@@ -2,89 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A89AD24EC27
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Aug 2020 10:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B76D24EC6D
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Aug 2020 11:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726365AbgHWIVY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Aug 2020 04:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        id S1726542AbgHWJ0l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Aug 2020 05:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgHWIVW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Aug 2020 04:21:22 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11815C061573;
-        Sun, 23 Aug 2020 01:21:22 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id k13so2763939plk.13;
-        Sun, 23 Aug 2020 01:21:22 -0700 (PDT)
+        with ESMTP id S1726356AbgHWJ0k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Aug 2020 05:26:40 -0400
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C382EC061574
+        for <linux-usb@vger.kernel.org>; Sun, 23 Aug 2020 02:26:39 -0700 (PDT)
+Received: by mail-qv1-xf44.google.com with SMTP id r19so2498415qvw.11
+        for <linux-usb@vger.kernel.org>; Sun, 23 Aug 2020 02:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=HorE3eSfXz4Gki6guH9XnAbsktXH9J/H5OfUk+fj9ww=;
-        b=D9m4vGhhadKVAw7CoQBmjIajZLQNNltNmMM6DDOZqZzdNZoB0yI7WVyi0OXKbppRBo
-         2U6LWFugxmTinh1FdA5xCI9UPTEb9d5izBpr47nrZeXk5PgTPWzD7GVYmrsS4okAgG4d
-         /dGRUHaoNgNWVzGj0k+3JwnRb+sMi9+b78mT5Rh9y9GVFmnunZAOv928a2ikFBa88CF9
-         QlxypZvyFajyAPumyDoidP5LkXzxA7T4cLZYDxKZAaIvvfqypORK8sQyKokiJl9OjmAK
-         M677vY1Y6yT/u5grPENUNzXZzL3/Chz0JtqmqZT0FnemSOrSxRGGdqWar6C1MKnybOul
-         cR2g==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s1sYF8go7qkIJfXgsFM0jG5g2kLGG3UutjF1ASPDx3Y=;
+        b=ePgC16u/C5fV3JjKJ4mqDBjBKX7rE8F5HKEV6aigJmB/MT0dpC6RU3uQWbhAfk9tUp
+         RCR7HIz1aGfyaWYfV3GYIthDlOREgyLhCneg+gG//QsMKzs3fAzx+vysXc9j4vsXQOrt
+         AbkVzaoQHcRTZHsieukpuWTyIr5I+Xd15gqNmwG/AqciZW/DLPSxu8sSVPnLDWlGBHHD
+         VHAWW5VLQGH6HQ20FmLfJcODHQuHT1SSbllPBfD8cKutqH3Lki5oRx19oMGJpXVIH12A
+         xq/5H9ylhHxH+F5YsJtY5387XcOHxSohttYGk7ZRlN2dwZiilN/axFky6oj1IQUmV2VI
+         Nyxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=HorE3eSfXz4Gki6guH9XnAbsktXH9J/H5OfUk+fj9ww=;
-        b=ZQ+8omlOopra+WHH99c1tnrdR1/l0REq6Cb4j1De16v0vaTmatLMnjC3l0nLXRhYpT
-         o7/LPGhpcSqUszuYuheZ/TDiY+r9fki3vU4QL5NOeTSDmgRBOCs3RKeDgu070FAtEpPs
-         fjf1B4TCmK66qyZZF+80Tz7iTlhAZhT+hQWhwpVH1h5Dng7y8f/TMTE86I575q/8KSLs
-         /sjGCDjNq0Aqs+CtOwrU+pbTfH1GzPYFRz/0rGKEo98kYa9ny8pq/8z2++K0LYf/ZVVH
-         DLy5Vk/dB5xiM+AEyixtg8QkvC4wWJtdziQeF2PyFngOnDAwNmYWb/0O75A+Fpf0Fpuu
-         8KVQ==
-X-Gm-Message-State: AOAM5323Sasrog3SG1e95lRMSegTP7SLgnJ2C6/u5TWQK2R+3jz3OLkO
-        /jUGXjrpM7kW2TklNqkCFZQ=
-X-Google-Smtp-Source: ABdhPJxLf+kXTEY8tY4f4/a5bUzfIcFh3YpQnFiHe2KQmR1ZuODc+Zff+j2Fm43ZKu7SfHriVcLBSw==
-X-Received: by 2002:a17:90a:a791:: with SMTP id f17mr412787pjq.136.1598170881504;
-        Sun, 23 Aug 2020 01:21:21 -0700 (PDT)
-Received: from localhost.localdomain ([157.32.237.182])
-        by smtp.gmail.com with ESMTPSA id q17sm7416783pfh.32.2020.08.23.01.21.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2020 01:21:20 -0700 (PDT)
-From:   Himadri Pandya <himadrispandya@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Himadri Pandya <himadrispandya@gmail.com>
-Subject: [PATCH] net: usb: Fix uninit-was-stored issue in asix_read_cmd()
-Date:   Sun, 23 Aug 2020 13:50:42 +0530
-Message-Id: <20200823082042.20816-1-himadrispandya@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s1sYF8go7qkIJfXgsFM0jG5g2kLGG3UutjF1ASPDx3Y=;
+        b=SDFTX24Q32XRuS0+h8j25ZJdZg3lxGpObc7a3551ky5qlwNge7HlFLii9y2WrII2gJ
+         Jzhi+SqKcJC3ki0DKYArLRupsXKVkqm/7hM3Tu+9QqY3iYL9NVNIAAbfUo5dTkIv+L93
+         lgEGlkmOWediWXyCw/M3o2VYsyr0nWcTRvPM5KP7nFtW0ojX0tZEeYnDFiRd4wXMoqFU
+         pyv6uwE8dSMpW9fe1YU6XWXt2xEHIXpDGZZ1tIuYTEQvNnAlS8wTktSGSFEctRXOKd1t
+         w4AppN8VRYcTRjrr2U3iL20IAZeARMgLWHbYSy9E9Nh/9wPnxkYRBrPmNtbtW/vZ8Wnl
+         mGBA==
+X-Gm-Message-State: AOAM53273eDspUWZDTCQwkO7vsCN8BUVQ2o2GbyJCGnVKKI14u79NSwB
+        zn60KT7MbSNj9DgRmYeqSXBwopei0rTqBuBt6IEi6b8b7DfB0A==
+X-Google-Smtp-Source: ABdhPJyRzSGIRnG9KdFdUSjw7nF3cpcCtQH1Pk0Y2ZVnelPepWNaPSLGOZB1ugjQ9FrlSgcpZPWH4jpnNU6VoPO2oTw=
+X-Received: by 2002:a0c:cc94:: with SMTP id f20mr472014qvl.159.1598174798398;
+ Sun, 23 Aug 2020 02:26:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200823082042.20816-1-himadrispandya@gmail.com>
+In-Reply-To: <20200823082042.20816-1-himadrispandya@gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Sun, 23 Aug 2020 11:26:27 +0200
+Message-ID: <CACT4Y+Y1TpqYowNXj+OTcQwH-7T4n6PtPPa4gDWkV-np5KhKAQ@mail.gmail.com>
+Subject: Re: [PATCH] net: usb: Fix uninit-was-stored issue in asix_read_cmd()
+To:     Himadri Pandya <himadrispandya@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Initialize the buffer before passing it to usb_read_cmd() function(s) to
-fix the uninit-was-stored issue in asix_read_cmd().
+On Sun, Aug 23, 2020 at 10:21 AM Himadri Pandya
+<himadrispandya@gmail.com> wrote:
+>
+> Initialize the buffer before passing it to usb_read_cmd() function(s) to
+> fix the uninit-was-stored issue in asix_read_cmd().
+>
+> Fixes: KMSAN: kernel-infoleak in raw_ioctl
+> Reported by: syzbot+a7e220df5a81d1ab400e@syzkaller.appspotmail.com
+>
+> Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
+> ---
+>  drivers/net/usb/asix_common.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+> index e39f41efda3e..a67ea1971b78 100644
+> --- a/drivers/net/usb/asix_common.c
+> +++ b/drivers/net/usb/asix_common.c
+> @@ -17,6 +17,8 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>
+>         BUG_ON(!dev);
+>
+> +       memset(data, 0, size);
 
-Fixes: KMSAN: kernel-infoleak in raw_ioctl
-Reported by: syzbot+a7e220df5a81d1ab400e@syzkaller.appspotmail.com
+Hi Himadri,
 
-Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
----
- drivers/net/usb/asix_common.c | 2 ++
- 1 file changed, 2 insertions(+)
+I think the proper fix is to check
+usbnet_read_cmd/usbnet_read_cmd_nopm return value instead.
+Memsetting data helps to fix the warning at hand, but the device did
+not send these 0's and we use them as if the device did send them.
 
-diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-index e39f41efda3e..a67ea1971b78 100644
---- a/drivers/net/usb/asix_common.c
-+++ b/drivers/net/usb/asix_common.c
-@@ -17,6 +17,8 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
- 
- 	BUG_ON(!dev);
- 
-+	memset(data, 0, size);
-+
- 	if (!in_pm)
- 		fn = usbnet_read_cmd;
- 	else
--- 
-2.17.1
+Perhaps we need a separate helper function (of a bool flag) that will
+fail on incomplete reads. Maybe even in the common USB layer because I
+think we've seen this type of bug lots of times and I guess there are
+dozens more.
 
+
+>         if (!in_pm)
+>                 fn = usbnet_read_cmd;
+>         else
+> --
+> 2.17.1
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/20200823082042.20816-1-himadrispandya%40gmail.com.
