@@ -2,199 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 048DA24F7C4
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 11:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB0D24F72E
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 11:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728074AbgHXJVt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 05:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730155AbgHXIzl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 04:55:41 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582BAC061573
-        for <linux-usb@vger.kernel.org>; Mon, 24 Aug 2020 01:55:41 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id p4so6709593qkf.0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Aug 2020 01:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4+DPdTdqNuyBoVS4RbQIr9UMaA1D5lYrJkHWf4GkHBQ=;
-        b=MH1x+F6HuXwDNwXoyQJcunv0GP2bLigkIo02yDGCp7PNi8rBk8ujHLvQ40AyCg0Ish
-         bVOgBrCJBjKQDAsN2axhHWiMVDLlNaLSa4jVdTFGsyD1bxAY7bAUKWfGLCh66oKH7HXm
-         r5S1vNkuLKXbrXt+Kkx8kg+ZOzUiA+qTnK9115FlM3dbVxZ8wwd8Ws+FCr/iWe8iYcmQ
-         fioom413+yIGdKEYzOfAOqEv5jVs4G9hm7XluPo+/08F33geafgjLLW0u30RPSJoxMNR
-         JkPRvuciD+M1L7XY/rePVkakQNglMsQgKBXPRfN203c5Q8bcg3/dsDr8ij0k3buKaSDp
-         uaww==
+        id S1728305AbgHXJJ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 05:09:58 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42750 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728004AbgHXJJz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 05:09:55 -0400
+Received: by mail-lj1-f193.google.com with SMTP id t6so8739845ljk.9;
+        Mon, 24 Aug 2020 02:09:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4+DPdTdqNuyBoVS4RbQIr9UMaA1D5lYrJkHWf4GkHBQ=;
-        b=JgdOAAgs8yeFtnCcvv2Qq+/kZTWfeoCwdmIee1xr3VIoNG8kR36geZ/fPX1NbBqLO+
-         kK2Dp/iDIHCEvvCJ+9tDYka8J1bAWw1iaPOm59nje3Eko4nrGObYpzlzO07vfp7mUYHf
-         oNU7Cl1sp45welJVaiiAXONNi8ko+SQadpf4VDsYXi5NeIVb+maiPK0xOCzf24XPzWOb
-         q4KpnkuVtH25sEYMAzHzAuf9KDt4sDXlxNnIXGvYjQKuWiPGbX1+4iPyyUdx590Sdjwm
-         ZCVeIVu+4l9OFBSt/MXPZTac0m2hAVgqOijRbbE5yN4j8reCF3zZuxzk3/j23jGC6oLh
-         r0Vg==
-X-Gm-Message-State: AOAM530X6cir1WKPxEV660fK7THWESp0aU0gEkvDKRbGe/NZC3akdfeb
-        p5avgGyNOgBpW19Dxc9g7UbEvbWT/gFzX5Pl5UrBaA==
-X-Google-Smtp-Source: ABdhPJweKUqUpQomWynHHhtNTqvLsvrsIrDv2Gk4h+l3xzPB0RswtWfNznQ1EDCUE/qCzmGdN7Zdxc63Y4doRjkGvHY=
-X-Received: by 2002:a05:620a:134b:: with SMTP id c11mr1857358qkl.256.1598259339701;
- Mon, 24 Aug 2020 01:55:39 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U7/56Iwa7YQEpMgvq8Bu6RRnpFZYJtOeNNKEyzZ2Vs4=;
+        b=bCREDG9alefGYSVc907gN1FXHOUsXNA1Q6mAmND3urMoUVGBl+q+hsyT3jwaxMwj3h
+         ihbAJgU4al8FpQCWcN68Ykj4/TIk2L5CnCrq/PyUVkjITYOzjhxTNiBjxvBQbspVAwDD
+         masBBzyAcKtYY1m+3CnQjNebDCnmhls714yp4M51iVUuvs5OFiSHB1PKAgoPyOEdH0FD
+         4Jz/F3PzVgBH/HkSb2P3P2fIpQEZEo34bZuBOmp2WC3HWkQvbjOpzgEXHYvCd+AfdIvF
+         1p8zKc5K7EVw/lhVTNHO26gw4Sy+P104bPA06jqZehfywPW2k5IKS2a9SaLruBKnIeed
+         ALkw==
+X-Gm-Message-State: AOAM533vuHmN34lojnjRgNrTLxGPUCwyTOof2tjiYCSakoXIll2ybALR
+        8iD2hS/z6dK9XyNndyyAjTs=
+X-Google-Smtp-Source: ABdhPJxsZEACGW+Gr+1iJcDrYBvDRxwv78E3p+eGSbhuI//GNWtzi46G7cY9CevlA3VCeGa5SYzPlA==
+X-Received: by 2002:a2e:3503:: with SMTP id z3mr2063054ljz.336.1598260190098;
+        Mon, 24 Aug 2020 02:09:50 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id v9sm634414lfe.10.2020.08.24.02.09.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2020 02:09:49 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kA8U8-0006v3-SJ; Mon, 24 Aug 2020 11:09:48 +0200
+Date:   Mon, 24 Aug 2020 11:09:48 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     Sheng Long Wang <china_shenglong@163.com>,
+        Wang Sheng Long <shenglong.wang.ext@siemens.com>,
+        johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb-serial:cp210x: add support to software flow
+ control
+Message-ID: <20200824090948.GC21288@localhost>
+References: <20200820075240.13321-1-china_shenglong@163.com>
+ <97836b78-740b-cf70-4803-27305b6e0a4d@siemens.com>
 MIME-Version: 1.0
-References: <20200823082042.20816-1-himadrispandya@gmail.com>
- <CACT4Y+Y1TpqYowNXj+OTcQwH-7T4n6PtPPa4gDWkV-np5KhKAQ@mail.gmail.com>
- <20200823101924.GA3078429@kroah.com> <CACT4Y+YbDODLRFn8M5QcY4CazhpeCaunJnP_udXtAs0rYoASSg@mail.gmail.com>
- <20200823105808.GB87391@kroah.com>
-In-Reply-To: <20200823105808.GB87391@kroah.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 24 Aug 2020 10:55:28 +0200
-Message-ID: <CACT4Y+ZiZQK8WBre9E4777NPaRK4UDOeZOeMZOQC=5tDsDu23A@mail.gmail.com>
-Subject: Re: [PATCH] net: usb: Fix uninit-was-stored issue in asix_read_cmd()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Himadri Pandya <himadrispandya@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        USB list <linux-usb@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97836b78-740b-cf70-4803-27305b6e0a4d@siemens.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Aug 23, 2020 at 12:57 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sun, Aug 23, 2020 at 12:31:03PM +0200, Dmitry Vyukov wrote:
-> > On Sun, Aug 23, 2020 at 12:19 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Sun, Aug 23, 2020 at 11:26:27AM +0200, Dmitry Vyukov wrote:
-> > > > On Sun, Aug 23, 2020 at 10:21 AM Himadri Pandya
-> > > > <himadrispandya@gmail.com> wrote:
-> > > > >
-> > > > > Initialize the buffer before passing it to usb_read_cmd() function(s) to
-> > > > > fix the uninit-was-stored issue in asix_read_cmd().
-> > > > >
-> > > > > Fixes: KMSAN: kernel-infoleak in raw_ioctl
-> > > > > Reported by: syzbot+a7e220df5a81d1ab400e@syzkaller.appspotmail.com
-> > > > >
-> > > > > Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
-> > > > > ---
-> > > > >  drivers/net/usb/asix_common.c | 2 ++
-> > > > >  1 file changed, 2 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-> > > > > index e39f41efda3e..a67ea1971b78 100644
-> > > > > --- a/drivers/net/usb/asix_common.c
-> > > > > +++ b/drivers/net/usb/asix_common.c
-> > > > > @@ -17,6 +17,8 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> > > > >
-> > > > >         BUG_ON(!dev);
-> > > > >
-> > > > > +       memset(data, 0, size);
-> > > >
-> > > > Hi Himadri,
-> > > >
-> > > > I think the proper fix is to check
-> > > > usbnet_read_cmd/usbnet_read_cmd_nopm return value instead.
-> > > > Memsetting data helps to fix the warning at hand, but the device did
-> > > > not send these 0's and we use them as if the device did send them.
-> > >
-> > > But, for broken/abusive devices, that really is the safest thing to do
-> > > here.  They are returning something that is obviously not correct, so
-> > > either all callers need to check the size received really is the size
-> > > they asked for, or we just plod onward with a 0 value like this.  Or we
-> > > could pick some other value, but that could cause other problems if it
-> > > is treated as an actual value.
-> >
-> > Do we want callers to do at least some error check (e.g. device did
-> > not return anything at all, broke, hang)?
-> > If yes, then with a separate helper function that fails on short
-> > reads, we can get both benefits at no additional cost. User code will
-> > say "I want 4 bytes, anything that is not 4 bytes is an error" and
-> > then 1 error check will do. In fact, it seems that that was the
-> > intention of whoever wrote this code (they assumed no short reads),
-> > it's just they did not actually implement that "anything that is not 4
-> > bytes is an error" part.
-> >
-> >
-> > > > Perhaps we need a separate helper function (of a bool flag) that will
-> > > > fail on incomplete reads. Maybe even in the common USB layer because I
-> > > > think we've seen this type of bug lots of times and I guess there are
-> > > > dozens more.
-> > >
-> > > It's not always a failure, some devices have protocols that are "I could
-> > > return up to a max X bytes but could be shorter" types of messages, so
-> > > it's up to the caller to check that they got what they really asked for.
-> >
-> > Yes, that's why I said _separate_ helper function. There seems to be
-> > lots of callers that want exactly this -- "I want 4 bytes, anything
-> > else is an error". With the current API it's harder to do - you need
-> > additional checks, additional code, maybe even additional variables to
-> > store the required size. APIs should make correct code easy to write.
->
-> I guess I already answered both of these in my previous email...
->
-> > > Yes, it's more work to do this checking.  However converting the world
-> > > over to a "give me an error value if you don't read X number of bytes"
-> > > function would also be the same amount of work, right?
-> >
-> > Should this go into the common USB layer then?
-> > It's weird to have such a special convention on the level of a single
-> > driver. Why are rules for this single driver so special?...
->
-> They aren't special at all, so yes, we should be checking for a short
-> read everywhere.  That would be the "correct" thing to do, I was just
-> suggesting a "quick fix" here, sorry.
+On Fri, Aug 21, 2020 at 07:32:58AM +0200, Jan Kiszka wrote:
+> On 20.08.20 09:52, Sheng Long Wang wrote:
+> > From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+> > 
+> > When data is transmitted between two serial ports,
+> > the phenomenon of data loss often occurs. The two kinds
+> > of flow control commonly used in serial communication
+> > are hardware flow control and software flow control.
+> > 
+> > In serial communication, If you only use RX/TX/GND Pins, you
+> > can't do hardware flow. So we often used software flow control
+> > and prevent data loss. The user sets the software flow control
+> > through the application program, and the application program
+> > sets the software flow control mode for the serial port
+> > chip through the driver.
+> > 
+> > For the cp210 serial port chip, its driver lacks the
+> > software flow control setting code, so the user cannot set
+> > the software flow control function through the application
+> > program. This adds the missing software flow control.
+> > 
+> > Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+> > 
+> > Changes in v3:
+> > -fixed code style, It mainly adjusts the code style acccording
+> >  to kernel specification.
+> 
+> Patch does not apply. You forgot to rebase over latest tty/tty-next or
+> linux master.
 
-Re quick fix, I guess it depends on the amount of work for the larger
-fix and if we can find volunteers (thanks Himadri!). We need to be
-practical as well.
+That should be the usb-next branch of the usb-serial tree:
 
-Re:
-        retval = usb_control_msg(....., data, data_size, ...);
-        if (retval < buf_size) {
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/
 
-There may be a fine line between interfaces and what code they
-provoke. Let me describe my reasoning.
+or linux-next (or, currently, Linus's master branch).
 
-Yes, the current interface allows writing correct code with moderate
-amount of effort. Yet we see cases where it's used incorrectly, maybe
-people were just a little bit lazy, or maybe they did not understand
-how to use it properly (nobody reads the docs, and it's also
-reasonable to assume that if you ask for N bytes and the function does
-not fail, then you get N bytes).
+You can use "scripts/get_maintainer.sh --scm" to determine which tree to
+base your work against.
 
-Currently to write correct code (1) we need a bit of duplication,
-which gets worse if data_size is actually some lengthy expression
-(X+Y*Z), maybe one will need an additional variable to use it
-correctly.
-(2) one needs to understand the contract;
-(3) may be subject to the following class of bugs (after some copy-paste:
-        retval = usb_control_msg(....., data, 4, ...);
-        if (retval < 2) {
-This class of bugs won't be necessary immediately caught by kernel
-testing systems (can have long life-time).
-
-I would add a "default" function (with shorter name) that does full read:
-
-if (!usb_control_msg(, ...., data, 4))
-
-and a function with longer name to read variable-size data:
-
-n = usb_control_msg_variable_length(, ...., data, sizeof(data)));
-
-The full read should be "the default" (shorter name), because if you
-need full read and use the wrong function, it won't be caught by
-testing (most likely long-lived bug). Whereas if you use full read for
-lengthy variable size data read, this will be immediately caught
-during any testing (even manual) -- you ask for 4K, you get fewer
-bytes, all your reads fail.
-So having "full read" easier to spell will lead to fewer bugs by design.
+Johan
