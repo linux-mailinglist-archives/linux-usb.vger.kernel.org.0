@@ -2,168 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AFD250B97
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 00:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BF1250BD7
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 00:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727935AbgHXWX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 18:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S1727913AbgHXWra (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 18:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726303AbgHXWX3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 18:23:29 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFB5C061574;
-        Mon, 24 Aug 2020 15:23:29 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id c15so10647180wrs.11;
-        Mon, 24 Aug 2020 15:23:29 -0700 (PDT)
+        with ESMTP id S1726531AbgHXWr3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 18:47:29 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78724C061574
+        for <linux-usb@vger.kernel.org>; Mon, 24 Aug 2020 15:47:29 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id p11so2574036pfn.11
+        for <linux-usb@vger.kernel.org>; Mon, 24 Aug 2020 15:47:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IfUS4URwAi9r1GH23nLJXNeKi/lPL1y8e7MUKSPEyJk=;
-        b=h53JpEW4YIJmyyVBDXBjaDiiHabRPoQDtG9UAFheRNC4uDo5OxZgXllhXKrUnud+gC
-         rsk0MMTDvZG/VhY9AsqPv1TGHfvX98ooecgUYKr69PaL+wq0jbnm2maQ7xI3lKy2QbmU
-         BAWrYfgk4SJ2YhgH6uSX+PrM1x4hgsbPwtGj3k6q7cSFMCGW7P7UEXrgPsPechZtauhu
-         TVzyrdCuO/fOw2l36+Fain+nuGerXvns/OtZVk9JfcYkitEtBY6JrA90G87yKe9bDHXw
-         6oKylGSpRwzkisXJQI21HgsBkZatEm+1Md/c4qhorX0wC2NzbmS3qSdM2+Y1So6Q/wKF
-         hpQQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tgCgrj/7RNoEUABuzTp3guQYTwt5yuubONILEbtUHdE=;
+        b=NedFESVhjB8Y65MLB01kXcJ3NxiJVrtyBCzQ3AaSaYU7HFRe324lwhjy/rtXDqndkM
+         9y6sSETHpexp/EbMGctE8dWHcJQillYrNgIBjst8MZkgUfi9ufBAVybTg4IrFfcj5s4Q
+         1tWBslrl4dVhVP6XfxB3Yo6LrMTPWU6tcSH1M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IfUS4URwAi9r1GH23nLJXNeKi/lPL1y8e7MUKSPEyJk=;
-        b=qs9iISbCWSXv8JAxu/obU+WQlnU6t2xUs+0P7O8AICGCXg97dEDso0Q61uRskssG3s
-         cme2/bpukVEstfj+Dq0yw+o1aX1jwTYhlBnbuoP+HW7s89+fbQuH5qlHvogu4DRb4kYU
-         Tc4W1IKlgxETVvWL3PfXW3Ieq0Kbcj5fRGd5tjZbkOSbH2tHlrDe0u15MQTdOG2DHd+G
-         aRxkRezj+HGPgXTaBKxQvPeZYT6DYgt+9AAT29+4e2RUTfDabCndFXY35B9aHlQWRel6
-         66LZKzIPqK58YTjIhaIY2vb9GrHGTX7IOJxRwbrTs2VC6nlhYpl2IHI6v2JMme8OHXao
-         /cMA==
-X-Gm-Message-State: AOAM530jzHzvckMaQlbhNWmj5pCk1YdXID8+t5fZ7I2pXNqBZTbujLgh
-        tpEB63TxiKKFKZ6aj4sazEN4SxQi97rYoMtC
-X-Google-Smtp-Source: ABdhPJwtNgrtupYuEecY4fweDInf/YX+rSI1iRu+EDXbSQJDjJjbadB9q0kUBoYvYlnRYZxj6dFypQ==
-X-Received: by 2002:adf:f58c:: with SMTP id f12mr7286242wro.45.1598307807824;
-        Mon, 24 Aug 2020 15:23:27 -0700 (PDT)
-Received: from localhost.localdomain (cpc83661-brig20-2-0-cust443.3-3.cable.virginm.net. [82.28.105.188])
-        by smtp.gmail.com with ESMTPSA id 5sm1838236wmz.22.2020.08.24.15.23.26
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tgCgrj/7RNoEUABuzTp3guQYTwt5yuubONILEbtUHdE=;
+        b=jEsbE0Hruko9lLHiTfjm2Sl5Bm18e3IVTjlQ/ghzRJ/UHxsu9rOzahJcoFoHUNxVoE
+         WC2LE7M12cm+0zgX5R5nBRDExeHwSR1ZRYJFiEtrgCKHmx51FvNRThUzXlu6Kum4uMw2
+         872sG3GG9vXnrv6DsE2Eohi043WlzGP+g790eo3wS/WSSGyNh9C1VCKAKGt3iT8MiUCf
+         oljLxNOydZHz7YrqTkmS5sbg6Q1L1xT14MBmczo9RRKXOUIwEWA/hrTke3G9vUhult9t
+         0PJxAqvXMGBCL/MTWukp+33DtQuHMcxkZSnIfaSqeGYsy4cko5LsGm01i1q5VHCQxuJX
+         +fOA==
+X-Gm-Message-State: AOAM5307cZRgB2z16PCqAAOSvhluk3A/Eg3eMZL8Wkn3ydGyZDuWUnvs
+        a2cW05yjHIkBnmjrATNJLzG3/Q==
+X-Google-Smtp-Source: ABdhPJzstXCt11oOnd0nn5W2icKYNmJ722Uy6n9Pw7DOVdijRVCMEkUwq7XkTS5YqaQ8CRlGx+aAEw==
+X-Received: by 2002:a17:902:b082:: with SMTP id p2mr5320220plr.266.1598309248702;
+        Mon, 24 Aug 2020 15:47:28 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id np4sm538459pjb.4.2020.08.24.15.47.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 15:23:27 -0700 (PDT)
-From:   Alex Dewar <alex.dewar90@gmail.com>
-Cc:     Alex Dewar <alex.dewar90@gmail.com>,
+        Mon, 24 Aug 2020 15:47:28 -0700 (PDT)
+Date:   Mon, 24 Aug 2020 15:47:26 -0700
+From:   Prashant Malani <pmalani@chromium.org>
+To:     "Mani, Rajmohan" <rajmohan.mani@intel.com>
+Cc:     Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        accessrunner-general@lists.sourceforge.net,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: atm: don't use snprintf() for sysfs attrs
-Date:   Mon, 24 Aug 2020 23:23:20 +0100
-Message-Id: <20200824222322.22962-1-alex.dewar90@gmail.com>
-X-Mailer: git-send-email 2.28.0
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>
+Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
+ (IOM) driver
+Message-ID: <20200824224726.GA48297@google.com>
+References: <20200822040508.23510-1-rajmohan.mani@intel.com>
+ <20200822040508.23510-2-rajmohan.mani@intel.com>
+ <20200822095631.GB2553024@google.com>
+ <DM6PR11MB3963121C820F570F845BBAEEF6560@DM6PR11MB3963.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR11MB3963121C820F570F845BBAEEF6560@DM6PR11MB3963.namprd11.prod.outlook.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-kernel/cpu.c: don't use snprintf() for sysfs attrs
+Hi Rajmohan,
 
-As per the documentation (Documentation/filesystems/sysfs.rst),
-snprintf() should not be used for formatting values returned by sysfs.
+On Mon, Aug 24, 2020 at 10:19:27PM +0000, Mani, Rajmohan wrote:
+> Hi Prashant,
+> 
+> Thanks for the quick review.
+> 
+> > > +
+> > > +	if (!iom || !iom->dev || !iom->regbar)
+> > 
+> > Do we need to check for !iom->dev and !iom->regbar?
+> 
+> It's a good practice to have sanity checks on pointer members dereferenced.
+> 
+> So I can lose the check on iom->dev, but prefer to keep the check on regbar.
+> Let me know if you feel strongly about losing the check for regbar as well.
 
-In all of these cases, sprintf() suffices as we know that the formatted
-strings will be less than PAGE_SIZE in length.
+Sounds good.
+> 
+> > Is there a valid situation
+> > where iom != NULL but iom->dev and/or iom->regbar == NULL?
+> > Sounds like it shouldn't, but I may be missing something.
+> > 
+> 
+> I think I am being conservative here.
+> 
+> > > +		return -ENODEV;
+> > > +
+> > > +	if (!status || (port > IOM_MAX_PORTS - 1))
+> > 
+> > I think parentheses around "port > IOM_MAX_PORT - 1" aren't required.
+> 
+> Ack
+> 
+> > > +		return -EINVAL;
+> > > +
+> > > +	reg = iom->regbar + IOM_PORT_STATUS_OFFSET + IOM_REG_LEN *
+> > port;
+> > > +
+> > > +	*status = ioread32(reg);
+> > 
+> > Perhaps just inline reg within the parentheses?
+> 
+> Kept this way to increase readability. Let me know if you feel strongly towards
+> inline reg.
 
-Issue identified by Coccinelle.
+I'd rather this be inlined, you save a couple lines from the variable
+declaration, and IMO we're not gaining much in terms of readability by
+declaring this separately.
 
-Signed-off-by: Alex Dewar <alex.dewar90@gmail.com>
----
- drivers/usb/atm/cxacru.c | 27 +++++++++++++--------------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+> 
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(intel_iom_port_status);
+> > > +
+> > > +static int intel_iom_probe(struct platform_device *pdev) {
+> > > +	void __iomem *addr;
+> > > +
+> > > +	/* only one IOM device is supported */
+> > 
+> > Minor nit: s/only/Only
+> 
+> And then I may need to end the comment with a period.
+> Let me know if you feel strongly.
+Yes, let's capitalize and add the period. Let's try to use the right
+punctuation where possible.
 
-diff --git a/drivers/usb/atm/cxacru.c b/drivers/usb/atm/cxacru.c
-index ea66f8f385bae..e62a770a5d3bf 100644
---- a/drivers/usb/atm/cxacru.c
-+++ b/drivers/usb/atm/cxacru.c
-@@ -230,12 +230,12 @@ CXACRU__ATTR_INIT(_name)
- 
- static ssize_t cxacru_sysfs_showattr_u32(u32 value, char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%u\n", value);
-+	return sprintf(buf, "%u\n", value);
- }
- 
- static ssize_t cxacru_sysfs_showattr_s8(s8 value, char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%d\n", value);
-+	return sprintf(buf, "%d\n", value);
- }
- 
- static ssize_t cxacru_sysfs_showattr_dB(s16 value, char *buf)
-@@ -255,8 +255,8 @@ static ssize_t cxacru_sysfs_showattr_bool(u32 value, char *buf)
- 	static char *str[] = { "no", "yes" };
- 
- 	if (unlikely(value >= ARRAY_SIZE(str)))
--		return snprintf(buf, PAGE_SIZE, "%u\n", value);
--	return snprintf(buf, PAGE_SIZE, "%s\n", str[value]);
-+		return sprintf(buf, "%u\n", value);
-+	return sprintf(buf, "%s\n", str[value]);
- }
- 
- static ssize_t cxacru_sysfs_showattr_LINK(u32 value, char *buf)
-@@ -264,8 +264,8 @@ static ssize_t cxacru_sysfs_showattr_LINK(u32 value, char *buf)
- 	static char *str[] = { NULL, "not connected", "connected", "lost" };
- 
- 	if (unlikely(value >= ARRAY_SIZE(str) || str[value] == NULL))
--		return snprintf(buf, PAGE_SIZE, "%u\n", value);
--	return snprintf(buf, PAGE_SIZE, "%s\n", str[value]);
-+		return sprintf(buf, "%u\n", value);
-+	return sprintf(buf, "%s\n", str[value]);
- }
- 
- static ssize_t cxacru_sysfs_showattr_LINE(u32 value, char *buf)
-@@ -275,8 +275,8 @@ static ssize_t cxacru_sysfs_showattr_LINE(u32 value, char *buf)
- 		"waiting", "initialising"
- 	};
- 	if (unlikely(value >= ARRAY_SIZE(str)))
--		return snprintf(buf, PAGE_SIZE, "%u\n", value);
--	return snprintf(buf, PAGE_SIZE, "%s\n", str[value]);
-+		return sprintf(buf, "%u\n", value);
-+	return sprintf(buf, "%s\n", str[value]);
- }
- 
- static ssize_t cxacru_sysfs_showattr_MODU(u32 value, char *buf)
-@@ -288,8 +288,8 @@ static ssize_t cxacru_sysfs_showattr_MODU(u32 value, char *buf)
- 			"ITU-T G.992.2 (G.LITE)"
- 	};
- 	if (unlikely(value >= ARRAY_SIZE(str)))
--		return snprintf(buf, PAGE_SIZE, "%u\n", value);
--	return snprintf(buf, PAGE_SIZE, "%s\n", str[value]);
-+		return sprintf(buf, "%u\n", value);
-+	return sprintf(buf, "%s\n", str[value]);
- }
- 
- /*
-@@ -309,8 +309,7 @@ static ssize_t mac_address_show(struct device *dev,
- 	if (instance == NULL || instance->usbatm->atm_dev == NULL)
- 		return -ENODEV;
- 
--	return snprintf(buf, PAGE_SIZE, "%pM\n",
--		instance->usbatm->atm_dev->esi);
-+	return sprintf(buf, "%pM\n", instance->usbatm->atm_dev->esi);
- }
- 
- static ssize_t adsl_state_show(struct device *dev,
-@@ -326,8 +325,8 @@ static ssize_t adsl_state_show(struct device *dev,
- 
- 	value = instance->card_info[CXINF_LINE_STARTABLE];
- 	if (unlikely(value >= ARRAY_SIZE(str)))
--		return snprintf(buf, PAGE_SIZE, "%u\n", value);
--	return snprintf(buf, PAGE_SIZE, "%s\n", str[value]);
-+		return sprintf(buf, "%u\n", value);
-+	return sprintf(buf, "%s\n", str[value]);
- }
- 
- static ssize_t adsl_state_store(struct device *dev,
--- 
-2.28.0
+Best regards,
 
+-Prashant
