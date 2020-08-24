@@ -2,110 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C235B24F034
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 00:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79F024F13A
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 04:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbgHWWOm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Aug 2020 18:14:42 -0400
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:54776 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726057AbgHWWOl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Aug 2020 18:14:41 -0400
-X-IronPort-AV: E=Sophos;i="5.76,346,1592863200"; 
-   d="scan'208";a="464389334"
-Received: from 91-160-5-165.subs.proxad.net (HELO [192.168.44.21]) ([91.160.5.165])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-SHA; 24 Aug 2020 00:14:38 +0200
-Subject: Re: [BUG] Regression in Linux 5.4.17 for JMicron JMS566 enclosure
-To:     Cyril Roelandt <tipecaml@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB list <linux-usb@vger.kernel.org>, sellis@redhat.com,
-        pachoramos@gmail.com, labbott@fedoraproject.org,
-        gregkh@linuxfoundation.org, javhera@gmx.com
-References: <Pine.LNX.4.44L0.2004191144550.4266-100000@netrider.rowland.org>
- <20200421030137.GA2492@Susan> <20200815001829.GA2786@Susan>
- <20200815021929.GC52242@rowland.harvard.edu> <20200815232357.GB2786@Susan>
- <20200816162642.GC86937@rowland.harvard.edu> <20200818041324.GA3173@Susan>
- <20200818145722.GA146472@rowland.harvard.edu> <20200823013025.GA11449@Susan>
- <20200823144752.GB303967@rowland.harvard.edu> <20200823180837.GA3448@Susan>
-From:   Brice Goglin <brice.goglin@gmail.com>
-Autocrypt: addr=brice.goglin@gmail.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <558e1879-e17a-6185-70db-b45c3f640596@gmail.com>
-Date:   Mon, 24 Aug 2020 00:14:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
-MIME-Version: 1.0
-In-Reply-To: <20200823180837.GA3448@Susan>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+        id S1727980AbgHXCjy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Aug 2020 22:39:54 -0400
+Received: from mail-eopbgr60047.outbound.protection.outlook.com ([40.107.6.47]:17060
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727942AbgHXCjx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 23 Aug 2020 22:39:53 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hlsuQPOg2LZEiG9Kfo9EQM4WR2lcnGOGwoOtIY2KT7otgqBjIA/0zubOyjaLnL42TwTU4x1eBRl1ChC9daDipqKmOCQcF4LmmXm55uH9t8IG8WaKi0B9RP6gBL6p+qLwidzg/kOUbZrG34JeLYlIPgb5+vmOlF9mfMRmShSld8hMbhNH8yvvrZLeIFigXk8re05+8wc5O4yJK9AJjKrNRVo9+NIyrUm4LDt7v7ozHDFdFKIyaPVAqYKbjHqa9nX4Sdo41TRjevLjUxEQ1W1t0CnK+BfdJiLxoP95ftjclTMPS/1e7FuSQbI2r8a6uWP4ky2ThhnPJVAWvfi5eV/4ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=27RPWjYsMr2DDAb8Gcmy7rDFaxQVEe9tffAqw6VBIoU=;
+ b=DE0+D8Pj3VWZFIyFknty67EAKoaJ1IiVXQ5SD7mIuLQbL9rvnDxITdZZdPrhkiQ1muiWLUWXpsTkqu4HUKwnPbJ0r+U+bfW2BE9+sdtAbSeTnPdpT5cdCy1ZQkMi7SVD9HKr6OWWSYBCdJwZs3MnVkt6OP40BMpavgkB1cgOqb32UbNn6MPOgNUMZmNJUQjf+UHvdODeHeKbPXl6rIgvD9ffpwOgS/epwQ/4duSeuKVVrwhenQ6RvXsp1JT5RH6JyiOKeZawyveXEFdUIxJeNDnOuOHmSmxZNU9CaBErTAiwXHMh43Agg1Eu7NsZ4/3GFnuIoUpwow6SYRLefBeQxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=27RPWjYsMr2DDAb8Gcmy7rDFaxQVEe9tffAqw6VBIoU=;
+ b=i+3YaHXnjYoBYsZUZz3ZFFBD3LymsMb9DL83IxQEBpKWaSeVNxIgEUjWDFe6Dq2gpQxxEGEgDTsi9zllgDcCv34052GFXqkkdxgJk2ORJHhO1tZuGqvgkog4Yig7mwp5/jYhrsryNOj6h8ecacOZuivUm8tC3SfjCiOx6Y425IQ=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB5735.eurprd04.prod.outlook.com (2603:10a6:20b:a4::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24; Mon, 24 Aug
+ 2020 02:39:50 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3305.026; Mon, 24 Aug 2020
+ 02:39:50 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Tang Bin <tangbin@cmss.chinamobile.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Subject: Re: [PATCH] usb: hcd: fix the error check
+Thread-Topic: [PATCH] usb: hcd: fix the error check
+Thread-Index: AQHWdu2wIt6TNfBTb0KQoyimK4tKialGkX2A
+Date:   Mon, 24 Aug 2020 02:39:50 +0000
+Message-ID: <20200824023839.GA4974@b29397-desktop>
+References: <20200820122038.18704-1-tangbin@cmss.chinamobile.com>
+In-Reply-To: <20200820122038.18704-1-tangbin@cmss.chinamobile.com>
+Accept-Language: en-US
 Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: cmss.chinamobile.com; dkim=none (message not signed)
+ header.d=none;cmss.chinamobile.com; dmarc=none action=none
+ header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: a745e707-e0b2-4448-3e29-08d847d6f94c
+x-ms-traffictypediagnostic: AM6PR04MB5735:
+x-microsoft-antispam-prvs: <AM6PR04MB5735277BF59126ADB96DF0268B560@AM6PR04MB5735.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2449;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 65TAyumAACToBmy7BsnAfWHvqBYX1hOdq7IxrcjBLGC6TRTC46l7wgSV4YNBwNCfP3RyguvOekfEd/4CttTahuNfVfqJTPIsbqiycuV9OJaGVjf3B7L16jtX56tC/IsAwD1LEDatC1rDhg5ny7skTdOAZdMa4pSLfrlPeouQ40bhkg+Hhm6LBTI9R1LP4s6OgD9DZFsPikrhTjhg+wVCUIlqSZvoVBym2olt/+1JJN6oatPYGCg7wkdcsL5AGS1mFKlOXX+xVwqf0uBH62C79gIg4l8xQIHAaShmRf50y8sLIlNeDGugjZeluIChCQvuqgKnhGfHAgFxoLWIQetgAg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(136003)(376002)(346002)(39860400002)(396003)(366004)(1076003)(8936002)(8676002)(4744005)(5660300002)(6486002)(54906003)(316002)(53546011)(6506007)(2906002)(186003)(26005)(478600001)(9686003)(71200400001)(6916009)(6512007)(33656002)(64756008)(4326008)(33716001)(66446008)(76116006)(83380400001)(66556008)(66476007)(91956017)(44832011)(66946007)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: qHUjUW/Ca4j7GLRn6Y5fiYWpLl20Yb74+KBl5CrpoCWq/4OQ1SGzKghcNbxxUWQiP0nDDIhyOmt/ClaoOIL069lHHk8WnTjuaHdXm7HJSVV6l+QhjpcplyE10j/OgQKheRSXR4Xdwdu6/K/Rv5u727Uw/Iqe1Wnc51t6UMQPVdFpFSv3cHTZ6bISrhPVPauFms6SVle8UQ2jOPHdOByFdKqfgluBE3/Gx2LH3o2aC5c2x/bhXmiVWsFGn899K1zHWg2ehrYITJ2dIVNw0fjaD9jPqU2kzm2bmgZDyRMdx43uInUteLDOgdSA2WIXZcfZmpr1bbvNsAkM9p4FxE/bnp0dvsSdZCkotx/mFaFA8FNBJ2sZ/HYtlFUgubRXZxRohi0r4YtKfBCl6HP0B380EufEVdJjpWetL/IaNt1VwUOQ1HgHxSUKY4J/+NF0W01/0gvGtwsKZdTjD7+qBb/wOdqT6cjr6R36MBB/lslejFLpzov1dm78ElJ4RrrWrwfDR4UmfZP8i68BQFYivfQFI/V+YEzxoVSEMG9yO5E2FzBgLsRQUUSbL7wRrtYm3RQ/mExq1pIcvDoHOXnKJbddVeL8D7Q2DmPI8ncIP1oMuACRB7wKNsMpKIhO6vE/cUmL81kZ6Tx2MMZYRIiwx52QKg==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2A021B90885F684F843EE60FD3E5EC8B@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a745e707-e0b2-4448-3e29-08d847d6f94c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2020 02:39:50.2468
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: APfYE/5QugbOXhKCB7XRxgrpjMc61LsaZjWX6Ej50fH4JckzmF6Uwf42HYGDtAU2fRCcoIVvzNncspw5vKMUDw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5735
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 20-08-20 20:20:38, Tang Bin wrote:
+> In the function usb_add_hcd(), usb_phy_roothub_alloc()
+> can return NULL in some cases, so IS_ERR() doesn't meet
+> the requirements. Thus fix it.
+> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+> ---
+>  drivers/usb/core/hcd.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index aa45840d8..b73a92ee1 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -2633,8 +2633,9 @@ int usb_add_hcd(struct usb_hcd *hcd,
+> =20
+>  	if (!hcd->skip_phy_initialization && usb_hcd_is_primary_hcd(hcd)) {
+>  		hcd->phy_roothub =3D usb_phy_roothub_alloc(hcd->self.sysdev);
+> -		if (IS_ERR(hcd->phy_roothub))
+> -			return PTR_ERR(hcd->phy_roothub);
+> +		if (IS_ERR_OR_NULL(hcd->phy_roothub))
+> +			return hcd->phy_roothub ?
+> +					PTR_ERR(hcd->phy_roothub) : -ENODEV;
 
-Le 23/08/2020 à 20:08, Cyril Roelandt a écrit :
-> Hello,
->
-> On 2020-08-23 10:47, Alan Stern wrote:
->> Yes; it looks like the problem is that there are entries for this device 
->> in both unusual_devs.h and unusual_uas.h -- and it doesn't help that the 
->> two entries aren't identical.
->>
->> The unusual_devs.h entry tells usb-storage not to use FUA, but it 
->> doesn't rule out the uas driver.  And since the device claims to support 
->> UAS, usb-storage bows out.  But then the unusual_uas.h entry tells uas 
->> not to handle the drive, so the end result is that it doesn't get 
->> handled at all.
->>
->> To fix the immediate problem you should add the US_FL_IGNORE_UAS flag to 
->> the entry in unusual_devs.h.
-> That did the trick[1]. Do you think this patch could be suitable for a
-> future version of the kernel?
+Many (old) host controller drivers, their PHYs are not seen by software.
+We may not consider NULL as error.
 
+--=20
 
-It fixes my issue too (on top of 5.7.17).
-
-Brice
-
+Thanks,
+Peter Chen=
