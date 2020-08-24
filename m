@@ -2,125 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 550E524F93F
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 11:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA5024FAFF
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 12:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729306AbgHXJnP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 05:43:15 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:38337 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729176AbgHXJnL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 05:43:11 -0400
-Received: by mail-lf1-f68.google.com with SMTP id k10so1144093lfm.5;
-        Mon, 24 Aug 2020 02:43:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B+sPpbAS75cGxaYopa1UoLFzKyaPQjVAHOZZ21i/IqI=;
-        b=fu8wQ7QFQpFE0Uv2l3IpS1bvMo4pYxj6hnQyCsNhWJEHS6xKmP3Pdb8U6boyiSO1+3
-         oEdFS0jFXaQg15GC2JLhH7X+0Su15vp1Ar+T6V8VRqpgEYPwRkjJwbfbpBfanUizjXXg
-         rEvL6PUa4uQuwf/ilWe6prBafDVa6WNRHqRc2sqNii5WY7Ny3lEO//dGxFOwyBoIhBVU
-         fZPYHzaayXTDViJ0IV4bg875Q+OKBG5lGQqKtXTyNaq9xWs0UtbClqya/MSH2LHjGYTI
-         iKmSyNS8W/EmB5k8DkU9DWjbXqLXF+ickzVv7vfyKXw280CFgoQAWpdp9jdWGevG2WUV
-         vP8w==
-X-Gm-Message-State: AOAM533uasoIZKqtN5k0W/FOJXUh62mXSbPB+ZKy1gKD3l5LfgabZkWO
-        WWJMt6ADvcrm2UtuM9xPrbM=
-X-Google-Smtp-Source: ABdhPJwRaluAeFEm/kpc6gnTtpSDh+hopLCqZnp2vTegFRD1V8+piLnV+XMyENeg6g7FhPNgvxjnqw==
-X-Received: by 2002:ac2:5235:: with SMTP id i21mr2251097lfl.96.1598262188023;
-        Mon, 24 Aug 2020 02:43:08 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id b17sm2105269ljp.9.2020.08.24.02.43.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 02:43:07 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kA90N-0007A7-1V; Mon, 24 Aug 2020 11:43:07 +0200
-Date:   Mon, 24 Aug 2020 11:43:07 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     "Wang, Sheng Long (EXT) (RC-CN DI FA R&D SW)" 
-        <shenglong.wang.ext@siemens.com>, Johan Hovold <johan@kernel.org>,
-        Sheng Long Wang <china_shenglong@163.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] usb-serial:cp210x: add support to software flow
- control
-Message-ID: <20200824094307.GE21288@localhost>
-References: <20200820075240.13321-1-china_shenglong@163.com>
- <97836b78-740b-cf70-4803-27305b6e0a4d@siemens.com>
- <20200824090948.GC21288@localhost>
- <f21d4cc8b12d4ec6870623472ca7df09@siemens.com>
- <faddf44e-db1d-46e5-b6db-88168b0cc808@siemens.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <faddf44e-db1d-46e5-b6db-88168b0cc808@siemens.com>
+        id S1726551AbgHXKEo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 06:04:44 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33938 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726086AbgHXKEn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Aug 2020 06:04:43 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 47F95AF77;
+        Mon, 24 Aug 2020 10:05:12 +0000 (UTC)
+Message-ID: <1598263476.6851.1.camel@suse.com>
+Subject: Re: [PATCH] usb: uas: Add quirk for PNY Pro Elite
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        usb-storage@lists.one-eyed-alien.net
+Cc:     stable@vger.kernel.org
+Date:   Mon, 24 Aug 2020 12:04:36 +0200
+In-Reply-To: <2b0585228b003eedcc82db84697b31477df152e0.1597803605.git.thinhn@synopsys.com>
+References: <2b0585228b003eedcc82db84697b31477df152e0.1597803605.git.thinhn@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 11:36:50AM +0200, Jan Kiszka wrote:
-> On 24.08.20 11:28, Wang, Sheng Long (EXT) (RC-CN DI FA R&D SW) wrote:
-> > Hi Johan,
-> > 
-> >     Thanks for your reminding. I am adjusting patch according to the latest Linux Master branch.
+Am Dienstag, den 18.08.2020, 19:27 -0700 schrieb Thinh Nguyen:
+> PNY Pro Elite USB 3.1 Gen 2 device (SSD) doesn't respond to ATA_12
+> pass-through command (i.e. it just hangs). If it doesn't support this
+> command, it should respond properly to the host. Let's just add a quirk
+> to be able to move forward with other operations.
 > 
-> Use git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git, branch
-> is likely usb-linus, as Johan requested - just in case there is another
-> conflict due to a patch not yet in Linux master but in that tree.
-
-The usb-next is used for new features like this one, but again,
-currently Linus's master branch works as well.
-
-> > -----Original Message-----
-> > From: Johan Hovold <johan@kernel.org> 
-> > Sent: Monday, August 24, 2020 5:10 PM
-> > To: Kiszka, Jan (CT RDA IOT SES-DE) <jan.kiszka@siemens.com>
-> > Cc: Sheng Long Wang <china_shenglong@163.com>; Wang, Sheng Long (EXT) (RC-CN DI FA R&D SW) <shenglong.wang.ext@siemens.com>; johan@kernel.org; gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH v3] usb-serial:cp210x: add support to software flow control
-> > 
-> > On Fri, Aug 21, 2020 at 07:32:58AM +0200, Jan Kiszka wrote:
-> >> On 20.08.20 09:52, Sheng Long Wang wrote:
-> >>> From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
-> >>>
-> >>> When data is transmitted between two serial ports, the phenomenon of 
-> >>> data loss often occurs. The two kinds of flow control commonly used 
-> >>> in serial communication are hardware flow control and software flow 
-> >>> control.
-> >>>
-> >>> In serial communication, If you only use RX/TX/GND Pins, you can't 
-> >>> do hardware flow. So we often used software flow control and prevent 
-> >>> data loss. The user sets the software flow control through the 
-> >>> application program, and the application program sets the software 
-> >>> flow control mode for the serial port chip through the driver.
-> >>>
-> >>> For the cp210 serial port chip, its driver lacks the software flow 
-> >>> control setting code, so the user cannot set the software flow 
-> >>> control function through the application program. This adds the 
-> >>> missing software flow control.
-> >>>
-> >>> Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
-> >>>
-> >>> Changes in v3:
-> >>> -fixed code style, It mainly adjusts the code style acccording  to 
-> >>> kernel specification.
-> >>
-> >> Patch does not apply. You forgot to rebase over latest tty/tty-next or 
-> >> linux master.
-> > 
-> > That should be the usb-next branch of the usb-serial tree:
-> > 
-> > 	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/
-> > 
-> > or linux-next (or, currently, Linus's master branch).
-> > 
-> > You can use "scripts/get_maintainer.sh --scm" to determine which tree to base your work against.
-> 
-> Thanks for correcting! But it's scripts/get_maintainer.pl. ;)
-
-Heh. Thanks for catching that.
-
-Johan
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+Acked-by: Oliver Neukum <oneukum@suse.com>
