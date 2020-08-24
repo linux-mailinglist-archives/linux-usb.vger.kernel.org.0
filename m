@@ -2,225 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1421724FC6F
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 13:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A1324FC8A
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 13:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbgHXLVP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 07:21:15 -0400
-Received: from mga02.intel.com ([134.134.136.20]:54702 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726187AbgHXLVM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Aug 2020 07:21:12 -0400
-IronPort-SDR: C90rIvJoEw8NPZUp9kdHHgb8F7h+1RQDsl49Pg593gTC9xdb8fNHxDCWuKDug46Qr6gh/bQ5q1
- PP963WTPMbsw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9722"; a="143655765"
-X-IronPort-AV: E=Sophos;i="5.76,348,1592895600"; 
-   d="scan'208";a="143655765"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2020 04:21:09 -0700
-IronPort-SDR: Qe4wJjk0l6qTG5Echa7PFmWqTdaP7KaME0sMqJRMDaUyW8U1bawZNVrQy+xRlXi6DxXhMKPHPr
- fPyFSuEETRww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,348,1592895600"; 
-   d="scan'208";a="402318672"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 24 Aug 2020 04:21:07 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 Aug 2020 14:21:06 +0300
-Date:   Mon, 24 Aug 2020 14:21:06 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Zwane Mwaikambo <zwane@yosper.io>
-Cc:     linux-usb@vger.kernel.org, zwanem@gmail.com
-Subject: Re: [PATCH] Fix array overruns in ucsi.c partner_altmode[]
-Message-ID: <20200824112106.GB189773@kuha.fi.intel.com>
-References: <alpine.DEB.2.21.2008131842080.26061@montezuma.home>
+        id S1726461AbgHXLaF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 07:30:05 -0400
+Received: from mail-eopbgr1410107.outbound.protection.outlook.com ([40.107.141.107]:6073
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726624AbgHXL3v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Aug 2020 07:29:51 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gQB0Wm/FATW6j/QJn1yxqTiApHJ/lUCEX0qxi3a74NhyiHg4aG+G6E/CCH14zS5t4tkCssWKF6/Rmw4q588kWNH51ptzV2xnMvgst0dq3sPMXuKC+K+YB8p1pfvQei7c1xDdv+lPC5VEuMayXVt2iz5GVG1+Tr9b0crB1tljfBgiUrYvsjZ/v8qFvFT5JCaMxy8yovNwozi/H06/6kvSiUOrPMrzO+0uEY7aSjltrUBBwdOmwpiFF9RnqAiMzTjSLqV/6IyEDe+Z+ocjxmE763iAWPOlCHgHN3wkidSiys3gxWiDfvuG/lDPUQeHpaYzG89KzmclRwAa0rwWR3J9Ag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sqUpWGuelzAn3KKgYhSMrdTnI6+0Gdqs2UfkuSHm9f8=;
+ b=XusLZR/13Is7tmt/8kGjoMNeURyBn+niT/vaTUUk1EY6rRpX3UsBawsdn/9fDVrISjFfCMVgo6xTcapm56zJL2xK6EPQQYiNLqi57hXck07L019UbGfNyr60QMK3M91wsmsvw8k7Pkawfk/OQCeOgn5BQt5crInQr93G9YPV6ADKraSeSjeZ9Lu6JYJiFZtK4P3fFvEaCKPCfrToE/tBL905QgAl+wcvVBNXvcQf/L59J98FicjgRcvlQss92lE7LN97LdAfZH8CObzcFd9zi8bzjG23eXaSQitp7YKDOI/gBTZgXXWXrm4rU/jQyoKpGjYwxHW4SOGIN3QkSjcQPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sqUpWGuelzAn3KKgYhSMrdTnI6+0Gdqs2UfkuSHm9f8=;
+ b=BRSLEHInzAo1Ycb3RYfrkstvteyA2QdnNmEolELOIlSAbZVZSVogx8nlUkdq5LQ7W6hLiXGaYK3krbWyyf2mE/+cxaqOzAIVuetIfe+f8b8h6qHNX7muzBySsfHGeX9GdWmMEEDiecspAfkVONdWxHSVGYiA2H3b3FZJ7f9yVBU=
+Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com (2603:1096:404:d5::22)
+ by TYAPR01MB4205.jpnprd01.prod.outlook.com (2603:1096:404:cb::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.26; Mon, 24 Aug
+ 2020 11:29:46 +0000
+Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com
+ ([fe80::9083:6001:8090:9f3]) by TY2PR01MB3692.jpnprd01.prod.outlook.com
+ ([fe80::9083:6001:8090:9f3%6]) with mapi id 15.20.3305.026; Mon, 24 Aug 2020
+ 11:29:46 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v2 2/5] dt-bindings: usb: renesas,usb3-peri: Document HS
+ and SS data bus
+Thread-Topic: [PATCH v2 2/5] dt-bindings: usb: renesas,usb3-peri: Document HS
+ and SS data bus
+Thread-Index: AQHWb7XJjorZCTsTKkiFFP/oeG3wFqlHMPDQ
+Date:   Mon, 24 Aug 2020 11:29:46 +0000
+Message-ID: <TY2PR01MB36928D9A5BF4A43429662BCED8560@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+References: <20200811080227.3170-1-biju.das.jz@bp.renesas.com>
+ <20200811080227.3170-3-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20200811080227.3170-3-biju.das.jz@bp.renesas.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: bp.renesas.com; dkim=none (message not signed)
+ header.d=none;bp.renesas.com; dmarc=none action=none header.from=renesas.com;
+x-originating-ip: [124.210.22.195]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: e4c897a8-d5ae-4247-006c-08d848210175
+x-ms-traffictypediagnostic: TYAPR01MB4205:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <TYAPR01MB4205A17ED73822E69CB0E4B5D8560@TYAPR01MB4205.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fTqGTQ9QHBWSYdiZAmEIrYa4yCje/o+5f6bKXamQZz0TLmPv+2eKS2dBvcYnkJT2eFw41hmtDEgnT4X+OWumQBZBsv404lHd6xHcpa7RU9Xrop17Y95w9tbv8fw0v3WAitFy9oN5B9so3swis53CDLnBFvcIih9tehr6dJuWZj4iB5TX6r0PmDtTgbv5PZiIn0OmVptYO6aPi5svlXSSeELwMI3W/UUS1Ezco24wprkn9WE2JOo0DgmokCeVh3VLbr1xvd0VE7RsKL4YOBLXzHEvE7rPfT0MhHwA5VjfScz4+zasv8YMUvdUg82pOs08ikHseUTmJTJpixzX/YlQgMDIkvMdOxedRAvsTOgzvpA1Cr8/RLUvanLJutFfmBQ9nAKU00/J3V+1AOjQYJfe631WMLAR2O0cg7fx6cleD6DzynVW73Nqr82rZiKeOO1GvASysVgH3KoFF7imZ8yUQw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3692.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(376002)(396003)(39860400002)(366004)(6506007)(26005)(110136005)(54906003)(478600001)(8936002)(83380400001)(186003)(7696005)(55236004)(5660300002)(52536014)(9686003)(2906002)(66446008)(316002)(55016002)(64756008)(66476007)(76116006)(33656002)(8676002)(71200400001)(66946007)(66556008)(4326008)(86362001)(142933001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: pLLLS8jP1UhpUXMHIZgpKbjEHKH2xpFtesi/QRgf7J6e/u5BA7R4j9IhSMZcaFSn1DvecaT1hEn3i0YM0rrAJBNTm5bJ1rdZUVF/aM+3jF55Bck1Cz/u5u7l1h2aBtkVpPkIHUIAIu3kNra/DFJmT/fq/Grfy+6Q4tco2y3ie2DE2eacwGjrgdoF77QcIm91FRADnZk9MrynQc9tGzfvdPiTv6AafHRafzYp8RTqjSVqrr7Q7/LySsJl5h+AuHOsSUKotkbM3E1tyuFdld012LTaGF8m+MdGUZkUTQpXg3eScrY6BPls6vWRcgzfAkQHH0/RZFNS+Y49rcGYrRyKjZbIlru32xF58Xk4erGEXWUFb2FnAC1JRhEcs1jv80n6TaWaLGy7ytYCIzKhcaTa9oQ9Big44rMO1K4nqnVoSZi9qnV98kSQzrZXwM6/l62unVpdsaSbcR1RXURYdGshQWWkjcYkeKlQcYtRDm83TQOKQjgq60SNSMH/mCQ0qB11El+qbV/hHm4XhnR7C7mkeJyxk/tALZ4tlt5ZoG6xRLoeyiu2ps5diCSkd7Avpw679UQRHISq9YuXC+02lC4qXyyXF/5ta+Qn5TElUHx1/Jfm3pbiEfcy2rkWN66jxc1r61s3RJs+agHY7P7Swt/oeQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2008131842080.26061@montezuma.home>
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3692.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4c897a8-d5ae-4247-006c-08d848210175
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2020 11:29:46.7031
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5o2DBOnvVzmDZ+k4VlVuwIhMws/nmVGLbCmHKn1qWkHGkgC9E6TYxnj/sjB3+gQcwHCyk1po6rarqbBgd9Jcjl7bx8MV9lgd+Ys/hz7RXWbKT0o55yc59ELso/ip+sxY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4205
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Biju-san,
 
-The subject line should mention the subsystem:
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#the-canonical-patch-format
+Thank you for the patch!
 
-On Thu, Aug 13, 2020 at 06:56:06PM -0700, Zwane Mwaikambo wrote:
-> Plugging in a USB type C dock causes an Oops due to an array 
-> overrun of ->partner_altmode[].
-> 
-> con->partner_altmode[i] ends up with the value 0x2 in the call and it's
-> because the array has been accessed out of bounds resulting in random 
-> contents of memory being checked. The patch was generated and tested 
-> against 5.8.0-rc6.
-> 
-> 
-> [  565.452023] BUG: kernel NULL pointer dereference, address: 00000000000002fe
-> [  565.452025] #PF: supervisor read access in kernel mode
-> [  565.452026] #PF: error_code(0x0000) - not-present page
-> [  565.452026] PGD 0 P4D 0 
-> [  565.452028] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [  565.452030] CPU: 0 PID: 502 Comm: kworker/0:3 Not tainted 5.8.0-rc3+ #1
-> [  565.452031] Hardware name: LENOVO 20RD002VUS/20RD002VUS, 
-> BIOS R16ET25W (1.11 ) 04/21/2020
-> [  565.452034] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-> [  565.452039] RIP: 0010:typec_altmode_update_active+0x1f/0x100 [typec]
-> [  565.452040] Code: 0f 1f 84 00 00 00 00 00 0f 1f 00 0f 1f 44 00 00 55 48 
-> 89 e5 41 54 53 48 83 ec 10 65 48 8b 04 25 28 00 00 00 48 89 45 e8 31 c0 
-> <0f> b6 87 fc 02 00 00 83 e0 01 40 38 f0 0f 84 95 00 00 00 48 8b 47
-> [  565.452041] RSP: 0018:ffffb729c066bdb0 EFLAGS: 00010246
-> [  565.452042] RAX: 0000000000000000 RBX: ffffa067c3e64a70 RCX: 0000000000000000
-> [  565.452043] RDX: ffffb729c066bd20 RSI: 0000000000000000 RDI: 0000000000000002
-> [  565.452044] RBP: ffffb729c066bdd0 R08: 00000083a7910a4f R09: 0000000000000000
-> [  565.452044] R10: ffffffffa106a220 R11: 0000000000000000 R12: 0000000000000000
-> [  565.452045] R13: ffffa067c3e64a98 R14: ffffa067c3e64810 R15: ffffa067c3e64800
-> [  565.452046] FS:  0000000000000000(0000) GS:ffffa067d1400000(0000)
-> knlGS:0000000000000000
-> [  565.452047] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  565.452048] CR2: 00000000000002fe CR3: 00000001b060a003 CR4: 00000000003606f0
-> [  565.452048] Call Trace:
-> [  565.452052]  ucsi_altmode_update_active+0x83/0xd0 [typec_ucsi]
-> [  565.452054]  ucsi_handle_connector_change+0x1dc/0x320 [typec_ucsi]
-> [  565.452057]  process_one_work+0x1df/0x3d0
-> [  565.452059]  worker_thread+0x4d/0x3d0
-> [  565.452060]  ? process_one_work+0x3d0/0x3d0
-> [  565.452062]  kthread+0x127/0x170
-> [  565.452063]  ? kthread_park+0x90/0x90
-> [  565.452065]  ret_from_fork+0x1f/0x30
-> 
-> The failing instruction is;
-> 
-> 0x0000000000000380 <+0>:     callq  0x385 <typec_altmode_update_active+5>
-> 0x0000000000000385 <+5>:     push   %rbp
-> 0x0000000000000386 <+6>:     mov    %rsp,%rbp
-> 0x0000000000000389 <+9>:     push   %r12
-> 0x000000000000038b <+11>:    push   %rbx
-> 0x000000000000038c <+12>:    sub    $0x10,%rsp
-> 0x0000000000000390 <+16>:    mov    %gs:0x28,%rax
-> 0x0000000000000399 <+25>:    mov    %rax,-0x18(%rbp)
-> 0x000000000000039d <+29>:    xor    %eax,%eax
-> 0x000000000000039f <+31>:    movzbl 0x2fc(%rdi),%eax <======
-> 0x00000000000003a6 <+38>:    and    $0x1,%eax
-> 
-> (gdb) list  *typec_altmode_update_active+0x1f
-> 0x39f is in typec_altmode_update_active (drivers/usb/typec/class.c:221).
-> 216      */
-> 217     void typec_altmode_update_active(struct typec_altmode *adev, bool active)
-> 218     {
-> 219             char dir[6];
-> 220
-> 221             if (adev->active == active)
-> 222                     return;
-> 223
-> 224             if (!is_typec_port(adev->dev.parent) && adev->dev.driver) {
-> 225                     if (!active)
-> 
-> (gdb) list *ucsi_altmode_update_active+0x83
-> 0x12a3 is in ucsi_altmode_update_active (drivers/usb/typec/ucsi/ucsi.c:221).
-> 216             }
-> 217
-> 218             if (cur < UCSI_MAX_ALTMODES)
-> 219                     altmode = typec_altmode_get_partner(con->port_altmode[cur]);
-> 220
-> 221             for (i = 0; con->partner_altmode[i]; i++)
-> 222                     typec_altmode_update_active(con->partner_altmode[i],
-> 223                                                con->partner_altmode[i] == altmode);
-> 224     }
-> 
-> This oops is for a similar array overrun in ucsi_unregister_altmodes
-> 
-> [ 4372.429633] usb 1-2.1.4: USB disconnect, device number 16
-> [ 4372.523235] usb 1-2.2: USB disconnect, device number 7
-> [ 4372.570537] usb 1-2.5: USB disconnect, device number 9
-> [ 4373.153246] BUG: kernel NULL pointer dereference, address: 00000000000002f2
-> [ 4373.153267] #PF: supervisor read access in kernel mode
-> [ 4373.153271] #PF: error_code(0x0000) - not-present page
-> [ 4373.153275] PGD 0 P4D 0 
-> [ 4373.153284] Oops: 0000 [#2] PREEMPT SMP NOPTI
-> [ 4373.153292] CPU: 0 PID: 13242 Comm: kworker/0:0 Tainted: G      D   
->         5.8.0-rc6+ #1
-> [ 4373.153296] Hardware name: LENOVO 20RD002VUS/20RD002VUS, BIOS R16ET25W (1.11 )
->  04/21/2020
-> [ 4373.153308] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-> [ 4373.153320] RIP: 0010:ucsi_unregister_altmodes+0x5f/0xa0 [typec_ucsi]
-> [ 4373.153326] Code: 54 48 8b 3b 41 83 c4 01 e8 9e f9 0c 00 49 63 c4 48 c7 
-> 03 00 00 00 00 49 8d 5c c5 00 48 8b 3b 48 85 ff 74 31 41 80 fe 01 75 d7 
-> <0f> b7 87 f0 02 00 00 66 3d 01 ff 74 0f 66 3d 55 09 75 c4 83 bf f8
-> [ 4373.153332] RSP: 0018:ffffb2ef036b3dc8 EFLAGS: 00010246
-> [ 4373.153338] RAX: 000000000000001e RBX: ffff94268b006a60 RCX: 0000000080800067
-> [ 4373.153342] RDX: 0000000080800068 RSI: 0000000000000001 RDI: 0000000000000002
-> [ 4373.153347] RBP: ffffb2ef036b3de8 R08: 0000000000000000 R09: ffffffff8dc65400
-> [ 4373.153351] R10: ffff9426678d7200 R11: 0000000000000001 R12: 000000000000001e
-> [ 4373.153355] R13: ffff94268b006970 R14: 0000000000000001 R15: ffff94268b006800
-> [ 4373.153361] FS:  0000000000000000(0000) GS:ffff942691400000(0000)
-> knlGS:0000000000000000
-> [ 4373.153366] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 4373.153371] CR2: 00000000000002f2 CR3: 00000004445a6005 CR4: 00000000003606f0
-> [ 4373.153375] Call Trace:
-> [ 4373.153389]  ucsi_unregister_partner.part.0+0x17/0x30 [typec_ucsi]
-> [ 4373.153400]  ucsi_handle_connector_change+0x25c/0x320 [typec_ucsi]
-> [ 4373.153418]  process_one_work+0x1df/0x3d0
-> [ 4373.153428]  worker_thread+0x4a/0x3d0
-> [ 4373.153436]  ? process_one_work+0x3d0/0x3d0
-> [ 4373.153444]  kthread+0x127/0x170
-> [ 4373.153451]  ? kthread_park+0x90/0x90
-> [ 4373.153461]  ret_from_fork+0x1f/0x30
-> [ 4373.153661] CR2: 00000000000002f2
-> 
-> Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
+> From: Biju Das, Sent: Tuesday, August 11, 2020 5:02 PM
+>=20
+> Document HS and SS data bus for the "usb-role-switch" enabled case.
+>=20
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index d0c63afaf..79061705e 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -218,9 +218,10 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
->  	if (cur < UCSI_MAX_ALTMODES)
->  		altmode = typec_altmode_get_partner(con->port_altmode[cur]);
->  
-> -	for (i = 0; con->partner_altmode[i]; i++)
-> -		typec_altmode_update_active(con->partner_altmode[i],
-> -					    con->partner_altmode[i] == altmode);
-> +	for (i = 0; i < UCSI_MAX_ALTMODES; i++)
-> +		if (con->partner_altmode[i])
-> +			typec_altmode_update_active(con->partner_altmode[i],
-> +										con->partner_altmode[i] == altmode);
->  }
->  
->  static u8 ucsi_altmode_next_mode(struct typec_altmode **alt, u16 svid)
-> @@ -479,7 +480,10 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
->  		return;
->  	}
->  
-> -	while (adev[i]) {
-> +	for (i = 0; i < UCSI_MAX_ALTMODES; i++) {
-> +		if (!adev[i])
-> +			break;
-> +
+> v1->v2: No change
+> Ref:https://patchwork.kernel.org/patch/11669423/
+> ---
+>  .../bindings/usb/renesas,usb3-peri.yaml       | 36 +++++++++++++++----
+>  1 file changed, 30 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+> b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+> index e3cdeab1199f..3eb964af37b8 100644
+> --- a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+> +++ b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+<snip>
+> @@ -79,9 +92,20 @@ examples:
+>          companion =3D <&xhci0>;
+>          usb-role-switch;
+>=20
+> -        port {
+> -            usb3_role_switch: endpoint {
+> -                remote-endpoint =3D <&hd3ss3220_ep>;
+> -            };
+> -        };
+> +    	ports {
 
-for (i = 0; adev[i]; i++)
+I think we should use spaces instead of tab here and below.
 
->  		if (recipient == UCSI_RECIPIENT_SOP &&
->  		    (adev[i]->svid == USB_TYPEC_DP_SID ||
->  			(adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
-> @@ -488,7 +492,7 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
->  			ucsi_displayport_remove_partner((void *)pdev);
->  		}
->  		typec_unregister_altmode(adev[i]);
-> -		adev[i++] = NULL;
-> +		adev[i] = NULL;
->  	}
->  }
+> +    		#address-cells =3D <1>;
+> +    		#size-cells =3D <0>;
+> +    		port@0 {
+> +    			reg =3D <0>;
+> +    			usb3_hs_ep: endpoint {
+> +    				remote-endpoint =3D <&hs_ep>;
+> +    			};
+> +    		};
+> +    		port@1 {
+> +    			reg =3D <1>;
+> +    			usb3_role_switch: endpoint {
+> +    				remote-endpoint =3D <&hd3ss3220_out_ep>;
+> +    			};
+> +    		};
+> +    	};
 
-So are the two fixes here? If so, then please supply one patch per
-fix.
+Best regards,
+Yoshihiro Shimoda
 
+>      };
+> --
+> 2.17.1
 
-thanks,
-
--- 
-heikki
