@@ -2,90 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3539C24FB76
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 12:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2BC24FC61
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 13:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726727AbgHXKcS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 06:32:18 -0400
-Received: from mailout04.rmx.de ([94.199.90.94]:38741 "EHLO mailout04.rmx.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725968AbgHXKcS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Aug 2020 06:32:18 -0400
-Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mailout04.rmx.de (Postfix) with ESMTPS id 4BZpMx1LRJz3qxPc;
-        Mon, 24 Aug 2020 12:32:13 +0200 (CEST)
-Received: from mta.arri.de (unknown [217.111.95.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by kdin02.retarus.com (Postfix) with ESMTPS id 4BZpMX3Q7Vz2TS6b;
-        Mon, 24 Aug 2020 12:31:52 +0200 (CEST)
-Received: from n95hx1g2.localnet (192.168.54.40) by mta.arri.de
- (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 24 Aug
- 2020 12:31:41 +0200
-From:   Christian Eggers <ceggers@arri.de>
-To:     Richard Leitner <richard.leitner@skidata.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] Add two new configuration drivers for Microchip USB hubs
-Date:   Mon, 24 Aug 2020 12:31:40 +0200
-Message-ID: <3231735.vQvGARyy4L@n95hx1g2>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <20200817075426.GA560469@pcleri>
-References: <20200726084116.GD448215@kroah.com> <20200727083333.19623-1-ceggers@arri.de> <20200817075426.GA560469@pcleri>
+        id S1726483AbgHXLRg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 07:17:36 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40273 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726473AbgHXLQg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 07:16:36 -0400
+Received: by mail-lj1-f196.google.com with SMTP id 185so9155168ljj.7;
+        Mon, 24 Aug 2020 04:16:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NTTAy7/Bk79COqVPp1Evjr43+xke8os2MtHi98vP9iY=;
+        b=EicSrsq40uhZY2B4Fju319uhPtB9IEiKtSpNgKtkSayTVZ0wX/OETsRRS3NeZ3ID2Q
+         /u9d+d5oeFM9YDAXLRg5uFGC/dd1FtZoYfUpQkOFICEFKiA1U7BybRjuW8pU+25svI5h
+         R2dTQUQo756TSYwLDfcOLA4OY7iIcyBQ0jCfrhGurrxGShFkv48e489Hr8vJKwBu3Pk2
+         +qN1q+mZKNePps5y6uK1wq0yYMnAHXr818D39SOcl3zrF937pRWw+VGbr6R4A4Huw9p1
+         B/iCFHA/QX9iHsLdv0aUZkbMiXM5nN88maQWUIJomvyn7l2FRlfN1+1aLe1qRma1DLSG
+         3FHw==
+X-Gm-Message-State: AOAM533hd10f2e6yuzBbet5S02wbvCgYdflU5mx/tjtk1Fbuw/XzPzkQ
+        5oyaiy6vomdAr/rWE0K0yHQ=
+X-Google-Smtp-Source: ABdhPJyHfYHFFrcReSj2HlMjvtCdInEhju5DvqSiAdCGwddCP5Ek/MLooLRPYf6uKVvsqC4FWvA0MA==
+X-Received: by 2002:a2e:912:: with SMTP id 18mr2491547ljj.429.1598267793081;
+        Mon, 24 Aug 2020 04:16:33 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id r25sm2018243lfn.93.2020.08.24.04.16.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2020 04:16:32 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kAASl-0000Z9-GD; Mon, 24 Aug 2020 13:16:32 +0200
+Date:   Mon, 24 Aug 2020 13:16:31 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     "Wang, Sheng Long" <shenglong.wang.ext@siemens.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Sheng Long Wang <china_shenglong@163.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Kiszka, Jan" <jan.kiszka@siemens.com>
+Subject: Re: [PATCH v3] usb-serial:cp210x: add support to software flow
+ control
+Message-ID: <20200824111631.GG21288@localhost>
+References: <20200820075240.13321-1-china_shenglong@163.com>
+ <97836b78-740b-cf70-4803-27305b6e0a4d@siemens.com>
+ <20200824090948.GC21288@localhost>
+ <f21d4cc8b12d4ec6870623472ca7df09@siemens.com>
+ <faddf44e-db1d-46e5-b6db-88168b0cc808@siemens.com>
+ <20200824094307.GE21288@localhost>
+ <8f7594e92e464bd4bd2e51218541ed58@siemens.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [192.168.54.40]
-X-RMX-ID: 20200824-123154-4BZpMX3Q7Vz2TS6b-0@kdin02
-X-RMX-SOURCE: 217.111.95.66
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f7594e92e464bd4bd2e51218541ed58@siemens.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Richard,
+On Mon, Aug 24, 2020 at 10:16:13AM +0000, Wang, Sheng Long wrote:
+> Hi, Johan
+> 
+>   So, Is it currently possible for me to use which Branch?  :)
+>  
+>   https://github.com/torvalds/linux  master branch
+> 
+>  Or use  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git
 
-On Monday, 17 August 2020, 09:54:26 CEST, Richard Leitner wrote:
-> Hi Christian,
-> sorry for the late reply. My MUA somehow didn't show me that series
-> earlier...
-likewise... I was on holiday last week.
+Please use the usb-next branch from 
 
-> I haven't looked into the patches in detail, but at a first glance it
-> looks like a lot copy-n-paste.
-> Have you thought about merging the (after your series) 3 hub drivers
-> into one? Something like a "microchip i2c usb hub driver"?
-> Would that be feasible for your point of view?
-I'm not sure about the criteria for having separate drivers vs. a combined 
-one.
-As changing the driver usually requires testing with real hardware, keeping 
-them separate may be easier. On the other hand, I already synced some changes 
-from usb251xb into "my" drivers, so it is likely that such work will also have 
-to done in future.
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git
 
-Rob Herring already suggested to create a common yaml document for the
-device tree bindings. It would probably make sense to share the device tree 
-code between our drivers. But I would like to keep the "hardware" side of the 
-drivers independent, as there are subtle differences between the different hub 
-series.
-
-Compared to usb251x, the new drivers don't write the full configuration memory 
-of the hub (the configuration memory space is much bigger than 8 bit and has 
-many holes). They rely on the defaults after hardware reset on perform read-
-modify-write for the properties set in the device tree.
-
-If the usb251xb hubs could be programmed in a similar way, merging all drivers 
-should be possible using a mic_usb_hub_ops struct with function pointers for 
-applying the (common) device tree properties (e.g. set_product_id(), 
-set_device_id(), ..., set_oc_delay(), set_manufacturer_string(), ...).
-
-Best regards
-Christian
-
-
-
-
+Johan
