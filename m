@@ -2,118 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 232EB24FF42
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 15:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4E424FF61
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 15:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726187AbgHXNpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 09:45:31 -0400
-Received: from mga03.intel.com ([134.134.136.65]:61093 "EHLO mga03.intel.com"
+        id S1727790AbgHXN67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 09:58:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51454 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726024AbgHXNpa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Aug 2020 09:45:30 -0400
-IronPort-SDR: at0WDYbrUWUIkv12KMrWFvSf9olDQAp+RzY523gxtDEHqmQX52FNJfRxAHeoqYQzgZO3BuLr2y
- tpNMuCCFIPuw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9722"; a="155882505"
-X-IronPort-AV: E=Sophos;i="5.76,348,1592895600"; 
-   d="scan'208";a="155882505"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2020 06:45:29 -0700
-IronPort-SDR: UfO5vfJKqd+PELLEYNYN9SgcEMYprtbYEVGf0H17XsK1IP+SV4iRB0CT7ZRoxYa6LGmZYn/Q94
- BzTkY5VWGkGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,348,1592895600"; 
-   d="scan'208";a="331024908"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Aug 2020 06:45:28 -0700
-Subject: Re: Data toggles not reset on "set configuration" for ports handled
- by "xhci_hcd" driver
-To:     Martin Thierer <mthierer@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
-References: <CAL3BvCzb6dGZOm6jy2PddSfioM7hThMEBm+aQ_gmMAWAXFYOuQ@mail.gmail.com>
- <20200821160321.GA256196@rowland.harvard.edu>
- <CAL3BvCyz3W+aRu0e=RE3teaMMh6KDYxu8NbFicY07Xt-=f9Whg@mail.gmail.com>
- <20200821170106.GB256196@rowland.harvard.edu>
- <d11a91f5-2bb8-01ce-c8b8-4512a2cf2793@linux.intel.com>
- <CAL3BvCyxTvfUjecoYO0ie1vt4_+1cad+8Dt=xmcXogZSooGj+A@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <cbdfafed-b8d4-ca07-bde1-4598f5117f04@linux.intel.com>
-Date:   Mon, 24 Aug 2020 16:48:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1725921AbgHXN6w (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Aug 2020 09:58:52 -0400
+Received: from saruman (unknown [194.34.132.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CAA27207CD;
+        Mon, 24 Aug 2020 13:58:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598277531;
+        bh=o9BlmvcB5Gr+9lF+n5O9P3SYHUi+Nkxe6s9/2q78T9o=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=IRlJ+6fEFRNWh7fO5RWDUEsjPBW/gE2Zqf6TkWcxeELMFccPEsNlM1rdpKna3i407
+         UB7P/OwwzrYz4OiB0ZGDJ1LBR4HxlTCFWy+WHVwXBy7gF4jbwvwn+636w2J6deEe42
+         n1qmjG4SdQcnvo+3fqHsXtKhn72zR6YKevnbjcJc=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
+        "yebin10@huawei.com" <yebin10@huawei.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: fsl: Fix unsigned expression compared with
+ zero in fsl_udc_probe
+In-Reply-To: <f61f4bc3916f852799edb6af9740afb2118ec84f.camel@infinera.com>
+References: <20200824080437.229826-1-yebin10@huawei.com>
+ <20200824082122.GA336539@kroah.com>
+ <f61f4bc3916f852799edb6af9740afb2118ec84f.camel@infinera.com>
+Date:   Mon, 24 Aug 2020 16:58:43 +0300
+Message-ID: <87d03gjgbw.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAL3BvCyxTvfUjecoYO0ie1vt4_+1cad+8Dt=xmcXogZSooGj+A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24.8.2020 16.10, Martin Thierer wrote:
->> True, xHCI doesn't reset the toggle in this case.
->> xHC only keeps track of added or dropped endpoints, it doesn't track
->> which configuration or interface is set.
-> 
-> I'm not sure if it's relevant, but I found that calling libusb's
-> set_interface() *does* seem to reset the data toggles also on xhci
-> ports, even if it does not actually change the interface.
-> 
-> Martin
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-It does, I checked that usb_set_configuration() ends up dropping and re-adding 
-the endpoint when it calls usb_hcd_alloc_bandwidth(), this should cause xhci
-driver to reset the toggles.
+Joakim Tjernlund <Joakim.Tjernlund@infinera.com> writes:
 
-Looks like libusb set_configuration could end up calling usb_reset_configuration() instead.
-If there are no changes it's possible usb_hcd_alloc_bandwidth() never gets called, and
-toggles never reset.
+> On Mon, 2020-08-24 at 10:21 +0200, Greg KH wrote:
+>>=20
+>> On Mon, Aug 24, 2020 at 04:04:37PM +0800, Ye Bin wrote:
+>> > Signed-off-by: Ye Bin <yebin10@huawei.com>
+>>=20
+>> I can't take patches without any changelog text, sorry.
+>
+> Still taking patches for fsl_udc_core.c ?
+> I figured this driver was obsolete and should be moved to one of the Chip=
+idea drivers.
 
-see drivers/usb/core/devio.c proc_setconfig()  
+Nobody sent any patches to switch over the users of this driver to
+chipidea. I would love to delete this driver :-)
 
--Mathias
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9Dx5QRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQawPA/8CqHT6zk1S2J+/qkvq8DEZIXlhm8dbpcE
+CqIW15+nNeGyk6JCrLhtG/q2ySPZgkZzfArbcEznTLWBXHf+XUHZiWKsL4FRj0It
+mUX4ScgBErd66faiF448UBfTFiVCUUMGJVaU5L896C/haxmlIebZSlPID7MBOyYI
+ouJLXSrwIbU+QDhQfFUhSLwqwKK/ayHD02nsRBaWG12WDImuXZ5w3FlKzKzCYDII
+Rsic7GjlUj6hBmHrbyt2beOG9k8Z2EDMI96SddAz+wFzQu9nIlqZPNbNK2qFrI0S
+N99f58xP1K+cC+tqn0YI3fEFz2HLb6S31PbcWd2slokfgB5DkJt05J2mRMGF04UF
+dDs+5Ab/RRGO+ZZFnIDQcI9hdNSdXggZAhH7XVB/LnBgfJwRyiudAt8zaj0/RJO1
+KTMJ7O2xjqalazXVAzqiOGPbPqNi6c4Oougsu1Pwoe5PzXOtr+p5i7Jx7yoPwMzg
+yamHoVfdtIy2lwD8wcC3Qdx/hzYf0y4sqMgb4cop5YyMFRBFhwlMbEB2zj6rtzz/
+NDa4ToWs+azhCchZz4Ow3FjPs/4Ssyy5oyJg7LT2ZzgxaOKU8XRDrHFR0NKnt12a
+vcvUkS+MV6snaygCncLFujM1co6zQ5KlD6Olm4q3IlguQidDM7raX2/YO/3It/oN
+9HR27WCDbjE=
+=BdBv
+-----END PGP SIGNATURE-----
+--=-=-=--
