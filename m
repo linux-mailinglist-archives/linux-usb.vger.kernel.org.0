@@ -2,152 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BF1250BD7
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 00:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E457D250C5B
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 01:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727913AbgHXWra (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 18:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726531AbgHXWr3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 18:47:29 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78724C061574
-        for <linux-usb@vger.kernel.org>; Mon, 24 Aug 2020 15:47:29 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id p11so2574036pfn.11
-        for <linux-usb@vger.kernel.org>; Mon, 24 Aug 2020 15:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tgCgrj/7RNoEUABuzTp3guQYTwt5yuubONILEbtUHdE=;
-        b=NedFESVhjB8Y65MLB01kXcJ3NxiJVrtyBCzQ3AaSaYU7HFRe324lwhjy/rtXDqndkM
-         9y6sSETHpexp/EbMGctE8dWHcJQillYrNgIBjst8MZkgUfi9ufBAVybTg4IrFfcj5s4Q
-         1tWBslrl4dVhVP6XfxB3Yo6LrMTPWU6tcSH1M=
+        id S1728073AbgHXXaq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 19:30:46 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:37505 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbgHXXao (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 19:30:44 -0400
+Received: by mail-io1-f65.google.com with SMTP id b16so10602652ioj.4;
+        Mon, 24 Aug 2020 16:30:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=tgCgrj/7RNoEUABuzTp3guQYTwt5yuubONILEbtUHdE=;
-        b=jEsbE0Hruko9lLHiTfjm2Sl5Bm18e3IVTjlQ/ghzRJ/UHxsu9rOzahJcoFoHUNxVoE
-         WC2LE7M12cm+0zgX5R5nBRDExeHwSR1ZRYJFiEtrgCKHmx51FvNRThUzXlu6Kum4uMw2
-         872sG3GG9vXnrv6DsE2Eohi043WlzGP+g790eo3wS/WSSGyNh9C1VCKAKGt3iT8MiUCf
-         oljLxNOydZHz7YrqTkmS5sbg6Q1L1xT14MBmczo9RRKXOUIwEWA/hrTke3G9vUhult9t
-         0PJxAqvXMGBCL/MTWukp+33DtQuHMcxkZSnIfaSqeGYsy4cko5LsGm01i1q5VHCQxuJX
-         +fOA==
-X-Gm-Message-State: AOAM5307cZRgB2z16PCqAAOSvhluk3A/Eg3eMZL8Wkn3ydGyZDuWUnvs
-        a2cW05yjHIkBnmjrATNJLzG3/Q==
-X-Google-Smtp-Source: ABdhPJzstXCt11oOnd0nn5W2icKYNmJ722Uy6n9Pw7DOVdijRVCMEkUwq7XkTS5YqaQ8CRlGx+aAEw==
-X-Received: by 2002:a17:902:b082:: with SMTP id p2mr5320220plr.266.1598309248702;
-        Mon, 24 Aug 2020 15:47:28 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
-        by smtp.gmail.com with ESMTPSA id np4sm538459pjb.4.2020.08.24.15.47.27
+        bh=Ul5vsSQ0AC/DUuwVVIoms1HCf2oN0/YEUiAq/yjQxDE=;
+        b=Ut3WcQ6bLanuewPTChONgcnarmYPcrWFQP43IfNlEjUvJpsfc0azDgv9f9EDXSc3ag
+         r+1+/haRwW9Y6MzVH8hsikzWLKffHJRsYR0hM+VNf1mzrQmjvDl+LSFmE62/tMD80IMW
+         F1BWdZNBZf0p0/kGol1jO3u4M2F0Qgtti+GRhX97Kemg3vTPJNEDIRsKz08TyJrexCkl
+         THswXd+o9gG0ck8pOU+8cwnVncY7ScXp6SybutvdywoqfqemoaN7QzowY6nviSC45SkG
+         s8JIFHv1WK9a3fYUhB1V4IEMTR6wOL9k6YOVrhOmTXueK2Fya+39j1FA0PJ7RHOp/Whe
+         JsNQ==
+X-Gm-Message-State: AOAM530B0mH/aSiw+ipZBi5gQNsiyMhbn/+sbN2uSzsNOAcfKFlyW8Ds
+        kveTchRVgwJ01dGUOuu22Q==
+X-Google-Smtp-Source: ABdhPJz+NQ1qdajPag/8+NvwhC0VZ3vzxnBW9ciupDP5U8wTD1qPKcV07ZiSre5zNxPrU8kgre3VRQ==
+X-Received: by 2002:a6b:e009:: with SMTP id z9mr6755255iog.124.1598311843191;
+        Mon, 24 Aug 2020 16:30:43 -0700 (PDT)
+Received: from xps15 ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id e6sm7517181iod.53.2020.08.24.16.30.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 15:47:28 -0700 (PDT)
-Date:   Mon, 24 Aug 2020 15:47:26 -0700
-From:   Prashant Malani <pmalani@chromium.org>
-To:     "Mani, Rajmohan" <rajmohan.mani@intel.com>
-Cc:     Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mon, 24 Aug 2020 16:30:42 -0700 (PDT)
+Received: (nullmailer pid 3540232 invoked by uid 1000);
+        Mon, 24 Aug 2020 23:30:40 -0000
+Date:   Mon, 24 Aug 2020 17:30:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "bleung@chromium.org" <bleung@chromium.org>
-Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
- (IOM) driver
-Message-ID: <20200824224726.GA48297@google.com>
-References: <20200822040508.23510-1-rajmohan.mani@intel.com>
- <20200822040508.23510-2-rajmohan.mani@intel.com>
- <20200822095631.GB2553024@google.com>
- <DM6PR11MB3963121C820F570F845BBAEEF6560@DM6PR11MB3963.namprd11.prod.outlook.com>
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: Add support for Broadcom USB pin map
+ driver
+Message-ID: <20200824233040.GA3532378@bogus>
+References: <20200812202018.49046-1-alcooperx@gmail.com>
+ <20200812202018.49046-2-alcooperx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM6PR11MB3963121C820F570F845BBAEEF6560@DM6PR11MB3963.namprd11.prod.outlook.com>
+In-Reply-To: <20200812202018.49046-2-alcooperx@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rajmohan,
+On Wed, Aug 12, 2020 at 04:20:16PM -0400, Al Cooper wrote:
+> Add DT bindings for the Broadcom USB pin map driver. This driver allows
+> some USB input and output signals to be mapped to any GPIO instead
+> of the normal dedicated pins to/from the XHCI controller.
 
-On Mon, Aug 24, 2020 at 10:19:27PM +0000, Mani, Rajmohan wrote:
-> Hi Prashant,
-> 
-> Thanks for the quick review.
-> 
-> > > +
-> > > +	if (!iom || !iom->dev || !iom->regbar)
-> > 
-> > Do we need to check for !iom->dev and !iom->regbar?
-> 
-> It's a good practice to have sanity checks on pointer members dereferenced.
-> 
-> So I can lose the check on iom->dev, but prefer to keep the check on regbar.
-> Let me know if you feel strongly about losing the check for regbar as well.
-
-Sounds good.
-> 
-> > Is there a valid situation
-> > where iom != NULL but iom->dev and/or iom->regbar == NULL?
-> > Sounds like it shouldn't, but I may be missing something.
-> > 
-> 
-> I think I am being conservative here.
-> 
-> > > +		return -ENODEV;
-> > > +
-> > > +	if (!status || (port > IOM_MAX_PORTS - 1))
-> > 
-> > I think parentheses around "port > IOM_MAX_PORT - 1" aren't required.
-> 
-> Ack
-> 
-> > > +		return -EINVAL;
-> > > +
-> > > +	reg = iom->regbar + IOM_PORT_STATUS_OFFSET + IOM_REG_LEN *
-> > port;
-> > > +
-> > > +	*status = ioread32(reg);
-> > 
-> > Perhaps just inline reg within the parentheses?
-> 
-> Kept this way to increase readability. Let me know if you feel strongly towards
-> inline reg.
-
-I'd rather this be inlined, you save a couple lines from the variable
-declaration, and IMO we're not gaining much in terms of readability by
-declaring this separately.
+Is this a driver or h/w block because bindings are for h/w blocks?
 
 > 
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(intel_iom_port_status);
-> > > +
-> > > +static int intel_iom_probe(struct platform_device *pdev) {
-> > > +	void __iomem *addr;
-> > > +
-> > > +	/* only one IOM device is supported */
-> > 
-> > Minor nit: s/only/Only
+> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> ---
+>  .../bindings/usb/brcm,usb-pinmap.yaml         | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
 > 
-> And then I may need to end the comment with a period.
-> Let me know if you feel strongly.
-Yes, let's capitalize and add the period. Let's try to use the right
-punctuation where possible.
+> diff --git a/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml b/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+> new file mode 100644
+> index 000000000000..19cf6ad36373
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+> @@ -0,0 +1,63 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/brcm,usb-pinmap.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom USB pin map Controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - Al Cooper <alcooperx@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +      items:
+> +          - const: brcm,usb-pinmap
 
-Best regards,
+2 space indentation please.
 
--Prashant
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description: Must be defined if any out-gpios are specified.
+
+'dependencies' can express this in schema.
+
+> +
+> +  in-gpios:
+> +    description: Array of one or more GPIO pins used for input signals.
+
+You need to define how many GPIOs are valid.
+
+> +
+> +  in-names:
+> +    description: Array of input signal names, one per gpio in in-gpios.
+
+No, this isn't how we name GPIOs. The part before '-gpios' is how.
+
+> +
+> +  in-masks:
+> +    description: Array of enable and mask pairs, one per gpio in-gpios.
+
+Needs a vendor prefix.
+
+> +
+> +  out-gpios:
+> +    description: Array of one or more GPIO pins used for output signals.
+> +
+> +  out-names:
+> +    description: Array of output signal names, one per gpio in out-gpios.
+> +
+> +  out-masks:
+> +    description: Array of enable, value, changed and clear masks, one
+> +      per gpio in out-gpios.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    usb_pinmap: usb-pinmap@22000d0 {
+> +        compatible = "brcm,usb-pinmap";
+> +        reg = <0x22000d0 0x4>;
+> +        in-gpios = <&gpio 18 0>, <&gpio 19 0>;
+> +        in-names = "VBUS", "PWRFLT";
+> +        in-masks = <0x8000 0x40000 0x10000 0x80000>;
+> +        out-gpios = <&gpio 20 0>;
+> +        out-names = "PWRON";
+> +        out-masks = <0x20000 0x800000 0x400000 0x200000>;
+> +        interrupts = <0x0 0xb2 0x4>;
+> +    };
+> +
+> +...
+> -- 
+> 2.17.1
+> 
