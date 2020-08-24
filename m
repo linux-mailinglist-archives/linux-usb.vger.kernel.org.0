@@ -2,129 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C099125087F
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 20:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA6A250936
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 21:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgHXSxL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 14:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725904AbgHXSxJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 14:53:09 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB5DC061573
-        for <linux-usb@vger.kernel.org>; Mon, 24 Aug 2020 11:53:08 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id 185so10894409ljj.7
-        for <linux-usb@vger.kernel.org>; Mon, 24 Aug 2020 11:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kr/ilKP3KtnpaNLBR4Wfqo2ibtevdlA/61dd3WxVQbQ=;
-        b=bqOH7tKogCiyKYB3sMzalRYYv42T8tBwVa1C577l6dLDiQqHISTeBcw3/rVMjcQVRr
-         +oeKkG0mXbC9eLC33+u8/ltcR8dvp2UukEC9uSYpxY/C3Gkwd5Y8jfWXavf3P3sBT+Er
-         X0gXWdng+UeTkQ4qPQxDaSxZZL7g5raQtCJsQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kr/ilKP3KtnpaNLBR4Wfqo2ibtevdlA/61dd3WxVQbQ=;
-        b=ZpbYofsTFSo6apsh+vgc7d9II8sJ6ULkyfvttyiBGdyUS658eXSsKmdoMnd+i3mrz/
-         8RW85c0Qw35OprM7Uvk/fTEz4xGaXLNDabepHUV4qP4LdAXcr310nIYAqv0zCNFR+7jv
-         KwvAB8CGRd7RNz+/skPKT2jKWk9z/I/m1dX2Gngh18IKSy7pMZscliVtzfgJ1TX4++YG
-         5f4r4Cy7gvpU5eyI+29gUrHLiNjDZO0/xTk4sehIi+urHK0LYWGR66UTCp2s6PonW0Yu
-         QvHsJGkmVByLNZnz/2QiJuLbUWQ7x9GoB8JNV99p0B0vAqdHg+hcWSmmXN4mINC+Qt20
-         2Krw==
-X-Gm-Message-State: AOAM531WLMAk599x+6UqrYjog7f91LYopCQ9u/iexstHwKyuJiAHjisb
-        zVUWhkgdrSPZ+wB8OCxMB1pCIcFuz4hjcg==
-X-Google-Smtp-Source: ABdhPJxsV0w8NAHrpGph6oJC0q+5n/UCfTKf2q7xKN/MkVmkdHD8d5zfuZhhax+EKtmHkd/yuMb5kA==
-X-Received: by 2002:a2e:503:: with SMTP id 3mr3382848ljf.225.1598295186940;
-        Mon, 24 Aug 2020 11:53:06 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id j2sm2337221ljb.98.2020.08.24.11.53.06
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Aug 2020 11:53:06 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id w14so10896810ljj.4
-        for <linux-usb@vger.kernel.org>; Mon, 24 Aug 2020 11:53:06 -0700 (PDT)
-X-Received: by 2002:a05:651c:d5:: with SMTP id 21mr2906073ljr.276.1598295186265;
- Mon, 24 Aug 2020 11:53:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <MN2PR18MB2637D7C742BC235FE38367F0A09C0@MN2PR18MB2637.namprd18.prod.outlook.com>
- <20200821082720.7716-1-penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20200821082720.7716-1-penguin-kernel@I-love.SAKURA.ne.jp>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Mon, 24 Aug 2020 11:52:53 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXOHDU+SWmr+7aOUtbuzC22T-UWhZXJ5UXtcsev5ZTbqMw@mail.gmail.com>
-Message-ID: <CA+ASDXOHDU+SWmr+7aOUtbuzC22T-UWhZXJ5UXtcsev5ZTbqMw@mail.gmail.com>
-Subject: Re: [PATCH v2] mwifiex: don't call del_timer_sync() on uninitialized timer
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Ganapathi Bhat <ganapathi.bhat@nxp.com>,
-        amit karwar <amitkarwar@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>,
-        Nishant Sarmukadam <nishants@marvell.com>,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+373e6719b49912399d21@syzkaller.appspotmail.com>,
-        syzbot <syzbot+dc4127f950da51639216@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726303AbgHXT0I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 15:26:08 -0400
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:43877 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725976AbgHXT0H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 15:26:07 -0400
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 3F0AEC18;
+        Mon, 24 Aug 2020 15:26:06 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute7.internal (MEProxy); Mon, 24 Aug 2020 15:26:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
+        mime-version:message-id:in-reply-to:references:date:from:to
+        :subject:content-type; s=fm2; bh=NSoVj/FZBFVo6u4kmXgVHCuJA83lXdg
+        hkQMVgtIx3TI=; b=E/0bEDwL5cwWAMdRuEOz2dEMnwHmHa+ZcqpVOmzKUHrZOul
+        U20ivkvwzDLmk3LKHvf1n4L7CxNgb6AHm8DcPkRDUrIJe6HoiNGRAoqD3mxhIJMt
+        MFJ3U1VjSCUl96ACCwFwkBhl1Aw/PCiX89d5dQNMQ0bjLz4kbotoojzRAcWbnPWp
+        eRDB643HADSKdyFM6DVEB0fvI0dYUX73ir9oKpmq8SLpWqKsfbpL4aJN+MK/40GF
+        cFC4ucQ97RcjQL/Kwe86oPWRdrfiUFHHguWNUnb264WrdctoasFwTwUV7KSxYMME
+        pJH8RS8kuSkUe5+NyTvmY4JjpqX6ZdpuNVU5ppg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=NSoVj/
+        FZBFVo6u4kmXgVHCuJA83lXdghkQMVgtIx3TI=; b=GlUJfeabdSsQC5Tx5bRJbz
+        VdEYN1KPEmrHy2RugGlxanYIeiS2gz+kYdgSP/Vh3OSTyygDkdx404MaPvMEQBam
+        p8LjhqH+hWSQ3eNumjSlBNVlSSvZFIvi11PjFhYtr4JroC1RkiwoIRBmli2gOTnu
+        6x8VZ6y8G6+IP6sLm/3XwLEAUjtQgcGlUD7DIpcdFg0mwHIvV7X0ahAaoELABWgg
+        bBF6Vdh+4gjWyIZv3PDaPoCI1giycjQekUIthNuV3NFb0wqKp+BJA093qC6yEOMr
+        ucREuWCBRSoez1VsDzjbcE6mk6jnsYe4o45G7gYiN3cdf12Q9YAwppgEOLAnJC8w
+        ==
+X-ME-Sender: <xms:TRREX9plrwjQT_yP6JdqQEbizueDrRsZ5ku_BsTQcKftyZtNGh92UQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedruddukedgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreerjeenucfhrhhomhepfdfuihgu
+    ucfuphhrhidfuceoshhiugesrggvrghmrdhusheqnecuggftrfgrthhtvghrnhepgeeftd
+    dtgfduffdvgedugeelkeeljeefueehhfejgefhfedvkeevueffgfeivdevnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhiugesrggvrghmrd
+    hush
+X-ME-Proxy: <xmx:TRREX_pVHoGEVrDM6EHF-PAO07zuv0-PEe01XXkMPxGvlfPKZHATYg>
+    <xmx:TRREX6OPAUGuER4cRLKIXgFCzjDRNmJXngP7MAPPqPbFxdZAhHI7JQ>
+    <xmx:TRREX44G3h0mh4PZw0-E1k8vGWSemfDXJRd9gpyTVXzRD9IF0irB-w>
+    <xmx:TRREX-HxsLn9I8hH6TWZzCfXjPA43PcmJICXeOG65M1-3IhasnNGiQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id BB6CC660069; Mon, 24 Aug 2020 15:26:01 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-214-g5a29d88-fm-20200818.002-g5a29d882
+Mime-Version: 1.0
+Message-Id: <d22c16f3-9fb2-4dd2-b511-5f2b5a975d6b@www.fastmail.com>
+In-Reply-To: <87ft8ck1qx.fsf@kernel.org>
+References: <508e531e-076d-4b02-8aac-783842346bc2@www.fastmail.com>
+ <87ft8ck1qx.fsf@kernel.org>
+Date:   Mon, 24 Aug 2020 14:25:45 -0500
+From:   "Sid Spry" <sid@aeam.us>
+To:     "Felipe Balbi" <balbi@kernel.org>, linux-usb@vger.kernel.org
+Subject: =?UTF-8?Q?Re:_mkdir_acm.${name}_in_configfs_always_fails_with_"Device_or?=
+ =?UTF-8?Q?_resource_busy"?=
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 21, 2020 at 1:28 AM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
-> syzbot is reporting that del_timer_sync() is called from
-> mwifiex_usb_cleanup_tx_aggr() from mwifiex_unregister_dev() without
-> checking timer_setup() from mwifiex_usb_tx_init() was called [1].
->
-> Ganapathi Bhat proposed a possibly cleaner fix, but it seems that
-> that fix was forgotten [2].
->
-> "grep -FrB1 'del_timer' drivers/ | grep -FA1 '.function)'" says that
-> currently there are 28 locations which call del_timer[_sync]() only if
-> that timer's function field was initialized (because timer_setup() sets
-> that timer's function field). Therefore, let's use same approach here.
->
-> [1] https://syzkaller.appspot.com/bug?id=26525f643f454dd7be0078423e3cdb0d57744959
-> [2] https://lkml.kernel.org/r/CA+ASDXMHt2gq9Hy+iP_BYkWXsSreWdp3_bAfMkNcuqJ3K+-jbQ@mail.gmail.com
->
-> Reported-by: syzbot <syzbot+dc4127f950da51639216@syzkaller.appspotmail.com>
-> Cc: Ganapathi Bhat <ganapathi.bhat@nxp.com>
-> Cc: Brian Norris <briannorris@chromium.org>
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+On Mon, Aug 24, 2020, at 1:16 AM, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> "Sid Spry" <sid@aeam.us> writes:
+> > See title. I'm getting this even when using shell commands, so I don't
+> > think it is my program.  Creating anything else, like ncm.usb0, will
+> > work.
+> 
+> which kernel version? which usb controller? which platform?
+> 
 
-This seems good to me:
+Kernel 5.4.45 compiled for a Raspberry Pi 4, the UDC is a DWC2.
+Apologies.
 
-Reviewed-by: Brian Norris <briannorris@chromium.org>
-
-> ---
->  drivers/net/wireless/marvell/mwifiex/usb.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/wireless/marvell/mwifiex/usb.c b/drivers/net/wireless/marvell/mwifiex/usb.c
-> index 6f3cfde4654c..426e39d4ccf0 100644
-> --- a/drivers/net/wireless/marvell/mwifiex/usb.c
-> +++ b/drivers/net/wireless/marvell/mwifiex/usb.c
-> @@ -1353,7 +1353,8 @@ static void mwifiex_usb_cleanup_tx_aggr(struct mwifiex_adapter *adapter)
->                                 skb_dequeue(&port->tx_aggr.aggr_list)))
->                                 mwifiex_write_data_complete(adapter, skb_tmp,
->                                                             0, -1);
-> -               del_timer_sync(&port->tx_aggr.timer_cnxt.hold_timer);
-> +               if (port->tx_aggr.timer_cnxt.hold_timer.function)
-> +                       del_timer_sync(&port->tx_aggr.timer_cnxt.hold_timer);
->                 port->tx_aggr.timer_cnxt.is_hold_timer_set = false;
->                 port->tx_aggr.timer_cnxt.hold_tmo_msecs = 0;
->         }
-> --
-> 2.18.4
->
+On another device (Allwinner based) I could add one serial gadget
+but not two, and I though this may have been endpoint exhaustion. Now
+I am not so sure.
