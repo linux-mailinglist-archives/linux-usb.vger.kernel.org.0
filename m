@@ -2,99 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9005724F890
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 11:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D00124F8B0
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 11:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728289AbgHXJey (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 05:34:54 -0400
-Received: from mail-co1nam11on2088.outbound.protection.outlook.com ([40.107.220.88]:54081
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729705AbgHXItV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Aug 2020 04:49:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j03ZgCfMrzPRF5/mJipXvXWy+neAmqRWPIGiQRgB1K5ZXtFvcH318csUlTxhNLZJYuxaX3PagUhc5GT8o9OEN9O69md4l4gqllwrTWNmDlHv6yGDXG2Lh8y9T9oP0ZWGLdYVloXYKyIpRNE1ZSgE05YOOyE3wlWmz68JA2zct0iui/3xUeXryIqEY8MZANatllsu70zs1rGMDvv+fwaOOJ1Mill7b3oBYgRyDtKQvdk/HPDHjarYzFrQl+OAbuKfAbNkF0taoDctZCmvOF46FvExr+aHRiPOh0FqkIZO0K4/9wdvV+Nkd9N0yIssRin9M3PQUlCygwebdYAdgHbORw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OTrt4QnTATuTJiebqsrkllOyJxogDghlkm95Sr25XhA=;
- b=IPjTQ/R486YQ6VpE3+iDCpg9UIymoow0Rp0zS0uQRgJ4SNjIhKnFl9eneE31BHRx6uWlLH8lp5T6E3moNLKEN6swxNGyfKix8mOxbDHxNYoFBj0egjPCP45TPTECzvKNBtFvHg16vuWZiio37soNHVv9BgUCqrx5KUvLQbiH690j41tN21Km+9JlGuuap1Y4bVpUm9w/ttFMFrXZzV3GCXXun6f9YqGlk4MFHga/G2qXZOKxlyBL9xZopc6CiMt26Iq4QAtLs5j/AyYwfWl7OKoCvcKqX4tcVFv9R8KKLxVKu7Y1CF6XfLFOjFbt/sZWt0mF739fjpYLpnei8ue3uQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
- dkim=pass header.d=infinera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OTrt4QnTATuTJiebqsrkllOyJxogDghlkm95Sr25XhA=;
- b=EJLFmMRkMPFtidX5sZvgCgvnnrxUlPX0grucokGTBYL7VJ5eIqxiOmCKQUxH3ijwVARuUIJqwon81FIL3vrOwk55Uc4NRVOZggVOwfdNU7oqUk6n8UdfkzeTP9c9OV7CYeLjX+mcl1q8/nILRmX4B/2BHqV4p022y+71IogIwwI=
-Received: from CY4PR1001MB2389.namprd10.prod.outlook.com
- (2603:10b6:910:45::21) by CY4PR1001MB2312.namprd10.prod.outlook.com
- (2603:10b6:910:49::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Mon, 24 Aug
- 2020 08:49:19 +0000
-Received: from CY4PR1001MB2389.namprd10.prod.outlook.com
- ([fe80::7c3b:e8e3:3d1b:284d]) by CY4PR1001MB2389.namprd10.prod.outlook.com
- ([fe80::7c3b:e8e3:3d1b:284d%7]) with mapi id 15.20.3283.024; Mon, 24 Aug 2020
- 08:49:19 +0000
-From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-To:     "yebin10@huawei.com" <yebin10@huawei.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: fsl: Fix unsigned expression compared with
- zero in fsl_udc_probe
-Thread-Topic: [PATCH] usb: gadget: fsl: Fix unsigned expression compared with
- zero in fsl_udc_probe
-Thread-Index: AQHWee+zZeLUHMNpPkKw58UdehD37KlG8waA
-Date:   Mon, 24 Aug 2020 08:49:18 +0000
-Message-ID: <f61f4bc3916f852799edb6af9740afb2118ec84f.camel@infinera.com>
-References: <20200824080437.229826-1-yebin10@huawei.com>
-         <20200824082122.GA336539@kroah.com>
-In-Reply-To: <20200824082122.GA336539@kroah.com>
-Accept-Language: en-GB, en-US
+        id S1729673AbgHXJge convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 24 Aug 2020 05:36:34 -0400
+Received: from gw-eagle2.siemens.com ([194.138.20.69]:11513 "EHLO
+        gw-eagle2.siemens.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726730AbgHXJgc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 05:36:32 -0400
+X-Greylist: delayed 489 seconds by postgrey-1.27 at vger.kernel.org; Mon, 24 Aug 2020 05:36:30 EDT
+Received: from mail2.dc4ca.siemens.de (mail2.dc4ca.siemens.de [139.25.224.94])
+        by gw-eagle2.siemens.com (Postfix) with ESMTPS id 592E1468008;
+        Mon, 24 Aug 2020 11:28:13 +0200 (CEST)
+Received: from DEMCHDC8A0A.ad011.siemens.net (demchdc8a0a.ad011.siemens.net [139.25.226.106])
+        by mail2.dc4ca.siemens.de (Postfix) with ESMTPS id 4E10D1552BD22;
+        Mon, 24 Aug 2020 11:28:13 +0200 (CEST)
+Received: from CNPEK01M06MSX.ad011.siemens.net (139.24.237.223) by
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2044.4; Mon, 24 Aug 2020 11:28:12 +0200
+Received: from CNPEK01M06MSX.ad011.siemens.net ([139.24.237.223]) by
+ CNPEK01M06MSX.ad011.siemens.net ([139.24.237.223]) with mapi id
+ 15.01.2044.004; Mon, 24 Aug 2020 17:28:09 +0800
+From:   "Wang, Sheng Long" <shenglong.wang.ext@siemens.com>
+To:     Johan Hovold <johan@kernel.org>
+CC:     Sheng Long Wang <china_shenglong@163.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Kiszka, Jan" <jan.kiszka@siemens.com>
+Subject: RE: [PATCH v3] usb-serial:cp210x: add support to software flow
+ control
+Thread-Topic: [PATCH v3] usb-serial:cp210x: add support to software flow
+ control
+Thread-Index: AQHWdscbn5u/RYWMnkqBpjeEIyjP+KlBhWMAgATzlACAAInCwA==
+Date:   Mon, 24 Aug 2020 09:28:09 +0000
+Message-ID: <f21d4cc8b12d4ec6870623472ca7df09@siemens.com>
+References: <20200820075240.13321-1-china_shenglong@163.com>
+ <97836b78-740b-cf70-4803-27305b6e0a4d@siemens.com>
+ <20200824090948.GC21288@localhost>
+In-Reply-To: <20200824090948.GC21288@localhost>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.37.90 
-authentication-results: huawei.com; dkim=none (message not signed)
- header.d=none;huawei.com; dmarc=none action=none header.from=infinera.com;
-x-originating-ip: [88.131.87.201]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: aff5f45a-306f-4dd1-7b00-08d8480a96d1
-x-ms-traffictypediagnostic: CY4PR1001MB2312:
-x-microsoft-antispam-prvs: <CY4PR1001MB2312D39A0EA6056E3725B2E5F4560@CY4PR1001MB2312.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OJbsPBaFt/8xKoBASEaOwKfoTv1kW7efqgrc4yUFFZkuDzo9nqprX8MbW/FWMd9M772cjQbQVF1KLtOXaY7F2AKE/1Ol5aHfIIsOYLLIBZptq9pQ3onyso1mYCQfqBGveSZRwDl7Vlv11qKnTj669mFiwjA1MsoD5A6daL0g2cuZZ+B8EBImviau3hzDPPPObO6UHdsFveU9gbI6aBSc6vKNr8CQCoWxv9SRgywrZYRQtcyKHc81NoJ/ldtNoNR6BzaCePVz3c9Sam6OLRLZxedQUQumVX245xNPEGf0+uWzbg1RwJFMvWe6ENuV649z
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1001MB2389.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(396003)(366004)(39850400004)(186003)(6512007)(2616005)(26005)(8676002)(6506007)(316002)(66446008)(86362001)(6486002)(8936002)(4326008)(66556008)(66476007)(110136005)(64756008)(71200400001)(4744005)(5660300002)(91956017)(76116006)(54906003)(66946007)(478600001)(36756003)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: D6BSCoc7RQRICFA2/0MQiUruQCvlYmQQzaDTvjX/+/ooJohzYepQ5sF6Ar9BU+Shy2D2bP74L8YcNNwUMSlTq8+H4CJSA/0dWGUL0aQl7JNLGBfOv72or1yofU3NRFPh8diukUxlAcNthda9RGFiYLXbtQaCK4lSg4N6D83AItvjoixWNTLieF5z9+R7Wh+VHhawCWI2YbTfYWxa07yLi19vmfjz00EEvOTBQvmMiqQ7yC78pompMMDVyvfFxOyc26D8IXYE4BqF0xrB7JIQ8g1pQOUuUXs0ywKztGiUd0SK1GqSbivIjSXwg7P3Zb/0/tXaeKJ5CmkBMVEvcSRhCmdcKwRp8QDWhR2H95SPiidn2Jm8XKQbKupdAun8yujDO7Ig2KlKilGCntNwwzGQ8GZnh5sVjgJBAP8EAkPnd62YEdnU4H8Y1BRXBbBDBfn/igHkga4uWeHOd/PAW1x+A9U66+RK4dN4BZgInDBAe6RqKJmvTovelNZWCQpfd6YbtCzc0hu/fuDiFqFwhjIr6Z/hOKoj9Jw8BXPoMXp5f5eEFX15ZrOPLiOFch+3s8lKtE+78ST1k3zfRm1cbFV8dK0LjmyA2EFaCC0zvTKfbBk9NXLzoJJwCs7pqjw5tacmg+g7a1AVMF6my6U0qg5ppw==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E7728E8FC8339A4688608D875D04735D@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcejAwNDNjYnhcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5ZTM1Ylxtc2dzXG1zZy0xZTQ5YzYxZC1lNWVjLTExZWEtYmU1OS1iMDBjZDE2OTA4NjRcYW1lLXRlc3RcMWU0OWM2MWYtZTVlYy0xMWVhLWJlNTktYjAwY2QxNjkwODY0Ym9keS50eHQiIHN6PSIyNTEwIiB0PSIxMzI0MjczNDg4ODE2NTU1ODciIGg9Ik4yT21wR1RxOUxNKzQ2dUl5MXE4QlJMRWtFbz0iIGlkPSIiIGJsPSIwIiBibz0iMSIgY2k9ImNBQUFBRVJIVTFSU1JVRk5DZ1VBQUhBQUFBQWpSNlBnK0huV0FZWmFyOHdMMmVEL2hscXZ6QXZaNFA4QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQkFBQUJBQUFBVGFuck9nQUFBQUFBQUFBQUFBQUFBQT09Ii8+PC9tZXRhPg==
+x-dg-rorf: 
+x-document-confidentiality: NotClassified
+x-originating-ip: [139.24.108.238]
+x-tm-snts-smtp: D19F5371A4BF487AD73746162E220B87BAA644334B4D139CA133D1D1F789C5EE2000:8
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-OriginatorOrg: infinera.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR1001MB2389.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aff5f45a-306f-4dd1-7b00-08d8480a96d1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2020 08:49:18.8459
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cMfpcdpJv+cnoLNVgDE/AaaxkMkMgZDFg8PSfTn4uDnC9aUBdFZBNqM0dZXL0VCo8Wupt0DUsZEP/liGb7jqeA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1001MB2312
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCAyMDIwLTA4LTI0IGF0IDEwOjIxICswMjAwLCBHcmVnIEtIIHdyb3RlOg0KPiANCj4g
-T24gTW9uLCBBdWcgMjQsIDIwMjAgYXQgMDQ6MDQ6MzdQTSArMDgwMCwgWWUgQmluIHdyb3RlOg0K
-PiA+IFNpZ25lZC1vZmYtYnk6IFllIEJpbiA8eWViaW4xMEBodWF3ZWkuY29tPg0KPiANCj4gSSBj
-YW4ndCB0YWtlIHBhdGNoZXMgd2l0aG91dCBhbnkgY2hhbmdlbG9nIHRleHQsIHNvcnJ5Lg0KDQpT
-dGlsbCB0YWtpbmcgcGF0Y2hlcyBmb3IgZnNsX3VkY19jb3JlLmMgPw0KSSBmaWd1cmVkIHRoaXMg
-ZHJpdmVyIHdhcyBvYnNvbGV0ZSBhbmQgc2hvdWxkIGJlIG1vdmVkIHRvIG9uZSBvZiB0aGUgQ2hp
-cGlkZWEgZHJpdmVycy4NCg0KIEpvY2tlDQo=
+Hi Johan,
+
+    Thanks for your reminding. I am adjusting patch according to the latest Linux Master branch.
+
+With best regards,
+Wang Sheng Long
+Siemens Ltd., China
+RC-CN DI FA R&D SW
+Tianyuan road No.99
+611731 CHENGDU, China
+Mobil: +86 15281074996
+mailto:shenglong.wang.ext@siemens.com
+
+
+
+-----Original Message-----
+From: Johan Hovold <johan@kernel.org> 
+Sent: Monday, August 24, 2020 5:10 PM
+To: Kiszka, Jan (CT RDA IOT SES-DE) <jan.kiszka@siemens.com>
+Cc: Sheng Long Wang <china_shenglong@163.com>; Wang, Sheng Long (EXT) (RC-CN DI FA R&D SW) <shenglong.wang.ext@siemens.com>; johan@kernel.org; gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb-serial:cp210x: add support to software flow control
+
+On Fri, Aug 21, 2020 at 07:32:58AM +0200, Jan Kiszka wrote:
+> On 20.08.20 09:52, Sheng Long Wang wrote:
+> > From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+> > 
+> > When data is transmitted between two serial ports, the phenomenon of 
+> > data loss often occurs. The two kinds of flow control commonly used 
+> > in serial communication are hardware flow control and software flow 
+> > control.
+> > 
+> > In serial communication, If you only use RX/TX/GND Pins, you can't 
+> > do hardware flow. So we often used software flow control and prevent 
+> > data loss. The user sets the software flow control through the 
+> > application program, and the application program sets the software 
+> > flow control mode for the serial port chip through the driver.
+> > 
+> > For the cp210 serial port chip, its driver lacks the software flow 
+> > control setting code, so the user cannot set the software flow 
+> > control function through the application program. This adds the 
+> > missing software flow control.
+> > 
+> > Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+> > 
+> > Changes in v3:
+> > -fixed code style, It mainly adjusts the code style acccording  to 
+> > kernel specification.
+> 
+> Patch does not apply. You forgot to rebase over latest tty/tty-next or 
+> linux master.
+
+That should be the usb-next branch of the usb-serial tree:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/
+
+or linux-next (or, currently, Linus's master branch).
+
+You can use "scripts/get_maintainer.sh --scm" to determine which tree to base your work against.
+
+Johan
