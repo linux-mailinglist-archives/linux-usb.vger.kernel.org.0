@@ -2,95 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9438324F985
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 11:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9005724F890
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 11:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729073AbgHXJq3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 24 Aug 2020 05:46:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34370 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728935AbgHXImU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Aug 2020 04:42:20 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208959] USB-serial (mct_u232): bit7=1 when tty is set to cs7?
-Date:   Mon, 24 Aug 2020 08:42:19 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: johan@kernel.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-208959-208809-4BpGXGzak4@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208959-208809@https.bugzilla.kernel.org/>
-References: <bug-208959-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1728289AbgHXJey (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 05:34:54 -0400
+Received: from mail-co1nam11on2088.outbound.protection.outlook.com ([40.107.220.88]:54081
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729705AbgHXItV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Aug 2020 04:49:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j03ZgCfMrzPRF5/mJipXvXWy+neAmqRWPIGiQRgB1K5ZXtFvcH318csUlTxhNLZJYuxaX3PagUhc5GT8o9OEN9O69md4l4gqllwrTWNmDlHv6yGDXG2Lh8y9T9oP0ZWGLdYVloXYKyIpRNE1ZSgE05YOOyE3wlWmz68JA2zct0iui/3xUeXryIqEY8MZANatllsu70zs1rGMDvv+fwaOOJ1Mill7b3oBYgRyDtKQvdk/HPDHjarYzFrQl+OAbuKfAbNkF0taoDctZCmvOF46FvExr+aHRiPOh0FqkIZO0K4/9wdvV+Nkd9N0yIssRin9M3PQUlCygwebdYAdgHbORw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OTrt4QnTATuTJiebqsrkllOyJxogDghlkm95Sr25XhA=;
+ b=IPjTQ/R486YQ6VpE3+iDCpg9UIymoow0Rp0zS0uQRgJ4SNjIhKnFl9eneE31BHRx6uWlLH8lp5T6E3moNLKEN6swxNGyfKix8mOxbDHxNYoFBj0egjPCP45TPTECzvKNBtFvHg16vuWZiio37soNHVv9BgUCqrx5KUvLQbiH690j41tN21Km+9JlGuuap1Y4bVpUm9w/ttFMFrXZzV3GCXXun6f9YqGlk4MFHga/G2qXZOKxlyBL9xZopc6CiMt26Iq4QAtLs5j/AyYwfWl7OKoCvcKqX4tcVFv9R8KKLxVKu7Y1CF6XfLFOjFbt/sZWt0mF739fjpYLpnei8ue3uQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
+ dkim=pass header.d=infinera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OTrt4QnTATuTJiebqsrkllOyJxogDghlkm95Sr25XhA=;
+ b=EJLFmMRkMPFtidX5sZvgCgvnnrxUlPX0grucokGTBYL7VJ5eIqxiOmCKQUxH3ijwVARuUIJqwon81FIL3vrOwk55Uc4NRVOZggVOwfdNU7oqUk6n8UdfkzeTP9c9OV7CYeLjX+mcl1q8/nILRmX4B/2BHqV4p022y+71IogIwwI=
+Received: from CY4PR1001MB2389.namprd10.prod.outlook.com
+ (2603:10b6:910:45::21) by CY4PR1001MB2312.namprd10.prod.outlook.com
+ (2603:10b6:910:49::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Mon, 24 Aug
+ 2020 08:49:19 +0000
+Received: from CY4PR1001MB2389.namprd10.prod.outlook.com
+ ([fe80::7c3b:e8e3:3d1b:284d]) by CY4PR1001MB2389.namprd10.prod.outlook.com
+ ([fe80::7c3b:e8e3:3d1b:284d%7]) with mapi id 15.20.3283.024; Mon, 24 Aug 2020
+ 08:49:19 +0000
+From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+To:     "yebin10@huawei.com" <yebin10@huawei.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: fsl: Fix unsigned expression compared with
+ zero in fsl_udc_probe
+Thread-Topic: [PATCH] usb: gadget: fsl: Fix unsigned expression compared with
+ zero in fsl_udc_probe
+Thread-Index: AQHWee+zZeLUHMNpPkKw58UdehD37KlG8waA
+Date:   Mon, 24 Aug 2020 08:49:18 +0000
+Message-ID: <f61f4bc3916f852799edb6af9740afb2118ec84f.camel@infinera.com>
+References: <20200824080437.229826-1-yebin10@huawei.com>
+         <20200824082122.GA336539@kroah.com>
+In-Reply-To: <20200824082122.GA336539@kroah.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.37.90 
+authentication-results: huawei.com; dkim=none (message not signed)
+ header.d=none;huawei.com; dmarc=none action=none header.from=infinera.com;
+x-originating-ip: [88.131.87.201]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: aff5f45a-306f-4dd1-7b00-08d8480a96d1
+x-ms-traffictypediagnostic: CY4PR1001MB2312:
+x-microsoft-antispam-prvs: <CY4PR1001MB2312D39A0EA6056E3725B2E5F4560@CY4PR1001MB2312.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OJbsPBaFt/8xKoBASEaOwKfoTv1kW7efqgrc4yUFFZkuDzo9nqprX8MbW/FWMd9M772cjQbQVF1KLtOXaY7F2AKE/1Ol5aHfIIsOYLLIBZptq9pQ3onyso1mYCQfqBGveSZRwDl7Vlv11qKnTj669mFiwjA1MsoD5A6daL0g2cuZZ+B8EBImviau3hzDPPPObO6UHdsFveU9gbI6aBSc6vKNr8CQCoWxv9SRgywrZYRQtcyKHc81NoJ/ldtNoNR6BzaCePVz3c9Sam6OLRLZxedQUQumVX245xNPEGf0+uWzbg1RwJFMvWe6ENuV649z
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1001MB2389.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(396003)(366004)(39850400004)(186003)(6512007)(2616005)(26005)(8676002)(6506007)(316002)(66446008)(86362001)(6486002)(8936002)(4326008)(66556008)(66476007)(110136005)(64756008)(71200400001)(4744005)(5660300002)(91956017)(76116006)(54906003)(66946007)(478600001)(36756003)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: D6BSCoc7RQRICFA2/0MQiUruQCvlYmQQzaDTvjX/+/ooJohzYepQ5sF6Ar9BU+Shy2D2bP74L8YcNNwUMSlTq8+H4CJSA/0dWGUL0aQl7JNLGBfOv72or1yofU3NRFPh8diukUxlAcNthda9RGFiYLXbtQaCK4lSg4N6D83AItvjoixWNTLieF5z9+R7Wh+VHhawCWI2YbTfYWxa07yLi19vmfjz00EEvOTBQvmMiqQ7yC78pompMMDVyvfFxOyc26D8IXYE4BqF0xrB7JIQ8g1pQOUuUXs0ywKztGiUd0SK1GqSbivIjSXwg7P3Zb/0/tXaeKJ5CmkBMVEvcSRhCmdcKwRp8QDWhR2H95SPiidn2Jm8XKQbKupdAun8yujDO7Ig2KlKilGCntNwwzGQ8GZnh5sVjgJBAP8EAkPnd62YEdnU4H8Y1BRXBbBDBfn/igHkga4uWeHOd/PAW1x+A9U66+RK4dN4BZgInDBAe6RqKJmvTovelNZWCQpfd6YbtCzc0hu/fuDiFqFwhjIr6Z/hOKoj9Jw8BXPoMXp5f5eEFX15ZrOPLiOFch+3s8lKtE+78ST1k3zfRm1cbFV8dK0LjmyA2EFaCC0zvTKfbBk9NXLzoJJwCs7pqjw5tacmg+g7a1AVMF6my6U0qg5ppw==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E7728E8FC8339A4688608D875D04735D@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
+X-OriginatorOrg: infinera.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR1001MB2389.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aff5f45a-306f-4dd1-7b00-08d8480a96d1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2020 08:49:18.8459
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cMfpcdpJv+cnoLNVgDE/AaaxkMkMgZDFg8PSfTn4uDnC9aUBdFZBNqM0dZXL0VCo8Wupt0DUsZEP/liGb7jqeA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1001MB2312
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208959
-
---- Comment #1 from Johan Hovold (johan@kernel.org) ---
-On Wed, Aug 19, 2020 at 02:52:47AM +0000, bugzilla-daemon@bugzilla.kernel.org
-wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=208959
-> 
->             Bug ID: 208959
->            Summary: USB-serial (mct_u232): bit7=1 when tty is set to cs7?
->            Product: Drivers
->            Version: 2.5
->     Kernel Version: 5.7.0
->           Hardware: All
->                 OS: Linux
->               Tree: Mainline
->             Status: NEW
->           Severity: low
->           Priority: P1
->          Component: USB
->           Assignee: drivers_usb@kernel-bugs.kernel.org
->           Reporter: mslade@epic-code.com.au
->         Regression: No
-> 
-> I'm not 100% certain this is a bug, please let me know if this is expected
-> behavior.
-> 
-> I have hooked an old serial mouse up to a USB serial device, USB ID 0711:0230
-> (part of an circa 2000 Targus port replicator)
-> 
-> when I configure it with the appropriate 1200 baud and 7 bit char width, the
-> bytes that come through /dev/ttyUSB0 all have bit7 set to 1.
-> 
-> This behavior is in contrast to an old serial port on a box running a 2.4.19
-> kernel.
-> 
-> Is there a standard for the value that non-data bits should be set to?
-
-This sounds like a configuration issue. If the mouse is indeed using
-7n1 and the converter is expecting 8n1 you could end up with bit 7
-always set on input.
-
-Can you verify that the converter is configured correctly, for example,
-by reading out the termios settings, enabling debugging and/or
-connecting it to another serial port configured for 7n1?
-
-Johan
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+T24gTW9uLCAyMDIwLTA4LTI0IGF0IDEwOjIxICswMjAwLCBHcmVnIEtIIHdyb3RlOg0KPiANCj4g
+T24gTW9uLCBBdWcgMjQsIDIwMjAgYXQgMDQ6MDQ6MzdQTSArMDgwMCwgWWUgQmluIHdyb3RlOg0K
+PiA+IFNpZ25lZC1vZmYtYnk6IFllIEJpbiA8eWViaW4xMEBodWF3ZWkuY29tPg0KPiANCj4gSSBj
+YW4ndCB0YWtlIHBhdGNoZXMgd2l0aG91dCBhbnkgY2hhbmdlbG9nIHRleHQsIHNvcnJ5Lg0KDQpT
+dGlsbCB0YWtpbmcgcGF0Y2hlcyBmb3IgZnNsX3VkY19jb3JlLmMgPw0KSSBmaWd1cmVkIHRoaXMg
+ZHJpdmVyIHdhcyBvYnNvbGV0ZSBhbmQgc2hvdWxkIGJlIG1vdmVkIHRvIG9uZSBvZiB0aGUgQ2hp
+cGlkZWEgZHJpdmVycy4NCg0KIEpvY2tlDQo=
