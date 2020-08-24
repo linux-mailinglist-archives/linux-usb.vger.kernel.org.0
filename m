@@ -2,168 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC16D250A5B
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 22:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2436250A90
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 23:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727060AbgHXU4w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 16:56:52 -0400
-Received: from mga11.intel.com ([192.55.52.93]:11969 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726051AbgHXU4v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Aug 2020 16:56:51 -0400
-IronPort-SDR: 7svKFMh+L5HXla2eRcb4c9YVkrfCNzAAEWR/rb32nW8IYrPONOdRKJ1nmWXWrGsplOTjMPYOTP
- +WgWgq5YSVeg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="153566288"
-X-IronPort-AV: E=Sophos;i="5.76,349,1592895600"; 
-   d="scan'208";a="153566288"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2020 13:56:50 -0700
-IronPort-SDR: 4NPByA73rfZoRpO9RibkGcKPWkKPIlPN6ZZZq/q5BXD28AGLPLJUnl8IKRS5gYzn4KoGqIWfMY
- Ty/vY6EOkVCA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,349,1592895600"; 
-   d="scan'208";a="338568656"
-Received: from lkp-server01.sh.intel.com (HELO c420d4f0765f) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 24 Aug 2020 13:56:49 -0700
-Received: from kbuild by c420d4f0765f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kAJWK-0000TO-KH; Mon, 24 Aug 2020 20:56:48 +0000
-Date:   Tue, 25 Aug 2020 04:56:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [balbi-usb:testing/next] BUILD SUCCESS WITH WARNING
- 53b3ae5a08ffcd07d627baeddd00ae63f973513b
-Message-ID: <5f442968.WEdAgLMYVLYcPzdY%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1727912AbgHXVKl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 17:10:41 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:24223 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727909AbgHXVKj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 17:10:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1598303438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=98P4pw0MSJfjYTwg7Jr3bMvh36DJTSmp1NgoIinTZVY=;
+        b=T6KPuXFlljhlHOKs+0VDpQHY/SEu3DBgB6dbvzvtoF1u4WxnxD0BRUR+YM5b+5GVSMhz+i
+        2KHIq7GzA4Ly1Qs+CH9EZKyo8Nuj612z9uyfWty5lMqTYe4ONE2YvG+M1DsZ1laBFZHnei
+        72LdzE0U+Ir8wwqfcIksy4navBZjT/s=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-11-cXpm1CHGMM6oNZrOebn5Cw-1; Mon, 24 Aug 2020 17:10:34 -0400
+X-MC-Unique: cXpm1CHGMM6oNZrOebn5Cw-1
+Received: by mail-qk1-f200.google.com with SMTP id v16so7377509qka.18
+        for <linux-usb@vger.kernel.org>; Mon, 24 Aug 2020 14:10:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=98P4pw0MSJfjYTwg7Jr3bMvh36DJTSmp1NgoIinTZVY=;
+        b=h+ZCVgqhBm5O1W+0JSkZFNi3rcFEXHP++ULp73CH7a99fMFg5VlZhjvEXTJTzXAWCM
+         A5EB/lC6Ss0HgXfhfN3kWa9eAQVBwr8qCTSCUXIBvqDWlbM7Y+DeV2TUDxPZqVkbb4TR
+         YcKpcKV2Pyz2F6bzjsUSGq3YASPfRVLhM9krsfqLnQb+gugwVn9M2/ZKwCVoNL94AW3+
+         7zus735/bhwPPVHtPBmo68NzCfqqaHZjv/RV/B3tj2E9pNns18cuGxyL5JCiyLZQWQjU
+         OlE/0QQWYLShcVMfL3Ac9PhInbZrOZKz9Po6t7jX+xu7P9gxK5B0+us0pL3cInJWUFN3
+         FoJQ==
+X-Gm-Message-State: AOAM531VPjzDsTiAkyKgmzlvD1sP0H6V1szbzl9q6rKe6VYYHNIB5WpW
+        TSmSqxEqQz6TOftC1KNlXBmLb6+oUoHMgeJ0H0MV1uGcrUJDjj7hQnZhhVN5zV3d62uzjYLP1/V
+        nozPLQCel2i65uUl0P9Rb
+X-Received: by 2002:ac8:3894:: with SMTP id f20mr6679732qtc.243.1598303433825;
+        Mon, 24 Aug 2020 14:10:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwS7pZM6tz74vKWqZ0073bXmrovICgMLihNHEaqZgQPStkNvmVP3ub77pZRv8l2/JBnLnEvCw==
+X-Received: by 2002:ac8:3894:: with SMTP id f20mr6679720qtc.243.1598303433555;
+        Mon, 24 Aug 2020 14:10:33 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id 198sm4681833qkh.19.2020.08.24.14.10.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2020 14:10:32 -0700 (PDT)
+From:   trix@redhat.com
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH v2] usb: storage: initialize variable
+Date:   Mon, 24 Aug 2020 14:10:27 -0700
+Message-Id: <20200824211027.11543-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
-branch HEAD: 53b3ae5a08ffcd07d627baeddd00ae63f973513b  dwc3: debugfs: fix checkpatch warnings
+From: Tom Rix <trix@redhat.com>
 
-Warning in current branch:
+clang static analysis reports this representative problem
 
-drivers/usb/dwc2/platform.c:593:1: warning: unused label 'error_debugfs' [-Wunused-label]
+transport.c:495:15: warning: Assigned value is garbage or
+  undefined
+        length_left -= partial;
+                   ^  ~~~~~~~
+partial is set only when usb_stor_bulk_transfer_sglist()
+is successful.
 
-Warning ids grouped by kconfigs:
+So set partial on entry to 0.
 
-clang_recent_errors
-|-- arm-randconfig-r012-20200824
-|   `-- drivers-usb-dwc2-platform.c:warning:unused-label-error_debugfs
-`-- mips-randconfig-r013-20200824
-    `-- drivers-usb-dwc2-platform.c:warning:unused-label-error_debugfs
-
-elapsed time: 724m
-
-configs tested: 97
-configs skipped: 6
-
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                      tqm8xx_defconfig
-nios2                         10m50_defconfig
-m68k                        m5407c3_defconfig
-powerpc                          g5_defconfig
-mips                           jazz_defconfig
-c6x                         dsk6455_defconfig
-arm                         lpc32xx_defconfig
-arm                      integrator_defconfig
-arm                           sunxi_defconfig
-sh                          landisk_defconfig
-powerpc                     ep8248e_defconfig
-mips                       rbtx49xx_defconfig
-m68k                           sun3_defconfig
-sh                   rts7751r2dplus_defconfig
-arm                            zeus_defconfig
-arm                              zx_defconfig
-arc                              alldefconfig
-arm                          badge4_defconfig
-sh                          sdk7780_defconfig
-sh                          r7785rp_defconfig
-arm                             rpc_defconfig
-h8300                    h8300h-sim_defconfig
-powerpc                         ps3_defconfig
-riscv                    nommu_k210_defconfig
-arc                        nsimosci_defconfig
-sh                           se7721_defconfig
-m68k                            q40_defconfig
-mips                     loongson1b_defconfig
-arm                           stm32_defconfig
-x86_64                           alldefconfig
-sparc                       sparc64_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20200824
-i386                 randconfig-a004-20200824
-i386                 randconfig-a005-20200824
-i386                 randconfig-a003-20200824
-i386                 randconfig-a006-20200824
-i386                 randconfig-a001-20200824
-x86_64               randconfig-a015-20200824
-x86_64               randconfig-a016-20200824
-x86_64               randconfig-a012-20200824
-x86_64               randconfig-a014-20200824
-x86_64               randconfig-a011-20200824
-x86_64               randconfig-a013-20200824
-i386                 randconfig-a013-20200824
-i386                 randconfig-a012-20200824
-i386                 randconfig-a011-20200824
-i386                 randconfig-a016-20200824
-i386                 randconfig-a015-20200824
-i386                 randconfig-a014-20200824
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/storage/transport.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
+index 238a8088e17f..044429717dcc 100644
+--- a/drivers/usb/storage/transport.c
++++ b/drivers/usb/storage/transport.c
+@@ -414,6 +414,9 @@ static int usb_stor_bulk_transfer_sglist(struct us_data *us, unsigned int pipe,
+ {
+ 	int result;
+ 
++	if (act_len)
++		*act_len = 0;
++
+ 	/* don't submit s-g requests during abort processing */
+ 	if (test_bit(US_FLIDX_ABORTING, &us->dflags))
+ 		return USB_STOR_XFER_ERROR;
+-- 
+2.18.1
+
