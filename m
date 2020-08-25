@@ -2,156 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8C925181B
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 14:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C86251887
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 14:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730030AbgHYMDV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Aug 2020 08:03:21 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:34682 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730022AbgHYMDO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Aug 2020 08:03:14 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 07PC1ASu022670;
-        Tue, 25 Aug 2020 07:01:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1598356870;
-        bh=nZf8uuMxaL10/OqfPfcuo5MhsldrclyKP8O5HMXbXtU=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=nmmegrVvUzAIZLonej0MLHSgqK0JwzS4rVjuOCbMdd1nMMUNsd4PLucLmzVjPQAdj
-         GiN9NEIB6kohXI7E3pmA/05pXgC2K0unP0dgQBLyyxP7MkT9NnquwIVaNsmuvCOkoS
-         gM0DVKz3MaKFh/ZqJ9SYI3Oevw7Tjha4OfMi4ogI=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 07PC1Aix015138
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Aug 2020 07:01:10 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 25
- Aug 2020 07:01:10 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 25 Aug 2020 07:01:10 -0500
-Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07PC10LD024089;
-        Tue, 25 Aug 2020 07:01:08 -0500
-From:   Roger Quadros <rogerq@ti.com>
-To:     <balbi@kernel.org>
-CC:     <pawell@cadence.com>, <kurahul@cadence.com>, <nsekhar@ti.com>,
-        <vigneshr@ti.com>, <robh+dt@kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Roger Quadros <rogerq@ti.com>
-Subject: [PATCH 3/3] usb: cdns3: Enable workaround for USB2.0 PHY Rx compliance test PHY lockup
-Date:   Tue, 25 Aug 2020 15:00:59 +0300
-Message-ID: <20200825120059.12436-4-rogerq@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200825120059.12436-1-rogerq@ti.com>
-References: <20200825120059.12436-1-rogerq@ti.com>
+        id S1726672AbgHYM07 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Aug 2020 08:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726015AbgHYM06 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Aug 2020 08:26:58 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C913C061574;
+        Tue, 25 Aug 2020 05:26:58 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id g13so12216456ioo.9;
+        Tue, 25 Aug 2020 05:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Wzcj8m5vFo9wtP7uviYdKc5PC5IJoO+QABXYTEcm/QQ=;
+        b=QMKzNPGRrERw9HyuJHYh//aByTTYk6xved9OV+s/sN3XgKrdGYFCYUHeBvcE3n136J
+         ZDiAPI314pmDApXJ5v/gF3jWHyLPdpayfQDDkEr18AB92xc/P56ZJOba1trauDK2Y9tz
+         nywaxJwwsF1GdOh6yI68ObfqZb8rIzFXWucxmIQsWZAgcpvvMh56W265wRSQ9wLVXtcx
+         nfnFxcy0uC39ywWv9ujRDOUxvETaJeNrPwUP6mJQTLRi0hK+hhgCPQZzSgcomUeVaQAr
+         dDtzdBt98W/T6WByYwu+73euWPUHQ92ItBPAB+uQPkveTqdqmayB3pfRehukCFg3dlBe
+         0wgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wzcj8m5vFo9wtP7uviYdKc5PC5IJoO+QABXYTEcm/QQ=;
+        b=rSdaEZGx1VWFiQJpxrFWHGOnrbVoTxpyBqMmxsLlgjhSmkjVRNFM66zJzDWvoEopN7
+         Cm2alG7Tk84OjqLxOE2WinUfX/Cc2j6jmRplK4DsiBCl7IBD2glqvux4aWmpHb426PF0
+         /jIp4Tb/6s7qTDhFADUWeFLZk1l41rY+ADa9n9VAHFb9P/TOopn0WDHmgDa8ih05aJ5B
+         pBKnafDv8L2bSdw/pj145GoQOT3eYgNlBpbwURzDBSoYBtpFXUp7qVm/iWvWmhqDbMCS
+         srWbMf0fb7OCgBn79c0Sq5FHNEImCwx9KWmOrArMEvdZrCq8gwbdag4REwbFXJ9oTQNu
+         31hQ==
+X-Gm-Message-State: AOAM531UZoHew4Xk2dNKyW5uCWUPDfIJM0XikSfsWgp51QTyKucJdaDL
+        s6hZRPzTMNX73uglP0tIUXj840JfK6DowbGPnuM=
+X-Google-Smtp-Source: ABdhPJyGsUoC/LkI1d2bqGvQuY/p0TswaMdrh4UELE3XPT8OzGZIBRz06RutIQlDXcmCFjsUlnyiGQCLVwdzp0rcciA=
+X-Received: by 2002:a02:ce32:: with SMTP id v18mr10452366jar.28.1598358417617;
+ Tue, 25 Aug 2020 05:26:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20200812202018.49046-1-alcooperx@gmail.com> <20200812202018.49046-2-alcooperx@gmail.com>
+ <20200824233040.GA3532378@bogus>
+In-Reply-To: <20200824233040.GA3532378@bogus>
+From:   Alan Cooper <alcooperx@gmail.com>
+Date:   Tue, 25 Aug 2020 08:26:46 -0400
+Message-ID: <CAOGqxeXWXkRD=agGL45D0sGe64TUBBq=OtibkX8AkiC5g0sWww@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: Add support for Broadcom USB pin map driver
+To:     Rob Herring <robh@kernel.org>
+Cc:     ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pawel Laszczak <pawell@cadence.com>
+On Mon, Aug 24, 2020 at 7:30 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Wed, Aug 12, 2020 at 04:20:16PM -0400, Al Cooper wrote:
+> > Add DT bindings for the Broadcom USB pin map driver. This driver allows
+> > some USB input and output signals to be mapped to any GPIO instead
+> > of the normal dedicated pins to/from the XHCI controller.
+>
+> Is this a driver or h/w block because bindings are for h/w blocks?
 
-USB2.0 PHY hangs in Rx Compliance test when the incoming packet
-amplitude is varied below and above the Squelch Level of
-Receiver during the active packet multiple times.
+This is a hardware block. I'll remove "driver" from the description.
 
-Version 1 of the controller allows PHY to be reset when RX fail condition
-is detected to work around the above issue. This feature is
-disabled by default and needs to be enabled using a bit from
-the newly added PHYRST_CFG register. This patch enables the workaround.
+>
+> >
+> > Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> > ---
+> >  .../bindings/usb/brcm,usb-pinmap.yaml         | 63 +++++++++++++++++++
+> >  1 file changed, 63 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml b/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+> > new file mode 100644
+> > index 000000000000..19cf6ad36373
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+> > @@ -0,0 +1,63 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/brcm,usb-pinmap.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Broadcom USB pin map Controller Device Tree Bindings
+> > +
+> > +maintainers:
+> > +  - Al Cooper <alcooperx@gmail.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +      items:
+> > +          - const: brcm,usb-pinmap
+>
+> 2 space indentation please.
 
-As there is no way to distinguish between the controller version
-before the device controller is started we need to rely on a
-DT property to decide when to apply the workaround.
+Fixed.
 
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-Signed-off-by: Roger Quadros <rogerq@ti.com>
----
- drivers/usb/cdns3/core.c |  2 ++
- drivers/usb/cdns3/core.h |  1 +
- drivers/usb/cdns3/drd.c  | 12 ++++++++++++
- drivers/usb/cdns3/drd.h  |  5 ++++-
- 4 files changed, 19 insertions(+), 1 deletion(-)
+>
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +    description: Must be defined if any out-gpios are specified.
+>
+> 'dependencies' can express this in schema.
 
-diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-index 5c1586ec7824..34b36487682b 100644
---- a/drivers/usb/cdns3/core.c
-+++ b/drivers/usb/cdns3/core.c
-@@ -443,6 +443,8 @@ static int cdns3_probe(struct platform_device *pdev)
- 		return -ENXIO;
- 	}
- 
-+	cdns->phyrst_a_enable = device_property_read_bool(dev, "cdns,phyrst-a-enable");
-+
- 	cdns->otg_res = *res;
- 
- 	mutex_init(&cdns->mutex);
-diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
-index 1ad1f1fe61e9..24cf0f1b5726 100644
---- a/drivers/usb/cdns3/core.h
-+++ b/drivers/usb/cdns3/core.h
-@@ -76,6 +76,7 @@ struct cdns3 {
- #define CDNS3_CONTROLLER_V0	0
- #define CDNS3_CONTROLLER_V1	1
- 	u32				version;
-+	bool				phyrst_a_enable;
- 
- 	int				otg_irq;
- 	int				dev_irq;
-diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
-index 6234bcd6158a..b74803e9703d 100644
---- a/drivers/usb/cdns3/drd.c
-+++ b/drivers/usb/cdns3/drd.c
-@@ -42,6 +42,18 @@ int cdns3_set_mode(struct cdns3 *cdns, enum usb_dr_mode mode)
- 			reg = readl(&cdns->otg_v1_regs->override);
- 			reg |= OVERRIDE_IDPULLUP;
- 			writel(reg, &cdns->otg_v1_regs->override);
-+
-+			/*
-+			 * Enable work around feature built into the
-+			 * controller to address issue with RX Sensitivity
-+			 * est (EL_17) for USB2 PHY. The issue only occures
-+			 * for 0x0002450D controller version.
-+			 */
-+			if (cdns->phyrst_a_enable) {
-+				reg = readl(&cdns->otg_v1_regs->phyrst_cfg);
-+				reg |= PHYRST_CFG_PHYRST_A_ENABLE;
-+				writel(reg, &cdns->otg_v1_regs->phyrst_cfg);
-+			}
- 		} else {
- 			reg = readl(&cdns->otg_v0_regs->ctrl1);
- 			reg |= OVERRIDE_IDPULLUP_V0;
-diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
-index 7e7cf7fa2dd3..f1ccae285a16 100644
---- a/drivers/usb/cdns3/drd.h
-+++ b/drivers/usb/cdns3/drd.h
-@@ -31,7 +31,7 @@ struct cdns3_otg_regs {
- 	__le32 simulate;
- 	__le32 override;
- 	__le32 susp_ctrl;
--	__le32 reserved4;
-+	__le32 phyrst_cfg;
- 	__le32 anasts;
- 	__le32 adp_ramp_time;
- 	__le32 ctrl1;
-@@ -153,6 +153,9 @@ struct cdns3_otg_common_regs {
- /* Only for CDNS3_CONTROLLER_V0 version */
- #define OVERRIDE_IDPULLUP_V0		BIT(24)
- 
-+/* PHYRST_CFG - bitmasks */
-+#define PHYRST_CFG_PHYRST_A_ENABLE     BIT(0)
-+
- #define CDNS3_ID_PERIPHERAL		1
- #define CDNS3_ID_HOST			0
- 
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Okay.
 
+>
+> > +
+> > +  in-gpios:
+> > +    description: Array of one or more GPIO pins used for input signals.
+>
+> You need to define how many GPIOs are valid.
+
+I tried to avoid doing this because there is a possibility that future
+chips will have a few more signals added and the driver was written so
+new signals can be added entirely in device tree without any changes
+to the driver. If this is unacceptable, I can add the current max in
+and out valid gpios.
+
+>
+> > +
+> > +  in-names:
+> > +    description: Array of input signal names, one per gpio in in-gpios.
+>
+> No, this isn't how we name GPIOs. The part before '-gpios' is how.
+
+This is the meant to be a description of how each gpio is being used
+to help with error messages in the driver.
+What if I use "brcmstb,in-functions" instead?
+
+>
+> > +
+> > +  in-masks:
+> > +    description: Array of enable and mask pairs, one per gpio in-gpios.
+>
+> Needs a vendor prefix.
+
+I'll change it to "brcmstb,in-masks"
+
+>
+> > +
+> > +  out-gpios:
+> > +    description: Array of one or more GPIO pins used for output signals.
+> > +
+> > +  out-names:
+> > +    description: Array of output signal names, one per gpio in out-gpios.
+> > +
+> > +  out-masks:
+> > +    description: Array of enable, value, changed and clear masks, one
+> > +      per gpio in out-gpios.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    usb_pinmap: usb-pinmap@22000d0 {
+> > +        compatible = "brcm,usb-pinmap";
+> > +        reg = <0x22000d0 0x4>;
+> > +        in-gpios = <&gpio 18 0>, <&gpio 19 0>;
+> > +        in-names = "VBUS", "PWRFLT";
+> > +        in-masks = <0x8000 0x40000 0x10000 0x80000>;
+> > +        out-gpios = <&gpio 20 0>;
+> > +        out-names = "PWRON";
+> > +        out-masks = <0x20000 0x800000 0x400000 0x200000>;
+> > +        interrupts = <0x0 0xb2 0x4>;
+> > +    };
+> > +
+> > +...
+> > --
+> > 2.17.1
+> >
