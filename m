@@ -2,79 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA06B2513DF
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 10:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED5B251402
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 10:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728131AbgHYIMM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 25 Aug 2020 04:12:12 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:34767 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725947AbgHYIML (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Aug 2020 04:12:11 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-223-8bUeqZBEMYG5yIzjTAMYbw-1; Tue, 25 Aug 2020 09:12:06 +0100
-X-MC-Unique: 8bUeqZBEMYG5yIzjTAMYbw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 25 Aug 2020 09:12:05 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 25 Aug 2020 09:12:05 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Alex Dewar' <alex.dewar90@gmail.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "accessrunner-general@lists.sourceforge.net" 
-        <accessrunner-general@lists.sourceforge.net>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: atm: don't use snprintf() for sysfs attrs
-Thread-Topic: [PATCH] usb: atm: don't use snprintf() for sysfs attrs
-Thread-Index: AQHWemUzoPleWxCDKky1KLXQzyLa5alIeCYw
-Date:   Tue, 25 Aug 2020 08:12:05 +0000
-Message-ID: <3e882693bb344424af37d4d35f3db605@AcuMS.aculab.com>
-References: <20200824222322.22962-1-alex.dewar90@gmail.com>
-In-Reply-To: <20200824222322.22962-1-alex.dewar90@gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1727793AbgHYIR4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Aug 2020 04:17:56 -0400
+Received: from out28-145.mail.aliyun.com ([115.124.28.145]:51304 "EHLO
+        out28-145.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725890AbgHYIRz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Aug 2020 04:17:55 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.250105|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.077471-0.000474437-0.922055;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03279;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.INYD1yr_1598343458;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.INYD1yr_1598343458)
+          by smtp.aliyun-inc.com(10.147.41.158);
+          Tue, 25 Aug 2020 16:17:52 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhenwenjin@gmail.com, sernia.zhou@foxmail.com,
+        yanfei.li@ingenic.com, rick.tyliu@ingenic.com,
+        aric.pzqi@ingenic.com, dongsheng.qiu@ingenic.com
+Subject: [PATCH 0/1] Fix static checker warning.
+Date:   Tue, 25 Aug 2020 16:16:53 +0800
+Message-Id: <20200825081654.18186-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: aculab.com
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Alex Dewar
-> Sent: 24 August 2020 23:23
-> kernel/cpu.c: don't use snprintf() for sysfs attrs
-> 
-> As per the documentation (Documentation/filesystems/sysfs.rst),
-> snprintf() should not be used for formatting values returned by sysfs.
-> 
-> In all of these cases, sprintf() suffices as we know that the formatted
-> strings will be less than PAGE_SIZE in length.
+Fix the warning that appears during Static analysis.
 
-Hmmmm....
-I much prefer to see bounded string ops.
-sysfs really ought to be passing through the buffer length.
-The buffer size should probably be SYSFS_BUF_LEN not PAGE_SIZE
-(even it happens to typically be the same).
-If PAGE_SIZE is big (or small) passing a 4k buffer may be
-more appropriate than a PAGE_SIZE one.
+周琰杰 (Zhou Yanjie) (1):
+  USB: PHY: JZ4770: Fix static checker warning.
 
-	David
+ drivers/usb/phy/phy-jz4770.c | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- 
+2.11.0
 
