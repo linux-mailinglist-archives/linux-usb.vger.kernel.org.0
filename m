@@ -2,159 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E457D250C5B
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 01:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91355250CD0
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 02:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728073AbgHXXaq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 19:30:46 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:37505 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726090AbgHXXao (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 19:30:44 -0400
-Received: by mail-io1-f65.google.com with SMTP id b16so10602652ioj.4;
-        Mon, 24 Aug 2020 16:30:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ul5vsSQ0AC/DUuwVVIoms1HCf2oN0/YEUiAq/yjQxDE=;
-        b=Ut3WcQ6bLanuewPTChONgcnarmYPcrWFQP43IfNlEjUvJpsfc0azDgv9f9EDXSc3ag
-         r+1+/haRwW9Y6MzVH8hsikzWLKffHJRsYR0hM+VNf1mzrQmjvDl+LSFmE62/tMD80IMW
-         F1BWdZNBZf0p0/kGol1jO3u4M2F0Qgtti+GRhX97Kemg3vTPJNEDIRsKz08TyJrexCkl
-         THswXd+o9gG0ck8pOU+8cwnVncY7ScXp6SybutvdywoqfqemoaN7QzowY6nviSC45SkG
-         s8JIFHv1WK9a3fYUhB1V4IEMTR6wOL9k6YOVrhOmTXueK2Fya+39j1FA0PJ7RHOp/Whe
-         JsNQ==
-X-Gm-Message-State: AOAM530B0mH/aSiw+ipZBi5gQNsiyMhbn/+sbN2uSzsNOAcfKFlyW8Ds
-        kveTchRVgwJ01dGUOuu22Q==
-X-Google-Smtp-Source: ABdhPJz+NQ1qdajPag/8+NvwhC0VZ3vzxnBW9ciupDP5U8wTD1qPKcV07ZiSre5zNxPrU8kgre3VRQ==
-X-Received: by 2002:a6b:e009:: with SMTP id z9mr6755255iog.124.1598311843191;
-        Mon, 24 Aug 2020 16:30:43 -0700 (PDT)
-Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id e6sm7517181iod.53.2020.08.24.16.30.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 16:30:42 -0700 (PDT)
-Received: (nullmailer pid 3540232 invoked by uid 1000);
-        Mon, 24 Aug 2020 23:30:40 -0000
-Date:   Mon, 24 Aug 2020 17:30:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Al Cooper <alcooperx@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: Add support for Broadcom USB pin map
- driver
-Message-ID: <20200824233040.GA3532378@bogus>
-References: <20200812202018.49046-1-alcooperx@gmail.com>
- <20200812202018.49046-2-alcooperx@gmail.com>
+        id S1726593AbgHYAQw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 20:16:52 -0400
+Received: from mail-eopbgr1400103.outbound.protection.outlook.com ([40.107.140.103]:13773
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726041AbgHYAQv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Aug 2020 20:16:51 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XRLJNdPNku23xZ9zuaQFKjoUBEElsZGNPfWGrggo/L/0qgIkbS0xHajcAbGvL9cUszxSrBm7i4tMXNBEVyLjPWFb02e/GEHMNPyG3pFlo1I9OATsnvJ32Y10opDPUHlKfsYoCacFlRdPNbMqhq/2SEh0nyNfpzpiO/qsWpqiyEn/SCU2ryS95Z7bM+TME4Wli9ndFAN0T59EQo+iY0yV95m8FWhBSHJWw/oAc6ppY/rmcxjQWLvInUM5nzt/Doj0xPockomM/m1KRfbx7AfQ413GLwfUo75j5ewZT0kKAtoD9WiASJPSfmoygMYHQeuIiZ58rLXZYrgIoEA/g3bUzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SlCIj7OkiX8LN+67nDunhm9vuCWu+1buWzSU1N/aWgo=;
+ b=T/fjOy0Y2d5ubrk4vfMKMBN0MlnGZshMkWWGenXk6BGydBhtrrEfo5O6jam6jLWyOxHfDjq74YpBcuU+aFtAQeVfpSCqf1GYhAeQV+kBj4LAnc4Fv7x1i0PGZzjAlGkuNUFIripEVTN+Nz3QNUbIh0okKtmBuc6p6iKdLyUQRUR9Ko+VmymcoimM20YI82F+H9l8x1gmhn4y3S4s/RdtnOj+b+XXrZDH0mZqks960kWnXteyQ1EFdyueBY3pCgAhFNUKIpmKRxSohDhSzNXHLdrykCP5pldEMlqpzvwIA5vPJBpWMa83Gz91dyQmLPN6IQ/5zYF8vRDbnCD8tqagAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SlCIj7OkiX8LN+67nDunhm9vuCWu+1buWzSU1N/aWgo=;
+ b=V8rSyQt8xJxLEUhvazOOpxgTm0OKdw+oRaG10UfcxoKNsd/gBhDD3LTnSQAQ1fBZV7QBU4Rt1nC0FsYO8Y9aXaJBLlGtmer0vFxUSlZ/1w+pWa/BuFkanfcqQ58s80CnIMwl0wiJJ44IqKvUn2mdCwovAz3pKTZcVZ5ehIUX+kE=
+Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com (2603:1096:404:d5::22)
+ by TYXPR01MB1725.jpnprd01.prod.outlook.com (2603:1096:403:c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Tue, 25 Aug
+ 2020 00:16:44 +0000
+Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com
+ ([fe80::9083:6001:8090:9f3]) by TY2PR01MB3692.jpnprd01.prod.outlook.com
+ ([fe80::9083:6001:8090:9f3%6]) with mapi id 15.20.3305.026; Tue, 25 Aug 2020
+ 00:16:44 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v3 2/5] dt-bindings: usb: renesas,usb3-peri: Document HS
+ and SS data bus
+Thread-Topic: [PATCH v3 2/5] dt-bindings: usb: renesas,usb3-peri: Document HS
+ and SS data bus
+Thread-Index: AQHWeiBo2jykZjtF8E6SC/8275D2TqlH9WrQ
+Date:   Tue, 25 Aug 2020 00:16:44 +0000
+Message-ID: <TY2PR01MB3692850B48F2B27E8BE9A7A2D8570@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+References: <20200824141053.5062-1-biju.das.jz@bp.renesas.com>
+ <20200824141053.5062-3-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20200824141053.5062-3-biju.das.jz@bp.renesas.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: bp.renesas.com; dkim=none (message not signed)
+ header.d=none;bp.renesas.com; dmarc=none action=none header.from=renesas.com;
+x-originating-ip: [240f:60:5f3e:1:212f:de6f:5c90:bd07]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: a28bd48a-29af-45f1-1c1f-08d8488c2656
+x-ms-traffictypediagnostic: TYXPR01MB1725:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <TYXPR01MB1725E88378E5D08B245F4004D8570@TYXPR01MB1725.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0+hI1wuou2hbgDfEGDqOoRKC6NcIkdbj2mKMeaEU0wkN/VJ5j2mJwmzB+gybkhUaz2IaGA8aEPj5VkooQKwQ25NWGeW5IWOyWgwA8U9qCFluua/Dzpkcw2EbkuFuv7EHh3FTnGuOA7Ced4uR4SDHeA8aWyzj+mxy849N62nRBnbxajFxBh9XzonzKZyvVqB89F0WbjPK5rcOlk+7jzGRXlyBlquWRbSFsM68vhSTlKHcuJk37DLWLdNJmP6TesXMhTNDserBEWEqAiT5JxAM4cLjvfptiMmoThRO3n6gbpg8OpTDeEZpi5l40FiPzMWCC5f6lVoJNrKiEF5I2XoDFmNrXzuS8ZnC2adPWAiLbHum9G7H5mRd83nJ9W6j8hT+
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3692.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(39860400002)(396003)(366004)(376002)(86362001)(8676002)(52536014)(2906002)(71200400001)(33656002)(110136005)(558084003)(64756008)(316002)(54906003)(66446008)(76116006)(66946007)(66476007)(66556008)(5660300002)(186003)(8936002)(7696005)(4326008)(9686003)(55016002)(478600001)(6506007)(142933001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: B4dqMGyJW/gOi4frh98lGrr+nYFvWsH8zVfBuBzjbMEFNp8Bk1Io8C/qCzXA/hwPlMjzsoGf8YTFeSCD4Z6e/yXrkrX+C/ywa9XW7pCvnLbaCmYInAJizHBgtJ55a9X9HZYmlI5RE74R58kNBXwo7l+qSPPBG5hyqR9vFY1mH+jRoyav+1M8pV8HEnVaQ/mSi+dv6CHm2UzdnrX237TI3z3J79cqOhr7TLK1752OPFyrCN2vJOh6o5Yi8XzKqaAaLG+2qOFO1ZBLpXF1yv1yXkM1U8TfYsUUcvbrnajpYv2E4/Zi/IfzMBASgm1tiIQmyMwrMGsuFBxMIT9gp9oZpuvca+5wlCGmpMD0YfA/aTMIx81kFuihoOyKfoB8HeHFzOUclxe9nY78P22tJ4j4+Qur0E8zmNQPAXswq7jnFgC5KJSFgBoxiDOVeR3gxnNaVs7gLHN08on2Ca7GtHcueQ7yij1Ok49QcIbp/xJQ8jUQQYk4HTw5zPPyAR5sx956sQpiSqpbiRerlh08dCSgSfYNRecVd73TghQEECW30ZCSil1W2Uag6Y/kKOckq67u7TNHZeWifEBfy035xl5lZeFkLFw79B+pKDocuXJzGJoEQGPOntIwa7jOCfkRAaJaaO7MFStXAOdEJDZsQ7DSEuZawUxQDDdyuEhzJCJflPdT9YeKEJbkn0ce4nwObqDJ/EMWr3O19YjpkTqUraLasA==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200812202018.49046-2-alcooperx@gmail.com>
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3692.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a28bd48a-29af-45f1-1c1f-08d8488c2656
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2020 00:16:44.7394
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lPYam3ylx6tafAVTUIyrdN16fIvozixnm/6yjdlmSDtu6YCqnizeC/0cRVgvInEbiIq1WelAYtR/qVcVjSiWiFA8WUOtCyWK/hxKlVZ4SfnX8Fpp3ztP/Ydi+/6ytGNG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYXPR01MB1725
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 12, 2020 at 04:20:16PM -0400, Al Cooper wrote:
-> Add DT bindings for the Broadcom USB pin map driver. This driver allows
-> some USB input and output signals to be mapped to any GPIO instead
-> of the normal dedicated pins to/from the XHCI controller.
+Hi Biju-san,
 
-Is this a driver or h/w block because bindings are for h/w blocks?
+> From: Biju Das, Sent: Monday, August 24, 2020 11:11 PM
+>=20
+> Document HS and SS data bus for the "usb-role-switch" enabled case.
+>=20
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-> 
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> ---
->  .../bindings/usb/brcm,usb-pinmap.yaml         | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml b/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
-> new file mode 100644
-> index 000000000000..19cf6ad36373
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/brcm,usb-pinmap.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom USB pin map Controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - Al Cooper <alcooperx@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +      items:
-> +          - const: brcm,usb-pinmap
+Thank you for the patch!
 
-2 space indentation please.
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: Must be defined if any out-gpios are specified.
+Best regards,
+Yoshihiro Shimoda
 
-'dependencies' can express this in schema.
-
-> +
-> +  in-gpios:
-> +    description: Array of one or more GPIO pins used for input signals.
-
-You need to define how many GPIOs are valid.
-
-> +
-> +  in-names:
-> +    description: Array of input signal names, one per gpio in in-gpios.
-
-No, this isn't how we name GPIOs. The part before '-gpios' is how.
-
-> +
-> +  in-masks:
-> +    description: Array of enable and mask pairs, one per gpio in-gpios.
-
-Needs a vendor prefix.
-
-> +
-> +  out-gpios:
-> +    description: Array of one or more GPIO pins used for output signals.
-> +
-> +  out-names:
-> +    description: Array of output signal names, one per gpio in out-gpios.
-> +
-> +  out-masks:
-> +    description: Array of enable, value, changed and clear masks, one
-> +      per gpio in out-gpios.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    usb_pinmap: usb-pinmap@22000d0 {
-> +        compatible = "brcm,usb-pinmap";
-> +        reg = <0x22000d0 0x4>;
-> +        in-gpios = <&gpio 18 0>, <&gpio 19 0>;
-> +        in-names = "VBUS", "PWRFLT";
-> +        in-masks = <0x8000 0x40000 0x10000 0x80000>;
-> +        out-gpios = <&gpio 20 0>;
-> +        out-names = "PWRON";
-> +        out-masks = <0x20000 0x800000 0x400000 0x200000>;
-> +        interrupts = <0x0 0xb2 0x4>;
-> +    };
-> +
-> +...
-> -- 
-> 2.17.1
-> 
