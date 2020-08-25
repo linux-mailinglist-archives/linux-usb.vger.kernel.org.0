@@ -2,89 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94758250DB9
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 02:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12837250DCD
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 02:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728087AbgHYAge (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Aug 2020 20:36:34 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:41795 "HELO
+        id S1726889AbgHYAsq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Aug 2020 20:48:46 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:37641 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728073AbgHYAge (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 20:36:34 -0400
-Received: (qmail 350852 invoked by uid 1000); 24 Aug 2020 20:36:33 -0400
-Date:   Mon, 24 Aug 2020 20:36:33 -0400
+        with SMTP id S1726090AbgHYAsq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Aug 2020 20:48:46 -0400
+Received: (qmail 351048 invoked by uid 1000); 24 Aug 2020 20:48:45 -0400
+Date:   Mon, 24 Aug 2020 20:48:45 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tom Rix <trix@redhat.com>
-Cc:     Vito Caputo <vcaputo@pengaru.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: storage: initialize variable
-Message-ID: <20200825003633.GB350601@rowland.harvard.edu>
-References: <20200824211027.11543-1-trix@redhat.com>
- <20200824211839.6c7m7yhgd7ffq3g3@shells.gnugeneration.com>
- <c9c4fca2-d04a-1bf9-e90e-9476392c1662@redhat.com>
+To:     Jean-Christophe Barnoud <jcbarnoud@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Duplicate endpoint : Sound Devices MixPre-D (sound interface)
+Message-ID: <20200825004845.GC350601@rowland.harvard.edu>
+References: <a8e7a061-e788-9c57-59fc-243d0daae851@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <c9c4fca2-d04a-1bf9-e90e-9476392c1662@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a8e7a061-e788-9c57-59fc-243d0daae851@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 02:31:01PM -0700, Tom Rix wrote:
+On Mon, Aug 24, 2020 at 06:48:37PM +0200, Jean-Christophe Barnoud wrote:
+> Hello.
 > 
-> On 8/24/20 2:18 PM, Vito Caputo wrote:
-> > On Mon, Aug 24, 2020 at 02:10:27PM -0700, trix@redhat.com wrote:
-> >> From: Tom Rix <trix@redhat.com>
-> >>
-> >> clang static analysis reports this representative problem
-> >>
-> >> transport.c:495:15: warning: Assigned value is garbage or
-> >>   undefined
-> >>         length_left -= partial;
-> >>                    ^  ~~~~~~~
-> >> partial is set only when usb_stor_bulk_transfer_sglist()
-> >> is successful.
-> >>
-> >> So set partial on entry to 0.
-> >>
-> >> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> >> Signed-off-by: Tom Rix <trix@redhat.com>
-> >> ---
-> >>  drivers/usb/storage/transport.c | 3 +++
-> >>  1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-> >> index 238a8088e17f..044429717dcc 100644
-> >> --- a/drivers/usb/storage/transport.c
-> >> +++ b/drivers/usb/storage/transport.c
-> >> @@ -414,6 +414,9 @@ static int usb_stor_bulk_transfer_sglist(struct us_data *us, unsigned int pipe,
-> >>  {
-> >>  	int result;
-> >>  
-> >> +	if (act_len)
-> >> +		*act_len = 0;
-> >> +
-> >>  	/* don't submit s-g requests during abort processing */
-> >>  	if (test_bit(US_FLIDX_ABORTING, &us->dflags))
-> >>  		return USB_STOR_XFER_ERROR;
-> > At a glance this seems odd to me.  If the caller insists on ignoring
-> > the return value, shouldn't it just initialize partial to zero?
-> >
-> > In my experience it's generally frowned upon for functions to store
-> > results in error paths.
+> The team at libusb says that this is a kernel issue so here it is.
+> Device : Sound Devices MixPre-D
+> This is an external audio interface that worked simultaneously as input and
+> output with older kernels and libusb versions (see far below with fedora 26,
+> kernel 4.13.13-200, libusb 0.1.5-8 from an older mothballed machine).
+> With newer versions of the kernel and libusb it works only as output (see
+> just below with a current fedora 32, kernel 5.7.15-200, libusb-0.1.5-16).
 > 
-> Then maybe v1 is more appropriate.
-> 
-> Else i can spin a v3.
-> 
-> My preference is v1 as it doesn't add any runtime if-checks.
+> An online search shows that the dmesg output "duplicate endpoint" is
+> identical to the one referenced in this permalink :
+> http://archive.lwn.net:8080/linux-kernel/20200201105829.5682c887@acme7.acmenet/
+> So I guess that the solution is the same, adding in
+> drivers/usb/core/quirks.c (adapted to the specific hardware identification)
+> :
+> +    /* Sound Devices MixPre-D */
+> +    { USB_DEVICE(0x0926, 0x0208), .driver_info =
+> USB_QUIRK_ENDPOINT_BLACKLIST },
 
-If you really want to get rid of the runtime check (both the one you 
-added and the one already present), you can audit all the callers of 
-this routine to make certain that none of them pass a NULL pointer for 
-act_len.
+More than just this entry is needed; there also has to be an entry 
+listing the endpoints to be ignored.  But that's straightforward to add.
+
+> +
+> Would it be possible to add this exception to quirks.c ?
+> Thanks
+> 
+> 
+> Fedora 32
+> 
+> [jcb@localhost ~]$ dmesg
+> [181470.940975] usb 3-9: new high-speed USB device number 6 using xhci_hcd
+> [181471.067606] usb 3-9: config 1 interface 2 altsetting 1 has a duplicate
+> endpoint with address 0x85, skipping
+> [181471.067609] usb 3-9: config 1 interface 2 altsetting 2 has a duplicate
+> endpoint with address 0x85, skipping
+
+Can you provide the output from "lsusb -v" for this device?  We'd like 
+to know exactly what's being added to the ignore list and why, before 
+doing it.
 
 Alan Stern
