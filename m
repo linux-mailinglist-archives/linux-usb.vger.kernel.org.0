@@ -2,119 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBBE251E86
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 19:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47247251EBA
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 20:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726611AbgHYRkf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Aug 2020 13:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725936AbgHYRkc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Aug 2020 13:40:32 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C03BC061574;
-        Tue, 25 Aug 2020 10:40:32 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id nv17so1622242pjb.3;
-        Tue, 25 Aug 2020 10:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2CIAlEB0sn0czmBCstmmbk0rRRc0a7Q7Eg5uRFK+DTM=;
-        b=OWtTyCh4mBkSanD+KT2LmsSmys9GdgNPDuMOUrEMBvirSVEpgWaccxzuVDCSUPzr+g
-         UL3d/b/WhkUnWbhm0C+dKAbICczXHeEay6JEghnYPq1AWGXV0OqUHZVzSR0vH40qB4T7
-         CvKheJOKe1bLwlHMjKz6V1TnFYQX/QwQ3zFo3OtKNBualjgvS3McIxk5bZckCXdHUxPn
-         y5cllopsvswApow32o5Hqk8i69l4DMq5zNUIBV31X/TRx3SDq4RkHJpDQFbpdjwtNLEK
-         YafzqTXU3/pyTiKmRDgRCRX9RrujtgeJf8Hbr9VBxTZRL/Jzkqt3LfmQHxV5h/PRKVwB
-         vyvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2CIAlEB0sn0czmBCstmmbk0rRRc0a7Q7Eg5uRFK+DTM=;
-        b=A+n5alUnkz/m6ra9z01JjGdiTqBX2TkMKr+7HXDFTg3kAk/S9CB/sx3PWn5pwDE//w
-         E0udbLC4dIkRkpqP+mP3LpnwsHVbaDtCBYoERoxyfNhqCpkx5qTVIr8VbwfNplNjyUnc
-         TLEe326HQmGKldC5HAUaE2tnNqaUG6YS2NSXuyDWlGmD1+unY73jHrGvtnrsqTLElEEt
-         NOmdun1c9d+56PUgqH52I1tbYpCStzB9W/8RJkln+YQeEBQvxxATtKRjS7mFlITLMVP6
-         QWZGWEjuBd5i9DXMwhCZj7EpzpFWSWEjvPMUIziUy0oz+fkQ6fhh0Y1Unf9eHj8Hz2Kw
-         nTnA==
-X-Gm-Message-State: AOAM530Z0c0qybj+uBNWhb82MQyzUWm8EaxcTLm1K+XFlM2U8K6JRHiE
-        lg1AH3tWBwuRc1JMlJAcl2g=
-X-Google-Smtp-Source: ABdhPJygG/iRoMRtYkc62+6+vovnxiIUBYXGvz6sXIt/PP/MjnVCr6wdHgCpE82t+Egu2LRmdgvskQ==
-X-Received: by 2002:a17:90a:eb17:: with SMTP id j23mr2403499pjz.151.1598377230639;
-        Tue, 25 Aug 2020 10:40:30 -0700 (PDT)
-Received: from [10.69.79.32] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id b6sm3378574pjz.33.2020.08.25.10.40.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Aug 2020 10:40:29 -0700 (PDT)
-Subject: Re: [PATCH v11 00/11] PCI: brcmstb: enable PCIe for STB chips
-To:     Jim Quinlan <james.quinlan@broadcom.com>,
-        linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVERS FOR ALLWINNER A10" 
-        <dri-devel@lists.freedesktop.org>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Julien Grall <julien.grall@arm.com>,
-        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:ALLWINNER A10 CSI DRIVER" <linux-media@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-References: <20200824193036.6033-1-james.quinlan@broadcom.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <b19bc982-a0c4-c6ff-d8f5-650f2b3a83c8@gmail.com>
-Date:   Tue, 25 Aug 2020 10:40:27 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.1.1
+        id S1726225AbgHYSA2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Aug 2020 14:00:28 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:36721 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726119AbgHYSA1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Aug 2020 14:00:27 -0400
+Received: (qmail 375693 invoked by uid 1000); 25 Aug 2020 14:00:26 -0400
+Date:   Tue, 25 Aug 2020 14:00:26 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     yanfei.xu@windriver.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: core: limit access to rawdescriptors which were not
+ allocated
+Message-ID: <20200825180026.GA375466@rowland.harvard.edu>
+References: <20200825161659.19008-1-yanfei.xu@windriver.com>
 MIME-Version: 1.0
-In-Reply-To: <20200824193036.6033-1-james.quinlan@broadcom.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200825161659.19008-1-yanfei.xu@windriver.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 8/24/2020 12:30 PM, Jim Quinlan wrote:
+On Wed, Aug 26, 2020 at 12:16:59AM +0800, yanfei.xu@windriver.com wrote:
+> From: Yanfei Xu <yanfei.xu@windriver.com>
 > 
-> Patchset Summary:
->    Enhance a PCIe host controller driver.  Because of its unusual design
->    we are foced to change dev->dma_pfn_offset into a more general role
->    allowing multiple offsets.  See the 'v1' notes below for more info.
+> When using systemcall to read the rawdescriptors, make sure we won't
+> access to the rawdescriptors never allocated, which are number
+> exceed the USB_MAXCONFIG.
+> 
+> Reported-by: syzbot+256e56ddde8b8957eabd@syzkaller.appspotmail.com
+> Signed-off-by: Yanfei Xu <yanfei.xu@windriver.com>
+> ---
+>  drivers/usb/core/sysfs.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+> index a2ca38e25e0c..1a7a625e5f55 100644
+> --- a/drivers/usb/core/sysfs.c
+> +++ b/drivers/usb/core/sysfs.c
+> @@ -895,7 +895,8 @@ read_descriptors(struct file *filp, struct kobject *kobj,
+>  	 * configurations (config plus subsidiary descriptors).
+>  	 */
+>  	for (cfgno = -1; cfgno < udev->descriptor.bNumConfigurations &&
+> -			nleft > 0; ++cfgno) {
+> +			nleft > 0 &&
+> +			cfgno < USB_MAXCONFIG; ++cfgno) {
+>  		if (cfgno < 0) {
+>  			src = &udev->descriptor;
+>  			srclen = sizeof(struct usb_device_descriptor);
 
-We are version 11 and counting, and it is not clear to me whether there 
-is any chance of getting these patches reviewed and hopefully merged for 
-the 5.10 merge window.
+This is not the right way to fix the problem.
 
-There are a lot of different files being touched, so what would be the 
-ideal way of routing those changes towards inclusion?
+Instead, we should make sure that udev->descriptor.bNumConfigurations is 
+always <= USB_MAXCONFIG.  That's what this code in 
+usb_get_configuration() is supposed to do:
 
-Thanks!
--- 
-Florian
+	int ncfg = dev->descriptor.bNumConfigurations;
+	...
+
+	if (ncfg > USB_MAXCONFIG) {
+		dev_warn(ddev, "too many configurations: %d, "
+		    "using maximum allowed: %d\n", ncfg, USB_MAXCONFIG);
+		dev->descriptor.bNumConfigurations = ncfg = USB_MAXCONFIG;
+	}
+
+If you want to fix the bug, you need to figure out why this isn't 
+working.
+
+Alan Stern
