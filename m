@@ -2,370 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF9C251A61
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 16:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400A0251AB8
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 16:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgHYOBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Aug 2020 10:01:45 -0400
-Received: from mga06.intel.com ([134.134.136.31]:59247 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726633AbgHYOA1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 25 Aug 2020 10:00:27 -0400
-IronPort-SDR: fJPxjCYB6MjMxPaTT7uS0/QYmqrCsaTcwwhI5iPTD6v1iJgmwY9wTgxKGhC4K4Fe7aGBQZgudc
- qU2+izDtRMxg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="217659403"
-X-IronPort-AV: E=Sophos;i="5.76,352,1592895600"; 
-   d="scan'208";a="217659403"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 07:00:02 -0700
-IronPort-SDR: fMHsK6yBLyD6mP0G1l/gxjvKnuCii4RNjnsOIVjhyJHSJtvOq/S5NKMk43FKZqMMSGDH0WbN8f
- QofaSH/+Ur2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,352,1592895600"; 
-   d="scan'208";a="402725591"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Aug 2020 06:59:59 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: [PATCH 3/3] usb: dwc3: pci: Register a software node for the dwc3 platform device
-Date:   Tue, 25 Aug 2020 16:59:51 +0300
-Message-Id: <20200825135951.53340-4-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200825135951.53340-1-heikki.krogerus@linux.intel.com>
-References: <20200825135951.53340-1-heikki.krogerus@linux.intel.com>
+        id S1726218AbgHYOVE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Aug 2020 10:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726015AbgHYOVE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Aug 2020 10:21:04 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9912CC061574
+        for <linux-usb@vger.kernel.org>; Tue, 25 Aug 2020 07:21:03 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id oz20so11828854ejb.5
+        for <linux-usb@vger.kernel.org>; Tue, 25 Aug 2020 07:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=j7njjj4fP/dM/qO6pJcdvxIHONmhXgz8n6uQ0RbRVTI=;
+        b=arc7hmezb/7Y8q/sQ9PT8vVQ75/LRED5NX2ZLNZX50yBR0+XIIT00j1YDXv33GW1X7
+         PqppM8VEOt7FabxzAp5w9kC9vdmPINmwQA3v/TTe5zlK5QjmfJD8AtKPmRxGt33HDALk
+         EZS7jke1Vg4MwRSrL4/LYuOQBkr4mQesFzl17BeyHNNCp8ABLQz4s8Oue/6+FslyEqj+
+         dh9X4J5quYImhhN82tnjsElb9dNh1M08gtLxG6pzkBbrsgt6v+fUveiWRXpvq00Kp3aL
+         jUEP0NVFTrYfzqDNUmxIGUo+55bxIfouLxYJUITcj4iKRfKnk/SKsF9E2O3+ItjExbto
+         bQaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=j7njjj4fP/dM/qO6pJcdvxIHONmhXgz8n6uQ0RbRVTI=;
+        b=TOAc1rVPwqmrfrwzNdjHrrJcOqqZylKtzBznITmRLxHZheWXTx33gWw6h1fe0Iqwpj
+         RBKu88+ZQ9r3Ht7uwg1eoU3KYemfrsk9ML4cOk3l0iO5qc8YrLG6eWHXYc7Z85OERkB3
+         VrE3j3ZDu1SvF3YBMP/jlcfmsHQND4Im0F/gICuWtmP3zZOZCS2sp1ZNQsHVBAPZb7io
+         Prs9gUPApxtfgN5KxY4QpqzZjWTkYDqFwtQB/oG/XRW2kkywv+Dysv+Ae5U9IrvkjBxc
+         NA+4NQFR/yez1gNlteufW68Pbzez+Q5FlhciiIKCx32xumyAbkZE2H1/yms3TBcwRNHz
+         hrjg==
+X-Gm-Message-State: AOAM531Gdawtcqlyavb9AMSCKs0CUYXedbZ6dh7Q8GIa1PlNxx/h7KnX
+        IAoG11wF0iQLoDyHFqSAEcBUCQ==
+X-Google-Smtp-Source: ABdhPJzGcDjR55H9A/W/+YJ8E7C/8uERKfkCaSwyfhtRVOKljjaHSw9dq3b2HYmAiXAm4C21zol5uQ==
+X-Received: by 2002:a17:906:f150:: with SMTP id gw16mr2292056ejb.532.1598365262138;
+        Tue, 25 Aug 2020 07:21:02 -0700 (PDT)
+Received: from localhost (cag06-3-82-243-161-21.fbx.proxad.net. [82.243.161.21])
+        by smtp.gmail.com with ESMTPSA id fx15sm13847072ejb.1.2020.08.25.07.21.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2020 07:21:00 -0700 (PDT)
+References: <20200713160522.19345-1-dan@dlrobertson.com> <20200713160522.19345-2-dan@dlrobertson.com> <1jy2maekzf.fsf@starbuckisacylon.baylibre.com> <ff07b04450080fd14d8da4470aeb6e1c28e4215f.camel@pengutronix.de> <1j8se43yrw.fsf@starbuckisacylon.baylibre.com> <18105405541cbc32cecaff181e1427f5434fafc3.camel@pengutronix.de>
+User-agent: mu4e 1.3.3; emacs 26.3
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Dan Robertson <dan@dlrobertson.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, aouledameur@baylibre.com
+Subject: Re: [PATCH 1/1] usb: dwc3: meson-g12a: fix shared reset control use
+In-reply-to: <18105405541cbc32cecaff181e1427f5434fafc3.camel@pengutronix.de>
+Date:   Tue, 25 Aug 2020 16:20:59 +0200
+Message-ID: <1j5z964xis.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-By registering the software node directly instead of just
-the properties in it, the driver can take advantage of also
-the other features the software nodes have.
 
-Initially using the nodes for isolating the Intel Broxton
-specific power management quirk by handling it in Broxton's
-very own power management operations (which are supplied as
-part of the software node) instead of the drivers generic
-ones.
+On Tue 25 Aug 2020 at 12:20, Philipp Zabel <p.zabel@pengutronix.de> wrote:
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/dwc3/dwc3-pci.c | 175 ++++++++++++++++++------------------
- 1 file changed, 86 insertions(+), 89 deletions(-)
+> On Mon, 2020-08-24 at 16:26 +0200, Jerome Brunet wrote:
+> [...]
+>> In practice, I think your proposition would work since the drivers
+>> sharing this USB reset line are likely to be probed/suspended/resumed at
+>> the same time but ...
+>> 
+>> If we imagine a situation where 2 device share a reset line, 1 go in
+>> suspend, the other does not - if the first device as control of the
+>> reset, it could trigger it and break the 2nd device. Same goes for
+>> probe/remove()
+>> 
+>> I agree it could be seen as unlikely but leaving such race condition
+>> open looks dangerous to me.
+>
+> You are right, this is not good enough.
+>
+>> > Is this something that would be feasible for your combination of
+>> > drivers? Otherwise it is be unclear to me under which condition a driver
+>> > should be allowed to call the proposed reset_control_clear().
+>> 
+>> I was thinking of reset_control_clear() as the counter part of
+>> reset_control_reset().
+>
+> I'm not particularly fond of reset_control_clear as a name, because it
+> is very close to "clearing a reset bit" which usually would deassert a
+> reset line (or the inverse).
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 242b6210380a4..43cc0f602820d 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -54,17 +54,12 @@
-  * struct dwc3_pci - Driver private structure
-  * @dwc3: child dwc3 platform_device
-  * @pci: our link to PCI bus
-- * @guid: _DSM GUID
-- * @has_dsm_for_pm: true for devices which need to run _DSM on runtime PM
-  * @wakeup_work: work for asynchronous resume
-  */
- struct dwc3_pci {
- 	struct platform_device *dwc3;
- 	struct pci_dev *pci;
- 
--	guid_t guid;
--
--	unsigned int has_dsm_for_pm:1;
- 	struct work_struct wakeup_work;
- };
- 
-@@ -108,6 +103,50 @@ static int dwc3_byt_enable_ulpi_refclock(struct pci_dev *pci)
- 	return 0;
- }
- 
-+#ifdef CONFIG_PM
-+static int dwc3_pci_intel_pm_dsm(struct device *dev, int param)
-+{
-+	union acpi_object *obj;
-+	union acpi_object tmp;
-+	union acpi_object argv4 = ACPI_INIT_DSM_ARGV4(1, &tmp);
-+	guid_t guid;
-+	int ret;
-+
-+	ret = guid_parse(PCI_INTEL_BXT_DSM_GUID, &guid);
-+	if (ret)
-+		return ret;
-+
-+	tmp.type = ACPI_TYPE_INTEGER;
-+	tmp.integer.value = param;
-+
-+	obj = acpi_evaluate_dsm(ACPI_HANDLE(dev), &guid,
-+				1, PCI_INTEL_BXT_FUNC_PMU_PWR, &argv4);
-+	if (!obj) {
-+		dev_err(dev, "failed to evaluate _DSM\n");
-+		return -EIO;
-+	}
-+
-+	ACPI_FREE(obj);
-+
-+	return 0;
-+}
-+
-+static int dwc3_pci_intel_suspend(struct device *dev)
-+{
-+	return dwc3_pci_intel_pm_dsm(dev->parent, PCI_INTEL_BXT_STATE_D3);
-+}
-+
-+static int dwc3_pci_intel_resume(struct device *dev)
-+{
-+	return dwc3_pci_intel_pm_dsm(dev->parent, PCI_INTEL_BXT_STATE_D0);
-+}
-+#endif /* CONFIG_PM */
-+
-+static const struct dev_pm_ops dwc3_pci_intel_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(dwc3_pci_intel_suspend, dwc3_pci_intel_resume)
-+	SET_RUNTIME_PM_OPS(dwc3_pci_intel_suspend, dwc3_pci_intel_resume, NULL)
-+};
-+
- static const struct property_entry dwc3_pci_intel_properties[] = {
- 	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
- 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
-@@ -141,18 +180,28 @@ static const struct property_entry dwc3_pci_amd_properties[] = {
- 	{}
- };
- 
-+static const struct software_node dwc3_pci_intel_swnode = {
-+	.properties = dwc3_pci_intel_properties,
-+};
-+
-+static const struct software_node dwc3_pci_intel_pm_swnode = {
-+	.properties = dwc3_pci_intel_properties,
-+	.pm = &dwc3_pci_intel_pm_ops,
-+};
-+
-+static const struct software_node dwc3_pci_intel_mrfld_swnode = {
-+	.properties = dwc3_pci_mrfld_properties,
-+};
-+
-+static const struct software_node dwc3_pci_amd_swnode = {
-+	.properties = dwc3_pci_amd_properties,
-+};
-+
- static int dwc3_pci_quirks(struct dwc3_pci *dwc)
- {
- 	struct pci_dev			*pdev = dwc->pci;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
--		if (pdev->device == PCI_DEVICE_ID_INTEL_BXT ||
--		    pdev->device == PCI_DEVICE_ID_INTEL_BXT_M ||
--		    pdev->device == PCI_DEVICE_ID_INTEL_EHLLP) {
--			guid_parse(PCI_INTEL_BXT_DSM_GUID, &dwc->guid);
--			dwc->has_dsm_for_pm = true;
--		}
--
- 		if (pdev->device == PCI_DEVICE_ID_INTEL_BYT) {
- 			struct gpio_desc *gpio;
- 			int ret;
-@@ -221,7 +270,6 @@ static void dwc3_pci_resume_work(struct work_struct *work)
- 
- static int dwc3_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- {
--	struct property_entry *p = (struct property_entry *)id->driver_data;
- 	struct dwc3_pci		*dwc;
- 	struct resource		res[2];
- 	int			ret;
-@@ -264,7 +312,7 @@ static int dwc3_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	dwc->dwc3->dev.parent = dev;
- 	ACPI_COMPANION_SET(&dwc->dwc3->dev, ACPI_COMPANION(dev));
- 
--	ret = platform_device_add_properties(dwc->dwc3, p);
-+	ret = device_add_software_node(&dwc->dwc3->dev, (void *)id->driver_data);
- 	if (ret < 0)
- 		goto err;
- 
-@@ -287,6 +335,7 @@ static int dwc3_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 
- 	return 0;
- err:
-+	device_remove_software_node(&dwc->dwc3->dev);
- 	platform_device_put(dwc->dwc3);
- 	return ret;
- }
-@@ -303,121 +352,86 @@ static void dwc3_pci_remove(struct pci_dev *pci)
- #endif
- 	device_init_wakeup(&pci->dev, false);
- 	pm_runtime_get(&pci->dev);
-+	device_remove_software_node(&dwc->dwc3->dev);
- 	platform_device_unregister(dwc->dwc3);
- }
- 
- static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BSW),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BYT),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MRFLD),
--	  (kernel_ulong_t) &dwc3_pci_mrfld_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_mrfld_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_CMLLP),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_CMLH),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_SPTLP),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_SPTH),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BXT),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_pm_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BXT_M),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_pm_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_APL),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_KBP),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_GLK),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_CNPLP),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_CNPH),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_CNPV),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ICLLP),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_EHLLP),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_pm_swnode },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPLP),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPH),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_JSP),
--	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
--	  (kernel_ulong_t) &dwc3_pci_amd_properties, },
-+	  (kernel_ulong_t) &dwc3_pci_amd_swnode, },
- 	{  }	/* Terminating Entry */
- };
- MODULE_DEVICE_TABLE(pci, dwc3_pci_id_table);
- 
--#if defined(CONFIG_PM) || defined(CONFIG_PM_SLEEP)
--static int dwc3_pci_dsm(struct dwc3_pci *dwc, int param)
--{
--	union acpi_object *obj;
--	union acpi_object tmp;
--	union acpi_object argv4 = ACPI_INIT_DSM_ARGV4(1, &tmp);
--
--	if (!dwc->has_dsm_for_pm)
--		return 0;
--
--	tmp.type = ACPI_TYPE_INTEGER;
--	tmp.integer.value = param;
--
--	obj = acpi_evaluate_dsm(ACPI_HANDLE(&dwc->pci->dev), &dwc->guid,
--			1, PCI_INTEL_BXT_FUNC_PMU_PWR, &argv4);
--	if (!obj) {
--		dev_err(&dwc->pci->dev, "failed to evaluate _DSM\n");
--		return -EIO;
--	}
--
--	ACPI_FREE(obj);
--
--	return 0;
--}
--#endif /* CONFIG_PM || CONFIG_PM_SLEEP */
--
- #ifdef CONFIG_PM
- static int dwc3_pci_runtime_suspend(struct device *dev)
- {
--	struct dwc3_pci		*dwc = dev_get_drvdata(dev);
--
--	if (device_can_wakeup(dev))
--		return dwc3_pci_dsm(dwc, PCI_INTEL_BXT_STATE_D3);
--
--	return -EBUSY;
-+	return device_can_wakeup(dev) ? 0 : -EBUSY;
- }
- 
- static int dwc3_pci_runtime_resume(struct device *dev)
- {
- 	struct dwc3_pci		*dwc = dev_get_drvdata(dev);
--	int			ret;
--
--	ret = dwc3_pci_dsm(dwc, PCI_INTEL_BXT_STATE_D0);
--	if (ret)
--		return ret;
- 
- 	queue_work(pm_wq, &dwc->wakeup_work);
- 
-@@ -425,24 +439,7 @@ static int dwc3_pci_runtime_resume(struct device *dev)
- }
- #endif /* CONFIG_PM */
- 
--#ifdef CONFIG_PM_SLEEP
--static int dwc3_pci_suspend(struct device *dev)
--{
--	struct dwc3_pci		*dwc = dev_get_drvdata(dev);
--
--	return dwc3_pci_dsm(dwc, PCI_INTEL_BXT_STATE_D3);
--}
--
--static int dwc3_pci_resume(struct device *dev)
--{
--	struct dwc3_pci		*dwc = dev_get_drvdata(dev);
--
--	return dwc3_pci_dsm(dwc, PCI_INTEL_BXT_STATE_D0);
--}
--#endif /* CONFIG_PM_SLEEP */
--
- static const struct dev_pm_ops dwc3_pci_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(dwc3_pci_suspend, dwc3_pci_resume)
- 	SET_RUNTIME_PM_OPS(dwc3_pci_runtime_suspend, dwc3_pci_runtime_resume,
- 		NULL)
- };
--- 
-2.28.0
+It was merely a suggestion :) any other name you prefer is fine by me
+
+>
+>> When a reset_control_reset() has been called once, "triggered_count" is
+>> incremented which signals that the ressource under the reset is
+>> "in_use" and the reset should not be done again.
+>
+> "triggered_count" would then have to be renamed to something like
+> "trigger_requested_count", or "use_count". I wonder it might be possible
+> to merge this with "deassert_count" as they'd share the same semantics
+> (while the count is > 0, the reset line must stay deasserted).
+
+Sure. Could investigate this as a 2nd step ?
+I'd like to bring a solution for our meson-usb use case quickly - even
+with the revert suggested, we are having an ugly warning around suspend
+
+>
+>> reset_control_clear()
+>> would be the way to state that the ressource is no longer used and, that
+>> from the caller perspective, the reset can fired again if necessary.
+>> 
+>> If we take the probe / suspend / resume example:
+>> * 1st device using the shared will actually trigger it (as it is now)
+>> * following device just increase triggered_count
+>> 
+>> If all devices go to suspend (calling reset_control_clear()) then
+>> triggered_count will reach zero, allowing the first device resuming to
+>> trigger the reset again ... this is important since it might not be the
+>> one which would have got the exclusive control
+>> 
+>> If any device don't go to suspend, meaning the ressource under reset
+>> keep on being used, no reset will performed. With exlusive control,
+>> there is a risk that the resuming device resets something already in use.
+>>
+>> Regarding the condition, on shared resets, call reset_control_reset()
+>> should be balanced reset_control_clear() - no clear before reset.
+>
+> Martin, is this something that would be useful for the current users of
+> the shared reset trigger functionality (phy-meson-gxl-usb2 and phy-
+> meson8b-usb2 with reset-meson)?
+
+I'm not Martin but these devices are the origin of the request/suggestion.
+
+>
+> regards
+> Philipp
 
