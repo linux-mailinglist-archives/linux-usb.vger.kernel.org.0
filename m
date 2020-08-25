@@ -2,79 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A93251ADE
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 16:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23E0251B02
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Aug 2020 16:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726542AbgHYOeC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Aug 2020 10:34:02 -0400
-Received: from mga07.intel.com ([134.134.136.100]:48069 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726483AbgHYOd7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 25 Aug 2020 10:33:59 -0400
-IronPort-SDR: rY/5/ZBrnqsTNyf3HA16dSVV1buAL3eI58we/ZKYnmTqnI+DyrsIO6lcZrnMUm8m5ELc7uob8U
- BHbEU7XMEHvQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="220379820"
-X-IronPort-AV: E=Sophos;i="5.76,352,1592895600"; 
-   d="scan'208";a="220379820"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 07:33:57 -0700
-IronPort-SDR: dzmeqHoIyTXJ+o+g7Y8O9WxJ1M4qlPGVCY4Rp7vvQQFDRLvAXeYKDd3/dQ9lCaBWtakJIiZusD
- 4GhiA4F4SMXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,352,1592895600"; 
-   d="scan'208";a="328880141"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 25 Aug 2020 07:33:55 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kAa1J-00BLPk-Mi; Tue, 25 Aug 2020 17:33:53 +0300
-Date:   Tue, 25 Aug 2020 17:33:53 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH 2/3] software node: Introduce device_add_software_node()
-Message-ID: <20200825143353.GL1891694@smile.fi.intel.com>
-References: <20200825135951.53340-1-heikki.krogerus@linux.intel.com>
- <20200825135951.53340-3-heikki.krogerus@linux.intel.com>
- <20200825143228.GK1891694@smile.fi.intel.com>
+        id S1726432AbgHYOjs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Aug 2020 10:39:48 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:34485 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725998AbgHYOjr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Aug 2020 10:39:47 -0400
+Received: (qmail 367187 invoked by uid 1000); 25 Aug 2020 10:39:46 -0400
+Date:   Tue, 25 Aug 2020 10:39:46 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        Himadri Pandya <himadrispandya@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        USB list <linux-usb@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: [PATCH] net: usb: Fix uninit-was-stored issue in asix_read_cmd()
+Message-ID: <20200825143946.GA365901@rowland.harvard.edu>
+References: <20200823082042.20816-1-himadrispandya@gmail.com>
+ <CACT4Y+Y1TpqYowNXj+OTcQwH-7T4n6PtPPa4gDWkV-np5KhKAQ@mail.gmail.com>
+ <20200823101924.GA3078429@kroah.com>
+ <CACT4Y+YbDODLRFn8M5QcY4CazhpeCaunJnP_udXtAs0rYoASSg@mail.gmail.com>
+ <20200823105808.GB87391@kroah.com>
+ <CACT4Y+ZiZQK8WBre9E4777NPaRK4UDOeZOeMZOQC=5tDsDu23A@mail.gmail.com>
+ <20200825065135.GA1316856@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200825143228.GK1891694@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200825065135.GA1316856@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 05:32:28PM +0300, Andy Shevchenko wrote:
-> On Tue, Aug 25, 2020 at 04:59:50PM +0300, Heikki Krogerus wrote:
-> > This helper will register a software node and then assign
-> > it to device at the same time. The function will also make
-> > sure that the device can't have more than one software node.
+On Tue, Aug 25, 2020 at 08:51:35AM +0200, Greg Kroah-Hartman wrote:
+> At first glance, I think this can all be cleaned up, but it will take a
+> bit of tree-wide work.  I agree, we need a "read this message and error
+> if the whole thing is not there", as well as a "send this message and
+> error if the whole thing was not sent", and also a way to handle
+> stack-provided data, which seems to be the primary reason subsystems
+> wrap this call (they want to make it easier on their drivers to use it.)
 > 
-> > +	/* Only one software node per device. */
-> > +	if (dev_to_swnode(dev))
-> > +		return -EBUSY;
-> 
-> > +	swnode = dev_to_swnode(dev);
-> > +	if (!swnode)
-> > +		return;
-> 
-> Hmm... I didn't find implementation of dev_to_swnode().
-> What did I miss?
+> Let me think about this in more detail, but maybe something like:
+> 	usb_control_msg_read()
+> 	usb_control_msg_send()
+> is a good first step (as the caller knows this) and stack provided data
+> would be allowed, and it would return an error if the whole message was
+> not read/sent properly.  That way we can start converting everything
+> over to a sane, and checkable, api and remove a bunch of wrapper
+> functions as well.
 
-Now found, I was looking into header, but it's defined in the c-file in
-previous patch.
+Suggestion: _read and _send are not a natural pair.  Consider instead
+_read and _write.  _recv and _send don't feel right either, because it
+both cases the host sends the control message -- the difference lies
+in who sends the data.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Alan Stern
