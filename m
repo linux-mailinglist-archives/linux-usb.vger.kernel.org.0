@@ -2,67 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F324F253175
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 16:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2021F2531B5
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 16:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbgHZOhK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 10:37:10 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:45331 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726241AbgHZOhI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 10:37:08 -0400
-Received: (qmail 402002 invoked by uid 1000); 26 Aug 2020 10:37:07 -0400
-Date:   Wed, 26 Aug 2020 10:37:07 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Martin Thierer <mthierer@gmail.com>, linux-usb@vger.kernel.org
-Subject: Re: Data toggles not reset on "set configuration" for ports handled
- by "xhci_hcd" driver
-Message-ID: <20200826143707.GC400430@rowland.harvard.edu>
-References: <CAL3BvCyz3W+aRu0e=RE3teaMMh6KDYxu8NbFicY07Xt-=f9Whg@mail.gmail.com>
- <20200821170106.GB256196@rowland.harvard.edu>
- <d11a91f5-2bb8-01ce-c8b8-4512a2cf2793@linux.intel.com>
- <CAL3BvCyxTvfUjecoYO0ie1vt4_+1cad+8Dt=xmcXogZSooGj+A@mail.gmail.com>
- <cbdfafed-b8d4-ca07-bde1-4598f5117f04@linux.intel.com>
- <a66ea20a-5406-ed31-e607-08552598ed68@linux.intel.com>
- <CAL3BvCzsAZjt23XjD-9T2JyUtLFPLB0prKn3Bw3nC4AC1nTbgA@mail.gmail.com>
- <9017830d-a4d2-66d5-6b42-b1162856ef90@linux.intel.com>
- <20200825151042.GC365901@rowland.harvard.edu>
- <b7b49077-de57-ef15-587a-a50486dfe372@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b7b49077-de57-ef15-587a-a50486dfe372@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727041AbgHZOpO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 10:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726700AbgHZOpN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 10:45:13 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE34C061574;
+        Wed, 26 Aug 2020 07:45:12 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id ds1so993166pjb.1;
+        Wed, 26 Aug 2020 07:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Dy92T63KJ9Q9h7SiErNQEXUlQ8OKcTJsbD/s/H02xn0=;
+        b=fvklMTl2auqGqE+SBvACHUKPWbFXsam2tzn7UcYmNAVOzHFjkMC7MSpsQY/Benw2lA
+         9p3SEyXDCInCdMug2N4B9SU7n1dFfAInLV6MTrAHd6lvO2vb/GHHn+76+YLXMmlUwb+e
+         Qif0rlucZ62ioFBP3BP4wHfnbxjx092UVcvdE6EkRw0KEAMMybEghcZv8dec/XwPpSSt
+         p7ltEv8pDxY6oIrjHEkarSat8fh0xo6NsYrNU8WeOjUd5eTCvCaoOF6uysYUvJiYiiDf
+         JEVkSm5FDJebXOvcOhzUsiuB2/fzrVB9DmdFk9LSG24pddyB5/zpQwenvHoFxhgytrTS
+         zHdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Dy92T63KJ9Q9h7SiErNQEXUlQ8OKcTJsbD/s/H02xn0=;
+        b=Aofwkar8Bym7MyLL+JnZq1lykh+hKcrQ6vqMjmmzzr7+uZxW5s9br7aNPUTqDC9sBF
+         W12ZuSQrG7KXH1tXEtmcZw3CXlBB1L6LmTkfzPzRhaHhJuRasMnpGwpI6XsZmvkvyok8
+         Zvau/FZrT9FOWCN2OxcumNgeXGnico/cduFZRohzEfjbGtvpI4+burQ4WoCuaGn9Erh9
+         xyIkLitp0tD7v71dl5Y9v0186y/tyB2g3htAajkK3QrZntTCDhqnQZaPOFpsT9P7ZSMx
+         ELBGa3eKU8Xv+0dQuMSzgauWHeAewuKo12fAaSQr0Cp7oaoMaZRUlyTHH/WTycWKjIdG
+         FPuA==
+X-Gm-Message-State: AOAM5302Sc9qvGpQLkCBi2JrdPBEHDc+h987zdJ0Wm0iyFBwguYMw5+S
+        /r1m/GWAi0xydbB8/oze8Q==
+X-Google-Smtp-Source: ABdhPJz5C8TKsukA3b1o1I8Av5bkzcF9Bzvrc6yl3VHd2AxHSqhgS3tdG4b2plRg/55UjC+HcS47fA==
+X-Received: by 2002:a17:902:c284:: with SMTP id i4mr12024270pld.287.1598453111944;
+        Wed, 26 Aug 2020 07:45:11 -0700 (PDT)
+Received: from localhost.localdomain ([2402:3a80:cfa:a9b5:1951:3e81:92cc:b4c1])
+        by smtp.gmail.com with ESMTPSA id o66sm2561214pgo.25.2020.08.26.07.45.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 07:45:11 -0700 (PDT)
+From:   madhuparnabhowmik10@gmail.com
+To:     jacmet@sunsite.dk, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org, andrianov@ispras.ru,
+        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+Subject: [PATCH] usb/c67x00/c67x00-drv: Fix Data Race bug
+Date:   Wed, 26 Aug 2020 20:14:59 +0530
+Message-Id: <20200826144459.8245-1-madhuparnabhowmik10@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 11:37:50AM +0300, Mathias Nyman wrote:
-> On 25.8.2020 18.10, Alan Stern wrote:
-> > There's got to be a better way to do this, something that doesn't 
-> > involve so much code duplication.  For instance, maybe we could make 
-> > this routine and usb_set_configuration() both call a new 
-> > __usb_set_config(), with an extra flag telling the routine whether to 
-> > change the interface devices and bindings.
-> 
-> I agree that this needs cleaning up, this code was intended for testing.
-> 
-> It allows us to call usb_hcd_alloc_bandwidth() once with a configuration
-> and with the old endpoint pointers still intact, leading to one configure
-> endpoint command for xhci with the relevant drop and add endpoint flags set,
-> all in one go.
-> 
-> Looks like the last part usb_disable_device() does similar endpoint code
-> churning to flush, disable, drop, and remove endpoints. May we could start
-> by turning that code into some useful helper first?
+From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 
-usb_disable_device() is _supposed_ to be the useful helper!  :-)  But 
-yes, it could be split into two pieces.
+Currently in c67x00_drv_probe() IRQ is requested before calling
+c67x00_probe_sie() and hence if interrupt happens the reading of certain
+variables in the handler can race with initialization of the variables,
+for e.g. sie->sie_num is written in c67x00_probe_sie() and read in
+ c67x00_hcd_irq().
+Hence, this patch calls c67x00_probe_sie() before requesting IRQ in
+probe.
 
-I still think it would be worthwhile to combine usb_set_configuration() 
-and usb_reset_configuration() into one routine, since they have to do a 
-lot of the same things.
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Alan Stern
+Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+---
+ drivers/usb/c67x00/c67x00-drv.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/c67x00/c67x00-drv.c b/drivers/usb/c67x00/c67x00-drv.c
+index 53838e7d4eef..2e816d5ca0eb 100644
+--- a/drivers/usb/c67x00/c67x00-drv.c
++++ b/drivers/usb/c67x00/c67x00-drv.c
+@@ -146,6 +146,9 @@ static int c67x00_drv_probe(struct platform_device *pdev)
+ 	c67x00_ll_init(c67x00);
+ 	c67x00_ll_hpi_reg_init(c67x00);
+ 
++	for (i = 0; i < C67X00_SIES; i++)
++		c67x00_probe_sie(&c67x00->sie[i], c67x00, i);
++
+ 	ret = request_irq(res2->start, c67x00_irq, 0, pdev->name, c67x00);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Cannot claim IRQ\n");
+@@ -158,9 +161,6 @@ static int c67x00_drv_probe(struct platform_device *pdev)
+ 		goto reset_failed;
+ 	}
+ 
+-	for (i = 0; i < C67X00_SIES; i++)
+-		c67x00_probe_sie(&c67x00->sie[i], c67x00, i);
+-
+ 	platform_set_drvdata(pdev, c67x00);
+ 
+ 	return 0;
+-- 
+2.17.1
+
