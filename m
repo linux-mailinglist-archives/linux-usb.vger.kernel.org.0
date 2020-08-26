@@ -2,121 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C78F32535CD
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 19:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682D12535EB
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 19:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbgHZRMr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 13:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S1726894AbgHZRSs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 13:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726802AbgHZRMl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 13:12:41 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47719C061574;
-        Wed, 26 Aug 2020 10:12:41 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id h2so1191154plr.0;
-        Wed, 26 Aug 2020 10:12:41 -0700 (PDT)
+        with ESMTP id S1726790AbgHZRSn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 13:18:43 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9F3C061756
+        for <linux-usb@vger.kernel.org>; Wed, 26 Aug 2020 10:18:42 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id h19so3231045ljg.13
+        for <linux-usb@vger.kernel.org>; Wed, 26 Aug 2020 10:18:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=foFtRttkojftmX4pY4pyI5q5jMC4/A1XtpwKxw5ra3U=;
-        b=RabYfrQO/VyKQRW/Ewp/P9Hi4+pn7atkXUXjA6FN1k8Oe0Qq80gdJEVUFrzd4xZmId
-         /n9qNtjOlRi2ToCO+guN4FSSOFrOU9UK17ByWhxJ/cY7JONFPt/jvV5/MG3Jy5NX4sOp
-         313dduRI+Az6ws9TFXSVOOS5mSYEbOp+3cjC8QnfN8xwkrvx+3wERHsF6VPw2J0Hqycy
-         gc0KnYEzTvVy4BSuwbiPj1kevPL/cvpieZckDqVNwPg3qDrfCoL5fvbM8HH9ZXD7Plj0
-         hACH64k/1qPw2iW2DFrO9IsAS2AIpIn0XhvKrVSpGxgnaemlI+3NsIVROU2v5XG3bAsr
-         dgXA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2pT89N8VTc50vb4WZvr37iDU8cKlOdxTlcFrKtLW66U=;
+        b=cMOLov8uCC9JY8w6U13qumCS9ENiAGpNrGXqc146BmlR/vAukuVhgZfHIUqIeUkdg4
+         lLbw9ZtMP5viBD8sFKvrK3hno/r9xAlRjIECnyA5JcySvUvAJyflC5m773B/E/NUUD4+
+         w7bCHAb/+HOhXubK+D31xy7psk63Dj248+vR8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=foFtRttkojftmX4pY4pyI5q5jMC4/A1XtpwKxw5ra3U=;
-        b=dNlciVGAa7uLuQokpJnDXcJ5OGmd5cOAC7HLF0rCb0283B9jZZqe653Xptz2NduwEx
-         2kCGBfs19BjDeJrYBsWSY4L7qFhP3fWoR7iueBy51YEpW8jN4L3p7cMFgXnIohyJrDdn
-         xKnErAdlWFX4Ly3XuYE274gx8Z/Y7r+qB99PXaLLrBorHBqdnBVi3XEyAPdu8pd4m/tM
-         ckSxe1OvUPzxc7YKvWafOiMVNmm4RyJeLU2bOVmSduiQXJQfLv4JsZnNmOiWHbSSORqB
-         SERLnrDj6D1WWC4xz32sMp3vZTlWCmaV05maDu0nCdxB1/OA3EmCxiuGF2scxMyQV86R
-         tDDQ==
-X-Gm-Message-State: AOAM533LQOAvVemvOqPVc3Lb31uyEA90NaT65pc4zEx4g5XiTSM4t/Tj
-        AuwZCSC22jPEIdlzI1UWVEez32HDsLs=
-X-Google-Smtp-Source: ABdhPJzkPfG8CS5m+0FMlo14AoxxxwmRlGR9ERwxyG1rptAqQXc7gSAS3CfJKXeT1cxGTQ6TYM5wGg==
-X-Received: by 2002:a17:90a:d594:: with SMTP id v20mr7273635pju.227.1598461960747;
-        Wed, 26 Aug 2020 10:12:40 -0700 (PDT)
-Received: from localhost.localdomain (cpe-172-112-234-200.socal.res.rr.com. [172.112.234.200])
-        by smtp.gmail.com with ESMTPSA id z10sm1957870pjt.30.2020.08.26.10.12.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 26 Aug 2020 10:12:40 -0700 (PDT)
-From:   lindsey.stanpoor@gmail.com
-To:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org, heiko@sntech.de,
-        balbi@kernel.org, cnemo@tutanota.com
-Subject: [PATCH 4/4] arm64: dts: rockchip: enable rk3328-rock64 usb3 nodes
-Date:   Wed, 26 Aug 2020 10:12:30 -0700
-Message-Id: <20200826171230.17041-2-lindsey.stanpoor@gmail.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200826171230.17041-1-lindsey.stanpoor@gmail.com>
-References: <20200826170623.15469-1-travelvia@airmail.cc>
- <20200826171230.17041-1-lindsey.stanpoor@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2pT89N8VTc50vb4WZvr37iDU8cKlOdxTlcFrKtLW66U=;
+        b=NDLaZq+b30KQ0CgfhnzDsbwKfemRHNMtmrs7yOnvzO6FKc83jqJXoTVjcrClnqOWnO
+         xCfrm3BzzMh3cONVnpvMXVEiJIPPv15G2IfGIB5cNB4NhNOoXQ3TS/HRHbVQ6rGth2SI
+         SHsUI4queJxizjFUiIwYVIKfp2m2katTzAG3IHpU0ctIN0wUEUrLp3oA4jWbAFcTTNG8
+         FsHks9WkRnin+1WRx/BX3Q0wD0uaDBqjFTZYsv4QIZPjb1tQC6Lp2RN/guFew7T7PFUV
+         VPH3QaCIv5fZdMByjjYpSeoDeEM7U3LiENO3/0SQ7e28/g+Q6RhW8ahlfCzxU2G672c1
+         6vmg==
+X-Gm-Message-State: AOAM532WHRlSJNz4ck+AGWB4xmRJjL5QXYlMV+HiSqTBGJ29smnHl5IH
+        lqEpcerCVYt88HDimQrrrGeRJ9QiQo7gPQ==
+X-Google-Smtp-Source: ABdhPJzL0ND+VtZIjD4xUDqLUKT3Z0N69w7PDsRxRMmO6tzu/U3/Fo5KNodGPLS7fGQN9kWwz8HmFA==
+X-Received: by 2002:a05:651c:1343:: with SMTP id j3mr7076923ljb.112.1598462320694;
+        Wed, 26 Aug 2020 10:18:40 -0700 (PDT)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
+        by smtp.gmail.com with ESMTPSA id 20sm635110ljj.51.2020.08.26.10.18.39
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Aug 2020 10:18:39 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id g6so3238816ljn.11
+        for <linux-usb@vger.kernel.org>; Wed, 26 Aug 2020 10:18:39 -0700 (PDT)
+X-Received: by 2002:a2e:2e04:: with SMTP id u4mr7260728lju.102.1598462319103;
+ Wed, 26 Aug 2020 10:18:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200826134315.GA3882506@kroah.com>
+In-Reply-To: <20200826134315.GA3882506@kroah.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 26 Aug 2020 10:18:23 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiMMTpFxd9q7roL+L6dZb3JoQYCF0uP4+7RNHFHbfC29Q@mail.gmail.com>
+Message-ID: <CAHk-=wiMMTpFxd9q7roL+L6dZb3JoQYCF0uP4+7RNHFHbfC29Q@mail.gmail.com>
+Subject: Re: [GIT PULL] USB fixes for 5.9-rc3
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Cameron Nemo <cnemo@tutanota.com>
+On Wed, Aug 26, 2020 at 6:43 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> USB fixes for 5.9-rc3
 
-Enable USB3 nodes for the rk3328-based PINE Rock64 board.
+I'm dropping this, since it seems to break things more than it fixes.
 
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Cameron Nemo <cnemo@tutanota.com>
----
- arch/arm64/boot/dts/rockchip/rk3328-rock64.dts | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+I see that the breakage is already figured out, but I'll just wait for
+the next fixes pull with the fix for the problem.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3328-rock64.dts b/arch/arm64/boot/dts/rockchip/rk3328-rock64.dts
-index 86cfb5c50a94..82c27eab6a52 100644
---- a/arch/arm64/boot/dts/rockchip/rk3328-rock64.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3328-rock64.dts
-@@ -363,10 +363,6 @@ &tsadc {
- 	status = "okay";
- };
- 
--&uart2 {
--	status = "okay";
--};
--
- &u2phy {
- 	status = "okay";
- 
-@@ -379,11 +375,24 @@ u2phy_otg: otg-port {
- 	};
- };
- 
-+&uart2 {
-+	status = "okay";
-+};
-+
- &usb20_otg {
- 	dr_mode = "host";
- 	status = "okay";
- };
- 
-+&usbdrd3 {
-+	status = "okay";
-+};
-+
-+&usbdrd_dwc3 {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
- &usb_host0_ehci {
- 	status = "okay";
- };
--- 
-2.28.0
-
+                Linus
