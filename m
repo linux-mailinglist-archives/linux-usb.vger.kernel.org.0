@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E1D252C2A
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 13:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64995252C27
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 13:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728707AbgHZLHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 07:07:42 -0400
-Received: from mga06.intel.com ([134.134.136.31]:15562 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728586AbgHZLHk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S1728614AbgHZLHk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Wed, 26 Aug 2020 07:07:40 -0400
-IronPort-SDR: nXcvERGA4xsFwGxuVcoubZMkmD2nSGtX3t9TNYmXh8NHxRHC0l01X31/tcbQTPOpvTQn2RJcUS
- yx/qziMt0vWQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="217817815"
+Received: from mga17.intel.com ([192.55.52.151]:18806 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728605AbgHZLHk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Aug 2020 07:07:40 -0400
+IronPort-SDR: xxxUN7c7ODGiwSrfTzAKpCR8jQ7F+/cme/Ls9molDvzb4MGL8AlZh2lgYqpYdp89B6A7az0L1e
+ 9unnQp/q3gcw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="136333399"
 X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
-   d="scan'208";a="217817815"
+   d="scan'208";a="136333399"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 04:07:39 -0700
-IronPort-SDR: YAY2uhONPZvKpQEYmQI0Lt8ylHiITgFV74Z7v5L1qRnhSZ5HqBtgkv4WrTbEORpPddFl+5hcD9
- fO5duUaOZtjQ==
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 04:07:39 -0700
+IronPort-SDR: cwE2FuYQA7wUBluc5SAsfjdlOa7PRdLjYq45CxLOlYvEcZ1WzthiLen+8tQsEsTYWUxo79y+qi
+ qYdoXWrqboUQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
-   d="scan'208";a="499674041"
+   d="scan'208";a="339123429"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Aug 2020 04:07:37 -0700
+  by orsmga007.jf.intel.com with ESMTP; 26 Aug 2020 04:07:37 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id C745B1B4; Wed, 26 Aug 2020 14:07:36 +0300 (EEST)
+        id D602F3D3; Wed, 26 Aug 2020 14:07:36 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Michael Jamet <michael.jamet@intel.com>,
@@ -37,9 +37,9 @@ Cc:     Michael Jamet <michael.jamet@intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Gil Fine <gil.fine@intel.com>, Lukas Wunner <lukas@wunner.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 1/9] thunderbolt: Move struct tb_cap_any to tb_regs.h
-Date:   Wed, 26 Aug 2020 14:07:28 +0300
-Message-Id: <20200826110736.55186-2-mika.westerberg@linux.intel.com>
+Subject: [PATCH 2/9] thunderbolt: Introduce tb_port_next_cap()
+Date:   Wed, 26 Aug 2020 14:07:29 +0300
+Message-Id: <20200826110736.55186-3-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200826110736.55186-1-mika.westerberg@linux.intel.com>
 References: <20200826110736.55186-1-mika.westerberg@linux.intel.com>
@@ -50,61 +50,86 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This structure will be needed by the debugfs implementation so make it
-available outside of cap.c.
-
-While there add kernel-doc comments to the structure.
+This function is useful for walking port config space (adapter)
+capability lists. Convert the tb_port_find_cap() to use this as well.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/cap.c     |  8 --------
- drivers/thunderbolt/tb_regs.h | 14 ++++++++++++++
- 2 files changed, 14 insertions(+), 8 deletions(-)
+ drivers/thunderbolt/cap.c | 35 +++++++++++++++++++++++++++++++----
+ drivers/thunderbolt/tb.h  |  1 +
+ 2 files changed, 32 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/thunderbolt/cap.c b/drivers/thunderbolt/cap.c
-index 19db6cdc5b70..1582e4ebac56 100644
+index 1582e4ebac56..c45b3a488412 100644
 --- a/drivers/thunderbolt/cap.c
 +++ b/drivers/thunderbolt/cap.c
-@@ -15,14 +15,6 @@
- #define VSE_CAP_OFFSET_MAX	0xffff
- #define TMU_ACCESS_EN		BIT(20)
- 
--struct tb_cap_any {
--	union {
--		struct tb_cap_basic basic;
--		struct tb_cap_extended_short extended_short;
--		struct tb_cap_extended_long extended_long;
--	};
--} __packed;
--
- static int tb_port_enable_tmu(struct tb_port *port, bool enable)
- {
- 	struct tb_switch *sw = port->sw;
-diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index 0431e415e3bc..c33751be0f56 100644
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -93,6 +93,20 @@ struct tb_cap_extended_long {
- 	u16 length;
- } __packed;
+@@ -59,23 +59,50 @@ static void tb_port_dummy_read(struct tb_port *port)
+ 	}
+ }
  
 +/**
-+ * struct tb_cap_any - Structure capable of hold every capability
-+ * @basic: Basic capability
-+ * @extended_short: Vendor specific capability
-+ * @extended_long: Vendor specific extended capability
++ * tb_port_next_cap() - Return next capability in the linked list
++ * @port: Port to find the capability for
++ * @offset: Previous capability offset (%0 for start)
++ *
++ * Returns dword offset of the next capability in port config space
++ * capability list and returns it. Passing %0 returns the first entry in
++ * the capability list. If no next capability is found returns %0. In case
++ * of failure returns negative errno.
 + */
-+struct tb_cap_any {
-+	union {
-+		struct tb_cap_basic basic;
-+		struct tb_cap_extended_short extended_short;
-+		struct tb_cap_extended_long extended_long;
-+	};
-+} __packed;
++int tb_port_next_cap(struct tb_port *port, unsigned int offset)
++{
++	struct tb_cap_any header;
++	int ret;
 +
- /* capabilities */
++	if (!offset)
++		return port->config.first_cap_offset;
++
++	ret = tb_port_read(port, &header, TB_CFG_PORT, offset, 1);
++	if (ret)
++		return ret;
++
++	return header.basic.next;
++}
++
+ static int __tb_port_find_cap(struct tb_port *port, enum tb_port_cap cap)
+ {
+-	u32 offset = 1;
++	int offset = 0;
  
- struct tb_cap_link_controller {
+ 	do {
+ 		struct tb_cap_any header;
+ 		int ret;
+ 
++		offset = tb_port_next_cap(port, offset);
++		if (offset < 0)
++			return offset;
++
+ 		ret = tb_port_read(port, &header, TB_CFG_PORT, offset, 1);
+ 		if (ret)
+ 			return ret;
+ 
+ 		if (header.basic.cap == cap)
+ 			return offset;
+-
+-		offset = header.basic.next;
+-	} while (offset);
++	} while (offset > 0);
+ 
+ 	return -ENOENT;
+ }
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 7754c690addc..54e8fad78bee 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -823,6 +823,7 @@ int tb_port_get_link_speed(struct tb_port *port);
+ int tb_switch_find_vse_cap(struct tb_switch *sw, enum tb_switch_vse_cap vsec);
+ int tb_switch_find_cap(struct tb_switch *sw, enum tb_switch_cap cap);
+ int tb_port_find_cap(struct tb_port *port, enum tb_port_cap cap);
++int tb_port_next_cap(struct tb_port *port, unsigned int offset);
+ bool tb_port_is_enabled(struct tb_port *port);
+ 
+ bool tb_usb3_port_is_enabled(struct tb_port *port);
 -- 
 2.28.0
 
