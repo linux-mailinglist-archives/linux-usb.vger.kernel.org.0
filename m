@@ -2,163 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01954253021
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 15:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F972530B9
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 15:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730326AbgHZNnk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 09:43:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52738 "EHLO mail.kernel.org"
+        id S1730572AbgHZNzZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 09:55:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60174 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730242AbgHZNnO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Aug 2020 09:43:14 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        id S1730374AbgHZNxo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Aug 2020 09:53:44 -0400
+Received: from localhost (unknown [70.37.104.77])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E583C21741;
-        Wed, 26 Aug 2020 13:42:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D2A5F221E2;
+        Wed, 26 Aug 2020 13:53:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598449380;
-        bh=MQx/+pcESt0M2O0VHxn1QIOJuotT12ugSC5HBwX/f9U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=p1XZcPvEewpwhfCYF34BU6TplCWPARuwRG9CdyI60OLDJ1UbnkUJud8MPB9io4thh
-         dJz+6zhuROlq+4onefEvuSTkq7JMBMVd20igLDKjhB1k89WlVygEZ88OYiUdCP6iw9
-         M6wh1OupsdLdTnD1uElVHx+zpSWisu6G8TkKWUVg=
-Date:   Wed, 26 Aug 2020 15:43:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.9-rc3
-Message-ID: <20200826134315.GA3882506@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+        s=default; t=1598450024;
+        bh=9r0UyxcqD3hPCtXTukSv5qYR6x4V9Iox9AKO8igKiNo=;
+        h=Date:From:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:From;
+        b=HnCPWtYmIgO6ztFlGuVt64hJvja7waWWxGWJWwmXqT1nUkRktpr1svdT9mp7fUq7z
+         AkUI8/yrBcXVJmLaWi18c3+Fx9VIEs6tLfgsdO/u2TofL3DmwEkJHEFxd6nknzqC0c
+         7YrvM0qer+P1DDEu7JiWOgbQVnts+5hVyFXMZPaY=
+Date:   Wed, 26 Aug 2020 13:53:43 +0000
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH 2/4] usb: typec: ucsi: Fix 2 unlocked ucsi_run_command calls
+In-Reply-To: <20200809141904.4317-3-hdegoede@redhat.com>
+References: <20200809141904.4317-3-hdegoede@redhat.com>
+Message-Id: <20200826135343.D2A5F221E2@mail.kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
+Hi
 
-  Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
+[This is an automated email]
 
-are available in the Git repository at:
+This commit has been processed because it contains a -stable tag.
+The stable tag indicates that it's relevant for the following trees: all
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.9-rc3
+The bot has tested the following trees: v5.8.2, v5.7.16, v5.4.59, v4.19.140, v4.14.193, v4.9.232, v4.4.232.
 
-for you to fetch changes up to 23e26d0577535f5ffe4ff8ed6d06e009553c0bca:
+v5.8.2: Build OK!
+v5.7.16: Failed to apply! Possible dependencies:
+    4dbc6a4ef06d ("usb: typec: ucsi: save power data objects in PD mode")
 
-  usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures (2020-08-25 16:02:35 +0200)
+v5.4.59: Failed to apply! Possible dependencies:
+    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+    3cf657f07918 ("usb: typec: ucsi: Remove all bit-fields")
+    470ce43a1a81 ("usb: typec: ucsi: Remove struct ucsi_control")
+    4dbc6a4ef06d ("usb: typec: ucsi: save power data objects in PD mode")
+    6df475f804e6 ("usb: typec: ucsi: Start using struct typec_operations")
+    bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
 
-----------------------------------------------------------------
-USB fixes for 5.9-rc3
+v4.19.140: Failed to apply! Possible dependencies:
+    247c554a14aa ("usb: typec: ucsi: add support for Cypress CCGx")
+    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+    470ce43a1a81 ("usb: typec: ucsi: Remove struct ucsi_control")
+    5c9ae5a87573 ("usb: typec: ucsi: ccg: add firmware flashing support")
+    5d438e200215 ("usb: typec: ucsi: ccg: add get_fw_info function")
+    6df475f804e6 ("usb: typec: ucsi: Start using struct typec_operations")
+    81534d5fa973 ("usb: typec: ucsi: Remove debug.h file")
+    a94ecde41f7e ("usb: typec: ucsi: ccg: enable runtime pm support")
+    ad74b8649bea ("usb: typec: ucsi: Preliminary support for alternate modes")
+    af8622f6a585 ("usb: typec: ucsi: Support for DisplayPort alt mode")
+    bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+    f2372b87c386 ("usb: typec: ucsi: displayport: Fix for the mode entering routine")
 
-Here are a small set of USB fixes for 5.9-rc3.
+v4.14.193: Failed to apply! Possible dependencies:
+    0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
+    247c554a14aa ("usb: typec: ucsi: add support for Cypress CCGx")
+    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+    3c4fb9f16921 ("usb: typec: wcove: start using tcpm for USB PD support")
+    44262fad12a7 ("staging: typec: tcpm: Drop commented out code")
+    4b4e02c83167 ("typec: tcpm: Move out of staging")
+    70cd90be3300 ("staging: typec: pd: Document struct pd_message")
+    76f0c53d08b9 ("usb: typec: fusb302: Move out of staging")
+    81534d5fa973 ("usb: typec: ucsi: Remove debug.h file")
+    956c36c297a2 ("USB: typec: add SPDX identifiers to some files")
+    98076fa64a05 ("staging: typec: tcpm: Document data structures")
+    ad74b8649bea ("usb: typec: ucsi: Preliminary support for alternate modes")
+    af8622f6a585 ("usb: typec: ucsi: Support for DisplayPort alt mode")
+    cf6e06cddf29 ("usb: typec: Start using ERR_PTR")
 
-Like most set of USB bugfixes, they include the usual:
-	- usb gadget driver fixes
-	- xhci driver fixes
-	- typec fixes
-	- new qurks and ids
-	- fixes for USB patches merged in 5.9-rc1
+v4.9.232: Failed to apply! Possible dependencies:
+    0c744ea4f77d ("Linux 4.10-rc2")
+    2bd6bf03f4c1 ("Linux 4.14-rc1")
+    2ea659a9ef48 ("Linux 4.12-rc1")
+    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+    49def1853334 ("Linux 4.10-rc4")
+    566cf877a1fc ("Linux 4.10-rc6")
+    5771a8c08880 ("Linux v4.13-rc1")
+    7089db84e356 ("Linux 4.10-rc8")
+    7a308bb3016f ("Linux 4.10-rc5")
+    7ce7d89f4883 ("Linux 4.10-rc1")
+    a121103c9228 ("Linux 4.10-rc3")
+    af8622f6a585 ("usb: typec: ucsi: Support for DisplayPort alt mode")
+    b24413180f56 ("License cleanup: add SPDX GPL-2.0 license identifier to files with no license")
+    c1ae3cfa0e89 ("Linux 4.11-rc1")
+    c470abd4fde4 ("Linux 4.10")
+    d5adbfcd5f7b ("Linux 4.10-rc7")
 
-Nothing huge, all of these have been in linux-next with no reported
-issues:
+v4.4.232: Failed to apply! Possible dependencies:
+    1001354ca341 ("Linux 4.9-rc1")
+    18558cae0272 ("Linux 4.5-rc4")
+    1a695a905c18 ("Linux 4.7-rc1")
+    29b4817d4018 ("Linux 4.8-rc1")
+    2bd6bf03f4c1 ("Linux 4.14-rc1")
+    2dcd0af568b0 ("Linux 4.6")
+    2ea659a9ef48 ("Linux 4.12-rc1")
+    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+    36f90b0a2ddd ("Linux 4.5-rc2")
+    388f7b1d6e8c ("Linux 4.5-rc3")
+    5771a8c08880 ("Linux v4.13-rc1")
+    7ce7d89f4883 ("Linux 4.10-rc1")
+    81f70ba233d5 ("Linux 4.5-rc5")
+    92e963f50fc7 ("Linux 4.5-rc1")
+    af8622f6a585 ("usb: typec: ucsi: Support for DisplayPort alt mode")
+    b24413180f56 ("License cleanup: add SPDX GPL-2.0 license identifier to files with no license")
+    b562e44f507e ("Linux 4.5")
+    c1ae3cfa0e89 ("Linux 4.11-rc1")
+    f55532a0c0b8 ("Linux 4.6-rc1")
+    f6cede5b49e8 ("Linux 4.5-rc7")
+    fc77dbd34c5c ("Linux 4.5-rc6")
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-----------------------------------------------------------------
-Alan Stern (1):
-      USB: yurex: Fix bad gfp argument
+NOTE: The patch will not be queued to stable trees until it is upstream.
 
-Andy Shevchenko (1):
-      usb: hcd: Fix use after free in usb_hcd_pci_remove()
+How should we proceed with this patch?
 
-Badhri Jagan Sridharan (1):
-      usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures
-
-Bastien Nocera (2):
-      USB: Also match device drivers using the ->match vfunc
-      USB: Fix device driver race
-
-Brooke Basile (2):
-      USB: gadget: u_f: add overflow checks to VLA macros
-      USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()
-
-Christophe JAILLET (1):
-      usb: gadget: f_tcm: Fix some resource leaks in some error paths
-
-Ding Hui (1):
-      xhci: Always restore EP_SOFT_CLEAR_TOGGLE even if ep reset failed
-
-Evgeny Novikov (1):
-      USB: lvtest: return proper error code in probe
-
-Greg Kroah-Hartman (1):
-      Merge tag 'fixes-for-v5.9-rc2' of git://git.kernel.org/.../balbi/usb into usb-linus
-
-Hans de Goede (4):
-      usb: typec: ucsi: Fix AB BA lock inversion
-      usb: typec: ucsi: Fix 2 unlocked ucsi_run_command calls
-      usb: typec: ucsi: Rework ppm_lock handling
-      usb: typec: ucsi: Hold con->lock for the entire duration of ucsi_register_port()
-
-Heikki Krogerus (1):
-      tools: usb: move to tools buildsystem
-
-JC Kuo (2):
-      usb: host: xhci-tegra: otg usb2/usb3 port init
-      usb: host: xhci-tegra: fix tegra_xusb_get_phy()
-
-Kai-Heng Feng (2):
-      USB: quirks: Add no-lpm quirk for another Raydium touchscreen
-      xhci: Do warm-reset when both CAS and XDEV_RESUME are set
-
-Li Jun (1):
-      usb: host: xhci: fix ep context print mismatch in debugfs
-
-M. Vefa Bicakci (1):
-      usbip: Implement a match function to fix usbip
-
-Thinh Nguyen (4):
-      usb: dwc3: gadget: Don't setup more than requested
-      usb: dwc3: gadget: Fix handling ZLP
-      usb: dwc3: gadget: Handle ZLP for sg requests
-      usb: uas: Add quirk for PNY Pro Elite
-
-Tom Rix (1):
-      USB: cdc-acm: rework notification_buffer resizing
-
-Vinod Koul (1):
-      usb: renesas-xhci: remove version check
-
-周琰杰 (Zhou Yanjie) (1):
-      USB: PHY: JZ4770: Fix static checker warning.
-
- drivers/usb/class/cdc-acm.c          |  22 ++++---
- drivers/usb/core/driver.c            |  40 ++++++++++++-
- drivers/usb/core/generic.c           |   5 +-
- drivers/usb/core/hcd-pci.c           |   5 +-
- drivers/usb/core/quirks.c            |   2 +
- drivers/usb/dwc3/gadget.c            | 107 +++++++++++++++++++++++++++++------
- drivers/usb/gadget/function/f_ncm.c  |  81 ++++++++++++++++++++++----
- drivers/usb/gadget/function/f_tcm.c  |   7 ++-
- drivers/usb/gadget/u_f.h             |  38 +++++++++----
- drivers/usb/host/xhci-debugfs.c      |   8 +--
- drivers/usb/host/xhci-hub.c          |  19 ++++---
- drivers/usb/host/xhci-pci-renesas.c  |  19 +------
- drivers/usb/host/xhci-tegra.c        |   4 +-
- drivers/usb/host/xhci.c              |   3 +-
- drivers/usb/misc/lvstest.c           |   2 +-
- drivers/usb/misc/yurex.c             |   2 +-
- drivers/usb/phy/phy-jz4770.c         |   1 +
- drivers/usb/storage/unusual_uas.h    |   7 +++
- drivers/usb/typec/tcpm/tcpm.c        |  28 ++++++++-
- drivers/usb/typec/ucsi/displayport.c |   9 +--
- drivers/usb/typec/ucsi/ucsi.c        | 103 +++++++++++++++++----------------
- drivers/usb/usbip/stub_dev.c         |   6 ++
- tools/usb/Build                      |   2 +
- tools/usb/Makefile                   |  53 ++++++++++++++---
- 24 files changed, 408 insertions(+), 165 deletions(-)
- create mode 100644 tools/usb/Build
+-- 
+Thanks
+Sasha
