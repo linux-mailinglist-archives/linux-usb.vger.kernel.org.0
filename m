@@ -2,170 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EED592533C5
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 17:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E23253402
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 17:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728067AbgHZPdg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 11:33:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50596 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727049AbgHZPdd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Aug 2020 11:33:33 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 51C9A2078D;
-        Wed, 26 Aug 2020 15:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598456012;
-        bh=2F0FlTbURVaj1x4DrL2qLIeLQqGNDXWILGGXNk69h3A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u28JoRRlaRp+ORrBZWuATbk3bssAY0RNJauoz7e/jSYK2dBkHdSvS+JdK8LU0d2mW
-         O7JBScg+sp00QIkzgjNQesrxpVcVB0vuedg7WD/aqEBKIm8113RJ7j4MXrD44kWtcS
-         5jQCokq4yLUpjNL7xnC06THocySmnhcycqOavoBw=
-Date:   Wed, 26 Aug 2020 17:33:47 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Brooke Basile <brookebasile@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1728071AbgHZPx2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 11:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727986AbgHZPxU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 11:53:20 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A816C061574;
+        Wed, 26 Aug 2020 08:53:20 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id k1so1204764pfu.2;
+        Wed, 26 Aug 2020 08:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=78S0umpQdnvgfhSWaH9CauU9B+pmDgBIPnkk0g1yodA=;
+        b=GJuP+NULyow0TPoqdaHS5mo21Nes0g0fj07Zv3ukKJbBGZccDWZLDEXP6VimmtTjND
+         5lSl546o+SkWwatqhvzj0ATjIjdpyTboFFPEKkEnL5UB+W+TICbALf2tVdoQbyCIvR9U
+         7kvLnH7j+qBWfeOPqbW34RYTcgK8wGL5qhlTG8bl8obkXNBZTt4tYQCIecNhadEny5y/
+         nsemflhfTEOszODt5xGBFqYhxudW1yxWvAPBr7+iWgggvFHfhdo/vMcQUTMOqtWIcHyI
+         gIbQZ11uVFSeORNyVuHunKng2ij2GCKYSpmx0B4Sr9ozsi9mFUOiz6ZjES4bOEBo2NZZ
+         izGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=78S0umpQdnvgfhSWaH9CauU9B+pmDgBIPnkk0g1yodA=;
+        b=Rzt5MHf36wL/r2YVPexgpIJ3A1qnqF2eJhlyeUm8U4r8c59//zMhq535zhB+JcIYQP
+         AnICFVnznCLCd7OQxTDlWfcQJ3mmnxGn7DfRpJjefAtmzs+F6ksPhW4FcJG0LJQJxyDz
+         715yUga/i+SOtWhZl6XYbGN4PCSXjZ0U+EPgtkxx/mzvOwV2fFICCoMxkBciqxMjZyZs
+         /yDFzR7WWIRc6cuwdcWqBsWdkLniB0zR50yMAzXbgf+0h+Fb9wNZ6fgecPX4213yKR0A
+         tebhrEQF0Rwa5+VGWXCcDXoAKVGJMiekHLt0PGUcfhE3aeYP70Phqh6tQO1+h7pe4rBL
+         QGyw==
+X-Gm-Message-State: AOAM531aj0r4crCtUD1ueFwh9pGsXFC+x991p+kwLGmrqvusqdf4oOze
+        sJP7UE5v+ugoFu6XEjTdnX6SFBkwPOjq0rrFQKg=
+X-Google-Smtp-Source: ABdhPJyib4x7o6e4MBbgPy4EPS/Lr3IiFjsUMYK7ZMSyy1wnDWTtrCEJr0UHP/PmN4eb8eLpBmfGVi9OA9MHuLEWEV8=
+X-Received: by 2002:aa7:95b8:: with SMTP id a24mr12490280pfk.219.1598457199510;
+ Wed, 26 Aug 2020 08:53:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200826134315.GA3882506@kroah.com> <CGME20200826150239eucas1p24c59716cc31edfeb2eece84d97936b93@eucas1p2.samsung.com>
+ <1425ab4f-ef7e-97d9-238f-0328ab51eb35@samsung.com> <20200826153347.GB4187816@kroah.com>
+In-Reply-To: <20200826153347.GB4187816@kroah.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 26 Aug 2020 18:53:02 +0300
+Message-ID: <CAHp75VepkugjZ4pvdNgxzT4T83ewL1AFtSZZtVq6aL+7=sqskA@mail.gmail.com>
+Subject: Re: [GIT PULL] USB fixes for 5.9-rc3
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Brooke Basile <brookebasile@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
         Ilja Van Sprundel <ivansprundel@ioactive.com>,
         Kees Cook <keescook@chromium.org>,
         Felipe Balbi <balbi@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: Re: [GIT PULL] USB fixes for 5.9-rc3
-Message-ID: <20200826153347.GB4187816@kroah.com>
-References: <20200826134315.GA3882506@kroah.com>
- <CGME20200826150239eucas1p24c59716cc31edfeb2eece84d97936b93@eucas1p2.samsung.com>
- <1425ab4f-ef7e-97d9-238f-0328ab51eb35@samsung.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1425ab4f-ef7e-97d9-238f-0328ab51eb35@samsung.com>
+Content-Type: multipart/mixed; boundary="00000000000090e62b05adc9d19e"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 05:02:38PM +0200, Marek Szyprowski wrote:
-> Hi Greg,
-> 
-> On 26.08.2020 15:43, Greg KH wrote:
-> > The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
-> >
-> >    Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
-> >
-> > are available in the Git repository at:
-> >
-> >    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.9-rc3
-> >
-> > for you to fetch changes up to 23e26d0577535f5ffe4ff8ed6d06e009553c0bca:
-> >
-> >    usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures (2020-08-25 16:02:35 +0200)
-> >
-> > ----------------------------------------------------------------
-> > USB fixes for 5.9-rc3
-> >
-> > Here are a small set of USB fixes for 5.9-rc3.
-> >
-> > Like most set of USB bugfixes, they include the usual:
-> > 	- usb gadget driver fixes
-> > 	- xhci driver fixes
-> > 	- typec fixes
-> > 	- new qurks and ids
-> > 	- fixes for USB patches merged in 5.9-rc1
-> >
-> > Nothing huge, all of these have been in linux-next with no reported
-> > issues:
-> >
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >
-> > ----------------------------------------------------------------
-> > Alan Stern (1):
-> >        USB: yurex: Fix bad gfp argument
-> >
-> > Andy Shevchenko (1):
-> >        usb: hcd: Fix use after free in usb_hcd_pci_remove()
-> >
-> > Badhri Jagan Sridharan (1):
-> >        usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures
-> >
-> > Bastien Nocera (2):
-> >        USB: Also match device drivers using the ->match vfunc
-> >        USB: Fix device driver race
-> >
-> > Brooke Basile (2):
-> >        USB: gadget: u_f: add overflow checks to VLA macros
-> 
-> Sorry, but the above patch breaks USB Ethernet Gadget operation. It also 
-> didn't get the proper testing in linux-next (next-20200826 is the first 
-> one with this patch).
-> 
-> This is how it explodes on Samsung Exynos (ARM 32bit) based board with 
-> g_ether module loaded:
-> 
-> ------------[ cut here ]------------
-> kernel BUG at mm/slub.c:4116!
+--00000000000090e62b05adc9d19e
+Content-Type: text/plain; charset="UTF-8"
 
-Why is slub.c erroring?  How is this related to freeing memory?
+On Wed, Aug 26, 2020 at 6:36 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> On Wed, Aug 26, 2020 at 05:02:38PM +0200, Marek Szyprowski wrote:
+> > On 26.08.2020 15:43, Greg KH wrote:
 
-> Internal error: Oops - BUG: 0 [#1] SMP ARM
-> Modules linked in: usb_f_ecm g_ether(+) usb_f_rndis u_ether libcomposite 
-> panel_samsung_s6e8aa0 s5p_csis s5p_fimc exynos4_is_common v4l2_fwnode 
-> max8997_regulator rtc_max8997 leds_max8997 max8
-> emless mms114 governor_simpleondemand s5p_mfc lima gpu_sched s5p_jpeg 
-> v4l2_mem2mem videobuf2_dma_contig videobuf2_memops videobuf2_v4l2 
-> videobuf2_common phy_exynos_usb2 exynosdrm analogix_dp
->   s3c2410_wdt
-> CPU: 0 PID: 616 Comm: modprobe Not tainted 5.9.0-rc1-00026-gb1cd1b65afba 
-> #9023
-> Hardware name: Samsung Exynos (Flattened Device Tree)
-> PC is at kfree+0x234/0x268
-> LR is at config_item_set_name+0x60/0xb0
-> ...
-> Process modprobe (pid: 616, stack limit = 0x(ptrval))
-> ...
-> [<c0494248>] (kfree) from [<c05347a0>] (config_item_set_name+0x60/0xb0)
-> [<c05347a0>] (config_item_set_name) from [<c0534844>] 
-> (config_group_init_type_name+0x1c/0x50)
+> > > Brooke Basile (2):
+> > >        USB: gadget: u_f: add overflow checks to VLA macros
+> >
+> > Sorry, but the above patch breaks USB Ethernet Gadget operation. It also
+> > didn't get the proper testing in linux-next (next-20200826 is the first
+> > one with this patch).
+> >
+> > This is how it explodes on Samsung Exynos (ARM 32bit) based board with
+> > g_ether module loaded:
 
-Odd, for a "normal" descriptor, the logic should have remained the same
-as without this patch.
+> Odd, for a "normal" descriptor, the logic should have remained the same
+> as without this patch.
 
-What does the descriptor definition of your device look like that it
-triggers this traceback?
+> Brooke, any ideas?
 
-> [<c0534844>] (config_group_init_type_name) from [<bf14bc18>] 
-> (usb_os_desc_prepare_interf_dir+0x54/0x124 [libcomposite])
-> [<bf14bc18>] (usb_os_desc_prepare_interf_dir [libcomposite]) from 
-> [<bf15af9c>] (rndis_alloc_inst+0x100/0x150 [usb_f_rndis])
-> [<bf15af9c>] (rndis_alloc_inst [usb_f_rndis]) from [<bf1499dc>] 
-> (try_get_usb_function_instance+0x88/0xa4 [libcomposite])
-> [<bf1499dc>] (try_get_usb_function_instance [libcomposite]) from 
-> [<bf149ad8>] (usb_get_function_instance+0xc/0x44 [libcomposite])
-> [<bf149ad8>] (usb_get_function_instance [libcomposite]) from 
-> [<bf114164>] (eth_bind+0xdc/0x34c [g_ether])
-> [<bf114164>] (eth_bind [g_ether]) from [<bf1497cc>] 
-> (composite_bind+0x78/0x1a8 [libcomposite])
-> [<bf1497cc>] (composite_bind [libcomposite]) from [<c0c62a0c>] 
-> (udc_bind_to_driver+0x60/0x108)
-> [<c0c62a0c>] (udc_bind_to_driver) from [<c0c62ed8>] 
-> (usb_gadget_probe_driver+0x100/0x158)
-> [<c0c62ed8>] (usb_gadget_probe_driver) from [<c0301fd0>] 
-> (do_one_initcall+0x54/0x220)
-> [<c0301fd0>] (do_one_initcall) from [<c03de390>] (do_init_module+0x60/0x210)
-> [<c03de390>] (do_init_module) from [<c03dd0d4>] (load_module+0x2078/0x24c0)
-> [<c03dd0d4>] (load_module) from [<c03dd758>] (sys_finit_module+0xc8/0xd8)
-> [<c03dd758>] (sys_finit_module) from [<c03000c0>] 
-> (ret_fast_syscall+0x0/0x54)
-> Exception stack(0xedd1dfa8 to 0xedd1dff0)
-> ...
-> ---[ end trace 0dc21d79c1880545 ]---
+I have an idea.
 
-Brooke, any ideas?
+Does below fix this?
 
-thanks,
 
-greg k-h
+-- 
+With Best Regards,
+Andy Shevchenko
+
+--00000000000090e62b05adc9d19e
+Content-Type: text/x-patch; charset="US-ASCII"; name="1.diff"
+Content-Disposition: attachment; filename="1.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kebk4tac0>
+X-Attachment-Id: f_kebk4tac0
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC91X2YuaCBiL2RyaXZlcnMvdXNiL2dhZGdl
+dC91X2YuaAppbmRleCBkZjRlMWRjYjM1N2QuLjBiNWM1ZjBkZDA3MyAxMDA2NDQKLS0tIGEvZHJp
+dmVycy91c2IvZ2FkZ2V0L3VfZi5oCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC91X2YuaApAQCAt
+MjUsOCArMjUsOCBAQAogCQlzaXplX3Qgb2Zmc2V0ID0gMDsJCQkJCSAgICAgICBcCiAJCWlmIChn
+cm91cG5hbWUjI19fbmV4dCAhPSBTSVpFX01BWCkgewkJCSAgICAgICBcCiAJCQlzaXplX3QgYWxp
+Z25fbWFzayA9IF9fYWxpZ25vZl9fKHR5cGUpIC0gMTsJICAgICAgIFwKLQkJCXNpemVfdCBvZmZz
+ZXQgPSAoZ3JvdXBuYW1lIyNfX25leHQgKyBhbGlnbl9tYXNrKSAgICAgICBcCi0JCQkJCSAmIH5h
+bGlnbl9tYXNrOwkJCSAgICAgICBcCisJCQlvZmZzZXQgPSAoZ3JvdXBuYW1lIyNfX25leHQgKyBh
+bGlnbl9tYXNrKSAmCSAgICAgICBcCisJCQkJICB+YWxpZ25fbWFzazsJCQkJICAgICAgIFwKIAkJ
+CXNpemVfdCBzaXplID0gYXJyYXlfc2l6ZShuLCBzaXplb2YodHlwZSkpOwkgICAgICAgXAogCQkJ
+aWYgKGNoZWNrX2FkZF9vdmVyZmxvdyhvZmZzZXQsIHNpemUsCQkgICAgICAgXAogCQkJCQkgICAg
+ICAgJmdyb3VwbmFtZSMjX19uZXh0KSkgeyAgICAgICAgICBcCkBAIC00Myw4ICs0Myw4IEBACiAJ
+CXNpemVfdCBvZmZzZXQgPSAwOwkJCQkJCVwKIAkJaWYgKGdyb3VwbmFtZSMjX19uZXh0ICE9IFNJ
+WkVfTUFYKSB7CQkJCVwKIAkJCXNpemVfdCBhbGlnbl9tYXNrID0gX19hbGlnbm9mX18odHlwZSkg
+LSAxOwkJXAotCQkJc2l6ZV90IG9mZnNldCA9IChncm91cG5hbWUjI19fbmV4dCArIGFsaWduX21h
+c2spCVwKLQkJCQkJICYgfmFsaWduX21hc2s7CQkJCVwKKwkJCW9mZnNldCA9IChncm91cG5hbWUj
+I19fbmV4dCArIGFsaWduX21hc2spICYJCVwKKwkJCQkgIH5hbGlnbl9tYXNrOwkJCQkJXAogCQkJ
+aWYgKGNoZWNrX2FkZF9vdmVyZmxvdyhvZmZzZXQsIGdyb3VwbmFtZSMjXyMjbmFtZSMjX19zeixc
+CiAJCQkJCQkJJmdyb3VwbmFtZSMjX19uZXh0KSkgewlcCiAJCQkJZ3JvdXBuYW1lIyNfX25leHQg
+PSBTSVpFX01BWDsJCQlcCg==
+--00000000000090e62b05adc9d19e--
