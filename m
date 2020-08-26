@@ -2,79 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9BA2537C0
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 21:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEE52537EF
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 21:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726798AbgHZTAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 15:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbgHZTAx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 15:00:53 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C86CC061574;
-        Wed, 26 Aug 2020 12:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=JTeiHpI9co8/sk3zm+dbWTU5RH8x8HjRlmbdmUsEWAA=; b=vh8X+msp/Vupas3v7jeX+S7Px9
-        13YwPPFGaulusQHlWXot74+cIamxFiSmgBkVDynnN9eUJ1KqDz568hVwY4lGG0aQXbGJk80T7fyGn
-        Be3o2tN+yw2Ls1zLNSBINNMHhXkr/6/lIuIpzoBxQwa75CsHRtj3WcSmhWLLQmosxoQSAzcZAIgud
-        KpN7FOHfFrdwxQ7rlq5ZXftd3UVCor+VZLAmreVxJehHWlQm8WzGrjBlf3EqrpmhYUPGPVCUuaHpu
-        dwyn4Qie2tm+UGPXu8RfioxupN9HsyZE8zyuiVEWWfZOSUvMy3JOpgtAKgIlPIML5va8BSom1GFS+
-        AvBT8paA==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kB0fD-0008WJ-28; Wed, 26 Aug 2020 19:00:51 +0000
-Subject: Re: [PATCH 2/2] usb: dwc3: Add driver for Xilinx platforms
-To:     Manish Narani <manish.narani@xilinx.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        michal.simek@xilinx.com, balbi@kernel.org, p.zabel@pengutronix.de
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com
-References: <1598467441-124203-1-git-send-email-manish.narani@xilinx.com>
- <1598467441-124203-3-git-send-email-manish.narani@xilinx.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <2b7054ec-1b20-0bbc-3cf2-53a32f6fb52d@infradead.org>
-Date:   Wed, 26 Aug 2020 12:00:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726938AbgHZTMy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 15:12:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726880AbgHZTMx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Aug 2020 15:12:53 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 90240207BC;
+        Wed, 26 Aug 2020 19:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598469173;
+        bh=8Zc/chi3NxO+6elc47lH3tAJjLn9eDjGU2FGAXhKkhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yE0LDUHi83oMtbJyjIl8P75e9ikwuBST72n9tjbj70ZamvIXQ8YrwaaPY13cODlFB
+         6fJushKd31li5vOpUkPq4qtm/GJLRu0lqCY4oQs/DGyTHfYbVQC86ll3tKq8gdmMzE
+         pOdAu7NcCpS0hMnLbZ2hxIQU6wYRSYkqkHH0iTec=
+Date:   Wed, 26 Aug 2020 21:13:07 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB fixes for 5.9-rc3
+Message-ID: <20200826191307.GA71779@kroah.com>
+References: <20200826134315.GA3882506@kroah.com>
+ <CAHk-=wiMMTpFxd9q7roL+L6dZb3JoQYCF0uP4+7RNHFHbfC29Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1598467441-124203-3-git-send-email-manish.narani@xilinx.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiMMTpFxd9q7roL+L6dZb3JoQYCF0uP4+7RNHFHbfC29Q@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/26/20 11:44 AM, Manish Narani wrote:
-> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-> index 7a2304565a73..416063ee9d05 100644
-> --- a/drivers/usb/dwc3/Kconfig
-> +++ b/drivers/usb/dwc3/Kconfig
-> @@ -139,4 +139,12 @@ config USB_DWC3_QCOM
->  	  for peripheral mode support.
->  	  Say 'Y' or 'M' if you have one such device.
->  
-> +config USB_DWC3_XILINX
-> +       tristate "Xilinx Platforms"
-> +       depends on (ARCH_ZYNQMP || ARCH_VERSAL) && OF
-> +       default USB_DWC3
-> +       help
-> +         Support Xilinx SoCs with DesignWare Core USB3 IP.
-> +	 Say 'Y' or 'M' if you have one such device.
-> +
->  endif
+On Wed, Aug 26, 2020 at 10:18:23AM -0700, Linus Torvalds wrote:
+> On Wed, Aug 26, 2020 at 6:43 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > USB fixes for 5.9-rc3
+> 
+> I'm dropping this, since it seems to break things more than it fixes.
+> 
+> I see that the breakage is already figured out, but I'll just wait for
+> the next fixes pull with the fix for the problem.
 
-Indent help text (2 lines) with one tab + 2 spaces, please,
-according to Documentation/process/coding-style.rst.
+No worries, I'll fix this up and send a new pull request later this
+week, sorry for the trouble,
 
-thanks.
-
--- 
-~Randy
-
+greg k-h
