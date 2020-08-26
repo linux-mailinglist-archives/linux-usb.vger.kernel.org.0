@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E132A252943
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 10:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79037252947
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 10:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727011AbgHZIea (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 04:34:30 -0400
-Received: from mga07.intel.com ([134.134.136.100]:12244 "EHLO mga07.intel.com"
+        id S1727043AbgHZIg4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 04:36:56 -0400
+Received: from mga14.intel.com ([192.55.52.115]:11848 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726874AbgHZIe3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Aug 2020 04:34:29 -0400
-IronPort-SDR: AUSfXtDec/WKSve0xE2l/c4qa+/0LfVeAxOU02YKdEIhjEKw8MdRWWrLdRc7KalYtufvQaF1cv
- TC7bpYU97LnA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="220515516"
+        id S1726999AbgHZIg4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Aug 2020 04:36:56 -0400
+IronPort-SDR: Er1l/5crVcLXj00GLcdYpnjmZYCj2j+fgNch1I72Cw9oV60JHs+0a2l/dDzJ/CR7GHQ5WOmPYA
+ KhgK29WnNXPg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="155515216"
 X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
-   d="scan'208";a="220515516"
+   d="scan'208";a="155515216"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 01:34:28 -0700
-IronPort-SDR: 3ENnCASnQg+DeVxIRqQR2cgGE/xXLid71Q5NVxpEyOsV82dGaTwblGqhfBfiS9saf3Z99/G5Ky
- f6BfOCUHgkUA==
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 01:36:55 -0700
+IronPort-SDR: k+2Nd5ib159feOdGcgejmWMztGDzFXjqXwKcyQu9hOQzyE74YPdblMNxNLPRCEIDZas9vJW/E9
+ IC6SzKJ8XODA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
-   d="scan'208";a="281742034"
+   d="scan'208";a="281742476"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Aug 2020 01:34:27 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 26 Aug 2020 01:36:54 -0700
 Subject: Re: Data toggles not reset on "set configuration" for ports handled
  by "xhci_hcd" driver
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Martin Thierer <mthierer@gmail.com>, linux-usb@vger.kernel.org
+To:     Martin Thierer <mthierer@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
 References: <CAL3BvCzb6dGZOm6jy2PddSfioM7hThMEBm+aQ_gmMAWAXFYOuQ@mail.gmail.com>
  <20200821160321.GA256196@rowland.harvard.edu>
  <CAL3BvCyz3W+aRu0e=RE3teaMMh6KDYxu8NbFicY07Xt-=f9Whg@mail.gmail.com>
@@ -41,7 +41,7 @@ References: <CAL3BvCzb6dGZOm6jy2PddSfioM7hThMEBm+aQ_gmMAWAXFYOuQ@mail.gmail.com>
  <a66ea20a-5406-ed31-e607-08552598ed68@linux.intel.com>
  <CAL3BvCzsAZjt23XjD-9T2JyUtLFPLB0prKn3Bw3nC4AC1nTbgA@mail.gmail.com>
  <9017830d-a4d2-66d5-6b42-b1162856ef90@linux.intel.com>
- <20200825151042.GC365901@rowland.harvard.edu>
+ <CAL3BvCzKdRAVNMgG2do1D_QgKnR_x+P-uBuv3-kPMi7z6iabwQ@mail.gmail.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
@@ -86,89 +86,37 @@ Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
  42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
  IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <b7b49077-de57-ef15-587a-a50486dfe372@linux.intel.com>
-Date:   Wed, 26 Aug 2020 11:37:50 +0300
+Message-ID: <a8c8509b-6f45-c905-3860-d2b5dd5f9103@linux.intel.com>
+Date:   Wed, 26 Aug 2020 11:40:17 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200825151042.GC365901@rowland.harvard.edu>
+In-Reply-To: <CAL3BvCzKdRAVNMgG2do1D_QgKnR_x+P-uBuv3-kPMi7z6iabwQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25.8.2020 18.10, Alan Stern wrote:
-> On Tue, Aug 25, 2020 at 02:53:56PM +0300, Mathias Nyman wrote:
->> On 25.8.2020 11.00, Martin Thierer wrote:
->>>> Can you try the code below? It should force dropping and adding the endpoints
->>>> for the intrface(s) of that configuration, and xhci should reset the toggles.
->>>>
->>>> Completely untested, it compiles :)
->>>
->>> Sorry, no, that doesn't work:
->>>
->>> xhci_hcd 0000:00:14.0: Trying to add endpoint 0x83 without dropping it.
->>> BUG: kernel NULL pointer dereference, address: 0000000000000010
->>
->> Ah, I see.
->> Endpoints weren't dropped on host side as pointer to the endpoints were cleaned up before this.
->> And the code to recover from a failed call got messed up as we removed some stuff it depends on.
->>
->> Here's a second version. 
+On 26.8.2020 10.40, Martin Thierer wrote:
+>> Here's a second version.
 >> I'm again not able to test this at all from my current location, so it might fail because
 >> of some silly mistake, but it compiles..
 >>
->> This version keeps endpoint pointers intact until endpoints are dropped from hcd side, 
->> it also removes the recover path (might need to fix one later) 
->>
->> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
->> index 6197938dcc2d..e90e8781f872 100644
->> --- a/drivers/usb/core/message.c
->> +++ b/drivers/usb/core/message.c
->> @@ -1537,9 +1537,21 @@ int usb_reset_configuration(struct usb_device *dev)
->>  	 * calls during probe() are fine
->>  	 */
->>  
->> +	/*
->> +	 * TEST2 flush and disable endpoints but leave the pointers intact until
->> +	 * usb_hcd_alloc_bandwidth() has dropped them from host controller side
->> +	 */
->>  	for (i = 1; i < 16; ++i) {
->> -		usb_disable_endpoint(dev, i, true);
->> -		usb_disable_endpoint(dev, i + USB_DIR_IN, true);
->> +		if (dev->ep_out[i]) {
->> +			dev->ep_out[i]->enabled = 0;
->> +			usb_hcd_flush_endpoint(dev, dev->ep_out[i]);
->> +			usb_hcd_disable_endpoint(dev, dev->ep_out[i]);
->> +		}
->> +		if (dev->ep_in[i]) {
->> +			dev->ep_in[i]->enabled = 0;
->> +			usb_hcd_flush_endpoint(dev, dev->ep_in[i]);
->> +			usb_hcd_disable_endpoint(dev, dev->ep_in[i]);
->> +		}
->>  	}
+>> This version keeps endpoint pointers intact until endpoints are dropped from hcd side,
+>> it also removes the recover path (might need to fix one later)
 > 
-> There's got to be a better way to do this, something that doesn't 
-> involve so much code duplication.  For instance, maybe we could make 
-> this routine and usb_set_configuration() both call a new 
-> __usb_set_config(), with an extra flag telling the routine whether to 
-> change the interface devices and bindings.
+> Thanks, that seems to work! (Judging by the absence of my original
+> issue with the xum1541 adapter; I haven't checked what's actually
+> happening on the bus).
+> 
+> Martin
+> 
 
-I agree that this needs cleaning up, this code was intended for testing.
+Great, thanks.
 
-It allows us to call usb_hcd_alloc_bandwidth() once with a configuration
-and with the old endpoint pointers still intact, leading to one configure
-endpoint command for xhci with the relevant drop and add endpoint flags set,
-all in one go.
-
-Looks like the last part usb_disable_device() does similar endpoint code
-churning to flush, disable, drop, and remove endpoints. May we could start
-by turning that code into some useful helper first?
+Now this test code needs to be cleaned up a turned into a real patch
 
 -Mathias
-
-
-maybe we could start
