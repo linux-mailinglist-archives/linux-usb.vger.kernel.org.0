@@ -2,215 +2,245 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8B72525C2
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 05:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217CD2525FD
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 06:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbgHZDVK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Aug 2020 23:21:10 -0400
-Received: from mail-eopbgr10049.outbound.protection.outlook.com ([40.107.1.49]:11998
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726673AbgHZDVH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 25 Aug 2020 23:21:07 -0400
+        id S1726190AbgHZEEN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 00:04:13 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:47956 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725267AbgHZEEM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 00:04:12 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07Q3xnOM001625;
+        Tue, 25 Aug 2020 21:04:02 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=as6HPH4gjNMPWgOq+DyMvGn4RLyMXAMZdzqYPrxcC4Q=;
+ b=Q+b/LFgNBElJw+VHBYMqpz7ZXM/2BPhmfIWtRFS88d6hAMUJz6T+CfTCIX2HuSzyNTTa
+ 1bWX2UVbsMfMsVq2u0W8YWgzJ72Li/MPWKD68WmUrkqTlCKVlTmsfD1oBRsE2mF0Y+tU
+ ujoq4a0XlRKZuc2yfroaq+8C7/n3K678Gxu1HIvEFfFxvjdLXoLUbXobk5gJSj9XH5lv
+ Q9TyghKSmXQI9lBHtbMeOf9uPOKT1R5EqSMgacpfDNKbTetojxxkH3WCxgXl4LAofAIF
+ 3OPj4GQ+A//SaGnulq0fLJ66fa2F3VXM1NLvxZk2OZRJnLGwpy4ejcNnlPEFvUjO9HRD iQ== 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 332xxx61my-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Aug 2020 21:04:02 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cgs+1lwDEIPWvTuO/n61JjYJyTupfnzxcL7W1jd2b1EgZ1jWpC1YfvUhXMan/rVI9Cfe726Hk5iAZJ4+go65pnzg4O9VaDdbbWNUK2Iyh3/8b4HisMdLlUsZeZFM0aASj0DKauXzOuP/gi19fgtmismodjN8Mkb0u9ONU6Ywi7MNTk9drxxEekSFgev7ipQ+nS/hyBfNiZJXYS8KtCoZz05Q5LHxBCBSz4n9ot2PYH0k9yYxFWhc8HsdbiusCMV0jW/TdjNSXMFYwUhfaU1sPNMvSHLS4Rktj+G2QcGNCxwhxhRa5aWYBkBqF5MOwyYJ8i8LWGobDS1UMjeZh3bB0Q==
+ b=Bx7+eKEGRcWOBxASaM1nDGXbuX7spcOMQB6PF/ByOl/0SpMTf58r7J34wTHhoJyG0zBW0B4ZleEvP3kUDob0OV4JhcAr0caFDxyX81PHDuz7m5V710V4AZ6ECYMjsy3DdbRIhOJMSCoGH26x+KdwhgLro+apwLiYgMh9RCzI8xRR7PHLvHAyjvdbmaGpe+sDSCKTxrhMcnEHgTwUyT/6WfNaFV//wKm9VgSmXE/4OU0oO2QQzW7s4iGDMhsDeLnqU2zH6lwLDIyzaH71xUyN/bSgIypvKSDT9UJQqTCjeAjDZ5AqYJTCPsRhWYMPYkid01Emr+lfSmfrWlSRz7I++w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cxWIcBW0Hz+WEjfZFP6k7t6435OjIhh/Q5Z0IWgyJkg=;
- b=I6DOHkcQysY3N4G5Jvy+WA0RtXROhdMMEwcQPA3msz9bQg8NLPGgO73OBRB54DE0QLQOKFjqvKyegOJ+TW7zLp49calo+amxyT7wxLgHHRyQLSe6EiZXUy8S0Dsq7I2c99CQVoD2+WiU3n7Nye6y3DyZklHb2VZeWFxFZKQi3Y4Oi+9yGTrtBDQqRXx8N80c5xmJXDn9oqRsirNZviZtTzJ7QkKZ0p9QYNhZ2BkP0pOf3PAFZnN5WwtGqVZ19iFJ5gd65RSzyNrM8lk9UfQnVzt8YvA7AzoP5qSEc/fkdiZc4It65BSvSo1d54VahwJB53/WHlY6W1L3J66UwlFEgA==
+ bh=as6HPH4gjNMPWgOq+DyMvGn4RLyMXAMZdzqYPrxcC4Q=;
+ b=XjDSZ8MghUxFxZjTTBOP1F9Cj/pRiRjIk9D4dioteylYBB73+irSWdu+PCgN2KJoqbWEDSpxu2Fs1361K7LZYjHk/u4nJabFzUv472B6UDVFeHl30aGj4NhiKJPcP05ZwPJQ5zpLkNw9r/h2E8hxH/j1PKueHsuoth/zBG8ED4LZHW14QzLSGE0pLGqrUv6QE/V6lhIlQadKmG3Y4chw7DFHggoKt3rY5Vj4OaWtlbb/y6bCT1TzX6Et7RGeHXavxRUasRU5Gt/FOkR0/DHc44xl/W+FAESOO/KWYc0QhPUeWH5bDX07ydeW5dapqNWWsgsW2aKQrQugCTo0+FhWBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cxWIcBW0Hz+WEjfZFP6k7t6435OjIhh/Q5Z0IWgyJkg=;
- b=Zs1Bkr+28ALp3KEsouZeeQFFACOzcbHMqiRZJlRU7JBwzyMPnka64QFNofcZPlwvL0r0EEPJCql2CcRRBTQeWunr4OdJb/e6H1oX5Nt+khFt5PPKS9VLVJbripn80x6dOAs/SNL8gFn9WjulAt5LVeXNgV3owlSgpAf3cn/l3Nk=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB4358.eurprd04.prod.outlook.com (2603:10a6:209:4d::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.26; Wed, 26 Aug
- 2020 03:21:03 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3305.032; Wed, 26 Aug 2020
- 03:21:03 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Roger Quadros <rogerq@ti.com>
+ bh=as6HPH4gjNMPWgOq+DyMvGn4RLyMXAMZdzqYPrxcC4Q=;
+ b=kU9QR20n6MyHEUsn+oZnrfq9NL0Zd8yyo88Js1E9bdY4nd1BMZJee1D8Pz7e6SGbisPtTLeqOJRsanM12MIwW39G5jv6wG3KHuCeD1LB2pOQm6gycfJXcx7d6/gSo15jVtX+Cc2b3o9P1lh3gLfJ9euIJE0bBfzHjNe6wgVFIJw=
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
+ DS7PR07MB7638.namprd07.prod.outlook.com (2603:10b6:5:2d1::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3305.26; Wed, 26 Aug 2020 04:04:01 +0000
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::35cf:ffb3:3776:8362]) by DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::35cf:ffb3:3776:8362%4]) with mapi id 15.20.3305.026; Wed, 26 Aug 2020
+ 04:04:01 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Peter Chen <peter.chen@nxp.com>, Roger Quadros <rogerq@ti.com>
 CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "kurahul@cadence.com" <kurahul@cadence.com>,
+        Rahul Kumar <kurahul@cadence.com>,
         "nsekhar@ti.com" <nsekhar@ti.com>,
         "vigneshr@ti.com" <vigneshr@ti.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 3/3] usb: cdns3: Enable workaround for USB2.0 PHY Rx
+Subject: RE: [PATCH 3/3] usb: cdns3: Enable workaround for USB2.0 PHY Rx
  compliance test PHY lockup
 Thread-Topic: [PATCH 3/3] usb: cdns3: Enable workaround for USB2.0 PHY Rx
  compliance test PHY lockup
-Thread-Index: AQHWete/XCUsbMkzVE2tONyDrFDh16lJudEA
-Date:   Wed, 26 Aug 2020 03:21:02 +0000
-Message-ID: <20200826031948.GA7646@b29397-desktop>
+Thread-Index: AQHWetduJTzcjYjglUaGSk5K6slNnalJuioAgAALt3A=
+Date:   Wed, 26 Aug 2020 04:04:01 +0000
+Message-ID: <DM6PR07MB5529A43AFDEB25993595DB59DD540@DM6PR07MB5529.namprd07.prod.outlook.com>
 References: <20200825120059.12436-1-rogerq@ti.com>
- <20200825120059.12436-4-rogerq@ti.com>
-In-Reply-To: <20200825120059.12436-4-rogerq@ti.com>
+ <20200825120059.12436-4-rogerq@ti.com> <20200826031948.GA7646@b29397-desktop>
+In-Reply-To: <20200826031948.GA7646@b29397-desktop>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: ti.com; dkim=none (message not signed)
- header.d=none;ti.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctMmFiZmQ0NmUtZTc1MS0xMWVhLTg3NjktMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDJhYmZkNDcwLWU3NTEtMTFlYS04NzY5LTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iNDUzMCIgdD0iMTMyNDI4ODgyMzkzOTEyODc2IiBoPSI3R0JleUQ2ODhOd0tvTkFjaWxJWE41QjNGL2M9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=cadence.com;
+x-originating-ip: [185.217.253.59]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 7f518d68-459b-4a21-22de-08d8496f0fea
-x-ms-traffictypediagnostic: AM6PR04MB4358:
-x-microsoft-antispam-prvs: <AM6PR04MB43588BE36482ADBDD5E59B978B540@AM6PR04MB4358.eurprd04.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: 537956dc-ec1c-4ae0-0675-08d8497510bd
+x-ms-traffictypediagnostic: DS7PR07MB7638:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DS7PR07MB7638FFDF32C7A54B9A7E0D58DD540@DS7PR07MB7638.namprd07.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kpZs1kC5kkvRF9DpchWMKoFiI91k9zsEsWGp/2Dz9pBCb6Eb0nI17CCM1bmYicckq4QNfen3F3vtV+NCXODVOGo/Tr/DEgYf7r7mApO56zlQjKGOi1atCvsdIMdBvfL553gq3ODI+EpOCYrFWsja82y7XHEw9TB9oVwFMdS8HgBT3RopjjISy7mFhzuOSjRSwr5A+m31fTzhhmuts8LwwVBMZmdkmcG3/gDoI4GUiyqepWyEEUVfABWG3CLHiyB0SVr9wV8z+nj/0S3NIxCyAYyil+NWt4zP67CEwqTL1NbCk5zv+qNGpli5niFXiTDXBBu2rdMK84d2P6EJwXvc9A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(346002)(376002)(39860400002)(366004)(136003)(396003)(83380400001)(186003)(44832011)(8936002)(1076003)(316002)(6916009)(6512007)(4326008)(478600001)(7416002)(9686003)(5660300002)(86362001)(8676002)(33716001)(26005)(53546011)(6486002)(66556008)(66946007)(76116006)(91956017)(66446008)(66476007)(71200400001)(2906002)(33656002)(64756008)(54906003)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 2UnYcjxSJp2k37LIHVwQKEg7irl5jfy1k6c8kaFUeC/swQP2SX3nVp26q2qExS6/xViN+J8dzTXhgs30rvR2k3YsJaZ2vw2RV7uwrtdRiXYrILDwGendWs9dOisY7rNtkuJ8c/7TeUrfy4xwsQxOx/yIGzTuBwFXA8nQjjECzICehpRG4oUzBQEG0Ky0G6Hwz4AHWvUDi8oU4/LFUo6uusRTb42jrN9icBjxM36PdjD76qtN4pj6YItpPK46YhuJG7PGCBebIQMNUVQGr+D6bEzzMlBW4b+ibrNwcysRK+ouTN/wdn2LS1bkvQ6HCREdbXpDidqbobzUni8l5flKW3VPVObdCDGvlI+0LR7IAeiRadSqfBzptFw4/skUUoaqOPYq+TTzb2KsZGp9tMAzhJMTReCRGtES+jg4vJhEIyZNEEx+qTqOFMZXWXdNTbGIyjdI4ECil9igiRR5QOLwfD+GxTs4zMD+UN5M/R3q9ALv6yUC0o/8WI+Y27WGPt7LcpRyYLkmV6RcZW+EBNUYdMrl4fHhIn0LSb7OgjaMxCXoAp9IqDXcXHZ0EWZCDhIE10OFW9+4iaRkF8dDR5fzliPLtk7/8+pQxbwQXzbWzqYTmf/JuwBrtYerYwB5Blu6T1jkby3D0CFSzoxqS3dSCA==
-x-ms-exchange-transport-forked: True
+x-microsoft-antispam-message-info: Llg6UcRnQL1nsdTV/Jur7ApxU8hhGEaqKFvRHWCpUeHZ1Uf3bOAviQr1f2QvCVDTIdK9ui+4eoDJlh5LMwSn4RMVtrciGjrXEmgtyU/UmqKCkJXvShYiSOaiNjzSFTXLcTK0EjBtyGUwFay1idtaRqk+R5VbCzl/0MuuzwENNZadQvW44x/Cf7hbqXc1vW5ZbgaTyjrifdgeNSS5goMmKWomh4jN7D6Gr4zo8xI5sWcaeEiNadX97Lrz/qmzEOAggg9Z1VF7+WgjuYqXBsSbBkyCs9qTU34BLuktHyC2k3bd5gBRCeVNav6zHXT4wtU9omv5AeBuy1+tWAeZf324Yos4lc7+x7GmGk65hpm0Q3ZrbKRRinHPGVj9yIZH5AXl
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(346002)(376002)(136003)(396003)(366004)(36092001)(66946007)(86362001)(478600001)(33656002)(66476007)(76116006)(66446008)(26005)(66556008)(71200400001)(64756008)(83380400001)(6506007)(186003)(7696005)(8936002)(8676002)(4326008)(5660300002)(9686003)(55016002)(110136005)(2906002)(52536014)(54906003)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: /D1Tlv/d68we0EtxuhC2Gi8UmnA2BGrGVoaMvYnxEd8zUOkYD12f7MpydquNTLhlvSJA/uw7t2x914q0YKtNU1fVdBhx9BaSxoc6MYXamrc3qhiV6+l3WvwoBlDcxooRj9atdFru95YfOIQpqd4BGzrBrxtKANF0cntkbBKKshbyVWIaZIpXR43KMgRK0vb2XilbnOe8OP4XjAUP3jEOu9OD0C9b2Z/Ww3rN8U3kdFQA3t9DupiDJ0dc4zphfaWPjzADi+CIZlGjUFUt96vtpgbiEmL3Elh7zvuQM1Ew4dqa/IgDpLWg5OjWTFtc5WX7MIlCNNM3d8K4DahieiAuqdohyHNp8UuNkvDt5ho7LDvTUSv9K4R5O49G5s+1+1YvsW2lYF4AEArTCzjA3qXd6NrR94BDWZf2otXntGAZCFDVvEw7uW3HxxDuAGpiouTHPDdRXTgP1idMJChj6ZfxUhjagHAJ7EALcT78V9u3a4XBJlOYjfBe/MY/AuB2LF9ajN40/3qr5Tx/moxMYQT/MYP2E1gZQgE0/i2j3HBiFD12PJmA5BmL5idqgQn1P7yvBf3G/zV0DQFoXgse6gM0++YOlqa3XTQgUrPI2zrpKgxHwWG+7GnjDxCI0C0mefB18OflvDI6eafYjQxXDmhQAQ==
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1F1ADF5DB7DE85439BE2EFDA545AC198@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-OriginatorOrg: cadence.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f518d68-459b-4a21-22de-08d8496f0fea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2020 03:21:02.8850
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 537956dc-ec1c-4ae0-0675-08d8497510bd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2020 04:04:01.2870
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XEYf3pFSAPMgL0RylvzgJo7Ut8LgkUha8gqLHOoaxn3wRn9wkRbxDGS5NJJb+LjXuNKejJQGG8aXzAR0qpRSmA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4358
+X-MS-Exchange-CrossTenant-userprincipalname: dpEdDwwQKe2LOW4+idPwxQX2KWe3Sts6Xd4qZDe0PvCrJ30PeSQkMhJmgpBD43jMb7/TzjENb17mg3gBzAsHXsQhL1qjZHbHvKMoT84KKns=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR07MB7638
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-25_11:2020-08-25,2020-08-26 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 bulkscore=0
+ adultscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1011 mlxscore=0 suspectscore=0
+ malwarescore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2008260030
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-08-25 15:00:59, Roger Quadros wrote:
-> From: Pawel Laszczak <pawell@cadence.com>
->=20
-> USB2.0 PHY hangs in Rx Compliance test when the incoming packet
-> amplitude is varied below and above the Squelch Level of
-> Receiver during the active packet multiple times.
->=20
-> Version 1 of the controller allows PHY to be reset when RX fail condition
-> is detected to work around the above issue. This feature is
-> disabled by default and needs to be enabled using a bit from
-> the newly added PHYRST_CFG register. This patch enables the workaround.
->=20
-> As there is no way to distinguish between the controller version
-> before the device controller is started we need to rely on a
-> DT property to decide when to apply the workaround.
+>On 20-08-25 15:00:59, Roger Quadros wrote:
+>> From: Pawel Laszczak <pawell@cadence.com>
+>>
+>> USB2.0 PHY hangs in Rx Compliance test when the incoming packet
+>> amplitude is varied below and above the Squelch Level of
+>> Receiver during the active packet multiple times.
+>>
+>> Version 1 of the controller allows PHY to be reset when RX fail conditio=
+n
+>> is detected to work around the above issue. This feature is
+>> disabled by default and needs to be enabled using a bit from
+>> the newly added PHYRST_CFG register. This patch enables the workaround.
+>>
+>> As there is no way to distinguish between the controller version
+>> before the device controller is started we need to rely on a
+>> DT property to decide when to apply the workaround.
+>
+>Pawel, it could know the controller version at cdns3_gadget_start,
+>but the controller starts when it tries to bind gadget driver, at that
+>time, it has already known the controller version.
+>
+>For me, the device controller starts is using USB_CONF.DEVEN (Device
+>Enable) through usb_gadget_connect, I am not sure if it is the same
+>with yours.
+>
 
-Pawel, it could know the controller version at cdns3_gadget_start,
-but the controller starts when it tries to bind gadget driver, at that
-time, it has already known the controller version.
+Yes in device mode driver knows controller version but this workaround=20
+Must be enabled also in host mode. In host mode the controller=20
+doesn't have access to device registers. The controller version is=20
+placed in device register.
 
-For me, the device controller starts is using USB_CONF.DEVEN (Device
-Enable) through usb_gadget_connect, I am not sure if it is the same
-with yours.
+Pawel
 
-Peter
-
-
->=20
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> Signed-off-by: Roger Quadros <rogerq@ti.com>
-> ---
->  drivers/usb/cdns3/core.c |  2 ++
->  drivers/usb/cdns3/core.h |  1 +
->  drivers/usb/cdns3/drd.c  | 12 ++++++++++++
->  drivers/usb/cdns3/drd.h  |  5 ++++-
->  4 files changed, 19 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index 5c1586ec7824..34b36487682b 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -443,6 +443,8 @@ static int cdns3_probe(struct platform_device *pdev)
->  		return -ENXIO;
->  	}
-> =20
-> +	cdns->phyrst_a_enable =3D device_property_read_bool(dev, "cdns,phyrst-a=
--enable");
-> +
->  	cdns->otg_res =3D *res;
-> =20
->  	mutex_init(&cdns->mutex);
-> diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
-> index 1ad1f1fe61e9..24cf0f1b5726 100644
-> --- a/drivers/usb/cdns3/core.h
-> +++ b/drivers/usb/cdns3/core.h
-> @@ -76,6 +76,7 @@ struct cdns3 {
->  #define CDNS3_CONTROLLER_V0	0
->  #define CDNS3_CONTROLLER_V1	1
->  	u32				version;
-> +	bool				phyrst_a_enable;
-> =20
->  	int				otg_irq;
->  	int				dev_irq;
-> diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
-> index 6234bcd6158a..b74803e9703d 100644
-> --- a/drivers/usb/cdns3/drd.c
-> +++ b/drivers/usb/cdns3/drd.c
-> @@ -42,6 +42,18 @@ int cdns3_set_mode(struct cdns3 *cdns, enum usb_dr_mod=
-e mode)
->  			reg =3D readl(&cdns->otg_v1_regs->override);
->  			reg |=3D OVERRIDE_IDPULLUP;
->  			writel(reg, &cdns->otg_v1_regs->override);
-> +
-> +			/*
-> +			 * Enable work around feature built into the
-> +			 * controller to address issue with RX Sensitivity
-> +			 * est (EL_17) for USB2 PHY. The issue only occures
-> +			 * for 0x0002450D controller version.
-> +			 */
-> +			if (cdns->phyrst_a_enable) {
-> +				reg =3D readl(&cdns->otg_v1_regs->phyrst_cfg);
-> +				reg |=3D PHYRST_CFG_PHYRST_A_ENABLE;
-> +				writel(reg, &cdns->otg_v1_regs->phyrst_cfg);
-> +			}
->  		} else {
->  			reg =3D readl(&cdns->otg_v0_regs->ctrl1);
->  			reg |=3D OVERRIDE_IDPULLUP_V0;
-> diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
-> index 7e7cf7fa2dd3..f1ccae285a16 100644
-> --- a/drivers/usb/cdns3/drd.h
-> +++ b/drivers/usb/cdns3/drd.h
-> @@ -31,7 +31,7 @@ struct cdns3_otg_regs {
->  	__le32 simulate;
->  	__le32 override;
->  	__le32 susp_ctrl;
-> -	__le32 reserved4;
-> +	__le32 phyrst_cfg;
->  	__le32 anasts;
->  	__le32 adp_ramp_time;
->  	__le32 ctrl1;
-> @@ -153,6 +153,9 @@ struct cdns3_otg_common_regs {
->  /* Only for CDNS3_CONTROLLER_V0 version */
->  #define OVERRIDE_IDPULLUP_V0		BIT(24)
-> =20
-> +/* PHYRST_CFG - bitmasks */
-> +#define PHYRST_CFG_PHYRST_A_ENABLE     BIT(0)
-> +
->  #define CDNS3_ID_PERIPHERAL		1
->  #define CDNS3_ID_HOST			0
-> =20
-> --=20
-> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
->=20
-
---=20
-
-Thanks,
-Peter Chen=
+>Peter
+>
+>
+>>
+>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+>> Signed-off-by: Roger Quadros <rogerq@ti.com>
+>> ---
+>>  drivers/usb/cdns3/core.c |  2 ++
+>>  drivers/usb/cdns3/core.h |  1 +
+>>  drivers/usb/cdns3/drd.c  | 12 ++++++++++++
+>>  drivers/usb/cdns3/drd.h  |  5 ++++-
+>>  4 files changed, 19 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+>> index 5c1586ec7824..34b36487682b 100644
+>> --- a/drivers/usb/cdns3/core.c
+>> +++ b/drivers/usb/cdns3/core.c
+>> @@ -443,6 +443,8 @@ static int cdns3_probe(struct platform_device *pdev)
+>>  		return -ENXIO;
+>>  	}
+>>
+>> +	cdns->phyrst_a_enable =3D device_property_read_bool(dev, "cdns,phyrst-=
+a-enable");
+>> +
+>>  	cdns->otg_res =3D *res;
+>>
+>>  	mutex_init(&cdns->mutex);
+>> diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+>> index 1ad1f1fe61e9..24cf0f1b5726 100644
+>> --- a/drivers/usb/cdns3/core.h
+>> +++ b/drivers/usb/cdns3/core.h
+>> @@ -76,6 +76,7 @@ struct cdns3 {
+>>  #define CDNS3_CONTROLLER_V0	0
+>>  #define CDNS3_CONTROLLER_V1	1
+>>  	u32				version;
+>> +	bool				phyrst_a_enable;
+>>
+>>  	int				otg_irq;
+>>  	int				dev_irq;
+>> diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+>> index 6234bcd6158a..b74803e9703d 100644
+>> --- a/drivers/usb/cdns3/drd.c
+>> +++ b/drivers/usb/cdns3/drd.c
+>> @@ -42,6 +42,18 @@ int cdns3_set_mode(struct cdns3 *cdns, enum usb_dr_mo=
+de mode)
+>>  			reg =3D readl(&cdns->otg_v1_regs->override);
+>>  			reg |=3D OVERRIDE_IDPULLUP;
+>>  			writel(reg, &cdns->otg_v1_regs->override);
+>> +
+>> +			/*
+>> +			 * Enable work around feature built into the
+>> +			 * controller to address issue with RX Sensitivity
+>> +			 * est (EL_17) for USB2 PHY. The issue only occures
+>> +			 * for 0x0002450D controller version.
+>> +			 */
+>> +			if (cdns->phyrst_a_enable) {
+>> +				reg =3D readl(&cdns->otg_v1_regs->phyrst_cfg);
+>> +				reg |=3D PHYRST_CFG_PHYRST_A_ENABLE;
+>> +				writel(reg, &cdns->otg_v1_regs->phyrst_cfg);
+>> +			}
+>>  		} else {
+>>  			reg =3D readl(&cdns->otg_v0_regs->ctrl1);
+>>  			reg |=3D OVERRIDE_IDPULLUP_V0;
+>> diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
+>> index 7e7cf7fa2dd3..f1ccae285a16 100644
+>> --- a/drivers/usb/cdns3/drd.h
+>> +++ b/drivers/usb/cdns3/drd.h
+>> @@ -31,7 +31,7 @@ struct cdns3_otg_regs {
+>>  	__le32 simulate;
+>>  	__le32 override;
+>>  	__le32 susp_ctrl;
+>> -	__le32 reserved4;
+>> +	__le32 phyrst_cfg;
+>>  	__le32 anasts;
+>>  	__le32 adp_ramp_time;
+>>  	__le32 ctrl1;
+>> @@ -153,6 +153,9 @@ struct cdns3_otg_common_regs {
+>>  /* Only for CDNS3_CONTROLLER_V0 version */
+>>  #define OVERRIDE_IDPULLUP_V0		BIT(24)
+>>
+>> +/* PHYRST_CFG - bitmasks */
+>> +#define PHYRST_CFG_PHYRST_A_ENABLE     BIT(0)
+>> +
+>>  #define CDNS3_ID_PERIPHERAL		1
+>>  #define CDNS3_ID_HOST			0
+>>
+>> --
+>> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+>> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+>>
+>
+>--
+>
+>Thanks,
+>Peter Chen
