@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB352530A7
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 15:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16B02530AF
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 15:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730464AbgHZNyD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 09:54:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60454 "EHLO mail.kernel.org"
+        id S1730587AbgHZNzL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 09:55:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60714 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730422AbgHZNxw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Aug 2020 09:53:52 -0400
+        id S1730451AbgHZNx6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Aug 2020 09:53:58 -0400
 Received: from localhost (unknown [70.37.104.77])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 99DB6208E4;
-        Wed, 26 Aug 2020 13:53:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D676222B47;
+        Wed, 26 Aug 2020 13:53:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598450029;
-        bh=P8Zfcu4xh+cWHlSmUEm/Nym6WeKbQs9WYrbqcwPGRzs=;
+        s=default; t=1598450038;
+        bh=XN/7xbmRyQzQM4W35vuJM4kB/IMClTtMi1Bbda7wrU4=;
         h=Date:From:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:From;
-        b=f1xccvVBJC52ZI+WJgAcRheMChKU9IGj/ud1wlfbNnKxzFs5ePGnHMA4vLu67P0jm
-         6a36iZXOsNQK3kCaDmrrxBSPFGqX25Iy7sowgAHOCRLvtmzwUcqMTKAo+xlYlvQRVz
-         Ux3RhFyHhxVnXo7FgY6Sstk/iJAWBqDlc6g7dyo8=
-Date:   Wed, 26 Aug 2020 13:53:49 +0000
+        b=S5SIw+6w+SEbZKsxoHj+A5KA64jL+7pd8ziJQM+l6uM12f84NAlsYNE573Oa9lLB6
+         4JX49cHFAAT18Q57cQ/dU8qht5cRQyN65N+D7+yf7bCDa8HVRbfQpLdc380CfrCoNG
+         51Q3lR3l1GZzl4okDLUP7BkFGqsCIQK2dEYJjKSk=
+Date:   Wed, 26 Aug 2020 13:53:57 +0000
 From:   Sasha Levin <sashal@kernel.org>
 To:     Sasha Levin <sashal@kernel.org>
 To:     Hans de Goede <hdegoede@redhat.com>
@@ -31,10 +31,10 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
 Cc:     stable@vger.kernel.org
 Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH 3/4] usb: typec: ucsi: Rework ppm_lock handling
-In-Reply-To: <20200809141904.4317-4-hdegoede@redhat.com>
-References: <20200809141904.4317-4-hdegoede@redhat.com>
-Message-Id: <20200826135349.99DB6208E4@mail.kernel.org>
+Subject: Re: [PATCH 4/4] usb: typec: ucsi: Hold con->lock for the entire duration of ucsi_register_port()
+In-Reply-To: <20200809141904.4317-5-hdegoede@redhat.com>
+References: <20200809141904.4317-5-hdegoede@redhat.com>
+Message-Id: <20200826135357.D676222B47@mail.kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -44,108 +44,24 @@ Hi
 
 [This is an automated email]
 
-This commit has been processed because it contains a -stable tag.
-The stable tag indicates that it's relevant for the following trees: all
+This commit has been processed because it contains a "Fixes:" tag
+fixing commit: 081da1325d35 ("usb: typec: ucsi: displayport: Fix a potential race during registration").
 
-The bot has tested the following trees: v5.8.2, v5.7.16, v5.4.59, v4.19.140, v4.14.193, v4.9.232, v4.4.232.
+The bot has tested the following trees: v5.8.2, v5.7.16, v5.4.59.
 
 v5.8.2: Build OK!
 v5.7.16: Failed to apply! Possible dependencies:
     4dbc6a4ef06d ("usb: typec: ucsi: save power data objects in PD mode")
-    e2ac86ebc787 ("usb: typec: ucsi: Fix 2 unlocked ucsi_run_command calls")
+    992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
 
 v5.4.59: Failed to apply! Possible dependencies:
-    170a6726d0e2 ("usb: typec: ucsi: add support for separate DP altmode devices")
     2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
     3cf657f07918 ("usb: typec: ucsi: Remove all bit-fields")
     470ce43a1a81 ("usb: typec: ucsi: Remove struct ucsi_control")
     4dbc6a4ef06d ("usb: typec: ucsi: save power data objects in PD mode")
     6df475f804e6 ("usb: typec: ucsi: Start using struct typec_operations")
-    71a1fa0df2a3 ("usb: typec: ucsi: Store the notification mask")
-    abfe9cb3f1f9 ("usb: typec: ucsi: Fix AB BA lock inversion")
+    992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
     bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
-    e2ac86ebc787 ("usb: typec: ucsi: Fix 2 unlocked ucsi_run_command calls")
-
-v4.19.140: Failed to apply! Possible dependencies:
-    247c554a14aa ("usb: typec: ucsi: add support for Cypress CCGx")
-    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
-    470ce43a1a81 ("usb: typec: ucsi: Remove struct ucsi_control")
-    5c9ae5a87573 ("usb: typec: ucsi: ccg: add firmware flashing support")
-    5d438e200215 ("usb: typec: ucsi: ccg: add get_fw_info function")
-    6df475f804e6 ("usb: typec: ucsi: Start using struct typec_operations")
-    81534d5fa973 ("usb: typec: ucsi: Remove debug.h file")
-    a94ecde41f7e ("usb: typec: ucsi: ccg: enable runtime pm support")
-    ad74b8649bea ("usb: typec: ucsi: Preliminary support for alternate modes")
-    af8622f6a585 ("usb: typec: ucsi: Support for DisplayPort alt mode")
-    bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
-    f2372b87c386 ("usb: typec: ucsi: displayport: Fix for the mode entering routine")
-
-v4.14.193: Failed to apply! Possible dependencies:
-    0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
-    3c4fb9f16921 ("usb: typec: wcove: start using tcpm for USB PD support")
-    44262fad12a7 ("staging: typec: tcpm: Drop commented out code")
-    4b4e02c83167 ("typec: tcpm: Move out of staging")
-    70cd90be3300 ("staging: typec: pd: Document struct pd_message")
-    76f0c53d08b9 ("usb: typec: fusb302: Move out of staging")
-    81534d5fa973 ("usb: typec: ucsi: Remove debug.h file")
-    956c36c297a2 ("USB: typec: add SPDX identifiers to some files")
-    98076fa64a05 ("staging: typec: tcpm: Document data structures")
-    ad74b8649bea ("usb: typec: ucsi: Preliminary support for alternate modes")
-    bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
-    cf6e06cddf29 ("usb: typec: Start using ERR_PTR")
-
-v4.9.232: Failed to apply! Possible dependencies:
-    0c744ea4f77d ("Linux 4.10-rc2")
-    2bd6bf03f4c1 ("Linux 4.14-rc1")
-    2ea659a9ef48 ("Linux 4.12-rc1")
-    49def1853334 ("Linux 4.10-rc4")
-    566cf877a1fc ("Linux 4.10-rc6")
-    5771a8c08880 ("Linux v4.13-rc1")
-    7089db84e356 ("Linux 4.10-rc8")
-    7a308bb3016f ("Linux 4.10-rc5")
-    7ce7d89f4883 ("Linux 4.10-rc1")
-    81534d5fa973 ("usb: typec: ucsi: Remove debug.h file")
-    a121103c9228 ("Linux 4.10-rc3")
-    ad74b8649bea ("usb: typec: ucsi: Preliminary support for alternate modes")
-    b24413180f56 ("License cleanup: add SPDX GPL-2.0 license identifier to files with no license")
-    bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
-    c1ae3cfa0e89 ("Linux 4.11-rc1")
-    c1b0bc2dabfa ("usb: typec: Add support for UCSI interface")
-    c470abd4fde4 ("Linux 4.10")
-    d2061f9cc32d ("usb: typec: add driver for Intel Whiskey Cove PMIC USB Type-C PHY")
-    d5adbfcd5f7b ("Linux 4.10-rc7")
-    fab9288428ec ("usb: USB Type-C connector class")
-
-v4.4.232: Failed to apply! Possible dependencies:
-    1001354ca341 ("Linux 4.9-rc1")
-    18558cae0272 ("Linux 4.5-rc4")
-    1a695a905c18 ("Linux 4.7-rc1")
-    29b4817d4018 ("Linux 4.8-rc1")
-    2bd6bf03f4c1 ("Linux 4.14-rc1")
-    2ea659a9ef48 ("Linux 4.12-rc1")
-    36f90b0a2ddd ("Linux 4.5-rc2")
-    388f7b1d6e8c ("Linux 4.5-rc3")
-    5771a8c08880 ("Linux v4.13-rc1")
-    6406c3d22637 ("usb: Kconfig: let USB_ULPI_BUS depends on USB_COMMON")
-    7ce7d89f4883 ("Linux 4.10-rc1")
-    81534d5fa973 ("usb: typec: ucsi: Remove debug.h file")
-    81f70ba233d5 ("Linux 4.5-rc5")
-    92e963f50fc7 ("Linux 4.5-rc1")
-    9360575c5837 ("usbip: vudc: Add vudc to Kconfig")
-    ad74b8649bea ("usb: typec: ucsi: Preliminary support for alternate modes")
-    ad764c49f65a ("usb: Kconfig: move ulpi bus support out of host")
-    b24413180f56 ("License cleanup: add SPDX GPL-2.0 license identifier to files with no license")
-    b562e44f507e ("Linux 4.5")
-    b5a2a8ecb204 ("usbip: vudc: fix Kconfig dependencies")
-    bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
-    c1ae3cfa0e89 ("Linux 4.11-rc1")
-    c1b0bc2dabfa ("usb: typec: Add support for UCSI interface")
-    cb9c1cfc8692 ("usb: Kconfig: using select for USB_COMMON dependency")
-    d2061f9cc32d ("usb: typec: add driver for Intel Whiskey Cove PMIC USB Type-C PHY")
-    f55532a0c0b8 ("Linux 4.6-rc1")
-    f6cede5b49e8 ("Linux 4.5-rc7")
-    fab9288428ec ("usb: USB Type-C connector class")
-    fc77dbd34c5c ("Linux 4.5-rc6")
 
 
 NOTE: The patch will not be queued to stable trees until it is upstream.
