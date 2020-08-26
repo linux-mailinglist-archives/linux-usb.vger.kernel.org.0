@@ -2,71 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE1F252559
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 03:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B26025256C
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 04:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726619AbgHZBzw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Aug 2020 21:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbgHZBzw (ORCPT
-        <rfc822;Linux-usb@vger.kernel.org>); Tue, 25 Aug 2020 21:55:52 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CF0C061574
-        for <Linux-usb@vger.kernel.org>; Tue, 25 Aug 2020 18:55:51 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id v4so519292ljd.0
-        for <Linux-usb@vger.kernel.org>; Tue, 25 Aug 2020 18:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WELsCXwXo5F3W3bEBZjb9tn0/jpYms5qeS4RSfUShgg=;
-        b=Z0vElUimKwK0F4s33sCeEPwDB+0yDwwZ9XQUVZwNoeioapiW8tCKmZl7KNIGSMyToK
-         9L+j9b4p8gaafo1IrIu83B9uhC8e0SWMMARjoT8xnUlf2vfcWBberR99+7AGZdWUAWvd
-         QxfjYPAHkaY6zq/knOVCfBRPfZ/Pkb/RXadyax/HC2INoJq7qaomz5ORhTUUGoJTsAph
-         obaerId5jEfWHXn4mHPwwhqRYH9/PSqj2bNDmph+WYxPWpfRZLPBgestCZVCo0ZsNoOg
-         vydGsd/B8qBcryFSMKpe1NCN3ennEXr8czBSGb4Iz/SbGSXsRgfUNrAgLfLv2qfo//zO
-         bUzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WELsCXwXo5F3W3bEBZjb9tn0/jpYms5qeS4RSfUShgg=;
-        b=iv4cXnGhUOLHnJcxkho3qgZ0v2RkxuXbO1ybfBBGmPEJMbBqJF3/IFBf3MVAT3F9nJ
-         A04lxSZ9dy6SPeEsU4lWSGOybJXSAkbYmWEJTrzmLLHbmzfG+VOPc3BFHt4rcj8YdvfS
-         nsE4M3hflZdzsSWTEb/xL9mU8FkPOK0ZL2WpsSjwDNcarRCzcssdwIute2mW2tjF+A2W
-         coUslUYxezWoyY3lVG5udSyJQUUu+iSyFnGgQlFk08U59GRLnzPvPHXVUASgEBmw45Il
-         ELy2GokvqFIrdJc8TQBWTQU5IyFOFPREacstmX8GAyutj6uCyJin+TIjaHTPrbsiBQat
-         ZvnA==
-X-Gm-Message-State: AOAM5323PMtw+n96RCCHU6cx3ngb/CzaG+OmEGGo59oUKg3i5WaitAar
-        lwZcYC4sRj1EWp6elYcZYxqLPRUsL7ZujhGjXFsc/isAhKqtHQ==
-X-Google-Smtp-Source: ABdhPJyNq2yBdZu1E9mX80b2GTywN+507B/tccofM0K1oeP7TvPh6L5wG3XdQDNFty3s6jk3upNp7G8P8ibcyXLmKx0=
-X-Received: by 2002:a2e:9516:: with SMTP id f22mr5632590ljh.24.1598406950298;
- Tue, 25 Aug 2020 18:55:50 -0700 (PDT)
+        id S1726698AbgHZCNi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Aug 2020 22:13:38 -0400
+Received: from mga01.intel.com ([192.55.52.88]:7408 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726611AbgHZCNi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 Aug 2020 22:13:38 -0400
+IronPort-SDR: frT6P7Cz/ELnM7Thd01/2othzj2UZEXPN/f0txbX6k8W23HWz/GWYKawXA7jQVHpLSAWMJSLTp
+ z4LXg40UTf3g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="174269994"
+X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
+   d="scan'208";a="174269994"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 19:13:35 -0700
+IronPort-SDR: y/reG0eqqVlXqkKIxDKqIhWE6J9RomabDdz2wenOfgbhY/RHrYCtV4eI5BJp9SCd1DU61+ctlG
+ emLSinjDqcVg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
+   d="scan'208";a="281676230"
+Received: from lkp-server01.sh.intel.com (HELO 4f455964fc6c) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Aug 2020 19:13:34 -0700
+Received: from kbuild by 4f455964fc6c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kAkwP-0001GJ-Qa; Wed, 26 Aug 2020 02:13:33 +0000
+Date:   Wed, 26 Aug 2020 10:13:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 23e26d0577535f5ffe4ff8ed6d06e009553c0bca
+Message-ID: <5f45c542.8LyVafFBchCuujgc%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <MRXP264MB0904FFAD5E50E6A6F4AB6419F8570@MRXP264MB0904.FRAP264.PROD.OUTLOOK.COM>
-In-Reply-To: <MRXP264MB0904FFAD5E50E6A6F4AB6419F8570@MRXP264MB0904.FRAP264.PROD.OUTLOOK.COM>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Wed, 26 Aug 2020 09:55:38 +0800
-Message-ID: <CAL411-oBThK1PqKWhbdUSEsCuApi6CWT5wzxye6P6RXsQuXhfg@mail.gmail.com>
-Subject: Re: Linux Crash with Gadget serial driver
-To:     GARG Shivam <shivam.garg@thalesgroup.com>
-Cc:     "Linux-usb@vger.kernel.org" <Linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 1:36 AM GARG Shivam <shivam.garg@thalesgroup.com> wrote:
->
-> Hi All,
->
-> My Device is a Linux machine that is having a Gadget Serial driver. Physically device side we have USB-C port while at host side we have USB port. This device is used as COM port to access the serial port.
->
-> My Device side Linux is getting panic as soon as I attached the USB to FreeBSD. Any view on this?
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: 23e26d0577535f5ffe4ff8ed6d06e009553c0bca  usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures
 
-You may post your panic log and kernel version info as well.
+elapsed time: 723m
 
-Peter
+configs tested: 98
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                         hackkit_defconfig
+sh                        edosk7760_defconfig
+mips                     cu1000-neo_defconfig
+arm                       versatile_defconfig
+m68k                          multi_defconfig
+arm                    vt8500_v6_v7_defconfig
+arc                        vdk_hs38_defconfig
+mips                         bigsur_defconfig
+arm                           omap1_defconfig
+arm                           h5000_defconfig
+arm                           corgi_defconfig
+sh                ecovec24-romimage_defconfig
+riscv                    nommu_virt_defconfig
+mips                         mpc30x_defconfig
+arm                             ezx_defconfig
+powerpc                      ppc64e_defconfig
+arc                           tb10x_defconfig
+arm                        vexpress_defconfig
+mips                        bcm63xx_defconfig
+parisc                              defconfig
+s390                             allyesconfig
+mips                  cavium_octeon_defconfig
+arm                         lpc18xx_defconfig
+arm                         s5pv210_defconfig
+openrisc                 simple_smp_defconfig
+um                            kunit_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20200825
+x86_64               randconfig-a002-20200825
+i386                 randconfig-a002-20200825
+i386                 randconfig-a004-20200825
+i386                 randconfig-a005-20200825
+i386                 randconfig-a003-20200825
+i386                 randconfig-a006-20200825
+i386                 randconfig-a001-20200825
+i386                 randconfig-a002-20200826
+i386                 randconfig-a004-20200826
+i386                 randconfig-a003-20200826
+i386                 randconfig-a005-20200826
+i386                 randconfig-a006-20200826
+i386                 randconfig-a001-20200826
+x86_64               randconfig-a015-20200826
+x86_64               randconfig-a016-20200826
+x86_64               randconfig-a012-20200826
+x86_64               randconfig-a014-20200826
+x86_64               randconfig-a011-20200826
+x86_64               randconfig-a013-20200826
+i386                 randconfig-a013-20200826
+i386                 randconfig-a012-20200826
+i386                 randconfig-a011-20200826
+i386                 randconfig-a016-20200826
+i386                 randconfig-a015-20200826
+i386                 randconfig-a014-20200826
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
