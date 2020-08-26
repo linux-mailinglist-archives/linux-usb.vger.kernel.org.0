@@ -2,106 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 798CC2534AA
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 18:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1642534CB
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 18:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727814AbgHZQTV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 12:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726820AbgHZQTU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 12:19:20 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DB8C061574;
-        Wed, 26 Aug 2020 09:19:20 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id d22so1234382pfn.5;
-        Wed, 26 Aug 2020 09:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ilq96LncB63Fy/CIWeCW+LtnzaRpV/8JBgOE+6AYhNY=;
-        b=jkj2lJ/wIshXTsGOEM64SsGQiF7RQEp7AAMTx/xiXkBBHv2KNeujd9MOPiD5kyQY8K
-         hf6yqxBesJFomueFy75MOk012wz7xpqJ0MwXVnD5pgU3v+SuGh9PQoHMTlzllEWlNso2
-         c2jmgT7yi0ZERQqXEdy4W3JE3P3vqVcJsoSp0jYSzSZoaxhBYV8ujdHHKWFn8BSpF9ya
-         mDIP+nyshLpiaJo8ZWYtQ58DI3chffKPgs6EUoLzrkDi0/ei3lYuVqKQ67l63bUgPAEA
-         9L/IrVAGvC03lLBPyY9u2Lj3waTfRLL82ppuYy0hqNnVehBouQnPIJkCoKDYDMIc/WkZ
-         kifQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ilq96LncB63Fy/CIWeCW+LtnzaRpV/8JBgOE+6AYhNY=;
-        b=r4YsJIIdD8f65cfsvkamlYuy5vLjM4vI1P3391jhbSrSEbJNbeXFCVpHZ8CND7tgfr
-         1ej4Symqf93qz1BLWX1ecUnGrSwAyO1Eq74ww8VlippxDqrdRLOuXPpHqjThBoi9P5a2
-         /sa75+914hWpPjDayo6aJrS8DTYYY5/9Yflca3vp+UokQkUTNCYpflhZ2ssJbvv4TDKw
-         gnALAZObpaxArPChwfiVurgB+JTVHjjEpyjfbJYofgUlFlipOTM7JheW0wUUEb/hHXuy
-         ReWFKZb6UtMazl6JtC2oKJ3NoOwUJXtA03dDRCLpLGEPy5KDLfAeDlewYVnKRYiVMaHp
-         bNag==
-X-Gm-Message-State: AOAM5322X2KxYR7ObvgQqYJCD1ZxX8YpVcf1FxjJNWn9/5V67T5B4e7t
-        47yqe/dxP0l1CHU7zo2rgi9DKctdDoHSGa+ZsiU=
-X-Google-Smtp-Source: ABdhPJza63eLcR7I3PDHKJp/Uyg9y5yJyruqodtcmJ8VwI4Uaxaj+0hTzcGzEO/9K2txWYSgQ2JOVl14QF3S4xXzvnA=
-X-Received: by 2002:a63:f24a:: with SMTP id d10mr11083692pgk.4.1598458760092;
- Wed, 26 Aug 2020 09:19:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200826134315.GA3882506@kroah.com> <CGME20200826150239eucas1p24c59716cc31edfeb2eece84d97936b93@eucas1p2.samsung.com>
- <1425ab4f-ef7e-97d9-238f-0328ab51eb35@samsung.com> <20200826153347.GB4187816@kroah.com>
- <CAHp75VepkugjZ4pvdNgxzT4T83ewL1AFtSZZtVq6aL+7=sqskA@mail.gmail.com> <de6aea2f-5f31-4391-0c36-8fd5fd63ab05@samsung.com>
-In-Reply-To: <de6aea2f-5f31-4391-0c36-8fd5fd63ab05@samsung.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 26 Aug 2020 19:19:03 +0300
-Message-ID: <CAHp75Vc=Z3y6eq0M174w314Lje=cujEk70qjbu+mVdobZsYt=Q@mail.gmail.com>
-Subject: Re: [GIT PULL] USB fixes for 5.9-rc3
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        id S1726864AbgHZQYS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 12:24:18 -0400
+Received: from mga04.intel.com ([192.55.52.120]:17284 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726856AbgHZQYR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Aug 2020 12:24:17 -0400
+IronPort-SDR: lG6ROm7RZMfhQb/k/ORl9Ewcumm/7iTIcJZCbWT0exu1aOzqKG1d8hCImLvFIRDhVnTYecGyrk
+ E0wUwAQeZGpA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9725"; a="153749924"
+X-IronPort-AV: E=Sophos;i="5.76,356,1592895600"; 
+   d="scan'208";a="153749924"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 09:24:17 -0700
+IronPort-SDR: K3eoO5N6s+0LS26WHH4aipA/YzuuQfZywiPvdPp9F+vRetDQlHZ0wpq/fMG3XW4KbLP5yZjUOr
+ D9zCwbgOonNA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,356,1592895600"; 
+   d="scan'208";a="336877573"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Aug 2020 09:24:15 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 633E71B4; Wed, 26 Aug 2020 19:24:14 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Brooke Basile <brookebasile@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Kees Cook <keescook@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+        Kees Cook <keescook@chromium.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [PATCH v1] USB: gadget: u_f: Unbreak offset calculation in VLAs
+Date:   Wed, 26 Aug 2020 19:24:13 +0300
+Message-Id: <20200826162413.21637-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 7:17 PM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
-> On 26.08.2020 17:53, Andy Shevchenko wrote:
-> > On Wed, Aug 26, 2020 at 6:36 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >> On Wed, Aug 26, 2020 at 05:02:38PM +0200, Marek Szyprowski wrote:
-> >>> On 26.08.2020 15:43, Greg KH wrote:
-> >>>
-> >>>> Brooke Basile (2):
-> >>>>         USB: gadget: u_f: add overflow checks to VLA macros
-> >>> Sorry, but the above patch breaks USB Ethernet Gadget operation. It also
-> >>> didn't get the proper testing in linux-next (next-20200826 is the first
-> >>> one with this patch).
-> >>>
-> >>> This is how it explodes on Samsung Exynos (ARM 32bit) based board with
-> >>> g_ether module loaded:
-> >> Odd, for a "normal" descriptor, the logic should have remained the same
-> >> as without this patch.
-> >> Brooke, any ideas?
-> > I have an idea.
-> >
-> > Does below fix this?
->
-> Yep, that's it. I've also moved offset assignment in the first part
-> after size_t size = array_size(n, sizeof(type));
->
-> Feel free to add:
->
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
->
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Inadvertently the commit b1cd1b65afba ("USB: gadget: u_f: add overflow checks
+to VLA macros") makes VLA macros to always return 0 due to different scope of
+two variables of the same name. Obviously we need to have only one.
 
-Will send a formal patch soon. Thanks for reporting and testing!
+Fixes: b1cd1b65afba ("USB: gadget: u_f: add overflow checks to VLA macros")
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/usb/gadget/u_f.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/usb/gadget/u_f.h b/drivers/usb/gadget/u_f.h
+index df4e1dcb357d..0b5c5f0dd073 100644
+--- a/drivers/usb/gadget/u_f.h
++++ b/drivers/usb/gadget/u_f.h
+@@ -25,8 +25,8 @@
+ 		size_t offset = 0;					       \
+ 		if (groupname##__next != SIZE_MAX) {			       \
+ 			size_t align_mask = __alignof__(type) - 1;	       \
+-			size_t offset = (groupname##__next + align_mask)       \
+-					 & ~align_mask;			       \
++			offset = (groupname##__next + align_mask) &	       \
++				  ~align_mask;				       \
+ 			size_t size = array_size(n, sizeof(type));	       \
+ 			if (check_add_overflow(offset, size,		       \
+ 					       &groupname##__next)) {          \
+@@ -43,8 +43,8 @@
+ 		size_t offset = 0;						\
+ 		if (groupname##__next != SIZE_MAX) {				\
+ 			size_t align_mask = __alignof__(type) - 1;		\
+-			size_t offset = (groupname##__next + align_mask)	\
+-					 & ~align_mask;				\
++			offset = (groupname##__next + align_mask) &		\
++				  ~align_mask;					\
+ 			if (check_add_overflow(offset, groupname##_##name##__sz,\
+ 							&groupname##__next)) {	\
+ 				groupname##__next = SIZE_MAX;			\
 -- 
-With Best Regards,
-Andy Shevchenko
+2.28.0
+
