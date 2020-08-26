@@ -2,140 +2,222 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E51253426
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 17:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5AC25343A
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 18:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726747AbgHZP5w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 11:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
+        id S1726763AbgHZQAw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 12:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726864AbgHZP5o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 11:57:44 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADCFC061756
-        for <linux-usb@vger.kernel.org>; Wed, 26 Aug 2020 08:57:43 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id ds1so1090267pjb.1
-        for <linux-usb@vger.kernel.org>; Wed, 26 Aug 2020 08:57:43 -0700 (PDT)
+        with ESMTP id S1726747AbgHZQAb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 12:00:31 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA69AC061574;
+        Wed, 26 Aug 2020 09:00:30 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id q14so2238513ilm.2;
+        Wed, 26 Aug 2020 09:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ijQWHet8Hvpkx4cDZTd5XJNqC2I4V5jJoFi9k0Qv97U=;
-        b=dsH4IocR3yy5Uc/4AvuYTBfKzPse7HEba7qvf7wpzpP8B29g1cHc6SgiNo0RQIw3T3
-         TNL0WYjJ3NhcszT0LS3ibCtC8EPshS7UNRLDe7CC7Zh+ICR1e5VW2M78xC7EaOs17myC
-         y4z3pH6ialJEj5LV/sQ+Fpjbv+lpwmu0WqGxU=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FBrFb6jnhRxK2pE9Uf4aDwedIGM0WKpvarBK1Vuymfk=;
+        b=JrxU1NWpArAPG9qvA7QSt+OG2bRAqwOm/cMEtAapa2DSLLIHjnKjyUjn+G6/vuhr7p
+         xFuyV+70u0ZkFTmRBg8RthkfR/tAXbgOJz+dgs35i8yQOjOdTy3xydIBSre9lG/gi2XF
+         GVgpJh9dfLGW7J5juIragtkSbfcMpRF6q1sfFP/XaQ5aGJK25TYLGUl9C+ZmVWaEEAxv
+         dxsElXtWa9u3uU+F4YJppmzZefzPNSxJiGziUPMt+5WM+7wPRFsHnX2cCFLZ0actFGdA
+         fv4YOSyoAtG2TYRHUzjMi0/PuDlMuZO9PJ2YunQ2083jcZL8aNZOQ21AeIu86El9x0e0
+         MMGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ijQWHet8Hvpkx4cDZTd5XJNqC2I4V5jJoFi9k0Qv97U=;
-        b=CyRgLu2mgcqUkD3XBeccfEyWnBdHz8Ki5SI5lBnLkGYMZo1MZ+zV6/bPGDbWpMdyEt
-         h/s4cOqz5tLPrvqFgxjcGXjSBeXB5XMlh+37kJZRpoQ45PZBMzovG0XW9ANI4u5Emkc9
-         lJ4J4S3KwaEdjg06PimFm1p1fI/c6qZ54M9pSqgQr1F6cReFoof6ds0GyEbUdYs11FQw
-         LZOU+h25Ifh/29POro9moo7jVspLQ+zMXKhdOs0a/gpFfHOc6tcTDERwdDsPfs0Po9Hy
-         5J2kInTq+VTkkiMJTS1Zjiptd18RQmN81vbOv/NNq0mEFNN+VDRf+2kGhOZJ3YMZ0h7W
-         uUgA==
-X-Gm-Message-State: AOAM533JFq3vMXVXEm6L5/BVKjQipnVn9DmgI+jJx9LjI3P0WGtYGBbn
-        gkbrxAMzX12uF/OPs/TXr9GfHg==
-X-Google-Smtp-Source: ABdhPJwABUwANAy+24sJPx0Nl4567R6wVmJBHxxgSG6TzcsdqKOKz4COI7yyclh24bzKWHMuAiAuWw==
-X-Received: by 2002:a17:90a:c7c4:: with SMTP id gf4mr6546054pjb.17.1598457462620;
-        Wed, 26 Aug 2020 08:57:42 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i1sm2667916pgq.41.2020.08.26.08.57.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2020 08:57:41 -0700 (PDT)
-Date:   Wed, 26 Aug 2020 08:57:40 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Brooke Basile <brookebasile@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: Re: [GIT PULL] USB fixes for 5.9-rc3
-Message-ID: <202008260856.5DAEFCEFF@keescook>
-References: <20200826134315.GA3882506@kroah.com>
- <CGME20200826150239eucas1p24c59716cc31edfeb2eece84d97936b93@eucas1p2.samsung.com>
- <1425ab4f-ef7e-97d9-238f-0328ab51eb35@samsung.com>
- <20200826153347.GB4187816@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FBrFb6jnhRxK2pE9Uf4aDwedIGM0WKpvarBK1Vuymfk=;
+        b=mKocAI5UCO3N+tvBGvEBGKSLmzMOgzJufdoTouasPHOfVTAR2AmuLe/cCnH7SsgBlu
+         ytnpuF6JsYoz/6GJid2yn19/3R7M8vE4XJozjUDJ7O68O92f+tiRdEpzeVuDl24voocg
+         1LBd7xPg8n14bT2bptZudY80BSsL1WGYgArbJ4VFo9quqLBKN0V9B7xY2UdqUnM071y9
+         xHTAP2xhi5qMxFVUDwaWA/VPry03ObHcRefJAQlpk96nvHSrKbz1p0k5sLDz5fKZthST
+         VCvDCo38ijKI47VPobgmaaXTUM9VQOu/LX97jW8uHnZKjeTNW2b72ZEiPJkc7n6zQpr6
+         NvIA==
+X-Gm-Message-State: AOAM533lPCNOW4sFLrJfoOpMjwWRDQhieRJ92ZjyI6u7LwoR4nyT/ErY
+        ST0Le1xG/Jb/dJcJHLMt4tl3QknXevSG1z+CzSU=
+X-Google-Smtp-Source: ABdhPJy+OCXtS+MIm488/SkgPQw1OHAlRys9kvA/GklBIJzCL5pNuy0EHvg5lM2w9KUososCV7G1/MajWrRb/8kZ8cg=
+X-Received: by 2002:a92:a052:: with SMTP id b18mr11252757ilm.10.1598457630141;
+ Wed, 26 Aug 2020 09:00:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200826153347.GB4187816@kroah.com>
+References: <20200812202018.49046-1-alcooperx@gmail.com> <20200812202018.49046-2-alcooperx@gmail.com>
+ <20200824233040.GA3532378@bogus> <CAOGqxeXWXkRD=agGL45D0sGe64TUBBq=OtibkX8AkiC5g0sWww@mail.gmail.com>
+ <CAL_JsqLvDq1L1BZKfgobfhe7UEqbkGtXXfHzUwfo36m4MCARhw@mail.gmail.com>
+In-Reply-To: <CAL_JsqLvDq1L1BZKfgobfhe7UEqbkGtXXfHzUwfo36m4MCARhw@mail.gmail.com>
+From:   Alan Cooper <alcooperx@gmail.com>
+Date:   Wed, 26 Aug 2020 12:00:19 -0400
+Message-ID: <CAOGqxeVL1Usx0g-zzg4qp8mCKAbf-XEY=OugUNAUCfCkyC2wgw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: Add support for Broadcom USB pin map driver
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 05:33:47PM +0200, Greg KH wrote:
-> On Wed, Aug 26, 2020 at 05:02:38PM +0200, Marek Szyprowski wrote:
-> > Hi Greg,
-> > 
-> > On 26.08.2020 15:43, Greg KH wrote:
-> > > The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
+On Tue, Aug 25, 2020 at 11:46 AM Rob Herring <robh@kernel.org> wrote:
+>
+> +Linus W
+>
+> On Tue, Aug 25, 2020 at 6:26 AM Alan Cooper <alcooperx@gmail.com> wrote:
+> >
+> > On Mon, Aug 24, 2020 at 7:30 PM Rob Herring <robh@kernel.org> wrote:
 > > >
-> > >    Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
+> > > On Wed, Aug 12, 2020 at 04:20:16PM -0400, Al Cooper wrote:
+> > > > Add DT bindings for the Broadcom USB pin map driver. This driver allows
+> > > > some USB input and output signals to be mapped to any GPIO instead
+> > > > of the normal dedicated pins to/from the XHCI controller.
 > > >
-> > > are available in the Git repository at:
-> > >
-> > >    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.9-rc3
-> > >
-> > > for you to fetch changes up to 23e26d0577535f5ffe4ff8ed6d06e009553c0bca:
-> > >
-> > >    usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures (2020-08-25 16:02:35 +0200)
-> > >
-> > > ----------------------------------------------------------------
-> > > USB fixes for 5.9-rc3
-> > >
-> > > Here are a small set of USB fixes for 5.9-rc3.
-> > >
-> > > Like most set of USB bugfixes, they include the usual:
-> > > 	- usb gadget driver fixes
-> > > 	- xhci driver fixes
-> > > 	- typec fixes
-> > > 	- new qurks and ids
-> > > 	- fixes for USB patches merged in 5.9-rc1
-> > >
-> > > Nothing huge, all of these have been in linux-next with no reported
-> > > issues:
-> > >
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > >
-> > > ----------------------------------------------------------------
-> > > Alan Stern (1):
-> > >        USB: yurex: Fix bad gfp argument
-> > >
-> > > Andy Shevchenko (1):
-> > >        usb: hcd: Fix use after free in usb_hcd_pci_remove()
-> > >
-> > > Badhri Jagan Sridharan (1):
-> > >        usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures
-> > >
-> > > Bastien Nocera (2):
-> > >        USB: Also match device drivers using the ->match vfunc
-> > >        USB: Fix device driver race
-> > >
-> > > Brooke Basile (2):
-> > >        USB: gadget: u_f: add overflow checks to VLA macros
-> > 
-> > Sorry, but the above patch breaks USB Ethernet Gadget operation. It also 
-> > didn't get the proper testing in linux-next (next-20200826 is the first 
-> > one with this patch).
-> > 
-> > This is how it explodes on Samsung Exynos (ARM 32bit) based board with 
-> > g_ether module loaded:
-> > 
-> > ------------[ cut here ]------------
-> > kernel BUG at mm/slub.c:4116!
-> 
-> Why is slub.c erroring?  How is this related to freeing memory?
+> > > Is this a driver or h/w block because bindings are for h/w blocks?
+> >
+> > This is a hardware block. I'll remove "driver" from the description.
+>
+> Another question, this kind of looks like a pin mux controller. Is
+> that not a fit for this? If not, why?
 
-I assume this is related to the size calculations in the VLA macros...
-nothing _looks_ wrong with that patch, but obviously something is. :)
-Hmmm
+This driver is not doing any pin-muxing of a physical pin on the chip.
+Instead it's using standard gpio's, through gpiolib, and propagating
+the gpio state for in-coming signals to a special register that feeds
+into a XHCI host controller register and it's propagating the state of
+out-going signals from the special register fed by a XHCI controller
+register to a gpio. Both directions are interrupt driven and
+continually mirroring the state between the XHCI host controller
+registers and the gpios. I don't see any pinmux/pinctrl driver doing
+this kind of thing.
 
--- 
-Kees Cook
+Thanks
+Al
+
+>
+> > > > Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> > > > ---
+> > > >  .../bindings/usb/brcm,usb-pinmap.yaml         | 63 +++++++++++++++++++
+> > > >  1 file changed, 63 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml b/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..19cf6ad36373
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+> > > > @@ -0,0 +1,63 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/usb/brcm,usb-pinmap.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Broadcom USB pin map Controller Device Tree Bindings
+> > > > +
+> > > > +maintainers:
+> > > > +  - Al Cooper <alcooperx@gmail.com>
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +      items:
+> > > > +          - const: brcm,usb-pinmap
+> > >
+> > > 2 space indentation please.
+> >
+> > Fixed.
+> >
+> > >
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  interrupts:
+> > > > +    maxItems: 1
+> > > > +    description: Must be defined if any out-gpios are specified.
+> > >
+> > > 'dependencies' can express this in schema.
+> >
+> > Okay.
+> >
+> > >
+> > > > +
+> > > > +  in-gpios:
+> > > > +    description: Array of one or more GPIO pins used for input signals.
+> > >
+> > > You need to define how many GPIOs are valid.
+> >
+> > I tried to avoid doing this because there is a possibility that future
+> > chips will have a few more signals added and the driver was written so
+> > new signals can be added entirely in device tree without any changes
+> > to the driver. If this is unacceptable, I can add the current max in
+> > and out valid gpios.
+>
+> A 'should be enough for a while' value is fine. The driver doesn't
+> have to have a max. I'd expect the binding to be updated for new SoCs
+> anyways.
+>
+> > >
+> > > > +
+> > > > +  in-names:
+> > > > +    description: Array of input signal names, one per gpio in in-gpios.
+> > >
+> > > No, this isn't how we name GPIOs. The part before '-gpios' is how.
+> >
+> > This is the meant to be a description of how each gpio is being used
+> > to help with error messages in the driver.
+> > What if I use "brcmstb,in-functions" instead?
+>
+> 'brcmstb' is not a vendor. But brcm,in-functions is fine.
+>
+> > > > +
+> > > > +  in-masks:
+> > > > +    description: Array of enable and mask pairs, one per gpio in-gpios.
+> > >
+> > > Needs a vendor prefix.
+> >
+> > I'll change it to "brcmstb,in-masks"
+> >
+> > >
+> > > > +
+> > > > +  out-gpios:
+> > > > +    description: Array of one or more GPIO pins used for output signals.
+> > > > +
+> > > > +  out-names:
+> > > > +    description: Array of output signal names, one per gpio in out-gpios.
+> > > > +
+> > > > +  out-masks:
+> > > > +    description: Array of enable, value, changed and clear masks, one
+> > > > +      per gpio in out-gpios.
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - reg
+> > > > +
+> > > > +additionalProperties: false
+> > > > +
+> > > > +examples:
+> > > > +  - |
+> > > > +    usb_pinmap: usb-pinmap@22000d0 {
+> > > > +        compatible = "brcm,usb-pinmap";
+> > > > +        reg = <0x22000d0 0x4>;
+> > > > +        in-gpios = <&gpio 18 0>, <&gpio 19 0>;
+> > > > +        in-names = "VBUS", "PWRFLT";
+> > > > +        in-masks = <0x8000 0x40000 0x10000 0x80000>;
+> > > > +        out-gpios = <&gpio 20 0>;
+> > > > +        out-names = "PWRON";
+> > > > +        out-masks = <0x20000 0x800000 0x400000 0x200000>;
+> > > > +        interrupts = <0x0 0xb2 0x4>;
+> > > > +    };
+> > > > +
+> > > > +...
+> > > > --
+> > > > 2.17.1
+> > > >
