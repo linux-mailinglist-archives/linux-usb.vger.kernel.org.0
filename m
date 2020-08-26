@@ -2,78 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 682D12535EB
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 19:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFF92535F0
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 19:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726894AbgHZRSs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 13:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
+        id S1726971AbgHZRUq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 13:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726790AbgHZRSn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 13:18:43 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9F3C061756
-        for <linux-usb@vger.kernel.org>; Wed, 26 Aug 2020 10:18:42 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id h19so3231045ljg.13
-        for <linux-usb@vger.kernel.org>; Wed, 26 Aug 2020 10:18:42 -0700 (PDT)
+        with ESMTP id S1725995AbgHZRUo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 13:20:44 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736B1C061574;
+        Wed, 26 Aug 2020 10:20:44 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id t23so2025818qto.3;
+        Wed, 26 Aug 2020 10:20:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2pT89N8VTc50vb4WZvr37iDU8cKlOdxTlcFrKtLW66U=;
-        b=cMOLov8uCC9JY8w6U13qumCS9ENiAGpNrGXqc146BmlR/vAukuVhgZfHIUqIeUkdg4
-         lLbw9ZtMP5viBD8sFKvrK3hno/r9xAlRjIECnyA5JcySvUvAJyflC5m773B/E/NUUD4+
-         w7bCHAb/+HOhXubK+D31xy7psk63Dj248+vR8=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wSED4ESvd7iAdE/O7jBMYhtVsvuSpxlXjFlIkcHc+zM=;
+        b=c3gUSVlDW5AcjSvdZVhlSt1dPojJYuyaw6hvXfSRDxI/PzBa7l/l20B7Vxg4LCukI4
+         0pURKybdgjCf5+OwBPA1uaHRRZSTF2zAgVrU+j4WIg94xvku1pGhJKSon32WxUWgP+0R
+         lJjWoVqlLsbR81J9dmyK5QJz8pyy+dj9L+vK2WHkozMYDyio8+L/C1WazoAqzSZt8vXK
+         gcp/bMLOvoCPQ+OcfNLnSDc1m9K9BIv+YLV6YuGGFmA9psovlKlgBps9HCQ98B/a5SCI
+         9yRizlesPEY5i2P8RijrCtGhnYuuyPBCrPQP3uQBA0Tz/1HBwl8gPs8UrBOKazwSypJZ
+         0F7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2pT89N8VTc50vb4WZvr37iDU8cKlOdxTlcFrKtLW66U=;
-        b=NDLaZq+b30KQ0CgfhnzDsbwKfemRHNMtmrs7yOnvzO6FKc83jqJXoTVjcrClnqOWnO
-         xCfrm3BzzMh3cONVnpvMXVEiJIPPv15G2IfGIB5cNB4NhNOoXQ3TS/HRHbVQ6rGth2SI
-         SHsUI4queJxizjFUiIwYVIKfp2m2katTzAG3IHpU0ctIN0wUEUrLp3oA4jWbAFcTTNG8
-         FsHks9WkRnin+1WRx/BX3Q0wD0uaDBqjFTZYsv4QIZPjb1tQC6Lp2RN/guFew7T7PFUV
-         VPH3QaCIv5fZdMByjjYpSeoDeEM7U3LiENO3/0SQ7e28/g+Q6RhW8ahlfCzxU2G672c1
-         6vmg==
-X-Gm-Message-State: AOAM532WHRlSJNz4ck+AGWB4xmRJjL5QXYlMV+HiSqTBGJ29smnHl5IH
-        lqEpcerCVYt88HDimQrrrGeRJ9QiQo7gPQ==
-X-Google-Smtp-Source: ABdhPJzL0ND+VtZIjD4xUDqLUKT3Z0N69w7PDsRxRMmO6tzu/U3/Fo5KNodGPLS7fGQN9kWwz8HmFA==
-X-Received: by 2002:a05:651c:1343:: with SMTP id j3mr7076923ljb.112.1598462320694;
-        Wed, 26 Aug 2020 10:18:40 -0700 (PDT)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id 20sm635110ljj.51.2020.08.26.10.18.39
-        for <linux-usb@vger.kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wSED4ESvd7iAdE/O7jBMYhtVsvuSpxlXjFlIkcHc+zM=;
+        b=tEGNd5q7KusKVVjgEJpVXtbBhmJMfeALj4CVk5lrBkdxMT4o9407P90bXStebAcDfJ
+         hbpP4fIypZsQjD+c8EUAd++GhxX7ndwniJdhzOA2AwDGw/PEUHjer9jXx/avLNK6GoiS
+         DA2E0PCPgnVsZ6WeW+NqqtsNFb4TuEyYSOHv52b7sugi4W2MVe6wmV9JKRmi3EULdvxB
+         n1n/PJklISF0L5WDIZJDKaeB5BmA0ONS3+ou/oNEgtgRfEcYJAb3f4QE9CcV7If9CFBO
+         bGg3qkT6cIM5d4JLMgvZDU2adK7jxuAX5CL3hYE3bkoDAMTmeg1ssBHGyBLui3gPe1XL
+         +VpA==
+X-Gm-Message-State: AOAM530KAyBAKb6nUKgLsu3ZMgMLVMvdGNzUfa92dOSRD6YGBsPuGIVi
+        w7qJ1a37mz+WYtp2RaMe26c=
+X-Google-Smtp-Source: ABdhPJzG8WHg8V2HrVwKceC5v/SufchJ1BjCTQXaSsVpduhD3FVXXV5jBbqbGxM/fegiME+/a/jpDQ==
+X-Received: by 2002:aed:2821:: with SMTP id r30mr14914331qtd.3.1598462442746;
+        Wed, 26 Aug 2020 10:20:42 -0700 (PDT)
+Received: from [192.168.1.181] (pool-173-75-208-99.phlapa.fios.verizon.net. [173.75.208.99])
+        by smtp.gmail.com with ESMTPSA id d8sm2432241qtn.70.2020.08.26.10.20.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Aug 2020 10:18:39 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id g6so3238816ljn.11
-        for <linux-usb@vger.kernel.org>; Wed, 26 Aug 2020 10:18:39 -0700 (PDT)
-X-Received: by 2002:a2e:2e04:: with SMTP id u4mr7260728lju.102.1598462319103;
- Wed, 26 Aug 2020 10:18:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200826134315.GA3882506@kroah.com>
-In-Reply-To: <20200826134315.GA3882506@kroah.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 26 Aug 2020 10:18:23 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiMMTpFxd9q7roL+L6dZb3JoQYCF0uP4+7RNHFHbfC29Q@mail.gmail.com>
-Message-ID: <CAHk-=wiMMTpFxd9q7roL+L6dZb3JoQYCF0uP4+7RNHFHbfC29Q@mail.gmail.com>
+        Wed, 26 Aug 2020 10:20:42 -0700 (PDT)
 Subject: Re: [GIT PULL] USB fixes for 5.9-rc3
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        USB <linux-usb@vger.kernel.org>,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Kees Cook <keescook@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+References: <20200826134315.GA3882506@kroah.com>
+ <CGME20200826150239eucas1p24c59716cc31edfeb2eece84d97936b93@eucas1p2.samsung.com>
+ <1425ab4f-ef7e-97d9-238f-0328ab51eb35@samsung.com>
+ <20200826153347.GB4187816@kroah.com>
+ <CAHp75VepkugjZ4pvdNgxzT4T83ewL1AFtSZZtVq6aL+7=sqskA@mail.gmail.com>
+ <de6aea2f-5f31-4391-0c36-8fd5fd63ab05@samsung.com>
+From:   Brooke Basile <brookebasile@gmail.com>
+Message-ID: <c8c7edb3-c9b9-58cb-ceb7-4b573b78a4f6@gmail.com>
+Date:   Wed, 26 Aug 2020 13:20:41 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+In-Reply-To: <de6aea2f-5f31-4391-0c36-8fd5fd63ab05@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 6:43 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> USB fixes for 5.9-rc3
+On 8/26/20 12:17 PM, Marek Szyprowski wrote:
+> Hi Andy,
+> 
+> On 26.08.2020 17:53, Andy Shevchenko wrote:
+>> On Wed, Aug 26, 2020 at 6:36 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>>> On Wed, Aug 26, 2020 at 05:02:38PM +0200, Marek Szyprowski wrote:
+>>>> On 26.08.2020 15:43, Greg KH wrote:
+>>>>
+>>>>> Brooke Basile (2):
+>>>>>          USB: gadget: u_f: add overflow checks to VLA macros
+>>>> Sorry, but the above patch breaks USB Ethernet Gadget operation. It also
+>>>> didn't get the proper testing in linux-next (next-20200826 is the first
+>>>> one with this patch).
+>>>>
+>>>> This is how it explodes on Samsung Exynos (ARM 32bit) based board with
+>>>> g_ether module loaded:
+>>> Odd, for a "normal" descriptor, the logic should have remained the same
+>>> as without this patch.
+>>> Brooke, any ideas?
+>> I have an idea.
+>>
+>> Does below fix this?
+> 
+> Yep, that's it. I've also moved offset assignment in the first part
+> after size_t size = array_size(n, sizeof(type));
+> 
+> Feel free to add:
+> 
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> 
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> 
+> Thanks!
+> 
+> Best regards
+> 
+Ah, I see.  My apologies, I don't know how I was able to miss something 
+like this when building/testing...
 
-I'm dropping this, since it seems to break things more than it fixes.
+Thank you for testing and reporting the issue.
 
-I see that the breakage is already figured out, but I'll just wait for
-the next fixes pull with the fix for the problem.
-
-                Linus
+Best,
+Brooke Basile
