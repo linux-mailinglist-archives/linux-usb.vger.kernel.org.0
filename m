@@ -2,158 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AA1252CCE
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 13:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE1E252CA3
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 13:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728799AbgHZLSJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 07:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728718AbgHZLQ7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 07:16:59 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5B4C061574;
-        Wed, 26 Aug 2020 04:16:58 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id o5so884204pgb.2;
-        Wed, 26 Aug 2020 04:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=9BLb5SG/442AGlteVEU+VMTqxtoAM2EGD3L4sUWx4Zo=;
-        b=RTM9eShaWBULpfiCRgbWc2dfnQ8mzP3UIe6PD9REcR2jFelRuQgY09d5O441gFQ6VO
-         D9oO87xWRZNIVvhOanS8SIn4qAUSIE5hSC0QV9OZr/R1PGgA70tXR1XXT2yxGoDCCVh8
-         k9DcqEJCygohr8Tp+SAGy4k6aq/7yODQ+f3HKMYSPE9HNJNCUURn96Zzn/ZEuuJ+HdwN
-         lFKP+ic/cFUz/eJIsM3GX3eDZ6Lb2LRk/2cydMrII6CYeh5fuBkansErTfOtBjKTm7lo
-         eHN8vdd7HPcLirjZpABpPEhp8zbHXq9ZFgG/ZyN+IW9LrDyM1EGCJXO685nidCgwtov2
-         zTfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=9BLb5SG/442AGlteVEU+VMTqxtoAM2EGD3L4sUWx4Zo=;
-        b=m7jtrtcFNJ+vlZcWgIBV8DDc5KY1iKAIWOtfazRQhrf47mCwnMZEmGLpbin1Yl6pwu
-         Pf26IQbjssEQs+UMA40pGXDb5dsJR3jQh1UVpNRS0IdwIQlHEx8tZIk5cXuSjUh49A+6
-         UJ+O3iyD1Jdw5bd0JKGYWSJcVwLRxJ4aIChuC64dzjo9++Hy0tYLlc7FIQ9H02OD0TAo
-         SmFkPtWNSAM9ybxcyALOsXHGpY1+DBlqoXmBN5g9bzZKNLdOy9jLhdOaiCiecc8X732X
-         WpvlK+qIec+g99ofUcdH2VYsDBPwLUDU+g00pT4H6pG7oOKU8PP6EWzHKVKTId0inPMZ
-         95iA==
-X-Gm-Message-State: AOAM531yh22QgnLngV0NjJAy7PlTIcCqkreqLkcbgRWwsakzOF8I7Ap5
-        dsSvVdbcaC8HRLDSDpvSLzDYnA7lVXzYEw==
-X-Google-Smtp-Source: ABdhPJwxUqjX5J9QraoEj7Vzj2jbbfcOOIZC6fx+JhfutgFaUIROtDcRQOSSk3ooISjmDYHh8woMpA==
-X-Received: by 2002:a63:6f02:: with SMTP id k2mr10069642pgc.191.1598440617709;
-        Wed, 26 Aug 2020 04:16:57 -0700 (PDT)
-Received: from localhost.localdomain ([2402:7500:464:1646:7076:aae7:15f:eca9])
-        by smtp.gmail.com with ESMTPSA id g129sm2628872pfb.33.2020.08.26.04.16.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 26 Aug 2020 04:16:57 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com
-Cc:     cy_huang@richtek.com, gene_chen@richtek.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] usb typec: mt6360: Add MT6360 Type-C DT binding documentation
-Date:   Wed, 26 Aug 2020 19:16:42 +0800
-Message-Id: <1598440602-8648-2-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1598440602-8648-1-git-send-email-u0084500@gmail.com>
-References: <1598440602-8648-1-git-send-email-u0084500@gmail.com>
+        id S1728960AbgHZLlJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 07:41:09 -0400
+Received: from mga07.intel.com ([134.134.136.100]:22746 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729077AbgHZLlD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Aug 2020 07:41:03 -0400
+IronPort-SDR: Zw3xv8ZBUZQT6/u9k2D1ZkHAfIxUkWhStUSDtCjJrJ4056zsI0V/nd/EV3zsw5B2mNzrCv9fOq
+ oBfoU1K2EV/w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="220534185"
+X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
+   d="scan'208";a="220534185"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 04:40:56 -0700
+IronPort-SDR: F65wMn1j39HEqIHOulahc+IHP0DvRXuZwf66EJImcRrERW9ExclF53Av3ZwMRIVDS4b93GH50G
+ 1OxFwACoFzRg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
+   d="scan'208";a="403038793"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 26 Aug 2020 04:40:53 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 26 Aug 2020 14:40:52 +0300
+Date:   Wed, 26 Aug 2020 14:40:52 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Gil Fine <gil.fine@intel.com>, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH 9/9] thunderbolt: Add debugfs interface
+Message-ID: <20200826114052.GK1375436@lahna.fi.intel.com>
+References: <20200826110736.55186-1-mika.westerberg@linux.intel.com>
+ <20200826110736.55186-10-mika.westerberg@linux.intel.com>
+ <20200826112246.GA3760307@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200826112246.GA3760307@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+Hi Greg,
 
-Add a devicetree binding documentation for the MT6360 Type-C driver.
+On Wed, Aug 26, 2020 at 01:22:46PM +0200, Greg Kroah-Hartman wrote:
+> > +#define DEBUGFS_ATTR(__space, __write)					\
+> > +static int __space ## _open(struct inode *inode, struct file *file)	\
+> > +{									\
+> > +	return single_open(file, __space ## _show, inode->i_private);	\
+> > +}									\
+> > +									\
+> > +static const struct file_operations __space ## _fops = {		\
+> > +	.owner = THIS_MODULE,						\
+> > +	.open = __space ## _open,					\
+> > +	.release = single_release,					\
+> > +	.read  = seq_read,						\
+> > +	.write = __write,						\
+> > +	.llseek = seq_lseek,						\
+> > +}
+> > +
+> > +#define DEBUGFS_ATTR_RO(__space)					\
+> > +	DEBUGFS_ATTR(__space, NULL)
+> > +
+> > +#define DEBUGFS_ATTR_RW(__space)					\
+> > +	DEBUGFS_ATTR(__space, __space ## _write)
+> 
+> We do have DEFINE_SIMPLE_ATTRIBUTE() and DEFINE_DEBUGFS_ATTRIBUTE, do
+> those work here instead of your custom macro?
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
- .../bindings/usb/mediatek,mt6360-tcpc.yaml         | 73 ++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+Unfortunately they do not work as they want u64 for the write side but
+we actually need to parse (offset, value) pairs here when write is
+enabled.
 
-diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-new file mode 100644
-index 00000000..9e8ab0d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/usb/mediatek,mt6360-tcpc.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Mediatek MT6360 Type-C Port Switch and Power Delivery controller DT bindings
-+
-+maintainers:
-+  - ChiYuan Huang <cy_huang@richtek.com>
-+
-+description: |
-+  Mediatek MT6360 is a multi-functional device. It integrates charger, ADC, flash, RGB indicators,
-+  regulators (BUCKs/LDOs), and TypeC Port Switch with Power Delivery controller.
-+  This document only describes MT6360 Type-C Port Switch and Power Delivery controller.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt6360-tcpc
-+
-+  interrupts-extended:
-+    maxItems: 1
-+
-+  interrupt-names:
-+    items:
-+      - const: PD_IRQB
-+
-+patternProperties:
-+  "connector":
-+    type: object
-+    $ref: ../connector/usb-connector.yaml#
-+    description:
-+      Properties for usb c connector.
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - interrupts-extended
-+  - interrupt-names
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/usb/pd.h>
-+    i2c0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        mt6360@34 {
-+            compatible = "mediatek,mt6360";
-+            reg = <0x34>;
-+
-+            tcpc {
-+                compatible = "mediatek,mt6360-tcpc";
-+                interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
-+                interrupt-names = "PD_IRQB";
-+
-+                connector {
-+                        compatible = "usb-c-connector";
-+                        label = "USB-C";
-+                        data-role = "dual";
-+                        power-role = "dual";
-+                        try-power-role = "sink";
-+                        source-pdos = <PDO_FIXED(5000, 1000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-+                        sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-+                        op-sink-microwatt = <10000000>;
-+                };
-+            };
-+        };
-+    };
-+...
--- 
-2.7.4
+> Other than that, this series looks fine to me:
+> 
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+Thanks!
