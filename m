@@ -2,152 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55169252E03
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 14:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B444E252EC7
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Aug 2020 14:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729679AbgHZMIM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 08:08:12 -0400
-Received: from blockout.pre-sense.de ([213.238.39.74]:51571 "EHLO
-        mail.pre-sense.de" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729426AbgHZMB5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 08:01:57 -0400
-X-Greylist: delayed 528 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Aug 2020 08:01:56 EDT
-Received: from smtp.pre-sense.de (tetris_b.pre-sense.de [10.9.0.76])
-        by mail.pre-sense.de (Postfix) with ESMTP id 2E7135E558;
-        Wed, 26 Aug 2020 13:53:04 +0200 (CEST)
-Received: from atlan.none (unknown [212.12.60.67])
-        by smtp.pre-sense.de (Postfix) with ESMTPS id 08C38164B;
-        Wed, 26 Aug 2020 13:52:12 +0200 (CEST)
-Subject: Re: Ext. HDDs not working under Linux via USB 3.0 but under Windows
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-References: <20200523154817.GA7091@rowland.harvard.edu>
- <34933b01-e4b0-10da-c935-9e6a9a6ae427@pre-sense.de>
- <20200523203349.GA12853@rowland.harvard.edu>
- <5bd5e8be-f8a9-9456-cced-c2bc75455556@pre-sense.de>
- <20200617163734.GC11314@rowland.harvard.edu>
- <763037ac-d8fa-8697-7f75-c0bf958b4308@pre-sense.de>
- <ce4d0606-b398-d23b-1a5f-25611eb4338f@pre-sense.de>
- <364ac09a-a877-c04e-5f2f-d5a559406590@pre-sense.de>
- <20200619150527.GA49731@rowland.harvard.edu>
- <c6fe1288-08a1-4d0a-37f5-c1ca44d46c25@pre-sense.de>
- <20200825184504.GC375466@rowland.harvard.edu>
-From:   =?UTF-8?Q?Till_D=c3=b6rges?= <doerges@pre-sense.de>
-Autocrypt: addr=doerges@pre-sense.de; prefer-encrypt=mutual; keydata=
- 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
-Organization: PRESENSE Technologies GmbH
-Message-ID: <0c7a4975-596e-9c5a-062f-df77e8ebe969@pre-sense.de>
-Date:   Wed, 26 Aug 2020 13:51:58 +0200
-User-Agent: Thunderbird
+        id S1729775AbgHZMhk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 08:37:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:43391 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729804AbgHZMhg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 08:37:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1598445453;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TvR8v0su4OMzMVSB/yixZYEsywfRZmxxYBu5jZ0Of3I=;
+        b=TRkDythY8Vs+hLC9jwGLVUYeZwJwIUpw1IR2w/SGMQeksrVl70LdBKS9C7klqpqDD2ILQR
+        1xCbk6u32tFtCmtj8uBW50UEH83k36vgf6Jb9viMulOrKj+TvHuDuyfrdfhfroRyTt0wGY
+        4LdkLACuhWaqCk8o0W0OP4HxV7WLOzk=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-162-ClHa59WUM3q50_CQK0quRg-1; Wed, 26 Aug 2020 08:37:31 -0400
+X-MC-Unique: ClHa59WUM3q50_CQK0quRg-1
+Received: by mail-ed1-f71.google.com with SMTP id c3so619790edm.7
+        for <linux-usb@vger.kernel.org>; Wed, 26 Aug 2020 05:37:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TvR8v0su4OMzMVSB/yixZYEsywfRZmxxYBu5jZ0Of3I=;
+        b=S2ydpYaxTt2XOQdlISCa+83It2ioSujoatMJeOCThwl61vRReyn2bvsjK9kdqVi6/I
+         33Wuy9sRZ2IbrKyOCYbVmkaq4WJryjnu4+LMP7PGlHbnmOm1O4+HV02m77GsJ0cvp4/U
+         eV7AYM5kuk7htgKA/tcZTfe2aYPpHVl4rB61AFUgx6RuZvSZcmWl+PY0KAR+DCgKCu8z
+         ZaSYxIB0uUTb6WAJwqi11Sf+OrTyNg6zkLvVpaJrbdJcBY1RHSzEdHZKKusuJgANsx8Q
+         hr9ixfn9nh8yiPR+Yu+lpD8QE7ZX3N3VEcrVRZ1jp6biZF/sYqVCgL5QWbOcstLfvHQS
+         JmEQ==
+X-Gm-Message-State: AOAM531MdZDaJKml7LdGulBI169kGdcOf5Dn8IvUzba7OOiWAl6D59al
+        OAfCjeZq6EacFrnZz8OSev+QTsMtFtuxOaiONmQEgDM6SoWjzTf271QdGv5mxyiiblOVsgfkVD8
+        cjOXC7VdpQ7RZCfQfD62E
+X-Received: by 2002:a17:906:560d:: with SMTP id f13mr15707518ejq.102.1598445450443;
+        Wed, 26 Aug 2020 05:37:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxDjgyyZIy2FVJ+/HUqr3oyGBfPnoSEsacYGWUNqbSWtk7NIoX7BiufoWZ48gd/JdiU+a/Iww==
+X-Received: by 2002:a17:906:560d:: with SMTP id f13mr15707486ejq.102.1598445450073;
+        Wed, 26 Aug 2020 05:37:30 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id d9sm1937309edt.20.2020.08.26.05.37.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Aug 2020 05:37:29 -0700 (PDT)
+Subject: Re: [PATCH 2/4] usb: typec: Add
+ typec_port_register_altmodes_from_fwnode()
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+References: <20200714113617.10470-1-hdegoede@redhat.com>
+ <20200714113617.10470-3-hdegoede@redhat.com>
+ <20200727130528.GB883641@kuha.fi.intel.com>
+ <469f369a-73f4-c348-b9ee-1662956f45be@redhat.com>
+ <20200811143833.GC627773@kuha.fi.intel.com>
+ <6c223f20-cf63-392e-f694-869cb231c46d@redhat.com>
+ <20200812124955.GB1169992@kuha.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <38f09a2a-4c6c-69b0-a61d-a67d2dc79546@redhat.com>
+Date:   Wed, 26 Aug 2020 14:37:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200825184504.GC375466@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200812124955.GB1169992@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am 25.08.20 um 20:45 schrieb Alan Stern:
-> On Fri, Jun 19, 2020 at 08:01:57PM +0200, Till Dörges wrote:
->> Am 19.06.20 um 17:05 schrieb Alan Stern:
+Hi,
+
+On 8/12/20 2:49 PM, Heikki Krogerus wrote:
+> On Wed, Aug 12, 2020 at 10:36:32AM +0200, Hans de Goede wrote:
+>> Hi,
 >>
->>> Can you build and test a kernel with the patch below, to make sure it does 
->>> what you want?
+>> On 8/11/20 4:38 PM, Heikki Krogerus wrote:
+>>> Hi,
+>>>
+>>>>>> +void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
+>>>>>> +	const struct typec_altmode_ops *ops, void *drvdata,
+>>>>>> +	struct typec_altmode **altmodes, size_t n,
+>>>>>> +	struct fwnode_handle *fwnode)
+>>>>>> +{
+>>>>>> +	struct fwnode_handle *altmodes_node, *child;
+>>>>>> +	struct typec_altmode_desc desc;
+>>>>>> +	struct typec_altmode *alt;
+>>>>>> +	size_t index = 0;
+>>>>>> +	u32 svid, vdo;
+>>>>>> +	int ret;
+>>>>>> +
+>>>>>> +	altmodes_node = fwnode_get_named_child_node(fwnode, "altmodes");
+>>>>>> +	if (!altmodes_node)
+>>>>>> +		return;
+>>>>>
+>>>>> Do we need that? Why not just make the sub-nodes describing the
+>>>>> alternate modes direct children of the connector node instead of
+>>>>> grouping them under a special sub-node?
+>>>>
+>>>> If you envision how this will look in e.g. DTS sources then I think
+>>>> you will see that this grouping keeps the DTS source code more
+>>>> readable. Grouping things together like this is somewhat normal in
+>>>> devicetree files. E.g. PMIC's or other regulator providers typical
+>>>> have a "regulators" node grouping all their regulators; and also the OF
+>>>> graph bindings which are used in the USB-connector node start with a
+>>>> "ports" parent / grouping node.
+>>>>
+>>>>> If the child node of the connector has device properties "svid" and
+>>>>> "vdo" then it is an alt mode that the connector supports, and it can't
+>>>>> be anything else, no?
+>>>>
+>>>> If you want to get rid of the altmodes parent/grouping node, then the
+>>>> usual way to do this would be to add a compatible string to the nodes,
+>>>> rather then check for the existence of some properties.
+>>>
+>>> I'm looking at this from ACPI PoW. We do not have compatible string in
+>>> ACPI (and in case you are wondering, the _HID PRP0001 is not a
+>>> reliable solution for that).
 >>
->> I was afraid you might say that. ;-)
+>> Note my main use-case for this is the ACPI case too, remember the
+>> infamous drivers/platform/x86/intel_cht_int33fe_typec.c that is my
+>> main consumer for this patch. Although there the info is lacking in ACPI
+>> so I need to inject it with c-code.
 >>
->> I don't have a kernel dev environment handy (that was the main reason why I was happy
->> with your offer of writing the patch).
+>>> If you wish to group the altmodes under a subnode, then that's fine, but
+>>> the "altmodes" node will need to be optional, just like the "ports"
+>>> OF-graph node is optional. So we need to be able to support systems
+>>> where the alternate mode subnodes are directly under the connector as
+>>> well.
 >>
->> I'll try setting one up, but it may take a moment.
+>> So for the ports case, AFAIK not having a ports subnode to group them
+>> is only used in the case there are no other type of subnodes.
+>>
+>> With the existing usb-connector devicetree-bindings we will have both
+>> ports subnodes and altmode subnodes. The usb-connector devicetree-bindings
+>> already specify that the port subnodes *must* be grouped together under
+>> a single ports subnode (for usb-connector nodes).
+>>
+>> So it seems logical and much cleaner to me to also group the altmodes
+>> together under an altmodes subnode. This also solves the problem of
+>> having to due heuristics to tell different kinds of subnodes apart.
+>>
+>> Question: why do you write: "we need to be able to support systems
+>> where the alternate mode subnodes are directly under the connector as
+>> well" are there already systems out there (or on their way) which
+>> contain ACPI table which contain a fwnode adhering to the usb-connector
+>> bindings + having subnodes which set a svid + vdo ?
 > 
-> It has been a couple of months.  Did you make any progress on this?
+> There are indeed platforms on their way, but I'll see if I can still
+> influence what goes into the ACPI tables of those platforms.
+> 
+>> Because unless such systems already exist I don't see why we need to
+>> be able to support them ?  New systems can use whatever scheme we
+>> can come-up with and unless existing systems already have what we
+>> need, except for the altmodes grouping node, then we will need some
+>> translating code which generates the expected swnodes anyways and
+>> then the translator can easily inject the grouping node.
+>>
+>> So I do not see why we would " need to be able to support systems
+>> where the alternate mode subnodes are directly under the connector as
+>> well" ?
+>>
+>> If you insist I can make the altmodes node optional and simply
+>> skip any child nodes which do not have both a svid and a vdo
+>> property, but having the subnode (and then logging an error on
+>> missing svid or vdo props) seems cleaner to me.
+> 
+> I'm trying to get the way the USB Type-C connectors are described
+> in ACPI (including the alternate modes) documented somewhere. I think
+> I already mentioned that to you already. There is now a discussion
+> with our Windows folks how to move forward with that. In any case,
+> additional nodes like that "altmodes" node are really problematic in
+> Windows because of way they handle the nodes, and to be honest, I
+> don't see any way I could convince those guys to accept it.
+> 
+> But all that is really not your problem. I have now a feeling that the
+> way we will end up describing the alternate modes in ACPI will not be
+> compatible with DT :-(. So I guess we can just go ahead with this, and
+> then add support for ACPI later?
 
+So since you wrote "So I guess we can just go ahead with this" O was
+wondering what the next steps are for getting this series (minus the
+DT-binding patch) upstream ?
 
-Thanks for the reminder and sorry for the delay.
+Regards,
 
+Hans
 
-I just tested your patch and it works like a charm.
-
-
-Testing was performed on:
-
---- snip ---
-user@box:~> lsb-release -d
-Description:    openSUSE Leap 15.1
-
-user@box:~> uname -a
-Linux box.none 4.12.14-lp151.28.59-default #1 SMP Wed Aug 5 10:58:34 UTC 2020
-(337e42e) x86_64 x86_64 x86_64 GNU/Linux
---- snip ---
-
-
-against the Kernel distributed by openSUSE:
-
---- snip ---
-user@box:~> rpm -q kernel-source
-kernel-source-4.12.14-lp151.28.59.1.noarch
---- snip ---
-
-
-The patch applied and after loading the new uas.ko the HDDs which didn't work before
-worked just fine.
-
-
-I understand the openSUSE Leap Kernel is somewhat different from Kernel HEAD but I'd
-assume that for the purpose of this test these differences are acceptable.
-
-
-Is there anything else I can do to help?
-
-
-Thanks again and regards -- Till
--- 
-Dipl.-Inform. Till Dörges                  doerges@pre-sense.de
-PRESENSE Technologies GmbH             Nagelsweg 41, D-20097 HH
-Geschäftsführer/Managing Directors       AG Hamburg, HRB 107844
-Till Dörges, Jürgen Sander               USt-IdNr.: DE263765024
