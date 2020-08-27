@@ -2,164 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7140225428C
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 11:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC51254305
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 12:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728273AbgH0Jg5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 05:36:57 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:56550 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726882AbgH0Jgz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 05:36:55 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 07R9anEk086876;
-        Thu, 27 Aug 2020 04:36:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1598521009;
-        bh=gq9PsmCr2b2hlhGa81Jfhi1VEMeq5fSGg/TFRp1g5+s=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=wTHDnESgv8vwzPcqsnOtcCasnTKXCPJAI3NJcewfw9MGKGMOlRbbxG2O6LP/eaG72
-         VkbzNEdZFV3qhtZCkBM9D+XH2n90HzW+oeNQr5vNhqmG9JrIpQCzlUlaZojzjHdOw7
-         HVrqw9J/VShiR6RnYhV0t/EWNGpnev0rcp0DMjQU=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 07R9an7A111323
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 27 Aug 2020 04:36:49 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 27
- Aug 2020 04:36:49 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 27 Aug 2020 04:36:48 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07R9ak6O018513;
-        Thu, 27 Aug 2020 04:36:47 -0500
-Subject: Re: [PATCH 3/3] usb: cdns3: Enable workaround for USB2.0 PHY Rx
- compliance test PHY lockup
-To:     Peter Chen <peter.chen@nxp.com>
-CC:     Pawel Laszczak <pawell@cadence.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        Rahul Kumar <kurahul@cadence.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20200825120059.12436-1-rogerq@ti.com>
- <20200825120059.12436-4-rogerq@ti.com> <20200826031948.GA7646@b29397-desktop>
- <DM6PR07MB5529A43AFDEB25993595DB59DD540@DM6PR07MB5529.namprd07.prod.outlook.com>
- <20200826071504.GA19661@b29397-desktop>
- <DM6PR07MB5529EB2FB7E3380321191B44DD540@DM6PR07MB5529.namprd07.prod.outlook.com>
- <AM7PR04MB71576DF6C03387C7628DBE3A8B540@AM7PR04MB7157.eurprd04.prod.outlook.com>
- <ab38721a-ef48-c6a7-aa33-3085ca7b8852@ti.com>
- <20200827002339.GA17559@b29397-desktop>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <b083883d-b8c3-ee16-6b02-8987cade17ed@ti.com>
-Date:   Thu, 27 Aug 2020 12:36:46 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728545AbgH0KBA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 06:01:00 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:15506 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726157AbgH0KA4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Aug 2020 06:00:56 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1598522456; h=Date: Message-Id: Cc: To: References:
+ In-Reply-To: From: Subject: Content-Transfer-Encoding: MIME-Version:
+ Content-Type: Sender; bh=g0YFy2eE4lE9AZIT/otbyOAVrUNfiz3bBfsoL1KFWMg=;
+ b=lOH6fqEugmTTkRtzLjirNxsh2cnQ4+7dk+bA1aWzzWRO0fDyxIrFTIiWBp8BEYQfYjaVdHXE
+ U6lyxKE8KDIaHrCBV08XQIwnwqCJgSn5OfD6oVDRpGkFLnmVRIwcC2k8gX5eY36hWQhSta6/
+ iSbSx4YSNzNm71MkYNnVWWc3kn0=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 5f4784281d69e438cb14ff34 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 27 Aug 2020 10:00:08
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3FF13C433B1; Thu, 27 Aug 2020 10:00:06 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=0.5 required=2.0 tests=ALL_TRUSTED,MISSING_DATE,
+        MISSING_MID,SPF_NONE autolearn=no autolearn_force=no version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 328F9C433CA;
+        Thu, 27 Aug 2020 10:00:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 328F9C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20200827002339.GA17559@b29397-desktop>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Subject: Re: [PATCH v2] mwifiex: don't call del_timer_sync() on uninitialized
+ timer
+From:   Kalle Valo <kvalo@codeaurora.org>
+In-Reply-To: <20200821082720.7716-1-penguin-kernel@I-love.SAKURA.ne.jp>
+References: <20200821082720.7716-1-penguin-kernel@I-love.SAKURA.ne.jp>
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     Ganapathi Bhat <ganapathi.bhat@nxp.com>,
+        Brian Norris <briannorris@chromium.org>, amitkarwar@gmail.com,
+        andreyknvl@google.com, davem@davemloft.net, dvyukov@google.com,
+        huxinming820@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, nishants@marvell.com,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+373e6719b49912399d21@syzkaller.appspotmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        syzbot <syzbot+dc4127f950da51639216@syzkaller.appspotmail.com>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.5.2
+Message-Id: <20200827100007.3FF13C433B1@smtp.codeaurora.org>
+Date:   Thu, 27 Aug 2020 10:00:06 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> wrote:
 
-
-On 27/08/2020 03:24, Peter Chen wrote:
-> On 20-08-26 15:49:57, Roger Quadros wrote:
->> Peter,
->>
->> On 26/08/2020 11:07, Peter Chen wrote:
->>>>
->>>>
->>>>>
->>>>> On 20-08-26 04:04:01, Pawel Laszczak wrote:
->>>>>>> On 20-08-25 15:00:59, Roger Quadros wrote:
->>>>>>>> From: Pawel Laszczak <pawell@cadence.com>
->>>>>>>>
->>>>>>>> USB2.0 PHY hangs in Rx Compliance test when the incoming packet
->>>>>>>> amplitude is varied below and above the Squelch Level of Receiver
->>>>>>>> during the active packet multiple times.
->>>>>>>>
->>>>>>>> Version 1 of the controller allows PHY to be reset when RX fail
->>>>>>>> condition is detected to work around the above issue. This feature
->>>>>>>> is disabled by default and needs to be enabled using a bit from
->>>>>>>> the newly added PHYRST_CFG register. This patch enables the workaround.
->>>>>>>>
->>>>>>>> As there is no way to distinguish between the controller version
->>>>>>>> before the device controller is started we need to rely on a DT
->>>>>>>> property to decide when to apply the workaround.
->>>>>>>
->>>>>>> Pawel, it could know the controller version at cdns3_gadget_start,
->>>>>>> but the controller starts when it tries to bind gadget driver, at
->>>>>>> that time, it has already known the controller version.
->>>>>>>
->>>>>>> For me, the device controller starts is using USB_CONF.DEVEN (Device
->>>>>>> Enable) through usb_gadget_connect, I am not sure if it is the same
->>>>>>> with yours.
->>>>>>>
->>>>>>
->>>>>> Yes in device mode driver knows controller version but this
->>>>>> workaround Must be enabled also in host mode. In host mode the
->>>>>> controller doesn't have access to device registers. The controller
->>>>>> version is placed in device register.
->>>>>>
->>>>>
->>>>> You may suggest your design team adding CHIP_VER register at global
->>>>> register region, it will easy the software engineer life.
->>>>>
->>>> >From what I read, this register is only enabling USB2 PHY reset
->>>>> software control, it needs for all chips with rev 0x0002450D, and the
->>>>> place you current change is only for 0x0002450D, right?
->>>>
->>>> Even I could say that this workaround should be enabled only for Specific USB2
->>>> PHY  (only 0x0002450D)
->>>>
->>>> This bit should not have any impact for Cadence PHY but it can has Impact for third
->>>> party PHYs.
->>>>
->>>
->>> So, it is related to specific PHY, but enable this specific PHY reset bit is at controller region, why don't
->>> put this enable bit at PHY region?
->>
->> I think this is related to Controller + PHY combination.
->> The fix for the issue is via a bit in the controller, so it needs to be managed by the
->> controller driver.
->>
->>>
->>> So, you use controller's device property to know this specific PHY, can controller know this specific
->>> PHY dynamically?
->>
->> Still the PHY will have to tell the controller the enable that bit. How to do that?
->>
->> Adding a dt-property that vendors can used was the simplest option.
->>
+> syzbot is reporting that del_timer_sync() is called from
+> mwifiex_usb_cleanup_tx_aggr() from mwifiex_unregister_dev() without
+> checking timer_setup() from mwifiex_usb_tx_init() was called [1].
 > 
-> Ok, does all controllers with ver 0x0002450D need this fix? I just think
-> if we introduce a flag stands for ver 0x0002450D in case this ver has
-> other issues in future or just using phy reset enable property?
+> Ganapathi Bhat proposed a possibly cleaner fix, but it seems that
+> that fix was forgotten [2].
 > 
-> Pawel & Roger, what's your opinion?
+> "grep -FrB1 'del_timer' drivers/ | grep -FA1 '.function)'" says that
+> currently there are 28 locations which call del_timer[_sync]() only if
+> that timer's function field was initialized (because timer_setup() sets
+> that timer's function field). Therefore, let's use same approach here.
 > 
-I think it is best to keep the flags specific to the issue rather than a one flag for
-all issues with a specific version. This way you can re-use the flag irrespective
-of IP version.
+> [1] https://syzkaller.appspot.com/bug?id=26525f643f454dd7be0078423e3cdb0d57744959
+> [2] https://lkml.kernel.org/r/CA+ASDXMHt2gq9Hy+iP_BYkWXsSreWdp3_bAfMkNcuqJ3K+-jbQ@mail.gmail.com
+> 
+> Reported-by: syzbot <syzbot+dc4127f950da51639216@syzkaller.appspotmail.com>
+> Cc: Ganapathi Bhat <ganapathi.bhat@nxp.com>
+> Cc: Brian Norris <briannorris@chromium.org>
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Reviewed-by: Brian Norris <briannorris@chromium.org>
+> Acked-by: Ganapathi Bhat <ganapathi.bhat@nxp.com>
 
-But best case is that Cadence put a IP revision register in common area as you
-have previously suggested so driver can automatically apply quirks to specific
-versions.
+Patch applied to wireless-drivers-next.git, thanks.
 
-cheers,
--roger
+621a3a8b1c0e mwifiex: don't call del_timer_sync() on uninitialized timer
+
 -- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+https://patchwork.kernel.org/patch/11728607/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
