@@ -2,264 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 388AE254835
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 17:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 867672547F3
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729008AbgH0MJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 08:09:13 -0400
-Received: from esa2.mentor.iphmx.com ([68.232.141.98]:4393 "EHLO
-        esa2.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728964AbgH0MHq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 08:07:46 -0400
-IronPort-SDR: lZrENF98HkO7lgSHgxOU5bs67FNWYT7XnUvz3YZceUd4qL2JR/nzW4uNCwFGXhkJucsie98nas
- MIsnFROOBQkpZhkE2zF7OGixRrhAbLJYSY/QivAy7nDjFfGp5GJzxvOobhNccESst9i4/oV+wf
- +AKaDupO8kyjPqZBm6aTt3DKu0o/pbbqiYjuz4A52LufKMX/5KgYxtcbcc/fgO8vgvlernCTzu
- 4R1fpodiBl9GUJDYGp7uMBvgd0+f/DLNWXYhgked/oht7xWR6HW1L/ZzTOzo6UthfG9ZK9SHav
- 0dw=
-X-IronPort-AV: E=Sophos;i="5.76,359,1592899200"; 
-   d="scan'208";a="52331554"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa2.mentor.iphmx.com with ESMTP; 27 Aug 2020 04:06:45 -0800
-IronPort-SDR: 8VB2H+hJ/+U8lqR67sLBmUJ/+z+Qwbylgkedv2al+v2XOSu4h0w3bSdbrI+bmPeAij+7jQD9wS
- t5TMIn4sN+UQeIV3QTfw/Em+JiccVrtY03SP4XN0FyIe492zKnsl7okA7FoiD25gwQOiBekLQ0
- Xrgbfu9hu4OXhQRVWZlPAhwOFTvX+HFd0s4SzU8fHFF076Dy5pkpU/diaQENp2de/p/PfvFkPe
- wxhgLwyZvAzEGDHmM070yIQo1HZ5H9SlFkXNwTHsmUSjwVs4IBBScgqmZ8z695HKTlf3+zdFkb
- 72o=
-Subject: Re: PROBLEM: Long Workqueue delays V2
-From:   Jim Baxter <jim_baxter@mentor.com>
-To:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-block@vger.kernel.org>
-References: <625615f2-3a6b-3136-35f9-2f2fb3c110cf@mentor.com>
- <066753ec-eddc-d7f6-5cc8-fe282baba6ec@mentor.com>
-CC:     <linux-usb@vger.kernel.org>,
-        "Frkuska, Joshua" <Joshua_Frkuska@mentor.com>,
-        "Resch Carsten (CM/ESO6)" <Carsten.Resch@de.bosch.com>,
-        "Rosca, Eugeniu (ADITG/ESB)" <erosca@de.adit-jv.com>,
-        "Craske, Mark" <Mark_Craske@mentor.com>,
-        "Brown, Michael" <michael_brown@mentor.com>
-Message-ID: <bf3d7f89-e652-a26b-bb27-c6dbef08e28c@mentor.com>
-Date:   Thu, 27 Aug 2020 13:06:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726946AbgH0NHG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 09:07:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47838 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726335AbgH0NGP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Aug 2020 09:06:15 -0400
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9F8272177B;
+        Thu, 27 Aug 2020 13:06:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598533574;
+        bh=CsyBLCeNf0dkNDeBsjaGXYEf31dJgW32YFFFbCsA2wc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=wcR+WVOwPjKQ+JXSlX6qCnAnfdgQg94Q/pdSgb/kq8qkB3owraYDTO3MMspsU1TSf
+         aUxr2eeIPammKlI/zd/u0B4BGQL1PyBJRLhfE7uH6fEsxc8aMlgKHecUE1SN84Ac0k
+         NRntBhmq1wUNDUysLXdIV/1V6+uNOCeEc1eFmWZo=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhenwenjin@gmail.com, sernia.zhou@foxmail.com,
+        yanfei.li@ingenic.com, rick.tyliu@ingenic.com,
+        aric.pzqi@ingenic.com, dongsheng.qiu@ingenic.com
+Subject: Re: [PATCH 1/1] USB: PHY: JZ4770: Fix static checker warning.
+In-Reply-To: <20200825081654.18186-2-zhouyanjie@wanyeetech.com>
+References: <20200825081654.18186-1-zhouyanjie@wanyeetech.com>
+ <20200825081654.18186-2-zhouyanjie@wanyeetech.com>
+Date:   Thu, 27 Aug 2020 16:06:07 +0300
+Message-ID: <87mu2gi6gw.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <066753ec-eddc-d7f6-5cc8-fe282baba6ec@mentor.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [137.202.0.90]
-X-ClientProxiedBy: SVR-IES-MBX-08.mgc.mentorg.com (139.181.222.8) To
- SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Has anyone any ideas of how to investigate this delay further?
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Comparing the perf output for unplugging the USB stick and using umount
-which does not cause these delays in other workqueues the main difference
-is that the problem case is executing the code in invalidate_mapping_pages()
-and a large part of that arch_local_irq_restore() which is part of
-releasing a lock, I would usually expect that requesting a lock would be
-where delays may occur.
+=E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wanyeetech.com> write=
+s:
 
-	--94.90%--invalidate_partition
-	   __invalidate_device
-	   |          
-	   |--64.55%--invalidate_bdev
-	   |  |          
-	   |   --64.13%--invalidate_mapping_pages
-	   |     |          
-	   |     |--24.09%--invalidate_inode_page
-	   |     |   |          
-	   |     |   --23.44%--remove_mapping
-	   |     |     |          
-	   |     |      --23.20%--__remove_mapping
-	   |     |        |          
-	   |     |         --21.90%--arch_local_irq_restore
-	   |     |          
-	   |     |--22.44%--arch_local_irq_enable
+> The commit 2a6c0b82e651 ("USB: PHY: JZ4770: Add support for new
+> Ingenic SoCs.") introduced the initialization function for different
+> chips, but left the relevant code involved in the resetting process
+> in the original function, resulting in uninitialized variable calls.
+>
+> Fixes: 2a6c0b82e651 ("USB: PHY: JZ4770: Add support for new
+> Ingenic SoCs.").
 
-Best regards,
-Jim
+These two lines here, they should be one line :-)
 
--------- Original Message --------
-Subject: Re: PROBLEM: Long Workqueue delays V2
-From: Jim Baxter <jim_baxter@mentor.com>
-To: 
-Date: Wed Aug 19 2020 14:12:24 GMT+0100 (British Summer Time)
+For the Fixes: line, you shouldn't worry about the 72-char limit. Also,
+when resending, don't add a blank line between Fixes and Signed-off-by
+and since this is a bug fix, it seems like Cc: stable is in order.
 
-> Added linux-block List which may also be relevant to this issue.
-> 
-> -------- Original Message --------
-> Subject: PROBLEM: Long Workqueue delays V2
-> From: Jim Baxter <jim_baxter@mentor.com>
-> To: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org
-> CC: "Resch Carsten (CM/ESO6)" <Carsten.Resch@de.bosch.com>, "Rosca, Eugeniu (ADITG/ESB)" <erosca@de.adit-jv.com>
-> Date: Tue, 18 Aug 2020 12:58:13 +0100
-> 
->> I am asking this question again to include the fs-devel list.
->>
->>
->> We have issues with the workqueue of the kernel overloading the CPU 0 
->> when we we disconnect a USB stick.
->>
->> This results in other items on the shared workqueue being delayed by
->> around 6.5 seconds with a default kernel configuration and 2.3 seconds
->> on a config tailored for our RCar embedded platform.
->>
->>
->>
->> We first noticed this issue on custom hardware and we have recreated it
->> on an RCar Starter Kit using a test module [1] to replicate the
->> behaviour, the test module outputs any delays of greater then 9ms.
->>
->> To run the test we have a 4GB random file on a USB stick and perform
->> the following test.
->> The stick is mounted as R/O and we are copying data from the stick:
->>
->> - Mount the stick.
->> mount -o ro,remount /dev/sda1
->>
->> - Load the Module:
->> # taskset -c 0 modprobe latency-mon
->>
->> - Copy large amount of data from the stick:
->> # dd if=/run/media/sda1/sample.txt of=/dev/zero
->> [ 1437.517603] DELAY: 10
->> 8388607+1 records in
->> 8388607+1 records out
->>
->>
->> - Disconnect the USB stick:
->> [ 1551.796792] usb 2-1: USB disconnect, device number 2
->> [ 1558.625517] DELAY: 6782
->>
->>
->> The Delay output 6782 is in milliseconds.
->>
->>
->>
->> Using umount stops the issue occurring but is unfortunately not guaranteed
->> in our particular system.
->>
->>
->> From my analysis the hub_event workqueue kworker/0:1+usb thread uses around
->> 98% of the CPU.
->>
->> I have traced the workqueue:workqueue_queue_work function while unplugging the USB
->> and there is no particular workqueue function being executed a lot more then the 
->> others for the kworker/0:1+usb thread.
->>
->>
->> Using perf I identified the hub_events workqueue was spending a lot of time in
->> invalidate_partition(), I have included a cut down the captured data from perf in
->> [2] which shows the additional functions where the kworker spends most of its time.
->>
->>
->> I am aware there will be delays on the shared workqueue, are the delays
->> we are seeing considered normal?
->>
->>
->> Is there any way to mitigate or identify where the delay is?
->> I am unsure if this is a memory or filesystem subsystem issue.
->>
->>
->> Thank you for you help.
->>
->> Thanks,
->> Jim Baxter
->>
->> [1] Test Module:
->> // SPDX-License-Identifier: GPL-2.0
->> /*
->>  * Simple WQ latency monitoring
->>  *
->>  * Copyright (C) 2020 Advanced Driver Information Technology.
->>  */
->>
->> #include <linux/init.h>
->> #include <linux/ktime.h>
->> #include <linux/module.h>
->>
->> #define PERIOD_MS 100
->>
->> static struct delayed_work wq;
->> static u64 us_save;
->>
->> static void wq_cb(struct work_struct *work)
->> {
->> 	u64 us = ktime_to_us(ktime_get());
->> 	u64 us_diff = us - us_save;
->> 	u64 us_print = 0;
->>
->> 	if (!us_save)
->> 		goto skip_print;
->>
->>
->> 	us_print = us_diff / 1000 - PERIOD_MS;
->> 	if (us_print > 9)
->> 		pr_crit("DELAY: %lld\n", us_print);
->>
->> skip_print:
->> 	us_save = us;
->> 	schedule_delayed_work(&wq, msecs_to_jiffies(PERIOD_MS));
->> }
->>
->> static int latency_mon_init(void)
->> {
->> 	us_save = 0;
->> 	INIT_DELAYED_WORK(&wq, wq_cb);
->> 	schedule_delayed_work(&wq, msecs_to_jiffies(PERIOD_MS));
->>
->> 	return 0;
->> }
->>
->> static void latency_mon_exit(void)
->> {
->> 	cancel_delayed_work_sync(&wq);
->> 	pr_info("%s\n", __func__);
->> }
->>
->> module_init(latency_mon_init);
->> module_exit(latency_mon_exit);
->> MODULE_AUTHOR("Eugeniu Rosca <erosca@de.adit-jv.com>");
->> MODULE_LICENSE("GPL");
->>
->>
->> [2] perf trace:
->>     95.22%     0.00%  kworker/0:2-eve  [kernel.kallsyms]
->>     |
->>     ---ret_from_fork
->>        kthread
->>        worker_thread
->>        |          
->>         --95.15%--process_one_work
->> 		  |          
->> 		   --94.99%--hub_event
->> 			 |          
->> 			  --94.99%--usb_disconnect
->> 			  <snip>
->> 				|  
->> 				--94.90%--invalidate_partition
->> 				   __invalidate_device
->> 				   |          
->> 				   |--64.55%--invalidate_bdev
->> 				   |  |          
->> 				   |   --64.13%--invalidate_mapping_pages
->> 				   |     |          
->> 				   |     |--24.09%--invalidate_inode_page
->> 				   |     |   |          
->> 				   |     |   --23.44%--remove_mapping
->> 				   |     |     |          
->> 				   |     |      --23.20%--__remove_mapping
->> 				   |     |        |          
->> 				   |     |         --21.90%--arch_local_irq_restore
->> 				   |     |          
->> 				   |     |--22.44%--arch_local_irq_enable
->> 				   |          
->> 					--30.35%--shrink_dcache_sb 
->> 					<snip>
->> 					  |      
->> 					  --30.17%--truncate_inode_pages_range
->>
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9Hr78RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQb2NQ//aIT0yosGqzDLShjKlr3XLVh0fMR0srEn
+KH0AUMPmQ/c7wiibmr/k/md5ZYflP6bi7P/qU6kOp/sqGeQ1VKt6LYAswohPfeoc
+TbyVITONa3wSco3qu2w0wQWdmqayUV4O3S6Oi9Qn/Q/vID2LWOchgxytL/O4f500
+ifoWVqJci03JUXh+HP72CTZ990WdiwZLpWHzNtQSiaHnlciWuVhzu1Mu0MTbFsAZ
+HXZIzHeEhcJpktb+BCeyMA3aHyz07XLP2go6f45y0XgJIoiGSxLgYKx49hg2pm+r
+NEWdlNRCr6r3eCAPC2jwIQaPv5enffyVexdywg2MLF09mjGnGa9LgErKzUOno56i
+RMcNacUlVkyFX0CDYUIhV6oNXaWZVhSdiJFEBfXyvkXjRB1HiM6fOwRgGg1USkah
+xGdp+4zGfpZ5d9XuQQGJMLnG7yCfJi92zGvByWfpc8QYLnPeJv7sNi/cWP4AETk4
+/2HJKW+O4ZV2+tkpqSKgruv6Us/O7FTG8gI4GHLuLqZyu4d4fUgOTa1UobhNU6WX
+tNe/oYywGQAQ/9bCXebZFTNciaiR3j/XtjrrW949ELQguHSEfN1v2lJlyehyh6GS
+BLZa1n6+FdnzkLmAUd+RHJwbMm5WDTf6eGD4JIZzGU4NHOHN1jdvSDnIZENlifOM
+C8Mf0iEPUjs=
+=sN0E
+-----END PGP SIGNATURE-----
+--=-=-=--
