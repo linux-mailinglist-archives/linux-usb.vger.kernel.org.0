@@ -2,165 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CE7254EAC
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 21:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3750254EEE
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 21:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbgH0TeO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 15:34:14 -0400
-Received: from mga18.intel.com ([134.134.136.126]:59438 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726873AbgH0TeK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 15:34:10 -0400
-IronPort-SDR: RVSMnCIG/CGm6DRO7NDYGyR4vMM9wKrBE4/rAYHUJpbX0TzjJ5T1SwcJ6X9Qbs0uQnH74w2j8G
- bgmCEjQrsuKQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="144229074"
-X-IronPort-AV: E=Sophos;i="5.76,360,1592895600"; 
-   d="scan'208";a="144229074"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2020 12:34:08 -0700
-IronPort-SDR: w7c5j/V5orFlY6I9hkLlqEjELpW+aZ/YRhE2wBSj81JiRTh0oS7oIhMtyAZ9Yp3y3Q8IO+cxMZ
- 3gJue+8GD3vw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,360,1592895600"; 
-   d="scan'208";a="403508103"
-Received: from lkp-server01.sh.intel.com (HELO 4f455964fc6c) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Aug 2020 12:34:07 -0700
-Received: from kbuild by 4f455964fc6c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kBNew-0002F1-Cw; Thu, 27 Aug 2020 19:34:06 +0000
-Date:   Fri, 28 Aug 2020 03:33:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 9aa37788e7ebb3f489fb4b71ce07adadd444264a
-Message-ID: <5f480a82.Zib1vqc9oHF3txJB%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726826AbgH0Tmq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 15:42:46 -0400
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:19640 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726120AbgH0Tmp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 15:42:45 -0400
+X-IronPort-AV: E=Sophos;i="5.76,359,1592863200"; 
+   d="scan'208";a="465001195"
+Received: from abo-173-121-68.mrs.modulonet.fr (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Aug 2020 21:42:42 +0200
+Date:   Thu, 27 Aug 2020 21:42:42 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Joe Perches <joe@perches.com>
+cc:     Alex Dewar <alex.dewar90@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        cocci <cocci@systeme.lip6.fr>, Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        accessrunner-general@lists.sourceforge.net
+Subject: Re: [Cocci] [PATCH] usb: atm: don't use snprintf() for sysfs attrs
+In-Reply-To: <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
+Message-ID: <alpine.DEB.2.22.394.2008272141220.2482@hadrien>
+References: <20200824222322.22962-1-alex.dewar90@gmail.com> <48f2dc90-7852-eaf1-55d7-2c85cf954688@rasmusvillemoes.dk> <20200827071537.GA168593@kroah.com> <20200827131819.7rcl2f5js3hkoqj2@lenovo-laptop> <def24e9e-018c-9712-0d07-d4cbc84f07d9@rasmusvillemoes.dk>
+ <20200827144846.yauuttjaqtxaldxg@lenovo-laptop> <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: 9aa37788e7ebb3f489fb4b71ce07adadd444264a  USB: Ignore UAS for JMicron JMS567 ATA/ATAPI Bridge
 
-elapsed time: 722m
 
-configs tested: 103
-configs skipped: 9
+On Thu, 27 Aug 2020, Joe Perches wrote:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> On Thu, 2020-08-27 at 15:48 +0100, Alex Dewar wrote:
+> > On Thu, Aug 27, 2020 at 03:41:06PM +0200, Rasmus Villemoes wrote:
+> > > On 27/08/2020 15.18, Alex Dewar wrote:
+> > > > On Thu, Aug 27, 2020 at 09:15:37AM +0200, Greg Kroah-Hartman wrote:
+> > > > > On Thu, Aug 27, 2020 at 08:42:06AM +0200, Rasmus Villemoes wrote:
+> > > > > > On 25/08/2020 00.23, Alex Dewar wrote:
+> > > > > > > kernel/cpu.c: don't use snprintf() for sysfs attrs
+> > > > > > >
+> > > > > > > As per the documentation (Documentation/filesystems/sysfs.rst),
+> > > > > > > snprintf() should not be used for formatting values returned by sysfs.
+> > > > > > >
+> > > > > >
+> > > > > > Can we have a sysfs_sprintf() (could just be a macro that does sprintf)
+> > > > > > to make it clear to the next reader that we know we're in a sysfs show
+> > > > > > method? It would make auditing uses of sprintf() much easier.
+> > > > >
+> > > > > Code churn to keep code checkers quiet for pointless reasons?  What
+> > > > > could go wrong with that...
+> > >
+> > > I did not (mean to) suggest replacing existing sprintf() calls in sysfs
+> > > show methods. But when changes _are_ being made, such as when replacing
+> > > snprintf() calls for whatever reasons, can we please not make it harder
+> > > for people doing manual audits (those are "code checkers" as well, I
+> > > suppose, but they do tend to only make noise when finding something).
+> > >
+> > > > > It should be pretty obvious to any reader that you are in a sysfs show
+> > > > > method, as almost all of them are trivially tiny and obvious.
+> > >
+> > > git grep doesn't immediately show that, not even with a suitable -C
+> > > argument, as you can't really know the potential callers unless you open
+> > > the file and see that the function is only assigned as a .show method.
+> > > And even that can be a pain because it's all hidden behind five levels
+> > > of magic macros that build identifiers with ##.
+> > >
+> > > > Perhaps I should have mentioned this in the commit message, but the problem
+> > > > is that snprintf() doesn't return the number of bytes written to the
+> > > > destination buffer,
+> > >
+> > > I'm perfectly well aware of that, TYVM (you may want to 'git log
+> > > --author Villemoes lib/vsprintf.c').
+> > >
+> > >  but the number of bytes that *would have been written if
+> > > > they fitted*, which may be more than the bounds specified [1]. So "return
+> > > > snprintf(...)" for sysfs attributes is an antipattern. If you need bounded
+> > > > string ops, scnprintf() is the way to go. Using snprintf() can give a
+> > > > false sense of security, because it isn't necessarily safe.
+> > >
+> > > Huh? This all seems utterly irrelevant WRT a change that replaces
+> > > PAGE_SIZE by INT_MAX (because that's what sprintf() is going to pretend
+> > > you passed). You get the same return value.
+> > >
+> > > But I'm not at all concerned about whether one passes the proper buffer
+> > > size or not in sysfs show methods; with my embedded hat on, I'm all for
+> > > saving a few bytes of .text here and there. The problem, as far as I'm
+> > > concerned, is merely that adding sprintf() callers makes it harder to
+> > > find the problematic sprintf() instances.
+> > >
+> >
+> > Apologies, I think I might have expressed myself poorly, being a kernel noob
+> > ;-). I know that this is a stylistic change rather than a functional
+> > one -- I meant that I was hoping that it would be helpful to get rid of bad
+> > uses of snprintf().
+> >
+> > I really like your idea of helper methods though :-). If in show()
+> > methods we could have something like:
+> > 	return sysfs_itoa(buf, i);
+> > in place of:
+> > 	return sprintf(buf, "%d\n", i);
+> >
+> > ... then we wouldn't be introducing any new calls to sprintf() as you
+> > say, but we'd still be removing a call to snprintf() (which also may be
+> > problematic). Plus we'd have type checking on the argument.
+> >
+> > For returning strings, we could have a bounded and unbounded variant of
+> > the function. As it seems like only single values should be returned via
+> > sysfs, if we did things this way then it would only be these
+> > string-returning functions which could cause buffer overflow problems
+> > and kernel devs could focus their attention accordingly...
+> >
+> > What do people think? I'm happy to have a crack, provided this is
+> > actually a sensible thing to do! I'm looking for a newbie-level project
+> > to get started with.
+>
+> Not a bad idea.
+>
+> Coccinelle should be able to transform the various .show
+> methods to something sysfs_ prefixed in a fairly automated
+> way.
 
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-riscv                    nommu_k210_defconfig
-mips                     decstation_defconfig
-arm                   milbeaut_m10v_defconfig
-powerpc                mpc7448_hpc2_defconfig
-sh                              ul2_defconfig
-powerpc                         ps3_defconfig
-arm                             rpc_defconfig
-sh                          sdk7780_defconfig
-arm                             ezx_defconfig
-mips                            e55_defconfig
-arm                          pxa910_defconfig
-sh                        apsh4ad0a_defconfig
-mips                          ath25_defconfig
-powerpc                     mpc5200_defconfig
-arm                      pxa255-idp_defconfig
-mips                           ip22_defconfig
-arm                         hackkit_defconfig
-arm                          moxart_defconfig
-parisc                           alldefconfig
-arm                        mvebu_v7_defconfig
-sh                               alldefconfig
-m68k                          amiga_defconfig
-sh                        edosk7705_defconfig
-arm                         axm55xx_defconfig
-sh                          urquell_defconfig
-arm                         assabet_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                               defconfig
-m68k                         apollo_defconfig
-sh                             sh03_defconfig
-sh                        edosk7760_defconfig
-sh                           sh2007_defconfig
-nios2                            alldefconfig
-arc                                 defconfig
-c6x                        evmc6678_defconfig
-sh                             shx3_defconfig
-powerpc                    amigaone_defconfig
-powerpc                     skiroot_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-x86_64               randconfig-a003-20200827
-x86_64               randconfig-a002-20200827
-x86_64               randconfig-a001-20200827
-x86_64               randconfig-a005-20200827
-x86_64               randconfig-a006-20200827
-x86_64               randconfig-a004-20200827
-i386                 randconfig-a002-20200827
-i386                 randconfig-a004-20200827
-i386                 randconfig-a003-20200827
-i386                 randconfig-a005-20200827
-i386                 randconfig-a006-20200827
-i386                 randconfig-a001-20200827
-i386                 randconfig-a013-20200827
-i386                 randconfig-a012-20200827
-i386                 randconfig-a011-20200827
-i386                 randconfig-a014-20200827
-i386                 randconfig-a016-20200827
-i386                 randconfig-a015-20200827
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Something like
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+identifier f;
+fresh identifier = "sysfs" ## f;
+
+may be useful.  Let me know if further help is needed.
+
+julia
+
+
+
+>
+>
+>
+>
+> _______________________________________________
+> Cocci mailing list
+> Cocci@systeme.lip6.fr
+> https://systeme.lip6.fr/mailman/listinfo/cocci
+>
