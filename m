@@ -2,153 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B04A2550B5
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 23:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08CA2550C8
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 23:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727115AbgH0VoH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 17:44:07 -0400
-Received: from smtprelay0012.hostedemail.com ([216.40.44.12]:40380 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726147AbgH0VoH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 17:44:07 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id B0C1F181D337B;
-        Thu, 27 Aug 2020 21:44:05 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:960:973:981:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1543:1593:1594:1711:1730:1747:1777:1792:1801:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3354:3622:3865:3867:3868:3870:3871:3872:3874:4321:4605:5007:7875:7903:10004:10400:10848:11026:11232:11473:11658:11914:12043:12296:12297:12438:12740:12760:12895:13141:13230:13439:14093:14097:14181:14659:14721:21080:21324:21451:21627:21990:30030:30054:30056:30070:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: paper52_5f066c127070
-X-Filterd-Recvd-Size: 4701
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf09.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 27 Aug 2020 21:44:02 +0000 (UTC)
-Message-ID: <d6d5836196208d5280cedf5837952096c3518852.camel@perches.com>
-Subject: Re: [Cocci] [PATCH] usb: atm: don't use snprintf() for sysfs attrs
-From:   Joe Perches <joe@perches.com>
-To:     Julia Lawall <julia.lawall@inria.fr>,
-        Denis Efremov <efremov@linux.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
+        id S1727849AbgH0VyS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 27 Aug 2020 17:54:18 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:25091 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726147AbgH0VyS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 17:54:18 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-58-iJVQv5u7OyCBBBM2t5KBVA-1; Thu, 27 Aug 2020 22:54:12 +0100
+X-MC-Unique: iJVQv5u7OyCBBBM2t5KBVA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Thu, 27 Aug 2020 22:54:12 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Thu, 27 Aug 2020 22:54:12 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joe Perches' <joe@perches.com>,
+        Alex Dewar <alex.dewar90@gmail.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cocci <cocci@systeme.lip6.fr>,
-        accessrunner-general@lists.sourceforge.net,
-        Alex Dewar <alex.dewar90@gmail.com>
-Date:   Thu, 27 Aug 2020 14:44:01 -0700
-In-Reply-To: <alpine.DEB.2.22.394.2008272334500.2482@hadrien>
+        cocci <cocci@systeme.lip6.fr>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "accessrunner-general@lists.sourceforge.net" 
+        <accessrunner-general@lists.sourceforge.net>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] usb: atm: don't use snprintf() for sysfs attrs
+Thread-Topic: [PATCH] usb: atm: don't use snprintf() for sysfs attrs
+Thread-Index: AQHWfJNPoPleWxCDKky1KLXQzyLa5alMfq2A
+Date:   Thu, 27 Aug 2020 21:54:12 +0000
+Message-ID: <c256eba42a564c01a8e470320475d46f@AcuMS.aculab.com>
 References: <20200824222322.22962-1-alex.dewar90@gmail.com>
          <48f2dc90-7852-eaf1-55d7-2c85cf954688@rasmusvillemoes.dk>
          <20200827071537.GA168593@kroah.com>
          <20200827131819.7rcl2f5js3hkoqj2@lenovo-laptop>
          <def24e9e-018c-9712-0d07-d4cbc84f07d9@rasmusvillemoes.dk>
          <20200827144846.yauuttjaqtxaldxg@lenovo-laptop>
-         <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
-         <alpine.DEB.2.22.394.2008272141220.2482@hadrien>
-         <5853c58e-7d26-2cf9-6cbf-698ecd93cbf9@linux.com>
-         <alpine.DEB.2.22.394.2008272334500.2482@hadrien>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.4-0ubuntu1 
+ <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
+In-Reply-To: <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0.001
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2020-08-27 at 23:36 +0200, Julia Lawall wrote:
-> On Fri, 28 Aug 2020, Denis Efremov wrote:
-[]
-> Regarding current device_attr_show.cocci implementation, it detects the functions
-> > by declaration:
-> > ssize_t any_name(struct device *dev, struct device_attribute *attr, char *buf)
-> > 
-> > and I limited the check to:
-> > "return snprintf"
-> > pattern because there are already too many warnings.
-> > 
-> > Actually, it looks more correct to check for:
-> > ssize_t show(struct device *dev, struct device_attribute *attr, char *buf)
-> > {
-> >         <...
-> > *       snprintf@p(...);
-> >         ...>
-> > }
-> > 
-> > This pattern should also highlight the snprintf calls there we save returned
-> > value in a var, e.g.:
-> > 
-> > ret += snprintf(...);
-> > ...
-> > ret += snprintf(...);
-> > ...
-> > ret += snprintf(...);
-> > 
-> > return ret;
-> > 
-> > > Something like
-> > > 
-> > > identifier f;
-> > > fresh identifier = "sysfs" ## f;
-> > > 
-> > > may be useful.  Let me know if further help is needed.
-> > 
-> > Initially, I wrote the rule to search for DEVICE_ATTR(..., ..., func_name, ...)
+From: Joe Perches
+> Sent: 27 August 2020 17:59
+> To: Alex Dewar <alex.dewar90@gmail.com>; Rasmus Villemoes <linux@rasmusvillemoes.dk>; cocci
+> <cocci@systeme.lip6.fr>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Kees Cook <keescook@chromium.org>; Gustavo A. R.
+> Silva <gustavoars@kernel.org>; accessrunner-general@lists.sourceforge.net; linux-usb@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH] usb: atm: don't use snprintf() for sysfs attrs
 > 
-> This is what I would have expected.
-> 
-> > functions. However, it looks like matching function prototype is enough. At least,
-> > I failed to find false positives. I rejected the initial DEVICE_ATTR() searching
-> > because I thought that it's impossible to handle DEVICE_ATTR_RO()/DEVICE_ATTR_RW()
-> > macroses with coccinelle as they "generate" function names internally with
-> > "##". "fresh identifier" should really help here, but now I doubt it's required in
-> > device_attr_show.cocci, function prototype is enough.
-> 
-> It's true that it is probably unique enough.
+> On Thu, 2020-08-27 at 15:48 +0100, Alex Dewar wrote:
+> > On Thu, Aug 27, 2020 at 03:41:06PM +0200, Rasmus Villemoes wrote:
+> > > On 27/08/2020 15.18, Alex Dewar wrote:
+> > > > On Thu, Aug 27, 2020 at 09:15:37AM +0200, Greg Kroah-Hartman wrote:
+> > > > > On Thu, Aug 27, 2020 at 08:42:06AM +0200, Rasmus Villemoes wrote:
+> > > > > > On 25/08/2020 00.23, Alex Dewar wrote:
+> > > > > > > kernel/cpu.c: don't use snprintf() for sysfs attrs
+> > > > > > >
+> > > > > > > As per the documentation (Documentation/filesystems/sysfs.rst),
+> > > > > > > snprintf() should not be used for formatting values returned by sysfs.
+> > > > > > >
+> > > > > >
+> > > > > > Can we have a sysfs_sprintf() (could just be a macro that does sprintf)
+> > > > > > to make it clear to the next reader that we know we're in a sysfs show
+> > > > > > method? It would make auditing uses of sprintf() much easier.
+> > > > >
+> > > > > Code churn to keep code checkers quiet for pointless reasons?  What
+> > > > > could go wrong with that...
+> > >
+> > > I did not (mean to) suggest replacing existing sprintf() calls in sysfs
+> > > show methods. But when changes _are_ being made, such as when replacing
+> > > snprintf() calls for whatever reasons, can we please not make it harder
+> > > for people doing manual audits (those are "code checkers" as well, I
+> > > suppose, but they do tend to only make noise when finding something).
+> > >
+> > > > > It should be pretty obvious to any reader that you are in a sysfs show
+> > > > > method, as almost all of them are trivially tiny and obvious.
+> > >
+> > > git grep doesn't immediately show that, not even with a suitable -C
+> > > argument, as you can't really know the potential callers unless you open
+> > > the file and see that the function is only assigned as a .show method.
+> > > And even that can be a pain because it's all hidden behind five levels
+> > > of magic macros that build identifiers with ##.
+> > >
+> > > > Perhaps I should have mentioned this in the commit message, but the problem
+> > > > is that snprintf() doesn't return the number of bytes written to the
+> > > > destination buffer,
+> > >
+> > > I'm perfectly well aware of that, TYVM (you may want to 'git log
+> > > --author Villemoes lib/vsprintf.c').
+> > >
+> > >  but the number of bytes that *would have been written if
+> > > > they fitted*, which may be more than the bounds specified [1]. So "return
+> > > > snprintf(...)" for sysfs attributes is an antipattern. If you need bounded
+> > > > string ops, scnprintf() is the way to go. Using snprintf() can give a
+> > > > false sense of security, because it isn't necessarily safe.
+> > >
+> > > Huh? This all seems utterly irrelevant WRT a change that replaces
+> > > PAGE_SIZE by INT_MAX (because that's what sprintf() is going to pretend
+> > > you passed). You get the same return value.
+> > >
+> > > But I'm not at all concerned about whether one passes the proper buffer
+> > > size or not in sysfs show methods; with my embedded hat on, I'm all for
+> > > saving a few bytes of .text here and there. The problem, as far as I'm
+> > > concerned, is merely that adding sprintf() callers makes it harder to
+> > > find the problematic sprintf() instances.
+> > >
+> >
+> > Apologies, I think I might have expressed myself poorly, being a kernel noob
+> > ;-). I know that this is a stylistic change rather than a functional
+> > one -- I meant that I was hoping that it would be helpful to get rid of bad
+> > uses of snprintf().
+> >
+> > I really like your idea of helper methods though :-). If in show()
+> > methods we could have something like:
+> > 	return sysfs_itoa(buf, i);
+> > in place of:
+> > 	return sprintf(buf, "%d\n", i);
+> >
+> > ... then we wouldn't be introducing any new calls to sprintf() as you
+> > say, but we'd still be removing a call to snprintf() (which also may be
+> > problematic). Plus we'd have type checking on the argument.
+> >
+> > For returning strings, we could have a bounded and unbounded variant of
+> > the function. As it seems like only single values should be returned via
+> > sysfs, if we did things this way then it would only be these
+> > string-returning functions which could cause buffer overflow problems
+> > and kernel devs could focus their attention accordingly...
+> >
+> > What do people think? I'm happy to have a crack, provided this is
+> > actually a sensible thing to do! I'm looking for a newbie-level project
+> > to get started with.
 
-I tried:
-@@
-identifier f_show =~ "^.*_show$";
-identifier dev, attr, buf;
-const char *chr;
-@@
-ssize_t f_show(struct device *dev, struct device_attribute *attr, char
-*buf)
-{
-	<...
-(
--	sprintf
-+	sysfs_sprintf
-	(...);
-|
--	snprintf(buf, PAGE_SIZE,
-+	sysfs_sprintf(buf,
-	...);
-|
--	scnprintf(buf, PAGE_SIZE,
-+	sysfs_sprintf(buf,
-	...);
-|
-	strcpy(buf, chr);
-	sysfs_strcpy(buf, chr);
-)
-	...>
-}
+The problem with that idea is that is the code needs to
+merge the output of two values or split an integer as nnn.nn
+then it needs to do something different from the 'normal' code.
 
-which finds direct statements without an assign
-but that doesn't find
+If the buffer is always PAGE_SIZE the why not embed it in
+a structure.
+The generated code will be the same, but it will be absolutely
+explicit that the size is PAGE_SIZE if the code filling in the
+buffer decides it needs to check.
 
-arch/arm/common/dmabounce.c:static ssize_t dmabounce_show(struct device *dev, struct device_attribute *attr, char *buf)
-arch/arm/common/dmabounce.c-{
-arch/arm/common/dmabounce.c-    struct dmabounce_device_info *device_info = dev->archdata.dmabounce;
-arch/arm/common/dmabounce.c-    return sprintf(buf, "%lu %lu %lu %lu %lu %lu\n",
-arch/arm/common/dmabounce.c-            device_info->small.allocs,
-arch/arm/common/dmabounce.c-            device_info->large.allocs,
-arch/arm/common/dmabounce.c-            device_info->total_allocs - device_info->small.allocs -
-arch/arm/common/dmabounce.c-                    device_info->large.allocs,
-arch/arm/common/dmabounce.c-            device_info->total_allocs,
-arch/arm/common/dmabounce.c-            device_info->map_op_count,
-arch/arm/common/dmabounce.c-            device_info->bounce_count);
-arch/arm/common/dmabounce.c-}
+	David
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
