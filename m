@@ -2,165 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF1825475E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884FD254796
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728156AbgH0OtB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 10:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S1727949AbgH0OwD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 10:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728094AbgH0Osx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 10:48:53 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35837C061264;
-        Thu, 27 Aug 2020 07:48:53 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id c15so5635054wrs.11;
-        Thu, 27 Aug 2020 07:48:53 -0700 (PDT)
+        with ESMTP id S1726093AbgH0Ov5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 10:51:57 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35EDC061264;
+        Thu, 27 Aug 2020 07:51:56 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id f26so6728543ljc.8;
+        Thu, 27 Aug 2020 07:51:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AOFWO6hOSuRZQ3JE3lz6nNzyfi0JSc63kfPTYrfcnNA=;
-        b=X/VyZuK6gEKrvY/S0fJvysWZTY1bcQbACA+KzQo0uddcob93HHWkY1IkNgbaYPbLDp
-         CXRUNEsX95EHocaDwWFHMFfQbuzO49yV2+AbJYEi4lfNwJF2vE6x3ixPBSGtcgktfNFO
-         EmAXFR5cAdgLYMbAqisF+MmtHTo4dXlwfbjZnfH79DgJh8CeM4UBLSaio2OLbeL/eqY2
-         grYpjcCZo3/KsHRfg5PjoSpFD9j3LWzL/eUyfnRvmvP49UTLArqdfi2rsHrxJgIy5ggl
-         1V01H5GpCO4VfB3QV6/N9t4snx1jbRta5/CsGjy5GMWb0uO1eo+vETdXAOy3tdMHm9W/
-         3A+g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=txhfrSF9RX3MqxwN9hoW/kar0+P8SVn2XnHOzqJQ9IY=;
+        b=gjBwiPji3SaNbCP9jML1HZoNahK/I6qqs0rl0EygcZbZRptYdcMLHdy1mv7UHcaDp0
+         +SUHGKslVz5TRz1z7pi7ETrhxoG2F4LiDXmAi5z22/+KyryUnUvOlH3Du1iqooWTAmiI
+         gyt4ZHvwYsreEvMfFGES4WdC5hyJ9xDyNT6KxBEdkshROOsM3DbwVyaKf5XqbIzaLCW3
+         2lgsa4SeK2WfjzhOr36LgK+d+MnFbnwSH3ryYf8jPNSSscvVS66RS1qRwWmJCTBwaMcE
+         NwJdJy/VloyZP1dH0avdKUyPtuRnd6MBdpz+2Rhxdc+62XDR8G5XrE3S0sk3qNda5+Jq
+         Uswg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AOFWO6hOSuRZQ3JE3lz6nNzyfi0JSc63kfPTYrfcnNA=;
-        b=h57n2PecWQoJ7eQoMIXxxveHtq3EZCzfXUa+JroMtwAW6ht+to10TwNADFDlxv1WPQ
-         wIZbr3CbQ1iIa2RrSVxzBzIP+Bm+Svmy84tcrmmCpq5WlD/HplzYcpQ6IoH5NzMMu0vG
-         c8KdAjgxCu6I9MyZ0KW6kqsZJCOxeqtGuSE8k6FksWV0JvJHoJlSDx3SZY86rA419K1r
-         xjtE1B/IjW10mbF84F754u+Ej1aO4EfuTkv9oF2WAhbcA1Dn53iM6kPEkP2sWCumzmev
-         +RtK8F7A0QUMRpp6r9xjILvRtuF0uorT6j33ermcCtKyoneHeHsyoApE+bmR24u5u+Kz
-         xsXA==
-X-Gm-Message-State: AOAM532tjKl0XthW48YoVdx8rXgnqKOo+rHZMnztwNq89HAJySt0UIB+
-        d5X2pqJL3vimW8wZwQOrtFk=
-X-Google-Smtp-Source: ABdhPJweHYE0sQb82yaSD/TLNUuNwKlbxXi4RLon3uJ1FLNlrDA6X5tISWP6DDD9/jeU4SMskex5wg==
-X-Received: by 2002:adf:cf10:: with SMTP id o16mr19158027wrj.380.1598539731825;
-        Thu, 27 Aug 2020 07:48:51 -0700 (PDT)
-Received: from lenovo-laptop (92.40.173.114.threembb.co.uk. [92.40.173.114])
-        by smtp.gmail.com with ESMTPSA id f17sm7055991wru.13.2020.08.27.07.48.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2020 07:48:51 -0700 (PDT)
-From:   Alex Dewar <alex.dewar90@gmail.com>
-X-Google-Original-From: Alex Dewar <alex.dewar@gmx.co.uk>
-Date:   Thu, 27 Aug 2020 15:48:46 +0100
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Alex Dewar <alex.dewar90@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        accessrunner-general@lists.sourceforge.net,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: atm: don't use snprintf() for sysfs attrs
-Message-ID: <20200827144846.yauuttjaqtxaldxg@lenovo-laptop>
-References: <20200824222322.22962-1-alex.dewar90@gmail.com>
- <48f2dc90-7852-eaf1-55d7-2c85cf954688@rasmusvillemoes.dk>
- <20200827071537.GA168593@kroah.com>
- <20200827131819.7rcl2f5js3hkoqj2@lenovo-laptop>
- <def24e9e-018c-9712-0d07-d4cbc84f07d9@rasmusvillemoes.dk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=txhfrSF9RX3MqxwN9hoW/kar0+P8SVn2XnHOzqJQ9IY=;
+        b=sKa358u3eSein4TlZIZqelc63X+gVmMrTUNj3kNmcoAKvaAwrNAFPHDLDrtFXgl3Rw
+         ZpN60xPejRg22LG/0cui5K9qny1lEZlCdzzeXN0ZZigK+ZQkGy86e9RlFFeaqWQKscrF
+         Gckf/QJDMZ/Cg41NDJV8EuD0GKNTMLlhhEtaKerUDQbQT+pJ2U8QLsRw5yfzFR4iz6Xr
+         Ojq01HOWoNOq1dVx2jqklQvLsXJ8YjKp8bMXtiycEaY60NgVHmbNwQ1+/hU6XAZp281t
+         Vy0414SUOaUqofwpslwSqa9JNBbGfPQ+TD5rA6BALe73a2/eQQRBP170RSTuTfrX33+a
+         qsRA==
+X-Gm-Message-State: AOAM533+q8iTBF16hzQs7h9/hOYFyw5HZNC+YlPyHhDpHj5V0i6gXilQ
+        K+ouEdqY0voV3VzSy8QHrzGz/+UMRt1NftG7awk=
+X-Google-Smtp-Source: ABdhPJxkVhI0j2VsdBWVwc0FSlt/bcCfk71WFFX36z10VABx6cu21rQwkSKWef3JMaP2Bwmgr7KClVB6jt0m6gXA8C8=
+X-Received: by 2002:a2e:160d:: with SMTP id w13mr10443684ljd.470.1598539914375;
+ Thu, 27 Aug 2020 07:51:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <def24e9e-018c-9712-0d07-d4cbc84f07d9@rasmusvillemoes.dk>
+References: <1598527137-6915-1-git-send-email-u0084500@gmail.com> <20200827140001.GE813478@kuha.fi.intel.com>
+In-Reply-To: <20200827140001.GE813478@kuha.fi.intel.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Thu, 27 Aug 2020 22:51:43 +0800
+Message-ID: <CADiBU393V_iQw_8Hx2braL=8QpvQuTY0059C-XkqmjO9W=aBgQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] usb typec: mt6360: Add support for mt6360 Type-C driver
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, Guenter Roeck <linux@roeck-us.net>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 03:41:06PM +0200, Rasmus Villemoes wrote:
-> On 27/08/2020 15.18, Alex Dewar wrote:
-> > On Thu, Aug 27, 2020 at 09:15:37AM +0200, Greg Kroah-Hartman wrote:
-> >> On Thu, Aug 27, 2020 at 08:42:06AM +0200, Rasmus Villemoes wrote:
-> >>> On 25/08/2020 00.23, Alex Dewar wrote:
-> >>>> kernel/cpu.c: don't use snprintf() for sysfs attrs
-> >>>>
-> >>>> As per the documentation (Documentation/filesystems/sysfs.rst),
-> >>>> snprintf() should not be used for formatting values returned by sysfs.
-> >>>>
-> >>>
-> >>> Can we have a sysfs_sprintf() (could just be a macro that does sprintf)
-> >>> to make it clear to the next reader that we know we're in a sysfs show
-> >>> method? It would make auditing uses of sprintf() much easier.
-> >>
-> >> Code churn to keep code checkers quiet for pointless reasons?  What
-> >> could go wrong with that...
-> 
-> I did not (mean to) suggest replacing existing sprintf() calls in sysfs
-> show methods. But when changes _are_ being made, such as when replacing
-> snprintf() calls for whatever reasons, can we please not make it harder
-> for people doing manual audits (those are "code checkers" as well, I
-> suppose, but they do tend to only make noise when finding something).
-> 
-> >> It should be pretty obvious to any reader that you are in a sysfs show
-> >> method, as almost all of them are trivially tiny and obvious.
-> 
-> git grep doesn't immediately show that, not even with a suitable -C
-> argument, as you can't really know the potential callers unless you open
-> the file and see that the function is only assigned as a .show method.
-> And even that can be a pain because it's all hidden behind five levels
-> of magic macros that build identifiers with ##.
-> 
-> > Perhaps I should have mentioned this in the commit message, but the problem
-> > is that snprintf() doesn't return the number of bytes written to the
-> > destination buffer,
-> 
-> I'm perfectly well aware of that, TYVM (you may want to 'git log
-> --author Villemoes lib/vsprintf.c').
-> 
->  but the number of bytes that *would have been written if
-> > they fitted*, which may be more than the bounds specified [1]. So "return
-> > snprintf(...)" for sysfs attributes is an antipattern. If you need bounded
-> > string ops, scnprintf() is the way to go. Using snprintf() can give a
-> > false sense of security, because it isn't necessarily safe.
-> 
-> Huh? This all seems utterly irrelevant WRT a change that replaces
-> PAGE_SIZE by INT_MAX (because that's what sprintf() is going to pretend
-> you passed). You get the same return value.
-> 
-> But I'm not at all concerned about whether one passes the proper buffer
-> size or not in sysfs show methods; with my embedded hat on, I'm all for
-> saving a few bytes of .text here and there. The problem, as far as I'm
-> concerned, is merely that adding sprintf() callers makes it harder to
-> find the problematic sprintf() instances.
-> 
-
-Apologies, I think I might have expressed myself poorly, being a kernel noob
-;-). I know that this is a stylistic change rather than a functional
-one -- I meant that I was hoping that it would be helpful to get rid of bad
-uses of snprintf().
-
-I really like your idea of helper methods though :-). If in show()
-methods we could have something like:
-	return sysfs_itoa(buf, i);
-in place of:
-	return sprintf(buf, "%d\n", i);
-
-... then we wouldn't be introducing any new calls to sprintf() as you
-say, but we'd still be removing a call to snprintf() (which also may be
-problematic). Plus we'd have type checking on the argument.
-
-For returning strings, we could have a bounded and unbounded variant of
-the function. As it seems like only single values should be returned via
-sysfs, if we did things this way then it would only be these
-string-returning functions which could cause buffer overflow problems
-and kernel devs could focus their attention accordingly...
-
-What do people think? I'm happy to have a crack, provided this is
-actually a sensible thing to do! I'm looking for a newbie-level project
-to get started with.
-
-Thanks for the feedback all,
-Alex
-> 
-> >> Anyway, we've had this for 20 years,
-> 
-> My bad, for a moment I forgot that code and patterns of that vintage
-> cannot have bugs.
-> 
-> Rasmus
+Heikki Krogerus <heikki.krogerus@linux.intel.com> =E6=96=BC 2020=E5=B9=B48=
+=E6=9C=8827=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:00=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> On Thu, Aug 27, 2020 at 07:18:55PM +0800, cy_huang wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Mediatek MT6360 is a multi-functional IC that includes USB Type-C.
+> > It works with Type-C Port Controller Manager to provide USB PD
+> > and USB Type-C functionalities.
+> >
+> > v1 to v2
+> > 1. Add fix to Prevent the race condition from interrupt and tcpci port
+> > unregister during module remove.
+> >
+> > v2 to v3
+> > 1. Change comment style for the head of source code.
+> > 2. No need to print error for platform_get_irq_byname.
+> > 3. Fix tcpci_register_port check from IS_ERR_OR_NULL to IS_ERR.
+> > 4. Rename driver/Kconfig/Makefile form mt6360 to mt636x.
+> > 5. Rename DT binding documents from mt6360 to mt636x.
+>
+> You don't place additional changelog here...
+>
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+>
+> You put it here, after that '---' marker:
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#th=
+e-canonical-patch-format
+>
+HI Hekki:
+     after reading the document, I have a little bit confused how to
+use diffstat for the changelog.
+      Is there any example that make me know to write a clear
+description for the changelog?
+>
+> >  drivers/usb/typec/tcpm/Kconfig        |   8 ++
+> >  drivers/usb/typec/tcpm/Makefile       |   1 +
+> >  drivers/usb/typec/tcpm/tcpci_mt6360.c | 212 ++++++++++++++++++++++++++=
+++++++++
+> >  3 files changed, 221 insertions(+)
+> >  create mode 100644 drivers/usb/typec/tcpm/tcpci_mt6360.c
+>
+> thanks,
+>
+> --
+> heikki
