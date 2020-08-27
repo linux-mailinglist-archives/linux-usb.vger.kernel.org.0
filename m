@@ -2,113 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 884FD254796
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C113B2547D1
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727949AbgH0OwD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 10:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
+        id S1727839AbgH0OzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 10:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726093AbgH0Ov5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 10:51:57 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35EDC061264;
-        Thu, 27 Aug 2020 07:51:56 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id f26so6728543ljc.8;
-        Thu, 27 Aug 2020 07:51:56 -0700 (PDT)
+        with ESMTP id S1728029AbgH0Oye (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 10:54:34 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEE5C061264
+        for <linux-usb@vger.kernel.org>; Thu, 27 Aug 2020 07:54:34 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id c19so3907822wmd.1
+        for <linux-usb@vger.kernel.org>; Thu, 27 Aug 2020 07:54:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=txhfrSF9RX3MqxwN9hoW/kar0+P8SVn2XnHOzqJQ9IY=;
-        b=gjBwiPji3SaNbCP9jML1HZoNahK/I6qqs0rl0EygcZbZRptYdcMLHdy1mv7UHcaDp0
-         +SUHGKslVz5TRz1z7pi7ETrhxoG2F4LiDXmAi5z22/+KyryUnUvOlH3Du1iqooWTAmiI
-         gyt4ZHvwYsreEvMfFGES4WdC5hyJ9xDyNT6KxBEdkshROOsM3DbwVyaKf5XqbIzaLCW3
-         2lgsa4SeK2WfjzhOr36LgK+d+MnFbnwSH3ryYf8jPNSSscvVS66RS1qRwWmJCTBwaMcE
-         NwJdJy/VloyZP1dH0avdKUyPtuRnd6MBdpz+2Rhxdc+62XDR8G5XrE3S0sk3qNda5+Jq
-         Uswg==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oZVAeSvtG/mpRkqWvtNg2LRx2WR/51E1Le8WsLH3g3E=;
+        b=1/RRRUSidWluDI/v0qwiNlRTldBIJd1teRIPUlv1Yza1bSIgAEE+TKEXj8qorYD1yG
+         cTk1Z71Tcgly9crQ13G5nMJe5q/P1vvdYQlwyqPpjrtpBdm28X3VO+NmXmKD4gOTHsoV
+         OkMZICRNKJH+iETlQNz3H7624GY3Z1njJd9v43YVECaxbXkCZkSlH3CE943Zj10SuiGr
+         GccdOfYFaXJwOVM9i8HxfvbK7fSYgeE0qt24AyJpvyRdbdYPXTIL/p6UIGDdtsWvVfcp
+         otfJwBuIoK9qXjTxG6SpS9QAw41AfHbMQLffoMRfKY0Q42O7HzRdjcv150Cfc/loXMZg
+         q1WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=txhfrSF9RX3MqxwN9hoW/kar0+P8SVn2XnHOzqJQ9IY=;
-        b=sKa358u3eSein4TlZIZqelc63X+gVmMrTUNj3kNmcoAKvaAwrNAFPHDLDrtFXgl3Rw
-         ZpN60xPejRg22LG/0cui5K9qny1lEZlCdzzeXN0ZZigK+ZQkGy86e9RlFFeaqWQKscrF
-         Gckf/QJDMZ/Cg41NDJV8EuD0GKNTMLlhhEtaKerUDQbQT+pJ2U8QLsRw5yfzFR4iz6Xr
-         Ojq01HOWoNOq1dVx2jqklQvLsXJ8YjKp8bMXtiycEaY60NgVHmbNwQ1+/hU6XAZp281t
-         Vy0414SUOaUqofwpslwSqa9JNBbGfPQ+TD5rA6BALe73a2/eQQRBP170RSTuTfrX33+a
-         qsRA==
-X-Gm-Message-State: AOAM533+q8iTBF16hzQs7h9/hOYFyw5HZNC+YlPyHhDpHj5V0i6gXilQ
-        K+ouEdqY0voV3VzSy8QHrzGz/+UMRt1NftG7awk=
-X-Google-Smtp-Source: ABdhPJxkVhI0j2VsdBWVwc0FSlt/bcCfk71WFFX36z10VABx6cu21rQwkSKWef3JMaP2Bwmgr7KClVB6jt0m6gXA8C8=
-X-Received: by 2002:a2e:160d:: with SMTP id w13mr10443684ljd.470.1598539914375;
- Thu, 27 Aug 2020 07:51:54 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=oZVAeSvtG/mpRkqWvtNg2LRx2WR/51E1Le8WsLH3g3E=;
+        b=j4s1BT440dlA7hMUJO+ntnq26mfiLFyEUoz7XSa1vKvkG6/LQbqBy2PGsPgCeZYsxh
+         BXh9U2KMsMZ1OGbNWNmOTH11iXVoLy4W4ftTzCNSrHI6k0hTnlJqE0ymA6Bc1hl6eeDj
+         4QD6o3YYmUWxzwrzUyf3J6dwIuddqt/SWqMbGgM8s+NrLpwwwWutzfmYaNki2f5qq3QU
+         nao556tZ/rCeKfsn8A5lMpcUlxre/SMjlvZjWLevXZ8quldhhlYPP2M6/0bb73P328Bo
+         ndOEaw13na1RJ1ggny3OlN/6SIrrebDh5chCoJcLzdfednxsWtfJsPdjlh2OiHx2xiFj
+         cY9g==
+X-Gm-Message-State: AOAM5303366wsp8L5AIoWkT9HsukTKX2pJIf9EpZUpKE5+OjYqocRtr7
+        AGQknPBGgukVe4IBShCBUKY7vw==
+X-Google-Smtp-Source: ABdhPJy+4UnsKlno9xlR2s6/syFFrYVdTcsn94eEm43qrCwnAKzyNoa4z7R/WcOnVCV1k/TSZjppQQ==
+X-Received: by 2002:a05:600c:2185:: with SMTP id e5mr13040501wme.73.1598540072937;
+        Thu, 27 Aug 2020 07:54:32 -0700 (PDT)
+Received: from ?IPv6:2a01:e35:2ec0:82b0:c02:85df:32ef:2826? ([2a01:e35:2ec0:82b0:c02:85df:32ef:2826])
+        by smtp.gmail.com with ESMTPSA id u6sm5532672wrn.95.2020.08.27.07.54.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Aug 2020 07:54:32 -0700 (PDT)
+Subject: Re: [PATCH] Revert "usb: dwc3: meson-g12a: fix shared reset control
+ use"
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20200827144810.26657-1-aouledameur@baylibre.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ BSwxi7g3Mu7u5kUByanqHyA=
+Organization: Baylibre
+Message-ID: <76b47a88-e40a-a95a-bc0b-1899a655de5a@baylibre.com>
+Date:   Thu, 27 Aug 2020 16:54:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <1598527137-6915-1-git-send-email-u0084500@gmail.com> <20200827140001.GE813478@kuha.fi.intel.com>
-In-Reply-To: <20200827140001.GE813478@kuha.fi.intel.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Thu, 27 Aug 2020 22:51:43 +0800
-Message-ID: <CADiBU393V_iQw_8Hx2braL=8QpvQuTY0059C-XkqmjO9W=aBgQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] usb typec: mt6360: Add support for mt6360 Type-C driver
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, Guenter Roeck <linux@roeck-us.net>,
-        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200827144810.26657-1-aouledameur@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Heikki Krogerus <heikki.krogerus@linux.intel.com> =E6=96=BC 2020=E5=B9=B48=
-=E6=9C=8827=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:00=E5=AF=AB=E9=
-=81=93=EF=BC=9A
->
-> On Thu, Aug 27, 2020 at 07:18:55PM +0800, cy_huang wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Mediatek MT6360 is a multi-functional IC that includes USB Type-C.
-> > It works with Type-C Port Controller Manager to provide USB PD
-> > and USB Type-C functionalities.
-> >
-> > v1 to v2
-> > 1. Add fix to Prevent the race condition from interrupt and tcpci port
-> > unregister during module remove.
-> >
-> > v2 to v3
-> > 1. Change comment style for the head of source code.
-> > 2. No need to print error for platform_get_irq_byname.
-> > 3. Fix tcpci_register_port check from IS_ERR_OR_NULL to IS_ERR.
-> > 4. Rename driver/Kconfig/Makefile form mt6360 to mt636x.
-> > 5. Rename DT binding documents from mt6360 to mt636x.
->
-> You don't place additional changelog here...
->
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
->
-> You put it here, after that '---' marker:
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#th=
-e-canonical-patch-format
->
-HI Hekki:
-     after reading the document, I have a little bit confused how to
-use diffstat for the changelog.
-      Is there any example that make me know to write a clear
-description for the changelog?
->
-> >  drivers/usb/typec/tcpm/Kconfig        |   8 ++
-> >  drivers/usb/typec/tcpm/Makefile       |   1 +
-> >  drivers/usb/typec/tcpm/tcpci_mt6360.c | 212 ++++++++++++++++++++++++++=
-++++++++
-> >  3 files changed, 221 insertions(+)
-> >  create mode 100644 drivers/usb/typec/tcpm/tcpci_mt6360.c
->
-> thanks,
->
-> --
-> heikki
+On 27/08/2020 16:48, Amjad Ouled-Ameur wrote:
+> This reverts commit 7a410953d1fb4dbe91ffcfdee9cbbf889d19b0d7.
+> 
+> This commit breaks USB on meson-gxl-s905x-libretech-cc. Reverting
+> the change solves the issue.
+> 
+> In fact, according to the reset framework code, consumers must not use
+> reset_control_(de)assert() on shared reset lines when reset_control_reset
+> has been used, and vice-versa.
+> 
+> Moreover, with this commit, usb is not guaranted to be reset since the
+> reset is likely to be initially deasserted.
+> 
+> Reverting the commit will bring back the suspend warning mentioned in the
+> commit description. Nevertheless, a warning is much less critical than
+> breaking dwc3-meson-g12a USB completely. We will address the warning
+> issue in another way as a 2nd step.
+> 
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+> ---
+>  drivers/usb/dwc3/dwc3-meson-g12a.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> index 88b75b5a039c..1f7f4d88ed9d 100644
+> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
+> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> @@ -737,13 +737,13 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  		goto err_disable_clks;
+>  	}
+>  
+> -	ret = reset_control_deassert(priv->reset);
+> +	ret = reset_control_reset(priv->reset);
+>  	if (ret)
+> -		goto err_assert_reset;
+> +		goto err_disable_clks;
+>  
+>  	ret = dwc3_meson_g12a_get_phys(priv);
+>  	if (ret)
+> -		goto err_assert_reset;
+> +		goto err_disable_clks;
+>  
+>  	ret = priv->drvdata->setup_regmaps(priv, base);
+>  	if (ret)
+> @@ -752,7 +752,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  	if (priv->vbus) {
+>  		ret = regulator_enable(priv->vbus);
+>  		if (ret)
+> -			goto err_assert_reset;
+> +			goto err_disable_clks;
+>  	}
+>  
+>  	/* Get dr_mode */
+> @@ -765,13 +765,13 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  
+>  	ret = priv->drvdata->usb_init(priv);
+>  	if (ret)
+> -		goto err_assert_reset;
+> +		goto err_disable_clks;
+>  
+>  	/* Init PHYs */
+>  	for (i = 0 ; i < PHY_COUNT ; ++i) {
+>  		ret = phy_init(priv->phys[i]);
+>  		if (ret)
+> -			goto err_assert_reset;
+> +			goto err_disable_clks;
+>  	}
+>  
+>  	/* Set PHY Power */
+> @@ -809,9 +809,6 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  	for (i = 0 ; i < PHY_COUNT ; ++i)
+>  		phy_exit(priv->phys[i]);
+>  
+> -err_assert_reset:
+> -	reset_control_assert(priv->reset);
+> -
+>  err_disable_clks:
+>  	clk_bulk_disable_unprepare(priv->drvdata->num_clks,
+>  				   priv->drvdata->clks);
+> 
+
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
