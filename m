@@ -2,62 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E122547BF
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246E02547AD
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbgH0OyA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 10:54:00 -0400
-Received: from crapouillou.net ([89.234.176.41]:38886 "EHLO crapouillou.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727108AbgH0NOu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 09:14:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1598534071; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=WwRPballsUTfHg7LtDod/X0oRDgxUAPVDJxMko1nRlE=;
-        b=mKy0+Na1sG/NaDKdMbQ4pKIYpLLjmD2l24mz7kELAOQAvVNaIjzM7qn5E8qWav1QMcY06v
-        a/rCQNHBlv01f7orOOgyCrXMnky+0xaOG8LTanL58v0IVm6whkD6/wwQHayDqFQeDlfdt3
-        4xqyMvO7jvQBBuKgY8AmZNU8DUlxLiA=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Felipe Balbi <balbi@kernel.org>,
-        =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>,
-        =?UTF-8?q?=E5=91=A8=E6=AD=A3?= <sernia.zhou@foxmail.com>,
-        =?UTF-8?q?=E6=BC=86=E9=B9=8F=E6=8C=AF?= <aric.pzqi@ingenic.com>
-Cc:     od@zcrc.me, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2] USB: PHY: JZ4770: Fix uninitialized value written to HW register
-Date:   Thu, 27 Aug 2020 15:14:25 +0200
-Message-Id: <20200827131425.75998-1-paul@crapouillou.net>
+        id S1727769AbgH0NTE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 09:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727954AbgH0NSZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 09:18:25 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C61BC061264;
+        Thu, 27 Aug 2020 06:18:23 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id t2so5160741wma.0;
+        Thu, 27 Aug 2020 06:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wGOm36EJ1gvLT2vEuLBm0bHlK+EP6bPxI7F5u3wXPR4=;
+        b=Dy3ZnT0b4XvZlnNaeII0JsUKxqSjbFz+Z7OhG/wjskDJ/PnJsbHSQbx0BWivbJdHCH
+         j6/XjkAmC6OhhG7LLrlrb0uVUZxo6XoMDZ9MQFzUje9t8Oa2bQwUZfJHnZiHcJvrUbsG
+         i77TYccRCB91FAJgI7GLKikJ65oci6GcYLN6oOq8oZj4zFHMUKIxxXM9F/Ois0A7RM/1
+         PzHNRvNPBCYxatHt0pBMaVGby2n7AK/w/7ODwumi2Jf7qznj9hSMwHP455BJTgjO5cAW
+         La7nqnS0MLQY5AVl+LJDGpQGpAh/vqClkQNJamCHCKipH5+QJKZ3HC9mL9ZrSgSLCh7X
+         OzLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wGOm36EJ1gvLT2vEuLBm0bHlK+EP6bPxI7F5u3wXPR4=;
+        b=LHdx9fXhqdJxngz/XfjcezIQknPHyULrNAf5ildmbIjfl3K25SPp48m9b5+w/2QadA
+         5CpnXum9kHpU/SxgMGI3vLECQobu75saZ9ZM+PN4NX28/2UEbMHwagHqkvWzpkfdchW9
+         qQ5B1om2pHG1VmUSjHbhh16GjPSh3e6P+7yR9qatpUCy9Tl6H2EoEp3o+jv9oeng4Oeu
+         cB5Bxfdxrm+aDJ5nRHRNYJyGi7aAiwGYjSdw+O5T6GIh2gt5wWvpsNjcH6Cnh45nw8J5
+         pqOWrlU2Y1YOcE3NjFBfhBBM9qzGpAio3V5VPiw/ldLWhclTdOUSnMfchYYmhd4oQxI/
+         /tEQ==
+X-Gm-Message-State: AOAM531lWyzIjJuT9+++TjjnMPLIJs3dfrQD58259dTJ/MmMh83q/ed8
+        ACl+GoDhxhit98qMqytGCUw=
+X-Google-Smtp-Source: ABdhPJzI5QjfPnh3uAIN0AT002leMR5QibZkzxxKT/UrRwGZ8om6hYO2KClj4bQXPg1weT+7NmHm2g==
+X-Received: by 2002:a1c:19c2:: with SMTP id 185mr11738054wmz.8.1598534301988;
+        Thu, 27 Aug 2020 06:18:21 -0700 (PDT)
+Received: from lenovo-laptop ([2a00:23c4:4b87:b300:cc3a:c411:9a4b:dba6])
+        by smtp.gmail.com with ESMTPSA id f3sm5022756wmb.35.2020.08.27.06.18.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Aug 2020 06:18:21 -0700 (PDT)
+From:   Alex Dewar <alex.dewar90@gmail.com>
+X-Google-Original-From: Alex Dewar <alex.dewar@gmx.co.uk>
+Date:   Thu, 27 Aug 2020 14:18:19 +0100
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alex Dewar <alex.dewar90@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        accessrunner-general@lists.sourceforge.net,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: atm: don't use snprintf() for sysfs attrs
+Message-ID: <20200827131819.7rcl2f5js3hkoqj2@lenovo-laptop>
+References: <20200824222322.22962-1-alex.dewar90@gmail.com>
+ <48f2dc90-7852-eaf1-55d7-2c85cf954688@rasmusvillemoes.dk>
+ <20200827071537.GA168593@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200827071537.GA168593@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The 'reg' value was written to a hardware register in
-ingenic_usb_phy_init(), while not being initialized anywhere.
+On Thu, Aug 27, 2020 at 09:15:37AM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Aug 27, 2020 at 08:42:06AM +0200, Rasmus Villemoes wrote:
+> > On 25/08/2020 00.23, Alex Dewar wrote:
+> > > kernel/cpu.c: don't use snprintf() for sysfs attrs
+> > > 
+> > > As per the documentation (Documentation/filesystems/sysfs.rst),
+> > > snprintf() should not be used for formatting values returned by sysfs.
+> > >
+> > 
+> > Sure. But then the security guys come along and send a patch saying
+> > "sprintf is evil, always pass a buffer bound". Perhaps with a side of
+> > "this code could get copy-pasted, better not promote the use of sprintf
+> > more than strictly necessary".
+> > 
+> > Can we have a sysfs_sprintf() (could just be a macro that does sprintf)
+> > to make it clear to the next reader that we know we're in a sysfs show
+> > method? It would make auditing uses of sprintf() much easier.
+> 
+> Code churn to keep code checkers quiet for pointless reasons?  What
+> could go wrong with that...
+> 
+> It should be pretty obvious to any reader that you are in a sysfs show
+> method, as almost all of them are trivially tiny and obvious.  Yes, it
+> doesn't help with those that make blanket statements like "sprintf is
+> evil", but I think that kind of just shows them that they shouldn't be
+> making foolish blanket statements like that :)
 
-Fixes: 2a6c0b82e651 ("USB: PHY: JZ4770: Add support for new Ingenic SoCs.")
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/usb/phy/phy-jz4770.c | 1 +
- 1 file changed, 1 insertion(+)
+Perhaps I should have mentioned this in the commit message, but the problem
+is that snprintf() doesn't return the number of bytes written to the
+destination buffer, but the number of bytes that *would have been written if
+they fitted*, which may be more than the bounds specified [1]. So "return
+snprintf(...)" for sysfs attributes is an antipattern. If you need bounded
+string ops, scnprintf() is the way to go. Using snprintf() can give a
+false sense of security, because it isn't necessarily safe.
 
-diff --git a/drivers/usb/phy/phy-jz4770.c b/drivers/usb/phy/phy-jz4770.c
-index d4ee3cb721ea..f6d3731581eb 100644
---- a/drivers/usb/phy/phy-jz4770.c
-+++ b/drivers/usb/phy/phy-jz4770.c
-@@ -176,6 +176,7 @@ static int ingenic_usb_phy_init(struct usb_phy *phy)
- 
- 	/* Wait for PHY to reset */
- 	usleep_range(30, 300);
-+	reg = readl(priv->base + REG_USBPCR_OFFSET);
- 	writel(reg & ~USBPCR_POR, priv->base + REG_USBPCR_OFFSET);
- 	usleep_range(300, 1000);
- 
--- 
-2.28.0
+[1] https://github.com/KSPP/linux/issues/105
 
+> 
+> Anyway, we've had this for 20 years, if sysfs calls are the only left
+> remaining user of sprintf(), then I'll be glad to consider using a
+> "wrapper" function or macro.
+> 
+> thanks,
+> 
+> greg k-h
