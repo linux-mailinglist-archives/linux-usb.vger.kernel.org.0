@@ -2,39 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D80F2545CD
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 15:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C68F2545E0
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 15:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727987AbgH0NUo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 09:20:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52502 "EHLO mail.kernel.org"
+        id S1726853AbgH0N1d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 09:27:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54604 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727977AbgH0NUd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 09:20:33 -0400
+        id S1727933AbgH0N0Z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Aug 2020 09:26:25 -0400
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0BA2C2177B;
-        Thu, 27 Aug 2020 13:20:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E0CB02177B;
+        Thu, 27 Aug 2020 13:25:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598534422;
-        bh=3UUv5GZXs5OPc6NZSgfQgryXBZh3vLgUdbHtldSBIqY=;
+        s=default; t=1598534725;
+        bh=nq5+PCguov0nBPnuBUE5YRB4tRsLuPvU3wHdjfwz+6w=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=cObzv+HE6f/RtXak9qv0Txv8BiWCBx8D3x3KxpTSyXwDZozPkJEsa8ktg8V/8BHoL
-         c1nGGMG09zY0nPMNzCCvoqUfV8gB+XTtp2pUSskwBOf1Dde3Y8yUIimWXbfld9ca2G
-         5JaLTy37hjTDsCFtkrBbzhMpj06fPb/F/+iO3Ph8=
+        b=pV09dhj0HqFaav1SauxvQbsAUbF8O8lanGpHV0Ra0sHSzuCutOC77h/Voqy59JPOO
+         MXZs6YjjpgdzUAJmKLkoJ927yX77xFe9MhUFYiTHfF3e0VVwQMVkkrEnGyGQg43gPA
+         G38VttbF8iDsrQkf5tXMZSLrx4jp+zEjq28dA2Ek=
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
-        rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
-        Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v7 3/3] usb: cdns3: imx: add glue layer runtime pm
- implementation
-In-Reply-To: <20200825021120.4926-4-peter.chen@nxp.com>
-References: <20200825021120.4926-1-peter.chen@nxp.com>
- <20200825021120.4926-4-peter.chen@nxp.com>
-Date:   Thu, 27 Aug 2020 16:20:15 +0300
-Message-ID: <87eensi5tc.fsf@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        =?utf-8?B?5ZGo?= =?utf-8?B?5q2j?= <sernia.zhou@foxmail.com>,
+        =?utf-8?B?5ryG6bmP5oyv?= <aric.pzqi@ingenic.com>, od@zcrc.me,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] USB: PHY: JZ4770: Fix uninitialized value written
+ to HW register
+In-Reply-To: <PN4QFQ.KWNBY2ZWQ7XC2@crapouillou.net>
+References: <20200827124308.71963-1-paul@crapouillou.net>
+ <20200827124308.71963-2-paul@crapouillou.net> <87v9h4i6t5.fsf@kernel.org>
+ <PN4QFQ.KWNBY2ZWQ7XC2@crapouillou.net>
+Date:   Thu, 27 Aug 2020 16:25:18 +0300
+Message-ID: <87bliwi5kx.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -47,266 +50,134 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Peter Chen <peter.chen@nxp.com> writes:
 
-> Add imx glue layer runtime pm implementation, and the runtime
-> pm is default off.
+Hi,
+
+Paul Cercueil <paul@crapouillou.net> writes:
+>>>  @@ -172,7 +172,8 @@ static int ingenic_usb_phy_init(struct usb_phy=20
+>>> *phy)
+>>>   		return err;
+>>>   	}
+>>>=20
+>>>  -	priv->soc_info->usb_phy_init(phy);
+>>>  +	reg =3D priv->soc_info->usb_phy_init(phy);
+>>>  +	writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>=20
+>> not fixing any bug.
+>>=20
+>> Looking at the code, the bug follows after this line. It would suffice
+>> to read REG_USBPCR_OFFSET in order to initialize reg. This bug fix=20
+>> could
+>> have been a one liner.
 >
-> Reviewed-by: Pawel Laszczak <pawell@cadence.com>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
->  drivers/usb/cdns3/cdns3-imx.c | 203 ++++++++++++++++++++++++++++++++--
->  1 file changed, 192 insertions(+), 11 deletions(-)
+> There's no need to re-read a register when you have the value readily=20
+> available. It just needs to be returned from the usb_phy_init=20
+> callbacks. But yes, it's not a one-liner.
+
+there's a difference between making a bug fix and reworking the behavior
+of the driver ;-)
+
+>>>  @@ -195,19 +196,15 @@ static void ingenic_usb_phy_remove(void *phy)
+>>>   	usb_remove_phy(phy);
+>>>   }
+>>>=20
+>>>  -static void jz4770_usb_phy_init(struct usb_phy *phy)
+>>>  +static u32 jz4770_usb_phy_init(struct usb_phy *phy)
+>>=20
+>> not a bug fix
+>>=20
+>>>   {
+>>>  -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
+>>>  -	u32 reg;
+>>>  -
+>>>  -	reg =3D USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS=
+=20
+>>> |
+>>>  +	return USBPCR_AVLD_REG | USBPCR_COMMONONN |=20
+>>> USBPCR_IDPULLUP_ALWAYS |
+>>>   		USBPCR_COMPDISTUNE_DFT | USBPCR_OTGTUNE_DFT |=20
+>>> USBPCR_SQRXTUNE_DFT |
+>>>   		USBPCR_TXFSLSTUNE_DFT | USBPCR_TXRISETUNE_DFT |=20
+>>> USBPCR_TXVREFTUNE_DFT |
+>>>   		USBPCR_POR;
+>>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>=20
+>> not a bug fix
+>>=20
+>>>   }
+>>>=20
+>>>  -static void jz4780_usb_phy_init(struct usb_phy *phy)
+>>>  +static u32 jz4780_usb_phy_init(struct usb_phy *phy)
+>>=20
+>> not a bug fix
+>>=20
+>>>  @@ -216,11 +213,10 @@ static void jz4780_usb_phy_init(struct=20
+>>> usb_phy *phy)
+>>>   		USBPCR1_WORD_IF_16BIT;
+>>>   	writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>>>=20
+>>>  -	reg =3D USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
+>>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>>  +	return USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
+>>=20
+>> not a bug fix
+>>=20
+>>>   }
+>>>=20
+>>>  -static void x1000_usb_phy_init(struct usb_phy *phy)
+>>>  +static u32 x1000_usb_phy_init(struct usb_phy *phy)
+>>=20
+>> not a bug fix
+>>=20
+>>>   {
+>>>   	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
+>>>   	u32 reg;
+>>>  @@ -228,13 +224,12 @@ static void x1000_usb_phy_init(struct usb_phy=20
+>>> *phy)
+>>>   	reg =3D readl(priv->base + REG_USBPCR1_OFFSET) |=20
+>>> USBPCR1_WORD_IF_16BIT;
+>>>   	writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>>>=20
+>>>  -	reg =3D USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
+>>>  +	return USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
+>>>   		USBPCR_TXHSXVTUNE_DCR_15MV | USBPCR_TXVREFTUNE_INC_25PPT |
+>>>   		USBPCR_COMMONONN | USBPCR_POR;
+>>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>=20
+>> not a bug fix
+>>=20
+>>>   }
+>>>=20
+>>>  -static void x1830_usb_phy_init(struct usb_phy *phy)
+>>>  +static u32 x1830_usb_phy_init(struct usb_phy *phy)
+>>=20
+>> not a bug fix
+>>=20
+>>>   {
+>>>   	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
+>>>   	u32 reg;
+>>>  @@ -246,9 +241,8 @@ static void x1830_usb_phy_init(struct usb_phy=20
+>>> *phy)
+>>>   		USBPCR1_DMPD | USBPCR1_DPPD;
+>>>   	writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>>>=20
+>>>  -	reg =3D USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT=20
+>>> |	USBPCR_TXPREEMPHTUNE |
+>>>  +	return USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT |=20
+>>> USBPCR_TXPREEMPHTUNE |
+>>>   		USBPCR_COMMONONN | USBPCR_POR;
+>>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>=20
+>> not a bug fix
 >
-> diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
-> index aba988e71958..a413df26e948 100644
-> --- a/drivers/usb/cdns3/cdns3-imx.c
-> +++ b/drivers/usb/cdns3/cdns3-imx.c
-> @@ -15,6 +15,8 @@
->  #include <linux/io.h>
->  #include <linux/of_platform.h>
->  #include <linux/iopoll.h>
-> +#include <linux/pm_runtime.h>
-> +#include "core.h"
->=20=20
->  #define USB3_CORE_CTRL1    0x00
->  #define USB3_CORE_CTRL2    0x04
-> @@ -32,7 +34,7 @@
->  /* Register bits definition */
->=20=20
->  /* USB3_CORE_CTRL1 */
-> -#define SW_RESET_MASK	(0x3f << 26)
-> +#define SW_RESET_MASK	GENMASK(31, 26)
+> Well, if you don't like my bug fix, next time wait for my Reviewed-by.
 
-why is this part of adding imx runtime pm?
+why so angry? Take a break every once in a while. Besides, someone else
+already sent the oneliner before you ;-)
 
-> @@ -44,17 +46,17 @@
->  #define OC_DISABLE	BIT(9)
->  #define MDCTRL_CLK_SEL	BIT(7)
->  #define MODE_STRAP_MASK	(0x7)
-> -#define DEV_MODE	(1 << 2)
-> -#define HOST_MODE	(1 << 1)
-> -#define OTG_MODE	(1 << 0)
-> +#define DEV_MODE	BIT(2)
-> +#define HOST_MODE	BIT(1)
-> +#define OTG_MODE	BIT(0)
-
-and these?
-
->=20=20
->  /* USB3_INT_REG */
->  #define CLK_125_REQ	BIT(29)
->  #define LPM_CLK_REQ	BIT(28)
->  #define DEVU3_WAEKUP_EN	BIT(14)
->  #define OTG_WAKEUP_EN	BIT(12)
-> -#define DEV_INT_EN (3 << 8) /* DEV INT b9:8 */
-> -#define HOST_INT1_EN (1 << 0) /* HOST INT b7:0 */
-> +#define DEV_INT_EN	GENMASK(9, 8) /* DEV INT b9:8 */
-> +#define HOST_INT1_EN	BIT(0) /* HOST INT b7:0 */
-
-what about these?
-
-> @@ -62,15 +64,34 @@
->  #define HOST_POWER_ON_READY	BIT(12)
->=20=20
->  /* USB3_SSPHY_STATUS */
-> -#define CLK_VALID_MASK		(0x3f << 26)
-> -#define CLK_VALID_COMPARE_BITS	(0xf << 28)
-> -#define PHY_REFCLK_REQ		(1 << 0)
-> +#define CLK_VALID_MASK		GENMASK(31, 26)
-> +#define CLK_VALID_COMPARE_BITS	GENMASK(31, 28)
-> +#define PHY_REFCLK_REQ		BIT(0)
-
-these?
-
-> +/* OTG registers definition */
-> +#define OTGSTS		0x4
-> +/* OTGSTS */
-> +#define OTG_NRDY	BIT(11)
-> +
-> +/* xHCI registers definition  */
-> +#define XECP_PM_PMCSR		0x8018
-> +#define XECP_AUX_CTRL_REG1	0x8120
-> +
-> +/* Register bits definition */
-> +/* XECP_AUX_CTRL_REG1 */
-> +#define CFG_RXDET_P3_EN		BIT(15)
-> +
-> +/* XECP_PM_PMCSR */
-> +#define PS_MASK			GENMASK(1, 0)
-> +#define PS_D0			0
-> +#define PS_D1			1
-
-I think only these are part of $subject
-
->  struct cdns_imx {
->  	struct device *dev;
->  	void __iomem *noncore;
->  	struct clk_bulk_data *clks;
->  	int num_clks;
-> +	struct platform_device *cdns3_pdev;
->  };
->=20=20
->  static inline u32 cdns_imx_readl(struct cdns_imx *data, u32 offset)
-> @@ -126,6 +147,20 @@ static int cdns_imx_noncore_init(struct cdns_imx *da=
-ta)
->  	return ret;
->  }
->=20=20
-> +static int cdns_imx_platform_suspend(struct device *dev,
-> +	bool suspend, bool wakeup);
-> +static struct cdns3_platform_data cdns_imx_pdata =3D {
-
-make it const?
-
-> +	.platform_suspend =3D cdns_imx_platform_suspend,
-> +};
-> +
-> +static struct of_dev_auxdata cdns_imx_auxdata[] =3D {
-
-const?
-
-> +	{
-> +	.compatible =3D "cdns,usb3",
-> +	.platform_data =3D &cdns_imx_pdata,
-> +	},
-
-bad indentation
-
-> @@ -194,6 +233,147 @@ static int cdns_imx_remove(struct platform_device *=
-pdev)
->  	return 0;
->  }
->=20=20
-> +#ifdef CONFIG_PM
-> +static void cdns3_set_wakeup(struct cdns_imx *data, bool enable)
-> +{
-> +	u32 value;
-> +
-> +	value =3D cdns_imx_readl(data, USB3_INT_REG);
-> +	if (enable)
-> +		value |=3D OTG_WAKEUP_EN | DEVU3_WAEKUP_EN;
-> +	else
-> +		value &=3D ~(OTG_WAKEUP_EN | DEVU3_WAEKUP_EN);
-> +
-> +	cdns_imx_writel(data, USB3_INT_REG, value);
-> +}
-> +
-> +static int cdns_imx_platform_suspend(struct device *dev,
-> +		bool suspend, bool wakeup)
-> +{
-> +	struct cdns3 *cdns =3D dev_get_drvdata(dev);
-> +	struct device *parent =3D dev->parent;
-> +	struct cdns_imx *data =3D dev_get_drvdata(parent);
-> +	void __iomem *otg_regs =3D (void __iomem *)(cdns->otg_regs);
-
-why the cast?
-
-> +	void __iomem *xhci_regs =3D cdns->xhci_regs;
-> +	u32 value;
-> +	int ret =3D 0;
-> +
-> +	if (cdns->role !=3D USB_ROLE_HOST)
-> +		return 0;
-> +
-> +	if (suspend) {
-> +		/* SW request low power when all usb ports allow to it ??? */
-> +		value =3D readl(xhci_regs + XECP_PM_PMCSR);
-> +		value &=3D ~PS_MASK;
-> +		value |=3D PS_D1;
-> +		writel(value, xhci_regs + XECP_PM_PMCSR);
-> +
-> +		/* mdctrl_clk_sel */
-> +		value =3D cdns_imx_readl(data, USB3_CORE_CTRL1);
-> +		value |=3D MDCTRL_CLK_SEL;
-> +		cdns_imx_writel(data, USB3_CORE_CTRL1, value);
-> +
-> +		/* wait for mdctrl_clk_status */
-> +		value =3D cdns_imx_readl(data, USB3_CORE_STATUS);
-> +		ret =3D readl_poll_timeout(data->noncore + USB3_CORE_STATUS, value,
-> +			(value & MDCTRL_CLK_STATUS) =3D=3D MDCTRL_CLK_STATUS,
-> +			10, 100000);
-> +		if (ret)
-> +			dev_warn(parent, "wait mdctrl_clk_status timeout\n");
-> +
-> +		/* wait lpm_clk_req to be 0 */
-> +		value =3D cdns_imx_readl(data, USB3_INT_REG);
-> +		ret =3D readl_poll_timeout(data->noncore + USB3_INT_REG, value,
-> +			(value & LPM_CLK_REQ) !=3D LPM_CLK_REQ,
-> +			10, 100000);
-> +		if (ret)
-> +			dev_warn(parent, "wait lpm_clk_req timeout\n");
-> +
-> +		/* wait phy_refclk_req to be 0 */
-> +		value =3D cdns_imx_readl(data, USB3_SSPHY_STATUS);
-> +		ret =3D readl_poll_timeout(data->noncore + USB3_SSPHY_STATUS, value,
-> +			(value & PHY_REFCLK_REQ) !=3D PHY_REFCLK_REQ,
-> +			10, 100000);
-> +		if (ret)
-> +			dev_warn(parent, "wait phy_refclk_req timeout\n");
-> +
-> +		cdns3_set_wakeup(data, wakeup);
-> +	} else {
-> +		cdns3_set_wakeup(data, false);
-> +
-> +		/* SW request D0 */
-> +		value =3D readl(xhci_regs + XECP_PM_PMCSR);
-> +		value &=3D ~PS_MASK;
-> +		value |=3D PS_D0;
-> +		writel(value, xhci_regs + XECP_PM_PMCSR);
-> +
-> +		/* clr CFG_RXDET_P3_EN */
-> +		value =3D readl(xhci_regs + XECP_AUX_CTRL_REG1);
-> +		value &=3D ~CFG_RXDET_P3_EN;
-> +		writel(value, xhci_regs + XECP_AUX_CTRL_REG1);
-> +
-> +		/* clear mdctrl_clk_sel */
-> +		value =3D cdns_imx_readl(data, USB3_CORE_CTRL1);
-> +		value &=3D ~MDCTRL_CLK_SEL;
-> +		cdns_imx_writel(data, USB3_CORE_CTRL1, value);
-> +
-> +		/* wait CLK_125_REQ to be 1 */
-> +		value =3D cdns_imx_readl(data, USB3_INT_REG);
-> +		ret =3D readl_poll_timeout(data->noncore + USB3_INT_REG, value,
-> +			(value & CLK_125_REQ) =3D=3D CLK_125_REQ,
-> +			10, 100000);
-> +		if (ret)
-> +			dev_warn(parent, "wait CLK_125_REQ timeout\n");
-> +
-> +		/* wait for mdctrl_clk_status is cleared */
-> +		value =3D cdns_imx_readl(data, USB3_CORE_STATUS);
-> +		ret =3D readl_poll_timeout(data->noncore + USB3_CORE_STATUS, value,
-> +			(value & MDCTRL_CLK_STATUS) !=3D MDCTRL_CLK_STATUS,
-> +			10, 100000);
-> +		if (ret)
-> +			dev_warn(parent, "wait mdctrl_clk_status cleared timeout\n");
-> +
-> +		/* Wait until OTG_NRDY is 0 */
-> +		value =3D readl(otg_regs + OTGSTS);
-> +		ret =3D readl_poll_timeout(otg_regs + OTGSTS, value,
-> +			(value & OTG_NRDY) !=3D OTG_NRDY,
-> +			10, 100000);
-> +		if (ret)
-> +			dev_warn(parent, "wait OTG ready timeout\n");
-> +	}
-> +
-> +	return ret;
-> +
-> +}
-> +
-> +static int cdns_imx_resume(struct device *dev)
-> +{
-> +	struct cdns_imx *data =3D dev_get_drvdata(dev);
-> +
-> +	return clk_bulk_prepare_enable(data->num_clks, data->clks);
-
-do you need to prepare and unprepare for every suspend/resume? Isn't
-enable/disable enough?
-
-> +static const struct dev_pm_ops cdns_imx_pm_ops =3D {
-> +	SET_RUNTIME_PM_OPS(cdns_imx_suspend, cdns_imx_resume, NULL)
-
-could the same be used for system sleep?
+In any case, why should I wait for your Reviewed-by? Get maintainer
+doesn't list you as the maintainer for it. Do you want to update
+MAINTAINERS by any chance?
 
 =2D-=20
 balbi
@@ -316,19 +187,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9Hsw8RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYhJA//SSKJauKLtLTYaJFqek25jBQAd+/X9KLk
-iBbPmIKmV6w7xLy2qTdqbjfQCuwrp1cYQxRE8gXkvyhmirhj8EI1hBz1M7pfUgGm
-YhXfHQyag3qE3Z0r8fgU1wIJKk9scRHIrGtATT0iSux3EAFoqgtuuPxMDiJMXdNK
-xSd4zAUz9/ZA+niGpLCECA396yo3Ohyr2fkIDkW1HA5hvY7XSPcYHgnZsPR648Wq
-fFn4OM6ba4kpuWZNBzZa4DzEvxJ9NpweYU59iKT/z+0+QlqtJ0ljDTlOezquPrM4
-Ktq/+Re4N+rylkiU1EgiYQUIgCCG7U3dYpHBQE56h+Pl0tXFgXCVkBTqUCYNBpb/
-h7FKoxGMKR+ofUk00wSoOpdh0GT0bDxcyYHpLqTaJBuH7zcg5n+xflQbVoD++kS5
-1BGnuErSFrhB2I4nKRYI+85UBd7L9nAv9zAv3yINLNZ4UwcjSzcO1UNLGuQPEW6v
-cLkgj9Ix+lTubz0/lB/yxM9cS2Ku4DWXP9qLftaGmWMQyVxDixZayQuwp3uTCxeD
-RvT5NpFyEfYaYb9tJZdJOP8NfzGvNBURtjLbKUBGUxyw2rbowalbiCbpUn8mr4EX
-Yj9HF56tr+uW5P/NX7LQieHwNS5kfbvf59NatU0ZsxstK0Mulwn5yatP9UBzzTPu
-v1KwlNLSfMU=
-=iJlq
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9HtD4RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQbmkg/6A6su3CbiM5/EDQM0TPLxiJMmFN+kRX5F
+vXp7xxu1B7iYEfai8fmXfR/rEdiQQgwBnAhigqNUHhzyzuhsxPbZ2jvDoIoY9e1o
+0egUHicDVH10gWj9Od3ZiLHVdG1K7x2AC3cddePtN82om/sUJrRWxqDAR2MfCNzN
+aARpImMPai7C9i0uAHkj4aLAbryk9zXzpZUbOP6DYm6VrQqHCPVRkLvt09EUvVQZ
+iIkxWz2/MjWPMNhuGZ1xQnHvcBBFRdW9lRcEBidhWEKjevRSFFN/FsiFcfOsLpG7
+gHxFVoCz8TWEBGASDCoVi1hZOTTcs+S0PkO9L5efY+Z3Kb9VTmnGe379hfBA88Gs
+NlVLm1xPviJS+GdVmEHjvDD03P/jlESmAcAv5bo8eJd3e0HcSedwYnKflL7Tez8R
+04CkUo9m0HS7pZ3Dj0QlHVG5+n2kB6q5SuegSepAPhu0o1T3FEWS0kVOJ8x/4JBO
+pH3HbroqbayuCUQVPXex6/jfLiVbu/Oq+mqx/YOgaE8LTk2i7pHxv/DuhG7desN+
+4bGm4CYaR2UeMTiqSKdXN8FX4sQk8vGvvNo26gx7klYDLGR2w6OWtYTu2OGTvJkD
+RyS8l5e9acIH6nU64fK8BPRrirkX2Hwa/yy/pCXYPyeR+NYOwotn2XDUHmuLCWVX
+E2iIpBBsrvg=
+=TuCC
 -----END PGP SIGNATURE-----
 --=-=-=--
