@@ -2,206 +2,282 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00729254031
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 10:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3E6254166
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 11:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728008AbgH0IFb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 04:05:31 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:26299 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727823AbgH0IF1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 04:05:27 -0400
-X-UUID: 13d119ae36ce4216b0ccab2afddfc3a6-20200827
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=/rUhkoefWsM5J0GijhaCYXHwxwTlQ+3R3C/h84JxZFE=;
-        b=J+h2PSPaarqfpv0DIgAt6LG0VGlOjsgSy00KPYQHxRqBA+Oe9oMv68PUczGEteoqZQIOKbjcXJMrMay+OtC8SDQcHrdD923JMX93rjEH2Gji2vswr9PYeiG+oIfhcu9RwRbOqIqPMI3pjXfjuHMon4yyQuARrr1k4PIn5qA7LwI=;
-X-UUID: 13d119ae36ce4216b0ccab2afddfc3a6-20200827
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 727189691; Thu, 27 Aug 2020 16:05:01 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N2.mediatek.inc
- (172.27.4.72) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 27 Aug
- 2020 16:05:00 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 27 Aug 2020 16:05:00 +0800
-Message-ID: <1598515415.21253.22.camel@mhfsdcap03>
-Subject: Re: [PATCH v2 1/2] usb typec: mt6360: Add support for mt6360 Type-C
- driver
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     cy_huang <u0084500@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <linux@roeck-us.net>,
-        <heikki.krogerus@linux.intel.com>, <cy_huang@richtek.com>,
-        <gene_chen@richtek.com>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Thu, 27 Aug 2020 16:03:35 +0800
-In-Reply-To: <1598503859-29620-1-git-send-email-u0084500@gmail.com>
-References: <1598503859-29620-1-git-send-email-u0084500@gmail.com>
+        id S1727814AbgH0JDF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 27 Aug 2020 05:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726266AbgH0JDE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 05:03:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3115C061264
+        for <linux-usb@vger.kernel.org>; Thu, 27 Aug 2020 02:03:04 -0700 (PDT)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1kBDoC-0002xt-8J; Thu, 27 Aug 2020 11:03:00 +0200
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1kBDoA-0006g5-NR; Thu, 27 Aug 2020 11:02:58 +0200
+Message-ID: <8d3045b22bf9524eba9dddf1ff470858d4b748be.camel@pengutronix.de>
+Subject: Re: [PATCH 2/2] usb: dwc3: Add driver for Xilinx platforms
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Manish Narani <manish.narani@xilinx.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        michal.simek@xilinx.com, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        git@xilinx.com
+Date:   Thu, 27 Aug 2020 11:02:58 +0200
+In-Reply-To: <1598467441-124203-3-git-send-email-manish.narani@xilinx.com>
+References: <1598467441-124203-1-git-send-email-manish.narani@xilinx.com>
+         <1598467441-124203-3-git-send-email-manish.narani@xilinx.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 612050C4527837B516ECA7941497B19744ADC0CD97CB56446CFC6A88A99B35DC2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA4LTI3IGF0IDEyOjUwICswODAwLCBjeV9odWFuZyB3cm90ZToNCj4gRnJv
-bTogQ2hpWXVhbiBIdWFuZyA8Y3lfaHVhbmdAcmljaHRlay5jb20+DQo+IA0KPiBNZWRpYXRlayBN
-VDYzNjAgaXMgYSBtdWx0aS1mdW5jdGlvbmFsIElDIHRoYXQgaW5jbHVkZXMgVVNCIFR5cGUtQy4N
-Cj4gSXQgd29ya3Mgd2l0aCBUeXBlLUMgUG9ydCBDb250cm9sbGVyIE1hbmFnZXIgdG8gcHJvdmlk
-ZSBVU0IgUEQNCj4gYW5kIFVTQiBUeXBlLUMgZnVuY3Rpb25hbGl0aWVzLg0KPiANCj4gQWRkIGZp
-eCB0byBQcmV2ZW50IHRoZSByYWNlIGNvbmRpdGlvbiBmcm9tIGludGVycnVwdCBhbmQgdGNwY2kg
-cG9ydCB1bnJlZ2lzdGVyDQo+IGR1cmluZyBtb2R1bGUgcmVtb3ZlLg0KPiANCj4gU2lnbmVkLW9m
-Zi1ieTogQ2hpWXVhbiBIdWFuZyA8Y3lfaHVhbmdAcmljaHRlay5jb20+DQo+IC0tLQ0KPiAgZHJp
-dmVycy91c2IvdHlwZWMvdGNwbS9LY29uZmlnICAgICAgICB8ICAgOCArKw0KPiAgZHJpdmVycy91
-c2IvdHlwZWMvdGNwbS9NYWtlZmlsZSAgICAgICB8ICAgMSArDQo+ICBkcml2ZXJzL3VzYi90eXBl
-Yy90Y3BtL3RjcGNpX210NjM2MC5jIHwgMjEzICsrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysNCkNhbiB5b3UgYXZvaWQgdXNpbmcgc3BlY2lhbCBTb0MgbmFtZSBpbiBmaWxlIG5hbWU/
-DQpJdCdzIG5vdCBjbGVhciBpZiB5b3UgbGF0ZXIgc3VwcG9ydCBuZXcgU29DIGluIHRoZSBkcml2
-ZXIsIGUuZy4gbXQ2M3h4Pw0KDQo+ICAzIGZpbGVzIGNoYW5nZWQsIDIyMiBpbnNlcnRpb25zKCsp
-DQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy91c2IvdHlwZWMvdGNwbS90Y3BjaV9tdDYz
-NjAuYw0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3R5cGVjL3RjcG0vS2NvbmZpZyBi
-L2RyaXZlcnMvdXNiL3R5cGVjL3RjcG0vS2NvbmZpZw0KPiBpbmRleCBmYTNmMzkzLi41OGE2NGUx
-IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi90eXBlYy90Y3BtL0tjb25maWcNCj4gKysrIGIv
-ZHJpdmVycy91c2IvdHlwZWMvdGNwbS9LY29uZmlnDQo+IEBAIC0yNyw2ICsyNywxNCBAQCBjb25m
-aWcgVFlQRUNfUlQxNzExSA0KPiAgCSAgVHlwZS1DIFBvcnQgQ29udHJvbGxlciBNYW5hZ2VyIHRv
-IHByb3ZpZGUgVVNCIFBEIGFuZCBVU0INCj4gIAkgIFR5cGUtQyBmdW5jdGlvbmFsaXRpZXMuDQo+
-ICANCj4gK2NvbmZpZyBUWVBFQ19NVDYzNjANCj4gKwl0cmlzdGF0ZSAiTWVkaWF0ZWsgTVQ2MzYw
-IFR5cGUtQyBkcml2ZXIiDQo+ICsJZGVwZW5kcyBvbiBNRkRfTVQ2MzYwDQo+ICsJaGVscA0KPiAr
-CSAgTWVkaWF0ZWsgTVQ2MzYwIGlzIGEgbXVsdGktZnVuY3Rpb25hbCBJQyB0aGF0IGluY2x1ZGVz
-DQo+ICsJICBVU0IgVHlwZS1DLiBJdCB3b3JrcyB3aXRoIFR5cGUtQyBQb3J0IENvbnRyb2xsZXIg
-TWFuYWdlcg0KPiArCSAgdG8gcHJvdmlkZSBVU0IgUEQgYW5kIFVTQiBUeXBlLUMgZnVuY3Rpb25h
-bGl0aWVzLg0KPiArDQo+ICBlbmRpZiAjIFRZUEVDX1RDUENJDQo+ICANCj4gIGNvbmZpZyBUWVBF
-Q19GVVNCMzAyDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi90eXBlYy90Y3BtL01ha2VmaWxl
-IGIvZHJpdmVycy91c2IvdHlwZWMvdGNwbS9NYWtlZmlsZQ0KPiBpbmRleCBhNWZmNmM4Li43NTky
-Y2NiIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi90eXBlYy90Y3BtL01ha2VmaWxlDQo+ICsr
-KyBiL2RyaXZlcnMvdXNiL3R5cGVjL3RjcG0vTWFrZWZpbGUNCj4gQEAgLTUsMyArNSw0IEBAIG9i
-ai0kKENPTkZJR19UWVBFQ19XQ09WRSkJKz0gdHlwZWNfd2NvdmUubw0KPiAgdHlwZWNfd2NvdmUt
-eQkJCTo9IHdjb3ZlLm8NCj4gIG9iai0kKENPTkZJR19UWVBFQ19UQ1BDSSkJKz0gdGNwY2kubw0K
-PiAgb2JqLSQoQ09ORklHX1RZUEVDX1JUMTcxMUgpCSs9IHRjcGNpX3J0MTcxMWgubw0KPiArb2Jq
-LSQoQ09ORklHX1RZUEVDX01UNjM2MCkJKz0gdGNwY2lfbXQ2MzYwLm8NCj4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvdXNiL3R5cGVjL3RjcG0vdGNwY2lfbXQ2MzYwLmMgYi9kcml2ZXJzL3VzYi90eXBl
-Yy90Y3BtL3RjcGNpX210NjM2MC5jDQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IDAw
-MDAwMDAwLi5hMzgxYjVkDQo+IC0tLSAvZGV2L251bGwNCj4gKysrIGIvZHJpdmVycy91c2IvdHlw
-ZWMvdGNwbS90Y3BjaV9tdDYzNjAuYw0KPiBAQCAtMCwwICsxLDIxMyBAQA0KPiArLy8gU1BEWC1M
-aWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb25seQ0KPiArLy8NCj4gKy8vIENvcHlyaWdodCAo
-QykgMjAyMCBNZWRpYVRlayBJbmMuDQo+ICsvLw0KPiArLy8gQXV0aG9yOiBDaGlZdWFuIEh1YW5n
-IDxjeV9odWFuZ0ByaWNodGVrLmNvbT4NClVzZSAvKiAqLyBleGNlcHQgU1BEWD8NCg0KPiArDQo+
-ICsjaW5jbHVkZSA8bGludXgvaW50ZXJydXB0Lmg+DQo+ICsjaW5jbHVkZSA8bGludXgva2VybmVs
-Lmg+DQo+ICsjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvb2Yu
-aD4NCj4gKyNpbmNsdWRlIDxsaW51eC9wbGF0Zm9ybV9kZXZpY2UuaD4NCj4gKyNpbmNsdWRlIDxs
-aW51eC9yZWdtYXAuaD4NCj4gKyNpbmNsdWRlIDxsaW51eC91c2IvdGNwbS5oPg0KPiArDQo+ICsj
-aW5jbHVkZSAidGNwY2kuaCINCj4gKw0KPiArI2RlZmluZSBNVDYzNjBfUkVHX1ZDT05OQ1RSTDEJ
-MHg4Qw0KPiArI2RlZmluZSBNVDYzNjBfUkVHX01PREVDVFJMMgkweDhGDQo+ICsjZGVmaW5lIE1U
-NjM2MF9SRUdfU1dSRVNFVAkweEEwDQo+ICsjZGVmaW5lIE1UNjM2MF9SRUdfREVCQ1RSTDEJMHhB
-MQ0KPiArI2RlZmluZSBNVDYzNjBfUkVHX0RSUENUUkwxCTB4QTINCj4gKyNkZWZpbmUgTVQ2MzYw
-X1JFR19EUlBDVFJMMgkweEEzDQo+ICsjZGVmaW5lIE1UNjM2MF9SRUdfSTJDVE9SU1QJMHhCRg0K
-PiArI2RlZmluZSBNVDYzNjBfUkVHX1JYQ1RSTDIJMHhDRg0KPiArI2RlZmluZSBNVDYzNjBfUkVH
-X0NURENUUkwyCTB4RUMNCj4gKw0KPiArLyogTVQ2MzYwX1JFR19WQ09OTkNUUkwxICovDQo+ICsj
-ZGVmaW5lIE1UNjM2MF9WQ09OTkNMX0VOQUJMRQlCSVQoMCkNCj4gKy8qIE1UNjM2MF9SRUdfUlhD
-VFJMMiAqLw0KPiArI2RlZmluZSBNVDYzNjBfT1BFTjQwTV9FTkFCTEUJQklUKDcpDQo+ICsvKiBN
-VDYzNjBfUkVHX0NURENUUkwyICovDQo+ICsjZGVmaW5lIE1UNjM2MF9SUE9ORVNIT1RfRU5BQkxF
-CUJJVCg2KQ0KPiArDQo+ICtzdHJ1Y3QgbXQ2MzYwX3RjcGNfaW5mbyB7DQo+ICsJc3RydWN0IHRj
-cGNpX2RhdGEgdGRhdGE7DQo+ICsJc3RydWN0IHRjcGNpICp0Y3BjaTsNCj4gKwlzdHJ1Y3QgZGV2
-aWNlICpkZXY7DQo+ICsJaW50IGlycTsNCj4gK307DQo+ICsNCj4gK3N0YXRpYyBpbmxpbmUgaW50
-IG10NjM2MF90Y3BjX3JlYWQxNihzdHJ1Y3QgcmVnbWFwICpyZWdtYXAsDQo+ICsJCQkJICAgICB1
-bnNpZ25lZCBpbnQgcmVnLCB1MTYgKnZhbCkNCj4gK3sNCj4gKwlyZXR1cm4gcmVnbWFwX3Jhd19y
-ZWFkKHJlZ21hcCwgcmVnLCB2YWwsIHNpemVvZih1MTYpKTsNCj4gK30NCj4gKw0KPiArc3RhdGlj
-IGlubGluZSBpbnQgbXQ2MzYwX3RjcGNfd3JpdGUxNihzdHJ1Y3QgcmVnbWFwICpyZWdtYXAsDQo+
-ICsJCQkJICAgICAgdW5zaWduZWQgaW50IHJlZywgdTE2IHZhbCkNCj4gK3sNCj4gKwlyZXR1cm4g
-cmVnbWFwX3Jhd193cml0ZShyZWdtYXAsIHJlZywgJnZhbCwgc2l6ZW9mKHUxNikpOw0KPiArfQ0K
-PiArDQo+ICtzdGF0aWMgaW50IG10NjM2MF90Y3BjX2luaXQoc3RydWN0IHRjcGNpICp0Y3BjaSwg
-c3RydWN0IHRjcGNpX2RhdGEgKnRkYXRhKQ0KPiArew0KPiArCXN0cnVjdCByZWdtYXAgKnJlZ21h
-cCA9IHRkYXRhLT5yZWdtYXA7DQo+ICsJaW50IHJldDsNCj4gKw0KPiArCXJldCA9IHJlZ21hcF93
-cml0ZShyZWdtYXAsIE1UNjM2MF9SRUdfU1dSRVNFVCwgMHgwMSk7DQo+ICsJaWYgKHJldCkNCj4g
-KwkJcmV0dXJuIHJldDsNCj4gKw0KPiArCS8qIGFmdGVyIHJlc2V0IGNvbW1hbmQsIHdhaXQgMX4y
-bXMgdG8gd2FpdCBJQyBhY3Rpb24gKi8NCj4gKwl1c2xlZXBfcmFuZ2UoMTAwMCwgMjAwMCk7DQo+
-ICsNCj4gKwkvKiB3cml0ZSBhbGwgYWxlcnQgdG8gbWFza2VkICovDQo+ICsJcmV0ID0gbXQ2MzYw
-X3RjcGNfd3JpdGUxNihyZWdtYXAsIFRDUENfQUxFUlRfTUFTSywgMCk7DQo+ICsJaWYgKHJldCkN
-Cj4gKwkJcmV0dXJuIHJldDsNCj4gKw0KPiArCS8qIGNvbmZpZyBJMkMgdGltZW91dCByZXNldCBl
-bmFibGUgLCBhbmQgdGltZW91dCB0byAyMDBtcyAqLw0KPiArCXJldCA9IHJlZ21hcF93cml0ZShy
-ZWdtYXAsIE1UNjM2MF9SRUdfSTJDVE9SU1QsIDB4OEYpOw0KPiArCWlmIChyZXQpDQo+ICsJCXJl
-dHVybiByZXQ7DQo+ICsNCj4gKwkvKiBjb25maWcgQ0MgRGV0ZWN0IERlYm91bmNlIDogMjYuNyp2
-YWwgdXMgKi8NCj4gKwlyZXQgPSByZWdtYXBfd3JpdGUocmVnbWFwLCBNVDYzNjBfUkVHX0RFQkNU
-UkwxLCAweDEwKTsNCj4gKwlpZiAocmV0KQ0KPiArCQlyZXR1cm4gcmV0Ow0KPiArDQo+ICsJLyog
-RFJQIFRvZ2dsZSBDeWNsZSA6IDUxLjIgKyA2LjQqdmFsIG1zICovDQo+ICsJcmV0ID0gcmVnbWFw
-X3dyaXRlKHJlZ21hcCwgTVQ2MzYwX1JFR19EUlBDVFJMMSwgNCk7DQo+ICsJaWYgKHJldCkNCj4g
-KwkJcmV0dXJuIHJldDsNCj4gKw0KPiArCS8qIERSUCBEdXl0IEN0cmwgOiBkY1NSQzogLzEwMjQg
-Ki8NCj4gKwlyZXQgPSBtdDYzNjBfdGNwY193cml0ZTE2KHJlZ21hcCwgTVQ2MzYwX1JFR19EUlBD
-VFJMMiwgMzMwKTsNCj4gKwlpZiAocmV0KQ0KPiArCQlyZXR1cm4gcmV0Ow0KPiArDQo+ICsJLyog
-RW5hYmxlIFZDT05OIEN1cnJlbnQgTGltaXQgZnVuY3Rpb24gKi8NCj4gKwlyZXQgPSByZWdtYXBf
-dXBkYXRlX2JpdHMocmVnbWFwLCBNVDYzNjBfUkVHX1ZDT05OQ1RSTDEsIE1UNjM2MF9WQ09OTkNM
-X0VOQUJMRSwNCj4gKwkJCQkgTVQ2MzYwX1ZDT05OQ0xfRU5BQkxFKTsNCj4gKwlpZiAocmV0KQ0K
-PiArCQlyZXR1cm4gcmV0Ow0KPiArDQo+ICsJLyogRW5hYmxlIGNjIG9wZW4gNDBtcyB3aGVuIHBt
-aWMgc2VuZCB2c3lzdXYgc2lnbmFsICovDQo+ICsJcmV0ID0gcmVnbWFwX3VwZGF0ZV9iaXRzKHJl
-Z21hcCwgTVQ2MzYwX1JFR19SWENUUkwyLCBNVDYzNjBfT1BFTjQwTV9FTkFCTEUsDQo+ICsJCQkJ
-IE1UNjM2MF9PUEVONDBNX0VOQUJMRSk7DQo+ICsJaWYgKHJldCkNCj4gKwkJcmV0dXJuIHJldDsN
-Cj4gKw0KPiArCS8qIEVuYWJsZSBScGRldCBvbmVzaG90IGRldGVjdGlvbiAqLw0KPiArCXJldCA9
-IHJlZ21hcF91cGRhdGVfYml0cyhyZWdtYXAsIE1UNjM2MF9SRUdfQ1REQ1RSTDIsIE1UNjM2MF9S
-UE9ORVNIT1RfRU5BQkxFLA0KPiArCQkJCSBNVDYzNjBfUlBPTkVTSE9UX0VOQUJMRSk7DQo+ICsJ
-aWYgKHJldCkNCj4gKwkJcmV0dXJuIHJldDsNCj4gKw0KPiArCS8qIFNldCBzaGlwcGluZyBtb2Rl
-IG9mZiwgQVVUT0lETEUgb24gKi8NCj4gKwlyZXR1cm4gcmVnbWFwX3dyaXRlKHJlZ21hcCwgTVQ2
-MzYwX1JFR19NT0RFQ1RSTDIsIDB4N0EpOw0KPiArfQ0KPiArDQo+ICtzdGF0aWMgaXJxcmV0dXJu
-X3QgbXQ2MzYwX2lycShpbnQgaXJxLCB2b2lkICpkZXZfaWQpDQo+ICt7DQo+ICsJc3RydWN0IG10
-NjM2MF90Y3BjX2luZm8gKm10aSA9IGRldl9pZDsNCj4gKw0KPiArCXJldHVybiB0Y3BjaV9pcnEo
-bXRpLT50Y3BjaSk7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyBpbnQgbXQ2MzYwX3RjcGNfcHJvYmUo
-c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gK3sNCj4gKwlzdHJ1Y3QgbXQ2MzYwX3Rj
-cGNfaW5mbyAqbXRpOw0KPiArCWludCByZXQ7DQo+ICsNCj4gKwltdGkgPSBkZXZtX2t6YWxsb2Mo
-JnBkZXYtPmRldiwgc2l6ZW9mKCptdGkpLCBHRlBfS0VSTkVMKTsNCj4gKwlpZiAoIW10aSkNCj4g
-KwkJcmV0dXJuIC1FTk9NRU07DQo+ICsNCj4gKwltdGktPmRldiA9ICZwZGV2LT5kZXY7DQo+ICsN
-Cj4gKwltdGktPnRkYXRhLnJlZ21hcCA9IGRldl9nZXRfcmVnbWFwKHBkZXYtPmRldi5wYXJlbnQs
-IE5VTEwpOw0KPiArCWlmICghbXRpLT50ZGF0YS5yZWdtYXApIHsNCj4gKwkJZGV2X2VycigmcGRl
-di0+ZGV2LCAiRmFpbGVkIHRvIGdldCBwYXJlbnQgcmVnbWFwXG4iKTsNCj4gKwkJcmV0dXJuIC1F
-Tk9ERVY7DQo+ICsJfQ0KPiArDQo+ICsJbXRpLT5pcnEgPSBwbGF0Zm9ybV9nZXRfaXJxX2J5bmFt
-ZShwZGV2LCAiUERfSVJRQiIpOw0KPiArCWlmIChtdGktPmlycSA8IDApIHsNCj4gKwkJZGV2X2Vy
-cigmcGRldi0+ZGV2LCAiRmFpbGVkIHRvIGdldCBQRF9JUlFCIGlycVxuIik7DQpObyBuZWVkIGFk
-ZCBlcnJvciBsb2csIHBsYXRmb3JtX2dldF9pcnFfYnluYW1lIHdpbGwgcHJpbnQgaXQNCg0KPiAr
-CQlyZXR1cm4gbXRpLT5pcnE7DQo+ICsJfQ0KPiArDQo+ICsJbXRpLT50ZGF0YS5pbml0ID0gbXQ2
-MzYwX3RjcGNfaW5pdDsNCj4gKwltdGktPnRjcGNpID0gdGNwY2lfcmVnaXN0ZXJfcG9ydCgmcGRl
-di0+ZGV2LCAmbXRpLT50ZGF0YSk7DQo+ICsJaWYgKElTX0VSUl9PUl9OVUxMKG10aS0+dGNwY2kp
-KSB7DQpVc2UgSVNfRVJSKCk/IGl0IHNlZW1zIG5vdCByZXR1cm4gTlVMTA0KPiArCQlkZXZfZXJy
-KCZwZGV2LT5kZXYsICJGYWlsZWQgdG8gcmVnaXN0ZXIgdGNwY2kgcG9ydFxuIik7DQo+ICsJCXJl
-dHVybiBQVFJfRVJSKG10aS0+dGNwY2kpOw0KSWYgcmV0dXJuIE5VTEwsIHRoaXMgbWF5IHJldHVy
-biAwPw0KDQo+ICsJfQ0KPiArDQo+ICsJcmV0ID0gZGV2bV9yZXF1ZXN0X3RocmVhZGVkX2lycSht
-dGktPmRldiwgbXRpLT5pcnEsIE5VTEwsIG10NjM2MF9pcnEsIElSUUZfT05FU0hPVCwNCj4gKwkJ
-CQkJZGV2X25hbWUoJnBkZXYtPmRldiksIG10aSk7DQo+ICsJaWYgKHJldCkgew0KPiArCQlkZXZf
-ZXJyKG10aS0+ZGV2LCAiRmFpbGVkIHRvIHJlZ2lzdGVyIGlycVxuIik7DQo+ICsJCXRjcGNpX3Vu
-cmVnaXN0ZXJfcG9ydChtdGktPnRjcGNpKTsNCj4gKwkJcmV0dXJuIHJldDsNCj4gKwl9DQo+ICsN
-Cj4gKwlkZXZpY2VfaW5pdF93YWtldXAoJnBkZXYtPmRldiwgdHJ1ZSk7DQo+ICsJcGxhdGZvcm1f
-c2V0X2RydmRhdGEocGRldiwgbXRpKTsNCj4gKw0KPiArCXJldHVybiAwOw0KPiArfQ0KPiArDQo+
-ICtzdGF0aWMgaW50IG10NjM2MF90Y3BjX3JlbW92ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpw
-ZGV2KQ0KPiArew0KPiArCXN0cnVjdCBtdDYzNjBfdGNwY19pbmZvICptdGkgPSBwbGF0Zm9ybV9n
-ZXRfZHJ2ZGF0YShwZGV2KTsNCj4gKw0KPiArCWRpc2FibGVfaXJxKG10aS0+aXJxKTsNCm5lZWQg
-c3luYz8NCg0KPiArCXRjcGNpX3VucmVnaXN0ZXJfcG9ydChtdGktPnRjcGNpKTsNCj4gKwlyZXR1
-cm4gMDsNCj4gK30NCj4gKw0KPiArc3RhdGljIGludCBfX21heWJlX3VudXNlZCBtdDYzNjBfdGNw
-Y19zdXNwZW5kKHN0cnVjdCBkZXZpY2UgKmRldikNCj4gK3sNCj4gKwlzdHJ1Y3QgbXQ2MzYwX3Rj
-cGNfaW5mbyAqbXRpID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ICsNCj4gKwlpZiAoZGV2aWNl
-X21heV93YWtldXAoZGV2KSkNCj4gKwkJZW5hYmxlX2lycV93YWtlKG10aS0+aXJxKTsNCj4gKw0K
-PiArCXJldHVybiAwOw0KPiArfQ0KPiArDQo+ICtzdGF0aWMgaW50IF9fbWF5YmVfdW51c2VkIG10
-NjM2MF90Y3BjX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ICt7DQo+ICsJc3RydWN0IG10
-NjM2MF90Y3BjX2luZm8gKm10aSA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPiArDQo+ICsJaWYg
-KGRldmljZV9tYXlfd2FrZXVwKGRldikpDQo+ICsJCWRpc2FibGVfaXJxX3dha2UobXRpLT5pcnEp
-Ow0KPiArDQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyBTSU1QTEVfREVWX1BN
-X09QUyhtdDYzNjBfdGNwY19wbV9vcHMsIG10NjM2MF90Y3BjX3N1c3BlbmQsIG10NjM2MF90Y3Bj
-X3Jlc3VtZSk7DQo+ICsNCj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIF9fbWF5
-YmVfdW51c2VkIG10NjM2MF90Y3BjX29mX2lkW10gPSB7DQo+ICsJeyAuY29tcGF0aWJsZSA9ICJt
-ZWRpYXRlayxtdDYzNjAtdGNwYyIsIH0sDQo+ICsJe30sDQo+ICt9Ow0KPiArTU9EVUxFX0RFVklD
-RV9UQUJMRShvZiwgbXQ2MzYwX3RjcGNfb2ZfaWQpOw0KPiArDQo+ICtzdGF0aWMgc3RydWN0IHBs
-YXRmb3JtX2RyaXZlciBtdDYzNjBfdGNwY19kcml2ZXIgPSB7DQo+ICsJLmRyaXZlciA9IHsNCj4g
-KwkJLm5hbWUgPSAibXQ2MzYwLXRjcGMiLA0KPiArCQkucG0gPSAmbXQ2MzYwX3RjcGNfcG1fb3Bz
-LA0KPiArCQkub2ZfbWF0Y2hfdGFibGUgPSBtdDYzNjBfdGNwY19vZl9pZCwNCj4gKwl9LA0KPiAr
-CS5wcm9iZSA9IG10NjM2MF90Y3BjX3Byb2JlLA0KPiArCS5yZW1vdmUgPSBtdDYzNjBfdGNwY19y
-ZW1vdmUsDQo+ICt9Ow0KPiArbW9kdWxlX3BsYXRmb3JtX2RyaXZlcihtdDYzNjBfdGNwY19kcml2
-ZXIpOw0KPiArDQo+ICtNT0RVTEVfQVVUSE9SKCJDaGlZdWFuIEh1YW5nIDxjeV9odWFuZ0ByaWNo
-dGVrLmNvbT4iKTsNCj4gK01PRFVMRV9ERVNDUklQVElPTigiTVQ2MzYwIFVTQiBUeXBlLUMgUG9y
-dCBDb250cm9sbGVyIEludGVyZmFjZSBEcml2ZXIiKTsNCj4gK01PRFVMRV9MSUNFTlNFKCJHUEwg
-djIiKTsNCg0K
+Hi Manish,
 
+On Thu, 2020-08-27 at 00:14 +0530, Manish Narani wrote:
+> Add a new driver for supporting Xilinx platforms. This driver handles
+> the USB 3.0 PHY initialization and PIPE control & reset operations for
+> ZynqMP platforms. This also handles the USB 2.0 PHY initialization and
+> reset operations for Versal platforms.
+> 
+> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+> ---
+[...]
+> +static int dwc3_xlnx_rst_assert(struct reset_control *rstc)
+> +{
+> +	unsigned long loop_time = msecs_to_jiffies(RST_TIMEOUT);
+> +	unsigned long timeout;
+> +
+> +	reset_control_assert(rstc);
+> +
+> +	/* wait until reset is asserted or timeout */
+> +	timeout = jiffies + loop_time;
+> +
+> +	while (!time_after_eq(jiffies, timeout)) {
+> +		if (reset_control_status(rstc) > 0)
+> +			return 0;
+> +
+> +		cpu_relax();
+> +	}
+> +
+> +	return -ETIMEDOUT;
+> +}
+
+I think this should be done in the reset controller driver instead.
+
+When reset_control_assert() is called with an exclusive reset control,
+the reset line should be already asserted when the function returns.
+
+> +
+> +static int dwc3_xlnx_rst_deassert(struct reset_control *rstc)
+> +{
+> +	unsigned long loop_time = msecs_to_jiffies(RST_TIMEOUT);
+> +	unsigned long timeout;
+> +
+> +	reset_control_deassert(rstc);
+> +
+> +	/* wait until reset is de-asserted or timeout */
+> +	timeout = jiffies + loop_time;
+> +	while (!time_after_eq(jiffies, timeout)) {
+> +		if (!reset_control_status(rstc))
+> +			return 0;
+> +
+> +		cpu_relax();
+> +	}
+> +
+> +	return -ETIMEDOUT;
+> +}
+
+Same as above, this belongs in the reset controller driver.
+
+> +static int dwc3_xlnx_init_versal(struct dwc3_xlnx *priv_data)
+> +{
+> +	struct device *dev = priv_data->dev;
+> +	int ret;
+> +
+> +	dwc3_xlnx_mask_phy_rst(priv_data, false);
+> +
+> +	/* Assert and De-assert reset */
+> +	ret = zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
+> +				     PM_RESET_ACTION_ASSERT);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to assert Reset\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
+> +				     PM_RESET_ACTION_RELEASE);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to De-assert Reset\n");
+> +		return ret;
+> +	}
+> +
+> +	dwc3_xlnx_mask_phy_rst(priv_data, true);
+> +
+> +	return 0;
+> +}
+> +
+> +static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
+> +{
+> +	struct device *dev = priv_data->dev;
+> +	int ret;
+> +	u32 reg;
+> +
+> +	priv_data->crst = devm_reset_control_get(dev, "usb_crst");
+
+Please use devm_reset_control_get_exclusive() instead.
+
+> +	if (IS_ERR(priv_data->crst)) {
+> +		dev_err(dev, "failed to get %s reset signal\n", "usb_crst");
+
+Consider using dev_err_probe() to hide -EPROBE_DEFER error values.
+
+> +		ret = PTR_ERR(priv_data->crst);
+> +		goto err;
+> +	}
+> +
+> +	priv_data->hibrst = devm_reset_control_get(dev, "usb_hibrst");
+> +	if (IS_ERR(priv_data->hibrst)) {
+> +		dev_err(dev, "failed to get %s reset signal\n", "usb_hibrst");
+> +		ret = PTR_ERR(priv_data->hibrst);
+> +		goto err;
+> +	}
+> +
+> +	priv_data->apbrst = devm_reset_control_get(dev, "usb_apbrst");
+> +	if (IS_ERR(priv_data->apbrst)) {
+> +		dev_err(dev, "failed to get %s reset signal\n", "usb_apbrst");
+> +		ret = PTR_ERR(priv_data->apbrst);
+> +		goto err;
+> +	}
+
+Same as above for the other two reset controls.
+
+> +	priv_data->usb3_phy = devm_phy_get(dev, "usb3-phy");
+> +
+> +	ret = dwc3_xlnx_rst_assert(priv_data->crst);
+> +	if (ret < 0) {
+> +		dev_err(dev, "%s: %d: Failed to assert reset\n",
+> +			__func__, __LINE__);
+> +		goto err;
+> +	}
+> +
+> +	ret = dwc3_xlnx_rst_assert(priv_data->hibrst);
+> +	if (ret < 0) {
+> +		dev_err(dev, "%s: %d: Failed to assert reset\n",
+> +			__func__, __LINE__);
+> +		goto err;
+> +	}
+> +
+> +	ret = dwc3_xlnx_rst_assert(priv_data->apbrst);
+> +	if (ret < 0) {
+> +		dev_err(dev, "%s: %d: Failed to assert reset\n",
+> +			__func__, __LINE__);
+> +		goto err;
+> +	}
+> +
+> +	ret = phy_init(priv_data->usb3_phy);
+> +	if (ret < 0) {
+> +		phy_exit(priv_data->usb3_phy);
+> +		goto err;
+> +	}
+> +
+> +	ret = dwc3_xlnx_rst_deassert(priv_data->apbrst);
+> +	if (ret < 0) {
+> +		dev_err(dev, "%s: %d: Failed to release reset\n",
+> +			__func__, __LINE__);
+> +		goto err;
+> +	}
+> +
+> +	/* Set PIPE power present signal */
+> +	writel(PIPE_POWER_ON, priv_data->regs + PIPE_POWER_OFFSET);
+> +
+> +	/* Clear PIPE CLK signal */
+> +	writel(PIPE_CLK_OFF, priv_data->regs + PIPE_CLK_OFFSET);
+> +
+> +	ret = dwc3_xlnx_rst_deassert(priv_data->crst);
+> +	if (ret < 0) {
+> +		dev_err(dev, "%s: %d: Failed to release reset\n",
+> +			__func__, __LINE__);
+> +		goto err;
+> +	}
+> +
+> +	ret = dwc3_xlnx_rst_deassert(priv_data->hibrst);
+> +	if (ret < 0) {
+> +		dev_err(dev, "%s: %d: Failed to release reset\n",
+> +			__func__, __LINE__);
+> +		goto err;
+> +	}
+> +
+> +	ret = phy_power_on(priv_data->usb3_phy);
+> +	if (ret < 0) {
+> +		phy_exit(priv_data->usb3_phy);
+> +		goto err;
+> +	}
+> +
+> +	/*
+> +	 * This routes the usb dma traffic to go through CCI path instead
+> +	 * of reaching DDR directly. This traffic routing is needed to
+> +	 * make SMMU and CCI work with USB dma.
+> +	 */
+> +	if (of_dma_is_coherent(dev->of_node) || dev->iommu_group) {
+> +		reg = readl(priv_data->regs + XLNX_USB_COHERENCY);
+> +		reg |= XLNX_USB_COHERENCY_ENABLE;
+> +		writel(reg, priv_data->regs + XLNX_USB_COHERENCY);
+> +	}
+> +
+> +err:
+> +	return ret;
+> +}
+> +
+> +static int dwc3_xlnx_probe(struct platform_device *pdev)
+> +{
+> +	struct dwc3_xlnx	*priv_data;
+> +	struct device		*dev = &pdev->dev;
+> +	struct device_node	*np = dev->of_node;
+> +	struct resource		*res;
+> +	void __iomem		*regs;
+> +	int			ret;
+> +
+> +	priv_data = devm_kzalloc(dev, sizeof(*priv_data), GFP_KERNEL);
+> +	if (!priv_data)
+> +		return -ENOMEM;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res) {
+> +		dev_err(dev, "missing memory resource\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	regs = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(regs))
+> +		return PTR_ERR(regs);
+> +
+> +	/* Store the usb control regs into priv_data for further usage */
+> +	priv_data->regs = regs;
+> +
+> +	priv_data->dev = dev;
+> +
+> +	platform_set_drvdata(pdev, priv_data);
+> +
+> +	ret = clk_bulk_get_all(priv_data->dev, &priv_data->clks);
+
+Why not use devm_clk_bulk_get_all()?
+
+regards
+Philipp
