@@ -2,204 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C68F2545E0
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 15:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF8F2545F6
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 15:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726853AbgH0N1d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 09:27:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54604 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727933AbgH0N0Z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 09:26:25 -0400
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E0CB02177B;
-        Thu, 27 Aug 2020 13:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598534725;
-        bh=nq5+PCguov0nBPnuBUE5YRB4tRsLuPvU3wHdjfwz+6w=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=pV09dhj0HqFaav1SauxvQbsAUbF8O8lanGpHV0Ra0sHSzuCutOC77h/Voqy59JPOO
-         MXZs6YjjpgdzUAJmKLkoJ927yX77xFe9MhUFYiTHfF3e0VVwQMVkkrEnGyGQg43gPA
-         G38VttbF8iDsrQkf5tXMZSLrx4jp+zEjq28dA2Ek=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        =?utf-8?B?5ZGo?= =?utf-8?B?5q2j?= <sernia.zhou@foxmail.com>,
-        =?utf-8?B?5ryG6bmP5oyv?= <aric.pzqi@ingenic.com>, od@zcrc.me,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] USB: PHY: JZ4770: Fix uninitialized value written
- to HW register
-In-Reply-To: <PN4QFQ.KWNBY2ZWQ7XC2@crapouillou.net>
-References: <20200827124308.71963-1-paul@crapouillou.net>
- <20200827124308.71963-2-paul@crapouillou.net> <87v9h4i6t5.fsf@kernel.org>
- <PN4QFQ.KWNBY2ZWQ7XC2@crapouillou.net>
-Date:   Thu, 27 Aug 2020 16:25:18 +0300
-Message-ID: <87bliwi5kx.fsf@kernel.org>
+        id S1728289AbgH0Nbd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 09:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728180AbgH0Nal (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 09:30:41 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0C8C061239
+        for <linux-usb@vger.kernel.org>; Thu, 27 Aug 2020 06:30:13 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id y3so5398090wrl.4
+        for <linux-usb@vger.kernel.org>; Thu, 27 Aug 2020 06:30:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p33Zl85F48xSFFwh9Fvb6fYwVy/Jt4DGVFmz86MHbko=;
+        b=CUujgUZRienGvENy9ZeNSE4OLq/gTozkw9vqhnndn3e+Pp27upZYxzcOy348qWT4x6
+         fZ9HzhrGd6ok0/lpV6XJMXIHbIrfSS3H2kc5d+JTd1lletPZjVOkUQ8WZMoDnSSylgRw
+         zOHH0JLxrQJsHR8v5+SGQOGgwwu7dIE6xp9Po=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p33Zl85F48xSFFwh9Fvb6fYwVy/Jt4DGVFmz86MHbko=;
+        b=Iz3QeIRSY84aSd8Io9Pva7FXszPHjILN2SNwv9EtWInck142IsN03o5gP+lNmNQ2Sw
+         zb9FGXDI0+jnymK/FptC6x9OncEaXM2ptnBOdGtBHO3Ga0cKiL9HVlCuUUe0b64hyc82
+         Ps3tm3G1up2/7gGKs8/Qp4+DyOZ4nuwDdmQeycLloFCqCfFTKI2vWZAW85coJ2WXNc7m
+         nVvc6NJ67FgknXXU/dWIGPvvsKi1TdSEWMmSGDANEEyBYb9iHlB4OOeZ9PCDEjBioXHn
+         D3BaAUmlUzFEJ47xFicn7U0atNc3RDok0OgLatgHWg2sfpJEDvX4+CYMC2UBmIxTwYui
+         KAQg==
+X-Gm-Message-State: AOAM530ME9eHWZfA+nlXpnPW/52o/zEpuwu2EhJVPyhxvBmmdDgabop3
+        Iy2IV2JcbTb+dvD7Z7K8nOk7WdXb2bgA6d+8hCdfbA==
+X-Google-Smtp-Source: ABdhPJyMtaFishcwtzNCj7DHN/faPMoK+tSF7O0vKJaBGS+gpAIRdF6geUez9pCQeleah1w6P5SJ7nzMgTS0KKpMqRI=
+X-Received: by 2002:adf:bb54:: with SMTP id x20mr19609148wrg.413.1598535011238;
+ Thu, 27 Aug 2020 06:30:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+References: <20200824193036.6033-1-james.quinlan@broadcom.com>
+ <b19bc982-a0c4-c6ff-d8f5-650f2b3a83c8@gmail.com> <20200827063517.GA4637@lst.de>
+In-Reply-To: <20200827063517.GA4637@lst.de>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Thu, 27 Aug 2020 09:29:59 -0400
+Message-ID: <CA+-6iNy3U9pO0Bykzgvb9n9fcsBi6FiatLdpA1s0HgQNWZ49mg@mail.gmail.com>
+Subject: Re: [PATCH v11 00/11] PCI: brcmstb: enable PCIe for STB chips
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS FOR ALLWINNER A10" 
+        <dri-devel@lists.freedesktop.org>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Julien Grall <julien.grall@arm.com>,
+        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:ALLWINNER A10 CSI DRIVER" <linux-media@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-
-Hi,
-
-Paul Cercueil <paul@crapouillou.net> writes:
->>>  @@ -172,7 +172,8 @@ static int ingenic_usb_phy_init(struct usb_phy=20
->>> *phy)
->>>   		return err;
->>>   	}
->>>=20
->>>  -	priv->soc_info->usb_phy_init(phy);
->>>  +	reg =3D priv->soc_info->usb_phy_init(phy);
->>>  +	writel(reg, priv->base + REG_USBPCR_OFFSET);
->>=20
->> not fixing any bug.
->>=20
->> Looking at the code, the bug follows after this line. It would suffice
->> to read REG_USBPCR_OFFSET in order to initialize reg. This bug fix=20
->> could
->> have been a one liner.
+On Thu, Aug 27, 2020 at 2:35 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> There's no need to re-read a register when you have the value readily=20
-> available. It just needs to be returned from the usb_phy_init=20
-> callbacks. But yes, it's not a one-liner.
-
-there's a difference between making a bug fix and reworking the behavior
-of the driver ;-)
-
->>>  @@ -195,19 +196,15 @@ static void ingenic_usb_phy_remove(void *phy)
->>>   	usb_remove_phy(phy);
->>>   }
->>>=20
->>>  -static void jz4770_usb_phy_init(struct usb_phy *phy)
->>>  +static u32 jz4770_usb_phy_init(struct usb_phy *phy)
->>=20
->> not a bug fix
->>=20
->>>   {
->>>  -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
->>>  -	u32 reg;
->>>  -
->>>  -	reg =3D USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS=
-=20
->>> |
->>>  +	return USBPCR_AVLD_REG | USBPCR_COMMONONN |=20
->>> USBPCR_IDPULLUP_ALWAYS |
->>>   		USBPCR_COMPDISTUNE_DFT | USBPCR_OTGTUNE_DFT |=20
->>> USBPCR_SQRXTUNE_DFT |
->>>   		USBPCR_TXFSLSTUNE_DFT | USBPCR_TXRISETUNE_DFT |=20
->>> USBPCR_TXVREFTUNE_DFT |
->>>   		USBPCR_POR;
->>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
->>=20
->> not a bug fix
->>=20
->>>   }
->>>=20
->>>  -static void jz4780_usb_phy_init(struct usb_phy *phy)
->>>  +static u32 jz4780_usb_phy_init(struct usb_phy *phy)
->>=20
->> not a bug fix
->>=20
->>>  @@ -216,11 +213,10 @@ static void jz4780_usb_phy_init(struct=20
->>> usb_phy *phy)
->>>   		USBPCR1_WORD_IF_16BIT;
->>>   	writel(reg, priv->base + REG_USBPCR1_OFFSET);
->>>=20
->>>  -	reg =3D USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
->>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
->>>  +	return USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
->>=20
->> not a bug fix
->>=20
->>>   }
->>>=20
->>>  -static void x1000_usb_phy_init(struct usb_phy *phy)
->>>  +static u32 x1000_usb_phy_init(struct usb_phy *phy)
->>=20
->> not a bug fix
->>=20
->>>   {
->>>   	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
->>>   	u32 reg;
->>>  @@ -228,13 +224,12 @@ static void x1000_usb_phy_init(struct usb_phy=20
->>> *phy)
->>>   	reg =3D readl(priv->base + REG_USBPCR1_OFFSET) |=20
->>> USBPCR1_WORD_IF_16BIT;
->>>   	writel(reg, priv->base + REG_USBPCR1_OFFSET);
->>>=20
->>>  -	reg =3D USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
->>>  +	return USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
->>>   		USBPCR_TXHSXVTUNE_DCR_15MV | USBPCR_TXVREFTUNE_INC_25PPT |
->>>   		USBPCR_COMMONONN | USBPCR_POR;
->>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
->>=20
->> not a bug fix
->>=20
->>>   }
->>>=20
->>>  -static void x1830_usb_phy_init(struct usb_phy *phy)
->>>  +static u32 x1830_usb_phy_init(struct usb_phy *phy)
->>=20
->> not a bug fix
->>=20
->>>   {
->>>   	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
->>>   	u32 reg;
->>>  @@ -246,9 +241,8 @@ static void x1830_usb_phy_init(struct usb_phy=20
->>> *phy)
->>>   		USBPCR1_DMPD | USBPCR1_DPPD;
->>>   	writel(reg, priv->base + REG_USBPCR1_OFFSET);
->>>=20
->>>  -	reg =3D USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT=20
->>> |	USBPCR_TXPREEMPHTUNE |
->>>  +	return USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT |=20
->>> USBPCR_TXPREEMPHTUNE |
->>>   		USBPCR_COMMONONN | USBPCR_POR;
->>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
->>=20
->> not a bug fix
+> On Tue, Aug 25, 2020 at 10:40:27AM -0700, Florian Fainelli wrote:
+> > Hi,
+> >
+> > On 8/24/2020 12:30 PM, Jim Quinlan wrote:
+> >>
+> >> Patchset Summary:
+> >>    Enhance a PCIe host controller driver.  Because of its unusual design
+> >>    we are foced to change dev->dma_pfn_offset into a more general role
+> >>    allowing multiple offsets.  See the 'v1' notes below for more info.
+> >
+> > We are version 11 and counting, and it is not clear to me whether there is
+> > any chance of getting these patches reviewed and hopefully merged for the
+> > 5.10 merge window.
+> >
+> > There are a lot of different files being touched, so what would be the
+> > ideal way of routing those changes towards inclusion?
 >
-> Well, if you don't like my bug fix, next time wait for my Reviewed-by.
-
-why so angry? Take a break every once in a while. Besides, someone else
-already sent the oneliner before you ;-)
-
-In any case, why should I wait for your Reviewed-by? Get maintainer
-doesn't list you as the maintainer for it. Do you want to update
-MAINTAINERS by any chance?
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9HtD4RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQbmkg/6A6su3CbiM5/EDQM0TPLxiJMmFN+kRX5F
-vXp7xxu1B7iYEfai8fmXfR/rEdiQQgwBnAhigqNUHhzyzuhsxPbZ2jvDoIoY9e1o
-0egUHicDVH10gWj9Od3ZiLHVdG1K7x2AC3cddePtN82om/sUJrRWxqDAR2MfCNzN
-aARpImMPai7C9i0uAHkj4aLAbryk9zXzpZUbOP6DYm6VrQqHCPVRkLvt09EUvVQZ
-iIkxWz2/MjWPMNhuGZ1xQnHvcBBFRdW9lRcEBidhWEKjevRSFFN/FsiFcfOsLpG7
-gHxFVoCz8TWEBGASDCoVi1hZOTTcs+S0PkO9L5efY+Z3Kb9VTmnGe379hfBA88Gs
-NlVLm1xPviJS+GdVmEHjvDD03P/jlESmAcAv5bo8eJd3e0HcSedwYnKflL7Tez8R
-04CkUo9m0HS7pZ3Dj0QlHVG5+n2kB6q5SuegSepAPhu0o1T3FEWS0kVOJ8x/4JBO
-pH3HbroqbayuCUQVPXex6/jfLiVbu/Oq+mqx/YOgaE8LTk2i7pHxv/DuhG7desN+
-4bGm4CYaR2UeMTiqSKdXN8FX4sQk8vGvvNo26gx7klYDLGR2w6OWtYTu2OGTvJkD
-RyS8l5e9acIH6nU64fK8BPRrirkX2Hwa/yy/pCXYPyeR+NYOwotn2XDUHmuLCWVX
-E2iIpBBsrvg=
-=TuCC
------END PGP SIGNATURE-----
---=-=-=--
+> FYI, I offered to take the dma-mapping bits through the dma-mapping tree.
+> I have a bit of a backlog, but plan to review and if Jim is ok with that
+> apply the current version.
+Sounds good to me.
+Thanks, Jim
