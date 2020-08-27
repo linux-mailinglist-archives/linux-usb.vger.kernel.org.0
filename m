@@ -2,116 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96916254C6F
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 19:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B95254C71
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 19:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727030AbgH0Rwk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 13:52:40 -0400
-Received: from cmta16.telus.net ([209.171.16.89]:51187 "EHLO cmta16.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727034AbgH0Rwe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 13:52:34 -0400
-Received: from montezuma.home ([154.5.226.127])
-        by cmsmtp with SMTP
-        id BM4ckZxb45b7lBM4dkwtYo; Thu, 27 Aug 2020 11:52:32 -0600
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=YPHhNiOx c=1 sm=1 tr=0
- a=f8b3WT/FcTuUJCJtQO1udw==:117 a=f8b3WT/FcTuUJCJtQO1udw==:17
- a=kj9zAlcOel0A:10 a=x7bEGLp0ZPQA:10 a=COSDN44dAAMA:10
- a=zmzfFYBeNj3Yna3xRlEA:9 a=eIeKMxlGXGYQ1869:21 a=aJn8JETYdI4vv6vw:21
- a=CjuIK1q_8ugA:10
-Date:   Thu, 27 Aug 2020 10:52:29 -0700 (PDT)
-From:   Zwane Mwaikambo <zwanem@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-cc:     Zwane Mwaikambo <zwane@yosper.io>,
+        id S1726266AbgH0RyT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 13:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726236AbgH0RyS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 13:54:18 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1460C061264
+        for <linux-usb@vger.kernel.org>; Thu, 27 Aug 2020 10:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=/y/iBXYAJ36T1NaJXIzJMrtOZrpXy9an16Ba2/yoBrI=; b=iuMj1hv3yGut430HW929xCR6zj
+        /6nMdjgX9AyGxRLmtWmT3jl5oy8/abzZ3HL62wrEaZbI0k5DyB6HDIZefEkV4xmLrdqf+bm66nkyz
+        7+GDImXZiOsA6qYbqY4nFrNrE5KNBP0AxkiKAkrsdbM5LTJGRi1zD9pjDOviKr52CsLq91qPvgVjo
+        P41wqVGBG50i+szFULZCrnLKNLOlhhuhdCEsaBK+qbJZPhemoa/xmSloTNjGmkSh1+COdS9y0aKyt
+        jN0I6ND1EkvQIwYAx7oFErVx/1aTeJwDT1QepGJfSJN8MIxScp4zoSfw2fqboU8PLcEvabOZxlU3r
+        NySLbncg==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kBM6J-0003tR-Hv; Thu, 27 Aug 2020 17:54:15 +0000
+Subject: Re: [PATCH v3 1/2] usb/typec: fix array overruns in ucsi.c
+ partner_altmode[]
+To:     Zwane Mwaikambo <zwanem@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zwane Mwaikambo <zwane@yosper.io>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         linux-usb@vger.kernel.org
-Subject: [PATCH v3 2/2] usb/typec: fix array overruns in ucsi.c
- partner_altmode[]
-In-Reply-To: <alpine.DEB.2.21.2008271035320.30454@montezuma.home>
-Message-ID: <alpine.DEB.2.21.2008271050140.30454@montezuma.home>
 References: <alpine.DEB.2.21.2008271035320.30454@montezuma.home>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <0013fe6c-c0a2-1759-c769-cda025e5eb38@infradead.org>
+Date:   Thu, 27 Aug 2020 10:54:11 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-CMAE-Envelope: MS4wfCLsNAtE5gle6VAwy+25/L21AZO6tuMrosL7XQFeNoJ8NJZj6xFgd4Ruxnh/tmWiMrW7ad3+WyCoqaa8mWBpY3puscUyOsfOtgNdE2oMiJaNZT0Euyhy
- oqe7Tm2W9lDu/zwJ0kjvJHlovQ7cg0EweLId5fPKFnmJTw40Lhi0RfyWSOYy/c3TfYdrrg3A/pUsuallnhgYrjEjQ6V5ZcL0xgGBkkMLxvmeOoSGwzyFWZsR
- wmMnn6RgnIlAABi11Fy9aB4XSW9pfAKoE1Rcw+GbP9nAYFqDeETwNz7DzosiBX19
+In-Reply-To: <alpine.DEB.2.21.2008271035320.30454@montezuma.home>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This fixes the second array overrun occurence (similar failure mode to 
-the first), this time in ucsi_unregister_altmodes.
+On 8/27/20 10:49 AM, Zwane Mwaikambo wrote:
+> This v3 addresses patch formatting and submission issues with the 
+> previous versions.
 
-[ 4373.153246] BUG: kernel NULL pointer dereference, address: 
-00000000000002f2
-[ 4373.153267] #PF: supervisor read access in kernel mode
-[ 4373.153271] #PF: error_code(0x0000) - not-present page
-[ 4373.153275] PGD 0 P4D 0 
-[ 4373.153284] Oops: 0000 [#2] PREEMPT SMP NOPTI
-[ 4373.153292] CPU: 0 PID: 13242 Comm: kworker/0:0 Tainted: G      D           
-5.8.0-rc6+ #1
-[ 4373.153296] Hardware name: LENOVO 20RD002VUS/20RD002VUS, BIOS R16ET25W 
-(1.11 ) 04/21/2020
-[ 4373.153308] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-[ 4373.153320] RIP: 0010:ucsi_unregister_altmodes+0x5f/0xa0 [typec_ucsi]
-[ 4373.153326] Code: 54 48 8b 3b 41 83 c4 01 e8 9e f9 0c 00 49 63 c4 48 c7 
-03 00 00 00 00 49 8d 5c c5 00 48 8b 3b 48 85 ff 74 31 41 80 fe 01 75 d7 
-<0f> b7 87 f0 02 00 00 66 3d 01 ff 74 0f 66 3d 55 09 75 c4 83 bf f8
-[ 4373.153332] RSP: 0018:ffffb2ef036b3dc8 EFLAGS: 00010246
-[ 4373.153338] RAX: 000000000000001e RBX: ffff94268b006a60 RCX: 
-0000000080800067
-[ 4373.153342] RDX: 0000000080800068 RSI: 0000000000000001 RDI: 
-0000000000000002
-[ 4373.153347] RBP: ffffb2ef036b3de8 R08: 0000000000000000 R09: 
-ffffffff8dc65400
-[ 4373.153351] R10: ffff9426678d7200 R11: 0000000000000001 R12: 
-000000000000001e
-[ 4373.153355] R13: ffff94268b006970 R14: 0000000000000001 R15: 
-ffff94268b006800
-[ 4373.153361] FS:  0000000000000000(0000) GS:ffff942691400000(0000) 
-knlGS:0000000000000000
-[ 4373.153366] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 4373.153371] CR2: 00000000000002f2 CR3: 00000004445a6005 CR4: 
-00000000003606f0
-[ 4373.153375] Call Trace:
-[ 4373.153389]  ucsi_unregister_partner.part.0+0x17/0x30 [typec_ucsi]
-[ 4373.153400]  ucsi_handle_connector_change+0x25c/0x320 [typec_ucsi]
-[ 4373.153418]  process_one_work+0x1df/0x3d0
-[ 4373.153428]  worker_thread+0x4a/0x3d0
-[ 4373.153436]  ? process_one_work+0x3d0/0x3d0
-[ 4373.153444]  kthread+0x127/0x170
-[ 4373.153451]  ? kthread_park+0x90/0x90
-[ 4373.153461]  ret_from_fork+0x1f/0x30
-[ 4373.153661] CR2: 00000000000002f2
+That info goes after the "---" line.
 
-Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
----
+> con->partner_altmode[i] ends up with the value 0x2 in the call to 
+> typec_altmode_update_active because the array has been accessed out of 
+> bounds causing a random memory read.
+> 
+> This patch fixes the first occurence and 2/2 the second.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index d0c63afaf..79061705e 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -479,7 +480,10 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- 		return;
- 	}
- 
--	while (adev[i]) {
-+	for (i = 0; i < UCSI_MAX_ALTMODES; i++) {
-+		if (!adev[i])
-+			break;
-+
- 		if (recipient == UCSI_RECIPIENT_SOP &&
- 		    (adev[i]->svid == USB_TYPEC_DP_SID ||
- 			(adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
-@@ -488,7 +492,7 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- 			ucsi_displayport_remove_partner((void *)pdev);
- 		}
- 		typec_unregister_altmode(adev[i]);
--		adev[i++] = NULL;
-+		adev[i] = NULL;
- 	}
- }
- 
+occurrence
+
+> 
+> Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
+> ---
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index d0c63afaf..79061705e 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -218,9 +218,10 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
+>  	if (cur < UCSI_MAX_ALTMODES)
+>  		altmode = typec_altmode_get_partner(con->port_altmode[cur]);
+>  
+> -	for (i = 0; con->partner_altmode[i]; i++)
+> -		typec_altmode_update_active(con->partner_altmode[i],
+> -					    con->partner_altmode[i] == altmode);
+> +	for (i = 0; i < UCSI_MAX_ALTMODES; i++)
+> +		if (con->partner_altmode[i])
+> +			typec_altmode_update_active(con->partner_altmode[i],
+> +										con->partner_altmode[i] == altmode);
+
+What happened to the indentation here?  Too much.
+
+>  }
+>  
+>  static u8 ucsi_altmode_next_mode(struct typec_altmode **alt, u16 svid)
+>  
+> 
+
+
+-- 
+~Randy
+
