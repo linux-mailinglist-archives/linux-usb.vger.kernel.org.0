@@ -2,40 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB3C255145
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 00:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6CD25514F
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 00:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727892AbgH0WpX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 18:45:23 -0400
-Received: from smtprelay0094.hostedemail.com ([216.40.44.94]:36066 "EHLO
+        id S1728041AbgH0WsW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 18:48:22 -0400
+Received: from smtprelay0113.hostedemail.com ([216.40.44.113]:49820 "EHLO
         smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726826AbgH0WpV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 18:45:21 -0400
+        by vger.kernel.org with ESMTP id S1727906AbgH0WsV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 18:48:21 -0400
 Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id DB2FD180339CD;
-        Thu, 27 Aug 2020 22:45:20 +0000 (UTC)
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id DC5BC181D330D;
+        Thu, 27 Aug 2020 22:48:19 +0000 (UTC)
 X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 30,2,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:3872:3874:4250:4321:5007:7875:7903:8603:10010:10400:10848:11026:11232:11658:11914:12296:12297:12679:12740:12760:12895:13069:13311:13357:13439:14096:14097:14659:14721:21080:21627:21990:30054:30083:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:1:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: pies81_1b16d5127070
-X-Filterd-Recvd-Size: 3013
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1536:1559:1593:1594:1711:1714:1730:1747:1777:1792:2198:2199:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3622:3865:3870:3871:3872:4321:4362:5007:10004:10400:10848:11658:11914:12196:12297:12740:12760:12895:13069:13311:13357:13439:14659:21080:21627:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: oven23_04042e627070
+X-Filterd-Recvd-Size: 1848
 Received: from XPS-9350.home (unknown [47.151.133.149])
         (Authenticated sender: joe@perches.com)
-        by omf15.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 27 Aug 2020 22:45:19 +0000 (UTC)
-Message-ID: <5ebe5c2737b59d04f1b8a46008cd3159c638f9d0.camel@perches.com>
+        by omf09.hostedemail.com (Postfix) with ESMTPA;
+        Thu, 27 Aug 2020 22:48:17 +0000 (UTC)
+Message-ID: <773aa01add27d7c5595f5cda9d3d2b791190c374.camel@perches.com>
 Subject: Re: [Cocci] [PATCH] usb: atm: don't use snprintf() for sysfs attrs
 From:   Joe Perches <joe@perches.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Denis Efremov <efremov@linux.com>
-Cc:     Julia Lawall <julia.lawall@inria.fr>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+To:     Denis Efremov <efremov@linux.com>,
+        Julia Lawall <julia.lawall@inria.fr>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org, cocci <cocci@systeme.lip6.fr>,
+        accessrunner-general@lists.sourceforge.net,
         Alex Dewar <alex.dewar90@gmail.com>
-Date:   Thu, 27 Aug 2020 15:45:17 -0700
-In-Reply-To: <202008271517.ECC1F1F8F@keescook>
+Date:   Thu, 27 Aug 2020 15:48:16 -0700
+In-Reply-To: <adfca3f2-561a-9d91-c064-cf01c2b573e7@linux.com>
 References: <20200824222322.22962-1-alex.dewar90@gmail.com>
          <48f2dc90-7852-eaf1-55d7-2c85cf954688@rasmusvillemoes.dk>
          <20200827071537.GA168593@kroah.com>
@@ -45,7 +46,9 @@ References: <20200824222322.22962-1-alex.dewar90@gmail.com>
          <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
          <alpine.DEB.2.22.394.2008272141220.2482@hadrien>
          <5853c58e-7d26-2cf9-6cbf-698ecd93cbf9@linux.com>
-         <202008271517.ECC1F1F8F@keescook>
+         <alpine.DEB.2.22.394.2008272334500.2482@hadrien>
+         <d6d5836196208d5280cedf5837952096c3518852.camel@perches.com>
+         <adfca3f2-561a-9d91-c064-cf01c2b573e7@linux.com>
 Content-Type: text/plain; charset="ISO-8859-1"
 User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
@@ -55,50 +58,9 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2020-08-27 at 15:20 -0700, Kees Cook wrote:
-> On Fri, Aug 28, 2020 at 12:01:34AM +0300, Denis Efremov wrote:
-> > Just FYI, I've send an addition to the device_attr_show.cocci script[1] to turn
-> > simple cases of snprintf (e.g. "%i") to sprintf. Looks like many developers would
-> > like it more than changing snprintf to scnprintf. As for me, I don't like the idea
-> > of automated altering of the original logic from bounded snprint to unbouded one
-> > with sprintf.
-> 
-> Agreed. This just makes me cringe. If the API design declares that when
-> a show() callback starts, buf has been allocated with PAGE_SIZE bytes,
-> then that's how the logic should proceed, and it should be using
-> scnprintf...
-> 
-> show(...) {
-> 	size_t remaining = PAGE_SIZE;
-> 
-> 	...
-> 	remaining -= scnprintf(buf, remaining, "fmt", var args ...);
-> 	remaining -= scnprintf(buf, remaining, "fmt", var args ...);
-> 	remaining -= scnprintf(buf, remaining, "fmt", var args ...);
-> 
-> 	return PAGE_SIZE - remaining;
-> }
+On Fri, 2020-08-28 at 01:38 +0300, Denis Efremov wrote:
+> > This will match it (the difference is in the ';'):
 
-It seems likely that coccinelle could do those transform
-with any of sprintf/snprintf/scnprint too.
-
-Though my bikeshed would use a single function and have
-that function know the maximum output size
-
-Something like:
-
-With single line use:
-
-	return sysfs_emit(buf, buf, fmt, ...) - buf;
-
-and multi-line use:
-
-	char *pos = buf;
-
-	pos = sysfs_emit(buf, pos, fmt1, ...);
-	pos = sysfs_emit(buf, pos, fmt2, ...);
-	...
-
-	return pos - buf;
+thanks.
 
 
