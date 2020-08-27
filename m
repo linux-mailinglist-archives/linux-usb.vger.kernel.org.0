@@ -2,78 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D76D9254887
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 17:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358FD25498D
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 17:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbgH0PDu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 27 Aug 2020 11:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726882AbgH0PDe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 11:03:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC4DC06121B
-        for <linux-usb@vger.kernel.org>; Thu, 27 Aug 2020 08:03:16 -0700 (PDT)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kBJQe-0000so-Kx; Thu, 27 Aug 2020 17:03:04 +0200
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kBJQd-0002Rp-My; Thu, 27 Aug 2020 17:03:03 +0200
-Message-ID: <b17e8cb934f223a4f6055cdc2065ba75367ccffd.camel@pengutronix.de>
-Subject: Re: [PATCH] Revert "usb: dwc3: meson-g12a: fix shared reset control
- use"
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        id S1727952AbgH0Pfw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 11:35:52 -0400
+Received: from out28-125.mail.aliyun.com ([115.124.28.125]:45466 "EHLO
+        out28-125.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726266AbgH0Pfv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 11:35:51 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436283|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0142134-0.00410037-0.981686;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03268;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.IOqof6y_1598542530;
+Received: from 192.168.178.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.IOqof6y_1598542530)
+          by smtp.aliyun-inc.com(10.147.41.143);
+          Thu, 27 Aug 2020 23:35:31 +0800
+Subject: Re: [PATCH 1/1] USB: PHY: JZ4770: Fix uninitialized value written to
+ HW register
+To:     Paul Cercueil <paul@crapouillou.net>,
         Felipe Balbi <balbi@kernel.org>
-Cc:     Dan Robertson <dan@dlrobertson.com>,
+Cc:     =?UTF-8?B?5ZGo5q2j?= <sernia.zhou@foxmail.com>,
+        =?UTF-8?B?5ryG6bmP5oyv?= <aric.pzqi@ingenic.com>, od@zcrc.me,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Thu, 27 Aug 2020 17:03:03 +0200
-In-Reply-To: <20200827144810.26657-1-aouledameur@baylibre.com>
-References: <20200827144810.26657-1-aouledameur@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200827124308.71963-1-paul@crapouillou.net>
+ <20200827124308.71963-2-paul@crapouillou.net> <87v9h4i6t5.fsf@kernel.org>
+ <PN4QFQ.KWNBY2ZWQ7XC2@crapouillou.net> <87bliwi5kx.fsf@kernel.org>
+ <HG6QFQ.KLMIR92DB2D02@crapouillou.net>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <ccfb841c-b518-3107-eb9b-a62169970bb1@wanyeetech.com>
+Date:   Thu, 27 Aug 2020 23:35:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <HG6QFQ.KLMIR92DB2D02@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2020-08-27 at 16:48 +0200, Amjad Ouled-Ameur wrote:
-> This reverts commit 7a410953d1fb4dbe91ffcfdee9cbbf889d19b0d7.
-> 
-> This commit breaks USB on meson-gxl-s905x-libretech-cc. Reverting
-> the change solves the issue.
-> 
-> In fact, according to the reset framework code, consumers must not use
-> reset_control_(de)assert() on shared reset lines when reset_control_reset
-> has been used, and vice-versa.
-> 
-> Moreover, with this commit, usb is not guaranted to be reset since the
-> reset is likely to be initially deasserted.
-> 
-> Reverting the commit will bring back the suspend warning mentioned in the
-> commit description. Nevertheless, a warning is much less critical than
-> breaking dwc3-meson-g12a USB completely. We will address the warning
-> issue in another way as a 2nd step.
-> 
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+Hi
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+在 2020/8/27 下午9:50, Paul Cercueil 写道:
+>
+>
+> Le jeu. 27 août 2020 à 16:25, Felipe Balbi <balbi@kernel.org> a écrit :
+>>
+>> Hi,
+>>
+>> Paul Cercueil <paul@crapouillou.net> writes:
+>>>>>   @@ -172,7 +172,8 @@ static int ingenic_usb_phy_init(struct usb_phy
+>>>>>  *phy)
+>>>>>            return err;
+>>>>>        }
+>>>>>
+>>>>>   -    priv->soc_info->usb_phy_init(phy);
+>>>>>   +    reg = priv->soc_info->usb_phy_init(phy);
+>>>>>   +    writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>>>
+>>>>  not fixing any bug.
+>>>>
+>>>>  Looking at the code, the bug follows after this line. It would 
+>>>> suffice
+>>>>  to read REG_USBPCR_OFFSET in order to initialize reg. This bug fix
+>>>>  could
+>>>>  have been a one liner.
+>>>
+>>>  There's no need to re-read a register when you have the value readily
+>>>  available. It just needs to be returned from the usb_phy_init
+>>>  callbacks. But yes, it's not a one-liner.
+>>
+>> there's a difference between making a bug fix and reworking the behavior
+>> of the driver ;-)
+>
+> The one-liner is actually what changes the behavior of the driver, 
+> since previously the code did not read back the register.
+>
+> In this case I guess it's fine, because the register does not have 
+> volatile bits.
+>
+>>>>>   @@ -195,19 +196,15 @@ static void ingenic_usb_phy_remove(void *phy)
+>>>>>        usb_remove_phy(phy);
+>>>>>    }
+>>>>>
+>>>>>   -static void jz4770_usb_phy_init(struct usb_phy *phy)
+>>>>>   +static u32 jz4770_usb_phy_init(struct usb_phy *phy)
+>>>>
+>>>>  not a bug fix
+>>>>
+>>>>>    {
+>>>>>   -    struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
+>>>>>   -    u32 reg;
+>>>>>   -
+>>>>>   -    reg = USBPCR_AVLD_REG | USBPCR_COMMONONN | 
+>>>>> USBPCR_IDPULLUP_ALWAYS
+>>>>>  |
+>>>>>   +    return USBPCR_AVLD_REG | USBPCR_COMMONONN |
+>>>>>  USBPCR_IDPULLUP_ALWAYS |
+>>>>>            USBPCR_COMPDISTUNE_DFT | USBPCR_OTGTUNE_DFT |
+>>>>>  USBPCR_SQRXTUNE_DFT |
+>>>>>            USBPCR_TXFSLSTUNE_DFT | USBPCR_TXRISETUNE_DFT |
+>>>>>  USBPCR_TXVREFTUNE_DFT |
+>>>>>            USBPCR_POR;
+>>>>>   -    writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>>>
+>>>>  not a bug fix
+>>>>
+>>>>>    }
+>>>>>
+>>>>>   -static void jz4780_usb_phy_init(struct usb_phy *phy)
+>>>>>   +static u32 jz4780_usb_phy_init(struct usb_phy *phy)
+>>>>
+>>>>  not a bug fix
+>>>>
+>>>>>   @@ -216,11 +213,10 @@ static void jz4780_usb_phy_init(struct
+>>>>>  usb_phy *phy)
+>>>>>            USBPCR1_WORD_IF_16BIT;
+>>>>>        writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>>>>>
+>>>>>   -    reg = USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
+>>>>>   -    writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>>>>   +    return USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
+>>>>
+>>>>  not a bug fix
+>>>>
+>>>>>    }
+>>>>>
+>>>>>   -static void x1000_usb_phy_init(struct usb_phy *phy)
+>>>>>   +static u32 x1000_usb_phy_init(struct usb_phy *phy)
+>>>>
+>>>>  not a bug fix
+>>>>
+>>>>>    {
+>>>>>        struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
+>>>>>        u32 reg;
+>>>>>   @@ -228,13 +224,12 @@ static void x1000_usb_phy_init(struct usb_phy
+>>>>>  *phy)
+>>>>>        reg = readl(priv->base + REG_USBPCR1_OFFSET) |
+>>>>>  USBPCR1_WORD_IF_16BIT;
+>>>>>        writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>>>>>
+>>>>>   -    reg = USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
+>>>>>   +    return USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
+>>>>>            USBPCR_TXHSXVTUNE_DCR_15MV | USBPCR_TXVREFTUNE_INC_25PPT |
+>>>>>            USBPCR_COMMONONN | USBPCR_POR;
+>>>>>   -    writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>>>
+>>>>  not a bug fix
+>>>>
+>>>>>    }
+>>>>>
+>>>>>   -static void x1830_usb_phy_init(struct usb_phy *phy)
+>>>>>   +static u32 x1830_usb_phy_init(struct usb_phy *phy)
+>>>>
+>>>>  not a bug fix
+>>>>
+>>>>>    {
+>>>>>        struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
+>>>>>        u32 reg;
+>>>>>   @@ -246,9 +241,8 @@ static void x1830_usb_phy_init(struct usb_phy
+>>>>>  *phy)
+>>>>>            USBPCR1_DMPD | USBPCR1_DPPD;
+>>>>>        writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>>>>>
+>>>>>   -    reg = USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT
+>>>>>  |    USBPCR_TXPREEMPHTUNE |
+>>>>>   +    return USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT |
+>>>>>  USBPCR_TXPREEMPHTUNE |
+>>>>>            USBPCR_COMMONONN | USBPCR_POR;
+>>>>>   -    writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>>>
+>>>>  not a bug fix
+>>>
+>>>  Well, if you don't like my bug fix, next time wait for my Reviewed-by.
+>>
+>> why so angry? Take a break every once in a while. Besides, someone else
+>> already sent the oneliner before you ;-)
+>
+> I'm just pissed that this patch has not been tested. I don't like 
+> sloppy work.
+>
+This is my fault. This error occurred in the v5 version, but was 
+corrected in the v6 version, but I don't know why v5 was merged into the 
+mainline and v6 was not merged, which caused this problem.
 
-regards
-Philipp
+
+>> In any case, why should I wait for your Reviewed-by? Get maintainer
+>> doesn't list you as the maintainer for it. Do you want to update
+>> MAINTAINERS by any chance?
+>
+> Yes, I thought I was (I'm maintainer of all Ingenic drivers), that 
+> also explains why I wasn't Cc'd for the oneliner patch you mentioned...
+>
+I checked again, get_maintainer did not give the correct information, 
+which caused my script to not add Paul to the cc list.
+> IIRC Zhou has a patch to move the driver to drivers/phy/, I'll add 
+> myself as maintainer once it's moved there.
+>
+I'll resend it soon.
+
+
+Thanks and best regards!
+
+> -Paul
+>
