@@ -2,60 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC962253F85
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 09:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9DF253F98
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 09:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728364AbgH0Hrm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 27 Aug 2020 03:47:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59272 "EHLO mail.kernel.org"
+        id S1728081AbgH0Hvi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 03:51:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60758 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726851AbgH0Hrl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 03:47:41 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208257] Kingston USB flash drive repeatedly disconnected after
- "Set SEL for device-initiated U2 failed."
-Date:   Thu, 27 Aug 2020 07:47:41 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: julroy67@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-208257-208809-XAJWxtIA0k@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208257-208809@https.bugzilla.kernel.org/>
-References: <bug-208257-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1727030AbgH0Hvf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Aug 2020 03:51:35 -0400
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C54EC22BEA;
+        Thu, 27 Aug 2020 07:51:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598514695;
+        bh=DIJvlMKzbNSjh9srx4Yl9VXGvX0GWse5Ag3lAUo1ZA8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SoALY6gPrgwmZay6+eURH9ZzpaAxs/X25l9uaoKsnD6ALA8ub+C/P0MSP6KQnGomS
+         Ej7TCGuF3ATMUb2L2c3ZO8LbEAYUazhfb+ZUtN6t0IqMAkSJx7eIaD5ktBClxjWyJU
+         Y9LzkUmuyNvZI4vPd6u5oO6axGR8GkfBqZ7EmQWI=
+Received: by mail-ej1-f48.google.com with SMTP id a21so6404295ejp.0;
+        Thu, 27 Aug 2020 00:51:34 -0700 (PDT)
+X-Gm-Message-State: AOAM5318sMU5DKtJBB2hEd+LfKrZtqMf2NqD5L/K3sbxONUg/r9NIIG/
+        RScSyiWzCb1FXdxBYmsj45SegnRS4EU1NeDJvcU=
+X-Google-Smtp-Source: ABdhPJziPMOxuJ09gXI/k0UxZq5JIsN+YRZxuWQCwZAMvUN9h301PIjJLzJwvv8KaGlNXCdLLGgwchSj+JCKsUFkr98=
+X-Received: by 2002:a17:906:d144:: with SMTP id br4mr19445113ejb.385.1598514693333;
+ Thu, 27 Aug 2020 00:51:33 -0700 (PDT)
 MIME-Version: 1.0
+References: <CGME20200826150239eucas1p24c59716cc31edfeb2eece84d97936b93@eucas1p2.samsung.com>
+ <20200826134315.GA3882506@kroah.com> <1425ab4f-ef7e-97d9-238f-0328ab51eb35@samsung.com>
+In-Reply-To: <1425ab4f-ef7e-97d9-238f-0328ab51eb35@samsung.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Thu, 27 Aug 2020 09:51:22 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPfmN6HAGXH-Qf4JAuo5Zbcu0y1yhrP2ZcdPMf8jwTv3Xw@mail.gmail.com>
+Message-ID: <CAJKOXPfmN6HAGXH-Qf4JAuo5Zbcu0y1yhrP2ZcdPMf8jwTv3Xw@mail.gmail.com>
+Subject: Re: [GIT PULL] USB fixes for 5.9-rc3
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Kees Cook <keescook@chromium.org>,
+        Brooke Basile <brookebasile@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208257
+On Wed, 26 Aug 2020 at 17:03, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>
+> Hi Greg,
+>
+> On 26.08.2020 15:43, Greg KH wrote:
+> > The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
+> >
+> >    Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
+> >
+> > are available in the Git repository at:
+> >
+> >    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.9-rc3
+> >
+> > for you to fetch changes up to 23e26d0577535f5ffe4ff8ed6d06e009553c0bca:
+> >
+> >    usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures (2020-08-25 16:02:35 +0200)
+> >
+> > ----------------------------------------------------------------
+> > USB fixes for 5.9-rc3
+> >
+> > Here are a small set of USB fixes for 5.9-rc3.
+> >
+> > Like most set of USB bugfixes, they include the usual:
+> >       - usb gadget driver fixes
+> >       - xhci driver fixes
+> >       - typec fixes
+> >       - new qurks and ids
+> >       - fixes for USB patches merged in 5.9-rc1
+> >
+> > Nothing huge, all of these have been in linux-next with no reported
+> > issues:
+> >
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >
+> > ----------------------------------------------------------------
+> > Alan Stern (1):
+> >        USB: yurex: Fix bad gfp argument
+> >
+> > Andy Shevchenko (1):
+> >        usb: hcd: Fix use after free in usb_hcd_pci_remove()
+> >
+> > Badhri Jagan Sridharan (1):
+> >        usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures
+> >
+> > Bastien Nocera (2):
+> >        USB: Also match device drivers using the ->match vfunc
+> >        USB: Fix device driver race
+> >
+> > Brooke Basile (2):
+> >        USB: gadget: u_f: add overflow checks to VLA macros
+>
+> Sorry, but the above patch breaks USB Ethernet Gadget operation. It also
+> didn't get the proper testing in linux-next (next-20200826 is the first
+> one with this patch).
+>
 
---- Comment #8 from Julien Humbert (julroy67@gmail.com) ---
-I'm really sorry, nothing moved at all.
-I asked for some help on the Red Hat Bugzilla, because I'm not sure how to
-compile the kernel with the patch, and I'm not even sure I could boot it on my
-main computer which is using secure boot.
+Hi Greg,
 
-I really hope I can make sure that this gets included for Fedora 33, I should
-try to contact some of the maintainers directly to get some movement.
+I have a different question - why is this patch not findable on any
+LKML lists? lore.kernel.org does not have it. Neither has mine inbox
+tracking most of the lists (also main linux-kernel). Maybe subject
+changed?
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Do we have another process of sending patches for fast inclusion in
+the Linux kernel? Is addressing a HW vulnerability?
+
+Best regards,
+Krzysztof
