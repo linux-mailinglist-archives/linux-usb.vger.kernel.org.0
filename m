@@ -2,125 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9DF253F98
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 09:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AC3253FF5
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 09:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728081AbgH0Hvi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 03:51:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60758 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727030AbgH0Hvf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 03:51:35 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C54EC22BEA;
-        Thu, 27 Aug 2020 07:51:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598514695;
-        bh=DIJvlMKzbNSjh9srx4Yl9VXGvX0GWse5Ag3lAUo1ZA8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SoALY6gPrgwmZay6+eURH9ZzpaAxs/X25l9uaoKsnD6ALA8ub+C/P0MSP6KQnGomS
-         Ej7TCGuF3ATMUb2L2c3ZO8LbEAYUazhfb+ZUtN6t0IqMAkSJx7eIaD5ktBClxjWyJU
-         Y9LzkUmuyNvZI4vPd6u5oO6axGR8GkfBqZ7EmQWI=
-Received: by mail-ej1-f48.google.com with SMTP id a21so6404295ejp.0;
-        Thu, 27 Aug 2020 00:51:34 -0700 (PDT)
-X-Gm-Message-State: AOAM5318sMU5DKtJBB2hEd+LfKrZtqMf2NqD5L/K3sbxONUg/r9NIIG/
-        RScSyiWzCb1FXdxBYmsj45SegnRS4EU1NeDJvcU=
-X-Google-Smtp-Source: ABdhPJziPMOxuJ09gXI/k0UxZq5JIsN+YRZxuWQCwZAMvUN9h301PIjJLzJwvv8KaGlNXCdLLGgwchSj+JCKsUFkr98=
-X-Received: by 2002:a17:906:d144:: with SMTP id br4mr19445113ejb.385.1598514693333;
- Thu, 27 Aug 2020 00:51:33 -0700 (PDT)
+        id S1728765AbgH0H6L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 03:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728333AbgH0H6J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 03:58:09 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8E5C061264;
+        Thu, 27 Aug 2020 00:58:08 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id f26so5340447ljc.8;
+        Thu, 27 Aug 2020 00:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lEBPqYLj1Sfpoe7PvHoeVpAVjO6ud5dnyjMuhp7FHVU=;
+        b=UdpN9e9+xHs/VTWHW2V0XUZN9Egd4mwnCmlizNY/AIPcvPFUdBqRvFNQU8vo2kolFY
+         7y2T/O/r2Ov/tzGqMTcdLnb7fmAI3MyewZNKhgF/msyQT7ep+SBJ9MJYrVL3ZFSf8/lg
+         fgpStsnUu58uIXrIb6sZBB73as3h9JlklSIHZwdaI5fVlpeBSVoP3GSxdwAKRIuGJ0G3
+         uheR2DVPPCDmJOgNe4rZtOHN3FRLjX6JrxavbkinDgK7QGTDkzOPEKPBJSpozg1JeTNn
+         SVy2dKblpo1tKuycek1vObQRq14/QN8FwJFtMEbbj5T1J/lC/ZObD/EoVv5j9sc/krMV
+         mzWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=lEBPqYLj1Sfpoe7PvHoeVpAVjO6ud5dnyjMuhp7FHVU=;
+        b=GFSiPWO5CJh5RhvONpAtEqiyWLJ+ZAdW+3V27joBwBS4hlS8OesAcbieWJYG0PPviX
+         yq236/4jg/kQrdyVwhb6H1ldAnKH2xTB9p/hOfiyxU2HkUKe0tU4rKCtjV8CJBeQSEZA
+         W1IsAPkCTYzH8UhmrCVDq0rAfFSJKkwNHVCUzukIRoepVrVOjvqJhZ5C0Znt06gR0YN/
+         SerhNeqvgoadgNXAlyt/3nGzNwmChLNSlnK/dun6Lb2ZSukQuxoPq5nIa/VRhPywjRtg
+         CrFtIfV6eD9g1ncoCiubdqcPulW7+UJa7AEfNsenopA5leBr6in+EdVQwSJ/tOodA0fJ
+         pZ1Q==
+X-Gm-Message-State: AOAM5331J1dGNIESZwf11TK4h/Aph3zdKQ00E574etiUDcNlQ9nHuw7R
+        ssUId5J19zwHX/P5RsB0qCA=
+X-Google-Smtp-Source: ABdhPJwUG34ZG5RWvvEl84Os0y3M8D8sLpjg17s0tEPZza0pvwK+RE1G6cGDx9RKlYZrA7Z7NkQMOQ==
+X-Received: by 2002:a2e:a370:: with SMTP id i16mr9544469ljn.22.1598515087168;
+        Thu, 27 Aug 2020 00:58:07 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:4853:a15:71d2:9e85:be1:5e21? ([2a00:1fa0:4853:a15:71d2:9e85:be1:5e21])
+        by smtp.gmail.com with ESMTPSA id j6sm297282lja.23.2020.08.27.00.58.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Aug 2020 00:58:06 -0700 (PDT)
+Subject: Re: [PATCH] net: usb: Fix uninit-was-stored issue in
+ asix_read_phy_addr()
+To:     Himadri Pandya <himadrispandya@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        gregkh@linuxfoundation.org
+References: <20200827065355.15177-1-himadrispandya@gmail.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <5dd266df-33cf-f351-7253-33a7f589cd56@gmail.com>
+Date:   Thu, 27 Aug 2020 10:57:56 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-References: <CGME20200826150239eucas1p24c59716cc31edfeb2eece84d97936b93@eucas1p2.samsung.com>
- <20200826134315.GA3882506@kroah.com> <1425ab4f-ef7e-97d9-238f-0328ab51eb35@samsung.com>
-In-Reply-To: <1425ab4f-ef7e-97d9-238f-0328ab51eb35@samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Thu, 27 Aug 2020 09:51:22 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPfmN6HAGXH-Qf4JAuo5Zbcu0y1yhrP2ZcdPMf8jwTv3Xw@mail.gmail.com>
-Message-ID: <CAJKOXPfmN6HAGXH-Qf4JAuo5Zbcu0y1yhrP2ZcdPMf8jwTv3Xw@mail.gmail.com>
-Subject: Re: [GIT PULL] USB fixes for 5.9-rc3
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Kees Cook <keescook@chromium.org>,
-        Brooke Basile <brookebasile@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200827065355.15177-1-himadrispandya@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 26 Aug 2020 at 17:03, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
->
-> Hi Greg,
->
-> On 26.08.2020 15:43, Greg KH wrote:
-> > The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
-> >
-> >    Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
-> >
-> > are available in the Git repository at:
-> >
-> >    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.9-rc3
-> >
-> > for you to fetch changes up to 23e26d0577535f5ffe4ff8ed6d06e009553c0bca:
-> >
-> >    usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures (2020-08-25 16:02:35 +0200)
-> >
-> > ----------------------------------------------------------------
-> > USB fixes for 5.9-rc3
-> >
-> > Here are a small set of USB fixes for 5.9-rc3.
-> >
-> > Like most set of USB bugfixes, they include the usual:
-> >       - usb gadget driver fixes
-> >       - xhci driver fixes
-> >       - typec fixes
-> >       - new qurks and ids
-> >       - fixes for USB patches merged in 5.9-rc1
-> >
-> > Nothing huge, all of these have been in linux-next with no reported
-> > issues:
-> >
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >
-> > ----------------------------------------------------------------
-> > Alan Stern (1):
-> >        USB: yurex: Fix bad gfp argument
-> >
-> > Andy Shevchenko (1):
-> >        usb: hcd: Fix use after free in usb_hcd_pci_remove()
-> >
-> > Badhri Jagan Sridharan (1):
-> >        usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures
-> >
-> > Bastien Nocera (2):
-> >        USB: Also match device drivers using the ->match vfunc
-> >        USB: Fix device driver race
-> >
-> > Brooke Basile (2):
-> >        USB: gadget: u_f: add overflow checks to VLA macros
->
-> Sorry, but the above patch breaks USB Ethernet Gadget operation. It also
-> didn't get the proper testing in linux-next (next-20200826 is the first
-> one with this patch).
->
+Hello!
 
-Hi Greg,
+On 27.08.2020 9:53, Himadri Pandya wrote:
 
-I have a different question - why is this patch not findable on any
-LKML lists? lore.kernel.org does not have it. Neither has mine inbox
-tracking most of the lists (also main linux-kernel). Maybe subject
-changed?
+> The buffer size is 2 Bytes and we expect to receive the same amount of
+> data. But sometimes we receive less data and run into uninit-was-stored
+> issue upon read. Hence modify the error check on the return value to match
+> with the buffer size as a prevention.
+> 
+> Reported-and-tested by: syzbot+a7e220df5a81d1ab400e@syzkaller.appspotmail.com
+> Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
+> ---
+>   drivers/net/usb/asix_common.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+> index e39f41efda3e..7bc6e8f856fe 100644
+> --- a/drivers/net/usb/asix_common.c
+> +++ b/drivers/net/usb/asix_common.c
+> @@ -296,7 +296,7 @@ int asix_read_phy_addr(struct usbnet *dev, int internal)
+>   
+>   	netdev_dbg(dev->net, "asix_get_phy_addr()\n");
+>   
+> -	if (ret < 0) {
+> +	if (ret < 2) {
+>   		netdev_err(dev->net, "Error reading PHYID register: %02x\n", ret);
 
-Do we have another process of sending patches for fast inclusion in
-the Linux kernel? Is addressing a HW vulnerability?
+    Hm... printing possibly negative values as hex?
 
-Best regards,
-Krzysztof
+[...]
+
+MBR, Sergei
