@@ -2,204 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0236A254760
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE22A254756
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727931AbgH0Osw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 10:48:52 -0400
-Received: from crapouillou.net ([89.234.176.41]:45044 "EHLO crapouillou.net"
+        id S1728219AbgH0OB2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 10:01:28 -0400
+Received: from mga12.intel.com ([192.55.52.136]:48117 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726887AbgH0N6V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 09:58:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1598536659; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WXO+rgQw15X1NqYEkxv8ngSYDPbmqHU2BHsKBTowoN4=;
-        b=OcCw9HFpgmahQzfbw51wNLZGHul+MmTLwQtu3+zzRCklkZ2RHsqJsEBY+ZOoSR2nGctrxA
-        +xXRh1Ce98O9xsa24PJVNrm7qM0Sm0S6L5VjAQGteHxVhROylf9apICMH5pd3+yBFEDju0
-        gBq00ke4lZGXH9fw0sQYrVCGcqtrWT0=
-Date:   Thu, 27 Aug 2020 15:50:41 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/1] USB: PHY: JZ4770: Fix uninitialized value written to
- HW register
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        =?UTF-8?b?5ZGo5q2j?= <sernia.zhou@foxmail.com>,
-        =?UTF-8?b?5ryG6bmP5oyv?= <aric.pzqi@ingenic.com>, od@zcrc.me,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <HG6QFQ.KLMIR92DB2D02@crapouillou.net>
-In-Reply-To: <87bliwi5kx.fsf@kernel.org>
-References: <20200827124308.71963-1-paul@crapouillou.net>
-        <20200827124308.71963-2-paul@crapouillou.net> <87v9h4i6t5.fsf@kernel.org>
-        <PN4QFQ.KWNBY2ZWQ7XC2@crapouillou.net> <87bliwi5kx.fsf@kernel.org>
+        id S1728169AbgH0OAV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Aug 2020 10:00:21 -0400
+IronPort-SDR: kHbK7rczgrEqwcttoqW3iGJ5Ke99C21DUBS3+6J5okZuDvnTQfW3Q4OpdihBVCC0DDVDe4mgDZ
+ Zl7sbKg7k+sA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9725"; a="136029221"
+X-IronPort-AV: E=Sophos;i="5.76,359,1592895600"; 
+   d="scan'208";a="136029221"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2020 07:00:06 -0700
+IronPort-SDR: 2uPs2ch9V4+cMSNTnQsUhQEEE0Q8ba0a1DGS157MvdQRqo9rVDlG6U+m1CNhZdpQtd5CcvzNRb
+ DsH4qQBWeYrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,359,1592895600"; 
+   d="scan'208";a="403408069"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 27 Aug 2020 07:00:02 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 27 Aug 2020 17:00:01 +0300
+Date:   Thu, 27 Aug 2020 17:00:01 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, linux@roeck-us.net, cy_huang@richtek.com,
+        gene_chen@richtek.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] usb typec: mt6360: Add support for mt6360 Type-C
+ driver
+Message-ID: <20200827140001.GE813478@kuha.fi.intel.com>
+References: <1598527137-6915-1-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1598527137-6915-1-git-send-email-u0084500@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Aug 27, 2020 at 07:18:55PM +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Mediatek MT6360 is a multi-functional IC that includes USB Type-C.
+> It works with Type-C Port Controller Manager to provide USB PD
+> and USB Type-C functionalities.
+> 
+> v1 to v2
+> 1. Add fix to Prevent the race condition from interrupt and tcpci port
+> unregister during module remove.
+> 
+> v2 to v3
+> 1. Change comment style for the head of source code.
+> 2. No need to print error for platform_get_irq_byname.
+> 3. Fix tcpci_register_port check from IS_ERR_OR_NULL to IS_ERR.
+> 4. Rename driver/Kconfig/Makefile form mt6360 to mt636x.
+> 5. Rename DT binding documents from mt6360 to mt636x.
+
+You don't place additional changelog here...
+
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+
+You put it here, after that '---' marker:
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#the-canonical-patch-format
 
 
-Le jeu. 27 ao=FBt 2020 =E0 16:25, Felipe Balbi <balbi@kernel.org> a=20
-=E9crit :
->=20
-> Hi,
->=20
-> Paul Cercueil <paul@crapouillou.net> writes:
->>>>   @@ -172,7 +172,8 @@ static int ingenic_usb_phy_init(struct=20
->>>> usb_phy
->>>>  *phy)
->>>>    		return err;
->>>>    	}
->>>>=20
->>>>   -	priv->soc_info->usb_phy_init(phy);
->>>>   +	reg =3D priv->soc_info->usb_phy_init(phy);
->>>>   +	writel(reg, priv->base + REG_USBPCR_OFFSET);
->>>=20
->>>  not fixing any bug.
->>>=20
->>>  Looking at the code, the bug follows after this line. It would=20
->>> suffice
->>>  to read REG_USBPCR_OFFSET in order to initialize reg. This bug fix
->>>  could
->>>  have been a one liner.
->>=20
->>  There's no need to re-read a register when you have the value=20
->> readily
->>  available. It just needs to be returned from the usb_phy_init
->>  callbacks. But yes, it's not a one-liner.
->=20
-> there's a difference between making a bug fix and reworking the=20
-> behavior
-> of the driver ;-)
+>  drivers/usb/typec/tcpm/Kconfig        |   8 ++
+>  drivers/usb/typec/tcpm/Makefile       |   1 +
+>  drivers/usb/typec/tcpm/tcpci_mt6360.c | 212 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 221 insertions(+)
+>  create mode 100644 drivers/usb/typec/tcpm/tcpci_mt6360.c
 
-The one-liner is actually what changes the behavior of the driver,=20
-since previously the code did not read back the register.
+thanks,
 
-In this case I guess it's fine, because the register does not have=20
-volatile bits.
-
->>>>   @@ -195,19 +196,15 @@ static void ingenic_usb_phy_remove(void=20
->>>> *phy)
->>>>    	usb_remove_phy(phy);
->>>>    }
->>>>=20
->>>>   -static void jz4770_usb_phy_init(struct usb_phy *phy)
->>>>   +static u32 jz4770_usb_phy_init(struct usb_phy *phy)
->>>=20
->>>  not a bug fix
->>>=20
->>>>    {
->>>>   -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
->>>>   -	u32 reg;
->>>>   -
->>>>   -	reg =3D USBPCR_AVLD_REG | USBPCR_COMMONONN |=20
->>>> USBPCR_IDPULLUP_ALWAYS
->>>>  |
->>>>   +	return USBPCR_AVLD_REG | USBPCR_COMMONONN |
->>>>  USBPCR_IDPULLUP_ALWAYS |
->>>>    		USBPCR_COMPDISTUNE_DFT | USBPCR_OTGTUNE_DFT |
->>>>  USBPCR_SQRXTUNE_DFT |
->>>>    		USBPCR_TXFSLSTUNE_DFT | USBPCR_TXRISETUNE_DFT |
->>>>  USBPCR_TXVREFTUNE_DFT |
->>>>    		USBPCR_POR;
->>>>   -	writel(reg, priv->base + REG_USBPCR_OFFSET);
->>>=20
->>>  not a bug fix
->>>=20
->>>>    }
->>>>=20
->>>>   -static void jz4780_usb_phy_init(struct usb_phy *phy)
->>>>   +static u32 jz4780_usb_phy_init(struct usb_phy *phy)
->>>=20
->>>  not a bug fix
->>>=20
->>>>   @@ -216,11 +213,10 @@ static void jz4780_usb_phy_init(struct
->>>>  usb_phy *phy)
->>>>    		USBPCR1_WORD_IF_16BIT;
->>>>    	writel(reg, priv->base + REG_USBPCR1_OFFSET);
->>>>=20
->>>>   -	reg =3D USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
->>>>   -	writel(reg, priv->base + REG_USBPCR_OFFSET);
->>>>   +	return USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
->>>=20
->>>  not a bug fix
->>>=20
->>>>    }
->>>>=20
->>>>   -static void x1000_usb_phy_init(struct usb_phy *phy)
->>>>   +static u32 x1000_usb_phy_init(struct usb_phy *phy)
->>>=20
->>>  not a bug fix
->>>=20
->>>>    {
->>>>    	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
->>>>    	u32 reg;
->>>>   @@ -228,13 +224,12 @@ static void x1000_usb_phy_init(struct=20
->>>> usb_phy
->>>>  *phy)
->>>>    	reg =3D readl(priv->base + REG_USBPCR1_OFFSET) |
->>>>  USBPCR1_WORD_IF_16BIT;
->>>>    	writel(reg, priv->base + REG_USBPCR1_OFFSET);
->>>>=20
->>>>   -	reg =3D USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
->>>>   +	return USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
->>>>    		USBPCR_TXHSXVTUNE_DCR_15MV | USBPCR_TXVREFTUNE_INC_25PPT |
->>>>    		USBPCR_COMMONONN | USBPCR_POR;
->>>>   -	writel(reg, priv->base + REG_USBPCR_OFFSET);
->>>=20
->>>  not a bug fix
->>>=20
->>>>    }
->>>>=20
->>>>   -static void x1830_usb_phy_init(struct usb_phy *phy)
->>>>   +static u32 x1830_usb_phy_init(struct usb_phy *phy)
->>>=20
->>>  not a bug fix
->>>=20
->>>>    {
->>>>    	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
->>>>    	u32 reg;
->>>>   @@ -246,9 +241,8 @@ static void x1830_usb_phy_init(struct usb_phy
->>>>  *phy)
->>>>    		USBPCR1_DMPD | USBPCR1_DPPD;
->>>>    	writel(reg, priv->base + REG_USBPCR1_OFFSET);
->>>>=20
->>>>   -	reg =3D USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT
->>>>  |	USBPCR_TXPREEMPHTUNE |
->>>>   +	return USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT |
->>>>  USBPCR_TXPREEMPHTUNE |
->>>>    		USBPCR_COMMONONN | USBPCR_POR;
->>>>   -	writel(reg, priv->base + REG_USBPCR_OFFSET);
->>>=20
->>>  not a bug fix
->>=20
->>  Well, if you don't like my bug fix, next time wait for my=20
->> Reviewed-by.
->=20
-> why so angry? Take a break every once in a while. Besides, someone=20
-> else
-> already sent the oneliner before you ;-)
-
-I'm just pissed that this patch has not been tested. I don't like=20
-sloppy work.
-
-> In any case, why should I wait for your Reviewed-by? Get maintainer
-> doesn't list you as the maintainer for it. Do you want to update
-> MAINTAINERS by any chance?
-
-Yes, I thought I was (I'm maintainer of all Ingenic drivers), that also=20
-explains why I wasn't Cc'd for the oneliner patch you mentioned...
-
-IIRC Zhou has a patch to move the driver to drivers/phy/, I'll add=20
-myself as maintainer once it's moved there.
-
--Paul
-
-
+-- 
+heikki
