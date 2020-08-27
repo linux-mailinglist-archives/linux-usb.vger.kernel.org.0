@@ -2,42 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE542545A5
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 15:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDA32545A1
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 15:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726289AbgH0NAF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 09:00:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41070 "EHLO mail.kernel.org"
+        id S1726858AbgH0NFL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 09:05:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726073AbgH0M7O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 08:59:14 -0400
+        id S1726845AbgH0NE7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Aug 2020 09:04:59 -0400
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 43E1D2177B;
-        Thu, 27 Aug 2020 12:58:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2095B207CD;
+        Thu, 27 Aug 2020 13:02:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598533134;
-        bh=d4Bbz6immrh2cuagoKGQb8dRAnNcJbLXhsZf4tTIDuo=;
+        s=default; t=1598533367;
+        bh=LzWZBpCw/l+Ix/GXPE6nae42Wme8sXfeIYoOLqaRLsQ=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=AQ/wQXnZJKoZcYs1/FwK94+TQjXENo2Hjf2OAsdhJNc5Et0ZXE6XJ1r5mXTmj3D9Z
-         xIXd+o3pg9l25PF2JOobM50WTJK4Au0fCL1nLs+dugKc0tlEiIMdQdJ6aqXSt/CnKO
-         to651qbL2bf1UTwBv8tnKPkMuV6WXpzmID7X2wP4=
+        b=y0Z196NIPvRRFED15YhQtorRsjOAL/5EHRTli8FDYNANC23zGBgTup+7OEOHNLZU6
+         yjR68sJL4gcNocA9V4maauV4CZLScAgY4aBIvQ56F73mQ0ZDQz2pwgAcE+d6Fjy4v6
+         tjj2go46yC/493h+pidRAT7l+Uzv/tpbV0gPSOx0=
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        =?utf-8?B?5ZGo5q2j?= <sernia.zhou@foxmail.com>,
-        =?utf-8?B?5ryG6bmP5oyv?= <aric.pzqi@ingenic.com>
-Cc:     od@zcrc.me, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/1] USB: PHY: JZ4770: Fix uninitialized value written
- to HW register
-In-Reply-To: <20200827124308.71963-2-paul@crapouillou.net>
-References: <20200827124308.71963-1-paul@crapouillou.net>
- <20200827124308.71963-2-paul@crapouillou.net>
-Date:   Thu, 27 Aug 2020 15:58:46 +0300
-Message-ID: <87v9h4i6t5.fsf@kernel.org>
+To:     Roger Quadros <rogerq@ti.com>, Peter Chen <peter.chen@nxp.com>
+Cc:     Pawel Laszczak <pawell@cadence.com>,
+        Rahul Kumar <kurahul@cadence.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 3/3] usb: cdns3: Enable workaround for USB2.0 PHY Rx
+ compliance test PHY lockup
+In-Reply-To: <b083883d-b8c3-ee16-6b02-8987cade17ed@ti.com>
+References: <20200825120059.12436-1-rogerq@ti.com>
+ <20200825120059.12436-4-rogerq@ti.com>
+ <20200826031948.GA7646@b29397-desktop>
+ <DM6PR07MB5529A43AFDEB25993595DB59DD540@DM6PR07MB5529.namprd07.prod.outlook.com>
+ <20200826071504.GA19661@b29397-desktop>
+ <DM6PR07MB5529EB2FB7E3380321191B44DD540@DM6PR07MB5529.namprd07.prod.outlook.com>
+ <AM7PR04MB71576DF6C03387C7628DBE3A8B540@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <ab38721a-ef48-c6a7-aa33-3085ca7b8852@ti.com>
+ <20200827002339.GA17559@b29397-desktop>
+ <b083883d-b8c3-ee16-6b02-8987cade17ed@ti.com>
+Date:   Thu, 27 Aug 2020 16:02:39 +0300
+Message-ID: <87sgc8i6mo.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -53,127 +63,95 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Paul Cercueil <paul@crapouillou.net> writes:
-> The 'reg' value was written to a hardware register in
-> ingenic_usb_phy_init(), while not being initialized anywhere.
+Roger Quadros <rogerq@ti.com> writes:
+>>>>>>>>> From: Pawel Laszczak <pawell@cadence.com>
+>>>>>>>>>
+>>>>>>>>> USB2.0 PHY hangs in Rx Compliance test when the incoming packet
+>>>>>>>>> amplitude is varied below and above the Squelch Level of Receiver
+>>>>>>>>> during the active packet multiple times.
+>>>>>>>>>
+>>>>>>>>> Version 1 of the controller allows PHY to be reset when RX fail
+>>>>>>>>> condition is detected to work around the above issue. This feature
+>>>>>>>>> is disabled by default and needs to be enabled using a bit from
+>>>>>>>>> the newly added PHYRST_CFG register. This patch enables the worka=
+round.
+>>>>>>>>>
+>>>>>>>>> As there is no way to distinguish between the controller version
+>>>>>>>>> before the device controller is started we need to rely on a DT
+>>>>>>>>> property to decide when to apply the workaround.
+>>>>>>>>
+>>>>>>>> Pawel, it could know the controller version at cdns3_gadget_start,
+>>>>>>>> but the controller starts when it tries to bind gadget driver, at
+>>>>>>>> that time, it has already known the controller version.
+>>>>>>>>
+>>>>>>>> For me, the device controller starts is using USB_CONF.DEVEN (Devi=
+ce
+>>>>>>>> Enable) through usb_gadget_connect, I am not sure if it is the same
+>>>>>>>> with yours.
+>>>>>>>>
+>>>>>>>
+>>>>>>> Yes in device mode driver knows controller version but this
+>>>>>>> workaround Must be enabled also in host mode. In host mode the
+>>>>>>> controller doesn't have access to device registers. The controller
+>>>>>>> version is placed in device register.
+>>>>>>>
+>>>>>>
+>>>>>> You may suggest your design team adding CHIP_VER register at global
+>>>>>> register region, it will easy the software engineer life.
+>>>>>>
+>>>>> >From what I read, this register is only enabling USB2 PHY reset
+>>>>>> software control, it needs for all chips with rev 0x0002450D, and the
+>>>>>> place you current change is only for 0x0002450D, right?
+>>>>>
+>>>>> Even I could say that this workaround should be enabled only for Spec=
+ific USB2
+>>>>> PHY  (only 0x0002450D)
+>>>>>
+>>>>> This bit should not have any impact for Cadence PHY but it can has Im=
+pact for third
+>>>>> party PHYs.
+>>>>>
+>>>>
+>>>> So, it is related to specific PHY, but enable this specific PHY reset =
+bit is at controller region, why don't
+>>>> put this enable bit at PHY region?
+>>>
+>>> I think this is related to Controller + PHY combination.
+>>> The fix for the issue is via a bit in the controller, so it needs to be=
+ managed by the
+>>> controller driver.
+>>>
+>>>>
+>>>> So, you use controller's device property to know this specific PHY, ca=
+n controller know this specific
+>>>> PHY dynamically?
+>>>
+>>> Still the PHY will have to tell the controller the enable that bit. How=
+ to do that?
+>>>
+>>> Adding a dt-property that vendors can used was the simplest option.
+>>>
+>>=20
+>> Ok, does all controllers with ver 0x0002450D need this fix? I just think
+>> if we introduce a flag stands for ver 0x0002450D in case this ver has
+>> other issues in future or just using phy reset enable property?
+>>=20
+>> Pawel & Roger, what's your opinion?
+>>=20
+> I think it is best to keep the flags specific to the issue rather than
+> a one flag for all issues with a specific version. This way you can
+> re-use the flag irrespective of IP version.
 
-your patch does a lot more than fix the bug :-)
+I second that. Specially when some SoC-manufacturers may implement ECO
+fixes and not change IP revision.
 
-> Fixes: 2a6c0b82e651 ("USB: PHY: JZ4770: Add support for new Ingenic SoCs.=
-")
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  drivers/usb/phy/phy-jz4770.c | 28 +++++++++++-----------------
->  1 file changed, 11 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/usb/phy/phy-jz4770.c b/drivers/usb/phy/phy-jz4770.c
-> index d4ee3cb721ea..58771a8688f2 100644
-> --- a/drivers/usb/phy/phy-jz4770.c
-> +++ b/drivers/usb/phy/phy-jz4770.c
-> @@ -97,7 +97,7 @@ enum ingenic_usb_phy_version {
->  struct ingenic_soc_info {
->  	enum ingenic_usb_phy_version version;
->=20=20
-> -	void (*usb_phy_init)(struct usb_phy *phy);
-> +	u32 (*usb_phy_init)(struct usb_phy *phy);
+> But best case is that Cadence put a IP revision register in common area a=
+s you
+> have previously suggested so driver can automatically apply quirks to spe=
+cific
+> versions.
 
-this is not fixing any bug
-
-> @@ -172,7 +172,8 @@ static int ingenic_usb_phy_init(struct usb_phy *phy)
->  		return err;
->  	}
->=20=20
-> -	priv->soc_info->usb_phy_init(phy);
-> +	reg =3D priv->soc_info->usb_phy_init(phy);
-> +	writel(reg, priv->base + REG_USBPCR_OFFSET);
-
-not fixing any bug.
-
-Looking at the code, the bug follows after this line. It would suffice
-to read REG_USBPCR_OFFSET in order to initialize reg. This bug fix could
-have been a one liner.
-
-> @@ -195,19 +196,15 @@ static void ingenic_usb_phy_remove(void *phy)
->  	usb_remove_phy(phy);
->  }
->=20=20
-> -static void jz4770_usb_phy_init(struct usb_phy *phy)
-> +static u32 jz4770_usb_phy_init(struct usb_phy *phy)
-
-not a bug fix
-
->  {
-> -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
-> -	u32 reg;
-> -
-> -	reg =3D USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS |
-> +	return USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS |
->  		USBPCR_COMPDISTUNE_DFT | USBPCR_OTGTUNE_DFT | USBPCR_SQRXTUNE_DFT |
->  		USBPCR_TXFSLSTUNE_DFT | USBPCR_TXRISETUNE_DFT | USBPCR_TXVREFTUNE_DFT |
->  		USBPCR_POR;
-> -	writel(reg, priv->base + REG_USBPCR_OFFSET);
-
-not a bug fix
-
->  }
->=20=20
-> -static void jz4780_usb_phy_init(struct usb_phy *phy)
-> +static u32 jz4780_usb_phy_init(struct usb_phy *phy)
-
-not a bug fix
-
-> @@ -216,11 +213,10 @@ static void jz4780_usb_phy_init(struct usb_phy *phy)
->  		USBPCR1_WORD_IF_16BIT;
->  	writel(reg, priv->base + REG_USBPCR1_OFFSET);
->=20=20
-> -	reg =3D USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
-> -	writel(reg, priv->base + REG_USBPCR_OFFSET);
-> +	return USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
-
-not a bug fix
-
->  }
->=20=20
-> -static void x1000_usb_phy_init(struct usb_phy *phy)
-> +static u32 x1000_usb_phy_init(struct usb_phy *phy)
-
-not a bug fix
-
->  {
->  	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
->  	u32 reg;
-> @@ -228,13 +224,12 @@ static void x1000_usb_phy_init(struct usb_phy *phy)
->  	reg =3D readl(priv->base + REG_USBPCR1_OFFSET) | USBPCR1_WORD_IF_16BIT;
->  	writel(reg, priv->base + REG_USBPCR1_OFFSET);
->=20=20
-> -	reg =3D USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
-> +	return USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
->  		USBPCR_TXHSXVTUNE_DCR_15MV | USBPCR_TXVREFTUNE_INC_25PPT |
->  		USBPCR_COMMONONN | USBPCR_POR;
-> -	writel(reg, priv->base + REG_USBPCR_OFFSET);
-
-not a bug fix
-
->  }
->=20=20
-> -static void x1830_usb_phy_init(struct usb_phy *phy)
-> +static u32 x1830_usb_phy_init(struct usb_phy *phy)
-
-not a bug fix
-
->  {
->  	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
->  	u32 reg;
-> @@ -246,9 +241,8 @@ static void x1830_usb_phy_init(struct usb_phy *phy)
->  		USBPCR1_DMPD | USBPCR1_DPPD;
->  	writel(reg, priv->base + REG_USBPCR1_OFFSET);
->=20=20
-> -	reg =3D USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT |	USBPCR_TXPREEMPHTUNE |
-> +	return USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT | USBPCR_TXPREEMPHTUNE |
->  		USBPCR_COMMONONN | USBPCR_POR;
-> -	writel(reg, priv->base + REG_USBPCR_OFFSET);
-
-not a bug fix
+little too late for that :-)
 
 =2D-=20
 balbi
@@ -183,19 +161,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9HrgYRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQaT/w/+JlNAlTBK+BeN8ZHhLCNQ6q9UGiD4uzhE
-dROf/8FE7LYMOOu+gU/eP0srxyxnWaDFNINb2JTpwb+jlyPyzYCLgncIYdGN0thD
-DgtItb3aGkq8o0pDKr/Ql/7+GP8NBcIxFHKz/MFp3hHOzccOqMzCsIeirIj0mvNT
-S6UYLJUjkEMwed37CXKIt72kxnIv02H48opi8FxFd0Jx2je8PFl+/CL/V+Yq4Ovg
-VmcSc2X8lIhIxcE24TNwBSNP8uvpB9beCqh9Olih+fbJRE0Di9SpZXJFQJx9gBm3
-6zm0CpjaD3K1T50GIXaHNmBRBS94SqywhxTQyoDLAghqNKYLCVpMcfezJZQoqGr+
-ExTY4aFgScrgNEubJ+aq1MPZsirhZW/wzW9Ov7//mQr/yahhUzNkQCkOeyiRdN1E
-Qphcr3RFlucqEoDjASRYetQTwI761snTt1nBIfTtJgKqMOKuL4P9vJ3yblmKsqm6
-5XXqDsfyI4oKjLLsEpDF1ckX3/IlXYFNPZ0tq95H8UOrO2x/X6e/jhToHG6DdPcJ
-9578H9gk1ALmhnRqqyHUBmILgSDRynjOLssPN+OGiuLB1u5SEtt8ist7FLKkh9LU
-upM9GjxAzLzdIb4/l5VprnMYPslkVKII0MXWkuM0pQcM/PslwB+HuyXmLa8jKDGf
-JLBfkngI1QE=
-=YW/H
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9Hru8RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQY8xg//WHz2GcqK1+sGxk+5lOGCP/rWdOLo+WMg
+UgBC36W9zMY0Cchh0rRluRfliavEkvtnIF12d8aQSg1tpqWQ+Mu2S8QwWUJCleaa
+wO77Ocyg3PfAOjHWEnWBJxrOoplNwnza/3uoKVfpPeJrHlqzwH9ibhe7MKdYlO13
+tTEHyGXL2G9tTiiF4KhEC0Q9W86i4lYscTfu9BZaRD0GESrnN+6BkLnBQHG7Eo2R
+fmj0ydezud89ezWtMhfSEXnsxRsylP/Nho5Rrd3mKyY4kL6A07JlGTzsZ5RDQmkp
+6V9MAyvw2IEIe41swFNf3VChP95c7eHmSVXlu0vuoJC+nluTqfHdCSq8LU6G1TQT
+BobJOm8/gSLfgNUua41wOf2HSDg0tNOzQ1FBPwJvphcLfDRJ0ExVjY12poRsaYV8
+ZISZzXrHddMVLOh5f36FeUkzEOVHl4Q13H9CjqOg+ehfqeXaY+iX7i3mVMkfpmsO
+eGCm5UUXxkcyvvlvCFYIcUTiWQ10y+M5Oql/HR5grD2MVEkUbWZyRU56WKRYkYgL
+VsOJ+lHx09MAo7aH2twsq/lf/A5zeo9f9qA/fyV0ppfCJBqeQOzuLGODD5r0zVWG
+F+tOI4MEAJyuQ4bKBPfENenFSck5oonFWZBtpMKYBD3JlG6u53MUFEIrMGTyUnl8
++ZbqFHkObCI=
+=7clK
 -----END PGP SIGNATURE-----
 --=-=-=--
