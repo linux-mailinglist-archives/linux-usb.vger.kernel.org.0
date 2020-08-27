@@ -2,108 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E63C2541FC
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 11:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7140225428C
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 11:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728520AbgH0JXg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 05:23:36 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:60447 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728401AbgH0JXd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 05:23:33 -0400
-X-UUID: c6ec64b1d9cd4f118c4f7a3070a9774b-20200827
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=S4CfLutE8hUT3EWA7X8xikOPUUz72YCt0QmrL0S0o10=;
-        b=RuipkW0mMnh8/+7ZcKhlpn2NZL+srPzHlp3S1Rjj0PlVd1QR+QPuofPFxemm55YaPAahwCqB1uGaTZGA18yH6isTzj4VHXqprGQXVsNvZL40m1s6XpmAD4JGu0fK985Z6wZSy3IHRAFzb2D5RndSNlCvNe1UTctnuAf3wX9/2UM=;
-X-UUID: c6ec64b1d9cd4f118c4f7a3070a9774b-20200827
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1025482517; Thu, 27 Aug 2020 17:23:29 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 27 Aug 2020 17:23:26 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 27 Aug 2020 17:23:26 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     Ainge Hsu <ainge.hsu@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: [PATCH v3] usb: mtu3: fix panic in mtu3_gadget_stop()
-Date:   Thu, 27 Aug 2020 17:22:58 +0800
-Message-ID: <1598520178-17301-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1596185878-24360-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1596185878-24360-1-git-send-email-macpaul.lin@mediatek.com>
+        id S1728273AbgH0Jg5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 05:36:57 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:56550 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726882AbgH0Jgz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 05:36:55 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 07R9anEk086876;
+        Thu, 27 Aug 2020 04:36:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1598521009;
+        bh=gq9PsmCr2b2hlhGa81Jfhi1VEMeq5fSGg/TFRp1g5+s=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=wTHDnESgv8vwzPcqsnOtcCasnTKXCPJAI3NJcewfw9MGKGMOlRbbxG2O6LP/eaG72
+         VkbzNEdZFV3qhtZCkBM9D+XH2n90HzW+oeNQr5vNhqmG9JrIpQCzlUlaZojzjHdOw7
+         HVrqw9J/VShiR6RnYhV0t/EWNGpnev0rcp0DMjQU=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 07R9an7A111323
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 27 Aug 2020 04:36:49 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 27
+ Aug 2020 04:36:49 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 27 Aug 2020 04:36:48 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07R9ak6O018513;
+        Thu, 27 Aug 2020 04:36:47 -0500
+Subject: Re: [PATCH 3/3] usb: cdns3: Enable workaround for USB2.0 PHY Rx
+ compliance test PHY lockup
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     Pawel Laszczak <pawell@cadence.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        Rahul Kumar <kurahul@cadence.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20200825120059.12436-1-rogerq@ti.com>
+ <20200825120059.12436-4-rogerq@ti.com> <20200826031948.GA7646@b29397-desktop>
+ <DM6PR07MB5529A43AFDEB25993595DB59DD540@DM6PR07MB5529.namprd07.prod.outlook.com>
+ <20200826071504.GA19661@b29397-desktop>
+ <DM6PR07MB5529EB2FB7E3380321191B44DD540@DM6PR07MB5529.namprd07.prod.outlook.com>
+ <AM7PR04MB71576DF6C03387C7628DBE3A8B540@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <ab38721a-ef48-c6a7-aa33-3085ca7b8852@ti.com>
+ <20200827002339.GA17559@b29397-desktop>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <b083883d-b8c3-ee16-6b02-8987cade17ed@ti.com>
+Date:   Thu, 27 Aug 2020 12:36:46 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20200827002339.GA17559@b29397-desktop>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VGhpcyBwYXRjaCBmaXhlcyBhIHBvc3NpYmxlIGlzc3VlIHdoZW4gbXR1M19nYWRnZXRfc3RvcCgp
-DQphbHJlYWR5IGFzc2lnbmVkIE5VTEwgdG8gbXR1LT5nYWRnZXRfZHJpdmVyIGR1cmluZyBtdHVf
-Z2FkZ2V0X2Rpc2Nvbm5lY3QoKS4NCg0KWzxmZmZmZmY5MDA4MTYxOTc0Pl0gbm90aWZpZXJfY2Fs
-bF9jaGFpbisweGE0LzB4MTI4DQpbPGZmZmZmZjkwMDgxNjFmZDQ+XSBfX2F0b21pY19ub3RpZmll
-cl9jYWxsX2NoYWluKzB4ODQvMHgxMzgNCls8ZmZmZmZmOTAwODE2MmVjMD5dIG5vdGlmeV9kaWUr
-MHhiMC8weDEyMA0KWzxmZmZmZmY5MDA4MDllMzQwPl0gZGllKzB4MWY4LzB4NWQwDQpbPGZmZmZm
-ZjkwMDgwZDAzYjQ+XSBfX2RvX2tlcm5lbF9mYXVsdCsweDE5Yy8weDI4MA0KWzxmZmZmZmY5MDA4
-MGQwNGRjPl0gZG9fYmFkX2FyZWErMHg0NC8weDE0MA0KWzxmZmZmZmY5MDA4MGQwZjljPl0gZG9f
-dHJhbnNsYXRpb25fZmF1bHQrMHg0Yy8weDkwDQpbPGZmZmZmZjkwMDgwODBhNzg+XSBkb19tZW1f
-YWJvcnQrMHhiOC8weDI1OA0KWzxmZmZmZmY5MDA4MDg0OWQwPl0gZWwxX2RhKzB4MjQvMHgzYw0K
-WzxmZmZmZmY5MDA5YmRlMDFjPl0gbXR1M19nYWRnZXRfZGlzY29ubmVjdCsweGFjLzB4MTI4DQpb
-PGZmZmZmZjkwMDliZDU3NmM+XSBtdHUzX2lycSsweDM0Yy8weGMxOA0KWzxmZmZmZmY5MDA4MmFj
-MDNjPl0gX19oYW5kbGVfaXJxX2V2ZW50X3BlcmNwdSsweDJhYy8weGNkMA0KWzxmZmZmZmY5MDA4
-MmFjYWUwPl0gaGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHg4MC8weDEzOA0KWzxmZmZmZmY5MDA4
-MmFjYzQ0Pl0gaGFuZGxlX2lycV9ldmVudCsweGFjLzB4MTQ4DQpbPGZmZmZmZjkwMDgyYjcxY2M+
-XSBoYW5kbGVfZmFzdGVvaV9pcnErMHgyMzQvMHg1NjgNCls8ZmZmZmZmOTAwODJhODcwOD5dIGdl
-bmVyaWNfaGFuZGxlX2lycSsweDQ4LzB4NjgNCls8ZmZmZmZmOTAwODJhOTZhYz5dIF9faGFuZGxl
-X2RvbWFpbl9pcnErMHgyNjQvMHgxNzQwDQpbPGZmZmZmZjkwMDgwODE5ZjQ+XSBnaWNfaGFuZGxl
-X2lycSsweDE0Yy8weDI1MA0KWzxmZmZmZmY5MDA4MDg0Y2VjPl0gZWwxX2lycSsweGVjLzB4MTk0
-DQpbPGZmZmZmZjkwMDg1Yjk4NWM+XSBkbWFfcG9vbF9hbGxvYysweDZlNC8weGFlMA0KWzxmZmZm
-ZmY5MDA4ZDdmODkwPl0gY21kcV9tYm94X3Bvb2xfYWxsb2NfaW1wbCsweGIwLzB4MjM4DQpbPGZm
-ZmZmZjkwMDhkODA5MDQ+XSBjbWRxX3BrdF9hbGxvY19idWYrMHgyZGMvMHg3YzANCls8ZmZmZmZm
-OTAwOGQ4MGY2MD5dIGNtZHFfcGt0X2FkZF9jbWRfYnVmZmVyKzB4MTc4LzB4MjcwDQpbPGZmZmZm
-ZjkwMDhkODIzMjA+XSBjbWRxX3BrdF9wZXJmX2JlZ2luKzB4MTA4LzB4MTQ4DQpbPGZmZmZmZjkw
-MDhkODI0ZDg+XSBjbWRxX3BrdF9jcmVhdGUrMHgxNzgvMHgxZjANCls8ZmZmZmZmOTAwOGY5NjIz
-MD5dIG10a19jcnRjX2NvbmZpZ19kZWZhdWx0X3BhdGgrMHgzMjgvMHg3YTANCls8ZmZmZmZmOTAw
-OTAyNDZjYz5dIG10a19kcm1faWRsZW1ncl9raWNrKzB4YTZjLzB4MTQ2MA0KWzxmZmZmZmY5MDA4
-ZjliYmI0Pl0gbXRrX2RybV9jcnRjX2F0b21pY19iZWdpbisweDFhNC8weDFhNjgNCls8ZmZmZmZm
-OTAwOGU4ZGY5Yz5dIGRybV9hdG9taWNfaGVscGVyX2NvbW1pdF9wbGFuZXMrMHgxNTQvMHg4NzgN
-Cls8ZmZmZmZmOTAwOGYyZmI3MD5dIG10a19hdG9taWNfY29tcGxldGUuaXNyYS4xNisweGU4MC8w
-eDE5YzgNCls8ZmZmZmZmOTAwOGYzMDkxMD5dIG10a19hdG9taWNfY29tbWl0KzB4MjU4LzB4ODk4
-DQpbPGZmZmZmZjkwMDhlZjE0MmM+XSBkcm1fYXRvbWljX2NvbW1pdCsweGNjLzB4MTA4DQpbPGZm
-ZmZmZjkwMDhlZjdjZjA+XSBkcm1fbW9kZV9hdG9taWNfaW9jdGwrMHgxYzIwLzB4MjU4MA0KWzxm
-ZmZmZmY5MDA4ZWJjNzY4Pl0gZHJtX2lvY3RsX2tlcm5lbCsweDExOC8weDFiMA0KWzxmZmZmZmY5
-MDA4ZWJjZGU4Pl0gZHJtX2lvY3RsKzB4NWMwLzB4OTIwDQpbPGZmZmZmZjkwMDg2M2IwMzA+XSBk
-b192ZnNfaW9jdGwrMHgxODgvMHgxODIwDQpbPGZmZmZmZjkwMDg2M2M3NTQ+XSBTeVNfaW9jdGwr
-MHg4Yy8weGEwDQoNClNpZ25lZC1vZmYtYnk6IE1hY3BhdWwgTGluIDxtYWNwYXVsLmxpbkBtZWRp
-YXRlay5jb20+DQpDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KLS0tDQpDaGFuZ2VzIGZvciB2
-MzoNCiAgLSBDYWxsIHN5bmNocm9uaXplX2lycSgpIGluIG10dTNfZ2FkZ2V0X3N0b3AoKSBpbnN0
-ZWFkIG9mIHJlbWVtYmVyaW5nDQogICAgY2FsbGJhY2sgZnVuY3Rpb24gaW4gbXR1M19nYWRnZXRf
-ZGlzY29ubmVjdCgpLg0KICAgIFRoYW5rcyBmb3IgQWxhbidzIHN1Z2dlc3Rpb24uDQoNCkNoYW5n
-ZXMgZm9yIHYyOg0KICAtIENoZWNrIG10dV9nYWRnZXRfZHJpdmVyIG91dCBvZiBzcGluX2xvY2sg
-bWlnaHQgc3RpbGwgbm90IHdvcmsuDQogICAgV2UgdXNlIGEgdGVtcG9yYXJ5IHBvaW50ZXIgdG8g
-cmVtZW1iZXIgdGhlIGNhbGxiYWNrIGZ1bmN0aW9uLg0KDQogZHJpdmVycy91c2IvbXR1My9tdHUz
-X2dhZGdldC5jIHwgICAgMSArDQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9ucygrKQ0KDQpk
-aWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvbXR1My9tdHUzX2dhZGdldC5jIGIvZHJpdmVycy91c2Iv
-bXR1My9tdHUzX2dhZGdldC5jDQppbmRleCAxZGU1YzlhLi4xYWIzZDNhIDEwMDY0NA0KLS0tIGEv
-ZHJpdmVycy91c2IvbXR1My9tdHUzX2dhZGdldC5jDQorKysgYi9kcml2ZXJzL3VzYi9tdHUzL210
-dTNfZ2FkZ2V0LmMNCkBAIC01NjQsNiArNTY0LDcgQEAgc3RhdGljIGludCBtdHUzX2dhZGdldF9z
-dG9wKHN0cnVjdCB1c2JfZ2FkZ2V0ICpnKQ0KIA0KIAlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZt
-dHUtPmxvY2ssIGZsYWdzKTsNCiANCisJc3luY2hyb25pemVfaXJxKG10dS0+aXJxKTsNCiAJcmV0
-dXJuIDA7DQogfQ0KIA0KLS0gDQoxLjcuOS41DQo=
 
+
+On 27/08/2020 03:24, Peter Chen wrote:
+> On 20-08-26 15:49:57, Roger Quadros wrote:
+>> Peter,
+>>
+>> On 26/08/2020 11:07, Peter Chen wrote:
+>>>>
+>>>>
+>>>>>
+>>>>> On 20-08-26 04:04:01, Pawel Laszczak wrote:
+>>>>>>> On 20-08-25 15:00:59, Roger Quadros wrote:
+>>>>>>>> From: Pawel Laszczak <pawell@cadence.com>
+>>>>>>>>
+>>>>>>>> USB2.0 PHY hangs in Rx Compliance test when the incoming packet
+>>>>>>>> amplitude is varied below and above the Squelch Level of Receiver
+>>>>>>>> during the active packet multiple times.
+>>>>>>>>
+>>>>>>>> Version 1 of the controller allows PHY to be reset when RX fail
+>>>>>>>> condition is detected to work around the above issue. This feature
+>>>>>>>> is disabled by default and needs to be enabled using a bit from
+>>>>>>>> the newly added PHYRST_CFG register. This patch enables the workaround.
+>>>>>>>>
+>>>>>>>> As there is no way to distinguish between the controller version
+>>>>>>>> before the device controller is started we need to rely on a DT
+>>>>>>>> property to decide when to apply the workaround.
+>>>>>>>
+>>>>>>> Pawel, it could know the controller version at cdns3_gadget_start,
+>>>>>>> but the controller starts when it tries to bind gadget driver, at
+>>>>>>> that time, it has already known the controller version.
+>>>>>>>
+>>>>>>> For me, the device controller starts is using USB_CONF.DEVEN (Device
+>>>>>>> Enable) through usb_gadget_connect, I am not sure if it is the same
+>>>>>>> with yours.
+>>>>>>>
+>>>>>>
+>>>>>> Yes in device mode driver knows controller version but this
+>>>>>> workaround Must be enabled also in host mode. In host mode the
+>>>>>> controller doesn't have access to device registers. The controller
+>>>>>> version is placed in device register.
+>>>>>>
+>>>>>
+>>>>> You may suggest your design team adding CHIP_VER register at global
+>>>>> register region, it will easy the software engineer life.
+>>>>>
+>>>> >From what I read, this register is only enabling USB2 PHY reset
+>>>>> software control, it needs for all chips with rev 0x0002450D, and the
+>>>>> place you current change is only for 0x0002450D, right?
+>>>>
+>>>> Even I could say that this workaround should be enabled only for Specific USB2
+>>>> PHY  (only 0x0002450D)
+>>>>
+>>>> This bit should not have any impact for Cadence PHY but it can has Impact for third
+>>>> party PHYs.
+>>>>
+>>>
+>>> So, it is related to specific PHY, but enable this specific PHY reset bit is at controller region, why don't
+>>> put this enable bit at PHY region?
+>>
+>> I think this is related to Controller + PHY combination.
+>> The fix for the issue is via a bit in the controller, so it needs to be managed by the
+>> controller driver.
+>>
+>>>
+>>> So, you use controller's device property to know this specific PHY, can controller know this specific
+>>> PHY dynamically?
+>>
+>> Still the PHY will have to tell the controller the enable that bit. How to do that?
+>>
+>> Adding a dt-property that vendors can used was the simplest option.
+>>
+> 
+> Ok, does all controllers with ver 0x0002450D need this fix? I just think
+> if we introduce a flag stands for ver 0x0002450D in case this ver has
+> other issues in future or just using phy reset enable property?
+> 
+> Pawel & Roger, what's your opinion?
+> 
+I think it is best to keep the flags specific to the issue rather than a one flag for
+all issues with a specific version. This way you can re-use the flag irrespective
+of IP version.
+
+But best case is that Cadence put a IP revision register in common area as you
+have previously suggested so driver can automatically apply quirks to specific
+versions.
+
+cheers,
+-roger
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
