@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B03253C5C
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 05:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE58253C5D
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 05:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbgH0Dyy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 23:54:54 -0400
-Received: from cmta20.telus.net ([209.171.16.93]:54959 "EHLO cmta20.telus.net"
+        id S1726828AbgH0Dzi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 23:55:38 -0400
+Received: from cmta19.telus.net ([209.171.16.92]:55360 "EHLO cmta19.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726804AbgH0Dyx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Aug 2020 23:54:53 -0400
-X-Greylist: delayed 487 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Aug 2020 23:54:52 EDT
+        id S1726794AbgH0Dzh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Aug 2020 23:55:37 -0400
 Received: from montezuma.home ([154.5.226.127])
         by cmsmtp with SMTP
-        id B8s6kBSMwljNxB8s7kjoAF; Wed, 26 Aug 2020 21:46:44 -0600
+        id B90fkIOEjpULuB90hkESFP; Wed, 26 Aug 2020 21:55:35 -0600
 X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=Z8aS40ZA c=1 sm=1 tr=0
+X-Authority-Analysis: v=2.3 cv=T9TysMCQ c=1 sm=1 tr=0
  a=f8b3WT/FcTuUJCJtQO1udw==:117 a=f8b3WT/FcTuUJCJtQO1udw==:17
  a=kj9zAlcOel0A:10 a=x7bEGLp0ZPQA:10 a=COSDN44dAAMA:10
- a=FeK0Axc1ga3GFLS-CpcA:9 a=mtrj2f7kD2FNrhT6:21 a=LXz7yYMI2QjYyAQP:21
+ a=ZS0011QlJNRiVC86QZEA:9 a=b9lOo4SMoJH9jnxD:21 a=mjZCC0XJ1Ajw4gUl:21
  a=CjuIK1q_8ugA:10 a=Z5ABNNGmrOfJ6cZ5bIyy:22 a=UDnyf2zBuKT2w-IlGP_r:22
-Date:   Wed, 26 Aug 2020 20:46:42 -0700 (PDT)
+Date:   Wed, 26 Aug 2020 20:55:33 -0700 (PDT)
 From:   Zwane Mwaikambo <zwanem@gmail.com>
 To:     Zwane Mwaikambo <zwane@yosper.io>
 cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         linux-usb@vger.kernel.org
-Subject: [PATCH 1/2] usb/typec: fix array overruns in ucsi.c
+Subject: [PATCH v2 1/2] usb/typec: fix array overruns in ucsi.c
  partner_altmode[]
-In-Reply-To: <CAD3Xbfq_nUsY7WKaDwUTnbTdx8SvWW8qCys+iOPAeoq3DtD46g@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2008262041300.12661@montezuma.home>
-References: <alpine.DEB.2.21.2008131842080.26061@montezuma.home> <20200824112106.GB189773@kuha.fi.intel.com> <CAD3Xbfq_nUsY7WKaDwUTnbTdx8SvWW8qCys+iOPAeoq3DtD46g@mail.gmail.com>
+In-Reply-To: <alpine.DEB.2.21.2008262041300.12661@montezuma.home>
+Message-ID: <alpine.DEB.2.21.2008262051190.12661@montezuma.home>
+References: <alpine.DEB.2.21.2008131842080.26061@montezuma.home> <20200824112106.GB189773@kuha.fi.intel.com> <CAD3Xbfq_nUsY7WKaDwUTnbTdx8SvWW8qCys+iOPAeoq3DtD46g@mail.gmail.com> <alpine.DEB.2.21.2008262041300.12661@montezuma.home>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-CMAE-Envelope: MS4wfCZYZ6NmUHODU68uuZZ/O7tX+2iCRle+3xOeykyuuoBrwkDrkZyJv9eyaejrAFe3fstV5WLYXAiv6nSVWW4kPliK/1cXWFZ2vRF6nSwKHrd6WG9Mp7ov
- E/4XZuIe8XEPlnoSkuiMAudV7rowCAa/3Hv/FM8nP+UVvF/q6Q5BLqev9IwDBcLM7EzrF2ORsCnGXpEZRpbICRSmayi5W980q6ExTGjPh3wl1PE1ygdSSwEw
- GzhdhMN1nqpo6Xn54T5sJw==
+X-CMAE-Envelope: MS4wfHILjXv/SI59n4DSVbrxaFtkUaDbKP0eiJXAgX7UYiFnSir7u1drMqjWizblp9MGhTt9QF/ejdUImi7QNJ6faM1ees/wLY0ELn9ZyLNli4BjDlONghPD
+ 8E/ctbhIgy3JwWhKCUOBlUZUjQqk4JT/3GKbUM6qU9zHEiVaf6z2+TjwKDL9P9WPTut1L+TQrZAsWT/ck+tCmg4UTGOffw7Z8WOqCLKEArzB5kPNB5s+2Fo5
+ +JLOgbbyigS8s71b4Xg+tw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the call to typec_altmode_update_active(), con->partner_altmode[i] ends 
-up with the value 0x2 in the call and it's because the array has been 
-accessed out of bounds resulting in random memory read.
+In ucsi_altmode_update_active(), con->partner_altmode[i] ends up with the 
+value 0x2 in the call and it's because the array has been accessed out of 
+bounds resulting in random memory read.
+
 
 [  565.452023] BUG: kernel NULL pointer dereference, address: 00000000000002fe
 [  565.452025] #PF: supervisor read access in kernel mode
@@ -157,23 +157,20 @@ Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
 ---
 
 diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index d0c63afaf..30d0857e4 100644
+index d0c63afaf..79061705e 100644
 --- a/drivers/usb/typec/ucsi/ucsi.c
 +++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -218,9 +218,12 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
+@@ -218,9 +218,10 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
  	if (cur < UCSI_MAX_ALTMODES)
  		altmode = typec_altmode_get_partner(con->port_altmode[cur]);
  
 -	for (i = 0; con->partner_altmode[i]; i++)
 -		typec_altmode_update_active(con->partner_altmode[i],
 -					    con->partner_altmode[i] == altmode);
-+	for (i = 0; i < UCSI_MAX_ALTMODES; i++) {
-+        if (con->partner_altmode[i]) {
-+		    typec_altmode_update_active(con->partner_altmode[i],
-+			                            con->partner_altmode[i] == altmode);
-+        }
-+    }
++	for (i = 0; i < UCSI_MAX_ALTMODES; i++)
++		if (con->partner_altmode[i])
++			typec_altmode_update_active(con->partner_altmode[i],
++										con->partner_altmode[i] == altmode);
  }
  
  static u8 ucsi_altmode_next_mode(struct typec_altmode **alt, u16 svid)
- 
