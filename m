@@ -2,148 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DDC253F73
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 09:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC962253F85
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 09:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728218AbgH0HoZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 03:44:25 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:20891 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726851AbgH0HoX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 03:44:23 -0400
-X-UUID: c5a2eea70eea42d9a4053461044fc617-20200827
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=hDrJTYFnlbUJyTHLWlz6XMMZ6XJkPNRSPabQes2kgkQ=;
-        b=cXefOo9Ig91+143NyEdseavBBjzPBCl1Oq3bDn3KgYXxu/JMDOSCU1biQiGwDHRCglVg4FtDY+dkh3IVuZ8OLh2Raczvm6mGFY5ebj4f0rb2sRzRhyzT39WffIo/ZuXGcYqU7CSbhT9hLBPEm5uQwYnz1TTm5TEhbXCLfzpCLwU=;
-X-UUID: c5a2eea70eea42d9a4053461044fc617-20200827
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 680989642; Thu, 27 Aug 2020 15:44:11 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
- (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 27 Aug
- 2020 15:44:07 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 27 Aug 2020 15:44:08 +0800
-Message-ID: <1598514163.21253.12.camel@mhfsdcap03>
-Subject: Re: [PATCH 2/2] usb: dwc3: Add driver for Xilinx platforms
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Manish Narani <manish.narani@xilinx.com>
-CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <michal.simek@xilinx.com>, <balbi@kernel.org>,
-        <p.zabel@pengutronix.de>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>
-Date:   Thu, 27 Aug 2020 15:42:43 +0800
-In-Reply-To: <1598467441-124203-3-git-send-email-manish.narani@xilinx.com>
-References: <1598467441-124203-1-git-send-email-manish.narani@xilinx.com>
-         <1598467441-124203-3-git-send-email-manish.narani@xilinx.com>
+        id S1728364AbgH0Hrm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 27 Aug 2020 03:47:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59272 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726851AbgH0Hrl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Aug 2020 03:47:41 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208257] Kingston USB flash drive repeatedly disconnected after
+ "Set SEL for device-initiated U2 failed."
+Date:   Thu, 27 Aug 2020 07:47:41 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: julroy67@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-208257-208809-XAJWxtIA0k@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208257-208809@https.bugzilla.kernel.org/>
+References: <bug-208257-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 080ACAF050D071BB9DA66103625574D2739A57C44FDD51F559F2DE08B7C0A04D2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA4LTI3IGF0IDAwOjE0ICswNTMwLCBNYW5pc2ggTmFyYW5pIHdyb3RlOg0K
-PiBBZGQgYSBuZXcgZHJpdmVyIGZvciBzdXBwb3J0aW5nIFhpbGlueCBwbGF0Zm9ybXMuIFRoaXMg
-ZHJpdmVyIGhhbmRsZXMNCj4gdGhlIFVTQiAzLjAgUEhZIGluaXRpYWxpemF0aW9uIGFuZCBQSVBF
-IGNvbnRyb2wgJiByZXNldCBvcGVyYXRpb25zIGZvcg0KPiBaeW5xTVAgcGxhdGZvcm1zLiBUaGlz
-IGFsc28gaGFuZGxlcyB0aGUgVVNCIDIuMCBQSFkgaW5pdGlhbGl6YXRpb24gYW5kDQo+IHJlc2V0
-IG9wZXJhdGlvbnMgZm9yIFZlcnNhbCBwbGF0Zm9ybXMuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBN
-YW5pc2ggTmFyYW5pIDxtYW5pc2gubmFyYW5pQHhpbGlueC5jb20+DQo+IC0tLQ0KPiAgZHJpdmVy
-cy91c2IvZHdjMy9LY29uZmlnICAgICAgICAgIHwgICA4ICsNCj4gIGRyaXZlcnMvdXNiL2R3YzMv
-TWFrZWZpbGUgICAgICAgICB8ICAgMSArDQo+ICBkcml2ZXJzL3VzYi9kd2MzL2R3YzMtb2Ytc2lt
-cGxlLmMgfCAgIDEgLQ0KPiAgZHJpdmVycy91c2IvZHdjMy9kd2MzLXhpbGlueC5jICAgIHwgNDE2
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgNCBmaWxlcyBjaGFuZ2VkLCA0MjUg
-aW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZl
-cnMvdXNiL2R3YzMvZHdjMy14aWxpbnguYw0KPiANClsuLi5dDQo+ICtzdGF0aWMgaW50IGR3YzNf
-eGxueF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiArew0KPiArCXN0cnVj
-dCBkd2MzX3hsbngJKnByaXZfZGF0YTsNCj4gKwlzdHJ1Y3QgZGV2aWNlCQkqZGV2ID0gJnBkZXYt
-PmRldjsNCj4gKwlzdHJ1Y3QgZGV2aWNlX25vZGUJKm5wID0gZGV2LT5vZl9ub2RlOw0KPiArCXN0
-cnVjdCByZXNvdXJjZQkJKnJlczsNCj4gKwl2b2lkIF9faW9tZW0JCSpyZWdzOw0KPiArCWludAkJ
-CXJldDsNCj4gKw0KPiArCXByaXZfZGF0YSA9IGRldm1fa3phbGxvYyhkZXYsIHNpemVvZigqcHJp
-dl9kYXRhKSwgR0ZQX0tFUk5FTCk7DQo+ICsJaWYgKCFwcml2X2RhdGEpDQo+ICsJCXJldHVybiAt
-RU5PTUVNOw0KPiArDQo+ICsJcmVzID0gcGxhdGZvcm1fZ2V0X3Jlc291cmNlKHBkZXYsIElPUkVT
-T1VSQ0VfTUVNLCAwKTsNCj4gKwlpZiAoIXJlcykgew0KPiArCQlkZXZfZXJyKGRldiwgIm1pc3Np
-bmcgbWVtb3J5IHJlc291cmNlXG4iKTsNCj4gKwkJcmV0dXJuIC1FTk9ERVY7DQo+ICsJfQ0KPiAr
-DQo+ICsJcmVncyA9IGRldm1faW9yZW1hcF9yZXNvdXJjZSgmcGRldi0+ZGV2LCByZXMpOw0KPiAr
-CWlmIChJU19FUlIocmVncykpDQo+ICsJCXJldHVybiBQVFJfRVJSKHJlZ3MpOw0KVXNlIGRldm1f
-cGxhdGZvcm1faW9yZW1hcF9yZXNvdXJjZSgpPw0KDQo+ICsNCj4gKwkvKiBTdG9yZSB0aGUgdXNi
-IGNvbnRyb2wgcmVncyBpbnRvIHByaXZfZGF0YSBmb3IgZnVydGhlciB1c2FnZSAqLw0KPiArCXBy
-aXZfZGF0YS0+cmVncyA9IHJlZ3M7DQo+ICsNCj4gKwlwcml2X2RhdGEtPmRldiA9IGRldjsNCj4g
-Kw0KPiArCXBsYXRmb3JtX3NldF9kcnZkYXRhKHBkZXYsIHByaXZfZGF0YSk7DQo+ICsNCj4gKwly
-ZXQgPSBjbGtfYnVsa19nZXRfYWxsKHByaXZfZGF0YS0+ZGV2LCAmcHJpdl9kYXRhLT5jbGtzKTsN
-Cj4gKwlpZiAocmV0IDwgMCkNCj4gKwkJcmV0dXJuIHJldDsNCj4gKw0KPiArCXByaXZfZGF0YS0+
-bnVtX2Nsb2NrcyA9IHJldDsNCj4gKw0KPiArCXJldCA9IGNsa19idWxrX3ByZXBhcmVfZW5hYmxl
-KHByaXZfZGF0YS0+bnVtX2Nsb2NrcywgcHJpdl9kYXRhLT5jbGtzKTsNCj4gKwlpZiAocmV0KQ0K
-PiArCQlyZXR1cm4gcmV0Ow0KPiArDQo+ICsJaWYgKG9mX2RldmljZV9pc19jb21wYXRpYmxlKHBk
-ZXYtPmRldi5vZl9ub2RlLCAieGxueCx6eW5xbXAtZHdjMyIpKSB7DQo+ICsJCXJldCA9IGR3YzNf
-eGxueF9pbml0X3p5bnFtcChwcml2X2RhdGEpOw0KPiArCQlpZiAocmV0KQ0KPiArCQkJZ290byBl
-cnJfY2xrX3B1dDsNCj4gKwl9DQo+ICsNCj4gKwlpZiAob2ZfZGV2aWNlX2lzX2NvbXBhdGlibGUo
-cGRldi0+ZGV2Lm9mX25vZGUsICJ4bG54LHZlcnNhbC1kd2MzIikpIHsNCj4gKwkJcmV0ID0gZHdj
-M194bG54X2luaXRfdmVyc2FsKHByaXZfZGF0YSk7DQo+ICsJCWlmIChyZXQpDQo+ICsJCQlnb3Rv
-IGVycl9jbGtfcHV0Ow0KPiArCX0NCj4gKw0KPiArCXJldCA9IG9mX3BsYXRmb3JtX3BvcHVsYXRl
-KG5wLCBOVUxMLCBOVUxMLCBkZXYpOw0KPiArCWlmIChyZXQpDQo+ICsJCWdvdG8gZXJyX2Nsa19w
-dXQ7DQo+ICsNCj4gKwlwbV9ydW50aW1lX3NldF9hY3RpdmUoZGV2KTsNCj4gKwlwbV9ydW50aW1l
-X2VuYWJsZShkZXYpOw0KPiArCXBtX3N1c3BlbmRfaWdub3JlX2NoaWxkcmVuKGRldiwgZmFsc2Up
-Ow0KPiArCXBtX3J1bnRpbWVfZ2V0X3N5bmMoZGV2KTsNCj4gKw0KPiArCXBtX3J1bnRpbWVfZm9y
-YmlkKGRldik7DQo+ICsNCj4gKwlyZXR1cm4gMDsNCj4gKw0KPiArZXJyX2Nsa19wdXQ6DQo+ICsJ
-Y2xrX2J1bGtfZGlzYWJsZV91bnByZXBhcmUocHJpdl9kYXRhLT5udW1fY2xvY2tzLCBwcml2X2Rh
-dGEtPmNsa3MpOw0KPiArCWNsa19idWxrX3B1dF9hbGwocHJpdl9kYXRhLT5udW1fY2xvY2tzLCBw
-cml2X2RhdGEtPmNsa3MpOw0KPiArDQo+ICsJcmV0dXJuIHJldDsNCj4gK30NCj4gKw0KPiArc3Rh
-dGljIGludCBkd2MzX3hsbnhfcmVtb3ZlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+
-ICt7DQo+ICsJc3RydWN0IGR3YzNfeGxueAkqcHJpdl9kYXRhID0gcGxhdGZvcm1fZ2V0X2RydmRh
-dGEocGRldik7DQo+ICsJc3RydWN0IGRldmljZQkJKmRldiA9ICZwZGV2LT5kZXY7DQo+ICsNCj4g
-KwlvZl9wbGF0Zm9ybV9kZXBvcHVsYXRlKGRldik7DQo+ICsNCj4gKwljbGtfYnVsa19kaXNhYmxl
-X3VucHJlcGFyZShwcml2X2RhdGEtPm51bV9jbG9ja3MsIHByaXZfZGF0YS0+Y2xrcyk7DQo+ICsJ
-Y2xrX2J1bGtfcHV0X2FsbChwcml2X2RhdGEtPm51bV9jbG9ja3MsIHByaXZfZGF0YS0+Y2xrcyk7
-DQo+ICsJcHJpdl9kYXRhLT5udW1fY2xvY2tzID0gMDsNCj4gKw0KPiArCXBtX3J1bnRpbWVfZGlz
-YWJsZShkZXYpOw0KPiArCXBtX3J1bnRpbWVfcHV0X25vaWRsZShkZXYpOw0KPiArCXBtX3J1bnRp
-bWVfc2V0X3N1c3BlbmRlZChkZXYpOw0KPiArDQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+ICsNCj4g
-KyNpZmRlZiBDT05GSUdfUE0NCj4gK3N0YXRpYyBpbnQgZHdjM194bG54X3J1bnRpbWVfc3VzcGVu
-ZChzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ICt7DQo+ICsJc3RydWN0IGR3YzNfeGxueAkqcHJpdl9k
-YXRhID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ICsNCj4gKwljbGtfYnVsa19kaXNhYmxlKHBy
-aXZfZGF0YS0+bnVtX2Nsb2NrcywgcHJpdl9kYXRhLT5jbGtzKTsNCj4gKw0KPiArCXJldHVybiAw
-Ow0KPiArfQ0KPiArDQo+ICtzdGF0aWMgaW50IGR3YzNfeGxueF9ydW50aW1lX2lkbGUoc3RydWN0
-IGRldmljZSAqZGV2KQ0KPiArew0KPiArCXBtX3J1bnRpbWVfbWFya19sYXN0X2J1c3koZGV2KTsN
-Cj4gKwlwbV9ydW50aW1lX2F1dG9zdXNwZW5kKGRldik7DQo+ICsNCj4gKwlyZXR1cm4gMDsNCj4g
-K30NCj4gKw0KPiArc3RhdGljIGludCBkd2MzX3hsbnhfcnVudGltZV9yZXN1bWUoc3RydWN0IGRl
-dmljZSAqZGV2KQ0KPiArew0KPiArCXN0cnVjdCBkd2MzX3hsbngJKnByaXZfZGF0YSA9IGRldl9n
-ZXRfZHJ2ZGF0YShkZXYpOw0KPiArDQo+ICsJcmV0dXJuIGNsa19idWxrX2VuYWJsZShwcml2X2Rh
-dGEtPm51bV9jbG9ja3MsIHByaXZfZGF0YS0+Y2xrcyk7DQo+ICt9DQo+ICsjZW5kaWYgLyogQ09O
-RklHX1BNICovDQo+ICsNCj4gKyNpZmRlZiBDT05GSUdfUE1fU0xFRVANCj4gK3N0YXRpYyBpbnQg
-ZHdjM194bG54X3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0KPiArew0KPiArCXN0cnVjdCBk
-d2MzX3hsbnggKnByaXZfZGF0YSA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPiArDQo+ICsJLyog
-RGlzYWJsZSB0aGUgY2xvY2tzICovDQo+ICsJY2xrX2J1bGtfZGlzYWJsZShwcml2X2RhdGEtPm51
-bV9jbG9ja3MsIHByaXZfZGF0YS0+Y2xrcyk7DQo+ICsNCj4gKwlyZXR1cm4gMDsNCj4gK30NCj4g
-Kw0KPiArc3RhdGljIGludCBkd2MzX3hsbnhfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCj4g
-K3sNCj4gKwlzdHJ1Y3QgZHdjM194bG54ICpwcml2X2RhdGEgPSBkZXZfZ2V0X2RydmRhdGEoZGV2
-KTsNCj4gKw0KPiArCXJldHVybiBjbGtfYnVsa19lbmFibGUocHJpdl9kYXRhLT5udW1fY2xvY2tz
-LCBwcml2X2RhdGEtPmNsa3MpOw0KPiArfQ0KPiArI2VuZGlmIC8qIENPTkZJR19QTV9TTEVFUCAq
-Lw0KPiArDQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IGRldl9wbV9vcHMgZHdjM194bG54X2Rldl9w
-bV9vcHMgPSB7DQo+ICsJU0VUX1NZU1RFTV9TTEVFUF9QTV9PUFMoZHdjM194bG54X3N1c3BlbmQs
-IGR3YzNfeGxueF9yZXN1bWUpDQo+ICsJU0VUX1JVTlRJTUVfUE1fT1BTKGR3YzNfeGxueF9ydW50
-aW1lX3N1c3BlbmQsIGR3YzNfeGxueF9ydW50aW1lX3Jlc3VtZSwNCj4gKwkJCSAgIGR3YzNfeGxu
-eF9ydW50aW1lX2lkbGUpDQo+ICt9Ow0KPiArDQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2Rl
-dmljZV9pZCBvZl9kd2MzX3hsbnhfbWF0Y2hbXSA9IHsNCj4gKwl7IC5jb21wYXRpYmxlID0gInhs
-bngsenlucW1wLWR3YzMiIH0sDQo+ICsJeyAuY29tcGF0aWJsZSA9ICJ4bG54LHZlcnNhbC1kd2Mz
-IiB9LA0KPiArCXsgLyogU2VudGluZWwgKi8gfQ0KPiArfTsNCj4gK01PRFVMRV9ERVZJQ0VfVEFC
-TEUob2YsIG9mX2R3YzNfeGxueF9tYXRjaCk7DQo+ICsNCj4gK3N0YXRpYyBzdHJ1Y3QgcGxhdGZv
-cm1fZHJpdmVyIGR3YzNfeGxueF9kcml2ZXIgPSB7DQo+ICsJLnByb2JlCQk9IGR3YzNfeGxueF9w
-cm9iZSwNCj4gKwkucmVtb3ZlCQk9IGR3YzNfeGxueF9yZW1vdmUsDQo+ICsJLmRyaXZlcgkJPSB7
-DQo+ICsJCS5uYW1lCT0gImR3YzMteGlsaW54IiwNCj4gKwkJLm9mX21hdGNoX3RhYmxlID0gb2Zf
-ZHdjM194bG54X21hdGNoLA0KPiArCQkucG0JPSAmZHdjM194bG54X2Rldl9wbV9vcHMsDQo+ICsJ
-fSwNCj4gK307DQo+ICsNCj4gK21vZHVsZV9wbGF0Zm9ybV9kcml2ZXIoZHdjM194bG54X2RyaXZl
-cik7DQo+ICsNCj4gK01PRFVMRV9MSUNFTlNFKCJHUEwgdjIiKTsNCj4gK01PRFVMRV9ERVNDUklQ
-VElPTigiWGlsaW54IERXQzMgY29udHJvbGxlciBzcGVjaWZpYyBnbHVlIGRyaXZlciIpOw0KPiAr
-TU9EVUxFX0FVVEhPUigiQW51cmFnIEt1bWFyIFZ1bGlzaGEgPGFudXJhZy5rdW1hci52dWxpc2hh
-QHhpbGlueC5jb20+Iik7DQo+ICtNT0RVTEVfQVVUSE9SKCJNYW5pc2ggTmFyYW5pIDxtYW5pc2gu
-bmFyYW5pQHhpbGlueC5jb20+Iik7DQoNCg==
+https://bugzilla.kernel.org/show_bug.cgi?id=208257
 
+--- Comment #8 from Julien Humbert (julroy67@gmail.com) ---
+I'm really sorry, nothing moved at all.
+I asked for some help on the Red Hat Bugzilla, because I'm not sure how to
+compile the kernel with the patch, and I'm not even sure I could boot it on my
+main computer which is using secure boot.
+
+I really hope I can make sure that this gets included for Fedora 33, I should
+try to contact some of the maintainers directly to get some movement.
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
