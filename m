@@ -2,200 +2,355 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBED253AF2
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 02:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687E4253B3B
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 02:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726853AbgH0AZB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Aug 2020 20:25:01 -0400
-Received: from mail-vi1eur05on2046.outbound.protection.outlook.com ([40.107.21.46]:24225
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726148AbgH0AY7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Aug 2020 20:24:59 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IjeGvLen3+aX6YqlkU0zg0y1gpeGhD2U3IRlRUuLJpYo9u6TXvOjPg8QqqALDn1Dxdec++Z/QFbVWgVtDlNrweMFsgD1XVFWRdUaKL73vL4HYZzsDvyNDDQS0nHl61JlUd6tEpCYUNK3RwlX7LkJZ/6tkYYtk5N+o6pyy6isnvNDx75zKXadlAfc5uchgffEuNO9LVWVcdbKMUQreDjUhzXSKYJ2GgUS2OptZZZ/YAHlcZYuNoTjWc+Ifvo8TWRPOlcPXNVl9qwmhIbxq9GK/3GnzONJecq8aQOGwVP06n5hKMm3NJ8YdcgSDVW7ikPn+bNsZhJCR2wyrC2tdqapWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GKcKvjSGmGifOI4ACRW6IHKOpzQudZ9H8w5ynwCmNe0=;
- b=hDyLMWNPHpEaFwzy1ZEx6psI8E31hMqVTwiefZtPaUduG+UdOR7pVK7UlBP1cpl6uE7rYeIJKaSkL4SGiUozW20RijpJGSMh14IXpwPBl2qP7fa31pRvWsirlxTImI8lxCZu/U+vgfq8AaIsUaZyDIQGMgIgTD7/byhxBmMVE555cfcjRQTRZGTuyfIA2jSfH/ieQykszFn34qRZGpVCgx/gFxVniZa1FcPfnVrL1bN3mFRAqWupLQUpD68QYdIi5eiVcRui91Xv/vyomMRzpKBMBkrgWnLji+cyQzKDIFWAM0WX4hrPUZ8x0E9xcui+K60tcRpImk2zYTxGtJkCiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GKcKvjSGmGifOI4ACRW6IHKOpzQudZ9H8w5ynwCmNe0=;
- b=p0ZVjG6EL2QiJYCWG1livM2ZDUhMTedWZ8PH8QqGHBtB27LITLQL5M0XWLRZTtiQcupCRXOYy3Zm9N/1PKXZbWVmsP4e0AsurjaABzrRjkZVPs7Gwobbr6H9YcQA7xLBcZDXPd3qTk+Uk0PugNQY+M+E7i5nnvB8/EKXMNT7EcE=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM7PR04MB7077.eurprd04.prod.outlook.com (2603:10a6:20b:11c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19; Thu, 27 Aug
- 2020 00:24:55 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3305.032; Thu, 27 Aug 2020
- 00:24:55 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Roger Quadros <rogerq@ti.com>
-CC:     Pawel Laszczak <pawell@cadence.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        Rahul Kumar <kurahul@cadence.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 3/3] usb: cdns3: Enable workaround for USB2.0 PHY Rx
- compliance test PHY lockup
-Thread-Topic: [PATCH 3/3] usb: cdns3: Enable workaround for USB2.0 PHY Rx
- compliance test PHY lockup
-Thread-Index: AQHWete/XCUsbMkzVE2tONyDrFDh16lJudEAgAAMW4CAADVhAIAACEuAgAACF/CAAFMvgIAAwdIA
-Date:   Thu, 27 Aug 2020 00:24:55 +0000
-Message-ID: <20200827002339.GA17559@b29397-desktop>
-References: <20200825120059.12436-1-rogerq@ti.com>
- <20200825120059.12436-4-rogerq@ti.com> <20200826031948.GA7646@b29397-desktop>
- <DM6PR07MB5529A43AFDEB25993595DB59DD540@DM6PR07MB5529.namprd07.prod.outlook.com>
- <20200826071504.GA19661@b29397-desktop>
- <DM6PR07MB5529EB2FB7E3380321191B44DD540@DM6PR07MB5529.namprd07.prod.outlook.com>
- <AM7PR04MB71576DF6C03387C7628DBE3A8B540@AM7PR04MB7157.eurprd04.prod.outlook.com>
- <ab38721a-ef48-c6a7-aa33-3085ca7b8852@ti.com>
-In-Reply-To: <ab38721a-ef48-c6a7-aa33-3085ca7b8852@ti.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: ti.com; dkim=none (message not signed)
- header.d=none;ti.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: d1360a51-3280-4529-ce2b-08d84a1f9f9f
-x-ms-traffictypediagnostic: AM7PR04MB7077:
-x-microsoft-antispam-prvs: <AM7PR04MB7077F0B096EC3D02873827BE8B550@AM7PR04MB7077.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: srRsLX2ziMcRoP/YnaYKUCIHce/+JcnpFD9OhJ5leOmG346HGz2fi3RTquYwFcmZEUz+km5QSPd40w7fnQ540tuZ5chMawczTIo8j+x/wBVh5swWRezV1gMLDf5DlZnwMQYPnD/M2q/YpjMGVOZHaEOhnbui+enHnSWvk9/guuTv8X7cQFHJ+lbbYcBvHquD9OM9VmhXeEhSxMx/3oB3wZWt3hYkukWbNdnBqWPQfw+GlntmAIqnw7cVOqm+ym6a/iQ9LPdq00PwskahtLmVaHHGdxcrZEfsEFmqO1/uXTT7wPe4q1UiHjahOQJTjAjf+nkjV/SS/SUsz8/x/4KYJQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(39860400002)(366004)(136003)(396003)(346002)(376002)(6916009)(44832011)(9686003)(7416002)(186003)(2906002)(4326008)(33716001)(76116006)(5660300002)(91956017)(8936002)(53546011)(478600001)(64756008)(6506007)(6512007)(1076003)(66446008)(66556008)(66946007)(33656002)(54906003)(6486002)(66476007)(316002)(86362001)(71200400001)(26005)(8676002)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: AsSjq7Wsjz2WzE8krla8gA30xB93uiuXXmvJNGkUM6J0Ss5aNb30K6O+JE/zYJqraJysWlnyntX6I1aPYx5I0CrJuvK4xazpPZbq+J0iT1/LXgMEunrsIsaKIdFoQfz0L8OZDJ3d9uSc5pkrWoNSU/JSpg4Nlg4gntxqFk4Hf0Lc5YM256CDMMZbPFXW9lcd1/HcczxmucQVPhBYgSKXeij6dXvaPbkvcLBfiTlX+CW07Xy/+Eg/69DpdtVBXZSJs2MszQc4HT2ouFAvzf0MMoisLu/h8LYBIDTYtSMISarqQFURI/PzkzWuu5aXk9nFxUOiB3mNzC2sDRTXTJvgB9WNVzauBy58/dm6WEok8HcU6eqBd7i+HCKxUugTOux4rRffe/AQQRCWE3JsTlOe+TUfMnx2gdFPIPnblB7kmlb01s3r83T28AQuOTzmaniczkansYhlMVFbC2Qx7r4hITN1h2yVvDG1vNNTXPabaoFPFL/KYfcv9ejDlUi84Ui3fr7SL/qYAoARV3VvMOaRKTi57eC3XXF7xNdlEBMLtILKnfZfVfWuQYYjbyWjgsoKQ+65XA9yxToXHmkiqmWe2KjbShGpgk5jq2ZOTr1Tzu/RC3amOgcD9ZgTPo92QtZCRNA4Roz7Ewjs+eK4TLqsqQ==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C19BF47BDD710F45AB0258E5658DA04F@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726783AbgH0A7k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Aug 2020 20:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726148AbgH0A7j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Aug 2020 20:59:39 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5311BC061786;
+        Wed, 26 Aug 2020 17:59:39 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id f26so4475787ljc.8;
+        Wed, 26 Aug 2020 17:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YgOXZpwH0ewXs82/jjLYcaOpq5EI/CmvwmT22mI/C+I=;
+        b=CCSyDD8O7rzYso7ZxMulzYe48S5Am/phI+EblCtlKt+rLexTw4fds0VFjNnKnM0e3j
+         Dl4C3egtwiHrZAiCIVqfNfJiq2lQIgy6mKMhDZ7tH5lNHVz975QeBczqyf67zJTJ1AEd
+         NsyTVyQquWKdsibgKTptCHrI+A3xZlCdjnqgwR+vKxdv4oapWTkuxtVw0XV/wEsCBTNf
+         DWQYTlaFfyEfYH7+VDA9/OWhxoJuUgDHAatz2ERh4GM+2G8kUK5oAIgBbzdssv5LhQnQ
+         6GhqukSepVgzIEiDMSi7484mWmdx53v9NJMvvwvSeE4s3isAt1w0V/wmikBjcs6DmHfK
+         HJ4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YgOXZpwH0ewXs82/jjLYcaOpq5EI/CmvwmT22mI/C+I=;
+        b=KIyGDnBZo3HaQUPbTiwhbRLLUwQvilcPzsX8sROz6XTJWKaNzIzrXNCInBTeIFwjJh
+         gRSBrWdmFVy+HwmTHvdIluDWM0WoM9PS2GasXWUUjhwy3ndzbxx69lhCXLlmU9jGxks3
+         3ji+s3RerwVnHyxL4KtJuDHtKYgdW4kvYyVgoEPomQQkA4PfHI7iRTo783fLeVqjle8h
+         /O39utYx8KYV+8hTe8rf2mntrgHOqiNMm0hWc4IcObO/IFKyN34h4vdn0jiQZs0fQcL6
+         Z4NtG/FXfFrMV88H7JrUTMt2k01cvCUerJsvDHcWDgSDNEEfcbT5tHlMzmy4zG3nLw+i
+         yZTw==
+X-Gm-Message-State: AOAM530YwBAt2Eus8g5SHuRPNhx1hjMU5g6VGYysWAmCkiE7SnF9+KNk
+        a4IouJ7kPVAzIvCiIFH6MzXFlGRhFgz9Z8KWeiGlKNaZ+Gg=
+X-Google-Smtp-Source: ABdhPJwH0lHwaLAzuFrgZmCUe1ZFD2AyR6rf6tblOaXajPSE84HmKfejrTd84DR4UlFsowLyiTELrWCu0CPcnfYSIgQ=
+X-Received: by 2002:a2e:160d:: with SMTP id w13mr8936438ljd.470.1598489974771;
+ Wed, 26 Aug 2020 17:59:34 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1360a51-3280-4529-ce2b-08d84a1f9f9f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Aug 2020 00:24:55.4451
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MkZvKLcQWvuv73vn2KiiuzvQhmwh4bftG7od8ysJOuGPwRPWL2SIMXPuQbgz3zSmIpR1rVNKhJ2lkPyFxd83pQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7077
+References: <1598440602-8648-1-git-send-email-u0084500@gmail.com> <a7d1a5d9-97e9-bcf6-23f4-2c4be356913f@roeck-us.net>
+In-Reply-To: <a7d1a5d9-97e9-bcf6-23f4-2c4be356913f@roeck-us.net>
+From:   =?UTF-8?B?5ZWf5Y6f6buD?= <u0084500@gmail.com>
+Date:   Thu, 27 Aug 2020 08:59:23 +0800
+Message-ID: <CADiBU3_x5-P8A0erchFpWucX4_R8M01-CdOJv38FjrPGSn+55A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb typec: mt6360: Add support for mt6360 Type-C driver
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
+        matthias.bgg@gmail.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-08-26 15:49:57, Roger Quadros wrote:
-> Peter,
->=20
-> On 26/08/2020 11:07, Peter Chen wrote:
-> > >=20
-> > >=20
-> > > >=20
-> > > > On 20-08-26 04:04:01, Pawel Laszczak wrote:
-> > > > > > On 20-08-25 15:00:59, Roger Quadros wrote:
-> > > > > > > From: Pawel Laszczak <pawell@cadence.com>
-> > > > > > >=20
-> > > > > > > USB2.0 PHY hangs in Rx Compliance test when the incoming pack=
-et
-> > > > > > > amplitude is varied below and above the Squelch Level of Rece=
-iver
-> > > > > > > during the active packet multiple times.
-> > > > > > >=20
-> > > > > > > Version 1 of the controller allows PHY to be reset when RX fa=
-il
-> > > > > > > condition is detected to work around the above issue. This fe=
-ature
-> > > > > > > is disabled by default and needs to be enabled using a bit fr=
-om
-> > > > > > > the newly added PHYRST_CFG register. This patch enables the w=
-orkaround.
-> > > > > > >=20
-> > > > > > > As there is no way to distinguish between the controller vers=
-ion
-> > > > > > > before the device controller is started we need to rely on a =
-DT
-> > > > > > > property to decide when to apply the workaround.
-> > > > > >=20
-> > > > > > Pawel, it could know the controller version at cdns3_gadget_sta=
-rt,
-> > > > > > but the controller starts when it tries to bind gadget driver, =
-at
-> > > > > > that time, it has already known the controller version.
-> > > > > >=20
-> > > > > > For me, the device controller starts is using USB_CONF.DEVEN (D=
-evice
-> > > > > > Enable) through usb_gadget_connect, I am not sure if it is the =
-same
-> > > > > > with yours.
-> > > > > >=20
-> > > > >=20
-> > > > > Yes in device mode driver knows controller version but this
-> > > > > workaround Must be enabled also in host mode. In host mode the
-> > > > > controller doesn't have access to device registers. The controlle=
-r
-> > > > > version is placed in device register.
-> > > > >=20
-> > > >=20
-> > > > You may suggest your design team adding CHIP_VER register at global
-> > > > register region, it will easy the software engineer life.
-> > > >=20
-> > > >From what I read, this register is only enabling USB2 PHY reset
-> > > > software control, it needs for all chips with rev 0x0002450D, and t=
-he
-> > > > place you current change is only for 0x0002450D, right?
-> > >=20
-> > > Even I could say that this workaround should be enabled only for Spec=
-ific USB2
-> > > PHY  (only 0x0002450D)
-> > >=20
-> > > This bit should not have any impact for Cadence PHY but it can has Im=
-pact for third
-> > > party PHYs.
-> > >=20
-> >=20
-> > So, it is related to specific PHY, but enable this specific PHY reset b=
-it is at controller region, why don't
-> > put this enable bit at PHY region?
->=20
-> I think this is related to Controller + PHY combination.
-> The fix for the issue is via a bit in the controller, so it needs to be m=
-anaged by the
-> controller driver.
->=20
-> >=20
-> > So, you use controller's device property to know this specific PHY, can=
- controller know this specific
-> > PHY dynamically?
->=20
-> Still the PHY will have to tell the controller the enable that bit. How t=
-o do that?
->=20
-> Adding a dt-property that vendors can used was the simplest option.
->=20
-
-Ok, does all controllers with ver 0x0002450D need this fix? I just think
-if we introduce a flag stands for ver 0x0002450D in case this ver has
-other issues in future or just using phy reset enable property?
-
-Pawel & Roger, what's your opinion?
-
---=20
-
-Thanks,
-Peter Chen=
+Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2020=E5=B9=B48=E6=9C=8827=E6=
+=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=884:44=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 8/26/20 4:16 AM, cy_huang wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Mediatek MT6360 is a multi-functional IC that includes USB Type-C.
+> > It works with Type-C Port Controller Manager to provide USB PD
+> > and USB Type-C functionalities.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> >  drivers/usb/typec/tcpm/Kconfig        |   8 ++
+> >  drivers/usb/typec/tcpm/Makefile       |   1 +
+> >  drivers/usb/typec/tcpm/tcpci_mt6360.c | 212 ++++++++++++++++++++++++++=
+++++++++
+> >  3 files changed, 221 insertions(+)
+> >  create mode 100644 drivers/usb/typec/tcpm/tcpci_mt6360.c
+> >
+> > diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kc=
+onfig
+> > index fa3f393..58a64e1 100644
+> > --- a/drivers/usb/typec/tcpm/Kconfig
+> > +++ b/drivers/usb/typec/tcpm/Kconfig
+> > @@ -27,6 +27,14 @@ config TYPEC_RT1711H
+> >         Type-C Port Controller Manager to provide USB PD and USB
+> >         Type-C functionalities.
+> >
+> > +config TYPEC_MT6360
+> > +     tristate "Mediatek MT6360 Type-C driver"
+> > +     depends on MFD_MT6360
+> > +     help
+> > +       Mediatek MT6360 is a multi-functional IC that includes
+> > +       USB Type-C. It works with Type-C Port Controller Manager
+> > +       to provide USB PD and USB Type-C functionalities.
+> > +
+> >  endif # TYPEC_TCPCI
+> >
+> >  config TYPEC_FUSB302
+> > diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/M=
+akefile
+> > index a5ff6c8..7592ccb 100644
+> > --- a/drivers/usb/typec/tcpm/Makefile
+> > +++ b/drivers/usb/typec/tcpm/Makefile
+> > @@ -5,3 +5,4 @@ obj-$(CONFIG_TYPEC_WCOVE)     +=3D typec_wcove.o
+> >  typec_wcove-y                        :=3D wcove.o
+> >  obj-$(CONFIG_TYPEC_TCPCI)    +=3D tcpci.o
+> >  obj-$(CONFIG_TYPEC_RT1711H)  +=3D tcpci_rt1711h.o
+> > +obj-$(CONFIG_TYPEC_MT6360)   +=3D tcpci_mt6360.o
+> > diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/=
+tcpm/tcpci_mt6360.c
+> > new file mode 100644
+> > index 00000000..6a28193
+> > --- /dev/null
+> > +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> > @@ -0,0 +1,212 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +//
+> > +// Copyright (C) 2020 MediaTek Inc.
+> > +//
+> > +// Author: ChiYuan Huang <cy_huang@richtek.com>
+> > +
+> > +#include <linux/interrupt.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/usb/tcpm.h>
+>
+> Is that needed ?
+Ah, sorry, for some testing, I forget to remove it.
+>
+> > +
+> > +#include "tcpci.h"
+> > +
+> > +#define MT6360_REG_VCONNCTRL1        0x8C
+> > +#define MT6360_REG_MODECTRL2 0x8F
+> > +#define MT6360_REG_SWRESET   0xA0
+> > +#define MT6360_REG_DEBCTRL1  0xA1
+> > +#define MT6360_REG_DRPCTRL1  0xA2
+> > +#define MT6360_REG_DRPCTRL2  0xA3
+> > +#define MT6360_REG_I2CTORST  0xBF
+> > +#define MT6360_REG_RXCTRL2   0xCF
+> > +#define MT6360_REG_CTDCTRL2  0xEC
+> > +
+> > +/* MT6360_REG_VCONNCTRL1 */
+> > +#define MT6360_VCONNCL_ENABLE        BIT(0)
+> > +/* MT6360_REG_RXCTRL2 */
+> > +#define MT6360_OPEN40M_ENABLE        BIT(7)
+> > +/* MT6360_REG_CTDCTRL2 */
+> > +#define MT6360_RPONESHOT_ENABLE      BIT(6)
+> > +
+> > +struct mt6360_tcpc_info {
+> > +     struct tcpci_data tdata;
+> > +     struct tcpci *tcpci;
+> > +     struct device *dev;
+> > +     int irq;
+> > +};
+> > +
+> > +static inline int mt6360_tcpc_read16(struct regmap *regmap,
+> > +                                  unsigned int reg, u16 *val)
+> > +{
+> > +     return regmap_raw_read(regmap, reg, val, sizeof(u16));
+> > +}
+> > +
+> > +static inline int mt6360_tcpc_write16(struct regmap *regmap,
+> > +                                   unsigned int reg, u16 val)
+> > +{
+> > +     return regmap_raw_write(regmap, reg, &val, sizeof(u16));
+> > +}
+> > +
+> > +static int mt6360_tcpc_init(struct tcpci *tcpci, struct tcpci_data *td=
+ata)
+> > +{
+> > +     struct regmap *regmap =3D tdata->regmap;
+> > +     int ret;
+> > +
+> > +     ret =3D regmap_write(regmap, MT6360_REG_SWRESET, 0x01);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* after reset command, wait 1~2ms to wait IC action */
+> > +     usleep_range(1000, 2000);
+> > +
+> > +     /* write all alert to masked */
+> > +     ret =3D mt6360_tcpc_write16(regmap, TCPC_ALERT_MASK, 0);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* config I2C timeout reset enable , and timeout to 200ms */
+> > +     ret =3D regmap_write(regmap, MT6360_REG_I2CTORST, 0x8F);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* config CC Detect Debounce : 26.7*val us */
+> > +     ret =3D regmap_write(regmap, MT6360_REG_DEBCTRL1, 0x10);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* DRP Toggle Cycle : 51.2 + 6.4*val ms */
+> > +     ret =3D regmap_write(regmap, MT6360_REG_DRPCTRL1, 4);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* DRP Duyt Ctrl : dcSRC: /1024 */
+> > +     ret =3D mt6360_tcpc_write16(regmap, MT6360_REG_DRPCTRL2, 330);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* Enable VCONN Current Limit function */
+> > +     ret =3D regmap_update_bits(regmap, MT6360_REG_VCONNCTRL1, MT6360_=
+VCONNCL_ENABLE,
+> > +                              MT6360_VCONNCL_ENABLE);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* Enable cc open 40ms when pmic send vsysuv signal */
+> > +     ret =3D regmap_update_bits(regmap, MT6360_REG_RXCTRL2, MT6360_OPE=
+N40M_ENABLE,
+> > +                              MT6360_OPEN40M_ENABLE);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* Enable Rpdet oneshot detection */
+> > +     ret =3D regmap_update_bits(regmap, MT6360_REG_CTDCTRL2, MT6360_RP=
+ONESHOT_ENABLE,
+> > +                              MT6360_RPONESHOT_ENABLE);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* Set shipping mode off, AUTOIDLE on */
+> > +     return regmap_write(regmap, MT6360_REG_MODECTRL2, 0x7A);
+> > +}
+> > +
+> > +static irqreturn_t mt6360_irq(int irq, void *dev_id)
+> > +{
+> > +     struct mt6360_tcpc_info *mti =3D dev_id;
+> > +
+> > +     return tcpci_irq(mti->tcpci);
+> > +}
+> > +
+> > +static int mt6360_tcpc_probe(struct platform_device *pdev)
+> > +{
+> > +     struct mt6360_tcpc_info *mti;
+> > +     int ret;
+> > +
+> > +     mti =3D devm_kzalloc(&pdev->dev, sizeof(*mti), GFP_KERNEL);
+> > +     if (!mti)
+> > +             return -ENOMEM;
+> > +
+> > +     mti->dev =3D &pdev->dev;
+> > +
+> > +     mti->tdata.regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
+> > +     if (!mti->tdata.regmap) {
+> > +             dev_err(&pdev->dev, "Failed to get parent regmap\n");
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     mti->irq =3D platform_get_irq_byname(pdev, "PD_IRQB");
+> > +     if (mti->irq < 0) {
+> > +             dev_err(&pdev->dev, "Failed to get PD_IRQB irq\n");
+> > +             return mti->irq;
+> > +     }
+> > +
+> > +     mti->tdata.init =3D mt6360_tcpc_init;
+> > +     mti->tcpci =3D tcpci_register_port(&pdev->dev, &mti->tdata);
+> > +     if (IS_ERR_OR_NULL(mti->tcpci)) {
+> > +             dev_err(&pdev->dev, "Failed to register tcpci port\n");
+> > +             return PTR_ERR(mti->tcpci);
+> > +     }
+> > +
+> > +     ret =3D devm_request_threaded_irq(mti->dev, mti->irq, NULL, mt636=
+0_irq, IRQF_ONESHOT,
+> > +                                     dev_name(&pdev->dev), mti);
+> > +     if (ret) {
+> > +             dev_err(mti->dev, "Failed to register irq\n");
+> > +             tcpci_unregister_port(mti->tcpci);
+> > +             return ret;
+> > +     }
+> > +
+> > +     device_init_wakeup(&pdev->dev, true);
+> > +     platform_set_drvdata(pdev, mti);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int mt6360_tcpc_remove(struct platform_device *pdev)
+> > +{
+> > +     struct mt6360_tcpc_info *mti =3D platform_get_drvdata(pdev);
+> > +
+> > +     tcpci_unregister_port(mti->tcpci);
+>
+> That leaves interrupts enabled, which might be racy
+> because interrupts are still enabled here.
+M..., yes, it will cause the race condition during module remove.
+I'll add disable_irq before tcpci unregister to prevent it.
+>
+> Guenter
+>
+> > +     return 0;
+> > +}
+> > +
+> > +static int __maybe_unused mt6360_tcpc_suspend(struct device *dev)
+> > +{
+> > +     struct mt6360_tcpc_info *mti =3D dev_get_drvdata(dev);> +
+> > +     if (device_may_wakeup(dev))
+> > +             enable_irq_wake(mti->irq);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int __maybe_unused mt6360_tcpc_resume(struct device *dev)
+> > +{
+> > +     struct mt6360_tcpc_info *mti =3D dev_get_drvdata(dev);
+> > +
+> > +     if (device_may_wakeup(dev))
+> > +             disable_irq_wake(mti->irq);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static SIMPLE_DEV_PM_OPS(mt6360_tcpc_pm_ops, mt6360_tcpc_suspend, mt63=
+60_tcpc_resume);
+> > +
+> > +static const struct of_device_id __maybe_unused mt6360_tcpc_of_id[] =
+=3D {
+> > +     { .compatible =3D "mediatek,mt6360-tcpc", },
+> > +     {},
+> > +};
+> > +MODULE_DEVICE_TABLE(of, mt6360_tcpc_of_id);
+> > +
+> > +static struct platform_driver mt6360_tcpc_driver =3D {
+> > +     .driver =3D {
+> > +             .name =3D "mt6360-tcpc",
+> > +             .pm =3D &mt6360_tcpc_pm_ops,
+> > +             .of_match_table =3D mt6360_tcpc_of_id,
+> > +     },
+> > +     .probe =3D mt6360_tcpc_probe,
+> > +     .remove =3D mt6360_tcpc_remove,
+> > +};
+> > +module_platform_driver(mt6360_tcpc_driver);
+> > +
+> > +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
+> > +MODULE_DESCRIPTION("MT6360 USB Type-C Port Controller Interface Driver=
+");
+> > +MODULE_LICENSE("GPL v2");
+> >
+>
