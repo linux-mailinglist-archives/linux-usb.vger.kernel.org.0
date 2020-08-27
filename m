@@ -2,125 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD6C2547D7
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343D72547C4
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 16:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727122AbgH0NK2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 09:10:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48860 "EHLO mail.kernel.org"
+        id S1727797AbgH0NMY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 09:12:24 -0400
+Received: from crapouillou.net ([89.234.176.41]:37006 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726207AbgH0NJo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 09:09:44 -0400
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E9FDB206F0;
-        Thu, 27 Aug 2020 13:09:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598533783;
-        bh=Hw8S0iXk3F0NNo4Sgldg/CqyuQTpDMwlBwO0sSRglkQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=sWGwxeIDAW2m6HoGZzH8H0FGJg0qj041qDtDRw2mW2/EkgXmuhYJyNPM7iEV398uJ
-         /7sPtbog9eFFnSqGf/SNGFNtC7xmvvhImn4eahEtUMK8VWTe7jl+xkFF/2Oo0MfNC9
-         2fislIHQwZetjnV6Wva3ZbpQpx4Gx/jINcH9PRgc=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
-        rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
-        Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v7 1/3] usb: cdns3: introduce set_phy_power_on{off} APIs
-In-Reply-To: <20200825021120.4926-2-peter.chen@nxp.com>
-References: <20200825021120.4926-1-peter.chen@nxp.com>
- <20200825021120.4926-2-peter.chen@nxp.com>
-Date:   Thu, 27 Aug 2020 16:09:36 +0300
-Message-ID: <87k0xki6b3.fsf@kernel.org>
+        id S1727781AbgH0NMT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Aug 2020 09:12:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1598533920; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mq/0F8UbeXY3Pqih2k8p1w6/ERNeaq1vUKEH8bis0Sc=;
+        b=FSWu/ChrO6m3aqF4WvOluzzLTotjPD5+xJiLy1DDHnA09hWuOS5dVkh66xV9kJMZeSDI+U
+        idrPUynBOLcgq0XA+R5pgDVxeUQGLG60K9ITh9B64onMPNYytRUchw+RW8XPSSiQcOTnvo
+        gMXosxaVspVpJtfHDWebqzuQ5ql4c/8=
+Date:   Thu, 27 Aug 2020 15:11:49 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/1] USB: PHY: JZ4770: Fix uninitialized value written to
+ HW register
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        =?UTF-8?b?5ZGo5q2j?= <sernia.zhou@foxmail.com>,
+        =?UTF-8?b?5ryG6bmP5oyv?= <aric.pzqi@ingenic.com>, od@zcrc.me,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <PN4QFQ.KWNBY2ZWQ7XC2@crapouillou.net>
+In-Reply-To: <87v9h4i6t5.fsf@kernel.org>
+References: <20200827124308.71963-1-paul@crapouillou.net>
+        <20200827124308.71963-2-paul@crapouillou.net> <87v9h4i6t5.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi Felipe,
 
-Peter Chen <peter.chen@nxp.com> writes:
+Le jeu. 27 ao=FBt 2020 =E0 15:58, Felipe Balbi <balbi@kernel.org> a=20
+=E9crit :
+>=20
+> Hi,
+>=20
+> Paul Cercueil <paul@crapouillou.net> writes:
+>>  The 'reg' value was written to a hardware register in
+>>  ingenic_usb_phy_init(), while not being initialized anywhere.
+>=20
+> your patch does a lot more than fix the bug :-)
+>=20
+>>  Fixes: 2a6c0b82e651 ("USB: PHY: JZ4770: Add support for new Ingenic=20
+>> SoCs.")
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>   drivers/usb/phy/phy-jz4770.c | 28 +++++++++++-----------------
+>>   1 file changed, 11 insertions(+), 17 deletions(-)
+>>=20
+>>  diff --git a/drivers/usb/phy/phy-jz4770.c=20
+>> b/drivers/usb/phy/phy-jz4770.c
+>>  index d4ee3cb721ea..58771a8688f2 100644
+>>  --- a/drivers/usb/phy/phy-jz4770.c
+>>  +++ b/drivers/usb/phy/phy-jz4770.c
+>>  @@ -97,7 +97,7 @@ enum ingenic_usb_phy_version {
+>>   struct ingenic_soc_info {
+>>   	enum ingenic_usb_phy_version version;
+>>=20
+>>  -	void (*usb_phy_init)(struct usb_phy *phy);
+>>  +	u32 (*usb_phy_init)(struct usb_phy *phy);
+>=20
+> this is not fixing any bug
+>=20
+>>  @@ -172,7 +172,8 @@ static int ingenic_usb_phy_init(struct usb_phy=20
+>> *phy)
+>>   		return err;
+>>   	}
+>>=20
+>>  -	priv->soc_info->usb_phy_init(phy);
+>>  +	reg =3D priv->soc_info->usb_phy_init(phy);
+>>  +	writel(reg, priv->base + REG_USBPCR_OFFSET);
+>=20
+> not fixing any bug.
+>=20
+> Looking at the code, the bug follows after this line. It would suffice
+> to read REG_USBPCR_OFFSET in order to initialize reg. This bug fix=20
+> could
+> have been a one liner.
 
-> Since we have both USB2 and USB3 PHYs for cdns3 controller, it is
-> better we have unity APIs to handle both USB2 and USB3's power, it
-> could simplify code for error handling and further power management
-> implementation.
->
-> Reviewed-by: Pawel Laszczak <pawell@cadence.com>
-> Reviewed-by: Jun Li <jun.li@nxp.com>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
->  drivers/usb/cdns3/core.c | 43 ++++++++++++++++++++++++++--------------
->  1 file changed, 28 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index 5c1586ec7824..e56dbb6a898c 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -371,6 +371,27 @@ static int cdns3_role_set(struct usb_role_switch *sw=
-, enum usb_role role)
->  	return ret;
->  }
->=20=20
-> +static int set_phy_power_on(struct cdns3 *cdns)
+There's no need to re-read a register when you have the value readily=20
+available. It just needs to be returned from the usb_phy_init=20
+callbacks. But yes, it's not a one-liner.
 
-care to keep the cdns3_ prefix? It's useful when you want to use
-e.g. ftrace and function_graph trace
+>=20
+>>  @@ -195,19 +196,15 @@ static void ingenic_usb_phy_remove(void *phy)
+>>   	usb_remove_phy(phy);
+>>   }
+>>=20
+>>  -static void jz4770_usb_phy_init(struct usb_phy *phy)
+>>  +static u32 jz4770_usb_phy_init(struct usb_phy *phy)
+>=20
+> not a bug fix
+>=20
+>>   {
+>>  -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
+>>  -	u32 reg;
+>>  -
+>>  -	reg =3D USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS=20
+>> |
+>>  +	return USBPCR_AVLD_REG | USBPCR_COMMONONN |=20
+>> USBPCR_IDPULLUP_ALWAYS |
+>>   		USBPCR_COMPDISTUNE_DFT | USBPCR_OTGTUNE_DFT |=20
+>> USBPCR_SQRXTUNE_DFT |
+>>   		USBPCR_TXFSLSTUNE_DFT | USBPCR_TXRISETUNE_DFT |=20
+>> USBPCR_TXVREFTUNE_DFT |
+>>   		USBPCR_POR;
+>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
+>=20
+> not a bug fix
+>=20
+>>   }
+>>=20
+>>  -static void jz4780_usb_phy_init(struct usb_phy *phy)
+>>  +static u32 jz4780_usb_phy_init(struct usb_phy *phy)
+>=20
+> not a bug fix
+>=20
+>>  @@ -216,11 +213,10 @@ static void jz4780_usb_phy_init(struct=20
+>> usb_phy *phy)
+>>   		USBPCR1_WORD_IF_16BIT;
+>>   	writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>>=20
+>>  -	reg =3D USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
+>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>  +	return USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
+>=20
+> not a bug fix
+>=20
+>>   }
+>>=20
+>>  -static void x1000_usb_phy_init(struct usb_phy *phy)
+>>  +static u32 x1000_usb_phy_init(struct usb_phy *phy)
+>=20
+> not a bug fix
+>=20
+>>   {
+>>   	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
+>>   	u32 reg;
+>>  @@ -228,13 +224,12 @@ static void x1000_usb_phy_init(struct usb_phy=20
+>> *phy)
+>>   	reg =3D readl(priv->base + REG_USBPCR1_OFFSET) |=20
+>> USBPCR1_WORD_IF_16BIT;
+>>   	writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>>=20
+>>  -	reg =3D USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
+>>  +	return USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
+>>   		USBPCR_TXHSXVTUNE_DCR_15MV | USBPCR_TXVREFTUNE_INC_25PPT |
+>>   		USBPCR_COMMONONN | USBPCR_POR;
+>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
+>=20
+> not a bug fix
+>=20
+>>   }
+>>=20
+>>  -static void x1830_usb_phy_init(struct usb_phy *phy)
+>>  +static u32 x1830_usb_phy_init(struct usb_phy *phy)
+>=20
+> not a bug fix
+>=20
+>>   {
+>>   	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
+>>   	u32 reg;
+>>  @@ -246,9 +241,8 @@ static void x1830_usb_phy_init(struct usb_phy=20
+>> *phy)
+>>   		USBPCR1_DMPD | USBPCR1_DPPD;
+>>   	writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>>=20
+>>  -	reg =3D USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT=20
+>> |	USBPCR_TXPREEMPHTUNE |
+>>  +	return USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT |=20
+>> USBPCR_TXPREEMPHTUNE |
+>>   		USBPCR_COMMONONN | USBPCR_POR;
+>>  -	writel(reg, priv->base + REG_USBPCR_OFFSET);
+>=20
+> not a bug fix
 
-> +{
-> +	int ret;
-> +
-> +	ret =3D phy_power_on(cdns->usb2_phy);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D phy_power_on(cdns->usb3_phy);
+Well, if you don't like my bug fix, next time wait for my Reviewed-by.
 
-let's say we fail here
+Cheers,
+-Paul
 
-> +	if (ret)
-> +		phy_power_off(cdns->usb2_phy);
 
-usb2_phy will be powered off..
-
-> +	return ret;
-> +}
-> +
-> +static void set_phy_power_off(struct cdns3 *cdns)
-> +{
-> +	phy_power_off(cdns->usb3_phy);
-> +	phy_power_off(cdns->usb2_phy);
-
-Won't this cause a problem?
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9HsJARHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQbW8A/+KtXQnsWiepv4CGMXfqqDO9DVzIS9Wus1
-4eUYIwcvsh75EG3sy+438EP2R8dXevnPRoh8etxsRjH8KB3iHSkA09Uqn1zSYwxF
-BZpn9QOacRdHLL9E8gsLfr8vfrnB7TFhYQ2mm82J5MO8CRBSwkGCKbBMyNuKrKvZ
-/IG5O69JJdvvp+cgd1OQQdFKp5CqbjW9FXFAWbCnBSDjK+ag11fDFCsOIj8iJ+Fp
-ynC1gJDfa47jIAuoDNYDlUV8xkdzCLLRaTXnpvgws9NC1B8E3HcrjGsxj2w17IAa
-BGBokXGee9m3iK2tPKSZOKDgS6/LeaJIW4Ov9gVWnucLtpk/WiaCfxB4uQglO0V0
-T9vCiK/Y/EBWtimabWiJqqzQz7x7xoPUJaWJcWbGRyiKb7rDG/Ht0v+X0gFAUl+E
-801mMlQC7fnNSVktcf8chkhoJq47GqGcCxMDUpnJva+vebuUHCuyPIi/P7X+nL8K
-NXgYFMSSocTUs+sE/sWivM3+zT9plJwnuCsl+Bqb7dd6gbMHNY77bIC5x+UlI/13
-s6D+ZC9tGrJZ74J1kFJuqBb6WkFJOEVbZdiHnmd11RQzfZebdL3Fkz01cSpwgREm
-WFESj4hTz/ePl4tHtu4kQWJ2Cf6egELoKAwkMCXbnCvEX3O3qzyFVF686LXtW5aZ
-6io4C6ugM6g=
-=xROt
------END PGP SIGNATURE-----
---=-=-=--
