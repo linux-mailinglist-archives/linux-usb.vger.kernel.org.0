@@ -2,176 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD22253EE0
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 09:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DDC253F73
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Aug 2020 09:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727839AbgH0HVi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Aug 2020 03:21:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54744 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728044AbgH0HVg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Aug 2020 03:21:36 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D3BC122BEA;
-        Thu, 27 Aug 2020 07:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598512895;
-        bh=TUY1+Wc/mT5a2h/+UDo96I0UzOWK9tY+zfE/mW01ycU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=04ZtWabXNuzBzozQ6IUJdXlFuW+RsVj5Gbd9/u3sVCqTVYtk1JLVMT3u+UdAT/jMy
-         rw4Dy5RtF3mBJPju5LgRBiq3u5xJahdJ9M+FQ8cwYte6sTV3qoP64KTsAjqiwHlhsd
-         Y4ug7a/OrJGdkywCiv/DBaKrhdtK4AjhK96+xMAE=
-Date:   Thu, 27 Aug 2020 09:21:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zwane Mwaikambo <zwanem@gmail.com>
-Cc:     Zwane Mwaikambo <zwane@yosper.io>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] usb/typec: fix array overruns in ucsi.c
- partner_altmode[]
-Message-ID: <20200827072149.GB168593@kroah.com>
-References: <alpine.DEB.2.21.2008131842080.26061@montezuma.home>
- <20200824112106.GB189773@kuha.fi.intel.com>
- <CAD3Xbfq_nUsY7WKaDwUTnbTdx8SvWW8qCys+iOPAeoq3DtD46g@mail.gmail.com>
- <alpine.DEB.2.21.2008262041300.12661@montezuma.home>
- <alpine.DEB.2.21.2008262051190.12661@montezuma.home>
+        id S1728218AbgH0HoZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Aug 2020 03:44:25 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:20891 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726851AbgH0HoX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Aug 2020 03:44:23 -0400
+X-UUID: c5a2eea70eea42d9a4053461044fc617-20200827
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=hDrJTYFnlbUJyTHLWlz6XMMZ6XJkPNRSPabQes2kgkQ=;
+        b=cXefOo9Ig91+143NyEdseavBBjzPBCl1Oq3bDn3KgYXxu/JMDOSCU1biQiGwDHRCglVg4FtDY+dkh3IVuZ8OLh2Raczvm6mGFY5ebj4f0rb2sRzRhyzT39WffIo/ZuXGcYqU7CSbhT9hLBPEm5uQwYnz1TTm5TEhbXCLfzpCLwU=;
+X-UUID: c5a2eea70eea42d9a4053461044fc617-20200827
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 680989642; Thu, 27 Aug 2020 15:44:11 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 27 Aug
+ 2020 15:44:07 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 27 Aug 2020 15:44:08 +0800
+Message-ID: <1598514163.21253.12.camel@mhfsdcap03>
+Subject: Re: [PATCH 2/2] usb: dwc3: Add driver for Xilinx platforms
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Manish Narani <manish.narani@xilinx.com>
+CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <michal.simek@xilinx.com>, <balbi@kernel.org>,
+        <p.zabel@pengutronix.de>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>
+Date:   Thu, 27 Aug 2020 15:42:43 +0800
+In-Reply-To: <1598467441-124203-3-git-send-email-manish.narani@xilinx.com>
+References: <1598467441-124203-1-git-send-email-manish.narani@xilinx.com>
+         <1598467441-124203-3-git-send-email-manish.narani@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2008262051190.12661@montezuma.home>
+X-TM-SNTS-SMTP: 080ACAF050D071BB9DA66103625574D2739A57C44FDD51F559F2DE08B7C0A04D2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 08:55:33PM -0700, Zwane Mwaikambo wrote:
-> In ucsi_altmode_update_active(), con->partner_altmode[i] ends up with the 
-> value 0x2 in the call and it's because the array has been accessed out of 
-> bounds resulting in random memory read.
-> 
-> 
-> [  565.452023] BUG: kernel NULL pointer dereference, address: 00000000000002fe
-> [  565.452025] #PF: supervisor read access in kernel mode
-> [  565.452026] #PF: error_code(0x0000) - not-present page
-> [  565.452026] PGD 0 P4D 0 
-> [  565.452028] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [  565.452030] CPU: 0 PID: 502 Comm: kworker/0:3 Not tainted 5.8.0-rc3+ #1
-> [  565.452031] Hardware name: LENOVO 20RD002VUS/20RD002VUS, 
-> BIOS R16ET25W (1.11 ) 04/21/2020
-> [  565.452034] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-> [  565.452039] RIP: 0010:typec_altmode_update_active+0x1f/0x100 [typec]
-> [  565.452040] Code: 0f 1f 84 00 00 00 00 00 0f 1f 00 0f 1f 44 00 00 55 48 
-> 89 e5 41 54 53 48 83 ec 10 65 48 8b 04 25 28 00 00 00 48 89 45 e8 31 c0 
-> <0f> b6 87 fc 02 00 00 83 e0 01 40 38 f0 0f 84 95 00 00 00 48 8b 47
-> [  565.452041] RSP: 0018:ffffb729c066bdb0 EFLAGS: 00010246
-> [  565.452042] RAX: 0000000000000000 RBX: ffffa067c3e64a70 RCX: 0000000000000000
-> [  565.452043] RDX: ffffb729c066bd20 RSI: 0000000000000000 RDI: 0000000000000002
-> [  565.452044] RBP: ffffb729c066bdd0 R08: 00000083a7910a4f R09: 0000000000000000
-> [  565.452044] R10: ffffffffa106a220 R11: 0000000000000000 R12: 0000000000000000
-> [  565.452045] R13: ffffa067c3e64a98 R14: ffffa067c3e64810 R15: ffffa067c3e64800
-> [  565.452046] FS:  0000000000000000(0000) GS:ffffa067d1400000(0000)
-> knlGS:0000000000000000
-> [  565.452047] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  565.452048] CR2: 00000000000002fe CR3: 00000001b060a003 CR4: 00000000003606f0
-> [  565.452048] Call Trace:
-> [  565.452052]  ucsi_altmode_update_active+0x83/0xd0 [typec_ucsi]
-> [  565.452054]  ucsi_handle_connector_change+0x1dc/0x320 [typec_ucsi]
-> [  565.452057]  process_one_work+0x1df/0x3d0
-> [  565.452059]  worker_thread+0x4d/0x3d0
-> [  565.452060]  ? process_one_work+0x3d0/0x3d0
-> [  565.452062]  kthread+0x127/0x170
-> [  565.452063]  ? kthread_park+0x90/0x90
-> [  565.452065]  ret_from_fork+0x1f/0x30
-> 
-> The failing instruction is;
-> 
-> 0x0000000000000380 <+0>:     callq  0x385 <typec_altmode_update_active+5>
-> 0x0000000000000385 <+5>:     push   %rbp
-> 0x0000000000000386 <+6>:     mov    %rsp,%rbp
-> 0x0000000000000389 <+9>:     push   %r12
-> 0x000000000000038b <+11>:    push   %rbx
-> 0x000000000000038c <+12>:    sub    $0x10,%rsp
-> 0x0000000000000390 <+16>:    mov    %gs:0x28,%rax
-> 0x0000000000000399 <+25>:    mov    %rax,-0x18(%rbp)
-> 0x000000000000039d <+29>:    xor    %eax,%eax
-> 0x000000000000039f <+31>:    movzbl 0x2fc(%rdi),%eax <======
-> 0x00000000000003a6 <+38>:    and    $0x1,%eax
-> 
-> (gdb) list  *typec_altmode_update_active+0x1f
-> 0x39f is in typec_altmode_update_active (drivers/usb/typec/class.c:221).
-> 216      */
-> 217     void typec_altmode_update_active(struct typec_altmode *adev, bool active)
-> 218     {
-> 219             char dir[6];
-> 220
-> 221             if (adev->active == active)
-> 222                     return;
-> 223
-> 224             if (!is_typec_port(adev->dev.parent) && adev->dev.driver) {
-> 225                     if (!active)
-> 
-> (gdb) list *ucsi_altmode_update_active+0x83
-> 0x12a3 is in ucsi_altmode_update_active (drivers/usb/typec/ucsi/ucsi.c:221).
-> 216             }
-> 217
-> 218             if (cur < UCSI_MAX_ALTMODES)
-> 219                     altmode = typec_altmode_get_partner(con->port_altmode[cur]);
-> 220
-> 221             for (i = 0; con->partner_altmode[i]; i++)
-> 222                     typec_altmode_update_active(con->partner_altmode[i],
-> 223                                                con->partner_altmode[i] == altmode);
-> 224     }
-> 
-> [ 4372.429633] usb 1-2.1.4: USB disconnect, device number 16
-> [ 4372.523235] usb 1-2.2: USB disconnect, device number 7
-> [ 4372.570537] usb 1-2.5: USB disconnect, device number 9
-> [ 4373.153246] BUG: kernel NULL pointer dereference, address: 00000000000002f2
-> [ 4373.153267] #PF: supervisor read access in kernel mode
-> [ 4373.153271] #PF: error_code(0x0000) - not-present page
-> [ 4373.153275] PGD 0 P4D 0 
-> [ 4373.153284] Oops: 0000 [#2] PREEMPT SMP NOPTI
-> [ 4373.153292] CPU: 0 PID: 13242 Comm: kworker/0:0 Tainted: G      D           5.8.0-rc6+ #1
-> [ 4373.153296] Hardware name: LENOVO 20RD002VUS/20RD002VUS, BIOS R16ET25W (1.11 ) 04/21/2020
-> [ 4373.153308] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-> [ 4373.153320] RIP: 0010:ucsi_unregister_altmodes+0x5f/0xa0 [typec_ucsi]
-> [ 4373.153326] Code: 54 48 8b 3b 41 83 c4 01 e8 9e f9 0c 00 49 63 c4 48 c7 
-> 03 00 00 00 00 49 8d 5c c5 00 48 8b 3b 48 85 ff 74 31 41 80 fe 01 75 d7 
-> <0f> b7 87 f0 02 00 00 66 3d 01 ff 74 0f 66 3d 55 09 75 c4 83 bf f8
-> [ 4373.153332] RSP: 0018:ffffb2ef036b3dc8 EFLAGS: 00010246
-> [ 4373.153338] RAX: 000000000000001e RBX: ffff94268b006a60 RCX: 0000000080800067
-> [ 4373.153342] RDX: 0000000080800068 RSI: 0000000000000001 RDI: 0000000000000002
-> [ 4373.153347] RBP: ffffb2ef036b3de8 R08: 0000000000000000 R09: ffffffff8dc65400
-> [ 4373.153351] R10: ffff9426678d7200 R11: 0000000000000001 R12: 000000000000001e
-> [ 4373.153355] R13: ffff94268b006970 R14: 0000000000000001 R15: ffff94268b006800
-> [ 4373.153361] FS:  0000000000000000(0000) GS:ffff942691400000(0000) knlGS:0000000000000000
-> [ 4373.153366] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 4373.153371] CR2: 00000000000002f2 CR3: 00000004445a6005 CR4: 00000000003606f0
-> [ 4373.153375] Call Trace:
-> [ 4373.153389]  ucsi_unregister_partner.part.0+0x17/0x30 [typec_ucsi]
-> [ 4373.153400]  ucsi_handle_connector_change+0x25c/0x320 [typec_ucsi]
-> [ 4373.153418]  process_one_work+0x1df/0x3d0
-> [ 4373.153428]  worker_thread+0x4a/0x3d0
-> [ 4373.153436]  ? process_one_work+0x3d0/0x3d0
-> [ 4373.153444]  kthread+0x127/0x170
-> [ 4373.153451]  ? kthread_park+0x90/0x90
-> [ 4373.153461]  ret_from_fork+0x1f/0x30
-> [ 4373.153661] CR2: 00000000000002f2
-> 
-> Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
-> ---
-> 
+T24gVGh1LCAyMDIwLTA4LTI3IGF0IDAwOjE0ICswNTMwLCBNYW5pc2ggTmFyYW5pIHdyb3RlOg0K
+PiBBZGQgYSBuZXcgZHJpdmVyIGZvciBzdXBwb3J0aW5nIFhpbGlueCBwbGF0Zm9ybXMuIFRoaXMg
+ZHJpdmVyIGhhbmRsZXMNCj4gdGhlIFVTQiAzLjAgUEhZIGluaXRpYWxpemF0aW9uIGFuZCBQSVBF
+IGNvbnRyb2wgJiByZXNldCBvcGVyYXRpb25zIGZvcg0KPiBaeW5xTVAgcGxhdGZvcm1zLiBUaGlz
+IGFsc28gaGFuZGxlcyB0aGUgVVNCIDIuMCBQSFkgaW5pdGlhbGl6YXRpb24gYW5kDQo+IHJlc2V0
+IG9wZXJhdGlvbnMgZm9yIFZlcnNhbCBwbGF0Zm9ybXMuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBN
+YW5pc2ggTmFyYW5pIDxtYW5pc2gubmFyYW5pQHhpbGlueC5jb20+DQo+IC0tLQ0KPiAgZHJpdmVy
+cy91c2IvZHdjMy9LY29uZmlnICAgICAgICAgIHwgICA4ICsNCj4gIGRyaXZlcnMvdXNiL2R3YzMv
+TWFrZWZpbGUgICAgICAgICB8ICAgMSArDQo+ICBkcml2ZXJzL3VzYi9kd2MzL2R3YzMtb2Ytc2lt
+cGxlLmMgfCAgIDEgLQ0KPiAgZHJpdmVycy91c2IvZHdjMy9kd2MzLXhpbGlueC5jICAgIHwgNDE2
+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgNCBmaWxlcyBjaGFuZ2VkLCA0MjUg
+aW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZl
+cnMvdXNiL2R3YzMvZHdjMy14aWxpbnguYw0KPiANClsuLi5dDQo+ICtzdGF0aWMgaW50IGR3YzNf
+eGxueF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiArew0KPiArCXN0cnVj
+dCBkd2MzX3hsbngJKnByaXZfZGF0YTsNCj4gKwlzdHJ1Y3QgZGV2aWNlCQkqZGV2ID0gJnBkZXYt
+PmRldjsNCj4gKwlzdHJ1Y3QgZGV2aWNlX25vZGUJKm5wID0gZGV2LT5vZl9ub2RlOw0KPiArCXN0
+cnVjdCByZXNvdXJjZQkJKnJlczsNCj4gKwl2b2lkIF9faW9tZW0JCSpyZWdzOw0KPiArCWludAkJ
+CXJldDsNCj4gKw0KPiArCXByaXZfZGF0YSA9IGRldm1fa3phbGxvYyhkZXYsIHNpemVvZigqcHJp
+dl9kYXRhKSwgR0ZQX0tFUk5FTCk7DQo+ICsJaWYgKCFwcml2X2RhdGEpDQo+ICsJCXJldHVybiAt
+RU5PTUVNOw0KPiArDQo+ICsJcmVzID0gcGxhdGZvcm1fZ2V0X3Jlc291cmNlKHBkZXYsIElPUkVT
+T1VSQ0VfTUVNLCAwKTsNCj4gKwlpZiAoIXJlcykgew0KPiArCQlkZXZfZXJyKGRldiwgIm1pc3Np
+bmcgbWVtb3J5IHJlc291cmNlXG4iKTsNCj4gKwkJcmV0dXJuIC1FTk9ERVY7DQo+ICsJfQ0KPiAr
+DQo+ICsJcmVncyA9IGRldm1faW9yZW1hcF9yZXNvdXJjZSgmcGRldi0+ZGV2LCByZXMpOw0KPiAr
+CWlmIChJU19FUlIocmVncykpDQo+ICsJCXJldHVybiBQVFJfRVJSKHJlZ3MpOw0KVXNlIGRldm1f
+cGxhdGZvcm1faW9yZW1hcF9yZXNvdXJjZSgpPw0KDQo+ICsNCj4gKwkvKiBTdG9yZSB0aGUgdXNi
+IGNvbnRyb2wgcmVncyBpbnRvIHByaXZfZGF0YSBmb3IgZnVydGhlciB1c2FnZSAqLw0KPiArCXBy
+aXZfZGF0YS0+cmVncyA9IHJlZ3M7DQo+ICsNCj4gKwlwcml2X2RhdGEtPmRldiA9IGRldjsNCj4g
+Kw0KPiArCXBsYXRmb3JtX3NldF9kcnZkYXRhKHBkZXYsIHByaXZfZGF0YSk7DQo+ICsNCj4gKwly
+ZXQgPSBjbGtfYnVsa19nZXRfYWxsKHByaXZfZGF0YS0+ZGV2LCAmcHJpdl9kYXRhLT5jbGtzKTsN
+Cj4gKwlpZiAocmV0IDwgMCkNCj4gKwkJcmV0dXJuIHJldDsNCj4gKw0KPiArCXByaXZfZGF0YS0+
+bnVtX2Nsb2NrcyA9IHJldDsNCj4gKw0KPiArCXJldCA9IGNsa19idWxrX3ByZXBhcmVfZW5hYmxl
+KHByaXZfZGF0YS0+bnVtX2Nsb2NrcywgcHJpdl9kYXRhLT5jbGtzKTsNCj4gKwlpZiAocmV0KQ0K
+PiArCQlyZXR1cm4gcmV0Ow0KPiArDQo+ICsJaWYgKG9mX2RldmljZV9pc19jb21wYXRpYmxlKHBk
+ZXYtPmRldi5vZl9ub2RlLCAieGxueCx6eW5xbXAtZHdjMyIpKSB7DQo+ICsJCXJldCA9IGR3YzNf
+eGxueF9pbml0X3p5bnFtcChwcml2X2RhdGEpOw0KPiArCQlpZiAocmV0KQ0KPiArCQkJZ290byBl
+cnJfY2xrX3B1dDsNCj4gKwl9DQo+ICsNCj4gKwlpZiAob2ZfZGV2aWNlX2lzX2NvbXBhdGlibGUo
+cGRldi0+ZGV2Lm9mX25vZGUsICJ4bG54LHZlcnNhbC1kd2MzIikpIHsNCj4gKwkJcmV0ID0gZHdj
+M194bG54X2luaXRfdmVyc2FsKHByaXZfZGF0YSk7DQo+ICsJCWlmIChyZXQpDQo+ICsJCQlnb3Rv
+IGVycl9jbGtfcHV0Ow0KPiArCX0NCj4gKw0KPiArCXJldCA9IG9mX3BsYXRmb3JtX3BvcHVsYXRl
+KG5wLCBOVUxMLCBOVUxMLCBkZXYpOw0KPiArCWlmIChyZXQpDQo+ICsJCWdvdG8gZXJyX2Nsa19w
+dXQ7DQo+ICsNCj4gKwlwbV9ydW50aW1lX3NldF9hY3RpdmUoZGV2KTsNCj4gKwlwbV9ydW50aW1l
+X2VuYWJsZShkZXYpOw0KPiArCXBtX3N1c3BlbmRfaWdub3JlX2NoaWxkcmVuKGRldiwgZmFsc2Up
+Ow0KPiArCXBtX3J1bnRpbWVfZ2V0X3N5bmMoZGV2KTsNCj4gKw0KPiArCXBtX3J1bnRpbWVfZm9y
+YmlkKGRldik7DQo+ICsNCj4gKwlyZXR1cm4gMDsNCj4gKw0KPiArZXJyX2Nsa19wdXQ6DQo+ICsJ
+Y2xrX2J1bGtfZGlzYWJsZV91bnByZXBhcmUocHJpdl9kYXRhLT5udW1fY2xvY2tzLCBwcml2X2Rh
+dGEtPmNsa3MpOw0KPiArCWNsa19idWxrX3B1dF9hbGwocHJpdl9kYXRhLT5udW1fY2xvY2tzLCBw
+cml2X2RhdGEtPmNsa3MpOw0KPiArDQo+ICsJcmV0dXJuIHJldDsNCj4gK30NCj4gKw0KPiArc3Rh
+dGljIGludCBkd2MzX3hsbnhfcmVtb3ZlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+
+ICt7DQo+ICsJc3RydWN0IGR3YzNfeGxueAkqcHJpdl9kYXRhID0gcGxhdGZvcm1fZ2V0X2RydmRh
+dGEocGRldik7DQo+ICsJc3RydWN0IGRldmljZQkJKmRldiA9ICZwZGV2LT5kZXY7DQo+ICsNCj4g
+KwlvZl9wbGF0Zm9ybV9kZXBvcHVsYXRlKGRldik7DQo+ICsNCj4gKwljbGtfYnVsa19kaXNhYmxl
+X3VucHJlcGFyZShwcml2X2RhdGEtPm51bV9jbG9ja3MsIHByaXZfZGF0YS0+Y2xrcyk7DQo+ICsJ
+Y2xrX2J1bGtfcHV0X2FsbChwcml2X2RhdGEtPm51bV9jbG9ja3MsIHByaXZfZGF0YS0+Y2xrcyk7
+DQo+ICsJcHJpdl9kYXRhLT5udW1fY2xvY2tzID0gMDsNCj4gKw0KPiArCXBtX3J1bnRpbWVfZGlz
+YWJsZShkZXYpOw0KPiArCXBtX3J1bnRpbWVfcHV0X25vaWRsZShkZXYpOw0KPiArCXBtX3J1bnRp
+bWVfc2V0X3N1c3BlbmRlZChkZXYpOw0KPiArDQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+ICsNCj4g
+KyNpZmRlZiBDT05GSUdfUE0NCj4gK3N0YXRpYyBpbnQgZHdjM194bG54X3J1bnRpbWVfc3VzcGVu
+ZChzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ICt7DQo+ICsJc3RydWN0IGR3YzNfeGxueAkqcHJpdl9k
+YXRhID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ICsNCj4gKwljbGtfYnVsa19kaXNhYmxlKHBy
+aXZfZGF0YS0+bnVtX2Nsb2NrcywgcHJpdl9kYXRhLT5jbGtzKTsNCj4gKw0KPiArCXJldHVybiAw
+Ow0KPiArfQ0KPiArDQo+ICtzdGF0aWMgaW50IGR3YzNfeGxueF9ydW50aW1lX2lkbGUoc3RydWN0
+IGRldmljZSAqZGV2KQ0KPiArew0KPiArCXBtX3J1bnRpbWVfbWFya19sYXN0X2J1c3koZGV2KTsN
+Cj4gKwlwbV9ydW50aW1lX2F1dG9zdXNwZW5kKGRldik7DQo+ICsNCj4gKwlyZXR1cm4gMDsNCj4g
+K30NCj4gKw0KPiArc3RhdGljIGludCBkd2MzX3hsbnhfcnVudGltZV9yZXN1bWUoc3RydWN0IGRl
+dmljZSAqZGV2KQ0KPiArew0KPiArCXN0cnVjdCBkd2MzX3hsbngJKnByaXZfZGF0YSA9IGRldl9n
+ZXRfZHJ2ZGF0YShkZXYpOw0KPiArDQo+ICsJcmV0dXJuIGNsa19idWxrX2VuYWJsZShwcml2X2Rh
+dGEtPm51bV9jbG9ja3MsIHByaXZfZGF0YS0+Y2xrcyk7DQo+ICt9DQo+ICsjZW5kaWYgLyogQ09O
+RklHX1BNICovDQo+ICsNCj4gKyNpZmRlZiBDT05GSUdfUE1fU0xFRVANCj4gK3N0YXRpYyBpbnQg
+ZHdjM194bG54X3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0KPiArew0KPiArCXN0cnVjdCBk
+d2MzX3hsbnggKnByaXZfZGF0YSA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPiArDQo+ICsJLyog
+RGlzYWJsZSB0aGUgY2xvY2tzICovDQo+ICsJY2xrX2J1bGtfZGlzYWJsZShwcml2X2RhdGEtPm51
+bV9jbG9ja3MsIHByaXZfZGF0YS0+Y2xrcyk7DQo+ICsNCj4gKwlyZXR1cm4gMDsNCj4gK30NCj4g
+Kw0KPiArc3RhdGljIGludCBkd2MzX3hsbnhfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCj4g
+K3sNCj4gKwlzdHJ1Y3QgZHdjM194bG54ICpwcml2X2RhdGEgPSBkZXZfZ2V0X2RydmRhdGEoZGV2
+KTsNCj4gKw0KPiArCXJldHVybiBjbGtfYnVsa19lbmFibGUocHJpdl9kYXRhLT5udW1fY2xvY2tz
+LCBwcml2X2RhdGEtPmNsa3MpOw0KPiArfQ0KPiArI2VuZGlmIC8qIENPTkZJR19QTV9TTEVFUCAq
+Lw0KPiArDQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IGRldl9wbV9vcHMgZHdjM194bG54X2Rldl9w
+bV9vcHMgPSB7DQo+ICsJU0VUX1NZU1RFTV9TTEVFUF9QTV9PUFMoZHdjM194bG54X3N1c3BlbmQs
+IGR3YzNfeGxueF9yZXN1bWUpDQo+ICsJU0VUX1JVTlRJTUVfUE1fT1BTKGR3YzNfeGxueF9ydW50
+aW1lX3N1c3BlbmQsIGR3YzNfeGxueF9ydW50aW1lX3Jlc3VtZSwNCj4gKwkJCSAgIGR3YzNfeGxu
+eF9ydW50aW1lX2lkbGUpDQo+ICt9Ow0KPiArDQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2Rl
+dmljZV9pZCBvZl9kd2MzX3hsbnhfbWF0Y2hbXSA9IHsNCj4gKwl7IC5jb21wYXRpYmxlID0gInhs
+bngsenlucW1wLWR3YzMiIH0sDQo+ICsJeyAuY29tcGF0aWJsZSA9ICJ4bG54LHZlcnNhbC1kd2Mz
+IiB9LA0KPiArCXsgLyogU2VudGluZWwgKi8gfQ0KPiArfTsNCj4gK01PRFVMRV9ERVZJQ0VfVEFC
+TEUob2YsIG9mX2R3YzNfeGxueF9tYXRjaCk7DQo+ICsNCj4gK3N0YXRpYyBzdHJ1Y3QgcGxhdGZv
+cm1fZHJpdmVyIGR3YzNfeGxueF9kcml2ZXIgPSB7DQo+ICsJLnByb2JlCQk9IGR3YzNfeGxueF9w
+cm9iZSwNCj4gKwkucmVtb3ZlCQk9IGR3YzNfeGxueF9yZW1vdmUsDQo+ICsJLmRyaXZlcgkJPSB7
+DQo+ICsJCS5uYW1lCT0gImR3YzMteGlsaW54IiwNCj4gKwkJLm9mX21hdGNoX3RhYmxlID0gb2Zf
+ZHdjM194bG54X21hdGNoLA0KPiArCQkucG0JPSAmZHdjM194bG54X2Rldl9wbV9vcHMsDQo+ICsJ
+fSwNCj4gK307DQo+ICsNCj4gK21vZHVsZV9wbGF0Zm9ybV9kcml2ZXIoZHdjM194bG54X2RyaXZl
+cik7DQo+ICsNCj4gK01PRFVMRV9MSUNFTlNFKCJHUEwgdjIiKTsNCj4gK01PRFVMRV9ERVNDUklQ
+VElPTigiWGlsaW54IERXQzMgY29udHJvbGxlciBzcGVjaWZpYyBnbHVlIGRyaXZlciIpOw0KPiAr
+TU9EVUxFX0FVVEhPUigiQW51cmFnIEt1bWFyIFZ1bGlzaGEgPGFudXJhZy5rdW1hci52dWxpc2hh
+QHhpbGlueC5jb20+Iik7DQo+ICtNT0RVTEVfQVVUSE9SKCJNYW5pc2ggTmFyYW5pIDxtYW5pc2gu
+bmFyYW5pQHhpbGlueC5jb20+Iik7DQoNCg==
 
-What changed from v1?
-
-That goes below the --- line so we know what is happening here.
-
-And why did you also send the 1/2 patch of the first series as well?
-
-Can you fix all of this up and just send a v3, with the needed
-information so I have a hint as to what to do here?
-
-thanks,
-
-greg k-h
