@@ -2,100 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E64255D17
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 16:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4AB255DB4
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 17:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728037AbgH1OwI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 10:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726878AbgH1OwF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 10:52:05 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20B1C061264
-        for <linux-usb@vger.kernel.org>; Fri, 28 Aug 2020 07:52:05 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id e14so704471vsa.9
-        for <linux-usb@vger.kernel.org>; Fri, 28 Aug 2020 07:52:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZmW/UzfIpiqxIVOvn5t5U7Hz6pKUYnMVNjjF5Y3VXtc=;
-        b=ASiPmnut8ciHDn1eSNZN++Q0EY9sH3AlBER8f194LxUx7jFUhiZzA+dHhYDJe9W8Au
-         A6ww7IdEnLBpDyW+d1rISSIosnSHvUGxstDL8aY4ECfWCKliS/yftWa+Z1Wh+qDLcS44
-         PNLPuzuGVLk1e/7BL/tLO4+bGfz6TWrbQZre2HTRo/wJTXOml58huo5DUJIaiXwx9wEv
-         vOBD2caU600iGI5oR6r0Jz+TPCcpek7SzfwI2LmIl/3cutVX7uqCFbn6NvS/rWCjOoE4
-         6T+OPEShQMiP/pEhX4QitVQpQEqgFjPUSkjmJ4aJA2V0+SsLpIDUKxxPIYKwqoxMCBDS
-         BJxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZmW/UzfIpiqxIVOvn5t5U7Hz6pKUYnMVNjjF5Y3VXtc=;
-        b=Yba3eubd77J8jzAjJ9yllmHLXlX7JClWnm8VmYApifFZVoX1bG0E6ijCVGU23proOd
-         8qVxUe0LPsdnR46mpEgLYy1uxa8mZrdRAhxjLuhLxee3xNt7IYjihkeafzT3qrLmm7rJ
-         66D1xClHQt+l0xiLLRtmaeG/OMWNjxtKI43mk/9zNuiaLjlTe0MrVvg6p7FwPG1oy10X
-         XORTPPjUU27OpGRNPnpFP62xOOHQppyiUmo97TYftfs5LHOjuOAzXExj86j34Wvw7KDc
-         tYsk154RKtnSaKZ5J4igKcZKejHp9+CW2iYDh5TIVjux2FLZIiiALKIqAbd8p7fHT9Hp
-         xGzA==
-X-Gm-Message-State: AOAM533MlUQxO25DfiUg9QGUy/EeeDt3DZmmkkRE/ng7zfi3FW47Ya2F
-        Ebs0bp7hr0HeVkTKEBsYNOtHrYAhK6Is50l2WwRT6Q==
-X-Google-Smtp-Source: ABdhPJxPLcaFKo8fXT9ratgxwY2hdZT7QpICZojESZhKVTSgGJCpiS5lrKCfG4YYue2Q/mEVwjb/FVS4d0AGzNdzj5Q=
-X-Received: by 2002:a67:e449:: with SMTP id n9mr1036754vsm.118.1598626324771;
- Fri, 28 Aug 2020 07:52:04 -0700 (PDT)
+        id S1728134AbgH1PVt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 11:21:49 -0400
+Received: from mga14.intel.com ([192.55.52.115]:8233 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728051AbgH1PVi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Aug 2020 11:21:38 -0400
+IronPort-SDR: zbeJLlo4MyeFQ23eRZYuN5HtuYzrcxbTX8rqoB2Y+tfIz3F+SW650RYCWvFp4SKfh5RAKuvBni
+ oNqL8yl0MYQQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9727"; a="155942164"
+X-IronPort-AV: E=Sophos;i="5.76,364,1592895600"; 
+   d="scan'208";a="155942164"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 08:21:36 -0700
+IronPort-SDR: 5AzL6bCfU8sqBhH9dnNGMXsnXJwa19INQzEFBtECdoF9s/PVGcNFwYXHmmwgNiQPgANLWAz5ps
+ RnbbbhMmxDYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,364,1592895600"; 
+   d="scan'208";a="337521262"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Aug 2020 08:21:36 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 28 Aug 2020 08:20:24 -0700
+Received: from orsmsx116.amr.corp.intel.com (10.22.240.14) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Fri, 28 Aug 2020 08:20:23 -0700
+Received: from ORSEDG002.ED.cps.intel.com (10.7.248.5) by
+ ORSMSX116.amr.corp.intel.com (10.22.240.14) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Fri, 28 Aug 2020 08:20:23 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.109)
+ by edgegateway.intel.com (134.134.137.101) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Fri, 28 Aug 2020 08:20:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nIGycc1s9eltW5avtupi8JCyskrlueS8GrbdfJ4NRU3KyOHjR03aiTEX1MTWgvZgsf9M5STAMMqHl7ZsC075tgtyfxkWOuvAIy3fbXal/Gx3wYDiO9t8G7nf4Nwr8HUyvP6cgw4RoaYJ09pvfPGBzCRR+tUYlWCDbvhp23i5QWY9aY7UiaZ0FX+oPj5PzxjHOEpa2n6sZmVfnNXT3kY13nKq7idBeiwHZBGa+T7Ta3r1DAOcdzArO/NYjBRXbM6c77JVuOXUStVLVHz2IuWGIbDcrywFYdsICcW4soilS1hF9JD4bwqZ5sJVGA4XQK2RLd5kEzyWS2hGPJizCSQfeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sMrVeCfoGeTCSazUkkK/czO5DCp0IBrJ0ouSG+3ZqtM=;
+ b=YYSnik5hrOPXsZiPyxjjx65LzyOKd0KxHs6A/Vg66x9zxW+lbz2Qzadth3TaMpz1L7Al0qjS37Mtm6T53Pq4xkumSN9M5zOUR2wcHWIjZiteEtOAdQSr25PrOMo3KouS63amaHngKqZ0e2jls8LMMk/vERYB8lL98wiMyWG0fTKyej+bEr+cB+6SzPBaoyJFCSK2P0m5RLAraumiWyqPIMHP0e66WjQb/tCfIKV9q6igIEdZqnqB9soEmjPfA8oLMmiPERfMr4s+WwloyVTT+1IRF0BbVNhF7DI/AfEZoPFa4kn0F0x1Pt7iLSOtNZFBdEPaOmOX9QhgNg/rC6bIdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sMrVeCfoGeTCSazUkkK/czO5DCp0IBrJ0ouSG+3ZqtM=;
+ b=cVar68i53T+yMC0U/XcWUtbpghayTPzSYvUZWVxGVK17GlFA5bT74reVLcZQAlhd1t5SZ2Wp3zJFIpNoS+Yx79Ynmx6gwHStGkLWwt6+htI4CZl125l8DmmxxMIugSp2jMg0enkBen4s7IEnhvFxUaJK0R6jWcBL5/N3vmj96tc=
+Received: from DM6PR11MB3963.namprd11.prod.outlook.com (2603:10b6:5:19b::16)
+ by DM6PR11MB4754.namprd11.prod.outlook.com (2603:10b6:5:2ad::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Fri, 28 Aug
+ 2020 15:20:22 +0000
+Received: from DM6PR11MB3963.namprd11.prod.outlook.com
+ ([fe80::5ca6:6956:d7f6:2c55]) by DM6PR11MB3963.namprd11.prod.outlook.com
+ ([fe80::5ca6:6956:d7f6:2c55%7]) with mapi id 15.20.3283.028; Fri, 28 Aug 2020
+ 15:20:22 +0000
+From:   "Mani, Rajmohan" <rajmohan.mani@intel.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        =?iso-8859-2?Q?Bla=BE_Hrastnik?= <blaz@mxxn.io>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "pmalani@chromium.org" <pmalani@chromium.org>,
+        "bleung@chromium.org" <bleung@chromium.org>
+Subject: RE: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager (IOM)
+ driver
+Thread-Topic: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
+ (IOM) driver
+Thread-Index: AQHWeD6ZmieVJ7ILtEmVT73DLNf2fqlNLX2AgAAXoACAAGapYA==
+Date:   Fri, 28 Aug 2020 15:20:22 +0000
+Message-ID: <DM6PR11MB3963228D43B50604AE4D0F3AF6520@DM6PR11MB3963.namprd11.prod.outlook.com>
+References: <20200822040508.23510-1-rajmohan.mani@intel.com>
+ <20200822040508.23510-2-rajmohan.mani@intel.com>
+ <20200828074359.GC942935@kroah.com>
+ <20200828090832.GB174928@kuha.fi.intel.com>
+In-Reply-To: <20200828090832.GB174928@kuha.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [76.126.121.82]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9c5a30c3-7cf5-4903-075f-08d84b65e1cd
+x-ms-traffictypediagnostic: DM6PR11MB4754:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR11MB47547092C33802363E106E83F6520@DM6PR11MB4754.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kYoI7wZqTJCKQr2lg/U9ir7WMAhe+ByPjVieiYovycC/UheOlvRzLl9LGVO4BMhk63GF1uhho7tTw93V7Y/SX/GKRc8w4rf5DVgfS36/Uh+JrTe1OWZXFTVxNGT3TqWaQ/9crNKFYDnSA8+6DKQisgjLWtBKlw76DfuYgzYxAT9Rs84uvo6/oz9FCnqKC6fQB3VkjMpclE5aQSEd0xKM75GEC/cBR+4mG7Vpvp5VokCDfZr4Cf//jFgK1QvbCtTzTn1yoFXlde3uFEg6HYCU7XpfNl1CZ5kV96l9dX8TVx7IL1Zr2jcDLpwj7fSaFHF8ke66KZhkX2zMbLcoowLwow==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(39860400002)(376002)(366004)(346002)(7696005)(83380400001)(5660300002)(52536014)(7416002)(6506007)(54906003)(110136005)(26005)(186003)(316002)(8676002)(66476007)(33656002)(9686003)(64756008)(66446008)(4326008)(66946007)(66556008)(55016002)(478600001)(76116006)(86362001)(8936002)(71200400001)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: vC9tmnyQcPI06JJnbejlzsILwIii+dEicl9A/cnl0SQX2xn1DEklvatUnwlPQWKriMxGC2TDDccbZZk4fKjqv0wxwfZYlf+EfwtSbT/bHofy0HSEvz6qQM1joFgD6ENMgt/ix/gjgYjagzIU/mV1wi7HQKriUiLyLevVh3gshe0XWgWu0bqIsGysnA7NkFOYovu1xjQ1Gx50qh2j5iFMuflNIUkwxEhtAkptzV5K5A9qRh7NpR1fcGxu/CCs8RljpW1vxmChZZLjCT3B2p7jkm0+q4S0knNcRz4KEnM7gA4uK1ZMLI3pCIQvG3IphjMCbsQxVtG2IN6pmU8fGuTVJbbJ41hhfx8JU3+X7xhMwpPNtWwYW1qfrMDufqWgmYkeC5fDVN5plHAXKRKcHrgpNmm5PrtSgFj17Kih2wQAsEebbJzyl6WRoDR6n295+5ajKy7CZk49mthTFewjjhn73e34Ihggoua+FKTSnncmLl7XaC7dKOLCDWknVBHQE5RmAsTKkMNWWaTQZ46kiHjz3huLF5XSpA14YKMiZJDUuXJi0Sq3pXdTJ+OahyJ2UrkvXExFXV2/uW6F0y3tQfmsUdUYkC387mCqY+BbpUs6sTOIOR3apQIyIkqyurBpuR1klFLCOlL0qKxIVxfv4AnwOw==
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20200825042210.300632-1-badhri@google.com> <20200825042210.300632-8-badhri@google.com>
- <fb1a7030-2649-c0cf-dd2a-651516333da7@infradead.org>
-In-Reply-To: <fb1a7030-2649-c0cf-dd2a-651516333da7@infradead.org>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Fri, 28 Aug 2020 07:51:28 -0700
-Message-ID: <CAPTae5KiP7DGJ8V0xtt3k0GUD6VtTBqCJzm6G1NGD+JrOexmXQ@mail.gmail.com>
-Subject: Re: [PATCH 07/14 v1] usb: typec: tcpci_maxim: Chip level TCPC driver
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3963.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c5a30c3-7cf5-4903-075f-08d84b65e1cd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Aug 2020 15:20:22.3416
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FBWU2IK7Ep/zkL/dpdkxilABbN9RfNhTEY00KPbBrACsc76fktAN/P93Oalp0dwb13tv6XzN7otqsdn93gXZsA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4754
+X-OriginatorOrg: intel.com
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 10:16 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> On 8/24/20 9:22 PM, Badhri Jagan Sridharan wrote:
-> > diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> > index fa3f39336246..7c9722b02afe 100644
-> > --- a/drivers/usb/typec/tcpm/Kconfig
-> > +++ b/drivers/usb/typec/tcpm/Kconfig
-> > @@ -27,6 +27,12 @@ config TYPEC_RT1711H
-> >         Type-C Port Controller Manager to provide USB PD and USB
-> >         Type-C functionalities.
-> >
-> > +config TYPEC_TCPCI_MAXIM
-> > +     tristate "Maxim TCPCI based Type-C chip driver"
-> > +     select USB_PSY
->
-> is that        USB_PHY
-> ?
-Yes and not a dependency here. Will remove. Thanks for catching this !
+Hi Greg,
 
->
-> > +     help
-> > +       MAXIM TCPCI based Type-C chip driver
->
-> end that with '.' please.
-Ack ! will fix it in the next version.
-
->
-> > +
-> >  endif # TYPEC_TCPCI
+> Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
+> (IOM) driver
+>=20
+> Hi Greg,
+>=20
+> On Fri, Aug 28, 2020 at 09:43:59AM +0200, Greg Kroah-Hartman wrote:
+> > I still find this crazy that a whole separate driver is created just
+> > to read a single 32bit value.
 > >
-> >  config TYPEC_FUSB302
->
->
+> > Why not put this logic in the driver that wants to read that value?
+> > That would be much simpler, smaller, and more obvious.
+>=20
+> That would mean that we start maintaining something like DMI quirk table =
+in
+> those drivers. Unfortunately the IOM device is not available on every pla=
+tform.
+> Also, even on platforms that do have it, there is no guarantee that the d=
+evice is
+> always going to be mapped to the same address.
+>=20
+> Nevertheless, I was originally hoping that we could hide the handling of =
+IOM
+> somehow in ACPI without the need for an actual device object, but it now
+> turns out that the other features of the IOM chip have created interest. =
+At
+> least our i915 guys probable have some use for it (I don't know exactly w=
+hat
+> they are planning to use it for).
+>=20
+> So the fact that we may later need the device for something else, on top =
+of the
+> clumsiness and most importantly risks involved with using ACPI to take ca=
+re of
+> extra tasks (ASL tends to have bugs - bugs that may never ever get fixed)=
+, I
+> think the IOM device object, and the driver that binds to it, do have a v=
+alid
+> reason for existing.
+>=20
+
+Intel PMC USB mux device is part of the PCH, while IOM is part of the SoC.
+This was another reason we had to have a separate ACPI device.
+
+>=20
+> thanks,
+>=20
 > --
-> ~Randy
->
+> heikki
