@@ -2,78 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9B22555D9
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 10:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFFF2555FE
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 10:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728447AbgH1IAX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 04:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726834AbgH1IAW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 04:00:22 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EA9C061264
-        for <linux-usb@vger.kernel.org>; Fri, 28 Aug 2020 01:00:22 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id ls14so168338pjb.3
-        for <linux-usb@vger.kernel.org>; Fri, 28 Aug 2020 01:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PTSZwOvmd8hsoHlVT3wY5Y3CJ5kZ77NPHrIjGIbwYUw=;
-        b=M2IAEoDo4E3zyfcmMI54faadFZp5+oZmu2y+07+gnyeA2B6K3YvWAITVmNhhrawFvM
-         ayYK6Zbpppnq+QInfKuBJpM3Kg274lCuvSJIVpbD7OC34RwaS/ybGChcSLMI5MHvY/LA
-         EEc+kAh2pY2MS9r+NVnDzx9wl6+CPq6QAv99AB4D4/CQg7qqHF08Ik6qanlsqHqULTKi
-         bWKWfMhSs3v74S+j3PG8tkuLnmenF+SeOiAHnYlIPRqqQ6qPbYzg7x6yeKeHJM2YzimM
-         rbF8lFxDn2NE5RYNyyzxj3jXT0d7seIFta2wYKXGHKoI+uK06yqfeXb7xZbv7j6+o+8D
-         IOtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PTSZwOvmd8hsoHlVT3wY5Y3CJ5kZ77NPHrIjGIbwYUw=;
-        b=HZTq/wnHMbZXxwx+XFrCpqx9gGuPymHBUgcYyZF6hl9kQli43q8ojm046QmGIEUk26
-         WkCy4/FJcWYHGVF6suBK3DGNRIS1dVx565S/OjBm7QX4XYvD/RSjUBAwVBM8oqki5B/3
-         h3aNnDj3eFcEMVg8QpeGFnEAF1R8iaKqVoW9IOh0DuvASfV7S3ksb0rxgcRRFNEQJ+i5
-         5plkMiZhfD7RxS/xR5jXtW0/VBx7oaZ2HaUUYMwDDmqVbxc8P5DRNhAKnASbNFo+S/iW
-         SirosTP6/tXz2y6p/nHCObPzab9kDWZlrBaoxx0pHrwNhYbpTJdE36h65a8+X6vq3tX2
-         6njw==
-X-Gm-Message-State: AOAM531bWmcPwy1LOjpt1Vaca0otoJSfPCjXYn/F4QkmT7S0vcjMjhXY
-        VbnGm7pNFlnkSbvFXlIJk2N34tAkPZ7olSFYPm8=
-X-Google-Smtp-Source: ABdhPJwLTcqWBufu/IELgrmoM20YFsPjoErnzZG30RqB6EC1s7V1WNdiRlek/uguBUQaPLJe1jnPa+dkGe3G38zCogo=
-X-Received: by 2002:a17:902:b194:: with SMTP id s20mr341800plr.321.1598601622048;
- Fri, 28 Aug 2020 01:00:22 -0700 (PDT)
+        id S1728505AbgH1IKQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 04:10:16 -0400
+Received: from smtprelay0088.hostedemail.com ([216.40.44.88]:39048 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727971AbgH1IKP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 04:10:15 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id A91BB18033E5D;
+        Fri, 28 Aug 2020 08:10:14 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:2911:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3872:3874:4250:4321:4425:5007:8531:10004:10400:10848:11232:11658:11914:12295:12296:12297:12740:12760:12895:13069:13311:13357:13439:14659:14721:21080:21433:21627:21990,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: drink66_59176f727074
+X-Filterd-Recvd-Size: 2525
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Fri, 28 Aug 2020 08:10:07 +0000 (UTC)
+Message-ID: <526af204ddf95f94012c6132d12693852bfe7442.camel@perches.com>
+Subject: Re: [Cocci] [PATCH] usb: atm: don't use snprintf() for sysfs attrs
+From:   Joe Perches <joe@perches.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Denis Efremov <efremov@linux.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cocci <cocci@systeme.lip6.fr>,
+        Alex Dewar <alex.dewar90@gmail.com>
+Date:   Fri, 28 Aug 2020 01:10:06 -0700
+In-Reply-To: <202008280056.6442BCC@keescook>
+References: <20200827071537.GA168593@kroah.com>
+         <20200827131819.7rcl2f5js3hkoqj2@lenovo-laptop>
+         <def24e9e-018c-9712-0d07-d4cbc84f07d9@rasmusvillemoes.dk>
+         <20200827144846.yauuttjaqtxaldxg@lenovo-laptop>
+         <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
+         <alpine.DEB.2.22.394.2008272141220.2482@hadrien>
+         <5853c58e-7d26-2cf9-6cbf-698ecd93cbf9@linux.com>
+         <202008271517.ECC1F1F8F@keescook>
+         <5ebe5c2737b59d04f1b8a46008cd3159c638f9d0.camel@perches.com>
+         <d99c613aa70617f440c51d9413372b858a4ae826.camel@perches.com>
+         <202008280056.6442BCC@keescook>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-References: <20200819100826.69716-1-andriy.shevchenko@linux.intel.com> <20200828075134.GB993816@kroah.com>
-In-Reply-To: <20200828075134.GB993816@kroah.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 28 Aug 2020 11:00:05 +0300
-Message-ID: <CAHp75Vfbhpy9JYjdZyg9Y5TVb_m2Yz0MQeGm20JLAOd6KEVO5A@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: hcd: convert tasklets to use new tasklet_setup() API
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        USB <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 10:53 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Aug 19, 2020 at 01:08:26PM +0300, Andy Shevchenko wrote:
-> > In preparation for unconditionally passing the struct tasklet_struct
-> > pointer to all tasklet callbacks, switch to using the new tasklet_setup()
-> > and from_tasklet() to pass the tasklet pointer explicitly.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> Does not apply to my tree as I think someone already did all of these
-> conversions.
+On Fri, 2020-08-28 at 00:58 -0700, Kees Cook wrote:
+> On Thu, Aug 27, 2020 at 09:12:06PM -0700, Joe Perches wrote:
+> > Perhaps something like the below with a sample conversion
+> > that uses single and multiple sysfs_emit uses.
+> 
+> On quick review, I like it. :)
+> 
+> > [...]
+> > +int sysfs_emit(char *buf, char *pos, const char *fmt, ...)
+> > +{
+> > +	int len;
+> > +	va_list args;
+> > +
+> > +	WARN(pos < buf, "pos < buf\n");
+> > +	WARN(pos - buf >= PAGE_SIZE, "pos >= PAGE_SIZE (%tu > %lu)\n",
+> > +	     pos - buf, PAGE_SIZE);
+> > +	if (pos < buf || pos - buf >= PAGE_SIZE)
+> > +		return 0;
+> 
+> This can be:
+> 
+> 	if (WARN(pos < buf, "pos < buf\n") ||
+> 	    WARN(pos - buf >= PAGE_SIZE, "pos >= PAGE_SIZE (%tu > %lu)\n",
+> 		 pos - buf, PAGE_SIZE))
+> 		return 0;
 
-Yes, that is the case.
+I had some vague recollection that WARN could be compiled
+away to nothing somehow.  True or false?
 
--- 
-With Best Regards,
-Andy Shevchenko
+If false, sure, of course, it'd be faster too.
+
