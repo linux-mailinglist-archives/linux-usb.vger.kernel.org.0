@@ -2,65 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE0B255566
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 09:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067B5255573
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 09:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728455AbgH1Hg6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 03:36:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38812 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726500AbgH1Hg5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Aug 2020 03:36:57 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7A3BE20776;
-        Fri, 28 Aug 2020 07:36:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598600217;
-        bh=TPzU+ne6lWyUaBunEnndm3XP49gskrG9vdKDqsGEFEQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ksbEVTGrfCApRpy8fEr6o4fImtuJP5woYut7dX5Pe3r07H4ZxlQqXoPIH14fl9K+m
-         YJ6M5N7eU70NhI5MZZOp8oaLyANVd3zizpQbpGbzcZzvtValwVVkexQEGBH9w/TxsP
-         fm+I0gnwxe6bvA338yfqVjFzU5KjduAHfJXGvlXA=
-Date:   Fri, 28 Aug 2020 09:37:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/14 v5] usb: typec: tcpci: Add set_vbus tcpci callback
-Message-ID: <20200828073709.GA942935@kroah.com>
-References: <20200825042210.300632-1-badhri@google.com>
- <20200825042210.300632-6-badhri@google.com>
+        id S1728208AbgH1Hja convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 28 Aug 2020 03:39:30 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:59500 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726566AbgH1Hj3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 03:39:29 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-266-Gqqjngt5NDyRwtlGJI5Pew-1; Fri, 28 Aug 2020 08:39:26 +0100
+X-MC-Unique: Gqqjngt5NDyRwtlGJI5Pew-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Fri, 28 Aug 2020 08:39:25 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 28 Aug 2020 08:39:25 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kees Cook' <keescook@chromium.org>,
+        Denis Efremov <efremov@linux.com>
+CC:     Julia Lawall <julia.lawall@inria.fr>,
+        Joe Perches <joe@perches.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        cocci <cocci@systeme.lip6.fr>,
+        "accessrunner-general@lists.sourceforge.net" 
+        <accessrunner-general@lists.sourceforge.net>,
+        Alex Dewar <alex.dewar90@gmail.com>
+Subject: RE: [Cocci] [PATCH] usb: atm: don't use snprintf() for sysfs attrs
+Thread-Topic: [Cocci] [PATCH] usb: atm: don't use snprintf() for sysfs attrs
+Thread-Index: AQHWfMBUatYqQRMSW0+Lm7S5UM8VU6lNInTw
+Date:   Fri, 28 Aug 2020 07:39:25 +0000
+Message-ID: <24d45f0868b74a3ba4924f031e968c55@AcuMS.aculab.com>
+References: <20200824222322.22962-1-alex.dewar90@gmail.com>
+ <48f2dc90-7852-eaf1-55d7-2c85cf954688@rasmusvillemoes.dk>
+ <20200827071537.GA168593@kroah.com>
+ <20200827131819.7rcl2f5js3hkoqj2@lenovo-laptop>
+ <def24e9e-018c-9712-0d07-d4cbc84f07d9@rasmusvillemoes.dk>
+ <20200827144846.yauuttjaqtxaldxg@lenovo-laptop>
+ <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
+ <alpine.DEB.2.22.394.2008272141220.2482@hadrien>
+ <5853c58e-7d26-2cf9-6cbf-698ecd93cbf9@linux.com>
+ <202008271517.ECC1F1F8F@keescook>
+In-Reply-To: <202008271517.ECC1F1F8F@keescook>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200825042210.300632-6-badhri@google.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0.001
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 09:22:01PM -0700, Badhri Jagan Sridharan wrote:
-> set_vbus callback allows TCPC which are TCPCI based, however,
-> does not support turning on sink and source mode through
-> Command.SinkVbus and Command.SourceVbusDefaultVoltage.
+From: Kees Cook
+> Sent: 27 August 2020 23:21
+...
 > 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 7 +++++++
->  drivers/usb/typec/tcpm/tcpci.h | 1 +
->  2 files changed, 8 insertions(+)
+> Agreed. This just makes me cringe. If the API design declares that when
+> a show() callback starts, buf has been allocated with PAGE_SIZE bytes,
+> then that's how the logic should proceed, and it should be using
+> scnprintf...
+> 
+> show(...) {
+> 	size_t remaining = PAGE_SIZE;
+> 
+> 	...
+> 	remaining -= scnprintf(buf, remaining, "fmt", var args ...);
+> 	remaining -= scnprintf(buf, remaining, "fmt", var args ...);
+> 	remaining -= scnprintf(buf, remaining, "fmt", var args ...);
 
-Why is this patch "v5" and the others "v1" in this series?
+Not quite what you had in mind, maybe:
+	char *end = buf + PAGE_SIZE;
 
-That's totally confusing, please just version the whole series, not
-individual patches, as you are not providing version information about
-what changed in this patch, right?
+	buf += scnprintf(buf, end - buf, ...);
 
-Make it easy for reviewers please...
+	return PAGE_SIZE - (end - buf);
 
-thanks,
+	David
 
-greg k-h
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
