@@ -2,158 +2,291 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B15AE255A9E
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 14:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432C1255AE1
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 15:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729486AbgH1Mw0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 08:52:26 -0400
-Received: from mail-il1-f197.google.com ([209.85.166.197]:34901 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729397AbgH1MwR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 08:52:17 -0400
-Received: by mail-il1-f197.google.com with SMTP id g6so709825iln.2
-        for <linux-usb@vger.kernel.org>; Fri, 28 Aug 2020 05:52:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=aH/xVZKT59e9fqybNQgxAsPp9qZltpZTome6AJmbByo=;
-        b=POJyU2cfcXdlpYM2Z8dOvcCIM/AODw13/9Evet1ReiDP5O3+vZwGy30wy8soLd1xly
-         OWrg4U25tb+3Q+dHzmvo9qQRWSp1DaF2R2txOa0Q8qBY3XZEPWJGT9w/+OkwTn45ktME
-         2L8zkFMlK4IDD9PILAIKtbsSBxryc544Jq8K9IRXcWKYVKqa1aJIsMnU6FcKJDbHj7cd
-         gzGJkNaHNZpInt4GXrk9QK3LGEkuJwM3zp0d5si3wrBAoehbOJsC2MUXgGaNoYwMzEDY
-         EYvZ/Nhg6zguQdKWFRJwbll418uNPZVa3kNBFLDaJ90utf4eIoznUqccgd1CT1GuoXfs
-         ny/g==
-X-Gm-Message-State: AOAM531l14EPley2xa2ioz+NU8/0pu6p0FEqRdFDUWg7xY2bhKaoWlry
-        r+eB6oWtq/XaEaZDS7QK+98rdo+/VzyMXvawS1XpUdBbuV6I
-X-Google-Smtp-Source: ABdhPJxyGLO2wQws8Ithxes0F1VVHW/onOapxqkMjNLFd9dD9PSLcEQfazHCtiYn4tK2qtwCDYS9GxpB9BX2ugTZRrGCVvOng0U+
+        id S1729552AbgH1NJt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 09:09:49 -0400
+Received: from mga07.intel.com ([134.134.136.100]:47710 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729474AbgH1NHh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Aug 2020 09:07:37 -0400
+IronPort-SDR: K4Ub2HxIi9EnwgmcV6HC645fVRzSSUXCOl2JfGPfdQysvaiGzqVNo0SwX/dyGkoeXRxSLS4N6q
+ k/8rHBsl9wRQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="220907013"
+X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
+   d="scan'208";a="220907013"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 06:07:25 -0700
+IronPort-SDR: A0Ha8WKSy85mxfueLMIZZq4m+LdZ2h3VLpZl3gnpxXOI4wjYCAS+6eNHrP3hoSqfvesoMEoW0J
+ GKVdh5mGWjBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
+   d="scan'208";a="444830438"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga004.jf.intel.com with ESMTP; 28 Aug 2020 06:07:24 -0700
+Subject: Re: Data toggles not reset on "set configuration" for ports handled
+ by "xhci_hcd" driver
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     Martin Thierer <mthierer@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
+References: <CAL3BvCzb6dGZOm6jy2PddSfioM7hThMEBm+aQ_gmMAWAXFYOuQ@mail.gmail.com>
+ <20200821160321.GA256196@rowland.harvard.edu>
+ <CAL3BvCyz3W+aRu0e=RE3teaMMh6KDYxu8NbFicY07Xt-=f9Whg@mail.gmail.com>
+ <20200821170106.GB256196@rowland.harvard.edu>
+ <d11a91f5-2bb8-01ce-c8b8-4512a2cf2793@linux.intel.com>
+ <CAL3BvCyxTvfUjecoYO0ie1vt4_+1cad+8Dt=xmcXogZSooGj+A@mail.gmail.com>
+ <cbdfafed-b8d4-ca07-bde1-4598f5117f04@linux.intel.com>
+ <a66ea20a-5406-ed31-e607-08552598ed68@linux.intel.com>
+ <CAL3BvCzsAZjt23XjD-9T2JyUtLFPLB0prKn3Bw3nC4AC1nTbgA@mail.gmail.com>
+ <9017830d-a4d2-66d5-6b42-b1162856ef90@linux.intel.com>
+ <CAL3BvCzKdRAVNMgG2do1D_QgKnR_x+P-uBuv3-kPMi7z6iabwQ@mail.gmail.com>
+ <a8c8509b-6f45-c905-3860-d2b5dd5f9103@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <f57b9d65-9553-17f7-090a-0272b013af36@linux.intel.com>
+Date:   Fri, 28 Aug 2020 16:10:47 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:24d1:: with SMTP id y17mr1043497jat.42.1598619136726;
- Fri, 28 Aug 2020 05:52:16 -0700 (PDT)
-Date:   Fri, 28 Aug 2020 05:52:16 -0700
-In-Reply-To: <000000000000d3c499057536ce86@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c69c7805adef8597@google.com>
-Subject: Re: INFO: task hung in usb_bulk_msg
-From:   syzbot <syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com>
-To:     andriy.shevchenko@linux.intel.com, bigeasy@linutronix.de,
-        felipe.balbi@linux.intel.com, gregkh@linuxfoundation.org,
-        joe@perches.com, johan@kernel.org, kai.heng.feng@canonical.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael.j.wysocki@intel.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <a8c8509b-6f45-c905-3860-d2b5dd5f9103@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+>> Thanks, that seems to work! (Judging by the absence of my original
+>> issue with the xum1541 adapter; I haven't checked what's actually
+>> happening on the bus).
+>>
+>> Martin
+>>
+> 
+> Great, thanks.
+> 
+> Now this test code needs to be cleaned up a turned into a real patch
 
-HEAD commit:    15bc20c6 Merge tag 'tty-5.9-rc3' of git://git.kernel.org/p..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1052a669900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=978db74cb30aa994
-dashboard link: https://syzkaller.appspot.com/bug?extid=7a7613e5ba9ae7bd15f9
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101c328e900000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155eff41900000
+Can you test one more round?
+The code below is cleaned up but it also has a functional change.
+This version issues separate commands for dropping and adding endpoints.
+Previous code both did all on one command.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com
+If it works I'll send it forward.
 
-INFO: task syz-executor790:9958 blocked for more than 143 seconds.
-      Not tainted 5.9.0-rc2-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor790 state:D stack:28240 pid: 9958 ppid:  6854 flags:0x00004004
-Call Trace:
- context_switch kernel/sched/core.c:3778 [inline]
- __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
- schedule+0xd0/0x2a0 kernel/sched/core.c:4602
- schedule_timeout+0x1d8/0x250 kernel/time/timer.c:1855
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common kernel/sched/completion.c:106 [inline]
- wait_for_common kernel/sched/completion.c:117 [inline]
- wait_for_completion_timeout+0x15e/0x270 kernel/sched/completion.c:157
- usb_start_wait_urb+0x144/0x2b0 drivers/usb/core/message.c:63
- usb_bulk_msg+0x226/0x550 drivers/usb/core/message.c:254
- do_proc_bulk+0x39b/0x710 drivers/usb/core/devio.c:1231
- proc_bulk drivers/usb/core/devio.c:1268 [inline]
- usbdev_do_ioctl drivers/usb/core/devio.c:2542 [inline]
- usbdev_ioctl+0x586/0x3360 drivers/usb/core/devio.c:2708
- vfs_ioctl fs/ioctl.c:48 [inline]
- __do_sys_ioctl fs/ioctl.c:753 [inline]
- __se_sys_ioctl fs/ioctl.c:739 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:739
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x44d089
-Code: Bad RIP value.
-RSP: 002b:00007f70887dadb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00000000006dec48 RCX: 000000000044d089
-RDX: 0000000020000000 RSI: 00000000c0185502 RDI: 0000000000000003
-RBP: 00000000006dec40 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006dec4c
-R13: 00007ffebdfc131f R14: 00007f70887db9c0 R15: 0000000000000064
+Thanks
+-Mathias
 
-Showing all locks held in the system:
-1 lock held by ksoftirqd/1/16:
- #0: ffff8880ae735e18 (&rq->lock){-.-.}-{2:2}, at: rq_lock kernel/sched/sched.h:1292 [inline]
- #0: ffff8880ae735e18 (&rq->lock){-.-.}-{2:2}, at: __schedule+0x232/0x21e0 kernel/sched/core.c:4445
-1 lock held by khungtaskd/1169:
- #0: ffffffff89bd6900 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:5825
-1 lock held by in:imklog/6531:
- #0: ffff8880a83bab70 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:930
-3 locks held by kworker/u4:0/6882:
-1 lock held by syz-executor790/24330:
- #0: ffff8880ae635e18 (&rq->lock){-.-.}-{2:2}, at: rq_lock kernel/sched/sched.h:1292 [inline]
- #0: ffff8880ae635e18 (&rq->lock){-.-.}-{2:2}, at: __schedule+0x232/0x21e0 kernel/sched/core.c:4445
+---
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH] usb: Fix out of sync data toggle if a configured device is
+ reconfigured
 
-=============================================
+Userspace drivers that use a SetConfiguration() request to "lightweight"
+reset a already configured usb device might cause data toggles to get out
+of sync between the device and host, and the device becomes unusable.
 
-NMI backtrace for cpu 0
-CPU: 0 PID: 1169 Comm: khungtaskd Not tainted 5.9.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x18f/0x20d lib/dump_stack.c:118
- nmi_cpu_backtrace.cold+0x70/0xb1 lib/nmi_backtrace.c:101
- nmi_trigger_cpumask_backtrace+0x1b3/0x223 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:209 [inline]
- watchdog+0xd7d/0x1000 kernel/hung_task.c:295
- kthread+0x3b5/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 6851 Comm: syz-executor790 Not tainted 5.9.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:get_timespec64+0x1b3/0x220 kernel/time/time.c:801
-Code: 89 73 08 e8 8f f6 10 00 48 b8 00 00 00 00 00 fc ff df 49 c7 04 04 00 00 00 00 48 8b 44 24 58 65 48 2b 04 25 28 00 00 00 75 45 <48> 83 c4 60 44 89 e8 5b 5d 41 5c 41 5d 41 5e c3 e8 58 f6 10 00 45
-RSP: 0018:ffffc90001667e20 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: ffffc90001667ed0 RCX: ffffffff81634853
-RDX: ffff8880a77381c0 RSI: ffffffff81634881 RDI: ffffc90001667ed8
-RBP: 0000000000000000 R08: 00000000000f4240 R09: ffffc90001667e4f
-R10: 0000000000000000 R11: 0000000000000000 R12: 1ffff920002ccfc4
-R13: 0000000000000000 R14: 00000000000f4240 R15: 0000000000000000
-FS:  000000000153e880(0000) GS:ffff8880ae700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000004c6238 CR3: 00000000a93cd000 CR4: 00000000001506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- __do_sys_nanosleep kernel/time/hrtimer.c:1962 [inline]
- __se_sys_nanosleep kernel/time/hrtimer.c:1957 [inline]
- __x64_sys_nanosleep+0xaa/0x260 kernel/time/hrtimer.c:1957
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x44b800
-Code: c0 5b 5d c3 66 0f 1f 44 00 00 8b 04 24 48 83 c4 18 5b 5d c3 66 0f 1f 44 00 00 83 3d b1 a0 29 00 00 75 14 b8 23 00 00 00 0f 05 <48> 3d 01 f0 ff ff 0f 83 24 e4 fb ff c3 48 83 ec 08 e8 7a 43 00 00
-RSP: 002b:00007ffebdfc1378 EFLAGS: 00000246 ORIG_RAX: 0000000000000023
-RAX: ffffffffffffffda RBX: 00000000000025c4 RCX: 000000000044b800
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007ffebdfc1380
-RBP: 000000000009bbed R08: 0000000000000001 R09: 000000000153e880
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffebdfc13e0
-R13: 000000000040a140 R14: 0000000000000000 R15: 0000000000000000
+The xHCI host requires endpoints to be dropped and added back to reset the
+toggle. USB core avoids these otherwise extra steps if the current active
+configuration is the same as the new requested configuration.
+
+A SetConfiguration() request will reset the device side data toggles.
+Make sure usb core drops and adds back the endpoints in this case.
+
+To avoid code duplication split the current usb_disable_device() function
+and reuse the endpoint specific part.
+
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/core/message.c | 89 +++++++++++++++++---------------------
+ 1 file changed, 40 insertions(+), 49 deletions(-)
+
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index 6197938dcc2d..46c0d5f633a7 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -1205,6 +1205,35 @@ void usb_disable_interface(struct usb_device *dev, struct usb_interface *intf,
+ 	}
+ }
+ 
++/*
++ * usb_disable_device_endpoints -- Disable all endpoints for a device
++ * @dev: the device whose endpoints are being disabled
++ * @skip_ep0: 0 to disable endpoint 0, 1 to skip it.
++ */
++static void usb_disable_device_endpoints(struct usb_device *dev, int skip_ep0)
++{
++	struct usb_hcd *hcd = bus_to_hcd(dev->bus);
++	int i;
++
++	if (hcd->driver->check_bandwidth) {
++
++		/* First pass: Cancel URBs, leave endpoint pointers intact. */
++		for (i = skip_ep0; i < 16; ++i) {
++			usb_disable_endpoint(dev, i, false);
++			usb_disable_endpoint(dev, i + USB_DIR_IN, false);
++		}
++		/* Remove endpoints from the host controller internal state */
++		mutex_lock(hcd->bandwidth_mutex);
++		usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
++		mutex_unlock(hcd->bandwidth_mutex);
++	}
++	/* Second pass: remove endpoint pointers */
++	for (i = skip_ep0; i < 16; ++i) {
++		usb_disable_endpoint(dev, i, true);
++		usb_disable_endpoint(dev, i + USB_DIR_IN, true);
++	}
++}
++
+ /**
+  * usb_disable_device - Disable all the endpoints for a USB device
+  * @dev: the device whose endpoints are being disabled
+@@ -1218,7 +1247,6 @@ void usb_disable_interface(struct usb_device *dev, struct usb_interface *intf,
+ void usb_disable_device(struct usb_device *dev, int skip_ep0)
+ {
+ 	int i;
+-	struct usb_hcd *hcd = bus_to_hcd(dev->bus);
+ 
+ 	/* getting rid of interfaces will disconnect
+ 	 * any drivers bound to them (a key side effect)
+@@ -1264,22 +1292,8 @@ void usb_disable_device(struct usb_device *dev, int skip_ep0)
+ 
+ 	dev_dbg(&dev->dev, "%s nuking %s URBs\n", __func__,
+ 		skip_ep0 ? "non-ep0" : "all");
+-	if (hcd->driver->check_bandwidth) {
+-		/* First pass: Cancel URBs, leave endpoint pointers intact. */
+-		for (i = skip_ep0; i < 16; ++i) {
+-			usb_disable_endpoint(dev, i, false);
+-			usb_disable_endpoint(dev, i + USB_DIR_IN, false);
+-		}
+-		/* Remove endpoints from the host controller internal state */
+-		mutex_lock(hcd->bandwidth_mutex);
+-		usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
+-		mutex_unlock(hcd->bandwidth_mutex);
+-		/* Second pass: remove endpoint pointers */
+-	}
+-	for (i = skip_ep0; i < 16; ++i) {
+-		usb_disable_endpoint(dev, i, true);
+-		usb_disable_endpoint(dev, i + USB_DIR_IN, true);
+-	}
++
++	usb_disable_device_endpoints(dev, skip_ep0);
+ }
+ 
+ /**
+@@ -1537,10 +1551,7 @@ int usb_reset_configuration(struct usb_device *dev)
+ 	 * calls during probe() are fine
+ 	 */
+ 
+-	for (i = 1; i < 16; ++i) {
+-		usb_disable_endpoint(dev, i, true);
+-		usb_disable_endpoint(dev, i + USB_DIR_IN, true);
+-	}
++	usb_disable_device_endpoints(dev, 1); /* skip ep0*/
+ 
+ 	config = dev->actconfig;
+ 	retval = 0;
+@@ -1553,34 +1564,10 @@ int usb_reset_configuration(struct usb_device *dev)
+ 		mutex_unlock(hcd->bandwidth_mutex);
+ 		return -ENOMEM;
+ 	}
+-	/* Make sure we have enough bandwidth for each alternate setting 0 */
+-	for (i = 0; i < config->desc.bNumInterfaces; i++) {
+-		struct usb_interface *intf = config->interface[i];
+-		struct usb_host_interface *alt;
+ 
+-		alt = usb_altnum_to_altsetting(intf, 0);
+-		if (!alt)
+-			alt = &intf->altsetting[0];
+-		if (alt != intf->cur_altsetting)
+-			retval = usb_hcd_alloc_bandwidth(dev, NULL,
+-					intf->cur_altsetting, alt);
+-		if (retval < 0)
+-			break;
+-	}
+-	/* If not, reinstate the old alternate settings */
++	/* xHCI adds all endpoints in usb_hcd_alloc_bandwidth */
++	retval = usb_hcd_alloc_bandwidth(dev, config, NULL, NULL);
+ 	if (retval < 0) {
+-reset_old_alts:
+-		for (i--; i >= 0; i--) {
+-			struct usb_interface *intf = config->interface[i];
+-			struct usb_host_interface *alt;
+-
+-			alt = usb_altnum_to_altsetting(intf, 0);
+-			if (!alt)
+-				alt = &intf->altsetting[0];
+-			if (alt != intf->cur_altsetting)
+-				usb_hcd_alloc_bandwidth(dev, NULL,
+-						alt, intf->cur_altsetting);
+-		}
+ 		usb_enable_lpm(dev);
+ 		mutex_unlock(hcd->bandwidth_mutex);
+ 		return retval;
+@@ -1589,8 +1576,12 @@ int usb_reset_configuration(struct usb_device *dev)
+ 			USB_REQ_SET_CONFIGURATION, 0,
+ 			config->desc.bConfigurationValue, 0,
+ 			NULL, 0, USB_CTRL_SET_TIMEOUT);
+-	if (retval < 0)
+-		goto reset_old_alts;
++	if (retval < 0) {
++		retval = usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
++		usb_enable_lpm(dev);
++		mutex_unlock(hcd->bandwidth_mutex);
++		return retval;
++	}
+ 	mutex_unlock(hcd->bandwidth_mutex);
+ 
+ 	/* re-init hc/hcd interface/endpoint state */
+-- 
+2.17.1
+
+
+
+
 
