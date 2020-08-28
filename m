@@ -2,327 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A8B25537B
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 06:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85704255420
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 07:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725809AbgH1EMM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 00:12:12 -0400
-Received: from smtprelay0115.hostedemail.com ([216.40.44.115]:56988 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725536AbgH1EML (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 00:12:11 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id EE44B182CED34;
-        Fri, 28 Aug 2020 04:12:08 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:1:2:41:69:355:379:599:960:966:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1593:1594:1605:1730:1747:1777:1792:2196:2198:2199:2200:2393:2553:2559:2562:2691:2828:3138:3139:3140:3141:3142:3622:3865:3866:3867:3868:3870:3872:3874:4052:4250:4321:4385:4605:5007:6691:7875:7903:8603:9897:10848:11026:11232:11473:11658:11914:12043:12291:12295:12296:12297:12438:12555:12683:12740:12760:12895:12986:13439:14659:21080:21433:21451:21611:21627:21740:21990:30034:30045:30054:30056:30083:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:1:0,LFtime:2,LUA_SUMMARY:none
-X-HE-Tag: brake40_18021b527072
-X-Filterd-Recvd-Size: 10858
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf04.hostedemail.com (Postfix) with ESMTPA;
-        Fri, 28 Aug 2020 04:12:07 +0000 (UTC)
-Message-ID: <d99c613aa70617f440c51d9413372b858a4ae826.camel@perches.com>
-Subject: Re: [Cocci] [PATCH] usb: atm: don't use snprintf() for sysfs attrs
-From:   Joe Perches <joe@perches.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Denis Efremov <efremov@linux.com>
-Cc:     Julia Lawall <julia.lawall@inria.fr>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cocci <cocci@systeme.lip6.fr>,
-        Alex Dewar <alex.dewar90@gmail.com>
-Date:   Thu, 27 Aug 2020 21:12:06 -0700
-In-Reply-To: <5ebe5c2737b59d04f1b8a46008cd3159c638f9d0.camel@perches.com>
-References: <20200824222322.22962-1-alex.dewar90@gmail.com>
-         <48f2dc90-7852-eaf1-55d7-2c85cf954688@rasmusvillemoes.dk>
-         <20200827071537.GA168593@kroah.com>
-         <20200827131819.7rcl2f5js3hkoqj2@lenovo-laptop>
-         <def24e9e-018c-9712-0d07-d4cbc84f07d9@rasmusvillemoes.dk>
-         <20200827144846.yauuttjaqtxaldxg@lenovo-laptop>
-         <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
-         <alpine.DEB.2.22.394.2008272141220.2482@hadrien>
-         <5853c58e-7d26-2cf9-6cbf-698ecd93cbf9@linux.com>
-         <202008271517.ECC1F1F8F@keescook>
-         <5ebe5c2737b59d04f1b8a46008cd3159c638f9d0.camel@perches.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.4-0ubuntu1 
+        id S1726857AbgH1Fyd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 01:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725858AbgH1Fyc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 01:54:32 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C1EC061264;
+        Thu, 27 Aug 2020 22:54:32 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id e11so1006273ljn.6;
+        Thu, 27 Aug 2020 22:54:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=M5X//ZshFwH0KFUFC07IKRMrNcpHsYLBwYNF7u93/jc=;
+        b=F6iZdECVa/kC5OREMqVO4E3qSsVlgWKNDTK8rq46y6mvBT8n0W1NYWRQqb7du7Fx9M
+         yDeuyYdz9peRTfxLOYbdSOOavxmHIQ3JYtMqq9N9xSGpdEPGNePDNHLxxaW79jOPw9rW
+         K+wQIWujkdKVzKm4QfKadr8CH79KcuM4+JFbt78igw+vbjzjO8rqaiGLfwDwPDhSLjUZ
+         DZfZmjj5SdRzzc17r3iHwjEKCP/Hjo87fElmJj5jFSL100xIAflQklK9F92nlrEk7+KE
+         EwriOUxhqRtsk0tPr+eAsnJe3TFJxj+IL/SNDq05FL9lLIa8PHYgBYx1NbI8UTVi715N
+         EhMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=M5X//ZshFwH0KFUFC07IKRMrNcpHsYLBwYNF7u93/jc=;
+        b=Jde+IinPG4arEy1VMXqj00YuQ2tEUtf+cfE0yhCFPfCWQsIBhNtS91fhmWGnlMrijO
+         or4GInDuhQgrjOelcb+5PbQwO8UDrGZmDXDmSA0W741+T8++NSgB4qjIvmr7vNY8VChN
+         DjHHXJEVcH0Qjo5F96pKWISUySnRihx/gXzjz+Zuy6jo37Uu/AbzzF3z/z8v5l7RaEO1
+         Gt+KWolyB6BtwGrrbWc9Sa/KktEttWxxFQj2n1q+r/u4AK3zUI3PNXA6Xis1TMr813As
+         yLcMAeJR6XA8Hv2GMMv7iE8Rn31V4/Mks09vQ1xJNHEYZRWLvneI4Xe/guINhyuiXEIo
+         /L5g==
+X-Gm-Message-State: AOAM532GIHFT0HBxSTXiYhQ0g3vOv8ZNxUkIp9D6CVUQXswxyQrKZZbK
+        vDuowGALj9BCQTvsNU+ZrZYHjbxc8CPo2Sk+4Hw=
+X-Google-Smtp-Source: ABdhPJwyIjGEyHiu5PklJExnAu2irMyZy92E3HWunXZk6nTyo4YZk5QUP6tuzmB3qWO18Rd/8O81zM+WhqbVxbAaCsI=
+X-Received: by 2002:a2e:a40f:: with SMTP id p15mr96315ljn.356.1598594068735;
+ Thu, 27 Aug 2020 22:54:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <1598527137-6915-1-git-send-email-u0084500@gmail.com>
+ <1598527137-6915-2-git-send-email-u0084500@gmail.com> <20200827164131.GA86149@roeck-us.net>
+In-Reply-To: <20200827164131.GA86149@roeck-us.net>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Fri, 28 Aug 2020 13:54:16 +0800
+Message-ID: <CADiBU38oTZLR=EPSW=ANGZn8074FyQqb=WS5kyMvu_8_Ua=XaQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] usb typec: mt6360: Rename driver/Kconfig/Makefile
+ from mt6360 to mt636x
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
+        matthias.bgg@gmail.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2020-08-27 at 15:45 -0700, Joe Perches wrote:
-> On Thu, 2020-08-27 at 15:20 -0700, Kees Cook wrote:
-> > On Fri, Aug 28, 2020 at 12:01:34AM +0300, Denis Efremov wrote:
-> > > Just FYI, I've send an addition to the device_attr_show.cocci script[1] to turn
-> > > simple cases of snprintf (e.g. "%i") to sprintf. Looks like many developers would
-> > > like it more than changing snprintf to scnprintf. As for me, I don't like the idea
-> > > of automated altering of the original logic from bounded snprint to unbouded one
-> > > with sprintf.
-> > 
-> > Agreed. This just makes me cringe. If the API design declares that when
-> > a show() callback starts, buf has been allocated with PAGE_SIZE bytes,
-> > then that's how the logic should proceed, and it should be using
-> > scnprintf...
-> > 
-> > show(...) {
-> > 	size_t remaining = PAGE_SIZE;
-> > 
-> > 	...
-> > 	remaining -= scnprintf(buf, remaining, "fmt", var args ...);
-> > 	remaining -= scnprintf(buf, remaining, "fmt", var args ...);
-> > 	remaining -= scnprintf(buf, remaining, "fmt", var args ...);
-> > 
-> > 	return PAGE_SIZE - remaining;
-> > }
-> 
-> It seems likely that coccinelle could do those transform
-> with any of sprintf/snprintf/scnprint too.
-> 
-> Though my bikeshed would use a single function and have
-> that function know the maximum output size
+Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2020=E5=B9=B48=E6=9C=8828=E6=
+=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=8812:41=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On Thu, Aug 27, 2020 at 07:18:56PM +0800, cy_huang wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > 1. Rename file form tcpci_mt6360.c to tcpci_mt636x.c
+> > 2. Rename internal function from mt6360 to mt636x, except the register
+> > definition.
+> > 3. Change Kconfig/Makefile from MT6360 to MT636X.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> >  drivers/usb/typec/tcpm/Kconfig        |   6 +-
+> >  drivers/usb/typec/tcpm/Makefile       |   2 +-
+> >  drivers/usb/typec/tcpm/tcpci_mt6360.c | 212 --------------------------=
+--------
+> >  drivers/usb/typec/tcpm/tcpci_mt636x.c | 212 ++++++++++++++++++++++++++=
+++++++++
+> >  4 files changed, 216 insertions(+), 216 deletions(-)
+> >  delete mode 100644 drivers/usb/typec/tcpm/tcpci_mt6360.c
+> >  create mode 100644 drivers/usb/typec/tcpm/tcpci_mt636x.c
+>
+> Maybe Heikki is ok with this change, but I am not, for the reasons
+> mentioned before. So I won't approve this patch. Note that, either
+> case, it should be merged with the first patch.
 
-Perhaps something like the below with a sample conversion
-that uses single and multiple sysfs_emit uses.
+Yes, I agree with you opinion. use 636x,  the range is too large from
+0 to 9, it may not all be compatible.
+Even though it's also possible that the part number don't have the
+same function.
+So I'm going to remove the rename patch.
+Do I need to add a patch named "revert"? Or just remove it. I'm not
+sure which way is better.
 
-I believe coccinelle can _mostly_ automated this.
-
----
- fs/sysfs/file.c       | 30 ++++++++++++++++++++++++++++++
- include/linux/sysfs.h |  8 ++++++++
- kernel/power/main.c   | 49 ++++++++++++++++++++++++++-----------------------
- 3 files changed, 64 insertions(+), 23 deletions(-)
-
-diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
-index eb6897ab78e7..c0ff3ba8e373 100644
---- a/fs/sysfs/file.c
-+++ b/fs/sysfs/file.c
-@@ -707,3 +707,33 @@ int sysfs_change_owner(struct kobject *kobj, kuid_t kuid, kgid_t kgid)
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(sysfs_change_owner);
-+
-+/**
-+ *	sysfs_emit - scnprintf equivalent, aware of PAGE_SIZE buffer.
-+ *	@buf:	start of PAGE_SIZE buffer.
-+ *	@pos:	current position in buffer
-+ *              (pos - buf) must always be < PAGE_SIZE
-+ *	@fmt:	format
-+ *	@...:	arguments to format
-+ *
-+ *
-+ * Returns number of characters written at pos.
-+ */
-+int sysfs_emit(char *buf, char *pos, const char *fmt, ...)
-+{
-+	int len;
-+	va_list args;
-+
-+	WARN(pos < buf, "pos < buf\n");
-+	WARN(pos - buf >= PAGE_SIZE, "pos >= PAGE_SIZE (%tu > %lu)\n",
-+	     pos - buf, PAGE_SIZE);
-+	if (pos < buf || pos - buf >= PAGE_SIZE)
-+		return 0;
-+
-+	va_start(args, fmt);
-+	len = vscnprintf(pos, PAGE_SIZE - (pos - buf), fmt, args);
-+	va_end(args);
-+
-+	return len;
-+}
-+EXPORT_SYMBOL_GPL(sysfs_emit);
-diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
-index 34e84122f635..5a21d3d30016 100644
---- a/include/linux/sysfs.h
-+++ b/include/linux/sysfs.h
-@@ -329,6 +329,8 @@ int sysfs_groups_change_owner(struct kobject *kobj,
- int sysfs_group_change_owner(struct kobject *kobj,
- 			     const struct attribute_group *groups, kuid_t kuid,
- 			     kgid_t kgid);
-+__printf(3, 4)
-+int sysfs_emit(char *buf, char *pos, const char *fmt, ...);
- 
- #else /* CONFIG_SYSFS */
- 
-@@ -576,6 +578,12 @@ static inline int sysfs_group_change_owner(struct kobject *kobj,
- 	return 0;
- }
- 
-+__printf(3, 4)
-+static inline int sysfs_emit(char *buf, char *pos, const char *fmt, ...)
-+{
-+	return 0;
-+}
-+
- #endif /* CONFIG_SYSFS */
- 
- static inline int __must_check sysfs_create_file(struct kobject *kobj,
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 40f86ec4ab30..f3fb9f255234 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -100,7 +100,7 @@ int pm_async_enabled = 1;
- static ssize_t pm_async_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			     char *buf)
- {
--	return sprintf(buf, "%d\n", pm_async_enabled);
-+	return sysfs_emit(buf, buf, "%d\n", pm_async_enabled);
- }
- 
- static ssize_t pm_async_store(struct kobject *kobj, struct kobj_attribute *attr,
-@@ -124,7 +124,7 @@ power_attr(pm_async);
- static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			      char *buf)
- {
--	char *s = buf;
-+	char *pos = buf;
- 	suspend_state_t i;
- 
- 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++)
-@@ -132,16 +132,16 @@ static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			const char *label = mem_sleep_states[i];
- 
- 			if (mem_sleep_current == i)
--				s += sprintf(s, "[%s] ", label);
-+				pos += sysfs_emit(buf, pos, "[%s] ", label);
- 			else
--				s += sprintf(s, "%s ", label);
-+				pos += sysfs_emit(buf, pos, "%s ", label);
- 		}
- 
- 	/* Convert the last space to a newline if needed. */
--	if (s != buf)
--		*(s-1) = '\n';
-+	if (pos != buf)
-+		*(pos - 1) = '\n';
- 
--	return (s - buf);
-+	return pos - buf;
- }
- 
- static suspend_state_t decode_suspend_state(const char *buf, size_t n)
-@@ -202,7 +202,7 @@ bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
- static ssize_t sync_on_suspend_show(struct kobject *kobj,
- 				   struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%d\n", sync_on_suspend_enabled);
-+	return sysfs_emit(buf, buf, "%d\n", sync_on_suspend_enabled);
- }
- 
- static ssize_t sync_on_suspend_store(struct kobject *kobj,
-@@ -336,7 +336,7 @@ static ssize_t last_failed_dev_show(struct kobject *kobj,
- 	index %= REC_FAILED_NUM;
- 	last_failed_dev = suspend_stats.failed_devs[index];
- 
--	return sprintf(buf, "%s\n", last_failed_dev);
-+	return sysfs_emit(buf, buf, "%s\n", last_failed_dev);
- }
- static struct kobj_attribute last_failed_dev = __ATTR_RO(last_failed_dev);
- 
-@@ -350,7 +350,7 @@ static ssize_t last_failed_errno_show(struct kobject *kobj,
- 	index %= REC_FAILED_NUM;
- 	last_failed_errno = suspend_stats.errno[index];
- 
--	return sprintf(buf, "%d\n", last_failed_errno);
-+	return sysfs_emit(buf, buf, "%d\n", last_failed_errno);
- }
- static struct kobj_attribute last_failed_errno = __ATTR_RO(last_failed_errno);
- 
-@@ -366,7 +366,7 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
- 	step = suspend_stats.failed_steps[index];
- 	last_failed_step = suspend_step_name(step);
- 
--	return sprintf(buf, "%s\n", last_failed_step);
-+	return sysfs_emit(buf, buf, "%s\n", last_failed_step);
- }
- static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
- 
-@@ -474,7 +474,7 @@ bool pm_print_times_enabled;
- static ssize_t pm_print_times_show(struct kobject *kobj,
- 				   struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%d\n", pm_print_times_enabled);
-+	return sysfs_emit(buf, buf, "%d\n", pm_print_times_enabled);
- }
- 
- static ssize_t pm_print_times_store(struct kobject *kobj,
-@@ -504,7 +504,9 @@ static ssize_t pm_wakeup_irq_show(struct kobject *kobj,
- 					struct kobj_attribute *attr,
- 					char *buf)
- {
--	return pm_wakeup_irq ? sprintf(buf, "%u\n", pm_wakeup_irq) : -ENODATA;
-+	if (!pm_wakeup_irq)
-+		return -ENODATA;
-+	return sysfs_emit(buf, buf, "%u\n", pm_wakeup_irq);
- }
- 
- power_attr_ro(pm_wakeup_irq);
-@@ -514,7 +516,7 @@ bool pm_debug_messages_on __read_mostly;
- static ssize_t pm_debug_messages_show(struct kobject *kobj,
- 				      struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%d\n", pm_debug_messages_on);
-+	return sysfs_emit(buf, buf, "%d\n", pm_debug_messages_on);
- }
- 
- static ssize_t pm_debug_messages_store(struct kobject *kobj,
-@@ -704,8 +706,9 @@ static ssize_t wakeup_count_show(struct kobject *kobj,
- {
- 	unsigned int val;
- 
--	return pm_get_wakeup_count(&val, true) ?
--		sprintf(buf, "%u\n", val) : -EINTR;
-+	if (!pm_get_wakeup_count(&val, true))
-+		return -EINTR;
-+	return sysfs_emit(buf, buf, "%u\n", val);
- }
- 
- static ssize_t wakeup_count_store(struct kobject *kobj,
-@@ -747,17 +750,17 @@ static ssize_t autosleep_show(struct kobject *kobj,
- 	suspend_state_t state = pm_autosleep_state();
- 
- 	if (state == PM_SUSPEND_ON)
--		return sprintf(buf, "off\n");
-+		return sysfs_emit(buf, buf, "off\n");
- 
- #ifdef CONFIG_SUSPEND
- 	if (state < PM_SUSPEND_MAX)
--		return sprintf(buf, "%s\n", pm_states[state] ?
--					pm_states[state] : "error");
-+		return sysfs_emit(buf, buf, "%s\n",
-+				  pm_states[state] ?: "error");
- #endif
- #ifdef CONFIG_HIBERNATION
--	return sprintf(buf, "disk\n");
-+	return sysfs_emit(buf, buf, "disk\n");
- #else
--	return sprintf(buf, "error");
-+	return sysfs_emit(buf, buf, "error\n");
- #endif
- }
- 
-@@ -826,7 +829,7 @@ int pm_trace_enabled;
- static ssize_t pm_trace_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			     char *buf)
- {
--	return sprintf(buf, "%d\n", pm_trace_enabled);
-+	return sysfs_emit(buf, buf, "%d\n", pm_trace_enabled);
- }
- 
- static ssize_t
-@@ -863,7 +866,7 @@ power_attr_ro(pm_trace_dev_match);
- static ssize_t pm_freeze_timeout_show(struct kobject *kobj,
- 				      struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%u\n", freeze_timeout_msecs);
-+	return sysfs_emit(buf, buf, "%u\n", freeze_timeout_msecs);
- }
- 
- static ssize_t pm_freeze_timeout_store(struct kobject *kobj,
+It seems you all want the code change to be squashed into the first
+code. And the second one is the DT binding. Right?
 
 
+>
+> Guenter
