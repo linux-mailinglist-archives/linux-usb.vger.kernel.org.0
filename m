@@ -2,175 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3072255B01
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 15:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCD4255B5C
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 15:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729518AbgH1NQh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 09:16:37 -0400
-Received: from mga14.intel.com ([192.55.52.115]:62305 "EHLO mga14.intel.com"
+        id S1729587AbgH1NmJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 09:42:09 -0400
+Received: from mga05.intel.com ([192.55.52.43]:50705 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729480AbgH1NMY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Aug 2020 09:12:24 -0400
-IronPort-SDR: 6Q45NdKqU28mSGvdCT2CKnH+cg3DcmzYkPBfiCA1Xvl4lXFjPj4Uo4iIA9AzEQsq8BZYIKftcc
- WGvyRPXA1mHA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="155918719"
+        id S1729548AbgH1NkM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Aug 2020 09:40:12 -0400
+IronPort-SDR: XBpWw5RKAnVwaco9YxKRcH2ZPU5mYYSruaMgG4dbl4S4o8rGOU2QfXdhzogct6bgkGDFqvNsQb
+ II8HyONpwaqg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="241479069"
 X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
-   d="scan'208";a="155918719"
+   d="scan'208";a="241479069"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 06:12:17 -0700
-IronPort-SDR: QGWTfQvXniq0ONUYCBZxLngfoYqrKUfxIbh8+L/QfvkWd7uCh4kyuMFgZtDvCgJhlzES/P+YL3
- EMOdRigbeT9A==
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 06:36:18 -0700
+IronPort-SDR: Rr08q6WrtP/vyNPM8WWINEBmTc7N4MsNykE3hPre/qvTrTWfgSrLuaC3y059yZIEonGy8xaKM/
+ b8l3MJxqPhRQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
-   d="scan'208";a="403747958"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 28 Aug 2020 06:12:14 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 28 Aug 2020 16:12:14 +0300
-Date:   Fri, 28 Aug 2020 16:12:14 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/14 v2] usb: typec: tcpci: Add support when hidden tx
- registers are inaccessible
-Message-ID: <20200828131214.GH174928@kuha.fi.intel.com>
-References: <20200825042210.300632-1-badhri@google.com>
- <20200825042210.300632-3-badhri@google.com>
+   d="scan'208";a="329954213"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 28 Aug 2020 06:36:15 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kBeY8-00C7um-G2; Fri, 28 Aug 2020 16:36:12 +0300
+Date:   Fri, 28 Aug 2020 16:36:12 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     syzbot <syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com>
+Cc:     bigeasy@linutronix.de, felipe.balbi@linux.intel.com,
+        gregkh@linuxfoundation.org, joe@perches.com, johan@kernel.org,
+        kai.heng.feng@canonical.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rafael.j.wysocki@intel.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: INFO: task hung in usb_bulk_msg
+Message-ID: <20200828133612.GR1891694@smile.fi.intel.com>
+References: <000000000000d3c499057536ce86@google.com>
+ <000000000000c69c7805adef8597@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200825042210.300632-3-badhri@google.com>
+In-Reply-To: <000000000000c69c7805adef8597@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Looks like you forgot v1 somewhere :-)
-
-On Mon, Aug 24, 2020 at 09:21:58PM -0700, Badhri Jagan Sridharan wrote:
-> TCPCI spec forbids direct access of TX_BUF_BYTE_x register.
-> The existing version of tcpci driver assumes that those registers
-> are directly addressible. Add support for tcpci chips which do
-> not support direct access to TX_BUF_BYTE_x registers. TX_BUF_BYTE_x
-> can only be accessed by I2C_WRITE_BYTE_COUNT.
+On Fri, Aug 28, 2020 at 05:52:16AM -0700, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
 > 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 49 +++++++++++++++++++++++++---------
->  drivers/usb/typec/tcpm/tcpci.h |  8 ++++++
->  2 files changed, 44 insertions(+), 13 deletions(-)
+> HEAD commit:    15bc20c6 Merge tag 'tty-5.9-rc3' of git://git.kernel.org/p..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1052a669900000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=978db74cb30aa994
+> dashboard link: https://syzkaller.appspot.com/bug?extid=7a7613e5ba9ae7bd15f9
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101c328e900000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155eff41900000
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index f57d91fd0e09..90d348caa6a8 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -320,8 +320,7 @@ static int tcpci_set_vbus(struct tcpc_dev *tcpc, bool source, bool sink)
->  	return 0;
->  }
->  
-> -static int tcpci_pd_transmit(struct tcpc_dev *tcpc,
-> -			     enum tcpm_transmit_type type,
-> +static int tcpci_pd_transmit(struct tcpc_dev *tcpc, enum tcpm_transmit_type type,
->  			     const struct pd_message *msg)
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com
 
-That does not look like a relevant change.
-
->  {
->  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> @@ -330,23 +329,47 @@ static int tcpci_pd_transmit(struct tcpc_dev *tcpc,
->  	int ret;
->  
->  	cnt = msg ? pd_header_cnt(header) * 4 : 0;
-> -	ret = regmap_write(tcpci->regmap, TCPC_TX_BYTE_CNT, cnt + 2);
-> -	if (ret < 0)
-> -		return ret;
-> +	/**
-> +	 * TCPCI spec forbids direct access of TCPC_TX_DATA.
-> +	 * But, since some of the chipsets offer this capability,
-> +	 * it's fair to support both.
-> +	 */
-> +	if (!tcpci->data->TX_BUF_BYTE_x_hidden) {
-
-Couldn't check if the flag is set first?
-
-        if (tcpci->data->TX_BUF_BYTE_x_hidden) {
-                ...
-
-> +		ret = regmap_write(tcpci->regmap, TCPC_TX_BYTE_CNT, cnt + 2);
-> +		if (ret < 0)
-> +			return ret;
->  
-> -	ret = tcpci_write16(tcpci, TCPC_TX_HDR, header);
-> -	if (ret < 0)
-> -		return ret;
-> +		ret = tcpci_write16(tcpci, TCPC_TX_HDR, header);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		if (cnt > 0) {
-> +			ret = regmap_raw_write(tcpci->regmap, TCPC_TX_DATA, &msg->payload, cnt);
-> +			if (ret < 0)
-> +				return ret;
-> +		}
-> +	} else {
-> +		u8 buf[TCPC_TRANSMIT_BUFFER_MAX_LEN] = {0,};
-> +		u8 pos = 0;
-> +
-> +		/* Payload + header + TCPC_TX_BYTE_CNT */
-> +		buf[pos++] = cnt + 2;
-> +
-> +		if (msg)
-> +			memcpy(&buf[pos], &msg->header, sizeof(msg->header));
-> +
-> +		pos += sizeof(header);
-> +
-> +		if (cnt > 0)
-> +			memcpy(&buf[pos], msg->payload, cnt);
->  
-> -	if (cnt > 0) {
-> -		ret = regmap_raw_write(tcpci->regmap, TCPC_TX_DATA,
-> -				       &msg->payload, cnt);
-> +		pos += cnt;
-> +		ret = regmap_raw_write(tcpci->regmap, TCPC_TX_BYTE_CNT, buf, pos);
->  		if (ret < 0)
->  			return ret;
->  	}
->  
-> -	reg = (PD_RETRY_COUNT << TCPC_TRANSMIT_RETRY_SHIFT) |
-> -		(type << TCPC_TRANSMIT_TYPE_SHIFT);
-> +	reg = (PD_RETRY_COUNT << TCPC_TRANSMIT_RETRY_SHIFT) | (type << TCPC_TRANSMIT_TYPE_SHIFT);
->  	ret = regmap_write(tcpci->regmap, TCPC_TRANSMIT, reg);
->  	if (ret < 0)
->  		return ret;
-> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-> index fd26ca35814c..cf9d8b63adcb 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.h
-> +++ b/drivers/usb/typec/tcpm/tcpci.h
-> @@ -128,9 +128,17 @@
->  #define TCPC_VBUS_VOLTAGE_ALARM_HI_CFG		0x76
->  #define TCPC_VBUS_VOLTAGE_ALARM_LO_CFG		0x78
->  
-> +/* I2C_WRITE_BYTE_COUNT + 1 when TX_BUF_BYTE_x is only accessible I2C_WRITE_BYTE_COUNT */
-> +#define TCPC_TRANSMIT_BUFFER_MAX_LEN		31
-> +
-> +/*
-> + * @TX_BUF_BYTE_x_hidden
-> + *		optional; Set when TX_BUF_BYTE_x can only be accessed through I2C_WRITE_BYTE_COUNT.
-> + */
->  struct tcpci;
->  struct tcpci_data {
->  	struct regmap *regmap;
-> +	unsigned char TX_BUF_BYTE_x_hidden:1;
->  	int (*init)(struct tcpci *tcpci, struct tcpci_data *data);
->  	int (*set_vconn)(struct tcpci *tcpci, struct tcpci_data *data,
->  			 bool enable);
-> -- 
-> 2.28.0.297.g1956fa8f8d-goog
-
-thanks,
+I have had hard times to understand the link between tty subsystem and this
+report. Also I'm wondering how 'Maintainers' column is formed in the dashboard
+view. And how the Cc list of this message in particular.
 
 -- 
-heikki
+With Best Regards,
+Andy Shevchenko
+
+
