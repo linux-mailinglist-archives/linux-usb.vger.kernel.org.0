@@ -2,59 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33675256234
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 22:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02BF2562C8
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 00:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726439AbgH1Uqp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 28 Aug 2020 16:46:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49052 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726010AbgH1Uqo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Aug 2020 16:46:44 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208267] usbip broken with latest kernels?
-Date:   Fri, 28 Aug 2020 20:46:44 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: spam@jwdt.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-208267-208809-P91OEUqanR@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208267-208809@https.bugzilla.kernel.org/>
-References: <bug-208267-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726524AbgH1WFZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 18:05:25 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:34300 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726379AbgH1WFY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 18:05:24 -0400
+Received: by mail-il1-f195.google.com with SMTP id t4so1961452iln.1;
+        Fri, 28 Aug 2020 15:05:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hEjjUFT83iNRg02ncmXB05CfgHtGJIWhaDk9gjoB/yw=;
+        b=OOilt4j1+KTw65U58gKzSPhkY50KfIrngoOMpxwsJSkNrFwRpnPucG0hfffWC3Qv7n
+         HlFgD5GFWhNG+39UYSXnXkcV4m0oUUHsCmcirnDwS9ZpmCZ9N+uMBVLDYym0N4QTme3l
+         GU69dZ/RaZWNpbdXN1/60dN/UB0wBYl20CanSa3Ow4Zm9+FE+eDsef72X6qOmdPg+OfD
+         PwlnZjRZJqkguWzZIj6AvCBfhs02WBVKwJgJ6LhNcRSt0VdDxf7HOCzuH1pea4oBzxxU
+         KmH/E+jc/yWaDGDqb6HMa1NZ1dhtdWdy1bUVv6EaPRX/6hFlhK+Q45+mgKzM8z7wFgBK
+         Uo4w==
+X-Gm-Message-State: AOAM533pnH4AdUJfiAmswB8MYGx0f1lSWzRSfNJnPgEqqiyeSYu5WJeY
+        4L1sxDmsXsQGpHXE9fIewTry5UC2kebT
+X-Google-Smtp-Source: ABdhPJxm/ppsdTb0g25vKmMiz/juduCbS2JSibG+yBa7cfosxhP0iu5fPruCrPy6GFCcFSyoZ/Y5fQ==
+X-Received: by 2002:a05:6e02:13c6:: with SMTP id v6mr804659ilj.87.1598652323060;
+        Fri, 28 Aug 2020 15:05:23 -0700 (PDT)
+Received: from xps15 ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id q23sm238341ior.47.2020.08.28.15.05.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Aug 2020 15:05:22 -0700 (PDT)
+Received: (nullmailer pid 3486516 invoked by uid 1000);
+        Fri, 28 Aug 2020 22:05:20 -0000
+Date:   Fri, 28 Aug 2020 16:05:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     gregkh@linuxfoundation.org, matthias.bgg@gmail.com,
+        linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        cy_huang@richtek.com, gene_chen@richtek.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] usb typec: mt6360: Add MT6360 Type-C DT binding
+ documentation
+Message-ID: <20200828220520.GA3482472@bogus>
+References: <1598610636-4939-1-git-send-email-u0084500@gmail.com>
+ <1598610636-4939-2-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1598610636-4939-2-git-send-email-u0084500@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208267
+On Fri, Aug 28, 2020 at 06:30:36PM +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add a devicetree binding documentation for the MT6360 Type-C driver.
+> 
+> usb typec: mt6360: Rename DT binding doument from mt6360 to mt636x
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+>  .../bindings/usb/mediatek,mt6360-tcpc.yaml         | 73 ++++++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> new file mode 100644
+> index 00000000..9e8ab0d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/mediatek,mt6360-tcpc.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Mediatek MT6360 Type-C Port Switch and Power Delivery controller DT bindings
+> +
+> +maintainers:
+> +  - ChiYuan Huang <cy_huang@richtek.com>
+> +
+> +description: |
+> +  Mediatek MT6360 is a multi-functional device. It integrates charger, ADC, flash, RGB indicators,
+> +  regulators (BUCKs/LDOs), and TypeC Port Switch with Power Delivery controller.
+> +  This document only describes MT6360 Type-C Port Switch and Power Delivery controller.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt6360-tcpc
+> +
+> +  interrupts-extended:
 
-David Rohr (spam@jwdt.org) changed:
+Use 'interrupts'. The tooling will automatically support 
+'interrupts-extended'.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |spam@jwdt.org
+> +    maxItems: 1
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: PD_IRQB
+> +
+> +patternProperties:
+> +  "connector":
+> +    type: object
+> +    $ref: ../connector/usb-connector.yaml#
+> +    description:
+> +      Properties for usb c connector.
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - interrupts-extended
+> +  - interrupt-names
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/usb/pd.h>
+> +    i2c0 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        mt6360@34 {
+> +            compatible = "mediatek,mt6360";
+> +            reg = <0x34>;
+> +
+> +            tcpc {
+> +                compatible = "mediatek,mt6360-tcpc";
+> +                interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
+> +                interrupt-names = "PD_IRQB";
+> +
+> +                connector {
 
---- Comment #11 from David Rohr (spam@jwdt.org) ---
-I just compiled 5.8.5 with your patch and usbip works correctly, thx!
+Where's the data connections? The assumption of the binding is the USB 
+(2 and 3) connections come from the parent if there's no graph to the 
+USB controller(s).
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+> +                        compatible = "usb-c-connector";
+> +                        label = "USB-C";
+> +                        data-role = "dual";
+> +                        power-role = "dual";
+> +                        try-power-role = "sink";
+> +                        source-pdos = <PDO_FIXED(5000, 1000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
+> +                        sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
+> +                        op-sink-microwatt = <10000000>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
+> -- 
+> 2.7.4
+> 
