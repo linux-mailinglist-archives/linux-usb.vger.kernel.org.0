@@ -2,102 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F97625564D
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 10:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F534255724
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 11:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728556AbgH1IW1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 04:22:27 -0400
-Received: from smtprelay0059.hostedemail.com ([216.40.44.59]:54576 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727971AbgH1IW1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 04:22:27 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 358A4180154A4;
-        Fri, 28 Aug 2020 08:22:26 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:2911:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:3872:3874:4250:4321:4425:5007:8531:10004:10400:10848:11232:11658:11914:12295:12296:12297:12740:12760:12895:13069:13311:13357:13439:14659:14721:21080:21324:21433:21627:21990:30054:30056:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: head10_2f0dd8327074
-X-Filterd-Recvd-Size: 3029
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf13.hostedemail.com (Postfix) with ESMTPA;
-        Fri, 28 Aug 2020 08:22:24 +0000 (UTC)
-Message-ID: <a98b0a411abdaf6b58c73322511087f57353fb22.camel@perches.com>
-Subject: Re: [Cocci] [PATCH] usb: atm: don't use snprintf() for sysfs attrs
-From:   Joe Perches <joe@perches.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Denis Efremov <efremov@linux.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cocci <cocci@systeme.lip6.fr>,
-        Alex Dewar <alex.dewar90@gmail.com>
-Date:   Fri, 28 Aug 2020 01:22:23 -0700
-In-Reply-To: <526af204ddf95f94012c6132d12693852bfe7442.camel@perches.com>
-References: <20200827071537.GA168593@kroah.com>
-         <20200827131819.7rcl2f5js3hkoqj2@lenovo-laptop>
-         <def24e9e-018c-9712-0d07-d4cbc84f07d9@rasmusvillemoes.dk>
-         <20200827144846.yauuttjaqtxaldxg@lenovo-laptop>
-         <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
-         <alpine.DEB.2.22.394.2008272141220.2482@hadrien>
-         <5853c58e-7d26-2cf9-6cbf-698ecd93cbf9@linux.com>
-         <202008271517.ECC1F1F8F@keescook>
-         <5ebe5c2737b59d04f1b8a46008cd3159c638f9d0.camel@perches.com>
-         <d99c613aa70617f440c51d9413372b858a4ae826.camel@perches.com>
-         <202008280056.6442BCC@keescook>
-         <526af204ddf95f94012c6132d12693852bfe7442.camel@perches.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.4-0ubuntu1 
+        id S1728785AbgH1JIx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 05:08:53 -0400
+Received: from mga07.intel.com ([134.134.136.100]:32332 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728556AbgH1JIw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Aug 2020 05:08:52 -0400
+IronPort-SDR: L8a78WkmjigQ90vn0e3dLlOoEZMGcfIDSxjEaEpGFTfkIh/CcyRC7hqC9Nnj9T0ScASL8K4diR
+ A5sVNt9Zi8MQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="220882682"
+X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
+   d="scan'208";a="220882682"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 02:08:38 -0700
+IronPort-SDR: A5E330doqR0ANFgd8uqrSRaKrCDQfRcDXTne+VNDyJh2zNQDw0hmFE2L/z7xl+bH71iSO0N1T2
+ lZkNXOb/uPcA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
+   d="scan'208";a="403696200"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 28 Aug 2020 02:08:33 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 28 Aug 2020 12:08:32 +0300
+Date:   Fri, 28 Aug 2020 12:08:32 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rajmohan Mani <rajmohan.mani@intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-usb@vger.kernel.org, pmalani@chromium.org,
+        bleung@chromium.org
+Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
+ (IOM) driver
+Message-ID: <20200828090832.GB174928@kuha.fi.intel.com>
+References: <20200822040508.23510-1-rajmohan.mani@intel.com>
+ <20200822040508.23510-2-rajmohan.mani@intel.com>
+ <20200828074359.GC942935@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200828074359.GC942935@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2020-08-28 at 01:10 -0700, Joe Perches wrote:
-> On Fri, 2020-08-28 at 00:58 -0700, Kees Cook wrote:
-> > On Thu, Aug 27, 2020 at 09:12:06PM -0700, Joe Perches wrote:
-> > > Perhaps something like the below with a sample conversion
-> > > that uses single and multiple sysfs_emit uses.
-> > 
-> > On quick review, I like it. :)
-> > 
-> > > [...]
-> > > +int sysfs_emit(char *buf, char *pos, const char *fmt, ...)
-> > > +{
-> > > +	int len;
-> > > +	va_list args;
-> > > +
-> > > +	WARN(pos < buf, "pos < buf\n");
-> > > +	WARN(pos - buf >= PAGE_SIZE, "pos >= PAGE_SIZE (%tu > %lu)\n",
-> > > +	     pos - buf, PAGE_SIZE);
-> > > +	if (pos < buf || pos - buf >= PAGE_SIZE)
-> > > +		return 0;
-> > 
-> > This can be:
-> > 
-> > 	if (WARN(pos < buf, "pos < buf\n") ||
-> > 	    WARN(pos - buf >= PAGE_SIZE, "pos >= PAGE_SIZE (%tu > %lu)\n",
-> > 		 pos - buf, PAGE_SIZE))
-> > 		return 0;
+Hi Greg,
+
+On Fri, Aug 28, 2020 at 09:43:59AM +0200, Greg Kroah-Hartman wrote:
+> I still find this crazy that a whole separate driver is created just to
+> read a single 32bit value.
 > 
-> I have some vague recollection that WARN could be compiled
-> away to nothing somehow.  True or false?
-> 
-> If false, sure, of course, it'd be faster too.
+> Why not put this logic in the driver that wants to read that value?
+> That would be much simpler, smaller, and more obvious.
 
-I can't find an instance where WARN doesn't return the
-condition.
+That would mean that we start maintaining something like DMI quirk
+table in those drivers. Unfortunately the IOM device is not available
+on every platform. Also, even on platforms that do have it, there is
+no guarantee that the device is always going to be mapped to the same
+address.
 
-And likely even faster would be to just show "invalid pos"
-instead of specific messages.
+Nevertheless, I was originally hoping that we could hide the handling
+of IOM somehow in ACPI without the need for an actual device object,
+but it now turns out that the other features of the IOM chip have
+created interest. At least our i915 guys probable have some use for it
+(I don't know exactly what they are planning to use it for).
 
-	if (WARN(pos < buf || (pos - buf) >= PAGE_SIZE,
-		 "Invalid pos\n");
-		return 0;
+So the fact that we may later need the device for something else, on
+top of the clumsiness and most importantly risks involved with using
+ACPI to take care of extra tasks (ASL tends to have bugs - bugs that
+may never ever get fixed), I think the IOM device object, and the
+driver that binds to it, do have a valid reason for existing.
 
-or maybe use WARN_ONCE or no WARN at all.
 
+thanks,
+
+-- 
+heikki
