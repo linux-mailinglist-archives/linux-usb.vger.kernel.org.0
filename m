@@ -2,231 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 641B6255582
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 09:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C7D255597
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 09:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728447AbgH1Hns (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 03:43:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40224 "EHLO mail.kernel.org"
+        id S1728447AbgH1HsP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 03:48:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42250 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726566AbgH1Hnr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Aug 2020 03:43:47 -0400
+        id S1728094AbgH1HsO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Aug 2020 03:48:14 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EC24120776;
-        Fri, 28 Aug 2020 07:43:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AC9BC2078A;
+        Fri, 28 Aug 2020 07:48:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598600626;
-        bh=WexA/mvpkGUeqg62kxLVzIKks8M2SdxjyP7pEBESRxQ=;
+        s=default; t=1598600894;
+        bh=wRcVqBDYNzDuiSshPZs2cXM/gGy3dQf2olqwI/4YQWk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TYp4tXV89t7nHhHpv3B7rjSsgs/0xCFtEd+NcafOBU8wKFX9sfe2yzyfvtnRs/1cH
-         9EZSDfTVBO0ntxePdJ9qShHyW4HpL2g98DnlFtcANTyMNGRlFLeH5CToyNWqm+5LST
-         Ey6cpRV89k7toL1NyiLEb7qaWV6Y+f/CLMfjKF1U=
-Date:   Fri, 28 Aug 2020 09:43:59 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rajmohan Mani <rajmohan.mani@intel.com>
-Cc:     Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, pmalani@chromium.org,
-        bleung@chromium.org
-Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
- (IOM) driver
-Message-ID: <20200828074359.GC942935@kroah.com>
-References: <20200822040508.23510-1-rajmohan.mani@intel.com>
- <20200822040508.23510-2-rajmohan.mani@intel.com>
+        b=KOvtTNpGyZ/bA7W7C4eRyBc3JDsu+jZEKA5Xp+3MiQMz8UOTMXiBjv5NQaTVfbPEz
+         nYavUkuVh44jcDUJMJI/pxbf72uUckc/eGYsFhr+IDezg6t1gA1qudlKiINIoUCX9N
+         Q49VPPAN2DQ3+WQ/7K289wo1vR1J7BH7CgIQ9pi0=
+Date:   Fri, 28 Aug 2020 09:48:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     yanfei.xu@windriver.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: integrate macro definitions into include/linux/usb.h
+Message-ID: <20200828074826.GA962117@kroah.com>
+References: <20200825154421.5463-1-yanfei.xu@windriver.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200822040508.23510-2-rajmohan.mani@intel.com>
+In-Reply-To: <20200825154421.5463-1-yanfei.xu@windriver.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 21, 2020 at 09:05:06PM -0700, Rajmohan Mani wrote:
-> Input Output Manager (IOM) is part of the Tiger Lake SoC that
-> configures the Type-C Sub System (TCSS). IOM is a micro controller
-> that handles Type-C topology, configuration and PM functions of
-> various Type-C devices connected on the platform.
+On Tue, Aug 25, 2020 at 11:44:21PM +0800, yanfei.xu@windriver.com wrote:
+> From: Yanfei Xu <yanfei.xu@windriver.com>
 > 
-> This driver helps read relevant information such as Type-C port
-> status (whether a device is connected to a Type-C port or not) and
-> the activity type on the Type-C ports (such as USB, Display Port,
-> Thunderbolt), for consumption by other drivers.
-> 
-> Currently intel_iom_port_status() API is exported by this driver,
-> that has information about the Type-C port status and port activity
-> type.
-> 
-> Signed-off-by: Rajmohan Mani <rajmohan.mani@intel.com>
-> ---
->  drivers/platform/x86/Kconfig                | 16 ++++
->  drivers/platform/x86/Makefile               |  1 +
->  drivers/platform/x86/intel_iom.c            | 95 +++++++++++++++++++++
->  include/linux/platform_data/x86/intel_iom.h | 49 +++++++++++
->  4 files changed, 161 insertions(+)
->  create mode 100644 drivers/platform/x86/intel_iom.c
->  create mode 100644 include/linux/platform_data/x86/intel_iom.h
-> 
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index 40219bba6801..f09b4b525ea5 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -837,6 +837,22 @@ config INTEL_INT0002_VGPIO
->  	  To compile this driver as a module, choose M here: the module will
->  	  be called intel_int0002_vgpio.
->  
-> +config INTEL_IOM
-> +	tristate "Intel Input Output Manager (IOM) driver"
-> +	depends on ACPI && PCI
-> +	help
-> +	  This driver helps read relevant information such as Type-C port
-> +	  status (whether a device is connected to a Type-C port or not)
-> +	  and the activity type on the Type-C ports (such as USB, Display
-> +	  Port, Thunderbolt), for consumption by other drivers.
-> +
-> +	  Currently intel_iom_port_status() API is exported by this driver,
-> +	  that has information about the Type-C port status and port activity
-> +	  type.
-> +
-> +	  To compile this driver as a module, choose M here: the module will
-> +	  be called intel_iom.
-> +
->  config INTEL_MENLOW
->  	tristate "Thermal Management driver for Intel menlow platform"
->  	depends on ACPI_THERMAL
-> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-> index 5f823f7eff45..b44f706074c3 100644
-> --- a/drivers/platform/x86/Makefile
-> +++ b/drivers/platform/x86/Makefile
-> @@ -77,6 +77,7 @@ intel_cht_int33fe-objs			:= intel_cht_int33fe_common.o \
->  					   intel_cht_int33fe_microb.o
->  obj-$(CONFIG_INTEL_HID_EVENT)		+= intel-hid.o
->  obj-$(CONFIG_INTEL_INT0002_VGPIO)	+= intel_int0002_vgpio.o
-> +obj-$(CONFIG_INTEL_IOM)			+= intel_iom.o
->  obj-$(CONFIG_INTEL_MENLOW)		+= intel_menlow.o
->  obj-$(CONFIG_INTEL_OAKTRAIL)		+= intel_oaktrail.o
->  obj-$(CONFIG_INTEL_VBTN)		+= intel-vbtn.o
-> diff --git a/drivers/platform/x86/intel_iom.c b/drivers/platform/x86/intel_iom.c
-> new file mode 100644
-> index 000000000000..cda7716410c6
-> --- /dev/null
-> +++ b/drivers/platform/x86/intel_iom.c
-> @@ -0,0 +1,95 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Intel Core SoC Input Output Manager (IOM) driver.
-> + *
-> + * This driver provides access to the Input Output Manager (IOM) (that
-> + * is part of Tiger Lake SoC) registers that can be used to know about
-> + * Type-C Sub System related information (such as Type-C port status,
-> + * activity type on Type-C ports).
-> + *
-> + * Copyright (C) 2020, Intel Corporation
-> + * Author: Rajmohan Mani <rajmohan.mani@intel.com>
-> + */
-> +
-> +#include <linux/io.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_data/x86/intel_iom.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +#define IOM_PORT_STATUS_OFFSET				0x560
-> +
-> +struct intel_iom {
-> +	struct device *dev;
-> +	void __iomem *regbar;
-> +};
-> +
-> +static struct intel_iom *iom;
-> +
-> +/**
-> + * intel_iom_port_status() - Get status bits for the Type-C port
-> + * @port: Type-C port number
-> + * @status: pointer to receive the status bits
-> + *
-> + * Returns 0 on success, error otherwise.
-> + */
-> +int intel_iom_port_status(u8 port, u32 *status)
-> +{
-> +	void __iomem *reg;
-> +
-> +	if (!iom || !iom->dev || !iom->regbar)
-> +		return -ENODEV;
-> +
-> +	if (!status || (port > IOM_MAX_PORTS - 1))
-> +		return -EINVAL;
-> +
-> +	reg = iom->regbar + IOM_PORT_STATUS_OFFSET + IOM_REG_LEN * port;
-> +
-> +	*status = ioread32(reg);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(intel_iom_port_status);
-> +
-> +static int intel_iom_probe(struct platform_device *pdev)
-> +{
-> +	void __iomem *addr;
-> +
-> +	/* only one IOM device is supported */
-> +	if (iom)
-> +		return -EBUSY;
-> +
-> +	iom = devm_kzalloc(&pdev->dev, sizeof(*iom), GFP_KERNEL);
-> +	if (!iom)
-> +		return -ENOMEM;
-> +
-> +	addr = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(addr))
-> +		return PTR_ERR(addr);
-> +
-> +	iom->regbar = addr;
-> +	iom->dev = &pdev->dev;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct acpi_device_id intel_iom_acpi_ids[] = {
-> +	{ "INTC1072" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, intel_iom_acpi_ids);
-> +
-> +static struct platform_driver intel_iom_driver = {
-> +	.probe = intel_iom_probe,
-> +	.driver = {
-> +		.name = "intel_iom",
-> +		.acpi_match_table = intel_iom_acpi_ids,
-> +	},
-> +};
-> +
-> +module_platform_driver_probe(intel_iom_driver, intel_iom_probe);
-> +
-> +MODULE_AUTHOR("Rajmohan Mani <rajmohan.mani@intel.com>");
-> +MODULE_DESCRIPTION("Intel IOM driver");
-> +MODULE_LICENSE("GPL v2");
+> include/linux/usb.h also contains 'Hard limit' and 'Arbitrary limit'
+> macro definitions in it, hence we can integrate these from config.c
+> into include/linux/usb.h
 
-I still find this crazy that a whole separate driver is created just to
-read a single 32bit value.
+Why?  No one uses these values outside of this .c file, so why put a
+value in a global .h file?
 
-Why not put this logic in the driver that wants to read that value?
-That would be much simpler, smaller, and more obvious.
+Who else wants to use these values?  If something else needs it, then
+sure, it could be moved, but until then, there's nothing wrong with the
+existing code as-is from what I can tell.
 
 thanks,
 
 greg k-h
-
