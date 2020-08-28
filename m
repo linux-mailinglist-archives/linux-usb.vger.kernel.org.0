@@ -2,139 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A8C255A6C
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 14:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15AE255A9E
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 14:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729238AbgH1MnH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 08:43:07 -0400
-Received: from mga07.intel.com ([134.134.136.100]:45113 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729397AbgH1Mlh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Aug 2020 08:41:37 -0400
-IronPort-SDR: QiB4Y8tD1CAqgY4NNgRcKgNEM6xTZz26PGDYm9u6NeQDEQySA/9B+op6odQ1sdn5hmyXPlNVju
- 7uVfW3K5OmZA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="220903373"
-X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
-   d="scan'208";a="220903373"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 05:41:13 -0700
-IronPort-SDR: Lh4nZm0NATi6V6tmU/nCkF8exbKmO3axbRKu+LBEf4uSForceXf9BcxCxuNf4Y4RTxPEiuoHRY
- bkCSYMPG/aBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
-   d="scan'208";a="403741661"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 28 Aug 2020 05:41:10 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 28 Aug 2020 15:41:10 +0300
-Date:   Fri, 28 Aug 2020 15:41:10 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Zwane Mwaikambo <zwanem@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Zwane Mwaikambo <zwane@yosper.io>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] usb/typec: fix array overruns in ucsi.c
- partner_altmode[]
-Message-ID: <20200828124110.GG174928@kuha.fi.intel.com>
-References: <alpine.DEB.2.21.2008271035320.30454@montezuma.home>
- <0013fe6c-c0a2-1759-c769-cda025e5eb38@infradead.org>
- <alpine.DEB.2.21.2008271058220.37762@montezuma.home>
- <alpine.DEB.2.21.2008271131570.37762@montezuma.home>
- <alpine.DEB.2.21.2008271135000.37762@montezuma.home>
+        id S1729486AbgH1Mw0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 08:52:26 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:34901 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729397AbgH1MwR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 08:52:17 -0400
+Received: by mail-il1-f197.google.com with SMTP id g6so709825iln.2
+        for <linux-usb@vger.kernel.org>; Fri, 28 Aug 2020 05:52:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=aH/xVZKT59e9fqybNQgxAsPp9qZltpZTome6AJmbByo=;
+        b=POJyU2cfcXdlpYM2Z8dOvcCIM/AODw13/9Evet1ReiDP5O3+vZwGy30wy8soLd1xly
+         OWrg4U25tb+3Q+dHzmvo9qQRWSp1DaF2R2txOa0Q8qBY3XZEPWJGT9w/+OkwTn45ktME
+         2L8zkFMlK4IDD9PILAIKtbsSBxryc544Jq8K9IRXcWKYVKqa1aJIsMnU6FcKJDbHj7cd
+         gzGJkNaHNZpInt4GXrk9QK3LGEkuJwM3zp0d5si3wrBAoehbOJsC2MUXgGaNoYwMzEDY
+         EYvZ/Nhg6zguQdKWFRJwbll418uNPZVa3kNBFLDaJ90utf4eIoznUqccgd1CT1GuoXfs
+         ny/g==
+X-Gm-Message-State: AOAM531l14EPley2xa2ioz+NU8/0pu6p0FEqRdFDUWg7xY2bhKaoWlry
+        r+eB6oWtq/XaEaZDS7QK+98rdo+/VzyMXvawS1XpUdBbuV6I
+X-Google-Smtp-Source: ABdhPJxyGLO2wQws8Ithxes0F1VVHW/onOapxqkMjNLFd9dD9PSLcEQfazHCtiYn4tK2qtwCDYS9GxpB9BX2ugTZRrGCVvOng0U+
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2008271135000.37762@montezuma.home>
+X-Received: by 2002:a05:6638:24d1:: with SMTP id y17mr1043497jat.42.1598619136726;
+ Fri, 28 Aug 2020 05:52:16 -0700 (PDT)
+Date:   Fri, 28 Aug 2020 05:52:16 -0700
+In-Reply-To: <000000000000d3c499057536ce86@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c69c7805adef8597@google.com>
+Subject: Re: INFO: task hung in usb_bulk_msg
+From:   syzbot <syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com>
+To:     andriy.shevchenko@linux.intel.com, bigeasy@linutronix.de,
+        felipe.balbi@linux.intel.com, gregkh@linuxfoundation.org,
+        joe@perches.com, johan@kernel.org, kai.heng.feng@canonical.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael.j.wysocki@intel.com,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 11:35:53AM -0700, Zwane Mwaikambo wrote:
-> This fixes the second array overrun occurrence (similar failure mode to 
-> the first), this time in ucsi_unregister_altmodes.
-> 
-> [ 4373.153246] BUG: kernel NULL pointer dereference, address: 
-> 00000000000002f2
-> [ 4373.153267] #PF: supervisor read access in kernel mode
-> [ 4373.153271] #PF: error_code(0x0000) - not-present page
-> [ 4373.153275] PGD 0 P4D 0 
-> [ 4373.153284] Oops: 0000 [#2] PREEMPT SMP NOPTI
-> [ 4373.153292] CPU: 0 PID: 13242 Comm: kworker/0:0 Tainted: G      D           
-> 5.8.0-rc6+ #1
-> [ 4373.153296] Hardware name: LENOVO 20RD002VUS/20RD002VUS, BIOS R16ET25W 
-> (1.11 ) 04/21/2020
-> [ 4373.153308] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-> [ 4373.153320] RIP: 0010:ucsi_unregister_altmodes+0x5f/0xa0 [typec_ucsi]
-> [ 4373.153326] Code: 54 48 8b 3b 41 83 c4 01 e8 9e f9 0c 00 49 63 c4 48 c7 
-> 03 00 00 00 00 49 8d 5c c5 00 48 8b 3b 48 85 ff 74 31 41 80 fe 01 75 d7 
-> <0f> b7 87 f0 02 00 00 66 3d 01 ff 74 0f 66 3d 55 09 75 c4 83 bf f8
-> [ 4373.153332] RSP: 0018:ffffb2ef036b3dc8 EFLAGS: 00010246
-> [ 4373.153338] RAX: 000000000000001e RBX: ffff94268b006a60 RCX: 
-> 0000000080800067
-> [ 4373.153342] RDX: 0000000080800068 RSI: 0000000000000001 RDI: 
-> 0000000000000002
-> [ 4373.153347] RBP: ffffb2ef036b3de8 R08: 0000000000000000 R09: 
-> ffffffff8dc65400
-> [ 4373.153351] R10: ffff9426678d7200 R11: 0000000000000001 R12: 
-> 000000000000001e
-> [ 4373.153355] R13: ffff94268b006970 R14: 0000000000000001 R15: 
-> ffff94268b006800
-> [ 4373.153361] FS:  0000000000000000(0000) GS:ffff942691400000(0000) 
-> knlGS:0000000000000000
-> [ 4373.153366] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 4373.153371] CR2: 00000000000002f2 CR3: 00000004445a6005 CR4: 
-> 00000000003606f0
-> [ 4373.153375] Call Trace:
-> [ 4373.153389]  ucsi_unregister_partner.part.0+0x17/0x30 [typec_ucsi]
-> [ 4373.153400]  ucsi_handle_connector_change+0x25c/0x320 [typec_ucsi]
-> [ 4373.153418]  process_one_work+0x1df/0x3d0
-> [ 4373.153428]  worker_thread+0x4a/0x3d0
-> [ 4373.153436]  ? process_one_work+0x3d0/0x3d0
-> [ 4373.153444]  kthread+0x127/0x170
-> [ 4373.153451]  ? kthread_park+0x90/0x90
-> [ 4373.153461]  ret_from_fork+0x1f/0x30
-> [ 4373.153661] CR2: 00000000000002f2
-> 
-> Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
+syzbot has found a reproducer for the following issue on:
 
-This is also fixing something.
+HEAD commit:    15bc20c6 Merge tag 'tty-5.9-rc3' of git://git.kernel.org/p..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1052a669900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=978db74cb30aa994
+dashboard link: https://syzkaller.appspot.com/bug?extid=7a7613e5ba9ae7bd15f9
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101c328e900000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155eff41900000
 
-        Fixes: ad74b8649bea ("usb: typec: ucsi: Preliminary support for alternate modes")
-        Cc: stable@vger.kernel.org
-        Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com
 
-> ---
-> 
-> This v4 addresses patch formatting and submission issues with the 
-> previous versions.
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index d0c63afaf..79061705e 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -479,7 +480,10 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
->  		return;
->  	}
->  
-> -	while (adev[i]) {
-> +	for (i = 0; i < UCSI_MAX_ALTMODES; i++) {
-> +		if (!adev[i])
-> +			break;
-> +
->  		if (recipient == UCSI_RECIPIENT_SOP &&
->  		    (adev[i]->svid == USB_TYPEC_DP_SID ||
->  			(adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
-> @@ -488,7 +492,7 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
->  			ucsi_displayport_remove_partner((void *)pdev);
->  		}
->  		typec_unregister_altmode(adev[i]);
-> -		adev[i++] = NULL;
-> +		adev[i] = NULL;
->  	}
->  }
->  
+INFO: task syz-executor790:9958 blocked for more than 143 seconds.
+      Not tainted 5.9.0-rc2-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor790 state:D stack:28240 pid: 9958 ppid:  6854 flags:0x00004004
+Call Trace:
+ context_switch kernel/sched/core.c:3778 [inline]
+ __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
+ schedule+0xd0/0x2a0 kernel/sched/core.c:4602
+ schedule_timeout+0x1d8/0x250 kernel/time/timer.c:1855
+ do_wait_for_common kernel/sched/completion.c:85 [inline]
+ __wait_for_common kernel/sched/completion.c:106 [inline]
+ wait_for_common kernel/sched/completion.c:117 [inline]
+ wait_for_completion_timeout+0x15e/0x270 kernel/sched/completion.c:157
+ usb_start_wait_urb+0x144/0x2b0 drivers/usb/core/message.c:63
+ usb_bulk_msg+0x226/0x550 drivers/usb/core/message.c:254
+ do_proc_bulk+0x39b/0x710 drivers/usb/core/devio.c:1231
+ proc_bulk drivers/usb/core/devio.c:1268 [inline]
+ usbdev_do_ioctl drivers/usb/core/devio.c:2542 [inline]
+ usbdev_ioctl+0x586/0x3360 drivers/usb/core/devio.c:2708
+ vfs_ioctl fs/ioctl.c:48 [inline]
+ __do_sys_ioctl fs/ioctl.c:753 [inline]
+ __se_sys_ioctl fs/ioctl.c:739 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:739
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x44d089
+Code: Bad RIP value.
+RSP: 002b:00007f70887dadb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000006dec48 RCX: 000000000044d089
+RDX: 0000000020000000 RSI: 00000000c0185502 RDI: 0000000000000003
+RBP: 00000000006dec40 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006dec4c
+R13: 00007ffebdfc131f R14: 00007f70887db9c0 R15: 0000000000000064
 
--- 
-heikki
+Showing all locks held in the system:
+1 lock held by ksoftirqd/1/16:
+ #0: ffff8880ae735e18 (&rq->lock){-.-.}-{2:2}, at: rq_lock kernel/sched/sched.h:1292 [inline]
+ #0: ffff8880ae735e18 (&rq->lock){-.-.}-{2:2}, at: __schedule+0x232/0x21e0 kernel/sched/core.c:4445
+1 lock held by khungtaskd/1169:
+ #0: ffffffff89bd6900 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:5825
+1 lock held by in:imklog/6531:
+ #0: ffff8880a83bab70 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:930
+3 locks held by kworker/u4:0/6882:
+1 lock held by syz-executor790/24330:
+ #0: ffff8880ae635e18 (&rq->lock){-.-.}-{2:2}, at: rq_lock kernel/sched/sched.h:1292 [inline]
+ #0: ffff8880ae635e18 (&rq->lock){-.-.}-{2:2}, at: __schedule+0x232/0x21e0 kernel/sched/core.c:4445
+
+=============================================
+
+NMI backtrace for cpu 0
+CPU: 0 PID: 1169 Comm: khungtaskd Not tainted 5.9.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x18f/0x20d lib/dump_stack.c:118
+ nmi_cpu_backtrace.cold+0x70/0xb1 lib/nmi_backtrace.c:101
+ nmi_trigger_cpumask_backtrace+0x1b3/0x223 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:209 [inline]
+ watchdog+0xd7d/0x1000 kernel/hung_task.c:295
+ kthread+0x3b5/0x4a0 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 6851 Comm: syz-executor790 Not tainted 5.9.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:get_timespec64+0x1b3/0x220 kernel/time/time.c:801
+Code: 89 73 08 e8 8f f6 10 00 48 b8 00 00 00 00 00 fc ff df 49 c7 04 04 00 00 00 00 48 8b 44 24 58 65 48 2b 04 25 28 00 00 00 75 45 <48> 83 c4 60 44 89 e8 5b 5d 41 5c 41 5d 41 5e c3 e8 58 f6 10 00 45
+RSP: 0018:ffffc90001667e20 EFLAGS: 00000246
+RAX: 0000000000000000 RBX: ffffc90001667ed0 RCX: ffffffff81634853
+RDX: ffff8880a77381c0 RSI: ffffffff81634881 RDI: ffffc90001667ed8
+RBP: 0000000000000000 R08: 00000000000f4240 R09: ffffc90001667e4f
+R10: 0000000000000000 R11: 0000000000000000 R12: 1ffff920002ccfc4
+R13: 0000000000000000 R14: 00000000000f4240 R15: 0000000000000000
+FS:  000000000153e880(0000) GS:ffff8880ae700000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000004c6238 CR3: 00000000a93cd000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ __do_sys_nanosleep kernel/time/hrtimer.c:1962 [inline]
+ __se_sys_nanosleep kernel/time/hrtimer.c:1957 [inline]
+ __x64_sys_nanosleep+0xaa/0x260 kernel/time/hrtimer.c:1957
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x44b800
+Code: c0 5b 5d c3 66 0f 1f 44 00 00 8b 04 24 48 83 c4 18 5b 5d c3 66 0f 1f 44 00 00 83 3d b1 a0 29 00 00 75 14 b8 23 00 00 00 0f 05 <48> 3d 01 f0 ff ff 0f 83 24 e4 fb ff c3 48 83 ec 08 e8 7a 43 00 00
+RSP: 002b:00007ffebdfc1378 EFLAGS: 00000246 ORIG_RAX: 0000000000000023
+RAX: ffffffffffffffda RBX: 00000000000025c4 RCX: 000000000044b800
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007ffebdfc1380
+RBP: 000000000009bbed R08: 0000000000000001 R09: 000000000153e880
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffebdfc13e0
+R13: 000000000040a140 R14: 0000000000000000 R15: 0000000000000000
+
