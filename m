@@ -2,105 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B72F2557D3
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 11:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF1325583E
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 12:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728717AbgH1JjB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 05:39:01 -0400
-Received: from mga04.intel.com ([192.55.52.120]:65292 "EHLO mga04.intel.com"
+        id S1729046AbgH1KD0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 06:03:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43494 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728016AbgH1JjA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Aug 2020 05:39:00 -0400
-IronPort-SDR: qtmir07ZuYXfhR2xrHhT+oRpKnc7KftWeY1R92TV3I25LyWN25J0cCoHvMY203VdA2KidGo+tj
- NNqM+vgRrhvg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="154053288"
-X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
-   d="scan'208";a="154053288"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 02:38:59 -0700
-IronPort-SDR: Ut9KRfr4SGf5laRD8mXE62p6pqgQNERWE+yGTMCfW8KYu4yXQeHj+qtfoFsXkYjybPwXWFLHXe
- 7KTlR1hVvZmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
-   d="scan'208";a="403704515"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 28 Aug 2020 02:38:56 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 28 Aug 2020 12:38:35 +0300
-Date:   Fri, 28 Aug 2020 12:38:35 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     ChiYuan Huang <u0084500@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, Guenter Roeck <linux@roeck-us.net>,
-        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] usb typec: mt6360: Add support for mt6360 Type-C
- driver
-Message-ID: <20200828093835.GC174928@kuha.fi.intel.com>
-References: <1598527137-6915-1-git-send-email-u0084500@gmail.com>
- <20200827140001.GE813478@kuha.fi.intel.com>
- <CADiBU393V_iQw_8Hx2braL=8QpvQuTY0059C-XkqmjO9W=aBgQ@mail.gmail.com>
+        id S1728554AbgH1KDY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Aug 2020 06:03:24 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB12A2078A;
+        Fri, 28 Aug 2020 10:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598609003;
+        bh=RQlCnu43eUxNNFUssnsTP3qzoHz2WEO8IwmtO5lhNC4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TH5buM50h70sZhztUtst0nYI+ozLU9ONQohRaIK+i6v8/tsTU6NhiOahWQaodUgMq
+         ZklCd5rArUrJJqYb+J46rZitgiLMZx8nv6KAgZ57m/64sB5Vsc7Ga5HJ7YeRHMZJ5G
+         E5FnlL3QjkH97l4xfKwHDjZc51RfIBljd1OZyJNo=
+Date:   Fri, 28 Aug 2020 12:03:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Rajmohan Mani <rajmohan.mani@intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-usb@vger.kernel.org, pmalani@chromium.org,
+        bleung@chromium.org
+Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
+ (IOM) driver
+Message-ID: <20200828100335.GB1229122@kroah.com>
+References: <20200822040508.23510-1-rajmohan.mani@intel.com>
+ <20200822040508.23510-2-rajmohan.mani@intel.com>
+ <20200828074359.GC942935@kroah.com>
+ <20200828090832.GB174928@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADiBU393V_iQw_8Hx2braL=8QpvQuTY0059C-XkqmjO9W=aBgQ@mail.gmail.com>
+In-Reply-To: <20200828090832.GB174928@kuha.fi.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 10:51:43PM +0800, ChiYuan Huang wrote:
-> Heikki Krogerus <heikki.krogerus@linux.intel.com> 於 2020年8月27日 週四 下午10:00寫道：
-> >
-> > On Thu, Aug 27, 2020 at 07:18:55PM +0800, cy_huang wrote:
-> > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > >
-> > > Mediatek MT6360 is a multi-functional IC that includes USB Type-C.
-> > > It works with Type-C Port Controller Manager to provide USB PD
-> > > and USB Type-C functionalities.
-> > >
-> > > v1 to v2
-> > > 1. Add fix to Prevent the race condition from interrupt and tcpci port
-> > > unregister during module remove.
-> > >
-> > > v2 to v3
-> > > 1. Change comment style for the head of source code.
-> > > 2. No need to print error for platform_get_irq_byname.
-> > > 3. Fix tcpci_register_port check from IS_ERR_OR_NULL to IS_ERR.
-> > > 4. Rename driver/Kconfig/Makefile form mt6360 to mt636x.
-> > > 5. Rename DT binding documents from mt6360 to mt636x.
-> >
-> > You don't place additional changelog here...
-> >
-> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > > ---
-> >
-> > You put it here, after that '---' marker:
-> > https://www.kernel.org/doc/html/latest/process/submitting-patches.html#the-canonical-patch-format
-> >
-> HI Hekki:
->      after reading the document, I have a little bit confused how to
-> use diffstat for the changelog.
->       Is there any example that make me know to write a clear
-> description for the changelog?
+On Fri, Aug 28, 2020 at 12:08:32PM +0300, Heikki Krogerus wrote:
+> Hi Greg,
+> 
+> On Fri, Aug 28, 2020 at 09:43:59AM +0200, Greg Kroah-Hartman wrote:
+> > I still find this crazy that a whole separate driver is created just to
+> > read a single 32bit value.
+> > 
+> > Why not put this logic in the driver that wants to read that value?
+> > That would be much simpler, smaller, and more obvious.
+> 
+> That would mean that we start maintaining something like DMI quirk
+> table in those drivers. Unfortunately the IOM device is not available
+> on every platform. Also, even on platforms that do have it, there is
+> no guarantee that the device is always going to be mapped to the same
+> address.
 
-Picking the latest patch from linux-usb ml. with version history:
-https://lore.kernel.org/linux-usb/1598083553-31896-11-git-send-email-chunfeng.yun@mediatek.com/
+Ok, but putting it in another driver has the same problem as you are now
+depending on that driver with the driver that calls this, right?
 
-See how the last tag line "Signed-off-by: Chunfeng Yun..." is followed
-by marker "---", which then is followed by the version history (the
-version history is then also ended with the marker "---", a step that
-I don't think is mandatory, but commonly used and often recommended).
+The quirk table would go in here, but not somewhere else?
 
-That way that patch version history does not contaminate the actual
-commit message.
+And if this really is only for typec stuff, put it in the typec
+directory, not burried off in the platform driver subdir please.
 
+> Nevertheless, I was originally hoping that we could hide the handling
+> of IOM somehow in ACPI without the need for an actual device object,
+> but it now turns out that the other features of the IOM chip have
+> created interest. At least our i915 guys probable have some use for it
+> (I don't know exactly what they are planning to use it for).
+> 
+> So the fact that we may later need the device for something else, on
+> top of the clumsiness and most importantly risks involved with using
+> ACPI to take care of extra tasks (ASL tends to have bugs - bugs that
+> may never ever get fixed), I think the IOM device object, and the
+> driver that binds to it, do have a valid reason for existing.
+
+Handle the situation today, if, in the future, someone else needs/wants
+this, _then_ work on splitting it out into separate pieces.  Don't
+create additional complexity today, for no benefit today.  It's already
+caused numerous review comments/complaints the way this is designed...
 
 thanks,
 
--- 
-heikki
+greg k-h
