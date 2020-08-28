@@ -2,104 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E9F2555C9
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 09:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9B22555D9
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 10:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728499AbgH1H6l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 03:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
+        id S1728447AbgH1IAX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 04:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727971AbgH1H6j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 03:58:39 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE6EC061264
-        for <linux-usb@vger.kernel.org>; Fri, 28 Aug 2020 00:58:39 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id y6so113434plt.3
-        for <linux-usb@vger.kernel.org>; Fri, 28 Aug 2020 00:58:39 -0700 (PDT)
+        with ESMTP id S1726834AbgH1IAW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 04:00:22 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EA9C061264
+        for <linux-usb@vger.kernel.org>; Fri, 28 Aug 2020 01:00:22 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id ls14so168338pjb.3
+        for <linux-usb@vger.kernel.org>; Fri, 28 Aug 2020 01:00:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PElpbzIDHomzRDBqhzC9EtSuGk5dGo9/mZ4Zosmva34=;
-        b=ISB7ntnkpAQLBD08Qe+CwRG4oyGX7bNu/54ttG6U4kcZTr1CXqDq7aE+vYsiYrQ3XC
-         fhJu3Ot9XdAp4t9UCHO6tiaW9UlBnbYqGlXJetJ0SNrvmGpkR7KXkZ2OP4/ljZQVwmRF
-         XYYJOVWz5g8XjNxGsph+V5EoqidDtb5wUP1nY=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PTSZwOvmd8hsoHlVT3wY5Y3CJ5kZ77NPHrIjGIbwYUw=;
+        b=M2IAEoDo4E3zyfcmMI54faadFZp5+oZmu2y+07+gnyeA2B6K3YvWAITVmNhhrawFvM
+         ayYK6Zbpppnq+QInfKuBJpM3Kg274lCuvSJIVpbD7OC34RwaS/ybGChcSLMI5MHvY/LA
+         EEc+kAh2pY2MS9r+NVnDzx9wl6+CPq6QAv99AB4D4/CQg7qqHF08Ik6qanlsqHqULTKi
+         bWKWfMhSs3v74S+j3PG8tkuLnmenF+SeOiAHnYlIPRqqQ6qPbYzg7x6yeKeHJM2YzimM
+         rbF8lFxDn2NE5RYNyyzxj3jXT0d7seIFta2wYKXGHKoI+uK06yqfeXb7xZbv7j6+o+8D
+         IOtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PElpbzIDHomzRDBqhzC9EtSuGk5dGo9/mZ4Zosmva34=;
-        b=BUfjRZdqGNrfy531oZUAtHNI2xUMM+6FWH2GXazfaXtBaLA6HpJMSbeg7q8HDGU+IS
-         5uNHao+KRj+u6Sd2pRizYgHWvgswzCRuXzKwWS3HsghyhQ2HpZ5MiQeBczGFoMPZIFqe
-         zQBwNAMIHhy/p/hAPpwKsW3JPQgJXYPvpSxUgy5NA+XjZZPGyRoBV7M7SRSFxpMsaPXx
-         N5iGI9ZrHjuZXo7kb2oVsS0dkVySv0XOlv97+Vy+qRrWXm6dIODXHwoQcCwxnCqKfi6W
-         XLGUmVMPaxfVG+FjagWtoP9qu9+uhmBkGPShvG5ZS7bxe92FJcXnOOCvGBM/yyWwnagf
-         y9gQ==
-X-Gm-Message-State: AOAM5324ES+c6bnh4U0XLCnKbwlLWutstwsBK4Y+9CGxeLjPQqxFbEkS
-        +Ld6ggKx1/Y7tWgHFRyMhUMlDA==
-X-Google-Smtp-Source: ABdhPJwYWtmVVE1J1r8j2+MZXqOUgShBQU9gpECocvKDQTrB1tC/VMiqwggHpKTrwS4yij/XM1+b/g==
-X-Received: by 2002:a17:90a:b10a:: with SMTP id z10mr223586pjq.102.1598601519328;
-        Fri, 28 Aug 2020 00:58:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y7sm403384pjn.54.2020.08.28.00.58.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Aug 2020 00:58:38 -0700 (PDT)
-Date:   Fri, 28 Aug 2020 00:58:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Denis Efremov <efremov@linux.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cocci <cocci@systeme.lip6.fr>,
-        Alex Dewar <alex.dewar90@gmail.com>
-Subject: Re: [Cocci] [PATCH] usb: atm: don't use snprintf() for sysfs attrs
-Message-ID: <202008280056.6442BCC@keescook>
-References: <20200827071537.GA168593@kroah.com>
- <20200827131819.7rcl2f5js3hkoqj2@lenovo-laptop>
- <def24e9e-018c-9712-0d07-d4cbc84f07d9@rasmusvillemoes.dk>
- <20200827144846.yauuttjaqtxaldxg@lenovo-laptop>
- <5d1dfb9b031130d4d20763ec621233a19d6a88a2.camel@perches.com>
- <alpine.DEB.2.22.394.2008272141220.2482@hadrien>
- <5853c58e-7d26-2cf9-6cbf-698ecd93cbf9@linux.com>
- <202008271517.ECC1F1F8F@keescook>
- <5ebe5c2737b59d04f1b8a46008cd3159c638f9d0.camel@perches.com>
- <d99c613aa70617f440c51d9413372b858a4ae826.camel@perches.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PTSZwOvmd8hsoHlVT3wY5Y3CJ5kZ77NPHrIjGIbwYUw=;
+        b=HZTq/wnHMbZXxwx+XFrCpqx9gGuPymHBUgcYyZF6hl9kQli43q8ojm046QmGIEUk26
+         WkCy4/FJcWYHGVF6suBK3DGNRIS1dVx565S/OjBm7QX4XYvD/RSjUBAwVBM8oqki5B/3
+         h3aNnDj3eFcEMVg8QpeGFnEAF1R8iaKqVoW9IOh0DuvASfV7S3ksb0rxgcRRFNEQJ+i5
+         5plkMiZhfD7RxS/xR5jXtW0/VBx7oaZ2HaUUYMwDDmqVbxc8P5DRNhAKnASbNFo+S/iW
+         SirosTP6/tXz2y6p/nHCObPzab9kDWZlrBaoxx0pHrwNhYbpTJdE36h65a8+X6vq3tX2
+         6njw==
+X-Gm-Message-State: AOAM531bWmcPwy1LOjpt1Vaca0otoJSfPCjXYn/F4QkmT7S0vcjMjhXY
+        VbnGm7pNFlnkSbvFXlIJk2N34tAkPZ7olSFYPm8=
+X-Google-Smtp-Source: ABdhPJwLTcqWBufu/IELgrmoM20YFsPjoErnzZG30RqB6EC1s7V1WNdiRlek/uguBUQaPLJe1jnPa+dkGe3G38zCogo=
+X-Received: by 2002:a17:902:b194:: with SMTP id s20mr341800plr.321.1598601622048;
+ Fri, 28 Aug 2020 01:00:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d99c613aa70617f440c51d9413372b858a4ae826.camel@perches.com>
+References: <20200819100826.69716-1-andriy.shevchenko@linux.intel.com> <20200828075134.GB993816@kroah.com>
+In-Reply-To: <20200828075134.GB993816@kroah.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 28 Aug 2020 11:00:05 +0300
+Message-ID: <CAHp75Vfbhpy9JYjdZyg9Y5TVb_m2Yz0MQeGm20JLAOd6KEVO5A@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: hcd: convert tasklets to use new tasklet_setup() API
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        USB <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 09:12:06PM -0700, Joe Perches wrote:
-> Perhaps something like the below with a sample conversion
-> that uses single and multiple sysfs_emit uses.
+On Fri, Aug 28, 2020 at 10:53 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Aug 19, 2020 at 01:08:26PM +0300, Andy Shevchenko wrote:
+> > In preparation for unconditionally passing the struct tasklet_struct
+> > pointer to all tasklet callbacks, switch to using the new tasklet_setup()
+> > and from_tasklet() to pass the tasklet pointer explicitly.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+> Does not apply to my tree as I think someone already did all of these
+> conversions.
 
-On quick review, I like it. :)
-
-> [...]
-> +int sysfs_emit(char *buf, char *pos, const char *fmt, ...)
-> +{
-> +	int len;
-> +	va_list args;
-> +
-> +	WARN(pos < buf, "pos < buf\n");
-> +	WARN(pos - buf >= PAGE_SIZE, "pos >= PAGE_SIZE (%tu > %lu)\n",
-> +	     pos - buf, PAGE_SIZE);
-> +	if (pos < buf || pos - buf >= PAGE_SIZE)
-> +		return 0;
-
-This can be:
-
-	if (WARN(pos < buf, "pos < buf\n") ||
-	    WARN(pos - buf >= PAGE_SIZE, "pos >= PAGE_SIZE (%tu > %lu)\n",
-		 pos - buf, PAGE_SIZE))
-		return 0;
+Yes, that is the case.
 
 -- 
-Kees Cook
+With Best Regards,
+Andy Shevchenko
