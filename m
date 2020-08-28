@@ -2,158 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 129A72562CF
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 00:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA27256335
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 00:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbgH1WGf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 18:06:35 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:35121 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726338AbgH1WGe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 18:06:34 -0400
-Received: by mail-io1-f65.google.com with SMTP id l8so588463ios.2;
-        Fri, 28 Aug 2020 15:06:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=39/6+NdecqvikGjg8YBo+lOCsS3fMVVJzywnwgJFjx0=;
-        b=FKcWZKPWciE73V1oAHju7v1w0Ew+nSaDidOkvSEiWSQioxC7ongrN2k2ZxBK8TVMwb
-         E5hmBusdHbvjg9ypZ0FnyILR2SOflnKoyzMdnt3xnyXQfH1uoI7EaaEEYgHkrYOZLXBf
-         CFrjid5bAxqZJRTJUkiyT5VCeIRBpZm+2l88FK3MmKpFvMNctC/Jo1dU0bsYSmvKRWjZ
-         bJohYOKmMchJZGujm40Wa87ir2d+oNvJWYvmeoYfhpSxipLcvsCVrtxEnCKsqDmLh9r/
-         f2qK9Dr2HCMarjTPAkfahyFSNd1H8v1ulJNZfTkYuVQhNOOsFc+dg1wFhMy4vO4V0PK/
-         94AA==
-X-Gm-Message-State: AOAM531SAo56ve6KnaK63o6lY8ggZIfN66ofFg+M1Gyh+dtI548aP0mA
-        27hACYvWAxcGjCjpxXJexg==
-X-Google-Smtp-Source: ABdhPJwVv8s/hJTLnejTHw2Frk9tNzJBWfrJVda7OMvoSYV6El+lEe6dFH5QofuW1HtBydBRzeP9uw==
-X-Received: by 2002:a05:6638:1393:: with SMTP id w19mr2971735jad.113.1598652393099;
-        Fri, 28 Aug 2020 15:06:33 -0700 (PDT)
-Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id v11sm342684ili.66.2020.08.28.15.06.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Aug 2020 15:06:32 -0700 (PDT)
-Received: (nullmailer pid 3488084 invoked by uid 1000);
-        Fri, 28 Aug 2020 22:06:30 -0000
-Date:   Fri, 28 Aug 2020 16:06:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     gregkh@linuxfoundation.org, matthias.bgg@gmail.com,
-        linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        cy_huang@richtek.com, gene_chen@richtek.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] usb typec: mt6360: Add MT6360 Type-C DT binding
- documentation
-Message-ID: <20200828220630.GB3482472@bogus>
-References: <1598610636-4939-1-git-send-email-u0084500@gmail.com>
- <1598610636-4939-2-git-send-email-u0084500@gmail.com>
+        id S1726791AbgH1Wot (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 18:44:49 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:57468 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726536AbgH1Wos (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Aug 2020 18:44:48 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1598654687; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=7zYeKLZuM7Jqdsbun4qwTZWBNVjMkdc6/XUKOp3cAGk=; b=V0Hp/EkKKRMikmsMT2Wc3qBdQwuS/E8w5clReGOUGWJa4SsDqoApp6pa0zTiC2i64hCLr27x
+ gHAhCdwXwzWwa4T3tnM2UwgJQYN2qDxVQ20dflMQNRvKOVy79V0l5TbLzQVjTJQudM+yW0Fx
+ 3RCe7RHaj5Hy8jOf2H9vFHBM140=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 5f4988deebeeb2610602a5c5 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 28 Aug 2020 22:44:46
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E7141C43391; Fri, 28 Aug 2020 22:44:45 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id D1D76C433CA;
+        Fri, 28 Aug 2020 22:44:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D1D76C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH v2] usb: dwc3: Stop active transfers before halting the controller
+Date:   Fri, 28 Aug 2020 15:44:40 -0700
+Message-Id: <20200828224440.22091-1-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1598610636-4939-2-git-send-email-u0084500@gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 06:30:36PM +0800, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Add a devicetree binding documentation for the MT6360 Type-C driver.
-> 
-> usb typec: mt6360: Rename DT binding doument from mt6360 to mt636x
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  .../bindings/usb/mediatek,mt6360-tcpc.yaml         | 73 ++++++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-> new file mode 100644
-> index 00000000..9e8ab0d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/mediatek,mt6360-tcpc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Mediatek MT6360 Type-C Port Switch and Power Delivery controller DT bindings
-> +
-> +maintainers:
-> +  - ChiYuan Huang <cy_huang@richtek.com>
-> +
-> +description: |
-> +  Mediatek MT6360 is a multi-functional device. It integrates charger, ADC, flash, RGB indicators,
-> +  regulators (BUCKs/LDOs), and TypeC Port Switch with Power Delivery controller.
-> +  This document only describes MT6360 Type-C Port Switch and Power Delivery controller.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt6360-tcpc
-> +
-> +  interrupts-extended:
-> +    maxItems: 1
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: PD_IRQB
-> +
-> +patternProperties:
-> +  "connector":
+In the DWC3 databook, for a device initiated disconnect or bus reset, the
+driver is required to send dependxfer commands for any pending transfers.
+In addition, before the controller can move to the halted state, the SW
+needs to acknowledge any pending events.  If the controller is not halted
+properly, there is a chance the controller will continue accessing stale or
+freed TRBs and buffers.
 
-Also, this is not a pattern, so should be under 'properties', and it 
-doesn't need quotes.
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 
-> +    type: object
-> +    $ref: ../connector/usb-connector.yaml#
-> +    description:
-> +      Properties for usb c connector.
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - interrupts-extended
-> +  - interrupt-names
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/usb/pd.h>
-> +    i2c0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        mt6360@34 {
-> +            compatible = "mediatek,mt6360";
-> +            reg = <0x34>;
-> +
-> +            tcpc {
-> +                compatible = "mediatek,mt6360-tcpc";
-> +                interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
-> +                interrupt-names = "PD_IRQB";
-> +
-> +                connector {
-> +                        compatible = "usb-c-connector";
-> +                        label = "USB-C";
-> +                        data-role = "dual";
-> +                        power-role = "dual";
-> +                        try-power-role = "sink";
-> +                        source-pdos = <PDO_FIXED(5000, 1000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-> +                        sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-> +                        op-sink-microwatt = <10000000>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-> -- 
-> 2.7.4
-> 
+---
+Changes in v2:
+ - Moved cleanup code to the pullup() API to differentiate between device
+   disconnect and hibernation.
+ - Added cleanup code to the bus reset case as well.
+ - Verified the move to pullup() did not reproduce the problen using the
+   same test sequence.
+
+Verified fix by adding a check for ETIMEDOUT during the run stop call.
+Shell script writing to the configfs UDC file to trigger disconnect and
+connect.  Batch script to have PC execute data transfers over adb (ie adb
+push)  After a few iterations, we'd run into a scenario where the
+controller wasn't halted.  With the following change, no failed halts after
+many iterations.
+---
+ drivers/usb/dwc3/ep0.c    |  2 +-
+ drivers/usb/dwc3/gadget.c | 52 ++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 52 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 59f2e8c31bd1..456aa87e8778 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+ 	int				ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	if (!dep->endpoint.desc) {
++	if (!dep->endpoint.desc || !dwc->pullups_connected) {
+ 		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
+ 				dep->name);
+ 		ret = -ESHUTDOWN;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 3ab6f118c508..df8d89d6bdc9 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1516,7 +1516,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
+ {
+ 	struct dwc3		*dwc = dep->dwc;
+ 
+-	if (!dep->endpoint.desc) {
++	if (!dep->endpoint.desc || !dwc->pullups_connected) {
+ 		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
+ 				dep->name);
+ 		return -ESHUTDOWN;
+@@ -1926,6 +1926,24 @@ static int dwc3_gadget_set_selfpowered(struct usb_gadget *g,
+ 	return 0;
+ }
+ 
++static void dwc3_stop_active_transfers(struct dwc3 *dwc)
++{
++	u32 epnum;
++
++	for (epnum = 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
++		struct dwc3_ep *dep;
++
++		dep = dwc->eps[epnum];
++		if (!dep)
++			continue;
++
++		if (!(dep->flags & DWC3_EP_ENABLED))
++			continue;
++
++		dwc3_remove_requests(dwc, dep);
++	}
++}
++
+ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
+ {
+ 	u32			reg;
+@@ -1994,9 +2012,39 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 		}
+ 	}
+ 
++	/*
++	 * Synchronize and disable any further event handling while controller
++	 * is being enabled/disabled.
++	 */
++	disable_irq(dwc->irq_gadget);
+ 	spin_lock_irqsave(&dwc->lock, flags);
++
++	/* Controller is not halted until pending events are acknowledged */
++	if (!is_on) {
++		u32 reg;
++
++		__dwc3_gadget_ep_disable(dwc->eps[0]);
++		__dwc3_gadget_ep_disable(dwc->eps[1]);
++
++		/*
++		 * The databook explicitly mentions for a device-initiated
++		 * disconnect sequence, the SW needs to ensure that it ends any
++		 * active transfers.
++		 */
++		dwc3_stop_active_transfers(dwc);
++
++		reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
++		reg &= DWC3_GEVNTCOUNT_MASK;
++		if (reg > 0) {
++			dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
++			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + reg) %
++						dwc->ev_buf->length;
++		}
++	}
++
+ 	ret = dwc3_gadget_run_stop(dwc, is_on, false);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
++	enable_irq(dwc->irq_gadget);
+ 
+ 	return ret;
+ }
+@@ -3100,6 +3148,8 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+ 	}
+ 
+ 	dwc3_reset_gadget(dwc);
++	/* Stop any active/pending transfers when receiving bus reset */
++	dwc3_stop_active_transfers(dwc);
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+ 	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
