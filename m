@@ -2,57 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C7D255597
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 09:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F372555A3
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Aug 2020 09:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728447AbgH1HsP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 03:48:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42250 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728094AbgH1HsO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Aug 2020 03:48:14 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AC9BC2078A;
-        Fri, 28 Aug 2020 07:48:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598600894;
-        bh=wRcVqBDYNzDuiSshPZs2cXM/gGy3dQf2olqwI/4YQWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KOvtTNpGyZ/bA7W7C4eRyBc3JDsu+jZEKA5Xp+3MiQMz8UOTMXiBjv5NQaTVfbPEz
-         nYavUkuVh44jcDUJMJI/pxbf72uUckc/eGYsFhr+IDezg6t1gA1qudlKiINIoUCX9N
-         Q49VPPAN2DQ3+WQ/7K289wo1vR1J7BH7CgIQ9pi0=
-Date:   Fri, 28 Aug 2020 09:48:26 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     yanfei.xu@windriver.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: integrate macro definitions into include/linux/usb.h
-Message-ID: <20200828074826.GA962117@kroah.com>
-References: <20200825154421.5463-1-yanfei.xu@windriver.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200825154421.5463-1-yanfei.xu@windriver.com>
+        id S1728505AbgH1Hu2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 03:50:28 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:56242 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726571AbgH1Hu2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 03:50:28 -0400
+X-IronPort-AV: E=Sophos;i="5.76,362,1592838000"; 
+   d="scan'208";a="55774010"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 28 Aug 2020 16:50:27 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 05EEA400E8CC;
+        Fri, 28 Aug 2020 16:50:24 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: [PATCH v2] dt-bindings: usb: renesas,usb-xhci: Document r8a774e1 support
+Date:   Fri, 28 Aug 2020 08:50:19 +0100
+Message-Id: <20200828075019.541-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 11:44:21PM +0800, yanfei.xu@windriver.com wrote:
-> From: Yanfei Xu <yanfei.xu@windriver.com>
-> 
-> include/linux/usb.h also contains 'Hard limit' and 'Arbitrary limit'
-> macro definitions in it, hence we can integrate these from config.c
-> into include/linux/usb.h
+Document r8a774e1 xhci support. The driver will use the fallback
+compatible string "renesas,rcar-gen3-xhci", therefore no driver
+change is needed.
 
-Why?  No one uses these values outside of this .c file, so why put a
-value in a global .h file?
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Hi All,
 
-Who else wants to use these values?  If something else needs it, then
-sure, it could be moved, but until then, there's nothing wrong with the
-existing code as-is from what I can tell.
+This patch is part of series [1] (patch 08/20), rest of the patches
+have been queued/acked.
 
-thanks,
+[1] https://lkml.org/lkml/2020/7/16/890
 
-greg k-h
+Cheers,
+Prabhakar
+
+v1->v2
+* Rebased the patch on 5.9-rc1 (Renesas devices were moved from usb-xhci.txt
+  renesas,usb-xhci.yaml)
+* Restored Ack's from Geert and Rob
+---
+ Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+index add9f7b66da0..0f078bd0a3e5 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+@@ -30,6 +30,7 @@ properties:
+               - renesas,xhci-r8a774a1 # RZ/G2M
+               - renesas,xhci-r8a774b1 # RZ/G2N
+               - renesas,xhci-r8a774c0 # RZ/G2E
++              - renesas,xhci-r8a774e1 # RZ/G2H
+               - renesas,xhci-r8a7795  # R-Car H3
+               - renesas,xhci-r8a7796  # R-Car M3-W
+               - renesas,xhci-r8a77961 # R-Car M3-W+
+-- 
+2.17.1
+
