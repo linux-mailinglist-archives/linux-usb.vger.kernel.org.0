@@ -2,151 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4E72564EF
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 07:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C223D256511
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 08:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726952AbgH2F72 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Aug 2020 01:59:28 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:33596 "EHLO m43-7.mailgun.net"
+        id S1726280AbgH2G1X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Aug 2020 02:27:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58030 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726791AbgH2F7Z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 29 Aug 2020 01:59:25 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1598680765; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=zbtKWEe/ycA4XfAazELEies/9m6qkiUjWQM6OfnRcUs=; b=OGCHXUT+0Oo4uD//F6L9FIllkiqNNy4qGFZ8ZYd6UFtUfxG1UmHfQIBAx7N7czScN28X88IS
- dRiWXoC22/mb9TpUgB1u6psQiz3b1w8OYqGnuz1ApDY3TIKl2bRukms1DfV0ybGOI48w1d/2
- PpxDPXNTmaS/6c3EdMzCc1EXBq4=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5f49eea0d70e1f492d204328 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 29 Aug 2020 05:58:56
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6FA3EC433C6; Sat, 29 Aug 2020 05:58:56 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1725886AbgH2G1X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 29 Aug 2020 02:27:23 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 20BE8C43391;
-        Sat, 29 Aug 2020 05:58:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 20BE8C43391
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     robh+dt@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, agross@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: [RFC v5 6/6] usb: dwc3: gadget: Ensure enough TXFIFO space for USB configuration
-Date:   Fri, 28 Aug 2020 22:58:46 -0700
-Message-Id: <20200829055846.19034-7-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200829055846.19034-1-wcheng@codeaurora.org>
-References: <20200829055846.19034-1-wcheng@codeaurora.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id A177E20936;
+        Sat, 29 Aug 2020 06:27:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598682442;
+        bh=nmPv6vDLuaeXHEYBEjQxMedQhS6gWik2Zx2Xfd6Z2rs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oyZgoHlz2pgoYTLWrnFmo74kMioGJkgPCP1NRq+fVd7PJUqXibhyxvSyKSumdkiDE
+         9aqwGIuCeubslJ3WGVgY6u/TH/7Tj7Gd+q1D+d+ra0jFquK6gPaPj4p/p0733JprTB
+         EH3rYPFsdo73/1bCtWAn+jU8J24hIHG9zROoeHA8=
+Date:   Sat, 29 Aug 2020 08:27:19 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Mani, Rajmohan" <rajmohan.mani@intel.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "pmalani@chromium.org" <pmalani@chromium.org>,
+        "bleung@chromium.org" <bleung@chromium.org>
+Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
+ (IOM) driver
+Message-ID: <20200829062719.GA80106@kroah.com>
+References: <20200822040508.23510-1-rajmohan.mani@intel.com>
+ <20200822040508.23510-2-rajmohan.mani@intel.com>
+ <20200828074359.GC942935@kroah.com>
+ <20200828090832.GB174928@kuha.fi.intel.com>
+ <DM6PR11MB3963228D43B50604AE4D0F3AF6520@DM6PR11MB3963.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR11MB3963228D43B50604AE4D0F3AF6520@DM6PR11MB3963.namprd11.prod.outlook.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If TXFIFO resizing is enabled, then based on if endpoint bursting is
-required or not, a larger amount of FIFO space is benefical.  Sometimes
-a particular interface can take all the available FIFO space, leading
-to other interfaces not functioning properly.  This callback ensures that
-the minimum fifo requirements, a single fifo per endpoint, can be met,
-otherwise the configuration binding will fail.  This will be based on the
-maximum number of eps existing in all configurations.
+On Fri, Aug 28, 2020 at 03:20:22PM +0000, Mani, Rajmohan wrote:
+> Hi Greg,
+> 
+> > Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
+> > (IOM) driver
+> > 
+> > Hi Greg,
+> > 
+> > On Fri, Aug 28, 2020 at 09:43:59AM +0200, Greg Kroah-Hartman wrote:
+> > > I still find this crazy that a whole separate driver is created just
+> > > to read a single 32bit value.
+> > >
+> > > Why not put this logic in the driver that wants to read that value?
+> > > That would be much simpler, smaller, and more obvious.
+> > 
+> > That would mean that we start maintaining something like DMI quirk table in
+> > those drivers. Unfortunately the IOM device is not available on every platform.
+> > Also, even on platforms that do have it, there is no guarantee that the device is
+> > always going to be mapped to the same address.
+> > 
+> > Nevertheless, I was originally hoping that we could hide the handling of IOM
+> > somehow in ACPI without the need for an actual device object, but it now
+> > turns out that the other features of the IOM chip have created interest. At
+> > least our i915 guys probable have some use for it (I don't know exactly what
+> > they are planning to use it for).
+> > 
+> > So the fact that we may later need the device for something else, on top of the
+> > clumsiness and most importantly risks involved with using ACPI to take care of
+> > extra tasks (ASL tends to have bugs - bugs that may never ever get fixed), I
+> > think the IOM device object, and the driver that binds to it, do have a valid
+> > reason for existing.
+> > 
+> 
+> Intel PMC USB mux device is part of the PCH, while IOM is part of the SoC.
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- drivers/usb/dwc3/core.h   |  1 +
- drivers/usb/dwc3/gadget.c | 35 +++++++++++++++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
+I have no idea what a "PCH" is, what "IOM" is, and how any of this
+relates to a "SoC" :)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index e85c1ec70cc3..0559b0a82c4d 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1249,6 +1249,7 @@ struct dwc3 {
- 	u16			imod_interval;
- 	int			last_fifo_depth;
- 	int			num_ep_resized;
-+	int			max_cfg_eps;
- };
- 
- #define INCRX_BURST_MODE 0
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 53e5220f9893..e8f7ea560920 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2411,6 +2411,7 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
- 
- out:
- 	dwc->gadget_driver	= NULL;
-+	dwc->max_cfg_eps = 0;
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	free_irq(dwc->irq_gadget, dwc->ev_buf);
-@@ -2518,6 +2519,39 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- }
- 
-+static int dwc3_gadget_check_config(struct usb_gadget *g, unsigned long ep_map)
-+{
-+	struct dwc3 *dwc = gadget_to_dwc(g);
-+	unsigned long in_ep_map;
-+	int fifo_size = 0;
-+	int ram1_depth;
-+	int ep_num;
-+
-+	if (!dwc->needs_fifo_resize)
-+		return 0;
-+
-+	/* Only interested in the IN endpoints */
-+	in_ep_map = ep_map >> 16;
-+	ep_num = hweight_long(in_ep_map);
-+
-+	if (ep_num <= dwc->max_cfg_eps)
-+		return 0;
-+
-+	/* Update the max number of eps in the composition */
-+	dwc->max_cfg_eps = ep_num;
-+
-+	fifo_size = dwc3_gadget_calc_tx_fifo_size(dwc, dwc->max_cfg_eps);
-+	/* Based on the equation, increment by one for every ep */
-+	fifo_size += dwc->max_cfg_eps;
-+
-+	/* Check if we can fit a single fifo per endpoint */
-+	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
-+	if (fifo_size > ram1_depth)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
- static const struct usb_gadget_ops dwc3_gadget_ops = {
- 	.get_frame		= dwc3_gadget_get_frame,
- 	.wakeup			= dwc3_gadget_wakeup,
-@@ -2527,6 +2561,7 @@ static const struct usb_gadget_ops dwc3_gadget_ops = {
- 	.udc_stop		= dwc3_gadget_stop,
- 	.udc_set_speed		= dwc3_gadget_set_speed,
- 	.get_config_params	= dwc3_gadget_config_params,
-+	.check_config		= dwc3_gadget_check_config,
- };
- 
- /* -------------------------------------------------------------------------- */
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Don't impose arbritrary hardware "splits" to kernel code when the kernel
+has no such "partitioning" please.
 
+> This was another reason we had to have a separate ACPI device.
+
+That sounds like a firmware issue you can solve in UEFI.
+
+I think this is the most TLA-laden email I have ever written, and I used
+to work at IBM :)
+
+greg k-h
