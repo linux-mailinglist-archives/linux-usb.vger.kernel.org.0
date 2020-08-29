@@ -2,168 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 948002567F3
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 15:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD54F2568A4
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 17:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727772AbgH2Nni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Aug 2020 09:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
+        id S1728239AbgH2P0A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Aug 2020 11:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728012AbgH2NnV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Aug 2020 09:43:21 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962E3C061236
-        for <linux-usb@vger.kernel.org>; Sat, 29 Aug 2020 06:43:19 -0700 (PDT)
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 07TDgreI023204
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 29 Aug 2020 15:42:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1598708574; bh=ZtyrvREL7GVT04vkTRU4w8IaZCoP+AHWmOpkFJx71tE=;
-        h=From:To:Cc:Subject:Date:Message-Id:From;
-        b=mAhVkHduzohvtspeDMsNRog3tLO1GeT5KafFahaYT/jtPDr/61eWevIU2F7cQ0DDp
-         HVWhjL/KOJaJ2o0wG0kpA8QNz/oT2gqZeMhbKXManebsJFwj0OMLF1z76fD8PWV5VQ
-         TclOC1hB0veXgngx64+c543IGyqUgQeSumyekvGM=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
-        (envelope-from <bjorn@miraculix.mork.no>)
-        id 1kC188-000FOG-N3; Sat, 29 Aug 2020 15:42:52 +0200
-From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        AceLan Kao <acelan.kao@canonical.com>,
-        Sebastian Sjoholm <ssjoholm@mac.com>,
-        Dan Williams <dcbw@redhat.com>, stable@vger.kernel.org
-Subject: [PATCH] USB: serial: option: support dynamic Quectel USB compositions
-Date:   Sat, 29 Aug 2020 15:42:50 +0200
-Message-Id: <20200829134250.59118-1-bjorn@mork.no>
-X-Mailer: git-send-email 2.28.0
+        with ESMTP id S1728196AbgH2PZ6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Aug 2020 11:25:58 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90170C061236
+        for <linux-usb@vger.kernel.org>; Sat, 29 Aug 2020 08:25:57 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id q4so1723930eds.3
+        for <linux-usb@vger.kernel.org>; Sat, 29 Aug 2020 08:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VlZBchCAyWhuNUD37n2dPDCJAJclNP7/k78UQz5aH6Y=;
+        b=m4XsMpk25tlrcGVQqQpM+7r2/Bjvrr/qPL8d+LgyuzzcqusO+srnJUfIvx3rpfniRn
+         WQVU9S+3ZgzFOp07by3VNOMcFIiUV5a3pAqviuOe6MziClK7/p4YVJFTB2k9q570znSy
+         R5dVw0/r66Jsq0tpkawxKhFVA2gVyaN0toXYqFfpOIB0Gio1LwJc3XH8iq1qR4+tHhLV
+         MQTdl5TFkqMyYi0VO34MhMI+OrZ1eivXF8wMEhu0Jitn9S4+qNOgrKmKfTfew1Jj9G6x
+         z5V0KfyGayhpShYxFXvSL3ui35InB8tShz5RUI+qjPSoQx6gh8/tPf3I/t22u0W42euW
+         YwGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VlZBchCAyWhuNUD37n2dPDCJAJclNP7/k78UQz5aH6Y=;
+        b=EyQf7TkTEwizHuIE95Olhlma+IFdX0/b43BqtjbmL8f9fuEFoKX1SHDQqzl9vdxCun
+         arLjyFPyYG/72EaXv1F00Gz1ep2VbyxgTMLWYA0R4F7UPb32Z1lHX/AuoMxslyggmFAE
+         jpWWXgmxHm7cx3/vunePRewK2oRXhAmPwwd0F+eVhOed+hlazN3eXcKJ6uFo/7IV0ywq
+         BBqIHCvbFbRNmFiKFIBHDSf3mrWgyZgP45WLdZ38yGyVZ1YXooP2d6w9qOReMi9ch4mF
+         qiLfDfLYKmu5SZlobxj1pI63KcARJoKCnrdTD5+Agj2jiaDt79rlM+liNlPoMMVHq1TU
+         I+zQ==
+X-Gm-Message-State: AOAM530GgazPm7n395rOR82NPWH8cm9EW58VzXx0HEOM/GIPWZ4HM33z
+        v7tvMknx3pjPR+Iv57ow9L7+muyChd/MbTKlQ7g=
+X-Google-Smtp-Source: ABdhPJz5XzPTbZ7BAUYzHuDxgUeYvsO0Qg+A3sH8USWhY8loqiIGsVFvzhKelnueGLLZLJeSRSprgA9A9IRvPluCnNU=
+X-Received: by 2002:a05:6402:1443:: with SMTP id d3mr3975828edx.40.1598714755843;
+ Sat, 29 Aug 2020 08:25:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.102.4 at canardo
-X-Virus-Status: Clean
+References: <20200713160522.19345-1-dan@dlrobertson.com> <20200713160522.19345-2-dan@dlrobertson.com>
+ <1jy2maekzf.fsf@starbuckisacylon.baylibre.com> <ff07b04450080fd14d8da4470aeb6e1c28e4215f.camel@pengutronix.de>
+ <1j8se43yrw.fsf@starbuckisacylon.baylibre.com> <18105405541cbc32cecaff181e1427f5434fafc3.camel@pengutronix.de>
+In-Reply-To: <18105405541cbc32cecaff181e1427f5434fafc3.camel@pengutronix.de>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 29 Aug 2020 17:25:45 +0200
+Message-ID: <CAFBinCC60WzSRitVGBPon9zZVJ_eUjdcEoP7NBHiHR24mLBgig@mail.gmail.com>
+Subject: Re: [PATCH 1/1] usb: dwc3: meson-g12a: fix shared reset control use
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Dan Robertson <dan@dlrobertson.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, aouledameur@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB composition, defining the set of exported functions, is dynamic
-in newer Quectel modems.  Default functions can be disabled and
-alternative functions can be enabled instead.  The alternatives
-includes class functions using interface pairs, which should be
-handled by the respective class drivers.
+Hi Philipp,
 
-Active interfaces are numbered consecutively, so static
-blacklisting based on interface numbers will fail when the
-composition changes.  An example of such an error, where the
-option driver has bound to the CDC ECM data interface,
-preventing cdc_ether from handling this function:
+On Tue, Aug 25, 2020 at 12:20 PM Philipp Zabel <p.zabel@pengutronix.de> wrote:
+[...]
+> > reset_control_clear()
+> > would be the way to state that the ressource is no longer used and, that
+> > from the caller perspective, the reset can fired again if necessary.
+> >
+> > If we take the probe / suspend / resume example:
+> > * 1st device using the shared will actually trigger it (as it is now)
+> > * following device just increase triggered_count
+> >
+> > If all devices go to suspend (calling reset_control_clear()) then
+> > triggered_count will reach zero, allowing the first device resuming to
+> > trigger the reset again ... this is important since it might not be the
+> > one which would have got the exclusive control
+> >
+> > If any device don't go to suspend, meaning the ressource under reset
+> > keep on being used, no reset will performed. With exlusive control,
+> > there is a risk that the resuming device resets something already in use.
+> >
+> > Regarding the condition, on shared resets, call reset_control_reset()
+> > should be balanced reset_control_clear() - no clear before reset.
+>
+> Martin, is this something that would be useful for the current users of
+> the shared reset trigger functionality (phy-meson-gxl-usb2 and phy-
+> meson8b-usb2 with reset-meson)?
+for the specific use-case (system suspend) this would currently not be
+useful for the two drivers you have named. This is because the
+platforms on which they are used currently don't support system
+suspend.
+if other drivers are going to benefit from this change then please go
+ahead and add the necessary API. Then I can also use it in these
+drivers. however, (as far as I understand) I won't be able to verify
+the new "fixed" behavior
 
- T: Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 2 Spd=480 MxCh= 0
- D: Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs= 1
- P: Vendor=2c7c ProdID=0125 Rev= 3.18
- S: Manufacturer=Quectel
- S: Product=EC25-AF
- C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
- A: FirstIf#= 4 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
- I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
- E: Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- E: Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
- E: Ad=83(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
- E: Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- E: Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
- E: Ad=85(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
- E: Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- E: Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
- E: Ad=87(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
- E: Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- E: Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- I:* If#= 4 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=(none)
- E: Ad=89(I) Atr=03(Int.) MxPS= 16 Ivl=32ms
- I:* If#= 5 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=option
- I: If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=option
- E: Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- E: Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Another device with the same id gets correct drivers, since the
-interface of the network function happens to be blacklisted by option:
-
- T: Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#= 3 Spd=480 MxCh= 0
- D: Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs= 1
- P: Vendor=2c7c ProdID=0125 Rev= 3.18
- S: Manufacturer=Android
- S: Product=Android
- C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
- I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
- E: Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- E: Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
- E: Ad=83(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
- E: Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- E: Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
- E: Ad=85(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
- E: Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- E: Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
- E: Ad=87(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
- E: Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- E: Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
- E: Ad=89(I) Atr=03(Int.) MxPS= 8 Ivl=32ms
- E: Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
- E: Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-Change rules for EC21, EC25, BG96 and EG95 to match vendor specific
-serial functions only, to prevent binding to class functions. Require
-2 endpoints on ff/ff/ff functions, avoiding the 3 endpoint QMI/RMNET
-network functions.
-
-Cc: AceLan Kao <acelan.kao@canonical.com>
-Cc: Sebastian Sjoholm <ssjoholm@mac.com>
-Cc: Dan Williams <dcbw@redhat.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Bjørn Mork <bjorn@mork.no>
----
- drivers/usb/serial/option.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 89b3192af326..6c3ece5dd9c9 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1094,14 +1094,18 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R410M),
- 	  .driver_info = RSVD(1) | RSVD(3) },
- 	/* Quectel products using Quectel vendor ID */
--	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21),
--	  .driver_info = RSVD(4) },
--	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC25),
--	  .driver_info = RSVD(4) },
--	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95),
--	  .driver_info = RSVD(4) },
--	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG96),
--	  .driver_info = RSVD(4) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, 0xff, 0xff, 0xff),
-+	  .driver_info = NUMEP2 },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, 0xff, 0, 0) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC25, 0xff, 0xff, 0xff),
-+	  .driver_info = NUMEP2 },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC25, 0xff, 0, 0) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95, 0xff, 0xff, 0xff),
-+	  .driver_info = NUMEP2 },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95, 0xff, 0, 0) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG96, 0xff, 0xff, 0xff),
-+	  .driver_info = NUMEP2 },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG96, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0xff, 0xff),
- 	  .driver_info = RSVD(1) | RSVD(2) | RSVD(3) | RSVD(4) | NUMEP2 },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0, 0) },
--- 
-2.28.0
-
+Best regards,
+Martin
