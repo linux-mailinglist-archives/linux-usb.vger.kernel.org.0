@@ -2,100 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADB92563F9
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 03:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A83256436
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 04:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726584AbgH2BYQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Aug 2020 21:24:16 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:47557 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726460AbgH2BYQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 21:24:16 -0400
-Received: (qmail 487363 invoked by uid 1000); 28 Aug 2020 21:24:15 -0400
-Date:   Fri, 28 Aug 2020 21:24:15 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com>
-Cc:     andriy.shevchenko@linux.intel.com, bigeasy@linutronix.de,
-        felipe.balbi@linux.intel.com, gregkh@linuxfoundation.org,
-        joe@perches.com, johan@kernel.org, kai.heng.feng@canonical.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael.j.wysocki@intel.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: INFO: task hung in usb_bulk_msg
-Message-ID: <20200829012415.GB486691@rowland.harvard.edu>
-References: <000000000000d3c499057536ce86@google.com>
- <000000000000c69c7805adef8597@google.com>
+        id S1726748AbgH2CtZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Aug 2020 22:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726460AbgH2CtZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Aug 2020 22:49:25 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C43C061264;
+        Fri, 28 Aug 2020 19:49:24 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id m22so928091ljj.5;
+        Fri, 28 Aug 2020 19:49:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KoMQwFEPaswLm8CKgcgeVCNRZ6lXaOkK1BuoeMaYQB4=;
+        b=vXfgIfPWzphWqHXx0xceNnHoQKfPjTCQY+vyfWFi0Javi2ObQEtAX5h3Ft9vfKVJJU
+         voaoJpvNMzAAD54kZa0nwlC6OJ/oXaRtwwgyqQ/mvlR41yUdD7khlmDK2i5IobJEtFS3
+         buHJvKWIFhbfyqsLfJiKrUHFw5JjIyrfhJim1DO8RrrkizqgSqkr4rKPj/YT+oQesW93
+         gD0J09tUCxlUw2TLyyx683iBgqIdJP16UF2JAGdE0R/9ytSwigSBryjL7xfxUlkngRn5
+         FHazbv0cHDIfEC8bYhghji2GqeTQLVyi3UjtC9wb/2HqjZGVEGQr5t+hKIMiqDgXMAcL
+         W3sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KoMQwFEPaswLm8CKgcgeVCNRZ6lXaOkK1BuoeMaYQB4=;
+        b=fM9RXeZhs6p9vE10bEYTY1NFsuyu0W06w9UYyqNDt1vDqnc7RXduJjM1nWUqtEgJDU
+         Q4Fmrqfp/SlOBbds+T58eq7BfnmKGJg4tQ1nio5jPTpDbcxe8Qji3/yiVwc5NoO84D8j
+         BUGSglBiSsfDzKPAVjPJdq/jI8qqD/EKrmmeWAWkwesmV4tTg5O2jAAJC30tPe3PdJ8+
+         gYJNAtfWwyeOQR+nOxHjMy0SkHgAN5504V/WCEaC2pHy1ptNxzjAKaUl1gY2HBbOQRJq
+         lFzTDIGzS6QtN2P8al/q5Dy2Z+hcllwpBhotic++UgHeyPO+gZVv8Wd4pB6R0bEPmRgU
+         uVXQ==
+X-Gm-Message-State: AOAM530BdrlQwL/r1EQJvmOj+FhrjuHmknPcxZUt81E8OZaV4gkPMaMC
+        tG8+xnceMczs9IOMBJaE2f2DsXbjyZOzjKoOqtI=
+X-Google-Smtp-Source: ABdhPJy1/ipn3kbvfszOmswDzwCLNGRXtroxaeXb4NPsRrn9sEN3gbYygMXJIxlSJgPh2sXI7MR+fNEpGiNUxdvzSxs=
+X-Received: by 2002:a2e:2c0e:: with SMTP id s14mr735843ljs.28.1598669362724;
+ Fri, 28 Aug 2020 19:49:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000c69c7805adef8597@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1598610636-4939-1-git-send-email-u0084500@gmail.com>
+ <1598610636-4939-2-git-send-email-u0084500@gmail.com> <20200828220520.GA3482472@bogus>
+ <CADiBU3-pd7nvtf2_1ssYVLQc4HOHX6PUyyx6GiJ_gH-4DaGmog@mail.gmail.com>
+In-Reply-To: <CADiBU3-pd7nvtf2_1ssYVLQc4HOHX6PUyyx6GiJ_gH-4DaGmog@mail.gmail.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Sat, 29 Aug 2020 10:49:10 +0800
+Message-ID: <CADiBU39P7jeSOV2_GcXh6A=b8SCViURCsS8SZFmy+oY2hS74tg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] usb typec: mt6360: Add MT6360 Type-C DT binding documentation
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, matthias.bgg@gmail.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 05:52:16AM -0700, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    15bc20c6 Merge tag 'tty-5.9-rc3' of git://git.kernel.org/p..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1052a669900000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=978db74cb30aa994
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7a7613e5ba9ae7bd15f9
-> compiler:       gcc (GCC) 10.1.0-syz 20200507
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101c328e900000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155eff41900000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com
-> 
-> INFO: task syz-executor790:9958 blocked for more than 143 seconds.
->       Not tainted 5.9.0-rc2-syzkaller #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:syz-executor790 state:D stack:28240 pid: 9958 ppid:  6854 flags:0x00004004
-> Call Trace:
->  context_switch kernel/sched/core.c:3778 [inline]
->  __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
->  schedule+0xd0/0x2a0 kernel/sched/core.c:4602
->  schedule_timeout+0x1d8/0x250 kernel/time/timer.c:1855
->  do_wait_for_common kernel/sched/completion.c:85 [inline]
->  __wait_for_common kernel/sched/completion.c:106 [inline]
->  wait_for_common kernel/sched/completion.c:117 [inline]
->  wait_for_completion_timeout+0x15e/0x270 kernel/sched/completion.c:157
->  usb_start_wait_urb+0x144/0x2b0 drivers/usb/core/message.c:63
->  usb_bulk_msg+0x226/0x550 drivers/usb/core/message.c:254
->  do_proc_bulk+0x39b/0x710 drivers/usb/core/devio.c:1231
->  proc_bulk drivers/usb/core/devio.c:1268 [inline]
->  usbdev_do_ioctl drivers/usb/core/devio.c:2542 [inline]
->  usbdev_ioctl+0x586/0x3360 drivers/usb/core/devio.c:2708
+ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2020=E5=B9=B48=E6=9C=8829=E6=
+=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=888:32=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Rob Herring <robh@kernel.org> =E6=96=BC 2020=E5=B9=B48=E6=9C=8829=E6=97=
+=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=886:05=E5=AF=AB=E9=81=93=EF=BC=9A
+> >
+> > On Fri, Aug 28, 2020 at 06:30:36PM +0800, cy_huang wrote:
+> > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > >
+> > > Add a devicetree binding documentation for the MT6360 Type-C driver.
+> > >
+> > > usb typec: mt6360: Rename DT binding doument from mt6360 to mt636x
+> > >
+> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > ---
+> > >  .../bindings/usb/mediatek,mt6360-tcpc.yaml         | 73 ++++++++++++=
+++++++++++
+> > >  1 file changed, 73 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,mt=
+6360-tcpc.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tc=
+pc.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> > > new file mode 100644
+> > > index 00000000..9e8ab0d
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> > > @@ -0,0 +1,73 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: "http://devicetree.org/schemas/usb/mediatek,mt6360-tcpc.yaml#"
+> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > > +
+> > > +title: Mediatek MT6360 Type-C Port Switch and Power Delivery control=
+ler DT bindings
+> > > +
+> > > +maintainers:
+> > > +  - ChiYuan Huang <cy_huang@richtek.com>
+> > > +
+> > > +description: |
+> > > +  Mediatek MT6360 is a multi-functional device. It integrates charge=
+r, ADC, flash, RGB indicators,
+> > > +  regulators (BUCKs/LDOs), and TypeC Port Switch with Power Delivery=
+ controller.
+> > > +  This document only describes MT6360 Type-C Port Switch and Power D=
+elivery controller.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - mediatek,mt6360-tcpc
+> > > +
+> > > +  interrupts-extended:
+> >
+> > Use 'interrupts'. The tooling will automatically support
+> > 'interrupts-extended'.
+> Okay.
+> >
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupt-names:
+> > > +    items:
+> > > +      - const: PD_IRQB
+> > > +
+> > > +patternProperties:
+> > > +  "connector":
+> > > +    type: object
+> > > +    $ref: ../connector/usb-connector.yaml#
+> > > +    description:
+> > > +      Properties for usb c connector.
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - interrupts-extended
+> > > +  - interrupt-names
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > > +    #include <dt-bindings/usb/pd.h>
+> > > +    i2c0 {
+> > > +        #address-cells =3D <1>;
+> > > +        #size-cells =3D <0>;
+> > > +
+> > > +        mt6360@34 {
+> > > +            compatible =3D "mediatek,mt6360";
+> > > +            reg =3D <0x34>;
+> > > +
+> > > +            tcpc {
+> > > +                compatible =3D "mediatek,mt6360-tcpc";
+> > > +                interrupts-extended =3D <&gpio26 3 IRQ_TYPE_LEVEL_LO=
+W>;
+> > > +                interrupt-names =3D "PD_IRQB";
+> > > +
+> > > +                connector {
+> >
+> > Where's the data connections? The assumption of the binding is the USB
+> > (2 and 3) connections come from the parent if there's no graph to the
+> > USB controller(s).
+> MT6360 is only a subpmic. TypeC part only handle the CC logic to support =
+USBPD.
+> For the usb connection like as usbhs/usbss,  it need to be handled
+> by/connect to application processor side.
+> LIke as connector/usb-connector.yaml decribed, it  specify the port
+> property to bind USB HS/SS.
+>
+Do i need to add the ports into the connector node for example?
+Like as hs/ss/aux, to make the user know to use 6360's tcpc?
 
-I'm confused about this bug report.
+I check the  style in connector/usb-connect.yaml
+Do I also need to replace two space instead of one tab in the binding examp=
+le?
 
-Here's the syz reproducer from the link listed above:
-
-# 
-https://syzkaller.appspot.com/bug?id=bf172344c5f1d3487a4feff67c3dd30e08d5b635
-# See https://goo.gl/kgGztJ for information about syzkaller reproducers.
-#{"threaded":true,"repeat":true,"procs":6,"sandbox":"none","fault_call":-1,"netdev":true,"close_fds":true}
-r0 = syz_open_dev$usbfs(&(0x7f0000000040)='/dev/bus/usb/00#/00#\x00', 
-0x4000000000000071, 0x28081)
-r1 = socket$inet6(0xa, 0x2, 0x0)
-r2 = dup(r1)
-ioctl$PERF_EVENT_IOC_ENABLE(r2, 0x8912, 0x400200)
-socketpair$unix(0x1, 0x0, 0x0, &(0x7f0000000000))
-ioctl$USBDEVFS_CONTROL(r0, 0x8108551b, &(0x7f0000001140)={0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
-ioctl$USBDEVFS_CLEAR_HALT(r0, 0xc0185502, &(0x7f0000000000)={0x1, 0x1})
-
-As far as I can see, the only USB ioctls used in this test are 
-USBDEVFS_CONTROL and USBDEVFS_CLEAR_HALT.  Neither of those calls 
-do_proc_bulk() or usb_bulk_msg(), so how did those routines end up in 
-the stack trace?
-
-In fact, do_proc_bulk() is called only for USBDEVFS_BULK.  But the test 
-doesn't use that ioctl!
-
-What's going on?  Am I missing part of the test?
-
-Alan Stern
-
+> >
+> > > +                        compatible =3D "usb-c-connector";
+> > > +                        label =3D "USB-C";
+> > > +                        data-role =3D "dual";
+> > > +                        power-role =3D "dual";
+> > > +                        try-power-role =3D "sink";
+> > > +                        source-pdos =3D <PDO_FIXED(5000, 1000, PDO_F=
+IXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
+> > > +                        sink-pdos =3D <PDO_FIXED(5000, 2000, PDO_FIX=
+ED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
+> > > +                        op-sink-microwatt =3D <10000000>;
+> > > +                };
+> > > +            };
+> > > +        };
+> > > +    };
+> > > +...
+> > > --
+> > > 2.7.4
+> > >
