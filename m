@@ -2,110 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C223D256511
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 08:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B22725662F
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Aug 2020 11:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726280AbgH2G1X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Aug 2020 02:27:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58030 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725886AbgH2G1X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 29 Aug 2020 02:27:23 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A177E20936;
-        Sat, 29 Aug 2020 06:27:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598682442;
-        bh=nmPv6vDLuaeXHEYBEjQxMedQhS6gWik2Zx2Xfd6Z2rs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oyZgoHlz2pgoYTLWrnFmo74kMioGJkgPCP1NRq+fVd7PJUqXibhyxvSyKSumdkiDE
-         9aqwGIuCeubslJ3WGVgY6u/TH/7Tj7Gd+q1D+d+ra0jFquK6gPaPj4p/p0733JprTB
-         EH3rYPFsdo73/1bCtWAn+jU8J24hIHG9zROoeHA8=
-Date:   Sat, 29 Aug 2020 08:27:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Mani, Rajmohan" <rajmohan.mani@intel.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "pmalani@chromium.org" <pmalani@chromium.org>,
-        "bleung@chromium.org" <bleung@chromium.org>
-Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
- (IOM) driver
-Message-ID: <20200829062719.GA80106@kroah.com>
-References: <20200822040508.23510-1-rajmohan.mani@intel.com>
- <20200822040508.23510-2-rajmohan.mani@intel.com>
- <20200828074359.GC942935@kroah.com>
- <20200828090832.GB174928@kuha.fi.intel.com>
- <DM6PR11MB3963228D43B50604AE4D0F3AF6520@DM6PR11MB3963.namprd11.prod.outlook.com>
+        id S1728001AbgH2JF5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Aug 2020 05:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726280AbgH2JFx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Aug 2020 05:05:53 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04094C061236
+        for <linux-usb@vger.kernel.org>; Sat, 29 Aug 2020 02:05:46 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id s13so1223261wmh.4
+        for <linux-usb@vger.kernel.org>; Sat, 29 Aug 2020 02:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aleksander-es.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QE5D//VreLHMPziiM2vl+h2p5SBjzAjfcvuXZshVHrw=;
+        b=YACj5OvQ3KyH1Q7+kB5LcxBtxADXRmMgaAqrGqpfGNN1KmJLVFxbknU+6cMzTz1kk9
+         Z6FrX6xsSJNyhZBBlTz+S7kRW/+tfZOwu5GO8fOgIsquj6vmDu2WvjDLs8jFZyvJydLP
+         oXI1l5H/OzjN66OwB1jDqW5Za4AaeYPtDqcjulF3JDpMq04YKLclhMI2o6Nm96WF6eu5
+         ih0Gvdm9tZQYg3dqYLoYIwBcya0B9mpq3RlfdY75RdZ1GD0lbizlzYlI4GDeSx/U/zCd
+         kjnwmWo4K+M0vT6qQAPjGo8OREvkBXcIfgIfF1Sl+nUCUzSBgKpqcs56yMmX6G6It/Hg
+         EykQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QE5D//VreLHMPziiM2vl+h2p5SBjzAjfcvuXZshVHrw=;
+        b=BGI2lNe0d+fBFIGRSBq+R+lH8F5E0gIJL0PnGdzFaTaNQDNHHVOxob3HQJ9pHqsRaS
+         W5blzYNAS5EgQK/NBTXVZfZ1giGQjVWbEu9hfECzIJfUoII3q/rR11nDddn62sX0g15c
+         emBPsordzszxF5BuAfa8N2KUJ21vjvmQLH9BGR73R4FHnW43MStKQU1Z7k/pg5wHEF+E
+         CvKBowl9zQKJ2UrhTAO2j6uQLUbG+mnKEJAL5RgjdZ2l52TktFoNbIibJ2NDSGT32sC5
+         yJdHcPY/Vbz5yfF/Y+S6jyqcn8j0W++uEVfaW8UQwVtXM2JluyLVZ3XgVJs14Ao6DYtU
+         Jr5Q==
+X-Gm-Message-State: AOAM531e3DA9syRYxVzuvCbfdhNZ6OY3XN7Ge/kfVG5BK+t8XVsO1wXE
+        lAJ5GDiUHF6TycSSXZMoXMJ+lJY4vLxwcw==
+X-Google-Smtp-Source: ABdhPJzn8lVS69nj85tYjy6Ko0MyExr6pjPMl6fAG+YuIIE4/HGv6LpsFT8fR6/hZ478RnuukH8qIg==
+X-Received: by 2002:a1c:a953:: with SMTP id s80mr1902732wme.70.1598691943764;
+        Sat, 29 Aug 2020 02:05:43 -0700 (PDT)
+Received: from localhost.localdomain (158.red-83-58-181.dynamicip.rima-tde.net. [83.58.181.158])
+        by smtp.gmail.com with ESMTPSA id g9sm2884529wrw.63.2020.08.29.02.05.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Aug 2020 02:05:43 -0700 (PDT)
+From:   Aleksander Morgado <aleksander@aleksander.es>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Aleksander Morgado <aleksander@aleksander.es>
+Subject: [PATCH] USB: serial: option: add support for SIM7070/SIM7080/SIM7090 modules
+Date:   Sat, 29 Aug 2020 11:05:39 +0200
+Message-Id: <20200829090539.80140-1-aleksander@aleksander.es>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB3963228D43B50604AE4D0F3AF6520@DM6PR11MB3963.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 03:20:22PM +0000, Mani, Rajmohan wrote:
-> Hi Greg,
-> 
-> > Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
-> > (IOM) driver
-> > 
-> > Hi Greg,
-> > 
-> > On Fri, Aug 28, 2020 at 09:43:59AM +0200, Greg Kroah-Hartman wrote:
-> > > I still find this crazy that a whole separate driver is created just
-> > > to read a single 32bit value.
-> > >
-> > > Why not put this logic in the driver that wants to read that value?
-> > > That would be much simpler, smaller, and more obvious.
-> > 
-> > That would mean that we start maintaining something like DMI quirk table in
-> > those drivers. Unfortunately the IOM device is not available on every platform.
-> > Also, even on platforms that do have it, there is no guarantee that the device is
-> > always going to be mapped to the same address.
-> > 
-> > Nevertheless, I was originally hoping that we could hide the handling of IOM
-> > somehow in ACPI without the need for an actual device object, but it now
-> > turns out that the other features of the IOM chip have created interest. At
-> > least our i915 guys probable have some use for it (I don't know exactly what
-> > they are planning to use it for).
-> > 
-> > So the fact that we may later need the device for something else, on top of the
-> > clumsiness and most importantly risks involved with using ACPI to take care of
-> > extra tasks (ASL tends to have bugs - bugs that may never ever get fixed), I
-> > think the IOM device object, and the driver that binds to it, do have a valid
-> > reason for existing.
-> > 
-> 
-> Intel PMC USB mux device is part of the PCH, while IOM is part of the SoC.
+These modules have 2 different USB layouts:
 
-I have no idea what a "PCH" is, what "IOM" is, and how any of this
-relates to a "SoC" :)
+The default layout with PID 0x9205 (AT+CUSBSELNV=1) exposes 4 TTYs and
+an ECM interface:
 
-Don't impose arbritrary hardware "splits" to kernel code when the kernel
-has no such "partitioning" please.
+  T:  Bus=02 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  6 Spd=480 MxCh= 0
+  D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+  P:  Vendor=1e0e ProdID=9205 Rev=00.00
+  S:  Manufacturer=SimTech, Incorporated
+  S:  Product=SimTech SIM7080
+  S:  SerialNumber=1234567890ABCDEF
+  C:  #Ifs= 6 Cfg#= 1 Atr=e0 MxPwr=500mA
+  I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+  I:  If#=0x1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+  I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+  I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+  I:  If#=0x4 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
+  I:  If#=0x5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
 
-> This was another reason we had to have a separate ACPI device.
+The purpose of each TTY is as follows:
+ * ttyUSB0: DIAG/QCDM port.
+ * ttyUSB1: GNSS data.
+ * ttyUSB2: AT-capable port (control).
+ * ttyUSB3: AT-capable port (data).
 
-That sounds like a firmware issue you can solve in UEFI.
+In the secondary layout with PID=0x9206 (AT+CUSBSELNV=86) the module
+exposes 6 TTY ports:
 
-I think this is the most TLA-laden email I have ever written, and I used
-to work at IBM :)
+  T:  Bus=02 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  8 Spd=480 MxCh= 0
+  D:  Ver= 2.00 Cls=02(commc) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+  P:  Vendor=1e0e ProdID=9206 Rev=00.00
+  S:  Manufacturer=SimTech, Incorporated
+  S:  Product=SimTech SIM7080
+  S:  SerialNumber=1234567890ABCDEF
+  C:  #Ifs= 6 Cfg#= 1 Atr=e0 MxPwr=500mA
+  I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+  I:  If#=0x1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+  I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+  I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+  I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+  I:  If#=0x5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
 
-greg k-h
+The purpose of each TTY is as follows:
+ * ttyUSB0: DIAG/QCDM port.
+ * ttyUSB1: GNSS data.
+ * ttyUSB2: AT-capable port (control).
+ * ttyUSB3: QFLOG interface.
+ * ttyUSB4: DAM interface.
+ * ttyUSB5: AT-capable port (data).
+
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+---
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 89b3192af326..01c5b452c6ea 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1819,6 +1819,8 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9003, 0xff) },	/* Simcom SIM7500/SIM7600 MBIM mode */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9011, 0xff),	/* Simcom SIM7500/SIM7600 RNDIS mode */
+ 	  .driver_info = RSVD(7) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9205, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT+ECM mode */
++	{ USB_DEVICE_INTERFACE_CLASS(0x1e0e, 0x9206, 0xff) },	/* Simcom SIM7070/SIM7080/SIM7090 AT-only mode */
+ 	{ USB_DEVICE(ALCATEL_VENDOR_ID, ALCATEL_PRODUCT_X060S_X200),
+ 	  .driver_info = NCTRL(0) | NCTRL(1) | RSVD(4) },
+ 	{ USB_DEVICE(ALCATEL_VENDOR_ID, ALCATEL_PRODUCT_X220_X500D),
+-- 
+2.28.0
+
