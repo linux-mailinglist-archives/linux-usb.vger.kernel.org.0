@@ -2,141 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77303256F98
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Aug 2020 19:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C28256FB8
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Aug 2020 20:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgH3RxJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Aug 2020 13:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726350AbgH3RxF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Aug 2020 13:53:05 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F1BC061575
-        for <linux-usb@vger.kernel.org>; Sun, 30 Aug 2020 10:53:02 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id 92so3259099qtb.6
-        for <linux-usb@vger.kernel.org>; Sun, 30 Aug 2020 10:53:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=yH1J8hCQGCEZj5x88WC5CgJLue5izK8xcUhAdJYu3aA=;
-        b=X9jDW+WqEr6Qd3xz4JS91mS4qm67XNj7+gQA1hLCr+ozEP3K6HAMzADL6YT177DB1G
-         /uXyuMAfgt83xMKn/rq89+mSfzY6INhLIl6lcn7ZKAl7lPxVpA4eXz8WA0RU86VKw67o
-         ww+X3E6VPh93mlAJGXCRhS7DA/pDcSthwfFU04SiCw2onUUgH5NtkjZ6RicWIrCtyLzH
-         /Js8Tbm6nyA9zsLKOEbbGxfghiJF0RlQQrO5bKrbS5n02Q7etZMlSnjZzme0cC2tZ9bh
-         gdcic7T+o+OecISpXqBh7G9HV5xVLKn/kI5Uw2phbDzc+XjVbFJURc5vYZ1QeYdupAGY
-         fqGA==
+        id S1726492AbgH3Sg6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Aug 2020 14:36:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22554 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726380AbgH3Sg5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Aug 2020 14:36:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1598812616;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=QozYeGLLb3VY909mnDA2JjEU+D2LsIUp8jIV0Jpgmp4=;
+        b=XXe8ONkAOIOg48XgLbK5kVSJL4L1HGy63VAqzpewlKUEeZZcOl8S7OKa+XgxzXuI/It+Ta
+        oeNNkJ2d+yd+RKfS2cFbIy4P0RsI08MVsHlXS0eoqiByT9dLC4S+nV0eCdaPy4B1n/uUEH
+        YDS2G2RzR17t8uwpM8qyYc1TVbFmxPY=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-75-O4ts9YZTMNSUzV5MyeqLjQ-1; Sun, 30 Aug 2020 14:36:53 -0400
+X-MC-Unique: O4ts9YZTMNSUzV5MyeqLjQ-1
+Received: by mail-il1-f200.google.com with SMTP id 2so3555975ill.10
+        for <linux-usb@vger.kernel.org>; Sun, 30 Aug 2020 11:36:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=yH1J8hCQGCEZj5x88WC5CgJLue5izK8xcUhAdJYu3aA=;
-        b=nNgXGKWAUNSYw6V/f1pmY+KDrEsESOvIMt9rGsP6PnKv76gdbNgzXgu0K3gi3aSwVT
-         6vVC3Q7i6BAXcaF5fq1Mnhid5WP+hBMdjjq/VWyzTqc4YZKpaPfxmeKQV+lczO+lSvq4
-         /ywod9HTedA0GCAx/hKr4qnVkPG2GPIQRL1yD4UT2I+aFdvrVUVYvRxOS3sr3OAKMACf
-         RwRyPhMJ/wBKD6GKiAcDyUbZtquNVdyz25OdOJwZg74bIVdqeEGOb8IpiRP38dqXop1f
-         S8SeZKwBBoAtisfgzJ/srEVwkBFuRIvvME1qUFdMtIiF0BZgwrac9ktEBu1348fxTJn7
-         Hr/g==
-X-Gm-Message-State: AOAM530EXXA9nyp2GouzgMamxCAWU4OUYYk8o/Zg2LH9nAPQaSLbAYkv
-        s+xejPTGnnKq/x49tOChIBGheA==
-X-Google-Smtp-Source: ABdhPJxlJuKK9dY0j5/s+p7Qz0nZTmqAnQO0yYzGoJC44cJ1LxMP6cZVfZIvfKOT/cENF+n/xibkEQ==
-X-Received: by 2002:ac8:292a:: with SMTP id y39mr9431959qty.89.1598809979234;
-        Sun, 30 Aug 2020 10:52:59 -0700 (PDT)
-Received: from uller (ec2-34-197-84-77.compute-1.amazonaws.com. [34.197.84.77])
-        by smtp.gmail.com with ESMTPSA id b199sm4988671qkg.116.2020.08.30.10.52.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=QozYeGLLb3VY909mnDA2JjEU+D2LsIUp8jIV0Jpgmp4=;
+        b=k0+r08kUSoC4tFJ2j5V34CJSSm+0CvpfQXGKvfiz6RjDrhNc4hEURMhK6MLOSeXDGM
+         0lZk8Qcz8FI/5xRwFDQhPhQoAhA+9c7sGqLRujpdy9Kz3BQd2jo2wh6UN4QPl0XtIJc7
+         ZKZY1iQzzqrbZNEnX58RbJuD1p1umU7e4BRhP+UAVj0pHREnoLfXlOdrMKU7lNLW5Uat
+         qSZ9Djh5ldqzaKwXNaYQbLwMBjC282wPAbeKRO9NiDc0YZwe1egL81lZ6ctJOogXdaBg
+         vDVn+sttSWKBwxhL8PdqzuKvMF1Jgx5VQTC5ErhKCVXx9Qsq7kGe08s7FIUZf+lwvURI
+         Qcjg==
+X-Gm-Message-State: AOAM532vZ70n0E4Jt0c/9jb1ylw3EZECgm54VDvkrGneFgze5IV/MuS1
+        kNRJGE11O7xOm0zeu5QMaYzHp9rnWxivPCjEelzFksRuCw+w1r/LMJdw0WfGxaLmMaH3lAnf/BY
+        VrNwi0SHeXWYA944Lz/hG
+X-Received: by 2002:a92:c904:: with SMTP id t4mr6323572ilp.257.1598812612571;
+        Sun, 30 Aug 2020 11:36:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJws0aS2JRLx2nRnOEJQonJ8J7aNV73fnvMcA6Cq8vQw0/+MPUr+w4mfxekC3wDSgZkuIXIHRg==
+X-Received: by 2002:a92:c904:: with SMTP id t4mr6323556ilp.257.1598812612345;
+        Sun, 30 Aug 2020 11:36:52 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id x185sm2883927iof.41.2020.08.30.11.36.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2020 10:52:58 -0700 (PDT)
-Date:   Sun, 30 Aug 2020 17:52:57 +0000
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>, sboyd@kernel.org,
-        heikki.krogerus@linux.intel.com, agross@kernel.org,
-        robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/4] arm64: boot: dts: qcom: pm8150b: Add DTS node for
- PMIC VBUS booster
-Message-ID: <20200830175257.GA1947@uller>
-References: <20200812071925.315-1-wcheng@codeaurora.org>
- <20200812071925.315-5-wcheng@codeaurora.org>
- <1ed0a34c-6219-fe3d-7d9c-13a74ce2d4d0@gmail.com>
- <02111c69-73fd-5e8c-5594-27393865d458@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <02111c69-73fd-5e8c-5594-27393865d458@codeaurora.org>
+        Sun, 30 Aug 2020 11:36:51 -0700 (PDT)
+From:   trix@redhat.com
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        natechancellor@gmail.com, ndesaulniers@google.com,
+        christophe.jaillet@wanadoo.fr, peter.chen@nxp.com, b-liu@ti.com,
+        chunfeng.yun@mediatek.com, novikov@ispras.ru, yanaijie@huawei.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] usb: gadget: net2272: assert for a valid dma request
+Date:   Sun, 30 Aug 2020 11:36:46 -0700
+Message-Id: <20200830183646.24930-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu 20 Aug 07:47 UTC 2020, Wesley Cheng wrote:
+From: Tom Rix <trix@redhat.com>
 
-> 
-> 
-> On 8/12/2020 2:34 AM, Sergei Shtylyov wrote:
-> > Hello!
-> > 
-> > On 12.08.2020 10:19, Wesley Cheng wrote:
-> > 
-> >> Add the required DTS node for the USB VBUS output regulator, which is
-> >> available on PM8150B.  This will provide the VBUS source to connected
-> >> peripherals.
-> >>
-> >> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> >> ---
-> >>   arch/arm64/boot/dts/qcom/pm8150b.dtsi   | 6 ++++++
-> >>   arch/arm64/boot/dts/qcom/sm8150-mtp.dts | 4 ++++
-> >>   2 files changed, 10 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-> >> b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-> >> index 053c659734a7..9e560c1ca30d 100644
-> >> --- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-> >> +++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-> >> @@ -53,6 +53,12 @@ power-on@800 {
-> >>               status = "disabled";
-> >>           };
-> >>   +        pm8150b_vbus: dcdc@1100 {
-> > 
-> >    s/dcdc/regulator/? What is "dcdc", anyway?
-> >    The device nodes must have the generic names, according to the DT spec.
-> > 
-> 
-> Hi Sergei,
-> 
-> Thanks for the comment!
-> 
-> DCDC is the label that we use for the DC to DC converter block, since
-> the VBUS booster will output 5V to the connected devices.  Would it make
-> more sense to have "dc-dc?"
-> 
+clang static analysis flags this representive problem
 
-At this level it's just a regulator at 0x1100, so it should be
-"regulator@1100". If you would like a more useful name in the running
-system you should be able to use the "regulator-name" property.
+net2272.c:1541:8: warning: Dereference of null pointer
+    if ((req->req.length % ep->ep.maxpacket != 0) ||
+         ^~~~~~~~~~~~~~~
+This is mostly not a problem.
 
-Regards,
-Bjorn
+In net2272_handle_dma(), even though every path through
+the routine dereferences req, it is set to NULL when the
+ep->queue is empty.  If the eq->queue was ever empty this
+would have oops.
 
-> Thanks
-> Wesley
-> 
-> >> +            compatible = "qcom,pm8150b-vbus-reg";
-> >> +            status = "disabled";
-> >> +            reg = <0x1100>;
-> >> +        };
-> >> +
-> >>           pm8150b_typec: typec@1500 {
-> >>               compatible = "qcom,pm8150b-usb-typec";
-> >>               status = "disabled";
-> > [...]
-> > 
-> > MBR, Sergei
-> 
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
+So the else statement should not be needed.  If it is,
+flag it as a BUG.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/usb/gadget/udc/net2272.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
+index 44d1ea2307bb..8301723a8b1a 100644
+--- a/drivers/usb/gadget/udc/net2272.c
++++ b/drivers/usb/gadget/udc/net2272.c
+@@ -1506,17 +1506,16 @@ static int net2272_stop(struct usb_gadget *_gadget)
+ static void
+ net2272_handle_dma(struct net2272_ep *ep)
+ {
+-	struct net2272_request *req;
++	struct net2272_request *req = NULL;
+ 	unsigned len;
+ 	int status;
+ 
+ 	if (!list_empty(&ep->queue))
+ 		req = list_entry(ep->queue.next,
+ 				struct net2272_request, queue);
+-	else
+-		req = NULL;
+ 
+ 	dev_vdbg(ep->dev->dev, "handle_dma %s req %p\n", ep->ep.name, req);
++	BUG_ON(!req);
+ 
+ 	/* Ensure DREQ is de-asserted */
+ 	net2272_write(ep->dev, DMAREQ,
+-- 
+2.18.1
+
