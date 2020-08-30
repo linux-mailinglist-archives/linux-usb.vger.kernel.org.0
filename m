@@ -2,123 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69648256D18
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Aug 2020 11:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CF1256D36
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Aug 2020 12:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726264AbgH3J2q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Aug 2020 05:28:46 -0400
-Received: from cmta18.telus.net ([209.171.16.91]:45128 "EHLO cmta18.telus.net"
+        id S1728720AbgH3KCC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Aug 2020 06:02:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34690 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725869AbgH3J2o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 30 Aug 2020 05:28:44 -0400
-Received: from montezuma.home ([154.5.226.127])
-        by cmsmtp with SMTP
-        id CJdfku3BWqUs3CJdhkoQ9s; Sun, 30 Aug 2020 03:28:42 -0600
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=Mo8sFFSe c=1 sm=1 tr=0
- a=f8b3WT/FcTuUJCJtQO1udw==:117 a=f8b3WT/FcTuUJCJtQO1udw==:17
- a=kj9zAlcOel0A:10 a=x7bEGLp0ZPQA:10 a=COSDN44dAAMA:10 a=VwQbUJbxAAAA:8
- a=jNnXH0EP_Q_1qWgQMt0A:9 a=8xZJOBTUvylkcGZP:21 a=hClwQdPMeXus6opM:21
- a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
-Date:   Sun, 30 Aug 2020 02:28:39 -0700 (PDT)
-From:   Zwane Mwaikambo <zwanem@gmail.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Zwane Mwaikambo <zwane@yosper.io>, linux-usb@vger.kernel.org
-Subject: [PATCH v5 2/2] usb/typec: fix array overruns in ucsi.c
- partner_altmode[]
-In-Reply-To: <alpine.DEB.2.21.2008300220350.37231@montezuma.home>
-Message-ID: <alpine.DEB.2.21.2008300227240.37231@montezuma.home>
-References: <alpine.DEB.2.21.2008271035320.30454@montezuma.home> <0013fe6c-c0a2-1759-c769-cda025e5eb38@infradead.org> <alpine.DEB.2.21.2008271058220.37762@montezuma.home> <alpine.DEB.2.21.2008271131570.37762@montezuma.home> <20200828123328.GF174928@kuha.fi.intel.com>
- <alpine.DEB.2.21.2008300220350.37231@montezuma.home>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1725869AbgH3KCA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 30 Aug 2020 06:02:00 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 801AF20714;
+        Sun, 30 Aug 2020 10:01:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598781719;
+        bh=ntiH5pY0+trPBOlc2VfgKdHGrgt4PdF2TY/6wUPDaY0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=umOly9TxkyK1nC6M+btK6xSzQjdZa3GwtK4W5HB75ND1WEr5C3LEyrb9U3AQqwUgH
+         oVJQCUO0DegK95zxJxRSgCtSqnJkeG6ZUESTK/9W1XncFxiAb/UTAk9dmflCbN41xG
+         vMQokkCYEE8uuNu+9MF26Nr8cf8yYFU3QzjR62UE=
+Date:   Sun, 30 Aug 2020 12:01:56 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.9-rc3 - take 2
+Message-ID: <20200830100156.GA129097@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-CMAE-Envelope: MS4wfDZKyMBOIaA2vpiYHtc55qN3zDORAXZaBaid5qUyZOmopddkIVwF6MXBB5MQ0sD9kz0sqkaDohS97O9R1A561w08HgWv7bc64mccdNxRPBj34uN16E6v
- smFhwctypX8VqmvW12OVqkPkNjUIqWHQ2AUbnMfWkbj+nEJ+7AC3VEaI4qmzgorFH5LODwrfMmL26MKJxASKAzeF+jSgvKeJ/NwOKrVH81sC1xqaaqTvRfK+
- DhYXj3ll0IFPP5sp6hZ+rCJosSmq8sEgLmv8x45bR53KTOYeQmgOeMr1Cu+gTcUgA9c6zSbfCdalGenG94CfZw==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This fixes the second array overrun occurrence (similar failure mode to 
-the first), this time in ucsi_unregister_altmodes.
+The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
 
-[ 4373.153246] BUG: kernel NULL pointer dereference, address: 
-00000000000002f2
-[ 4373.153267] #PF: supervisor read access in kernel mode
-[ 4373.153271] #PF: error_code(0x0000) - not-present page
-[ 4373.153275] PGD 0 P4D 0 
-[ 4373.153284] Oops: 0000 [#2] PREEMPT SMP NOPTI
-[ 4373.153292] CPU: 0 PID: 13242 Comm: kworker/0:0 Tainted: G      D           
-5.8.0-rc6+ #1
-[ 4373.153296] Hardware name: LENOVO 20RD002VUS/20RD002VUS, BIOS R16ET25W 
-(1.11 ) 04/21/2020
-[ 4373.153308] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-[ 4373.153320] RIP: 0010:ucsi_unregister_altmodes+0x5f/0xa0 [typec_ucsi]
-[ 4373.153326] Code: 54 48 8b 3b 41 83 c4 01 e8 9e f9 0c 00 49 63 c4 48 c7 
-03 00 00 00 00 49 8d 5c c5 00 48 8b 3b 48 85 ff 74 31 41 80 fe 01 75 d7 
-<0f> b7 87 f0 02 00 00 66 3d 01 ff 74 0f 66 3d 55 09 75 c4 83 bf f8
-[ 4373.153332] RSP: 0018:ffffb2ef036b3dc8 EFLAGS: 00010246
-[ 4373.153338] RAX: 000000000000001e RBX: ffff94268b006a60 RCX: 
-0000000080800067
-[ 4373.153342] RDX: 0000000080800068 RSI: 0000000000000001 RDI: 
-0000000000000002
-[ 4373.153347] RBP: ffffb2ef036b3de8 R08: 0000000000000000 R09: 
-ffffffff8dc65400
-[ 4373.153351] R10: ffff9426678d7200 R11: 0000000000000001 R12: 
-000000000000001e
-[ 4373.153355] R13: ffff94268b006970 R14: 0000000000000001 R15: 
-ffff94268b006800
-[ 4373.153361] FS:  0000000000000000(0000) GS:ffff942691400000(0000) 
-knlGS:0000000000000000
-[ 4373.153366] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 4373.153371] CR2: 00000000000002f2 CR3: 00000004445a6005 CR4: 
-00000000003606f0
-[ 4373.153375] Call Trace:
-[ 4373.153389]  ucsi_unregister_partner.part.0+0x17/0x30 [typec_ucsi]
-[ 4373.153400]  ucsi_handle_connector_change+0x25c/0x320 [typec_ucsi]
-[ 4373.153418]  process_one_work+0x1df/0x3d0
-[ 4373.153428]  worker_thread+0x4a/0x3d0
-[ 4373.153436]  ? process_one_work+0x3d0/0x3d0
-[ 4373.153444]  kthread+0x127/0x170
-[ 4373.153451]  ? kthread_park+0x90/0x90
-[ 4373.153461]  ret_from_fork+0x1f/0x30
-[ 4373.153661] CR2: 00000000000002f2
+  Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
 
-Fixes: ad74b8649beaf ("usb: typec: ucsi: Preliminary support for alternate modes")
-Cc: stable@vger.kernel.org
-Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
----
-v2 addresses both instances of array overrun
-v3 addresses patch submission/formatting issues
-v4 addresses patch submission/formatting issues
-v5 adds and cc to stable
+are available in the Git repository at:
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index d0c63afaf..79061705e 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -479,7 +480,10 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- 		return;
- 	}
- 
--	while (adev[i]) {
-+	for (i = 0; i < UCSI_MAX_ALTMODES; i++) {
-+		if (!adev[i])
-+			break;
-+
- 		if (recipient == UCSI_RECIPIENT_SOP &&
- 		    (adev[i]->svid == USB_TYPEC_DP_SID ||
- 			(adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
-@@ -488,7 +492,7 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- 			ucsi_displayport_remove_partner((void *)pdev);
- 		}
- 		typec_unregister_altmode(adev[i]);
--		adev[i++] = NULL;
-+		adev[i] = NULL;
- 	}
- }
- 
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.9-rc3
+
+for you to fetch changes up to 20934c0de13b49a072fb1e0ca79fe0fe0e40eae5:
+
+  usb: storage: Add unusual_uas entry for Sony PSZ drives (2020-08-28 09:23:16 +0200)
+
+----------------------------------------------------------------
+USB fixes for 5.9-rc3 - take 2
+
+Let's try this again...  Here are some USB fixes for 5.9-rc3.
+
+This differs from the previous pull request for this release in that:
+	- the usb gadget patch now does not break some systems, and
+	  actually does what it was intended to do.  Many thanks to
+	  Marek Szyprowski for quickly noticing and testing the patch
+	  from Andy Shevchenko to resolve this issue.
+	- some more new USB quirks have been added to get some new
+	  devices to work properly based on user reports.
+
+Other than that, the original pull request patches are all here, and
+they contain:
+	- usb gadget driver fixes
+	- xhci driver fixes
+	- typec fixes
+	- new quirks and ids
+	- fixes for USB patches that went into 5.9-rc1.
+
+All of these have been tested in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (3):
+      USB: yurex: Fix bad gfp argument
+      USB: quirks: Ignore duplicate endpoint on Sound Devices MixPre-D
+      usb: storage: Add unusual_uas entry for Sony PSZ drives
+
+Andy Shevchenko (2):
+      usb: hcd: Fix use after free in usb_hcd_pci_remove()
+      USB: gadget: u_f: Unbreak offset calculation in VLAs
+
+Badhri Jagan Sridharan (1):
+      usb: typec: tcpm: Fix Fix source hard reset response for TDA 2.3.1.1 and TDA 2.3.1.2 failures
+
+Bastien Nocera (2):
+      USB: Also match device drivers using the ->match vfunc
+      USB: Fix device driver race
+
+Brooke Basile (2):
+      USB: gadget: u_f: add overflow checks to VLA macros
+      USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()
+
+Christophe JAILLET (1):
+      usb: gadget: f_tcm: Fix some resource leaks in some error paths
+
+Cyril Roelandt (1):
+      USB: Ignore UAS for JMicron JMS567 ATA/ATAPI Bridge
+
+Ding Hui (1):
+      xhci: Always restore EP_SOFT_CLEAR_TOGGLE even if ep reset failed
+
+Evgeny Novikov (1):
+      USB: lvtest: return proper error code in probe
+
+Greg Kroah-Hartman (1):
+      Merge tag 'fixes-for-v5.9-rc2' of git://git.kernel.org/.../balbi/usb into usb-linus
+
+Hans de Goede (4):
+      usb: typec: ucsi: Fix AB BA lock inversion
+      usb: typec: ucsi: Fix 2 unlocked ucsi_run_command calls
+      usb: typec: ucsi: Rework ppm_lock handling
+      usb: typec: ucsi: Hold con->lock for the entire duration of ucsi_register_port()
+
+Heikki Krogerus (1):
+      tools: usb: move to tools buildsystem
+
+JC Kuo (2):
+      usb: host: xhci-tegra: otg usb2/usb3 port init
+      usb: host: xhci-tegra: fix tegra_xusb_get_phy()
+
+Kai-Heng Feng (2):
+      USB: quirks: Add no-lpm quirk for another Raydium touchscreen
+      xhci: Do warm-reset when both CAS and XDEV_RESUME are set
+
+Li Jun (1):
+      usb: host: xhci: fix ep context print mismatch in debugfs
+
+M. Vefa Bicakci (1):
+      usbip: Implement a match function to fix usbip
+
+Tang Bin (1):
+      usb: host: ohci-exynos: Fix error handling in exynos_ohci_probe()
+
+Thinh Nguyen (4):
+      usb: dwc3: gadget: Don't setup more than requested
+      usb: dwc3: gadget: Fix handling ZLP
+      usb: dwc3: gadget: Handle ZLP for sg requests
+      usb: uas: Add quirk for PNY Pro Elite
+
+Tom Rix (1):
+      USB: cdc-acm: rework notification_buffer resizing
+
+Vinod Koul (1):
+      usb: renesas-xhci: remove version check
+
+周琰杰 (Zhou Yanjie) (1):
+      USB: PHY: JZ4770: Fix static checker warning.
+
+ drivers/usb/class/cdc-acm.c          |  22 ++++---
+ drivers/usb/core/driver.c            |  40 ++++++++++++-
+ drivers/usb/core/generic.c           |   5 +-
+ drivers/usb/core/hcd-pci.c           |   5 +-
+ drivers/usb/core/quirks.c            |   7 +++
+ drivers/usb/dwc3/gadget.c            | 107 +++++++++++++++++++++++++++++------
+ drivers/usb/gadget/function/f_ncm.c  |  81 ++++++++++++++++++++++----
+ drivers/usb/gadget/function/f_tcm.c  |   7 ++-
+ drivers/usb/gadget/u_f.h             |  38 +++++++++----
+ drivers/usb/host/ohci-exynos.c       |   5 +-
+ drivers/usb/host/xhci-debugfs.c      |   8 +--
+ drivers/usb/host/xhci-hub.c          |  19 ++++---
+ drivers/usb/host/xhci-pci-renesas.c  |  19 +------
+ drivers/usb/host/xhci-tegra.c        |   4 +-
+ drivers/usb/host/xhci.c              |   3 +-
+ drivers/usb/misc/lvstest.c           |   2 +-
+ drivers/usb/misc/yurex.c             |   2 +-
+ drivers/usb/phy/phy-jz4770.c         |   1 +
+ drivers/usb/storage/unusual_devs.h   |   2 +-
+ drivers/usb/storage/unusual_uas.h    |  14 +++++
+ drivers/usb/typec/tcpm/tcpm.c        |  28 ++++++++-
+ drivers/usb/typec/ucsi/displayport.c |   9 +--
+ drivers/usb/typec/ucsi/ucsi.c        | 103 +++++++++++++++++----------------
+ drivers/usb/usbip/stub_dev.c         |   6 ++
+ tools/usb/Build                      |   2 +
+ tools/usb/Makefile                   |  53 ++++++++++++++---
+ 26 files changed, 423 insertions(+), 169 deletions(-)
+ create mode 100644 tools/usb/Build
