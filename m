@@ -2,174 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 446052571E1
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 04:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0742571FB
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 05:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbgHaCaA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Aug 2020 22:30:00 -0400
-Received: from mail-vi1eur05on2048.outbound.protection.outlook.com ([40.107.21.48]:40737
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726940AbgHaC3x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 30 Aug 2020 22:29:53 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aKY3Nxduz2KFVnaxDsRC6stsqol+xhkaohV4abMtm5mjQh1a2HMPZ41t4LUjoomS+Nwe6IYEufHQlwSzb4kSnP+IKfCvKazj5VlE8z7UUzXPpjF+WqxoG2IKIBJfNGuoK/9ebBzY5ooyu2a4ymcyooCShsPRgiH3fCFS48HLVOqT+oUPZENnHN9kCGTwfi9ReTyUKIX+zbh0xoJ+zI0R3jsklkOO0zqblgf2gOo001oR1+D8WVKKaBB0MKxw2pt4fkUvab3P5cKfpyq4sKIbG19Psj+cgKRELW8M0zhZvjXKSX25sdc9d/JYxeijkp5pM+aE9fJPm+5W9HpD2QBhbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QtFXeV3h5SXLvBEWDjcWbCjKLzEdW1nSjJEWFaeswLQ=;
- b=eWPbKG0tgv1qpZbnCjS+QMlDsz29K5f1ze+roWGW0H1wlmu762kdrpvXWW/VZcA8pl7Y57iYVVq7l7gJ5e1oGiuf8G3zg1xm1c8BbJu20c9LOgnB05WOS6SLPFblDN6cWb9VLcPy4oMmrk7SoaWwcE1nih5gFUcOrGSJTDqYcZbvTvjykojmwRr/1HPmIoHr9lrLwGWh1RjpPDx65HoaqgrHK2MdFOJy7V3aJR4+B/uK9FhQVmwQUck7PZ/RPJhuwqLpu8ltkl49qW10pKaemRp8kLVJDvUWLSfruutBbdk30Z3MrZ2T1fBR7kh4FxsRuOK0fJn0U3lJhFR5mWCiWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QtFXeV3h5SXLvBEWDjcWbCjKLzEdW1nSjJEWFaeswLQ=;
- b=MXbNIGH6K2vXotCEKldT/8seQ9NOK7CNoTCSwu35/MtfOY96zHkuwrCwxzb1X+hV52EKdtQ6A0vKM2o1kCI+BWVO9NuDymKIhSJoNzGFbqg8w0rTya6yL70WapCvlf7Vo7VrVuXkFaXf+bfbCxcsGY/vYmHr0VB6ZNi+D6/WwVE=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB4245.eurprd04.prod.outlook.com (2603:10a6:209:4f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.24; Mon, 31 Aug
- 2020 02:29:48 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3326.025; Mon, 31 Aug 2020
- 02:29:48 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "jackp@codeaurora.org" <jackp@codeaurora.org>
-Subject: Re: [RFC v5 4/6] usb: gadget: configfs: Check USB configuration
- before adding
-Thread-Topic: [RFC v5 4/6] usb: gadget: configfs: Check USB configuration
- before adding
-Thread-Index: AQHWfcmPpEbUbGD8pEumd+WlyoI7WKlRgTuA
-Date:   Mon, 31 Aug 2020 02:29:48 +0000
-Message-ID: <20200831022825.GA15756@b29397-desktop>
-References: <20200829055846.19034-1-wcheng@codeaurora.org>
- <20200829055846.19034-5-wcheng@codeaurora.org>
-In-Reply-To: <20200829055846.19034-5-wcheng@codeaurora.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: codeaurora.org; dkim=none (message not signed)
- header.d=none;codeaurora.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 63e33dec-9300-4b6c-97cc-08d84d55bba9
-x-ms-traffictypediagnostic: AM6PR04MB4245:
-x-microsoft-antispam-prvs: <AM6PR04MB4245FB348F7E6FF8BC088A7B8B510@AM6PR04MB4245.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: q99bLq916nXPK3UQPJdEdvJ+ATD57IKr3T2UVLF5av4yJ2hMveBplHfe11694I6FkLvZey5N5OB1PKn/JX6xEHGOrdnbuDAjfS9BOTXcxzb/l02YIFjqWdWvkFaIuRF5ZrD4rNaOnQ2PoUj/25Hi82VmjfqUhUZzpMh0N88Mtu6UyFsvIac1voAhEh7N7EvH6LfZRJk84F7SBn1voZKdZq6XynHJiodatbAkIpX2Da5loAPHbut5aiAphS7lWDmBXp5nrhoJKpWYdQ1Iimx6NxscXZlul8s8EDbTDGovF3gu5DUo6qRZ27IRcrsSE0AX4GdtWLIq4v7cRNrFRnerzA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(376002)(346002)(396003)(136003)(39860400002)(366004)(5660300002)(66476007)(66946007)(64756008)(44832011)(8936002)(8676002)(6506007)(53546011)(6916009)(33656002)(7416002)(66556008)(66446008)(9686003)(83380400001)(26005)(316002)(54906003)(186003)(33716001)(76116006)(91956017)(6486002)(6512007)(2906002)(1076003)(86362001)(71200400001)(4326008)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: LtXs5Kz9uZw+UQN3a3EI7qnWmCPH+aYPsNK4Anv4ed4FW7yLJ1Au6jbkPwVLXkwVn+URujyuN/Qh9TP31+tWlR+NVDIs6Ka8TIDuvNpaPmgivD2OX0G/fHWqieXjBRaVp33Rr2jclmEhppsvFwp7MgNJ2UHjsR8IfD9V1eeUeI0agTCdZc9kL+kle41YdEcpYwYji7ypA2clcPuwi42DdAPN4/gzdFXrrz0ex++TilGeAXlq0h4AjgTp2khGvqwSb+emqD9heX1+OyG/Rp1PO6PD8zwTKdU9BzxT1QD3XBYLLwfMl/Oaz3fjSLC3uqyeT+NyW4XUo6csTIjSeXdVfhWOTakMJZbiuICEj3hyhDeZKa/x8RI/gE+ZEEnb7VMeEGoPUeWjKAO/ulNhT9uYcESeiJfdEWTQQ5kScGFQp0klQvpwD3RtVdBDVi7/rSUVec9nryFpTKHDLSHSXwn1Ybh73Crnpfrx2fizZufhOOcX2z+Bf8nDjiIUzxVUuQwWs6i82mtYJmv75XD1VdcTj7uZaISZuU+ZCdjd+cUTBBPkl3L9FgBe2ptAuoj5GsKmh4jCW3vc/PWkvjFUW4tiH/SEdl7v345im9G/v4363R/ApgsOSxo2hUUKVizHAwggX/xeBvdcwZLoQXtsmKeGog==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2AD5C8FB23B1BA4596D5507D200A053D@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727065AbgHaDAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Aug 2020 23:00:08 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:56157 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726692AbgHaDAF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Aug 2020 23:00:05 -0400
+X-UUID: 83132b0db23946a2a501e9fa94dcfc33-20200831
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=sxA4q5kZv1gPdhXKXWhBUtYma0O+/4Q3ZgXNHmoU+Js=;
+        b=LUoYkR/WmFRSKppCxbv+gLdg84HG68hd7KB0bX/USBtwBP4y5+3M8tj7OUsFNaMdnUfuf672LOkhWUfXQZ+zRt+epT2Pr0h7p5lFwVkprMOf7Cff6jXbAHgIf657s6LzRewB5fFXEiediSKgv05UeD2waUnRPwoRss2PlNlh+Ys=;
+X-UUID: 83132b0db23946a2a501e9fa94dcfc33-20200831
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1559049207; Mon, 31 Aug 2020 10:59:53 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 31 Aug
+ 2020 10:59:51 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 31 Aug 2020 10:59:50 +0800
+Message-ID: <1598842698.11403.2.camel@mhfsdcap03>
+Subject: Re: [PATCH v4 2/2] usb typec: mt6360: Add MT6360 Type-C DT binding
+ documentation
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     ChiYuan Huang <u0084500@gmail.com>
+CC:     Rob Herring <robh@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>, <matthias.bgg@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        cy_huang <cy_huang@richtek.com>, <gene_chen@richtek.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Mon, 31 Aug 2020 10:58:18 +0800
+In-Reply-To: <CADiBU39P7jeSOV2_GcXh6A=b8SCViURCsS8SZFmy+oY2hS74tg@mail.gmail.com>
+References: <1598610636-4939-1-git-send-email-u0084500@gmail.com>
+         <1598610636-4939-2-git-send-email-u0084500@gmail.com>
+         <20200828220520.GA3482472@bogus>
+         <CADiBU3-pd7nvtf2_1ssYVLQc4HOHX6PUyyx6GiJ_gH-4DaGmog@mail.gmail.com>
+         <CADiBU39P7jeSOV2_GcXh6A=b8SCViURCsS8SZFmy+oY2hS74tg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63e33dec-9300-4b6c-97cc-08d84d55bba9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2020 02:29:48.8260
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ymrFU8IPCtWlsG23FqGzwkCfCw+P5YA98o+nGWfI1m6L9cr9/MAydpDNFuwYNm51lf3TZ3ZyDuW0CnsiDsuJ1g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4245
+X-TM-SNTS-SMTP: 2140C069E5EBD92A1DA8B8FF4EC85146537652C50164FEE7A5993EA1D23FCBB42000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-08-28 22:58:44, Wesley Cheng wrote:
-> Ensure that the USB gadget is able to support the configuration being
-> added based on the number of endpoints required from all interfaces.  Thi=
-s
-> is for accounting for any bandwidth or space limitations.
->=20
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> ---
->  drivers/usb/gadget/configfs.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->=20
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.=
-c
-> index 56051bb97349..7c74c04b1d8c 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -1361,6 +1361,7 @@ static int configfs_composite_bind(struct usb_gadge=
-t *gadget,
->  		struct usb_function *f;
->  		struct usb_function *tmp;
->  		struct gadget_config_name *cn;
-> +		unsigned long ep_map =3D 0;
-> =20
->  		if (gadget_is_otg(gadget))
->  			c->descriptors =3D otg_desc;
-> @@ -1390,7 +1391,28 @@ static int configfs_composite_bind(struct usb_gadg=
-et *gadget,
->  				list_add(&f->list, &cfg->func_list);
->  				goto err_purge_funcs;
->  			}
-> +			if (f->ss_descriptors) {
-> +				struct usb_descriptor_header **d;
-> +
-> +				d =3D f->ss_descriptors;
-> +				for (; *d; ++d) {
-> +					struct usb_endpoint_descriptor *ep;
-> +					int addr;
-> +
-> +					if ((*d)->bDescriptorType !=3D USB_DT_ENDPOINT)
-> +						continue;
-> +
-> +					ep =3D (struct usb_endpoint_descriptor *)*d;
-> +					addr =3D ((ep->bEndpointAddress & 0x80) >> 3) |
-> +						(ep->bEndpointAddress & 0x0f);
+T24gU2F0LCAyMDIwLTA4LTI5IGF0IDEwOjQ5ICswODAwLCBDaGlZdWFuIEh1YW5nIHdyb3RlOg0K
+PiBDaGlZdWFuIEh1YW5nIDx1MDA4NDUwMEBnbWFpbC5jb20+IOaWvCAyMDIw5bm0OOaciDI55pel
+IOmAseWFrSDkuIrljYg4OjMy5a+r6YGT77yaDQo+ID4NCj4gPiBSb2IgSGVycmluZyA8cm9iaEBr
+ZXJuZWwub3JnPiDmlrwgMjAyMOW5tDjmnIgyOeaXpSDpgLHlha0g5LiK5Y2INjowNeWvq+mBk++8
+mg0KPiA+ID4NCj4gPiA+IE9uIEZyaSwgQXVnIDI4LCAyMDIwIGF0IDA2OjMwOjM2UE0gKzA4MDAs
+IGN5X2h1YW5nIHdyb3RlOg0KPiA+ID4gPiBGcm9tOiBDaGlZdWFuIEh1YW5nIDxjeV9odWFuZ0By
+aWNodGVrLmNvbT4NCj4gPiA+ID4NCj4gPiA+ID4gQWRkIGEgZGV2aWNldHJlZSBiaW5kaW5nIGRv
+Y3VtZW50YXRpb24gZm9yIHRoZSBNVDYzNjAgVHlwZS1DIGRyaXZlci4NCj4gPiA+ID4NCj4gPiA+
+ID4gdXNiIHR5cGVjOiBtdDYzNjA6IFJlbmFtZSBEVCBiaW5kaW5nIGRvdW1lbnQgZnJvbSBtdDYz
+NjAgdG8gbXQ2MzZ4DQo+ID4gPiA+DQo+ID4gPiA+IFNpZ25lZC1vZmYtYnk6IENoaVl1YW4gSHVh
+bmcgPGN5X2h1YW5nQHJpY2h0ZWsuY29tPg0KPiA+ID4gPiAtLS0NCj4gPiA+ID4gIC4uLi9iaW5k
+aW5ncy91c2IvbWVkaWF0ZWssbXQ2MzYwLXRjcGMueWFtbCAgICAgICAgIHwgNzMgKysrKysrKysr
+KysrKysrKysrKysrKw0KPiA+ID4gPiAgMSBmaWxlIGNoYW5nZWQsIDczIGluc2VydGlvbnMoKykN
+Cj4gPiA+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
+ZGluZ3MvdXNiL21lZGlhdGVrLG10NjM2MC10Y3BjLnlhbWwNCj4gPiA+ID4NCj4gPiA+ID4gZGlm
+ZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWss
+bXQ2MzYwLXRjcGMueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2Iv
+bWVkaWF0ZWssbXQ2MzYwLXRjcGMueWFtbA0KPiA+ID4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0K
+PiA+ID4gPiBpbmRleCAwMDAwMDAwMC4uOWU4YWIwZA0KPiA+ID4gPiAtLS0gL2Rldi9udWxsDQo+
+ID4gPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0
+ZWssbXQ2MzYwLXRjcGMueWFtbA0KPiA+ID4gPiBAQCAtMCwwICsxLDczIEBADQo+ID4gPiA+ICsj
+IFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkN
+Cj4gPiA+ID4gKyVZQU1MIDEuMg0KPiA+ID4gPiArLS0tDQo+ID4gPiA+ICskaWQ6ICJodHRwOi8v
+ZGV2aWNldHJlZS5vcmcvc2NoZW1hcy91c2IvbWVkaWF0ZWssbXQ2MzYwLXRjcGMueWFtbCMiDQo+
+ID4gPiA+ICskc2NoZW1hOiAiaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2NoZW1hcy9jb3Jl
+LnlhbWwjIg0KPiA+ID4gPiArDQo+ID4gPiA+ICt0aXRsZTogTWVkaWF0ZWsgTVQ2MzYwIFR5cGUt
+QyBQb3J0IFN3aXRjaCBhbmQgUG93ZXIgRGVsaXZlcnkgY29udHJvbGxlciBEVCBiaW5kaW5ncw0K
+PiA+ID4gPiArDQo+ID4gPiA+ICttYWludGFpbmVyczoNCj4gPiA+ID4gKyAgLSBDaGlZdWFuIEh1
+YW5nIDxjeV9odWFuZ0ByaWNodGVrLmNvbT4NCj4gPiA+ID4gKw0KPiA+ID4gPiArZGVzY3JpcHRp
+b246IHwNCj4gPiA+ID4gKyAgTWVkaWF0ZWsgTVQ2MzYwIGlzIGEgbXVsdGktZnVuY3Rpb25hbCBk
+ZXZpY2UuIEl0IGludGVncmF0ZXMgY2hhcmdlciwgQURDLCBmbGFzaCwgUkdCIGluZGljYXRvcnMs
+DQo+ID4gPiA+ICsgIHJlZ3VsYXRvcnMgKEJVQ0tzL0xET3MpLCBhbmQgVHlwZUMgUG9ydCBTd2l0
+Y2ggd2l0aCBQb3dlciBEZWxpdmVyeSBjb250cm9sbGVyLg0KPiA+ID4gPiArICBUaGlzIGRvY3Vt
+ZW50IG9ubHkgZGVzY3JpYmVzIE1UNjM2MCBUeXBlLUMgUG9ydCBTd2l0Y2ggYW5kIFBvd2VyIERl
+bGl2ZXJ5IGNvbnRyb2xsZXIuDQo+ID4gPiA+ICsNCj4gPiA+ID4gK3Byb3BlcnRpZXM6DQo+ID4g
+PiA+ICsgIGNvbXBhdGlibGU6DQo+ID4gPiA+ICsgICAgZW51bToNCj4gPiA+ID4gKyAgICAgIC0g
+bWVkaWF0ZWssbXQ2MzYwLXRjcGMNCj4gPiA+ID4gKw0KPiA+ID4gPiArICBpbnRlcnJ1cHRzLWV4
+dGVuZGVkOg0KPiA+ID4NCj4gPiA+IFVzZSAnaW50ZXJydXB0cycuIFRoZSB0b29saW5nIHdpbGwg
+YXV0b21hdGljYWxseSBzdXBwb3J0DQo+ID4gPiAnaW50ZXJydXB0cy1leHRlbmRlZCcuDQo+ID4g
+T2theS4NCj4gPiA+DQo+ID4gPiA+ICsgICAgbWF4SXRlbXM6IDENCj4gPiA+ID4gKw0KPiA+ID4g
+PiArICBpbnRlcnJ1cHQtbmFtZXM6DQo+ID4gPiA+ICsgICAgaXRlbXM6DQo+ID4gPiA+ICsgICAg
+ICAtIGNvbnN0OiBQRF9JUlFCDQo+ID4gPiA+ICsNCj4gPiA+ID4gK3BhdHRlcm5Qcm9wZXJ0aWVz
+Og0KPiA+ID4gPiArICAiY29ubmVjdG9yIjoNCj4gPiA+ID4gKyAgICB0eXBlOiBvYmplY3QNCj4g
+PiA+ID4gKyAgICAkcmVmOiAuLi9jb25uZWN0b3IvdXNiLWNvbm5lY3Rvci55YW1sIw0KPiA+ID4g
+PiArICAgIGRlc2NyaXB0aW9uOg0KPiA+ID4gPiArICAgICAgUHJvcGVydGllcyBmb3IgdXNiIGMg
+Y29ubmVjdG9yLg0KPiA+ID4gPiArDQo+ID4gPiA+ICthZGRpdGlvbmFsUHJvcGVydGllczogZmFs
+c2UNCj4gPiA+ID4gKw0KPiA+ID4gPiArcmVxdWlyZWQ6DQo+ID4gPiA+ICsgIC0gY29tcGF0aWJs
+ZQ0KPiA+ID4gPiArICAtIGludGVycnVwdHMtZXh0ZW5kZWQNCj4gPiA+ID4gKyAgLSBpbnRlcnJ1
+cHQtbmFtZXMNCj4gPiA+ID4gKw0KPiA+ID4gPiArZXhhbXBsZXM6DQo+ID4gPiA+ICsgIC0gfA0K
+PiA+ID4gPiArICAgICNpbmNsdWRlIDxkdC1iaW5kaW5ncy9pbnRlcnJ1cHQtY29udHJvbGxlci9p
+cnEuaD4NCj4gPiA+ID4gKyAgICAjaW5jbHVkZSA8ZHQtYmluZGluZ3MvdXNiL3BkLmg+DQo+ID4g
+PiA+ICsgICAgaTJjMCB7DQo+ID4gPiA+ICsgICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDE+Ow0K
+PiA+ID4gPiArICAgICAgICAjc2l6ZS1jZWxscyA9IDwwPjsNCj4gPiA+ID4gKw0KPiA+ID4gPiAr
+ICAgICAgICBtdDYzNjBAMzQgew0KPiA+ID4gPiArICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJt
+ZWRpYXRlayxtdDYzNjAiOw0KPiA+ID4gPiArICAgICAgICAgICAgcmVnID0gPDB4MzQ+Ow0KPiA+
+ID4gPiArDQo+ID4gPiA+ICsgICAgICAgICAgICB0Y3BjIHsNCj4gPiA+ID4gKyAgICAgICAgICAg
+ICAgICBjb21wYXRpYmxlID0gIm1lZGlhdGVrLG10NjM2MC10Y3BjIjsNCj4gPiA+ID4gKyAgICAg
+ICAgICAgICAgICBpbnRlcnJ1cHRzLWV4dGVuZGVkID0gPCZncGlvMjYgMyBJUlFfVFlQRV9MRVZF
+TF9MT1c+Ow0KPiA+ID4gPiArICAgICAgICAgICAgICAgIGludGVycnVwdC1uYW1lcyA9ICJQRF9J
+UlFCIjsNCj4gPiA+ID4gKw0KPiA+ID4gPiArICAgICAgICAgICAgICAgIGNvbm5lY3RvciB7DQo+
+ID4gPg0KPiA+ID4gV2hlcmUncyB0aGUgZGF0YSBjb25uZWN0aW9ucz8gVGhlIGFzc3VtcHRpb24g
+b2YgdGhlIGJpbmRpbmcgaXMgdGhlIFVTQg0KPiA+ID4gKDIgYW5kIDMpIGNvbm5lY3Rpb25zIGNv
+bWUgZnJvbSB0aGUgcGFyZW50IGlmIHRoZXJlJ3Mgbm8gZ3JhcGggdG8gdGhlDQo+ID4gPiBVU0Ig
+Y29udHJvbGxlcihzKS4NCj4gPiBNVDYzNjAgaXMgb25seSBhIHN1YnBtaWMuIFR5cGVDIHBhcnQg
+b25seSBoYW5kbGUgdGhlIENDIGxvZ2ljIHRvIHN1cHBvcnQgVVNCUEQuDQo+ID4gRm9yIHRoZSB1
+c2IgY29ubmVjdGlvbiBsaWtlIGFzIHVzYmhzL3VzYnNzLCAgaXQgbmVlZCB0byBiZSBoYW5kbGVk
+DQo+ID4gYnkvY29ubmVjdCB0byBhcHBsaWNhdGlvbiBwcm9jZXNzb3Igc2lkZS4NCj4gPiBMSWtl
+IGFzIGNvbm5lY3Rvci91c2ItY29ubmVjdG9yLnlhbWwgZGVjcmliZWQsIGl0ICBzcGVjaWZ5IHRo
+ZSBwb3J0DQo+ID4gcHJvcGVydHkgdG8gYmluZCBVU0IgSFMvU1MuDQo+ID4NCj4gRG8gaSBuZWVk
+IHRvIGFkZCB0aGUgcG9ydHMgaW50byB0aGUgY29ubmVjdG9yIG5vZGUgZm9yIGV4YW1wbGU/DQo+
+IExpa2UgYXMgaHMvc3MvYXV4LCB0byBtYWtlIHRoZSB1c2VyIGtub3cgdG8gdXNlIDYzNjAncyB0
+Y3BjPw0KPiANCj4gSSBjaGVjayB0aGUgIHN0eWxlIGluIGNvbm5lY3Rvci91c2ItY29ubmVjdC55
+YW1sDQo+IERvIEkgYWxzbyBuZWVkIHRvIHJlcGxhY2UgdHdvIHNwYWNlIGluc3RlYWQgb2Ygb25l
+IHRhYiBpbiB0aGUgYmluZGluZyBleGFtcGxlPw0KDQpzZWUgd3JpdGluZy1zY2hlbWEucnN0IGFi
+b3V0IGV4YW1wbGVzOg0KDQoiTm90ZTogWUFNTCBkb2Vzbid0IGFsbG93IGxlYWRpbmcgdGFicywg
+c28gc3BhY2VzIG11c3QgYmUgdXNlZCBpbnN0ZWFkLiINCj4gDQo+ID4gPg0KPiA+ID4gPiArICAg
+ICAgICAgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJ1c2ItYy1jb25uZWN0b3IiOw0KPiA+
+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICAgbGFiZWwgPSAiVVNCLUMiOw0KPiA+ID4gPiAr
+ICAgICAgICAgICAgICAgICAgICAgICAgZGF0YS1yb2xlID0gImR1YWwiOw0KPiA+ID4gPiArICAg
+ICAgICAgICAgICAgICAgICAgICAgcG93ZXItcm9sZSA9ICJkdWFsIjsNCj4gPiA+ID4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgIHRyeS1wb3dlci1yb2xlID0gInNpbmsiOw0KPiA+ID4gPiArICAg
+ICAgICAgICAgICAgICAgICAgICAgc291cmNlLXBkb3MgPSA8UERPX0ZJWEVEKDUwMDAsIDEwMDAs
+IFBET19GSVhFRF9EVUFMX1JPTEUgfCBQRE9fRklYRURfREFUQV9TV0FQKT47DQo+ID4gPiA+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICBzaW5rLXBkb3MgPSA8UERPX0ZJWEVEKDUwMDAsIDIwMDAs
+IFBET19GSVhFRF9EVUFMX1JPTEUgfCBQRE9fRklYRURfREFUQV9TV0FQKT47DQo+ID4gPiA+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICBvcC1zaW5rLW1pY3Jvd2F0dCA9IDwxMDAwMDAwMD47DQo+
+ID4gPiA+ICsgICAgICAgICAgICAgICAgfTsNCj4gPiA+ID4gKyAgICAgICAgICAgIH07DQo+ID4g
+PiA+ICsgICAgICAgIH07DQo+ID4gPiA+ICsgICAgfTsNCj4gPiA+ID4gKy4uLg0KPiA+ID4gPiAt
+LQ0KPiA+ID4gPiAyLjcuNA0KPiA+ID4gPg0KDQo=
 
-">> 3" or "<< 3?
-
-> +					set_bit(addr, &ep_map);
-
-You want to record all endpoints on ep_map? Considering there are
-four EP_IN (1-4), and four EP_OUT (1-4), what the value of ep_map
-would like?
-
-> +				}
-> +			}
->  		}
-> +		ret =3D usb_gadget_check_config(cdev->gadget, ep_map);
-> +		if (ret)
-> +			goto err_purge_funcs;
-> +
-
-You may move this patch after your 4nd patch to avoid "git bisect"
-issue.
-
->  		usb_ep_autoconfig_reset(cdev->gadget);
->  	}
->  	if (cdev->use_os_string) {
-> --=20
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum=
-,
-> a Linux Foundation Collaborative Project
->=20
-
---=20
-
-Thanks,
-Peter Chen=
