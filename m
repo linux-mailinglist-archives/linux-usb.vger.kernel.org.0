@@ -2,36 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 416EC2573BD
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 08:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9E52573C3
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 08:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725949AbgHaGee (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 02:34:34 -0400
-Received: from mga07.intel.com ([134.134.136.100]:35067 "EHLO mga07.intel.com"
+        id S1725891AbgHaGh6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 02:37:58 -0400
+Received: from mga12.intel.com ([192.55.52.136]:31001 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725810AbgHaGea (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 Aug 2020 02:34:30 -0400
-IronPort-SDR: HpuEQ1ChO2P/wWvcEEl/5CbLCLDFRBCOPHCb2QXa+Y1GHW+e1md/jQAKqra6MpwOGsuFsMnBnK
- 2/N15Cl2oGXw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9729"; a="221154810"
+        id S1725794AbgHaGhz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Aug 2020 02:37:55 -0400
+IronPort-SDR: m2RGhjfTdJWIhQR+AKnJD+Th0WnzAWOkluLCOrgxIs0l2UIbu+fRzFQmHI6oeyrkrBImv9C+/z
+ r5mk8mfr5t6A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9729"; a="136451352"
 X-IronPort-AV: E=Sophos;i="5.76,374,1592895600"; 
-   d="scan'208";a="221154810"
+   d="scan'208";a="136451352"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2020 23:34:30 -0700
-IronPort-SDR: EcUQoMMmPztjt2xQOwzUfKTJ8QKO8iYE48MPz62Dxe4qu/OpPq1W7qSMKkSb8C7mc7RCrMTMRB
- E6Upso6khyhg==
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2020 23:37:54 -0700
+IronPort-SDR: N4OebHVVrSmwm+Pmfenv1vWmIgD6OH1pg5BO+lRLgKltZBbNnYmDgfsbSIaPYU4Iy39yKoKBwT
+ Eqk8RPVIvDtw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,374,1592895600"; 
-   d="scan'208";a="445596390"
+   d="scan'208";a="445597362"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga004.jf.intel.com with ESMTP; 30 Aug 2020 23:34:29 -0700
+  by orsmga004.jf.intel.com with ESMTP; 30 Aug 2020 23:37:53 -0700
 Subject: Re: Data toggles not reset on "set configuration" for ports handled
  by "xhci_hcd" driver
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Martin Thierer <mthierer@gmail.com>, linux-usb@vger.kernel.org
-References: <20200821170106.GB256196@rowland.harvard.edu>
+To:     Martin Thierer <mthierer@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
+References: <CAL3BvCzb6dGZOm6jy2PddSfioM7hThMEBm+aQ_gmMAWAXFYOuQ@mail.gmail.com>
+ <20200821160321.GA256196@rowland.harvard.edu>
+ <CAL3BvCyz3W+aRu0e=RE3teaMMh6KDYxu8NbFicY07Xt-=f9Whg@mail.gmail.com>
+ <20200821170106.GB256196@rowland.harvard.edu>
  <d11a91f5-2bb8-01ce-c8b8-4512a2cf2793@linux.intel.com>
  <CAL3BvCyxTvfUjecoYO0ie1vt4_+1cad+8Dt=xmcXogZSooGj+A@mail.gmail.com>
  <cbdfafed-b8d4-ca07-bde1-4598f5117f04@linux.intel.com>
@@ -41,7 +44,7 @@ References: <20200821170106.GB256196@rowland.harvard.edu>
  <CAL3BvCzKdRAVNMgG2do1D_QgKnR_x+P-uBuv3-kPMi7z6iabwQ@mail.gmail.com>
  <a8c8509b-6f45-c905-3860-d2b5dd5f9103@linux.intel.com>
  <f57b9d65-9553-17f7-090a-0272b013af36@linux.intel.com>
- <20200828155541.GC470612@rowland.harvard.edu>
+ <CAL3BvCyqATeb2cSE5ZcxrvkZWROfMn3U7YxcPMXHjQpEFDMAkA@mail.gmail.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
@@ -86,73 +89,36 @@ Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
  42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
  IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <de8b5ab8-961b-0613-750c-ce9aff6ac3a4@linux.intel.com>
-Date:   Mon, 31 Aug 2020 09:37:53 +0300
+Message-ID: <8ae30689-aa69-0344-99a4-1425b9eaafec@linux.intel.com>
+Date:   Mon, 31 Aug 2020 09:41:17 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200828155541.GC470612@rowland.harvard.edu>
+In-Reply-To: <CAL3BvCyqATeb2cSE5ZcxrvkZWROfMn3U7YxcPMXHjQpEFDMAkA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28.8.2020 18.55, Alan Stern wrote:
-> On Fri, Aug 28, 2020 at 04:10:47PM +0300, Mathias Nyman wrote:
->>>> Thanks, that seems to work! (Judging by the absence of my original
->>>> issue with the xum1541 adapter; I haven't checked what's actually
->>>> happening on the bus).
->>>>
->>>> Martin
->>>>
->>>
->>> Great, thanks.
->>>
->>> Now this test code needs to be cleaned up a turned into a real patch
->>
+On 28.8.2020 21.04, Martin Thierer wrote:
+> On Fri, Aug 28, 2020 at 3:07 PM Mathias Nyman
+> <mathias.nyman@linux.intel.com> wrote:
 >> Can you test one more round?
 >> The code below is cleaned up but it also has a functional change.
 >> This version issues separate commands for dropping and adding endpoints.
 >> Previous code both did all on one command.
 >>
 >> If it works I'll send it forward.
->>
->> Thanks
->> -Mathias
->>
->> ---
->> From: Mathias Nyman <mathias.nyman@linux.intel.com>
->> Subject: [PATCH] usb: Fix out of sync data toggle if a configured device is
->>  reconfigured
->>
->> Userspace drivers that use a SetConfiguration() request to "lightweight"
->> reset a already configured usb device might cause data toggles to get out
->> of sync between the device and host, and the device becomes unusable.
->>
->> The xHCI host requires endpoints to be dropped and added back to reset the
->> toggle. USB core avoids these otherwise extra steps if the current active
->> configuration is the same as the new requested configuration.
->>
->> A SetConfiguration() request will reset the device side data toggles.
->> Make sure usb core drops and adds back the endpoints in this case.
->>
->> To avoid code duplication split the current usb_disable_device() function
->> and reuse the endpoint specific part.
->>
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > 
-> This seems reasonable.  But can you add something to the kerneldoc for
-> usb_reset_configuration() explaining that if the routine fails, the
-> device will probablly be in an unusable state (endpoints disabled,
-> interfaces only partially enabled)?
-> 
-> Alan Stern
-> 
+> Looks good - thanks! (Disclaimer: My original issue is gone; I haven't
+> checked if it breaks anything else, but didn't notice any problems,
+> either).
 
-Good point, will add
+Thanks for testing. 
+Can I add a Tested-by: Martin Thierer <mthierer@gmail.com> tag to the patch?
 
-Thanks
-Mathias
+-Mathias 
+
