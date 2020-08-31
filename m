@@ -2,118 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C69212571AE
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 03:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 446052571E1
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 04:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726695AbgHaBwj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Aug 2020 21:52:39 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:16438 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726454AbgHaBwi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Aug 2020 21:52:38 -0400
-X-UUID: 11d7f1acc5b24e608d751e86be8500cd-20200831
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=CKPJOw9Pxq9nUroeTbwTwZKLGO0Crpt83e3+Rzmhnfc=;
-        b=rckeqeT9blEUI8eczTUNnmz0uwebwQSnwayquCCYbLbjNdLo6sYcKCRR2T8yDXgkCNnLRDR0q/GXYstyk4s870/xRSPEYl8UYmKhQ3/GOSlmIZb6aW3PxW5bOTbUsWjHrYQudzfJvWFyhN/GyPgliS1UjS5xlQ22crvSCLrpLhs=;
-X-UUID: 11d7f1acc5b24e608d751e86be8500cd-20200831
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1758976509; Mon, 31 Aug 2020 09:52:31 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs08n2.mediatek.inc
- (172.21.101.56) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 31 Aug
- 2020 09:52:29 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 31 Aug 2020 09:52:29 +0800
-Message-ID: <1598838655.7054.11.camel@mhfsdcap03>
-Subject: Re: [PATCH v4] usb: mtu3: fix panic in mtu3_gadget_stop()
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Ainge Hsu <ainge.hsu@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Date:   Mon, 31 Aug 2020 09:50:55 +0800
-In-Reply-To: <1598539328-1976-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1598520178-17301-1-git-send-email-macpaul.lin@mediatek.com>
-         <1598539328-1976-1-git-send-email-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726984AbgHaCaA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Aug 2020 22:30:00 -0400
+Received: from mail-vi1eur05on2048.outbound.protection.outlook.com ([40.107.21.48]:40737
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726940AbgHaC3x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 30 Aug 2020 22:29:53 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aKY3Nxduz2KFVnaxDsRC6stsqol+xhkaohV4abMtm5mjQh1a2HMPZ41t4LUjoomS+Nwe6IYEufHQlwSzb4kSnP+IKfCvKazj5VlE8z7UUzXPpjF+WqxoG2IKIBJfNGuoK/9ebBzY5ooyu2a4ymcyooCShsPRgiH3fCFS48HLVOqT+oUPZENnHN9kCGTwfi9ReTyUKIX+zbh0xoJ+zI0R3jsklkOO0zqblgf2gOo001oR1+D8WVKKaBB0MKxw2pt4fkUvab3P5cKfpyq4sKIbG19Psj+cgKRELW8M0zhZvjXKSX25sdc9d/JYxeijkp5pM+aE9fJPm+5W9HpD2QBhbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QtFXeV3h5SXLvBEWDjcWbCjKLzEdW1nSjJEWFaeswLQ=;
+ b=eWPbKG0tgv1qpZbnCjS+QMlDsz29K5f1ze+roWGW0H1wlmu762kdrpvXWW/VZcA8pl7Y57iYVVq7l7gJ5e1oGiuf8G3zg1xm1c8BbJu20c9LOgnB05WOS6SLPFblDN6cWb9VLcPy4oMmrk7SoaWwcE1nih5gFUcOrGSJTDqYcZbvTvjykojmwRr/1HPmIoHr9lrLwGWh1RjpPDx65HoaqgrHK2MdFOJy7V3aJR4+B/uK9FhQVmwQUck7PZ/RPJhuwqLpu8ltkl49qW10pKaemRp8kLVJDvUWLSfruutBbdk30Z3MrZ2T1fBR7kh4FxsRuOK0fJn0U3lJhFR5mWCiWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QtFXeV3h5SXLvBEWDjcWbCjKLzEdW1nSjJEWFaeswLQ=;
+ b=MXbNIGH6K2vXotCEKldT/8seQ9NOK7CNoTCSwu35/MtfOY96zHkuwrCwxzb1X+hV52EKdtQ6A0vKM2o1kCI+BWVO9NuDymKIhSJoNzGFbqg8w0rTya6yL70WapCvlf7Vo7VrVuXkFaXf+bfbCxcsGY/vYmHr0VB6ZNi+D6/WwVE=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB4245.eurprd04.prod.outlook.com (2603:10a6:209:4f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.24; Mon, 31 Aug
+ 2020 02:29:48 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3326.025; Mon, 31 Aug 2020
+ 02:29:48 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "jackp@codeaurora.org" <jackp@codeaurora.org>
+Subject: Re: [RFC v5 4/6] usb: gadget: configfs: Check USB configuration
+ before adding
+Thread-Topic: [RFC v5 4/6] usb: gadget: configfs: Check USB configuration
+ before adding
+Thread-Index: AQHWfcmPpEbUbGD8pEumd+WlyoI7WKlRgTuA
+Date:   Mon, 31 Aug 2020 02:29:48 +0000
+Message-ID: <20200831022825.GA15756@b29397-desktop>
+References: <20200829055846.19034-1-wcheng@codeaurora.org>
+ <20200829055846.19034-5-wcheng@codeaurora.org>
+In-Reply-To: <20200829055846.19034-5-wcheng@codeaurora.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: codeaurora.org; dkim=none (message not signed)
+ header.d=none;codeaurora.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 63e33dec-9300-4b6c-97cc-08d84d55bba9
+x-ms-traffictypediagnostic: AM6PR04MB4245:
+x-microsoft-antispam-prvs: <AM6PR04MB4245FB348F7E6FF8BC088A7B8B510@AM6PR04MB4245.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: q99bLq916nXPK3UQPJdEdvJ+ATD57IKr3T2UVLF5av4yJ2hMveBplHfe11694I6FkLvZey5N5OB1PKn/JX6xEHGOrdnbuDAjfS9BOTXcxzb/l02YIFjqWdWvkFaIuRF5ZrD4rNaOnQ2PoUj/25Hi82VmjfqUhUZzpMh0N88Mtu6UyFsvIac1voAhEh7N7EvH6LfZRJk84F7SBn1voZKdZq6XynHJiodatbAkIpX2Da5loAPHbut5aiAphS7lWDmBXp5nrhoJKpWYdQ1Iimx6NxscXZlul8s8EDbTDGovF3gu5DUo6qRZ27IRcrsSE0AX4GdtWLIq4v7cRNrFRnerzA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(376002)(346002)(396003)(136003)(39860400002)(366004)(5660300002)(66476007)(66946007)(64756008)(44832011)(8936002)(8676002)(6506007)(53546011)(6916009)(33656002)(7416002)(66556008)(66446008)(9686003)(83380400001)(26005)(316002)(54906003)(186003)(33716001)(76116006)(91956017)(6486002)(6512007)(2906002)(1076003)(86362001)(71200400001)(4326008)(478600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: LtXs5Kz9uZw+UQN3a3EI7qnWmCPH+aYPsNK4Anv4ed4FW7yLJ1Au6jbkPwVLXkwVn+URujyuN/Qh9TP31+tWlR+NVDIs6Ka8TIDuvNpaPmgivD2OX0G/fHWqieXjBRaVp33Rr2jclmEhppsvFwp7MgNJ2UHjsR8IfD9V1eeUeI0agTCdZc9kL+kle41YdEcpYwYji7ypA2clcPuwi42DdAPN4/gzdFXrrz0ex++TilGeAXlq0h4AjgTp2khGvqwSb+emqD9heX1+OyG/Rp1PO6PD8zwTKdU9BzxT1QD3XBYLLwfMl/Oaz3fjSLC3uqyeT+NyW4XUo6csTIjSeXdVfhWOTakMJZbiuICEj3hyhDeZKa/x8RI/gE+ZEEnb7VMeEGoPUeWjKAO/ulNhT9uYcESeiJfdEWTQQ5kScGFQp0klQvpwD3RtVdBDVi7/rSUVec9nryFpTKHDLSHSXwn1Ybh73Crnpfrx2fizZufhOOcX2z+Bf8nDjiIUzxVUuQwWs6i82mtYJmv75XD1VdcTj7uZaISZuU+ZCdjd+cUTBBPkl3L9FgBe2ptAuoj5GsKmh4jCW3vc/PWkvjFUW4tiH/SEdl7v345im9G/v4363R/ApgsOSxo2hUUKVizHAwggX/xeBvdcwZLoQXtsmKeGog==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2AD5C8FB23B1BA4596D5507D200A053D@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 77E100386F2C0ABE68A90833F81AA8EAAAE55A04FA2870F70C909006F70608A82000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63e33dec-9300-4b6c-97cc-08d84d55bba9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2020 02:29:48.8260
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ymrFU8IPCtWlsG23FqGzwkCfCw+P5YA98o+nGWfI1m6L9cr9/MAydpDNFuwYNm51lf3TZ3ZyDuW0CnsiDsuJ1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4245
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA4LTI3IGF0IDIyOjQyICswODAwLCBNYWNwYXVsIExpbiB3cm90ZToNCj4g
-VGhpcyBwYXRjaCBmaXhlcyBhIHBvc3NpYmxlIGlzc3VlIHdoZW4gbXR1M19nYWRnZXRfc3RvcCgp
-DQo+IGFscmVhZHkgYXNzaWduZWQgTlVMTCB0byBtdHUtPmdhZGdldF9kcml2ZXIgZHVyaW5nIG10
-dV9nYWRnZXRfZGlzY29ubmVjdCgpLg0KPiANCj4gWzxmZmZmZmY5MDA4MTYxOTc0Pl0gbm90aWZp
-ZXJfY2FsbF9jaGFpbisweGE0LzB4MTI4DQo+IFs8ZmZmZmZmOTAwODE2MWZkND5dIF9fYXRvbWlj
-X25vdGlmaWVyX2NhbGxfY2hhaW4rMHg4NC8weDEzOA0KPiBbPGZmZmZmZjkwMDgxNjJlYzA+XSBu
-b3RpZnlfZGllKzB4YjAvMHgxMjANCj4gWzxmZmZmZmY5MDA4MDllMzQwPl0gZGllKzB4MWY4LzB4
-NWQwDQo+IFs8ZmZmZmZmOTAwODBkMDNiND5dIF9fZG9fa2VybmVsX2ZhdWx0KzB4MTljLzB4Mjgw
-DQo+IFs8ZmZmZmZmOTAwODBkMDRkYz5dIGRvX2JhZF9hcmVhKzB4NDQvMHgxNDANCj4gWzxmZmZm
-ZmY5MDA4MGQwZjljPl0gZG9fdHJhbnNsYXRpb25fZmF1bHQrMHg0Yy8weDkwDQo+IFs8ZmZmZmZm
-OTAwODA4MGE3OD5dIGRvX21lbV9hYm9ydCsweGI4LzB4MjU4DQo+IFs8ZmZmZmZmOTAwODA4NDlk
-MD5dIGVsMV9kYSsweDI0LzB4M2MNCj4gWzxmZmZmZmY5MDA5YmRlMDFjPl0gbXR1M19nYWRnZXRf
-ZGlzY29ubmVjdCsweGFjLzB4MTI4DQo+IFs8ZmZmZmZmOTAwOWJkNTc2Yz5dIG10dTNfaXJxKzB4
-MzRjLzB4YzE4DQo+IFs8ZmZmZmZmOTAwODJhYzAzYz5dIF9faGFuZGxlX2lycV9ldmVudF9wZXJj
-cHUrMHgyYWMvMHhjZDANCj4gWzxmZmZmZmY5MDA4MmFjYWUwPl0gaGFuZGxlX2lycV9ldmVudF9w
-ZXJjcHUrMHg4MC8weDEzOA0KPiBbPGZmZmZmZjkwMDgyYWNjNDQ+XSBoYW5kbGVfaXJxX2V2ZW50
-KzB4YWMvMHgxNDgNCj4gWzxmZmZmZmY5MDA4MmI3MWNjPl0gaGFuZGxlX2Zhc3Rlb2lfaXJxKzB4
-MjM0LzB4NTY4DQo+IFs8ZmZmZmZmOTAwODJhODcwOD5dIGdlbmVyaWNfaGFuZGxlX2lycSsweDQ4
-LzB4NjgNCj4gWzxmZmZmZmY5MDA4MmE5NmFjPl0gX19oYW5kbGVfZG9tYWluX2lycSsweDI2NC8w
-eDE3NDANCj4gWzxmZmZmZmY5MDA4MDgxOWY0Pl0gZ2ljX2hhbmRsZV9pcnErMHgxNGMvMHgyNTAN
-Cj4gWzxmZmZmZmY5MDA4MDg0Y2VjPl0gZWwxX2lycSsweGVjLzB4MTk0DQo+IFs8ZmZmZmZmOTAw
-ODViOTg1Yz5dIGRtYV9wb29sX2FsbG9jKzB4NmU0LzB4YWUwDQo+IFs8ZmZmZmZmOTAwOGQ3Zjg5
-MD5dIGNtZHFfbWJveF9wb29sX2FsbG9jX2ltcGwrMHhiMC8weDIzOA0KPiBbPGZmZmZmZjkwMDhk
-ODA5MDQ+XSBjbWRxX3BrdF9hbGxvY19idWYrMHgyZGMvMHg3YzANCj4gWzxmZmZmZmY5MDA4ZDgw
-ZjYwPl0gY21kcV9wa3RfYWRkX2NtZF9idWZmZXIrMHgxNzgvMHgyNzANCj4gWzxmZmZmZmY5MDA4
-ZDgyMzIwPl0gY21kcV9wa3RfcGVyZl9iZWdpbisweDEwOC8weDE0OA0KPiBbPGZmZmZmZjkwMDhk
-ODI0ZDg+XSBjbWRxX3BrdF9jcmVhdGUrMHgxNzgvMHgxZjANCj4gWzxmZmZmZmY5MDA4Zjk2MjMw
-Pl0gbXRrX2NydGNfY29uZmlnX2RlZmF1bHRfcGF0aCsweDMyOC8weDdhMA0KPiBbPGZmZmZmZjkw
-MDkwMjQ2Y2M+XSBtdGtfZHJtX2lkbGVtZ3Jfa2ljaysweGE2Yy8weDE0NjANCj4gWzxmZmZmZmY5
-MDA4ZjliYmI0Pl0gbXRrX2RybV9jcnRjX2F0b21pY19iZWdpbisweDFhNC8weDFhNjgNCj4gWzxm
-ZmZmZmY5MDA4ZThkZjljPl0gZHJtX2F0b21pY19oZWxwZXJfY29tbWl0X3BsYW5lcysweDE1NC8w
-eDg3OA0KPiBbPGZmZmZmZjkwMDhmMmZiNzA+XSBtdGtfYXRvbWljX2NvbXBsZXRlLmlzcmEuMTYr
-MHhlODAvMHgxOWM4DQo+IFs8ZmZmZmZmOTAwOGYzMDkxMD5dIG10a19hdG9taWNfY29tbWl0KzB4
-MjU4LzB4ODk4DQo+IFs8ZmZmZmZmOTAwOGVmMTQyYz5dIGRybV9hdG9taWNfY29tbWl0KzB4Y2Mv
-MHgxMDgNCj4gWzxmZmZmZmY5MDA4ZWY3Y2YwPl0gZHJtX21vZGVfYXRvbWljX2lvY3RsKzB4MWMy
-MC8weDI1ODANCj4gWzxmZmZmZmY5MDA4ZWJjNzY4Pl0gZHJtX2lvY3RsX2tlcm5lbCsweDExOC8w
-eDFiMA0KPiBbPGZmZmZmZjkwMDhlYmNkZTg+XSBkcm1faW9jdGwrMHg1YzAvMHg5MjANCj4gWzxm
-ZmZmZmY5MDA4NjNiMDMwPl0gZG9fdmZzX2lvY3RsKzB4MTg4LzB4MTgyMA0KPiBbPGZmZmZmZjkw
-MDg2M2M3NTQ+XSBTeVNfaW9jdGwrMHg4Yy8weGEwDQo+IA0KPiBGaXhlczogZGYyMDY5YWNiMDA1
-ICgidXNiOiBBZGQgTWVkaWFUZWsgVVNCMyBEUkQgZHJpdmVyIikNCj4gU2lnbmVkLW9mZi1ieTog
-TWFjcGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NCj4gQ2M6IHN0YWJsZUB2Z2Vy
-Lmtlcm5lbC5vcmcNCj4gLS0tDQo+IENoYW5nZXMgZm9yIHY0Og0KPiAgIC0gQWRkIGEgIkZpeGVz
-OiIgbGluZS4gIFRoYW5rcyBGZWxpcGUuDQo+IENoYW5nZXMgZm9yIHYzOg0KPiAgIC0gQ2FsbCBz
-eW5jaHJvbml6ZV9pcnEoKSBpbiBtdHUzX2dhZGdldF9zdG9wKCkgaW5zdGVhZCBvZiByZW1lbWJl
-cmluZw0KPiAgICAgY2FsbGJhY2sgZnVuY3Rpb24gaW4gbXR1M19nYWRnZXRfZGlzY29ubmVjdCgp
-Lg0KPiAgICAgVGhhbmtzIGZvciBBbGFuJ3Mgc3VnZ2VzdGlvbi4NCj4gQ2hhbmdlcyBmb3IgdjI6
-DQo+ICAgLSBDaGVjayBtdHVfZ2FkZ2V0X2RyaXZlciBvdXQgb2Ygc3Bpbl9sb2NrIG1pZ2h0IHN0
-aWxsIG5vdCB3b3JrLg0KPiAgICAgV2UgdXNlIGEgdGVtcG9yYXJ5IHBvaW50ZXIgdG8gcmVtZW1i
-ZXIgdGhlIGNhbGxiYWNrIGZ1bmN0aW9uLg0KPiANCj4gIGRyaXZlcnMvdXNiL210dTMvbXR1M19n
-YWRnZXQuYyB8ICAgIDEgKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9ucygrKQ0KPiAN
-Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL210dTMvbXR1M19nYWRnZXQuYyBiL2RyaXZlcnMv
-dXNiL210dTMvbXR1M19nYWRnZXQuYw0KPiBpbmRleCAxZGU1YzlhLi4xYWIzZDNhIDEwMDY0NA0K
-PiAtLS0gYS9kcml2ZXJzL3VzYi9tdHUzL210dTNfZ2FkZ2V0LmMNCj4gKysrIGIvZHJpdmVycy91
-c2IvbXR1My9tdHUzX2dhZGdldC5jDQo+IEBAIC01NjQsNiArNTY0LDcgQEAgc3RhdGljIGludCBt
-dHUzX2dhZGdldF9zdG9wKHN0cnVjdCB1c2JfZ2FkZ2V0ICpnKQ0KPiAgDQo+ICAJc3Bpbl91bmxv
-Y2tfaXJxcmVzdG9yZSgmbXR1LT5sb2NrLCBmbGFncyk7DQo+ICANCj4gKwlzeW5jaHJvbml6ZV9p
-cnEobXR1LT5pcnEpOw0KPiAgCXJldHVybiAwOw0KPiAgfQ0KPiAgDQpBY2tlZC1ieTogQ2h1bmZl
-bmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KDQpUaGFua3MgYSBsb3QNCg0KDQoN
-Cg==
+On 20-08-28 22:58:44, Wesley Cheng wrote:
+> Ensure that the USB gadget is able to support the configuration being
+> added based on the number of endpoints required from all interfaces.  Thi=
+s
+> is for accounting for any bandwidth or space limitations.
+>=20
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> ---
+>  drivers/usb/gadget/configfs.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>=20
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.=
+c
+> index 56051bb97349..7c74c04b1d8c 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -1361,6 +1361,7 @@ static int configfs_composite_bind(struct usb_gadge=
+t *gadget,
+>  		struct usb_function *f;
+>  		struct usb_function *tmp;
+>  		struct gadget_config_name *cn;
+> +		unsigned long ep_map =3D 0;
+> =20
+>  		if (gadget_is_otg(gadget))
+>  			c->descriptors =3D otg_desc;
+> @@ -1390,7 +1391,28 @@ static int configfs_composite_bind(struct usb_gadg=
+et *gadget,
+>  				list_add(&f->list, &cfg->func_list);
+>  				goto err_purge_funcs;
+>  			}
+> +			if (f->ss_descriptors) {
+> +				struct usb_descriptor_header **d;
+> +
+> +				d =3D f->ss_descriptors;
+> +				for (; *d; ++d) {
+> +					struct usb_endpoint_descriptor *ep;
+> +					int addr;
+> +
+> +					if ((*d)->bDescriptorType !=3D USB_DT_ENDPOINT)
+> +						continue;
+> +
+> +					ep =3D (struct usb_endpoint_descriptor *)*d;
+> +					addr =3D ((ep->bEndpointAddress & 0x80) >> 3) |
+> +						(ep->bEndpointAddress & 0x0f);
 
+">> 3" or "<< 3?
+
+> +					set_bit(addr, &ep_map);
+
+You want to record all endpoints on ep_map? Considering there are
+four EP_IN (1-4), and four EP_OUT (1-4), what the value of ep_map
+would like?
+
+> +				}
+> +			}
+>  		}
+> +		ret =3D usb_gadget_check_config(cdev->gadget, ep_map);
+> +		if (ret)
+> +			goto err_purge_funcs;
+> +
+
+You may move this patch after your 4nd patch to avoid "git bisect"
+issue.
+
+>  		usb_ep_autoconfig_reset(cdev->gadget);
+>  	}
+>  	if (cdev->use_os_string) {
+> --=20
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum=
+,
+> a Linux Foundation Collaborative Project
+>=20
+
+--=20
+
+Thanks,
+Peter Chen=
