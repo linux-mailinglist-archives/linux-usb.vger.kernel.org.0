@@ -2,144 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D292573EB
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 08:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C6A2573F1
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 08:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725835AbgHaGpE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 02:45:04 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:46828 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbgHaGpC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 02:45:02 -0400
-Received: by mail-lj1-f195.google.com with SMTP id h19so5311406ljg.13;
-        Sun, 30 Aug 2020 23:45:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=xRYa6WvfqJz3WHv3sEhdsCUyjG/CtRbsaAhiwDu8HgQ=;
-        b=Rs5m2OfjtFKmTsq+MGyXAa8gXQ4Df3TADYYbkPpapjx0gureguv9iSZ+AivbyEH6v6
-         EKtizd6h2GdHE3pClQLXd5zFAHwsKelclEEPIFe5fwrTSbnQ7NKnTV861jgEmaCaXYWq
-         DAjMMuatJk+jZytmkQCOBMBBX05BSQPtnG9eulBp7jJF8hThH1X9y6hcv0IESESTgfyT
-         3sPzVsuRkUHm2WkPbVOSWqQkq3gn9dfnXeViLi34i+NF+8tsSjmWfvoakf7Q1D1S1v6P
-         jTYap05GDA4aauzzbG9U4Nr/qJt73/LCZGn1mazd7Wb2dvsRBiMWbulIxCpEJDjLhh1D
-         /qhA==
-X-Gm-Message-State: AOAM533MpV0wi2xxdidsBJQjD5TGpLxalaYCnJwtbXbhELRsz4s0dA/F
-        C9tB52IDeGkbD7qC9Db4Utg=
-X-Google-Smtp-Source: ABdhPJzoWnc64lR5hzkIJ8/VwFhBxhpPzBCOFC73f09BfIDx8noZz4Rr2UuontmpPPfUtNBp2TeCrg==
-X-Received: by 2002:a2e:4942:: with SMTP id b2mr616100ljd.382.1598856299971;
-        Sun, 30 Aug 2020 23:44:59 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id y4sm621054ljk.61.2020.08.30.23.44.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2020 23:44:59 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kCdYi-0007jW-0v; Mon, 31 Aug 2020 08:44:52 +0200
-Date:   Mon, 31 Aug 2020 08:44:52 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        AceLan Kao <acelan.kao@canonical.com>,
-        Sebastian Sjoholm <ssjoholm@mac.com>,
-        Dan Williams <dcbw@redhat.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: support dynamic Quectel USB
- compositions
-Message-ID: <20200831064452.GO21288@localhost>
-References: <20200829134250.59118-1-bjorn@mork.no>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        id S1726618AbgHaGxf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 02:53:35 -0400
+Received: from mail-dm6nam11on2062.outbound.protection.outlook.com ([40.107.223.62]:13856
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725794AbgHaGxf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Aug 2020 02:53:35 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=STOmiSv0aS4dlbvc/zpO+oRpipDWkIJVHV+7Ymgib5+yBwYOUE2AOQxGaFPKH4vcpWYHPMAXS0gfzAziu6q5zVwKUATYuj/OqkZo5cxBUU8b9zMMQ7vd2rSAmpGDUHzZFFESfE1T8qhUdb57YKyMmNuKg2heCRWmNn4n+vLy5PKlJZ9RHmrugLz3tZPOpnmvBSPJaApnGInB09haRvmn4ksHWmn1C+UJUmvZ4NsQ8xpo28+AvzTqFcP6T4u6ul3ppRmA2s/6e3O3vUYn31vzOt0aPrh5QLplYf4JoPqYhc2goyPhwyyAqGheYPMpvHKrUy+8nV6PIbP3Bj+X1OWCqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9y1Xi5eIi/6Xm0NR6kLhAF0cCwSoCGfu1j43rm7zgc4=;
+ b=l4+5B4ykRaN3VMzpi3Cvp/iT0+0f3BsdShBuezjUsR54EOpqEPEl0zm2aC/mH2WkxHuHaH0pVCpU7EDaOUpvq9n+U3M1eI2UV6B2pwg5j1ayJLJikeIhj3Nvq0PLkw/sleJwoDEd/w94qP96OPcUsoNVvo7qW0Hnx7HiqgNNuGoGzvm+WNFfvwB38VLzyhGKbWEsbWaGaX7TGDTaH19NKZxM/nXApylAA2z+XUDhVhmQ/Iof35q0vdUPoalzDKEK3wzFqFalUuhYL60YWCm47ewfBlSlxwgw5T1RWIJps6G2yDSPFz67wBhVS+UA9uDBd/B5wDbYh0X28eCxyPY9Nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9y1Xi5eIi/6Xm0NR6kLhAF0cCwSoCGfu1j43rm7zgc4=;
+ b=i0mzdFDP7A546eSy6xlw6jbqcAB7vnHCuh1zowZWwHd1ffl4FurxEaz82bFgl3m5m0vJjdN3oOKCiIs+VFKaWmpy6MKMGxQguJuMvn5kQfxE592UxXHpPeP5kh4j4dEVWnxEEr9K/zw2Bya69LV5TOMpJRllzUj2zvkuVt8nLcQ=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=amd.com;
+Received: from BN6PR1201MB2467.namprd12.prod.outlook.com (2603:10b6:404:a7::8)
+ by BN7PR12MB2754.namprd12.prod.outlook.com (2603:10b6:408:2b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Mon, 31 Aug
+ 2020 06:53:32 +0000
+Received: from BN6PR1201MB2467.namprd12.prod.outlook.com
+ ([fe80::2160:a344:3b0e:cf3e]) by BN6PR1201MB2467.namprd12.prod.outlook.com
+ ([fe80::2160:a344:3b0e:cf3e%8]) with mapi id 15.20.3326.025; Mon, 31 Aug 2020
+ 06:53:31 +0000
+From:   Nehal Bakulchandra Shah <Nehal-bakulchandra.Shah@amd.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandeep.Singh@amd.com, yuanmei@lenovo.com
+Cc:     Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+Subject: [PATCH] xhci: workaround for S3 issue on AMD SNPS 3.0 xHC
+Date:   Mon, 31 Aug 2020 06:52:46 +0000
+Message-Id: <20200831065246.1166470-1-Nehal-bakulchandra.Shah@amd.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200829134250.59118-1-bjorn@mork.no>
+Content-Type: text/plain
+X-ClientProxiedBy: MAXPR0101CA0001.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:c::11) To BN6PR1201MB2467.namprd12.prod.outlook.com
+ (2603:10b6:404:a7::8)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from 255.255.255.255 (255.255.255.255) by MAXPR0101CA0001.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:c::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19 via Frontend Transport; Mon, 31 Aug 2020 06:53:29 +0000
+X-Mailer: git-send-email 2.25.1
+X-Originating-IP: [165.204.156.251]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: e1a1de47-4dcd-4926-c831-08d84d7a92a2
+X-MS-TrafficTypeDiagnostic: BN7PR12MB2754:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BN7PR12MB2754CB9A6651842522F660E7A0510@BN7PR12MB2754.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +oawSJlqRR8jodj6EM88Uqmocdlh20odmt5gcI9JqoUf0ZIProdXTKLXuooooeL+IFcM/FZwonxI5jdB/zVdvyG9U2LbgANscLAJ5YR101RNIdvpM6CW6vIjM1YKG9Z2bA8s1wsSETC29NHenIkygV89NL7C207cSUhSzuAfNxJ2Cw55GFHtqVFR/BxfITJh3FmLv6nhMndljOQxWkgOoFyn0o+9XcnncR+H0aKr4mBMv0ErqAP8F/1eXR2I1cqALPLJTg7w/xFW2Lu/GqQljQtWy8tU0OidkHmUL5hFxHJTpXJkHmEbjopPLTyITXhBwjuABlpDifGz4zKMKqzzZw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR1201MB2467.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(376002)(346002)(39860400002)(136003)(956004)(36756003)(83380400001)(6666004)(478600001)(1076003)(4326008)(86362001)(52116002)(2616005)(26005)(316002)(6486002)(66556008)(16576012)(2906002)(8676002)(5660300002)(66476007)(66946007)(8936002)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: 8eTul6gWNjpgYLCgHygPgt9pXgJUWyjuVvqRH9B8tEHwQrEPC8orGQ1ExTXu0bQBJhPcLiGTgCQKHdwVa7dgA2xmIPNnIFRZK7pSe9FOpkcVFv9w+GQehTjd70rIRPGKaHLTMt35oSZY/gky1JVg4nOfBnIr3rIg7graF+IjziUgtftQxP89+n6yo2oQB3rvXfzIXOAB+4aq1wY9+gs+yxgpr38mDkPqb0ZNDQ2RNEqXcChE8oy2BGoOhmlrUlsp4tDOIZLoSVZJuXRNn52wLmF/YWl8fjzOy0Rsm996Gp/10rtM2080FYHoJ90TnEMLis85WdvvrfC3f+eoHIT0/WGGJBz5rYLgfB1A4Ands+JN2VZiGO9wx0JjqSLNLQCGmEvz1JWzjjaAjdsoN2dfk4QI4/MgkwuwiXlGibvLZmAzJ8S20OsnDp93uWRBypmvdGIQePkoO3hxsgq3lmwUEg59KnVgY7W1uXPDV7tw3HPzRB1PAgGU/6fdjPCs42M1s8Rp0MIQK80WL9zggObrSzAXqJsUtW4dmzF9Tmvs0+cmfFZgeufNIP3pe/ys1PXAuX1S5GyreKpRiiafX/tR3dKdCO1HPBVKoO63l58/a8lR5ftTGWokSSsAQ3ri7lwdVGv++47WuzEx9ToF+eLouw==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1a1de47-4dcd-4926-c831-08d84d7a92a2
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR1201MB2467.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2020 06:53:31.6104
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9UUhYsQdJblPG81QQL8fKskbW4pX+EDnPNPSVPlKVNGTrblzR++MzF15BVZ6kGil
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2754
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 29, 2020 at 03:42:50PM +0200, Bjørn Mork wrote:
-> The USB composition, defining the set of exported functions, is dynamic
-> in newer Quectel modems.  Default functions can be disabled and
-> alternative functions can be enabled instead.  The alternatives
-> includes class functions using interface pairs, which should be
-> handled by the respective class drivers.
-> 
-> Active interfaces are numbered consecutively, so static
-> blacklisting based on interface numbers will fail when the
-> composition changes.  An example of such an error, where the
-> option driver has bound to the CDC ECM data interface,
-> preventing cdc_ether from handling this function:
-> 
->  T: Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 2 Spd=480 MxCh= 0
->  D: Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs= 1
->  P: Vendor=2c7c ProdID=0125 Rev= 3.18
->  S: Manufacturer=Quectel
->  S: Product=EC25-AF
->  C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
->  A: FirstIf#= 4 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
->  I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
->  E: Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  E: Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->  E: Ad=83(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
->  E: Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  E: Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->  E: Ad=85(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
->  E: Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  E: Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->  E: Ad=87(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
->  E: Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  E: Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  I:* If#= 4 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=(none)
->  E: Ad=89(I) Atr=03(Int.) MxPS= 16 Ivl=32ms
->  I:* If#= 5 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=option
->  I: If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=option
->  E: Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  E: Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Another device with the same id gets correct drivers, since the
-> interface of the network function happens to be blacklisted by option:
-> 
->  T: Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#= 3 Spd=480 MxCh= 0
->  D: Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs= 1
->  P: Vendor=2c7c ProdID=0125 Rev= 3.18
->  S: Manufacturer=Android
->  S: Product=Android
->  C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
->  I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
->  E: Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  E: Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->  E: Ad=83(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
->  E: Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  E: Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->  E: Ad=85(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
->  E: Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  E: Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->  E: Ad=87(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
->  E: Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  E: Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
->  E: Ad=89(I) Atr=03(Int.) MxPS= 8 Ivl=32ms
->  E: Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->  E: Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Change rules for EC21, EC25, BG96 and EG95 to match vendor specific
-> serial functions only, to prevent binding to class functions. Require
-> 2 endpoints on ff/ff/ff functions, avoiding the 3 endpoint QMI/RMNET
-> network functions.
-> 
-> Cc: AceLan Kao <acelan.kao@canonical.com>
-> Cc: Sebastian Sjoholm <ssjoholm@mac.com>
-> Cc: Dan Williams <dcbw@redhat.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Bjørn Mork <bjorn@mork.no>
+From: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
 
-Thanks, Bjørn. Now applied.
+On some platform of AMD, S3 fails with HCE and SRE errors.To fix this,
+sparse controller enable bit has to be disabled.
 
-Johan
+Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+---
+ drivers/usb/host/xhci-pci.c | 12 ++++++++++++
+ drivers/usb/host/xhci.h     |  1 +
+ 2 files changed, 13 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 3feaafebfe58..865a16e6c1ed 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -160,6 +160,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	    (pdev->device == 0x15e0 || pdev->device == 0x15e1))
+ 		xhci->quirks |= XHCI_SNPS_BROKEN_SUSPEND;
+ 
++	if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->device == 0x15e5)
++		xhci->quirks |= XHCI_DISABLE_SPARSE;
++
+ 	if (pdev->vendor == PCI_VENDOR_ID_AMD)
+ 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+ 
+@@ -371,6 +374,15 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	/* USB 2.0 roothub is stored in the PCI device now. */
+ 	hcd = dev_get_drvdata(&dev->dev);
+ 	xhci = hcd_to_xhci(hcd);
++
++	if (xhci->quirks & XHCI_DISABLE_SPARSE) {
++		u32 reg;
++
++		reg = readl(hcd->regs + 0xC12C);
++		reg &=  ~BIT(17);
++		writel(reg, hcd->regs + 0xC12C);
++	}
++
+ 	xhci->shared_hcd = usb_create_shared_hcd(&xhci_pci_hc_driver, &dev->dev,
+ 						 pci_name(dev), hcd);
+ 	if (!xhci->shared_hcd) {
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index ea1754f185a2..ea966d70f1ee 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1874,6 +1874,7 @@ struct xhci_hcd {
+ #define XHCI_RESET_PLL_ON_DISCONNECT	BIT_ULL(34)
+ #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
+ #define XHCI_RENESAS_FW_QUIRK	BIT_ULL(36)
++#define XHCI_DISABLE_SPARSE	BIT_ULL(37)
+ 
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
+-- 
+2.25.1
+
