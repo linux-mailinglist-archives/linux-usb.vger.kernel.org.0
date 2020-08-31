@@ -2,178 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 582252570BE
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Aug 2020 23:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80565257123
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 02:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726434AbgH3Vgr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Aug 2020 17:36:47 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:57888 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726155AbgH3Vgq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Aug 2020 17:36:46 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0913D258;
-        Sun, 30 Aug 2020 23:36:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1598823402;
-        bh=afb9NeFTelTB2r7vjqDOx2f+fySe7Y8p2317ney7DEM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZsqR1+o61yyvGRlAkKUcfS85Kjqn6S7owyKVw7e31rt7po0awN6/KrnnndJigRbEu
-         up4uPDo3QJn0Y1BzYl53viU/6aagoar8TNRJk4TJ3YOXKYb8uCKf6yH0B7daGBASXv
-         g3njpj0tz0b4ujhmNEfAn60LOBjM9wt2AS69NPWM=
-Date:   Mon, 31 Aug 2020 00:36:21 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Guenter Roeck <linux@roeck-us.net>
+        id S1726586AbgHaAKO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Aug 2020 20:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726404AbgHaAKN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Aug 2020 20:10:13 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A06C061573;
+        Sun, 30 Aug 2020 17:10:13 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id g207so3615087pfb.1;
+        Sun, 30 Aug 2020 17:10:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=qLPEfrUi2jCIWCjZKRo6ZLLPjq6acaeWm3ALBWaznXk=;
+        b=F3CnXuCn2pzKt3lquHeMzcnfquvPYqjIIQrtoVQ84O4mtYiNWRWGSKyMzzLuDuhGR4
+         Nssb7lzRM/8lmZn3YJ/SDCYbCK1WuoIDIOLyZIoCfI3iBh0ZaKcgxUz1KdFsHqvFBFhd
+         JFgXycahfNDgPcdZzml0356S32S3kCnUReHH0TM+YcG0DuVLLILPwNtTxc6IzG//KJP5
+         vTDafW5Mg2L7N4q+XmztACw6cYDx5XNBq7kGiriHSjFiivFuSsbngdaP8f2YoCKeaF5z
+         K24hzkPCpJZNT/X3sG6KbmlL/C7QVm79GnceeFKDJz4tJIzhc9ecsuX7QBcJclyJQnDI
+         og+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qLPEfrUi2jCIWCjZKRo6ZLLPjq6acaeWm3ALBWaznXk=;
+        b=X/EWMkQVfuS4gERhDQqbdQYQXCRvkUWTXm+FvxNwZ+vQOj9apiJUlE/d7InOT2ro47
+         yXFlYoMstB83fsoAmPwL3tdyoRqz4ZtyI6Z2sNhShEjqWzE09y+kamXK5PF8EzS4svum
+         EkbHnqEHcgDjXwHBX6mWcpnXhnbdSyxhZI8nP8NsQ/cyY+Ke1F/rYG/dhMeIerN+yHHP
+         Xi26+tpM59Lnd4PKU/+5Lu1Io+XhlKc2v2D7WvLRHhaCw/MBc7uL8yCTY350SHDPBZQK
+         VbZRHfY9hm/zwdPkH+Pl4ptl5AnIbtBiIZ8OiA9KhJDss9kvxk538V6uoDcltBXX1ap9
+         WIGA==
+X-Gm-Message-State: AOAM530SbBufLc4UdCfEc/QyTVcCsUAmHXKhNAwBM3YQdFM+bhaGMz6u
+        FzI1a6j10wc/82QPXrGMbQw=
+X-Google-Smtp-Source: ABdhPJwWpKZRGsCUjZpmp33QErRgjRznzLg4iQdazkktoI5TvtWGJPMJCAhKW2BkvmSCD8WTPNRe2Q==
+X-Received: by 2002:a63:cb0a:: with SMTP id p10mr2440832pgg.314.1598832612609;
+        Sun, 30 Aug 2020 17:10:12 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q5sm5961917pfu.16.2020.08.30.17.10.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 30 Aug 2020 17:10:11 -0700 (PDT)
+Date:   Sun, 30 Aug 2020 17:10:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@iki.fi>,
         linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 0/5] media: uvcvideo: Fix race conditions
-Message-ID: <20200830213621.GC6043@pendragon.ideasonboard.com>
+Message-ID: <20200831001010.GA92208@roeck-us.net>
 References: <20200830150443.167286-1-linux@roeck-us.net>
  <20200830155833.GA6043@pendragon.ideasonboard.com>
  <ac2080a1-3b00-ac9e-cd49-d1ee84c6ca25@roeck-us.net>
+ <20200830213621.GC6043@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ac2080a1-3b00-ac9e-cd49-d1ee84c6ca25@roeck-us.net>
+In-Reply-To: <20200830213621.GC6043@pendragon.ideasonboard.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Guenter,
-
-On Sun, Aug 30, 2020 at 01:48:24PM -0700, Guenter Roeck wrote:
-> On 8/30/20 8:58 AM, Laurent Pinchart wrote:
-> > On Sun, Aug 30, 2020 at 08:04:38AM -0700, Guenter Roeck wrote:
-> >> The uvcvideo code has no lock protection against USB disconnects
-> >> while video operations are ongoing. This has resulted in random
-> >> error reports, typically pointing to a crash in usb_ifnum_to_if(),
-> >> called from usb_hcd_alloc_bandwidth(). A typical traceback is as
-> >> follows.
-> >>
-> >> usb 1-4: USB disconnect, device number 3
-> >> BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
-> >> PGD 0 P4D 0
-> >> Oops: 0000 [#1] PREEMPT SMP PTI
-> >> CPU: 0 PID: 5633 Comm: V4L2CaptureThre Not tainted 4.19.113-08536-g5d29ca36db06 #1
-> >> Hardware name: GOOGLE Edgar, BIOS Google_Edgar.7287.167.156 03/25/2019
-> >> RIP: 0010:usb_ifnum_to_if+0x29/0x40
-> >> Code: <...>
-> >> RSP: 0018:ffffa46f42a47a80 EFLAGS: 00010246
-> >> RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff904a396c9000
-> >> RDX: ffff904a39641320 RSI: 0000000000000001 RDI: 0000000000000000
-> >> RBP: ffffa46f42a47a80 R08: 0000000000000002 R09: 0000000000000000
-> >> R10: 0000000000009975 R11: 0000000000000009 R12: 0000000000000000
-> >> R13: ffff904a396b3800 R14: ffff904a39e88000 R15: 0000000000000000
-> >> FS: 00007f396448e700(0000) GS:ffff904a3ba00000(0000) knlGS:0000000000000000
-> >> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >> CR2: 0000000000000000 CR3: 000000016cb46000 CR4: 00000000001006f0
-> >> Call Trace:
-> >>  usb_hcd_alloc_bandwidth+0x1ee/0x30f
-> >>  usb_set_interface+0x1a3/0x2b7
-> >>  uvc_video_start_transfer+0x29b/0x4b8 [uvcvideo]
-> >>  uvc_video_start_streaming+0x91/0xdd [uvcvideo]
-> >>  uvc_start_streaming+0x28/0x5d [uvcvideo]
-> >>  vb2_start_streaming+0x61/0x143 [videobuf2_common]
-> >>  vb2_core_streamon+0xf7/0x10f [videobuf2_common]
-> >>  uvc_queue_streamon+0x2e/0x41 [uvcvideo]
-> >>  uvc_ioctl_streamon+0x42/0x5c [uvcvideo]
-> >>  __video_do_ioctl+0x33d/0x42a
-> >>  video_usercopy+0x34e/0x5ff
-> >>  ? video_ioctl2+0x16/0x16
-> >>  v4l2_ioctl+0x46/0x53
-> >>  do_vfs_ioctl+0x50a/0x76f
-> >>  ksys_ioctl+0x58/0x83
-> >>  __x64_sys_ioctl+0x1a/0x1e
-> >>  do_syscall_64+0x54/0xde
-> >>
-> >> While this is problem rarely observed in the field, it is relatively easy
-> >> to reproduce by adding msleep() calls into the code.
-> >>
-> >> I don't presume to claim that I found every issue, but this patch series
-> >> should fix at least the major problems.
-> >>
-> >> The patch series was tested exensively on a Chromebook running chromeos-4.19
-> >> and on a Linux system running a v5.8.y based kernel.
-> > 
-> > I'll review each patch individually, but I think 2/5, 4/5 and 5/5 should
-> > be handled in the V4L2 core, not the uvcvideo driver. Otherwise we would
-> > have to replicate that logic in all drivers, while I think it can easily
-> > be implemented in a generic fashion as previously discussed.
-> > 
-> The problem is that the v4l2 core already does support locking. There is
-> a global lock, in struct video_device, a queue lock in struct v4l2_m2m_ctx,
-> and another queue lock in struct vb2_queue. However, all of those have
-> to be initialized from the driver. The uvcvideo driver uses its own locks and
-> does not set the lock pointers in the various generic structures. I was able
-> to figure out how to use the uvcvideo specific locks in the uvcvideo
-> driver, but all my attempts to initialize and use the generic locks failed.
+On Mon, Aug 31, 2020 at 12:36:21AM +0300, Laurent Pinchart wrote:
+> Hi Guenter,
 > 
-> It may well be that the generic code isn't entirely clean - for example
-> I am not sure if the lock protection in v4l2_open() is complete since
-> it doesn't handle disconnects after checking if the video device is still
-> registered (and I don't really see the point of the second video_is_registered()
-> call in v4l2_open). However, that may just be a lack of understanding on my
-> side on how the code is supposed to work. Maybe the actual device open function
-> is expected to have its own protection against underlying hardware removal
-> and video device unregistration while opening the device.
+[ ... ]
+
+> I'll try to prototype what I envision would be a good solution in the
+> V4L2 core. If stars align, I may even try to push it one level up, to
+> the chardev layer. Would you then be able to test it ?
 > 
-> [ Regarding the second call to video_is_registered() in v4l2_open():
->   Add msleep(5000) between it and the call to the driver open function,
->   disconnect the device during the sleep, and it will happily call the device
->   open function on a non-registered video device. That is what patch 5/5 tries
->   to fix or the uvcvideo driver.
->   The same problem applies to other file operations in v4l2-dev.c: They all
->   check if the video device is registered before calling the device
->   specific code, but I don't really see the point of doing that because
->   there is no protection against unregistration after the check was made
->   and before/while the device specific code is running.
->   Patch 4/5 tries to fix this for the uvcvideo driver.
->   If that is a bug in the v4l2 code, I'll be happy to work on a fix,
->   but the only generic fix I could think of would be to utilize the lock in
->   struct video_device ... but that lock isn't initialized by the uvcvideo
->   driver.
-> ]
-> 
-> Either case, I don't think my understanding of the interaction between
-> v4l2 and uvcvideo is good enough to make more invasive changes. I _think_
-> any generic improvement should start with refactoring the uvcvideo code to
-> use the v4l2 locking mechanism. However, from the exchange here, my
-> understanding is that this locking mechanism is not used on purpose. That
-> means we'll have a uvcvideo specific locking mechanism, period, and I don't
-> think it is even possible to solve the problem without utilizing this locking
-> mechanism.
-> 
-> Of course, it may as well be that I am completely off track and clueless.
-> After all, the first time I looked into this code was about two weeks ago.
-> So please bear with me if I talk nonsense.
 
-It would be rather impolite to claim you're clueless, given that you
-managed to write this patch series only two weeks after first looking
-into the problem :-)
+Sure, I'll be happy to do that.
 
-I'll try to prototype what I envision would be a good solution in the
-V4L2 core. If stars align, I may even try to push it one level up, to
-the chardev layer. Would you then be able to test it ?
+I ordered a couple of non-UVC webcams (pwc and gspca) from eBay for
+comparison. Both of those use the v4l2 locking mechanism, so we should
+be able to see the difference.
 
-> >> ----------------------------------------------------------------
-> >> Guenter Roeck (5):
-> >>       media: uvcvideo: Cancel async worker earlier
-> >>       media: uvcvideo: Lock video streams and queues while unregistering
-> >>       media: uvcvideo: Release stream queue when unregistering video device
-> >>       media: uvcvideo: Protect uvc queue file operations against disconnect
-> >>       media: uvcvideo: In uvc_v4l2_open, check if video device is registered
-> >>
-> >>  drivers/media/usb/uvc/uvc_ctrl.c   | 11 ++++++----
-> >>  drivers/media/usb/uvc/uvc_driver.c | 12 ++++++++++
-> >>  drivers/media/usb/uvc/uvc_queue.c  | 32 +++++++++++++++++++++++++--
-> >>  drivers/media/usb/uvc/uvc_v4l2.c   | 45 ++++++++++++++++++++++++++++++++++++--
-> >>  drivers/media/usb/uvc/uvcvideo.h   |  1 +
-> >>  5 files changed, 93 insertions(+), 8 deletions(-)
-
--- 
-Regards,
-
-Laurent Pinchart
+Thanks,
+Guenter
