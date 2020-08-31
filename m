@@ -2,160 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3A1257A15
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 15:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01873257A0B
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 15:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727019AbgHaNIn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 09:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726312AbgHaNIV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 09:08:21 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DB0C061575
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 06:08:19 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id ls14so2922491pjb.3
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 06:08:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mk7FtTc/f6qHI6YR0nGT99GfuEciTtZUAkIA+oGDTfQ=;
-        b=J16HH5uA2klm2bdsp1Gjtj0NJQcbP+ztovRXtBEfLffl5VWu5VAYr1HIcUEN/xepfh
-         OfjvkYiaTQPNnGgjoi9RP0md3GE1OewP6vWxZJQORJMcGsI/tCEtplqn5+ai9s8eutya
-         8uBjxHSndtJjkidrTQppKWNZjEMWQrkUcvstwJXvKTedn5aSTGIJ72ri9Q5yZVQlziwA
-         mL9Cvoz/ryNLVMCyjD5IgL+MuFfN/VOaS5DZY9A+0QVCMCoIcL6yKb5gygXvSCZN0GmX
-         QdaI7SgotecPklcgE1G9QVQo+1V72flhhzZ863kSeeyV68tWTpHoU4wRYUx1lttszjGj
-         G01g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mk7FtTc/f6qHI6YR0nGT99GfuEciTtZUAkIA+oGDTfQ=;
-        b=Xw8aoExosohrel/qNAuCSia+E8bel5a11yWghuHQhIu5JZumdtdiMjX5ZqmFVInEQ1
-         n0mZdjzL9rLd87Xh+9Y2UO+LNYBfxfhxAv+M4boWO2byIFCWaNlHVKGJqbqkhG03Bvuw
-         omtdiLi31sh1yumgL1z3NbZJZH/qOO6zdPvMiQ2Gwi7CYka05y1NzNrPcsE3mh+Sdr51
-         8/me/WBTiqxCKikHcSk4eE62UGNrCzuEKpGKxybkutQI+TRcqf9OmTWlTQwL/jIM5vdc
-         qP0cNudDG/7gDc+QK1uehue2ezV+IRryBzXhO8HUEeSQXV2HXSoel99l0cqE5ejnAidc
-         1mpA==
-X-Gm-Message-State: AOAM533PCSYHqXTgWDFATpyZkeUIddGuiPp1V+3jzhd2wPhPV3HSiECQ
-        EE9kLQ1jO9MBc5f+3FAlMqlRPS/H8vjcDjler/8lfQ==
-X-Google-Smtp-Source: ABdhPJzYKTYVAtyZXsiilypXQ6hmz9ZsSEUQ6nit9aUfPrUNqSlmP2XSrQ6MdiU36zQQyUD5aa195dzQr1jfsRsM7z8=
-X-Received: by 2002:a17:902:b589:: with SMTP id a9mr1016337pls.98.1598879295913;
- Mon, 31 Aug 2020 06:08:15 -0700 (PDT)
+        id S1726515AbgHaNH5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 09:07:57 -0400
+Received: from mga17.intel.com ([192.55.52.151]:3413 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726249AbgHaNHw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Aug 2020 09:07:52 -0400
+IronPort-SDR: WWH8KCmrgdoq+d1DEwxjJAZwgueSvTdaTcIv6+cW9qy4gh9Ke0iPgHkIx2I34yCbTsLQgu88O3
+ aA03ptc9rYeg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9729"; a="137015568"
+X-IronPort-AV: E=Sophos;i="5.76,375,1592895600"; 
+   d="scan'208";a="137015568"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2020 06:07:51 -0700
+IronPort-SDR: TftJ8w9CgwEpepgvlqjh3XEDiELLyGx/Hy2WvhqDPvnJ3ZZ54wTByK7sySJmLbWLi2O1D9WLlB
+ PFk/m5rwAnng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,375,1592895600"; 
+   d="scan'208";a="445707943"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga004.jf.intel.com with ESMTP; 31 Aug 2020 06:07:49 -0700
+Subject: Re: [PATCH v2] usb: xhci: add debugfs support for ep with stream
+To:     Jun Li <jun.li@nxp.com>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+References: <1594901321-6992-1-git-send-email-jun.li@nxp.com>
+ <DB8PR04MB6523AC8B5B7C1DEDA1254F0A89430@DB8PR04MB6523.eurprd04.prod.outlook.com>
+ <c6c4f598-ff8a-8b51-d87c-c5d20f4421a4@linux.intel.com>
+ <VE1PR04MB65289D522279DD1267A1FFF5895C0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <5257ec39-9f59-58fe-661f-a1cd69955f1e@linux.intel.com>
+Date:   Mon, 31 Aug 2020 16:11:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <000000000000d3c499057536ce86@google.com> <000000000000c69c7805adef8597@google.com>
- <20200829012415.GB486691@rowland.harvard.edu>
-In-Reply-To: <20200829012415.GB486691@rowland.harvard.edu>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 31 Aug 2020 15:08:05 +0200
-Message-ID: <CAAeHK+z2KDbNVW5_5BA8P+r=8+VQY1p9ksJmny6ZW0xR3zBobA@mail.gmail.com>
-Subject: Re: INFO: task hung in usb_bulk_msg
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com>,
-        andriy.shevchenko@linux.intel.com, bigeasy@linutronix.de,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>, Johan Hovold <johan@kernel.org>,
-        Kai Heng Feng <kai.heng.feng@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        rafael.j.wysocki@intel.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <VE1PR04MB65289D522279DD1267A1FFF5895C0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 29, 2020 at 3:24 AM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, Aug 28, 2020 at 05:52:16AM -0700, syzbot wrote:
-> > syzbot has found a reproducer for the following issue on:
-> >
-> > HEAD commit:    15bc20c6 Merge tag 'tty-5.9-rc3' of git://git.kernel.org/p..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1052a669900000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=978db74cb30aa994
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=7a7613e5ba9ae7bd15f9
-> > compiler:       gcc (GCC) 10.1.0-syz 20200507
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101c328e900000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155eff41900000
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com
-> >
-> > INFO: task syz-executor790:9958 blocked for more than 143 seconds.
-> >       Not tainted 5.9.0-rc2-syzkaller #0
-> > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > task:syz-executor790 state:D stack:28240 pid: 9958 ppid:  6854 flags:0x00004004
-> > Call Trace:
-> >  context_switch kernel/sched/core.c:3778 [inline]
-> >  __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
-> >  schedule+0xd0/0x2a0 kernel/sched/core.c:4602
-> >  schedule_timeout+0x1d8/0x250 kernel/time/timer.c:1855
-> >  do_wait_for_common kernel/sched/completion.c:85 [inline]
-> >  __wait_for_common kernel/sched/completion.c:106 [inline]
-> >  wait_for_common kernel/sched/completion.c:117 [inline]
-> >  wait_for_completion_timeout+0x15e/0x270 kernel/sched/completion.c:157
-> >  usb_start_wait_urb+0x144/0x2b0 drivers/usb/core/message.c:63
-> >  usb_bulk_msg+0x226/0x550 drivers/usb/core/message.c:254
-> >  do_proc_bulk+0x39b/0x710 drivers/usb/core/devio.c:1231
-> >  proc_bulk drivers/usb/core/devio.c:1268 [inline]
-> >  usbdev_do_ioctl drivers/usb/core/devio.c:2542 [inline]
-> >  usbdev_ioctl+0x586/0x3360 drivers/usb/core/devio.c:2708
->
-> I'm confused about this bug report.
->
-> Here's the syz reproducer from the link listed above:
->
-> #
-> https://syzkaller.appspot.com/bug?id=bf172344c5f1d3487a4feff67c3dd30e08d5b635
-> # See https://goo.gl/kgGztJ for information about syzkaller reproducers.
-> #{"threaded":true,"repeat":true,"procs":6,"sandbox":"none","fault_call":-1,"netdev":true,"close_fds":true}
-> r0 = syz_open_dev$usbfs(&(0x7f0000000040)='/dev/bus/usb/00#/00#\x00',
-> 0x4000000000000071, 0x28081)
-> r1 = socket$inet6(0xa, 0x2, 0x0)
-> r2 = dup(r1)
-> ioctl$PERF_EVENT_IOC_ENABLE(r2, 0x8912, 0x400200)
-> socketpair$unix(0x1, 0x0, 0x0, &(0x7f0000000000))
-> ioctl$USBDEVFS_CONTROL(r0, 0x8108551b, &(0x7f0000001140)={0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
-> ioctl$USBDEVFS_CLEAR_HALT(r0, 0xc0185502, &(0x7f0000000000)={0x1, 0x1})
->
-> As far as I can see, the only USB ioctls used in this test are
-> USBDEVFS_CONTROL and USBDEVFS_CLEAR_HALT.  Neither of those calls
-> do_proc_bulk() or usb_bulk_msg(), so how did those routines end up in
-> the stack trace?
->
-> In fact, do_proc_bulk() is called only for USBDEVFS_BULK.  But the test
-> doesn't use that ioctl!
->
-> What's going on?  Am I missing part of the test?
+On 18.8.2020 4.54, Jun Li wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> Sent: Monday, August 17, 2020 7:48 PM
+>> To: Jun Li <jun.li@nxp.com>; mathias.nyman@intel.com
+>> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; dl-linux-imx
+>> <linux-imx@nxp.com>
+>> Subject: Re: [PATCH v2] usb: xhci: add debugfs support for ep with stream
+>>
+>> On 13.8.2020 12.57, Jun Li wrote:
+>>> Hi
+>>>
+>>>> -----Original Message-----
+>>>> From: Jun Li <jun.li@nxp.com>
+>>>> Sent: Thursday, July 16, 2020 8:40 PM
+>>>> To: mathias.nyman@intel.com
+>>>> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
+>>>> dl-linux-imx <linux-imx@nxp.com>
+>>>> Subject: [PATCH v2] usb: xhci: add debugfs support for ep with stream
+>>>>
+>>>> To show the trb ring of streams, use the exsiting ring files of bulk
+>>>> ep to show trb ring of one specific stream ID, which stream ID's trb
+>>>> ring will be shown, is controlled by a new debugfs file stream_id,
+>>>> this is to avoid to create a large number of dir for every allocate
+>>>> stream IDs, another debugfs file stream_context_array is created to show all
+>> the allocated stream context array entries.
+>>>>
+>>>> Signed-off-by: Li Jun <jun.li@nxp.com>
+>>>> ---
+>>>> chanages for v2:
+>>>> -  Drop stream files remove, the stream files will be removed
+>>>>    with ep dir removal, keep the ep but only remove streams
+>>>>    actually does not make sense in current code.
+>>>> -  Use the new_ring for show_ring pointer for non-zero ep.
+>>>>
+>>>>  drivers/usb/host/xhci-debugfs.c | 112
+>>>> +++++++++++++++++++++++++++++++++++++++-
+>>>>  drivers/usb/host/xhci-debugfs.h |  10 ++++
+>>>>  drivers/usb/host/xhci.c         |   1 +
+>>>>  3 files changed, 122 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/usb/host/xhci-debugfs.c
+>>>> b/drivers/usb/host/xhci-debugfs.c index 65d8de4..708585c 100644
+>>>> --- a/drivers/usb/host/xhci-debugfs.c
+>>>> +++ b/drivers/usb/host/xhci-debugfs.c
+>>>> @@ -450,9 +450,14 @@ void xhci_debugfs_create_endpoint(struct xhci_hcd *xhci,
+>>>>  	if (!epriv)
+>>>>  		return;
+>>>>
+>>>> +	if (dev->eps[ep_index].ring)
+>>>> +		epriv->show_ring = dev->eps[ep_index].ring;
+>>>> +	else
+>>>> +		epriv->show_ring = dev->eps[ep_index].new_ring;
+>>>> +
 
-Hi Alan,
+Ran some tests and the I suspect the above code causes issues.
 
-Yeah, it's a bit confusing, sorry for that. Since syzkaller mutates
-the values that are passed into syscalls, it might mutate the cmd
-value of an ioctl. This results in a mismatch between the name of a
-syscall in syzkaller's notation, and the actual cmd value. In this
-case we have:
+If an endpoint is dropped and added back the above code will store the
+old ring in epriv->show_ring as we have both a .ring and .new_ring present at
+that moment. Soon after this the old ring pointed to by .ring will be freed,
+and .ring = .new_ring will be set.
 
-ioctl$USBDEVFS_CONTROL(r0, 0x8108551b, ...)
+Old code showed whatever ring buffer eps[i].ring pointer pointed to when the
+sysfs file was read, (as we saved the address, &eps[i].ring). I see now that
+it in theory it had a small gap before .ring = .new_ring was set where user
+could read the ring buffer and .ring would still be a NULL pointer.
+That needs to be fixed as well.
 
-where 0x8108551b == 2164806939, which is the value for
-USBDEVFS_DISCONNECT_CLAIM [1], and
+I still like the old way of using double pointer more.
+xhci driver will also dig out the current ring from eps[i].ring, so I think we
+should as well.
+(in stream case it would be &ep->stream_info->stream_rings[stream_id])
 
-ioctl$USBDEVFS_CLEAR_HALT(r0, 0xc0185502, ...)
-
-where 0xc0185502 == 3222820098, which is the value for USBDEVFS_BULK [2].
-
-I remember Dmitry did some changes to this part, but I think syzkaller
-only avoids getting disabled ioctls during mutations. Dmitry, maybe it
-would make sense to avoid getting other known ioctls during mutations?
-
-Thanks!
-
-[1] https://github.com/google/syzkaller/blob/master/sys/linux/dev_bus_usb.txt.const#L13
-[2] https://github.com/google/syzkaller/blob/master/sys/linux/dev_bus_usb.txt.const#L4
+-Mathias
