@@ -2,283 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8DD257437
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 09:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA96257462
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 09:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725949AbgHaHVi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 03:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725829AbgHaHVf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 03:21:35 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471C6C061573
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 00:21:30 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id c15so4800875wrs.11
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 00:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:to:cc:subject:date:user-agent:mime-version;
-        bh=V0QDA2LF9Wto87E+ppn4aL/Wy/RYphM3G8hdy2RQoF0=;
-        b=Ya4EKweK7fHvvmxZ69jxxjVD/5cwbuirrmorXVp69JzFI7Lrrwksy7108TAZI8QBji
-         RYdSqrcmQ53IXTHUQqeJoSgbCYh4Od5VipjzXBoMpWDb2p1pUzoTjAtiFng0eiPiggKx
-         bv1IspAVdzfl7/IQMAUHBPNqj9NpR1enUk2DWenPPEo8ZH2vCuIEhAmlH9ghquEvqW0L
-         LPjFxFFwCf1YtrEe340FqveoNdJt+u/YpHDFjxAnevU4DSC1WWE5GVotUnbTwW1057Qw
-         DcOc8zdmMKezhrcMSPXha/OmH1hT9YwVDtjsmQOZVhybuwPvlQuI/MgBLMCBOqUMbq02
-         XApQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:to:cc:subject:date:user-agent
-         :mime-version;
-        bh=V0QDA2LF9Wto87E+ppn4aL/Wy/RYphM3G8hdy2RQoF0=;
-        b=QUaFPDWBOBs+xw09oqjcT0uuaUO5a49y/HKZ2cswwX8p0wlOYlK+m+ZS3CxBAC5RJp
-         uoOSeWTUdVfRepiWnGlAJd/SMV5l32LksWCsLsoIksDmi9PQ+FjoQ9RBMbyQWlLnctoj
-         lY6hveYbIzf1cjyPlqeHx19k/HSIXsxbZh2NGxPd+4pdIue+laZBGn0+Vl178X1x0uva
-         lzmbbi/s4lOrN5/9LvXXnatcO1cZDes+Kmk7ibKLA7Mh+abuX9K64wVOLWtkIP/BWerW
-         OoJ20NsTt6laQfmkkilX4ERhGR/QqarbKlHn8XnGc7hBx06RAU/KRUPCoAPgcHh56kGy
-         N1pA==
-X-Gm-Message-State: AOAM533+RSYLWE85gZ9Z9xUUZVwemBG9Iy7zDu+gZkeyQ2qqH26pSt6M
-        zCBcX9ECY9qg0SOKzEThlIQ7CuT1ReOhIg==
-X-Google-Smtp-Source: ABdhPJx2+W0cIOWwvOFi4Har4lWhz7eEu8v2qSFakt/JksKlnS+N7wXtPoRtdBBux1qC9o8UMTTtOA==
-X-Received: by 2002:adf:e94a:: with SMTP id m10mr306726wrn.249.1598858489164;
-        Mon, 31 Aug 2020 00:21:29 -0700 (PDT)
-Received: from daniel-ThinkPad-X230 ([2a01:e35:1387:1640:4059:1936:4cf5:a56d])
-        by smtp.gmail.com with ESMTPSA id g9sm11013701wrw.63.2020.08.31.00.21.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2020 00:21:28 -0700 (PDT)
-Message-ID: <5f4ca4f8.1c69fb81.a4487.0f5f@mx.google.com>
-X-Google-Original-Message-ID: <87blirb7rc.fsf@gmail.com>>
-From:   <f1rmb.daniel@gmail.com> (<Daniel Caujolle-Bert>)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH] usb-serial-simple: Add Whistler radio scanners TRX serie support.
-Date:   Mon, 31 Aug 2020 09:21:27 +0200
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        id S1728104AbgHaHfF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 03:35:05 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:22867 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725829AbgHaHfD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Aug 2020 03:35:03 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1598859302; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=jgiqhD6mEWmgkZ8iCooIwuov0Mq1aYTRhNXeEovmpSI=; b=qTZwMME5vGLTquH8OBPbSE4OI0R5asRKYkIUJDH7IHAj8tx6BN9hkBPoor1gaF0Y8W27UURE
+ tACK8xX0g7SXqtKImhMc46ue35/affSWY1jsgKQ2uSB9LascDdM30dfwZUxu99AqzcDIb8/4
+ tqPe6nI+y+Q4JujGMVoTK5m6n70=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 5f4ca81ea816b7fb48d07ee6 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 31 Aug 2020 07:34:54
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6A6EEC43395; Mon, 31 Aug 2020 07:34:53 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.1 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.110.39.192] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0F497C433CA;
+        Mon, 31 Aug 2020 07:34:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0F497C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [RFC v5 4/6] usb: gadget: configfs: Check USB configuration
+ before adding
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "jackp@codeaurora.org" <jackp@codeaurora.org>
+References: <20200829055846.19034-1-wcheng@codeaurora.org>
+ <20200829055846.19034-5-wcheng@codeaurora.org>
+ <20200831022825.GA15756@b29397-desktop>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <2631cd0b-66d4-aabc-dc41-9ae5e84fa90d@codeaurora.org>
+Date:   Mon, 31 Aug 2020 00:34:51 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20200831022825.GA15756@b29397-desktop>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-   Whistler TRX serie radio scanners provide 2 USB subclass devices: one
-usb mass storage and one serial device.
-The problem is USB serial is unusable, as the cdc_acm fails with
-error -22.
-Enabling the support in the usb_simple_serial driver make it works.
 
 
-Cheers.
----
-Daniel
+On 8/30/2020 7:29 PM, Peter Chen wrote:
+> On 20-08-28 22:58:44, Wesley Cheng wrote:
+>> Ensure that the USB gadget is able to support the configuration being
+>> added based on the number of endpoints required from all interfaces.  This
+>> is for accounting for any bandwidth or space limitations.
+>>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> ---
+>>  drivers/usb/gadget/configfs.c | 22 ++++++++++++++++++++++
+>>  1 file changed, 22 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+>> index 56051bb97349..7c74c04b1d8c 100644
+>> --- a/drivers/usb/gadget/configfs.c
+>> +++ b/drivers/usb/gadget/configfs.c
+>> @@ -1361,6 +1361,7 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
+>>  		struct usb_function *f;
+>>  		struct usb_function *tmp;
+>>  		struct gadget_config_name *cn;
+>> +		unsigned long ep_map = 0;
+>>  
+>>  		if (gadget_is_otg(gadget))
+>>  			c->descriptors = otg_desc;
+>> @@ -1390,7 +1391,28 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
+>>  				list_add(&f->list, &cfg->func_list);
+>>  				goto err_purge_funcs;
+>>  			}
+>> +			if (f->ss_descriptors) {
+>> +				struct usb_descriptor_header **d;
+>> +
+>> +				d = f->ss_descriptors;
+>> +				for (; *d; ++d) {
+>> +					struct usb_endpoint_descriptor *ep;
+>> +					int addr;
+>> +
+>> +					if ((*d)->bDescriptorType != USB_DT_ENDPOINT)
+>> +						continue;
+>> +
+>> +					ep = (struct usb_endpoint_descriptor *)*d;
+>> +					addr = ((ep->bEndpointAddress & 0x80) >> 3) |
+>> +						(ep->bEndpointAddress & 0x0f);
+> 
+> ">> 3" or "<< 3?
+> 
 
+Hi Peter,
 
-lsusb -v output:
-Bus 003 Device 003: ID 2a59:0012 Whistler Whistler TRX-1e Scanner
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0 
-  bDeviceSubClass         0 
-  bDeviceProtocol         0 
-  bMaxPacketSize0         8
-  idVendor           0x2a59 
-  idProduct          0x0012 
-  bcdDevice            0.01
-  iManufacturer           1 Whistler
-  iProduct                2 Whistler TRX-1e Scanner
-  iSerial                 0 
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0059
-    bNumInterfaces          2
-    bConfigurationValue     1
-    iConfiguration          2 Whistler TRX-1e Scanner
-    bmAttributes         0xc0
-      Self Powered
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass         8 Mass Storage
-      bInterfaceSubClass      6 SCSI
-      bInterfaceProtocol     80 Bulk-Only
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               1
-        ** UNRECOGNIZED:  08 11 01 02 02 02 01 00
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0 
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Union:
-        bMasterInterface        0
-        bSlaveInterface         1 
-      CDC Call Management:
-        bmCapabilities       0x00
-        bDataInterface          1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0008  1x 8 bytes
-        bInterval               2
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-Device Status:     0x0000
-  (Bus Powered)
+Thanks for your comments.  It should be ">> 3" as we want to utilize the
+corresponding USB_DIR_IN bit in the bitmap to set the correct bit.
+(USB_DIR_IN = 0x80)
 
+>> +					set_bit(addr, &ep_map);
+> 
+> You want to record all endpoints on ep_map? Considering there are
+> four EP_IN (1-4), and four EP_OUT (1-4), what the value of ep_map
+> would like?
+> 
 
+So for example, if a configuration uses EP8IN and EP9OUT, then the
+ep_map will look like:
 
+EP8-IN:
+addr = ((0x88 & 0x80) >> 3) | (0x88 & 0xf) --> 0x18
 
-From 7f47321863c9dd4827460d65e985633c16efbb0f Mon Sep 17 00:00:00 2001
-From: Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
-Date: Thu, 27 Aug 2020 10:28:52 +0200
-Subject: [PATCH] usb-serial-simple: Add Whistler radio scanners TRX serie support.
+EP9-OUT:
+addr = ((0x9 & 0x80) >> 3) | (0x9 & 0xf) --> 0x9
 
-Whistler's firmware CDC support seems incomplete or buggy, but usb-serial works.
+ep_map = ep_map = 0x01000200
 
-Signed-off-by: Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
----
- drivers/usb/class/cdc-acm.c            | 14 ++++++++++++++
- drivers/usb/serial/Kconfig             |  1 +
- drivers/usb/serial/usb-serial-simple.c | 10 ++++++++++
- 3 files changed, 25 insertions(+)
+The lower 16 bits will carry the OUT endpoints, whereas the upper 16
+bits are the IN endpoints. (ie bit16 = ep0in, bit0 = ep0out)
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 991786876dbb..12929f65bcfb 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1915,6 +1915,20 @@ static const struct usb_device_id acm_ids[] = {
- 	.driver_info = SEND_ZERO_PACKET,
- 	},
- 
-+	/* Exclude Whistler radio scanners */
-+	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0010, USB_CLASS_COMM), /* TRX-1  */
-+	.driver_info = IGNORE_DEVICE,
-+	},
-+	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0011, USB_CLASS_COMM), /* TRX-2  */
-+	.driver_info = IGNORE_DEVICE,
-+	},
-+	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0012, USB_CLASS_COMM), /* TRX-1e  */
-+	.driver_info = IGNORE_DEVICE,
-+	},
-+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0013, USB_CLASS_COMM), /* TRX-2e */
-+	.driver_info = IGNORE_DEVICE,
-+	},
-+
- 	/* control interfaces without any protocol set */
- 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_ACM,
- 		USB_CDC_PROTO_NONE) },
-diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
-index 4007fa25a8ff..cd23e33c0ea4 100644
---- a/drivers/usb/serial/Kconfig
-+++ b/drivers/usb/serial/Kconfig
-@@ -71,6 +71,7 @@ config USB_SERIAL_SIMPLE
- 		- ViVOtech ViVOpay USB device.
- 		- Infineon Modem Flashloader USB interface
- 		- ZIO Motherboard USB serial interface
-+		- Whistler TRX radio scanners
- 
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called usb-serial-simple.
-diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
-index bd23a7cb1be2..af32a0fc9447 100644
---- a/drivers/usb/serial/usb-serial-simple.c
-+++ b/drivers/usb/serial/usb-serial-simple.c
-@@ -112,6 +112,14 @@ DEVICE(suunto, SUUNTO_IDS);
- 	{ USB_DEVICE(0x908, 0x0004) }
- DEVICE(siemens_mpi, SIEMENS_IDS);
- 
-+/* Whistler radio scanners */
-+#define WHISTLER_IDS()						\
-+	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0010, USB_CLASS_COMM) }, /* TRX-1  */ \
-+	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0011, USB_CLASS_COMM) }, /* TRX-2  */ \
-+	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0012, USB_CLASS_COMM) }, /* TRX-1e */ \
-+	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0013, USB_CLASS_COMM) }  /* TRX-2e */
-+DEVICE(whistler, WHISTLER_IDS);
-+
- /* All of the above structures mushed into two lists */
- static struct usb_serial_driver * const serial_drivers[] = {
- 	&carelink_device,
-@@ -127,6 +135,7 @@ static struct usb_serial_driver * const serial_drivers[] = {
- 	&hp4x_device,
- 	&suunto_device,
- 	&siemens_mpi_device,
-+	&whistler_device,
- 	NULL
- };
- 
-@@ -144,6 +153,7 @@ static const struct usb_device_id id_table[] = {
- 	HP4X_IDS(),
- 	SUUNTO_IDS(),
- 	SIEMENS_IDS(),
-+	WHISTLER_IDS(),
- 	{ },
- };
- MODULE_DEVICE_TABLE(usb, id_table);
+>> +				}
+>> +			}
+>>  		}
+>> +		ret = usb_gadget_check_config(cdev->gadget, ep_map);
+>> +		if (ret)
+>> +			goto err_purge_funcs;
+>> +
+> 
+> You may move this patch after your 4nd patch to avoid "git bisect"
+> issue.
+> 
+
+Sure, thanks for the suggestion, will do that in the next rev.
+
+Thanks
+Wesley
+
+>>  		usb_ep_autoconfig_reset(cdev->gadget);
+>>  	}
+>>  	if (cdev->use_os_string) {
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
+> 
+
 -- 
-2.25.1
-
-
-
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
