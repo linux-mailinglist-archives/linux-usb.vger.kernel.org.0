@@ -2,73 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B45902575F5
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 11:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F484257689
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 11:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727918AbgHaJG5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 05:06:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41594 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726244AbgHaJG4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 Aug 2020 05:06:56 -0400
-Received: from localhost (unknown [122.171.38.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 44968208CA;
-        Mon, 31 Aug 2020 09:06:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598864816;
-        bh=1Qz1M9vaoARg9GtUW4ovk1F2f4s3/6BPUuzEaqduOXc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0jTD3R1lBvSfSxPQgT9W8buKR6N1GnQIJ8/BTEbtQYmZr50oYl1xw16dsiwgfcl1e
-         KDwjWx/mDwezUpYNuxO/4Wt5l3vGvBhOYGADoVHSEyFGRRHvHxK8AeJhRGq81bLTh3
-         tEeAeWgWGdDiLs+A2JrPcoySoIKg7e8IS95c65GY=
-Date:   Mon, 31 Aug 2020 14:36:52 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-kernel@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Seungwon Jeon <essuuj@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 0/8] drivers: phy: Constify static phy_ops structs
-Message-ID: <20200831090652.GK2639@vkoul-mobl>
-References: <20200823220025.17588-1-rikard.falkeborn@gmail.com>
+        id S1725972AbgHaJbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 05:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725915AbgHaJbe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 05:31:34 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C856C061573
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 02:31:34 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id j7so426674oij.9
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 02:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xHAxdabrEVK6MdYgD3kMRO9EnjvLT1T5LkSqdV3LIGg=;
+        b=P+4nPzG1q82HIbk/6kFRgk8A5SWL/05NOmSQzhnUGEpbHkEN5T9g9UPvJTkfzG3xpt
+         /rYBH5aIMfqn20GSSNgCnEqX4haEJ8p9m8WP4GEYn/lKrJtPpPpckAToA7GGQa34YsEK
+         UefPE4xRuZL/I8yCmvN1+1a1RRyKicZS8pve4rZMAYCZeFs/no+esIE5M3GmPKZ0F13D
+         0YiqH5fegpaJl9iGxFTxdiQeV7SHUQOWubFg7jgE25rxQvM+c1yok+bkZEmPsVFu/Zbz
+         zxb27OYm/CWXzud4QziwyfNGzkbiq8+/+bb/uFXIB1JnlvidQlmMTs/m7pFYk9SGY+qv
+         /KiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xHAxdabrEVK6MdYgD3kMRO9EnjvLT1T5LkSqdV3LIGg=;
+        b=PMuDCc2ytqKpyAaU0SlJZwgr4CuKhz7fBL2NYvuA5u07IRqAa9iL0a73TR462xcIim
+         YctUZcHCSNuAl/pFAFbd+Zv+F6Ok/k0Y4OftlzSrRaYro0C1CN5kqzlnrGXvICNO6APe
+         rbnKQVH++152JV3XbXpnw38sixCD1O9bxpdM3nE4OYE1DHgfmzYezCXTSdkQq2YuJkEm
+         NloC4pZZeGah1Ve7NAetv56EbhyCLJC4unP7g7At5IukashaD/p5oyWR6bAw0DWM/0xK
+         nWj5JM47Bm3jnPLoMRCxHQr5kuIduNoDFzwa5Z9gON/SpGCVxTk6FfUnpRezPTV2m78f
+         O6Eg==
+X-Gm-Message-State: AOAM530TwoRC33wAUORZKiMIl2UCtZ4ZWmSdgQIHohVW24DBC5IaiSj0
+        NdG7aZO9Xvlm4I9mAmwZqMpIC8R6hxj9cS4/ltA=
+X-Google-Smtp-Source: ABdhPJwkRDzH5A1QfqO1E2OK+zFCzfUX2MQMcFwKdBFrIvHFfaPyF2mhc1ZCyo1PS5cmhSAHM0hIq6q/zrZ3tBAQYbE=
+X-Received: by 2002:aca:47d3:: with SMTP id u202mr284580oia.37.1598866293910;
+ Mon, 31 Aug 2020 02:31:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200823220025.17588-1-rikard.falkeborn@gmail.com>
+Received: by 2002:a4a:b998:0:0:0:0:0 with HTTP; Mon, 31 Aug 2020 02:31:33
+ -0700 (PDT)
+Reply-To: imffundin@gmail.com
+From:   Office <imffund0147@gmail.com>
+Date:   Mon, 31 Aug 2020 02:31:33 -0700
+Message-ID: <CAEjZ-Wf_s9eJenLqGN=NgiZ2VHmG6mL1W9cabMqUsKKWmzFf3g@mail.gmail.com>
+Subject: Are You Dead Alive ?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24-08-20, 00:00, Rikard Falkeborn wrote:
-> This series constifies all static phy_ops structs in drivers/phy.
-> Typically the only usage is to pass the address of it to devm_phy_create()
-> which takes a const pointer. The lone exception is in
-> drivers/phy/qualcomm/phy-qcom-ipq4019-usb.c where the address of the
-> structs is assigned to the data-field in of_device_id, which is a const
-> void pointer.
-> 
-> Making the structs const allows the compiler to put them in read-only
-> memory.
-> 
-> The patches are all independent of each other, and have been
-> compile-tested only.
+Hello
 
-Applied all, thanks
+we offer loan at low interest rate of 3% interest rate per year and is
+Very easy to get and at low rates is also available are you
+interested?  contact us via below email  :postmail052@gmail.com
 
--- 
-~Vinod
+
+Email ; postmail052@gmail.com
+Mr.Solomon Brandy
+Sinanpasa Loan Company
