@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A186257F69
+	by mail.lfdr.de (Postfix) with ESMTP id B7124257F6A
 	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 19:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728872AbgHaRQ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 13:16:58 -0400
-Received: from mga12.intel.com ([192.55.52.136]:16611 "EHLO mga12.intel.com"
+        id S1727952AbgHaRRA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 13:17:00 -0400
+Received: from mga03.intel.com ([134.134.136.65]:38710 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726791AbgHaRQ5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 Aug 2020 13:16:57 -0400
-IronPort-SDR: dD7nqSDQGlpxwQyOdBE055id41ata0zg2VFPimHyb9CBjpRpoO0KsJND9g8FbCm6WKWd1HjH4W
- grm4uaYJNEWQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="136549406"
+        id S1728846AbgHaRQ6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Aug 2020 13:16:58 -0400
+IronPort-SDR: UaMVym/qaksAJEHC3IwDtpwitBwECMAU0AYdMfa0cyjHT+Q8+/b0uhb+hNfqaq2NgUUlwsrpzV
+ Q41zotj1fwNQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="157026458"
 X-IronPort-AV: E=Sophos;i="5.76,376,1592895600"; 
-   d="scan'208";a="136549406"
+   d="scan'208";a="157026458"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2020 10:16:55 -0700
-IronPort-SDR: WSmzcxSqEHZOpsgQpWUGDO/MSUW535gw9bl+X4zdVoSNdy/4t701VPW38EbcjY3L1Mt1pM04x9
- IWSHHA8VenhQ==
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2020 10:16:56 -0700
+IronPort-SDR: Rgi6y6bYgRa2BbsENsT3PkZu1WZ8zOcPsNUpt8NN03r/DyukOW4xsOV9yTVrNToQZLAvY4OdiK
+ zIfs76kCcYqQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,376,1592895600"; 
-   d="scan'208";a="338287401"
+   d="scan'208";a="340720288"
 Received: from lkp-server02.sh.intel.com (HELO 713faec3b0e5) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 31 Aug 2020 10:16:54 -0700
+  by orsmga007.jf.intel.com with ESMTP; 31 Aug 2020 10:16:54 -0700
 Received: from kbuild by 713faec3b0e5 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kCnQL-00007r-Qb; Mon, 31 Aug 2020 17:16:53 +0000
-Date:   Tue, 01 Sep 2020 01:16:43 +0800
+        id 1kCnQL-00007u-VY; Mon, 31 Aug 2020 17:16:53 +0000
+Date:   Tue, 01 Sep 2020 01:16:46 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 5fedf0d295d3ef69fd85fdee4cb68fd3756b54c2
-Message-ID: <5f4d307b.puJX3SRDJirfcPYa%lkp@intel.com>
+Subject: [usb:usb_control_msg] BUILD SUCCESS
+ e7b9bcf5d9e6db6f3ea46b6b8c11958b6433fb19
+Message-ID: <5f4d307e.CoDYBX6x5sXmYKam%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -46,8 +46,8 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-next
-branch HEAD: 5fedf0d295d3ef69fd85fdee4cb68fd3756b54c2  Merge 5.9-rc3 into usb-next
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb_control_msg
+branch HEAD: e7b9bcf5d9e6db6f3ea46b6b8c11958b6433fb19  sound: usx2y: convert to use new usb control functions...
 
 elapsed time: 722m
 
