@@ -2,68 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AD6257528
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 10:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45902575F5
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 11:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbgHaITd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 31 Aug 2020 04:19:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44276 "EHLO mail.kernel.org"
+        id S1727918AbgHaJG5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 05:06:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41594 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725829AbgHaITc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 Aug 2020 04:19:32 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208911] Renesas USB controller - FW has invalid version :8224
-Date:   Mon, 31 Aug 2020 08:19:32 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: chripell@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-208911-208809-oXBCcxvUQ9@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208911-208809@https.bugzilla.kernel.org/>
-References: <bug-208911-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726244AbgHaJG4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Aug 2020 05:06:56 -0400
+Received: from localhost (unknown [122.171.38.130])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 44968208CA;
+        Mon, 31 Aug 2020 09:06:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598864816;
+        bh=1Qz1M9vaoARg9GtUW4ovk1F2f4s3/6BPUuzEaqduOXc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0jTD3R1lBvSfSxPQgT9W8buKR6N1GnQIJ8/BTEbtQYmZr50oYl1xw16dsiwgfcl1e
+         KDwjWx/mDwezUpYNuxO/4Wt5l3vGvBhOYGADoVHSEyFGRRHvHxK8AeJhRGq81bLTh3
+         tEeAeWgWGdDiLs+A2JrPcoySoIKg7e8IS95c65GY=
+Date:   Mon, 31 Aug 2020 14:36:52 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-kernel@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Seungwon Jeon <essuuj@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 0/8] drivers: phy: Constify static phy_ops structs
+Message-ID: <20200831090652.GK2639@vkoul-mobl>
+References: <20200823220025.17588-1-rikard.falkeborn@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200823220025.17588-1-rikard.falkeborn@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208911
+On 24-08-20, 00:00, Rikard Falkeborn wrote:
+> This series constifies all static phy_ops structs in drivers/phy.
+> Typically the only usage is to pass the address of it to devm_phy_create()
+> which takes a const pointer. The lone exception is in
+> drivers/phy/qualcomm/phy-qcom-ipq4019-usb.c where the address of the
+> structs is assigned to the data-field in of_device_id, which is a const
+> void pointer.
+> 
+> Making the structs const allows the compiler to put them in read-only
+> memory.
+> 
+> The patches are all independent of each other, and have been
+> compile-tested only.
 
-Christian (chripell@gmail.com) changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |chripell@gmail.com
-
---- Comment #15 from Christian (chripell@gmail.com) ---
-Hi, I understand from #9 that the check will be removed. To corroborate that
-decision, here is another data point with a still different FW version:
-
-[    1.318773] xhci_hcd 0000:02:00.0: FW has invalid version :8228
-[    1.318795] xhci_hcd 0000:02:00.0: Direct firmware load for
-renesas_usb_fw.mem failed with error -2
-[    1.318796] xhci_hcd 0000:02:00.0: request_firmware failed: -2
-[    1.318799] xhci_hcd: probe of 0000:02:00.0 failed with error -2
-
-Thanks for promptly working on this bug!
+Applied all, thanks
 
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+~Vinod
