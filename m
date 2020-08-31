@@ -2,317 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEE42578F7
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 14:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F7025790C
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 14:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbgHaMJS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 08:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgHaMJO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 08:09:14 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB7BC061573;
-        Mon, 31 Aug 2020 05:09:12 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id d11so8087929ejt.13;
-        Mon, 31 Aug 2020 05:09:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/Unu49ykbOe62UJ6hfhQMQxQUKYYTm838oAdPCMhX9Y=;
-        b=mO71JFCw5R6VlX2+LMfNXQHMxMK9WagGkJUUYEOQ8iePyeVPAftHQvGTJy0OeQN35W
-         WRgu+KE4H42Pf4fh7IWWux5Dk15Vy/fyOyO3+sCGqQDPW/KRKmcmuMHzfmlhezcB6RbP
-         p2gcc2nvUSJgO09EbLOPHW0dKcPwyHTntnyyp2vjRaBKge5W53ionoOBkBE9ueyOrmys
-         ij4VVAt9ftqkQxZKqtiM50W3UEDbdXhvvDH2J7YWV0L4eQH7K/6vk6JpMRFyu6X9iy2c
-         l/tcKRfvPuohV6j5y2UNYXLWttpPU6YRdhKTteI+/VtqvZtuVqsh+idEtwygYHznaR67
-         qOBA==
+        id S1727065AbgHaMQS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 08:16:18 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:32890 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726224AbgHaMQQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 08:16:16 -0400
+Received: by mail-io1-f71.google.com with SMTP id l22so528633iol.0
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 05:16:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/Unu49ykbOe62UJ6hfhQMQxQUKYYTm838oAdPCMhX9Y=;
-        b=IDTxWXWlwMRf4iOcHQPysqN/MZKVRJZ6cE1CwleUugm+EZXszcN/bEHIN4p1jSomzs
-         1dfhjaeGPlLZUP419q7n8LR4sEFC6HHupvWx1i1AzT3IcDtdhrOPcyWKJvyCmB9YeAxH
-         C7TRQlGaDBhv08aI7tc2fWbOpK3m+XVxWAFRxEnuFw7fN0aoeoGWeojypnU0N0xrQUdV
-         pdHkO5AL2ikLrzpDRhnzsgwAB67upfPwYV8bxZuP9gSOA+Cdkkp2D27TvruGLdkGTNOk
-         MRwdvOJN4rdmTYF8v/dQ1vj08qpt8Y0XYge1HIcVsUGrLzPpvT1AQefGKXZTgpBxxih0
-         NdjA==
-X-Gm-Message-State: AOAM531CIE1kkGK7kYIjfb2rfZtQ2I7lQylEJxsKkJr5zxDdKmhmALXC
-        BhtjKIx7ukQpuPbjHTThTgs=
-X-Google-Smtp-Source: ABdhPJxSF7PvESnsLyseSn1BrphMlvXxYC2Q7IdafnhrEJI6Y40jd4vGdMUcqIlrlshBTLgxnGhWnA==
-X-Received: by 2002:a17:906:3c47:: with SMTP id i7mr843963ejg.554.1598875751255;
-        Mon, 31 Aug 2020 05:09:11 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id r12sm7520787edx.59.2020.08.31.05.09.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2020 05:09:10 -0700 (PDT)
-Date:   Mon, 31 Aug 2020 14:09:08 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     JC Kuo <jckuo@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh@kernel.org, jonathanh@nvidia.com,
-        kishon@ti.com, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, nkristam@nvidia.com
-Subject: Re: [PATCH v2 06/12] soc/tegra: pmc: provide usb sleepwalk register
- map
-Message-ID: <20200831120908.GD1689119@ulmo>
-References: <20200831044043.1561074-1-jckuo@nvidia.com>
- <20200831044043.1561074-7-jckuo@nvidia.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=xqAEW0uxhAt/9jyozVgi195mAb05+fCsu31ZuwuP3RE=;
+        b=BH7JF/5hqUs6KJlV6HRQKU7yV1a4jRsPrk6zJN/MgmEhLc9sVLrXhIqbdExITm6+QO
+         KLAAasnNJ6Vxmx5p7gh8NdS3zX2WYqM4WPmdUZeqiZ6s49ACgJQ4Lq8LbmB8gnBWgDU5
+         5X5dMyN2OnnOZnjOcW6vt3PCG4AUqROFCWsD5B21USDZpcOIVhGZe6YMyNcR0NxhmgsR
+         qFsVgEfsaMhEXmhP+mogA3YAXdnfNKT0+CGQSM3IYR6tfVjgecNOHNt9ZnlilSmeTinT
+         5UsvGZ1rOLKl6UaZRYJ9QGQxwL6QPObqS+QBd/g21mQ+RN5PnK0heNAdxEfRGraYj7zs
+         H7vg==
+X-Gm-Message-State: AOAM531gIZWkHzWQ7YTc6zqhR7K1pC2avx5k1u2pMaOa/CYtKmAtGbPd
+        M6dKG/vtDsUdT4tQ2IxLyeroB639TiQpParkZNuMjetzDLzm
+X-Google-Smtp-Source: ABdhPJxsCP4vmGpKdDdCv2nN17m84UVhtF2m7pbehTjiWasZlC4m83UnxuB/Qmcq/+OhJByyGuMeL9nNhNcFo4gsWoj5DAJA4BfT
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wLAMOaPNJ0fu1fTG"
-Content-Disposition: inline
-In-Reply-To: <20200831044043.1561074-7-jckuo@nvidia.com>
-User-Agent: Mutt/1.14.6 (2020-07-11)
+X-Received: by 2002:a92:a302:: with SMTP id a2mr1071597ili.116.1598876175225;
+ Mon, 31 Aug 2020 05:16:15 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 05:16:15 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000076d7e105ae2b5ec4@google.com>
+Subject: general protection fault in line6_midibuf_write
+From:   syzbot <syzbot+b333bd4e812c1d42827a@syzkaller.appspotmail.com>
+To:     alsa-devel@alsa-project.org, andreyknvl@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
 
---wLAMOaPNJ0fu1fTG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On Mon, Aug 31, 2020 at 12:40:37PM +0800, JC Kuo wrote:
-> This commit implements a register map which grants USB (UTMI and HSIC)
-> sleepwalk registers access to USB phy drivers. The USB sleepwalk logic
-> is in PMC hardware block but USB phy drivers have the best knowledge
-> of proper programming sequence. This approach prevents using custom
-> pmc APIs.
->=20
-> Signed-off-by: JC Kuo <jckuo@nvidia.com>
-> ---
->  drivers/soc/tegra/pmc.c | 89 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 89 insertions(+)
+HEAD commit:    3ed8e1c2 usb: typec: tcpm: Migrate workqueue to RT priorit..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=137be056900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ccafc70ac3d5f49c
+dashboard link: https://syzkaller.appspot.com/bug?extid=b333bd4e812c1d42827a
+compiler:       gcc (GCC) 10.1.0-syz 20200507
 
-Same comment as in earlier patches regarding the subject and "USB PHY"
-in the commit message.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-> index d332e5d9abac..03317978915a 100644
-> --- a/drivers/soc/tegra/pmc.c
-> +++ b/drivers/soc/tegra/pmc.c
-> @@ -43,6 +43,7 @@
->  #include <linux/seq_file.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
-> +#include <linux/regmap.h>
-> =20
->  #include <soc/tegra/common.h>
->  #include <soc/tegra/fuse.h>
-> @@ -102,6 +103,9 @@
-> =20
->  #define PMC_PWR_DET_VALUE		0xe4
-> =20
-> +#define PMC_USB_DEBOUNCE_DEL		0xec
-> +#define PMC_USB_AO			0xf0
-> +
->  #define PMC_SCRATCH41			0x140
-> =20
->  #define PMC_WAKE2_MASK			0x160
-> @@ -133,6 +137,13 @@
->  #define IO_DPD2_STATUS			0x1c4
->  #define SEL_DPD_TIM			0x1c8
-> =20
-> +#define PMC_UTMIP_UHSIC_TRIGGERS	0x1ec
-> +#define PMC_UTMIP_UHSIC_SAVED_STATE	0x1f0
-> +
-> +#define PMC_UTMIP_TERM_PAD_CFG		0x1f8
-> +#define PMC_UTMIP_UHSIC_SLEEP_CFG	0x1fc
-> +#define PMC_UTMIP_UHSIC_FAKE		0x218
-> +
->  #define PMC_SCRATCH54			0x258
->  #define  PMC_SCRATCH54_DATA_SHIFT	8
->  #define  PMC_SCRATCH54_ADDR_SHIFT	0
-> @@ -145,8 +156,18 @@
->  #define  PMC_SCRATCH55_CHECKSUM_SHIFT	16
->  #define  PMC_SCRATCH55_I2CSLV1_SHIFT	0
-> =20
-> +#define  PMC_UTMIP_UHSIC_LINE_WAKEUP	0x26c
-> +
-> +#define PMC_UTMIP_BIAS_MASTER_CNTRL	0x270
-> +#define PMC_UTMIP_MASTER_CONFIG		0x274
-> +#define PMC_UTMIP_UHSIC2_TRIGGERS	0x27c
-> +#define PMC_UTMIP_MASTER2_CONFIG	0x29c
-> +
->  #define GPU_RG_CNTRL			0x2d4
-> =20
-> +#define PMC_UTMIP_PAD_CFG0		0x4c0
-> +#define PMC_UTMIP_UHSIC_SLEEP_CFG1	0x4d0
-> +#define PMC_UTMIP_SLEEPWALK_P3		0x4e0
->  /* Tegra186 and later */
->  #define WAKE_AOWAKE_CNTRL(x) (0x000 + ((x) << 2))
->  #define WAKE_AOWAKE_CNTRL_LEVEL (1 << 3)
-> @@ -334,6 +355,7 @@ struct tegra_pmc_soc {
->  	const struct pmc_clk_init_data *pmc_clks_data;
->  	unsigned int num_pmc_clks;
->  	bool has_blink_output;
-> +	bool has_usb_sleepwalk;
->  };
-> =20
->  static const char * const tegra186_reset_sources[] =3D {
-> @@ -2495,6 +2517,67 @@ static void tegra_pmc_clock_register(struct tegra_=
-pmc *pmc,
->  			 err);
->  }
-> =20
-> +#define regmap_reg(x) regmap_reg_range(x, x)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b333bd4e812c1d42827a@syzkaller.appspotmail.com
 
-This doesn't seem like a good idea. What if anyone ever thought it was a
-good idea to add this to the core regmap header? We'd get a naming
-conflict that would first have to get resolved.
+general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
+CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.9.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:midibuf_is_full sound/usb/line6/midibuf.c:44 [inline]
+RIP: 0010:line6_midibuf_write+0x30/0x3f0 sound/usb/line6/midibuf.c:91
+Code: 49 89 f5 41 54 55 89 d5 53 48 89 fb 4c 8d 7b 18 48 83 ec 28 e8 11 68 5f fc 4c 89 fa 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 0a 03 00 00 44 8b 63 18 31 ff
+RSP: 0018:ffff8881db3099d8 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 00000000000000b0 RCX: ffffc900006a8000
+RDX: 0000000000000019 RSI: ffffffff84e098af RDI: 00000000000000b0
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8734d643
+R10: 0000000000000000 R11: 000000000004e017 R12: 00000000000000b0
+R13: ffff8881d40aec80 R14: ffff8881d4464984 R15: 00000000000000c8
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005629deed5130 CR3: 00000001d2254000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ line6_data_received+0x281/0x520 sound/usb/line6/driver.c:296
+ __usb_hcd_giveback_urb+0x32d/0x560 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1716
+ dummy_timer+0x11f2/0x3240 drivers/usb/gadget/udc/dummy_hcd.c:1967
+ call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1413
+ expire_timers kernel/time/timer.c:1458 [inline]
+ __run_timers.part.0+0x67c/0xa60 kernel/time/timer.c:1755
+ __run_timers kernel/time/timer.c:1736 [inline]
+ run_timer_softirq+0x80/0x120 kernel/time/timer.c:1768
+ __do_softirq+0x1af/0x91c kernel/softirq.c:298
+ asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:706
+ </IRQ>
+ __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
+ run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
+ do_softirq_own_stack+0x73/0x90 arch/x86/kernel/irq_64.c:77
+ invoke_softirq kernel/softirq.c:393 [inline]
+ __irq_exit_rcu kernel/softirq.c:423 [inline]
+ irq_exit_rcu+0x107/0x1a0 kernel/softirq.c:435
+ sysvec_apic_timer_interrupt+0x43/0x90 arch/x86/kernel/apic/apic.c:1091
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:581
+RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
+RIP: 0010:console_unlock+0xa99/0xcd0 kernel/printk/printk.c:2509
+Code: 00 89 ee 48 c7 c7 a0 0a 35 87 e8 12 b9 03 00 65 ff 0d 3b 48 d8 7e e9 87 f9 ff ff e8 f1 59 16 00 e8 dc f2 1b 00 ff 74 24 30 9d <e9> 20 fe ff ff e8 dd 59 16 00 48 8d 7d 08 48 89 f8 48 c1 e8 03 42
+RSP: 0018:ffff8881da34f5e0 EFLAGS: 00000212
+RAX: 00000000000d56ed RBX: 0000000000000200 RCX: 0000000000000006
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff8129a6d4
+RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff895c65e7
+R10: fffffbfff12b8cbc R11: 0000000000003254 R12: ffffffff82b3d6f0
+R13: ffffffff876fa450 R14: 0000000000000054 R15: dffffc0000000000
+ vprintk_emit+0x1b2/0x460 kernel/printk/printk.c:2029
+ dev_vprintk_emit+0x3eb/0x436 drivers/base/core.c:4133
+ dev_printk_emit+0xba/0xf1 drivers/base/core.c:4144
+ __dev_printk+0xcf/0xf5 drivers/base/core.c:4156
+ _dev_info+0xd7/0x109 drivers/base/core.c:4202
+ hub_port_init.cold+0x264/0x32f drivers/usb/core/hub.c:4628
+ hub_port_connect drivers/usb/core/hub.c:5140 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x2191/0x4390 drivers/usb/core/hub.c:5576
+ process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+ process_scheduled_works kernel/workqueue.c:2331 [inline]
+ worker_thread+0x82b/0x1120 kernel/workqueue.c:2417
+ kthread+0x392/0x470 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+Modules linked in:
+---[ end trace 3dff073ad8b565c9 ]---
+RIP: 0010:midibuf_is_full sound/usb/line6/midibuf.c:44 [inline]
+RIP: 0010:line6_midibuf_write+0x30/0x3f0 sound/usb/line6/midibuf.c:91
+Code: 49 89 f5 41 54 55 89 d5 53 48 89 fb 4c 8d 7b 18 48 83 ec 28 e8 11 68 5f fc 4c 89 fa 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 0a 03 00 00 44 8b 63 18 31 ff
+RSP: 0018:ffff8881db3099d8 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 00000000000000b0 RCX: ffffc900006a8000
+RDX: 0000000000000019 RSI: ffffffff84e098af RDI: 00000000000000b0
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8734d643
+R10: 0000000000000000 R11: 000000000004e017 R12: 00000000000000b0
+R13: ffff8881d40aec80 R14: ffff8881d4464984 R15: 00000000000000c8
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005629deed5130 CR3: 00000001d2254000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-> +static const struct regmap_range pmc_usb_sleepwalk_ranges[] =3D {
-> +	regmap_reg_range(PMC_USB_DEBOUNCE_DEL, PMC_USB_AO),
-> +	regmap_reg_range(PMC_UTMIP_UHSIC_TRIGGERS, PMC_UTMIP_UHSIC_SAVED_STATE),
-> +	regmap_reg_range(PMC_UTMIP_TERM_PAD_CFG, PMC_UTMIP_UHSIC_FAKE),
-> +	regmap_reg(PMC_UTMIP_UHSIC_LINE_WAKEUP),
-> +	regmap_reg_range(PMC_UTMIP_BIAS_MASTER_CNTRL, PMC_UTMIP_MASTER_CONFIG),
-> +	regmap_reg_range(PMC_UTMIP_UHSIC2_TRIGGERS, PMC_UTMIP_MASTER2_CONFIG),
-> +	regmap_reg_range(PMC_UTMIP_PAD_CFG0, PMC_UTMIP_UHSIC_SLEEP_CFG1),
-> +	regmap_reg(PMC_UTMIP_SLEEPWALK_P3),
-> +};
 
-Since we only have two usages of the regmap_reg() macro, perhaps just
-use regmap_reg_range() with the same parameter used twice?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> +
-> +static const struct regmap_access_table pmc_usb_sleepwalk_table =3D {
-> +	.yes_ranges =3D pmc_usb_sleepwalk_ranges,
-> +	.n_yes_ranges =3D ARRAY_SIZE(pmc_usb_sleepwalk_ranges),
-> +};
-> +
-> +static int tegra_pmc_regmap_readl(void *context, unsigned int reg, unsig=
-ned int *val)
-
-s/reg/offset/ to make it clearer what this really is. Also: s/val/value/ to
-avoid potential confusion with "valid".
-
-> +{
-> +	struct tegra_pmc *pmc =3D context;
-> +
-> +	*val =3D tegra_pmc_readl(pmc, reg);
-> +	return 0;
-> +}
-> +
-> +static int tegra_pmc_regmap_writel(void *context, unsigned int reg, unsi=
-gned int val)
-> +{
-> +	struct tegra_pmc *pmc =3D context;
-> +
-> +	tegra_pmc_writel(pmc, val, reg);
-> +	return 0;
-> +}
-
-Same here.
-
-> +
-> +static const struct regmap_config usb_sleepwalk_regmap_config =3D {
-> +	.name =3D "usb_sleepwalk",
-> +	.reg_bits =3D 32,
-> +	.val_bits =3D 32,
-> +	.reg_stride =3D 4,
-> +	.fast_io =3D true,
-> +	.rd_table =3D &pmc_usb_sleepwalk_table,
-> +	.wr_table =3D &pmc_usb_sleepwalk_table,
-> +	.reg_read =3D tegra_pmc_regmap_readl,
-> +	.reg_write =3D tegra_pmc_regmap_writel,
-> +};
-> +
-> +static int tegra_pmc_regmap_init(struct tegra_pmc *pmc)
-> +{
-> +	struct regmap *regmap;
-> +
-> +	if (pmc->soc->has_usb_sleepwalk) {
-> +		regmap =3D devm_regmap_init(pmc->dev, NULL, (__force void *)pmc,
-
-Do you really need that __force in there?
-
-> +					  &usb_sleepwalk_regmap_config);
-> +		if (IS_ERR(regmap)) {
-> +			dev_err(pmc->dev, "failed to allocate register map\n");
-
-Maybe output the error code here?
-
-> +			return PTR_ERR(regmap);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int tegra_pmc_probe(struct platform_device *pdev)
->  {
->  	void __iomem *base;
-> @@ -2613,6 +2696,10 @@ static int tegra_pmc_probe(struct platform_device =
-*pdev)
->  	pmc->base =3D base;
->  	mutex_unlock(&pmc->powergates_lock);
-> =20
-> +	err =3D tegra_pmc_regmap_init(pmc);
-> +	if (err < 0)
-> +		goto cleanup_powergates;
-
-You could call this perhaps a little bit earlier to avoid having to
-clean up powergates? Since you register with devm_regmap_init() you
-won't have to clean this up manually.
-
-For that reason it makes sense as a general rule to initialize devm
-things before anything that's not managed (unless, of course, if it
-doesn't make any sense).
-
-> +
->  	tegra_pmc_clock_register(pmc, pdev->dev.of_node);
->  	platform_set_drvdata(pdev, pmc);
-> =20
-> @@ -2976,6 +3063,7 @@ static const struct tegra_pmc_soc tegra124_pmc_soc =
-=3D {
->  	.pmc_clks_data =3D tegra_pmc_clks_data,
->  	.num_pmc_clks =3D ARRAY_SIZE(tegra_pmc_clks_data),
->  	.has_blink_output =3D true,
-> +	.has_usb_sleepwalk =3D true,
->  };
-> =20
->  static const char * const tegra210_powergates[] =3D {
-> @@ -3094,6 +3182,7 @@ static const struct tegra_pmc_soc tegra210_pmc_soc =
-=3D {
->  	.pmc_clks_data =3D tegra_pmc_clks_data,
->  	.num_pmc_clks =3D ARRAY_SIZE(tegra_pmc_clks_data),
->  	.has_blink_output =3D true,
-> +	.has_usb_sleepwalk =3D true,
->  };
-> =20
->  #define TEGRA186_IO_PAD_TABLE(_pad)                                     =
-     \
-
-I'd prefer if we explicitly set this to false on SoC generations where
-we don't have sleepwalk support (or don't need to deal with it in the
-kernel). That avoids confusion as to whether this was simply forgotten
-or whether the omission was on purpose.
-
-Thierry
-
---wLAMOaPNJ0fu1fTG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9M6GIACgkQ3SOs138+
-s6EaqxAAmPRgHbu6YpzkiKoq+XbNk+lFnWWy7ZVbp680XlcbUXFC14Li1NsWoNDb
-XVmk2NIfxIpZWR1oPNlOYKCMZTF8cg3XeL4lTanUQDkpFLMCpa/dYjs8BdOu0EyS
-yhz2ICzzt71Przr4FUxsJznmXPak10JIkq8SCF2vXRv5UhM1KiPzmUII7VE16UY4
-OXkyQoFhF6NmrVHumw1yFPiHiRFwM506yraFBZULyBvJrkYfH5COocy5n1oIFO0P
-u4wr3wwvf5XAlCSYeR3GynsGCc2e1qZ1pIw9FrptAgBnuyHOwGrzBZ+l/FWgrEo1
-2t8v2eim/Jb5IvL5C/rs/67tAvY0zITf4N+0iH0JYA8RZ5NSlWxKOo7QhUP/0ixd
-r1vlbceA8wYfTarrKnl26HMf1iJAqawxD/7nNgptRo179w8vaWPNN8eZZfmtkO9n
-w/95A4hIf5lV+OpLH6jt91qeKgIpX/lCXW2L61ZW3DGHrc9W7EJ942HtV6MKrk5U
-Z3Mar/SVM1fAv590MlVTlYhyfgAyMGyhzhJ0K8n6/fbVK0htAhkBKR5+ovwAxAx+
-bzTQsB1k48GyFf9oO+JHJa1D0q7QAjVo/iw+vYLbhAoRKFkc/3OkzXL3idX8Kwso
-BT/jqEvd5pMOxoAmkh4ZREk1GT0uTkxhzLG+guWTvKKId9hRgqM=
-=G5F3
------END PGP SIGNATURE-----
-
---wLAMOaPNJ0fu1fTG--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
