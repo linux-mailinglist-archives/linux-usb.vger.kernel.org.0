@@ -2,109 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A99257833
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 13:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0880F257862
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 13:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725972AbgHaLFN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 07:05:13 -0400
-Received: from mail-db8eur05on2060.outbound.protection.outlook.com ([40.107.20.60]:3764
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726252AbgHaLBT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 Aug 2020 07:01:19 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TF4XtQ0J3eICNKFigMgv1ciF7yLAThHetFti3D7OFfS1KitWfNo8rFDI+CfdiN/tingdrRpI5vQmNiA74YSxPtF8f4BTSlq9hhKcb4TjEvQGIydc9FfmW4mSGSXrN5dP8JBtIX1OXX5S4RQKjWzVilasHN2g89Cu289dmbynGqI01vDRF3wo81OP3HtIf3RwOFNe0LyUgqFGunhEiFnYhfSYC5dXMpoWoro2x4+ThJO3kGtZvTMQNNn96u5+UTYJDG889ggPoAzEZmcrbNLzfGAJfYOpONjZbtk3/fuRH8T2vsG5tapuIqF9Cl6G14TUfZ9DFwfkNvf1FFRnMcRekw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ua/rfCNIOSrJm1obd6XP2M+GCQqum27HEf0zhX5uYMo=;
- b=JCmzopyKR0AuQ11Db8LlpQyUhVkadN8b5euodKvEzI/eyF62HJPp7TFUD5psQiH1VqgJTcW70NnSpFtksTLef5QoF4i6/KjGvJx8X216IZJbPJiC/VOraJXIrjRjDtTcpepj1INDurMZsZ8+9WOkEIwrjnvpvGYL8th+gwncwMsMaGM+rxv6nTckzXT/afGdwCtmoz38Qw9jsfkEl2NDrd8a8aagiUVIX+DcSQaaDeUkvx3cU+bkv2HVmB1TKQqZ3RibyVrdiqZ2BeLU3CBbLCFH0TpHwc+M9m4sRrL99nfuiWTCF2dHr3fzMKyVTDIQlmMI5sGTOwQ1+Gg6jgSlZw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ua/rfCNIOSrJm1obd6XP2M+GCQqum27HEf0zhX5uYMo=;
- b=cy+qevvi+cpj2Y20c/TEILljvIbS/3RPQXl3xjuCQRkkAGZ80LtKFkExT5PdacXS3CxYtJFZugH6ueZ4QWZ4t6+ZEEoXS2iIydqCsGFH5gxIJqWsoi8auP9Kme+7y/eGuXlR2QhE5cqe6XLbS6ZJb6fYvJ5xJG0bs9uHxJ+t934=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB6149.eurprd04.prod.outlook.com (2603:10a6:20b:b5::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.22; Mon, 31 Aug
- 2020 11:00:44 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3326.025; Mon, 31 Aug 2020
- 11:00:44 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S1727784AbgHaL2t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 07:28:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56812 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726144AbgHaL1S (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Aug 2020 07:27:18 -0400
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 28B5620707;
+        Mon, 31 Aug 2020 11:27:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598873237;
+        bh=PsPzZUXkCARyw1/Bpgavuwu8siY52OCiseD9eawSFlg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=dFX5/hDGqWOwkIkJBsHbPOjGrZnUHR2sxKvyBOG8dH1ppjwuyo3R8u3Gg/m1RcUBZ
+         dbnLVzTq4diPnPOYhEESj2enl+9ZognOl3YbBvRVPoDTFZ9srOBKxerbVu15wjjskW
+         ZFTW2vklKEvl6Lwb6SAx0dOYBQwqfUpC0N9q/tUM=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Peter Chen <peter.chen@nxp.com>,
         "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         dl-linux-imx <linux-imx@nxp.com>,
         "pawell@cadence.com" <pawell@cadence.com>,
         "rogerq@ti.com" <rogerq@ti.com>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         Jun Li <jun.li@nxp.com>
-Subject: RE: [PATCH 4/8] usb: host: xhci-plat: add .suspend_quirk for struct
- xhci_plat_priv
-Thread-Topic: [PATCH 4/8] usb: host: xhci-plat: add .suspend_quirk for struct
- xhci_plat_priv
-Thread-Index: AQHWMCRbdg1lrgT4nEqhJe7F1Tze76lSnGaAgAAPIAA=
-Date:   Mon, 31 Aug 2020 11:00:44 +0000
-Message-ID: <AM7PR04MB7157A964A5F0D67E218AC8798B510@AM7PR04MB7157.eurprd04.prod.outlook.com>
+Subject: RE: [PATCH 1/8] usb: cdns3: add runtime PM support
+In-Reply-To: <AM7PR04MB71572A2B1EDC6D379B1CBDA88B510@AM7PR04MB7157.eurprd04.prod.outlook.com>
 References: <20200522103256.16322-1-peter.chen@nxp.com>
- <20200522103256.16322-5-peter.chen@nxp.com> <87lfhv9lkg.fsf@kernel.org>
-In-Reply-To: <87lfhv9lkg.fsf@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [180.164.158.209]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: c36b6128-5901-42e7-00ee-08d84d9d1bfd
-x-ms-traffictypediagnostic: AM6PR04MB6149:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR04MB614985DC760EE99F5A74551B8B510@AM6PR04MB6149.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SGy4xgeDmMtQmKIzLkAdGvCTMVhRc1ypoXvqpM+sfSpHvF6kfN+Ncsu0sWQuYTLdHm9dlanMI556hBDoGv2esS+C7BmyWhh3jxIDoDDukaEc2DestOvngf5rUwn5/ocPUQAF9VU9vhNBlI1WLxNV4WQi90n1VGtEestADhn+0vkC6We2kyD2IXkRdBUYyhfgakLpaMrwz9hUiH3odsr4PmzxrVURIoQX2GU9aiaCEMfI8ZEt3IurUNaKiZyUzj3t00H8lRi9yoCbNsZzhYkQ5snxZ3+62HFBCxb9ywjL8BkndK74mq39/mWRA9oylOze91YkNVMALhOakJAlGzE+oIAK+gx8Gggzr191DyDof5uPPIlvgsQ9KiOHSN2pWNJ8
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(366004)(346002)(376002)(39860400002)(8676002)(5660300002)(66556008)(8936002)(66476007)(55016002)(64756008)(6506007)(7696005)(33656002)(66446008)(9686003)(558084003)(110136005)(52536014)(4326008)(71200400001)(15650500001)(54906003)(83380400001)(86362001)(44832011)(26005)(2906002)(66946007)(186003)(316002)(76116006)(478600001)(142923001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: xVRBnOY8QDsRdqc1+BOYK++jp2V7KqfwMhI13x+t9d/I2A+dPNi2VRz/MbwCW1r+onafYQ+IIdSxcmPPobampixYjfHmUiWWW51YAkoZaSZGmyB1W4g7t7US8pXnaY+oeTd2LzdzZYc9b0rZTvZwQOcmE4YgbWb4C2Z5p9W1YPf+tUcfNwDmK1qkkBy61R35/dtXfzRp3FtVDxEmelFQ/F+RsI7W+6aAfILHsFRYRrKO/f7kHJEvshNp+MMcKmiBZb4pC+2QkhJvXQes5WHC7nHjsg+dXwID7jeRZgeJbY36WkUlV9WaJmLHxduNMiUVi3E3dSDt5U/gRUIXZVWLuyrunkdOXZIIxARD08KpyVCuvSqwHJw1vPke+JydJwYYWuDGXhas/D/C8/TvwWN16HleGhMPxkfdJFCOGJxy66tX2zwR+ovGf3IrxGjTpQQc6V/ik+a0ljKd54ysDzK4ZClbIfnscVqUw00Q0Y9Mbmo+qURLEpuYMWfclBxoGDu/DhTeNYIMU0Ht8A7i98HoKgUXUAP6unN0+dqcuq+dFZwT97FwkrGHfh5ChSh9Be1pdjUrJ/YqidKwrbXMAt5mSnFfJFfONhd7j1xWJBSG9TthNDkYP32hv+KbmA04ZV9TMGyeBZ9Pf5yEyDroFA5+Ig==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <20200522103256.16322-2-peter.chen@nxp.com> <87sgc39ls8.fsf@kernel.org>
+ <AM7PR04MB71572A2B1EDC6D379B1CBDA88B510@AM7PR04MB7157.eurprd04.prod.outlook.com>
+Date:   Mon, 31 Aug 2020 14:27:04 +0300
+Message-ID: <87wo1f9htj.fsf@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c36b6128-5901-42e7-00ee-08d84d9d1bfd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2020 11:00:44.6480
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YR/Df248FGXDXMFV/S3sG3iylzrnEcJhIIjPIXpdG5EF7z8gdaxKuxzgFGYx+7jfyhHWWfq+aur8aCoF2qd7WA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6149
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> Subject: Re: [PATCH 4/8] usb: host: xhci-plat: add .suspend_quirk for str=
-uct
-> xhci_plat_priv
->=20
-> Peter Chen <peter.chen@nxp.com> writes:
->=20
-> > Some platforms (eg cdns3) may have special sequences between
-> > xhci_bus_suspend and xhci_suspend, add .suspend_quick for it.
->                                                   ^^^^^
->                                                   quirk?
->=20
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, will change.
 
-Peter
+Hi,
+
+Peter Chen <peter.chen@nxp.com> writes:
+>> Peter Chen <peter.chen@nxp.com> writes:
+>> > Introduce runtime PM and wakeup interrupt handler for cdns3, the
+>> > runtime PM is default off since other cdns3 has not implemented glue
+>> > layer support for runtime PM.
+>>=20
+>> it should be left disabled by default even after every glue implements i=
+t.
+>> Enabling runtime PM is a policy decision better left to userspace, IMO.
+>>=20
+>> > When the controller is in low power mode, the lpm flag will be set.
+>> > The interrupt triggered later than lpm flag is set considers as wakeup
+>> > interrupt and handled at cdns_drd_irq. Once the wakeup
+>>=20
+>> This sentence doesn't parse very well. Do you want to rephrase it?
+>>=20
+>> > occurs, it first disables interrupt to avoid later interrupt
+>> > occurrence since the controller is in low power mode at that time, and
+>> > access registers may be invalid at that time. At wakeup handler, it
+>> > will call pm_runtime_get to wakeup controller, and at runtime resume
+>> > handler, it will enable interrupt again.
+>>=20
+>> Then what? Are you going to, somehow, process pending interrupts? At what
+>> point?
+>>=20
+>> > The API platform_suspend is introduced for glue layer to implement
+>> > platform specific PM sequence.
+>>=20
+>> I really think that's unnecessary. Why can't we rely on parent->child
+>> relationship for this?
+>>=20
+>=20=20
+> Hi Felipe,
+>
+> This is the old version patch; I replied your questions at your reply for=
+ new
+> version at last Friday, thanks.
+
+yeah sorry, I'm getting caught up on my inbox from oldest to
+newest. This slip through the cracks ;-)
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9M3ogRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQbrzxAAo7QDSy8DV7n8zY6PKNB9PUV/YsmKNXMY
+5GZn4s9lNDGShqeqlc9LW8WM5xfMxyTZ3gw1N1f38jXgKlmPKr6CgLcQ0T4QBW8A
+vs02Rg8wQbLQDZmFG8P9f6PdHUBckZr9f2ItuWNs6lcGsxbDZ0iuFHtS9fyptoJr
+hIzlDgLnIbelFDOTVkvq0bVtHCswsqgTB3MWq5kz0+RIer29wmbT4lXzyDSCSu+b
+Nw8ODX5rgfstJfXQodgU7+q7/wy1S3J7+tJIA3VBWBi1QxR1OwQ2duxeQb9S5les
+GO5zu/3OXdvjduRmajQ9qeRMfr9djBgtqKWODFfIddnjD3NL2qN0hfUfkBcfrDK6
+7W/1fKSngXKmacet6AHb4E5pvr9tGOTxJLqWAFBU2UO0TNAcJ7DCNf+d7YgrWh6O
+sgTaSUkzxoJ3mvmo4/1ZYb8/TIZFDrC9m+z14pPaxmEdUEHlVd7GdvH+1VAKJU7L
+gtgpR2tfPEvfVX+oEO2oO8hn3MQ19Wqg4W7KdYgG/HI/IZH9Bgbajjvx6gAbJ8dV
+WSf4SNzsiSFOUGKebFEUaPpZGcW1+h66xU96Jj3dYE2leeqL276VLAdIAb8W6eAx
+bL82TbhQlbYfnRehBHVJp2dDl+lLLxM8yPnKHQI6T3m+KkeairBdH7b+wK7oJcJE
+IklffyKTDwA=
+=spSR
+-----END PGP SIGNATURE-----
+--=-=-=--
