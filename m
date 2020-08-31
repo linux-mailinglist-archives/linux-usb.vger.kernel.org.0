@@ -2,142 +2,283 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C6A2573F1
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 08:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8DD257437
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 09:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbgHaGxf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 02:53:35 -0400
-Received: from mail-dm6nam11on2062.outbound.protection.outlook.com ([40.107.223.62]:13856
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725794AbgHaGxf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 Aug 2020 02:53:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=STOmiSv0aS4dlbvc/zpO+oRpipDWkIJVHV+7Ymgib5+yBwYOUE2AOQxGaFPKH4vcpWYHPMAXS0gfzAziu6q5zVwKUATYuj/OqkZo5cxBUU8b9zMMQ7vd2rSAmpGDUHzZFFESfE1T8qhUdb57YKyMmNuKg2heCRWmNn4n+vLy5PKlJZ9RHmrugLz3tZPOpnmvBSPJaApnGInB09haRvmn4ksHWmn1C+UJUmvZ4NsQ8xpo28+AvzTqFcP6T4u6ul3ppRmA2s/6e3O3vUYn31vzOt0aPrh5QLplYf4JoPqYhc2goyPhwyyAqGheYPMpvHKrUy+8nV6PIbP3Bj+X1OWCqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9y1Xi5eIi/6Xm0NR6kLhAF0cCwSoCGfu1j43rm7zgc4=;
- b=l4+5B4ykRaN3VMzpi3Cvp/iT0+0f3BsdShBuezjUsR54EOpqEPEl0zm2aC/mH2WkxHuHaH0pVCpU7EDaOUpvq9n+U3M1eI2UV6B2pwg5j1ayJLJikeIhj3Nvq0PLkw/sleJwoDEd/w94qP96OPcUsoNVvo7qW0Hnx7HiqgNNuGoGzvm+WNFfvwB38VLzyhGKbWEsbWaGaX7TGDTaH19NKZxM/nXApylAA2z+XUDhVhmQ/Iof35q0vdUPoalzDKEK3wzFqFalUuhYL60YWCm47ewfBlSlxwgw5T1RWIJps6G2yDSPFz67wBhVS+UA9uDBd/B5wDbYh0X28eCxyPY9Nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+        id S1725949AbgHaHVi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 03:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbgHaHVf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 03:21:35 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471C6C061573
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 00:21:30 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id c15so4800875wrs.11
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 00:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9y1Xi5eIi/6Xm0NR6kLhAF0cCwSoCGfu1j43rm7zgc4=;
- b=i0mzdFDP7A546eSy6xlw6jbqcAB7vnHCuh1zowZWwHd1ffl4FurxEaz82bFgl3m5m0vJjdN3oOKCiIs+VFKaWmpy6MKMGxQguJuMvn5kQfxE592UxXHpPeP5kh4j4dEVWnxEEr9K/zw2Bya69LV5TOMpJRllzUj2zvkuVt8nLcQ=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=amd.com;
-Received: from BN6PR1201MB2467.namprd12.prod.outlook.com (2603:10b6:404:a7::8)
- by BN7PR12MB2754.namprd12.prod.outlook.com (2603:10b6:408:2b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Mon, 31 Aug
- 2020 06:53:32 +0000
-Received: from BN6PR1201MB2467.namprd12.prod.outlook.com
- ([fe80::2160:a344:3b0e:cf3e]) by BN6PR1201MB2467.namprd12.prod.outlook.com
- ([fe80::2160:a344:3b0e:cf3e%8]) with mapi id 15.20.3326.025; Mon, 31 Aug 2020
- 06:53:31 +0000
-From:   Nehal Bakulchandra Shah <Nehal-bakulchandra.Shah@amd.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sandeep.Singh@amd.com, yuanmei@lenovo.com
-Cc:     Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-Subject: [PATCH] xhci: workaround for S3 issue on AMD SNPS 3.0 xHC
-Date:   Mon, 31 Aug 2020 06:52:46 +0000
-Message-Id: <20200831065246.1166470-1-Nehal-bakulchandra.Shah@amd.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAXPR0101CA0001.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:c::11) To BN6PR1201MB2467.namprd12.prod.outlook.com
- (2603:10b6:404:a7::8)
+        d=gmail.com; s=20161025;
+        h=message-id:from:to:cc:subject:date:user-agent:mime-version;
+        bh=V0QDA2LF9Wto87E+ppn4aL/Wy/RYphM3G8hdy2RQoF0=;
+        b=Ya4EKweK7fHvvmxZ69jxxjVD/5cwbuirrmorXVp69JzFI7Lrrwksy7108TAZI8QBji
+         RYdSqrcmQ53IXTHUQqeJoSgbCYh4Od5VipjzXBoMpWDb2p1pUzoTjAtiFng0eiPiggKx
+         bv1IspAVdzfl7/IQMAUHBPNqj9NpR1enUk2DWenPPEo8ZH2vCuIEhAmlH9ghquEvqW0L
+         LPjFxFFwCf1YtrEe340FqveoNdJt+u/YpHDFjxAnevU4DSC1WWE5GVotUnbTwW1057Qw
+         DcOc8zdmMKezhrcMSPXha/OmH1hT9YwVDtjsmQOZVhybuwPvlQuI/MgBLMCBOqUMbq02
+         XApQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:to:cc:subject:date:user-agent
+         :mime-version;
+        bh=V0QDA2LF9Wto87E+ppn4aL/Wy/RYphM3G8hdy2RQoF0=;
+        b=QUaFPDWBOBs+xw09oqjcT0uuaUO5a49y/HKZ2cswwX8p0wlOYlK+m+ZS3CxBAC5RJp
+         uoOSeWTUdVfRepiWnGlAJd/SMV5l32LksWCsLsoIksDmi9PQ+FjoQ9RBMbyQWlLnctoj
+         lY6hveYbIzf1cjyPlqeHx19k/HSIXsxbZh2NGxPd+4pdIue+laZBGn0+Vl178X1x0uva
+         lzmbbi/s4lOrN5/9LvXXnatcO1cZDes+Kmk7ibKLA7Mh+abuX9K64wVOLWtkIP/BWerW
+         OoJ20NsTt6laQfmkkilX4ERhGR/QqarbKlHn8XnGc7hBx06RAU/KRUPCoAPgcHh56kGy
+         N1pA==
+X-Gm-Message-State: AOAM533+RSYLWE85gZ9Z9xUUZVwemBG9Iy7zDu+gZkeyQ2qqH26pSt6M
+        zCBcX9ECY9qg0SOKzEThlIQ7CuT1ReOhIg==
+X-Google-Smtp-Source: ABdhPJx2+W0cIOWwvOFi4Har4lWhz7eEu8v2qSFakt/JksKlnS+N7wXtPoRtdBBux1qC9o8UMTTtOA==
+X-Received: by 2002:adf:e94a:: with SMTP id m10mr306726wrn.249.1598858489164;
+        Mon, 31 Aug 2020 00:21:29 -0700 (PDT)
+Received: from daniel-ThinkPad-X230 ([2a01:e35:1387:1640:4059:1936:4cf5:a56d])
+        by smtp.gmail.com with ESMTPSA id g9sm11013701wrw.63.2020.08.31.00.21.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2020 00:21:28 -0700 (PDT)
+Message-ID: <5f4ca4f8.1c69fb81.a4487.0f5f@mx.google.com>
+X-Google-Original-Message-ID: <87blirb7rc.fsf@gmail.com>>
+From:   <f1rmb.daniel@gmail.com> (<Daniel Caujolle-Bert>)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH] usb-serial-simple: Add Whistler radio scanners TRX serie support.
+Date:   Mon, 31 Aug 2020 09:21:27 +0200
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from 255.255.255.255 (255.255.255.255) by MAXPR0101CA0001.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:c::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19 via Frontend Transport; Mon, 31 Aug 2020 06:53:29 +0000
-X-Mailer: git-send-email 2.25.1
-X-Originating-IP: [165.204.156.251]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: e1a1de47-4dcd-4926-c831-08d84d7a92a2
-X-MS-TrafficTypeDiagnostic: BN7PR12MB2754:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN7PR12MB2754CB9A6651842522F660E7A0510@BN7PR12MB2754.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +oawSJlqRR8jodj6EM88Uqmocdlh20odmt5gcI9JqoUf0ZIProdXTKLXuooooeL+IFcM/FZwonxI5jdB/zVdvyG9U2LbgANscLAJ5YR101RNIdvpM6CW6vIjM1YKG9Z2bA8s1wsSETC29NHenIkygV89NL7C207cSUhSzuAfNxJ2Cw55GFHtqVFR/BxfITJh3FmLv6nhMndljOQxWkgOoFyn0o+9XcnncR+H0aKr4mBMv0ErqAP8F/1eXR2I1cqALPLJTg7w/xFW2Lu/GqQljQtWy8tU0OidkHmUL5hFxHJTpXJkHmEbjopPLTyITXhBwjuABlpDifGz4zKMKqzzZw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR1201MB2467.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(376002)(346002)(39860400002)(136003)(956004)(36756003)(83380400001)(6666004)(478600001)(1076003)(4326008)(86362001)(52116002)(2616005)(26005)(316002)(6486002)(66556008)(16576012)(2906002)(8676002)(5660300002)(66476007)(66946007)(8936002)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: 8eTul6gWNjpgYLCgHygPgt9pXgJUWyjuVvqRH9B8tEHwQrEPC8orGQ1ExTXu0bQBJhPcLiGTgCQKHdwVa7dgA2xmIPNnIFRZK7pSe9FOpkcVFv9w+GQehTjd70rIRPGKaHLTMt35oSZY/gky1JVg4nOfBnIr3rIg7graF+IjziUgtftQxP89+n6yo2oQB3rvXfzIXOAB+4aq1wY9+gs+yxgpr38mDkPqb0ZNDQ2RNEqXcChE8oy2BGoOhmlrUlsp4tDOIZLoSVZJuXRNn52wLmF/YWl8fjzOy0Rsm996Gp/10rtM2080FYHoJ90TnEMLis85WdvvrfC3f+eoHIT0/WGGJBz5rYLgfB1A4Ands+JN2VZiGO9wx0JjqSLNLQCGmEvz1JWzjjaAjdsoN2dfk4QI4/MgkwuwiXlGibvLZmAzJ8S20OsnDp93uWRBypmvdGIQePkoO3hxsgq3lmwUEg59KnVgY7W1uXPDV7tw3HPzRB1PAgGU/6fdjPCs42M1s8Rp0MIQK80WL9zggObrSzAXqJsUtW4dmzF9Tmvs0+cmfFZgeufNIP3pe/ys1PXAuX1S5GyreKpRiiafX/tR3dKdCO1HPBVKoO63l58/a8lR5ftTGWokSSsAQ3ri7lwdVGv++47WuzEx9ToF+eLouw==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1a1de47-4dcd-4926-c831-08d84d7a92a2
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR1201MB2467.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2020 06:53:31.6104
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9UUhYsQdJblPG81QQL8fKskbW4pX+EDnPNPSVPlKVNGTrblzR++MzF15BVZ6kGil
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2754
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+Hi,
 
-On some platform of AMD, S3 fails with HCE and SRE errors.To fix this,
-sparse controller enable bit has to be disabled.
+   Whistler TRX serie radio scanners provide 2 USB subclass devices: one
+usb mass storage and one serial device.
+The problem is USB serial is unusable, as the cdc_acm fails with
+error -22.
+Enabling the support in the usb_simple_serial driver make it works.
 
-Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+
+Cheers.
 ---
- drivers/usb/host/xhci-pci.c | 12 ++++++++++++
- drivers/usb/host/xhci.h     |  1 +
- 2 files changed, 13 insertions(+)
+Daniel
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 3feaafebfe58..865a16e6c1ed 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -160,6 +160,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	    (pdev->device == 0x15e0 || pdev->device == 0x15e1))
- 		xhci->quirks |= XHCI_SNPS_BROKEN_SUSPEND;
+
+lsusb -v output:
+Bus 003 Device 003: ID 2a59:0012 Whistler Whistler TRX-1e Scanner
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0         8
+  idVendor           0x2a59 
+  idProduct          0x0012 
+  bcdDevice            0.01
+  iManufacturer           1 Whistler
+  iProduct                2 Whistler TRX-1e Scanner
+  iSerial                 0 
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0059
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          2 Whistler TRX-1e Scanner
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     80 Bulk-Only
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               1
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               1
+        ** UNRECOGNIZED:  08 11 01 02 02 02 01 00
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              0 
+      CDC Header:
+        bcdCDC               1.10
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Union:
+        bMasterInterface        0
+        bSlaveInterface         1 
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          1
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval               2
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+Device Status:     0x0000
+  (Bus Powered)
+
+
+
+
+From 7f47321863c9dd4827460d65e985633c16efbb0f Mon Sep 17 00:00:00 2001
+From: Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
+Date: Thu, 27 Aug 2020 10:28:52 +0200
+Subject: [PATCH] usb-serial-simple: Add Whistler radio scanners TRX serie support.
+
+Whistler's firmware CDC support seems incomplete or buggy, but usb-serial works.
+
+Signed-off-by: Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
+---
+ drivers/usb/class/cdc-acm.c            | 14 ++++++++++++++
+ drivers/usb/serial/Kconfig             |  1 +
+ drivers/usb/serial/usb-serial-simple.c | 10 ++++++++++
+ 3 files changed, 25 insertions(+)
+
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 991786876dbb..12929f65bcfb 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1915,6 +1915,20 @@ static const struct usb_device_id acm_ids[] = {
+ 	.driver_info = SEND_ZERO_PACKET,
+ 	},
  
-+	if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->device == 0x15e5)
-+		xhci->quirks |= XHCI_DISABLE_SPARSE;
++	/* Exclude Whistler radio scanners */
++	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0010, USB_CLASS_COMM), /* TRX-1  */
++	.driver_info = IGNORE_DEVICE,
++	},
++	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0011, USB_CLASS_COMM), /* TRX-2  */
++	.driver_info = IGNORE_DEVICE,
++	},
++	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0012, USB_CLASS_COMM), /* TRX-1e  */
++	.driver_info = IGNORE_DEVICE,
++	},
++ 	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0013, USB_CLASS_COMM), /* TRX-2e */
++	.driver_info = IGNORE_DEVICE,
++	},
 +
- 	if (pdev->vendor == PCI_VENDOR_ID_AMD)
- 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+ 	/* control interfaces without any protocol set */
+ 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_ACM,
+ 		USB_CDC_PROTO_NONE) },
+diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
+index 4007fa25a8ff..cd23e33c0ea4 100644
+--- a/drivers/usb/serial/Kconfig
++++ b/drivers/usb/serial/Kconfig
+@@ -71,6 +71,7 @@ config USB_SERIAL_SIMPLE
+ 		- ViVOtech ViVOpay USB device.
+ 		- Infineon Modem Flashloader USB interface
+ 		- ZIO Motherboard USB serial interface
++		- Whistler TRX radio scanners
  
-@@ -371,6 +374,15 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	/* USB 2.0 roothub is stored in the PCI device now. */
- 	hcd = dev_get_drvdata(&dev->dev);
- 	xhci = hcd_to_xhci(hcd);
-+
-+	if (xhci->quirks & XHCI_DISABLE_SPARSE) {
-+		u32 reg;
-+
-+		reg = readl(hcd->regs + 0xC12C);
-+		reg &=  ~BIT(17);
-+		writel(reg, hcd->regs + 0xC12C);
-+	}
-+
- 	xhci->shared_hcd = usb_create_shared_hcd(&xhci_pci_hc_driver, &dev->dev,
- 						 pci_name(dev), hcd);
- 	if (!xhci->shared_hcd) {
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index ea1754f185a2..ea966d70f1ee 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1874,6 +1874,7 @@ struct xhci_hcd {
- #define XHCI_RESET_PLL_ON_DISCONNECT	BIT_ULL(34)
- #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
- #define XHCI_RENESAS_FW_QUIRK	BIT_ULL(36)
-+#define XHCI_DISABLE_SPARSE	BIT_ULL(37)
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called usb-serial-simple.
+diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+index bd23a7cb1be2..af32a0fc9447 100644
+--- a/drivers/usb/serial/usb-serial-simple.c
++++ b/drivers/usb/serial/usb-serial-simple.c
+@@ -112,6 +112,14 @@ DEVICE(suunto, SUUNTO_IDS);
+ 	{ USB_DEVICE(0x908, 0x0004) }
+ DEVICE(siemens_mpi, SIEMENS_IDS);
  
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
++/* Whistler radio scanners */
++#define WHISTLER_IDS()						\
++	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0010, USB_CLASS_COMM) }, /* TRX-1  */ \
++	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0011, USB_CLASS_COMM) }, /* TRX-2  */ \
++	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0012, USB_CLASS_COMM) }, /* TRX-1e */ \
++	{ USB_DEVICE_INTERFACE_CLASS(0x2a59, 0x0013, USB_CLASS_COMM) }  /* TRX-2e */
++DEVICE(whistler, WHISTLER_IDS);
++
+ /* All of the above structures mushed into two lists */
+ static struct usb_serial_driver * const serial_drivers[] = {
+ 	&carelink_device,
+@@ -127,6 +135,7 @@ static struct usb_serial_driver * const serial_drivers[] = {
+ 	&hp4x_device,
+ 	&suunto_device,
+ 	&siemens_mpi_device,
++	&whistler_device,
+ 	NULL
+ };
+ 
+@@ -144,6 +153,7 @@ static const struct usb_device_id id_table[] = {
+ 	HP4X_IDS(),
+ 	SUUNTO_IDS(),
+ 	SIEMENS_IDS(),
++	WHISTLER_IDS(),
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(usb, id_table);
 -- 
 2.25.1
+
+
+
 
