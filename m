@@ -2,103 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA08257EA3
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 18:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C93D257EFE
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Aug 2020 18:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728727AbgHaQXy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 12:23:54 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:33794 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728509AbgHaQXx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 12:23:53 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07VGK4OL021856;
-        Mon, 31 Aug 2020 16:23:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=RpZrAjaF5qVRKMKVziStX4EIVycnEig2p+gTO6CUt9k=;
- b=VuPN3MiIU3I18AcA4+BYpj2ACg7pWey0Zw7gteGx0x9/KNatC2QqOW7LaibjGbKs1bY3
- b2D+ObtClmoF3QGbJesAiTNG8VpkfwtaGmiTttt0SMPNG/VVY0O89bEURo7KYXkxF25M
- Tn9k54UxleGoOtdaCb4hjomKU60hOlJOTG4fpiBq9z9Ao+fVv5kbYcvYTRS0hZjvi2lP
- +Jpr+nwn2M9lylJWGWnzBaLO3vVUfOA0wg/ygCsM3I5ZuWuvpl4ZHpmW9MxUumedGQHq
- briPoKzQbWtn6iUanztZ6f6j2NzsKbwlpBOYZCWIDMomfRYfx13Gl3Tbx618rXiVGwgB SQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 337eyky66k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Aug 2020 16:23:42 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07VGKvJC101042;
-        Mon, 31 Aug 2020 16:23:41 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 3380sq7ytd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 31 Aug 2020 16:23:41 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 07VGNeqh007758;
-        Mon, 31 Aug 2020 16:23:40 GMT
-Received: from concerto.us.oracle.com (/10.65.179.108)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 31 Aug 2020 09:23:40 -0700
-From:   Khalid Aziz <khalid.aziz@oracle.com>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        erkka.talvitie@vincit.fi
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Khalid Aziz <khalid@gonehiking.org>
-Subject: [RFC RESEND PATCH 1/1] usb: ehci: Remove erroneous return of EPROTO upon detection of stall
-Date:   Mon, 31 Aug 2020 10:23:31 -0600
-Message-Id: <8248a5f80a8aa7cd391fa36a907d342fad38563b.1598887346.git.khalid@gonehiking.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1598887346.git.khalid@gonehiking.org>
-References: <cover.1598887346.git.khalid@gonehiking.org>
+        id S1728648AbgHaQrf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 12:47:35 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:44933 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727799AbgHaQrW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 12:47:22 -0400
+Received: by mail-io1-f70.google.com with SMTP id l8so2102751ioa.11
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 09:47:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=wStrx+w9cg4MJN1sqeclOzlihfsrmPUHTb1URkLm6dI=;
+        b=eUug/DgBCpEOzbsuppBkaRqCN8jI7lf4mdqd44FMSYGw1+V6hWJnnJVfamqL6glvPH
+         +b0WwRx9XmJaOEZ2BJvBguqj5fLvwSTcydGNDGUPbHAzRajr+N3zTWocIdbFQj75iklM
+         2t/2d+j+enmfommym0OMckZYoFrDpwlzZejc6zWvXXKM/HGGp4BdLDK5wIoM2yvVMsfF
+         AHEGNPK2WUICrR+WPMzjgJudHCpsWYZTpjihr6SjysecqIF1iVpLTWslF3i1cpK1JI/5
+         VfykuBCGR/ZkVgZhy7BNQLRGCy/bwKKmFLBqlS2n2F2Aj9ZxEwSMyi8cokkmeub53RLl
+         C7BQ==
+X-Gm-Message-State: AOAM533/OflL3o3SNWfa4/aYAIzDHt0MkREZmi4Nfojz5stoJFJ1czwb
+        FJ5raFETa0EpWzwaqhoOx96QAyJ6Ujp4idyqHGH9Jl/3dPyw
+X-Google-Smtp-Source: ABdhPJyMLkWyfV9IXG3RdY5g9LqhcNRN2B7RVIXNy/D6Mzzdf0RWcwYTaMx4tpWzzFS++sVRuz1q5nf5pHetmBNie2nC7DLzFujg
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9730 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- phishscore=0 malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008310097
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9730 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 mlxscore=0
- lowpriorityscore=0 clxscore=1015 spamscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008310097
+X-Received: by 2002:a92:ba02:: with SMTP id o2mr1987546ili.219.1598892440478;
+ Mon, 31 Aug 2020 09:47:20 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 09:47:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f2e88105ae2f2768@google.com>
+Subject: INFO: task can't die in usb_start_wait_urb
+From:   syzbot <syzbot+c3df2ca09fe4beef4d67@syzkaller.appspotmail.com>
+To:     andriy.shevchenko@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rafael.j.wysocki@intel.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With the USB 3.0/3.1 controller on MSI B450-A Pro Max motherboard,
-full speed and low speed devices see constant resets making
-keyboards and mouse unreliable and unusable. These resets are caused
-by detection of stall in qtd_copy_status() and returning EPROTO
-which in turn results in TT buffers in hub being cleared. Hubs do
-not seem to repsond well to this and seem to hang which causes
-further USB transactions to time out. A reset finally clears the
-issue until we repeat the cycle all over again.
+Hello,
 
-Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
-Cc: Khalid Aziz <khalid@gonehiking.org>
+syzbot found the following issue on:
+
+HEAD commit:    b36c9697 Add linux-next specific files for 20200828
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=156a598e900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5e3cf99580b5542c
+dashboard link: https://syzkaller.appspot.com/bug?extid=c3df2ca09fe4beef4d67
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16c3301e900000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d2df49900000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c3df2ca09fe4beef4d67@syzkaller.appspotmail.com
+
+INFO: task syz-executor787:6840 can't die for more than 143 seconds.
+task:syz-executor787 state:D stack:26864 pid: 6840 ppid:  6833 flags:0x00000004
+Call Trace:
+ context_switch kernel/sched/core.c:3778 [inline]
+ __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
+ schedule+0xd0/0x2a0 kernel/sched/core.c:4602
+ schedule_timeout+0x1d8/0x250 kernel/time/timer.c:1855
+ do_wait_for_common kernel/sched/completion.c:85 [inline]
+ __wait_for_common kernel/sched/completion.c:106 [inline]
+ wait_for_common kernel/sched/completion.c:117 [inline]
+ wait_for_completion_timeout+0x15e/0x270 kernel/sched/completion.c:157
+ usb_start_wait_urb+0x144/0x2b0 drivers/usb/core/message.c:63
+ usb_bulk_msg+0x226/0x550 drivers/usb/core/message.c:254
+ do_proc_bulk+0x39b/0x710 drivers/usb/core/devio.c:1231
+ proc_bulk drivers/usb/core/devio.c:1268 [inline]
+ usbdev_do_ioctl drivers/usb/core/devio.c:2542 [inline]
+ usbdev_ioctl+0x586/0x3360 drivers/usb/core/devio.c:2708
+ vfs_ioctl fs/ioctl.c:48 [inline]
+ __do_sys_ioctl fs/ioctl.c:753 [inline]
+ __se_sys_ioctl fs/ioctl.c:739 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:739
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x449659
+Code: Bad RIP value.
+RSP: 002b:00007f02ac79cdb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000006dac28 RCX: 0000000000449659
+RDX: 0000000020000000 RSI: 00000000c0185502 RDI: 0000000000000003
+RBP: 00000000006dac20 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006dac2c
+R13: 00007ffe8f1fe93f R14: 00007f02ac79d9c0 R15: 20c49ba5e353f7cf
+INFO: task syz-executor787:6840 blocked for more than 143 seconds.
+      Not tainted 5.9.0-rc2-next-20200828-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor787 state:D stack:26864 pid: 6840 ppid:  6833 flags:0x00000004
+Call Trace:
+ context_switch kernel/sched/core.c:3778 [inline]
+ __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
+ schedule+0xd0/0x2a0 kernel/sched/core.c:4602
+ schedule_timeout+0x1d8/0x250 kernel/time/timer.c:1855
+ do_wait_for_common kernel/sched/completion.c:85 [inline]
+ __wait_for_common kernel/sched/completion.c:106 [inline]
+ wait_for_common kernel/sched/completion.c:117 [inline]
+ wait_for_completion_timeout+0x15e/0x270 kernel/sched/completion.c:157
+ usb_start_wait_urb+0x144/0x2b0 drivers/usb/core/message.c:63
+ usb_bulk_msg+0x226/0x550 drivers/usb/core/message.c:254
+ do_proc_bulk+0x39b/0x710 drivers/usb/core/devio.c:1231
+ proc_bulk drivers/usb/core/devio.c:1268 [inline]
+ usbdev_do_ioctl drivers/usb/core/devio.c:2542 [inline]
+ usbdev_ioctl+0x586/0x3360 drivers/usb/core/devio.c:2708
+ vfs_ioctl fs/ioctl.c:48 [inline]
+ __do_sys_ioctl fs/ioctl.c:753 [inline]
+ __se_sys_ioctl fs/ioctl.c:739 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:739
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x449659
+Code: Bad RIP value.
+RSP: 002b:00007f02ac79cdb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000006dac28 RCX: 0000000000449659
+RDX: 0000000020000000 RSI: 00000000c0185502 RDI: 0000000000000003
+RBP: 00000000006dac20 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006dac2c
+R13: 00007ffe8f1fe93f R14: 00007f02ac79d9c0 R15: 20c49ba5e353f7cf
+
+Showing all locks held in the system:
+1 lock held by khungtaskd/1173:
+ #0: ffffffff89c67640 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:5825
+1 lock held by in:imklog/6531:
+ #0: ffff888098a9c130 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:930
+
+=============================================
+
+NMI backtrace for cpu 0
+CPU: 0 PID: 1173 Comm: khungtaskd Not tainted 5.9.0-rc2-next-20200828-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x18f/0x20d lib/dump_stack.c:118
+ nmi_cpu_backtrace.cold+0x44/0xd7 lib/nmi_backtrace.c:105
+ nmi_trigger_cpumask_backtrace+0x1b3/0x223 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:147 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:253 [inline]
+ watchdog+0xd89/0xf30 kernel/hung_task.c:339
+ kthread+0x3b5/0x4a0 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 3891 Comm: systemd-journal Not tainted 5.9.0-rc2-next-20200828-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:lookup_chain_cache kernel/locking/lockdep.c:3109 [inline]
+RIP: 0010:lookup_chain_cache_add kernel/locking/lockdep.c:3128 [inline]
+RIP: 0010:validate_chain kernel/locking/lockdep.c:3183 [inline]
+RIP: 0010:__lock_acquire+0x1750/0x5640 kernel/locking/lockdep.c:4426
+Code: 74 5d 49 bd 00 00 00 00 00 fc ff df 48 8b 54 24 08 eb 06 49 83 ec 08 74 46 49 8d 7c 24 18 48 89 f8 48 c1 e8 03 42 80 3c 28 00 <0f> 85 43 2a 00 00 49 8b 44 24 18 48 39 c2 0f 84 26 f5 ff ff 49 8d
+RSP: 0018:ffffc90004807b00 EFLAGS: 00000046
+RAX: 1ffffffff1806a53 RBX: 0000000000003fe4 RCX: ffffffff815a153b
+RDX: 62386d250e98b09e RSI: 0000000000000008 RDI: ffffffff8c035298
+RBP: ffff888093da49f0 R08: 0000000000000000 R09: ffffffff8c6a59f7
+R10: fffffbfff18d4b3e R11: 0000000000000000 R12: ffffffff8c035280
+R13: dffffc0000000000 R14: ffff888093da4100 R15: 0000000000000001
+FS:  00007ff896ba08c0(0000) GS:ffff8880ae700000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ff893f44000 CR3: 000000009398b000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ lock_acquire+0x1f1/0xad0 kernel/locking/lockdep.c:5005
+ __raw_spin_lock include/linux/spinlock_api_smp.h:142 [inline]
+ _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:151
+ spin_lock include/linux/spinlock.h:354 [inline]
+ __alloc_fd+0x34/0x600 fs/file.c:500
+ do_sys_openat2+0x134/0x420 fs/open.c:1166
+ do_sys_open fs/open.c:1184 [inline]
+ __do_sys_open fs/open.c:1192 [inline]
+ __se_sys_open fs/open.c:1188 [inline]
+ __x64_sys_open+0x119/0x1c0 fs/open.c:1188
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7ff896130840
+Code: 73 01 c3 48 8b 0d 68 77 20 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 bb 20 00 00 75 10 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e f6 ff ff 48 89 04 24
+RSP: 002b:00007fffa7dee6b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007fffa7dee9c0 RCX: 00007ff896130840
+RDX: 00000000000001a0 RSI: 0000000000080042 RDI: 0000560b7f41acd0
+RBP: 000000000000000d R08: 000000000000ffc0 R09: 00000000ffffffff
+R10: 0000000000000069 R11: 0000000000000246 R12: 00000000ffffffff
+R13: 0000560b7f40f040 R14: 00007fffa7dee980 R15: 0000560b7f41aaf0
+
+
 ---
- drivers/usb/host/ehci-q.c | 4 ----
- 1 file changed, 4 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-index 8a5c9b3ebe1e..7d4b2bc4633c 100644
---- a/drivers/usb/host/ehci-q.c
-+++ b/drivers/usb/host/ehci-q.c
-@@ -214,10 +214,6 @@ static int qtd_copy_status (
- 		 * When MMF is active and PID Code is IN, queue is halted.
- 		 * EHCI Specification, Table 4-13.
- 		 */
--		} else if ((token & QTD_STS_MMF) &&
--					(QTD_PID(token) == PID_CODE_IN)) {
--			status = -EPROTO;
--		/* CERR nonzero + halt --> stall */
- 		} else if (QTD_CERR(token)) {
- 			status = -EPIPE;
- 
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
