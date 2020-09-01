@@ -2,61 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 577A6258C0D
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 11:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC99258CE9
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 12:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726467AbgIAJuh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Sep 2020 05:50:37 -0400
-Received: from k17.unixstorm.org ([91.227.123.100]:33590 "EHLO
-        k17.unixstorm.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726117AbgIAJuh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 05:50:37 -0400
-X-Greylist: delayed 3051 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Sep 2020 05:50:35 EDT
-Received: from user-5-173-184-185.play-internet.pl ([5.173.184.185] helo=localhost.localdomain)
-        by k17.unixstorm.org with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92.3)
-        (envelope-from <kamil@re-ws.pl>)
-        id 1kD28p-0001Sq-BC; Tue, 01 Sep 2020 10:59:47 +0200
-From:   Kamil Lorenc <kamil@re-ws.pl>
-To:     Peter Korsgaard <jacmet@sunsite.dk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kamil Lorenc <kamil@re-ws.pl>
-Subject: [PATCH] net: usb: dm9601: Add USB ID of Keenetic Plus DSL
-Date:   Tue,  1 Sep 2020 10:57:38 +0200
-Message-Id: <20200901085738.27482-1-kamil@re-ws.pl>
-X-Mailer: git-send-email 2.28.0
+        id S1726105AbgIAKla convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 1 Sep 2020 06:41:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57916 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725848AbgIAKl3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Sep 2020 06:41:29 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208267] usbip broken with latest kernels?
+Date:   Tue, 01 Sep 2020 10:41:28 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: forum@docmax.my.to
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-208267-208809-OFhPjyBGcQ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208267-208809@https.bugzilla.kernel.org/>
+References: <bug-208267-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Id: kamil@re-ws.pl
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Keenetic Plus DSL is a xDSL modem that uses dm9620 as its USB interface.
+https://bugzilla.kernel.org/show_bug.cgi?id=208267
 
-Signed-off-by: Kamil Lorenc <kamil@re-ws.pl>
----
- drivers/net/usb/dm9601.c | 4 ++++
- 1 file changed, 4 insertions(+)
+--- Comment #12 from DocMAX (forum@docmax.my.to) ---
+Just a side-question: Can things like this happen on LTS versions of the
+kernel?
 
-diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
-index b91f92e4e5f2..915ac75b55fc 100644
---- a/drivers/net/usb/dm9601.c
-+++ b/drivers/net/usb/dm9601.c
-@@ -625,6 +625,10 @@ static const struct usb_device_id products[] = {
- 	 USB_DEVICE(0x0a46, 0x1269),	/* DM9621A USB to Fast Ethernet Adapter */
- 	 .driver_info = (unsigned long)&dm9601_info,
- 	},
-+	{
-+	 USB_DEVICE(0x0586, 0x3427),	/* ZyXEL Keenetic Plus DSL xDSL modem */
-+	 .driver_info = (unsigned long)&dm9601_info,
-+	},
- 	{},			// END
- };
- 
 -- 
-2.28.0
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
