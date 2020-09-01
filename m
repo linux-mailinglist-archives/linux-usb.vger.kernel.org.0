@@ -2,55 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B4C2585D9
+	by mail.lfdr.de (Postfix) with ESMTP id E2D442585DA
 	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 05:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727049AbgIAC7p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 22:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S1727088AbgIAC7u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 22:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726770AbgIAC7l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 22:59:41 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2EFC06137B
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:41 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id mu14so826797pjb.7
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:41 -0700 (PDT)
+        with ESMTP id S1727041AbgIAC7n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 22:59:43 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A9BC061366
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:43 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id 196so7601225qkn.6
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=Yh60bZiNGZOc6tQmxndGlvfAxn8JuzncJI3aBSV8EoY=;
-        b=E/9+iKxP4Os7jwiIYc3rotS8dGcNiNtYwvKk+8ZDeBMp1d8/CH4ofA0oj+UZ3XCpPz
-         cfG0DNZEAaOMlRwzmh3cEixzcpJr8ft7sOdRVchESWS7Pn5ZIEX/aZUgcI8jZByjJBWR
-         bOZ5CvWvG3Qr+WQBqglexl2FnjtwFsGi6i8wwURyU71HQ19QkiGCB1eePYUzXd7u4umn
-         E7ud3CDzios8WHEHHnvbnbfLM2L1TXJ4h24eTD8kffHPgnvd3Dfcfv+dotCETio+RNHk
-         Tdz6a1KJf5zUVEfC7uDHgTxnMaLDY3jLpbHgFgwrED6qx0A7tZr6qGalEABmVTZc3UWD
-         o8mg==
+        bh=YmypCvt0GTO9TngCUZyl18kzUPGJakzF+npVltizd4g=;
+        b=NcyR/6nOOprsALH1y/XOZ+6IsHBhRUr5VnnI7M1QWjQ0hCt8qAPY8Ww005y8GeLFqZ
+         xI50vV/SaK3yrKWUoh6Qnok2Nzbddaq4OoBdWQD1kYy1d5hgiST+wTFls5GkmBanLL+K
+         MwaCNi/MozQCxAw2c3/KwcCt727T/RWybnwaMEO8zAqVD1zP/1cFX9FFtLIzCnRrlYur
+         0FQf/S7rwT6W/3cETt3prTWU35AiJFUwGWHFpTfPznsNigw4KzHGoMa+4ZkyWx+5Rk9i
+         cWniGf0MdgvgKrGU4zCCGcL2JHGLK/m8wA6OUhAqxfaQ1pI3Grs51kBeQVFd4+2ue2rh
+         2A9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Yh60bZiNGZOc6tQmxndGlvfAxn8JuzncJI3aBSV8EoY=;
-        b=pLeR449XnOG5otJ6mBN2Tdj/7NU7p356kgeqpQDJdwhGHMATtHKBpIpVa+rfS4Cw9S
-         yKG2KmqX6448dmM9LoOzQHVEJUxJxovN1IJMB48C56v56teahCVNZOkG5Q6ZkxbCJq3p
-         VhxITA+aZFuwbFXt8vKysQLT7uWj++pPEl0QKf9lUYNvl9ntNLGfd5zJc4VMW7wZS+E2
-         EYFgu9clRQs2762hDLiKcZhBRghusigrWrReI53TCm2eWy/SH4zRMQdHervYyxMQREAv
-         jNd2aaMxTsbU/J5NT1RxcEgPpg2CPNeVgpns9sp6r8rdho/FIeQxxKOTTb38Av2sfr7C
-         zXug==
-X-Gm-Message-State: AOAM530Yd9aQNYX0cPSwhejgn0lFSDFFq1JiYR3a0TFvcHNug73d4bOu
-        aHVtMt7iwmM+woMhgL7Css1MtlK5I44=
-X-Google-Smtp-Source: ABdhPJx2p8nBPH0VHIF0A2JGccic6C05ANWW5kVbeqZiWcdXnz3TnvAIjroB4b0QcEePrRgfD0JuzZYrUKI=
+        bh=YmypCvt0GTO9TngCUZyl18kzUPGJakzF+npVltizd4g=;
+        b=M1YEZqQgoIRkALZnCHGZ3gFkZIIJ8QCA00QBcgMZOr88Ne0DOmgG/pnBMXY+vznVwF
+         3aLJEvuSQpZbhKydrgJ/L8VbXwWALgi5tU14O9D6XS05f1Mtol2erXwEQTNJ5fRUh9dX
+         BycZk4wqiJvmDzgqRJFsxMkaf1VYJVv/8Hd9AjmgalKruBaCy4uB9vv07dC1vXM2aQ+Z
+         0GHrCMYWwne+4R1Ae6vTm/6jamcCadh7vVvvzJPFLnLIJC6rzT7f6iaEYqVK/Dd4YPhR
+         nN6CghksPHZxHztEgI1qiopjsU9I6w9eyw6Sg88s3T+QzUqM7CopokiMa3fcEIek96TJ
+         zJhA==
+X-Gm-Message-State: AOAM5305g019N/ZL6XBRduFKQwurxp0ZLsUs7qrzSzvIdwOOVO7MTThe
+        stSIwzpBxIjppMS8m7cviMVhAnvHx/8=
+X-Google-Smtp-Source: ABdhPJzMEAVY2Ge8dAOHg87wIFAYI34/CLnRne8aY7Zc3SAwXmi3XvqtyPzwSrw5aV+Y2m3kL5UN4SR/VF8=
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:1:f292:1cff:fee0:66cf])
- (user=badhri job=sendgmr) by 2002:a17:90a:fb91:: with SMTP id
- cp17mr2215983pjb.141.1598929180360; Mon, 31 Aug 2020 19:59:40 -0700 (PDT)
-Date:   Mon, 31 Aug 2020 19:59:18 -0700
+ (user=badhri job=sendgmr) by 2002:a0c:b626:: with SMTP id f38mr1400471qve.0.1598929182318;
+ Mon, 31 Aug 2020 19:59:42 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 19:59:19 -0700
 In-Reply-To: <20200901025927.3596190-1-badhri@google.com>
-Message-Id: <20200901025927.3596190-6-badhri@google.com>
+Message-Id: <20200901025927.3596190-7-badhri@google.com>
 Mime-Version: 1.0
 References: <20200901025927.3596190-1-badhri@google.com>
 X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
-Subject: [PATCH v6 05/14] usb: typec: tcpci: Add set_vbus tcpci callback
+Subject: [PATCH v6 06/14] dt-bindings: usb: Maxim type-c controller device
+ tree binding document
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -63,49 +64,67 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-set_vbus callback allows TCPC which are TCPCI based, however,
-does not support turning on sink and source mode through
-Command.SinkVbus and Command.SourceVbusDefaultVoltage.
+Add device tree binding document for Maxim TCPCI based Type-C chip driver
 
 Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
 Changes since v1:
 - Changing patch version to v6 to fix version number confusion.
 ---
- drivers/usb/typec/tcpm/tcpci.c | 7 +++++++
- drivers/usb/typec/tcpm/tcpci.h | 1 +
- 2 files changed, 8 insertions(+)
+ .../devicetree/bindings/usb/maxim,tcpci.txt   | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/maxim,tcpci.txt
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index b960fe5a0f28..d6a6fac82d48 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -328,6 +328,13 @@ static int tcpci_set_vbus(struct tcpc_dev *tcpc, bool source, bool sink)
- 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
- 	int ret;
- 
-+	if (tcpci->data->set_vbus) {
-+		ret = tcpci->data->set_vbus(tcpci, tcpci->data, source, sink);
-+		/* Bypass when ret > 0 */
-+		if (ret != 0)
-+			return ret < 0 ? ret : 0;
-+	}
+diff --git a/Documentation/devicetree/bindings/usb/maxim,tcpci.txt b/Documentation/devicetree/bindings/usb/maxim,tcpci.txt
+new file mode 100644
+index 000000000000..8a5b08e57b2d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/maxim,tcpci.txt
+@@ -0,0 +1,44 @@
++Maxim TCPCI Type-C PD controller:
++---------------------------------
 +
- 	/* Disable both source and sink first before enabling anything */
- 
- 	if (!source) {
-diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-index 04c49a0b0368..4d441bdf24d5 100644
---- a/drivers/usb/typec/tcpm/tcpci.h
-+++ b/drivers/usb/typec/tcpm/tcpci.h
-@@ -144,6 +144,7 @@ struct tcpci_data {
- 			 bool enable);
- 	int (*start_drp_toggling)(struct tcpci *tcpci, struct tcpci_data *data,
- 				  enum typec_cc_status cc);
-+	int (*set_vbus)(struct tcpci *tcpci, struct tcpci_data *data, bool source, bool sink);
- };
- 
- struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
++Required properties:
++- compatible:       should be set maxim,tcpci:
++
++- reg:              0x25:the i2c slave address of typec port controller device.
++- interrupt-parent: the phandle to the interrupt controller which provides
++                    the interrupt.
++- usbpd,usbpd_int:  interrupt specification for tcpci alert.
++
++Required sub-node:
++- connector: The "usb-c-connector" attached to the tcpci chip, the bindings
++  of connector node are specified in
++  Documentation/devicetree/bindings/connector/usb-connector.txt
++
++maxtcpc: maxtcpc@25 {
++	status = "okay";
++	compatible = "maxim,tcpc";
++	reg = <0x25>;
++	interrupt-parent = <&gpa8>;
++	usbpd,usbpd_int = <&gpa8 2 GPIO_ACTIVE_LOW>;
++
++	connector {
++		compatible = "usb-c-connector";
++		label = "USB-C";
++		data-role = "dual";
++		power-role = "dual";
++		try-power-role = "sink";
++		self-powered;
++		op-sink-microwatt = <2600000>;
++		source-pdos = <PDO_FIXED(5000, 900,
++					 PDO_FIXED_SUSPEND |
++					 PDO_FIXED_USB_COMM |
++					 PDO_FIXED_DATA_SWAP |
++					 PDO_FIXED_DUAL_ROLE)>;
++		sink-pdos = <PDO_FIXED(5000, 3000,
++				       PDO_FIXED_USB_COMM |
++				       PDO_FIXED_DATA_SWAP |
++				       PDO_FIXED_DUAL_ROLE)
++				       PDO_FIXED(9000, 2000, 0)
++		frs-typec-current = <FRS_5V_1P5A>;
++	};
++};
 -- 
 2.28.0.402.g5ffc5be6b7-goog
 
