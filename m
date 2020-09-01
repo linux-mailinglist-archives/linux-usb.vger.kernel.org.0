@@ -2,91 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 311D2259EFB
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 21:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B03259F3D
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 21:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728039AbgIATLA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Sep 2020 15:11:00 -0400
-Received: from mr06.mx01.tldhost.de ([62.108.41.213]:49451 "EHLO
-        mr06.mx01.tldhost.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgIATK7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 15:10:59 -0400
-X-Greylist: delayed 714 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Sep 2020 15:10:58 EDT
-Received: from mx01.tldhost.de (localhost [127.0.0.1])
-        by mx01.tldhost.de (Postfix) with ESMTP id 2C37F121717
-        for <linux-usb@vger.kernel.org>; Tue,  1 Sep 2020 20:59:03 +0200 (CEST)
-Received: by mx01.tldhost.de (Postfix, from userid 1001)
-        id 21EB312171F; Tue,  1 Sep 2020 20:59:03 +0200 (CEST)
-X-Spam-Status: No, score=-1.9 required=7.0 tests=BAYES_00,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.2
-Received: from server12.tldhost.de (server12.tldhost.de [84.19.26.112])
-        by mx01.tldhost.de (Postfix) with ESMTPS id 9A37E121625;
-        Tue,  1 Sep 2020 20:59:02 +0200 (CEST)
-Received: from fw-emea.rohde-schwarz.com (fw-emea.rohde-schwarz.com
- [80.246.32.33]) by webmail.kiener-muenchen.de (Horde Framework) with HTTPS;
- Tue, 01 Sep 2020 18:59:03 +0000
-Date:   Tue, 01 Sep 2020 18:59:03 +0000
-Message-ID: <20200901185903.Horde.NHT9rmY1GQT34m6C6YMUCNF@webmail.kiener-muenchen.de>
-From:   guido@kiener-muenchen.de
-To:     George McCollister <george.mccollister@gmail.com>
-Cc:     linux-usb@vger.kernel.org, guido.kiener@rohde-schwarz.com
-Subject: Re: usbtmc: stb race condition introduced by
- 4f3c8d6eddc272b386464524235440a418ed2029
-In-Reply-To: <CAFSKS=Pv1Ji4XqHjVMCAnszq_HjFYYk7GuzeeCCScHd1NMumDA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        id S1728223AbgIATbg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Sep 2020 15:31:36 -0400
+Received: from k17.unixstorm.org ([91.227.123.100]:38506 "EHLO
+        k17.unixstorm.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726102AbgIATbf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 15:31:35 -0400
+Received: from aadu223.neoplus.adsl.tpnet.pl ([83.4.98.223] helo=kamil)
+        by k17.unixstorm.org with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <kamil@re-ws.pl>)
+        id 1kDBz9-0002Lq-5x; Tue, 01 Sep 2020 21:31:27 +0200
+From:   Kamil Lorenc <kamil@re-ws.pl>
+To:     Peter Korsgaard <jacmet@sunsite.dk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kamil Lorenc <kamil@re-ws.pl>
+Subject: [PATCH] net: usb: dm9601: Add USB ID of Keenetic Plus DSL
+In_reply-To: <20200901085738.27482-1-kamil@re-ws.pl>
 MIME-Version: 1.0
-Content-Disposition: inline
-X-PPP-Message-ID: <20200901185903.5728.88104@server12.tldhost.de>
-X-PPP-Vhost: kiener-muenchen.de
-X-POWERED-BY: TLDHost.de - AV:CLEAN SPAM:OK
+Content-Transfer-Encoding: 8bit
+Message-ID: <GENERATED-WASMISSING-1kDBz9-0002Lq-5x@k17.unixstorm.org>
+X-ACL-Warn: Adding Message-ID header because it is missing!
+X-Authenticated-Id: kamil@re-ws.pl
+Date:   Tue, 1 Sep 2020 15:31:35 -0400
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-George,
-
-Thanks for your question.
-> Since 4f3c8d6eddc272b386464524235440a418ed2029 I'm experiencing this
-> STB race condition. TL;DR an old, cached STB value can be used after a
-> new one is reported in reply to a control message. Hacking up the
-> latest driver code to ignore the cached stb value gets around the
-> issue.
-
-The SRQ notification is an important message and must not be missed
-in userspace applications. The new implementation does not miss the
-SRQ event anymore, even when multiple threads are waiting for the SRQ event.
-
-Your coding relies on the previous behavior and did not fail for your
-use case and timing. However we could not develop reliable applications with
-the previous implementation.
-
-There are now two ways to wait for the SRQ event:
-1. Using the poll/select method
-2. Using the new ioctl USBTMC488_IOCTL_WAIT_SRQ (preferred way)
-
-When receiving the SRQ event, you should immediately read the stb with
-USBTMC488_IOCTL_READ_STB within the same thread to prevent races or
-reading stale status byte information.
-
-More info see:
-https://github.com/GuidoKiener/linux-usbtmc/blob/master/README.md
-
-> My USBTMC device has an interrupt endpoint with a 1ms interval.
+> Keenetic Plus DSL is a xDSL modem that uses dm9620 as its USB interface.
 >
-> 1) A query is sent to the USBTMC device.
+> Signed-off-by: Kamil Lorenc <kamil@re-ws.pl>
+> ---
+>  drivers/net/usb/dm9601.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> 2) An SRQ is reported via the interrupt endpoint with MAV set.
+> diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
+> index b91f92e4e5f2..915ac75b55fc 100644
+> --- a/drivers/net/usb/dm9601.c
+> +++ b/drivers/net/usb/dm9601.c
+> @@ -625,6 +625,10 @@ static const struct usb_device_id products[] = {
+>    USB_DEVICE(0x0a46, 0x1269),  /* DM9621A USB to Fast Ethernet Adapter */
+>    .driver_info = (unsigned long)&dm9601_info,
+>   },
+> + {
+> +  USB_DEVICE(0x0586, 0x3427),  /* ZyXEL Keenetic Plus DSL xDSL modem */
+> +  .driver_info = (unsigned long)&dm9601_info,
+> + },
+>   {},     // END
+>  };
 >
-> 3) Userspace performs a read to get the reply since MAV is set after
-> being notified by poll().
+> --
+> 2.28.0
 
-Did you start reading (read()) without checking the Status Byte after  
-poll() event?
-
-Regards,
-
-Guido
-
+I received an error from Peter Korsgaard's mailserver informing that his
+email address does not exist. Should I do something with that fact?
 
