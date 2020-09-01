@@ -2,252 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E9F25A13D
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 00:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA08625A15B
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 00:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbgIAWOz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Sep 2020 18:14:55 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:29926 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726105AbgIAWOz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Sep 2020 18:14:55 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1598998493; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=CihyVjIvp+TmDkyAm229UOS4eE/s5fm2jitEPh8edkU=; b=uIRyl9+XdUUwQKSPtqncc75tIW0qzN+wZFwcg2wsiSShXY4wImXl9HF9o8qy7T78PoUhNotf
- PtDg6LsWXLF+IkhV2e1C8c55zk9Brugbx6RY5q2NYsuHfnW0TJTF4Be3NDVtH8Wui2H/WY41
- mgeX9w/NvGLRVMWw6kdQ1v4YZSk=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5f4ec7dbd3d3df8c396b1797 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 01 Sep 2020 22:14:51
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4763FC433CA; Tue,  1 Sep 2020 22:14:51 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
-        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.110.73.30] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0F64EC433C6;
-        Tue,  1 Sep 2020 22:14:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0F64EC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v2] usb: dwc3: Stop active transfers before halting the
- controller
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "jackp@codeaurora.org" <jackp@codeaurora.org>
-References: <20200828224440.22091-1-wcheng@codeaurora.org>
- <e7e0cac8-b0f1-3173-a54a-ccf061807c0c@synopsys.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <d9ff68b0-6f5e-bf6d-9dfb-daac8b0a7abe@codeaurora.org>
-Date:   Tue, 1 Sep 2020 15:14:49 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726523AbgIAWVO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Sep 2020 18:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726139AbgIAWVN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 18:21:13 -0400
+Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA67C061244
+        for <linux-usb@vger.kernel.org>; Tue,  1 Sep 2020 15:21:13 -0700 (PDT)
+Received: by mail-oo1-xc41.google.com with SMTP id k63so694993oob.1
+        for <linux-usb@vger.kernel.org>; Tue, 01 Sep 2020 15:21:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GMjcFFMjh9CmQrHCBi43lrtpGMhqyeOaxqkERHytROo=;
+        b=XSDlwuZu7QNHyUPzVRJXI2B+DZfNJBVpBAQWOJYh6bpiBfpTNRSDihtbioSha9WN18
+         z30ObMyBph/Tv1lhEdumAf2Lkwce/ryZEJ83NXFE0eODJbJOXWpsJnfgfxflSNreO0KH
+         o5NZa6RoXfm6BQA7YvqWr++eHR2yMePOAqeZlpAVxLXX+fCv++ttSYSOgDEO90/BmYXd
+         nihiiCAs3+4T/d42nzUMGKLJFdgiVhKbh7mW2r63kh7YUpThsRvZh4Qc/w6FDjjLxXe8
+         O4fGT/erFRPM6+gh7NwFfmA1nU79jnyYRSjKiXtMmFAMnj6dlkGyUfnZoUg0+xRseqV7
+         wu5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GMjcFFMjh9CmQrHCBi43lrtpGMhqyeOaxqkERHytROo=;
+        b=hchsAdBWDKGjpqEDX7JXzEuX5YpSYXUcsA9MsYkIEmf2+/MC9HvPuUKFse3KHJBQHn
+         e6trMnjScB6T3xmbeK3G57iRJnJK0hFM8m7R8m1ZHe2qRsbZWZLM/m4wAhz03qGQt+0M
+         0NHNsYhYC+h6nSj8aivyJxe4nVu8szUVVOzNt5ZHShxgkTwCkWYXORg5T2hq8FgDxPG0
+         E9qXZOeywaY8nKjCFj+ZlIRZH0TSl4oxsnSKa7DrO8rW6JTk3o12QOseZteebcDetXp2
+         lf8lpKHH1xXL0It67NzF0Bk69q7iO594shRWW3x0NbAMTJ8S1DIMTtgUSDzZOmRuKe5n
+         D5BQ==
+X-Gm-Message-State: AOAM530D3MIiz46tE1ZByAmWhuOScDRHTdy4XgGK11UrnAAAU85vNZlK
+        6ix1gj6tohP7DFYvjX/en9+HlO/CrLcey2++h+PkbLjd/g==
+X-Google-Smtp-Source: ABdhPJxTpLRRGLRBnWegxW9lWMA2lHUlBvH9VYAEKnl6m1dYpRWVKYKyCchjxbnfg46Un80XNyhXu5i80MA8uz+MaoU=
+X-Received: by 2002:a4a:aa0e:: with SMTP id x14mr3019913oom.27.1598998872537;
+ Tue, 01 Sep 2020 15:21:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <e7e0cac8-b0f1-3173-a54a-ccf061807c0c@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAFSKS=Pv1Ji4XqHjVMCAnszq_HjFYYk7GuzeeCCScHd1NMumDA@mail.gmail.com>
+ <20200901185903.Horde.NHT9rmY1GQT34m6C6YMUCNF@webmail.kiener-muenchen.de>
+In-Reply-To: <20200901185903.Horde.NHT9rmY1GQT34m6C6YMUCNF@webmail.kiener-muenchen.de>
+From:   George McCollister <george.mccollister@gmail.com>
+Date:   Tue, 1 Sep 2020 17:21:00 -0500
+Message-ID: <CAFSKS=M8xh3UVFEt+QxcCr_Ghie8tBkudrbLO15hpvEzQEbGfQ@mail.gmail.com>
+Subject: Re: usbtmc: stb race condition introduced by 4f3c8d6eddc272b386464524235440a418ed2029
+To:     guido@kiener-muenchen.de
+Cc:     linux-usb@vger.kernel.org, guido.kiener@rohde-schwarz.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Sep 1, 2020 at 1:59 PM <guido@kiener-muenchen.de> wrote:
+>
+>
+> George,
+>
+> Thanks for your question.
+> > Since 4f3c8d6eddc272b386464524235440a418ed2029 I'm experiencing this
+> > STB race condition. TL;DR an old, cached STB value can be used after a
+> > new one is reported in reply to a control message. Hacking up the
+> > latest driver code to ignore the cached stb value gets around the
+> > issue.
+>
+> The SRQ notification is an important message and must not be missed
+> in userspace applications. The new implementation does not miss the
+> SRQ event anymore, even when multiple threads are waiting for the SRQ event.
+>
+> Your coding relies on the previous behavior and did not fail for your
+> use case and timing. However we could not develop reliable applications with
+> the previous implementation.
+>
+> There are now two ways to wait for the SRQ event:
+> 1. Using the poll/select method
+> 2. Using the new ioctl USBTMC488_IOCTL_WAIT_SRQ (preferred way)
+>
+> When receiving the SRQ event, you should immediately read the stb with
+> USBTMC488_IOCTL_READ_STB within the same thread to prevent races or
+> reading stale status byte information.
 
+I do. I call it as soon as poll indicates there is an SRQ.
 
-On 8/29/2020 2:35 PM, Thinh Nguyen wrote:
-> Wesley Cheng wrote:
->> In the DWC3 databook, for a device initiated disconnect or bus reset, the
->> driver is required to send dependxfer commands for any pending transfers.
->> In addition, before the controller can move to the halted state, the SW
->> needs to acknowledge any pending events.  If the controller is not halted
->> properly, there is a chance the controller will continue accessing stale or
->> freed TRBs and buffers.
->>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->>
->> ---
->> Changes in v2:
->>  - Moved cleanup code to the pullup() API to differentiate between device
->>    disconnect and hibernation.
->>  - Added cleanup code to the bus reset case as well.
->>  - Verified the move to pullup() did not reproduce the problen using the
->>    same test sequence.
->>
->> Verified fix by adding a check for ETIMEDOUT during the run stop call.
->> Shell script writing to the configfs UDC file to trigger disconnect and
->> connect.  Batch script to have PC execute data transfers over adb (ie adb
->> push)  After a few iterations, we'd run into a scenario where the
->> controller wasn't halted.  With the following change, no failed halts after
->> many iterations.
->> ---
->>  drivers/usb/dwc3/ep0.c    |  2 +-
->>  drivers/usb/dwc3/gadget.c | 52 ++++++++++++++++++++++++++++++++++++++-
->>  2 files changed, 52 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->> index 59f2e8c31bd1..456aa87e8778 100644
->> --- a/drivers/usb/dwc3/ep0.c
->> +++ b/drivers/usb/dwc3/ep0.c
->> @@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
->>  	int				ret;
->>  
->>  	spin_lock_irqsave(&dwc->lock, flags);
->> -	if (!dep->endpoint.desc) {
->> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
->>  		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
->>  				dep->name);
->>  		ret = -ESHUTDOWN;
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 3ab6f118c508..df8d89d6bdc9 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -1516,7 +1516,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
->>  {
->>  	struct dwc3		*dwc = dep->dwc;
->>  
->> -	if (!dep->endpoint.desc) {
->> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
->>  		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
->>  				dep->name);
->>  		return -ESHUTDOWN;
->> @@ -1926,6 +1926,24 @@ static int dwc3_gadget_set_selfpowered(struct usb_gadget *g,
->>  	return 0;
->>  }
->>  
->> +static void dwc3_stop_active_transfers(struct dwc3 *dwc)
->> +{
->> +	u32 epnum;
->> +
->> +	for (epnum = 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
->> +		struct dwc3_ep *dep;
->> +
->> +		dep = dwc->eps[epnum];
->> +		if (!dep)
->> +			continue;
->> +
->> +		if (!(dep->flags & DWC3_EP_ENABLED))
->> +			continue;
-> 
-> Don't do the enabled check here. Let the dwc3_stop_active_transfer() do
-> that checking.
-> 
+>
+> More info see:
+> https://github.com/GuidoKiener/linux-usbtmc/blob/master/README.md
+>
+> > My USBTMC device has an interrupt endpoint with a 1ms interval.
+> >
+> > 1) A query is sent to the USBTMC device.
+> >
+> > 2) An SRQ is reported via the interrupt endpoint with MAV set.
+> >
+> > 3) Userspace performs a read to get the reply since MAV is set after
+> > being notified by poll().
+>
+> Did you start reading (read()) without checking the Status Byte after
+> poll() event?
 
-Hi Thinh,
+I check the status byte after poll(). The problem seems to be that I
+also check the status byte in a loop (until there is nothing to
+service) before calling poll again. As long as you only check the
+status byte when there is a cached value available it should be no
+problem. However if you call USBTMC488_IOCTL_READ_STB when there is
+not a cached SRQ value an SRQ can occur after the lock is released in
+usbtmc488_ioctl_read_stb() and cache an older value (which will be
+read by the next USBTMC488_IOCTL_READ_STB) than the one returned. This
+is a race condition and sounds broken to me but if this is the
+intended behavior I can adjust my userspace code to only do
+USBTMC488_IOCTL_READ_STB once after poll indicates an SRQ and live
+with it.
 
-Thanks for the detailed review, as always.  Got it, we can allow that to
-catch it based off the DWC3_EP_TRANSFER_STARTED.
+It doesn't seem right for USBTMC488_IOCTL_READ_STB to ever report an
+older value than what was reported on the previous call.
 
->> +
->> +		dwc3_remove_requests(dwc, dep);
->> +	}
->> +}
->> +
->>  static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
->>  {
->>  	u32			reg;
->> @@ -1994,9 +2012,39 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>  		}
->>  	}
->>  
->> +	/*
->> +	 * Synchronize and disable any further event handling while controller
->> +	 * is being enabled/disabled.
->> +	 */
->> +	disable_irq(dwc->irq_gadget);
-> 
-> I think it's better to do dwc3_gadget_disable_irq(). This only stops
-> handling events. Although it's unlikely, the controller may still
-> generate events before it's halted.
-> 
+>
+> Regards,
+>
+> Guido
+>
+>
 
-I think its better if we can do both.  At least with the disable_irq()
-call present, we can ensure the irq handlers are complete, or we can do
-as Felipe suggested, and first disable the controller events (using
-dwc3_gadget_disable_irq()) and then calling synchronize_irq().
-
-The concern I had is the pullup() API updating the lpos, and the hardirq
-handler referencing it to update the evt buf cache and waking up the
-threaded irq handler. (since we don't clear the evt->count explicitly,
-it may reference empty/stale events)
-
->>  	spin_lock_irqsave(&dwc->lock, flags);
->> +
->> +	/* Controller is not halted until pending events are acknowledged */
->> +	if (!is_on) {
->> +		u32 reg;
->> +
->> +		__dwc3_gadget_ep_disable(dwc->eps[0]);
->> +		__dwc3_gadget_ep_disable(dwc->eps[1]);
-> 
-> You can just do __dwc3_gadget_stop(), and do that after
-> dwc3_stop_active_transfers().
-> 
-
-Got it.
-
->> +
->> +		/*
->> +		 * The databook explicitly mentions for a device-initiated
->> +		 * disconnect sequence, the SW needs to ensure that it ends any
->> +		 * active transfers.
->> +		 */
->> +		dwc3_stop_active_transfers(dwc);
->> +
->> +		reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
->> +		reg &= DWC3_GEVNTCOUNT_MASK;
-> 
-> Can we use another variable "count" instead of reusing reg to make it a
-> little clearer?
-> 
-
-Sure, I'll add another variable.
-
-Thanks
-Wesley
-
->> +		if (reg > 0) {
->> +			dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
->> +			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + reg) %
->> +						dwc->ev_buf->length;
->> +		}
->> +	}
->> +
->>  	ret = dwc3_gadget_run_stop(dwc, is_on, false);
->>  	spin_unlock_irqrestore(&dwc->lock, flags);
->> +	enable_irq(dwc->irq_gadget);
->>  
->>  	return ret;
->>  }
->> @@ -3100,6 +3148,8 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
->>  	}
->>  
->>  	dwc3_reset_gadget(dwc);
->> +	/* Stop any active/pending transfers when receiving bus reset */
->> +	dwc3_stop_active_transfers(dwc);
->>  
->>  	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
->>  	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
-> 
-> Looks good to me.
-> 
-> Thanks,
-> Thinh
-> 
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Thanks for your reply.
