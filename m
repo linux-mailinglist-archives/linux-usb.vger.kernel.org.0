@@ -2,220 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E13C2258A49
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 10:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67D4258A56
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 10:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726116AbgIAIWK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Sep 2020 04:22:10 -0400
-Received: from mga03.intel.com ([134.134.136.65]:37502 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725848AbgIAIWJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Sep 2020 04:22:09 -0400
-IronPort-SDR: Cw0iJDm6I3KvSB38TEEugHmCtXHWMvw1UKMoIZVBEJ/MujleL3j/4lPLDCHNdg9VFYMeYquNy7
- lYLUxp+gG7eQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="157129119"
-X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
-   d="scan'208";a="157129119"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 01:22:08 -0700
-IronPort-SDR: Yyjn9M0n58MwxNlAxu38YKWBMNa+ly+sJrQb3oyXt7lYS8cdZj7h/gW2mcIfYEbA/AVBh3xosV
- 8mTlsUeCLD4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
-   d="scan'208";a="333643233"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Sep 2020 01:22:06 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>, <stern@rowland.harvard.edu>,
-        mthierer@gmail.com, balbi@kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: Fix out of sync data toggle if a configured device is reconfigured
-Date:   Tue,  1 Sep 2020 11:25:28 +0300
-Message-Id: <20200901082528.12557-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1725989AbgIAI3k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Sep 2020 04:29:40 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:10747 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725848AbgIAI3k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Sep 2020 04:29:40 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id E5EC497EA266BFBD358C;
+        Tue,  1 Sep 2020 16:29:37 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 1 Sep 2020 16:29:30 +0800
+From:   Tian Tao <tiantao6@hisilicon.com>
+To:     <andreas.noever@gmail.com>, <michael.jamet@intel.com>,
+        <mika.westerberg@linux.intel.com>, <YehezkelShB@gmail.com>,
+        <linux-usb@vger.kernel.org>
+CC:     <linuxarm@huawei.com>
+Subject: [PATCH v2] thunderbolt: Use kobj_to_dev() instead of container_of()
+Date:   Tue, 1 Sep 2020 16:27:17 +0800
+Message-ID: <1598948837-740-1-git-send-email-tiantao6@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Userspace drivers that use a SetConfiguration() request to "lightweight"
-reset an already configured usb device might cause data toggles to get out
-of sync between the device and host, and the device becomes unusable.
+Doesn't really matter for an individual driver, but it may
+get coppied to lots more. I consider it's a little tidy up.
 
-The xHCI host requires endpoints to be dropped and added back to reset the
-toggle. If USB core notices the new configuration is the same as the
-current active configuration it will avoid these extra steps by calling
-usb_reset_configuration() instead of usb_set_configuration().
+Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 
-A SetConfiguration() request will reset the device side data toggles.
-Make sure usb_reset_configuration() function also drops and adds back the
-endpoints to ensure data toggles are in sync.
-
-To avoid code duplication split the current usb_disable_device() function
-and reuse the endpoint specific part.
-
-Cc: stable <stable@vger.kernel.org>
-Tested-by: Martin Thierer <mthierer@gmail.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+v2:
+    rewrite the commit message.
 ---
-Changes for v2:
-  - Fix incorrect return value in error path
-  - Cleanup blank line
-  - Reword commit message
----
- drivers/usb/core/message.c | 91 ++++++++++++++++++--------------------
- 1 file changed, 42 insertions(+), 49 deletions(-)
+ drivers/thunderbolt/domain.c | 2 +-
+ drivers/thunderbolt/switch.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 6197938dcc2d..ae1de9cc4b09 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -1205,6 +1205,34 @@ void usb_disable_interface(struct usb_device *dev, struct usb_interface *intf,
- 	}
- }
- 
-+/*
-+ * usb_disable_device_endpoints -- Disable all endpoints for a device
-+ * @dev: the device whose endpoints are being disabled
-+ * @skip_ep0: 0 to disable endpoint 0, 1 to skip it.
-+ */
-+static void usb_disable_device_endpoints(struct usb_device *dev, int skip_ep0)
-+{
-+	struct usb_hcd *hcd = bus_to_hcd(dev->bus);
-+	int i;
-+
-+	if (hcd->driver->check_bandwidth) {
-+		/* First pass: Cancel URBs, leave endpoint pointers intact. */
-+		for (i = skip_ep0; i < 16; ++i) {
-+			usb_disable_endpoint(dev, i, false);
-+			usb_disable_endpoint(dev, i + USB_DIR_IN, false);
-+		}
-+		/* Remove endpoints from the host controller internal state */
-+		mutex_lock(hcd->bandwidth_mutex);
-+		usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
-+		mutex_unlock(hcd->bandwidth_mutex);
-+	}
-+	/* Second pass: remove endpoint pointers */
-+	for (i = skip_ep0; i < 16; ++i) {
-+		usb_disable_endpoint(dev, i, true);
-+		usb_disable_endpoint(dev, i + USB_DIR_IN, true);
-+	}
-+}
-+
- /**
-  * usb_disable_device - Disable all the endpoints for a USB device
-  * @dev: the device whose endpoints are being disabled
-@@ -1218,7 +1246,6 @@ void usb_disable_interface(struct usb_device *dev, struct usb_interface *intf,
- void usb_disable_device(struct usb_device *dev, int skip_ep0)
+diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+index bba4cbf..7a192b7 100644
+--- a/drivers/thunderbolt/domain.c
++++ b/drivers/thunderbolt/domain.c
+@@ -275,7 +275,7 @@ static struct attribute *domain_attrs[] = {
+ static umode_t domain_attr_is_visible(struct kobject *kobj,
+ 				      struct attribute *attr, int n)
  {
- 	int i;
--	struct usb_hcd *hcd = bus_to_hcd(dev->bus);
+-	struct device *dev = container_of(kobj, struct device, kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct tb *tb = container_of(dev, struct tb, dev);
  
- 	/* getting rid of interfaces will disconnect
- 	 * any drivers bound to them (a key side effect)
-@@ -1264,22 +1291,8 @@ void usb_disable_device(struct usb_device *dev, int skip_ep0)
- 
- 	dev_dbg(&dev->dev, "%s nuking %s URBs\n", __func__,
- 		skip_ep0 ? "non-ep0" : "all");
--	if (hcd->driver->check_bandwidth) {
--		/* First pass: Cancel URBs, leave endpoint pointers intact. */
--		for (i = skip_ep0; i < 16; ++i) {
--			usb_disable_endpoint(dev, i, false);
--			usb_disable_endpoint(dev, i + USB_DIR_IN, false);
--		}
--		/* Remove endpoints from the host controller internal state */
--		mutex_lock(hcd->bandwidth_mutex);
--		usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
--		mutex_unlock(hcd->bandwidth_mutex);
--		/* Second pass: remove endpoint pointers */
--	}
--	for (i = skip_ep0; i < 16; ++i) {
--		usb_disable_endpoint(dev, i, true);
--		usb_disable_endpoint(dev, i + USB_DIR_IN, true);
--	}
-+
-+	usb_disable_device_endpoints(dev, skip_ep0);
- }
- 
- /**
-@@ -1522,6 +1535,9 @@ EXPORT_SYMBOL_GPL(usb_set_interface);
-  * The caller must own the device lock.
-  *
-  * Return: Zero on success, else a negative error code.
-+ *
-+ * If this routine fails the device will probably be in an unusable state
-+ * with endpoints disabled, and interfaces only partially enabled.
-  */
- int usb_reset_configuration(struct usb_device *dev)
+ 	if (attr == &dev_attr_boot_acl.attr) {
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index a921de9..173ce3b 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -1649,7 +1649,7 @@ static struct attribute *switch_attrs[] = {
+ static umode_t switch_attr_is_visible(struct kobject *kobj,
+ 				      struct attribute *attr, int n)
  {
-@@ -1537,10 +1553,7 @@ int usb_reset_configuration(struct usb_device *dev)
- 	 * calls during probe() are fine
- 	 */
+-	struct device *dev = container_of(kobj, struct device, kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct tb_switch *sw = tb_to_switch(dev);
  
--	for (i = 1; i < 16; ++i) {
--		usb_disable_endpoint(dev, i, true);
--		usb_disable_endpoint(dev, i + USB_DIR_IN, true);
--	}
-+	usb_disable_device_endpoints(dev, 1); /* skip ep0*/
- 
- 	config = dev->actconfig;
- 	retval = 0;
-@@ -1553,34 +1566,10 @@ int usb_reset_configuration(struct usb_device *dev)
- 		mutex_unlock(hcd->bandwidth_mutex);
- 		return -ENOMEM;
- 	}
--	/* Make sure we have enough bandwidth for each alternate setting 0 */
--	for (i = 0; i < config->desc.bNumInterfaces; i++) {
--		struct usb_interface *intf = config->interface[i];
--		struct usb_host_interface *alt;
- 
--		alt = usb_altnum_to_altsetting(intf, 0);
--		if (!alt)
--			alt = &intf->altsetting[0];
--		if (alt != intf->cur_altsetting)
--			retval = usb_hcd_alloc_bandwidth(dev, NULL,
--					intf->cur_altsetting, alt);
--		if (retval < 0)
--			break;
--	}
--	/* If not, reinstate the old alternate settings */
-+	/* xHCI adds all endpoints in usb_hcd_alloc_bandwidth */
-+	retval = usb_hcd_alloc_bandwidth(dev, config, NULL, NULL);
- 	if (retval < 0) {
--reset_old_alts:
--		for (i--; i >= 0; i--) {
--			struct usb_interface *intf = config->interface[i];
--			struct usb_host_interface *alt;
--
--			alt = usb_altnum_to_altsetting(intf, 0);
--			if (!alt)
--				alt = &intf->altsetting[0];
--			if (alt != intf->cur_altsetting)
--				usb_hcd_alloc_bandwidth(dev, NULL,
--						alt, intf->cur_altsetting);
--		}
- 		usb_enable_lpm(dev);
- 		mutex_unlock(hcd->bandwidth_mutex);
- 		return retval;
-@@ -1589,8 +1578,12 @@ int usb_reset_configuration(struct usb_device *dev)
- 			USB_REQ_SET_CONFIGURATION, 0,
- 			config->desc.bConfigurationValue, 0,
- 			NULL, 0, USB_CTRL_SET_TIMEOUT);
--	if (retval < 0)
--		goto reset_old_alts;
-+	if (retval < 0) {
-+		usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
-+		usb_enable_lpm(dev);
-+		mutex_unlock(hcd->bandwidth_mutex);
-+		return retval;
-+	}
- 	mutex_unlock(hcd->bandwidth_mutex);
- 
- 	/* re-init hc/hcd interface/endpoint state */
+ 	if (attr == &dev_attr_device.attr) {
 -- 
-2.17.1
+2.7.4
 
