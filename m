@@ -2,226 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE142585C2
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 04:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4792585D3
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 04:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbgIACnr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 22:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S1726102AbgIAC7c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 22:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725901AbgIACnq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 22:43:46 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFA9C061366;
-        Mon, 31 Aug 2020 19:43:45 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id t23so9112191ljc.3;
-        Mon, 31 Aug 2020 19:43:45 -0700 (PDT)
+        with ESMTP id S1725993AbgIAC7b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 22:59:31 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA75C061366
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:31 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id q131so4875310qke.22
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3goilOQjfvmalan6T70oSxy71Eb7b8sm1pFq3tCaMuE=;
-        b=MY5WPUa+HHogDSqFdmZN/aCR9qyBTb6OaEgBTqAsiSyJgABd9t/VWCw4tbJYfnzZ8G
-         d0+MTOLQaEnz7tyRFaKxiXvTzWSDXl8YjOGYNbigIqBOlCrkVmaJxr9bdjWPoyN2+bgW
-         yz4HFihFint+E5ACPR7aUJs6tr8fW7kCrhGtg1rqt67/2czpnaj6sMO0a1W0wGc81U7e
-         4jMU1Zt/BhGJYkWoNlNsh4Sb3c+b3gA/GmMjimr6uZCdO8lV17BDX99kwWYVt+PBV5Ea
-         hGWmc6UBmjs19wZHnYRllBQx71junPviNxMH4g1XNiAujqIMxQPhr8h2dKhttjhKXC5d
-         nGkg==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=aqbI5Ia32TqOrslGEIErfhCZqRPbdylIvc6i8h2yZKw=;
+        b=Saty0hS8ZkPaeozqCVkqP9Q7DGds6LC26Gc8QFvaGAlYQ16EcEAJMCNGsiC8NNVyUV
+         rEzqmwSlyUCyMRR5RZ+yeI0D2OegIiIlPpWJ20k/Vc+O9HbZoBNrJKTdvXO4KA02rn2u
+         CRuTCqopFDz1+l0Z2gudUoOZSj+Xe9rmUqdJAiygfXXYJ59Z9XPjGy1FOL5n16UfJGpq
+         2e/irZ2KcO6rAy20guLmZuZW3Sti8PURgRX41WembXA58Pwp3jo1TXhDIiXThGGhOwIu
+         L0Yf1Rb+imEPCoUhHlQ5Zs73MtzRwLQmTRzbIG65os/+tRibT9V9J7s4RgS9ruBorBbI
+         b9hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3goilOQjfvmalan6T70oSxy71Eb7b8sm1pFq3tCaMuE=;
-        b=Uts8kTojlxbLQ6pc3j0mNc+QBpZck8yuTUecwz23bN+Z6EFVwW7JkyMGgCCoZCeptm
-         EdkfltJvwcubnNQUfsObA71pEG8le6uss/KUhIitW7VkdHoXyhtaASnYP5y8tRyYlgvL
-         yCfoZ8PS4naz9x1H3gfx7j4b73Cs7gP4yGXDsM0KDyFJrQLD5PXYOhwSBIb1+eFwU+tg
-         zEuXoA6u6pxIf9rjsXailMtSTAt6NJY4QtKVmeDD8ZvbAc1vtfJDKU51YdZsD3sliCqJ
-         tzhDeG6EhPhJ7Ir+lDXokrYWnRYRuCffYvys0zSGARFJwTbIsNV57ytaGO33QrsdTGHc
-         lNxw==
-X-Gm-Message-State: AOAM531wB8hzEW/0BGD9WpPvunKGcUBwgVx6tSP46GjirENyz9iC7rAN
-        isZjyMaqbgQmkm23euIirGV284X721iYnSuUnf1v99Ea+rs=
-X-Google-Smtp-Source: ABdhPJw2GiGKDIYf1rIY1lllTSYEgOj3YL6lMrCt6V7USlF65aqaEo1Y3GK64n82UuB3QstIXlXNMPO7W71OWL3x/0A=
-X-Received: by 2002:a2e:9b08:: with SMTP id u8mr1851982lji.208.1598928223917;
- Mon, 31 Aug 2020 19:43:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <1598610636-4939-1-git-send-email-u0084500@gmail.com>
- <1598610636-4939-2-git-send-email-u0084500@gmail.com> <20200828220520.GA3482472@bogus>
- <CADiBU3-pd7nvtf2_1ssYVLQc4HOHX6PUyyx6GiJ_gH-4DaGmog@mail.gmail.com>
- <CADiBU39P7jeSOV2_GcXh6A=b8SCViURCsS8SZFmy+oY2hS74tg@mail.gmail.com> <1598842698.11403.2.camel@mhfsdcap03>
-In-Reply-To: <1598842698.11403.2.camel@mhfsdcap03>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Tue, 1 Sep 2020 10:43:32 +0800
-Message-ID: <CADiBU39ippYd2EvFBhesOVU4CPa9C9fsiSTaB9BdnYFZjOt4_w@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] usb typec: mt6360: Add MT6360 Type-C DT binding documentation
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>, matthias.bgg@gmail.com,
-        Guenter Roeck <linux@roeck-us.net>,
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=aqbI5Ia32TqOrslGEIErfhCZqRPbdylIvc6i8h2yZKw=;
+        b=OoyTXm4a0f+aJi2oB3CJNMCugJk8eMPWoyyVUVcocGq1xL2A0aiGxcuLNwS6q5nEQB
+         bUa2DwCbFSuJV71XIMp2baRc9N0FgaIL48JLH0Nv/tLtaDTSc4ke7CSG3+n9Y86NSTcQ
+         0zf9IA81ly3/5N8oPTn9JXxCBtOvWKLUyJtbNVOufa+sDKEGMc7WbmHJ/kJOzC9Vf6+T
+         NDHrDaF5OJ+fHvNIMJ9wJijOU9Vh5zjr47BKL7me+GzF6Cu8MhOsXZ2evVHNW2RY8eGZ
+         CjNVB12D9P6HEPfr5VrFKzLCAZ94rfjFVFaDRoxSC6ln1+rViwYHyq58PH9v4IN6s2yZ
+         pAAw==
+X-Gm-Message-State: AOAM531KKxtXfp0T9d3CCMkEIvNtkwPev7vp+KrNF+V0Jpne+SUt0cVQ
+        iVEJaV09d7NFdzXrYa3qtEULYS7NVUQ=
+X-Google-Smtp-Source: ABdhPJyAHfuQ9RaLLZ3z5nf1R7jFGuXpDSlM91oLR8qmMk3SusVTCBPIFpgE1gbGnSuRrwM6Pa7whya7RMI=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:1:f292:1cff:fee0:66cf])
+ (user=badhri job=sendgmr) by 2002:a0c:a789:: with SMTP id v9mr1397448qva.2.1598929170526;
+ Mon, 31 Aug 2020 19:59:30 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 19:59:13 -0700
+Message-Id: <20200901025927.3596190-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
+Subject: [PATCH v6 00/14] TCPM support for FRS and AutoDischarge Disconnect
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Chunfeng Yun <chunfeng.yun@mediatek.com> =E6=96=BC 2020=E5=B9=B48=E6=9C=883=
-1=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8811:00=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> On Sat, 2020-08-29 at 10:49 +0800, ChiYuan Huang wrote:
-> > ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2020=E5=B9=B48=E6=9C=8829=
-=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=888:32=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-> > >
-> > > Rob Herring <robh@kernel.org> =E6=96=BC 2020=E5=B9=B48=E6=9C=8829=E6=
-=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=886:05=E5=AF=AB=E9=81=93=EF=BC=9A
-> > > >
-> > > > On Fri, Aug 28, 2020 at 06:30:36PM +0800, cy_huang wrote:
-> > > > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > > > >
-> > > > > Add a devicetree binding documentation for the MT6360 Type-C driv=
-er.
-> > > > >
-> > > > > usb typec: mt6360: Rename DT binding doument from mt6360 to mt636=
-x
-> > > > >
-> > > > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > > > > ---
-> > > > >  .../bindings/usb/mediatek,mt6360-tcpc.yaml         | 73 ++++++++=
-++++++++++++++
-> > > > >  1 file changed, 73 insertions(+)
-> > > > >  create mode 100644 Documentation/devicetree/bindings/usb/mediate=
-k,mt6360-tcpc.yaml
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt636=
-0-tcpc.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.ya=
-ml
-> > > > > new file mode 100644
-> > > > > index 00000000..9e8ab0d
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.=
-yaml
-> > > > > @@ -0,0 +1,73 @@
-> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > > +%YAML 1.2
-> > > > > +---
-> > > > > +$id: "http://devicetree.org/schemas/usb/mediatek,mt6360-tcpc.yam=
-l#"
-> > > > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > > > > +
-> > > > > +title: Mediatek MT6360 Type-C Port Switch and Power Delivery con=
-troller DT bindings
-> > > > > +
-> > > > > +maintainers:
-> > > > > +  - ChiYuan Huang <cy_huang@richtek.com>
-> > > > > +
-> > > > > +description: |
-> > > > > +  Mediatek MT6360 is a multi-functional device. It integrates ch=
-arger, ADC, flash, RGB indicators,
-> > > > > +  regulators (BUCKs/LDOs), and TypeC Port Switch with Power Deli=
-very controller.
-> > > > > +  This document only describes MT6360 Type-C Port Switch and Pow=
-er Delivery controller.
-> > > > > +
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    enum:
-> > > > > +      - mediatek,mt6360-tcpc
-> > > > > +
-> > > > > +  interrupts-extended:
-> > > >
-> > > > Use 'interrupts'. The tooling will automatically support
-> > > > 'interrupts-extended'.
-> > > Okay.
-> > > >
-> > > > > +    maxItems: 1
-> > > > > +
-> > > > > +  interrupt-names:
-> > > > > +    items:
-> > > > > +      - const: PD_IRQB
-> > > > > +
-> > > > > +patternProperties:
-> > > > > +  "connector":
-> > > > > +    type: object
-> > > > > +    $ref: ../connector/usb-connector.yaml#
-> > > > > +    description:
-> > > > > +      Properties for usb c connector.
-> > > > > +
-> > > > > +additionalProperties: false
-> > > > > +
-> > > > > +required:
-> > > > > +  - compatible
-> > > > > +  - interrupts-extended
-> > > > > +  - interrupt-names
-> > > > > +
-> > > > > +examples:
-> > > > > +  - |
-> > > > > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > > > > +    #include <dt-bindings/usb/pd.h>
-> > > > > +    i2c0 {
-> > > > > +        #address-cells =3D <1>;
-> > > > > +        #size-cells =3D <0>;
-> > > > > +
-> > > > > +        mt6360@34 {
-> > > > > +            compatible =3D "mediatek,mt6360";
-> > > > > +            reg =3D <0x34>;
-> > > > > +
-> > > > > +            tcpc {
-> > > > > +                compatible =3D "mediatek,mt6360-tcpc";
-> > > > > +                interrupts-extended =3D <&gpio26 3 IRQ_TYPE_LEVE=
-L_LOW>;
-> > > > > +                interrupt-names =3D "PD_IRQB";
-> > > > > +
-> > > > > +                connector {
-> > > >
-> > > > Where's the data connections? The assumption of the binding is the =
-USB
-> > > > (2 and 3) connections come from the parent if there's no graph to t=
-he
-> > > > USB controller(s).
-> > > MT6360 is only a subpmic. TypeC part only handle the CC logic to supp=
-ort USBPD.
-> > > For the usb connection like as usbhs/usbss,  it need to be handled
-> > > by/connect to application processor side.
-> > > LIke as connector/usb-connector.yaml decribed, it  specify the port
-> > > property to bind USB HS/SS.
-> > >
-> > Do i need to add the ports into the connector node for example?
-> > Like as hs/ss/aux, to make the user know to use 6360's tcpc?
-> >
-> > I check the  style in connector/usb-connect.yaml
-> > Do I also need to replace two space instead of one tab in the binding e=
-xample?
->
-> see writing-schema.rst about examples:
->
-> "Note: YAML doesn't allow leading tabs, so spaces must be used instead."
+First of all apologies for mixing up the patch version as noted by
+Heikki and Greg. All of them were v1's but since I was manually adding
+the version numbers I mixed them up. Using the --reroll-count option
+now. Updating the patch version to v6 (highest version number in the
+previous patchset + 1) to avoid confusion.
 
-Thx. I have followed by Rob's comment in the previous mail to add the
-fix and sent the patch v5.
-> >
-> > > >
-> > > > > +                        compatible =3D "usb-c-connector";
-> > > > > +                        label =3D "USB-C";
-> > > > > +                        data-role =3D "dual";
-> > > > > +                        power-role =3D "dual";
-> > > > > +                        try-power-role =3D "sink";
-> > > > > +                        source-pdos =3D <PDO_FIXED(5000, 1000, P=
-DO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-> > > > > +                        sink-pdos =3D <PDO_FIXED(5000, 2000, PDO=
-_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-> > > > > +                        op-sink-microwatt =3D <10000000>;
-> > > > > +                };
-> > > > > +            };
-> > > > > +        };
-> > > > > +    };
-> > > > > +...
-> > > > > --
-> > > > > 2.7.4
-> > > > >
->
+I also rebased on to off of the recent usb-next tip:
+5fedf0d295d3 (origin/usb-testing, origin/usb-next) Merge 5.9-rc3 into usb-next
+Which had the following changes causing merge conflict:
+3ed8e1c2ac99 usb: typec: tcpm: Migrate workqueue to RT priority for processing events
+6bbe2a90a0bb usb: typec: tcpm: During PR_SWAP, source caps should be sent only after tSwapSourceStart
+
+Addressed comments from Heikki and Randy which have described in the
+individual commit's change history as well.
+
+Badhri Jagan Sridharan (14):
+  usb: typec: tcpci: Add register definitions to tcpci
+  usb: typec: tcpci: Add support when hidden tx registers are
+    inaccessible
+  usb: typec: tcpci: update ROLE_CONTROL for DRP
+  usb: typec: tcpci: Add a getter method to retrieve tcpm_port reference
+  usb: typec: tcpci: Add set_vbus tcpci callback
+  dt-bindings: usb: Maxim type-c controller device tree binding document
+  usb: typec: tcpci_maxim: Chip level TCPC driver
+  dt-bindings: connector: Add property to set initial current cap for
+    FRS
+  usb: typec: tcpm: Add support for Sink Fast Role SWAP(FRS)
+  usb: typec: tcpci: Implement callbacks for FRS
+  usb: typec: tcpci_maxim: Add support for Sink FRS
+  usb: typec: tcpm: Implement enabling Auto Discharge disconnect support
+  usb: typec: tcpci: Implement Auto discharge disconnect callbacks
+  usb: typec: tcpci_maxim: Implemnent set_auto_vbus_discharge_threshold
+
+ .../bindings/connector/usb-connector.txt      | 128 ++++
+ .../devicetree/bindings/usb/maxim,tcpci.txt   |  44 ++
+ drivers/usb/typec/tcpm/Kconfig                |   5 +
+ drivers/usb/typec/tcpm/Makefile               |  13 +-
+ drivers/usb/typec/tcpm/tcpci.c                | 146 ++++-
+ drivers/usb/typec/tcpm/tcpci.h                |  43 ++
+ drivers/usb/typec/tcpm/tcpci_maxim.c          | 564 ++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpm.c                 | 291 ++++++++-
+ include/dt-bindings/usb/pd.h                  |  10 +
+ include/linux/usb/pd.h                        |  19 +-
+ include/linux/usb/tcpm.h                      |  24 +-
+ include/linux/usb/typec.h                     |  13 +
+ 12 files changed, 1266 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/connector/usb-connector.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/maxim,tcpci.txt
+ create mode 100644 drivers/usb/typec/tcpm/tcpci_maxim.c
+
+
+base-commit: 5fedf0d295d3ef69fd85fdee4cb68fd3756b54c2
+-- 
+2.28.0.402.g5ffc5be6b7-goog
+
