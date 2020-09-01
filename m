@@ -2,156 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B6825859E
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 04:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2F02585A3
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 04:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726085AbgIACcp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 22:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgIACcn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 22:32:43 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F70C061366
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:32:43 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id x17so2696755uao.5
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8cuCW4UG5Ed1e/kY33jplyyTlIIty/LC2aDLumsAvBg=;
-        b=jRTKU7RlvutznVWkIyYAQAks/zFgT9iRl7hrrn3kcFYyCAJ0TmlZlkArx95l9Wg1lt
-         J9etQ/nSkA3OLkb4r8u/VkG9O4VRi9WVjp0eoPcaKZYqf/+tkILRKdewR4xfz3N5+oqO
-         hST/V4wQqatuza8EmZcxORiybaTLAuN2bHRGtKC2+7SOTiP2kHryFvG6/J8Cr7wJS8vy
-         ZYKWfFxpnfHznPnSJErNWYuHa5/WTThyc7+cphuzXA/v5ATwx5UI/ctnEukQ7pGPxl4V
-         iMxbKpHFmU1djdC9ZvHZ1mStOIh6ZHXcB0ENnPEHiWbG0LTuffnSNN83UmuzQDWW9uzr
-         vBbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8cuCW4UG5Ed1e/kY33jplyyTlIIty/LC2aDLumsAvBg=;
-        b=uO8QtfDIAzCkMguMTRW/dPG7LKWv27OIQZNGRxbeSrObFoa+9JuuyQ0Ny/rq2KAA7f
-         YYHynAtWRvl1nVCsESXtnFHTJYkpajK6C4GPsEPuwP8SwODQmajiOijnVbG1tdFhWAaZ
-         cOst10MYvaiHPnp7Mtafsb2+/Q6ULAZQNgW5q9ejaRGKQ/G8/fpQyihx93uWRbJFNx5E
-         K6TKZ+uaCVR8i3M/VcCkSEs57oL0cDsN8PhYqOcicu77O22KFGNTgJ6HUD2bXCk+wlPD
-         bp923r09g6WRJtH7cfFlb5q9flV8B6oMYFP3JsxdLysnsYNNrlSgKPYetxn9BHyzp5VI
-         HCug==
-X-Gm-Message-State: AOAM5332r7mAHqat8DccyXH08J08XaJLtLHzP6xHK1V7dRd2qRuCa1wA
-        bCu5kcBz32/cUK5QvH3QmPX/z74KGis7ouQqd6FSPQ==
-X-Google-Smtp-Source: ABdhPJwzI3ZCb++m9ycTyc1BwPJ3hr+C63fUeALlFF1nLsb6NUYiDOgZjbHnnWGio36wAKATCS8+XOS0OK1ftOVFm1E=
-X-Received: by 2002:ab0:14c8:: with SMTP id f8mr3418947uae.23.1598927562467;
- Mon, 31 Aug 2020 19:32:42 -0700 (PDT)
+        id S1726226AbgIACeZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 22:34:25 -0400
+Received: from mail-eopbgr150077.outbound.protection.outlook.com ([40.107.15.77]:50118
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726020AbgIACeX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Aug 2020 22:34:23 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i78Ae6/o3LSkWdrBI1azZDdrirIgze09lymyrUE8NUUkbOw5ZQMBX4ygu/sB0gsJSogYRvpKoNMTgDENvyNmdzNYaqZasVXHpRozoz9IMPruM9H70lD3sVxveEvxbruRAm961Pev8v0H4p8qLVDSnAbchlgJvKme84Q0Ra/fFKgiobTa5JSFOTOg/iWqg505KhWNW4xsCVi5GnrXZRqNvw8JqaQadTE87WWa/+0IrMeont1Si7vGLfJdoLf2SGfNaSWG/Y2y+SILftprIJfHZpFQ2GFMo4nh4x8zaIG/pTq/Y6xz9TE5jGpAxEHH5i+xbxeMPTRZ8j51re0WMVMwMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=askAiLjHDWTHSvDZ671aCCkq07dUFIHbrn7BtbKy2U0=;
+ b=QqT4Eey3efNDmnrHxmjHzHfFcqMXRSNdP4v7QTuvDQrHTYwOlMbGpJ8eLle43H83/lruG48Gtr692e9JSSyU4YvV9TwBWox7jzaD48F7v8k/raJ+jz2dP9939xKAy7Z9eixQwsZnZWsEH8F71WZdV8Evq6jG6M5BDjTifbvxYkUHuVgV6phil30hkC9JgCMN1pWlD663n5NgZo6uyf/xzLE+frtNLsS01phSvni86whmmNFoP87/UDof+/YI5cxQFPpCQAbXDHiP91flDbrvbg0IdRmLUpuVclDnU8sS3H81PlbRhetv1MGFVQyuCkJGio7TMy8VEsWT/5CtPWmfIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=askAiLjHDWTHSvDZ671aCCkq07dUFIHbrn7BtbKy2U0=;
+ b=SAxeZnVw/g1Gq343rLKEcn5e2vbZZkcZ4ZE6QEV7et7aeb8YCgftQbK3h79ORCKZaiPtOk2/cIa+ue0Ilfv3/aKNuWZ2mBxn4G5itI4MPhVjzDySxcHJnFIWvHPbvwO0BprG+2YlTnOYMwuffJlqhmWOj7R/mA+w6xxmgzw1sTA=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB6150.eurprd04.prod.outlook.com (2603:10a6:20b:71::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.21; Tue, 1 Sep
+ 2020 02:34:20 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3326.025; Tue, 1 Sep 2020
+ 02:34:20 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
+        rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
+        Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 0/5] usb: cdns3: misc improvements
+Date:   Tue,  1 Sep 2020 10:33:47 +0800
+Message-Id: <20200901023352.25552-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0046.apcprd02.prod.outlook.com
+ (2603:1096:3:18::34) To AM7PR04MB7157.eurprd04.prod.outlook.com
+ (2603:10a6:20b:118::20)
 MIME-Version: 1.0
-References: <20200706133341.476881-1-lee.jones@linaro.org> <20200706133341.476881-9-lee.jones@linaro.org>
- <ca14707c-7d40-07ac-da1d-ca27a2e93dcd@redhat.com> <20200706142051.GA3500@dell>
- <65f27abc-69c8-3877-be5b-e5e478153af9@redhat.com> <20200714135456.GB1398296@dell>
-In-Reply-To: <20200714135456.GB1398296@dell>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Mon, 31 Aug 2020 19:32:06 -0700
-Message-ID: <CAPTae5L3cVYc+00-bPzDADXRjzFCOGPB5NnmSZ4_c=0D5Mxikg@mail.gmail.com>
-Subject: Re: [PATCH 08/32] usb: typec: tcpm: tcpm: Remove dangling unused
- 'struct tcpm_altmode_ops'
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR02CA0046.apcprd02.prod.outlook.com (2603:1096:3:18::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19 via Frontend Transport; Tue, 1 Sep 2020 02:34:17 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [119.31.174.66]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: f5009534-8df5-4e93-2ea0-08d84e1f87a5
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6150:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM6PR04MB615091CCD166C603DCE66FB98B2E0@AM6PR04MB6150.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1265;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fFnBNLOAZPvL68lHu9BXvXofaTKHPsMvRdDifmm2X7pUcjY+x2CcJohKXpJO5o8EYvYvIun3sGZkb5ZJyfKoMaWiByH+OEqCvk9pocTLgqVAUVjpllkA3WMufCW3E1MqdPrxcSqj6fYp4hFPT6Mi6DxUQ89IcdyyZY+OpXziG59qKulpZoJQbsKNU3YfD2SkaGTtT3eCEujflVV6SekT7LfMCkM5KLdpp7T4YYZfh84FOv/w6lhw6bstp+d/wH8jFCbdLvU1q9+ueVsHhMNNK76gqnTzjZcv44dLAY7Yk9yf0HJMZs7db4/eNVR+AGAQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(376002)(366004)(396003)(346002)(36756003)(478600001)(6486002)(2906002)(1076003)(44832011)(8936002)(8676002)(66476007)(6666004)(5660300002)(66946007)(316002)(6512007)(66556008)(6916009)(26005)(2616005)(956004)(16526019)(52116002)(186003)(83380400001)(86362001)(4744005)(4326008)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: 2m6zTPlpDiSs3GrOaoKbA47itvuyYvqELkxwJvy/QM+A7LEWfyAdTU3qeIe4am51Uze5px2ikFbhV339hy63DtmkhiopJU1AZtxHqECSBeU8OCOpaytdp24qIjG7UzmIMxY0PmGbpLhp9OVwy7LOEZ94fKTBkEzJsEmWTXRRgA9tYukRNxWLdzHvuN3ZAgnl1VO7h9v40MX5IE4r5yz0fNwzyOUfY09qt0p7C29Ei39oIRVK7Sue3tekbu/1sOvG4Js9PSbQnpclM6H7slSUg6kdh6lTDB+7l14mmlycYi52PQL+sNGhNAhXAsso9oe+zs80XF3lMwFdmEJlMBacwCs1EIXxBPKK5G5ZpqZN1DRdkyEn2JTWRbPmSYPbBJQf0zDhqr0B6BNKpebTeeK3A3COoiZwO48rU4xw7jWa0t0ixlFDw7oyFNwrxEQpiQpnXbMEr3ZhfdhFTY1zUqu5g9wRp/pe4qG6GfoTDsg/zVFVnqpkFEsSEOjKe1E39EsEsKqdt1bnbMhInSV6T3G0h9wlnOE5iPNEQDwYWYDbSAL5DN1aIm6GHxy3b4KAvnFai67X3ArZ7CXh/7UwLY987t1e95bYB3v3ehbiuzVItRThDzvBJL+F/asrZhDHtjOm1mKRWmCmWQoCAfPaczodTw==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5009534-8df5-4e93-2ea0-08d84e1f87a5
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2020 02:34:20.3430
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5mk6hLF8J6Xh8AMyvomfgrnGMotNCvXxA8kgIjgM1zsUFq/PoZJlSMKeyGQQM++t7L3rcJGnlHZFt1mN9aU6og==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6150
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hans,
+Peter Chen (5):
+  usb: cdns3: core: quit if it uses role switch class
+  usb: cdns3: gadget: set fast access bit
+  usb: cdns3: gadget: clear the interrupt status when disconnect the
+    host
+  usb: cdns3: drd: call PHY .set_mode accordingly
+  usb: cdns3: gadget: move wait configuration operation
 
-Kernel test robot is still reporting this issue. I have my repo synced
-to ToT usb-next:
-Output of git repo:
-5fedf0d295d3 (origin/usb-testing, origin/usb-next) Merge 5.9-rc3 into usb-n=
-ext
-f75aef392f86 (tag: v5.9-rc3, origin/usb-linus, origin/main) Linux 5.9-rc3
-e43327c706f2 Merge branch 'linus' of
-git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6
-dcc5c6f013d8 Merge tag 'x86-urgent-2020-08-30' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
-d2283cdc18d3 Merge tag 'irq-urgent-2020-08-30' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
-0063a82de937 Merge tag 'sched-urgent-2020-08-30' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+ drivers/usb/cdns3/core.c   |  4 ++++
+ drivers/usb/cdns3/drd.c    |  5 +++++
+ drivers/usb/cdns3/ep0.c    | 10 +++++++++-
+ drivers/usb/cdns3/gadget.c | 15 ++++++++-------
+ 4 files changed, 26 insertions(+), 8 deletions(-)
 
-Were you able to get your patch merged ?
+-- 
+2.17.1
 
-Thanks,
-Badhri
-
-
-On Tue, Jul 14, 2020 at 6:55 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Tue, 14 Jul 2020, Hans de Goede wrote:
->
-> > Hi,
-> >
-> > On 7/6/20 4:20 PM, Lee Jones wrote:
-> > > On Mon, 06 Jul 2020, Hans de Goede wrote:
-> > >
-> > > > Hi,
-> > > >
-> > > > On 7/6/20 3:33 PM, Lee Jones wrote:
-> > > > > Looks as though a079973f462a3 ("usb: typec: tcpm: Remove tcpc_con=
-fig
-> > > > > configuration mechanism") pulled out the only use of 'tcpm_altmod=
-e_ops'
-> > > > > last year.  No need to keep it around.
-> > > > >
-> > > > > Fixes the following W=3D1 kernel build warning(s):
-> > > > >
-> > > > >    drivers/usb/typec/tcpm/tcpm.c:1551:39: warning: =E2=80=98tcpm_=
-altmode_ops=E2=80=99 defined but not used [-Wunused-const-variable=3D]
-> > > > >    1551 | static const struct typec_altmode_ops tcpm_altmode_ops =
-=3D {
-> > > > >    | ^~~~~~~~~~~~~~~~
-> > > > >
-> > > > > Cc: Guenter Roeck <linux@roeck-us.net>
-> > > > > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > > Cc: Hans de Goede <hdegoede@redhat.com>
-> > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > >
-> > > > This is necessary for adding Display port over Type-C support
-> > > > on devices using the tcpm code, rather then firmware, to do
-> > > > the Type-C alt-mode negotiation.
-> > > >
-> > > > I have a local patch in my tree which adds support for this.
-> > > >
-> > > > But Heikki did not like my approach, so that patch
-> > > > (which needs the bits you are removing) never landed
-> > > > upstream:
-> > > >
-> > > > https://patchwork.kernel.org/patch/11199517/
-> > > >
-> > > > Which is somewhat old now.
-> > >
-> > > Yes, that's a just a little old now.
-> > >
-> > > If it drags on for much longer, perhaps consider taking it out for th=
-e
-> > > time being and adding it back when you start to make use of it again?
-> >
-> > Ok, I've just submitted a reworked patch-series upstream which
-> > actually uses this code. So please drop this patch from your
-> > patch-set.
->
-> No problem.
->
-> Thanks Hans.
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Senior Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
