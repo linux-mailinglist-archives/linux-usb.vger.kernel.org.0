@@ -2,71 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD8625971A
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 18:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CC52597D1
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 18:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731441AbgIAQKp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 1 Sep 2020 12:10:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47512 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731340AbgIAQKn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Sep 2020 12:10:43 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209089] USB storage devices appear as SATA devices
-Date:   Tue, 01 Sep 2020 16:10:43 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209089-208809-sAfX4t36jf@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209089-208809@https.bugzilla.kernel.org/>
-References: <bug-209089-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1728251AbgIAQTk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Sep 2020 12:19:40 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:38497 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1732015AbgIAQSu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 12:18:50 -0400
+Received: (qmail 592026 invoked by uid 1000); 1 Sep 2020 12:18:48 -0400
+Date:   Tue, 1 Sep 2020 12:18:48 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     gregkh@linuxfoundation.org, erkka.talvitie@vincit.fi,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC RESEND PATCH 0/1] USB EHCI: repeated resets on full and low
+ speed devices
+Message-ID: <20200901161848.GF587030@rowland.harvard.edu>
+References: <cover.1598887346.git.khalid@gonehiking.org>
+ <20200901023117.GD571008@rowland.harvard.edu>
+ <0ec31395-56d9-c490-4e42-1c27bbc69df3@oracle.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0ec31395-56d9-c490-4e42-1c27bbc69df3@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209089
+On Tue, Sep 01, 2020 at 08:51:14AM -0700, Khalid Aziz wrote:
+> >> At the time of failure, when we reach this conditional, token is
+> >> either 0x80408d46 or 0x408d46 which means following bits are set:
+> >>
+> >> QTD_STS_STS, QTD_STS_MMF, QTD_STS_HALT, QTD_IOC, QTD_TOGGLE
+> >>
+> >> and 
+> >>
+> >>         QTD_PID = 1
+> >>         QTD_CERR = 3
+> >>         QTD_LENGTH = 0x40 (64)
+> >>
+> >> This causes  the branch "(token & QTD_STS_MMF) && (QTD_PID(token) ==
+> >> PID_CODE_IN" to be taken and qtd_copy_status() returns EPROTO. This
+> >> return value in qh_completions() results in ehci_clear_tt_buffer()
+> >> being called:
 
---- Comment #9 from Alan Stern (stern@rowland.harvard.edu) ---
-(I bet you could have fixed the fstab contents by booting from the pen drive in
-"rescue" mode, with no need to have FreeBSD installed.)
+I didn't mention this before, but that combination of events doesn't 
+make sense.  The MMF bit is supposed to get set only for queue heads in 
+the periodic list, that is, only for interrupt transactions.  But 
+ehci_clear_tt_buffer() doesn't do anything for interrupt endpoints; it 
+tests specifically for that right at the start.
 
-Changing the monikers is only a partial solution.  For example, devices that
-show up as uda and udb one day could very well show up as udb and uda the next
-day.
+Maybe your EHCI controller is setting the MMF bit when it shouldn't.  
+The usbmon output will help clear this up.
 
-Also, suppose your system's primary hard disk was attached by USB rather than
-SATA.  Then the pen drive could have been labelled uda and the primary drive
-labelled udb, and your fstab would still be messed up.  This is part of the
-reason why people recommend using filesystem or GUID labels for fstab entries
-rather than drive names and partition numbers.
+Or maybe the hubs you are testing don't work right.  That's the only 
+reason I can think of for the failures you see with the USB-3 
+controller; the way it operates is very different from the way EHCI 
+does.
 
-In short, changing the monikers isn't going to happen, and even if it did
-happen it wouldn't fully fix your original problem.
-
-However, there is a way to set up your system to use permanently fixed drive
-names that you assign.  All you have to do is write and install an appropriate
-udev script.  Then you can make the drive names be anything you want.
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Alan Stern
