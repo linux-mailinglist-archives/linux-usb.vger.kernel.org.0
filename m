@@ -2,171 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B21E025A1B0
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 00:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5B625A1E0
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 01:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgIAW5R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Sep 2020 18:57:17 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:40938 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726050AbgIAW5Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 18:57:16 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 081MsabW119623;
-        Tue, 1 Sep 2020 22:57:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=JnpmDtSqdgZ8Qo0nmwK77Wr3l27dEGsHABeVPi7Ih9M=;
- b=Tfr4hut2D2vl4wIfNVBeKf18toi87Qqm1rxk2g7vccbGDx/06o4ZrfoKD2+gJXFc4xr+
- WmydL6igHvFINPfaGwFKlFhwCmIBPkGriRZ1jr9fKUsEa018YzUhmn3dy6OTdDITl+Ix
- HdGHSf70T+DAhlVq6HfE6+r97j/dskFtLppzgWYVTzZYMZMxA/a4vGkyREl5hlSQ7T/E
- HAbMzmLoIDmjw4/Q1Tqp283o8b1JpkxTMwvl7a1gceSwe4Jz1Fuzs2/kaK4swp5yKM0p
- UmbGz6BXxzxaFgqe1uVYdOd9shF04/i68bLA9jvWv61prI9eRukCqGzoP0xoa4lNIXo3 fQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 337eym77ky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 01 Sep 2020 22:57:13 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 081MtBvm004152;
-        Tue, 1 Sep 2020 22:55:12 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 3380kp003j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Sep 2020 22:55:12 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 081Mt31t032307;
-        Tue, 1 Sep 2020 22:55:03 GMT
-Received: from [10.154.191.218] (/10.154.191.218)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 01 Sep 2020 15:55:02 -0700
-Subject: Re: [RFC RESEND PATCH 0/1] USB EHCI: repeated resets on full and low
- speed devices
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, erkka.talvitie@vincit.fi,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1598887346.git.khalid@gonehiking.org>
- <20200901023117.GD571008@rowland.harvard.edu>
- <608418fa-b0ce-c2a4-ad79-fe505c842587@oracle.com>
- <20200901163602.GG587030@rowland.harvard.edu>
- <4d1ab90a-ec55-85e8-d646-cfa58f08d449@oracle.com>
- <20200901195159.GA599114@rowland.harvard.edu>
-From:   Khalid Aziz <khalid.aziz@oracle.com>
-X-Pep-Version: 2.0
-Organization: Oracle Corp
-Message-ID: <68228cc9-5d1a-6872-0956-a7006fe3b943@oracle.com>
-Date:   Tue, 1 Sep 2020 16:54:48 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726183AbgIAXY1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Sep 2020 19:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725949AbgIAXYY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 19:24:24 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF06C061244
+        for <linux-usb@vger.kernel.org>; Tue,  1 Sep 2020 16:24:23 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id a15so1362944ejf.11
+        for <linux-usb@vger.kernel.org>; Tue, 01 Sep 2020 16:24:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6nvYO83TuGyoqoEjxwK3HJvbFAyS+1kGkzEzB8i/fiw=;
+        b=ouHQr8phdwKmipCzwFsEUpoRGmJ8DdK+/z0pujc+O8dzygl3W2jrb50djUI+q2ZF71
+         fqBw4KAHVMF+eg4cWrsXLjR9m/8dcVi20/NjUHjHzgAIEzOCtsFbwTPQpib5ZUnHhmir
+         2xvkXmoc1E4Hbpo3nZjo3Dfqc2QpDwM6drDeARxmEShUQuUeElPoVU5eyquNQAj71ALz
+         F2DM/nq7Xhq7yAeDVggthENSH+ZmXgbeQHOlU+eXeyfGFDAaztBSBEkjVC/joKe/d3g1
+         O5vToScQ+azkn5X6JOypQu+W4PpwDnJnmbu525qsDECBRQFhNz2h4k0Ki+FF9oCdjtl7
+         Fhzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6nvYO83TuGyoqoEjxwK3HJvbFAyS+1kGkzEzB8i/fiw=;
+        b=FA9UtPMy+RZ7RkB1kXJiiTxQJht+AxyL/YAdbWjlZISbl+lNjBHGsX2gX8ELWQwZ2Y
+         0xUC2wbcbk+bNGNQh0GwTBulFbFKShTad9cV6n3gdL6vHeUoG5npdWPsnhb/GIxRJMDz
+         oaNw9upY677CMTF31W0xlezk1QptazTD7iNPFoQXx1BliFMD9Dn02R1gjKtiERcJ45IU
+         nAQ1khlleO5se5utLG4C6Z2qdnaqAlZXrYmN39Wjomwa2VpYXSLZ0A1wvh+0tg/lgXwi
+         N4LJj6VuWitzZ10hQt2IXTrPw5tp5X1EkeIe0VqMN46xuU5+Bj1tZd/nYtlsYBooysSC
+         RCNA==
+X-Gm-Message-State: AOAM532Z7IBlJ89SoeZYRVI7d1OXxWVmZTEm9TDcIpT8P7F20Jml53IY
+        gQawuGBXCEgaPTn3Qgq7+e8dOAcYrSQe2PblrcM=
+X-Google-Smtp-Source: ABdhPJxRzUQn1VMtYlq+NHSoL+G1OwMjzmpU01odaXrKFKIQ61+ckgZ74esHK8DxXKsf/QJeliLxW3Bb8l83/ru2GAg=
+X-Received: by 2002:a17:906:5488:: with SMTP id r8mr573238ejo.483.1599002661950;
+ Tue, 01 Sep 2020 16:24:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200901195159.GA599114@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
- mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009010192
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 mlxscore=0
- lowpriorityscore=0 clxscore=1015 spamscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009010192
+References: <20200901055417.1732-1-tom.ty89@gmail.com> <20200901145535.GC587030@rowland.harvard.edu>
+In-Reply-To: <20200901145535.GC587030@rowland.harvard.edu>
+From:   Tom Yan <tom.ty89@gmail.com>
+Date:   Wed, 2 Sep 2020 07:24:10 +0800
+Message-ID: <CAGnHSEnXyBXwdTxc-dxP_wSUdT-JuRwegtPmpXJNecOTDJR_+w@mail.gmail.com>
+Subject: Re: [PATCH] usb-storage: always set hw_max_sectors in slave_configure
+ to avoid inappropriate clamping
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        Arnd Bergmann <arnd@arndb.de>, cyrozap@gmail.com,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/1/20 1:51 PM, Alan Stern wrote:
-> On Tue, Sep 01, 2020 at 11:00:16AM -0600, Khalid Aziz wrote:
->> On 9/1/20 10:36 AM, Alan Stern wrote:
->>> On Tue, Sep 01, 2020 at 09:15:46AM -0700, Khalid Aziz wrote:
->>>> On 8/31/20 8:31 PM, Alan Stern wrote:
->>>>> Can you collect a usbmon trace showing an example of this problem?
->>>>>
->>>>
->>>> I have attached usbmon traces for when USB hub with keyboards and mo=
-use
->>>> is plugged into USB 2.0 port and when it is plugged into the NEC USB=
- 3.0
->>>> port.
->>>
->>> The usbmon traces show lots of errors, but no Clear-TT events.  The=20
->>> large number of errors suggests that you've got a hardware problem;=20
->>> either a bad hub or bad USB connections.
->>
->> That is what I thought initially which is why I got additional hubs an=
-d
->> a USB 2.0 PCI card to test. I am seeing errors across 3 USB controller=
-s,
->> 4 USB hubs and 4 slow/full speed devices. All of the hubs and slow/ful=
-l
->> devices work with zero errors on my laptop. My keyboard/mouse devices
->> and 2 of my USB hubs predate motherboard update and they all worked
->> flawlessly before the motherboard upgrade. Some combinations of these
->> also works with no errors on my desktop with new motherboard that I ha=
-d
->> listed in my original email:
->=20
-> It's a very puzzling situation.
->=20
-> One thing which probably would work well, surprisingly, would be to buy=
-=20
-> an old USB-1.1 hub and plug it into the PCI card.  That combination is =
+On Tue, 1 Sep 2020 at 22:55, Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> Patch submissions should have text lines limited to fewer than 80
+> columns.
+>
+> On Tue, Sep 01, 2020 at 01:54:17PM +0800, Tom Yan wrote:
+> > When the scsi request queue is initialized/allocated, the scsi driver
+> > clamps hw_max_sectors against the dma max mapping size of
+> > sdev->host->dma_dev. The clamping is apparently inappriorate to USB
+> > drives.
+>
+> Wouldn't it be more accurate to say that the clamping _is_ appropriate,
+> but it should be performed using the sysdev device rather than the
+> nominal parent?  Thus the error lies in allowing shost->dma_dev to be
+> set incorrectly.
+>
+> > Either way we are calling blk_queue_max_hw_sectors() in the usb
+> > drivers for some (but not all) cases, which causes the clamping to be
+> > overriden (inconsistently) anyway.
+> >
+> > Therefore the usb driver should always set hw_max_sectors and do the
+> > clamping against the right device itself.
+>
+> How about fixing the dma_dev assignment instead?
 
-> likely to be similar to what you see when plugging the devices directly=
-=20
-> into the PCI card.  It might even work okay with the USB-3 controllers.=
+That won't really help unless we also do the clamping on the USB side
+*conditionally* (i.e. only after when we call
+`blk_queue_max_hw_sectors()` again there). I'm not sure there's a good
+reason for doing so.
 
->=20
->> 2. USB 2.0 controller - WORKS
->> 5. USB 3.0/3.1 controller -> Bus powered USB 2.0 hub - WORKS
->>
->> I am not seeing a common failure here that would point to any specific=
+Although this might seem a bit redundant/clumsy at first glance, it's
+also much easier to follow (e.g. we don't have to dive into the SCSI
+side to know where the hw_max_sectors came from).
 
->> hardware being bad. Besides, that one code change (which I still can't=
+Besides, the whole DMA thing is quite beyond my knowledge.
 
->> say is the right code change) in ehci-q.c makes USB 2.0 controller wor=
-k
->> reliably with all my devices.
->=20
-> The USB and EHCI designs are flawed in that under the circumstances=20
-> you're seeing, they don't have any way to tell the difference between a=
-=20
-> STALL and a host timing error.  The current code treats these situation=
-s=20
-> as timing/transmission errors (resulting in device resets); your change=
-=20
-> causes them to be treated as STALLs.  However, there are known, common =
+I'm going to fix the commit message, and use 2048 blocks for SS UAS drives.
 
-> situations in which those same symptoms really are caused by=20
-> transmission errors, so we don't want to start treating them as STALLs.=
-
->=20
-> Besides, I suspect that your code change does _not_ make the USB-2=20
-> controller work reliably with your devices.  You should collect a usbmo=
-n=20
-> trace under those conditions; I predict it will be full of STALLs.  And=
-=20
-> furthermore, I believe these STALLs will not show up in a usbmon trace =
-
-> made with the devices plugged directly into the PCI card.  If I'm right=
-=20
-> about these things, the errors are still present even with your patch; =
-
-> all it does is hide them.
->=20
-> Short of a USB bus analyzer, however, there's no way to tell what's=20
-> really going on.
-
-I have managed to find a hardware combination that seems to work, so for
-now at least my machine is usable. I will figure out how to interpret
-usbmon output and run more experiments. There seems to be a real problem
-in the driver somewhere and should be solved.
-
-Thanks,
-Khalid
-
-
+>
+> Alan Stern
+>
+> > Signed-off-by: Tom Yan <tom.ty89@gmail.com>
+> > ---
+> >  drivers/usb/storage/scsiglue.c | 37 ++++++++++++++++------------------
+> >  drivers/usb/storage/uas.c      | 23 ++++++++++++++++-----
+> >  2 files changed, 35 insertions(+), 25 deletions(-)
+> >
+> > diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
+> > index e5a971b83e3f..804cbc0ba4da 100644
+> > --- a/drivers/usb/storage/scsiglue.c
+> > +++ b/drivers/usb/storage/scsiglue.c
+> > @@ -120,6 +120,23 @@ static int slave_configure(struct scsi_device *sdev)
+> >                * better throughput on most devices.
+> >                */
+> >               blk_queue_max_hw_sectors(sdev->request_queue, 2048);
+> > +     } else {
+> > +         /*
+> > +          * Some devices are known to choke with anything larger. It seems like
+> > +          * the problem stems from the fact that original IDE controllers had
+> > +          * only an 8-bit register to hold the number of sectors in one transfer
+> > +          * and even those couldn't handle a full 256 sectors.
+> > +          *
+> > +          * Because we want to make sure we interoperate with as many devices as
+> > +          * possible, we will maintain a 240 sector transfer size limit for USB
+> > +          * Mass Storage devices.
+> > +          *
+> > +          * Tests show that other operating have similar limits with Microsoft
+> > +          * Windows 7 limiting transfers to 128 sectors for both USB2 and USB3
+> > +          * and Apple Mac OS X 10.11 limiting transfers to 256 sectors for USB2
+> > +          * and 2048 for USB3 devices.
+> > +          */
+> > +             blk_queue_max_hw_sectors(sdev->request_queue, 240);
+> >       }
+> >
+> >       /*
+> > @@ -626,26 +643,6 @@ static const struct scsi_host_template usb_stor_host_template = {
+> >       /* lots of sg segments can be handled */
+> >       .sg_tablesize =                 SG_MAX_SEGMENTS,
+> >
+> > -
+> > -     /*
+> > -      * Limit the total size of a transfer to 120 KB.
+> > -      *
+> > -      * Some devices are known to choke with anything larger. It seems like
+> > -      * the problem stems from the fact that original IDE controllers had
+> > -      * only an 8-bit register to hold the number of sectors in one transfer
+> > -      * and even those couldn't handle a full 256 sectors.
+> > -      *
+> > -      * Because we want to make sure we interoperate with as many devices as
+> > -      * possible, we will maintain a 240 sector transfer size limit for USB
+> > -      * Mass Storage devices.
+> > -      *
+> > -      * Tests show that other operating have similar limits with Microsoft
+> > -      * Windows 7 limiting transfers to 128 sectors for both USB2 and USB3
+> > -      * and Apple Mac OS X 10.11 limiting transfers to 256 sectors for USB2
+> > -      * and 2048 for USB3 devices.
+> > -      */
+> > -     .max_sectors =                  240,
+> > -
+> >       /* emulated HBA */
+> >       .emulated =                     1,
+> >
+> > diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+> > index 08f9296431e9..cffa435afd84 100644
+> > --- a/drivers/usb/storage/uas.c
+> > +++ b/drivers/usb/storage/uas.c
+> > @@ -827,11 +827,6 @@ static int uas_slave_alloc(struct scsi_device *sdev)
+> >        */
+> >       blk_queue_update_dma_alignment(sdev->request_queue, (512 - 1));
+> >
+> > -     if (devinfo->flags & US_FL_MAX_SECTORS_64)
+> > -             blk_queue_max_hw_sectors(sdev->request_queue, 64);
+> > -     else if (devinfo->flags & US_FL_MAX_SECTORS_240)
+> > -             blk_queue_max_hw_sectors(sdev->request_queue, 240);
+> > -
+> >       return 0;
+> >  }
+> >
+> > @@ -839,6 +834,24 @@ static int uas_slave_configure(struct scsi_device *sdev)
+> >  {
+> >       struct uas_dev_info *devinfo = sdev->hostdata;
+> >
+> > +     struct us_data *us = host_to_us(sdev->host);
+> > +     struct device *dev = us->pusb_dev->bus->sysdev;
+> > +
+> > +     if (devinfo->flags & US_FL_MAX_SECTORS_64)
+> > +             blk_queue_max_hw_sectors(sdev->request_queue, 64);
+> > +     else if (devinfo->flags & US_FL_MAX_SECTORS_240)
+> > +             blk_queue_max_hw_sectors(sdev->request_queue, 240);
+> > +     else
+> > +             blk_queue_max_hw_sectors(sdev->request_queue, SCSI_DEFAULT_MAX_SECTORS);
+> > +
+> > +     /*
+> > +      * The max_hw_sectors should be up to maximum size of a mapping for
+> > +      * the device. Otherwise, a DMA API might fail on swiotlb environment.
+> > +      */
+> > +     blk_queue_max_hw_sectors(sdev->request_queue,
+> > +             min_t(size_t, queue_max_hw_sectors(sdev->request_queue),
+> > +                   dma_max_mapping_size(dev) >> SECTOR_SHIFT));
+> > +
+> >       if (devinfo->flags & US_FL_NO_REPORT_OPCODES)
+> >               sdev->no_report_opcodes = 1;
+> >
+> > --
+> > 2.28.0
+> >
