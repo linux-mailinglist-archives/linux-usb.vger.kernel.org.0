@@ -2,95 +2,209 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D9C259F77
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 21:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E386259F88
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 21:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732753AbgIATwC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Sep 2020 15:52:02 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:50027 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1732089AbgIATwB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 15:52:01 -0400
-Received: (qmail 599608 invoked by uid 1000); 1 Sep 2020 15:51:59 -0400
-Date:   Tue, 1 Sep 2020 15:51:59 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     gregkh@linuxfoundation.org, erkka.talvitie@vincit.fi,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC RESEND PATCH 0/1] USB EHCI: repeated resets on full and low
- speed devices
-Message-ID: <20200901195159.GA599114@rowland.harvard.edu>
-References: <cover.1598887346.git.khalid@gonehiking.org>
- <20200901023117.GD571008@rowland.harvard.edu>
- <608418fa-b0ce-c2a4-ad79-fe505c842587@oracle.com>
- <20200901163602.GG587030@rowland.harvard.edu>
- <4d1ab90a-ec55-85e8-d646-cfa58f08d449@oracle.com>
+        id S1732737AbgIAT4n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Sep 2020 15:56:43 -0400
+Received: from mga03.intel.com ([134.134.136.65]:29049 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730149AbgIAT4j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Sep 2020 15:56:39 -0400
+IronPort-SDR: Q9x3kDoV7ifiKy6GTq3HszpzaL6bdwr2Dxn4PiAiw8jtIK+KbguXyVsl9mMf9Eg8MESqWtNuQa
+ zOKJRuAbyhhg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="157266032"
+X-IronPort-AV: E=Sophos;i="5.76,380,1592895600"; 
+   d="scan'208";a="157266032"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 12:56:38 -0700
+IronPort-SDR: RYNzqBpy5UOMrOe1q20Zwz6QmSEu0C23PTac3XRlcSLRMgalDOduErEZqPh+OQWNhioRcx6XJi
+ L8480xJgDhWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,380,1592895600"; 
+   d="scan'208";a="446265361"
+Received: from lkp-server02.sh.intel.com (HELO f796b30506bf) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 01 Sep 2020 12:56:36 -0700
+Received: from kbuild by f796b30506bf with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kDCOS-00004o-6v; Tue, 01 Sep 2020 19:56:36 +0000
+Date:   Wed, 02 Sep 2020 03:56:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 6b6c71e897e2bfa6acf8583daf80970cb0a9f87e
+Message-ID: <5f4ea766.lUiqffepRIAAaCNO%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d1ab90a-ec55-85e8-d646-cfa58f08d449@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 11:00:16AM -0600, Khalid Aziz wrote:
-> On 9/1/20 10:36 AM, Alan Stern wrote:
-> > On Tue, Sep 01, 2020 at 09:15:46AM -0700, Khalid Aziz wrote:
-> >> On 8/31/20 8:31 PM, Alan Stern wrote:
-> >>> Can you collect a usbmon trace showing an example of this problem?
-> >>>
-> >>
-> >> I have attached usbmon traces for when USB hub with keyboards and mouse
-> >> is plugged into USB 2.0 port and when it is plugged into the NEC USB 3.0
-> >> port.
-> > 
-> > The usbmon traces show lots of errors, but no Clear-TT events.  The 
-> > large number of errors suggests that you've got a hardware problem; 
-> > either a bad hub or bad USB connections.
-> 
-> That is what I thought initially which is why I got additional hubs and
-> a USB 2.0 PCI card to test. I am seeing errors across 3 USB controllers,
-> 4 USB hubs and 4 slow/full speed devices. All of the hubs and slow/full
-> devices work with zero errors on my laptop. My keyboard/mouse devices
-> and 2 of my USB hubs predate motherboard update and they all worked
-> flawlessly before the motherboard upgrade. Some combinations of these
-> also works with no errors on my desktop with new motherboard that I had
-> listed in my original email:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: 6b6c71e897e2bfa6acf8583daf80970cb0a9f87e  Merge tag 'thunderbolt-for-v5.9-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
 
-It's a very puzzling situation.
+elapsed time: 726m
 
-One thing which probably would work well, surprisingly, would be to buy 
-an old USB-1.1 hub and plug it into the PCI card.  That combination is 
-likely to be similar to what you see when plugging the devices directly 
-into the PCI card.  It might even work okay with the USB-3 controllers.
+configs tested: 144
+configs skipped: 13
 
-> 2. USB 2.0 controller - WORKS
-> 5. USB 3.0/3.1 controller -> Bus powered USB 2.0 hub - WORKS
-> 
-> I am not seeing a common failure here that would point to any specific
-> hardware being bad. Besides, that one code change (which I still can't
-> say is the right code change) in ehci-q.c makes USB 2.0 controller work
-> reliably with all my devices.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-The USB and EHCI designs are flawed in that under the circumstances 
-you're seeing, they don't have any way to tell the difference between a 
-STALL and a host timing error.  The current code treats these situations 
-as timing/transmission errors (resulting in device resets); your change 
-causes them to be treated as STALLs.  However, there are known, common 
-situations in which those same symptoms really are caused by 
-transmission errors, so we don't want to start treating them as STALLs.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+nds32                            alldefconfig
+arm                       omap2plus_defconfig
+arm                             mxs_defconfig
+sh                ecovec24-romimage_defconfig
+mips                        nlm_xlp_defconfig
+m68k                        mvme16x_defconfig
+arm                     eseries_pxa_defconfig
+arm                      footbridge_defconfig
+sh                            migor_defconfig
+sh                                  defconfig
+um                           x86_64_defconfig
+sh                           se7750_defconfig
+nios2                         3c120_defconfig
+ia64                      gensparse_defconfig
+mips                 decstation_r4k_defconfig
+riscv                    nommu_k210_defconfig
+sh                            shmin_defconfig
+arm                       multi_v4t_defconfig
+arm                        spear3xx_defconfig
+powerpc                  mpc866_ads_defconfig
+mips                        omega2p_defconfig
+sh                            titan_defconfig
+sparc                            alldefconfig
+mips                           ip32_defconfig
+riscv                               defconfig
+powerpc                     pq2fads_defconfig
+i386                                defconfig
+mips                      loongson3_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                      bmips_stb_defconfig
+mips                        maltaup_defconfig
+arm                        vexpress_defconfig
+s390                       zfcpdump_defconfig
+arm                         shannon_defconfig
+arm                         hackkit_defconfig
+arm                        mvebu_v5_defconfig
+xtensa                       common_defconfig
+m68k                        m5407c3_defconfig
+mips                         db1xxx_defconfig
+arm                          ixp4xx_defconfig
+sh                              ul2_defconfig
+sh                         ecovec24_defconfig
+s390                          debug_defconfig
+mips                         tb0219_defconfig
+sh                     sh7710voipgw_defconfig
+mips                         tb0287_defconfig
+mips                     cu1000-neo_defconfig
+mips                          malta_defconfig
+powerpc                    gamecube_defconfig
+m68k                             alldefconfig
+mips                      malta_kvm_defconfig
+m68k                       m5249evb_defconfig
+powerpc                      chrp32_defconfig
+arm                         socfpga_defconfig
+um                             i386_defconfig
+arm                         s5pv210_defconfig
+arm                         mv78xx0_defconfig
+powerpc                     skiroot_defconfig
+arm                         lubbock_defconfig
+mips                         bigsur_defconfig
+arm                          gemini_defconfig
+nios2                         10m50_defconfig
+x86_64                           alldefconfig
+mips                           rs90_defconfig
+um                            kunit_defconfig
+m68k                         amcore_defconfig
+powerpc                     mpc83xx_defconfig
+sh                         microdev_defconfig
+riscv                    nommu_virt_defconfig
+arm                          exynos_defconfig
+arm                        neponset_defconfig
+m68k                        stmark2_defconfig
+mips                          rm200_defconfig
+arm                          prima2_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20200901
+x86_64               randconfig-a006-20200901
+x86_64               randconfig-a003-20200901
+x86_64               randconfig-a005-20200901
+x86_64               randconfig-a001-20200901
+x86_64               randconfig-a002-20200901
+i386                 randconfig-a004-20200901
+i386                 randconfig-a005-20200901
+i386                 randconfig-a006-20200901
+i386                 randconfig-a002-20200901
+i386                 randconfig-a001-20200901
+i386                 randconfig-a003-20200901
+i386                 randconfig-a016-20200901
+i386                 randconfig-a015-20200901
+i386                 randconfig-a011-20200901
+i386                 randconfig-a013-20200901
+i386                 randconfig-a014-20200901
+i386                 randconfig-a012-20200901
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-Besides, I suspect that your code change does _not_ make the USB-2 
-controller work reliably with your devices.  You should collect a usbmon 
-trace under those conditions; I predict it will be full of STALLs.  And 
-furthermore, I believe these STALLs will not show up in a usbmon trace 
-made with the devices plugged directly into the PCI card.  If I'm right 
-about these things, the errors are still present even with your patch; 
-all it does is hide them.
+clang tested configs:
+x86_64               randconfig-a013-20200901
+x86_64               randconfig-a016-20200901
+x86_64               randconfig-a011-20200901
+x86_64               randconfig-a012-20200901
+x86_64               randconfig-a015-20200901
+x86_64               randconfig-a014-20200901
 
-Short of a USB bus analyzer, however, there's no way to tell what's 
-really going on.
-
-Alan Stern
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
