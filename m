@@ -2,188 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64943259B40
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 19:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8973B259B5C
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 19:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732528AbgIAQ65 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Sep 2020 12:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732497AbgIAQ6x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 12:58:53 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326BBC061244;
-        Tue,  1 Sep 2020 09:58:53 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id f18so1132241pfa.10;
-        Tue, 01 Sep 2020 09:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hbLywgShsnuHsUn2KPFm85Q/XjLDaiF9CQkPiOZ3tQ8=;
-        b=mwTMQx6x5N/kKMJ0gc0w8CXrrhYtnf8KLypsDqsqUCpubEuoV5AIs3VZEvFDQPFYH5
-         EHSaJpnSOGZqlbWXvkQNHaJHBvA3np24QkXbHFFAa8HgvX8JBMkNUFnPq46zXqaB0lXR
-         pgmlFNadWTfafWkiqq116Kk7ZQeZyqAVBEwcGQVdwPCMVAr9nco23+ZfyQpeND2y/qLN
-         wpV1aJ2Za8gIp5Qkb6IpCWeliHZ2Jr4Sshji6U9gCFph8Yehoz+vVW1EKOb6Cd4KWmMm
-         fwdCjlc1EMIwo5/yzLLZrFGbXOJ8tKqEZ4PrJb/kWYCJrEkgwFqRO6sz1CbQ08zLt6LX
-         rHrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=hbLywgShsnuHsUn2KPFm85Q/XjLDaiF9CQkPiOZ3tQ8=;
-        b=ZOC1JK4EtvQ6tzpscayS69l6JNfOoUwe3Pa1VCOjlFmdHvs9vDUcQ/MonmtHqy3YTN
-         5fPpHHYxxbnOiAbceqpHxZh91CmAxQkjrQJskimghoDK5nmxhTMPCOIYC1PefoF4n+AJ
-         2ye9UihBKAcxVadHsZSgWMI/9nP2qJnhRvGdQGs8SNb4t402yOqoGAesDu9GDOtbJsdo
-         pyuZ/fHg3SPmB+S78lGYQsYfifzf9ANJte0G/YSOvrX0sK9/X+oS1yJIy6Kgf8VLpeYl
-         IxrYQnQR5K2SPnY/Pk+FCQ5WoSgP5EI0nEoY4IiZm7rhwCSuCar3J6nmRqi2kaaWlTOp
-         FGvg==
-X-Gm-Message-State: AOAM5312mHQ/rLCCY7re88dWKtd4thYSpJqZ34UFxQYjAVWUxAieHqXg
-        Bnzg+F9M09RZuKzgA/Lz4EE=
-X-Google-Smtp-Source: ABdhPJyV6IDjIGBD4w5+xbU+nY8K13X4kuRYAXGzcxgebkDj9ZVUAGaG2ngFXqwDFMsNIDyxFR9/Wg==
-X-Received: by 2002:a62:8309:: with SMTP id h9mr2785040pfe.104.1598979532722;
-        Tue, 01 Sep 2020 09:58:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e124sm2663450pfa.87.2020.09.01.09.58.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Sep 2020 09:58:51 -0700 (PDT)
-Subject: Re: [PATCH 4/5] media: uvcvideo: Protect uvc queue file operations
- against disconnect
-To:     kernel test robot <lkp@intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     kbuild-all@lists.01.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
-        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-References: <20200830150443.167286-5-linux@roeck-us.net>
- <202009020050.iNjROTuy%lkp@intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <5b4d6d49-8d11-9026-ffe2-3f18615d1ffc@roeck-us.net>
-Date:   Tue, 1 Sep 2020 09:58:50 -0700
+        id S1732380AbgIARAi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Sep 2020 13:00:38 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:56828 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728992AbgIARAe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 13:00:34 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 081Gsr8o013992;
+        Tue, 1 Sep 2020 17:00:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=aibERFvdWUYyUmBPyrFjkji1LkSFLR29QppeRLSjaDY=;
+ b=H5/MMJ5QuXxZhpwreszvtwwTWXDkuqFToe0zYEtxEGW6D+CgiayRbUQORvvAoKQ7hhdC
+ O2VNA5CkOp6VVHFr85FCmNfR/PJLQRtx3X3f/t8EVsInT2l3oKvVDqsuUDa6gKAoQRzl
+ wtxZpDKhwAWlk8zCY1CPgJiHxCTxb2fGsb+ODuYpNdoXsrZ2JldTpWFToDyvkg8lG3QN
+ +ZboiQURhXPZ+WWRBsmSqXjyM9WOkREjsRrn3i33QdweBmfeM4QM5+9YBt3A/6lmkxT7
+ kVbJxm0kqo6WaUiAqvZwFBAjjdjZQv10E7y1KdTuLXfkK5Ve+pSsxBOc3es7pGSAI5+r FQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 337eeqwqw5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 01 Sep 2020 17:00:30 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 081GxfIH029482;
+        Tue, 1 Sep 2020 17:00:29 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 3380xwsywp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Sep 2020 17:00:29 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 081H0RpH028907;
+        Tue, 1 Sep 2020 17:00:27 GMT
+Received: from [10.154.191.218] (/10.154.191.218)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 01 Sep 2020 10:00:26 -0700
+Subject: Re: [RFC RESEND PATCH 0/1] USB EHCI: repeated resets on full and low
+ speed devices
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, erkka.talvitie@vincit.fi,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1598887346.git.khalid@gonehiking.org>
+ <20200901023117.GD571008@rowland.harvard.edu>
+ <608418fa-b0ce-c2a4-ad79-fe505c842587@oracle.com>
+ <20200901163602.GG587030@rowland.harvard.edu>
+From:   Khalid Aziz <khalid.aziz@oracle.com>
+Organization: Oracle Corp
+X-Pep-Version: 2.0
+Message-ID: <4d1ab90a-ec55-85e8-d646-cfa58f08d449@oracle.com>
+Date:   Tue, 1 Sep 2020 11:00:16 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <202009020050.iNjROTuy%lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252
+In-Reply-To: <20200901163602.GG587030@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009010142
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009010141
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/1/20 9:51 AM, kernel test robot wrote:
-> Hi Guenter,
-> 
-> I love your patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on linuxtv-media/master]
-> [also build test WARNING on v5.9-rc3 next-20200828]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Guenter-Roeck/media-uvcvideo-Fix-race-conditions/20200830-230715
-> base:   git://linuxtv.org/media_tree.git master
-> config: x86_64-randconfig-s031-20200901 (attached as .config)
-> compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
-> reproduce:
->         # apt-get install sparse
->         # sparse version: v0.6.2-191-g10164920-dirty
->         # save the attached .config to linux build tree
->         make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=x86_64 
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> 
-> sparse warnings: (new ones prefixed by >>)
-> 
->>> drivers/media/usb/uvc/uvc_queue.c:402:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __poll_t [usertype] ret @@     got int @@
->>> drivers/media/usb/uvc/uvc_queue.c:402:21: sparse:     expected restricted __poll_t [usertype] ret
->>> drivers/media/usb/uvc/uvc_queue.c:402:21: sparse:     got int
-> 
-> # https://github.com/0day-ci/linux/commit/9128827e77bc077a6fefd3ca886a8466e84f7154
-> git remote add linux-review https://github.com/0day-ci/linux
-> git fetch --no-tags linux-review Guenter-Roeck/media-uvcvideo-Fix-race-conditions/20200830-230715
-> git checkout 9128827e77bc077a6fefd3ca886a8466e84f7154
-> vim +402 drivers/media/usb/uvc/uvc_queue.c
-> 
->    393	
->    394	__poll_t uvc_queue_poll(struct uvc_video_queue *queue, struct file *file,
->    395				    poll_table *wait)
->    396	{
->    397		struct uvc_streaming *stream = uvc_queue_to_stream(queue);
->    398		__poll_t ret;
->    399	
->    400		mutex_lock(&queue->mutex);
->    401		if (!video_is_registered(&stream->vdev)) {
->  > 402			ret = -ENODEV;
+On 9/1/20 10:36 AM, Alan Stern wrote:
+> On Tue, Sep 01, 2020 at 09:15:46AM -0700, Khalid Aziz wrote:
+>> On 8/31/20 8:31 PM, Alan Stern wrote:
+>>> Can you collect a usbmon trace showing an example of this problem?
+>>>
+>>
+>> I have attached usbmon traces for when USB hub with keyboards and mous=
+e
+>> is plugged into USB 2.0 port and when it is plugged into the NEC USB 3=
+=2E0
+>> port.
+>=20
+> The usbmon traces show lots of errors, but no Clear-TT events.  The=20
+> large number of errors suggests that you've got a hardware problem;=20
+> either a bad hub or bad USB connections.
 
-Looks like this has to return EPOLLERR. I'll make that change in v2.
+That is what I thought initially which is why I got additional hubs and
+a USB 2.0 PCI card to test. I am seeing errors across 3 USB controllers,
+4 USB hubs and 4 slow/full speed devices. All of the hubs and slow/full
+devices work with zero errors on my laptop. My keyboard/mouse devices
+and 2 of my USB hubs predate motherboard update and they all worked
+flawlessly before the motherboard upgrade. Some combinations of these
+also works with no errors on my desktop with new motherboard that I had
+listed in my original email:
 
-Guenter
+2. USB 2.0 controller - WORKS
+5. USB 3.0/3.1 controller -> Bus powered USB 2.0 hub - WORKS
 
->    403			goto unlock;
->    404		}
->    405		ret = vb2_poll(&queue->queue, file, wait);
->    406	unlock:
->    407		mutex_unlock(&queue->mutex);
->    408	
->    409		return ret;
->    410	}
->    411	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+I am not seeing a common failure here that would point to any specific
+hardware being bad. Besides, that one code change (which I still can't
+say is the right code change) in ehci-q.c makes USB 2.0 controller work
+reliably with all my devices.
+
+--
+Khalid
 
