@@ -2,221 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F5B258AE6
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 11:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81038258B0A
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 11:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726091AbgIAJBa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Sep 2020 05:01:30 -0400
-Received: from mga17.intel.com ([192.55.52.151]:32159 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725848AbgIAJB3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Sep 2020 05:01:29 -0400
-IronPort-SDR: r6lZqDo1bz8X4wG0HECCJi8zzgFiPSaCAIG6Qk1aApGmZbCWNTrogEquW9Z9CBeimrygah1SlD
- KsRK/cmac9LQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="137178425"
-X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
-   d="scan'208";a="137178425"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 02:01:28 -0700
-IronPort-SDR: U+8yXhSi045XLaF4XSdsfXSSfezh2yEx9pOh+zXC0haTJcL/6792Yxw7Ju/2KqAxWBw4lscknk
- 2Czp54jPh1wQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
-   d="scan'208";a="502172580"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Sep 2020 02:01:26 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 11AE811E; Tue,  1 Sep 2020 12:01:24 +0300 (EEST)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Gil Fine <gil.fine@intel.com>, Lukas Wunner <lukas@wunner.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v2 3/9] thunderbolt: Introduce tb_switch_next_cap()
-Date:   Tue,  1 Sep 2020 12:01:24 +0300
-Message-Id: <20200901090124.31282-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200826110736.55186-4-mika.westerberg@linux.intel.com>
-References: <20200826110736.55186-4-mika.westerberg@linux.intel.com>
+        id S1726625AbgIAJJF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 1 Sep 2020 05:09:05 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:35684 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726528AbgIAJJD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 05:09:03 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-283-TOoGT-t2Oa-s63UZlOFx8A-1; Tue, 01 Sep 2020 10:07:44 +0100
+X-MC-Unique: TOoGT-t2Oa-s63UZlOFx8A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Tue, 1 Sep 2020 10:07:42 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Tue, 1 Sep 2020 10:07:42 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joe Perches' <joe@perches.com>, Denis Efremov <efremov@linux.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Alex Dewar <alex.dewar90@gmail.com>
+CC:     York Sun <york.sun@nxp.com>, Borislav Petkov <bp@alien8.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "James Morse" <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        "Maxim Levitsky" <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Douglas Miller" <dougmill@linux.ibm.com>,
+        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        =?iso-8859-1?Q?Kai_M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mark Brown <broonie@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Pete Zaitcev <zaitcev@redhat.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-i3c@lists.infradead.org" <linux-i3c@lists.infradead.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: sysfs output without newlines
+Thread-Topic: sysfs output without newlines
+Thread-Index: AQHWfkO/+C/EB0p8Hk2MEQnp7JjooqlTgZKw
+Date:   Tue, 1 Sep 2020 09:07:42 +0000
+Message-ID: <5f0b48e0291b4b54bc1caeb8b5715c65@AcuMS.aculab.com>
+References: <0f837bfb394ac632241eaac3e349b2ba806bce09.camel@perches.com>
+         <4cd6275c-6e95-3aeb-9924-141f62e00449@linux.com>
+ <b64a4cb0ee68fee01973616e5ef0f299ac191f6d.camel@perches.com>
+In-Reply-To: <b64a4cb0ee68fee01973616e5ef0f299ac191f6d.camel@perches.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0.001
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is similar to tb_port_next_cap() but instead allows walking
-capability list of a switch (router). Convert tb_switch_find_cap() and
-tb_switch_find_vse_cap() to use this as well.
+From: Joe Perches
+> Sent: 29 August 2020 21:34
+...
+> > On 8/29/20 9:23 PM, Joe Perches wrote:
+> > > While doing an investigation for a possible treewide conversion of
+> > > sysfs output using sprintf/snprintf/scnprintf, I discovered
+> > > several instances of sysfs output without terminating newlines.
+> > >
+> > > It seems likely all of these should have newline terminations
+> > > or have the \n\r termination changed to a single newline.
+> >
+> > I think that it could break badly written scripts in rare cases.
+> 
+> Maybe.
+> 
+> Is sysfs output a nominally unchangeable api like seq_?
+> Dunno.  seq_ output is extended all the time.
+> 
+> I think whitespace isn't generally considered part of
+> sscanf type input content awareness.
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-Hi all,
+The shell will remove trailing '\n' (but not '\r') from:
+	foo=$(cat bar)
+So shell scripts are unlikely to be affected.
 
-Just sending this one as the rest of the series is unchanged. I noticed
-when testing with older devices, the Port Ridge controller (found on Apple
-Thunderbolt ethernet/firewire dongles) does not terminate the router
-capability list correctly so this version checks for the two supported
-capability IDs and terminates the walk if an unknown ID is found.
+	David
 
-Also added Greg's tag.
-
- drivers/thunderbolt/cap.c | 93 ++++++++++++++++++++++++++-------------
- drivers/thunderbolt/tb.h  |  1 +
- 2 files changed, 64 insertions(+), 30 deletions(-)
-
-diff --git a/drivers/thunderbolt/cap.c b/drivers/thunderbolt/cap.c
-index c45b3a488412..6f571e912cf2 100644
---- a/drivers/thunderbolt/cap.c
-+++ b/drivers/thunderbolt/cap.c
-@@ -132,6 +132,50 @@ int tb_port_find_cap(struct tb_port *port, enum tb_port_cap cap)
- 	return ret;
- }
- 
-+/**
-+ * tb_switch_next_cap() - Return next capability in the linked list
-+ * @sw: Switch to find the capability for
-+ * @offset: Previous capability offset (%0 for start)
-+ *
-+ * Finds dword offset of the next capability in router config space
-+ * capability list and returns it. Passing %0 returns the first entry in
-+ * the capability list. If no next capability is found returns %0. In case
-+ * of failure returns negative errno.
-+ */
-+int tb_switch_next_cap(struct tb_switch *sw, unsigned int offset)
-+{
-+	struct tb_cap_any header;
-+	int ret;
-+
-+	if (!offset)
-+		return sw->config.first_cap_offset;
-+
-+	ret = tb_sw_read(sw, &header, TB_CFG_SWITCH, offset, 2);
-+	if (ret)
-+		return ret;
-+
-+	switch (header.basic.cap) {
-+	case TB_SWITCH_CAP_TMU:
-+		ret = header.basic.next;
-+		break;
-+
-+	case TB_SWITCH_CAP_VSE:
-+		if (!header.extended_short.length)
-+			ret = header.extended_long.next;
-+		else
-+			ret = header.extended_short.next;
-+		break;
-+
-+	default:
-+		tb_sw_dbg(sw, "unknown capability %#x at %#x\n",
-+			  header.basic.cap, offset);
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+	return ret >= VSE_CAP_OFFSET_MAX ? 0 : ret;
-+}
-+
- /**
-  * tb_switch_find_cap() - Find switch capability
-  * @sw Switch to find the capability for
-@@ -143,21 +187,23 @@ int tb_port_find_cap(struct tb_port *port, enum tb_port_cap cap)
-  */
- int tb_switch_find_cap(struct tb_switch *sw, enum tb_switch_cap cap)
- {
--	int offset = sw->config.first_cap_offset;
-+	int offset = 0;
- 
--	while (offset > 0 && offset < CAP_OFFSET_MAX) {
-+	do {
- 		struct tb_cap_any header;
- 		int ret;
- 
-+		offset = tb_switch_next_cap(sw, offset);
-+		if (offset < 0)
-+			return offset;
-+
- 		ret = tb_sw_read(sw, &header, TB_CFG_SWITCH, offset, 1);
- 		if (ret)
- 			return ret;
- 
- 		if (header.basic.cap == cap)
- 			return offset;
 -
--		offset = header.basic.next;
--	}
-+	} while (offset);
- 
- 	return -ENOENT;
- }
-@@ -174,37 +220,24 @@ int tb_switch_find_cap(struct tb_switch *sw, enum tb_switch_cap cap)
-  */
- int tb_switch_find_vse_cap(struct tb_switch *sw, enum tb_switch_vse_cap vsec)
- {
--	struct tb_cap_any header;
--	int offset;
--
--	offset = tb_switch_find_cap(sw, TB_SWITCH_CAP_VSE);
--	if (offset < 0)
--		return offset;
-+	int offset = 0;
- 
--	while (offset > 0 && offset < VSE_CAP_OFFSET_MAX) {
-+	do {
-+		struct tb_cap_any header;
- 		int ret;
- 
--		ret = tb_sw_read(sw, &header, TB_CFG_SWITCH, offset, 2);
-+		offset = tb_switch_next_cap(sw, offset);
-+		if (offset < 0)
-+			return offset;
-+
-+		ret = tb_sw_read(sw, &header, TB_CFG_SWITCH, offset, 1);
- 		if (ret)
- 			return ret;
- 
--		/*
--		 * Extended vendor specific capabilities come in two
--		 * flavors: short and long. The latter is used when
--		 * offset is over 0xff.
--		 */
--		if (offset >= CAP_OFFSET_MAX) {
--			if (header.extended_long.vsec_id == vsec)
--				return offset;
--			offset = header.extended_long.next;
--		} else {
--			if (header.extended_short.vsec_id == vsec)
--				return offset;
--			if (!header.extended_short.length)
--				return -ENOENT;
--			offset = header.extended_short.next;
--		}
--	}
-+		if (header.extended_short.cap == TB_SWITCH_CAP_VSE &&
-+		    header.extended_short.vsec_id == vsec)
-+			return offset;
-+	} while (offset);
- 
- 	return -ENOENT;
- }
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 786c313ce97c..cbd18cad9bcd 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -828,6 +828,7 @@ int tb_port_get_link_speed(struct tb_port *port);
- 
- int tb_switch_find_vse_cap(struct tb_switch *sw, enum tb_switch_vse_cap vsec);
- int tb_switch_find_cap(struct tb_switch *sw, enum tb_switch_cap cap);
-+int tb_switch_next_cap(struct tb_switch *sw, unsigned int offset);
- int tb_port_find_cap(struct tb_port *port, enum tb_port_cap cap);
- int tb_port_next_cap(struct tb_port *port, unsigned int offset);
- bool tb_port_is_enabled(struct tb_port *port);
--- 
-2.28.0
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
