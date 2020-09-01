@@ -2,60 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA30258974
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 09:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3CB258991
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 09:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbgIAHmO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Sep 2020 03:42:14 -0400
-Received: from mga05.intel.com ([192.55.52.43]:31884 "EHLO mga05.intel.com"
+        id S1726537AbgIAHsg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Sep 2020 03:48:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35574 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726124AbgIAHmN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Sep 2020 03:42:13 -0400
-IronPort-SDR: k+XUZZmj/KqcRyLShm0rIzJiIZ8GbfHfWrZSxihLULV9ABpFyEh/HTtGh9YPLPTfPC5U280UJg
- BgzODnNaXR4A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="241935374"
-X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
-   d="scan'208";a="241935374"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 00:42:12 -0700
-IronPort-SDR: mHPQrUsBA6ymKH/ksIDCAlbzt7yq2GLyxqN0vwTXLdi7iG0n7iE9MaFnK/ZN8Sy8eCYYUEoyNM
- 7UGtkZ1wzjUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
-   d="scan'208";a="404695670"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 01 Sep 2020 00:42:10 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 01 Sep 2020 10:42:09 +0300
-Date:   Tue, 1 Sep 2020 10:42:09 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "tiantao (H)" <tiantao6@hisilicon.com>
-Cc:     "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-        "michael.jamet@intel.com" <michael.jamet@intel.com>,
-        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>
-Subject: Re: =?utf-8?B?562U5aSNOiBbUEFUQ0g=?= =?utf-8?Q?=5D?= thunderbolt:
- Use kobj_to_dev() instead of container_of()
-Message-ID: <20200901074209.GT1375436@lahna.fi.intel.com>
-References: <1598922090-39482-1-git-send-email-tiantao6@hisilicon.com>
- <20200901070847.GR1375436@lahna.fi.intel.com>
- <b7567a2dc486435c9e34e5f027d3664f@hisilicon.com>
+        id S1726078AbgIAHsg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Sep 2020 03:48:36 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6D9F32068E;
+        Tue,  1 Sep 2020 07:48:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598946516;
+        bh=S+cnDQDUBEE6f1rAocaColK88rzxrNkJdb72+E1S8Y8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OcVjY2UFvO4yP8KTI0KlcYn+gKm2PmUHI1iksgPLeiAtJQuZp0K16jAupVKaNmVKC
+         9uKzCWOOeMHYlN/nN4eeLw+3+nVowvuu+LL0VEoj/lx+WqOu87BUZ7fdB30aZDPwXT
+         /ynFEPXVpt6hpNiS+ekjn+/GGgmY6rV8A90CI4fM=
+Date:   Tue, 1 Sep 2020 09:49:04 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] Thunderbolt/USB4 fixes for v5.9-rc4
+Message-ID: <20200901074904.GA110073@kroah.com>
+References: <20200901073706.GS1375436@lahna.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b7567a2dc486435c9e34e5f027d3664f@hisilicon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200901073706.GS1375436@lahna.fi.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 07:37:48AM +0000, tiantao (H) wrote:
-> Hi:
+On Tue, Sep 01, 2020 at 10:37:06AM +0300, Mika Westerberg wrote:
+> Hi Greg,
 > 
-> Doesn't really matter for an individual driver, but it may get coppied to lots more. 
-> I consider it's a little tidy up.
+> The following changes since commit d012a7190fc1fd72ed48911e77ca97ba4521bccd:
+> 
+>   Linux 5.9-rc2 (2020-08-23 14:08:43 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.9-rc4
 
-That's fine but please write it down in the commit message as well :)
+Pulled and pushed out, thanks!
+
+greg k-h
