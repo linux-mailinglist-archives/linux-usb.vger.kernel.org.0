@@ -2,127 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81038258B0A
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 11:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D24C258B1D
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 11:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726625AbgIAJJF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 1 Sep 2020 05:09:05 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:35684 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726528AbgIAJJD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Sep 2020 05:09:03 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-283-TOoGT-t2Oa-s63UZlOFx8A-1; Tue, 01 Sep 2020 10:07:44 +0100
-X-MC-Unique: TOoGT-t2Oa-s63UZlOFx8A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 1 Sep 2020 10:07:42 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 1 Sep 2020 10:07:42 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Joe Perches' <joe@perches.com>, Denis Efremov <efremov@linux.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Alex Dewar <alex.dewar90@gmail.com>
-CC:     York Sun <york.sun@nxp.com>, Borislav Petkov <bp@alien8.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "James Morse" <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        "Maxim Levitsky" <maximlevitsky@gmail.com>,
-        Alex Dubov <oakad@yahoo.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Douglas Miller" <dougmill@linux.ibm.com>,
-        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        =?iso-8859-1?Q?Kai_M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mark Brown <broonie@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Pete Zaitcev <zaitcev@redhat.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-i3c@lists.infradead.org" <linux-i3c@lists.infradead.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: sysfs output without newlines
-Thread-Topic: sysfs output without newlines
-Thread-Index: AQHWfkO/+C/EB0p8Hk2MEQnp7JjooqlTgZKw
-Date:   Tue, 1 Sep 2020 09:07:42 +0000
-Message-ID: <5f0b48e0291b4b54bc1caeb8b5715c65@AcuMS.aculab.com>
-References: <0f837bfb394ac632241eaac3e349b2ba806bce09.camel@perches.com>
-         <4cd6275c-6e95-3aeb-9924-141f62e00449@linux.com>
- <b64a4cb0ee68fee01973616e5ef0f299ac191f6d.camel@perches.com>
-In-Reply-To: <b64a4cb0ee68fee01973616e5ef0f299ac191f6d.camel@perches.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1726102AbgIAJL3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Sep 2020 05:11:29 -0400
+Received: from mga01.intel.com ([192.55.52.88]:42833 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726050AbgIAJL3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Sep 2020 05:11:29 -0400
+IronPort-SDR: IR8dbpKO0LyJBXko6xgNgEoppcRr+dnYjShmhXwUqus8FhV8DXaM90uxNDREh05x9lO4mh67LB
+ qi/OTMh3lsOg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="175178541"
+X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
+   d="scan'208";a="175178541"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 02:11:26 -0700
+IronPort-SDR: brv74DfoS/Yv7vJCvhvujqyZxbv+OKNaRmrknP3Q6RINCjGmMZWFEgy98laanvkh79NDmBjZtA
+ ERf/JqM0A/9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
+   d="scan'208";a="404717583"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 01 Sep 2020 02:11:23 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 01 Sep 2020 12:11:23 +0300
+Date:   Tue, 1 Sep 2020 12:11:23 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Tian Tao <tiantao6@hisilicon.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linuxarm@huawei.com
+Subject: Re: [PATCH v2] thunderbolt: Use kobj_to_dev() instead of
+ container_of()
+Message-ID: <20200901091123.GV1375436@lahna.fi.intel.com>
+References: <1598948837-740-1-git-send-email-tiantao6@hisilicon.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1598948837-740-1-git-send-email-tiantao6@hisilicon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Joe Perches
-> Sent: 29 August 2020 21:34
-...
-> > On 8/29/20 9:23 PM, Joe Perches wrote:
-> > > While doing an investigation for a possible treewide conversion of
-> > > sysfs output using sprintf/snprintf/scnprintf, I discovered
-> > > several instances of sysfs output without terminating newlines.
-> > >
-> > > It seems likely all of these should have newline terminations
-> > > or have the \n\r termination changed to a single newline.
-> >
-> > I think that it could break badly written scripts in rare cases.
+On Tue, Sep 01, 2020 at 04:27:17PM +0800, Tian Tao wrote:
+> Doesn't really matter for an individual driver, but it may
+> get coppied to lots more. I consider it's a little tidy up.
 > 
-> Maybe.
-> 
-> Is sysfs output a nominally unchangeable api like seq_?
-> Dunno.  seq_ output is extended all the time.
-> 
-> I think whitespace isn't generally considered part of
-> sscanf type input content awareness.
+> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 
-The shell will remove trailing '\n' (but not '\r') from:
-	foo=$(cat bar)
-So shell scripts are unlikely to be affected.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Applied, thanks!
