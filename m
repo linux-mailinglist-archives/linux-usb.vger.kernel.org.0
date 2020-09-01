@@ -2,162 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 124332585E8
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 05:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0972925867C
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 05:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727906AbgIADAX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 23:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
+        id S1726102AbgIADt3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 23:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727099AbgIAC7u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 22:59:50 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7929CC06123A
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:50 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id o21so1914202pfd.14
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:50 -0700 (PDT)
+        with ESMTP id S1725987AbgIADt3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 23:49:29 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0933C0612FE
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 20:49:27 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id w14so48841eds.0
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 20:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=ywomHyBbrkh1CUGUn9oIS/1bKG05YgBtSywxfZ4E0FU=;
-        b=NGF/ymveLM/4A4XA7qnfcFeufdfbdnU2PGxDYCFrQnFvUePWGMC4t6nZbpEoC7BKMq
-         e67VyMZKd9+g8355Ql0ZkZGVYpy9xm4WCItPFujlPgBROfaX6yJ9Xgy2gXmWr51X8zrT
-         ZTOAVq4sOdFGCUJkgFbwGFw03RKY/V6KzJ9fjrm3SZ8526Kt2FJXpWSzaunuTXX823Eg
-         PzoxgqRcyMbl6neNPzTcxInNlLFTos6DG/3T5WGJn641agMM6QHjiK6M1L6NjvwrcypE
-         cOl/rLTtrBvAqDZv2LTnb8APc/9rJj5mmXuLwcGdV7PpWPHcE2bgsx7p5pJEB/Juek0P
-         bplw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yGnO401VJHee8tld9vBJFCvzyhmUXUCdoPGxNKVZlA4=;
+        b=URABT8PmD9jvxsM4ZfwAqvdM4QNTeAHUaLoIcr4DTRGeIqIi72VctfX4RMUdAPy5ve
+         WvIEZFwG7h5O+slzi4TrjmK+YIF6VKiIN+6fKim44q2w46UAVqjt1o49ce9hapP0CgVs
+         4Z3YP43OxmInVJtVN/O7XTivWEh6Fa8KiQtATEJ8tw6JWtu5Nia5iWHKAf42lxAV7nnq
+         8O4ApbdipmnulbF4NDi1DeV+Bm15+n4spy8A+We6koCLspYEJ84+6jwNdZb8/gsjyYcS
+         iTOCU900vDhNmUTbEFvupBpJaUONpKpadUXY4322lgkGsb3XA6pP5NHpnAdjdxvblqnv
+         to9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=ywomHyBbrkh1CUGUn9oIS/1bKG05YgBtSywxfZ4E0FU=;
-        b=hE7WFO7AlWTr67TV8826vBbk+TYb6oed8A4hDUCoRikYTxzQW1KPnHJTfyWvc2JsJU
-         9vKPCDu/frsDUIOKEYRZbIulTmm7yNmGOIRt2tMnxRTuvWf/tSPi5s4TOrC1aL0vceAB
-         98ZH+ATG3bzvX0LuF3MX9D+OLFa1aUOUtSOP+PwbmG31es5oYr3EiNo/TGUFl9LMEHQI
-         8B1mk53kveJITGKUkVKkt5UZ+E2vfTHO41U1N3MTo5n1zVRBt7vNJ5mzG6N+6pbOYdmc
-         y6k/Hmvg2PvIKt4IpPPBkH6SWfjFdrzLrCAytR/M+t9DOfIgy/KUocNnD+oFI4zjsuZz
-         5U3A==
-X-Gm-Message-State: AOAM530/HzmoW7YCvD6XLcpqBizmIZ4gmG01spRHhIWbMxHZJgG9nAZb
-        jVQ8Ju8IeMa0wS9GwM/I3SfMyKCDIiE=
-X-Google-Smtp-Source: ABdhPJw5hvDf0Qoiz6yGzcMpcMw9AoxMsh74++ApyWLXQUGEk6RjEjMayv9xhXlZKjXazxsiNMdxSSFltGE=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:1:f292:1cff:fee0:66cf])
- (user=badhri job=sendgmr) by 2002:a17:90b:4ad1:: with SMTP id
- mh17mr2290334pjb.54.1598929190046; Mon, 31 Aug 2020 19:59:50 -0700 (PDT)
-Date:   Mon, 31 Aug 2020 19:59:23 -0700
-In-Reply-To: <20200901025927.3596190-1-badhri@google.com>
-Message-Id: <20200901025927.3596190-11-badhri@google.com>
-Mime-Version: 1.0
-References: <20200901025927.3596190-1-badhri@google.com>
-X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
-Subject: [PATCH v6 10/14] usb: typec: tcpci: Implement callbacks for FRS
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yGnO401VJHee8tld9vBJFCvzyhmUXUCdoPGxNKVZlA4=;
+        b=S+ZuNJMrddJISFtlaEIPrWxTXTPvOKlxe/U8eWXnXcCKHUbr9P0dB5bUVaO7/VjlGb
+         GECDu3wSmLWRKsaajFMMy0Pdt2KKcj/rBZBQqkXfUp4pmFL5QSe/7N0/qLIbGUQBamxe
+         bljcK99noVV3EuPoaORgVhNPLCf5yxGcXU30Gx8WjoprJrgyKKvuX6kVB+nn4DvKw6Kv
+         E5Hdw1a1k9eKNU2dj2kraTIk1Ejl7lvZ5Kg1StoD65juokWqDJM3Pg6zsqT9Y0tm7YMQ
+         uwHKEGfwohPrQ6W8ZAkIcTaUgEHjHWE2MBmE3C6Gjjv/KqHvSFOx9o3StNlgt9egC8/y
+         XGMg==
+X-Gm-Message-State: AOAM530ScJ94jNu0q02OlHyld69DdkbWSfjlBhGO60kuHtjA3SwaukES
+        4N4AmsZHXC4M2J03E5WGx6wqP/PJyXDfDRF/8Gw=
+X-Google-Smtp-Source: ABdhPJyH+71h/9rE7aXIeKdqQjPLJfuEVqfB5evxT76m7wpyOWLlZNHYH/bwHg73hrimJ43B1I81hJub5i60qOXuZdQ=
+X-Received: by 2002:aa7:d458:: with SMTP id q24mr55999edr.23.1598932166175;
+ Mon, 31 Aug 2020 20:49:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAGnHSEnKNZFyjF6E+QCLESzuOX-Fz-4ejuhmZNnGRaN8GQbM7g@mail.gmail.com>
+ <20200901020757.GC571008@rowland.harvard.edu>
+In-Reply-To: <20200901020757.GC571008@rowland.harvard.edu>
+From:   Tom Yan <tom.ty89@gmail.com>
+Date:   Tue, 1 Sep 2020 11:49:15 +0800
+Message-ID: <CAGnHSEkweSB6N5=mRtWWD_rtY+m=VuVx=NY-yzNKYWmF5+1MJQ@mail.gmail.com>
+Subject: Re: About clamping max_sectors to (ambiguous) dma_max_mapping_size
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
+        cyrozap@gmail.com, gregkh@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Implement tcpc.enable_frs to enable TCPC to receive
-Fast role swap signal.
+On Tue, 1 Sep 2020 at 10:07, Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Tue, Sep 01, 2020 at 08:55:07AM +0800, Tom Yan wrote:
+> > Hi,
+> >
+> > So a recent commit that disable 64 bit dma addressing for ASM1142:
+> > https://github.com/torvalds/linux/commit/ec37198acca7b4c17b96247697406e47aafe0605
+> >
+> > I notice that it also causes (hw) max_sectors of uas drives connected
+> > to the controller to drop from 1024 blocks (SCSI_DEFAULT_MAX_SECTORS)
+> > to 512 blocks, because we clamp it against
+> > dma_max_mapping_size($some_device).
+> >
+> > For uas drives, $some_device is `sdev->host->dma_dev`:
+> > https://github.com/torvalds/linux/blob/v5.8/drivers/scsi/scsi_lib.c#L1778
+> > (`shost` is `sdev->host`:
+> > https://github.com/torvalds/linux/blob/v5.8/drivers/scsi/scsi_lib.c#L1873)
+> >
+> > But for bot/msc drives: $some_device is some other device:
+> > https://github.com/torvalds/linux/blob/v5.8/drivers/usb/storage/scsiglue.c#L92
+> >
+> > In that case, max_sectors remains to be 2048 blocks for SS BOT drives
+> > connected to the ASM1142 controller.
+> >
+> > I tried to change it to `sdev->host->dma_dev`. It lowered their
+> > max_sectors to 512 blocks.
+> >
+> > So my questions are:
+> > 1. Do we really need to do any clamping to max_sectors in either (uas/bot) case?
+> > 2. If so, should we change the $some_device in either case?
+> >
+> > For the record, in the original commit (for BOT drives):
+> > https://github.com/torvalds/linux/commit/d74ffae8b8dd17eaa8b82fc163e6aa2076dc8fb1
+> > The commit message states that the clamping is needed because of some
+> > other change, which is supposed to cause max_segment_size to raise
+> > from 0x10000 to 0xffffffff, but when I check the sysfs files for both
+> > kinds of drives, all of the values are 0x10000.
+> >
+> > Also see https://github.com/virtio-win/kvm-guest-drivers-windows/issues/498
+>
+> You should take a look at Arnd Bergmann's commit a8c06e407ef9 ("usb:
+> separate out sysdev pointer from usb_bus"), which is what introduced
+> this difference originally.
+>
+> As far as I know, both drivers (usb-storage and uas) should be using the
+> bus->sysdev device for the purpose of clamping max_sectors.  If uas
+> doesn't use that device then it should be fixed.
 
-Additionally set the sink disconnect threshold to 4v
-to prevent disconnect during Fast Role swap.
+The uas driver relies on the scsi driver
+(https://github.com/torvalds/linux/blob/v5.8/drivers/scsi/scsi_lib.c#L1796)
+for max_sector setting and clamping (except when US_FL_MAX_SECTORS_64
+or US_FL_MAX_SECTORS_240 is set, where the clamping will be
+overridden):
+https://github.com/torvalds/linux/blob/v5.8/drivers/usb/storage/uas.c#L816
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
-Changes since v1:
-- Changing patch version to v6 to fix version number confusion.
----
- drivers/usb/typec/tcpm/tcpci.c | 17 +++++++++++++++++
- drivers/usb/typec/tcpm/tcpci.h |  8 ++++++++
- 2 files changed, 25 insertions(+)
+They (uas and scsiglue/bot) call `blk_queue_max_hw_sectors` in
+different functions btw (`uas_slave_alloc` vs `slave_configure`,
+instead of `slave_alloc`, that is). I suppose we should do all the
+clamping and setting in `uas_slave_configure` instead as well?
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index d6a6fac82d48..f9f0af64da5f 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -268,6 +268,22 @@ static int tcpci_set_vconn(struct tcpc_dev *tcpc, bool enable)
- 				enable ? TCPC_POWER_CTRL_VCONN_ENABLE : 0);
- }
- 
-+static int tcpci_enable_frs(struct tcpc_dev *dev, bool enable)
-+{
-+	struct tcpci *tcpci = tcpc_to_tcpci(dev);
-+	int ret;
-+
-+	/* To prevent disconnect during FRS, set disconnect threshold to 3.5V */
-+	ret = tcpci_write16(tcpci, TCPC_VBUS_SINK_DISCONNECT_THRESH, enable ? 0 : 0x8c);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_update_bits(tcpci->regmap, TCPC_POWER_CTRL, TCPC_FAST_ROLE_SWAP_EN, enable ?
-+				 TCPC_FAST_ROLE_SWAP_EN : 0);
-+
-+	return ret;
-+}
-+
- static int tcpci_set_bist_data(struct tcpc_dev *tcpc, bool enable)
- {
- 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-@@ -611,6 +627,7 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
- 	tcpci->tcpc.set_roles = tcpci_set_roles;
- 	tcpci->tcpc.pd_transmit = tcpci_pd_transmit;
- 	tcpci->tcpc.set_bist_data = tcpci_set_bist_data;
-+	tcpci->tcpc.enable_frs = tcpci_enable_frs;
- 
- 	err = tcpci_parse_config(tcpci);
- 	if (err < 0)
-diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-index 82f021a82456..5ef07a56d67a 100644
---- a/drivers/usb/typec/tcpm/tcpci.h
-+++ b/drivers/usb/typec/tcpm/tcpci.h
-@@ -16,6 +16,7 @@
- #define TCPC_PD_INT_REV			0xa
- 
- #define TCPC_ALERT			0x10
-+#define TCPC_ALERT_EXTND		BIT(14)
- #define TCPC_ALERT_EXTENDED_STATUS	BIT(13)
- #define TCPC_ALERT_VBUS_DISCNCT		BIT(11)
- #define TCPC_ALERT_RX_BUF_OVF		BIT(10)
-@@ -37,6 +38,9 @@
- #define TCPC_EXTENDED_STATUS_MASK		0x16
- #define TCPC_EXTENDED_STATUS_MASK_VSAFE0V	BIT(0)
- 
-+#define TCPC_ALERT_EXTENDED_MASK	0x17
-+#define TCPC_SINK_FAST_ROLE_SWAP	BIT(0)
-+
- #define TCPC_CONFIG_STD_OUTPUT		0x18
- 
- #define TCPC_TCPC_CTRL			0x19
-@@ -63,6 +67,7 @@
- 
- #define TCPC_POWER_CTRL			0x1c
- #define TCPC_POWER_CTRL_VCONN_ENABLE	BIT(0)
-+#define TCPC_FAST_ROLE_SWAP_EN		BIT(7)
- 
- #define TCPC_CC_STATUS			0x1d
- #define TCPC_CC_STATUS_TOGGLING		BIT(5)
-@@ -74,11 +79,14 @@
- 
- #define TCPC_POWER_STATUS		0x1e
- #define TCPC_POWER_STATUS_UNINIT	BIT(6)
-+#define TCPC_POWER_STATUS_SOURCING_VBUS	BIT(4)
- #define TCPC_POWER_STATUS_VBUS_DET	BIT(3)
- #define TCPC_POWER_STATUS_VBUS_PRES	BIT(2)
- 
- #define TCPC_FAULT_STATUS		0x1f
- 
-+#define TCPC_ALERT_EXTENDED		0x21
-+
- #define TCPC_COMMAND			0x23
- #define TCPC_CMD_WAKE_I2C		0x11
- #define TCPC_CMD_DISABLE_VBUS_DETECT	0x22
--- 
-2.28.0.402.g5ffc5be6b7-goog
+I faintly remember I asked about it but allow me to ask again, should
+we really NOT raise max_sectors to 2048 blocks for **SS UAS** drives
+like we do for SS BOT drives?
 
+>
+> And yes, the clamping is necessary.
+
+As I mentioned, if the clamping is done against the max mapping size
+of `bus->sysdev`, max_sectors will not be actually lowered in both
+cases (XHCI_NO_64BIT_SUPPORT or not). So basically it does nothing, at
+least on my devices. Allow me to confirm, is that a correct/expected
+behaviour?
+
+>
+> Alan Stern
