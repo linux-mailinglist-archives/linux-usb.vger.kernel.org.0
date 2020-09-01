@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7AD2585D5
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 04:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B4C2585D9
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Sep 2020 05:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726800AbgIAC7g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Aug 2020 22:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
+        id S1727049AbgIAC7p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Aug 2020 22:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgIAC7d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 22:59:33 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADD2C061366
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:33 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id j20so7200016ybt.10
-        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:33 -0700 (PDT)
+        with ESMTP id S1726770AbgIAC7l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Aug 2020 22:59:41 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2EFC06137B
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:41 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id mu14so826797pjb.7
+        for <linux-usb@vger.kernel.org>; Mon, 31 Aug 2020 19:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=dksXFr9Ur1TVJsysY1A4OAwfD74oXm7s3UI7cm7URy4=;
-        b=kIHSNnYnG66S7jMff+LOcYcMvMQo+iGzdYvIhL6i+UtYsZAiTuOGfuWICNTU887ViC
-         45p+/jDfQSPZb7UJoWua2fjUlhM4icRm1gLiqYXvAAfQjDGJQx3ahpqdCgheqV9n263m
-         as0GS97ZdpVU1szBZAbKwnzVnk1xNBrpCrw7dI9HQbKGl+ICZlMD7Ze19xFuoaGvvkLC
-         pL/msZU05p2nn7nB94zz+l3t1rc5QtqY/cdcnUaL3IUCYAtE7Ni/+EeXFQSY8j6N0r2K
-         gnwKyC6Vk4Qrg3p+m1mfasTN1uOg4ssIO3MLpnodPfa9PJNkdHRarKa3kRP0FnT1SBaa
-         1hHw==
+        bh=Yh60bZiNGZOc6tQmxndGlvfAxn8JuzncJI3aBSV8EoY=;
+        b=E/9+iKxP4Os7jwiIYc3rotS8dGcNiNtYwvKk+8ZDeBMp1d8/CH4ofA0oj+UZ3XCpPz
+         cfG0DNZEAaOMlRwzmh3cEixzcpJr8ft7sOdRVchESWS7Pn5ZIEX/aZUgcI8jZByjJBWR
+         bOZ5CvWvG3Qr+WQBqglexl2FnjtwFsGi6i8wwURyU71HQ19QkiGCB1eePYUzXd7u4umn
+         E7ud3CDzios8WHEHHnvbnbfLM2L1TXJ4h24eTD8kffHPgnvd3Dfcfv+dotCETio+RNHk
+         Tdz6a1KJf5zUVEfC7uDHgTxnMaLDY3jLpbHgFgwrED6qx0A7tZr6qGalEABmVTZc3UWD
+         o8mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=dksXFr9Ur1TVJsysY1A4OAwfD74oXm7s3UI7cm7URy4=;
-        b=gSeS6ym+m5+Iih0M7/KZcgLoA/gOO5JaBnRVaJ3aJW6AW0RP5SAtGYiAwjq3JJnoV9
-         sooCDS/yeO/+37yQSjdTVAl0u9R+7N/uQA5A+RIN7AZftEJOIgmeBH4okt7dKp0ZNrFE
-         +qLQR9uj7FiOHr0V+U7Af5qXZh59UVoO8PZ5D9m+8kZ0zLi3ae7gVOTeN8g2kUYI5cA0
-         qmV7xaH2krbwKX3n6XnfZkTktTRAYdrXVjuINjHEOKwc7PGSTqhd2jcPetFp0AcG7SCL
-         mSYUdb4sBRUbQ/yaxusIc/buWc47KcSPsymZie90+6A7o/5bWsAJYMd1XYWd+QhfivfY
-         EGzw==
-X-Gm-Message-State: AOAM533RiWbw1AvDHKMUUv3WkjWHCWVmgfmUNbCFB8GNoWWknpRLta39
-        aYHpJXFeS0++3YHCOPgQb3ewYsNgNWo=
-X-Google-Smtp-Source: ABdhPJxrvhmQhutKuwiS6k9sj9dul9RFWDWzE7UrPiOFulPP3gPZbwF55a7TwdGxVmuQlzvakaUCphwjR9A=
+        bh=Yh60bZiNGZOc6tQmxndGlvfAxn8JuzncJI3aBSV8EoY=;
+        b=pLeR449XnOG5otJ6mBN2Tdj/7NU7p356kgeqpQDJdwhGHMATtHKBpIpVa+rfS4Cw9S
+         yKG2KmqX6448dmM9LoOzQHVEJUxJxovN1IJMB48C56v56teahCVNZOkG5Q6ZkxbCJq3p
+         VhxITA+aZFuwbFXt8vKysQLT7uWj++pPEl0QKf9lUYNvl9ntNLGfd5zJc4VMW7wZS+E2
+         EYFgu9clRQs2762hDLiKcZhBRghusigrWrReI53TCm2eWy/SH4zRMQdHervYyxMQREAv
+         jNd2aaMxTsbU/J5NT1RxcEgPpg2CPNeVgpns9sp6r8rdho/FIeQxxKOTTb38Av2sfr7C
+         zXug==
+X-Gm-Message-State: AOAM530Yd9aQNYX0cPSwhejgn0lFSDFFq1JiYR3a0TFvcHNug73d4bOu
+        aHVtMt7iwmM+woMhgL7Css1MtlK5I44=
+X-Google-Smtp-Source: ABdhPJx2p8nBPH0VHIF0A2JGccic6C05ANWW5kVbeqZiWcdXnz3TnvAIjroB4b0QcEePrRgfD0JuzZYrUKI=
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:1:f292:1cff:fee0:66cf])
- (user=badhri job=sendgmr) by 2002:a25:c74a:: with SMTP id w71mr150863ybe.191.1598929172798;
- Mon, 31 Aug 2020 19:59:32 -0700 (PDT)
-Date:   Mon, 31 Aug 2020 19:59:14 -0700
+ (user=badhri job=sendgmr) by 2002:a17:90a:fb91:: with SMTP id
+ cp17mr2215983pjb.141.1598929180360; Mon, 31 Aug 2020 19:59:40 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 19:59:18 -0700
 In-Reply-To: <20200901025927.3596190-1-badhri@google.com>
-Message-Id: <20200901025927.3596190-2-badhri@google.com>
+Message-Id: <20200901025927.3596190-6-badhri@google.com>
 Mime-Version: 1.0
 References: <20200901025927.3596190-1-badhri@google.com>
 X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
-Subject: [PATCH v6 01/14] usb: typec: tcpci: Add register definitions to tcpci
+Subject: [PATCH v6 05/14] usb: typec: tcpci: Add set_vbus tcpci callback
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -63,39 +63,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add register definitions to trap extended alerts.
+set_vbus callback allows TCPC which are TCPCI based, however,
+does not support turning on sink and source mode through
+Command.SinkVbus and Command.SourceVbusDefaultVoltage.
 
 Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
-Change history:
-- No code changes. Update version from v1 to v6 to avoid confusion
+Changes since v1:
+- Changing patch version to v6 to fix version number confusion.
 ---
- drivers/usb/typec/tcpm/tcpci.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/usb/typec/tcpm/tcpci.c | 7 +++++++
+ drivers/usb/typec/tcpm/tcpci.h | 1 +
+ 2 files changed, 8 insertions(+)
 
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index b960fe5a0f28..d6a6fac82d48 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -328,6 +328,13 @@ static int tcpci_set_vbus(struct tcpc_dev *tcpc, bool source, bool sink)
+ 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
+ 	int ret;
+ 
++	if (tcpci->data->set_vbus) {
++		ret = tcpci->data->set_vbus(tcpci, tcpci->data, source, sink);
++		/* Bypass when ret > 0 */
++		if (ret != 0)
++			return ret < 0 ? ret : 0;
++	}
++
+ 	/* Disable both source and sink first before enabling anything */
+ 
+ 	if (!source) {
 diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-index 11c36d086c86..fd26ca35814c 100644
+index 04c49a0b0368..4d441bdf24d5 100644
 --- a/drivers/usb/typec/tcpm/tcpci.h
 +++ b/drivers/usb/typec/tcpm/tcpci.h
-@@ -16,6 +16,7 @@
- #define TCPC_PD_INT_REV			0xa
+@@ -144,6 +144,7 @@ struct tcpci_data {
+ 			 bool enable);
+ 	int (*start_drp_toggling)(struct tcpci *tcpci, struct tcpci_data *data,
+ 				  enum typec_cc_status cc);
++	int (*set_vbus)(struct tcpci *tcpci, struct tcpci_data *data, bool source, bool sink);
+ };
  
- #define TCPC_ALERT			0x10
-+#define TCPC_ALERT_EXTENDED_STATUS	BIT(13)
- #define TCPC_ALERT_VBUS_DISCNCT		BIT(11)
- #define TCPC_ALERT_RX_BUF_OVF		BIT(10)
- #define TCPC_ALERT_FAULT		BIT(9)
-@@ -32,6 +33,10 @@
- #define TCPC_ALERT_MASK			0x12
- #define TCPC_POWER_STATUS_MASK		0x14
- #define TCPC_FAULT_STATUS_MASK		0x15
-+
-+#define TCPC_EXTENDED_STATUS_MASK		0x16
-+#define TCPC_EXTENDED_STATUS_MASK_VSAFE0V	BIT(0)
-+
- #define TCPC_CONFIG_STD_OUTPUT		0x18
- 
- #define TCPC_TCPC_CTRL			0x19
+ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
 -- 
 2.28.0.402.g5ffc5be6b7-goog
 
