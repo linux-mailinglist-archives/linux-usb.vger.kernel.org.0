@@ -2,103 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B24225AF48
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 17:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5013C25AFD5
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 17:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728386AbgIBPfz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 11:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728312AbgIBPfr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 11:35:47 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDEDC061244;
-        Wed,  2 Sep 2020 08:35:45 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id k15so3033008pfc.12;
-        Wed, 02 Sep 2020 08:35:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=HEqwK4t3Jbhbn9WZdb3oUG7FILqb8kl/CCgidI15uDY=;
-        b=kHDTXriPodcCimTodp4iPeVr/AekjfXT50p2ukyjZp6e16RJa0u708YWek45zszv3C
-         Fp/vea5VhkArLmNoriItDE91gvIqPHZqGRqPoqHdCstr8iMz+E4qo/0PmUCarHxcTZNk
-         D3fUssP5yY2hYcM3XuyVinhVsdzjSf2puMyTiHDZFxyHRbDEveX0UqmxAA9xsBU/I0W9
-         OTNVmSrDeEy26aw3cdSrEfzEsR8QuM4li2SKqNmzDgMqvBwdoN6n45bZlV8kADcH7Nai
-         NVI4/vnFlm8Kwwl0g/Rl28VIKAF5XpuVcG70+0X5LKFhMqsakOHeOL6TUHBms+IqOKgh
-         akTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=HEqwK4t3Jbhbn9WZdb3oUG7FILqb8kl/CCgidI15uDY=;
-        b=LMRGay1Jo0UkPqbCq0Ekes8MZGMy1S9hsyFf9OaBCn9on3BTJd9LB3O676BW/Y8LlU
-         Pt1iIOL4PqAexliK166L5DZZ/BhOfcku9jZBPZopsiHHwfqVSNhpG7NF3aIAxid2l0lx
-         wVWDkKEVvTxXZIBwf/wht1FJQIAWEHdX36SB8nr6GR3zwcfcv5gP4FujF9F0/X6jCXVK
-         RamFzXXX4Hloxm1d42vY9QYoWgz7sy3ZaX06bi8fz4OHUExBIHKKTCd/QOfbc8VR25eK
-         lN+m7OJ6Er0jbwaU7Xl8oGaGdWpy1GPJ3V3lz2xYjZSg37CWdqpRoBVRJk+AQFU3+Dhi
-         2OYQ==
-X-Gm-Message-State: AOAM533Xlovo6igmRtMbwlBamcDQ3m7Bql+JTxxQm0l5G7o6oHBF4WVF
-        ca27zG9GXhbdWAbujgDCz+Y=
-X-Google-Smtp-Source: ABdhPJxHJXPfvXBk6OiHcYKsndf2R7W1LPm3hgGc5pDEcgNbal5oYmhxvi2HRzhZgeA3KaOaKDJWiw==
-X-Received: by 2002:a63:f804:: with SMTP id n4mr2278378pgh.155.1599060944940;
-        Wed, 02 Sep 2020 08:35:44 -0700 (PDT)
-Received: from localhost.localdomain ([123.241.84.106])
-        by smtp.gmail.com with ESMTPSA id m3sm4835402pjn.28.2020.09.02.08.35.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Sep 2020 08:35:43 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cy_huang@richtek.com
-Subject: [PATCH] usb: typec: tcpm: Fix if vbus before cc, hard_reset_count not reset issue
-Date:   Wed,  2 Sep 2020 23:35:33 +0800
-Message-Id: <1599060933-8092-1-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S1727807AbgIBPqJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 11:46:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37724 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728424AbgIBPox (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Sep 2020 11:44:53 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 243A1208B3;
+        Wed,  2 Sep 2020 15:44:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599061492;
+        bh=4zFgxSZn/t8hg2/snLmMsHpw94gIm/JjZHKbxYo1VF0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P+n3HpWt74btTt+hU7xVFhdZQHWFCswrdnM6FP2RQJltIg4a3BYu1nvKfa7VgEc0M
+         mM505S5A1oYUpgWNYZv1jv97eNm+zHbwA7xWW5qffJr2mkCCVVcctRvHZ3FBm97wA5
+         4cLjfy6w1uQx5PEPIoW0hFxBMTi1US44xoVXiNnY=
+Date:   Wed, 2 Sep 2020 17:45:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Santiago Ruano =?iso-8859-1?Q?Rinc=F3n?= 
+        <santiago.ruano-rincon@imt-atlantique.fr>
+Cc:     linux-usb@vger.kernel.org, Oliver Neukum <oneukum@suse.de>,
+        miguel@det.uvigo.es, 965074@bugs.debian.org
+Subject: Re: Patches to make multicast proccesing on CDC NCM drivers
+Message-ID: <20200902154517.GB2037986@kroah.com>
+References: <20200730135334.GN1496479@bartik>
+ <1596118042.2508.6.camel@suse.de>
+ <20200902114718.GB242939@bartik>
+ <20200902120546.GA2008696@kroah.com>
+ <20200902132728.GC242939@bartik>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200902132728.GC242939@bartik>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On Wed, Sep 02, 2020 at 03:27:28PM +0200, Santiago Ruano Rincón wrote:
+> El 02/09/20 a las 14:05, Greg KH escribió:
+> > On Wed, Sep 02, 2020 at 01:47:18PM +0200, Santiago Ruano Rincón wrote:
+> > > El 30/07/20 a las 16:07, Oliver Neukum escribió:
+> > > > Am Donnerstag, den 30.07.2020, 15:53 +0200 schrieb Santiago Ruano
+> > > > Rincón:
+> > > > > Hi,
+> > > > > 
+> > > > > Miguel Rodríguez sent this set of patches two years ago to fix the lack
+> > > > > of multicast processing on CDC NCM driver:
+> > > > > 
+> > > > > https://www.spinics.net/lists/linux-usb/msg170611.html
+> > > > > https://www.spinics.net/lists/linux-usb/msg170603.html
+> > > > > https://www.spinics.net/lists/linux-usb/msg170567.html
+> > > > > https://www.spinics.net/lists/linux-usb/msg170568.html
+> > > > > 
+> > > > > I've using a DKMS version of them, available in
+> > > > > https://github.com/stbuehler/fixed-cdc-ether-ncm/tree/wip/patches
+> > > > > since more than a year ago, and they are working fine with my Dell D6000
+> > > > > docking station. IPv6 connectivity is broken without them.
+> > > > > 
+> > > > > Is there any chance to consider those patches (or what would be needed
+> > > > > to make it happen)?
+> > > > > It would be great to have them upstream!
+> > > > 
+> > > > Hi,
+> > > > 
+> > > > they have been merged on Wednesday.
+> > > …
+> > > 
+> > > Great, thanks!
+> > > 
+> > > It would be possible to apply/backport Miguel's patches (along with
+> > > 5fd99b5d9950d6300467ded18ff4e44af0b4ae55) to stable versions please?
+> > 
+> > I don't see that git commit id in Linus's tree, are you sure it is
+> > correct?
+> 
+> I should had mention it is found in linux-next, sorry. Please see
+> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=969365#10
 
-Fix: If vbus event is before cc_event trigger, hard_reset_count
-won't bt reset for some case.
+Ah, nothing I can do with patches that are not yet in Linus's tree.
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-Below's the flow.
+> > > FWIW, in the context of Debian, I'm personally interested in 4.19.y.
+> > 
+> > What specific list of commits are you wanting to see backported?
+> 
+> This:
+> 
+> 37a2ebdd9e597ae1a0270ac747883ea8f6f767b6
+> e10dcb1b6ba714243ad5a35a11b91cc14103a9a9
+> e506addeff844237d60545ef4f6141de21471caf
+> 0226009ce0f6089f9b31211f7a2703cf9a327a01
 
-_tcpm_pd_vbus_off() -> run_state_machine to change state to SNK_UNATTACHED
-call tcpm_snk_detach() -> tcpm_snk_detach() -> tcpm_detach()
-tcpm_port_is_disconnected() will be called.
-But port->attached is still true and port->cc1=open and port->cc2=open
+These do not look like bugfixes, but a new feature being added for this
+driver.  So why not just use a newer kernel version for this feature?
 
-It cause tcpm_port_is_disconnected return false, then hard_reset_count won't be reset.
-After that, tcpm_reset_port() is called.
-port->attached become false.
+thanks,
 
-After that, cc now trigger cc_change event, the hard_reset_count will be kept.
-Even tcpm_detach will be called, due to port->attached is false, tcpm_detach()
-will directly return.
-
-CC_EVENT will only trigger drp toggling again.
----
- drivers/usb/typec/tcpm/tcpm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index a48e3f90..5c73e1d 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -2797,8 +2797,7 @@ static void tcpm_detach(struct tcpm_port *port)
- 		port->tcpc->set_bist_data(port->tcpc, false);
- 	}
- 
--	if (tcpm_port_is_disconnected(port))
--		port->hard_reset_count = 0;
-+	port->hard_reset_count = 0;
- 
- 	tcpm_reset_port(port);
- }
--- 
-2.7.4
-
+greg k-h
