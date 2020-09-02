@@ -2,88 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D838725AAD1
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 14:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6252B25AAEE
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 14:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726377AbgIBMF0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 08:05:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49320 "EHLO mail.kernel.org"
+        id S1726722AbgIBMOS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 08:14:18 -0400
+Received: from mga02.intel.com ([134.134.136.20]:27339 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726140AbgIBMFV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Sep 2020 08:05:21 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BE1282078B;
-        Wed,  2 Sep 2020 12:05:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599048321;
-        bh=u+4ibBvp2QzwwGZqBQIQYYibjqDiypNttDcy+bmGWpI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EkbLsyVQeqtFP3lPZhdCdBoNoyzY1duYw73OYPQOBF1m0SMudE1DhtKZw7dZy3h0F
-         UtlagFn8x1V9EzgOrPgJUQx54U2C9f7KdRTU9nYezzM6WrAGb9ImIrQdQWhjwqrH/u
-         klr5mPzoErU9rMbjGGm5RSs5uhT0c3XrsOqiO36Q=
-Date:   Wed, 2 Sep 2020 14:05:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Santiago Ruano =?iso-8859-1?Q?Rinc=F3n?= 
-        <santiago.ruano-rincon@imt-atlantique.fr>
-Cc:     linux-usb@vger.kernel.org, Oliver Neukum <oneukum@suse.de>,
-        miguel@det.uvigo.es, 965074@bugs.debian.org
-Subject: Re: Patches to make multicast proccesing on CDC NCM drivers
-Message-ID: <20200902120546.GA2008696@kroah.com>
-References: <20200730135334.GN1496479@bartik>
- <1596118042.2508.6.camel@suse.de>
- <20200902114718.GB242939@bartik>
+        id S1726124AbgIBMOL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Sep 2020 08:14:11 -0400
+IronPort-SDR: vD0KRL7L4VtHk6V40eQFwZrUlM5+Oqjc5pzgj10NQ7K6MNa0Bs9lOehHsUFPXZl8d7UQOh1HxY
+ VK6jCvIOYNAw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="145105393"
+X-IronPort-AV: E=Sophos;i="5.76,383,1592895600"; 
+   d="scan'208";a="145105393"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 05:14:09 -0700
+IronPort-SDR: vdCy2ovvGPokdOY40dBcLYFBNC00/R7Y9S9m3Fb+XL0bTGsnd456n0X8mR+lhH/4sKhJ/dupZp
+ NacXYcEKnwKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,383,1592895600"; 
+   d="scan'208";a="502656038"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Sep 2020 05:14:07 -0700
+Subject: Re: 5.8 regression: Low-speed interrupt transfers not working on
+ (some?) 9 Series Chipset xHCI Controllers
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+References: <428aa83d-ab2e-d391-3449-770d108bb087@redhat.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <9b1b1f17-83a8-2e4d-ee73-f28eedac2777@linux.intel.com>
+Date:   Wed, 2 Sep 2020 15:17:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+In-Reply-To: <428aa83d-ab2e-d391-3449-770d108bb087@redhat.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200902114718.GB242939@bartik>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 01:47:18PM +0200, Santiago Ruano Rincón wrote:
-> El 30/07/20 a las 16:07, Oliver Neukum escribió:
-> > Am Donnerstag, den 30.07.2020, 15:53 +0200 schrieb Santiago Ruano
-> > Rincón:
-> > > Hi,
-> > > 
-> > > Miguel Rodríguez sent this set of patches two years ago to fix the lack
-> > > of multicast processing on CDC NCM driver:
-> > > 
-> > > https://www.spinics.net/lists/linux-usb/msg170611.html
-> > > https://www.spinics.net/lists/linux-usb/msg170603.html
-> > > https://www.spinics.net/lists/linux-usb/msg170567.html
-> > > https://www.spinics.net/lists/linux-usb/msg170568.html
-> > > 
-> > > I've using a DKMS version of them, available in
-> > > https://github.com/stbuehler/fixed-cdc-ether-ncm/tree/wip/patches
-> > > since more than a year ago, and they are working fine with my Dell D6000
-> > > docking station. IPv6 connectivity is broken without them.
-> > > 
-> > > Is there any chance to consider those patches (or what would be needed
-> > > to make it happen)?
-> > > It would be great to have them upstream!
-> > 
-> > Hi,
-> > 
-> > they have been merged on Wednesday.
-> …
+Hi
+
+On 2.9.2020 12.07, Hans de Goede wrote:
+> Hi,
 > 
-> Great, thanks!
+> I've been working with 2 Fedora users who both report that there
+> keyboard and mouse has stopped working after upgrading to
+> 5.7.17 -> 5.8.4 .
 > 
-> It would be possible to apply/backport Miguel's patches (along with
-> 5fd99b5d9950d6300467ded18ff4e44af0b4ae55) to stable versions please?
+> After some back and forth I have found the following common pattern:
+> 
+> 1. Both reporters have a "9 Series Chipset Family USB xHCI Controller"
+> 2. Both reporters have a lo-speed (1.5M) keyboard and mouse connected to
+>    that XHCI controller
+> 3. The kbd/mouse gets detected but does not send events.
+> 
+> So there seems to be an issue with lo-speed USB interrupt-transfers
+> not working on the "9 Series Chipset Family USB xHCI Controller".
+> 
+> One reporter is using a DELL Precicion T5610 laptop, the PCI id
+> of the XHCI controller there is 8086:8cb1 and both 5.7 and 5.8 dmesg say:
+> 
+> [    3.324639] xhci_hcd 0000:00:14.0: hcc params 0x200077c1 hci version 0x100 quirks 0x0000000000009810
+> [    3.324643] xhci_hcd 0000:00:14.0: cache line size of 64 is not supported
 
-I don't see that git commit id in Linus's tree, are you sure it is
-correct?
+Are there any logs of this? 
+Dynamic debug of xhci and usb core would help.
 
-> FWIW, in the context of Debian, I'm personally interested in 4.19.y.
+echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
 
-What specific list of commits are you wanting to see backported?
+> 
+> The other reporter is using a Gigabyte H97-D3H motherboard. This reporter
+> reports that plugging the kbd/mouse into the USB ports which are connected
+> to the H97's EHCI controller works around the problem.
+> 
+> I have tried to reproduce this on some of my own systems, but I do
+> not have any hardware of this exact generation and I could not reproduce
+> it on the closest hardware which I do have.
+> 
+> Matthias, if you have some idea which 4.8 change might have caused this
+> I can build rpms with a test kernel with that change reverted for
+> the reporters to test.
 
-thanks,
+Can't see anything obvious that would cause this on the xhci side.
+Best guess would have been:
 
-greg k-h
+8f97250c21f0 xhci: Don't clear hub TT buffer on ep0 protocol stall
+ - but it's already in 5.7.17.
+
+536dd97c6952 xhci: Fix enumeration issue when setting max packet size for FS devices
+- but is for Full-speed devices, and also in 5.7.17
+
+If there is a hub (possibly built in) between the roothub and the keyboard then this
+could be related to the TT buffer of the hub. Just before 5.7 there were fixes related to this,
+and would concern LS and FS devices. 
+
+what does lsusb -t say?
+Are there any changes on the hid side that could case this?
+
+-Mathias
+
+
+
