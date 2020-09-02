@@ -2,125 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8597325AC14
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 15:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C49825AC7A
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 16:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbgIBNaK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 09:30:10 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:35864 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbgIBN2z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 09:28:55 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 082DSZUE026423;
-        Wed, 2 Sep 2020 08:28:35 -0500
+        id S1727800AbgIBOBR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 10:01:17 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:51498 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727024AbgIBN6Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 09:58:24 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 082DZt8g126157;
+        Wed, 2 Sep 2020 08:35:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1599053315;
-        bh=vQI22dfT496+KMI35oF7DTRni+ONmCVmidN8Fb1B6+0=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=o6XRI5IHSlSq6IaNK6ejdynXOQ4iGHZeZdFOzKOYghxXfXBoyXag8B2B21u4ZY0zm
-         ork3hupljrMbFs8CAklrPjWxvbn1wxgtIb8LrDJ9aq6pv/t9N3+QWTN2qAcXrmcby4
-         jvBqMn5CRpgIYbfPVbPLwhwR6fwkX9vgUMXbTkoU=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 082DSZRN095336
+        s=ti-com-17Q1; t=1599053755;
+        bh=3APtkbHYrt+xP2S/hKgF189ShFm5BX6uKlppIWy5V58=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=WtuBLD4fKjgY2P82xYenl2yEBVg4t2Sv4+r1Jv5l0NqHri9sTB+AnyEVM++TWsvKb
+         37UjX7pi/YCqY1IOGnjYeZm8G+xJGamLK9pRX4M2OsEnatHgFs2fiVSdaDgMf50a6u
+         eMLAXdwmKVt2lnWJ8iACDAxbVdKwGPmLPCSAhTOI=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 082DZtbg043439
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Sep 2020 08:28:35 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 2 Sep
- 2020 08:28:34 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE109.ent.ti.com
+        Wed, 2 Sep 2020 08:35:55 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE109.ent.ti.com
  (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 2 Sep
+ 2020 08:35:54 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 2 Sep 2020 08:28:34 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 082DSW0D080726;
-        Wed, 2 Sep 2020 08:28:32 -0500
-Subject: Re: [PATCH 2/3] dt-bindings: usb: cdns,usb3: Add cdns,phyrst-a-enable
- property
-To:     Peter Chen <peter.chen@nxp.com>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "kurahul@cadence.com" <kurahul@cadence.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20200825120059.12436-1-rogerq@ti.com>
- <20200825120059.12436-3-rogerq@ti.com> <20200827111343.GB5983@b29397-desktop>
+ Frontend Transport; Wed, 2 Sep 2020 08:35:54 -0500
+Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 082DZiGC065816;
+        Wed, 2 Sep 2020 08:35:52 -0500
 From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <08a7533f-b09e-f044-64e5-d709ae220599@ti.com>
-Date:   Wed, 2 Sep 2020 16:28:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     <balbi@kernel.org>
+CC:     <pawell@cadence.com>, <kurahul@cadence.com>, <nsekhar@ti.com>,
+        <vigneshr@ti.com>, <robh+dt@kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Roger Quadros <rogerq@ti.com>
+Subject: [PATCH v2 3/3] usb: cdns3: Enable workaround for USB2.0 PHY Rx compliance test PHY lockup
+Date:   Wed, 2 Sep 2020 16:35:43 +0300
+Message-ID: <20200902133543.17222-4-rogerq@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200902133543.17222-1-rogerq@ti.com>
+References: <20200902133543.17222-1-rogerq@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <20200827111343.GB5983@b29397-desktop>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Peter,
+From: Pawel Laszczak <pawell@cadence.com>
 
-On 27/08/2020 14:14, Peter Chen wrote:
-> On 20-08-25 15:00:58, Roger Quadros wrote:
->> Controller version 0x0002450D has USB2 PHY RX sensitivity issues
->> that needs to be worked around by enabling phyrst-a-enable bit
->> in PHYRST_CFG register.
->>
->> There is no way to distinguish between the controller version
->> before the device controller is started so we need to add this
->> DT property.
-> 
-> Maybe you should say "There is no way to know controller version
-> at host mode, but this workaround needs for both host and device
-> mode, so we have to add this DT property", the same for the comments
-> of your driver code patch.
+USB2.0 PHY hangs in Rx Compliance test when the incoming packet
+amplitude is varied below and above the Squelch Level of
+Receiver during the active packet multiple times.
 
-I will reword it to
+Version 1 of the controller allows PHY to be reset when RX fail condition
+is detected to work around the above issue. This feature is
+disabled by default and needs to be enabled using a bit from
+the newly added PHYRST_CFG register. This patch enables the workaround.
 
-"There is no way to know controller version before device controller
+There is no way to know controller version before device controller
 is started and the workaround needs to be applied for both host and
-device modes, so we add this DT property"
+device modes, so we rely on a DT property do decide when to
+apply the workaround.
 
-cheers,
--roger
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+Signed-off-by: Roger Quadros <rogerq@ti.com>
+---
+ drivers/usb/cdns3/core.c |  2 ++
+ drivers/usb/cdns3/core.h |  1 +
+ drivers/usb/cdns3/drd.c  | 12 ++++++++++++
+ drivers/usb/cdns3/drd.h  |  5 ++++-
+ 4 files changed, 19 insertions(+), 1 deletion(-)
 
-> 
-> Peter
->>
->> Signed-off-by: Roger Quadros <rogerq@ti.com>
->> ---
->>   Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->> index 7bc0263accee..e670adc955e1 100644
->> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->> @@ -58,6 +58,10 @@ properties:
->>         buffers expressed in KB
->>       $ref: /schemas/types.yaml#/definitions/uint32
->>   
->> +  cdns,phyrst-a-enable:
->> +    description: Enable resetting of PHY if Rx fail is detected
->> +    type: boolean
->> +
->>   required:
->>     - compatible
->>     - reg
->> -- 
->> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
->> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
->>
-> 
-
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index 5c1586ec7824..34b36487682b 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -443,6 +443,8 @@ static int cdns3_probe(struct platform_device *pdev)
+ 		return -ENXIO;
+ 	}
+ 
++	cdns->phyrst_a_enable = device_property_read_bool(dev, "cdns,phyrst-a-enable");
++
+ 	cdns->otg_res = *res;
+ 
+ 	mutex_init(&cdns->mutex);
+diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+index 1ad1f1fe61e9..24cf0f1b5726 100644
+--- a/drivers/usb/cdns3/core.h
++++ b/drivers/usb/cdns3/core.h
+@@ -76,6 +76,7 @@ struct cdns3 {
+ #define CDNS3_CONTROLLER_V0	0
+ #define CDNS3_CONTROLLER_V1	1
+ 	u32				version;
++	bool				phyrst_a_enable;
+ 
+ 	int				otg_irq;
+ 	int				dev_irq;
+diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+index 6234bcd6158a..b74803e9703d 100644
+--- a/drivers/usb/cdns3/drd.c
++++ b/drivers/usb/cdns3/drd.c
+@@ -42,6 +42,18 @@ int cdns3_set_mode(struct cdns3 *cdns, enum usb_dr_mode mode)
+ 			reg = readl(&cdns->otg_v1_regs->override);
+ 			reg |= OVERRIDE_IDPULLUP;
+ 			writel(reg, &cdns->otg_v1_regs->override);
++
++			/*
++			 * Enable work around feature built into the
++			 * controller to address issue with RX Sensitivity
++			 * est (EL_17) for USB2 PHY. The issue only occures
++			 * for 0x0002450D controller version.
++			 */
++			if (cdns->phyrst_a_enable) {
++				reg = readl(&cdns->otg_v1_regs->phyrst_cfg);
++				reg |= PHYRST_CFG_PHYRST_A_ENABLE;
++				writel(reg, &cdns->otg_v1_regs->phyrst_cfg);
++			}
+ 		} else {
+ 			reg = readl(&cdns->otg_v0_regs->ctrl1);
+ 			reg |= OVERRIDE_IDPULLUP_V0;
+diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
+index 7e7cf7fa2dd3..f1ccae285a16 100644
+--- a/drivers/usb/cdns3/drd.h
++++ b/drivers/usb/cdns3/drd.h
+@@ -31,7 +31,7 @@ struct cdns3_otg_regs {
+ 	__le32 simulate;
+ 	__le32 override;
+ 	__le32 susp_ctrl;
+-	__le32 reserved4;
++	__le32 phyrst_cfg;
+ 	__le32 anasts;
+ 	__le32 adp_ramp_time;
+ 	__le32 ctrl1;
+@@ -153,6 +153,9 @@ struct cdns3_otg_common_regs {
+ /* Only for CDNS3_CONTROLLER_V0 version */
+ #define OVERRIDE_IDPULLUP_V0		BIT(24)
+ 
++/* PHYRST_CFG - bitmasks */
++#define PHYRST_CFG_PHYRST_A_ENABLE     BIT(0)
++
+ #define CDNS3_ID_PERIPHERAL		1
+ #define CDNS3_ID_HOST			0
+ 
 -- 
 Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
 Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+
