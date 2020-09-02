@@ -2,148 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 389E025B325
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 19:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F3125B366
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 20:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727804AbgIBRpl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 13:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
+        id S1728169AbgIBSH5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 14:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726755AbgIBRpj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 13:45:39 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C64C061245
-        for <linux-usb@vger.kernel.org>; Wed,  2 Sep 2020 10:45:38 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id u128so47981pfb.6
-        for <linux-usb@vger.kernel.org>; Wed, 02 Sep 2020 10:45:38 -0700 (PDT)
+        with ESMTP id S1728142AbgIBSHq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 14:07:46 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0A2C061245
+        for <linux-usb@vger.kernel.org>; Wed,  2 Sep 2020 11:07:45 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id v196so96876pfc.1
+        for <linux-usb@vger.kernel.org>; Wed, 02 Sep 2020 11:07:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=M5YO14fqaaPHPcmYL4623+XBQiuMqqfILgeNu8++0Qs=;
-        b=OrExn47aQ4X8wiD7c2aryGoNVqNrNUFfkkU2vS5rLfSj7UrQPLPR9UPGKY7DZER43R
-         1vvzd6oID+raO/zeFh5fLbqrMFbquqRrPgneSMcDer4Y8Cd+ixwLbKSLTd3E2mKrifMw
-         Y8NzsUFG6YOdlxmaOxP3A+UUZx3B4u0k6bdfo=
+        bh=VSHJHG5+upzM/goEP/xSDgS82DC6KInUZGDcM8Rgka0=;
+        b=bHBkkk3TDfWb/oc46NO3T9Wcl1C1+WCRl3YsWSAYw6GuX8yxbSXolnyMtfb3PrpZQh
+         XyZOf4ZwPmAQlmCGZ40oUd2zSE2aeefFxGG/1nZ9Hi0C0axG51w/+1I6O3Rra9oWYSrQ
+         7xrsZTSbA/p1tYeU1w9VSaskHsyDopzrWLxA4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=M5YO14fqaaPHPcmYL4623+XBQiuMqqfILgeNu8++0Qs=;
-        b=eP4cjM/lOLQuc+1cBEacWWeyeeScla0OOe+iLY3JVf8U3wdjJszP7mJnPqdJHJHIuG
-         ruDizu3woYT8NrO5vyNpMxZ8pRnJDhY8jFz8y7kTBiOO2rwzHFklsBJnRVN89BwI/Cft
-         tXx8N+hKkYO4CjvHSGlRwo/BC+mIvLrSy39LnRdFXBZz0vWiS0QLQ4G+GMfx43pYTySH
-         5RIzArN49FAOuqovz6bAJb9ooEyprZOpVxZNGDofddkLDki+RuA8RfU5Tu3e3xCgUigo
-         KSsoPL81znqC3Q3e2345XZ1BpdEpj3p28Aor217bn5Eoe8iegLYBT6p5pU0gSprmm/J9
-         zGrQ==
-X-Gm-Message-State: AOAM531oPCNIpbKXxkI8HLd18qtYvGoZjAn8g6/jSlaKEWBDfSor7u7Z
-        suYmDoMFf25VSNyLNlhE82oyww==
-X-Google-Smtp-Source: ABdhPJxANidNJpzD1plqQWPD+xyVqjnMdfL3tfnY8w4QJp2qez/qTprRlAsuZK7nxPq3ZxfNrugSxQ==
-X-Received: by 2002:aa7:8715:: with SMTP id b21mr4115176pfo.55.1599068737966;
-        Wed, 02 Sep 2020 10:45:37 -0700 (PDT)
+        bh=VSHJHG5+upzM/goEP/xSDgS82DC6KInUZGDcM8Rgka0=;
+        b=UD5Smau/JhPcW5U56MHyQP6fuNHOwb+y9MD1TEDV6nlykH377QndPfbN/XvPHyqsCF
+         988R6Qu6XNtWHedsInfldB8iBIyEAAASfyYjMXUt169Ct8YJUfMn2hLjneB8OG5ibJRc
+         LofjfRs/ABpXtNAAwcEZnYFVYEihbka8iEeA8dBy6Eweo5fSfYGTjJ9+r6LTUGVE1T6w
+         Nvj/iKpP5Q5c2lEiMWW3EXmZlQaE+3zaFHVG58V121M3XRjNPzwbKSsAQSdzbeM+dapE
+         RfPujUKw1Dz6unPsfyoxt5tm7trELd8QtWMR/LXx1bjzrPD9huORCRPRSmcIL4AzLoWx
+         jgVw==
+X-Gm-Message-State: AOAM531JxhgtrEz3/jK8iKDZNv/KJmB6rhY/NXTDTslpfBEZP0ICTwNN
+        0q0scUdXqdo8btL0wv/jR2WE7g==
+X-Google-Smtp-Source: ABdhPJxRtv/WZ5Qf90LITBn6Dc7Kzt8ZqfLowhGcvjpbau0PdWMveSmIGMrmf35bUmCxHnp16pPGkw==
+X-Received: by 2002:a63:2a91:: with SMTP id q139mr2847387pgq.391.1599070065402;
+        Wed, 02 Sep 2020 11:07:45 -0700 (PDT)
 Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id x6sm6009919pge.61.2020.09.02.10.45.37
+        by smtp.gmail.com with ESMTPSA id i1sm25205pgq.41.2020.09.02.11.07.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Sep 2020 10:45:37 -0700 (PDT)
-Date:   Wed, 2 Sep 2020 10:45:36 -0700
+        Wed, 02 Sep 2020 11:07:44 -0700 (PDT)
+Date:   Wed, 2 Sep 2020 11:07:43 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
         Ravi Chandra Sadineni <ravisadineni@chromium.org>,
         Douglas Anderson <dianders@chromium.org>,
         Bastien Nocera <hadess@hadess.net>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, linux-usb@vger.kernel.org,
         Alan Stern <stern@rowland.harvard.edu>,
         "Alexander A. Klimov" <grandmaster@al2klimov.de>,
         Masahiro Yamada <masahiroy@kernel.org>
 Subject: Re: [RFC PATCH] USB: misc: Add usb_hub_pwr driver
-Message-ID: <20200902174536.GE3419728@google.com>
+Message-ID: <20200902180743.GF3419728@google.com>
 References: <20200901132005.RFC.1.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <20200902053048.GB6837@b29397-desktop>
+ <20200902060744.GA142357@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200902053048.GB6837@b29397-desktop>
+In-Reply-To: <20200902060744.GA142357@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
+Hi Greg,
 
-On Wed, Sep 02, 2020 at 05:31:06AM +0000, Peter Chen wrote:
-> On 20-09-01 13:21:43, Matthias Kaehlcke wrote:
-> > The driver combo usb_hub_pwr/usb_hub_psupply allows to control
-> > the power supply of an onboard USB hub.
-> > 
-> > The drivers address two issues:
-> >  - a USB hub needs to be powered before it can be discovered
-> >  - battery powered devices may want to switch the USB hub off
-> >    during suspend to extend battery life
-> > 
-> > The regulator of the hub is controlled by the usb_hub_psupply
-> > platform driver. The regulator is switched on when the platform
-> > device is initialized, which enables discovery of the hub. The
-> > driver provides an external interface to enable/disable the
-> > power supply which is used by the usb_hub_pwr driver.
-> > 
-> > The usb_hub_pwr extends the generic USB hub driver. The device is
-> > initialized when the hub is discovered by the USB subsystem. It
-> > uses the usb_hub_psupply interface to make its own request to
-> > enable the regulator (increasing the use count to 2).
-> > 
-> > During system suspend usb_hub_pwr checks if any wakeup capable
-> > devices are connected to the hub. If not it 'disables' the hub
-> > regulator (decreasing the use count to 1, hence the regulator
-> > stays enabled for now). When the usb_hub_psupply device suspends
-> > it disables the hub regulator unconditionally (decreasing the use
-> > count to 0 or 1, depending on the actions of usb_hub_pwr). This
-> > is done to allow the usb_hub_pwr device to control the state of
-> > the regulator during system suspend.
-> > 
-> > Upon resume usb_hub_psupply enables the regulator again, the
-> > usb_hub_pwr device does the same if it disabled the regulator
-> > during resume.
+On Wed, Sep 02, 2020 at 08:07:44AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Sep 01, 2020 at 01:21:43PM -0700, Matthias Kaehlcke wrote:
+> > diff --git a/drivers/usb/misc/Makefile b/drivers/usb/misc/Makefile
+> > index da39bddb0604..2bd02388ca62 100644
+> > --- a/drivers/usb/misc/Makefile
+> > +++ b/drivers/usb/misc/Makefile
+> > @@ -31,3 +31,4 @@ obj-$(CONFIG_USB_CHAOSKEY)		+= chaoskey.o
+> >  
+> >  obj-$(CONFIG_USB_SISUSBVGA)		+= sisusbvga/
+> >  obj-$(CONFIG_USB_LINK_LAYER_TEST)	+= lvstest.o
+> > +obj-$(CONFIG_USB_HUB_PWR)		+= usb_hub_pwr.o usb_hub_psupply.o
 > 
-> Hi Matthias,
-> 
-> I did similar several years ago [1], but the concept (power sequence)
-> doesn't be accepted by power maintainer.
+> Why is this 2 files?  Why can't it just be one?
 
-Yeah, I saw that, I think I even reviewed or tested some early version
-of it :)
+It's effectively two drivers that work together, it seemed cleaner to me
+to have a file for every driver.
 
-> Your patch introduce an new way to fix this long-term issue, I have an
-> idea to fix it more generally.
+The 'usb_hub_psupply' driver (which probably should be named
+'onboard_usb_hub' or similar) would even be useful on its own (taking
+care of powering the hub on and potentially other setup actions)
+with a bit of rework.
 
-> - Create a table (say usb_pm_table) for USB device which needs to do
-> initial power on and power management during suspend suspend/resume based
-> on VID and PID, example: usb/core/quirks.c
-> - After hub (both roothub and intermediate hub) device is created, search
-> the DT node under this hub, and see if the device is in usb_pm_table. If
-> it is in it, create a platform device, say usb-power-supply, and the
-> related driver is like your usb_hub_psupply.c, the parent of this device
-> is controller device.
+> And isn't this much the same thing as many of the other "misc" hub
+> controller drivers we have?
 
-This part isn't clear to me. How would the DT look like? Would it have a
-single node per physical hub chip or one node for each 'logical' hub?
-Similarly, would there be a single plaform device or multiple?
+There are some commonalities, however most of these drivers seem to
+target USB hubs with an I2C bus, using custom 'commands' for initialization
+and putting the hub in/out of standby.
 
-I guess when registering the platform device we could pass it the
-corresponding DT node, to allow it to determine its regulators, GPIOs,
-etc during probe.
+The drivers in this patch have two goals:
 
-> - After this usb-power-supply device is probed, do initial power on at
-> probe, eg, clock, regulator, reset-gpio.
-> - This usb-power-supply device system suspend operation should be called after
-> onboard device has suspended since it is created before it. No runtime PM ops
-> are needed for it.
-> - When the hub is removed, delete this platform device.
+- provide a generic (configurable) solution for powering up/initializing
+  a USB hub
+- enable support for powering down a USB hub during system suspend
 
-What exactly is removal? It seems once the hub is 'removed' it could never be
-probed again because the platform device that is in charge of the
-initialization is only created when the USB controller is initialized. I have
-the impression that the platform device would have to exist as long as the USB
-controller.
+> And to make it easier to review, can you split out the device tree
+> descriptions so that the DT maintainers can review that?
+
+Sure, I wasn't sure if this is the right approach, hence I only sent
+an RFC without formal bindings to get initial feedback. As of now it
+seems that you are at least not frontally opposed it ;-)
