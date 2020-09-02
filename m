@@ -2,140 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C845D25ACBB
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 16:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F2725AD28
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 16:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727929AbgIBOPB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 10:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728022AbgIBOOG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 10:14:06 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE3AC061245
-        for <linux-usb@vger.kernel.org>; Wed,  2 Sep 2020 07:14:06 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id q67so2614527vsd.5
-        for <linux-usb@vger.kernel.org>; Wed, 02 Sep 2020 07:14:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Mf1/z4+27SMojkdEL30sqjZxKrc9OfislJ7bsFeI77o=;
-        b=OeP7jDrF/mHV3l0SsimH57hpISqWllwgm2PKDBkVn2MklTzoihTMDJus1590xOMbqJ
-         e/NyHYbEXv7GRVXMGm5RVd9Tha4q3pgF/mxRxUwDD+5+FYrbawSMAdls3qYEvJkgM1dp
-         R38tE0CQwczRVcGD2oj7EVM4l7riphW7+iTpBj3zhcrx+fLPmPKoCgC0W2CEUscWF+fa
-         0bW9Qlglh7co1HKsHEb9b8fDpKg9+lGUOcvWhoi2KfwshjKU5u8hCvCKp/ciGpfpm+Re
-         nXyKpgzXsmTSr0WMaMThsdtg5vkNDNsR4aTyUM90WDEax9NG0MWM5/3GkOxXzCGUkkSy
-         CfQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Mf1/z4+27SMojkdEL30sqjZxKrc9OfislJ7bsFeI77o=;
-        b=VtSwAbgczWFsVcLT5rdr49x4+htpt5HlptrDbsTSp6l0GGMtKJUe5MmPa6yf0lBzwX
-         LCfduonvnTY0ltuqde4zA610f6qfTWulQ+ObCVibe0c+edR6z5mkFoHIuyfMPSd6WyxG
-         kuKggfiq/EZn/5JtWIw0+fYEHBxQpkLd3RBBRn8dGgcv2X5+xeln/fXChCrQQs1HI0z0
-         YsVN3YJ24P6CIFcBPeB4IOo/rCAGlTSpuTM+bZ78/6BlCSBDhg8NESpCMc+o6yfmc3ta
-         xiz5O5xp+N/U4D2jY6+AkG9lhG7CKwlA+iZCgkFJbIWfIh1HHv036MQtc4nm7ey/O/38
-         MelA==
-X-Gm-Message-State: AOAM531IQfHS/wDLN+tYFogdYTckvqWR5znVOJxOG8qCSBX/R4Saa/uh
-        7F0yuEpj/BZOvArUQ+ABfaqKE8LmN5zk7oxUeWDUvA==
-X-Google-Smtp-Source: ABdhPJwKPOcO1u+OBmHz0DOUyoQs8omJHgxLA94Bl2FgF0+6+xhKe6JFPNDlsRk7vx4cqS7LPRiUKIMG3cuAIlkL6lc=
-X-Received: by 2002:a67:8ec7:: with SMTP id q190mr5511968vsd.75.1599056045758;
- Wed, 02 Sep 2020 07:14:05 -0700 (PDT)
+        id S1726979AbgIBOb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 10:31:29 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:43740 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728150AbgIBO3p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 10:29:45 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 082DZls6028416;
+        Wed, 2 Sep 2020 08:35:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1599053747;
+        bh=K5qBBK8U6hjB2NNhfCKUHbnA7a4cstCXECTtIpV0nF4=;
+        h=From:To:CC:Subject:Date;
+        b=OBefMpTEu329mouZhYm8mzO6vDzu1mB4w3S6FXPD0tPzzGyIDcpxl69UsqpnBAAiD
+         SzvFcZr1eebTaOHNyctULecgl2IssIyU534S4rF4/B+/sQsmQwDPW5XYVVyUZiN9v4
+         5ZnoqGI+zwKODqT6KZeefUoZpu/ON7+NnE2vtqP0=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 082DZlNm056935
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Sep 2020 08:35:47 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 2 Sep
+ 2020 08:35:47 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 2 Sep 2020 08:35:47 -0500
+Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 082DZiG9065816;
+        Wed, 2 Sep 2020 08:35:45 -0500
+From:   Roger Quadros <rogerq@ti.com>
+To:     <balbi@kernel.org>
+CC:     <pawell@cadence.com>, <kurahul@cadence.com>, <nsekhar@ti.com>,
+        <vigneshr@ti.com>, <robh+dt@kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Roger Quadros <rogerq@ti.com>
+Subject: [PATCH v2 0/3] usb: cdns,usb3: Convert DT binding to YAML
+Date:   Wed, 2 Sep 2020 16:35:40 +0300
+Message-ID: <20200902133543.17222-1-rogerq@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20200713160522.19345-1-dan@dlrobertson.com> <20200713160522.19345-2-dan@dlrobertson.com>
- <1jy2maekzf.fsf@starbuckisacylon.baylibre.com> <ff07b04450080fd14d8da4470aeb6e1c28e4215f.camel@pengutronix.de>
- <1j8se43yrw.fsf@starbuckisacylon.baylibre.com> <18105405541cbc32cecaff181e1427f5434fafc3.camel@pengutronix.de>
- <CAFBinCC60WzSRitVGBPon9zZVJ_eUjdcEoP7NBHiHR24mLBgig@mail.gmail.com>
-In-Reply-To: <CAFBinCC60WzSRitVGBPon9zZVJ_eUjdcEoP7NBHiHR24mLBgig@mail.gmail.com>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Date:   Wed, 2 Sep 2020 16:13:54 +0200
-Message-ID: <CAHNvnFNafYwcGcZk88WokMvZB_FQu8_imL=5sWecP2+xqWg1RA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] usb: dwc3: meson-g12a: fix shared reset control use
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Dan Robertson <dan@dlrobertson.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Le sam. 29 ao=C3=BBt 2020 =C3=A0 17:25, Martin Blumenstingl
-<martin.blumenstingl@googlemail.com> a =C3=A9crit :
->
-> Hi Philipp,
->
-> On Tue, Aug 25, 2020 at 12:20 PM Philipp Zabel <p.zabel@pengutronix.de> w=
-rote:
-> [...]
-> > > reset_control_clear()
-> > > would be the way to state that the ressource is no longer used and, t=
-hat
-> > > from the caller perspective, the reset can fired again if necessary.
-> > >
-> > > If we take the probe / suspend / resume example:
-> > > * 1st device using the shared will actually trigger it (as it is now)
-> > > * following device just increase triggered_count
-> > >
-> > > If all devices go to suspend (calling reset_control_clear()) then
-> > > triggered_count will reach zero, allowing the first device resuming t=
-o
-> > > trigger the reset again ... this is important since it might not be t=
-he
-> > > one which would have got the exclusive control
-> > >
-> > > If any device don't go to suspend, meaning the ressource under reset
-> > > keep on being used, no reset will performed. With exlusive control,
-> > > there is a risk that the resuming device resets something already in =
-use.
-> > >
-> > > Regarding the condition, on shared resets, call reset_control_reset()
-> > > should be balanced reset_control_clear() - no clear before reset.
-> >
-> > Martin, is this something that would be useful for the current users of
-> > the shared reset trigger functionality (phy-meson-gxl-usb2 and phy-
-> > meson8b-usb2 with reset-meson)?
-> for the specific use-case (system suspend) this would currently not be
-> useful for the two drivers you have named. This is because the
-> platforms on which they are used currently don't support system
-> suspend.
-> if other drivers are going to benefit from this change then please go
-> ahead and add the necessary API. Then I can also use it in these
-> drivers. however, (as far as I understand) I won't be able to verify
-> the new "fixed" behavior
->
->
-> Best regards,
-> Martin
+Hi,
 
-Hi Philipp,
+This series converts DT binding to YAML schema.
+Then adds a new property to enable workaround for USB2.0 PHY
+Rx compliance issues.
 
-Regarding the naming of the new call, since reset_control_clear() is not
-really representative of the intended behaviour, I have thought of some
-other metaphors such as:
+cheers,
+-roger
 
-reset_control_resettable()    (sounds the most relevant to me)
-reset_control_standby()
-reset_control_unseal()
-reset_control_untie()
-reset_control_loosen()/loose()
-reset_control_unfetter()
+Changelog:
+v2:
+- updated commit log to better describe why DT property is required
+for the quirk.
 
-What do you think?
+Pawel Laszczak (1):
+  usb: cdns3: Enable workaround for USB2.0 PHY Rx compliance test PHY
+    lockup
 
-Regards,
-Amjad
+Roger Quadros (2):
+  dt-bindings: usb: Convert cdns-usb3.txt to YAML schema
+  dt-bindings: usb: cdns,usb3: Add cdns,phyrst-a-enable property
 
+ .../devicetree/bindings/usb/cdns,usb3.yaml    | 93 +++++++++++++++++++
+ .../devicetree/bindings/usb/cdns-usb3.txt     | 45 ---------
+ drivers/usb/cdns3/core.c                      |  2 +
+ drivers/usb/cdns3/core.h                      |  1 +
+ drivers/usb/cdns3/drd.c                       | 12 +++
+ drivers/usb/cdns3/drd.h                       |  5 +-
+ 6 files changed, 112 insertions(+), 46 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/cdns-usb3.txt
 
---=20
-Amjad Ouled-Ameur
-Embedded Linux Engineer - Villeneuve Loubet, FR
-Engit@BayLibre - At the Heart of Embedded Linux
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+
