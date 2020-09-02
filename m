@@ -2,113 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F3125B366
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 20:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C03E25B37A
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 20:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728169AbgIBSH5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 14:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
+        id S1727919AbgIBSMp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 14:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728142AbgIBSHq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 14:07:46 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0A2C061245
-        for <linux-usb@vger.kernel.org>; Wed,  2 Sep 2020 11:07:45 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id v196so96876pfc.1
-        for <linux-usb@vger.kernel.org>; Wed, 02 Sep 2020 11:07:45 -0700 (PDT)
+        with ESMTP id S1726177AbgIBSMo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 14:12:44 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992C0C061244;
+        Wed,  2 Sep 2020 11:12:43 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id s10so146192plp.1;
+        Wed, 02 Sep 2020 11:12:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VSHJHG5+upzM/goEP/xSDgS82DC6KInUZGDcM8Rgka0=;
-        b=bHBkkk3TDfWb/oc46NO3T9Wcl1C1+WCRl3YsWSAYw6GuX8yxbSXolnyMtfb3PrpZQh
-         XyZOf4ZwPmAQlmCGZ40oUd2zSE2aeefFxGG/1nZ9Hi0C0axG51w/+1I6O3Rra9oWYSrQ
-         7xrsZTSbA/p1tYeU1w9VSaskHsyDopzrWLxA4=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h3f9lrWEnIT8HUEopKzesuhjDoqNNwJ+zYjj81qDGgk=;
+        b=bhB4Utg1ATXtd2Dfd7kZCmepTMUzHRvLckIBrXX5TWBfUJ/erjfgy80A5/gWGYM2U9
+         ym4bihNrlVhUadMl6R1Xh6anLk9EciD/mSWAFd7ZcFgLO8rLWdLkS/8MSOUd+chNr4Ep
+         8n78vkuGH4YhGmYN7k2SJpkkbzUfqD3UCqnJ6VCUyd3z1cVIJhmKlZ568Fp8e+U4ttKQ
+         OFXfgrGiHVvLzhqZTvpdsKtRZh75uS5l0gIQaxcqt8bQQT6QnJBk62mkORcFUQyBQsPT
+         Km37lu8JEJ6OfJ42ZjMWTeQT9JyMMilEfzjhhNwPeILP7gwk2IYdb7tyqQoFRIfpgLYf
+         s3MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VSHJHG5+upzM/goEP/xSDgS82DC6KInUZGDcM8Rgka0=;
-        b=UD5Smau/JhPcW5U56MHyQP6fuNHOwb+y9MD1TEDV6nlykH377QndPfbN/XvPHyqsCF
-         988R6Qu6XNtWHedsInfldB8iBIyEAAASfyYjMXUt169Ct8YJUfMn2hLjneB8OG5ibJRc
-         LofjfRs/ABpXtNAAwcEZnYFVYEihbka8iEeA8dBy6Eweo5fSfYGTjJ9+r6LTUGVE1T6w
-         Nvj/iKpP5Q5c2lEiMWW3EXmZlQaE+3zaFHVG58V121M3XRjNPzwbKSsAQSdzbeM+dapE
-         RfPujUKw1Dz6unPsfyoxt5tm7trELd8QtWMR/LXx1bjzrPD9huORCRPRSmcIL4AzLoWx
-         jgVw==
-X-Gm-Message-State: AOAM531JxhgtrEz3/jK8iKDZNv/KJmB6rhY/NXTDTslpfBEZP0ICTwNN
-        0q0scUdXqdo8btL0wv/jR2WE7g==
-X-Google-Smtp-Source: ABdhPJxRtv/WZ5Qf90LITBn6Dc7Kzt8ZqfLowhGcvjpbau0PdWMveSmIGMrmf35bUmCxHnp16pPGkw==
-X-Received: by 2002:a63:2a91:: with SMTP id q139mr2847387pgq.391.1599070065402;
-        Wed, 02 Sep 2020 11:07:45 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id i1sm25205pgq.41.2020.09.02.11.07.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Sep 2020 11:07:44 -0700 (PDT)
-Date:   Wed, 2 Sep 2020 11:07:43 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>, linux-usb@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [RFC PATCH] USB: misc: Add usb_hub_pwr driver
-Message-ID: <20200902180743.GF3419728@google.com>
-References: <20200901132005.RFC.1.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <20200902060744.GA142357@kroah.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h3f9lrWEnIT8HUEopKzesuhjDoqNNwJ+zYjj81qDGgk=;
+        b=ChGxrApbmtIUQZpBLsEDip+PY4VZwroLnn0jgX6Nor1/cQUKJhX5tYhfiYMD6hosVn
+         y4PoCpTgslQI9ESLd2+llTaS7+7wxaKtLTD7GZlvUaa/rN0LD6umXNV/Po8YEybC80x3
+         ZHIkzreaPJhgNBIIjYNS3dHb1xyNPd8q1hW7hyHrKIHDE20Lelr1LEjVrL6aZfXIJKPZ
+         twQsb1u1ZYnORKpeU2I6UzqYcC36Ov5ATuaS+6skznXth7Ec9+MwSM2jeK26IP3+TaB6
+         vwtkZEsmQ+sDoUxplYFh7R1ZBR2jZwj7aD4g8KSQEBXEM5PlfoR8FaLs+dNc4u5y67eZ
+         jpcg==
+X-Gm-Message-State: AOAM531SSkbNZJ3pcM5EDtYuDnE8dAK9fUZFsQ1ucOxdYhoVOWD3FvQ3
+        fAvZr5aFxvm8PGSxg8lJUA2g2Myphxc=
+X-Google-Smtp-Source: ABdhPJw0Hl+6859WKV8nvo4KGjdx6+L+6AaUXsSU2feSqDzwvX7zAQRFPC5XKmyfeDam/8LzLXItLA==
+X-Received: by 2002:a17:90a:7084:: with SMTP id g4mr3002233pjk.116.1599070362994;
+        Wed, 02 Sep 2020 11:12:42 -0700 (PDT)
+Received: from localhost.localdomain (cpe-172-112-234-200.socal.res.rr.com. [172.112.234.200])
+        by smtp.gmail.com with ESMTPSA id u123sm148993pfb.209.2020.09.02.11.12.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 02 Sep 2020 11:12:42 -0700 (PDT)
+From:   lindsey.stanpoor@gmail.com
+To:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org, heiko@sntech.de,
+        balbi@kernel.org, cnemo@tutanota.com
+Subject: [PATCH v4 1/4] dt-bindings: usb: add rk3328 dwc3 docs
+Date:   Wed,  2 Sep 2020 11:12:31 -0700
+Message-Id: <20200902181234.13955-1-lindsey.stanpoor@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200902060744.GA142357@kroah.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+From: Cameron Nemo <cnemo@tutanota.com>
 
-On Wed, Sep 02, 2020 at 08:07:44AM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Sep 01, 2020 at 01:21:43PM -0700, Matthias Kaehlcke wrote:
-> > diff --git a/drivers/usb/misc/Makefile b/drivers/usb/misc/Makefile
-> > index da39bddb0604..2bd02388ca62 100644
-> > --- a/drivers/usb/misc/Makefile
-> > +++ b/drivers/usb/misc/Makefile
-> > @@ -31,3 +31,4 @@ obj-$(CONFIG_USB_CHAOSKEY)		+= chaoskey.o
-> >  
-> >  obj-$(CONFIG_USB_SISUSBVGA)		+= sisusbvga/
-> >  obj-$(CONFIG_USB_LINK_LAYER_TEST)	+= lvstest.o
-> > +obj-$(CONFIG_USB_HUB_PWR)		+= usb_hub_pwr.o usb_hub_psupply.o
-> 
-> Why is this 2 files?  Why can't it just be one?
+Document compatible for dwc3 on the Rockchip rk3328 platform.
 
-It's effectively two drivers that work together, it seemed cleaner to me
-to have a file for every driver.
+Signed-off-by: Cameron Nemo <cnemo@tutanota.com>
+---
+ Documentation/devicetree/bindings/usb/dwc3.txt          | 1 +
+ Documentation/devicetree/bindings/usb/rockchip,dwc3.txt | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-The 'usb_hub_psupply' driver (which probably should be named
-'onboard_usb_hub' or similar) would even be useful on its own (taking
-care of powering the hub on and potentially other setup actions)
-with a bit of rework.
+diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+index d03edf9d3935..d625cd5966e9 100644
+--- a/Documentation/devicetree/bindings/usb/dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+@@ -25,6 +25,7 @@ Exception for clocks:
+     "ti,am437x-dwc3"
+     "ti,dwc3"
+     "ti,keystone-dwc3"
++    "rockchip,rk3328-dwc3"
+     "rockchip,rk3399-dwc3"
+     "xlnx,zynqmp-dwc3"
+ 
+diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt b/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
+index 94520493233b..b41f30a61be6 100644
+--- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
+@@ -1,7 +1,8 @@
+ Rockchip SuperSpeed DWC3 USB SoC controller
+ 
+ Required properties:
+-- compatible:	should contain "rockchip,rk3399-dwc3" for rk3399 SoC
++- compatible:	should contain "rockchip,rk3328-dwc3" for rk3328 SoC
++		or "rockchip,rk3399-dwc3" for rk3399 SoC
+ - clocks:	A list of phandle + clock-specifier pairs for the
+ 		clocks listed in clock-names
+ - clock-names:	Should contain the following:
+-- 
+2.28.0
 
-> And isn't this much the same thing as many of the other "misc" hub
-> controller drivers we have?
-
-There are some commonalities, however most of these drivers seem to
-target USB hubs with an I2C bus, using custom 'commands' for initialization
-and putting the hub in/out of standby.
-
-The drivers in this patch have two goals:
-
-- provide a generic (configurable) solution for powering up/initializing
-  a USB hub
-- enable support for powering down a USB hub during system suspend
-
-> And to make it easier to review, can you split out the device tree
-> descriptions so that the DT maintainers can review that?
-
-Sure, I wasn't sure if this is the right approach, hence I only sent
-an RFC without formal bindings to get initial feedback. As of now it
-seems that you are at least not frontally opposed it ;-)
