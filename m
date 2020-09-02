@@ -2,116 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5BB25AA86
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 13:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC8425AAB1
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 14:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbgIBLuD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 07:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S1726490AbgIBMAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 08:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbgIBLr7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 07:47:59 -0400
-Received: from zproxy130.enst.fr (zproxy130.enst.fr [IPv6:2001:660:330f:2::c2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF34C061244
-        for <linux-usb@vger.kernel.org>; Wed,  2 Sep 2020 04:47:53 -0700 (PDT)
-Received: from localhost (localhost [IPv6:::1])
-        by zproxy130.enst.fr (Postfix) with ESMTP id E8466120A7B;
-        Wed,  2 Sep 2020 13:47:19 +0200 (CEST)
-Received: from zproxy130.enst.fr ([IPv6:::1])
-        by localhost (zproxy130.enst.fr [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id ggx5qKN8hUrw; Wed,  2 Sep 2020 13:47:19 +0200 (CEST)
-Received: from localhost (localhost [IPv6:::1])
-        by zproxy130.enst.fr (Postfix) with ESMTP id 6E786120D4D;
-        Wed,  2 Sep 2020 13:47:19 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zproxy130.enst.fr 6E786120D4D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=imt-atlantique.fr;
-        s=50EA75E8-DE22-11E6-A6DE-0662BA474D24; t=1599047239;
-        bh=lgqI3BHiaCdFjF9DUgHtSQr46rLPna1Dx5J8GFjgG68=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=iOTtx8Tkcda7LaxgjUMnbJtKA5tYsSL0oDXTR/WTyieYQ2+gGXoQQJvkmcRp64kRU
-         hBFT5TQqLVNLrqTvW0lnRZymWWy/i7LRsS5Psuq/2duAMQBSgi7CnJOa31Smtk1EX5
-         FsVOxRoELDI4pEGE/yYHDB5inag83nYXUXUsVFB0=
-X-Virus-Scanned: amavisd-new at zproxy130.enst.fr
-Received: from zproxy130.enst.fr ([IPv6:::1])
-        by localhost (zproxy130.enst.fr [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id e-3VPomxjFA8; Wed,  2 Sep 2020 13:47:19 +0200 (CEST)
-Received: from localhost (unknown [10.29.225.220])
-        by zproxy130.enst.fr (Postfix) with ESMTPSA id 39A7F120A7B;
-        Wed,  2 Sep 2020 13:47:19 +0200 (CEST)
-Date:   Wed, 2 Sep 2020 13:47:18 +0200
-From:   Santiago Ruano =?iso-8859-1?Q?Rinc=F3n?= 
-        <santiago.ruano-rincon@imt-atlantique.fr>
-To:     linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.de>, miguel@det.uvigo.es,
-        965074@bugs.debian.org
-Subject: Re: Patches to make multicast proccesing on CDC NCM drivers
-Message-ID: <20200902114718.GB242939@bartik>
-References: <20200730135334.GN1496479@bartik>
- <1596118042.2508.6.camel@suse.de>
+        with ESMTP id S1726285AbgIBMA0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 08:00:26 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A34C061247
+        for <linux-usb@vger.kernel.org>; Wed,  2 Sep 2020 05:00:25 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id c17so2821492ybe.0
+        for <linux-usb@vger.kernel.org>; Wed, 02 Sep 2020 05:00:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=fQu188afTkltHrR3sb1HUtHfPblsmAmHFIs4oHSfTdQ=;
+        b=tqEif33geefr3UOI9C2cV1A5F8yhPUTbhfy5UO2juL5NNW6+vltFHx9BGpBLsavfAj
+         IvTHHAUI4RTycbrFyVqaUJ+7BrniC8f9ak8YkkRfKVSy3A/8Fbmeemm7gP+Kzbf1NUkY
+         8oiS5PD56WZ3kiUPm0MPhOCWj1p9E6dQiwm45hvNkoon0ryNB4zIHpv3xT2jydEoJWVA
+         7LQDBS9Ffu0EnJlQRrc208OgPT7ln22OjciygKKvrduo+GO3fHVGFiATMXcfZzxO61KV
+         QJCApPDFSEK6ireTqZCVr0K625ic6srCmBmasyQPBTQxaOjh/+vZpfEBBHZpJRiuxNv8
+         f46w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=fQu188afTkltHrR3sb1HUtHfPblsmAmHFIs4oHSfTdQ=;
+        b=G+hXYafwuik3lP3OhwmiZN94h6QKqdmdgShhT4MufnT74xEzNFvw+ncUNg3cUeT6mW
+         4vfYYR3fjGpHYrlI3rDTRfhcF1hCpoEcYn/KNY1/3DZZX4Rptct4u9XCUnh4NQAZYdii
+         e9TPt6TDoclE1tou8I0FQXHPQ25LJG3cp8f+US//tDgoQfiONuHfDrmvn1Q2iv+DUCmJ
+         Y+88e+/UJmHlsKK67RqaRgr/rSlw59hTbk+ouCImnOCP8FShCwi0at9eucKEoenBPTn9
+         iG1YDsZhRBOn5Pc64ewLTGz3YO8PbpKsjM5jZfwFGtWYjXnJcLYPkgiMxVmJ7plVMmei
+         OGzQ==
+X-Gm-Message-State: AOAM530Z/DFZhfmLaDZCrn2Sk/rnNMBhGgw5oP2A+S/1WlHnmKj1c0Vg
+        HX6zuwFcz4EhrNQ32sUoCAaGKbzf809Ov9bUBh4=
+X-Google-Smtp-Source: ABdhPJx90rIXDzP0WqCBd2B5XUvtT8eRu02CVBiY7PXohG7vuX/5Y3ioZjiE9R8cXOmpKUK2DAFKYWR9N0j+Yle35js=
+X-Received: by 2002:a25:e791:: with SMTP id e139mr10035958ybh.67.1599048022257;
+ Wed, 02 Sep 2020 05:00:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Yylu36WmvOXNoKYn"
-Content-Disposition: inline
-In-Reply-To: <1596118042.2508.6.camel@suse.de>
+Received: by 2002:a25:d311:0:0:0:0:0 with HTTP; Wed, 2 Sep 2020 05:00:21 -0700 (PDT)
+Reply-To: jlmv002@gmail.com
+From:   DR JIM <advocate.mary002@gmail.com>
+Date:   Wed, 2 Sep 2020 13:00:21 +0100
+Message-ID: <CA+omnrhnyejQKdCCiWuaSQo2Wk-JsQ7cobAe-XfQcwOQXUXE_w@mail.gmail.com>
+Subject: ATTENTION: DELIVERY OF YOUR ATM VISA CARD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Attention:Beneficiary,
 
---Yylu36WmvOXNoKYn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is to official inform you that we have been having a meeting for
+the past Seven month which ended Two days ago with Dr. David  R.
+Malpass, the World Bank President and Hon. Mrs. Christine Laggard
+(IMF) Director General, in the meeting we treated on Email programs
+victim problems.
 
-El 30/07/20 a las 16:07, Oliver Neukum escribi=C3=B3:
-> Am Donnerstag, den 30.07.2020, 15:53 +0200 schrieb Santiago Ruano
-> Rinc=C3=B3n:
-> > Hi,
-> >=20
-> > Miguel Rodr=C3=ADguez sent this set of patches two years ago to fix the=
- lack
-> > of multicast processing on CDC NCM driver:
-> >=20
-> > https://www.spinics.net/lists/linux-usb/msg170611.html
-> > https://www.spinics.net/lists/linux-usb/msg170603.html
-> > https://www.spinics.net/lists/linux-usb/msg170567.html
-> > https://www.spinics.net/lists/linux-usb/msg170568.html
-> >=20
-> > I've using a DKMS version of them, available in
-> > https://github.com/stbuehler/fixed-cdc-ether-ncm/tree/wip/patches
-> > since more than a year ago, and they are working fine with my Dell D6000
-> > docking station. IPv6 connectivity is broken without them.
-> >=20
-> > Is there any chance to consider those patches (or what would be needed
-> > to make it happen)?
-> > It would be great to have them upstream!
->=20
-> Hi,
->=20
-> they have been merged on Wednesday.
-=E2=80=A6
+United Nation have agreed to compensate you with the sum of One
+million two Hundred Thousand Dollars (USD$1.200,000.00) this also
+includes international businesses that failed due to Government
+problems etc?. We have arranged your payment through Master Card ATM
+which is the latest  instruction from World Bank Group.
 
-Great, thanks!
+For the collection of your Master Card ATM contact our representative
+Dr.JIM LAW  and forward the following details to him.
 
-It would be possible to apply/backport Miguel's patches (along with
-5fd99b5d9950d6300467ded18ff4e44af0b4ae55) to stable versions please?
+1. Full Name:.........
+2. Country:........
+3. Delivery Address:..........
+4. Telephone:..............&  Occupation.......
+5. Your Age...... /Sex..........
 
-FWIW, in the context of Debian, I'm personally interested in 4.19.y.
 
-Best regards,
+Contact Dr.JIM LAW  with below email  and forward all your details to
+him.Email:( jlmv002@gmail.com)Note: for the immediate collection of
+your Master Card ATM contact ourrepresentative Agent.
 
- -- Santiago
+Dr.JIM  LAW  to enable you confirm your payment without further delay
+and note any other contact  you made out side his office is at of your
+own risk.
 
---Yylu36WmvOXNoKYn
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRZVjztY8b+Ty43oH1itBCJKh26HQUCX0+GLAAKCRBitBCJKh26
-HVoxAQC/u2K6ZbVv6h6JH5iLIwf898TveKClRkHECoHfFIlbFAEA/zzWGPo0JtH3
-+xivsR9kn0WuW8xkfLKl0Sxh6UBdcQk=
-=idff
------END PGP SIGNATURE-----
-
---Yylu36WmvOXNoKYn--
+Mrs, Zongo Che
