@@ -2,92 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC8425AAB1
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 14:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D838725AAD1
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 14:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726490AbgIBMAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 08:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726285AbgIBMA0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 08:00:26 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A34C061247
-        for <linux-usb@vger.kernel.org>; Wed,  2 Sep 2020 05:00:25 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id c17so2821492ybe.0
-        for <linux-usb@vger.kernel.org>; Wed, 02 Sep 2020 05:00:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=fQu188afTkltHrR3sb1HUtHfPblsmAmHFIs4oHSfTdQ=;
-        b=tqEif33geefr3UOI9C2cV1A5F8yhPUTbhfy5UO2juL5NNW6+vltFHx9BGpBLsavfAj
-         IvTHHAUI4RTycbrFyVqaUJ+7BrniC8f9ak8YkkRfKVSy3A/8Fbmeemm7gP+Kzbf1NUkY
-         8oiS5PD56WZ3kiUPm0MPhOCWj1p9E6dQiwm45hvNkoon0ryNB4zIHpv3xT2jydEoJWVA
-         7LQDBS9Ffu0EnJlQRrc208OgPT7ln22OjciygKKvrduo+GO3fHVGFiATMXcfZzxO61KV
-         QJCApPDFSEK6ireTqZCVr0K625ic6srCmBmasyQPBTQxaOjh/+vZpfEBBHZpJRiuxNv8
-         f46w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=fQu188afTkltHrR3sb1HUtHfPblsmAmHFIs4oHSfTdQ=;
-        b=G+hXYafwuik3lP3OhwmiZN94h6QKqdmdgShhT4MufnT74xEzNFvw+ncUNg3cUeT6mW
-         4vfYYR3fjGpHYrlI3rDTRfhcF1hCpoEcYn/KNY1/3DZZX4Rptct4u9XCUnh4NQAZYdii
-         e9TPt6TDoclE1tou8I0FQXHPQ25LJG3cp8f+US//tDgoQfiONuHfDrmvn1Q2iv+DUCmJ
-         Y+88e+/UJmHlsKK67RqaRgr/rSlw59hTbk+ouCImnOCP8FShCwi0at9eucKEoenBPTn9
-         iG1YDsZhRBOn5Pc64ewLTGz3YO8PbpKsjM5jZfwFGtWYjXnJcLYPkgiMxVmJ7plVMmei
-         OGzQ==
-X-Gm-Message-State: AOAM530Z/DFZhfmLaDZCrn2Sk/rnNMBhGgw5oP2A+S/1WlHnmKj1c0Vg
-        HX6zuwFcz4EhrNQ32sUoCAaGKbzf809Ov9bUBh4=
-X-Google-Smtp-Source: ABdhPJx90rIXDzP0WqCBd2B5XUvtT8eRu02CVBiY7PXohG7vuX/5Y3ioZjiE9R8cXOmpKUK2DAFKYWR9N0j+Yle35js=
-X-Received: by 2002:a25:e791:: with SMTP id e139mr10035958ybh.67.1599048022257;
- Wed, 02 Sep 2020 05:00:22 -0700 (PDT)
+        id S1726377AbgIBMF0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 08:05:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49320 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726140AbgIBMFV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Sep 2020 08:05:21 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BE1282078B;
+        Wed,  2 Sep 2020 12:05:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599048321;
+        bh=u+4ibBvp2QzwwGZqBQIQYYibjqDiypNttDcy+bmGWpI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EkbLsyVQeqtFP3lPZhdCdBoNoyzY1duYw73OYPQOBF1m0SMudE1DhtKZw7dZy3h0F
+         UtlagFn8x1V9EzgOrPgJUQx54U2C9f7KdRTU9nYezzM6WrAGb9ImIrQdQWhjwqrH/u
+         klr5mPzoErU9rMbjGGm5RSs5uhT0c3XrsOqiO36Q=
+Date:   Wed, 2 Sep 2020 14:05:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Santiago Ruano =?iso-8859-1?Q?Rinc=F3n?= 
+        <santiago.ruano-rincon@imt-atlantique.fr>
+Cc:     linux-usb@vger.kernel.org, Oliver Neukum <oneukum@suse.de>,
+        miguel@det.uvigo.es, 965074@bugs.debian.org
+Subject: Re: Patches to make multicast proccesing on CDC NCM drivers
+Message-ID: <20200902120546.GA2008696@kroah.com>
+References: <20200730135334.GN1496479@bartik>
+ <1596118042.2508.6.camel@suse.de>
+ <20200902114718.GB242939@bartik>
 MIME-Version: 1.0
-Received: by 2002:a25:d311:0:0:0:0:0 with HTTP; Wed, 2 Sep 2020 05:00:21 -0700 (PDT)
-Reply-To: jlmv002@gmail.com
-From:   DR JIM <advocate.mary002@gmail.com>
-Date:   Wed, 2 Sep 2020 13:00:21 +0100
-Message-ID: <CA+omnrhnyejQKdCCiWuaSQo2Wk-JsQ7cobAe-XfQcwOQXUXE_w@mail.gmail.com>
-Subject: ATTENTION: DELIVERY OF YOUR ATM VISA CARD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200902114718.GB242939@bartik>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Attention:Beneficiary,
+On Wed, Sep 02, 2020 at 01:47:18PM +0200, Santiago Ruano Rincón wrote:
+> El 30/07/20 a las 16:07, Oliver Neukum escribió:
+> > Am Donnerstag, den 30.07.2020, 15:53 +0200 schrieb Santiago Ruano
+> > Rincón:
+> > > Hi,
+> > > 
+> > > Miguel Rodríguez sent this set of patches two years ago to fix the lack
+> > > of multicast processing on CDC NCM driver:
+> > > 
+> > > https://www.spinics.net/lists/linux-usb/msg170611.html
+> > > https://www.spinics.net/lists/linux-usb/msg170603.html
+> > > https://www.spinics.net/lists/linux-usb/msg170567.html
+> > > https://www.spinics.net/lists/linux-usb/msg170568.html
+> > > 
+> > > I've using a DKMS version of them, available in
+> > > https://github.com/stbuehler/fixed-cdc-ether-ncm/tree/wip/patches
+> > > since more than a year ago, and they are working fine with my Dell D6000
+> > > docking station. IPv6 connectivity is broken without them.
+> > > 
+> > > Is there any chance to consider those patches (or what would be needed
+> > > to make it happen)?
+> > > It would be great to have them upstream!
+> > 
+> > Hi,
+> > 
+> > they have been merged on Wednesday.
+> …
+> 
+> Great, thanks!
+> 
+> It would be possible to apply/backport Miguel's patches (along with
+> 5fd99b5d9950d6300467ded18ff4e44af0b4ae55) to stable versions please?
 
-This is to official inform you that we have been having a meeting for
-the past Seven month which ended Two days ago with Dr. David  R.
-Malpass, the World Bank President and Hon. Mrs. Christine Laggard
-(IMF) Director General, in the meeting we treated on Email programs
-victim problems.
+I don't see that git commit id in Linus's tree, are you sure it is
+correct?
 
-United Nation have agreed to compensate you with the sum of One
-million two Hundred Thousand Dollars (USD$1.200,000.00) this also
-includes international businesses that failed due to Government
-problems etc?. We have arranged your payment through Master Card ATM
-which is the latest  instruction from World Bank Group.
+> FWIW, in the context of Debian, I'm personally interested in 4.19.y.
 
-For the collection of your Master Card ATM contact our representative
-Dr.JIM LAW  and forward the following details to him.
+What specific list of commits are you wanting to see backported?
 
-1. Full Name:.........
-2. Country:........
-3. Delivery Address:..........
-4. Telephone:..............&  Occupation.......
-5. Your Age...... /Sex..........
+thanks,
 
-
-Contact Dr.JIM LAW  with below email  and forward all your details to
-him.Email:( jlmv002@gmail.com)Note: for the immediate collection of
-your Master Card ATM contact ourrepresentative Agent.
-
-Dr.JIM  LAW  to enable you confirm your payment without further delay
-and note any other contact  you made out side his office is at of your
-own risk.
-
-Thanks
-
-Mrs, Zongo Che
+greg k-h
