@@ -2,119 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1DE25B234
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 18:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F2725B2EC
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 19:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727088AbgIBQ5Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 12:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbgIBQ5P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 12:57:15 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C17C061244;
-        Wed,  2 Sep 2020 09:57:15 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id h12so2839217pgm.7;
-        Wed, 02 Sep 2020 09:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=H2xZ0ZoFG70NkdUFyqdi8QAezKVnUW8TlFis+TNiOMA=;
-        b=eJ2Y2w+twA9/KRNYMeFDNfziLBY9T77SEP5t7P7nUdAMvRSFKCUSUoyROGOkffd1WB
-         WK9VWfb/p1T2A5JhFZyJkEN8ViiWJtgY5hVI8nFvUARvm+9Lfxh7cO2ZrlyufUGtgaY8
-         Vj39NUF1dBGCJmt/rdxIdvuloOZ7J4fg3oWgese8YhEsKh0fNrOqY3vDIntMsVWLvE+k
-         Huu2AFFn9akPOsqFC3VJY27EQ3r1rjXzHO0hjIvz2ShYoMH+IESC/qOaV8GeobEw0Bu+
-         sRVBdTjKy+mvQ6T/84BtY+5obiZ/vJvvxEresNTqKubSV89OEkHXkJxSFGkMQEctI2wN
-         0oIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=H2xZ0ZoFG70NkdUFyqdi8QAezKVnUW8TlFis+TNiOMA=;
-        b=qZJ6T7T8GwSCiqA7iicTpfjnN0OC2Ew3r2Smef67Zix6t3UTwcezK6WKcOcTlSDRW5
-         Bt1gP3nO70ZiGyyRShjV8BOnXCpL9wHKQaA8c63kozdIp1ReipTVJ8eRE51Sn06nqFx4
-         SK7hJetUE7dCw+KBo2KRlCm4Qn8/XORYEQvekJk471hCGM0F5s9lQIECNlx8hjXvnRB8
-         ma6PFd268keJeqwhVeLWDGT4mzStsAbDOg+BZrItUJqYmslBm7S3RxbeFXhJyw1AKAxK
-         xlNVek2ZYfCqDT0Jra/b9KIx7Fyl6nhQXN86BIcpc2I4mjJ4/ytdpauv86CTn0Y4qAvw
-         b9Dg==
-X-Gm-Message-State: AOAM5323LithBZ+w7vbicfIn5Ru3+0Aa6C5MyY7AjCd55MthuHZnCvaF
-        3jh4aMUV1zWhhNabapxfNiwL3d5ywgE=
-X-Google-Smtp-Source: ABdhPJwn0IOIe0oX5jnT9VSHbOFIuLgkkgBLv9LUUwZrT2+SPKkq0lqA0YK/6ttb6F5JvlHAQC/bEQ==
-X-Received: by 2002:a63:9d09:: with SMTP id i9mr2491983pgd.381.1599065834749;
-        Wed, 02 Sep 2020 09:57:14 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m4sm23442pfh.129.2020.09.02.09.57.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 02 Sep 2020 09:57:14 -0700 (PDT)
-Date:   Wed, 2 Sep 2020 09:57:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cy_huang@richtek.com
-Subject: Re: [PATCH] usb: typec: tcpm: Fix if vbus before cc,
- hard_reset_count not reset issue
-Message-ID: <20200902165713.GG56237@roeck-us.net>
-References: <1599060933-8092-1-git-send-email-u0084500@gmail.com>
+        id S1726968AbgIBR1A convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 2 Sep 2020 13:27:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42842 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726384AbgIBR1A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Sep 2020 13:27:00 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207887] USB keyboard (and other devices) connected to Thinkpad
+ Dock hangs after a while
+Date:   Wed, 02 Sep 2020 17:26:59 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207887-208809-I40fAEJZkD@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207887-208809@https.bugzilla.kernel.org/>
+References: <bug-207887-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1599060933-8092-1-git-send-email-u0084500@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 11:35:33PM +0800, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Fix: If vbus event is before cc_event trigger, hard_reset_count
-> won't bt reset for some case.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
-> Below's the flow.
-> 
-> _tcpm_pd_vbus_off() -> run_state_machine to change state to SNK_UNATTACHED
-> call tcpm_snk_detach() -> tcpm_snk_detach() -> tcpm_detach()
-> tcpm_port_is_disconnected() will be called.
-> But port->attached is still true and port->cc1=open and port->cc2=open
-> 
-> It cause tcpm_port_is_disconnected return false, then hard_reset_count won't be reset.
-> After that, tcpm_reset_port() is called.
-> port->attached become false.
-> 
-> After that, cc now trigger cc_change event, the hard_reset_count will be kept.
-> Even tcpm_detach will be called, due to port->attached is false, tcpm_detach()
-> will directly return.
-> 
-> CC_EVENT will only trigger drp toggling again.
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index a48e3f90..5c73e1d 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -2797,8 +2797,7 @@ static void tcpm_detach(struct tcpm_port *port)
->  		port->tcpc->set_bist_data(port->tcpc, false);
->  	}
->  
-> -	if (tcpm_port_is_disconnected(port))
-> -		port->hard_reset_count = 0;
-> +	port->hard_reset_count = 0;
->  
+https://bugzilla.kernel.org/show_bug.cgi?id=207887
 
-Doesn't that mean that the state machine will never enter
-error recovery ?
+--- Comment #4 from Alan Stern (stern@rowland.harvard.edu) ---
+What happens if you remove the jumper, so as to disable the USB storage on the
+keyboard?
 
-Guenter
-
->  	tcpm_reset_port(port);
->  }
-> -- 
-> 2.7.4
-> 
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
