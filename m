@@ -2,157 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6252B25AAEE
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 14:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EABFF25AB33
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 14:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbgIBMOS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 08:14:18 -0400
-Received: from mga02.intel.com ([134.134.136.20]:27339 "EHLO mga02.intel.com"
+        id S1726310AbgIBMei convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 2 Sep 2020 08:34:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34416 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726124AbgIBMOL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Sep 2020 08:14:11 -0400
-IronPort-SDR: vD0KRL7L4VtHk6V40eQFwZrUlM5+Oqjc5pzgj10NQ7K6MNa0Bs9lOehHsUFPXZl8d7UQOh1HxY
- VK6jCvIOYNAw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="145105393"
-X-IronPort-AV: E=Sophos;i="5.76,383,1592895600"; 
-   d="scan'208";a="145105393"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 05:14:09 -0700
-IronPort-SDR: vdCy2ovvGPokdOY40dBcLYFBNC00/R7Y9S9m3Fb+XL0bTGsnd456n0X8mR+lhH/4sKhJ/dupZp
- NacXYcEKnwKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,383,1592895600"; 
-   d="scan'208";a="502656038"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Sep 2020 05:14:07 -0700
-Subject: Re: 5.8 regression: Low-speed interrupt transfers not working on
- (some?) 9 Series Chipset xHCI Controllers
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-References: <428aa83d-ab2e-d391-3449-770d108bb087@redhat.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <9b1b1f17-83a8-2e4d-ee73-f28eedac2777@linux.intel.com>
-Date:   Wed, 2 Sep 2020 15:17:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726124AbgIBMeh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Sep 2020 08:34:37 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207887] USB devices connected to Thinkpad Dock hangs after a
+ while
+Date:   Wed, 02 Sep 2020 12:34:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mail@3v1n0.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207887-208809-sVzPH2Yx7h@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207887-208809@https.bugzilla.kernel.org/>
+References: <bug-207887-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <428aa83d-ab2e-d391-3449-770d108bb087@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+https://bugzilla.kernel.org/show_bug.cgi?id=207887
 
-On 2.9.2020 12.07, Hans de Goede wrote:
-> Hi,
-> 
-> I've been working with 2 Fedora users who both report that there
-> keyboard and mouse has stopped working after upgrading to
-> 5.7.17 -> 5.8.4 .
-> 
-> After some back and forth I have found the following common pattern:
-> 
-> 1. Both reporters have a "9 Series Chipset Family USB xHCI Controller"
-> 2. Both reporters have a lo-speed (1.5M) keyboard and mouse connected to
->    that XHCI controller
-> 3. The kbd/mouse gets detected but does not send events.
-> 
-> So there seems to be an issue with lo-speed USB interrupt-transfers
-> not working on the "9 Series Chipset Family USB xHCI Controller".
-> 
-> One reporter is using a DELL Precicion T5610 laptop, the PCI id
-> of the XHCI controller there is 8086:8cb1 and both 5.7 and 5.8 dmesg say:
-> 
-> [    3.324639] xhci_hcd 0000:00:14.0: hcc params 0x200077c1 hci version 0x100 quirks 0x0000000000009810
-> [    3.324643] xhci_hcd 0000:00:14.0: cache line size of 64 is not supported
+--- Comment #2 from Marco Trevisan (Treviño) (mail@3v1n0.net) ---
+Not sure if this is totally related to the dock or more likely to an USB
+mechanical keyboard (both TEX Yoda II and TEX Shinobi - this one is also
+bluetooth when connected) that seems to behave differently. 
+This is on kernel 5.4.0-42-generic (ubuntu)
 
-Are there any logs of this? 
-Dynamic debug of xhci and usb core would help.
+In the middle of using it I've got a:
 
-echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
+set 01 18:35:44 tricky kernel: usb 1-3.2.3: reset full-speed USB device number
+33 using xhci_hcd
+set 01 18:36:11 tricky acpid[2940]: input device has been disconnected, fd 28
+set 01 18:36:11 tricky acpid[2940]: input device has been disconnected, fd 29
+set 01 18:36:13 tricky kernel: Bluetooth: hci0: advertising data len corrected
+set 01 18:36:16 tricky kernel: input: TEX-BLE-KB-1 Mouse as
+/devices/virtual/misc/uhid/0005:0000:0000.0038/input/input108
+set 01 18:36:16 tricky kernel: input: TEX-BLE-KB-1 Keyboard as
+/devices/virtual/misc/uhid/0005:0000:0000.0038/input/input109
+set 01 18:36:16 tricky kernel: input: TEX-BLE-KB-1 Consumer Control as
+/devices/virtual/misc/uhid/0005:0000:0000.0038/input/input110
+set 01 18:36:16 tricky kernel: hid-generic 0005:0000:0000.0038: input,hidraw4:
+BLUETOOTH HID v0.00 Mouse [TEX-BLE-KB-1] on 44:85:00:64:22:b9
+set 01 18:36:16 tricky systemd-logind[3018]: Watching system buttons on
+/dev/input/event26 (TEX-BLE-KB-1 Keyboard)
+set 01 18:38:11 tricky kernel: INFO: task kworker/u16:8:183192 blocked for more
+than 120 seconds.
+set 01 18:38:11 tricky kernel:       Tainted: G         C OE K  
+5.4.0-42-generic #46-Ubuntu
+set 01 18:38:11 tricky kernel: "echo 0 >
+/proc/sys/kernel/hung_task_timeout_secs" disables this message.
+set 01 18:38:11 tricky kernel: kworker/u16:8   D    0 183192      2 0x80004000
+set 01 18:38:11 tricky kernel: Workqueue: scsi_tmf_4 scmd_eh_abort_handler
+set 01 18:38:11 tricky kernel: Call Trace:
+set 01 18:38:11 tricky kernel:  __schedule+0x2e3/0x740
+set 01 18:38:11 tricky kernel:  schedule+0x42/0xb0
+set 01 18:38:11 tricky kernel:  schedule_timeout+0x203/0x2f0
+set 01 18:38:11 tricky kernel:  wait_for_completion+0xb1/0x120
+set 01 18:38:11 tricky kernel:  ? wake_up_q+0x70/0x70
+set 01 18:38:11 tricky kernel:  command_abort+0x60/0xa0 [usb_storage]
+set 01 18:38:11 tricky kernel:  scmd_eh_abort_handler+0x8d/0x220
+set 01 18:38:11 tricky kernel:  process_one_work+0x1eb/0x3b0
+set 01 18:38:11 tricky kernel:  worker_thread+0x4d/0x400
+set 01 18:38:11 tricky kernel:  kthread+0x104/0x140
+set 01 18:38:11 tricky kernel:  ? process_one_work+0x3b0/0x3b0
+set 01 18:38:11 tricky kernel:  ? kthread_park+0x90/0x90
 
-> 
-> The other reporter is using a Gigabyte H97-D3H motherboard. This reporter
-> reports that plugging the kbd/mouse into the USB ports which are connected
-> to the H97's EHCI controller works around the problem.
-> 
-> I have tried to reproduce this on some of my own systems, but I do
-> not have any hardware of this exact generation and I could not reproduce
-> it on the closest hardware which I do have.
-> 
-> Matthias, if you have some idea which 4.8 change might have caused this
-> I can build rpms with a test kernel with that change reverted for
-> the reporters to test.
+... repeated various times ...
 
-Can't see anything obvious that would cause this on the xhci side.
-Best guess would have been:
-
-8f97250c21f0 xhci: Don't clear hub TT buffer on ep0 protocol stall
- - but it's already in 5.7.17.
-
-536dd97c6952 xhci: Fix enumeration issue when setting max packet size for FS devices
-- but is for Full-speed devices, and also in 5.7.17
-
-If there is a hub (possibly built in) between the roothub and the keyboard then this
-could be related to the TT buffer of the hub. Just before 5.7 there were fixes related to this,
-and would concern LS and FS devices. 
-
-what does lsusb -t say?
-Are there any changes on the hid side that could case this?
-
--Mathias
+Then when trying to reonnect:
+set 01 21:34:08 tricky kernel: usb 1-3: USB disconnect, device number 30
+set 01 21:34:08 tricky kernel: usb 1-3.2: USB disconnect, device number 31
+set 01 21:34:08 tricky kernel: usb 1-3.3: cannot submit urb (err = -19)
+set 01 21:34:08 tricky kernel: usb 1-3.3: cannot submit urb 0, error -19: no
+device
+set 01 21:34:08 tricky kernel: usb 2-4: USB disconnect, device number 10
+set 01 21:34:08 tricky kernel: usb 2-4.2: USB disconnect, device number 11
 
 
 
+Then it fails when trying to suspend:
+
+set 01 21:34:54 tricky kernel: PM: suspend entry (deep)
+set 01 21:34:54 tricky systemd-sleep[319991]: Suspending system...
+set 01 21:34:54 tricky kernel: Filesystems sync: 0.012 seconds
+set 01 21:35:14 tricky kernel: Freezing user space processes ... (elapsed 0.005
+seconds) done.
+set 01 21:35:14 tricky kernel: OOM killer disabled.
+set 01 21:35:14 tricky kernel: Freezing remaining freezable tasks ... 
+set 01 21:35:14 tricky kernel: Freezing of tasks failed after 20.008 seconds (0
+tasks refusing to freeze, wq_busy=1):
+set 01 21:35:14 tricky kernel: Showing busy workqueues and worker pools:
+set 01 21:35:14 tricky kernel: workqueue events_freezable: flags=0x4
+set 01 21:35:14 tricky kernel:   pwq 0: cpus=0 node=0 flags=0x0 nice=0
+active=0/0 refcnt=2
+set 01 21:35:14 tricky kernel:     delayed: pci_pme_list_scan
+set 01 21:35:14 tricky kernel: workqueue events_freezable_power_: flags=0x86
+set 01 21:35:14 tricky kernel:   pwq 16: cpus=0-7 flags=0x4 nice=0 active=1/0
+refcnt=3
+set 01 21:35:14 tricky kernel:     in-flight: 255885:disk_events_workfn
+set 01 21:35:14 tricky kernel: workqueue usb_hub_wq: flags=0x4
+set 01 21:35:14 tricky kernel:   pwq 0: cpus=0 node=0 flags=0x0 nice=0
+active=4/0 refcnt=5
+set 01 21:35:14 tricky kernel:     in-flight: 314094:hub_event hub_event,
+279442:hub_event hub_event
+set 01 21:35:14 tricky kernel: workqueue scsi_tmf_4: flags=0x2000a
+set 01 21:35:14 tricky kernel:   pwq 16: cpus=0-7 flags=0x4 nice=0 active=1/1
+refcnt=3
+set 01 21:35:14 tricky kernel:     in-flight: 183192:scmd_eh_abort_handler
+set 01 21:35:14 tricky kernel: pool 0: cpus=0 node=0 flags=0x0 nice=0 hung=0s
+workers=5 idle: 319427 317598 319488
+set 01 21:35:14 tricky kernel: pool 16: cpus=0-7 flags=0x4 nice=0 hung=1s
+workers=13 idle: 311397 312581 300348 280847 275132 317871 252113 305935 212775
+279932 300931
+set 01 21:35:14 tricky kernel: Restarting kernel threads ... done.
+set 01 21:35:14 tricky kernel: OOM killer enabled.
+set 01 21:35:14 tricky kernel: Restarting tasks ... done.
+
+
+Rebooting seems to be the only option.
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
