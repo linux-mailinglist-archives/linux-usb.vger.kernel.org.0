@@ -2,96 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E660625AEDE
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 17:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B24225AF48
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 17:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728315AbgIBPaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 11:30:23 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:34337 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728312AbgIBPaJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 11:30:09 -0400
-Received: (qmail 626846 invoked by uid 1000); 2 Sep 2020 11:30:08 -0400
-Date:   Wed, 2 Sep 2020 11:30:08 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tom Yan <tom.ty89@gmail.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        arnd@arndb.de, cyrozap@gmail.com, yoshihiro.shimoda.uh@renesas.com
-Subject: Re: [PATCH v2 1/2] uas: bump hw_max_sectors to 2048 blocks for SS or
- faster drives
-Message-ID: <20200902153008.GE624583@rowland.harvard.edu>
-References: <20200901145535.GC587030@rowland.harvard.edu>
- <20200902000937.2204-1-tom.ty89@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200902000937.2204-1-tom.ty89@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1728386AbgIBPfz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 11:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728312AbgIBPfr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 11:35:47 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDEDC061244;
+        Wed,  2 Sep 2020 08:35:45 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id k15so3033008pfc.12;
+        Wed, 02 Sep 2020 08:35:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=HEqwK4t3Jbhbn9WZdb3oUG7FILqb8kl/CCgidI15uDY=;
+        b=kHDTXriPodcCimTodp4iPeVr/AekjfXT50p2ukyjZp6e16RJa0u708YWek45zszv3C
+         Fp/vea5VhkArLmNoriItDE91gvIqPHZqGRqPoqHdCstr8iMz+E4qo/0PmUCarHxcTZNk
+         D3fUssP5yY2hYcM3XuyVinhVsdzjSf2puMyTiHDZFxyHRbDEveX0UqmxAA9xsBU/I0W9
+         OTNVmSrDeEy26aw3cdSrEfzEsR8QuM4li2SKqNmzDgMqvBwdoN6n45bZlV8kADcH7Nai
+         NVI4/vnFlm8Kwwl0g/Rl28VIKAF5XpuVcG70+0X5LKFhMqsakOHeOL6TUHBms+IqOKgh
+         akTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=HEqwK4t3Jbhbn9WZdb3oUG7FILqb8kl/CCgidI15uDY=;
+        b=LMRGay1Jo0UkPqbCq0Ekes8MZGMy1S9hsyFf9OaBCn9on3BTJd9LB3O676BW/Y8LlU
+         Pt1iIOL4PqAexliK166L5DZZ/BhOfcku9jZBPZopsiHHwfqVSNhpG7NF3aIAxid2l0lx
+         wVWDkKEVvTxXZIBwf/wht1FJQIAWEHdX36SB8nr6GR3zwcfcv5gP4FujF9F0/X6jCXVK
+         RamFzXXX4Hloxm1d42vY9QYoWgz7sy3ZaX06bi8fz4OHUExBIHKKTCd/QOfbc8VR25eK
+         lN+m7OJ6Er0jbwaU7Xl8oGaGdWpy1GPJ3V3lz2xYjZSg37CWdqpRoBVRJk+AQFU3+Dhi
+         2OYQ==
+X-Gm-Message-State: AOAM533Xlovo6igmRtMbwlBamcDQ3m7Bql+JTxxQm0l5G7o6oHBF4WVF
+        ca27zG9GXhbdWAbujgDCz+Y=
+X-Google-Smtp-Source: ABdhPJxHJXPfvXBk6OiHcYKsndf2R7W1LPm3hgGc5pDEcgNbal5oYmhxvi2HRzhZgeA3KaOaKDJWiw==
+X-Received: by 2002:a63:f804:: with SMTP id n4mr2278378pgh.155.1599060944940;
+        Wed, 02 Sep 2020 08:35:44 -0700 (PDT)
+Received: from localhost.localdomain ([123.241.84.106])
+        by smtp.gmail.com with ESMTPSA id m3sm4835402pjn.28.2020.09.02.08.35.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 02 Sep 2020 08:35:43 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cy_huang@richtek.com
+Subject: [PATCH] usb: typec: tcpm: Fix if vbus before cc, hard_reset_count not reset issue
+Date:   Wed,  2 Sep 2020 23:35:33 +0800
+Message-Id: <1599060933-8092-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 08:09:36AM +0800, Tom Yan wrote:
-> There's no reason for uas to use a smaller value of max_sectors than
-> usb-storage.
-> 
-> Also copying the dma max mapping size clamping from usb-storage.
-> 
-> Signed-off-by: Tom Yan <tom.ty89@gmail.com>
-> ---
->  drivers/usb/storage/uas.c | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-> index 08f9296431e9..813c49914b9a 100644
-> --- a/drivers/usb/storage/uas.c
-> +++ b/drivers/usb/storage/uas.c
-> @@ -827,11 +827,6 @@ static int uas_slave_alloc(struct scsi_device *sdev)
->  	 */
->  	blk_queue_update_dma_alignment(sdev->request_queue, (512 - 1));
->  
-> -	if (devinfo->flags & US_FL_MAX_SECTORS_64)
-> -		blk_queue_max_hw_sectors(sdev->request_queue, 64);
-> -	else if (devinfo->flags & US_FL_MAX_SECTORS_240)
-> -		blk_queue_max_hw_sectors(sdev->request_queue, 240);
-> -
->  	return 0;
->  }
->  
-> @@ -839,6 +834,20 @@ static int uas_slave_configure(struct scsi_device *sdev)
->  {
->  	struct uas_dev_info *devinfo = sdev->hostdata;
->  
-> +	struct us_data *us = host_to_us(sdev->host);
-> +	struct device *dev = us->pusb_dev->bus->sysdev;
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Yeah, this won't work.  The uas driver doesn't use struct us_data at 
-all.  Instead you should have:
+Fix: If vbus event is before cc_event trigger, hard_reset_count
+won't bt reset for some case.
 
-	struct device *dev = devinfo->udev->bus->sysdev;
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+---
+Below's the flow.
 
-except that now you probably don't need it.
+_tcpm_pd_vbus_off() -> run_state_machine to change state to SNK_UNATTACHED
+call tcpm_snk_detach() -> tcpm_snk_detach() -> tcpm_detach()
+tcpm_port_is_disconnected() will be called.
+But port->attached is still true and port->cc1=open and port->cc2=open
 
-> +
-> +	if (devinfo->flags & US_FL_MAX_SECTORS_64)
-> +		blk_queue_max_hw_sectors(sdev->request_queue, 64);
-> +	else if (devinfo->flags & US_FL_MAX_SECTORS_240)
-> +		blk_queue_max_hw_sectors(sdev->request_queue, 240);
-> +	else if (us->pusb_dev->speed >= USB_SPEED_SUPER)
+It cause tcpm_port_is_disconnected return false, then hard_reset_count won't be reset.
+After that, tcpm_reset_port() is called.
+port->attached become false.
 
-Same thing here: devinfo->udev->speed.
+After that, cc now trigger cc_change event, the hard_reset_count will be kept.
+Even tcpm_detach will be called, due to port->attached is false, tcpm_detach()
+will directly return.
 
-> +		blk_queue_max_hw_sectors(sdev->request_queue, 2048);
+CC_EVENT will only trigger drp toggling again.
+---
+ drivers/usb/typec/tcpm/tcpm.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Also, you might want to check before doing this.  If it would decrease 
-the max_hw_sectors value, there's no point doing it.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index a48e3f90..5c73e1d 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -2797,8 +2797,7 @@ static void tcpm_detach(struct tcpm_port *port)
+ 		port->tcpc->set_bist_data(port->tcpc, false);
+ 	}
+ 
+-	if (tcpm_port_is_disconnected(port))
+-		port->hard_reset_count = 0;
++	port->hard_reset_count = 0;
+ 
+ 	tcpm_reset_port(port);
+ }
+-- 
+2.7.4
 
-> +
-> +	blk_queue_max_hw_sectors(sdev->request_queue,
-> +		min_t(size_t, queue_max_hw_sectors(sdev->request_queue),
-> +		      dma_max_mapping_size(dev) >> SECTOR_SHIFT));
-
-And presumably this will be unnecessary.
-
-Alan Stern
