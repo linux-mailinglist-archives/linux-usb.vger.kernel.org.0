@@ -2,80 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF0B25A9DB
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 13:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8A425AA28
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Sep 2020 13:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbgIBLDI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 07:03:08 -0400
-Received: from aclms1.advantech.com.tw ([61.58.41.199]:42462 "EHLO
-        ACLMS1.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726226AbgIBLDE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 07:03:04 -0400
-Received: from taipei09.ADVANTECH.CORP (unverified [172.20.0.236]) by ACLMS1.advantech.com.tw
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Te15c9c306fac14014b1cfc@ACLMS1.advantech.com.tw>;
- Wed, 2 Sep 2020 19:03:01 +0800
-Received: from localhost (172.16.12.96) by taipei09.ADVANTECH.CORP
- (172.20.0.236) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 2 Sep
- 2020 19:03:01 +0800
-From:   William Sung <william.sung@advantech.com.tw>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        AceLan Kao <acelan.kao@canonical.com>,
-        Campion Kang <campion.kang@advantech.com.tw>,
-        William Sung <william.sung@advantech.com.tw>
-Subject: [PATCH v2] usb: serial: option: Fix the lackage for Quectel EG95 LTE modem support
-Date:   Wed, 2 Sep 2020 19:03:01 +0800
-Message-ID: <20200902110301.21936-1-william.sung@advantech.com.tw>
-X-Mailer: git-send-email 2.17.1
+        id S1726400AbgIBLXf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 07:23:35 -0400
+Received: from mga09.intel.com ([134.134.136.24]:22206 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726183AbgIBLXc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Sep 2020 07:23:32 -0400
+IronPort-SDR: OZs/v5oW+sxnuedzK2ZWYU1Ye74M4OsEe5k7ugN0NoSAx1fJ/R0ilLhnocn+XtxC/Bzmy6Wxik
+ HhRlD472xVRA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="158360807"
+X-IronPort-AV: E=Sophos;i="5.76,381,1592895600"; 
+   d="scan'208";a="158360807"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 04:23:31 -0700
+IronPort-SDR: OqNCIjSk4VpEk9lplIyXWdoWV7hgkGe5Iq51Opx0ujwSKJuJVa80CDtRvjRjmjAzIKCfjyV5JS
+ kPXG16VU6E3w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,381,1592895600"; 
+   d="scan'208";a="331402380"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 02 Sep 2020 04:23:28 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kDQrN-00Dhr3-5n; Wed, 02 Sep 2020 14:23:25 +0300
+Date:   Wed, 2 Sep 2020 14:23:25 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     himadrispandya@gmail.com, dvyukov@google.com,
+        linux-usb@vger.kernel.org, perex@perex.cz, tiwai@suse.com,
+        stern@rowland.harvard.ed, linux-kernel@vger.kernel.org,
+        marcel@holtmann.org, johan.hedberg@gmail.com,
+        linux-bluetooth@vger.kernel.org, alsa-devel@alsa-project.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH 03/10] USB: core: message.c: use usb_control_msg_send()
+ in a few places
+Message-ID: <20200902112325.GL1891694@smile.fi.intel.com>
+References: <20200902110115.1994491-1-gregkh@linuxfoundation.org>
+ <20200902110115.1994491-4-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.12.96]
-X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
- taipei09.ADVANTECH.CORP (172.20.0.236)
-X-StopIT: No
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200902110115.1994491-4-gregkh@linuxfoundation.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Add reset-resume callback for resetting USB devices after MCU exits
-from suspend/sleep mode.
+On Wed, Sep 02, 2020 at 01:01:05PM +0200, Greg Kroah-Hartman wrote:
+> There are a few calls to usb_control_msg() that can be converted to use
+> usb_control_msg_send() instead, so do that in order to make the error
+> checking a bit simpler.
 
-* Add zero packet support
+Makes sense. Others will take this as a good example of API in use.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Fixes: da6902e5b6db ("USB: serial: option: add Quectel EG95 LTE modem"
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/usb/core/message.c | 38 +++++++++++++++++++-------------------
+>  1 file changed, 19 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+> index 6aa49b237717..dfd079485c76 100644
+> --- a/drivers/usb/core/message.c
+> +++ b/drivers/usb/core/message.c
+> @@ -1081,7 +1081,7 @@ int usb_set_isoch_delay(struct usb_device *dev)
+>  	if (dev->speed < USB_SPEED_SUPER)
+>  		return 0;
+>  
+> -	return usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+> +	return usb_control_msg_send(dev, 0,
+>  			USB_REQ_SET_ISOCH_DELAY,
+>  			USB_DIR_OUT | USB_TYPE_STANDARD | USB_RECIP_DEVICE,
+>  			dev->hub_delay, 0, NULL, 0,
+> @@ -1203,13 +1203,13 @@ int usb_clear_halt(struct usb_device *dev, int pipe)
+>  	 * (like some ibmcam model 1 units) seem to expect hosts to make
+>  	 * this request for iso endpoints, which can't halt!
+>  	 */
+> -	result = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+> -		USB_REQ_CLEAR_FEATURE, USB_RECIP_ENDPOINT,
+> -		USB_ENDPOINT_HALT, endp, NULL, 0,
+> -		USB_CTRL_SET_TIMEOUT);
+> +	result = usb_control_msg_send(dev, 0,
+> +				      USB_REQ_CLEAR_FEATURE, USB_RECIP_ENDPOINT,
+> +				      USB_ENDPOINT_HALT, endp, NULL, 0,
+> +				      USB_CTRL_SET_TIMEOUT);
+>  
+>  	/* don't un-halt or force to DATA0 except on success */
+> -	if (result < 0)
+> +	if (result)
+>  		return result;
+>  
+>  	/* NOTE:  seems like Microsoft and Apple don't bother verifying
+> @@ -1558,9 +1558,10 @@ int usb_set_interface(struct usb_device *dev, int interface, int alternate)
+>  	if (dev->quirks & USB_QUIRK_NO_SET_INTF)
+>  		ret = -EPIPE;
+>  	else
+> -		ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+> -				   USB_REQ_SET_INTERFACE, USB_RECIP_INTERFACE,
+> -				   alternate, interface, NULL, 0, 5000);
+> +		ret = usb_control_msg_send(dev, 0,
+> +					   USB_REQ_SET_INTERFACE,
+> +					   USB_RECIP_INTERFACE, alternate,
+> +					   interface, NULL, 0, 5000);
+>  
+>  	/* 9.4.10 says devices don't need this and are free to STALL the
+>  	 * request if the interface only has one alternate setting.
+> @@ -1570,7 +1571,7 @@ int usb_set_interface(struct usb_device *dev, int interface, int alternate)
+>  			"manual set_interface for iface %d, alt %d\n",
+>  			interface, alternate);
+>  		manual = 1;
+> -	} else if (ret < 0) {
+> +	} else if (ret) {
+>  		/* Re-instate the old alt setting */
+>  		usb_hcd_alloc_bandwidth(dev, NULL, alt, iface->cur_altsetting);
+>  		usb_enable_lpm(dev);
+> @@ -1718,11 +1719,10 @@ int usb_reset_configuration(struct usb_device *dev)
+>  		mutex_unlock(hcd->bandwidth_mutex);
+>  		return retval;
+>  	}
+> -	retval = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+> -			USB_REQ_SET_CONFIGURATION, 0,
+> -			config->desc.bConfigurationValue, 0,
+> -			NULL, 0, USB_CTRL_SET_TIMEOUT);
+> -	if (retval < 0)
+> +	retval = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
+> +				      config->desc.bConfigurationValue, 0,
+> +				      NULL, 0, USB_CTRL_SET_TIMEOUT);
+> +	if (retval)
+>  		goto reset_old_alts;
+>  	mutex_unlock(hcd->bandwidth_mutex);
+>  
+> @@ -2103,10 +2103,10 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
+>  	}
+>  	kfree(new_interfaces);
+>  
+> -	ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+> -			      USB_REQ_SET_CONFIGURATION, 0, configuration, 0,
+> -			      NULL, 0, USB_CTRL_SET_TIMEOUT);
+> -	if (ret < 0 && cp) {
+> +	ret = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
+> +				   configuration, 0, NULL, 0,
+> +				   USB_CTRL_SET_TIMEOUT);
+> +	if (ret && cp) {
+>  		/*
+>  		 * All the old state is gone, so what else can we do?
+>  		 * The device is probably useless now anyway.
+> -- 
+> 2.28.0
+> 
 
-Signed-off-by: William Sung <william.sung@advantech.com.tw>
----
-
- v2: * Add ZLP support
-     * Remove redundant code for reserving interface number 4
-
- drivers/usb/serial/option.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 89b3192af326..ba4dc67dab2f 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1099,7 +1099,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC25),
- 	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95),
--	  .driver_info = RSVD(4) },
-+	  .driver_info = RSVD(4) | ZLP },
- 	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG96),
- 	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0xff, 0xff),
-@@ -2069,6 +2069,7 @@ static struct usb_serial_driver option_1port_device = {
- #ifdef CONFIG_PM
- 	.suspend           = usb_wwan_suspend,
- 	.resume            = usb_wwan_resume,
-+	.reset_resume      = usb_wwan_resume,
- #endif
- };
- 
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
+
 
