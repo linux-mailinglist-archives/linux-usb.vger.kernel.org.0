@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E2025C05F
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 13:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6710A25C068
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 13:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728622AbgICLdh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 07:33:37 -0400
-Received: from crapouillou.net ([89.234.176.41]:51632 "EHLO crapouillou.net"
+        id S1728666AbgICLep (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 07:34:45 -0400
+Received: from crapouillou.net ([89.234.176.41]:51890 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728565AbgICLdA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Sep 2020 07:33:00 -0400
+        id S1728661AbgICLei (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Sep 2020 07:34:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1599132386; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1599132397; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/HT6v/AkQG8sNb82MyIxu+857/MGP3ynerDd+/QF+M4=;
-        b=NT6bXm22K1zaV5clRMxCKg0SUnoSS/HP14SzgmhrY2C0oCtaBdBnHyiki5RSoxo9YMg0wc
-        VlGjjQNZqrqrIJsvppR7x/8r1X5Y/XgECewG8x/W00M9fiWcXDUwxobiKfMfJ366wNUM4I
-        PtqmGeqLYhAmU8Cr/zkWSrTKKfrsUI4=
+        bh=So1ydkKuCEbYZRfPCMaB7KCDvSR7hgpAAFNtUES9lnU=;
+        b=TdDiNKC/us7YKeyMnnsJ+Gvaf3XEHP0+ivVh03DILw/6xdyhGyQYHfRGGRBxn4+7b7Tgdm
+        wwZTFIbsD9ztA92cvXnUd128sxT5s47A/ML1Xf6o+EBbRib8GKDkXWG0m7A4xoDPlpv154
+        0sKvjhacukZekWOSySQ8noyCTQC5i+U=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Chen <Peter.Chen@nxp.com>,
@@ -44,9 +44,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 09/20] usb/musb: am35x: Use pm_ptr() macro
-Date:   Thu,  3 Sep 2020 13:25:43 +0200
-Message-Id: <20200903112554.34263-10-paul@crapouillou.net>
+Subject: [PATCH 13/20] usb/phy: am335x: Use pm_ptr() macro
+Date:   Thu,  3 Sep 2020 13:25:47 +0200
+Message-Id: <20200903112554.34263-14-paul@crapouillou.net>
 In-Reply-To: <20200903112554.34263-1-paul@crapouillou.net>
 References: <20200903112554.34263-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -64,49 +64,49 @@ simply be discarded by the compiler.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/usb/musb/am35x.c | 8 +++-----
+ drivers/usb/phy/phy-am335x.c | 8 +++-----
  1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/musb/am35x.c b/drivers/usb/musb/am35x.c
-index 660641ab1545..6162111f4cae 100644
---- a/drivers/usb/musb/am35x.c
-+++ b/drivers/usb/musb/am35x.c
-@@ -547,8 +547,7 @@ static int am35x_remove(struct platform_device *pdev)
+diff --git a/drivers/usb/phy/phy-am335x.c b/drivers/usb/phy/phy-am335x.c
+index 8524475d942d..a238f866634b 100644
+--- a/drivers/usb/phy/phy-am335x.c
++++ b/drivers/usb/phy/phy-am335x.c
+@@ -90,8 +90,7 @@ static int am335x_phy_remove(struct platform_device *pdev)
  	return 0;
  }
  
 -#ifdef CONFIG_PM_SLEEP
--static int am35x_suspend(struct device *dev)
-+static int __maybe_unused am35x_suspend(struct device *dev)
+-static int am335x_phy_suspend(struct device *dev)
++static int __maybe_unused am335x_phy_suspend(struct device *dev)
  {
- 	struct am35x_glue	*glue = dev_get_drvdata(dev);
- 	struct musb_hdrc_platform_data *plat = dev_get_platdata(dev);
-@@ -564,7 +563,7 @@ static int am35x_suspend(struct device *dev)
+ 	struct am335x_phy *am_phy = dev_get_drvdata(dev);
+ 
+@@ -111,7 +110,7 @@ static int am335x_phy_suspend(struct device *dev)
  	return 0;
  }
  
--static int am35x_resume(struct device *dev)
-+static int __maybe_unused am35x_resume(struct device *dev)
+-static int am335x_phy_resume(struct device *dev)
++static int __maybe_unused am335x_phy_resume(struct device *dev)
  {
- 	struct am35x_glue	*glue = dev_get_drvdata(dev);
- 	struct musb_hdrc_platform_data *plat = dev_get_platdata(dev);
-@@ -589,7 +588,6 @@ static int am35x_resume(struct device *dev)
+ 	struct am335x_phy	*am_phy = dev_get_drvdata(dev);
+ 
+@@ -122,7 +121,6 @@ static int am335x_phy_resume(struct device *dev)
  
  	return 0;
  }
 -#endif
  
- static SIMPLE_DEV_PM_OPS(am35x_pm_ops, am35x_suspend, am35x_resume);
+ static SIMPLE_DEV_PM_OPS(am335x_pm_ops, am335x_phy_suspend, am335x_phy_resume);
  
-@@ -598,7 +596,7 @@ static struct platform_driver am35x_driver = {
- 	.remove		= am35x_remove,
- 	.driver		= {
- 		.name	= "musb-am35x",
--		.pm	= &am35x_pm_ops,
-+		.pm	= pm_ptr(&am35x_pm_ops),
+@@ -137,7 +135,7 @@ static struct platform_driver am335x_phy_driver = {
+ 	.remove         = am335x_phy_remove,
+ 	.driver         = {
+ 		.name   = "am335x-phy-driver",
+-		.pm = &am335x_pm_ops,
++		.pm = pm_ptr(&am335x_pm_ops),
+ 		.of_match_table = am335x_phy_ids,
  	},
  };
- 
 -- 
 2.28.0
 
