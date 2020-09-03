@@ -2,62 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 040F625BDD8
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 10:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A5D25BDD9
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 10:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728061AbgICIux (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 04:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
+        id S1728115AbgICIvA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 04:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726292AbgICIuv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Sep 2020 04:50:51 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF24C061244
-        for <linux-usb@vger.kernel.org>; Thu,  3 Sep 2020 01:50:51 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id u20so1784744pfn.0
-        for <linux-usb@vger.kernel.org>; Thu, 03 Sep 2020 01:50:51 -0700 (PDT)
+        with ESMTP id S1726397AbgICIu5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Sep 2020 04:50:57 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96339C061244
+        for <linux-usb@vger.kernel.org>; Thu,  3 Sep 2020 01:50:54 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id gl3so31258pjb.1
+        for <linux-usb@vger.kernel.org>; Thu, 03 Sep 2020 01:50:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VLwjdBqRP5KkcLfMJcD+59nZi8fno4/2R2tsm4OK2/w=;
-        b=lDiEqWVSOU/DjR1ocEMpGLX2pDaznvUAuyMp3tzErVSbqq1/ZWzqNVhKxKOLadxd54
-         BRDecgkNVErRs0tWJJ2vGVF4HBtKFwqd6vW6GG3rH/5jj1BSLrUKkQeaTt1xf69VH/F6
-         60P/LfJAJUgELVnw9x0oSLZbiB4MUuZzp3AdA+Kb1RMOp/E4SWhH9Y+rYAj3PV+411ov
-         hrFUB5lMb9mMwYWtXctueV/1L6HNUrtQLzpvNL6xhocwKmI29far2jM/w8ek6o3aiUdc
-         UmzVkpKbBG8xo9HM5bZ1SbfwVfhZRvO7BitIUMIjbRe/NCw5NkDJ2GoSquvstnrKxfIO
-         ViCA==
+        bh=zPbBfYdRv19xF3sirA0d8CLfF89pzIdN85SmGePftxg=;
+        b=P3/KBp0nypZkZbRWcV78yYMOkhTndoLzdEx780gwwZ8OmuBmckWMZ7b/lYzkfv9Awz
+         fCwicBzxvvnqWViTe9780nb0RKvvhohJeTPC2b/bWs2biAsxc5stQotqAEaTU6AaSRDM
+         7WC/KXzTXhXY2pnq1lmH/RcBMahWo4A5NQwEuKVKa4i4cBrmFhHUdxrdnzyZumRsJxyW
+         FOE3p+3sEGQlh0o/XqwZncMmRFRYwiCAzOEsJmI1ukKZOGrMWYFCHpwbpU49+bQVx3x9
+         wOOLht7ZSEzU0O8ZaH9+xvz1plvxIAMk2C76D+3G6Ulq/YByIwDambLxLQFoa+QCCRPL
+         k/0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VLwjdBqRP5KkcLfMJcD+59nZi8fno4/2R2tsm4OK2/w=;
-        b=IczDET6CFZ9MFlShRoPhyMCHl5mMY58k2C4oD6xAadahvBur0Tk9Uz1oCWmdjh14BQ
-         RISOzaMdhhMxdPAYTQG/zSIcVNchMAGG3zjSt7WePxMbb3n+UhyIyTIsvzPXHLad/sUQ
-         wss6iNo66+Pyjex9+/e7Nhvxz++ftW5U9ZLm0WX8ev3U2qyd/gdD9kiGtI/olZmpjGh8
-         woO9z3wJoIjLkVNtpEuENRx7ZP33HlhL52XKPBY4gYWifooZS4ey8FD0yGQ3gUhowAlq
-         oKhplIBNyT9g088MOVZcSXc/PzL61B7/0XvzSA/lmKi+L7JEDWrlY7e62zSSQwacbJx3
-         sr3w==
-X-Gm-Message-State: AOAM5308CK4JpIMEGD0Waim3pZtmE/a+s867VUp8BIEhxNPPmEUM6foW
-        9llVOvBI3I6hl3Cx251LEakx8ISw4sk=
-X-Google-Smtp-Source: ABdhPJypSXMabgALkVqbO1levj57oYbbaDis9RfrH7+CDHw7zXSHHMkKKqwaCy2PMQ8wRUsiHAE18g==
-X-Received: by 2002:a63:2782:: with SMTP id n124mr332299pgn.319.1599123050317;
-        Thu, 03 Sep 2020 01:50:50 -0700 (PDT)
+        bh=zPbBfYdRv19xF3sirA0d8CLfF89pzIdN85SmGePftxg=;
+        b=ua0U1bH74AoHbt49uEhJ9/S4dU5udFccfA7Ufzng7nAfVlpsGGv0u4LHLV5NohcGGm
+         /r9A7bOabj7W2foZC+zBRkcWp4yUpZT5IIbfsEzQnNe4LDEnWd9//PDlTq2d4Fge392Y
+         byZ6AVtxuCw6X9p6CgPwcFDjRJVGPd+pqQ5iiPWOuTP2J2sAjx9X9tbFKbarkJb+KPKy
+         ruIom0ZqzDzPjjFdy9rqmY7WH3LRfn7SjpPDimNngiN1X0kKP7aT74oRlVk+1VzXnCeW
+         FE67cLtHB8HYOdSNfqMg6hX2Mcd2vyi7X2aqr1PG7+CL8XRYyk8j7s4BSg+dT34xzdWG
+         4IVA==
+X-Gm-Message-State: AOAM531tSDkliPn/DpIrMDH2CVzJJqNVYXCV/v6pCq0+yOXEVYi68kvn
+        F5CiIa8fxWM8FxAQppGRD6b+RVMBRQg=
+X-Google-Smtp-Source: ABdhPJwVwOwyA4frWgLrLIJ2jm0NRKbm8Dy9EmAodgpu6bwE47V+rIGye30qaPUUAyR9kC/tEdNMbw==
+X-Received: by 2002:a17:90a:e016:: with SMTP id u22mr2407541pjy.178.1599123053812;
+        Thu, 03 Sep 2020 01:50:53 -0700 (PDT)
 Received: from localhost.localdomain ([161.81.62.213])
-        by smtp.gmail.com with ESMTPSA id i9sm1945760pgb.37.2020.09.03.01.50.48
+        by smtp.gmail.com with ESMTPSA id i9sm1945760pgb.37.2020.09.03.01.50.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2020 01:50:49 -0700 (PDT)
+        Thu, 03 Sep 2020 01:50:53 -0700 (PDT)
 From:   Tom Yan <tom.ty89@gmail.com>
 To:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
         stern@rowland.harvard.edu, arnd@arndb.de
 Cc:     cyrozap@gmail.com, yoshihiro.shimoda.uh@renesas.com,
         Tom Yan <tom.ty89@gmail.com>
-Subject: [PATCH v5 1/2] usb-storage: fix sdev->host->dma_dev
-Date:   Thu,  3 Sep 2020 16:50:34 +0800
-Message-Id: <20200903085035.307720-1-tom.ty89@gmail.com>
+Subject: [PATCH v5 2/2] uas: bump hw_max_sectors to 2048 blocks for SS or faster drives
+Date:   Thu,  3 Sep 2020 16:50:35 +0800
+Message-Id: <20200903085035.307720-2-tom.ty89@gmail.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200903083404.GA2169202@kroah.com>
+In-Reply-To: <20200903085035.307720-1-tom.ty89@gmail.com>
 References: <20200903083404.GA2169202@kroah.com>
+ <20200903085035.307720-1-tom.ty89@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -65,97 +66,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use scsi_add_host_with_dma() instead of scsi_add_host() in usb.c and uas.c.
-
-When the scsi request queue is initialized/allocated, hw_max_sectors is clamped
-to the dma max mapping size. Therefore, the correct device that should be used
-for the clamping needs to be set.
-
-The same clamping is still needed in the USB drivers as hw_max_sectors could be
-changed there. The original clamping would be invalidated in such cases.
+There's no reason for uas to use a smaller value of max_sectors than
+usb-storage.
 
 Signed-off-by: Tom Yan <tom.ty89@gmail.com>
 ---
-v2: fix commit message line length; bump hw_max_sectors to 2048 for SS UAS
-drives; split the "fallback" hw_max_sectors setting into another patch
-v3: use a different approach: fix the dma_dev instead
-v4: add the changelog of the patch series
-v5: fix changelog line length
- drivers/usb/storage/scsiglue.c |  2 +-
- drivers/usb/storage/uas.c      | 17 +++++++++++------
- drivers/usb/storage/usb.c      |  5 +++--
- 3 files changed, 15 insertions(+), 9 deletions(-)
+ drivers/usb/storage/uas.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-index e5a971b83e3f..560efd1479ba 100644
---- a/drivers/usb/storage/scsiglue.c
-+++ b/drivers/usb/storage/scsiglue.c
-@@ -92,7 +92,7 @@ static int slave_alloc (struct scsi_device *sdev)
- static int slave_configure(struct scsi_device *sdev)
- {
- 	struct us_data *us = host_to_us(sdev->host);
--	struct device *dev = us->pusb_dev->bus->sysdev;
-+	struct device *dev = sdev->host->dma_dev;
- 
- 	/*
- 	 * Many devices have trouble transferring more than 32KB at a time,
 diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 08f9296431e9..f4beeb8a8adb 100644
+index f4beeb8a8adb..c1123da43407 100644
 --- a/drivers/usb/storage/uas.c
 +++ b/drivers/usb/storage/uas.c
-@@ -827,17 +827,22 @@ static int uas_slave_alloc(struct scsi_device *sdev)
- 	 */
- 	blk_queue_update_dma_alignment(sdev->request_queue, (512 - 1));
+@@ -839,6 +839,8 @@ static int uas_slave_configure(struct scsi_device *sdev)
+ 		blk_queue_max_hw_sectors(sdev->request_queue, 64);
+ 	else if (devinfo->flags & US_FL_MAX_SECTORS_240)
+ 		blk_queue_max_hw_sectors(sdev->request_queue, 240);
++	else if (devinfo->udev->speed >= USB_SPEED_SUPER)
++		blk_queue_max_hw_sectors(sdev->request_queue, 2048);
  
--	if (devinfo->flags & US_FL_MAX_SECTORS_64)
--		blk_queue_max_hw_sectors(sdev->request_queue, 64);
--	else if (devinfo->flags & US_FL_MAX_SECTORS_240)
--		blk_queue_max_hw_sectors(sdev->request_queue, 240);
--
- 	return 0;
- }
- 
- static int uas_slave_configure(struct scsi_device *sdev)
- {
- 	struct uas_dev_info *devinfo = sdev->hostdata;
-+	struct device *dev = sdev->host->dma_dev;
-+
-+	if (devinfo->flags & US_FL_MAX_SECTORS_64)
-+		blk_queue_max_hw_sectors(sdev->request_queue, 64);
-+	else if (devinfo->flags & US_FL_MAX_SECTORS_240)
-+		blk_queue_max_hw_sectors(sdev->request_queue, 240);
-+
-+	blk_queue_max_hw_sectors(sdev->request_queue,
-+		min_t(size_t, queue_max_hw_sectors(sdev->request_queue),
-+		      dma_max_mapping_size(dev) >> SECTOR_SHIFT));
- 
- 	if (devinfo->flags & US_FL_NO_REPORT_OPCODES)
- 		sdev->no_report_opcodes = 1;
-@@ -1023,7 +1028,7 @@ static int uas_probe(struct usb_interface *intf, const struct usb_device_id *id)
- 	shost->can_queue = devinfo->qdepth - 2;
- 
- 	usb_set_intfdata(intf, shost);
--	result = scsi_add_host(shost, &intf->dev);
-+	result = scsi_add_host_with_dma(shost, &intf->dev, udev->bus->sysdev);
- 	if (result)
- 		goto free_streams;
- 
-diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-index 94a64729dc27..c2ef367cf257 100644
---- a/drivers/usb/storage/usb.c
-+++ b/drivers/usb/storage/usb.c
-@@ -1049,8 +1049,9 @@ int usb_stor_probe2(struct us_data *us)
- 		goto BadDevice;
- 	usb_autopm_get_interface_no_resume(us->pusb_intf);
- 	snprintf(us->scsi_name, sizeof(us->scsi_name), "usb-storage %s",
--					dev_name(&us->pusb_intf->dev));
--	result = scsi_add_host(us_to_host(us), dev);
-+					dev_name(dev));
-+	result = scsi_add_host_with_dma(us_to_host(us), dev,
-+					us->pusb_dev->bus->sysdev);
- 	if (result) {
- 		dev_warn(dev,
- 				"Unable to add the scsi host\n");
+ 	blk_queue_max_hw_sectors(sdev->request_queue,
+ 		min_t(size_t, queue_max_hw_sectors(sdev->request_queue),
 -- 
 2.28.0
 
