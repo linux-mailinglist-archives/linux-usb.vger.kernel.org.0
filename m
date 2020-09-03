@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB94625C06E
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 13:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB44125C074
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 13:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728705AbgICLft (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 07:35:49 -0400
-Received: from crapouillou.net ([89.234.176.41]:51944 "EHLO crapouillou.net"
+        id S1728739AbgICLia (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 07:38:30 -0400
+Received: from crapouillou.net ([89.234.176.41]:52056 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728646AbgICLfK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Sep 2020 07:35:10 -0400
+        id S1728665AbgICLhy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Sep 2020 07:37:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1599132402; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1599132413; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hcIYdvuHgCnX105VYCMzaNdLpnwL2oejz7eq3kv/QCg=;
-        b=l7TbgxzpKLSy0f6XLh5qi4mNX+GQCUAKmtU+E1nWIeS96sZKn1LB6jiycJjFMuiwsFy0TA
-        2zCaaa2m6gE/ximHchPnzqKmlRw6nu45OsdT97mINoU/Tc4nlNTa9NBZg0Qq7wHf0VUs87
-        vUj9NR0sMCrRUu/irsY+vlaud1PF1Ls=
+        bh=J6Cjz5sekpGDn1rcuBCLu89HY0vBE+cfODvggh6BD5M=;
+        b=xsWwAFxugGWyD41I1noG8j49pGiP3DmP8Z0Ib/Oi1o/eDGTRpVibfAeZIg7DS9Fqfq8T1l
+        TLZAlUHAAu9Mt135JM9yq5oOklHHDyG+kTom6DdpcL7oLHxESfAvghnKS/w/Y/+C6njNeI
+        3eppN8IzlKc75vYDexd9MLS6vk5HxLU=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Chen <Peter.Chen@nxp.com>,
@@ -44,9 +44,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 15/20] usb/gadget/udc: atmel: Use pm_ptr() macro
-Date:   Thu,  3 Sep 2020 13:25:49 +0200
-Message-Id: <20200903112554.34263-16-paul@crapouillou.net>
+Subject: [PATCH 19/20] usb/gadget/udc: renesas: Use pm_ptr() macro
+Date:   Thu,  3 Sep 2020 13:25:53 +0200
+Message-Id: <20200903112554.34263-20-paul@crapouillou.net>
 In-Reply-To: <20200903112554.34263-1-paul@crapouillou.net>
 References: <20200903112554.34263-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -64,47 +64,47 @@ simply be discarded by the compiler.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/usb/gadget/udc/atmel_usba_udc.c | 8 +++-----
+ drivers/usb/gadget/udc/renesas_usb3.c | 8 +++-----
  1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
-index a6426dd1cfef..38da3f3ebde7 100644
---- a/drivers/usb/gadget/udc/atmel_usba_udc.c
-+++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-@@ -2359,8 +2359,7 @@ static int usba_udc_remove(struct platform_device *pdev)
- 	return 0;
+diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+index 0c418ce50ba0..4e8ba5914eff 100644
+--- a/drivers/usb/gadget/udc/renesas_usb3.c
++++ b/drivers/usb/gadget/udc/renesas_usb3.c
+@@ -2867,8 +2867,7 @@ static int renesas_usb3_probe(struct platform_device *pdev)
+ 	return ret;
  }
  
 -#ifdef CONFIG_PM_SLEEP
--static int usba_udc_suspend(struct device *dev)
-+static int __maybe_unused usba_udc_suspend(struct device *dev)
+-static int renesas_usb3_suspend(struct device *dev)
++static int __maybe_unused renesas_usb3_suspend(struct device *dev)
  {
- 	struct usba_udc *udc = dev_get_drvdata(dev);
+ 	struct renesas_usb3 *usb3 = dev_get_drvdata(dev);
  
-@@ -2393,7 +2392,7 @@ static int usba_udc_suspend(struct device *dev)
+@@ -2884,7 +2883,7 @@ static int renesas_usb3_suspend(struct device *dev)
  	return 0;
  }
  
--static int usba_udc_resume(struct device *dev)
-+static int __maybe_unused usba_udc_resume(struct device *dev)
+-static int renesas_usb3_resume(struct device *dev)
++static int __maybe_unused renesas_usb3_resume(struct device *dev)
  {
- 	struct usba_udc *udc = dev_get_drvdata(dev);
+ 	struct renesas_usb3 *usb3 = dev_get_drvdata(dev);
  
-@@ -2417,7 +2416,6 @@ static int usba_udc_resume(struct device *dev)
+@@ -2899,7 +2898,6 @@ static int renesas_usb3_resume(struct device *dev)
  
  	return 0;
  }
 -#endif
  
- static SIMPLE_DEV_PM_OPS(usba_udc_pm_ops, usba_udc_suspend, usba_udc_resume);
- 
-@@ -2425,7 +2423,7 @@ static struct platform_driver udc_driver = {
- 	.remove		= usba_udc_remove,
+ static SIMPLE_DEV_PM_OPS(renesas_usb3_pm_ops, renesas_usb3_suspend,
+ 			renesas_usb3_resume);
+@@ -2909,7 +2907,7 @@ static struct platform_driver renesas_usb3_driver = {
+ 	.remove		= renesas_usb3_remove,
  	.driver		= {
- 		.name		= "atmel_usba_udc",
--		.pm		= &usba_udc_pm_ops,
-+		.pm		= pm_ptr(&usba_udc_pm_ops),
- 		.of_match_table	= atmel_udc_dt_ids,
+ 		.name =	udc_name,
+-		.pm		= &renesas_usb3_pm_ops,
++		.pm		= pm_ptr(&renesas_usb3_pm_ops),
+ 		.of_match_table = of_match_ptr(usb3_of_match),
  	},
  };
 -- 
