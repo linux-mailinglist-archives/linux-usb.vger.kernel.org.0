@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB16A25C04B
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 13:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0074A25C05D
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 13:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728556AbgICL07 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 07:26:59 -0400
-Received: from crapouillou.net ([89.234.176.41]:50376 "EHLO crapouillou.net"
+        id S1728572AbgICLc7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 07:32:59 -0400
+Received: from crapouillou.net ([89.234.176.41]:51548 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728422AbgICL0T (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Sep 2020 07:26:19 -0400
+        id S1728633AbgICLcN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Sep 2020 07:32:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1599132365; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1599132384; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nylEOZ/ud9dJuiCng3IS9pJVAuTv7JQFJCJlDdh38kA=;
-        b=JuRU33REs724J6eVnbhIDjfeUMWW9tOA78MdFBc3i95nB9cktLPxKK2ChHPcQK628+jfXp
-        i3+e9cDmuhgUwtVBolHIKO9sH8/eX+Ybb3YnUm1v+0udsj1vdEp3baEUPowH0LfsUOS6V5
-        R9po9WQ1ueOAKCWhmtjbsOVyV8m+OMk=
+        bh=2TQYLxc3aHxXcFDX5qciZlfYToGuHk7NHkGdcnudwus=;
+        b=tnYD6IS4snnHJrlJyjB0BhU2Y/BNORywG/8Sfqgkjf31/Cy4M08Lt84RUw4tdSFSBZEYNu
+        wfXt8hsktCQiQYAsXl8BVqtqjHbOxuVdH6NI4gHmY0iUyY4RsQ8r0fjQOY9a19Cqpxz/T3
+        yUCZWhbC7JHjcKvR2k1SabcdznHa1ig=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Chen <Peter.Chen@nxp.com>,
@@ -44,9 +44,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 01/20] usb/host: ohci-platform: Use pm_ptr() macro
-Date:   Thu,  3 Sep 2020 13:25:35 +0200
-Message-Id: <20200903112554.34263-2-paul@crapouillou.net>
+Subject: [PATCH 08/20] usb/misc: usb4604: Use pm_ptr() macro
+Date:   Thu,  3 Sep 2020 13:25:42 +0200
+Message-Id: <20200903112554.34263-9-paul@crapouillou.net>
 In-Reply-To: <20200903112554.34263-1-paul@crapouillou.net>
 References: <20200903112554.34263-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -64,77 +64,49 @@ simply be discarded by the compiler.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/usb/host/ohci-platform.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ drivers/usb/misc/usb4604.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-index 4a8456f12a73..21400d7d8b0a 100644
---- a/drivers/usb/host/ohci-platform.c
-+++ b/drivers/usb/host/ohci-platform.c
-@@ -176,22 +176,21 @@ static int ohci_platform_probe(struct platform_device *dev)
- 	if (pdata->num_ports)
- 		ohci->num_ports = pdata->num_ports;
- 
--#ifndef CONFIG_USB_OHCI_BIG_ENDIAN_MMIO
--	if (ohci->flags & OHCI_QUIRK_BE_MMIO) {
-+	if (!IS_ENABLED(CONFIG_USB_OHCI_BIG_ENDIAN_MMIO) &&
-+	    ohci->flags & OHCI_QUIRK_BE_MMIO) {
- 		dev_err(&dev->dev,
- 			"Error: CONFIG_USB_OHCI_BIG_ENDIAN_MMIO not set\n");
- 		err = -EINVAL;
- 		goto err_reset;
- 	}
--#endif
--#ifndef CONFIG_USB_OHCI_BIG_ENDIAN_DESC
--	if (ohci->flags & OHCI_QUIRK_BE_DESC) {
-+
-+	if (!IS_ENABLED(CONFIG_USB_OHCI_BIG_ENDIAN_DESC) &&
-+	    ohci->flags & OHCI_QUIRK_BE_DESC) {
- 		dev_err(&dev->dev,
- 			"Error: CONFIG_USB_OHCI_BIG_ENDIAN_DESC not set\n");
- 		err = -EINVAL;
- 		goto err_reset;
- 	}
--#endif
- 
- 	pm_runtime_set_active(&dev->dev);
- 	pm_runtime_enable(&dev->dev);
-@@ -267,8 +266,7 @@ static int ohci_platform_remove(struct platform_device *dev)
- 	return 0;
+diff --git a/drivers/usb/misc/usb4604.c b/drivers/usb/misc/usb4604.c
+index 1b4de651e697..2142af9bbdec 100644
+--- a/drivers/usb/misc/usb4604.c
++++ b/drivers/usb/misc/usb4604.c
+@@ -112,8 +112,7 @@ static int usb4604_i2c_probe(struct i2c_client *i2c,
+ 	return usb4604_probe(hub);
  }
  
 -#ifdef CONFIG_PM_SLEEP
--static int ohci_platform_suspend(struct device *dev)
-+static int __maybe_unused ohci_platform_suspend(struct device *dev)
+-static int usb4604_i2c_suspend(struct device *dev)
++static int __maybe_unused usb4604_i2c_suspend(struct device *dev)
  {
- 	struct usb_hcd *hcd = dev_get_drvdata(dev);
- 	struct usb_ohci_pdata *pdata = dev->platform_data;
-@@ -286,7 +284,7 @@ static int ohci_platform_suspend(struct device *dev)
- 	return ret;
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct usb4604 *hub = i2c_get_clientdata(client);
+@@ -123,7 +122,7 @@ static int usb4604_i2c_suspend(struct device *dev)
+ 	return 0;
  }
  
--static int ohci_platform_resume(struct device *dev)
-+static int __maybe_unused ohci_platform_resume(struct device *dev)
+-static int usb4604_i2c_resume(struct device *dev)
++static int __maybe_unused usb4604_i2c_resume(struct device *dev)
  {
- 	struct usb_hcd *hcd = dev_get_drvdata(dev);
- 	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
-@@ -306,7 +304,6 @@ static int ohci_platform_resume(struct device *dev)
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct usb4604 *hub = i2c_get_clientdata(client);
+@@ -132,7 +131,6 @@ static int usb4604_i2c_resume(struct device *dev)
  
  	return 0;
  }
--#endif /* CONFIG_PM_SLEEP */
+-#endif
  
- static const struct of_device_id ohci_platform_ids[] = {
- 	{ .compatible = "generic-ohci", },
-@@ -332,7 +329,7 @@ static struct platform_driver ohci_platform_driver = {
- 	.shutdown	= usb_hcd_platform_shutdown,
- 	.driver		= {
- 		.name	= "ohci-platform",
--		.pm	= &ohci_platform_pm_ops,
-+		.pm	= pm_ptr(&ohci_platform_pm_ops),
- 		.of_match_table = ohci_platform_ids,
- 	}
- };
+ static SIMPLE_DEV_PM_OPS(usb4604_i2c_pm_ops, usb4604_i2c_suspend,
+ 		usb4604_i2c_resume);
+@@ -154,7 +152,7 @@ MODULE_DEVICE_TABLE(of, usb4604_of_match);
+ static struct i2c_driver usb4604_i2c_driver = {
+ 	.driver = {
+ 		.name = "usb4604",
+-		.pm = &usb4604_i2c_pm_ops,
++		.pm = pm_ptr(&usb4604_i2c_pm_ops),
+ 		.of_match_table = of_match_ptr(usb4604_of_match),
+ 	},
+ 	.probe		= usb4604_i2c_probe,
 -- 
 2.28.0
 
