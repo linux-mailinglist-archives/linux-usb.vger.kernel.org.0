@@ -2,133 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F4C25BB85
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 09:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB84B25BBC3
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 09:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728113AbgICHVL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 03:21:11 -0400
-Received: from mga09.intel.com ([134.134.136.24]:56047 "EHLO mga09.intel.com"
+        id S1728231AbgICHcf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 03:32:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56460 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725943AbgICHVK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Sep 2020 03:21:10 -0400
-IronPort-SDR: bmXDHYbF+kvCAhCO0pZG2AeGuZsvY2AwLbGC57HJDgmv+naUFOUA5JcTpfJlhNmWJ6rgKbPVvJ
- z3buklLmhX7w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="158516983"
-X-IronPort-AV: E=Sophos;i="5.76,385,1592895600"; 
-   d="scan'208";a="158516983"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 00:20:56 -0700
-IronPort-SDR: iljunDC2aqSiM/SIissT5dKpRy289U9MGh+F83EU2SODTNGz9Q6wcmOSpK2LT3oAD/wD7u04xl
- dYU+gcqcncaw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,385,1592895600"; 
-   d="scan'208";a="502962627"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Sep 2020 00:20:47 -0700
-Subject: Re: [PATCH v2] usb: xhci: add debugfs support for ep with stream
-To:     Jun Li <jun.li@nxp.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-References: <1594901321-6992-1-git-send-email-jun.li@nxp.com>
- <DB8PR04MB6523AC8B5B7C1DEDA1254F0A89430@DB8PR04MB6523.eurprd04.prod.outlook.com>
- <c6c4f598-ff8a-8b51-d87c-c5d20f4421a4@linux.intel.com>
- <VE1PR04MB65289D522279DD1267A1FFF5895C0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <5257ec39-9f59-58fe-661f-a1cd69955f1e@linux.intel.com>
- <VE1PR04MB6528936627B6478BE76813D6892F0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <aa359d28-c53f-37b0-6e4f-19a312fb6293@linux.intel.com>
- <VE1PR04MB65285CCF5DDF72D2F990B7DB892F0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <ed0df478-f17e-e276-55fe-c712118e9898@linux.intel.com>
-Date:   Thu, 3 Sep 2020 10:23:53 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726025AbgICHce (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Sep 2020 03:32:34 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B389420775;
+        Thu,  3 Sep 2020 07:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599118353;
+        bh=a6NQokr4jM352XqY6vw/Xjc9tnmlUORQvxTKs8y3VmQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lY2nENn4PyQnLe86tGBsy7BegX4EZ7tvxXVlNM7BZv6S3N+PmLZ0sqWiCET8GGqTk
+         o68zMMnRNYD7BkFKDl2ntBWB2Sy6A0ODNnz4eHdZJOHHBJgh+vXLe7u5kUJqQS+zhd
+         95RgxEBPX+1UU5R2KEx32QhMc60fTKCtZT9/LTMc=
+Date:   Thu, 3 Sep 2020 09:32:30 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     himadrispandya@gmail.com, dvyukov@google.com,
+        linux-usb@vger.kernel.org, perex@perex.cz, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Eli Billauer <eli.billauer@gmail.com>,
+        Emiliano Ingrassia <ingrassia@epigenesys.com>,
+        Alexander Tsoy <alexander@tsoy.me>,
+        "Geoffrey D. Bennett" <g@b4.vu>, Jussi Laako <jussi@sonarnerd.net>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Dmitry Panchenko <dmitry@d-systems.ee>,
+        Chris Wulff <crwulff@gmail.com>,
+        Jesus Ramos <jesus-ramos@live.com>
+Subject: Re: [PATCH 01/10] USB: move snd_usb_pipe_sanity_check into the USB
+ core
+Message-ID: <20200903073230.GA162335@kroah.com>
+References: <20200902110115.1994491-1-gregkh@linuxfoundation.org>
+ <20200902110115.1994491-2-gregkh@linuxfoundation.org>
+ <20200903004553.GA642955@rowland.harvard.edu>
 MIME-Version: 1.0
-In-Reply-To: <VE1PR04MB65285CCF5DDF72D2F990B7DB892F0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200903004553.GA642955@rowland.harvard.edu>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->> I think this debugfs code is just called too early. It shouldn't need to check new_ring
->> pointer at all.
->>
->> I wrote a fix that changes the order and makes sure endpoint is enabled and ring
->> pointer is set correctly before we call xhci_debugfs_create_endpoint()
->>
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.o
->> rg%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fmnyman%2Fxhci.git%2Fcommit%2F%3Fh%3Dfo
->> r-usb-linus%26id%3Dcf99aef5624a592fd4f3374c7060bfa1a65f15df&amp;data=02%7C01%7
->> Cjun.li%40nxp.com%7C73e4663a6f6641fbb8b308d84f3d021a%7C686ea1d3bc2b4c6fa92cd99
->> c5c301635%7C0%7C0%7C637346470803922895&amp;sdata=i4DfCW8EVUSAWnzb8Ql4jPjAOD5wp
->> tfbaMrO8vKvtDc%3D&amp;reserved=0
+On Wed, Sep 02, 2020 at 08:45:53PM -0400, Alan Stern wrote:
+> On Wed, Sep 02, 2020 at 01:01:03PM +0200, Greg Kroah-Hartman wrote:
+> > snd_usb_pipe_sanity_check() is a great function, so let's move it into
+> > the USB core so that other parts of the kernel, including the USB core,
+> > can call it.
+> > 
+> > Name it usb_pipe_type_check() to match the existing
+> > usb_urb_ep_type_check() call, which now uses this function.
+> > 
+> > Cc: Jaroslav Kysela <perex@perex.cz>
+> > Cc: Takashi Iwai <tiwai@suse.com>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: Eli Billauer <eli.billauer@gmail.com>
+> > Cc: Emiliano Ingrassia <ingrassia@epigenesys.com>
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: Alexander Tsoy <alexander@tsoy.me>
+> > Cc: "Geoffrey D. Bennett" <g@b4.vu>
+> > Cc: Jussi Laako <jussi@sonarnerd.net>
+> > Cc: Nick Kossifidis <mickflemm@gmail.com>
+> > Cc: Dmitry Panchenko <dmitry@d-systems.ee>
+> > Cc: Chris Wulff <crwulff@gmail.com>
+> > Cc: Jesus Ramos <jesus-ramos@live.com>
+> > Cc: linux-usb@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: alsa-devel@alsa-project.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
 > 
-> This is a good place for non-zero Eps, but does not cover ep0.
+> > diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+> > index 27e83e55a590..45bc2914c1ba 100644
+> > --- a/drivers/usb/core/urb.c
+> > +++ b/drivers/usb/core/urb.c
+> > @@ -192,24 +192,39 @@ static const int pipetypes[4] = {
+> >  };
+> >  
+> >  /**
+> > - * usb_urb_ep_type_check - sanity check of endpoint in the given urb
+> > - * @urb: urb to be checked
+> > + * usb_pipe_type_check - sanity check of a specific pipe for a usb device
+> > + * @dev: struct usb_device to be checked
+> > + * @pipe: pipe to check
+> >   *
+> >   * This performs a light-weight sanity check for the endpoint in the
+> > - * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
+> > - * a negative error code.
+> > + * given usb device.  It returns 0 if the pipe is a valid for the specific usb
+> -----------------------------------------------------^
+> Typo.
+
+Oops, will fix, thanks.
+
+
 > 
+> > + * device, otherwise a negative error code.
+> >   */
+> > -int usb_urb_ep_type_check(const struct urb *urb)
+> > +int usb_pipe_type_check(struct usb_device *dev, unsigned int pipe)
+> >  {
+> >  	const struct usb_host_endpoint *ep;
+> >  
+> > -	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
+> > +	ep = usb_pipe_endpoint(dev, pipe);
+> >  	if (!ep)
+> >  		return -EINVAL;
+> > -	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+> > +	if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+> >  		return -EINVAL;
+> >  	return 0;
+> >  }
+> > +EXPORT_SYMBOL_GPL(usb_pipe_type_check);
+> > +
+> > +/**
+> > + * usb_urb_ep_type_check - sanity check of endpoint in the given urb
+> > + * @urb: urb to be checked
+> > + *
+> > + * This performs a light-weight sanity check for the endpoint in the
+> > + * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
+> > + * a negative error code.
+> > + */
+> > +int usb_urb_ep_type_check(const struct urb *urb)
+> > +{
+> > +	return usb_pipe_type_check(urb->dev, urb->pipe);
+> > +}
+> >  EXPORT_SYMBOL_GPL(usb_urb_ep_type_check);
+> 
+> Since this routine is used in only one place in the entire kernel, you 
+> might as well inline the code there and get rid of the function 
+> entirely.
 
-ep0 is special, it's not touched in these add/drop endpoint or check bandwidth
-functions.
+Good idea, will do.
 
-ep0 ring is allocated earlier during slot creation in
-xhci_alloc_virt_device()
-  ...
-  /* Allocate endpoint 0 ring */
-  dev->eps[0].ring = xhci_ring_alloc(xhci, 2, 1, TYPE_CTRL, 0, flags);
+> > diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+> > index abf99b814a0f..fc3aab04a0bc 100644
+> > --- a/sound/usb/quirks.c
+> > +++ b/sound/usb/quirks.c
+> > @@ -846,7 +846,7 @@ static int snd_usb_accessmusic_boot_quirk(struct usb_device *dev)
+> >  	static const u8 seq[] = { 0x4e, 0x73, 0x52, 0x01 };
+> >  	void *buf;
+> >  
+> > -	if (snd_usb_pipe_sanity_check(dev, usb_sndintpipe(dev, 0x05)))
+> > +	if (usb_pipe_type_check(dev, usb_sndintpipe(dev, 0x05)))
+> >  		return -EINVAL;
+> >  	buf = kmemdup(seq, ARRAY_SIZE(seq), GFP_KERNEL);
+> >  	if (!buf)
+> > @@ -875,7 +875,7 @@ static int snd_usb_nativeinstruments_boot_quirk(struct usb_device *dev)
+> >  {
+> >  	int ret;
+> >  
+> > -	if (snd_usb_pipe_sanity_check(dev, usb_sndctrlpipe(dev, 0)))
+> > +	if (usb_pipe_type_check(dev, usb_sndctrlpipe(dev, 0)))
+> >  		return -EINVAL;
+> 
+> In a few places here this check is completely unnecessary.  All it does 
+> is verify that the device does have an endpoint 0 and the the type of 
+> the endpoint matches the type of the pipe.  Well, every USB device 
+> always has an endpoint 0, and it is always a bidirectional control 
+> endpoint.
 
-and for debugfs ep00 is added manually together with the slot
-xhci_debugfs_create_slot()
-  ...
-  xhci_debugfs_create_ring_dir(xhci, &dev->eps[0].ring, "ep00", priv->root);
+I think this was probably added to handle syzbot issues.  As long as the
+USB core does ensure that a USB device has endpoint 0, I agree, these
+can be removed.  I'll go check that and add a follow-on patch to the
+series to do this, thanks.
 
-So regarding ep0 the change should be ok.
+thanks,
 
--Mathias
+greg k-h
