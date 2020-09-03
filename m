@@ -2,173 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4C625BFE8
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 13:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E681625C04A
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 13:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgICLLa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 07:11:30 -0400
-Received: from mga04.intel.com ([192.55.52.120]:28872 "EHLO mga04.intel.com"
+        id S1728436AbgICL0Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 07:26:24 -0400
+Received: from crapouillou.net ([89.234.176.41]:50270 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727820AbgICLKw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Sep 2020 07:10:52 -0400
-IronPort-SDR: C9VuKViKcxCqNKLwk6Pvq9yLitY/IN7G/plUl1lfEDvs7ajVoGNOevPCpijf509qBoLiBqDjc2
- kqg/emgBVnAQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="154957035"
-X-IronPort-AV: E=Sophos;i="5.76,386,1592895600"; 
-   d="scan'208";a="154957035"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 04:10:50 -0700
-IronPort-SDR: srNyS15yYxiubWrALz3MHiSARrEVmd+DvtRK4jTl0juOLHU3GxaKX+bY7p9daDwxbZnTZZn7dg
- myC8KtiGiX8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,386,1592895600"; 
-   d="scan'208";a="405450775"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 03 Sep 2020 04:10:47 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 03 Sep 2020 14:10:47 +0300
-Date:   Thu, 3 Sep 2020 14:10:47 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Zwane Mwaikambo <zwanem@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Zwane Mwaikambo <zwane@yosper.io>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] usb/typec: fix array overruns in ucsi.c
- partner_altmode[]
-Message-ID: <20200903111047.GH1279097@kuha.fi.intel.com>
-References: <alpine.DEB.2.21.2008271035320.30454@montezuma.home>
- <0013fe6c-c0a2-1759-c769-cda025e5eb38@infradead.org>
- <alpine.DEB.2.21.2008271058220.37762@montezuma.home>
- <alpine.DEB.2.21.2008271131570.37762@montezuma.home>
- <20200828123328.GF174928@kuha.fi.intel.com>
- <alpine.DEB.2.21.2008300220350.37231@montezuma.home>
+        id S1728085AbgICL0G (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Sep 2020 07:26:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1599132362; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=SR+iHQciNK1Dv29p/vdSQ9gduW5dmKiBTrl2NLxMY20=;
+        b=rfr/QNV5RzywkcrtwTfLhKPhjdrJfEhu9mfs28GozR5K5U8TlPo9A01AW4BtxUR0RBNi1G
+        wp1us28vEA+MBOzKHcKM5g0SmOT77V5i42hS1PHUdaVWF/CjlRncgOuu0whBvXUbmSWVwR
+        h6uZjr6MxNY4Y4dlFC9WpuGu+k9PXQk=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Tony Prisk <linux@prisktech.co.nz>, Bin Liu <b-liu@ti.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 00/20] usb: Use new pm_ptr() macro
+Date:   Thu,  3 Sep 2020 13:25:34 +0200
+Message-Id: <20200903112554.34263-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2008300220350.37231@montezuma.home>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Zwane,
+The pm_ptr() macro was introduced to avoid conditional compilation of
+the PM code. Instead of having the .suspend/.resume functions compiled
+conditionally if CONFIG_PM_SLEEP, they are now always visible by the
+compiler, which can then detect bugs, and will be discarded if unused.
 
-Sorry to keep you waiting. I'm trying to find a board I can use to
-test these...
+Cheers,
+-Paul
 
-On Sun, Aug 30, 2020 at 02:26:36AM -0700, Zwane Mwaikambo wrote:
-> con->partner_altmode[i] ends up with the value 0x2 in the call to 
-> typec_altmode_update_active because the array has been accessed out of 
-> bounds causing a random memory read.
-> 
-> This patch fixes the first occurrence and 2/2 the second.
+Paul Cercueil (20):
+  usb/host: ohci-platform: Use pm_ptr() macro
+  usb/host: ehci-spear: Use pm_ptr() macro
+  usb/host: ehci-npcm7xx: Use pm_ptr() macro
+  usb/host: ehci-platform: Use pm_ptr() macro
+  usb/cdns3: core: Use pm_ptr() macro
+  usb/chipidea: core: Use pm_ptr() macro
+  usb/misc: usb3503: Use pm_ptr() macro
+  usb/misc: usb4604: Use pm_ptr() macro
+  usb/musb: am35x: Use pm_ptr() macro
+  usb/musb: da8xx: Use pm_ptr() macro
+  usb/musb: musb_dsps: Use pm_ptr() macro
+  usb/musb: ux500: Use pm_ptr() macro
+  usb/phy: am335x: Use pm_ptr() macro
+  usb/phy: mxs-usb: Use pm_ptr() macro
+  usb/gadget/udc: atmel: Use pm_ptr() macro
+  usb/gadget/udc: bdc: Use pm_ptr() macro
+  usb/gadget/udc: mv-u3d: Use pm_ptr() macro
+  usb/gadget/udc: pch: Use pm_ptr() macro
+  usb/gadget/udc: renesas: Use pm_ptr() macro
+  usb/gadget/udc: snps: Use pm_ptr() macro
 
-That, when read from the final commit log, does not actually tell you
-anything.
-
-> [  565.452023] BUG: kernel NULL pointer dereference, address: 00000000000002fe
-> [  565.452025] #PF: supervisor read access in kernel mode
-> [  565.452026] #PF: error_code(0x0000) - not-present page
-> [  565.452026] PGD 0 P4D 0 
-> [  565.452028] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [  565.452030] CPU: 0 PID: 502 Comm: kworker/0:3 Not tainted 5.8.0-rc3+ #1
-> [  565.452031] Hardware name: LENOVO 20RD002VUS/20RD002VUS, 
-> BIOS R16ET25W (1.11 ) 04/21/2020
-> [  565.452034] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-> [  565.452039] RIP: 0010:typec_altmode_update_active+0x1f/0x100 [typec]
-> [  565.452040] Code: 0f 1f 84 00 00 00 00 00 0f 1f 00 0f 1f 44 00 00 55 48 
-> 89 e5 41 54 53 48 83 ec 10 65 48 8b 04 25 28 00 00 00 48 89 45 e8 31 c0 
-> <0f> b6 87 fc 02 00 00 83 e0 01 40 38 f0 0f 84 95 00 00 00 48 8b 47
-> [  565.452041] RSP: 0018:ffffb729c066bdb0 EFLAGS: 00010246
-> [  565.452042] RAX: 0000000000000000 RBX: ffffa067c3e64a70 RCX: 0000000000000000
-> [  565.452043] RDX: ffffb729c066bd20 RSI: 0000000000000000 RDI: 0000000000000002
-> [  565.452044] RBP: ffffb729c066bdd0 R08: 00000083a7910a4f R09: 0000000000000000
-> [  565.452044] R10: ffffffffa106a220 R11: 0000000000000000 R12: 0000000000000000
-> [  565.452045] R13: ffffa067c3e64a98 R14: ffffa067c3e64810 R15: ffffa067c3e64800
-> [  565.452046] FS:  0000000000000000(0000) GS:ffffa067d1400000(0000)
-> knlGS:0000000000000000
-> [  565.452047] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  565.452048] CR2: 00000000000002fe CR3: 00000001b060a003 CR4: 00000000003606f0
-> [  565.452048] Call Trace:
-> [  565.452052]  ucsi_altmode_update_active+0x83/0xd0 [typec_ucsi]
-> [  565.452054]  ucsi_handle_connector_change+0x1dc/0x320 [typec_ucsi]
-> [  565.452057]  process_one_work+0x1df/0x3d0
-> [  565.452059]  worker_thread+0x4d/0x3d0
-> [  565.452060]  ? process_one_work+0x3d0/0x3d0
-> [  565.452062]  kthread+0x127/0x170
-> [  565.452063]  ? kthread_park+0x90/0x90
-> [  565.452065]  ret_from_fork+0x1f/0x30
-> 
-> The failing instruction is;
-> 
-> 0x0000000000000380 <+0>:     callq  0x385 <typec_altmode_update_active+5>
-> 0x0000000000000385 <+5>:     push   %rbp
-> 0x0000000000000386 <+6>:     mov    %rsp,%rbp
-> 0x0000000000000389 <+9>:     push   %r12
-> 0x000000000000038b <+11>:    push   %rbx
-> 0x000000000000038c <+12>:    sub    $0x10,%rsp
-> 0x0000000000000390 <+16>:    mov    %gs:0x28,%rax
-> 0x0000000000000399 <+25>:    mov    %rax,-0x18(%rbp)
-> 0x000000000000039d <+29>:    xor    %eax,%eax
-> 0x000000000000039f <+31>:    movzbl 0x2fc(%rdi),%eax <======
-> 0x00000000000003a6 <+38>:    and    $0x1,%eax
-> 
-> (gdb) list  *typec_altmode_update_active+0x1f
-> 0x39f is in typec_altmode_update_active (drivers/usb/typec/class.c:221).
-> 216      */
-> 217     void typec_altmode_update_active(struct typec_altmode *adev, bool active)
-> 218     {
-> 219             char dir[6];
-> 220
-> 221             if (adev->active == active)
-> 222                     return;
-> 223
-> 224             if (!is_typec_port(adev->dev.parent) && adev->dev.driver) {
-> 225                     if (!active)
-> 
-> (gdb) list *ucsi_altmode_update_active+0x83
-> 0x12a3 is in ucsi_altmode_update_active (drivers/usb/typec/ucsi/ucsi.c:221).
-> 216             }
-> 217
-> 218             if (cur < UCSI_MAX_ALTMODES)
-> 219                     altmode = typec_altmode_get_partner(con->port_altmode[cur]);
-> 220
-> 221             for (i = 0; con->partner_altmode[i]; i++)
-> 222                     typec_altmode_update_active(con->partner_altmode[i],
-> 223                                                con->partner_altmode[i] == altmode);
-> 224     }
-> 
-> Fixes: ad74b8649beaf ("usb: typec: ucsi: Preliminary support for alternate modes")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
-> ---
-> v2 addresses both instances of array overrun
-> v3 addresses patch submission/formatting issues
-> v4 addresses patch submission/formatting issues
-> v5 adds and cc to stable
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index affd024190c9..16906519c173 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -218,9 +218,10 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
->  	if (cur < UCSI_MAX_ALTMODES)
->  		altmode = typec_altmode_get_partner(con->port_altmode[cur]);
->  
-> -	for (i = 0; con->partner_altmode[i]; i++)
-> -		typec_altmode_update_active(con->partner_altmode[i],
-> -					    con->partner_altmode[i] == altmode);
-> +	for (i = 0; i < UCSI_MAX_ALTMODES; i++)
-> +		if (con->partner_altmode[i])
-> +			typec_altmode_update_active(con->partner_altmode[i],
-> +				con->partner_altmode[i] == altmode);
->  }
->  
->  static u8 ucsi_altmode_next_mode(struct typec_altmode **alt, u16 svid)
->  
-
-thanks,
+ drivers/usb/cdns3/core.c                | 13 ++++---------
+ drivers/usb/chipidea/core.c             | 26 +++++++++++--------------
+ drivers/usb/gadget/udc/atmel_usba_udc.c |  8 +++-----
+ drivers/usb/gadget/udc/bdc/bdc_core.c   |  9 +++------
+ drivers/usb/gadget/udc/mv_u3d_core.c    |  8 +++-----
+ drivers/usb/gadget/udc/pch_udc.c        | 11 +++--------
+ drivers/usb/gadget/udc/renesas_usb3.c   |  8 +++-----
+ drivers/usb/gadget/udc/snps_udc_plat.c  | 16 +++++----------
+ drivers/usb/host/ehci-npcm7xx.c         |  8 +++-----
+ drivers/usb/host/ehci-platform.c        |  8 +++-----
+ drivers/usb/host/ehci-spear.c           |  8 +++-----
+ drivers/usb/host/ohci-platform.c        | 19 ++++++++----------
+ drivers/usb/misc/usb3503.c              | 18 ++++++++---------
+ drivers/usb/misc/usb4604.c              |  8 +++-----
+ drivers/usb/musb/am35x.c                |  8 +++-----
+ drivers/usb/musb/da8xx.c                |  8 +++-----
+ drivers/usb/musb/musb_dsps.c            | 20 +++++++------------
+ drivers/usb/musb/ux500.c                |  8 +++-----
+ drivers/usb/phy/phy-am335x.c            |  8 +++-----
+ drivers/usb/phy/phy-mxs-usb.c           | 11 +++++------
+ 20 files changed, 87 insertions(+), 144 deletions(-)
 
 -- 
-heikki
+2.28.0
+
