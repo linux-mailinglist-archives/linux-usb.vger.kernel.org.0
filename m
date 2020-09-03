@@ -2,206 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB0825B7B5
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 02:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3885D25B85B
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 03:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727025AbgICApz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Sep 2020 20:45:55 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36735 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726586AbgICApy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 20:45:54 -0400
-Received: (qmail 643241 invoked by uid 1000); 2 Sep 2020 20:45:53 -0400
-Date:   Wed, 2 Sep 2020 20:45:53 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     himadrispandya@gmail.com, dvyukov@google.com,
-        linux-usb@vger.kernel.org, perex@perex.cz, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Eli Billauer <eli.billauer@gmail.com>,
-        Emiliano Ingrassia <ingrassia@epigenesys.com>,
-        Alexander Tsoy <alexander@tsoy.me>,
-        "Geoffrey D. Bennett" <g@b4.vu>, Jussi Laako <jussi@sonarnerd.net>,
-        Nick Kossifidis <mickflemm@gmail.com>,
-        Dmitry Panchenko <dmitry@d-systems.ee>,
-        Chris Wulff <crwulff@gmail.com>,
-        Jesus Ramos <jesus-ramos@live.com>
-Subject: Re: [PATCH 01/10] USB: move snd_usb_pipe_sanity_check into the USB
- core
-Message-ID: <20200903004553.GA642955@rowland.harvard.edu>
-References: <20200902110115.1994491-1-gregkh@linuxfoundation.org>
- <20200902110115.1994491-2-gregkh@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200902110115.1994491-2-gregkh@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726654AbgICBm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Sep 2020 21:42:57 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:50692 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726177AbgICBmy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Sep 2020 21:42:54 -0400
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A6D10C00B2;
+        Thu,  3 Sep 2020 01:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1599097373; bh=1UIyxk96xT7j81Ue2i1Pp0leyDJRlUXaTtX35F3xV5s=;
+        h=Date:From:Subject:To:Cc:From;
+        b=cRs3UEcakkIDElaqkYd9SZsclCbBLXqy5cZDWDugDhtWNZDLohZsnww18SgBn+6IF
+         VjssnhcuWCWNThwp2g+T78wp2uGhX5rTjzQkcFXALC1VR3qkqHk3KD28qLsNxFr6v3
+         +cHNm/o5ZtYu9WB3y97oEmwH2Y9HW4UonllxiSMeJ4JKm2zclK+/9JCNRBXlw11vRp
+         07D1XsLlOgmbnJ/0QQzQ0DCQ5QMwAZCF5jhsmPvWjk7jY2koyQ6QMA8ECs7BHYJ1Vo
+         Nx68SJUkK/Oc+WLXvWQnRCFL5H+ZBUqIpbHxehK+BCk+YnrooVpQH5EfH7OiRQJDuW
+         jdYs1SEGk/XkQ==
+Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id C39E7A005E;
+        Thu,  3 Sep 2020 01:42:51 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Wed, 02 Sep 2020 18:42:51 -0700
+Date:   Wed, 02 Sep 2020 18:42:51 -0700
+Message-Id: <cover.1599096763.git.thinhn@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH v2 0/2] usb: dwc3: gadget: Fix halt/clear_stall handling
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 01:01:03PM +0200, Greg Kroah-Hartman wrote:
-> snd_usb_pipe_sanity_check() is a great function, so let's move it into
-> the USB core so that other parts of the kernel, including the USB core,
-> can call it.
-> 
-> Name it usb_pipe_type_check() to match the existing
-> usb_urb_ep_type_check() call, which now uses this function.
-> 
-> Cc: Jaroslav Kysela <perex@perex.cz>
-> Cc: Takashi Iwai <tiwai@suse.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: Eli Billauer <eli.billauer@gmail.com>
-> Cc: Emiliano Ingrassia <ingrassia@epigenesys.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Alexander Tsoy <alexander@tsoy.me>
-> Cc: "Geoffrey D. Bennett" <g@b4.vu>
-> Cc: Jussi Laako <jussi@sonarnerd.net>
-> Cc: Nick Kossifidis <mickflemm@gmail.com>
-> Cc: Dmitry Panchenko <dmitry@d-systems.ee>
-> Cc: Chris Wulff <crwulff@gmail.com>
-> Cc: Jesus Ramos <jesus-ramos@live.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
+This series fixes a couple of driver issues handling ClearFeature(halt)
+request:
 
-> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-> index 27e83e55a590..45bc2914c1ba 100644
-> --- a/drivers/usb/core/urb.c
-> +++ b/drivers/usb/core/urb.c
-> @@ -192,24 +192,39 @@ static const int pipetypes[4] = {
->  };
->  
->  /**
-> - * usb_urb_ep_type_check - sanity check of endpoint in the given urb
-> - * @urb: urb to be checked
-> + * usb_pipe_type_check - sanity check of a specific pipe for a usb device
-> + * @dev: struct usb_device to be checked
-> + * @pipe: pipe to check
->   *
->   * This performs a light-weight sanity check for the endpoint in the
-> - * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
-> - * a negative error code.
-> + * given usb device.  It returns 0 if the pipe is a valid for the specific usb
------------------------------------------------------^
-Typo.
+1) A function driver often uses set_halt() to reject a class driver protocol
+command. After set_halt(), the endpoint will be stalled. It can queue new
+requests while the endpoint is stalled. However, dwc3 currently drops those
+requests after CLEAR_STALL. The driver should only drop started requests. Keep
+the pending requests in the pending list to resume and process them after the
+host issues ClearFeature(Halt) to the endpoint.
 
-> + * device, otherwise a negative error code.
->   */
-> -int usb_urb_ep_type_check(const struct urb *urb)
-> +int usb_pipe_type_check(struct usb_device *dev, unsigned int pipe)
->  {
->  	const struct usb_host_endpoint *ep;
->  
-> -	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
-> +	ep = usb_pipe_endpoint(dev, pipe);
->  	if (!ep)
->  		return -EINVAL;
-> -	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
-> +	if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
->  		return -EINVAL;
->  	return 0;
->  }
-> +EXPORT_SYMBOL_GPL(usb_pipe_type_check);
-> +
-> +/**
-> + * usb_urb_ep_type_check - sanity check of endpoint in the given urb
-> + * @urb: urb to be checked
-> + *
-> + * This performs a light-weight sanity check for the endpoint in the
-> + * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
-> + * a negative error code.
-> + */
-> +int usb_urb_ep_type_check(const struct urb *urb)
-> +{
-> +	return usb_pipe_type_check(urb->dev, urb->pipe);
-> +}
->  EXPORT_SYMBOL_GPL(usb_urb_ep_type_check);
+2) DWC3 should issue CLEAR_STALL command _after_ END_TRANSFER command completes.
 
-Since this routine is used in only one place in the entire kernel, you 
-might as well inline the code there and get rid of the function 
-entirely.
+Changes in v2:
+- Rebased on 5.9-rc3
+- Remove a cleanup patch so this series can be merged to 5.9-rcX
+- Account for wedged endpoint
+- Account for CLEAR_FEATURE on stopped endpoints with pending requests
+  (END_TRANSFER command won't be issued for stopped endpoints, so just kick
+  pending request right after CLEAR_STALL)
 
-> diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-> index abf99b814a0f..fc3aab04a0bc 100644
-> --- a/sound/usb/quirks.c
-> +++ b/sound/usb/quirks.c
-> @@ -846,7 +846,7 @@ static int snd_usb_accessmusic_boot_quirk(struct usb_device *dev)
->  	static const u8 seq[] = { 0x4e, 0x73, 0x52, 0x01 };
->  	void *buf;
->  
-> -	if (snd_usb_pipe_sanity_check(dev, usb_sndintpipe(dev, 0x05)))
-> +	if (usb_pipe_type_check(dev, usb_sndintpipe(dev, 0x05)))
->  		return -EINVAL;
->  	buf = kmemdup(seq, ARRAY_SIZE(seq), GFP_KERNEL);
->  	if (!buf)
-> @@ -875,7 +875,7 @@ static int snd_usb_nativeinstruments_boot_quirk(struct usb_device *dev)
->  {
->  	int ret;
->  
-> -	if (snd_usb_pipe_sanity_check(dev, usb_sndctrlpipe(dev, 0)))
-> +	if (usb_pipe_type_check(dev, usb_sndctrlpipe(dev, 0)))
->  		return -EINVAL;
 
-In a few places here this check is completely unnecessary.  All it does 
-is verify that the device does have an endpoint 0 and the the type of 
-the endpoint matches the type of the pipe.  Well, every USB device 
-always has an endpoint 0, and it is always a bidirectional control 
-endpoint.  Therefore a simple static check is all you need: There's no 
-point calling usb_pipe_type_check() when the pipe is of the form 
-usb_{snd|rcv}ctrlpipe(dev, 0).
+Thinh Nguyen (2):
+  usb: dwc3: gadget: Resume pending requests after CLEAR_STALL
+  usb: dwc3: gadget: END_TRANSFER before CLEAR_STALL command
 
-In short, this check should be removed completely; it does nothing.
+ drivers/usb/dwc3/core.h   |  1 +
+ drivers/usb/dwc3/ep0.c    | 16 +++++++++++
+ drivers/usb/dwc3/gadget.c | 56 ++++++++++++++++++++++++++++++---------
+ drivers/usb/dwc3/gadget.h |  1 +
+ 4 files changed, 61 insertions(+), 13 deletions(-)
 
->  	ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
->  				  0xaf, USB_TYPE_VENDOR | USB_RECIP_DEVICE,
-> @@ -984,7 +984,7 @@ static int snd_usb_axefx3_boot_quirk(struct usb_device *dev)
->  
->  	dev_dbg(&dev->dev, "Waiting for Axe-Fx III to boot up...\n");
->  
-> -	if (snd_usb_pipe_sanity_check(dev, usb_sndctrlpipe(dev, 0)))
-> +	if (usb_pipe_type_check(dev, usb_sndctrlpipe(dev, 0)))
 
-Same for this check.
+base-commit: f75aef392f869018f78cfedf3c320a6b3fcfda6b
+-- 
+2.28.0
 
->  		return -EINVAL;
->  	/* If the Axe-Fx III has not fully booted, it will timeout when trying
->  	 * to enable the audio streaming interface. A more generous timeout is
-> @@ -1018,7 +1018,7 @@ static int snd_usb_motu_microbookii_communicate(struct usb_device *dev, u8 *buf,
->  {
->  	int err, actual_length;
->  
-> -	if (snd_usb_pipe_sanity_check(dev, usb_sndintpipe(dev, 0x01)))
-> +	if (usb_pipe_type_check(dev, usb_sndintpipe(dev, 0x01)))
->  		return -EINVAL;
->  	err = usb_interrupt_msg(dev, usb_sndintpipe(dev, 0x01), buf, *length,
->  				&actual_length, 1000);
-> @@ -1030,7 +1030,7 @@ static int snd_usb_motu_microbookii_communicate(struct usb_device *dev, u8 *buf,
->  
->  	memset(buf, 0, buf_size);
->  
-> -	if (snd_usb_pipe_sanity_check(dev, usb_rcvintpipe(dev, 0x82)))
-> +	if (usb_pipe_type_check(dev, usb_rcvintpipe(dev, 0x82)))
->  		return -EINVAL;
->  	err = usb_interrupt_msg(dev, usb_rcvintpipe(dev, 0x82), buf, buf_size,
->  				&actual_length, 1000);
-> @@ -1117,7 +1117,7 @@ static int snd_usb_motu_m_series_boot_quirk(struct usb_device *dev)
->  {
->  	int ret;
->  
-> -	if (snd_usb_pipe_sanity_check(dev, usb_sndctrlpipe(dev, 0)))
-> +	if (usb_pipe_type_check(dev, usb_sndctrlpipe(dev, 0)))
-
-And this one.
-
->  		return -EINVAL;
->  	ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
->  			      1, USB_TYPE_VENDOR | USB_RECIP_DEVICE,
-
-Alan Stern
