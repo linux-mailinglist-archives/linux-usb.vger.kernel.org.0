@@ -2,89 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F78025C8BB
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 20:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC16225CBDA
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 23:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728085AbgICSbp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 14:31:45 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:39263 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726990AbgICSbp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Sep 2020 14:31:45 -0400
-Received: (qmail 669461 invoked by uid 1000); 3 Sep 2020 14:31:44 -0400
-Date:   Thu, 3 Sep 2020 14:31:44 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tom Yan <tom.ty89@gmail.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        arnd@arndb.de, cyrozap@gmail.com, yoshihiro.shimoda.uh@renesas.com
-Subject: Re: [PATCH v6 1/3] usb-storage: fix sdev->host->dma_dev
-Message-ID: <20200903183144.GA668415@rowland.harvard.edu>
-References: <20200903155438.GC663761@rowland.harvard.edu>
- <20200903181725.2931-1-tom.ty89@gmail.com>
+        id S1726770AbgICVKr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 17:10:47 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:41830 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726088AbgICVKq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Sep 2020 17:10:46 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1599167444; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=+92L8rCs5Qj2hNgiOrOiCHxci4B2giXkbMRgaJdNbaU=; b=BO/63UCZuxigs9WL3I+0FjC90/LlgvfF4ljgrBfefQ6x2I52ooZqQMvY0KOM3KCUTrvUT0G2
+ Rg5MZxjeR3Cb2CK1ZKuolau3C3h3mtv9cUxf7TZARdsWlKSj0/sJK5xff/doS9XFr7He/gEK
+ MiOVSP+ndUE58OJ6OaO/e8cIBys=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 5f515bad25e1ee7586dd7e58 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 03 Sep 2020 21:10:05
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D405AC43391; Thu,  3 Sep 2020 21:10:03 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 87CC8C433C8;
+        Thu,  3 Sep 2020 21:10:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 87CC8C433C8
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH v3] usb: dwc3: Stop active transfers before halting the controller
+Date:   Thu,  3 Sep 2020 14:09:54 -0700
+Message-Id: <20200903210954.24504-1-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200903181725.2931-1-tom.ty89@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 02:17:23AM +0800, Tom Yan wrote:
-> Use scsi_add_host_with_dma() instead of scsi_add_host().
-> 
-> When the scsi request queue is initialized/allocated, hw_max_sectors is clamped
-> to the dma max mapping size. Therefore, the correct device that should be used
-> for the clamping needs to be set.
-> 
-> The same clamping is still needed in usb-storage as hw_max_sectors could be
-> changed there. The original clamping would be invalidated in such cases.
-> 
-> Signed-off-by: Tom Yan <tom.ty89@gmail.com>
-> ---
-> v2: fix commit message line length; bump hw_max_sectors to 2048 for SS UAS
-> drives; split the "fallback" hw_max_sectors setting into another patch
-> v3: use a different approach: fix the dma_dev instead
-> v4: add the changelog of the patch series
-> v5: fix changelog line length
-> v6: split dma_dev fix for usb-storage and uas
->  drivers/usb/storage/scsiglue.c | 2 +-
->  drivers/usb/storage/usb.c      | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-> index e5a971b83e3f..560efd1479ba 100644
-> --- a/drivers/usb/storage/scsiglue.c
-> +++ b/drivers/usb/storage/scsiglue.c
-> @@ -92,7 +92,7 @@ static int slave_alloc (struct scsi_device *sdev)
->  static int slave_configure(struct scsi_device *sdev)
->  {
->  	struct us_data *us = host_to_us(sdev->host);
-> -	struct device *dev = us->pusb_dev->bus->sysdev;
-> +	struct device *dev = sdev->host->dma_dev;
->  
->  	/*
->  	 * Many devices have trouble transferring more than 32KB at a time,
-> diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-> index 94a64729dc27..c2ef367cf257 100644
-> --- a/drivers/usb/storage/usb.c
-> +++ b/drivers/usb/storage/usb.c
-> @@ -1049,8 +1049,9 @@ int usb_stor_probe2(struct us_data *us)
->  		goto BadDevice;
->  	usb_autopm_get_interface_no_resume(us->pusb_intf);
->  	snprintf(us->scsi_name, sizeof(us->scsi_name), "usb-storage %s",
-> -					dev_name(&us->pusb_intf->dev));
-> -	result = scsi_add_host(us_to_host(us), dev);
-> +					dev_name(dev));
-> +	result = scsi_add_host_with_dma(us_to_host(us), dev,
-> +					us->pusb_dev->bus->sysdev);
->  	if (result) {
->  		dev_warn(dev,
->  				"Unable to add the scsi host\n");
-> -- 
-> 2.28.0
+In the DWC3 databook, for a device initiated disconnect or bus reset, the
+driver is required to send dependxfer commands for any pending transfers.
+In addition, before the controller can move to the halted state, the SW
+needs to acknowledge any pending events.  If the controller is not halted
+properly, there is a chance the controller will continue accessing stale or
+freed TRBs and buffers.
 
-For all three patches:
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+---
+Changes in v3:
+ - Removed DWC3_EP_ENABLED check from dwc3_gadget_stop_active_transfers()
+   as dwc3_stop_active_transfer() has a check already in place.
+ - Calling __dwc3_gadget_stop() which ensures that DWC3 interrupt events
+   are cleared, and ep0 eps are cleared for the pullup disabled case.  Not
+   required to call __dwc3_gadget_start() on pullup enable, as the
+   composite driver will execute udc_start() before calling pullup().
+
+Changes in v2:
+ - Moved cleanup code to the pullup() API to differentiate between device
+   disconnect and hibernation.
+ - Added cleanup code to the bus reset case as well.
+ - Verified the move to pullup() did not reproduce the problen using the
+   same test sequence.
+
+Verified fix by adding a check for ETIMEDOUT during the run stop call.
+Shell script writing to the configfs UDC file to trigger disconnect and
+connect.  Batch script to have PC execute data transfers over adb (ie adb
+push)  After a few iterations, we'd run into a scenario where the
+controller wasn't halted.  With the following change, no failed halts after
+many iterations.
+---
+ drivers/usb/dwc3/ep0.c    |  2 +-
+ drivers/usb/dwc3/gadget.c | 49 ++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 49 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 59f2e8c31bd1..456aa87e8778 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+ 	int				ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	if (!dep->endpoint.desc) {
++	if (!dep->endpoint.desc || !dwc->pullups_connected) {
+ 		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
+ 				dep->name);
+ 		ret = -ESHUTDOWN;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 3ab6f118c508..73bda7eaa773 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1516,7 +1516,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
+ {
+ 	struct dwc3		*dwc = dep->dwc;
+ 
+-	if (!dep->endpoint.desc) {
++	if (!dep->endpoint.desc || !dwc->pullups_connected) {
+ 		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
+ 				dep->name);
+ 		return -ESHUTDOWN;
+@@ -1926,6 +1926,21 @@ static int dwc3_gadget_set_selfpowered(struct usb_gadget *g,
+ 	return 0;
+ }
+ 
++static void dwc3_stop_active_transfers(struct dwc3 *dwc)
++{
++	u32 epnum;
++
++	for (epnum = 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
++		struct dwc3_ep *dep;
++
++		dep = dwc->eps[epnum];
++		if (!dep)
++			continue;
++
++		dwc3_remove_requests(dwc, dep);
++	}
++}
++
+ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
+ {
+ 	u32			reg;
+@@ -1971,6 +1986,8 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
+ 	return 0;
+ }
+ 
++static void __dwc3_gadget_stop(struct dwc3 *dwc);
++
+ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ {
+ 	struct dwc3		*dwc = gadget_to_dwc(g);
+@@ -1994,9 +2011,37 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 		}
+ 	}
+ 
++	/*
++	 * Synchronize and disable any further event handling while controller
++	 * is being enabled/disabled.
++	 */
++	disable_irq(dwc->irq_gadget);
+ 	spin_lock_irqsave(&dwc->lock, flags);
++
++	/* Controller is not halted until pending events are acknowledged */
++	if (!is_on) {
++		u32 count;
++
++		/*
++		 * The databook explicitly mentions for a device-initiated
++		 * disconnect sequence, the SW needs to ensure that it ends any
++		 * active transfers.
++		 */
++		dwc3_stop_active_transfers(dwc);
++		__dwc3_gadget_stop(dwc);
++
++		count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
++		count &= DWC3_GEVNTCOUNT_MASK;
++		if (count > 0) {
++			dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
++			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
++						dwc->ev_buf->length;
++		}
++	}
++
+ 	ret = dwc3_gadget_run_stop(dwc, is_on, false);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
++	enable_irq(dwc->irq_gadget);
+ 
+ 	return ret;
+ }
+@@ -3100,6 +3145,8 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+ 	}
+ 
+ 	dwc3_reset_gadget(dwc);
++	/* Stop any active/pending transfers when receiving bus reset */
++	dwc3_stop_active_transfers(dwc);
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+ 	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
