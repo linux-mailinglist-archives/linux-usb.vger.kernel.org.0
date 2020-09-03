@@ -2,114 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B199125BF1A
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 12:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4C625BFE8
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 13:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726770AbgICKdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 06:33:04 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:50484 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726543AbgICKc7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Sep 2020 06:32:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599129177;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2EBz+XNEZDprNAc71MY7Cc8HkN8faZ2EKOlhwmah+a0=;
-        b=JaJS1dsSeNg3BdZb2vO9xPVzGO3xQj8hdZ8sPiMdLxi3z7FrkGGckbrP0/k081KhDZiOrC
-        dW/Oro0pv7MGTK1omJUNe0i5tAUB8cBqUjUrmDUj9Tw6OuqYQML3r6l+ofhZmzbbyodIWO
-        akibsWLgBozUYT4GdDgDbxVoZtnLJwA=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-447-uQgcQqUdN8KM2Gk32XREOQ-1; Thu, 03 Sep 2020 06:32:54 -0400
-X-MC-Unique: uQgcQqUdN8KM2Gk32XREOQ-1
-Received: by mail-ed1-f69.google.com with SMTP id c25so1097271edx.11
-        for <linux-usb@vger.kernel.org>; Thu, 03 Sep 2020 03:32:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2EBz+XNEZDprNAc71MY7Cc8HkN8faZ2EKOlhwmah+a0=;
-        b=T1ZL3/SRppZvjMdzWNMViSJ1T1a4lc/A4rGTt/agw82TeVmXaAB32ePHceuGyHV23a
-         wxuvybIrL0mXf/SiscK8zLsl3UnRPVLyk8rRMRj5FI5Lv8ye34Ez1LcAEwYJC1rCPSi/
-         u36tIka4NspNM/S9+7p4pCGa5Dk9ChAelRsBvj6d+kYfMwqts2mUkV3NUKi41LMxM7a0
-         NqgxnWe3vfqtsKWb2UMn/t7SGPdO7kB3jZ5V+e4XeeEawy7PB/fOGuhYuCY6lo4cabBN
-         OIzJQe9RTaDsKRHELc+1pn2ezUEnROUYiuOuKTru4/tyq2gttIl42NFkFdB/1wOv9XJN
-         t+Kw==
-X-Gm-Message-State: AOAM5300chwLs0TcLYFB4dJ7M3b511MMmf6hbjl1IbfkS3YskZyvfQ0y
-        BrUj9fUibc0EEMSOFgLHqG7CM8QinFt/qF9M72EL7bCp3+vBt+l0Dunx7iFruLkXRT+K7er/i2f
-        /k4zuXbPNSShlta58/4KN
-X-Received: by 2002:a17:906:4d4d:: with SMTP id b13mr1343026ejv.221.1599129172879;
-        Thu, 03 Sep 2020 03:32:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzKOOQit71KDUj1vlagmzzxdVBIYpRE6M2EIk+DSgSKDROQ5nL1jX9o7MvYH4+PhPmTGlii7Q==
-X-Received: by 2002:a17:906:4d4d:: with SMTP id b13mr1343004ejv.221.1599129172669;
-        Thu, 03 Sep 2020 03:32:52 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id re10sm2899834ejb.68.2020.09.03.03.32.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2020 03:32:52 -0700 (PDT)
-Subject: Re: [PATCH] HID: quirks: Add USB_QUIRK_IGNORE_REMOTE_WAKEUP quirk for
- BYD zhaoxin notebook
-To:     Penghao <penghao@uniontech.com>, gregkh@linuxfoundation.org
-Cc:     johan@kernel.org, dlaz@chromium.org, stern@rowland.harvard.edu,
-        kerneldev@karsmulder.nl, jonathan@jdcox.net, tomasz@meresinski.eu,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200903100326.5327-1-penghao@uniontech.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <e9b10ea4-1f7d-4edc-daa6-32af833fea67@redhat.com>
-Date:   Thu, 3 Sep 2020 12:32:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726891AbgICLLa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 07:11:30 -0400
+Received: from mga04.intel.com ([192.55.52.120]:28872 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727820AbgICLKw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Sep 2020 07:10:52 -0400
+IronPort-SDR: C9VuKViKcxCqNKLwk6Pvq9yLitY/IN7G/plUl1lfEDvs7ajVoGNOevPCpijf509qBoLiBqDjc2
+ kqg/emgBVnAQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="154957035"
+X-IronPort-AV: E=Sophos;i="5.76,386,1592895600"; 
+   d="scan'208";a="154957035"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 04:10:50 -0700
+IronPort-SDR: srNyS15yYxiubWrALz3MHiSARrEVmd+DvtRK4jTl0juOLHU3GxaKX+bY7p9daDwxbZnTZZn7dg
+ myC8KtiGiX8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,386,1592895600"; 
+   d="scan'208";a="405450775"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 03 Sep 2020 04:10:47 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 03 Sep 2020 14:10:47 +0300
+Date:   Thu, 3 Sep 2020 14:10:47 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Zwane Mwaikambo <zwanem@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Zwane Mwaikambo <zwane@yosper.io>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] usb/typec: fix array overruns in ucsi.c
+ partner_altmode[]
+Message-ID: <20200903111047.GH1279097@kuha.fi.intel.com>
+References: <alpine.DEB.2.21.2008271035320.30454@montezuma.home>
+ <0013fe6c-c0a2-1759-c769-cda025e5eb38@infradead.org>
+ <alpine.DEB.2.21.2008271058220.37762@montezuma.home>
+ <alpine.DEB.2.21.2008271131570.37762@montezuma.home>
+ <20200828123328.GF174928@kuha.fi.intel.com>
+ <alpine.DEB.2.21.2008300220350.37231@montezuma.home>
 MIME-Version: 1.0
-In-Reply-To: <20200903100326.5327-1-penghao@uniontech.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2008300220350.37231@montezuma.home>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Zwane,
 
-On 9/3/20 12:03 PM, Penghao wrote:
-> Add a USB_QUIRK_IGNORE_REMOTE_WAKEUP quirk for the BYD zhaoxin notebook.
-> This notebook come with usb touchpad. And we would like to disable touchpad
-> wakeup on this notebook by default.
+Sorry to keep you waiting. I'm trying to find a board I can use to
+test these...
 
-2 questions:
-
-1. Why do you want to enable remote wakeup by default ?
-2. Is this a HID multi-touch touchpad?
-
-Regards,
-
-Hans
-
-
+On Sun, Aug 30, 2020 at 02:26:36AM -0700, Zwane Mwaikambo wrote:
+> con->partner_altmode[i] ends up with the value 0x2 in the call to 
+> typec_altmode_update_active because the array has been accessed out of 
+> bounds causing a random memory read.
 > 
-> Signed-off-by: Penghao <penghao@uniontech.com>
+> This patch fixes the first occurrence and 2/2 the second.
+
+That, when read from the final commit log, does not actually tell you
+anything.
+
+> [  565.452023] BUG: kernel NULL pointer dereference, address: 00000000000002fe
+> [  565.452025] #PF: supervisor read access in kernel mode
+> [  565.452026] #PF: error_code(0x0000) - not-present page
+> [  565.452026] PGD 0 P4D 0 
+> [  565.452028] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> [  565.452030] CPU: 0 PID: 502 Comm: kworker/0:3 Not tainted 5.8.0-rc3+ #1
+> [  565.452031] Hardware name: LENOVO 20RD002VUS/20RD002VUS, 
+> BIOS R16ET25W (1.11 ) 04/21/2020
+> [  565.452034] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
+> [  565.452039] RIP: 0010:typec_altmode_update_active+0x1f/0x100 [typec]
+> [  565.452040] Code: 0f 1f 84 00 00 00 00 00 0f 1f 00 0f 1f 44 00 00 55 48 
+> 89 e5 41 54 53 48 83 ec 10 65 48 8b 04 25 28 00 00 00 48 89 45 e8 31 c0 
+> <0f> b6 87 fc 02 00 00 83 e0 01 40 38 f0 0f 84 95 00 00 00 48 8b 47
+> [  565.452041] RSP: 0018:ffffb729c066bdb0 EFLAGS: 00010246
+> [  565.452042] RAX: 0000000000000000 RBX: ffffa067c3e64a70 RCX: 0000000000000000
+> [  565.452043] RDX: ffffb729c066bd20 RSI: 0000000000000000 RDI: 0000000000000002
+> [  565.452044] RBP: ffffb729c066bdd0 R08: 00000083a7910a4f R09: 0000000000000000
+> [  565.452044] R10: ffffffffa106a220 R11: 0000000000000000 R12: 0000000000000000
+> [  565.452045] R13: ffffa067c3e64a98 R14: ffffa067c3e64810 R15: ffffa067c3e64800
+> [  565.452046] FS:  0000000000000000(0000) GS:ffffa067d1400000(0000)
+> knlGS:0000000000000000
+> [  565.452047] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  565.452048] CR2: 00000000000002fe CR3: 00000001b060a003 CR4: 00000000003606f0
+> [  565.452048] Call Trace:
+> [  565.452052]  ucsi_altmode_update_active+0x83/0xd0 [typec_ucsi]
+> [  565.452054]  ucsi_handle_connector_change+0x1dc/0x320 [typec_ucsi]
+> [  565.452057]  process_one_work+0x1df/0x3d0
+> [  565.452059]  worker_thread+0x4d/0x3d0
+> [  565.452060]  ? process_one_work+0x3d0/0x3d0
+> [  565.452062]  kthread+0x127/0x170
+> [  565.452063]  ? kthread_park+0x90/0x90
+> [  565.452065]  ret_from_fork+0x1f/0x30
+> 
+> The failing instruction is;
+> 
+> 0x0000000000000380 <+0>:     callq  0x385 <typec_altmode_update_active+5>
+> 0x0000000000000385 <+5>:     push   %rbp
+> 0x0000000000000386 <+6>:     mov    %rsp,%rbp
+> 0x0000000000000389 <+9>:     push   %r12
+> 0x000000000000038b <+11>:    push   %rbx
+> 0x000000000000038c <+12>:    sub    $0x10,%rsp
+> 0x0000000000000390 <+16>:    mov    %gs:0x28,%rax
+> 0x0000000000000399 <+25>:    mov    %rax,-0x18(%rbp)
+> 0x000000000000039d <+29>:    xor    %eax,%eax
+> 0x000000000000039f <+31>:    movzbl 0x2fc(%rdi),%eax <======
+> 0x00000000000003a6 <+38>:    and    $0x1,%eax
+> 
+> (gdb) list  *typec_altmode_update_active+0x1f
+> 0x39f is in typec_altmode_update_active (drivers/usb/typec/class.c:221).
+> 216      */
+> 217     void typec_altmode_update_active(struct typec_altmode *adev, bool active)
+> 218     {
+> 219             char dir[6];
+> 220
+> 221             if (adev->active == active)
+> 222                     return;
+> 223
+> 224             if (!is_typec_port(adev->dev.parent) && adev->dev.driver) {
+> 225                     if (!active)
+> 
+> (gdb) list *ucsi_altmode_update_active+0x83
+> 0x12a3 is in ucsi_altmode_update_active (drivers/usb/typec/ucsi/ucsi.c:221).
+> 216             }
+> 217
+> 218             if (cur < UCSI_MAX_ALTMODES)
+> 219                     altmode = typec_altmode_get_partner(con->port_altmode[cur]);
+> 220
+> 221             for (i = 0; con->partner_altmode[i]; i++)
+> 222                     typec_altmode_update_active(con->partner_altmode[i],
+> 223                                                con->partner_altmode[i] == altmode);
+> 224     }
+> 
+> Fixes: ad74b8649beaf ("usb: typec: ucsi: Preliminary support for alternate modes")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
 > ---
->   drivers/usb/core/quirks.c | 4 ++++
->   1 file changed, 4 insertions(+)
+> v2 addresses both instances of array overrun
+> v3 addresses patch submission/formatting issues
+> v4 addresses patch submission/formatting issues
+> v5 adds and cc to stable
 > 
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index 7c1198f80c23..5fa3f2416967 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -387,6 +387,10 @@ static const struct usb_device_id usb_quirk_list[] = {
->   	{ USB_DEVICE(0x0b05, 0x17e0), .driver_info =
->   			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
->   
-> +	/* SONiX USB DEVICE Touchpad */
-> +	{ USB_DEVICE(0x0c45, 0x7056), .driver_info =
-> +			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
-> +
->   	/* Realtek hub in Dell WD19 (Type-C) */
->   	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
->   
-> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index affd024190c9..16906519c173 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -218,9 +218,10 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
+>  	if (cur < UCSI_MAX_ALTMODES)
+>  		altmode = typec_altmode_get_partner(con->port_altmode[cur]);
+>  
+> -	for (i = 0; con->partner_altmode[i]; i++)
+> -		typec_altmode_update_active(con->partner_altmode[i],
+> -					    con->partner_altmode[i] == altmode);
+> +	for (i = 0; i < UCSI_MAX_ALTMODES; i++)
+> +		if (con->partner_altmode[i])
+> +			typec_altmode_update_active(con->partner_altmode[i],
+> +				con->partner_altmode[i] == altmode);
+>  }
+>  
+>  static u8 ucsi_altmode_next_mode(struct typec_altmode **alt, u16 svid)
+>  
 
+thanks,
+
+-- 
+heikki
