@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F158D25C4CD
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 17:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1950725C4CE
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Sep 2020 17:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbgICLcM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 07:32:12 -0400
-Received: from crapouillou.net ([89.234.176.41]:51414 "EHLO crapouillou.net"
+        id S1728697AbgICPS3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 11:18:29 -0400
+Received: from crapouillou.net ([89.234.176.41]:51512 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728596AbgICLbi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Sep 2020 07:31:38 -0400
+        id S1728376AbgICLb6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Sep 2020 07:31:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1599132378; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1599132381; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VitADMM0fnVC5UEnlJQqBbjbeuxkosY7PKciS9JCWhQ=;
-        b=FOTskssgTXu613ZyXQFH73GPSn4sAH4YrP0JV6oEP+WsASxewPFIop8x6uA55dH2X0sPIU
-        nYurhrftzHdBnJRaCPCA6k8tDEyO3YMnmeLEyHvxrjcjUS+VBt6Ymr6jWUZnVt/N1mci+7
-        cxpnf7I+HG5vzL5cT8vb59uEQPISUYA=
+        bh=Q++myQyFVGc5viHm1my4fERz4BkgXBYuJlPFvw347zc=;
+        b=jYQYUggTNuQ1S6/3AD+ZmojFJNLvAFPZAu3nlpl+R3Zxjg7o0i+1ZV9A/w9OncyVirf37r
+        RDUjJo7sVHvcVRBsCymTMBSH3cp4BYuaJq2KJjp3ncoaZ+8635HCMWW3Twt/Oy+vizidMX
+        QmnPSvEHoqj0+1aIe8xKa3yGbcwpIp0=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Chen <Peter.Chen@nxp.com>,
@@ -44,9 +44,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 06/20] usb/chipidea: core: Use pm_ptr() macro
-Date:   Thu,  3 Sep 2020 13:25:40 +0200
-Message-Id: <20200903112554.34263-7-paul@crapouillou.net>
+Subject: [PATCH 07/20] usb/misc: usb3503: Use pm_ptr() macro
+Date:   Thu,  3 Sep 2020 13:25:41 +0200
+Message-Id: <20200903112554.34263-8-paul@crapouillou.net>
 In-Reply-To: <20200903112554.34263-1-paul@crapouillou.net>
 References: <20200903112554.34263-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -64,115 +64,85 @@ simply be discarded by the compiler.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/usb/chipidea/core.c | 26 +++++++++++---------------
- 1 file changed, 11 insertions(+), 15 deletions(-)
+ drivers/usb/misc/usb3503.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-index aa40e510b806..af64ab98fb56 100644
---- a/drivers/usb/chipidea/core.c
-+++ b/drivers/usb/chipidea/core.c
-@@ -1231,9 +1231,8 @@ static int ci_hdrc_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM
- /* Prepare wakeup by SRP before suspend */
--static void ci_otg_fsm_suspend_for_srp(struct ci_hdrc *ci)
-+static void __maybe_unused ci_otg_fsm_suspend_for_srp(struct ci_hdrc *ci)
- {
- 	if ((ci->fsm.otg->state == OTG_STATE_A_IDLE) &&
- 				!hw_read_otgsc(ci, OTGSC_ID)) {
-@@ -1245,7 +1244,7 @@ static void ci_otg_fsm_suspend_for_srp(struct ci_hdrc *ci)
- }
- 
- /* Handle SRP when wakeup by data pulse */
--static void ci_otg_fsm_wakeup_by_srp(struct ci_hdrc *ci)
-+static void __maybe_unused ci_otg_fsm_wakeup_by_srp(struct ci_hdrc *ci)
- {
- 	if ((ci->fsm.otg->state == OTG_STATE_A_IDLE) &&
- 		(ci->fsm.a_bus_drop == 1) && (ci->fsm.a_bus_req == 0)) {
-@@ -1259,7 +1258,7 @@ static void ci_otg_fsm_wakeup_by_srp(struct ci_hdrc *ci)
- 	}
- }
- 
--static void ci_controller_suspend(struct ci_hdrc *ci)
-+static void __maybe_unused ci_controller_suspend(struct ci_hdrc *ci)
- {
- 	disable_irq(ci->irq);
- 	ci_hdrc_enter_lpm(ci, true);
-@@ -1277,7 +1276,7 @@ static void ci_controller_suspend(struct ci_hdrc *ci)
-  * interrupt (wakeup int) only let the controller be out of
-  * low power mode, but not handle any interrupts.
-  */
--static void ci_extcon_wakeup_int(struct ci_hdrc *ci)
-+static void __maybe_unused ci_extcon_wakeup_int(struct ci_hdrc *ci)
- {
- 	struct ci_hdrc_cable *cable_id, *cable_vbus;
- 	u32 otgsc = hw_read_otgsc(ci, ~0);
-@@ -1294,7 +1293,7 @@ static void ci_extcon_wakeup_int(struct ci_hdrc *ci)
- 		ci_irq(ci->irq, ci);
- }
- 
--static int ci_controller_resume(struct device *dev)
-+static int __maybe_unused ci_controller_resume(struct device *dev)
- {
- 	struct ci_hdrc *ci = dev_get_drvdata(dev);
- 	int ret;
-@@ -1332,8 +1331,7 @@ static int ci_controller_resume(struct device *dev)
+diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
+index 116bd789e568..48099c6bf04c 100644
+--- a/drivers/usb/misc/usb3503.c
++++ b/drivers/usb/misc/usb3503.c
+@@ -322,8 +322,7 @@ static int usb3503_platform_remove(struct platform_device *pdev)
  	return 0;
  }
  
 -#ifdef CONFIG_PM_SLEEP
--static int ci_suspend(struct device *dev)
-+static int __maybe_unused ci_suspend(struct device *dev)
+-static int usb3503_suspend(struct usb3503 *hub)
++static int __maybe_unused usb3503_suspend(struct usb3503 *hub)
  {
- 	struct ci_hdrc *ci = dev_get_drvdata(dev);
- 
-@@ -1366,7 +1364,7 @@ static int ci_suspend(struct device *dev)
+ 	usb3503_switch_mode(hub, USB3503_MODE_STANDBY);
+ 	clk_disable_unprepare(hub->clk);
+@@ -331,7 +330,7 @@ static int usb3503_suspend(struct usb3503 *hub)
  	return 0;
  }
  
--static int ci_resume(struct device *dev)
-+static int __maybe_unused ci_resume(struct device *dev)
+-static int usb3503_resume(struct usb3503 *hub)
++static int __maybe_unused usb3503_resume(struct usb3503 *hub)
  {
- 	struct ci_hdrc *ci = dev_get_drvdata(dev);
- 	int ret;
-@@ -1386,9 +1384,8 @@ static int ci_resume(struct device *dev)
- 
- 	return ret;
- }
--#endif /* CONFIG_PM_SLEEP */
- 
--static int ci_runtime_suspend(struct device *dev)
-+static int __maybe_unused ci_runtime_suspend(struct device *dev)
- {
- 	struct ci_hdrc *ci = dev_get_drvdata(dev);
- 
-@@ -1408,13 +1405,12 @@ static int ci_runtime_suspend(struct device *dev)
+ 	clk_prepare_enable(hub->clk);
+ 	usb3503_switch_mode(hub, hub->mode);
+@@ -339,30 +338,29 @@ static int usb3503_resume(struct usb3503 *hub)
  	return 0;
  }
  
--static int ci_runtime_resume(struct device *dev)
-+static int __maybe_unused ci_runtime_resume(struct device *dev)
+-static int usb3503_i2c_suspend(struct device *dev)
++static int __maybe_unused usb3503_i2c_suspend(struct device *dev)
  {
- 	return ci_controller_resume(dev);
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 
+ 	return usb3503_suspend(i2c_get_clientdata(client));
  }
  
--#endif /* CONFIG_PM */
--static const struct dev_pm_ops ci_pm_ops = {
-+static const struct dev_pm_ops __maybe_unused ci_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(ci_suspend, ci_resume)
- 	SET_RUNTIME_PM_OPS(ci_runtime_suspend, ci_runtime_resume, NULL)
- };
-@@ -1424,7 +1420,7 @@ static struct platform_driver ci_hdrc_driver = {
- 	.remove	= ci_hdrc_remove,
- 	.driver	= {
- 		.name	= "ci_hdrc",
--		.pm	= &ci_pm_ops,
-+		.pm	= pm_ptr(&ci_pm_ops),
- 		.dev_groups = ci_groups,
+-static int usb3503_i2c_resume(struct device *dev)
++static int __maybe_unused usb3503_i2c_resume(struct device *dev)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 
+ 	return usb3503_resume(i2c_get_clientdata(client));
+ }
+ 
+-static int usb3503_platform_suspend(struct device *dev)
++static int __maybe_unused usb3503_platform_suspend(struct device *dev)
+ {
+ 	return usb3503_suspend(dev_get_drvdata(dev));
+ }
+ 
+-static int usb3503_platform_resume(struct device *dev)
++static int __maybe_unused usb3503_platform_resume(struct device *dev)
+ {
+ 	return usb3503_resume(dev_get_drvdata(dev));
+ }
+-#endif
+ 
+ static SIMPLE_DEV_PM_OPS(usb3503_i2c_pm_ops, usb3503_i2c_suspend,
+ 		usb3503_i2c_resume);
+@@ -388,7 +386,7 @@ MODULE_DEVICE_TABLE(of, usb3503_of_match);
+ static struct i2c_driver usb3503_i2c_driver = {
+ 	.driver = {
+ 		.name = USB3503_I2C_NAME,
+-		.pm = &usb3503_i2c_pm_ops,
++		.pm = pm_ptr(&usb3503_i2c_pm_ops),
+ 		.of_match_table = of_match_ptr(usb3503_of_match),
  	},
- };
+ 	.probe		= usb3503_i2c_probe,
+@@ -400,7 +398,7 @@ static struct platform_driver usb3503_platform_driver = {
+ 	.driver = {
+ 		.name = USB3503_I2C_NAME,
+ 		.of_match_table = of_match_ptr(usb3503_of_match),
+-		.pm = &usb3503_platform_pm_ops,
++		.pm = pm_ptr(&usb3503_platform_pm_ops),
+ 	},
+ 	.probe		= usb3503_platform_probe,
+ 	.remove		= usb3503_platform_remove,
 -- 
 2.28.0
 
