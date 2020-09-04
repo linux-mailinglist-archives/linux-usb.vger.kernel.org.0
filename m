@@ -2,129 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F7A25D67C
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Sep 2020 12:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0E125D6AF
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Sep 2020 12:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729995AbgIDKiu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Sep 2020 06:38:50 -0400
-Received: from regular1.263xmail.com ([211.150.70.202]:36622 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728118AbgIDKik (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Sep 2020 06:38:40 -0400
-Received: from localhost (unknown [192.168.167.223])
-        by regular1.263xmail.com (Postfix) with ESMTP id 92CE3408;
-        Fri,  4 Sep 2020 18:38:21 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
-Received: from [10.10.77.74] (250.19.126.124.broad.bjtelecom.net [124.126.19.250])
-        by smtp.263.net (postfix) whith ESMTP id P15473T140655923783424S1599215900940793_;
-        Fri, 04 Sep 2020 18:38:21 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <9ad19152e9ec3a302d88ebfa8cf6d6dc>
-X-RL-SENDER: penghao@uniontech.com
-X-SENDER: penghao@uniontech.com
-X-LOGIN-NAME: penghao@uniontech.com
-X-FST-TO: tomasz@meresinski.eu
-X-SENDER-IP: 124.126.19.250
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 5
-X-System-Flag: 0
+        id S1729961AbgIDKo1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Sep 2020 06:44:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57878 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726171AbgIDKo0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Sep 2020 06:44:26 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6D5F520770;
+        Fri,  4 Sep 2020 10:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599216265;
+        bh=3++H5FLh2C1YKek3cWv88BHDHieTeA4Y8dH+wVehUno=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RmdexBTFilHLSNIkaHvBO/F2/GuyHKDcS+HqsCNopLYZoCfCz5wYTnApFBMmRoxEZ
+         Dj/U4cNhG8+LwERuak5e6kX2BkeZO8HF1Ppqdm21oI5H1zqqFPlojhDeGFnAnW/JZE
+         6VrMndJL1PMyZuGO33R0viJowxGpn111DpfVFa90=
+Date:   Fri, 4 Sep 2020 12:44:47 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     PengHao <penghao@uniontech.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, johan@kernel.org, dlaz@chromium.org,
+        stern@rowland.harvard.edu, kerneldev@karsmulder.nl,
+        jonathan@jdcox.net, tomasz@meresinski.eu
 Subject: Re: [PATCH v3] HID: quirks: Add USB_QUIRK_IGNORE_REMOTE_WAKEUP quirk
  for BYD zhaoxin notebook
-To:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
-Cc:     johan@kernel.org, dlaz@chromium.org, stern@rowland.harvard.edu,
-        kerneldev@karsmulder.nl, jonathan@jdcox.net, tomasz@meresinski.eu
+Message-ID: <20200904104447.GA2727177@kroah.com>
 References: <20200904091322.30426-1-penghao@uniontech.com>
  <f519d8a0-9082-13c5-0222-40dd9a1fac36@redhat.com>
-From:   PengHao <penghao@uniontech.com>
-Message-ID: <bd5674f2-67dc-b386-f639-97ddce13b8af@uniontech.com>
-Date:   Fri, 4 Sep 2020 18:38:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+ <bd5674f2-67dc-b386-f639-97ddce13b8af@uniontech.com>
 MIME-Version: 1.0
-In-Reply-To: <f519d8a0-9082-13c5-0222-40dd9a1fac36@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: tl
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bd5674f2-67dc-b386-f639-97ddce13b8af@uniontech.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, Hans
+On Fri, Sep 04, 2020 at 06:38:21PM +0800, PengHao wrote:
+> Hi, Hans
+> 
+> Thanks for the review. And sorry for I'm not really familiar with
+> mailing list, so didn't reply early.
+> 
+> Actually the reason why I submit this patch, is the vendor ask we do
+> this, they do not want enable touchpad wakeup.
 
-Thanks for the review. And sorry for I'm not really familiar with
-mailing list, so didn't reply early.
+That says _what_ they want to do, but we need to know _why_ this is the
+case.
 
-Actually the reason why I submit this patch, is the vendor ask we do
-this, they do not want enable touchpad wakeup.
+What is wrong with the existing touchpad wakeup functionality that is
+broken on this device?  Why does this quirk have to be added, what goes
+wrong if it is not added?
 
-And yes, this device use hid-multitouch.
+Please put that information in the changelog text.
 
+thanks,
 
-在 2020/9/4 下午6:05, Hans de Goede 写道:
-> Hi,
-> 
-> On 9/4/20 11:13 AM, Penghao wrote:
->> Add a USB_QUIRK_IGNORE_REMOTE_WAKEUP quirk for the BYD zhaoxin notebook.
->> This notebook come with usb touchpad. And we would like to disable
->> touchpad
->> wakeup on this notebook by default.
-> 
-> You are still not explaining why this is necessary ?
-> 
-> And you did not answer my question if this touchpad is using hid-multitouch
-> either ?
-> 
-> So NACK (rejection) from me until both questions are answered. The commi
-> message for a quirk should always explain why a quirk is necessary and
-> "we would like to disable touchpad wakeup on this notebook by default"
-> does not explain why you want to do that.
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
->>
->> Signed-off-by: Penghao <penghao@uniontech.com>
->> ---
->>
->> Changes since v2:
->>   - Add changes
->>
->> Changes since v1:
->>   - Add the entries sorted by vendor ID and product ID.
->>
->>   drivers/usb/core/quirks.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
->> index 7c1198f80c23..fffe1f7f1098 100644
->> --- a/drivers/usb/core/quirks.c
->> +++ b/drivers/usb/core/quirks.c
->> @@ -393,6 +393,10 @@ static const struct usb_device_id
->> usb_quirk_list[] = {
->>       /* Generic RTL8153 based ethernet adapters */
->>       { USB_DEVICE(0x0bda, 0x8153), .driver_info = USB_QUIRK_NO_LPM },
->>   +    /* SONiX USB DEVICE Touchpad */
->> +    { USB_DEVICE(0x0c45, 0x7056), .driver_info =
->> +            USB_QUIRK_IGNORE_REMOTE_WAKEUP },
->> +
->>       /* Action Semiconductor flash disk */
->>       { USB_DEVICE(0x10d6, 0x2200), .driver_info =
->>               USB_QUIRK_STRING_FETCH_255 },
->>
-> 
-> 
-> 
-> 
-> 
-
-
+greg k-h
