@@ -2,83 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC4E25CFC0
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Sep 2020 05:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8CD25CFE4
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Sep 2020 05:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729689AbgIDDXH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 23:23:07 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:42881 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729554AbgIDDXF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Sep 2020 23:23:05 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E29FE84487;
-        Fri,  4 Sep 2020 15:23:00 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1599189780;
-        bh=FO/GvvPK88wYveqA4cy1JGNJmVuc1A7K+Phw+/GBSNY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=yat8fNDPyAHgKTOtQJ1urvLTGXYvJs9K9PFiZ/SvtuAxTac7IFhGe2oU/iDZ6Uolz
-         21z9JfaYHH9u+E5dcF/cqPzyWppfMrK57cup5lMXow5ZnJOhOVkfbLafeMDs4vFpyF
-         OasC+Jvbai0xai1+HK7DLL7TKgJP0llAPhK23GEXE8JisXNovcCKVemBgcg0/CuW7F
-         m6MB14xe5+IYPk8NhXK7yeNDHnNMyZNTeRKuhWMGrpLyhUMiSihT/kzX/q/PVP0GwC
-         wy1MLgWF0ezsYXSUksJ7/CkQg09ODHG6ko4ufs+mS5P+VCuE93e0lrc1oIiuaLzu06
-         HQ2FINndz8cAQ==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f51b3150000>; Fri, 04 Sep 2020 15:23:01 +1200
-Received: from hamishm-dl.ws.atlnz.lc (hamishm-dl.ws.atlnz.lc [10.33.24.30])
-        by smtp (Postfix) with ESMTP id 777F413EF39;
-        Fri,  4 Sep 2020 15:23:00 +1200 (NZST)
-Received: by hamishm-dl.ws.atlnz.lc (Postfix, from userid 1133)
-        id BF2512A06EA; Fri,  4 Sep 2020 15:23:00 +1200 (NZST)
-From:   Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        stern@rowland.harvard.edu
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-Subject: [PATCH 2/2] dt-bindings: usb: generic-ohci: Document per-port-overcurrent property
-Date:   Fri,  4 Sep 2020 15:22:47 +1200
-Message-Id: <20200904032247.11345-3-hamish.martin@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200904032247.11345-1-hamish.martin@alliedtelesis.co.nz>
-References: <20200904032247.11345-1-hamish.martin@alliedtelesis.co.nz>
+        id S1729713AbgIDDsV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 23:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729550AbgIDDsU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Sep 2020 23:48:20 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB4AC061244;
+        Thu,  3 Sep 2020 20:48:20 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id p37so3645077pgl.3;
+        Thu, 03 Sep 2020 20:48:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LLqMfP2X1w4/jx53zQazins9pmX04Mu60TQfw9itrD8=;
+        b=mb+Hl9XGSjFDxPd2p1f2pWmrMALZyTgnOGltZSsAKY+ceyLlc25uoUfqCfv4SGdZ00
+         2BzApt7dNMGm+qM2lH5spgflbHWPIL3hTYvYi7oTiHQEgy1gnoriuYH07qsaYIcDXcxe
+         YqNwQkWYLjmcNDkwWgO1c8/O4/aOD19xb59o8nsrrFITpflaTq1Z9MOI1/aEMHLEo+2n
+         4mP/M/E62GB5R5TVEOnbfSEtgoggO2tp/eNAXS+OECnOsToBoqM30yFjE27oXhgd7/2D
+         36ReqsHdWTuMfW512oIc8gHkBGvfq0holRoO8LXq/p2yy5uTS7h9k+nBo7S5wAtodOht
+         P3kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LLqMfP2X1w4/jx53zQazins9pmX04Mu60TQfw9itrD8=;
+        b=QmR4RSMcBVcJCs/RwR3POBWunTyHk/Y4EOJMxq5fTYINMlz4IJtTqbQct2br3IsAIL
+         qGdg84RLjFwu3LX0fltixDrcbk+Q0iU+xqxOJKlXc0dD1LV9+TJj0IKdIZNnuQjTyX1r
+         67EX4Luf18f2xW7eUvknJnx4Z44E1a4xie3W2HT0DbfYi/cIDTFi3oQXeJPOogy1GNod
+         Df3NhS98spNDXPZxX2UGCoBg79lUD5lOA9Nwnyk0Vixs6moGqWO/a5OI5dd2dR39geK8
+         tl0AXEALgtwNFIfbH+ck81DHCTbHnF+72hMlYej9Fc/Z6X2xTCsQxfcEYqseTyqUcYEc
+         tqaA==
+X-Gm-Message-State: AOAM531VYCjlTJDSBrnv5ZpzD7S5Suz2GfasnLPYTjTsqxKoafTkw/yg
+        6IoIWjeu54znaMgtoaGs0As=
+X-Google-Smtp-Source: ABdhPJxZxpzdB4FVjwyhMcw6LmWXi5pm+av3ieAQSNIpqfV1v7ZJR5459FGAK0H8X2gf8VjSQVuWzg==
+X-Received: by 2002:aa7:9582:: with SMTP id z2mr47814pfj.257.1599191298737;
+        Thu, 03 Sep 2020 20:48:18 -0700 (PDT)
+Received: from [10.230.30.107] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id n11sm4224831pgd.2.2020.09.03.20.48.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Sep 2020 20:48:17 -0700 (PDT)
+Subject: Re: [PATCH v2 01/11] usb: gadget: bdc: fix improper SPDX comment
+ style for header file
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Sasi Kumar <sasi.kumar@broadcom.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <1597923046-12535-1-git-send-email-chunfeng.yun@mediatek.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <4ef74f8d-bbb3-2503-ed3e-8b5ce385a7eb@gmail.com>
+Date:   Thu, 3 Sep 2020 20:48:15 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.1.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+In-Reply-To: <1597923046-12535-1-git-send-email-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-OHCI overcurrent protection defaults to Global or "ganged" overcurrent
-protection mode. This new property allows for the Individual Port
-Over-current Protection to be selected when required.
 
-Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
----
- Documentation/devicetree/bindings/usb/generic-ohci.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Do=
-cumentation/devicetree/bindings/usb/generic-ohci.yaml
-index 2178bcc401bc..5a68a647d059 100644
---- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-@@ -70,6 +70,11 @@ properties:
-     description:
-       Overrides the detected port count
-=20
-+  per-port-overcurrent:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      Set this flag for per-port overcurrent protection mode
-+
-   phys:
-     description: PHY specifier for the USB PHY
-=20
---=20
-2.28.0
+On 8/20/2020 4:30 AM, Chunfeng Yun wrote:
+> For C header files Documentation/process/license-rules.rst
+> mandates C-like comments (opposed to C source files where
+> C++ style should be used).
+> 
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
