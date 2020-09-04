@@ -2,100 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D329F25CFB6
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Sep 2020 05:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C853E25CFBE
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Sep 2020 05:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729686AbgIDDTT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Sep 2020 23:19:19 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:59147 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729528AbgIDDTR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Sep 2020 23:19:17 -0400
-X-UUID: 2165b6289a7540eab6a08a50e1a2c698-20200904
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=81j54tuoiKV3uK8sKV8TMOkBCYp/9eQY2ZBo8fSyYog=;
-        b=LjfOI6kypqLNZxiIZyol+4fjhvpGl8Y6+jlS1qBeFfioqww6ht3LMcW6FAoVjoTLy4UfGpeSXRGgXqJHpICjIpCTNKyyP8ZC/mOxC6/PNKQencmPY/RQgdyRTeX6exLWZV7RSMkV2EDPRO/ZbhEgJ0XS8zqSZCW4b7gpcTfOvI0=;
-X-UUID: 2165b6289a7540eab6a08a50e1a2c698-20200904
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1556347710; Fri, 04 Sep 2020 11:19:11 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31DR.mediatek.inc
- (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 4 Sep
- 2020 11:19:09 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 4 Sep 2020 11:19:08 +0800
-Message-ID: <1599189448.11403.33.camel@mhfsdcap03>
-Subject: Re: [PATCH v2 01/11] usb: gadget: bdc: fix improper SPDX comment
- style for header file
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Sasi Kumar <sasi.kumar@broadcom.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Fri, 4 Sep 2020 11:17:28 +0800
-In-Reply-To: <1597923046-12535-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1597923046-12535-1-git-send-email-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1729727AbgIDDXG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Sep 2020 23:23:06 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:42890 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729655AbgIDDXE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Sep 2020 23:23:04 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9E07D84488;
+        Fri,  4 Sep 2020 15:23:02 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1599189782;
+        bh=SYPM5NmO2oFScs3sCrM5DJmQkLy/qPNPYboTphS/uI8=;
+        h=From:To:Cc:Subject:Date;
+        b=LavJHK0Atihlh25m8bejpmJ0sJAKAx77eAo7BPQ2rAa/2e0WClbU4VnpdMYS1OGfX
+         bKjK7Jic0OFFdYvLqIOMARnUDPLgPk9RvveRSIXhH4KVTne1c2HifM7IdNnmMsdHWE
+         n/6r/yOTAP621L4r/ox3+GvTeD+teJth+QtvydrfK+SnS8EPduKzZbiyRVh0Yj0NNH
+         jl/zPPccSmXOENKJ+J06wGR6zgIkaMybiaHFf2TLgZTIDBx+MCWxGwNGyhPMaQ/v3i
+         HBJEkEpoxLaYc7p6aI1ft+bycmvEHvbFY7temOm0YA5xoPeugKbRaOzx/Dh8p1YPLO
+         IHJSU3Rj2t6JA==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5f51b3120000>; Fri, 04 Sep 2020 15:23:02 +1200
+Received: from hamishm-dl.ws.atlnz.lc (hamishm-dl.ws.atlnz.lc [10.33.24.30])
+        by smtp (Postfix) with ESMTP id AECFB13EEBA;
+        Fri,  4 Sep 2020 15:22:57 +1200 (NZST)
+Received: by hamishm-dl.ws.atlnz.lc (Postfix, from userid 1133)
+        id 00B942A06EA; Fri,  4 Sep 2020 15:22:57 +1200 (NZST)
+From:   Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+Subject: [PATCH 0/2] usb: ohci: Per-port overcurrent protection
+Date:   Fri,  4 Sep 2020 15:22:45 +1200
+Message-Id: <20200904032247.11345-1-hamish.martin@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 6437F811FE63FA34E3E573D3346DC7F53866220D91CCF2E752ABCF714B765FAD2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgRmxvcmlhbiwgDQoNCk9uIFRodSwgMjAyMC0wOC0yMCBhdCAxOTozMCArMDgwMCwgQ2h1bmZl
-bmcgWXVuIHdyb3RlOg0KPiBGb3IgQyBoZWFkZXIgZmlsZXMgRG9jdW1lbnRhdGlvbi9wcm9jZXNz
-L2xpY2Vuc2UtcnVsZXMucnN0DQo+IG1hbmRhdGVzIEMtbGlrZSBjb21tZW50cyAob3Bwb3NlZCB0
-byBDIHNvdXJjZSBmaWxlcyB3aGVyZQ0KPiBDKysgc3R5bGUgc2hvdWxkIGJlIHVzZWQpLg0KPiAN
-Cj4gQ2M6IEZsb3JpYW4gRmFpbmVsbGkgPGYuZmFpbmVsbGlAZ21haWwuY29tPg0KPiBTaWduZWQt
-b2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+IC0tLQ0K
-PiB2MjogYWRkIENjIEZsb3JpYW4NCj4gLS0tDQo+ICBkcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2Jk
-Yy9iZGMuaCAgICAgfCAyICstDQo+ICBkcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy9iZGNfY21k
-LmggfCAyICstDQo+ICBkcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy9iZGNfZGJnLmggfCAyICst
-DQo+ICBkcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy9iZGNfZXAuaCAgfCAyICstDQo+ICA0IGZp
-bGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYg
-LS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy9iZGMuaCBiL2RyaXZlcnMvdXNiL2dh
-ZGdldC91ZGMvYmRjL2JkYy5oDQo+IGluZGV4IGFjNzVlMjUuLmZjYmE3N2UgMTAwNjQ0DQo+IC0t
-LSBhL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvYmRjL2JkYy5oDQo+ICsrKyBiL2RyaXZlcnMvdXNi
-L2dhZGdldC91ZGMvYmRjL2JkYy5oDQo+IEBAIC0xLDQgKzEsNCBAQA0KPiAtLy8gU1BEWC1MaWNl
-bnNlLUlkZW50aWZpZXI6IEdQTC0yLjArDQo+ICsvKiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjog
-R1BMLTIuMCsgKi8NCj4gIC8qDQo+ICAgKiBiZGMuaCAtIGhlYWRlciBmb3IgdGhlIEJSQ00gQkRD
-IFVTQjMuMCBkZXZpY2UgY29udHJvbGxlcg0KPiAgICoNCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-dXNiL2dhZGdldC91ZGMvYmRjL2JkY19jbWQuaCBiL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvYmRj
-L2JkY19jbWQuaA0KPiBpbmRleCAyOWNjOTg4Li4zNzNlNjc0IDEwMDY0NA0KPiAtLS0gYS9kcml2
-ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy9iZGNfY21kLmgNCj4gKysrIGIvZHJpdmVycy91c2IvZ2Fk
-Z2V0L3VkYy9iZGMvYmRjX2NtZC5oDQo+IEBAIC0xLDQgKzEsNCBAQA0KPiAtLy8gU1BEWC1MaWNl
-bnNlLUlkZW50aWZpZXI6IEdQTC0yLjArDQo+ICsvKiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjog
-R1BMLTIuMCsgKi8NCj4gIC8qDQo+ICAgKiBiZGNfY21kLmggLSBoZWFkZXIgZm9yIHRoZSBCREMg
-ZGVidWcgZnVuY3Rpb25zDQo+ICAgKg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0
-L3VkYy9iZGMvYmRjX2RiZy5oIGIvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9iZGMvYmRjX2RiZy5o
-DQo+IGluZGV4IDM3M2Q1YWIuLjg1OWQ1ODggMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2dh
-ZGdldC91ZGMvYmRjL2JkY19kYmcuaA0KPiArKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2Jk
-Yy9iZGNfZGJnLmgNCj4gQEAgLTEsNCArMSw0IEBADQo+IC0vLyBTUERYLUxpY2Vuc2UtSWRlbnRp
-ZmllcjogR1BMLTIuMCsNCj4gKy8qIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wKyAq
-Lw0KPiAgLyoNCj4gICAqIGJkY19kYmcuaCAtIGhlYWRlciBmb3IgdGhlIEJEQyBkZWJ1ZyBmdW5j
-dGlvbnMNCj4gICAqDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy9i
-ZGNfZXAuaCBiL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvYmRjL2JkY19lcC5oDQo+IGluZGV4IGEz
-N2ZmODAzLi41YmJkNzNmIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2Jk
-Yy9iZGNfZXAuaA0KPiArKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy9iZGNfZXAuaA0K
-PiBAQCAtMSw0ICsxLDQgQEANCj4gLS8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4w
-Kw0KPiArLyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjArICovDQo+ICAvKg0KPiAg
-ICogYmRjX2VwLmggLSBoZWFkZXIgZm9yIHRoZSBCREMgZGVidWcgZnVuY3Rpb25zDQo+ICAgKg0K
-V291bGQgeW91IHBsZWFzZSB0YWtlIGEgbG9vayBhdCB0aGlzIHNlcmllcz8NCkknbGwgZHJvcCB0
-aGUgcGF0Y2hlcyB0aGF0IG5vdCBmaW5lIHdpdGggeW91Lg0KVGhhbmtzDQoNCg0K
+Add a dt-binding to select per-port overcurrent protection mode so handle
+spurious overcurrent events from unconnected ports.
+
+Hamish Martin (2):
+  usb: ohci: Add per-port overcurrent quirk
+  dt-bindings: usb: generic-ohci: Document per-port-overcurrent property
+
+ Documentation/devicetree/bindings/usb/generic-ohci.yaml | 5 +++++
+ drivers/usb/host/ohci-hcd.c                             | 4 ++++
+ drivers/usb/host/ohci-platform.c                        | 3 +++
+ drivers/usb/host/ohci.h                                 | 1 +
+ 4 files changed, 13 insertions(+)
+
+--=20
+2.28.0
 
