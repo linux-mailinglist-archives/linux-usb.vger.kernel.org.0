@@ -2,79 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F2125DA6F
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Sep 2020 15:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F59225DAB4
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Sep 2020 15:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730652AbgIDNue (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Sep 2020 09:50:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48194 "EHLO mail.kernel.org"
+        id S1730701AbgIDN5K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Sep 2020 09:57:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51748 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730634AbgIDNu2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 4 Sep 2020 09:50:28 -0400
+        id S1730534AbgIDN5A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Sep 2020 09:57:00 -0400
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 14905204FD;
-        Fri,  4 Sep 2020 13:50:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ABDBC2065E;
+        Fri,  4 Sep 2020 13:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599227428;
-        bh=936VthRBiEB4km52buOWNR2V7woJnLVTpg2eVa8/G2U=;
+        s=default; t=1599227820;
+        bh=2iZTMjJAf9QaoVGMuJs7cq21Dk7HyyqjCyXnvWCnIDM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X5ymyTrwKNf9E/c7D0/1k80/zY25RgIG1FMihrBWz6Nr6ZfiaF77ACOyBDMK21DHQ
-         GzK1Lqe3FO/B5hbxQnMqGD5OtFm03U7dT22Wy/8yekJsB0Z7A0gx5fxVDrhrpIPlSG
-         B8NVSTDMkW60Hk1Ot+lRKBP4d2+IPYbWcubdJBKs=
-Date:   Fri, 4 Sep 2020 15:50:49 +0200
+        b=CtpyBjpJASTV0+hw2qZcXQv2tah2h1hZnQj66L3t3agRpviksC+wxf/wzBmSLfWJ2
+         R0vd5IUlCcvIQwmj442+FCv8Iu/unsxwcU71Ty9abGP2hCjEDkQHr6Mx+Z3uCvuW2p
+         GaiKo7W8lD0Kih0SyzKNt51ZcSXU+30jvUGltY0w=
+Date:   Fri, 4 Sep 2020 15:57:21 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Penghao <penghao@uniontech.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        johan@kernel.org, hdegoede@redhat.com, dlaz@chromium.org,
-        stern@rowland.harvard.edu, kerneldev@karsmulder.nl,
-        jonathan@jdcox.net, tomasz@meresinski.eu
-Subject: Re: [PATCH v3] HID: quirks: Add USB_QUIRK_IGNORE_REMOTE_WAKEUP quirk
- for BYD zhaoxin notebook
-Message-ID: <20200904135049.GA3181902@kroah.com>
-References: <20200904091322.30426-1-penghao@uniontech.com>
+Cc:     johan@kernel.org, jonathan@jdcox.net, kai.heng.feng@canonical.com,
+        gustavo.padovan@collabora.com, tomasz@meresinski.eu,
+        hdegoede@redhat.com, kerneldev@karsmulder.nl,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: usb-audio: quirks: Add
+ USB_QUIRK_DISCONNECT_SUSPEND quirk for Lenovo A630Z TIO built-in usb audio
+ card
+Message-ID: <20200904135721.GA3182607@kroah.com>
+References: <20200904014516.12298-1-penghao@uniontech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200904091322.30426-1-penghao@uniontech.com>
+In-Reply-To: <20200904014516.12298-1-penghao@uniontech.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 05:13:22PM +0800, Penghao wrote:
-> Add a USB_QUIRK_IGNORE_REMOTE_WAKEUP quirk for the BYD zhaoxin notebook.
-> This notebook come with usb touchpad. And we would like to disable touchpad
-> wakeup on this notebook by default.
+On Fri, Sep 04, 2020 at 09:45:16AM +0800, Penghao wrote:
+> Add a USB_QUIRK_DISCONNECT_SUSPEND quirk for the Lenovo TIO built-in
+> usb-audio.when A630Z going into S3,the system immediately wakeup 7-8
+> seconds later by usb-audio disconnect interrupt.to avoids the issue.
+> 
+> Seeking a better fix, we've tried a lot of things, including:
+>  - Check that the device's power/wakeup is disabled
+>  - Check that remote wakeup is off at the USB level
+>  - All the quirks in drivers/usb/core/quirks.c e.g. USB_QUIRK_RESET_RESUME,
+>    USB_QUIRK_RESET, USB_QUIRK_IGNORE_REMOTE_WAKEUP, USB_QUIRK_NO_LPM.
+> 
+> but none of that makes any difference.
+> 
+> There are no errors in the logs showing any suspend/resume-related issues.
+> When the system wakes up due to the modem, log-wise it appears to be a
+> normal resume.
+> 
+> Introduce a quirk to disable the port during suspend when the modem is
+> detected.
 > 
 > Signed-off-by: Penghao <penghao@uniontech.com>
 > ---
-> 
-> Changes since v2:
->  - Add changes
-> 
-> Changes since v1:
->  - Add the entries sorted by vendor ID and product ID.
-> 
 >  drivers/usb/core/quirks.c | 4 ++++
 >  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index 7c1198f80c23..fffe1f7f1098 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -393,6 +393,10 @@ static const struct usb_device_id usb_quirk_list[] = {
->  	/* Generic RTL8153 based ethernet adapters */
->  	{ USB_DEVICE(0x0bda, 0x8153), .driver_info = USB_QUIRK_NO_LPM },
->  
-> +	/* SONiX USB DEVICE Touchpad */
-> +	{ USB_DEVICE(0x0c45, 0x7056), .driver_info =
-> +			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
-> +
 
-Why is the subject line "HID:"?  This is a USB core quirk, not a
-hid-specific one.
+Odd subject line, this is not ALSA: or the usb-audio driver :(
+
+Please fix up and properly order the entry.
 
 thanks,
 
