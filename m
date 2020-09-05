@@ -2,74 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FE625E6C1
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Sep 2020 11:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3446125E74E
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Sep 2020 13:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726660AbgIEJ3f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Sep 2020 05:29:35 -0400
-Received: from sonic307-53.consmr.mail.ir2.yahoo.com ([87.248.110.30]:46358
-        "EHLO sonic307-53.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726591AbgIEJ3f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Sep 2020 05:29:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1599298173; bh=NajTNMrfMLb6UXcjRhYpYerQX8PtVBLz0oFgaMINSWY=; h=Date:From:Reply-To:Subject:References:From:Subject; b=DKRKLwtUNyEyetYfPSnrJKCuwRnGf5ri44xzezS60dxLpPiihPxrj+SJ0xDU0wd95SiA2LDWaYmaESzywdhr/TM+6Snhp/Tw+ARkZVI+D/y7RtJLNlp+1805px2GRrA/4CZJuslA1GtYbv3SLQ9iL2VWxDhHtDJEh8+pw0twVpi1rL4zB7vThUz5wdBPKAEwDkiidrP8q2ZlBmHyYn1ucII6LUgrMkefco5jKpi/RakpG4KXjYQ9Ts+NkdYcaxhWnDZorYuh0iAMwCEFRoXKcks6FdTgywc/saMyhTiNp7vguK4icA61orANQMdKS/tAgkdwvsuxQNJtWxg6Kcq1VA==
-X-YMail-OSG: wM8ZSq4VM1kmGNO3eax4S9QX93T_p9s0w5abNUTrEUMRanSy5MtA9wxO5Oxo5CI
- P_QYgPYm3QiQZeH7dAHKj2M_7Apt7EbPjkqI5KrM3sWMUkPbrz2__Krl7MBMCQjFYVMXlLJc1D50
- XlM5XNukDYM4jd_q8nB5oJQnSd35rm8LTNycUX2QhW7O3X.Q0DUDJK6QpSlVk14mxfMRU4WTO3g4
- vkKfL65Vno6h2axmAlgrnyYZnuGORsaKCXBVOxmHRBdSiyVvtu7OcQncosVCZ29BzGaOWC01gL1p
- Z05q5VMwCh_k0wvZaZi35ZOu23ekVmuFPOQ1bDJ9CSVXE2RthrNpI8I1bSI96okS4a7b51xZmTkn
- MnAa_Okd_9r43qXHlQbaHQvvFMtsBXJcz5e99GXTplEwNTpXPLuqzgq5nQ3Dabp8fbn4Nmg3YbLY
- u8abZP0n41vDPNwzR9tOrXpIsC_QRIv_Y_3QjXjNZtvqFdzPlCJzmahlI_P6rAo3bA4rs78aF7FD
- OUZxLJ_LccTs5uZmCzPBSrlmOL3pnFc0XARHfStZke7v08OJ6PEJGWYE21pXQAmWmLdyKlT7O8FV
- zoTXnw6i_K0o5bFM7AwY.VsRauHaNKbVTDcdGYgOjUtoXWCwTNtO5NnNAub2K8M7zhJ2bSgLxRSx
- KGWtSKD4oLuxOROSiuWOdBdTNNcpBJRDd8BXC3vsyaJ3uAJyp6XV1PdcbSDQMBHcg6zstF4DQ1.4
- 3Qs1SjTfhXvbuzgOTOpwG6jCA4R.jiaOKBncagLL6qryZIfsEUT0lSI2BY3edd2MAeu_S3zDEM.0
- hPxcZ4y_VTlK.koTOfbH92YbjzDvbbQix3a956LXAESaTChK6OR_xI19A5mqmyOPWZxIzhAveKgQ
- M36MVSHXne8JKrQ5qs798xsEDpI3iCW_Uc8Eu9RsnB35SzsGYNMRXzocnyjyuUHczjD_o2HadlFg
- STubDJQyoPGcCpLDGtwns8pQ6MGbUwxGGfhQ3PYHKvw4Tqa9RK50ap.B84S.Vm_diHEuOWjz.JBV
- eii7Wfs3p8XwPvtyi.g0iOXkbv5zy.kNX1VYDEYDvVIevYcARPVTa1Zl4qRB2gD38uUFRYLZXzCL
- qikmo.f6B1kYtiuuHBKXA3VpYRo0Yyp9NmP0e7g7GNOO.dQlChkARE0e29eVcHM0DaeGxRqWECWb
- WAOIPx.QySkbk6nkAzmBIwLE8v6gTOhCYH4ZH7VxVIcqVbwitCpHv77RsQVBjQv1bqL9Ttetj7OM
- dH9LLYSNeVzUV.Z9FIdTfWcbsNjnSqPs2VaOuMq5YbEIpq8syL8TAkzSKqkZA3qWLt.B2MoIPDA9
- srGMn0s06k3tOTOGF4pTpsIcRq6GkrpIuYMPa9IPr_FYw33f.64pOhAJvA4BnMerJ.oDC.Hxqg4B
- wZLUAaDLSgTcArDLjphn.PNDSiQNXSr.MsOIeFYx5uMwDNA--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ir2.yahoo.com with HTTP; Sat, 5 Sep 2020 09:29:33 +0000
-Date:   Sat, 5 Sep 2020 09:29:32 +0000 (UTC)
-From:   Ms Lisa Hugh <lisa.hugh0000@gmail.com>
-Reply-To: ms.lisahugh000@gmail.com
-Message-ID: <1137909115.4407550.1599298172358@mail.yahoo.com>
-Subject: REPLY TO MY EMAIL FOR BUSINESS(Ms Lisa hugh).
+        id S1728441AbgIELiH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Sep 2020 07:38:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26100 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726491AbgIELhp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Sep 2020 07:37:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599305863;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jRq3l1S3Um+HFP1g6fJUj42uWgf4/EuFvqkzKR8X4MQ=;
+        b=UxjZi9j3E7HLuRPF2GYyu7KdZovFuSJ3pRz/nh/HPTYZ6CZ+gOTGH/8MaH5PoxPjq3sEoe
+        BOcbcwI4uhIKTbrwY3kl8NnO2u+abUcTTxIFu59kcJIIGj+UynXfI08ZZrOaLqNrm4GsId
+        kg42MWx/bWCHE9bYl1CMmywfXBd6oQA=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-63-sPmumLPhNXq6FtB_ofK-iA-1; Sat, 05 Sep 2020 07:37:41 -0400
+X-MC-Unique: sPmumLPhNXq6FtB_ofK-iA-1
+Received: by mail-ed1-f71.google.com with SMTP id z19so3579781edr.10
+        for <linux-usb@vger.kernel.org>; Sat, 05 Sep 2020 04:37:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=jRq3l1S3Um+HFP1g6fJUj42uWgf4/EuFvqkzKR8X4MQ=;
+        b=aiZSFzaae+aOZTSWIQwCntMjU2WVQXmecs0SfoNrGrHkAuNhjugHKj/wB7P3Up5qdz
+         Ulb50LzGnXT6vtgUr1iqVXz8yYJ20OzEq1hDA4TcjC0UE78LyRFs79YCLKt3jJVBL0QF
+         w5pNbl+AsPXm00oXcJOGlUPatiDIiCXbOGnXq/A6ABAR6YWGGhpBlSDJfmCnlXiH7uKH
+         muxZLJUokHlu147Bx8DVx5/9Cmss3VDPIAHlrRrF37SCYzqmOQIQthH/7EcGnSIiRUEj
+         I4DxVKY1ai8h5A2mlyRhpzIDFzZMxVG+uzF9L1YM8DD8UnZJkyBtsf5E3/aJG2SMcZqz
+         otng==
+X-Gm-Message-State: AOAM531T9BWx5qQJMSpqHwNgIO48sb3Boz+3dpFlDA8L95nGIE9DLPDn
+        ce43wf5/c3vvCrkDC76HznbLCCCsg38Zyvseluvv+GKeSkBs9+qLjE9dBiaOzcHHISvQFwGdYx0
+        INDT4ZDfmCs87Z/x9TyY5
+X-Received: by 2002:a50:8e58:: with SMTP id 24mr13408198edx.226.1599305860305;
+        Sat, 05 Sep 2020 04:37:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxnbGJFPfPFE90TE3p7hkkla6EHfvOuspZBWBtmpa4ZsWlAlx+GmChuRKUauy2CkE7FOLdM1w==
+X-Received: by 2002:a50:8e58:: with SMTP id 24mr13408182edx.226.1599305860091;
+        Sat, 05 Sep 2020 04:37:40 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id v5sm8962212ejv.114.2020.09.05.04.37.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Sep 2020 04:37:39 -0700 (PDT)
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: How to set USB_PORT_QUIRK_OLD_SCHEME on an usb-port ?
+Message-ID: <2f2dd720-3ab4-ba0a-16bf-8b899aafa26d@redhat.com>
+Date:   Sat, 5 Sep 2020 13:37:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-References: <1137909115.4407550.1599298172358.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16565 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0
-To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi All,
+
+I have been debugging an issue with a 2-in-1 which
+consists of a tablet + a kbd-dock, where the device
+turns into a clamshell when docked into the kbd-dock.
+
+The kbd dock is connected via pogo-pins. This works
+fine when docked at boot. But there is an enumeration
+issue when hot-docked (and the keyboard looses power
+when the lid is closedm so this also triggers after
+a suspend/resume):
+
+[ 3498.924190] usb 1-3: new full-speed USB device number 5 using xhci_hcd
+[ 3499.041725] usb 1-3: device descriptor read/64, error -71
+[ 3515.215890] usb 1-3: device descriptor read/64, error -110
+[ 3515.440369] usb 1-3: new full-speed USB device number 6 using xhci_hcd
+[ 3515.603544] usb 1-3: New USB device found, idVendor=06cb, idProduct=73f5, bcdDevice= 0.02
+[ 3515.603574] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 3515.603596] usb 1-3: Product: ITE Device(8910)
+[ 3515.603614] usb 1-3: Manufacturer: ITE Tech. Inc.
+
+Note there is about 6 seconds before the keyboard becomes
+usable, which is quite long when trying to unlock the
+laptop after opening the lid.
+
+If I set the USB_PORT_QUIRK_OLD_SCHEME on the port used by the kbd-dock:
+
+echo 1 >  /sys/devices/pci0000\:00/0000\:00\:14.0/usb1/1-0\:1.0/usb1-port3/quirks
+
+Then this changes to:
+
+[ 4467.875008] usb 1-3: new full-speed USB device number 7 using xhci_hcd
+[ 4467.878483] usb 1-3: Device not responding to setup address.
+[ 4468.082476] usb 1-3: Device not responding to setup address.
+[ 4468.289990] usb 1-3: device not accepting address 7, error -71
+[ 4468.614928] usb 1-3: new full-speed USB device number 8 using xhci_hcd
+[ 4468.662392] usb 1-3: New USB device found, idVendor=06cb, idProduct=73f5, bcdDevice= 0.02
+[ 4468.662423] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 4468.662444] usb 1-3: Product: ITE Device(8910)
+[ 4468.662461] usb 1-3: Manufacturer: ITE Tech. Inc.
+
+Which is a lot better wrt making the keyboard available for
+use in a timely manner.
+
+So now I'm looking into a way to automatically do this. I would
+prefer to keep the handling of this out of the kernel, so I looked into
+udev, but it seems that the usb_port_device_type device-s registered by
+usb_hub_create_port_device() are not visible to udev?
+
+At least I'm not seeing them, in the output of "udevadm info -e"
 
 
-Dear Friend,
-
-I am Ms Lisa hugh, work with the department of Audit and accounting manager here in the Bank(B.O.A).
-
-Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment, amount (US$4.5M DOLLARS).
-
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me for success.
-
-Note/ 50% for you why 50% for me after success of the transfer to your bank account.
-
-Below information is what i need from you so will can be reaching each other
-
-1)Full name ...
-2)Private telephone number...
-3)Age...
-4)Nationality...
-5)Occupation ...
+Note another option would be to set the global old_scheme_first kernel
+cmdline parameter on this 2-in-1. That can be done with a simple
+dmi_system_id table on which to do this, but adding such a table
+seems undesirable.
 
 
-Thanks.
+A third option I guess would be to try and improve the probe time
+of the kbd-dock under the new scheme.
 
-Ms Lisa hugh.
+
+Any input on this would be much appreciated.
+
+Regards,
+
+Hans
+
+
