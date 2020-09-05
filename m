@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0898F25E86D
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Sep 2020 16:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C0325E878
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Sep 2020 16:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728633AbgIEOps (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Sep 2020 10:45:48 -0400
-Received: from mga01.intel.com ([192.55.52.88]:18302 "EHLO mga01.intel.com"
+        id S1728687AbgIEOqo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Sep 2020 10:46:44 -0400
+Received: from mga02.intel.com ([134.134.136.20]:13107 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728206AbgIEOpd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 5 Sep 2020 10:45:33 -0400
-IronPort-SDR: rGFBDs2HwzVmzvta+w6gyWLVhGeDO+AK45k8WzukxMnbyllxQchiLByZoIeBu+RwHhOjOB7IxB
- iElOTy7Q3OmQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9734"; a="175914918"
+        id S1728656AbgIEOqm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 5 Sep 2020 10:46:42 -0400
+IronPort-SDR: 6jPmAhA8URU2twW6nMPRndKRXm+nH8nv9Nw3NcYonVBWAYuW+4JxXXiY3nbX6i5s5R5F+7o79n
+ zo+B+EF9qXtA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9734"; a="145593994"
 X-IronPort-AV: E=Sophos;i="5.76,394,1592895600"; 
-   d="scan'208";a="175914918"
+   d="scan'208";a="145593994"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2020 07:45:28 -0700
-IronPort-SDR: JsAQZZbL60iKUWcP98we8hGfSGVFIjMauSZ/S0jH7GNDcPRnepjElwU3IB0lR5idyQW9dP6XES
- sioVKmrmJ2Cg==
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2020 07:46:37 -0700
+IronPort-SDR: o6+7p5vFttjNR1+2HzENGVZ7qA5wWZinLE0E+cIJO3W2AgS+FbTiatS9DS4C0tH7L9ossysEWG
+ fpyjgvph4u3Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,394,1592895600"; 
-   d="scan'208";a="316256480"
+   d="scan'208";a="447731019"
 Received: from lkp-server02.sh.intel.com (HELO c089623da072) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 05 Sep 2020 07:45:26 -0700
+  by orsmga004.jf.intel.com with ESMTP; 05 Sep 2020 07:46:36 -0700
 Received: from kbuild by c089623da072 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kEZRW-0000F1-3w; Sat, 05 Sep 2020 14:45:26 +0000
-Date:   Sat, 05 Sep 2020 22:45:19 +0800
+        id 1kEZSd-0000FV-Cn; Sat, 05 Sep 2020 14:46:35 +0000
+Date:   Sat, 05 Sep 2020 22:45:39 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 5df7ef7d32fec1d6d1c34dbec019b461a12ce870
-Message-ID: <5f53a47f.e6L8f8Otd1VehC5n%lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ a18cd6c9b6bc73dc17e8b7e9bd07decaa8833c97
+Message-ID: <5f53a493.ehWEK5ea//T8v3y1%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -46,13 +46,13 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 5df7ef7d32fec1d6d1c34dbec019b461a12ce870  uas: bump hw_max_sectors to 2048 blocks for SS or faster drives
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: a18cd6c9b6bc73dc17e8b7e9bd07decaa8833c97  usb: core: fix slab-out-of-bounds Read in read_descriptors
 
-elapsed time: 1335m
+elapsed time: 1336m
 
-configs tested: 131
-configs skipped: 13
+configs tested: 136
+configs skipped: 11
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -80,12 +80,12 @@ xtensa                    xip_kc705_defconfig
 m68k                                defconfig
 powerpc                          allmodconfig
 s390                                defconfig
+mips                          rm200_defconfig
+arm                         vf610m4_defconfig
+sh                  sh7785lcr_32bit_defconfig
 arc                         haps_hs_defconfig
 arm                              zx_defconfig
 powerpc                      ppc64e_defconfig
-arm                      footbridge_defconfig
-arm                          iop32x_defconfig
-xtensa                       common_defconfig
 arm                        mvebu_v5_defconfig
 mips                          malta_defconfig
 openrisc                 simple_smp_defconfig
@@ -104,13 +104,11 @@ mips                        qi_lb60_defconfig
 arm                     am200epdkit_defconfig
 sh                     sh7710voipgw_defconfig
 arm                        multi_v7_defconfig
-arm                        mini2440_defconfig
-microblaze                    nommu_defconfig
+arc                              allyesconfig
 sh                   sh7724_generic_defconfig
+riscv                             allnoconfig
 ia64                         bigsur_defconfig
 arc                     nsimosci_hs_defconfig
-arc                              allyesconfig
-riscv                             allnoconfig
 sh                          landisk_defconfig
 powerpc                          g5_defconfig
 arm                            hisi_defconfig
@@ -118,12 +116,19 @@ powerpc                     skiroot_defconfig
 sh                         ecovec24_defconfig
 arm                            qcom_defconfig
 powerpc                  storcenter_defconfig
+arm                          iop32x_defconfig
 xtensa                generic_kc705_defconfig
 ia64                          tiger_defconfig
-xtensa                           allyesconfig
+sh                           se7750_defconfig
+mips                      fuloong2e_defconfig
+powerpc                       ppc64_defconfig
+arm                         palmz72_defconfig
+s390                             alldefconfig
+arm                  colibri_pxa270_defconfig
 mips                            ar7_defconfig
 mips                           xway_defconfig
 m68k                       m5275evb_defconfig
+xtensa                           allyesconfig
 m68k                          sun3x_defconfig
 mips                      pistachio_defconfig
 arm                            mps2_defconfig
