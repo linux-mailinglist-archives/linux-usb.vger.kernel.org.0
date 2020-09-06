@@ -2,84 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE59C25EA68
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Sep 2020 22:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADA325EC1F
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Sep 2020 04:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728449AbgIEUeP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Sep 2020 16:34:15 -0400
-Received: from go.tenamax.net ([192.200.104.114]:27591 "EHLO go.tenamax.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728103AbgIEUeP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 5 Sep 2020 16:34:15 -0400
-X-Greylist: delayed 2066 seconds by postgrey-1.27 at vger.kernel.org; Sat, 05 Sep 2020 16:34:15 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=gltcginvest.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=L0p73dcRXnQb1IdixpE6sncc3RX5HUD6Tpms0G5JcJM=; b=GI5hVKBYsj/2+PPgAI+W6hyDir
-        sSBuRUwKPKD7E6aGphzXliL7Dsa0ZSJa8lxP40DmR6JdjcQZ4UjBW+a7o0rWP59WQf/1m35u6EH1K
-        J7f+hCJCqRv3hyrlVbnDwufav7oe9nRCjl9WnTnTnq8DDTKY709KXj6grcpzl1Olu3rflJLYRUHaL
-        4b2d7knRnAxA/mDPzpBqI21WsmrlXLK8bLytdOKS+16SowV53uXOs7fWZpdkI5bsSbL03siJbK5aE
-        rB4UV3EZZeNNvCaRXW2kpD0Xkmpi5/Ba41aoLHDpQQgOZ6x0vfMZF6wCPYED7l3Kk0qfmxGH6Nb72
-        E9TmZqlQ==;
-Received: from [::1] (port=46480 helo=go.tenamax.net)
-        by go.tenamax.net with esmtpa (Exim 4.93)
-        (envelope-from <customeronline@gltcginvest.com>)
-        id 1kEdvv-000FWT-31; Sat, 05 Sep 2020 15:33:12 -0400
+        id S1728790AbgIFCWb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Sep 2020 22:22:31 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:52227 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728409AbgIFCWa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Sep 2020 22:22:30 -0400
+Received: (qmail 729609 invoked by uid 1000); 5 Sep 2020 22:22:29 -0400
+Date:   Sat, 5 Sep 2020 22:22:29 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: How to set USB_PORT_QUIRK_OLD_SCHEME on an usb-port ?
+Message-ID: <20200906022229.GA729107@rowland.harvard.edu>
+References: <2f2dd720-3ab4-ba0a-16bf-8b899aafa26d@redhat.com>
 MIME-Version: 1.0
-Date:   Sat, 05 Sep 2020 15:33:01 -0400
-From:   Magnus Panda Paul <customeronline@gltcginvest.com>
-To:     undisclosed-recipients:;
-Subject: Re: Please support my book launch
-Reply-To: ipandaswy@gmail.com
-User-Agent: Roundcube Webmail/1.4.6
-Message-ID: <c1cdfee0529e5dabf6921ffc3ba0e1ec@gltcginvest.com>
-X-Sender: customeronline@gltcginvest.com
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-OutGoing-Spam-Status: No, score=1.5
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - go.tenamax.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - gltcginvest.com
-X-Get-Message-Sender-Via: go.tenamax.net: authenticated_id: customeronline@gltcginvest.com
-X-Authenticated-Sender: go.tenamax.net: customeronline@gltcginvest.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2f2dd720-3ab4-ba0a-16bf-8b899aafa26d@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sat, Sep 05, 2020 at 01:37:38PM +0200, Hans de Goede wrote:
+> Hi All,
+> 
+> I have been debugging an issue with a 2-in-1 which
+> consists of a tablet + a kbd-dock, where the device
+> turns into a clamshell when docked into the kbd-dock.
+> 
+> The kbd dock is connected via pogo-pins. This works
+> fine when docked at boot. But there is an enumeration
+> issue when hot-docked (and the keyboard looses power
+> when the lid is closedm so this also triggers after
+> a suspend/resume):
+> 
+> [ 3498.924190] usb 1-3: new full-speed USB device number 5 using xhci_hcd
+> [ 3499.041725] usb 1-3: device descriptor read/64, error -71
+> [ 3515.215890] usb 1-3: device descriptor read/64, error -110
+> [ 3515.440369] usb 1-3: new full-speed USB device number 6 using xhci_hcd
+> [ 3515.603544] usb 1-3: New USB device found, idVendor=06cb, idProduct=73f5, bcdDevice= 0.02
+> [ 3515.603574] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> [ 3515.603596] usb 1-3: Product: ITE Device(8910)
+> [ 3515.603614] usb 1-3: Manufacturer: ITE Tech. Inc.
+> 
+> Note there is about 6 seconds before the keyboard becomes
+> usable, which is quite long when trying to unlock the
+> laptop after opening the lid.
+> 
+> If I set the USB_PORT_QUIRK_OLD_SCHEME on the port used by the kbd-dock:
+> 
+> echo 1 >  /sys/devices/pci0000\:00/0000\:00\:14.0/usb1/1-0\:1.0/usb1-port3/quirks
+> 
+> Then this changes to:
+> 
+> [ 4467.875008] usb 1-3: new full-speed USB device number 7 using xhci_hcd
+> [ 4467.878483] usb 1-3: Device not responding to setup address.
+> [ 4468.082476] usb 1-3: Device not responding to setup address.
+> [ 4468.289990] usb 1-3: device not accepting address 7, error -71
+> [ 4468.614928] usb 1-3: new full-speed USB device number 8 using xhci_hcd
+> [ 4468.662392] usb 1-3: New USB device found, idVendor=06cb, idProduct=73f5, bcdDevice= 0.02
+> [ 4468.662423] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> [ 4468.662444] usb 1-3: Product: ITE Device(8910)
+> [ 4468.662461] usb 1-3: Manufacturer: ITE Tech. Inc.
+> 
+> Which is a lot better wrt making the keyboard available for
+> use in a timely manner.
+> 
+> So now I'm looking into a way to automatically do this. I would
+> prefer to keep the handling of this out of the kernel, so I looked into
+> udev, but it seems that the usb_port_device_type device-s registered by
+> usb_hub_create_port_device() are not visible to udev?
+> 
+> At least I'm not seeing them, in the output of "udevadm info -e"
 
-Hello. My name is Panda Paul Magnus. I am a music producer, singer, 
-front-end developer and part time writer. Having become unemployed due 
-to COVID19, I spent my time writing a book (manuscript on: 
-https://gogetfunding.com/7-and-the-11-heavens-book-publishing/).
+My impression is that fixing this would be the simplest approach.
 
-It has turned out to be very good with my editor saying it was  "the 
-best piece she has read in decades."
+Alan Stern
 
-Consequently, I have been offered a publishing contract for my book "7 
-and the 11 heavens". However, because I am a first time author, the 
-publishers want me to demonstrate that I can generate the required sales 
-before they can risk the investment.
+> Note another option would be to set the global old_scheme_first kernel
+> cmdline parameter on this 2-in-1. That can be done with a simple
+> dmi_system_id table on which to do this, but adding such a table
+> seems undesirable.
+> 
+> 
+> A third option I guess would be to try and improve the probe time
+> of the kbd-dock under the new scheme.
 
-They want me to get pre-orders of no less than 500 copies, but the more 
-the better. I am sending this email to ask for help in pre-ordering the 
-book, or making a donation toward the production cost of the book, to 
-enable me take advantage of this once in a life time opportunity. Copies 
-of the book will be sent to everyone who pre-orders as soon as it is 
-ready in, give or take, 60 days. A full manuscript can also be emailed 
-upon request in the meantime.
+Have you tried decreasing the initial_descriptor_timeout module 
+parameter for usbcore?  That would probably help, but it's kind of a 
+sledgehammer.
 
-My GoGetFunding campaign for the book is on: 
-https://gogetfunding.com/7-and-the-11-heavens-book-publishing/
+Alan Stern
 
-I would truly appreciate any support I can get. Thank you for your time, 
-and support in advance.
+> Any input on this would be much appreciated.
+> 
+> Regards,
+> 
+> Hans
