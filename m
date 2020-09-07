@@ -2,120 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 822DE2603AD
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 19:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E72F26032B
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 19:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730810AbgIGRxK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 13:53:10 -0400
-Received: from mga18.intel.com ([134.134.136.126]:29151 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728897AbgIGLWx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Sep 2020 07:22:53 -0400
-IronPort-SDR: KJg6LNaFUQva6a0+CmI4Bt1E+C7+SI5HQguGHn9kU8Z6xt15795w584FHWLtGR9Ujj4cxluusJ
- c0X9NWiB4GWQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9736"; a="145696982"
-X-IronPort-AV: E=Sophos;i="5.76,401,1592895600"; 
-   d="scan'208";a="145696982"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2020 04:03:43 -0700
-IronPort-SDR: 9IXG5z2Zamb8VXZqHIJLIe3ucrY1MV9J/z5bHNOeK7xSRJO6ZDr9TaT6V6rEjIUDUeVSgnLpEN
- BlBkVo83f1qw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,401,1592895600"; 
-   d="scan'208";a="343193312"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 07 Sep 2020 04:03:41 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 8141715D; Mon,  7 Sep 2020 14:03:40 +0300 (EEST)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] thunderbolt: Retry DROM read once if parsing fails
-Date:   Mon,  7 Sep 2020 14:03:40 +0300
-Message-Id: <20200907110340.71031-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.28.0
+        id S1731171AbgIGRpn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 13:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731373AbgIGRoL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Sep 2020 13:44:11 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B406C061795
+        for <linux-usb@vger.kernel.org>; Mon,  7 Sep 2020 10:44:05 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id z9so14900944wmk.1
+        for <linux-usb@vger.kernel.org>; Mon, 07 Sep 2020 10:44:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TtLg9Y4dgEBmAcytToxU0LrQsMgfNF7OgoEHJZ2Q+vw=;
+        b=A0Stn/cyvojbDX7w3lzbvMIO7gTwe43sZAGbFpuAEdS5sHSClH8/IZ2AifZ+YY+VOX
+         UVwM/aA+6tWtgJSEoCDO1PW617SUSIQB8k6b0bPqqeB7dxfGKJQUxNBeFtcQo9e3Ascw
+         6zhcNnrpuccjT086HR4puL61ghnrcI3EOoQm8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TtLg9Y4dgEBmAcytToxU0LrQsMgfNF7OgoEHJZ2Q+vw=;
+        b=gmBmLBUQcEuUQvzA6Mn9ow6PuoIQt7auL8UGFJOrCz7BWmuJxnfxkN6cPIZxVCU9Ov
+         QDaWgk6YzqjeAN4O+BtlUs4Xq0J2sf4HVsD1sJiXNFijMV/2bbNYHstYRjpmsPkuQMUV
+         cLGV8eMHMRZKz8dt8fE3b1wSYpXOdEw9L5r8ImG2C+B4Ta5EKpHyIsv/Dl9InbfMcJPT
+         R/3n8eHzg76Vvq5LNkTPuubhsnVTlcVn6jaGEshNyqtQcfil2k6GIQKal2U6sAtt2e0/
+         6pv+GIkm/qg2VVZ3lhA4phH5JL+NygNuECg9o1YHC9xS6GZtGXiUhpz3uB2p53LQfxik
+         y/oA==
+X-Gm-Message-State: AOAM5329H4Qimf+k7xFSk5/BOVOa5c/eSyq14fU4pZY9bIEGx+fkmxhM
+        HuUJqoKOOUYbLso7Si36IDTiAuWXwen4tIA0eR4tYQ==
+X-Google-Smtp-Source: ABdhPJyNQsBm1Y3/ieHSfjO664M9CBhnY/ZnuJjayy1tYR+ob0ku/Wpd26F5nf8H2/xl9/84D4TcAGvzrj4IPjrxwfU=
+X-Received: by 2002:a1c:bad5:: with SMTP id k204mr408820wmf.111.1599500642170;
+ Mon, 07 Sep 2020 10:44:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200824193036.6033-1-james.quinlan@broadcom.com>
+ <b19bc982-a0c4-c6ff-d8f5-650f2b3a83c8@gmail.com> <20200827063517.GA4637@lst.de>
+ <CA+-6iNy3U9pO0Bykzgvb9n9fcsBi6FiatLdpA1s0HgQNWZ49mg@mail.gmail.com> <20200907091649.GA6428@e121166-lin.cambridge.arm.com>
+In-Reply-To: <20200907091649.GA6428@e121166-lin.cambridge.arm.com>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Mon, 7 Sep 2020 13:43:23 -0400
+Message-ID: <CA+-6iNzoz3pM2pJksXogeuou6wB9W-59rN-amCLERFLuY5zLMg@mail.gmail.com>
+Subject: Re: [PATCH v11 00/11] PCI: brcmstb: enable PCIe for STB chips
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS FOR ALLWINNER A10" 
+        <dri-devel@lists.freedesktop.org>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Julien Grall <julien.grall@arm.com>,
+        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:ALLWINNER A10 CSI DRIVER" <linux-media@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Kai-Heng reported that sometimes DROM parsing of ASUS PA27AC Thunderbolt 3
-monitor fails. This makes the driver to fail to add the device so only
-DisplayPort tunneling is functional.
+On Mon, Sep 7, 2020 at 5:16 AM Lorenzo Pieralisi
+<lorenzo.pieralisi@arm.com> wrote:
+>
+> On Thu, Aug 27, 2020 at 09:29:59AM -0400, Jim Quinlan wrote:
+> > On Thu, Aug 27, 2020 at 2:35 AM Christoph Hellwig <hch@lst.de> wrote:
+> > >
+> > > On Tue, Aug 25, 2020 at 10:40:27AM -0700, Florian Fainelli wrote:
+> > > > Hi,
+> > > >
+> > > > On 8/24/2020 12:30 PM, Jim Quinlan wrote:
+> > > >>
+> > > >> Patchset Summary:
+> > > >>    Enhance a PCIe host controller driver.  Because of its unusual design
+> > > >>    we are foced to change dev->dma_pfn_offset into a more general role
+> > > >>    allowing multiple offsets.  See the 'v1' notes below for more info.
+> > > >
+> > > > We are version 11 and counting, and it is not clear to me whether there is
+> > > > any chance of getting these patches reviewed and hopefully merged for the
+> > > > 5.10 merge window.
+> > > >
+> > > > There are a lot of different files being touched, so what would be the
+> > > > ideal way of routing those changes towards inclusion?
+> > >
+> > > FYI, I offered to take the dma-mapping bits through the dma-mapping tree.
+> > > I have a bit of a backlog, but plan to review and if Jim is ok with that
+> > > apply the current version.
+> > Sounds good to me.
+>
+> Hi Jim,
+>
+> is the dependency now solved ? Should we review/take this series as
+> is for v5.10 through the PCI tree ?
+Hello Lorenzo,
 
-It is not clear what exactly happens but waiting for 100 ms and retrying
-the read seems to work this around so we do that here.
+We are still working out a regression with the DMA offset commit on
+the RaspberryPi.  Nicolas has found the root cause and we are now
+devising a solution.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=206493
-Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/eeprom.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+Thanks,
+Jim Quinlan
+Broadcom STB
 
-diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-index 3ebca44ab3fa..0c8471be3e32 100644
---- a/drivers/thunderbolt/eeprom.c
-+++ b/drivers/thunderbolt/eeprom.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/crc32.h>
-+#include <linux/delay.h>
- #include <linux/property.h>
- #include <linux/slab.h>
- #include "tb.h"
-@@ -389,8 +390,8 @@ static int tb_drom_parse_entries(struct tb_switch *sw)
- 		struct tb_drom_entry_header *entry = (void *) (sw->drom + pos);
- 		if (pos + 1 == drom_size || pos + entry->len > drom_size
- 				|| !entry->len) {
--			tb_sw_warn(sw, "drom buffer overrun, aborting\n");
--			return -EIO;
-+			tb_sw_warn(sw, "DROM buffer overrun\n");
-+			return -EILSEQ;
- 		}
- 
- 		switch (entry->type) {
-@@ -526,7 +527,8 @@ int tb_drom_read(struct tb_switch *sw)
- 	u16 size;
- 	u32 crc;
- 	struct tb_drom_header *header;
--	int res;
-+	int res, retries = 1;
-+
- 	if (sw->drom)
- 		return 0;
- 
-@@ -612,7 +614,17 @@ int tb_drom_read(struct tb_switch *sw)
- 		tb_sw_warn(sw, "drom device_rom_revision %#x unknown\n",
- 			header->device_rom_revision);
- 
--	return tb_drom_parse_entries(sw);
-+	res = tb_drom_parse_entries(sw);
-+	/* If the DROM parsing fails, wait a moment and retry once */
-+	if (res == -EILSEQ && retries--) {
-+		tb_sw_warn(sw, "parsing DROM failed, retrying\n");
-+		msleep(100);
-+		res = tb_drom_read_n(sw, 0, sw->drom, size);
-+		if (!res)
-+			goto parse;
-+	}
-+
-+	return res;
- err:
- 	kfree(sw->drom);
- 	sw->drom = NULL;
--- 
-2.28.0
-
+>
+> Thanks,
+> Lorenzo
