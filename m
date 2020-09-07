@@ -2,143 +2,312 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A64D25F18C
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 03:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E12425F1A4
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 04:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726352AbgIGBu3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Sep 2020 21:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725773AbgIGBu0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Sep 2020 21:50:26 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E8DC061573
-        for <linux-usb@vger.kernel.org>; Sun,  6 Sep 2020 18:50:25 -0700 (PDT)
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 58F46891B0;
-        Mon,  7 Sep 2020 13:50:14 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1599443414;
-        bh=HaJSV/JZqCspnyNj8zH+yoo1VQmuoQY74/gtMgoAgNQ=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=h/gG0S98yHoeXto/fR4Hwd5AQd0EAD6TzxRfCNNS3ob9UzvE6MfXY4n0N4j5sDGPz
-         AHzn2bSGREZexZwFeBFBeRagRRQAkP0GxrcxZcQy7y5Kwl51bizjPlGfRgq02mc2KA
-         fYGtCm4bdHi5dh3c8AtmMPu5IJXNMVUzxJNNhulA4zp/X4xzl25EuxJHDj+Jl7p+08
-         zrKcBMTRd0h95Z1ANDjYkiz3MzRkJxsgT+5NiAyz8tmBYXDEUTLdIXJKTwjowJinGh
-         NBz7QHoraZ2gZi24frK+EOaA63BMZMAezqGP1/DBrL0p+DjKgdD4ElDcDS9Kg1wuWB
-         fHhLftl38Uk9w==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f5591d60000>; Mon, 07 Sep 2020 13:50:14 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Mon, 7 Sep 2020 13:50:10 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.006; Mon, 7 Sep 2020 13:50:10 +1200
-From:   Hamish Martin <Hamish.Martin@alliedtelesis.co.nz>
-To:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 1/2] usb: ohci: Add per-port overcurrent quirk
-Thread-Topic: [PATCH 1/2] usb: ohci: Add per-port overcurrent quirk
-Thread-Index: AQHWgmqw+C7I38zeeUyVpdiHcFIeNalX1saAgAPNqgA=
-Date:   Mon, 7 Sep 2020 01:50:10 +0000
-Message-ID: <9ba7b4dda9ef40e3c4c9b3f1c33075e04601ef61.camel@alliedtelesis.co.nz>
-References: <20200904032247.11345-1-hamish.martin@alliedtelesis.co.nz>
-         <20200904032247.11345-2-hamish.martin@alliedtelesis.co.nz>
-         <20200904154517.GB694058@rowland.harvard.edu>
-In-Reply-To: <20200904154517.GB694058@rowland.harvard.edu>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [2001:df5:b000:24:f8a2:c861:f25b:236e]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1984D23B95FD2943BBE9AF67343ED460@atlnz.lc>
-Content-Transfer-Encoding: base64
+        id S1726297AbgIGC03 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Sep 2020 22:26:29 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:15886 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726259AbgIGC01 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Sep 2020 22:26:27 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f559a430001>; Sun, 06 Sep 2020 19:26:11 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Sun, 06 Sep 2020 19:26:25 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Sun, 06 Sep 2020 19:26:25 -0700
+Received: from [10.19.100.119] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 7 Sep
+ 2020 02:26:20 +0000
+Subject: Re: [PATCH v2 04/12] phy: tegra: xusb: t210: add lane_iddq operations
+To:     Thierry Reding <thierry.reding@gmail.com>
+CC:     <gregkh@linuxfoundation.org>, <robh@kernel.org>,
+        <jonathanh@nvidia.com>, <kishon@ti.com>,
+        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nkristam@nvidia.com>
+References: <20200831044043.1561074-1-jckuo@nvidia.com>
+ <20200831044043.1561074-5-jckuo@nvidia.com> <20200831115330.GB1689119@ulmo>
+X-Nvconfidentiality: public
+From:   JC Kuo <jckuo@nvidia.com>
+Message-ID: <59118eb8-43d9-e3d4-8edf-1a92884872b1@nvidia.com>
+Date:   Mon, 7 Sep 2020 10:26:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20200831115330.GB1689119@ulmo>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1599445572; bh=LWQD0r/LLc7PivDJOXjTqASz5siAoKPYTMLCgq/Rpoo=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=D/sOKuwwrgK7R6S8Hv5tICzoZoiyyrNUu619yXss97OJzw6x2DeVN8j0Wy6axoqNc
+         CSXD/LQ/kwE+DAzRU6DpQf7c2+oc92yUbKzCnDs0XjzlF5TKI9GYnJypUHOSakanv3
+         VuoYIBKP7XBuHwDifEbdtxgc226cvEtGakPiJvMzFklCdweg1bMC/2ufsLsklaV262
+         uldmoGvGxfXP3i+uNAPaGI44RE59FpO50rPmV9ZZJiw4Jhrslqtr+tIPo8Tv6XYIIZ
+         MLcXohsuXxc8d+SK0QDJUzHBIBRUvw6I1vECE7YNogeMzKKnkhOyyBtZCtyREdF2uG
+         4fvosiotOIkbw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgQWxhbiwNCg0KVGhhbmtzIGZvciB5b3VyIHF1aWNrIGZlZWRiYWNrLiBNeSByZXBsaWVzIGFy
-ZSBpbmxpbmUgYmVsb3cuDQoNCk9uIEZyaSwgMjAyMC0wOS0wNCBhdCAxMTo0NSAtMDQwMCwgQWxh
-biBTdGVybiB3cm90ZToNCj4gT24gRnJpLCBTZXAgMDQsIDIwMjAgYXQgMDM6MjI6NDZQTSArMTIw
-MCwgSGFtaXNoIE1hcnRpbiB3cm90ZToNCj4gPiBTb21lIGludGVncmF0ZWQgT0hDSSBjb250cm9s
-bGVyIGh1YnMgZG8gbm90IGV4cG9zZSBhbGwgcG9ydHMgb2YgdGhlDQo+ID4gaHViDQo+ID4gdG8g
-cGlucyBvbiB0aGUgU29DLiBJbiBzb21lIGNhc2VzIHRoZSB1bmNvbm5lY3RlZCBwb3J0cyBnZW5l
-cmF0ZQ0KPiA+IHNwdXJpb3VzIG92ZXJjdXJyZW50IGV2ZW50cy4gRm9yIGV4YW1wbGUgdGhlIEJy
-b2FkY29tIDU2MDYwL1Jhbmdlcg0KPiA+IDIgU29DDQo+ID4gY29udGFpbnMgYSBub21pbmFsbHkg
-MyBwb3J0IGh1YiBidXQgb25seSB0aGUgZmlyc3QgcG9ydCBpcyB3aXJlZC4NCj4gPiANCj4gPiBE
-ZWZhdWx0IGJlaGF2aW91ciBmb3Igb2hjaS1wbGF0Zm9ybSBkcml2ZXIgaXMgdG8gdXNlICJnYW5n
-ZWQiDQo+ID4gb3ZlcmN1cnJlbnQgcHJvdGVjdGlvbiBtb2RlLiBUaGlzIGxlYWRzIHRvIHRoZSBz
-cHVyaW91cyBvdmVyY3VycmVudA0KPiA+IGV2ZW50cyBhZmZlY3RpbmcgYWxsIHBvcnRzIGluIHRo
-ZSBodWIuDQo+ID4gDQo+ID4gQWxsb3cgdGhpcyB0byBiZSByZWN0aWZpZWQgYnkgc3BlY2lmeWlu
-ZyBwZXItcG9ydCBvdmVyY3VycmVudA0KPiA+IHByb3RlY3Rpb24NCj4gPiBtb2RlIHZpYSB0aGUg
-ZGV2aWNlIHRyZWUuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogSGFtaXNoIE1hcnRpbiA8aGFt
-aXNoLm1hcnRpbkBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL3Vz
-Yi9ob3N0L29oY2ktaGNkLmMgICAgICB8IDQgKysrKw0KPiA+ICBkcml2ZXJzL3VzYi9ob3N0L29o
-Y2ktcGxhdGZvcm0uYyB8IDMgKysrDQo+ID4gIGRyaXZlcnMvdXNiL2hvc3Qvb2hjaS5oICAgICAg
-ICAgIHwgMSArDQo+ID4gIDMgZmlsZXMgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspDQo+ID4gDQo+
-ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3Qvb2hjaS1oY2QuYyBiL2RyaXZlcnMvdXNi
-L2hvc3Qvb2hjaS0NCj4gPiBoY2QuYw0KPiA+IGluZGV4IGRkMzdlNzdkYWUwMC4uMDFlM2Q3NWUy
-OWQ5IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3Qvb2hjaS1oY2QuYw0KPiA+ICsr
-KyBiL2RyaXZlcnMvdXNiL2hvc3Qvb2hjaS1oY2QuYw0KPiA+IEBAIC02ODcsNiArNjg3LDEwIEBA
-IHN0YXRpYyBpbnQgb2hjaV9ydW4gKHN0cnVjdCBvaGNpX2hjZCAqb2hjaSkNCj4gPiAgCQl2YWwg
-fD0gUkhfQV9OUFM7DQo+ID4gIAkJb2hjaV93cml0ZWwgKG9oY2ksIHZhbCwgJm9oY2ktPnJlZ3Mt
-PnJvb3RodWIuYSk7DQo+ID4gIAl9DQo+ID4gKwlpZiAob2hjaS0+ZmxhZ3MgJiBPSENJX1FVSVJL
-X1BFUl9QT1JUX09DKSB7DQo+ID4gKwkJdmFsIHw9IFJIX0FfT0NQTTsNCj4gPiArCQlvaGNpX3dy
-aXRlbChvaGNpLCB2YWwsICZvaGNpLT5yZWdzLT5yb290aHViLmEpOw0KPiA+ICsJfQ0KPiANCj4g
-SSBkb24ndCB0aGluayB0aGlzIGlzIHJpZ2h0LCBmb3IgdHdvIHJlYXNvbnMuICBGaXJzdCwgaXNu
-J3QgcGVyLXBvcnQgDQo+IG92ZXJjdXJyZW50IHByb3RlY3Rpb24gdGhlIGRlZmF1bHQ/DQoNCk5v
-dCBhcyBmYXIgYXMgSSB1bmRlcnN0YW5kIHRoZSBjdXJyZW50IGNvZGUuIEp1c3QgYWJvdmUgd2hl
-cmUgbXkgcGF0Y2gNCmFwcGxpZXMsIHRoZSBSSF9BX09DUE0gKGFuZCBSSF9BX1BTTSkgYml0cyBh
-cmUgZXhwbGljaXRseSBjbGVhcmVkIGluDQondmFsJyB3aXRoOg0KICAgIHZhbCAmPSB+KFJIX0Ff
-UFNNIHwgUkhfQV9PQ1BNKTsNCg0KVGhpcywgY291cGxlZCB3aXRoIHRoZSBPSENJX1FVSVJLX0hV
-Ql9QT1dFUiBiZWluZyBzZXQgYnkgdmlydHVlIG9mIHRoZQ0KJ2Rpc3RydXN0X2Zpcm13YXJlJyBt
-b2R1bGUgcGFyYW0gZGVmYXVsdGluZyB0cnVlLCByZWFkcyB0byBtZSBsaWtlIHRoZQ0KZGVmYXVs
-dCBpcyBmb3IgZ2FuZ2VkIG92ZXItY3VycmVudCBwcm90ZWN0aW9uLiBBbmQgdGhhdCBpcyBteQ0K
-ZXhwZXJpZW5jZSBpbiB0aGlzIGNhc2UuIA0KSWYgbm9uZSBvZiB0aGUgcXVpcmtzIGFyZSBzZWxl
-Y3RlZCB0aGVuIGFsbCBvZiB0aGUgZmlkZGxpbmcgd2l0aCAndmFsJw0KbmV2ZXIgZ2V0cyB3cml0
-dGVuIHRvICdvaGNpLT5yZWdzLT5yb290aHViLmEnDQoNCkknZCBhcHByZWNpYXRlIHlvdXIgcmVh
-ZGluZyBvZiB0aGF0IGFuYWx5c2lzIGJlY2F1c2UgSSdtIGJ5IG5vIG1lYW5zDQpzdXJlIG9mIGl0
-Lg0KDQo+IA0KPiBTZWNvbmQsIFJIX0FfT0NQTSBkb2Vzbid0IGRvIGFueXRoaW5nIHVubGVzcyBS
-SF9BX05PQ1AgaXMgY2xlYXIuDQoNCkNvcnJlY3QsIGFuZCB0aGF0IGlzIG15IG1pc3Rha2UuIElm
-IEkgcHJvZ3Jlc3MgdG8gYSB2MiBvZiB0aGlzIHBhdGNoIEkNCndpbGwgdXBkYXRlIGFjY29yZGlu
-Z2x5Lg0KDQpUaGFua3MsDQpIYW1pc2ggTWFydGluDQoNCj4gDQo+IEFsYW4gU3Rlcm4NCj4gDQo+
-ID4gIAlvaGNpX3dyaXRlbCAob2hjaSwgUkhfSFNfTFBTQywgJm9oY2ktPnJlZ3MtPnJvb3RodWIu
-c3RhdHVzKTsNCj4gPiAgCW9oY2lfd3JpdGVsIChvaGNpLCAodmFsICYgUkhfQV9OUFMpID8gMCA6
-IFJIX0JfUFBDTSwNCj4gPiAgCQkJCQkJJm9oY2ktPnJlZ3MtDQo+ID4gPnJvb3RodWIuYik7DQo+
-ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3Qvb2hjaS1wbGF0Zm9ybS5jDQo+ID4gYi9k
-cml2ZXJzL3VzYi9ob3N0L29oY2ktcGxhdGZvcm0uYw0KPiA+IGluZGV4IDRhODQ1NmYxMmE3My4u
-NDVlNjljZTRlZjg2IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3Qvb2hjaS1wbGF0
-Zm9ybS5jDQo+ID4gKysrIGIvZHJpdmVycy91c2IvaG9zdC9vaGNpLXBsYXRmb3JtLmMNCj4gPiBA
-QCAtMTM3LDYgKzEzNyw5IEBAIHN0YXRpYyBpbnQgb2hjaV9wbGF0Zm9ybV9wcm9iZShzdHJ1Y3QN
-Cj4gPiBwbGF0Zm9ybV9kZXZpY2UgKmRldikNCj4gPiAgCQlpZiAob2ZfcHJvcGVydHlfcmVhZF9i
-b29sKGRldi0+ZGV2Lm9mX25vZGUsICJuby1iaWctDQo+ID4gZnJhbWUtbm8iKSkNCj4gPiAgCQkJ
-b2hjaS0+ZmxhZ3MgfD0gT0hDSV9RVUlSS19GUkFNRV9OTzsNCj4gPiAgDQo+ID4gKwkJaWYgKG9m
-X3Byb3BlcnR5X3JlYWRfYm9vbChkZXYtPmRldi5vZl9ub2RlLCAicGVyLXBvcnQtDQo+ID4gb3Zl
-cmN1cnJlbnQiKSkNCj4gPiArCQkJb2hjaS0+ZmxhZ3MgfD0gT0hDSV9RVUlSS19QRVJfUE9SVF9P
-QzsNCj4gPiArDQo+ID4gIAkJaWYgKG9mX3Byb3BlcnR5X3JlYWRfYm9vbChkZXYtPmRldi5vZl9u
-b2RlLA0KPiA+ICAJCQkJCSAgInJlbW90ZS13YWtldXAtY29ubmVjdGVkIikpDQo+ID4gIAkJCW9o
-Y2ktPmhjX2NvbnRyb2wgPSBPSENJX0NUUkxfUldDOw0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L3VzYi9ob3N0L29oY2kuaCBiL2RyaXZlcnMvdXNiL2hvc3Qvb2hjaS5oDQo+ID4gaW5kZXggYWFj
-NjI4NWIzN2Y4Li45YzJiYzgxNjI0NmMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvaG9z
-dC9vaGNpLmgNCj4gPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L29oY2kuaA0KPiA+IEBAIC00MjIs
-NiArNDIyLDcgQEAgc3RydWN0IG9oY2lfaGNkIHsNCj4gPiAgI2RlZmluZQlPSENJX1FVSVJLX0FN
-RF9QUkVGRVRDSAkweDQwMAkJCS8qDQo+ID4gcHJlLWZldGNoIGZvciBJU08gdHJhbnNmZXIgKi8N
-Cj4gPiAgI2RlZmluZQlPSENJX1FVSVJLX0dMT0JBTF9TVVNQRU5ECTB4ODAwCQkvKiBtdXN0DQo+
-ID4gc3VzcGVuZCBwb3J0cyAqLw0KPiA+ICAjZGVmaW5lCU9IQ0lfUVVJUktfUUVNVQkJMHgxMDAw
-CQkJLyoNCj4gPiByZWxheCB0aW1pbmcgZXhwZWN0YXRpb25zICovDQo+ID4gKyNkZWZpbmUJT0hD
-SV9RVUlSS19QRVJfUE9SVF9PQwkweDIwMDAJCQkvKg0KPiA+IHBlci1wb3J0IG92ZXJjdXJyZW50
-IHByb3RlY3Rpb24gKi8NCj4gPiAgDQo+ID4gIAkvLyB0aGVyZSBhcmUgYWxzbyBjaGlwIHF1aXJr
-cy9idWdzIGluIGluaXQgbG9naWMNCj4gPiAgDQo+ID4gLS0gDQo+ID4gMi4yOC4wDQo+ID4gDQo=
+Hi Thierry,
+Thanks for review. I will amend accordingly and submit a new patch.
+
+JC
+
+On 8/31/20 7:53 PM, Thierry Reding wrote:
+> On Mon, Aug 31, 2020 at 12:40:35PM +0800, JC Kuo wrote:
+>> As per Tegra210 TRM, before changing lane assignments, driver should
+>> keep lanes in IDDQ and sleep state; after changing lane assignments,
+>> driver should bring lanes out of IDDQ.
+>> This commit implements the required operations.
+>>
+>> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+>> ---
+>>  drivers/phy/tegra/xusb-tegra210.c | 94 +++++++++++++++++++++++++++++++
+>>  drivers/phy/tegra/xusb.c          |  6 ++
+>>  drivers/phy/tegra/xusb.h          |  4 +-
+>>  3 files changed, 103 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
+>> index 3a2d9797fb9f..fe1ab440424d 100644
+>> --- a/drivers/phy/tegra/xusb-tegra210.c
+>> +++ b/drivers/phy/tegra/xusb-tegra210.c
+>> @@ -198,6 +198,18 @@
+>>  #define XUSB_PADCTL_UPHY_MISC_PAD_CTL1_AUX_RX_TERM_EN BIT(18)
+>>  #define XUSB_PADCTL_UPHY_MISC_PAD_CTL1_AUX_RX_MODE_OVRD BIT(13)
+>>  
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_PX_CTL2(x) (0x464 + (x) * 0x40)
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_IDDQ BIT(0)
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_IDDQ_OVRD BIT(1)
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_SLEEP_MASK (0x3 << 4)
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_SLEEP_VAL (0x3 << 4)
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_PWR_OVRD BIT(24)
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_IDDQ BIT(8)
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_IDDQ_OVRD BIT(9)
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_SLEEP_MASK (0x3 << 12)
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_SLEEP_VAL (0x3 << 12)
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_PWR_OVRD BIT(25)
+>> +
+>>  #define XUSB_PADCTL_UPHY_PLL_S0_CTL1 0x860
+>>  
+>>  #define XUSB_PADCTL_UPHY_PLL_S0_CTL2 0x864
+>> @@ -209,6 +221,7 @@
+>>  #define XUSB_PADCTL_UPHY_PLL_S0_CTL8 0x87c
+>>  
+>>  #define XUSB_PADCTL_UPHY_MISC_PAD_S0_CTL1 0x960
+>> +#define XUSB_PADCTL_UPHY_MISC_PAD_S0_CTL2 0x964
+>>  
+>>  #define XUSB_PADCTL_UPHY_USB3_PADX_ECTL1(x) (0xa60 + (x) * 0x40)
+>>  #define XUSB_PADCTL_UPHY_USB3_PAD_ECTL1_TX_TERM_CTRL_SHIFT 16
+>> @@ -1636,6 +1649,63 @@ static const struct tegra_xusb_pad_soc tegra210_hsic_pad = {
+>>  	.ops = &tegra210_hsic_ops,
+>>  };
+>>  
+>> +static void
+>> +tegra210_uphy_lane_iddq_enable(struct tegra_xusb_padctl *padctl, unsigned lane)
+>> +{
+>> +	u32 val, offset;
+>> +
+>> +	if (lane <= 6)
+>> +		offset = XUSB_PADCTL_UPHY_MISC_PAD_PX_CTL2(lane);
+>> +	else if (lane == 7)
+>> +		offset = XUSB_PADCTL_UPHY_MISC_PAD_S0_CTL2;
+>> +	else {
+>> +		WARN(true, "invalid lane %u\n", lane);
+>> +		return;
+>> +	}
+>> +
+>> +	val = padctl_readl(padctl, offset);
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_IDDQ_OVRD;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_IDDQ_OVRD;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_PWR_OVRD;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_PWR_OVRD;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_IDDQ;
+>> +	val &= ~XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_SLEEP_MASK;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_SLEEP_VAL;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_IDDQ;
+>> +	val &= ~XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_SLEEP_MASK;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_SLEEP_VAL;
+>> +	padctl_writel(padctl, val, offset);
+>> +}
+>> +
+>> +static void
+>> +tegra210_uphy_lane_iddq_disable(struct tegra_xusb_padctl *padctl, unsigned lane)
+>> +{
+>> +	u32 val, offset;
+>> +
+>> +	if (lane <= 6)
+>> +		offset = XUSB_PADCTL_UPHY_MISC_PAD_PX_CTL2(lane);
+>> +	else if (lane == 7)
+>> +		offset = XUSB_PADCTL_UPHY_MISC_PAD_S0_CTL2;
+>> +	else {
+>> +		WARN(true, "invalid lane %d\n", lane);
+>> +		return;
+>> +	}
+>> +
+>> +	val = padctl_readl(padctl, offset);
+>> +	val &= ~XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_IDDQ_OVRD;
+>> +	val &= ~XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_IDDQ_OVRD;
+>> +	val &= ~XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_PWR_OVRD;
+>> +	val &= ~XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_PWR_OVRD;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_IDDQ;
+>> +	val &= ~XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_SLEEP_MASK;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_TX_SLEEP_VAL;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_IDDQ;
+>> +	val &= ~XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_SLEEP_MASK;
+>> +	val |= XUSB_PADCTL_UPHY_MISC_PAD_CTL2_RX_SLEEP_VAL;
+>> +	padctl_writel(padctl, val, offset);
+>> +}
+>> +
+>> +
+>>  static const char *tegra210_pcie_functions[] = {
+>>  	"pcie-x1",
+>>  	"usb3-ss",
+>> @@ -1808,9 +1878,21 @@ static void tegra210_pcie_lane_remove(struct tegra_xusb_lane *lane)
+>>  	kfree(pcie);
+>>  }
+>>  
+>> +static void tegra210_pcie_lane_iddq_enable(struct tegra_xusb_lane *lane)
+>> +{
+>> +	tegra210_uphy_lane_iddq_enable(lane->pad->padctl, lane->index);
+>> +}
+>> +
+>> +static void tegra210_pcie_lane_iddq_disable(struct tegra_xusb_lane *lane)
+>> +{
+>> +	tegra210_uphy_lane_iddq_disable(lane->pad->padctl, lane->index);
+>> +}
+>> +
+>>  static const struct tegra_xusb_lane_ops tegra210_pcie_lane_ops = {
+>>  	.probe = tegra210_pcie_lane_probe,
+>>  	.remove = tegra210_pcie_lane_remove,
+>> +	.iddq_enable = tegra210_pcie_lane_iddq_enable,
+>> +	.iddq_disable = tegra210_pcie_lane_iddq_disable,
+>>  };
+>>  
+>>  static int tegra210_pcie_phy_init(struct phy *phy)
+>> @@ -1971,9 +2053,21 @@ static void tegra210_sata_lane_remove(struct tegra_xusb_lane *lane)
+>>  	kfree(sata);
+>>  }
+>>  
+>> +static void tegra210_sata_lane_iddq_enable(struct tegra_xusb_lane *lane)
+>> +{
+>> +	tegra210_uphy_lane_iddq_enable(lane->pad->padctl, lane->index + 7);
+>> +}
+>> +
+>> +static void tegra210_sata_lane_iddq_disable(struct tegra_xusb_lane *lane)
+>> +{
+>> +	tegra210_uphy_lane_iddq_disable(lane->pad->padctl, lane->index + 7);
+>> +}
+> 
+> This looks like abstraction at the wrong level. You introduce this
+> arbtitrary offset 7 to differentiate between the two types, whereas what
+> you really only seem to be after is to get the correct offset.
+> 
+> Can't we instead make tegra210_uphy_lane_iddq_{enable,disable}() take
+> the offset instead and push the logic to pick the offset into the
+> callers? We could then have an extra helper that determines the offset
+> from the lane if we want to avoid duplicating that logic.
+> 
+> Or perhaps an even better way would be to store the offset to this MISC
+> register in struct tegra_xusb_lane_soc? Something like this perhaps:
+> 
+>     struct tegra_xusb_lane_soc {
+>         ...
+>         struct {
+>             unsigned int misc;
+>         } regs;
+>     };
+> 
+> That way we don't even have to go through two layers but instead can
+> operate on the struct tegra_xusb_lane directly.
+> 
+>> +
+>>  static const struct tegra_xusb_lane_ops tegra210_sata_lane_ops = {
+>>  	.probe = tegra210_sata_lane_probe,
+>>  	.remove = tegra210_sata_lane_remove,
+>> +	.iddq_enable = tegra210_sata_lane_iddq_enable,
+>> +	.iddq_disable = tegra210_sata_lane_iddq_disable,
+>>  };
+>>  
+>>  static int tegra210_sata_phy_init(struct phy *phy)
+>> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+>> index b48b590aa0c1..74abd67e3a31 100644
+>> --- a/drivers/phy/tegra/xusb.c
+>> +++ b/drivers/phy/tegra/xusb.c
+>> @@ -321,11 +321,17 @@ static void tegra_xusb_lane_program(struct tegra_xusb_lane *lane)
+>>  	if (soc->num_funcs < 2)
+>>  		return;
+>>  
+>> +	if (lane->pad->ops->iddq_enable && lane->pad->ops->iddq_disable)
+>> +		lane->pad->ops->iddq_enable(lane);
+> 
+> You can drop the second check because it isn't relevant here.
+> 
+>> +
+>>  	/* choose function */
+>>  	value = padctl_readl(padctl, soc->offset);
+>>  	value &= ~(soc->mask << soc->shift);
+>>  	value |= lane->function << soc->shift;
+>>  	padctl_writel(padctl, value, soc->offset);
+>> +
+>> +	if (lane->pad->ops->iddq_enable && lane->pad->ops->iddq_disable)
+>> +		lane->pad->ops->iddq_disable(lane);
+> 
+> Similarly, the first check can be dropped here because only the second
+> is relevant. It might make sense to only support IDDQ if both callbacks
+> are implemented, but that's not something we need to check at this
+> level. The check here is only to avoid calling a NULL function. If you
+> absolutely want to do sanity checks, do them at ->probe() time. But I
+> don't think we need that here. It's up to the developer to get this
+> right.
+> 
+>>  }
+>>  
+>>  static void tegra_xusb_pad_program(struct tegra_xusb_pad *pad)
+>> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
+>> index 0c828694cf2d..485b692a3b15 100644
+>> --- a/drivers/phy/tegra/xusb.h
+>> +++ b/drivers/phy/tegra/xusb.h
+>> @@ -22,6 +22,7 @@ struct phy;
+>>  struct phy_provider;
+>>  struct platform_device;
+>>  struct regulator;
+>> +struct tegra_xusb_padctl;
+>>  
+>>  /*
+>>   * lanes
+>> @@ -126,6 +127,8 @@ struct tegra_xusb_lane_ops {
+>>  					 struct device_node *np,
+>>  					 unsigned int index);
+>>  	void (*remove)(struct tegra_xusb_lane *lane);
+>> +	void (*iddq_enable)(struct tegra_xusb_lane *lane);
+>> +	void (*iddq_disable)(struct tegra_xusb_lane *lane);
+>>  };
+>>  
+>>  bool tegra_xusb_lane_check(struct tegra_xusb_lane *lane, const char *function);
+>> @@ -134,7 +137,6 @@ bool tegra_xusb_lane_check(struct tegra_xusb_lane *lane, const char *function);
+>>   * pads
+>>   */
+>>  struct tegra_xusb_pad_soc;
+>> -struct tegra_xusb_padctl;
+>>  
+>>  struct tegra_xusb_pad_ops {
+>>  	struct tegra_xusb_pad *(*probe)(struct tegra_xusb_padctl *padctl,
+> 
+> These last two hunks look like leftovers. I don't see why they are
+> needed here.
+> 
+> Thierry
+> 
