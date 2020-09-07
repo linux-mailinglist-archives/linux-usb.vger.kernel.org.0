@@ -2,144 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A41625FDF1
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 18:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 578C825FDE5
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 18:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729896AbgIGQDS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 12:03:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56072 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730295AbgIGP77 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Sep 2020 11:59:59 -0400
-Received: from mail.kernel.org (ip5f5ad5cf.dynamic.kabel-deutschland.de [95.90.213.207])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6CB4121775;
-        Mon,  7 Sep 2020 15:59:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599494379;
-        bh=TunUPIzcYuVLQPmKAkSuBmmotsT9zvhar8CTxXKkGPE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CKcoOBGzwouJOQ5MyfPX/KssWFHddHkDTzS9/Dz883Jye0V4rWJJmuEK1T0Us+V7M
-         IGMszREvPk8I3rEpCPGdvp/tUJ1rYHeC7pgLvSoGV5mCvWWwIgqW7031KpSUnP5og2
-         flHmYb4wkINQ/EUqQ3CXCGJDIHsRXg/z//KB1vGw=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kFJYP-00ATv0-DP; Mon, 07 Sep 2020 17:59:37 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 10/11] dwc3-of-simple: add support for Hikey 970
-Date:   Mon,  7 Sep 2020 17:59:34 +0200
-Message-Id: <83393769e4391d038c4ab69a67ac77e2ca34efd4.1599493845.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1599493845.git.mchehab+huawei@kernel.org>
-References: <cover.1599493845.git.mchehab+huawei@kernel.org>
+        id S1730287AbgIGQB0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 12:01:26 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:24968 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730175AbgIGQAy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Sep 2020 12:00:54 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 087FwmWY007780;
+        Mon, 7 Sep 2020 18:00:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=5hJXgMmfM7j2x45Htgd+XTxABN7i6bZcNnBR7TltiQc=;
+ b=qfXjG9BjlvQUBOqflF5p7z3776fBAB+qsPwWEZdiK0zDCeI4eZlhV+vIE30OMOhK6nKH
+ v5Br7aHHIf03skfADKd+dUjh8REcY+xHif2Z00oSIxnDDVakh5MqoguroyyTy1B3ewfq
+ LBb0FF5ojDUpzkXbtm7SbS5yU8IZ7DUF5CxuqcVHsLHSy2uOuzlIo/45KbMxJpFkf+xm
+ wJlgRlpSV8g6A/amCIf0niKXL+LA9S25AnAnNyB+A90AaWWIndeFprq6Egb60U4XndZB
+ DdB8W7GqnqBkDQMRAV9rhj1PWtDhSXtoUoGo4pUEag+zFJhethRBN9fkK12MqlIak0PR Mw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 33c0eujvvw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Sep 2020 18:00:41 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C336F10002A;
+        Mon,  7 Sep 2020 18:00:40 +0200 (CEST)
+Received: from Webmail-eu.st.com (gpxdag3node5.st.com [10.75.127.72])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8526B212132;
+        Mon,  7 Sep 2020 18:00:40 +0200 (CEST)
+Received: from lmecxl0995.lme.st.com (10.75.127.46) by GPXDAG3NODE5.st.com
+ (10.75.127.72) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 7 Sep
+ 2020 18:00:39 +0200
+Subject: Re: [balbi-usb:testing/next 29/33] drivers/usb/dwc2/drd.c:83:37:
+ error: 'struct dwc2_hsotg' has no member named 'test_mode'
+To:     Felipe Balbi <balbi@kernel.org>, kernel test robot <lkp@intel.com>
+CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
+References: <202009072101.xr4ImAoy%lkp@intel.com> <877dt5ofhf.fsf@kernel.org>
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+Message-ID: <8ede307b-ccd1-21eb-fcab-826f8939c695@st.com>
+Date:   Mon, 7 Sep 2020 18:00:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <877dt5ofhf.fsf@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG3NODE3.st.com (10.75.127.9) To GPXDAG3NODE5.st.com
+ (10.75.127.72)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-07_10:2020-09-07,2020-09-07 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This binding driver is needed for Hikey 970 to work,
-as otherwise a Serror is produced:
+Hi Felipe,
 
-    [    1.837458] SError Interrupt on CPU0, code 0xbf000002 -- SError
-    [    1.837462] CPU: 0 PID: 74 Comm: kworker/0:1 Not tainted 5.8.0+ #205
-    [    1.837463] Hardware name: HiKey970 (DT)
-    [    1.837465] Workqueue: events deferred_probe_work_func
-    [    1.837467] pstate: 20000005 (nzCv daif -PAN -UAO BTYPE=--)
-    [    1.837468] pc : _raw_spin_unlock_irqrestore+0x18/0x50
-    [    1.837469] lr : regmap_unlock_spinlock+0x14/0x20
-    [    1.837470] sp : ffff8000124dba60
-    [    1.837471] x29: ffff8000124dba60 x28: 0000000000000000
-    [    1.837474] x27: ffff0001b7e854c8 x26: ffff80001204ea18
-    [    1.837476] x25: 0000000000000005 x24: ffff800011f918f8
-    [    1.837479] x23: ffff800011fbb588 x22: ffff0001b7e40e00
-    [    1.837481] x21: 0000000000000100 x20: 0000000000000000
-    [    1.837483] x19: ffff0001b767ec00 x18: 00000000ff10c000
-    [    1.837485] x17: 0000000000000002 x16: 0000b0740fdb9950
-    [    1.837488] x15: ffff8000116c1198 x14: ffffffffffffffff
-    [    1.837490] x13: 0000000000000030 x12: 0101010101010101
-    [    1.837493] x11: 0000000000000020 x10: ffff0001bf17d130
-    [    1.837495] x9 : 0000000000000000 x8 : ffff0001b6938080
-    [    1.837497] x7 : 0000000000000000 x6 : 000000000000003f
-    [    1.837500] x5 : 0000000000000000 x4 : 0000000000000000
-    [    1.837502] x3 : ffff80001096a880 x2 : 0000000000000000
-    [    1.837505] x1 : ffff0001b7e40e00 x0 : 0000000100000001
-    [    1.837507] Kernel panic - not syncing: Asynchronous SError Interrupt
-    [    1.837509] CPU: 0 PID: 74 Comm: kworker/0:1 Not tainted 5.8.0+ #205
-    [    1.837510] Hardware name: HiKey970 (DT)
-    [    1.837511] Workqueue: events deferred_probe_work_func
-    [    1.837513] Call trace:
-    [    1.837514]  dump_backtrace+0x0/0x1e0
-    [    1.837515]  show_stack+0x18/0x24
-    [    1.837516]  dump_stack+0xc0/0x11c
-    [    1.837517]  panic+0x15c/0x324
-    [    1.837518]  nmi_panic+0x8c/0x90
-    [    1.837519]  arm64_serror_panic+0x78/0x84
-    [    1.837520]  do_serror+0x158/0x15c
-    [    1.837521]  el1_error+0x84/0x100
-    [    1.837522]  _raw_spin_unlock_irqrestore+0x18/0x50
-    [    1.837523]  regmap_write+0x58/0x80
-    [    1.837524]  hi3660_reset_deassert+0x28/0x34
-    [    1.837526]  reset_control_deassert+0x50/0x260
-    [    1.837527]  reset_control_deassert+0xf4/0x260
-    [    1.837528]  dwc3_probe+0x5dc/0xe6c
-    [    1.837529]  platform_drv_probe+0x54/0xb0
-    [    1.837530]  really_probe+0xe0/0x490
-    [    1.837531]  driver_probe_device+0xf4/0x160
-    [    1.837532]  __device_attach_driver+0x8c/0x114
-    [    1.837533]  bus_for_each_drv+0x78/0xcc
-    [    1.837534]  __device_attach+0x108/0x1a0
-    [    1.837535]  device_initial_probe+0x14/0x20
-    [    1.837537]  bus_probe_device+0x98/0xa0
-    [    1.837538]  deferred_probe_work_func+0x88/0xe0
-    [    1.837539]  process_one_work+0x1cc/0x350
-    [    1.837540]  worker_thread+0x2c0/0x470
-    [    1.837541]  kthread+0x154/0x160
-    [    1.837542]  ret_from_fork+0x10/0x30
-    [    1.837569] SMP: stopping secondary CPUs
-    [    1.837570] Kernel Offset: 0x1d0000 from 0xffff800010000000
-    [    1.837571] PHYS_OFFSET: 0x0
-    [    1.837572] CPU features: 0x240002,20882004
-    [    1.837573] Memory Limit: none
+On 9/7/20 3:58 PM, Felipe Balbi wrote:
+> kernel test robot <lkp@intel.com> writes:
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/next
+>> head:   c9bb389c50ce07f0e4e105eb84f5541916bea8e8
+>> commit: 0e9bd6770c25a3dbd9cb1c9fc132b9e4a65da7cd [29/33] usb: dwc2: override PHY input signals with usb role switch support
+>> config: arm64-randconfig-s031-20200907 (attached as .config)
+>> compiler: aarch64-linux-gcc (GCC) 9.3.0
+>> reproduce:
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # apt-get install sparse
+>>          # sparse version: v0.6.2-191-g10164920-dirty
+>>          git checkout 0e9bd6770c25a3dbd9cb1c9fc132b9e4a65da7cd
+>>          # save the attached .config to linux build tree
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=arm64
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>     drivers/usb/dwc2/drd.c: In function 'dwc2_drd_role_sw_set':
+>>>> drivers/usb/dwc2/drd.c:83:37: error: 'struct dwc2_hsotg' has no member named 'test_mode'
+>>        83 |   if (role == USB_ROLE_NONE && hsotg->test_mode) {
+>>           |                                     ^~
+> 
+> patch dropped now. Amelie, can you send a fixed up version?
+> 
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/usb/dwc3/dwc3-of-simple.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This issue is already fixed in v5: 
+https://lore.kernel.org/patchwork/project/lkml/list/?series=455508
 
-diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-index 8852fbfdead4..2d497165efe2 100644
---- a/drivers/usb/dwc3/dwc3-of-simple.c
-+++ b/drivers/usb/dwc3/dwc3-of-simple.c
-@@ -49,7 +49,8 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
- 	 * Some controllers need to toggle the usb3-otg reset before trying to
- 	 * initialize the PHY, otherwise the PHY times out.
- 	 */
--	if (of_device_is_compatible(np, "rockchip,rk3399-dwc3"))
-+	if (of_device_is_compatible(np, "rockchip,rk3399-dwc3") ||
-+	    of_device_is_compatible(np, "hisilicon,hi3670-dwc3"))
- 		simple->need_reset = true;
- 
- 	simple->resets = of_reset_control_array_get(np, false, true,
-@@ -176,6 +177,7 @@ static const struct of_device_id of_dwc3_simple_match[] = {
- 	{ .compatible = "cavium,octeon-7130-usb-uctl" },
- 	{ .compatible = "sprd,sc9860-dwc3" },
- 	{ .compatible = "allwinner,sun50i-h6-dwc3" },
-+	{ .compatible = "hisilicon,hi3670-dwc3" },
- 	{ /* Sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, of_dwc3_simple_match);
--- 
-2.26.2
-
+Could you apply this version of the patchset ?
