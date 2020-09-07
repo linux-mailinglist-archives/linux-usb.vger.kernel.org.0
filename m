@@ -2,38 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A6425F31D
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 08:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B36225F327
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 08:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726735AbgIGGUr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 02:20:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50904 "EHLO mail.kernel.org"
+        id S1726420AbgIGGZB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 02:25:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52402 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725823AbgIGGUq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Sep 2020 02:20:46 -0400
+        id S1725823AbgIGGZB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Sep 2020 02:25:01 -0400
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 173FF21582;
-        Mon,  7 Sep 2020 06:20:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4ACF721582;
+        Mon,  7 Sep 2020 06:24:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599459645;
-        bh=FkdMsLs/B/AI52w0YJVQHs5rkHUi4N8XZ2mK6c2zwNI=;
+        s=default; t=1599459900;
+        bh=N/uJPTSaJnCC/iKMCzuMKFeVts2Yw/s4TN7JSR5nJFA=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=fkadxlKyjqm2/I2XGl9nTRHwOR9m5GeeP9HlXe8c3fTEZwdChgipSLrjP2gKquFiL
-         y8qlppTfzDtC6LGivS7uBdPBmzBdQvEdGdmpKdZshHjBtE5NSA5uIn4KeqEmtoZW1O
-         ysE4hJ07NXt0YDoGyQEcGgUOzzHzwDUI5Oox3w78=
+        b=cuNbbYGJ0Q9CJjAKjR16Xxjnsu5WqCVHGvGfXFTbr20k1pXxI1yFLFu7A5sle1tmb
+         /ztvPTSGpfWUm80e9VmsHnhS0XxUX9gB6wBX4+ios/oAiRFOe2kE0dUmtrKW5sgoAG
+         zHP9cCk1URj5LO2CfRDKIRCFCWXBIkXICrVHiOqM=
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [PATCH v3] usb: dwc3: Stop active transfers before halting the
- controller
-In-Reply-To: <20200903210954.24504-1-wcheng@codeaurora.org>
-References: <20200903210954.24504-1-wcheng@codeaurora.org>
-Date:   Mon, 07 Sep 2020 09:20:38 +0300
-Message-ID: <87o8mi151l.fsf@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH v3 1/4] usb: dwc3: gadget: Refactor preparing TRBs
+In-Reply-To: <66fa061307b6f4eff00fb279ae5130c3bd8720f7.1599098161.git.thinhn@synopsys.com>
+References: <cover.1599098161.git.thinhn@synopsys.com>
+ <66fa061307b6f4eff00fb279ae5130c3bd8720f7.1599098161.git.thinhn@synopsys.com>
+Date:   Mon, 07 Sep 2020 09:24:53 +0300
+Message-ID: <87lfhm14ui.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -46,121 +47,46 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
 
-Hi,
+> There are a lot of common codes for preparing SG and linear TRBs. Let's
+> refactor them for easier read. No functional change here.
+>
+> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 
-Wesley Cheng <wcheng@codeaurora.org> writes:
-> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-> index 59f2e8c31bd1..456aa87e8778 100644
-> --- a/drivers/usb/dwc3/ep0.c
-> +++ b/drivers/usb/dwc3/ep0.c
-> @@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct u=
-sb_request *request,
->  	int				ret;
->=20=20
->  	spin_lock_irqsave(&dwc->lock, flags);
-> -	if (!dep->endpoint.desc) {
-> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
+email here doesn't match author's ;-)
 
-this looks odd. If we don't have pullups connected, we shouldn't have a
-descriptor, likewise if we don't have a a description, we haven't been
-enumerated, therefore we shouldn't have pullups connected.
-
-What am I missing here?
-
-> @@ -1926,6 +1926,21 @@ static int dwc3_gadget_set_selfpowered(struct usb_=
-gadget *g,
->  	return 0;
+> @@ -1091,6 +1091,65 @@ static void dwc3_prepare_one_trb(struct dwc3_ep *d=
+ep,
+>  			stream_id, short_not_ok, no_interrupt, is_last);
 >  }
 >=20=20
-> +static void dwc3_stop_active_transfers(struct dwc3 *dwc)
+> +/**
+> + * dwc3_prepare_last_sg - prepare TRBs for the last SG entry
+> + * @dep: The endpoint that the request belongs to
+> + * @req: The request to prepare
+> + * @entry_length: The last SG entry size
+> + * @node: Indicates whether this is not the first entry (for isoc only)
+> + */
+> +static void dwc3_prepare_last_sg(struct dwc3_ep *dep,
+> +				 struct dwc3_request *req,
+> +				 unsigned int entry_length,
+> +				 unsigned int node)
+
+I think some of these can be combined into a single line. Also, why so
+far to the right on the line breaks? Could you keep the existing style?
+
 > +{
-> +	u32 epnum;
+> +	unsigned int maxp =3D usb_endpoint_maxp(dep->endpoint.desc);
+> +	unsigned int rem =3D req->request.length % maxp;
+> +	unsigned int num_extra_trbs =3D 0;
+> +	unsigned int i;
+> +	bool do_zlp =3D false;
 > +
-> +	for (epnum =3D 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
+> +	if (!usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
+> +	    req->request.zero && req->request.length && !rem) {
 
-dwc3 knows the number of endpoints available in the HW. Use dwc->num_eps
-instead.
-
-> @@ -1971,6 +1986,8 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, i=
-nt is_on, int suspend)
->  	return 0;
->  }
->=20=20
-> +static void __dwc3_gadget_stop(struct dwc3 *dwc);
-> +
->  static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->  {
->  	struct dwc3		*dwc =3D gadget_to_dwc(g);
-> @@ -1994,9 +2011,37 @@ static int dwc3_gadget_pullup(struct usb_gadget *g=
-, int is_on)
->  		}
->  	}
->=20=20
-> +	/*
-> +	 * Synchronize and disable any further event handling while controller
-> +	 * is being enabled/disabled.
-> +	 */
-> +	disable_irq(dwc->irq_gadget);
-
-why isn't dwc3_gadget_disable_irq() enough?
-
->  	spin_lock_irqsave(&dwc->lock, flags);
-
-spin_lock_irqsave() will disable interrupts, why disable_irq() above?
-
-> +	/* Controller is not halted until pending events are acknowledged */
-> +	if (!is_on) {
-> +		u32 count;
-> +
-> +		/*
-> +		 * The databook explicitly mentions for a device-initiated
-> +		 * disconnect sequence, the SW needs to ensure that it ends any
-> +		 * active transfers.
-> +		 */
-
-make this a little better by mentioning the version and section of the
-databook you're reading. That makes it easier for future
-reference. Also, use an actual quote from the databook, along the lines
-of:
-
-		/*
-                 * Synopsys DesignWare Cores USB3 Databook Revision
-                 * X.YYa states in section W.Z that "device-initiated
-                 * disconnect ...."
-                 */
-
-> +		dwc3_stop_active_transfers(dwc);
-> +		__dwc3_gadget_stop(dwc);
-> +
-> +		count =3D dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
-> +		count &=3D DWC3_GEVNTCOUNT_MASK;
-> +		if (count > 0) {
-> +			dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
-> +			dwc->ev_buf->lpos =3D (dwc->ev_buf->lpos + count) %
-> +						dwc->ev_buf->length;
-> +		}
-
-don't duplicate code. Add a patch before this extracting this into
-helper and use it for both irq handler and gadget pullup.
-
-> +	}
-> +
->  	ret =3D dwc3_gadget_run_stop(dwc, is_on, false);
->  	spin_unlock_irqrestore(&dwc->lock, flags);
-> +	enable_irq(dwc->irq_gadget);
->=20=20
->  	return ret;
->  }
-> @@ -3100,6 +3145,8 @@ static void dwc3_gadget_reset_interrupt(struct dwc3=
- *dwc)
->  	}
->=20=20
->  	dwc3_reset_gadget(dwc);
-> +	/* Stop any active/pending transfers when receiving bus reset */
-
-unnecessary comment. We're calling a function named "stop active
-transfers" from within the "bus reset handler".
+spaces for indentation?
 
 =2D-=20
 balbi
@@ -170,19 +96,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9V0TYRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQaxUw/+No1HiLvCnkSakNkNplU1N0hLR23QkR6V
-945LSRtp6gIAbj5uPgSahMN6zcUDpgqOT8p/Q8GEnw0aoaHBHUVQ74G+dgR9heeG
-GMvOPurO0a0nQElri2gOxMVDlxcHyDyJeH9U40I6vcvk05m6q/KYqTV7FGzs5gX7
-5sdjrP+2UGvSC8xPQSBkaEVP+jhpFqPTrwgPvl5wyPUixxUPBm61QQJ47nGJUJsp
-ZmHoPwHHPvD/nsa1v50jB+29Ia0VT7ogmFOLiLHCCcNM88sQt2UdN7166cspGxMj
-9sFFy4El00gL9onZfWzSpjIOxwaUVYZ/rON0SClGmFP8nIR7k/SlWGZiq1434Qep
-24sWuFZcWLJS2q38HDvArUdtZlJ1f0xefCGnwARw6zEyHVHllcD7n4DcIiKnUilf
-G4fT9zXsDRhI/ceJ3yzdK5EasY1XtUn7teSn7M2oCg6yjJ5t3el8F6U+063UhC7j
-SvvCIHLH/xWqYaSn1JIRopdeOtlSJdbUlq1rJ8NjSBPja/hTpOH2iFhCnJsw7Xoo
-nKm4PAO8355hIZgwIrs/jxMbvqQR4BjksXB2pXyMMKwt9N3zKqjW668T8ks1NGI9
-2j2nr0NesEFvvD3+rvL0pmfMCxR73HNMAC6gKhSESmknJx7GH+SD5TV8qWDr6FC3
-3ejLiKiEphE=
-=487c
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9V0jURHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQb8yA//UMGNytSvQ05R+hfN4giM45+zondS9M6r
+s5Y5DyVOHQVK1jmPPE/s9NTOvlP56iqu2/game//B8JqAhTmg61wsXqHxXZX6IDs
+tT1DdiNcEJw42ze482HiF/GRPPXOrWEtpy9TGXYMMzX1aEUuYNt/XqwpgX3F/Y+s
+HNTk/+liSUOMV+lm3Js0nhRpZMtC5iV9jfSH2TZq+joWwDRITzwIbvX7E+BLa+69
+cuYCRk4UbjWW98NdWpCi+yVHLjnlgZVT6kDXwjcUISVONNtsyC2jTGuz+6YskJkV
+aYWdjxERtqUD9G2ONJfLK2gOqaF7ivF5b+PBtYNSaIE41Cr+BZh5DogmtTo5SMjD
+YA8WLVPOpbkis90qEYBKdZjI4FlEmDX3UlSWlQhjsAr3gCGK+lKMSH9McFySexxM
+9NNAvsY+ZiS6dFl6r07arQRzjlEgOvR5urhm3azBRB/s1fCO2qpyLfFmKHlyQlEi
+jUt36tEZOJgKLIk/Npx21VaWcnN4AtLXGHWxNQIDUA38hAFy6V74uzPz+/Opkxhx
+hEyRJ3niEosrGCmfAIcEb707fJcUHv4mkJstOyFbc8PDMRhc38jYOocvoTLgdsjC
+Zv8Z2W9IZbjHA/tKEYcj6xThrES7pyzJvMbh4GplDGhNY3lnQi/u7aeb11kkXOAC
+3/pMZgInXsE=
+=+wrh
 -----END PGP SIGNATURE-----
 --=-=-=--
