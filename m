@@ -2,64 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 560C225FD19
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 17:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF7B25FDD2
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 17:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730179AbgIGP2j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 11:28:39 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:56697 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730136AbgIGPPp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Sep 2020 11:15:45 -0400
-Received: (qmail 763212 invoked by uid 1000); 7 Sep 2020 11:08:58 -0400
-Date:   Mon, 7 Sep 2020 11:08:58 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S1730223AbgIGP6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 11:58:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58230 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730010AbgIGOua (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Sep 2020 10:50:30 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 02CC821481;
+        Mon,  7 Sep 2020 14:41:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599489714;
+        bh=vyE2X1zQKzP1YNOY504/+A2IyiOqZJITaebb9PZflls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c6hSYHs20N7asJxie1tfww4JQBkA2E6D0wkvqfpBxR6REkJBlWNdSnD0BGokzdT4l
+         8FQxIwgIf1zsTzXYN8FnnKoBqJnlW6WjlPKXiD9ZcSdMdk6dD4ajO6FaxA1iJCtkaB
+         l0gAZvE0zqwF3JbPujEb6oKOdpp5kkpqGisnALyw=
+Date:   Mon, 7 Sep 2020 16:42:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Takashi Iwai <tiwai@suse.de>
 Cc:     himadrispandya@gmail.com, dvyukov@google.com,
         linux-usb@vger.kernel.org, perex@perex.cz, tiwai@suse.com,
         stern@rowland.harvard.ed, linux-kernel@vger.kernel.org,
         marcel@holtmann.org, johan.hedberg@gmail.com,
-        linux-bluetooth@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 04/11] USB: core: hub.c: use usb_control_msg_send() in
- a few places
-Message-ID: <20200907150858.GD762136@rowland.harvard.edu>
-References: <20200907145108.3766613-1-gregkh@linuxfoundation.org>
- <20200907145108.3766613-5-gregkh@linuxfoundation.org>
+        linux-bluetooth@vger.kernel.org, alsa-devel@alsa-project.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Eli Billauer <eli.billauer@gmail.com>,
+        Emiliano Ingrassia <ingrassia@epigenesys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Alexander Tsoy <alexander@tsoy.me>,
+        "Geoffrey D. Bennett" <g@b4.vu>, Jussi Laako <jussi@sonarnerd.net>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Dmitry Panchenko <dmitry@d-systems.ee>,
+        Chris Wulff <crwulff@gmail.com>,
+        Jesus Ramos <jesus-ramos@live.com>
+Subject: Re: [PATCH 01/10] USB: move snd_usb_pipe_sanity_check into the USB
+ core
+Message-ID: <20200907144209.GA3751762@kroah.com>
+References: <20200902110115.1994491-1-gregkh@linuxfoundation.org>
+ <20200902110115.1994491-2-gregkh@linuxfoundation.org>
+ <s5hh7sg9rgq.wl-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200907145108.3766613-5-gregkh@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <s5hh7sg9rgq.wl-tiwai@suse.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 07, 2020 at 04:51:01PM +0200, Greg Kroah-Hartman wrote:
-> There are a few calls to usb_control_msg() that can be converted to use
-> usb_control_msg_send() instead, so do that in order to make the error
-> checking a bit simpler and the code smaller.
+On Wed, Sep 02, 2020 at 04:35:33PM +0200, Takashi Iwai wrote:
+> On Wed, 02 Sep 2020 13:01:03 +0200,
+> Greg Kroah-Hartman wrote:
+> > 
+> > snd_usb_pipe_sanity_check() is a great function, so let's move it into
+> > the USB core so that other parts of the kernel, including the USB core,
+> > can call it.
+> > 
+> > Name it usb_pipe_type_check() to match the existing
+> > usb_urb_ep_type_check() call, which now uses this function.
+> > 
+> > Cc: Jaroslav Kysela <perex@perex.cz>
+> > Cc: Takashi Iwai <tiwai@suse.com>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: Eli Billauer <eli.billauer@gmail.com>
+> > Cc: Emiliano Ingrassia <ingrassia@epigenesys.com>
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: Alexander Tsoy <alexander@tsoy.me>
+> > Cc: "Geoffrey D. Bennett" <g@b4.vu>
+> > Cc: Jussi Laako <jussi@sonarnerd.net>
+> > Cc: Nick Kossifidis <mickflemm@gmail.com>
+> > Cc: Dmitry Panchenko <dmitry@d-systems.ee>
+> > Cc: Chris Wulff <crwulff@gmail.com>
+> > Cc: Jesus Ramos <jesus-ramos@live.com>
+> > Cc: linux-usb@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: alsa-devel@alsa-project.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> v2:
->  - dropped changes to usb_req_set_sel() thanks to review from Alan
+> Reviewed-by: Takashi Iwai <tiwai@suse.de>
 
-> @@ -4056,7 +4035,7 @@ static void usb_enable_link_state(struct usb_hcd *hcd, struct usb_device *udev,
->  	 * associated with the link state we're about to enable.
->  	 */
->  	ret = usb_req_set_sel(udev, state);
-> -	if (ret < 0) {
-> +	if (ret) {
->  		dev_warn(&udev->dev, "Set SEL for device-initiated %s failed.\n",
->  				usb3_lpm_names[state]);
->  		return;
+Thanks for the reviews of all of these.
 
-Did this change survive by mistake?
-
-Actually, it looks like usb_req_set_sel needs to check the value 
-returned by usb_control_msg -- a perfect example of the sort of thing 
-you were trying to fix in the first place!
-
-Alan Stern
+greg k-h
