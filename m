@@ -2,170 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D28FE25FDCC
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 17:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7D525FD97
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 17:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729899AbgIGP6E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 11:58:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58154 "EHLO mail.kernel.org"
+        id S1730030AbgIGOvS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 10:51:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58454 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730008AbgIGOuJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Sep 2020 10:50:09 -0400
-Received: from coco.lan (ip5f5ad5cf.dynamic.kabel-deutschland.de [95.90.213.207])
+        id S1730019AbgIGOvC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Sep 2020 10:51:02 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 650DE21532;
-        Mon,  7 Sep 2020 14:50:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BE3772176B;
+        Mon,  7 Sep 2020 14:51:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599490208;
-        bh=ucJr+saLVcP0I55uqGtU5DQWyYXMW2U5WBZWrLtx+zk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jJTNEKN6B2ykUQfSlOxxOquiv+y2ri4qBpvBA0yy2WBHyYQ7U60vuSx9SEBF9QlBn
-         Ar+/7pK9BivK2eSYEDscpEZzduRbW2j7hxwiRljDzqT3vtxs/9Pq1T4PlIi/i4lUpu
-         MPpNKwTKS8Igkyfh9QzkF30mEKEu4P5RLAI0SoJo=
-Date:   Mon, 7 Sep 2020 16:50:00 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Felipe Balbi <balbi@kernel.org>, Yu Chen <chenyu56@huawei.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, john.stultz@linaro.org,
-        suzhuangluan@hisilicon.com, kongfei@hisilicon.com,
-        liuyu712@hisilicon.com, wanghu17@hisilicon.com,
-        butao@hisilicon.com, chenyao11@huawei.com,
-        fangshengzhou@hisilicon.com, lipengcheng8@huawei.com,
-        songxiaowei@hisilicon.com, xuyiping@hisilicon.com,
-        xuyoujun4@huawei.com, yudongbin@hisilicon.com,
-        zangleigang@hisilicon.com,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>
-Subject: Re: [PATCH v6 04/13] usb: dwc3: Add splitdisable quirk for
- Hisilicon Kirin Soc
-Message-ID: <20200907165000.7c42a6da@coco.lan>
-In-Reply-To: <874ko9of80.fsf@kernel.org>
-References: <20190420064019.57522-1-chenyu56@huawei.com>
-        <20190420064019.57522-5-chenyu56@huawei.com>
-        <20200907150631.70e1bce0@coco.lan>
-        <874ko9of80.fsf@kernel.org>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        s=default; t=1599490261;
+        bh=7qCTpFFNqVHtpIMDAKfKXUS+bFE7hzcYks7b6ByyYYk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i7cbHqNM8H80YrBKKrffwXGThOtzzgcasGBvFkRfT7FH9nFjKPReIo6OfblvqC8J8
+         dcFzGdDcEzRsAq9FHSI69+mXJXBePLE+tU9T7CxLvPOaFBeO7Qt7ENNJqN0ouv/WHx
+         p+qTucob7AxMxRRcAJKUFp7Nutzrjr2zfrQTAv1Y=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     himadrispandya@gmail.com, dvyukov@google.com,
+        linux-usb@vger.kernel.org
+Cc:     perex@perex.cz, tiwai@suse.com, stern@rowland.harvard.ed,
+        linux-kernel@vger.kernel.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v2 00/11] USB: new USB control message helper functions
+Date:   Mon,  7 Sep 2020 16:50:57 +0200
+Message-Id: <20200907145108.3766613-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Em Mon, 07 Sep 2020 17:04:31 +0300
-Felipe Balbi <balbi@kernel.org> escreveu:
+In a recent discussion about a USB networking bug found by syzbot, and
+fixed by Himadri Pandya, the design of the existing usb_control_msg()
+call was brought up as not being the "nicest" thing to use by Dmitry
+Vyukov:
+        https://lore.kernel.org/r/CACT4Y+YbDODLRFn8M5QcY4CazhpeCaunJnP_udXtAs0rYoASSg@mail.gmail.com
 
-> Hi Mauro,
-> 
-> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
-> 
-> > Hi Felipe/Greg,
-> >
-> > What's the status of this patch?   
-> 
-> to be frank, I don't think I have this in my inbox anymore.
-> 
-> > I tested here, together with the Hikey 970 phy RFC patches I sent
-> > last week.
-> >
-> > Without this patch, the USB HID driver receives -EPROTO from
-> > submitted URBs, causing it to enter into an endless reset cycle
-> > on every 500 ms, at the hid_io_error() logic.  
-> 
-> > Tested-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> >
-> > If you prefer, I can re-submit this one with my SOB.  
-> 
-> Please do, but since you're changing device tree, I need Rob's acked-by.
+The function makes it hard to get right, in that it will return the
+number of bytes sent/received, but almost no one checks to see if a
+short read/write happens.  With a malicious, or broken, USB device, this
+can cause drivers to act on data that they did not anticipate, and
+sometimes copy internal kernel data out to userspace.
 
-Ok, I'll do that.
+So let's fix this up by creating two new functions,
+usb_control_msg_send() and usb_control_msg_recv().  These functions
+either complete the full transation, or they return an error, a short
+send/recv is now an error.
 
-> > Thanks,
-> > Mauro
-> >
-> > Em Sat, 20 Apr 2019 14:40:10 +0800
-> > Yu Chen <chenyu56@huawei.com> escreveu:
-> >  
-> >> SPLIT_BOUNDARY_DISABLE should be set for DesignWare USB3 DRD Core
-> >> of Hisilicon Kirin Soc when dwc3 core act as host.  
-> 
-> is this Kirin-specific or is this something that we should do a revision
-> check? 
+They also accept data off of the stack, saving individual drivers the
+pain of having to constantly allocate memory on their own for tiny
+messages, thereby saving overall kernel code space.
 
-I've no idea. I don't have any datasheets from this device.
+The api also does not require a raw USB "pipe" to be sent to the
+function, as we know the direction, so just pass in the endpoint number
+instead, again making it easier on the USB driver author to use.
 
-> Why does it affect only Hikey kirin? 
+This series first takes a helper function out of the sound core for
+verifying USB endpoints to be able to use internally, and then adds the
+new functions, converts over some internal USB code to use them, and
+then starts to clean up some drivers using these new functions, as an
+example of the savings that can happen by using these functions.
 
-As John Stultz didn't re-submit this one (and looking at the DT
-between Kirin 960 and 970 from the original Kernel 4.9 official
-drivers), I suspect that only Kirin 970 requires this quirk.
+Thanks to Dmitry and Himadri for the idea on how to do all of this.
 
-It could well be due to some Dwc3 revision, but it could also be due
-to some differences at the USB part of the SoC, as there are a
-few other things different between hikey 960 and 970: it has a
-different PHY driver, and there are also some differences at the
-USB HUB which is connected into it.
+greg k-h
 
-On both devices, the USB physical ports are actually connected
-into a HUB. In the case of Hikey 970, the hub seems to be a
-TI TUSB8041 4-Port Hub:
-	
-	$ lsusb
-	Bus 002 Device 002: ID 0451:8140 Texas Instruments, Inc. TUSB8041 4-Port Hub
-	Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-	Bus 001 Device 004: ID 090c:1000 Silicon Motion, Inc. - Taiwan (formerly Feiya Technology Corp.) Flash Drive
-	Bus 001 Device 003: ID 413c:301a Dell Computer Corp. Dell MS116 Optical Mouse
-	Bus 001 Device 002: ID 0451:8142 Texas Instruments, Inc. TUSB8041 4-Port Hub
-	Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Changes from v1:
+	- added acks from Takashi Iwai
+	- dropped changes to one function in patch 04 thanks to review
+	  from Alan Stern
+	- typo fix in comment in patch 01
+	- added new patch 11 to remove some unneeded checks in the sound
+	  drivers for endpoint statuses that would always be true.
 
-> What's the dwc3 revision on
-> that SoC (grep SNPSID /sys/kernel/debugfs/*dwc3/regdump)?
+*** BLURB HERE ***
 
-	GSNPSID = 0x33313130
+Greg Kroah-Hartman (11):
+  USB: move snd_usb_pipe_sanity_check into the USB core
+  USB: add usb_control_msg_send() and usb_control_msg_recv()
+  USB: core: message.c: use usb_control_msg_send() in a few places
+  USB: core: hub.c: use usb_control_msg_send() in a few places
+  USB: legousbtower: use usb_control_msg_recv()
+  sound: usx2y: move to use usb_control_msg_send()
+  sound: 6fire: move to use usb_control_msg_send() and
+    usb_control_msg_recv()
+  sound: line6: move to use usb_control_msg_send() and
+    usb_control_msg_recv()
+  sound: hiface: move to use usb_control_msg_send()
+  Bluetooth: ath3k: use usb_control_msg_send() and
+    usb_control_msg_recv()
+  ALSA: remove calls to usb_pipe_type_check for control endpoints
 
-> 
-> >> @@ -1825,10 +1834,27 @@ static int dwc3_resume(struct device *dev)
-> >>  
-> >>  	return 0;
-> >>  }
-> >> +
-> >> +static void dwc3_complete(struct device *dev)
-> >> +{
-> >> +	struct dwc3	*dwc = dev_get_drvdata(dev);
-> >> +	u32		reg;
-> >> +
-> >> +	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_HOST &&
-> >> +			dwc->dis_split_quirk) {
-> >> +		dev_dbg(dwc->dev, "set DWC3_GUCTL3_SPLITDISABLE\n");  
-> 
-> no more dev_dbg() should be added. This driver relies exclusively on
-> tracepoints for debugging.
+ drivers/bluetooth/ath3k.c       |  90 +++++------------
+ drivers/usb/core/hub.c          |  99 ++++++++----------
+ drivers/usb/core/message.c      | 171 ++++++++++++++++++++++++++++----
+ drivers/usb/core/urb.c          |  31 ++++--
+ drivers/usb/misc/legousbtower.c |  60 ++++-------
+ include/linux/usb.h             |   7 ++
+ sound/usb/6fire/firmware.c      |  38 +++----
+ sound/usb/helper.c              |  16 +--
+ sound/usb/helper.h              |   1 -
+ sound/usb/hiface/pcm.c          |  14 ++-
+ sound/usb/line6/driver.c        |  69 +++++--------
+ sound/usb/line6/podhd.c         |  17 ++--
+ sound/usb/line6/toneport.c      |   8 +-
+ sound/usb/mixer_scarlett_gen2.c |   2 +-
+ sound/usb/quirks.c              |  12 +--
+ sound/usb/usx2y/us122l.c        |  42 ++------
+ 16 files changed, 335 insertions(+), 342 deletions(-)
 
-Ok. 
+-- 
+2.28.0
 
-> 
-> >> +		reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
-> >> +		reg |= DWC3_GUCTL3_SPLITDISABLE;
-> >> +		dwc3_writel(dwc->regs, DWC3_GUCTL3, reg);
-> >> +	}
-> >> +}
-> >> +#else
-> >> +#define dwc3_complete NULL
-> >>  #endif /* CONFIG_PM_SLEEP */
-> >>  
-> >>  static const struct dev_pm_ops dwc3_dev_pm_ops = {
-> >>  	SET_SYSTEM_SLEEP_PM_OPS(dwc3_suspend, dwc3_resume)
-> >> +	.complete = dwc3_complete,  
-> 
-> why is this done on complete? Why can't it be done at the end of
-> dwc3_resume()?
-
-Again, no idea. I didn't actually tried to suspend/resume.
-
-Maybe the original author can shed a light on it.
-
-Thanks,
-Mauro
