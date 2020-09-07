@@ -2,155 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD4F25FBF6
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 16:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC1A25FBF8
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 16:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729753AbgIGOVv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 10:21:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49280 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729594AbgIGOSz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Sep 2020 10:18:55 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8F2292064B;
-        Mon,  7 Sep 2020 14:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599488180;
-        bh=+hBkQu9s4/gMzHCxciSjjnQi2QtLKwBklfRKGdDcWQs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ubElOFB8q/iIS1SIkvwxPAzakDy+zGpi/JPWEGV+l+oSadsydiBT5sTCirXySPLqt
-         uFcwgKNn3JXhKu8BvcomGRstBQE9qN2SN/qJLdtwM9id25z1Lv/0d/Bbt72IA2dTay
-         GkXCdq92evvVCma8kdDninKnSyiW/ZPpouX25gls=
-Date:   Mon, 7 Sep 2020 16:16:34 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     himadrispandya@gmail.com, dvyukov@google.com,
-        linux-usb@vger.kernel.org, perex@perex.cz, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Eli Billauer <eli.billauer@gmail.com>,
-        Emiliano Ingrassia <ingrassia@epigenesys.com>,
-        Alexander Tsoy <alexander@tsoy.me>,
-        "Geoffrey D. Bennett" <g@b4.vu>, Jussi Laako <jussi@sonarnerd.net>,
-        Nick Kossifidis <mickflemm@gmail.com>,
-        Dmitry Panchenko <dmitry@d-systems.ee>,
-        Chris Wulff <crwulff@gmail.com>,
-        Jesus Ramos <jesus-ramos@live.com>
-Subject: Re: [PATCH 01/10] USB: move snd_usb_pipe_sanity_check into the USB
- core
-Message-ID: <20200907141634.GA3733019@kroah.com>
-References: <20200902110115.1994491-1-gregkh@linuxfoundation.org>
- <20200902110115.1994491-2-gregkh@linuxfoundation.org>
- <20200903004553.GA642955@rowland.harvard.edu>
- <20200903073230.GA162335@kroah.com>
+        id S1729801AbgIGOVX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 10:21:23 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:35061 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729759AbgIGOSz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Sep 2020 10:18:55 -0400
+Received: (qmail 762377 invoked by uid 1000); 7 Sep 2020 10:18:14 -0400
+Date:   Mon, 7 Sep 2020 10:18:14 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH 1/1] usb: gadget: core: wait gadget device .release
+ finishing at usb_del_gadget_udc
+Message-ID: <20200907141814.GA762136@rowland.harvard.edu>
+References: <20200731095935.23034-1-peter.chen@nxp.com>
+ <20200731115536.GB1648202@kroah.com>
+ <DB8PR04MB7162B2FAC7FACD0A11F6D8218B4E0@DB8PR04MB7162.eurprd04.prod.outlook.com>
+ <20200731122520.GB1655976@kroah.com>
+ <20200731140553.GA8013@b29397-desktop>
+ <20200731141632.GB1717752@kroah.com>
+ <877dt610z6.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200903073230.GA162335@kroah.com>
+In-Reply-To: <877dt610z6.fsf@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 09:32:30AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Sep 02, 2020 at 08:45:53PM -0400, Alan Stern wrote:
-> > On Wed, Sep 02, 2020 at 01:01:03PM +0200, Greg Kroah-Hartman wrote:
-> > > snd_usb_pipe_sanity_check() is a great function, so let's move it into
-> > > the USB core so that other parts of the kernel, including the USB core,
-> > > can call it.
-> > > 
-> > > Name it usb_pipe_type_check() to match the existing
-> > > usb_urb_ep_type_check() call, which now uses this function.
-> > > 
-> > > Cc: Jaroslav Kysela <perex@perex.cz>
-> > > Cc: Takashi Iwai <tiwai@suse.com>
-> > > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > > Cc: Eli Billauer <eli.billauer@gmail.com>
-> > > Cc: Emiliano Ingrassia <ingrassia@epigenesys.com>
-> > > Cc: Alan Stern <stern@rowland.harvard.edu>
-> > > Cc: Alexander Tsoy <alexander@tsoy.me>
-> > > Cc: "Geoffrey D. Bennett" <g@b4.vu>
-> > > Cc: Jussi Laako <jussi@sonarnerd.net>
-> > > Cc: Nick Kossifidis <mickflemm@gmail.com>
-> > > Cc: Dmitry Panchenko <dmitry@d-systems.ee>
-> > > Cc: Chris Wulff <crwulff@gmail.com>
-> > > Cc: Jesus Ramos <jesus-ramos@live.com>
-> > > Cc: linux-usb@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: alsa-devel@alsa-project.org
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > ---
-> > 
-> > > diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-> > > index 27e83e55a590..45bc2914c1ba 100644
-> > > --- a/drivers/usb/core/urb.c
-> > > +++ b/drivers/usb/core/urb.c
-> > > @@ -192,24 +192,39 @@ static const int pipetypes[4] = {
-> > >  };
-> > >  
-> > >  /**
-> > > - * usb_urb_ep_type_check - sanity check of endpoint in the given urb
-> > > - * @urb: urb to be checked
-> > > + * usb_pipe_type_check - sanity check of a specific pipe for a usb device
-> > > + * @dev: struct usb_device to be checked
-> > > + * @pipe: pipe to check
-> > >   *
-> > >   * This performs a light-weight sanity check for the endpoint in the
-> > > - * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
-> > > - * a negative error code.
-> > > + * given usb device.  It returns 0 if the pipe is a valid for the specific usb
-> > -----------------------------------------------------^
-> > Typo.
+On Mon, Sep 07, 2020 at 10:48:29AM +0300, Felipe Balbi wrote:
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 > 
-> Oops, will fix, thanks.
+> Hi,
 > 
+> > On Fri, Jul 31, 2020 at 02:06:20PM +0000, Peter Chen wrote:
+> >> > And this no-op function is horrid.  There used to be documentation in
+> >> > the kernel where I could rant about this, but instead, I'll just say,
+> >> > "why are people trying to work around warnings we put in the core kernel
+> >> > to fix common problems?  Do they think we did that just because we
+> >> > wanted to be mean???"
+> >> > 
+> >> 
+> >> So, like kernel doc for device_initialize said, a proper fix for dwc3
+> >> should be zeroed gadget device memory at its own driver before the 
+> >> gadget device register to driver core, right?
+> >
+> > It should get a totally different, dynamically allocated structure.
+> > NEVER recycle them.
 > 
-> > 
-> > > + * device, otherwise a negative error code.
-> > >   */
-> > > -int usb_urb_ep_type_check(const struct urb *urb)
-> > > +int usb_pipe_type_check(struct usb_device *dev, unsigned int pipe)
-> > >  {
-> > >  	const struct usb_host_endpoint *ep;
-> > >  
-> > > -	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
-> > > +	ep = usb_pipe_endpoint(dev, pipe);
-> > >  	if (!ep)
-> > >  		return -EINVAL;
-> > > -	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
-> > > +	if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
-> > >  		return -EINVAL;
-> > >  	return 0;
-> > >  }
-> > > +EXPORT_SYMBOL_GPL(usb_pipe_type_check);
-> > > +
-> > > +/**
-> > > + * usb_urb_ep_type_check - sanity check of endpoint in the given urb
-> > > + * @urb: urb to be checked
-> > > + *
-> > > + * This performs a light-weight sanity check for the endpoint in the
-> > > + * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
-> > > + * a negative error code.
-> > > + */
-> > > +int usb_urb_ep_type_check(const struct urb *urb)
-> > > +{
-> > > +	return usb_pipe_type_check(urb->dev, urb->pipe);
-> > > +}
-> > >  EXPORT_SYMBOL_GPL(usb_urb_ep_type_check);
-> > 
-> > Since this routine is used in only one place in the entire kernel, you 
-> > might as well inline the code there and get rid of the function 
-> > entirely.
-> 
-> Good idea, will do.
+> then we break usage of container_of(). That's okay, but we have to add
+> some sort of private_data to the gadget structure so UDC drivers can get
+> their own pointers back.
 
-No, wait, the USB sound drivers call it a lot, so it needs to stick
-around for now until we clean that up.
+As you've probably seen by now, Peter solved this problem by storing the 
+private back-pointer in gadget->dev.platform_data.
 
-thanks,
-
-greg k-h
+Alan Stern
