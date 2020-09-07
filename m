@@ -2,80 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB6825FD91
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 17:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE57325FD84
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 17:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730269AbgIGPwi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 11:52:38 -0400
-Received: from mga17.intel.com ([192.55.52.151]:25785 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730221AbgIGPwe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Sep 2020 11:52:34 -0400
-IronPort-SDR: XLendpVzhN8Mt4KG5/sHo+UV+ChOat8WTxaIMm+uZ3LxioFTEqDPeohrIl6Z6l32MRP34fxeXL
- QiKrR/wwhlxA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9737"; a="138066938"
-X-IronPort-AV: E=Sophos;i="5.76,402,1592895600"; 
-   d="scan'208";a="138066938"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2020 08:52:29 -0700
-IronPort-SDR: OKawkKFMoTnSGMbguXThLtl8NtjcwhxLsewqqLKPYgFmHyfSdylAm5yyICdAjMpdfR2/DEblnQ
- njoVBfvoFnZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,402,1592895600"; 
-   d="scan'208";a="333197015"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 07 Sep 2020 08:52:26 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kFJNC-00EzvH-KL; Mon, 07 Sep 2020 18:48:02 +0300
-Date:   Mon, 7 Sep 2020 18:48:02 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     himadrispandya@gmail.com, dvyukov@google.com,
-        linux-usb@vger.kernel.org, perex@perex.cz, tiwai@suse.com,
-        stern@rowland.harvard.ed, linux-kernel@vger.kernel.org,
-        marcel@holtmann.org, johan.hedberg@gmail.com,
-        linux-bluetooth@vger.kernel.org, alsa-devel@alsa-project.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v2 03/11] USB: core: message.c: use
- usb_control_msg_send() in a few places
-Message-ID: <20200907154802.GO1891694@smile.fi.intel.com>
-References: <20200907145108.3766613-1-gregkh@linuxfoundation.org>
- <20200907145108.3766613-4-gregkh@linuxfoundation.org>
- <20200907145644.GA3767938@kroah.com>
+        id S1730149AbgIGPvW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 11:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730108AbgIGPvI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Sep 2020 11:51:08 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E530EC061573
+        for <linux-usb@vger.kernel.org>; Mon,  7 Sep 2020 08:51:07 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id e33so8220556pgm.0
+        for <linux-usb@vger.kernel.org>; Mon, 07 Sep 2020 08:51:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/Lf5JI/5EngLrcYSVXwIufn068kTxx2rWtJHNGWaQh0=;
+        b=ERCTfdWoTZkFD+5wD+JEtW3plu4KNoCwrju0nSQTSPkQ3KWl3N30rEuyAkBzY343hu
+         f3fFA3hzjINlp/l+bm3UTRwshwWWdXocRHaZiTWzkHUPAkLhToC9Hom+iIGOFsIDAvD1
+         Yis9Da8qNjmcnzJfFeXmDcf/kEOWsKMIkFlv60szdJu1ehRPGRkSFBB73/1kN4NdZ5na
+         PUFL8PeRGVl5QQ6BHAqPtgHQ6P5SeifghuNF+75PCTS/KP0+l4iJMdvQX8qs6ZQvgZ2C
+         Bt5VxahpcvJ1nDOfpau8LO8VLQjbjqkKT5X2apKtwoQvwbXJ02KIT3H8R3uVA9lAqWi0
+         IQ7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/Lf5JI/5EngLrcYSVXwIufn068kTxx2rWtJHNGWaQh0=;
+        b=Ii/hMYFY8OlT49exHZC1jdAyUaF5OOb0HOT6+4MejISdwRQK5EIs6/Q9vtrSrIEbSP
+         vp+Scvb22CF7O1L2NGMNgiJhIdDvcgKwEMTWWiLL7nT1YCCE8TTv1ctjIUNjMcCWRNA5
+         VonAe8R56IvsaICogpkhIEjJnLlzo3z1ei9Ph5ShD7QvNDP53SZT646NAddkr1eP9sZc
+         spZwHspPzTVjSHJDCe7HfaXmScEmzkM0JdeNzRl+zN50EUc9Li7ZQd/Zn1d6D35panBJ
+         3R1zTtyFIbNNlT0SJN/etepWw01oG5NNDh2hT/aPpi+8pTwbT1vWUsFVCqNyB5jtbIg9
+         JegA==
+X-Gm-Message-State: AOAM532B7GfbvZklwkMHGPkB2yjXN/fROQk2jlQlMoXUOJNXlgYYib/F
+        08d0CxRNCk64aI4qRzzxK5E=
+X-Google-Smtp-Source: ABdhPJykUtiZY9jsicWKP6vP4OPAjz7LWQ2D5BcYYXB4vxfjOfarbBvzpUtPcC4PxviBpbcaixyWoQ==
+X-Received: by 2002:a05:6a00:4c:: with SMTP id i12mr8603965pfk.157.1599493867511;
+        Mon, 07 Sep 2020 08:51:07 -0700 (PDT)
+Received: from lemmy.tees.ne.jp (153-125-65-70.catv.tees.ne.jp. [153.125.65.70])
+        by smtp.googlemail.com with ESMTPSA id g17sm12745967pjl.30.2020.09.07.08.51.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2020 08:51:07 -0700 (PDT)
+From:   Yasushi Asano <yazzep@gmail.com>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, erosca@de.adit-jv.com,
+        andrew_gabbasov@mentor.com, jim_baxter@mentor.com,
+        wnatsume@jp.adit-jv.com, nnishiguchi@jp.adit-jv.com,
+        yasano@jp.adit-jv.com
+Subject: [PATCH v3] USB: hub.c: decrease the number of attempts of enumeration scheme
+Date:   Tue,  8 Sep 2020 00:50:51 +0900
+Message-Id: <20200907155052.2450-1-yazzep@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAEt1Rjq+Fz85KU-aKO+boNE5yL7GiwdopmRd3-FxEL+mzEui-g@mail.gmail.com>
+References: <CAEt1Rjq+Fz85KU-aKO+boNE5yL7GiwdopmRd3-FxEL+mzEui-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200907145644.GA3767938@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 07, 2020 at 04:56:44PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Sep 07, 2020 at 04:51:00PM +0200, Greg Kroah-Hartman wrote:
-> > There are a few calls to usb_control_msg() that can be converted to use
-> > usb_control_msg_send() instead, so do that in order to make the error
-> > checking a bit simpler.
-> > 
-> > Cc: Alan Stern <stern@rowland.harvard.edu>
-> > Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Cc: linux-usb@vger.kernel.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> Oops, Andy, sorry, you gave me a Reviewed-by: Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> on the previous version of this,
-> I'll add it next round, or when it's queued up.
+From: Yasushi Asano <yasano@jp.adit-jv.com>
 
-NP! Whatever works better for you.
+Dear Alan
+Dear Greg
+
+I added the log which was not applied this patch and the log which 
+was applied this patch to the commit statement. When this patch is 
+applied, enumeration failure is detected within 30 seconds and 
+the PET test is passed.
+
+In addition, I also fixed the error output which is pointed out 
+from the kernel test robot. 
+I would appreciate it if you would advance this PR. 
+Thank you in advance.
+
+Yasushi Asano (1):
+  USB: hub.c: decrease the number of attempts of enumeration scheme
+
+ drivers/usb/core/hub.c | 23 ++++-------------------
+ 1 file changed, 4 insertions(+), 19 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.7.4
 
