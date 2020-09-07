@@ -2,103 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B90C25FBC3
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 16:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD4F25FBF6
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 16:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729755AbgIGOC1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 10:02:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44028 "EHLO mail.kernel.org"
+        id S1729753AbgIGOVv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 10:21:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49280 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729636AbgIGOAJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Sep 2020 10:00:09 -0400
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
+        id S1729594AbgIGOSz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Sep 2020 10:18:55 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BA01521473;
-        Mon,  7 Sep 2020 13:58:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8F2292064B;
+        Mon,  7 Sep 2020 14:16:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599487139;
-        bh=at+9rNRCYJkEIFh6GvwBTj8WRxmaKB3Ezs9RAcM85fs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=TB3IBsjvh5rp5//bXTUwrlWTR/Kd2iGE4QEcWK7s/sM1TTZs75SEKmJGirz4pmVeB
-         Wc39DPBVRseLsvmlDTX0LaozkEHYUgCytS/qNlj56blbSb/WDYveRCollQhdul/sUM
-         6c7lyC9e57RVTBeW41RTb+gPxupvM4twc8mEOa7I=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     kernel test robot <lkp@intel.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: Re: [balbi-usb:testing/next 29/33] drivers/usb/dwc2/drd.c:83:37:
- error: 'struct dwc2_hsotg' has no member named 'test_mode'
-In-Reply-To: <202009072101.xr4ImAoy%lkp@intel.com>
-References: <202009072101.xr4ImAoy%lkp@intel.com>
-Date:   Mon, 07 Sep 2020 16:58:52 +0300
-Message-ID: <877dt5ofhf.fsf@kernel.org>
+        s=default; t=1599488180;
+        bh=+hBkQu9s4/gMzHCxciSjjnQi2QtLKwBklfRKGdDcWQs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ubElOFB8q/iIS1SIkvwxPAzakDy+zGpi/JPWEGV+l+oSadsydiBT5sTCirXySPLqt
+         uFcwgKNn3JXhKu8BvcomGRstBQE9qN2SN/qJLdtwM9id25z1Lv/0d/Bbt72IA2dTay
+         GkXCdq92evvVCma8kdDninKnSyiW/ZPpouX25gls=
+Date:   Mon, 7 Sep 2020 16:16:34 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     himadrispandya@gmail.com, dvyukov@google.com,
+        linux-usb@vger.kernel.org, perex@perex.cz, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Eli Billauer <eli.billauer@gmail.com>,
+        Emiliano Ingrassia <ingrassia@epigenesys.com>,
+        Alexander Tsoy <alexander@tsoy.me>,
+        "Geoffrey D. Bennett" <g@b4.vu>, Jussi Laako <jussi@sonarnerd.net>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Dmitry Panchenko <dmitry@d-systems.ee>,
+        Chris Wulff <crwulff@gmail.com>,
+        Jesus Ramos <jesus-ramos@live.com>
+Subject: Re: [PATCH 01/10] USB: move snd_usb_pipe_sanity_check into the USB
+ core
+Message-ID: <20200907141634.GA3733019@kroah.com>
+References: <20200902110115.1994491-1-gregkh@linuxfoundation.org>
+ <20200902110115.1994491-2-gregkh@linuxfoundation.org>
+ <20200903004553.GA642955@rowland.harvard.edu>
+ <20200903073230.GA162335@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200903073230.GA162335@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Thu, Sep 03, 2020 at 09:32:30AM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Sep 02, 2020 at 08:45:53PM -0400, Alan Stern wrote:
+> > On Wed, Sep 02, 2020 at 01:01:03PM +0200, Greg Kroah-Hartman wrote:
+> > > snd_usb_pipe_sanity_check() is a great function, so let's move it into
+> > > the USB core so that other parts of the kernel, including the USB core,
+> > > can call it.
+> > > 
+> > > Name it usb_pipe_type_check() to match the existing
+> > > usb_urb_ep_type_check() call, which now uses this function.
+> > > 
+> > > Cc: Jaroslav Kysela <perex@perex.cz>
+> > > Cc: Takashi Iwai <tiwai@suse.com>
+> > > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > > Cc: Eli Billauer <eli.billauer@gmail.com>
+> > > Cc: Emiliano Ingrassia <ingrassia@epigenesys.com>
+> > > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > > Cc: Alexander Tsoy <alexander@tsoy.me>
+> > > Cc: "Geoffrey D. Bennett" <g@b4.vu>
+> > > Cc: Jussi Laako <jussi@sonarnerd.net>
+> > > Cc: Nick Kossifidis <mickflemm@gmail.com>
+> > > Cc: Dmitry Panchenko <dmitry@d-systems.ee>
+> > > Cc: Chris Wulff <crwulff@gmail.com>
+> > > Cc: Jesus Ramos <jesus-ramos@live.com>
+> > > Cc: linux-usb@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Cc: alsa-devel@alsa-project.org
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > 
+> > > diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+> > > index 27e83e55a590..45bc2914c1ba 100644
+> > > --- a/drivers/usb/core/urb.c
+> > > +++ b/drivers/usb/core/urb.c
+> > > @@ -192,24 +192,39 @@ static const int pipetypes[4] = {
+> > >  };
+> > >  
+> > >  /**
+> > > - * usb_urb_ep_type_check - sanity check of endpoint in the given urb
+> > > - * @urb: urb to be checked
+> > > + * usb_pipe_type_check - sanity check of a specific pipe for a usb device
+> > > + * @dev: struct usb_device to be checked
+> > > + * @pipe: pipe to check
+> > >   *
+> > >   * This performs a light-weight sanity check for the endpoint in the
+> > > - * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
+> > > - * a negative error code.
+> > > + * given usb device.  It returns 0 if the pipe is a valid for the specific usb
+> > -----------------------------------------------------^
+> > Typo.
+> 
+> Oops, will fix, thanks.
+> 
+> 
+> > 
+> > > + * device, otherwise a negative error code.
+> > >   */
+> > > -int usb_urb_ep_type_check(const struct urb *urb)
+> > > +int usb_pipe_type_check(struct usb_device *dev, unsigned int pipe)
+> > >  {
+> > >  	const struct usb_host_endpoint *ep;
+> > >  
+> > > -	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
+> > > +	ep = usb_pipe_endpoint(dev, pipe);
+> > >  	if (!ep)
+> > >  		return -EINVAL;
+> > > -	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+> > > +	if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+> > >  		return -EINVAL;
+> > >  	return 0;
+> > >  }
+> > > +EXPORT_SYMBOL_GPL(usb_pipe_type_check);
+> > > +
+> > > +/**
+> > > + * usb_urb_ep_type_check - sanity check of endpoint in the given urb
+> > > + * @urb: urb to be checked
+> > > + *
+> > > + * This performs a light-weight sanity check for the endpoint in the
+> > > + * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
+> > > + * a negative error code.
+> > > + */
+> > > +int usb_urb_ep_type_check(const struct urb *urb)
+> > > +{
+> > > +	return usb_pipe_type_check(urb->dev, urb->pipe);
+> > > +}
+> > >  EXPORT_SYMBOL_GPL(usb_urb_ep_type_check);
+> > 
+> > Since this routine is used in only one place in the entire kernel, you 
+> > might as well inline the code there and get rid of the function 
+> > entirely.
+> 
+> Good idea, will do.
 
-kernel test robot <lkp@intel.com> writes:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tes=
-ting/next
-> head:   c9bb389c50ce07f0e4e105eb84f5541916bea8e8
-> commit: 0e9bd6770c25a3dbd9cb1c9fc132b9e4a65da7cd [29/33] usb: dwc2: overr=
-ide PHY input signals with usb role switch support
-> config: arm64-randconfig-s031-20200907 (attached as .config)
-> compiler: aarch64-linux-gcc (GCC) 9.3.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.2-191-g10164920-dirty
->         git checkout 0e9bd6770c25a3dbd9cb1c9fc132b9e4a65da7cd
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.cros=
-s C=3D1 CF=3D'-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=3Darm64=20
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->    drivers/usb/dwc2/drd.c: In function 'dwc2_drd_role_sw_set':
->>> drivers/usb/dwc2/drd.c:83:37: error: 'struct dwc2_hsotg' has no member =
-named 'test_mode'
->       83 |   if (role =3D=3D USB_ROLE_NONE && hsotg->test_mode) {
->          |                                     ^~
+No, wait, the USB sound drivers call it a lot, so it needs to stick
+around for now until we clean that up.
 
-patch dropped now. Amelie, can you send a fixed up version?
+thanks,
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9WPJwRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZ5ahAAk+a7/q+E4f0pg5lKW17KBD62EvoHQVgB
-1h5B6HsQNrC5hBs99jDRDwHNfA29kooINvrm07YhK+BasL7eBGTi1IuXbDdgU2eR
-LjTe7QCGRE+nwbKuF/kUtp2nCLJWWWaU81ynS7HBEYCBz+vpoIXYbu2GSpglGW4t
-dPoIxBNnO7LmonVJKmFqRD+drt6f+9P8EDKH8xR1xnYmhm8ECyFyMzqyYghUF866
-3BOojlqu+oC/YWoAgAIif/4EmLpSRyxqP+6BwKrR4OTB0yYAo/CXyPu3OJyp0OV7
-ozGH7OXmQptzbuqvjkggmX3wv+HEatP4e9t3nnbdu0dTVNEcCThw0xnUEvD2sEXN
-NfsquHSkupx0EyiAFLBN9SYYvCzCPtQnEtO6bi4eFc2xMDl9xfPU1MlQ9+no3WW1
-jblY+3e3mHouuofLE+O3dDU3HTsvOCOQoNMu58fSDrBeDB8zWKJGJC8SIE3dsK5z
-Us/+U1gv8WJlSXZIK3cW0lN9TSRgTTzYeI43XzDY5vwq5MMPkzXRLIwgZ+l39BYz
-wMg5oQCzPm+So+u8ajD7dcfE8/xUmdC7foYqwtEXlp4mTYs5SfT/OE8zF3w1mr7Y
-Fz3y1bhyO4OaDs9FHY2BgDG2F3IdNVo6o8Q8fdvCwN1jACyTttgu5X2bneYjFElz
-mNupexbGHbY=
-=gnGQ
------END PGP SIGNATURE-----
---=-=-=--
+greg k-h
