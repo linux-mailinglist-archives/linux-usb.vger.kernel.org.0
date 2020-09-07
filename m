@@ -2,118 +2,288 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EEB25FC7A
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 17:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0448F25FCC0
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 17:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730111AbgIGO7j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 10:59:39 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:37835 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730115AbgIGO7B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Sep 2020 10:59:01 -0400
-Received: (qmail 763064 invoked by uid 1000); 7 Sep 2020 10:59:00 -0400
-Date:   Mon, 7 Sep 2020 10:59:00 -0400
-From:   "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-To:     Hamish Martin <Hamish.Martin@alliedtelesis.co.nz>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 1/2] usb: ohci: Add per-port overcurrent quirk
-Message-ID: <20200907145900.GC762136@rowland.harvard.edu>
-References: <20200904032247.11345-1-hamish.martin@alliedtelesis.co.nz>
- <20200904032247.11345-2-hamish.martin@alliedtelesis.co.nz>
- <20200904154517.GB694058@rowland.harvard.edu>
- <9ba7b4dda9ef40e3c4c9b3f1c33075e04601ef61.camel@alliedtelesis.co.nz>
+        id S1730039AbgIGOwO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 10:52:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58394 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730017AbgIGOvA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Sep 2020 10:51:00 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 49690207C3;
+        Mon,  7 Sep 2020 14:50:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599490258;
+        bh=VyYPJEj5Ta05TnAL4Uqngww5JY0W3tZR+jtP4bI3fM8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AO0NWMVeiykJuFlIG2+j/MgHbQ1A9SkfAaTHndL7x8pAgyokDPAePFPyq4+eMfyoJ
+         iulHCmkqToL92A4X1uEeI8AjdoLKZWWY7nECRBYr05PHYN6LFOqgRvJuN1Aw8nZwgg
+         AEJObpCRRN8wzpUSgvETVNQzKrE63S6eRb42pSiU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     himadrispandya@gmail.com, dvyukov@google.com,
+        linux-usb@vger.kernel.org
+Cc:     perex@perex.cz, tiwai@suse.com, stern@rowland.harvard.ed,
+        linux-kernel@vger.kernel.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Eli Billauer <eli.billauer@gmail.com>,
+        Emiliano Ingrassia <ingrassia@epigenesys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Alexander Tsoy <alexander@tsoy.me>,
+        "Geoffrey D. Bennett" <g@b4.vu>, Jussi Laako <jussi@sonarnerd.net>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Dmitry Panchenko <dmitry@d-systems.ee>,
+        Chris Wulff <crwulff@gmail.com>,
+        Jesus Ramos <jesus-ramos@live.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH v2 01/11] USB: move snd_usb_pipe_sanity_check into the USB core
+Date:   Mon,  7 Sep 2020 16:50:58 +0200
+Message-Id: <20200907145108.3766613-2-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200907145108.3766613-1-gregkh@linuxfoundation.org>
+References: <20200907145108.3766613-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ba7b4dda9ef40e3c4c9b3f1c33075e04601ef61.camel@alliedtelesis.co.nz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 07, 2020 at 01:50:10AM +0000, Hamish Martin wrote:
-> Hi Alan,
-> 
-> Thanks for your quick feedback. My replies are inline below.
-> 
-> On Fri, 2020-09-04 at 11:45 -0400, Alan Stern wrote:
-> > On Fri, Sep 04, 2020 at 03:22:46PM +1200, Hamish Martin wrote:
-> > > Some integrated OHCI controller hubs do not expose all ports of the
-> > > hub
-> > > to pins on the SoC. In some cases the unconnected ports generate
-> > > spurious overcurrent events. For example the Broadcom 56060/Ranger
-> > > 2 SoC
-> > > contains a nominally 3 port hub but only the first port is wired.
-> > > 
-> > > Default behaviour for ohci-platform driver is to use "ganged"
-> > > overcurrent protection mode. This leads to the spurious overcurrent
-> > > events affecting all ports in the hub.
-> > > 
-> > > Allow this to be rectified by specifying per-port overcurrent
-> > > protection
-> > > mode via the device tree.
-> > > 
-> > > Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-> > > ---
-> > >  drivers/usb/host/ohci-hcd.c      | 4 ++++
-> > >  drivers/usb/host/ohci-platform.c | 3 +++
-> > >  drivers/usb/host/ohci.h          | 1 +
-> > >  3 files changed, 8 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-
-> > > hcd.c
-> > > index dd37e77dae00..01e3d75e29d9 100644
-> > > --- a/drivers/usb/host/ohci-hcd.c
-> > > +++ b/drivers/usb/host/ohci-hcd.c
-> > > @@ -687,6 +687,10 @@ static int ohci_run (struct ohci_hcd *ohci)
-> > >  		val |= RH_A_NPS;
-> > >  		ohci_writel (ohci, val, &ohci->regs->roothub.a);
-> > >  	}
-> > > +	if (ohci->flags & OHCI_QUIRK_PER_PORT_OC) {
-> > > +		val |= RH_A_OCPM;
-> > > +		ohci_writel(ohci, val, &ohci->regs->roothub.a);
-> > > +	}
-> > 
-> > I don't think this is right, for two reasons.  First, isn't per-port 
-> > overcurrent protection the default?
-> 
-> Not as far as I understand the current code. Just above where my patch
-> applies, the RH_A_OCPM (and RH_A_PSM) bits are explicitly cleared in
-> 'val' with:
->     val &= ~(RH_A_PSM | RH_A_OCPM);
-> 
-> This, coupled with the OHCI_QUIRK_HUB_POWER being set by virtue of the
-> 'distrust_firmware' module param defaulting true, reads to me like the
-> default is for ganged over-current protection. And that is my
-> experience in this case. 
+snd_usb_pipe_sanity_check() is a great function, so let's move it into
+the USB core so that other parts of the kernel, including the USB core,
+can call it.
 
-You're right about that.  I hadn't noticed before; it makes little sense 
-to have a quirk that defaults to true.
+Name it usb_pipe_type_check() to match the existing
+usb_urb_ep_type_check() call, which now uses this function.
 
-It's not easy to tell the full story from the kernel history; that 
-module parameter predates the Git era.  I did learn that it was modified 
-in 2.6.3-rc3 and goes back even farther: see
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Eli Billauer <eli.billauer@gmail.com>
+Cc: Emiliano Ingrassia <ingrassia@epigenesys.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Alexander Tsoy <alexander@tsoy.me>
+Cc: "Geoffrey D. Bennett" <g@b4.vu>
+Cc: Jussi Laako <jussi@sonarnerd.net>
+Cc: Nick Kossifidis <mickflemm@gmail.com>
+Cc: Dmitry Panchenko <dmitry@d-systems.ee>
+Cc: Chris Wulff <crwulff@gmail.com>
+Cc: Jesus Ramos <jesus-ramos@live.com>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: alsa-devel@alsa-project.org
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+v2:
+ - use usb_pipe_type_check() instead of usb_urb_ep_type_check in urb.c
+ - fix typo in function description
+ - both changes thanks to Alan Stern's review comments
+ - added Takashi Iwai's reviewed-by
 
-	https://marc.info/?l=linux-usb-devel&m=110628457424684&w=2
+ drivers/usb/core/urb.c          | 31 +++++++++++++++++++++++--------
+ include/linux/usb.h             |  1 +
+ sound/usb/helper.c              | 16 +---------------
+ sound/usb/helper.h              |  1 -
+ sound/usb/mixer_scarlett_gen2.c |  2 +-
+ sound/usb/quirks.c              | 12 ++++++------
+ 6 files changed, 32 insertions(+), 31 deletions(-)
 
-> If none of the quirks are selected then all of the fiddling with 'val'
-> never gets written to 'ohci->regs->roothub.a'
-> 
-> I'd appreciate your reading of that analysis because I'm by no means
-> sure of it.
-> 
-> > 
-> > Second, RH_A_OCPM doesn't do anything unless RH_A_NOCP is clear.
-> 
-> Correct, and that is my mistake. If I progress to a v2 of this patch I
-> will update accordingly.
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 27e83e55a590..357b149b20d3 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -192,24 +192,39 @@ static const int pipetypes[4] = {
+ };
+ 
+ /**
+- * usb_urb_ep_type_check - sanity check of endpoint in the given urb
+- * @urb: urb to be checked
++ * usb_pipe_type_check - sanity check of a specific pipe for a usb device
++ * @dev: struct usb_device to be checked
++ * @pipe: pipe to check
+  *
+  * This performs a light-weight sanity check for the endpoint in the
+- * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
+- * a negative error code.
++ * given usb device.  It returns 0 if the pipe is valid for the specific usb
++ * device, otherwise a negative error code.
+  */
+-int usb_urb_ep_type_check(const struct urb *urb)
++int usb_pipe_type_check(struct usb_device *dev, unsigned int pipe)
+ {
+ 	const struct usb_host_endpoint *ep;
+ 
+-	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
++	ep = usb_pipe_endpoint(dev, pipe);
+ 	if (!ep)
+ 		return -EINVAL;
+-	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
++	if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+ 		return -EINVAL;
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(usb_pipe_type_check);
++
++/**
++ * usb_urb_ep_type_check - sanity check of endpoint in the given urb
++ * @urb: urb to be checked
++ *
++ * This performs a light-weight sanity check for the endpoint in the
++ * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
++ * a negative error code.
++ */
++int usb_urb_ep_type_check(const struct urb *urb)
++{
++	return usb_pipe_type_check(urb->dev, urb->pipe);
++}
+ EXPORT_SYMBOL_GPL(usb_urb_ep_type_check);
+ 
+ /**
+@@ -474,7 +489,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+ 	 */
+ 
+ 	/* Check that the pipe's type matches the endpoint's type */
+-	if (usb_urb_ep_type_check(urb))
++	if (usb_pipe_type_check(urb->dev, urb->pipe))
+ 		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
+ 			usb_pipetype(urb->pipe), pipetypes[xfertype]);
+ 
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 20c555db4621..0b3963d7ec38 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1764,6 +1764,7 @@ static inline int usb_urb_dir_out(struct urb *urb)
+ 	return (urb->transfer_flags & URB_DIR_MASK) == URB_DIR_OUT;
+ }
+ 
++int usb_pipe_type_check(struct usb_device *dev, unsigned int pipe);
+ int usb_urb_ep_type_check(const struct urb *urb);
+ 
+ void *usb_alloc_coherent(struct usb_device *dev, size_t size,
+diff --git a/sound/usb/helper.c b/sound/usb/helper.c
+index 4c12cc5b53fd..cf92d7110773 100644
+--- a/sound/usb/helper.c
++++ b/sound/usb/helper.c
+@@ -63,20 +63,6 @@ void *snd_usb_find_csint_desc(void *buffer, int buflen, void *after, u8 dsubtype
+ 	return NULL;
+ }
+ 
+-/* check the validity of pipe and EP types */
+-int snd_usb_pipe_sanity_check(struct usb_device *dev, unsigned int pipe)
+-{
+-	static const int pipetypes[4] = {
+-		PIPE_CONTROL, PIPE_ISOCHRONOUS, PIPE_BULK, PIPE_INTERRUPT
+-	};
+-	struct usb_host_endpoint *ep;
+-
+-	ep = usb_pipe_endpoint(dev, pipe);
+-	if (!ep || usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+-		return -EINVAL;
+-	return 0;
+-}
+-
+ /*
+  * Wrapper for usb_control_msg().
+  * Allocates a temp buffer to prevent dmaing from/to the stack.
+@@ -89,7 +75,7 @@ int snd_usb_ctl_msg(struct usb_device *dev, unsigned int pipe, __u8 request,
+ 	void *buf = NULL;
+ 	int timeout;
+ 
+-	if (snd_usb_pipe_sanity_check(dev, pipe))
++	if (usb_pipe_type_check(dev, pipe))
+ 		return -EINVAL;
+ 
+ 	if (size > 0) {
+diff --git a/sound/usb/helper.h b/sound/usb/helper.h
+index 5e8a18b4e7b9..f5b4c6647e4d 100644
+--- a/sound/usb/helper.h
++++ b/sound/usb/helper.h
+@@ -7,7 +7,6 @@ unsigned int snd_usb_combine_bytes(unsigned char *bytes, int size);
+ void *snd_usb_find_desc(void *descstart, int desclen, void *after, u8 dtype);
+ void *snd_usb_find_csint_desc(void *descstart, int desclen, void *after, u8 dsubtype);
+ 
+-int snd_usb_pipe_sanity_check(struct usb_device *dev, unsigned int pipe);
+ int snd_usb_ctl_msg(struct usb_device *dev, unsigned int pipe,
+ 		    __u8 request, __u8 requesttype, __u16 value, __u16 index,
+ 		    void *data, __u16 size);
+diff --git a/sound/usb/mixer_scarlett_gen2.c b/sound/usb/mixer_scarlett_gen2.c
+index 0ffff7640892..9609c6d9655c 100644
+--- a/sound/usb/mixer_scarlett_gen2.c
++++ b/sound/usb/mixer_scarlett_gen2.c
+@@ -1978,7 +1978,7 @@ static int scarlett2_mixer_status_create(struct usb_mixer_interface *mixer)
+ 		return 0;
+ 	}
+ 
+-	if (snd_usb_pipe_sanity_check(dev, pipe))
++	if (usb_pipe_type_check(dev, pipe))
+ 		return -EINVAL;
+ 
+ 	mixer->urb = usb_alloc_urb(0, GFP_KERNEL);
+diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+index abf99b814a0f..fc3aab04a0bc 100644
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -846,7 +846,7 @@ static int snd_usb_accessmusic_boot_quirk(struct usb_device *dev)
+ 	static const u8 seq[] = { 0x4e, 0x73, 0x52, 0x01 };
+ 	void *buf;
+ 
+-	if (snd_usb_pipe_sanity_check(dev, usb_sndintpipe(dev, 0x05)))
++	if (usb_pipe_type_check(dev, usb_sndintpipe(dev, 0x05)))
+ 		return -EINVAL;
+ 	buf = kmemdup(seq, ARRAY_SIZE(seq), GFP_KERNEL);
+ 	if (!buf)
+@@ -875,7 +875,7 @@ static int snd_usb_nativeinstruments_boot_quirk(struct usb_device *dev)
+ {
+ 	int ret;
+ 
+-	if (snd_usb_pipe_sanity_check(dev, usb_sndctrlpipe(dev, 0)))
++	if (usb_pipe_type_check(dev, usb_sndctrlpipe(dev, 0)))
+ 		return -EINVAL;
+ 	ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+ 				  0xaf, USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+@@ -984,7 +984,7 @@ static int snd_usb_axefx3_boot_quirk(struct usb_device *dev)
+ 
+ 	dev_dbg(&dev->dev, "Waiting for Axe-Fx III to boot up...\n");
+ 
+-	if (snd_usb_pipe_sanity_check(dev, usb_sndctrlpipe(dev, 0)))
++	if (usb_pipe_type_check(dev, usb_sndctrlpipe(dev, 0)))
+ 		return -EINVAL;
+ 	/* If the Axe-Fx III has not fully booted, it will timeout when trying
+ 	 * to enable the audio streaming interface. A more generous timeout is
+@@ -1018,7 +1018,7 @@ static int snd_usb_motu_microbookii_communicate(struct usb_device *dev, u8 *buf,
+ {
+ 	int err, actual_length;
+ 
+-	if (snd_usb_pipe_sanity_check(dev, usb_sndintpipe(dev, 0x01)))
++	if (usb_pipe_type_check(dev, usb_sndintpipe(dev, 0x01)))
+ 		return -EINVAL;
+ 	err = usb_interrupt_msg(dev, usb_sndintpipe(dev, 0x01), buf, *length,
+ 				&actual_length, 1000);
+@@ -1030,7 +1030,7 @@ static int snd_usb_motu_microbookii_communicate(struct usb_device *dev, u8 *buf,
+ 
+ 	memset(buf, 0, buf_size);
+ 
+-	if (snd_usb_pipe_sanity_check(dev, usb_rcvintpipe(dev, 0x82)))
++	if (usb_pipe_type_check(dev, usb_rcvintpipe(dev, 0x82)))
+ 		return -EINVAL;
+ 	err = usb_interrupt_msg(dev, usb_rcvintpipe(dev, 0x82), buf, buf_size,
+ 				&actual_length, 1000);
+@@ -1117,7 +1117,7 @@ static int snd_usb_motu_m_series_boot_quirk(struct usb_device *dev)
+ {
+ 	int ret;
+ 
+-	if (snd_usb_pipe_sanity_check(dev, usb_sndctrlpipe(dev, 0)))
++	if (usb_pipe_type_check(dev, usb_sndctrlpipe(dev, 0)))
+ 		return -EINVAL;
+ 	ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+ 			      1, USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-- 
+2.28.0
 
-Shall we try changing the parameter's default value?  The USB subsystem 
-is a lot more mature and reliable now than it was back in 2004.
-
-Alan Stern
