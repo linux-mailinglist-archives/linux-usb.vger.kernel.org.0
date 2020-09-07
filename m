@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C7125FF6A
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 18:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B7925FF70
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 18:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730381AbgIGQby (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 12:31:54 -0400
-Received: from mga09.intel.com ([134.134.136.24]:34570 "EHLO mga09.intel.com"
+        id S1730430AbgIGQb6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 12:31:58 -0400
+Received: from mga09.intel.com ([134.134.136.24]:34574 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729793AbgIGOWF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S1729811AbgIGOWF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Mon, 7 Sep 2020 10:22:05 -0400
-IronPort-SDR: vIOtwWF8K5+Ue+5c0HPElYbJwgWJZwX1sKlAXSbYct8WB3tWCsk9zT0/FKorBf21uhb/vLDHzi
- AyOqnY6m1AcA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9736"; a="158987045"
+IronPort-SDR: 7SnCGsY8ygDcgEJR9WmA++8oudIbezDrWnkVWs1b2mk1EqAbuCOYl25x27Q/ni/Gri/ZKJW3z7
+ 4QHq77l1pSqg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9736"; a="158987053"
 X-IronPort-AV: E=Sophos;i="5.76,402,1592895600"; 
-   d="scan'208";a="158987045"
+   d="scan'208";a="158987053"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2020 07:21:57 -0700
-IronPort-SDR: J/JYFS3oFVQrkWg9Q3rECnWSXHQBJlmIpzYiV9dHCa38Opyg7lRHU9NAZEZEgtmS2HGPQzz+GG
- d/bmYMnJTtXQ==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2020 07:22:01 -0700
+IronPort-SDR: KjwBIvDadpSfVWan+1F4N9iKaJL4bmpavJOC7S0SshGxa/9bgjwjk5FWaLfYUaPaiSMyAfrxDS
+ U1hbBrTAxL7Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,402,1592895600"; 
-   d="scan'208";a="406850918"
+   d="scan'208";a="406850924"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Sep 2020 07:21:55 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 07 Sep 2020 07:21:57 -0700
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     "Mani, Rajmohan" <rajmohan.mani@intel.com>,
         Utkarsh Patel <utkarsh.h.patel@intel.com>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH 1/2] usb: typec: intel_pmc_mux: Do not configure Altmode HPD High
-Date:   Mon,  7 Sep 2020 17:21:51 +0300
-Message-Id: <20200907142152.35678-2-heikki.krogerus@linux.intel.com>
+        linux-usb@vger.kernel.org
+Subject: [PATCH 2/2] usb: typec: intel_pmc_mux: Do not configure SBU and HSL Orientation in Alternate modes
+Date:   Mon,  7 Sep 2020 17:21:52 +0300
+Message-Id: <20200907142152.35678-3-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200907142152.35678-1-heikki.krogerus@linux.intel.com>
 References: <20200907142152.35678-1-heikki.krogerus@linux.intel.com>
@@ -48,43 +48,54 @@ X-Mailing-List: linux-usb@vger.kernel.org
 From: Utkarsh Patel <utkarsh.h.patel@intel.com>
 
 According to the PMC Type C Subsystem (TCSS) Mux programming guide rev
-0.7, bit 14 is reserved in Alternate mode.
-In DP Alternate Mode state, if the HPD_STATE (bit 7) field in the
-status update command VDO is set to HPD_HIGH, HPD is configured via
-separate HPD mode request after configuring DP Alternate mode request.
-Configuring reserved bit may show unexpected behaviour.
-So do not configure them while issuing the Alternate Mode request.
+0.7, bits 4 and 5 are reserved in Alternate modes.
+SBU Orientation and HSL Orientation needs to be configured only during
+initial cable detection in USB connect flow based on device property of
+"sbu-orientation" and "hsl-orientation".
+Configuring these reserved bits in the Alternate modes may result in delay
+in display link training or some unexpected behaviour.
+So do not configure them while issuing Alternate Mode requests.
 
-Fixes: 7990be48ef4d ("usb: typec: mux: intel: Handle alt mode HPD_HIGH")
-Cc: stable@vger.kernel.org
+Fixes: ff4a30d5e243 ("usb: typec: mux: intel_pmc_mux: Support for static SBU/HSL orientation")
 Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/typec/mux/intel_pmc_mux.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/usb/typec/mux/intel_pmc_mux.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
 diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index e4021e13af40a..802d443b367c6 100644
+index 802d443b367c6..3bc08847fb7f0 100644
 --- a/drivers/usb/typec/mux/intel_pmc_mux.c
 +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -68,7 +68,6 @@ enum {
- #define PMC_USB_ALTMODE_DP_MODE_SHIFT	8
+@@ -61,8 +61,6 @@ enum {
  
- /* TBT specific Mode Data bits */
--#define PMC_USB_ALTMODE_HPD_HIGH	BIT(14)
- #define PMC_USB_ALTMODE_TBT_TYPE	BIT(17)
- #define PMC_USB_ALTMODE_CABLE_TYPE	BIT(18)
- #define PMC_USB_ALTMODE_ACTIVE_LINK	BIT(20)
-@@ -185,9 +184,6 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
+ #define PMC_USB_ALTMODE_ORI_SHIFT	1
+ #define PMC_USB_ALTMODE_UFP_SHIFT	3
+-#define PMC_USB_ALTMODE_ORI_AUX_SHIFT	4
+-#define PMC_USB_ALTMODE_ORI_HSL_SHIFT	5
+ 
+ /* DP specific Mode Data bits */
+ #define PMC_USB_ALTMODE_DP_MODE_SHIFT	8
+@@ -178,9 +176,6 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
+ 	req.mode_data = (port->orientation - 1) << PMC_USB_ALTMODE_ORI_SHIFT;
+ 	req.mode_data |= (port->role - 1) << PMC_USB_ALTMODE_UFP_SHIFT;
+ 
+-	req.mode_data |= sbu_orientation(port) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
+-	req.mode_data |= hsl_orientation(port) << PMC_USB_ALTMODE_ORI_HSL_SHIFT;
+-
  	req.mode_data |= (state->mode - TYPEC_STATE_MODAL) <<
  			 PMC_USB_ALTMODE_DP_MODE_SHIFT;
  
--	if (data->status & DP_STATUS_HPD_STATE)
--		req.mode_data |= PMC_USB_ALTMODE_HPD_HIGH;
+@@ -208,9 +203,6 @@ pmc_usb_mux_tbt(struct pmc_usb_port *port, struct typec_mux_state *state)
+ 	req.mode_data = (port->orientation - 1) << PMC_USB_ALTMODE_ORI_SHIFT;
+ 	req.mode_data |= (port->role - 1) << PMC_USB_ALTMODE_UFP_SHIFT;
+ 
+-	req.mode_data |= sbu_orientation(port) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
+-	req.mode_data |= hsl_orientation(port) << PMC_USB_ALTMODE_ORI_HSL_SHIFT;
 -
- 	ret = pmc_usb_command(port, (void *)&req, sizeof(req));
- 	if (ret)
- 		return ret;
+ 	if (TBT_ADAPTER(data->device_mode) == TBT_ADAPTER_TBT3)
+ 		req.mode_data |= PMC_USB_ALTMODE_TBT_TYPE;
+ 
 -- 
 2.28.0
 
