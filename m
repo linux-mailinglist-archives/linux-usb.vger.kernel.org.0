@@ -2,76 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1209B260165
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 19:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822DE2603AD
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 19:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731111AbgIGRDy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 13:03:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46662 "EHLO mail.kernel.org"
+        id S1730810AbgIGRxK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 13:53:10 -0400
+Received: from mga18.intel.com ([134.134.136.126]:29151 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730322AbgIGQdQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Sep 2020 12:33:16 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E50E21974;
-        Mon,  7 Sep 2020 16:33:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599496396;
-        bh=pWPCQxYkwcrRSwkB1/hw9MYm8NdGPFIuQ7QBFDTRK/A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fQR3PHhchJjmCTr2EBXeL2YJ3CGRxbbG3VisjU6nW0sJV4dkjuohROmyg9GifALJJ
-         7ed/iq9Vy8qHB+Iz+pNiw6fUae340lgVuWqkCnMrAd6S0OhpKPCQUW+jTjTc6r11+v
-         1CoB/bmRqDNov7ltjU0Mk4y/RfE0lxC6UbntcN2I=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kamil Lorenc <kamil@re-ws.pl>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 44/53] net: usb: dm9601: Add USB ID of Keenetic Plus DSL
-Date:   Mon,  7 Sep 2020 12:32:10 -0400
-Message-Id: <20200907163220.1280412-44-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200907163220.1280412-1-sashal@kernel.org>
-References: <20200907163220.1280412-1-sashal@kernel.org>
+        id S1728897AbgIGLWx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Sep 2020 07:22:53 -0400
+IronPort-SDR: KJg6LNaFUQva6a0+CmI4Bt1E+C7+SI5HQguGHn9kU8Z6xt15795w584FHWLtGR9Ujj4cxluusJ
+ c0X9NWiB4GWQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9736"; a="145696982"
+X-IronPort-AV: E=Sophos;i="5.76,401,1592895600"; 
+   d="scan'208";a="145696982"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2020 04:03:43 -0700
+IronPort-SDR: 9IXG5z2Zamb8VXZqHIJLIe3ucrY1MV9J/z5bHNOeK7xSRJO6ZDr9TaT6V6rEjIUDUeVSgnLpEN
+ BlBkVo83f1qw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,401,1592895600"; 
+   d="scan'208";a="343193312"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 07 Sep 2020 04:03:41 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 8141715D; Mon,  7 Sep 2020 14:03:40 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH] thunderbolt: Retry DROM read once if parsing fails
+Date:   Mon,  7 Sep 2020 14:03:40 +0300
+Message-Id: <20200907110340.71031-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Kamil Lorenc <kamil@re-ws.pl>
+Kai-Heng reported that sometimes DROM parsing of ASUS PA27AC Thunderbolt 3
+monitor fails. This makes the driver to fail to add the device so only
+DisplayPort tunneling is functional.
 
-[ Upstream commit a609d0259183a841621f252e067f40f8cc25d6f6 ]
+It is not clear what exactly happens but waiting for 100 ms and retrying
+the read seems to work this around so we do that here.
 
-Keenetic Plus DSL is a xDSL modem that uses dm9620 as its USB interface.
-
-Signed-off-by: Kamil Lorenc <kamil@re-ws.pl>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=206493
+Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/net/usb/dm9601.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/thunderbolt/eeprom.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
-index b91f92e4e5f22..915ac75b55fc7 100644
---- a/drivers/net/usb/dm9601.c
-+++ b/drivers/net/usb/dm9601.c
-@@ -625,6 +625,10 @@ static const struct usb_device_id products[] = {
- 	 USB_DEVICE(0x0a46, 0x1269),	/* DM9621A USB to Fast Ethernet Adapter */
- 	 .driver_info = (unsigned long)&dm9601_info,
- 	},
-+	{
-+	 USB_DEVICE(0x0586, 0x3427),	/* ZyXEL Keenetic Plus DSL xDSL modem */
-+	 .driver_info = (unsigned long)&dm9601_info,
-+	},
- 	{},			// END
- };
+diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
+index 3ebca44ab3fa..0c8471be3e32 100644
+--- a/drivers/thunderbolt/eeprom.c
++++ b/drivers/thunderbolt/eeprom.c
+@@ -7,6 +7,7 @@
+  */
  
+ #include <linux/crc32.h>
++#include <linux/delay.h>
+ #include <linux/property.h>
+ #include <linux/slab.h>
+ #include "tb.h"
+@@ -389,8 +390,8 @@ static int tb_drom_parse_entries(struct tb_switch *sw)
+ 		struct tb_drom_entry_header *entry = (void *) (sw->drom + pos);
+ 		if (pos + 1 == drom_size || pos + entry->len > drom_size
+ 				|| !entry->len) {
+-			tb_sw_warn(sw, "drom buffer overrun, aborting\n");
+-			return -EIO;
++			tb_sw_warn(sw, "DROM buffer overrun\n");
++			return -EILSEQ;
+ 		}
+ 
+ 		switch (entry->type) {
+@@ -526,7 +527,8 @@ int tb_drom_read(struct tb_switch *sw)
+ 	u16 size;
+ 	u32 crc;
+ 	struct tb_drom_header *header;
+-	int res;
++	int res, retries = 1;
++
+ 	if (sw->drom)
+ 		return 0;
+ 
+@@ -612,7 +614,17 @@ int tb_drom_read(struct tb_switch *sw)
+ 		tb_sw_warn(sw, "drom device_rom_revision %#x unknown\n",
+ 			header->device_rom_revision);
+ 
+-	return tb_drom_parse_entries(sw);
++	res = tb_drom_parse_entries(sw);
++	/* If the DROM parsing fails, wait a moment and retry once */
++	if (res == -EILSEQ && retries--) {
++		tb_sw_warn(sw, "parsing DROM failed, retrying\n");
++		msleep(100);
++		res = tb_drom_read_n(sw, 0, sw->drom, size);
++		if (!res)
++			goto parse;
++	}
++
++	return res;
+ err:
+ 	kfree(sw->drom);
+ 	sw->drom = NULL;
 -- 
-2.25.1
+2.28.0
 
