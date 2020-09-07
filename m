@@ -2,62 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A3425FC59
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 16:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289E025FC6C
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 16:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730055AbgIGOyv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 10:54:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59660 "EHLO mail.kernel.org"
+        id S1730101AbgIGO6Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 10:58:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32888 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729889AbgIGOxW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Sep 2020 10:53:22 -0400
+        id S1730081AbgIGO4a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Sep 2020 10:56:30 -0400
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7CD7A207C3;
-        Mon,  7 Sep 2020 14:53:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 136EF21532;
+        Mon,  7 Sep 2020 14:56:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599490382;
-        bh=JC9nnzVrHcw3JNmXn1wBkr67sKeHB8MZJZI1vvATfwA=;
+        s=default; t=1599490589;
+        bh=CxyQpGP9n8TbvTWZlcMnPBvQvdoM8Roi6NJr/4wY+3A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S4wPrTOYk2TQzK/mk8Ts5ernOC/TKoNkGo6E4Mqy85c8JSyc4vo8F0ip95zu6U7uq
-         KAJDK1KJOjo4ODMWFzPJR+uYceGKEnmyhrn2RtIR8WxR8BvlsSlkM9BqCO2X62BorX
-         +mh7yUagGhAjotbzonJg7k/iVFFWjfj0KfVWEAcc=
-Date:   Mon, 7 Sep 2020 16:53:16 +0200
+        b=lLzcZLnJRYwJRZpj3pSMH+uuomTwjStzPuS6HLjLIR8uWd1c17Y4ebZXRr69gGDbk
+         XzOwh+xBK4S0GODqAZ9+JB/lT9bmvkpwmYARCwsKMtJ5kSbtocsB4b0nmXhOEwQg8b
+         HtSakIDPyMr4ieHYrnhthaO4x/1FviU5JovhMFEA=
+Date:   Mon, 7 Sep 2020 16:56:44 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Mani, Rajmohan" <rajmohan.mani@intel.com>,
-        Utkarsh Patel <utkarsh.h.patel@intel.com>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        himadrispandya@gmail.com, dvyukov@google.com,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: typec: intel_pmc_mux: Do not configure SBU and
- HSL Orientation in Alternate modes
-Message-ID: <20200907145316.GA3767242@kroah.com>
-References: <20200907142152.35678-1-heikki.krogerus@linux.intel.com>
- <20200907142152.35678-3-heikki.krogerus@linux.intel.com>
+Cc:     perex@perex.cz, tiwai@suse.com, stern@rowland.harvard.ed,
+        linux-kernel@vger.kernel.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 03/11] USB: core: message.c: use
+ usb_control_msg_send() in a few places
+Message-ID: <20200907145644.GA3767938@kroah.com>
+References: <20200907145108.3766613-1-gregkh@linuxfoundation.org>
+ <20200907145108.3766613-4-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200907142152.35678-3-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20200907145108.3766613-4-gregkh@linuxfoundation.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 07, 2020 at 05:21:52PM +0300, Heikki Krogerus wrote:
-> From: Utkarsh Patel <utkarsh.h.patel@intel.com>
+On Mon, Sep 07, 2020 at 04:51:00PM +0200, Greg Kroah-Hartman wrote:
+> There are a few calls to usb_control_msg() that can be converted to use
+> usb_control_msg_send() instead, so do that in order to make the error
+> checking a bit simpler.
 > 
-> According to the PMC Type C Subsystem (TCSS) Mux programming guide rev
-> 0.7, bits 4 and 5 are reserved in Alternate modes.
-> SBU Orientation and HSL Orientation needs to be configured only during
-> initial cable detection in USB connect flow based on device property of
-> "sbu-orientation" and "hsl-orientation".
-> Configuring these reserved bits in the Alternate modes may result in delay
-> in display link training or some unexpected behaviour.
-> So do not configure them while issuing Alternate Mode requests.
-> 
-> Fixes: ff4a30d5e243 ("usb: typec: mux: intel_pmc_mux: Support for static SBU/HSL orientation")
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-5.8 is still a stable kernel now, so I'll add cc: stable to this...
+Oops, Andy, sorry, you gave me a Reviewed-by: Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> on the previous version of this,
+I'll add it next round, or when it's queued up.
 
 thanks,
 
