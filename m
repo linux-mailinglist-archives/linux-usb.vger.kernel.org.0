@@ -2,40 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CA425F3F7
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 09:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8BF25F437
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Sep 2020 09:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727784AbgIGH3b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 03:29:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46676 "EHLO mail.kernel.org"
+        id S1726971AbgIGHmo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 03:42:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727773AbgIGH3Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Sep 2020 03:29:24 -0400
+        id S1726419AbgIGHmn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Sep 2020 03:42:43 -0400
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E91E2075A;
-        Mon,  7 Sep 2020 07:29:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0ED4F207C3;
+        Mon,  7 Sep 2020 07:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599463764;
-        bh=fiVMKaCpQNtSpZfOMqiF+Hy9B2MhSJwRupICGTlSJXA=;
+        s=default; t=1599464562;
+        bh=TIs5JwlDQRvebAekInbuV/2Ii2UXnxsq8CLe4ACPU+M=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=bUUciCr7h10pGs/SZ0Uqxqco2mnTMFwGVmjbvqHUdSOjXA5rtF4dBKQnrmy2HUKeA
-         ExXLg/kUdrkquRyCVkTUgUI8/2c8H6aV/dAkdubyb7tAi1v2x4Kw6bCSY4T4dfddzu
-         opv/zKSqW2bvvYQpuaR4XaFsQEdHYn0KPenDCAs8=
+        b=ZdAosuz8jovwbxcvibwH+AMwYlv8fVIdxYehYYIMNofF7Hdu8yCh/CLKMCMmpbTgw
+         4wamX9ZzzgWOMEl58JmSh533zvU4viY96+uz2MYAE2tQi9xDLG6ywD80olFAs0Zg7N
+         rFTtOIOwjPflEPKvMzFCPqdDhFOPaMT+g+n/5do8=
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@nxp.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-imx@nxp.com, pawell@cadence.com, rogerq@ti.com,
-        jun.li@nxp.com
-Subject: Re: [PATCH v4 1/9] usb: cdns3: introduce cdns3_set_phy_power API
-In-Reply-To: <20200703070044.GB2220026@kroah.com>
-References: <20200703062653.29159-1-peter.chen@nxp.com>
- <20200703062653.29159-2-peter.chen@nxp.com>
- <20200703070044.GB2220026@kroah.com>
-Date:   Mon, 07 Sep 2020 10:29:16 +0300
-Message-ID: <87ft7u11v7.fsf@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/7] usb: mtu3: convert to
+ devm_platform_ioremap_resource_byname
+In-Reply-To: <1595404275-8449-1-git-send-email-chunfeng.yun@mediatek.com>
+References: <1595404275-8449-1-git-send-email-chunfeng.yun@mediatek.com>
+Date:   Mon, 07 Sep 2020 10:42:35 +0300
+Message-ID: <87d02y1190.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -48,42 +49,21 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Greg KH <gregkh@linuxfoundation.org> writes:
 
-> On Fri, Jul 03, 2020 at 02:26:45PM +0800, Peter Chen wrote:
->> Since we have both USB2 and USB3 PHYs for cdns3 controller, it is
->> better we have a unity API to handle both USB2 and USB3's power, it
->> could simplify code for error handling and further power management
->> implementation.
->>=20
->> Reviewed-by: Jun Li <jun.li@nxp.com>
->> Signed-off-by: Peter Chen <peter.chen@nxp.com>
->> ---
->>  drivers/usb/cdns3/core.c | 44 ++++++++++++++++++++++++++--------------
->>  1 file changed, 29 insertions(+), 15 deletions(-)
->>=20
->> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
->> index 19bbb5b7e6b6..bfd09aa98c12 100644
->> --- a/drivers/usb/cdns3/core.c
->> +++ b/drivers/usb/cdns3/core.c
->> @@ -384,6 +384,28 @@ static int cdns3_role_set(struct usb_role_switch *s=
-w, enum usb_role role)
->>  	return ret;
->>  }
->>=20=20
->> +static int cdns3_set_phy_power(struct cdns3 *cdns, bool on)
->
-> Please just make function calls self-describing, instead of having to
-> try to remember what a specific flag means.  This isn't as bad as some
-> functions, but the general idea remains, this should be 2 functions:
-> 	set_phy_power_off()
-> 	set_phy_power_on()
->
-> no need for the cdns3_ prefix, it's a static function.
+Hi,
 
-the cdns3_ prefix helps when using function trace or function graph
-trace. It's a lot easier to say "trace anything matching cdns3_*" than
-it is to remember each function ;-)
+Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
+> Use devm_platform_ioremap_resource_byname() to simplify code
+>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+
+why is it so that your patches always come base64 encoded? They look
+fine on the email client, but when I try to pipe the message to git am
+it always gives me a lot of trouble and I have to manually decode the
+body of your messages and recombine with the patch.
+
+Can you try to send your patches as actual plain text without encoding
+the body with base64?
 
 =2D-=20
 balbi
@@ -93,19 +73,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9V4UwRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQbQ9RAAv/NIrqNQdO2avQfX/VM5jpvGpOlcu5Kz
-6qC3n2US1zXWutuCC8aaDLK5+nUuCYmYLDA9jqnyU8jDLHAv+mRsVtKNqqOz8Jf+
-R2qUrRWnot4NPn2ikCWAwV0j9C//XzAnMDbe4Vx9EQ+gqixonwJYALiw6MgW3lS6
-Ux5S+wEZbO9OTP8iimfk8eArAFo2vB4APDK5gthEoVx4Z20YsXtUVXuleHTqFrTb
-SGunTeZvyqTc1Llxd4r+wiMh+bO2ODwPVkELWA1EGqc5KhF+S3xKquqCvKcCHjaU
-NRzaygdZrlgHleskKFbUqcSy/dW6oXSiF4EAlNebmgaySsYhf3TPoP55S1Bp8fxv
-WtRRDwFs2XQFRWyBcnx1+J9kYyzLK86lsDY9jaF8nKR8U3BiBbcNEHtxAfVoaf48
-lkDe8APGdUdFTX3AYyKMbze/N9rIGRZ8WZoHh8a/ssDRvFFMkAC+X9aF8d1sN1kQ
-kn0g06NQQmin0hup5EpnT6R5xAs0+CAhtcG1TN/2q9jpPs/CoL3JzsbtaRhGpH/F
-odHF4Mc6ayeN88aylOqT6+wHZX9HUWEqM52eidhMGkDFj5brU8mM5/ipOTBeD2y4
-1m7O9quORpYqQ/ImkYE7sqY5Z/XXJeyV+zLuMDzjn1wzp8QfY3l95rVv6wHLZka3
-wiB7PSNTO4g=
-=0Qfi
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9V5GsRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQbf5A/9GQSFGsCjJVDMN491TnVJU2UcuvE0m1yH
+PuO6qqWoETNQrMIeT0hIx8IED30Szqy7LB/i1VRA/xIaN354CvgWKNyIooryvqXe
+G7E9zb/0BmiTGLoCzt0cKl12pLDz+vGQ4/F4iMm5Aqw+FoaMIPbI+VxWt1TRmdFu
+akic1csqJULetfSI7aqxuMnUJ9FFijZRTFMkLUnxYS1HNH0Ox8rncv1HmRgd+M+E
+Dmpezs3HLQH2bL6vv+k9Cf75JR5agb8fAbxKvsI00uSK6SdNVmNtOaoJCdE3eaj3
+oG5YdX+lvRW3xO+oPyPypxke3FgQdqZwaRBxBduVsVptgZ5zEmEmjKHfqKCv1nvw
+r8aTppriB+8UNkNjnMLmvbkRRaOFtHlxXGM45vNDGrQGFnMgHcsixmfXiy65/AoK
+cNXPN8TTUm0A9CZ6sAe34raZ3H3LPAX1Mg/GuP7Is6Lm7FiiA6X9J0fC46YzK4ZE
+EEhfn9VNYzDbgVpcgPDdMIe+Lvrzm5ATkFvpVrhz/WUcCT0stSPpXZIHjkAyrmUD
+n47a1pTiVpN3ChKyFMH5IlZSihwpMdkG19LRFnryn2NRaiNQEng3qhpJ9YpekN5Z
+cHprLCzqjPM5FzafSiOVLr3mwKhMcQoL7e9M5T1q2OZ26Rharbx2iMHjoDSW8Jbn
+NyfsrIki6cs=
+=vjAN
 -----END PGP SIGNATURE-----
 --=-=-=--
