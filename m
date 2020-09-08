@@ -2,195 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AB026080B
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Sep 2020 03:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3EE260826
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Sep 2020 04:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728275AbgIHB3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Sep 2020 21:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728088AbgIHB3a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Sep 2020 21:29:30 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7F7C061573;
-        Mon,  7 Sep 2020 18:29:28 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id v23so17997843ljd.1;
-        Mon, 07 Sep 2020 18:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HiTxX/NKoyGJdegowbPqKvyW3w0ydFE9dQBnGemN7oI=;
-        b=PHvcacQ2g0DZDK/I1eM3G1Qqwh5pAkG83XOJ90BNa+Ojc4BPn8sFHfKbwhVNAGiUl1
-         4UgaugzoiLah1hjRTGHaY8zKKUc3kcvb8lOUqDNXVea3M9d4HnHd0yZELpQ7nXO8Iu0u
-         xxXkDNzzKKJDfJ5mzoIYab2eKXXqAQ4l6mas/F08Mn0oOhVHGP5E+jSvpyUYY0F4iMy2
-         jXS1BmyZ5efHN40PcRV6ph0o+k3Kl2L3C4msGsRjqATJpiAFqAapncRfEGKyicX+E36C
-         Tdb986WWxh6F/invXOzjNVsgN0nW2OTnpi9a1w0s5+H1I+z5WpKKeDNAIh8bHruqb8yW
-         0eyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HiTxX/NKoyGJdegowbPqKvyW3w0ydFE9dQBnGemN7oI=;
-        b=NvGjJo2U0uLP4r+TXjVxXUTZjrP3OrCOm6CxM+PEOiy+y93Yu4MqDycyqZUs0KG+TO
-         9hlk3fZoJpdf/dE0VV9evO8hU/geej45sDv3xVQ59Tz/ZkOm/5e8p6Taf/bsuIhxZ4vr
-         T5vl2mihjDainrdMdn4eahihVzCIfunwiuiDmq4k3Qt0as/xQDGuFQW8P2wCWBOyMYBr
-         8bDMOuofIXU9KarUUJ6XlbPBbDMqiBzxoB6WhJ1kiYerPRuJQYK1oD6JOMTB6GlfOpuV
-         bwXaahNhlgMNmxiCtl3ORZf5vPVJV2zrpLF5H+Xxn+HYsEzzmqj0hZKln5FlWd9y6ak5
-         HVng==
-X-Gm-Message-State: AOAM533STHmWTtGx/RiX09hR1Fcw1EomFmdcXM4+21BJrA8Mgu5fsCh/
-        UdWKCjkBcaJ0k77BJnKYP0csSRFSbc8yr5Lrlok=
-X-Google-Smtp-Source: ABdhPJymEqz1Wr3rdJDULjk0XJZB3s6uZFOdi1SmbSmb/VT1ELtC5xg5WAbWrZvcaLSZggmo858j+QrNyh0ReYE5wRQ=
-X-Received: by 2002:a2e:80d6:: with SMTP id r22mr10779753ljg.356.1599528567196;
- Mon, 07 Sep 2020 18:29:27 -0700 (PDT)
+        id S1728210AbgIHCKj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Sep 2020 22:10:39 -0400
+Received: from bilbo3.cbmm.lodz.pl ([212.51.204.40]:33139 "EHLO
+        bilbo3.cbmm.lodz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728085AbgIHCKc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Sep 2020 22:10:32 -0400
+X-Greylist: delayed 363 seconds by postgrey-1.27 at vger.kernel.org; Mon, 07 Sep 2020 22:10:30 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by bilbo3.cbmm.lodz.pl (Postfix) with ESMTP id 86EB05C82;
+        Tue,  8 Sep 2020 04:04:25 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bilbo3.cbmm.lodz.pl
+Received: from bilbo3.cbmm.lodz.pl ([127.0.0.1])
+        by localhost (bilbo3.cbmm.lodz.pl [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZwFc4F5-zyeR; Tue,  8 Sep 2020 04:04:24 +0200 (CEST)
+Received: from poczta.cbmm.lodz.pl (bilbo3.cbmm.lodz.pl [212.51.204.40])
+        (Authenticated sender: amwrobel@cbmm.lodz.pl)
+        by bilbo3.cbmm.lodz.pl (Postfix) with ESMTPSA id 807464F58;
+        Tue,  8 Sep 2020 03:51:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cbmm.lodz.pl; s=mail;
+        t=1599529886; bh=GSRrrlKUiRyefsg7VNTfUVmtzHNAugeDu9DtUiZGItI=;
+        h=Date:From:To:Subject:Reply-To:From;
+        b=lPa5K5wY71cDBgOaiCJwC+48klthKEMa4AiuzaZZlac23aWWNBUiJGkBzjRpj23Uk
+         eM99vEV2wnnliySTePqBToCjfnVs7yFixcUFLNNwhKqBv9IYrffEKqtO2TONqJBYtD
+         WpbcSDGkPgdVfDwrBtqiF7YlViKpee9de4owYiD0=
 MIME-Version: 1.0
-References: <1598928042-22115-1-git-send-email-u0084500@gmail.com> <1598928042-22115-2-git-send-email-u0084500@gmail.com>
-In-Reply-To: <1598928042-22115-2-git-send-email-u0084500@gmail.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Tue, 8 Sep 2020 09:29:15 +0800
-Message-ID: <CADiBU3895A-tmnfLD60j4j-Y034ho8dzsgVvrSeNtQnP9Nzfjw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] usb typec: mt6360: Add MT6360 Type-C DT binding documentation
-To:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Tue, 08 Sep 2020 04:51:22 +0300
+From:   MR WILLIAM YUN <amwrobel@cbmm.lodz.pl>
+To:     undisclosed-recipients:;
+Subject: =?UTF-8?Q?GESCH=C3=84FTSVORSCHLAGSDATUM_=2808-09-2020=29?=
+Reply-To: williamyun891@gmail.com
+Mail-Reply-To: williamyun891@gmail.com
+Message-ID: <384620ec7a5d5ed15baa3c9bf1800492@cbmm.lodz.pl>
+X-Sender: amwrobel@cbmm.lodz.pl
+User-Agent: Roundcube Webmail/1.1.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi.
 
-cy_huang <u0084500@gmail.com> =E6=96=BC 2020=E5=B9=B49=E6=9C=881=E6=97=A5 =
-=E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8810:40=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> From: ChiYuan Huang <cy_huang@richtek.com>
->
-> Add a devicetree binding documentation for the MT6360 Type-C driver.
->
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  .../bindings/usb/mediatek,mt6360-tcpc.yaml         | 95 ++++++++++++++++=
-++++++
->  1 file changed, 95 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,mt6360=
--tcpc.yaml
->
-> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.y=
-aml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-> new file mode 100644
-> index 00000000..1e8e1c2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-> @@ -0,0 +1,95 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/mediatek,mt6360-tcpc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Mediatek MT6360 Type-C Port Switch and Power Delivery controller =
-DT bindings
-> +
-> +maintainers:
-> +  - ChiYuan Huang <cy_huang@richtek.com>
-> +
-> +description: |
-> +  Mediatek MT6360 is a multi-functional device. It integrates charger, A=
-DC, flash, RGB indicators,
-> +  regulators (BUCKs/LDOs), and TypeC Port Switch with Power Delivery con=
-troller.
-> +  This document only describes MT6360 Type-C Port Switch and Power Deliv=
-ery controller.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt6360-tcpc
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: PD_IRQB
-> +
-> +  connector:
-> +    type: object
-> +    $ref: ../connector/usb-connector.yaml#
-> +    description:
-> +      Properties for usb c connector.
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +  - interrupt-names
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/usb/pd.h>
-> +    i2c0 {
-> +      #address-cells =3D <1>;
-> +      #size-cells =3D <0>;
-> +
-> +      mt6360@34 {
-> +        compatible =3D "mediatek,mt6360";
-> +        reg =3D <0x34>;
-> +        tcpc {
-> +          compatible =3D "mediatek,mt6360-tcpc";
-> +          interrupts-extended =3D <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
-> +          interrupt-names =3D "PD_IRQB";
-> +
-> +          connector {
-> +            compatible =3D "usb-c-connector";
-> +            label =3D "USB-C";
-> +            data-role =3D "dual";
-> +            power-role =3D "dual";
-> +            try-power-role =3D "sink";
-> +            source-pdos =3D <PDO_FIXED(5000, 1000, PDO_FIXED_DUAL_ROLE |=
- PDO_FIXED_DATA_SWAP)>;
-> +            sink-pdos =3D <PDO_FIXED(5000, 2000, PDO_FIXED_DUAL_ROLE | P=
-DO_FIXED_DATA_SWAP)>;
-> +            op-sink-microwatt =3D <10000000>;
-> +
-> +            ports {
-> +              #address-cells =3D <1>;
-> +              #size-cells =3D <0>;
-> +
-> +              port@0 {
-> +                reg =3D <0>;
-> +                endpoint {
-> +                  remote-endpoint =3D <&usb_hs>;
-> +                };
-> +              };
-> +              port@1 {
-> +                reg =3D <1>;
-> +                endpoint {
-> +                  remote-endpoint =3D <&usb_ss>;
-> +                };
-> +              };
-> +              port@2 {
-> +                reg =3D <2>;
-> +                endpoint {
-> +                  remote-endpoint =3D <&dp_aux>;
-> +                };
-> +              };
-> +            };
-> +          };
-> +        };
-> +      };
-> +    };
-> +...
 
-Any comment about the v5 dt-binding document change?
-> --
-> 2.7.4
->
+-- 
+Hallo,
+Ich bin William Yun aus Hongkong. Ich habe ein Geschäft für Sie im Wert 
+von 24,5 Mio. USD für Sie. Bei Interesse antworten Sie bitte für weitere 
+Details. williamyun891@gmail.com
+
+Grüße,
+William Yun
+Geschäftsführer,
+& Leiter Personal Banking,
+Hang Seng Bank,
+Hongkong.
+E-Mail: williamyun891@gmail.com
