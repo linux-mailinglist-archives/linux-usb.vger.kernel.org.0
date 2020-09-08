@@ -2,225 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 625D626235E
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 01:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE8B26235C
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 01:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729719AbgIHXFz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Sep 2020 19:05:55 -0400
-Received: from mga06.intel.com ([134.134.136.31]:3675 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726657AbgIHXFy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Sep 2020 19:05:54 -0400
-IronPort-SDR: sqePyzWwRtXyBSq4EzYdokjaCzeV3O9XmHF0CMRaRXxhpBewX1p9OvifqHOmTUTfyyP51Iw7ZV
- 9m8czciZcczA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9738"; a="219797020"
-X-IronPort-AV: E=Sophos;i="5.76,407,1592895600"; 
-   d="scan'208";a="219797020"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2020 16:05:42 -0700
-IronPort-SDR: Xv+yBSlKq4QLKUgK5cBPgpbc+GifsUloqjohvyMn0CYCUwpX1uqULUtb8edQ9VXlA3MFxxYqQq
- 9OhVk3WF5/Bg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,407,1592895600"; 
-   d="scan'208";a="343696973"
-Received: from lkp-server01.sh.intel.com (HELO fc0154cbc871) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 08 Sep 2020 16:05:41 -0700
-Received: from kbuild by fc0154cbc871 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kFmgG-0000Fz-IR; Tue, 08 Sep 2020 23:05:40 +0000
-Date:   Wed, 09 Sep 2020 07:05:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [balbi-usb:testing/next] BUILD REGRESSION
- 3c9722514c3fb74bbe0af87c20bc6b4c47121287
-Message-ID: <5f580e1d.DexYB40yBbPBm9uF%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729397AbgIHXF1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Sep 2020 19:05:27 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:36667 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726657AbgIHXFY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Sep 2020 19:05:24 -0400
+Received: by mail-il1-f193.google.com with SMTP id p13so559620ils.3;
+        Tue, 08 Sep 2020 16:05:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/qeqE/5fPzRv3YsJ66Yy8YazV/xbUggNlRPkCJRA0bA=;
+        b=MhrCfIi4c7NwDcTW8chKtWpsLVVW1UHnw7zL2MywIAM1XkCyWaaMUYNFindw4Zgy4O
+         j9RIxvawBB5welx0TW3np/bbZGWaOOJ0x3K25fUrQWIynXa5o+lzeUor4MjAhxqffDDo
+         dDK6awCoLx7HQ3CmzcjS//93Bvft34W5gKBGxwAEXYDVpd2PKJKrmuK2BDtiGWcv9x45
+         y+gVSr7GIhIpsCZKM0sj07Irqjmfrg5dfMkxhJNizx+T2SbOSE7vjawxWTQ8Fow8OIeA
+         i933SI/YLwYcVPnchVQ24ZFa+r24gdIIHgvAmCSCgvSefOecJfI3lv1MSgqMLnPbE3dP
+         WUug==
+X-Gm-Message-State: AOAM530jtjE3A/9U7XkGT1kz92R4U6VlCyMB6DP0qTxjKJkhhQH2V3jC
+        CQIfih8rSunCFTXTXDPvig==
+X-Google-Smtp-Source: ABdhPJypClO7IsDzE/xubvRHVl36SEZhjCvZo/KL6SE1PsR7GzOL7aa0mOKH4UtHDf4daBKwVdq/9Q==
+X-Received: by 2002:a92:c009:: with SMTP id q9mr1098800ild.73.1599606323035;
+        Tue, 08 Sep 2020 16:05:23 -0700 (PDT)
+Received: from xps15 ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id k2sm372555ioj.2.2020.09.08.16.05.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 16:05:22 -0700 (PDT)
+Received: (nullmailer pid 1108505 invoked by uid 1000);
+        Tue, 08 Sep 2020 23:05:20 -0000
+Date:   Tue, 8 Sep 2020 17:05:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Manish Narani <manish.narani@xilinx.com>
+Cc:     gregkh@linuxfoundation.org, michal.simek@xilinx.com,
+        balbi@kernel.org, p.zabel@pengutronix.de,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        git@xilinx.com
+Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation for
+ Versal DWC3 Controller
+Message-ID: <20200908230520.GA1102401@bogus>
+References: <1598467441-124203-1-git-send-email-manish.narani@xilinx.com>
+ <1598467441-124203-2-git-send-email-manish.narani@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <1598467441-124203-2-git-send-email-manish.narani@xilinx.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
-branch HEAD: 3c9722514c3fb74bbe0af87c20bc6b4c47121287  dt-bindings: usb: renesas,usb-xhci: Document r8a774e1 support
+On Thu, Aug 27, 2020 at 12:14:00AM +0530, Manish Narani wrote:
+> Add documentation for Versal DWC3 controller. Add required property
+> 'reg' for the same. Also add optional properties for snps,dwc3.
+> 
+> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+> ---
+>  .../devicetree/bindings/usb/dwc3-xilinx.txt          | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> index 4aae5b2cef56..dd41ed831411 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> @@ -1,7 +1,8 @@
+>  Xilinx SuperSpeed DWC3 USB SoC controller
+>  
+>  Required properties:
+> -- compatible:	Should contain "xlnx,zynqmp-dwc3"
+> +- compatible:	May contain "xlnx,zynqmp-dwc3" or "xlnx,versal-dwc3"
+> +- reg:		Base address and length of the register control block
+>  - clocks:	A list of phandles for the clocks listed in clock-names
+>  - clock-names:	Should contain the following:
+>    "bus_clk"	 Master/Core clock, have to be >= 125 MHz for SS
+> @@ -13,12 +14,19 @@ Required child node:
+>  A child node must exist to represent the core DWC3 IP block. The name of
+>  the node is not important. The content of the node is defined in dwc3.txt.
+>  
+> +Optional properties for snps,dwc3:
+> +- dma-coherent:	Enable this flag if CCI is enabled in design. Adding this
+> +		flag configures Global SoC bus Configuration Register and
+> +		Xilinx USB 3.0 IP - USB coherency register to enable CCI.
+> +- interrupt-names: This property provides the names of the interrupt ids used
 
-Error/Warning in current branch:
+You have to define what the names are. 'dwc_usb3' seems pretty pointless 
+if only 1 name.
 
-arceb-elf-ld: drd.c:(.text+0x1c0): undefined reference to `usb_role_switch_register'
-arceb-elf-ld: drd.c:(.text+0x2c4): undefined reference to `usb_role_switch_unregister'
-arceb-elf-ld: drd.c:(.text+0x82): undefined reference to `usb_role_switch_get_drvdata'
-drd.c:(.text+0x1c0): undefined reference to `usb_role_switch_register'
-drd.c:(.text+0x2c4): undefined reference to `usb_role_switch_unregister'
-drd.c:(.text+0x82): undefined reference to `usb_role_switch_get_drvdata'
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-`-- arc-randconfig-r016-20200908
-    |-- arceb-elf-ld:drd.c:(.text):undefined-reference-to-usb_role_switch_get_drvdata
-    |-- arceb-elf-ld:drd.c:(.text):undefined-reference-to-usb_role_switch_register
-    |-- arceb-elf-ld:drd.c:(.text):undefined-reference-to-usb_role_switch_unregister
-    |-- drd.c:(.text):undefined-reference-to-usb_role_switch_get_drvdata
-    |-- drd.c:(.text):undefined-reference-to-usb_role_switch_register
-    `-- drd.c:(.text):undefined-reference-to-usb_role_switch_unregister
-
-elapsed time: 725m
-
-configs tested: 143
-configs skipped: 10
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-xtensa                    xip_kc705_defconfig
-arm                          iop32x_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-powerpc                      pasemi_defconfig
-sh                   secureedge5410_defconfig
-sh                        sh7757lcr_defconfig
-microblaze                    nommu_defconfig
-mips                           ip27_defconfig
-arm                   milbeaut_m10v_defconfig
-alpha                               defconfig
-arc                              alldefconfig
-m68k                        m5272c3_defconfig
-mips                 decstation_r4k_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                     ep8248e_defconfig
-xtensa                              defconfig
-arm                          pxa910_defconfig
-arm                        spear3xx_defconfig
-c6x                        evmc6457_defconfig
-arc                              allyesconfig
-sh                   sh7724_generic_defconfig
-mips                          ath79_defconfig
-sh                          lboxre2_defconfig
-nios2                               defconfig
-arm                      pxa255-idp_defconfig
-arm                  colibri_pxa270_defconfig
-powerpc                     powernv_defconfig
-arm                            lart_defconfig
-csky                             alldefconfig
-arm                         lubbock_defconfig
-arm                          badge4_defconfig
-arm                         hackkit_defconfig
-powerpc                 linkstation_defconfig
-arm                      footbridge_defconfig
-arm                         cm_x300_defconfig
-arm                         lpc32xx_defconfig
-riscv                             allnoconfig
-sh                            hp6xx_defconfig
-openrisc                    or1ksim_defconfig
-arm                           spitz_defconfig
-arm                          ep93xx_defconfig
-arm                       versatile_defconfig
-sh                          r7785rp_defconfig
-openrisc                 simple_smp_defconfig
-riscv                          rv32_defconfig
-s390                       zfcpdump_defconfig
-arm                       mainstone_defconfig
-powerpc                      ppc64e_defconfig
-sh                            shmin_defconfig
-mips                           ci20_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-x86_64               randconfig-a006-20200907
-x86_64               randconfig-a004-20200907
-x86_64               randconfig-a003-20200907
-x86_64               randconfig-a005-20200907
-x86_64               randconfig-a001-20200907
-x86_64               randconfig-a002-20200907
-i386                 randconfig-a004-20200908
-i386                 randconfig-a005-20200908
-i386                 randconfig-a006-20200908
-i386                 randconfig-a002-20200908
-i386                 randconfig-a001-20200908
-i386                 randconfig-a003-20200908
-i386                 randconfig-a004-20200907
-i386                 randconfig-a005-20200907
-i386                 randconfig-a006-20200907
-i386                 randconfig-a002-20200907
-i386                 randconfig-a003-20200907
-i386                 randconfig-a001-20200907
-x86_64               randconfig-a013-20200908
-x86_64               randconfig-a016-20200908
-x86_64               randconfig-a011-20200908
-x86_64               randconfig-a012-20200908
-x86_64               randconfig-a015-20200908
-x86_64               randconfig-a014-20200908
-i386                 randconfig-a016-20200908
-i386                 randconfig-a015-20200908
-i386                 randconfig-a011-20200908
-i386                 randconfig-a013-20200908
-i386                 randconfig-a014-20200908
-i386                 randconfig-a012-20200908
-i386                 randconfig-a016-20200907
-i386                 randconfig-a015-20200907
-i386                 randconfig-a011-20200907
-i386                 randconfig-a013-20200907
-i386                 randconfig-a014-20200907
-i386                 randconfig-a012-20200907
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a004-20200908
-x86_64               randconfig-a006-20200908
-x86_64               randconfig-a003-20200908
-x86_64               randconfig-a001-20200908
-x86_64               randconfig-a005-20200908
-x86_64               randconfig-a002-20200908
-x86_64               randconfig-a013-20200907
-x86_64               randconfig-a011-20200907
-x86_64               randconfig-a016-20200907
-x86_64               randconfig-a012-20200907
-x86_64               randconfig-a015-20200907
-x86_64               randconfig-a014-20200907
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +
+>  Example device node:
+>  
+>  		usb@0 {
+>  			#address-cells = <0x2>;
+>  			#size-cells = <0x1>;
+>  			compatible = "xlnx,zynqmp-dwc3";
+> +			reg = <0x0 0xff9d0000 0x0 0x100>;
+>  			clock-names = "bus_clk" "ref_clk";
+>  			clocks = <&clk125>, <&clk125>;
+>  			ranges;
+> @@ -26,7 +34,9 @@ Example device node:
+>  			dwc3@fe200000 {
+>  				compatible = "snps,dwc3";
+>  				reg = <0x0 0xfe200000 0x40000>;
+> +				interrupt-name = "dwc_usb3";
+>  				interrupts = <0x0 0x41 0x4>;
+>  				dr_mode = "host";
+> +				dma-coherent;
+>  			};
+>  		};
+> -- 
+> 2.17.1
+> 
