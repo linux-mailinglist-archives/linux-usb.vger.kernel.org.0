@@ -2,128 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8868D26102D
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Sep 2020 12:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFDB261157
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Sep 2020 14:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729843AbgIHKm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Sep 2020 06:42:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:51840 "EHLO foss.arm.com"
+        id S1730274AbgIHM3j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Sep 2020 08:29:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33802 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728971AbgIHKmi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Sep 2020 06:42:38 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE88931B;
-        Tue,  8 Sep 2020 03:42:32 -0700 (PDT)
-Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0AEF13F66E;
-        Tue,  8 Sep 2020 03:42:28 -0700 (PDT)
-Date:   Tue, 8 Sep 2020 11:42:26 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Jim Quinlan <james.quinlan@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVERS FOR ALLWINNER A10" 
-        <dri-devel@lists.freedesktop.org>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Julien Grall <julien.grall@arm.com>,
-        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:ALLWINNER A10 CSI DRIVER" <linux-media@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-Subject: Re: [PATCH v11 00/11] PCI: brcmstb: enable PCIe for STB chips
-Message-ID: <20200908104226.GB22909@e121166-lin.cambridge.arm.com>
-References: <20200824193036.6033-1-james.quinlan@broadcom.com>
- <b19bc982-a0c4-c6ff-d8f5-650f2b3a83c8@gmail.com>
- <20200827063517.GA4637@lst.de>
- <CA+-6iNy3U9pO0Bykzgvb9n9fcsBi6FiatLdpA1s0HgQNWZ49mg@mail.gmail.com>
- <20200907091649.GA6428@e121166-lin.cambridge.arm.com>
- <CA+-6iNzoz3pM2pJksXogeuou6wB9W-59rN-amCLERFLuY5zLMg@mail.gmail.com>
- <00e49acb-c659-de10-3e87-76bfd82e4a76@gmail.com>
+        id S1729422AbgIHLwK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Sep 2020 07:52:10 -0400
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 32B062087D;
+        Tue,  8 Sep 2020 11:50:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599565849;
+        bh=Ykug4tlZvn0QcDm5UxH6t/c3Mp72WB/jwbZTgq++YCg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=An44oiu7XgXeHdNuYhzwlWOOWDTqUAzhOL+QhselabNvsnlIjLwpbfM6Kvylxvzm/
+         FxUuSbteymwSpzR4zY0nnJIIKXEhO6jCDryKnoBnzME6Ro6nyNaYrwB52VeQinIikm
+         6yvayXQTph7HNuT3KXgHVg90xGwoBK+rlWZ0OWqo=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxarm@huawei.com, mauro.chehab@huawei.com,
+        John Stultz <john.stultz@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dwc3-of-simple: add support for Hikey 970
+In-Reply-To: <20200908122311.55346806@coco.lan>
+References: <731e13f9fbba3a81bedb39f1c1deaf41200acd0c.1599559004.git.mchehab+huawei@kernel.org>
+ <87k0x4lh7i.fsf@kernel.org> <20200908122311.55346806@coco.lan>
+Date:   Tue, 08 Sep 2020 14:50:41 +0300
+Message-ID: <87h7s8lc6m.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00e49acb-c659-de10-3e87-76bfd82e4a76@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 07, 2020 at 11:29:06AM -0700, Florian Fainelli wrote:
-> 
-> 
-> On 9/7/2020 10:43 AM, Jim Quinlan wrote:
-> > On Mon, Sep 7, 2020 at 5:16 AM Lorenzo Pieralisi
-> > <lorenzo.pieralisi@arm.com> wrote:
-> > > 
-> > > On Thu, Aug 27, 2020 at 09:29:59AM -0400, Jim Quinlan wrote:
-> > > > On Thu, Aug 27, 2020 at 2:35 AM Christoph Hellwig <hch@lst.de> wrote:
-> > > > > 
-> > > > > On Tue, Aug 25, 2020 at 10:40:27AM -0700, Florian Fainelli wrote:
-> > > > > > Hi,
-> > > > > > 
-> > > > > > On 8/24/2020 12:30 PM, Jim Quinlan wrote:
-> > > > > > > 
-> > > > > > > Patchset Summary:
-> > > > > > >     Enhance a PCIe host controller driver.  Because of its unusual design
-> > > > > > >     we are foced to change dev->dma_pfn_offset into a more general role
-> > > > > > >     allowing multiple offsets.  See the 'v1' notes below for more info.
-> > > > > > 
-> > > > > > We are version 11 and counting, and it is not clear to me whether there is
-> > > > > > any chance of getting these patches reviewed and hopefully merged for the
-> > > > > > 5.10 merge window.
-> > > > > > 
-> > > > > > There are a lot of different files being touched, so what would be the
-> > > > > > ideal way of routing those changes towards inclusion?
-> > > > > 
-> > > > > FYI, I offered to take the dma-mapping bits through the dma-mapping tree.
-> > > > > I have a bit of a backlog, but plan to review and if Jim is ok with that
-> > > > > apply the current version.
-> > > > Sounds good to me.
-> > > 
-> > > Hi Jim,
-> > > 
-> > > is the dependency now solved ? Should we review/take this series as
-> > > is for v5.10 through the PCI tree ?
-> > Hello Lorenzo,
-> > 
-> > We are still working out a regression with the DMA offset commit on
-> > the RaspberryPi.  Nicolas has found the root cause and we are now
-> > devising a solution.
-> 
-> Maybe we can parallelize the PCIe driver review while the DMA changes
-> are being worked on in Christoph's branch. Lorenzo, are you fine with
-> the PCIe changes proper?
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-I will have a look - the main contentious point was about the DMA
-changes - if Christoph is happy with them I am OK with them
-too - I hope there is not anything controversial in the host
-bridge driver itself but I will look into it.
 
-Lorenzo
+Hi,
+
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+>> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+>> > This binding driver is needed for Hikey 970 to work,
+>> > as otherwise a Serror is produced:=20=20
+>>=20
+>> you mentioned Serror doesn't happen anymore...
+>>=20
+>> >     [    1.837458] SError Interrupt on CPU0, code 0xbf000002 -- SError
+>> >     [    1.837462] CPU: 0 PID: 74 Comm: kworker/0:1 Not tainted 5.8.0+=
+ #205
+>> >     [    1.837463] Hardware name: HiKey970 (DT)
+>> >     [    1.837465] Workqueue: events deferred_probe_work_func
+>> >     [    1.837467] pstate: 20000005 (nzCv daif -PAN -UAO BTYPE=3D--)
+>> >     [    1.837468] pc : _raw_spin_unlock_irqrestore+0x18/0x50
+>> >     [    1.837469] lr : regmap_unlock_spinlock+0x14/0x20
+>> >     [    1.837470] sp : ffff8000124dba60
+>> >     [    1.837471] x29: ffff8000124dba60 x28: 0000000000000000
+>> >     [    1.837474] x27: ffff0001b7e854c8 x26: ffff80001204ea18
+>> >     [    1.837476] x25: 0000000000000005 x24: ffff800011f918f8
+>> >     [    1.837479] x23: ffff800011fbb588 x22: ffff0001b7e40e00
+>> >     [    1.837481] x21: 0000000000000100 x20: 0000000000000000
+>> >     [    1.837483] x19: ffff0001b767ec00 x18: 00000000ff10c000
+>> >     [    1.837485] x17: 0000000000000002 x16: 0000b0740fdb9950
+>> >     [    1.837488] x15: ffff8000116c1198 x14: ffffffffffffffff
+>> >     [    1.837490] x13: 0000000000000030 x12: 0101010101010101
+>> >     [    1.837493] x11: 0000000000000020 x10: ffff0001bf17d130
+>> >     [    1.837495] x9 : 0000000000000000 x8 : ffff0001b6938080
+>> >     [    1.837497] x7 : 0000000000000000 x6 : 000000000000003f
+>> >     [    1.837500] x5 : 0000000000000000 x4 : 0000000000000000
+>> >     [    1.837502] x3 : ffff80001096a880 x2 : 0000000000000000
+>> >     [    1.837505] x1 : ffff0001b7e40e00 x0 : 0000000100000001
+>> >     [    1.837507] Kernel panic - not syncing: Asynchronous SError Int=
+errupt
+>> >     [    1.837509] CPU: 0 PID: 74 Comm: kworker/0:1 Not tainted 5.8.0+=
+ #205
+>> >     [    1.837510] Hardware name: HiKey970 (DT)
+>> >     [    1.837511] Workqueue: events deferred_probe_work_func
+>> >     [    1.837513] Call trace:
+>> >     [    1.837514]  dump_backtrace+0x0/0x1e0
+>> >     [    1.837515]  show_stack+0x18/0x24
+>> >     [    1.837516]  dump_stack+0xc0/0x11c
+>> >     [    1.837517]  panic+0x15c/0x324
+>> >     [    1.837518]  nmi_panic+0x8c/0x90
+>> >     [    1.837519]  arm64_serror_panic+0x78/0x84
+>> >     [    1.837520]  do_serror+0x158/0x15c
+>> >     [    1.837521]  el1_error+0x84/0x100
+>> >     [    1.837522]  _raw_spin_unlock_irqrestore+0x18/0x50
+>> >     [    1.837523]  regmap_write+0x58/0x80
+>> >     [    1.837524]  hi3660_reset_deassert+0x28/0x34
+>> >     [    1.837526]  reset_control_deassert+0x50/0x260
+>> >     [    1.837527]  reset_control_deassert+0xf4/0x260
+>> >     [    1.837528]  dwc3_probe+0x5dc/0xe6c
+>> >     [    1.837529]  platform_drv_probe+0x54/0xb0
+>> >     [    1.837530]  really_probe+0xe0/0x490
+>> >     [    1.837531]  driver_probe_device+0xf4/0x160
+>> >     [    1.837532]  __device_attach_driver+0x8c/0x114
+>> >     [    1.837533]  bus_for_each_drv+0x78/0xcc
+>> >     [    1.837534]  __device_attach+0x108/0x1a0
+>> >     [    1.837535]  device_initial_probe+0x14/0x20
+>> >     [    1.837537]  bus_probe_device+0x98/0xa0
+>> >     [    1.837538]  deferred_probe_work_func+0x88/0xe0
+>> >     [    1.837539]  process_one_work+0x1cc/0x350
+>> >     [    1.837540]  worker_thread+0x2c0/0x470
+>> >     [    1.837541]  kthread+0x154/0x160
+>> >     [    1.837542]  ret_from_fork+0x10/0x30
+>> >     [    1.837569] SMP: stopping secondary CPUs
+>> >     [    1.837570] Kernel Offset: 0x1d0000 from 0xffff800010000000
+>> >     [    1.837571] PHYS_OFFSET: 0x0
+>> >     [    1.837572] CPU features: 0x240002,20882004
+>> >     [    1.837573] Memory Limit: none=20=20
+>>=20
+>> is this splat still valid?=20
+>
+> What I tried to say, is that, if the dwc3 is described this way at the
+> DT bindings:
+>
+>
+>     / {
+> 	dwc3: dwc3@ff100000 {
+> 		compatible =3D "snps,dwc3";
+> 		reg =3D <0x0 0xff100000 0x0 0x100000>;
+> 		clocks =3D <&crg_ctrl HI3670_CLK_GATE_ABB_USB>,
+>                          <&crg_ctrl HI3670_HCLK_GATE_USB3OTG>,
+>                          <&crg_ctrl HI3670_CLK_GATE_USB3OTG_REF>,
+>                          <&crg_ctrl HI3670_ACLK_GATE_USB3DVFS>;
+>     ...
+>
+> The panic occurs, with the logs posted at the patch.
+>
+> The fix is to use dwc3-of-simple to initialize the clocks earlier,
+> e. g., using this binding:
+>
+>     / {
+> 	usb3: hisi_dwc3 {
+> 		compatible =3D "hisilicon,kirin970-dwc3";
+> 		#address-cells =3D <2>;
+> 		#size-cells =3D <2>;
+> 		ranges;
+>=20=20
+> 		clocks =3D <&crg_ctrl HI3670_CLK_GATE_ABB_USB>,
+>                          <&crg_ctrl HI3670_HCLK_GATE_USB3OTG>,
+>                          <&crg_ctrl HI3670_CLK_GATE_USB3OTG_REF>,
+>                          <&crg_ctrl HI3670_ACLK_GATE_USB3DVFS>;
+>
+>
+> 		dwc3: dwc3@ff100000 {
+> 				compatible =3D "snps,dwc3";
+> 				teg =3D <0x0 0xff100000 0x0 0x100000>;
+>     ...
+
+now it's clear, I'll apply as is :-)
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9XcBERHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQanlA/6AviME0f13AQ7e8+04/8997iPxEbRBND5
+YA4b6MGoDrp7NiDbwrfLaSAF46HBEUI70jJGZxt0DeY6Qp081nusCZ4WOzxpqkJJ
+2TJLfqpALYpbZ+KLAZ9hvjDkwqvwDVt5+/CxpfcaEL3UtKb5/cMBrjcMOpW20eq0
+bRSYq97rjsd/cbn+MyoCcqYQ4QgJgZFXcq4MccYmwFlGT7XCfY4Jez33jQ3uMkY4
+GG8hUUCfSpBl2mxYhX+Y6i+XTozCna9Xz7lDLbx3dLGMIpO648AHUACXc8XKnVlk
+UAtQaCaqCM6U2OUTBgyjK8JAM8I89iF90aK6SqlBq0ciP0roLl1p8JajNiVIrJfM
+xsHn2j+l39oPVCkWToeb7PKK0+bZLGOtfu4QyOHZW3ahN6mOj5xPhgpQ2pLdjJSl
+Vqh5oI92muIiWVneLPLKYgzLtTfVFMJ4uefrLLK5cA+O2de/KHC0ZPtK2P4gv1xt
+Tt7omnabnZKlEEimN/MxFggHt0oTGy/ML3H92PhdjKC5T6BiwRlkvdrUyvyWgd+u
+OXzMZCiHMwa1qAT6daNBUx144fz9kGfvbqDPHt7lkVIyAPwcEbn/RoJwjEjX6HtM
+ReoCk/WuHyPjqkwSQEHLUurleF78z/kqMFmtb2qYVmLjg9SXHKsQblhuFIDbwH+N
+JRjSrCTCJ24=
+=fZWs
+-----END PGP SIGNATURE-----
+--=-=-=--
