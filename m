@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E103260AF9
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Sep 2020 08:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344A0260AFA
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Sep 2020 08:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728908AbgIHGaD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Sep 2020 02:30:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55874 "EHLO mail.kernel.org"
+        id S1728759AbgIHGbH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Sep 2020 02:31:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56066 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728869AbgIHGaC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Sep 2020 02:30:02 -0400
+        id S1728501AbgIHGbG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Sep 2020 02:31:06 -0400
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8F36921532;
-        Tue,  8 Sep 2020 06:30:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5D2C3207DE;
+        Tue,  8 Sep 2020 06:31:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599546602;
-        bh=2PM4BS/VyOP6k7uSLDFqufI9yqIpRwJ7HeYv7mznjBQ=;
+        s=default; t=1599546666;
+        bh=tKFqs58DUBuvgkG9OhvtPVhfc2JM8UM0V/+NiletXWQ=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Fote4zkld6nTExQBI/oW7Okoaq/b3u8SCKL/cXxU06gTIyrXW35mTa8rQ+DSS7Ll3
-         PcpfU0/eZpxa66aCv2VBE6UVOwLnZXO/Lh+TmpJ2AvhbmC4l0kxAqrYHox2mf0TQ4w
-         qineP0kWZoRklL91IP4O9lA1HSgYN7uHFhiePKDY=
+        b=EZxR6/+q+RTWx1EvjPKJauS6ZfDl/fCRMnR7ZetKPIpUHwb7c2jTANJGYK2BkA3Ey
+         WNbG9ahPI77gskoHwuK09A8D7iILGG+hfgXwOnPuFEtAXv0cIJIk+qHvrQg9ApT4YA
+         LxUVdrUa6HZE2mGHetpy6iM6+sAXxnCfe8YTM79c=
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Peter Chen <peter.chen@nxp.com>
 Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
         rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
         Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH 6/8] usb: cdns3: gadget: need to handle sg case for WA2
- case
-In-Reply-To: <20200901084454.28649-7-peter.chen@nxp.com>
+Subject: Re: [PATCH 7/8] usb: cdns3: gadget: sg_support is only for
+ DEV_VER_V2 or above
+In-Reply-To: <20200901084454.28649-8-peter.chen@nxp.com>
 References: <20200901084454.28649-1-peter.chen@nxp.com>
- <20200901084454.28649-7-peter.chen@nxp.com>
-Date:   Tue, 08 Sep 2020 09:29:55 +0300
-Message-ID: <877dt4n5lo.fsf@kernel.org>
+ <20200901084454.28649-8-peter.chen@nxp.com>
+Date:   Tue, 08 Sep 2020 09:30:59 +0300
+Message-ID: <874ko8n5jw.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -47,55 +47,37 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-
-Hi,
-
 Peter Chen <peter.chen@nxp.com> writes:
-> Add sg support for WA2 case.
 
-what's WA2? Care to spell it out?
-
+> The scatter buffer list support earlier than DEV_VER_V2 is not
+> good enough, software can't know well about short transfer for it.
+>
+> Cc: Pawel Laszczak <pawell@cadence.com>
 > Signed-off-by: Peter Chen <peter.chen@nxp.com>
 > ---
->  drivers/usb/cdns3/gadget.c | 44 +++++++++++++++++++++++++++-----------
->  1 file changed, 31 insertions(+), 13 deletions(-)
+>  drivers/usb/cdns3/gadget.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
 > diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-> index 6cb44c354f40..1fd36bc5c6db 100644
+> index 1fd36bc5c6db..82dc362550bf 100644
 > --- a/drivers/usb/cdns3/gadget.c
 > +++ b/drivers/usb/cdns3/gadget.c
-> @@ -462,6 +462,36 @@ static int cdns3_start_all_request(struct cdns3_devi=
-ce *priv_dev,
->  		(reg) |=3D EP_STS_EN_DESCMISEN; \
->  	} } while (0)
+> @@ -3161,7 +3161,6 @@ static int cdns3_gadget_start(struct cdns3 *cdns)
+>  	priv_dev->gadget.speed =3D USB_SPEED_UNKNOWN;
+>  	priv_dev->gadget.ops =3D &cdns3_gadget_ops;
+>  	priv_dev->gadget.name =3D "usb-ss-gadget";
+> -	priv_dev->gadget.sg_supported =3D 1;
+>  	priv_dev->gadget.quirk_avoids_skb_reserve =3D 1;
+>  	priv_dev->gadget.irq =3D cdns->dev_irq;
 >=20=20
-> +static void __cdns3_descmiss_copy_data(struct usb_request *request,
-> +	struct usb_request *descmiss_req)
-> +{
-> +	int length =3D request->actual + descmiss_req->actual;
-> +	struct scatterlist *s =3D request->sg;
-> +
-> +	if (!s) {
-> +		if (length <=3D request->length) {
-> +			memcpy(&((u8 *)request->buf)[request->actual],
+> @@ -3200,6 +3199,8 @@ static int cdns3_gadget_start(struct cdns3 *cdns)
+>  		readl(&priv_dev->regs->usb_cap2));
+>=20=20
+>  	priv_dev->dev_ver =3D GET_DEV_BASE_VERSION(priv_dev->dev_ver);
+> +	if (priv_dev->dev_ver >=3D DEV_VER_V2)
+> +		priv_dev->gadget.sg_supported =3D 1;
 
-			memcpy(request->buf + request->actual, ... ?
-
-> +			       descmiss_req->buf,
-> +			       descmiss_req->actual);
-> +			request->actual =3D length;
-> +		} else {
-> +			/* It should never occures */
-                                           ^^^^^^^
-                                           occur
-
-ps: famous last words :-)
-
-> +			request->status =3D -ENOMEM;
-
-this is not documented as a valid status for usb request
-completion. Who's treating this -ENOMEM case? Which gadgets have you
-tested with this change?
+is this a bug fix?
 
 =2D-=20
 balbi
@@ -105,19 +87,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9XJOMRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYDnRAAp4b8O7q1GLjDfTpXFdiHMEa+5PbROoZE
-NQ082hfCxBJKf+RictAMeNy8unTaMgH93FufCg6OYxpm6d48lBJBbeBY24nb+MoE
-PAc6nQ2UYPUCvvqKnAPVVdu43j4jgahZme+XfZX4Lh+NLSVfSuU96TIr+adE/aza
-fTp76y4G7hYX6NDST5rz+Pi+L2x+IrkXKB49/I/zP46pD87tEyNZ0z056mqhv8yh
-5KE13GHa4nhPutssas9TJLdmTu0gQditA2hk+MZRfv9n367Tm/0lJCPdDPcIzmZj
-i+on9RetAVbXDuX2EvqXCEiA7ZXjF1tQC3+WNjE0i0Q169c2tN7vD1ocLybg2OdX
-35mTViGyfT8i+cQBxbEekrIOtdII1Htvw+UXzWGP7SpcwNWLLr3Mj4keZj62ckSm
-SKpkHdvRqnG93mp01izUq63jKiSS6NixrwLWSu/Wx1b+KvQF9tiRHrZ8r+7NF7dl
-jgGkVNa/624QC0RYYKRJB94pH938UcSQ6wOuKQAgRXBWIEoGksbW895Ce8XhPDmX
-9nYgNjkgGAu2Bl5VLmqZkxFznaM8QXAA4hIAAzm5jZcI0cy0nbSdlKX3tJMVkfKm
-MS6mJenoi58ydgjWqeB2QdpVp7A+VLpdaYfdaXVU/3pVI8QOIxwz3vgA6t3VWydE
-gCELuJJvZbI=
-=8zdA
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9XJSMRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZK1BAApUS1GDqKd5+mN3Dd4sVI7tdM04tnyAW0
+AC0MrUfp5w2ruh/J0L38+VuzXcwHCJ5yQ+OosZrKF7GcjycfVFjPekp2Qtn2oQn3
+LRQmkoMC2afOj3BR31HWsqkosEzsvE8nFd5md/NlG40TGXbDsNRKSFVSlkhkMQ+4
+P3r+cPH0Up05LdVE6awQ3I2PtCiuO4t8Gcd3xbmGfhnHXGYYhg3gcngb1yJADFU/
+CixyYXsNwoXleuAi9i2l+LQyq+ksRwURNcPJu0yaIgMjtGkCVF47twPvSgArZbye
+c+Xw7Te4swETBjj3RFftbwjzevUph61WARPfE8CBXCQsXhThEdKlcKCZDdL1FT/t
+PZfRJHu2f/rcqpM4BQ2/lsH5fGjcQjUKOXz39kpH/J6tZgd119Tw2FoKqo+oPXwh
+Hhd5MyFBEebsHOjgnjMCpZ6jCAIW8lw6NZJ3Mrai6301XHhfmyG/MuNhaltFBcmf
+CdA/tEcWj4UwAPlSaW8TeXV/LjjiJ2318xxIr+cOjqY+/Nu1D54SEZBiNe4h1IoG
+TjfpMkWaVSRgbv7yfET1k6BhCOWAnbFTVdcCUn9umoI47P7qvSLW6qE6W4QW+Tpl
+il3ZJw8rREXkHQvsMkVlaww038doIteDcR8/ErHgxJQzUsSFpiLZAY9ejqHSqRRT
+K1o6Sbcwx58=
+=KGp1
 -----END PGP SIGNATURE-----
 --=-=-=--
