@@ -2,72 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F64226150F
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Sep 2020 18:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFB526151F
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Sep 2020 18:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731974AbgIHQgp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Sep 2020 12:36:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34254 "EHLO mail.kernel.org"
+        id S1731857AbgIHQoi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Sep 2020 12:44:38 -0400
+Received: from verein.lst.de ([213.95.11.211]:53340 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732021AbgIHQbi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Sep 2020 12:31:38 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9E52B206DB;
-        Tue,  8 Sep 2020 12:12:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599567145;
-        bh=qmVm2cBZbFlDXg2K5rwPxPvrNmapd2esw84x5y2TZFA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NQ7N43mQZ4LkTz66NIKWIOC2tQ5F40LoHwfxM6xc2UuMF2nup3sPRlDg2/4oHVOgE
-         ueQDJCcgHx6hagKe8KacN6yDsSoeaI90haVA0MrSWqN19Ht8L0EgNacfxJSXPfOOzo
-         XziLjCQjkwu0AgW5+bxQSftlzmQ6q6ckvclcRO5g=
-Date:   Tue, 8 Sep 2020 08:12:24 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Lars Melin <larsm17@gmail.com>
-Cc:     Kristian Evensen <kristian.evensen@gmail.com>,
-        linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
-        Daniele Palmas <dnlplm@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.14 17/33] net: usb: qmi_wwan: add Telit 0x1050
- composition
-Message-ID: <20200908121224.GT8670@sasha-vm>
-References: <20191026132110.4026-1-sashal@kernel.org>
- <20191026132110.4026-17-sashal@kernel.org>
- <CAKfDRXjjuW4VM03HeVoeEyG=cULUK8ZXexWu48rfFvJE+DD8_g@mail.gmail.com>
- <20200907181552.GN8670@sasha-vm>
- <6e09f3e2-674d-f7c1-e868-c170dff1dbb9@gmail.com>
+        id S1731773AbgIHQoU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Sep 2020 12:44:20 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 026F868B02; Tue,  8 Sep 2020 14:20:45 +0200 (CEST)
+Date:   Tue, 8 Sep 2020 14:20:45 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS FOR ALLWINNER A10" 
+        <dri-devel@lists.freedesktop.org>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Julien Grall <julien.grall@arm.com>,
+        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:ALLWINNER A10 CSI DRIVER" <linux-media@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+Subject: Re: [PATCH v11 00/11] PCI: brcmstb: enable PCIe for STB chips
+Message-ID: <20200908122045.GA31727@lst.de>
+References: <20200824193036.6033-1-james.quinlan@broadcom.com> <b19bc982-a0c4-c6ff-d8f5-650f2b3a83c8@gmail.com> <20200827063517.GA4637@lst.de> <CA+-6iNy3U9pO0Bykzgvb9n9fcsBi6FiatLdpA1s0HgQNWZ49mg@mail.gmail.com> <20200907091649.GA6428@e121166-lin.cambridge.arm.com> <CA+-6iNzoz3pM2pJksXogeuou6wB9W-59rN-amCLERFLuY5zLMg@mail.gmail.com> <00e49acb-c659-de10-3e87-76bfd82e4a76@gmail.com> <20200908104226.GB22909@e121166-lin.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6e09f3e2-674d-f7c1-e868-c170dff1dbb9@gmail.com>
+In-Reply-To: <20200908104226.GB22909@e121166-lin.cambridge.arm.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 08, 2020 at 07:33:21AM +0700, Lars Melin wrote:
->On 9/8/2020 01:15, Sasha Levin wrote:
->>On Mon, Sep 07, 2020 at 11:36:37AM +0200, Kristian Evensen wrote:
->// snip
->
->>>When testing the FN980 with kernel 4.14, I noticed that the qmi device
->>>was not there. Checking the git log, I see that this patch was never
->>>applied. The patch applies fine, so I guess it was just missed
->>>somewhere. If it could be added to the next 4.14 release, it would be
->>>much appreciated.
->>
->>Interesting, yes - I'm not sure why it's missing. I'll queue it up.
->>
->
->The patch is missing from all 4.x LTS kernels, not only 4.14
+On Tue, Sep 08, 2020 at 11:42:26AM +0100, Lorenzo Pieralisi wrote:
+> > Maybe we can parallelize the PCIe driver review while the DMA changes
+> > are being worked on in Christoph's branch. Lorenzo, are you fine with
+> > the PCIe changes proper?
+> 
+> I will have a look - the main contentious point was about the DMA
+> changes - if Christoph is happy with them I am OK with them
+> too - I hope there is not anything controversial in the host
+> bridge driver itself but I will look into it.
 
-Right, it's queued up for all the trees.
-
--- 
-Thanks,
-Sasha
+I'm pretty happy with the overall shape.  Now we just need to squeeze
+out the regressions..
