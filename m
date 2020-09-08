@@ -2,120 +2,246 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A97261E24
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Sep 2020 21:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FAEE262209
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Sep 2020 23:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732459AbgIHTqX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Sep 2020 15:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730656AbgIHTqM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Sep 2020 15:46:12 -0400
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0981C061757;
-        Tue,  8 Sep 2020 12:46:11 -0700 (PDT)
-Received: by mail-oo1-xc42.google.com with SMTP id r10so30741oor.5;
-        Tue, 08 Sep 2020 12:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=sB5cXzWSwS8xZ3/r8jsVyeeT+zbo9/MGNsGrKz2xEhE=;
-        b=q6JsxEBfFsN852oOLbFZceYKHBIQK84dqs1vWfUDcU9FsLwmxPaAmYJg0hra091o6F
-         3Ip2BlbfsiKxpuoOxLCXyaC5+iG4FNLalgIn+7TmiMF6dFpWKE/3l//H+FMa/eKtdjQV
-         b2t1KH73I1X8UOrAuB+6HwjDF9LeD7RXUtfzjOyCWm0RkZYVSGyuJ0201il+U2kVtKSb
-         WAUWqQfnmy5FeHo1KRPtKIbGM6U1/y6NqID4cjs+7MX6jSHD6qN4b0vmLOEgUCJbtkZq
-         Ufnqd7jlpG9qbMGL6wys7ddC/vUGPKq7BXnSDTT5zxUmA0K3l0HXWuIe5w0WKt7RLew3
-         zi8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=sB5cXzWSwS8xZ3/r8jsVyeeT+zbo9/MGNsGrKz2xEhE=;
-        b=GWal8wIu0N+Q4mouzhZzucYoMdGmOGkqVqUF8eOc1fgI/Yktv6IzgKkBqiLHCNdqEL
-         d1wD5EamdUR2IvqhDtc75Hfqiku8Kc0kWBu8VnIKZ0nBQRvDCKmWhhTbvHEyiOex4lAW
-         0xGYm2CHzX9tAfLFQIJd20RYo3rKNLOimnASTUL+NsfD3DqcxWc+Fxly/CnS7jsSH8Da
-         nOZYXt1pnD4g6iuQZRec+hFXwpm9H5E/ySvyExZbuQjBkYNs8gsCgJMKQVtjM9wzfny2
-         pz1EC0vVRwgHc1gzbHtgeAIfmAT6c+xc1K606LfIU0SWau+Kc1K+qna2Ws70gqYIWy+v
-         GWJQ==
-X-Gm-Message-State: AOAM533xJnoNSBAs5Vr68ev3bx5Irx+LmkuVldw9yHxrusGrHqMr7AU6
-        k1DhtazUQO8BMUPPSbnyFyg=
-X-Google-Smtp-Source: ABdhPJwaavyJz3F8NhRPdRYQHTMWe9HkuD/34zNDgHToIdid7v1qQ0w4/fYa9Ra8+cZM3P48DW8fmg==
-X-Received: by 2002:a4a:5258:: with SMTP id d85mr197181oob.72.1599594370867;
-        Tue, 08 Sep 2020 12:46:10 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z16sm31422oth.43.2020.09.08.12.46.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 08 Sep 2020 12:46:10 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH v2 5/5] media: uvcvideo: Abort uvc_v4l2_open if video device is unregistered
-Date:   Tue,  8 Sep 2020 12:45:57 -0700
-Message-Id: <20200908194557.198335-6-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200908194557.198335-1-linux@roeck-us.net>
-References: <20200908194557.198335-1-linux@roeck-us.net>
+        id S1728164AbgIHVmF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Sep 2020 17:42:05 -0400
+Received: from a27-56.smtp-out.us-west-2.amazonses.com ([54.240.27.56]:39660
+        "EHLO a27-56.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726002AbgIHVmE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Sep 2020 17:42:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1599601323;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        bh=MMxFcLq/Tfxamt12qfIPmZT++zwC8dnUjdn0xGbLW3U=;
+        b=debXvkyu72EYya7PdbCNUmN+h16i/lPTyspR6KFF6m/LAyr+SXMJExOpukZZZeHi
+        wgUuveROl9ULUoLEw2iGuFa9v2KHoidav3C70A31UH3iwsH9Lc6J5Z5Emhyr6+xp4Zc
+        SpA0rhwAlKIUREL4ynVVMhrGxzcRRRQhHs6r+fK4=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1599601323;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+        bh=MMxFcLq/Tfxamt12qfIPmZT++zwC8dnUjdn0xGbLW3U=;
+        b=jMIU9+tzOHKa1p8iYqB3w5iZc839HZk4rCz3mLXmG7n5XEgBLWoJr4RHRyZRhTry
+        dgzBa5oXNf7CcmUiuzASeRg/9hBqGvz4ejV8CRGNhwmhKkJSwHQw0AvIaInpJpISY38
+        qgISSPDUNGQZS2ls7KCcs97tMiU6Ts+ioBOTt+VE=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.5 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 037CAC433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v3] usb: dwc3: Stop active transfers before halting the
+ controller
+To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org
+References: <20200903210954.24504-1-wcheng@codeaurora.org>
+ <87o8mi151l.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <010101746fab2ee1-91b46c27-fef0-4266-94cb-14dea5ca350e-000000@us-west-2.amazonses.com>
+Date:   Tue, 8 Sep 2020 21:42:03 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <87o8mi151l.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SES-Outgoing: 2020.09.08-54.240.27.56
+Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-uvc_v4l2_open() acquires the uvc device mutex. After doing so,
-it does not check if the video device is still registered. This may
-result in race conditions and can result in an attempt to submit an urb
-to a disconnected USB interface (from uvc_status_start).
 
-The problem was observed after adding a call to msleep() just before
-acquiring the mutex and disconnecting the camera during the sleep.
 
-Check if the video device is still registered after acquiring the mutex
-to avoid the problem. In the release function, only call uvc_status_stop()
-if the video device is still registered. If the video device has been
-unregistered, the urb associated with uvc status has already been killed
-in uvc_status_unregister(). Trying to kill it again won't do any good
-and might have unexpected side effects.
+On 9/6/2020 11:20 PM, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Wesley Cheng <wcheng@codeaurora.org> writes:
+>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>> index 59f2e8c31bd1..456aa87e8778 100644
+>> --- a/drivers/usb/dwc3/ep0.c
+>> +++ b/drivers/usb/dwc3/ep0.c
+>> @@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+>>  	int				ret;
+>>  
+>>  	spin_lock_irqsave(&dwc->lock, flags);
+>> -	if (!dep->endpoint.desc) {
+>> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
+> 
+> this looks odd. If we don't have pullups connected, we shouldn't have a
+> descriptor, likewise if we don't have a a description, we haven't been
+> enumerated, therefore we shouldn't have pullups connected.
+> 
+> What am I missing here?
+> 
 
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: Fix typo in description. The USB message is sent from uvc_status_start()
-    in the open function, not from uvc_v4l2_open().
+Hi Felipe,
 
- drivers/media/usb/uvc/uvc_v4l2.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+When we
+echo "" > /sys/kernel/config/usb_gadget/g1/UDC
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 7e5e583dae5e..1f7d454557b9 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -548,6 +548,10 @@ static int uvc_v4l2_open(struct file *file)
- 	}
- 
- 	mutex_lock(&stream->dev->lock);
-+	if (!video_is_registered(&stream->vdev)) {
-+		mutex_unlock(&stream->dev->lock);
-+		return -ENODEV;
-+	}
- 	if (stream->dev->users == 0) {
- 		ret = uvc_status_start(stream->dev, GFP_KERNEL);
- 		if (ret < 0) {
-@@ -590,7 +594,7 @@ static int uvc_v4l2_release(struct file *file)
- 	file->private_data = NULL;
- 
- 	mutex_lock(&stream->dev->lock);
--	if (--stream->dev->users == 0)
-+	if (--stream->dev->users == 0 && video_is_registered(&stream->vdev))
- 		uvc_status_stop(stream->dev);
- 	mutex_unlock(&stream->dev->lock);
- 
+This triggers the usb_gadget_disconnect() routine to execute.
+
+int usb_gadget_disconnect(struct usb_gadget *gadget)
+{
+...
+	ret = gadget->ops->pullup(gadget, 0);
+	if (!ret) {
+		gadget->connected = 0;
+		gadget->udc->driver->disconnect(gadget);
+	}
+
+So it is possible that we've already disabled the pullup before running
+the disable() callbacks in the function drivers.  The disable()
+callbacks usually are the ones responsible for calling usb_ep_disable(),
+where we clear the desc field.  This means there is a brief period where
+the pullups_connected = 0, but we still have valid ep desc, as it has
+not been disabled yet.
+
+Also, for function drivers like mass storage, the fsg_disable() routine
+defers the actual usb_ep_disable() call to the fsg_thread, so its not
+always ensured that the disconnect() execution would result in the
+usb_ep_disable() to occur synchronously.
+
+>> @@ -1926,6 +1926,21 @@ static int dwc3_gadget_set_selfpowered(struct usb_gadget *g,
+>>  	return 0;
+>>  }
+>>  
+>> +static void dwc3_stop_active_transfers(struct dwc3 *dwc)
+>> +{
+>> +	u32 epnum;
+>> +
+>> +	for (epnum = 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
+> 
+> dwc3 knows the number of endpoints available in the HW. Use dwc->num_eps
+> instead.
+> 
+
+Sure, will do.
+
+>> @@ -1971,6 +1986,8 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
+>>  	return 0;
+>>  }
+>>  
+>> +static void __dwc3_gadget_stop(struct dwc3 *dwc);
+>> +
+>>  static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>  {
+>>  	struct dwc3		*dwc = gadget_to_dwc(g);
+>> @@ -1994,9 +2011,37 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>  		}
+>>  	}
+>>  
+>> +	/*
+>> +	 * Synchronize and disable any further event handling while controller
+>> +	 * is being enabled/disabled.
+>> +	 */
+>> +	disable_irq(dwc->irq_gadget);
+> 
+> why isn't dwc3_gadget_disable_irq() enough?
+> 
+>>  	spin_lock_irqsave(&dwc->lock, flags);
+> 
+> spin_lock_irqsave() will disable interrupts, why disable_irq() above?
+> 
+
+In the discussion I had with Thinh, the concern was that with the newly
+added code to override the lpos here, if the interrupt routine
+(dwc3_check_event_buf()) runs, then it will reference the lpos for
+copying the event buffer contents to the event cache, and potentially
+process events.  There is no locking in place, so it could be possible
+to have both run in parallel.
+
+Hence, the reason if there was already a pending IRQ triggered, the
+dwc3_gadget_disable_irq() won't ensure the IRQ is handled.  We can do
+something like:
+if (!is_on)
+	dwc3_gadget_disable_irq()
+synchronize_irq()
+spin_lock_irqsave()
+if(!is_on) {
+...
+
+But the logic to only apply this on the pullup removal case is a little
+messy.  Also, from my understanding, the spin_lock_irqsave() will only
+disable the local CPU IRQs, but not the interrupt line on the GIC, which
+means other CPUs can handle it, unless we explicitly set the IRQ
+affinity to CPUX.
+
+>> +	/* Controller is not halted until pending events are acknowledged */
+>> +	if (!is_on) {
+>> +		u32 count;
+>> +
+>> +		/*
+>> +		 * The databook explicitly mentions for a device-initiated
+>> +		 * disconnect sequence, the SW needs to ensure that it ends any
+>> +		 * active transfers.
+>> +		 */
+> 
+> make this a little better by mentioning the version and section of the
+> databook you're reading. That makes it easier for future
+> reference. Also, use an actual quote from the databook, along the lines
+> of:
+> 
+> 		/*
+>                  * Synopsys DesignWare Cores USB3 Databook Revision
+>                  * X.YYa states in section W.Z that "device-initiated
+>                  * disconnect ...."
+>                  */
+> 
+
+Got it.
+
+>> +		dwc3_stop_active_transfers(dwc);
+>> +		__dwc3_gadget_stop(dwc);
+>> +
+>> +		count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+>> +		count &= DWC3_GEVNTCOUNT_MASK;
+>> +		if (count > 0) {
+>> +			dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
+>> +			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
+>> +						dwc->ev_buf->length;
+>> +		}
+> 
+> don't duplicate code. Add a patch before this extracting this into
+> helper and use it for both irq handler and gadget pullup.
+> 
+
+We actually removed this call in the IRQ handler, as if we ensure that
+the IRQ routine has fully complete and won't trigger anymore, then this
+sequence will handle clearing of the event count.
+
+>> +	}
+>> +
+>>  	ret = dwc3_gadget_run_stop(dwc, is_on, false);
+>>  	spin_unlock_irqrestore(&dwc->lock, flags);
+>> +	enable_irq(dwc->irq_gadget);
+>>  
+>>  	return ret;
+>>  }
+>> @@ -3100,6 +3145,8 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+>>  	}
+>>  
+>>  	dwc3_reset_gadget(dwc);
+>> +	/* Stop any active/pending transfers when receiving bus reset */
+> 
+> unnecessary comment. We're calling a function named "stop active
+> transfers" from within the "bus reset handler".
+> 
+
+I can remove this.
+
+Thanks
+Wesley
+
 -- 
-2.17.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
