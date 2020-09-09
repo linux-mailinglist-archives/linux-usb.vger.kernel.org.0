@@ -2,506 +2,349 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E60D26366A
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 21:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5175A2636A7
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 21:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728971AbgIITDw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Sep 2020 15:03:52 -0400
-Received: from mail-bn8nam08on2057.outbound.protection.outlook.com ([40.107.100.57]:14817
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726642AbgIITDu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Sep 2020 15:03:50 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hFVdM/zZiLKVKwG+hgCzvI6ri+eZv7fxQRoLTGZQNO2tWvZCIpTm5QPlCbGMyTaKDjijwko7IzDV50g8QkB7O3EncQbEi6nH+qGen7tRDQtyj0VlTgUZPKCQvYmql+UO3of4Pf9QLwMxQIZcfuZji7j6dXY0hLcp445cmeYUR03HYr7lIwRI9ZWLfWarzMPY3dE/8YebVOgUWxt3MUIoBzT6sgKeoz9AciQ8yM9uVZ6uzXZI0Q8J3Ya78SyzcrlWodci0jtGaPHO5+2ItblFE+1uJrYBk7YFHnHlSJNS54mmGmSe52SSntUsGtD2N7TMjGzRkcbNhwndy1jjSS1uMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7WYPMeu4SXiMDUBFH0jpPYq+vQ6/ocF8+/zIOJ/+eCU=;
- b=hcGWZ2xpxLw+PF4OEMBIndTSHxyWOvXemV2R1VuagRPCEVM+2YYk5LDt4ZtBT79Mhzg6zjPVznwPJqHcw8K2wa/nljnAQXJsFcMVTao+vJvpx3RiSYMRvHLNa5yTIUqQyuqBgtFIJtIo+Tt5SKEHQt2T8GFvWOcNglJWNNjF+XLXGYXG28xcVwFARmicOb0b35mXGSI6o5Qt4Hs/O0G4+3CfANkOBOlVs2qcVdqNuOfCjbxsd3yN97M9yUFLXHA5NOJUoAaVz1UYZe19ZlRsnDjOsw5SVVYyEzG93TzQzB9FI+qCXag3Bzgkam5/bVfFTkkU2oib0ajXMHH0qSB3NA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
+        id S1726801AbgIITeq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 15:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725772AbgIITep (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Sep 2020 15:34:45 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16EDC061573;
+        Wed,  9 Sep 2020 12:34:44 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id l4so3474171ilq.2;
+        Wed, 09 Sep 2020 12:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7WYPMeu4SXiMDUBFH0jpPYq+vQ6/ocF8+/zIOJ/+eCU=;
- b=Mv4UYy8LKYytltUHmE2Po0rO/wbDEJvR3O6lc4eipr1uwq+O4Z6Qcd++rwgGIqTm/z4P7/DHFIxnsBtFUdIIEwyIYFgIVsFA6tvay6OqP9a3Cd0P697iZBG6+w6qpROfLtr6635gdds+oogRGrTO6DhJn6c3ziEM7MHLdDAfiZA=
-Received: from SA0PR11CA0029.namprd11.prod.outlook.com (2603:10b6:806:d3::34)
- by BYAPR02MB4053.namprd02.prod.outlook.com (2603:10b6:a02:f9::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15; Wed, 9 Sep
- 2020 19:03:44 +0000
-Received: from SN1NAM02FT052.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:d3:cafe::47) by SA0PR11CA0029.outlook.office365.com
- (2603:10b6:806:d3::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend
- Transport; Wed, 9 Sep 2020 19:03:44 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- SN1NAM02FT052.mail.protection.outlook.com (10.152.72.146) with Microsoft SMTP
- Server id 15.20.3348.17 via Frontend Transport; Wed, 9 Sep 2020 19:03:44
- +0000
-Received: from [149.199.38.66] (port=46265 helo=smtp.xilinx.com)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
-        (envelope-from <manish.narani@xilinx.com>)
-        id 1kG5NP-0000KS-Oz; Wed, 09 Sep 2020 12:03:27 -0700
-Received: from [127.0.0.1] (helo=localhost)
-        by smtp.xilinx.com with smtp (Exim 4.63)
-        (envelope-from <manish.narani@xilinx.com>)
-        id 1kG5Nf-0006rN-Sv; Wed, 09 Sep 2020 12:03:43 -0700
-Received: from [172.23.64.106] (helo=xhdvnc125.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <mnarani@xilinx.com>)
-        id 1kG5Nc-0006ql-Av; Wed, 09 Sep 2020 12:03:40 -0700
-Received: by xhdvnc125.xilinx.com (Postfix, from userid 16987)
-        id 768A61210FA; Thu, 10 Sep 2020 00:33:19 +0530 (IST)
-From:   Manish Narani <manish.narani@xilinx.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        michal.simek@xilinx.com, balbi@kernel.org, p.zabel@pengutronix.de
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com, Manish Narani <manish.narani@xilinx.com>
-Subject: [PATCH v2 2/2] usb: dwc3: Add driver for Xilinx platforms
-Date:   Thu, 10 Sep 2020 00:33:05 +0530
-Message-Id: <1599678185-119412-3-git-send-email-manish.narani@xilinx.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1599678185-119412-1-git-send-email-manish.narani@xilinx.com>
-References: <1599678185-119412-1-git-send-email-manish.narani@xilinx.com>
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HyNnJ/ORWt19mYZwXhNeGZixJ8qXb9id936qJJ9it9Q=;
+        b=rOjqfLof+Y/bvSwkGf6kdEjBg9ZUuevrxm1QEsA8ZsmcBDWBCvfY6ts0rZBacwJ5nR
+         A49DHNw38JGfZc5aJ9q9JMRgq2NfhZOCHAU5SSmakPsnNcIdi6QHV4Nwj/4Uq4aXqrz4
+         tvmbw83UXuPQjGplh36h0/ZzSUd5PIoS3tyIeBsv4ejjGdSfsB+qB4PXz1w+Efaqdzyu
+         +Vd9qz/iKwst0AbBCdU8Od68Tdf46KjMRV6MqCSbK4SpDWa9pv4vtuM/KY1LCOp3aF9T
+         QQ9RGmWMD5G68cjt2k5WUG42wr4FGQyjbyZ203MsIe7Ta3c3qe1EcV6e/YWl1I3Bw9PO
+         zgpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HyNnJ/ORWt19mYZwXhNeGZixJ8qXb9id936qJJ9it9Q=;
+        b=RttHZc7LjLx0c/FzCnPKZSORFgikWvJIitp0zEpKSeWoSGzTQyntUQS60sp/DO7nBV
+         QBx0cJOcJGOWcuM8Mnt/lJanhkL+cG7i9XCHaLuS2Fv923feMVkuoZbSMSg7WvyKhWRL
+         mWqAFCssPnQ2p1C3LavAvK5eucf7LFYteWt5YieURyCN/gkT0CkNd3r3kmNrIoL4VfkB
+         Ma8jeS/1oSbWPf6uuXPqin7WRCVvVZp6k0aRDQ0Y7mwKH7rZk4ZDxRwsDj5Rm6iOZay8
+         /rZWvYX4vvirL5d8z/DPYzCdhDilYbImkjU/vJMevp0hxh3rD1sxI35bDITbsdrePGOO
+         TOWA==
+X-Gm-Message-State: AOAM530mQM6WJuAem1gs0e9mO7wFxVPnVCp0GnOr20HO5Dtbatx6xKf3
+        endXvxpsl00+9gmV56lzucY0iB3oX64=
+X-Google-Smtp-Source: ABdhPJyqYBbUKL3KLe68lgpQyTjLs0vfece3S0yXF09QQF/wk3OS87JPRpz1vbKKn9Xvk4HmSS+tXw==
+X-Received: by 2002:a05:6e02:ed2:: with SMTP id i18mr3729535ilk.124.1599680079720;
+        Wed, 09 Sep 2020 12:34:39 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-238-150.hlrn.qwest.net. [71.218.238.150])
+        by smtp.gmail.com with ESMTPSA id e4sm1610567iom.14.2020.09.09.12.34.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2020 12:34:38 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        James Hilliard <james.hilliard1@gmail.com>,
+        Russ Dill <Russ.Dill@gmail.com>,
+        Hector Martin <hector@marcansoft.com>
+Subject: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
+Date:   Wed,  9 Sep 2020 13:34:18 -0600
+Message-Id: <20200909193419.2006744-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: b0775e7f-b2a6-408d-9a32-08d854f312c8
-X-MS-TrafficTypeDiagnostic: BYAPR02MB4053:
-X-Microsoft-Antispam-PRVS: <BYAPR02MB4053B5BF96ECD9384569CBBCC1260@BYAPR02MB4053.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CKRHkJK8YTgvRUKS0RFmUcGZ5g65LbFlV20KHdljSjNu0bXdkwjeucAd0S/VglVLIvFmCMIgaoEJCG7tzpwkvkM1Jmb0ie2uu9TLNp2KwgZ3EpgcDiRBhU7pwp+AAee1iQjyCBwLlFZqYQ5FkPdrHoEU2Xhi8JsAgmY8PRPUYsrOhqmvpDVGq75NSIxqO9m6gsKN5yTKvHw4phEQEgBsajcwvBAht7pH+aPBnVQpQD0jroS0AN6q1yBQdixUXPvbdu6eEZ+sTIimpwlQZoM4PEHUuTtvOvYyK0BdxAS0adWJx5VICGWI4bnD1mDYFnUsYpZZ5VMYomYLiCaQM6cTrPe8826AiTxUS4qVKY8WG4n4OPuyvumUgoKiTCrjiGe92ar+lgrnTXF/MQjVCLzDtQ==
-X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFS:(136003)(39860400002)(376002)(396003)(346002)(46966005)(44832011)(6666004)(30864003)(36756003)(5660300002)(2616005)(81166007)(336012)(82740400003)(83380400001)(26005)(186003)(426003)(70206006)(70586007)(356005)(47076004)(82310400003)(4326008)(6266002)(2906002)(8936002)(42186006)(8676002)(478600001)(316002)(107886003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2020 19:03:44.1737
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0775e7f-b2a6-408d-9a32-08d854f312c8
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT052.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4053
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a new driver for supporting Xilinx platforms. This driver is used
-for some sequence of operations required for Xilinx USB controllers.
-This driver is also used to choose between PIPE clock coming from SerDes
-and the Suspend Clock. Before the controller is out of reset, the clock
-selection should be changed to PIPE clock in order to make the USB
-controller work. There is a register added in Xilinx USB controller
-register space for the same.
+This patch detects and reverses the effects of the malicious FTDI
+Windows driver version 2.12.00(FTDIgate).
 
-Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+While we currently load the ftdi_sio driver for devices with
+FTDI_BRICK_PID(0x0000) userspace applications that expect the
+appropriate FTDI_8U232AM_PID(0x6001) PID may not work properly.
+
+Since the malicious FTDI driver modifies the PID without modifying
+the normal checksum field we can detect and limit the unbricking
+to devices that were bricked specifically using the FTDI checksum
+preimage attack technique used by the official Windows drivers.
+
+This should have no effect on devices where the PID was deliberately
+set to FTDI_BRICK_PID(0x0000) as the checksum would normally change
+and the preimage target(address 62) should be 0. We validate that
+the preimage target is not 0 before attempting to unbrick.
+
+Since we only write to even addresses this should have no effect at
+all on non-counterfeit FTDI hardware due to the hardware only
+committing EEPROM writes when odd addresses are written.
+
+References:
+https://marcan.st/transf/detect_ftdi_clone.py
+https://hackaday.com/2014/10/22/watch-that-windows-update-ftdi-drivers-are-killing-fake-chips/
+https://www.eevblog.com/forum/reviews/ftdi-driver-kills-fake-ftdi-ft232/msg535270/#msg535270
+https://lkml.org/lkml/2014/10/23/266
+https://lore.kernel.org/patchwork/patch/509929/
+https://lore.kernel.org/patchwork/patch/510097/
+
+Signed-off-by: Russ Dill <Russ.Dill@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Cc: Hector Martin <hector@marcansoft.com>
 ---
- drivers/usb/dwc3/Kconfig          |   9 +
- drivers/usb/dwc3/Makefile         |   1 +
- drivers/usb/dwc3/dwc3-of-simple.c |   1 -
- drivers/usb/dwc3/dwc3-xilinx.c    | 334 ++++++++++++++++++++++++++++++
- 4 files changed, 344 insertions(+), 1 deletion(-)
- create mode 100644 drivers/usb/dwc3/dwc3-xilinx.c
+Changes v1 -> v2:
+  - Move ftdi_read_eeprom and ftdi_write_eeprom outside #ifdef CONFIG_GPIOLIB
+---
+ drivers/usb/serial/ftdi_sio.c | 181 +++++++++++++++++++++++++++-------
+ drivers/usb/serial/ftdi_sio.h |   4 +
+ 2 files changed, 152 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index 7a2304565a73..0e00e6dfccd8 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -139,4 +139,13 @@ config USB_DWC3_QCOM
- 	  for peripheral mode support.
- 	  Say 'Y' or 'M' if you have one such device.
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index 871cdccf3a5f..85324e2ea107 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1062,6 +1062,9 @@ static const char *ftdi_chip_name[] = {
+ /* function prototypes for a FTDI serial converter */
+ static int  ftdi_sio_probe(struct usb_serial *serial,
+ 					const struct usb_device_id *id);
++static int  ftdi_read_eeprom(struct usb_serial *serial, void *dst, u16 addr,
++					u16 nbytes);
++static int  ftdi_write_eeprom(struct usb_serial_port *port, u8 addr, u16 data);
+ static int  ftdi_sio_port_probe(struct usb_serial_port *port);
+ static int  ftdi_sio_port_remove(struct usb_serial_port *port);
+ static int  ftdi_open(struct tty_struct *tty, struct usb_serial_port *port);
+@@ -1996,39 +1999,6 @@ static int ftdi_gpio_direction_output(struct gpio_chip *gc, unsigned int gpio,
+ 	return result;
+ }
  
-+config USB_DWC3_XILINX
-+	tristate "Xilinx Platforms"
-+	depends on (ARCH_ZYNQMP || ARCH_VERSAL) && OF
-+	default USB_DWC3
-+	help
-+	  Support Xilinx SoCs with DesignWare Core USB3 IP.
-+	  This driver handles both ZynqMP and Versal SoC operations.
-+	  Say 'Y' or 'M' if you have one such device.
-+
- endif
-diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
-index ae86da0dc5bd..add567578b1f 100644
---- a/drivers/usb/dwc3/Makefile
-+++ b/drivers/usb/dwc3/Makefile
-@@ -51,3 +51,4 @@ obj-$(CONFIG_USB_DWC3_MESON_G12A)	+= dwc3-meson-g12a.o
- obj-$(CONFIG_USB_DWC3_OF_SIMPLE)	+= dwc3-of-simple.o
- obj-$(CONFIG_USB_DWC3_ST)		+= dwc3-st.o
- obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
-+obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
-diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-index 7df115012935..e3a485b76818 100644
---- a/drivers/usb/dwc3/dwc3-of-simple.c
-+++ b/drivers/usb/dwc3/dwc3-of-simple.c
-@@ -172,7 +172,6 @@ static const struct dev_pm_ops dwc3_of_simple_dev_pm_ops = {
+-static int ftdi_read_eeprom(struct usb_serial *serial, void *dst, u16 addr,
+-				u16 nbytes)
+-{
+-	int read = 0;
+-
+-	if (addr % 2 != 0)
+-		return -EINVAL;
+-	if (nbytes % 2 != 0)
+-		return -EINVAL;
+-
+-	/* Read EEPROM two bytes at a time */
+-	while (read < nbytes) {
+-		int rv;
+-
+-		rv = usb_control_msg(serial->dev,
+-				     usb_rcvctrlpipe(serial->dev, 0),
+-				     FTDI_SIO_READ_EEPROM_REQUEST,
+-				     FTDI_SIO_READ_EEPROM_REQUEST_TYPE,
+-				     0, (addr + read) / 2, dst + read, 2,
+-				     WDR_TIMEOUT);
+-		if (rv < 2) {
+-			if (rv >= 0)
+-				return -EIO;
+-			else
+-				return rv;
+-		}
+-
+-		read += rv;
+-	}
+-
+-	return 0;
+-}
+-
+ static int ftdi_gpio_init_ft232h(struct usb_serial_port *port)
+ {
+ 	struct ftdi_private *priv = usb_get_serial_port_data(port);
+@@ -2234,10 +2204,149 @@ static int ftdi_sio_probe(struct usb_serial *serial,
+ 	return 0;
+ }
  
- static const struct of_device_id of_dwc3_simple_match[] = {
- 	{ .compatible = "rockchip,rk3399-dwc3" },
--	{ .compatible = "xlnx,zynqmp-dwc3" },
- 	{ .compatible = "cavium,octeon-7130-usb-uctl" },
- 	{ .compatible = "sprd,sc9860-dwc3" },
- 	{ .compatible = "allwinner,sun50i-h6-dwc3" },
-diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-new file mode 100644
-index 000000000000..7e485951d2f7
---- /dev/null
-+++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -0,0 +1,334 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * dwc3-xilinx.c - Xilinx DWC3 controller specific glue driver
-+ *
-+ * Authors: Manish Narani <manish.narani@xilinx.com>
-+ *          Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include <linux/clk.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/of_platform.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+#include <linux/of_address.h>
-+#include <linux/delay.h>
-+#include <linux/firmware/xlnx-zynqmp.h>
-+#include <linux/io.h>
-+
-+#include <linux/phy/phy.h>
-+
-+/* USB phy reset mask register */
-+#define XLNX_USB_PHY_RST_EN			0x001C
-+#define XLNX_PHY_RST_MASK			0x1
-+
-+/* Xilinx USB 3.0 IP Register */
-+#define XLNX_USB_TRAFFIC_ROUTE_CONFIG		0x005C
-+#define XLNX_USB_TRAFFIC_ROUTE_FPD		0x1
-+
-+/* Versal USB Reset ID */
-+#define VERSAL_USB_RESET_ID			0xC104036
-+
-+#define XLNX_USB_FPD_PIPE_CLK			0x7c
-+#define PIPE_CLK_DESELECT			1
-+#define PIPE_CLK_SELECT				0
-+#define XLNX_USB_FPD_POWER_PRSNT		0x80
-+#define PIPE_POWER_ON				1
-+#define PIPE_POWER_OFF				0
-+
-+struct dwc3_xlnx {
-+	int				num_clocks;
-+	struct clk_bulk_data		*clks;
-+	struct device			*dev;
-+	void __iomem			*regs;
-+	int				(*pltfm_init)(struct dwc3_xlnx *data);
-+};
-+
-+static void dwc3_xlnx_mask_phy_rst(struct dwc3_xlnx *priv_data, bool mask)
++static int ftdi_read_eeprom(struct usb_serial *serial, void *dst, u16 addr,
++				u16 nbytes)
 +{
-+	u32 reg;
++	int read = 0;
 +
-+	/*
-+	 * Enable or disable ULPI PHY reset from USB Controller.
-+	 * This does not actually reset the phy, but just controls
-+	 * whether USB controller can or cannot reset ULPI PHY.
-+	 */
-+	reg = readl(priv_data->regs + XLNX_USB_PHY_RST_EN);
++	if (addr % 2 != 0)
++		return -EINVAL;
++	if (nbytes % 2 != 0)
++		return -EINVAL;
 +
-+	if (mask)
-+		reg &= ~XLNX_PHY_RST_MASK;
-+	else
-+		reg |= XLNX_PHY_RST_MASK;
++	/* Read EEPROM two bytes at a time */
++	while (read < nbytes) {
++		int rv;
 +
-+	writel(reg, priv_data->regs + XLNX_USB_PHY_RST_EN);
-+}
++		rv = usb_control_msg(serial->dev,
++				     usb_rcvctrlpipe(serial->dev, 0),
++				     FTDI_SIO_READ_EEPROM_REQUEST,
++				     FTDI_SIO_READ_EEPROM_REQUEST_TYPE,
++				     0, (addr + read) / 2, dst + read, 2,
++				     WDR_TIMEOUT);
++		if (rv < 2) {
++			if (rv >= 0)
++				return -EIO;
++			else
++				return rv;
++		}
 +
-+static int dwc3_xlnx_init_versal(struct dwc3_xlnx *priv_data)
-+{
-+	struct device		*dev = priv_data->dev;
-+	int			ret;
-+
-+	dwc3_xlnx_mask_phy_rst(priv_data, false);
-+
-+	/* Assert and De-assert reset */
-+	ret = zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
-+				     PM_RESET_ACTION_ASSERT);
-+	if (ret < 0) {
-+		dev_err_probe(dev, ret, "failed to assert Reset\n");
-+		return ret;
++		read += rv;
 +	}
-+
-+	ret = zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
-+				     PM_RESET_ACTION_RELEASE);
-+	if (ret < 0) {
-+		dev_err_probe(dev, ret, "failed to De-assert Reset\n");
-+		return ret;
-+	}
-+
-+	dwc3_xlnx_mask_phy_rst(priv_data, true);
 +
 +	return 0;
 +}
 +
-+static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
++static int ftdi_write_eeprom(struct usb_serial_port *port, u8 addr, u16 data)
 +{
-+	struct device		*dev = priv_data->dev;
-+	struct reset_control	*crst, *hibrst, *apbrst;
-+	struct phy		*usb3_phy;
-+	int			ret;
-+	u32			reg;
++	struct usb_device *udev = port->serial->dev;
++	int rv;
 +
-+	crst = devm_reset_control_get_exclusive(dev, "usb_crst");
-+	if (IS_ERR(crst)) {
-+		ret = PTR_ERR(crst);
-+		dev_err_probe(dev, ret,
-+			      "failed to get core reset signal\n");
-+		goto err;
-+	}
-+
-+	hibrst = devm_reset_control_get_exclusive(dev, "usb_hibrst");
-+	if (IS_ERR(hibrst)) {
-+		ret = PTR_ERR(hibrst);
-+		dev_err_probe(dev, ret,
-+			      "failed to get hibernation reset signal\n");
-+		goto err;
-+	}
-+
-+	apbrst = devm_reset_control_get_exclusive(dev, "usb_apbrst");
-+	if (IS_ERR(apbrst)) {
-+		ret = PTR_ERR(apbrst);
-+		dev_err_probe(dev, ret,
-+			      "failed to get APB reset signal\n");
-+		goto err;
-+	}
-+
-+	ret = reset_control_assert(crst);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to assert core reset\n");
-+		goto err;
-+	}
-+
-+	ret = reset_control_assert(hibrst);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to assert hibernation reset\n");
-+		goto err;
-+	}
-+
-+	ret = reset_control_assert(apbrst);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to assert APB reset\n");
-+		goto err;
-+	}
-+
-+	usb3_phy = devm_phy_get(dev, "usb3-phy");
-+
-+	ret = phy_init(usb3_phy);
-+	if (ret < 0) {
-+		phy_exit(usb3_phy);
-+		goto err;
-+	}
-+
-+	ret = reset_control_deassert(apbrst);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to release APB reset\n");
-+		goto err;
-+	}
-+
-+	/* Set PIPE Power Present signal in FPD Power Present Register*/
-+	writel(PIPE_POWER_ON, priv_data->regs + XLNX_USB_FPD_POWER_PRSNT);
-+
-+	/* Set the PIPE Clock Select bit in FPD PIPE Clock register */
-+	writel(PIPE_CLK_SELECT, priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
-+
-+	ret = reset_control_deassert(crst);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to release core reset\n");
-+		goto err;
-+	}
-+
-+	ret = reset_control_deassert(hibrst);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to release hibernation reset\n");
-+		goto err;
-+	}
-+
-+	ret = phy_power_on(usb3_phy);
-+	if (ret < 0) {
-+		phy_exit(usb3_phy);
-+		goto err;
-+	}
-+
-+	/*
-+	 * This routes the USB DMA traffic to go through FPD path instead
-+	 * of reaching DDR directly. This traffic routing is needed to
-+	 * make SMMU and CCI work with USB DMA.
-+	 */
-+	if (of_dma_is_coherent(dev->of_node) || device_iommu_mapped(dev)) {
-+		reg = readl(priv_data->regs + XLNX_USB_TRAFFIC_ROUTE_CONFIG);
-+		reg |= XLNX_USB_TRAFFIC_ROUTE_FPD;
-+		writel(reg, priv_data->regs + XLNX_USB_TRAFFIC_ROUTE_CONFIG);
-+	}
-+
-+err:
-+	return ret;
++	rv = usb_control_msg(udev,
++			     usb_sndctrlpipe(udev, 0),
++			     FTDI_SIO_WRITE_EEPROM_REQUEST,
++			     FTDI_SIO_WRITE_EEPROM_REQUEST_TYPE,
++			     data, addr,
++			     NULL, 0, WDR_TIMEOUT);
++	if (rv < 0)
++		dev_err(&port->dev, "Unable to write EEPROM: %i\n", rv);
++	return rv;
 +}
 +
-+static const struct of_device_id dwc3_xlnx_of_match[] = {
-+	{
-+		.compatible = "xlnx,zynqmp-dwc3",
-+		.data = &dwc3_xlnx_init_zynqmp,
-+	},
-+	{
-+		.compatible = "xlnx,versal-dwc3",
-+		.data = &dwc3_xlnx_init_versal,
-+	},
-+	{ /* Sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, dwc3_xlnx_of_match);
-+
-+static int dwc3_xlnx_probe(struct platform_device *pdev)
++static u16 ftdi_checksum(u16 *data, int n)
 +{
-+	struct dwc3_xlnx		*priv_data;
-+	struct device			*dev = &pdev->dev;
-+	struct device_node		*np = dev->of_node;
-+	const struct of_device_id	*match;
-+	void __iomem			*regs;
-+	int				ret;
++	u16 checksum;
++	int i;
 +
-+	priv_data = devm_kzalloc(dev, sizeof(*priv_data), GFP_KERNEL);
-+	if (!priv_data)
++	checksum = 0xaaaa;
++	for (i = 0; i < n - 1; i++) {
++		checksum ^= be16_to_cpu(data[i]);
++		checksum = (checksum << 1) | (checksum >> 15);
++	}
++
++	return cpu_to_be16(checksum);
++}
++
++static int ftdi_repair_brick(struct usb_serial_port *port)
++{
++	struct ftdi_private *priv = usb_get_serial_port_data(port);
++	int orig_latency;
++	int rv;
++	u16 *eeprom_data;
++	u16 checksum;
++	int eeprom_size;
++	int result;
++
++	switch (priv->chip_type) {
++	case FT232RL:
++		eeprom_size = 0x40;
++		break;
++	default:
++		/* Unsupported for brick repair */
++		return 0;
++	}
++
++	/* Latency timer needs to be 0x77 to unlock EEPROM programming */
++	if (priv->latency != 0x77) {
++		orig_latency = priv->latency;
++		priv->latency = 0x77;
++		rv = write_latency_timer(port);
++		priv->latency = orig_latency;
++		if (rv < 0)
++			return -EIO;
++	}
++
++	eeprom_data = kmalloc(eeprom_size * 2, GFP_KERNEL);
++	if (!eeprom_data)
 +		return -ENOMEM;
 +
-+	regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(regs)) {
-+		ret = PTR_ERR(regs);
-+		dev_err_probe(dev, ret, "failed to map registers\n");
-+		return ret;
-+	}
++	/* Read in EEPROM */
++	result = ftdi_read_eeprom(port->serial, eeprom_data, 0x00, eeprom_size * 2);
++	if (result < 0)
++		goto end_repair_brick;
 +
-+	match = of_match_node(dwc3_xlnx_of_match, pdev->dev.of_node);
++	/* Verify EEPROM is valid */
++	checksum = ftdi_checksum(eeprom_data, eeprom_size);
++	if (checksum != eeprom_data[eeprom_size - 1])
++		goto end_repair_brick;
 +
-+	priv_data->pltfm_init = match->data;
-+	priv_data->regs = regs;
-+	priv_data->dev = dev;
++	/* Skip if no preimage attack against target address 62 */
++	if (eeprom_data[62] == 0)
++		goto end_repair_brick;
 +
-+	platform_set_drvdata(pdev, priv_data);
++	/* Attempt to restore Product ID to 0x6001 */
++	eeprom_data[2] = FTDI_8U232AM_PID;
 +
-+	ret = devm_clk_bulk_get_all(priv_data->dev, &priv_data->clks);
-+	if (ret < 0)
-+		return ret;
++	/* Clear preimage attack target address */
++	eeprom_data[62] = 0;
 +
-+	priv_data->num_clocks = ret;
++	/* Calculate and verify new checksum */
++	checksum = ftdi_checksum(eeprom_data, eeprom_size);
++	if (checksum != eeprom_data[eeprom_size - 1])
++		goto end_repair_brick;
 +
-+	ret = clk_bulk_prepare_enable(priv_data->num_clocks, priv_data->clks);
-+	if (ret)
-+		return ret;
++	/* Restore EEPROM PID to original pre-brick state */
++	if (ftdi_write_eeprom(port, 2, eeprom_data[2]) < 0)
++		goto end_repair_brick;
 +
-+	ret = priv_data->pltfm_init(priv_data);
-+	if (ret)
-+		goto err_clk_put;
++	/* Restore EEPROM preimage target address to original pre-brick state */
++	if (ftdi_write_eeprom(port, 62, eeprom_data[62]) < 0)
++		goto end_repair_brick;
 +
-+	ret = of_platform_populate(np, NULL, NULL, dev);
-+	if (ret)
-+		goto err_clk_put;
++	dev_info(&port->dev, "Successfully repaired eeprom bricked by FTDI's malicious Windows driver.\n");
 +
-+	pm_runtime_set_active(dev);
-+	pm_runtime_enable(dev);
-+	pm_suspend_ignore_children(dev, false);
-+	pm_runtime_get_sync(dev);
++end_repair_brick:
++	kfree(eeprom_data);
 +
-+	return 0;
-+
-+err_clk_put:
-+	clk_bulk_disable_unprepare(priv_data->num_clocks, priv_data->clks);
-+	clk_bulk_put_all(priv_data->num_clocks, priv_data->clks);
-+
-+	return ret;
++	return result;
 +}
 +
-+static int dwc3_xlnx_remove(struct platform_device *pdev)
-+{
-+	struct dwc3_xlnx	*priv_data = platform_get_drvdata(pdev);
-+	struct device		*dev = &pdev->dev;
+ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+ {
+ 	struct ftdi_private *priv;
+ 	const struct ftdi_sio_quirk *quirk = usb_get_serial_data(port->serial);
++	u16 vendor_id;
++	u16 product_id;
+ 	int result;
+ 
+ 	priv = kzalloc(sizeof(struct ftdi_private), GFP_KERNEL);
+@@ -2255,6 +2364,12 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+ 	ftdi_set_max_packet_size(port);
+ 	if (read_latency_timer(port) < 0)
+ 		priv->latency = 16;
++	vendor_id = le16_to_cpu(port->serial->dev->descriptor.idVendor);
++	product_id = le16_to_cpu(port->serial->dev->descriptor.idProduct);
++	if (vendor_id == FTDI_VID &&
++		product_id == FTDI_BRICK_PID &&
++		priv->chip_type == FT232RL)
++		ftdi_repair_brick(port);
+ 	write_latency_timer(port);
+ 	create_sysfs_attrs(port);
+ 
+diff --git a/drivers/usb/serial/ftdi_sio.h b/drivers/usb/serial/ftdi_sio.h
+index be1641e0408b..40c6c4372a34 100644
+--- a/drivers/usb/serial/ftdi_sio.h
++++ b/drivers/usb/serial/ftdi_sio.h
+@@ -39,6 +39,7 @@
+ #define FTDI_SIO_SET_BITMODE		0x0b /* Set bitbang mode */
+ #define FTDI_SIO_READ_PINS		0x0c /* Read immediate value of pins */
+ #define FTDI_SIO_READ_EEPROM		0x90 /* Read EEPROM */
++#define FTDI_SIO_WRITE_EEPROM		0x91 /* Write EEPROM */
+ 
+ /* Interface indices for FT2232, FT2232H and FT4232H devices */
+ #define INTERFACE_A		1
+@@ -457,6 +458,9 @@ enum ftdi_sio_baudrate {
+ #define FTDI_SIO_READ_EEPROM_REQUEST_TYPE 0xc0
+ #define FTDI_SIO_READ_EEPROM_REQUEST FTDI_SIO_READ_EEPROM
+ 
++#define FTDI_SIO_WRITE_EEPROM_REQUEST_TYPE 0x40
++#define FTDI_SIO_WRITE_EEPROM_REQUEST FTDI_SIO_WRITE_EEPROM
 +
-+	of_platform_depopulate(dev);
-+
-+	clk_bulk_disable_unprepare(priv_data->num_clocks, priv_data->clks);
-+	clk_bulk_put_all(priv_data->num_clocks, priv_data->clks);
-+	priv_data->num_clocks = 0;
-+
-+	pm_runtime_disable(dev);
-+	pm_runtime_put_noidle(dev);
-+	pm_runtime_set_suspended(dev);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused dwc3_xlnx_suspend_common(struct device *dev)
-+{
-+	struct dwc3_xlnx *priv_data = dev_get_drvdata(dev);
-+
-+	clk_bulk_disable(priv_data->num_clocks, priv_data->clks);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused dwc3_xlnx_resume_common(struct device *dev)
-+{
-+	struct dwc3_xlnx *priv_data = dev_get_drvdata(dev);
-+
-+	return clk_bulk_enable(priv_data->num_clocks, priv_data->clks);
-+}
-+
-+static int __maybe_unused dwc3_xlnx_runtime_idle(struct device *dev)
-+{
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_autosuspend(dev);
-+
-+	return 0;
-+}
-+
-+static UNIVERSAL_DEV_PM_OPS(dwc3_xlnx_dev_pm_ops, dwc3_xlnx_suspend_common,
-+			    dwc3_xlnx_resume_common, dwc3_xlnx_runtime_idle);
-+
-+static struct platform_driver dwc3_xlnx_driver = {
-+	.probe		= dwc3_xlnx_probe,
-+	.remove		= dwc3_xlnx_remove,
-+	.driver		= {
-+		.name		= "dwc3-xilinx",
-+		.of_match_table	= dwc3_xlnx_of_match,
-+		.pm		= &dwc3_xlnx_dev_pm_ops,
-+	},
-+};
-+
-+module_platform_driver(dwc3_xlnx_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("Xilinx DWC3 controller specific glue driver");
-+MODULE_AUTHOR("Manish Narani <manish.narani@xilinx.com>");
-+MODULE_AUTHOR("Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>");
+ #define FTDI_FTX_CBUS_MUX_GPIO		0x8
+ #define FTDI_FT232R_CBUS_MUX_GPIO	0xa
+ 
 -- 
-2.17.1
+2.25.1
 
