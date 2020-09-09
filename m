@@ -2,116 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1525262605
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 05:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB77826266C
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 06:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726726AbgIID5t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Sep 2020 23:57:49 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:47667 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726226AbgIID5s (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Sep 2020 23:57:48 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A5811806B5;
-        Wed,  9 Sep 2020 15:57:44 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1599623864;
-        bh=oy6vEeRGVNHpSwqfZtf5OR46azHgDDplVuor0K5/zsE=;
-        h=From:To:Cc:Subject:Date;
-        b=KRsh+FspnOx9utk291uXAxP36UC1ZjZOIy0vO4fecPF3DJPlmrsudXQW8vyFDGHjw
-         hlfqmF0dC1o/h0sGXFkf6RqAkHYntDRbIhzC6Rlv3WpHrguxMQ7D28fgfzPQ2VK2mM
-         dvOyu/AWgnAlp+9jSKPeXYGAQLjCxjtZK73D3Eaa4+EK6PKYSOK9sAnxqqpFD0TLQd
-         E+MVxBsWhpGHUO5OiQqbDeNaFarrAyz7wghcLTNiXloowo+x4uBhHYtWDVLsNFjwvy
-         VUMu3DmLX7yKGnWuu3avTPREeTwjlAExYFukUfzDPov7MneyZsJv0tVPuqvozTWSG0
-         VzobQBtUaH7tw==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f5852b90000>; Wed, 09 Sep 2020 15:57:45 +1200
-Received: from hamishm-dl.ws.atlnz.lc (hamishm-dl.ws.atlnz.lc [10.33.24.30])
-        by smtp (Postfix) with ESMTP id 13A2F13EEB7;
-        Wed,  9 Sep 2020 15:57:44 +1200 (NZST)
-Received: by hamishm-dl.ws.atlnz.lc (Postfix, from userid 1133)
-        id 64BEB2A2ADF; Wed,  9 Sep 2020 15:57:44 +1200 (NZST)
-From:   Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-Subject: [PATCH] usb: ohci: Default to per-port over-current protection
-Date:   Wed,  9 Sep 2020 15:57:34 +1200
-Message-Id: <20200909035734.22463-1-hamish.martin@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.28.0
+        id S1725840AbgIIEnT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 00:43:19 -0400
+Received: from mga05.intel.com ([192.55.52.43]:6079 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725811AbgIIEnQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Sep 2020 00:43:16 -0400
+IronPort-SDR: la5aqwbYGXrIofkVI0ifI7YL9OK/Vyfv2h0yhBVdi6+85TWvcDPK2pD3b/td6eLTwKa2cceGNn
+ cqKrklyHE5nQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9738"; a="243084175"
+X-IronPort-AV: E=Sophos;i="5.76,408,1592895600"; 
+   d="scan'208";a="243084175"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2020 21:43:15 -0700
+IronPort-SDR: qudUQnPsndW+/4lmp0X2l/xnS7mqJ3YCPXx/wHYzaCd0IzVPT1yErdmrl6GW8KvkStdiRV0U8W
+ nfQoPVNcajQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,408,1592895600"; 
+   d="scan'208";a="505319925"
+Received: from lkp-server01.sh.intel.com (HELO 12ff3cf3f2e9) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Sep 2020 21:43:14 -0700
+Received: from kbuild by 12ff3cf3f2e9 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kFrwv-00001N-En; Wed, 09 Sep 2020 04:43:13 +0000
+Date:   Wed, 09 Sep 2020 12:42:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [balbi-usb:testing/fixes] BUILD SUCCESS
+ 51609fba0cca69206a213171ce0cdf2dfc9cb21d
+Message-ID: <5f585d2d.Ag27ON0pIxLGRQvc%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some integrated OHCI controller hubs do not expose all ports of the hub
-to pins on the SoC. In some cases the unconnected ports generate
-spurious over-current events. For example the Broadcom 56060/Ranger 2 SoC
-contains a nominally 3 port hub but only the first port is wired.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/fixes
+branch HEAD: 51609fba0cca69206a213171ce0cdf2dfc9cb21d  usb: dwc3: simple: add support for Hikey 970
 
-Default behaviour for ohci-platform driver is to use global over-current
-protection mode (AKA "ganged"). This leads to the spurious over-current
-events affecting all ports in the hub.
+elapsed time: 726m
 
-We now alter the default to use per-port over-current protection.
+configs tested: 167
+configs skipped: 17
 
-This patch results in the following configuration changes depending
-on quirks:
-- For quirk OHCI_QUIRK_SUPERIO no changes. These systems remain set up
-  for ganged power switching and no over-current protection.
-- For quirk OHCI_QUIRK_AMD756 or OHCI_QUIRK_HUB_POWER power switching
-  remains at none, while over-current protection is now guaranteed to be
-  set to per-port rather than the previous behaviour where it was either
-  none or global over-current protection depending on the value at
-  function entry.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+arm                       omap2plus_defconfig
+powerpc                    adder875_defconfig
+mips                            ar7_defconfig
+arm                           omap1_defconfig
+sh                           se7619_defconfig
+mips                           ip28_defconfig
+mips                          malta_defconfig
+powerpc                       holly_defconfig
+arm                        mvebu_v7_defconfig
+arc                     nsimosci_hs_defconfig
+sh                        sh7763rdp_defconfig
+sh                          r7785rp_defconfig
+mips                           rs90_defconfig
+m68k                       m5275evb_defconfig
+arm                          exynos_defconfig
+mips                malta_kvm_guest_defconfig
+m68k                        m5407c3_defconfig
+c6x                              allyesconfig
+mips                            gpr_defconfig
+sh                           se7780_defconfig
+powerpc                           allnoconfig
+s390                       zfcpdump_defconfig
+nios2                               defconfig
+arc                        vdk_hs38_defconfig
+ia64                      gensparse_defconfig
+c6x                        evmc6457_defconfig
+m68k                            q40_defconfig
+sparc                            allyesconfig
+sh                   secureedge5410_defconfig
+um                            kunit_defconfig
+sh                           se7721_defconfig
+sh                                  defconfig
+arm                              zx_defconfig
+arm                  colibri_pxa270_defconfig
+arm                          pxa168_defconfig
+arm                        spear6xx_defconfig
+ia64                          tiger_defconfig
+microblaze                      mmu_defconfig
+powerpc                     mpc512x_defconfig
+arm                          collie_defconfig
+arm                          moxart_defconfig
+mips                     cu1000-neo_defconfig
+arc                            hsdk_defconfig
+powerpc                          allmodconfig
+s390                                defconfig
+arm                         hackkit_defconfig
+powerpc                 linkstation_defconfig
+arm                      footbridge_defconfig
+xtensa                              defconfig
+c6x                         dsk6455_defconfig
+h8300                            alldefconfig
+sh                        sh7785lcr_defconfig
+arc                          axs103_defconfig
+mips                         rt305x_defconfig
+arm                         s3c2410_defconfig
+riscv                            allmodconfig
+m68k                        stmark2_defconfig
+powerpc                         ps3_defconfig
+arm                        trizeps4_defconfig
+powerpc                  mpc885_ads_defconfig
+sh                         apsh4a3a_defconfig
+mips                         tb0287_defconfig
+arc                          axs101_defconfig
+sh                        apsh4ad0a_defconfig
+arm                            zeus_defconfig
+c6x                        evmc6472_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                             defconfig
+x86_64               randconfig-a006-20200907
+x86_64               randconfig-a004-20200907
+x86_64               randconfig-a003-20200907
+x86_64               randconfig-a005-20200907
+x86_64               randconfig-a001-20200907
+x86_64               randconfig-a002-20200907
+i386                 randconfig-a004-20200908
+i386                 randconfig-a005-20200908
+i386                 randconfig-a006-20200908
+i386                 randconfig-a002-20200908
+i386                 randconfig-a001-20200908
+i386                 randconfig-a003-20200908
+i386                 randconfig-a004-20200907
+i386                 randconfig-a005-20200907
+i386                 randconfig-a006-20200907
+i386                 randconfig-a002-20200907
+i386                 randconfig-a003-20200907
+i386                 randconfig-a001-20200907
+i386                 randconfig-a004-20200909
+i386                 randconfig-a005-20200909
+i386                 randconfig-a006-20200909
+i386                 randconfig-a002-20200909
+i386                 randconfig-a001-20200909
+i386                 randconfig-a003-20200909
+x86_64               randconfig-a013-20200908
+x86_64               randconfig-a016-20200908
+x86_64               randconfig-a011-20200908
+x86_64               randconfig-a012-20200908
+x86_64               randconfig-a015-20200908
+x86_64               randconfig-a014-20200908
+i386                 randconfig-a016-20200907
+i386                 randconfig-a015-20200907
+i386                 randconfig-a011-20200907
+i386                 randconfig-a013-20200907
+i386                 randconfig-a014-20200907
+i386                 randconfig-a012-20200907
+i386                 randconfig-a016-20200908
+i386                 randconfig-a015-20200908
+i386                 randconfig-a011-20200908
+i386                 randconfig-a013-20200908
+i386                 randconfig-a014-20200908
+i386                 randconfig-a012-20200908
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a004-20200908
+x86_64               randconfig-a006-20200908
+x86_64               randconfig-a003-20200908
+x86_64               randconfig-a001-20200908
+x86_64               randconfig-a005-20200908
+x86_64               randconfig-a002-20200908
+x86_64               randconfig-a013-20200907
+x86_64               randconfig-a011-20200907
+x86_64               randconfig-a016-20200907
+x86_64               randconfig-a012-20200907
+x86_64               randconfig-a015-20200907
+x86_64               randconfig-a014-20200907
+x86_64               randconfig-a013-20200909
+x86_64               randconfig-a016-20200909
+x86_64               randconfig-a011-20200909
+x86_64               randconfig-a012-20200909
+x86_64               randconfig-a015-20200909
+x86_64               randconfig-a014-20200909
+
 ---
- drivers/usb/host/ohci-hcd.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-index dd37e77dae00..8ab81f6ab150 100644
---- a/drivers/usb/host/ohci-hcd.c
-+++ b/drivers/usb/host/ohci-hcd.c
-@@ -673,20 +673,25 @@ static int ohci_run (struct ohci_hcd *ohci)
-=20
- 	/* handle root hub init quirks ... */
- 	val =3D roothub_a (ohci);
--	val &=3D ~(RH_A_PSM | RH_A_OCPM);
-+	/* Configure for per-port over-current protection by default */
-+	val &=3D ~RH_A_NOCP;
-+	val |=3D RH_A_OCPM;
- 	if (ohci->flags & OHCI_QUIRK_SUPERIO) {
--		/* NSC 87560 and maybe others */
-+		/* NSC 87560 and maybe others.
-+		 * Ganged power switching, no over-current protection.
-+		 */
- 		val |=3D RH_A_NOCP;
--		val &=3D ~(RH_A_POTPGT | RH_A_NPS);
--		ohci_writel (ohci, val, &ohci->regs->roothub.a);
-+		val &=3D ~(RH_A_POTPGT | RH_A_NPS | RH_A_PSM | RH_A_OCPM);
- 	} else if ((ohci->flags & OHCI_QUIRK_AMD756) ||
- 			(ohci->flags & OHCI_QUIRK_HUB_POWER)) {
- 		/* hub power always on; required for AMD-756 and some
--		 * Mac platforms.  ganged overcurrent reporting, if any.
-+		 * Mac platforms.
- 		 */
-+		val &=3D ~RH_A_PSM;
- 		val |=3D RH_A_NPS;
--		ohci_writel (ohci, val, &ohci->regs->roothub.a);
- 	}
-+	ohci_writel(ohci, val, &ohci->regs->roothub.a);
-+
- 	ohci_writel (ohci, RH_HS_LPSC, &ohci->regs->roothub.status);
- 	ohci_writel (ohci, (val & RH_A_NPS) ? 0 : RH_B_PPCM,
- 						&ohci->regs->roothub.b);
---=20
-2.28.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
