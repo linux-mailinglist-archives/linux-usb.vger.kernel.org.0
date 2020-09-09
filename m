@@ -2,75 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A20C9262D58
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 12:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A16262D9A
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 13:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbgIIKkq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Sep 2020 06:40:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34568 "EHLO mail.kernel.org"
+        id S1729808AbgIILDR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 07:03:17 -0400
+Received: from mga17.intel.com ([192.55.52.151]:41543 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726293AbgIIKko (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Sep 2020 06:40:44 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B3FBA206F4;
-        Wed,  9 Sep 2020 10:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599648044;
-        bh=/uoeLxvdnAM7fxQswYJcfDtLDxf5ByEIff/HZMqRk50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zy/os9uAYjHUY8OakLoDAgR1bJ8L3Z3g66LsG4b9aualfs5rU+vOODr67K5HgStuZ
-         L3i1uf0s3/5N6B3ewfGiEbqDwzRy0nR01CrYLvImyIJ7QBiSqmsp4kW2UaKu6DlogH
-         SfJvyjSTqvShRTzdpLjZaoMrLMgUViaJ7lsT/Xds=
-Date:   Wed, 9 Sep 2020 12:40:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lorenzo Colitti <lorenzo@google.com>, balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, zenczykowski@gmail.com
-Subject: Re: [PATCH v3 0/3] usb: gadget: f_ncm: support SuperSpeed Plus,
- improve on SuperSpeed
-Message-ID: <20200909104054.GA615992@kroah.com>
-References: <20200825055505.765782-1-lorenzo@google.com>
+        id S1727976AbgIILAX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Sep 2020 07:00:23 -0400
+IronPort-SDR: 408r7hK2/TNFIW6b8BjcbiyD5SFFB5SY+WL4YvWGJFtReHv5XdXju1pRqbEWmnD1TUyxbkWCLy
+ lBR+K2AhmT0A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9738"; a="138348286"
+X-IronPort-AV: E=Sophos;i="5.76,409,1592895600"; 
+   d="scan'208";a="138348286"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2020 04:00:05 -0700
+IronPort-SDR: tfdgNGiFbAlzDNI8DWaWA54nTIMqRB5s8zVdogIbRZJsI1MZI9VuytQunfdtPwruxerkuarpAz
+ gZGyG5lwTRIA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,409,1592895600"; 
+   d="scan'208";a="505415435"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Sep 2020 04:00:02 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 01C0B163; Wed,  9 Sep 2020 14:00:01 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 0/7] thunderbolt: Additional minor improvements
+Date:   Wed,  9 Sep 2020 13:59:54 +0300
+Message-Id: <20200909110001.71603-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200825055505.765782-1-lorenzo@google.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 02:55:02PM +0900, Lorenzo Colitti wrote:
-> This patch series makes the NCM gadget usable at SuperSpeed Plus
-> speeds (currently, it crashes with an oops). It also improves the
-> behaviour on SuperSpeed and above by making simple performance
-> improvements and by fixing the speeds that are reported to the
-> host (currently 851 Mbps, which is much below actual throughput).
-> 
-> Tested on a gadget directly connected to a Linux laptop running
-> 5.6.14 and cdc_ncm, using both 5 Gbps and 10 Gbps cables. iperf3
-> single TCP connection throughput (gadget to host) is > 2 Gbps on
-> SuperSpeed and > 4 Gbps on SuperSpeed Plus.
-> 
-> Changes since v1:
-> - Set bMaxBurst to 15 on endpoints.
-> - Report more realistic speeds than 851 Mbps.
-> 
-> Changes since v2:
-> - Remove the separate SuperSpeed Plus descriptors and function
->   which were just a copy of the SuperSpeed descriptors and
->   function. Instead, just pass the SuperSpeed function to
->   usb_assign_descriptors for both SuperSpeed and SuperSpeed
->   Plus.
-> - Don't set bMaxBurst on the interrupt endpoint. This is
->   incorrect/useless and forbidden by the spec.
-> - Make the speed constants unsigned literals.
-> 
-> 
+Hi all,
 
-Felipe, did you miss this series, or is it still in your to-review queue
-you are working your way through?
+This series has some additional minor improvements and cleanups from my
+internal development tree. All of this is v5.10 material and apply on top
+of thunderbolt.git/next.
 
-thanks,
+Mika Westerberg (7):
+  thunderbolt: Only stop control channel when entering freeze
+  thunderbolt: Allow KUnit tests to be built also when CONFIG_USB4=m
+  thunderbolt: Use "if USB4" instead of "depends on" in Kconfig
+  thunderbolt: Handle ERR_LOCK notification
+  thunderbolt: Log correct zeroX entries in decode_error()
+  thunderbolt: Correct tb_check_quirks() kernel-doc
+  thunderbolt: Capitalize comment on top of QUIRK_FORCE_POWER_LINK_CONTROLLER
 
-greg k-h
+ drivers/thunderbolt/Kconfig   |  6 ++++--
+ drivers/thunderbolt/Makefile  |  3 +--
+ drivers/thunderbolt/ctl.c     | 18 +++++++++++++++---
+ drivers/thunderbolt/domain.c  | 31 +++++++++++++++++++++++++++++++
+ drivers/thunderbolt/nhi.c     | 21 ++++++++++++++++++---
+ drivers/thunderbolt/quirks.c  |  2 +-
+ drivers/thunderbolt/tb.c      | 18 ++++++++++++++++++
+ drivers/thunderbolt/tb.h      | 16 +++++++++++++++-
+ drivers/thunderbolt/tb_msgs.h |  1 +
+ drivers/thunderbolt/test.c    | 13 ++++++++++++-
+ 10 files changed, 116 insertions(+), 13 deletions(-)
+
+-- 
+2.28.0
+
