@@ -2,78 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7FE26336A
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 19:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB8C2633E3
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 19:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730521AbgIIRDf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Sep 2020 13:03:35 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:11760 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730429AbgIIPqd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Sep 2020 11:46:33 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id F39D713A618DF6ED4B13;
-        Wed,  9 Sep 2020 21:44:13 +0800 (CST)
-Received: from localhost (10.174.179.108) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Wed, 9 Sep 2020
- 21:44:07 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <gustavoars@kernel.org>, <yuehaibing@huawei.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] usb: host: ehci-sched: Remove ununsed function tt_start_uframe()
-Date:   Wed, 9 Sep 2020 21:44:05 +0800
-Message-ID: <20200909134405.34036-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1729785AbgIIRMC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 13:12:02 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46743 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730303AbgIIPdM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Sep 2020 11:33:12 -0400
+Received: (qmail 818535 invoked by uid 1000); 9 Sep 2020 10:11:09 -0400
+Date:   Wed, 9 Sep 2020 10:11:09 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     gregkh@linuxfoundation.org, gustavoars@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] usb: host: ehci-sched: Remove ununsed function
+ tt_start_uframe()
+Message-ID: <20200909141109.GC817244@rowland.harvard.edu>
+References: <20200909134405.34036-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.108]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200909134405.34036-1-yuehaibing@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-commit b35c5009bbf6 ("USB: EHCI: create per-TT bandwidth tables")
-left behind this, remove it.
+On Wed, Sep 09, 2020 at 09:44:05PM +0800, YueHaibing wrote:
+> commit b35c5009bbf6 ("USB: EHCI: create per-TT bandwidth tables")
+> left behind this, remove it.
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/usb/host/ehci-sched.c | 20 --------------------
- 1 file changed, 20 deletions(-)
-
-diff --git a/drivers/usb/host/ehci-sched.c b/drivers/usb/host/ehci-sched.c
-index 847979f265b1..6dfb242f9a4b 100644
---- a/drivers/usb/host/ehci-sched.c
-+++ b/drivers/usb/host/ehci-sched.c
-@@ -307,26 +307,6 @@ static int __maybe_unused same_tt(struct usb_device *dev1,
- 
- #ifdef CONFIG_USB_EHCI_TT_NEWSCHED
- 
--/* Which uframe does the low/fullspeed transfer start in?
-- *
-- * The parameter is the mask of ssplits in "H-frame" terms
-- * and this returns the transfer start uframe in "B-frame" terms,
-- * which allows both to match, e.g. a ssplit in "H-frame" uframe 0
-- * will cause a transfer in "B-frame" uframe 0.  "B-frames" lag
-- * "H-frames" by 1 uframe.  See the EHCI spec sec 4.5 and figure 4.7.
-- */
--static inline unsigned char tt_start_uframe(struct ehci_hcd *ehci, __hc32 mask)
--{
--	unsigned char smask = hc32_to_cpu(ehci, mask) & QH_SMASK;
--
--	if (!smask) {
--		ehci_err(ehci, "invalid empty smask!\n");
--		/* uframe 7 can't have bw so this will indicate failure */
--		return 7;
--	}
--	return ffs(smask) - 1;
--}
--
- static const unsigned char
- max_tt_usecs[] = { 125, 125, 125, 125, 125, 125, 30, 0 };
- 
--- 
-2.17.1
-
-
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
