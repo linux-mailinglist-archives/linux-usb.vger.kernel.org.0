@@ -2,66 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 300F72623C9
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 02:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BB1262452
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 02:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728347AbgIIABi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Sep 2020 20:01:38 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:50338 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726605AbgIIABf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Sep 2020 20:01:35 -0400
-X-IronPort-AV: E=Sophos;i="5.76,407,1592838000"; 
-   d="scan'208";a="56716876"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 09 Sep 2020 09:01:34 +0900
-Received: from localhost.localdomain (unknown [10.166.252.89])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 86E22412FB92;
-        Wed,  9 Sep 2020 09:01:34 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH v2] usb: gadget: u_serial: clear suspended flag when disconnecting
-Date:   Wed,  9 Sep 2020 09:01:32 +0900
-Message-Id: <1599609692-17967-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S1729005AbgIIA50 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Sep 2020 20:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726726AbgIIA5Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Sep 2020 20:57:25 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C72C061755;
+        Tue,  8 Sep 2020 17:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=edHMnCORJHCF3GGZi4la1uovDGKt4ZGTnbqEXZK5eEY=; b=R6gDusR4C0ITTwuInVdq7YY0RO
+        fY7Dy3uBdw9OMnFtGW3eJfnKsqbQW5WD2e7iFGw7SAAUPb2GCQGmX6PvaW8/sdkjf9H0lZpW/IDBn
+        +oonYdH8HVpdOQrwwhPE6UDVSN9TgAb7nEOQa/g4sSCBnzXyxqVSw3kRHOeZJLhJN2GjvZMfTjH4g
+        sxabOm8I2Mf9yCSiXZ75kZRrrnRgywJc2k7Ud3ZQksqm5Sfu3oZK7+RXuHSL+ZwTI0174u4iRHAXa
+        qwnoznCT33dVRoeGNuQzNmmn3TFoTcURuC4BpDFv3zOY1okOYHtF1jPiHQBArktVPdnY+1U80vDsF
+        VI22d9Ew==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kFoQL-000630-UP; Wed, 09 Sep 2020 00:57:22 +0000
+To:     LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH trivial] usb: phy: phy-ab8500-usb: fix spello of "function"
+Message-ID: <1be7e71f-6b79-290a-f38e-b51ccaf85e8e@infradead.org>
+Date:   Tue, 8 Sep 2020 17:57:19 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The commit aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume
-callbacks") set/cleared the suspended flag in USB bus suspend/resume
-only. But, when a USB cable is disconnected in the suspend, since some
-controllers will not detect USB bus resume, the suspended flag is not
-cleared. After that, user cannot send any data. To fix the issue,
-clears the suspended flag in the gserial_disconnect().
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Tested-by: Linh Phung <linh.phung.jy@renesas.com>
-Tested-by: Tam Nguyen <tam.nguyen.xa@renesas.com>
+Fix typo/spello of "function".
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: linux-usb@vger.kernel.org
+Cc: Jiri Kosina <trivial@kernel.org>
 ---
- Changes from v1:
- - Fix typo in the subject.
+ drivers/usb/phy/phy-ab8500-usb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/usb/gadget/function/u_serial.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 127ecc2..2caccbb 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -1391,6 +1391,7 @@ void gserial_disconnect(struct gserial *gser)
- 		if (port->port.tty)
- 			tty_hangup(port->port.tty);
- 	}
-+	port->suspended = false;
- 	spin_unlock_irqrestore(&port->port_lock, flags);
- 
- 	/* disable endpoints, aborting down any active I/O */
--- 
-2.7.4
+--- linux-next-20200908.orig/drivers/usb/phy/phy-ab8500-usb.c
++++ linux-next-20200908/drivers/usb/phy/phy-ab8500-usb.c
+@@ -518,7 +518,7 @@ static int ab8500_usb_link_status_update
+  *   3. Enable AB regulators
+  *   4. Enable USB phy
+  *   5. Reset the musb controller
+- *   6. Switch the ULPI GPIO pins to fucntion mode
++ *   6. Switch the ULPI GPIO pins to function mode
+  *   7. Enable the musb Peripheral5 clock
+  *   8. Restore MUSB context
+  */
 
