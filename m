@@ -2,64 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85682262C04
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 11:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB623262C1B
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 11:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730021AbgIIJfw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Sep 2020 05:35:52 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:58782 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729913AbgIIJfi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Sep 2020 05:35:38 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0899WbNI011181;
-        Wed, 9 Sep 2020 11:35:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=8Z39wgCMgSV09FjTrcLGWnULrXx4mkaAHwq5zt5eW6M=;
- b=gbeq6VPctr7PRcnvzs/xjGO9bZYbn/zlGkYwIRNkbjYBUVjcBjytvYI3OpXvZO0+Bye8
- REpm800IET4D4wrDNTipL3QQxKX1G6Ph8kbYruuRrqZ1XVbsNbEm64vU9Cx9nnwLybmb
- xEgRTQ/kN/nmeKaUlrQiw8lS4+hxWPzT4FFBxjWhESGfHG/jpsra/p7Tqfwx3q8y7+MP
- Ec/omYK+jm5X+eEM5VPsIhweMGrK2vLA+VibrGa57UnXF2bbs/CYqXBnH2Pb5v2BuYSt
- nVspCq5G3HFXMQcS46QGgGvV5F1Rm9UvfF76RXJ8sjk6ceCTfj09x61Yy6G5atOF3QhC TA== 
+        id S1726726AbgIIJj4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 05:39:56 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:23848 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726036AbgIIJj4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Sep 2020 05:39:56 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0899XgQH010720;
+        Wed, 9 Sep 2020 11:39:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : from : to : cc
+ : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=PykR6OaCTds9EU5d37YAScx//FGQpVST4bf8i4TIE4E=;
+ b=vYN6dzPAZDYNgez96cms6Df2eYcajYaTqs6DSx5XJCkXFxOVhvWTMJdIOgRPkSd91EPO
+ Szrda4zRdRpjlo3EsMQLQXPUDHWbBzP3WosXiXDy2u+GSJGJdUT+rMDl2WxARKYlHQ0v
+ wN8EK9jv33C00NitDYNWZgj4+79ebnghlOZF6cq1wDdbL23iU10Ljn1CS11IVa/iOYaS
+ wiruGsBqdDEK1WFdG99sxG2NFl5WH+4u2MQ5JFMbAzrOEULtfj790l4s9UjCzLqluHJu
+ zRbJM8mVWmlWqo2UD+u8vCoLsgcCO0yrQStMqA+0dtWdjMSh6eNEfe3+/fdIeU4joQ7J Jw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 33c0euv55c-1
+        by mx07-00178001.pphosted.com with ESMTP id 33byt7vt75-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 11:35:22 +0200
+        Wed, 09 Sep 2020 11:39:32 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E653A100034;
-        Wed,  9 Sep 2020 11:35:21 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7866D10002A;
+        Wed,  9 Sep 2020 11:39:31 +0200 (CEST)
 Received: from Webmail-eu.st.com (gpxdag3node5.st.com [10.75.127.72])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D4CBD220AE9;
-        Wed,  9 Sep 2020 11:35:21 +0200 (CEST)
-Received: from localhost (10.75.127.46) by GPXDAG3NODE5.st.com (10.75.127.72)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 9 Sep 2020 11:35:21
- +0200
-From:   Amelie Delaunay <amelie.delaunay@st.com>
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v6 3/3] usb: dwc2: don't use ID/Vbus detection if usb-role-switch on STM32MP15 SoCs
-Date:   Wed, 9 Sep 2020 11:35:11 +0200
-Message-ID: <20200909093511.4728-4-amelie.delaunay@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200909093511.4728-1-amelie.delaunay@st.com>
-References: <20200909093511.4728-1-amelie.delaunay@st.com>
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 62AE0220AEC;
+        Wed,  9 Sep 2020 11:39:31 +0200 (CEST)
+Received: from lmecxl0995.lme.st.com (10.75.127.49) by GPXDAG3NODE5.st.com
+ (10.75.127.72) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 9 Sep
+ 2020 11:39:30 +0200
+Subject: Re: [balbi-usb:testing/next 32/38] drd.c:undefined reference to
+ `usb_role_switch_get_drvdata'
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+To:     Felipe Balbi <balbi@kernel.org>, kernel test robot <lkp@intel.com>
+CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
+References: <202009090044.0oZdDUmk%lkp@intel.com> <87eenbld3z.fsf@kernel.org>
+ <91a69ea7-71b8-be3c-19ad-980306681b2c@st.com>
+ <55abf0b6-2b21-faf2-7581-9be7da4475f2@st.com>
+Message-ID: <87721d13-1724-b3e3-aa65-35185be4bac1@st.com>
+Date:   Wed, 9 Sep 2020 11:39:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG6NODE2.st.com (10.75.127.17) To GPXDAG3NODE5.st.com
+In-Reply-To: <55abf0b6-2b21-faf2-7581-9be7da4475f2@st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To GPXDAG3NODE5.st.com
  (10.75.127.72)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-09_03:2020-09-08,2020-09-09 signatures=0
@@ -68,30 +65,97 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If usb-role-switch is present in the device tree, it means that ID and Vbus
-signals are not connected to the OTG controller but to an external
-component (GPIOs, Type-C controller). In this configuration, usb role
-switch is used to force valid sessions on STM32MP15 SoCs.
 
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
----
- drivers/usb/dwc2/params.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index a3611cdd1dea..50df72f32b4c 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -185,7 +185,7 @@ static void dwc2_set_stm32mp15_hsotg_params(struct dwc2_hsotg *hsotg)
- 	struct dwc2_core_params *p = &hsotg->params;
- 
- 	p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
--	p->activate_stm_id_vb_detection = true;
-+	p->activate_stm_id_vb_detection = !device_property_read_bool(hsotg->dev, "usb-role-switch");
- 	p->host_rx_fifo_size = 440;
- 	p->host_nperio_tx_fifo_size = 256;
- 	p->host_perio_tx_fifo_size = 256;
--- 
-2.17.1
+On 9/9/20 10:58 AM, Amelie DELAUNAY wrote:
+> 
+> 
+> On 9/9/20 9:33 AM, Amelie DELAUNAY wrote:
+>> Hi,
+>>
+>> On 9/9/20 7:42 AM, Felipe Balbi wrote:
+>>>
+>>> Hi,
+>>>
+>>> kernel test robot <lkp@intel.com> writes:
+>>>> tree:   
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git 
+>>>> testing/next
+>>>> head:   3c9722514c3fb74bbe0af87c20bc6b4c47121287
+>>>> commit: a0f0bc95705446b8b1476338056bf869271ba36a [32/38] usb: dwc2: 
+>>>> override PHY input signals with usb role switch support
+>>>> config: arc-randconfig-r016-20200908 (attached as .config)
+>>>> compiler: arceb-elf-gcc (GCC) 9.3.0
+>>>> reproduce (this is a W=1 build):
+>>>>          wget 
+>>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+>>>> -O ~/bin/make.cross
+>>>>          chmod +x ~/bin/make.cross
+>>>>          git checkout a0f0bc95705446b8b1476338056bf869271ba36a
+>>>>          # save the attached .config to linux build tree
+>>>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 
+>>>> make.cross ARCH=arc
+>>>>
+>>>> If you fix the issue, kindly add following tag as appropriate
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>
+>>>> All errors (new ones prefixed by >>):
+>>>>
+>>>>     arceb-elf-ld: lib/stackdepot.o: in function `filter_irq_stacks':
+>>>>     stackdepot.c:(.text+0x5a): undefined reference to 
+>>>> `__irqentry_text_start'
+>>>>     arceb-elf-ld: stackdepot.c:(.text+0x5a): undefined reference to 
+>>>> `__irqentry_text_start'
+>>>>     arceb-elf-ld: stackdepot.c:(.text+0x62): undefined reference to 
+>>>> `__irqentry_text_end'
+>>>>     arceb-elf-ld: stackdepot.c:(.text+0x62): undefined reference to 
+>>>> `__irqentry_text_end'
+>>>>     arceb-elf-ld: stackdepot.c:(.text+0x6a): undefined reference to 
+>>>> `__softirqentry_text_start'
+>>>>     arceb-elf-ld: stackdepot.c:(.text+0x6a): undefined reference to 
+>>>> `__softirqentry_text_start'
+>>>>     arceb-elf-ld: stackdepot.c:(.text+0x72): undefined reference to 
+>>>> `__softirqentry_text_end'
+>>>>     arceb-elf-ld: stackdepot.c:(.text+0x72): undefined reference to 
+>>>> `__softirqentry_text_end'
+>>>>     arceb-elf-ld: drivers/usb/dwc2/drd.o: in function 
+>>>> `dwc2_drd_role_sw_set':
+>>>>>> drd.c:(.text+0x82): undefined reference to 
+>>>>>> `usb_role_switch_get_drvdata'
+>>>>>> arceb-elf-ld: drd.c:(.text+0x82): undefined reference to 
+>>>>>> `usb_role_switch_get_drvdata'
+>>>>     arceb-elf-ld: drivers/usb/dwc2/drd.o: in function `dwc2_drd_init':
+>>>>>> drd.c:(.text+0x1c0): undefined reference to 
+>>>>>> `usb_role_switch_register'
+>>>>>> arceb-elf-ld: drd.c:(.text+0x1c0): undefined reference to 
+>>>>>> `usb_role_switch_register'
+>>>>     arceb-elf-ld: drivers/usb/dwc2/drd.o: in function `dwc2_drd_exit':
+>>>>>> drd.c:(.text+0x2c4): undefined reference to 
+>>>>>> `usb_role_switch_unregister'
+>>>>>> arceb-elf-ld: drd.c:(.text+0x2c4): undefined reference to 
+>>>>>> `usb_role_switch_unregister'
+>>>
+>>> Amelie? Have you seen this? Is it ARC-specific?
+>>>
+>> Never seen this before. But looking at DWC2 Kconfig and Makefile, I 
+>> should have add the 'select USB_ROLE_SWITCH' as it is in DWC3 Kconfig. 
+>> Because in my patch, USB_ROLE_SWITCH is selected if 
+>> USB_DWC2_DUAL_ROLE, but drd.c (using USB role switch API) is compiled 
+>> if CONFIG_USB_DWC2 is enabled, whatever DWC2 mode.
+>>
+>> So, an update of DWC2 Kconfig/Makefile as DWC3 seems required.
+>> I send a v6 or a fixup of "usb: dwc2: override PHY input signals with 
+>> usb role switch support" can be done ?
+> 
+> ARC DWC2/USB_ROLE_SWITCH config is:
+> CONFIG_USB_DWC2=y
+> CONFIG_USB_DWC2_DUAL_ROLE=n
+> CONFIG_USB_DWC2_HOST=y
+> CONFIG_USB_DWC2_PERIPHERAL=n
+> CONFIG_USB_ROLE_SWITCH=m
+> 
+> I succeed to reproduce the issue with this configuration. I'm preparing 
+> a fix.
 
+New series sent: 
+https://lore.kernel.org/patchwork/project/lkml/list/?series=461852
