@@ -2,118 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE36262B81
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 11:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71751262B7E
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 11:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726688AbgIIJOa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Sep 2020 05:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726169AbgIIJO0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Sep 2020 05:14:26 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330F0C061573;
-        Wed,  9 Sep 2020 02:14:25 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id k18so1572583wmj.5;
-        Wed, 09 Sep 2020 02:14:25 -0700 (PDT)
+        id S1728363AbgIIJOP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 05:14:15 -0400
+Received: from mail-dm6nam12on2045.outbound.protection.outlook.com ([40.107.243.45]:61537
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726169AbgIIJOK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Sep 2020 05:14:10 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eqvC2s8jgXv4b7KfSbrmG9Ov5geAQj+atr0objk0BESrWKNxDtsD0OM4NSlPm4TpQ3esy+uNpCDRSr+tux3TizEMyGmXVPY7TUrq/Ryi9QkTFZF41TUucmYO8k3sZ6+Tubzt5tETFxGib2RkKcAfxVxVNLLFn91q8ticR5PzSuqHJbAKPNkkoXOu1aapY77V77MBLt39oQHYH+0CDMs3bVVx49eOjadJEbGieX2rI6zI1QKb9Ac4HN01DSC+7fF/NlJ4lQOs5FFIvBSxgQZbV/smhXIe9NfA+S5Qok6wiUySXVuh4+tPnEmx0aDAXiXLG1n5ubvZZk+6yWWwOty/lQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uZYJJ1ZuQtyAmROiyc2fKI0GtEfo/aVs6uGvsTqUvHg=;
+ b=Wvl0+AUQDn4FBXFclsevkpc9PhX/RbrngBFEyxDf/GM0Uw4lnUS/jXaHmvrKbp2y+eehquhDahfKoZ6T2PFRbErgEO197Y/mZ7eMeHXCS/++hS6CFPSsxXJ0qqXjxj1SF2r6J/8BjD4axqqZnvHud6RTij2ihpy5ZWcPJe1FPuNfLAonJRK20Iju/ASofYTneVjArZppI01fKnEqkE+JnPIg3BaujC3lKILYBAkjHAmDHZzK2sVdbm2qcUK7iQTz2QEv2jPDOXFZuf2IyrQnRt5kJrMPXDF/bB2F4u75P99JXXmgxiBU0rijIri0JkYE9Z4/+XxuQs4Dx3rI/ljptQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uGe9wXJ3Bd6sgUOcwqPvqoXTxaWG5mofYiPNXsQ6p44=;
-        b=Ay8+wIbCiWsJ3UCSJJcnSuJu038TaXpKb+KBuMJWsKFa9oOBSzXdvXWmgcbc5NPWsS
-         G3R3z75Fz+SuBzjzrpkFsbtV18oeqM3ggi9yo92b1tCVOuZkjWUVqfJcOqr1f+jgWPg6
-         u6g5+3r9xeuU6WoqjevwsCVtzvtPdw7HkupQYKcFfFX4Z11amiIMx6d6umeylKw+HkPZ
-         FCWb1pzljY19ZsHQutV/heMGrQt84a2aybaAVo01PRvyaS0gLlY1AgwvgpGGwtsFqGxl
-         7PpnXymfFGBxNDxkBbNO8hn5TNgSOtk4tunG2KhPz4hsfzTTlxbfH5g5mc9ZIs6agAzV
-         OUyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uGe9wXJ3Bd6sgUOcwqPvqoXTxaWG5mofYiPNXsQ6p44=;
-        b=ZzIGQzYDHENfBTe7YIb9prTRQ7Mfgqesu082YwRfJlWlksSX4EXbxZoDX2Wyz+Oj0b
-         UCgO5RjBnHcRTkb2zL2WXAXrzJvp+qkSDFeyAMFm3XvIJHtkxE5QkZLt02d9qeE5Ix7t
-         W0dm7yGY+35mAbCaI4NWxcbVwWZFvm0NHEfjk6mts7JrKTbw9CLMjhBohO+JuPGR3OgH
-         Vu+jxKapt3g1xjkK0bpN8kQ7BNbZ6da7XT75uUvATWYPN8crp+YJ12P0wf3W5YJYTsTj
-         L3Ff0I+Iv0w6YGPa+yshD/b1gGSEPYDSXHMohhOBZYavM7yExEzX2/6rwt0hgeXxd+YS
-         wOyw==
-X-Gm-Message-State: AOAM532sK2m7Au1iHlyZOTRNcc6HeaDtb4euz394R0hzwbH7snsDfWmY
-        krP4PItucY0Ndl/Xqbmy2nc=
-X-Google-Smtp-Source: ABdhPJznARw/K0qOtNWyxtB+ajrykx9LRmwii9MsgbCxW4/Gm52PvQfL7YlriejjtH2TxPqNhHH43A==
-X-Received: by 2002:a7b:cd8b:: with SMTP id y11mr2608495wmj.172.1599642863733;
-        Wed, 09 Sep 2020 02:14:23 -0700 (PDT)
-Received: from LABNL-ITC-SW01.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
-        by smtp.gmail.com with ESMTPSA id y5sm3128206wrh.6.2020.09.09.02.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2020 02:14:23 -0700 (PDT)
-From:   Daniele Palmas <dnlplm@gmail.com>
-To:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Cc:     Kristian Evensen <kristian.evensen@gmail.com>,
-        Paul Gildea <paul.gildea@gmail.com>,
-        Carl Yin <carl.yin@quectel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>
-Subject: [PATCH net-next 1/1] net: usb: qmi_wwan: add default rx_urb_size
-Date:   Wed,  9 Sep 2020 11:13:02 +0200
-Message-Id: <20200909091302.20992-1-dnlplm@gmail.com>
-X-Mailer: git-send-email 2.17.1
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uZYJJ1ZuQtyAmROiyc2fKI0GtEfo/aVs6uGvsTqUvHg=;
+ b=rzBpADcBia7AHq3VuxESNjA9yKHow3qnGVroWOBvk+C7jiovaHRiDdIA1daayXWQhJ9bT0cIHE5qHEryVsabfMN2nQU62zh47Rm2TuDPSeCi7O+tKntlrxUVh+RexyYNFzTSxvUvxqEKHY5QDlzfwB6BXlYu6Zxr1NdYjz3YuSE=
+Received: from BYAPR02MB5896.namprd02.prod.outlook.com (2603:10b6:a03:122::10)
+ by BYAPR02MB5975.namprd02.prod.outlook.com (2603:10b6:a03:118::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15; Wed, 9 Sep
+ 2020 09:14:05 +0000
+Received: from BYAPR02MB5896.namprd02.prod.outlook.com
+ ([fe80::84b5:71be:1584:f314]) by BYAPR02MB5896.namprd02.prod.outlook.com
+ ([fe80::84b5:71be:1584:f314%7]) with mapi id 15.20.3370.016; Wed, 9 Sep 2020
+ 09:14:05 +0000
+From:   Manish Narani <MNARANI@xilinx.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Michal Simek <michals@xilinx.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>
+Subject: RE: [PATCH 2/2] usb: dwc3: Add driver for Xilinx platforms
+Thread-Topic: [PATCH 2/2] usb: dwc3: Add driver for Xilinx platforms
+Thread-Index: AQHWe9kSXk9fyd29ekqKVsSVp3b0nKlLf7MAgAHFp1CABnYHgIAMTv+w
+Date:   Wed, 9 Sep 2020 09:14:05 +0000
+Message-ID: <BYAPR02MB58960AA4C87C76223C04D71BC1260@BYAPR02MB5896.namprd02.prod.outlook.com>
+References: <1598467441-124203-1-git-send-email-manish.narani@xilinx.com>
+ <1598467441-124203-3-git-send-email-manish.narani@xilinx.com>
+ <87y2m0ioql.fsf@kernel.org>
+ <BYAPR02MB5896669D47783D06F779608BC1520@BYAPR02MB5896.namprd02.prod.outlook.com>
+ <877dtd7kxc.fsf@kernel.org>
+In-Reply-To: <877dtd7kxc.fsf@kernel.org>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=xilinx.com;
+x-originating-ip: [149.199.50.130]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 1d0c1704-cf41-4de8-f1e2-08d854a0b349
+x-ms-traffictypediagnostic: BYAPR02MB5975:
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR02MB5975A6BA9DEBC3EE8533A193C1260@BYAPR02MB5975.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1227;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RhN0KPM21mp3JwdLYVscTb1/3BA4QLvz+BGDZCkGw7qjAe62w27s0s4ceGx626h/WWKy3rdLJD3HLW/D0BxEa+fTjm6s8vU7EbZc0lEBw5bWF9zTDOH4x7qzX1O7Ihj9gDrfAy9GQKg7co8ses+pbsrv1NjbG1bN9erpOnloz1AHhFXiD1t067MJ6baZENj5f2tZlWWteN75bkYu3fs108BhvqqULvpwr/B6Mj4t5l6DlyuRYytKLCAuewt7NO6zhvuDWhLsSARK0zPZrbkG7EPuQf33xNaKsk73JeO+9mRIq6v6c6VoIDz0XRzJSEdsgVRPiRoMWW6EgeJUvqVOXQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR02MB5896.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(396003)(39860400002)(376002)(346002)(186003)(52536014)(107886003)(7416002)(316002)(86362001)(478600001)(33656002)(5660300002)(66946007)(76116006)(26005)(7696005)(83380400001)(6506007)(71200400001)(4326008)(9686003)(66476007)(66556008)(66446008)(64756008)(55016002)(2906002)(54906003)(8936002)(8676002)(110136005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 9LTeryk/WLcFmVJxOkWoW7pjNsjM93K+EJGk+SBoYG0fCeO93j7a/MToD4qRuwCkGvNXCX/y37UU2UgBHbzx8Ina+QJw/1st/6SYQEiqhdXdtr/uq4hA9zVdloVuLaUzoq+AkWXO8TaGgPmgmo83pbP7fyySTVCYvqy7MLCfO16tZIKHdK1QjNBHYlwuI4Qry/9t1y/XlpwZT/qsAf1RW0PLfrFrGBGV2OPeGdmqE8ywc7CVNhLcAVbQXCXhp9fJ2Y34R1VocVdAG9H90H9K8bd7+R7Z5sySaE4JFHgXZXD7b3b17peXgtjq05YsqxvskeO6osxlrR2YWKT/tvNzC+L4QePejiE/ceCv9F3sm9qV6WWWyrZoJeD1Dxz2FwXC4ZeQKHsAsYM580ZhI3SD6IUfKQ6ef0ZHp+XR7Oay8qQljBqLmAS7D/JjXlWCQmb/nNpcOrA1heb7HDulzWVHQWCMgSLbuznU+H1Jc/oHONX96tQTnARDOAAL5TzMSmkz9renPtDMtMyAWp/9caWiQoYgnPc0diwaDyiqNSXFjQbnKgXsskE+/ZG1t7Dq7tVxr6OEKd/m+Lijpg1ccgWkyP7wxokpK/e9Ll9mM3K64ZBctCT0tL2zVwJebBh4jMErEVxqocmQVaGrEUPHTKeG5Q==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR02MB5896.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d0c1704-cf41-4de8-f1e2-08d854a0b349
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2020 09:14:05.1084
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0AX987tusCbLt1sDpjt5/DE3PbQwK+L6JTeMPKoTrZGJzq13kZHZwwi4wouCTbETaw1IH7yjDUR0LAnEmNbNdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5975
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add default rx_urb_size to support QMAP download data aggregation
-without needing additional setup steps in userspace.
+Hi Felipe,
 
-The value chosen is the current highest one seen in available modems.
+Thanks for the response.
 
-The patch has the side-effect of fixing a babble issue in raw-ip mode
-reported by multiple users.
+> -----Original Message-----
+> From: Felipe Balbi <balbi@kernel.org>
+> Sent: Tuesday, September 1, 2020 5:45 PM
+>=20
+> >> > +		goto err;
+> >> > +	}
+> >> > +
+> >> > +	ret =3D dwc3_xlnx_rst_assert(priv_data->apbrst);
+> >> > +	if (ret < 0) {
+> >> > +		dev_err(dev, "%s: %d: Failed to assert reset\n",
+> >> > +			__func__, __LINE__);
+> >>
+> >> 		dev_err(dev, "Failed to assert APB reset\n");
+> >>
+> >> > +		goto err;
+> >> > +	}
+> >> > +
+> >> > +	ret =3D phy_init(priv_data->usb3_phy);
+> >>
+> >> dwc3 core should be handling this already
+> >
+> > The USB controller used in Xilinx ZynqMP platform uses xilinx GT phy
+> > which has 4 GT lanes and can used by 4 peripherals at a time.
+>=20
+> At the same time or are they mutually exclusive?
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
----
-Resending with mailing lists added: sorry for the noise.
+The lanes are mutually exclusive.
 
-Hi Bjørn and all,
+ [...]
+> >> > +	if (ret < 0) {
+> >> > +		dev_err(dev, "%s: %d: Failed to release reset\n",
+> >> > +			__func__, __LINE__);
+> >> > +		goto err;
+> >> > +	}
+> >> > +
+> >> > +	/* Set PIPE power present signal */
+> >> > +	writel(PIPE_POWER_ON, priv_data->regs + PIPE_POWER_OFFSET);
+> >> > +
+> >> > +	/* Clear PIPE CLK signal */
+> >> > +	writel(PIPE_CLK_OFF, priv_data->regs + PIPE_CLK_OFFSET);
+> >>
+> >> shouldn't this be hidden under clk_enable()?
+> >
+> > Though its naming suggests something related to clock framework, it is
+> > a register in the Xilinx USB controller space which configures the
+> > PIPE clock coming from Serdes.
+>=20
+> PIPE clock is a clock. It just so happens that the source is the PHY
+> itself.
 
-this patch tries to address the issue reported in the following threads
-
-https://www.spinics.net/lists/netdev/msg635944.html
-https://www.spinics.net/lists/linux-usb/msg198846.html
-https://www.spinics.net/lists/linux-usb/msg198025.html
-
-so I'm adding the people involved, maybe you can give it a try to
-double check if this is good for you.
-
-On my side, I performed tests with different QC chipsets without
-experiencing problems.
+This bit is used to choose between PIPE clock coming from SerDes
+and the Suspend Clock. When the controller is out of reset, this bit
+needs to be reset in order to make the USB controller work. This
+register is added in Xilinx USB controller register space. I will
+add more description about the same in v2.
 
 Thanks,
-Daniele
----
- drivers/net/usb/qmi_wwan.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 07c42c0719f5..92d568f982b6 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -815,6 +815,10 @@ static int qmi_wwan_bind(struct usbnet *dev, struct usb_interface *intf)
- 	}
- 	dev->net->netdev_ops = &qmi_wwan_netdev_ops;
- 	dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
-+
-+	/* Set rx_urb_size to allow QMAP rx data aggregation */
-+	dev->rx_urb_size = 32768;
-+
- err:
- 	return status;
- }
--- 
-2.17.1
+Manish
 
