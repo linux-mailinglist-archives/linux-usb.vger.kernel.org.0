@@ -2,247 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCAA262572
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 04:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1525262605
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 05:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729822AbgIICz4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Sep 2020 22:55:56 -0400
-Received: from m12-16.163.com ([220.181.12.16]:57114 "EHLO m12-16.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729691AbgIICzx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Sep 2020 22:55:53 -0400
-X-Greylist: delayed 911 seconds by postgrey-1.27 at vger.kernel.org; Tue, 08 Sep 2020 22:55:51 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=F18fFmXeWeRjmTAsVn
-        9Hw6fZGsQLMSIvu+VR4xb46lc=; b=gXYo0FhtfRYvU4N7psfjOxF6ahDA5Iq+1w
-        TJ9OvuK/XJuKwtCTKhTX2x5+MHi+uADJYJ1TpWDNeDcRKOnurEMR0iEM6LgVw0Iw
-        483xEq+TKC8QgrxniDr0f3B6Y7dBm3toQmKfmuWj4YxsggzYVpnmN/4x8MNPRNQ4
-        B805H/3FE=
-Received: from localhost.localdomain (unknown [222.211.191.110])
-        by smtp12 (Coremail) with SMTP id EMCowACXmCyVQFhfurHUUg--.29631S4;
-        Wed, 09 Sep 2020 10:40:23 +0800 (CST)
-From:   Sheng Long Wang <china_shenglong@163.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
+        id S1726726AbgIID5t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Sep 2020 23:57:49 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:47667 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726226AbgIID5s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Sep 2020 23:57:48 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A5811806B5;
+        Wed,  9 Sep 2020 15:57:44 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1599623864;
+        bh=oy6vEeRGVNHpSwqfZtf5OR46azHgDDplVuor0K5/zsE=;
+        h=From:To:Cc:Subject:Date;
+        b=KRsh+FspnOx9utk291uXAxP36UC1ZjZOIy0vO4fecPF3DJPlmrsudXQW8vyFDGHjw
+         hlfqmF0dC1o/h0sGXFkf6RqAkHYntDRbIhzC6Rlv3WpHrguxMQ7D28fgfzPQ2VK2mM
+         dvOyu/AWgnAlp+9jSKPeXYGAQLjCxjtZK73D3Eaa4+EK6PKYSOK9sAnxqqpFD0TLQd
+         E+MVxBsWhpGHUO5OiQqbDeNaFarrAyz7wghcLTNiXloowo+x4uBhHYtWDVLsNFjwvy
+         VUMu3DmLX7yKGnWuu3avTPREeTwjlAExYFukUfzDPov7MneyZsJv0tVPuqvozTWSG0
+         VzobQBtUaH7tw==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5f5852b90000>; Wed, 09 Sep 2020 15:57:45 +1200
+Received: from hamishm-dl.ws.atlnz.lc (hamishm-dl.ws.atlnz.lc [10.33.24.30])
+        by smtp (Postfix) with ESMTP id 13A2F13EEB7;
+        Wed,  9 Sep 2020 15:57:44 +1200 (NZST)
+Received: by hamishm-dl.ws.atlnz.lc (Postfix, from userid 1133)
+        id 64BEB2A2ADF; Wed,  9 Sep 2020 15:57:44 +1200 (NZST)
+From:   Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jan.kiszka@siemens.com,
-        Wang Sheng Long <shenglong.wang.ext@siemens.com>
-Subject: [PATCH v4] usb-serial:cp210x: add support to software flow control
-Date:   Wed,  9 Sep 2020 10:39:30 +0800
-Message-Id: <20200909023931.19530-1-china_shenglong@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: EMCowACXmCyVQFhfurHUUg--.29631S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW3JF45Jw18Jr45Gw48Jr1kXwb_yoW7KryrpF
-        48trWFyrWqva17Wa1rAF4UZwnxZan7XFyIyFW3G39ayr13Jr1fKF1Ika4Yyr1UArW8Gry5
-        Jrn0yayDuF4jqrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j6OJnUUUUU=
-X-Originating-IP: [222.211.191.110]
-X-CM-SenderInfo: xfkl0tpbvkv0xjor0wi6rwjhhfrp/xtbBdReaslaD8hrIWgAAsl
+        Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+Subject: [PATCH] usb: ohci: Default to per-port over-current protection
+Date:   Wed,  9 Sep 2020 15:57:34 +1200
+Message-Id: <20200909035734.22463-1-hamish.martin@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+Some integrated OHCI controller hubs do not expose all ports of the hub
+to pins on the SoC. In some cases the unconnected ports generate
+spurious over-current events. For example the Broadcom 56060/Ranger 2 SoC
+contains a nominally 3 port hub but only the first port is wired.
 
-When data is transmitted between two serial ports,
-the phenomenon of data loss often occurs. The two kinds
-of flow control commonly used in serial communication
-are hardware flow control and software flow control.
+Default behaviour for ohci-platform driver is to use global over-current
+protection mode (AKA "ganged"). This leads to the spurious over-current
+events affecting all ports in the hub.
 
-In serial communication, If you only use RX/TX/GND Pins, you
-can't do hardware flow. So we often used software flow control
-and prevent data loss. The user sets the software flow control
-through the application program, and the application program
-sets the software flow control mode for the serial port
-chip through the driver.
+We now alter the default to use per-port over-current protection.
 
-For the cp210 serial port chip, its driver lacks the
-software flow control setting code, so the user cannot set
-the software flow control function through the application
-program. This adds the missing software flow control.
+This patch results in the following configuration changes depending
+on quirks:
+- For quirk OHCI_QUIRK_SUPERIO no changes. These systems remain set up
+  for ganged power switching and no over-current protection.
+- For quirk OHCI_QUIRK_AMD756 or OHCI_QUIRK_HUB_POWER power switching
+  remains at none, while over-current protection is now guaranteed to be
+  set to per-port rather than the previous behaviour where it was either
+  none or global over-current protection depending on the value at
+  function entry.
 
-Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
-
-Changes in v3:
-- fixed code style, It mainly adjusts the code style acccording
-  to kernel specification.
-
-Changes in v4:
-- It mainly adjusts the patch based on the last usb-next branch
-  of the usb-serial and optimized the relevant code.
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
 ---
- drivers/usb/serial/cp210x.c | 125 ++++++++++++++++++++++++++++++++++--
- 1 file changed, 120 insertions(+), 5 deletions(-)
+ drivers/usb/host/ohci-hcd.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index d0c05aa8a0d6..bcbf8da99ebb 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -412,6 +412,15 @@ struct cp210x_comm_status {
- 	u8       bReserved;
- } __packed;
- 
-+struct cp210x_special_chars {
-+	u8	bEofChar;
-+	u8	bErrorChar;
-+	u8	bBreakChar;
-+	u8	bEventChar;
-+	u8	bXonChar;
-+	u8	bXoffChar;
-+};
-+
- /*
-  * CP210X_PURGE - 16 bits passed in wValue of USB request.
-  * SiLabs app note AN571 gives a strange description of the 4 bits:
-@@ -675,6 +684,69 @@ static int cp210x_read_vendor_block(struct usb_serial *serial, u8 type, u16 val,
- 	return result;
- }
- 
-+static int cp210x_get_chars(struct usb_serial_port *port, void *buf, int bufsize)
-+{
-+	struct usb_serial *serial = port->serial;
-+	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-+	void *dmabuf;
-+	int result;
-+
-+	dmabuf = kmemdup(buf, bufsize, GFP_KERNEL);
-+	if (!dmabuf)
-+		return -ENOMEM;
-+
-+	result = usb_control_msg(serial->dev,
-+				usb_sndctrlpipe(serial->dev, 0),
-+				CP210X_GET_CHARS, REQTYPE_DEVICE_TO_HOST, 0,
-+				port_priv->bInterfaceNumber,
-+				dmabuf, bufsize, USB_CTRL_SET_TIMEOUT);
-+
-+	if (result == bufsize) {
-+		memcpy(buf, dmabuf, bufsize);
-+		result = 0;
-+	} else {
-+		dev_err(&port->dev, "failed get req 0x%x size %d status: %d\n",
-+			CP210X_GET_CHARS, bufsize, result);
-+		if (result >= 0)
-+			result = -EIO;
-+	}
-+
-+	kfree(dmabuf);
-+
-+	return result;
-+}
-+
-+static int cp210x_set_chars(struct usb_serial_port *port, void *buf, int bufsize)
-+{
-+	struct usb_serial *serial = port->serial;
-+	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-+	void *dmabuf;
-+	int result;
-+
-+	dmabuf = kmemdup(buf, bufsize, GFP_KERNEL);
-+	if (!dmabuf)
-+		return -ENOMEM;
-+
-+	result = usb_control_msg(serial->dev,
-+				usb_sndctrlpipe(serial->dev, 0),
-+				CP210X_SET_CHARS, REQTYPE_HOST_TO_INTERFACE, 0,
-+				port_priv->bInterfaceNumber,
-+				dmabuf, bufsize, USB_CTRL_SET_TIMEOUT);
-+
-+	if (result == bufsize) {
-+		result = 0;
-+	} else {
-+		dev_err(&port->dev, "failed get req 0x%x size %d status: %d\n",
-+			CP210X_SET_CHARS, bufsize, result);
-+		if (result >= 0)
-+			result = -EIO;
-+	}
-+
-+	kfree(dmabuf);
-+
-+	return result;
-+}
-+
- /*
-  * Writes any 16-bit CP210X_ register (req) whose value is passed
-  * entirely in the wValue field of the USB request.
-@@ -1356,11 +1428,17 @@ static void cp210x_set_termios(struct tty_struct *tty,
- 		struct usb_serial_port *port, struct ktermios *old_termios)
- {
- 	struct device *dev = &port->dev;
--	unsigned int cflag, old_cflag;
-+	unsigned int cflag, old_cflag, iflag;
-+	struct cp210x_special_chars charsres;
-+	struct cp210x_flow_ctl flow_ctl;
- 	u16 bits;
-+	int result;
-+	u32 ctl_hs;
-+	u32 flow_repl;
- 
- 	cflag = tty->termios.c_cflag;
- 	old_cflag = old_termios->c_cflag;
-+	iflag = tty->termios.c_iflag;
- 
- 	if (tty->termios.c_ospeed != old_termios->c_ospeed)
- 		cp210x_change_speed(tty, port, old_termios);
-@@ -1434,10 +1512,6 @@ static void cp210x_set_termios(struct tty_struct *tty,
+diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+index dd37e77dae00..8ab81f6ab150 100644
+--- a/drivers/usb/host/ohci-hcd.c
++++ b/drivers/usb/host/ohci-hcd.c
+@@ -673,20 +673,25 @@ static int ohci_run (struct ohci_hcd *ohci)
+=20
+ 	/* handle root hub init quirks ... */
+ 	val =3D roothub_a (ohci);
+-	val &=3D ~(RH_A_PSM | RH_A_OCPM);
++	/* Configure for per-port over-current protection by default */
++	val &=3D ~RH_A_NOCP;
++	val |=3D RH_A_OCPM;
+ 	if (ohci->flags & OHCI_QUIRK_SUPERIO) {
+-		/* NSC 87560 and maybe others */
++		/* NSC 87560 and maybe others.
++		 * Ganged power switching, no over-current protection.
++		 */
+ 		val |=3D RH_A_NOCP;
+-		val &=3D ~(RH_A_POTPGT | RH_A_NPS);
+-		ohci_writel (ohci, val, &ohci->regs->roothub.a);
++		val &=3D ~(RH_A_POTPGT | RH_A_NPS | RH_A_PSM | RH_A_OCPM);
+ 	} else if ((ohci->flags & OHCI_QUIRK_AMD756) ||
+ 			(ohci->flags & OHCI_QUIRK_HUB_POWER)) {
+ 		/* hub power always on; required for AMD-756 and some
+-		 * Mac platforms.  ganged overcurrent reporting, if any.
++		 * Mac platforms.
+ 		 */
++		val &=3D ~RH_A_PSM;
+ 		val |=3D RH_A_NPS;
+-		ohci_writel (ohci, val, &ohci->regs->roothub.a);
  	}
- 
- 	if ((cflag & CRTSCTS) != (old_cflag & CRTSCTS)) {
--		struct cp210x_flow_ctl flow_ctl;
--		u32 ctl_hs;
--		u32 flow_repl;
--
- 		cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
- 				sizeof(flow_ctl));
- 		ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
-@@ -1474,6 +1548,47 @@ static void cp210x_set_termios(struct tty_struct *tty,
- 				sizeof(flow_ctl));
- 	}
- 
-+	if ((iflag & IXOFF) || (iflag & IXON)) {
++	ohci_writel(ohci, val, &ohci->regs->roothub.a);
 +
-+		result = cp210x_get_chars(port, &charsres, sizeof(charsres));
-+		if (result < 0)
-+			dev_err(dev, "failed to get character: %d\n", result);
-+
-+		charsres.bXonChar  = START_CHAR(tty);
-+		charsres.bXoffChar = STOP_CHAR(tty);
-+
-+		result = cp210x_set_chars(port, &charsres, sizeof(charsres));
-+		if (result < 0)
-+			dev_err(dev, "failed to set character: %d\n", result);
-+
-+		result = cp210x_read_reg_block(port,
-+					CP210X_GET_FLOW,
-+					&flow_ctl,
-+					sizeof(flow_ctl));
-+		if (result)
-+			dev_err(dev, "failed to read flow_ctl reg: %d\n", result);
-+
-+		flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
-+
-+		if (iflag & IXOFF)
-+			flow_repl |= CP210X_SERIAL_AUTO_RECEIVE;
-+		else
-+			flow_repl &= ~CP210X_SERIAL_AUTO_RECEIVE;
-+
-+		if (iflag & IXON)
-+			flow_repl |= CP210X_SERIAL_AUTO_TRANSMIT;
-+		else
-+			flow_repl &= ~CP210X_SERIAL_AUTO_TRANSMIT;
-+
-+		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
-+		result = cp210x_write_reg_block(port,
-+					CP210X_SET_FLOW,
-+					&flow_ctl,
-+					sizeof(flow_ctl));
-+		if (result)
-+			dev_err(dev, "failed to write flow_ctl reg: %d\n", result);
-+	}
-+
- 	/*
- 	 * Enable event-insertion mode only if input parity checking is
- 	 * enabled for now.
--- 
-2.17.1
-
+ 	ohci_writel (ohci, RH_HS_LPSC, &ohci->regs->roothub.status);
+ 	ohci_writel (ohci, (val & RH_A_NPS) ? 0 : RH_B_PPCM,
+ 						&ohci->regs->roothub.b);
+--=20
+2.28.0
 
