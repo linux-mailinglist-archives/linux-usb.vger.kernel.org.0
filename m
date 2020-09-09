@@ -2,104 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 233B1262F86
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 16:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F1A26300D
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 16:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbgIIOIi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Sep 2020 10:08:38 -0400
-Received: from mga17.intel.com ([192.55.52.151]:53175 "EHLO mga17.intel.com"
+        id S1730140AbgIIO5z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 10:57:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730323AbgIINLJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Sep 2020 09:11:09 -0400
-IronPort-SDR: Q91RznWiFRGzB0tGxT5zl0z3zPwwiqU7feHQ+gt9xCY54EgqyBp25je2HaTUHj8y0VS5MOtlqv
- AOhYj1rNuGlQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9738"; a="138363314"
-X-IronPort-AV: E=Sophos;i="5.76,409,1592895600"; 
-   d="scan'208";a="138363314"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2020 06:11:02 -0700
-IronPort-SDR: l36POSGCzQGkqTBe+7H1PFCCJBCzucpLRrcML4YciT9+8vrlta/2n9h9j9c/uJFqFHgxnVFRX4
- +evhrtW32m6w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,409,1592895600"; 
-   d="scan'208";a="407444765"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 09 Sep 2020 06:11:00 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Sep 2020 16:10:59 +0300
-Date:   Wed, 9 Sep 2020 16:10:59 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Zwane Mwaikambo <zwanem@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Zwane Mwaikambo <zwane@yosper.io>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] usb/typec: fix array overruns in ucsi.c
- partner_altmode[]
-Message-ID: <20200909131059.GB3627076@kuha.fi.intel.com>
-References: <alpine.DEB.2.21.2008271035320.30454@montezuma.home>
- <0013fe6c-c0a2-1759-c769-cda025e5eb38@infradead.org>
- <alpine.DEB.2.21.2008271058220.37762@montezuma.home>
- <alpine.DEB.2.21.2008271131570.37762@montezuma.home>
- <20200828123328.GF174928@kuha.fi.intel.com>
- <alpine.DEB.2.21.2008300220350.37231@montezuma.home>
- <20200903111047.GH1279097@kuha.fi.intel.com>
+        id S1729479AbgIIMaS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Sep 2020 08:30:18 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A58E421D81;
+        Wed,  9 Sep 2020 12:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599654523;
+        bh=4HhY12y7N+KPVF8QmaBcDAWyMvyvMqqXX3wDvyIDGr8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fq5z/fdOUgdQz6osW2YWSoPe2iEk2C6WZ8VI+Hi2t+rVU+jPzMiesRwgWZINIq1y1
+         HVGLuIdUQQx0+h+NKiNQDnlxzVjUCTCr/bs9xEEV1anVH+5xAyKz3aQXBokqOlz93E
+         /3J1RYqWtoDPftxicbW2OZC3B0XoisiA7u90LVEg=
+Date:   Wed, 9 Sep 2020 14:28:53 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Daniele Palmas <dnlplm@gmail.com>
+Cc:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Kristian Evensen <kristian.evensen@gmail.com>,
+        Paul Gildea <paul.gildea@gmail.com>,
+        Carl Yin <carl.yin@quectel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH net-next 1/1] net: usb: qmi_wwan: add default rx_urb_size
+Message-ID: <20200909122853.GA669308@kroah.com>
+References: <20200909091302.20992-1-dnlplm@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20200903111047.GH1279097@kuha.fi.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200909091302.20992-1-dnlplm@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 02:10:50PM +0300, Heikki Krogerus wrote:
-> Hi Zwane,
+On Wed, Sep 09, 2020 at 11:13:02AM +0200, Daniele Palmas wrote:
+> Add default rx_urb_size to support QMAP download data aggregation
+> without needing additional setup steps in userspace.
 > 
-> Sorry to keep you waiting. I'm trying to find a board I can use to
-> test these...
+> The value chosen is the current highest one seen in available modems.
+> 
+> The patch has the side-effect of fixing a babble issue in raw-ip mode
+> reported by multiple users.
+> 
+> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
 
-I've now tested this (these) with ThinkPad X280, and there is no
-regression, however, now that (I think) I understand what's going on,
-I would not try to fix the issue like you do. I would simply make sure
-the alternate mode arrays are NULL terminated. For example with
-something like this:
+Any specific kernel commit that this "fixes:"?
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index cba6f77bea61b..7e66e4d232996 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -317,8 +317,8 @@ struct ucsi_connector {
-        struct typec_port *port;
-        struct typec_partner *partner;
- 
--       struct typec_altmode *port_altmode[UCSI_MAX_ALTMODES];
--       struct typec_altmode *partner_altmode[UCSI_MAX_ALTMODES];
-+       struct typec_altmode *port_altmode[UCSI_MAX_ALTMODES + 1];
-+       struct typec_altmode *partner_altmode[UCSI_MAX_ALTMODES + 1];
- 
-        struct typec_capability typec_cap;
+> ---
+> Resending with mailing lists added: sorry for the noise.
+> 
+> Hi Bjørn and all,
+> 
+> this patch tries to address the issue reported in the following threads
+> 
+> https://www.spinics.net/lists/netdev/msg635944.html
+> https://www.spinics.net/lists/linux-usb/msg198846.html
+> https://www.spinics.net/lists/linux-usb/msg198025.html
+> 
+> so I'm adding the people involved, maybe you can give it a try to
+> double check if this is good for you.
+> 
+> On my side, I performed tests with different QC chipsets without
+> experiencing problems.
+> 
+> Thanks,
+> Daniele
+> ---
+>  drivers/net/usb/qmi_wwan.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index 07c42c0719f5..92d568f982b6 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -815,6 +815,10 @@ static int qmi_wwan_bind(struct usbnet *dev, struct usb_interface *intf)
+>  	}
+>  	dev->net->netdev_ops = &qmi_wwan_netdev_ops;
+>  	dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
+> +
+> +	/* Set rx_urb_size to allow QMAP rx data aggregation */
+> +	dev->rx_urb_size = 32768;
 
-Though I'm not sure we should need even that. Try it out in any case.
+Where did this "magic number" come from?
 
-Even if that works, I have a feeling there is something odd going on.
-What kinds of device has all 30 modes supported (or even more)? I want
-to know if this is a case where the firmware is just reporting bogus
-values.
+And making an urb size that big can keep some pipelines full, it also
+comes at the expense of other potential issues, have you tested this to
+see that it really does help in throughput?
 
-What device are you plugging to the Type-C connector? Does it really
-have all 30 altmodes? What do you see in /sys/class/typec directory
-when you connect the device?
-
-        ls /sys/class/typec
-
-Actually, do this:
-
-        grep . /sys/class/typec/port*-partner/port*-partner.*/svid
-
-and tell what you get.
+And if it does, does this size really need to be that big?  What is it
+set to today, the endpoint size?  If so, that's a huge jump...
 
 thanks,
 
--- 
-heikki
+greg k-h
