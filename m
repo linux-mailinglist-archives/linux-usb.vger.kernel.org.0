@@ -2,123 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06175263125
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 18:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6A02632E9
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 18:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730742AbgIIQB3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Sep 2020 12:01:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59240 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730721AbgIIQBA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Sep 2020 12:01:00 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 113592067C;
-        Wed,  9 Sep 2020 16:00:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599667259;
-        bh=gCT1PxEjHYMnqsc3IvRBLytlHp3Q+TLZOGRYtcA00sU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pt3N8HoH3a+eDZqio6ImrjIXNZmkwfnNSI1lzhPVdUJxLiorxqYClioNwFwZA3NXh
-         qEkynAsRcZP1fht5kGWwTvTgx5gyftJio8jabIzKtPVpb94ZaDPmTkannaAJ1uNoEP
-         Asa+s+3Ou4Q+aMLBi7einndS6rIL1hsuHWs3R4/4=
-Received: by mail-oi1-f170.google.com with SMTP id w16so2877799oia.2;
-        Wed, 09 Sep 2020 09:00:59 -0700 (PDT)
-X-Gm-Message-State: AOAM531son41hDdnHW4lzlJGoAJe9uV5CQeq51mzfZZHuyVFBSojz4UQ
-        u49a6G5+Sqxjd4+CNyYMzMzZKeXDzbG4A0zmFA==
-X-Google-Smtp-Source: ABdhPJxxfDXQk+6W+xnjTSduPNlggtWkN48qYEkMLzn2/lnfsbJZ547HMTqHktm+eYoi9g0Fz3c0ICdHDjbvpLrhV8U=
-X-Received: by 2002:aca:fc07:: with SMTP id a7mr1092879oii.106.1599667258344;
- Wed, 09 Sep 2020 09:00:58 -0700 (PDT)
+        id S1730914AbgIIQxt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 12:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730901AbgIIQET (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Sep 2020 12:04:19 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B80C061757
+        for <linux-usb@vger.kernel.org>; Wed,  9 Sep 2020 09:04:17 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id l9so2928576wme.3
+        for <linux-usb@vger.kernel.org>; Wed, 09 Sep 2020 09:04:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fqHDfmvrn1k16mVJQ5+b/SIXRz53SpIEt2htZWi6LBw=;
+        b=MWcvAepihDTzFeQEhYY4dmVrfX1hYZrzB4rWEGRs4dmjdbtUj+2Qif01qedSuWuIzF
+         pTWkOigok9A72v58KpF1HrnrSkw/q3gV/pNBzM6lsDcPtpzwJCjXF0KuVhlOMqmAibM4
+         BNvWlMPLHGrYmjmq9cFMO84V6elPjUgSJ8rXi+n8phF5NJ/1ifTr68u4FfK+28F7B30F
+         KG+s1lHKyfT1hW3fITFNV+T1cPG6rE7Dz2jvtP+F4NxMMDki7qWh6xf8J/yJzRRk5j0J
+         5siS673YwqOMAvBMZZELYYn9H1wEUUvN4WMzsE2eYMOtKM74f29o/BQN8TPAj51/dUHU
+         ikTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fqHDfmvrn1k16mVJQ5+b/SIXRz53SpIEt2htZWi6LBw=;
+        b=BPgQM9X9eofKq+fCAFnZEXd2dgc9s8yDm1ucYiMUWB5peBBzdqCDSIpO8drmNmbSIu
+         JEvtyWqcy5zuos7rzaDxY9UIhihY/eXLngVx3IVMWJK9cv9h9o1SeZp9dhLUT8hnXaK6
+         BwGWbMgUtOm43XwAVPDMbqw240eeGBKDLosBcPTEe25oMSdOumUnsQRlmGpmS1mVd5Xg
+         9JPbSL8YqXaP6MqsEf4K6pqhiKFjUf/wB6HzYRYfkkO+aTXXQIjXuyYlPTYzbnWeK1Tq
+         I48ILBDpO+PT/hXjNELQxyaiOGklXni/tCnlrPzMZNRpD6hFVsx7SW2eyINpSuKknDMt
+         MAew==
+X-Gm-Message-State: AOAM533dTI9/jU2LzaPSNvU/xEnY6frEQX80O2fcFRqsWa/t1mXA4o2r
+        5KsDgDjcEzRx6xP96rUSueGWEw==
+X-Google-Smtp-Source: ABdhPJwPM+/b2ZDI+b2lSlT6ZtTWsjPKk0PA8OlwP8p9CqXazyikXgs/36KZ9HFCJYOviAo2mF99NQ==
+X-Received: by 2002:a1c:81c6:: with SMTP id c189mr4178443wmd.124.1599667455779;
+        Wed, 09 Sep 2020 09:04:15 -0700 (PDT)
+Received: from bender.baylibre.local ([2a01:e35:2ec0:82b0:5405:9623:e2f1:b2ac])
+        by smtp.gmail.com with ESMTPSA id y6sm4850700wrn.41.2020.09.09.09.04.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2020 09:04:15 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     khilman@baylibre.com, kishon@ti.com, balbi@kernel.org,
+        martin.blumenstingl@googlemail.com
+Cc:     linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 0/5] usb: dwc-meson-g12a: Add support for USB on S400 board
+Date:   Wed,  9 Sep 2020 18:04:04 +0200
+Message-Id: <20200909160409.8678-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <1598467441-124203-1-git-send-email-manish.narani@xilinx.com>
- <1598467441-124203-2-git-send-email-manish.narani@xilinx.com>
- <20200908230520.GA1102401@bogus> <BYAPR02MB589674F9C2EFC763AFC63BD2C1260@BYAPR02MB5896.namprd02.prod.outlook.com>
-In-Reply-To: <BYAPR02MB589674F9C2EFC763AFC63BD2C1260@BYAPR02MB5896.namprd02.prod.outlook.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 9 Sep 2020 10:00:45 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKfF6+ocozmSf0n0r8LPjbyK4CurS2qqy1rdNNqQw+cnA@mail.gmail.com>
-Message-ID: <CAL_JsqKfF6+ocozmSf0n0r8LPjbyK4CurS2qqy1rdNNqQw+cnA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation for
- Versal DWC3 Controller
-To:     Manish Narani <MNARANI@xilinx.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Michal Simek <michals@xilinx.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 9, 2020 at 9:46 AM Manish Narani <MNARANI@xilinx.com> wrote:
->
-> Hi Rob,
->
-> Thanks for the review.
->
-> > -----Original Message-----
-> > From: Rob Herring <robh@kernel.org>
-> > Sent: Wednesday, September 9, 2020 4:35 AM
-> > To: Manish Narani <MNARANI@xilinx.com>
-> > Cc: gregkh@linuxfoundation.org; Michal Simek <michals@xilinx.com>;
-> > balbi@kernel.org; p.zabel@pengutronix.de; linux-usb@vger.kernel.org;
-> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> > kernel@vger.kernel.org; git <git@xilinx.com>
-> > Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation for
-> > Versal DWC3 Controller
-> >
-> > On Thu, Aug 27, 2020 at 12:14:00AM +0530, Manish Narani wrote:
-> > > Add documentation for Versal DWC3 controller. Add required property
-> > > 'reg' for the same. Also add optional properties for snps,dwc3.
-> > >
-> > > Signed-off-by: Manish Narani <manish.narani@xilinx.com>
-> > > ---
-> > >  .../devicetree/bindings/usb/dwc3-xilinx.txt          | 12 +++++++++++-
-> > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
-> > b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
-> > > index 4aae5b2cef56..dd41ed831411 100644
-> > > --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
-> > > +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
-> > > @@ -1,7 +1,8 @@
-> > >  Xilinx SuperSpeed DWC3 USB SoC controller
-> > >
-> > >  Required properties:
-> > > -- compatible:      Should contain "xlnx,zynqmp-dwc3"
-> > > +- compatible:      May contain "xlnx,zynqmp-dwc3" or "xlnx,versal-
-> > dwc3"
-> > > +- reg:             Base address and length of the register control block
-> > >  - clocks:  A list of phandles for the clocks listed in clock-names
-> > >  - clock-names:     Should contain the following:
-> > >    "bus_clk"         Master/Core clock, have to be >= 125 MHz for SS
-> > > @@ -13,12 +14,19 @@ Required child node:
-> > >  A child node must exist to represent the core DWC3 IP block. The name of
-> > >  the node is not important. The content of the node is defined in dwc3.txt.
-> > >
-> > > +Optional properties for snps,dwc3:
-> > > +- dma-coherent:    Enable this flag if CCI is enabled in design. Adding this
-> > > +           flag configures Global SoC bus Configuration Register and
-> > > +           Xilinx USB 3.0 IP - USB coherency register to enable CCI.
-> > > +- interrupt-names: This property provides the names of the interrupt ids
-> > used
-> >
-> > You have to define what the names are. 'dwc_usb3' seems pretty pointless
-> > if only 1 name.
->
-> OK. I am planning to add more interrupt ids going ahead. For now I will remove
-> this interrupt name in v2. The interrupt name will be added along with other interrupt
-> names.
+The Amlogic AXG is close from the GXL Glue but with a single OTG PHY.
 
-Define all the interrupts you have. Bindings should be complete, not
-what a driver for some OS happens to use at some point in time.
+It needs the same init sequence as GXL & GXM, but it seems it doesn't need
+the host disconnect bit.
 
-Rob
+The Glue driver reuses the already implemented GXL & GXM work.
+
+The USB2 PHY driver needs a slight tweak to keep the OTG detection working.
+
+Neil Armstrong (5):
+  phy: amlogic: phy-meson-gxl-usb2: keep ID pull-up even in Host mode
+  dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: add the Amlogic AXG
+    Families USB Glue Bindings
+  usb: dwc-meson-g12a: Add support for USB on AXG SoCs
+  arm64: dts: meson-axg: add USB nodes
+  arm64: dts: meson-axg-s400: enable USB OTG
+
+ .../usb/amlogic,meson-g12a-usb-ctrl.yaml      | 22 +++++++-
+ .../arm64/boot/dts/amlogic/meson-axg-s400.dts | 10 ++++
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi    | 51 +++++++++++++++++++
+ drivers/phy/amlogic/phy-meson-gxl-usb2.c      |  3 +-
+ drivers/usb/dwc3/dwc3-meson-g12a.c            | 17 +++++++
+ 5 files changed, 101 insertions(+), 2 deletions(-)
+
+-- 
+2.22.0
+
