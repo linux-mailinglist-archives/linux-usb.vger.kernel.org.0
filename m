@@ -2,211 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4C1263386
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 19:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3A426336C
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 19:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731231AbgIIRFU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Sep 2020 13:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730260AbgIIPmP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Sep 2020 11:42:15 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB19C0619C2;
-        Wed,  9 Sep 2020 08:13:33 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id 185so2675532oie.11;
-        Wed, 09 Sep 2020 08:13:33 -0700 (PDT)
+        id S1730522AbgIIRDo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 13:03:44 -0400
+Received: from mail-co1nam11on2050.outbound.protection.outlook.com ([40.107.220.50]:61824
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730494AbgIIPq3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Sep 2020 11:46:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bqLSzODX6NNP+cIXpI9B8iVOu+EnGejzY7PiNySckYsHdGGvh0e9wLDrWUBaVHNkrDs1+QHaUrQmEun8byW1n85JfdRE4GkNXPHbhovTHsinSsgT0/G3IgKWoWsnT8lI35SA4lR+b4uiK+EP5h2fu5QxlPFhVQvEKQdcU2dJhIgz5bLyDcHUO8ulhgttGbQ6Pin6fGW9nCBmozfPYGyWRO0G/GfHW47GWMef5avV3PTm12AubMyRVjRcnC1i9Xl/gis0h5UP1atYEa7+6g0T683DteIDkj8TYNlV7zwXlDQwkpGsNVr6W+auqVB+lbs9Rr4yBSwzjF948tcvUWJ5sQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PxQgBUeTBuyN+JwqjIpIWS6i5OlF/4xaLh84B2rMaig=;
+ b=iQHfeLcRv5hvwolOT3Xnq1W5O60vgpLz1Ucvgvs/XmFujJfihMrEssRuBgryvmzWrHP2G2GIRypa5BS8db0H3WSEISakOallMnOPNS7J37puic0Sbvr8hdVgxVp5vUuFdyc2xejsWIVr2EBKDjyf0druH5FHTuWYCOo28hrHxsECcZ+LaRz1m23TDjPtERzxAzJmNFSU5wjv4TB/74sV8M77D5AMP1VA3Y2e1n50HHEB/2H4ZiKlgAvE/81cfKXoy5kgymf1VeJ2lBx8N3oLixfknum+xknneiLgAlWDTTDOJqXqpItiYUA9X0VNrvrMNyNk92B4Z4hzBUzO7Ejk+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CdaV3sDds66XXA89qA8qa8FAmNjF4GIYWa4lEyrs0nA=;
-        b=CNGkYrVSh0ClcYmHGxQgDwF7dCr96BWhYxsE6aP8mh20b5vV01X2/lMWGA79bkvGhr
-         wKYyOgldmSK4cb1368I4Rz5KapuKQN0cMeoyXUVj6HtShkBkWqtXqs+BgOmOtZOsKF3C
-         sy0Mbzv7kw79Tdhk83AZkR5ArV4V2dzmAbjXnt0UwieBy1c49V1TDp8LJOqTetBLiLtc
-         4y6VzuCYPCUecBRwa8LBYS0yL/Ayh/vtyX6niqp0ZOZNWVniKXhQ9rpuZk/YKCGdW359
-         +syUwZl0k+mYlI0anKzm/gKoGX6JKYXuHao4wFiKggrOFdFHmDceIV7vGcVasYC4zwGI
-         bYLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=CdaV3sDds66XXA89qA8qa8FAmNjF4GIYWa4lEyrs0nA=;
-        b=GT5XHmYEZgzduU8tTkxdzwRscFP3IgIC57VeevhQ2wQCfsIa2C7ixHUtQZXDoOBOzx
-         IeAKwnKfMqw55Yo5V832UEYbS4mjsAzqNzKt4buo5t7O2mnF3o4OUGR86G0BEej4QDM2
-         snvi72OLOog2nbaC/vgarISXE5xqeQhDE9gMovXpATQfDN5EY8pl98W48GdUd2DGREYs
-         CPC7AzFevLbb+FMCZ7ulAN/p5K83vsUFNOOmB+lSacAmD5dbDlE5z3soBJ+19ZMsbvCR
-         CGrGTvYnWnC/jL8oUkN2KA4dpMi0bpWbotA3HFDbmlSsLgZok8cR5ToagH/OopxyJxSC
-         txvg==
-X-Gm-Message-State: AOAM532WJP+vd8J41wHKTxgL2vgMl6uKRbkK3iIaA3zbSY5p/r0Z7oTu
-        i+9VUY4astI2cRm6mL/l3Ck=
-X-Google-Smtp-Source: ABdhPJznUhCxaV9IJdYf3pJWQqcvHstvsFmPzksNL3TXEXGH0e39wsbjw0gg+Ci1aSTs2gwQ8xJ/+A==
-X-Received: by 2002:a05:6808:287:: with SMTP id z7mr1002509oic.99.1599664412805;
-        Wed, 09 Sep 2020 08:13:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j66sm393156otc.74.2020.09.09.08.13.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 08:13:32 -0700 (PDT)
-Subject: Re: [kbuild] Re: [PATCH v2 5/5] media: uvcvideo: Abort uvc_v4l2_open
- if video device is unregistered
-To:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     lkp@intel.com, kbuild-all@lists.01.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
-        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-References: <20200909121941.GY8321@kadam>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <3e5525e5-f403-7e0d-bfb3-e5569d2a8c8d@roeck-us.net>
-Date:   Wed, 9 Sep 2020 08:13:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200909121941.GY8321@kadam>
-Content-Type: text/plain; charset=windows-1252
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PxQgBUeTBuyN+JwqjIpIWS6i5OlF/4xaLh84B2rMaig=;
+ b=ZRuig3f7eOi/CLHzEYS9hV3c7Z4vdrgQWkpTMMYStDgdpNxffn9czAEl4eD6M6ORfu3gm8go6po7xGJHtgTxzNyDi1Hx1F2ZmSmWzqO8dUuVZ0hMN1JWLxInUxmR+y5kQTIHBf89KkwY/vFyo6cPrhlhRxMDpX+WcRPCkj7POQs=
+Received: from BYAPR02MB5896.namprd02.prod.outlook.com (2603:10b6:a03:122::10)
+ by BY5PR02MB6850.namprd02.prod.outlook.com (2603:10b6:a03:203::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Wed, 9 Sep
+ 2020 15:46:13 +0000
+Received: from BYAPR02MB5896.namprd02.prod.outlook.com
+ ([fe80::84b5:71be:1584:f314]) by BYAPR02MB5896.namprd02.prod.outlook.com
+ ([fe80::84b5:71be:1584:f314%7]) with mapi id 15.20.3370.016; Wed, 9 Sep 2020
+ 15:46:13 +0000
+From:   Manish Narani <MNARANI@xilinx.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Michal Simek <michals@xilinx.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>
+Subject: RE: [PATCH 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation for
+ Versal DWC3 Controller
+Thread-Topic: [PATCH 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation for
+ Versal DWC3 Controller
+Thread-Index: AQHWe9j+PlxSy8oZg0WQBIs3MmmIKKlfcVoAgAEWjJA=
+Date:   Wed, 9 Sep 2020 15:46:13 +0000
+Message-ID: <BYAPR02MB589674F9C2EFC763AFC63BD2C1260@BYAPR02MB5896.namprd02.prod.outlook.com>
+References: <1598467441-124203-1-git-send-email-manish.narani@xilinx.com>
+ <1598467441-124203-2-git-send-email-manish.narani@xilinx.com>
+ <20200908230520.GA1102401@bogus>
+In-Reply-To: <20200908230520.GA1102401@bogus>
+Accept-Language: en-IN, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=xilinx.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [149.199.50.130]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 6e7f3652-0efe-4840-f709-08d854d77b5e
+x-ms-traffictypediagnostic: BY5PR02MB6850:
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BY5PR02MB685061ACDB2EB11AEE2FAE91C1260@BY5PR02MB6850.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7UKcmu5SXuAPnrEx/VYF7Dx75j7tCsSYlX7YFSNldwGq5VRGpCKwTXQxURmbhwU3G/3OkutAC6IosN1K6SoOnGrGSIwjVetQ8b0H18N+b0n40DBmFEpPJ5FU4f/22j9/eymso6Vy6vS8q28AxPAa88GAsy/NPUzXrbUbExxpj0GIEAwXvKYE6szjY+U8VV9zkbbZNogyxo6GLXEdCDuRiEomYUEfz5WJmGJ0fudMfhHV12HXGLNwHN19LQEn/ErSj4kZ5vwK+MK88QSFwpq+FP5yGXGo+t/tyi6sm6Zm4SKqxAX0UG56WpuQL5FaSGXLM3QYJT1Fdmm8leQCbftojQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR02MB5896.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(136003)(376002)(346002)(366004)(8936002)(83380400001)(2906002)(54906003)(33656002)(71200400001)(9686003)(66476007)(66946007)(4326008)(55016002)(66446008)(64756008)(66556008)(76116006)(107886003)(6506007)(53546011)(316002)(186003)(7696005)(5660300002)(7416002)(478600001)(44832011)(52536014)(8676002)(6916009)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 9CTfkpjQMdi85PmN01LU+zmO7s0aVqUSX0M7aZ/UawyFyB3CFQAkPn9cm3Oxb81iGMNItD/mmalAglNLTCye5GhCR5ru/jg5RCCGTF6/Oc5JikW0pwBxU9OHP0h3u8Xhar6OLAHl+9BNboWiDx8h3zjz93pim72dx7xAunM2iGbgbKLdz0KtdWj40hedKVyQD8ONeZvHf4ii0Ygh1GDiSLmkl/o+vQSkl5gJMM2QudxrE0Bi/yeTBei6Szo8oHK13azEthkhIT0RldwQcRKutv8J24Q18gxX4I97VqNvJL2nWA0Ld4XwoDb9cW+KEZS9hSp3dSBCBskNryCl+uuoiavBcBbuf0fqZBrXDlv4KFW0bFZiPAkVPNWhCuvIShMvnyULT0YALJ3UGd+WkY3BAZFkoOO0Y8pPHWZEDME3+MI6SJrTi36VIUqC5nMVbW3zUnefTN+P0W5I2JdzAg8GpE5sNx4u0jyHEuePuEeyxGluq+rvR1xVbuE2vtyxSY1Jscw49t9igaQtdTRk/skEGmSVPc7DTJHpldbKbPDuuWgn7F33S3ULQa2gBD/+yvGWOGgS/9pKVlrwhb0nUlUlmcUCtpI4xJ2Ozmevw3u9URXnuJbUoCspllXAQNPNF3evvEh6Gl2JJbB0i/tQf7aapw==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR02MB5896.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e7f3652-0efe-4840-f709-08d854d77b5e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2020 15:46:13.6078
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aFO/se0PZi+n6tM7ezMcLGj9MKtRZj3qprSfFF4dMPCjRpezLoD5yW5pBbsWWl18mxhmRFizo7ewym9l+oQQ/w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR02MB6850
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/9/20 5:19 AM, Dan Carpenter wrote:
-> Hi Guenter,
-> 
-> url:    https://github.com/0day-ci/linux/commits/Guenter-Roeck/media-uvcvideo-Fix-race-conditions/20200909-121927 
-> base:   git://linuxtv.org/media_tree.git master
-> config: x86_64-randconfig-m001-20200909 (attached as .config)
-> compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
-> smatch warnings:
-> drivers/media/usb/uvc/uvc_v4l2.c:553 uvc_v4l2_open() warn: possible memory leak of 'handle'
-> 
+Hi Rob,
 
-Good catch. It is also missing a call to usb_autopm_put_interface().
-I'll fix that in v3.
+Thanks for the review.
+
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: Wednesday, September 9, 2020 4:35 AM
+> To: Manish Narani <MNARANI@xilinx.com>
+> Cc: gregkh@linuxfoundation.org; Michal Simek <michals@xilinx.com>;
+> balbi@kernel.org; p.zabel@pengutronix.de; linux-usb@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> kernel@vger.kernel.org; git <git@xilinx.com>
+> Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation=
+ for
+> Versal DWC3 Controller
+>=20
+> On Thu, Aug 27, 2020 at 12:14:00AM +0530, Manish Narani wrote:
+> > Add documentation for Versal DWC3 controller. Add required property
+> > 'reg' for the same. Also add optional properties for snps,dwc3.
+> >
+> > Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+> > ---
+> >  .../devicetree/bindings/usb/dwc3-xilinx.txt          | 12 +++++++++++-
+> >  1 file changed, 11 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> > index 4aae5b2cef56..dd41ed831411 100644
+> > --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> > +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> > @@ -1,7 +1,8 @@
+> >  Xilinx SuperSpeed DWC3 USB SoC controller
+> >
+> >  Required properties:
+> > -- compatible:	Should contain "xlnx,zynqmp-dwc3"
+> > +- compatible:	May contain "xlnx,zynqmp-dwc3" or "xlnx,versal-
+> dwc3"
+> > +- reg:		Base address and length of the register control block
+> >  - clocks:	A list of phandles for the clocks listed in clock-names
+> >  - clock-names:	Should contain the following:
+> >    "bus_clk"	 Master/Core clock, have to be >=3D 125 MHz for SS
+> > @@ -13,12 +14,19 @@ Required child node:
+> >  A child node must exist to represent the core DWC3 IP block. The name =
+of
+> >  the node is not important. The content of the node is defined in dwc3.=
+txt.
+> >
+> > +Optional properties for snps,dwc3:
+> > +- dma-coherent:	Enable this flag if CCI is enabled in design. Adding t=
+his
+> > +		flag configures Global SoC bus Configuration Register and
+> > +		Xilinx USB 3.0 IP - USB coherency register to enable CCI.
+> > +- interrupt-names: This property provides the names of the interrupt i=
+ds
+> used
+>=20
+> You have to define what the names are. 'dwc_usb3' seems pretty pointless
+> if only 1 name.
+
+OK. I am planning to add more interrupt ids going ahead. For now I will rem=
+ove
+this interrupt name in v2. The interrupt name will be added along with othe=
+r interrupt
+names.
 
 Thanks,
-Guenter
-
-> # https://github.com/0day-ci/linux/commit/50911975ff9b21d08ff5408e496683b8ac567b1c 
-> git remote add linux-review https://github.com/0day-ci/linux 
-> git fetch --no-tags linux-review Guenter-Roeck/media-uvcvideo-Fix-race-conditions/20200909-121927
-> git checkout 50911975ff9b21d08ff5408e496683b8ac567b1c
-> vim +/handle +553 drivers/media/usb/uvc/uvc_v4l2.c
-> 
-> bec43661b1dc00 drivers/media/video/uvc/uvc_v4l2.c Hans Verkuil     2008-12-30  530  static int uvc_v4l2_open(struct file *file)
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  531  {
-> 35f02a681b72ec drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-06-28  532  	struct uvc_streaming *stream;
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  533  	struct uvc_fh *handle;
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  534  	int ret = 0;
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  535  
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  536  	uvc_trace(UVC_TRACE_CALLS, "uvc_v4l2_open\n");
-> 35f02a681b72ec drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-06-28  537  	stream = video_drvdata(file);
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  538  
-> 35f02a681b72ec drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-06-28  539  	ret = usb_autopm_get_interface(stream->dev->intf);
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  540  	if (ret < 0)
-> 716fdee110ceb8 drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-09-29  541  		return ret;
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  542  
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  543  	/* Create the device handle. */
-> f14d4988c28e52 drivers/media/usb/uvc/uvc_v4l2.c   Laurent Pinchart 2018-01-16  544  	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
->                                                                                         ^^^^^^^^^^^^^^^^
-> 
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  545  	if (handle == NULL) {
-> 35f02a681b72ec drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-06-28  546  		usb_autopm_put_interface(stream->dev->intf);
-> 716fdee110ceb8 drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-09-29  547  		return -ENOMEM;
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  548  	}
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  549  
-> 17706f5653a90f drivers/media/usb/uvc/uvc_v4l2.c   Laurent Pinchart 2013-04-25  550  	mutex_lock(&stream->dev->lock);
-> 50911975ff9b21 drivers/media/usb/uvc/uvc_v4l2.c   Guenter Roeck    2020-09-08  551  	if (!video_is_registered(&stream->vdev)) {
-> 50911975ff9b21 drivers/media/usb/uvc/uvc_v4l2.c   Guenter Roeck    2020-09-08  552  		mutex_unlock(&stream->dev->lock);
-> 50911975ff9b21 drivers/media/usb/uvc/uvc_v4l2.c   Guenter Roeck    2020-09-08 @553  		return -ENODEV;
->                                                                                                 ^^^^^^^^^^^^^^
-> kfree(handle);
-> 
-> 50911975ff9b21 drivers/media/usb/uvc/uvc_v4l2.c   Guenter Roeck    2020-09-08  554  	}
-> 17706f5653a90f drivers/media/usb/uvc/uvc_v4l2.c   Laurent Pinchart 2013-04-25  555  	if (stream->dev->users == 0) {
-> 17706f5653a90f drivers/media/usb/uvc/uvc_v4l2.c   Laurent Pinchart 2013-04-25  556  		ret = uvc_status_start(stream->dev, GFP_KERNEL);
-> 35f02a681b72ec drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-06-28  557  		if (ret < 0) {
-> 17706f5653a90f drivers/media/usb/uvc/uvc_v4l2.c   Laurent Pinchart 2013-04-25  558  			mutex_unlock(&stream->dev->lock);
-> a82a45f65377b0 drivers/media/usb/uvc/uvc_v4l2.c   Oliver Neukum    2013-01-10  559  			usb_autopm_put_interface(stream->dev->intf);
-> 04a37e0f32f988 drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-05-19  560  			kfree(handle);
-> 716fdee110ceb8 drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-09-29  561  			return ret;
-> 04a37e0f32f988 drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-05-19  562  		}
-> 04a37e0f32f988 drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-05-19  563  	}
-> 04a37e0f32f988 drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-05-19  564  
-> 17706f5653a90f drivers/media/usb/uvc/uvc_v4l2.c   Laurent Pinchart 2013-04-25  565  	stream->dev->users++;
-> 17706f5653a90f drivers/media/usb/uvc/uvc_v4l2.c   Laurent Pinchart 2013-04-25  566  	mutex_unlock(&stream->dev->lock);
-> 17706f5653a90f drivers/media/usb/uvc/uvc_v4l2.c   Laurent Pinchart 2013-04-25  567  
-> d8da7513bcf983 drivers/media/usb/uvc/uvc_v4l2.c   Hans Verkuil     2015-03-09  568  	v4l2_fh_init(&handle->vfh, &stream->vdev);
-> b4012002f3a398 drivers/media/video/uvc/uvc_v4l2.c Hans de Goede    2012-04-08  569  	v4l2_fh_add(&handle->vfh);
-> 8e113595edf074 drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-07-01  570  	handle->chain = stream->chain;
-> 35f02a681b72ec drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-06-28  571  	handle->stream = stream;
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  572  	handle->state = UVC_HANDLE_PASSIVE;
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  573  	file->private_data = handle;
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  574  
-> 716fdee110ceb8 drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2009-09-29  575  	return 0;
-> c0efd232929c2c drivers/media/video/uvc/uvc_v4l2.c Laurent Pinchart 2008-06-30  576  }
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org 
-> 
-> 
-> _______________________________________________
-> kbuild mailing list -- kbuild@lists.01.org
-> To unsubscribe send an email to kbuild-leave@lists.01.org
-> 
-
+Manish
