@@ -2,152 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD76262D06
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 12:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20C9262D58
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 12:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728015AbgIIK11 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Sep 2020 06:27:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45314 "EHLO mail.kernel.org"
+        id S1727975AbgIIKkq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 06:40:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34568 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727935AbgIIK0v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Sep 2020 06:26:51 -0400
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
+        id S1726293AbgIIKko (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Sep 2020 06:40:44 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9365D206F4;
-        Wed,  9 Sep 2020 10:26:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B3FBA206F4;
+        Wed,  9 Sep 2020 10:40:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599647209;
-        bh=MG0msxZvjCsJNDApogNfiZrhvSjNoctWQSyL9scydxs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=FedeXmt6fvwowKtOyhe/cRP0eUKyzmP9wPKyX4D8hmyQKsI71a7+ceemLYsWgstGb
-         6AI1ZhtZEIyey4iaef9Elcefio4AU1rhrW6bOmUOxuA4pV9zlVKnZkv0PsjObP9Jfe
-         pCfjE5Yim1FbmjqPyh80HSWywTyr/fhL2hqU2i8g=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Manish Narani <MNARANI@xilinx.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Michal Simek <michals@xilinx.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>
-Subject: RE: [PATCH 2/2] usb: dwc3: Add driver for Xilinx platforms
-In-Reply-To: <BYAPR02MB58960AA4C87C76223C04D71BC1260@BYAPR02MB5896.namprd02.prod.outlook.com>
-References: <1598467441-124203-1-git-send-email-manish.narani@xilinx.com>
- <1598467441-124203-3-git-send-email-manish.narani@xilinx.com>
- <87y2m0ioql.fsf@kernel.org>
- <BYAPR02MB5896669D47783D06F779608BC1520@BYAPR02MB5896.namprd02.prod.outlook.com>
- <877dtd7kxc.fsf@kernel.org>
- <BYAPR02MB58960AA4C87C76223C04D71BC1260@BYAPR02MB5896.namprd02.prod.outlook.com>
-Date:   Wed, 09 Sep 2020 13:26:42 +0300
-Message-ID: <87blifkzz1.fsf@kernel.org>
+        s=default; t=1599648044;
+        bh=/uoeLxvdnAM7fxQswYJcfDtLDxf5ByEIff/HZMqRk50=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zy/os9uAYjHUY8OakLoDAgR1bJ8L3Z3g66LsG4b9aualfs5rU+vOODr67K5HgStuZ
+         L3i1uf0s3/5N6B3ewfGiEbqDwzRy0nR01CrYLvImyIJ7QBiSqmsp4kW2UaKu6DlogH
+         SfJvyjSTqvShRTzdpLjZaoMrLMgUViaJ7lsT/Xds=
+Date:   Wed, 9 Sep 2020 12:40:54 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Lorenzo Colitti <lorenzo@google.com>, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, zenczykowski@gmail.com
+Subject: Re: [PATCH v3 0/3] usb: gadget: f_ncm: support SuperSpeed Plus,
+ improve on SuperSpeed
+Message-ID: <20200909104054.GA615992@kroah.com>
+References: <20200825055505.765782-1-lorenzo@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200825055505.765782-1-lorenzo@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Tue, Aug 25, 2020 at 02:55:02PM +0900, Lorenzo Colitti wrote:
+> This patch series makes the NCM gadget usable at SuperSpeed Plus
+> speeds (currently, it crashes with an oops). It also improves the
+> behaviour on SuperSpeed and above by making simple performance
+> improvements and by fixing the speeds that are reported to the
+> host (currently 851 Mbps, which is much below actual throughput).
+> 
+> Tested on a gadget directly connected to a Linux laptop running
+> 5.6.14 and cdc_ncm, using both 5 Gbps and 10 Gbps cables. iperf3
+> single TCP connection throughput (gadget to host) is > 2 Gbps on
+> SuperSpeed and > 4 Gbps on SuperSpeed Plus.
+> 
+> Changes since v1:
+> - Set bMaxBurst to 15 on endpoints.
+> - Report more realistic speeds than 851 Mbps.
+> 
+> Changes since v2:
+> - Remove the separate SuperSpeed Plus descriptors and function
+>   which were just a copy of the SuperSpeed descriptors and
+>   function. Instead, just pass the SuperSpeed function to
+>   usb_assign_descriptors for both SuperSpeed and SuperSpeed
+>   Plus.
+> - Don't set bMaxBurst on the interrupt endpoint. This is
+>   incorrect/useless and forbidden by the spec.
+> - Make the speed constants unsigned literals.
+> 
+> 
 
+Felipe, did you miss this series, or is it still in your to-review queue
+you are working your way through?
 
-Hi,
+thanks,
 
-Manish Narani <MNARANI@xilinx.com> writes:
->> -----Original Message-----
->> From: Felipe Balbi <balbi@kernel.org>
->> Sent: Tuesday, September 1, 2020 5:45 PM
->>=20
->> >> > +		goto err;
->> >> > +	}
->> >> > +
->> >> > +	ret =3D dwc3_xlnx_rst_assert(priv_data->apbrst);
->> >> > +	if (ret < 0) {
->> >> > +		dev_err(dev, "%s: %d: Failed to assert reset\n",
->> >> > +			__func__, __LINE__);
->> >>
->> >> 		dev_err(dev, "Failed to assert APB reset\n");
->> >>
->> >> > +		goto err;
->> >> > +	}
->> >> > +
->> >> > +	ret =3D phy_init(priv_data->usb3_phy);
->> >>
->> >> dwc3 core should be handling this already
->> >
->> > The USB controller used in Xilinx ZynqMP platform uses xilinx GT phy
->> > which has 4 GT lanes and can used by 4 peripherals at a time.
->>=20
->> At the same time or are they mutually exclusive?
->
-> The lanes are mutually exclusive.
-
-Thank you for confirming :-)
-
->  [...]
->> >> > +	if (ret < 0) {
->> >> > +		dev_err(dev, "%s: %d: Failed to release reset\n",
->> >> > +			__func__, __LINE__);
->> >> > +		goto err;
->> >> > +	}
->> >> > +
->> >> > +	/* Set PIPE power present signal */
->> >> > +	writel(PIPE_POWER_ON, priv_data->regs + PIPE_POWER_OFFSET);
->> >> > +
->> >> > +	/* Clear PIPE CLK signal */
->> >> > +	writel(PIPE_CLK_OFF, priv_data->regs + PIPE_CLK_OFFSET);
->> >>
->> >> shouldn't this be hidden under clk_enable()?
->> >
->> > Though its naming suggests something related to clock framework, it is
->> > a register in the Xilinx USB controller space which configures the
->> > PIPE clock coming from Serdes.
->>=20
->> PIPE clock is a clock. It just so happens that the source is the PHY
->> itself.
->
-> This bit is used to choose between PIPE clock coming from SerDes
-> and the Suspend Clock. When the controller is out of reset, this bit
-> needs to be reset in order to make the USB controller work. This
-> register is added in Xilinx USB controller register space. I will
-> add more description about the same in v2.
-
-Aha! That clarifies. It's just a clock selection from clocks that are
-generated elsewhere :-) I guess a clk driver would be overkill, indeed.
-
-Thanks for explaining. Could you add some of this information to commit
-log, then?
-
-cheers
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9YreIRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZ/zw/7Btf7KF38ujarqULDRAGPcndKWFLsg+zM
-mf6UkIlysLp3RK3ADxwyLi+9jwnezvSTQ7wHU1E3jF5aHsVpahXOtkkjS6ffYhyG
-LyOGMJNJ1/h4i+QyNs5mkfOTNSP02W0mfd2VrzWse9A1IMqJeoo0xVjrqyZixZEd
-6FaO1mfIXfFFQnfS5q5hZo9GYk6HNM929VKs09bX2uJ8qsJqcI+i5SAdxbo+Zp4T
-2PxrQtcQEYxjL2R39AbAy6U627ZfEtuHrIOtTV5czMqzPAIfi/88WnXvriT7oOcM
-GrvAz+ulf8uSMwNtVc3GUzkFgpppshjoB71WojNxlfbt/5UYLTLyFOfDfPf2i4gE
-Q6EKRU3NPJcnt/2letLFfhSow6qnLuCFYCfl6z+8lgbLHoThfmNtUrx4jlVrPFMJ
-Sz1bSR5NO82aNvbhOIXWGcyoaiZBpYPX0XVyW0wDEc+dnal4oUE12MxOVhzk6QVz
-FqBdmDKXx+jjwwKkWoBONLsTvjScG5PXPMTOMGFffVSnrJ6f8bo1QGuwL8H72uqj
-4z44XEbYjiWGFYroG3VsoVJvf/vGjsfud0ZJLesKF37BeaU1jJkbYQQQjLM9WzXY
-IZ0Mg04mcVLl1vhCDK3KZH0B/8vMDiUgduLflBtuuxPqVU/wAr74jgLRJMDppBDH
-vE++F+UPao4=
-=+Qxk
------END PGP SIGNATURE-----
---=-=-=--
+greg k-h
