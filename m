@@ -2,145 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A32262E98
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 14:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC17262F67
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Sep 2020 15:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730168AbgIIMex (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Sep 2020 08:34:53 -0400
-Received: from mga18.intel.com ([134.134.136.126]:19338 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725772AbgIIMea (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Sep 2020 08:34:30 -0400
-IronPort-SDR: c3pKPumq1Z3l32v2yaxyXlfsAoMWvlhrBGBs/Zzn6BATiTbBmGKlK0a3tC9ZV5GROPhAB6avEC
- 8O6rAX6Td9zQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9738"; a="146034994"
-X-IronPort-AV: E=Sophos;i="5.76,409,1592895600"; 
-   d="scan'208";a="146034994"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2020 05:33:59 -0700
-IronPort-SDR: YVJTxxldgfjht2lJ70U1M7S/TGap95fdFRjuF+rOOlDceSQFVHUVMEHVQVXuFQIhAHoRSXvDVK
- HUPATy5yW9Yw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,409,1592895600"; 
-   d="scan'208";a="407436780"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 09 Sep 2020 05:33:56 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Sep 2020 15:33:55 +0300
-Date:   Wed, 9 Sep 2020 15:33:55 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Zwane Mwaikambo <zwanem@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Zwane Mwaikambo <zwane@yosper.io>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] usb/typec: fix array overruns in ucsi.c
- partner_altmode[]
-Message-ID: <20200909123355.GA3627076@kuha.fi.intel.com>
-References: <alpine.DEB.2.21.2008271035320.30454@montezuma.home>
- <0013fe6c-c0a2-1759-c769-cda025e5eb38@infradead.org>
- <alpine.DEB.2.21.2008271058220.37762@montezuma.home>
- <alpine.DEB.2.21.2008271131570.37762@montezuma.home>
- <20200828123328.GF174928@kuha.fi.intel.com>
- <alpine.DEB.2.21.2008300220350.37231@montezuma.home>
- <alpine.DEB.2.21.2008300227240.37231@montezuma.home>
+        id S1730446AbgIINxi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 09:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726970AbgIINWO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Sep 2020 09:22:14 -0400
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFE9C0617A1;
+        Wed,  9 Sep 2020 05:50:21 -0700 (PDT)
+Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 089CnV6b019522
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 9 Sep 2020 14:49:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1599655773; bh=gyZQUFKOvOzRD5d6Mx+YiDunu6byD7irHNEmNRStxpY=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=FisxOlxKtlkGOJN1DvW1fUmDGy7B7E4DClQNfYXa9nfw01xgf1/L8Hid0lOYFtCoH
+         m6QC1zJd9KczFwx2d/CQzE8aPHMYfPLf7jwHnUfGrRahCBCmc6zFGCFZBa7GMy9eJX
+         GjZMpaXRSYX4X8p15l7snzCzAwAQfjkWwTcRIt2I=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
+        (envelope-from <bjorn@mork.no>)
+        id 1kFzXW-00052h-Qk; Wed, 09 Sep 2020 14:49:30 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Daniele Palmas <dnlplm@gmail.com>
+Cc:     =?utf-8?B?Q2FybCBZaW4o5q635byg5oiQKQ==?= <carl.yin@quectel.com>,
+        Kristian Evensen <kristian.evensen@gmail.com>,
+        Paul Gildea <paul.gildea@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH net-next 1/1] net: usb: qmi_wwan: add default rx_urb_size
+Organization: m
+References: <20200909091302.20992-1-dnlplm@gmail.com>
+        <HK2PR06MB35077179EE3FDE04A1EB612786260@HK2PR06MB3507.apcprd06.prod.outlook.com>
+        <CAGRyCJFuMv5PmLC2iUGOgbBufWUKhmVoYgrK_hXTgqmj1P1Yjw@mail.gmail.com>
+Date:   Wed, 09 Sep 2020 14:49:30 +0200
+In-Reply-To: <CAGRyCJFuMv5PmLC2iUGOgbBufWUKhmVoYgrK_hXTgqmj1P1Yjw@mail.gmail.com>
+        (Daniele Palmas's message of "Wed, 9 Sep 2020 13:57:58 +0200")
+Message-ID: <87tuw7dsit.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2008300227240.37231@montezuma.home>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.102.4 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Daniele Palmas <dnlplm@gmail.com> writes:
+> Il giorno mer 9 set 2020 alle ore 13:09 Carl Yin(=E6=AE=B7=E5=BC=A0=E6=88=
+=90)
+> <carl.yin@quectel.com> ha scritto:
+>>
+>> Hi Deniele:
+>>
+>>         I have an idea, by now in order to use QMAP,
+>>         must execute shell command 'echo mux_id > /sys/class/net/<iface>=
+/add_mux' in user space,
+>>         maybe we can expand usage of sys attribute 'add_mux', like next:
+>>         'echo mux_id mux_size mux_version > /sys/class/net/<iface>/add_m=
+ux'.
+>>         Users can set correct 'mux_size and mux_version' according to th=
+e response of 'QMI_WDA_SET_DATA_FORMAT '.
+>>         If 'mux_size and mux_version' miss, qmi_wwan can use default val=
+ues.
+>>
+>
+> not sure this is something acceptable, let's wait for Bj=C3=B8rn to comme=
+nt.
 
-One nitpick below...
+This breaks the "one value per file" rule.  Ref
+https://www.kernel.org/doc/Documentation/filesystems/sysfs.txt
 
-On Sun, Aug 30, 2020 at 02:28:39AM -0700, Zwane Mwaikambo wrote:
-> This fixes the second array overrun occurrence (similar failure mode to 
-> the first), this time in ucsi_unregister_altmodes.
-> 
-> [ 4373.153246] BUG: kernel NULL pointer dereference, address: 
-> 00000000000002f2
-> [ 4373.153267] #PF: supervisor read access in kernel mode
-> [ 4373.153271] #PF: error_code(0x0000) - not-present page
-> [ 4373.153275] PGD 0 P4D 0 
-> [ 4373.153284] Oops: 0000 [#2] PREEMPT SMP NOPTI
-> [ 4373.153292] CPU: 0 PID: 13242 Comm: kworker/0:0 Tainted: G      D           
-> 5.8.0-rc6+ #1
-> [ 4373.153296] Hardware name: LENOVO 20RD002VUS/20RD002VUS, BIOS R16ET25W 
-> (1.11 ) 04/21/2020
-> [ 4373.153308] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-> [ 4373.153320] RIP: 0010:ucsi_unregister_altmodes+0x5f/0xa0 [typec_ucsi]
-> [ 4373.153326] Code: 54 48 8b 3b 41 83 c4 01 e8 9e f9 0c 00 49 63 c4 48 c7 
-> 03 00 00 00 00 49 8d 5c c5 00 48 8b 3b 48 85 ff 74 31 41 80 fe 01 75 d7 
-> <0f> b7 87 f0 02 00 00 66 3d 01 ff 74 0f 66 3d 55 09 75 c4 83 bf f8
-> [ 4373.153332] RSP: 0018:ffffb2ef036b3dc8 EFLAGS: 00010246
-> [ 4373.153338] RAX: 000000000000001e RBX: ffff94268b006a60 RCX: 
-> 0000000080800067
-> [ 4373.153342] RDX: 0000000080800068 RSI: 0000000000000001 RDI: 
-> 0000000000000002
-> [ 4373.153347] RBP: ffffb2ef036b3de8 R08: 0000000000000000 R09: 
-> ffffffff8dc65400
-> [ 4373.153351] R10: ffff9426678d7200 R11: 0000000000000001 R12: 
-> 000000000000001e
-> [ 4373.153355] R13: ffff94268b006970 R14: 0000000000000001 R15: 
-> ffff94268b006800
-> [ 4373.153361] FS:  0000000000000000(0000) GS:ffff942691400000(0000) 
-> knlGS:0000000000000000
-> [ 4373.153366] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 4373.153371] CR2: 00000000000002f2 CR3: 00000004445a6005 CR4: 
-> 00000000003606f0
-> [ 4373.153375] Call Trace:
-> [ 4373.153389]  ucsi_unregister_partner.part.0+0x17/0x30 [typec_ucsi]
-> [ 4373.153400]  ucsi_handle_connector_change+0x25c/0x320 [typec_ucsi]
-> [ 4373.153418]  process_one_work+0x1df/0x3d0
-> [ 4373.153428]  worker_thread+0x4a/0x3d0
-> [ 4373.153436]  ? process_one_work+0x3d0/0x3d0
-> [ 4373.153444]  kthread+0x127/0x170
-> [ 4373.153451]  ? kthread_park+0x90/0x90
-> [ 4373.153461]  ret_from_fork+0x1f/0x30
-> [ 4373.153661] CR2: 00000000000002f2
-> 
-> Fixes: ad74b8649beaf ("usb: typec: ucsi: Preliminary support for alternate modes")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
-> ---
-> v2 addresses both instances of array overrun
-> v3 addresses patch submission/formatting issues
-> v4 addresses patch submission/formatting issues
-> v5 adds and cc to stable
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index d0c63afaf..79061705e 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -479,7 +480,10 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
->  		return;
->  	}
->  
-> -	while (adev[i]) {
-> +	for (i = 0; i < UCSI_MAX_ALTMODES; i++) {
-> +		if (!adev[i])
-> +			break;
+And I really think this userspace ABI is complicated enough already
+without adding yet another variable governed by strict rules.
 
-        for (i = 0; i < UCSI_MAX_ALTMODES && adev[u]; i++) {
+I'd prefer this to just work, if possible.  I liked the simplicity of
+your patch.  If it is necessary to have a different value when QMAP is
+disabled, then I'd much rather see two fixed values, depending on
+QMI_WWAN_FLAG_MUX.
 
->  		if (recipient == UCSI_RECIPIENT_SOP &&
->  		    (adev[i]->svid == USB_TYPEC_DP_SID ||
->  			(adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
-> @@ -488,7 +492,7 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
->  			ucsi_displayport_remove_partner((void *)pdev);
->  		}
->  		typec_unregister_altmode(adev[i]);
-> -		adev[i++] = NULL;
-> +		adev[i] = NULL;
->  	}
->  }
->  
 
-thanks,
+>>         If fixed set as 32KB, but MDM9x07 chips only support 4KB, or use=
+s do not enable QMAP,
+>>         Maybe cannot reach max throughput for no enough rx urbs.
+>>
+>
+> I did not test for performance, but you could be right since for
+> example, if I'm not wrong, rx_qlen for an high-speed device would be 2
+> with the changed rx_urb_size.
 
--- 
-heikki
+That's correct.  But I believe 2 URBs might be enough.  Still, would be
+nice if some of you with a fast enough modem could test this.  At least
+if throughput issues are going to be an argument for a more complicated
+ABI.
+
+> So, we'll probably need to modify also usbnet_update_max_qlen, but not
+> sure about the direction (maybe fallback to a default value to
+> guarantee a minimum number if rx_qlen is < than a threshold?). And
+> this is also a change affecting all the drivers using usbnet, so it
+> requires additional care.
+
+I'm not sure we want to do that. We haven't done it for other
+aggregating usbnet protocols.  There is a reason we have the hard limit.
+
+
+
+
+Bj=C3=B8rn
+
+>> > -----=E9=82=AE=E4=BB=B6=E5=8E=9F=E4=BB=B6-----
+>> > =E5=8F=91=E4=BB=B6=E4=BA=BA: Daniele Palmas [mailto:dnlplm@gmail.com]
+>> > =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: Wednesday, September 09, 2020 5:=
+13 PM
+>> > =E6=94=B6=E4=BB=B6=E4=BA=BA: Bj=C3=B8rn Mork <bjorn@mork.no>
+>> > =E6=8A=84=E9=80=81: Kristian Evensen <kristian.evensen@gmail.com>; Pau=
+l Gildea
+>> > <paul.gildea@gmail.com>; Carl Yin(=E6=AE=B7=E5=BC=A0=E6=88=90) <carl.y=
+in@quectel.com>; David S .
+>> > Miller <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>;
+>> > netdev@vger.kernel.org; linux-usb@vger.kernel.org; Daniele Palmas
+>> > <dnlplm@gmail.com>
+>> > =E4=B8=BB=E9=A2=98: [PATCH net-next 1/1] net: usb: qmi_wwan: add defau=
+lt rx_urb_size
+>> >
+>> > Add default rx_urb_size to support QMAP download data aggregation with=
+out
+>> > needing additional setup steps in userspace.
+>> >
+>> > The value chosen is the current highest one seen in available modems.
+>> >
+>> > The patch has the side-effect of fixing a babble issue in raw-ip mode =
+reported by
+>> > multiple users.
+>> >
+>> > Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+>> > ---
+>> > Resending with mailing lists added: sorry for the noise.
+>> >
+>> > Hi Bj=C3=B8rn and all,
+>> >
+>> > this patch tries to address the issue reported in the following threads
+>> >
+>> > https://www.spinics.net/lists/netdev/msg635944.html
+>> > https://www.spinics.net/lists/linux-usb/msg198846.html
+>> > https://www.spinics.net/lists/linux-usb/msg198025.html
+>> >
+>> > so I'm adding the people involved, maybe you can give it a try to doub=
+le check if
+>> > this is good for you.
+>> >
+>> > On my side, I performed tests with different QC chipsets without exper=
+iencing
+>> > problems.
+>> >
+>> > Thanks,
+>> > Daniele
+>> > ---
+>> >  drivers/net/usb/qmi_wwan.c | 4 ++++
+>> >  1 file changed, 4 insertions(+)
+>> >
+>> > diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c i=
+ndex
+>> > 07c42c0719f5..92d568f982b6 100644
+>> > --- a/drivers/net/usb/qmi_wwan.c
+>> > +++ b/drivers/net/usb/qmi_wwan.c
+>> > @@ -815,6 +815,10 @@ static int qmi_wwan_bind(struct usbnet *dev, stru=
+ct
+>> > usb_interface *intf)
+>> >       }
+>> >       dev->net->netdev_ops =3D &qmi_wwan_netdev_ops;
+>> >       dev->net->sysfs_groups[0] =3D &qmi_wwan_sysfs_attr_group;
+>> > +
+>> > +     /* Set rx_urb_size to allow QMAP rx data aggregation */
+>> > +     dev->rx_urb_size =3D 32768;
+>> > +
+>> >  err:
+>> >       return status;
+>> >  }
+>> > --
+>> > 2.17.1
+>>
