@@ -2,99 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C02263ED3
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 09:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7875263EFA
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 09:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729298AbgIJHew (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 03:34:52 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:1175 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728297AbgIJHev (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 03:34:51 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08A7Qsvo001037;
-        Thu, 10 Sep 2020 09:34:37 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=yitzxd1EpxSR+UWF5RZLvTzZh1+/ExLz6X9wKwEHp6c=;
- b=nZkhw9kUN+I2HILMVN6KMn/4f3IhIl+hTkgVaz7LymhFmX6Yaen1vqRfif7nItEFDy0W
- VzOOoOZhJxnaXG0QZn+FNFmXUdFRxa4wvcmjIWZXbBhNszmj2zDOn3vjmT+Tks45w+SA
- 6Ql6tRmp+hu6oMRjjs42MJKjXLmIcI4UbvMCOrn5JcDAXplgcLUGRJE8segauxo6djdQ
- yBeId3gNdpjsYiIZfeW8P5YXSwAoFkoP6miPjXAyy+QP2MG8fvZt/mQpCRltySB4Pooq
- l8txBZZcwQ2oNiqaJE8ysdEWVemf5LRMGlCBKHK2oAnuoN11aQgwK8rUwfz24HgYdpjf Iw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 33c051hm4p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Sep 2020 09:34:37 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EBD7F10002A;
-        Thu, 10 Sep 2020 09:34:36 +0200 (CEST)
-Received: from Webmail-eu.st.com (gpxdag3node5.st.com [10.75.127.72])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D0F57212104;
-        Thu, 10 Sep 2020 09:34:36 +0200 (CEST)
-Received: from lmecxl0995.lme.st.com (10.75.127.46) by GPXDAG3NODE5.st.com
- (10.75.127.72) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 10 Sep
- 2020 09:34:35 +0200
-Subject: Re: [balbi-usb:testing/next 32/38] ld.lld: error: undefined symbol:
- usb_role_switch_get_drvdata
-To:     kernel test robot <lkp@intel.com>, Felipe Balbi <balbi@kernel.org>
-CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "clang-built-linux@googlegroups.com" 
-        <clang-built-linux@googlegroups.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
-References: <202009100918.i31tdoK9%lkp@intel.com>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <497fbf82-805b-5b82-28f0-114c3f31756f@st.com>
-Date:   Thu, 10 Sep 2020 09:34:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728936AbgIJHtt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 03:49:49 -0400
+Received: from cmta16.telus.net ([209.171.16.89]:56242 "EHLO cmta16.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726228AbgIJHtn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Sep 2020 03:49:43 -0400
+Received: from montezuma.home ([154.5.226.127])
+        by cmsmtp with SMTP
+        id GHKskeCsofTjcGHKtkx2qU; Thu, 10 Sep 2020 01:49:41 -0600
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=WpxVzuXv c=1 sm=1 tr=0
+ a=f8b3WT/FcTuUJCJtQO1udw==:117 a=f8b3WT/FcTuUJCJtQO1udw==:17
+ a=kj9zAlcOel0A:10 a=x7bEGLp0ZPQA:10 a=COSDN44dAAMA:10 a=VwQbUJbxAAAA:8
+ a=N_azex4ibauUt0sjNm8A:9 a=XjqelibciK-eNWHm:21 a=qvHAVC5k3IWE086n:21
+ a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
+Date:   Thu, 10 Sep 2020 00:49:38 -0700 (PDT)
+From:   Zwane Mwaikambo <zwanem@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Zwane Mwaikambo <zwane@yosper.io>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] usb/typec: fix array overruns in ucsi.c
+ partner_altmode[]
+In-Reply-To: <6a7cd809-5309-2945-d5f9-8147101bff03@infradead.org>
+Message-ID: <alpine.DEB.2.21.2009100049160.31932@montezuma.home>
+References: <alpine.DEB.2.21.2008271035320.30454@montezuma.home> <0013fe6c-c0a2-1759-c769-cda025e5eb38@infradead.org> <alpine.DEB.2.21.2008271058220.37762@montezuma.home> <alpine.DEB.2.21.2008271131570.37762@montezuma.home> <20200828123328.GF174928@kuha.fi.intel.com>
+ <alpine.DEB.2.21.2008300220350.37231@montezuma.home> <alpine.DEB.2.21.2008300227240.37231@montezuma.home> <20200909123355.GA3627076@kuha.fi.intel.com> <6a7cd809-5309-2945-d5f9-8147101bff03@infradead.org>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <202009100918.i31tdoK9%lkp@intel.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG8NODE2.st.com (10.75.127.23) To GPXDAG3NODE5.st.com
- (10.75.127.72)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-10_01:2020-09-10,2020-09-10 signatures=0
+Content-Type: text/plain; charset=US-ASCII
+X-CMAE-Envelope: MS4wfDoAbKsiatNKa9Vd7VOFpZPjnazVJCvEv7PKrmDCIf8uSeYsEDmdWVDXq46mcZpTaFrSzB175rpe4KHBM9VH4vjoVHnLLhW/Foc2qh/r2S+0XYM++a3j
+ D2X1bWEfZLnyboreLcHQK2AsVMowEP5/aeV3PTV2OXtoOy4cXtWAUEhGiQQcOW3bCigKjEqcpPyOKS5EKMhCn/NJbVs87VFBIZkpSKPhI7i7xP99jqoVc9nZ
+ V2UvvYrrst6AEH/q4RyGkGVA/iKTIZuOexJvpPhPt17NYHhdgYiO8krxKjrdCvGxmoy9UdbiMGfUuj5suM+Bug==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Wed, 9 Sep 2020, Randy Dunlap wrote:
 
-On 9/10/20 3:29 AM, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/next
-> head:   3c9722514c3fb74bbe0af87c20bc6b4c47121287
-> commit: a0f0bc95705446b8b1476338056bf869271ba36a [32/38] usb: dwc2: override PHY input signals with usb role switch support
-> config: x86_64-randconfig-r022-20200909 (attached as .config)
-> compiler: clang version 12.0.0 (https://github.com/llvm/llvm-project 8893d0816ccdf8998d2e21b5430e9d6abe7ef465)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # install x86_64 cross compiling tool for clang build
->          # apt-get install binutils-x86-64-linux-gnu
->          git checkout a0f0bc95705446b8b1476338056bf869271ba36a
->          # save the attached .config to linux build tree
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64
+> On 9/9/20 5:33 AM, Heikki Krogerus wrote:
+> > Hi,
+> > 
+> > One nitpick below...
+> > 
+> > On Sun, Aug 30, 2020 at 02:28:39AM -0700, Zwane Mwaikambo wrote:
+> >> This fixes the second array overrun occurrence (similar failure mode to 
+> >> the first), this time in ucsi_unregister_altmodes.
+> >>
+> >> [ 4373.153246] BUG: kernel NULL pointer dereference, address: 
+> >> 00000000000002f2
+> >> [ 4373.153267] #PF: supervisor read access in kernel mode
+> >> [ 4373.153271] #PF: error_code(0x0000) - not-present page
+> >> [ 4373.153275] PGD 0 P4D 0 
+> >> [ 4373.153284] Oops: 0000 [#2] PREEMPT SMP NOPTI
+> >> [ 4373.153292] CPU: 0 PID: 13242 Comm: kworker/0:0 Tainted: G      D           
+> >> 5.8.0-rc6+ #1
+> >> [ 4373.153296] Hardware name: LENOVO 20RD002VUS/20RD002VUS, BIOS R16ET25W 
+> >> (1.11 ) 04/21/2020
+> >> [ 4373.153308] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
+> >> [ 4373.153320] RIP: 0010:ucsi_unregister_altmodes+0x5f/0xa0 [typec_ucsi]
+> >> [ 4373.153326] Code: 54 48 8b 3b 41 83 c4 01 e8 9e f9 0c 00 49 63 c4 48 c7 
+> >> 03 00 00 00 00 49 8d 5c c5 00 48 8b 3b 48 85 ff 74 31 41 80 fe 01 75 d7 
+> >> <0f> b7 87 f0 02 00 00 66 3d 01 ff 74 0f 66 3d 55 09 75 c4 83 bf f8
+> >> [ 4373.153332] RSP: 0018:ffffb2ef036b3dc8 EFLAGS: 00010246
+> >> [ 4373.153338] RAX: 000000000000001e RBX: ffff94268b006a60 RCX: 
+> >> 0000000080800067
+> >> [ 4373.153342] RDX: 0000000080800068 RSI: 0000000000000001 RDI: 
+> >> 0000000000000002
+> >> [ 4373.153347] RBP: ffffb2ef036b3de8 R08: 0000000000000000 R09: 
+> >> ffffffff8dc65400
+> >> [ 4373.153351] R10: ffff9426678d7200 R11: 0000000000000001 R12: 
+> >> 000000000000001e
+> >> [ 4373.153355] R13: ffff94268b006970 R14: 0000000000000001 R15: 
+> >> ffff94268b006800
+> >> [ 4373.153361] FS:  0000000000000000(0000) GS:ffff942691400000(0000) 
+> >> knlGS:0000000000000000
+> >> [ 4373.153366] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> [ 4373.153371] CR2: 00000000000002f2 CR3: 00000004445a6005 CR4: 
+> >> 00000000003606f0
+> >> [ 4373.153375] Call Trace:
+> >> [ 4373.153389]  ucsi_unregister_partner.part.0+0x17/0x30 [typec_ucsi]
+> >> [ 4373.153400]  ucsi_handle_connector_change+0x25c/0x320 [typec_ucsi]
+> >> [ 4373.153418]  process_one_work+0x1df/0x3d0
+> >> [ 4373.153428]  worker_thread+0x4a/0x3d0
+> >> [ 4373.153436]  ? process_one_work+0x3d0/0x3d0
+> >> [ 4373.153444]  kthread+0x127/0x170
+> >> [ 4373.153451]  ? kthread_park+0x90/0x90
+> >> [ 4373.153461]  ret_from_fork+0x1f/0x30
+> >> [ 4373.153661] CR2: 00000000000002f2
+> >>
+> >> Fixes: ad74b8649beaf ("usb: typec: ucsi: Preliminary support for alternate modes")
+> >> Cc: stable@vger.kernel.org
+> >> Signed-off-by: Zwane Mwaikambo <zwane@yosper.io>
+> >> ---
+> >> v2 addresses both instances of array overrun
+> >> v3 addresses patch submission/formatting issues
+> >> v4 addresses patch submission/formatting issues
+> >> v5 adds and cc to stable
+> >>
+> >> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> >> index d0c63afaf..79061705e 100644
+> >> --- a/drivers/usb/typec/ucsi/ucsi.c
+> >> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> >> @@ -479,7 +480,10 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
+> >>  		return;
+> >>  	}
+> >>  
+> >> -	while (adev[i]) {
+> >> +	for (i = 0; i < UCSI_MAX_ALTMODES; i++) {
+> >> +		if (!adev[i])
+> >> +			break;
+> > 
+> >         for (i = 0; i < UCSI_MAX_ALTMODES && adev[u]; i++) {
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ld.lld: error: undefined symbol: usb_role_switch_get_drvdata
->     >>> referenced by drd.c:71 (drivers/usb/dwc2/drd.c:71)
->     >>> usb/dwc2/drd.o:(dwc2_drd_role_sw_set) in archive drivers/built-in.a
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+> make that                                      adev[i]
 
-fixed in v6 version: 
-https://lore.kernel.org/patchwork/project/lkml/list/?series=461852
+Agreed, that does read better than the break.
+
+	Zwane
