@@ -2,119 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68905263F3C
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 10:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E312263F5D
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 10:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbgIJIB5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 04:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726846AbgIJIBy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 04:01:54 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D6FC061573;
-        Thu, 10 Sep 2020 01:01:53 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id z4so5641694wrr.4;
-        Thu, 10 Sep 2020 01:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z1ZKReFd/s/odi3eL/MqUhA7bsdxdwk/Ji4Nwo/5s7U=;
-        b=nNJNiyH7Je1hC/GSL9wFaKn21YAQ/RJMOL03AdrBX+VNkPAQC1p2g6KZTonSxVXmx0
-         k4ixOs2/RCQNyRmnJGPQCfIj2zSy2H0rg25WSsZFptIr3fFkTwXZetsK5ZwzfVuNcvNu
-         9ZLRgERinvCJ9XxWECSypcIj+c4dH4PrIfoe4dJ5651/pPL38bowWBBdr6fRqn7i3R2J
-         wQMb4WIypRArUpia92ORy0t/nF0nbrgAvxSe6AlGWl6w/I1ES2x7hggRlaRcYY6VVLMi
-         wYkvq/hZug8OB/yCSWurfEyNVsORUuOLYXjXGUUxYuTln267lWlWlu0VbZZ3/XZfWvHq
-         T3IA==
+        id S1730030AbgIJIJC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 04:09:02 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:37104 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726381AbgIJII6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 04:08:58 -0400
+Received: by mail-lj1-f196.google.com with SMTP id n25so6988132ljj.4;
+        Thu, 10 Sep 2020 01:08:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z1ZKReFd/s/odi3eL/MqUhA7bsdxdwk/Ji4Nwo/5s7U=;
-        b=GPR3UR++2f6i0bT7mEQOe5r71yWRcHqMpu7ay50LPnnreIqAc2RKCBWnB9wzzJR3sX
-         1ziPbL74T4/tuKrIAafDlWcFWaoFHG8qlXk4LE6ygJcT8pS2rwQ+XpdVgNNC9q//h6jE
-         atw21nQFmWYlEHo+x/eX23YlWUkdi0DPn5dUf7TOjGp4OegMTZve9BNrV8Goopz3IVg7
-         wZi4BG1a2xnHmAKcgDwRxXFakDcMEHNiJ3XlJtKLzRBPkYETe5CQazVOj7rVw7jT2OWI
-         5cTKf1yNBoPEYngquEptKOp2N5P2CqOuhQ+GbkuhZI3m8/pzFCDBd+3kwTjOqG17CbOC
-         VEsQ==
-X-Gm-Message-State: AOAM533fdCVYnXr4y86fRSkS1ZAh1znZWyjpHt+a1TgXJRbWQM4b67Te
-        TYgRaX70gtxdnh3luEiQl+p6KfmNrWA93t1rYMbHo4/usu5tzA==
-X-Google-Smtp-Source: ABdhPJyopEghGwH/opOyv9jt888kuhF5bybS5/T/Z/PAig8cUn0Qu1vsdG33nEcABEatcjfsxKiNrfB6uzHlmrj6NEI=
-X-Received: by 2002:adf:d4c1:: with SMTP id w1mr7750640wrk.108.1599724912460;
- Thu, 10 Sep 2020 01:01:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200909193419.2006744-1-james.hilliard1@gmail.com>
- <1599706954.10822.3.camel@suse.de> <a1161f77-5b37-39ea-eb91-7b0b59278960@gmail.com>
- <CADvTj4q+b6nLBV6LEdd6K-daNbhTf6rUMOYnj+p0FO6+NTCg7A@mail.gmail.com>
-In-Reply-To: <CADvTj4q+b6nLBV6LEdd6K-daNbhTf6rUMOYnj+p0FO6+NTCg7A@mail.gmail.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Thu, 10 Sep 2020 02:01:39 -0600
-Message-ID: <CADvTj4qSPU17BPrH0UO5XQxbtX8d2nY8WDEtEnT0VPyVK=N-yQ@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pmRob3RYVaIomHkLhJXPXfLDXQfpL3YCNNeyPTjyLK0=;
+        b=k+M1/rwKaG9pthCWpmz31sY05xfUxpZWRF0QZjsgV0HyyuSyYwYGEFQAvP4arBYHK5
+         fp7Zdd+/l4UR0dm4Jv62uHdnnCZtc1AgTmnhO374yQDzoB0eCisgCIUpuFsi1Sii9ys7
+         H6trm+Uk4L0gWNsn/WlCtPOZRXHVgyb4Ra1WdrsX7rx7NOPrAlUoj0rxfOOnmpxy5mvP
+         JznivlnA7mKu72YsuV8dCqIQdN+mFiiE7e/BvXHX/RsvHOl15SNmp/9lEC6+uuSZ28Nu
+         v8NCihq8DikrNX66g+T6JrlT0OTD5RfsVLlZhO1TtnsA2MkaexBOV/gUZM1G3lT+2E1B
+         51Gw==
+X-Gm-Message-State: AOAM532js+yvNHc/pUbxEd2yQFu58c0msl6DVlHh7ZU3Bq0fQVEabr6h
+        qgukIG5lFlMbtiablKEvtgCTjCdEHkc=
+X-Google-Smtp-Source: ABdhPJwrU6yyWj2plalDJmuv0QNjHpTvDh68TpF8qjACsiAZualjyCWkgqiOX8Zan1K1qHTanXEKQA==
+X-Received: by 2002:a2e:9c52:: with SMTP id t18mr3721956ljj.65.1599725335212;
+        Thu, 10 Sep 2020 01:08:55 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id v11sm1169484lfg.39.2020.09.10.01.08.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2020 01:08:54 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kGHdS-0005ty-48; Thu, 10 Sep 2020 10:08:50 +0200
+Date:   Thu, 10 Sep 2020 10:08:50 +0200
+From:   Johan Hovold <johan@kernel.org>
 To:     Lars Melin <larsm17@gmail.com>
-Cc:     Oliver Neukum <oneukum@suse.de>, linux-usb@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>,
+Cc:     Oliver Neukum <oneukum@suse.de>,
+        James Hilliard <james.hilliard1@gmail.com>,
+        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russ Dill <Russ.Dill@gmail.com>,
+        linux-kernel@vger.kernel.org, Russ Dill <Russ.Dill@gmail.com>,
         Hector Martin <hector@marcansoft.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
+Message-ID: <20200910080850.GD24441@localhost>
+References: <20200909193419.2006744-1-james.hilliard1@gmail.com>
+ <1599706954.10822.3.camel@suse.de>
+ <a1161f77-5b37-39ea-eb91-7b0b59278960@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1161f77-5b37-39ea-eb91-7b0b59278960@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 12:48 AM James Hilliard
-<james.hilliard1@gmail.com> wrote:
->
-> On Wed, Sep 9, 2020 at 11:34 PM Lars Melin <larsm17@gmail.com> wrote:
-> >
-> > On 9/10/2020 10:02, Oliver Neukum wrote:
-> > > Am Mittwoch, den 09.09.2020, 13:34 -0600 schrieb James Hilliard:
-> > >> This patch detects and reverses the effects of the malicious FTDI
-> > >> Windows driver version 2.12.00(FTDIgate).
-> > >
-> > > Hi,
-> > >
-> > > this raises questions.
-> > > Should we do this unconditionally without asking?
-> > > Does this belong into kernel space?
-> > >
-> >
-> > My answer to both of those question is a strong NO.
-> >
-> > The patch author tries to justify the patch with egoistical arguments
-> > (easier for him and his customers) without thinking of all other users
-> > of memory constrained embedded hardware that doesn't need the patch code
-> > but have to carry it.
-> If that's a concern it would not be difficult to add a kconfig option to allow
-> disabling it.
-I should maybe add that the reason I'm trying to upstream this is because
-I have been repeatedly bitten by this issue for years over many totally
-unrelated projects, as have many people I know. If this was a one-off
-issue I would not have spent the time writing a kernel patch to fix
-it. The supply
-chains must be heavily contaminated with counterfeits with how often I've
-personally run into this problem.
+On Thu, Sep 10, 2020 at 12:33:55PM +0700, Lars Melin wrote:
+> On 9/10/2020 10:02, Oliver Neukum wrote:
+> > Am Mittwoch, den 09.09.2020, 13:34 -0600 schrieb James Hilliard:
+> >> This patch detects and reverses the effects of the malicious FTDI
+> >> Windows driver version 2.12.00(FTDIgate).
+> > 
+> > Hi,
+> > 
+> > this raises questions.
+> > Should we do this unconditionally without asking?
+> > Does this belong into kernel space?
+> > 
+> 
+> My answer to both of those question is a strong NO.
+> 
+> The patch author tries to justify the patch with egoistical arguments 
+> (easier for him and his customers) without thinking of all other users 
+> of memory constrained embedded hardware that doesn't need the patch code 
+> but have to carry it.
+> 
+> The bricked PID is btw already supported by the linux ftdi driver so 
+> there is no functionality gain in the patch.
 
-The damage done by FTDI with their malicious drivers really is hard to quantify,
-both in terms of wasted man hours working around this issue and in the
-inevitable mountains of e-waste they create by bricking end user hardware.
-Most of these customers have likely never even heard of FTDI, they even
-intentionally designed their malicious drivers to make it non-obvious that
-the failures are due to counterfeits, completely unethical behavior IMO.
+I fully agree. This doesn't belong in the kernel. If the Windows driver
+breaks someones device on purpose they should know about it, and *if*
+they want they can reprogram the device using the tools mentioned in the
+thread. But the kernel shouldn't be playing such games and reprogram
+eeproms behind people's backs.
 
-FTDI may very well be one of the least environmentally friendly companies
-in terms of environmental damage per dollar of revenue.
-> >
-> > The bricked PID is btw already supported by the linux ftdi driver so
-> > there is no functionality gain in the patch.
-> By the kernel driver sure, but userspace is where things get messed up
-> without something like this.
-> >
-> > br
-> > Lars
-> >
-> >
-> >
+Johan
