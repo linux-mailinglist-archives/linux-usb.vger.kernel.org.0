@@ -2,78 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CAA2652E7
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 23:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9442F265448
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 23:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgIJV0A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 17:26:00 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:49522 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726301AbgIJVZ3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 17:25:29 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8C6AE891B0;
-        Fri, 11 Sep 2020 09:25:26 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1599773126;
-        bh=qqHU8t6MUhQ7iFPaaO3/oB5D4eqjg20+i952QRb+1fM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=lvCWAmz3PLpRblqQoHVR1T6wswyx4Q9rXsLMKwXsg83nOrerMKec3ssfW/nSSr1zP
-         nu4fYf7vlzz3RYsyeTfEzVVowMUbx5BZyP5/6MA2Bz9frbMbyRf6izWQh0w2E0oBLI
-         dtUpV2tfeiyiXV4OUlauQ0+S2lgbe3zW5Bp2KZPAQ82XZoltvoFySRASONt4VGYErT
-         seD2VDn7FMUGSniBA7uN358lO8T0JmokTqtOjhp604x4bByHqZzHmkKkiyQm0Fo3/O
-         DuKbKPuzkcijTlpd4fwflXUjszhXZWcOu3baORvtjulxccNRTwyHi7BVRO8ZgCsl71
-         kUX6PF2M3nUhQ==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f5a99c50000>; Fri, 11 Sep 2020 09:25:25 +1200
-Received: from hamishm-dl.ws.atlnz.lc (hamishm-dl.ws.atlnz.lc [10.33.24.30])
-        by smtp (Postfix) with ESMTP id 0A44013EEB7;
-        Fri, 11 Sep 2020 09:25:25 +1200 (NZST)
-Received: by hamishm-dl.ws.atlnz.lc (Postfix, from userid 1133)
-        id 60FB02A2AB9; Fri, 11 Sep 2020 09:25:26 +1200 (NZST)
-From:   Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-Subject: [PATCH v2 2/2] usb: ohci: Make distrust_firmware param default to false
-Date:   Fri, 11 Sep 2020 09:25:12 +1200
-Message-Id: <20200910212512.16670-2-hamish.martin@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200910212512.16670-1-hamish.martin@alliedtelesis.co.nz>
-References: <20200910212512.16670-1-hamish.martin@alliedtelesis.co.nz>
+        id S1728612AbgIJVmv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 17:42:51 -0400
+Received: from cmccmta3.chinamobile.com ([221.176.66.81]:18257 "EHLO
+        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730567AbgIJL5g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 07:57:36 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.13]) by rmmx-syy-dmz-app10-12010 (RichMail) with SMTP id 2eea5f5a1432a09-8b324; Thu, 10 Sep 2020 19:55:30 +0800 (CST)
+X-RM-TRANSID: 2eea5f5a1432a09-8b324
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[223.112.105.130])
+        by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee75f5a142f81d-8c931;
+        Thu, 10 Sep 2020 19:55:30 +0800 (CST)
+X-RM-TRANSID: 2ee75f5a142f81d-8c931
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Subject: [PATCH] usb: phy: tegra: Use IS_ERR() to check and simplify code
+Date:   Thu, 10 Sep 2020 19:56:07 +0800
+Message-Id: <20200910115607.11392-1-tangbin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.20.1.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The 'distrust_firmware' module parameter dates from 2004 and the USB
-subsystem is a lot more mature and reliable now than it was then.
-Alter the default to false now.
+Use IS_ERR() and PTR_ERR() instead of PTR_ERR_OR_ZERO() to
+simplify code, avoid redundant judgements.
 
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
 ---
- drivers/usb/host/ohci-hcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/phy/phy-tegra-usb.c | 25 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-index 2845ea328a06..73e13e7c2b46 100644
---- a/drivers/usb/host/ohci-hcd.c
-+++ b/drivers/usb/host/ohci-hcd.c
-@@ -102,7 +102,7 @@ static void io_watchdog_func(struct timer_list *t);
-=20
-=20
- /* Some boards misreport power switching/overcurrent */
--static bool distrust_firmware =3D true;
-+static bool distrust_firmware;
- module_param (distrust_firmware, bool, 0);
- MODULE_PARM_DESC (distrust_firmware,
- 	"true to distrust firmware power/overcurrent setup");
---=20
-2.28.0
+diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+index 6153cc35a..3b901429d 100644
+--- a/drivers/usb/phy/phy-tegra-usb.c
++++ b/drivers/usb/phy/phy-tegra-usb.c
+@@ -1121,10 +1121,9 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
+ 		return PTR_ERR(tegra_phy->vbus);
+ 
+ 	tegra_phy->pll_u = devm_clk_get(&pdev->dev, "pll_u");
+-	err = PTR_ERR_OR_ZERO(tegra_phy->pll_u);
+-	if (err) {
++	if (IS_ERR(tegra_phy->pll_u)) {
+ 		dev_err(&pdev->dev, "Failed to get pll_u clock: %d\n", err);
+-		return err;
++		return PTR_ERR(tegra_phy->pll_u);
+ 	}
+ 
+ 	phy_type = of_usb_get_phy_mode(np);
+@@ -1135,20 +1134,18 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
+ 			return err;
+ 
+ 		tegra_phy->pad_clk = devm_clk_get(&pdev->dev, "utmi-pads");
+-		err = PTR_ERR_OR_ZERO(tegra_phy->pad_clk);
+-		if (err) {
++		if (IS_ERR(tegra_phy->pad_clk)) {
+ 			dev_err(&pdev->dev,
+ 				"Failed to get UTMIP pad clock: %d\n", err);
+-			return err;
++			return PTR_ERR(tegra_phy->pad_clk);
+ 		}
+ 
+ 		reset = devm_reset_control_get_optional_shared(&pdev->dev,
+ 							       "utmi-pads");
+-		err = PTR_ERR_OR_ZERO(reset);
+-		if (err) {
++		if (IS_ERR(reset)) {
+ 			dev_err(&pdev->dev,
+ 				"Failed to get UTMI-pads reset: %d\n", err);
+-			return err;
++			return PTR_ERR(reset);
+ 		}
+ 		tegra_phy->pad_rst = reset;
+ 		break;
+@@ -1157,22 +1154,20 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
+ 		tegra_phy->is_ulpi_phy = true;
+ 
+ 		tegra_phy->clk = devm_clk_get(&pdev->dev, "ulpi-link");
+-		err = PTR_ERR_OR_ZERO(tegra_phy->clk);
+-		if (err) {
++		if (IS_ERR(tegra_phy->clk)) {
+ 			dev_err(&pdev->dev,
+ 				"Failed to get ULPI clock: %d\n", err);
+-			return err;
++			return PTR_ERR(tegra_phy->clk);
+ 		}
+ 
+ 		gpiod = devm_gpiod_get_from_of_node(&pdev->dev, np,
+ 						    "nvidia,phy-reset-gpio",
+ 						    0, GPIOD_OUT_HIGH,
+ 						    "ulpi_phy_reset_b");
+-		err = PTR_ERR_OR_ZERO(gpiod);
+-		if (err) {
++		if (IS_ERR(gpiod)) {
+ 			dev_err(&pdev->dev,
+ 				"Request failed for reset GPIO: %d\n", err);
+-			return err;
++			return PTR_ERR(gpiod);
+ 		}
+ 		tegra_phy->reset_gpio = gpiod;
+ 
+-- 
+2.20.1.windows.1
+
+
 
