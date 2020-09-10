@@ -2,99 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C3E263B5E
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 05:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01205263B82
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 05:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729971AbgIJDYr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 9 Sep 2020 23:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S1728289AbgIJDle (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Sep 2020 23:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729992AbgIJDXl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Sep 2020 23:23:41 -0400
-X-Greylist: delayed 366 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Sep 2020 20:23:40 PDT
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E154CC061573;
-        Wed,  9 Sep 2020 20:23:40 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 44F91425DF;
-        Thu, 10 Sep 2020 03:17:21 +0000 (UTC)
-Date:   Thu, 10 Sep 2020 12:17:13 +0900
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1599706954.10822.3.camel@suse.de>
-References: <20200909193419.2006744-1-james.hilliard1@gmail.com> <1599706954.10822.3.camel@suse.de>
+        with ESMTP id S1726642AbgIJDlO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Sep 2020 23:41:14 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DCBC061573;
+        Wed,  9 Sep 2020 20:41:12 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id o5so5009109wrn.13;
+        Wed, 09 Sep 2020 20:41:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RV3JhQ0QrU39E+lQO0xIaUDW05mKR2Brp3o0EwUp+KA=;
+        b=sciv+invHn9PJ1ccTmvXk3hwTs7w5CUYYvb5Vs9i9GRLCbhpfGZv6LEvFxWSJqiqt6
+         u8T1Ck6RAHh2w6T9PT0wUGDWiDo+a7Zd6Hx4Yt1aWqR/8Twyc4WjouWdPOQEeNiH2At6
+         ToI7B99CoPgF0RxBM7145ujkUgmzDJMdbs2ESiDa7pWWnr9fYCe0X5IUdQN3SYZlDFSk
+         BVtbxGOs0TR0x2oOMqfgJUostYx50v/GCiDMDusI8sRh5DRYGSvpgtWlj9KEl6uVfNV4
+         xfQ/nrh641hz+dOg/e6nRe3aWRk22CUVLOfeQXtsJjVJW2nK6Dexda9zUkCdKaSSOSBy
+         ROMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RV3JhQ0QrU39E+lQO0xIaUDW05mKR2Brp3o0EwUp+KA=;
+        b=DIbODLzqRtWPl6cUsUR4xie3MJaWzcgYjEQk0GWzqtKb/HY/NR0rjgqeigNAAHn4UA
+         4Y7+FnT0P5euxrScXHrlDMd/LTGNaaNHnsDwX24NUHENtLItHB17dGZwHHa/SWAQFqAq
+         H4o9hGstAE7Ba28B5Cdb/YB2LNOT9ePKjf6ejANxGr0Vt98kgQnNNdE3ADvdu7Btst3y
+         uxx7rrz96h59i+7XV91lAyDCyWJ26SHXlhcGC/cua9YUIh3C76VIprNudVicouvqcmLu
+         9a6XxgPPgd5ErxY2lb5aj6N0ChUoKLLJVFtQqtpTpgT/QKw4EuImZ/NWjFbVSFw0cRgO
+         PqEQ==
+X-Gm-Message-State: AOAM533HYrsv1s4QKckTlKi9f6uPjKRnwpBXE/hVWIm7SO44CCCuZBwj
+        uwoWA75VUH6BATfvfJgbB+sWJj3WDGASe+eFu269l7AjeYo=
+X-Google-Smtp-Source: ABdhPJyxUCvs11LE1Qixn/Lu3hO6JNOIaSffZiU564Y2L8dQlgRpFkbW6XgPj0S9M0mJJohXJjWZijldB11noMDYc/w=
+X-Received: by 2002:a05:6000:1152:: with SMTP id d18mr6648189wrx.173.1599709271452;
+ Wed, 09 Sep 2020 20:41:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
+References: <20200909193419.2006744-1-james.hilliard1@gmail.com> <1599706954.10822.3.camel@suse.de>
+In-Reply-To: <1599706954.10822.3.camel@suse.de>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Wed, 9 Sep 2020 21:40:59 -0600
+Message-ID: <CADvTj4oznyY=sfbmtmdcYMgkYriV_Ujk=+0Fz--XumNa8ZvD=A@mail.gmail.com>
 Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
-To:     Oliver Neukum <oneukum@suse.de>,
-        James Hilliard <james.hilliard1@gmail.com>,
-        linux-usb@vger.kernel.org
-CC:     Johan Hovold <johan@kernel.org>,
+To:     Oliver Neukum <oneukum@suse.de>
+Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Russ Dill <Russ.Dill@gmail.com>
-From:   "Hector Martin \"marcan\"" <hector@marcansoft.com>
-Message-ID: <D2C1360E-65CC-410A-8B39-48F7340FEFCE@marcansoft.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russ Dill <Russ.Dill@gmail.com>,
+        Hector Martin <hector@marcansoft.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On September 10, 2020 12:02:34 PM GMT+09:00, Oliver Neukum <oneukum@suse.de> wrote:
->Am Mittwoch, den 09.09.2020, 13:34 -0600 schrieb James Hilliard:
->> This patch detects and reverses the effects of the malicious FTDI
->> Windows driver version 2.12.00(FTDIgate).
+On Wed, Sep 9, 2020 at 9:02 PM Oliver Neukum <oneukum@suse.de> wrote:
 >
->Hi,
+> Am Mittwoch, den 09.09.2020, 13:34 -0600 schrieb James Hilliard:
+> > This patch detects and reverses the effects of the malicious FTDI
+> > Windows driver version 2.12.00(FTDIgate).
 >
->this raises questions.
->Should we do this unconditionally without asking?
->Does this belong into kernel space?
-
-I agree; this is very cute, but does it really need to be an automatic Linux feature? Presumably someone looking to fix a bricked FTDI chip can just run my script, and those who just want to use those chips with Linux already can since the driver binds to the zero PID.
-
-I am deeply amused by the idea of Linux automatically fixing problems caused by malicious Windows drivers, but thinking objectively, I'm not sure if that's the right thing to do.
-
+> Hi,
 >
->> +static int ftdi_repair_brick(struct usb_serial_port *port)
->> +{
->> +	struct ftdi_private *priv = usb_get_serial_port_data(port);
->> +	int orig_latency;
->> +	int rv;
->> +	u16 *eeprom_data;
->> +	u16 checksum;
->> +	int eeprom_size;
->> +	int result;
->> +
->> +	switch (priv->chip_type) {
->> +	case FT232RL:
->> +		eeprom_size = 0x40;
->> +		break;
->> +	default:
->> +		/* Unsupported for brick repair */
->> +		return 0;
->> +	}
->> +
->> +	/* Latency timer needs to be 0x77 to unlock EEPROM programming */
->> +	if (priv->latency != 0x77) {
->> +		orig_latency = priv->latency;
->> +		priv->latency = 0x77;
->> +		rv = write_latency_timer(port);
->> +		priv->latency = orig_latency;
->> +		if (rv < 0)
->> +			return -EIO;
->> +	}
->
->Do you really want to change this without returning to the original?
->
->	Regards
->		Oliver
+> this raises questions.
+> Should we do this unconditionally without asking?
+Well I think since we can reliably detect devices that have been
+bricked by the malicious windows driver it's fine. I was careful to
+ensure that this will bail out and not try to change anything unless all
+conditions match this specific brick attack.
+> Does this belong into kernel space?
+This seemed to be by far the simplest option for embedded systems
+that need to automatically detect and repair the bricked eeproms.
 
--- 
-Hector Martin "marcan" (hector@marcansoft.com)
-Public key: https://mrcn.st/pub
+People seem to have plugged a bunch of counterfeit FTDI Arduino's
+that normally attach to an embedded Linux host into windows for
+some reason for a kiosk platform of mine which messed up the
+userspace detection/mappings. This seemed like the best way to
+avoid this being a support issue requiring manual unbricking
+prochedures.
+>
+> > +static int ftdi_repair_brick(struct usb_serial_port *port)
+> > +{
+> > +     struct ftdi_private *priv = usb_get_serial_port_data(port);
+> > +     int orig_latency;
+> > +     int rv;
+> > +     u16 *eeprom_data;
+> > +     u16 checksum;
+> > +     int eeprom_size;
+> > +     int result;
+> > +
+> > +     switch (priv->chip_type) {
+> > +     case FT232RL:
+> > +             eeprom_size = 0x40;
+> > +             break;
+> > +     default:
+> > +             /* Unsupported for brick repair */
+> > +             return 0;
+> > +     }
+> > +
+> > +     /* Latency timer needs to be 0x77 to unlock EEPROM programming */
+> > +     if (priv->latency != 0x77) {
+> > +             orig_latency = priv->latency;
+> > +             priv->latency = 0x77;
+> > +             rv = write_latency_timer(port);
+> > +             priv->latency = orig_latency;
+> > +             if (rv < 0)
+> > +                     return -EIO;
+> > +     }
+>
+> Do you really want to change this without returning to the original?
+> @@ -2255,6 +2364,12 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+>         ftdi_set_max_packet_size(port);
+>         if (read_latency_timer(port) < 0)
+>                 priv->latency = 16;
+> +       vendor_id = le16_to_cpu(port->serial->dev->descriptor.idVendor);
+> +       product_id = le16_to_cpu(port->serial->dev->descriptor.idProduct);
+> +       if (vendor_id == FTDI_VID &&
+> +               product_id == FTDI_BRICK_PID &&
+> +               priv->chip_type == FT232RL)
+> +               ftdi_repair_brick(port);
+>         write_latency_timer(port);
+It should get restored here.
+>         create_sysfs_attrs(port);
+>
+>
+>         Regards
+>                 Oliver
+>
