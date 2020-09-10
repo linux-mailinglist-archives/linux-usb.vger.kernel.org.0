@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36918263BB9
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 06:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA3F263C31
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 06:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725867AbgIJEH6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 00:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S1725920AbgIJEkR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 00:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725773AbgIJEHv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 00:07:51 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE91C061573;
-        Wed,  9 Sep 2020 21:07:50 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id a65so4188831wme.5;
-        Wed, 09 Sep 2020 21:07:50 -0700 (PDT)
+        with ESMTP id S1725885AbgIJEkM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 00:40:12 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2E7C061573;
+        Wed,  9 Sep 2020 21:40:10 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id a9so4403950wmm.2;
+        Wed, 09 Sep 2020 21:40:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=e8xrolCd6+J8Mbo2hmZKIFa1uobUqrIU1pGogqZIxKE=;
-        b=TOTchPWZDQwXPWWMUlf0jECodfQYz8tz4XVSre4nfLfYioggBjRqpafVsj4d/YonKV
-         Xjv7qQEVY439VE53aS4/GdRwq6LoY28/dhaHbAE43erCmBJZCOub2/FLuwZgmAQCNy37
-         +E6RGhLTQ6uB5clojQnTuGpv39VlkTVHZDd6mOzx/NuDT9Rk/uLkarSHVFNh2wiqCRVv
-         JCPnfsluwM01S9w3NO6MamPtsePj1sZN7HXI06KN6ChJVMJKJ0Sev34LtQgZlzZGBZ5V
-         n6wtj4XwTIUFT+1f3ZaLk/svHr7/XqaqIn0sZ/LY6LMu3jFq5hXL/w86QPcHbwqFQYrb
-         TTIA==
+        bh=mc9SNJlcG+CRra5ZD7ro4UIYeqbPZf8MuQyyBF3eIN4=;
+        b=LTHoYaMk5cQETYo/PMWMjoLIuUg0dtbCwLfx27HE4m8ksDcqiDZUz08HtGzlvImGuA
+         4R/336vmqWeBNR53AtfB8dbj9NEP9zFjGqASl4MHMbute89Fvps+3Fy0HCaGzCCXD6A6
+         zxl/tlOefZjf4O+m4iDtaM68dQcoGnzHBKXOwDBm6GXbUQCQJSA81/xabUK2beM8XN4A
+         Km9EfQ6FAqawq6wYGSJVD0LQoniC7rhX7X5FY0T06um1LH/3gLYMY/FJ1tRSQhMESjUn
+         AruZDX1jcPtowc3cXe50dTdmlImFE6ImylL8PW8SRU+A+MizPZ0en8ULjVCKOEZixgPd
+         /drw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=e8xrolCd6+J8Mbo2hmZKIFa1uobUqrIU1pGogqZIxKE=;
-        b=R/e9Cg20VaFSnN+7lJRF1vkGar7xGLYi4ubLBr4vbWpHQtfmGAR3pB09J006M34buv
-         OOz1KWO9rrd3qv+zTJl1FvPnlX9BVOME6xlhy472fZ9C+JQel26SxjlO/cQXiFgCm6Ix
-         w/q+qBxTnFzvT8X0uduBIxqS8+TVli0AZAWGxeRNGU4JT/HoLQV+DurMByu2FhK3IiOo
-         KAEuZSHwGRAg1bXytTOgkSqoX4eJFDbXU9GzihNPgJy0mQ6TGUhJiq/QcEtUH/8woBeX
-         s2w+6tTliN3KUsxZuZgSgOmXy9dPBth/IKKZEs4qUzOw+If43p3LegGp7wSQVtRChW0x
-         Agmw==
-X-Gm-Message-State: AOAM532oVQq9TOCz2UgxjGO3tpDtIRzrp8+l+zxZX9NGYSXxroyW/AYf
-        ZNxDqtgQZZeh25ZODLG7sw0CuflfCbWYgSu3/VE=
-X-Google-Smtp-Source: ABdhPJwsovHDrBeS+DA3X2q7mkTAgr+UHtZD5ytvEPFAHcd5BPaJ8aZSqhaxQ8Xgfr4yLfu0SHR1SV1tGnrgGUXUpdI=
-X-Received: by 2002:a05:600c:2cc1:: with SMTP id l1mr6278282wmc.78.1599710868970;
- Wed, 09 Sep 2020 21:07:48 -0700 (PDT)
+        bh=mc9SNJlcG+CRra5ZD7ro4UIYeqbPZf8MuQyyBF3eIN4=;
+        b=S762FsE1PBBzh3GacVhVJwalKkXVhTGRVian3dmgO+0PVkOp0IQyq2W64PcZDD5Jaj
+         dfkgucLwVvDyo/G4CvshQw9f8Ij3n8bzqzsCPW+ZD6t2BWIpWKRwHNxHIwrMdmymT+ak
+         54umkhUOCTJ9Pe/NoSOAmQ9dQUSZw63UpE/JlDPF4sDUtd3kwyWD7Rq6qn2yFwcKBPuN
+         9nmlGf/rq/g84nCzwpBMx5xKSZC4HRt9/tr1FKqvKL8vQ1HhvT+KwP4rMCoMktAn60vZ
+         XSyuGlRCbldEXNr3Yr9uQ43vaXKucPlT0tykh5Cl3baw5fNIitItubnpl6oOYO+GQx4Q
+         krYw==
+X-Gm-Message-State: AOAM532M5XNZgqczDrnWPF4rdm3YCDIqhlDxJUXUOzfe5if3M+kO0i4G
+        3Rw82QTvfemTuLnaFfD8fi9HwfwAy/sMjJXTv6hauxLdEXo=
+X-Google-Smtp-Source: ABdhPJxd//jSojRixlr0FByN5tErk8/x5DHyd+5Pmz7vOOMTDT9m1YCBgpJAtJb+RfR/4yxVUyP6SZDMrWbtkn4bbwU=
+X-Received: by 2002:a1c:14e:: with SMTP id 75mr6893527wmb.114.1599712809340;
+ Wed, 09 Sep 2020 21:40:09 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200909193419.2006744-1-james.hilliard1@gmail.com>
- <1599706954.10822.3.camel@suse.de> <CADvTj4oznyY=sfbmtmdcYMgkYriV_Ujk=+0Fz--XumNa8ZvD=A@mail.gmail.com>
- <36F0CEB4-DE2E-41DA-9569-4706B00FCF7D@marcansoft.com>
-In-Reply-To: <36F0CEB4-DE2E-41DA-9569-4706B00FCF7D@marcansoft.com>
+ <1599706954.10822.3.camel@suse.de> <D2C1360E-65CC-410A-8B39-48F7340FEFCE@marcansoft.com>
+ <CADvTj4o-T92C0bO6Bp9p1N-CjX80nzL+y6bPfosMqU2ftdex8Q@mail.gmail.com> <17A89C84-23A1-42DD-B541-F61BC7693560@marcansoft.com>
+In-Reply-To: <17A89C84-23A1-42DD-B541-F61BC7693560@marcansoft.com>
 From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Wed, 9 Sep 2020 22:07:36 -0600
-Message-ID: <CADvTj4omztaEz09qXYCvspNowqavOSOM1qaXvtAt1KQZuWDisw@mail.gmail.com>
+Date:   Wed, 9 Sep 2020 22:39:56 -0600
+Message-ID: <CADvTj4p7BuegLic+i9eW_JwXBPhkKZy85K98sX_as3S5Tv3vPg@mail.gmail.com>
 Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
 To:     Hector Martin marcan <hector@marcansoft.com>
 Cc:     Oliver Neukum <oneukum@suse.de>, linux-usb@vger.kernel.org,
@@ -64,117 +64,106 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 9, 2020 at 9:47 PM Hector Martin "marcan"
+On Wed, Sep 9, 2020 at 9:49 PM Hector Martin "marcan"
 <hector@marcansoft.com> wrote:
 >
 >
 >
-> On September 10, 2020 12:40:59 PM GMT+09:00, James Hilliard <james.hilliard1@gmail.com> wrote:
-> >On Wed, Sep 9, 2020 at 9:02 PM Oliver Neukum <oneukum@suse.de> wrote:
+> On September 10, 2020 12:46:20 PM GMT+09:00, James Hilliard <james.hilliard1@gmail.com> wrote:
+> >On Wed, Sep 9, 2020 at 9:17 PM Hector Martin "marcan"
+> ><hector@marcansoft.com> wrote:
 > >>
-> >> Am Mittwoch, den 09.09.2020, 13:34 -0600 schrieb James Hilliard:
-> >> > This patch detects and reverses the effects of the malicious FTDI
-> >> > Windows driver version 2.12.00(FTDIgate).
 > >>
-> >> Hi,
 > >>
-> >> this raises questions.
-> >> Should we do this unconditionally without asking?
-> >Well I think since we can reliably detect devices that have been
-> >bricked by the malicious windows driver it's fine. I was careful to
-> >ensure that this will bail out and not try to change anything unless
-> >all
-> >conditions match this specific brick attack.
-> >> Does this belong into kernel space?
-> >This seemed to be by far the simplest option for embedded systems
-> >that need to automatically detect and repair the bricked eeproms.
-> >
-> >People seem to have plugged a bunch of counterfeit FTDI Arduino's
-> >that normally attach to an embedded Linux host into windows for
-> >some reason for a kiosk platform of mine which messed up the
-> >userspace detection/mappings. This seemed like the best way to
-> >avoid this being a support issue requiring manual unbricking
-> >prochedures.
+> >> On September 10, 2020 12:02:34 PM GMT+09:00, Oliver Neukum
+> ><oneukum@suse.de> wrote:
+> >> >Am Mittwoch, den 09.09.2020, 13:34 -0600 schrieb James Hilliard:
+> >> >> This patch detects and reverses the effects of the malicious FTDI
+> >> >> Windows driver version 2.12.00(FTDIgate).
+> >> >
+> >> >Hi,
+> >> >
+> >> >this raises questions.
+> >> >Should we do this unconditionally without asking?
+> >> >Does this belong into kernel space?
+> >>
+> >> I agree; this is very cute, but does it really need to be an
+> >automatic Linux feature? Presumably someone looking to fix a bricked
+> >FTDI chip can just run my script, and those who just want to use those
+> >chips with Linux already can since the driver binds to the zero PID.
+> >Well for one your script is not easily useable with embedded platforms
+> >like mine where I ran into this issue, I have no python2 interpreter
+> >available in my production builds.
 >
-> If you need to update the kernel on this platform anyway to use this feature, why not just introduce a userspace script to fix the bricked units instead?
-I considered that but it appeared to be far more complex as I would
-have to validate all the interactions with my other userspace apps.
-
-I haven't tested this but I suspect there may also be issues having
-userspace code access these control messages, especially since
-I build the ftdi_sio driver into my kernels rather than using a module.
->
-> Needing this autofixed seems like somewhat of a niche use case better served by a script on platforms where it might be a problem, rather than upstream kernel code.
-I figured this would be useful for anyone with these bricked devices
-as I have wasted a lot of time debugging this issue since I wasn't
-expecting the ID's to have changed.
-
-I'm assuming it happened because I use USB hubs and firmware was
-being flashed for different hub attached hardware devices by moving
-the entire hub to Windows even though the userspace arduino control
-application doesn't run on Windows at the moment.
-
-I can't think of any case where this would be harmful as I have
-plenty of sanity checks before fixing the brick to ensure it only
-unbricks devices that have the preimage attack signature.
-
-This is an annoying enough issue that I think autofixing makes sense
-simply so that everyone can avoid wasting time debugging the issue
-manually.
+> Surely you can port the exact same algorithm to plain userspace C, as you did to kernel space C :)
+Sure, but it would be significantly more complex, require a lot more code
+and testing since there can be other userspace apps interacting with the
+hardware, in addition to being less reliable and potentially difficult
+to install
+for some setups. Detecting and dealing with this issue in the kernel is
+very simple and reliable in comparison. There's also potentially permissions
+issues if one wants to do this from userspace from my understanding.
 >
 > >>
-> >> > +static int ftdi_repair_brick(struct usb_serial_port *port)
-> >> > +{
-> >> > +     struct ftdi_private *priv = usb_get_serial_port_data(port);
-> >> > +     int orig_latency;
-> >> > +     int rv;
-> >> > +     u16 *eeprom_data;
-> >> > +     u16 checksum;
-> >> > +     int eeprom_size;
-> >> > +     int result;
-> >> > +
-> >> > +     switch (priv->chip_type) {
-> >> > +     case FT232RL:
-> >> > +             eeprom_size = 0x40;
-> >> > +             break;
-> >> > +     default:
-> >> > +             /* Unsupported for brick repair */
-> >> > +             return 0;
-> >> > +     }
-> >> > +
-> >> > +     /* Latency timer needs to be 0x77 to unlock EEPROM
+> >> I am deeply amused by the idea of Linux automatically fixing problems
+> >caused by malicious Windows drivers, but thinking objectively, I'm not
+> >sure if that's the right thing to do.
+> >From my understanding Linux fixing up hardware issues caused
+> >by faulty/weird Windows drivers isn't exactly unusual.
+>
+> I'm not aware of any instances like this where nonvolatile memory is modified. At most you'll get things like resetting devices that a previous windows warm boot misconfigured, I think?
+Yeah, I think it's mostly nonvolatile memory, I've seen this issue quite a bit
+with some of the Realtek ethernet drivers.
+
+I think user experience for devices should be that one can move
+a USB device from Linux to Windows and back without having to manually
+reprogram an eeprom. The sheer amount of resources FTDI has wasted
+with their malicious Windows driver is crazy and likely far exceeds any losses
+from counterfeiting. I think due to how widespread this issue is it makes sense
+to aggressively and automatically mitigate the damages wherever possible, it's
+also likely a major source of ewaste since people may throw out perfectly
+functional hardware without knowing it can be fixed easily.
+>
+> >>
+> >> >
+> >> >> +static int ftdi_repair_brick(struct usb_serial_port *port)
+> >> >> +{
+> >> >> +    struct ftdi_private *priv = usb_get_serial_port_data(port);
+> >> >> +    int orig_latency;
+> >> >> +    int rv;
+> >> >> +    u16 *eeprom_data;
+> >> >> +    u16 checksum;
+> >> >> +    int eeprom_size;
+> >> >> +    int result;
+> >> >> +
+> >> >> +    switch (priv->chip_type) {
+> >> >> +    case FT232RL:
+> >> >> +            eeprom_size = 0x40;
+> >> >> +            break;
+> >> >> +    default:
+> >> >> +            /* Unsupported for brick repair */
+> >> >> +            return 0;
+> >> >> +    }
+> >> >> +
+> >> >> +    /* Latency timer needs to be 0x77 to unlock EEPROM
 > >programming */
-> >> > +     if (priv->latency != 0x77) {
-> >> > +             orig_latency = priv->latency;
-> >> > +             priv->latency = 0x77;
-> >> > +             rv = write_latency_timer(port);
-> >> > +             priv->latency = orig_latency;
-> >> > +             if (rv < 0)
-> >> > +                     return -EIO;
-> >> > +     }
+> >> >> +    if (priv->latency != 0x77) {
+> >> >> +            orig_latency = priv->latency;
+> >> >> +            priv->latency = 0x77;
+> >> >> +            rv = write_latency_timer(port);
+> >> >> +            priv->latency = orig_latency;
+> >> >> +            if (rv < 0)
+> >> >> +                    return -EIO;
+> >> >> +    }
+> >> >
+> >> >Do you really want to change this without returning to the original?
+> >> >
+> >> >       Regards
+> >> >               Oliver
 > >>
-> >> Do you really want to change this without returning to the original?
-> >> @@ -2255,6 +2364,12 @@ static int ftdi_sio_port_probe(struct
-> >usb_serial_port *port)
-> >>         ftdi_set_max_packet_size(port);
-> >>         if (read_latency_timer(port) < 0)
-> >>                 priv->latency = 16;
-> >> +       vendor_id =
-> >le16_to_cpu(port->serial->dev->descriptor.idVendor);
-> >> +       product_id =
-> >le16_to_cpu(port->serial->dev->descriptor.idProduct);
-> >> +       if (vendor_id == FTDI_VID &&
-> >> +               product_id == FTDI_BRICK_PID &&
-> >> +               priv->chip_type == FT232RL)
-> >> +               ftdi_repair_brick(port);
-> >>         write_latency_timer(port);
-> >It should get restored here.
-> >>         create_sysfs_attrs(port);
-> >>
-> >>
-> >>         Regards
-> >>                 Oliver
-> >>
+> >> --
+> >> Hector Martin "marcan" (hector@marcansoft.com)
+> >> Public key: https://mrcn.st/pub
 >
 > --
 > Hector Martin "marcan" (hector@marcansoft.com)
