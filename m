@@ -2,71 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDE626430D
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 11:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DAF264325
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 12:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730799AbgIJJ7L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 05:59:11 -0400
-Received: from marcansoft.com ([212.63.210.85]:48630 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730627AbgIJJ6B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Sep 2020 05:58:01 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1551E419AD;
-        Thu, 10 Sep 2020 09:57:49 +0000 (UTC)
-Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
-To:     James Hilliard <james.hilliard1@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan@kernel.org>, Lars Melin <larsm17@gmail.com>,
-        Oliver Neukum <oneukum@suse.de>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russ Dill <Russ.Dill@gmail.com>
-References: <20200909193419.2006744-1-james.hilliard1@gmail.com>
- <1599706954.10822.3.camel@suse.de>
- <a1161f77-5b37-39ea-eb91-7b0b59278960@gmail.com>
- <20200910080850.GD24441@localhost>
- <CADvTj4rDdj8KtLhGZEZP+XZcF4DTE4oW9sNf=zNWaRPzkny93A@mail.gmail.com>
- <20200910085541.GA1099591@kroah.com>
- <CADvTj4pYR9H1X1_f4DYTkb5ViXAdx9sO5yBgHgM5vFaDMs_miQ@mail.gmail.com>
-From:   Hector Martin <hector@marcansoft.com>
-Message-ID: <26a723e4-e166-6377-875a-f737a15dc6b1@marcansoft.com>
-Date:   Thu, 10 Sep 2020 18:57:47 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+        id S1730424AbgIJKBs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 06:01:48 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:57250 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727830AbgIJKBr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 06:01:47 -0400
+Received: from fsav305.sakura.ne.jp (fsav305.sakura.ne.jp [153.120.85.136])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 08AA1WOa077957;
+        Thu, 10 Sep 2020 19:01:32 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav305.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav305.sakura.ne.jp);
+ Thu, 10 Sep 2020 19:01:31 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav305.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 08AA1VfS077951
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+        Thu, 10 Sep 2020 19:01:31 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [RFC 0/5] fix races in CDC-WDM
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     bjorn@mork.no, linux-usb@vger.kernel.org
+References: <20200812132034.14363-1-oneukum@suse.com>
+ <ee0af733-903f-8e8f-8027-b5490a37032f@i-love.sakura.ne.jp>
+ <1599728957.10822.9.camel@suse.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <4f285044-aae9-c3be-23ba-90790cd624f1@i-love.sakura.ne.jp>
+Date:   Thu, 10 Sep 2020 19:01:28 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CADvTj4pYR9H1X1_f4DYTkb5ViXAdx9sO5yBgHgM5vFaDMs_miQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
+In-Reply-To: <1599728957.10822.9.camel@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/09/2020 18.52, James Hilliard wrote:
-> So I'm having trouble coming up with a reliable way to fix this in userspace,
-> I've already got quite a few moving parts there as is and most of what I
-> come up with seems like it would not work reliably, at least for automatically
-> repairing the eeprom.
+On 2020/09/10 18:09, Oliver Neukum wrote:
+>> Does it make sense to wait for response of someone else's usb_submit_urb() when
+>> someone is calling close(), for there is no guarantee that failure notice received
+>> via wdm_flush() via some file descriptor corresponds to usb_submit_urb() request from
+>> wdm_write() call from that file descriptor?
+> 
+> Well, user space may do multithreading. Whether it makes sense is
+> another question. We just need to return results confirming to the
+> standards. You noticed bugs. I think the next version will fix them.
 
-I'm confused as to why this is hard to fix in userspace. You already 
-said you have userspace code binding to the proper VID/PID, so your code 
-won't find the bricked device. Then it's just a matter of having a udev 
-rule run the unbricker when it detects the bad device (which should 
-issue a USB reset when it's done reprogramming, making the device appear 
-as the right VID/PID), thus effectively doing the same thing the kernel 
-does. If this is embedded and not using udev, then substitute whatever 
-equivalent you have. If you're polling for the device at runtime instead 
-and don't have a device manager, just poll for the VID 0 device too and 
-apply the fix.
+My question is how do you handle if App1 and App2 (not multithreading but
+multiprocessing) shares the "desc" ? Unless
 
-I can't think of a scenario where this would be difficult to fix in 
-userspace...
+>> In patch "[RFC 3/5] CDC-WDM: making flush() interruptible", it is legal to return -EINTR
+>>  from close(). But I think that returning -EINTR from close() is not recommended because
+>> it can confuse multithreaded application (retrying close() upon -EINTR is not safe).
+> 
+> Well, but what is the alternative? Should we ignore signals?
+> 
 
--- 
-Hector Martin (hector@marcansoft.com)
-Public Key: https://mrcn.st/pub
+we return the error from write() request (i.e. give up trying to report errors from
+close() event), we can't pass results to the intended recipients.
+
