@@ -2,115 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E39263DB3
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 08:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C02263ED3
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 09:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730093AbgIJGxY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 02:53:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33088 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726961AbgIJGxQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Sep 2020 02:53:16 -0400
-Received: from localhost (p5486ceec.dip0.t-ipconnect.de [84.134.206.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 93A222078E;
-        Thu, 10 Sep 2020 06:53:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599720795;
-        bh=/LOePKGDUR83plqAhx1ySvpBeTmOBTt4AYD41Ar10p8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e3Jk9M7ZKtsnsBd892ykDqq6ldjJyX23IqJ7DyDWgKOR2vkDHWpTUx3L4W3ZSGRl8
-         gbJ25CK/q4T0DRgLEQdFDMLfOBf9AoSauHV2UkWklXje0SfXK1Ub2yM0Bl5ncgFE73
-         tRqSbJwVN+gRudxLpTtOTt3VxbQSMkA19oVYS08w=
-Date:   Thu, 10 Sep 2020 08:53:12 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Kees Cook <kees.cook@canonical.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
-        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
-        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        storagedev@microchip.com, sparclinux@vger.kernel.org,
-        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
-        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>
-Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
- break;
-Message-ID: <20200910065312.GH1031@ninjato>
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+        id S1729298AbgIJHew (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 03:34:52 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:1175 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728297AbgIJHev (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 03:34:51 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08A7Qsvo001037;
+        Thu, 10 Sep 2020 09:34:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=yitzxd1EpxSR+UWF5RZLvTzZh1+/ExLz6X9wKwEHp6c=;
+ b=nZkhw9kUN+I2HILMVN6KMn/4f3IhIl+hTkgVaz7LymhFmX6Yaen1vqRfif7nItEFDy0W
+ VzOOoOZhJxnaXG0QZn+FNFmXUdFRxa4wvcmjIWZXbBhNszmj2zDOn3vjmT+Tks45w+SA
+ 6Ql6tRmp+hu6oMRjjs42MJKjXLmIcI4UbvMCOrn5JcDAXplgcLUGRJE8segauxo6djdQ
+ yBeId3gNdpjsYiIZfeW8P5YXSwAoFkoP6miPjXAyy+QP2MG8fvZt/mQpCRltySB4Pooq
+ l8txBZZcwQ2oNiqaJE8ysdEWVemf5LRMGlCBKHK2oAnuoN11aQgwK8rUwfz24HgYdpjf Iw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 33c051hm4p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Sep 2020 09:34:37 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EBD7F10002A;
+        Thu, 10 Sep 2020 09:34:36 +0200 (CEST)
+Received: from Webmail-eu.st.com (gpxdag3node5.st.com [10.75.127.72])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D0F57212104;
+        Thu, 10 Sep 2020 09:34:36 +0200 (CEST)
+Received: from lmecxl0995.lme.st.com (10.75.127.46) by GPXDAG3NODE5.st.com
+ (10.75.127.72) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 10 Sep
+ 2020 09:34:35 +0200
+Subject: Re: [balbi-usb:testing/next 32/38] ld.lld: error: undefined symbol:
+ usb_role_switch_get_drvdata
+To:     kernel test robot <lkp@intel.com>, Felipe Balbi <balbi@kernel.org>
+CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
+References: <202009100918.i31tdoK9%lkp@intel.com>
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+Message-ID: <497fbf82-805b-5b82-28f0-114c3f31756f@st.com>
+Date:   Thu, 10 Sep 2020 09:34:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="OpLPJvDmhXTZE4Lg"
-Content-Disposition: inline
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <202009100918.i31tdoK9%lkp@intel.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG8NODE2.st.com (10.75.127.23) To GPXDAG3NODE5.st.com
+ (10.75.127.72)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-10_01:2020-09-10,2020-09-10 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
---OpLPJvDmhXTZE4Lg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 9/10/20 3:29 AM, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/next
+> head:   3c9722514c3fb74bbe0af87c20bc6b4c47121287
+> commit: a0f0bc95705446b8b1476338056bf869271ba36a [32/38] usb: dwc2: override PHY input signals with usb role switch support
+> config: x86_64-randconfig-r022-20200909 (attached as .config)
+> compiler: clang version 12.0.0 (https://github.com/llvm/llvm-project 8893d0816ccdf8998d2e21b5430e9d6abe7ef465)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # install x86_64 cross compiling tool for clang build
+>          # apt-get install binutils-x86-64-linux-gnu
+>          git checkout a0f0bc95705446b8b1476338056bf869271ba36a
+>          # save the attached .config to linux build tree
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: undefined symbol: usb_role_switch_get_drvdata
+>     >>> referenced by drd.c:71 (drivers/usb/dwc2/drd.c:71)
+>     >>> usb/dwc2/drd.o:(dwc2_drd_role_sw_set) in archive drivers/built-in.a
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
 
-
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index e32ef3f01fe8..b13b1cbcac29 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1785,7 +1785,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  		fallthrough;
->  	case PCI_DEVICE_ID_INTEL_82801CA_3:
->  		priv->features |= FEATURE_HOST_NOTIFY;
-> -		fallthrough;
-> +		break;
->  	case PCI_DEVICE_ID_INTEL_82801BA_2:
->  	case PCI_DEVICE_ID_INTEL_82801AB_3:
->  	case PCI_DEVICE_ID_INTEL_82801AA_3:
-
-I am not the maintainer (Jean is) but I suggest to drop this hunk. The
-code is more complex with multiple 'fallthrough', so this change alone
-actually makes the code inconsistent. A rework would need a seperate
-patch.
-
-
---OpLPJvDmhXTZE4Lg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9ZzVQACgkQFA3kzBSg
-KbYNuA//cymFe0KsFqywRHv3eBWJhoqwvWN2Xhwrx5/b6N3kkKGTo61aOo1ZI2gU
-55rQoGusy8OzGXaxlyhNS8Ea9ztPZc/tHEohOHKPYr52ErUMXlbMo3I3q7sZAZEI
-O/bRlnPKUCKqKOpZBin0ri6NE3FNYybTW30HgIk/LFUeCuaup10cUcxCmPfXHlNc
-M/2M2tBVyyBOqlVVsPxIfEZ4jGDaikxt7mBZDj4QMJnivnuMFuuz8U7gYzkXIHfO
-4ahGx+dBLCCInwFNFjEIPr+biq6Bgt/Vl9bbgN/BYbzdgbbJcikEhWHd9FxEoxQ5
-Y4M6/HxLDuCwTLIoFHjVifsFHK4Emk5ECc0xBWjHu3CJDunZSmy6yS5gbD1BrstW
-Djf0Ue1kyqnVPBDKE0EwFmwz1z1V14bhhXVC1fkiJjTpYRA6g3zMwH1oan6XIbGj
-v4OuWFDkQLEfzCCBIASGS849HtQ4rNafKxX3KQ3qxngh7XBrK7X92SLf3qRJurdt
-h5Ozd/zYDzyKQ1nOf/XWAOP5SKZH2ANjTrFKgIZE8MRkTmbzrlZkCnDnFD0pKPlB
-Z9h9uPZ7kifAejwaRPfsTu6/B9XJafMKfLa3hKTg2kgO+p67ItBEQ0W8wrXLE1/1
-c5FW5PqdkjKnx/9yUqosjEsHV2goh1guE4cziLkF1pZXcrElbtk=
-=ZP3J
------END PGP SIGNATURE-----
-
---OpLPJvDmhXTZE4Lg--
+fixed in v6 version: 
+https://lore.kernel.org/patchwork/project/lkml/list/?series=461852
