@@ -2,142 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9E326412E
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 11:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4B1264169
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 11:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730165AbgIJJOs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 05:14:48 -0400
-Received: from verein.lst.de ([213.95.11.211]:60117 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727090AbgIJJOC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Sep 2020 05:14:02 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 7F59E6736F; Thu, 10 Sep 2020 11:13:51 +0200 (CEST)
-Date:   Thu, 10 Sep 2020 11:13:51 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Greg KH <greg@kroah.com>
-Cc:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org,
-        Russell King <linux@armlinux.org.uk>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/3] dma-mapping: introduce DMA range map, supplanting
- dma_pfn_offset
-Message-ID: <20200910091351.GA25883@lst.de>
-References: <20200910054038.324517-1-hch@lst.de> <20200910054038.324517-4-hch@lst.de> <20200910075351.GA1092435@kroah.com>
+        id S1730383AbgIJJTg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 05:19:36 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34946 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730093AbgIJJTZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 05:19:25 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08A92VZj043273;
+        Thu, 10 Sep 2020 05:18:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : subject : to : cc
+ : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=lbijph5Taiyv+LvsJ/sM7F9hRJYgXJ1/OeIBGv1V4zI=;
+ b=m+S0uISl4zEUpQGOdqBmign+zGpGsKWZr0M8gyz4QB85tpAWWy9P9TsdEALPMOQc3bzS
+ HTmLUO+a8FzA6nkFFUM33SJxJVALimBUdqlyOa2QZAPtF+c5k3tdLE9Ja5lY/NITAiC6
+ 7HCRwKAifhDAW7efbtBkvvOJ9noreWSpBIsRvblR2Hd6QlL3Ql+0LiOJ/5ZV1/0dyGOl
+ ERG9aDbHT//+EVNVz7T31D+HrD6qNbB+7sB3Bj+uKnN/s2x03LNnlPZVOOElWWQIxfaC
+ VUv4NZ3PEML96IaUY9CGtxDOOL3o1HTtA4I8YY6eO/McXjX1bfFSSUd+pDdF2Re/VmW7 tg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33fh5s0eur-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Sep 2020 05:18:39 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08A92b39043665;
+        Thu, 10 Sep 2020 05:18:37 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33fh5s0etk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Sep 2020 05:18:37 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08A9DDHx028675;
+        Thu, 10 Sep 2020 09:18:34 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03fra.de.ibm.com with ESMTP id 33c2a8bckn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Sep 2020 09:18:34 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08A9GxlP65470906
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Sep 2020 09:16:59 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C217AE055;
+        Thu, 10 Sep 2020 09:18:32 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 299C6AE04D;
+        Thu, 10 Sep 2020 09:18:30 +0000 (GMT)
+Received: from oc4120165700.ibm.com (unknown [9.145.14.177])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Sep 2020 09:18:30 +0000 (GMT)
+From:   Steffen Maier <maier@linux.ibm.com>
+Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+To:     Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Benjamin Block <bblock@linux.ibm.com>
+Cc:     Kees Cook <kees.cook@canonical.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
+        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
+        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        storagedev@microchip.com, sparclinux@vger.kernel.org,
+        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+        alsa-devel <alsa-devel@alsa-project.org>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+Message-ID: <0c66fbe5-c48b-7dc1-f7fe-1498da9cc1a3@linux.ibm.com>
+Date:   Thu, 10 Sep 2020 11:18:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200910075351.GA1092435@kroah.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-10_01:2020-09-10,2020-09-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 suspectscore=0 impostorscore=0 priorityscore=1501 spamscore=0
+ mlxlogscore=940 adultscore=0 bulkscore=0 clxscore=1011 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009100080
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 09:53:51AM +0200, Greg KH wrote:
-> >  		/*
-> >  		 * Please refer to usb_alloc_dev() to see why we set
-> > -		 * dma_mask and dma_pfn_offset.
-> > +		 * dma_mask and dma_range_map.
-> >  		 */
-> >  		intf->dev.dma_mask = dev->dev.dma_mask;
-> > -		intf->dev.dma_pfn_offset = dev->dev.dma_pfn_offset;
-> > +		if (dma_direct_copy_range_map(&intf->dev, &dev->dev))
-> > +			dev_err(&dev->dev, "failed to copy DMA map\n");
+On 9/9/20 10:06 PM, Joe Perches wrote:
+> fallthrough to a separate case/default label break; isn't very readable.
 > 
-> We tell the user, but then just keep on running?  Is there anything that
-> we can do here?
+> Convert pseudo-keyword fallthrough; statements to a simple break; when
+> the next label is case or default and the only statement in the next
+> label block is break;
 > 
-> If not, why not have dma_direct_copy_range_map() print out the error?
+> Found using:
+> 
+> $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
+> 
+> Miscellanea:
+> 
+> o Move or coalesce a couple label blocks above a default: block.
+> 
+> Signed-off-by: Joe Perches <joe@perches.com>
+> ---
+> 
+> Compiled allyesconfig x86-64 only.
+> A few files for other arches were not compiled.
 
-At least for USB I'm pretty sure this isn't required at all.  I've been
-running with the patch below on my desktop for two days now trying all
-the usb toys I have (in addition to grepping for obvious abuses in
-the drivers).  remoteproc is a different story, but the DMA handling
-seems there is sketchy to start with..
+>   drivers/s390/scsi/zfcp_fsf.c                              |  2 +-
 
----
-From 8bae3e6833f2ca431dcfcbc8f9cced7d5e972a01 Mon Sep 17 00:00:00 2001
-From: Christoph Hellwig <hch@lst.de>
-Date: Wed, 9 Sep 2020 08:28:59 +0200
-Subject: usb: don't inherity DMA properties for USB devices
+>   82 files changed, 109 insertions(+), 112 deletions(-)
 
-As the comment in usb_alloc_dev correctly states, drivers can't use
-the DMA API on usb device, and at least calling dma_set_mask on them
-is highly dangerous.  Unlike what the comment states upper level drivers
-also can't really use the presence of a dma mask to check for DMA
-support, as the dma_mask is set by default for most busses.
+> diff --git a/drivers/s390/scsi/zfcp_fsf.c b/drivers/s390/scsi/zfcp_fsf.c
+> index 140186fe1d1e..2741a07df692 100644
+> --- a/drivers/s390/scsi/zfcp_fsf.c
+> +++ b/drivers/s390/scsi/zfcp_fsf.c
+> @@ -2105,7 +2105,7 @@ static void zfcp_fsf_open_lun_handler(struct zfcp_fsf_req *req)
+>   
+>   	case FSF_PORT_HANDLE_NOT_VALID:
+>   		zfcp_erp_adapter_reopen(adapter, 0, "fsouh_1");
+> -		fallthrough;
+> +		break;
+>   	case FSF_LUN_ALREADY_OPEN:
+>   		break;
+>   	case FSF_PORT_BOXED:
 
-Remove the copying over of DMA information, and remove the now unused
-dma_direct_copy_range_map export.
+Acked-by: Steffen Maier <maier@linux.ibm.com> # for zfcp
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/usb/core/message.c |  7 -------
- drivers/usb/core/usb.c     | 13 -------------
- kernel/dma/direct.c        |  1 -
- 3 files changed, 21 deletions(-)
 
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 935ee98e049f65..9e45732dc1d1d1 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -1954,13 +1954,6 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
- 		intf->dev.bus = &usb_bus_type;
- 		intf->dev.type = &usb_if_device_type;
- 		intf->dev.groups = usb_interface_groups;
--		/*
--		 * Please refer to usb_alloc_dev() to see why we set
--		 * dma_mask and dma_range_map.
--		 */
--		intf->dev.dma_mask = dev->dev.dma_mask;
--		if (dma_direct_copy_range_map(&intf->dev, &dev->dev))
--			dev_err(&dev->dev, "failed to copy DMA map\n");
- 		INIT_WORK(&intf->reset_ws, __usb_queue_reset_device);
- 		intf->minor = -1;
- 		device_initialize(&intf->dev);
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index 23d451f6894d70..9b4ac4415f1a47 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -599,19 +599,6 @@ struct usb_device *usb_alloc_dev(struct usb_device *parent,
- 	dev->dev.bus = &usb_bus_type;
- 	dev->dev.type = &usb_device_type;
- 	dev->dev.groups = usb_device_groups;
--	/*
--	 * Fake a dma_mask/offset for the USB device:
--	 * We cannot really use the dma-mapping API (dma_alloc_* and
--	 * dma_map_*) for USB devices but instead need to use
--	 * usb_alloc_coherent and pass data in 'urb's, but some subsystems
--	 * manually look into the mask/offset pair to determine whether
--	 * they need bounce buffers.
--	 * Note: calling dma_set_mask() on a USB device would set the
--	 * mask for the entire HCD, so don't do that.
--	 */
--	dev->dev.dma_mask = bus->sysdev->dma_mask;
--	if (dma_direct_copy_range_map(&dev->dev, bus->sysdev))
--		dev_err(&dev->dev, "failed to copy DMA map\n");
- 	set_dev_node(&dev->dev, dev_to_node(bus->sysdev));
- 	dev->state = USB_STATE_ATTACHED;
- 	dev->lpm_disable_count = 1;
-diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
-index fc815f7375e282..3af257571a3b42 100644
---- a/kernel/dma/direct.c
-+++ b/kernel/dma/direct.c
-@@ -552,4 +552,3 @@ int dma_direct_copy_range_map(struct device *to, struct device *from)
- 	to->dma_range_map = new_map;
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(dma_direct_copy_range_map);
 -- 
-2.28.0
+Mit freundlichen Gruessen / Kind regards
+Steffen Maier
 
+Linux on IBM Z Development
+
+https://www.ibm.com/privacy/us/en/
+IBM Deutschland Research & Development GmbH
+Vorsitzender des Aufsichtsrats: Matthias Hartmann
+Geschaeftsfuehrung: Dirk Wittkopp
+Sitz der Gesellschaft: Boeblingen
+Registergericht: Amtsgericht Stuttgart, HRB 243294
