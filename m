@@ -2,121 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9442F265448
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 23:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDE9265438
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 23:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728612AbgIJVmv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 17:42:51 -0400
-Received: from cmccmta3.chinamobile.com ([221.176.66.81]:18257 "EHLO
-        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730567AbgIJL5g (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 07:57:36 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.13]) by rmmx-syy-dmz-app10-12010 (RichMail) with SMTP id 2eea5f5a1432a09-8b324; Thu, 10 Sep 2020 19:55:30 +0800 (CST)
-X-RM-TRANSID: 2eea5f5a1432a09-8b324
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[223.112.105.130])
-        by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee75f5a142f81d-8c931;
-        Thu, 10 Sep 2020 19:55:30 +0800 (CST)
-X-RM-TRANSID: 2ee75f5a142f81d-8c931
-From:   Tang Bin <tangbin@cmss.chinamobile.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com
-Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tang Bin <tangbin@cmss.chinamobile.com>,
-        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Subject: [PATCH] usb: phy: tegra: Use IS_ERR() to check and simplify code
-Date:   Thu, 10 Sep 2020 19:56:07 +0800
-Message-Id: <20200910115607.11392-1-tangbin@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.20.1.windows.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1728696AbgIJVm7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 17:42:59 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54030 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730602AbgIJMWW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Sep 2020 08:22:22 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 664D8B016;
+        Thu, 10 Sep 2020 12:21:33 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     penguin-kernel@i-love.sakura.ne.jp, bjorn@mork.no,
+        linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [RFC 1/6] CDC-WDM: fix hangs in flush()
+Date:   Thu, 10 Sep 2020 14:21:00 +0200
+Message-Id: <20200910122105.13398-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use IS_ERR() and PTR_ERR() instead of PTR_ERR_OR_ZERO() to
-simplify code, avoid redundant judgements.
+In a multithreaded scenario  a flush() and a write() may be waiting for the same
+IO to complete. Hence completion of output must use wake_up_all(),
+even in error handling, while a flush may be waiting for an intended but
+not started Io.
 
-Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- drivers/usb/phy/phy-tegra-usb.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+ drivers/usb/class/cdc-wdm.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
-index 6153cc35a..3b901429d 100644
---- a/drivers/usb/phy/phy-tegra-usb.c
-+++ b/drivers/usb/phy/phy-tegra-usb.c
-@@ -1121,10 +1121,9 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
- 		return PTR_ERR(tegra_phy->vbus);
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index e3db6fbeadef..adb3fc307083 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -151,7 +151,7 @@ static void wdm_out_callback(struct urb *urb)
+ 	kfree(desc->outbuf);
+ 	desc->outbuf = NULL;
+ 	clear_bit(WDM_IN_USE, &desc->flags);
+-	wake_up(&desc->wait);
++	wake_up_all(&desc->wait);
+ }
  
- 	tegra_phy->pll_u = devm_clk_get(&pdev->dev, "pll_u");
--	err = PTR_ERR_OR_ZERO(tegra_phy->pll_u);
--	if (err) {
-+	if (IS_ERR(tegra_phy->pll_u)) {
- 		dev_err(&pdev->dev, "Failed to get pll_u clock: %d\n", err);
--		return err;
-+		return PTR_ERR(tegra_phy->pll_u);
- 	}
+ static void wdm_in_callback(struct urb *urb)
+@@ -424,6 +424,7 @@ static ssize_t wdm_write
+ 	if (rv < 0) {
+ 		desc->outbuf = NULL;
+ 		clear_bit(WDM_IN_USE, &desc->flags);
++		wake_up_all(&desc->wait); /* for flush() */
+ 		dev_err(&desc->intf->dev, "Tx URB error: %d\n", rv);
+ 		rv = usb_translate_errors(rv);
+ 		goto out_free_mem_pm;
+@@ -586,6 +587,7 @@ static ssize_t wdm_read
+ static int wdm_flush(struct file *file, fl_owner_t id)
+ {
+ 	struct wdm_device *desc = file->private_data;
++	int rv;
  
- 	phy_type = of_usb_get_phy_mode(np);
-@@ -1135,20 +1134,18 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
- 			return err;
+ 	wait_event(desc->wait,
+ 			/*
+@@ -600,11 +602,12 @@ static int wdm_flush(struct file *file, fl_owner_t id)
+ 	/* cannot dereference desc->intf if WDM_DISCONNECTING */
+ 	if (test_bit(WDM_DISCONNECTING, &desc->flags))
+ 		return -ENODEV;
+-	if (desc->werr < 0)
++	rv = desc->werr;
++	if (rv < 0)
+ 		dev_err(&desc->intf->dev, "Error in flush path: %d\n",
+-			desc->werr);
++			rv);
  
- 		tegra_phy->pad_clk = devm_clk_get(&pdev->dev, "utmi-pads");
--		err = PTR_ERR_OR_ZERO(tegra_phy->pad_clk);
--		if (err) {
-+		if (IS_ERR(tegra_phy->pad_clk)) {
- 			dev_err(&pdev->dev,
- 				"Failed to get UTMIP pad clock: %d\n", err);
--			return err;
-+			return PTR_ERR(tegra_phy->pad_clk);
- 		}
+-	return usb_translate_errors(desc->werr);
++	return usb_translate_errors(rv);
+ }
  
- 		reset = devm_reset_control_get_optional_shared(&pdev->dev,
- 							       "utmi-pads");
--		err = PTR_ERR_OR_ZERO(reset);
--		if (err) {
-+		if (IS_ERR(reset)) {
- 			dev_err(&pdev->dev,
- 				"Failed to get UTMI-pads reset: %d\n", err);
--			return err;
-+			return PTR_ERR(reset);
- 		}
- 		tegra_phy->pad_rst = reset;
- 		break;
-@@ -1157,22 +1154,20 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
- 		tegra_phy->is_ulpi_phy = true;
- 
- 		tegra_phy->clk = devm_clk_get(&pdev->dev, "ulpi-link");
--		err = PTR_ERR_OR_ZERO(tegra_phy->clk);
--		if (err) {
-+		if (IS_ERR(tegra_phy->clk)) {
- 			dev_err(&pdev->dev,
- 				"Failed to get ULPI clock: %d\n", err);
--			return err;
-+			return PTR_ERR(tegra_phy->clk);
- 		}
- 
- 		gpiod = devm_gpiod_get_from_of_node(&pdev->dev, np,
- 						    "nvidia,phy-reset-gpio",
- 						    0, GPIOD_OUT_HIGH,
- 						    "ulpi_phy_reset_b");
--		err = PTR_ERR_OR_ZERO(gpiod);
--		if (err) {
-+		if (IS_ERR(gpiod)) {
- 			dev_err(&pdev->dev,
- 				"Request failed for reset GPIO: %d\n", err);
--			return err;
-+			return PTR_ERR(gpiod);
- 		}
- 		tegra_phy->reset_gpio = gpiod;
- 
+ static __poll_t wdm_poll(struct file *file, struct poll_table_struct *wait)
 -- 
-2.20.1.windows.1
-
-
+2.16.4
 
