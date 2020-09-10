@@ -2,101 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B35E2640AE
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 10:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E080A2640F3
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 11:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730464AbgIJI4j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 04:56:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37058 "EHLO mail.kernel.org"
+        id S1729455AbgIJJJj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 05:09:39 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37676 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730400AbgIJIze (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Sep 2020 04:55:34 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5DA2D206A1;
-        Thu, 10 Sep 2020 08:55:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599728134;
-        bh=Sw3cSgiiRVB7WjdtgUzZk4fAw77GoTjxM0/fy6CX2UQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VaYGy1DGNz7YN5SG68MnqqzLWdNriwbjMQ5P5LsPml47jMyrueTtPJK9N4uvEJKvL
-         nlDlIV9BHCB629AE3/7hHlSrrgov2Z+N4dr2ZS5/gZ1ZPZrtHthGSvJLhMUKQOuOJw
-         J9az9zqi3guXQPR7Oh/HlzGZzv+FCRNKi24CcDWY=
-Date:   Thu, 10 Sep 2020 10:55:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, Lars Melin <larsm17@gmail.com>,
-        Oliver Neukum <oneukum@suse.de>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russ Dill <Russ.Dill@gmail.com>,
-        Hector Martin <hector@marcansoft.com>
-Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
-Message-ID: <20200910085541.GA1099591@kroah.com>
-References: <20200909193419.2006744-1-james.hilliard1@gmail.com>
- <1599706954.10822.3.camel@suse.de>
- <a1161f77-5b37-39ea-eb91-7b0b59278960@gmail.com>
- <20200910080850.GD24441@localhost>
- <CADvTj4rDdj8KtLhGZEZP+XZcF4DTE4oW9sNf=zNWaRPzkny93A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADvTj4rDdj8KtLhGZEZP+XZcF4DTE4oW9sNf=zNWaRPzkny93A@mail.gmail.com>
+        id S1729161AbgIJJJX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Sep 2020 05:09:23 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 3F27FB1E6;
+        Thu, 10 Sep 2020 09:09:37 +0000 (UTC)
+Message-ID: <1599728957.10822.9.camel@suse.com>
+Subject: Re: [RFC 0/5] fix races in CDC-WDM
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     bjorn@mork.no, linux-usb@vger.kernel.org
+Date:   Thu, 10 Sep 2020 11:09:17 +0200
+In-Reply-To: <ee0af733-903f-8e8f-8027-b5490a37032f@i-love.sakura.ne.jp>
+References: <20200812132034.14363-1-oneukum@suse.com>
+         <ee0af733-903f-8e8f-8027-b5490a37032f@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 02:17:44AM -0600, James Hilliard wrote:
-> On Thu, Sep 10, 2020 at 2:08 AM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > On Thu, Sep 10, 2020 at 12:33:55PM +0700, Lars Melin wrote:
-> > > On 9/10/2020 10:02, Oliver Neukum wrote:
-> > > > Am Mittwoch, den 09.09.2020, 13:34 -0600 schrieb James Hilliard:
-> > > >> This patch detects and reverses the effects of the malicious FTDI
-> > > >> Windows driver version 2.12.00(FTDIgate).
-> > > >
-> > > > Hi,
-> > > >
-> > > > this raises questions.
-> > > > Should we do this unconditionally without asking?
-> > > > Does this belong into kernel space?
-> > > >
-> > >
-> > > My answer to both of those question is a strong NO.
-> > >
-> > > The patch author tries to justify the patch with egoistical arguments
-> > > (easier for him and his customers) without thinking of all other users
-> > > of memory constrained embedded hardware that doesn't need the patch code
-> > > but have to carry it.
-> > >
-> > > The bricked PID is btw already supported by the linux ftdi driver so
-> > > there is no functionality gain in the patch.
-> >
-> > I fully agree. This doesn't belong in the kernel. If the Windows driver
-> > breaks someones device on purpose they should know about it, and *if*
-> > they want they can reprogram the device using the tools mentioned in the
-> > thread. But the kernel shouldn't be playing such games and reprogram
-> > eeproms behind people's backs.
-> One of the main issues is that this issue is very often not-obvious, FTDI
-> specifically designed their malicious driver to make it appear that the
-> hardware failed, they intentionally do not provide proper feedback to
-> the user when they soft-brick it. I assume this is because they want
-> to push the support costs related to their malicious driver onto the
-> integrator rather than themselves.
+Am Mittwoch, den 12.08.2020, 23:29 +0900 schrieb Tetsuo Handa:
+> On 2020/08/12 22:20, Oliver Neukum wrote:
+> > CDC-WDM was not written with multithreaded users or
+> > uncooperative devices in mind.
+> > This leads to race conditions and hangs in flush(). 
 
-That's fine, but why is it the Linux kernel's job to fix up this mess?
 
-There is already a userspace tool that can be run to resolve this for
-devices that wish to have this fixed up for.  Use that.  We want to keep
-things that can be done in userspace, in userspace, whenever possible.
+Hi,
 
-And again, Linux runs just fine with these devices so why is it Linux's
+thank you for waiting. Family emergency.
 
-I'm with Johan here, reprogramming eeproms when people least expect it
-is not nice, and in a way, is much the same thing that the Windows
-drivers are doing.
+> In patch "[RFC 2/5] CDC-WDM: introduce a timeout in flush()", since multiple users can
+> share "desc", wouldn't someone's usb_submit_urb() from wdm_write() gets unexpectedly
+> interfered by someone else's usb_kill_urb(desc->command) from wdm_open() ?
 
-thanks,
+Yes. Fixed.
 
-greg k-h
+> In patch "[RFC 2/5] CDC-WDM: introduce a timeout in flush()", don't we need to similarly
+> apply timeout to wait_event_interruptible() in wdm_write(), for the same problem will
+> happen if hardware remained silent forever?
+
+Technically a device may take forever. Interrupting a wait in write()
+is not problematic.
+
+> In patch "[RFC 3/5] CDC-WDM: making flush() interruptible", it is legal to return -EINTR
+>  from close(). But I think that returning -EINTR from close() is not recommended because
+> it can confuse multithreaded application (retrying close() upon -EINTR is not safe).
+
+Well, but what is the alternative? Should we ignore signals?
+
+> In patch "[RFC 5/5] CDC-WDM: remove use of intf->dev after potential disconnect",
+> 
+>         /* cannot dereference desc->intf if WDM_DISCONNECTING */
+>         if (test_bit(WDM_DISCONNECTING, &desc->flags))
+>                 return -ENODEV;
+> 
+> can be also removed, for this check is meant for not to dereference desc->intf
+> after disconnect ?
+
+It can be removed, but that would make error reporting worse.
+
+> Guessing from symmetry, do we need to check WDM_DISCONNECTING or WDM_RESETTING
+> in wait_event_interruptible_timeout() from wdm_flush() when wait_event_interruptible()
+> in wdm_write() is not checking WDM_DISCONNECTING nor WDM_RESETTING ?
+
+Added
+
+> Does it make sense to wait for response of someone else's usb_submit_urb() when
+> someone is calling close(), for there is no guarantee that failure notice received
+> via wdm_flush() via some file descriptor corresponds to usb_submit_urb() request from
+> wdm_write() call from that file descriptor?
+
+Well, user space may do multithreading. Whether it makes sense is
+another question. We just need to return results confirming to the
+standards. You noticed bugs. I think the next version will fix them.
+
+What else would we do?
+
+	Regards
+		Oliver
+
+
