@@ -2,86 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCD02644AF
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 12:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531582644F9
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 13:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730413AbgIJKwq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 06:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730403AbgIJKuP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 06:50:15 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7860AC061799
-        for <linux-usb@vger.kernel.org>; Thu, 10 Sep 2020 03:50:06 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id z23so7960128ejr.13
-        for <linux-usb@vger.kernel.org>; Thu, 10 Sep 2020 03:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dl+Puul4vVPh8oSiqSBQlazGVFYUlaK2t3JkMD3S8VU=;
-        b=MfR+kaqr9Ijvrx9g8wnfe7FFqLLww8qX3LZ9b84v4pCfAz/g6fGA42sPm0CJpfWGGE
-         qYE7rUatAHQDiitWJVs+uVxotoSAZqt3zr7GoxqZGh1X3QFe7FU352wH11BltiJNbHql
-         5AEqFDggtRG3ieScrHb1PF00WL7dA2G8E61ESpi3lxr5RGIVR5IxhnyQQ0zgnrTAX3WJ
-         VCZedtySvxPz/rXfJbYgpG31Vva3nJGgcQW74ksuK5HiDq8OoQimF9YEDA7bng/B1Prl
-         fHM3laMutRyVCPg1OtxDzcu3uQx4vqauE5jF35lEQWUua+8X9EvtaD00ZrmplRoQ5jGi
-         HkCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dl+Puul4vVPh8oSiqSBQlazGVFYUlaK2t3JkMD3S8VU=;
-        b=bqV/BNdEcIxGkczbBR2ZHbB2XF+ZPbvhDrk2gTSdNnbGVD0Dcb7uySeCtGLnAzZpuC
-         Zx3EE0XH+G8jrBMBg8al/6Pe0/mgTZIHMT//PRNzDyox3pJvanWmSCjRwBOeV5PX0IH9
-         5aflhkLhy7tFUkd6dr9ityix6nS2ORFUwNcdld5NB3n5gIWnctu9IlAYmlF9zfTDGPoW
-         uYHQzRQbW77cRELuiCSGKc4WOc1rPEmbt2LQiwHnBcKPwPttosL+qtwGv7HXSr74daEF
-         ID4rvfgOfVowianIdNMK/ftu1L8Zx2+GbD7YplIMG6z0sl5xeI49TeyYJCT8Dxm07LiZ
-         kYMQ==
-X-Gm-Message-State: AOAM533W0pNS87rlAOrPmIW/W5VceC5xEPfSsv1BIx7p1brMnjXyOIk3
-        VrTAcs/apSD+1QWImBy2C44NpqROw4KMaXfTXiJ3qQ==
-X-Google-Smtp-Source: ABdhPJz2QEjAlqXQ/OoQNuvXwR82jdCqI8EOUurylTRWYYiFSskudC59oTiUg29MEX2zzBztMwvKMOU5vvzGeJ0jq6k=
-X-Received: by 2002:a17:907:94cf:: with SMTP id dn15mr8438636ejc.114.1599735004965;
- Thu, 10 Sep 2020 03:50:04 -0700 (PDT)
+        id S1730083AbgIJLBg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 10 Sep 2020 07:01:36 -0400
+Received: from mail2.bemta24.messagelabs.com ([67.219.250.122]:56460 "EHLO
+        mail2.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730744AbgIJK7b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 06:59:31 -0400
+Received: from [100.112.135.89] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-3.bemta.az-b.us-west-2.aws.symcld.net id 75/F5-22172-0170A5F5; Thu, 10 Sep 2020 10:59:28 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKJsWRWlGSWpSXmKPExsVyKz0mWJefPSr
+  e4MwxC4sZO/tZLD4e/cRscWiihsXxztVMFmsfTmK0mPC+i8WiseEfq8Wq1VeZLc5s3Mtk8Wtr
+  ocWzXVPZLb4dPcZmsWhZK7NFZ/8kVovmux3MFjNWfWW3+Pr3OLPFv/47zBY79l9nteh80sPiI
+  OJxf/dKdo/JTzYyecx88YTdY+nc1eweO2fdZff48DHO4+mEyewe/Qf+MHksehzssWHmbUaPNf
+  fzPE4+bWHyaNkv5vF5k5zH7WfbWDwm3HjMGCAQxZqZl5RfkcCa0TnjIFvBa/aKM/O7WBsYH7F
+  1MXJxCAksYZT4OeMLSxcjJwezgJ7EjalT2EBsXgFBiZMzn0DFtSWWLXzN3MXIAWSrSXztKgEJ
+  CwtwS3Sf+MsOEhYR4JP4eD8AJMwmICqxbdMJsGoWAVWJxWvMQMJCQObtd0sYQWwJAXuJpe8vQ
+  NmSEk9uT2aEWOou8XjTE7CJQgL8EhNuV01g5JuF5LRZSE6bheS0WQinLWBkWcVokVSUmZ5Rkp
+  uYmaNraGCga2hopGtobALEZnqJVbpJeqXFuuWpxSW6RnqJ5cV6xZW5yTkpenmpJZsYgTGeUtD
+  WsYNx+psPeocYJTmYlER5ZW5HxgvxJeWnVGYkFmfEF5XmpBYfYtTj4BC4cPbhJ0aBKx8+NTFJ
+  seTl56UqSfAevgtULViUmp5akZaZA0xJMA0SHDxKIrw894DSvMUFibnFmekQqVOM3hwbj85bx
+  MyxHUweA5P9axYDyZc7lwDJw7uBpBDYBilxXieQDQIgIzJK8+AWwFLrJUZZKWFeRgYGBiGegt
+  Si3MwSVPlXjOIcjErCvPIgU3gy80rg7ngFdCIT0ImN8mAnliQipKQamFjVZ6yalXC3+Xnwt2U
+  HLm2LLl+tuzvlVwHnoVIW9d6euYqpDtqv52meaOo6/X7Cu5NxHN8W/Z0VvvT3LokXnj3/kgtY
+  7NXn1K4y9276Evb33t3n4cf8X7VdUVq+YfX253P4rv9LD+GPPsCewOTwYPJepn8B7C9qih4+n
+  eUuusF/W9hZX5mT+5ru3Z568eCPKC7j69MZ2HS/Cwve7H1aru3AdZJR4fCnxf4OSyJcJ2hL1E
+  7iaKjlannBI3hfK7PrVPdb25btXNn/LU1ruYpavkWtWMde2LBgBieLoeFr0UIfzni7JT+s9+x
+  aENzssNFrS9mKmE1L99ScC6tRXbI47Yvcgnin2gcXPpy0M5/OIKXEUpyRaKjFXFScCAAVt51l
+  KAQAAA==
+X-Msg-Ref: server-32.tower-345.messagelabs.com!1599735503!396249!79
+X-Originating-IP: [218.103.92.83]
+X-SYMC-ESS-Client-Auth: outbound-route-from=fail
+X-StarScan-Received: 
+X-StarScan-Version: 9.60.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 11681 invoked from network); 10 Sep 2020 10:59:27 -0000
+Received: from 083.92.103.218.static.netvigator.com (HELO fksex.fkdomain.local) (218.103.92.83)
+  by server-32.tower-345.messagelabs.com with SMTP; 10 Sep 2020 10:59:27 -0000
+Received: from [172.20.10.4] (102.80.141.101) by fksex.fkdomain.local
+ (192.168.1.9) with Microsoft SMTP Server (TLS) id 8.2.255.0; Thu, 10 Sep 2020
+ 18:59:09 +0800
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <1599726112-4439-1-git-send-email-chunfeng.yun@mediatek.com>
-In-Reply-To: <1599726112-4439-1-git-send-email-chunfeng.yun@mediatek.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 10 Sep 2020 12:49:38 +0200
-Message-ID: <CAG48ez1jLVcj=BAAsSA5i-k+gCtRNn+OhfwAWAxFJSKLwZKQ=A@mail.gmail.com>
-Subject: Re: [PATCH RESEND v3 01/11] usb: early: convert to readl_poll_timeout_atomic()
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jason Yan <yanaijie@huawei.com>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        Saurav Girepunje <saurav.girepunje@gmail.com>,
-        linux-usb@vger.kernel.org,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re
+To:     Recipients@vger.kernel.org
+From:   Stefano@vger.kernel.org, Pessina@vger.kernel.org
+Date:   Thu, 10 Sep 2020 03:58:48 -0700
+Reply-To: stefanopessina679@yahoo.com
+X-Antivirus: Avast (VPS 200910-0, 09/09/2020), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <41435acf-259a-433e-a1a9-17b8ae5c9b18@fksex.fkdomain.local>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 10:24 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-> Use readl_poll_timeout_atomic() to simplify code
->
-> Cc: Lu Baolu <baolu.lu@linux.intel.com>
-> Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Hallo,
 
-Reviewed-by: Jann Horn <jannh@google.com>
+Ich bin Stefano Pessina, ein italienischer Wirtschaftsmagnat, Investor und Philanthrop. der stellvertretende Vorsitzende, Chief Executive Officer (CEO) und der größte Einzelaktionär der Walgreens Boots Alliance. ich gab
+25 Prozent meines persönlichen Vermögens für wohltätige Zwecke wegbringen. Und ich habe auch zugesagt, den Rest von 25% in diesem Jahr 2020 wegen des Herzschmerzes von Covid-19 an Einzelpersonen zu verschenken. Ich habe beschlossen, Ihnen 950.000,00 USD (neunhundertfünfzigtausend Dollar) zu spenden. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen. über meine E-Mail an (stefanopessina679@yahoo.com)
+
+Sie können auch mehr über mich über den unten stehenden Link lesen
+
+https://en.wikipedia.org/wiki/Stefano_Pessina
+
+Herzlicher Gruss
+CEO Walgreens Boots Alliance
+Stefano Pessina
+
+-- 
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
+
