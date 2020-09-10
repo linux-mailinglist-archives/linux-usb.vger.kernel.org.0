@@ -2,15 +2,15 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E6D264602
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 14:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E3B2645EF
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 14:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730203AbgIJM3Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 08:29:16 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56398 "EHLO mx2.suse.de"
+        id S1730477AbgIJMYt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 08:24:49 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53638 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730695AbgIJM00 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Sep 2020 08:26:26 -0400
+        id S1730508AbgIJMVb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Sep 2020 08:21:31 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
         by mx2.suse.de (Postfix) with ESMTP id 65F6EAFF6;
