@@ -2,101 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A21EF263C79
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 07:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0148E263C9B
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 07:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbgIJFeh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 01:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
+        id S1727787AbgIJFlp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 01:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725855AbgIJFeF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 01:34:05 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3759CC061573;
-        Wed,  9 Sep 2020 22:34:01 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id o16so2464769pjr.2;
-        Wed, 09 Sep 2020 22:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uGUkLkekDDrHHyjl9V1yaazxeNg3zJrmb/AGpekFVEU=;
-        b=LNQ6YQYlGzUoEEn59bhxCAzN0bbl0RH3ljxUlRnh8MvIkfpOCRQN5XEMH/xRYA+JQI
-         MbwO0s/RiAvGlJAmzsU1/Gjve4jRbyiPhjQAWj9i4i/+Tvvx5X/w8AlSz7PInXV10Tp6
-         RIBT1pgKtAf+7vUT/N9a5+AEeTfUQA4RlqbAwwPX3tTWSDo7nEsF3KpKEhrY/zd7QXmm
-         uvFkOh3Ej6tRjlIsLSbuGw+chSIIhXReaHOszaTXvv2CoRZZR/Tjn5oK4qThg9++DAeG
-         0ahQ5J9HSH/14/4AARusqV25omLbV4GjHBlX7ZAPXnquQn3XpSSmRF/xrx7O1YvKiJyA
-         VLlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uGUkLkekDDrHHyjl9V1yaazxeNg3zJrmb/AGpekFVEU=;
-        b=Zba0qlF5d6EEdeMb9e0Mo5fU1uxCzyfDPWbQ+o9kszE7+y1AKyoldQmj6rDSVoAAcs
-         eYyGHP2tFuog/lmhCKE9e++NXtD1ZwWSYGeDXRkEjXQyL1dBKSblmXgPxwpo6e3yRPcE
-         C/zp4Uq/KV0lHkehyvKlw3kOiBW3ywQtJZIrePi/zWn5Qv0O253c8VUtq8JfFTSeDcV9
-         ivEjjjcL7dzLH6xYXY/SaBkVS9ZH432S2Z9qALhlhZN9qLFj6gHLoOZCnQcn7teaZRJL
-         huPy5k11qM6ys0K9D7k+EuY2dXNGWdHfNkLVdTe7rQZXsqdR8Ylc77QHuKAHZYaE1jqo
-         azBQ==
-X-Gm-Message-State: AOAM532nyBz+iuBYR7rduvB2ipnNkmf8N5zSmXYJHJbCgpV90NOUzyFZ
-        4qDah40n2LZRORpcF1VIM3Q=
-X-Google-Smtp-Source: ABdhPJyA4kPg48qb2udCMYHl4sXWhpEBoJK9wBIXp40zG7zp6AGgM9d0QvaM0WisgbU+c02gkQNkMg==
-X-Received: by 2002:a17:902:bc81:: with SMTP id bb1mr4107803plb.105.1599716040593;
-        Wed, 09 Sep 2020 22:34:00 -0700 (PDT)
-Received: from [192.168.1.5] ([61.7.133.45])
-        by smtp.googlemail.com with ESMTPSA id j26sm4453002pfa.160.2020.09.09.22.33.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 22:34:00 -0700 (PDT)
-Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
-To:     Oliver Neukum <oneukum@suse.de>,
-        James Hilliard <james.hilliard1@gmail.com>,
+        with ESMTP id S1725868AbgIJFkx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 01:40:53 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C0AC061573;
+        Wed,  9 Sep 2020 22:40:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=GAlHdOT6xNBIXoRJTGjDfO8yxN+XWkHMSyYrbndYoes=; b=rXra2losZTDAUND7ZVSHxWZYp9
+        O0bLx1ptf6BcC5QeKhuW38Lf8UWBywKGkwCs/qUGI5fa6K3Wo47yLmh+ur6K/PaChoT/tGFAxhcfB
+        ub0IkMkCNn8zmoDDxv5Ga1FM9H3Llnp4yAc4H38rVR/D87e4VVNPsmj3sTrqj4NY/ll95s+l7RlB0
+        aeZms3/a23jfo8wlpZ1fWP3dtIV+nqpRDfJEM1YB/0RAcM9KRXd9eflYS3vfBKqRTkX8ewEJaAWKu
+        EB2yqu8Vmg5QAIVSz+rH5SsKaWoc/Avpgn0ZFhqfwiDyyGYPXlholm/TZWUcvLJuu7lgJQ3Z+5U2M
+        v9Uq/JMA==;
+Received: from [2001:4bb8:184:af1:d8d0:3027:a666:4c4e] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kGFK2-0001sv-Sk; Thu, 10 Sep 2020 05:40:39 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     iommu@lists.linux-foundation.org,
+        Russell King <linux@armlinux.org.uk>,
+        Santosh Shilimkar <ssantosh@kernel.org>
+Cc:     Jim Quinlan <james.quinlan@broadcom.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-usb@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Russ Dill <Russ.Dill@gmail.com>,
-        Hector Martin <hector@marcansoft.com>
-References: <20200909193419.2006744-1-james.hilliard1@gmail.com>
- <1599706954.10822.3.camel@suse.de>
-From:   Lars Melin <larsm17@gmail.com>
-Message-ID: <a1161f77-5b37-39ea-eb91-7b0b59278960@gmail.com>
-Date:   Thu, 10 Sep 2020 12:33:55 +0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+Subject: support range based offsets in dma-direct
+Date:   Thu, 10 Sep 2020 07:40:35 +0200
+Message-Id: <20200910054038.324517-1-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <1599706954.10822.3.camel@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/10/2020 10:02, Oliver Neukum wrote:
-> Am Mittwoch, den 09.09.2020, 13:34 -0600 schrieb James Hilliard:
->> This patch detects and reverses the effects of the malicious FTDI
->> Windows driver version 2.12.00(FTDIgate).
-> 
-> Hi,
-> 
-> this raises questions.
-> Should we do this unconditionally without asking?
-> Does this belong into kernel space?
-> 
+Hi all,
 
-My answer to both of those question is a strong NO.
+this series adds range-based offsets to the dma-direct implementation.  The
+guts of the change are a patch from Jim with some modifications from me,
+but to do it nicely we need to ARM patches to prepare for it as well.
 
-The patch author tries to justify the patch with egoistical arguments 
-(easier for him and his customers) without thinking of all other users 
-of memory constrained embedded hardware that doesn't need the patch code 
-but have to carry it.
-
-The bricked PID is btw already supported by the linux ftdi driver so 
-there is no functionality gain in the patch.
-
-br
-Lars
-
-
-
+Diffstat:
+ arch/arm/common/dmabounce.c                        |    2 
+ arch/arm/include/asm/dma-direct.h                  |   69 +++++++++++++++++
+ arch/arm/include/asm/dma-mapping.h                 |   70 ------------------
+ arch/arm/mach-keystone/keystone.c                  |   21 +++--
+ arch/sh/drivers/pci/pcie-sh7786.c                  |    9 +-
+ arch/x86/pci/sta2x11-fixup.c                       |    6 +
+ drivers/acpi/arm64/iort.c                          |    6 +
+ drivers/base/core.c                                |    2 
+ drivers/gpu/drm/sun4i/sun4i_backend.c              |    8 +-
+ drivers/iommu/io-pgtable-arm.c                     |    2 
+ drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c |    9 ++
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c |   11 ++
+ drivers/of/address.c                               |   73 ++++++++----------
+ drivers/of/device.c                                |   44 +++++++----
+ drivers/of/of_private.h                            |   11 +-
+ drivers/of/unittest.c                              |   34 ++++++--
+ drivers/remoteproc/remoteproc_core.c               |    4 -
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.c     |   10 ++
+ drivers/usb/core/message.c                         |    5 -
+ drivers/usb/core/usb.c                             |    3 
+ include/linux/device.h                             |    4 -
+ include/linux/dma-direct.h                         |   52 +++++++++++--
+ include/linux/dma-mapping.h                        |   19 ++++
+ kernel/dma/coherent.c                              |    7 -
+ kernel/dma/direct.c                                |   81 ++++++++++++++++++++-
+ 25 files changed, 373 insertions(+), 189 deletions(-)
