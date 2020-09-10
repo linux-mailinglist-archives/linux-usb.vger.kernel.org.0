@@ -2,194 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53AF62646B6
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 15:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28AB2264811
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 16:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbgIJNQw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 09:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730701AbgIJNMX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 09:12:23 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75474C061756
-        for <linux-usb@vger.kernel.org>; Thu, 10 Sep 2020 06:12:16 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id t10so6671954wrv.1
-        for <linux-usb@vger.kernel.org>; Thu, 10 Sep 2020 06:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Bq+U/roPoyR+PFGiWvFpI6j3vo6m28j+pYae81Oydrk=;
-        b=LxW9JQardfe6ovRqT818t4MTPCbypCYUo6YFqdrT244gD5a1S0M2FecEI0fJMIgCzr
-         Ar89gXm/TIGENRR2BL49FoHZo7vujerVPjd5M+e2s3HXP4Wo7+O2P4figtbf5/nmwDS/
-         Q2R1sft6rUH2GuRa5ewLVT4dLProx4KzE35qEa4E6nG7xI6czJpWrd4mlBvx4KBv1Ccz
-         A73yWuTvok4lQOj7F9He312DDKguKWTUTaFTwJ9WMRqZBv5IIXVbgFL3+SKSF4xaBQqF
-         6f2aAKtqQ+uZhXhgjIwYfEadfGfIDAA1hYNVQFQSDpaEu0fH3OPF+Cxvx5kbZQoNIkpH
-         Yvmg==
+        id S1730870AbgIJOgW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 10:36:22 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:35387 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728211AbgIJOeR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 10:34:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599748441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7LH+FwkTwx6nSJCYI1KtwqE1gO8u9UI8dkFe2h5a2YM=;
+        b=PrPhz023Ogdp4tdvGIwiwORnXKRBX0qbGCU3Wm7a9qKiLJzB6/dLOx9KYNiLjY722lpt3w
+        NMU4e2u4ROmq1/GxUSxxTYf9X0sl95Z+/c13BGgfPS1lIGAyeQFvMUxcISj5gVfrNgheSg
+        YhMzInHH+iCl99WP/2VXnTB9gH77gWw=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-453-ceFymzVLN5CNmU-3hM-VYA-1; Thu, 10 Sep 2020 09:58:53 -0400
+X-MC-Unique: ceFymzVLN5CNmU-3hM-VYA-1
+Received: by mail-ed1-f72.google.com with SMTP id i22so2497562edu.1
+        for <linux-usb@vger.kernel.org>; Thu, 10 Sep 2020 06:58:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Bq+U/roPoyR+PFGiWvFpI6j3vo6m28j+pYae81Oydrk=;
-        b=K1MNe3znFyAiBSiXZ3j45DGUsD8KFNvNOIKyZEK3rLeqAIZ9G8PQC+uLcs0g7NZ1+r
-         BZtGzjoVZakfVdBJmLIR0NfnWf0pcqRGQ0N2hJ+2cuYIwMvxlyc+Rxe+3OTU0SYW8451
-         GuKPfy+ROwcIoyau8FPk0PMkxmIZiqlCIOWSFpSMTGoRj+63c1NUCbyUw+wjuGi0CFLQ
-         +UeGzFIY15IHilwfEhoHK60Zqcdhb6Lqf3EGtxi6T45aqJMgzMPiiirbtrfgVWUXx0qD
-         cNH1nLKujPz2d1iOF1jjUfp9DR5M/NLeeVJGeK/8wPidClsN0XXXp768autDE/1+e5Lv
-         6W8g==
-X-Gm-Message-State: AOAM530RJ4uQY9NiOdmEjewcoKjy5axc9eEuhaahjjOEBJPztZVTCGjK
-        WWoo8AY0kSmHToq6XKk8CdQPcg==
-X-Google-Smtp-Source: ABdhPJx2Dvf8nFJMefE2zEyQsiA8oS3cus97b9p96If1Q7HdqZx1B5j3NrbyrLIFhtzFYQ1R++dhWQ==
-X-Received: by 2002:a5d:6301:: with SMTP id i1mr8482460wru.323.1599743535091;
-        Thu, 10 Sep 2020 06:12:15 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id j14sm3301883wmj.19.2020.09.10.06.12.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 06:12:14 -0700 (PDT)
-Date:   Thu, 10 Sep 2020 14:12:12 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7LH+FwkTwx6nSJCYI1KtwqE1gO8u9UI8dkFe2h5a2YM=;
+        b=Nphmkk43lPPYjSPnfO8s8taqgSi3ezjLUqnF97g4EuFnzlTSwbBd134Pp+LoSjIm1r
+         WA3JtzPloST31j2y6TrJcf+xWgZvD3rwT+Irp+RvmE5qpqLVTZS8Ca7h+0giiuB17gr8
+         IobVVhqDM0ZSbdOmK4vMDCVFXeOFtVsAbEk7zgZK2JIP7wDOpgxyu8Bq33v7F+NBwfp9
+         +Oms2BGIuxaGHPXIO83B+kE3UvBcIAs1ylK1j4z4GY+nWQmCtt10geVq0iZtxR2InLvL
+         EQgYkzQsjuS6XGj1tygbTRS0bGa7jBby1rdQKjcCTg88ItoEo4x9PgggyGtydP1CEc3W
+         wZlA==
+X-Gm-Message-State: AOAM530mze+y9Kn4nn9yC8Opr8+GLeI2MiGgTP7haKAiDTh43oBGKIqW
+        jXh+M2eKiq1xvUlA9X6lccTVd++n0UoLk9hcPJYekFIQXbTJcfgVmn4LFSgKeY2XoipM/Lmm+Jr
+        4JzeSf+HzbQL/ulHXhAIb
+X-Received: by 2002:a05:6402:78b:: with SMTP id d11mr9810628edy.341.1599746331705;
+        Thu, 10 Sep 2020 06:58:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwEB+RkeGm9dqLhuNHTmUrJ7s7H6k9Hsct7lOvj3k827noqmc67qC++zNOH0aCPFqvcaOG9LQ==
+X-Received: by 2002:a05:6402:78b:: with SMTP id d11mr9810608edy.341.1599746331478;
+        Thu, 10 Sep 2020 06:58:51 -0700 (PDT)
+Received: from x1.localdomain ([109.38.136.20])
+        by smtp.gmail.com with ESMTPSA id z4sm7439503ede.65.2020.09.10.06.58.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Sep 2020 06:58:50 -0700 (PDT)
+Subject: Re: How to set USB_PORT_QUIRK_OLD_SCHEME on an usb-port ?
+To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Jann Horn <jannh@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Jason Yan <yanaijie@huawei.com>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        Saurav Girepunje <saurav.girepunje@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH RESEND v3 04/11] usb: xhci-rcar: convert to
- readl_poll_timeout_atomic()
-Message-ID: <20200910131212.wm7zskxvcesl652c@holly.lan>
-References: <1599726112-4439-1-git-send-email-chunfeng.yun@mediatek.com>
- <1599726112-4439-4-git-send-email-chunfeng.yun@mediatek.com>
+        linux-usb@vger.kernel.org
+References: <2f2dd720-3ab4-ba0a-16bf-8b899aafa26d@redhat.com>
+ <20200906022229.GA729107@rowland.harvard.edu>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <28948e6c-b67b-5b5c-daeb-070a1dadf9c8@redhat.com>
+Date:   Thu, 10 Sep 2020 15:58:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1599726112-4439-4-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <20200906022229.GA729107@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 04:21:45PM +0800, Chunfeng Yun wrote:
-> Use readl_poll_timeout_atomic() to simplify code
+Hi,
+
+On 9/6/20 4:22 AM, Alan Stern wrote:
+> On Sat, Sep 05, 2020 at 01:37:38PM +0200, Hans de Goede wrote:
+>> Hi All,
+>>
+>> I have been debugging an issue with a 2-in-1 which
+>> consists of a tablet + a kbd-dock, where the device
+>> turns into a clamshell when docked into the kbd-dock.
+>>
+>> The kbd dock is connected via pogo-pins. This works
+>> fine when docked at boot. But there is an enumeration
+>> issue when hot-docked (and the keyboard looses power
+>> when the lid is closedm so this also triggers after
+>> a suspend/resume):
+>>
+>> [ 3498.924190] usb 1-3: new full-speed USB device number 5 using xhci_hcd
+>> [ 3499.041725] usb 1-3: device descriptor read/64, error -71
+>> [ 3515.215890] usb 1-3: device descriptor read/64, error -110
+>> [ 3515.440369] usb 1-3: new full-speed USB device number 6 using xhci_hcd
+>> [ 3515.603544] usb 1-3: New USB device found, idVendor=06cb, idProduct=73f5, bcdDevice= 0.02
+>> [ 3515.603574] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+>> [ 3515.603596] usb 1-3: Product: ITE Device(8910)
+>> [ 3515.603614] usb 1-3: Manufacturer: ITE Tech. Inc.
+>>
+>> Note there is about 6 seconds before the keyboard becomes
+>> usable, which is quite long when trying to unlock the
+>> laptop after opening the lid.
+>>
+>> If I set the USB_PORT_QUIRK_OLD_SCHEME on the port used by the kbd-dock:
+>>
+>> echo 1 >  /sys/devices/pci0000\:00/0000\:00\:14.0/usb1/1-0\:1.0/usb1-port3/quirks
+>>
+>> Then this changes to:
+>>
+>> [ 4467.875008] usb 1-3: new full-speed USB device number 7 using xhci_hcd
+>> [ 4467.878483] usb 1-3: Device not responding to setup address.
+>> [ 4468.082476] usb 1-3: Device not responding to setup address.
+>> [ 4468.289990] usb 1-3: device not accepting address 7, error -71
+>> [ 4468.614928] usb 1-3: new full-speed USB device number 8 using xhci_hcd
+>> [ 4468.662392] usb 1-3: New USB device found, idVendor=06cb, idProduct=73f5, bcdDevice= 0.02
+>> [ 4468.662423] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+>> [ 4468.662444] usb 1-3: Product: ITE Device(8910)
+>> [ 4468.662461] usb 1-3: Manufacturer: ITE Tech. Inc.
+>>
+>> Which is a lot better wrt making the keyboard available for
+>> use in a timely manner.
+>>
+>> So now I'm looking into a way to automatically do this. I would
+>> prefer to keep the handling of this out of the kernel, so I looked into
+>> udev, but it seems that the usb_port_device_type device-s registered by
+>> usb_hub_create_port_device() are not visible to udev?
+>>
+>> At least I'm not seeing them, in the output of "udevadm info -e"
 > 
-> Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v2~v3: no changes
-> ---
->  drivers/usb/host/xhci-rcar.c | 43 ++++++++++++-------------------------------
->  1 file changed, 12 insertions(+), 31 deletions(-)
+> My impression is that fixing this would be the simplest approach.
+
+I agree that first trying to fix it is a good idea.
+
+>> Note another option would be to set the global old_scheme_first kernel
+>> cmdline parameter on this 2-in-1. That can be done with a simple
+>> dmi_system_id table on which to do this, but adding such a table
+>> seems undesirable.
+>>
+>>
+>> A third option I guess would be to try and improve the probe time
+>> of the kbd-dock under the new scheme.
 > 
-> diff --git a/drivers/usb/host/xhci-rcar.c b/drivers/usb/host/xhci-rcar.c
-> index c1025d3..74f836f 100644
-> --- a/drivers/usb/host/xhci-rcar.c
-> +++ b/drivers/usb/host/xhci-rcar.c
-> @@ -6,6 +6,7 @@
->   */
->  
->  #include <linux/firmware.h>
-> +#include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/of.h>
-> @@ -127,8 +128,7 @@ static int xhci_rcar_download_firmware(struct usb_hcd *hcd)
->  	void __iomem *regs = hcd->regs;
->  	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
->  	const struct firmware *fw;
-> -	int retval, index, j, time;
-> -	int timeout = 10000;
-> +	int retval, index, j;
->  	u32 data, val, temp;
->  	u32 quirks = 0;
->  	const struct soc_device_attribute *attr;
-> @@ -166,32 +166,19 @@ static int xhci_rcar_download_firmware(struct usb_hcd *hcd)
->  		temp |= RCAR_USB3_DL_CTRL_FW_SET_DATA0;
->  		writel(temp, regs + RCAR_USB3_DL_CTRL);
->  
-> -		for (time = 0; time < timeout; time++) {
-> -			val = readl(regs + RCAR_USB3_DL_CTRL);
-> -			if ((val & RCAR_USB3_DL_CTRL_FW_SET_DATA0) == 0)
-> -				break;
-> -			udelay(1);
-> -		}
-> -		if (time == timeout) {
-> -			retval = -ETIMEDOUT;
-> +		retval = readl_poll_timeout_atomic(regs + RCAR_USB3_DL_CTRL,
-> +				val, !(val & RCAR_USB3_DL_CTRL_FW_SET_DATA0),
-> +				1, 10000);
-> +		if (retval < 0)
->  			break;
-> -		}
->  	}
->  
->  	temp = readl(regs + RCAR_USB3_DL_CTRL);
->  	temp &= ~RCAR_USB3_DL_CTRL_ENABLE;
->  	writel(temp, regs + RCAR_USB3_DL_CTRL);
->  
-> -	for (time = 0; time < timeout; time++) {
-> -		val = readl(regs + RCAR_USB3_DL_CTRL);
-> -		if (val & RCAR_USB3_DL_CTRL_FW_SUCCESS) {
-> -			retval = 0;
-> -			break;
-> -		}
-> -		udelay(1);
-> -	}
-> -	if (time == timeout)
-> -		retval = -ETIMEDOUT;
-> +	retval = readl_poll_timeout_atomic((regs + RCAR_USB3_DL_CTRL),
-> +			val, (val & RCAR_USB3_DL_CTRL_FW_SUCCESS), 1, 10000);
+> Have you tried decreasing the initial_descriptor_timeout module
+> parameter for usbcore?  That would probably help, but it's kind of a
+> sledgehammer.
 
-Directly assigning to retval at this point will clobber a previous
--ETIMEDOUT error.
+So I tried this:
 
-In other words if there is a timeout waiting for FW_SET_DATA0, but not for
-DW_SUCCESS, then we will return the wrong return value.
+[root@localhost ~]# cat /sys/module/usbcore/parameters/initial_descriptor_timeout
+1000
 
+But it does not really seem to help:
 
-Daniel.
+[ 1171.435346] usb 1-3: USB disconnect, device number 2
+[ 1180.430958] usb 1-3: new full-speed USB device number 3 using xhci_hcd
+[ 1180.551543] usb 1-3: device descriptor read/64, error -71
+[ 1184.045548] usb 1-3: device descriptor read/64, error -110
+[ 1184.270924] usb 1-3: new full-speed USB device number 4 using xhci_hcd
+[ 1184.438336] usb 1-3: New USB device found, idVendor=06cb, idProduct=73f5, bcdDevice= 0.02
+[ 1184.438371] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 1184.438399] usb 1-3: Product: ITE Device(8910)
+[ 1184.438425] usb 1-3: Manufacturer: ITE Tech. Inc.
 
+Regards,
 
->  
->  	release_firmware(fw);
->  
-> @@ -200,18 +187,12 @@ static int xhci_rcar_download_firmware(struct usb_hcd *hcd)
->  
->  static bool xhci_rcar_wait_for_pll_active(struct usb_hcd *hcd)
->  {
-> -	int timeout = 1000;
-> +	int retval;
->  	u32 val, mask = RCAR_USB3_AXH_STA_PLL_ACTIVE_MASK;
->  
-> -	while (timeout > 0) {
-> -		val = readl(hcd->regs + RCAR_USB3_AXH_STA);
-> -		if ((val & mask) == mask)
-> -			return true;
-> -		udelay(1);
-> -		timeout--;
-> -	}
-> -
-> -	return false;
-> +	retval = readl_poll_timeout_atomic(hcd->regs + RCAR_USB3_AXH_STA,
-> +			val, ((val & mask) == mask), 1, 1000);
-> +	return !!retval;
+Hans
 
-This function returns a bool so !! is either wrong or redundant... I
-think in this case it is wrong and should be a single ! .
-
-
-Daniel.
