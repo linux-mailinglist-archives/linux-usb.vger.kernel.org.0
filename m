@@ -2,79 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 531582644F9
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 13:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 213142645EC
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 14:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730083AbgIJLBg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 10 Sep 2020 07:01:36 -0400
-Received: from mail2.bemta24.messagelabs.com ([67.219.250.122]:56460 "EHLO
-        mail2.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730744AbgIJK7b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 06:59:31 -0400
-Received: from [100.112.135.89] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-3.bemta.az-b.us-west-2.aws.symcld.net id 75/F5-22172-0170A5F5; Thu, 10 Sep 2020 10:59:28 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKJsWRWlGSWpSXmKPExsVyKz0mWJefPSr
-  e4MwxC4sZO/tZLD4e/cRscWiihsXxztVMFmsfTmK0mPC+i8WiseEfq8Wq1VeZLc5s3Mtk8Wtr
-  ocWzXVPZLb4dPcZmsWhZK7NFZ/8kVovmux3MFjNWfWW3+Pr3OLPFv/47zBY79l9nteh80sPiI
-  OJxf/dKdo/JTzYyecx88YTdY+nc1eweO2fdZff48DHO4+mEyewe/Qf+MHksehzssWHmbUaPNf
-  fzPE4+bWHyaNkv5vF5k5zH7WfbWDwm3HjMGCAQxZqZl5RfkcCa0TnjIFvBa/aKM/O7WBsYH7F
-  1MXJxCAksYZT4OeMLSxcjJwezgJ7EjalT2EBsXgFBiZMzn0DFtSWWLXzN3MXIAWSrSXztKgEJ
-  CwtwS3Sf+MsOEhYR4JP4eD8AJMwmICqxbdMJsGoWAVWJxWvMQMJCQObtd0sYQWwJAXuJpe8vQ
-  NmSEk9uT2aEWOou8XjTE7CJQgL8EhNuV01g5JuF5LRZSE6bheS0WQinLWBkWcVokVSUmZ5Rkp
-  uYmaNraGCga2hopGtobALEZnqJVbpJeqXFuuWpxSW6RnqJ5cV6xZW5yTkpenmpJZsYgTGeUtD
-  WsYNx+psPeocYJTmYlER5ZW5HxgvxJeWnVGYkFmfEF5XmpBYfYtTj4BC4cPbhJ0aBKx8+NTFJ
-  seTl56UqSfAevgtULViUmp5akZaZA0xJMA0SHDxKIrw894DSvMUFibnFmekQqVOM3hwbj85bx
-  MyxHUweA5P9axYDyZc7lwDJw7uBpBDYBilxXieQDQIgIzJK8+AWwFLrJUZZKWFeRgYGBiGegt
-  Si3MwSVPlXjOIcjErCvPIgU3gy80rg7ngFdCIT0ImN8mAnliQipKQamFjVZ6yalXC3+Xnwt2U
-  HLm2LLl+tuzvlVwHnoVIW9d6euYqpDtqv52meaOo6/X7Cu5NxHN8W/Z0VvvT3LokXnj3/kgtY
-  7NXn1K4y9276Evb33t3n4cf8X7VdUVq+YfX253P4rv9LD+GPPsCewOTwYPJepn8B7C9qih4+n
-  eUuusF/W9hZX5mT+5ru3Z568eCPKC7j69MZ2HS/Cwve7H1aru3AdZJR4fCnxf4OSyJcJ2hL1E
-  7iaKjlannBI3hfK7PrVPdb25btXNn/LU1ruYpavkWtWMde2LBgBieLoeFr0UIfzni7JT+s9+x
-  aENzssNFrS9mKmE1L99ScC6tRXbI47Yvcgnin2gcXPpy0M5/OIKXEUpyRaKjFXFScCAAVt51l
-  KAQAAA==
-X-Msg-Ref: server-32.tower-345.messagelabs.com!1599735503!396249!79
-X-Originating-IP: [218.103.92.83]
-X-SYMC-ESS-Client-Auth: outbound-route-from=fail
-X-StarScan-Received: 
-X-StarScan-Version: 9.60.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 11681 invoked from network); 10 Sep 2020 10:59:27 -0000
-Received: from 083.92.103.218.static.netvigator.com (HELO fksex.fkdomain.local) (218.103.92.83)
-  by server-32.tower-345.messagelabs.com with SMTP; 10 Sep 2020 10:59:27 -0000
-Received: from [172.20.10.4] (102.80.141.101) by fksex.fkdomain.local
- (192.168.1.9) with Microsoft SMTP Server (TLS) id 8.2.255.0; Thu, 10 Sep 2020
- 18:59:09 +0800
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Re
-To:     Recipients@vger.kernel.org
-From:   Stefano@vger.kernel.org, Pessina@vger.kernel.org
-Date:   Thu, 10 Sep 2020 03:58:48 -0700
-Reply-To: stefanopessina679@yahoo.com
-X-Antivirus: Avast (VPS 200910-0, 09/09/2020), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <41435acf-259a-433e-a1a9-17b8ae5c9b18@fksex.fkdomain.local>
+        id S1729911AbgIJMX6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 08:23:58 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53628 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730507AbgIJMVc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Sep 2020 08:21:32 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 664D8B016;
+        Thu, 10 Sep 2020 12:21:33 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     penguin-kernel@i-love.sakura.ne.jp, bjorn@mork.no,
+        linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [RFC 1/6] CDC-WDM: fix hangs in flush()
+Date:   Thu, 10 Sep 2020 14:21:00 +0200
+Message-Id: <20200910122105.13398-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hallo,
+In a multithreaded scenario  a flush() and a write() may be waiting for the same
+IO to complete. Hence completion of output must use wake_up_all(),
+even in error handling, while a flush may be waiting for an intended but
+not started Io.
 
-Ich bin Stefano Pessina, ein italienischer Wirtschaftsmagnat, Investor und Philanthrop. der stellvertretende Vorsitzende, Chief Executive Officer (CEO) und der größte Einzelaktionär der Walgreens Boots Alliance. ich gab
-25 Prozent meines persönlichen Vermögens für wohltätige Zwecke wegbringen. Und ich habe auch zugesagt, den Rest von 25% in diesem Jahr 2020 wegen des Herzschmerzes von Covid-19 an Einzelpersonen zu verschenken. Ich habe beschlossen, Ihnen 950.000,00 USD (neunhundertfünfzigtausend Dollar) zu spenden. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen. über meine E-Mail an (stefanopessina679@yahoo.com)
+Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/class/cdc-wdm.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-Sie können auch mehr über mich über den unten stehenden Link lesen
-
-https://en.wikipedia.org/wiki/Stefano_Pessina
-
-Herzlicher Gruss
-CEO Walgreens Boots Alliance
-Stefano Pessina
-
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index e3db6fbeadef..adb3fc307083 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -151,7 +151,7 @@ static void wdm_out_callback(struct urb *urb)
+ 	kfree(desc->outbuf);
+ 	desc->outbuf = NULL;
+ 	clear_bit(WDM_IN_USE, &desc->flags);
+-	wake_up(&desc->wait);
++	wake_up_all(&desc->wait);
+ }
+ 
+ static void wdm_in_callback(struct urb *urb)
+@@ -424,6 +424,7 @@ static ssize_t wdm_write
+ 	if (rv < 0) {
+ 		desc->outbuf = NULL;
+ 		clear_bit(WDM_IN_USE, &desc->flags);
++		wake_up_all(&desc->wait); /* for flush() */
+ 		dev_err(&desc->intf->dev, "Tx URB error: %d\n", rv);
+ 		rv = usb_translate_errors(rv);
+ 		goto out_free_mem_pm;
+@@ -586,6 +587,7 @@ static ssize_t wdm_read
+ static int wdm_flush(struct file *file, fl_owner_t id)
+ {
+ 	struct wdm_device *desc = file->private_data;
++	int rv;
+ 
+ 	wait_event(desc->wait,
+ 			/*
+@@ -600,11 +602,12 @@ static int wdm_flush(struct file *file, fl_owner_t id)
+ 	/* cannot dereference desc->intf if WDM_DISCONNECTING */
+ 	if (test_bit(WDM_DISCONNECTING, &desc->flags))
+ 		return -ENODEV;
+-	if (desc->werr < 0)
++	rv = desc->werr;
++	if (rv < 0)
+ 		dev_err(&desc->intf->dev, "Error in flush path: %d\n",
+-			desc->werr);
++			rv);
+ 
+-	return usb_translate_errors(desc->werr);
++	return usb_translate_errors(rv);
+ }
+ 
+ static __poll_t wdm_poll(struct file *file, struct poll_table_struct *wait)
 -- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+2.16.4
 
