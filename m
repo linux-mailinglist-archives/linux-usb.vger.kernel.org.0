@@ -2,340 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE92263CBF
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 07:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F7D263D56
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 08:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726754AbgIJFvq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 01:51:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40232 "EHLO mail.kernel.org"
+        id S1729860AbgIJG2f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 02:28:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52524 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725996AbgIJFtj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Sep 2020 01:49:39 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        id S1726440AbgIJG21 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Sep 2020 02:28:27 -0400
+Received: from coco.lan (ip5f5ad5ac.dynamic.kabel-deutschland.de [95.90.213.172])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2CE1620756;
-        Thu, 10 Sep 2020 05:49:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 79CF6206A1;
+        Thu, 10 Sep 2020 06:28:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599716977;
-        bh=qjk7eclNSd0kjMW5II9Ri1Jgh+6EUOXc7q8ENEVyxCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G/dU8JZ5MblGH7AwLNS8Byt1Fs+qj42gejdiXIO+yMvMbvGLZxVtv27WBICwINlL5
-         0vwfuPSBL+26xhMuf5b+csNRIJMGEO9Sm9CoRguk0OqvfYlNzAGCk1i9GkMzq/W1Tn
-         9W+RZj5RhbIugiflAJhPQWklKrc6UGF9+R2h103w=
-Date:   Thu, 10 Sep 2020 07:49:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        linux-kernel@vger.kernel.org, Russ Dill <Russ.Dill@gmail.com>,
-        Hector Martin <hector@marcansoft.com>
-Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
-Message-ID: <20200910054933.GA525707@kroah.com>
-References: <20200909193419.2006744-1-james.hilliard1@gmail.com>
+        s=default; t=1599719306;
+        bh=DjrBPnz1BgCnBYG/64IiUxKEJrMJGKb1A3mRWVpncJk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KppkCOGGex5Td4qsjLzCFk1NCf4XHbXpibLJsQYMVVaT0bkaAFQjn+ZuEeXf2o77m
+         UyE3jBNOXTpotfoeco2l+h7jkiCeDQm7I+A6v3H6sCfl0zDTboY8/bNQu+oaB5Un+6
+         r8LmWMYkPZepovOPOzqdHyn81ea3fXGQ2O9gVUL8=
+Date:   Thu, 10 Sep 2020 08:28:12 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Kees Cook <kees.cook@canonical.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
+        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
+        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        storagedev@microchip.com, sparclinux@vger.kernel.org,
+        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+        alsa-devel <alsa-devel@alsa-project.org>
+Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+Message-ID: <20200910082812.057a04e6@coco.lan>
+In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200909193419.2006744-1-james.hilliard1@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 01:34:18PM -0600, James Hilliard wrote:
-> This patch detects and reverses the effects of the malicious FTDI
-> Windows driver version 2.12.00(FTDIgate).
+Em Wed, 09 Sep 2020 13:06:39 -0700
+Joe Perches <joe@perches.com> escreveu:
+
+> fallthrough to a separate case/default label break; isn't very readable.
 > 
-> While we currently load the ftdi_sio driver for devices with
-> FTDI_BRICK_PID(0x0000) userspace applications that expect the
-> appropriate FTDI_8U232AM_PID(0x6001) PID may not work properly.
+> Convert pseudo-keyword fallthrough; statements to a simple break; when
+> the next label is case or default and the only statement in the next
+> label block is break;
 > 
-> Since the malicious FTDI driver modifies the PID without modifying
-> the normal checksum field we can detect and limit the unbricking
-> to devices that were bricked specifically using the FTDI checksum
-> preimage attack technique used by the official Windows drivers.
+> Found using:
 > 
-> This should have no effect on devices where the PID was deliberately
-> set to FTDI_BRICK_PID(0x0000) as the checksum would normally change
-> and the preimage target(address 62) should be 0. We validate that
-> the preimage target is not 0 before attempting to unbrick.
+> $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
 > 
-> Since we only write to even addresses this should have no effect at
-> all on non-counterfeit FTDI hardware due to the hardware only
-> committing EEPROM writes when odd addresses are written.
+> Miscellanea:
 > 
-> References:
-> https://marcan.st/transf/detect_ftdi_clone.py
-> https://hackaday.com/2014/10/22/watch-that-windows-update-ftdi-drivers-are-killing-fake-chips/
-> https://www.eevblog.com/forum/reviews/ftdi-driver-kills-fake-ftdi-ft232/msg535270/#msg535270
-> https://lkml.org/lkml/2014/10/23/266
-> https://lore.kernel.org/patchwork/patch/509929/
-> https://lore.kernel.org/patchwork/patch/510097/
+> o Move or coalesce a couple label blocks above a default: block.
 > 
-> Signed-off-by: Russ Dill <Russ.Dill@gmail.com>
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> Cc: Hector Martin <hector@marcansoft.com>
+> Signed-off-by: Joe Perches <joe@perches.com>
 > ---
-> Changes v1 -> v2:
->   - Move ftdi_read_eeprom and ftdi_write_eeprom outside #ifdef CONFIG_GPIOLIB
-> ---
->  drivers/usb/serial/ftdi_sio.c | 181 +++++++++++++++++++++++++++-------
->  drivers/usb/serial/ftdi_sio.h |   4 +
->  2 files changed, 152 insertions(+), 33 deletions(-)
-
-This is interesting, but not something that is really needed on a Linux
-machine right?  The "bricked" devices work just fine on Linux, and Linux
-does not cause these devices to ever be "bricked", so why build into the
-Linux kernel an option that only is needed by another operating system?
-
-If you have "bricked" devices, you can use the userspace tool to fix
-them up so that they can work properly on other operating systems, as a
-utility.  But to build this into Linux feels very odd to me.
-
-That being said, code review:
-
 > 
-> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-> index 871cdccf3a5f..85324e2ea107 100644
-> --- a/drivers/usb/serial/ftdi_sio.c
-> +++ b/drivers/usb/serial/ftdi_sio.c
-> @@ -1062,6 +1062,9 @@ static const char *ftdi_chip_name[] = {
->  /* function prototypes for a FTDI serial converter */
->  static int  ftdi_sio_probe(struct usb_serial *serial,
->  					const struct usb_device_id *id);
-> +static int  ftdi_read_eeprom(struct usb_serial *serial, void *dst, u16 addr,
-> +					u16 nbytes);
-
-No need for this, just keep this function in the same place in the file,
-right?
-
-> +static int  ftdi_write_eeprom(struct usb_serial_port *port, u8 addr, u16 data);
->  static int  ftdi_sio_port_probe(struct usb_serial_port *port);
->  static int  ftdi_sio_port_remove(struct usb_serial_port *port);
->  static int  ftdi_open(struct tty_struct *tty, struct usb_serial_port *port);
-> @@ -1996,39 +1999,6 @@ static int ftdi_gpio_direction_output(struct gpio_chip *gc, unsigned int gpio,
->  	return result;
->  }
->  
-> -static int ftdi_read_eeprom(struct usb_serial *serial, void *dst, u16 addr,
-> -				u16 nbytes)
-> -{
-> -	int read = 0;
-> -
-> -	if (addr % 2 != 0)
-> -		return -EINVAL;
-> -	if (nbytes % 2 != 0)
-> -		return -EINVAL;
-> -
-> -	/* Read EEPROM two bytes at a time */
-> -	while (read < nbytes) {
-> -		int rv;
-> -
-> -		rv = usb_control_msg(serial->dev,
-> -				     usb_rcvctrlpipe(serial->dev, 0),
-> -				     FTDI_SIO_READ_EEPROM_REQUEST,
-> -				     FTDI_SIO_READ_EEPROM_REQUEST_TYPE,
-> -				     0, (addr + read) / 2, dst + read, 2,
-> -				     WDR_TIMEOUT);
-> -		if (rv < 2) {
-> -			if (rv >= 0)
-> -				return -EIO;
-> -			else
-> -				return rv;
-> -		}
-> -
-> -		read += rv;
-> -	}
-> -
-> -	return 0;
-> -}
-
-Why move this function?
-
-> -
->  static int ftdi_gpio_init_ft232h(struct usb_serial_port *port)
->  {
->  	struct ftdi_private *priv = usb_get_serial_port_data(port);
-> @@ -2234,10 +2204,149 @@ static int ftdi_sio_probe(struct usb_serial *serial,
->  	return 0;
->  }
->  
-> +static int ftdi_read_eeprom(struct usb_serial *serial, void *dst, u16 addr,
-> +				u16 nbytes)
-> +{
-> +	int read = 0;
-> +
-> +	if (addr % 2 != 0)
-> +		return -EINVAL;
-> +	if (nbytes % 2 != 0)
-> +		return -EINVAL;
-> +
-> +	/* Read EEPROM two bytes at a time */
-> +	while (read < nbytes) {
-> +		int rv;
-> +
-> +		rv = usb_control_msg(serial->dev,
-> +				     usb_rcvctrlpipe(serial->dev, 0),
-> +				     FTDI_SIO_READ_EEPROM_REQUEST,
-> +				     FTDI_SIO_READ_EEPROM_REQUEST_TYPE,
-> +				     0, (addr + read) / 2, dst + read, 2,
-> +				     WDR_TIMEOUT);
-> +		if (rv < 2) {
-> +			if (rv >= 0)
-> +				return -EIO;
-> +			else
-> +				return rv;
-> +		}
-> +
-> +		read += rv;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int ftdi_write_eeprom(struct usb_serial_port *port, u8 addr, u16 data)
-> +{
-> +	struct usb_device *udev = port->serial->dev;
-> +	int rv;
-> +
-> +	rv = usb_control_msg(udev,
-> +			     usb_sndctrlpipe(udev, 0),
-> +			     FTDI_SIO_WRITE_EEPROM_REQUEST,
-> +			     FTDI_SIO_WRITE_EEPROM_REQUEST_TYPE,
-> +			     data, addr,
-> +			     NULL, 0, WDR_TIMEOUT);
-> +	if (rv < 0)
-> +		dev_err(&port->dev, "Unable to write EEPROM: %i\n", rv);
-
-You don't check for a "short write"?
-
-> +	return rv;
-> +}
-> +
-> +static u16 ftdi_checksum(u16 *data, int n)
-> +{
-> +	u16 checksum;
-> +	int i;
-> +
-> +	checksum = 0xaaaa;
-> +	for (i = 0; i < n - 1; i++) {
-> +		checksum ^= be16_to_cpu(data[i]);
-> +		checksum = (checksum << 1) | (checksum >> 15);
-> +	}
-
-What type of function is this, don't we have all of the needed checksum
-functions in the kernel already?
-
-> +
-> +	return cpu_to_be16(checksum);
-> +}
-> +
-> +static int ftdi_repair_brick(struct usb_serial_port *port)
-> +{
-> +	struct ftdi_private *priv = usb_get_serial_port_data(port);
-> +	int orig_latency;
-> +	int rv;
-> +	u16 *eeprom_data;
-> +	u16 checksum;
-> +	int eeprom_size;
-> +	int result;
-> +
-> +	switch (priv->chip_type) {
-> +	case FT232RL:
-> +		eeprom_size = 0x40;
-> +		break;
-> +	default:
-> +		/* Unsupported for brick repair */
-> +		return 0;
-> +	}
-> +
-> +	/* Latency timer needs to be 0x77 to unlock EEPROM programming */
-> +	if (priv->latency != 0x77) {
-> +		orig_latency = priv->latency;
-> +		priv->latency = 0x77;
-> +		rv = write_latency_timer(port);
-> +		priv->latency = orig_latency;
-
-So you change the latency, and then lie that it is changed?
-
-> +		if (rv < 0)
-> +			return -EIO;
-> +	}
-> +
-> +	eeprom_data = kmalloc(eeprom_size * 2, GFP_KERNEL);
-> +	if (!eeprom_data)
-> +		return -ENOMEM;
-> +
-> +	/* Read in EEPROM */
-> +	result = ftdi_read_eeprom(port->serial, eeprom_data, 0x00, eeprom_size * 2);
-> +	if (result < 0)
-> +		goto end_repair_brick;
-> +
-> +	/* Verify EEPROM is valid */
-> +	checksum = ftdi_checksum(eeprom_data, eeprom_size);
-> +	if (checksum != eeprom_data[eeprom_size - 1])
-> +		goto end_repair_brick;
-> +
-> +	/* Skip if no preimage attack against target address 62 */
-> +	if (eeprom_data[62] == 0)
-> +		goto end_repair_brick;
-
-Here, and later on, if you error out, you are not setting the return
-value to be an error, why?
+> Compiled allyesconfig x86-64 only.
+> A few files for other arches were not compiled.
+> 
 
 
-> +
-> +	/* Attempt to restore Product ID to 0x6001 */
-> +	eeprom_data[2] = FTDI_8U232AM_PID;
-> +
-> +	/* Clear preimage attack target address */
-> +	eeprom_data[62] = 0;
-> +
-> +	/* Calculate and verify new checksum */
-> +	checksum = ftdi_checksum(eeprom_data, eeprom_size);
-> +	if (checksum != eeprom_data[eeprom_size - 1])
-> +		goto end_repair_brick;
-> +
-> +	/* Restore EEPROM PID to original pre-brick state */
-> +	if (ftdi_write_eeprom(port, 2, eeprom_data[2]) < 0)
-> +		goto end_repair_brick;
-> +
-> +	/* Restore EEPROM preimage target address to original pre-brick state */
-> +	if (ftdi_write_eeprom(port, 62, eeprom_data[62]) < 0)
-> +		goto end_repair_brick;
-> +
-> +	dev_info(&port->dev, "Successfully repaired eeprom bricked by FTDI's malicious Windows driver.\n");
-> +
-> +end_repair_brick:
-> +	kfree(eeprom_data);
-> +
-> +	return result;
-> +}
-> +
->  static int ftdi_sio_port_probe(struct usb_serial_port *port)
->  {
->  	struct ftdi_private *priv;
->  	const struct ftdi_sio_quirk *quirk = usb_get_serial_data(port->serial);
-> +	u16 vendor_id;
-> +	u16 product_id;
->  	int result;
->  
->  	priv = kzalloc(sizeof(struct ftdi_private), GFP_KERNEL);
-> @@ -2255,6 +2364,12 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
->  	ftdi_set_max_packet_size(port);
->  	if (read_latency_timer(port) < 0)
->  		priv->latency = 16;
-> +	vendor_id = le16_to_cpu(port->serial->dev->descriptor.idVendor);
-> +	product_id = le16_to_cpu(port->serial->dev->descriptor.idProduct);
-> +	if (vendor_id == FTDI_VID &&
-> +		product_id == FTDI_BRICK_PID &&
-> +		priv->chip_type == FT232RL)
-> +		ftdi_repair_brick(port);
+>  drivers/media/dvb-frontends/drxd_hard.c                   |  2 +-
+>  drivers/media/i2c/ov5640.c                                |  2 +-
+>  drivers/media/i2c/ov6650.c                                |  5 ++---
+>  drivers/media/i2c/smiapp/smiapp-core.c                    |  2 +-
+>  drivers/media/i2c/tvp5150.c                               |  2 +-
+>  drivers/media/pci/ddbridge/ddbridge-core.c                |  2 +-
+>  drivers/media/usb/cpia2/cpia2_core.c                      |  2 +-
 
-So now you are forcing all devices with that id to go through this
-function?  How long does this function take?  What about devices that
-were working just fine with Linux with that id and did not want their
-eeproms to be "fixed"?
+For media drivers:
 
-thanks,
+Reviewed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-greg k-h
+
+Thanks,
+Mauro
