@@ -2,90 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E312263F5D
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 10:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F367A263F66
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Sep 2020 10:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730030AbgIJIJC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Sep 2020 04:09:02 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:37104 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726381AbgIJII6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Sep 2020 04:08:58 -0400
-Received: by mail-lj1-f196.google.com with SMTP id n25so6988132ljj.4;
-        Thu, 10 Sep 2020 01:08:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pmRob3RYVaIomHkLhJXPXfLDXQfpL3YCNNeyPTjyLK0=;
-        b=k+M1/rwKaG9pthCWpmz31sY05xfUxpZWRF0QZjsgV0HyyuSyYwYGEFQAvP4arBYHK5
-         fp7Zdd+/l4UR0dm4Jv62uHdnnCZtc1AgTmnhO374yQDzoB0eCisgCIUpuFsi1Sii9ys7
-         H6trm+Uk4L0gWNsn/WlCtPOZRXHVgyb4Ra1WdrsX7rx7NOPrAlUoj0rxfOOnmpxy5mvP
-         JznivlnA7mKu72YsuV8dCqIQdN+mFiiE7e/BvXHX/RsvHOl15SNmp/9lEC6+uuSZ28Nu
-         v8NCihq8DikrNX66g+T6JrlT0OTD5RfsVLlZhO1TtnsA2MkaexBOV/gUZM1G3lT+2E1B
-         51Gw==
-X-Gm-Message-State: AOAM532js+yvNHc/pUbxEd2yQFu58c0msl6DVlHh7ZU3Bq0fQVEabr6h
-        qgukIG5lFlMbtiablKEvtgCTjCdEHkc=
-X-Google-Smtp-Source: ABdhPJwrU6yyWj2plalDJmuv0QNjHpTvDh68TpF8qjACsiAZualjyCWkgqiOX8Zan1K1qHTanXEKQA==
-X-Received: by 2002:a2e:9c52:: with SMTP id t18mr3721956ljj.65.1599725335212;
-        Thu, 10 Sep 2020 01:08:55 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id v11sm1169484lfg.39.2020.09.10.01.08.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 01:08:54 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kGHdS-0005ty-48; Thu, 10 Sep 2020 10:08:50 +0200
-Date:   Thu, 10 Sep 2020 10:08:50 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Lars Melin <larsm17@gmail.com>
-Cc:     Oliver Neukum <oneukum@suse.de>,
-        James Hilliard <james.hilliard1@gmail.com>,
-        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Russ Dill <Russ.Dill@gmail.com>,
-        Hector Martin <hector@marcansoft.com>
+        id S1728207AbgIJIKb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Sep 2020 04:10:31 -0400
+Received: from marcansoft.com ([212.63.210.85]:49254 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726381AbgIJIKa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Sep 2020 04:10:30 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id A246B3FA50;
+        Thu, 10 Sep 2020 08:10:24 +0000 (UTC)
 Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
-Message-ID: <20200910080850.GD24441@localhost>
+To:     James Hilliard <james.hilliard1@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russ Dill <Russ.Dill@gmail.com>
 References: <20200909193419.2006744-1-james.hilliard1@gmail.com>
- <1599706954.10822.3.camel@suse.de>
- <a1161f77-5b37-39ea-eb91-7b0b59278960@gmail.com>
+ <20200910054933.GA525707@kroah.com>
+ <CADvTj4pZKeic1-Yb_baJkbfn8UWXczuoSRXqhH_1qHB=NV4FjA@mail.gmail.com>
+From:   Hector Martin <hector@marcansoft.com>
+Message-ID: <ca3dfd1e-b595-18aa-3442-30363b2e2797@marcansoft.com>
+Date:   Thu, 10 Sep 2020 17:10:20 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a1161f77-5b37-39ea-eb91-7b0b59278960@gmail.com>
+In-Reply-To: <CADvTj4pZKeic1-Yb_baJkbfn8UWXczuoSRXqhH_1qHB=NV4FjA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 12:33:55PM +0700, Lars Melin wrote:
-> On 9/10/2020 10:02, Oliver Neukum wrote:
-> > Am Mittwoch, den 09.09.2020, 13:34 -0600 schrieb James Hilliard:
-> >> This patch detects and reverses the effects of the malicious FTDI
-> >> Windows driver version 2.12.00(FTDIgate).
-> > 
-> > Hi,
-> > 
-> > this raises questions.
-> > Should we do this unconditionally without asking?
-> > Does this belong into kernel space?
-> > 
-> 
-> My answer to both of those question is a strong NO.
-> 
-> The patch author tries to justify the patch with egoistical arguments 
-> (easier for him and his customers) without thinking of all other users 
-> of memory constrained embedded hardware that doesn't need the patch code 
-> but have to carry it.
-> 
-> The bricked PID is btw already supported by the linux ftdi driver so 
-> there is no functionality gain in the patch.
+On 10/09/2020 15.45, James Hilliard wrote:
+>>> +static int ftdi_write_eeprom(struct usb_serial_port *port, u8 addr, u16 data)
+>>> +{
+>>> +     struct usb_device *udev = port->serial->dev;
+>>> +     int rv;
+>>> +
+>>> +     rv = usb_control_msg(udev,
+>>> +                          usb_sndctrlpipe(udev, 0),
+>>> +                          FTDI_SIO_WRITE_EEPROM_REQUEST,
+>>> +                          FTDI_SIO_WRITE_EEPROM_REQUEST_TYPE,
+>>> +                          data, addr,
+>>> +                          NULL, 0, WDR_TIMEOUT);
+>>> +     if (rv < 0)
+>>> +             dev_err(&port->dev, "Unable to write EEPROM: %i\n", rv);
+>>
+>> You don't check for a "short write"?
+>  From my understanding the hardware only accepts 2 byte writes, and
+> the non-counterfeits actually only commit writes on odd addresses
+> while they buffer writes on even(this difference is what FTDI's windows
+> driver exploits). So I guess this should be "if (rv < 2)"?
 
-I fully agree. This doesn't belong in the kernel. If the Windows driver
-breaks someones device on purpose they should know about it, and *if*
-they want they can reprogram the device using the tools mentioned in the
-thread. But the kernel shouldn't be playing such games and reprogram
-eeproms behind people's backs.
+It's not "data" anyway, the data word gets sent in control message 
+headers. Unless I'm mistaken rv == 0 on success, so the code should be 
+correct as-is.
 
-Johan
+>>
+>>> +     return rv;
+>>> +}
+>>> +
+>>> +static u16 ftdi_checksum(u16 *data, int n)
+>>> +{
+>>> +     u16 checksum;
+>>> +     int i;
+>>> +
+>>> +     checksum = 0xaaaa;
+>>> +     for (i = 0; i < n - 1; i++) {
+>>> +             checksum ^= be16_to_cpu(data[i]);
+>>> +             checksum = (checksum << 1) | (checksum >> 15);
+>>> +     }
+>>
+>> What type of function is this, don't we have all of the needed checksum
+>> functions in the kernel already?
+> Some custom crc16 style checksum I guess, I'm not seeing anything
+> in the kernel that's the same, although I might not be looking in the
+> right places.
+
+This isn't a CRC, it's some random xor all the words thing with a 
+somewhat pointless rotation in the way. I'd be surprised if anything 
+elses uses this particular function. Pretty sure other drivers are 
+littered with stuff like this too, hardware manufacturers love to 
+reinvent checksums.
+
+-- 
+Hector Martin (hector@marcansoft.com)
+Public Key: https://mrcn.st/pub
