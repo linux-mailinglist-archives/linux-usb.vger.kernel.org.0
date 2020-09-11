@@ -2,75 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8105D265925
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 08:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BC326594B
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 08:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725792AbgIKGJa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Sep 2020 02:09:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34788 "EHLO mail.kernel.org"
+        id S1725778AbgIKGZR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Sep 2020 02:25:17 -0400
+Received: from verein.lst.de ([213.95.11.211]:35640 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725768AbgIKGJ3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 11 Sep 2020 02:09:29 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 766E121D7E;
-        Fri, 11 Sep 2020 06:09:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599804569;
-        bh=i4EvJQ4Hd4XUMCwTQL0NZfkrCdHx7ugse8XeINccp6U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dfi+I0kMUG1tla9siuFgxikCDgMn+UD1N3AnfGGyzlFtj38Z1iUNuP4s85al6DOKV
-         aQx9yQ4lpuzx12l1wn2CjqpCuyspjqn1oKprCxxFnxGRvFDRlYTQ7K97MZQ39P6b65
-         siLwfoBGTDyORuQxpw93n2jSqCHoCi4DdHvcozPA=
-Date:   Fri, 11 Sep 2020 08:09:25 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Hector Martin <hector@marcansoft.com>
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Lars Melin <larsm17@gmail.com>,
-        Oliver Neukum <oneukum@suse.de>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russ Dill <Russ.Dill@gmail.com>
-Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
-Message-ID: <20200911060925.GA553486@kroah.com>
-References: <20200909193419.2006744-1-james.hilliard1@gmail.com>
- <1599706954.10822.3.camel@suse.de>
- <a1161f77-5b37-39ea-eb91-7b0b59278960@gmail.com>
- <20200910080850.GD24441@localhost>
- <CADvTj4rDdj8KtLhGZEZP+XZcF4DTE4oW9sNf=zNWaRPzkny93A@mail.gmail.com>
- <20200910085541.GA1099591@kroah.com>
- <CADvTj4pYR9H1X1_f4DYTkb5ViXAdx9sO5yBgHgM5vFaDMs_miQ@mail.gmail.com>
- <26a723e4-e166-6377-875a-f737a15dc6b1@marcansoft.com>
- <CADvTj4o9GL5p6eZq+0Q_Pw_ZKuYHvAtav79==CJDdnTj7q+bBg@mail.gmail.com>
- <0bcb0208-04bc-40c8-7b42-56b4dcf93f21@marcansoft.com>
+        id S1725535AbgIKGZQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 11 Sep 2020 02:25:16 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 9D35867373; Fri, 11 Sep 2020 08:25:12 +0200 (CEST)
+Date:   Fri, 11 Sep 2020 08:25:12 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org,
+        Russell King <linux@armlinux.org.uk>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-sh@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        linux-pci@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/3] ARM/dma-mapping: move various helpers from
+ dma-mapping.h to dma-direct.h
+Message-ID: <20200911062512.GC21597@lst.de>
+References: <20200910054038.324517-1-hch@lst.de> <20200910054038.324517-2-hch@lst.de> <42497691-ec93-1e93-d3e5-e841eaf8247a@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0bcb0208-04bc-40c8-7b42-56b4dcf93f21@marcansoft.com>
+In-Reply-To: <42497691-ec93-1e93-d3e5-e841eaf8247a@arm.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 11, 2020 at 04:54:08AM +0900, Hector Martin wrote:
-> On 11/09/2020 03.51, James Hilliard wrote:
-> > I haven't tested this yet but my assumption was that either a kernel driver
-> > or libusb can issue usb control messages, but both can not be bound to
-> > a device at the same time. I figured this wouldn't have come up when you
-> > tested your python script since the script likely predated adding the brick PID
-> > to the ftdi_sio Linux kernel driver.
-> 
-> Binding to interfaces is exclusive, but global device control messages are
-> not issued to an interface. I think it should work even if the kernel driver
-> is bound (this is how lsusb works too, since it issues control requests even
-> to devices bound to drivers). Even if it is necessary to unbind it, though,
-> libusb already provides a single function to do that
-> (libusb_detach_kernel_driver).
+On Thu, Sep 10, 2020 at 07:02:23PM +0100, Robin Murphy wrote:
+> On 2020-09-10 06:40, Christoph Hellwig wrote:
+>> Move the helpers to translate to and from direct mapping DMA addresses
+>> to dma-direct.h.  This not only is the most logical place, but the new
+>> placement also avoids dependency loops with pending commits.
+>
+> For the straightforward move as it should be,
+>
+> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+>
+> However I do wonder how much of this could be cleaned up further...
+>> +
+>> +#ifdef __arch_page_to_dma
+>> +#error Please update to __arch_pfn_to_dma
+>> +#endif
+>
+> This must be long, long dead by now.
 
-You really should unbind the device from the driver when doing stuff
-like this, so the kernel doesn't get confused.
+Yeah.  I had a patch to remove this which lead me into the rabbit
+hole your described later.  A few patches in I decided to give up
+and just do the trivial move.  But it probably makes sense to pick
+up at least the two trivial dead code removal patches..
 
-thanks,
+>> +static inline unsigned long dma_to_pfn(struct device *dev, dma_addr_t addr)
+>> +{
+>> +	unsigned long pfn = __bus_to_pfn(addr);
+>> +
+>> +	if (dev)
+>> +		pfn += dev->dma_pfn_offset;
+>> +
+>> +	return pfn;
+>> +}
+>
+> These are only overridden for OMAP1510, and it looks like it wouldn't take 
+> much for the platform code or ohci-omap driver to set up a generic DMA 
+> offset for the relevant device.
 
-greg k-h
+I sent a ping to the omap maintainers earlier this week to ask for that :)
+
+>> +static inline dma_addr_t virt_to_dma(struct device *dev, void *addr)
+>> +{
+>> +	if (dev)
+>> +		return pfn_to_dma(dev, virt_to_pfn(addr));
+>> +
+>> +	return (dma_addr_t)__virt_to_bus((unsigned long)(addr));
+>> +}
+>
+> And this is only used for some debug prints in dmabounce.
+>
+> Similarly the __bus_to_*()/__*_to_bus() calls themselves only appear 
+> significant to mach-footbridge any more, and could probably also be evolved 
+> into regular DMA offsets now that all API calls must have a non-NULL 
+> device. I think I might come back and take a closer look at all this at 
+> some point in future... :)
+
+Yes,  pretty much all of this should eventually go away.  I just don't
+want to bock the ranges work on all kinds of random arm cleanups..
