@@ -2,79 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 557E426592D
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 08:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8105D265925
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 08:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725648AbgIKGLm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 11 Sep 2020 02:11:42 -0400
-Received: from mail.flex.co.jp ([211.8.82.123]:50491 "EHLO www.flex.co.jp"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725446AbgIKGLm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 11 Sep 2020 02:11:42 -0400
-Received: from live.com.mx ([103.89.89.225])
-        (authenticated bits=0)
-        by www.flex.co.jp (MTA) with ESMTP id 0898njCZ009536
-        for <linux-usb@vger.kernel.org>; Wed, 9 Sep 2020 17:49:57 +0900
-Reply-To: powerinthewords@yahoo.co.jp
-From:   piyin.crhe@live.com.mx
-To:     linux-usb@vger.kernel.org
-Subject: =?utf-8?Q?=5BSpam=5D?=
- We are still waiting for your email...
-Date:   09 Sep 2020 01:49:55 -0700
-Message-ID: <20200909014955.82998FE0A988A352@live.com.mx>
+        id S1725792AbgIKGJa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Sep 2020 02:09:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34788 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725768AbgIKGJ3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 11 Sep 2020 02:09:29 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 766E121D7E;
+        Fri, 11 Sep 2020 06:09:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599804569;
+        bh=i4EvJQ4Hd4XUMCwTQL0NZfkrCdHx7ugse8XeINccp6U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dfi+I0kMUG1tla9siuFgxikCDgMn+UD1N3AnfGGyzlFtj38Z1iUNuP4s85al6DOKV
+         aQx9yQ4lpuzx12l1wn2CjqpCuyspjqn1oKprCxxFnxGRvFDRlYTQ7K97MZQ39P6b65
+         siLwfoBGTDyORuQxpw93n2jSqCHoCi4DdHvcozPA=
+Date:   Fri, 11 Sep 2020 08:09:25 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Hector Martin <hector@marcansoft.com>
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Lars Melin <larsm17@gmail.com>,
+        Oliver Neukum <oneukum@suse.de>, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russ Dill <Russ.Dill@gmail.com>
+Subject: Re: [PATCH v2] usb: serial: Repair FTDI FT232R bricked eeprom
+Message-ID: <20200911060925.GA553486@kroah.com>
+References: <20200909193419.2006744-1-james.hilliard1@gmail.com>
+ <1599706954.10822.3.camel@suse.de>
+ <a1161f77-5b37-39ea-eb91-7b0b59278960@gmail.com>
+ <20200910080850.GD24441@localhost>
+ <CADvTj4rDdj8KtLhGZEZP+XZcF4DTE4oW9sNf=zNWaRPzkny93A@mail.gmail.com>
+ <20200910085541.GA1099591@kroah.com>
+ <CADvTj4pYR9H1X1_f4DYTkb5ViXAdx9sO5yBgHgM5vFaDMs_miQ@mail.gmail.com>
+ <26a723e4-e166-6377-875a-f737a15dc6b1@marcansoft.com>
+ <CADvTj4o9GL5p6eZq+0Q_Pw_ZKuYHvAtav79==CJDdnTj7q+bBg@mail.gmail.com>
+ <0bcb0208-04bc-40c8-7b42-56b4dcf93f21@marcansoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-SpamInfo: FortiGuard-AntiSpam ip, connection black ip 103.89.89.225
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0bcb0208-04bc-40c8-7b42-56b4dcf93f21@marcansoft.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Beneficiary,
+On Fri, Sep 11, 2020 at 04:54:08AM +0900, Hector Martin wrote:
+> On 11/09/2020 03.51, James Hilliard wrote:
+> > I haven't tested this yet but my assumption was that either a kernel driver
+> > or libusb can issue usb control messages, but both can not be bound to
+> > a device at the same time. I figured this wouldn't have come up when you
+> > tested your python script since the script likely predated adding the brick PID
+> > to the ftdi_sio Linux kernel driver.
+> 
+> Binding to interfaces is exclusive, but global device control messages are
+> not issued to an interface. I think it should work even if the kernel driver
+> is bound (this is how lsusb works too, since it issues control requests even
+> to devices bound to drivers). Even if it is necessary to unbind it, though,
+> libusb already provides a single function to do that
+> (libusb_detach_kernel_driver).
 
-We wish to inform you that a power of attorney was forwarded to 
-our office  by two gentlemen regarding your unclaimed fund of $56 
-Million Dollar. One of them is an American citizen named Mr. 
-Robert Porter and the other is Mr. Wilhelm Berg a Swedish 
-citizen.We have be waiting for you to contact us since last year.
+You really should unbind the device from the driver when doing stuff
+like this, so the kernel doesn't get confused.
 
-The document claims these gentlemen to be your authorized 
-representatives, and the power of attorney states that you are 
-already deceased.  It further states that your death was due to 
-lung cancer, with your date of death being January 27th, 2020.
+thanks,
 
-They have now submitted a new account to replace the receiving 
-account that was in the original claim of funds. These funds have 
-remained unclaimed for quite some time and the need for 
-resolution is pressing. Below is the new account they have 
-submitted.
-
-Account Name's :  Robert Porter /Wilhelm Berg
-Account: 5007-29 438 66
-IBAN-nr: SE4150000000050072943866
-Bic-kod: ESSESESS
-Skandinaviska Enskilda Banken. (SEB :)
-SWEDEN .
-
-In the event that you are in fact still alive, we ask that you 
-confirm your existence by responding to this email. You are to 
-view this as a matter requiring immediate attention and response. 
-We have 48 hr monitoring of all activities within Federal Reserve 
-Bank.On this regard,you will be directed to any of our office 
-center that you will go in person to sign the final papers,
-because we have our payment center in Europe,Asia,America and 
-Canada.You will go to any of the office that you will be directed 
-to with the copy of the documents of your fund.
-
-We have contacted the bank in the Sweden asking them to wait for 
-further directives from Federal Reserve Bank, prior to 
-authorizing any withdrawals in any form.  Our request is based 
-entirely on our attempt to verify that you are in fact deceased, 
-before money is wrongly disbursed.
-
-Your in Service,
-
-Robert Steven Kaplan
-2200 N Pearl St, Dallas, TX 75201, United States
+greg k-h
