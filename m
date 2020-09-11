@@ -2,148 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4CF2657E8
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 06:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F18265803
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 06:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725616AbgIKEP3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Sep 2020 00:15:29 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:52503 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725283AbgIKEP2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Sep 2020 00:15:28 -0400
-X-UUID: 6eb9bf8afc2c4b4099bbb2c51450e210-20200911
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=S8V5Akl7eiGW/k+oP2VPh5gqJCICXAtbHzsKCE8cyBY=;
-        b=M+bUlxzfH0khcXVKgizt0+HQ0SOHVBO4vIRgS4tiaQYUxXo+4U6D0Iqr5U39e9CZsKr94sBCxMBV2n4rvCbqK91Pc6hltjAY1/o6WUZGlkDkpewkG4ZepFk84GRNnFMcp7y7LaB/Hwpt5sInc66AeHmZumt+OjusTdJ91ijckz8=;
-X-UUID: 6eb9bf8afc2c4b4099bbb2c51450e210-20200911
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1742903327; Fri, 11 Sep 2020 12:14:50 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
- (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 11 Sep
- 2020 12:14:47 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 11 Sep 2020 12:14:48 +0800
-Message-ID: <1599797572.24609.8.camel@mhfsdcap03>
-Subject: Re: [PATCH RESEND v3 04/11] usb: xhci-rcar: convert to
- readl_poll_timeout_atomic()
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-CC:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Jann Horn <jannh@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Jason Yan <yanaijie@huawei.com>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "Ben Dooks" <ben.dooks@codethink.co.uk>,
-        Saurav Girepunje <saurav.girepunje@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Date:   Fri, 11 Sep 2020 12:12:52 +0800
-In-Reply-To: <OSAPR01MB3683CA015AB25BC00D8459EBD8240@OSAPR01MB3683.jpnprd01.prod.outlook.com>
-References: <1599726112-4439-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1599726112-4439-4-git-send-email-chunfeng.yun@mediatek.com>
-         <20200910131212.wm7zskxvcesl652c@holly.lan>
-         <1599791601.24609.5.camel@mhfsdcap03>
-         <OSAPR01MB3683CA015AB25BC00D8459EBD8240@OSAPR01MB3683.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1725834AbgIKETy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Sep 2020 00:19:54 -0400
+Received: from smtprelay0064.hostedemail.com ([216.40.44.64]:51536 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725283AbgIKETs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Sep 2020 00:19:48 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 12942837F24A;
+        Fri, 11 Sep 2020 04:19:43 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2198:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3354:3622:3865:3866:3867:3868:3870:3871:3872:3874:4321:5007:6742:6743:10004:10400:10848:11026:11232:11473:11657:11658:11914:12043:12297:12438:12555:12740:12760:12895:13153:13161:13228:13229:13439:14096:14097:14181:14659:14721:21080:21433:21627:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: seat91_4d0f80d270eb
+X-Filterd-Recvd-Size: 4376
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf19.hostedemail.com (Postfix) with ESMTPA;
+        Fri, 11 Sep 2020 04:19:36 +0000 (UTC)
+Message-ID: <f4ad706519917d493a0af32ea2da8565227cc74a.camel@perches.com>
+Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+From:   Joe Perches <joe@perches.com>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        oss-drivers@netronome.com, nouveau@lists.freedesktop.org,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
+        dm-devel@redhat.com, linux-mtd@lists.infradead.org,
+        linux-i2c@vger.kernel.org, sparclinux@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-rtc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-serial@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Kees Cook <kees.cook@canonical.com>,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-sctp@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org,
+        storagedev@microchip.com, ceph-devel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org,
+        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Will Deacon <will@kernel.org>
+Date:   Thu, 10 Sep 2020 21:19:35 -0700
+In-Reply-To: <9372456a-8dcf-2735-57a4-e126aa5df3a6@arm.com>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+         <9372456a-8dcf-2735-57a4-e126aa5df3a6@arm.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 4BBBF29723D19EFB7DEBE93A32BA78B9759C1FC910FE727AC46D1BE3BA4A1A0F2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTA5LTExIGF0IDAzOjEzICswMDAwLCBZb3NoaWhpcm8gU2hpbW9kYSB3cm90
-ZToNCj4gSGkgRGFuaWVsLCBDaHVuZmVuZywNCj4gDQo+ID4gRnJvbTogQ2h1bmZlbmcgWXVuLCBT
-ZW50OiBGcmlkYXksIFNlcHRlbWJlciAxMSwgMjAyMCAxMTozMyBBTQ0KPiA+IA0KPiA+IE9uIFRo
-dSwgMjAyMC0wOS0xMCBhdCAxNDoxMiArMDEwMCwgRGFuaWVsIFRob21wc29uIHdyb3RlOg0KPiA+
-ID4gT24gVGh1LCBTZXAgMTAsIDIwMjAgYXQgMDQ6MjE6NDVQTSArMDgwMCwgQ2h1bmZlbmcgWXVu
-IHdyb3RlOg0KPiA+ID4gPiBVc2UgcmVhZGxfcG9sbF90aW1lb3V0X2F0b21pYygpIHRvIHNpbXBs
-aWZ5IGNvZGUNCj4gPiA+ID4NCj4gPiA+ID4gQ2M6IE1hdGhpYXMgTnltYW4gPG1hdGhpYXMubnlt
-YW5AbGludXguaW50ZWwuY29tPg0KPiA+ID4gPiBDYzogWW9zaGloaXJvIFNoaW1vZGEgPHlvc2hp
-aGlyby5zaGltb2RhLnVoQHJlbmVzYXMuY29tPg0KPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBDaHVu
-ZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+ID4gPiA+IC0tLQ0KPiA+ID4g
-PiB2Mn52Mzogbm8gY2hhbmdlcw0KPiA+ID4gPiAtLS0NCj4gPiA+ID4gIGRyaXZlcnMvdXNiL2hv
-c3QveGhjaS1yY2FyLmMgfCA0MyArKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tDQo+ID4gPiA+ICAxIGZpbGUgY2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygrKSwgMzEgZGVs
-ZXRpb25zKC0pDQo+ID4gPiA+DQo+ID4gPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0
-L3hoY2ktcmNhci5jIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLXJjYXIuYw0KPiA+ID4gPiBpbmRl
-eCBjMTAyNWQzLi43NGY4MzZmIDEwMDY0NA0KPiA+ID4gPiAtLS0gYS9kcml2ZXJzL3VzYi9ob3N0
-L3hoY2ktcmNhci5jDQo+ID4gPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1yY2FyLmMN
-Cj4gPiA+ID4gQEAgLTYsNiArNiw3IEBADQo+ID4gPiA+ICAgKi8NCj4gPiA+ID4NCj4gPiA+ID4g
-ICNpbmNsdWRlIDxsaW51eC9maXJtd2FyZS5oPg0KPiA+ID4gPiArI2luY2x1ZGUgPGxpbnV4L2lv
-cG9sbC5oPg0KPiA+ID4gPiAgI2luY2x1ZGUgPGxpbnV4L21vZHVsZS5oPg0KPiA+ID4gPiAgI2lu
-Y2x1ZGUgPGxpbnV4L3BsYXRmb3JtX2RldmljZS5oPg0KPiA+ID4gPiAgI2luY2x1ZGUgPGxpbnV4
-L29mLmg+DQo+ID4gPiA+IEBAIC0xMjcsOCArMTI4LDcgQEAgc3RhdGljIGludCB4aGNpX3JjYXJf
-ZG93bmxvYWRfZmlybXdhcmUoc3RydWN0IHVzYl9oY2QgKmhjZCkNCj4gPiA+ID4gIAl2b2lkIF9f
-aW9tZW0gKnJlZ3MgPSBoY2QtPnJlZ3M7DQo+ID4gPiA+ICAJc3RydWN0IHhoY2lfcGxhdF9wcml2
-ICpwcml2ID0gaGNkX3RvX3hoY2lfcHJpdihoY2QpOw0KPiA+ID4gPiAgCWNvbnN0IHN0cnVjdCBm
-aXJtd2FyZSAqZnc7DQo+ID4gPiA+IC0JaW50IHJldHZhbCwgaW5kZXgsIGosIHRpbWU7DQo+ID4g
-PiA+IC0JaW50IHRpbWVvdXQgPSAxMDAwMDsNCj4gPiA+ID4gKwlpbnQgcmV0dmFsLCBpbmRleCwg
-ajsNCj4gPiA+ID4gIAl1MzIgZGF0YSwgdmFsLCB0ZW1wOw0KPiA+ID4gPiAgCXUzMiBxdWlya3Mg
-PSAwOw0KPiA+ID4gPiAgCWNvbnN0IHN0cnVjdCBzb2NfZGV2aWNlX2F0dHJpYnV0ZSAqYXR0cjsN
-Cj4gPiA+ID4gQEAgLTE2NiwzMiArMTY2LDE5IEBAIHN0YXRpYyBpbnQgeGhjaV9yY2FyX2Rvd25s
-b2FkX2Zpcm13YXJlKHN0cnVjdCB1c2JfaGNkICpoY2QpDQo+ID4gPiA+ICAJCXRlbXAgfD0gUkNB
-Ul9VU0IzX0RMX0NUUkxfRldfU0VUX0RBVEEwOw0KPiA+ID4gPiAgCQl3cml0ZWwodGVtcCwgcmVn
-cyArIFJDQVJfVVNCM19ETF9DVFJMKTsNCj4gPiA+ID4NCj4gPiA+ID4gLQkJZm9yICh0aW1lID0g
-MDsgdGltZSA8IHRpbWVvdXQ7IHRpbWUrKykgew0KPiA+ID4gPiAtCQkJdmFsID0gcmVhZGwocmVn
-cyArIFJDQVJfVVNCM19ETF9DVFJMKTsNCj4gPiA+ID4gLQkJCWlmICgodmFsICYgUkNBUl9VU0Iz
-X0RMX0NUUkxfRldfU0VUX0RBVEEwKSA9PSAwKQ0KPiA+ID4gPiAtCQkJCWJyZWFrOw0KPiA+ID4g
-PiAtCQkJdWRlbGF5KDEpOw0KPiA+ID4gPiAtCQl9DQo+ID4gPiA+IC0JCWlmICh0aW1lID09IHRp
-bWVvdXQpIHsNCj4gPiA+ID4gLQkJCXJldHZhbCA9IC1FVElNRURPVVQ7DQo+ID4gPiA+ICsJCXJl
-dHZhbCA9IHJlYWRsX3BvbGxfdGltZW91dF9hdG9taWMocmVncyArIFJDQVJfVVNCM19ETF9DVFJM
-LA0KPiA+ID4gPiArCQkJCXZhbCwgISh2YWwgJiBSQ0FSX1VTQjNfRExfQ1RSTF9GV19TRVRfREFU
-QTApLA0KPiA+ID4gPiArCQkJCTEsIDEwMDAwKTsNCj4gPiA+ID4gKwkJaWYgKHJldHZhbCA8IDAp
-DQpIb3cgYWJvdXQgZnJlZSBmaXJtd2FyZSBhbmQgcmV0dXJuIGVycm9yIG51bWJlciBoZXJlID8g
-aW5zdGVhZCBvZiBicmVhaw0KDQo+ID4gPiA+ICAJCQlicmVhazsNCj4gPiA+ID4gLQkJfQ0KPiA+
-ID4gPiAgCX0NCj4gPiA+ID4NCj4gPiA+ID4gIAl0ZW1wID0gcmVhZGwocmVncyArIFJDQVJfVVNC
-M19ETF9DVFJMKTsNCj4gPiA+ID4gIAl0ZW1wICY9IH5SQ0FSX1VTQjNfRExfQ1RSTF9FTkFCTEU7
-DQo+ID4gPiA+ICAJd3JpdGVsKHRlbXAsIHJlZ3MgKyBSQ0FSX1VTQjNfRExfQ1RSTCk7DQo+ID4g
-PiA+DQo+ID4gPiA+IC0JZm9yICh0aW1lID0gMDsgdGltZSA8IHRpbWVvdXQ7IHRpbWUrKykgew0K
-PiA+ID4gPiAtCQl2YWwgPSByZWFkbChyZWdzICsgUkNBUl9VU0IzX0RMX0NUUkwpOw0KPiA+ID4g
-PiAtCQlpZiAodmFsICYgUkNBUl9VU0IzX0RMX0NUUkxfRldfU1VDQ0VTUykgew0KPiA+ID4gPiAt
-CQkJcmV0dmFsID0gMDsNCj4gPiA+ID4gLQkJCWJyZWFrOw0KPiA+ID4gPiAtCQl9DQo+ID4gPiA+
-IC0JCXVkZWxheSgxKTsNCj4gPiA+ID4gLQl9DQo+ID4gPiA+IC0JaWYgKHRpbWUgPT0gdGltZW91
-dCkNCj4gPiA+ID4gLQkJcmV0dmFsID0gLUVUSU1FRE9VVDsNCj4gPiA+ID4gKwlyZXR2YWwgPSBy
-ZWFkbF9wb2xsX3RpbWVvdXRfYXRvbWljKChyZWdzICsgUkNBUl9VU0IzX0RMX0NUUkwpLA0KPiA+
-ID4gPiArCQkJdmFsLCAodmFsICYgUkNBUl9VU0IzX0RMX0NUUkxfRldfU1VDQ0VTUyksIDEsIDEw
-MDAwKTsNCj4gPiA+DQo+ID4gPiBEaXJlY3RseSBhc3NpZ25pbmcgdG8gcmV0dmFsIGF0IHRoaXMg
-cG9pbnQgd2lsbCBjbG9iYmVyIGEgcHJldmlvdXMNCj4gPiA+IC1FVElNRURPVVQgZXJyb3IuDQo+
-ID4gPg0KPiA+ID4gSW4gb3RoZXIgd29yZHMgaWYgdGhlcmUgaXMgYSB0aW1lb3V0IHdhaXRpbmcg
-Zm9yIEZXX1NFVF9EQVRBMCwgYnV0IG5vdCBmb3INCj4gPiA+IERXX1NVQ0NFU1MsIHRoZW4gd2Ug
-d2lsbCByZXR1cm4gdGhlIHdyb25nIHJldHVybiB2YWx1ZS4NCj4gDQo+IFRoYW5rIHlvdSBmb3Ig
-eW91ciBjb21tZW50ISBJIGRpZG4ndCByZWFsaXplZCB0aGlzLg0KPiANCj4gPiBZZXMsIGFncmVl
-IHdpdGggeW91LCBidXQgc2VlbXMgSSBrZWVwIGl0cyBvcmlnaW5hbCBsb2dpYyB1bmNoYW5nZWQu
-DQo+ID4gSGkgWW9zaGloaXJvLA0KPiA+IA0KPiA+ICAgV2hhdCBkbyB0aGluayBhYm91dCBEYW5p
-ZWwncyBzdWdnZXN0aW9uPyBzaG91bGQgSSBmaXggaXQgdXA/DQo+IA0KPiBJIHRoaW5rIHlvdSBz
-aG91bGQgZml4IGl0IHVwIGxpa2UgYmVsb3c6DQo+IA0KPiBpZiAocmVhZGxfcG9sbF90aW1lb3V0
-X2F0b21pYyhyZWdzICsgUkNBUl9VU0IzX0RMX0NUUkwsDQo+IAkJdmFsLCB2YWwgJiBSQ0FSX1VT
-QjNfRExfQ1RSTF9GV19TVUNDRVNTLCAxLCAxMDAwMCkgPCAwKQ0KPiAJcmV0dmFsID0gLUVUSU1F
-T1VUOwkvKiBPdmVyd3JpdGUgcmV0dmFsIGlmIHRpbWVvdXQgb2NjdXJyZWQgKi8NCg0KcmVhZGxf
-cG9sbF90aW1lb3V0X2F0b21pYygpIG9ubHkgcmV0dXJuIC1FVElNRU9VVCBlcnJvciBudW1iZXIs
-IHNvIHRoaXMNCmxpa2VzIHdoYXQgSSBkaWQsIGRvZXNuJ3QgZml4IGl0Lg0KDQo+IA0KPiBPdGhl
-cndpc2UsIHRoZSB4aGNpX3JjYXJfZG93bmxvYWRfZmlybXdhcmUoKSBjYW5ub3QgcmV0dXJuIC1F
-VElNRURPVVQgaWYNCj4gdGltZW91dCBoYXBwZW5lZCBvbiB0aGUgcHJldmlvdXMgcG9sbCBbMV0u
-DQo+IA0KPiBbMV0NCj4gKwkJcmV0dmFsID0gcmVhZGxfcG9sbF90aW1lb3V0X2F0b21pYyhyZWdz
-ICsgUkNBUl9VU0IzX0RMX0NUUkwsDQo+ICsJCQkJdmFsLCAhKHZhbCAmIFJDQVJfVVNCM19ETF9D
-VFJMX0ZXX1NFVF9EQVRBMCksDQo+ICsJCQkJMSwgMTAwMDApOw0KPiANCj4gQmVzdCByZWdhcmRz
-LA0KPiBZb3NoaWhpcm8gU2hpbW9kYQ0KPiANCg0K
+On Thu, 2020-09-10 at 15:21 +0100, Robin Murphy wrote:
+> On 2020-09-09 21:06, Joe Perches wrote:
+> > fallthrough to a separate case/default label break; isn't very readable.
+> > 
+> > Convert pseudo-keyword fallthrough; statements to a simple break; when
+> > the next label is case or default and the only statement in the next
+> > label block is break;
+> > 
+> > Found using:
+> > 
+> > $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
+> > 
+> > Miscellanea:
+> > 
+> > o Move or coalesce a couple label blocks above a default: block.
+> > 
+> > Signed-off-by: Joe Perches <joe@perches.com>
+> > ---
+> > 
+> > Compiled allyesconfig x86-64 only.
+> > A few files for other arches were not compiled.
+> > 
+> 
+> [...]
+> > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> > index c192544e874b..743db1abec40 100644
+> > --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> > @@ -3777,7 +3777,7 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+> >   	switch (FIELD_GET(IDR0_TTF, reg)) {
+> >   	case IDR0_TTF_AARCH32_64:
+> >   		smmu->ias = 40;
+> > -		fallthrough;
+> > +		break;
+> >   	case IDR0_TTF_AARCH64:
+> >   		break;
+> >   	default:
+> 
+> I have to say I don't really agree with the readability argument for 
+> this one - a fallthrough is semantically correct here, since the first 
+> case is a superset of the second. It just happens that anything we would 
+> do for the common subset is implicitly assumed (there are other 
+> potential cases we simply haven't added support for at the moment), thus 
+> the second case is currently empty.
+> This change actively obfuscates that distinction.
+
+Then perhaps comments should be added to usefully
+describe the mechanisms.
+
+	case IDR0_TTF_AARCH32_64:
+		smmu->ias = 40;
+		fallthrough;	/* and still do the 64 bit processing */
+	case IDR0_TTF_AARCH64:
+		/* Nothing specific yet */
+		break;
+
+> Robin.
 
