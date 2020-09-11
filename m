@@ -2,100 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BC326594B
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 08:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE06265BA3
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 10:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725778AbgIKGZR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Sep 2020 02:25:17 -0400
-Received: from verein.lst.de ([213.95.11.211]:35640 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725535AbgIKGZQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 11 Sep 2020 02:25:16 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 9D35867373; Fri, 11 Sep 2020 08:25:12 +0200 (CEST)
-Date:   Fri, 11 Sep 2020 08:25:12 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org,
-        Russell King <linux@armlinux.org.uk>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        devicetree@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-sh@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        linux-pci@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/3] ARM/dma-mapping: move various helpers from
- dma-mapping.h to dma-direct.h
-Message-ID: <20200911062512.GC21597@lst.de>
-References: <20200910054038.324517-1-hch@lst.de> <20200910054038.324517-2-hch@lst.de> <42497691-ec93-1e93-d3e5-e841eaf8247a@arm.com>
+        id S1725839AbgIKIaW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Sep 2020 04:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725550AbgIKIaP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Sep 2020 04:30:15 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A652C061573;
+        Fri, 11 Sep 2020 01:30:12 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id y2so5032888lfy.10;
+        Fri, 11 Sep 2020 01:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=v3X+VL4+MsixaR62rPp7HwB6Wzg0tRmPuvJoIJorT2g=;
+        b=c2jghuXtnbNv5767gqGXY+pPhE9HA7vje+0qO1UeB9hLYukfKNNfu5vKtRGTUk70jm
+         77zzBzRNCDISWsgvWp2d3rHq1VqFPJRyOaGnJpFfHkjNI8LoSWbMRhj4CbExcwWHALPD
+         12FPeWX1q6VU3qmyJlHtEaa7S6QYtMANjlfTsPzNvfjTOGcvj4iS/38Tc7U6tMzlP5cr
+         Z+N3C1z1OdMr06KhWSVC+M88jA7GW/99zMVcyfV1iyaaXARfuy4cMpfE77KM/Tgj0ABy
+         zbvoMvYoX/oDiI/JVUnoqWD7mUfDTO/uNP0Fk2eXMp6bXtVPH3OqCdGbCLq794f4GIh7
+         XZdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=v3X+VL4+MsixaR62rPp7HwB6Wzg0tRmPuvJoIJorT2g=;
+        b=cxLULYK0LlrL9bfHyLvtDF1mFGUl+e7C3YL+Y557IZvqnQ3yDxteZE+spPSg/6BNS/
+         UALJq5eqVvr4cT582pDabgV3et0+vwwpcdGec5VjIFKl+Ry7cWhwNlRxC4595cH9Rotz
+         1NhyOx3hCN3CzlNjL7W25Zd+7Sod3dzriQWrggq9ue9VXuAYu6t/4XbM5mKI/Nc2RSzf
+         t3lyVnhK+aE9+3Bq0LAjyUqjur3o0GWfMM+Ro5WbXticWZvhjBlQvS7dIPV4ja51pcyk
+         /1ungX6I592viHh4FDa486T0jgluBDAqSeIiOLlyxJDFeStDA0GazFtk5E0pM23Nh0lM
+         BINA==
+X-Gm-Message-State: AOAM530rl28Y+PnIhOwfZEcx7zRrbDnJQAsDnu0oqEaUCsOTjJhopQvG
+        Jvk8t6ljrrq0emaGzCoOf6k=
+X-Google-Smtp-Source: ABdhPJx9nUeV/83qz7H1mGdfts1xPRTGfCTDFwjiGZJTuXH+zznv/fgZvjUnwsdAo5TlZkuTcP6u0Q==
+X-Received: by 2002:a05:6512:36cd:: with SMTP id e13mr409270lfs.165.1599813010980;
+        Fri, 11 Sep 2020 01:30:10 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:4498:c7cc:1d90:b990:ebe6:7df7? ([2a00:1fa0:4498:c7cc:1d90:b990:ebe6:7df7])
+        by smtp.gmail.com with ESMTPSA id z15sm400438lji.78.2020.09.11.01.30.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Sep 2020 01:30:10 -0700 (PDT)
+Subject: Re: [PATCH] usb: phy: tegra: Use IS_ERR() to check and simplify code
+To:     Tang Bin <tangbin@cmss.chinamobile.com>, balbi@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+References: <20200910115607.11392-1-tangbin@cmss.chinamobile.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <d0bd4d4c-0447-6c5f-6dc3-17e5ceae2623@gmail.com>
+Date:   Fri, 11 Sep 2020 11:29:59 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42497691-ec93-1e93-d3e5-e841eaf8247a@arm.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20200910115607.11392-1-tangbin@cmss.chinamobile.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 07:02:23PM +0100, Robin Murphy wrote:
-> On 2020-09-10 06:40, Christoph Hellwig wrote:
->> Move the helpers to translate to and from direct mapping DMA addresses
->> to dma-direct.h.  This not only is the most logical place, but the new
->> placement also avoids dependency loops with pending commits.
->
-> For the straightforward move as it should be,
->
-> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
->
-> However I do wonder how much of this could be cleaned up further...
->> +
->> +#ifdef __arch_page_to_dma
->> +#error Please update to __arch_pfn_to_dma
->> +#endif
->
-> This must be long, long dead by now.
+Hello!
 
-Yeah.  I had a patch to remove this which lead me into the rabbit
-hole your described later.  A few patches in I decided to give up
-and just do the trivial move.  But it probably makes sense to pick
-up at least the two trivial dead code removal patches..
+On 10.09.2020 14:56, Tang Bin wrote:
 
->> +static inline unsigned long dma_to_pfn(struct device *dev, dma_addr_t addr)
->> +{
->> +	unsigned long pfn = __bus_to_pfn(addr);
->> +
->> +	if (dev)
->> +		pfn += dev->dma_pfn_offset;
->> +
->> +	return pfn;
->> +}
->
-> These are only overridden for OMAP1510, and it looks like it wouldn't take 
-> much for the platform code or ohci-omap driver to set up a generic DMA 
-> offset for the relevant device.
+> Use IS_ERR() and PTR_ERR() instead of PTR_ERR_OR_ZERO() to
+> simplify code, avoid redundant judgements.
+> 
+> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+> ---
+>   drivers/usb/phy/phy-tegra-usb.c | 25 ++++++++++---------------
+>   1 file changed, 10 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+> index 6153cc35a..3b901429d 100644
+> --- a/drivers/usb/phy/phy-tegra-usb.c
+> +++ b/drivers/usb/phy/phy-tegra-usb.c
+> @@ -1121,10 +1121,9 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
+>   		return PTR_ERR(tegra_phy->vbus);
+>   
+>   	tegra_phy->pll_u = devm_clk_get(&pdev->dev, "pll_u");
+> -	err = PTR_ERR_OR_ZERO(tegra_phy->pll_u);
+> -	if (err) {
+> +	if (IS_ERR(tegra_phy->pll_u)) {
+>   		dev_err(&pdev->dev, "Failed to get pll_u clock: %d\n", err);
 
-I sent a ping to the omap maintainers earlier this week to ask for that :)
+    'err' should be changed here too...
 
->> +static inline dma_addr_t virt_to_dma(struct device *dev, void *addr)
->> +{
->> +	if (dev)
->> +		return pfn_to_dma(dev, virt_to_pfn(addr));
->> +
->> +	return (dma_addr_t)__virt_to_bus((unsigned long)(addr));
->> +}
->
-> And this is only used for some debug prints in dmabounce.
->
-> Similarly the __bus_to_*()/__*_to_bus() calls themselves only appear 
-> significant to mach-footbridge any more, and could probably also be evolved 
-> into regular DMA offsets now that all API calls must have a non-NULL 
-> device. I think I might come back and take a closer look at all this at 
-> some point in future... :)
+> -		return err;
+> +		return PTR_ERR(tegra_phy->pll_u);
+>   	}
+>   
+>   	phy_type = of_usb_get_phy_mode(np);
+> @@ -1135,20 +1134,18 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
+>   			return err;
+>   
+>   		tegra_phy->pad_clk = devm_clk_get(&pdev->dev, "utmi-pads");
+> -		err = PTR_ERR_OR_ZERO(tegra_phy->pad_clk);
+> -		if (err) {
+> +		if (IS_ERR(tegra_phy->pad_clk)) {
+>   			dev_err(&pdev->dev,
+>   				"Failed to get UTMIP pad clock: %d\n", err);
 
-Yes,  pretty much all of this should eventually go away.  I just don't
-want to bock the ranges work on all kinds of random arm cleanups..
+    Same here.
+
+> -			return err;
+> +			return PTR_ERR(tegra_phy->pad_clk);
+>   		}
+>   
+>   		reset = devm_reset_control_get_optional_shared(&pdev->dev,
+>   							       "utmi-pads");
+> -		err = PTR_ERR_OR_ZERO(reset);
+> -		if (err) {
+> +		if (IS_ERR(reset)) {
+>   			dev_err(&pdev->dev,
+>   				"Failed to get UTMI-pads reset: %d\n", err);
+
+    And here.
+
+> -			return err;
+> +			return PTR_ERR(reset);
+>   		}
+>   		tegra_phy->pad_rst = reset;
+>   		break;
+> @@ -1157,22 +1154,20 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
+>   		tegra_phy->is_ulpi_phy = true;
+>   
+>   		tegra_phy->clk = devm_clk_get(&pdev->dev, "ulpi-link");
+> -		err = PTR_ERR_OR_ZERO(tegra_phy->clk);
+> -		if (err) {
+> +		if (IS_ERR(tegra_phy->clk)) {
+>   			dev_err(&pdev->dev,
+>   				"Failed to get ULPI clock: %d\n", err);
+
+    And here.
+
+> -			return err;
+> +			return PTR_ERR(tegra_phy->clk);
+>   		}
+>   
+>   		gpiod = devm_gpiod_get_from_of_node(&pdev->dev, np,
+>   						    "nvidia,phy-reset-gpio",
+>   						    0, GPIOD_OUT_HIGH,
+>   						    "ulpi_phy_reset_b");
+> -		err = PTR_ERR_OR_ZERO(gpiod);
+> -		if (err) {
+> +		if (IS_ERR(gpiod)) {
+>   			dev_err(&pdev->dev,
+>   				"Request failed for reset GPIO: %d\n", err);
+
+    And here.
+
+> -			return err;
+> +			return PTR_ERR(gpiod);
+>   		}
+>   		tegra_phy->reset_gpio = gpiod;
+>   
+
+    Overall, this patch is broken and not even worth redoing -- the current 
+code seems good...
+
+MBR, Sergei
