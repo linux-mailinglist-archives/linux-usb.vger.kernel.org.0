@@ -2,56 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 291192668D3
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 21:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6498E26697B
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 22:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726002AbgIKTcI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Sep 2020 15:32:08 -0400
-Received: from aluxe.matcuer.unam.mx ([132.248.41.2]:47245 "EHLO
-        aluxe.matcuer.unam.mx" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725863AbgIKTb4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Sep 2020 15:31:56 -0400
-X-Greylist: delayed 27690 seconds by postgrey-1.27 at vger.kernel.org; Fri, 11 Sep 2020 15:31:55 EDT
-Received: from localhost (ip6-localhost [127.0.0.1])
-        by aluxe.matcuer.unam.mx (Postfix) with ESMTP id 41FAA10C0BC7;
-        Fri, 11 Sep 2020 03:52:50 -0500 (CDT)
-X-Virus-Scanned: Debian amavisd-new at matcuer.unam.mx
-Received: from aluxe.matcuer.unam.mx ([127.0.0.1])
-        by localhost (aluxe.matcuer.unam.mx [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id lUVNFtW2m0UE; Fri, 11 Sep 2020 03:52:48 -0500 (CDT)
-Received: from correo.matcuer.unam.mx (ip6-localhost [127.0.0.1])
-        by aluxe.matcuer.unam.mx (Postfix) with ESMTP id 4535F10C0B6F;
-        Fri, 11 Sep 2020 02:28:27 -0500 (CDT)
-Received: from 105.112.102.124
-        (SquirrelMail authenticated user otto)
-        by correo.matcuer.unam.mx with HTTP;
-        Fri, 11 Sep 2020 02:28:27 -0500
-Message-ID: <9ac9dfc7a565ca5e4d32e76f7ffca0a9.squirrel@correo.matcuer.unam.mx>
-Date:   Fri, 11 Sep 2020 02:28:27 -0500
-Subject: 
-From:   "Mikhail Fridman" <otto@matcuer.unam.mx>
-Reply-To: mikhai.fridman261@gmail.com
-User-Agent: SquirrelMail/1.4.23 [SVN]
-MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Priority: 3 (Normal)
-Importance: Normal
-To:     unlisted-recipients:; (no To-header on input)
+        id S1725847AbgIKUTz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Sep 2020 16:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725832AbgIKUTz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Sep 2020 16:19:55 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606C9C061795;
+        Fri, 11 Sep 2020 13:19:55 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 137CD1365DC87;
+        Fri, 11 Sep 2020 13:03:01 -0700 (PDT)
+Date:   Fri, 11 Sep 2020 13:19:43 -0700 (PDT)
+Message-Id: <20200911.131943.1509486357233508252.davem@davemloft.net>
+To:     allen.lkml@gmail.com
+Cc:     m.grzeschik@pengutronix.de, paulus@samba.org, oliver@neukum.org,
+        woojung.huh@microchip.com, petkan@nucleusys.com,
+        keescook@chromium.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/8] drivers: net: convert tasklets to use new
+ tasklet_setup()
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <CAOMdWSJohOLK023ZM-yTnZiNHdy2TfyyWV3+iuuQiALiYV2NLQ@mail.gmail.com>
+References: <20200817084614.24263-1-allen.cryptic@gmail.com>
+        <CAOMdWSJohOLK023ZM-yTnZiNHdy2TfyyWV3+iuuQiALiYV2NLQ@mail.gmail.com>
+X-Mailer: Mew version 6.8 on Emacs 27.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [2620:137:e000::1:9]); Fri, 11 Sep 2020 13:03:01 -0700 (PDT)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I, Mikhail Fridman have selected you specifically as one of my
-beneficiaries for my Charitable Donation of $5 Million Dollars,
+From: Allen <allen.lkml@gmail.com>
+Date: Fri, 11 Sep 2020 11:26:52 +0530
 
-Check the link below for confirmation:
+> Will you pick these up or should I send these out again when I
+> have fixed the two patches on the other thread.
 
-https://www.rt.com/business/343781-mikhail-fridman-will-charity/
-
-I await your earliest response for further directives.
-
-Best Regards,
-Mikhail Fridman.
-
+Always resend.
