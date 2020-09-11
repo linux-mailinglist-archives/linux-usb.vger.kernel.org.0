@@ -2,176 +2,539 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE06265BA3
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 10:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BAD265BAF
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Sep 2020 10:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725839AbgIKIaW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Sep 2020 04:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S1725778AbgIKIeT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Sep 2020 04:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725550AbgIKIaP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Sep 2020 04:30:15 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A652C061573;
-        Fri, 11 Sep 2020 01:30:12 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id y2so5032888lfy.10;
-        Fri, 11 Sep 2020 01:30:12 -0700 (PDT)
+        with ESMTP id S1725616AbgIKIeN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Sep 2020 04:34:13 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EF7C061573
+        for <linux-usb@vger.kernel.org>; Fri, 11 Sep 2020 01:34:13 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id a19so3709401ilq.10
+        for <linux-usb@vger.kernel.org>; Fri, 11 Sep 2020 01:34:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=v3X+VL4+MsixaR62rPp7HwB6Wzg0tRmPuvJoIJorT2g=;
-        b=c2jghuXtnbNv5767gqGXY+pPhE9HA7vje+0qO1UeB9hLYukfKNNfu5vKtRGTUk70jm
-         77zzBzRNCDISWsgvWp2d3rHq1VqFPJRyOaGnJpFfHkjNI8LoSWbMRhj4CbExcwWHALPD
-         12FPeWX1q6VU3qmyJlHtEaa7S6QYtMANjlfTsPzNvfjTOGcvj4iS/38Tc7U6tMzlP5cr
-         Z+N3C1z1OdMr06KhWSVC+M88jA7GW/99zMVcyfV1iyaaXARfuy4cMpfE77KM/Tgj0ABy
-         zbvoMvYoX/oDiI/JVUnoqWD7mUfDTO/uNP0Fk2eXMp6bXtVPH3OqCdGbCLq794f4GIh7
-         XZdw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=D3qZEwNPIZHgIwmmdgzoKMHEXjywlscnQJ9Rg5O/N94=;
+        b=jr1m0lWFe8mGcOQYeSd5p9BussF7vh2jW4f85EvrrXEQS24FCT1Z7Lz9G8RwoOj6si
+         z7TjpeA1I/gSJTseJarZt/NNiJmep1gk/3MH4aB6iPChc0goqKGYHCtKNszcmYtpHELF
+         yENWpr9jBd0pemJSh49WKGdmD9gib16BPCEepElVMXSpbnU2NdF99ILHqLZl1jGrPJIR
+         miSOXqtCvsDM+oXMZ5a1AX/uvrwPzh2cfMPYgJmIlribb+KDGBFs9vw3miNakkBOiTZl
+         Ht+llHLZXN+oTGsp7DFarpt4uIiuSgW/BiyCNLHj2hrawqnyGiLgbl2OX5XRtN/oB7P8
+         b6vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=v3X+VL4+MsixaR62rPp7HwB6Wzg0tRmPuvJoIJorT2g=;
-        b=cxLULYK0LlrL9bfHyLvtDF1mFGUl+e7C3YL+Y557IZvqnQ3yDxteZE+spPSg/6BNS/
-         UALJq5eqVvr4cT582pDabgV3et0+vwwpcdGec5VjIFKl+Ry7cWhwNlRxC4595cH9Rotz
-         1NhyOx3hCN3CzlNjL7W25Zd+7Sod3dzriQWrggq9ue9VXuAYu6t/4XbM5mKI/Nc2RSzf
-         t3lyVnhK+aE9+3Bq0LAjyUqjur3o0GWfMM+Ro5WbXticWZvhjBlQvS7dIPV4ja51pcyk
-         /1ungX6I592viHh4FDa486T0jgluBDAqSeIiOLlyxJDFeStDA0GazFtk5E0pM23Nh0lM
-         BINA==
-X-Gm-Message-State: AOAM530rl28Y+PnIhOwfZEcx7zRrbDnJQAsDnu0oqEaUCsOTjJhopQvG
-        Jvk8t6ljrrq0emaGzCoOf6k=
-X-Google-Smtp-Source: ABdhPJx9nUeV/83qz7H1mGdfts1xPRTGfCTDFwjiGZJTuXH+zznv/fgZvjUnwsdAo5TlZkuTcP6u0Q==
-X-Received: by 2002:a05:6512:36cd:: with SMTP id e13mr409270lfs.165.1599813010980;
-        Fri, 11 Sep 2020 01:30:10 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:4498:c7cc:1d90:b990:ebe6:7df7? ([2a00:1fa0:4498:c7cc:1d90:b990:ebe6:7df7])
-        by smtp.gmail.com with ESMTPSA id z15sm400438lji.78.2020.09.11.01.30.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2020 01:30:10 -0700 (PDT)
-Subject: Re: [PATCH] usb: phy: tegra: Use IS_ERR() to check and simplify code
-To:     Tang Bin <tangbin@cmss.chinamobile.com>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com
-Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-References: <20200910115607.11392-1-tangbin@cmss.chinamobile.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <d0bd4d4c-0447-6c5f-6dc3-17e5ceae2623@gmail.com>
-Date:   Fri, 11 Sep 2020 11:29:59 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=D3qZEwNPIZHgIwmmdgzoKMHEXjywlscnQJ9Rg5O/N94=;
+        b=IYKhegCh59UnlkXa4fbQbb9UPpEduhUBs4GCYloynDWQ8DWEhSMp6Ff1cUkHJv0Jwg
+         9IuH2DK8FhNfnSd8CudEYjEeJb8AuIFOlbjfywmucyn0V+MEfyJBBvUVNz5AYaRSq44p
+         RcutwH4KT50rg3tZWcY9lb2x/F+46OZvPcj9pjqlgx6PR4/ykmG+yjwX+8uDtt9G7HQw
+         XCsDvltiUoY0b+oOLIXkR+FRMgs4ijXkFfisIFhZdq8XQLV0BZs4MDjgvJkujjSA/q2U
+         Stw7XjCOGPGYSnAlgJnWMby/kUE+X96zQaKv+PU9s4sTHnZL4/IpcE2dnAu9cAVKU/U1
+         9MCQ==
+X-Gm-Message-State: AOAM531ehHcIsbjbvUbcyco5+cx6Ety1fTYeEgd6Ks7/kNB3L/+c2fJl
+        +Fhbj9HszhqG/VdpXRI6VDx4xaF1Upv+qr66O3xUxjDwlBQ=
+X-Google-Smtp-Source: ABdhPJwpUbeD8uYU1vxXUcnUCutiU3apS3UaoA+2RTAYW/szz+lZ34MJDjy6g2VWYoORxs5oVEBQM/ZLMZpHdegVJwE=
+X-Received: by 2002:a92:35d0:: with SMTP id c77mr827698ilf.183.1599813252776;
+ Fri, 11 Sep 2020 01:34:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200910115607.11392-1-tangbin@cmss.chinamobile.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAEt1Rjq+Fz85KU-aKO+boNE5yL7GiwdopmRd3-FxEL+mzEui-g@mail.gmail.com>
+ <20200907155052.2450-1-yazzep@gmail.com> <20200907155052.2450-2-yazzep@gmail.com>
+ <20200908190402.GA797206@rowland.harvard.edu> <CAEt1RjquJZzTctN6dNQSDbUZ9YG2FnEtzTZsoA3a9RtXHxwUmA@mail.gmail.com>
+In-Reply-To: <CAEt1RjquJZzTctN6dNQSDbUZ9YG2FnEtzTZsoA3a9RtXHxwUmA@mail.gmail.com>
+From:   yasushi asano <yazzep@gmail.com>
+Date:   Fri, 11 Sep 2020 17:33:18 +0900
+Message-ID: <CAEt1RjpGcZ4T70tr83pmcD--PzAMboBkbv55qFcRfMz11ZUggw@mail.gmail.com>
+Subject: Re: [PATCH v3] USB: hub.c: decrease the number of attempts of
+ enumeration scheme
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        "Rosca, Eugeniu (ADITG/ESM1)" <erosca@de.adit-jv.com>,
+        andrew_gabbasov@mentor.com, Baxter Jim <jim_baxter@mentor.com>,
+        "Natsume, Wataru (ADITJ/SWG)" <wnatsume@jp.adit-jv.com>,
+        "Nishiguchi, Naohiro (ADITJ/SWG)" <nnishiguchi@jp.adit-jv.com>,
+        =?UTF-8?B?5rWF6YeO5oGt5Y+y?= <yasano@jp.adit-jv.com>,
+        kernel test robot <rong.a.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+Dear Alan,
+I tested the patch you provided.
+Unfortunately, it takes about 40 seconds to reach the detection of
+enumeration failure. so the PET test failed.
+Now I'm checking which procedure took time.
+                     :
+[   77.469035] hrtimer: interrupt took 23800 ns
+[  737.812782] *** Connect  PET       ***
+[  759.854355] *** Exec PET App       ***
+[  763.300951] usb 1-1.1: new full-speed USB device number 4 using ehci-pla=
+tform
+[  763.301248] usb 1-1.1: device descriptor read/64, error -32
+[  763.383966] usb 1-1.1: new full-speed USB device number 5 using ehci-pla=
+tform
+[  763.384256] usb 1-1.1: device descriptor read/64, error -32
+[  763.390282] usb 1-1-port1: attempt power cycle
+[  765.586566] usb 1-1-port1: unable to enumerate USB device [-107]
+[  816.850692] *** Setting Test Suite ***
+[  835.593181] *** Ready OK Test Start***
+[  838.822953] usb 1-1.1: new full-speed USB device number 7 using
+ehci-platform [1]---start---------
+[  844.037032] usb 1-1.1: device descriptor read/64, error -110
+          [2]....... [2]-[1] =3D 5.2 second
+[  844.121947] usb 1-1.1: new full-speed USB device number 8 using ehci-pla=
+tform
+[  849.156628] usb 1-1.1: device descriptor read/64, error -110
+          [3]....... [3]-[2] =3D 5.1 second
+[  849.163971] usb 1-1-port1: attempt power cycle
+[  851.102959] usb 1-1.1: new full-speed USB device number 9 using ehci-pla=
+tform
+[  856.325028] usb 1-1.1: device descriptor read/64, error -110
+          [4]....... [4]-[3] =3D 7.2 second
+[  856.409962] usb 1-1.1: new full-speed USB device number 10 using
+ehci-platform
+[  867.281957] usb 1-1.1: device not accepting address 10, error -110
+          [5]....... [5]-[4] =3D 10.9 second
+[  867.365954] usb 1-1.1: new full-speed USB device number 11 using
+ehci-platform
+[  878.545941] usb 1-1.1: device not accepting address 11, error -110
+          [6]....... [6]-[5] =3D 11.2 second
+[  878.552808] usb 1-1-port1: unable to enumerate USB device
+          [7]  total [7]-[1] =3D 39.7 second
+[  899.489808] *** End of Test        ***
 
-On 10.09.2020 14:56, Tang Bin wrote:
-
-> Use IS_ERR() and PTR_ERR() instead of PTR_ERR_OR_ZERO() to
-> simplify code, avoid redundant judgements.
-> 
-> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-> ---
->   drivers/usb/phy/phy-tegra-usb.c | 25 ++++++++++---------------
->   1 file changed, 10 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
-> index 6153cc35a..3b901429d 100644
-> --- a/drivers/usb/phy/phy-tegra-usb.c
-> +++ b/drivers/usb/phy/phy-tegra-usb.c
-> @@ -1121,10 +1121,9 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
->   		return PTR_ERR(tegra_phy->vbus);
->   
->   	tegra_phy->pll_u = devm_clk_get(&pdev->dev, "pll_u");
-> -	err = PTR_ERR_OR_ZERO(tegra_phy->pll_u);
-> -	if (err) {
-> +	if (IS_ERR(tegra_phy->pll_u)) {
->   		dev_err(&pdev->dev, "Failed to get pll_u clock: %d\n", err);
-
-    'err' should be changed here too...
-
-> -		return err;
-> +		return PTR_ERR(tegra_phy->pll_u);
->   	}
->   
->   	phy_type = of_usb_get_phy_mode(np);
-> @@ -1135,20 +1134,18 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
->   			return err;
->   
->   		tegra_phy->pad_clk = devm_clk_get(&pdev->dev, "utmi-pads");
-> -		err = PTR_ERR_OR_ZERO(tegra_phy->pad_clk);
-> -		if (err) {
-> +		if (IS_ERR(tegra_phy->pad_clk)) {
->   			dev_err(&pdev->dev,
->   				"Failed to get UTMIP pad clock: %d\n", err);
-
-    Same here.
-
-> -			return err;
-> +			return PTR_ERR(tegra_phy->pad_clk);
->   		}
->   
->   		reset = devm_reset_control_get_optional_shared(&pdev->dev,
->   							       "utmi-pads");
-> -		err = PTR_ERR_OR_ZERO(reset);
-> -		if (err) {
-> +		if (IS_ERR(reset)) {
->   			dev_err(&pdev->dev,
->   				"Failed to get UTMI-pads reset: %d\n", err);
-
-    And here.
-
-> -			return err;
-> +			return PTR_ERR(reset);
->   		}
->   		tegra_phy->pad_rst = reset;
->   		break;
-> @@ -1157,22 +1154,20 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
->   		tegra_phy->is_ulpi_phy = true;
->   
->   		tegra_phy->clk = devm_clk_get(&pdev->dev, "ulpi-link");
-> -		err = PTR_ERR_OR_ZERO(tegra_phy->clk);
-> -		if (err) {
-> +		if (IS_ERR(tegra_phy->clk)) {
->   			dev_err(&pdev->dev,
->   				"Failed to get ULPI clock: %d\n", err);
-
-    And here.
-
-> -			return err;
-> +			return PTR_ERR(tegra_phy->clk);
->   		}
->   
->   		gpiod = devm_gpiod_get_from_of_node(&pdev->dev, np,
->   						    "nvidia,phy-reset-gpio",
->   						    0, GPIOD_OUT_HIGH,
->   						    "ulpi_phy_reset_b");
-> -		err = PTR_ERR_OR_ZERO(gpiod);
-> -		if (err) {
-> +		if (IS_ERR(gpiod)) {
->   			dev_err(&pdev->dev,
->   				"Request failed for reset GPIO: %d\n", err);
-
-    And here.
-
-> -			return err;
-> +			return PTR_ERR(gpiod);
->   		}
->   		tegra_phy->reset_gpio = gpiod;
->   
-
-    Overall, this patch is broken and not even worth redoing -- the current 
-code seems good...
-
-MBR, Sergei
+2020=E5=B9=B49=E6=9C=8810=E6=97=A5(=E6=9C=A8) 13:49 yasushi asano <yazzep@g=
+mail.com>:
+>
+> Dear Alan
+> Thank you for your kindness.
+> I tried to minimize the amount of change so as not to affect other
+> processing, but I understood that my fix was not appropriate.
+> I'm testing the patch you offered using PET tool.
+> Please wait a while.
+>
+> 2020=E5=B9=B49=E6=9C=889=E6=97=A5(=E6=B0=B4) 4:04 Alan Stern <stern@rowla=
+nd.harvard.edu>:
+> >
+> > On Tue, Sep 08, 2020 at 12:50:52AM +0900, Yasushi Asano wrote:
+> > > From: Yasushi Asano <yasano@jp.adit-jv.com>
+> > >
+> > > According to 6.7.22 A-UUT "Device No Response" for connection timeout
+> > > of USB OTG and EH automated compliance plan v1.2, the enumeration
+> > > failure has to be detected within 30 seconds. However, the old and ne=
+w
+> > > enumeration schemes made a total of 16 attempts, and each attempt can
+> > > take 5 seconds to timeout, so it failed with PET test. Modify it to
+> > > reduce the number of attempts to 5 and pass PET test.
+> > >
+> > > in case of old_schene_first=3DN and use_both_schemes=3DY
+> > > attempt 3 * new scheme, then 2 * old scheme
+> > > in case of old_schene_first=3DY and use_both_schemes=3DY
+> > > attempt 2 * old scheme, then 3 * new scheme
+> >
+> > There are several issues this patch does not take into account, such as
+> > resets between retries and port-power cycling.  Also, you did not
+> > restructure the code appropriately.
+> >
+> > Please review and test the patch below.  Does it do what you think it
+> > should?
+> >
+> > Alan Stern
+> >
+> >
+> > Index: usb-devel/drivers/usb/core/hub.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- usb-devel.orig/drivers/usb/core/hub.c
+> > +++ usb-devel/drivers/usb/core/hub.c
+> > @@ -2707,9 +2707,7 @@ static unsigned hub_is_wusb(struct usb_h
+> >
+> >  #define PORT_RESET_TRIES       5
+> >  #define SET_ADDRESS_TRIES      2
+> > -#define GET_DESCRIPTOR_TRIES   2
+> > -#define SET_CONFIG_TRIES       (2 * (use_both_schemes + 1))
+> > -#define USE_NEW_SCHEME(i, scheme)      ((i) / 2 =3D=3D (int)(scheme))
+> > +#define PORT_INIT_TRIES                5
+> >
+> >  #define HUB_ROOT_RESET_TIME    60      /* times are in msec */
+> >  #define HUB_SHORT_RESET_TIME   10
+> > @@ -2717,23 +2715,31 @@ static unsigned hub_is_wusb(struct usb_h
+> >  #define HUB_LONG_RESET_TIME    200
+> >  #define HUB_RESET_TIMEOUT      800
+> >
+> > -/*
+> > - * "New scheme" enumeration causes an extra state transition to be
+> > - * exposed to an xhci host and causes USB3 devices to receive control
+> > - * commands in the default state.  This has been seen to cause
+> > - * enumeration failures, so disable this enumeration scheme for USB3
+> > - * devices.
+> > - */
+> >  static bool use_new_scheme(struct usb_device *udev, int retry,
+> >                            struct usb_port *port_dev)
+> >  {
+> >         int old_scheme_first_port =3D
+> > -               port_dev->quirks & USB_PORT_QUIRK_OLD_SCHEME;
+> > +               (port_dev->quirks & USB_PORT_QUIRK_OLD_SCHEME) ||
+> > +               old_scheme_first;
+> >
+> > +       /*
+> > +        * "New scheme" enumeration causes an extra state transition to=
+ be
+> > +        * exposed to an xhci host and causes USB3 devices to receive c=
+ontrol
+> > +        * commands in the default state.  This has been seen to cause
+> > +        * enumeration failures, so disable this enumeration scheme for=
+ USB3
+> > +        * devices.
+> > +        */
+> >         if (udev->speed >=3D USB_SPEED_SUPER)
+> >                 return false;
+> >
+> > -       return USE_NEW_SCHEME(retry, old_scheme_first_port || old_schem=
+e_first);
+> > +       /*
+> > +        * If use_both_schemes is set, use the first scheme (whichever
+> > +        * it is) for the larger half of the retries, then use the othe=
+r
+> > +        * scheme.  Otherwise, use the first scheme for all the retries=
+.
+> > +        */
+> > +       if (use_both_schemes && retry >=3D (PORT_INIT_TRIES + 1) / 2)
+> > +               return old_scheme_first_port;   /* Second half */
+> > +       return !old_scheme_first_port;          /* First half or all */
+> >  }
+> >
+> >  /* Is a USB 3.0 port in the Inactive or Compliance Mode state?
+> > @@ -4539,12 +4545,13 @@ hub_port_init(struct usb_hub *hub, struc
+> >         struct usb_device       *hdev =3D hub->hdev;
+> >         struct usb_hcd          *hcd =3D bus_to_hcd(hdev->bus);
+> >         struct usb_port         *port_dev =3D hub->ports[port1 - 1];
+> > -       int                     retries, operations, retval, i;
+> > +       int                     operations, retval, i;
+> >         unsigned                delay =3D HUB_SHORT_RESET_TIME;
+> >         enum usb_device_speed   oldspeed =3D udev->speed;
+> >         const char              *speed;
+> >         int                     devnum =3D udev->devnum;
+> >         const char              *driver_name;
+> > +       bool                    do_new_scheme;
+> >
+> >         /* root hub ports have a slightly longer reset period
+> >          * (from USB 2.0 spec, section 7.1.7.5)
+> > @@ -4657,130 +4664,106 @@ hub_port_init(struct usb_hub *hub, struc
+> >          * first 8 bytes of the device descriptor to get the ep0 maxpac=
+ket
+> >          * value.
+> >          */
+> > -       for (retries =3D 0; retries < GET_DESCRIPTOR_TRIES; (++retries,=
+ msleep(100))) {
+> > -               bool did_new_scheme =3D false;
+> > -
+> > -               if (use_new_scheme(udev, retry_counter, port_dev)) {
+> > -                       struct usb_device_descriptor *buf;
+> > -                       int r =3D 0;
+> > +       do_new_scheme =3D use_new_scheme(udev, retry_counter, port_dev)=
+;
+> >
+> > -                       did_new_scheme =3D true;
+> > -                       retval =3D hub_enable_device(udev);
+> > -                       if (retval < 0) {
+> > -                               dev_err(&udev->dev,
+> > -                                       "hub failed to enable device, e=
+rror %d\n",
+> > -                                       retval);
+> > -                               goto fail;
+> > -                       }
+> > +       if (do_new_scheme) {
+> > +               struct usb_device_descriptor *buf;
+> > +               int r =3D 0;
+> > +
+> > +               retval =3D hub_enable_device(udev);
+> > +               if (retval < 0) {
+> > +                       dev_err(&udev->dev,
+> > +                               "hub failed to enable device, error %d\=
+n",
+> > +                               retval);
+> > +                       goto fail;
+> > +               }
+> >
+> >  #define GET_DESCRIPTOR_BUFSIZE 64
+> > -                       buf =3D kmalloc(GET_DESCRIPTOR_BUFSIZE, GFP_NOI=
+O);
+> > -                       if (!buf) {
+> > -                               retval =3D -ENOMEM;
+> > -                               continue;
+> > -                       }
+> > +               buf =3D kmalloc(GET_DESCRIPTOR_BUFSIZE, GFP_NOIO);
+> > +               if (!buf) {
+> > +                       retval =3D -ENOMEM;
+> > +                       goto fail;
+> > +               }
+> >
+> > -                       /* Retry on all errors; some devices are flakey=
+.
+> > -                        * 255 is for WUSB devices, we actually need to=
+ use
+> > -                        * 512 (WUSB1.0[4.8.1]).
+> > -                        */
+> > -                       for (operations =3D 0; operations < 3; ++operat=
+ions) {
+> > -                               buf->bMaxPacketSize0 =3D 0;
+> > -                               r =3D usb_control_msg(udev, usb_rcvaddr=
+0pipe(),
+> > -                                       USB_REQ_GET_DESCRIPTOR, USB_DIR=
+_IN,
+> > -                                       USB_DT_DEVICE << 8, 0,
+> > -                                       buf, GET_DESCRIPTOR_BUFSIZE,
+> > -                                       initial_descriptor_timeout);
+> > -                               switch (buf->bMaxPacketSize0) {
+> > -                               case 8: case 16: case 32: case 64: case=
+ 255:
+> > -                                       if (buf->bDescriptorType =3D=3D
+> > -                                                       USB_DT_DEVICE) =
+{
+> > -                                               r =3D 0;
+> > -                                               break;
+> > -                                       }
+> > -                                       fallthrough;
+> > -                               default:
+> > -                                       if (r =3D=3D 0)
+> > -                                               r =3D -EPROTO;
+> > -                                       break;
+> > -                               }
+> > -                               /*
+> > -                                * Some devices time out if they are po=
+wered on
+> > -                                * when already connected. They need a =
+second
+> > -                                * reset. But only on the first attempt=
+,
+> > -                                * lest we get into a time out/reset lo=
+op
+> > -                                */
+> > -                               if (r =3D=3D 0 || (r =3D=3D -ETIMEDOUT =
+&&
+> > -                                               retries =3D=3D 0 &&
+> > -                                               udev->speed > USB_SPEED=
+_FULL))
+> > -                                       break;
+> > +               /*
+> > +                * 255 is for WUSB devices, we actually need to use
+> > +                * 512 (WUSB1.0[4.8.1]).
+> > +                */
+> > +               buf->bMaxPacketSize0 =3D 0;
+> > +               r =3D usb_control_msg(udev, usb_rcvaddr0pipe(),
+> > +                       USB_REQ_GET_DESCRIPTOR, USB_DIR_IN,
+> > +                       USB_DT_DEVICE << 8, 0,
+> > +                       buf, GET_DESCRIPTOR_BUFSIZE,
+> > +                       initial_descriptor_timeout);
+> > +               switch (buf->bMaxPacketSize0) {
+> > +               case 8: case 16: case 32: case 64: case 255:
+> > +                       if (buf->bDescriptorType =3D=3D USB_DT_DEVICE) =
+{
+> > +                               r =3D 0;
+> > +                               break;
+> >                         }
+> > -                       udev->descriptor.bMaxPacketSize0 =3D
+> > -                                       buf->bMaxPacketSize0;
+> > +                       fallthrough;
+> > +               default:
+> > +                       if (r =3D=3D 0)
+> > +                               r =3D -EPROTO;
+> > +                       if (r !=3D -ENODEV)
+> > +                               dev_err(&udev->dev, "device descriptor =
+read/64, error %d\n", r);
+> > +                       retval =3D r;
+> >                         kfree(buf);
+> > +                       goto fail;
+> > +               }
+> > +               udev->descriptor.bMaxPacketSize0 =3D buf->bMaxPacketSiz=
+e0;
+> > +               kfree(buf);
+> >
+> > -                       retval =3D hub_port_reset(hub, port1, udev, del=
+ay, false);
+> > -                       if (retval < 0)         /* error or disconnect =
+*/
+> > -                               goto fail;
+> > -                       if (oldspeed !=3D udev->speed) {
+> > -                               dev_dbg(&udev->dev,
+> > -                                       "device reset changed speed!\n"=
+);
+> > -                               retval =3D -ENODEV;
+> > -                               goto fail;
+> > -                       }
+> > -                       if (r) {
+> > -                               if (r !=3D -ENODEV)
+> > -                                       dev_err(&udev->dev, "device des=
+criptor read/64, error %d\n",
+> > -                                                       r);
+> > -                               retval =3D -EMSGSIZE;
+> > -                               continue;
+> > -                       }
+> > +               retval =3D hub_port_reset(hub, port1, udev, delay, fals=
+e);
+> > +               if (retval < 0)         /* error or disconnect */
+> > +                       goto fail;
+> > +               if (oldspeed !=3D udev->speed) {
+> > +                       dev_dbg(&udev->dev, "device reset changed speed=
+!\n");
+> > +                       retval =3D -ENODEV;
+> > +                       goto fail;
+> > +               }
+> >  #undef GET_DESCRIPTOR_BUFSIZE
+> > +       }
+> > +
+> > +       /*
+> > +        * If device is WUSB, we already assigned an
+> > +        * unauthorized address in the Connect Ack sequence;
+> > +        * authorization will assign the final address.
+> > +        */
+> > +       if (udev->wusb =3D=3D 0) {
+> > +               for (operations =3D 0; operations < SET_ADDRESS_TRIES; =
+++operations) {
+> > +                       retval =3D hub_set_address(udev, devnum);
+> > +                       if (retval >=3D 0)
+> > +                               break;
+> > +                       msleep(200);
+> > +               }
+> > +               if (retval < 0) {
+> > +                       if (retval !=3D -ENODEV)
+> > +                               dev_err(&udev->dev, "device not accepti=
+ng address %d, error %d\n",
+> > +                                               devnum, retval);
+> > +                       goto fail;
+> > +               }
+> > +               if (udev->speed >=3D USB_SPEED_SUPER) {
+> > +                       devnum =3D udev->devnum;
+> > +                       dev_info(&udev->dev,
+> > +                                       "%s SuperSpeed%s%s USB device n=
+umber %d using %s\n",
+> > +                                       (udev->config) ? "reset" : "new=
+",
+> > +                                (udev->speed =3D=3D USB_SPEED_SUPER_PL=
+US) ?
+> > +                                               "Plus Gen 2" : " Gen 1"=
+,
+> > +                                (udev->rx_lanes =3D=3D 2 && udev->tx_l=
+anes =3D=3D 2) ?
+> > +                                               "x2" : "",
+> > +                                devnum, driver_name);
+> >                 }
+> >
+> >                 /*
+> > -                * If device is WUSB, we already assigned an
+> > -                * unauthorized address in the Connect Ack sequence;
+> > -                * authorization will assign the final address.
+> > +                * cope with hardware quirkiness:
+> > +                *  - let SET_ADDRESS settle, some device hardware want=
+s it
+> > +                *  - read ep0 maxpacket even for high and low speed,
+> >                  */
+> > -               if (udev->wusb =3D=3D 0) {
+> > -                       for (operations =3D 0; operations < SET_ADDRESS=
+_TRIES; ++operations) {
+> > -                               retval =3D hub_set_address(udev, devnum=
+);
+> > -                               if (retval >=3D 0)
+> > -                                       break;
+> > -                               msleep(200);
+> > -                       }
+> > -                       if (retval < 0) {
+> > -                               if (retval !=3D -ENODEV)
+> > -                                       dev_err(&udev->dev, "device not=
+ accepting address %d, error %d\n",
+> > -                                                       devnum, retval)=
+;
+> > -                               goto fail;
+> > -                       }
+> > -                       if (udev->speed >=3D USB_SPEED_SUPER) {
+> > -                               devnum =3D udev->devnum;
+> > -                               dev_info(&udev->dev,
+> > -                                               "%s SuperSpeed%s%s USB =
+device number %d using %s\n",
+> > -                                               (udev->config) ? "reset=
+" : "new",
+> > -                                        (udev->speed =3D=3D USB_SPEED_=
+SUPER_PLUS) ?
+> > -                                                       "Plus Gen 2" : =
+" Gen 1",
+> > -                                        (udev->rx_lanes =3D=3D 2 && ud=
+ev->tx_lanes =3D=3D 2) ?
+> > -                                                       "x2" : "",
+> > -                                        devnum, driver_name);
+> > -                       }
+> > -
+> > -                       /* cope with hardware quirkiness:
+> > -                        *  - let SET_ADDRESS settle, some device hardw=
+are wants it
+> > -                        *  - read ep0 maxpacket even for high and low =
+speed,
+> > -                        */
+> > -                       msleep(10);
+> > -                       /* use_new_scheme() checks the speed which may =
+have
+> > -                        * changed since the initial look so we cache t=
+he result
+> > -                        * in did_new_scheme
+> > -                        */
+> > -                       if (did_new_scheme)
+> > -                               break;
+> > -               }
+> > +               msleep(10);
+> > +       }
+> >
+> > +       if (!do_new_scheme) {
+> >                 retval =3D usb_get_device_descriptor(udev, 8);
+> >                 if (retval < 8) {
+> >                         if (retval !=3D -ENODEV)
+> > @@ -4804,7 +4787,6 @@ hub_port_init(struct usb_hub *hub, struc
+> >                                         retval);
+> >                                 retval =3D 0;
+> >                         }
+> > -                       break;
+> >                 }
+> >         }
+> >         if (retval)
+> > @@ -5106,7 +5088,7 @@ static void hub_port_connect(struct usb_
+> >                 unit_load =3D 100;
+> >
+> >         status =3D 0;
+> > -       for (i =3D 0; i < SET_CONFIG_TRIES; i++) {
+> > +       for (i =3D 0; i < PORT_INIT_TRIES; i++) {
+> >
+> >                 /* reallocate for each attempt, since references
+> >                  * to the previous one can escape in various ways
+> > @@ -5239,7 +5221,7 @@ loop:
+> >                         break;
+> >
+> >                 /* When halfway through our retry count, power-cycle th=
+e port */
+> > -               if (i =3D=3D (SET_CONFIG_TRIES / 2) - 1) {
+> > +               if (i =3D=3D (PORT_INIT_TRIES / 2) - 1) {
+> >                         dev_info(&port_dev->dev, "attempt power cycle\n=
+");
+> >                         usb_hub_set_port_power(hdev, hub, port1, false)=
+;
+> >                         msleep(2 * hub_power_on_good_delay(hub));
+> > @@ -5770,7 +5752,7 @@ static int usb_reset_and_verify_device(s
+> >         bos =3D udev->bos;
+> >         udev->bos =3D NULL;
+> >
+> > -       for (i =3D 0; i < SET_CONFIG_TRIES; ++i) {
+> > +       for (i =3D 0; i < PORT_INIT_TRIES; ++i) {
+> >
+> >                 /* ep0 maxpacket size may change; let the HCD know abou=
+t it.
+> >                  * Other endpoints will be handled by re-enumeration. *=
+/
+> >
