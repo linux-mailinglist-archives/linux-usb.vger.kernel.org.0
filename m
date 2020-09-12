@@ -2,108 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD83826784E
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Sep 2020 08:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03FB267A38
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Sep 2020 14:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725865AbgILGqd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Sep 2020 02:46:33 -0400
-Received: from verein.lst.de ([213.95.11.211]:39013 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725813AbgILGqc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 12 Sep 2020 02:46:32 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id EB2A368B02; Sat, 12 Sep 2020 08:46:24 +0200 (CEST)
-Date:   Sat, 12 Sep 2020 08:46:24 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org,
-        Russell King <linux@armlinux.org.uk>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        devicetree@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-sh@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        linux-pci@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/3] dma-mapping: introduce DMA range map, supplanting
- dma_pfn_offset
-Message-ID: <20200912064624.GA19260@lst.de>
-References: <20200910054038.324517-1-hch@lst.de> <20200910054038.324517-4-hch@lst.de> <011dea58-3714-3343-c055-57228be2a450@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <011dea58-3714-3343-c055-57228be2a450@arm.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+        id S1725872AbgILMOE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Sep 2020 08:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725845AbgILMOB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Sep 2020 08:14:01 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA55C061573;
+        Sat, 12 Sep 2020 05:14:00 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id p9so16969932ejf.6;
+        Sat, 12 Sep 2020 05:14:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=gEpdRqAvRKHN0Q4Rm3fCmgidSOyPeuBoBtSoBHiF1iM=;
+        b=TKCneEZYS78YeCzkuObuNRlmqDwnQ5CAdjUjwQPmNPFFqN4sw1USBAFbuh4yfzTAXI
+         d89QuRbQfprknG7kM693aUeZgoiVLBvGWLfDdPF+Jsg6qwR/qd7ry1Nh1unyvpBBslFv
+         JLp+V4AvrsYElb4iLFN0Et6lsoTOXOqY9SenmNn8Lg4zipZ23EjTClY1EevDaQwK5QDq
+         WRV0OUCKca9r7m03MNC2wPYhEv2q9JbZZFUk8laj5MBrimncEdqibw4OKTWc4e7gU273
+         8ntc/UJD3QfzODiPkOtNwMkWyw2mDaDTviYsMrXu1KNwhdgLMQc15C6CIAB+IZch9tCm
+         NTww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=gEpdRqAvRKHN0Q4Rm3fCmgidSOyPeuBoBtSoBHiF1iM=;
+        b=Jim0HxzSyNUlrKzvaoQwIxtEnBqekwShysI10O9SltuKJbVlHEPOYz8cQWK+LBN6FN
+         OsB9uPeaU2Y4Vv9u0ZDVFPiV3aZtKL5zXg6q2sT7dZBt3v6QHVzE5e2ThX4Ifezw8H49
+         KSLZHEChUkJoWiS37vGEkNp+xc+jDmFBJFb0xRlrw/4I7KbLcqg+XqMtuVzJIyJF9v7q
+         a2F+1D+Z+T4gZGOeyy9Z1tDXlXUzBMGsS2sI0n5GPDMxScweE31IuNs6bI0YVq+2Osyq
+         yHWKulDYgLa0mpygOateRgIM2Mq9rCzwlfhu51e17fxsTi3wbA7cFsCTjJllIhRcbNQ2
+         4ruA==
+X-Gm-Message-State: AOAM530M0QkCDNgAApAK5WE5ZOO/fASMJnHsJm6m9oXEZPbi1m4YkHZT
+        DuWstOk4jpRhEq5jzCsSWno=
+X-Google-Smtp-Source: ABdhPJz0i2HLJ4Q4WLY7Fe3aVzacLAzPDRqohJ5LhoMI3ZKwHaH9Q6bmI2jsZKWienwLlFq266hoeA==
+X-Received: by 2002:a17:906:e0c7:: with SMTP id gl7mr5771634ejb.109.1599912839273;
+        Sat, 12 Sep 2020 05:13:59 -0700 (PDT)
+Received: from felia.fritz.box ([2001:16b8:2dd9:a000:782a:45ff:c1e1:cfe9])
+        by smtp.gmail.com with ESMTPSA id t14sm4606365edc.7.2020.09.12.05.13.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Sep 2020 05:13:58 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
+        Pia Eichinger <pia.eichinger@st.oth-regensburg.de>,
+        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: make linux-usb list remarks consistent
+Date:   Sat, 12 Sep 2020 14:13:46 +0200
+Message-Id: <20200912121346.2796-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 11, 2020 at 05:12:36PM +0100, Robin Murphy wrote:
-> (apologies to Jim - I did look through one of the previous versions since I 
-> last commented and thought it looked OK, but never actually replied as 
-> such)
->
-> On 2020-09-10 06:40, Christoph Hellwig wrote:
->> From: Jim Quinlan <james.quinlan@broadcom.com>
->>
->> The new field 'dma_range_map' in struct device is used to facilitate the
->> use of single or multiple offsets between mapping regions of cpu addrs and
->> dma addrs.  It subsumes the role of "dev->dma_pfn_offset" which was only
->> capable of holding a single uniform offset and had no region bounds
->> checking.
->>
->> The function of_dma_get_range() has been modified so that it takes a single
->> argument -- the device node -- and returns a map, NULL, or an error code.
->> The map is an array that holds the information regarding the DMA regions.
->> Each range entry contains the address offset, the cpu_start address, the
->> dma_start address, and the size of the region.
->>
->> of_dma_configure() is the typical manner to set range offsets but there are
->> a number of ad hoc assignments to "dev->dma_pfn_offset" in the kernel
->> driver code.  These cases now invoke the function
->> dma_attach_offset_range(dev, cpu_addr, dma_addr, size).
->
-> This is now called dma_direct_set_offset(), right?
+Commit f24f27b85ead ("MAINTAINERS: add entry for mediatek usb3 DRD IP
+driver") claims linux-usb@vger.kernel.org is moderated for
+non-subscribers, but all other 46 entries for linux-usb@vger.kernel.org
+do not mention that.
 
-Yes.
+Adjust this entry to be consistent with all others.
 
->> +		int ret = dma_direct_set_offset(dev, KEYSTONE_HIGH_PHYS_START,
->> +						KEYSTONE_LOW_PHYS_START,
->> +						KEYSTONE_HIGH_PHYS_SIZE);
->> +		dev_err(dev, "set dma_offset%08llx%s\n",
->> +			KEYSTONE_HIGH_PHYS_START - KEYSTONE_LOW_PHYS_START,
->> +			ret ? " failed" : "");
->
-> FWIW I've already been thinking of some optimisations which would have the 
-> happy side-effect of removing many of these allocation failure scenarios, 
-> but at this point I reckon it's more practical to just get the current 
-> implementation landed and working.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+applies cleanly on current master and next-20200911
 
-Given that no one deals or can easily deal with these failures we
-should probably take care of that.  IMHO we could just allocate a
-single static range and point all the devices to it, what would
-you think of that?
+Greg, please pick this minor non-urgent clean-up patch for your -next tree.
 
->>   @@ -811,8 +812,13 @@ static int sun4i_backend_bind(struct device *dev, 
->> struct device *master,
->>   		 * because of an old DT, we need to set the DMA offset by hand
->>   		 * on our device since the RAM mapping is at 0 for the DMA bus,
->>   		 * unlike the CPU.
->> +		 *
->> +		 * XXX(hch): this has no business in a driver and needs to move
->> +		 * to the device tree.
->
-> As the context implies, this has actually grown a proper DT description of 
-> the funky interconnect layout (see 564d6fd611f9 and the linked patch 
-> series), and this is just an ugly fallback path to prevent regressions with 
-> old DTBs that are already out there. So unless you can fire up the time 
-> machine to fix those, this extra comment is really just beating a dead 
-> horse :(
+This patch submission will also show me if linux-usb is moderated or not.
+I have not subscribed to linux-usb and if it shows up quickly in the
+archive, the list is probably not moderated, and hence, validating the
+patch.
 
-Well, I need to beat the dead horse to avoid having to export the
-function, which will really just bread new users.  So at the minimum
-we'd need to move the setup to platform code that is always built in.
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 26af84f97353..4396a8986518 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11112,7 +11112,7 @@ F:	net/dsa/tag_mtk.c
+ 
+ MEDIATEK USB3 DRD IP DRIVER
+ M:	Chunfeng Yun <chunfeng.yun@mediatek.com>
+-L:	linux-usb@vger.kernel.org (moderated for non-subscribers)
++L:	linux-usb@vger.kernel.org
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+-- 
+2.17.1
+
