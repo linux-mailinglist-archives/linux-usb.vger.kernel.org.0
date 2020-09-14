@@ -2,97 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C11EF268CED
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Sep 2020 16:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9553E268FAC
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Sep 2020 17:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726779AbgINNuC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Sep 2020 09:50:02 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:40377 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726756AbgINNsw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Sep 2020 09:48:52 -0400
-Received: (qmail 963410 invoked by uid 1000); 14 Sep 2020 09:48:43 -0400
-Date:   Mon, 14 Sep 2020 09:48:43 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     linux@prisktech.co.nz, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: host: ehci-platform: Add workaround for
- brcm,xgs-iproc-ehci
-Message-ID: <20200914134843.GA963127@rowland.harvard.edu>
-References: <20200913215926.29880-1-chris.packham@alliedtelesis.co.nz>
+        id S1726341AbgINPXt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Sep 2020 11:23:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38582 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726058AbgINPXL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Sep 2020 11:23:11 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2BE5B20639;
+        Mon, 14 Sep 2020 15:23:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600096990;
+        bh=EBqqQRsDxhvM1nw92/w69eMe9mZazFwm//Ofb5xCjvc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NhxFEZ5hFRzKcHM5UdRESvNf5RWMR93f2OaogAsqv4akh7DGDkhvKhkLXVh3XCM0k
+         bsyO24n6WDGAe+S0tayv+05GZAfma4r1iry3NA2mq4riIC66xgJYRRiAOYGhZ3L7Wk
+         KZNptsHILBCJ9AFv6G0mXT/Pfdx9wAbjVpWcRzH4=
+Date:   Mon, 14 Sep 2020 17:23:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     himadrispandya@gmail.com, dvyukov@google.com,
+        linux-usb@vger.kernel.org, perex@perex.cz, tiwai@suse.com,
+        stern@rowland.harvard.ed, linux-kernel@vger.kernel.org,
+        marcel@holtmann.org, johan.hedberg@gmail.com,
+        linux-bluetooth@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 04/11] USB: core: hub.c: use usb_control_msg_send() in
+ a few places
+Message-ID: <20200914152309.GA3394411@kroah.com>
+References: <20200907145108.3766613-1-gregkh@linuxfoundation.org>
+ <20200907145108.3766613-5-gregkh@linuxfoundation.org>
+ <20200907150858.GD762136@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200913215926.29880-1-chris.packham@alliedtelesis.co.nz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200907150858.GD762136@rowland.harvard.edu>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 09:59:26AM +1200, Chris Packham wrote:
-> The ehci controller found in some Broadcom switches with integrated SoCs
-> has an issue which causes a soft lockup with large transfers like you
-> see when running ext4 on USB3 flash drive.
+On Mon, Sep 07, 2020 at 11:08:58AM -0400, Alan Stern wrote:
+> On Mon, Sep 07, 2020 at 04:51:01PM +0200, Greg Kroah-Hartman wrote:
+> > There are a few calls to usb_control_msg() that can be converted to use
+> > usb_control_msg_send() instead, so do that in order to make the error
+> > checking a bit simpler and the code smaller.
+> > 
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> > v2:
+> >  - dropped changes to usb_req_set_sel() thanks to review from Alan
 > 
-> Port the fix from the Broadcom XLDK to increase the OUT_THRESHOLD to
-> avoid the problem.
+> > @@ -4056,7 +4035,7 @@ static void usb_enable_link_state(struct usb_hcd *hcd, struct usb_device *udev,
+> >  	 * associated with the link state we're about to enable.
+> >  	 */
+> >  	ret = usb_req_set_sel(udev, state);
+> > -	if (ret < 0) {
+> > +	if (ret) {
+> >  		dev_warn(&udev->dev, "Set SEL for device-initiated %s failed.\n",
+> >  				usb3_lpm_names[state]);
+> >  		return;
 > 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
+> Did this change survive by mistake?
 > 
-> I don't have much data on what this change does. I can say it is needed to
-> avoid a soft lockup when using a USB3 Flash drive formatted has ext4 (USB2 +
-> ext4 is OK, USB3 + fat is OK). I presume the affected combination ends up using
-> larger transfers triggering the problem.
-> 
-> The equivalent change in the Broadcom XLDK is
-> 
-> 	if (IS_ENABLED(CONFIG_USB_EHCI_XGS_IPROC))
-> 		ehci_writel(ehci, BCM_USB_FIFO_THRESHOLD,
-> 				&ehci->regs->reserved4[6]);
-> 
-> This is problematic because it would unconditionally apply to all ehci
-> controllers whenever CONFIG_USB_EHCI_XGS_IPROC is enabled (also reserved4 only
-> goes to 6 so technically it's indexing off the end of the array).
-> 
-> I wasn't sure if I should add a new property or somehow detect the affected
-> host controller. I settled on using of_device_is_compatible() as that seemed
-> the simplest thing to do.
-> 
-> Changes in v2:
-> - move workaround to ehci_platform_reset
-> - cosmetic changes suggested by Alan
-> 
->  drivers/usb/host/ehci-platform.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
-> index 006c4f6188a5..9804ffa9e67f 100644
-> --- a/drivers/usb/host/ehci-platform.c
-> +++ b/drivers/usb/host/ehci-platform.c
-> @@ -42,6 +42,9 @@
->  #define EHCI_MAX_CLKS 4
->  #define hcd_to_ehci_priv(h) ((struct ehci_platform_priv *)hcd_to_ehci(h)->priv)
->  
-> +#define BCM_USB_FIFO_THRESHOLD	0x00800040
-> +#define bcm_iproc_insnreg01	hostpc[0]
-> +
->  struct ehci_platform_priv {
->  	struct clk *clks[EHCI_MAX_CLKS];
->  	struct reset_control *rsts;
-> @@ -75,6 +78,11 @@ static int ehci_platform_reset(struct usb_hcd *hcd)
->  
->  	if (pdata->no_io_watchdog)
->  		ehci->need_io_watchdog = 0;
-> +
-> +	if (of_device_is_compatible(pdev->dev.of_node, "brcm,xgs-iproc-ehci"))
-> +		ehci_writel(ehci, BCM_USB_FIFO_THRESHOLD,
-> +			    &ehci->regs->bcm_iproc_insnreg01);
-> +
->  	return 0;
->  }
+> Actually, it looks like usb_req_set_sel needs to check the value 
+> returned by usb_control_msg -- a perfect example of the sort of thing 
+> you were trying to fix in the first place!
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Ugh, good catch, and yes, the original code is buggy :)
+
+thanks,
+
+greg k-h
