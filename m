@@ -2,90 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 734412693D0
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Sep 2020 19:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4EA269440
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Sep 2020 19:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbgINRnk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Sep 2020 13:43:40 -0400
-Received: from mga02.intel.com ([134.134.136.20]:35229 "EHLO mga02.intel.com"
+        id S1726020AbgINR5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Sep 2020 13:57:05 -0400
+Received: from cmta18.telus.net ([209.171.16.91]:34323 "EHLO cmta18.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726191AbgINMRc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Sep 2020 08:17:32 -0400
-IronPort-SDR: TQWMj1zEqCU+fIadJbMG6FpQI/GUmzIOQlry1N6Wwk06k+mEz/y6/r/X/iP7/AAR+G6pbjxxj6
- IqrbhcJJ80fw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9743"; a="146757109"
-X-IronPort-AV: E=Sophos;i="5.76,426,1592895600"; 
-   d="scan'208";a="146757109"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2020 05:14:29 -0700
-IronPort-SDR: b34j+gzHlZXBkLI/FcXPAtUYFIqWzDW7HliECCjA8xKGFgDYjZuazHgtOMHX0l8CvBTyNIsh04
- aK34YPhcYfsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,426,1592895600"; 
-   d="scan'208";a="408839789"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 14 Sep 2020 05:14:26 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 14 Sep 2020 15:14:25 +0300
-Date:   Mon, 14 Sep 2020 15:14:25 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Raymond Tan <raymond.tan@intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: pci: Allow Elkhart Lake to utilize DSM method
- for PM functionality
-Message-ID: <20200914121425.GA810499@kuha.fi.intel.com>
-References: <20200821131101.81915-1-heikki.krogerus@linux.intel.com>
+        id S1725992AbgINR5C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Sep 2020 13:57:02 -0400
+Received: from montezuma.home ([154.5.226.127])
+        by cmsmtp with SMTP
+        id HsimkbHKpiMStHsiokUAPv; Mon, 14 Sep 2020 11:56:59 -0600
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=X7os11be c=1 sm=1 tr=0
+ a=f8b3WT/FcTuUJCJtQO1udw==:117 a=f8b3WT/FcTuUJCJtQO1udw==:17
+ a=kj9zAlcOel0A:10 a=x7bEGLp0ZPQA:10 a=COSDN44dAAMA:10
+ a=53Pd975QBpgh9OEATY8A:9 a=CjuIK1q_8ugA:10
+Date:   Mon, 14 Sep 2020 10:56:56 -0700 (PDT)
+From:   Zwane Mwaikambo <zwanem@gmail.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Zwane Mwaikambo <zwane@yosper.io>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] usb/typec: fix array overruns in ucsi.c
+ partner_altmode[]
+In-Reply-To: <20200914134942.GB810499@kuha.fi.intel.com>
+Message-ID: <alpine.DEB.2.21.2009140907410.42407@montezuma.home>
+References: <alpine.DEB.2.21.2008271058220.37762@montezuma.home> <alpine.DEB.2.21.2008271131570.37762@montezuma.home> <20200828123328.GF174928@kuha.fi.intel.com> <alpine.DEB.2.21.2008300220350.37231@montezuma.home> <20200903111047.GH1279097@kuha.fi.intel.com>
+ <20200909131059.GB3627076@kuha.fi.intel.com> <alpine.DEB.2.21.2009100030340.31932@montezuma.home> <20200910125018.GA3946915@kuha.fi.intel.com> <alpine.DEB.2.21.2009101912020.31932@montezuma.home> <20200911135618.GA4168153@kuha.fi.intel.com>
+ <20200914134942.GB810499@kuha.fi.intel.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200821131101.81915-1-heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset=US-ASCII
+X-CMAE-Envelope: MS4wfLGjFCtjCPdVPyLfjI5rNDby1jgkYkY08/qYk32Ujf8C+TnyUoiwxRDOl98WHxTb9cYCn9I4xFsI7/KEsbq5PsRWOW+PfVhtDGFzmzJvLTwNekthSa2g
+ NBPOZzKyjGbyDTNjIrBE2a1MVYvQzEmR1gHm6P3tuReAFRt1Yj/nxQ/EpykM6Uc4yN/lTokd72b4YiCqV9BgRN2nqetFjX/dcALpyuAUi9xWR/9IFiyGr3qJ
+ f23nnfCQdHW7ydPbSr0DDt4d9rb/rFkjcUr0bxgacQqNCBBi0k/uNZmBy7ThQYvxWzIlZcbBQKdra6D3ZzwKhw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
+On Mon, 14 Sep 2020, Heikki Krogerus wrote:
 
-On Fri, Aug 21, 2020 at 04:11:01PM +0300, Heikki Krogerus wrote:
-> From: Raymond Tan <raymond.tan@intel.com>
+> Hi,
 > 
-> Similar to some other IA platforms, Elkhart Lake too depends on the
-> PMU register write to request transition of Dx power state.
+> On Fri, Sep 11, 2020 at 04:56:22PM +0300, Heikki Krogerus wrote:
+> > Looks like the firmware does not terminate the list of alternate modes
+> > at all. It's just returning the two supported modes over and over
+> > again, regardless of the requested mode offset... I need to think how
+> > that should be handled.
 > 
-> Thus, we add the PCI_DEVICE_ID_INTEL_EHLLP to the list of devices that
-> shall execute the ACPI _DSM method during D0/D3 sequence.
->a 
-> [heikki.krogerus@linux.intel.com: included Fixes tag]
-> 
-> Fixes: dbb0569de852 ("usb: dwc3: pci: Add Support for Intel Elkhart Lake Devices")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Raymond Tan <raymond.tan@intel.com>
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  drivers/usb/dwc3/dwc3-pci.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-> index f5a61f57c74f0..242b6210380a4 100644
-> --- a/drivers/usb/dwc3/dwc3-pci.c
-> +++ b/drivers/usb/dwc3/dwc3-pci.c
-> @@ -147,7 +147,8 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc)
->  
->  	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
->  		if (pdev->device == PCI_DEVICE_ID_INTEL_BXT ||
-> -				pdev->device == PCI_DEVICE_ID_INTEL_BXT_M) {
-> +		    pdev->device == PCI_DEVICE_ID_INTEL_BXT_M ||
-> +		    pdev->device == PCI_DEVICE_ID_INTEL_EHLLP) {
->  			guid_parse(PCI_INTEL_BXT_DSM_GUID, &dwc->guid);
->  			dwc->has_dsm_for_pm = true;
->  		}
+> Since we can't rely on the data that the firmware returns, we also
+> have to check that the mode index does not exceed MODE_DISCOVER_MAX.
+> Can you test if the attached patch fixes the issue for you?
 
-I think this has gone under your radar. Let me know if you want
-anything to be changed.
+Sadly that's not entirely surprising :/ i tested your patch and i was able 
+to plugin and unplug the USB-C dock with a working display multiple 
+times.
 
-thanks,
+Thanks!
 
--- 
-heikki
+	Zwane
