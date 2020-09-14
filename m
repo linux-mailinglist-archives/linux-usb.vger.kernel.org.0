@@ -2,164 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB73268C95
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Sep 2020 15:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11EF268CED
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Sep 2020 16:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgINNwo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Sep 2020 09:52:44 -0400
-Received: from mga17.intel.com ([192.55.52.151]:12627 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726785AbgINNuY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:50:24 -0400
-IronPort-SDR: yBuWl6wJFDZx8tehtCay9/noy3FrDjyHwSzNvFBsDJFOFXmHrmAOqjozKMo1ljmlgPTWdyBsep
- MeGaPFW01a4w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9743"; a="139091737"
-X-IronPort-AV: E=Sophos;i="5.76,426,1592895600"; 
-   d="scan'208,223";a="139091737"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2020 06:49:46 -0700
-IronPort-SDR: ZQq7//rYLJV9qA19RJXG+Mb0NVj5Wc43PZxXJgdYzeV5z41/eQGR2lq3BWVOm0uyRz2xMAf0p6
- qRue34a/jjBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,426,1592895600"; 
-   d="scan'208,223";a="408858786"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 14 Sep 2020 06:49:43 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 14 Sep 2020 16:49:43 +0300
-Date:   Mon, 14 Sep 2020 16:49:42 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Zwane Mwaikambo <zwanem@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Zwane Mwaikambo <zwane@yosper.io>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] usb/typec: fix array overruns in ucsi.c
- partner_altmode[]
-Message-ID: <20200914134942.GB810499@kuha.fi.intel.com>
-References: <alpine.DEB.2.21.2008271058220.37762@montezuma.home>
- <alpine.DEB.2.21.2008271131570.37762@montezuma.home>
- <20200828123328.GF174928@kuha.fi.intel.com>
- <alpine.DEB.2.21.2008300220350.37231@montezuma.home>
- <20200903111047.GH1279097@kuha.fi.intel.com>
- <20200909131059.GB3627076@kuha.fi.intel.com>
- <alpine.DEB.2.21.2009100030340.31932@montezuma.home>
- <20200910125018.GA3946915@kuha.fi.intel.com>
- <alpine.DEB.2.21.2009101912020.31932@montezuma.home>
- <20200911135618.GA4168153@kuha.fi.intel.com>
+        id S1726779AbgINNuC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Sep 2020 09:50:02 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40377 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726756AbgINNsw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Sep 2020 09:48:52 -0400
+Received: (qmail 963410 invoked by uid 1000); 14 Sep 2020 09:48:43 -0400
+Date:   Mon, 14 Sep 2020 09:48:43 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     linux@prisktech.co.nz, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: host: ehci-platform: Add workaround for
+ brcm,xgs-iproc-ehci
+Message-ID: <20200914134843.GA963127@rowland.harvard.edu>
+References: <20200913215926.29880-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="0F1p//8PRICkK4MW"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200911135618.GA4168153@kuha.fi.intel.com>
+In-Reply-To: <20200913215926.29880-1-chris.packham@alliedtelesis.co.nz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Sep 14, 2020 at 09:59:26AM +1200, Chris Packham wrote:
+> The ehci controller found in some Broadcom switches with integrated SoCs
+> has an issue which causes a soft lockup with large transfers like you
+> see when running ext4 on USB3 flash drive.
+> 
+> Port the fix from the Broadcom XLDK to increase the OUT_THRESHOLD to
+> avoid the problem.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> I don't have much data on what this change does. I can say it is needed to
+> avoid a soft lockup when using a USB3 Flash drive formatted has ext4 (USB2 +
+> ext4 is OK, USB3 + fat is OK). I presume the affected combination ends up using
+> larger transfers triggering the problem.
+> 
+> The equivalent change in the Broadcom XLDK is
+> 
+> 	if (IS_ENABLED(CONFIG_USB_EHCI_XGS_IPROC))
+> 		ehci_writel(ehci, BCM_USB_FIFO_THRESHOLD,
+> 				&ehci->regs->reserved4[6]);
+> 
+> This is problematic because it would unconditionally apply to all ehci
+> controllers whenever CONFIG_USB_EHCI_XGS_IPROC is enabled (also reserved4 only
+> goes to 6 so technically it's indexing off the end of the array).
+> 
+> I wasn't sure if I should add a new property or somehow detect the affected
+> host controller. I settled on using of_device_is_compatible() as that seemed
+> the simplest thing to do.
+> 
+> Changes in v2:
+> - move workaround to ehci_platform_reset
+> - cosmetic changes suggested by Alan
+> 
+>  drivers/usb/host/ehci-platform.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
+> index 006c4f6188a5..9804ffa9e67f 100644
+> --- a/drivers/usb/host/ehci-platform.c
+> +++ b/drivers/usb/host/ehci-platform.c
+> @@ -42,6 +42,9 @@
+>  #define EHCI_MAX_CLKS 4
+>  #define hcd_to_ehci_priv(h) ((struct ehci_platform_priv *)hcd_to_ehci(h)->priv)
+>  
+> +#define BCM_USB_FIFO_THRESHOLD	0x00800040
+> +#define bcm_iproc_insnreg01	hostpc[0]
+> +
+>  struct ehci_platform_priv {
+>  	struct clk *clks[EHCI_MAX_CLKS];
+>  	struct reset_control *rsts;
+> @@ -75,6 +78,11 @@ static int ehci_platform_reset(struct usb_hcd *hcd)
+>  
+>  	if (pdata->no_io_watchdog)
+>  		ehci->need_io_watchdog = 0;
+> +
+> +	if (of_device_is_compatible(pdev->dev.of_node, "brcm,xgs-iproc-ehci"))
+> +		ehci_writel(ehci, BCM_USB_FIFO_THRESHOLD,
+> +			    &ehci->regs->bcm_iproc_insnreg01);
+> +
+>  	return 0;
+>  }
 
---0F1p//8PRICkK4MW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi,
-
-On Fri, Sep 11, 2020 at 04:56:22PM +0300, Heikki Krogerus wrote:
-> Looks like the firmware does not terminate the list of alternate modes
-> at all. It's just returning the two supported modes over and over
-> again, regardless of the requested mode offset... I need to think how
-> that should be handled.
-
-Since we can't rely on the data that the firmware returns, we also
-have to check that the mode index does not exceed MODE_DISCOVER_MAX.
-Can you test if the attached patch fixes the issue for you?
-
-thanks,
-
--- 
-heikki
-
---0F1p//8PRICkK4MW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-usb-typec-ucsi-Prevent-mode-overrun.patch"
-
-From 50506dd61c6a086cb883e429312f4c6f0809e379 Mon Sep 17 00:00:00 2001
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Date: Mon, 14 Sep 2020 16:22:07 +0300
-Subject: [PATCH] usb: typec: ucsi: Prevent mode overrun
-
-Sometimes the embedded controller firmware does not
-terminate the list of alternate modes that the partner
-supports in its response to the GET_ALTERNATE_MODES command.
-Instead the firmware returns the supported alternate modes
-over and over again until the driver stops requesting them.
-
-If that happens, the number of modes for each alternate mode
-will exceed the maximum 6 that is defined in the USB Power
-Delivery specification. Making sure that can't happen by
-adding a check for it.
-
-Not-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index e680fcfdee609..758b988ac518a 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -216,14 +216,18 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
- 					    con->partner_altmode[i] == altmode);
- }
- 
--static u8 ucsi_altmode_next_mode(struct typec_altmode **alt, u16 svid)
-+static int ucsi_altmode_next_mode(struct typec_altmode **alt, u16 svid)
- {
- 	u8 mode = 1;
- 	int i;
- 
--	for (i = 0; alt[i]; i++)
-+	for (i = 0; alt[i]; i++) {
-+		if (i > MODE_DISCOVERY_MAX)
-+			return -ERANGE;
-+
- 		if (alt[i]->svid == svid)
- 			mode++;
-+	}
- 
- 	return mode;
- }
-@@ -258,8 +262,11 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
- 			goto err;
- 		}
- 
--		desc->mode = ucsi_altmode_next_mode(con->port_altmode,
--						    desc->svid);
-+		ret = ucsi_altmode_next_mode(con->port_altmode, desc->svid);
-+		if (ret < 0)
-+			return ret;
-+
-+		desc->mode = ret;
- 
- 		switch (desc->svid) {
- 		case USB_TYPEC_DP_SID:
-@@ -292,8 +299,11 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
- 			goto err;
- 		}
- 
--		desc->mode = ucsi_altmode_next_mode(con->partner_altmode,
--						    desc->svid);
-+		ret = ucsi_altmode_next_mode(con->partner_altmode, desc->svid);
-+		if (ret < 0)
-+			return ret;
-+
-+		desc->mode = ret;
- 
- 		alt = typec_partner_register_altmode(con->partner, desc);
- 		if (IS_ERR(alt)) {
--- 
-2.28.0
-
-
---0F1p//8PRICkK4MW--
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
