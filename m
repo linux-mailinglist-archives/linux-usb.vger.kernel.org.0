@@ -2,100 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 322C5268605
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Sep 2020 09:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD41268625
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Sep 2020 09:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725988AbgINHcs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Sep 2020 03:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S1726094AbgINHgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Sep 2020 03:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbgINHcd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Sep 2020 03:32:33 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A976C061788;
-        Mon, 14 Sep 2020 00:32:32 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id q4so5022181pjh.5;
-        Mon, 14 Sep 2020 00:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zOQKj9yAVp75GeABVCWJkbI1F1JUvZbL7Zt6hBXdVz8=;
-        b=H7Vk5lpud8ae6do/7R7/E439BDih3dEXglPrN4QqhqLQQ1FQLrVcCAHDb5kj+fpEh5
-         jgworh/Rgo/WQ0m3CUHSklQxIVCn5UYvKw6xDqgesyKExEUOtrGvD93csUhuKpeYsP1r
-         B9kx+8EQ+VJjLwz7Bb3LnOmdygSDnAz4MxvcvQZYLQdDcxEDKW4qWWdQ8GOOCa6owmLD
-         0E4zGxeTmCy8+p8QgPNG46Hn3YwdeBMAoDAUik1H477+Ap/HI7oF6yhMre5u07bv5YoN
-         83sTHWAXkPLNBaiOHSHl0JQ87pcL6TBelQ//35vPXG++uBmOXGeYR2rs5YxH5D5bVAYy
-         L35g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zOQKj9yAVp75GeABVCWJkbI1F1JUvZbL7Zt6hBXdVz8=;
-        b=i+8UrnFfL15Lo1ugDRFk6bND7DsYoywNroRdordYxf0O9VtdxCJ9x3GxBeEkzoZGi/
-         oTqDFVvy3VLsAFePSeALT3pB65KVNN2NuZslCOzRJcPvOinDEjGTIlpqMJcogbK0y9Nb
-         3Fxja8zm4sMycOQ8mKZx05BuI7lLvi24FTWsbA+dMmZE6sfnFnTCXo7i3N+Y9uXNtKlE
-         Ql0Pwgeq3SZY90P2oVk6csU/I92V9YpPCZ6GyzRW1xEpSTM23vZLeThI779cV16ZEvIt
-         Nd/YfiPHylJhI3BW/msWrCraUGZgbuBiB+E4yPwadxtytGWqtlsUaZZYERTifoXGaOkw
-         GAug==
-X-Gm-Message-State: AOAM533ghjAUWimkbeWYvamp8Kgq/kBIAfVpP+Z3LTRze1AtB4XEM1OR
-        W1n5xP5xfeJnTKoiawaAF6w=
-X-Google-Smtp-Source: ABdhPJz6NeGTlr+27zZLNZza9dbvHhQ1tg12+yq4GzCKa4ifumMPCs29uCVZqiEazYOJGCtTZjblaQ==
-X-Received: by 2002:a17:90a:ec0b:: with SMTP id l11mr12375692pjy.144.1600068751891;
-        Mon, 14 Sep 2020 00:32:31 -0700 (PDT)
-Received: from localhost.localdomain ([49.207.192.250])
-        by smtp.gmail.com with ESMTPSA id o1sm9128626pfg.83.2020.09.14.00.32.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2020 00:32:31 -0700 (PDT)
-From:   Allen Pais <allen.lkml@gmail.com>
-To:     davem@davemloft.net
-Cc:     m.grzeschik@pengutronix.de, kuba@kernel.org, paulus@samba.org,
-        oliver@neukum.org, woojung.huh@microchip.com,
-        UNGLinuxDriver@microchip.com, petkan@nucleusys.com,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-ppp@vger.kernel.org, Allen Pais <apais@linux.microsoft.com>,
-        Romain Perier <romain.perier@gmail.com>
-Subject: [RESEND net-next v2 12/12] net: usbnet: convert tasklets to use new tasklet_setup() API
-Date:   Mon, 14 Sep 2020 13:01:31 +0530
-Message-Id: <20200914073131.803374-13-allen.lkml@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200914073131.803374-1-allen.lkml@gmail.com>
-References: <20200914073131.803374-1-allen.lkml@gmail.com>
+        with ESMTP id S1725951AbgINHgK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Sep 2020 03:36:10 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A04C06174A;
+        Mon, 14 Sep 2020 00:36:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=C7dRzELMuzY1ti6Be4zl/P2o9CmOm3JEIs4jyyZleQw=; b=lwk02yujA1vjIelTZNfxXJy9LN
+        v7YD5PWtck3jet/c/PDtH/SmOvHL+NzTK518RPrY0A+aHSvGL4Yb8MIOAoGG3rhJ/Oiu+vNNYdbwz
+        xKV0ICUgng+ECUWVsEsca4S+8Mbode59LZh8n8hyxzw3IYN6Ps9D9XcCzLhV9ZQ+njw4qplkOp8Lb
+        EM+FMEy8jVDpnf9IVRWUBOsm/muxp94nXrEAk06uhAZew11B+2igip5eHeeSAAiF07LDs2Q3vm6qY
+        31J7KCG0vY7Zv+4Wny08jHxr0+vvKvhPWPu409qwu/N6S7hbTtkQjkwssJ1vOudtyux59KHeFK4ui
+        4AIuIf/w==;
+Received: from 089144214092.atnat0023.highway.a1.net ([89.144.214.92] helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kHj1m-0008RI-5h; Mon, 14 Sep 2020 07:35:54 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     iommu@lists.linux-foundation.org,
+        Russell King <linux@armlinux.org.uk>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jim Quinlan <james.quinlan@broadcom.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devicetree@vger.kernel.org
+Subject: support range based offsets in dma-direct v2
+Date:   Mon, 14 Sep 2020 09:33:37 +0200
+Message-Id: <20200914073343.1579578-1-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Allen Pais <apais@linux.microsoft.com>
+Hi all,
 
-In preparation for unconditionally passing the
-struct tasklet_struct pointer to all tasklet
-callbacks, switch to using the new tasklet_setup()
-and from_tasklet() to pass the tasklet pointer explicitly
-and remove the .data field.
+this series adds range-based offsets to the dma-direct implementation.  The
+guts of the change are a patch from Jim with some modifications from me,
+but to do it nicely we need to ARM patches to prepare for it as well.
 
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
-Signed-off-by: Allen Pais <apais@linux.microsoft.com>
----
- drivers/net/usb/usbnet.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Changes since v1:
+ - rebased on top of the latests dma-mapping for-next tree
+ - add two more trivial ARM cleanups
+ - remove the DMA property inheritance hack in usb
+ - move the remaining copy of the ranges into the remoteproc driver
+   as it should not be seen as a general API, but as a quirk for
+   remoteproc that we need to fix ASAP
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 2b2a841cd938..d63485b858ba 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1708,8 +1708,7 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
- 	skb_queue_head_init (&dev->txq);
- 	skb_queue_head_init (&dev->done);
- 	skb_queue_head_init(&dev->rxq_pause);
--	dev->bh.func = usbnet_bh_tasklet;
--	dev->bh.data = (unsigned long)&dev->delay;
-+	dev->bh.func = (void(*) (unsigned long))usbnet_bh_tasklet;
- 	INIT_WORK (&dev->kevent, usbnet_deferred_kevent);
- 	init_usb_anchor(&dev->deferred);
- 	timer_setup(&dev->delay, usbnet_bh, 0);
--- 
-2.25.1
-
+Diffstat:
