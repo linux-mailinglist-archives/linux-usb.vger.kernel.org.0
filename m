@@ -2,62 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD0826965E
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Sep 2020 22:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37873269681
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Sep 2020 22:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726361AbgINUYo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Sep 2020 16:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726255AbgINUYl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Sep 2020 16:24:41 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA858C06174A;
-        Mon, 14 Sep 2020 13:24:40 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 39C461273FF76;
-        Mon, 14 Sep 2020 13:07:52 -0700 (PDT)
-Date:   Mon, 14 Sep 2020 13:24:38 -0700 (PDT)
-Message-Id: <20200914.132438.1323071673363556958.davem@davemloft.net>
-To:     allen.lkml@gmail.com
-Cc:     m.grzeschik@pengutronix.de, kuba@kernel.org, paulus@samba.org,
-        oliver@neukum.org, woojung.huh@microchip.com,
-        UNGLinuxDriver@microchip.com, petkan@nucleusys.com,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-ppp@vger.kernel.org, apais@linux.microsoft.com
-Subject: Re: [RESEND net-next v2 00/12]drivers: net: convert tasklets to
- use new tasklet_setup() API
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200914073131.803374-1-allen.lkml@gmail.com>
-References: <20200914073131.803374-1-allen.lkml@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 27.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [2620:137:e000::1:9]); Mon, 14 Sep 2020 13:07:52 -0700 (PDT)
+        id S1726260AbgINU0x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Sep 2020 16:26:53 -0400
+Received: from mail-io1-f45.google.com ([209.85.166.45]:43602 "EHLO
+        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726335AbgINU01 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Sep 2020 16:26:27 -0400
+Received: by mail-io1-f45.google.com with SMTP id z25so1539256iol.10;
+        Mon, 14 Sep 2020 13:26:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pBnFBkWoZFvBeLIVMIY+de1Tgg4+VMrP2i4DNdIGX9U=;
+        b=kWa8ehsWlAtLnVB4/59Ys0+l5KpQUH+USeUyPfrzjhCOawIrKeubr0LlTeDJH7YZgj
+         liD0ume+SDIXyIgQ1XLZ56LlJVZtOoXVKJhrMVVFrGtXNFyGTwdssVI4fwdN8j1WgdIR
+         XslxeEnwRkFLumXqXejW476v0Au4Nihr16jLnp0jswhNJ9OU9c6qb7oZD5XGpAPEn8Th
+         oEfZOEzF5h/xYMdO/qfERu/B/bQ0fuPhA4EiUsLGAghSESJ9mE31pNNqlz3teaWPmk1o
+         Uh47bxZdoXTe/VHvvP9rtWuYyJx3Fziki7f1pmYY8g1YyCVQj+hmBrFV05o+25I7Wymq
+         voIQ==
+X-Gm-Message-State: AOAM530TtFv+95HAG9VE1z9PoWdHMJBN9woDlR0N2Tdj+Qs60yltfSlx
+        FraqR/X1dHvfUm6Ik/Uyuw==
+X-Google-Smtp-Source: ABdhPJzG7fU1g8IWiJZlne66hAGC8Dn0qryW6T3XCfP9dBS3ABXnxukUIIwe8+M6m34CHZdHTDe2uQ==
+X-Received: by 2002:a02:9f0d:: with SMTP id z13mr14871940jal.60.1600115186421;
+        Mon, 14 Sep 2020 13:26:26 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id i14sm7679165ilb.28.2020.09.14.13.26.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2020 13:26:25 -0700 (PDT)
+Received: (nullmailer pid 183633 invoked by uid 1000);
+        Mon, 14 Sep 2020 20:26:23 -0000
+Date:   Mon, 14 Sep 2020 14:26:23 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     lindsey.stanpoor@gmail.com
+Cc:     devicetree@vger.kernel.org, cnemo@tutanota.com, balbi@kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-rockchip@lists.infradead.org, heiko@sntech.de,
+        robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/4] dt-bindings: usb: add rk3328 dwc3 docs
+Message-ID: <20200914202623.GA183582@bogus>
+References: <20200902181234.13955-1-lindsey.stanpoor@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200902181234.13955-1-lindsey.stanpoor@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Allen Pais <allen.lkml@gmail.com>
-Date: Mon, 14 Sep 2020 13:01:19 +0530
-
-> From: Allen Pais <apais@linux.microsoft.com>
+On Wed, 02 Sep 2020 11:12:31 -0700, lindsey.stanpoor@gmail.com wrote:
+> From: Cameron Nemo <cnemo@tutanota.com>
 > 
-> ommit 12cc923f1ccc ("tasklet: Introduce new initialization API")'
-> introduced a new tasklet initialization API. This series converts
-> all the net/* drivers to use the new tasklet_setup() API
+> Document compatible for dwc3 on the Rockchip rk3328 platform.
 > 
-> This series is based on v5.9-rc5
+> Signed-off-by: Cameron Nemo <cnemo@tutanota.com>
+> ---
+>  Documentation/devicetree/bindings/usb/dwc3.txt          | 1 +
+>  Documentation/devicetree/bindings/usb/rockchip,dwc3.txt | 3 ++-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
 
-I don't understand how this works, you're not passing the existing
-parameter any more so won't that crash until the final parts of the
-conversion?
-
-This is like a half-transformation that will break bisection.
-
-I'm not applying this series, sorry.
+Acked-by: Rob Herring <robh@kernel.org>
