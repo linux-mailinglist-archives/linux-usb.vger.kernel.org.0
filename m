@@ -2,123 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C2026A4C3
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 14:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9F726A4DB
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 14:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726530AbgIOMMx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 08:12:53 -0400
-Received: from mga02.intel.com ([134.134.136.20]:45047 "EHLO mga02.intel.com"
+        id S1726343AbgIOMQb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 08:16:31 -0400
+Received: from mga04.intel.com ([192.55.52.120]:46049 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726466AbgIOMMt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Sep 2020 08:12:49 -0400
-IronPort-SDR: Kw4TQnqxCCgZHVHtW2E4uQsLSvMnrF4S1JAz9bLGwHkAR89NpX+NS9N2Wi7IPKuo6VIlsL7kYk
- jy6Ovfd+awrA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="146931356"
+        id S1726333AbgIOMQ2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Sep 2020 08:16:28 -0400
+IronPort-SDR: U+DEJS9vnOaw3pGqqeBlAldGIfYDNaZEGr6O3KdJZYp2YiIf4h6MvH8bzRTbBCO3S4FV7xKCaF
+ h/Kw8NokypaA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="156636516"
 X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
-   d="scan'208";a="146931356"
+   d="scan'208";a="156636516"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 05:12:19 -0700
-IronPort-SDR: yAREuQbk4980ARyBOoiXGAyvrjN8/059oMNvClMF8Qex/WwuehQj0r91EvFoXSIPZaukkz1dEv
- Tmc3FG0uFMiw==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 05:16:18 -0700
+IronPort-SDR: zHcTlE409gQ8N5SSotwtoKhpNs93GndkkJ7e1WDuvrjKIKX3TlNReDnWOh5z4E1dXzLnnJOZ9d
+ g1WMyy/wQzNQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
-   d="scan'208";a="409182851"
+   d="scan'208";a="409183643"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 15 Sep 2020 05:12:17 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Sep 2020 15:12:16 +0300
-Date:   Tue, 15 Sep 2020 15:12:16 +0300
+  by fmsmga001.fm.intel.com with SMTP; 15 Sep 2020 05:16:15 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Sep 2020 15:16:15 +0300
+Date:   Tue, 15 Sep 2020 15:16:15 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Badhri Jagan Sridharan <badhri@google.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 03/14] usb: typec: tcpci: update ROLE_CONTROL for DRP
-Message-ID: <20200915121216.GD1139641@kuha.fi.intel.com>
+Subject: Re: [PATCH v6 04/14] usb: typec: tcpci: Add a getter method to
+ retrieve tcpm_port reference
+Message-ID: <20200915121615.GE1139641@kuha.fi.intel.com>
 References: <20200901025927.3596190-1-badhri@google.com>
- <20200901025927.3596190-4-badhri@google.com>
+ <20200901025927.3596190-5-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200901025927.3596190-4-badhri@google.com>
+In-Reply-To: <20200901025927.3596190-5-badhri@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 31, 2020 at 07:59:16PM -0700, Badhri Jagan Sridharan wrote:
-> ROLE_CONTROL register would not have the actual CC terminations
-> unless the port does not set ROLE_CONTROL.DRP. For DRP ports,
-> CC_STATUS.cc1/cc2 indicates the final terminations applied
-> when TCPC enters potential_connect_as_source/_sink.
-> For DRP ports, infer port role from CC_STATUS and set corresponding
-> CC terminations before setting the orientation.
+On Mon, Aug 31, 2020 at 07:59:17PM -0700, Badhri Jagan Sridharan wrote:
+> Allow chip level drivers to retrieve reference to tcpm_port.
 > 
 > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+
+I'm still wondering if this is the right way. Ideally the glue drivers
+should not need to deal with the tcpm_port at all directly, only with
+the tcpci handle they have. But FWIW:
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
-> Changes since v1:
->  - Changing patch version to v6 to fix version number confusion.
+> Change since v1:
+> - Changing patch version to v6 to fix version number confusion.
 > ---
->  drivers/usb/typec/tcpm/tcpci.c | 37 +++++++++++++++++++++++++++++++++-
->  1 file changed, 36 insertions(+), 1 deletion(-)
+>  drivers/usb/typec/tcpm/tcpci.c | 6 ++++++
+>  drivers/usb/typec/tcpm/tcpci.h | 2 ++
+>  2 files changed, 8 insertions(+)
 > 
 > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 7d36d5e2d3f7..7d9491ba62fb 100644
+> index 7d9491ba62fb..b960fe5a0f28 100644
 > --- a/drivers/usb/typec/tcpm/tcpci.c
 > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -191,12 +191,47 @@ static int tcpci_set_polarity(struct tcpc_dev *tcpc,
->  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
->  	unsigned int reg;
->  	int ret;
-> +	enum typec_cc_status cc1, cc2;
+> @@ -38,6 +38,12 @@ struct tcpci_chip {
+>  	struct tcpci_data data;
+>  };
 >  
-> -	/* Keep the disconnect cc line open */
-> +	/* Obtain Rp setting from role control */
->  	ret = regmap_read(tcpci->regmap, TCPC_ROLE_CTRL, &reg);
->  	if (ret < 0)
->  		return ret;
+> +struct tcpm_port *tcpci_get_tcpm_port(struct tcpci *tcpci)
+> +{
+> +	return tcpci->port;
+> +}
+> +EXPORT_SYMBOL_GPL(tcpci_get_tcpm_port);
+> +
+>  static inline struct tcpci *tcpc_to_tcpci(struct tcpc_dev *tcpc)
+>  {
+>  	return container_of(tcpc, struct tcpci, tcpc);
+> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
+> index cf9d8b63adcb..04c49a0b0368 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.h
+> +++ b/drivers/usb/typec/tcpm/tcpci.h
+> @@ -150,4 +150,6 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
+>  void tcpci_unregister_port(struct tcpci *tcpci);
+>  irqreturn_t tcpci_irq(struct tcpci *tcpci);
 >  
-> +	ret = tcpci_get_cc(tcpc, &cc1, &cc2);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/*
-> +	 * When port has drp toggling enabled, ROLE_CONTROL would only have the initial
-> +	 * terminations for the toggling and does not indicate the final cc
-> +	 * terminations when ConnectionResult is 0 i.e. drp toggling stops and
-> +	 * the connection is resolbed. Infer port role from TCPC_CC_STATUS based on the
-> +	 * terminations seen. The port role is then used to set the cc terminations.
-> +	 */
-> +	if (reg & TCPC_ROLE_CTRL_DRP) {
-> +		/* Disable DRP for the OPEN setting to take effect */
-> +		reg = reg & ~TCPC_ROLE_CTRL_DRP;
-> +
-> +		if (polarity == TYPEC_POLARITY_CC2) {
-> +			reg &= ~(TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT);
-> +			/* Local port is source */
-> +			if (cc2 == TYPEC_CC_RD)
-> +				/* Role control would have the Rp setting when DRP was enabled */
-> +				reg |= TCPC_ROLE_CTRL_CC_RP << TCPC_ROLE_CTRL_CC2_SHIFT;
-> +			else
-> +				reg |= TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC2_SHIFT;
-> +		} else {
-> +			reg &= ~(TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT);
-> +			/* Local port is source */
-> +			if (cc1 == TYPEC_CC_RD)
-> +				/* Role control would have the Rp setting when DRP was enabled */
-> +				reg |= TCPC_ROLE_CTRL_CC_RP << TCPC_ROLE_CTRL_CC1_SHIFT;
-> +			else
-> +				reg |= TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC1_SHIFT;
-> +		}
-> +	}
-> +
->  	if (polarity == TYPEC_POLARITY_CC2)
->  		reg |= TCPC_ROLE_CTRL_CC_OPEN << TCPC_ROLE_CTRL_CC1_SHIFT;
->  	else
+> +struct tcpm_port;
+> +struct tcpm_port *tcpci_get_tcpm_port(struct tcpci *tcpci);
+>  #endif /* __LINUX_USB_TCPCI_H */
 > -- 
 > 2.28.0.402.g5ffc5be6b7-goog
 
