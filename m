@@ -2,93 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7890926A196
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 11:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4FF26A1D9
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 11:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgIOJGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 05:06:41 -0400
-Received: from mga03.intel.com ([134.134.136.65]:35019 "EHLO mga03.intel.com"
+        id S1726214AbgIOJOo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 05:14:44 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33188 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726269AbgIOJGe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Sep 2020 05:06:34 -0400
-IronPort-SDR: RZD/fFWTjvWyaYIJCtNMDzEdl4brC47SlQmB8DC403Dr6vIA5u/jFu0AFJj/JoHYnbKKWwa4bw
- iw1Jurkpfvfw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="159272034"
-X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
-   d="scan'208";a="159272034"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 02:06:31 -0700
-IronPort-SDR: JN6muYTQqB3wm3kCXqk1xsORqKL94poqyPOQLwwV9SSOFBG1M/RLedvNq9ruyR1KSefDfAWvPJ
- brvH/uTc728w==
-X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
-   d="scan'208";a="482690707"
-Received: from emoriart-mobl.ger.corp.intel.com (HELO localhost) ([10.252.7.208])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 02:06:16 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        oss-drivers@netronome.com, nouveau@lists.freedesktop.org,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
-        dm-devel@redhat.com, linux-mtd@lists.infradead.org,
-        linux-i2c@vger.kernel.org, sparclinux@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-rtc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-serial@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Kees Cook <kees.cook@canonical.com>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-sctp@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org,
-        storagedev@microchip.com, ceph-devel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org,
-        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [Intel-gfx] [trivial PATCH] treewide: Convert switch/case fallthrough; to break;
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-Date:   Tue, 15 Sep 2020 12:06:21 +0300
-Message-ID: <87d02nxvci.fsf@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1726208AbgIOJOn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Sep 2020 05:14:43 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 5D98AACB7;
+        Tue, 15 Sep 2020 09:14:57 +0000 (UTC)
+Message-ID: <1600161279.2424.5.camel@suse.com>
+Subject: Re: [RFC 0/5] fix races in CDC-WDM
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     bjorn@mork.no, linux-usb@vger.kernel.org
+Date:   Tue, 15 Sep 2020 11:14:39 +0200
+In-Reply-To: <4f285044-aae9-c3be-23ba-90790cd624f1@i-love.sakura.ne.jp>
+References: <20200812132034.14363-1-oneukum@suse.com>
+         <ee0af733-903f-8e8f-8027-b5490a37032f@i-love.sakura.ne.jp>
+         <1599728957.10822.9.camel@suse.com>
+         <4f285044-aae9-c3be-23ba-90790cd624f1@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 09 Sep 2020, Joe Perches <joe@perches.com> wrote:
-> diff --git a/drivers/gpu/drm/i915/display/intel_sprite.c b/drivers/gpu/drm/i915/display/intel_sprite.c
-> index 5ac0dbf0e03d..35ac539cc2b1 100644
-> --- a/drivers/gpu/drm/i915/display/intel_sprite.c
-> +++ b/drivers/gpu/drm/i915/display/intel_sprite.c
-> @@ -2861,7 +2861,7 @@ static bool gen12_plane_format_mod_supported(struct drm_plane *_plane,
->  	case I915_FORMAT_MOD_Y_TILED_GEN12_MC_CCS:
->  		if (!gen12_plane_supports_mc_ccs(dev_priv, plane->id))
->  			return false;
-> -		fallthrough;
-> +		break;
->  	case DRM_FORMAT_MOD_LINEAR:
->  	case I915_FORMAT_MOD_X_TILED:
->  	case I915_FORMAT_MOD_Y_TILED:
+Am Donnerstag, den 10.09.2020, 19:01 +0900 schrieb Tetsuo Handa:
+> On 2020/09/10 18:09, Oliver Neukum wrote:
+> > > Does it make sense to wait for response of someone else's usb_submit_urb() when
+> > > someone is calling close(), for there is no guarantee that failure notice received
+> > > via wdm_flush() via some file descriptor corresponds to usb_submit_urb() request from
+> > > wdm_write() call from that file descriptor?
+> > 
+> > Well, user space may do multithreading. Whether it makes sense is
+> > another question. We just need to return results confirming to the
+> > standards. You noticed bugs. I think the next version will fix them.
+> 
+> My question is how do you handle if App1 and App2 (not multithreading but
+> multiprocessing) shares the "desc" ? Unless
 
-Acked-by: Jani Nikula <jani.nikula@intel.com>
+Well, device locking is a function of user space. This is Unix. If you
+have two uncoordinated writers to a device, you cannot expect sensible
+results. You can expect that the driver does not hang, of course.
 
-for merging via whichever tree seems best.
+> > > In patch "[RFC 3/5] CDC-WDM: making flush() interruptible", it is legal to return -EINTR
+> > >  from close(). But I think that returning -EINTR from close() is not recommended because
+> > > it can confuse multithreaded application (retrying close() upon -EINTR is not safe).
+> > 
+> > Well, but what is the alternative? Should we ignore signals?
+> > 
+> 
+> we return the error from write() request (i.e. give up trying to report errors from
+> close() event), we can't pass results to the intended recipients.
 
-BR,
-Jani.
+That means
 
+* harming the single threaded for the sake of the few multithreaded
+* it would not work for O_NONBLOCK
+* if you use a device from multiple threads or tasks, locking is your
+problem
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Is there something we can do in flush()?
+
+	Regards
+		Oliver
+
