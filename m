@@ -2,230 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 064D126B827
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 02:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1776726B820
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 02:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727173AbgIPAhW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 20:37:22 -0400
-Received: from mga18.intel.com ([134.134.136.126]:62772 "EHLO mga18.intel.com"
+        id S1726661AbgIPAgw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 20:36:52 -0400
+Received: from mga03.intel.com ([134.134.136.65]:58943 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726554AbgIONYC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Sep 2020 09:24:02 -0400
-IronPort-SDR: 91aTZ9OSQwXV3vOOzbVkkVzUpg+iAaBPCRNScTC7FuWa7jokieqfEf/BOuTc6yVCkX5kQFqxp4
- C7VGizxxEKrw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="146997036"
+        id S1726501AbgIONY7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Sep 2020 09:24:59 -0400
+IronPort-SDR: +GP10s1nqvmRHkLPvpFfojJDFCICASCtxyx9KzkncrgXDGwQlPKkC1H3RGjaaRBSPadP/AcMFP
+ TzC/F9NXhciw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="159301984"
 X-IronPort-AV: E=Sophos;i="5.76,430,1592895600"; 
-   d="scan'208";a="146997036"
+   d="scan'208";a="159301984"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 06:20:09 -0700
-IronPort-SDR: Isx70hkPNJ0JgqVtz320eNI766rbex8guIQzHolgCfFR6Ew1suJGe6HoW1cDHbkX3lSf7TWEEy
- QuwbfpaPO4zA==
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 06:23:52 -0700
+IronPort-SDR: p576YaDPTEkIONnXRQvNV5bD7KIIi9w8jyN2kfHe8J7ysqAN2At9lvoUun6WQRAPyp+5Jn/4UU
+ V9qtYEwtX6Gg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,430,1592895600"; 
-   d="scan'208";a="409199755"
+   d="scan'208";a="409200332"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 15 Sep 2020 06:20:07 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Sep 2020 16:20:06 +0300
-Date:   Tue, 15 Sep 2020 16:20:06 +0300
+  by fmsmga001.fm.intel.com with SMTP; 15 Sep 2020 06:23:49 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Sep 2020 16:23:49 +0300
+Date:   Tue, 15 Sep 2020 16:23:49 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Badhri Jagan Sridharan <badhri@google.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 09/14] usb: typec: tcpm: Add support for Sink Fast
- Role SWAP(FRS)
-Message-ID: <20200915132006.GH1139641@kuha.fi.intel.com>
+Subject: Re: [PATCH v6 10/14] usb: typec: tcpci: Implement callbacks for FRS
+Message-ID: <20200915132349.GI1139641@kuha.fi.intel.com>
 References: <20200901025927.3596190-1-badhri@google.com>
- <20200901025927.3596190-10-badhri@google.com>
+ <20200901025927.3596190-11-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200901025927.3596190-10-badhri@google.com>
+In-Reply-To: <20200901025927.3596190-11-badhri@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 31, 2020 at 07:59:22PM -0700, Badhri Jagan Sridharan wrote:
-> PD 3.0 spec defines a new mechanism for power role swap called
-> Fast role swap. This change enables TCPM to support FRS when
-> acting as sink.
+On Mon, Aug 31, 2020 at 07:59:23PM -0700, Badhri Jagan Sridharan wrote:
+> Implement tcpc.enable_frs to enable TCPC to receive
+> Fast role swap signal.
 > 
-> Once the explicit contract is negotiated, sink port is
-> expected to query the source port for sink caps to
-> determine whether the source is FRS capable.
-> Bits 23 & 24 of fixed pdo of the sink caps from the source, when
-> set, indicates the current needed by the source when fast role
-> swap is in progress(Implicit contract phasae). 0 indicates that
-> the source does not support Fast Role Swap.
-> 
-> Upon receiving the FRS signal from the source,
-> TCPC(TCPM_FRS_EVENT) informs TCPM to start the Fast role swap sequence.
-> 
-> 1. TCPM sends FRS PD message: FR_SWAP_SEND
-> 2. If response is not received within the expiry of
->    SenderResponseTimer, Error recovery is triggered.:
->    FR_SWAP_SEND_TIMEOUT
-> 3. Upon receipt of the accept message, TCPM waits for
->    PSSourceOffTimer for PS_READY message from the partner:
->    FR_SWAP_SNK_SRC_NEW_SINK_READY.
-> 
-> TCPC is expected to autonomously turn on vbus once the FRS
-> signal is received and vbus voltage falls below vsafe5v within
-> tSrcFrSwap. This is different from traditional power role swap
-> where the vbus sourcing is turned on by TCPM.
-> 
-> 4. By this time, TCPC most likely would have started to
->    source vbus, TCPM waits for tSrcFrSwap to see  if the
->    lower level TCPC driver signals TCPM_SOURCING_VBUS event:
->    FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED.
-> 5. When TCPC signals sourcing vbus, TCPM sends PS_READY msg and
->    changes the CC pin from Rd to Rp. This is the end of fast
->    role swap sequence and TCPM initiates the sequnce to negotiate
->    explicit contract by transitioning into SRC_STARTUP after
->    SwapSrcStart.
-> 
-> The code is written based on the sequence described in "Figure 8-107:
-> Dual-role Port in Sink to Source Fast Role Swap State Diagram" of
-> USB Power Delivery Specification Revision 3.0, Version 1.2.
+> Additionally set the sink disconnect threshold to 4v
+> to prevent disconnect during Fast Role swap.
 > 
 > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+
+One nitpick below. Otherwise, FWIW:
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
 > Changes since v1:
 > - Changing patch version to v6 to fix version number confusion.
-> - Rebased on top of usb-next and resolved conflicts due to the below
->   changes:
->   3ed8e1c2ac99 usb: typec: tcpm: Migrate workqueue to RT priority for processing events
->   6bbe2a90a0bb usb: typec: tcpm: During PR_SWAP, source caps should be sent only after tSwapSourceStart
-> - enable_frs sequence is now run as part of the same kthread that runs
->   the state machines.
-> - Fixed the implicit fallthrough warning in the switch case for
->   FR_SWAP_CANCEL case.
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 217 +++++++++++++++++++++++++++++++++-
->  include/linux/usb/pd.h        |  19 +--
->  include/linux/usb/tcpm.h      |   8 +-
->  include/linux/usb/typec.h     |  13 ++
->  4 files changed, 245 insertions(+), 12 deletions(-)
+>  drivers/usb/typec/tcpm/tcpci.c | 17 +++++++++++++++++
+>  drivers/usb/typec/tcpm/tcpci.h |  8 ++++++++
+>  2 files changed, 25 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 92806547f485..083e7af107b2 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -106,6 +106,13 @@
->  	S(VCONN_SWAP_TURN_ON_VCONN),		\
->  	S(VCONN_SWAP_TURN_OFF_VCONN),		\
->  						\
-> +	S(FR_SWAP_SEND),			\
-> +	S(FR_SWAP_SEND_TIMEOUT),		\
-> +	S(FR_SWAP_SNK_SRC_TRANSITION_TO_OFF),			\
-> +	S(FR_SWAP_SNK_SRC_NEW_SINK_READY),		\
-> +	S(FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED),	\
-> +	S(FR_SWAP_CANCEL),			\
-> +						\
->  	S(SNK_TRY),				\
->  	S(SNK_TRY_WAIT),			\
->  	S(SNK_TRY_WAIT_DEBOUNCE),               \
-> @@ -127,6 +134,9 @@
->  	S(GET_PPS_STATUS_SEND),			\
->  	S(GET_PPS_STATUS_SEND_TIMEOUT),		\
->  						\
-> +	S(GET_SINK_CAP),			\
-> +	S(GET_SINK_CAP_TIMEOUT),		\
-> +						\
->  	S(ERROR_RECOVERY),			\
->  	S(PORT_RESET),				\
->  	S(PORT_RESET_WAIT_OFF)
-> @@ -175,6 +185,8 @@ enum adev_actions {
->  #define TCPM_CC_EVENT		BIT(0)
->  #define TCPM_VBUS_EVENT		BIT(1)
->  #define TCPM_RESET_EVENT	BIT(2)
-> +#define TCPM_FRS_EVENT		BIT(3)
-> +#define TCPM_SOURCING_VBUS	BIT(4)
->  
->  #define LOG_BUFFER_ENTRIES	1024
->  #define LOG_BUFFER_ENTRY_SIZE	128
-> @@ -184,6 +196,8 @@ enum adev_actions {
->  #define SVID_DISCOVERY_MAX	16
->  #define ALTMODE_DISCOVERY_MAX	(SVID_DISCOVERY_MAX * MODE_DISCOVERY_MAX)
->  
-> +#define GET_SINK_CAP_RETRY_MS	100
-> +
->  struct pd_mode_data {
->  	int svid_index;		/* current SVID index		*/
->  	int nsvids;
-> @@ -261,6 +275,8 @@ struct tcpm_port {
->  	struct kthread_work state_machine;
->  	struct hrtimer vdm_state_machine_timer;
->  	struct kthread_work vdm_state_machine;
-> +	struct hrtimer enable_frs_timer;
-> +	struct kthread_work enable_frs;
->  	bool state_machine_running;
->  
->  	struct completion tx_complete;
-> @@ -335,6 +351,12 @@ struct tcpm_port {
->  	/* port belongs to a self powered device */
->  	bool self_powered;
->  
-> +	/* FRS */
-> +	enum frs_typec_current frs_current;
-
-Do you use this member anywhere?
-
-I can't see anywhere it being used, but I think you should use it
-instead the one in port_caps.
-
-> +	/* Sink caps have been queried */
-> +	bool sink_cap_done;
-> +
->  #ifdef CONFIG_DEBUG_FS
->  	struct dentry *dentry;
->  	struct mutex logbuffer_lock;	/* log buffer access lock */
-> @@ -940,6 +962,16 @@ static void mod_vdm_delayed_work(struct tcpm_port *port, unsigned int delay_ms)
->  	}
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index d6a6fac82d48..f9f0af64da5f 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -268,6 +268,22 @@ static int tcpci_set_vconn(struct tcpc_dev *tcpc, bool enable)
+>  				enable ? TCPC_POWER_CTRL_VCONN_ENABLE : 0);
 >  }
-
-<snip>
-
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index 9cb1bec94b71..2ec7451a14ab 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -204,6 +204,18 @@ struct typec_operations {
->  			     enum typec_port_type type);
->  };
 >  
-> +/*
-> + * Initial current capability of the new source when vSafe5V is applied during PD3.0 Fast Role Swap.
-> + * Based on "Table 6-14 Fixed Supply PDO - Sink" of "USB Power Delivery Specification Revision 3.0,
-> + * Version 1.2"
-> + */
-> +enum frs_typec_current {
-> +	FRS_NOT_SUPPORTED,
-> +	FRS_DEFAULT_POWER,
-> +	FRS_5V_1P5A,
-> +	FRS_5V_3A,
-> +};
+> +static int tcpci_enable_frs(struct tcpc_dev *dev, bool enable)
+> +{
+> +	struct tcpci *tcpci = tcpc_to_tcpci(dev);
+> +	int ret;
 > +
->  /*
->   * struct typec_capability - USB Type-C Port Capabilities
->   * @type: Supported power role of the port
-> @@ -226,6 +238,7 @@ struct typec_capability {
->  	int			prefer_role;
->  	enum typec_accessory	accessory[TYPEC_MAX_ACCESSORY];
->  	unsigned int		orientation_aware:1;
-> +	enum frs_typec_current	frs_current;
+> +	/* To prevent disconnect during FRS, set disconnect threshold to 3.5V */
+> +	ret = tcpci_write16(tcpci, TCPC_VBUS_SINK_DISCONNECT_THRESH, enable ? 0 : 0x8c);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = regmap_update_bits(tcpci->regmap, TCPC_POWER_CTRL, TCPC_FAST_ROLE_SWAP_EN, enable ?
+> +				 TCPC_FAST_ROLE_SWAP_EN : 0);
 
-So forget about this. We can add it here if/when there is another
-driver that needs that. You already have that member in struct
-tcpm_port, so just use that for now.
+	ret = regmap_update_bits(tcpci->regmap, TCPC_POWER_CTRL, TCPC_FAST_ROLE_SWAP_EN,
+                                 enable ? TCPC_FAST_ROLE_SWAP_EN : 0);
 
-And you can also introduce enum frs_typec_current in tcpm.c for now.
-
->  	struct fwnode_handle	*fwnode;
->  	void			*driver_data;
+> +
+> +	return ret;
+> +}
+> +
+>  static int tcpci_set_bist_data(struct tcpc_dev *tcpc, bool enable)
+>  {
+>  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
+> @@ -611,6 +627,7 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
+>  	tcpci->tcpc.set_roles = tcpci_set_roles;
+>  	tcpci->tcpc.pd_transmit = tcpci_pd_transmit;
+>  	tcpci->tcpc.set_bist_data = tcpci_set_bist_data;
+> +	tcpci->tcpc.enable_frs = tcpci_enable_frs;
+>  
+>  	err = tcpci_parse_config(tcpci);
+>  	if (err < 0)
+> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
+> index 82f021a82456..5ef07a56d67a 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.h
+> +++ b/drivers/usb/typec/tcpm/tcpci.h
+> @@ -16,6 +16,7 @@
+>  #define TCPC_PD_INT_REV			0xa
+>  
+>  #define TCPC_ALERT			0x10
+> +#define TCPC_ALERT_EXTND		BIT(14)
+>  #define TCPC_ALERT_EXTENDED_STATUS	BIT(13)
+>  #define TCPC_ALERT_VBUS_DISCNCT		BIT(11)
+>  #define TCPC_ALERT_RX_BUF_OVF		BIT(10)
+> @@ -37,6 +38,9 @@
+>  #define TCPC_EXTENDED_STATUS_MASK		0x16
+>  #define TCPC_EXTENDED_STATUS_MASK_VSAFE0V	BIT(0)
+>  
+> +#define TCPC_ALERT_EXTENDED_MASK	0x17
+> +#define TCPC_SINK_FAST_ROLE_SWAP	BIT(0)
+> +
+>  #define TCPC_CONFIG_STD_OUTPUT		0x18
+>  
+>  #define TCPC_TCPC_CTRL			0x19
+> @@ -63,6 +67,7 @@
+>  
+>  #define TCPC_POWER_CTRL			0x1c
+>  #define TCPC_POWER_CTRL_VCONN_ENABLE	BIT(0)
+> +#define TCPC_FAST_ROLE_SWAP_EN		BIT(7)
+>  
+>  #define TCPC_CC_STATUS			0x1d
+>  #define TCPC_CC_STATUS_TOGGLING		BIT(5)
+> @@ -74,11 +79,14 @@
+>  
+>  #define TCPC_POWER_STATUS		0x1e
+>  #define TCPC_POWER_STATUS_UNINIT	BIT(6)
+> +#define TCPC_POWER_STATUS_SOURCING_VBUS	BIT(4)
+>  #define TCPC_POWER_STATUS_VBUS_DET	BIT(3)
+>  #define TCPC_POWER_STATUS_VBUS_PRES	BIT(2)
+>  
+>  #define TCPC_FAULT_STATUS		0x1f
+>  
+> +#define TCPC_ALERT_EXTENDED		0x21
+> +
+>  #define TCPC_COMMAND			0x23
+>  #define TCPC_CMD_WAKE_I2C		0x11
+>  #define TCPC_CMD_DISABLE_VBUS_DETECT	0x22
 > -- 
 > 2.28.0.402.g5ffc5be6b7-goog
 
