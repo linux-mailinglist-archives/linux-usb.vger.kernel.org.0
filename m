@@ -2,142 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6343C26AA40
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 19:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7176326ABBE
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 20:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727697AbgIORLb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 13:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727835AbgIORKu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 13:10:50 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05E5C061355
-        for <linux-usb@vger.kernel.org>; Tue, 15 Sep 2020 09:58:24 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id e14so2300262vsa.9
-        for <linux-usb@vger.kernel.org>; Tue, 15 Sep 2020 09:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VOZJDXmk4I7sBQkBNkbqiC999QN+5QxW+u+FQGNFV0A=;
-        b=e63A8UNiaTNJGTTvmfggSIGCDE9Qr29ZZD6JllO168qvrxrxA3DUc1Nc0Aj64EKijO
-         Txj7oJYWDhWJsEevrKKrmbyk5rdsc34U+SxKZ5QUiont8CyFcs3xM360KOTJ8ULfk9OY
-         YEz49gC2k6VoBo85MxV1gabmZfVlicl5IiEV4VD6hFQOpw8BTV8zcn5j3akI0pQ9z30i
-         BZWkl8m6eDs47dLDELpUGMKc+pKg3BL8DjV62J8OW6zpRnEzMT891r2wzsXZgvekwgbe
-         VIdQ8pgY6bgxwrEU6dhpJJxf+mjUd5WpZdwwKWjuyQ3AIqQsBeVwjKEkpKm6wnlhTvx/
-         Z9/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VOZJDXmk4I7sBQkBNkbqiC999QN+5QxW+u+FQGNFV0A=;
-        b=ExA9JMKZpDJLYIUYqmKc+2TKyjQCuswEJSCCOmYqSrvHxSx/ooCfrmXOa2Y3GKtPiI
-         ljD+gqCEpUlVXV9Iir5bMGPiXrDO4gt8onJokZtVIs+veLgR9KnF+DpX8Gnfwai+b38p
-         tQdpW6UXfLmc41EyETd9a5zF1Tje4JbUNCRCR/XIy4q1oZb16d/z0NxLK10mRy5xmxNa
-         MTDF5b9jPehn4imNxFOS/HLiRj23x9SFaKfYnOKVqxGAv7dVp602OcC60OXKMalV5AlE
-         MZBp+keAZOUEijj/L35yIGZqPd842qC6EMZi4qj3ldnkefUk8yrCDJKYe54zZL/fVGsz
-         vxEA==
-X-Gm-Message-State: AOAM530yBhsgqVn2moMbjsOcq5bcOmKFf/mAieS84r0atB5ZCr4Al3Mr
-        xvC9bgUrCiffz6xBNCeyAnC0dIwDv4WhcQfEM7kyHg==
-X-Google-Smtp-Source: ABdhPJysYGKFNHZgqc12O3FvnUz67CSwz/ASv1bmn+v0ghVePdGTd1m+Au6nssZDFksIeluLQWCCUm7G4yZU6Dv7DF0=
-X-Received: by 2002:a67:ee1a:: with SMTP id f26mr2206910vsp.48.1600189102861;
- Tue, 15 Sep 2020 09:58:22 -0700 (PDT)
+        id S1727982AbgIOSYs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 14:24:48 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:36603 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727804AbgIOSYg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 14:24:36 -0400
+Received: (qmail 1012504 invoked by uid 1000); 15 Sep 2020 14:24:14 -0400
+Date:   Tue, 15 Sep 2020 14:24:14 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Patrik Nilsson <nipatriknilsson@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Subject: Re: high speed data to usb disk makes the kernel think that is has
+ been unmounted
+Message-ID: <20200915182414.GB1010655@rowland.harvard.edu>
+References: <20200811175655.GB828356@kroah.com>
+ <47a5804c-835a-f1a2-abce-50b3531f2556@gmail.com>
+ <20200811193150.GA344152@rowland.harvard.edu>
+ <ef2937d6-f8a8-fbc6-decd-eeb4af94e863@gmail.com>
+ <20200812061451.GE1299081@kroah.com>
+ <95be674d-ee98-b904-6856-2f662ac7838f@gmail.com>
+ <20200818085502.GB28036@kroah.com>
+ <83a5be3e-9f93-e601-5161-cbb5d1957c5a@gmail.com>
+ <20200818183420.GB152667@rowland.harvard.edu>
+ <0975cb43-5520-543c-987c-57de5e7b258b@gmail.com>
 MIME-Version: 1.0
-References: <20200901025927.3596190-1-badhri@google.com> <20200915120927.GA1139641@kuha.fi.intel.com>
-In-Reply-To: <20200915120927.GA1139641@kuha.fi.intel.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Tue, 15 Sep 2020 09:57:46 -0700
-Message-ID: <CAPTae5KUMmSGJLj8K8UbGwAwyZyK6YCEYQotOKW24sxRwUrSTg@mail.gmail.com>
-Subject: Re: [PATCH v6 00/14] TCPM support for FRS and AutoDischarge Disconnect
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0975cb43-5520-543c-987c-57de5e7b258b@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 5:09 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Mon, Aug 31, 2020 at 07:59:13PM -0700, Badhri Jagan Sridharan wrote:
-> > First of all apologies for mixing up the patch version as noted by
-> > Heikki and Greg. All of them were v1's but since I was manually adding
-> > the version numbers I mixed them up. Using the --reroll-count option
-> > now. Updating the patch version to v6 (highest version number in the
-> > previous patchset + 1) to avoid confusion.
->
-> If this is v6, then where are v2 - v5? And what changed? Why didn't
-> you just make this v2?
+On Tue, Sep 15, 2020 at 06:43:49PM +0200, Patrik Nilsson wrote:
+> Hi Alan,
+> 
+> Unfortunately the options you suggested didn't help.
+> 
+> The patch below works and is tested with Ubuntu kernel 5.4.0.47.50.
+> 
+> I have stress tested the usb system. To the USB is now seven mechanical hard
+> disks and two ssd disks connected. Six processes are at the same time
+> writing random data to the disks. One of them is to the ssd disk I couldn't
+> write data to before without it failed. Also the other usb-ssd disk is my
+> root partition.
+> 
+> Before I applied the patch, my root partition sometimes failed to be kept
+> mounted. Now I have not had any crashes.
+> 
+> This is a quick fix for hard disks, but working. It continued to work when I
+> started three virtualbox guests and let them also do work. The guests' hard
+> disks is on my usb-root partition.
+> 
+> It doesn't work if I also use my usb2ethernet adapter (ID 2001:4a00 D-Link
+> Corp.), although my root partition and two randomize tests survived. Maybe a
+> much larger timeout in this case will help? But this I don't find as a good
+> solution.
+> 
+> The behavior is the same on the other (much slower) computer with a
+> different usb hub. I have also tested it with exactly the same setup as
+> earlier, with no mechanical hard disks, and it works with the patch and not
+> without it.
 
-Frankly, I did not know how to fix the version numbers that I messed
-up in the original
-patchset. I had, by mistake, versioned the patch5 in the series v5 in
-the original patchset.
-So I thought I will consistently call them V6 and update all the patches
-to version v6 to avoid confusion. To confirm there is no v2-v5 for most of them.
-I have also mentioned the actual code changes and versioning changes in the
-change history for each patch. Hopefully that mitigates the confusion.
-Again apologies for messing up the versioning in the original patchset !
-I have started to double check the patch version numbers before sending.
+Is there any way you can capture a usbmon trace that shows the problem?
 
-Thanks,
-Badhri
+> Any suggestion on how to solve this? In a good way.
+> 
+> Best regards,
+> Patrik
+> 
+> ---start of diff---
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 5b768b80d1ee..3c550934815c 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -105,7 +105,7 @@ MODULE_PARM_DESC(use_both_schemes,
+>  DECLARE_RWSEM(ehci_cf_port_reset_rwsem);
+>  EXPORT_SYMBOL_GPL(ehci_cf_port_reset_rwsem);
+> 
+> -#define HUB_DEBOUNCE_TIMEOUT    2000
+> +#define HUB_DEBOUNCE_TIMEOUT    10000
+>  #define HUB_DEBOUNCE_STEP      25
+>  #define HUB_DEBOUNCE_STABLE     100
+> 
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index 20c555db4621..e64d441bb78f 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -1841,8 +1841,8 @@ extern int usb_set_configuration(struct usb_device
+> *dev, int configuration);
+>   * USB identifies 5 second timeouts, maybe more in a few cases, and a few
+>   * slow devices (like some MGE Ellipse UPSes) actually push that limit.
+>   */
+> -#define USB_CTRL_GET_TIMEOUT    5000
+> -#define USB_CTRL_SET_TIMEOUT    5000
+> +#define USB_CTRL_GET_TIMEOUT    10000
+> +#define USB_CTRL_SET_TIMEOUT    10000
 
->
->
-> > I also rebased on to off of the recent usb-next tip:
-> > 5fedf0d295d3 (origin/usb-testing, origin/usb-next) Merge 5.9-rc3 into usb-next
-> > Which had the following changes causing merge conflict:
-> > 3ed8e1c2ac99 usb: typec: tcpm: Migrate workqueue to RT priority for processing events
-> > 6bbe2a90a0bb usb: typec: tcpm: During PR_SWAP, source caps should be sent only after tSwapSourceStart
-> >
-> > Addressed comments from Heikki and Randy which have described in the
-> > individual commit's change history as well.
-> >
-> > Badhri Jagan Sridharan (14):
-> >   usb: typec: tcpci: Add register definitions to tcpci
-> >   usb: typec: tcpci: Add support when hidden tx registers are
-> >     inaccessible
-> >   usb: typec: tcpci: update ROLE_CONTROL for DRP
-> >   usb: typec: tcpci: Add a getter method to retrieve tcpm_port reference
-> >   usb: typec: tcpci: Add set_vbus tcpci callback
-> >   dt-bindings: usb: Maxim type-c controller device tree binding document
-> >   usb: typec: tcpci_maxim: Chip level TCPC driver
-> >   dt-bindings: connector: Add property to set initial current cap for
-> >     FRS
-> >   usb: typec: tcpm: Add support for Sink Fast Role SWAP(FRS)
-> >   usb: typec: tcpci: Implement callbacks for FRS
-> >   usb: typec: tcpci_maxim: Add support for Sink FRS
-> >   usb: typec: tcpm: Implement enabling Auto Discharge disconnect support
-> >   usb: typec: tcpci: Implement Auto discharge disconnect callbacks
-> >   usb: typec: tcpci_maxim: Implemnent set_auto_vbus_discharge_threshold
-> >
-> >  .../bindings/connector/usb-connector.txt      | 128 ++++
-> >  .../devicetree/bindings/usb/maxim,tcpci.txt   |  44 ++
-> >  drivers/usb/typec/tcpm/Kconfig                |   5 +
-> >  drivers/usb/typec/tcpm/Makefile               |  13 +-
-> >  drivers/usb/typec/tcpm/tcpci.c                | 146 ++++-
-> >  drivers/usb/typec/tcpm/tcpci.h                |  43 ++
-> >  drivers/usb/typec/tcpm/tcpci_maxim.c          | 564 ++++++++++++++++++
-> >  drivers/usb/typec/tcpm/tcpm.c                 | 291 ++++++++-
-> >  include/dt-bindings/usb/pd.h                  |  10 +
-> >  include/linux/usb/pd.h                        |  19 +-
-> >  include/linux/usb/tcpm.h                      |  24 +-
-> >  include/linux/usb/typec.h                     |  13 +
-> >  12 files changed, 1266 insertions(+), 34 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/connector/usb-connector.txt
-> >  create mode 100644 Documentation/devicetree/bindings/usb/maxim,tcpci.txt
-> >  create mode 100644 drivers/usb/typec/tcpm/tcpci_maxim.c
-> >
-> >
-> > base-commit: 5fedf0d295d3ef69fd85fdee4cb68fd3756b54c2
-> > --
-> > 2.28.0.402.g5ffc5be6b7-goog
->
-> --
-> heikki
+What happens if you leave these two lines unchanged and increase only 
+the HUB_DEBOUNCE_TIMEOUT value?
+
+Alan Stern
