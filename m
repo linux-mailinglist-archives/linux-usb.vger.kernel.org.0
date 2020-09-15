@@ -2,92 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C1C26B398
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 01:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EDC26B386
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 01:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727005AbgIOOxb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 10:53:31 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:44849 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727208AbgIOOxA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 10:53:00 -0400
-Received: (qmail 1004253 invoked by uid 1000); 15 Sep 2020 10:52:58 -0400
-Date:   Tue, 15 Sep 2020 10:52:58 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andrew_gabbasov@mentor.com,
-        Baxter Jim <jim_baxter@mentor.com>,
-        "Natsume, Wataru \(ADITJ/SWG\)" <wnatsume@jp.adit-jv.com>,
-        "Nishiguchi, Naohiro \(ADITJ/SWG\)" <nnishiguchi@jp.adit-jv.com>,
-        =?utf-8?B?5rWF6YeO5oGt5Y+y?= <yasano@jp.adit-jv.com>,
-        kernel test robot <rong.a.chen@intel.com>,
-        yasushi asano <yazzep@gmail.com>,
-        Martin Mueller <Martin.Mueller5@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v3] USB: hub.c: decrease the number of attempts of
- enumeration scheme
-Message-ID: <20200915145258.GC1002979@rowland.harvard.edu>
-References: <CAEt1Rjq+Fz85KU-aKO+boNE5yL7GiwdopmRd3-FxEL+mzEui-g@mail.gmail.com>
- <20200907155052.2450-1-yazzep@gmail.com>
- <20200907155052.2450-2-yazzep@gmail.com>
- <20200908190402.GA797206@rowland.harvard.edu>
- <CAEt1RjquJZzTctN6dNQSDbUZ9YG2FnEtzTZsoA3a9RtXHxwUmA@mail.gmail.com>
- <CAEt1RjpGcZ4T70tr83pmcD--PzAMboBkbv55qFcRfMz11ZUggw@mail.gmail.com>
- <20200911151228.GA883311@rowland.harvard.edu>
- <20200915094531.GA8046@lxhi-065.adit-jv.com>
- <20200915110111.GA269380@kroah.com>
+        id S1727337AbgIOXER (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 19:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727454AbgIOXDr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 19:03:47 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87888C06174A
+        for <linux-usb@vger.kernel.org>; Tue, 15 Sep 2020 16:03:47 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id q4so555418pjh.5
+        for <linux-usb@vger.kernel.org>; Tue, 15 Sep 2020 16:03:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Szj4HEGLJCAo0focZEdIAz4HSdQqUNWGrF8lTpz41tg=;
+        b=Al/ywHXkCLn66C3fB4LS0wK1RSE8K1XgfVUSsuH9bvAtw0RLdo2wBFXwerM1pAgULA
+         /VBg8L6Xm1vtYDF0bYsOMv2/j+akKykQ4U9gd6R66+jRn7mUdHj7ddSOoJ7JnzEd7qsH
+         ladfCPczQpkBnRc+aFmReIhIhDepPYqdxSZO4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Szj4HEGLJCAo0focZEdIAz4HSdQqUNWGrF8lTpz41tg=;
+        b=DoktLPVXRpd6h5NS4rkfUAVkMPR5SSa54qcRg/N8ykc0uqt9f4AY/XoACmjT4NtcOv
+         EREB+c2KPg9ol2WRN39kCSfbKdFsGNjtZuudn0eJHecrP7Y4Rl6d11Zi/m/yM/WNuV2c
+         md9NpcgBIUGscY/30tDSmQOQwCRHl/f5V0OmK/BQ96TjdJCkgto8cfMbUT0hdLikfpdq
+         0+suTgwAWhteOWQBsZ/Xe/DoMA3/78zs0nydY/jW7YTUvBzBfdAcaB6oDSEZOPrg8aib
+         k+YI+tCkkhK8IEn9NvBumz2i6u4AapBVqmb9Ox7eDzm0J7mg+uLlN1TMG/yBPfw3OetT
+         tAOw==
+X-Gm-Message-State: AOAM530yCgLeTlkxr6k+uhpDjYYJydev4N+qL7voeSvmooUqkOpjMWJh
+        1f2soAMHgo6zoluUaVvlPb7mwQ==
+X-Google-Smtp-Source: ABdhPJyN0uXuwQlv65uva/TdZOuxlc4iCI9S6l1Qqb7sv1C+xG4CJpZX6gyS9Wkm+edENuYvypjqmQ==
+X-Received: by 2002:a17:90a:b702:: with SMTP id l2mr1476282pjr.82.1600211027113;
+        Tue, 15 Sep 2020 16:03:47 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id a20sm14251840pfa.59.2020.09.15.16.03.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2020 16:03:46 -0700 (PDT)
+Date:   Tue, 15 Sep 2020 16:03:45 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH 2/2] USB: misc: Add onboard_usb_hub driver
+Message-ID: <20200915230345.GF2771744@google.com>
+References: <20200914112716.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20200914112716.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <20200915025426.GA17450@b29397-desktop>
+ <20200915050207.GF2022397@google.com>
+ <AM7PR04MB715735A8A102F3EC9041EA328B200@AM7PR04MB7157.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200915110111.GA269380@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <AM7PR04MB715735A8A102F3EC9041EA328B200@AM7PR04MB7157.eurprd04.prod.outlook.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 01:01:11PM +0200, Greg KH wrote:
-> On Tue, Sep 15, 2020 at 11:45:31AM +0200, Eugeniu Rosca wrote:
-> > Dear Alan,
-> > Dear Greg,
-> > 
-> > On Fri, Sep 11, 2020 at 11:12:28AM -0400, Alan Stern wrote:
-> > 
-> > > The thing is, I'm afraid that without these retry loops, some devices
-> > > will stop working.  If that happens, we will not be able to keep this
-> > > patch in place; we will just have to accept that we fail the PET test.
-> > > 
-> > > Alan Stern
-> > 
-> > Does this mean that Linux community leaves no choice but to ship a
-> > forked kernel (with no chance of alignment to upstream) for
-> > organizations which design embedded devices where USB plays a key
-> > role, hence requires passing the USB-IF Compliance Program [*]?
-> 
-> We are saying that if you ship such a kernel, we _KNOW_ that it will
-> fail to work in a number of known systems.  I doubt you want that to
-> happen if you care about shipping a device, right?
-> 
-> > Is there hope to give users a knob (build-time or run-time) which would
-> > enable the behavior expected and thoroughly described in compliance
-> > docs, particularly chapter "6.7.22 A-UUT Device No Response for
-> > connection timeout" of "USB On-The-Go and Embedded Host Automated
-> > Compliance Plan" [**]?
-> 
-> Given that the USB-IF has explicitly kicked-out the Linux community from
-> its specification work and orginization, I personally don't really care
-> what they say here.  If you are a member of the USB-IF, please work with
-> them to fix the test to reflect real-world systems and not an idealized
-> system.  Last I heard, they wanted nothing to do with Linux systems at
-> all :(
+Hi Peter,
 
-<irony>If the USB-IF were the final authority regarding USB devices, we 
-wouldn't have this problem in the first place.</irony> Every device 
-would respond properly to the very first port initialization attempt and 
-no retries would be needed.
+On Tue, Sep 15, 2020 at 07:05:38AM +0000, Peter Chen wrote:
+>   
+> > > > +	hub->cfg.power_off_in_suspend =
+> > of_property_read_bool(dev->of_node, "power-off-in-suspend");
+> > > > +	hub->cfg.wakeup_source = of_property_read_bool(dev->of_node,
+> > > > +"wakeup-source");
+> > >
+> > > Do you really need these two properties? If the device (and its
+> > > children if existed) has wakeup enabled, you keep power in suspend,
+> > > otherwise, you could close it, any exceptions?
+> > 
+> > That would work for my use case, but I'm not sure it's a universally good
+> > configuration.
+> > 
+> > I don't have a specific USB device in mind, but you could have a device that
+> > shouldn't lose it's context during suspend or keep operating autonomously (e.g.
+> > a sensor with a large buffer collecting samples). Not sure if something like this
+> > exists in the real though.
+> > 
+> > I'm not an expert, but it seems there are USB controllers with wakeup support
+> > which is always enabled. A board with such a controller then couldn't have a
+> > policy to power down the hub regardless of wakeup capable devices being
+> > connected.
+> > 
+> 
+> Whether or not it is a wakeup_source, it could get through its or its children's
+> /sys/../power/wakeup value, you have already used usb_wakeup_enabled_descendants
+> to know it.
 
-But real hardware doesn't always follow the official spec.  And then 
-when it fails to work with Linux, _we_ are the people who get blamed.
+I conceptually agree, but in practice there are some conflicting details:
 
-Alan Stern
+wakeup for the hubs on my system is by default disabled, yet USB wakeup works
+regardless, so the flag doesn't really provide useful information. I guess we
+could still use it if there is no better way, but it doesn't seem ideal.
+
+Similar for udev->bus->controller, according to sysfs it doesn't even have wakeup
+support. Please let me know if there is a reliable way to check if wakeup is
+enabled on the controller of a device.
+
+> If the onboard HUB needs to reflect wakeup signal, it should not power off its regulator.
+> 
+> For another property power-off-in-suspend, I think it is also a user option,
+> but not a hardware feature.
+
+Ok, I think you are suggesting a sysfs attribute instead of a DT property, that
+sounds good to me.
