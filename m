@@ -2,306 +2,292 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE42269C2B
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 04:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA78269C53
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 05:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726122AbgIOCzM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Sep 2020 22:55:12 -0400
-Received: from mail-eopbgr70082.outbound.protection.outlook.com ([40.107.7.82]:9875
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726057AbgIOCzM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Sep 2020 22:55:12 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kvAJrcQPqiLEaOpeFpSlstfP3NoA8ovEiZqCtJYD1zka5fTzPaq/DoKbTQcQ4/ZqmQiVoJfjUTWG/YigxEyOFErExfOeiZj+6oIQo2PxwjZmlLNNmhccBKXe9NpqleJSe1VOVhHS4uc9WTNDvnaQPZ9I9unDqBgRqlbbNHUCX2gzHin8RkHk0TlYhA0zpVzjQVhrTgG/kctAh634bQIgdRsjOekTLaymucF+G7itojb46FPONbNcpi9AYtKx8aaIaSwlNb70PG3bBQikRSJAOIMM3PS8wbLX44VcV4fhjQtYNwah/ayhufWzUkVp9TpWkI0+gvHDuemAYUJ7IpPEGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ejfxRPkrfCMErYZtnCeurYmckBPzHU/cZ1Dh+B+bZDM=;
- b=jM6UrOExzEL68C9DPOUytV/Qd4SFv0WM74u65EXgB/qYUhIooXQQyuaZ9f8aejf/xYhMF256mERkRIu9ceVmjgWVqiCQ3SrTaoFW/QJIwqEhdMLMyyVYsUIK+MmZ92Bk3CNqb6symDod05qZDwqQJQKgTReD5RNeYC0b33nnRNzDWwM2waYwf5SfgFTQnX/LVhojiNvOIMHNYdiOiiyn3+1Y6tiAAn1m7hvBXZv7ohdHgqiMkTXL5g4exunk8u020TwvKgnd5mmlAtjec3mFlj1Df1+FJURosjy/QyELKID7rchM5NK8VeaVgr4/I4W0Wfxkjw9cA+nLhwdZV03diQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ejfxRPkrfCMErYZtnCeurYmckBPzHU/cZ1Dh+B+bZDM=;
- b=LUBv0/ZcpCm9G+ObRtJ7YZHYqIC8r1VA/0/zJ9Oi880j+6FUt+L2OftgS69keaEY3eoKXPtOzJZakivQ+SooyOsfnb8IzzjbbSQVK5uaxdItzRCpdZcuhHG5hrVLbJcxNTmSkPe0Xg0CYPQU2g+45PX/BfQuIg8vaC6tC3IIwK4=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB5176.eurprd04.prod.outlook.com (2603:10a6:20b:6::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Tue, 15 Sep
- 2020 02:55:06 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3370.019; Tue, 15 Sep 2020
- 02:55:06 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH 2/2] USB: misc: Add onboard_usb_hub driver
-Thread-Topic: [PATCH 2/2] USB: misc: Add onboard_usb_hub driver
-Thread-Index: AQHWisa8s1Sayn6UyUeJIx1ZNmduw6lpAX4A
-Date:   Tue, 15 Sep 2020 02:55:06 +0000
-Message-ID: <20200915025426.GA17450@b29397-desktop>
-References: <20200914112716.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200914112716.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
-In-Reply-To: <20200914112716.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: chromium.org; dkim=none (message not signed)
- header.d=none;chromium.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 1e4ba19f-b2ed-4ba2-ae0a-08d85922c09c
-x-ms-traffictypediagnostic: AM6PR04MB5176:
-x-microsoft-antispam-prvs: <AM6PR04MB51765E096C377FFCC92922728B200@AM6PR04MB5176.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xJUyS3Yc8N6RYtEnNjHScmR7lTqcdy71S97er/VCvVKcfSu2NWSwpIwdH45CV3mcATG5FLNP0Ss4koZAedSHB4EqYnvyWAWIIkO/L7luFO15jIauR1AgyAvGdxspssTbzPGf/wFhwBZ1IToWuz9vDgElA4GX80pXoAJaIbXWjfWSi7EFodN0VNrl3cnijpb48KVIgcbW6p1mzQEmFopk1Evb5QCZaEQpUzwlz09AtdY1FPSuo2wu/FNcWaNC4BXETTwUcQx40ftTP4qcgNHdqD/Ex7H8GpOAnmfhgrcmOhoHDmr2bOI+XmkAcab/JHj8MH02qc6I/4oxOuA7ndCViw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(136003)(396003)(366004)(346002)(376002)(39860400002)(6486002)(316002)(66446008)(91956017)(76116006)(66946007)(66476007)(66556008)(64756008)(53546011)(71200400001)(6916009)(5660300002)(6506007)(6512007)(9686003)(26005)(186003)(2906002)(7416002)(8676002)(1076003)(478600001)(8936002)(44832011)(33656002)(33716001)(83380400001)(86362001)(54906003)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: JQf7qxdYPE1BEVdK3aQKQPAycekxUbkEsTj5Tj6zRjbWFY1hLk+ddlqS1GCtmQD61xq+1zF5O+uFvHHwJ1RrplWHnpj8+3sIjAUHglyQtbtL4R3guPd2fPkM5mxKHGfAYJHzRJkkOGS81E1JWx1dm/MzULVUymkCqm4fGntAJTUyHQZp+TupMrppjMfYrXiRLD/sVWBu9Cq2Mw1UXYYXxlLvPLbwcWu58Zk0h8RhTPvXYXacG1NpbcFTvEhUuXZnxOxAyF92YB0zkB7wEd6mwGLncus+0A8twjcw/9Km883XgyxhxXiHl9SAfmI4LEfqRpo9yLjCfhQ1W0fJencFrm6TOthTLxGkELGoVUgYeoCd0xJtKMpN1Sk/l5OLmTRAT1wAeOsu654BCJXyfzkUyqUNbaJIkaaIIms6ELMCN/Vk1bihyiQmCCg80UG2d6icxV6Q9ZJqk/xPTgkls1S9E5kKYJ4UT1H7IxDOyWR3Cuqx2wuFmVuRZEu4TbUXqhbMA3pWpRoEs0poX/upU94CS9HJi2U8ePMyQpwO7IeWTFHRfMgKC9HXApi1wA6a5dBTGPbYQSfUYSR4KfXHvv5oLOrYELU09E1GgTLN9QZy9ZpDJ+QW7WnRd8r7koPUKwNH5kzlKB4BJNNKIulXXONIyw==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <F9F810C307D8AE40A49811D0D15D9038@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726125AbgIODHf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Sep 2020 23:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbgIODHc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Sep 2020 23:07:32 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B957C06174A;
+        Mon, 14 Sep 2020 20:07:32 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id v23so1492592ljd.1;
+        Mon, 14 Sep 2020 20:07:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3gqr6jBNEY+ASWMIkvM8cpZA4SkbUkARE19dPv6D5kI=;
+        b=U9FPg+d3tnMPwrger9NcG55Q9DB0VbUlYIzHPxVvtrOxmZHDf7vWTFPv+NTJmkdt2Z
+         ykrgU30+rW8/wsXHEBIGjEn2p5nvg3n7KRbnUidf2Hy4iGhMSEcJKRwzyPsQJz/dAj0Y
+         sDrw0252O8puBsQTb3kEltwwyelhXRjE7I8RujCexrcpnh8XKD97y6r/XqHeGOYd2AmC
+         7OaqHU0vJ3Ao+YPZ1ke0sEk6BopwPblu0tuhdV8XEzX+abNZ4CNOXOGMLlg6Dk1MGi/q
+         YZWJWLyQHQn/FBxGIVMq8VKLXm1QbnPMbGSPTS0eErTEQABqR8oXeXignVgQrud8PeRd
+         EbnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3gqr6jBNEY+ASWMIkvM8cpZA4SkbUkARE19dPv6D5kI=;
+        b=kByEip0uxCE4jSizAoEuD77i7d0elW2bewP0XPK1CiZY+CKR3cFw9QbyhVuKavAvrL
+         kdcHxDCL6R8wAwJt79/khCwy1I8fOyERXwmkDIfGF/vQMApsuhOkdnZ8F2R/SwjBQym/
+         A7cJJ7DR8KBkYoUWFIDS1xRFulPw7uixqEDaBgsMlJc1p3WN/l+eNzveZ+YYJzeqk6Zh
+         1mIAM1KuzvjlSmd88j53TunX8wy3ZMp7BMyNsVdXVnWrnDZ7fqn79UzSoAoV4MsbtzVT
+         78t5/vm2QmuNfNmeJqbKYFK552L8pmTDXX8VEi8h8gqt2yMdbKVltOEdlYeiMZ9XEQ3f
+         zQSQ==
+X-Gm-Message-State: AOAM531mqCPQnnZe67EpjnRCsF23h0aN0fs6uwdLPNQVMZBXLYP9Zz66
+        t3e35YRo4fG41Xcq+AmKxvxuXsIu68UNcXynHb4=
+X-Google-Smtp-Source: ABdhPJyuBg+E2YcqDm0il606vPK4VVYMwHW5wQRazUTgDHNzhNDYb+aKd7NPekYjUkDYhiTmfhYKjYmpEQdBWz+V0Hc=
+X-Received: by 2002:a2e:907:: with SMTP id 7mr6436762ljj.470.1600139250537;
+ Mon, 14 Sep 2020 20:07:30 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e4ba19f-b2ed-4ba2-ae0a-08d85922c09c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2020 02:55:06.6785
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MTTc7nPjJ788KBNeQQwK4vHJByjoFCyozpFpIaxdFiRLmVFFsGyfIDe+VBcxa2Gr9yH3DdFSpX6Q0dY5L12x+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5176
+References: <1599060933-8092-1-git-send-email-u0084500@gmail.com>
+ <20200902165713.GG56237@roeck-us.net> <CADiBU3_iHk4aoM8o6GcaTmWDZT4ymvb0Ff-XeLLZ0C9dhCnLZQ@mail.gmail.com>
+ <fd2a33fc-2383-66cb-0fd7-d5aa0cc9111f@roeck-us.net> <CADiBU3_vYAmHDCONrExzyM+1CTfqJx_eS1hYG8aHkNWFzTcwfg@mail.gmail.com>
+ <63c7f5e4-eff2-1420-30a5-a0b98a7815e0@roeck-us.net> <CADiBU3-83rVLqhVAqqSGc0qQ66PHsGVVcp_m3sm_4ZS5A+GXKQ@mail.gmail.com>
+In-Reply-To: <CADiBU3-83rVLqhVAqqSGc0qQ66PHsGVVcp_m3sm_4ZS5A+GXKQ@mail.gmail.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Tue, 15 Sep 2020 11:07:18 +0800
+Message-ID: <CADiBU3_c5O-yUac-ytp5WoQQ12edkU+4wn+WNBOVGRGM15NBJA@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: tcpm: Fix if vbus before cc, hard_reset_count
+ not reset issue
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cy_huang <cy_huang@richtek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-09-14 11:27:49, Matthias Kaehlcke wrote:
-> The main issue this driver addresses is that a USB hub needs to be
-> powered before it can be discovered. For onboard hubs this is often
-> solved by supplying the hub with an 'always-on' regulator, which is
-> kind of a hack. Some onboard hubs may require further initialization
-> steps, like changing the state of a GPIO or enabling a clock, which
-> requires further hacks. This driver creates a platform device
-> representing the hub which performs the necessary initialization.
-> Currently it only supports switching on a single regulator, support
-> for multiple regulators or other actions can be added as needed.
-> Different initialization sequences can be supported based on the
-> compatible string.
->=20
-> Besides performing the initialization the driver can be configured
-> to power the hub off during system suspend. This can help to extend
-> battery life on battery powered devices, which have no requirements
-> to keep the hub powered during suspend. The driver can also be
-> configured to leave the hub powered when a wakeup capable USB device
-> is connected when suspending, and keeping it powered otherwise.
->=20
-> Technically the driver consists of two drivers, the platform driver
-> described above and a very thin USB driver that subclasses the
-> generic hub driver. The purpose of this driver is to provide the
-> platform driver with the USB devices corresponding to the hub(s)
-> (a hub controller may provide multiple 'logical' hubs, e.g. one
-> to support USB 2.0 and another for USB 3.x).
+Hi, Guenter:
 
-I agree with Alan, you may change this driver to apply for generic
-onboard USB devices.
+ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2020=E5=B9=B49=E6=9C=886=E6=97=
+=A5 =E9=80=B1=E6=97=A5 =E4=B8=8B=E5=8D=8811:22=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2020=E5=B9=B49=E6=9C=885=E6=
+=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=8811:51=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> >
+> > On 9/4/20 6:24 PM, ChiYuan Huang wrote:
+> > > Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2020=E5=B9=B49=E6=9C=885=
+=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=883:41=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> > >>
+> > >> On 9/3/20 9:21 AM, ChiYuan Huang wrote:
+> > >>> Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2020=E5=B9=B49=E6=9C=
+=883=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8812:57=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+> > >>>>
+> > >>>> On Wed, Sep 02, 2020 at 11:35:33PM +0800, cy_huang wrote:
+> > >>>>> From: ChiYuan Huang <cy_huang@richtek.com>
+> > >>>>>
+> > >>>>> Fix: If vbus event is before cc_event trigger, hard_reset_count
+> > >>>>> won't bt reset for some case.
+> > >>>>>
+> > >>>>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > >>>>> ---
+> > >>>>> Below's the flow.
+> > >>>>>
+> > >>>>> _tcpm_pd_vbus_off() -> run_state_machine to change state to SNK_U=
+NATTACHED
+> > >>>>> call tcpm_snk_detach() -> tcpm_snk_detach() -> tcpm_detach()
+> > >>>>> tcpm_port_is_disconnected() will be called.
+> > >>>>> But port->attached is still true and port->cc1=3Dopen and port->c=
+c2=3Dopen
+> > >>>>>
+> > >>>>> It cause tcpm_port_is_disconnected return false, then hard_reset_=
+count won't be reset.
+> > >>>>> After that, tcpm_reset_port() is called.
+> > >>>>> port->attached become false.
+> > >>>>>
+> > >>>>> After that, cc now trigger cc_change event, the hard_reset_count =
+will be kept.
+> > >>>>> Even tcpm_detach will be called, due to port->attached is false, =
+tcpm_detach()
+> > >>>>> will directly return.
+> > >>>>>
+> > >>>>> CC_EVENT will only trigger drp toggling again.
+> > >>>>> ---
+> > >>>>>  drivers/usb/typec/tcpm/tcpm.c | 3 +--
+> > >>>>>  1 file changed, 1 insertion(+), 2 deletions(-)
+> > >>>>>
+> > >>>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tc=
+pm/tcpm.c
+> > >>>>> index a48e3f90..5c73e1d 100644
+> > >>>>> --- a/drivers/usb/typec/tcpm/tcpm.c
+> > >>>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > >>>>> @@ -2797,8 +2797,7 @@ static void tcpm_detach(struct tcpm_port *p=
+ort)
+> > >>>>>               port->tcpc->set_bist_data(port->tcpc, false);
+> > >>>>>       }
+> > >>>>>
+> > >>>>> -     if (tcpm_port_is_disconnected(port))
+> > >>>>> -             port->hard_reset_count =3D 0;
+> > >>>>> +     port->hard_reset_count =3D 0;
+> > >>>>>
+> > >>>>
+> > >>>> Doesn't that mean that the state machine will never enter
+> > >>>> error recovery ?
+> > >>>>
+> > >>> I think it does't affect the error recovery.
+> > >>> All error recovery seems to check pd_capable flag.
+> > >>>
+> > >>> >From my below case, it's A to C cable only. There is no USBPD cont=
+ract
+> > >>> will be estabilished.
+> > >>>
+> > >>> This case occurred following by the below test condition
+> > >>> Cable -> A to C (default Rp bind to vbus) connected to PC.
+> > >>> 1. first time plugged in the cable with PC
+> > >>> It will make HARD_RESET_COUNT  to be equal 2
+> > >>> 2. And then plug out. At that time HARD_RESET_COUNT is till 2.
+> > >>> 3. next time plugged in again.
+> > >>> Due to hard_reset_count is still 2 , after wait_cap_timeout, the st=
+ate
+> > >>> eventually changed to SNK_READY.
+> > >>> But during the state transition, no hard_reset  be sent.
+> > >>>
+> > >>> Defined in the USBPD policy engine, typec transition to USBPD, all
+> > >>> variables must be reset included hard_reset_count.
+> > >>> So it expected SNK must send hard_reset again.
+> > >>>
+> > >>> The original code defined hard_reset_count must be reset only when
+> > >>> tcpm_port_is_disconnected.
+> > >>>
+> > >>> It doesn't make sense that it only occurred in some scenario.
+> > >>> If tcpm_detach is called, hard_reset count must be reset also.
+> > >>>
+> > >>
+> > >> If a hard reset fails, the state machine may cycle through states
+> > >> HARD_RESET_SEND, HARD_RESET_START, SRC_HARD_RESET_VBUS_OFF,
+> > >> SRC_HARD_RESET_VBUS_ON back to SRC_UNATTACHED. In this state,
+> > >> tcpm_src_detach() and with it tcpm_detach() is called. The hard
+> > >> reset counter is incremented in HARD_RESET_SEND. If tcpm_detach()
+> > >> resets the counter, the state machine will keep cycling through hard
+> > >> resets without ever entering the error recovery state. I am not
+> > >> entirely sure where the counter should be reset, but tcpm_detach()
+> > >> seems to be the wrong place.
+> > >
+> > > This case you specified means locally error occurred.
+> >
+> > It could be a local error (with the local hardware), or with the
+> > remote partner not accepting the reset. We only know that an error
+> > occurred.
+> >
+> > > It intended to re-run the state machine from typec  to USBPD.
+> > >>From my understanding, hard_reset_count to be reset is reasonable.
+> > >
+> > > The normal stare from the state transition you specified is
+> > > HARD_RESET_SEND, HARD_RESET_START -> SRC_HARD_RESET_VBUS_OFF,
+> > > SRC_HARD_RESET_VBUS_ON -> received VBUS_EVENT then go to SRC_STARTUP.
+> > >
+> > The operational word is "normal". Error recovery is expected to handle
+> > situations which are not normal.
+>
+> Following by the USBPD 3.0 revision 1.2, section 8.3.3.24.1
+> The ErrorRecovery state is  used to electronically disconnect Port
+> Partner using the USB Type-C connector.
+> And there's one sentence to be said "The ErrorRecovery staste shall
+> map to USB Type-C Error Recovery state operations".
+> I also read ErrorRecovery state in USB TYPE-C 1.3 spec.
+> Section 4.5.2.2.2.1   ErrorRecovery state requirement listed the below te=
+xt.
+> The port shall not drive VBUS or VCONN, and shall present a
+> high-impedance to ground (above
+> zOPEN) on its CC1 and CC2 pins.
+> Section 4.5.2.2.2.2 Exiting from the error recovery state
+> I read the description. The roughly meaning is to change the state to
+> Unattached(Src or Snk) after tErrorRecovery.
+>
+> Summary the above text.
+> Reset HardResetCounter is ok in tcpm_detach.
+> My patch is just to relax the counter reset conditions during tcpm_detach=
+().
+> If not, it will check tcpm_port_is_disconnected().
+> And only two scenario, the hard reset count will be cleared to 0 at this =
+case.
+> 1) port not attached and cc1=3Dopen and cc2=3Dopen
+> 2) port attached and either (polarity=3Dcc1, cc1=3Dopen) or (polarity=3Dc=
+c2, cc2=3Dopen)
+>
+> I think this judgement is narrow in tcpm_detach case.
+>
+> >
+> > I don't question the need to reset the counter. The only question
+> > is where and when to reset it.
+> >
+> I re-check all tcpm code for hard reset counter about the increment and r=
+eset.
+> They all meets USBPD spec. Only the detach case, I'm wondering why it
+> need to add the check for tcpm_port_is_disconnected().
+>
+Below's the real case log.
+[ 4848.046358] VBUS off
+[ 4848.046384] state change SNK_READY -> SNK_UNATTACHED
+[ 4848.050908] Setting voltage/current limit 0 mV 0 mA
+[ 4848.050936] polarity 0
+[ 4848.052593] Requesting mux state 0, usb-role 0, orientation 0
+[ 4848.053222] Start toggling
+[ 4848.086500] state change SNK_UNATTACHED -> TOGGLING
+[ 4848.089983] CC1: 0 -> 0, CC2: 3 -> 3 [state TOGGLING, polarity 0, connec=
+ted]
+[ 4848.089993] state change TOGGLING -> SNK_ATTACH_WAIT
+[ 4848.090031] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 200 =
+ms
+[ 4848.141162] CC1: 0 -> 0, CC2: 3 -> 0 [state SNK_ATTACH_WAIT,
+polarity 0, disconnected]
+[ 4848.141170] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT
+[ 4848.141184] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @ 20 =
+ms
+[ 4848.163156] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed 20 m=
+s]
+[ 4848.163162] Start toggling
+[ 4848.216918] CC1: 0 -> 0, CC2: 0 -> 3 [state TOGGLING, polarity 0, connec=
+ted]
+[ 4848.216954] state change TOGGLING -> SNK_ATTACH_WAIT
+[ 4848.217080] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 200 =
+ms
+[ 4848.231771] CC1: 0 -> 0, CC2: 3 -> 0 [state SNK_ATTACH_WAIT,
+polarity 0, disconnected]
+[ 4848.231800] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT
+[ 4848.231857] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @ 20 =
+ms
+[ 4848.256022] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed 20 m=
+s]
+[ 4848.256049] Start toggling
+[ 4848.871148] VBUS on
+[ 4848.885324] CC1: 0 -> 0, CC2: 0 -> 3 [state TOGGLING, polarity 0, connec=
+ted]
+[ 4848.885372] state change TOGGLING -> SNK_ATTACH_WAIT
+[ 4848.885548] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 200 =
+ms
+[ 4849.088240] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 200 m=
+s]
+[ 4849.088284] state change SNK_DEBOUNCED -> SNK_ATTACHED
+[ 4849.088291] polarity 1
+[ 4849.088769] Requesting mux state 1, usb-role 2, orientation 2
+[ 4849.088895] state change SNK_ATTACHED -> SNK_STARTUP
+[ 4849.088907] state change SNK_STARTUP -> SNK_DISCOVERY
+[ 4849.088915] Setting voltage/current limit 5000 mV 0 mA
+[ 4849.088927] vbus=3D0 charge:=3D1
+[ 4849.090505] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES
+[ 4849.090828] pending state change SNK_WAIT_CAPABILITIES -> SNK_READY @ 24=
+0 ms
+[ 4849.335878] state change SNK_WAIT_CAPABILITIES -> SNK_READY [delayed 240=
+ ms]
 
-> +static int onboard_hub_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev =3D &pdev->dev;
-> +	struct onboard_hub *hub;
-> +
-> +	hub =3D devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
-> +	if (!hub)
-> +		return -ENOMEM;
-> +
-> +	hub->vdd =3D devm_regulator_get(dev, "vdd");
-> +	if (IS_ERR(hub->vdd))
-> +		return PTR_ERR(hub->vdd);
-> +
-> +	hub->dev =3D dev;
-> +	mutex_init(&hub->lock);
-> +	INIT_LIST_HEAD(&hub->udev_list);
-> +
-> +	hub->cfg.power_off_in_suspend =3D of_property_read_bool(dev->of_node, "=
-power-off-in-suspend");
-> +	hub->cfg.wakeup_source =3D of_property_read_bool(dev->of_node, "wakeup-=
-source");
+You can see the next type c attach log.
+It directly change state from SNK_WAIT_CAPABILITIES to SNK_READY due
+to not reset hard_reset_count.
 
-Do you really need these two properties? If the device (and its children
-if existed) has wakeup enabled, you keep power in suspend, otherwise,
-you could close it, any exceptions?
+It's easy to reproduce if you plugout USB Adapater w/i AtoC cable connected=
+.
 
-Peter
-
-
-> +
-> +	dev_set_drvdata(dev, hub);
-> +
-> +	return onboard_hub_power_on(hub);
-> +}
-> +
-> +static int onboard_hub_remove(struct platform_device *pdev)
-> +{
-> +	struct onboard_hub *hub =3D dev_get_drvdata(&pdev->dev);
-> +
-> +	return onboard_hub_power_off(hub);
-> +}
-> +
-> +static const struct of_device_id onboard_hub_match[] =3D {
-> +	{ .compatible =3D "onboard-usb-hub" },
-> +	{ .compatible =3D "realtek,rts5411" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, onboard_hub_match);
-> +
-> +static struct platform_driver onboard_hub_driver =3D {
-> +	.probe =3D onboard_hub_probe,
-> +	.remove =3D onboard_hub_remove,
-> +#ifdef CONFIG_PM
-> +	.suspend =3D onboard_hub_suspend,
-> +	.resume =3D onboard_hub_resume,
-> +#endif
-> +	.driver =3D {
-> +		.name =3D "onboard-usb-hub",
-> +		.of_match_table =3D onboard_hub_match,
-> +	},
-> +};
-> +
-> +/************************** USB driver **************************/
-> +
-> +#define VENDOR_ID_REALTEK	0x0bda
-> +
-> +static struct onboard_hub *_find_onboard_hub(struct device *dev)
-> +{
-> +	const phandle *ph;
-> +	struct device_node *np;
-> +	struct platform_device *pdev;
-> +
-> +	ph =3D of_get_property(dev->of_node, "hub", NULL);
-> +	if (!ph) {
-> +		dev_err(dev, "failed to read 'hub' property\n");
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	np =3D of_find_node_by_phandle(be32_to_cpu(*ph));
-> +	if (!np) {
-> +		dev_err(dev, "failed find device node for onboard hub\n");
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	pdev =3D of_find_device_by_node(np);
-> +	of_node_put(np);
-> +	if (!pdev)
-> +		return ERR_PTR(-EPROBE_DEFER);
-> +
-> +	return dev_get_drvdata(&pdev->dev);
-> +}
-> +
-> +static int onboard_hub_usbdev_probe(struct usb_device *udev)
-> +{
-> +	struct device *dev =3D &udev->dev;
-> +	struct onboard_hub *hub;
-> +
-> +	/* ignore supported hubs without device tree node */
-> +	if (!dev->of_node)
-> +		return -ENODEV;
-> +
-> +	hub =3D _find_onboard_hub(dev);
-> +	if (IS_ERR(hub))
-> +		return PTR_ERR(dev);
-> +
-> +	dev_set_drvdata(dev, hub);
-> +
-> +	onboard_hub_add_usbdev(hub, udev);
-> +
-> +	return 0;
-> +}
-> +
-> +static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
-> +{
-> +	struct onboard_hub *hub =3D dev_get_drvdata(&udev->dev);
-> +
-> +	onboard_hub_remove_usbdev(hub, udev);
-> +
-> +	put_device(hub->dev);
-> +}
-> +
-> +static const struct usb_device_id onboard_hub_id_table[] =3D {
-> +	{ .idVendor =3D VENDOR_ID_REALTEK,
-> +	  .idProduct =3D 0x0411, /* RTS5411 USB 3.0 */
-> +	  .match_flags =3D USB_DEVICE_ID_MATCH_DEVICE },
-> +	{ .idVendor =3D VENDOR_ID_REALTEK,
-> +	  .idProduct =3D 0x5411, /* RTS5411 USB 2.0 */
-> +	  .match_flags =3D USB_DEVICE_ID_MATCH_DEVICE },
-> +	{},
-> +};
-> +
-> +MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
-> +
-> +static struct usb_device_driver onboard_hub_usbdev_driver =3D {
-> +
-> +	.name =3D "onboard-usb-hub",
-> +	.probe =3D onboard_hub_usbdev_probe,
-> +	.disconnect =3D onboard_hub_usbdev_disconnect,
-> +	.generic_subclass =3D 1,
-> +	.supports_autosuspend =3D	1,
-> +	.id_table =3D onboard_hub_id_table,
-> +};
-> +
-> +/************************** Driver (de)registration ********************=
-******/
-> +
-> +static int __init onboard_hub_init(void)
-> +{
-> +	int rc;
-> +
-> +	rc =3D platform_driver_register(&onboard_hub_driver);
-> +	if (rc)
-> +		return rc;
-> +
-> +	return usb_register_device_driver(&onboard_hub_usbdev_driver, THIS_MODU=
-LE);
-> +}
-> +device_initcall(onboard_hub_init);
-> +
-> +static void __exit onboard_hub_exit(void)
-> +{
-> +	usb_deregister_device_driver(&onboard_hub_usbdev_driver);
-> +	platform_driver_unregister(&onboard_hub_driver);
-> +}
-> +module_exit(onboard_hub_exit);
-> +
-> +MODULE_AUTHOR("Matthias Kaehlcke <mka@chromium.org>");
-> +MODULE_DESCRIPTION("Onboard USB Hub driver");
-> +MODULE_LICENSE("GPL v2");
-> --=20
-> 2.28.0.618.gf4bc123cb7-goog
->=20
-
---=20
-
-Thanks,
-Peter Chen=
+> > Guenter
