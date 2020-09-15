@@ -2,126 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6235269F16
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 09:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E792269F6E
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 09:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726184AbgIOHGr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 03:06:47 -0400
-Received: from mail-eopbgr40068.outbound.protection.outlook.com ([40.107.4.68]:54497
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726186AbgIOHGQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Sep 2020 03:06:16 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QA2tN+W0wNwBdwJSGKagdOMnnuzrhv3Jh6B4BVSn96WczkylalUutdhxQuMqeGcXoew+UFv8S6Wzy3oFuBs/J8kkC55xc/5V2aMcDUTXoDLLHYdTs5rz7bkvrg/zaKvIVltPlfCv/gE01MLPRMyDmMD03PCFjvnL8mGLHKZ1rAl7Dth7FRz3XWPy/yXthP0/1Pe/ydQJBpMZQqZ/LaahXcA2cJ00LtU8eIprlfVelRz+/aWVz4AbN9DwBS7pQMMhCZGg4WSN5x3sYjXXVFiuBS3UrskN9rIcCVoID1AdFBP88SgCzbGWL2ZQxMuwQ+G6iL78CF8yJP0FkcrEQpJkNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FfMpvduonQ0BDfDklM04v9AaSm4h94w0214lV/lhEQ0=;
- b=WxpCbiFXbEplDDafb0uNizpSTTz2YG6GpfbAuW0NP2prlo224oGGcXSl9Dwz+Xs2XGhdGSS1HR5zSbpokLaKtjksHuyA9/UzQFFi7TDmVHkP09LmYXu4GyuDSKWj0XlAIi8MtjqAZXwcaSbAfHFxrWL6v0oe/RCvU19SYLOkRcqaxPdokHdydfEiqoa8uH2oLe8u4Bp23aBGRuzvHXHqTu/Zw4srTkHt/dw6oJz+VmRQVSBIQE+MqzP1b0tzjg3zlJAViWjNmGeMEij9uL0/BUimtOVhQf4IgKKBM1l/JVCZpS8EL/XTvR9Z5+uOj5EfoNU7W33jIVQ4ChU82oEYrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FfMpvduonQ0BDfDklM04v9AaSm4h94w0214lV/lhEQ0=;
- b=pqxbVeuveZsM8A95NQmqIIhU76DA+tZ96HLd5AS0yFxpxIS/jWx4ZvWBU7FK+MVVZwu6lhC4FPCNCFH79x2ctpFTqCK8MqKjEqh5ttSHFGwJ7Hx/v7H2As5Ymsk9iXFMxZdyaUC01vMSHH9rZbr6n+hIDXCzR4wvpUYINk1w00w=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB6712.eurprd04.prod.outlook.com (2603:10a6:20b:d9::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.17; Tue, 15 Sep
- 2020 07:05:39 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3370.019; Tue, 15 Sep 2020
- 07:05:38 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        id S1726130AbgIOHNq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 03:13:46 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:1314 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726119AbgIOHNn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 03:13:43 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08F7CT9r008378;
+        Tue, 15 Sep 2020 09:13:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=QvCfA91FVwCDbBDN11Y5LvhX6jukmlC0QOPchjpIoQI=;
+ b=z92xUoCl2NvhVhBK1TspT0coUXVOLwvUbth2hIzfb9c2+/QlXiNXnz2Pe0wWxoxrMsXM
+ Ll+yHE/ZtBDStNU1g1ZhoMFN5CrN8safCh0dJ2jL2wA7a0FrIHOghA3AQkFbb5UIpQyw
+ HxsnJQSAO376ua53v3z38S7pg3ocfA2mhI8rIT3vNL0IbvaVtl58lp72CaoBy5TxldaQ
+ iU3+158QpE07A7l9XFXsIyLGrkRvVu0UbhOkxwVgaQtr0Zgu5AZR3TqjNEW9GXfbjh7l
+ sY6Ugq2fhtN7zrpEFHmqnnRFF0DQ5owD+td4V/dMMXv9NtP4RCBQJGHtC0skwJkvql3e 3w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 33gkf9ecab-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Sep 2020 09:13:29 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4ABB1100034;
+        Tue, 15 Sep 2020 09:13:28 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 348DA21CA68;
+        Tue, 15 Sep 2020 09:13:28 +0200 (CEST)
+Received: from lmecxl0995.lme.st.com (10.75.127.51) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 15 Sep
+ 2020 09:13:15 +0200
+Subject: Re: [balbi-usb:testing/next 32/38] drivers/usb/dwc2/drd.c:71:
+ undefined reference to `usb_role_switch_get_drvdata'
+To:     kernel test robot <lkp@intel.com>
+CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: RE: [PATCH 2/2] USB: misc: Add onboard_usb_hub driver
-Thread-Topic: [PATCH 2/2] USB: misc: Add onboard_usb_hub driver
-Thread-Index: AQHWisa8s1Sayn6UyUeJIx1ZNmduw6lpAX4AgAAjrICAAB3x4A==
-Date:   Tue, 15 Sep 2020 07:05:38 +0000
-Message-ID: <AM7PR04MB715735A8A102F3EC9041EA328B200@AM7PR04MB7157.eurprd04.prod.outlook.com>
-References: <20200914112716.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200914112716.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <20200915025426.GA17450@b29397-desktop> <20200915050207.GF2022397@google.com>
-In-Reply-To: <20200915050207.GF2022397@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: chromium.org; dkim=none (message not signed)
- header.d=none;chromium.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [92.121.68.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 128f8ed7-bac9-4f29-8f52-08d85945c07d
-x-ms-traffictypediagnostic: AM6PR04MB6712:
-x-microsoft-antispam-prvs: <AM6PR04MB6712F456A3F92EA2705A15378B200@AM6PR04MB6712.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UfHRIOZQKIBXrh1Gk+WIaIzq8edpodl4AKumO6Wo79EFpp5r7+OugwWC4ce62Ah3eSmEcTyO3a5xwnYrL8sXG1NO4NTTodrnK7+AeQjD2PXhgKfXMyfYfR2/iH0qNp+0Ep6D/d6TTuGU/RDfX6u6PN8ugQhCR+/OwTZCYekyBKBk68765TGYiuPVjvQHHhCXUMCvdVIFKPTvoNxkzJoiXrwkQfTFEooDk1LPqLfsGlu7rWIpeqxsgbY19Uyksf9pYvgwWyZJKdmh1CfdcqeAViFkROS+hZDL5FnvQtHu58uS7rlVLukFZNexGils5sh7LYF4ZF11jTLX6jPSpPgjWA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(346002)(376002)(366004)(136003)(7696005)(55016002)(66446008)(64756008)(66556008)(66476007)(9686003)(66946007)(8676002)(26005)(6916009)(186003)(8936002)(71200400001)(6506007)(478600001)(5660300002)(52536014)(316002)(44832011)(4326008)(7416002)(54906003)(83380400001)(86362001)(33656002)(76116006)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 0fzsdEEiz6z47FDtRBKlH0s/k9E/zhkdQIjZuwBYbfX5GxYwsIpMcFbw0o2H6usVOK8+jSGtEF554ttCJPjKRx3Hlx5CQlzWCCMgLVR3eZYWTTMWzc6fsQyISrQJygStJhHLryWz+EiWGJNHHaq8c7y59gGX6liJ7J2KDDSMG5OGdtt9bs7wnwABBJjkKniLreGcXiwJhOO2M84wE7vRDR6aZwFxC8QvEueOtgwNIloboTQRAzjkqYzPh8aPGf7fpJ6ZsgBLHq6stqdcVZfQmgfh8mwDeH0uHFA069ztOXwYi3z3OvdM13jNOijhS2aHrcde6JQFKKZ+qR8n8vICSpcipeAJENaqdCLDvy/vTySOsdyN+OrUKMgZ51GKDifFrEQqVChTmVXB3GClUkNHD/duJMpuzUXTMv55r3XEnTLZf5Sy5DCI9czBFqwtNsH19oTZ7gNK/O+nrXCxJKsxoKt5xQ77O6Zsl/QIKjZepSGW/MjWUT5PFxaiYLQEW++BqSoW+lUg19bHZVWVw54F/Pv3ewdozbzZmmuFFQHlefPIbp6NCP4vzXL3HT+JyNmT8eOeMYFwacqutHsXqpW5+UBHTwS6soj0uKw7CT/wOGYgm1uS6l0QCnDgS+4KmPETGURxdmcv665X/PNJqiIvsQ==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+References: <202009151336.53lUhHje%lkp@intel.com>
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+Message-ID: <bff256bc-0de2-923e-92a7-a8cd5e682f30@st.com>
+Date:   Tue, 15 Sep 2020 09:13:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 128f8ed7-bac9-4f29-8f52-08d85945c07d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2020 07:05:38.8660
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xC8HpVz80je9CFssijMrTm7ABaiFtsGiL9mgqLwlSNo4OLEvFjD22CbhXSFmYJ8yyBQkR45wIDuiHJPmTnmlXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6712
+In-Reply-To: <202009151336.53lUhHje%lkp@intel.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-15_04:2020-09-15,2020-09-15 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-ICANCj4gPiA+ICsJaHViLT5jZmcucG93ZXJfb2ZmX2luX3N1c3BlbmQgPQ0KPiBvZl9wcm9wZXJ0
-eV9yZWFkX2Jvb2woZGV2LT5vZl9ub2RlLCAicG93ZXItb2ZmLWluLXN1c3BlbmQiKTsNCj4gPiA+
-ICsJaHViLT5jZmcud2FrZXVwX3NvdXJjZSA9IG9mX3Byb3BlcnR5X3JlYWRfYm9vbChkZXYtPm9m
-X25vZGUsDQo+ID4gPiArIndha2V1cC1zb3VyY2UiKTsNCj4gPg0KPiA+IERvIHlvdSByZWFsbHkg
-bmVlZCB0aGVzZSB0d28gcHJvcGVydGllcz8gSWYgdGhlIGRldmljZSAoYW5kIGl0cw0KPiA+IGNo
-aWxkcmVuIGlmIGV4aXN0ZWQpIGhhcyB3YWtldXAgZW5hYmxlZCwgeW91IGtlZXAgcG93ZXIgaW4g
-c3VzcGVuZCwNCj4gPiBvdGhlcndpc2UsIHlvdSBjb3VsZCBjbG9zZSBpdCwgYW55IGV4Y2VwdGlv
-bnM/DQo+IA0KPiBUaGF0IHdvdWxkIHdvcmsgZm9yIG15IHVzZSBjYXNlLCBidXQgSSdtIG5vdCBz
-dXJlIGl0J3MgYSB1bml2ZXJzYWxseSBnb29kDQo+IGNvbmZpZ3VyYXRpb24uDQo+IA0KPiBJIGRv
-bid0IGhhdmUgYSBzcGVjaWZpYyBVU0IgZGV2aWNlIGluIG1pbmQsIGJ1dCB5b3UgY291bGQgaGF2
-ZSBhIGRldmljZSB0aGF0DQo+IHNob3VsZG4ndCBsb3NlIGl0J3MgY29udGV4dCBkdXJpbmcgc3Vz
-cGVuZCBvciBrZWVwIG9wZXJhdGluZyBhdXRvbm9tb3VzbHkgKGUuZy4NCj4gYSBzZW5zb3Igd2l0
-aCBhIGxhcmdlIGJ1ZmZlciBjb2xsZWN0aW5nIHNhbXBsZXMpLiBOb3Qgc3VyZSBpZiBzb21ldGhp
-bmcgbGlrZSB0aGlzDQo+IGV4aXN0cyBpbiB0aGUgcmVhbCB0aG91Z2guDQo+IA0KPiBJJ20gbm90
-IGFuIGV4cGVydCwgYnV0IGl0IHNlZW1zIHRoZXJlIGFyZSBVU0IgY29udHJvbGxlcnMgd2l0aCB3
-YWtldXAgc3VwcG9ydA0KPiB3aGljaCBpcyBhbHdheXMgZW5hYmxlZC4gQSBib2FyZCB3aXRoIHN1
-Y2ggYSBjb250cm9sbGVyIHRoZW4gY291bGRuJ3QgaGF2ZSBhDQo+IHBvbGljeSB0byBwb3dlciBk
-b3duIHRoZSBodWIgcmVnYXJkbGVzcyBvZiB3YWtldXAgY2FwYWJsZSBkZXZpY2VzIGJlaW5nDQo+
-IGNvbm5lY3RlZC4NCj4gDQoNCldoZXRoZXIgb3Igbm90IGl0IGlzIGEgd2FrZXVwX3NvdXJjZSwg
-aXQgY291bGQgZ2V0IHRocm91Z2ggaXRzIG9yIGl0cyBjaGlsZHJlbidzIC9zeXMvLi4vcG93ZXIv
-d2FrZXVwDQp2YWx1ZSwgeW91IGhhdmUgYWxyZWFkeSB1c2VkIHVzYl93YWtldXBfZW5hYmxlZF9k
-ZXNjZW5kYW50cyB0byBrbm93IGl0LiBJZiB0aGUgb25ib2FyZCBIVUINCm5lZWRzIHRvIHJlZmxl
-Y3Qgd2FrZXVwIHNpZ25hbCwgaXQgc2hvdWxkIG5vdCBwb3dlciBvZmYgaXRzIHJlZ3VsYXRvci4N
-Cg0KRm9yIGFub3RoZXIgcHJvcGVydHkgcG93ZXItb2ZmLWluLXN1c3BlbmQsIEkgdGhpbmsgaXQg
-aXMgYWxzbyBhIHVzZXIgb3B0aW9uLCBidXQgbm90IGEgaGFyZHdhcmUgZmVhdHVyZS4NCg0KSWYg
-KHdha2V1cC1zb3VyY2UgfHwgISBwb3dlci1vZmYtaW4tc3VzcGVuZCkNCglwb3dlciBvZmY7DQpl
-bHNlDQoJa2VlcCBwb3dlcjsNCg0KUGV0ZXINCg0K
+
+
+On 9/15/20 7:16 AM, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/next
+> head:   3c9722514c3fb74bbe0af87c20bc6b4c47121287
+> commit: a0f0bc95705446b8b1476338056bf869271ba36a [32/38] usb: dwc2: override PHY input signals with usb role switch support
+> config: i386-randconfig-a014-20200914 (attached as .config)
+> compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
+> reproduce (this is a W=1 build):
+>          git checkout a0f0bc95705446b8b1476338056bf869271ba36a
+>          # save the attached .config to linux build tree
+>          make W=1 ARCH=i386
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     ld: drivers/usb/dwc2/drd.o: in function `dwc2_drd_role_sw_set':
+>>> drivers/usb/dwc2/drd.c:71: undefined reference to `usb_role_switch_get_drvdata'
+>     ld: drivers/usb/dwc2/drd.o: in function `dwc2_drd_init':
+>>> drivers/usb/dwc2/drd.c:134: undefined reference to `usb_role_switch_register'
+>     ld: drivers/usb/dwc2/drd.o: in function `dwc2_drd_exit':
+>>> drivers/usb/dwc2/drd.c:179: undefined reference to `usb_role_switch_unregister'
+> 
+> # https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git/commit/?id=a0f0bc95705446b8b1476338056bf869271ba36a
+> git remote add balbi-usb https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git
+> git fetch --no-tags balbi-usb testing/next
+> git checkout a0f0bc95705446b8b1476338056bf869271ba36a
+> vim +71 drivers/usb/dwc2/drd.c
+> 
+>      68	
+>      69	static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+>      70	{
+>    > 71		struct dwc2_hsotg *hsotg = usb_role_switch_get_drvdata(sw);
+>      72		unsigned long flags;
+>      73		int already = 0;
+>      74	
+>      75		/* Skip session not in line with dr_mode */
+>      76		if ((role == USB_ROLE_DEVICE && hsotg->dr_mode == USB_DR_MODE_HOST) ||
+>      77		    (role == USB_ROLE_HOST && hsotg->dr_mode == USB_DR_MODE_PERIPHERAL))
+>      78			return -EINVAL;
+>      79	
+>      80	#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
+>      81		IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
+>      82		/* Skip session if core is in test mode */
+>      83		if (role == USB_ROLE_NONE && hsotg->test_mode) {
+>      84			dev_dbg(hsotg->dev, "Core is in test mode\n");
+>      85			return -EBUSY;
+>      86		}
+>      87	#endif
+>      88	
+>      89		spin_lock_irqsave(&hsotg->lock, flags);
+>      90	
+>      91		if (role == USB_ROLE_HOST) {
+>      92			already = dwc2_ovr_avalid(hsotg, true);
+>      93		} else if (role == USB_ROLE_DEVICE) {
+>      94			already = dwc2_ovr_bvalid(hsotg, true);
+>      95			/* This clear DCTL.SFTDISCON bit */
+>      96			dwc2_hsotg_core_connect(hsotg);
+>      97		} else {
+>      98			if (dwc2_is_device_mode(hsotg)) {
+>      99				if (!dwc2_ovr_bvalid(hsotg, false))
+>     100					/* This set DCTL.SFTDISCON bit */
+>     101					dwc2_hsotg_core_disconnect(hsotg);
+>     102			} else {
+>     103				dwc2_ovr_avalid(hsotg, false);
+>     104			}
+>     105		}
+>     106	
+>     107		spin_unlock_irqrestore(&hsotg->lock, flags);
+>     108	
+>     109		if (!already && hsotg->dr_mode == USB_DR_MODE_OTG)
+>     110			/* This will raise a Connector ID Status Change Interrupt */
+>     111			dwc2_force_mode(hsotg, role == USB_ROLE_HOST);
+>     112	
+>     113		dev_dbg(hsotg->dev, "%s-session valid\n",
+>     114			role == USB_ROLE_NONE ? "No" :
+>     115			role == USB_ROLE_HOST ? "A" : "B");
+>     116	
+>     117		return 0;
+>     118	}
+>     119	
+>     120	int dwc2_drd_init(struct dwc2_hsotg *hsotg)
+>     121	{
+>     122		struct usb_role_switch_desc role_sw_desc = {0};
+>     123		struct usb_role_switch *role_sw;
+>     124		int ret;
+>     125	
+>     126		if (!device_property_read_bool(hsotg->dev, "usb-role-switch"))
+>     127			return 0;
+>     128	
+>     129		role_sw_desc.driver_data = hsotg;
+>     130		role_sw_desc.fwnode = dev_fwnode(hsotg->dev);
+>     131		role_sw_desc.set = dwc2_drd_role_sw_set;
+>     132		role_sw_desc.allow_userspace_control = true;
+>     133	
+>   > 134		role_sw = usb_role_switch_register(hsotg->dev, &role_sw_desc);
+>     135		if (IS_ERR(role_sw)) {
+>     136			ret = PTR_ERR(role_sw);
+>     137			dev_err(hsotg->dev,
+>     138				"failed to register role switch: %d\n", ret);
+>     139			return ret;
+>     140		}
+>     141	
+>     142		hsotg->role_sw = role_sw;
+>     143	
+>     144		/* Enable override and initialize values */
+>     145		dwc2_ovr_init(hsotg);
+>     146	
+>     147		return 0;
+>     148	}
+>     149	
+>     150	void dwc2_drd_suspend(struct dwc2_hsotg *hsotg)
+>     151	{
+>     152		u32 gintsts, gintmsk;
+>     153	
+>     154		if (hsotg->role_sw && !hsotg->params.external_id_pin_ctl) {
+>     155			gintmsk = dwc2_readl(hsotg, GINTMSK);
+>     156			gintmsk &= ~GINTSTS_CONIDSTSCHNG;
+>     157			dwc2_writel(hsotg, gintmsk, GINTMSK);
+>     158			gintsts = dwc2_readl(hsotg, GINTSTS);
+>     159			dwc2_writel(hsotg, gintsts | GINTSTS_CONIDSTSCHNG, GINTSTS);
+>     160		}
+>     161	}
+>     162	
+>     163	void dwc2_drd_resume(struct dwc2_hsotg *hsotg)
+>     164	{
+>     165		u32 gintsts, gintmsk;
+>     166	
+>     167		if (hsotg->role_sw && !hsotg->params.external_id_pin_ctl) {
+>     168			gintsts = dwc2_readl(hsotg, GINTSTS);
+>     169			dwc2_writel(hsotg, gintsts | GINTSTS_CONIDSTSCHNG, GINTSTS);
+>     170			gintmsk = dwc2_readl(hsotg, GINTMSK);
+>     171			gintmsk |= GINTSTS_CONIDSTSCHNG;
+>     172			dwc2_writel(hsotg, gintmsk, GINTMSK);
+>     173		}
+>     174	}
+>     175	
+>     176	void dwc2_drd_exit(struct dwc2_hsotg *hsotg)
+>     177	{
+>     178		if (hsotg->role_sw)
+>   > 179			usb_role_switch_unregister(hsotg->role_sw);
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+
+Fixed in v6 patchset: 
+https://lore.kernel.org/patchwork/project/lkml/list/?series=461852.
+
+Regards,
+Amelie
