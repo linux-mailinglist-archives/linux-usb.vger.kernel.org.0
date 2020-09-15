@@ -2,82 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE60326AE59
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 22:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D196126B096
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 00:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727818AbgIOUBs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 16:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S1727443AbgIOWOr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 18:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727816AbgIOT7k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 15:59:40 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207D6C06174A;
-        Tue, 15 Sep 2020 12:59:39 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id a12so4212228eds.13;
-        Tue, 15 Sep 2020 12:59:39 -0700 (PDT)
+        with ESMTP id S1727752AbgIOQit (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 12:38:49 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89288C06174A
+        for <linux-usb@vger.kernel.org>; Tue, 15 Sep 2020 09:37:50 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id t76so4561614oif.7
+        for <linux-usb@vger.kernel.org>; Tue, 15 Sep 2020 09:37:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E7RLNR+VirUb/uAODVT/yUShu7jNp0ygawaN/ILApZ0=;
-        b=eB8YoYOSeUIcRxhZrwQXxQ7Ig+nfGWQ8X1kdmSJ6LXacs3Z+6fAoDmzyEuNu/UXFxz
-         hFxMFIT4OwzrCM3u7RJQbbk9fOt2E/0QoAALEYHDE1RXD77ffAYyULXacOTWy6lvlGKL
-         l/8T+XO2R7Cm4rcLfPr7Am+NMLDG2NwAMgq1gwISC9waz/kKvysx3B/0XB5+ZRHWfboK
-         nW/sSOsc1fiX/10VLy5UWOyBOjWyOuKybtn3OiPKEUIORoYcpTFuvcUA7SI1vAunN+3I
-         zMJA3pxY9vR3rv8Lhjpyk74PBEcu03w5oW/ZwbMMMxWbGGyRkvbDxY7s2W8meXR2Ee1b
-         tDtg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=j1IjPX42QV4ZtmFRWDiz+pKpHRVz7JIwU6XXJfdBbV8=;
+        b=B0GnAyAMlkdBkFa/WL3TZAE+Js/7ZQOwxfCf8Ri+PiqaQ5dm3hLmTuwobKrbCRpMAz
+         jTRuGgQ+xvJJ9LYvdbVGkrxJTR4ta9884mUF16m/oS6CNFPmbJEBdaBClf+rUMUKoz4j
+         Yn0sH7WN0aSs9dW1P7Lrfknf7+/lJhZDZEP28=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E7RLNR+VirUb/uAODVT/yUShu7jNp0ygawaN/ILApZ0=;
-        b=QiT3wTqP8YKI6e1pTt+kn92Mk4iEB4qt0iIBI1We6wkr+vqgkrBoSa4DlvsGlfoKsT
-         oih3gYgaSnimLMc+sS87It07AQUVx34XwxdOINQrjusIzSNqfGTVEr9JXxLHYqFoHUbp
-         c4GDyALEAzfTLzf9EVzzo9mKsDGs69BRy7f0lPyx4rMpXFUKNRN3d2MyziE/R+ONt6d9
-         b/SSDnH0io5dVKu+kk5x7h77C/2HXV4oTxaTpiigcDi7w/PNhnzi81Uh0wNJ9ZrC6T1w
-         54WOyx67nPKmewDIPg+CsAfqI1mqot1DyMqq40jxw3KzEXuxCw2WxZC5Vj4ed+g2tqKC
-         74lg==
-X-Gm-Message-State: AOAM532izhO5ht6cTeOS1VIV7Sgup5WIykd1vCoW793x2pCzEQAEaAbA
-        vwkyqAttD4u5nlchTk+5tc7jiHPj6M7iTfmD7JY=
-X-Google-Smtp-Source: ABdhPJwVckPjSdsQxJxnp2l2KOi29DouQvL+6SIfp1k9vTQ6+NG83TwB0YzKYH20/8Q9jWJxUFa8oVUilVv1QfP7MXA=
-X-Received: by 2002:aa7:c0d3:: with SMTP id j19mr24940978edp.40.1600199977756;
- Tue, 15 Sep 2020 12:59:37 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=j1IjPX42QV4ZtmFRWDiz+pKpHRVz7JIwU6XXJfdBbV8=;
+        b=IibOPwx7WgpCMSl3Tg30jSFlJDJsJB2FI8eCZKZu8dckBP70rtJsSnf9W1saO+EBjY
+         EvxqXx0Iozb6ppuweuAoplOtgCheSc1fx31r18A4z2SnHqxADCqPRZ/58poK8VR71ztv
+         tFV6GmaJUQtfTvqxqw/gBpx9XETVgmYycB78TLq7wW9G05B+oisrr8mh2mPSHB+06jhm
+         vM++CW6U6qphJ/IXT1DrDV34van3ZwqdIeU/rnpLZHBqvEka6Qjxf8sumI/zjuHOna2L
+         7iYSlk50syB7DPYvpjFipDJk/7BtfNhAAN/Q6GRefPbXAOzFoP6SsTvgOWLIrzcjkjFC
+         J7oA==
+X-Gm-Message-State: AOAM53084dkuw6jkZVfysiSbeOgEFJAzSZAMM4zXrtsSWXEWtJjhm0Uu
+        YA4pfHOnZirJLp4jbcU4UFf9/w==
+X-Google-Smtp-Source: ABdhPJw6wj4ib5lJiJmrAZyhwGegpz0slieqSzCh8ct3zcoOAsww+au1Sc+hbv/5x4nr4RYgZFZwOg==
+X-Received: by 2002:aca:fd95:: with SMTP id b143mr203924oii.68.1600187869898;
+        Tue, 15 Sep 2020 09:37:49 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id m20sm7553821oof.23.2020.09.15.09.37.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2020 09:37:49 -0700 (PDT)
+Subject: Re: [PATCH -next] usbip: simplify the return expression of
+ usbip_core_init()
+To:     Liu Shixin <liushixin2@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200915032631.1772673-1-liushixin2@huawei.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <81ff1561-ab22-905c-7fd1-424814e96c41@linuxfoundation.org>
+Date:   Tue, 15 Sep 2020 10:37:48 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20200909160409.8678-1-narmstrong@baylibre.com> <20200909160409.8678-4-narmstrong@baylibre.com>
-In-Reply-To: <20200909160409.8678-4-narmstrong@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 15 Sep 2020 21:59:26 +0200
-Message-ID: <CAFBinCCFmb7S9iR7_z7w5=_sOQZ6sMjo7YWdsETObyNa7MP6XA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] usb: dwc-meson-g12a: Add support for USB on AXG SoCs
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     khilman@baylibre.com, balbi@kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200915032631.1772673-1-liushixin2@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Neil,
+On 9/14/20 9:26 PM, Liu Shixin wrote:
+> Simplify the return expression.
+> 
+> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+> ---
+>   drivers/usb/usbip/usbip_common.c | 8 +-------
+>   1 file changed, 1 insertion(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
+> index e4b96674c405..4ce6c6a45eb1 100644
+> --- a/drivers/usb/usbip/usbip_common.c
+> +++ b/drivers/usb/usbip/usbip_common.c
+> @@ -755,13 +755,7 @@ EXPORT_SYMBOL_GPL(usbip_recv_xbuff);
+>   
+>   static int __init usbip_core_init(void)
+>   {
+> -	int ret;
+> -
+> -	ret = usbip_init_eh();
+> -	if (ret)
+> -		return ret;
+> -
+> -	return 0;
+> +	return usbip_init_eh();
+>   }
+>   
+>   static void __exit usbip_core_exit(void)
+> 
 
-On Wed, Sep 9, 2020 at 6:04 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> The Amlogic AXG is close from the GXL Glue but with a single OTG PHY.
-s/close from/close to/
+Looks good to me.
 
-[...]
-> +static struct dwc3_meson_g12a_drvdata axg_drvdata = {
-> +       .otg_switch_supported = true,
-> +       .clks = meson_gxl_clocks,
-> +       .num_clks = ARRAY_SIZE(meson_gxl_clocks),
-> +       .phy_names = meson_a1_phy_names,
-> +       .num_phys = ARRAY_SIZE(meson_a1_phy_names),
-I wonder if we should also update the comment for meson_a1_phy_names
-to understand that part I had to go back to the dt-bindings patch
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-
-Best regards,
-Martin
+thanks,
+-- Shuah
