@@ -2,219 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E792269F6E
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 09:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E63B626A006
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 09:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgIOHNq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 03:13:46 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:1314 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726119AbgIOHNn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 03:13:43 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08F7CT9r008378;
-        Tue, 15 Sep 2020 09:13:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=QvCfA91FVwCDbBDN11Y5LvhX6jukmlC0QOPchjpIoQI=;
- b=z92xUoCl2NvhVhBK1TspT0coUXVOLwvUbth2hIzfb9c2+/QlXiNXnz2Pe0wWxoxrMsXM
- Ll+yHE/ZtBDStNU1g1ZhoMFN5CrN8safCh0dJ2jL2wA7a0FrIHOghA3AQkFbb5UIpQyw
- HxsnJQSAO376ua53v3z38S7pg3ocfA2mhI8rIT3vNL0IbvaVtl58lp72CaoBy5TxldaQ
- iU3+158QpE07A7l9XFXsIyLGrkRvVu0UbhOkxwVgaQtr0Zgu5AZR3TqjNEW9GXfbjh7l
- sY6Ugq2fhtN7zrpEFHmqnnRFF0DQ5owD+td4V/dMMXv9NtP4RCBQJGHtC0skwJkvql3e 3w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 33gkf9ecab-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Sep 2020 09:13:29 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4ABB1100034;
-        Tue, 15 Sep 2020 09:13:28 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 348DA21CA68;
-        Tue, 15 Sep 2020 09:13:28 +0200 (CEST)
-Received: from lmecxl0995.lme.st.com (10.75.127.51) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 15 Sep
- 2020 09:13:15 +0200
-Subject: Re: [balbi-usb:testing/next 32/38] drivers/usb/dwc2/drd.c:71:
- undefined reference to `usb_role_switch_get_drvdata'
-To:     kernel test robot <lkp@intel.com>
-CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-References: <202009151336.53lUhHje%lkp@intel.com>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <bff256bc-0de2-923e-92a7-a8cd5e682f30@st.com>
-Date:   Tue, 15 Sep 2020 09:13:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726245AbgIOHmE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 03:42:04 -0400
+Received: from mga09.intel.com ([134.134.136.24]:11281 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726234AbgIOHli (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Sep 2020 03:41:38 -0400
+IronPort-SDR: SF1CNlPcRq/zcUxVoMYBiV2/fUgeud+onLxaUDIRS3Eh5HVl6X2I5akQLzCjexAhvHD8QC6uH8
+ +dIb8S1jjsJg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="160148427"
+X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
+   d="scan'208";a="160148427"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 00:41:33 -0700
+IronPort-SDR: 3I9RtokET9TMDCamenG1CpkDfnJsNwGvXk+qLm6Ko17tlA4NT398VZsxH/tSWZBZux2UrPphPC
+ Th5Z3BPEeRYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
+   d="scan'208";a="335552748"
+Received: from lkp-server01.sh.intel.com (HELO 96654786cb26) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 15 Sep 2020 00:41:32 -0700
+Received: from kbuild by 96654786cb26 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kI5al-00003A-LJ; Tue, 15 Sep 2020 07:41:31 +0000
+Date:   Tue, 15 Sep 2020 15:40:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb_control_msg] BUILD SUCCESS
+ 08e2375002fd794cbd26b2662ef83529701c9279
+Message-ID: <5f607005.EaGhbtOvrcJMz5EH%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <202009151336.53lUhHje%lkp@intel.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-15_04:2020-09-15,2020-09-15 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb_control_msg
+branch HEAD: 08e2375002fd794cbd26b2662ef83529701c9279  ALSA: remove calls to usb_pipe_type_check for control endpoints
 
+elapsed time: 934m
 
-On 9/15/20 7:16 AM, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/next
-> head:   3c9722514c3fb74bbe0af87c20bc6b4c47121287
-> commit: a0f0bc95705446b8b1476338056bf869271ba36a [32/38] usb: dwc2: override PHY input signals with usb role switch support
-> config: i386-randconfig-a014-20200914 (attached as .config)
-> compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
-> reproduce (this is a W=1 build):
->          git checkout a0f0bc95705446b8b1476338056bf869271ba36a
->          # save the attached .config to linux build tree
->          make W=1 ARCH=i386
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     ld: drivers/usb/dwc2/drd.o: in function `dwc2_drd_role_sw_set':
->>> drivers/usb/dwc2/drd.c:71: undefined reference to `usb_role_switch_get_drvdata'
->     ld: drivers/usb/dwc2/drd.o: in function `dwc2_drd_init':
->>> drivers/usb/dwc2/drd.c:134: undefined reference to `usb_role_switch_register'
->     ld: drivers/usb/dwc2/drd.o: in function `dwc2_drd_exit':
->>> drivers/usb/dwc2/drd.c:179: undefined reference to `usb_role_switch_unregister'
-> 
-> # https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git/commit/?id=a0f0bc95705446b8b1476338056bf869271ba36a
-> git remote add balbi-usb https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git
-> git fetch --no-tags balbi-usb testing/next
-> git checkout a0f0bc95705446b8b1476338056bf869271ba36a
-> vim +71 drivers/usb/dwc2/drd.c
-> 
->      68	
->      69	static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
->      70	{
->    > 71		struct dwc2_hsotg *hsotg = usb_role_switch_get_drvdata(sw);
->      72		unsigned long flags;
->      73		int already = 0;
->      74	
->      75		/* Skip session not in line with dr_mode */
->      76		if ((role == USB_ROLE_DEVICE && hsotg->dr_mode == USB_DR_MODE_HOST) ||
->      77		    (role == USB_ROLE_HOST && hsotg->dr_mode == USB_DR_MODE_PERIPHERAL))
->      78			return -EINVAL;
->      79	
->      80	#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
->      81		IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
->      82		/* Skip session if core is in test mode */
->      83		if (role == USB_ROLE_NONE && hsotg->test_mode) {
->      84			dev_dbg(hsotg->dev, "Core is in test mode\n");
->      85			return -EBUSY;
->      86		}
->      87	#endif
->      88	
->      89		spin_lock_irqsave(&hsotg->lock, flags);
->      90	
->      91		if (role == USB_ROLE_HOST) {
->      92			already = dwc2_ovr_avalid(hsotg, true);
->      93		} else if (role == USB_ROLE_DEVICE) {
->      94			already = dwc2_ovr_bvalid(hsotg, true);
->      95			/* This clear DCTL.SFTDISCON bit */
->      96			dwc2_hsotg_core_connect(hsotg);
->      97		} else {
->      98			if (dwc2_is_device_mode(hsotg)) {
->      99				if (!dwc2_ovr_bvalid(hsotg, false))
->     100					/* This set DCTL.SFTDISCON bit */
->     101					dwc2_hsotg_core_disconnect(hsotg);
->     102			} else {
->     103				dwc2_ovr_avalid(hsotg, false);
->     104			}
->     105		}
->     106	
->     107		spin_unlock_irqrestore(&hsotg->lock, flags);
->     108	
->     109		if (!already && hsotg->dr_mode == USB_DR_MODE_OTG)
->     110			/* This will raise a Connector ID Status Change Interrupt */
->     111			dwc2_force_mode(hsotg, role == USB_ROLE_HOST);
->     112	
->     113		dev_dbg(hsotg->dev, "%s-session valid\n",
->     114			role == USB_ROLE_NONE ? "No" :
->     115			role == USB_ROLE_HOST ? "A" : "B");
->     116	
->     117		return 0;
->     118	}
->     119	
->     120	int dwc2_drd_init(struct dwc2_hsotg *hsotg)
->     121	{
->     122		struct usb_role_switch_desc role_sw_desc = {0};
->     123		struct usb_role_switch *role_sw;
->     124		int ret;
->     125	
->     126		if (!device_property_read_bool(hsotg->dev, "usb-role-switch"))
->     127			return 0;
->     128	
->     129		role_sw_desc.driver_data = hsotg;
->     130		role_sw_desc.fwnode = dev_fwnode(hsotg->dev);
->     131		role_sw_desc.set = dwc2_drd_role_sw_set;
->     132		role_sw_desc.allow_userspace_control = true;
->     133	
->   > 134		role_sw = usb_role_switch_register(hsotg->dev, &role_sw_desc);
->     135		if (IS_ERR(role_sw)) {
->     136			ret = PTR_ERR(role_sw);
->     137			dev_err(hsotg->dev,
->     138				"failed to register role switch: %d\n", ret);
->     139			return ret;
->     140		}
->     141	
->     142		hsotg->role_sw = role_sw;
->     143	
->     144		/* Enable override and initialize values */
->     145		dwc2_ovr_init(hsotg);
->     146	
->     147		return 0;
->     148	}
->     149	
->     150	void dwc2_drd_suspend(struct dwc2_hsotg *hsotg)
->     151	{
->     152		u32 gintsts, gintmsk;
->     153	
->     154		if (hsotg->role_sw && !hsotg->params.external_id_pin_ctl) {
->     155			gintmsk = dwc2_readl(hsotg, GINTMSK);
->     156			gintmsk &= ~GINTSTS_CONIDSTSCHNG;
->     157			dwc2_writel(hsotg, gintmsk, GINTMSK);
->     158			gintsts = dwc2_readl(hsotg, GINTSTS);
->     159			dwc2_writel(hsotg, gintsts | GINTSTS_CONIDSTSCHNG, GINTSTS);
->     160		}
->     161	}
->     162	
->     163	void dwc2_drd_resume(struct dwc2_hsotg *hsotg)
->     164	{
->     165		u32 gintsts, gintmsk;
->     166	
->     167		if (hsotg->role_sw && !hsotg->params.external_id_pin_ctl) {
->     168			gintsts = dwc2_readl(hsotg, GINTSTS);
->     169			dwc2_writel(hsotg, gintsts | GINTSTS_CONIDSTSCHNG, GINTSTS);
->     170			gintmsk = dwc2_readl(hsotg, GINTMSK);
->     171			gintmsk |= GINTSTS_CONIDSTSCHNG;
->     172			dwc2_writel(hsotg, gintmsk, GINTMSK);
->     173		}
->     174	}
->     175	
->     176	void dwc2_drd_exit(struct dwc2_hsotg *hsotg)
->     177	{
->     178		if (hsotg->role_sw)
->   > 179			usb_role_switch_unregister(hsotg->role_sw);
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+configs tested: 143
+configs skipped: 2
 
-Fixed in v6 patchset: 
-https://lore.kernel.org/patchwork/project/lkml/list/?series=461852.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Regards,
-Amelie
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+m68k                          hp300_defconfig
+sh                          sdk7786_defconfig
+powerpc                          g5_defconfig
+arm                           tegra_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                        icon_defconfig
+arm                          pxa3xx_defconfig
+arm                              zx_defconfig
+powerpc                      ppc40x_defconfig
+mips                        vocore2_defconfig
+sh                          r7780mp_defconfig
+powerpc                    mvme5100_defconfig
+um                             i386_defconfig
+arc                            hsdk_defconfig
+powerpc                    gamecube_defconfig
+powerpc                 mpc836x_mds_defconfig
+arm                         shannon_defconfig
+parisc                generic-64bit_defconfig
+sh                        dreamcast_defconfig
+arm                            mps2_defconfig
+powerpc                      pcm030_defconfig
+powerpc                 mpc8540_ads_defconfig
+mips                 pnx8335_stb225_defconfig
+powerpc                 linkstation_defconfig
+powerpc                  storcenter_defconfig
+alpha                               defconfig
+m68k                           sun3_defconfig
+arm                    vt8500_v6_v7_defconfig
+powerpc                      mgcoge_defconfig
+ia64                                defconfig
+mips                        bcm47xx_defconfig
+arc                        nsimosci_defconfig
+powerpc                      obs600_defconfig
+riscv                            alldefconfig
+arm                        multi_v5_defconfig
+powerpc                     tqm8541_defconfig
+arm                         hackkit_defconfig
+nds32                             allnoconfig
+arm                             ezx_defconfig
+m68k                        mvme16x_defconfig
+arm                           omap1_defconfig
+powerpc                         wii_defconfig
+arm                       multi_v4t_defconfig
+arm                       aspeed_g5_defconfig
+sparc                       sparc64_defconfig
+powerpc                     tqm8560_defconfig
+arm                        spear3xx_defconfig
+m68k                        m5307c3_defconfig
+c6x                              alldefconfig
+arm                        trizeps4_defconfig
+arm                        multi_v7_defconfig
+ia64                             allyesconfig
+ia64                             allmodconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+c6x                              allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20200914
+x86_64               randconfig-a006-20200914
+x86_64               randconfig-a003-20200914
+x86_64               randconfig-a002-20200914
+x86_64               randconfig-a001-20200914
+x86_64               randconfig-a005-20200914
+i386                 randconfig-a004-20200913
+i386                 randconfig-a006-20200913
+i386                 randconfig-a003-20200913
+i386                 randconfig-a001-20200913
+i386                 randconfig-a002-20200913
+i386                 randconfig-a005-20200913
+i386                 randconfig-a004-20200914
+i386                 randconfig-a006-20200914
+i386                 randconfig-a001-20200914
+i386                 randconfig-a003-20200914
+i386                 randconfig-a002-20200914
+i386                 randconfig-a005-20200914
+x86_64               randconfig-a014-20200913
+x86_64               randconfig-a011-20200913
+x86_64               randconfig-a012-20200913
+x86_64               randconfig-a016-20200913
+x86_64               randconfig-a015-20200913
+x86_64               randconfig-a013-20200913
+i386                 randconfig-a015-20200913
+i386                 randconfig-a014-20200913
+i386                 randconfig-a011-20200913
+i386                 randconfig-a013-20200913
+i386                 randconfig-a016-20200913
+i386                 randconfig-a012-20200913
+i386                 randconfig-a015-20200914
+i386                 randconfig-a014-20200914
+i386                 randconfig-a011-20200914
+i386                 randconfig-a013-20200914
+i386                 randconfig-a016-20200914
+i386                 randconfig-a012-20200914
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a006-20200913
+x86_64               randconfig-a004-20200913
+x86_64               randconfig-a003-20200913
+x86_64               randconfig-a002-20200913
+x86_64               randconfig-a005-20200913
+x86_64               randconfig-a001-20200913
+x86_64               randconfig-a014-20200914
+x86_64               randconfig-a011-20200914
+x86_64               randconfig-a016-20200914
+x86_64               randconfig-a012-20200914
+x86_64               randconfig-a015-20200914
+x86_64               randconfig-a013-20200914
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
