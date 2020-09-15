@@ -2,57 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAE326AE4D
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 21:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE60326AE59
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 22:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbgIOT4o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 15:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
+        id S1727818AbgIOUBs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 16:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727810AbgIOT43 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 15:56:29 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E11C06174A;
-        Tue, 15 Sep 2020 12:56:24 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id w1so4283378edr.3;
-        Tue, 15 Sep 2020 12:56:24 -0700 (PDT)
+        with ESMTP id S1727816AbgIOT7k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 15:59:40 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207D6C06174A;
+        Tue, 15 Sep 2020 12:59:39 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id a12so4212228eds.13;
+        Tue, 15 Sep 2020 12:59:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5enmw55Fem91T+DvSEPj+IHaKM+L/svAv9/sGu5e/Ds=;
-        b=Gy4OIdYhMC4ajTg8uZCs56b6sKBkd/CL8S0ZImQKbOenS8JYsOhm18ycyFH8evinV5
-         rmc7GMn1mi9cYIBxaLiYk2r2GKAdjRg0sOoexSqDlLL+A87yqXDSLBDL8whX2LCWgbKh
-         fFLLGClMLQ/wRYvbPDPlm8gdN86iYVCgo4hKff3Ltwm4vR5AK8JHFxq+IEhnAaKqPKeZ
-         sOehcLDyjGzRQltjh6Y11gL/ALPKQTk2de7UP1wofvbOBpeT0RjWGIL3Q4j02KNLbgo1
-         bdYkVsC0jBEkj/kMmxeci910gUtO3FnPG1N5SLdLbnc+DhCyy51Tgff8nFBplAeNddci
-         RXeQ==
+        bh=E7RLNR+VirUb/uAODVT/yUShu7jNp0ygawaN/ILApZ0=;
+        b=eB8YoYOSeUIcRxhZrwQXxQ7Ig+nfGWQ8X1kdmSJ6LXacs3Z+6fAoDmzyEuNu/UXFxz
+         hFxMFIT4OwzrCM3u7RJQbbk9fOt2E/0QoAALEYHDE1RXD77ffAYyULXacOTWy6lvlGKL
+         l/8T+XO2R7Cm4rcLfPr7Am+NMLDG2NwAMgq1gwISC9waz/kKvysx3B/0XB5+ZRHWfboK
+         nW/sSOsc1fiX/10VLy5UWOyBOjWyOuKybtn3OiPKEUIORoYcpTFuvcUA7SI1vAunN+3I
+         zMJA3pxY9vR3rv8Lhjpyk74PBEcu03w5oW/ZwbMMMxWbGGyRkvbDxY7s2W8meXR2Ee1b
+         tDtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5enmw55Fem91T+DvSEPj+IHaKM+L/svAv9/sGu5e/Ds=;
-        b=Fh1G92zh9xN7MLF2537aRgCfAnEdfp3MgQTLi1d3MQJLSQ2/UnOlMhbkMMIxKGoZkp
-         4ftHI76kjBAzE4DODDcBchSkd2t6nuQTvGi9Zr1Tkf8e4iiogDSK0SnNX1USmKwhwG4A
-         DUrcl4MBHERRhdUMMWtnnGHrP/d246BXHggtR+GVsV+vteTvPlCxDWwMngPybnxnhwNy
-         Hv1Q5gGyhcSU7iLll8DQJUMMlTQhp92rtnTAnNzBalC3QIxoAmUhU03K8a9Md6pSGTqx
-         dWcfSjZHkcMavtd6W4MhTcvAveBVWJ00HJOt6Qj3dNYvEvbGWea8JfYfhRMj+3hvcFNa
-         6QaA==
-X-Gm-Message-State: AOAM532s2VmEXAAO3iUNHJNfwsX14RI38nihEzC25mKoGOBRUklzrHbw
-        1EncO+PYOf5hHqE9AWKaafqmfKj1L9tGCnaieWU=
-X-Google-Smtp-Source: ABdhPJyO2Vz913/ZIwBEKyWfB1ZN+xCuIcv/RKPdD0tvxcr1S81cF3S8LwcKpW5biZPhxEtVuLj7sVRGM4i+XxBltEc=
-X-Received: by 2002:a05:6402:489:: with SMTP id k9mr23681127edv.287.1600199783611;
- Tue, 15 Sep 2020 12:56:23 -0700 (PDT)
+        bh=E7RLNR+VirUb/uAODVT/yUShu7jNp0ygawaN/ILApZ0=;
+        b=QiT3wTqP8YKI6e1pTt+kn92Mk4iEB4qt0iIBI1We6wkr+vqgkrBoSa4DlvsGlfoKsT
+         oih3gYgaSnimLMc+sS87It07AQUVx34XwxdOINQrjusIzSNqfGTVEr9JXxLHYqFoHUbp
+         c4GDyALEAzfTLzf9EVzzo9mKsDGs69BRy7f0lPyx4rMpXFUKNRN3d2MyziE/R+ONt6d9
+         b/SSDnH0io5dVKu+kk5x7h77C/2HXV4oTxaTpiigcDi7w/PNhnzi81Uh0wNJ9ZrC6T1w
+         54WOyx67nPKmewDIPg+CsAfqI1mqot1DyMqq40jxw3KzEXuxCw2WxZC5Vj4ed+g2tqKC
+         74lg==
+X-Gm-Message-State: AOAM532izhO5ht6cTeOS1VIV7Sgup5WIykd1vCoW793x2pCzEQAEaAbA
+        vwkyqAttD4u5nlchTk+5tc7jiHPj6M7iTfmD7JY=
+X-Google-Smtp-Source: ABdhPJwVckPjSdsQxJxnp2l2KOi29DouQvL+6SIfp1k9vTQ6+NG83TwB0YzKYH20/8Q9jWJxUFa8oVUilVv1QfP7MXA=
+X-Received: by 2002:aa7:c0d3:: with SMTP id j19mr24940978edp.40.1600199977756;
+ Tue, 15 Sep 2020 12:59:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200909160409.8678-1-narmstrong@baylibre.com> <20200909160409.8678-3-narmstrong@baylibre.com>
-In-Reply-To: <20200909160409.8678-3-narmstrong@baylibre.com>
+References: <20200909160409.8678-1-narmstrong@baylibre.com> <20200909160409.8678-4-narmstrong@baylibre.com>
+In-Reply-To: <20200909160409.8678-4-narmstrong@baylibre.com>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 15 Sep 2020 21:56:12 +0200
-Message-ID: <CAFBinCBEoGv5PJqG_b+HyEoe9Lm0+CaFbsBaUnFv4uB0M6J78Q@mail.gmail.com>
-Subject: Re: [PATCH 2/5] dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: add
- the Amlogic AXG Families USB Glue Bindings
+Date:   Tue, 15 Sep 2020 21:59:26 +0200
+Message-ID: <CAFBinCCFmb7S9iR7_z7w5=_sOQZ6sMjo7YWdsETObyNa7MP6XA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] usb: dwc-meson-g12a: Add support for USB on AXG SoCs
 To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     khilman@baylibre.com, devicetree@vger.kernel.org,
+Cc:     khilman@baylibre.com, balbi@kernel.org,
         linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
@@ -62,32 +61,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Neil
+Hi Neil,
 
 On Wed, Sep 9, 2020 at 6:04 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
 >
 > The Amlogic AXG is close from the GXL Glue but with a single OTG PHY.
-nit-pick: I think this should be "close to"
+s/close from/close to/
 
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-
-> ---
->  .../usb/amlogic,meson-g12a-usb-ctrl.yaml      | 22 ++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> index 5b04a7dfa018..c0058332b967 100644
-> --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> @@ -25,13 +25,14 @@ description: |
->    The Amlogic A1 embeds a DWC3 USB IP Core configured for USB2 in
->    host-only mode.
->
-> -  The Amlogic GXL & GXM SoCs doesn't embed an USB3 PHY.
-> +  The Amlogic GXL, GXM & AXG SoCs doesn't embed an USB3 PHY.
-nit-pick: not sure if we need to fix it here: s/doesn't/don't/
-(personally I would also put AXG first - in reality it changes nothing though)
+[...]
+> +static struct dwc3_meson_g12a_drvdata axg_drvdata = {
+> +       .otg_switch_supported = true,
+> +       .clks = meson_gxl_clocks,
+> +       .num_clks = ARRAY_SIZE(meson_gxl_clocks),
+> +       .phy_names = meson_a1_phy_names,
+> +       .num_phys = ARRAY_SIZE(meson_a1_phy_names),
+I wonder if we should also update the comment for meson_a1_phy_names
+to understand that part I had to go back to the dt-bindings patch
 
 
 Best regards,
