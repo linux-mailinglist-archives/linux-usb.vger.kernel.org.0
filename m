@@ -2,79 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8677E26B6D1
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 02:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A77026B715
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 02:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727150AbgIPAMC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 20:12:02 -0400
-Received: from forward4-smtp.messagingengine.com ([66.111.4.238]:36407 "EHLO
-        forward4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726847AbgIOO0a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 10:26:30 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailforward.nyi.internal (Postfix) with ESMTP id 1FE201940B9D;
-        Tue, 15 Sep 2020 10:01:02 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 15 Sep 2020 10:01:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Tj1t3x
-        ABHZjsC2NjqJwZYpMhXu3dpb7qewiHFHSRUdc=; b=J0GR7UMVLfoLYUWKI+xxmz
-        fCPrr0ZNYS9aVHuzp7DoFy2XsMNfiBoD8RNdWPVQQu5rl+DelMBPZQsLrNsHvUq4
-        yu8nzbWi7qGAakcgJeHSwEhFHIhfgEy8x0BGCNAtQP+Aoe49zkZ0rc1SXA7Tfh2h
-        C/NE+zKeFLH+TyGMV58+7mPWyqo1BmhMsUkWPzlu0cKloB3eh+yPHBFWhU849tYC
-        xLl9wNIHohfE09fZmchBRk9jUETgYIzSpm1Cth6dSrIo9maShjUZ4Ruad2H9Gz7R
-        B3ncBRqar3R8DB3X8ZwAyvfhSP8BchCgimGU3qyETGZ2pkZmvWW+2CNSLVl4S+pA
-        ==
-X-ME-Sender: <xms:HclgX9ltR_85DNvwb-Fa2CzmFuKCyoVl8CWMPdcLIoBC8SqSJ8iwlA>
-    <xme:HclgX43XHJiQ0-miLzuPzvRat_N8jXpU3vlh-BKs6e8C9DFeN0RZLojbIBD8Z9Hz6
-    LopKkazpPysKg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtddtgdegtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvghfmjfeslhhinhhugihfohhunhgurghtihhonhdrohhrgheqnecuggftrf
-    grthhtvghrnheptedvleegfffguddtledvvddtteffjeetgfevveeugefgleelhfevveef
-    udeuuddvnecukfhppeekfedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:HclgXzrNTKEpyDtPFHNSH_BcTBJ_qP4tQSGiIw_3KYwjOZBOiisymw>
-    <xmx:HclgX9npcHAvNopZ_XnVgm1FnKnO-sWmX_6bvZLPQI8N9XuceX_TUA>
-    <xmx:HclgX71LfFAwsVhlfbAVJJC_0TeRlUPHEy_-wuKFdAuZpJkmiohoRQ>
-    <xmx:HslgXwiPva-ZQuxM2p6GcMcdZqRulYohXcKnMd6sVXdk_nutAEWnIQ>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 33E7C306468F;
-        Tue, 15 Sep 2020 10:01:01 -0400 (EDT)
-Date:   Tue, 15 Sep 2020 16:00:58 +0200
-From:   Greg KH <gregKH@linuxfoundation.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] UAS: fix disconnect by unplugging a hub
-Message-ID: <20200915140058.GA914700@kroah.com>
-References: <20200915134501.13947-1-oneukum@suse.com>
- <20200915134501.13947-3-oneukum@suse.com>
+        id S1727273AbgIPAQe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 20:16:34 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:35540 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726136AbgIOOXS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 10:23:18 -0400
+Received: by mail-il1-f194.google.com with SMTP id y9so3185967ilq.2;
+        Tue, 15 Sep 2020 07:21:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oibcEZaus/KsE9Tzx8ei6QcB5cjiNKskz7YSAoeajEU=;
+        b=VUL0UUDL1tN2ZbWB7++YaOqMpVNu19aNMDXf2tcDFp63gnbNWnb41Ag+8+nLkYQ2O5
+         GICDmqlLV+89s+oObukZSUd7HnIIAJv74xbMsr3jGi6KZDHQ08i5GCTQwqRjYvFysYcS
+         orlnyHkr7KoJjfaCjTqV17AwcOB7YG1t9jqhJf/QHWT5dJgxMfHSgMxxMbqLwkCEV8My
+         xi2kz7ZO0HaQ2QYfWMle8hycYJCm5BhrtIrCWzSdjd+85k+WScLQrzCVBUaQ9AgXDa+z
+         gmJ+wvPVBav1gZ9/MOqAL9kusBfHqQCZyfNYmF5AbD9BCah3Q/3/XEuRKVy4wDKLht+n
+         yWiA==
+X-Gm-Message-State: AOAM531avnZsmncym+mrXHWCJVOsiOVa+/FtYA58MweHnz3Yi8AvMSB8
+        l5QywPYxhPr3vu8tgcaOSw==
+X-Google-Smtp-Source: ABdhPJzt8yV1vKiC8DPNIwCsSdd5HBuc1l0C2uul6JJjtgEd9/PutB30hWIdnJ86bLqeEaT6LV9bZA==
+X-Received: by 2002:a92:9146:: with SMTP id t67mr16054340ild.297.1600179707146;
+        Tue, 15 Sep 2020 07:21:47 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id p17sm8912639ilj.81.2020.09.15.07.21.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2020 07:21:46 -0700 (PDT)
+Received: (nullmailer pid 1873185 invoked by uid 1000);
+        Tue, 15 Sep 2020 14:21:45 -0000
+Date:   Tue, 15 Sep 2020 08:21:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        linux-usb@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Peter Chen <peter.chen@nxp.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Add binding for onboard USB hubs
+Message-ID: <20200915142145.GA1861636@bogus>
+References: <20200914112716.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200915134501.13947-3-oneukum@suse.com>
+In-Reply-To: <20200914112716.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 03:45:01PM +0200, Oliver Neukum wrote:
-> The SCSI layer can go into an ugly loop if you ignore that a device
-> is gone. You need to report an error in the command rather than
-> in the return value of the queue method.
-> We need to specifically check for ENODEV..
+On Mon, Sep 14, 2020 at 11:27:48AM -0700, Matthias Kaehlcke wrote:
+> Onboard USB hubs need to be powered and may require initiaization of
+> other resources (like GPIOs or clocks) to work properly. This adds
+> a device tree binding for these hubs.
+
+We already have bindings for these. 2 in fact as I2C controlled hubs are 
+often described under the I2C bus.
+
 > 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
->  drivers/usb/storage/uas.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+>  .../bindings/usb/onboard_usb_hub.yaml         | 70 +++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> new file mode 100644
+> index 000000000000..f82d8f459eed
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/onboard_usb_hub.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Binding for onboard USB hubs
+> +
+> +maintainers:
+> +  - Matthias Kaehlcke <mka@chromium.org>
+> +
+> +allOf:
+> +  - $ref: /schemas/usb/onboard_usb_hub.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - onboard-usb-hub
+> +      - realtek,rts5411
+> +
+> +  power-off-in-suspend:
+> +    description:
+> +      The hub should be powered off during system suspend. When the
+> +      "wakeup-source" property is also provided the hub is only powered
+> +      off during suspend when no wakeup capable descendants are connected.
+> +    type: boolean
+> +
+> +  vdd-supply:
+> +    description:
+> +      phandle to the regulator that provides power to the hub.
+> +
+> +  wakeup-source:
+> +    description:
+> +      Wakeup capable USB devices connected to this hub can be used as
+> +      wakeup source.
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - vdd-supply
+> +
+> +examples:
+> +  - |
+> +    usb_hub: usb-hub {
+> +        compatible = "realtek,rts5411", "onboard-usb-hub";
+> +        vdd-supply = <&pp3300_hub>;
+> +        power-off-in-suspend;
+> +        wakeup-source;
 
-Should this one go to the stable kernels?
+This is the hub device?
 
-thanks,
+> +    };
+> +
+> +    &usb_1_dwc3 {
+> +	dr_mode = "host";
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +
+> +	/* 2.0 hub on port 1 */
+> +	hub@1 {
+> +		compatible = "usbbda,5411";
+> +		reg = <1>;
+> +		hub = <&usb_hub>;
 
-greg k-h
+Or this node is?
+
+> +	};
+> +
+> +	/* 3.0 hub on port 2 */
+> +	hub@2 {
+> +		compatible = "usbbda,411";
+> +		reg = <2>;
+> +		hub = <&usb_hub>;
+
+Or this node is?
+
+The hub node belongs here.
+
+If you really have it connected to 2 upstream ports, then just do 
+one node with 'reg = <1 2>;'.
+
+Rob
+
+> +	};
+> +
+> +...
+> -- 
+> 2.28.0.618.gf4bc123cb7-goog
+> 
