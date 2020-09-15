@@ -2,218 +2,290 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4638D26B646
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 02:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D62726B90F
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 02:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727111AbgIPABp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 20:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727198AbgIPAAK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 20:00:10 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3570C06174A
-        for <linux-usb@vger.kernel.org>; Tue, 15 Sep 2020 17:00:09 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id k13so2189274plk.3
-        for <linux-usb@vger.kernel.org>; Tue, 15 Sep 2020 17:00:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RX3pgRSaqwuA91vHSgRiOLr6fZp+r278bl7l934MXzo=;
-        b=I182+EMgnVlXeJ47Jpn+7tZxBNwd0Q4oeX34HqBM9qVe+Kc3Ch8LGnghFtFaFDoiI+
-         HGm8fXrJUu2L+YhOwQAi8t6WDe4uJ4ADZRBofop4MrMgBTQdJC1IICusIXpVTxM24MYu
-         CHV5T8SHE9ZaD5FzAtY921nrac1crYXcu8ErQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RX3pgRSaqwuA91vHSgRiOLr6fZp+r278bl7l934MXzo=;
-        b=EPNqAyQJZckibBSlALWpro2wybbVARgkTWyQDhRRF8LAlq8wafw3hViziYY/vO3bOc
-         ZVWxaxiypEqu46ZPqaQz/+FyfeSMQ2YXPwVgnYxgw6g80Jizv+z5zO3usaHLG5YfxF8e
-         UlmIofOVx4nKk7lDYJImeD4blQWzjjVtHh+7khKWs7Ius69FoWxiMILr9t3cljPfOMGd
-         g80LutC8yGiDvYnHGD89IdNYpf9zLgQuLqMCqWoF60HzkYYKUo7WKPOqBtDhbByAJ8/S
-         cOi1kOZ/wutaNtMyGWhWusxrQjBpbvGM0AmFzlOeM/R6j4Ah3erblQISdP4NFzgbrvrk
-         FIRw==
-X-Gm-Message-State: AOAM53021uT/xjIz0Fw6yoclXEHIleoaa0YQEsyDohffb4yzD2sd4Mmt
-        I80DnAEM7rQ/LYB2ylubh6hi0w==
-X-Google-Smtp-Source: ABdhPJx2q0kjfen9gHcVuYxqbdmmHRWRJidwPFOESeIQIJnD+CHVVXk6+U17mQhEWN8yg8Sb2ToONw==
-X-Received: by 2002:a17:90a:8981:: with SMTP id v1mr1640899pjn.54.1600214409487;
-        Tue, 15 Sep 2020 17:00:09 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id e10sm542754pjj.32.2020.09.15.17.00.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2020 17:00:09 -0700 (PDT)
-Date:   Tue, 15 Sep 2020 17:00:08 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        linux-usb@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        devicetree@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Peter Chen <peter.chen@nxp.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: usb: Add binding for onboard USB hubs
-Message-ID: <20200916000008.GG2771744@google.com>
-References: <20200914112716.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200915142145.GA1861636@bogus>
+        id S1726414AbgIPAzr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 20:55:47 -0400
+Received: from mail-eopbgr30045.outbound.protection.outlook.com ([40.107.3.45]:5518
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726314AbgIOLa2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Sep 2020 07:30:28 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FdC1rNS56godu0DNp4FG4kCXbLQJwN/IjKAG1zSjuMcokGvID4DMvof5lzDpuAXB2mTXqvYKAcs7LLZT/ORl+AHfQZCT7sTAHoMX5y9+TW7i0iMgorr/Hzam58dOde2dIklEVHGBS58hf8GubXZ+ZnOcT4lxruTiLGZ5qqtJJb+vSmifHdg3nPsrHHqrtmtdWUmjixtOgSExm3o0qJXKZcHcQDu2p8QxPM42DR26LUhc/IUPrkaXWZw28gy08e7pP8bz7/dsqTwBRQ2LO/+VrGJc0NY8acEF/lOE4GUWyEgyJ9lEpCg9tLwqdN6ZlO0tXWoMNFqDnPg6Zz2jLr9Yiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=818BGAW3i3vkSLnkctR3JRn6gIYnQTB8TNpeDgkvIho=;
+ b=GaebiXctzBg7EJleEcL8ujV9P5HICnaDSw9SlvZco3+MpZUGm6eLmBInFYIJrPruuDL3CTXijc/ckHL2lB5q2hhD0maR2pJ8z0/LwN+jnpecBOw+Smfg2jSVU8FBq8KVy8hHj5CEw0hSKsIeGFGuUdFPT9gw91jCrH0o60vgFHeSN3xT+C6LfzNLBr9xS9Diy6Zfb8UZPRXCRgdk/N0xRzz+sUw9Otg3hEyQD0Rv5SGkxOZwHxp2auyBu0kFLbm6HgEL1iEU0D6l1HDdSngR6BCkH6cuZAIh3dk244C65Q7AEzIZK4DXtrjj02pl3tOgHE5MUkOtL0Zk18uB1x+l9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=818BGAW3i3vkSLnkctR3JRn6gIYnQTB8TNpeDgkvIho=;
+ b=bbpNNdKtROKFHXuVLGTQ1Ajr+VcFvtmVj8oQmEj31drHA0F1+J4gN5rob+yEc6XGRkquZS8AiV8eHtC9oebdv8hAcGmV9nKQB6zdkSeocSWsX6EPqDBQuJTplDTs1yF8sOmhVAvwaPzFr1vSjnyNcQ958LSZ5z/guDY3+kLuLZw=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=nxp.com;
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
+ by VE1PR04MB7278.eurprd04.prod.outlook.com (2603:10a6:800:1b1::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Tue, 15 Sep
+ 2020 11:29:34 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::acd3:d354:3f34:3af7]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::acd3:d354:3f34:3af7%4]) with mapi id 15.20.3370.019; Tue, 15 Sep 2020
+ 11:29:33 +0000
+From:   Li Jun <jun.li@nxp.com>
+To:     mathias.nyman@intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-imx@nxp.com
+Subject: [PATCH v3] usb: xhci: add debugfs support for ep with stream
+Date:   Tue, 15 Sep 2020 19:22:47 +0800
+Message-Id: <1600168967-28675-1-git-send-email-jun.li@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR03CA0145.apcprd03.prod.outlook.com
+ (2603:1096:4:c8::18) To VE1PR04MB6528.eurprd04.prod.outlook.com
+ (2603:10a6:803:127::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200915142145.GA1861636@bogus>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from 10.192.242.69 (119.31.174.67) by SG2PR03CA0145.apcprd03.prod.outlook.com (2603:1096:4:c8::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3391.11 via Frontend Transport; Tue, 15 Sep 2020 11:29:32 +0000
+X-Mailer: git-send-email 2.7.4
+X-Originating-IP: [119.31.174.67]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: b100d4f3-bc7b-418c-fe05-08d8596a9e8f
+X-MS-TrafficTypeDiagnostic: VE1PR04MB7278:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <VE1PR04MB7278DE8BA8E1D55607AE2A9589200@VE1PR04MB7278.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:105;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ELQAN2bKlJNNBD7MGoJ/RHBFK5nI8ZzN8vAChV/KYx2HzySV+opKscMAwa6lM3pfaRwP8fPcZOywIslnjm00Tcu1q2SWMZqW4xoOPEYKEoDRpkj+PRb0BN/AtP5nOpWp5HpsFQ2SsZDJe8JxYRa2WxGX+S8wtkxcqg7vrQE735jppjJ7K9qxLVziL/D+bc6HTQ2aKJid4W8h0KTPUhUL6phl6UlvtkM4K0uKkMWENz8syJ8js5lVXwNxwJe1yhcqqIcAcxoCT2W2uf+q0XqPfQWbZk4Y46xm/qZtqwgTWtQazUVnlE+BGxPZoxErn+1GCptyJeItum1lx6tglkME3Bgmhx0YLcnTQJnoyhbTnpjrIfxZ2O9yyMG1E622c9pn1XCaNXWecb617zQdCKda8sa1P2jwM0eK8Tb0v7UVcY1Va9SttdDA2we3JNFDcXf8R0Ubbk2KcI9ClperZPFVsg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39860400002)(346002)(376002)(396003)(136003)(6916009)(8676002)(52116002)(66556008)(66946007)(66476007)(2906002)(6666004)(83380400001)(86362001)(186003)(16526019)(966005)(8936002)(26005)(36756003)(4326008)(6486002)(16576012)(316002)(956004)(478600001)(5660300002)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: FoVweY1Tt0dNEj+k3ThZeW2hTc+PHob1ScXDR9PpfqCf1LbMD2LJ1z4ZYEYSs8A7B/OvFdskZWeCxOMv9sKfWgNtRX3tGIjaw8D+OBrwh03tBLXw6pJmWjZtXEX1lhoD8Gy41aBsbKfZMW1ZLT2WtW7UG1XUv8JB74VQOOu7ybVwACTStAuki97iHkfhnVf1NW9CsVD3ZH0ZSTlAFGz5adHCEs0INTrmqtAl5I3/wM/S8s3cssYWQt+pDlYAwhcMpuqw1wEYzsbxmLmGzA8Zoo++VEZL8vuXpseCFudYSk277nFzn9w67vone15xNqe/LhHSOkdYVNhE9e8jb49DvlXBfpZi6fVSLN11KA7HRIHXU5svP9sWSv0ceOgRz9wMAhtE13EYDekYXILGhRh/xUHBW3xPOT/2TvozbVHcfd4egRNL+ZYoQUR6gq/n953eg11ZXCEMFu11sTxxyQNvxYPl5Y7pVOMQMkQYtpwo7ouToMS9CklaMfYhbMUYvLm4pBtMHHmL/ox/oTheRU4drrZF4qzDp1dS2ZbDb+UUjBxBnbq5PTcOovrsTWqCRez4ahLy1gS+MT/NcS8K8Ra72MvHFwFEHYjbbImKXYCpRIaMPT2cMB8dFjJBDmwOZTiq/FBkDYAKsRJ5V8ESc+N5Uw==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b100d4f3-bc7b-418c-fe05-08d8596a9e8f
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2020 11:29:33.7535
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5hTgpQ+TZreGMI1/zGuJoRzt5rHoVvEz+xjtSOH9rmRxd52lJvRgdCMcokw2OpYO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7278
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+To show the trb ring of streams, use the exsiting ring files of bulk ep
+to show trb ring of one specific stream ID, which stream ID's trb ring
+will be shown, is controlled by a new debugfs file stream_id, this is to
+avoid to create a large number of dir for every allocate stream IDs,
+another debugfs file stream_context_array is created to show all the
+allocated stream context array entries.
 
-On Tue, Sep 15, 2020 at 08:21:45AM -0600, Rob Herring wrote:
-> On Mon, Sep 14, 2020 at 11:27:48AM -0700, Matthias Kaehlcke wrote:
-> > Onboard USB hubs need to be powered and may require initiaization of
-> > other resources (like GPIOs or clocks) to work properly. This adds
-> > a device tree binding for these hubs.
-> 
-> We already have bindings for these. 2 in fact as I2C controlled hubs are 
-> often described under the I2C bus.
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+changes for v3:
+-  Remove check of eps[i].ring and eps[i].new_ring, use eps[i].ring
+   as target ring addr, as Mathias's patch[1] makes sure endpoint is
+   enabled and ring pointer is set correctly before we call
+   xhci_debugfs_create_endpoint().
+   [1] https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=for-usb-linus&id=cf99aef5624a592fd4f3374c7060bfa1a65f15df
+-  Improve the stream_id show format as suggested by Mathias. 
 
-Yes, these are I2C controlled hubs, which need hub specific drivers. This
-driver is for hubs without an additional bus that share similar
-initialization requirements and can benefit from common functionality.
+chanages for v2:
+-  Drop stream files remove, the stream files will be removed
+   with ep dir removal, keep the ep but only remove streams
+   actually does not make sense in current code. 
+-  Use the new_ring for show_ring pointer for non-zero ep.
 
-> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
-> > 
-> >  .../bindings/usb/onboard_usb_hub.yaml         | 70 +++++++++++++++++++
-> >  1 file changed, 70 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> > new file mode 100644
-> > index 000000000000..f82d8f459eed
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> > @@ -0,0 +1,70 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/onboard_usb_hub.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Binding for onboard USB hubs
-> > +
-> > +maintainers:
-> > +  - Matthias Kaehlcke <mka@chromium.org>
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/usb/onboard_usb_hub.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - onboard-usb-hub
-> > +      - realtek,rts5411
-> > +
-> > +  power-off-in-suspend:
-> > +    description:
-> > +      The hub should be powered off during system suspend. When the
-> > +      "wakeup-source" property is also provided the hub is only powered
-> > +      off during suspend when no wakeup capable descendants are connected.
-> > +    type: boolean
-> > +
-> > +  vdd-supply:
-> > +    description:
-> > +      phandle to the regulator that provides power to the hub.
-> > +
-> > +  wakeup-source:
-> > +    description:
-> > +      Wakeup capable USB devices connected to this hub can be used as
-> > +      wakeup source.
-> > +    type: boolean
-> > +
-> > +required:
-> > +  - compatible
-> > +  - vdd-supply
-> > +
-> > +examples:
-> > +  - |
-> > +    usb_hub: usb-hub {
-> > +        compatible = "realtek,rts5411", "onboard-usb-hub";
-> > +        vdd-supply = <&pp3300_hub>;
-> > +        power-off-in-suspend;
-> > +        wakeup-source;
-> 
-> This is the hub device?
+ drivers/usb/host/xhci-debugfs.c | 109 +++++++++++++++++++++++++++++++++++++++-
+ drivers/usb/host/xhci-debugfs.h |  10 ++++
+ drivers/usb/host/xhci.c         |   1 +
+ 3 files changed, 119 insertions(+), 1 deletion(-)
 
-This is the physical hub device on the platform bus, which is the
-equivalent to this entry for a usb2512b hub on an I2C bus:
+diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
+index 352003b..3927edb 100644
+--- a/drivers/usb/host/xhci-debugfs.c
++++ b/drivers/usb/host/xhci-debugfs.c
+@@ -451,9 +451,11 @@ void xhci_debugfs_create_endpoint(struct xhci_hcd *xhci,
+ 	if (!epriv)
+ 		return;
+ 
++	epriv->show_ring = dev->eps[ep_index].ring;
++
+ 	snprintf(epriv->name, sizeof(epriv->name), "ep%02d", ep_index);
+ 	epriv->root = xhci_debugfs_create_ring_dir(xhci,
+-						   &dev->eps[ep_index].ring,
++						   &epriv->show_ring,
+ 						   epriv->name,
+ 						   spriv->root);
+ 	spriv->eps[ep_index] = epriv;
+@@ -475,6 +477,111 @@ void xhci_debugfs_remove_endpoint(struct xhci_hcd *xhci,
+ 	kfree(epriv);
+ }
+ 
++static int xhci_stream_id_show(struct seq_file *s, void *unused)
++{
++	struct xhci_ep_priv	*epriv = s->private;
++
++	if (!epriv->stream_info)
++		return -EPERM;
++
++	seq_printf(s, "Show stream ID %d trb ring, supported [1 - %d]\n",
++		   epriv->stream_id, epriv->stream_info->num_streams - 1);
++
++	return 0;
++}
++
++static int xhci_stream_id_open(struct inode *inode, struct file *file)
++{
++	return single_open(file, xhci_stream_id_show, inode->i_private);
++}
++
++static ssize_t xhci_stream_id_write(struct file *file,  const char __user *ubuf,
++			       size_t count, loff_t *ppos)
++{
++	struct seq_file         *s = file->private_data;
++	struct xhci_ep_priv	*epriv = s->private;
++	int			ret;
++	u16			stream_id; /* MaxPStreams + 1 <= 16 */
++
++	if (!epriv->stream_info)
++		return -EPERM;
++
++	/* Decimal number */
++	ret = kstrtou16_from_user(ubuf, count, 10, &stream_id);
++	if (ret)
++		return ret;
++
++	if (stream_id == 0 || stream_id >= epriv->stream_info->num_streams)
++		return -EINVAL;
++
++	epriv->stream_id = stream_id;
++	epriv->show_ring = epriv->stream_info->stream_rings[stream_id];
++
++	return count;
++}
++
++static const struct file_operations stream_id_fops = {
++	.open			= xhci_stream_id_open,
++	.write                  = xhci_stream_id_write,
++	.read			= seq_read,
++	.llseek			= seq_lseek,
++	.release		= single_release,
++};
++
++static int xhci_stream_context_array_show(struct seq_file *s, void *unused)
++{
++	struct xhci_ep_priv	*epriv = s->private;
++	struct xhci_stream_ctx	*stream_ctx;
++	dma_addr_t		dma;
++	int			id;
++
++	if (!epriv->stream_info)
++		return -EPERM;
++
++	seq_printf(s, "Allocated %d streams and %d stream context array entries\n",
++			epriv->stream_info->num_streams,
++			epriv->stream_info->num_stream_ctxs);
++
++	for (id = 0; id < epriv->stream_info->num_stream_ctxs; id++) {
++		stream_ctx = epriv->stream_info->stream_ctx_array + id;
++		dma = epriv->stream_info->ctx_array_dma + id * 16;
++		if (id < epriv->stream_info->num_streams)
++			seq_printf(s, "%pad stream id %d deq %016llx\n", &dma,
++				   id, le64_to_cpu(stream_ctx->stream_ring));
++		else
++			seq_printf(s, "%pad stream context entry not used deq %016llx\n",
++				   &dma, le64_to_cpu(stream_ctx->stream_ring));
++	}
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(xhci_stream_context_array);
++
++void xhci_debugfs_create_stream_files(struct xhci_hcd *xhci,
++				      struct xhci_virt_device *dev,
++				      int ep_index)
++{
++	struct xhci_slot_priv	*spriv = dev->debugfs_private;
++	struct xhci_ep_priv	*epriv;
++
++	if (!spriv || !spriv->eps[ep_index] ||
++	    !dev->eps[ep_index].stream_info)
++		return;
++
++	epriv = spriv->eps[ep_index];
++	epriv->stream_info = dev->eps[ep_index].stream_info;
++
++	/* Show trb ring of stream ID 1 by default */
++	epriv->stream_id = 1;
++	epriv->show_ring = epriv->stream_info->stream_rings[1];
++	debugfs_create_file("stream_id", 0644,
++			    epriv->root, epriv,
++			    &stream_id_fops);
++	debugfs_create_file("stream_context_array", 0444,
++			    epriv->root, epriv,
++			    &xhci_stream_context_array_fops);
++}
++
+ void xhci_debugfs_create_slot(struct xhci_hcd *xhci, int slot_id)
+ {
+ 	struct xhci_slot_priv	*priv;
+diff --git a/drivers/usb/host/xhci-debugfs.h b/drivers/usb/host/xhci-debugfs.h
+index 56db635..7c074b4 100644
+--- a/drivers/usb/host/xhci-debugfs.h
++++ b/drivers/usb/host/xhci-debugfs.h
+@@ -91,6 +91,9 @@ struct xhci_file_map {
+ struct xhci_ep_priv {
+ 	char			name[DEBUGFS_NAMELEN];
+ 	struct dentry		*root;
++	struct xhci_stream_info *stream_info;
++	struct xhci_ring	*show_ring;
++	unsigned int		stream_id;
+ };
+ 
+ struct xhci_slot_priv {
+@@ -113,6 +116,9 @@ void xhci_debugfs_create_endpoint(struct xhci_hcd *xhci,
+ void xhci_debugfs_remove_endpoint(struct xhci_hcd *xhci,
+ 				  struct xhci_virt_device *virt_dev,
+ 				  int ep_index);
++void xhci_debugfs_create_stream_files(struct xhci_hcd *xhci,
++				      struct xhci_virt_device *virt_dev,
++				      int ep_index);
+ #else
+ static inline void xhci_debugfs_init(struct xhci_hcd *xhci) { }
+ static inline void xhci_debugfs_exit(struct xhci_hcd *xhci) { }
+@@ -128,6 +134,10 @@ static inline void
+ xhci_debugfs_remove_endpoint(struct xhci_hcd *xhci,
+ 			     struct xhci_virt_device *virt_dev,
+ 			     int ep_index) { }
++static inline void
++xhci_debugfs_create_stream_files(struct xhci_hcd *xhci,
++				 struct xhci_virt_device *virt_dev,
++				 int ep_index) { }
+ #endif /* CONFIG_DEBUG_FS */
+ 
+ #endif /* __LINUX_XHCI_DEBUGFS_H */
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 3c41b14..5909fc2 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3530,6 +3530,7 @@ static int xhci_alloc_streams(struct usb_hcd *hcd, struct usb_device *udev,
+ 		xhci_dbg(xhci, "Slot %u ep ctx %u now has streams.\n",
+ 			 udev->slot_id, ep_index);
+ 		vdev->eps[ep_index].ep_state |= EP_HAS_STREAMS;
++		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
+ 	}
+ 	xhci_free_command(xhci, config_cmd);
+ 	spin_unlock_irqrestore(&xhci->lock, flags);
+-- 
+2.7.4
 
-    usb2512b@2c {
-        compatible = "microchip,usb2512b";
-	reg = <0x2c>;
-	reset-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
-    };
-
-(source: Documentation/devicetree/bindings/usb/usb251xb.txt)
-
-It doesn't have an I2C, SPI or other bus, hence the platform bus is
-used.
-
-> > +    };
-> > +
-> > +    &usb_1_dwc3 {
-> > +	dr_mode = "host";
-> > +	#address-cells = <1>;
-> > +	#size-cells = <0>;
-> > +
-> > +	/* 2.0 hub on port 1 */
-> > +	hub@1 {
-> > +		compatible = "usbbda,5411";
-> > +		reg = <1>;
-> > +		hub = <&usb_hub>;
-> 
-> Or this node is?
-
-It is the USB 2.0 part of the hub. The device is instantiated by
-Linux even without this node, but the system associates the node
-with the device, which suggests it 'exists'.
-
-The usb2512b mentioned above implicitly also has a node here, it just
-isn't specified since the USB controller autodetects it.
-
-> > +	};
-> > +
-> > +	/* 3.0 hub on port 2 */
-> > +	hub@2 {
-> > +		compatible = "usbbda,411";
-> > +		reg = <2>;
-> > +		hub = <&usb_hub>;
-> 
-> Or this node is?
-
-It is the USB 3.0 part of the hub.
-
-> The hub node belongs here.
-
-The platform device isn't probed when the node is inside the USB
-controller node. I haven't investigated why that's the case.
-
-> If you really have it connected to 2 upstream ports, then just do
-> one node with 'reg = <1 2>;'.
-
-Yes, it is connected to two upstream ports. The platform driver needs a
-reference to both/all hubs, to be able to determine whether to keep the
-hub powered during system suspend or not.
-
-Technically the hub with product id 0x5411 is connected to port 1 and the
-one with product id 0x411 to port 2, so I would say the above is more
-accurate than pretending one of the hubs is connected to both ports.
-
-I would argue that the two hub nodes are similar to a SDIO BT/WiFi combo,
-where you have one chip/module with multiple functions. The DT has entries
-for both functions, even though they reside in the same chip and share the
-same bus.
