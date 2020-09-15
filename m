@@ -2,167 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 420CD26A663
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 15:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0981026A658
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 15:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbgIONiY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 09:38:24 -0400
-Received: from mga09.intel.com ([134.134.136.24]:43500 "EHLO mga09.intel.com"
+        id S1726371AbgIONft (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 09:35:49 -0400
+Received: from node.akkea.ca ([192.155.83.177]:60636 "EHLO node.akkea.ca"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726664AbgIONbd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Sep 2020 09:31:33 -0400
-IronPort-SDR: VCvbYezxSr6U7uUPgBYbMM/QcGWpcKRz1PLvy6NElDVpDCMnx7VMUyTQeLOea7tqLmzAd65xCI
- y6cOv+6bOTWA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="160186331"
-X-IronPort-AV: E=Sophos;i="5.76,430,1592895600"; 
-   d="scan'208";a="160186331"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 06:26:01 -0700
-IronPort-SDR: X/LAgiXrHQkEEyDEpen6n/OPzoT4qPjXcZp29hFeNe3FOcq5vSx25iJXDd90z6KIRlkmJTAJeW
- zWzTkBG/X7SA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,430,1592895600"; 
-   d="scan'208";a="409200767"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 15 Sep 2020 06:25:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Sep 2020 16:25:57 +0300
-Date:   Tue, 15 Sep 2020 16:25:57 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 11/14] usb: typec: tcpci_maxim: Add support for Sink
- FRS
-Message-ID: <20200915132557.GJ1139641@kuha.fi.intel.com>
-References: <20200901025927.3596190-1-badhri@google.com>
- <20200901025927.3596190-12-badhri@google.com>
+        id S1726663AbgIONbx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Sep 2020 09:31:53 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by node.akkea.ca (Postfix) with ESMTP id EA60B4E201F;
+        Tue, 15 Sep 2020 13:31:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
+        t=1600176680; bh=gtj/Nyy1vtgEu5K98dpN7qFHnlOiZePDKix5OG62n4U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=G7N5XllA2F0KoXYnkUIWeekxwQZWbcjAbVZ2Pz9by2aBkwVPtMmhPGCvm+JoyAeW7
+         ojfCI+dKYiUfl/XPT7pKaDzyQTEFsN8iX58neF14cGwqz2RCjAMXDd3IG9LLMhIHua
+         qDoBiMFOSm2GErjLDcX0yJmW/+vkvNfm8LI4Qys8=
+X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
+Received: from node.akkea.ca ([127.0.0.1])
+        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UcZR_BcROKHC; Tue, 15 Sep 2020 13:31:19 +0000 (UTC)
+Received: from www.akkea.ca (node.akkea.ca [192.155.83.177])
+        by node.akkea.ca (Postfix) with ESMTPSA id 41C234E200E;
+        Tue, 15 Sep 2020 13:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
+        t=1600176679; bh=gtj/Nyy1vtgEu5K98dpN7qFHnlOiZePDKix5OG62n4U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=IMtXG/QJAiy5UTRY3xSVaQZTEpcnB0yr7fBviRru58vV7DxGdKBwObJl3Gi11KlhT
+         NHFsthA5w6Mt9tft3X0ETH+j2UbzG4I3Wi84zJqqqKUb/A4jXGtd/fSbatDR7sMId5
+         ovN34oXI2jHPSh1w8wIQFTo3dJsRjwjWKRoLOJjs=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200901025927.3596190-12-badhri@google.com>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 15 Sep 2020 06:31:19 -0700
+From:   Angus Ainslie <angus@akkea.ca>
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     kernel@puri.sm, MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bryan.odonoghue@linaro.org
+Subject: Re: [PATCH 1/4] extcon: Add USB VBUS properties
+In-Reply-To: <bfa20bf2-e13b-1cd4-52d9-c8fa922d5aac@samsung.com>
+References: <20200914164639.1487650-1-angus@akkea.ca>
+ <CGME20200914165800epcas1p12e04260289513eac00f442388d5ba374@epcas1p1.samsung.com>
+ <20200914164639.1487650-2-angus@akkea.ca>
+ <bfa20bf2-e13b-1cd4-52d9-c8fa922d5aac@samsung.com>
+Message-ID: <23ce56387f39fa097b36380dbe9661a0@akkea.ca>
+X-Sender: angus@akkea.ca
+User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 31, 2020 at 07:59:24PM -0700, Badhri Jagan Sridharan wrote:
-> Upon receiving ALERT_EXTENDED.TCPC_SINK_FAST_ROLE_SWAP signal
-> tcpm to start Sink fast role swap signal.
-> 
-> Inform when TCPM is sourcing vbus.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Hi,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
-> Changes since v1:
-> - Changing patch version to v6 to fix version number confusion.
-> ---
->  drivers/usb/typec/tcpm/tcpci_maxim.c | 50 +++++++++++++++++++++++++---
->  1 file changed, 46 insertions(+), 4 deletions(-)
+On 2020-09-14 18:40, Chanwoo Choi wrote:
+> Hi,
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index b61f290a8f96..6ba808ad901a 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -106,13 +106,22 @@ static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
->  		return;
->  	}
->  
-> +	ret = max_tcpci_write8(chip, TCPC_ALERT_EXTENDED, 0xff);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "Unable to clear TCPC_ALERT_EXTENDED ret:%d\n", ret);
-> +		return;
-> +	}
-> +
->  	alert_mask = TCPC_ALERT_TX_SUCCESS | TCPC_ALERT_TX_DISCARDED | TCPC_ALERT_TX_FAILED |
->  		TCPC_ALERT_RX_HARD_RST | TCPC_ALERT_RX_STATUS | TCPC_ALERT_CC_STATUS |
-> -		TCPC_ALERT_VBUS_DISCNCT | TCPC_ALERT_RX_BUF_OVF | TCPC_ALERT_POWER_STATUS;
-> +		TCPC_ALERT_VBUS_DISCNCT | TCPC_ALERT_RX_BUF_OVF | TCPC_ALERT_POWER_STATUS |
-> +		/* Enable Extended alert for detecting Fast Role Swap Signal */
-> +		TCPC_ALERT_EXTND;
->  
->  	ret = max_tcpci_write16(chip, TCPC_ALERT_MASK, alert_mask);
->  	if (ret < 0) {
-> -		dev_err(chip->dev, "Error writing to TCPC_ALERT_MASK ret:%d\n", ret);
-> +		dev_err(chip->dev,
-> +			"Error enabling TCPC_ALERT: TCPC_ALERT_MASK write failed ret:%d\n", ret);
->  		return;
->  	}
->  
-> @@ -122,6 +131,10 @@ static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
->  		dev_err(chip->dev, "Error writing to TCPC_POWER_CTRL ret:%d\n", ret);
->  		return;
->  	}
-> +
-> +	ret = max_tcpci_write8(chip, TCPC_ALERT_EXTENDED_MASK, TCPC_SINK_FAST_ROLE_SWAP);
-> +	if (ret < 0)
-> +		return;
->  }
->  
->  static void process_rx(struct max_tcpci_chip *chip, u16 status)
-> @@ -225,10 +238,23 @@ static void process_power_status(struct max_tcpci_chip *chip)
->  	if (ret < 0)
->  		return;
->  
-> -	if (pwr_status == 0xff)
-> +	if (pwr_status == 0xff) {
->  		max_tcpci_init_regs(chip);
-> -	else
-> +	} else if (pwr_status & TCPC_POWER_STATUS_SOURCING_VBUS) {
-> +		tcpm_sourcing_vbus(chip->port);
-> +		/*
-> +		 * Alawys re-enable boost here.
-> +		 * In normal case, when say an headset is attached, TCPM would
-> +		 * have instructed to TCPC to enable boost, so the call is a
-> +		 * no-op.
-> +		 * But for Fast Role Swap case, Boost turns on autonomously without
-> +		 * AP intervention, but, needs AP to enable source mode explicitly
-> +		 * for AP to regain control.
-> +		 */
-> +		max_tcpci_set_vbus(chip->tcpci, &chip->data, true, false);
-> +	} else {
->  		tcpm_vbus_change(chip->port);
-> +	}
->  }
->  
->  static void process_tx(struct max_tcpci_chip *chip, u16 status)
-> @@ -249,6 +275,7 @@ static irqreturn_t _max_tcpci_irq(struct max_tcpci_chip *chip, u16 status)
->  {
->  	u16 mask;
->  	int ret;
-> +	u8 reg_status;
->  
->  	/*
->  	 * Clear alert status for everything except RX_STATUS, which shouldn't
-> @@ -274,6 +301,21 @@ static irqreturn_t _max_tcpci_irq(struct max_tcpci_chip *chip, u16 status)
->  		}
->  	}
->  
-> +	if (status & TCPC_ALERT_EXTND) {
-> +		ret = max_tcpci_read8(chip, TCPC_ALERT_EXTENDED, &reg_status);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		ret = max_tcpci_write8(chip, TCPC_ALERT_EXTENDED, reg_status);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		if (reg_status & TCPC_SINK_FAST_ROLE_SWAP) {
-> +			dev_info(chip->dev, "FRS Signal");
-> +			tcpm_sink_frs(chip->port);
-> +		}
-> +	}
-> +
->  	if (status & TCPC_ALERT_RX_STATUS)
->  		process_rx(chip, status);
->  
-> -- 
-> 2.28.0.402.g5ffc5be6b7-goog
+> On 9/15/20 1:46 AM, Angus Ainslie wrote:
+>> USB type C, USB BC1.2 and USB power delivery allow different voltages
+>> and currents for VBUS so we need these additional properties.
+>> 
+>> Also USB type C allows separate device and power roles so add a VBUS 
+>> SRC
+>> property.
+>> 
+>> Signed-off-by: Angus Ainslie <angus@akkea.ca>
+>> ---
+>>  include/linux/extcon.h | 17 ++++++++++++++++-
+>>  1 file changed, 16 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/include/linux/extcon.h b/include/linux/extcon.h
+>> index fd183fb9c20f..c4d48f4f74c4 100644
+>> --- a/include/linux/extcon.h
+>> +++ b/include/linux/extcon.h
+>> @@ -117,14 +117,29 @@
+>>   * @type:       integer (intval)
+>>   * @value:      0 (USB/USB2) or 1 (USB3)
+>>   * @default:    0 (USB/USB2)
+>> + * - EXTCON_PROP_USB_VBUS_SRC
+> 
+> Could you explain more correct meaning of both sink and source?
+> 
 
--- 
-heikki
+Sure I can add some comments.
+
+>> + * @type:	integer (intval)
+>> + * @value:	0 (sink) or 1 (source)
+>> + * @default:	0 (sink)
+>> + * - EXTCON_PROP_USB_VBUS_VOLTAGE
+>> + * @type:	integer (intval)
+>> + * @value:	negotiated vbus voltage in mV
+>> + * @default:	5000
+> 
+> Could you suggest the data why do you set default value as 5000?
+> 
+
+The lowest USB VBUS is 5V so I can add that to the comments.
+
+>> + * - EXTCON_PROP_USB_VBUS_CURRENT
+>> + * @type:	integer (intval)
+>> + * @value:	negotiated vbus current in mA
+>> + * @default:	100
+> 
+> ditto. Why default value is 100?
+> 
+
+USB spec says that until the current is negotiated the max that anything 
+can draw is 100mA. I can add a comment to that effect.
+
+Thanks
+Angus
+
+>>   *
+>>   */
+>>  #define EXTCON_PROP_USB_VBUS		0
+>>  #define EXTCON_PROP_USB_TYPEC_POLARITY	1
+>>  #define EXTCON_PROP_USB_SS		2
+>> +#define EXTCON_PROP_USB_VBUS_SRC	3
+>> +#define EXTCON_PROP_USB_VBUS_VOLTAGE	4
+>> +#define EXTCON_PROP_USB_VBUS_CURRENT	5
+>> 
+>>  #define EXTCON_PROP_USB_MIN		0
+>> -#define EXTCON_PROP_USB_MAX		2
+>> +#define EXTCON_PROP_USB_MAX		5
+>>  #define EXTCON_PROP_USB_CNT	(EXTCON_PROP_USB_MAX - 
+>> EXTCON_PROP_USB_MIN + 1)
+>> 
+>>  /* Properties of EXTCON_TYPE_CHG. */
+>> 
