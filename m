@@ -2,113 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A09426B08B
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 00:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C7A26B196
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 00:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727708AbgIOWNe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Sep 2020 18:13:34 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:39134 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727620AbgIOQjA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 12:39:00 -0400
-Received: by mail-il1-f196.google.com with SMTP id s88so3621978ilb.6;
-        Tue, 15 Sep 2020 09:38:17 -0700 (PDT)
+        id S1727635AbgIOWcz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Sep 2020 18:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727576AbgIOQRP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Sep 2020 12:17:15 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0587FC061A30;
+        Tue, 15 Sep 2020 09:15:14 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id u21so3341739ljl.6;
+        Tue, 15 Sep 2020 09:15:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oDmwZqV69ONfDlP5WkAsuibEHA5OimwIA2UcgWGM9tY=;
+        b=Ln7C0LzIknZfvK3onMWkZDezxGy8+BvyqOBTBe4pH7X5j6N6dbeSEetYtfct3AY9Te
+         3r3dV/KOffGDN7VNdsIfTTS4vyWiLTcI/vRm3C06lx4Vq171QMVBhMNva9Wa7YWBB44i
+         QRGSf/QrFsV7RjhihAqcpcA6pLQ0pmOCoNmWYjiAat1QkeK7T6bhcp4rUEpfz1ebpvdN
+         EPm89o1fXcon8YhNLk+pLrXxgNhS5sXOLkcI/7BKQpSyCgMtuRy8xgqz/NCjWD8oYTjH
+         mqNtJjasPPPPDR9krXG7oYR/ob2Smk01TgcTx7DiaLI0xuJtvWXzmK4x1IXumNKi6TR3
+         leGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fQjq4psADqOTnHj/5X1me47R++0Wgzo4u+nIQzoreps=;
-        b=Sfo3JtsgiNdG5PPVa8FD/kozMhckR1uaP64Uz22YZhAq/5arVVSQodJuwgBo6RpdlN
-         Z3CD6i/BmLIbCqTrOF80KjoEuF5OTTn4Oxx50F5GPP1H6D/9oDmW+BCnsI8m4JSnEMr+
-         bcyGOZkBB+VZgL6LvpUAlAeEmXnh/d8YMCJT6A9lhN43a81ffrWep8uSJO7TLTDlanis
-         p2mU6zOOS/q0q7Js6b10gJglXiMxYGs94VwaHadainnql8j4lUpCCWQzLSwz9tRFF5um
-         SkZ05777oNU82U4OeKFjxkihWOJEKKIv+3YDIJcSBv1vAnAQaBYWC0ncFFU3ZLfd8FjH
-         yESg==
-X-Gm-Message-State: AOAM53186k5WOOMn5NJVd2NQ+IxH70Uiojbqb0fBu05fF5C9tjQdKOqQ
-        6s+bG0hRwU0OjnE/ZAH5Cg==
-X-Google-Smtp-Source: ABdhPJyc/WK+I+3WGB3O4e0d/McGvpjNZjWv2eTGNesdR8lUL+lh2ZG1y+ZQBTzSh6qPvBnsqH/w/w==
-X-Received: by 2002:a92:6f0a:: with SMTP id k10mr15682854ilc.5.1600187897117;
-        Tue, 15 Sep 2020 09:38:17 -0700 (PDT)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id v20sm9059138ile.42.2020.09.15.09.38.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 09:38:16 -0700 (PDT)
-Received: (nullmailer pid 2088114 invoked by uid 1000);
-        Tue, 15 Sep 2020 16:38:14 -0000
-Date:   Tue, 15 Sep 2020 10:38:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, linuxarm@huawei.com,
-        mauro.chehab@huawei.com, John Stultz <john.stultz@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: document a new quirk for dwc3
-Message-ID: <20200915163814.GA2084568@bogus>
-References: <cover.1599549364.git.mchehab+huawei@kernel.org>
- <cb821a8b5ef2d44ce32c8ce1d01c34b7afb70eb2.1599549364.git.mchehab+huawei@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oDmwZqV69ONfDlP5WkAsuibEHA5OimwIA2UcgWGM9tY=;
+        b=pWXcnr/82ipHC0n7Wm4g9oq9rs8PszkPqz3cJ6sXhHhCL5JKsze6LUXylLgaPq0IMk
+         MgwS3pPr87/YLbof06lhNMMDrOxTk/obpnzKWwaTFfuG9fRj/auM/B4E+Fm9WDVdnpGD
+         wWU203pIbBuzFeEq2J/Cx56B43feGc1ud+9jd44RyXwZPOtLuW23/1pnwxjOIHhcLgMs
+         J7eeIQGlsJXeyOJ71lsaaH+Hm252tD6SUkt5gjIiLBEZZgEnN1Al7h/M/RAWlRaLCP+6
+         j1MIAX6cUOcOZYj9+3FGBwcVKgTQLM2dgFKWPAgHRhZYnlpSVJJdsNpJOCrwCToNu4xs
+         sxZA==
+X-Gm-Message-State: AOAM5330isw+ZuuLW+6/bBsTzg/lPQtTyJcyRquIUTBXIZVlPVxDY5It
+        /0/IDDYwbA5bhcRJKFv3H8zrCml+QzBFlA==
+X-Google-Smtp-Source: ABdhPJyRIxD4Fa1CsUoi3GwfVw9/SasDPCay69suX7DD07Z92Pf/ekdBRCTI1PWOOkU0Ucn5gVba9A==
+X-Received: by 2002:a2e:8616:: with SMTP id a22mr6595908lji.466.1600186512213;
+        Tue, 15 Sep 2020 09:15:12 -0700 (PDT)
+Received: from wasted.omprussia.ru ([2a00:1fa0:42d3:da34:6ad8:5c64:8a52:942b])
+        by smtp.gmail.com with ESMTPSA id b141sm4076671lfd.236.2020.09.15.09.15.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2020 09:15:11 -0700 (PDT)
+Subject: Re: [PATCH v3 2/3] dt-bindings: usb: cdns,usb3: Add
+ cdns,phyrst-a-enable property
+To:     Roger Quadros <rogerq@ti.com>, balbi@kernel.org
+Cc:     pawell@cadence.com, kurahul@cadence.com, nsekhar@ti.com,
+        vigneshr@ti.com, robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20200915114543.2599-1-rogerq@ti.com>
+ <20200915114543.2599-3-rogerq@ti.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <1b45d695-0874-69c7-8398-5d14033f0788@gmail.com>
+Date:   Tue, 15 Sep 2020 19:15:10 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cb821a8b5ef2d44ce32c8ce1d01c34b7afb70eb2.1599549364.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20200915114543.2599-3-rogerq@ti.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 08, 2020 at 09:20:57AM +0200, Mauro Carvalho Chehab wrote:
-> At Hikey 970, setting the SPLIT disable at the General
-> User Register 3 is required.
+Hello!
+
+On 9/15/20 2:45 PM, Roger Quadros wrote:
+
+> Controller version 0x0002450D has USB2 PHY RX sensitivity issues
+> that needs to be worked around by enabling phyrst-a-enable bit
+> in PHYRST_CFG register.
 > 
-> Without that, the URBs generated by the usbhid driver
-> return -EPROTO errors. That causes the code at
-> hid-core.c to call hid_io_error(), which schedules
-> a reset_work, causing a call to hid_reset().
+> There is no way to know controller version before device controller
+> is started and the workaround needs to be applied for both host and
+> device modes, so we add this DT property.
 > 
-> In turn, the code there will call:
-> 
-> 	usb_queue_reset_device(usbhid->intf);
-> 
-> The net result is that the input devices won't work, and
-> will be reset on every 0.5 seconds:
-> 
-> 	[   33.122384] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0002
-> 	[   33.378220] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
-> 	[   33.698394] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0000
-> 	[   34.882365] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0002
-> 	[   35.138217] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
-> 	[   35.458617] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0000
-> 	[   36.642392] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0002
-> 	[   36.898207] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
-> 	[   37.218598] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0000
-> 	[   38.402368] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0002
-> 	[   38.658174] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
-> 	[   38.978594] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0000
-> 	[   40.162361] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0002
-> 	[   40.418148] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
-> 	...
-> 	[  397.698132] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Signed-off-by: Roger Quadros <rogerq@ti.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 > ---
->  Documentation/devicetree/bindings/usb/dwc3.txt | 3 +++
->  1 file changed, 3 insertions(+)
+>  Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
-> index d03edf9d3935..1aae2b6160c1 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
-> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-> @@ -78,6 +78,9 @@ Optional properties:
->  			park mode are disabled.
->   - snps,dis_metastability_quirk: when set, disable metastability workaround.
->  			CAUTION: use only if you are absolutely sure of it.
-> + - snps,dis-split-quirk: when set, change the way URBs are handled by the
-> +			 driver. Needed to avoid -EPROTO errors with usbhid
-> +			 on some devices (Hikey 970).
+> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> index 9b14c8443d39..ac20b98e9910 100644
+> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> @@ -61,6 +61,10 @@ properties:
+>        buffers expressed in KB
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>  
+> +  cdns,phyrst-a-enable:
+> +    description: Enable resetting of PHY if Rx fail is detected
 
-Can't this be implied by the compatible string? Yes we have quirk 
-properties already, but the problem with them is you can't address them 
-without a DT change.
+   Failure?
 
-Rob
+[...]
+
+MBR, Sergei
