@@ -2,94 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A89269AD0
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 03:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3782269AD3
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Sep 2020 03:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbgIOBCr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Sep 2020 21:02:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46184 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725999AbgIOBCr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Sep 2020 21:02:47 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0F2AB20897;
-        Tue, 15 Sep 2020 01:02:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600131766;
-        bh=rcUTiEDscKq9WvyrbhZMnGd9sESz+6KVCA3cBx84RRM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=1Nff53bF1ooiZft2vuwx9AyOPhB18fxB0omFu+iP+s1M2dbXGNTA0sttkQASTlIsL
-         ZXk+1efvDrUrVXv8m7m8ahYvD08dIzAOFZGKuLlS3ycYc5u5cVlKqvIsqP4TDcjGAc
-         XXVA3Fs31/Cu7c/5hgVo4fxLZuyvAfftommXZG90=
-Date:   Mon, 14 Sep 2020 18:02:44 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Allen Pais <allen.lkml@gmail.com>
-Cc:     davem@davemloft.net, m.grzeschik@pengutronix.de, paulus@samba.org,
-        oliver@neukum.org, woojung.huh@microchip.com,
-        UNGLinuxDriver@microchip.com, petkan@nucleusys.com,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-ppp@vger.kernel.org, Allen Pais <apais@linux.microsoft.com>,
-        Romain Perier <romain.perier@gmail.com>
-Subject: Re: [RESEND net-next v2 01/12] net: mvpp2: Prepare to use the new
- tasklet API
-Message-ID: <20200914180244.3581836c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20200914073131.803374-2-allen.lkml@gmail.com>
-References: <20200914073131.803374-1-allen.lkml@gmail.com>
-        <20200914073131.803374-2-allen.lkml@gmail.com>
+        id S1726085AbgIOBDd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Sep 2020 21:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725999AbgIOBDb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Sep 2020 21:03:31 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D936C06174A;
+        Mon, 14 Sep 2020 18:03:29 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id a22so1237784ljp.13;
+        Mon, 14 Sep 2020 18:03:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=E1q14rQlgrSLatoty0jVapm3PrkVuxqei5oD9yAnTYA=;
+        b=TQ0tAo4Lk8BmjNMpUM7B2v2eJgGqHIHTW2E4/JxHYLBPYEbL2GOEXa3hYcB88YPV+D
+         rsXL6SY9r8ASAgE8jpvkJDHh7GmJRqXRkxR6+qr8+tk9bxXzavjg3CwjSUtf9LgQObtW
+         Z+EHPWbFuFvC2eCxhz4QYvrSwCiSTExOiHWEXRxGeQE6M2sHxISOTWmc4reYPsdTqqTf
+         FdUJ/4a9+XPrM3y0O/QWI4f2oR7SR4EtfK7OXk6DnUduKU/fV/k6zykUVgrBbLdSMGcs
+         OguZcbCFAGKIoxi3jOmgPotq4ZsnC5XQS4jk6GvHyMXC+pkQkfjwBclCIyq+G4XyQTD1
+         eiWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=E1q14rQlgrSLatoty0jVapm3PrkVuxqei5oD9yAnTYA=;
+        b=Bw3FiwWrJAyIB8lDrbNRHplDrziMjmHy1U/+ccJljGtSS+IPGkJ06br5IKDM7pMlrd
+         HagumRy6edKOPcPt1RA5fKKl2D/msfsvgD4zhGI+HWIGG0sGeI9P6OuqRwk2co8Fm8ll
+         0ZqhgV6CtU3k9l2KP6bnT8YEdG04Pzdqpa/r/+rA0HNH7axR7Uocs6NdgLKl1kotrMMA
+         qdyR9YHlyXjqCVfzLb8mI+R5AZHWBZfRjcue7iPMqnsADqwxq9sbxPNSI1Qrj9iNzC4/
+         Qx9ctbzXewsEWOaPphGDqOHQyYONuzZVxoTCSO9pmvus9OOoZFU04Cga3j+3FshF5F/k
+         mKwg==
+X-Gm-Message-State: AOAM531JoDVe9vynewwWkILloEDuGPOxz3T4GnRtSKga16hyq3glW8RB
+        6ZefVUswhTnZad+mGmI391bCf2kj0asfKRlmVFs=
+X-Google-Smtp-Source: ABdhPJw9ifkbVP+uEe2SD7R2hIj95UXfSck4Zwdz+D0V/9bCy7pHGJ86/66K1wgr6YE3PVf6c5+qVxJJUbQVva9yrXk=
+X-Received: by 2002:a2e:9955:: with SMTP id r21mr1824267ljj.119.1600131807796;
+ Mon, 14 Sep 2020 18:03:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <1598928042-22115-1-git-send-email-u0084500@gmail.com>
+ <1598928042-22115-2-git-send-email-u0084500@gmail.com> <20200914182916.GA4193162@bogus>
+In-Reply-To: <20200914182916.GA4193162@bogus>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Tue, 15 Sep 2020 09:03:15 +0800
+Message-ID: <CADiBU3-Rn9wPNh_17U9yiDmhHSRcxb5L3nqtg+qigbmiYBjrbA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] usb typec: mt6360: Add MT6360 Type-C DT binding documentation
+To:     Rob Herring <robh@kernel.org>
+Cc:     cy_huang <cy_huang@richtek.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, gene_chen@richtek.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        matthias.bgg@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 14 Sep 2020 13:01:20 +0530 Allen Pais wrote:
-> From: Allen Pais <apais@linux.microsoft.com>
-> 
-> The future tasklet API will no longer allow to pass an arbitrary
-> "unsigned long" data parameter. The tasklet data structure will need to
-> be embedded into a data structure that will be retrieved from the tasklet
-> handler. Currently, there are no ways to retrieve the "struct mvpp2_port
-> *" from a given "struct mvpp2_port_pcpu *". This commit adds a new field
-> to get the address of the main port for each pcpu context.
-> 
-> Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> Signed-off-by: Allen Pais <apais@linux.microsoft.com>
-> ---
->  drivers/net/ethernet/marvell/mvpp2/mvpp2.h      | 1 +
->  drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2.h b/drivers/net/ethernet/marvell/mvpp2/mvpp2.h
-> index 32753cc771bf..198860a4527d 100644
-> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2.h
-> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2.h
-> @@ -861,6 +861,7 @@ struct mvpp2_port_pcpu {
->  	struct hrtimer tx_done_timer;
->  	struct net_device *dev;
->  	bool timer_scheduled;
-> +	struct mvpp2_port *port;
->  };
->  
->  struct mvpp2_queue_vector {
-> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> index 6e140d1b8967..e8e68e8acdb3 100644
-> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> @@ -6025,6 +6025,7 @@ static int mvpp2_port_probe(struct platform_device *pdev,
->  		err = -ENOMEM;
->  		goto err_free_txq_pcpu;
->  	}
-> +	port->pcpu->port = port;
->  
->  	if (!port->has_tx_irqs) {
->  		for (thread = 0; thread < priv->nthreads; thread++) {
-
-Not 100% sure but I think this is yours:
-
-drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c:6442:13: warning: dereference of noderef expression
-
-port->pcpu is __percpu, no?
+Rob Herring <robh@kernel.org> =E6=96=BC 2020=E5=B9=B49=E6=9C=8815=E6=97=A5 =
+=E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=882:29=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Tue, 01 Sep 2020 10:40:42 +0800, cy_huang wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add a devicetree binding documentation for the MT6360 Type-C driver.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> >  .../bindings/usb/mediatek,mt6360-tcpc.yaml         | 95 ++++++++++++++=
+++++++++
+> >  1 file changed, 95 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,mt63=
+60-tcpc.yaml
+> >
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+Thx.
