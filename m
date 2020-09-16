@@ -2,72 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 013C426BFEC
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 10:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3129126C000
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 11:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726243AbgIPI4e convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 16 Sep 2020 04:56:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43798 "EHLO mail.kernel.org"
+        id S1726646AbgIPJAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 05:00:41 -0400
+Received: from mga01.intel.com ([192.55.52.88]:59022 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725840AbgIPI4d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Sep 2020 04:56:33 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209089] USB storage devices appear as SATA devices
-Date:   Wed, 16 Sep 2020 08:56:32 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: oliver@neukum.org
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: INVALID
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-209089-208809-7u1WksXxXJ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209089-208809@https.bugzilla.kernel.org/>
-References: <bug-209089-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726349AbgIPJAi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Sep 2020 05:00:38 -0400
+IronPort-SDR: ezjXa9dDyZSvU1zbt7NPyEPocv5reXWevzXe0yeR7g66qq9JXjwFSEsLprFM83cGZc/012WAaa
+ O4SMEyiTo+fA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9745"; a="177500631"
+X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
+   d="scan'208";a="177500631"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 02:00:37 -0700
+IronPort-SDR: H9NdyXG4B3WLSCpcf5HOGEyAsANotDSIOZeyds4BnezyKilj3wmgpI1xNed/1C9eesbCmNXSoO
+ IId4xflZ1Ylw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
+   d="scan'208";a="409487537"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Sep 2020 02:00:36 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH 1/2] usb: typec: ucsi: acpi: Increase command completion timeout value
+Date:   Wed, 16 Sep 2020 12:00:33 +0300
+Message-Id: <20200916090034.25119-2-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200916090034.25119-1-heikki.krogerus@linux.intel.com>
+References: <20200916090034.25119-1-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209089
+UCSI specification quite clearly states that if a command
+can't be completed in 10ms, the firmware must notify
+about BUSY condition. Unfortunately almost none of the
+platforms (the firmware on them) generate the BUSY
+notification even if a command can't be completed in time.
 
-Oliver Neukum (oliver@neukum.org) changed:
+The driver already considered that, and used a timeout
+value of 5 seconds, but processing especially the alternate
+mode discovery commands takes often considerable amount of
+time from the firmware, much more than the 5 seconds. That
+happens especially after bootup when devices are already
+connected to the USB Type-C connector. For now on those
+platforms the alternate mode discovery has simply failed
+because of the timeout.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |oliver@neukum.org
+To improve the situation, increasing the timeout value for
+the command completion to 1 minute. That should give enough
+time for even the slowest firmware to process the commands.
 
---- Comment #18 from Oliver Neukum (oliver@neukum.org) ---
-(In reply to Manish Jain from comment #15)
-> Hi Alan,
-> 
-> Nice to see your response to the reopened PR.
+Fixes: f56de278e8ec ("usb: typec: ucsi: acpi: Move to the new API")
+Cc: stable@vger.kernel.org
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Storage and UAS do use the SCSI command set. Hence
-
-1) the commands specific to SCSI can be issued
-2) there is an sg device associated with each sd
-3) we have optical drives, tapes and other devices on USB (USB-SCSI bridges are
-real)
-
-Hence if anything is inappropriately named, it would be SATA devices, not USB
-devices.
-
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index c0aca2f0f23f0..fbfe8f5933af8 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -78,7 +78,7 @@ static int ucsi_acpi_sync_write(struct ucsi *ucsi, unsigned int offset,
+ 	if (ret)
+ 		goto out_clear_bit;
+ 
+-	if (!wait_for_completion_timeout(&ua->complete, msecs_to_jiffies(5000)))
++	if (!wait_for_completion_timeout(&ua->complete, 60 * HZ))
+ 		ret = -ETIMEDOUT;
+ 
+ out_clear_bit:
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+2.28.0
+
