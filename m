@@ -2,59 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5CD26BF71
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 10:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B86A26BF75
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 10:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbgIPIgi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 04:36:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37276 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726592AbgIPIgf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Sep 2020 04:36:35 -0400
+        id S1726349AbgIPIhU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 04:37:20 -0400
+Received: from forward3-smtp.messagingengine.com ([66.111.4.237]:57989 "EHLO
+        forward3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726571AbgIPIhT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Sep 2020 04:37:19 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailforward.nyi.internal (Postfix) with ESMTP id C56C31941E7E;
+        Wed, 16 Sep 2020 04:37:16 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 16 Sep 2020 04:37:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=aLsPB3
+        oIyB61RlTNMZtc9Pv0eK/BIL9eShZUMmzt6/E=; b=mfcNZbiCCGj7uysE3oYrU/
+        mWN4aHnwgMitBkRc5qRRkhwDu1Iw8xBbuSit93HCOqFJ8jGTnMsF7MePX/0BHW3n
+        8fwG2s6TCJ8ZxCG4dFo1lgwondlNUzQdLn5KGn3M6UduZv/uyiZQmdX+lSHryTtE
+        jIYmJwTej6MnK4ZR+JUgn/3EIJjeTPh7VZ6NLKxCrOewhmWlytgICtgtwvnAgrVZ
+        /BuQj8oXNlKXjT2rIH/uSjFRsLwsk61z1i5tsCrkMcm6YsiH+DViVWLit2zMfcZv
+        +2JLmcEqueLmeU5tN8Ow69o7HXDivw5Lm0QkFllDMsGGpIuUL/5idBnULT5I38vQ
+        ==
+X-ME-Sender: <xms:vM5hX0nJFXbMaMC8EvUB3XggMjbAb7RvQn6o2OktQWgyTR-bSRPspQ>
+    <xme:vM5hXz1mYP_fsCdPLbXLgB0wXNfzRZ0Fk3yugi8QL2DNki6_NexyWkoCAngosRjRN
+    4BZ9g7L8vKwag>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtddvgddtiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvghfmjfeslhhinhhugihfohhunhgurghtihhonhdrohhrgheqnecuggftrf
+    grthhtvghrnheptedvleegfffguddtledvvddtteffjeetgfevveeugefgleelhfevveef
+    udeuuddvnecukfhppeekfedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:vM5hXyqugnUkIGlxXsDnfOe9L0EPplS3Igdgtmt2Sy6ZfT58QDI-yg>
+    <xmx:vM5hXwlQubDkdQf5yXA6q6phX6NyrBl24IfPIv_Jyz-iUZGnIa-NCg>
+    <xmx:vM5hXy3uXo8jfmf9vOw-FbQsalD5nU7hyV9eo0fLVTAu9Lc6n9VEiA>
+    <xmx:vM5hX7hDguR5UIkO0EXKVbm917A6qLgDUu8-dSJnCbZAOH95c8cGMQ>
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0741520795;
-        Wed, 16 Sep 2020 08:36:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600245394;
-        bh=xeEOPUM/m0tdOvTmc/vGWX+UjwQvGGKXHGQgLj/4HpM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XfYZgbdmR9jb7pgdlnq5n31S/jwJ5Qo6AfxozcGXDgDJR5oNkDBjWYtz87oVK6qQC
-         VipAbL0SNx4xo+qZz6qNKEm7gV9ZM1y+Ql3dR8XugZbziJ7nUF8Jr1sMHtQTJdHiya
-         UzlwnGIpIMc+CJ2E5zu5Nw4r9LN/YcjiK3KVKeN8=
-Date:   Wed, 16 Sep 2020 10:37:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Mani, Rajmohan" <rajmohan.mani@intel.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/5] USB Type-C fixes
-Message-ID: <20200916083709.GA676008@kroah.com>
-References: <20200916081617.17146-1-heikki.krogerus@linux.intel.com>
+        by mail.messagingengine.com (Postfix) with ESMTPA id 2D6C33064674;
+        Wed, 16 Sep 2020 04:37:16 -0400 (EDT)
+Date:   Wed, 16 Sep 2020 10:37:51 +0200
+From:   Greg KH <gregKH@linuxfoundation.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/2] UAS: fix disconnect by unplugging a hub
+Message-ID: <20200916083751.GB676008@kroah.com>
+References: <20200915134501.13947-1-oneukum@suse.com>
+ <20200915134501.13947-3-oneukum@suse.com>
+ <20200915140058.GA914700@kroah.com>
+ <1600243885.2424.10.camel@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200916081617.17146-1-heikki.krogerus@linux.intel.com>
+In-Reply-To: <1600243885.2424.10.camel@suse.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 11:16:12AM +0300, Heikki Krogerus wrote:
+On Wed, Sep 16, 2020 at 10:11:25AM +0200, Oliver Neukum wrote:
+> Am Dienstag, den 15.09.2020, 16:00 +0200 schrieb Greg KH:
+> > On Tue, Sep 15, 2020 at 03:45:01PM +0200, Oliver Neukum wrote:
+> > > The SCSI layer can go into an ugly loop if you ignore that a device
+> > > is gone. You need to report an error in the command rather than
+> > > in the return value of the queue method.
+> > > We need to specifically check for ENODEV..
+> > > 
+> > > Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> > > ---
+> > >  drivers/usb/storage/uas.c | 14 ++++++++++++--
+> > >  1 file changed, 12 insertions(+), 2 deletions(-)
+> > 
+> > Should this one go to the stable kernels?
+> 
 > Hi,
 > 
-> There are two fixes for the UCSI drivers that address issues related
-> to the alternate modes. The other three fixes are for the PMC mux
-> driver. We were missing dependency on ACPI and the port number that
-> was used with the IOM was incorrect.
-> 
-> Let me know if you want anything to be changed.
+> in theory yes, but it depends on the previous patch.
+> Should I submit a separate patch?
 
-This seems to be a mix of patches to be sent to Linus for 5.9-final and
-some for 5.10-rc1, right?
-
-Can you resend these as two series so I know which one is which?
-
-thanks,
+Reordering these would be best, thanks!
 
 greg k-h
