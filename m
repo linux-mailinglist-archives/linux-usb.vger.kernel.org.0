@@ -2,87 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB0626C6AE
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 19:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7C426C613
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 19:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727708AbgIPR74 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 13:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727697AbgIPR6n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Sep 2020 13:58:43 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C55C08E86E
-        for <linux-usb@vger.kernel.org>; Wed, 16 Sep 2020 06:33:37 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id b124so3946138pfg.13
-        for <linux-usb@vger.kernel.org>; Wed, 16 Sep 2020 06:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Z59ooJDsuSRh3WpgjPcaFgr1Ej1tmjibts28KLusPiE=;
-        b=sBkh5DOhsfR2dl0x/ApnSnRxoQaso9jXJi7fNCqa1h/nLM2nCkz0NgYgWn+MmvbgqZ
-         b4PsvrQpWxqWjeAhKqsTBGxlxWHXb72T3l1A8wkhEkjNH5dwEG34XpOlrOg6nKkBG0Ra
-         nEYgJzDBMZKrKF1e9QimVS7NTlWm1cm/5D5Kaznvzd4phI+IRySHZ06KrcXUOIq5iikl
-         V1MAW93Nn6qVgeRz7RJjGUN02eM9zxG+c7XXQoXzleUsH/acHELN/hkkbIvd0xukqMRm
-         DDDAFsaAlg/r3HeZYOhSn9FqMEgBU6tUoMSAJ61IosAri7E1Uga07omV7xdzPM8C31RS
-         d7FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Z59ooJDsuSRh3WpgjPcaFgr1Ej1tmjibts28KLusPiE=;
-        b=oeLpX8pchOROZ3c7qIN4BB9xgsYxnSvUxznvIQOZoPnoFxrzp7Fpj5DGJxe4r6ki9I
-         ZsoLRiAOR2ZMBbqAnG+9ssShbYhoD7usiMojZcojin1p3JZHBYQpUaD/4vcl4XcHSers
-         1QOJAw3dMv/tDI9ikD9zLvN2nRj+ju0Ghc4XvokqKebxOQ0l3XMzDFLzOhO/GfQAO4Sn
-         0/QXrxhmaDv3X96Pve1hJP/DQjwjoAGBIvlu8ISSwM8DjGZiu18HBGoNc9YPOI9Y+h6+
-         FI4aSVjUbt7ZG+y69i6ebvmo0+COZkh9qYdRA2c6Z4Wdycbpf+aSa0kZ1iwpqSNJgF02
-         vlMA==
-X-Gm-Message-State: AOAM531ntGohVCKQTYJri1oFv76VMVep88mDwzP10/g8QtSh+ogoy05C
-        PhxW3Jbu3TR2hyiM8QqTplgBOUSwFHdDUIlYFxcmCg==
-X-Google-Smtp-Source: ABdhPJzjinU/zjeAOGY94FbXyYFRLLCekdZY3q7ofVZmOlV51ckS2dByMnR8/LczqwsVEgD15ft70VZxzSOLAe2RBqA=
-X-Received: by 2002:a62:38ce:0:b029:138:838f:dd53 with SMTP id
- f197-20020a6238ce0000b0290138838fdd53mr21292120pfa.2.1600263216683; Wed, 16
- Sep 2020 06:33:36 -0700 (PDT)
+        id S1727177AbgIPRcG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 13:32:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44832 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727080AbgIPRbd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Sep 2020 13:31:33 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B46922080C;
+        Wed, 16 Sep 2020 17:31:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600277492;
+        bh=MQJPQUU49Ig49sb0z71114UXRnPXtQC9EbfuBVLjS+A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vk5wC7FqKr8EArfA9fDKEcS7av3gAmdnlclKvwdRmhjOt9C/AMl4x0eYVXRcyRCJg
+         RkrpSTTnTTxFuNp4ClS88fKjhtHG7d3bDcK7mPfxqJpIWETXgKjRIG3gIncUq008D8
+         WU+zrGoxiXuk97FUXvigYyFFDsyqOtKzug8S7zlo=
+Date:   Wed, 16 Sep 2020 19:32:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Quentin Perret <qperret@google.com>
+Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gprocida@google.com,
+        maennich@google.com, kernel-team@android.com
+Subject: Re: [PATCH] ehci-hcd: Move include to keep CRC stable
+Message-ID: <20200916173206.GA3070014@kroah.com>
+References: <20200916171825.3228122-1-qperret@google.com>
+ <20200916173127.GB3068942@kroah.com>
 MIME-Version: 1.0
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 16 Sep 2020 15:33:25 +0200
-Message-ID: <CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com>
-Subject: USB driver ID matching broken
-To:     Bastien Nocera <hadess@hadess.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzkaller <syzkaller@googlegroups.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200916173127.GB3068942@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bastien, Greg, Alan,
+On Wed, Sep 16, 2020 at 07:31:27PM +0200, Greg KH wrote:
+> On Wed, Sep 16, 2020 at 06:18:25PM +0100, Quentin Perret wrote:
+> > The CRC calculation done by genksyms is triggered when the parser hits
+> > EXPORT_SYMBOL*() macros. At this point, genksyms recursively expands the
+> > types of the function parameters, and uses that as the input for the CRC
+> > calculation. In the case of forward-declared structs, the type expands
+> > to 'UNKNOWN'. Following this, it appears that the result of the
+> > expansion of each type is cached somewhere, and seems to be re-used
+> > when/if the same type is seen again for another exported symbol in the
+> > same C file.
+> > 
+> > Unfortunately, this can cause CRC 'stability' issues when a struct
+> > definition becomes visible in the middle of a C file. For example, let's
+> > assume code with the following pattern:
+> > 
+> >     struct foo;
+> > 
+> >     int bar(struct foo *arg)
+> >     {
+> > 	/* Do work ... */
+> >     }
+> >     EXPORT_SYMBOL_GPL(bar);
+> > 
+> >     /* This contains struct foo's definition */
+> >     #include "foo.h"
+> > 
+> >     int baz(struct foo *arg)
+> >     {
+> > 	/* Do more work ... */
+> >     }
+> >     EXPORT_SYMBOL_GPL(baz);
+> > 
+> > Here, baz's CRC will be computed using the expansion of struct foo that
+> > was cached after bar's CRC calculation ('UNKOWN' here). But if
+> > EXPORT_SYMBOL_GPL(bar) is removed from the file (because of e.g. symbol
+> > trimming using CONFIG_TRIM_UNUSED_KSYMS), struct foo will be expanded
+> > late, during baz's CRC calculation, which now has visibility over the
+> > full struct definition, hence resulting in a different CRC for baz.
+> > 
+> > The proper fix for this certainly is in genksyms, but that will take me
+> > some time to get right. In the meantime, we have seen one occurrence of
+> > this in the ehci-hcd code which hits this problem because of the way it
+> > includes C files halfway through the code together with an unlucky mix
+> > of symbol trimming.
+> > 
+> > In order to workaround this, move the include done in ehci-hub.c early
+> > in ehci-hcd.c, hence making sure the struct definitions are visible to
+> > the entire file. This improves CRC stability of the ehci-hcd exports
+> > even when symbol trimming is enabled.
+> > 
+> > Signed-off-by: Quentin Perret <qperret@google.com>
+> > ---
+> >  drivers/usb/host/ehci-hcd.c | 1 +
+> >  drivers/usb/host/ehci-hub.c | 1 -
+> >  2 files changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+> > index 6257be4110ca..3575b7201881 100644
+> > --- a/drivers/usb/host/ehci-hcd.c
+> > +++ b/drivers/usb/host/ehci-hcd.c
+> > @@ -22,6 +22,7 @@
+> >  #include <linux/interrupt.h>
+> >  #include <linux/usb.h>
+> >  #include <linux/usb/hcd.h>
+> > +#include <linux/usb/otg.h>
+> >  #include <linux/moduleparam.h>
+> >  #include <linux/dma-mapping.h>
+> >  #include <linux/debugfs.h>
+> > diff --git a/drivers/usb/host/ehci-hub.c b/drivers/usb/host/ehci-hub.c
+> > index ce0eaf7d7c12..087402aec5cb 100644
+> > --- a/drivers/usb/host/ehci-hub.c
+> > +++ b/drivers/usb/host/ehci-hub.c
+> > @@ -14,7 +14,6 @@
+> >   */
+> >  
+> >  /*-------------------------------------------------------------------------*/
+> > -#include <linux/usb/otg.h>
+> >  
+> >  #define	PORT_WAKE_BITS	(PORT_WKOC_E|PORT_WKDISC_E|PORT_WKCONN_E)
+> 
+> Thanks for root-causing this issue.  genksyms is a fragile beast, good
+> luck trying to resolve that!
+> 
+> I'll go queue this up and mark it for stable kernels, thanks.
 
-Looks like commit adb6e6ac20ee ("USB: Also match device drivers using
-the ->match vfunc") broke the USB driver ID matching process. This, in
-turn, led to a complete breakage of the USB fuzzing instance.
+I'll queue it up after I get Alan's review first :)
 
-This is how an attempt to connect a USB device looks now:
+thanks,
 
-[   39.781642][   T12] usb 1-1: new high-speed USB device number 2
-using dummy_hcd
-[   40.299955][   T12] usb 1-1: New USB device found, idVendor=0cf3,
-idProduct=9271, bcdDevice= 1.08
-[   40.303072][   T12] usb 1-1: New USB device strings: Mfr=1,
-Product=2, SerialNumber=3
-[   40.305678][   T12] usb 1-1: Product: syz
-[   40.307041][   T12] usb 1-1: Manufacturer: syz
-[   40.308556][   T12] usb 1-1: SerialNumber: syz
-[   40.314825][   T12] usbip-host 1-1: 1-1 is not in match_busid table... skip!
-[   42.500114][   T51] usb 1-1: USB disconnect, device number 2
-
-It seems that when going through the list of registered IDs the code
-tries to match against USB/IP and succeeds as usbip_match() always
-returns true.
-
-I'm not sure what's the best fix for this is.
-
-Thanks!
+greg k-h
