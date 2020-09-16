@@ -2,85 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 960B226C979
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 21:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813A526C9B2
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 21:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727555AbgIPTJ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 15:09:28 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:54312 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727395AbgIPRo0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Sep 2020 13:44:26 -0400
-Received: from relay10.mail.gandi.net (unknown [217.70.178.230])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 3BED73AE1EF
-        for <linux-usb@vger.kernel.org>; Wed, 16 Sep 2020 14:41:09 +0000 (UTC)
-Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
-        (Authenticated sender: hadess@hadess.net)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id D67D3240011;
-        Wed, 16 Sep 2020 14:39:40 +0000 (UTC)
-Message-ID: <9d329243e4ed6b09afade2659e09b847e9c780fc.camel@hadess.net>
-Subject: Re: USB driver ID matching broken
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller <syzkaller@googlegroups.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "M. Vefa Bicakci" <m.v.b@runbox.com>
-Date:   Wed, 16 Sep 2020 16:39:40 +0200
-In-Reply-To: <20200916141513.GA2977321@kroah.com>
-References: <CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com>
-         <20200916141513.GA2977321@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.37.90 (3.37.90-1.fc33) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727307AbgIPTRT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 15:17:19 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45966 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727351AbgIPTQB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Sep 2020 15:16:01 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=cantorsusede;
+        t=1600283759;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=IMQ3yTWOGedb0Gw2IjIHRgHrKUy+DEi23Ll3uoIDubU=;
+        b=kPfmCLC45giihGWoDWly+srV5B+ydosxnXZ+5ZOFq6IDab7LFO+2tFiraNbeD8+OH3WtIj
+        RB+yb4BIeBZM1aXfAFTpFl53bfSpOa9mcDhJauyxMVqusHZk4hFwlrJ3mriKG3gLctwvNy
+        LcLCjjyiSWQ1FQbmnWcYzgV1vQ0hIii+GdKTLU5FQ8faR2MDezDqWKZKM2QsJ+4pFA+5jr
+        WEV8zpYh0q5qY+/Jj3gf1l5ibdJEbTjL6dB94w4vzzEBkr76t5l1Q8NgYlT6lPXI8PMTIP
+        k9HFp6clKdBDgsGNCZlIdGhfPoH1AVOd6Sn0iznXfMi4cQjf7Es87AJ1Teb0wA==
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 856C5B5C7;
+        Wed, 16 Sep 2020 19:16:14 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCHv2] base: force NOIO allocations during unplug
+Date:   Wed, 16 Sep 2020 21:15:44 +0200
+Message-Id: <20200916191544.5104-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2020-09-16 at 16:15 +0200, Greg Kroah-Hartman wrote:
-> On Wed, Sep 16, 2020 at 03:33:25PM +0200, Andrey Konovalov wrote:
-> > Hi Bastien, Greg, Alan,
-> > 
-> > Looks like commit adb6e6ac20ee ("USB: Also match device drivers
-> > using
-> > the ->match vfunc") broke the USB driver ID matching process. This,
-> > in
-> > turn, led to a complete breakage of the USB fuzzing instance.
-> > 
-> > This is how an attempt to connect a USB device looks now:
-> > 
-> > [   39.781642][   T12] usb 1-1: new high-speed USB device number 2
-> > using dummy_hcd
-> > [   40.299955][   T12] usb 1-1: New USB device found,
-> > idVendor=0cf3,
-> > idProduct=9271, bcdDevice= 1.08
-> > [   40.303072][   T12] usb 1-1: New USB device strings: Mfr=1,
-> > Product=2, SerialNumber=3
-> > [   40.305678][   T12] usb 1-1: Product: syz
-> > [   40.307041][   T12] usb 1-1: Manufacturer: syz
-> > [   40.308556][   T12] usb 1-1: SerialNumber: syz
-> > [   40.314825][   T12] usbip-host 1-1: 1-1 is not in match_busid
-> > table... skip!
-> > [   42.500114][   T51] usb 1-1: USB disconnect, device number 2
-> > 
-> > It seems that when going through the list of registered IDs the
-> > code
-> > tries to match against USB/IP and succeeds as usbip_match() always
-> > returns true.
-> > 
-> > I'm not sure what's the best fix for this is.
-> 
-> I thought that is what the patch from Bastien was supposed to fix?
-> 
-> If it didn't, we can revert it.
+There is one overlooked situation under which a driver
+must not do IO to allocate memory. You cannot do that
+while disconnecting a device. A device being disconnected
+is no longer functional in most cases, yet IO may fail
+only when the handler runs.
 
-It wasn't. Are you thinking of "usbip: Implement a match function to
-fix usbip" by M. Vefa Bicakci (CC:ed)?
+v2: extended section for NOIO until after second notifier chain
 
-Seems to me that usbip wants to match *every* device. Wouldn't that be
-a bug in usbip?
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/base/core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index bb5806a2bd4c..b79783454293 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -26,6 +26,7 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/netdevice.h>
+ #include <linux/sched/signal.h>
++#include <linux/sched/mm.h>
+ #include <linux/sysfs.h>
+ 
+ #include "base.h"
+@@ -3062,6 +3063,7 @@ void device_del(struct device *dev)
+ 	struct device *parent = dev->parent;
+ 	struct kobject *glue_dir = NULL;
+ 	struct class_interface *class_intf;
++	unsigned int noio_flag;
+ 
+ 	device_lock(dev);
+ 	kill_device(dev);
+@@ -3073,6 +3075,7 @@ void device_del(struct device *dev)
+ 	/* Notify clients of device removal.  This call must come
+ 	 * before dpm_sysfs_remove().
+ 	 */
++	noio_flag = memalloc_noio_save();
+ 	if (dev->bus)
+ 		blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
+ 					     BUS_NOTIFY_DEL_DEVICE, dev);
+@@ -3114,6 +3117,7 @@ void device_del(struct device *dev)
+ 	glue_dir = get_glue_dir(dev);
+ 	kobject_del(&dev->kobj);
+ 	cleanup_glue_dir(dev, glue_dir);
++	memalloc_noio_restore(noio_flag);
+ 	put_device(parent);
+ }
+ EXPORT_SYMBOL_GPL(device_del);
+-- 
+2.16.4
 
