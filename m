@@ -2,57 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 150A826C0DD
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 11:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F4826C167
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 12:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726699AbgIPJmQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 05:42:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56904 "EHLO mail.kernel.org"
+        id S1726473AbgIPKDV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 06:03:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58608 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726392AbgIPJmN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Sep 2020 05:42:13 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C477721974;
-        Wed, 16 Sep 2020 09:42:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600249333;
-        bh=Zyz1k6+4C95Uq9AAHgQJys/Qg/hwN8GgPH4IQdZSgmU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pfhppxslLK+WkRCPGNnOPmAorHZQA4r7hh+thJND1dlVKOHspJa7NN+Fs2aXIbpzS
-         Jyl9rWhj7KSy78QtPhGdSToxHVgipbetcrq5nD2vjv42FHnW7VQViAhrhks45OMjYF
-         PvAj9ch9n6qYridTAAm0t45QDDj2cfYWLZw5eSng=
-Date:   Wed, 16 Sep 2020 11:42:48 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Mani, Rajmohan" <rajmohan.mani@intel.com>,
-        linux-usb@vger.kernel.org,
-        Madhusudanarao Amara <madhusudanarao.amara@intel.com>
-Subject: Re: [PATCH 3/3] usb: typec: intel_pmc_mux: Handle SCU IPC error
- conditions
-Message-ID: <20200916094248.GA740415@kroah.com>
-References: <20200916091102.27118-1-heikki.krogerus@linux.intel.com>
- <20200916091102.27118-4-heikki.krogerus@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200916091102.27118-4-heikki.krogerus@linux.intel.com>
+        id S1726536AbgIPKDQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Sep 2020 06:03:16 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id D61F3AED9;
+        Wed, 16 Sep 2020 10:03:29 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] microtek: use set_host_byte()
+Date:   Wed, 16 Sep 2020 12:03:02 +0200
+Message-Id: <20200916100302.30855-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 12:11:02PM +0300, Heikki Krogerus wrote:
-> From: Madhusudanarao Amara <madhusudanarao.amara@intel.com>
-> 
-> Check and return if there are errors. The response bits are valid
-> only on no errors.
-> 
-> Fixes: b7404a29cd3d ("usb: typec: intel_pmc_mux: Definitions for response status bits")
+The SCSI layer is providing a new macro. Let's use it.
 
-This is in 5.9-rc4, so shouldn't it go in for 5.9-final?
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/image/microtek.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/image/microtek.c b/drivers/usb/image/microtek.c
+index 360416680e82..59b02a539963 100644
+--- a/drivers/usb/image/microtek.c
++++ b/drivers/usb/image/microtek.c
+@@ -389,7 +389,7 @@ void mts_int_submit_urb (struct urb* transfer,
+ 	res = usb_submit_urb( transfer, GFP_ATOMIC );
+ 	if ( unlikely(res) ) {
+ 		MTS_INT_ERROR( "could not submit URB! Error was %d\n",(int)res );
+-		context->srb->result = DID_ERROR << 16;
++		set_host_byte(context->srb, DID_ERROR);
+ 		mts_transfer_cleanup(transfer);
+ 	}
+ }
+@@ -438,7 +438,7 @@ static void mts_data_done( struct urb* transfer )
+ 		scsi_set_resid(context->srb, context->data_length -
+ 			       transfer->actual_length);
+ 	} else if ( unlikely(status) ) {
+-		context->srb->result = (status == -ENOENT ? DID_ABORT : DID_ERROR)<<16;
++		set_host_byte(context->srb, (status == -ENOENT ? DID_ABORT : DID_ERROR));
+ 	}
+ 
+ 	mts_get_status(transfer);
+@@ -455,12 +455,12 @@ static void mts_command_done( struct urb *transfer )
+ 	        if (status == -ENOENT) {
+ 		        /* We are being killed */
+ 			MTS_DEBUG_GOT_HERE();
+-			context->srb->result = DID_ABORT<<16;
++			set_host_byte(context->srb, DID_ABORT);
+                 } else {
+ 		        /* A genuine error has occurred */
+ 			MTS_DEBUG_GOT_HERE();
+ 
+-		        context->srb->result = DID_ERROR<<16;
++		        set_host_byte(context->srb, DID_ERROR);
+                 }
+ 		mts_transfer_cleanup(transfer);
+ 
+@@ -495,7 +495,7 @@ static void mts_do_sg (struct urb* transfer)
+ 	                                          scsi_sg_count(context->srb));
+ 
+ 	if (unlikely(status)) {
+-                context->srb->result = (status == -ENOENT ? DID_ABORT : DID_ERROR)<<16;
++                set_host_byte(context->srb, (status == -ENOENT ? DID_ABORT : DID_ERROR));
+ 		mts_transfer_cleanup(transfer);
+         }
+ 
+@@ -578,7 +578,7 @@ mts_scsi_queuecommand_lck(struct scsi_cmnd *srb, mts_scsi_cmnd_callback callback
+ 
+ 		MTS_DEBUG("this device doesn't exist\n");
+ 
+-		srb->result = DID_BAD_TARGET << 16;
++		set_host_byte(srb, DID_BAD_TARGET);
+ 
+ 		if(likely(callback != NULL))
+ 			callback(srb);
+@@ -605,7 +605,7 @@ mts_scsi_queuecommand_lck(struct scsi_cmnd *srb, mts_scsi_cmnd_callback callback
+ 
+ 	if(unlikely(res)){
+ 		MTS_ERROR("error %d submitting URB\n",(int)res);
+-		srb->result = DID_ERROR << 16;
++		set_host_byte(srb, DID_ERROR);
+ 
+ 		if(likely(callback != NULL))
+ 			callback(srb);
+-- 
+2.16.4
 
-greg k-h
