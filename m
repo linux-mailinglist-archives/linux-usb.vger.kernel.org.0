@@ -2,97 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C899226CBEC
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 22:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FD126CCB0
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 22:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728437AbgIPUgl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 16:36:41 -0400
-Received: from mga02.intel.com ([134.134.136.20]:21154 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726793AbgIPRKV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:10:21 -0400
-IronPort-SDR: L9i3YG3xSoZc/0ZTN1Lu/XgFkpizjcUbzLq06j2flQRUS5MqVo8AWWHEQG6kSVp+3y/9+xwy3Q
- dnB3l2hHmMZg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9745"; a="147137498"
-X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
-   d="scan'208";a="147137498"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 05:26:43 -0700
-IronPort-SDR: p7/YuHpQIogTkInWLhal8vzrvsLtpNi254IL9RX3AA6hWTXoyG5ZN/rgH0eN/0RtWo9F/B+uOQ
- ipuMsEyloMzg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
-   d="scan'208";a="451832627"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga004.jf.intel.com with ESMTP; 16 Sep 2020 05:26:41 -0700
-Subject: Re: [PATCH] xhci: workaround for S3 issue on AMD SNPS 3.0 xHC
-To:     Nehal Bakulchandra Shah <Nehal-bakulchandra.Shah@amd.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sandeep.Singh@amd.com,
-        yuanmei@lenovo.com
-References: <20200831065246.1166470-1-Nehal-bakulchandra.Shah@amd.com>
-From:   Mathias Nyman <mathias.nyman@intel.com>
-Message-ID: <897a7917-5ea6-025b-c516-482188759e0a@intel.com>
-Date:   Wed, 16 Sep 2020 15:30:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728482AbgIPUsI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 16:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726382AbgIPRBO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Sep 2020 13:01:14 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26F1C014D06;
+        Wed, 16 Sep 2020 06:38:27 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id 34so3885592pgo.13;
+        Wed, 16 Sep 2020 06:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=RPMmBa/zuVIVa6YT0Ct/PRYo3W8xK4AI2YIowuyMAz8=;
+        b=fHilp9TKndRfRIpIEW7pskStpJIx9tJimZ/y0pA9ypEvUHuYNm+18QlWmYOouD1tX0
+         LCK9aNAEI5YK+8CxLy6PgjIyLZmIZKfqvdx8B+9dwUnu8GnDSki3ejFJDcxMtw4ZvZkD
+         o58I2PumQyjbrEwCBsQvpOvIod2iRymYkDGLSlbDNe4W6UpmWWVqCwY2nBO6TgvF0l4g
+         KHU2qC9MgZICr7bfyPlIUWcx9aqQb6z72coEyRXs4xC52mJuXIJ47/9zIuWZe9xlXciN
+         rWrQ0jdnFJUZre4qzzTb/8uUrDgfCghNIQGgFqFdkhyrVn5mG75WLqiOFP8ZrHLbyxL8
+         NelQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=RPMmBa/zuVIVa6YT0Ct/PRYo3W8xK4AI2YIowuyMAz8=;
+        b=jfTHcUUvW1CA4vlmQzW1747Vme3acmyrR3wNr4HC65JdygXqIXH7fDntCYyEB+f4i8
+         QOTQNC6c28ILk0iygOtM069qUUUne4a3FBHnWoT05EQUq3zaNhp635qY/iX5GOj2OneX
+         kUtt8blkzqNfd/fYrsDofD7iD4au/6oi/Ywr73rYPRzzoXfdz0hMAk2enY6UVBlXSFf9
+         AL4KJLZx0ONwZ+GA9hIcgPg3I37DQErwYXyJv2jeW6uLdTyrrYmaoE5t7HKfP0FxbL+Z
+         0dT5Oq/iFHY9g7QA6qJso1RCbzaN5FBHMSoaH1YiOJQ8ewHZWJKr+gF0BPR0QOMIDXol
+         0X5w==
+X-Gm-Message-State: AOAM531Dw56MEgBasnOcUr5nIuOy12nC75STWwx/VKsehDoX4SYaetoC
+        AcfZy4lkMfMbgI3cSMSomRkrRNVSgiKjVukRLFE=
+X-Google-Smtp-Source: ABdhPJw8pDY+mq6BWskzMRd1QiEHrMA+qZcz43pBqGlrejs0IcKqbHwaajsxiVnJqEydNRZeG2HCHg==
+X-Received: by 2002:a63:30c:: with SMTP id 12mr18613171pgd.66.1600263506704;
+        Wed, 16 Sep 2020 06:38:26 -0700 (PDT)
+Received: from [192.168.0.104] ([49.207.198.18])
+        by smtp.gmail.com with ESMTPSA id e62sm16987968pfh.76.2020.09.16.06.38.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Sep 2020 06:38:26 -0700 (PDT)
+Subject: Re: [Linux-kernel-mentees][PATCH] rtl8150: set memory to all 0xFFs on
+ failed register reads
+To:     Petko Manolov <petkan@nucleusys.com>
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200916050540.15290-1-anant.thazhemadam@gmail.com>
+ <20200916061946.GA38262@p310>
+From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Message-ID: <780e991d-864d-0491-f440-12a926920a8a@gmail.com>
+Date:   Wed, 16 Sep 2020 19:08:21 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200831065246.1166470-1-Nehal-bakulchandra.Shah@amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <20200916061946.GA38262@p310>
+Content-Type: text/plain; charset=windows-1252
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 31.8.2020 9.52, Nehal Bakulchandra Shah wrote:
-> From: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-> 
-> On some platform of AMD, S3 fails with HCE and SRE errors.To fix this,
-> sparse controller enable bit has to be disabled.
-> 
-> Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-> ---
->  drivers/usb/host/xhci-pci.c | 12 ++++++++++++
->  drivers/usb/host/xhci.h     |  1 +
->  2 files changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 3feaafebfe58..865a16e6c1ed 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -160,6 +160,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  	    (pdev->device == 0x15e0 || pdev->device == 0x15e1))
->  		xhci->quirks |= XHCI_SNPS_BROKEN_SUSPEND;
->  
-> +	if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->device == 0x15e5)
-> +		xhci->quirks |= XHCI_DISABLE_SPARSE;
-> +
->  	if (pdev->vendor == PCI_VENDOR_ID_AMD)
->  		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
->  
-> @@ -371,6 +374,15 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  	/* USB 2.0 roothub is stored in the PCI device now. */
->  	hcd = dev_get_drvdata(&dev->dev);
->  	xhci = hcd_to_xhci(hcd);
-> +
-> +	if (xhci->quirks & XHCI_DISABLE_SPARSE) {
-> +		u32 reg;
-> +
-> +		reg = readl(hcd->regs + 0xC12C);
-> +		reg &=  ~BIT(17);
-> +		writel(reg, hcd->regs + 0xC12C);
-> +	}
-> +
 
-Is disabling the bit once in probe enough?
-xHC will be reset after hibernation as well, does this bit need to be cleared after that?
+On 16/09/20 11:49 am, Petko Manolov wrote:
+> On 20-09-16 10:35:40, Anant Thazhemadam wrote:
+>> get_registers() copies whatever memory is written by the
+>> usb_control_msg() call even if the underlying urb call ends up failing.
+> Not true, memcpy() is only called if "ret" is positive.
+Right. I'm really sorry I fumbled and messed up the commit message
+there. Thank you for pointing that out.
+>> If get_registers() fails, or ends up reading 0 bytes, meaningless and junk 
+>> register values would end up being copied over (and eventually read by the 
+>> driver), and since most of the callers of get_registers() don't check the 
+>> return values of get_registers() either, this would go unnoticed.
+> usb_control_msg() returns negative on error (look up usb_internal_control_msg() 
+> to see for yourself) so it does not go unnoticed.
 
-Also consider turning this into a separate function with a proper description,
-see xhci_pme_quirk() for example. Avoids cluttering probe.
-Actually if this bit only needs to be cleared once then that function could be called from xhci_pci_setup()
+When I said "this would go unnoticed", I meant get_register() failing would
+go unnoticed, not that usb_control_msg() failing would go unnoticed.
+I agree that get_registers() notices usb_control_msg() failing, and
+appropriately returns the return value from usb_control_msg().
+But there are many instances where get_registers() is called but the return
+value of get_registers() is not checked, to see if it failed or not; hence, "this
+would go unnoticed".
 
--Mathias
+> If for some reason it return zero, nothing is copied.  Also, if usb transfer fail 
+> no register values are being copied anywhere.
+
+True.
+Now consider set_ethernet_addr(), and suppose get_register() fails when
+invoked from inside set_ethernet_addr().
+As you said, no value is copied back, which means no value is copied back
+into node_id, which leaves node_id uninitialized. This node_id (still
+uninitialized) is then blindly copied into dev->netdev->dev_addr; which
+is less than ideal and could also quickly prove to become an issue, right?
+
+> Your patch also allows for memcpy() to be called with 'size' either zero or 
+> greater than the allocated buffer size. Please, look at the code carefully.
+Oh. I apologize for this. This can be reverted relatively easily.
+>> It might be a better idea to try and mirror the PCI master abort
+>> termination and set memory to 0xFFs instead in such cases.
+> I wasn't aware drivers are now responsible for filling up the memory with 
+> anything.  Does not sound like a good idea to me.
+Since we copy the correct register values when get_register() doesn't fail,
+I thought it might be a slightly better alternative to fill node_id with 0xFFs,
+instead of leaving it go uninitialized in case get_registers() fails.
+
+Also, what are the odds that a successful get_register() call would see
+0xFFs being copied?
+If that's very real scenario, then I admit this doesn't work at all.
+
+The only other alternative approach I can think of that can handle the
+issue I highlighted above, is to introduce checking for get_registers()'s
+return values nearly everywhere it gets called.
+Would that be a more preferable and welcome approach?
+
+Thank you for your time.
+
+Thanks,
+Anant
+
+
