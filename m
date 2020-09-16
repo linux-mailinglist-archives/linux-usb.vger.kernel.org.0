@@ -2,63 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C59326C99B
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 21:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960B226C979
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 21:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727381AbgIPTOl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 15:14:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56000 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727310AbgIPRka (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:40:30 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9564321582;
-        Wed, 16 Sep 2020 11:08:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600254525;
-        bh=ZvnhF1LiI2Yn89FtkAkVB3JW7SiaJzI4LcpPN8woHiM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SjH1R95zudOHxhkqmCPAIbP4/e/X3Njf/MwMLrvq8Y8hsUBjLITC/GaBOYHI6uphJ
-         xjT+nsqT7c6kKsoWG/9br2ZLYcXH+WjaPwRQvb5V1F41T85DMUjaHhPOzirYx9HE6U
-         toyDNeFo7VKFb9lQ/y4dSUJZweEZajmCzS9Evz3M=
-Date:   Wed, 16 Sep 2020 13:09:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Mani, Rajmohan" <rajmohan.mani@intel.com>,
-        linux-usb@vger.kernel.org,
-        Madhusudanarao Amara <madhusudanarao.amara@intel.com>
-Subject: Re: [PATCH 3/3] usb: typec: intel_pmc_mux: Handle SCU IPC error
- conditions
-Message-ID: <20200916110919.GA853546@kroah.com>
-References: <20200916091102.27118-1-heikki.krogerus@linux.intel.com>
- <20200916091102.27118-4-heikki.krogerus@linux.intel.com>
- <20200916094248.GA740415@kroah.com>
- <20200916105845.GE1358028@kuha.fi.intel.com>
+        id S1727555AbgIPTJ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 15:09:28 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:54312 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727395AbgIPRo0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Sep 2020 13:44:26 -0400
+Received: from relay10.mail.gandi.net (unknown [217.70.178.230])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 3BED73AE1EF
+        for <linux-usb@vger.kernel.org>; Wed, 16 Sep 2020 14:41:09 +0000 (UTC)
+Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
+        (Authenticated sender: hadess@hadess.net)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id D67D3240011;
+        Wed, 16 Sep 2020 14:39:40 +0000 (UTC)
+Message-ID: <9d329243e4ed6b09afade2659e09b847e9c780fc.camel@hadess.net>
+Subject: Re: USB driver ID matching broken
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        syzkaller <syzkaller@googlegroups.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "M. Vefa Bicakci" <m.v.b@runbox.com>
+Date:   Wed, 16 Sep 2020 16:39:40 +0200
+In-Reply-To: <20200916141513.GA2977321@kroah.com>
+References: <CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com>
+         <20200916141513.GA2977321@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.37.90 (3.37.90-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200916105845.GE1358028@kuha.fi.intel.com>
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 01:58:45PM +0300, Heikki Krogerus wrote:
-> On Wed, Sep 16, 2020 at 11:42:48AM +0200, Greg Kroah-Hartman wrote:
-> > On Wed, Sep 16, 2020 at 12:11:02PM +0300, Heikki Krogerus wrote:
-> > > From: Madhusudanarao Amara <madhusudanarao.amara@intel.com>
-> > > 
-> > > Check and return if there are errors. The response bits are valid
-> > > only on no errors.
-> > > 
-> > > Fixes: b7404a29cd3d ("usb: typec: intel_pmc_mux: Definitions for response status bits")
+On Wed, 2020-09-16 at 16:15 +0200, Greg Kroah-Hartman wrote:
+> On Wed, Sep 16, 2020 at 03:33:25PM +0200, Andrey Konovalov wrote:
+> > Hi Bastien, Greg, Alan,
 > > 
-> > This is in 5.9-rc4, so shouldn't it go in for 5.9-final?
+> > Looks like commit adb6e6ac20ee ("USB: Also match device drivers
+> > using
+> > the ->match vfunc") broke the USB driver ID matching process. This,
+> > in
+> > turn, led to a complete breakage of the USB fuzzing instance.
+> > 
+> > This is how an attempt to connect a USB device looks now:
+> > 
+> > [   39.781642][   T12] usb 1-1: new high-speed USB device number 2
+> > using dummy_hcd
+> > [   40.299955][   T12] usb 1-1: New USB device found,
+> > idVendor=0cf3,
+> > idProduct=9271, bcdDevice= 1.08
+> > [   40.303072][   T12] usb 1-1: New USB device strings: Mfr=1,
+> > Product=2, SerialNumber=3
+> > [   40.305678][   T12] usb 1-1: Product: syz
+> > [   40.307041][   T12] usb 1-1: Manufacturer: syz
+> > [   40.308556][   T12] usb 1-1: SerialNumber: syz
+> > [   40.314825][   T12] usbip-host 1-1: 1-1 is not in match_busid
+> > table... skip!
+> > [   42.500114][   T51] usb 1-1: USB disconnect, device number 2
+> > 
+> > It seems that when going through the list of registered IDs the
+> > code
+> > tries to match against USB/IP and succeeds as usbip_match() always
+> > returns true.
+> > 
+> > I'm not sure what's the best fix for this is.
 > 
-> You are correct. I'm sorry about that. Do you want me to resend?
+> I thought that is what the patch from Bastien was supposed to fix?
+> 
+> If it didn't, we can revert it.
 
-No worries, I'll take it in the correct branch now, thanks!
+It wasn't. Are you thinking of "usbip: Implement a match function to
+fix usbip" by M. Vefa Bicakci (CC:ed)?
 
-greg k-h
+Seems to me that usbip wants to match *every* device. Wouldn't that be
+a bug in usbip?
+
