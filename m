@@ -2,20 +2,20 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FC026BF92
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 10:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013C426BFEC
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 10:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726349AbgIPInR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 16 Sep 2020 04:43:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38782 "EHLO mail.kernel.org"
+        id S1726243AbgIPI4e convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 16 Sep 2020 04:56:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43798 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726068AbgIPInP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Sep 2020 04:43:15 -0400
+        id S1725840AbgIPI4d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Sep 2020 04:56:33 -0400
 From:   bugzilla-daemon@bugzilla.kernel.org
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 209089] USB storage devices appear as SATA devices
-Date:   Wed, 16 Sep 2020 08:43:14 +0000
+Date:   Wed, 16 Sep 2020 08:56:32 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -24,14 +24,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: high
-X-Bugzilla-Who: greg@kroah.com
+X-Bugzilla-Who: oliver@neukum.org
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: INVALID
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status cc resolution
-Message-ID: <bug-209089-208809-845wGl9AAf@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-209089-208809-7u1WksXxXJ@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-209089-208809@https.bugzilla.kernel.org/>
 References: <bug-209089-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -46,26 +46,27 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=209089
 
-Greg Kroah-Hartman (greg@kroah.com) changed:
+Oliver Neukum (oliver@neukum.org) changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|REOPENED                    |RESOLVED
-                 CC|                            |greg@kroah.com
-         Resolution|---                         |INVALID
+                 CC|                            |oliver@neukum.org
 
---- Comment #17 from Greg Kroah-Hartman (greg@kroah.com) ---
-This is not going to change, sorry.
+--- Comment #18 from Oliver Neukum (oliver@neukum.org) ---
+(In reply to Manish Jain from comment #15)
+> Hi Alan,
+> 
+> Nice to see your response to the reopened PR.
 
-We can not rename USB block device names, as it would break all current systems
-that have been working just fine for the past 20+ years with USB disks on
-Linux.  To do so is crazy and not how Linux development works at all.
+Storage and UAS do use the SCSI command set. Hence
 
-If we were to do this, there would be hundreds of thousands of mad users and
-broken systems, not something that you should be asking to have happen.
+1) the commands specific to SCSI can be issued
+2) there is an sg device associated with each sd
+3) we have optical drives, tapes and other devices on USB (USB-SCSI bridges are
+real)
 
-If you want persistent disk names, use /dev/disk/by-*/ symlinks, that is what
-they are there for, and have been there for 15+ years.
+Hence if anything is inappropriately named, it would be SATA devices, not USB
+devices.
 
 -- 
 You are receiving this mail because:
