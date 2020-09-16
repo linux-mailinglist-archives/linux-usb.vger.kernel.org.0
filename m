@@ -2,121 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7074B26CB37
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 22:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8FF26CB2B
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 22:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727358AbgIPUYT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 16:24:19 -0400
-Received: from aibo.runbox.com ([91.220.196.211]:50572 "EHLO aibo.runbox.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727084AbgIPR2V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:28:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:References:Cc:To:Subject:From;
-        bh=EF7A2aZIznKvjbmU4/mJNAmp2hc14V7A0aHHQVvh8Ls=; b=Sx+CU2z/PguhjBqvE491Fm5gur
-        IhH9H8Qfn4FxWL8SpNQQCWQw7zh7USP5W5ZYAeFTESOaYpECkCJ2/+ElUsIRdmdblVunE2iJeJUFK
-        1kSgD0aqHJtCvr61c4wcS2zzYshZRx/LEOjt4z8b9+0f9Vdop9rt58cIfTTj+bUNzs1Q6wN/meUNi
-        ENeJ2Yu9DKHn0Hlx3oksi8X8Em2EOauI21ER0BtrA0n4xsBdzxZYBH6uwOmfYqFNL0Y7dyr+nAYxw
-        Qzdx+DpdMQEd2VLntKk+jLJDcZdsZc5e06eEB+2aq7omZkLDCSJhG7tDTntecQDzmMtEEvQ7L/spe
-        RccmQvXA==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1kIZpg-0006Bg-M9; Wed, 16 Sep 2020 17:58:56 +0200
-Received: by submission03.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1kIZpS-0007AR-Jc; Wed, 16 Sep 2020 17:58:42 +0200
-From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
-Subject: Re: USB driver ID matching broken
-To:     Bastien Nocera <hadess@hadess.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller <syzkaller@googlegroups.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
-References: <CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com>
- <20200916141513.GA2977321@kroah.com>
- <9d329243e4ed6b09afade2659e09b847e9c780fc.camel@hadess.net>
-Message-ID: <359d080c-5cbb-250a-0ebd-aaba5f5c530d@runbox.com>
-Date:   Wed, 16 Sep 2020 18:58:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
-MIME-Version: 1.0
-In-Reply-To: <9d329243e4ed6b09afade2659e09b847e9c780fc.camel@hadess.net>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+        id S1727725AbgIPUXT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 16:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727105AbgIPR2l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Sep 2020 13:28:41 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F63C061223
+        for <linux-usb@vger.kernel.org>; Wed, 16 Sep 2020 10:18:37 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id y17so6644360qkf.15
+        for <linux-usb@vger.kernel.org>; Wed, 16 Sep 2020 10:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=Y0CPyJBwGQKF4TQ8zu0H48gbO6NYy9xi7Y4e0tcM1aw=;
+        b=AKcdiPC8efayCQdDN10LvIwxIxN45JmyKaoTeC1THHFKEOIMQ0ITfoGNlFPyYhVETY
+         H1fJm0YJ4NkBeEQ5g9uN4zPH4mO4tQ3qQd4AGqFpK/os0xUBQDVFNwOyvjh5VsB6kHOL
+         MFtH55xPMLaZ9nBpF4QO3bOoi0Mxhd4B8+kWEfqMKPo/yEbIxCbk4RTn1LWhrKNhJJPq
+         BJVBMvbUFzDf8dL+b4dzYOIepi6BTrjdvqe14vnOXWopFyqNa/Rz+LEBAu/+c1HlWqH2
+         MdPs0Lf12rnEGwXFQtyiN6QDhLsEmGO4EhI9Eud57PhAR2Dwq8UvNtoId9Y7MbpJi7xC
+         x9bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=Y0CPyJBwGQKF4TQ8zu0H48gbO6NYy9xi7Y4e0tcM1aw=;
+        b=Sz6HumFQJLmU/qtl038dLau7quQ6Ku9FZCbhP2JyxRMrbLJukzZJb+gd4GlgNEj8wH
+         NJCxtRTdJFcRWUXB91nSZJwaIibjGDVkWc0YjG91pYsT49lCPUc17AS7zn6b8XIHiNPI
+         5rh31hxhN1fhz+FlySURb1rnUHiSY2sBAWGQsOTJT2nqZRMAqB6eJrfvzP9RuGhV6xkO
+         LuQirNp5zA7eJxKd+dfBDyboBml3BvbRcxzux9sO1JBm8zWCpug3cGvx7O+d07HM4blH
+         p/RH9OiKKYsNaAYjup4vhw1sVTNnNBC+NjXOJewG+dQ9BFesYmhpqEXBxFk4gxvUxGCs
+         j8Pw==
+X-Gm-Message-State: AOAM533BwKguRrqmcDq0ZO3K/IL3gSU2O7ld5gh5sUhXqasCLl4qbeC3
+        ksrdkOU/PNUwJaZsohLd/6mmYD2cSpoh
+X-Google-Smtp-Source: ABdhPJznneI9TAMGyd2aPyjb7DmSc4PR6Y++OBX/SaiCh7j1ELLhBHs25xVeDzbpuY3fAJOT29JQgmtByDnZ
+X-Received: from luke.lon.corp.google.com ([2a00:79e0:d:110:f693:9fff:fef4:a7ef])
+ (user=qperret job=sendgmr) by 2002:ad4:57a7:: with SMTP id
+ g7mr24575105qvx.10.1600276714810; Wed, 16 Sep 2020 10:18:34 -0700 (PDT)
+Date:   Wed, 16 Sep 2020 18:18:25 +0100
+Message-Id: <20200916171825.3228122-1-qperret@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
+Subject: [PATCH] ehci-hcd: Move include to keep CRC stable
+From:   Quentin Perret <qperret@google.com>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gprocida@google.com, maennich@google.com, kernel-team@android.com,
+        Quentin Perret <qperret@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16/09/2020 17.39, Bastien Nocera wrote:
-> On Wed, 2020-09-16 at 16:15 +0200, Greg Kroah-Hartman wrote:
->> On Wed, Sep 16, 2020 at 03:33:25PM +0200, Andrey Konovalov wrote:
->>> Hi Bastien, Greg, Alan,
->>>
->>> Looks like commit adb6e6ac20ee ("USB: Also match device drivers
->>> using
->>> the ->match vfunc") broke the USB driver ID matching process. This,
->>> in
->>> turn, led to a complete breakage of the USB fuzzing instance.
->>>
->>> This is how an attempt to connect a USB device looks now:
->>>
->>> [   39.781642][   T12] usb 1-1: new high-speed USB device number 2
->>> using dummy_hcd
->>> [   40.299955][   T12] usb 1-1: New USB device found,
->>> idVendor=0cf3,
->>> idProduct=9271, bcdDevice= 1.08
->>> [   40.303072][   T12] usb 1-1: New USB device strings: Mfr=1,
->>> Product=2, SerialNumber=3
->>> [   40.305678][   T12] usb 1-1: Product: syz
->>> [   40.307041][   T12] usb 1-1: Manufacturer: syz
->>> [   40.308556][   T12] usb 1-1: SerialNumber: syz
->>> [   40.314825][   T12] usbip-host 1-1: 1-1 is not in match_busid
->>> table... skip!
->>> [   42.500114][   T51] usb 1-1: USB disconnect, device number 2
->>>
->>> It seems that when going through the list of registered IDs the
->>> code
->>> tries to match against USB/IP and succeeds as usbip_match() always
->>> returns true.
->>>
->>> I'm not sure what's the best fix for this is.
->>
->> I thought that is what the patch from Bastien was supposed to fix?
->>
->> If it didn't, we can revert it.
-> 
-> It wasn't. Are you thinking of "usbip: Implement a match function to
-> fix usbip" by M. Vefa Bicakci (CC:ed)?
-> 
-> Seems to me that usbip wants to match *every* device. Wouldn't that be
-> a bug in usbip?
+The CRC calculation done by genksyms is triggered when the parser hits
+EXPORT_SYMBOL*() macros. At this point, genksyms recursively expands the
+types of the function parameters, and uses that as the input for the CRC
+calculation. In the case of forward-declared structs, the type expands
+to 'UNKNOWN'. Following this, it appears that the result of the
+expansion of each type is cached somewhere, and seems to be re-used
+when/if the same type is seen again for another exported symbol in the
+same C file.
 
-Hello all,
+Unfortunately, this can cause CRC 'stability' issues when a struct
+definition becomes visible in the middle of a C file. For example, let's
+assume code with the following pattern:
 
-I agree with Bastien; it looks like the match function that I had prepared
-for the "USB-IP no longer works starting with v5.7.y" bug at [1] is not
-appropriate due to the fact that the match function always returns true.
+    struct foo;
 
-My understanding of how USB-IP works is that the user-space provides the
-USB bus identifier of the device to be published via USB-IP to the kernel
-via /sys/bus/usb/drivers/usbip-host/match_busid. Given that the bus
-identifiers written to match_busid are stored in a table, perhaps this
-table can be queried in the usbip_match function to avoid the issue
-reported by Andrey while preserving USB-IP's functionality?
+    int bar(struct foo *arg)
+    {
+	/* Do work ... */
+    }
+    EXPORT_SYMBOL_GPL(bar);
 
-If needed, I can prepare a patch implementing this proposal, perhaps after
-commit 7a2f2974 ("usbip: Implement a match function to fix usbip") is
-reverted. The only catch is that my bandwidth is a bit limited, hence it
-may take some time for me to publish a patch.
+    /* This contains struct foo's definition */
+    #include "foo.h"
 
-Sorry for this unexpected bug,
+    int baz(struct foo *arg)
+    {
+	/* Do more work ... */
+    }
+    EXPORT_SYMBOL_GPL(baz);
 
-Vefa
+Here, baz's CRC will be computed using the expansion of struct foo that
+was cached after bar's CRC calculation ('UNKOWN' here). But if
+EXPORT_SYMBOL_GPL(bar) is removed from the file (because of e.g. symbol
+trimming using CONFIG_TRIM_UNUSED_KSYMS), struct foo will be expanded
+late, during baz's CRC calculation, which now has visibility over the
+full struct definition, hence resulting in a different CRC for baz.
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=208267
+The proper fix for this certainly is in genksyms, but that will take me
+some time to get right. In the meantime, we have seen one occurrence of
+this in the ehci-hcd code which hits this problem because of the way it
+includes C files halfway through the code together with an unlucky mix
+of symbol trimming.
+
+In order to workaround this, move the include done in ehci-hub.c early
+in ehci-hcd.c, hence making sure the struct definitions are visible to
+the entire file. This improves CRC stability of the ehci-hcd exports
+even when symbol trimming is enabled.
+
+Signed-off-by: Quentin Perret <qperret@google.com>
+---
+ drivers/usb/host/ehci-hcd.c | 1 +
+ drivers/usb/host/ehci-hub.c | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+index 6257be4110ca..3575b7201881 100644
+--- a/drivers/usb/host/ehci-hcd.c
++++ b/drivers/usb/host/ehci-hcd.c
+@@ -22,6 +22,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/usb.h>
+ #include <linux/usb/hcd.h>
++#include <linux/usb/otg.h>
+ #include <linux/moduleparam.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/debugfs.h>
+diff --git a/drivers/usb/host/ehci-hub.c b/drivers/usb/host/ehci-hub.c
+index ce0eaf7d7c12..087402aec5cb 100644
+--- a/drivers/usb/host/ehci-hub.c
++++ b/drivers/usb/host/ehci-hub.c
+@@ -14,7 +14,6 @@
+  */
+ 
+ /*-------------------------------------------------------------------------*/
+-#include <linux/usb/otg.h>
+ 
+ #define	PORT_WAKE_BITS	(PORT_WKOC_E|PORT_WKDISC_E|PORT_WKCONN_E)
+ 
+-- 
+2.28.0.618.gf4bc123cb7-goog
+
