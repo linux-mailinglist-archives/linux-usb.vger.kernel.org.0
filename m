@@ -2,123 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F6126C002
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 11:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F8F26C01C
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 11:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726649AbgIPJAn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 05:00:43 -0400
-Received: from mga01.intel.com ([192.55.52.88]:59022 "EHLO mga01.intel.com"
+        id S1726610AbgIPJGe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 05:06:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46238 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726505AbgIPJAl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Sep 2020 05:00:41 -0400
-IronPort-SDR: YGmY+kJ7tZG5HPV8VYAU+whTYQmGvUWhUY+ENi4PfiOhdAK/ky5FHExp3/Vdx/r4B/QMUdG+Dd
- bgdbFIQVHZxg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9745"; a="177500635"
-X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
-   d="scan'208";a="177500635"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 02:00:39 -0700
-IronPort-SDR: qW+Ml2v/mo/jvkmTs2X9msRi5ehTzuASLDh2qGkoJ9WEm2dsZrxY5qTzkvtyVWhQwfSdsxQDci
- ehQaNvtcZxHQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
-   d="scan'208";a="409487543"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Sep 2020 02:00:37 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        Zwane Mwaikambo <zwanem@gmail.com>
-Subject: [PATCH 2/2] usb: typec: ucsi: Prevent mode overrun
-Date:   Wed, 16 Sep 2020 12:00:34 +0300
-Message-Id: <20200916090034.25119-3-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200916090034.25119-1-heikki.krogerus@linux.intel.com>
-References: <20200916090034.25119-1-heikki.krogerus@linux.intel.com>
+        id S1726129AbgIPJGb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Sep 2020 05:06:31 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B20F921974;
+        Wed, 16 Sep 2020 09:06:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600247190;
+        bh=Dfwbci88DTkyCRzDTgwvZH7qGaycD4hKjVm1q2R6nDI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bsWQuzvWoVSuUq700Adg7BMCU+7Pad8dakDZORQGKVPwk48j/EqXdFnRrGzLT44TS
+         oWbbT033KjoAt97oXXS1a6qmCQwJ9WUqELN0czuU7AO8AfvZBv/JXdcnYCjj9M+5kf
+         GQRn/mLUWDrHjqL9HyfVntGTUcmgZZMahsKZZ84w=
+Date:   Wed, 16 Sep 2020 11:06:41 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     himadrispandya@gmail.com, dvyukov@google.com,
+        linux-usb@vger.kernel.org, perex@perex.cz, tiwai@suse.com,
+        stern@rowland.harvard.ed, linux-kernel@vger.kernel.org,
+        marcel@holtmann.org, johan.hedberg@gmail.com,
+        linux-bluetooth@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v3 04/11] USB: core: hub.c: use usb_control_msg_send() in
+ a few places
+Message-ID: <20200916090641.GA710715@kroah.com>
+References: <20200914153756.3412156-1-gregkh@linuxfoundation.org>
+ <20200914153756.3412156-5-gregkh@linuxfoundation.org>
+ <20200914180616.GB972479@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200914180616.GB972479@rowland.harvard.edu>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sometimes the embedded controller firmware does not
-terminate the list of alternate modes that the partner
-supports in its response to the GET_ALTERNATE_MODES command.
-Instead the firmware returns the supported alternate modes
-over and over again until the driver stops requesting them.
+On Mon, Sep 14, 2020 at 02:06:16PM -0400, Alan Stern wrote:
+> On Mon, Sep 14, 2020 at 05:37:49PM +0200, Greg Kroah-Hartman wrote:
+> > There are a few calls to usb_control_msg() that can be converted to use
+> > usb_control_msg_send() instead, so do that in order to make the error
+> > checking a bit simpler and the code smaller.
+> > 
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> > v3:
+> >  - drop change in usb_enable_link_state() as it was not needed now
+> >    thanks to review from Alan
+> >  - minor changes requested by checkpatch.pl
+> > 
+> > v2:
+> >  - dropped changes to usb_req_set_sel() thanks to review from Alan
+> > 
+> >  drivers/usb/core/hub.c | 99 +++++++++++++++++-------------------------
+> >  1 file changed, 40 insertions(+), 59 deletions(-)
+> 
+> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-If that happens, the number of modes for each alternate mode
-will exceed the maximum 6 that is defined in the USB Power
-Delivery specification. Making sure that can't happen by
-adding a check for it.
+Thanks for the review!
 
-This fixes NULL pointer dereference that is caused by the
-overrun.
-
-Fixes: ad74b8649beaf ("usb: typec: ucsi: Preliminary support for alternate modes")
-Cc: stable@vger.kernel.org
-Reported-by: Zwane Mwaikambo <zwanem@gmail.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index e680fcfdee609..758b988ac518a 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -216,14 +216,18 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
- 					    con->partner_altmode[i] == altmode);
- }
- 
--static u8 ucsi_altmode_next_mode(struct typec_altmode **alt, u16 svid)
-+static int ucsi_altmode_next_mode(struct typec_altmode **alt, u16 svid)
- {
- 	u8 mode = 1;
- 	int i;
- 
--	for (i = 0; alt[i]; i++)
-+	for (i = 0; alt[i]; i++) {
-+		if (i > MODE_DISCOVERY_MAX)
-+			return -ERANGE;
-+
- 		if (alt[i]->svid == svid)
- 			mode++;
-+	}
- 
- 	return mode;
- }
-@@ -258,8 +262,11 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
- 			goto err;
- 		}
- 
--		desc->mode = ucsi_altmode_next_mode(con->port_altmode,
--						    desc->svid);
-+		ret = ucsi_altmode_next_mode(con->port_altmode, desc->svid);
-+		if (ret < 0)
-+			return ret;
-+
-+		desc->mode = ret;
- 
- 		switch (desc->svid) {
- 		case USB_TYPEC_DP_SID:
-@@ -292,8 +299,11 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
- 			goto err;
- 		}
- 
--		desc->mode = ucsi_altmode_next_mode(con->partner_altmode,
--						    desc->svid);
-+		ret = ucsi_altmode_next_mode(con->partner_altmode, desc->svid);
-+		if (ret < 0)
-+			return ret;
-+
-+		desc->mode = ret;
- 
- 		alt = typec_partner_register_altmode(con->partner, desc);
- 		if (IS_ERR(alt)) {
--- 
-2.28.0
-
+greg k-h
