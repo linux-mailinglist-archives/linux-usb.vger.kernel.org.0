@@ -2,137 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B32426CCA5
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 22:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC74126CD5A
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Sep 2020 22:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728404AbgIPUrh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 16:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726649AbgIPRBU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Sep 2020 13:01:20 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC9BC0086D1;
-        Wed, 16 Sep 2020 06:41:01 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id t7so1622229pjd.3;
-        Wed, 16 Sep 2020 06:41:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=a7VpgUXD3etb/W2u95CFqiHYYBXyXu79NXiK4t98Blw=;
-        b=I+qQ5j9mEE3iA0H4ZUBphMax7ReOC8kLIFC4DG0UZcKdQnYem3m8Y+7sCVJiRZJ/B/
-         pw8tMLhpfRFVWel7rSka1hqv7O+41MZIaPaAoRO64Re5IL8TAkR1wJJOSWwT10WJMY1S
-         MmLmpoRxLod/Oqy9GDd2FhG94gZ7/74YYZ25q0zp1FMPB/mZFfmEX8B2sotKLoWCAR9m
-         ScqhB8raR4jlvngSTMKThpKS98ZX+BfZbhZnmqcHUcIZJeWdC/MkkwOEN+mlx2nDXPJ+
-         rGBjZ0Qawi4ak9DsvFSaQWQtOz12PLCl68CPxiYgA+fLS6yRBLooKDQ4+D0XFi4PMMz6
-         4PZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=a7VpgUXD3etb/W2u95CFqiHYYBXyXu79NXiK4t98Blw=;
-        b=hn+VglDnqbU6nU8bK3NmY/Nqmd/OsbglntwwyiW4BwxLcGPPyWrAN+BYfmR9mBENhw
-         kRPvC6BJee56w4g5VlTv0LCEz9d2w+sQmEnHK93co54v6XqCOEgT6GMH2Ap4/Fp6mCis
-         uGRUYLu5AKjehB/iAHMvSFoTRMxAAYmxEbdzf9JnyiM0ZDUmzALBlNe5tKXYHoxCaow1
-         1+ZoBEYqzTRLPSD3BiC2rIMd4RTFwEiUtVK5CGtaMHBi9ywdGKLH/Njn+8TnpI0WgJwL
-         0KTohg6vvyj1LrXePhi238b/A9JD7qqs+k3pPcNDYLMBGgkyPJYHuhqFW2yJ8JQEwPnO
-         T9ag==
-X-Gm-Message-State: AOAM533giAi5udOIqwEqYtzsfrKM2bynIw61Ja3tjU273s9tnd3Z3B4A
-        /gyKvHQU++nEGKl7JwGkJKodk6E2nwpOnNJDQxE=
-X-Google-Smtp-Source: ABdhPJwsdlcogMP86H7W0+GT+TmcgrKpclDe9FF5ms19t0nLyBthmXVXaKb8aLBdzPeosDJc3+hC3w==
-X-Received: by 2002:a17:90a:7ac1:: with SMTP id b1mr3975237pjl.121.1600263660892;
-        Wed, 16 Sep 2020 06:41:00 -0700 (PDT)
-Received: from [192.168.0.104] ([49.207.198.18])
-        by smtp.gmail.com with ESMTPSA id gm17sm2784507pjb.46.2020.09.16.06.40.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2020 06:41:00 -0700 (PDT)
-Subject: Re: [Linux-kernel-mentees][PATCH] rtl8150: set memory to all 0xFFs on
- failed register reads
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com,
-        Petko Manolov <petkan@nucleusys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200916050540.15290-1-anant.thazhemadam@gmail.com>
- <20200916062227.GD142621@kroah.com>
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Message-ID: <dfdb48b8-5cd9-2b19-11cc-b17f45904e0f@gmail.com>
-Date:   Wed, 16 Sep 2020 19:10:55 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728597AbgIPU6T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 16:58:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46162 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726541AbgIPQdO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Sep 2020 12:33:14 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B147922240;
+        Wed, 16 Sep 2020 14:14:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600265679;
+        bh=nZAQn55+aPcq8RzVKQN+6ql3dw2uD5nehssjhy2nZYk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IkFYpQXDgKNz2Afod07W1Wri9ZEd4d2XvR50R3r67V4f2627PcBsJDqX3iiWbhBM7
+         4X9df7MET5/lGN6V5A+MiXTcanzDUE43eIA2fs7o89XN0Plr4UyHjbKiKcTU3S30GC
+         bEkeT7DaM98kohGkPjVMKhlU8922XsSwVFiTG8Pw=
+Date:   Wed, 16 Sep 2020 16:15:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        syzkaller <syzkaller@googlegroups.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: USB driver ID matching broken
+Message-ID: <20200916141513.GA2977321@kroah.com>
+References: <CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200916062227.GD142621@kroah.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Sep 16, 2020 at 03:33:25PM +0200, Andrey Konovalov wrote:
+> Hi Bastien, Greg, Alan,
+> 
+> Looks like commit adb6e6ac20ee ("USB: Also match device drivers using
+> the ->match vfunc") broke the USB driver ID matching process. This, in
+> turn, led to a complete breakage of the USB fuzzing instance.
+> 
+> This is how an attempt to connect a USB device looks now:
+> 
+> [   39.781642][   T12] usb 1-1: new high-speed USB device number 2
+> using dummy_hcd
+> [   40.299955][   T12] usb 1-1: New USB device found, idVendor=0cf3,
+> idProduct=9271, bcdDevice= 1.08
+> [   40.303072][   T12] usb 1-1: New USB device strings: Mfr=1,
+> Product=2, SerialNumber=3
+> [   40.305678][   T12] usb 1-1: Product: syz
+> [   40.307041][   T12] usb 1-1: Manufacturer: syz
+> [   40.308556][   T12] usb 1-1: SerialNumber: syz
+> [   40.314825][   T12] usbip-host 1-1: 1-1 is not in match_busid table... skip!
+> [   42.500114][   T51] usb 1-1: USB disconnect, device number 2
+> 
+> It seems that when going through the list of registered IDs the code
+> tries to match against USB/IP and succeeds as usbip_match() always
+> returns true.
+> 
+> I'm not sure what's the best fix for this is.
 
-On 16/09/20 11:52 am, Greg KH wrote:
-> On Wed, Sep 16, 2020 at 10:35:40AM +0530, Anant Thazhemadam wrote:
->> get_registers() copies whatever memory is written by the
->> usb_control_msg() call even if the underlying urb call ends up failing.
->>
->> If get_registers() fails, or ends up reading 0 bytes, meaningless and 
->> junk register values would end up being copied over (and eventually read 
->> by the driver), and since most of the callers of get_registers() don't 
->> check the return values of get_registers() either, this would go unnoticed.
->>
->> It might be a better idea to try and mirror the PCI master abort
->> termination and set memory to 0xFFs instead in such cases.
-> It would be better to use this new api call instead of
-> usb_control_msg():
-> 	https://lore.kernel.org/r/20200914153756.3412156-1-gregkh@linuxfoundation.org
->
-> How about porting this patch to run on top of that series instead?  That
-> should make this logic much simpler.
-This looks viable to me. I'll be sure to try this out.
->> Fixes: https://syzkaller.appspot.com/bug?extid=abbc768b560c84d92fd3
->> Reported-by: syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com
->> Tested-by: syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com
->> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
->> ---
->>  drivers/net/usb/rtl8150.c | 9 +++++++--
->>  1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
->> index 733f120c852b..04fca7bfcbcb 100644
->> --- a/drivers/net/usb/rtl8150.c
->> +++ b/drivers/net/usb/rtl8150.c
->> @@ -162,8 +162,13 @@ static int get_registers(rtl8150_t * dev, u16 indx, u16 size, void *data)
->>  	ret = usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
->>  			      RTL8150_REQ_GET_REGS, RTL8150_REQT_READ,
->>  			      indx, 0, buf, size, 500);
->> -	if (ret > 0 && ret <= size)
->> +
->> +	if (ret < 0)
->> +		memset(data, 0xff, size);
->> +
->> +	else
->>  		memcpy(data, buf, ret);
->> +
->>  	kfree(buf);
->>  	return ret;
->>  }
->> @@ -276,7 +281,7 @@ static int write_mii_word(rtl8150_t * dev, u8 phy, __u8 indx, u16 reg)
->>  
->>  static inline void set_ethernet_addr(rtl8150_t * dev)
->>  {
->> -	u8 node_id[6];
->> +	u8 node_id[6] = {0};
-> This should not be needed to be done.
+I thought that is what the patch from Bastien was supposed to fix?
 
-Noted.
+If it didn't, we can revert it.
 
-Thank you for your time.
+thanks,
 
-Thanks,
-Anant
-
+greg k-h
