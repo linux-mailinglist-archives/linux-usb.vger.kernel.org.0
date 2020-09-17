@@ -2,95 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C64A426D9F4
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 13:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C368426D9CE
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 13:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726651AbgIQLQq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 07:16:46 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:48742 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726543AbgIQLQ0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 07:16:26 -0400
-X-Greylist: delayed 2273 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 07:15:23 EDT
-Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 2286B3A5C9A;
-        Thu, 17 Sep 2020 10:24:04 +0000 (UTC)
-X-Originating-IP: 82.255.60.242
-Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
-        (Authenticated sender: hadess@hadess.net)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 73DD1FF804;
-        Thu, 17 Sep 2020 10:23:25 +0000 (UTC)
-Message-ID: <2ee0f3922f54888acf3e0cafa47c3829a9b0de8f.camel@hadess.net>
-Subject: Re: [PATCH 1/2] usbcore/driver: Fix specific driver selection
-From:   Bastien Nocera <hadess@hadess.net>
-To:     "M. Vefa Bicakci" <m.v.b@runbox.com>, linux-usb@vger.kernel.org
-Cc:     Andrey Konovalov <andreyknvl@google.com>, stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller@googlegroups.com
-Date:   Thu, 17 Sep 2020 12:23:24 +0200
-In-Reply-To: <20200917095959.174378-1-m.v.b@runbox.com>
-References: <359d080c-5cbb-250a-0ebd-aaba5f5c530d@runbox.com>
-         <20200917095959.174378-1-m.v.b@runbox.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.37.90 (3.37.90-1.fc33) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726615AbgIQLET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 07:04:19 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47836 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726362AbgIQLDR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Sep 2020 07:03:17 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=cantorsusede;
+        t=1600340570;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=aRuNZn9DZq04RhZrasixWm1rwDIXQsQVN4YYKiZ1FbQ=;
+        b=NMQI8nS5SMa2WQOoxEn10W8j9sIrGWPU32Gx7jy6OmwVTMFEjv5ksUZcTHafAtzfdvEdQ+
+        dSGPZC++MlhTpdlz4djBbVB60CzBmxbSXC0I/KFOEYt0NOpxhieuPXCZTLef0o9qv9+8Q2
+        /vk/BVwWKtlX+TTxgvrcj06p/MzRIxdUvESKGd955NMc62dw//pNaXWnMxw4MqeTO1FmsT
+        fJlhJtTQtjVBvEunLnx4amvU8qQqQpNqmyeftHIgrXYB4Uijxb6aDHErKEcPlMMWeML69u
+        6YRkXRUDEojZRCHX7mhfBe1pbcT+dRyVquzpgayBBoo99KT8gb1vHjAxSseaHg==
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E304CB0BE;
+        Thu, 17 Sep 2020 11:03:23 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] CDC-ACM: cleanup of data structures
+Date:   Thu, 17 Sep 2020 13:02:35 +0200
+Message-Id: <20200917110235.11854-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2020-09-17 at 12:59 +0300, M. Vefa Bicakci wrote:
-> This commit resolves two minor bugs in the selection/discovery of
-> more
-> specific USB device drivers for devices that are currently bound to
-> generic USB device drivers.
-> 
-> The first bug is related to the way a candidate USB device driver is
-> compared against the generic USB device driver. The code in
-> is_dev_usb_generic_driver() used to unconditionally use
-> to_usb_device_driver() on each device driver, without verifying that
-> the device driver in question is a USB device driver (as opposed to a
-> USB interface driver).
+Buffers should be u8*, not unsigned char*
+Buffers have an unsigned length and using an int
+as a boolean is a bit outdated.
 
-You could also return early if is_usb_device() fails in
-__usb_bus_reprobe_drivers(). Each of the interface and the device
-itself is a separate "struct device", and "non-interface" devices won't
-have interface devices assigned to them.
+No functional change intended.
 
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/class/cdc-acm.c | 13 +++++++------
+ drivers/usb/class/cdc-acm.h |  6 +++---
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
-> The second bug is related to the logic that determines whether a
-> device
-> currently bound to a generic USB device driver should be re-probed by
-> a
-> more specific USB device driver or not. The code in
-> __usb_bus_reprobe_drivers() used to have the following lines:
-> 
->   if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
->       (!new_udriver->match || new_udriver->match(udev) != 0))
->  		return 0;
-> 
->   ret = device_reprobe(dev);
-> 
-> As the reader will notice, the code checks whether the USB device in
-> consideration matches the identifier table (id_table) of a specific
-> USB device_driver (new_udriver), followed by a similar check, but
-> this
-> time with the USB device driver's match function. However, the match
-> function's return value is not checked correctly. When match()
-> returns
-> zero, it means that the specific USB device driver is *not*
-> applicable
-> to the USB device in question, but the code then goes on to reprobe
-> the
-> device with the new USB device driver under consideration. All this
-> to
-> say, the logic is inverted.
-
-Could you split that change as the first commit in your patchset?
-
-I'll test your patches locally once you've respun them. Thanks for
-working on this.
-
-Cheers
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 85377bd740b3..e79ba5616fa0 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -173,7 +173,7 @@ static int acm_wb_alloc(struct acm *acm)
+ 	for (;;) {
+ 		wb = &acm->wb[wbn];
+ 		if (!wb->use) {
+-			wb->use = 1;
++			wb->use = true;
+ 			wb->len = 0;
+ 			return wbn;
+ 		}
+@@ -191,7 +191,8 @@ static int acm_wb_is_avail(struct acm *acm)
+ 	n = ACM_NW;
+ 	spin_lock_irqsave(&acm->write_lock, flags);
+ 	for (i = 0; i < ACM_NW; i++)
+-		n -= acm->wb[i].use;
++		if(acm->wb[i].use)
++			n--;
+ 	spin_unlock_irqrestore(&acm->write_lock, flags);
+ 	return n;
+ }
+@@ -201,7 +202,7 @@ static int acm_wb_is_avail(struct acm *acm)
+  */
+ static void acm_write_done(struct acm *acm, struct acm_wb *wb)
+ {
+-	wb->use = 0;
++	wb->use = false;
+ 	acm->transmitting--;
+ 	usb_autopm_put_interface_async(acm->control);
+ }
+@@ -745,7 +746,7 @@ static void acm_port_shutdown(struct tty_port *port)
+ 		if (!urb)
+ 			break;
+ 		wb = urb->context;
+-		wb->use = 0;
++		wb->use = false;
+ 		usb_autopm_put_interface_async(acm->control);
+ 	}
+ 
+@@ -796,7 +797,7 @@ static int acm_tty_write(struct tty_struct *tty,
+ 	wb = &acm->wb[wbn];
+ 
+ 	if (!acm->dev) {
+-		wb->use = 0;
++		wb->use = false;
+ 		spin_unlock_irqrestore(&acm->write_lock, flags);
+ 		return -ENODEV;
+ 	}
+@@ -808,7 +809,7 @@ static int acm_tty_write(struct tty_struct *tty,
+ 
+ 	stat = usb_autopm_get_interface_async(acm->control);
+ 	if (stat) {
+-		wb->use = 0;
++		wb->use = false;
+ 		spin_unlock_irqrestore(&acm->write_lock, flags);
+ 		return stat;
+ 	}
+diff --git a/drivers/usb/class/cdc-acm.h b/drivers/usb/class/cdc-acm.h
+index cd5e9d8ab237..a50ea3911042 100644
+--- a/drivers/usb/class/cdc-acm.h
++++ b/drivers/usb/class/cdc-acm.h
+@@ -64,12 +64,12 @@
+ #define ACM_NR  16
+ 
+ struct acm_wb {
+-	unsigned char *buf;
++	u8 *buf;
+ 	dma_addr_t dmah;
+-	int len;
+-	int use;
++	unsigned int len;
+ 	struct urb		*urb;
+ 	struct acm		*instance;
++	bool use;
+ };
+ 
+ struct acm_rb {
+-- 
+2.16.4
 
