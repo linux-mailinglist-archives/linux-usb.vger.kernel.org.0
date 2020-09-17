@@ -2,70 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6DE26E70F
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 23:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67AA26E9B4
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 02:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726637AbgIQVDt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 17:03:49 -0400
-Received: from cmta19.telus.net ([209.171.16.92]:56724 "EHLO cmta19.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726669AbgIQVDt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Sep 2020 17:03:49 -0400
-X-Greylist: delayed 487 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 17:03:48 EDT
-Received: from montezuma.home ([154.5.226.127])
-        by cmsmtp with SMTP
-        id J0wMkWX9hJSCdJ0wNkg8Ye; Thu, 17 Sep 2020 14:55:41 -0600
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=GaZpYjfL c=1 sm=1 tr=0
- a=f8b3WT/FcTuUJCJtQO1udw==:117 a=f8b3WT/FcTuUJCJtQO1udw==:17
- a=kj9zAlcOel0A:10 a=x7bEGLp0ZPQA:10 a=COSDN44dAAMA:10
- a=qMtNfzp5Xp0zt5On6f8A:9 a=CjuIK1q_8ugA:10
-Date:   Thu, 17 Sep 2020 13:55:38 -0700 (PDT)
-From:   Zwane Mwaikambo <zwanem@gmail.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Zwane Mwaikambo <zwane@yosper.io>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] usb/typec: fix array overruns in ucsi.c
- partner_altmode[]
-In-Reply-To: <20200916075952.GB1358028@kuha.fi.intel.com>
-Message-ID: <alpine.DEB.2.21.2009171355050.41832@montezuma.home>
-References: <20200828123328.GF174928@kuha.fi.intel.com> <alpine.DEB.2.21.2008300220350.37231@montezuma.home> <20200903111047.GH1279097@kuha.fi.intel.com> <20200909131059.GB3627076@kuha.fi.intel.com> <alpine.DEB.2.21.2009100030340.31932@montezuma.home>
- <20200910125018.GA3946915@kuha.fi.intel.com> <alpine.DEB.2.21.2009101912020.31932@montezuma.home> <20200911135618.GA4168153@kuha.fi.intel.com> <20200914134942.GB810499@kuha.fi.intel.com> <alpine.DEB.2.21.2009140907410.42407@montezuma.home>
- <20200916075952.GB1358028@kuha.fi.intel.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-CMAE-Envelope: MS4wfK8RI0fipMeTIud1EvyG3Ag5r/P7uySQiqqRQtZwI//0b8Xbple6s9Xgcg3RuNbHwOONBWM3fjpI5ftQPD5NIeo0jarHd3D1Xce3kOicfUgSB3XWLFN8
- 7m+FEPegW0HEeO5bFW/sVa5XtZh07pkbz+UJiia0eWsL+WpnOUOulvQJzovOJG6HyQFdurFZ5oxjBXie6spiWBjv0Ex2ZVWvTBDfM3oOmEfMf14KFixGfw7l
- kosM2+yqKgEnUkvnJKrmom+KQGt4pxdJMt/LsPFPzCUMtwief3B7xfG2DZLYak/zdsNpivy+Gueog+u401FGng==
+        id S1726170AbgIRAAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 20:00:55 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:44743 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726117AbgIRAAz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 20:00:55 -0400
+X-Greylist: delayed 344 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 20:00:55 EDT
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 00966A97
+        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 19:55:10 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute7.internal (MEProxy); Thu, 17 Sep 2020 19:55:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
+        mime-version:message-id:date:from:to:subject:content-type; s=
+        fm2; bh=Q6i5i4YIbs+nARhmaywOz9m9OvvpHgtw90DFlbCrCes=; b=eZqxomoi
+        sGuc0v9Go3fcp4APaTRZ1e1S+f+CAv1GlRWFbeWrHUjEA/CrtTaDTkOoqokSbRAw
+        yeSGx4UOMW1fPHvuEW0rNKO2pjTeWiXCgHwxx+7vctcUrn+BM29FVh+DSxTCfwtF
+        68BcqhMG2PpPhFYKFlZjl6JQZUsSWjAyfqydA30VAmZuMTgR+WB4i5NXEhjcEHnl
+        oqoDWrsVxlK78XmPmuxnmmrbSiLsC+S8yL6CbCt6GOo/g8aYIDo3Xny+1YYb5CTf
+        OW4R4JKpOS+5ycuKNkPWm+iz9oJBheYLtgkW7BoeBpuz/zAeTv9tLjXxI5uInIM+
+        k4p73ufIEf6RvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-type:date:from:message-id
+        :mime-version:subject:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; bh=Q6i5i4YIbs+nARhmaywOz9m9OvvpH
+        gtw90DFlbCrCes=; b=jU74zv2fYg7mhhXOZg9PxQp0hH5fmluJDUAZTPVIsBvTk
+        GP0ogBABnLOoA4cv6dlwlIlDoB9beBUt40a9lt+BnV4yyuZp7CPjwOYfCiHlrwL3
+        07rNLVVlldG/CGQNEmc4HSIMd6eO730daisP/CUGFu6mA2rA0oJaZXLQ9Alfgai3
+        qdEIFXoPe6NVfCa6TWmgrmw9vyCIRVLO+Af07DwPjYLWfi6i94F3AedUu6TteUuU
+        fhUE2fWjs8j7XI4uBjSrwr++mqpY7f9qDQeT1NAYk7cfzCihI+bNfP/zvcm05PFO
+        PvAxoGp/RLmr9D3D2a2MAnE4uBjXjqI+kMexEHDkg==
+X-ME-Sender: <xms:XvdjXz0eRCzwAW1TUrKxf63LXsBl3X-Jd93KyXahm3iq60RV6Yxpjw>
+    <xme:XvdjXyHKXRoFUM7Essx6waZs8WUTUVSpmDN2FFRpyw6SF9UZvKBr1eZy1wGh9w3iR
+    tMklmT7m__jCyDZRp4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtdehgddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepofgfggfkfffhvffutgesthdtredtre
+    ertdenucfhrhhomhepfdfuihguucfuphhrhidfuceoshhiugesrggvrghmrdhusheqnecu
+    ggftrfgrthhtvghrnhepueekheeiueeugeevvdejhfeiuefgvdekvdduvdegudfgheefve
+    dtgeetvdehudetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomhepshhiugesrggvrghmrdhush
+X-ME-Proxy: <xmx:XvdjXz4OVWkqrsIU3J7e4sfzHowpe8uYr7nWZB-x2to1_mY_iufO9Q>
+    <xmx:XvdjX40wDm6fpzVl4gyiAiNjHSNOFKGjHmUXD4CF2wge24nvQUEElQ>
+    <xmx:XvdjX2Ee6d8mbhKXNwIrg-opFESWDuBhERJFrsWjG-jNahifSINHIQ>
+    <xmx:XvdjX6QzsdGRC6ST_F4lHnKcj0GUEsfPwDc-dhcmRi0wGlQ4QapY0Q>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 48A8666006F; Thu, 17 Sep 2020 19:55:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-324-g0f99587-fm-20200916.004-g0f995879
+Mime-Version: 1.0
+Message-Id: <8d9ea8e7-ef9f-4d00-8ca0-b624dcd91de1@www.fastmail.com>
+Date:   Thu, 17 Sep 2020 18:54:49 -0500
+From:   "Sid Spry" <sid@aeam.us>
+To:     linux-usb@vger.kernel.org
+Subject: Enabling Device DWC3 Device Mode
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 16 Sep 2020, Heikki Krogerus wrote:
+I've a RK3399 based board (RockPro64) and am unable to find any useful information on how to ensure the USB controller is set up for device/gadget operation. 
 
-> On Mon, Sep 14, 2020 at 10:56:56AM -0700, Zwane Mwaikambo wrote:
-> > On Mon, 14 Sep 2020, Heikki Krogerus wrote:
-> > 
-> > > Hi,
-> > > 
-> > > On Fri, Sep 11, 2020 at 04:56:22PM +0300, Heikki Krogerus wrote:
-> > > > Looks like the firmware does not terminate the list of alternate modes
-> > > > at all. It's just returning the two supported modes over and over
-> > > > again, regardless of the requested mode offset... I need to think how
-> > > > that should be handled.
-> > > 
-> > > Since we can't rely on the data that the firmware returns, we also
-> > > have to check that the mode index does not exceed MODE_DISCOVER_MAX.
-> > > Can you test if the attached patch fixes the issue for you?
-> > 
-> > Sadly that's not entirely surprising :/ i tested your patch and i was able 
-> > to plugin and unplug the USB-C dock with a working display multiple 
-> > times.
-> 
-> OK. Let's fix the issue with this at this stage.
+The base armbian (Ubuntu Focal based distribution) kernel did not have dwc2/dwc3 modules compiled. I compiled the modules for kernel ~5.7 after ensuring that dual role mode was supported along with gadget configfs and am able to modprobe them, but I see no devices populate in /sys/class/udc and no dmesg errors.
 
-Thanks for digging into the issue and resolving it!
+I should be able to target any kernel version, but I am concerned that there may be missing device tree information but am unsure how to check that. Most people seem uninterested in using the device mode on this hardware, but it was 1 of 2 boards, based on the same part, that I found claiming to support device mode USB3.
 
-	Zwane
+Cheers!
