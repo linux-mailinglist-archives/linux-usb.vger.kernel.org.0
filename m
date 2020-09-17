@@ -2,118 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0D226D12C
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 04:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D334526D294
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 06:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726234AbgIQCdJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 22:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726064AbgIQCdF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Sep 2020 22:33:05 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0231DC061797;
-        Wed, 16 Sep 2020 19:26:05 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id a2so481505otr.11;
-        Wed, 16 Sep 2020 19:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ljdmjxdKqEuBlgltC6/Q3uw8AjHFikdpknr0TkuRy0A=;
-        b=YHFubGF31fKSw5FJtZqFQQbWWzTmPO4L7HyCUWSEw7HpOARjJfH1pdbHGg3fskJMN9
-         SJXpz7AZBuSkbz56d2pPj+fjmNjm+mi4F5a1ZWqoSvUNsycvxASJid+KEiMQOflzRC6z
-         SHiWlZOp8+NaHPmjDuOAt0yd65ncxNbtmGJFdS2YW23ifhrrTlEBBKgAclwFgVuaXxZx
-         ssGCl/6/74rm05R53imZOke/NCf0sIOCxQ84Ma0cKHE8U30EXYYO3vwcAvx+/Vem+5Qx
-         vsV52yGOF7s8BxZ3HINY8zdRUBHVW9+rIHrYXq1Re2fQ5r87vxMr5NbGi/2OnuIs7xbW
-         q9ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=ljdmjxdKqEuBlgltC6/Q3uw8AjHFikdpknr0TkuRy0A=;
-        b=cwMRPOzP1kWsjM3OXwWgQmJC5gfEbq5oDiz2ZeC+QUBhMki9Blo2ikaB3Pu8FFWaJf
-         ujvytjYJs3xOdczc95v3IfwjEJ7lQfKas4FpKcAM54gesFW9yqisAuojnC2nZJysMkth
-         YHyl/c9rVDEoLS3fj6Li1nV2X1YIZjdYFtEjQXNZHsiVGuw4Dw7f0jJjPLmRaHfLakfx
-         +TSVOl2uwTdRg5Uy+R1RVMPT/iTPaTFkmnK7Sx6wbWeGx2Xb5jzYExclm1SjQ5EiOmfE
-         6xD3mkWKV9iq6plDg1plGBX74KHncwuYaK1zuqi+8g2ySlWGfnYsF7nvR6pxMqu53ch9
-         KldQ==
-X-Gm-Message-State: AOAM533sT561o4sBLpSDyiZTtUJcBXdRtVm5KAiJ/5MKu95vwF5s4v2O
-        vVjm/oy39jJHByeEAcdrgJ8=
-X-Google-Smtp-Source: ABdhPJzDl9ZZfD8ZSxUVlnOikRRv4WS+mkf73k0l4N5ta56eofyQlT8SAN949r9jTu6TBH6XzUYH2w==
-X-Received: by 2002:a05:6830:20d8:: with SMTP id z24mr18418697otq.3.1600309564443;
-        Wed, 16 Sep 2020 19:26:04 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c25sm12286685oot.42.2020.09.16.19.26.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 16 Sep 2020 19:26:04 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH RESEND v3 5/5] media: uvcvideo: Abort uvc_v4l2_open if video device is unregistered
-Date:   Wed, 16 Sep 2020 19:25:47 -0700
-Message-Id: <20200917022547.198090-6-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200917022547.198090-1-linux@roeck-us.net>
-References: <20200917022547.198090-1-linux@roeck-us.net>
+        id S1725886AbgIQE2w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 00:28:52 -0400
+Received: from mga09.intel.com ([134.134.136.24]:2889 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725267AbgIQE2v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Sep 2020 00:28:51 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 00:28:51 EDT
+IronPort-SDR: Fo0SRXJctn0nY2ukI/7TurawSKiAz1tJp6VaCeCy5ARh4JzEsK2Dj+MnAjtw26DFdmz898fnnu
+ IUWr7/C4dZZg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="160551263"
+X-IronPort-AV: E=Sophos;i="5.76,435,1592895600"; 
+   d="scan'208";a="160551263"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 21:21:44 -0700
+IronPort-SDR: a2KZHtg3XCgFACfSHEChJKPjzWFR1DraS5jjZigpSJsnTNsARgyUhXqfmGBm7yb41Ef3xfMkEr
+ zwJCu5lvs0jA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,435,1592895600"; 
+   d="scan'208";a="336277407"
+Received: from lkp-server02.sh.intel.com (HELO bdcb92cf8b4e) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2020 21:21:42 -0700
+Received: from kbuild by bdcb92cf8b4e with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kIlQU-0000PB-7T; Thu, 17 Sep 2020 04:21:42 +0000
+Date:   Thu, 17 Sep 2020 12:20:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ d69030c91b3765934048151792f141f0571efa86
+Message-ID: <5f62e41e.02KQ+8iJoOu29vsF%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-uvc_v4l2_open() acquires the uvc device mutex. After doing so,
-it does not check if the video device is still registered. This may
-result in race conditions and can result in an attempt to submit an urb
-to a disconnected USB interface (from uvc_status_start).
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: d69030c91b3765934048151792f141f0571efa86  usb: typec: intel_pmc_mux: Handle SCU IPC error conditions
 
-The problem was observed after adding a call to msleep() just before
-acquiring the mutex and disconnecting the camera during the sleep.
+elapsed time: 1029m
 
-Check if the video device is still registered after acquiring the mutex
-to avoid the problem. In the release function, only call uvc_status_stop()
-if the video device is still registered. If the video device has been
-unregistered, the urb associated with uvc status has already been killed
-in uvc_status_unregister(). Trying to kill it again won't do any good
-and might have unexpected side effects.
+configs tested: 117
+configs skipped: 2
 
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+mips                     decstation_defconfig
+mips                      malta_kvm_defconfig
+sh                        sh7763rdp_defconfig
+arm                          pcm027_defconfig
+powerpc                  storcenter_defconfig
+mips                         cobalt_defconfig
+riscv                            alldefconfig
+sh                   secureedge5410_defconfig
+sh                            shmin_defconfig
+m68k                       m5475evb_defconfig
+arm                          tango4_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                    sam440ep_defconfig
+arm                         axm55xx_defconfig
+arm                         at91_dt_defconfig
+parisc                           allyesconfig
+powerpc                     kilauea_defconfig
+arm                          imote2_defconfig
+powerpc                  mpc885_ads_defconfig
+nios2                            allyesconfig
+arm                           sama5_defconfig
+sh                ecovec24-romimage_defconfig
+arm                           efm32_defconfig
+mips                         tb0287_defconfig
+mips                         db1xxx_defconfig
+arc                             nps_defconfig
+arm                        trizeps4_defconfig
+powerpc                 mpc836x_mds_defconfig
+powerpc                      tqm8xx_defconfig
+powerpc                      katmai_defconfig
+sh                        apsh4ad0a_defconfig
+powerpc                         wii_defconfig
+arm                          exynos_defconfig
+ia64                         bigsur_defconfig
+mips                         rt305x_defconfig
+powerpc                  mpc866_ads_defconfig
+alpha                            alldefconfig
+m68k                         apollo_defconfig
+alpha                               defconfig
+powerpc                 mpc8313_rdb_defconfig
+um                             i386_defconfig
+powerpc                       holly_defconfig
+arm                         assabet_defconfig
+mips                      pistachio_defconfig
+m68k                          multi_defconfig
+arc                      axs103_smp_defconfig
+powerpc                   lite5200b_defconfig
+sh                           se7343_defconfig
+powerpc                 mpc85xx_cds_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20200916
+x86_64               randconfig-a004-20200916
+x86_64               randconfig-a003-20200916
+x86_64               randconfig-a002-20200916
+x86_64               randconfig-a001-20200916
+x86_64               randconfig-a005-20200916
+i386                 randconfig-a004-20200916
+i386                 randconfig-a006-20200916
+i386                 randconfig-a003-20200916
+i386                 randconfig-a001-20200916
+i386                 randconfig-a002-20200916
+i386                 randconfig-a005-20200916
+i386                 randconfig-a015-20200916
+i386                 randconfig-a014-20200916
+i386                 randconfig-a011-20200916
+i386                 randconfig-a013-20200916
+i386                 randconfig-a016-20200916
+i386                 randconfig-a012-20200916
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a014-20200916
+x86_64               randconfig-a011-20200916
+x86_64               randconfig-a016-20200916
+x86_64               randconfig-a012-20200916
+x86_64               randconfig-a015-20200916
+x86_64               randconfig-a013-20200916
+
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 7e5e583dae5e..8073eae5d879 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -548,6 +548,12 @@ static int uvc_v4l2_open(struct file *file)
- 	}
- 
- 	mutex_lock(&stream->dev->lock);
-+	if (!video_is_registered(&stream->vdev)) {
-+		mutex_unlock(&stream->dev->lock);
-+		usb_autopm_put_interface(stream->dev->intf);
-+		kfree(handle);
-+		return -ENODEV;
-+	}
- 	if (stream->dev->users == 0) {
- 		ret = uvc_status_start(stream->dev, GFP_KERNEL);
- 		if (ret < 0) {
-@@ -590,7 +596,7 @@ static int uvc_v4l2_release(struct file *file)
- 	file->private_data = NULL;
- 
- 	mutex_lock(&stream->dev->lock);
--	if (--stream->dev->users == 0)
-+	if (--stream->dev->users == 0 && video_is_registered(&stream->vdev))
- 		uvc_status_stop(stream->dev);
- 	mutex_unlock(&stream->dev->lock);
- 
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
