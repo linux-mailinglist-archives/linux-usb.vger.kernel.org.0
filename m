@@ -2,182 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D334526D294
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 06:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D910526D3F3
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 08:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725886AbgIQE2w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 00:28:52 -0400
-Received: from mga09.intel.com ([134.134.136.24]:2889 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725267AbgIQE2v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Sep 2020 00:28:51 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 00:28:51 EDT
-IronPort-SDR: Fo0SRXJctn0nY2ukI/7TurawSKiAz1tJp6VaCeCy5ARh4JzEsK2Dj+MnAjtw26DFdmz898fnnu
- IUWr7/C4dZZg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="160551263"
-X-IronPort-AV: E=Sophos;i="5.76,435,1592895600"; 
-   d="scan'208";a="160551263"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 21:21:44 -0700
-IronPort-SDR: a2KZHtg3XCgFACfSHEChJKPjzWFR1DraS5jjZigpSJsnTNsARgyUhXqfmGBm7yb41Ef3xfMkEr
- zwJCu5lvs0jA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,435,1592895600"; 
-   d="scan'208";a="336277407"
-Received: from lkp-server02.sh.intel.com (HELO bdcb92cf8b4e) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2020 21:21:42 -0700
-Received: from kbuild by bdcb92cf8b4e with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kIlQU-0000PB-7T; Thu, 17 Sep 2020 04:21:42 +0000
-Date:   Thu, 17 Sep 2020 12:20:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- d69030c91b3765934048151792f141f0571efa86
-Message-ID: <5f62e41e.02KQ+8iJoOu29vsF%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726211AbgIQGux (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 02:50:53 -0400
+Received: from forward1-smtp.messagingengine.com ([66.111.4.223]:42207 "EHLO
+        forward1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726106AbgIQGus (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 02:50:48 -0400
+X-Greylist: delayed 574 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 02:50:47 EDT
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailforward.nyi.internal (Postfix) with ESMTP id 6826319413AB;
+        Thu, 17 Sep 2020 02:41:12 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Thu, 17 Sep 2020 02:41:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=SpMrt8
+        Cv2dgWwH5+Ti/tgpGpm4GUdFZSeUucCaVp9tw=; b=er0H7CWNNTpMNTNv2Wy15U
+        /uMSNMSTT0BhAq/miiY+xWsY2eNTemJkymmfAsDgvWs3os88Ls/RK9XZxjvZ/ws/
+        2gek78dJJIz9cIH4NiJmWfwJtIxqWa81rnTnFPz/PTfAocJWCp04/6jt8/e0uKX6
+        maAaRHf4Tp/DYyW1uF3nDWuHhA2bbMcK2E2cc7YVkhVuNt5LZPzWcdVi1G9rrS5k
+        2QzMfjmhCQ7cSBB6uizVHgjATFpU1jHJTTL7SMudH+g2r1kQ1WCLnmE1lEwnuPu8
+        P5Ak75hqx6hJzQQuME0EtcBYGAQF+bYpUK32kqxcTdolBJPQ1OJUQoyKsn9N8/Tw
+        ==
+X-ME-Sender: <xms:CAVjX8hTvvvxpOEiBCPPUFfgVGFb4fk7p5EjNgBMJgss82SIKu0qlQ>
+    <xme:CAVjX1B4pSOvzv0MQ9qZ9QM0YfrHh3mTkBZ-LEegds8lw8byjF8QcliFATZ-pOek5
+    37wOGAY9kMIOg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtdefgdduuddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgmffjsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgqeenucggtf
+    frrghtthgvrhhnpeetvdelgeffgfdutdelvddvtdetffejtefgveevueeggfellefhveev
+    feduueduvdenucfkphepkeefrdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:CAVjX0FyrBgbcF-qu36vsNoCT66vHiMfXOi4WcfOAFygV6A-Tkax5w>
+    <xmx:CAVjX9R34mbHHWhEvIo_9e3ViVCWlsjJ8dg_yp0lk1P2PlQ-dk4tRA>
+    <xmx:CAVjX5xBydEYruUoOGfKUHRzzsafPOpM598admDjREjZUMt3_UE-JQ>
+    <xmx:CAVjX3Y241O-MyWnykZZDhFjqgZzeyLo93zxfZHa1bvTE60ljGWMMg>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id DA9853064685;
+        Thu, 17 Sep 2020 02:41:11 -0400 (EDT)
+Date:   Thu, 17 Sep 2020 08:41:45 +0200
+From:   Greg KH <gregKH@linuxfoundation.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu
+Subject: Re: [PATCHv2] base: force NOIO allocations during unplug
+Message-ID: <20200917064145.GA3194762@kroah.com>
+References: <20200916191544.5104-1-oneukum@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20200916191544.5104-1-oneukum@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: d69030c91b3765934048151792f141f0571efa86  usb: typec: intel_pmc_mux: Handle SCU IPC error conditions
+On Wed, Sep 16, 2020 at 09:15:44PM +0200, Oliver Neukum wrote:
+> There is one overlooked situation under which a driver
+> must not do IO to allocate memory. You cannot do that
+> while disconnecting a device. A device being disconnected
+> is no longer functional in most cases, yet IO may fail
+> only when the handler runs.
+> 
+> v2: extended section for NOIO until after second notifier chain
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>  drivers/base/core.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index bb5806a2bd4c..b79783454293 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/netdevice.h>
+>  #include <linux/sched/signal.h>
+> +#include <linux/sched/mm.h>
+>  #include <linux/sysfs.h>
+>  
+>  #include "base.h"
+> @@ -3062,6 +3063,7 @@ void device_del(struct device *dev)
+>  	struct device *parent = dev->parent;
+>  	struct kobject *glue_dir = NULL;
+>  	struct class_interface *class_intf;
+> +	unsigned int noio_flag;
+>  
+>  	device_lock(dev);
+>  	kill_device(dev);
+> @@ -3073,6 +3075,7 @@ void device_del(struct device *dev)
+>  	/* Notify clients of device removal.  This call must come
+>  	 * before dpm_sysfs_remove().
+>  	 */
+> +	noio_flag = memalloc_noio_save();
+>  	if (dev->bus)
+>  		blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
+>  					     BUS_NOTIFY_DEL_DEVICE, dev);
+> @@ -3114,6 +3117,7 @@ void device_del(struct device *dev)
+>  	glue_dir = get_glue_dir(dev);
+>  	kobject_del(&dev->kobj);
+>  	cleanup_glue_dir(dev, glue_dir);
+> +	memalloc_noio_restore(noio_flag);
+>  	put_device(parent);
+>  }
+>  EXPORT_SYMBOL_GPL(device_del);
+> -- 
+> 2.16.4
+> 
 
-elapsed time: 1029m
+Thanks, now queued up.
 
-configs tested: 117
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                     decstation_defconfig
-mips                      malta_kvm_defconfig
-sh                        sh7763rdp_defconfig
-arm                          pcm027_defconfig
-powerpc                  storcenter_defconfig
-mips                         cobalt_defconfig
-riscv                            alldefconfig
-sh                   secureedge5410_defconfig
-sh                            shmin_defconfig
-m68k                       m5475evb_defconfig
-arm                          tango4_defconfig
-sh                  sh7785lcr_32bit_defconfig
-powerpc                    sam440ep_defconfig
-arm                         axm55xx_defconfig
-arm                         at91_dt_defconfig
-parisc                           allyesconfig
-powerpc                     kilauea_defconfig
-arm                          imote2_defconfig
-powerpc                  mpc885_ads_defconfig
-nios2                            allyesconfig
-arm                           sama5_defconfig
-sh                ecovec24-romimage_defconfig
-arm                           efm32_defconfig
-mips                         tb0287_defconfig
-mips                         db1xxx_defconfig
-arc                             nps_defconfig
-arm                        trizeps4_defconfig
-powerpc                 mpc836x_mds_defconfig
-powerpc                      tqm8xx_defconfig
-powerpc                      katmai_defconfig
-sh                        apsh4ad0a_defconfig
-powerpc                         wii_defconfig
-arm                          exynos_defconfig
-ia64                         bigsur_defconfig
-mips                         rt305x_defconfig
-powerpc                  mpc866_ads_defconfig
-alpha                            alldefconfig
-m68k                         apollo_defconfig
-alpha                               defconfig
-powerpc                 mpc8313_rdb_defconfig
-um                             i386_defconfig
-powerpc                       holly_defconfig
-arm                         assabet_defconfig
-mips                      pistachio_defconfig
-m68k                          multi_defconfig
-arc                      axs103_smp_defconfig
-powerpc                   lite5200b_defconfig
-sh                           se7343_defconfig
-powerpc                 mpc85xx_cds_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20200916
-x86_64               randconfig-a004-20200916
-x86_64               randconfig-a003-20200916
-x86_64               randconfig-a002-20200916
-x86_64               randconfig-a001-20200916
-x86_64               randconfig-a005-20200916
-i386                 randconfig-a004-20200916
-i386                 randconfig-a006-20200916
-i386                 randconfig-a003-20200916
-i386                 randconfig-a001-20200916
-i386                 randconfig-a002-20200916
-i386                 randconfig-a005-20200916
-i386                 randconfig-a015-20200916
-i386                 randconfig-a014-20200916
-i386                 randconfig-a011-20200916
-i386                 randconfig-a013-20200916
-i386                 randconfig-a016-20200916
-i386                 randconfig-a012-20200916
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a014-20200916
-x86_64               randconfig-a011-20200916
-x86_64               randconfig-a016-20200916
-x86_64               randconfig-a012-20200916
-x86_64               randconfig-a015-20200916
-x86_64               randconfig-a013-20200916
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+greg k-h
