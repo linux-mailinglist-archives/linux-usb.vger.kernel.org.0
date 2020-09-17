@@ -2,245 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B35726E2F8
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 19:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4E526E297
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 19:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgIQRxj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 13:53:39 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:62375 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726417AbgIQRxC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 13:53:02 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1600365181; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=OsGJzh7AbAIFeAPQukAez6thOj5mT0cSe2xT4U55hI0=; b=GF9uRieBPqhzuGsIldRt/K88NqnxA2DyQVy/5wT+reB0kh21Qiqjmc50UkmKJUQtOcU/GX4q
- PalLAMmUK6GvNa1BTwn7cUZ6O15lznVPraQZvH0YRz4HahXgMLEtbxPaGMI8rJEYyYTMTsKU
- 7s2WFeF2i15xxuuP6j+QuodKbjI=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 5f639d5e6fe64d5a7f374800 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 17 Sep 2020 17:31:10
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 5A7A4C433FE; Thu, 17 Sep 2020 17:31:09 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.125.142] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4F3FBC433C8;
-        Thu, 17 Sep 2020 17:31:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4F3FBC433C8
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v3 1/5] dt-bindings: usb: convert ti,hd3ss3220 bindings to
- json-schema
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <20200824141053.5062-1-biju.das.jz@bp.renesas.com>
- <20200824141053.5062-2-biju.das.jz@bp.renesas.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <da7b8ea3-8cc1-5590-2200-c495e6c733af@codeaurora.org>
-Date:   Thu, 17 Sep 2020 10:31:06 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726369AbgIQRiw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 13:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726549AbgIQRfw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 13:35:52 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51182C061756;
+        Thu, 17 Sep 2020 10:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=4maTmDv4AP9a2BVWoeVpaTsF7J85VdHKVOCXW2UepmM=; b=QFp4HORQVPspQyGcNMbSL/1M6h
+        1sRHDmXrzXxAaFTyenkhdDUzIMqP/3+LRa350pLnLpT27G2DmCVVkxHUjnP33eNWr1Xe/Ns7Bvptw
+        vOPfeREcXNIfZqhfq8jWWDP0i0ha8XUbevEgNwzzX/Y1e0aFpnylsDHlGF3R0u+iYrWP+M6dA0XrE
+        iYAo6gjMsKD6ohHAWMaam19wPmRXH9esO6hN7Lel1JKz9Df1pKIq1/nEtH9JMN98jM/CTg7Ximrup
+        IcCrMulugPrDBiaLexpCbwKTzRuGq9nAw4/d0fvsBfSnenDIsLffBWaspUXE/HOhiaP5vI2OcA790
+        CPS34y1A==;
+Received: from 089144214092.atnat0023.highway.a1.net ([89.144.214.92] helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kIxns-0002tg-8A; Thu, 17 Sep 2020 17:34:40 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Russell King <linux@armlinux.org.uk>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Tony Lindgren <tony@atomide.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: RFC: remove the need for <asm/dma-direct.h> on ARM
+Date:   Thu, 17 Sep 2020 19:32:25 +0200
+Message-Id: <20200917173229.3311382-1-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20200824141053.5062-2-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Russell,
+
+as Robin pointed out there is not much need for the ARM specific
+routines to translated to and from a dma_addr_t given that we have
+the dma offset (and now offset range) functionality.  This series
+converts ARM over to the generic helpers.  This has only been tested
+on qemu, and specificall not on omap1 and footbridge given that I
+do not have the hardware.
+
+The patches are on to of the dma-mapping for-next tree, to make
+review and testing easier a git tree is also available here:
+
+    git://git.infradead.org/users/hch/misc.git arm-dma-direct-cleanups
+
+Gitweb:
+
+    http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/arm-dma-direct-cleanups
 
 
-On 8/24/2020 7:10 AM, Biju Das wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> 
-> Convert ti,hd3ss3220.txt to YAML. Updated the binding documentation
-> as graph bindings of this device model Super Speed (SS) data bus to
-> the Super Speed (SS) capable connector.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v2->v3: Replaced Tabs with spaces in the example section.
-> v1->v2 : No change
-> Ref: https://patchwork.kernel.org/patch/11669423/
-> ---
->  .../devicetree/bindings/usb/ti,hd3ss3220.txt  | 38 ---------
->  .../devicetree/bindings/usb/ti,hd3ss3220.yaml | 81 +++++++++++++++++++
->  2 files changed, 81 insertions(+), 38 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/ti,hd3ss3220.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.txt b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.txt
-> deleted file mode 100644
-> index 2bd21b22ce95..000000000000
-> --- a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.txt
-> +++ /dev/null
-> @@ -1,38 +0,0 @@
-> -TI HD3SS3220 TypeC DRP Port Controller.
-> -
-> -Required properties:
-> - - compatible: Must be "ti,hd3ss3220".
-> - - reg: I2C slave address, must be 0x47 or 0x67 based on ADDR pin.
-> - - interrupts: An interrupt specifier.
-> -
-> -Required sub-node:
-> - - connector: The "usb-c-connector" attached to the hd3ss3220 chip. The
-> -   bindings of the connector node are specified in:
-> -
-> -	Documentation/devicetree/bindings/connector/usb-connector.yaml
-> -
-> -Example:
-> -hd3ss3220@47 {
-> -	compatible = "ti,hd3ss3220";
-> -	reg = <0x47>;
-> -	interrupt-parent = <&gpio6>;
-> -	interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
-> -
-> -	connector {
-> -		compatible = "usb-c-connector";
-> -		label = "USB-C";
-> -		data-role = "dual";
-> -
-> -		ports {
-> -			#address-cells = <1>;
-> -			#size-cells = <0>;
-> -
-> -			port@1 {
-> -				reg = <1>;
-> -				hd3ss3220_ep: endpoint {
-> -					remote-endpoint = <&usb3_role_switch>;
-> -				};
-> -			};
-> -		};
-> -	};
-> -};
-> diff --git a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
-> new file mode 100644
-> index 000000000000..750a099529c0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/ti,hd3ss3220.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TI HD3SS3220 TypeC DRP Port Controller
-> +
-> +maintainers:
-> +  - Biju Das <biju.das.jz@bp.renesas.com>
-> +
-> +description: |-
-> +  HD3SS3220 is a USB SuperSpeed (SS) 2:1 mux with DRP port controller. The device provides Channel
-> +  Configuration (CC) logic and 5V VCONN sourcing for ecosystems implementing USB Type-C. The
-> +  HD3SS3220 can be configured as a Downstream Facing Port (DFP), Upstream Facing Port (UFP) or a
-> +  Dual Role Port (DRP) making it ideal for any application.
-> +
-> +properties:
-> +  compatible:
-> +   const: ti,hd3ss3220
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  ports:
-> +    description: OF graph bindings (specified in bindings/graph.txt) that model
-> +      SS data bus to the SS capable connector.
-> +    type: object
-> +    properties:
-> +      port@0:
-> +        type: object
-> +        description: Super Speed (SS) capable connector.
-> +
-> +      port@1:
-> +        type: object
-> +        description: Super Speed (SS) data bus.
-> +
-> +    required:
-> +      - port@0
-> +      - port@1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        hd3ss3220@47 {
-> +                compatible = "ti,hd3ss3220";
-> +                reg = <0x47>;
-> +                interrupt-parent = <&gpio6>;
-> +                interrupts = <3>;
-> +
-> +                ports {
-> +                        #address-cells = <1>;
-> +                        #size-cells = <0>;
-> +                        port@0 {
-> +                                reg = <0>;
-> +                                hd3ss3220_in_ep: endpoint {
-> +                                        remote-endpoint = <&ss_ep>;
-> +                                };
-
-Hi Biju,
-
-I'm involved in a separate thread[1] and I just wanted to get your
-inputs on how you understood the port and endpoint assignments for the
-USB type C connectors in different designs.
-
-Since the hd3ss3220 does the type C lane detect and has an integrated
-lane select mux, what is the ss_ep being used for?
-
-Thanks
-Wesley
-
-[1]
-https://lore.kernel.org/linux-usb/0101017458361303-16620b87-c433-4c00-a061-b1e688363539-000000@us-west-2.amazonses.com/
-> +                        };
-> +                        port@1 {
-> +                                reg = <1>;
-> +                                hd3ss3220_out_ep: endpoint {
-> +                                        remote-endpoint = <&usb3_role_switch>;
-> +                                };
-> +                        };
-> +                };
-> +        };
-> +    };
-> 
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Diffstat:
+ arch/arm/include/asm/dma-direct.h                |   66 -----------------------
+ b/arch/arm/Kconfig                               |    1 
+ b/arch/arm/common/dmabounce.c                    |   14 ++--
+ b/arch/arm/include/asm/memory.h                  |    2 
+ b/arch/arm/mach-footbridge/cats-pci.c            |    7 +-
+ b/arch/arm/mach-footbridge/common.c              |   40 ++++++++++---
+ b/arch/arm/mach-footbridge/common.h              |    3 +
+ b/arch/arm/mach-footbridge/ebsa285-pci.c         |    7 +-
+ b/arch/arm/mach-footbridge/include/mach/memory.h |    4 -
+ b/arch/arm/mach-footbridge/netwinder-pci.c       |    7 +-
+ b/arch/arm/mach-footbridge/personal-pci.c        |    7 +-
+ b/arch/arm/mach-omap1/include/mach/memory.h      |   31 ----------
+ b/arch/arm/mach-omap1/usb.c                      |   22 +++++++
+ b/arch/arm/mm/dma-mapping.c                      |   20 +++---
+ 14 files changed, 91 insertions(+), 140 deletions(-)
