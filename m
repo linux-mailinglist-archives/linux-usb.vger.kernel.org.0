@@ -2,42 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F0C26DE98
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 16:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C81D726DE95
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 16:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727722AbgIQOoa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 10:44:30 -0400
-Received: from aibo.runbox.com ([91.220.196.211]:44958 "EHLO aibo.runbox.com"
+        id S1727685AbgIQOng (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 10:43:36 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:44960 "EHLO aibo.runbox.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727635AbgIQOmR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Sep 2020 10:42:17 -0400
+        id S1727641AbgIQOmQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Sep 2020 10:42:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
          s=selector2; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
         :Message-Id:Date:Subject:Cc:To:From;
-        bh=Acb83lDQUxJQj91yQAdseCCeGfKFWuDFFfIoGna9aek=; b=n0DkPng3dG+8RcJuA5zwIacHb1
-        TXe5LLPwDoZwWp8ela6FZimISCPatyIPhmJc/s9ol5h9NfkPzofrC5/T5Id0AWZGO4g1QfR3zfMOR
-        LW7IQ891IP5ALTcxuisRUYWBpgC2EeTm3qsddzP8WN5+PS/kctuEMxarZUmyVpoCbwZWJPYYRxJKW
-        xL1mFhcpbxrPGzVyF23657tvhv0vvg6+Sh2ycarDYQw8MgCLnPErMP3QAhtZjhrw9T5VCZkL3JZI8
-        1HKAcrhnG6pseVbqREsGVrPNsmHJO0lo+HnbdY2XVqHxowAKGn2NvJx+dnDMfwt/3i86mVVNqMNk5
-        Tn/WK/Zw==;
+        bh=jYC5vfpyAOB01Xz9fU7PjyTQCLGjlSBNPFV1rX8wF80=; b=UdIyK5YcbcJK/sE20vl9eIdY+0
+        7Yuwn/2NTwL2mPvPbiwx+wmxKwJ/2E3jSMUZ48DFehw6Sr1pkR4vPZN24T+Smi+iTkCS185isl9V9
+        VpV7avfNrKsAPgUHUZAJTiQt7ucOtwFlM7A7nq6E7MXaLuMZiQ1b9FiFfIt7vml6PJ0wLYwwdX/kK
+        pS4kw/8+Ezf6SPMhEZffiohd8jKkWR0JU4l/1clxSvCvtgxf31OkwUhsk39hV3fk+lWrdBR+qKWSz
+        oPJm/avtxGWfBCJw9Ovupm0nWEmMJ6lvr8wX0dCK0+s4qtBD3VwMAo1T3WkH8JpyWgfRMPDwGbSJc
+        GYIag1lA==;
 Received: from [10.9.9.72] (helo=submission01.runbox)
         by mailtransmit02.runbox with esmtp (Exim 4.86_2)
         (envelope-from <m.v.b@runbox.com>)
-        id 1kIv6z-0001Ks-3U; Thu, 17 Sep 2020 16:42:13 +0200
+        id 1kIv6y-0001Ko-KU; Thu, 17 Sep 2020 16:42:12 +0200
 Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.90_1)
-        id 1kIv6o-0002ee-Bs; Thu, 17 Sep 2020 16:42:02 +0200
+        id 1kIv6p-0002ee-CS; Thu, 17 Sep 2020 16:42:03 +0200
 From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
 To:     linux-usb@vger.kernel.org
-Cc:     "M. Vefa Bicakci" <m.v.b@runbox.com>, stable@vger.kernel.org,
+Cc:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        stable@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Bastien Nocera <hadess@hadess.net>,
-        Andrey Konovalov <andreyknvl@google.com>,
         syzkaller@googlegroups.com
-Subject: [PATCH 2/3] usbcore/driver: Fix incorrect downcast
-Date:   Thu, 17 Sep 2020 17:41:50 +0300
-Message-Id: <20200917144151.355848-2-m.v.b@runbox.com>
+Subject: [PATCH 3/3] usbip: Make the driver's match function specific
+Date:   Thu, 17 Sep 2020 17:41:51 +0300
+Message-Id: <20200917144151.355848-3-m.v.b@runbox.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200917144151.355848-1-m.v.b@runbox.com>
 References: <a6e14983a8849d5f75a43f403c7cc721b6e4a420.camel@hadess.net>
@@ -48,53 +50,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This commit resolves a minor bug in the selection/discovery of more
-specific USB device drivers for devices that are currently bound to
-generic USB device drivers.
+Prior to this commit, the USB-IP subsystem's USB device driver match
+function used to match all USB devices (by returning true
+unconditionally). Unfortunately, this is not correct behaviour and is
+likely the root cause of the bug reported by Andrey Konovalov.
 
-The bug is related to the way a candidate USB device driver is
-compared against the generic USB device driver. The code in
-is_dev_usb_generic_driver() assumes that the device driver in question
-is a USB device driver by calling to_usb_device_driver(dev->driver)
-to downcast; however I have observed that this assumption is not always
-true, through code instrumentation.
+USB-IP should only match USB devices that the user-space asked the kernel
+to handle via USB-IP, by writing to the match_busid sysfs file, which is
+what this commit aims to achieve. This is done by making the match
+function check that the passed in USB device was indeed requested by the
+user-space to be handled by USB-IP.
 
-Given that USB device drivers are bound to struct device instances with
-of the type &usb_device_type, this commit checks the return value of
-is_usb_device() before the call to is_dev_usb_generic_driver(), and
-therefore ensures that incorrect type downcasts do not occur. The use
-of is_usb_device() was suggested by Bastien Nocera.
-
-This bug was found while investigating Andrey Konovalov's report
-indicating USB/IP subsystem's misbehaviour with the generic USB device
-driver matching code.
-
-Fixes: d5643d2249 ("USB: Fix device driver race")
+Reported-by: Andrey Konovalov <andreyknvl@google.com>
+Fixes: 7a2f2974f2 ("usbip: Implement a match function to fix usbip")
 Link: https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/
 Cc: <stable@vger.kernel.org> # 5.8
+Cc: Bastien Nocera <hadess@hadess.net>
+Cc: Valentina Manea <valentina.manea.m@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Bastien Nocera <hadess@hadess.net>
-Cc: Andrey Konovalov <andreyknvl@google.com>
 Cc: <syzkaller@googlegroups.com>
 Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
 ---
- drivers/usb/core/driver.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/usbip/stub_dev.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 950044a6e77f..ba7acd6e7cc4 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -919,7 +919,7 @@ static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
- 	struct usb_device *udev;
- 	int ret;
+diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+index 9d7d642022d1..3d9c8ff6762e 100644
+--- a/drivers/usb/usbip/stub_dev.c
++++ b/drivers/usb/usbip/stub_dev.c
+@@ -463,7 +463,20 @@ static void stub_disconnect(struct usb_device *udev)
  
--	if (!is_dev_usb_generic_driver(dev))
-+	if (!is_usb_device(dev) || !is_dev_usb_generic_driver(dev))
- 		return 0;
+ static bool usbip_match(struct usb_device *udev)
+ {
+-	return true;
++	bool match;
++	struct bus_id_priv *busid_priv;
++	const char *udev_busid = dev_name(&udev->dev);
++
++	busid_priv = get_busid_priv(udev_busid);
++	if (!busid_priv)
++		return false;
++
++	match = (busid_priv->status != STUB_BUSID_REMOV &&
++		 busid_priv->status != STUB_BUSID_OTHER);
++
++	put_busid_priv(busid_priv);
++
++	return match;
+ }
  
- 	udev = to_usb_device(dev);
+ #ifdef CONFIG_PM
 -- 
 2.26.2
 
