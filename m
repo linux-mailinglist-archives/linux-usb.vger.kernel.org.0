@@ -2,128 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2193526D08F
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 03:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CA726D13E
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 04:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726093AbgIQBYh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Sep 2020 21:24:37 -0400
-Received: from mail-eopbgr40078.outbound.protection.outlook.com ([40.107.4.78]:42913
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725858AbgIQBYf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Sep 2020 21:24:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oFXTatEeR3Cn5nEvH0U92pMvbuG7L5v/A9Pp5mUjASVwy9n+08aivvlWmxIzKeeqj87MohMTTGI/uYE1mrYRI5/7o7r18O1uFEseTW/FVWXtUfI5Wji4viY1zHW4eGa2tZCZTacue+ETER13NhwLReHj0fmLuBDHPSiR9fib7KG6NA0d1BzkceUL6UQqnRw/pmEYS6upXkuGYXVX1Uhgircri19DlMVCNsOKgvWIv11WGrjXtaXodW96eYuz+wTLrPRNE18OrhsOpzqFebWObs9XeCpQRcoK5r2X5mfxPQ5bQZQ7/M+g0VEjJ6pJTffXlpkClTugodyc3Fjd861jyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KqeZrWtPyvvRz7CD6spZhdrQUa8cmzkzp5WhJiGaC1c=;
- b=FP4jYsQlYbsGFt1d/AdX5r6+znKrltv/e+M6PmlTw5X8WiZuY+iE8dX9bpNNqsb1XnomX8bnwKYV0OYScXZa/fzCL/1BZ8QfPnSSc+i7Of219lRgZNItDC4I51MiaD24EZnd4XBlJxPudi62HdyUecWEuXX+jc/JprcETYmYgy8Q36L9FU1t/kwVtK2zZtRSW40WwTyVhYjNlXwExjo2En+LEu+KgklERoRXBedmiEGOY9b9CP+EGI7gvydWzd0Yj/UrVdymsddJMcMvB8KIGoZxtQkpsVoUVr/5qf9Ov8fow+bCuxNGf6WTu/32DKXUTe5tG17Z4Idfl+qemUaiSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KqeZrWtPyvvRz7CD6spZhdrQUa8cmzkzp5WhJiGaC1c=;
- b=QLpHFa8m/kSsXWct3xlZ6y+j8PcBNKm5lg7pU0+3N3xdUQ+tqRhyVtAE7mDlXawd7vpAZ2W8JY8p+zohm1AEYGVZ2zmWncRDL48rv5D/XD00g405eTW2h6zbteAfjjggzBLPMwWOykihvMd/gPVcb/LHibtTMAndxHFNETTyiqE=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM5PR0401MB2481.eurprd04.prod.outlook.com (2603:10a6:203:39::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.14; Thu, 17 Sep
- 2020 01:24:30 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3391.013; Thu, 17 Sep 2020
- 01:24:30 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: RE: [PATCH 2/2] USB: misc: Add onboard_usb_hub driver
-Thread-Topic: [PATCH 2/2] USB: misc: Add onboard_usb_hub driver
-Thread-Index: AQHWisa8s1Sayn6UyUeJIx1ZNmduw6lpAX4AgAAjrICAAB3x4IABEESAgACa9ICAALfHgIAAVssAgAAF7QCAAAESkA==
-Date:   Thu, 17 Sep 2020 01:24:30 +0000
-Message-ID: <AM7PR04MB7157872B1019B748119B7DBA8B3E0@AM7PR04MB7157.eurprd04.prod.outlook.com>
-References: <20200914112716.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200914112716.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <20200915025426.GA17450@b29397-desktop> <20200915050207.GF2022397@google.com>
- <AM7PR04MB715735A8A102F3EC9041EA328B200@AM7PR04MB7157.eurprd04.prod.outlook.com>
- <20200915230345.GF2771744@google.com> <20200916081821.GA14376@b29397-desktop>
- <20200916191607.GB3560556@google.com> <20200917002646.GA23310@b29397-desktop>
- <20200917004758.GD3560556@google.com>
-In-Reply-To: <20200917004758.GD3560556@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: chromium.org; dkim=none (message not signed)
- header.d=none;chromium.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [180.164.158.209]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: e6e754db-2dcb-488a-4f21-08d85aa86d11
-x-ms-traffictypediagnostic: AM5PR0401MB2481:
-x-microsoft-antispam-prvs: <AM5PR0401MB24811D502FB68FE2313FF0578B3E0@AM5PR0401MB2481.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MVhy3kiwnvdfrolWyIW6gj0Ty5uSnRq8CyKajdbHYvI2ZkA2/gRvCCQA7Ac14AxeeqxU2f+QKctqv5jQUi3Q6PB0cMUlxYU+eZyhoasDF36Kc6jTlj9p15MhGxsu8TkX2Ju8FpgvJ0ZYZCQj0UBEAfhsr0jLN8QkRpQytWsMmyr8JCGCi8FpkxUsSKmzON33dwVTywCiDxG2Bl6mw+vpVYLWqX20cFrwTDpN7AHZTjRj3sDJ9fznZdRK5HjEuLWtMbfefjKaqVhbHJNJxm277GqjfHa09Vjn9YGvkcW+hBvyFwV/x+Ep5D0+oZj5s1amL6OZ/xSj03bOfv6gS88HTUp2A/6GvRngEpuFGlguyVPh3lZMugbMD195QmK+5W6B
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(39850400004)(136003)(376002)(346002)(316002)(76116006)(7416002)(8676002)(33656002)(5660300002)(6916009)(9686003)(64756008)(54906003)(66446008)(478600001)(66476007)(52536014)(66556008)(66946007)(6506007)(4326008)(83380400001)(7696005)(86362001)(44832011)(55016002)(71200400001)(26005)(2906002)(186003)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: nFyc4QoBHWT7SLM9ogQKd+quhbeljGF4IMuQKUEBVk8jgDxGxcIr4DwE5ulJvxVNnNxkMEhd3Fx2HePLOhHJot+TXOeDFpzTRds5bViwGCn7zV4E6A6Tm00ydBqxJtmwPuPkb67ERR5GQCDUsT/TomiRqIkAIssJz+OYW1yKzyvWRZCzkYd4jqV6vFPi3oZIl72eysiZBMWDul3UjK6Ea4S2ZFN6aApDHFT0QXuQaJ/fJis94dsORsEA3hUa7utd/fJHzOtQYGXHqp/sftgACGjgIic6lph8bUXpW+mqI4bjN94o9H+B6ck0ngxf8kAdPILZtDsdTqwOlLrfpJ8JdudoIvwHIT2MxXPiX7CC/1jMEHwVOlag31yOa8cAbLri4eAWsEWh7Al+OFx6ye/QUr5c1y/bOsqE3PuRGKkIsr2Cvnfs+v99i5Iia7jCGnNr/B+d8ITbWztjujbg+Yz9LCrPtabIZR/Wh5RaG2hmL1m9uXixYfyse3+n2W8NXf7vdHNvuGRIHkSgt1iA71ir06L7jcBIyL45UmQiKbEuM2w2cIzfLt9G461Ht3CrryKaRRN4/sDhVtR4CffFb2cyl4l7lEYxOzonkYKE2r9cBZbYHlKP2a+MqZYW7gOgzMxZJy6JJUXzQDYabJLHi1GRsA==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6e754db-2dcb-488a-4f21-08d85aa86d11
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Sep 2020 01:24:30.3263
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6YpO1AlNo6Bs08s9RNeXLqKghJacTNWGwI1JxKf2DX+9X9WfLRXhF3gLHBmplS9w3vAPdx9jYtidf+dX7wBlhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0401MB2481
+        id S1726304AbgIQCdy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Sep 2020 22:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726170AbgIQCdH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Sep 2020 22:33:07 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6541FC061756;
+        Wed, 16 Sep 2020 19:25:57 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id i17so674444oig.10;
+        Wed, 16 Sep 2020 19:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=R5XYK+FD12SBr+zByKiW7lJ2AXayCleve7wGCw+emfg=;
+        b=V9UjUCYOOdeSu2uHFLTg7/KcyyISDs1n0pfeaYK3t4TaGUl8l5NpOAGQCUzEFZ1Ire
+         57sYAG3FYfR4OZzOGFq335xtt6YTXKZz0FTqrUrnLL3QDEyWiuwqmNKwAPYgSrQOWMun
+         xnV6RqwF7NlC8RNPGk0ub9VhlU6J86rmNN/4YCtbGqmK+n1PFa20qE8wPhxSNVHuSkTr
+         Ir31bTJGeNEzfFK2rGRFqp2QCjFAl/B6KM9c+bztlk1Y3ZqD3YMw/6Wzk0/E7b9xk6KM
+         iDWBiMIWHDD6+BuT0nGYs7NaBhQT2EjvkvaRhyMmep72hgezTK1lT+qQm1rLWHtcmJQp
+         QXCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=R5XYK+FD12SBr+zByKiW7lJ2AXayCleve7wGCw+emfg=;
+        b=aCyXrqAvvruF/NkUpi9O8leJoGnoe6WdNIst8sCfHUejV0I5NLj2xHHej45dBlZjTE
+         Vhy9QeZoAg9UJry6pyKA/FI6t4xc9qqYlk4I8x2qQW3eMwmrqfVt27Xs0sOegk9m5CWz
+         jttfiurC/p4pwt04VnG5FcdtNx46BxmI4NjZncFq5OfEhY3PB0xiJB92cFaRhCpa8BRG
+         28LEW9K99zcX6fzbjo0r5MH8KIAhCELcfOvrxRlB7AQtkDuep8MDig/+pZN9h5odHMih
+         9HvRFVMNBjZZ1O4vu5I5OpOoBmldvaUIXtiZLU1GrKXUo3UNwIsnRRiBbXEG7MzocCe5
+         EJmQ==
+X-Gm-Message-State: AOAM532amXfPDHMM0JuyikeujNioVnJ9mL0sUFNdqJZxBLoMweHditEj
+        /nWq7YyJbYBYyQb9vbxvp+WtNGNibbA=
+X-Google-Smtp-Source: ABdhPJzPPJOoGkQ+eWqM+gcoZekSgumJCUcku3YiZ/oKUVcrJKQGqOqnkjl9KwukPmqXoKDf6g5X0g==
+X-Received: by 2002:a54:440f:: with SMTP id k15mr1096762oiw.131.1600309556810;
+        Wed, 16 Sep 2020 19:25:56 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b16sm9424322otq.31.2020.09.16.19.25.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 16 Sep 2020 19:25:55 -0700 (PDT)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH RESEND v3 0/5] media: uvcvideo: Fix race conditions
+Date:   Wed, 16 Sep 2020 19:25:42 -0700
+Message-Id: <20200917022547.198090-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiA+ID4NCj4gPg0KPiA+IFlvdSBtYXkgbmVlZCBib3RoIChnbHVlICYgeGhjaSksIGl0IGRlcGVu
-ZHMgb24gc3lzdGVtIGRlc2lnbiwgYW5kDQo+ID4gdXN1YWxseSwgdGhlc2UgdHdvIGtpbmRzIG9m
-IHdha2V1cCBzZXR0aW5nIGlzbid0IGNvbmZsaWN0Lg0KPiANCj4gT2ssIHRoYW5rcy4gU28gaWYg
-SSB1bmRlcnN0YW5kIGNvcnJlY3RseSB0aGUgb25ib2FyZCBodWIgZHJpdmVyIHNob3VsZCBjaGVj
-ayB0aGUNCj4gd2FrZXVwIHN0YXRlIG9mIHRoZSB4SENJIHRvIGRldGVybWluZSBpZiByZW1vdGUg
-d2FrZXVwIGlzIGVuYWJsZWQgZm9yIHRoZQ0KPiBjb250cm9sbGVyIChhZnRlciBhbGwgaXQgZG9l
-c24ndCBrbm93IGFueXRoaW5nIGFib3V0IHRoZSBwbGF0Zm9ybSBkZXZpY2UpLg0KPiBXYWtldXAg
-bWlnaHQgbm90IHdvcmsgcHJvcGVybHkgaWYgaXQgaXMgZGlzYWJsZWQgZm9yIHRoZSBwbGF0Zm9y
-bSBkZXZpY2UsIGJ1dCBpdCdzDQo+IHRoZSByZXNwb25zYWJpbGl0eSBvZiB0aGUgYm9hcmQgc29m
-dHdhcmUvY29uZmlnIHRvIG1ha2Ugc3VyZSBpdCBpcyBlbmFibGVkDQo+IChwb3NzaWJseSB0aGlz
-IGNvdWxkIGJlIGRvbmUgYnkgbWFraW5nIHRoZSBkd2MzLXFjb20gZHJpdmVyIHVuZGVyc3RhbmQg
-dGhlDQo+ICd3YWtldXAtc291cmNlJyBwcm9wZXJ0eSwgYXMgdGhlIHhoY2ktbXRrIGRyaXZlciBk
-b2VzKS4NCg0KTm8sIGV2ZXJ5IGxldmVsIHNob3VsZCBoYW5kbGUgaXRzIG93biB3YWtldXAgc2V0
-dGluZy4gWW91IG1heSBoYXZlIHRvIGRvIHRoaXMgc2luY2UgdGhlIFVTQiBidXMgYW5kIHBsYXRm
-b3JtIGJ1cw0KYXJlIHR3byBkaWZmZXJlbnQgYnVzZXMsIHlvdSBzaG91bGQgbm90IHZpc2l0IGRl
-dmljZSBzdHJ1Y3R1cmUgYWNyb3NzIHRoZSBidXMuIEFuZCB5b3UgZG9uJ3QgbmVlZCBhIGRldmlj
-ZSB0cmVlIHByb3BlcnR5DQp0byBkbyBpdC4gRm9yIHBsYXRmb3JtIGRyaXZlciwgeW91IGNvdWxk
-IHVzZSBkZXZpY2VfbWF5X3dha2V1cCwgZm9yIG9uYm9hcmQgaHViIHBvd2VyIGRyaXZlciwgeW91
-IGNvdWxkIHVzZQ0KdXNiX3dha2V1cF9lbmFibGVkX2Rlc2NlbmRhbnRzIHNpbmNlIHlvdSBuZWVk
-IHRvIGNvdmVyIGRlc2NlbmRhbnRzLg0KDQpUaGUgcHVycG9zZSBvZiB0aGVzZSB0d28gd2FrZXVw
-IGxvZ2ljIGlzIGRpZmZlcmVudCwgZm9yIFVTQiBidXMsIGl0IGlzIHVzZWQgdG8gdGVsbCBVU0Ig
-ZGV2aWNlcyB0byBlbmFibGUgcmVtb3RlIHdha2V1cA0KYW5kIGRvIG5vdCBwb3dlciBvZmYgaXRz
-IHJlZ3VsYXRvcjsgZm9yIHBsYXRmb3JtIGJ1cywgaXQgaXMgdXNlZCB0byB0ZWxsIHRoZSBjb250
-cm9sbGVyIHRvIGVuYWJsZSBpdHMgd2FrZXVwIHNldHRpbmcgYW5kIGtlZXANCnRoZSByZWd1bGF0
-b3IgZm9yIGl0cyBVU0IgY29udHJvbGxlciBhbmQgVVNCIFBIWSAoaWYgbmVlZGVkKS4NCg0KUGV0
-ZXINCg0K
+Something seems to have gone wrong with v3 of this patch series.
+I am sure I sent it out, but I don't find it anywhere.
+Resending. Sorry for any duplicates.
+
+The uvcvideo code has no lock protection against USB disconnects
+while video operations are ongoing. This has resulted in random
+error reports, typically pointing to a crash in usb_ifnum_to_if(),
+called from usb_hcd_alloc_bandwidth(). A typical traceback is as
+follows.
+
+usb 1-4: USB disconnect, device number 3
+BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
+PGD 0 P4D 0
+Oops: 0000 [#1] PREEMPT SMP PTI
+CPU: 0 PID: 5633 Comm: V4L2CaptureThre Not tainted 4.19.113-08536-g5d29ca36db06 #1
+Hardware name: GOOGLE Edgar, BIOS Google_Edgar.7287.167.156 03/25/2019
+RIP: 0010:usb_ifnum_to_if+0x29/0x40
+Code: <...>
+RSP: 0018:ffffa46f42a47a80 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff904a396c9000
+RDX: ffff904a39641320 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffffa46f42a47a80 R08: 0000000000000002 R09: 0000000000000000
+R10: 0000000000009975 R11: 0000000000000009 R12: 0000000000000000
+R13: ffff904a396b3800 R14: ffff904a39e88000 R15: 0000000000000000
+FS: 00007f396448e700(0000) GS:ffff904a3ba00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000016cb46000 CR4: 00000000001006f0
+Call Trace:
+ usb_hcd_alloc_bandwidth+0x1ee/0x30f
+ usb_set_interface+0x1a3/0x2b7
+ uvc_video_start_transfer+0x29b/0x4b8 [uvcvideo]
+ uvc_video_start_streaming+0x91/0xdd [uvcvideo]
+ uvc_start_streaming+0x28/0x5d [uvcvideo]
+ vb2_start_streaming+0x61/0x143 [videobuf2_common]
+ vb2_core_streamon+0xf7/0x10f [videobuf2_common]
+ uvc_queue_streamon+0x2e/0x41 [uvcvideo]
+ uvc_ioctl_streamon+0x42/0x5c [uvcvideo]
+ __video_do_ioctl+0x33d/0x42a
+ video_usercopy+0x34e/0x5ff
+ ? video_ioctl2+0x16/0x16
+ v4l2_ioctl+0x46/0x53
+ do_vfs_ioctl+0x50a/0x76f
+ ksys_ioctl+0x58/0x83
+ __x64_sys_ioctl+0x1a/0x1e
+ do_syscall_64+0x54/0xde
+
+While there are not many references to this problem on mailing lists, it is
+reported on a regular basis on various Chromebooks (roughly 300 reports
+per month). The problem is relatively easy to reproduce by adding msleep()
+calls into the code.
+
+I tried to reproduce the problem with non-uvcvideo webcams, but was
+unsuccessful. I was unable to get Philips (pwc) webcams to work. gspca
+based webcams don't experience the problem, or at least I was unable to
+reproduce it (The gspa driver does not trigger sending USB messages in the
+open function, and otherwise uses the locking mechanism provided by the
+v4l2/vb2 core).
+
+I don't presume to claim that I found every issue, but this patch series
+should fix at least the major problems.
+
+The patch series was tested exensively on a Chromebook running chromeos-4.19
+and on a Linux system running a v5.8.y based kernel.
+
+v3:
+- In patch 5/5, add missing calls to usb_autopm_put_interface() and kfree()
+  to failure code path
+
+v2:
+- Added details about problem frequency and testing with non-uvc webcams
+  to summary
+- In patch 4/5, return EPOLLERR instead of -ENODEV on poll errors
+- Fix description in patch 5/5
+
+----------------------------------------------------------------
+Guenter Roeck (5):
+      media: uvcvideo: Cancel async worker earlier
+      media: uvcvideo: Lock video streams and queues while unregistering
+      media: uvcvideo: Release stream queue when unregistering video device
+      media: uvcvideo: Protect uvc queue file operations against disconnect
+      media: uvcvideo: Abort uvc_v4l2_open if video device is unregistered
+
+ drivers/media/usb/uvc/uvc_ctrl.c   | 11 ++++++----
+ drivers/media/usb/uvc/uvc_driver.c | 12 ++++++++++
+ drivers/media/usb/uvc/uvc_queue.c  | 32 +++++++++++++++++++++++++--
+ drivers/media/usb/uvc/uvc_v4l2.c   | 45 ++++++++++++++++++++++++++++++++++++--
+ drivers/media/usb/uvc/uvcvideo.h   |  1 +
+ 5 files changed, 93 insertions(+), 8 deletions(-)
