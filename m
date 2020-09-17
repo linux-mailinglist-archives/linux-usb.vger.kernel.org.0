@@ -2,77 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7467626D405
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 08:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997CE26D40E
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 09:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726255AbgIQG5S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 02:57:18 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:39923 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726192AbgIQG5R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 02:57:17 -0400
-X-Greylist: delayed 304 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 02:57:15 EDT
-X-UUID: e55451a087fc42be8ef1c6b376087c54-20200917
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=fhSCGvsrIBFTU6Oe3bgRtFqtBj0ow+eXgKg9mZZzjAo=;
-        b=mkXZApdw1q4Ada/u7mbaP0uKPociAuqFn4pQLb030fmPObNTH1GnLGrGnbCh5/PzKxJQAmrNMzT+nHUJRTAjkDyyO+mE27c4r/qu7CeZzHtF8U0SCNeP3dxXCVwAKKQLdFxYjN6gLWRcU5mjmfMvnDWk+1AKswd7G/7iBksMxrY=;
-X-UUID: e55451a087fc42be8ef1c6b376087c54-20200917
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 659381008; Thu, 17 Sep 2020 14:52:05 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31DR.mediatek.inc
- (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 17 Sep
- 2020 14:52:03 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Sep 2020 14:52:02 +0800
-Message-ID: <1600325394.20109.16.camel@mhfsdcap03>
-Subject: Re: [PATCH] MAINTAINERS: Add entry for Broadcom BDC driver
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bcm-kernel-feedback-list@broadcom.com>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>, <matthias.bgg@gmail.com>,
-        <swboyd@chromium.org>, <linux-arm-kernel@lists.infradead.org>,
-        <alcooperx@gmail.com>
-Date:   Thu, 17 Sep 2020 14:49:54 +0800
-In-Reply-To: <830cd104-87de-4246-35ff-47a0ed5b05a9@gmail.com>
-References: <20200710034806.15650-1-f.fainelli@gmail.com>
-         <830cd104-87de-4246-35ff-47a0ed5b05a9@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726244AbgIQHA0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 03:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726171AbgIQHAF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 03:00:05 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50074C061756
+        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 00:00:00 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id t10so798990wrv.1
+        for <linux-usb@vger.kernel.org>; Wed, 16 Sep 2020 23:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AYO9vI1jssWFcgU0C4Kub0Gl3FwLz/cFiMnc7N/ZW8M=;
+        b=wifFBUQy+ttQ5Td1dl7VKNfBfS1AhjM4edEBr+Q8ZvPNeGybfd68skZoMlLwAwzCSX
+         B+QDjxln57NaBDmolZ1oCx7SocjTeiAQtD1oB+9nEzpZZd0cOZXeNJZEthygcKm9EuvT
+         nrB1dQzYuhUPHy6+TGWhs/vyWQ46B/pXi2M3OUT/7JAnIkmjvp/EIEkZlWJ0sN4ymo/n
+         dXYbGHzg2ou8am6oaD6a5FwA3mkN6e0DPLXYtJnF73U2hIkwBPjk8YGSoJDVvRN+kxgo
+         El7B8mMDQMuBn7+eD7ogF6WajlCFtRgnXpAzrDj4BenoFMA4FzNFvH5JLpjf6THsji6b
+         U+JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AYO9vI1jssWFcgU0C4Kub0Gl3FwLz/cFiMnc7N/ZW8M=;
+        b=p4zEjdCwnO2aDp/1T7QlPldDBlSGRtVL71g7+gtu90MCaMhaQAiVzwOHUF29SvxP1h
+         EWAjlYjCmSLCauY/8xg7867gy610gTWcJCDJ6uW9dggmBqWfQfzaKMCpt61OyE61q3BK
+         nH0HSDIL3qtRgW/HaZOYyswobfh37o34iYBxRT/6oB+mgDxl4wQnfGp9jUxOcBb9toXo
+         cRooQlGLblv4pvE5thbAWxGqCaftlD6vZzTqoMSJSbM3LaV1bDL7Nh/SxJbAunpxCuTK
+         TL9xjoM9OlzzWlwqyoceBIHMSv5h0CRqhuT4ZC52QaftPPj1IJXRO8V5rFAswpY3Y5MR
+         QJ7g==
+X-Gm-Message-State: AOAM530sItXuIC+Zii+/zgfUjMLU9hfffAWytCcDnYUT0lnsn4N8jjV4
+        B+nJ4F/kq6mliL2c9VmZk3kJAA==
+X-Google-Smtp-Source: ABdhPJz8bKW3OvFfUb/6QzuoM+0dCijwwS3cJjUsFtm6QbvCnlA4iVmILfLpLhYU5ZyBMa9zQTuP9w==
+X-Received: by 2002:adf:e8c3:: with SMTP id k3mr30942832wrn.228.1600325998448;
+        Wed, 16 Sep 2020 23:59:58 -0700 (PDT)
+Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id z14sm35709055wrh.14.2020.09.16.23.59.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2020 23:59:57 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     khilman@baylibre.com, kishon@ti.com, balbi@kernel.org,
+        martin.blumenstingl@googlemail.com
+Cc:     linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2 0/5] usb: dwc-meson-g12a: Add support for USB on S400 board
+Date:   Thu, 17 Sep 2020 08:59:44 +0200
+Message-Id: <20200917065949.3476-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 003D9F375333C4C19A1819A9282574292585033BFA22A87247ADF63049C69E1C2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gU3VuLCAyMDIwLTA5LTA2IGF0IDEyOjU1IC0wNzAwLCBGbG9yaWFuIEZhaW5lbGxpIHdyb3Rl
-Og0KPiANCj4gT24gNy85LzIwMjAgODo0OCBQTSwgRmxvcmlhbiBGYWluZWxsaSB3cm90ZToNCj4g
-PiBUaGUgQnJvYWRjb20gQkRDIGRyaXZlciBkaWQgbm90IGhhdmUgYSBNQUlOVEFJTkVSUyBlbnRy
-eSB3aGljaCBtYWRlIGl0DQo+ID4gZXNjYXBlIHJldmlldyBmcm9tIEFsIGFuZCBteXNlbGYsIGFk
-ZCBhbiBlbnRyeSBzbyB0aGUgcmVsZXZhbnQgbWFpbGluZw0KPiA+IGxpc3RzIGFuZCBwZW9wbGUg
-YXJlIGNvcGllZC4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBGbG9yaWFuIEZhaW5lbGxpIDxm
-LmZhaW5lbGxpQGdtYWlsLmNvbT4NCj4gDQo+IFRoaXMgcGF0Y2ggc3RpbGwgZG9lcyBub3Qgc2Vl
-bSB0byBoYXZlIGJlZW4gcGlja2VkIHVwIChub3Qgc2VlaW5nIGl0IGluIA0KPiBsaW51eC1uZXh0
-KSwgY2FuIHRoaXMgYmUgYXBwbGllZCBzbyB3ZSBoYXZlIGFuIGFjY3VyYXRlIG1haW50YWluZXIg
-DQo+IGluZm9ybWF0aW9uIGZvciB0aGlzIGRyaXZlcj8NClBpbmcNCg0KPiANCj4gVGhhbmtzDQo+
-IA0KPiA+IC0tLQ0KPiA+ICAgTUFJTlRBSU5FUlMgfCA4ICsrKysrKysrDQo+ID4gICAxIGZpbGUg
-Y2hhbmdlZCwgOCBpbnNlcnRpb25zKCspDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL01BSU5UQUlO
-RVJTIGIvTUFJTlRBSU5FUlMNCj4gPiBpbmRleCAxZDRhYTdmOTQyZGUuLjM2MGQwMDFiODFiOCAx
-MDA2NDQNCj4gPiAtLS0gYS9NQUlOVEFJTkVSUw0KPiA+ICsrKyBiL01BSU5UQUlORVJTDQo+ID4g
-QEAgLTM0MzQsNiArMzQzNCwxNCBAQCBGOglkcml2ZXJzL2J1cy9icmNtc3RiX2dpc2IuYw0KPiA+
-ICAgRjoJZHJpdmVycy9wY2kvY29udHJvbGxlci9wY2llLWJyY21zdGIuYw0KPiA+ICAgTjoJYnJj
-bXN0Yg0KPiA+ICAgDQo+ID4gK0JST0FEQ09NIEJEQyBEUklWRVINCj4gPiArTToJQWwgQ29vcGVy
-IDxhbGNvb3BlcnhAZ21haWwuY29tPg0KPiA+ICtMOglsaW51eC11c2JAdmdlci5rZXJuZWwub3Jn
-DQo+ID4gK0w6CWJjbS1rZXJuZWwtZmVlZGJhY2stbGlzdEBicm9hZGNvbS5jb20NCj4gPiArUzoJ
-TWFpbnRhaW5lZA0KPiA+ICtGOglEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNi
-L2JyY20sYmRjLnR4dA0KPiA+ICtGOglkcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy8NCj4gPiAr
-DQo+ID4gICBCUk9BRENPTSBCTUlQUyBDUFVGUkVRIERSSVZFUg0KPiA+ICAgTToJTWFya3VzIE1h
-eWVyIDxtbWF5ZXJAYnJvYWRjb20uY29tPg0KPiA+ICAgTToJYmNtLWtlcm5lbC1mZWVkYmFjay1s
-aXN0QGJyb2FkY29tLmNvbQ0KPiA+IA0KPiANCg0K
+The Amlogic AXG is close to the GXL Glue but with a single OTG PHY.
+
+It needs the same init sequence as GXL & GXM, but it seems it doesn't need
+the host disconnect bit.
+
+The Glue driver reuses the already implemented GXL & GXM work.
+
+The USB2 PHY driver needs a slight tweak to keep the OTG detection working.
+
+Changes since v1 at [1]:
+- s/close from/close to/g
+- collected review tags
+- added small comment about phy management in patch 3
+- removed status = "okay" in patch 4
+- removed invalid phy-supply of phy1 in patch 5
+
+[1] http://lore.kernel.org/r/20200909160409.8678-1-narmstrong@baylibre.com
+
+Neil Armstrong (5):
+  phy: amlogic: phy-meson-gxl-usb2: keep ID pull-up even in Host mode
+  dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: add the Amlogic AXG
+    Families USB Glue Bindings
+  usb: dwc-meson-g12a: Add support for USB on AXG SoCs
+  arm64: dts: meson-axg: add USB nodes
+  arm64: dts: meson-axg-s400: enable USB OTG
+
+ .../usb/amlogic,meson-g12a-usb-ctrl.yaml      | 22 +++++++-
+ .../arm64/boot/dts/amlogic/meson-axg-s400.dts |  6 +++
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi    | 50 +++++++++++++++++++
+ drivers/phy/amlogic/phy-meson-gxl-usb2.c      |  3 +-
+ drivers/usb/dwc3/dwc3-meson-g12a.c            | 18 +++++++
+ 5 files changed, 97 insertions(+), 2 deletions(-)
+
+-- 
+2.22.0
 
