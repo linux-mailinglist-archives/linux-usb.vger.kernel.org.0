@@ -2,124 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5296226D440
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 09:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DE526D418
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 09:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726250AbgIQHH0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 03:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
+        id S1726306AbgIQHCj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 03:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbgIQHAO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 03:00:14 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3B2C061351
-        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 00:00:05 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id e16so797316wrm.2
-        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 00:00:04 -0700 (PDT)
+        with ESMTP id S1726298AbgIQHCd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 03:02:33 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D943C061788
+        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 00:02:32 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id x23so847150wmi.3
+        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 00:02:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZG6N/rhNc2zEd0OmlssDRFgV4b5KjiPy9hIEmRV9zOc=;
-        b=GVoDkghgcAlUKt8WnZ0zuyGHxFOF6iJbX0CkdJ7VSuHnfyB0eSkmYBJmJvknoWmN16
-         W67hTuQ48S68jHaxzPwVVIfNmpEwkoQSUT+VWRyQEX4g+RDNfoS+wJ7nHegZ838E6JKO
-         RO4T9m2u9wQybkMXV0I+cZUqNZ/lCmsSgyWOSiF45JI8c6fQffCao9QuIdIhrRoGTOkP
-         7PiyoG3oz1C7hBbcp4POtOnEWC44Ptmtzb4RXImlH2Jov0oKcidiEN+TOIU9FV+AaiCk
-         4BmiXKy7ZPY5P8V2hDihIKzLqvG0Sp2INBAqC72OYYVBlZ7oduR9EMFdVsgzA2rUGSsF
-         fHcA==
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BqhRqTEPpCjb9qnDcmrdqW2jBinVNi/yu11Q61abTtY=;
+        b=gBbOaaw76CpZdXT71jt7xPL2LZn8f8UkdL17+Rg8Ha6AX91WYLPgjzrYFJDUxzC1r4
+         hOyaCe3BqiB9h56uRvlPibNuAsupIyDGk+HgfjNoinuKUcOnOW64p0OINGJ3K5G5KiXA
+         eshIObWJ/Ce8XjO1Ii1xKv3mIWfjRCRhpZJmup6V0T7hKFSj/ZBCLFJ98dJUHAI92CIg
+         zqHZ3CSqPGiJXn9L/X9imu64rNJs+jdszKdQTVV6CJqX+4Z7jarpPOFwm8TrKuCshqgF
+         FZyHlxV6eCkimTzftwRkZzaaLxkwU+9oJdasa+kFyBbAZXXCJ29x/1xeqmc7JwlJt2QH
+         qzjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZG6N/rhNc2zEd0OmlssDRFgV4b5KjiPy9hIEmRV9zOc=;
-        b=I7jmbTPCixTKWCP6r1eZfk8cTNVukgytazM+WaKNy1q7gkkVIb6KFsxq6yShQ6+U/y
-         2zFOz4GDoV/U/lWA+5dgSmkOyXaBQs+a0Xtlng0qc6vlfzagflreEU7+tVtOzGyDdkCw
-         dDd/7fwWu8ZNcbrjxcP/QbN59I7Pag1CjZJqBU4dY1XD8UwA3awkAC2zZRjO/xTXA0Ds
-         MYBysOo8gdGD6bVK2uGGrBXR0CjX3+Jp3fwchUawTEp3FzyFnTYG9RryiPAvJ5uyGXjc
-         E7pqLdyLG07Zi2xy/Q5D/BXj4FEKYCNwUE0miql0294gzuQGa05PNmaGVBsE33BMqPVA
-         dVRQ==
-X-Gm-Message-State: AOAM531RZl34i554SVWOdzrtk/zumc6Da943c5Km3K/vEdTR9gDRwxIS
-        ddXcJCjh/Ju1ZnXKQ0xgucUQgQ==
-X-Google-Smtp-Source: ABdhPJyKfXYnIS4ErZB/cswC92sAGdSNdhniNnIBWbPAMUoVrHd/CFYke/iib87+7iJgpTBeQrIDnA==
-X-Received: by 2002:adf:e989:: with SMTP id h9mr32555878wrm.38.1600326003291;
-        Thu, 17 Sep 2020 00:00:03 -0700 (PDT)
-Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id z14sm35709055wrh.14.2020.09.17.00.00.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 00:00:02 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     khilman@baylibre.com, balbi@kernel.org,
-        martin.blumenstingl@googlemail.com
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=BqhRqTEPpCjb9qnDcmrdqW2jBinVNi/yu11Q61abTtY=;
+        b=UAI20zA1DrdiurkSF2pW7HrdTBHyX465vTxnE7KG3qhZB3OyX/tZzYUZ7QGwfVxPzt
+         IrRVA7G4m7iAnA/WONs7cCzZM/cY6xIFzF5ysrp339HIlkM0qXODMU5tIro6rHc89E6o
+         hGkYs6gDQYYK+A1qI1DJE7bVtwjkiZtNDHUVS7q5eky9RkIxzEDgvaAkx+44bhXS5TU7
+         Dkrp+7CXEKu9O8wXcY2LxI8QVgtdxNBTsiJTjA5fCr6Pg9g6+HnLTol5RIcikKqlYBE6
+         MrcdH/KrOBj5mzaoSoI47n255C9keon9+fIEUlMs0YnuzxK/ELuKqc+vG6jOzBr4dT5a
+         bvJw==
+X-Gm-Message-State: AOAM530U69fyjTANvTQ31lR76iVx+Pq5r/oz+ZuZ65qEEN10cFJu8WsY
+        7qj4ObfyFtPLlYdzbdFAoBQJNDHwdNAVk8kd
+X-Google-Smtp-Source: ABdhPJyl0mVSI2T/IyvbYO1mIMoVwJj7ck9To5e6GHu79NKu8XaupWDAuatOLm24KeK3k4JYsxq4VQ==
+X-Received: by 2002:a1c:dec2:: with SMTP id v185mr8275637wmg.1.1600326150520;
+        Thu, 17 Sep 2020 00:02:30 -0700 (PDT)
+Received: from [10.1.2.12] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id k8sm10416163wma.16.2020.09.17.00.02.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Sep 2020 00:02:29 -0700 (PDT)
+Subject: Re: [PATCH v2 2/5] dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: add
+ the Amlogic AXG Families USB Glue Bindings
+To:     khilman@baylibre.com, martin.blumenstingl@googlemail.com,
+        devicetree@vger.kernel.org
 Cc:     linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
         linux-usb@vger.kernel.org
-Subject: [PATCH v2 3/5] usb: dwc-meson-g12a: Add support for USB on AXG SoCs
-Date:   Thu, 17 Sep 2020 08:59:47 +0200
-Message-Id: <20200917065949.3476-4-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200917065949.3476-1-narmstrong@baylibre.com>
 References: <20200917065949.3476-1-narmstrong@baylibre.com>
+ <20200917065949.3476-3-narmstrong@baylibre.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ BSwxi7g3Mu7u5kUByanqHyA=
+Organization: Baylibre
+Message-ID: <d411aaba-389d-3200-1370-922a071e53d9@baylibre.com>
+Date:   Thu, 17 Sep 2020 09:02:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200917065949.3476-3-narmstrong@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Amlogic AXG is close to the GXL Glue but with a single OTG PHY.
+On 17/09/2020 08:59, Neil Armstrong wrote:
+> The Amlogic AXG is close to the GXL Glue but with a single OTG PHY.
+> 
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-It needs the same init sequence as GXL & GXM, but it seems it doesn't need
-the host disconnect bit.
+Forgot:
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
----
- drivers/usb/dwc3/dwc3-meson-g12a.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Neil
 
-diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-index 1f7f4d88ed9d..784e7eafc9ce 100644
---- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-+++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-@@ -127,6 +127,7 @@ static const char *meson_g12a_phy_names[] = {
- /*
-  * Amlogic A1 has a single physical PHY, in slot 1, but still has the
-  * two U2 PHY controls register blocks like G12A.
-+ * AXG has the similar scheme, thus needs the same tweak.
-  * Handling the first PHY on slot 1 would need a large amount of code
-  * changes, and the current management is generic enough to handle it
-  * correctly when only the "usb2-phy1" phy is specified on-par with the
-@@ -215,6 +216,19 @@ static struct dwc3_meson_g12a_drvdata gxm_drvdata = {
- 	.usb_post_init = dwc3_meson_gxl_usb_post_init,
- };
- 
-+static struct dwc3_meson_g12a_drvdata axg_drvdata = {
-+	.otg_switch_supported = true,
-+	.clks = meson_gxl_clocks,
-+	.num_clks = ARRAY_SIZE(meson_gxl_clocks),
-+	.phy_names = meson_a1_phy_names,
-+	.num_phys = ARRAY_SIZE(meson_a1_phy_names),
-+	.setup_regmaps = dwc3_meson_gxl_setup_regmaps,
-+	.usb2_init_phy = dwc3_meson_gxl_usb2_init_phy,
-+	.set_phy_mode = dwc3_meson_gxl_set_phy_mode,
-+	.usb_init = dwc3_meson_g12a_usb_init,
-+	.usb_post_init = dwc3_meson_gxl_usb_post_init,
-+};
-+
- static struct dwc3_meson_g12a_drvdata g12a_drvdata = {
- 	.otg_switch_supported = true,
- 	.clks = meson_g12a_clocks,
-@@ -930,6 +944,10 @@ static const struct of_device_id dwc3_meson_g12a_match[] = {
- 		.compatible = "amlogic,meson-gxm-usb-ctrl",
- 		.data = &gxm_drvdata,
- 	},
-+	{
-+		.compatible = "amlogic,meson-axg-usb-ctrl",
-+		.data = &axg_drvdata,
-+	},
- 	{
- 		.compatible = "amlogic,meson-g12a-usb-ctrl",
- 		.data = &g12a_drvdata,
--- 
-2.22.0
+> ---
+>  .../usb/amlogic,meson-g12a-usb-ctrl.yaml      | 22 ++++++++++++++++++-
+>  1 file changed, 21 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> index 5b04a7dfa018..c0058332b967 100644
+> --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> @@ -25,13 +25,14 @@ description: |
+>    The Amlogic A1 embeds a DWC3 USB IP Core configured for USB2 in
+>    host-only mode.
+>  
+> -  The Amlogic GXL & GXM SoCs doesn't embed an USB3 PHY.
+> +  The Amlogic GXL, GXM & AXG SoCs doesn't embed an USB3 PHY.
+>  
+>  properties:
+>    compatible:
+>      enum:
+>        - amlogic,meson-gxl-usb-ctrl
+>        - amlogic,meson-gxm-usb-ctrl
+> +      - amlogic,meson-axg-usb-ctrl
+>        - amlogic,meson-g12a-usb-ctrl
+>        - amlogic,meson-a1-usb-ctrl
+>  
+> @@ -151,6 +152,25 @@ allOf:
+>  
+>        required:
+>          - clock-names
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - amlogic,meson-axg-usb-ctrl
+> +
+> +    then:
+> +      properties:
+> +        phy-names:
+> +          items:
+> +            - const: usb2-phy1 # USB2 PHY1 if USBOTG_B port is used
+> +        clocks:
+> +          minItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: usb_ctrl
+> +            - const: ddr
+> +      required:
+> +        - clock-names
+>    - if:
+>        properties:
+>          compatible:
+> 
 
