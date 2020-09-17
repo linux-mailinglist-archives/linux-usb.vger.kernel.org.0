@@ -2,149 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5B126E53A
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 21:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE4126E5D9
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 21:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728405AbgIQQSj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 12:18:39 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:63575 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728322AbgIQQSL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 12:18:11 -0400
-Received: from fsav403.sakura.ne.jp (fsav403.sakura.ne.jp [133.242.250.102])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 08HGHfrp094255;
-        Fri, 18 Sep 2020 01:17:41 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav403.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav403.sakura.ne.jp);
- Fri, 18 Sep 2020 01:17:41 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav403.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 08HGHegj094225
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
-        Fri, 18 Sep 2020 01:17:41 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [RFC 0/5] fix races in CDC-WDM
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     bjorn@mork.no, linux-usb@vger.kernel.org
-References: <20200812132034.14363-1-oneukum@suse.com>
- <ee0af733-903f-8e8f-8027-b5490a37032f@i-love.sakura.ne.jp>
- <1599728957.10822.9.camel@suse.com>
- <4f285044-aae9-c3be-23ba-90790cd624f1@i-love.sakura.ne.jp>
- <1600161279.2424.5.camel@suse.com>
- <4b8f6305-52fd-cb72-eb13-9d0a0bf07319@i-love.sakura.ne.jp>
- <1600251486.2424.17.camel@suse.com>
- <4e724e07-3993-bcaa-79e9-45a2f7e1f759@i-love.sakura.ne.jp>
- <1600336214.2424.39.camel@suse.com>
- <0bd0995d-d8a0-321a-0695-f4013bbc88ec@i-love.sakura.ne.jp>
- <1600352222.2424.57.camel@suse.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <52714f66-c2ec-7a31-782a-9365ba900111@i-love.sakura.ne.jp>
-Date:   Fri, 18 Sep 2020 01:17:39 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1727696AbgIQOoA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 10:44:00 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:55470 "EHLO aibo.runbox.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727648AbgIQOmS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Sep 2020 10:42:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+         s=selector2; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
+        :Message-Id:Date:Subject:Cc:To:From;
+        bh=WaCu4zldHM3wFml3XoeYbHVyOElXbVex+B6UOeOoYQs=; b=K5nbWtU2dkwkGPzspMmSTpOjNX
+        lXlAcg9cV3ApcaEGvrjC/EaeltW8ObTwpXDVerxkdpOMJFeHdnaJSkZwzGW0gr3Fm3YSRljTAohW2
+        H6K+q/asalUdLPBBh9zmyqt+1rDaieydvu8fD4IJPy2RMzNuVa4BOLf9HZsTpixmh6TgALK3aIqPq
+        bYd5tMkGTS0+gB2/gyuK3nD7WSrLhFKc0OKW4/EkXTb/qj4cWj6RagaVXI26mGVa4AGLNQttj3Dot
+        nAM0gtLKF3aq2NQBGa9f5uar92GpNBZVx26DOLyBoa5a6n5IOPOPv9Hirnq+wazpNNSAhMFkCKHNV
+        /lqiI7QQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <m.v.b@runbox.com>)
+        id 1kIv6z-0007ku-MD; Thu, 17 Sep 2020 16:42:13 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1kIv6m-0002ee-8o; Thu, 17 Sep 2020 16:42:00 +0200
+From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+To:     linux-usb@vger.kernel.org
+Cc:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bastien Nocera <hadess@hadess.net>, syzkaller@googlegroups.com
+Subject: [PATCH 1/3] usbcore/driver: Fix specific driver selection
+Date:   Thu, 17 Sep 2020 17:41:49 +0300
+Message-Id: <20200917144151.355848-1-m.v.b@runbox.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <a6e14983a8849d5f75a43f403c7cc721b6e4a420.camel@hadess.net>
+References: <a6e14983a8849d5f75a43f403c7cc721b6e4a420.camel@hadess.net>
 MIME-Version: 1.0
-In-Reply-To: <1600352222.2424.57.camel@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/09/17 23:17, Oliver Neukum wrote:
-> The API and its semantics are clear. Write schedules a write:
-> 
->        A  successful  return  from  write() does not make any guarantee that data has been committed to disk.  On some filesystems, including NFS, it does not even guarantee that space has successfully been reserved for the data.  In this case, some errors might be
->        delayed until a future write(2), fsync(2), or even close(2).  The only way to be sure is to call fsync(2) after you are done writing all your data.
+This commit resolves a bug in the selection/discovery of more
+specific USB device drivers for devices that are currently bound to
+generic USB device drivers.
 
-But I think that this leaves a room for allowing write() to imply fflush()
-(i.e. write() is allowed to wait for data to be committed to disk).
+The bug is in the logic that determines whether a device currently
+bound to a generic USB device driver should be re-probed by a
+more specific USB device driver or not. The code in
+__usb_bus_reprobe_drivers() used to have the following lines:
 
-> 
-> Fsync flushes data:
-> 
->        fsync()  transfers ("flushes") all modified in-core data of (i.e., modified buffer cache pages for) the file referred to by the file descriptor fd to the disk device (or other permanent storage device) so that all changed information can be retrieved even if
->        the system crashes or is rebooted.  This includes writing through or flushing a disk cache if present.  The call blocks until the device reports that the transfer has completed.
-> 
-> If user space does not call fsync(), the error is supposed to be reported
-> by the next write() and if there is no next write(), close() shall report it.
+  if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
+      (!new_udriver->match || new_udriver->match(udev) != 0))
+ 		return 0;
 
-Where does "the next" (and not "the next after the next") write() come from?
+  ret = device_reprobe(dev);
 
->> You did not answer to
->>
->>   How do we guarantee that N'th write() request already set desc->werr before
->>   (N+1)'th next write() request is issued? If (N+1)'th write() request reached
->>   memdup_user() before desc->werr is set by callback of N'th write() request,
->>   (N+1)'th write() request will fail to report the error from N'th write() request.
->>   Yes, that error would be reported by (N+2)'th write() request, but the userspace
->>   process might have already discarded data needed for taking some actions (e.g.
->>   print error messages, retry the write() request with same argument).
-> 
-> We don't, nor do we have to. You are right, error reporting can be
-> improved. I implemented fsync() to do so.
+As the reader will notice, the code checks whether the USB device in
+consideration matches the identifier table (id_table) of a specific
+USB device_driver (new_udriver), followed by a similar check, but this
+time with the USB device driver's match function. However, the match
+function's return value is not checked correctly. When match() returns
+zero, it means that the specific USB device driver is *not* applicable
+to the USB device in question, but the code then goes on to reprobe the
+device with the new USB device driver under consideration. All this to
+say, the logic is inverted.
 
-You are saying that if user space does not call fsync(), the error is allowed to be
-reported by the next after the next (in other words, (N+2)'th) write() ?
+This bug was found by code inspection and instrumentation after
+Andrey Konovalov's report indicating USB/IP subsystem's misbehaviour
+with the generic USB device driver matching code.
 
-> 
->> . At least I think that
->>
->>         spin_lock_irq(&desc->iuspin);
->>         we = desc->werr;
->>         desc->werr = 0;
->>         spin_unlock_irq(&desc->iuspin);
->>         if (we < 0)
->>                 return usb_translate_errors(we);
->>
->> in wdm_write() should be moved to after !test_bit(WDM_IN_USE, &desc->flags).
-> 
-> Why?
+Reported-by: Andrey Konovalov <andreyknvl@google.com>
+Fixes: d5643d2249 ("USB: Fix device driver race")
+Link: https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/
+Cc: <stable@vger.kernel.org> # 5.8
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Bastien Nocera <hadess@hadess.net>
+Cc: <syzkaller@googlegroups.com>
+Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
+---
+ drivers/usb/core/driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Otherwise, we can't make sure (N+1)'th write() will report error from N'th write().
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index c976ea9f9582..950044a6e77f 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -924,7 +924,7 @@ static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
+ 
+ 	udev = to_usb_device(dev);
+ 	if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
+-	    (!new_udriver->match || new_udriver->match(udev) != 0))
++	    (!new_udriver->match || new_udriver->match(udev) == 0))
+ 		return 0;
+ 
+ 	ret = device_reprobe(dev);
 
-Since I don't know the characteristics of data passed via wdm_write() (I guess that
-the data is some stateful controlling commands rather than meaningless byte stream),
-I guess that (N+1)'th wdm_write() attempt should be made only after confirming that
-N'th wdm_write() attempt received wdm_callback() response. To preserve state / data
-used by N'th wdm_write() attempt, reporting the error from too late write() attempt
-would be useless.
-
-
-
->> In addition, is
->>
->>         /* using write lock to protect desc->count */
->>         mutex_lock(&desc->wlock);
->>
->> required? Isn't wdm_mutex that is actually protecting desc->count from modification?
->> If it is desc->wlock that is actually protecting desc->count, the !desc->count check
->> in wdm_release() and the desc->count == 1 check in wdm_open() have to be done with
->> desc->wlock held.
-> 
-> Correct. So should wdm_mutex be dropped earlier?
-
-If recover_from_urb_loss() can tolerate stale desc->count value, wdm_mutex already
-protects desc->count. I don't know how this module works. I don't know whether
-wdm_mutex and/or desc->wlock is held when recover_from_urb_loss() is called from
-wdm_resume(). It seems that desc->wlock is held but wdm_mutex is not held when
-recover_from_urb_loss() is called from wdm_post_reset().
-
-
-
-By the way, after the fixes, we could replace
-
-  spin_lock_irq(&desc->iuspin);
-  rv = desc->werr;
-  desc->werr = 0;
-  spin_unlock_irq(&desc->iuspin);
-
-with
-
-  rv = xchg(&desc->werr, 0);
-
-and avoid spin_lock_irq()/spin_unlock_irq() because there are many
-locations which needs to check and clear the error...
+base-commit: 871e6496207c6aa94134448779c77631a11bfa2e
+-- 
+2.26.2
 
