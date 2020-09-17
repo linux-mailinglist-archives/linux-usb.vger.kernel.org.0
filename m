@@ -2,153 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6501F26DBF8
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 14:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA4026DC6F
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 15:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727091AbgIQMsA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 08:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727061AbgIQMrp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 08:47:45 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E96C061756;
-        Thu, 17 Sep 2020 05:47:45 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 03A1E2DB;
-        Thu, 17 Sep 2020 14:47:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1600346864;
-        bh=OXUeB8VkK9eJ9P/8aiciz5yppKnnWoJoVG0UEnhVgzY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZzXWKepK0Csq6B/wFleNFY926g/afD++QvtPLesJyZXYu2dNhwGkpFN2aH29V9v2U
-         yPR0uGpA9y6NE36tA03V4QU8dhZuZtRdV4cssk/qhNCuZX8ya1UhqRnkI+3aZCvMC/
-         RarMBOLmIhffEP3SFZpSeoH8eHEIjh8NHg57gg4I=
-Date:   Thu, 17 Sep 2020 15:47:14 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 0/5] media: uvcvideo: Fix race conditions
-Message-ID: <20200917124714.GD3969@pendragon.ideasonboard.com>
-References: <20200917022547.198090-1-linux@roeck-us.net>
+        id S1726770AbgIQNGs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 09:06:48 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:54953 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727058AbgIQNGe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 09:06:34 -0400
+Received: from fsav107.sakura.ne.jp (fsav107.sakura.ne.jp [27.133.134.234])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 08HBP26l040207;
+        Thu, 17 Sep 2020 20:25:02 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav107.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav107.sakura.ne.jp);
+ Thu, 17 Sep 2020 20:25:02 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav107.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 08HBOvnT040186
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+        Thu, 17 Sep 2020 20:25:01 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [RFC 0/5] fix races in CDC-WDM
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     bjorn@mork.no, linux-usb@vger.kernel.org
+References: <20200812132034.14363-1-oneukum@suse.com>
+ <ee0af733-903f-8e8f-8027-b5490a37032f@i-love.sakura.ne.jp>
+ <1599728957.10822.9.camel@suse.com>
+ <4f285044-aae9-c3be-23ba-90790cd624f1@i-love.sakura.ne.jp>
+ <1600161279.2424.5.camel@suse.com>
+ <4b8f6305-52fd-cb72-eb13-9d0a0bf07319@i-love.sakura.ne.jp>
+ <1600251486.2424.17.camel@suse.com>
+ <4e724e07-3993-bcaa-79e9-45a2f7e1f759@i-love.sakura.ne.jp>
+ <1600336214.2424.39.camel@suse.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <0bd0995d-d8a0-321a-0695-f4013bbc88ec@i-love.sakura.ne.jp>
+Date:   Thu, 17 Sep 2020 20:24:57 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <1600336214.2424.39.camel@suse.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200917022547.198090-1-linux@roeck-us.net>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Guenter,
+On 2020/09/17 18:50, Oliver Neukum wrote:
+> Am Mittwoch, den 16.09.2020, 20:14 +0900 schrieb Tetsuo Handa:
+>> On 2020/09/16 19:18, Oliver Neukum wrote:
+>>> Am Dienstag, den 15.09.2020, 19:30 +0900 schrieb Tetsuo Handa:
+>>>> On 2020/09/15 18:14, Oliver Neukum wrote
+>>>>> Is there something we can do in flush()?
+>>>>
+>>>> I consider that wdm_flush() is a wrong place to return an error. It is possible that
+>>>
+>>> I am afraid that is a basic problem we need to resolve. As I understand
+>>>  it, flush() as a method exists precisely to report errors. Otherwise
+>>> you could implement it in release(). But this is not called for every
+>>> close().
+>>
+>> I think fsync() or ioctl() is a better method for reporting errors.
+> 
+> Very well, I am implementing fsync(). However, I must say that the very
+> existance of fsync() tells us that write() is not expected to push
+> data out to devices and hence report results.
 
-On Wed, Sep 16, 2020 at 07:25:42PM -0700, Guenter Roeck wrote:
-> Something seems to have gone wrong with v3 of this patch series.
-> I am sure I sent it out, but I don't find it anywhere.
-> Resending. Sorry for any duplicates.
+If you ask userspace programs to be updated to call fsync(), we can ask
+userspace programs be updated to call ioctl().
 
-I haven't checked the mailing list, but I've found it in my inbox :-)
-I'm not forgetting about you, just been fairly busy recently. I still
-plan to try and provide an alternative implementation in the V4L2 core
-(in a form that I think should even be moved to the cdev core) that
-would fix this for all drivers.
+I expected you to implement wdm_ioctl() for fetching last error code. Then,
 
-By the way, as you managed to get hold of non-UVC webcams, one thing you
-could try in your tests to make the drivers misbehave is to block on a
-DQBUF call, and unplug the device at that time. When blocking, DQBUF
-releases the driver lock (through the vb2ops .wait_prepare() and
-.wait_finis() operations for drivers based on vb2), so this may allow
-unregistration to proceed without waiting for userspace calls to
-complete.
+> 
+>> Whether N'th write() request succeeded remains unknown until (N+1)'th
+>> write() request or close() request is issued? That sounds a strange design.
+> 
+> Welcome to the world of Unix. This is necessary if you want to block
+> as rarely as possible.
 
-> The uvcvideo code has no lock protection against USB disconnects
-> while video operations are ongoing. This has resulted in random
-> error reports, typically pointing to a crash in usb_ifnum_to_if(),
-> called from usb_hcd_alloc_bandwidth(). A typical traceback is as
-> follows.
-> 
-> usb 1-4: USB disconnect, device number 3
-> BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
-> PGD 0 P4D 0
-> Oops: 0000 [#1] PREEMPT SMP PTI
-> CPU: 0 PID: 5633 Comm: V4L2CaptureThre Not tainted 4.19.113-08536-g5d29ca36db06 #1
-> Hardware name: GOOGLE Edgar, BIOS Google_Edgar.7287.167.156 03/25/2019
-> RIP: 0010:usb_ifnum_to_if+0x29/0x40
-> Code: <...>
-> RSP: 0018:ffffa46f42a47a80 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff904a396c9000
-> RDX: ffff904a39641320 RSI: 0000000000000001 RDI: 0000000000000000
-> RBP: ffffa46f42a47a80 R08: 0000000000000002 R09: 0000000000000000
-> R10: 0000000000009975 R11: 0000000000000009 R12: 0000000000000000
-> R13: ffff904a396b3800 R14: ffff904a39e88000 R15: 0000000000000000
-> FS: 00007f396448e700(0000) GS:ffff904a3ba00000(0000) knlGS:0000000000000000
-> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000000 CR3: 000000016cb46000 CR4: 00000000001006f0
-> Call Trace:
->  usb_hcd_alloc_bandwidth+0x1ee/0x30f
->  usb_set_interface+0x1a3/0x2b7
->  uvc_video_start_transfer+0x29b/0x4b8 [uvcvideo]
->  uvc_video_start_streaming+0x91/0xdd [uvcvideo]
->  uvc_start_streaming+0x28/0x5d [uvcvideo]
->  vb2_start_streaming+0x61/0x143 [videobuf2_common]
->  vb2_core_streamon+0xf7/0x10f [videobuf2_common]
->  uvc_queue_streamon+0x2e/0x41 [uvcvideo]
->  uvc_ioctl_streamon+0x42/0x5c [uvcvideo]
->  __video_do_ioctl+0x33d/0x42a
->  video_usercopy+0x34e/0x5ff
->  ? video_ioctl2+0x16/0x16
->  v4l2_ioctl+0x46/0x53
->  do_vfs_ioctl+0x50a/0x76f
->  ksys_ioctl+0x58/0x83
->  __x64_sys_ioctl+0x1a/0x1e
->  do_syscall_64+0x54/0xde
-> 
-> While there are not many references to this problem on mailing lists, it is
-> reported on a regular basis on various Chromebooks (roughly 300 reports
-> per month). The problem is relatively easy to reproduce by adding msleep()
-> calls into the code.
-> 
-> I tried to reproduce the problem with non-uvcvideo webcams, but was
-> unsuccessful. I was unable to get Philips (pwc) webcams to work. gspca
-> based webcams don't experience the problem, or at least I was unable to
-> reproduce it (The gspa driver does not trigger sending USB messages in the
-> open function, and otherwise uses the locking mechanism provided by the
-> v4l2/vb2 core).
-> 
-> I don't presume to claim that I found every issue, but this patch series
-> should fix at least the major problems.
-> 
-> The patch series was tested exensively on a Chromebook running chromeos-4.19
-> and on a Linux system running a v5.8.y based kernel.
-> 
-> v3:
-> - In patch 5/5, add missing calls to usb_autopm_put_interface() and kfree()
->   to failure code path
-> 
-> v2:
-> - Added details about problem frequency and testing with non-uvc webcams
->   to summary
-> - In patch 4/5, return EPOLLERR instead of -ENODEV on poll errors
-> - Fix description in patch 5/5
-> 
-> ----------------------------------------------------------------
-> Guenter Roeck (5):
->       media: uvcvideo: Cancel async worker earlier
->       media: uvcvideo: Lock video streams and queues while unregistering
->       media: uvcvideo: Release stream queue when unregistering video device
->       media: uvcvideo: Protect uvc queue file operations against disconnect
->       media: uvcvideo: Abort uvc_v4l2_open if video device is unregistered
-> 
->  drivers/media/usb/uvc/uvc_ctrl.c   | 11 ++++++----
->  drivers/media/usb/uvc/uvc_driver.c | 12 ++++++++++
->  drivers/media/usb/uvc/uvc_queue.c  | 32 +++++++++++++++++++++++++--
->  drivers/media/usb/uvc/uvc_v4l2.c   | 45 ++++++++++++++++++++++++++++++++++++--
->  drivers/media/usb/uvc/uvcvideo.h   |  1 +
->  5 files changed, 93 insertions(+), 8 deletions(-)
+we can apply my proposal (wait for response at wdm_write() by default) as a baseline
+for not to break existing userspace programs (except latency), followed by a patch
+which allows userspace programs to use that wdm_ioctl() in order not to wait for
+response at wdm_write(), which is enabled by calling wdm_ioctl() (in order to
+recover latency caused by waiting for response at wdm_write()).
 
--- 
-Regards,
 
-Laurent Pinchart
+
+>> What is the purpose of sending the error to the userspace process via write() or close()?
+> 
+> Yes. However to do so, user space must be running. That the death
+> of a process interferes with error handling is independent from that.
+
+Why need to send the error to the userspace process when that process was killed?
+My question
+
+  Isn't the purpose to allow userspace process to do something (e.g. print error messages,
+  retry the write() request with same argument) ? If close() returned an error, it might be
+  too late to retry the write() request with same argument.
+
+which is unrelated to the userspace process being killed. My suggestion is that we can send
+the error from wdm_write() (for synchronous mode) or wdm_ioctl() (for asynchronous mode).
+
+> 
+>> And I think that wdm_flush() is a strange interface for reporting the error.
+> 
+> Well, POSIX is what it is.The close() syscall is supposed to return
+> errors. Hence flush() must report them.
+
+If we check the error at wdm_write() or wdm_ioctl(), there is no error to report at
+wdm_flush(). Therefore, we can remove wdm_flush() completely.
+
+
+
+I can't read this series without squashing into single patch. Making changes which
+will be after all removed in [RFC 5/7] is sad. Please do [RFC 5/7] before [RFC 4/7].
+Then, you won't need to make unneeded modifications. I'd like to see one cleanup
+patch, one possible unsafe dereference fix patch, and one deadlock avoidance patch.
+
+
+
+You did not answer to
+
+  How do we guarantee that N'th write() request already set desc->werr before
+  (N+1)'th next write() request is issued? If (N+1)'th write() request reached
+  memdup_user() before desc->werr is set by callback of N'th write() request,
+  (N+1)'th write() request will fail to report the error from N'th write() request.
+  Yes, that error would be reported by (N+2)'th write() request, but the userspace
+  process might have already discarded data needed for taking some actions (e.g.
+  print error messages, retry the write() request with same argument).
+
+. At least I think that
+
+        spin_lock_irq(&desc->iuspin);
+        we = desc->werr;
+        desc->werr = 0;
+        spin_unlock_irq(&desc->iuspin);
+        if (we < 0)
+                return usb_translate_errors(we);
+
+in wdm_write() should be moved to after !test_bit(WDM_IN_USE, &desc->flags).
+
+
+
+In [RFC 2/7], I think that
+
+                /* in case flush() had timed out */
+                usb_kill_urb(desc->command);
+
+which is called only when desc->count == 0 in wdm_open() is pointless, for since
+desc->count is incremented/decremented with wdm_mutex held, kill_urbs(desc) which
+is called when desc->count == 0 in wdm_release() must have already called
+usb_kill_urb(desc->command) before allowing wdm_open() to reach there.
+
+In addition, is
+
+        /* using write lock to protect desc->count */
+        mutex_lock(&desc->wlock);
+
+required? Isn't wdm_mutex that is actually protecting desc->count from modification?
+If it is desc->wlock that is actually protecting desc->count, the !desc->count check
+in wdm_release() and the desc->count == 1 check in wdm_open() have to be done with
+desc->wlock held.
+
+
+
+In [RFC 3/7], patch description says
+
+  There is no need for flush() to be uninterruptible. close(2)
+  is allowed to return -EAGAIN. Change it.
+
+but the code does
+
+	if (rv < 0)
+		return -EINTR;
+
+. Which error code do you want to use? (I still prefer removing wdm_flush() completely...)
+
