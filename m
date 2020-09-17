@@ -2,98 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AE926D865
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 12:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B7226D8EC
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 12:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726554AbgIQKGs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 06:06:48 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37708 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726559AbgIQKGf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Sep 2020 06:06:35 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=cantorsusede;
-        t=1600337190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=lAPuK4woBdNl3RoIv0cwrcWM2DcttdWFgRNJGM6HIXI=;
-        b=TFlhU1zZGfB0hxAudWANKwucjCh54sFyz1e6vLmX5pQfJ8yEXmi6FrGTBBRk/0Dz+0DKWa
-        T4yWUiWYTdFY0yShF7eg6bP1a/OeqVkTJDqmIYwpwGlNXIW3sLzbfLQSrJD7hNhh+FaUZ0
-        +M83YT4B33W8nCyBjV1dLkJJ/KLmivp4Wpcszpq6MUVjPV7D0XzFric5TBp0CaDVVhKEhM
-        SvR5Ol8h5xtx1Z6sOuumQz4eQa4rX7J7lkZRgzIhA8yPyPjYtdXPhF8Suk2M7Zzijo+6sf
-        QlP3oPQpTejpyl4zd9tPJr/NXEbTzTtQ0yqjjmKeeXIqGkKLGzB33efn3WQWyw==
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 625AEADEE;
-        Thu, 17 Sep 2020 10:07:04 +0000 (UTC)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     penguin-kernel@i-love.sakura.ne.jp, bjorn@mork.no,
-        linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [RFC 7/7] CDC-WDM: implement fsync
-Date:   Thu, 17 Sep 2020 12:06:14 +0200
-Message-Id: <20200917100614.1010-8-oneukum@suse.com>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200917100614.1010-1-oneukum@suse.com>
-References: <20200917100614.1010-1-oneukum@suse.com>
+        id S1726660AbgIQKYf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 06:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726576AbgIQKTF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 06:19:05 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2049EC061756
+        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 03:19:03 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id u23so1159561qku.17
+        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 03:19:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=ZU+DPT22S0CV1ES1wtFAa83RDjLdxcwwskP2a3Xj38w=;
+        b=u1mDyPU0nqs9XqH5wdSySLV7aOgSvluTZAD4YXy4RysXzuU07tm5o+/aik1DX57pGq
+         uL9iPY/fBDQe7yOZkt4yq8zvW4LD7kxcNPbNt1QOgszjhVyFRMsP08dmrYcATtcsufTF
+         uapGy7cc2Bhlg+/UulkOUNn+l4eRNMFnKKLUfb9VxrtTWshb1QBUWvj14Oo8PQCW1GXg
+         MN4usefnhoKMY2lZWGUYzI333dS8G1DuDNMXcHxcrgBypgeC9cRMuH4KdtHLZNcdcnZS
+         tvyQOusOb7QIi2C9Piny0GP546KAAo+kemfHkpqJKPMIptnm/SZm/dtPZz/slQU2XgQK
+         ku3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=ZU+DPT22S0CV1ES1wtFAa83RDjLdxcwwskP2a3Xj38w=;
+        b=kjpDiqOatbk+dlkNsK/50Lm07bYclo0q51EBXnW0mFFPMxTzwhb6Q/UvCrDgErPjCG
+         xK8PQYvltoIGnG2d2Rn18Qv8kZ2Ut2CL0prniL18oM3+BedPsKa9LkuBECkhwNh2UU82
+         mpzL/C/P6foLPUr+/iMvxFHIQt6G3daxFVSYXG2owyT7GovKd6x7USK+Gib3jZFfEwkx
+         R3oeQwNm4MCHaSSujrdYYMqOpxsNCUyGSbmuH1Fx3IenON5OBm7UMgJaMfVfkTvUszk6
+         R93M41u0gzowtE/QuEOeqeQ7JKYw8kP63prjNl5n4ye/AjaXJn7ReQ2lD/DTMzvy+ESe
+         5XXQ==
+X-Gm-Message-State: AOAM532zymDjXz1Z8zyNmTS/lFfLzRY+YiP2MYyqdNTkJlumlHVbGdBF
+        Scb2pc70KYGAb35g6XtPNpO1McZkSLE=
+X-Google-Smtp-Source: ABdhPJxDnWgHN2qC3rqj59a7E1XQy8vDobQsTiIdnHwfq+MyZWjuKBk/rUH9eEnO0X3gcR9QLePElYvsZms=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:1:f292:1cff:fee0:66cf])
+ (user=badhri job=sendgmr) by 2002:ad4:58e3:: with SMTP id di3mr11458117qvb.54.1600337942277;
+ Thu, 17 Sep 2020 03:19:02 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 03:18:46 -0700
+Message-Id: <20200917101856.3156869-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
+Subject: [PATCH v7 01/11] usb: typec: tcpci: Add a getter method to retrieve
+ tcpm_port reference
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some users want to be very sure that data has gone out to the
-device. This needs fsync.
+Allow chip level drivers to retrieve reference to tcpm_port.
 
-Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/class/cdc-wdm.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+Change since v1:
+- Changing patch version to v6 to fix version number confusion.
 
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index f952eec87b0f..7607ab2bbe07 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -590,6 +590,33 @@ static ssize_t wdm_read
- 	return rv;
- }
+Change since v6:
+- Rebase on usb-next
+- Added Reviewed-by from Heikki.
+---
+ drivers/usb/typec/tcpm/tcpci.c | 6 ++++++
+ drivers/usb/typec/tcpm/tcpci.h | 2 ++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index 7d9491ba62fb..b960fe5a0f28 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -38,6 +38,12 @@ struct tcpci_chip {
+ 	struct tcpci_data data;
+ };
  
-+/*
-+ * The difference to flush is that we wait forever. If you don't like
-+ * that behavior, you need to send a signal.
-+ */
-+
-+static int wdm_fsync(struct file *file, loff_t start, loff_t end, int datasync)
++struct tcpm_port *tcpci_get_tcpm_port(struct tcpci *tcpci)
 +{
-+	struct wdm_device *desc = file->private_data;
-+	int rv;
-+
-+	rv = wait_event_interruptible(desc->wait,
-+			!test_bit(WDM_IN_USE, &desc->flags) ||
-+			test_bit(WDM_DISCONNECTING, &desc->flags));
-+
-+	if (test_bit(WDM_DISCONNECTING, &desc->flags))
-+		return -ENODEV;
-+	if (rv < 0)
-+		return -EINTR;
-+
-+	spin_lock_irq(&desc->iuspin);
-+	rv = desc->werr;
-+	desc->werr = 0;
-+	spin_unlock_irq(&desc->iuspin);
-+
-+	return usb_translate_errors(rv);
++	return tcpci->port;
 +}
++EXPORT_SYMBOL_GPL(tcpci_get_tcpm_port);
 +
- static int wdm_flush(struct file *file, fl_owner_t id)
+ static inline struct tcpci *tcpc_to_tcpci(struct tcpc_dev *tcpc)
  {
- 	struct wdm_device *desc = file->private_data;
-@@ -750,6 +777,7 @@ static const struct file_operations wdm_fops = {
- 	.owner =	THIS_MODULE,
- 	.read =		wdm_read,
- 	.write =	wdm_write,
-+	.fsync =	wdm_fsync,
- 	.open =		wdm_open,
- 	.flush =	wdm_flush,
- 	.release =	wdm_release,
+ 	return container_of(tcpc, struct tcpci, tcpc);
+diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
+index cf9d8b63adcb..04c49a0b0368 100644
+--- a/drivers/usb/typec/tcpm/tcpci.h
++++ b/drivers/usb/typec/tcpm/tcpci.h
+@@ -150,4 +150,6 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
+ void tcpci_unregister_port(struct tcpci *tcpci);
+ irqreturn_t tcpci_irq(struct tcpci *tcpci);
+ 
++struct tcpm_port;
++struct tcpm_port *tcpci_get_tcpm_port(struct tcpci *tcpci);
+ #endif /* __LINUX_USB_TCPCI_H */
 -- 
-2.16.4
+2.28.0.618.gf4bc123cb7-goog
 
