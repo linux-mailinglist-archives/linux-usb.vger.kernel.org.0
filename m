@@ -2,106 +2,265 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C81D726DE95
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 16:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357B326DEB5
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 16:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727685AbgIQOng (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 10:43:36 -0400
-Received: from aibo.runbox.com ([91.220.196.211]:44960 "EHLO aibo.runbox.com"
+        id S1727652AbgIQOt4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 10:49:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45960 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727641AbgIQOmQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Sep 2020 10:42:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector2; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
-        :Message-Id:Date:Subject:Cc:To:From;
-        bh=jYC5vfpyAOB01Xz9fU7PjyTQCLGjlSBNPFV1rX8wF80=; b=UdIyK5YcbcJK/sE20vl9eIdY+0
-        7Yuwn/2NTwL2mPvPbiwx+wmxKwJ/2E3jSMUZ48DFehw6Sr1pkR4vPZN24T+Smi+iTkCS185isl9V9
-        VpV7avfNrKsAPgUHUZAJTiQt7ucOtwFlM7A7nq6E7MXaLuMZiQ1b9FiFfIt7vml6PJ0wLYwwdX/kK
-        pS4kw/8+Ezf6SPMhEZffiohd8jKkWR0JU4l/1clxSvCvtgxf31OkwUhsk39hV3fk+lWrdBR+qKWSz
-        oPJm/avtxGWfBCJw9Ovupm0nWEmMJ6lvr8wX0dCK0+s4qtBD3VwMAo1T3WkH8JpyWgfRMPDwGbSJc
-        GYIag1lA==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1kIv6y-0001Ko-KU; Thu, 17 Sep 2020 16:42:12 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1kIv6p-0002ee-CS; Thu, 17 Sep 2020 16:42:03 +0200
-From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
-To:     linux-usb@vger.kernel.org
-Cc:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        stable@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller@googlegroups.com
-Subject: [PATCH 3/3] usbip: Make the driver's match function specific
-Date:   Thu, 17 Sep 2020 17:41:51 +0300
-Message-Id: <20200917144151.355848-3-m.v.b@runbox.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200917144151.355848-1-m.v.b@runbox.com>
-References: <a6e14983a8849d5f75a43f403c7cc721b6e4a420.camel@hadess.net>
- <20200917144151.355848-1-m.v.b@runbox.com>
+        id S1727778AbgIQOtZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Sep 2020 10:49:25 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3CD4F206DB;
+        Thu, 17 Sep 2020 14:48:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600354080;
+        bh=sfthpgU6LTh5kEwIKbE0LbgLu/hukWCbFKyb2zfPjUw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RgxZxtOcni3OEB0z47zK9B9KjJApk/zCyq7cwuET1X6qz8/ySDyo58jSVr52zvqNh
+         AurUOkhyoZdFHPZE0XYJXhW0ekKytUL0YiDHHprXi8o4jFiJVzqSdozyE7IUfZ4meH
+         lEQWnuRVgyCE6jZDPQ40k/BV2KmHi46Zs8zDuLhY=
+Received: by mail-ot1-f52.google.com with SMTP id c10so2103873otm.13;
+        Thu, 17 Sep 2020 07:48:00 -0700 (PDT)
+X-Gm-Message-State: AOAM531DeItYnyLFwGrkSi+tBXCHZ2wFyspKRrNJIN8EdemLf++cZPJJ
+        aQO9fdF0qD59jcPbqdHWe32R8Oq679ZhF3LJCQ==
+X-Google-Smtp-Source: ABdhPJx2OKNTrIWy6fhiXMZseiLqqWeXElK00F/L2kA3QdEqg6K0YRW8p/L0K2YEJOVZQVqmenQQlcLShDoEwzbktss=
+X-Received: by 2002:a9d:6b0d:: with SMTP id g13mr20255042otp.129.1600354079374;
+ Thu, 17 Sep 2020 07:47:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1599549364.git.mchehab+huawei@kernel.org>
+ <cb821a8b5ef2d44ce32c8ce1d01c34b7afb70eb2.1599549364.git.mchehab+huawei@kernel.org>
+ <20200915163814.GA2084568@bogus> <20200917091821.0de18caa@coco.lan>
+In-Reply-To: <20200917091821.0de18caa@coco.lan>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 17 Sep 2020 08:47:48 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLucKWwgBVAoyXpm1mCD5-OvFj2pM_q2+tcyA+K9fCnKg@mail.gmail.com>
+Message-ID: <CAL_JsqLucKWwgBVAoyXpm1mCD5-OvFj2pM_q2+tcyA+K9fCnKg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: document a new quirk for dwc3
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, Linuxarm <linuxarm@huawei.com>,
+        mauro.chehab@huawei.com, John Stultz <john.stultz@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Prior to this commit, the USB-IP subsystem's USB device driver match
-function used to match all USB devices (by returning true
-unconditionally). Unfortunately, this is not correct behaviour and is
-likely the root cause of the bug reported by Andrey Konovalov.
+On Thu, Sep 17, 2020 at 1:18 AM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> Em Tue, 15 Sep 2020 10:38:14 -0600
+> Rob Herring <robh@kernel.org> escreveu:
+>
+> > On Tue, Sep 08, 2020 at 09:20:57AM +0200, Mauro Carvalho Chehab wrote:
+> > > At Hikey 970, setting the SPLIT disable at the General
+> > > User Register 3 is required.
+> > >
+> > > Without that, the URBs generated by the usbhid driver
+> > > return -EPROTO errors. That causes the code at
+> > > hid-core.c to call hid_io_error(), which schedules
+> > > a reset_work, causing a call to hid_reset().
+> > >
+> > > In turn, the code there will call:
+> > >
+> > >     usb_queue_reset_device(usbhid->intf);
+> > >
+> > > The net result is that the input devices won't work, and
+> > > will be reset on every 0.5 seconds:
+> > >
+> > >     [   33.122384] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0002
+> > >     [   33.378220] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
+> > >     [   33.698394] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0000
+> > >     [   34.882365] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0002
+> > >     [   35.138217] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
+> > >     [   35.458617] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0000
+> > >     [   36.642392] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0002
+> > >     [   36.898207] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
+> > >     [   37.218598] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0000
+> > >     [   38.402368] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0002
+> > >     [   38.658174] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
+> > >     [   38.978594] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0000
+> > >     [   40.162361] hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0002
+> > >     [   40.418148] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
+> > >     ...
+> > >     [  397.698132] usb 1-1.1: reset low-speed USB device number 3 using xhci-hcd
+> > >
+> > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > > ---
+> > >  Documentation/devicetree/bindings/usb/dwc3.txt | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+> > > index d03edf9d3935..1aae2b6160c1 100644
+> > > --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+> > > +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+> > > @@ -78,6 +78,9 @@ Optional properties:
+> > >                     park mode are disabled.
+> > >   - snps,dis_metastability_quirk: when set, disable metastability workaround.
+> > >                     CAUTION: use only if you are absolutely sure of it.
+> > > + - snps,dis-split-quirk: when set, change the way URBs are handled by the
+> > > +                    driver. Needed to avoid -EPROTO errors with usbhid
+> > > +                    on some devices (Hikey 970).
+> >
+> > Can't this be implied by the compatible string? Yes we have quirk
+> > properties already, but the problem with them is you can't address them
+> > without a DT change.
+>
+> Short answer:
+>
+> While technically doable, I don't think that this would be a good idea.
+>
+> -
+>
+> Long answer:
+>
+> The first thing is related to the compatible namespace: should such
+> quirk be added at SoC level or at board level?
+>
+> I don't know if the need to disable split mode came from a different
+> dwc3 variant used by the Kirin 970 SoC, or if this is due to the way
+> USB is wired at the Hikey 970 board.
 
-USB-IP should only match USB devices that the user-space asked the kernel
-to handle via USB-IP, by writing to the match_busid sysfs file, which is
-what this commit aims to achieve. This is done by making the match
-function check that the passed in USB device was indeed requested by the
-user-space to be handled by USB-IP.
+If board specific, then I agree that a separate property makes sense.
+This doesn't really sound board specific though.
 
-Reported-by: Andrey Konovalov <andreyknvl@google.com>
-Fixes: 7a2f2974f2 ("usbip: Implement a match function to fix usbip")
-Link: https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/
-Cc: <stable@vger.kernel.org> # 5.8
-Cc: Bastien Nocera <hadess@hadess.net>
-Cc: Valentina Manea <valentina.manea.m@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: <syzkaller@googlegroups.com>
-Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
----
- drivers/usb/usbip/stub_dev.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+> Right now, I'm assuming the latter, but Felipe suggested that this
+> might be due to a different version of the IP. Currently, we have
+> no means to check.
+>
+> So, I'm placing all Hikey 970 specific quirks under the board-specific
+> part, e. g., at:
+>
+>         arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts
+>
+> This sounds more flexible, as, if some different hardware based on
+> the same chipset reaches upstream, it could use a different set of
+> quirks, if needed.
+>
+> However, if we decide to bind quirks with compatible strings,
+> we need to know if we would create a board-specific compatible
+> or just SoC-specific ones.
+>
+> -
+>
+> Another possibility would be to add generic compatible bindings
+> for each quirk featureset. Right now the dwc3 core driver accepts
+> only two compatible strings:
+>
+>        .compatible = "snps,dwc3"
+>        .compatible = "synopsys,dwc3"
 
-diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
-index 9d7d642022d1..3d9c8ff6762e 100644
---- a/drivers/usb/usbip/stub_dev.c
-+++ b/drivers/usb/usbip/stub_dev.c
-@@ -463,7 +463,20 @@ static void stub_disconnect(struct usb_device *udev)
- 
- static bool usbip_match(struct usb_device *udev)
- {
--	return true;
-+	bool match;
-+	struct bus_id_priv *busid_priv;
-+	const char *udev_busid = dev_name(&udev->dev);
-+
-+	busid_priv = get_busid_priv(udev_busid);
-+	if (!busid_priv)
-+		return false;
-+
-+	match = (busid_priv->status != STUB_BUSID_REMOV &&
-+		 busid_priv->status != STUB_BUSID_OTHER);
-+
-+	put_busid_priv(busid_priv);
-+
-+	return match;
- }
- 
- #ifdef CONFIG_PM
--- 
-2.26.2
+Yeah, the binding for DWC3 is odd.
 
+> And both are equivalent. No quirks are added there via compatible
+> strings.
+>
+> Ok, we might start adding different compatible strings for different
+> sets of quirks, like:
+>
+>         .compatible = "snps,dwc3-splitdisable"
+
+Um, no.
+
+>
+> but, this sounds really ugly, specially when multiple quirks
+> would be required.
+>
+> We might also deprecate the usage of "snps,dwc3"/"synopsys,dwc3",
+> in favor of SoC-specific and board-specific compatible strings,
+> but that would add a long list of boards there, with lots of code
+> to set quirks. IMHO, it is a lot nicer to rely on DT to enable
+> or disable those SoC and board-specific optional features of the
+> Designware IP.
+>
+> -
+>
+> In the specific case of Hikey 970, there are two other
+> alternatives:
+>
+> 1) we ended needing to create a new compatible for the Kirin 970
+> SoC, for it to be probed via this driver:
+>
+>         drivers/usb/dwc3/dwc3-of-simple.c
+>
+> as, otherwise an async ARM error happens, making the SoC to
+> crash. All dwc3-of-simple driver does is to use a different
+> code for initializing the clocks.
+>
+> However, dwc3-of-simple driver is completely independent from
+> dwc3: it doesn't pass platform data to the main dwc3 driver.
+> So, it doesn't propagate any quirk to the main driver.
+>
+> One possible hack would be to make dwc3 driver to also
+> accept platform data, using it as an interface for the
+> dwc3-of-simple to pass quirks.
+>
+> If we go on that direction, we could also remove all other
+> quirks from Kirin 970 dwc3, coding them inside the driver,
+> instead of using DT, e. g. the driver would do something like:
+>
+>         if (of_device_is_compatible(np,
+>                                    "hisilicon,hi3670-dwc3")) {
+>                 cfg->dis_split_quirk = true;
+>                 cfg->foo = true;
+>                 cfg->bar = true;
+
+Normally, this would all be driver match data.
+
+>                 ...
+>
+>         }
+>
+> such change would require a re-design at the logic around
+> dwc3_get_properties(), as the driver should start accepting
+> quirks either from platform_data or from DT (or both?).
+>
+> 2) Because this specific device uses the dwc3-of-simple driver,
+> the actual DT binding is:
+>
+>         usb3: hisi_dwc3 {
+>                 compatible = "hisilicon,hi3670-dwc3";
+>         ...
+>                 dwc3: dwc3@ff100000 {
+>                         compatible = "snps,dwc3";
+>         ...
+>                 };
+>         };
+
+This parent child split should never have happened for the cases that
+don't have 'wrapper registers'. We should have had on node here with
+just:
+
+compatible = "hisilicon,hi3670-dwc3", "snps,dwc3";
+
+> For boards that use dwc3-of-simple drivers, we could add a hack
+> at the dwc3 core that would seek for the parent's device's
+> compatible string with something like (not tested):
+>
+>         if (of_device_is_compatible(pdev->parent->dev.of_node,
+>                                    "hisilicon,hi3670-dwc3"))
+>                 dwc->dis_split_quirk = true;
+
+This is what I'd do. You could have a match table instead as that
+would scale better.
+
+> It should be noticed that both platform_data and pdev->parent
+> alternatives will only work for boards using dwc3-of-simple driver.
+> This could limit this quirk usage on future devices.
+>
+> -
+>
+> IMO, adding a new quirk is cleaner, and adopts the same solution
+> that it is currently used by other drivers with Designware IP.
+
+We already have a bunch of quirk properties. What's one more, sigh. So
+if that's what you want, fine.
+
+Rob
