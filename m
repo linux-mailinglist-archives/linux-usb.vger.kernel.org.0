@@ -2,153 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 873D126DA9A
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 13:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A64626DB01
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 14:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbgIQLog (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 07:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726884AbgIQLoP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 07:44:15 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD28CC06174A
-        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 04:44:13 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id w2so1657746wmi.1
-        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 04:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=q/xNh3KK7BcpDa/un4n60xPyDcwsxLG5qRFTw4dutHI=;
-        b=mw2CaSdDgO2djAMShMNS+yV5rBMcw37ffv1hnAUlPtneAb/Spmn/TuGEh3Q3kNrI+d
-         okiHJyzCYoYYz6zAWHpaqzvMvLl4mADzo1Kw5gD6IbwVN7bPhftUsKuDfW8U7GRXo/Fh
-         +p75QvjR8tsdFqKwTSq2jhQieyrGaQGkJDK6zSQTsuVT9cTyBJOVfGoikhz4PmVyy+lj
-         beXtLcvhmuCcqxphryNnrFiRCXGJGfWyym6gEh/Hn3imxC6Xsz1IiqI+E6HZFRM8TynB
-         6OYVwfW9r54d1gIu8c3n2gdOLnBiMFRey06OGNLQEdlkZhhiT2w7ZFEkQ9FzUKjgSCYX
-         JcTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q/xNh3KK7BcpDa/un4n60xPyDcwsxLG5qRFTw4dutHI=;
-        b=KsWDL9ZwM/kXThZoUuMT84Movdrhdy9KRxNUVV9bls2yST5w+wjL7SCkzxkNMAWxjb
-         1NRLIO/ggbYL9sU7ITs5yfl1XAN4z9FyIG00i6C1dC5DL5CVDCc7EDtGyCGTzUQKHuo9
-         y8ZAMJYJfFQPNlUK7/PS6/X6WYhsFCJnYO83/I8eYcC17hFaPkwWhhAS8sBLQwMBYR24
-         w+I/s9HAcABeKpANIRdNjtPIFvqFwERMMziQYZ763JGdQehyjBonpMNTfArissx5w0rE
-         UB4RX9LeywgcSv8x0mLsoW24+cJF1kyIae2wtgUKHQrNeRv0x66w/0jFEW1bs+pptThH
-         t0+w==
-X-Gm-Message-State: AOAM531uNxDmtWfXxfotIrwjS9pWXrI5H21idfrpYkGyUvEXiMbuuR/H
-        9qhQKiIsmQGy8M+9ItjuZ4qivQ==
-X-Google-Smtp-Source: ABdhPJxorxK4ik5Io6/q+rnDtp1V2PR0T3H03RS5/LrOQIskiZ3SLWoGSEoc7BKLAGuaQaOOmF3kow==
-X-Received: by 2002:a7b:cb07:: with SMTP id u7mr9211873wmj.57.1600343052160;
-        Thu, 17 Sep 2020 04:44:12 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:7220:84ff:fe09:a3aa])
-        by smtp.gmail.com with ESMTPSA id m18sm10538595wmg.32.2020.09.17.04.44.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 04:44:11 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 12:44:11 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Quentin Perret <qperret@google.com>
-Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gprocida@google.com, kernel-team@android.com
-Subject: Re: [PATCH] ehci-hcd: Move include to keep CRC stable
-Message-ID: <20200917114411.GB3897889@google.com>
-References: <20200916171825.3228122-1-qperret@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200916171825.3228122-1-qperret@google.com>
+        id S1726733AbgIQMEZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 08:04:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40862 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726691AbgIQMET (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Sep 2020 08:04:19 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=cantorsusede;
+        t=1600344199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zDzV/nOSl/rS5jbmDaez+Qr68vBztihPQiMXXHVSE2Y=;
+        b=bMSir+X5D7RFyyr0TKaRzPJyoA8qBnAbHLhIfX+r1LZo03IEy0mGYGbu8qa/rkD68AN3W4
+        LUfNE9llgOnyNLh5nOkc4/ZSFYkuWhhiTj7WdaF3snHBZRHCV0lCgXcp5BgZA6FUFq4C7t
+        hMkvnrs0aKC14oyCQClTuuxC+3CJukGIQLMkxhS7z7NKUqL5TQUDtywlV5p8/KXaDpb/kL
+        bjZpqIStygy5wRiTqu0rYG7n9dh2ospUpvveLDG5lk+louQQJfJYYdYA59yiQ25WHwfXkr
+        9SFi+neL/wVW9xb7oVP8DAXBDqfNeTH6ldYzBh1NIo1H8ciPInJy6+TIz1Tlqg==
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 7CA87AF33;
+        Thu, 17 Sep 2020 12:03:53 +0000 (UTC)
+Message-ID: <1600344191.2424.44.camel@suse.com>
+Subject: Re: [PATCH] usblp: fix race between disconnect() and read()
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Greg KH <gregKH@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Date:   Thu, 17 Sep 2020 14:03:11 +0200
+In-Reply-To: <20200917114347.GA3436799@kroah.com>
+References: <20200917103427.15740-1-oneukum@suse.com>
+         <20200917114347.GA3436799@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 06:18:25PM +0100, Quentin Perret wrote:
->The CRC calculation done by genksyms is triggered when the parser hits
->EXPORT_SYMBOL*() macros. At this point, genksyms recursively expands the
->types of the function parameters, and uses that as the input for the CRC
->calculation. In the case of forward-declared structs, the type expands
->to 'UNKNOWN'. Following this, it appears that the result of the
->expansion of each type is cached somewhere, and seems to be re-used
->when/if the same type is seen again for another exported symbol in the
->same C file.
->
->Unfortunately, this can cause CRC 'stability' issues when a struct
->definition becomes visible in the middle of a C file. For example, let's
->assume code with the following pattern:
->
->    struct foo;
->
->    int bar(struct foo *arg)
->    {
->	/* Do work ... */
->    }
->    EXPORT_SYMBOL_GPL(bar);
->
->    /* This contains struct foo's definition */
->    #include "foo.h"
->
->    int baz(struct foo *arg)
->    {
->	/* Do more work ... */
->    }
->    EXPORT_SYMBOL_GPL(baz);
->
->Here, baz's CRC will be computed using the expansion of struct foo that
->was cached after bar's CRC calculation ('UNKOWN' here). But if
->EXPORT_SYMBOL_GPL(bar) is removed from the file (because of e.g. symbol
->trimming using CONFIG_TRIM_UNUSED_KSYMS), struct foo will be expanded
->late, during baz's CRC calculation, which now has visibility over the
->full struct definition, hence resulting in a different CRC for baz.
->
->The proper fix for this certainly is in genksyms, but that will take me
->some time to get right. In the meantime, we have seen one occurrence of
->this in the ehci-hcd code which hits this problem because of the way it
->includes C files halfway through the code together with an unlucky mix
->of symbol trimming.
->
->In order to workaround this, move the include done in ehci-hub.c early
->in ehci-hcd.c, hence making sure the struct definitions are visible to
->the entire file. This improves CRC stability of the ehci-hcd exports
->even when symbol trimming is enabled.
->
->Signed-off-by: Quentin Perret <qperret@google.com>
+Am Donnerstag, den 17.09.2020, 13:43 +0200 schrieb Greg KH:
+> On Thu, Sep 17, 2020 at 12:34:27PM +0200, Oliver Neukum wrote:
+> > read() needs to check whether the device has been
+> > disconnected before it tries to talk to the device.
+> > 
+> > Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> > Reported-by: syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com
+> > ---
+> >  drivers/usb/class/usblp.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
+> > index 084c48c5848f..67cbd42421be 100644
+> > --- a/drivers/usb/class/usblp.c
+> > +++ b/drivers/usb/class/usblp.c
+> > @@ -827,6 +827,11 @@ static ssize_t usblp_read(struct file *file, char __user *buffer, size_t len, lo
+> >  	if (rv < 0)
+> >  		return rv;
+> >  
+> > +	if (!usblp->present) {
+> > +		count = -ENODEV;
+> > +		goto done;
+> > +	}
+> > +
+> 
+> What prevents ->present from not being changed right after this test?
 
-Reviewed-by: Matthias Maennich <maennich@google.com>
+Hi,
 
-Cheers,
-Matthias
+the mutex taken in
 
->---
-> drivers/usb/host/ehci-hcd.c | 1 +
-> drivers/usb/host/ehci-hub.c | 1 -
-> 2 files changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
->index 6257be4110ca..3575b7201881 100644
->--- a/drivers/usb/host/ehci-hcd.c
->+++ b/drivers/usb/host/ehci-hcd.c
->@@ -22,6 +22,7 @@
-> #include <linux/interrupt.h>
-> #include <linux/usb.h>
-> #include <linux/usb/hcd.h>
->+#include <linux/usb/otg.h>
-> #include <linux/moduleparam.h>
-> #include <linux/dma-mapping.h>
-> #include <linux/debugfs.h>
->diff --git a/drivers/usb/host/ehci-hub.c b/drivers/usb/host/ehci-hub.c
->index ce0eaf7d7c12..087402aec5cb 100644
->--- a/drivers/usb/host/ehci-hub.c
->+++ b/drivers/usb/host/ehci-hub.c
->@@ -14,7 +14,6 @@
->  */
->
-> /*-------------------------------------------------------------------------*/
->-#include <linux/usb/otg.h>
->
-> #define	PORT_WAKE_BITS	(PORT_WKOC_E|PORT_WKDISC_E|PORT_WKCONN_E)
->
->-- 
->2.28.0.618.gf4bc123cb7-goog
->
+rv = usblp_rwait_and_lock(usblp, !!(file->f_flags & O_NONBLOCK));
+
+right above it. Yes, this driver is a mess. But short of adding
+a ton of comments or rewriting the whole thing I have no idea
+what to do about that.
+
+	Regards
+		Oliver
+
