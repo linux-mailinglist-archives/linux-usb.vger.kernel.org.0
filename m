@@ -2,127 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5C626D5E3
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 10:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C69026D84E
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 12:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726388AbgIQIKu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 04:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726412AbgIQIFJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 04:05:09 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B849AC06121D
-        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 01:03:39 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id z9so1053473wmk.1
-        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 01:03:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=TUShtxADeMIRUv08jDyFnIdO2h4AVdi1g89uLOtrWXw=;
-        b=Xm9muXpLMfdw+3JTaQ5+6nxJDSneO0K8th2wgQ0VLh2VI2BmK+XWoQ9cDtIn8+KaRJ
-         B45Xbntr5JjNU8mF7nIZd8VP+CTHviEtF1Um5VazOhr6GEQCgh9bbRNIM6C+XWioNjmk
-         ImuOo8Gi8eD0FtSQ7hHZ1yPAo82BLFHJwGGg0UxKCYs0oMSSpMWIe45dJUN+DzUELaKQ
-         JzvvcS8KVPQMZJTfgm/lLBewbBl9UGKGHM3XV6hYGQwunOqgCSfJKO8sQaLl1M6X9BRD
-         K+XM2hJttDJQqNZl5Xftk9yd2fnhmTZR2ol6vfSH0itoQkT2+o/FcX7saxpuLl0f47l5
-         EzpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TUShtxADeMIRUv08jDyFnIdO2h4AVdi1g89uLOtrWXw=;
-        b=Gdo9L0db/aRGTObO+kCq+aL1teMGNI72NmttCXyQ2raywTPfOxWrFV0mXAV+xjxIZ/
-         Z/eDOwZGEQIYp2R+oXfmoUzwNwpSOabtn6UMc2PWDj6CXC8ufUEIrC+FSw1Juivp94hX
-         2C5KdxRTxACKsH2ybqSSXRDxxEEqhOXjGRaYsD7dWqwSb54IxAAZESXmYfpPEgPCWWSd
-         sVxhMXheejCoeE0byJ5sw7RFO0xn9OVSR8ChFoJCnzEZso4Q9TJ2tQICtZc131GeJp4Z
-         CtThUuTSbRevDQNQXmIvwoW5AZiAfyJOHXIv6YWCaBI0tZM5vxjbD7GSi9YBrfqn7kOh
-         MwDg==
-X-Gm-Message-State: AOAM532O2kQ0siLKeUd/xM6fJp5DaHhZmjwGlYtXmKth9POEc024w54r
-        nOHOTtcI1u5JQcYfPm4+YtnGkA==
-X-Google-Smtp-Source: ABdhPJzTwzfeJOnCQh65prZummqH9JR09Yxja+zvv2OTSAZpPcom4k7xuvXSyH3Yv50qn/8+2aIWyQ==
-X-Received: by 2002:a1c:e256:: with SMTP id z83mr8793930wmg.33.1600329817598;
-        Thu, 17 Sep 2020 01:03:37 -0700 (PDT)
-Received: from netronome.com ([2001:982:756:703:d63d:7eff:fe99:ac9d])
-        by smtp.gmail.com with ESMTPSA id a13sm9836030wme.26.2020.09.17.01.03.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 01:03:36 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 10:03:35 +0200
-From:   Simon Horman <simon.horman@netronome.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Kees Cook <kees.cook@canonical.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
-        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
-        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        storagedev@microchip.com, sparclinux@vger.kernel.org,
-        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
-        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>
-Subject: Re: [oss-drivers] [trivial PATCH] treewide: Convert switch/case
- fallthrough; to break;
-Message-ID: <20200917080334.GB5769@netronome.com>
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726410AbgIQKDq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 06:03:46 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36460 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726285AbgIQKDp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Sep 2020 06:03:45 -0400
+X-Greylist: delayed 801 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 06:03:44 EDT
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=cantorsusede;
+        t=1600336223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7UVYAh3T5Ee62pqNKcLahyPwKyTaGPHzfMgm4zCF5Jc=;
+        b=PDUU68T2i2jlTEiUikPKbVWBnaj3xMHOAXRV7wUURC78h+JFMbBJ3kjoxWq/8bRkSY4pGN
+        RyaUFD/EUXzltLIY30cjoAvI+MgPi+9DfF0MZDCFqM/i+iGBM7wCK31fcZijw0v9IwsL1x
+        n7VuDaLVy4BCy7V1C98N3EhLEz4b3kHNdFZRPSM0QbYXbiFTcQVLaOFyWMO/odbJTxmNHM
+        EF+uUlrG1mElR3fW39JB30Mc4t59AG3CbydNo3McM/kw3/RzCXnBTNa5KqI7ZPpE4my6Ud
+        YUkb19HMn5AKiG+GpOREDUk51A3lL0aLCUcCM1E/8I6/Qhdc0wkcb1LOULeo7A==
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id DEB5FB20D;
+        Thu, 17 Sep 2020 09:50:56 +0000 (UTC)
+Message-ID: <1600336214.2424.39.camel@suse.com>
+Subject: Re: [RFC 0/5] fix races in CDC-WDM
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     bjorn@mork.no, linux-usb@vger.kernel.org
+Date:   Thu, 17 Sep 2020 11:50:14 +0200
+In-Reply-To: <4e724e07-3993-bcaa-79e9-45a2f7e1f759@i-love.sakura.ne.jp>
+References: <20200812132034.14363-1-oneukum@suse.com>
+         <ee0af733-903f-8e8f-8027-b5490a37032f@i-love.sakura.ne.jp>
+         <1599728957.10822.9.camel@suse.com>
+         <4f285044-aae9-c3be-23ba-90790cd624f1@i-love.sakura.ne.jp>
+         <1600161279.2424.5.camel@suse.com>
+         <4b8f6305-52fd-cb72-eb13-9d0a0bf07319@i-love.sakura.ne.jp>
+         <1600251486.2424.17.camel@suse.com>
+         <4e724e07-3993-bcaa-79e9-45a2f7e1f759@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 01:06:39PM -0700, Joe Perches wrote:
-> fallthrough to a separate case/default label break; isn't very readable.
+Am Mittwoch, den 16.09.2020, 20:14 +0900 schrieb Tetsuo Handa:
+> On 2020/09/16 19:18, Oliver Neukum wrote:
+> > Am Dienstag, den 15.09.2020, 19:30 +0900 schrieb Tetsuo Handa:
+> > > On 2020/09/15 18:14, Oliver Neukum wrote
+> > > > Is there something we can do in flush()?
+> > > 
+> > > I consider that wdm_flush() is a wrong place to return an error. It is possible that
+> > 
+> > I am afraid that is a basic problem we need to resolve. As I understand
+> >  it, flush() as a method exists precisely to report errors. Otherwise
+> > you could implement it in release(). But this is not called for every
+> > close().
 > 
-> Convert pseudo-keyword fallthrough; statements to a simple break; when
-> the next label is case or default and the only statement in the next
-> label block is break;
-> 
-> Found using:
-> 
-> $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
-> 
-> Miscellanea:
-> 
-> o Move or coalesce a couple label blocks above a default: block.
-> 
-> Signed-off-by: Joe Perches <joe@perches.com>
+> I think fsync() or ioctl() is a better method for reporting errors.
 
-...
+Very well, I am implementing fsync(). However, I must say that the very
+existance of fsync() tells us that write() is not expected to push
+data out to devices and hence report results.
 
-> diff --git a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
-> index 252fe06f58aa..1d5b87079104 100644
-> --- a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
-> +++ b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
-> @@ -345,7 +345,7 @@ static int matching_bar(struct nfp_bar *bar, u32 tgt, u32 act, u32 tok,
->  		baract = NFP_CPP_ACTION_RW;
->  		if (act == 0)
->  			act = NFP_CPP_ACTION_RW;
-> -		fallthrough;
-> +		break;
->  	case NFP_PCIE_BAR_PCIE2CPP_MapType_FIXED:
->  		break;
->  	default:
+> Whether N'th write() request succeeded remains unknown until (N+1)'th
+> write() request or close() request is issued? That sounds a strange design.
 
-This is a cascading fall-through handling all map types.
-I don't think this change improves readability.
+Welcome to the world of Unix. This is necessary if you want to block
+as rarely as possible.
 
-...
+> If there is nothing more to write(), how userspace process knows whether
+> N'th write() request succeeded? Wait for writability using poll() ?
+
+Technically fsync(). poll() will tell you that you can write again.
+That is a related but different concept.
+
+> What is the purpose of sending the error to the userspace process via write() or close()?
+
+Yes. However to do so, user space must be running. That the death
+of a process interferes with error handling is independent from that.
+
+> And I think that wdm_flush() is a strange interface for reporting the error.
+
+Well, POSIX is what it is.The close() syscall is supposed to return
+errors. Hence flush() must report them.
+
+	Regards
+		Oliver
+
