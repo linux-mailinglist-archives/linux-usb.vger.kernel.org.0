@@ -2,82 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD7126E2F5
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 19:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F95C26E431
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 20:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726533AbgIQRwp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 13:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbgIQRwC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 13:52:02 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3DDC061756;
-        Thu, 17 Sep 2020 10:52:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=pGkfsVyYFjM6wbe1xMrt8vihG2zoZEqiWnoR3qBkdNg=; b=r1gCnVlt4vYnAWkwa/wKKHMJuk
-        M/9XNRpTvcWG3orOH+ly4yA0waoICNPUIB8xPwcWuzjCwOcnuaQflyDAv3bWha/HZIlu2hJ9rYp7/
-        vBwOUbsqVgH25sQUBzoq8h4dtoOuJuBOaZOYfKeM+H4Zcz9TdsFrUCZD92r/vQB4a3GU0RqTtrKT/
-        5ZIPRaea0rJX2hDHoMgvV05m9G9kP6074oWk69zq50N0nEy3pyREIw0IDGlHCwFjr/lYYiTMFFQP8
-        iqeZDh8hjsXnyLnyu+08E82E/UHusDjQvRWfv2358r1N7bk9j/zBG2llkrdY+Sjx3u3lv20rkxE2a
-        fcG506Vg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kIy4U-00046d-Gx; Thu, 17 Sep 2020 17:51:51 +0000
-To:     LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Cc:     Li Yin <yin1.li@intel.com>,
-        Vadivel Murugan R <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH -next] phy: fix USB_LGM_PHY warning & build errors
-Message-ID: <d1dd0ddd-3143-5777-1c63-195e1a32f237@infradead.org>
-Date:   Thu, 17 Sep 2020 10:51:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726192AbgIQSmp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 14:42:45 -0400
+Received: from verein.lst.de ([213.95.11.211]:57039 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728715AbgIQQy6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Sep 2020 12:54:58 -0400
+X-Greylist: delayed 557 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 12:54:42 EDT
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 1B12468BEB; Thu, 17 Sep 2020 18:45:15 +0200 (CEST)
+Date:   Thu, 17 Sep 2020 18:45:14 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     iommu@lists.linux-foundation.org,
+        Russell King <linux@armlinux.org.uk>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-sh@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
+        linux-usb@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        linux-pci@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: support range based offsets in dma-direct v3
+Message-ID: <20200917164514.GA5982@lst.de>
+References: <20200916061500.1970090-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200916061500.1970090-1-hch@lst.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
-
-Fix a Kconfig warning that is causing lots of build errors
-when USB_SUPPORT is not set.
-
-USB_PHY depends on USB_SUPPORT but "select" doesn't care about
-dependencies, so this driver should also depend on USB_SUPPORT.
-It should not select USB_SUPPORT.
-
-WARNING: unmet direct dependencies detected for USB_PHY
-  Depends on [n]: USB_SUPPORT [=n]
-  Selected by [m]:
-  - USB_LGM_PHY [=m]
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Li Yin <yin1.li@intel.com>
-Cc: Vadivel Murugan R <vadivel.muruganx.ramuthevar@linux.intel.com>
-Cc: Kishon Vijay Abraham I <kishon@ti.com>
-Cc: Vinod Koul <vkoul@kernel.org>
----
- drivers/phy/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
-
---- linux-next-20200917.orig/drivers/phy/Kconfig
-+++ linux-next-20200917/drivers/phy/Kconfig
-@@ -51,6 +51,7 @@ config PHY_XGENE
- 
- config USB_LGM_PHY
- 	tristate "INTEL Lightning Mountain USB PHY Driver"
-+	depends on USB_SUPPORT
- 	select USB_PHY
- 	select REGULATOR
- 	select REGULATOR_FIXED_VOLTAGE
-
+I've pulled this into the dma-mapping for-next tree.  Thanks Jim and
+everyone helping out!
