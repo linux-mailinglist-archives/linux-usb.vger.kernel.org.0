@@ -2,108 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE4126E5D9
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 21:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00C926E581
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 21:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727696AbgIQOoA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 10:44:00 -0400
-Received: from aibo.runbox.com ([91.220.196.211]:55470 "EHLO aibo.runbox.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727648AbgIQOmS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Sep 2020 10:42:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector2; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
-        :Message-Id:Date:Subject:Cc:To:From;
-        bh=WaCu4zldHM3wFml3XoeYbHVyOElXbVex+B6UOeOoYQs=; b=K5nbWtU2dkwkGPzspMmSTpOjNX
-        lXlAcg9cV3ApcaEGvrjC/EaeltW8ObTwpXDVerxkdpOMJFeHdnaJSkZwzGW0gr3Fm3YSRljTAohW2
-        H6K+q/asalUdLPBBh9zmyqt+1rDaieydvu8fD4IJPy2RMzNuVa4BOLf9HZsTpixmh6TgALK3aIqPq
-        bYd5tMkGTS0+gB2/gyuK3nD7WSrLhFKc0OKW4/EkXTb/qj4cWj6RagaVXI26mGVa4AGLNQttj3Dot
-        nAM0gtLKF3aq2NQBGa9f5uar92GpNBZVx26DOLyBoa5a6n5IOPOPv9Hirnq+wazpNNSAhMFkCKHNV
-        /lqiI7QQ==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1kIv6z-0007ku-MD; Thu, 17 Sep 2020 16:42:13 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1kIv6m-0002ee-8o; Thu, 17 Sep 2020 16:42:00 +0200
-From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
-To:     linux-usb@vger.kernel.org
-Cc:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bastien Nocera <hadess@hadess.net>, syzkaller@googlegroups.com
-Subject: [PATCH 1/3] usbcore/driver: Fix specific driver selection
-Date:   Thu, 17 Sep 2020 17:41:49 +0300
-Message-Id: <20200917144151.355848-1-m.v.b@runbox.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <a6e14983a8849d5f75a43f403c7cc721b6e4a420.camel@hadess.net>
-References: <a6e14983a8849d5f75a43f403c7cc721b6e4a420.camel@hadess.net>
+        id S1726476AbgIQTyX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 15:54:23 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:57121 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726475AbgIQTyW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 15:54:22 -0400
+Received: (qmail 1101981 invoked by uid 1000); 17 Sep 2020 15:54:16 -0400
+Date:   Thu, 17 Sep 2020 15:54:16 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v2 2/2] USB: misc: Add onboard_usb_hub driver
+Message-ID: <20200917195416.GA1099735@rowland.harvard.edu>
+References: <20200917114600.v2.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20200917114600.v2.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200917114600.v2.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This commit resolves a bug in the selection/discovery of more
-specific USB device drivers for devices that are currently bound to
-generic USB device drivers.
+On Thu, Sep 17, 2020 at 11:46:22AM -0700, Matthias Kaehlcke wrote:
+> The main issue this driver addresses is that a USB hub needs to be
+> powered before it can be discovered. For onboard hubs this is often
+> solved by supplying the hub with an 'always-on' regulator, which is
+> kind of a hack. Some onboard hubs may require further initialization
+> steps, like changing the state of a GPIO or enabling a clock, which
+> requires further hacks. This driver creates a platform device
+> representing the hub which performs the necessary initialization.
+> Currently it only supports switching on a single regulator, support
+> for multiple regulators or other actions can be added as needed.
+> Different initialization sequences can be supported based on the
+> compatible string.
+> 
+> Besides performing the initialization the driver can be configured
+> to power the hub off during system suspend. This can help to extend
+> battery life on battery powered devices which have no requirements
+> to keep the hub powered during suspend. The driver can also be
+> configured to leave the hub powered when a wakeup capable USB device
+> is connected when suspending, and power it off otherwise.
+> 
+> Technically the driver consists of two drivers, the platform driver
+> described above and a very thin USB driver that subclasses the
+> generic driver. The purpose of this driver is to provide the platform
+> driver with the USB devices corresponding to the hub(s) (a hub
+> controller may provide multiple 'logical' hubs, e.g. one to support
+> USB 2.0 and another for USB 3.x).
+> 
+> Co-developed-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 
-The bug is in the logic that determines whether a device currently
-bound to a generic USB device driver should be re-probed by a
-more specific USB device driver or not. The code in
-__usb_bus_reprobe_drivers() used to have the following lines:
+> +config USB_ONBOARD_HUB
+> +	tristate "Onboard USB hub support"
+> +	depends on OF
+> +	help
+> +	  Say Y here if you want to support onboard USB hubs. The driver
+> +	  powers supported hubs on and may perform other initialization
+> +	  steps.
 
-  if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
-      (!new_udriver->match || new_udriver->match(udev) != 0))
- 		return 0;
+I have a nagging feeling that this description may be too vague for a
+lot of people to understand.  Does everybody know what an "onboard"
+USB hub is?
 
-  ret = device_reprobe(dev);
+Consider for example that Intel's current EHCI host controllers all
+come with a USB hub built into the chipset.  That built-in hub
+certainly could be considered "onboard", but it doesn't need this
+driver.
 
-As the reader will notice, the code checks whether the USB device in
-consideration matches the identifier table (id_table) of a specific
-USB device_driver (new_udriver), followed by a similar check, but this
-time with the USB device driver's match function. However, the match
-function's return value is not checked correctly. When match() returns
-zero, it means that the specific USB device driver is *not* applicable
-to the USB device in question, but the code then goes on to reprobe the
-device with the new USB device driver under consideration. All this to
-say, the logic is inverted.
+Maybe also give some examples of devices that require this driver, to
+help make the idea clear to readers.
 
-This bug was found by code inspection and instrumentation after
-Andrey Konovalov's report indicating USB/IP subsystem's misbehaviour
-with the generic USB device driver matching code.
 
-Reported-by: Andrey Konovalov <andreyknvl@google.com>
-Fixes: d5643d2249 ("USB: Fix device driver race")
-Link: https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/
-Cc: <stable@vger.kernel.org> # 5.8
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Bastien Nocera <hadess@hadess.net>
-Cc: <syzkaller@googlegroups.com>
-Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
----
- drivers/usb/core/driver.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +static int __maybe_unused onboard_hub_suspend(struct device *dev)
+> +{
+> +	struct onboard_hub *hub = dev_get_drvdata(dev);
+> +	struct udev_node *node;
+> +	int rc = 0;
+> +
+> +	hub->has_wakeup_capable_descendants = false;
+> +
+> +	if (!hub->power_off_in_suspend)
+> +		return 0;
+> +
+> +	mutex_lock(&hub->lock);
+> +
+> +	list_for_each_entry(node, &hub->udev_list, list) {
+> +		if (!device_may_wakeup(node->udev->bus->controller))
+> +			break;
 
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index c976ea9f9582..950044a6e77f 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -924,7 +924,7 @@ static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
- 
- 	udev = to_usb_device(dev);
- 	if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
--	    (!new_udriver->match || new_udriver->match(udev) != 0))
-+	    (!new_udriver->match || new_udriver->match(udev) == 0))
- 		return 0;
- 
- 	ret = device_reprobe(dev);
+You're assuming that node->udev->bus->controller is going to be the
+same for the nodes on the list, right?
 
-base-commit: 871e6496207c6aa94134448779c77631a11bfa2e
--- 
-2.26.2
+> +
+> +		if (usb_wakeup_enabled_descendants(node->udev)) {
+> +			hub->has_wakeup_capable_descendants = true;
+> +			break;
+> +		}
+> +	}
+> +
+> +	mutex_unlock(&hub->lock);
+> +
+> +	if (!hub->has_wakeup_capable_descendants)
+> +		rc = onboard_hub_power_off(hub);
+> +
+> +	return rc;
+> +}
+> +
+> +static int __maybe_unused onboard_hub_resume(struct device *dev)
+> +{
+> +	struct onboard_hub *hub = dev_get_drvdata(dev);
+> +	int rc = 0;
+> +
+> +	if (hub->power_off_in_suspend && !hub->has_wakeup_capable_descendants)
 
+Instead of this cumbersome two-condition test, how about simply
+having a hub->is_powered_on flag?  Then
+hub->has_wakeup_capable_descendants wouldn't be needed.
+
+> +		rc = onboard_hub_power_on(hub);
+> +
+> +	return rc;
+> +}
+
+> +static int onboard_hub_remove_usbdev(struct onboard_hub *hub, struct usb_device *udev)
+> +{
+> +	struct udev_node *node;
+> +
+> +	mutex_lock(&hub->lock);
+> +
+> +	list_for_each_entry(node, &hub->udev_list, list) {
+> +		if (node->udev == udev) {
+> +			list_del(&node->list);
+> +			devm_kfree(hub->dev, node);
+
+Why have an explicit kfree here but not anywhere else?  And if you do
+have an explicit kfree, why use devm_kzalloc rather than plain kzalloc?
+
+> +			break;
+> +		}
+> +	}
+> +
+> +	mutex_unlock(&hub->lock);
+> +
+> +	if (node == NULL)
+> +		return -EINVAL;
+
+This test is wrong.  Look at the definition of list_for_each_entry;
+node will never be NULL.  Probably the best approach is to use a local
+"ret" variable.
+
+> +
+> +	return 0;
+> +}
+
+> +static int onboard_hub_remove(struct platform_device *pdev)
+> +{
+> +	struct onboard_hub *hub = dev_get_drvdata(&pdev->dev);
+> +
+> +	sysfs_remove_file(&pdev->dev.kobj, &dev_attr_power_off_in_suspend.attr);
+> +
+> +	return onboard_hub_power_off(hub);
+> +}
+
+Shouldn't this routine unbind the onboard_hub_usbdev driver from all
+the associated devices?  Otherwise you end up with more-or-less
+dangling references to hub (I say more-or-less because with the devm
+allocations, the structures will hang around as zombies for a while).
+
+Relying on the onboard_hub_power_off call to do this for you isn't a
+great idea, because the effect won't happen immediately.
+
+> +static int onboard_hub_usbdev_probe(struct usb_device *udev)
+> +{
+> +	struct device *dev = &udev->dev;
+> +	struct onboard_hub *hub;
+> +
+> +	/* ignore supported hubs without device tree node */
+> +	if (!dev->of_node)
+> +		return -ENODEV;
+> +
+> +	hub = _find_onboard_hub(dev);
+> +	if (IS_ERR(hub))
+> +		return PTR_ERR(dev);
+> +
+> +	dev_set_drvdata(dev, hub);
+> +
+> +	onboard_hub_add_usbdev(hub, udev);
+
+Ignoring the return code?  Then why does that routine return int rather
+than void?
+
+> +
+> +	return 0;
+> +}
+> +
+> +static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+> +{
+> +	struct onboard_hub *hub = dev_get_drvdata(&udev->dev);
+> +
+> +	onboard_hub_remove_usbdev(hub, udev);
+
+Ditto.
+
+> +
+> +	put_device(hub->dev);
+
+Is there a matching get_device somewhere (like in _find_onboard_hub)?
+If so, I didn't see it.  And I don't see any reason for it.
+
+Alan Stern
