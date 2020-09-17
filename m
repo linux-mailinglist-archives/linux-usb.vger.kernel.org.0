@@ -2,53 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B7226D8EC
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 12:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA82326D8F6
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Sep 2020 12:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726660AbgIQKYf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 06:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
+        id S1726721AbgIQKZh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 06:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726576AbgIQKTF (ORCPT
+        with ESMTP id S1726604AbgIQKTF (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Sep 2020 06:19:05 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2049EC061756
-        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 03:19:03 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id u23so1159561qku.17
-        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 03:19:03 -0700 (PDT)
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1986DC061788
+        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 03:19:05 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id r24so1082356pgu.23
+        for <linux-usb@vger.kernel.org>; Thu, 17 Sep 2020 03:19:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=ZU+DPT22S0CV1ES1wtFAa83RDjLdxcwwskP2a3Xj38w=;
-        b=u1mDyPU0nqs9XqH5wdSySLV7aOgSvluTZAD4YXy4RysXzuU07tm5o+/aik1DX57pGq
-         uL9iPY/fBDQe7yOZkt4yq8zvW4LD7kxcNPbNt1QOgszjhVyFRMsP08dmrYcATtcsufTF
-         uapGy7cc2Bhlg+/UulkOUNn+l4eRNMFnKKLUfb9VxrtTWshb1QBUWvj14Oo8PQCW1GXg
-         MN4usefnhoKMY2lZWGUYzI333dS8G1DuDNMXcHxcrgBypgeC9cRMuH4KdtHLZNcdcnZS
-         tvyQOusOb7QIi2C9Piny0GP546KAAo+kemfHkpqJKPMIptnm/SZm/dtPZz/slQU2XgQK
-         ku3A==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=lTFIRTR1zNwvJ04BgZN6fFlBDrcI3QRsPDim78iCLb4=;
+        b=sZXLpVdl+nNo2cP9flul5No44LJwj8N0mPdruUaP6v2aqiRrUHLUsX2r3kJ6R2lgEY
+         5pcMgvASvtXPMvdOZjcZtRoHpY9EGMi3Fw9TQ9bjtLy/4KfF6ZihSWfduHQs+kUmynKs
+         KINImWENB/1MfEWHxhQdM7W7nssHpp67TB17hk2KoafoNA0tUqMbcZH8FF8+x1BDfzke
+         YUm2sev4F2W3BfhD6cZvas1PRNN9xgXg5x7YsNT+bqgjP0W4xgpuWDctKIzDynNHIrfz
+         3BODPguF7t/VhrlueO3gI+jWZNZzJlMAQ9uVoh7TgTMpoexsThUTdhr34m9GnR6iT8lG
+         R2ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=ZU+DPT22S0CV1ES1wtFAa83RDjLdxcwwskP2a3Xj38w=;
-        b=kjpDiqOatbk+dlkNsK/50Lm07bYclo0q51EBXnW0mFFPMxTzwhb6Q/UvCrDgErPjCG
-         xK8PQYvltoIGnG2d2Rn18Qv8kZ2Ut2CL0prniL18oM3+BedPsKa9LkuBECkhwNh2UU82
-         mpzL/C/P6foLPUr+/iMvxFHIQt6G3daxFVSYXG2owyT7GovKd6x7USK+Gib3jZFfEwkx
-         R3oeQwNm4MCHaSSujrdYYMqOpxsNCUyGSbmuH1Fx3IenON5OBm7UMgJaMfVfkTvUszk6
-         R93M41u0gzowtE/QuEOeqeQ7JKYw8kP63prjNl5n4ye/AjaXJn7ReQ2lD/DTMzvy+ESe
-         5XXQ==
-X-Gm-Message-State: AOAM532zymDjXz1Z8zyNmTS/lFfLzRY+YiP2MYyqdNTkJlumlHVbGdBF
-        Scb2pc70KYGAb35g6XtPNpO1McZkSLE=
-X-Google-Smtp-Source: ABdhPJxDnWgHN2qC3rqj59a7E1XQy8vDobQsTiIdnHwfq+MyZWjuKBk/rUH9eEnO0X3gcR9QLePElYvsZms=
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=lTFIRTR1zNwvJ04BgZN6fFlBDrcI3QRsPDim78iCLb4=;
+        b=D9a3wTFf8hcrsq+Am3pC2Xq0L6H2/kexnzGK6XuWzpvHX1r/v9fWXvHr76SDw71uL6
+         Av4BM0IOzwXrKQ+H9tekVOgFlt/VLRs8P3jticMl8Z6SbFNihJfQcK+Upd2uursV5MCd
+         Nu4PmLSVchAddZEzm+2/JTMljYJdFZ1axj0u7ddUgWE3YTIKyUwVmp8PpAWJHmzJT1vw
+         GmdFfi5LkbkUB35sD7RaJsD5rkbIpOr6NqwiIRYl22ZVseLvDTHbt/Go19UcNeMECn2L
+         UhjwavN+8jBcGAQG2g5m9xQGqS6Q4W4BecIfkDDNweWCduptNRs7XVAuB2fVUHvgJxrm
+         eBWg==
+X-Gm-Message-State: AOAM530DAH3UZo1UDeqlPiII0cZchdh2L1Iq4Bzc8JPXWBbvL5apymtk
+        Bm3J7imkcfjD5xoup0HJ0+flqpX+Cb8=
+X-Google-Smtp-Source: ABdhPJz2NDBYgm2dEJ0aYPOKY7ua+ImoHCM7sFC3Sx2DEdycXosdR3QJHU4KT70Qvt68Krz6YZCEGJZbKwo=
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:1:f292:1cff:fee0:66cf])
- (user=badhri job=sendgmr) by 2002:ad4:58e3:: with SMTP id di3mr11458117qvb.54.1600337942277;
- Thu, 17 Sep 2020 03:19:02 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 03:18:46 -0700
-Message-Id: <20200917101856.3156869-1-badhri@google.com>
+ (user=badhri job=sendgmr) by 2002:a17:90b:941:: with SMTP id
+ dw1mr733475pjb.1.1600337944220; Thu, 17 Sep 2020 03:19:04 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 03:18:47 -0700
+In-Reply-To: <20200917101856.3156869-1-badhri@google.com>
+Message-Id: <20200917101856.3156869-2-badhri@google.com>
 Mime-Version: 1.0
+References: <20200917101856.3156869-1-badhri@google.com>
 X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
-Subject: [PATCH v7 01/11] usb: typec: tcpci: Add a getter method to retrieve
- tcpm_port reference
+Subject: [PATCH v7 02/11] usb: typec: tcpci: Add set_vbus tcpci callback
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -60,50 +62,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Allow chip level drivers to retrieve reference to tcpm_port.
+set_vbus callback allows TCPC which are TCPCI based, however,
+does not support turning on sink and source mode through
+Command.SinkVbus and Command.SourceVbusDefaultVoltage.
 
 Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
-Change since v1:
+Changes since v1:
 - Changing patch version to v6 to fix version number confusion.
 
-Change since v6:
+Changes since v6:
 - Rebase on usb-next
-- Added Reviewed-by from Heikki.
 ---
- drivers/usb/typec/tcpm/tcpci.c | 6 ++++++
- drivers/usb/typec/tcpm/tcpci.h | 2 ++
+ drivers/usb/typec/tcpm/tcpci.c | 7 +++++++
+ drivers/usb/typec/tcpm/tcpci.h | 1 +
  2 files changed, 8 insertions(+)
 
 diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index 7d9491ba62fb..b960fe5a0f28 100644
+index b960fe5a0f28..d6a6fac82d48 100644
 --- a/drivers/usb/typec/tcpm/tcpci.c
 +++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -38,6 +38,12 @@ struct tcpci_chip {
- 	struct tcpci_data data;
- };
+@@ -328,6 +328,13 @@ static int tcpci_set_vbus(struct tcpc_dev *tcpc, bool source, bool sink)
+ 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
+ 	int ret;
  
-+struct tcpm_port *tcpci_get_tcpm_port(struct tcpci *tcpci)
-+{
-+	return tcpci->port;
-+}
-+EXPORT_SYMBOL_GPL(tcpci_get_tcpm_port);
++	if (tcpci->data->set_vbus) {
++		ret = tcpci->data->set_vbus(tcpci, tcpci->data, source, sink);
++		/* Bypass when ret > 0 */
++		if (ret != 0)
++			return ret < 0 ? ret : 0;
++	}
 +
- static inline struct tcpci *tcpc_to_tcpci(struct tcpc_dev *tcpc)
- {
- 	return container_of(tcpc, struct tcpci, tcpc);
+ 	/* Disable both source and sink first before enabling anything */
+ 
+ 	if (!source) {
 diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-index cf9d8b63adcb..04c49a0b0368 100644
+index 04c49a0b0368..4d441bdf24d5 100644
 --- a/drivers/usb/typec/tcpm/tcpci.h
 +++ b/drivers/usb/typec/tcpm/tcpci.h
-@@ -150,4 +150,6 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
- void tcpci_unregister_port(struct tcpci *tcpci);
- irqreturn_t tcpci_irq(struct tcpci *tcpci);
+@@ -144,6 +144,7 @@ struct tcpci_data {
+ 			 bool enable);
+ 	int (*start_drp_toggling)(struct tcpci *tcpci, struct tcpci_data *data,
+ 				  enum typec_cc_status cc);
++	int (*set_vbus)(struct tcpci *tcpci, struct tcpci_data *data, bool source, bool sink);
+ };
  
-+struct tcpm_port;
-+struct tcpm_port *tcpci_get_tcpm_port(struct tcpci *tcpci);
- #endif /* __LINUX_USB_TCPCI_H */
+ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
 -- 
 2.28.0.618.gf4bc123cb7-goog
 
