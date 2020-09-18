@@ -2,86 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 080B726F658
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 08:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6C626F694
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 09:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726493AbgIRGxJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Sep 2020 02:53:09 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:41809 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726427AbgIRGxI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Sep 2020 02:53:08 -0400
-Received: by mail-lf1-f65.google.com with SMTP id y17so4946344lfa.8;
-        Thu, 17 Sep 2020 23:53:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jEIokPWY8McXPGxPjFui/VeUF3vCcShRe9TmH70vfVc=;
-        b=YvUPjxfekIMCDK7iM6OBhdEw/OwZcMxfdm6hraLyYa6yAduEzCPUPPBImeM1yxpvxd
-         yDrchSA0TFBG5/Yg+Bzzpq+niJ96aFPwq6V2g9ljLcmWttMnsLnSaiMg3AfcTRpFxblm
-         UljLIqgzoiDAvbh6EZ2D6X1xd7WGI5NqkZ2uEEz8ZqdYYLZDitlj72FnxMznotkqbeBM
-         shwCmBMNsvgHLPu4RY9b6pIQbIVcuV5NNoLqVkUNBVS5yMzOur9TPsIqU1NtAhTrMGRC
-         kBbl90QkQLuy5IiVPsGQh+cSD7I/GjusxXLASnDRmRp+m9j3fCYCbZtZUi8J5wv1b1H0
-         ECeA==
-X-Gm-Message-State: AOAM533hr8MkWHySnjr7RJaVtg3DQFCtRrW8hxkMKFKFpIy/XRvZgAgB
-        6dy+9lhzV/lWYGQ6x0fgPVLuqYbXMng=
-X-Google-Smtp-Source: ABdhPJyuh9HtxeBxunoebr024x2ZU8qQdRsKa692WK3UGnrpTGSSOnU8hBPIt0CDHrPpFYpQtkk9Og==
-X-Received: by 2002:ac2:5217:: with SMTP id a23mr9739542lfl.509.1600411986135;
-        Thu, 17 Sep 2020 23:53:06 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id u14sm396413lji.83.2020.09.17.23.53.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 23:53:04 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kJAGS-0005pO-6J; Fri, 18 Sep 2020 08:53:00 +0200
-Date:   Fri, 18 Sep 2020 08:53:00 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.4 041/330] USB: serial: mos7840: fix probe
- error handling
-Message-ID: <20200918065300.GA21896@localhost>
-References: <20200918020110.2063155-1-sashal@kernel.org>
- <20200918020110.2063155-41-sashal@kernel.org>
+        id S1726430AbgIRHR7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Sep 2020 03:17:59 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:13290 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726159AbgIRHR7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Sep 2020 03:17:59 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 02832A29E2733212CEEA;
+        Fri, 18 Sep 2020 15:17:57 +0800 (CST)
+Received: from ubuntu.network (10.175.138.68) by
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.487.0; Fri, 18 Sep 2020 15:17:50 +0800
+From:   Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <davem@davemloft.net>, <UNGLinuxDriver@microchip.com>,
+        <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
+Subject: [PATCH -next] rapidio: Remove set but not used variable 'rc'
+Date:   Fri, 18 Sep 2020 15:18:44 +0800
+Message-ID: <20200918071844.19772-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200918020110.2063155-41-sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.138.68]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 09:56:21PM -0400, Sasha Levin wrote:
-> From: Johan Hovold <johan@kernel.org>
-> 
-> [ Upstream commit 960fbd1ca584a5b4cd818255769769d42bfc6dbe ]
-> 
-> The driver would return success and leave the port structures
-> half-initialised if any of the register accesses during probe fails.
-> 
-> This would specifically leave the port control urb unallocated,
-> something which could trigger a NULL pointer dereference on interrupt
-> events.
-> 
-> Fortunately the interrupt implementation is completely broken and has
-> never even been enabled...
-> 
-> Note that the zero-length-enable register write used to set the zle-flag
-> for all ports is moved to attach.
-> 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes gcc '-Wunused-but-set-variable' warning:
 
-Please drop this from all stable queues. As the commit message and
-missing stable-cc tag suggests, it's not needed.
+drivers/rapidio/rio_cm.c: In function rio_txcq_handler:
+drivers/rapidio/rio_cm.c:673:7: warning: variable ‘rc’ set but not used [-Wunused-but-set-variable]
 
-Sasha, please stop sending AUTOSEL patches for usb-serial. I think this
-the fourth time I ask you now.
+rc is never used, so remove it.
 
-Johan
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+---
+ drivers/rapidio/rio_cm.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/rapidio/rio_cm.c b/drivers/rapidio/rio_cm.c
+index 50ec53d67a4c..545693bd86a3 100644
+--- a/drivers/rapidio/rio_cm.c
++++ b/drivers/rapidio/rio_cm.c
+@@ -670,12 +670,11 @@ static void rio_txcq_handler(struct cm_dev *cm, int slot)
+ 	 */
+ 	if (!list_empty(&cm->tx_reqs) && (cm->tx_cnt < RIOCM_TX_RING_SIZE)) {
+ 		struct tx_req *req, *_req;
+-		int rc;
+ 
+ 		list_for_each_entry_safe(req, _req, &cm->tx_reqs, node) {
+ 			list_del(&req->node);
+ 			cm->tx_buf[cm->tx_slot] = req->buffer;
+-			rc = rio_add_outb_message(cm->mport, req->rdev, cmbox,
++			rio_add_outb_message(cm->mport, req->rdev, cmbox,
+ 						  req->buffer, req->len);
+ 			kfree(req->buffer);
+ 			kfree(req);
+-- 
+2.17.1
+
