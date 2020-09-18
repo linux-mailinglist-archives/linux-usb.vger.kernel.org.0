@@ -2,208 +2,243 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14868270150
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 17:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D72D270190
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 18:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgIRPtQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Sep 2020 11:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgIRPtP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Sep 2020 11:49:15 -0400
-Received: from mail-oo1-xc43.google.com (mail-oo1-xc43.google.com [IPv6:2607:f8b0:4864:20::c43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92024C0613CE
-        for <linux-usb@vger.kernel.org>; Fri, 18 Sep 2020 08:49:15 -0700 (PDT)
-Received: by mail-oo1-xc43.google.com with SMTP id m25so1537711oou.0
-        for <linux-usb@vger.kernel.org>; Fri, 18 Sep 2020 08:49:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3ZCvvmPS8NZtzcruP7g025J2xlGm6Ho0jKBIcAsBZw8=;
-        b=FQcc71LXQzx71dmeeefd9NzMr960WhzjM+ML44qYvLf/kwepwfygyAnsLEa3l7CPmD
-         QBB7oIcSwiVCNe086MFRQ4Ff/JJqxAbZQztXfinVbDFX7jrtNcCtJ4C1QxafYK+9d1Qw
-         w5FYm+ijWZTrToN5m/arhmrFbwIRKgyKe9gm4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3ZCvvmPS8NZtzcruP7g025J2xlGm6Ho0jKBIcAsBZw8=;
-        b=pUl+jOMELZAnld5veEKuAjPpoCEcC8ubFRWYaedvXU1l+l0w9/E/D2CUrC3kGCO7af
-         cNTyALS0pp+k/e92LBDtw13v7dn9VUI/sFQkIx0q2ncUOkpD1l+GD+oo0kxjwo5GA4NA
-         ZG3yp9Tkwz0M/zLiOlwvIcTWMXVcPCpU081rZbUkWNHQxm68+WK+4+IvQ+4oaMtXNjEN
-         HK7/2DN8lXt/gXYqRdE93gLyBookZsby0WLi9A8lsJZ3bR0Rryld11JV05QT/OrglAlY
-         //YeZaTY1z040VSoeiE7+IL5rOIbGmsLhZKninbl5yWgAvfWbA9AOm8FrqY4PyF+0MIQ
-         K2aw==
-X-Gm-Message-State: AOAM532yucMBA3tkEBz9a9GUBdHX0akgjf5tUlyvPha2hTqvxfzdurGc
-        jfy7gTi+tREe++DHa7R2DqUW6Q==
-X-Google-Smtp-Source: ABdhPJzxEgRaV8FUuna5mSlVx3LEhW2+ch/5o+hyR0quWhQb+fauYLPUj1Ysu4SsHrEEoWKIX9DYRA==
-X-Received: by 2002:a4a:d04c:: with SMTP id x12mr24290524oor.61.1600444154765;
-        Fri, 18 Sep 2020 08:49:14 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id j24sm2518897otn.64.2020.09.18.08.49.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Sep 2020 08:49:14 -0700 (PDT)
-Subject: Re: [PATCH 3/3] usbip: Make the driver's match function specific
-To:     "M. Vefa Bicakci" <m.v.b@runbox.com>, linux-usb@vger.kernel.org
-Cc:     Andrey Konovalov <andreyknvl@google.com>, stable@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller@googlegroups.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <a6e14983a8849d5f75a43f403c7cc721b6e4a420.camel@hadess.net>
- <20200917144151.355848-1-m.v.b@runbox.com>
- <20200917144151.355848-3-m.v.b@runbox.com>
- <45badff8-53e9-359d-4bf2-b0f71b910b2f@linuxfoundation.org>
- <e64f51b0-db05-e078-af58-b31a0be1e9ca@runbox.com>
- <e6404ae3-4b4e-f8d4-4c92-a71410e20569@runbox.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <d6d43c46-3231-7e64-b708-d1fe8349e8a3@linuxfoundation.org>
-Date:   Fri, 18 Sep 2020 09:49:12 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726221AbgIRQFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Sep 2020 12:05:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725955AbgIRQFg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Sep 2020 12:05:36 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5B24F23888;
+        Fri, 18 Sep 2020 16:05:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600445135;
+        bh=/jtGzaSFhcML7gFvXOyrFp8wXpuiZ4YoqvXopimAccI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GLtkFh5wrmceJ7iejRuEt1MN9S2gXSwvTcrTICrtpxNVkFqquRJaLisDl1nL2UIcP
+         htZZ/V6gga3tFmVGNcDV/FOxCtQ4jn0IFIJ/LtdSNXl8JGWEF35Ln1cXMOCQjk8G1V
+         qipgCUE1mCP4GjdxlfBt4vI5gmK6dPM153uvMX+o=
+Received: by mail-oi1-f170.google.com with SMTP id y6so7619233oie.5;
+        Fri, 18 Sep 2020 09:05:35 -0700 (PDT)
+X-Gm-Message-State: AOAM531QxreOGsselNmvVINVHeiENMtxIwwOob3DEEnIKxFQg3YTB3/O
+        LlN4sHtYcysjicBNm5IReer1fOwpmwXozCf7sA==
+X-Google-Smtp-Source: ABdhPJwnYBIiziuhSIY6yUU90RmySa/cL8llmX10i6r7vnjVrfFCaxstEbq1Bz9fJdOwUsoKCn42Ro80P1onG6ooQdY=
+X-Received: by 2002:aca:4d58:: with SMTP id a85mr9246503oib.147.1600445134520;
+ Fri, 18 Sep 2020 09:05:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <e6404ae3-4b4e-f8d4-4c92-a71410e20569@runbox.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200914112716.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20200915142145.GA1861636@bogus> <20200916000008.GG2771744@google.com>
+In-Reply-To: <20200916000008.GG2771744@google.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 18 Sep 2020 10:05:21 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLN=+icsQiyBJ98S2nGcRueUfkeRsR16o1zAQ36+DvAkg@mail.gmail.com>
+Message-ID: <CAL_JsqLN=+icsQiyBJ98S2nGcRueUfkeRsR16o1zAQ36+DvAkg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Add binding for onboard USB hubs
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/18/20 8:31 AM, M. Vefa Bicakci wrote:
-> On 18/09/2020 12.26, M. Vefa Bicakci wrote:
->> On 17/09/2020 18.21, Shuah Khan wrote:
->>> On 9/17/20 8:41 AM, M. Vefa Bicakci wrote:
->>>> Prior to this commit, the USB-IP subsystem's USB device driver match
->>>> function used to match all USB devices (by returning true
->>>> unconditionally). Unfortunately, this is not correct behaviour and is
->>>> likely the root cause of the bug reported by Andrey Konovalov.
->>>>
->>>> USB-IP should only match USB devices that the user-space asked the 
->>>> kernel
->>>> to handle via USB-IP, by writing to the match_busid sysfs file, 
->>>> which is
->>>> what this commit aims to achieve. This is done by making the match
->>>> function check that the passed in USB device was indeed requested by 
->>>> the
->>>> user-space to be handled by USB-IP.
-> 
-> [snipped by Vefa]
-> 
->>>> Reported-by: Andrey Konovalov <andreyknvl@google.com>
->>>> Fixes: 7a2f2974f2 ("usbip: Implement a match function to fix usbip")
->>>> Link: 
->>>> https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/ 
->>>>
->>>> Cc: <stable@vger.kernel.org> # 5.8
->>>> Cc: Bastien Nocera <hadess@hadess.net>
->>>> Cc: Valentina Manea <valentina.manea.m@gmail.com>
->>>> Cc: Shuah Khan <shuah@kernel.org>
->>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>> Cc: Alan Stern <stern@rowland.harvard.edu>
->>>> Cc: <syzkaller@googlegroups.com>
->>>> Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
->>>> ---
->>>>   drivers/usb/usbip/stub_dev.c | 15 ++++++++++++++-
->>>>   1 file changed, 14 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/usb/usbip/stub_dev.c 
->>>> b/drivers/usb/usbip/stub_dev.c
->>>> index 9d7d642022d1..3d9c8ff6762e 100644
->>>> --- a/drivers/usb/usbip/stub_dev.c
->>>> +++ b/drivers/usb/usbip/stub_dev.c
->>>> @@ -463,7 +463,20 @@ static void stub_disconnect(struct usb_device 
->>>> *udev)
->>>>   static bool usbip_match(struct usb_device *udev)
->>>>   {
->>>> -    return true;
->>>> +    bool match;
->>>> +    struct bus_id_priv *busid_priv;
->>>> +    const char *udev_busid = dev_name(&udev->dev);
->>>> +
->>>> +    busid_priv = get_busid_priv(udev_busid);
->>>> +    if (!busid_priv)
->>>> +        return false;
->>>> +
->>>> +    match = (busid_priv->status != STUB_BUSID_REMOV &&
->>>> +         busid_priv->status != STUB_BUSID_OTHER);
->>>> +
->>>> +    put_busid_priv(busid_priv);
->>>> +
->>>> +    return match;
->>>>   }
->>>>   #ifdef CONFIG_PM
->>>>
->>>
->>> Did you happen to run the usbip test on this patch? If not, can you
->>> please run tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
->>> and make sure there are no regressions.
->>
->> Ah, this is a very good point! I have been testing the patches on 
->> Qubes OS,
->> which uses usbip to forward USB devices between VMs. To be honest, I 
->> was not
->> aware of the self-tests for usbip, and I will run the self-tests prior to
->> publishing the next version of the patch series.
-> 
-> Hello Shuah,
-> 
-> I have just cleaned up the patches and run usbip_test.sh with a kernel 
-> without
-> the patches in this series and with a kernel in this series.
-> 
-> I noticed that there is a change in behaviour due to the fact that the new
-> match function (usbip_match) does not always return true. This causes the
-> stub device driver's probe() function to not get called at all, as the new
-> more selective match function will prevent the stub device driver from 
-> being
-> considered as a potential driver for the device under consideration.
-> 
++Florian
 
-Yes. This is the behavior I am concerned about and hence the reason
-to use the usbip test to verify this doesn't happen.
+On Tue, Sep 15, 2020 at 6:00 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> Hi Rob,
+>
+> On Tue, Sep 15, 2020 at 08:21:45AM -0600, Rob Herring wrote:
+> > On Mon, Sep 14, 2020 at 11:27:48AM -0700, Matthias Kaehlcke wrote:
+> > > Onboard USB hubs need to be powered and may require initiaization of
+> > > other resources (like GPIOs or clocks) to work properly. This adds
+> > > a device tree binding for these hubs.
+> >
+> > We already have bindings for these. 2 in fact as I2C controlled hubs are
+> > often described under the I2C bus.
+>
+> Yes, these are I2C controlled hubs, which need hub specific drivers. This
+> driver is for hubs without an additional bus that share similar
+> initialization requirements and can benefit from common functionality.
 
-With the patch you have the usbip match behavior becomes restrictive
-which isn't desirable.
+Yes, as I said, there's already 2 ways to do this. The second is
+defining the USB bus under the USB host. I'm sure there's some
+examples in the tree.
 
-> All of this results in the following difference in the logs of the 
-> usbip_test.sh,
-> where the expected kernel log message "usbip-host 2-6: 2-6 is not in 
-> match_busid table... skip!"
-> is not printed by a kernel that includes the patches in this series.
-> 
-> --- unpatched_kernel_log.txt  2020-09-18 17:12:10.654000000 +0300
-> +++ patched_kernel_log.txt  2020-09-18 17:12:10.654000000 +0300
-> @@ -213,70 +213,69 @@
->       |__ Port 1: Dev 2, If 0, Class=Human Interface Device, 
-> Driver=usbhid, 480M
->   ==============================================================
->   modprobe usbip_host - does it work?
->   Should see -busid- is not in match_busid table... skip! dmesg
->   ==============================================================
-> -usbip-host 2-6: 2-6 is not in match_busid table... skip!
->   ==============================================================
-> 
-> Do you find this change in behaviour unacceptable?
+> > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > > ---
+> > >
+> > >  .../bindings/usb/onboard_usb_hub.yaml         | 70 +++++++++++++++++++
+> > >  1 file changed, 70 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> > > new file mode 100644
+> > > index 000000000000..f82d8f459eed
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> > > @@ -0,0 +1,70 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/usb/onboard_usb_hub.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Binding for onboard USB hubs
+> > > +
+> > > +maintainers:
+> > > +  - Matthias Kaehlcke <mka@chromium.org>
+> > > +
+> > > +allOf:
+> > > +  - $ref: /schemas/usb/onboard_usb_hub.yaml#
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - onboard-usb-hub
+> > > +      - realtek,rts5411
+> > > +
+> > > +  power-off-in-suspend:
+> > > +    description:
+> > > +      The hub should be powered off during system suspend. When the
+> > > +      "wakeup-source" property is also provided the hub is only powered
+> > > +      off during suspend when no wakeup capable descendants are connected.
+> > > +    type: boolean
+> > > +
+> > > +  vdd-supply:
+> > > +    description:
+> > > +      phandle to the regulator that provides power to the hub.
+> > > +
+> > > +  wakeup-source:
+> > > +    description:
+> > > +      Wakeup capable USB devices connected to this hub can be used as
+> > > +      wakeup source.
+> > > +    type: boolean
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - vdd-supply
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    usb_hub: usb-hub {
+> > > +        compatible = "realtek,rts5411", "onboard-usb-hub";
+> > > +        vdd-supply = <&pp3300_hub>;
+> > > +        power-off-in-suspend;
+> > > +        wakeup-source;
+> >
+> > This is the hub device?
+>
+> This is the physical hub device on the platform bus, which is the
 
-Yeah. This behavior isn't acceptable.
+How is a USB hub connected to the 'platform bus'? There's no such
+thing as 'platform bus' in DT.
 
-If no, I can remove this
-> test case from usbip_test.sh with the same patch. If yes, then there is 
-> a need
-> for a different solution to resolve the unexpected negative interaction 
-> between
-> Bastien's work on generic/specific USB device driver selection and usbip
-> functionality.
-> 
+> equivalent to this entry for a usb2512b hub on an I2C bus:
+>
+>     usb2512b@2c {
+>         compatible = "microchip,usb2512b";
+>         reg = <0x2c>;
+>         reset-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
+>     };
+>
+> (source: Documentation/devicetree/bindings/usb/usb251xb.txt)
+>
+> It doesn't have an I2C, SPI or other bus, hence the platform bus is
+> used.
+>
+> > > +    };
+> > > +
+> > > +    &usb_1_dwc3 {
+> > > +   dr_mode = "host";
+> > > +   #address-cells = <1>;
+> > > +   #size-cells = <0>;
+> > > +
+> > > +   /* 2.0 hub on port 1 */
+> > > +   hub@1 {
+> > > +           compatible = "usbbda,5411";
+> > > +           reg = <1>;
+> > > +           hub = <&usb_hub>;
+> >
+> > Or this node is?
+>
+> It is the USB 2.0 part of the hub. The device is instantiated by
+> Linux even without this node, but the system associates the node
+> with the device, which suggests it 'exists'.
+>
+> The usb2512b mentioned above implicitly also has a node here, it just
+> isn't specified since the USB controller autodetects it.
 
-I would recommend finding a different solution. Now that you have the
-usbip test handy, you can verify and test for regressions.
+Like other probe-able buses, we describe the devices in DT when they
+have extra resources/config which are not probe-able.
 
-thanks,
--- Shuah
+> > > +   };
+> > > +
+> > > +   /* 3.0 hub on port 2 */
+> > > +   hub@2 {
+> > > +           compatible = "usbbda,411";
+> > > +           reg = <2>;
+> > > +           hub = <&usb_hub>;
+> >
+> > Or this node is?
+>
+> It is the USB 3.0 part of the hub.
+>
+> > The hub node belongs here.
+>
+> The platform device isn't probed when the node is inside the USB
+> controller node. I haven't investigated why that's the case.
 
+It shouldn't be a platform device, but associating a device_node with
+the usb device. I think at least that is there in the kernel.
+
+Though if you need setup to happen before the device is probe-able
+which appears to be the case here, then that is a common problem which
+isn't really a solved issue. There's the mmc-pwrseq stuff, but I don't
+want to see a repeat of that. There was an #armlinux irc discussion I
+had with Florian on this just 2 days ago[1]. If the only thing you
+have to configure is 'reset-gpios', then you probably can do that
+generically scanning all the child USB DT devices and deassert reset.
+But as soon as you have device specific things and need specific
+ordering and timing, then you'll need device specific code to handle
+it.
+
+>
+> > If you really have it connected to 2 upstream ports, then just do
+> > one node with 'reg = <1 2>;'.
+>
+> Yes, it is connected to two upstream ports. The platform driver needs a
+> reference to both/all hubs, to be able to determine whether to keep the
+> hub powered during system suspend or not.
+>
+> Technically the hub with product id 0x5411 is connected to port 1 and the
+> one with product id 0x411 to port 2, so I would say the above is more
+> accurate than pretending one of the hubs is connected to both ports.
+>
+> I would argue that the two hub nodes are similar to a SDIO BT/WiFi combo,
+> where you have one chip/module with multiple functions. The DT has entries
+> for both functions, even though they reside in the same chip and share the
+> same bus.
+
+That has generally worked because little is shared between BT and WiFi
+and what is shared is refcounted (clks for example). That could work
+here, we just have to be careful.
+
+Rob
+
+[1] https://pastebin.com/iepyfe9c
