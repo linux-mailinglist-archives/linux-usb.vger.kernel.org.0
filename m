@@ -2,157 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B026A26FFEE
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 16:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82265270004
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 16:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726699AbgIROcC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Sep 2020 10:32:02 -0400
-Received: from aibo.runbox.com ([91.220.196.211]:39174 "EHLO aibo.runbox.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726566AbgIROcB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 18 Sep 2020 10:32:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:References:Cc:To:From:Subject;
-        bh=JiTb7IeCRmeEU+pE2dpY6N2mMZW+Z3A95EDmSNkAqyY=; b=Qw6PFKnc2Tt7oK5jTttIu88hDr
-        udt12tnZQvhpU/UW1FGplGaW6xKMjSnokT0D1Oe0W5SNQ/cQM8uKvghbkIJHU42SIG3CxRO9H+y0k
-        LS7Jlb0/JgUMti9p7Bl+13liH0z6O1fHcLFl2eb6/3qkBgR7W8VgMTGw2OZZkh70QzTJ1VUifZf82
-        PTmLeGozypXyFyw8c2VRWncz1OHMjUfHNXHfTN7vM0vHPa4nvJ/M+I/p/iNlBxvXfCq3m+SYM/wrO
-        A33mzpA7rgTNwSWuSgPVus8scuja6STgf5bD5LP7XYSWiCGiP6LcM7c7o3GZghUWWLSaZSCzS4DlV
-        E7n/pPpA==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1kJHQa-0001Cs-BW; Fri, 18 Sep 2020 16:31:56 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1kJHQG-0007hI-VD; Fri, 18 Sep 2020 16:31:37 +0200
-Subject: Re: [PATCH 3/3] usbip: Make the driver's match function specific
-From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org
-Cc:     Andrey Konovalov <andreyknvl@google.com>, stable@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller@googlegroups.com
-References: <a6e14983a8849d5f75a43f403c7cc721b6e4a420.camel@hadess.net>
- <20200917144151.355848-1-m.v.b@runbox.com>
- <20200917144151.355848-3-m.v.b@runbox.com>
- <45badff8-53e9-359d-4bf2-b0f71b910b2f@linuxfoundation.org>
- <e64f51b0-db05-e078-af58-b31a0be1e9ca@runbox.com>
-Message-ID: <e6404ae3-4b4e-f8d4-4c92-a71410e20569@runbox.com>
-Date:   Fri, 18 Sep 2020 17:31:33 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726219AbgIROhx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Sep 2020 10:37:53 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:37476 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbgIROhx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Sep 2020 10:37:53 -0400
+Received: by mail-lj1-f194.google.com with SMTP id n25so5304184ljj.4
+        for <linux-usb@vger.kernel.org>; Fri, 18 Sep 2020 07:37:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+5VqptTZKcnINB/SXHa2/jUfqJYTsUiUyW39e2yh0Gw=;
+        b=BSUatw7qmDtfetyulnJfGbeKXiM8qt61SdGpsMO3UAcXCzT4gOedRgPGJIX4KUPLhy
+         oaiTAogcjiU7mcgSMjwV8YgHu9OX/9Kz69za200KFri3z82lBKH3EKA77ZWsmOFPIvl7
+         8sE7+R6bEM2SX4dga/8K0kKO9JxnvYqQK5V8PK+trqVz7lA+uemcA5nkyLdJGfLDbIks
+         2WJttz82xpt7Ei3fiB3OcgpcLkt/QF17x3b5SEoswUMNrmazN5E+8Sz4SctkwNpkOW/b
+         foLfaHqFY0+48cE9oeigXXigbDNCPMCi/FXOGryZuCHxl/rT9JGjiZbKQlJCl/Yobo/g
+         u38Q==
+X-Gm-Message-State: AOAM531+Yel6ZaY8Xf2vYdOIhreNdmYuRIniy7lYb/4Ub8L22zrtFWPK
+        YtxUltOYUC1lbvh6+qHhnqsPOa6of9c=
+X-Google-Smtp-Source: ABdhPJzhbMppcJJ/CMT1mbbWaXKb4ZACh9gOSflEy8LGMsHposJGPWNVmAwFf5k3DQlHGOdT6NGgYA==
+X-Received: by 2002:a2e:8ec1:: with SMTP id e1mr12943629ljl.84.1600439871198;
+        Fri, 18 Sep 2020 07:37:51 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id w26sm644669ljm.30.2020.09.18.07.37.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2020 07:37:49 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kJHWE-0000yG-FL; Fri, 18 Sep 2020 16:37:46 +0200
+Date:   Fri, 18 Sep 2020 16:37:46 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     "<Daniel Caujolle-Bert>" <f1rmb.daniel@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, Oliver Neukum <oneukum@suse.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb-serial-simple: Add Whistler radio scanners TRX serie
+ support.
+Message-ID: <20200918143746.GC21896@localhost>
+References: <5f4ca4f8.1c69fb81.a4487.0f5f@mx.google.com>
+ <20200918074519.GN24441@localhost>
+ <5f64b2cc.1c69fb81.67f97.d907@mx.google.com>
 MIME-Version: 1.0
-In-Reply-To: <e64f51b0-db05-e078-af58-b31a0be1e9ca@runbox.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f64b2cc.1c69fb81.67f97.d907@mx.google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18/09/2020 12.26, M. Vefa Bicakci wrote:
-> On 17/09/2020 18.21, Shuah Khan wrote:
->> On 9/17/20 8:41 AM, M. Vefa Bicakci wrote:
->>> Prior to this commit, the USB-IP subsystem's USB device driver match
->>> function used to match all USB devices (by returning true
->>> unconditionally). Unfortunately, this is not correct behaviour and is
->>> likely the root cause of the bug reported by Andrey Konovalov.
->>>
->>> USB-IP should only match USB devices that the user-space asked the kernel
->>> to handle via USB-IP, by writing to the match_busid sysfs file, which is
->>> what this commit aims to achieve. This is done by making the match
->>> function check that the passed in USB device was indeed requested by the
->>> user-space to be handled by USB-IP.
-
-[snipped by Vefa]
-
->>> Reported-by: Andrey Konovalov <andreyknvl@google.com>
->>> Fixes: 7a2f2974f2 ("usbip: Implement a match function to fix usbip")
->>> Link: https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/
->>> Cc: <stable@vger.kernel.org> # 5.8
->>> Cc: Bastien Nocera <hadess@hadess.net>
->>> Cc: Valentina Manea <valentina.manea.m@gmail.com>
->>> Cc: Shuah Khan <shuah@kernel.org>
->>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> Cc: Alan Stern <stern@rowland.harvard.edu>
->>> Cc: <syzkaller@googlegroups.com>
->>> Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
->>> ---
->>>   drivers/usb/usbip/stub_dev.c | 15 ++++++++++++++-
->>>   1 file changed, 14 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
->>> index 9d7d642022d1..3d9c8ff6762e 100644
->>> --- a/drivers/usb/usbip/stub_dev.c
->>> +++ b/drivers/usb/usbip/stub_dev.c
->>> @@ -463,7 +463,20 @@ static void stub_disconnect(struct usb_device *udev)
->>>   static bool usbip_match(struct usb_device *udev)
->>>   {
->>> -    return true;
->>> +    bool match;
->>> +    struct bus_id_priv *busid_priv;
->>> +    const char *udev_busid = dev_name(&udev->dev);
->>> +
->>> +    busid_priv = get_busid_priv(udev_busid);
->>> +    if (!busid_priv)
->>> +        return false;
->>> +
->>> +    match = (busid_priv->status != STUB_BUSID_REMOV &&
->>> +         busid_priv->status != STUB_BUSID_OTHER);
->>> +
->>> +    put_busid_priv(busid_priv);
->>> +
->>> +    return match;
->>>   }
->>>   #ifdef CONFIG_PM
->>>
->>
->> Did you happen to run the usbip test on this patch? If not, can you
->> please run tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
->> and make sure there are no regressions.
+On Fri, Sep 18, 2020 at 03:14:50PM +0200, <Daniel Caujolle-Bert> wrote:
+> Hi Johan,
 > 
-> Ah, this is a very good point! I have been testing the patches on Qubes OS,
-> which uses usbip to forward USB devices between VMs. To be honest, I was not
-> aware of the self-tests for usbip, and I will run the self-tests prior to
-> publishing the next version of the patch series.
+>   I just tried your patch, and it works, /dev/ttyACM0 is there and
+>   usable.
 
-Hello Shuah,
+Great, thanks for testing!
 
-I have just cleaned up the patches and run usbip_test.sh with a kernel without
-the patches in this series and with a kernel in this series.
+Can I add your Tested-by tag to the resulting patch?
 
-I noticed that there is a change in behaviour due to the fact that the new
-match function (usbip_match) does not always return true. This causes the
-stub device driver's probe() function to not get called at all, as the new
-more selective match function will prevent the stub device driver from being
-considered as a potential driver for the device under consideration.
+I'll try to get this sorted as soon as possible.
 
-All of this results in the following difference in the logs of the usbip_test.sh,
-where the expected kernel log message "usbip-host 2-6: 2-6 is not in match_busid table... skip!"
-is not printed by a kernel that includes the patches in this series.
-
---- unpatched_kernel_log.txt  2020-09-18 17:12:10.654000000 +0300
-+++ patched_kernel_log.txt  2020-09-18 17:12:10.654000000 +0300
-@@ -213,70 +213,69 @@
-      |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 480M
-  ==============================================================
-  modprobe usbip_host - does it work?
-  Should see -busid- is not in match_busid table... skip! dmesg
-  ==============================================================
--usbip-host 2-6: 2-6 is not in match_busid table... skip!
-  ==============================================================
-
-Do you find this change in behaviour unacceptable? If no, I can remove this
-test case from usbip_test.sh with the same patch. If yes, then there is a need
-for a different solution to resolve the unexpected negative interaction between
-Bastien's work on generic/specific USB device driver selection and usbip
-functionality.
-
-Thank you,
-
-Vefa
+Johan
