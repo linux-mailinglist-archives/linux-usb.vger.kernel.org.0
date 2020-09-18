@@ -2,38 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED56526EC64
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 04:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642FA26ECC1
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 04:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728643AbgIRCL0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 22:11:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36834 "EHLO mail.kernel.org"
+        id S1729096AbgIRCOc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 22:14:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42668 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728636AbgIRCLZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:11:25 -0400
+        id S1728742AbgIRCOb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:14:31 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 374E92311C;
-        Fri, 18 Sep 2020 02:11:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5D39623A32;
+        Fri, 18 Sep 2020 02:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600395084;
-        bh=aWLWRDXTPVtOl+4fi6ZSpPtT6elC4qoGlPuzJAweLow=;
+        s=default; t=1600395270;
+        bh=FKSyQy8IhMrfV3uwxwj3FPEYU6o9g3jlh069ZrX5a10=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FfmOlmPxGCpqSTRXMtjGNNh9EXeyiYRgiUA3h3uPkE4UVnwUk2mYBCNOrNJuwnm1X
-         XBXy10eQ0iXzM9eKIx2mxQj7fddy9Xwt44LMicSN22YrkdljVbfYk7xJ3ryEN5KoGZ
-         ao9SAXEm4ax65qUTbYbXzI5jrY/Q9oeydOuEGCBw=
+        b=w20e7/5AJLFPfEPHHH5IrvBOjTRvU7PLWCB24u88XpHWuFRLT2zMGH7IKBH4T0FYK
+         7UKeakkKutwAE2VJC38Ns+Qq294hi7olrSsIzZ80EKqC5TRno/4vqHkn9GdQcDFrPb
+         PAF43OZV2Y3KuR0N6F5qhfF5+ahq4fONcdPy6GZQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Colin Ian King <colin.king@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 167/206] USB: EHCI: ehci-mv: fix less than zero comparison of an unsigned int
-Date:   Thu, 17 Sep 2020 22:07:23 -0400
-Message-Id: <20200918020802.2065198-167-sashal@kernel.org>
+Cc:     Yu Chen <chenyu56@huawei.com>,
+        John Stultz <john.stultz@linaro.org>, Li Jun <jun.li@nxp.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 109/127] usb: dwc3: Increase timeout for CmdAct cleared by device controller
+Date:   Thu, 17 Sep 2020 22:12:02 -0400
+Message-Id: <20200918021220.2066485-109-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918020802.2065198-1-sashal@kernel.org>
-References: <20200918020802.2065198-1-sashal@kernel.org>
+In-Reply-To: <20200918021220.2066485-1-sashal@kernel.org>
+References: <20200918021220.2066485-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,44 +44,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+From: Yu Chen <chenyu56@huawei.com>
 
-[ Upstream commit a7f40c233a6b0540d28743267560df9cfb571ca9 ]
+[ Upstream commit 1c0e69ae1b9f9004fd72978612ae3463791edc56 ]
 
-The comparison of hcd->irq to less than zero for an error check will
-never be true because hcd->irq is an unsigned int.  Fix this by
-assigning the int retval to the return of platform_get_irq and checking
-this for the -ve error condition and assigning hcd->irq to retval.
+If the SS PHY is in P3, there is no pipe_clk, HW may use suspend_clk
+for function, as suspend_clk is slow so EP command need more time to
+complete, e.g, imx8M suspend_clk is 32K, set ep configuration will
+take about 380us per below trace time stamp(44.286278 - 44.285897
+= 0.000381):
 
-Addresses-Coverity: ("Unsigned compared against 0")
-Fixes: c856b4b0fdb5 ("USB: EHCI: ehci-mv: fix error handling in mv_ehci_probe()")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
-Link: https://lore.kernel.org/r/20200515165453.104028-1-colin.king@canonical.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+configfs_acm.sh-822   [000] d..1    44.285896: dwc3_writel: addr
+000000006d59aae1 value 00000401
+configfs_acm.sh-822   [000] d..1    44.285897: dwc3_readl: addr
+000000006d59aae1 value 00000401
+... ...
+configfs_acm.sh-822   [000] d..1    44.286278: dwc3_readl: addr
+000000006d59aae1 value 00000001
+configfs_acm.sh-822   [000] d..1    44.286279: dwc3_gadget_ep_cmd:
+ep0out: cmd 'Set Endpoint Configuration' [401] params 00001000
+00000500 00000000 --> status: Successful
+
+This was originally found on Hisilicon Kirin Soc that need more time
+for the device controller to clear the CmdAct of DEPCMD.
+
+Signed-off-by: Yu Chen <chenyu56@huawei.com>
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+Signed-off-by: Li Jun <jun.li@nxp.com>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/ehci-mv.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/usb/dwc3/gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/ehci-mv.c b/drivers/usb/host/ehci-mv.c
-index 4edcd7536a01b..9d93e7441bbca 100644
---- a/drivers/usb/host/ehci-mv.c
-+++ b/drivers/usb/host/ehci-mv.c
-@@ -192,11 +192,10 @@ static int mv_ehci_probe(struct platform_device *pdev)
- 	hcd->rsrc_len = resource_size(r);
- 	hcd->regs = ehci_mv->op_regs;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 4149d751719e3..4a42368734644 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -276,7 +276,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned cmd,
+ {
+ 	const struct usb_endpoint_descriptor *desc = dep->endpoint.desc;
+ 	struct dwc3		*dwc = dep->dwc;
+-	u32			timeout = 1000;
++	u32			timeout = 5000;
+ 	u32			saved_config = 0;
+ 	u32			reg;
  
--	hcd->irq = platform_get_irq(pdev, 0);
--	if (hcd->irq < 0) {
--		retval = hcd->irq;
-+	retval = platform_get_irq(pdev, 0);
-+	if (retval < 0)
- 		goto err_disable_clk;
--	}
-+	hcd->irq = retval;
- 
- 	ehci = hcd_to_ehci(hcd);
- 	ehci->caps = (struct ehci_caps *) ehci_mv->cap_regs;
 -- 
 2.25.1
 
