@@ -2,38 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AED26FDFA
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 15:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF4026FDFC
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 15:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgIRNOj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Sep 2020 09:14:39 -0400
+        id S1726772AbgIRNOk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Sep 2020 09:14:40 -0400
 Received: from mga09.intel.com ([134.134.136.24]:46076 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726126AbgIRNOi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 18 Sep 2020 09:14:38 -0400
-IronPort-SDR: ottVCoIS71WMvDqIqdO0Lhpfd7vKpaUkSG6RhPXailHV9a3kmBi+eM88EsuEVMmgI08LNzXtO0
- MbsfKr/YSFFQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="160849970"
+        id S1726126AbgIRNOk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Sep 2020 09:14:40 -0400
+IronPort-SDR: TSwUB3PVQUtS4IDd5CEgxBP+HPCElrWgvQ7hdeJ+957n4UbzxDRa1PGomEZ7YIC6pkAwvW2b3d
+ pRuNpCHLXw+A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="160849976"
 X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
-   d="scan'208";a="160849970"
+   d="scan'208";a="160849976"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2020 06:14:38 -0700
-IronPort-SDR: 86Cxok5xpr8haSRG+59vvlZFjtKgcP1nLkqAgZUUxIQyqH5q0dbcM8j7bI+AkXVA8V4w3hdSYP
- TfhVv4Thmakg==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2020 06:14:40 -0700
+IronPort-SDR: TKFYOvKGsPPJLJGAFSLHJ5T/6lY51BWrV/6YwTXp7uUmO8fJN+L3BImCkJkC7GOz8cm3WxAab5
+ nb0zSz4dLFVA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
-   d="scan'208";a="508871208"
+   d="scan'208";a="508871209"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Sep 2020 06:14:37 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 18 Sep 2020 06:14:38 -0700
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
 Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 08/10] xhci: Tune interrupt blocking for isochronous transfers
-Date:   Fri, 18 Sep 2020 16:17:50 +0300
-Message-Id: <20200918131752.16488-9-mathias.nyman@linux.intel.com>
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 09/10] xhci: don't create endpoint debugfs entry before ring buffer is set.
+Date:   Fri, 18 Sep 2020 16:17:51 +0300
+Message-Id: <20200918131752.16488-10-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200918131752.16488-1-mathias.nyman@linux.intel.com>
 References: <20200918131752.16488-1-mathias.nyman@linux.intel.com>
@@ -41,71 +42,43 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-controllers with XHCI_AVOID_BEI quirk cause too frequent interrupts
-and affect power management.
+Make sure xHC completes the configure endpoint command and xhci driver
+sets the ring pointers correctly before we create the user readable
+debugfs file.
 
-To avoid interrupting on every isochronous interval the BEI (Block
-Event Interrupt) flag is set for all except the last Isoch TRB in a URB.
-This lead to event ring filling up in case several isoc URB were
-queued and cancelled rapidly, which some controllers didn't
-handle well, and thus the XHCI_AVOID_BEI quirk was introduced.
-see commit 227a4fd801c8 ("usb: xhci: apply XHCI_AVOID_BEI quirk to all
-Intel xHCI controllers")
+In theory there was a small gap where a user could have read the
+debugfs file and cause a NULL pointer dereference error as ring
+pointer was not yet set, in practise we want this change to simplify
+the upcoming streams debugfs support.
 
-With the XHCI_AVOID_BEI quirk each Isoch TRB will trigger an interrupt.
-This can cause up to 8000 interrupts per second for isochronous transfers
-with HD USB3 cameras, affecting power saving.
-
-The event ring fits 256 events, instead of interrupting on every
-isochronous TRB if XHCI_AVOID_BEI is set we make sure at least every
-8th Isochronous TRB asserts an interrupt, clearing the event ring.
-
+Fixes: 02b6fdc2a153 ("usb: xhci: Add debugfs interface for xHCI driver")
+Cc: stable@vger.kernel.org #v4.19+
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-ring.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+ drivers/usb/host/xhci.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index a741a38a4c69..167dae117f73 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -3736,6 +3736,24 @@ static int xhci_get_isoc_frame_id(struct xhci_hcd *xhci,
- 	return start_frame;
- }
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 4cfb95104c26..e88f4f953995 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1918,8 +1918,6 @@ static int xhci_add_endpoint(struct usb_hcd *hcd, struct usb_device *udev,
+ 	ep_ctx = xhci_get_ep_ctx(xhci, virt_dev->in_ctx, ep_index);
+ 	trace_xhci_add_endpoint(ep_ctx);
  
-+/* Check if we should generate event interrupt for a TD in an isoc URB */
-+static bool trb_block_event_intr(struct xhci_hcd *xhci, int num_tds, int i)
-+{
-+	if (xhci->hci_version < 0x100)
-+		return false;
-+	/* always generate an event interrupt for the last TD */
-+	if (i == num_tds - 1)
-+		return false;
-+	/*
-+	 * If AVOID_BEI is set the host handles full event rings poorly,
-+	 * generate an event at least every 8th TD to clear the event ring
-+	 */
-+	if (i && xhci->quirks & XHCI_AVOID_BEI)
-+		return !!(i % 8);
-+
-+	return true;
-+}
-+
- /* This is for isoc transfer */
- static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 		struct urb *urb, int slot_id, unsigned int ep_index)
-@@ -3843,10 +3861,7 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 				more_trbs_coming = false;
- 				td->last_trb = ep_ring->enqueue;
- 				field |= TRB_IOC;
--				/* set BEI, except for the last TD */
--				if (xhci->hci_version >= 0x100 &&
--				    !(xhci->quirks & XHCI_AVOID_BEI) &&
--				    i < num_tds - 1)
-+				if (trb_block_event_intr(xhci, num_tds, i))
- 					field |= TRB_BEI;
- 			}
- 			/* Calculate TRB length */
+-	xhci_debugfs_create_endpoint(xhci, virt_dev, ep_index);
+-
+ 	xhci_dbg(xhci, "add ep 0x%x, slot id %d, new drop flags = %#x, new add flags = %#x\n",
+ 			(unsigned int) ep->desc.bEndpointAddress,
+ 			udev->slot_id,
+@@ -2952,6 +2950,7 @@ static int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+ 		xhci_check_bw_drop_ep_streams(xhci, virt_dev, i);
+ 		virt_dev->eps[i].ring = virt_dev->eps[i].new_ring;
+ 		virt_dev->eps[i].new_ring = NULL;
++		xhci_debugfs_create_endpoint(xhci, virt_dev, i);
+ 	}
+ command_cleanup:
+ 	kfree(command->completion);
 -- 
 2.17.1
 
