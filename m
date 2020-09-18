@@ -2,99 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CA526F77B
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 09:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB4C26F82F
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 10:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726900AbgIRHxk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Sep 2020 03:53:40 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45857 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726646AbgIRHxk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Sep 2020 03:53:40 -0400
-Received: by mail-lj1-f194.google.com with SMTP id c2so4269729ljj.12;
-        Fri, 18 Sep 2020 00:53:38 -0700 (PDT)
+        id S1726202AbgIRIaQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Sep 2020 04:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725874AbgIRIaQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Sep 2020 04:30:16 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111E5C06174A
+        for <linux-usb@vger.kernel.org>; Fri, 18 Sep 2020 01:30:16 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id x14so4696469wrl.12
+        for <linux-usb@vger.kernel.org>; Fri, 18 Sep 2020 01:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:to:cc:subject:references:date:in-reply-to
+         :user-agent:mime-version;
+        bh=q/+K2B9QmnMKilu9ZMqvKB2311H2cHEoDw9nAY8V4SM=;
+        b=MRYsieR7vOKP/Me0/wfTZdvztrgBvUYcbtpp9p1KC/i14WUjoe8uhuajAaTVg7Dl9i
+         W7onws58MPteMovE4HABfXM7wKCrzXiZJsWu6r/MjtQMX/vGGA4SiocnlmJHc/UTzvps
+         6WuUAYTC2/QWM7dgzIrwFi5P4yuE53+A5Xj/k8QT7QMGKuPctMWzauEPzIUeLZeswQm3
+         Tx3uGJttSZPWf/6H1Hr2NQCPd7Ngy2MY/zf6XGmblx5/gTpy0ajxeYH+EpBgsyS3xNBT
+         6Nu3jSTnA23JaXLkUYUb/3ktSj17ueLwuBbYNRaCMp/xVSt8dRN+MFQu4ZK0TDzrq1JP
+         RkRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GyOHKL1/jyD90zbgDyT56Y9yMNaAOcbKzuPFJ2ymZ/M=;
-        b=AXy+vQUTfSEPcbuNU68Kz6GyzLQAHahdF37DMbWFmbQzifMi7SQu6CYoAZuKvzdMvm
-         W5lLA2+kmXWO2hdWdyL4w3+RsLK+Pi7ndEIswlqxEA5Jfyr0ZK3EBZ5UAmw21C8JSf0X
-         nAX+2ZT6m2KDGCYXQqS8wF0jKC2nq5fRD14wO54hr1B+c0ITPdVWs7U/0H9+NQMOt5UD
-         eYuCcv1QYyr2bFAwf0adpybLM2MHs58xE0+NRb/vj57vZBVCZeQfT/MXYZ/EMCYmxJBc
-         8pPlROytXNVmNCaI5MAdpCRrmokvXW4w8RCialg2gL5yD9xSx5vP6dAFikYFLE9jWJ4q
-         o2kw==
-X-Gm-Message-State: AOAM531+UyI9VvKP3edtsBXa171HtjMc7mMROR3fZUjX1A2jdGu8Ft2o
-        f3SZGmt0Wdc6lrwFlPiqtHpZvPg4tyM=
-X-Google-Smtp-Source: ABdhPJyFnEapePUeKcYZkPJpfZwutD7tNn9yHm6yz7nMDkc/xACMKQoUncnwG/o2QcVABiAddQ5BhA==
-X-Received: by 2002:a05:651c:327:: with SMTP id b7mr10808141ljp.140.1600415617830;
-        Fri, 18 Sep 2020 00:53:37 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id u11sm435025ljh.17.2020.09.18.00.53.36
+        h=x-gm-message-state:message-id:from:to:cc:subject:references:date
+         :in-reply-to:user-agent:mime-version;
+        bh=q/+K2B9QmnMKilu9ZMqvKB2311H2cHEoDw9nAY8V4SM=;
+        b=raT2EoY8BtkdHO4Lxu5aEW5e1v9J7Jg5wV0Q9nJtMdWPg24O9xZx+wo/GvWpkaoiQO
+         okU76QvOwkZ8RWXuZOVZWYjcNMuYIL0A3hf7DK6E1dqJN+0cBO4NcLAbKK+R35yu/R+L
+         eLIRqGd9gyC7/Tz+XEu8nxgmqNLL2YdPBRDEJctlA7D98cHbgTyy7TXO+PL9CQfJNdFJ
+         g8boQKr2JA4xNIFD/rFFMb7AvgKW98GToISC5ZB2nOs74D1vL90bvwPZ3YBnqkhAFnkd
+         eENRe2+yJz0EpDw8hw45FdPfyCVEiCZgiAlvPFRgAqPrebb54Y4rhbxKbzxtC0NlHeSU
+         78rQ==
+X-Gm-Message-State: AOAM530oum3xQzlgLyqCfgdmA2o9z6sCGutKsDJQzm76TDd84dTQULXw
+        Eqlc0PXui688fNTOxycFXaiOj85KUM4JJw==
+X-Google-Smtp-Source: ABdhPJxPdx7AOY0Daj+14XUFmX6hjXSRSDDkdP3zBnJMNDWALktw+q1zTvyTJ6ISgh6SQNeO815bwQ==
+X-Received: by 2002:adf:91e1:: with SMTP id 88mr35931137wri.305.1600417814590;
+        Fri, 18 Sep 2020 01:30:14 -0700 (PDT)
+Received: from daniel-ThinkPad-X230 (lns-bzn-35-82-250-215-35.adsl.proxad.net. [82.250.215.35])
+        by smtp.gmail.com with ESMTPSA id i11sm3966769wre.32.2020.09.18.01.30.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2020 00:53:36 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kJBD2-00077J-HH; Fri, 18 Sep 2020 09:53:32 +0200
-Date:   Fri, 18 Sep 2020 09:53:32 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     William Sung <william.sung@advantech.com.tw>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AceLan Kao <acelan.kao@canonical.com>,
-        Campion Kang <campion.kang@advantech.com.tw>
-Subject: Re: [PATCH v2] usb: serial: option: Fix the lackage for Quectel EG95
- LTE modem support
-Message-ID: <20200918075332.GP24441@localhost>
-References: <20200902110301.21936-1-william.sung@advantech.com.tw>
+        Fri, 18 Sep 2020 01:30:13 -0700 (PDT)
+Message-ID: <5f647015.1c69fb81.41200.93cc@mx.google.com>
+X-Google-Original-Message-ID: <87imcbqygc.fsf@gmail.com>>
+From:   <f1rmb.daniel@gmail.com> (<Daniel Caujolle-Bert>)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "\<Daniel Caujolle-Bert\>" <f1rmb.daniel@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb-serial-simple: Add Whistler radio scanners TRX serie support.
+References: <5f4ca4f8.1c69fb81.a4487.0f5f@mx.google.com>
+        <20200918074519.GN24441@localhost>
+Date:   Fri, 18 Sep 2020 10:30:11 +0200
+In-Reply-To: <20200918074519.GN24441@localhost> (Johan Hovold's message of
+        "Fri, 18 Sep 2020 09:45:19 +0200")
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200902110301.21936-1-william.sung@advantech.com.tw>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 07:03:01PM +0800, William Sung wrote:
-> * Add reset-resume callback for resetting USB devices after MCU exits
-> from suspend/sleep mode.
+Hi Johan,
 
-Looks like both your patches try to do this. Again, one logical change
-per patch, please.
 
-> * Add zero packet support
-> 
-> Fixes: da6902e5b6db ("USB: serial: option: add Quectel EG95 LTE modem"
-> 
-> Signed-off-by: William Sung <william.sung@advantech.com.tw>
-> ---
-> 
->  v2: * Add ZLP support
->      * Remove redundant code for reserving interface number 4
-> 
->  drivers/usb/serial/option.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 89b3192af326..ba4dc67dab2f 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -1099,7 +1099,7 @@ static const struct usb_device_id option_ids[] = {
->  	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC25),
->  	  .driver_info = RSVD(4) },
->  	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95),
-> -	  .driver_info = RSVD(4) },
-> +	  .driver_info = RSVD(4) | ZLP },
->  	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG96),
->  	  .driver_info = RSVD(4) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0xff, 0xff),
-> @@ -2069,6 +2069,7 @@ static struct usb_serial_driver option_1port_device = {
->  #ifdef CONFIG_PM
->  	.suspend           = usb_wwan_suspend,
->  	.resume            = usb_wwan_resume,
-> +	.reset_resume      = usb_wwan_resume,
->  #endif
->  };
+   I will compile right now and test today.
 
-Johan
+
+Cheers.
+---
+Daniel
