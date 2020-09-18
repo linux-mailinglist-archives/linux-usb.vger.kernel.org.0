@@ -2,113 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CC826F74D
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 09:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3673226F763
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 09:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726751AbgIRHr1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Sep 2020 03:47:27 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:35481 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726185AbgIRHr1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Sep 2020 03:47:27 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0AA355C031F;
-        Fri, 18 Sep 2020 03:47:26 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 18 Sep 2020 03:47:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:content-transfer-encoding:in-reply-to; s=fm1; bh=7
-        D2NCdie8lSKhVHC3+ynZJEVlEwnVVKdauhjkeHig+g=; b=RoJB7GWWlVnDkYt36
-        NJmPkDouccbfrWbx9Y1cLUqxyF0NrzAhNaOJVCKGFI7De2bffwGuAQsgQWlv2gOG
-        50T/6+256/HXYjFy5G9Vzs61LJIP5sr/CPustcLOFji4cb391WsKJTWMvQYYZrSV
-        Z4TYzjcL5slnvfRGOEV8SWb7GDcSUPiAImn11ok1N9Mn+Vr1qWP8kZwCuwd/42nM
-        6brMNSw4mgOckWDClYRgh8bT5WpO+fBb3tGGnTeOp1KPm9Fu471EXv8wUaVCIsLl
-        NMvvLn7jTU4JxRnDaqqcYp/h+/C6iN76hK0IbZG1FQPWlkYcvvO+xr/8bL9Cq/8j
-        uGBTg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=7D2NCdie8lSKhVHC3+ynZJEVlEwnVVKdauhjkeHig
-        +g=; b=syEKekqXl/tswfOEY1jHLeE4jKpPZApC9DS3AJUmWwUgvrJ8kxsuyJPxQ
-        F459adMMg9+22ghoUJpmalgfChDgl8jC2xyvN3Tu9hEcWZEYTuLvU2kWD86H0HnA
-        JK4Lzrn1uuqiOP6Nb1dNtJkWkdMiC5PbCZ0WhgVN1zU2qabOXC4VQcvQmTMqVG7b
-        N/4s8ccPFATWEYX+q5/LmX/jFtvDdcMWkPH/yW+hMoTMDTdRPDDLiOsWVH47QGFo
-        NW8XKM4WHoGxz2plgmBIW4gn9A7+uFMUlF4vuEG2ZYukcEDSU88SQr6pBixYqdCS
-        PRJbQSdvFi04zrgbURx+jLDjFNixg==
-X-ME-Sender: <xms:DWZkX1XTci81h75NQDlsVlC-mJ6kPaJgl9jIf7GAuDzMuoEeXFqZ0g>
-    <xme:DWZkX1l1FC41_etlN1y57eiknaKsvSKBBb9O_bXXcA-QPIJvOS-zj6WjbRsKjTRSB
-    5YSJy4sg8I9tA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtdehgdduvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtugfgjgesthekredttddtjeenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepueehke
-    ehlefffeeiudetfeekjeffvdeuheejjeffheeludfgteekvdelkeduuddvnecukfhppeek
-    fedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:DWZkXxZFkFMyumDgWbxHeqbAhTlR6rI9qqOhypgX9RR_wLoqwLDwRQ>
-    <xmx:DWZkX4WaqjvRUFGHpsiz7cJizK72BFiy25zEUe2O2NPWyr2hOUPlWQ>
-    <xmx:DWZkX_kMV7PPIzxquJFRgF_roGYPlVx79ZOz9Uc_Oiv0s1rTyZkqYg>
-    <xmx:DmZkX4CIkfsnfJyfjiCo5X6oJOo388mF5npPA_JwlMEUPh8VbZwVBg>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 3E3FF3064610;
-        Fri, 18 Sep 2020 03:47:25 -0400 (EDT)
-Date:   Fri, 18 Sep 2020 09:47:54 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Zheng Yongjun <zhengyongjun3@huawei.com>
-Cc:     davem@davemloft.net, UNGLinuxDriver@microchip.com, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] rapidio: Remove set but not used variable 'rc'
-Message-ID: <20200918074754.GA979569@kroah.com>
-References: <20200918071844.19772-1-zhengyongjun3@huawei.com>
+        id S1726810AbgIRHwI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Sep 2020 03:52:08 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:38081 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726738AbgIRHwH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Sep 2020 03:52:07 -0400
+Received: by mail-lf1-f65.google.com with SMTP id y11so5113882lfl.5;
+        Fri, 18 Sep 2020 00:52:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JIGXHwKfHfCJXixJmE7+Do7NXGtiGDBK+l84obZPw4Y=;
+        b=c5Q7V1J7jpxMDo2CT62lRouTNkUBIb2I/cmDSPblrdmRy8TDTcpCALXYfkGd53XLzC
+         5/iw21xj0BNR230JRPWq2I1qFXgiiUo2L4PKeoKKqNqrrTaMYF+2OinREU+K2q/r3ZpF
+         GjuJpihe/qKKo1V8Z4KEiVyMe7+Gg0raxXWyWg4bkbyl2HCE0SX8hqiZoVzMTFXNTxn2
+         1Tj68HZzPsahhpJDxqwMJZycR5gPo3mKVUdywXa7SvLI5gs9iK+hwnt4zhfePr2GjLXl
+         i0wB04tfpNgpkFRFFB2Pvx/fub0O+M1xK/ObOoUzIzpicJk+ojt/45S4t8LKLAs8UoHo
+         UGTw==
+X-Gm-Message-State: AOAM532Hp2LF0CmzYXbgrOo8a55tB83UYlNBwROr7txehJljPwUZQ0re
+        qG91HqHzwAuG5U4SDZZtKb8=
+X-Google-Smtp-Source: ABdhPJwJCsAoQ3MFjL1Z0xIWLLw9TkqspVnlHNYY63eULIqs9sMIrBry02mqFMLggU+exItWxYIh+g==
+X-Received: by 2002:a05:6512:32b1:: with SMTP id q17mr11767958lfe.329.1600415525972;
+        Fri, 18 Sep 2020 00:52:05 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id q11sm431542lfc.309.2020.09.18.00.52.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2020 00:52:05 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kJBBY-00076W-Sd; Fri, 18 Sep 2020 09:52:00 +0200
+Date:   Fri, 18 Sep 2020 09:52:00 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     William Sung <william.sung@advantech.com.tw>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Campion Kang <campion.kang@advantech.com.tw>
+Subject: Re: [PATCH 1/2] usb: serial: option: Fix the lackage for Quectel
+ EG95 LTE modem support
+Message-ID: <20200918075200.GO24441@localhost>
+References: <20200901050022.3319-1-william.sung@advantech.com.tw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200918071844.19772-1-zhengyongjun3@huawei.com>
+In-Reply-To: <20200901050022.3319-1-william.sung@advantech.com.tw>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 18, 2020 at 03:18:44PM +0800, Zheng Yongjun wrote:
-> Fixes gcc '-Wunused-but-set-variable' warning:
+On Tue, Sep 01, 2020 at 01:00:21PM +0800, William Sung wrote:
+> * Add reset-resume callback for resetting USB devices after MCU exits
+> from suspend/sleep mode.
+
+Please split this in it's own patch and argue for why it's needed.
+
+> * Because Quectel EG95 uses USB interface 4 as a USB network device, so
+> return from option_startup() to prevent being used as a USB serial
+> device.
+>
+> Fixes: da6902e5b6db ("USB: serial: option: add Quectel EG95 LTE modem"
 > 
-> drivers/rapidio/rio_cm.c: In function rio_txcq_handler:
-> drivers/rapidio/rio_cm.c:673:7: warning: variable ‘rc’ set but not used [-Wunused-but-set-variable]
-> 
-> rc is never used, so remove it.
-> 
-> Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+> Signed-off-by: William Sung <william.sung@advantech.com.tw>
 > ---
->  drivers/rapidio/rio_cm.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  drivers/usb/serial/option.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/rapidio/rio_cm.c b/drivers/rapidio/rio_cm.c
-> index 50ec53d67a4c..545693bd86a3 100644
-> --- a/drivers/rapidio/rio_cm.c
-> +++ b/drivers/rapidio/rio_cm.c
-> @@ -670,12 +670,11 @@ static void rio_txcq_handler(struct cm_dev *cm, int slot)
->  	 */
->  	if (!list_empty(&cm->tx_reqs) && (cm->tx_cnt < RIOCM_TX_RING_SIZE)) {
->  		struct tx_req *req, *_req;
-> -		int rc;
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 89b3192af326..9de8aec47e5e 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -2069,6 +2069,7 @@ static struct usb_serial_driver option_1port_device = {
+>  #ifdef CONFIG_PM
+>  	.suspend           = usb_wwan_suspend,
+>  	.resume            = usb_wwan_resume,
+> +	.reset_resume      = usb_wwan_resume,
+>  #endif
+>  };
 >  
->  		list_for_each_entry_safe(req, _req, &cm->tx_reqs, node) {
->  			list_del(&req->node);
->  			cm->tx_buf[cm->tx_slot] = req->buffer;
-> -			rc = rio_add_outb_message(cm->mport, req->rdev, cmbox,
-> +			rio_add_outb_message(cm->mport, req->rdev, cmbox,
->  						  req->buffer, req->len);
+> @@ -2104,6 +2105,11 @@ static int option_probe(struct usb_serial *serial,
+>  	if (device_flags & NUMEP2 && iface_desc->bNumEndpoints != 2)
+>  		return -ENODEV;
+>  
+> +	/* Quectel EC25 & EC21 & EG91 & EG95 ... interface 4 can be used as USB network device */
+> +	if (serial->dev->descriptor.idVendor == cpu_to_le16(0x2c7c) &&
+> +		serial->interface->cur_altsetting->desc.bInterfaceNumber >= 4)
+> +		return -ENODEV;
 
-That's not the only place in this file where this call is made, and the
-return value is ignored.
+And please use the normal mechanisms for blacklisting interfaces (e.g.
+the RSVD() macro).
 
-It should be fixed up to properly check that return value, not ignore
-it.  Can you do that instead for the places this is called?
+> +
+>  	/* Store the device flags so we can use them during attach. */
+>  	usb_set_serial_data(serial, (void *)device_flags);
 
-thanks,
+Also make sure your patches have distinct and descriptive summaries
+(Subject lines).
 
-greg k-h
+Johan
