@@ -2,340 +2,223 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F50626EA7C
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 03:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 176FE26EAC6
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 03:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726154AbgIRBa0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Sep 2020 21:30:26 -0400
-Received: from mail-eopbgr130077.outbound.protection.outlook.com ([40.107.13.77]:54732
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        id S1726104AbgIRB6J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Sep 2020 21:58:09 -0400
+Received: from mail-eopbgr70043.outbound.protection.outlook.com ([40.107.7.43]:4065
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726007AbgIRBa0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Sep 2020 21:30:26 -0400
+        id S1725886AbgIRB6J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Sep 2020 21:58:09 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZYd7scwmGQll05uA8ApqasSgS6gHveeaUIoCYGYM8n9gfXGzjMgktpw+ZEmpED7DGgYAJuKGRtnrzP3I0AWJNz+f724V53BSMx92yds/3nXkqEquQ7+iJ8N2EwxdyC2QvpIFWZt2Diwy+VA0JOzqLf8cuF32bAMlkz/ShFcPRZE16vmQ42LgnbU5XE3AP3k+knqJVKusW6WH6gDC3sTRX7qISRFNKgExZTYLyo3FbHtf8vF1VrSBUxTaZMnPTxM5CsMrfCUDuIkRPXHr7D9i3ses7+cGufpyrDgbDRzly0km0S940bh4gUDNWqiXWGw3zod6tY9xB14TTxAlVxroPA==
+ b=c745mIQl3cbUJFNr2stRu0asgbbKRWG1AxatDhxK28DRbeGMdIt0v5c3daVkIisY4htRw0DhhTVE7NxOnZHeVLL0PAdOcrucAka2gBIyZsTjROwN5k6HBHb0IhrxyIXMM0ajqL5lxb16Mcf6KEkZ8qSt7xxO6is8pvwd62QW0CK0l6B18aa5xSJ8I2NP87a4XnFbUC3knhJEK9yrMo1t9Vh55952WOX/q2zpqrAWkhTsq0uYpLFfol9+HD4Y9vjuHYOtocLJnEO3F/gxU99zCeH3Kx44hF26+IQB04mrns/dfXyl3A27fZ44SJIf7KXwwPN93/rTLAMVh/WoFOCnUA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3eaCVO9dtgRH2ul06UTUSoFMMm+05fRrE6tJ3JrkngM=;
- b=mGqGZrwJI8YKW1b4s99txduoNSB354bPJpFKBhbeinr/iw5nrmKLcMH4uafupPX8m24QoGBG+h3pp7IhJDftGsRayAywgVEsUirgYCtJYFSj7BHZO1nzqmdf87ekLxfo9IKR+xNzh6MFTzHL27KSXE0Jdg/PpTxGOjw5Sdov7vtsew7LWxYgx9uT5QlfrJ/WwZxeb14sd9x2bZhx9U7aeC+VcrcO/4BuFqXoXtcowMjVXOdKlLeDAzV8xJL/D5vzU1raPTnvAnWvJlfLXY7qE358UYyBmS1sK77tnPcFaFxMShznkwFk/s8vJwFe7/jkVLXtWLn3PZsfp3FatEoQug==
+ bh=oLmXi1/lfA5L/Rdi8rQkrqT7LJ/6QjOSi+jO7IsYxpc=;
+ b=TxVs1lp1ESYEVcmKesR+VYPjLXNLp9G+6NBTcJqVV4hxu9rDi8h8WGni+u6ByjhCuNqmB27rczsfJBHPm4ves+4ItxZ7+KUUipLZ6PTSjhsVH1JJv+i/7i9/hQS5XduEKN02uuwD170Tm+YoqnK7BytKP5dK1BxgWKDlwgQJGfaDcIKmbBc7Uk0bLu/oRhtdJHV6wm8lIogFYjm9zR08l3kiy8GK42GVd/jQcxyP00lLXYAPxlHdLWbcPAm5SimfX7bs8YPZYVrIemru0q/bw6V7LeHfMR/pE6ypCh6cBOOUaGvHVY62tq0AGyMr394v5NgG7SZoUr7pT6WNpWhUow==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3eaCVO9dtgRH2ul06UTUSoFMMm+05fRrE6tJ3JrkngM=;
- b=LtUmyfVYyl9d7V6E4+ZYfVvk8Xuc5f9f5JGkJZpndy0/vtlVhWjYY+SI1T1p5cZXQQpJQrkcxwW+N/oNztz7oOKLU/q2rhxEYnwgokvtIF7/7NWvfFvQYJpLydBVnrgxNf3iGhl1q8xhwMFEiYOp7kjm+CBMnMIjZaZotmEW0Vs=
+ bh=oLmXi1/lfA5L/Rdi8rQkrqT7LJ/6QjOSi+jO7IsYxpc=;
+ b=eZz6bo5oji9J3KWfjT4kqW3Y36jLs77j21AqJnbdyTOKFsXCyjipKDPs2ZsCmc+BYOsy6CVv4eb0fSFLY7IB3fpio/KQZ8qnf8c0L8DuZ8vAPNxaC0wvDb8Cj88Yj9PCnB+R6UE/vA4s85UDbDbuIXeqnXBFs5syAappVWBF55w=
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB6437.eurprd04.prod.outlook.com (2603:10a6:20b:f3::28) with
+ by AM6PR0402MB3543.eurprd04.prod.outlook.com (2603:10a6:209:6::26) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Fri, 18 Sep
- 2020 01:30:20 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.13; Fri, 18 Sep
+ 2020 01:58:04 +0000
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3391.013; Fri, 18 Sep 2020
- 01:30:20 +0000
+ 01:58:03 +0000
 From:   Peter Chen <peter.chen@nxp.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
+To:     Pawel Laszczak <pawell@cadence.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "jpawar@cadence.com" <jpawar@cadence.com>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "sudhakar.panneerselvam@oracle.com" 
+        <sudhakar.panneerselvam@oracle.com>,
+        "gustavoars@kernel.org" <gustavoars@kernel.org>,
+        "Thinh.Nguyen@synopsys.com" <Thinh.Nguyen@synopsys.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v2 2/2] USB: misc: Add onboard_usb_hub driver
-Thread-Topic: [PATCH v2 2/2] USB: misc: Add onboard_usb_hub driver
-Thread-Index: AQHWjSLcz65MIHr9l0mmL9XOptmWpqltnA+A
-Date:   Fri, 18 Sep 2020 01:30:20 +0000
-Message-ID: <20200918012935.GA3938@b29397-desktop>
-References: <20200917114600.v2.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200917114600.v2.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
-In-Reply-To: <20200917114600.v2.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kurahul@cadence.com" <kurahul@cadence.com>
+Subject: RE: [PATCH] usb: gadget: config_ep_by_speed_and_alt instead
+ config_ep_by_speed.
+Thread-Topic: [PATCH] usb: gadget: config_ep_by_speed_and_alt instead
+ config_ep_by_speed.
+Thread-Index: AQHWjMtdf7F+AIzBpUKgYQ5VAttJaqltohZA
+Date:   Fri, 18 Sep 2020 01:58:03 +0000
+Message-ID: <AM7PR04MB7157A29711B6889583A190698B3F0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+References: <20200917075857.27803-1-pawell@cadence.com>
+In-Reply-To: <20200917075857.27803-1-pawell@cadence.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: chromium.org; dkim=none (message not signed)
- header.d=none;chromium.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
+authentication-results: cadence.com; dkim=none (message not signed)
+ header.d=none;cadence.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [180.164.158.209]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 23e6a690-4a5d-47f2-41d7-08d85b72685b
-x-ms-traffictypediagnostic: AM6PR04MB6437:
-x-microsoft-antispam-prvs: <AM6PR04MB6437C374310FF1319ACB61498B3F0@AM6PR04MB6437.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2449;
+x-ms-office365-filtering-correlation-id: 8a3cf258-e45c-4cc0-8810-08d85b7647ab
+x-ms-traffictypediagnostic: AM6PR0402MB3543:
+x-microsoft-antispam-prvs: <AM6PR0402MB354393B2DECCCD699BFB81A68B3F0@AM6PR0402MB3543.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ybfc3YhtzTF+iIClvcqYFRBfcurU1p3omlL99riB7HGDU2kIDz7nI12v4OSseurcptw8IgyrkwOWgmg7v2SK0AhPImo8B3X6aOVks4fRK4AGk0f3HpaBu5ZFLYwtNMZStTSrGX8TtPoexgOwF1jLVzbxMnlKoVwr+fhAM3fiyc6niDg1yw977eVq7PO5mrBxYs6jBFU40+nsEI/z2kTAQZB9i/j3SKR4oaFmfAWRtSIwsujcDQUQAslEm+2aCSsyFTHN9Klmpx41tf6i3J6ykvq5715mSwHc883/XRAacv+VHp4I43LUN5NsS4wzJLpjjCasFuByEFWixMjyosVFgQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(396003)(346002)(366004)(376002)(39860400002)(136003)(316002)(44832011)(9686003)(6512007)(6506007)(33656002)(53546011)(66476007)(86362001)(91956017)(64756008)(66446008)(26005)(66946007)(8936002)(66556008)(5660300002)(33716001)(76116006)(71200400001)(4326008)(6916009)(2906002)(6486002)(186003)(83380400001)(8676002)(54906003)(7416002)(1076003)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: Jy3nb0DS0D54p6qk9soTOsmh8flSq+Y/3Ct1v/hzW47Kdfvmf6VlhWWizU/05c+JcFVau1EtJsq7szEzYaTiykeCLnfHTw+wjolfETIjZpP/MDa/01VaM6rf38weWzsD48XOvvEW9vUCviJwhcOJkcuJr1uGqbXEe5cnait/Aj59RRk+F5vblGASyICpwCG0wK84ZnjKnDqxxzSzSm45iDg5q/mPx1hM6wWioo9TXFRCPgGPESbBoT+bkqq5Q+kCM0wWMYLiubKxlbEU9039l/0tdGI40SQON2VPOuihz811UPZfweznyGlf3hPREEIkTGYaCmDpfkiCN5/rR2K8ydue4ofav11oj//wtl56uHP5CjdBbg+5n3rUzwKXBxs2t/QeDMxlQV6snzNGKcINfY4Z952rqJJ4WNFekeC/iAxUhtBup4VHQDQl0iCBQkW7bEVCd8wplnBGHrG3vFOxam5Q0YjgTC7c69sxGbbzbGlUc9wjvppoC3fKD9JIpIsYjNyuH91yoNaGt2xpOtDI/haomcHGGugA38l7wpnxZ1JqRm5iiA7Kep4x8G5Cmp1Qph4V/6CrgNvYnBKHmt4nFj6TW04oFoOs1ChksOqNaHMOE8A8u3/4Rnpvypkzl0BcRfubh+CLI+gKffuXaUMfMQ==
+x-microsoft-antispam-message-info: vOFbroLHGnyhKTQ/3osci/y0uassDI7pBQJM1F4jDYqAVLe3p/OlFTo6CB4Nb60AOJJ0OWto7roxL8mamcTKEZsKHpnFhorg+xWi65mt0vd3dLfHzrWalk7WXquYj8w3sraPMcvVY7Km7MmEWZR+NgCcuf1t6HYFxWC6yTI24KBBvC/Uvw/sEp07TjNACbcvTwsn2WB4dhKpNnXtAeDejPBy3hFAl5v6OMrz6G3XIgqY8xS3WVbPzJEkdRMWmgnYpc2YCrdmLAeAxX2HBC8fBs55zaAUE3ZfnfIjSQVm+8MSFR6pT4cyt8FiUZb3EdqjnjSsbtVyr9hGV3AYj3wY/WZxHfk8PxkaOZff34tYvWSoeoE1JMOW5iDmfBg//8l1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(396003)(366004)(346002)(376002)(186003)(71200400001)(9686003)(4326008)(66476007)(55016002)(7696005)(66946007)(7416002)(478600001)(2906002)(66556008)(64756008)(76116006)(8936002)(316002)(26005)(66446008)(83380400001)(44832011)(54906003)(110136005)(86362001)(5660300002)(6506007)(33656002)(8676002)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: +Zj0XDm/DQ4Jot3ueIT3jNNC2M4jGgcPKLxH9qhJF1ax4Nw7mTh1m2n1fuTA3hQPnyIZpK5WJUN802KrSG3h4L8U2GyOhMlvzA9ErRWSvfL50cP0eLS38ZeB3OVNgKysGP5Jdvd+zNdD48le72iOnumH3KozqoT7Ua4e5RjDbNnWU5D59269XTZ6+uJyDW8GYaZ/iJ2vcs9plUNIEoaYjJxSK5gRpNY1u4/FR8NnJXjYZf4GgeE0En205JZjr4zxBbIiZP41elJZBUhOPWfGtR+6Il1Y7JUNw7HOPMj6oPlfwzO49GlcN8pCtUoWbKJbHrVMf47FNo05VnqnlVlVXptEvAjW5FweBJ7gUvUWzPD8lc7Jq1XdE2PUiaWZ7rPhcHLoP4RVtDck5yf5sSsl2CKx5oMTcX/PUwH8mZPZsn/9GyOp0BQeE4prKdeQu/vdByWd5/+8BUjG/En42q8rtj5q1hpHgBieLx5Ya5jXxIHCbDXPRrR/boedWa/mgbF3gsqPLLD3PbRR0YX8KGbSJzk0aWVOAvxmwrNC11HHvQ6kCVj0L3hgq2k40tsZkenxyVW0qQDPC6rGOQs08uSoxnDVrFUV0tRIbjBE1BFQamW7tR3tH1Rx6pbhSEYfmU78sTNCsqhRpWTdqEo51O600Q==
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C0D665A162C5084D90063F62ED633206@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23e6a690-4a5d-47f2-41d7-08d85b72685b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Sep 2020 01:30:20.6313
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a3cf258-e45c-4cc0-8810-08d85b7647ab
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Sep 2020 01:58:03.8094
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MA5TnHos0iOHVLWMg6jU/IT19+w55ybyOQEsyPupJi0wzn/1cq9mz8aVqQhWyDeCMRqVnNa9IGJPYYa4UV9jiw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6437
+X-MS-Exchange-CrossTenant-userprincipalname: DMj5HW2vckRsHJy/8EMLDIvTmFIZObHVTWLv/Ti344TNybIFleQy/UTDM3A3WOzuiMP6nOZh08Oj4WnOk6rbzQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3543
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-09-17 11:46:22, Matthias Kaehlcke wrote:
-> The main issue this driver addresses is that a USB hub needs to be
-> powered before it can be discovered. For onboard hubs this is often
-> solved by supplying the hub with an 'always-on' regulator, which is
-> kind of a hack. Some onboard hubs may require further initialization
-> steps, like changing the state of a GPIO or enabling a clock, which
-> requires further hacks. This driver creates a platform device
-> representing the hub which performs the necessary initialization.
-> Currently it only supports switching on a single regulator, support
-> for multiple regulators or other actions can be added as needed.
-> Different initialization sequences can be supported based on the
-> compatible string.
+=20
+> Subject: [PATCH] usb: gadget: config_ep_by_speed_and_alt instead
+> config_ep_by_speed.
 >=20
-> Besides performing the initialization the driver can be configured
-> to power the hub off during system suspend. This can help to extend
-> battery life on battery powered devices which have no requirements
-> to keep the hub powered during suspend. The driver can also be
-> configured to leave the hub powered when a wakeup capable USB device
-> is connected when suspending, and power it off otherwise.
+
+Typo, you may indicate use config_ep_by_speed_and_alt instead of config_ep_=
+by_speed
+
+> This patch replace config_ep_by_speed with config_ep_by_speed_and_alt.
+> This change allows to select proper usb_ss_ep_comp_descriptor for each
+> stream capable endpoints.
 >=20
-> Technically the driver consists of two drivers, the platform driver
-> described above and a very thin USB driver that subclasses the
-> generic driver. The purpose of this driver is to provide the platform
-> driver with the USB devices corresponding to the hub(s) (a hub
-> controller may provide multiple 'logical' hubs, e.g. one to support
-> USB 2.0 and another for USB 3.x).
+> f_tcm function for SS use array of headers for both  BOT/UAS alternate
+> setting:
 >=20
-> Co-developed-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
-> Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+
+Delete space before "BOT/UAS"
+
+> static struct usb_descriptor_header *uasp_ss_function_desc[] =3D {
+>         (struct usb_descriptor_header *) &bot_intf_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_bi_desc,
+>         (struct usb_descriptor_header *) &bot_bi_ep_comp_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_bo_desc,
+>         (struct usb_descriptor_header *) &bot_bo_ep_comp_desc,
+>=20
+>         (struct usb_descriptor_header *) &uasp_intf_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_bi_desc,
+>         (struct usb_descriptor_header *) &uasp_bi_ep_comp_desc,
+>         (struct usb_descriptor_header *) &uasp_bi_pipe_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_bo_desc,
+>         (struct usb_descriptor_header *) &uasp_bo_ep_comp_desc,
+>         (struct usb_descriptor_header *) &uasp_bo_pipe_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_status_desc,
+>         (struct usb_descriptor_header *) &uasp_status_in_ep_comp_desc,
+>         (struct usb_descriptor_header *) &uasp_status_pipe_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_cmd_desc,
+>         (struct usb_descriptor_header *) &uasp_cmd_comp_desc,
+>         (struct usb_descriptor_header *) &uasp_cmd_pipe_desc,
+>         NULL,
+> };
+>=20
+> The first 5 descriptors are associated with BOT alternate setting, and ot=
+hers
+> are associated  with UAS.
+>=20
+
+delete space before "with UAS"
+
+After fixing above typo, you could add my:
+
+Reviewed-by: Peter Chen <peter.chen@nxp.com>
+
+Peter
+
+> During handling UAS alternate setting f_tcm driver invokes
+> config_ep_by_speed and this function sets incorrect companion endpoint
+> descriptor in usb_ep object.
+>=20
+> Instead setting ep->comp_desc to uasp_bi_ep_comp_desc function in this ca=
+se
+> set ep->comp_desc to bot_uasp_ss_bi_desc.
+>=20
+> And in result it uses the descriptor from BOT alternate setting instead U=
+AS.
+>=20
+> Finally, it causes that controller driver during enabling endpoints detec=
+t that
+> just enabled endpoint for bot.
+>=20
+> Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 > ---
+>  drivers/usb/gadget/function/f_tcm.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 >=20
-> Changes in v2:
-> - check wakeup enabled state of the USB controller instead of
->   using 'wakeup-source' property
-> - use sysfs attribute instead of DT property to determine if
->   the hub should be powered off at all during system suspend
-> - added missing brace in onboard_hub_suspend()
-> - updated commit message
-> - use pm_ptr for pm_ops as suggested by Alan
+> diff --git a/drivers/usb/gadget/function/f_tcm.c
+> b/drivers/usb/gadget/function/f_tcm.c
+> index 184165e27908..410fa89eae8f 100644
+> --- a/drivers/usb/gadget/function/f_tcm.c
+> +++ b/drivers/usb/gadget/function/f_tcm.c
+> @@ -392,12 +392,12 @@ static void bot_set_alt(struct f_uas *fu)
 >=20
-> Changes in v1:
-> - renamed the driver to 'onboard_usb_hub'
-> - single file for platform and USB driver
-> - USB hub devices register with the platform device
->   - the DT includes a phandle of the platform device
-> - the platform device now controls when power is turned off
-> - the USB driver became a very thin subclass of the generic USB
->   driver
-> - enabled autosuspend support
+>  	fu->flags =3D USBG_IS_BOT;
 >=20
->  drivers/usb/misc/Kconfig           |  15 ++
->  drivers/usb/misc/Makefile          |   1 +
->  drivers/usb/misc/onboard_usb_hub.c | 329 +++++++++++++++++++++++++++++
->  3 files changed, 345 insertions(+)
->  create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+> -	config_ep_by_speed(gadget, f, fu->ep_in);
+> +	config_ep_by_speed_and_alt(gadget, f, fu->ep_in, USB_G_ALT_INT_BBB);
+>  	ret =3D usb_ep_enable(fu->ep_in);
+>  	if (ret)
+>  		goto err_b_in;
 >=20
-> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> index 6818ea689cd9..e941244e24e5 100644
-> --- a/drivers/usb/misc/Kconfig
-> +++ b/drivers/usb/misc/Kconfig
-> @@ -275,3 +275,18 @@ config USB_CHAOSKEY
-> =20
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called chaoskey.
-> +
-> +config USB_ONBOARD_HUB
-> +	tristate "Onboard USB hub support"
+> -	config_ep_by_speed(gadget, f, fu->ep_out);
+> +	config_ep_by_speed_and_alt(gadget, f, fu->ep_out,
+> USB_G_ALT_INT_BBB);
+>  	ret =3D usb_ep_enable(fu->ep_out);
+>  	if (ret)
+>  		goto err_b_out;
+> @@ -852,21 +852,21 @@ static void uasp_set_alt(struct f_uas *fu)
+>  	if (gadget->speed >=3D USB_SPEED_SUPER)
+>  		fu->flags |=3D USBG_USE_STREAMS;
+>=20
+> -	config_ep_by_speed(gadget, f, fu->ep_in);
+> +	config_ep_by_speed_and_alt(gadget, f, fu->ep_in, USB_G_ALT_INT_UAS);
+>  	ret =3D usb_ep_enable(fu->ep_in);
+>  	if (ret)
+>  		goto err_b_in;
+>=20
+> -	config_ep_by_speed(gadget, f, fu->ep_out);
+> +	config_ep_by_speed_and_alt(gadget, f, fu->ep_out,
+> USB_G_ALT_INT_UAS);
+>  	ret =3D usb_ep_enable(fu->ep_out);
+>  	if (ret)
+>  		goto err_b_out;
+>=20
+> -	config_ep_by_speed(gadget, f, fu->ep_cmd);
+> +	config_ep_by_speed_and_alt(gadget, f, fu->ep_cmd,
+> USB_G_ALT_INT_UAS);
+>  	ret =3D usb_ep_enable(fu->ep_cmd);
+>  	if (ret)
+>  		goto err_cmd;
+> -	config_ep_by_speed(gadget, f, fu->ep_status);
+> +	config_ep_by_speed_and_alt(gadget, f, fu->ep_status,
+> +USB_G_ALT_INT_UAS);
+>  	ret =3D usb_ep_enable(fu->ep_status);
+>  	if (ret)
+>  		goto err_status;
+> --
+> 2.17.1
 
-On board HUB belongs to HUB, this driver is just for possible power and
-initialization requirements for HUB which is hard-wired on board. The
-configuration name USB_HUB_POWER_SUPPLY may more suitable, and at the
-menu and help, you could indicate it is special for HUBs which are
-hard-wired on board.
-
-> +static ssize_t power_off_in_suspend_show(struct device *dev, struct devi=
-ce_attribute *attr,
-> +			   char *buf)
-> +{
-> +	struct onboard_hub *hub =3D dev_get_drvdata(dev);
-> +
-> +	return sprintf(buf, "%d\n", hub->power_off_in_suspend);
-> +}
-> +
-> +static ssize_t power_off_in_suspend_store(struct device *dev, struct dev=
-ice_attribute *attr,
-> +			    const char *buf, size_t count)
-> +{
-> +	struct onboard_hub *hub =3D dev_get_drvdata(dev);
-> +	bool val;
-> +	int ret;
-> +
-> +	ret =3D strtobool(buf, &val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	hub->power_off_in_suspend =3D val;
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RW(power_off_in_suspend);
-> +
-> +static int onboard_hub_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev =3D &pdev->dev;
-> +	struct onboard_hub *hub;
-> +	int rc;
-> +
-> +	hub =3D devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
-> +	if (!hub)
-> +		return -ENOMEM;
-> +
-> +	hub->vdd =3D devm_regulator_get(dev, "vdd");
-> +	if (IS_ERR(hub->vdd))
-> +		return PTR_ERR(hub->vdd);
-> +
-> +	hub->dev =3D dev;
-> +	mutex_init(&hub->lock);
-> +	INIT_LIST_HEAD(&hub->udev_list);
-> +
-> +	dev_set_drvdata(dev, hub);
-> +
-> +	rc =3D sysfs_create_file(&dev->kobj, &dev_attr_power_off_in_suspend.att=
-r);
-> +	if (rc)
-> +		return rc;
-
-You could use dev_groups for sysfs entry management.
-
-> +/************************** USB driver **************************/
-> +
-> +#define VENDOR_ID_REALTEK	0x0bda
-> +
-> +static struct onboard_hub *_find_onboard_hub(struct device *dev)
-> +{
-> +	const phandle *ph;
-> +	struct device_node *np;
-> +	struct platform_device *pdev;
-> +
-> +	ph =3D of_get_property(dev->of_node, "hub", NULL);
-> +	if (!ph) {
-> +		dev_err(dev, "failed to read 'hub' property\n");
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	np =3D of_find_node_by_phandle(be32_to_cpu(*ph));
-> +	if (!np) {
-> +		dev_err(dev, "failed find device node for onboard hub\n");
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	pdev =3D of_find_device_by_node(np);
-> +	of_node_put(np);
-> +	if (!pdev)
-> +		return ERR_PTR(-EPROBE_DEFER);
-> +
-> +	return dev_get_drvdata(&pdev->dev);
-> +}
-> +
-> +static int onboard_hub_usbdev_probe(struct usb_device *udev)
-> +{
-> +	struct device *dev =3D &udev->dev;
-> +	struct onboard_hub *hub;
-> +
-> +	/* ignore supported hubs without device tree node */
-> +	if (!dev->of_node)
-> +		return -ENODEV;
-> +
-> +	hub =3D _find_onboard_hub(dev);
-> +	if (IS_ERR(hub))
-> +		return PTR_ERR(dev);
-> +
-> +	dev_set_drvdata(dev, hub);
-> +
-> +	onboard_hub_add_usbdev(hub, udev);
-> +
-> +	return 0;
-> +}
-> +
-> +static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
-> +{
-> +	struct onboard_hub *hub =3D dev_get_drvdata(&udev->dev);
-> +
-> +	onboard_hub_remove_usbdev(hub, udev);
-> +
-> +	put_device(hub->dev);
-> +}
-> +
-> +static const struct usb_device_id onboard_hub_id_table[] =3D {
-> +	{ .idVendor =3D VENDOR_ID_REALTEK,
-> +	  .idProduct =3D 0x0411, /* RTS5411 USB 3.0 */
-> +	  .match_flags =3D USB_DEVICE_ID_MATCH_DEVICE },
-> +	{ .idVendor =3D VENDOR_ID_REALTEK,
-> +	  .idProduct =3D 0x5411, /* RTS5411 USB 2.0 */
-> +	  .match_flags =3D USB_DEVICE_ID_MATCH_DEVICE },
-> +	{},
-> +};
-> +
-> +MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
-> +
-> +static struct usb_device_driver onboard_hub_usbdev_driver =3D {
-> +
-> +	.name =3D "onboard-usb-hub",
-> +	.probe =3D onboard_hub_usbdev_probe,
-> +	.disconnect =3D onboard_hub_usbdev_disconnect,
-> +	.generic_subclass =3D 1,
-> +	.supports_autosuspend =3D	1,
-> +	.id_table =3D onboard_hub_id_table,
-> +};
-> +
-> +/************************** Driver (de)registration ********************=
-******/
-> +
-> +static int __init onboard_hub_init(void)
-> +{
-> +	int rc;
-> +
-> +	rc =3D platform_driver_register(&onboard_hub_driver);
-> +	if (rc)
-> +		return rc;
-> +
-> +	return usb_register_device_driver(&onboard_hub_usbdev_driver, THIS_MODU=
-LE);
-> +}
-> +device_initcall(onboard_hub_init);
-> +
-> +static void __exit onboard_hub_exit(void)
-> +{
-> +	usb_deregister_device_driver(&onboard_hub_usbdev_driver);
-> +	platform_driver_unregister(&onboard_hub_driver);
-> +}
-> +module_exit(onboard_hub_exit);
-> +
-> +MODULE_AUTHOR("Matthias Kaehlcke <mka@chromium.org>");
-> +MODULE_DESCRIPTION("Onboard USB Hub driver");
-
-Improve the description like mentioned above.
-
---=20
-
-Thanks,
-Peter Chen=
