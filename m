@@ -2,191 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D6926F58F
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 07:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080B726F658
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 08:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726563AbgIRFzZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Sep 2020 01:55:25 -0400
-Received: from muru.com ([72.249.23.125]:44804 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725886AbgIRFzZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 18 Sep 2020 01:55:25 -0400
-X-Greylist: delayed 400 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Sep 2020 01:55:24 EDT
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 2880880C2;
-        Fri, 18 Sep 2020 05:48:43 +0000 (UTC)
-Date:   Fri, 18 Sep 2020 08:49:33 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-usb@vger.kernel.org,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: Re: [PATCH 1/4] ARM/omap1: switch to use dma_direct_set_offset for
- lbus DMA offsets
-Message-ID: <20200918054933.GK7101@atomide.com>
-References: <20200917173229.3311382-1-hch@lst.de>
- <20200917173229.3311382-2-hch@lst.de>
+        id S1726493AbgIRGxJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Sep 2020 02:53:09 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:41809 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726427AbgIRGxI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Sep 2020 02:53:08 -0400
+Received: by mail-lf1-f65.google.com with SMTP id y17so4946344lfa.8;
+        Thu, 17 Sep 2020 23:53:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jEIokPWY8McXPGxPjFui/VeUF3vCcShRe9TmH70vfVc=;
+        b=YvUPjxfekIMCDK7iM6OBhdEw/OwZcMxfdm6hraLyYa6yAduEzCPUPPBImeM1yxpvxd
+         yDrchSA0TFBG5/Yg+Bzzpq+niJ96aFPwq6V2g9ljLcmWttMnsLnSaiMg3AfcTRpFxblm
+         UljLIqgzoiDAvbh6EZ2D6X1xd7WGI5NqkZ2uEEz8ZqdYYLZDitlj72FnxMznotkqbeBM
+         shwCmBMNsvgHLPu4RY9b6pIQbIVcuV5NNoLqVkUNBVS5yMzOur9TPsIqU1NtAhTrMGRC
+         kBbl90QkQLuy5IiVPsGQh+cSD7I/GjusxXLASnDRmRp+m9j3fCYCbZtZUi8J5wv1b1H0
+         ECeA==
+X-Gm-Message-State: AOAM533hr8MkWHySnjr7RJaVtg3DQFCtRrW8hxkMKFKFpIy/XRvZgAgB
+        6dy+9lhzV/lWYGQ6x0fgPVLuqYbXMng=
+X-Google-Smtp-Source: ABdhPJyuh9HtxeBxunoebr024x2ZU8qQdRsKa692WK3UGnrpTGSSOnU8hBPIt0CDHrPpFYpQtkk9Og==
+X-Received: by 2002:ac2:5217:: with SMTP id a23mr9739542lfl.509.1600411986135;
+        Thu, 17 Sep 2020 23:53:06 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id u14sm396413lji.83.2020.09.17.23.53.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 23:53:04 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kJAGS-0005pO-6J; Fri, 18 Sep 2020 08:53:00 +0200
+Date:   Fri, 18 Sep 2020 08:53:00 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.4 041/330] USB: serial: mos7840: fix probe
+ error handling
+Message-ID: <20200918065300.GA21896@localhost>
+References: <20200918020110.2063155-1-sashal@kernel.org>
+ <20200918020110.2063155-41-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200917173229.3311382-2-hch@lst.de>
+In-Reply-To: <20200918020110.2063155-41-sashal@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Christoph Hellwig <hch@lst.de> [200917 17:37]:
-> Switch the omap1510 platform ohci device to use dma_direct_set_offset
-> to set the DMA offset instead of using direct hooks into the DMA
-> mapping code and remove the now unused hooks.
-
-Looks nice to me :) I still can't test this probably for few more weeks
-though but hopefully Aaro or Janusz (Added to Cc) can test it.
-
-Regards,
-
-Tony
-
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/arm/include/asm/dma-direct.h         | 18 -------------
->  arch/arm/mach-omap1/include/mach/memory.h | 31 -----------------------
->  arch/arm/mach-omap1/usb.c                 | 22 ++++++++++++++++
->  3 files changed, 22 insertions(+), 49 deletions(-)
+On Thu, Sep 17, 2020 at 09:56:21PM -0400, Sasha Levin wrote:
+> From: Johan Hovold <johan@kernel.org>
 > 
-> diff --git a/arch/arm/include/asm/dma-direct.h b/arch/arm/include/asm/dma-direct.h
-> index 436544aeb83405..77fcb7ee5ec907 100644
-> --- a/arch/arm/include/asm/dma-direct.h
-> +++ b/arch/arm/include/asm/dma-direct.h
-> @@ -9,7 +9,6 @@
->   * functions used internally by the DMA-mapping API to provide DMA
->   * addresses. They must not be used by drivers.
->   */
-> -#ifndef __arch_pfn_to_dma
->  static inline dma_addr_t pfn_to_dma(struct device *dev, unsigned long pfn)
->  {
->  	if (dev && dev->dma_range_map)
-> @@ -34,23 +33,6 @@ static inline dma_addr_t virt_to_dma(struct device *dev, void *addr)
->  	return (dma_addr_t)__virt_to_bus((unsigned long)(addr));
->  }
->  
-> -#else
-> -static inline dma_addr_t pfn_to_dma(struct device *dev, unsigned long pfn)
-> -{
-> -	return __arch_pfn_to_dma(dev, pfn);
-> -}
-> -
-> -static inline unsigned long dma_to_pfn(struct device *dev, dma_addr_t addr)
-> -{
-> -	return __arch_dma_to_pfn(dev, addr);
-> -}
-> -
-> -static inline dma_addr_t virt_to_dma(struct device *dev, void *addr)
-> -{
-> -	return __arch_virt_to_dma(dev, addr);
-> -}
-> -#endif
-> -
->  static inline dma_addr_t phys_to_dma(struct device *dev, phys_addr_t paddr)
->  {
->  	unsigned int offset = paddr & ~PAGE_MASK;
-> diff --git a/arch/arm/mach-omap1/include/mach/memory.h b/arch/arm/mach-omap1/include/mach/memory.h
-> index 1142560e0078f5..36bc0000cb6ab8 100644
-> --- a/arch/arm/mach-omap1/include/mach/memory.h
-> +++ b/arch/arm/mach-omap1/include/mach/memory.h
-> @@ -14,42 +14,11 @@
->   * OMAP-1510 bus address is translated into a Local Bus address if the
->   * OMAP bus type is lbus. We do the address translation based on the
->   * device overriding the defaults used in the dma-mapping API.
-> - * Note that the is_lbus_device() test is not very efficient on 1510
-> - * because of the strncmp().
->   */
-> -#if defined(CONFIG_ARCH_OMAP15XX) && !defined(__ASSEMBLER__)
->  
->  /*
->   * OMAP-1510 Local Bus address offset
->   */
->  #define OMAP1510_LB_OFFSET	UL(0x30000000)
->  
-> -#define virt_to_lbus(x)		((x) - PAGE_OFFSET + OMAP1510_LB_OFFSET)
-> -#define lbus_to_virt(x)		((x) - OMAP1510_LB_OFFSET + PAGE_OFFSET)
-> -#define is_lbus_device(dev)	(cpu_is_omap15xx() && dev && (strncmp(dev_name(dev), "ohci", 4) == 0))
-> -
-> -#define __arch_pfn_to_dma(dev, pfn)	\
-> -	({ dma_addr_t __dma = __pfn_to_phys(pfn); \
-> -	   if (is_lbus_device(dev)) \
-> -		__dma = __dma - PHYS_OFFSET + OMAP1510_LB_OFFSET; \
-> -	   __dma; })
-> -
-> -#define __arch_dma_to_pfn(dev, addr)	\
-> -	({ dma_addr_t __dma = addr;				\
-> -	   if (is_lbus_device(dev))				\
-> -		__dma += PHYS_OFFSET - OMAP1510_LB_OFFSET;	\
-> -	   __phys_to_pfn(__dma);				\
-> -	})
-> -
-> -#define __arch_dma_to_virt(dev, addr)	({ (void *) (is_lbus_device(dev) ? \
-> -						lbus_to_virt(addr) : \
-> -						__phys_to_virt(addr)); })
-> -
-> -#define __arch_virt_to_dma(dev, addr)	({ unsigned long __addr = (unsigned long)(addr); \
-> -					   (dma_addr_t) (is_lbus_device(dev) ? \
-> -						virt_to_lbus(__addr) : \
-> -						__virt_to_phys(__addr)); })
-> -
-> -#endif	/* CONFIG_ARCH_OMAP15XX */
-> -
->  #endif
-> diff --git a/arch/arm/mach-omap1/usb.c b/arch/arm/mach-omap1/usb.c
-> index d8e9bbda8f7bdd..ba8566204ea9f4 100644
-> --- a/arch/arm/mach-omap1/usb.c
-> +++ b/arch/arm/mach-omap1/usb.c
-> @@ -9,6 +9,7 @@
->  #include <linux/kernel.h>
->  #include <linux/init.h>
->  #include <linux/platform_device.h>
-> +#include <linux/dma-mapping.h>
->  #include <linux/io.h>
->  
->  #include <asm/irq.h>
-> @@ -542,6 +543,25 @@ static u32 __init omap1_usb2_init(unsigned nwires, unsigned alt_pingroup)
->  /* ULPD_APLL_CTRL */
->  #define APLL_NDPLL_SWITCH	(1 << 0)
->  
-> +static int omap_1510_usb_ohci_notifier(struct notifier_block *nb,
-> +		unsigned long event, void *data)
-> +{
-> +	struct device *dev = data;
-> +
-> +	if (event != BUS_NOTIFY_ADD_DEVICE)
-> +		return NOTIFY_DONE;
-> +
-> +	if (strncmp(dev_name(dev), "ohci", 4) == 0 &&
-> +	    dma_direct_set_offset(dev, PHYS_OFFSET, OMAP1510_LB_OFFSET,
-> +			(u64)-1))
-> +		WARN_ONCE(1, "failed to set DMA offset\n");
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static struct notifier_block omap_1510_usb_ohci_nb = {
-> +	.notifier_call		= omap_1510_usb_ohci_notifier,
-> +};
-> +
->  static void __init omap_1510_usb_init(struct omap_usb_config *config)
->  {
->  	unsigned int val;
-> @@ -600,6 +620,8 @@ static void __init omap_1510_usb_init(struct omap_usb_config *config)
->  	if (config->register_host) {
->  		int status;
->  
-> +		bus_register_notifier(&platform_bus_type,
-> +				      &omap_1510_usb_ohci_nb);
->  		ohci_device.dev.platform_data = config;
->  		status = platform_device_register(&ohci_device);
->  		if (status)
-> -- 
-> 2.28.0
+> [ Upstream commit 960fbd1ca584a5b4cd818255769769d42bfc6dbe ]
 > 
+> The driver would return success and leave the port structures
+> half-initialised if any of the register accesses during probe fails.
+> 
+> This would specifically leave the port control urb unallocated,
+> something which could trigger a NULL pointer dereference on interrupt
+> events.
+> 
+> Fortunately the interrupt implementation is completely broken and has
+> never even been enabled...
+> 
+> Note that the zero-length-enable register write used to set the zle-flag
+> for all ports is moved to attach.
+> 
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+
+Please drop this from all stable queues. As the commit message and
+missing stable-cc tag suggests, it's not needed.
+
+Sasha, please stop sending AUTOSEL patches for usb-serial. I think this
+the fourth time I ask you now.
+
+Johan
