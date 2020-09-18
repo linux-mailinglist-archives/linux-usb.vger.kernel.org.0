@@ -2,56 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 014E026FCA1
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 14:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AEA26FCA7
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Sep 2020 14:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726435AbgIRMfq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Sep 2020 08:35:46 -0400
-Received: from mga02.intel.com ([134.134.136.20]:59076 "EHLO mga02.intel.com"
+        id S1726593AbgIRMgr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Sep 2020 08:36:47 -0400
+Received: from mga02.intel.com ([134.134.136.20]:59130 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726154AbgIRMfq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 18 Sep 2020 08:35:46 -0400
-IronPort-SDR: ci6L5s8JM6kkXa/Xem4ngglXooSHzVmk/KmibNre+tRKgHS9lnp2HloSVsHXti10UV8L7B1tcV
- rmZrGhE/4Mlg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="147605940"
+        id S1726154AbgIRMgo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Sep 2020 08:36:44 -0400
+IronPort-SDR: Y/nZuBNoL6c82jGzdaE9Vj8R+57knCrDnvuJoFErblh0mEIHCfaUVUQ8Bp1qUnQKNM6al21tRK
+ v4YGFhiY0jRQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="147606026"
 X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
-   d="scan'208";a="147605940"
+   d="scan'208";a="147606026"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2020 05:35:42 -0700
-IronPort-SDR: PE5XZXoFk2bBgIToiHAv30S5WJjpbPgvCu3TdyUjsmrkLQ0R//OoEAJrPzK3uifgMEF/l5hfp3
- k64kEMbGPlnQ==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2020 05:36:42 -0700
+IronPort-SDR: NsnatMsAgTi6GJZA8QWntqaf2CXt2q2NSfwt5o5hfKwDC8e0nqg2bZ2DixP1Efyy8VSa6GGYDX
+ QeEInWYwQsYw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
-   d="scan'208";a="410277951"
+   d="scan'208";a="410278121"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 18 Sep 2020 05:35:40 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 18 Sep 2020 15:35:39 +0300
-Date:   Fri, 18 Sep 2020 15:35:39 +0300
+  by fmsmga001.fm.intel.com with SMTP; 18 Sep 2020 05:36:40 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 18 Sep 2020 15:36:39 +0300
+Date:   Fri, 18 Sep 2020 15:36:39 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Badhri Jagan Sridharan <badhri@google.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 04/11] usb: typec: tcpci_maxim: Chip level TCPC driver
-Message-ID: <20200918123539.GD1630537@kuha.fi.intel.com>
+Subject: Re: [PATCH v7 06/11] usb: typec: tcpm: Add support for Sink Fast
+ Role SWAP(FRS)
+Message-ID: <20200918123639.GE1630537@kuha.fi.intel.com>
 References: <20200917101856.3156869-1-badhri@google.com>
- <20200917101856.3156869-4-badhri@google.com>
+ <20200917101856.3156869-6-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200917101856.3156869-4-badhri@google.com>
+In-Reply-To: <20200917101856.3156869-6-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 03:18:49AM -0700, Badhri Jagan Sridharan wrote:
-> Chip level TCPC driver for Maxim's TCPCI implementation.
-> This TCPC implementation does not support the following
-> commands: COMMAND.SinkVbus, COMMAND.SourceVbusDefaultVoltage,
-> COMMAND.SourceVbusHighVoltage. Instead the sinking and sourcing
-> from vbus is supported by writes to custom registers.
+On Thu, Sep 17, 2020 at 03:18:51AM -0700, Badhri Jagan Sridharan wrote:
+> PD 3.0 spec defines a new mechanism for power role swap called
+> Fast role swap. This change enables TCPM to support FRS when
+> acting as sink.
+> 
+> Once the explicit contract is negotiated, sink port is
+> expected to query the source port for sink caps to
+> determine whether the source is FRS capable.
+> Bits 23 & 24 of fixed pdo of the sink caps from the source, when
+> set, indicates the current needed by the source when fast role
+> swap is in progress(Implicit contract phasae). 0 indicates that
+> the source does not support Fast Role Swap.
+> 
+> Upon receiving the FRS signal from the source,
+> TCPC(TCPM_FRS_EVENT) informs TCPM to start the Fast role swap sequence.
+> 
+> 1. TCPM sends FRS PD message: FR_SWAP_SEND
+> 2. If response is not received within the expiry of
+>    SenderResponseTimer, Error recovery is triggered.:
+>    FR_SWAP_SEND_TIMEOUT
+> 3. Upon receipt of the accept message, TCPM waits for
+>    PSSourceOffTimer for PS_READY message from the partner:
+>    FR_SWAP_SNK_SRC_NEW_SINK_READY.
+> 
+> TCPC is expected to autonomously turn on vbus once the FRS
+> signal is received and vbus voltage falls below vsafe5v within
+> tSrcFrSwap. This is different from traditional power role swap
+> where the vbus sourcing is turned on by TCPM.
+> 
+> 4. By this time, TCPC most likely would have started to
+>    source vbus, TCPM waits for tSrcFrSwap to see  if the
+>    lower level TCPC driver signals TCPM_SOURCING_VBUS event:
+>    FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED.
+> 5. When TCPC signals sourcing vbus, TCPM sends PS_READY msg and
+>    changes the CC pin from Rd to Rp. This is the end of fast
+>    role swap sequence and TCPM initiates the sequnce to negotiate
+>    explicit contract by transitioning into SRC_STARTUP after
+>    SwapSrcStart.
+> 
+> The code is written based on the sequence described in "Figure 8-107:
+> Dual-role Port in Sink to Source Fast Role Swap State Diagram" of
+> USB Power Delivery Specification Revision 3.0, Version 1.2.
 > 
 > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
@@ -60,542 +97,534 @@ Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > ---
 > Changes since v1:
 > - Changing patch version to v6 to fix version number confusion.
-> - Removed setting USB_PSY and terminating description with period as
->   suggested by Randy.
+> - Rebased on top of usb-next and resolved conflicts due to the below
+>   changes:
+>   3ed8e1c2ac99 usb: typec: tcpm: Migrate workqueue to RT priority for processing events
+>   6bbe2a90a0bb usb: typec: tcpm: During PR_SWAP, source caps should be sent only after tSwapSourceStart
+> - enable_frs sequence is now run as part of the same kthread that runs
+>   the state machines.
+> - Fixed the implicit fallthrough warning in the switch case for
+>   FR_SWAP_CANCEL case.
 > 
 > Changes since v6:
-> - Addressed Heikki comments:
->   - Removed TX discarded message
->   - Removed the redundant TCPC_POWER_STATUS_UNINIT check
-> - Cleaned up irq setup routine
+> - Moved frs_current from caps to tcpm_port as Heikki suggested.
 > ---
->  drivers/usb/typec/tcpm/Kconfig       |   5 +
->  drivers/usb/typec/tcpm/Makefile      |  15 +-
->  drivers/usb/typec/tcpm/tcpci.h       |   1 +
->  drivers/usb/typec/tcpm/tcpci_maxim.c | 461 +++++++++++++++++++++++++++
->  4 files changed, 475 insertions(+), 7 deletions(-)
->  create mode 100644 drivers/usb/typec/tcpm/tcpci_maxim.c
 > 
-> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> index 58a64e1bf627..938ab5615687 100644
-> --- a/drivers/usb/typec/tcpm/Kconfig
-> +++ b/drivers/usb/typec/tcpm/Kconfig
-> @@ -35,6 +35,11 @@ config TYPEC_MT6360
->  	  USB Type-C. It works with Type-C Port Controller Manager
->  	  to provide USB PD and USB Type-C functionalities.
+>  drivers/usb/typec/tcpm/tcpm.c | 229 +++++++++++++++++++++++++++++++++-
+>  include/linux/usb/pd.h        |  19 +--
+>  include/linux/usb/tcpm.h      |   8 +-
+>  3 files changed, 244 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 92806547f485..55535c4f66bf 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -106,6 +106,13 @@
+>  	S(VCONN_SWAP_TURN_ON_VCONN),		\
+>  	S(VCONN_SWAP_TURN_OFF_VCONN),		\
+>  						\
+> +	S(FR_SWAP_SEND),			\
+> +	S(FR_SWAP_SEND_TIMEOUT),		\
+> +	S(FR_SWAP_SNK_SRC_TRANSITION_TO_OFF),			\
+> +	S(FR_SWAP_SNK_SRC_NEW_SINK_READY),		\
+> +	S(FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED),	\
+> +	S(FR_SWAP_CANCEL),			\
+> +						\
+>  	S(SNK_TRY),				\
+>  	S(SNK_TRY_WAIT),			\
+>  	S(SNK_TRY_WAIT_DEBOUNCE),               \
+> @@ -127,6 +134,9 @@
+>  	S(GET_PPS_STATUS_SEND),			\
+>  	S(GET_PPS_STATUS_SEND_TIMEOUT),		\
+>  						\
+> +	S(GET_SINK_CAP),			\
+> +	S(GET_SINK_CAP_TIMEOUT),		\
+> +						\
+>  	S(ERROR_RECOVERY),			\
+>  	S(PORT_RESET),				\
+>  	S(PORT_RESET_WAIT_OFF)
+> @@ -170,11 +180,25 @@ enum adev_actions {
+>  	ADEV_ATTENTION,
+>  };
 >  
-> +config TYPEC_TCPCI_MAXIM
-> +	tristate "Maxim TCPCI based Type-C chip driver"
-> +	help
-> +	  MAXIM TCPCI based Type-C chip driver.
-> +
->  endif # TYPEC_TCPCI
->  
->  config TYPEC_FUSB302
-> diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/Makefile
-> index 7592ccb8c526..7d499f3569fd 100644
-> --- a/drivers/usb/typec/tcpm/Makefile
-> +++ b/drivers/usb/typec/tcpm/Makefile
-> @@ -1,8 +1,9 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -obj-$(CONFIG_TYPEC_TCPM)	+= tcpm.o
-> -obj-$(CONFIG_TYPEC_FUSB302)	+= fusb302.o
-> -obj-$(CONFIG_TYPEC_WCOVE)	+= typec_wcove.o
-> -typec_wcove-y			:= wcove.o
-> -obj-$(CONFIG_TYPEC_TCPCI)	+= tcpci.o
-> -obj-$(CONFIG_TYPEC_RT1711H)	+= tcpci_rt1711h.o
-> -obj-$(CONFIG_TYPEC_MT6360)	+= tcpci_mt6360.o
-> +obj-$(CONFIG_TYPEC_TCPM)		+= tcpm.o
-> +obj-$(CONFIG_TYPEC_FUSB302)		+= fusb302.o
-> +obj-$(CONFIG_TYPEC_WCOVE)		+= typec_wcove.o
-> +typec_wcove-y				:= wcove.o
-> +obj-$(CONFIG_TYPEC_TCPCI)		+= tcpci.o
-> +obj-$(CONFIG_TYPEC_RT1711H)		+= tcpci_rt1711h.o
-> +obj-$(CONFIG_TYPEC_MT6360)		+= tcpci_mt6360.o
-> +obj-$(CONFIG_TYPEC_TCPCI_MAXIM)		+= tcpci_maxim.o
-> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-> index 4d441bdf24d5..82f021a82456 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.h
-> +++ b/drivers/usb/typec/tcpm/tcpci.h
-> @@ -109,6 +109,7 @@
->  
->  #define TCPC_RX_BYTE_CNT		0x30
->  #define TCPC_RX_BUF_FRAME_TYPE		0x31
-> +#define TCPC_RX_BUF_FRAME_TYPE_SOP	0
->  #define TCPC_RX_HDR			0x32
->  #define TCPC_RX_DATA			0x34 /* through 0x4f */
->  
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> new file mode 100644
-> index 000000000000..91337ddb4962
-> --- /dev/null
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -0,0 +1,461 @@
-> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Copyright (C) 2020, Google LLC
-> + *
-> + * MAXIM TCPCI based TCPC driver
+> + * Initial current capability of the new source when vSafe5V is applied during PD3.0 Fast Role Swap.
+> + * Based on "Table 6-14 Fixed Supply PDO - Sink" of "USB Power Delivery Specification Revision 3.0,
+> + * Version 1.2"
 > + */
-> +
-> +#include <linux/gpio.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_gpio.h>
-> +#include <linux/regmap.h>
-> +#include <linux/usb/pd.h>
-> +#include <linux/usb/tcpm.h>
-> +#include <linux/usb/typec.h>
-> +
-> +#include "tcpci.h"
-> +
-> +#define PD_ACTIVITY_TIMEOUT_MS				10000
-> +
-> +#define TCPC_VENDOR_ALERT				0x80
-> +
-> +#define TCPC_RECEIVE_BUFFER_COUNT_OFFSET		0
-> +#define TCPC_RECEIVE_BUFFER_FRAME_TYPE_OFFSET		1
-> +#define TCPC_RECEIVE_BUFFER_RX_BYTE_BUF_OFFSET		2
-> +
-> +/*
-> + * LongMessage not supported, hence 32 bytes for buf to be read from RECEIVE_BUFFER.
-> + * DEVICE_CAPABILITIES_2.LongMessage = 0, the value in READABLE_BYTE_COUNT reg shall be
-> + * less than or equal to 31. Since, RECEIVE_BUFFER len = 31 + 1(READABLE_BYTE_COUNT).
-> + */
-> +#define TCPC_RECEIVE_BUFFER_LEN				32
-> +
-> +#define MAX_BUCK_BOOST_SID				0x69
-> +#define MAX_BUCK_BOOST_OP				0xb9
-> +#define MAX_BUCK_BOOST_OFF				0
-> +#define MAX_BUCK_BOOST_SOURCE				0xa
-> +#define MAX_BUCK_BOOST_SINK				0x5
-> +
-> +struct max_tcpci_chip {
-> +	struct tcpci_data data;
-> +	struct tcpci *tcpci;
-> +	struct device *dev;
-> +	struct i2c_client *client;
-> +	struct tcpm_port *port;
+> +enum frs_typec_current {
+> +	FRS_NOT_SUPPORTED,
+> +	FRS_DEFAULT_POWER,
+> +	FRS_5V_1P5A,
+> +	FRS_5V_3A,
 > +};
 > +
-> +static const struct regmap_range max_tcpci_tcpci_range[] = {
-> +	regmap_reg_range(0x00, 0x95)
-> +};
+>  /* Events from low level driver */
+>  
+>  #define TCPM_CC_EVENT		BIT(0)
+>  #define TCPM_VBUS_EVENT		BIT(1)
+>  #define TCPM_RESET_EVENT	BIT(2)
+> +#define TCPM_FRS_EVENT		BIT(3)
+> +#define TCPM_SOURCING_VBUS	BIT(4)
+>  
+>  #define LOG_BUFFER_ENTRIES	1024
+>  #define LOG_BUFFER_ENTRY_SIZE	128
+> @@ -184,6 +208,8 @@ enum adev_actions {
+>  #define SVID_DISCOVERY_MAX	16
+>  #define ALTMODE_DISCOVERY_MAX	(SVID_DISCOVERY_MAX * MODE_DISCOVERY_MAX)
+>  
+> +#define GET_SINK_CAP_RETRY_MS	100
 > +
-> +const struct regmap_access_table max_tcpci_tcpci_write_table = {
-> +	.yes_ranges = max_tcpci_tcpci_range,
-> +	.n_yes_ranges = ARRAY_SIZE(max_tcpci_tcpci_range),
-> +};
+>  struct pd_mode_data {
+>  	int svid_index;		/* current SVID index		*/
+>  	int nsvids;
+> @@ -261,6 +287,8 @@ struct tcpm_port {
+>  	struct kthread_work state_machine;
+>  	struct hrtimer vdm_state_machine_timer;
+>  	struct kthread_work vdm_state_machine;
+> +	struct hrtimer enable_frs_timer;
+> +	struct kthread_work enable_frs;
+>  	bool state_machine_running;
+>  
+>  	struct completion tx_complete;
+> @@ -335,6 +363,12 @@ struct tcpm_port {
+>  	/* port belongs to a self powered device */
+>  	bool self_powered;
+>  
+> +	/* FRS */
+> +	enum frs_typec_current frs_current;
 > +
-> +static const struct regmap_config max_tcpci_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = 0x95,
-> +	.wr_table = &max_tcpci_tcpci_write_table,
-> +};
+> +	/* Sink caps have been queried */
+> +	bool sink_cap_done;
 > +
-> +static struct max_tcpci_chip *tdata_to_max_tcpci(struct tcpci_data *tdata)
+>  #ifdef CONFIG_DEBUG_FS
+>  	struct dentry *dentry;
+>  	struct mutex logbuffer_lock;	/* log buffer access lock */
+> @@ -940,6 +974,16 @@ static void mod_vdm_delayed_work(struct tcpm_port *port, unsigned int delay_ms)
+>  	}
+>  }
+>  
+> +static void mod_enable_frs_delayed_work(struct tcpm_port *port, unsigned int delay_ms)
 > +{
-> +	return container_of(tdata, struct max_tcpci_chip, data);
+> +	if (delay_ms) {
+> +		hrtimer_start(&port->enable_frs_timer, ms_to_ktime(delay_ms), HRTIMER_MODE_REL);
+> +	} else {
+> +		hrtimer_cancel(&port->enable_frs_timer);
+> +		kthread_queue_work(port->wq, &port->enable_frs);
+> +	}
 > +}
 > +
-> +static int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
-> +{
-> +	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u16));
-> +}
-> +
-> +static int max_tcpci_write16(struct max_tcpci_chip *chip, unsigned int reg, u16 val)
-> +{
-> +	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u16));
-> +}
-> +
-> +static int max_tcpci_read8(struct max_tcpci_chip *chip, unsigned int reg, u8 *val)
-> +{
-> +	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u8));
-> +}
-> +
-> +static int max_tcpci_write8(struct max_tcpci_chip *chip, unsigned int reg, u8 val)
-> +{
-> +	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u8));
-> +}
-> +
-> +static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
-> +{
-> +	u16 alert_mask = 0;
+>  static void tcpm_set_state(struct tcpm_port *port, enum tcpm_state state,
+>  			   unsigned int delay_ms)
+>  {
+> @@ -1669,6 +1713,9 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
+>  	unsigned int cnt = pd_header_cnt_le(msg->header);
+>  	unsigned int rev = pd_header_rev_le(msg->header);
+>  	unsigned int i;
+> +	enum frs_typec_current frs_current;
+> +	bool frs_enable;
 > +	int ret;
+>  
+>  	switch (type) {
+>  	case PD_DATA_SOURCE_CAP:
+> @@ -1738,7 +1785,21 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
+>  		/* We don't do anything with this at the moment... */
+>  		for (i = 0; i < cnt; i++)
+>  			port->sink_caps[i] = le32_to_cpu(msg->payload[i]);
 > +
-> +	ret = max_tcpci_write16(chip, TCPC_ALERT, 0xffff);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "Error writing to TCPC_ALERT ret:%d\n", ret);
-> +		return;
-> +	}
-> +
-> +	ret = max_tcpci_write16(chip, TCPC_VENDOR_ALERT, 0xffff);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "Error writing to TCPC_VENDOR_ALERT ret:%d\n", ret);
-> +		return;
-> +	}
-> +
-> +	alert_mask = TCPC_ALERT_TX_SUCCESS | TCPC_ALERT_TX_DISCARDED | TCPC_ALERT_TX_FAILED |
-> +		TCPC_ALERT_RX_HARD_RST | TCPC_ALERT_RX_STATUS | TCPC_ALERT_CC_STATUS |
-> +		TCPC_ALERT_VBUS_DISCNCT | TCPC_ALERT_RX_BUF_OVF | TCPC_ALERT_POWER_STATUS;
-> +
-> +	ret = max_tcpci_write16(chip, TCPC_ALERT_MASK, alert_mask);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "Error writing to TCPC_ALERT_MASK ret:%d\n", ret);
-> +		return;
-> +	}
-> +
-> +	/* Enable vbus voltage monitoring and voltage alerts */
-> +	ret = max_tcpci_write8(chip, TCPC_POWER_CTRL, 0);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "Error writing to TCPC_POWER_CTRL ret:%d\n", ret);
-> +		return;
-> +	}
-> +}
-> +
-> +static void process_rx(struct max_tcpci_chip *chip, u16 status)
-> +{
-> +	struct pd_message msg;
-> +	u8 count, frame_type, rx_buf[TCPC_RECEIVE_BUFFER_LEN];
-> +	int ret, payload_index;
-> +	u8 *rx_buf_ptr;
-> +
-> +	/*
-> +	 * READABLE_BYTE_COUNT: Indicates the number of bytes in the RX_BUF_BYTE_x registers
-> +	 * plus one (for the RX_BUF_FRAME_TYPE) Table 4-36.
-> +	 * Read the count and frame type.
-> +	 */
-> +	ret = regmap_raw_read(chip->data.regmap, TCPC_RX_BYTE_CNT, rx_buf, 2);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "TCPC_RX_BYTE_CNT read failed ret:%d", ret);
-> +		return;
-> +	}
-> +
-> +	count = rx_buf[TCPC_RECEIVE_BUFFER_COUNT_OFFSET];
-> +	frame_type = rx_buf[TCPC_RECEIVE_BUFFER_FRAME_TYPE_OFFSET];
-> +
-> +	if (count == 0 || frame_type != TCPC_RX_BUF_FRAME_TYPE_SOP) {
-> +		max_tcpci_write16(chip, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
-> +		dev_err(chip->dev, "%s", count ==  0 ? "error: count is 0" :
-> +			"error frame_type is not SOP");
-> +		return;
-> +	}
-> +
-> +	if (count > sizeof(struct pd_message) || count + 1 > TCPC_RECEIVE_BUFFER_LEN) {
-> +		dev_err(chip->dev, "Invalid TCPC_RX_BYTE_CNT %d", count);
-> +		return;
-> +	}
-> +
-> +	/*
-> +	 * Read count + 1 as RX_BUF_BYTE_x is hidden and can only be read through
-> +	 * TCPC_RX_BYTE_CNT
-> +	 */
-> +	count += 1;
-> +	ret = regmap_raw_read(chip->data.regmap, TCPC_RX_BYTE_CNT, rx_buf, count);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "Error: TCPC_RX_BYTE_CNT read failed: %d", ret);
-> +		return;
-> +	}
-> +
-> +	rx_buf_ptr = rx_buf + TCPC_RECEIVE_BUFFER_RX_BYTE_BUF_OFFSET;
-> +	msg.header = cpu_to_le16(*(u16 *)rx_buf_ptr);
-> +	rx_buf_ptr = rx_buf_ptr + sizeof(msg.header);
-> +	for (payload_index = 0; payload_index < pd_header_cnt_le(msg.header); payload_index++,
-> +	     rx_buf_ptr += sizeof(msg.payload[0]))
-> +		msg.payload[payload_index] = cpu_to_le32(*(u32 *)rx_buf_ptr);
-> +
-> +	/*
-> +	 * Read complete, clear RX status alert bit.
-> +	 * Clear overflow as well if set.
-> +	 */
-> +	ret = max_tcpci_write16(chip, TCPC_ALERT, status & TCPC_ALERT_RX_BUF_OVF ?
-> +				TCPC_ALERT_RX_STATUS | TCPC_ALERT_RX_BUF_OVF :
-> +				TCPC_ALERT_RX_STATUS);
-> +	if (ret < 0)
-> +		return;
-> +
-> +	tcpm_pd_receive(chip->port, &msg);
-> +}
-> +
-> +static int max_tcpci_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata, bool source, bool sink)
-> +{
-> +	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
-> +	u8 buffer_source[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SOURCE};
-> +	u8 buffer_sink[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SINK};
-> +	u8 buffer_none[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_OFF};
-> +	struct i2c_client *i2c = chip->client;
-> +	int ret;
-> +
-> +	struct i2c_msg msgs[] = {
-> +		{
-> +			.addr = MAX_BUCK_BOOST_SID,
-> +			.flags = i2c->flags & I2C_M_TEN,
-> +			.len = 2,
-> +			.buf = source ? buffer_source : sink ? buffer_sink : buffer_none,
-> +		},
-> +	};
-> +
-> +	if (source && sink) {
-> +		dev_err(chip->dev, "Both source and sink set\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = i2c_transfer(i2c->adapter, msgs, 1);
-> +
-> +	return  ret < 0 ? ret : 1;
-> +}
-> +
-> +static void process_power_status(struct max_tcpci_chip *chip)
-> +{
-> +	u8 pwr_status;
-> +	int ret;
-> +
-> +	ret = max_tcpci_read8(chip, TCPC_POWER_STATUS, &pwr_status);
-> +	if (ret < 0)
-> +		return;
-> +
-> +	if (pwr_status == 0xff)
-> +		max_tcpci_init_regs(chip);
-> +	else
-> +		tcpm_vbus_change(chip->port);
-> +}
-> +
-> +static void process_tx(struct max_tcpci_chip *chip, u16 status)
-> +{
-> +	if (status & TCPC_ALERT_TX_SUCCESS)
-> +		tcpm_pd_transmit_complete(chip->port, TCPC_TX_SUCCESS);
-> +	else if (status & TCPC_ALERT_TX_DISCARDED)
-> +		tcpm_pd_transmit_complete(chip->port, TCPC_TX_DISCARDED);
-> +	else if (status & TCPC_ALERT_TX_FAILED)
-> +		tcpm_pd_transmit_complete(chip->port, TCPC_TX_FAILED);
-> +
-> +	/* Reinit regs as Hard reset sets them to default value */
-> +	if ((status & TCPC_ALERT_TX_SUCCESS) && (status & TCPC_ALERT_TX_FAILED))
-> +		max_tcpci_init_regs(chip);
-> +}
-> +
-> +static irqreturn_t _max_tcpci_irq(struct max_tcpci_chip *chip, u16 status)
-> +{
-> +	u16 mask;
-> +	int ret;
-> +
-> +	/*
-> +	 * Clear alert status for everything except RX_STATUS, which shouldn't
-> +	 * be cleared until we have successfully retrieved message.
-> +	 */
-> +	if (status & ~TCPC_ALERT_RX_STATUS) {
-> +		mask = status & TCPC_ALERT_RX_BUF_OVF ?
-> +			status & ~(TCPC_ALERT_RX_STATUS | TCPC_ALERT_RX_BUF_OVF) :
-> +			status & ~TCPC_ALERT_RX_STATUS;
-> +		ret = max_tcpci_write16(chip, TCPC_ALERT, mask);
-> +		if (ret < 0) {
-> +			dev_err(chip->dev, "ALERT clear failed\n");
-> +			return ret;
+> +		frs_current = (port->sink_caps[0] & PDO_FIXED_FRS_CURR_MASK) >>
+> +			PDO_FIXED_FRS_CURR_SHIFT;
+> +		frs_enable = frs_current && (frs_current <= port->frs_current);
+> +		tcpm_log(port,
+> +			 "Port partner FRS capable partner_frs_current:%u port_frs_current:%u enable:%c",
+> +			 frs_current, port->frs_current, frs_enable ? 'y' : 'n');
+> +		if (frs_enable) {
+> +			ret  = port->tcpc->enable_frs(port->tcpc, true);
+> +			tcpm_log(port, "Enable FRS %s, ret:%d\n", ret ? "fail" : "success", ret);
 > +		}
-> +	}
 > +
-> +	if (status & TCPC_ALERT_RX_BUF_OVF && !(status & TCPC_ALERT_RX_STATUS)) {
-> +		ret = max_tcpci_write16(chip, TCPC_ALERT, (TCPC_ALERT_RX_STATUS |
-> +							  TCPC_ALERT_RX_BUF_OVF));
-> +		if (ret < 0) {
-> +			dev_err(chip->dev, "ALERT clear failed\n");
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (status & TCPC_ALERT_RX_STATUS)
-> +		process_rx(chip, status);
-> +
-> +	if (status & TCPC_ALERT_VBUS_DISCNCT)
-> +		tcpm_vbus_change(chip->port);
-> +
-> +	if (status & TCPC_ALERT_CC_STATUS)
-> +		tcpm_cc_change(chip->port);
-> +
-> +	if (status & TCPC_ALERT_POWER_STATUS)
-> +		process_power_status(chip);
-> +
-> +	if (status & TCPC_ALERT_RX_HARD_RST) {
-> +		tcpm_pd_hard_reset(chip->port);
-> +		max_tcpci_init_regs(chip);
-> +	}
-> +
-> +	if (status & TCPC_ALERT_TX_SUCCESS || status & TCPC_ALERT_TX_DISCARDED || status &
-> +	    TCPC_ALERT_TX_FAILED)
-> +		process_tx(chip, status);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static irqreturn_t max_tcpci_irq(int irq, void *dev_id)
-> +{
-> +	struct max_tcpci_chip *chip = dev_id;
-> +	u16 status;
-> +	irqreturn_t irq_return;
-> +	int ret;
-> +
-> +	if (!chip->port)
-> +		return IRQ_HANDLED;
-> +
-> +	ret = max_tcpci_read16(chip, TCPC_ALERT, &status);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "ALERT read failed\n");
-> +		return ret;
-> +	}
-> +	while (status) {
-> +		irq_return = _max_tcpci_irq(chip, status);
-> +		/* Do not return if the ALERT is already set. */
-> +		ret = max_tcpci_read16(chip, TCPC_ALERT, &status);
-> +		if (ret < 0)
+>  		port->nr_sink_caps = cnt;
+> +		port->sink_cap_done = true;
+> +		tcpm_set_state(port, SNK_READY, 0);
+>  		break;
+>  	case PD_DATA_VENDOR_DEF:
+>  		tcpm_handle_vdm_request(port, msg->payload, cnt);
+> @@ -1833,6 +1894,9 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>  		case VCONN_SWAP_WAIT_FOR_VCONN:
+>  			tcpm_set_state(port, VCONN_SWAP_TURN_OFF_VCONN, 0);
+>  			break;
+> +		case FR_SWAP_SNK_SRC_TRANSITION_TO_OFF:
+> +			tcpm_set_state(port, FR_SWAP_SNK_SRC_NEW_SINK_READY, 0);
 > +			break;
+>  		default:
+>  			break;
+>  		}
+> @@ -1872,6 +1936,13 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>  					     -EAGAIN : -EOPNOTSUPP);
+>  			tcpm_set_state(port, VCONN_SWAP_CANCEL, 0);
+>  			break;
+> +		case FR_SWAP_SEND:
+> +			tcpm_set_state(port, FR_SWAP_CANCEL, 0);
+> +			break;
+> +		case GET_SINK_CAP:
+> +			port->sink_cap_done = true;
+> +			tcpm_set_state(port, ready_state(port), 0);
+> +			break;
+>  		default:
+>  			break;
+>  		}
+> @@ -1906,6 +1977,9 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>  		case VCONN_SWAP_SEND:
+>  			tcpm_set_state(port, VCONN_SWAP_START, 0);
+>  			break;
+> +		case FR_SWAP_SEND:
+> +			tcpm_set_state(port, FR_SWAP_SNK_SRC_TRANSITION_TO_OFF, 0);
+> +			break;
+>  		default:
+>  			break;
+>  		}
+> @@ -2806,6 +2880,10 @@ static void tcpm_reset_port(struct tcpm_port *port)
+>  	port->try_src_count = 0;
+>  	port->try_snk_count = 0;
+>  	port->usb_type = POWER_SUPPLY_USB_TYPE_C;
+> +	port->nr_sink_caps = 0;
+> +	port->sink_cap_done = false;
+> +	if (port->tcpc->enable_frs)
+> +		port->tcpc->enable_frs(port->tcpc, false);
+>  
+>  	power_supply_changed(port->psy);
+>  }
+> @@ -3356,10 +3434,9 @@ static void run_state_machine(struct tcpm_port *port)
+>  		tcpm_swap_complete(port, 0);
+>  		tcpm_typec_connect(port);
+>  		tcpm_check_send_discover(port);
+> +		mod_enable_frs_delayed_work(port, 0);
+>  		tcpm_pps_complete(port, port->pps_status);
+> -
+>  		power_supply_changed(port->psy);
+> -
+>  		break;
+>  
+>  	/* Accessory states */
+> @@ -3383,9 +3460,13 @@ static void run_state_machine(struct tcpm_port *port)
+>  		tcpm_set_state(port, HARD_RESET_START, 0);
+>  		break;
+>  	case HARD_RESET_START:
+> +		port->sink_cap_done = false;
+> +		if (port->tcpc->enable_frs)
+> +			port->tcpc->enable_frs(port->tcpc, false);
+>  		port->hard_reset_count++;
+>  		port->tcpc->set_pd_rx(port->tcpc, false);
+>  		tcpm_unregister_altmodes(port);
+> +		port->nr_sink_caps = 0;
+>  		port->send_discover = true;
+>  		if (port->pwr_role == TYPEC_SOURCE)
+>  			tcpm_set_state(port, SRC_HARD_RESET_VBUS_OFF,
+> @@ -3517,6 +3598,35 @@ static void run_state_machine(struct tcpm_port *port)
+>  		tcpm_set_state(port, ready_state(port), 0);
+>  		break;
+>  
+> +	case FR_SWAP_SEND:
+> +		if (tcpm_pd_send_control(port, PD_CTRL_FR_SWAP)) {
+> +			tcpm_set_state(port, ERROR_RECOVERY, 0);
+> +			break;
+> +		}
+> +		tcpm_set_state_cond(port, FR_SWAP_SEND_TIMEOUT, PD_T_SENDER_RESPONSE);
+> +		break;
+> +	case FR_SWAP_SEND_TIMEOUT:
+> +		tcpm_set_state(port, ERROR_RECOVERY, 0);
+> +		break;
+> +	case FR_SWAP_SNK_SRC_TRANSITION_TO_OFF:
+> +		tcpm_set_state(port, ERROR_RECOVERY, PD_T_PS_SOURCE_OFF);
+> +		break;
+> +	case FR_SWAP_SNK_SRC_NEW_SINK_READY:
+> +		if (port->vbus_source)
+> +			tcpm_set_state(port, FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED, 0);
+> +		else
+> +			tcpm_set_state(port, ERROR_RECOVERY, PD_T_RECEIVER_RESPONSE);
+> +		break;
+> +	case FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED:
+> +		tcpm_set_pwr_role(port, TYPEC_SOURCE);
+> +		if (tcpm_pd_send_control(port, PD_CTRL_PS_RDY)) {
+> +			tcpm_set_state(port, ERROR_RECOVERY, 0);
+> +			break;
+> +		}
+> +		tcpm_set_cc(port, tcpm_rp_cc(port));
+> +		tcpm_set_state(port, SRC_STARTUP, PD_T_SWAP_SRC_START);
+> +		break;
+> +
+>  	/* PR_Swap states */
+>  	case PR_SWAP_ACCEPT:
+>  		tcpm_pd_send_control(port, PD_CTRL_ACCEPT);
+> @@ -3640,6 +3750,12 @@ static void run_state_machine(struct tcpm_port *port)
+>  		else
+>  			tcpm_set_state(port, SNK_READY, 0);
+>  		break;
+> +	case FR_SWAP_CANCEL:
+> +		if (port->pwr_role == TYPEC_SOURCE)
+> +			tcpm_set_state(port, SRC_READY, 0);
+> +		else
+> +			tcpm_set_state(port, SNK_READY, 0);
+> +		break;
+>  
+>  	case BIST_RX:
+>  		switch (BDO_MODE_MASK(port->bist_request)) {
+> @@ -3674,6 +3790,14 @@ static void run_state_machine(struct tcpm_port *port)
+>  	case GET_PPS_STATUS_SEND_TIMEOUT:
+>  		tcpm_set_state(port, ready_state(port), 0);
+>  		break;
+> +	case GET_SINK_CAP:
+> +		tcpm_pd_send_control(port, PD_CTRL_GET_SINK_CAP);
+> +		tcpm_set_state(port, GET_SINK_CAP_TIMEOUT, PD_T_SENDER_RESPONSE);
+> +		break;
+> +	case GET_SINK_CAP_TIMEOUT:
+> +		port->sink_cap_done = true;
+> +		tcpm_set_state(port, ready_state(port), 0);
+> +		break;
+>  	case ERROR_RECOVERY:
+>  		tcpm_swap_complete(port, -EPROTO);
+>  		tcpm_pps_complete(port, -EPROTO);
+> @@ -3889,6 +4013,13 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+>  		 * Ignore it.
+>  		 */
+>  		break;
+> +	case FR_SWAP_SEND:
+> +	case FR_SWAP_SEND_TIMEOUT:
+> +	case FR_SWAP_SNK_SRC_TRANSITION_TO_OFF:
+> +	case FR_SWAP_SNK_SRC_NEW_SINK_READY:
+> +	case FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED:
+> +		/* Do nothing, CC change expected */
+> +		break;
+>  
+>  	case PORT_RESET:
+>  	case PORT_RESET_WAIT_OFF:
+> @@ -3959,6 +4090,9 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
+>  	case SRC_TRY_DEBOUNCE:
+>  		/* Do nothing, waiting for sink detection */
+>  		break;
+> +	case FR_SWAP_SNK_SRC_NEW_SINK_READY:
+> +		tcpm_set_state(port, FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED, 0);
+> +		break;
+>  
+>  	case PORT_RESET:
+>  	case PORT_RESET_WAIT_OFF:
+> @@ -4038,6 +4172,14 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
+>  		 */
+>  		break;
+>  
+> +	case FR_SWAP_SEND:
+> +	case FR_SWAP_SEND_TIMEOUT:
+> +	case FR_SWAP_SNK_SRC_TRANSITION_TO_OFF:
+> +	case FR_SWAP_SNK_SRC_NEW_SINK_READY:
+> +	case FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED:
+> +		/* Do nothing, vbus drop expected */
+> +		break;
+> +
+>  	default:
+>  		if (port->pwr_role == TYPEC_SINK &&
+>  		    port->attached)
+> @@ -4092,6 +4234,25 @@ static void tcpm_pd_event_handler(struct kthread_work *work)
+>  			if (port->tcpc->get_cc(port->tcpc, &cc1, &cc2) == 0)
+>  				_tcpm_cc_change(port, cc1, cc2);
+>  		}
+> +		if (events & TCPM_FRS_EVENT) {
+> +			if (port->state == SNK_READY)
+> +				tcpm_set_state(port, FR_SWAP_SEND, 0);
+> +			else
+> +				tcpm_log(port, "Discarding FRS_SIGNAL! Not in sink ready");
+> +		}
+> +		if (events & TCPM_SOURCING_VBUS) {
+> +			tcpm_log(port, "sourcing vbus");
+> +			/*
+> +			 * In fast role swap case TCPC autonomously sources vbus. Set vbus_source
+> +			 * true as TCPM wouldn't have called tcpm_set_vbus.
+> +			 *
+> +			 * When vbus is sourced on the command on TCPM i.e. TCPM called
+> +			 * tcpm_set_vbus to source vbus, vbus_source would already be true.
+> +			 */
+> +			port->vbus_source = true;
+> +			_tcpm_pd_vbus_on(port);
+> +		}
+> +
+>  		spin_lock(&port->pd_event_lock);
+>  	}
+>  	spin_unlock(&port->pd_event_lock);
+> @@ -4125,6 +4286,50 @@ void tcpm_pd_hard_reset(struct tcpm_port *port)
+>  }
+>  EXPORT_SYMBOL_GPL(tcpm_pd_hard_reset);
+>  
+> +void tcpm_sink_frs(struct tcpm_port *port)
+> +{
+> +	spin_lock(&port->pd_event_lock);
+> +	port->pd_events = TCPM_FRS_EVENT;
+> +	spin_unlock(&port->pd_event_lock);
+> +	kthread_queue_work(port->wq, &port->event_work);
+> +}
+> +EXPORT_SYMBOL_GPL(tcpm_sink_frs);
+> +
+> +void tcpm_sourcing_vbus(struct tcpm_port *port)
+> +{
+> +	spin_lock(&port->pd_event_lock);
+> +	port->pd_events = TCPM_SOURCING_VBUS;
+> +	spin_unlock(&port->pd_event_lock);
+> +	kthread_queue_work(port->wq, &port->event_work);
+> +}
+> +EXPORT_SYMBOL_GPL(tcpm_sourcing_vbus);
+> +
+> +static void tcpm_enable_frs_work(struct kthread_work *work)
+> +{
+> +	struct tcpm_port *port = container_of(work, struct tcpm_port, enable_frs);
+> +
+> +	mutex_lock(&port->lock);
+> +	/* Not FRS capable */
+> +	if (!port->connected || port->port_type != TYPEC_PORT_DRP ||
+> +	    port->pwr_opmode != TYPEC_PWR_MODE_PD ||
+> +	    !port->tcpc->enable_frs ||
+> +	    /* Sink caps queried */
+> +	    port->sink_cap_done || port->negotiated_rev < PD_REV30)
+> +		goto unlock;
+> +
+> +	/* Send when the state machine is idle */
+> +	if (port->state != SNK_READY || port->vdm_state != VDM_STATE_DONE || port->send_discover)
+> +		goto resched;
+> +
+> +	tcpm_set_state(port, GET_SINK_CAP, 0);
+> +	port->sink_cap_done = true;
+> +
+> +resched:
+> +	mod_enable_frs_delayed_work(port, GET_SINK_CAP_RETRY_MS);
+> +unlock:
+> +	mutex_unlock(&port->lock);
+> +}
+> +
+>  static int tcpm_dr_set(struct typec_port *p, enum typec_data_role data)
+>  {
+>  	struct tcpm_port *port = typec_get_drvdata(p);
+> @@ -4532,7 +4737,7 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  {
+>  	const char *cap_str;
+>  	int ret;
+> -	u32 mw;
+> +	u32 mw, frs_current;
+>  
+>  	if (!fwnode)
+>  		return -EINVAL;
+> @@ -4601,6 +4806,13 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  
+>  	port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
+>  
+> +	/* FRS can only be supported byb DRP ports */
+> +	if (port->port_type == TYPEC_PORT_DRP) {
+> +		ret = fwnode_property_read_u32(fwnode, "frs-typec-current", &frs_current);
+> +		if (ret >= 0 && frs_current <= FRS_5V_3A)
+> +			port->frs_current = frs_current;
 > +	}
 > +
-> +	return irq_return;
-> +}
-> +
-> +static irqreturn_t max_tcpci_isr(int irq, void *dev_id)
+>  	return 0;
+>  }
+>  
+> @@ -4845,6 +5057,14 @@ static enum hrtimer_restart vdm_state_machine_timer_handler(struct hrtimer *time
+>  	return HRTIMER_NORESTART;
+>  }
+>  
+> +static enum hrtimer_restart enable_frs_timer_handler(struct hrtimer *timer)
 > +{
-> +	struct max_tcpci_chip *chip = dev_id;
+> +	struct tcpm_port *port = container_of(timer, struct tcpm_port, enable_frs_timer);
 > +
-> +	pm_wakeup_event(chip->dev, PD_ACTIVITY_TIMEOUT_MS);
-> +
-> +	if (!chip->port)
-> +		return IRQ_HANDLED;
-> +
-> +	return IRQ_WAKE_THREAD;
+> +	kthread_queue_work(port->wq, &port->enable_frs);
+> +	return HRTIMER_NORESTART;
 > +}
 > +
-> +static int max_tcpci_init_alert(struct max_tcpci_chip *chip, struct i2c_client *client)
-> +{
-> +	int ret;
-> +
-> +	ret = devm_request_threaded_irq(chip->dev, client->irq, max_tcpci_isr, max_tcpci_irq,
-> +					(IRQF_TRIGGER_LOW | IRQF_ONESHOT), dev_name(chip->dev),
-> +					chip);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	enable_irq_wake(client->irq);
-> +	return 0;
-> +}
-> +
-> +static int max_tcpci_start_toggling(struct tcpci *tcpci, struct tcpci_data *tdata,
-> +				    enum typec_cc_status cc)
-> +{
-> +	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
-> +
-> +	max_tcpci_init_regs(chip);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tcpci_init(struct tcpci *tcpci, struct tcpci_data *data)
-> +{
-> +	/*
-> +	 * Generic TCPCI overwrites the regs once this driver initializes
-> +	 * them. Prevent this by returning -1.
-> +	 */
-> +	return -1;
-> +}
-> +
-> +static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id *i2c_id)
-> +{
-> +	int ret;
-> +	struct max_tcpci_chip *chip;
-> +	u8 power_status;
-> +
-> +	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
-> +	if (!chip)
-> +		return -ENOMEM;
-> +
-> +	chip->client = client;
-> +	chip->data.regmap = devm_regmap_init_i2c(client, &max_tcpci_regmap_config);
-> +	if (IS_ERR(chip->data.regmap)) {
-> +		dev_err(&client->dev, "Regmap init failed\n");
-> +		return PTR_ERR(chip->data.regmap);
-> +	}
-> +
-> +	chip->dev = &client->dev;
-> +	i2c_set_clientdata(client, chip);
-> +
-> +	ret = max_tcpci_read8(chip, TCPC_POWER_STATUS, &power_status);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Chip level tcpci callbacks */
-> +	chip->data.set_vbus = max_tcpci_set_vbus;
-> +	chip->data.start_drp_toggling = max_tcpci_start_toggling;
-> +	chip->data.TX_BUF_BYTE_x_hidden = true;
-> +	chip->data.init = tcpci_init;
-> +
-> +	max_tcpci_init_regs(chip);
-> +	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
-> +	if (IS_ERR_OR_NULL(chip->tcpci)) {
-> +		dev_err(&client->dev, "TCPCI port registration failed");
-> +		ret = PTR_ERR(chip->tcpci);
-> +		return PTR_ERR(chip->tcpci);
-> +	}
-> +	chip->port = tcpci_get_tcpm_port(chip->tcpci);
-> +	ret = max_tcpci_init_alert(chip, client);
-> +	if (ret < 0)
-> +		goto unreg_port;
-> +
-> +	device_init_wakeup(chip->dev, true);
-> +	return 0;
-> +
-> +unreg_port:
-> +	tcpci_unregister_port(chip->tcpci);
-> +
-> +	return ret;
-> +}
-> +
-> +static int max_tcpci_remove(struct i2c_client *client)
-> +{
-> +	struct max_tcpci_chip *chip = i2c_get_clientdata(client);
-> +
-> +	if (!IS_ERR_OR_NULL(chip->tcpci))
-> +		tcpci_unregister_port(chip->tcpci);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct i2c_device_id max_tcpci_id[] = {
-> +	{ "maxtcpc", 0 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, max_tcpci_id);
-> +
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id max_tcpci_of_match[] = {
-> +	{ .compatible = "maxim,tcpc", },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, max_tcpci_of_match);
-> +#endif
-> +
-> +static struct i2c_driver max_tcpci_i2c_driver = {
-> +	.driver = {
-> +		.name = "maxtcpc",
-> +		.of_match_table = of_match_ptr(max_tcpci_of_match),
-> +	},
-> +	.probe = max_tcpci_probe,
-> +	.remove = max_tcpci_remove,
-> +	.id_table = max_tcpci_id,
-> +};
-> +module_i2c_driver(max_tcpci_i2c_driver);
-> +
-> +MODULE_AUTHOR("Badhri Jagan Sridharan <badhri@google.com>");
-> +MODULE_DESCRIPTION("Maxim TCPCI based USB Type-C Port Controller Interface Driver");
-> +MODULE_LICENSE("GPL v2");
+>  struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>  {
+>  	struct tcpm_port *port;
+> @@ -4874,10 +5094,13 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>  	kthread_init_work(&port->state_machine, tcpm_state_machine_work);
+>  	kthread_init_work(&port->vdm_state_machine, vdm_state_machine_work);
+>  	kthread_init_work(&port->event_work, tcpm_pd_event_handler);
+> +	kthread_init_work(&port->enable_frs, tcpm_enable_frs_work);
+>  	hrtimer_init(&port->state_machine_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+>  	port->state_machine_timer.function = state_machine_timer_handler;
+>  	hrtimer_init(&port->vdm_state_machine_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+>  	port->vdm_state_machine_timer.function = vdm_state_machine_timer_handler;
+> +	hrtimer_init(&port->enable_frs_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+> +	port->enable_frs_timer.function = enable_frs_timer_handler;
+>  
+>  	spin_lock_init(&port->pd_event_lock);
+>  
+> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+> index f842e4589bd2..3a805e2ecbc9 100644
+> --- a/include/linux/usb/pd.h
+> +++ b/include/linux/usb/pd.h
+> @@ -219,14 +219,16 @@ enum pd_pdo_type {
+>  #define PDO_CURR_MASK		0x3ff
+>  #define PDO_PWR_MASK		0x3ff
+>  
+> -#define PDO_FIXED_DUAL_ROLE	BIT(29)	/* Power role swap supported */
+> -#define PDO_FIXED_SUSPEND	BIT(28) /* USB Suspend supported (Source) */
+> -#define PDO_FIXED_HIGHER_CAP	BIT(28) /* Requires more than vSafe5V (Sink) */
+> -#define PDO_FIXED_EXTPOWER	BIT(27) /* Externally powered */
+> -#define PDO_FIXED_USB_COMM	BIT(26) /* USB communications capable */
+> -#define PDO_FIXED_DATA_SWAP	BIT(25) /* Data role swap supported */
+> -#define PDO_FIXED_VOLT_SHIFT	10	/* 50mV units */
+> -#define PDO_FIXED_CURR_SHIFT	0	/* 10mA units */
+> +#define PDO_FIXED_DUAL_ROLE		BIT(29)	/* Power role swap supported */
+> +#define PDO_FIXED_SUSPEND		BIT(28) /* USB Suspend supported (Source) */
+> +#define PDO_FIXED_HIGHER_CAP		BIT(28) /* Requires more than vSafe5V (Sink) */
+> +#define PDO_FIXED_EXTPOWER		BIT(27) /* Externally powered */
+> +#define PDO_FIXED_USB_COMM		BIT(26) /* USB communications capable */
+> +#define PDO_FIXED_DATA_SWAP		BIT(25) /* Data role swap supported */
+> +#define PDO_FIXED_FRS_CURR_MASK		(BIT(24) | BIT(23)) /* FR_Swap Current (Sink) */
+> +#define PDO_FIXED_FRS_CURR_SHIFT	23
+> +#define PDO_FIXED_VOLT_SHIFT		10	/* 50mV units */
+> +#define PDO_FIXED_CURR_SHIFT		0	/* 10mA units */
+>  
+>  #define PDO_FIXED_VOLT(mv)	((((mv) / 50) & PDO_VOLT_MASK) << PDO_FIXED_VOLT_SHIFT)
+>  #define PDO_FIXED_CURR(ma)	((((ma) / 10) & PDO_CURR_MASK) << PDO_FIXED_CURR_SHIFT)
+> @@ -454,6 +456,7 @@ static inline unsigned int rdo_max_power(u32 rdo)
+>  #define PD_T_DB_DETECT		10000	/* 10 - 15 seconds */
+>  #define PD_T_SEND_SOURCE_CAP	150	/* 100 - 200 ms */
+>  #define PD_T_SENDER_RESPONSE	60	/* 24 - 30 ms, relaxed */
+> +#define PD_T_RECEIVER_RESPONSE	15	/* 15ms max */
+>  #define PD_T_SOURCE_ACTIVITY	45
+>  #define PD_T_SINK_ACTIVITY	135
+>  #define PD_T_SINK_WAIT_CAP	240
+> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+> index 89f58760cf48..09762d26fa0c 100644
+> --- a/include/linux/usb/tcpm.h
+> +++ b/include/linux/usb/tcpm.h
+> @@ -78,8 +78,11 @@ enum tcpm_transmit_type {
+>   *		automatically if a connection is established.
+>   * @try_role:	Optional; called to set a preferred role
+>   * @pd_transmit:Called to transmit PD message
+> - * @mux:	Pointer to multiplexer data
+>   * @set_bist_data: Turn on/off bist data mode for compliance testing
+> + * @enable_frs:
+> + *		Optional; Called to enable/disable PD 3.0 fast role swap.
+> + *		Enabling frs is accessory dependent as not all PD3.0
+> + *		accessories support fast role swap.
+>   */
+>  struct tcpc_dev {
+>  	struct fwnode_handle *fwnode;
+> @@ -105,6 +108,7 @@ struct tcpc_dev {
+>  	int (*pd_transmit)(struct tcpc_dev *dev, enum tcpm_transmit_type type,
+>  			   const struct pd_message *msg);
+>  	int (*set_bist_data)(struct tcpc_dev *dev, bool on);
+> +	int (*enable_frs)(struct tcpc_dev *dev, bool enable);
+>  };
+>  
+>  struct tcpm_port;
+> @@ -114,6 +118,8 @@ void tcpm_unregister_port(struct tcpm_port *port);
+>  
+>  void tcpm_vbus_change(struct tcpm_port *port);
+>  void tcpm_cc_change(struct tcpm_port *port);
+> +void tcpm_sink_frs(struct tcpm_port *port);
+> +void tcpm_sourcing_vbus(struct tcpm_port *port);
+>  void tcpm_pd_receive(struct tcpm_port *port,
+>  		     const struct pd_message *msg);
+>  void tcpm_pd_transmit_complete(struct tcpm_port *port,
 > -- 
 > 2.28.0.618.gf4bc123cb7-goog
-
-thanks,
 
 -- 
 heikki
