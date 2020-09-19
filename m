@@ -2,91 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C32C7270A42
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Sep 2020 04:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC433270A49
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Sep 2020 04:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726471AbgISCwC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Sep 2020 22:52:02 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:51512 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726353AbgISCvs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 18 Sep 2020 22:51:48 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 6A0565A4C615191914BA;
-        Sat, 19 Sep 2020 10:51:46 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.487.0; Sat, 19 Sep 2020 10:51:36 +0800
-From:   Qinglang Miao <miaoqinglang@huawei.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        "Sylvain Lemieux" <slemieux.tyco@gmail.com>
-CC:     <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Qinglang Miao <miaoqinglang@huawei.com>
-Subject: [PATCH -next v2] usb: gadget: lpc32xx_udc: Convert to DEFINE_SHOW_ATTRIBUTE
-Date:   Sat, 19 Sep 2020 10:52:08 +0800
-Message-ID: <20200919025208.17863-1-miaoqinglang@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726316AbgISCyB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Sep 2020 22:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726129AbgISCyA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Sep 2020 22:54:00 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995AAC0613CF
+        for <linux-usb@vger.kernel.org>; Fri, 18 Sep 2020 19:54:00 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id g16so2518906uan.5
+        for <linux-usb@vger.kernel.org>; Fri, 18 Sep 2020 19:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YwIKrth7tYJPF7+z3Nto/9YjegvW9VBp7/QyzsiYMn0=;
+        b=e7S7ENxmJ/7DWnFswzJufgY8ywuXmcOXN9cQNitublLijI8AFQODk2r33cFrWPbQCL
+         9/2EY065UtTzOdOtqcBtiMBBuKTWXl4+6DcRzPqgsPPEASVe8HYcTLLs3/bNp/FK8ZV7
+         Az7MPnslghIkftQ+wCOW3IzuANm05ccf/4arwNjUvB5falJvWuxyJBS/xNFkAcLWpIb+
+         XYcCwii1jR2F5JNz34kgJfa6NOo3CrfALlF2n2Qg6yeOBcLlbEwaVLJCTFHNbupz2VRj
+         ZTSRxIXlshD6sDCTMGpfZbXdkPySMtyt1m6wHsYW7E0XbefzB+9ae/nX2LRBFeb0OHiM
+         nZ4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YwIKrth7tYJPF7+z3Nto/9YjegvW9VBp7/QyzsiYMn0=;
+        b=HCBzH4mfi3EFDA/btO50EXt9w+VYyNyiw1In1ZETVVu7WOsHof5tECaHmYLATb+ePU
+         +XhxuAc2DK5iepTd+T7LqUTigcjwKggGjbIygTC10QC5aAvEZUiLbrxLao072OxBXDiz
+         n5lXDmOzCd1zSX+a4mV58HdwojJSeBt8dsXPnrLTUWqRvFQZ4M9Rf//rBsRsvPr52sHg
+         3Wut7bdGcl5DEowLN2YS4phyKTqOkIHl+tKfdYuRlsPLnD/eyYJVRv7anNy8Cg/QLIJg
+         4zOHaWs2sVgLMHArMOPxwQCULVz9w5K9o0ccd7lM0+iqBg9Taoa8T+yWAuvjwYC2yBZK
+         zG4Q==
+X-Gm-Message-State: AOAM532UnNWshZJofF3M2G68W+gVeTNUeXk5czMFhpGQ4Yp6GnEaBc/y
+        9ETLWVLIpb9VVe+fRb2o3s13m3pfhwfuJssdbfX8fA==
+X-Google-Smtp-Source: ABdhPJytgx7MYHC4QXL2ZpNmp5sQXDy9TCGGzCNRYIhdFgqf2FE/spyMp67u/5ZEwObSOHklg6a8F0d7ce+xzF0penU=
+X-Received: by 2002:a9f:366e:: with SMTP id s43mr7671448uad.69.1600484038765;
+ Fri, 18 Sep 2020 19:53:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+References: <20200917101856.3156869-1-badhri@google.com> <20200917101856.3156869-11-badhri@google.com>
+ <20200918142007.GF1630537@kuha.fi.intel.com>
+In-Reply-To: <20200918142007.GF1630537@kuha.fi.intel.com>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Fri, 18 Sep 2020 19:53:22 -0700
+Message-ID: <CAPTae5KNabvw7sHyCdj2BE6xPDqfmOQaEm3fXTMx_LxMtuYP-g@mail.gmail.com>
+Subject: Re: [PATCH v7 11/11] usb: typec: tcpci_maxim: Implemnent set_auto_vbus_discharge_threshold
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use DEFINE_SHOW_ATTRIBUTE macro to simplify the code.
+On Fri, Sep 18, 2020 at 7:20 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> On Thu, Sep 17, 2020 at 03:18:56AM -0700, Badhri Jagan Sridharan wrote:
+> > Programs VBUS_SINK_DISCONNECT_THRESHOLD based on the power_role,
+> > voltage requested as sink, mode of operation.
+> >
+> > The programmed threshold is based on vSinkDisconnect and
+> > vSinkDisconnectPD values.
+> >
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > ---
+> > Changes since v1:
+> > - Changing patch version to v6 to fix version number confusion.
+> >
+> > Changes since v6:
+> > - Rebase on usb-next.
+> > ---
+> >  drivers/usb/typec/tcpm/tcpci_maxim.c | 48 ++++++++++++++++++++++++++++
+> >  1 file changed, 48 insertions(+)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> > index 723d7dd38f75..8289b596d2ee 100644
+> > --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
+> > +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> > @@ -137,6 +137,52 @@ static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
+> >               return;
+> >  }
+> >
+> > +static int max_tcpci_set_auto_vbus_discharge_threshold(struct tcpci *tcpci, struct tcpci_data *data,
+> > +                                                    enum typec_role port_role,
+> > +                                                    enum typec_pwr_opmode mode, bool pps_active,
+> > +                                                    u32 requested_vbus_voltage_mv)
+> > +{
+> > +     struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
+> > +     u32 threshold = 0;
+> > +     u8 pwr_ctrl;
+> > +
+> > +     /*
+> > +      * Indicates that vbus is going to go away due PR_SWAP, hard reset etc.
+> > +      * Do not discharge vbus here.
+> > +      */
+> > +     if (requested_vbus_voltage_mv == 0)
+> > +             goto write_thresh;
+>
+> I would assume that step is the same for every TCPC, no?
+I agree so moved to tcpci.c code.
+>
+> > +     if (port_role == TYPEC_SINK) {
+> > +             max_tcpci_read8(chip, TCPC_POWER_CTRL, &pwr_ctrl);
+> > +             if (pwr_ctrl & TCPC_FAST_ROLE_SWAP_EN) {
+> > +                     /* To prevent disconnect when the source is fast role swap is capable. */
+> > +                     threshold = 3500;
+> > +             } else if (mode == TYPEC_PWR_MODE_PD) {
+> > +                     if (pps_active)
+> > +                             threshold = (95 * requested_vbus_voltage_mv / 100) - 850;
+> > +                     else
+> > +                             threshold = (95 * requested_vbus_voltage_mv / 100) - 1250;
+> > +             } else {
+> > +                     /* 3.5V for non-pd sink */
+> > +                     threshold = 3500;
+> > +             }
+> > +     } else {
+> > +             /* 4V for source */
+> > +             threshold = 4000;
+> > +     }
+> > +
+> > +     threshold = threshold / TCPC_VBUS_SINK_DISCONNECT_THRESH_LSB;
+> > +
+> > +     if (threshold > TCPC_VBUS_SINK_DISCONNECT_THRESH_MAX) {
+> > +             dev_err(chip->dev, "VBUS_SINK_DISCONNECT_THRESH out of range");
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +write_thresh:
+> > +     return max_tcpci_write16(chip, TCPC_VBUS_SINK_DISCONNECT_THRESH, threshold);
+>
+> So couldn't tcpci.c write that register? This callback would then just
+> calculate the value. I just want to avoid boilerplate.
+Done !
+>
+> The threshold has type u32, but you still pass it to
+> max_tcpci_write16(). Is that on purpose (doesn't the compiler
+> complain)?
+I didnt see any warnings ! I don't know why.
+It wouldn't overflow though as TCPC_VBUS_SINK_DISCONNECT_THRESH_MAX
+has a max value of 0x3ff. Have corrected it though and moved the code
+to tcpci.c in v8.
 
-Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
----
-v2: based on linux-next(20200917), and can be applied to
-    mainline cleanly now.
+Thanks,
+Badhri
 
- drivers/usb/gadget/udc/lpc32xx_udc.c | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
-index e8a4637a9..3f1c62adc 100644
---- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-+++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-@@ -495,7 +495,7 @@ static void proc_ep_show(struct seq_file *s, struct lpc32xx_ep *ep)
- 	}
- }
- 
--static int proc_udc_show(struct seq_file *s, void *unused)
-+static int udc_show(struct seq_file *s, void *unused)
- {
- 	struct lpc32xx_udc *udc = s->private;
- 	struct lpc32xx_ep *ep;
-@@ -524,22 +524,11 @@ static int proc_udc_show(struct seq_file *s, void *unused)
- 	return 0;
- }
- 
--static int proc_udc_open(struct inode *inode, struct file *file)
--{
--	return single_open(file, proc_udc_show, PDE_DATA(inode));
--}
--
--static const struct file_operations proc_ops = {
--	.owner		= THIS_MODULE,
--	.open		= proc_udc_open,
--	.read		= seq_read,
--	.llseek		= seq_lseek,
--	.release	= single_release,
--};
-+DEFINE_SHOW_ATTRIBUTE(udc);
- 
- static void create_debug_file(struct lpc32xx_udc *udc)
- {
--	udc->pde = debugfs_create_file(debug_filename, 0, NULL, udc, &proc_ops);
-+	udc->pde = debugfs_create_file(debug_filename, 0, NULL, udc, &udc_fops);
- }
- 
- static void remove_debug_file(struct lpc32xx_udc *udc)
--- 
-2.23.0
-
+>
+> thanks,
+>
+> --
+> heikki
