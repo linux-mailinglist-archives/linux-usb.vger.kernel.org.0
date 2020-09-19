@@ -2,165 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8F6270E3C
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Sep 2020 15:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E16270ED3
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Sep 2020 17:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgISNyr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 19 Sep 2020 09:54:47 -0400
-Received: from aibo.runbox.com ([91.220.196.211]:46168 "EHLO aibo.runbox.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726159AbgISNyr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 19 Sep 2020 09:54:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:References:Cc:To:Subject:From;
-        bh=iPHWx2JUAUbIcISqbiln9SvsImo21k4OI04gLx1TxnU=; b=XyOztFjj4B18FXgIhNL3GUVH+A
-        PFnTIEfM1KaZsDoVzSP4GoydKYNvopMaTatgeMMY1RmcPdn1XC8UZxhUx/fzip8PcLvJUcbXH26NO
-        1NFWabAjYowd9rie5vFj/tmVf+sBqESfyFxLNZprAB31PPhzeorwmLLl9L5caz3XE8EIYZ51wFKLg
-        9Jm4b6vLc/ok3rvV37lW/otOqODSkfOd3G+CKHpeD4C47+H6WisH7+iR1pG5ftXqj5uT0oUdILmf1
-        VWl4EfSuLhXKXK/maa/HDewqzm5MIY9g5Ps/Xmr06YFDTNHoHP5pc08+fgIRNlSpVK8ZRrFjfVwOf
-        +3+67/sA==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1kJdK6-0006qk-Ik; Sat, 19 Sep 2020 15:54:42 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1kJdJp-0002Zg-HG; Sat, 19 Sep 2020 15:54:25 +0200
-From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
-Subject: Re: [PATCH 3/3] usbip: Make the driver's match function specific
-To:     Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>
-Cc:     Andrey Konovalov <andreyknvl@google.com>, stable@vger.kernel.org,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller@googlegroups.com
-References: <a6e14983a8849d5f75a43f403c7cc721b6e4a420.camel@hadess.net>
- <20200917144151.355848-1-m.v.b@runbox.com>
- <20200917144151.355848-3-m.v.b@runbox.com>
- <45badff8-53e9-359d-4bf2-b0f71b910b2f@linuxfoundation.org>
- <e64f51b0-db05-e078-af58-b31a0be1e9ca@runbox.com>
- <e6404ae3-4b4e-f8d4-4c92-a71410e20569@runbox.com>
- <d6d43c46-3231-7e64-b708-d1fe8349e8a3@linuxfoundation.org>
-Message-ID: <1580e066-41e6-ec74-7427-1dd0cdabcf90@runbox.com>
-Date:   Sat, 19 Sep 2020 16:54:22 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726596AbgISPQv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 19 Sep 2020 11:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726587AbgISPQv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Sep 2020 11:16:51 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906CBC0613D0
+        for <linux-usb@vger.kernel.org>; Sat, 19 Sep 2020 08:16:50 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id y17so9336727lfa.8
+        for <linux-usb@vger.kernel.org>; Sat, 19 Sep 2020 08:16:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/Yyx5fgdQQ53MJfSQkVm3NCGXBb0SNoIJgKMHS8hFqU=;
+        b=rN7OavEaQ4SwSGOpsJTrpu03q6Glz1O6NFAjy8AikXA7iFrkbitfUVx01VMLZ4M6Ue
+         sEqqInFS75d8eXpw59FJiEYbpUqnkORrfmcEaFVLhCeBLNOJhVo5dj2bSmpvRqwP1/5O
+         1jnLtTiBCA1tvQYPrfM7z5oe3bkE2zUKFDowcCoATPWIdhdX19EVq2dEezActrm+QKJg
+         0fn6ZG0N/BubIi9AhxEACFjMkKv7MQ2R4R0ziHGIKIuKhhI6HEZY5KiXWLxoCeoXRmv7
+         SXWGUC0YXiiSzojyoxsc120R58zfbMV53Vyys19g9flOxW6/svOkdhPuf132O66GguW2
+         FrUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/Yyx5fgdQQ53MJfSQkVm3NCGXBb0SNoIJgKMHS8hFqU=;
+        b=FW3nuJb+h+gPzpBp6w6dKQNKvLeFql0J121/8jklIYKols2+ov9fOdzq/O3pZL11wk
+         hEO4arqCF66LhEguAfuV3LL1/9I/kWwIZW1rgLtjlF7cA921vDSLhHPiGwAf33+vd9th
+         3FcC+FXVxL8VTCSqSoGt+j9h1BPVyF3ayz0YcKhxRMDRJOtXBvpC/8rIDxMwdTW/XZ5L
+         oynDS51NzLJBlvdLT5Y650HeJ4BjulkrwrIewxpGuohT7jOMSEuy/Avy9aCNP2m66Sb0
+         EAq652WCalFJSCkA+4XSNlPfoK1MfmDyZ09hHN0HsvKkQXLhDyer8rBKkbfoPrNf3v1I
+         FRLA==
+X-Gm-Message-State: AOAM531fkLj9K10d1FBUYWCp3p/i0fpQ+e9A3h9o3+2GcG90FNFP1ZD7
+        DE+VytlR35/PqFlzkelrDD9XYxPzw+Mc3wCq148=
+X-Google-Smtp-Source: ABdhPJwuWHxT1algO/3mzGuimfSdFOFDRjOyCniqmj9rP8XU1guJfFUmBH+P7dbey4pHmLDJd+qS0RNZJZ8JsHkx+/c=
+X-Received: by 2002:ac2:4424:: with SMTP id w4mr11947842lfl.447.1600528608758;
+ Sat, 19 Sep 2020 08:16:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <d6d43c46-3231-7e64-b708-d1fe8349e8a3@linuxfoundation.org>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab3:6e58:0:0:0:0:0 with HTTP; Sat, 19 Sep 2020 08:16:48
+ -0700 (PDT)
+Reply-To: kkoduah.sarpong@outlook.com
+From:   Kofi Koduah Sarpong <kofikoduahsarpong68@gmail.com>
+Date:   Sat, 19 Sep 2020 08:16:48 -0700
+Message-ID: <CAGyyCatJ-GsTnppF_8M5=VUOK+S9JoJyUVUoucVHSVOsHgJUkQ@mail.gmail.com>
+Subject: Re: investment interest from Engr: Kofi Sarpong Please go through and
+ get back to me.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18/09/2020 18.49, Shuah Khan wrote:
-> On 9/18/20 8:31 AM, M. Vefa Bicakci wrote:
->> Hello Shuah,
->>
->> I have just cleaned up the patches and run usbip_test.sh with a kernel without
->> the patches in this series and with a kernel in this series.
->>
->> I noticed that there is a change in behaviour due to the fact that the new
->> match function (usbip_match) does not always return true. This causes the
->> stub device driver's probe() function to not get called at all, as the new
->> more selective match function will prevent the stub device driver from being
->> considered as a potential driver for the device under consideration.
->>
-> 
-> Yes. This is the behavior I am concerned about and hence the reason
-> to use the usbip test to verify this doesn't happen.
-> 
-> With the patch you have the usbip match behavior becomes restrictive
-> which isn't desirable.
-> 
->> All of this results in the following difference in the logs of the usbip_test.sh,
->> where the expected kernel log message "usbip-host 2-6: 2-6 is not in match_busid table... skip!"
->> is not printed by a kernel that includes the patches in this series.
->>
->> --- unpatched_kernel_log.txt  2020-09-18 17:12:10.654000000 +0300
->> +++ patched_kernel_log.txt  2020-09-18 17:12:10.654000000 +0300
->> @@ -213,70 +213,69 @@
->>       |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 480M
->>   ==============================================================
->>   modprobe usbip_host - does it work?
->>   Should see -busid- is not in match_busid table... skip! dmesg
->>   ==============================================================
->> -usbip-host 2-6: 2-6 is not in match_busid table... skip!
->>   ==============================================================
->>
->> Do you find this change in behaviour unacceptable?
-> 
-> Yeah. This behavior isn't acceptable.
-> 
-> If no, I can remove this
->> test case from usbip_test.sh with the same patch. If yes, then there is a need
->> for a different solution to resolve the unexpected negative interaction between
->> Bastien's work on generic/specific USB device driver selection and usbip
->> functionality.
->>
-> 
-> I would recommend finding a different solution. Now that you have the
-> usbip test handy, you can verify and test for regressions.
-> 
-> thanks,
-> -- Shuah
+Lukoil Overseas Gh. Ltd.
+Oil & Gas Extraction Companies
+No. 68 Mankralo Street
+East Cantonments
+Accra Ghana.
 
-Thanks for the feedback, Shuah. I spent some time looking at and instrumenting
-the code in an attempt to find another solution, but have not found one.
+Dear: Reem Awwaad
 
-If the generic/specific USB driver selection functionality that Bastien Nocera
-introduced is desired to stay in the kernel, then making usbip_match more
-specific appears to be the only option for usbip to be functional without
-negatively affecting other device drivers.
+My name is Engr: Kofi Koduah Sarpong.
+I am the Chief Executive Officer of Lukoil Overseas Gh. Ltd Ghana.
+I will be retiring from my work by June next year. I write to inform
+you of my intention to invest in a Hotel business or any other forms
+of business in your country and i request you assists me in carrying
+out the feasibility studies on location and likely cost implication,
+type and estimation on how much it will cost to establish a three star
+hotel, either by outright purchase of already existing one or a
+dilapidated one that we can renovate or setting up a new one entirely.
 
-Should Bastien's work be reverted until a solution to this issue is found?
-Would you (or anyone) have any suggestions? I would be happy to work further
-on resolving this issue.
+If you sincerely carry out this survey, and give me feedback as fast
+as possible, I will give you the power of attorney to build & manage
+the hotel for me, pending my retirement next year as I said.
 
-I am including a summary of my findings below my signature.
+Sir, i have the sum of (US$85 million USD) that I deposited in a
+Finance company outside my country for this project.
 
-Thank you,
+Please don=E2=80=99t disregard this message I am very sincere in what am
+telling you the documents for the deposit I will send them to you for
+your confirmation as soon as we proceed.
 
-Vefa
+I have very little issue with health right now as a result of age but
+I have been assured by my doctor that I will be fine and get back to
+work soon presently i am in the neighboring country for medical
+reason.
 
-=== === ===
+Please do let me know if you are capable, and can handling such
+business. Feed me back with your details, and your area of
+specialization should be indicated as well. I will be expecting your
+reply as soon as possible.
 
-(1) If usbip_match stays as is, then the issue reported by Andrey Konovalov at
+Please send your telephone number to me i will call you for more details.
 
-       https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/
 
-     will remain unresolved and will trickle down to Linux 5.9 due to the following
-     commit's interaction with the return-true usbip_match function:
-
-       USB: Simplify USB ID table match
-       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=master&id=0ed9498f9ecfde50c93f3f3dd64b4cd5414d9944
-
-     This commit was mis-classified as a simplification rather than a bug-fix
-     and was not backported to linux-5.8.y. (I can explain my reasoning if beneficial.)
-     After cherry-picking this commit onto 5.8.10, I can reproduce Andrey's issue
-     with Andrey's "keyboard" program at: https://github.com/xairy/raw-gadget.git
-
-(2) If the following patches are also included in the kernel to fix two bugs in the
-     USB driver selection logic, then a return-true usbip_match function will cause
-     usbip's stub driver to be selected as the more specific device driver for all
-     USB devices when the usbip_host module is loaded. (This makes all USB devices
-     unavailable on my system, until I unload usbip_host and reload {x,e}hci-pci
-     modules.)
-
-       usbcore/driver: Fix specific driver selection
-       https://marc.info/?l=linux-usb&m=160037262607960&q=mbox
-
-       usbcore/driver: Fix incorrect downcast
-       https://lore.kernel.org/linux-usb/20200917144151.355848-2-m.v.b@runbox.com/
-
-     I realize that this impact statement does not match my previous description at
-
-        https://lore.kernel.org/linux-usb/363eab9a-c32a-4c60-4d6b-14ae8d873c52@runbox.com/
-
-     which was because I had forgotten to cherry pick 0ed9498f9e ("USB: Simplify
-     USB ID table match"; i.e., the commit discussed in the previous bullet point)
-     onto my v5.8.10-based test kernel.
+Regards
+Engr: Kofi Koduah Sarpong
+Chief Executive Officer
