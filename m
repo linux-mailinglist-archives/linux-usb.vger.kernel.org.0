@@ -2,114 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5721D270D45
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Sep 2020 12:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C950B270E39
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Sep 2020 15:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbgISKyd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 19 Sep 2020 06:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726041AbgISKyc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Sep 2020 06:54:32 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D683C0613CE;
-        Sat, 19 Sep 2020 03:54:32 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id s19so6353848ybc.5;
-        Sat, 19 Sep 2020 03:54:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pzSAC77KGj3b71DFM8b51B+fZYfC1Bsciu342riUU+I=;
-        b=q3aT5V6EYpJSrJl/fZxvehZ9OLp1zFUW4vS7anYCIVy32j7NWiA6qEyJPp+k82RqFP
-         0RcCLeEvdynv7ZL1KsxKuAPjJ3CmL385W0hTKZR3Svfxfq64HyLGOZv7XUxG1gVPiKY4
-         OcxFH/huz5+ZJwenNgGrJiujfVF077N5O7y/pTAEqSD5fVfPZDg0r3vfztI1xzKMhn27
-         /fFkHqgw4wyFop0l/J0qOegfFQsObv+T9uhO1opjkrdYtDjIzInwNF97zfNG12gyugE6
-         rPZISBt5qEfy55VNNc4dP4clg7dPo0hdPZolHWAEWcaS94b//yBekPMElBwzBVvlUdTm
-         GmIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pzSAC77KGj3b71DFM8b51B+fZYfC1Bsciu342riUU+I=;
-        b=itS3dXbvk4S1Ldnp/IIMacECrNyZW/WmgOk4BJlkRnhj31zd3fIisrWlb7sa2Tq7D0
-         XezdpcZ8wE7r9azt5c5gvYwFAmsEpdKTWJKagaIjmHtW9XkuuTVbhysf8Q2pSimjzc5e
-         WHzl+gq1iGQQhypALmnVRbpPGYEEZpiVfai52LS2x7hM7ttKwlIF7t3iolaTagj367uG
-         kgbIWlKHevrvD6xjwGIarmMCVhHrxXaSmxecrZhpdLVa3MI3pnOUzyCA76U5AdwZtbka
-         jPiabqUMKmfBMBaacWtxE8JJkYM4dIIAHvixIdGdrxqtOpP5haG7PEWQfEjc+pGC1+ji
-         JfuQ==
-X-Gm-Message-State: AOAM531XdgWFPWEOTN/3l75PFwNKJjjBwgv6lxNpFjBcJL1G0s2iotAp
-        TrLVy4dZ9CAd4Pkac9cOaZCF1BO01avuPhF/o48=
-X-Google-Smtp-Source: ABdhPJw5efc5NhFkTetrZgcf7Z8DzfCZh/tmjP6pUg93tWkSjNZlODD1MWwUBtozQzW7FY/5hEpct+waFEd5OOBoI4k=
-X-Received: by 2002:a25:e811:: with SMTP id k17mr45613290ybd.401.1600512871413;
- Sat, 19 Sep 2020 03:54:31 -0700 (PDT)
+        id S1726437AbgISNxL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 19 Sep 2020 09:53:11 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:46090 "EHLO aibo.runbox.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726159AbgISNxL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 19 Sep 2020 09:53:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+         s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:References:Cc:To:Subject:From;
+        bh=x4PvldqpBh6r5oG1qvZNgwCA+P5SnAhYQfcqcPXTvb0=; b=ODqOnMPPHj2lewdreRBtovUFB4
+        /bj0uxyny/sbG5NruPIuFgfYGERTUPpcBpk1dEvIpqzWhwPROTNvkMG7Yd3BuTr7p2qKEcu9g8+M0
+        HVHa8JHLb3QUtOlYqQ3RJbSaZ4+CgTUDAsV/km4S9pX0YYt/BmSpEfun+mwEPiNV2JnkqcJb6k3iM
+        4oGxuvYQ7nUV5+bT0y8+YFodCFS+2Jl6NQ8dqr9WoOAFaFAcNuU4oA9iNpwCc7Yuvq8VHMjVzW0dN
+        bojm1QYc3sK5n+ocGVqMsOEvBYzRfq9pA5xcFBpwglmJ7LlKozwe0CEb8mlJCy5AlDdMSqVOXqxI4
+        rrAJOOzg==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <m.v.b@runbox.com>)
+        id 1kJdIY-0006kP-Mu; Sat, 19 Sep 2020 15:53:06 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1kJdIJ-0000zW-PL; Sat, 19 Sep 2020 15:52:51 +0200
+From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+Subject: Re: [PATCH 1/3] usbcore/driver: Fix specific driver selection
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bastien Nocera <hadess@hadess.net>, syzkaller@googlegroups.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <a6e14983a8849d5f75a43f403c7cc721b6e4a420.camel@hadess.net>
+ <20200917144151.355848-1-m.v.b@runbox.com>
+ <363eab9a-c32a-4c60-4d6b-14ae8d873c52@runbox.com>
+ <20200918145231.GA1130146@rowland.harvard.edu>
+Message-ID: <50d2232f-cb08-5881-828d-cb9e465d5d05@runbox.com>
+Date:   Sat, 19 Sep 2020 16:52:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-12-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594919915-5225-12-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sat, 19 Sep 2020 11:54:05 +0100
-Message-ID: <CA+V-a8vuR-7vqxNnrqQ5Ysf3Xjvhp3xRZ33i8+6nEGFLJciT3A@mail.gmail.com>
-Subject: Re: [PATCH 11/20] dt-bindings: usb: renesas,usbhs: Add r8a774e1 support
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200918145231.GA1130146@rowland.harvard.edu>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On 18/09/2020 17.52, Alan Stern wrote:
+> On Fri, Sep 18, 2020 at 05:31:26PM +0300, M. Vefa Bicakci wrote:
+>> Hello all,
+>>
+>> I noticed that applying this patch on its own to the kernel causes the following
+>> unexpected behaviour: As soon as the usbip_host module is loaded, all of the
+>> USB devices are re-probed() by their drivers, and this causes the USB devices
+>> connected to my system to be momentarily unavailable. This happens because
+>> *without* the third patch in this patch set, the match function for the usbip_host
+>> device driver unconditionally returns true.
+>>
+>> The third patch in this patch set [1] makes this unexpected behaviour go
+>> away, as it makes the usbip device driver's match function only match devices
+>> that were requested by user-space to be used with USB-IP.
+>>
+>> Is this something to be concerned about? I was thinking of people who might be
+>> using git-bisect, who might encounter this issue in an unexpected manner.
+>>
+>> As a potential solution, I can prepare another patch to revert commit
+>> 7a2f2974f2 ("usbip: Implement a match function to fix usbip") so that this
+>> unexpected behaviour will not be observed. This revert would be placed as
+>> the first patch in the patch series.
+> 
+> Yes, that sounds like a good solution.
+> 
+> Alan Stern
 
-On Thu, Jul 16, 2020 at 6:19 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> Document RZ/G2H (R8A774E1) SoC bindings.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-Could you please pick this patch.
+Thanks for the feedback, Alan!
 
-Cheers,
-Prabhakar
+Given Shuah's answer to my other question, it looks like there is a need for
+further work.
 
-> diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> index af4826fb6824..737c1f47b7de 100644
-> --- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> +++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> @@ -39,6 +39,7 @@ properties:
->                - renesas,usbhs-r8a774a1 # RZ/G2M
->                - renesas,usbhs-r8a774b1 # RZ/G2N
->                - renesas,usbhs-r8a774c0 # RZ/G2E
-> +              - renesas,usbhs-r8a774e1 # RZ/G2H
->                - renesas,usbhs-r8a7795  # R-Car H3
->                - renesas,usbhs-r8a7796  # R-Car M3-W
->                - renesas,usbhs-r8a77961 # R-Car M3-W+
-> --
-> 2.17.1
->
+Vefa
