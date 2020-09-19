@@ -2,159 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC433270A49
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Sep 2020 04:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EAC4270B07
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Sep 2020 07:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbgISCyB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Sep 2020 22:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726129AbgISCyA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Sep 2020 22:54:00 -0400
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995AAC0613CF
-        for <linux-usb@vger.kernel.org>; Fri, 18 Sep 2020 19:54:00 -0700 (PDT)
-Received: by mail-ua1-x941.google.com with SMTP id g16so2518906uan.5
-        for <linux-usb@vger.kernel.org>; Fri, 18 Sep 2020 19:54:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YwIKrth7tYJPF7+z3Nto/9YjegvW9VBp7/QyzsiYMn0=;
-        b=e7S7ENxmJ/7DWnFswzJufgY8ywuXmcOXN9cQNitublLijI8AFQODk2r33cFrWPbQCL
-         9/2EY065UtTzOdOtqcBtiMBBuKTWXl4+6DcRzPqgsPPEASVe8HYcTLLs3/bNp/FK8ZV7
-         Az7MPnslghIkftQ+wCOW3IzuANm05ccf/4arwNjUvB5falJvWuxyJBS/xNFkAcLWpIb+
-         XYcCwii1jR2F5JNz34kgJfa6NOo3CrfALlF2n2Qg6yeOBcLlbEwaVLJCTFHNbupz2VRj
-         ZTSRxIXlshD6sDCTMGpfZbXdkPySMtyt1m6wHsYW7E0XbefzB+9ae/nX2LRBFeb0OHiM
-         nZ4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YwIKrth7tYJPF7+z3Nto/9YjegvW9VBp7/QyzsiYMn0=;
-        b=HCBzH4mfi3EFDA/btO50EXt9w+VYyNyiw1In1ZETVVu7WOsHof5tECaHmYLATb+ePU
-         +XhxuAc2DK5iepTd+T7LqUTigcjwKggGjbIygTC10QC5aAvEZUiLbrxLao072OxBXDiz
-         n5lXDmOzCd1zSX+a4mV58HdwojJSeBt8dsXPnrLTUWqRvFQZ4M9Rf//rBsRsvPr52sHg
-         3Wut7bdGcl5DEowLN2YS4phyKTqOkIHl+tKfdYuRlsPLnD/eyYJVRv7anNy8Cg/QLIJg
-         4zOHaWs2sVgLMHArMOPxwQCULVz9w5K9o0ccd7lM0+iqBg9Taoa8T+yWAuvjwYC2yBZK
-         zG4Q==
-X-Gm-Message-State: AOAM532UnNWshZJofF3M2G68W+gVeTNUeXk5czMFhpGQ4Yp6GnEaBc/y
-        9ETLWVLIpb9VVe+fRb2o3s13m3pfhwfuJssdbfX8fA==
-X-Google-Smtp-Source: ABdhPJytgx7MYHC4QXL2ZpNmp5sQXDy9TCGGzCNRYIhdFgqf2FE/spyMp67u/5ZEwObSOHklg6a8F0d7ce+xzF0penU=
-X-Received: by 2002:a9f:366e:: with SMTP id s43mr7671448uad.69.1600484038765;
- Fri, 18 Sep 2020 19:53:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200917101856.3156869-1-badhri@google.com> <20200917101856.3156869-11-badhri@google.com>
- <20200918142007.GF1630537@kuha.fi.intel.com>
-In-Reply-To: <20200918142007.GF1630537@kuha.fi.intel.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Fri, 18 Sep 2020 19:53:22 -0700
-Message-ID: <CAPTae5KNabvw7sHyCdj2BE6xPDqfmOQaEm3fXTMx_LxMtuYP-g@mail.gmail.com>
-Subject: Re: [PATCH v7 11/11] usb: typec: tcpci_maxim: Implemnent set_auto_vbus_discharge_threshold
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726112AbgISF7p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 19 Sep 2020 01:59:45 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:52863 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726054AbgISF7o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Sep 2020 01:59:44 -0400
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id B95769EF;
+        Sat, 19 Sep 2020 01:59:43 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute7.internal (MEProxy); Sat, 19 Sep 2020 01:59:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm2; bh=KpwAQqu9rVzwclCBareEUxPEJ9ZL5tM
+        EWD8m/APp4As=; b=nQvlEB+Ing/zEY4M+iWIoMTnQNezP+h6x+W5s5HVusts3IG
+        ytKkVaZGSeNn8FUYp2cI7FAMqgJN8SAB2NQFVE6kigEYE5bF68EqIlF5zkKvyp+O
+        Pb5FPih08eZlvdYSKWJVI5HN/SUUeklKUzXy2ltOhVzsBTkq3TMq7KNELOmLo0cn
+        Te60FaJsYom4kLel/07kf2PAuHKcTYG6gadt9ZRd0fSiFYXMjclrHl01qULkVf/J
+        IQTU018RskDt/niowNH+KUohbcaKLPjf47LYqmvilMHkOOJKxgwMgDPKhbHkfpOu
+        qjE915j0/UvFb2oI8jzUvlkaRXVGRXm0LWocRuQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=KpwAQq
+        u9rVzwclCBareEUxPEJ9ZL5tMEWD8m/APp4As=; b=qxW9nTulbiN0rO+D+uXpTQ
+        irybOUVwqW6XxszDySQEezKz8wQZJzY5viCkYNl0HtupT8q8/Pk3ifI8HCpkvx/n
+        v2ZBeFfGC8KZch97zKGJqjs6y4KWeW+orqifEpx70uCmbSqnHQ+08DOY2A2wSmqY
+        kJvoMOGrXW1b9q5yGmLFjcasslHi2f9di7FMkkb4oYdtzuzwI21sPlc24LUgm5eM
+        YAlNtMfGHoA0j3ROq8EYQCZPNq9Ut2FAvH1oLwlfrUH6tcFQQKvybJeDrN9HZPLc
+        Yt+MKgj+L6xfZ16Y/94IxKCsM64dbYCVC6ZfKw3428ZNwsMVaATBDrugEoxz0EjQ
+        ==
+X-ME-Sender: <xms:Tp5lXx3slfllNrNYfEETZi-Vt1dVhfTSCD39_AefSQWgpfjHxqDt8g>
+    <xme:Tp5lX4GyqQ89yDV97cURZuwx24s-9h4xg9xfbtZ3PeaFPslsdRqBNF1eZBleTrPhH
+    2y_vs1wRRo6vjS5_lY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtdejgddutdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvufgtsehttd
+    ertderredtnecuhfhrohhmpedfufhiugcuufhprhihfdcuoehsihgusegrvggrmhdruhhs
+    qeenucggtffrrghtthgvrhhnpeevgefhveevteetfeetkeejjeehudffffffhfeuffelhf
+    euffdufeduleejfeeugfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
+    ihhlfhhrohhmpehsihgusegrvggrmhdruhhs
+X-ME-Proxy: <xmx:Tp5lXx4_7YWk2qesY__G_oirToV9pb-Xw6MHDRmlBjXAYH74TW14jw>
+    <xmx:Tp5lX-0_RKXkP8r8hVb_Pf-E1wP7-fMGBJL5eYihMGafBv_ptR7HhQ>
+    <xmx:Tp5lX0HqPWA2vicb7wqw2o2CQaPe6Hfu3q5XUUxORZkUQOTayq6CLw>
+    <xmx:T55lX3xUJ8bBkYXnR-llpVmO6Rj3lZWiPYXsM2oe9a_8wp1f1KVzLg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4B4BA660069; Sat, 19 Sep 2020 01:59:35 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-325-g8593b62-fm-20200916.004-g0f995879-bis
+Mime-Version: 1.0
+Message-Id: <0aa35d4b-50f0-41e3-b12d-c59b1263a5cf@www.fastmail.com>
+In-Reply-To: <AM6PR04MB5413A79BF32C07041B1B7B70F13F0@AM6PR04MB5413.eurprd04.prod.outlook.com>
+References: <8d9ea8e7-ef9f-4d00-8ca0-b624dcd91de1@www.fastmail.com>
+ <AM6PR04MB541315E1AF4DB7DEF9F3D2BBF13F0@AM6PR04MB5413.eurprd04.prod.outlook.com>
+ <63692cc0-4df0-41d7-8889-a83eca7fd806@www.fastmail.com>
+ <AM6PR04MB5413A79BF32C07041B1B7B70F13F0@AM6PR04MB5413.eurprd04.prod.outlook.com>
+Date:   Sat, 19 Sep 2020 00:59:22 -0500
+From:   "Sid Spry" <sid@aeam.us>
+To:     "Ran Wang" <ran.wang_1@nxp.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: Enabling Device DWC3 Device Mode
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 18, 2020 at 7:20 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Thu, Sep 17, 2020 at 03:18:56AM -0700, Badhri Jagan Sridharan wrote:
-> > Programs VBUS_SINK_DISCONNECT_THRESHOLD based on the power_role,
-> > voltage requested as sink, mode of operation.
-> >
-> > The programmed threshold is based on vSinkDisconnect and
-> > vSinkDisconnectPD values.
-> >
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > ---
-> > Changes since v1:
-> > - Changing patch version to v6 to fix version number confusion.
-> >
-> > Changes since v6:
-> > - Rebase on usb-next.
-> > ---
-> >  drivers/usb/typec/tcpm/tcpci_maxim.c | 48 ++++++++++++++++++++++++++++
-> >  1 file changed, 48 insertions(+)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> > index 723d7dd38f75..8289b596d2ee 100644
-> > --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> > +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> > @@ -137,6 +137,52 @@ static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
-> >               return;
-> >  }
-> >
-> > +static int max_tcpci_set_auto_vbus_discharge_threshold(struct tcpci *tcpci, struct tcpci_data *data,
-> > +                                                    enum typec_role port_role,
-> > +                                                    enum typec_pwr_opmode mode, bool pps_active,
-> > +                                                    u32 requested_vbus_voltage_mv)
-> > +{
-> > +     struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
-> > +     u32 threshold = 0;
-> > +     u8 pwr_ctrl;
-> > +
-> > +     /*
-> > +      * Indicates that vbus is going to go away due PR_SWAP, hard reset etc.
-> > +      * Do not discharge vbus here.
-> > +      */
-> > +     if (requested_vbus_voltage_mv == 0)
-> > +             goto write_thresh;
->
-> I would assume that step is the same for every TCPC, no?
-I agree so moved to tcpci.c code.
->
-> > +     if (port_role == TYPEC_SINK) {
-> > +             max_tcpci_read8(chip, TCPC_POWER_CTRL, &pwr_ctrl);
-> > +             if (pwr_ctrl & TCPC_FAST_ROLE_SWAP_EN) {
-> > +                     /* To prevent disconnect when the source is fast role swap is capable. */
-> > +                     threshold = 3500;
-> > +             } else if (mode == TYPEC_PWR_MODE_PD) {
-> > +                     if (pps_active)
-> > +                             threshold = (95 * requested_vbus_voltage_mv / 100) - 850;
-> > +                     else
-> > +                             threshold = (95 * requested_vbus_voltage_mv / 100) - 1250;
-> > +             } else {
-> > +                     /* 3.5V for non-pd sink */
-> > +                     threshold = 3500;
-> > +             }
-> > +     } else {
-> > +             /* 4V for source */
-> > +             threshold = 4000;
-> > +     }
-> > +
-> > +     threshold = threshold / TCPC_VBUS_SINK_DISCONNECT_THRESH_LSB;
-> > +
-> > +     if (threshold > TCPC_VBUS_SINK_DISCONNECT_THRESH_MAX) {
-> > +             dev_err(chip->dev, "VBUS_SINK_DISCONNECT_THRESH out of range");
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +write_thresh:
-> > +     return max_tcpci_write16(chip, TCPC_VBUS_SINK_DISCONNECT_THRESH, threshold);
->
-> So couldn't tcpci.c write that register? This callback would then just
-> calculate the value. I just want to avoid boilerplate.
-Done !
->
-> The threshold has type u32, but you still pass it to
-> max_tcpci_write16(). Is that on purpose (doesn't the compiler
-> complain)?
-I didnt see any warnings ! I don't know why.
-It wouldn't overflow though as TCPC_VBUS_SINK_DISCONNECT_THRESH_MAX
-has a max value of 0x3ff. Have corrected it though and moved the code
-to tcpci.c in v8.
+Hello list and Ran, I've some more observations. Firstly, I have to set the dwc3
+mode to peripheral directly. Checking the code I was unable to find what actually
+allows you to select the mode if specifying OTG.
 
-Thanks,
-Badhri
+I have devices in /sys/class/udc and they function properly via configfs when
+plugged into a USB2 only port. If I plug them into a superspeed port I get
+nothing in dmesg on the host side. At first, I did get a response on the host, in
+the form of:
 
+[591550.770819] usb 1-1.2: new full-speed USB device number 76 using xhci_hcd
+[591550.870962] usb 1-1.2: device descriptor read/64, error -32
+[591551.078865] usb 1-1.2: device descriptor read/64, error -32
+[591551.286875] usb 1-1.2: new full-speed USB device number 77 using xhci_hcd
+[591551.386873] usb 1-1.2: device descriptor read/64, error -32
+[591551.594859] usb 1-1.2: device descriptor read/64, error -32
+[591551.703160] usb 1-1-port2: attempt power cycle
+
+However now I get no driver activity when binding the UDC in configfs or
+loading or unloading the respective modules. Kernel is 5.7.15 w/ patches.
+
+It doesn't seem like a fried the port or tripped a polyfuse, the port still works
+after attempting USB3 device mode.
+
+On Thu, Sep 17, 2020, at 10:42 PM, Ran Wang wrote:
+> Hi Sid,
+> 
+> > -----Original Message-----
+> > From: Sid Spry <sid@aeam.us>
+> > Sent: Friday, September 18, 2020 11:08 AM
+> > To: Ran Wang <ran.wang_1@nxp.com>
+> > Cc: linux-usb@vger.kernel.org
+> > Subject: Re: Enabling Device DWC3 Device Mode
+> > 
+> > Thanks Ran. I took a look at the document, if you or anyone else can weigh in
+> > I'd appreciate it. The platform devices seem to be active, see below.
 >
-> thanks,
->
-> --
-> heikki
+> So you want to use 'otg' or 'preripheral'? The SW flows is a little bit 
+> different (in dwc3/core.c)
+> If you want otg, I guess module solution would not be good. But I have 
+> no idea how to enable
+> mass storage gadget in build-in way, to be honest. So you could try 
+> ethernet gadget which
+> doesn't require passing parameters, it works on my part.
+> 
+> > Starting at line 767. It's a lot sparser, but the dr_mode is there. I feel I should
+> > note that despite the lack of devices in /sys/class/udc I have nodes in
+> > /sys/bus/platform/drivers/dwc3:
+> > 
+> > # ls /sys/bus/platform/drivers/dwc3
+> > bind  fe800000.usb  fe900000.usb  module  uevent  unbind
+> > 
+> > > One of the example in DTS is
+> > > arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
+> > > and arch/arm64/boot/dts/freescale/fsl-lx2160a-rdb.dts, and you need to
+> > > manually update it by following above doc to enable device mode.
+> > >
+> > 
+> > The document linked is relevant beginning page 445. The above dts settings
+> > seem appropriate and I have the necessary kernel configuration enabled. Any
+> > relevant drivers are modules.
+> > 
+> > I'm not really sure how to diagnose it from here. Any help is appreciated.
+> 
+> Parsing property 'dr_mode' is the key to control driver logic path.
+> 
+> I think you could begin with drivers/usb/dwc3/core.c, see what happen 
+> in dwc3_core_init_mode()
+> which handling role switching (host/peripheral/otg) in calling 
+> dwc3_probe()
+> if you have made sure all kernel configuration had been done correctly, 
+> such as (ethernet gadget):
+> CONFIG_USB_DWC3=y
+> CONFIG_USB_DWC3_DUAL_ROLE=y
+> CONFIG_USB_GADGET=y
+> CONFIG_USB_CONFIGFS=y
+> CONFIG_USB_ETH=y
+> 
+> With dr_mode=peripheral (or otg), it should work (if above dwc3_probe() 
+> encountered no error).
+> 
+
+I will pursue this in more detail so I don't need to reboot to change dwc3 mode
+but didn't find any relevant code path for otg -> device from userspace. I'll try
+debugging later.
+
+Sid.
