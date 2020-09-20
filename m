@@ -2,233 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30389271121
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Sep 2020 00:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D63F27118C
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Sep 2020 02:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726696AbgISW3Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 19 Sep 2020 18:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S1726826AbgITATE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 19 Sep 2020 20:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726598AbgISW3Z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Sep 2020 18:29:25 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB79C0613CE;
-        Sat, 19 Sep 2020 15:29:25 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id v23so8015935ljd.1;
-        Sat, 19 Sep 2020 15:29:25 -0700 (PDT)
+        with ESMTP id S1726788AbgITATE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Sep 2020 20:19:04 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2D9C0613CE;
+        Sat, 19 Sep 2020 17:19:03 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id j11so13015641ejk.0;
+        Sat, 19 Sep 2020 17:19:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NKi+wjC6dWzf+Z7xGQjWsEc0rij7x/ja/YI7q4yBabs=;
-        b=kHIQOZ0CB9+LA4FOUvowUp2lKrrUOWcfne+NEfcfXJk0OTupohDxTLR43rdPYnpU5U
-         GicCbI0EvyF77t+uvfFgtPParoW7MY/QP0EkmSsc2ro8g3fNiPcAMdMmRDU9CpFLDQVD
-         o5gGX+mk1OtmrvatXkrMovoRWzxpYSg+jfHCjZsjENQNSzY6KylvlDdh1BRYn/Aa4Czn
-         W2itJWQNQynupCSvO/KbveyopSz6z7xXAn+2LJEjL9Gg2X0HY1P/+AfLFYXXdtIxXOKn
-         msgL17woaTsPj05OK1vNY+w48J+/Uphiyvq6mEPxYaIuguoZ1m1m1EKqjBV7lxcwGW+k
-         ciTQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5yaT5gZZGJLhXLmT2L9V2Hy/ARWeh+FAUBV0QnUx2j0=;
+        b=OKh2MwB7YAnunkLwi9mBwWSPlaCMF2V4O40fHFkSKo0sUpoEoGINQ3wJXUMz7HrHZn
+         MqbfAV8Qmo3UMJyhdoJf8Dpgmb4ExMaPHDfE2z6U34vlVIz/FrvOxeltI5sNJqD8wAe/
+         3jW7JZ6TX0eZSTcWgiTFST0mqiHGaBd+9RNhFIAq6VCUPeQtUrrN6WByeZeTzNuvLKKe
+         jGI4WMSiltp/NV4QpFIkrTCKWr5umucs50HSpKa1shqznnYPVGN1l7wdNgVVEJZD9aT6
+         neIyXUNaLrB048snOOWnskYXA0vHMMOGD/R6pkPP+lts67U97bC/h2ThNDoyZJiZFA/F
+         uQSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NKi+wjC6dWzf+Z7xGQjWsEc0rij7x/ja/YI7q4yBabs=;
-        b=TZt1JEAdJTr9sKwGjL97UM5Huh8cFkOLXGHE5NmQNHafWwMtsqbuRGaiLX8noclHKd
-         67iZhk0W1xZp08LreWmTXtdqoUpcH3T/z6Rh09bawRJ3IsZxplBzMKz5G9FRAm0fczg/
-         HnhqTFZqR2C7nM7NYscQbDKS+3z2IAAxk9V20yPri0ljpJm8BpTfIeg7IMHxxi+2oGrA
-         5p8lGJwm5wW/P9AxXNkOEgTf8P1OY9buge6KPdjVFd3vjth5U7owCu4rvXxHl6im6D/D
-         R5Sl1AUNzj8KND5tM4TLuNULJtlTtMdC20topRZYLIYmYpkcveNly1uJXyKqjoWsVzD0
-         qHzw==
-X-Gm-Message-State: AOAM532Hc5RkXS/jkwo6oMI4enli8lv2PFaLVFb9hSVQbx4N514HLNJU
-        icOTi9MOoMMLettzGl+31VU=
-X-Google-Smtp-Source: ABdhPJyKClnDWdlUib5KUXzdnN+24azy9IRGBZhTe+irm0IOao3KfXeA08PP2jHuylJgT4MIk5ApWg==
-X-Received: by 2002:a2e:7806:: with SMTP id t6mr14590542ljc.48.1600554563573;
-        Sat, 19 Sep 2020 15:29:23 -0700 (PDT)
-Received: from z50.localnet (109241122244.gdansk.vectranet.pl. [109.241.122.244])
-        by smtp.gmail.com with ESMTPSA id o128sm1435563lfa.126.2020.09.19.15.29.21
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5yaT5gZZGJLhXLmT2L9V2Hy/ARWeh+FAUBV0QnUx2j0=;
+        b=iqFj6tgdglhGs6WVrBayYiBo8HNrbjU5t7lq8m27znT8X5VPamaTlDpJJqbJTQrRfH
+         +V3CX1FPrsUoBCnc2jtcXssb3OBgiLqPYJb5NQGCup2YnJP+Wcq81myidXB1gLZIlCdB
+         p+oRz9InFgQMZsr7a26XQUP6d6HxpraloqUqwAfHlMAiUDJbhQjZhBfINOxoj3+urKvw
+         ZI2RP7acytprU/+1VCOjQmMO587TbUq/rxKGCoEMSqkdI7426VqbcJmX0tD3JHeynw+o
+         pz+gfa6gs8dMHekLXeiX47bmWExa1FIHt8VT8Tkv4v7n6i0Fx/CkrwPixMkGX6cbRrY9
+         Tvlg==
+X-Gm-Message-State: AOAM533GyDlzIPtMGriBcigeQorNSM/Pe/5zbL5I0h4bR94yY/e93F+A
+        nDuimhkqu04aTQnvhTSPoHs=
+X-Google-Smtp-Source: ABdhPJzJrK3cKu/ge/dvWRohSexRPJbhGwDuFT805kDgJfQVKW04vd0cTvmAyqeJqlfMt493XlFP1w==
+X-Received: by 2002:a17:906:e88:: with SMTP id p8mr45339836ejf.134.1600561142056;
+        Sat, 19 Sep 2020 17:19:02 -0700 (PDT)
+Received: from debian64.daheim (p4fd09180.dip0.t-ipconnect.de. [79.208.145.128])
+        by smtp.gmail.com with ESMTPSA id i3sm5570067edn.55.2020.09.19.17.19.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2020 15:29:22 -0700 (PDT)
-From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>, Tony Lindgren <tony@atomide.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/4] ARM/omap1: switch to use dma_direct_set_offset for lbus DMA offsets
-Date:   Sun, 20 Sep 2020 00:29:20 +0200
-Message-ID: <2184547.ElGaqSPkdT@z50>
-In-Reply-To: <20200918054933.GK7101@atomide.com>
-References: <20200917173229.3311382-1-hch@lst.de> <20200917173229.3311382-2-hch@lst.de> <20200918054933.GK7101@atomide.com>
+        Sat, 19 Sep 2020 17:19:01 -0700 (PDT)
+Received: from chuck by debian64.daheim with local (Exim 4.94)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1kJn49-000s3p-Dv; Sun, 20 Sep 2020 02:18:53 +0200
+From:   Christian Lamparter <chunkeey@gmail.com>
+To:     linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <hminas@synopsys.com>
+Subject: [PATCH v1 1/2] dt-bindings: usb: dwc2: add support for APM82181 SoCs USB OTG HS and FS
+Date:   Sun, 20 Sep 2020 02:18:49 +0200
+Message-Id: <a43868b06566f5d959d8cfc4e763bede2885931a.1600560884.git.chunkeey@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Tony,
+adds the specific compatible string for the DWC2 IP found in the APM82181
+SoCs. The APM82181's USB-OTG seems like it was taken from its direct
+predecessor: the PPC460EX (canyonlands).
 
-On Friday, September 18, 2020 7:49:33 A.M. CEST Tony Lindgren wrote:
-> * Christoph Hellwig <hch@lst.de> [200917 17:37]:
-> > Switch the omap1510 platform ohci device to use dma_direct_set_offset
-> > to set the DMA offset instead of using direct hooks into the DMA
-> > mapping code and remove the now unused hooks.
-> 
-> Looks nice to me :) I still can't test this probably for few more weeks
-> though but hopefully Aaro or Janusz (Added to Cc) can test it.
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+---
+ Documentation/devicetree/bindings/usb/dwc2.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Works for me on Amstrad Delta (tested with a USB ethernet adapter).
-
-Tested-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-
-Thanks,
-Janusz
-
-> 
-> Regards,
-> 
-> Tony
-> 
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > ---
-> >  arch/arm/include/asm/dma-direct.h         | 18 -------------
-> >  arch/arm/mach-omap1/include/mach/memory.h | 31 -----------------------
-> >  arch/arm/mach-omap1/usb.c                 | 22 ++++++++++++++++
-> >  3 files changed, 22 insertions(+), 49 deletions(-)
-> > 
-> > diff --git a/arch/arm/include/asm/dma-direct.h b/arch/arm/include/asm/dma-direct.h
-> > index 436544aeb83405..77fcb7ee5ec907 100644
-> > --- a/arch/arm/include/asm/dma-direct.h
-> > +++ b/arch/arm/include/asm/dma-direct.h
-> > @@ -9,7 +9,6 @@
-> >   * functions used internally by the DMA-mapping API to provide DMA
-> >   * addresses. They must not be used by drivers.
-> >   */
-> > -#ifndef __arch_pfn_to_dma
-> >  static inline dma_addr_t pfn_to_dma(struct device *dev, unsigned long pfn)
-> >  {
-> >  	if (dev && dev->dma_range_map)
-> > @@ -34,23 +33,6 @@ static inline dma_addr_t virt_to_dma(struct device *dev, void *addr)
-> >  	return (dma_addr_t)__virt_to_bus((unsigned long)(addr));
-> >  }
-> >  
-> > -#else
-> > -static inline dma_addr_t pfn_to_dma(struct device *dev, unsigned long pfn)
-> > -{
-> > -	return __arch_pfn_to_dma(dev, pfn);
-> > -}
-> > -
-> > -static inline unsigned long dma_to_pfn(struct device *dev, dma_addr_t addr)
-> > -{
-> > -	return __arch_dma_to_pfn(dev, addr);
-> > -}
-> > -
-> > -static inline dma_addr_t virt_to_dma(struct device *dev, void *addr)
-> > -{
-> > -	return __arch_virt_to_dma(dev, addr);
-> > -}
-> > -#endif
-> > -
-> >  static inline dma_addr_t phys_to_dma(struct device *dev, phys_addr_t paddr)
-> >  {
-> >  	unsigned int offset = paddr & ~PAGE_MASK;
-> > diff --git a/arch/arm/mach-omap1/include/mach/memory.h b/arch/arm/mach-omap1/include/mach/memory.h
-> > index 1142560e0078f5..36bc0000cb6ab8 100644
-> > --- a/arch/arm/mach-omap1/include/mach/memory.h
-> > +++ b/arch/arm/mach-omap1/include/mach/memory.h
-> > @@ -14,42 +14,11 @@
-> >   * OMAP-1510 bus address is translated into a Local Bus address if the
-> >   * OMAP bus type is lbus. We do the address translation based on the
-> >   * device overriding the defaults used in the dma-mapping API.
-> > - * Note that the is_lbus_device() test is not very efficient on 1510
-> > - * because of the strncmp().
-> >   */
-> > -#if defined(CONFIG_ARCH_OMAP15XX) && !defined(__ASSEMBLER__)
-> >  
-> >  /*
-> >   * OMAP-1510 Local Bus address offset
-> >   */
-> >  #define OMAP1510_LB_OFFSET	UL(0x30000000)
-> >  
-> > -#define virt_to_lbus(x)		((x) - PAGE_OFFSET + OMAP1510_LB_OFFSET)
-> > -#define lbus_to_virt(x)		((x) - OMAP1510_LB_OFFSET + PAGE_OFFSET)
-> > -#define is_lbus_device(dev)	(cpu_is_omap15xx() && dev && (strncmp(dev_name(dev), "ohci", 4) == 0))
-> > -
-> > -#define __arch_pfn_to_dma(dev, pfn)	\
-> > -	({ dma_addr_t __dma = __pfn_to_phys(pfn); \
-> > -	   if (is_lbus_device(dev)) \
-> > -		__dma = __dma - PHYS_OFFSET + OMAP1510_LB_OFFSET; \
-> > -	   __dma; })
-> > -
-> > -#define __arch_dma_to_pfn(dev, addr)	\
-> > -	({ dma_addr_t __dma = addr;				\
-> > -	   if (is_lbus_device(dev))				\
-> > -		__dma += PHYS_OFFSET - OMAP1510_LB_OFFSET;	\
-> > -	   __phys_to_pfn(__dma);				\
-> > -	})
-> > -
-> > -#define __arch_dma_to_virt(dev, addr)	({ (void *) (is_lbus_device(dev) ? \
-> > -						lbus_to_virt(addr) : \
-> > -						__phys_to_virt(addr)); })
-> > -
-> > -#define __arch_virt_to_dma(dev, addr)	({ unsigned long __addr = (unsigned long)(addr); \
-> > -					   (dma_addr_t) (is_lbus_device(dev) ? \
-> > -						virt_to_lbus(__addr) : \
-> > -						__virt_to_phys(__addr)); })
-> > -
-> > -#endif	/* CONFIG_ARCH_OMAP15XX */
-> > -
-> >  #endif
-> > diff --git a/arch/arm/mach-omap1/usb.c b/arch/arm/mach-omap1/usb.c
-> > index d8e9bbda8f7bdd..ba8566204ea9f4 100644
-> > --- a/arch/arm/mach-omap1/usb.c
-> > +++ b/arch/arm/mach-omap1/usb.c
-> > @@ -9,6 +9,7 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/init.h>
-> >  #include <linux/platform_device.h>
-> > +#include <linux/dma-mapping.h>
-> >  #include <linux/io.h>
-> >  
-> >  #include <asm/irq.h>
-> > @@ -542,6 +543,25 @@ static u32 __init omap1_usb2_init(unsigned nwires, unsigned alt_pingroup)
-> >  /* ULPD_APLL_CTRL */
-> >  #define APLL_NDPLL_SWITCH	(1 << 0)
-> >  
-> > +static int omap_1510_usb_ohci_notifier(struct notifier_block *nb,
-> > +		unsigned long event, void *data)
-> > +{
-> > +	struct device *dev = data;
-> > +
-> > +	if (event != BUS_NOTIFY_ADD_DEVICE)
-> > +		return NOTIFY_DONE;
-> > +
-> > +	if (strncmp(dev_name(dev), "ohci", 4) == 0 &&
-> > +	    dma_direct_set_offset(dev, PHYS_OFFSET, OMAP1510_LB_OFFSET,
-> > +			(u64)-1))
-> > +		WARN_ONCE(1, "failed to set DMA offset\n");
-> > +	return NOTIFY_OK;
-> > +}
-> > +
-> > +static struct notifier_block omap_1510_usb_ohci_nb = {
-> > +	.notifier_call		= omap_1510_usb_ohci_notifier,
-> > +};
-> > +
-> >  static void __init omap_1510_usb_init(struct omap_usb_config *config)
-> >  {
-> >  	unsigned int val;
-> > @@ -600,6 +620,8 @@ static void __init omap_1510_usb_init(struct omap_usb_config *config)
-> >  	if (config->register_host) {
-> >  		int status;
-> >  
-> > +		bus_register_notifier(&platform_bus_type,
-> > +				      &omap_1510_usb_ohci_nb);
-> >  		ohci_device.dev.platform_data = config;
-> >  		status = platform_device_register(&ohci_device);
-> >  		if (status)
-> 
-
-
-
+diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
+index ffa157a0fce7..34ddb5c877a1 100644
+--- a/Documentation/devicetree/bindings/usb/dwc2.yaml
++++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+@@ -39,6 +39,7 @@ properties:
+               - amlogic,meson-g12a-usb
+           - const: snps,dwc2
+       - const: amcc,dwc-otg
++      - const: apm,apm82181-dwc-otg
+       - const: snps,dwc2
+       - const: st,stm32f4x9-fsotg
+       - const: st,stm32f4x9-hsotg
+-- 
+2.28.0
 
