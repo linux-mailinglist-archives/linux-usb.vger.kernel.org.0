@@ -2,223 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5048271775
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Sep 2020 21:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0788E27180B
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Sep 2020 23:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgITTVP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Sep 2020 15:21:15 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:58819 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726109AbgITTVP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Sep 2020 15:21:15 -0400
-Received: (qmail 1191691 invoked by uid 1000); 20 Sep 2020 15:21:14 -0400
-Date:   Sun, 20 Sep 2020 15:21:14 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     yasushi asano <yazzep@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew_gabbasov@mentor.com, Baxter Jim <jim_baxter@mentor.com>,
-        "Natsume, Wataru \(ADITJ/SWG\)" <wnatsume@jp.adit-jv.com>,
-        "Nishiguchi, Naohiro \(ADITJ/SWG\)" <nnishiguchi@jp.adit-jv.com>,
-        =?utf-8?B?5rWF6YeO5oGt5Y+y?= <yasano@jp.adit-jv.com>,
-        kernel test robot <rong.a.chen@intel.com>,
-        Martin Mueller <Martin.Mueller5@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v3] USB: hub.c: decrease the number of attempts of
- enumeration scheme
-Message-ID: <20200920192114.GB1190206@rowland.harvard.edu>
-References: <20200907155052.2450-2-yazzep@gmail.com>
- <20200908190402.GA797206@rowland.harvard.edu>
- <CAEt1RjquJZzTctN6dNQSDbUZ9YG2FnEtzTZsoA3a9RtXHxwUmA@mail.gmail.com>
- <CAEt1RjpGcZ4T70tr83pmcD--PzAMboBkbv55qFcRfMz11ZUggw@mail.gmail.com>
- <20200911151228.GA883311@rowland.harvard.edu>
- <20200915094531.GA8046@lxhi-065.adit-jv.com>
- <20200915110111.GA269380@kroah.com>
- <20200915145258.GC1002979@rowland.harvard.edu>
- <CAEt1Rjop72j8Hb8s+yW5edfF0+dSV2DQHtqsPoK65QQ-+HRwZg@mail.gmail.com>
- <CAEt1RjpNHPuV8T2ufkHw4hk9otJXKdm-mAddxHCir6_+q2tXvg@mail.gmail.com>
+        id S1726367AbgITVIw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Sep 2020 17:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbgITVIw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Sep 2020 17:08:52 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DFFC061755
+        for <linux-usb@vger.kernel.org>; Sun, 20 Sep 2020 14:08:51 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id q63so12976404qkf.3
+        for <linux-usb@vger.kernel.org>; Sun, 20 Sep 2020 14:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+V5WytTg6gV4j0WhWe8jzAETwNFQtPwiWyG0hNReL5I=;
+        b=POic+2q2v3ykuERO6FjWtZ2nNQvNLr3GAXjjN9Y8jnIp3P/JrSGz62JTVHCZhWBraD
+         L+u6s3947V5SXDTmPfbCQI3poInzkUvHueKy5xdE0MrtszZ6gVpEo1nFvFS65s94848R
+         o/uhln4F4igR7SFspXHel26qRHIRuDRZp61H1bM1q2HhMG1/e0ioYHujWqzH7X2J8eRF
+         cs1RHZmbkhZvr4xy+P3Yqa8Kgaxt3nKjjATKBSPljiZ6t1NrdjZWUlpFFrDeMfSGkuOd
+         szE/j8mFAwYpLYArmuOm56q8wbjLXiX//xnQBMCmiLQr1difV9kbmW+r9oeSqOXXAjM+
+         3odA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+V5WytTg6gV4j0WhWe8jzAETwNFQtPwiWyG0hNReL5I=;
+        b=OaUtv5MWakMI1YAEl/2GnyKIIHZcLZY0dfmYtRSD75O3ISm2saLCqCf5dXy7xSLS5J
+         mUx+GqBytsojqyHo5AmZpWfC3FJbgBI4eeN6gfS01pKmDLCpfgx8ttqDXutxdW7rR1rJ
+         pUP4OVwML1rTfZNnnyrqL4tiIvEAtqCe2AQdjJ30oGzuo69DNFauHhQs1KsTFEIe2JYJ
+         jbiRTuxMLbeNFwLEjf01Ds1C85pwRcZGWXli/hJV6MGzERd7GEPK9sVTKIbMBPQwm6N6
+         yczLx4zvNZprC91Fnd2Bh+9a3VrzOAGHvOwSBv+snUYCrx6wPnHFD1sKf/J7AgL6X+0N
+         4Tpw==
+X-Gm-Message-State: AOAM5333xwDyhIH6yNFopXnXH0mdcVcGTylWhRaAzT7SmdkEwxQWbMQm
+        gWX5Mm3/gd9vRL7clgO7Mis=
+X-Google-Smtp-Source: ABdhPJycKuv7V6pm/sEdHN2/VTFbz6EKr/Ss+KMqkhUExIMzR/VCSVEtjB4li1lOAkHndwNYS82JYA==
+X-Received: by 2002:a37:4f47:: with SMTP id d68mr42286095qkb.6.1600636131037;
+        Sun, 20 Sep 2020 14:08:51 -0700 (PDT)
+Received: from [192.168.1.181] (pool-173-75-208-99.phlapa.fios.verizon.net. [173.75.208.99])
+        by smtp.gmail.com with ESMTPSA id x49sm8253375qtc.94.2020.09.20.14.08.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Sep 2020 14:08:50 -0700 (PDT)
+Subject: Re: [PATCH] USB: gadget: f_ncm: Fix NDP16 datagram validation
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        stable <stable@kernel.org>
+References: <20200920170158.1217068-1-bryan.odonoghue@linaro.org>
+From:   Brooke Basile <brookebasile@gmail.com>
+Message-ID: <34126e7e-270b-fd9d-e08a-588feec758a5@gmail.com>
+Date:   Sun, 20 Sep 2020 17:08:49 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEt1RjpNHPuV8T2ufkHw4hk9otJXKdm-mAddxHCir6_+q2tXvg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200920170158.1217068-1-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 12:00:10AM +0900, yasushi asano wrote:
-> Dear Alan,
-> Could you please proceed with your proposal(Kconfig option)?
-> After all, Customer products need to get USB certification.
-> Thank you for considering my request.
+On 9/20/20 1:01 PM, Bryan O'Donoghue wrote:
+> commit 2b74b0a04d3e ("USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()")
+> adds important bounds checking however it unfortunately also introduces  a
+> bug with respect to section 3.3.1 of the NCM specification.
+> 
+> wDatagramIndex[1] : "Byte index, in little endian, of the second datagram
+> described by this NDP16. If zero, then this marks the end of the sequence
+> of datagrams in this NDP16."
+> 
+> wDatagramLength[1]: "Byte length, in little endian, of the second datagram
+> described by this NDP16. If zero, then this marks the end of the sequence
+> of datagrams in this NDP16."
+> 
+> wDatagramIndex[1] and wDatagramLength[1] respectively then may be zero but
+> that does not mean we should throw away the data referenced by
+> wDatagramIndex[0] and wDatagramLength[0] as is currently the case.
+> 
+> Breaking the loop on (index2 == 0 || dg_len2 == 0) should come at the end
+> as was previously the case and checks for index2 and dg_len2 should be
+> removed since zero is valid.
+> 
+> I'm not sure how much testing the above patch received but for me right now
+> after enumeration ping doesn't work. Reverting the commit restores ping,
+> scp, etc.
+> 
+> The extra validation associated with wDatagramIndex[0] and
+> wDatagramLength[0] appears to be valid so, this change removes the incorrect
+> restriction on wDatagramIndex[1] and wDatagramLength[1] restoring data
+> processing between host and device.
+> 
+> Fixes: 2b74b0a04d3e ("USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()")
+> Cc: Ilja Van Sprundel <ivansprundel@ioactive.com>
+> Cc: Brooke Basile <brookebasile@gmail.com>
+> Cc: stable <stable@kernel.org>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>   drivers/usb/gadget/function/f_ncm.c | 30 ++---------------------------
+>   1 file changed, 2 insertions(+), 28 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+> index b4206b0dede5..1f638759a953 100644
+> --- a/drivers/usb/gadget/function/f_ncm.c
+> +++ b/drivers/usb/gadget/function/f_ncm.c
+> @@ -1189,7 +1189,6 @@ static int ncm_unwrap_ntb(struct gether *port,
+>   	const struct ndp_parser_opts *opts = ncm->parser_opts;
+>   	unsigned	crc_len = ncm->is_crc ? sizeof(uint32_t) : 0;
+>   	int		dgram_counter;
+> -	bool		ndp_after_header;
+>   
+>   	/* dwSignature */
+>   	if (get_unaligned_le32(tmp) != opts->nth_sign) {
+> @@ -1216,7 +1215,6 @@ static int ncm_unwrap_ntb(struct gether *port,
+>   	}
+>   
+>   	ndp_index = get_ncm(&tmp, opts->ndp_index);
+> -	ndp_after_header = false;
+>   
+>   	/* Run through all the NDP's in the NTB */
+>   	do {
+> @@ -1232,8 +1230,6 @@ static int ncm_unwrap_ntb(struct gether *port,
+>   			     ndp_index);
+>   			goto err;
+>   		}
+> -		if (ndp_index == opts->nth_size)
+> -			ndp_after_header = true;
+>   
+>   		/*
+>   		 * walk through NDP
+> @@ -1312,37 +1308,13 @@ static int ncm_unwrap_ntb(struct gether *port,
+>   			index2 = get_ncm(&tmp, opts->dgram_item_len);
+>   			dg_len2 = get_ncm(&tmp, opts->dgram_item_len);
+>   
+> -			if (index2 == 0 || dg_len2 == 0)
+> -				break;
+> -
+>   			/* wDatagramIndex[1] */
+> -			if (ndp_after_header) {
+> -				if (index2 < opts->nth_size + opts->ndp_size) {
+> -					INFO(port->func.config->cdev,
+> -					     "Bad index: %#X\n", index2);
+> -					goto err;
+> -				}
+> -			} else {
+> -				if (index2 < opts->nth_size + opts->dpe_size) {
+> -					INFO(port->func.config->cdev,
+> -					     "Bad index: %#X\n", index2);
+> -					goto err;
+> -				}
+> -			}
+>   			if (index2 > block_len - opts->dpe_size) {
+>   				INFO(port->func.config->cdev,
+>   				     "Bad index: %#X\n", index2);
+>   				goto err;
+>   			}
+>   
+> -			/* wDatagramLength[1] */
+> -			if ((dg_len2 < 14 + crc_len) ||
+> -					(dg_len2 > frame_max)) {
+> -				INFO(port->func.config->cdev,
+> -				     "Bad dgram length: %#X\n", dg_len);
+> -				goto err;
+> -			}
+> -
+>   			/*
+>   			 * Copy the data into a new skb.
+>   			 * This ensures the truesize is correct
+> @@ -1359,6 +1331,8 @@ static int ncm_unwrap_ntb(struct gether *port,
+>   			ndp_len -= 2 * (opts->dgram_item_len * 2);
+>   
+>   			dgram_counter++;
+> +			if (index2 == 0 || dg_len2 == 0)
+> +				break;
+>   		} while (ndp_len > 2 * (opts->dgram_item_len * 2));
+>   	} while (ndp_index);
+>   
+> 
+Bryan,
 
-The patch is below.  It is simpler than what we were looking at before, 
-more like what you were working on originally.
+Ah, I see my mistake.  I did test this, but I must have missed some test 
+cases as I didn't encounter this error.
+Thanks a lot for testing and fixing the issue, and for the thorough 
+explanation.
 
-This actually is a combination of two separate patches, one to replace 
-SET_CONFIG_TRIES with PORT_INIT_TRIES and improve use_new_scheme(), the 
-other to add the USB_FEW_INIT_RETRIES Kconfig option.  Even so, it's not 
-very complicated.
-
-Alan Stern
-
-
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -2705,11 +2705,18 @@ static unsigned hub_is_wusb(struct usb_h
- }
- 
- 
-+#ifdef CONFIG_USB_FEW_INIT_RETRIES
-+#define PORT_RESET_TRIES	2
-+#define SET_ADDRESS_TRIES	1
-+#define GET_DESCRIPTOR_TRIES	1
-+#define PORT_INIT_TRIES		5
-+
-+#else
- #define PORT_RESET_TRIES	5
- #define SET_ADDRESS_TRIES	2
- #define GET_DESCRIPTOR_TRIES	2
--#define SET_CONFIG_TRIES	(2 * (use_both_schemes + 1))
--#define USE_NEW_SCHEME(i, scheme)	((i) / 2 == (int)(scheme))
-+#define PORT_INIT_TRIES		4
-+#endif	/* CONFIG_USB_FEW_INIT_RETRIES */
- 
- #define HUB_ROOT_RESET_TIME	60	/* times are in msec */
- #define HUB_SHORT_RESET_TIME	10
-@@ -2717,23 +2724,31 @@ static unsigned hub_is_wusb(struct usb_h
- #define HUB_LONG_RESET_TIME	200
- #define HUB_RESET_TIMEOUT	800
- 
--/*
-- * "New scheme" enumeration causes an extra state transition to be
-- * exposed to an xhci host and causes USB3 devices to receive control
-- * commands in the default state.  This has been seen to cause
-- * enumeration failures, so disable this enumeration scheme for USB3
-- * devices.
-- */
- static bool use_new_scheme(struct usb_device *udev, int retry,
- 			   struct usb_port *port_dev)
- {
- 	int old_scheme_first_port =
--		port_dev->quirks & USB_PORT_QUIRK_OLD_SCHEME;
-+		(port_dev->quirks & USB_PORT_QUIRK_OLD_SCHEME) ||
-+		old_scheme_first;
- 
-+	/*
-+	 * "New scheme" enumeration causes an extra state transition to be
-+	 * exposed to an xhci host and causes USB3 devices to receive control
-+	 * commands in the default state.  This has been seen to cause
-+	 * enumeration failures, so disable this enumeration scheme for USB3
-+	 * devices.
-+	 */
- 	if (udev->speed >= USB_SPEED_SUPER)
- 		return false;
- 
--	return USE_NEW_SCHEME(retry, old_scheme_first_port || old_scheme_first);
-+	/*
-+	 * If use_both_schemes is set, use the first scheme (whichever
-+	 * it is) for the larger half of the retries, then use the other
-+	 * scheme.  Otherwise, use the first scheme for all the retries.
-+	 */
-+	if (use_both_schemes && retry >= (PORT_INIT_TRIES + 1) / 2)
-+		return old_scheme_first_port;	/* Second half */
-+	return !old_scheme_first_port;		/* First half or all */
- }
- 
- /* Is a USB 3.0 port in the Inactive or Compliance Mode state?
-@@ -4545,6 +4560,7 @@ hub_port_init(struct usb_hub *hub, struc
- 	const char		*speed;
- 	int			devnum = udev->devnum;
- 	const char		*driver_name;
-+	bool			do_new_scheme;
- 
- 	/* root hub ports have a slightly longer reset period
- 	 * (from USB 2.0 spec, section 7.1.7.5)
-@@ -4657,14 +4673,13 @@ hub_port_init(struct usb_hub *hub, struc
- 	 * first 8 bytes of the device descriptor to get the ep0 maxpacket
- 	 * value.
- 	 */
--	for (retries = 0; retries < GET_DESCRIPTOR_TRIES; (++retries, msleep(100))) {
--		bool did_new_scheme = false;
-+	do_new_scheme = use_new_scheme(udev, retry_counter, port_dev);
- 
--		if (use_new_scheme(udev, retry_counter, port_dev)) {
-+	for (retries = 0; retries < GET_DESCRIPTOR_TRIES; (++retries, msleep(100))) {
-+		if (do_new_scheme) {
- 			struct usb_device_descriptor *buf;
- 			int r = 0;
- 
--			did_new_scheme = true;
- 			retval = hub_enable_device(udev);
- 			if (retval < 0) {
- 				dev_err(&udev->dev,
-@@ -4773,11 +4788,7 @@ hub_port_init(struct usb_hub *hub, struc
- 			 *  - read ep0 maxpacket even for high and low speed,
- 			 */
- 			msleep(10);
--			/* use_new_scheme() checks the speed which may have
--			 * changed since the initial look so we cache the result
--			 * in did_new_scheme
--			 */
--			if (did_new_scheme)
-+			if (do_new_scheme)
- 				break;
- 		}
- 
-@@ -5106,7 +5117,7 @@ static void hub_port_connect(struct usb_
- 		unit_load = 100;
- 
- 	status = 0;
--	for (i = 0; i < SET_CONFIG_TRIES; i++) {
-+	for (i = 0; i < PORT_INIT_TRIES; i++) {
- 
- 		/* reallocate for each attempt, since references
- 		 * to the previous one can escape in various ways
-@@ -5239,7 +5250,7 @@ loop:
- 			break;
- 
- 		/* When halfway through our retry count, power-cycle the port */
--		if (i == (SET_CONFIG_TRIES / 2) - 1) {
-+		if (i == (PORT_INIT_TRIES / 2) - 1) {
- 			dev_info(&port_dev->dev, "attempt power cycle\n");
- 			usb_hub_set_port_power(hdev, hub, port1, false);
- 			msleep(2 * hub_power_on_good_delay(hub));
-@@ -5770,7 +5781,7 @@ static int usb_reset_and_verify_device(s
- 	bos = udev->bos;
- 	udev->bos = NULL;
- 
--	for (i = 0; i < SET_CONFIG_TRIES; ++i) {
-+	for (i = 0; i < PORT_INIT_TRIES; ++i) {
- 
- 		/* ep0 maxpacket size may change; let the HCD know about it.
- 		 * Other endpoints will be handled by re-enumeration. */
-Index: usb-devel/drivers/usb/core/Kconfig
-===================================================================
---- usb-devel.orig/drivers/usb/core/Kconfig
-+++ usb-devel/drivers/usb/core/Kconfig
-@@ -32,6 +32,20 @@ config USB_DEFAULT_PERSIST
- 	  If you have any questions about this, say Y here, only say N
- 	  if you know exactly what you are doing.
- 
-+config USB_FEW_INIT_RETRIES
-+	bool "Limit USB device initialization to only a few retries"
-+	help
-+	  When a new USB device is detected, the kernel tries very hard
-+	  to initialize and enumerate it, with lots of nested retry loops.
-+	  This almost always works, but when it fails it can take a long time.
-+	  This option tells the kernel to make only a few retry attempts,
-+	  so that the total time required for a failed initialization is
-+	  no more than 30 seconds (as required by the USB OTG spec).
-+
-+	  Say N here unless you require new-device enumeration failure to
-+	  occur within 30 seconds (as might be needed in an embedded
-+	  application).
-+
- config USB_DYNAMIC_MINORS
- 	bool "Dynamic USB minor allocation"
- 	help
-
+Best,
+Brooke Basile
