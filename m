@@ -2,103 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D18B2714A8
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Sep 2020 15:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AD82714CD
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Sep 2020 16:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726406AbgITNy0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Sep 2020 09:54:26 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:47517 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726305AbgITNyZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Sep 2020 09:54:25 -0400
-X-IronPort-AV: E=Sophos;i="5.77,282,1596466800"; 
-   d="scan'208";a="57511484"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 20 Sep 2020 22:49:21 +0900
-Received: from localhost.localdomain (unknown [172.29.52.129])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 02B9940078C5;
-        Sun, 20 Sep 2020 22:49:18 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726420AbgITOIB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Sep 2020 10:08:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34010 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726290AbgITOIA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 20 Sep 2020 10:08:00 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C05FC21531;
+        Sun, 20 Sep 2020 14:07:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600610879;
+        bh=5Nu/Q5V28hWJU3Crt7+FLHDN+lSqZIJn2t8MycJ4Kfc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=my7AamuI0IRhPPpTH8LoiNnx+5ToKW4tisR+RYX62c0lCpubPnNVu35GdWXBc2RqE
+         BncX3ahljtB9G9+fJyoK6vnft7jC2L8PKTHeIHBUJ0hLizAQty/w7wk5tOL0RQd562
+         xvfzpRl+X/f0CbrhiyMVi/j5k1OB0ObMhpYkNLEE=
+Date:   Sun, 20 Sep 2020 16:08:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 4/6] usb: typec: hd3ss3220: Use OF graph API to get the connector fwnode
-Date:   Sun, 20 Sep 2020 14:49:03 +0100
-Message-Id: <20200920134905.4370-5-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200920134905.4370-1-biju.das.jz@bp.renesas.com>
-References: <20200920134905.4370-1-biju.das.jz@bp.renesas.com>
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
+        dmaengine <dmaengine@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 07/20] dt-bindings: usb: renesas,usb3-peri: Document
+ r8a774e1 support
+Message-ID: <20200920140824.GA2915460@kroah.com>
+References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594919915-5225-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CA+V-a8vJ2n3KEL8P+XmVob2zjoWaX+s4a6c1TV_WoPFkwdkZmA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8vJ2n3KEL8P+XmVob2zjoWaX+s4a6c1TV_WoPFkwdkZmA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some platforms have only super speed data bus connected to this device
-and high speed data bus directly connected to the SoC. In such platforms
-modelling connector as a child of this device is making it non compliant
-with usb connector bindings. By modelling connector node as standalone
-device node along with this device and the SoC data bus will make it
-compliant with usb connector bindings.
-Update the driver to handle this model by using OF graph API to get the
-connector fwnode and usb role switch class API to get role switch handle.
+On Sat, Sep 19, 2020 at 11:50:07AM +0100, Lad, Prabhakar wrote:
+> Hi Greg,
+> 
+> On Thu, Jul 16, 2020 at 6:19 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> >
+> > Document RZ/G2H (R8A774E1) SoC bindings.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> Could you please pick this patch.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-v3->v4: No Change
-v2->v3: Added Heikki's reviewed by tag.
-v1->v2: Fixed the commit message (https://patchwork.kernel.org/patch/11700777/)
-Ref:https://patchwork.kernel.org/patch/11669423/
----
- drivers/usb/typec/hd3ss3220.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+Don't DT patches have to be acked by a DT maintainer first?
 
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index 323dfa8160ab..f633ec15b1a1 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -155,7 +155,7 @@ static int hd3ss3220_probe(struct i2c_client *client,
- {
- 	struct typec_capability typec_cap = { };
- 	struct hd3ss3220 *hd3ss3220;
--	struct fwnode_handle *connector;
-+	struct fwnode_handle *connector, *ep;
- 	int ret;
- 	unsigned int data;
- 
-@@ -173,11 +173,21 @@ static int hd3ss3220_probe(struct i2c_client *client,
- 
- 	hd3ss3220_set_source_pref(hd3ss3220,
- 				  HD3SS3220_REG_GEN_CTRL_SRC_PREF_DRP_DEFAULT);
-+	/* For backward compatibility check the connector child node first */
- 	connector = device_get_named_child_node(hd3ss3220->dev, "connector");
--	if (!connector)
--		return -ENODEV;
-+	if (connector) {
-+		hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
-+	} else {
-+		ep = fwnode_graph_get_next_endpoint(dev_fwnode(hd3ss3220->dev), NULL);
-+		if (!ep)
-+			return -ENODEV;
-+		connector = fwnode_graph_get_remote_port_parent(ep);
-+		fwnode_handle_put(ep);
-+		if (!connector)
-+			return -ENODEV;
-+		hd3ss3220->role_sw = usb_role_switch_get(hd3ss3220->dev);
-+	}
- 
--	hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
- 	if (IS_ERR(hd3ss3220->role_sw)) {
- 		ret = PTR_ERR(hd3ss3220->role_sw);
- 		goto err_put_fwnode;
--- 
-2.17.1
+thanks,
 
+greg k-h
