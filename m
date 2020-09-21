@@ -2,67 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAA4272420
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 14:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F99E272434
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 14:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbgIUMpf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 08:45:35 -0400
-Received: from mx2.suse.de ([195.135.220.15]:57288 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726395AbgIUMpf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Sep 2020 08:45:35 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1600692334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bqn34meecDvZDEJxHRUx1vPpxYKHN7TRkTg3l4zsI10=;
-        b=ZH0ZQw0RHyItdFk8C5/e34TBv+PyWGC+OaHR69poNbc/YtndFEwYjWiv323SKyD4BLsze5
-        C9eVzYBlN0jfj88pQFOEczbgCdKof3NWMZ+HKo/0Ik+oxmOWXO+rdEZVUuF+OU+/VJnO85
-        BvjJMyrKN0r6FayLTT3ZrmG5Y3e35Hs=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 97F9CAD68;
-        Mon, 21 Sep 2020 12:46:10 +0000 (UTC)
-Message-ID: <1600692319.2424.88.camel@suse.com>
-Subject: Re: [RFC 4/4] USB: cdc-acm: clean up handling of quirky devices
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
-Date:   Mon, 21 Sep 2020 14:45:19 +0200
-In-Reply-To: <20200921121525.GV24441@localhost>
-References: <20200921113525.32187-1-johan@kernel.org>
-         <20200921113525.32187-5-johan@kernel.org>
-         <1600689232.2424.78.camel@suse.com> <20200921121525.GV24441@localhost>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726786AbgIUMwk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 08:52:40 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:47126 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726395AbgIUMwk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 08:52:40 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id A60241C0B81; Mon, 21 Sep 2020 14:52:37 +0200 (CEST)
+Date:   Mon, 21 Sep 2020 14:52:37 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Pavel Machek <pavel@denx.de>, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu, johan@kernel.org, gustavoars@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: yurex: Rearrange code not to need GFP_ATOMIC
+Message-ID: <20200921125237.GA24776@duo.ucw.cz>
+References: <20200920084452.GA2257@amd>
+ <1600691092.2424.85.camel@suse.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="FL5UXtIhxfXey3p5"
+Content-Disposition: inline
+In-Reply-To: <1600691092.2424.85.camel@suse.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 21.09.2020, 14:15 +0200 schrieb Johan Hovold:
-> On Mon, Sep 21, 2020 at 01:53:52PM +0200, Oliver Neukum wrote:
-> > Am Montag, den 21.09.2020, 13:35 +0200 schrieb Johan Hovold:
-> > > Instead of falling back to "combined-interface" probing when detecting
-> > > broken union and call-management descriptors, assume all interfaces with
-> > > three endpoints are of "combined-interface" type.
-> > 
-> > Hi,
-> > 
-> > this just ignores a union header. I am afraid that is not correct.
-> > Could you move it into the !union_header clause?
-> 
-> And probe for a combined interface before falling back to the management
-> descriptor then? Along the lines of
 
+--FL5UXtIhxfXey3p5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, exactly.
+Hi!
 
-	Regards
-		Oliver
+> > Move prepare to wait around, so that normal GFP_KERNEL allocation can
+> > be used.
+> >=20
+> > Signed-off-by: Pavel Machek (CIP) <pavel@denx.de>
+> > Acked-by: Alan Stern <stern@rowland.harvard.edu>
+>=20
+> Ehm. Please recheck.
 
+Sorry about that.
+
+> > +++ b/drivers/usb/misc/yurex.c
+> > @@ -489,10 +489,10 @@ static ssize_t yurex_write(struct file *file, con=
+st char __user *user_buffer,
+> >  	}
+> > =20
+> >  	/* send the data as the control msg */
+> > -	prepare_to_wait(&dev->waitq, &wait, TASK_INTERRUPTIBLE);
+> >  	dev_dbg(&dev->interface->dev, "%s - submit %c\n", __func__,
+> >  		dev->cntl_buffer[0]);
+> > -	retval =3D usb_submit_urb(dev->cntl_urb, GFP_ATOMIC);
+> > +	retval =3D usb_submit_urb(dev->cntl_urb, GFP_KERNEL);
+>=20
+> URB completes here. wake_up() returns the task to RUNNING.
+>=20
+> > +	prepare_to_wait(&dev->waitq, &wait, TASK_INTERRUPTIBLE);
+>=20
+> Task goes to TASK_INTERRUPTIBLE
+>=20
+> >  	if (retval >=3D 0)
+> >  		timeout =3D schedule_timeout(YUREX_WRITE_TIMEOUT);
+>=20
+> Task turns into Sleeping Beauty until timeout
+
+Is there way to do the allocations for submit_urb before the
+prepare_to_wait? GFP_ATOMIC would be nice to avoid... and doing
+GFP_ATOMIC from normal process context just because of task_state
+seems ... wrong.
+
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--FL5UXtIhxfXey3p5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2iiFQAKCRAw5/Bqldv6
+8tnrAJ4yv71+Q+P6ArjsrTPlDQ7nQ+QIrQCdHjymlZ8hQ7EqYgentvBFzwxh0s0=
+=RmqP
+-----END PGP SIGNATURE-----
+
+--FL5UXtIhxfXey3p5--
