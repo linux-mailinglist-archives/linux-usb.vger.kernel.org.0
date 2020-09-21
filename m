@@ -2,65 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C54AA271B0E
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 08:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065FC271BB9
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 09:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbgIUGr2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 02:47:28 -0400
-Received: from verein.lst.de ([213.95.11.211]:38657 "EHLO verein.lst.de"
+        id S1726489AbgIUH0T convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 21 Sep 2020 03:26:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59760 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726149AbgIUGr1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Sep 2020 02:47:27 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id C048A68AFE; Mon, 21 Sep 2020 08:47:23 +0200 (CEST)
-Date:   Mon, 21 Sep 2020 08:47:23 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/4] ARM/omap1: switch to use dma_direct_set_offset for
- lbus DMA offsets
-Message-ID: <20200921064723.GA18559@lst.de>
-References: <20200917173229.3311382-1-hch@lst.de> <20200917173229.3311382-2-hch@lst.de> <20200918054933.GK7101@atomide.com> <2184547.ElGaqSPkdT@z50> <20200921064418.GM7101@atomide.com>
+        id S1726334AbgIUH0S (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Sep 2020 03:26:18 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208911] Renesas USB controller - FW has invalid version :8224
+Date:   Mon, 21 Sep 2020 07:26:18 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: kernel@maximilian-stieg.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-208911-208809-75hhuSoNxE@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208911-208809@https.bugzilla.kernel.org/>
+References: <bug-208911-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200921064418.GM7101@atomide.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 09:44:18AM +0300, Tony Lindgren wrote:
-> * Janusz Krzysztofik <jmkrzyszt@gmail.com> [200919 22:29]:
-> > Hi Tony,
-> > 
-> > On Friday, September 18, 2020 7:49:33 A.M. CEST Tony Lindgren wrote:
-> > > * Christoph Hellwig <hch@lst.de> [200917 17:37]:
-> > > > Switch the omap1510 platform ohci device to use dma_direct_set_offset
-> > > > to set the DMA offset instead of using direct hooks into the DMA
-> > > > mapping code and remove the now unused hooks.
-> > > 
-> > > Looks nice to me :) I still can't test this probably for few more weeks
-> > > though but hopefully Aaro or Janusz (Added to Cc) can test it.
-> > 
-> > Works for me on Amstrad Delta (tested with a USB ethernet adapter).
-> > 
-> > Tested-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-> 
-> Great, good to hear! And thanks for testing it.
-> 
-> Christoph, feel free to queue this along with the other patches:
-> 
-> Acked-by: Tony Lindgren <tony@atomide.com>
-> 
-> Or let me know if you want me to pick it up.
+https://bugzilla.kernel.org/show_bug.cgi?id=208911
 
-I'd prefer to pick it up through the dma-mapping tree, but preferably
-I'd pick the whole series up once Russell has tested footwinder.
+--- Comment #21 from Max (kernel@maximilian-stieg.de) ---
+Since Debian changed the kernel from 4.9 to 4.19 I can't use the Renesas
+uPD720201 USB 3.0 card. The devices will only detected, if there plugged-in on
+the boot. If I unplugged and plugged them in again, they doesn't show up on
+lsblk. The card will be shown in lspic "04:00.0 USB controller: Renesas
+Technology Corp. uPD720201 USB 3.0 Host Controller (rev 03)".
+
+It looks it is fixed now?
+I did this steps:
+
+- Update the BISO for my hp gen8 microserver to 2.75 (Aug 2020)
+- Update to kernel 4.19.0-10
+- Restart
+And now my usb 3.0 devices will show up.
+
+I'm sorry, but thanks for your time
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
