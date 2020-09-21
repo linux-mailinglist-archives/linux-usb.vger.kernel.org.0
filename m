@@ -2,52 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9912722B5
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 13:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8CD72722F5
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 13:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726696AbgIULhh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 07:37:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58706 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726444AbgIULhh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Sep 2020 07:37:37 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3F7DF20BED;
-        Mon, 21 Sep 2020 11:37:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600688256;
-        bh=9AdHOOiwkBvVaWNKqDxReKJzBIpM2azxE/0lbd7Zlkw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=guM7Bz418LoW1F/aqJ4PoUN2dkgYQmGqL30duJ3BVAx97cvEPF5hf6cwANj0Flb4X
-         PGV9kkUPC1Xydm0WDxpTxNwVcJJwFF+MDvcNA+l5f7Y7ny100jcAqvXQaVqz29n431
-         xwPUC+ZWrY7tcgZkwybz0XtY2bg2C4yF0kLz8Y0Q=
-Date:   Mon, 21 Sep 2020 13:38:00 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     stern@rowland.harvard.edu, kai.heng.feng@canonical.com,
-        johan@kernel.org, tomasz@meresinski.eu, jonathan@jdcox.net,
-        kerneldev@karsmulder.nl, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S1726460AbgIULrd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 07:47:33 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:40406 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726402AbgIULrc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 07:47:32 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id CED471C0B7A; Mon, 21 Sep 2020 13:47:29 +0200 (CEST)
+Date:   Mon, 21 Sep 2020 13:47:29 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Pavel Machek <pavel@denx.de>, stern@rowland.harvard.edu,
+        kai.heng.feng@canonical.com, johan@kernel.org,
+        tomasz@meresinski.eu, jonathan@jdcox.net, kerneldev@karsmulder.nl,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] USB: quirks: simplify quirk handling.
-Message-ID: <20200921113800.GA26212@kroah.com>
+Message-ID: <20200921114729.GA21368@duo.ucw.cz>
 References: <20200921113039.GA19862@duo.ucw.cz>
+ <20200921113800.GA26212@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="IS0zKkzwUGydFO0o"
 Content-Disposition: inline
-In-Reply-To: <20200921113039.GA19862@duo.ucw.cz>
+In-Reply-To: <20200921113800.GA26212@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 01:30:39PM +0200, Pavel Machek wrote:
-> Simplify quirk handling.
 
-In what way?
+--IS0zKkzwUGydFO0o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please be more descriptive in your changelog and resend.
+On Mon 2020-09-21 13:38:00, Greg KH wrote:
+> On Mon, Sep 21, 2020 at 01:30:39PM +0200, Pavel Machek wrote:
+> > Simplify quirk handling.
+>=20
+> In what way?
+>=20
+> Please be more descriptive in your changelog and resend.
 
-thanks,
+Have you looked at the patch below? Please apply the patch. You are
+free to edit the changelog if you feel the need.
 
-greg k-h
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--IS0zKkzwUGydFO0o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2iS0QAKCRAw5/Bqldv6
+8ujBAJ9B5HOkcqxDoaHZMtSxoV1LRbLZKQCgwZ0qh0oimerhxavrreqLlAfugvM=
+=Hw2D
+-----END PGP SIGNATURE-----
+
+--IS0zKkzwUGydFO0o--
