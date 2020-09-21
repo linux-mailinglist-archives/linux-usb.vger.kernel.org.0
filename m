@@ -2,68 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A42C427196F
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 04:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23FF271A47
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 07:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726416AbgIUCrE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Sep 2020 22:47:04 -0400
-Received: from mga09.intel.com ([134.134.136.24]:53124 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726104AbgIUCrC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 20 Sep 2020 22:47:02 -0400
-IronPort-SDR: 4PlKAVprG6g6sO/q7C1ynuVwbwIbi3ICk2gNWdHpnX5YNexaT5HAvO/adtOII0emivvBhgLVKI
- lDOC9rhCShpA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9750"; a="161218640"
-X-IronPort-AV: E=Sophos;i="5.77,285,1596524400"; 
-   d="scan'208";a="161218640"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2020 19:47:02 -0700
-IronPort-SDR: oyMhHU9LxZweZyZrXHaeYjrRbkmOkpYCk6OgNECm0TpWDuR7oIAXWmzUNSb0nDVdIQFCFnjKOC
- xliQRDilwcig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,285,1596524400"; 
-   d="scan'208";a="321538190"
-Received: from wwanmoha-ilbpg2.png.intel.com ([10.88.227.42])
-  by orsmga002.jf.intel.com with ESMTP; 20 Sep 2020 19:46:59 -0700
-From:   Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
-To:     kishon@ti.com, vkoul@kernel.org, robh+dt@kernel.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        mgross@linux.intel.com, lakshmi.bai.raja.subramanian@intel.com,
-        wan.ahmad.zainie.wan.mohamad@intel.com
-Subject: [PATCH 4/4] usb: dwc3: of-simple: Add compatible string for Intel Keem Bay platform
-Date:   Mon, 21 Sep 2020 10:44:59 +0800
-Message-Id: <20200921024459.20899-5-wan.ahmad.zainie.wan.mohamad@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200921024459.20899-1-wan.ahmad.zainie.wan.mohamad@intel.com>
-References: <20200921024459.20899-1-wan.ahmad.zainie.wan.mohamad@intel.com>
+        id S1726324AbgIUFFO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 01:05:14 -0400
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:39507 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726228AbgIUFFN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 01:05:13 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id B0EE35C008B;
+        Mon, 21 Sep 2020 01:05:12 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 21 Sep 2020 01:05:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=gypLun0jPgetvkZD6FyF3Z4d2+y
+        MYP3aTcU6VKPkCNc=; b=O8NfIfVOBebOdJvH/LsT5EpIrK/zETd8eSE6dcPbq20
+        K0VVgWykP1GpYQPj/d1qwaLkE09Zkt/uOFKMkeA/EY6v/vUjmTzKIUIdifFk5F11
+        xU9rZdRWTcvRc6nWT+80DI+GLLtfObqtrShRBgbAFPuHcfMQl0Y5kURthZXxg/Cc
+        P5e45iErN79VHihT3+7Gb4ueaUft2huHFw2pWK311uhjAlPPViS6Dc2ozBIUjQLX
+        uqwATcUUuq/1nEAg902DLjjFNKRJIO+2OiXLuTrlb6mcBFnDKUGxh/TBrPQsd8H0
+        HmdOIRCQ6sf1DhJBoMmvIvG/BgOdka9tu9PoJXeLTZA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=gypLun
+        0jPgetvkZD6FyF3Z4d2+yMYP3aTcU6VKPkCNc=; b=bcO95xSuCOAtcMy3fcrbQu
+        n42y+zQL3qPbrnst3wyj7YTckVo4IGH4ynfwmn7yoHu6HnkV7tZFMeRbdEZ0AZKD
+        OEu7PgdEmlZzysOa+7ZiK14Ffra/fCSJRYwXHvL/aZPOvR1RmCFelnNzSUfdv7nR
+        tZykuIcWL5YPZnujnwWjIf05xctmkstYAWXFhI+pNcU686K7SivoAFQuAggeIXcl
+        UVa67sh9vlaBwL8b2vtj/nXCVaFgtaLY2MqFykqlyhPB/WPbZ1FysLI+HVxBpSjx
+        PtAj9XwPcW8LLG1l2psdsPfnikv39jl2hNhafxs+pbSscxfF5VUnuQwkWbFNGCbA
+        ==
+X-ME-Sender: <xms:iDRoXyDEpFUDmPtZaxLY2PfbbM4mt-u2SAm-7ZWNDxP79168bF08ug>
+    <xme:iDRoX8hd0lTr7kV1fQg_wAR__Qcaf-vkAusIen-BFDK_b72oRk5wnj2c5U_l4VOBW
+    P3_pSf1_onofg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddugdeklecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttdertd
+    dttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeen
+    ucggtffrrghtthgvrhhnpeeuleeltdehkeeltefhleduuddvhfffuedvffduveegheekge
+    eiffevheegfeetgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeekfedr
+    keeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:iDRoX1n2k_nHhyGeYEUsPSpprQr_XHTRRgqnKcPoOrDEiHoD_NeHCg>
+    <xmx:iDRoXwxGQ8Dbx5j6-N1JSPsIZyZ_jt3cdWRNFhSlXWyviwuLhPoY-g>
+    <xmx:iDRoX3Rf54RNgJuynraDGaMMvQzniS0cPcehIp9hspEoU_BQsiZkgg>
+    <xmx:iDRoX6OBCc1FOZ3amxsyqGinvcIEBj2aU0HBRRuMxQHLgiYNOObn9w>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id EED093280060;
+        Mon, 21 Sep 2020 01:05:11 -0400 (EDT)
+Date:   Mon, 21 Sep 2020 07:05:09 +0200
+From:   Greg KH <greg@kroah.com>
+To:     bugzilla-daemon@bugzilla.kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [Bug 208911] Renesas USB controller - FW has invalid version
+ :8224
+Message-ID: <20200921050509.GA537189@kroah.com>
+References: <bug-208911-208809@https.bugzilla.kernel.org/>
+ <bug-208911-208809-1kyMI7584h@https.bugzilla.kernel.org/>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bug-208911-208809-1kyMI7584h@https.bugzilla.kernel.org/>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add compatible string to use this generic glue layer to support
-Intel Keem Bay platform's dwc3 controller.
+On Sun, Sep 20, 2020 at 09:38:10PM +0000, bugzilla-daemon@bugzilla.kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=208911
+> 
+> Max (kernel@maximilian-stieg.de) changed:
+> 
+>            What    |Removed                     |Added
+> ----------------------------------------------------------------------------
+>                  CC|                            |kernel@maximilian-stieg.de
+> 
+> --- Comment #19 from Max (kernel@maximilian-stieg.de) ---
+> Will this fix only came in 5.8 or also in 4.19 (LTS), which is used by Debian
+> 10?
 
-Signed-off-by: Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
----
- drivers/usb/dwc3/dwc3-of-simple.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-index 2816e4a9813a..e62ecd22b3ed 100644
---- a/drivers/usb/dwc3/dwc3-of-simple.c
-+++ b/drivers/usb/dwc3/dwc3-of-simple.c
-@@ -177,6 +177,7 @@ static const struct of_device_id of_dwc3_simple_match[] = {
- 	{ .compatible = "sprd,sc9860-dwc3" },
- 	{ .compatible = "allwinner,sun50i-h6-dwc3" },
- 	{ .compatible = "hisilicon,hi3670-dwc3" },
-+	{ .compatible = "intel,keembay-dwc3" },
- 	{ /* Sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, of_dwc3_simple_match);
--- 
-2.17.1
-
+Does it affect you on the latest 4.19.y kernel release?
