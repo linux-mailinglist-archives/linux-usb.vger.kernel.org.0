@@ -2,61 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CD1272459
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 14:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C09272476
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 15:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbgIUMzE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 08:55:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60462 "EHLO mail.kernel.org"
+        id S1726471AbgIUNAd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 09:00:33 -0400
+Received: from mx2.suse.de ([195.135.220.15]:42032 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727055AbgIUMy5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Sep 2020 08:54:57 -0400
-Received: from localhost (unknown [70.37.104.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EE4D820874;
-        Mon, 21 Sep 2020 12:54:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600692897;
-        bh=YTX2FUJMA61MC//Hyghreyy7urvRmhmEcVuSrJ8McWM=;
-        h=Date:From:To:To:To:Cc:Cc:Subject:In-Reply-To:References:From;
-        b=AHPyzCgt7OZRRAmzWC8DQLDp676gZONzrkI5OZ6OEb6kwTF3+fNv+HhEJSKdmo/6A
-         Foot9lpFJrIFkuOWDGIHCsfrYR/YSsbQQU7H2eUt1L+FDTqqyQbkxmr18sC3KZat2c
-         K4ShI68ieWiuJC6bvwiM0Y0N020CWndUEyNhiaew=
-Date:   Mon, 21 Sep 2020 12:54:56 +0000
-From:   Sasha Levin <sashal@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH 09/10] xhci: don't create endpoint debugfs entry before ring buffer is set.
-In-Reply-To: <20200918131752.16488-10-mathias.nyman@linux.intel.com>
-References: <20200918131752.16488-10-mathias.nyman@linux.intel.com>
-Message-Id: <20200921125456.EE4D820874@mail.kernel.org>
+        id S1726419AbgIUNAd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Sep 2020 09:00:33 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1600693231;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QbMGdGSEKCbNHlcpDxVMYwiji/WZGhd6LjylQ8KNxmc=;
+        b=sJvwDXIgsaDJzaZVFypt9dI5DemxxR8DfDfQbVsusSxH7ZeIoYef+pI9sdOk+8GsPMmzGp
+        q96A35YZbN+aArJfcLCOvaa5/pWU62pl0j6emV1k15QvHTu+5SMNlp6LTuKbIDYyS84Jvc
+        W3D7Ee3BbjEuuL7B26VWnNI+jc1qwQ8=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id D4564AD12;
+        Mon, 21 Sep 2020 13:01:07 +0000 (UTC)
+Message-ID: <1600693216.2424.92.camel@suse.com>
+Subject: Re: [PATCH] usb: yurex: Rearrange code not to need GFP_ATOMIC
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        johan@kernel.org, gustavoars@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 21 Sep 2020 15:00:16 +0200
+In-Reply-To: <20200921125237.GA24776@duo.ucw.cz>
+References: <20200920084452.GA2257@amd> <1600691092.2424.85.camel@suse.com>
+         <20200921125237.GA24776@duo.ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+Am Montag, den 21.09.2020, 14:52 +0200 schrieb Pavel Machek:
+> Hi!
 
-[This is an automated email]
+> > 
+> > Task goes to TASK_INTERRUPTIBLE
+> > 
+> > >  	if (retval >= 0)
+> > >  		timeout = schedule_timeout(YUREX_WRITE_TIMEOUT);
+> > 
+> > Task turns into Sleeping Beauty until timeout
+> 
+> Is there way to do the allocations for submit_urb before the
 
-This commit has been processed because it contains a "Fixes:" tag
-fixing commit: 02b6fdc2a153 ("usb: xhci: Add debugfs interface for xHCI driver").
+No. In theory you do not even know which HC will get the URB.
+Preallocating resources is impossible. I do consider this a
+design bug in the usbcore API.
 
-The bot has tested the following trees: v5.8.10, v5.4.66, v4.19.146.
+> prepare_to_wait? GFP_ATOMIC would be nice to avoid... and doing
+> GFP_ATOMIC from normal process context just because of task_state
+> seems ... wrong.
 
-v5.8.10: Build OK!
-v5.4.66: Build OK!
-v4.19.146: Failed to apply! Possible dependencies:
-    5afa0a5ed3da ("usb: xhci: add endpoint context tracing when an endpoint is added")
+Well, then you will need to change the rest of the logic
+and use a struct completion. Give the age and practical
+relevance of the driver I would recommend against making
+such drastic changes and let it just be in its awkward
+but correct state.
 
+	Regards
+		Oliver
 
-NOTE: The patch will not be queued to stable trees until it is upstream.
-
-How should we proceed with this patch?
-
--- 
-Thanks
-Sasha
