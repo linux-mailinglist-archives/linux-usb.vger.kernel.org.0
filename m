@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67ADE272FCD
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 19:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE0C272DC2
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 18:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729381AbgIUQk4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 12:40:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43750 "EHLO mail.kernel.org"
+        id S1729536AbgIUQm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 12:42:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728887AbgIUQkn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Sep 2020 12:40:43 -0400
+        id S1729089AbgIUQmw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Sep 2020 12:42:52 -0400
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C2C58235F9;
-        Mon, 21 Sep 2020 16:40:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2DA792076B;
+        Mon, 21 Sep 2020 16:42:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600706443;
-        bh=I8vTKPKPUh/H/WNeeEyNJZRVJ2gJ3oDIQYlO/tpd1WQ=;
+        s=default; t=1600706571;
+        bh=hcubLVqPrBqXU0+oe6Qa2Fuo6ElvZgAx30ZYQhLXOjY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k4Tgz5Ng+9sP/kPe9nCAtrt2l42S3sZv0t4a6dDWB2Pv50a+4hOPP2xnklAJYsQAS
-         jsV76SiCU7RVWIXVHt9M5NGabvLC4GgCE9e/kF8uGkAFhfsr19faC8bRfrScFuqS7o
-         IMEz9ywV+iyXGvbkq/KwueuZwY3Gt7RpM68jyYEc=
+        b=qnRGH+joui3XuDsFpM6bL2k9h80Em1aQ8OFxnUI4Hpn0AxluIA1IbLIe9/+RGnndF
+         kUiHcRIdaKLtA/O3daHgSlr/qeYT62HHsOenBuoMFGC63QHCjnXedId+7eNj//e6Ml
+         hg8aoxKdU+aKy6nh8e4jw3gY0LdrnsykZC42PcPM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-usb@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH 4.14 94/94] x86/defconfig: Enable CONFIG_USB_XHCI_HCD=y
-Date:   Mon, 21 Sep 2020 18:28:21 +0200
-Message-Id: <20200921162039.881390757@linuxfoundation.org>
+Subject: [PATCH 4.19 49/49] x86/defconfig: Enable CONFIG_USB_XHCI_HCD=y
+Date:   Mon, 21 Sep 2020 18:28:33 +0200
+Message-Id: <20200921162036.823911923@linuxfoundation.org>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200921162035.541285330@linuxfoundation.org>
-References: <20200921162035.541285330@linuxfoundation.org>
+In-Reply-To: <20200921162034.660953761@linuxfoundation.org>
+References: <20200921162034.660953761@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,7 +75,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/arch/x86/configs/i386_defconfig
 +++ b/arch/x86/configs/i386_defconfig
-@@ -246,6 +246,7 @@ CONFIG_USB_HIDDEV=y
+@@ -245,6 +245,7 @@ CONFIG_USB_HIDDEV=y
  CONFIG_USB=y
  CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
  CONFIG_USB_MON=y
@@ -85,7 +85,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  CONFIG_USB_OHCI_HCD=y
 --- a/arch/x86/configs/x86_64_defconfig
 +++ b/arch/x86/configs/x86_64_defconfig
-@@ -242,6 +242,7 @@ CONFIG_USB_HIDDEV=y
+@@ -241,6 +241,7 @@ CONFIG_USB_HIDDEV=y
  CONFIG_USB=y
  CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
  CONFIG_USB_MON=y
