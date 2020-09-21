@@ -2,96 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F99E272434
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 14:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CD1272459
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 14:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726786AbgIUMwk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 08:52:40 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:47126 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726395AbgIUMwk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 08:52:40 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id A60241C0B81; Mon, 21 Sep 2020 14:52:37 +0200 (CEST)
-Date:   Mon, 21 Sep 2020 14:52:37 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Pavel Machek <pavel@denx.de>, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, johan@kernel.org, gustavoars@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: yurex: Rearrange code not to need GFP_ATOMIC
-Message-ID: <20200921125237.GA24776@duo.ucw.cz>
-References: <20200920084452.GA2257@amd>
- <1600691092.2424.85.camel@suse.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="FL5UXtIhxfXey3p5"
-Content-Disposition: inline
-In-Reply-To: <1600691092.2424.85.camel@suse.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727092AbgIUMzE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 08:55:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60462 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727055AbgIUMy5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Sep 2020 08:54:57 -0400
+Received: from localhost (unknown [70.37.104.77])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE4D820874;
+        Mon, 21 Sep 2020 12:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600692897;
+        bh=YTX2FUJMA61MC//Hyghreyy7urvRmhmEcVuSrJ8McWM=;
+        h=Date:From:To:To:To:Cc:Cc:Subject:In-Reply-To:References:From;
+        b=AHPyzCgt7OZRRAmzWC8DQLDp676gZONzrkI5OZ6OEb6kwTF3+fNv+HhEJSKdmo/6A
+         Foot9lpFJrIFkuOWDGIHCsfrYR/YSsbQQU7H2eUt1L+FDTqqyQbkxmr18sC3KZat2c
+         K4ShI68ieWiuJC6bvwiM0Y0N020CWndUEyNhiaew=
+Date:   Mon, 21 Sep 2020 12:54:56 +0000
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH 09/10] xhci: don't create endpoint debugfs entry before ring buffer is set.
+In-Reply-To: <20200918131752.16488-10-mathias.nyman@linux.intel.com>
+References: <20200918131752.16488-10-mathias.nyman@linux.intel.com>
+Message-Id: <20200921125456.EE4D820874@mail.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi
 
---FL5UXtIhxfXey3p5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[This is an automated email]
 
-Hi!
+This commit has been processed because it contains a "Fixes:" tag
+fixing commit: 02b6fdc2a153 ("usb: xhci: Add debugfs interface for xHCI driver").
 
-> > Move prepare to wait around, so that normal GFP_KERNEL allocation can
-> > be used.
-> >=20
-> > Signed-off-by: Pavel Machek (CIP) <pavel@denx.de>
-> > Acked-by: Alan Stern <stern@rowland.harvard.edu>
->=20
-> Ehm. Please recheck.
+The bot has tested the following trees: v5.8.10, v5.4.66, v4.19.146.
 
-Sorry about that.
+v5.8.10: Build OK!
+v5.4.66: Build OK!
+v4.19.146: Failed to apply! Possible dependencies:
+    5afa0a5ed3da ("usb: xhci: add endpoint context tracing when an endpoint is added")
 
-> > +++ b/drivers/usb/misc/yurex.c
-> > @@ -489,10 +489,10 @@ static ssize_t yurex_write(struct file *file, con=
-st char __user *user_buffer,
-> >  	}
-> > =20
-> >  	/* send the data as the control msg */
-> > -	prepare_to_wait(&dev->waitq, &wait, TASK_INTERRUPTIBLE);
-> >  	dev_dbg(&dev->interface->dev, "%s - submit %c\n", __func__,
-> >  		dev->cntl_buffer[0]);
-> > -	retval =3D usb_submit_urb(dev->cntl_urb, GFP_ATOMIC);
-> > +	retval =3D usb_submit_urb(dev->cntl_urb, GFP_KERNEL);
->=20
-> URB completes here. wake_up() returns the task to RUNNING.
->=20
-> > +	prepare_to_wait(&dev->waitq, &wait, TASK_INTERRUPTIBLE);
->=20
-> Task goes to TASK_INTERRUPTIBLE
->=20
-> >  	if (retval >=3D 0)
-> >  		timeout =3D schedule_timeout(YUREX_WRITE_TIMEOUT);
->=20
-> Task turns into Sleeping Beauty until timeout
 
-Is there way to do the allocations for submit_urb before the
-prepare_to_wait? GFP_ATOMIC would be nice to avoid... and doing
-GFP_ATOMIC from normal process context just because of task_state
-seems ... wrong.
+NOTE: The patch will not be queued to stable trees until it is upstream.
 
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+How should we proceed with this patch?
 
---FL5UXtIhxfXey3p5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2iiFQAKCRAw5/Bqldv6
-8tnrAJ4yv71+Q+P6ArjsrTPlDQ7nQ+QIrQCdHjymlZ8hQ7EqYgentvBFzwxh0s0=
-=RmqP
------END PGP SIGNATURE-----
-
---FL5UXtIhxfXey3p5--
+-- 
+Thanks
+Sasha
