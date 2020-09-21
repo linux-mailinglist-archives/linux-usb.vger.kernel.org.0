@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 851BC272671
+	by mail.lfdr.de (Postfix) with ESMTP id 11C5A272670
 	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 16:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727365AbgIUOAF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1727360AbgIUOAF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Mon, 21 Sep 2020 10:00:05 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:40367 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727212AbgIUOAE (ORCPT
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:41462 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726496AbgIUOAE (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 10:00:04 -0400
-Received: by mail-lj1-f195.google.com with SMTP id s205so11170317lja.7;
-        Mon, 21 Sep 2020 07:00:03 -0700 (PDT)
+Received: by mail-lf1-f65.google.com with SMTP id y17so14130991lfa.8
+        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 07:00:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Hb+hvNgCGvB638VQzdE3NIGwCfs5oVJCLR3se4p/iOQ=;
-        b=mmArRY58tz1JUoF4Mt13TyuEU2tR1XntFGnzjmQZIURnM8V4zoV+WGF4Go2XSqQe6f
-         IKc40KM285evvj9AiLc66SixWYy5Fb0rqiwyEKe9nYSqvH8NKx9+VxGl9h8RzXYqHB95
-         J0L5K4WiVm0VUo7tarqlkVaSnKdRJGEZUi3/F1WbbAjUOq1siiNlGn71SjBPpjqmmSn7
-         n0cbYDN7sMVrMj6y8TgvTfdjBvnXc3rGXCXSz4gUq4BdxdsmwEp17jBPl4Hiuoy74EMp
-         8QFwGpZaG6bCMc3gdx9CRQl4TbMZiZ8aCC5qEkTOKYvOz1iAhfDUFBCAKFQHNAgVXt+L
-         5dLw==
-X-Gm-Message-State: AOAM530RPtuzKJjdOevWz0D+fUvTMpq/Zh/GsJVxNqlkK5sKeHYhs+gd
-        aFHur82lGooDK3R3+pzJKfE=
-X-Google-Smtp-Source: ABdhPJz7LguBTd+8s7pivgoffUS7JzHCqg1FrpvAy9NmuriFUwh+MTpgAq7UPuAEvXTmBIZ/FLMscg==
-X-Received: by 2002:a2e:7215:: with SMTP id n21mr16504713ljc.438.1600696801854;
-        Mon, 21 Sep 2020 07:00:01 -0700 (PDT)
+        bh=4/FdGn9Ta2As0651L0QV5CW8c4e0Ma+q3GzcN2EtOes=;
+        b=iA2LLwWOndAMnyXD07XLwyHBno8/jY55uVdgZf4Hrm7PN7kkTkJn9vEj7xTpeAWC/Q
+         bXgN8vf6dnmYHj+yjnRZ6MQRUK672W4bSR+yGs/+jC30gt0hgRMnW2+5JB97F90AnCMo
+         etSFogQm2d8rrz55sV66UUUu207w6LCO642dlTC6MxBHV8vwQUiw6qkmz/DNwh/rISU5
+         mkfkspxZxaSPKyYtrJwKZksDx24FM/x1uwORaKb0NkPvEwHPfVUtOEyiRCCBiUqU8LCD
+         rGsEB3N52uPb6QTCXZrfRdU79CLQDmKFc8NmM38g+Z4zO3tlKptRQiWskhTv3ImxGw9F
+         d0EQ==
+X-Gm-Message-State: AOAM531kTuhb9aBZL4T4QcTDGxKfcm+VEUGZ1I95/u2pS7feBEmnC/5S
+        osu+pvOvBNwuvjTD1y5OwA4=
+X-Google-Smtp-Source: ABdhPJywIhpbNWNU5CTb6hMjLaCsc2jG87gIS6zZ1reYA9Rb73VL4oVXy8Rbwm1NBQgyXYam34o/fA==
+X-Received: by 2002:a19:8089:: with SMTP id b131mr38374lfd.390.1600696802344;
+        Mon, 21 Sep 2020 07:00:02 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id k205sm2594711lfk.19.2020.09.21.07.00.00
+        by smtp.gmail.com with ESMTPSA id w9sm2612350lfn.224.2020.09.21.07.00.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 21 Sep 2020 07:00:01 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@xi.terra>)
-        id 1kKMMF-0006Gu-2Q; Mon, 21 Sep 2020 15:59:55 +0200
+        id 1kKMMF-0006Gy-4t; Mon, 21 Sep 2020 15:59:55 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Oliver Neukum <oneukum@suse.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org,
         Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>,
-        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH v2 2/4] USB: cdc-acm: handle broken union descriptors
-Date:   Mon, 21 Sep 2020 15:59:49 +0200
-Message-Id: <20200921135951.24045-3-johan@kernel.org>
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH v2 3/4] USB: cdc-acm: use common data-class define
+Date:   Mon, 21 Sep 2020 15:59:50 +0200
+Message-Id: <20200921135951.24045-4-johan@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200921135951.24045-1-johan@kernel.org>
 References: <20200921135951.24045-1-johan@kernel.org>
@@ -54,52 +54,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Handle broken union functional descriptors where the master-interface
-doesn't exist or where its class is of neither Communication or Data
-type (as required by the specification) by falling back to
-"combined-interface" probing.
+Use the data-class define provided by USB core and drop the
+driver-specific one.
 
-Note that this still allows for handling union descriptors with switched
-interfaces.
-
-This specifically makes the Whistler radio scanners TRX series devices
-work with the driver without adding further quirks to the device-id
-table.
-
-Link: https://lore.kernel.org/r/5f4ca4f8.1c69fb81.a4487.0f5f@mx.google.com
-Reported-by: Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
-Cc: stable@vger.kernel.org
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/class/cdc-acm.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/usb/class/cdc-acm.c | 6 ++----
+ drivers/usb/class/cdc-acm.h | 2 --
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index e28ac640ff9c..f42ade505569 100644
+index f42ade505569..a361b937684a 100644
 --- a/drivers/usb/class/cdc-acm.c
 +++ b/drivers/usb/class/cdc-acm.c
-@@ -1240,9 +1240,21 @@ static int acm_probe(struct usb_interface *intf,
- 			}
- 		}
- 	} else {
-+		int class = -1;
-+
- 		data_intf_num = union_header->bSlaveInterface0;
- 		control_interface = usb_ifnum_to_if(usb_dev, union_header->bMasterInterface0);
- 		data_interface = usb_ifnum_to_if(usb_dev, data_intf_num);
-+
-+		if (control_interface)
-+			class = control_interface->cur_altsetting->desc.bInterfaceClass;
-+
-+		if (class != USB_CLASS_COMM && class != USB_CLASS_CDC_DATA) {
-+			dev_dbg(&intf->dev, "Broken union descriptor, assuming single interface\n");
-+			combined_interfaces = 1;
-+			control_interface = data_interface = intf;
-+			goto look_for_collapsed_interface;
-+		}
- 	}
+@@ -1287,10 +1287,8 @@ static int acm_probe(struct usb_interface *intf,
+ skip_normal_probe:
  
- 	if (!control_interface || !data_interface) {
+ 	/*workaround for switched interfaces */
+-	if (data_interface->cur_altsetting->desc.bInterfaceClass
+-						!= CDC_DATA_INTERFACE_TYPE) {
+-		if (control_interface->cur_altsetting->desc.bInterfaceClass
+-						== CDC_DATA_INTERFACE_TYPE) {
++	if (data_interface->cur_altsetting->desc.bInterfaceClass != USB_CLASS_CDC_DATA) {
++		if (control_interface->cur_altsetting->desc.bInterfaceClass == USB_CLASS_CDC_DATA) {
+ 			dev_dbg(&intf->dev,
+ 				"Your device has switched interfaces.\n");
+ 			swap(control_interface, data_interface);
+diff --git a/drivers/usb/class/cdc-acm.h b/drivers/usb/class/cdc-acm.h
+index cd5e9d8ab237..b7174a0098a5 100644
+--- a/drivers/usb/class/cdc-acm.h
++++ b/drivers/usb/class/cdc-acm.h
+@@ -131,8 +131,6 @@ struct acm {
+ 	unsigned long quirks;
+ };
+ 
+-#define CDC_DATA_INTERFACE_TYPE	0x0a
+-
+ /* constants describing various quirks and errors */
+ #define NO_UNION_NORMAL			BIT(0)
+ #define SINGLE_RX_URB			BIT(1)
 -- 
 2.26.2
 
