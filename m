@@ -2,76 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD6C272B96
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 18:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7033272BE9
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 18:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727969AbgIUQTQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 12:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726419AbgIUQTQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 12:19:16 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91A1C061755
-        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 09:19:15 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id d4so79203wmd.5
-        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 09:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:to:cc:subject:references:date:in-reply-to
-         :user-agent:mime-version;
-        bh=+aVVvXzUFdVZdOrIpKJit9DGGPVqWMLgWre5iCirSqg=;
-        b=ndQ1hXnqPYPf0fB4FBjdXE2y7hTTtoCEk6MD6GQ7EK4XB/igbcajS+gOkIhgHuV1u7
-         UNMzFYoEdsx7C8fbCxaxhMQ2Paz7AE+C0WfouVv5t+YdSQA73a22P9knIJjGjnS4A7Vf
-         EB0Mkw5TzEnx6QEd6yEVutqaIA3v81ykjJtGY4wn9rwqNxKhShkUqsjGFagpxiSNqzth
-         MQRW/SFhBGzeUjmOhEH+tHY2A1aRp5KXUcJykhzo9SAuLV0G9aB5O2Zo2HIkClMvuyZd
-         TF0h1vWyqyjMeITJf9RgcOJ1EjyujuqlHU2HIyk2ccuk6CCoiegIZUK1pO8C30rgaDi+
-         5hEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:to:cc:subject:references:date
-         :in-reply-to:user-agent:mime-version;
-        bh=+aVVvXzUFdVZdOrIpKJit9DGGPVqWMLgWre5iCirSqg=;
-        b=BTdqsqf0CpiC36jKlDANnZTtJBky/WCTnHZRBNo+QGAGqZanVy1wcVMHjBBLeVqQrH
-         +Py+63rEzitSY8PvtjP55shLDq1Grxq7TU6Q+zmMzGqJ5vM8ZhuIIf/o2Yr8d5Z6e7tP
-         dt6ZKn75zALXgw6RRoOl4VNfUQ4glDbbb/gmkyNyLlnU1jufgxNyupc7wz4WYPOQD+aw
-         qoC0Nyy5YjOMeBnNLvaDfH3eOnfhjHbsoQkCxC69zBfpkR0hN3yqlEoporyPWlwc/LQk
-         rjuM4EZHf0wPZh6x18tuRjYokaX97q38ezT8lTwMMR5FEuxzMZXkI5FfhX0hokboO3Zz
-         c3Tw==
-X-Gm-Message-State: AOAM530NFBIlDVptEiqs1jyC6XLYtxgFuiUzcxYQuIoLQrOfh0Wj/6tv
-        pEziKTZ60FceTb3D/16X2fg=
-X-Google-Smtp-Source: ABdhPJy1TxOlBHsmKJrqkJ0WaYHKX6s5pG1rKfHjX5JS9zI6n1RVtNfcWleVdx8Ho2HMBsVMuYGKqQ==
-X-Received: by 2002:a1c:9cd3:: with SMTP id f202mr168705wme.148.1600705154619;
-        Mon, 21 Sep 2020 09:19:14 -0700 (PDT)
-Received: from daniel-ThinkPad-X230 ([2a01:e35:1387:1640:1853:cc4f:48fd:e3ca])
-        by smtp.gmail.com with ESMTPSA id h2sm22476048wrp.69.2020.09.21.09.19.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2020 09:19:13 -0700 (PDT)
-Message-ID: <5f68d281.1c69fb81.86428.99fb@mx.google.com>
-X-Google-Original-Message-ID: <87pn6f5chr.fsf@gmail.com>>
-From:   <f1rmb.daniel@gmail.com> (<Daniel Caujolle-Bert>)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
-Subject: Re: [PATCH v2 0/4] USB: cdc-acm: handle broken union descriptors
-References: <20200921135951.24045-1-johan@kernel.org>
-Date:   Mon, 21 Sep 2020 18:19:12 +0200
-In-Reply-To: <20200921135951.24045-1-johan@kernel.org> (Johan Hovold's message
-        of "Mon, 21 Sep 2020 15:59:47 +0200")
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        id S1728274AbgIUQZA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 12:25:00 -0400
+Received: from out28-172.mail.aliyun.com ([115.124.28.172]:35323 "EHLO
+        out28-172.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726457AbgIUQY6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 12:24:58 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08949126|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0335908-0.0164095-0.95;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03303;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.IaJ0p8G_1600705483;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.IaJ0p8G_1600705483)
+          by smtp.aliyun-inc.com(10.147.40.44);
+          Tue, 22 Sep 2020 00:24:52 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, kishon@ti.com,
+        vkoul@kernel.org, paul@crapouillou.net
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        christophe.jaillet@wanadoo.fr, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
+Subject: [PATCH v5 0/2] Use the generic PHY framework for Ingenic USB PHY.
+Date:   Tue, 22 Sep 2020 00:24:15 +0800
+Message-Id: <20200921162417.52004-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan, Oliver,
+v3->v4:
+Only add new generic-PHY driver, without removing the old one. Because the
+jz4740-musb driver is not ready to use the generic PHY framework. When the
+jz4740-musb driver is modified to use the generic PHY framework, the old
+jz4770-phy driver can be "retired".
 
-   I just compiled and tested, everything still works.
+v4->v5:
+1.Add an extra blank line between "devm_of_phy_provider_register" and "return".
+2.Remove unnecessary "phy_set_drvdata".
+3.Add Paul Cercueil's Reviewed-by.
+
+周琰杰 (Zhou Yanjie) (2):
+  USB: PHY: JZ4770: Remove unnecessary function calls.
+  PHY: Ingenic: Add USB PHY driver using generic PHY framework.
+
+ drivers/phy/Kconfig                   |   1 +
+ drivers/phy/Makefile                  |   1 +
+ drivers/phy/ingenic/Kconfig           |  12 ++
+ drivers/phy/ingenic/Makefile          |   2 +
+ drivers/phy/ingenic/phy-ingenic-usb.c | 373 ++++++++++++++++++++++++++++++++++
+ drivers/usb/phy/phy-jz4770.c          |   2 +-
+ 6 files changed, 390 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/phy/ingenic/Kconfig
+ create mode 100644 drivers/phy/ingenic/Makefile
+ create mode 100644 drivers/phy/ingenic/phy-ingenic-usb.c
 
 
-Cheers.
----
-Daniel
+周琰杰 (Zhou Yanjie) (2):
+  USB: PHY: JZ4770: Remove unnecessary function calls.
+  PHY: Ingenic: Add USB PHY driver using generic PHY framework.
+
+ drivers/phy/Kconfig                   |   1 +
+ drivers/phy/Makefile                  |   1 +
+ drivers/phy/ingenic/Kconfig           |  12 ++
+ drivers/phy/ingenic/Makefile          |   2 +
+ drivers/phy/ingenic/phy-ingenic-usb.c | 372 ++++++++++++++++++++++++++++++++++
+ drivers/usb/phy/phy-jz4770.c          |   2 +-
+ 6 files changed, 389 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/phy/ingenic/Kconfig
+ create mode 100644 drivers/phy/ingenic/Makefile
+ create mode 100644 drivers/phy/ingenic/phy-ingenic-usb.c
+
+-- 
+2.11.0
+
