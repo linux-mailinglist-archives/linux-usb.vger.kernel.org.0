@@ -2,73 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4B427230E
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 13:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A81272322
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 13:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726649AbgIULtc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 07:49:32 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56342 "EHLO mx2.suse.de"
+        id S1726483AbgIULwD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 07:52:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36222 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726522AbgIULtb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Sep 2020 07:49:31 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1600688969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ByZHliO9xGu4qAvhF4W99RnKyoIv7qIEmoIOubJl9E=;
-        b=aKFlF+6yb/YdhzNOhSNDVUm5yfH1UKsXRsN+k8RYWE7qpt3tmDXEbMwe3rPxLxX2MhXxo2
-        ANl8l0XgQiL0S9W5lVb774uCyaPv/JrSQB+WKn+2GXqvpAZ+yujZKqpH0EX00yRScmit7t
-        RkYCMJaHvyv6JnAHJXrU9XOvggAG5yc=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id DEC23ACA3;
-        Mon, 21 Sep 2020 11:50:05 +0000 (UTC)
-Message-ID: <1600688954.2424.76.camel@suse.com>
-Subject: Re: [PATCH v2] USB: cdc-acm: add Whistler radio scanners TRX series
- support
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>,
-        stable@vger.kernel.org
-Date:   Mon, 21 Sep 2020 13:49:14 +0200
-In-Reply-To: <20200921113601.GT24441@localhost>
-References: <20200921081022.6881-1-johan@kernel.org>
-         <1600677792.2424.61.camel@suse.com> <20200921093145.GS24441@localhost>
-         <1600684156.2424.65.camel@suse.com> <20200921113601.GT24441@localhost>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726375AbgIULwD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Sep 2020 07:52:03 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 493CD20EDD;
+        Mon, 21 Sep 2020 11:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600689122;
+        bh=NQPRQz+/iXSNe/+tUadlxBAYfUGBh67MQofu9hUBUTg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RPP0h1Fj1Zxs8Z6/zNYzmrhuwfKB4AUNmvHGDOZBvtSOTwTVB1pshajIcnVjzuPTf
+         FxcTYmWjx2NvgWR88Fm0N4iEovvT5pCil6Mw3WZwndBm1jXFHNpJoF97z1Rt3kuuNZ
+         4RxSLc5sQTGLrvKOIloeRy0IyRe8q/pKfK4q2gSg=
+Date:   Mon, 21 Sep 2020 13:52:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     stern@rowland.harvard.edu, kai.heng.feng@canonical.com,
+        johan@kernel.org, tomasz@meresinski.eu, jonathan@jdcox.net,
+        kerneldev@karsmulder.nl, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: quirks: simplify quirk handling.
+Message-ID: <20200921115226.GA275283@kroah.com>
+References: <20200921113039.GA19862@duo.ucw.cz>
+ <20200921113800.GA26212@kroah.com>
+ <20200921114729.GA21368@duo.ucw.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200921114729.GA21368@duo.ucw.cz>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 21.09.2020, 13:36 +0200 schrieb Johan Hovold:
-> On Mon, Sep 21, 2020 at 12:29:16PM +0200, Oliver Neukum wrote:
+On Mon, Sep 21, 2020 at 01:47:29PM +0200, Pavel Machek wrote:
+> On Mon 2020-09-21 13:38:00, Greg KH wrote:
+> > On Mon, Sep 21, 2020 at 01:30:39PM +0200, Pavel Machek wrote:
+> > > Simplify quirk handling.
+> > 
+> > In what way?
+> > 
+> > Please be more descriptive in your changelog and resend.
+> 
+> Have you looked at the patch below? Please apply the patch. You are
+> free to edit the changelog if you feel the need.
 
-Hi,
+I am also free to ignore patches with changelogs that do not say
+anything of consequence, which I will do here.
 
-> I meant that instead of falling back to "combined-interface" probing we
-> could assume that all interfaces with three endpoints are "combined" and
-> simply ignore the union and call managementy. descriptors and all the ways
-> that devices may have gotten those wrong.
-
-I am afraid we would break the spec. I cannot recall a prohibition on
-having more endpoints than necessary. Heuristics and ignoring invalid
-descriptors is one things. Ignoring valid descriptors is something
-else.
-
-> I was thinking more of the individual entries in the device-id table
-> whose control interfaces may not even be of the Communication class. But
-> hopefully that was verified when adding them.
-
-Now you are confusing me. In case of a quirky device, why change
-the current logic?
-
-	Regards
-		Oliver
-
+greg k-h
