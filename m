@@ -2,77 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD9A27222B
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 13:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1485A27228E
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 13:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgIULVS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 07:21:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58110 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726532AbgIULVR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Sep 2020 07:21:17 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1600687276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=/ngJDL6/z4BJCeT0oPCblUO16rv/1+hCOitTErETCi0=;
-        b=ZH5NCXjwyacORxWak9yPY8h/p1Ab6S6o8DhyEpemCng4vexkRw0mGlpbHw2IspJfCdD2OH
-        pCHDtpqjpRpQ/YBJNdkGUq2gSVVYSXRS4DzppypFxIRX3boLI6KKB245384dFP/FW3Ep7z
-        5ic+98WKbaVAsdxGJUJcIb6tXt2AqGo=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 8B98EB20B;
-        Mon, 21 Sep 2020 11:21:52 +0000 (UTC)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     penguin-kernel@i-love.sakura.ne.jp, bjorn@mork.no,
-        linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [RFC 8/8] CDC-WDM: reduce scope of wdm_mutex
-Date:   Mon, 21 Sep 2020 13:20:52 +0200
-Message-Id: <20200921112052.27943-9-oneukum@suse.com>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200921112052.27943-1-oneukum@suse.com>
-References: <20200921112052.27943-1-oneukum@suse.com>
+        id S1726875AbgIULal (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 07:30:41 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:35902 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726457AbgIULal (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 07:30:41 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id CF8711C0B81; Mon, 21 Sep 2020 13:30:39 +0200 (CEST)
+Date:   Mon, 21 Sep 2020 13:30:39 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        kai.heng.feng@canonical.com, johan@kernel.org,
+        tomasz@meresinski.eu, jonathan@jdcox.net, kerneldev@karsmulder.nl,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: quirks: simplify quirk handling.
+Message-ID: <20200921113039.GA19862@duo.ucw.cz>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="5vNYLRcllDrimb99"
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use the global mutex for as short as possible in open()
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/class/cdc-wdm.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+--5vNYLRcllDrimb99
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 7607ab2bbe07..230fe66828e3 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -704,6 +704,7 @@ static int wdm_open(struct inode *inode, struct file *file)
- 
- 	/* using write lock to protect desc->count */
- 	mutex_lock(&desc->wlock);
-+	mutex_unlock(&wdm_mutex);
- 	if (!desc->count++) {
- 		/* in case flush() had timed out */
- 		usb_kill_urb(desc->command);
-@@ -716,13 +717,14 @@ static int wdm_open(struct inode *inode, struct file *file)
- 				"Error submitting int urb - %d\n", rv);
- 			rv = usb_translate_errors(rv);
- 		}
-+		if (desc->count == 1)
-+			desc->manage_power(intf, 1);
- 	} else {
- 		rv = 0;
+Simplify quirk handling.
+
+Signed-off-by: Pavel Machek (CIP) <pavel@denx.de>
+
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index f232914de5fd..167b6ac428a3 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -56,18 +56,13 @@ static int quirks_param_set(const char *value, const st=
+ruct kernel_param *kp)
+ 		if (val[i] =3D=3D ',')
+ 			quirk_count++;
+=20
+-	if (quirk_list) {
+-		kfree(quirk_list);
+-		quirk_list =3D NULL;
+-	}
+-
++	kfree(quirk_list);
+ 	quirk_list =3D kcalloc(quirk_count, sizeof(struct quirk_entry),
+ 			     GFP_KERNEL);
+ 	if (!quirk_list) {
+ 		quirk_count =3D 0;
+-		mutex_unlock(&quirk_mutex);
+-		kfree(val);
+-		return -ENOMEM;
++		err =3D -ENOMEM;
++		goto unlock;
  	}
- 	mutex_unlock(&desc->wlock);
--	if (desc->count == 1)
--		desc->manage_power(intf, 1);
- 	usb_autopm_put_interface(desc->intf);
-+	return rv;
- out:
- 	mutex_unlock(&wdm_mutex);
- 	return rv;
--- 
-2.16.4
+=20
+ 	for (i =3D 0, p =3D val; p && *p;) {
+@@ -153,7 +148,7 @@ static int quirks_param_set(const char *value, const st=
+ruct kernel_param *kp)
+ 	mutex_unlock(&quirk_mutex);
+ 	kfree(val);
+=20
+-	return 0;
++	return err;
+ }
+=20
+ static const struct kernel_param_ops quirks_param_ops =3D {
 
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--5vNYLRcllDrimb99
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2iO3wAKCRAw5/Bqldv6
+8vwSAJwOXFVGsbOUYjR9k1gNqz+YYCNksgCfQ2QxZWEU2bWe4x6HL22QjO5mjP8=
+=A++X
+-----END PGP SIGNATURE-----
+
+--5vNYLRcllDrimb99--
