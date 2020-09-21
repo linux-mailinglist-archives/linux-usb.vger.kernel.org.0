@@ -2,68 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CD72722F5
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 13:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4B427230E
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 13:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgIULrd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 07:47:33 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:40406 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726402AbgIULrc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 07:47:32 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id CED471C0B7A; Mon, 21 Sep 2020 13:47:29 +0200 (CEST)
-Date:   Mon, 21 Sep 2020 13:47:29 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Pavel Machek <pavel@denx.de>, stern@rowland.harvard.edu,
-        kai.heng.feng@canonical.com, johan@kernel.org,
-        tomasz@meresinski.eu, jonathan@jdcox.net, kerneldev@karsmulder.nl,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: quirks: simplify quirk handling.
-Message-ID: <20200921114729.GA21368@duo.ucw.cz>
-References: <20200921113039.GA19862@duo.ucw.cz>
- <20200921113800.GA26212@kroah.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="IS0zKkzwUGydFO0o"
-Content-Disposition: inline
-In-Reply-To: <20200921113800.GA26212@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726649AbgIULtc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 07:49:32 -0400
+Received: from mx2.suse.de ([195.135.220.15]:56342 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726522AbgIULtb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Sep 2020 07:49:31 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1600688969;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3ByZHliO9xGu4qAvhF4W99RnKyoIv7qIEmoIOubJl9E=;
+        b=aKFlF+6yb/YdhzNOhSNDVUm5yfH1UKsXRsN+k8RYWE7qpt3tmDXEbMwe3rPxLxX2MhXxo2
+        ANl8l0XgQiL0S9W5lVb774uCyaPv/JrSQB+WKn+2GXqvpAZ+yujZKqpH0EX00yRScmit7t
+        RkYCMJaHvyv6JnAHJXrU9XOvggAG5yc=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id DEC23ACA3;
+        Mon, 21 Sep 2020 11:50:05 +0000 (UTC)
+Message-ID: <1600688954.2424.76.camel@suse.com>
+Subject: Re: [PATCH v2] USB: cdc-acm: add Whistler radio scanners TRX series
+ support
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>,
+        stable@vger.kernel.org
+Date:   Mon, 21 Sep 2020 13:49:14 +0200
+In-Reply-To: <20200921113601.GT24441@localhost>
+References: <20200921081022.6881-1-johan@kernel.org>
+         <1600677792.2424.61.camel@suse.com> <20200921093145.GS24441@localhost>
+         <1600684156.2424.65.camel@suse.com> <20200921113601.GT24441@localhost>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Am Montag, den 21.09.2020, 13:36 +0200 schrieb Johan Hovold:
+> On Mon, Sep 21, 2020 at 12:29:16PM +0200, Oliver Neukum wrote:
 
---IS0zKkzwUGydFO0o
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Mon 2020-09-21 13:38:00, Greg KH wrote:
-> On Mon, Sep 21, 2020 at 01:30:39PM +0200, Pavel Machek wrote:
-> > Simplify quirk handling.
->=20
-> In what way?
->=20
-> Please be more descriptive in your changelog and resend.
+> I meant that instead of falling back to "combined-interface" probing we
+> could assume that all interfaces with three endpoints are "combined" and
+> simply ignore the union and call managementy. descriptors and all the ways
+> that devices may have gotten those wrong.
 
-Have you looked at the patch below? Please apply the patch. You are
-free to edit the changelog if you feel the need.
+I am afraid we would break the spec. I cannot recall a prohibition on
+having more endpoints than necessary. Heuristics and ignoring invalid
+descriptors is one things. Ignoring valid descriptors is something
+else.
 
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+> I was thinking more of the individual entries in the device-id table
+> whose control interfaces may not even be of the Communication class. But
+> hopefully that was verified when adding them.
 
---IS0zKkzwUGydFO0o
-Content-Type: application/pgp-signature; name="signature.asc"
+Now you are confusing me. In case of a quirky device, why change
+the current logic?
 
------BEGIN PGP SIGNATURE-----
+	Regards
+		Oliver
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2iS0QAKCRAw5/Bqldv6
-8ujBAJ9B5HOkcqxDoaHZMtSxoV1LRbLZKQCgwZ0qh0oimerhxavrreqLlAfugvM=
-=Hw2D
------END PGP SIGNATURE-----
-
---IS0zKkzwUGydFO0o--
