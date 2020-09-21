@@ -2,162 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE71F2722A6
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 13:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3542722A2
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 13:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726748AbgIULgX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 07:36:23 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:44287 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726690AbgIULgV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 07:36:21 -0400
-Received: by mail-lf1-f68.google.com with SMTP id d15so13588139lfq.11
-        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 04:36:20 -0700 (PDT)
+        id S1726654AbgIULgN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 07:36:13 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40199 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726326AbgIULgM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 07:36:12 -0400
+Received: by mail-lj1-f196.google.com with SMTP id s205so10751413lja.7;
+        Mon, 21 Sep 2020 04:36:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mT/W9gPoT8HPtWMjLt/eX8O8tgNIOA/33FYtdIYgctA=;
-        b=X7U4f9Y/We8XmZhp8SQL/j6FaM78XylWUvR+gtK1IUSY5jAzCDMmoHhDBjwllquVSS
-         49vXXpl73qZ+5C5NWIoS/k5SzLy1YXdWqMmKjVM1xxxn8HxSP7RlvTKdBv6ec0zwQrL0
-         QwqHJWn1KX7DI+DTc03qbupFPqi2RVhdvNe6JtL9m2ufM0VirC/qdCUPbRsBc4DeRhMH
-         RvzVUUV5GC7o651TPznrYEFUz/FCOeEG4oyZzOBgOW2Y1JMjtt/WiEXkwiryZ4XI6XRc
-         Ft7iSte7DnAkegeh4HKtnU2vyGxppZ/316zWH+yxXaI6HszFgrVppcDbVLel46oLJtj/
-         +DFg==
-X-Gm-Message-State: AOAM531qTKnbdecxFdzYScAjmyWvWHFiNjgVYPbJKiyc6pugr88jDAC4
-        H9dNrfGpfKppx5OPp24sH84=
-X-Google-Smtp-Source: ABdhPJz3S43zAcu/gERGOeZM2BBbVIMeWWs8WqMB4g7GOzNJi9sD7lAR2GjstKfBNQfrsfYd3+y7QQ==
-X-Received: by 2002:a05:6512:3191:: with SMTP id i17mr14796436lfe.460.1600688179495;
-        Mon, 21 Sep 2020 04:36:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kd3iMKnixtZzfCsALrdkM+rA5qkShZbR4dY98v7k9JI=;
+        b=qp4n7gj72VH5om8bC3n6he3nAoHnOQDM8lTXIck/wPHaveSzEC1jKt3QOqysdTLA3b
+         xpRQ9bAcf/Glp0H4GGTsInBfZ2KIAIhV03+U8lfs3sIcPCH7bDaCvRxCBdH/vWUHEEAz
+         e+sqMLbLmaf5hrdKRJXMeHMGp+PeC1BGW3L0PtP8sqh/cO/Hgs6pq2ZEczMw8r3w2Pkk
+         5S40tOwm0Mqhd+R+dIWNzSl2hb/5hDszv+xeMm5alb3WDnNYMWGJ4jUnN1gPKjWRziMM
+         kKFnzGfqGIEBBOwQwaZf8kTBnkEoqABtd2WITsOPVzfbDSVghc+NQ5j1gEAtrmn90WtQ
+         NlOQ==
+X-Gm-Message-State: AOAM5331qgSXHT9Zs77TcIOpoBAIMGqzhzapP+0Cfoj+KBH7fKyi880I
+        QPgg53ML+BaP9TBxXyRqD84=
+X-Google-Smtp-Source: ABdhPJwdk6FBblDCoPl9mOit9wQxOLYXq/8FPmzqGRPHLy/OW+Z1gPPsZH0K02YBkq7HfneJihxwWg==
+X-Received: by 2002:a2e:3215:: with SMTP id y21mr14853686ljy.52.1600688170047;
+        Mon, 21 Sep 2020 04:36:10 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id b28sm2489744lfq.107.2020.09.21.04.36.17
+        by smtp.gmail.com with ESMTPSA id m20sm2633088ljp.132.2020.09.21.04.36.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2020 04:36:18 -0700 (PDT)
+        Mon, 21 Sep 2020 04:36:09 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@xi.terra>)
-        id 1kKK79-0008OR-Dx; Mon, 21 Sep 2020 13:36:11 +0200
+        (envelope-from <johan@kernel.org>)
+        id 1kKK6z-0008O2-Py; Mon, 21 Sep 2020 13:36:02 +0200
+Date:   Mon, 21 Sep 2020 13:36:01 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org,
         Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [RFC 4/4] USB: cdc-acm: clean up handling of quirky devices
-Date:   Mon, 21 Sep 2020 13:35:25 +0200
-Message-Id: <20200921113525.32187-5-johan@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200921113525.32187-1-johan@kernel.org>
-References: <20200921113525.32187-1-johan@kernel.org>
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] USB: cdc-acm: add Whistler radio scanners TRX series
+ support
+Message-ID: <20200921113601.GT24441@localhost>
+References: <20200921081022.6881-1-johan@kernel.org>
+ <1600677792.2424.61.camel@suse.com>
+ <20200921093145.GS24441@localhost>
+ <1600684156.2424.65.camel@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1600684156.2424.65.camel@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Instead of falling back to "combined-interface" probing when detecting
-broken union and call-management descriptors, assume all interfaces with
-three endpoints are of "combined-interface" type.
+On Mon, Sep 21, 2020 at 12:29:16PM +0200, Oliver Neukum wrote:
+> Am Montag, den 21.09.2020, 11:31 +0200 schrieb Johan Hovold:
+> > On Mon, Sep 21, 2020 at 10:43:12AM +0200, Oliver Neukum wrote:
+> > > Am Montag, den 21.09.2020, 10:10 +0200 schrieb Johan Hovold:
+> > > > Add support for Whistler radio scanners TRX series, which have a union
+> > > > descriptor that designates a mass-storage interface as master. Handle
+> > > > that by generalising the NO_DATA_INTERFACE quirk to allow us to fall
+> > > > back to using the combined-interface detection.
+> > > 
+> > > Hi,
+> 
+> Hi,
+> 
+> > > 
+> > > it amazes me what solutions people can come up with. Yet in this case
+> > > using a quirk looks like an inferior solution. If your master
+> > > is a storage interface, you will have a condition on the device you
+> > > can test for without the need for a quirk.
+> > 
+> > Sure, and I mentioned that as an alternative, another would be checking
+> > for a control interface with three endpoints directly.
+> 
+> These tests are not mutually exclusive. You can check for both
+> conditions being met. In fact you have to, it seems to me.
 
-This allows for the removal of the NO_DATA_INTERFACE quirk and makes the
-probe algorithm somewhat easier to follow.
+I meant that instead of falling back to "combined-interface" probing we
+could assume that all interfaces with three endpoints are "combined" and
+simply ignore the union and call management descriptors and all the ways
+that devices may have gotten those wrong.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/class/cdc-acm.c | 44 ++++++++++---------------------------
- drivers/usb/class/cdc-acm.h | 11 +++++-----
- 2 files changed, 16 insertions(+), 39 deletions(-)
+I'll include that as an RFC.
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 2758e295871e..eda883ce6d9d 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1217,44 +1217,27 @@ static int acm_probe(struct usb_interface *intf,
- 	if (cmgmd)
- 		call_intf_num = cmgmd->bDataInterface;
- 
-+	if (intf->cur_altsetting->desc.bNumEndpoints == 3) {
-+		dev_dbg(&intf->dev, "assuming single interface\n");
-+		combined_interfaces = 1;
-+		control_interface = data_interface = intf;
-+		goto look_for_collapsed_interface;
-+	}
-+
- 	if (!union_header) {
- 		if (call_intf_num > 0) {
- 			dev_dbg(&intf->dev, "No union descriptor, using call management descriptor\n");
--			/* quirks for Droids MuIn LCD */
--			if (quirks & NO_DATA_INTERFACE) {
--				data_interface = usb_ifnum_to_if(usb_dev, 0);
--			} else {
--				data_intf_num = call_intf_num;
--				data_interface = usb_ifnum_to_if(usb_dev, data_intf_num);
--			}
-+			data_intf_num = call_intf_num;
-+			data_interface = usb_ifnum_to_if(usb_dev, data_intf_num);
- 			control_interface = intf;
- 		} else {
--			if (intf->cur_altsetting->desc.bNumEndpoints != 3) {
--				dev_dbg(&intf->dev,"No union descriptor, giving up\n");
--				return -ENODEV;
--			} else {
--				dev_warn(&intf->dev,"No union descriptor, testing for castrated device\n");
--				combined_interfaces = 1;
--				control_interface = data_interface = intf;
--				goto look_for_collapsed_interface;
--			}
-+			dev_dbg(&intf->dev, "No union descriptor, giving up\n");
-+			return -ENODEV;
- 		}
- 	} else {
--		int class = -1;
--
- 		data_intf_num = union_header->bSlaveInterface0;
- 		control_interface = usb_ifnum_to_if(usb_dev, union_header->bMasterInterface0);
- 		data_interface = usb_ifnum_to_if(usb_dev, data_intf_num);
--
--		if (control_interface)
--			class = control_interface->cur_altsetting->desc.bInterfaceClass;
--
--		if (class != USB_CLASS_COMM && class != USB_CLASS_CDC_DATA) {
--			dev_warn(&intf->dev, "Broken union descriptor, assuming single interface\n");
--			combined_interfaces = 1;
--			control_interface = data_interface = intf;
--			goto look_for_collapsed_interface;
--		}
- 	}
- 
- 	if (!control_interface || !data_interface) {
-@@ -1881,11 +1864,6 @@ static const struct usb_device_id acm_ids[] = {
- 
- 	/* NOTE: non-Nokia COMM/ACM/0xff is likely MSFT RNDIS... NOT a modem! */
- 
--	/* Support for Droids MuIn LCD */
--	{ USB_DEVICE(0x04d8, 0x000b),
--	.driver_info = NO_DATA_INTERFACE,
--	},
--
- #if IS_ENABLED(CONFIG_INPUT_IMS_PCU)
- 	{ USB_DEVICE(0x04d8, 0x0082),	/* Application mode */
- 	.driver_info = IGNORE_DEVICE,
-diff --git a/drivers/usb/class/cdc-acm.h b/drivers/usb/class/cdc-acm.h
-index b7174a0098a5..b2135095898f 100644
---- a/drivers/usb/class/cdc-acm.h
-+++ b/drivers/usb/class/cdc-acm.h
-@@ -135,9 +135,8 @@ struct acm {
- #define NO_UNION_NORMAL			BIT(0)
- #define SINGLE_RX_URB			BIT(1)
- #define NO_CAP_LINE			BIT(2)
--#define NO_DATA_INTERFACE		BIT(4)
--#define IGNORE_DEVICE			BIT(5)
--#define QUIRK_CONTROL_LINE_STATE	BIT(6)
--#define CLEAR_HALT_CONDITIONS		BIT(7)
--#define SEND_ZERO_PACKET		BIT(8)
--#define DISABLE_ECHO			BIT(9)
-+#define IGNORE_DEVICE			BIT(3)
-+#define QUIRK_CONTROL_LINE_STATE	BIT(4)
-+#define CLEAR_HALT_CONDITIONS		BIT(5)
-+#define SEND_ZERO_PACKET		BIT(6)
-+#define DISABLE_ECHO			BIT(7)
--- 
-2.26.2
+> > My fear is that any change in this direction risk introducing regression
+> > if there are devices out there with broken descriptors that we currently
+> > happen to support by chance. Then again, probably better to try to
+> > handle any such breakage if/when reported.
+> 
+> Well, I guess the chance that we break devices which claim to be
+> storage devices we will simply have to take. Those devices are
+> quite broken in any case.
 
+I was thinking more of the individual entries in the device-id table
+whose control interfaces may not even be of the Communication class. But
+hopefully that was verified when adding them.
+
+Johan
