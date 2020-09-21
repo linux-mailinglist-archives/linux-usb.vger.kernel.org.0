@@ -2,85 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E040D2726F7
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 16:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C542727D5
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 16:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726419AbgIUO2R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 10:28:17 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:44422 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbgIUO2R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 10:28:17 -0400
-Received: by mail-lj1-f194.google.com with SMTP id b19so11266167lji.11
-        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 07:28:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mtNhXFuf8g4XBcLG6hHchTKDDf6mQ6ZidJdQqTdREu8=;
-        b=JLVvSGHyyKvs+df74aC1+NyIhKTCqE/oQHDOo/zm2ta0coIsAZb0c3TyCs2TKQHLVk
-         azCRlvo44RbE4J3j7e6mCS3N2O75niRsjFN1Ka6qVzOO5kOAn8LVqdiRAyzpGTOTvv4e
-         PKQW5GyMm55d8Ri4iem9sVXsxhKm645XjB5tyAHnD+F3B6X3zqdoo/s7VbOP8Mh/UzTy
-         ZVNWLY9n3kA1O01/n8StdmqjcRMpSzAuMXhCw+eWd6CxFL+nDbBWm10+J5YjQoSqtauA
-         vVu7BZXffT6SNFiMgPsdy955AsqHS+PjQbp/LMVV02g8xs9GtVpCB37iJKXWhZq3ECTZ
-         2Blw==
-X-Gm-Message-State: AOAM531ILhUxUmBCR1fOyjxCfz4OiC1Mgfs0b2WHLZ8lX4IRWDqcfCQe
-        prKFgjyhp+UddIDA+GKc4MNLHNqQxbU=
-X-Google-Smtp-Source: ABdhPJyQGme2YiZ+e5hOsMpSJXZyLNrUQfwmPzd2XmM345y7kewbm4PZe0s9/r4EsPaf+OYBfVlKKA==
-X-Received: by 2002:a2e:958f:: with SMTP id w15mr17514200ljh.449.1600698495145;
-        Mon, 21 Sep 2020 07:28:15 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id e14sm2797083ljp.15.2020.09.21.07.28.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2020 07:28:14 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kKMnW-0006PU-Vz; Mon, 21 Sep 2020 16:28:07 +0200
-Date:   Mon, 21 Sep 2020 16:28:06 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Johan Hovold <johan@kernel.org>, Erik Slagter <erik@slagter.name>,
+        id S1727408AbgIUOiF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 10:38:05 -0400
+Received: from mga18.intel.com ([134.134.136.126]:54160 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726901AbgIUOiE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Sep 2020 10:38:04 -0400
+IronPort-SDR: MyLTTzPZNdRs1y9knQA5YT7HkU3PA6A/V8vEpxP6Pf3ZXE/sOOctC3+xL+Ok2rG7Jyc7tooLHE
+ DmAS7mntPx8Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9751"; a="148137710"
+X-IronPort-AV: E=Sophos;i="5.77,286,1596524400"; 
+   d="scan'208";a="148137710"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2020 07:38:01 -0700
+IronPort-SDR: Yr6Ou9Kpp30JO3lehVBuzaR7PSPo27rLfaSBy8DT+QX8KxyTQEW4BXepBPQWuiBoDqB+JMg3QN
+ oBSotKLc1gxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,286,1596524400"; 
+   d="scan'208";a="412309314"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 21 Sep 2020 07:37:58 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Sep 2020 17:37:57 +0300
+Date:   Mon, 21 Sep 2020 17:37:57 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Angus Ainslie <angus@akkea.ca>
+Cc:     kernel@puri.sm, MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
-Subject: Re: [PATCH v2 4/4] USB: cdc-acm: clean up no-union-descriptor
- handling
-Message-ID: <20200921142806.GX24441@localhost>
-References: <20200921135951.24045-1-johan@kernel.org>
- <20200921135951.24045-5-johan@kernel.org>
- <1600697816.2424.102.camel@suse.com>
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bryan.odonoghue@linaro.org
+Subject: Re: [PATCH 0/4] RFC: USB C extcon patchset for the tps6598x
+Message-ID: <20200921143757.GG1630537@kuha.fi.intel.com>
+References: <20200914164639.1487650-1-angus@akkea.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1600697816.2424.102.camel@suse.com>
+In-Reply-To: <20200914164639.1487650-1-angus@akkea.ca>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 04:16:56PM +0200, Oliver Neukum wrote:
-> Am Montag, den 21.09.2020, 15:59 +0200 schrieb Johan Hovold:
-> > For interfaces that lack a union descriptor, probe for a
-> > "combined-interface" before falling back to the call-management
-> > descriptor instead of the other way round.
+On Mon, Sep 14, 2020 at 09:46:35AM -0700, Angus Ainslie wrote:
+> We have a complex set of hardware components to manage our USB C data and
+> power. For these to work together we decided to use extcon to communicate
+> the system changes as various cables and devices are plugged in/out. We did
+> look at usb_roleswitch and the charging framework but thought it would be
+> preferable to keep all of the information together in one system.
 > 
-> Hi,
+> The components we have in the system are:
 > 
-> the more I look at this the more it seems to me like the
-> device that has the quirk does NOT have a collapsed interface
-> but two interfaces and just a lack of a union descriptor.
+> 1) TPS65982 type USB type C controller
+> 2) dwc3 IP in the imx8mq
+> 3) BQ25895 battery charger
+> 
+> I'll break this into 2 parts the data role and the power role.
+> 
+> For the data role the TPS65982 senses connect and disconnect as well as data
+> source/sink. It is also controlling the USB 3 data lanes. The display port and
+> USB 3 muxing is handled by a different chip and we'll submit patches for that
+> later on. The dwc3 controls the USB 2 data lanes.
+> 
+> On the power side there are even more moving pieces. The TPS65982 negotiates
+> the power delivery contract, the dwc3 senses the BC1.2 charging current and the
+> BQ25895 sets whether we are sinking or sourcing current and what the current
+> limit is of the sink and source.
+> 
+> For both the data and power roles no single chip has all of the required
+> information. Is using extcon the correct way of doing this and if not what
+> are the alternatives ?
 
-But then why name the quirk NO_DATA_INTERFACE if it has a data
-interface? By hardcoding the data-interface number to be the one and
-only interface, you'd end up probing for a "combined" interface also
-with a broken call-management descriptor.
+Do not use extcon with the Type-C drivers unless you have some really
+good reason for not using the dedicated frameworks for each thing. The
+reason why we even have some of the dedicated frameworks in the first
+place, for example the USB role switch class, is because extcon simply
+could not be made to work on every type of hardware architecture.
 
-Side note: I really think we should start mandating lsusb output to go
-along with any patch for quirky devices.
+So you will need to register a power supply in tps6598x.c just like
+the other USB Type-C drivers like tcpm.c and ucsi.c if the TPS65982
+does not communicated directly with the BQ25895. That can be one
+of "supplied_from" (and also "supplied_to" if needed for sourcing) for
+the bq25890_changer. You probable only need to implement the
+external_power_changed() hook for it if it's missing in order to make
+it work. You can also register a power supply in dwc3 and use it as a
+second supply for bq25890 if you still really need to handle BC1.2.
 
-> I am taking the original author into CC (hoping it still workd)
-> Johan, would just taking the first three patches of the series work for
-> now?
+The data role should already be handled for you. dwc3 already
+registers an USB role switch, and tps6598x.c already configures one.
+For data role you should not need any additional code.
 
-Of course, no problem holding back the last one for a bit.
+Please note that there is also framework for the alt mode muxes.
 
-Johan
+
+> The extcon extensions allow us to communicate the the power roles amongst
+> the various chips.
+> 
+> This patch series has been tested with the 5.9-rc4 kernel on the Purism
+> Librem5 HW. Assuming this is the correct way to use extcon there will be
+> follow on patches to the BQ25895 and dwc3 drivers.
+> 
+> Strictly speaking only the first 3 patches are needed for extcon support, the
+> forth patch decodes the power delivery contracts which makes use of the extcon
+> system.
+> 
+> 
+> Angus Ainslie (4):
+>   extcon: Add USB VBUS properties
+>   usb: typec: tps6589x: register as an extcon provider
+>   usb: typec: tps6598x: Add the extcon USB chargers
+>   usb: typec: tps6598x: Add the power delivery irq
+> 
+>  drivers/usb/typec/tps6598x.c | 488 ++++++++++++++++++++++++++++++++++-
+>  include/linux/extcon.h       |  17 +-
+>  2 files changed, 503 insertions(+), 2 deletions(-)
+> 
+> -- 
+> 2.25.1
+
+thanks,
+
+-- 
+heikki
