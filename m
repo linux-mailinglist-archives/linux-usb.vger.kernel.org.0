@@ -2,85 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8D0272382
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 14:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B71272390
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Sep 2020 14:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726445AbgIUMPf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 08:15:35 -0400
-Received: from mail-lj1-f177.google.com ([209.85.208.177]:44279 "EHLO
-        mail-lj1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbgIUMPf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 08:15:35 -0400
-Received: by mail-lj1-f177.google.com with SMTP id b19so10864529lji.11
-        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 05:15:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PucaVNZG7a2BDgaEJBx2aQDY3Mss+7fBpx/BFNuY4ng=;
-        b=PK5tGjd3TAf49zhOxr4p70fNV80DbbKAtaKPAFw6sZsiwhvHEu/7aeajdhmIvp+SV5
-         xa5nbhquk350Fiq4PxLOs2NoWGkWH630mPJoYTp9Kiq/Z15oRqzY69CoEWgr19q+ATMF
-         gFkrYaCtm/PLsTLNFw2DqYRiwrCqU97wEjTLabY5QU6cP2jv9MDjpzW1lfDhGE2sV9jx
-         jYv6VxeWg6+LuE4Pb7EcXGX+lGJ3E+YaRwTPRHyWOrAS2PQJ8iFM7C43HoNARDBX1j9A
-         47SFahYx4sPx0mYjZW5SPHz5XGChHj7ySIDU3DDFOR0W+g6BJA7tMQAbJl4+NrdPi/iQ
-         xYmQ==
-X-Gm-Message-State: AOAM533hG1RtbozANQBqBMtZY38Nq/xhbwJdGh/jH8jPqgMdetw8Vq/r
-        3u6VaWPsm33Ux2hZYlkMiDU=
-X-Google-Smtp-Source: ABdhPJzClL+ZxOH4BRK4jk0KvTMv7gFM4i3a6qWAn9brm/Iva/xSL1kb3JaAKpByIjsyGCMwR47mgw==
-X-Received: by 2002:a2e:980c:: with SMTP id a12mr14635527ljj.26.1600690532853;
-        Mon, 21 Sep 2020 05:15:32 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id b141sm2553336lfd.236.2020.09.21.05.15.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2020 05:15:32 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kKKj7-0000Zr-R8; Mon, 21 Sep 2020 14:15:25 +0200
-Date:   Mon, 21 Sep 2020 14:15:25 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726532AbgIUMRY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 08:17:24 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35922 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726341AbgIUMRY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Sep 2020 08:17:24 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1600690642;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2WOB/LsKGVOS4/FNcum1bDPrDTePrSfKOmWeegawm6M=;
+        b=Zt+26VaPHHDeVljzZ848AbXPE+5uUM9ujyWMbRVIYVh/V4seFQ39TxODBCL3KsFpb6ZmEl
+        tVIM687xwkr1mL12xR/xGbANIL0LnGddPLq0WK8SHdmWISWiRnYqpmDw6oho9umGwOgTED
+        a8F0Yra4bNZ+HPVr12q7B+YszKuPaps=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 0D44CAC4D;
+        Mon, 21 Sep 2020 12:17:58 +0000 (UTC)
+Message-ID: <1600690627.2424.80.camel@suse.com>
+Subject: Re: [PATCH v2] USB: cdc-acm: add Whistler radio scanners TRX series
+ support
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org,
-        Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
-Subject: Re: [RFC 4/4] USB: cdc-acm: clean up handling of quirky devices
-Message-ID: <20200921121525.GV24441@localhost>
-References: <20200921113525.32187-1-johan@kernel.org>
- <20200921113525.32187-5-johan@kernel.org>
- <1600689232.2424.78.camel@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1600689232.2424.78.camel@suse.com>
+        Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>,
+        stable@vger.kernel.org
+Date:   Mon, 21 Sep 2020 14:17:07 +0200
+In-Reply-To: <20200921120302.GU24441@localhost>
+References: <20200921081022.6881-1-johan@kernel.org>
+         <1600677792.2424.61.camel@suse.com> <20200921093145.GS24441@localhost>
+         <1600684156.2424.65.camel@suse.com> <20200921113601.GT24441@localhost>
+         <1600688954.2424.76.camel@suse.com> <20200921120302.GU24441@localhost>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 01:53:52PM +0200, Oliver Neukum wrote:
-> Am Montag, den 21.09.2020, 13:35 +0200 schrieb Johan Hovold:
-> > Instead of falling back to "combined-interface" probing when detecting
-> > broken union and call-management descriptors, assume all interfaces with
-> > three endpoints are of "combined-interface" type.
+Am Montag, den 21.09.2020, 14:03 +0200 schrieb Johan Hovold:
+> On Mon, Sep 21, 2020 at 01:49:14PM +0200, Oliver Neukum wrote:
+> > Am Montag, den 21.09.2020, 13:36 +0200 schrieb Johan Hovold:
+> > > On Mon, Sep 21, 2020 at 12:29:16PM +0200, Oliver Neukum wrote:
+> > 
+> > Hi,
+> > 
+> > > I meant that instead of falling back to "combined-interface" probing we
+> > > could assume that all interfaces with three endpoints are "combined" and
+> > > simply ignore the union and call managementy. descriptors and all the ways
+> > > that devices may have gotten those wrong.
+> > 
+> > I am afraid we would break the spec. I cannot recall a prohibition on
+> > having more endpoints than necessary. Heuristics and ignoring invalid
+> > descriptors is one things. Ignoring valid descriptors is something
+> > else.
 > 
-> Hi,
+> That depends on how you read the spec (see "3.3.1 Communication Class
+> Interface"). But sure, it's probably be better to err on the safe-side.
+
+You mean 3.4.1?
+
+> > > I was thinking more of the individual entries in the device-id table
+> > > whose control interfaces may not even be of the Communication class. But
+> > > hopefully that was verified when adding them.
+> > 
+> > Now you are confusing me. In case of a quirky device, why change
+> > the current logic?
 > 
-> this just ignores a union header. I am afraid that is not correct.
-> Could you move it into the !union_header clause?
+> Just because they have a quirk defined, doesn't mean they don't rely on
+> the generic probe algorithm (e.g. a USB_DEVICE entry which matches all
+> interface classes and only specifies SEND_ZERO_PACKET).
 
-And probe for a combined interface before falling back to the management
-descriptor then? Along the lines of
+Right, so let me be more specific. It would probably be unwise to
+change the decision tree in probe() as far as devices whose quirks
+affect decisions in that already are concerned.
 
-	if (!union_desc) {
-		if (bNumEndpoints == 3) {
-			goto probe_combined_interface;
-		} else if (call_intf_num > 0) {
-			data_intf_num = call_intf_num;
-			...
-		} else {
-			return -ENODEV;
-		}
-	} else {
-		...
-	}
-			
-Johan
+	Regards
+		Oliver
+
