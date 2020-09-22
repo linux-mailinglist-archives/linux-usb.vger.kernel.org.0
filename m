@@ -2,78 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2310C273EFD
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 11:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7590D273F37
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 12:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbgIVJ4G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 05:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbgIVJ4F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 05:56:05 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BD4C061755
-        for <linux-usb@vger.kernel.org>; Tue, 22 Sep 2020 02:56:05 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id z4so16343642wrr.4
-        for <linux-usb@vger.kernel.org>; Tue, 22 Sep 2020 02:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:to:cc:subject:references:date:in-reply-to
-         :user-agent:mime-version;
-        bh=mbMaRPaRf3fawjRPAEw1Cpka4kfwr3UGu5HSBhGaCRo=;
-        b=aBWF9DKvQYuRfxDNggtrKjN1TRs2eCCyz+cFGg1Sditbjw7mbRH7ygDqlrJj4A2FCo
-         2GAfI5s/SYl/m+WFdzeMvQSohOETBRh6EDPgVwlpFxS3I2adfdab+Olg+WxWp96rvkug
-         advhneKhUaC3/Q1X4E28a13vH0dFuJF4HzMal6fGugolfJIqx2j3wAhXpuXzHCRLRdk4
-         smUloDcSV5/DcHS/1mfiTawLohBrhTZ1PWwWWVgP9Egmmm5ok4I8zW4rqIDxWv7dTMM7
-         II8yFKl3RMI2X8zyPWsNWzNkK1MCyq+RMT5QjM9RjdkmSXsJq1ElRohza173tnqEnLN3
-         8txw==
+        id S1726522AbgIVKHY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 06:07:24 -0400
+Received: from mail-lf1-f45.google.com ([209.85.167.45]:43503 "EHLO
+        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbgIVKHY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 06:07:24 -0400
+Received: by mail-lf1-f45.google.com with SMTP id y2so17346235lfy.10
+        for <linux-usb@vger.kernel.org>; Tue, 22 Sep 2020 03:07:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:to:cc:subject:references:date
-         :in-reply-to:user-agent:mime-version;
-        bh=mbMaRPaRf3fawjRPAEw1Cpka4kfwr3UGu5HSBhGaCRo=;
-        b=AYBQwFRflpuProRc2CdAGuos9eCQ2VbvVU1HSBU6VeLoiYEQhzvP3LKbWU+vKRpyk/
-         7z3Ktv1Vgw0ddN9/g9hCbDOoO1bdB3jECV5zjGRQpxPCECuEMqCnTzELlbCz++hAxRx4
-         qcvykgy7lFDem3zG3JTbLXYXGt5TIXie4TvD1kHx5UP1J714F2ZFHM22rNtlwZIpXXIA
-         m3sopyu1eOCWsG8tXJOtxGfd+d9jN3H60hAs0eJ6IHs7jv5dKd0GDeaLuKFnVSB2R3pF
-         Bhn5IMHYI91wKgvOwdpEDpB2EJrFAZrqAVqEmEvULM2QuzQ8/4XkZgi4yuvD5o4PKVn2
-         IbKA==
-X-Gm-Message-State: AOAM530xmAqOQ1ZYVOme3nmfk/HHSID9pVjewE9aXQUCs9TzpzQ2jsfQ
-        ezMI0nxkuRozrBHQhbJclplKJiGnnRGkhA==
-X-Google-Smtp-Source: ABdhPJyxpg6nW13Xw+h3cM1xvHqa8uoNlYPiHBrq0+leK8Dl/gPGj0IWHQk+/NzLboS9PFTUk6edtw==
-X-Received: by 2002:adf:dd44:: with SMTP id u4mr4236786wrm.22.1600768563831;
-        Tue, 22 Sep 2020 02:56:03 -0700 (PDT)
-Received: from daniel-ThinkPad-X230 ([2a01:e35:1387:1640:1853:cc4f:48fd:e3ca])
-        by smtp.gmail.com with ESMTPSA id k12sm25569342wrn.39.2020.09.22.02.56.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g8AhtFNZ8B0u/Su5uMsQVep65Pu2+oZVvNFtSm1Q8jA=;
+        b=dvDhIwJO8I77yPO0DtoDbWsstKXI+K/gVioS7fqMsIJnjOKSPN1wftp2unOdAHSMcv
+         FNga5Qm5WHXmSQANZQNGm7d6sYqXCxnx11uCJMNuxswdBa3AGZO2YOKF1xc1bcm/phkT
+         Bl/UjA1+a5hm+woyQ9UPWKECdWfSlrtsZDGGCcPeSzd05+ySwSeHBesQa7RU2Fsd7Lq8
+         RPM0r9CoA+NNqBME7j3QWGp1XWI2RfwHf6PawoSmtq9jqaLpAuFR9U20dwIGBNlzx5FK
+         oBoKYtMfcnbHkL1oU9Z2J/s2psi6Q1GkvBnaZSiRONVjRM8F/g4JhwcP77r3d+/xUcd3
+         hE1w==
+X-Gm-Message-State: AOAM532YADfy0NEuKKnZCDE3GgPksQx0MhWwgWuUs9CxaoUvkdDjrmPS
+        9HnQE7OKvOvLc1t9ZH+VdEw=
+X-Google-Smtp-Source: ABdhPJw51V0MqSA/f/VeYa3aoxN6B+nsbJNMH4ncAWSL7F9Bn9K64kg32nsaxprIi+kc/FanHjr1qA==
+X-Received: by 2002:a19:7fc8:: with SMTP id a191mr1318889lfd.591.1600769242217;
+        Tue, 22 Sep 2020 03:07:22 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id z27sm3359593lfg.14.2020.09.22.03.07.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 02:56:03 -0700 (PDT)
-Message-ID: <5f69ca33.1c69fb81.f95dc.2c96@mx.google.com>
-X-Google-Original-Message-ID: <87r1qup231.fsf@gmail.com>>
-From:   <f1rmb.daniel@gmail.com> (<Daniel Caujolle-Bert>)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     "\<Daniel Caujolle-Bert\>" <f1rmb.daniel@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
+        Tue, 22 Sep 2020 03:07:21 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kKfCc-0001Lq-Ca; Tue, 22 Sep 2020 12:07:15 +0200
+Date:   Tue, 22 Sep 2020 12:07:14 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     "<Daniel Caujolle-Bert>" <f1rmb.daniel@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, Oliver Neukum <oneukum@suse.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
 Subject: Re: [PATCH v2 0/4] USB: cdc-acm: handle broken union descriptors
+Message-ID: <20200922100714.GB24441@localhost>
 References: <20200921135951.24045-1-johan@kernel.org>
-        <5f68d281.1c69fb81.86428.99fb@mx.google.com>
-        <20200922070818.GA24441@localhost>
-Date:   Tue, 22 Sep 2020 11:56:02 +0200
-In-Reply-To: <20200922070818.GA24441@localhost> (Johan Hovold's message of
-        "Tue, 22 Sep 2020 09:08:18 +0200")
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+ <5f68d281.1c69fb81.86428.99fb@mx.google.com>
+ <20200922070818.GA24441@localhost>
+ <5f69ca33.1c69fb81.f95dc.2c96@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f69ca33.1c69fb81.f95dc.2c96@mx.google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
+On Tue, Sep 22, 2020 at 11:56:02AM +0200, <Daniel Caujolle-Bert> wrote:
+> Hi Johan,
+> 
+>    Okay, I replied to the second patch, hope I didn't make any mistake.
 
-   Okay, I replied to the second patch, hope I didn't make any mistake.
+Looks good. Thanks again!
 
-
-Cheers.
----
-Daniel
+Johan
