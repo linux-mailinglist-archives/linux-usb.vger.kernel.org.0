@@ -2,72 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F17B7273996
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 06:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C601E2739A8
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 06:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbgIVEFg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 22 Sep 2020 00:05:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56258 "EHLO mail.kernel.org"
+        id S1728416AbgIVEVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 00:21:36 -0400
+Received: from mga18.intel.com ([134.134.136.126]:51222 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726098AbgIVEFg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Sep 2020 00:05:36 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208911] Renesas USB controller - FW has invalid version :8224
-Date:   Tue, 22 Sep 2020 04:05:35 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: vkoul@kernel.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-208911-208809-p4nsEptvkp@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208911-208809@https.bugzilla.kernel.org/>
-References: <bug-208911-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726790AbgIVEVf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Sep 2020 00:21:35 -0400
+IronPort-SDR: K6TEJh7RtMb86KxJ4/qzQvUTvJ7VFUkyueumbIcLtPexDJB0zur4nKX1FUX/r2AEDGG8VkD8a/
+ WrjT6rCU9t6Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9751"; a="148282267"
+X-IronPort-AV: E=Sophos;i="5.77,289,1596524400"; 
+   d="scan'208";a="148282267"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2020 21:21:34 -0700
+IronPort-SDR: iGxqjyRDLUS1y98vuXY8eB3HROqQQ4TcOPMlcRFeWQUSzH3Sc5k0/f4+pxVJaWvaOtF3W41RWe
+ v5S0VYXI3NBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,289,1596524400"; 
+   d="scan'208";a="348343830"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga007.jf.intel.com with ESMTP; 21 Sep 2020 21:21:35 -0700
+Received: from [10.213.147.65] (vramuthx-MOBL1.gar.corp.intel.com [10.213.147.65])
+        by linux.intel.com (Postfix) with ESMTP id 644AD580812;
+        Mon, 21 Sep 2020 21:21:32 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [PATCH -next] phy: fix USB_LGM_PHY warning & build errors
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Cc:     Li Yin <yin1.li@intel.com>, Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <d1dd0ddd-3143-5777-1c63-195e1a32f237@infradead.org>
+ <cb3b277e-109d-82c5-9dec-153b4e035c2a@infradead.org>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <7a0129e7-b023-29ad-963f-345bb762b35e@linux.intel.com>
+Date:   Tue, 22 Sep 2020 12:21:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <cb3b277e-109d-82c5-9dec-153b4e035c2a@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208911
+Hi Randy,
 
---- Comment #22 from Vinod Koul (vkoul@kernel.org) ---
-(In reply to Greg Kroah-Hartman from comment #20)
-> On Sun, Sep 20, 2020 at 09:38:10PM +0000,
-> bugzilla-daemon@bugzilla.kernel.org wrote:
-> > https://bugzilla.kernel.org/show_bug.cgi?id=208911
-> > 
-> > Max (kernel@maximilian-stieg.de) changed:
-> > 
-> >            What    |Removed                     |Added
-> >
-> ----------------------------------------------------------------------------
-> >                  CC|                            |kernel@maximilian-stieg.de
-> > 
-> > --- Comment #19 from Max (kernel@maximilian-stieg.de) ---
-> > Will this fix only came in 5.8 or also in 4.19 (LTS), which is used by
-> Debian
-> > 10?
+   Thank you for the report, surely will fix it.
+
+Regards
+Vadivel
+
+On 21/9/2020 11:45 pm, Randy Dunlap wrote:
+> Ping.  Still seeing this in linux-next.
 > 
-> Does it affect you on the latest 4.19.y kernel release?
-
-Nope it does not affect 4.19 kernel. The change went 5.8 kernel, already has
-been ported to 5.8 stable kernels
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+> On 9/17/20 10:51 AM, Randy Dunlap wrote:
+>> From: Randy Dunlap <rdunlap@infradead.org>
+>>
+>> Fix a Kconfig warning that is causing lots of build errors
+>> when USB_SUPPORT is not set.
+>>
+>> USB_PHY depends on USB_SUPPORT but "select" doesn't care about
+>> dependencies, so this driver should also depend on USB_SUPPORT.
+>> It should not select USB_SUPPORT.
+>>
+>> WARNING: unmet direct dependencies detected for USB_PHY
+>>    Depends on [n]: USB_SUPPORT [=n]
+>>    Selected by [m]:
+>>    - USB_LGM_PHY [=m]
+>>
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Li Yin <yin1.li@intel.com>
+>> Cc: Vadivel Murugan R <vadivel.muruganx.ramuthevar@linux.intel.com>
+>> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+>> Cc: Vinod Koul <vkoul@kernel.org>
+>> ---
+>>   drivers/phy/Kconfig |    1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> --- linux-next-20200917.orig/drivers/phy/Kconfig
+>> +++ linux-next-20200917/drivers/phy/Kconfig
+>> @@ -51,6 +51,7 @@ config PHY_XGENE
+>>   
+>>   config USB_LGM_PHY
+>>   	tristate "INTEL Lightning Mountain USB PHY Driver"
+>> +	depends on USB_SUPPORT
+>>   	select USB_PHY
+>>   	select REGULATOR
+>>   	select REGULATOR_FIXED_VOLTAGE
+>>
+> 
+> 
