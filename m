@@ -2,209 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FFDD274811
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 20:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC02A274989
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 21:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgIVSXO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 14:23:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52648 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726526AbgIVSXO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Sep 2020 14:23:14 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1A3423A34;
-        Tue, 22 Sep 2020 18:23:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600798993;
-        bh=GSCu9GXAhuGzC5gGgyow7P9n+KXGkvZXBndaUzUHCIg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=k5u5VLi7sUWY6THM9NZGWxzVsw7n/I0s1EIgazcDg4ui/JFokqQC0qMMP1zuY6zT0
-         PmRElxzwQ020PHJufm8wnVUk7y1QXPjSFcwvFK0Xr7JIhHVOpysiDS4GTelA8zfd1d
-         llILFr5C6o003iwZN/0RlelQarZTqmabUJ/wn9zo=
-Received: by mail-ej1-f48.google.com with SMTP id p9so24255745ejf.6;
-        Tue, 22 Sep 2020 11:23:12 -0700 (PDT)
-X-Gm-Message-State: AOAM532bfAHJ1CbH2QZGhkUyXCoHJIP+S1mRpasxZxaihmIFjJXl5Q4K
-        EJ7fVJ2syYIQ9H83IjGy+PxKBGdr/w6uKS3hEGU=
-X-Google-Smtp-Source: ABdhPJw8FKzJLMabeTiCWUHmXAy3SDx3zLWVir4fUXAYWxXSsYJ8yKFs5m3+W3FP4o8OL30RKnzqA2m7BXp5wo9bxXo=
-X-Received: by 2002:a17:906:4a51:: with SMTP id a17mr6293102ejv.381.1600798991296;
- Tue, 22 Sep 2020 11:23:11 -0700 (PDT)
+        id S1726682AbgIVTyO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 15:54:14 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:34031 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726617AbgIVTyN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 15:54:13 -0400
+Received: by mail-io1-f66.google.com with SMTP id m17so21068251ioo.1;
+        Tue, 22 Sep 2020 12:54:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+qF2EAj+xZ27M9bstX87bUprxWqOcd9qGhCKaOFiGNc=;
+        b=K1tsSEABTJtF80U2hngG6anJgaHEvEkXykeeK/sZEWuSP0W0nXzUiBmEtJOr8UgP/C
+         j/O85hmFqosCgS1pmso/HWrTptRFx2Gaz/3OsEcxDxKQDOkS+F0mHCFXJpGHctNEYeQh
+         aeESxILJPH9AaBsDzDJLwuQXoszTBYF4w3r38CuF29r7kaTmGXQpQbJLVpfyAa8TJ7oR
+         GoUhM1/2QNRbobR1rubOZcHve+FBOnShiNX20QX54SSj2XMcv1k2J0C0OrNwmIHTXPXj
+         J359t5JFq3VhzTe18+puqB08LXGNnSVvIZRbnosSRumh0a1x775y3V1YxC2f48KGZiEQ
+         kHpg==
+X-Gm-Message-State: AOAM532cla4nZ38KK449zXJD566XpRiCKRxoPzQ46NIs6EBvgsC9Dh1h
+        wABzDseRGhKrvUMUPSG6aEgg+5NW/Hxc
+X-Google-Smtp-Source: ABdhPJzijmPheoOp8k8M0D8ZYTknwbf0gqU6P2fI0sRjA5TFSpfxcEdmfuQ37IRLZxfB19R2VHB5Zg==
+X-Received: by 2002:a05:6602:2e0e:: with SMTP id o14mr4889500iow.111.1600804452622;
+        Tue, 22 Sep 2020 12:54:12 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id e9sm9498571ilr.20.2020.09.22.12.54.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2020 12:54:11 -0700 (PDT)
+Received: (nullmailer pid 3131804 invoked by uid 1000);
+        Tue, 22 Sep 2020 19:54:10 -0000
+Date:   Tue, 22 Sep 2020 13:54:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Manish Narani <manish.narani@xilinx.com>
+Cc:     gregkh@linuxfoundation.org, michal.simek@xilinx.com,
+        balbi@kernel.org, p.zabel@pengutronix.de,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        git@xilinx.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation
+ for Versal DWC3 Controller
+Message-ID: <20200922195410.GA3122345@bogus>
+References: <1599678185-119412-1-git-send-email-manish.narani@xilinx.com>
+ <1599678185-119412-2-git-send-email-manish.narani@xilinx.com>
 MIME-Version: 1.0
-References: <1600771612-30727-1-git-send-email-jun.li@nxp.com>
- <1600771612-30727-4-git-send-email-jun.li@nxp.com> <CAJKOXPfocQZY-5Xmn5q=oetmS1doe0zXsQH=uXx0+CxGaESgUg@mail.gmail.com>
- <VE1PR04MB6528C9AF51263B92EA687BEB893B0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-In-Reply-To: <VE1PR04MB6528C9AF51263B92EA687BEB893B0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 22 Sep 2020 20:22:58 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPeEV+BJGn76dnS5uca+NfDqFT-T=eqSWipJ8HH4W6mfVw@mail.gmail.com>
-Message-ID: <CAJKOXPeEV+BJGn76dnS5uca+NfDqFT-T=eqSWipJ8HH4W6mfVw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] dt-bindings: usb: dwc3-imx8mp: add imx8mp dwc3
- glue bindings
-To:     Jun Li <jun.li@nxp.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Andy Duan <fugang.duan@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1599678185-119412-2-git-send-email-manish.narani@xilinx.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 22 Sep 2020 at 18:45, Jun Li <jun.li@nxp.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Krzysztof Kozlowski <krzk@kernel.org>
-> > Sent: Tuesday, September 22, 2020 10:33 PM
-> > To: Jun Li <jun.li@nxp.com>
-> > Cc: robh+dt@kernel.org; shawnguo@kernel.org; balbi@kernel.org;
-> > mathias.nyman@intel.com; gregkh@linuxfoundation.org;
-> > s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com;
-> > dl-linux-imx <linux-imx@nxp.com>; Anson Huang <anson.huang@nxp.com>;
-> > Aisheng Dong <aisheng.dong@nxp.com>; Peng Fan <peng.fan@nxp.com>; Andy Duan
-> > <fugang.duan@nxp.com>; Joakim Zhang <qiangqing.zhang@nxp.com>; Horia
-> > Geanta <horia.geanta@nxp.com>; linux-usb@vger.kernel.org;
-> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org
-> > Subject: Re: [PATCH v3 3/6] dt-bindings: usb: dwc3-imx8mp: add imx8mp dwc3
-> > glue bindings
-> >
-> > On Tue, 22 Sep 2020 at 12:56, Li Jun <jun.li@nxp.com> wrote:
-> > >
-> > > NXP imx8mp integrates 2 dwc3 3.30b IP and add some wakeup logic to
-> > > support low power mode, the glue layer is for this wakeup
-> > > functionality, which has a separated interrupt, can support wakeup
-> > > from U3 and connect events for host, and vbus wakeup for device.
-> > >
-> > > Signed-off-by: Li Jun <jun.li@nxp.com>
-> > > ---
-> > >  .../devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml   | 99
-> > ++++++++++++++++++++++
-> > >  1 file changed, 99 insertions(+)
-> > >
-> > > diff --git
-> > > a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-> > > b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-> > > new file mode 100644
-> > > index 0000000..a5d5566
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-> > > @@ -0,0 +1,99 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) # Copyright
-> > > +(c) 2020 NXP %YAML 1.2
-> > > +---
-> > > +$id:
-> > >
-> > +https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevi
-> > >
-> > +cetree.org%2Fschemas%2Fusb%2Ffsl%2Cimx8mp-dwc3.yaml%23&amp;data=02%7C
-> > >
-> > +01%7Cjun.li%40nxp.com%7Ceaedeb64ec15472183d108d85f046841%7C686ea1d3bc
-> > >
-> > +2b4c6fa92cd99c5c301635%7C0%7C0%7C637363819819667936&amp;sdata=IvFQ8l0
-> > > +7VXUMbG8riyITSTZb1P50oIXs%2BkAV%2FeX8ntk%3D&amp;reserved=0
-> > > +$schema:
-> > >
-> > +https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevi
-> > >
-> > +cetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=02%7C01%7Cjun.li%40
-> > >
-> > +nxp.com%7Ceaedeb64ec15472183d108d85f046841%7C686ea1d3bc2b4c6fa92cd99c
-> > >
-> > +5c301635%7C0%7C0%7C637363819819677934&amp;sdata=H3%2BcwgiLKBynHv4N%2F
-> > > +dogBi3SwaizVHmqieJXVrErv0I%3D&amp;reserved=0
-> > > +
-> > > +title: NXP iMX8MP Soc USB Controller
-> > > +
-> > > +maintainers:
-> > > +  - Li Jun <jun.li@nxp.com>
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    items:
-> >
-> > Items are not necessary
-> >
-> >
-> > > +    - const: fsl,imx8mp-dwc3
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +    description: Address and length of the register set for the wrapper
-> > of
-> > > +      dwc3 core on the SOC.
-> > > +
-> > > +  "#address-cells":
-> > > +    enum: [ 1, 2 ]
-> > > +
-> > > +  "#size-cells":
-> > > +    enum: [ 1, 2 ]
-> > > +
-> > > +  ranges: true
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +    description: The interrupt that is asserted when a wakeup event is
-> > > +      received.
-> > > +
-> > > +  clocks:
-> > > +    description:
-> > > +      A list of phandle and clock-specifier pairs for the clocks
-> > > +      listed in clock-names.
-> > > +    items:
-> > > +      - description: system hsio root clock.
-> > > +      - description: suspend clock, used for usb wakeup logic.
-> > > +
-> > > +  clock-names:
-> > > +    items:
-> > > +      - const: hsio
-> > > +      - const: suspend
-> > > +
-> > > +# Required child node:
-> > > +
-> > > +patternProperties:
-> > > +  "^dwc3@[0-9a-f]+$":
-> > > +    type: object
-> > > +    description:
-> > > +      A child node must exist to represent the core DWC3 IP block
-> > > +      The content of the node is defined in dwc3.txt.
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - "#address-cells"
-> > > +  - "#size-cells"
-> > > +  - ranges
-> > > +  - clocks
-> > > +  - clock-names
-> > > +  - interrupts
-> > > +
-> > > +additionalProperties: false
-> >
-> > Do you actually validate your DTS changes with this schema? They do not look
-> > like passing the validation...
->
-> I did run dt_binding_check, maybe I missed some errors as there are always some other
-> failures, I will re-run to double check.
+On Thu, Sep 10, 2020 at 12:33:04AM +0530, Manish Narani wrote:
+> Add documentation for Versal DWC3 controller. Add required property
+> 'reg' for the same. Also add optional properties for snps,dwc3.
+> 
+> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+> ---
+>  .../devicetree/bindings/usb/dwc3-xilinx.txt   | 20 +++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> index 4aae5b2cef56..219b5780dbee 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> @@ -1,7 +1,8 @@
+>  Xilinx SuperSpeed DWC3 USB SoC controller
+>  
+>  Required properties:
+> -- compatible:	Should contain "xlnx,zynqmp-dwc3"
+> +- compatible:	May contain "xlnx,zynqmp-dwc3" or "xlnx,versal-dwc3"
+> +- reg:		Base address and length of the register control block
+>  - clocks:	A list of phandles for the clocks listed in clock-names
+>  - clock-names:	Should contain the following:
+>    "bus_clk"	 Master/Core clock, have to be >= 125 MHz for SS
+> @@ -13,12 +14,24 @@ Required child node:
+>  A child node must exist to represent the core DWC3 IP block. The name of
+>  the node is not important. The content of the node is defined in dwc3.txt.
+>  
+> +Optional properties for snps,dwc3:
+> +- dma-coherent:	Enable this flag if CCI is enabled in design. Adding this
+> +		flag configures Global SoC bus Configuration Register and
+> +		Xilinx USB 3.0 IP - USB coherency register to enable CCI.
+> +- snps,enable-hibernation: Add this flag to enable hibernation support for
+> +		peripheral mode.
 
-dt_binding_check is good for the binding and example. Except this you
-need to run dtbs_check so your new DTS will be checked. In this case
-it points to missing properties in the bindings.
+This belongs in the DWC3 binding. It also implies that hibernation is 
+not supported by any other DWC3 based platform. Can't this be implied by 
+the compatible string (in the parent)?
 
-Best regards,
-Krzysztof
+> +- interrupt-names: Should contain the following:
+> +  "dwc_usb3"	USB gadget mode interrupts
+> +  "otg"		USB OTG mode interrupts
+> +  "hiber"	USB hibernation interrupts
+> +
+>  Example device node:
+>  
+>  		usb@0 {
+>  			#address-cells = <0x2>;
+>  			#size-cells = <0x1>;
+>  			compatible = "xlnx,zynqmp-dwc3";
+> +			reg = <0x0 0xff9d0000 0x0 0x100>;
+>  			clock-names = "bus_clk" "ref_clk";
+>  			clocks = <&clk125>, <&clk125>;
+>  			ranges;
+> @@ -26,7 +39,10 @@ Example device node:
+>  			dwc3@fe200000 {
+>  				compatible = "snps,dwc3";
+>  				reg = <0x0 0xfe200000 0x40000>;
+> -				interrupts = <0x0 0x41 0x4>;
+> +				interrupt-names = "dwc_usb3", "otg", "hiber";
+> +				interrupts = <0 65 4>, <0 69 4>, <0 75 4>;
+>  				dr_mode = "host";
+> +				dma-coherent;
+> +				snps,enable-hibernation;
+>  			};
+>  		};
+> -- 
+> 2.17.1
+> 
