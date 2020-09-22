@@ -2,83 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F03CC2737A3
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 02:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772022737B4
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 02:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729391AbgIVAmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 20:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
+        id S1729359AbgIVA5J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 20:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729332AbgIVAmB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 20:42:01 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A6EC0613D0
-        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 17:42:01 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id g29so10520474pgl.2
-        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 17:42:01 -0700 (PDT)
+        with ESMTP id S1728656AbgIVA5J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 20:57:09 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB5EC0613CF
+        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 17:57:09 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id b124so10861996pfg.13
+        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 17:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=CaGeSvPYLRYBm98UO6Jry86VMBCqcS8gmrX0rLLRuOo=;
-        b=UVWVU0fbt3UEKUYJ92XpmWL02+0ZZG+3A1SSfXv4mzj9EmM+5wPT0JugLs1A1pTkgs
-         GvwFgkaLyI7j3I22oeHMuDDE7hUnqOrHHOkP8Msf3V+Ax6fnak1f0BqDfabxgg9kmDXb
-         fEd7tC05asleoEk921rx4kEVfKq3LyTKxAUdg=
+        bh=/2UIHSD+hbD9/XCm2LFBXpV4w2R7LaAj/BBBieDXtOU=;
+        b=B6sUsa1QUvAeo3BZNfcv6jwsZiebVcbLS2CGUEVHBYxrAWie0xw/k80T0ceGurIKt+
+         2Hr2FAnUJV+8ehvQIPkTA1jpT+RY0P/GQtn3i7/c7Plewzs56cZVgRjsCCkHWsnSmR9y
+         lafoqQvNM2JDw4KFfjsi0/vvLfipK0Wb6yM54=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=CaGeSvPYLRYBm98UO6Jry86VMBCqcS8gmrX0rLLRuOo=;
-        b=YljsHLtYe4crGyGnkbRX98xz7sGQsk72ZaUzxakH38Dqj084C2U1L7whwOrFZYPMHL
-         Wb8AvngddrxUmxSOIgamwQ9wBTjaXgApkRhdo7ud7kcF8AEXIeu1Re1HN9u4bYLa98m9
-         fSNFZadb1fr0qGCw5AO3kQZM8Igx9cUzRyz8I9m1TfBIJNmzGIDGkIFAA2GUPyZlEj6X
-         3FSw10K94pOCcWd7VCyIOOJj5NdcF6qpcH/111mkKk2XLLa3DF+FkdlLhtm4q/iDfOZ6
-         hI9h458ven/xpDlQON0sBQK+ereOSqS3b6QMFUmz6KeOKOFd3fWkirzrXh6qUBznn2kA
-         Y27Q==
-X-Gm-Message-State: AOAM532kcDVyX5qHSYwpvw1t+XJ9eWWP2Flz/j/NB3uu3y/x7L41DU7s
-        TFUuBcuIAdHOMJSjR1VBQ5pJRw==
-X-Google-Smtp-Source: ABdhPJzrP7IAhyFSlSdePZhYT6llTUXfmudyC5btRBnQE8UwmQ3o815KAwRkrvJlha1c1bQQjUFnZw==
-X-Received: by 2002:a63:3645:: with SMTP id d66mr1639938pga.167.1600735320822;
-        Mon, 21 Sep 2020 17:42:00 -0700 (PDT)
+        bh=/2UIHSD+hbD9/XCm2LFBXpV4w2R7LaAj/BBBieDXtOU=;
+        b=Kjet26MNxvn/Nr9bfUp9vlKmvYpp4llCjlVEj+PV+M4bfa6ge8hxYdcpq2+i6Yqxdc
+         7Wz4RPpMceivY4Wh+QYljkjRpBt1cbTR9rmveIYhlWqGZgVJ3b82QyYl/Y8MSg0MvWv9
+         ZrFrUTXEirBRZaWhKsdCuBKGGzAarn1RattL/nhwFzRJvYa74gq0hJCTc7tsEdFxlcGm
+         vNA1OxF5Bm6qdV+ephvRLe/rt+pwYqWEHRvkQ2V7/cmck4EL32kXcOsT0Y/o8C/5v2pZ
+         hWjSDfzNEtgonUHeZt+2cjBLAvorMdUmOoNTqJOqKiLbjtEDDPjg2xPwA9i60slSFjbA
+         9zxA==
+X-Gm-Message-State: AOAM53170GGMvqoUUtkoHrt9mTfoXYkyR5OKoUKVZL+iZE35poY81V3B
+        fXIuRWtkNTDahIHJBpq9ywoD5g==
+X-Google-Smtp-Source: ABdhPJz7FrBzPRdx17yONMe68ekQBkxq/errYQZ9czK2iIPqzoMw46wfdmjYq+CCGcFRfSKwYFfz3g==
+X-Received: by 2002:a05:6a00:1513:b029:142:2501:34de with SMTP id q19-20020a056a001513b0290142250134demr2040339pfu.55.1600736228551;
+        Mon, 21 Sep 2020 17:57:08 -0700 (PDT)
 Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id e123sm13488203pfh.167.2020.09.21.17.41.59
+        by smtp.gmail.com with ESMTPSA id ie13sm546943pjb.5.2020.09.21.17.57.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Sep 2020 17:42:00 -0700 (PDT)
-Date:   Mon, 21 Sep 2020 17:41:58 -0700
+        Mon, 21 Sep 2020 17:57:08 -0700 (PDT)
+Date:   Mon, 21 Sep 2020 17:57:06 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
+To:     Peter Chen <peter.chen@nxp.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Douglas Anderson <dianders@chromium.org>,
-        linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Peter Chen <peter.chen@nxp.com>,
         Stephen Boyd <swboyd@chromium.org>,
         "Alexander A. Klimov" <grandmaster@al2klimov.de>,
         Masahiro Yamada <masahiroy@kernel.org>
 Subject: Re: [PATCH v2 2/2] USB: misc: Add onboard_usb_hub driver
-Message-ID: <20200922004158.GC21107@google.com>
+Message-ID: <20200922005706.GD21107@google.com>
 References: <20200917114600.v2.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
  <20200917114600.v2.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <20200917195416.GA1099735@rowland.harvard.edu>
+ <20200918012935.GA3938@b29397-desktop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200917195416.GA1099735@rowland.harvard.edu>
+In-Reply-To: <20200918012935.GA3938@b29397-desktop>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+Hi Peter,
 
-thanks for taking time to review!
-
-On Thu, Sep 17, 2020 at 03:54:16PM -0400, Alan Stern wrote:
-> On Thu, Sep 17, 2020 at 11:46:22AM -0700, Matthias Kaehlcke wrote:
+On Fri, Sep 18, 2020 at 01:30:20AM +0000, Peter Chen wrote:
+> On 20-09-17 11:46:22, Matthias Kaehlcke wrote:
 > > The main issue this driver addresses is that a USB hub needs to be
 > > powered before it can be discovered. For onboard hubs this is often
 > > solved by supplying the hub with an 'always-on' regulator, which is
@@ -108,147 +107,143 @@ On Thu, Sep 17, 2020 at 03:54:16PM -0400, Alan Stern wrote:
 > > Co-developed-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
 > > Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
 > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> 
+> > ---
+> > 
+> > Changes in v2:
+> > - check wakeup enabled state of the USB controller instead of
+> >   using 'wakeup-source' property
+> > - use sysfs attribute instead of DT property to determine if
+> >   the hub should be powered off at all during system suspend
+> > - added missing brace in onboard_hub_suspend()
+> > - updated commit message
+> > - use pm_ptr for pm_ops as suggested by Alan
+> > 
+> > Changes in v1:
+> > - renamed the driver to 'onboard_usb_hub'
+> > - single file for platform and USB driver
+> > - USB hub devices register with the platform device
+> >   - the DT includes a phandle of the platform device
+> > - the platform device now controls when power is turned off
+> > - the USB driver became a very thin subclass of the generic USB
+> >   driver
+> > - enabled autosuspend support
+> > 
+> >  drivers/usb/misc/Kconfig           |  15 ++
+> >  drivers/usb/misc/Makefile          |   1 +
+> >  drivers/usb/misc/onboard_usb_hub.c | 329 +++++++++++++++++++++++++++++
+> >  3 files changed, 345 insertions(+)
+> >  create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+> > 
+> > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> > index 6818ea689cd9..e941244e24e5 100644
+> > --- a/drivers/usb/misc/Kconfig
+> > +++ b/drivers/usb/misc/Kconfig
+> > @@ -275,3 +275,18 @@ config USB_CHAOSKEY
+> >  
+> >  	  To compile this driver as a module, choose M here: the
+> >  	  module will be called chaoskey.
+> > +
 > > +config USB_ONBOARD_HUB
 > > +	tristate "Onboard USB hub support"
-> > +	depends on OF
-> > +	help
-> > +	  Say Y here if you want to support onboard USB hubs. The driver
-> > +	  powers supported hubs on and may perform other initialization
-> > +	  steps.
 > 
-> I have a nagging feeling that this description may be too vague for a
-> lot of people to understand.  Does everybody know what an "onboard"
-> USB hub is?
-> 
-> Consider for example that Intel's current EHCI host controllers all
-> come with a USB hub built into the chipset.  That built-in hub
-> certainly could be considered "onboard", but it doesn't need this
-> driver.
-> 
-> Maybe also give some examples of devices that require this driver, to
-> help make the idea clear to readers.
+> On board HUB belongs to HUB, this driver is just for possible power and
+> initialization requirements for HUB which is hard-wired on board. The
+> configuration name USB_HUB_POWER_SUPPLY may more suitable, and at the
+> menu and help, you could indicate it is special for HUBs which are
+> hard-wired on board.
 
-Ok, I'll try to come up with a better description.
+I'm not convinced about the 'power supply' naming, since as you say there
+can be more initialization besides switching on a regulator and the driver
+'extends' the hub driver to support switching the hub power off during
+system suspend.
 
-> > +static int __maybe_unused onboard_hub_suspend(struct device *dev)
+So far neither Alan nor Greg have raised concerns about the naming (though
+that's still an option ;-). I'm open to change it if we can come up with a
+name that clearly describes the driver better than the current name.
+
+> > +static ssize_t power_off_in_suspend_show(struct device *dev, struct device_attribute *attr,
+> > +			   char *buf)
 > > +{
 > > +	struct onboard_hub *hub = dev_get_drvdata(dev);
-> > +	struct udev_node *node;
-> > +	int rc = 0;
 > > +
-> > +	hub->has_wakeup_capable_descendants = false;
-> > +
-> > +	if (!hub->power_off_in_suspend)
-> > +		return 0;
-> > +
-> > +	mutex_lock(&hub->lock);
-> > +
-> > +	list_for_each_entry(node, &hub->udev_list, list) {
-> > +		if (!device_may_wakeup(node->udev->bus->controller))
-> > +			break;
-> 
-> You're assuming that node->udev->bus->controller is going to be the
-> same for the nodes on the list, right?
-
-Yes, that is the assumption, although you have a point that this isn't
-necessarily the case. It's probably true in the vast majority of cases,
-but a hub could be wired up to multiple controllers. I'll change the
-loop to set the flag without breaking, it's a micro-optimization
-anyway.
-
-> > +
-> > +		if (usb_wakeup_enabled_descendants(node->udev)) {
-> > +			hub->has_wakeup_capable_descendants = true;
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> > +	mutex_unlock(&hub->lock);
-> > +
-> > +	if (!hub->has_wakeup_capable_descendants)
-> > +		rc = onboard_hub_power_off(hub);
-> > +
-> > +	return rc;
+> > +	return sprintf(buf, "%d\n", hub->power_off_in_suspend);
 > > +}
 > > +
-> > +static int __maybe_unused onboard_hub_resume(struct device *dev)
+> > +static ssize_t power_off_in_suspend_store(struct device *dev, struct device_attribute *attr,
+> > +			    const char *buf, size_t count)
 > > +{
 > > +	struct onboard_hub *hub = dev_get_drvdata(dev);
-> > +	int rc = 0;
+> > +	bool val;
+> > +	int ret;
 > > +
-> > +	if (hub->power_off_in_suspend && !hub->has_wakeup_capable_descendants)
-> 
-> Instead of this cumbersome two-condition test, how about simply
-> having a hub->is_powered_on flag?  Then
-> hub->has_wakeup_capable_descendants wouldn't be needed.
-
-Ok, less cumbersome code is always good :)
-
-> > +		rc = onboard_hub_power_on(hub);
+> > +	ret = strtobool(buf, &val);
+> > +	if (ret < 0)
+> > +		return ret;
 > > +
-> > +	return rc;
+> > +	hub->power_off_in_suspend = val;
+> > +
+> > +	return count;
 > > +}
-> 
-> > +static int onboard_hub_remove_usbdev(struct onboard_hub *hub, struct usb_device *udev)
+> > +static DEVICE_ATTR_RW(power_off_in_suspend);
+> > +
+> > +static int onboard_hub_probe(struct platform_device *pdev)
 > > +{
-> > +	struct udev_node *node;
+> > +	struct device *dev = &pdev->dev;
+> > +	struct onboard_hub *hub;
+> > +	int rc;
 > > +
-> > +	mutex_lock(&hub->lock);
+> > +	hub = devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
+> > +	if (!hub)
+> > +		return -ENOMEM;
 > > +
-> > +	list_for_each_entry(node, &hub->udev_list, list) {
-> > +		if (node->udev == udev) {
-> > +			list_del(&node->list);
-> > +			devm_kfree(hub->dev, node);
+> > +	hub->vdd = devm_regulator_get(dev, "vdd");
+> > +	if (IS_ERR(hub->vdd))
+> > +		return PTR_ERR(hub->vdd);
+> > +
+> > +	hub->dev = dev;
+> > +	mutex_init(&hub->lock);
+> > +	INIT_LIST_HEAD(&hub->udev_list);
+> > +
+> > +	dev_set_drvdata(dev, hub);
+> > +
+> > +	rc = sysfs_create_file(&dev->kobj, &dev_attr_power_off_in_suspend.attr);
+> > +	if (rc)
+> > +		return rc;
 > 
-> Why have an explicit kfree here but not anywhere else?  And if you do
-> have an explicit kfree, why use devm_kzalloc rather than plain kzalloc?
+> You could use dev_groups for sysfs entry management.
 
-The motivation of the explicit kfree was to avoid hogging memory if the
-USB device disappears and reappears repeatedly. However this doesn't seem
-to be a very common scenario so maybe we can ignore it.
+Thanks, will do, Greg also pointed that out.
 
-> > +			break;
-> > +		}
+> > +/************************** USB driver **************************/
+> > +
+> > +#define VENDOR_ID_REALTEK	0x0bda
+> > +
+> > +static struct onboard_hub *_find_onboard_hub(struct device *dev)
+> > +{
+> > +	const phandle *ph;
+> > +	struct device_node *np;
+> > +	struct platform_device *pdev;
+> > +
+> > +	ph = of_get_property(dev->of_node, "hub", NULL);
+> > +	if (!ph) {
+> > +		dev_err(dev, "failed to read 'hub' property\n");
+> > +		return ERR_PTR(-EINVAL);
 > > +	}
 > > +
-> > +	mutex_unlock(&hub->lock);
+> > +	np = of_find_node_by_phandle(be32_to_cpu(*ph));
+> > +	if (!np) {
+> > +		dev_err(dev, "failed find device node for onboard hub\n");
+> > +		return ERR_PTR(-EINVAL);
+> > +	}
 > > +
-> > +	if (node == NULL)
-> > +		return -EINVAL;
-> 
-> This test is wrong.  Look at the definition of list_for_each_entry;
-> node will never be NULL.  Probably the best approach is to use a local
-> "ret" variable.
-
-Ack, thanks for catching!
-
+> > +	pdev = of_find_device_by_node(np);
+> > +	of_node_put(np);
+> > +	if (!pdev)
+> > +		return ERR_PTR(-EPROBE_DEFER);
 > > +
-> > +	return 0;
+> > +	return dev_get_drvdata(&pdev->dev);
 > > +}
-> 
-> > +static int onboard_hub_remove(struct platform_device *pdev)
-> > +{
-> > +	struct onboard_hub *hub = dev_get_drvdata(&pdev->dev);
 > > +
-> > +	sysfs_remove_file(&pdev->dev.kobj, &dev_attr_power_off_in_suspend.attr);
-> > +
-> > +	return onboard_hub_power_off(hub);
-> > +}
-> 
-> Shouldn't this routine unbind the onboard_hub_usbdev driver from all
-> the associated devices?  Otherwise you end up with more-or-less
-> dangling references to hub (I say more-or-less because with the devm
-> allocations, the structures will hang around as zombies for a while).
-
-True, the dangling references aren't a good idea. Initially I thought
-that the USB devices holding a reference of the hub device would prevent
-this, but apparently that was wishful thinking. IIUC unbinding would be
-done through device_driver_detach().
-
-> Relying on the onboard_hub_power_off call to do this for you isn't a
-> great idea, because the effect won't happen immediately.
-> 
 > > +static int onboard_hub_usbdev_probe(struct usb_device *udev)
 > > +{
 > > +	struct device *dev = &udev->dev;
@@ -265,12 +260,6 @@ done through device_driver_detach().
 > > +	dev_set_drvdata(dev, hub);
 > > +
 > > +	onboard_hub_add_usbdev(hub, udev);
-> 
-> Ignoring the return code?  Then why does that routine return int rather
-> than void?
-
-Ok, will abort if the function returns an error.
-
 > > +
 > > +	return 0;
 > > +}
@@ -280,17 +269,59 @@ Ok, will abort if the function returns an error.
 > > +	struct onboard_hub *hub = dev_get_drvdata(&udev->dev);
 > > +
 > > +	onboard_hub_remove_usbdev(hub, udev);
-> 
-> Ditto.
-
-In this case it's probably better to change the return type to void, since
-there is not really an alternative course of action.
-
 > > +
 > > +	put_device(hub->dev);
+> > +}
+> > +
+> > +static const struct usb_device_id onboard_hub_id_table[] = {
+> > +	{ .idVendor = VENDOR_ID_REALTEK,
+> > +	  .idProduct = 0x0411, /* RTS5411 USB 3.0 */
+> > +	  .match_flags = USB_DEVICE_ID_MATCH_DEVICE },
+> > +	{ .idVendor = VENDOR_ID_REALTEK,
+> > +	  .idProduct = 0x5411, /* RTS5411 USB 2.0 */
+> > +	  .match_flags = USB_DEVICE_ID_MATCH_DEVICE },
+> > +	{},
+> > +};
+> > +
+> > +MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
+> > +
+> > +static struct usb_device_driver onboard_hub_usbdev_driver = {
+> > +
+> > +	.name = "onboard-usb-hub",
+> > +	.probe = onboard_hub_usbdev_probe,
+> > +	.disconnect = onboard_hub_usbdev_disconnect,
+> > +	.generic_subclass = 1,
+> > +	.supports_autosuspend =	1,
+> > +	.id_table = onboard_hub_id_table,
+> > +};
+> > +
+> > +/************************** Driver (de)registration **************************/
+> > +
+> > +static int __init onboard_hub_init(void)
+> > +{
+> > +	int rc;
+> > +
+> > +	rc = platform_driver_register(&onboard_hub_driver);
+> > +	if (rc)
+> > +		return rc;
+> > +
+> > +	return usb_register_device_driver(&onboard_hub_usbdev_driver, THIS_MODULE);
+> > +}
+> > +device_initcall(onboard_hub_init);
+> > +
+> > +static void __exit onboard_hub_exit(void)
+> > +{
+> > +	usb_deregister_device_driver(&onboard_hub_usbdev_driver);
+> > +	platform_driver_unregister(&onboard_hub_driver);
+> > +}
+> > +module_exit(onboard_hub_exit);
+> > +
+> > +MODULE_AUTHOR("Matthias Kaehlcke <mka@chromium.org>");
+> > +MODULE_DESCRIPTION("Onboard USB Hub driver");
 > 
-> Is there a matching get_device somewhere (like in _find_onboard_hub)?
-> If so, I didn't see it.  And I don't see any reason for it.
+> Improve the description like mentioned above.
 
-Yes, implicitly, of_find_device_by_node() "takes a reference to the
-embedded struct device which needs to be dropped after use."
+Will have to see if I can come up with something that provides more
+information but is at the same time short. I might leave it as is
+in the next version if my inspiration fails and be open to specific
+suggestions.
