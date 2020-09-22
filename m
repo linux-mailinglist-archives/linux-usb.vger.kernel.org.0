@@ -2,65 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7590D273F37
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 12:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11886273F50
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 12:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726522AbgIVKHY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 06:07:24 -0400
-Received: from mail-lf1-f45.google.com ([209.85.167.45]:43503 "EHLO
-        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbgIVKHY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 06:07:24 -0400
-Received: by mail-lf1-f45.google.com with SMTP id y2so17346235lfy.10
-        for <linux-usb@vger.kernel.org>; Tue, 22 Sep 2020 03:07:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=g8AhtFNZ8B0u/Su5uMsQVep65Pu2+oZVvNFtSm1Q8jA=;
-        b=dvDhIwJO8I77yPO0DtoDbWsstKXI+K/gVioS7fqMsIJnjOKSPN1wftp2unOdAHSMcv
-         FNga5Qm5WHXmSQANZQNGm7d6sYqXCxnx11uCJMNuxswdBa3AGZO2YOKF1xc1bcm/phkT
-         Bl/UjA1+a5hm+woyQ9UPWKECdWfSlrtsZDGGCcPeSzd05+ySwSeHBesQa7RU2Fsd7Lq8
-         RPM0r9CoA+NNqBME7j3QWGp1XWI2RfwHf6PawoSmtq9jqaLpAuFR9U20dwIGBNlzx5FK
-         oBoKYtMfcnbHkL1oU9Z2J/s2psi6Q1GkvBnaZSiRONVjRM8F/g4JhwcP77r3d+/xUcd3
-         hE1w==
-X-Gm-Message-State: AOAM532YADfy0NEuKKnZCDE3GgPksQx0MhWwgWuUs9CxaoUvkdDjrmPS
-        9HnQE7OKvOvLc1t9ZH+VdEw=
-X-Google-Smtp-Source: ABdhPJw51V0MqSA/f/VeYa3aoxN6B+nsbJNMH4ncAWSL7F9Bn9K64kg32nsaxprIi+kc/FanHjr1qA==
-X-Received: by 2002:a19:7fc8:: with SMTP id a191mr1318889lfd.591.1600769242217;
-        Tue, 22 Sep 2020 03:07:22 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id z27sm3359593lfg.14.2020.09.22.03.07.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 03:07:21 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kKfCc-0001Lq-Ca; Tue, 22 Sep 2020 12:07:15 +0200
-Date:   Tue, 22 Sep 2020 12:07:14 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     "<Daniel Caujolle-Bert>" <f1rmb.daniel@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726613AbgIVKNz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 06:13:55 -0400
+Received: from mx2.suse.de ([195.135.220.15]:57238 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726424AbgIVKNy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Sep 2020 06:13:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1600769632;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc; bh=hLNlwK4aAmxhaviZBEgCNkRcatYwoWqvV4tnyBUTyhM=;
+        b=XPRf7nmtsmeOOSAfhiA8PUQkskgvCH4U88hWGCK3UFf3vOr74eOCXhLwwoK6C60kU7Lf7W
+        b3q0CyVGknC6GF2YP13ijbx9gBPt+pqdN+RaCS3cTiZMQzcy3M++D15dJUCNXFsTgTd8Ky
+        xn5+B8siVj+05y8Nsu+3A4n8k17Y+gM=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E7D46ADAB;
+        Tue, 22 Sep 2020 10:14:28 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     penguin-kernel@i-love.sakura.ne.jp, bjorn@mork.no,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] USB: cdc-acm: handle broken union descriptors
-Message-ID: <20200922100714.GB24441@localhost>
-References: <20200921135951.24045-1-johan@kernel.org>
- <5f68d281.1c69fb81.86428.99fb@mx.google.com>
- <20200922070818.GA24441@localhost>
- <5f69ca33.1c69fb81.f95dc.2c96@mx.google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5f69ca33.1c69fb81.f95dc.2c96@mx.google.com>
+Subject: [RFC] fixes for hangs and error reporting in CDC_WDM
+Date:   Tue, 22 Sep 2020 12:13:23 +0200
+Message-Id: <20200922101329.14801-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 22, 2020 at 11:56:02AM +0200, <Daniel Caujolle-Bert> wrote:
-> Hi Johan,
-> 
->    Okay, I replied to the second patch, hope I didn't make any mistake.
+Stress testing has shown that CDC-WDM has some issues with hangs
+and error reporting
 
-Looks good. Thanks again!
+1. wakeups are not correctly handled in multhreaded environments
+2. unresponsive hardware is not handled
+3. errors are not correctly reported. This needs flush() to be
+implemented.
 
-Johan
+For easier review all squashed together:
+
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -58,6 +58,9 @@ MODULE_DEVICE_TABLE (usb, wdm_ids);
+ 
+ #define WDM_MAX                        16
+ 
++/* flush() is uninterruptible, but we cannot wait forever */
++#define WDM_FLUSH_TIMEOUT      (30 * HZ)
++
+ /* CDC-WMC r1.1 requires wMaxCommand to be "at least 256 decimal (0x100)" */
+ #define WDM_DEFAULT_BUFSIZE    256
+ 
+@@ -151,7 +154,7 @@ static void wdm_out_callback(struct urb *urb)
+        kfree(desc->outbuf);
+        desc->outbuf = NULL;
+        clear_bit(WDM_IN_USE, &desc->flags);
+-       wake_up(&desc->wait);
++       wake_up_all(&desc->wait);
+ }
+ 
+ static void wdm_in_callback(struct urb *urb)
+@@ -393,6 +396,9 @@ static ssize_t wdm_write
+        if (test_bit(WDM_RESETTING, &desc->flags))
+                r = -EIO;
+ 
++       if (test_bit(WDM_DISCONNECTING, &desc->flags))
++               r = -ENODEV;
++
+        if (r < 0) {
+                rv = r;
+                goto out_free_mem_pm;
+@@ -424,6 +430,7 @@ static ssize_t wdm_write
+        if (rv < 0) {
+                desc->outbuf = NULL;
+                clear_bit(WDM_IN_USE, &desc->flags);
++               wake_up_all(&desc->wait); /* for flush() */
+                dev_err(&desc->intf->dev, "Tx URB error: %d\n", rv);
+                rv = usb_translate_errors(rv);
+                goto out_free_mem_pm;
+@@ -583,11 +590,39 @@ static ssize_t wdm_read
+        return rv;
+ }
+ 
++/*
++ * The difference to flush is that we wait forever. If you don't like
++ * that behavior, you need to send a signal.
++ */
++
++static int wdm_fsync(struct file *file, loff_t start, loff_t end, int datasync)
++{
++       struct wdm_device *desc = file->private_data;
++       int rv;
++
++       rv = wait_event_interruptible(desc->wait,
++                       !test_bit(WDM_IN_USE, &desc->flags) ||
++                       test_bit(WDM_DISCONNECTING, &desc->flags));
++
++       if (test_bit(WDM_DISCONNECTING, &desc->flags))
++               return -ENODEV;
++       if (rv < 0)
++               return -EINTR;
++
++       spin_lock_irq(&desc->iuspin);
++       rv = desc->werr;
++       desc->werr = 0;
++       spin_unlock_irq(&desc->iuspin);
++
++       return usb_translate_errors(rv);
++}
++
+ static int wdm_flush(struct file *file, fl_owner_t id)
+ {
+        struct wdm_device *desc = file->private_data;
++       int rv;
+ 
+-       wait_event(desc->wait,
++       rv = wait_event_timeout(desc->wait,
+                        /*
+                         * needs both flags. We cannot do with one
+                         * because resetting it would cause a race
+@@ -595,16 +630,25 @@ static int wdm_flush(struct file *file, fl_owner_t id)
+                         * a disconnect
+                         */
+                        !test_bit(WDM_IN_USE, &desc->flags) ||
+-                       test_bit(WDM_DISCONNECTING, &desc->flags));
++                       test_bit(WDM_DISCONNECTING, &desc->flags),
++                       WDM_FLUSH_TIMEOUT);
+ 
+-       /* cannot dereference desc->intf if WDM_DISCONNECTING */
++       /*
++        * to report the correct error.
++        * This is best effort
++        * We are inevitably racing with the hardware.
++        */
+        if (test_bit(WDM_DISCONNECTING, &desc->flags))
+                return -ENODEV;
+-       if (desc->werr < 0)
+-               dev_err(&desc->intf->dev, "Error in flush path: %d\n",
+-                       desc->werr);
++       if (!rv)
++               return -EIO;
++
++       spin_lock_irq(&desc->iuspin);
++       rv = desc->werr;
++       desc->werr = 0;
++       spin_unlock_irq(&desc->iuspin);
+ 
+-       return usb_translate_errors(desc->werr);
++       return usb_translate_errors(rv);
+ }
+ 
+ static __poll_t wdm_poll(struct file *file, struct poll_table_struct *wait)
+@@ -729,6 +773,7 @@ static const struct file_operations wdm_fops = {
+        .owner =        THIS_MODULE,
+        .read =         wdm_read,
+        .write =        wdm_write,
++       .fsync =        wdm_fsync,
+        .open =         wdm_open,
+        .flush =        wdm_flush,
+
