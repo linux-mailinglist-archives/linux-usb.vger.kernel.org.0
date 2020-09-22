@@ -2,85 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BA1273D5C
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 10:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535BC273D65
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 10:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726524AbgIVIeh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 04:34:37 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:63593 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726489AbgIVIeh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 04:34:37 -0400
-Received: from fsav107.sakura.ne.jp (fsav107.sakura.ne.jp [27.133.134.234])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 08M8YLAq053035;
-        Tue, 22 Sep 2020 17:34:21 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav107.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav107.sakura.ne.jp);
- Tue, 22 Sep 2020 17:34:21 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav107.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 08M8YKG6053020
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
-        Tue, 22 Sep 2020 17:34:21 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [RFC 0/5] fix races in CDC-WDM
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     bjorn@mork.no, linux-usb@vger.kernel.org
-References: <20200812132034.14363-1-oneukum@suse.com>
- <ee0af733-903f-8e8f-8027-b5490a37032f@i-love.sakura.ne.jp>
- <1599728957.10822.9.camel@suse.com>
- <4f285044-aae9-c3be-23ba-90790cd624f1@i-love.sakura.ne.jp>
- <1600161279.2424.5.camel@suse.com>
- <4b8f6305-52fd-cb72-eb13-9d0a0bf07319@i-love.sakura.ne.jp>
- <1600251486.2424.17.camel@suse.com>
- <4e724e07-3993-bcaa-79e9-45a2f7e1f759@i-love.sakura.ne.jp>
- <1600336214.2424.39.camel@suse.com>
- <0bd0995d-d8a0-321a-0695-f4013bbc88ec@i-love.sakura.ne.jp>
- <1600352222.2424.57.camel@suse.com>
- <52714f66-c2ec-7a31-782a-9365ba900111@i-love.sakura.ne.jp>
- <1600685578.2424.72.camel@suse.com>
- <fab1cbfc-7284-73f4-b633-1e060c38acdb@i-love.sakura.ne.jp>
- <1600759983.6926.9.camel@suse.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <94896ccd-e1b3-11c5-be98-954ee01081ac@i-love.sakura.ne.jp>
-Date:   Tue, 22 Sep 2020 17:34:16 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726486AbgIVIiu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 04:38:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39278 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726343AbgIVIiu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Sep 2020 04:38:50 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2F3DA23A1E;
+        Tue, 22 Sep 2020 08:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600763929;
+        bh=Mm0cw1XMHiTcGFvYZ5YAxmxvfxAfdbEoZVA80me39JE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lJGS3A93Lgq85UkTDgJdes21K55ht2plPLTIViCrhCUCIC3GbnIc5h/FFIvwdAN7y
+         GZhrRI/BtSs3f5OiCBv4YSrBUeSmOmarfFBLok5wtLaSTM8T+VppMPRyZogheOejZ9
+         PC9RJDxQ+/0Q63ijmDGf4+v/jSPWVgbPUXU+FO1g=
+Date:   Tue, 22 Sep 2020 10:39:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
+        dmaengine <dmaengine@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 07/20] dt-bindings: usb: renesas,usb3-peri: Document
+ r8a774e1 support
+Message-ID: <20200922083909.GA2092905@kroah.com>
+References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594919915-5225-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CA+V-a8vJ2n3KEL8P+XmVob2zjoWaX+s4a6c1TV_WoPFkwdkZmA@mail.gmail.com>
+ <20200920140824.GA2915460@kroah.com>
+ <CAMuHMdUyXMfZcVKkqaZHJ8tJf-3Kotqg+S2NHMZT0VFO0ZJJww@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1600759983.6926.9.camel@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUyXMfZcVKkqaZHJ8tJf-3Kotqg+S2NHMZT0VFO0ZJJww@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/09/22 16:33, Oliver Neukum wrote:
-> Am Dienstag, den 22.09.2020, 10:56 +0900 schrieb Tetsuo Handa:
->> On 2020/09/21 19:52, Oliver Neukum wrote:
->> To understand it, I must understand why it is safe to defer error reporting.
+On Mon, Sep 21, 2020 at 09:30:39AM +0200, Geert Uytterhoeven wrote:
+> Hi Greg,
 > 
-> It is not. There is nothing to understand here. If user space needs
-> a guarantee that data has been pushed out without an error, it will
-> have to call fsync()
-
->> I'm querying you about characteristics of data passed to wdm_write().
->> Without knowing the difference between writing to cdc-wdm driver and normal file on
->> some filesystem, I can't judge whether it is acceptable to defer reporting errors.
+> On Sun, Sep 20, 2020 at 4:08 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> > On Sat, Sep 19, 2020 at 11:50:07AM +0100, Lad, Prabhakar wrote:
+> > > On Thu, Jul 16, 2020 at 6:19 PM Lad Prabhakar
+> > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > >
+> > > > Document RZ/G2H (R8A774E1) SoC bindings.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > Could you please pick this patch.
+> >
+> > Don't DT patches have to be acked by a DT maintainer first?
 > 
-> That is simply not a decision you or I make. The man page clearly
-> says that it is acceptable. If user space does not like that, it must
-> call fsync() after write().
+> https://lore.kernel.org/r/20200721033508.GA3504365@bogus
 
-Then, cdc-wdm driver did not implement fsync() was a big problem. Userspace
-needs to be careful not to give up upon -EINVAL when running on older kernels
-which did not implement wdm_fsync().
+Ah, missed that, sorry.  This, and patch 11/20, now queued up.
 
-The remaining concern would be how to handle unresponding hardware, for blocking
-wdm_write()/wdm_read() and wdm_fsync() are using wait_event_interruptible(). If
-the caller do not have a mean to send a signal, the caller might hung up forever
-when the hardware stopped responding. Please add a comment that userspace needs to
-be careful when calling these functions.
-
+greg k-h
