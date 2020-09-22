@@ -2,95 +2,295 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E91B6273643
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 01:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03CC2737A3
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 02:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728783AbgIUXLd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Sep 2020 19:11:33 -0400
-Received: from mail.rusoil.net ([188.128.114.25]:57383 "EHLO mail.rusoil.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726457AbgIUXLb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Sep 2020 19:11:31 -0400
-X-Greylist: delayed 374 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 19:11:22 EDT
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 3CFBD40D5B;
-        Tue, 22 Sep 2020 04:08:14 +0500 (YEKT)
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id EV4tl_rVLSS7; Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 2C0DD40CEA;
-        Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rusoil.net 2C0DD40CEA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rusoil.net;
-        s=maildkim; t=1600729693;
-        bh=6R3BgBYiA7fkqGiiNDuwPskBnpH9JXyNAW/l3ZEA+wY=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=Vnjy6nBVnSTcINEW6kER3ugTxQ4KBYKS36YiGFr6YA3B4INc+KiGVhbak8MS9Qjs4
-         d1hbAool1vpcT5tqzIahdEndE3qiAPgBOX6jsmCcvHSMZhz19GFDJ1aQySn107enqY
-         lwxWqbZRY2a+BQ8VxoJh3Rpje7MgA+/fhr9SupmU=
-X-Virus-Scanned: amavisd-new at mail.rusoil.net
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id K7O08Fi_YWVd; Tue, 22 Sep 2020 04:08:12 +0500 (YEKT)
-Received: from mail.rusoil.net (mail.rusoil.net [172.16.7.34])
-        by mail.rusoil.net (Postfix) with ESMTP id 6147940C07;
-        Tue, 22 Sep 2020 04:08:10 +0500 (YEKT)
-Date:   Tue, 22 Sep 2020 04:08:09 +0500 (YEKT)
-From:   Blue Oak Mortgage and Loans <em@rusoil.net>
-Reply-To: Blue Oak Mortgage and Loans <info@bluelmtg.net>
-Message-ID: <2020026523.907101.1600729689731.JavaMail.zimbra@rusoil.net>
-Subject: Wir finanzieren Projekte und Unternehmen
+        id S1729391AbgIVAmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Sep 2020 20:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729332AbgIVAmB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Sep 2020 20:42:01 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A6EC0613D0
+        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 17:42:01 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id g29so10520474pgl.2
+        for <linux-usb@vger.kernel.org>; Mon, 21 Sep 2020 17:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CaGeSvPYLRYBm98UO6Jry86VMBCqcS8gmrX0rLLRuOo=;
+        b=UVWVU0fbt3UEKUYJ92XpmWL02+0ZZG+3A1SSfXv4mzj9EmM+5wPT0JugLs1A1pTkgs
+         GvwFgkaLyI7j3I22oeHMuDDE7hUnqOrHHOkP8Msf3V+Ax6fnak1f0BqDfabxgg9kmDXb
+         fEd7tC05asleoEk921rx4kEVfKq3LyTKxAUdg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CaGeSvPYLRYBm98UO6Jry86VMBCqcS8gmrX0rLLRuOo=;
+        b=YljsHLtYe4crGyGnkbRX98xz7sGQsk72ZaUzxakH38Dqj084C2U1L7whwOrFZYPMHL
+         Wb8AvngddrxUmxSOIgamwQ9wBTjaXgApkRhdo7ud7kcF8AEXIeu1Re1HN9u4bYLa98m9
+         fSNFZadb1fr0qGCw5AO3kQZM8Igx9cUzRyz8I9m1TfBIJNmzGIDGkIFAA2GUPyZlEj6X
+         3FSw10K94pOCcWd7VCyIOOJj5NdcF6qpcH/111mkKk2XLLa3DF+FkdlLhtm4q/iDfOZ6
+         hI9h458ven/xpDlQON0sBQK+ereOSqS3b6QMFUmz6KeOKOFd3fWkirzrXh6qUBznn2kA
+         Y27Q==
+X-Gm-Message-State: AOAM532kcDVyX5qHSYwpvw1t+XJ9eWWP2Flz/j/NB3uu3y/x7L41DU7s
+        TFUuBcuIAdHOMJSjR1VBQ5pJRw==
+X-Google-Smtp-Source: ABdhPJzrP7IAhyFSlSdePZhYT6llTUXfmudyC5btRBnQE8UwmQ3o815KAwRkrvJlha1c1bQQjUFnZw==
+X-Received: by 2002:a63:3645:: with SMTP id d66mr1639938pga.167.1600735320822;
+        Mon, 21 Sep 2020 17:42:00 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id e123sm13488203pfh.167.2020.09.21.17.41.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2020 17:42:00 -0700 (PDT)
+Date:   Mon, 21 Sep 2020 17:41:58 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v2 2/2] USB: misc: Add onboard_usb_hub driver
+Message-ID: <20200922004158.GC21107@google.com>
+References: <20200917114600.v2.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20200917114600.v2.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <20200917195416.GA1099735@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.210.183.69]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF79 (Win)/8.8.12_GA_3794)
-Thread-Index: IhGK+mMcCqn+S/Et9t28g8ApaUDaLg==
-Thread-Topic: Wir finanzieren Projekte und Unternehmen
-To:     unlisted-recipients:; (no To-header on input)
+Content-Disposition: inline
+In-Reply-To: <20200917195416.GA1099735@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Alan,
 
+thanks for taking time to review!
 
-Dies ist ein Newsletter von Blue Oak Mortgage and Loans. Bitte melden Sie s=
-ich ab, wenn Sie keine E-Mail mehr von uns erhalten m=C3=B6chten.
+On Thu, Sep 17, 2020 at 03:54:16PM -0400, Alan Stern wrote:
+> On Thu, Sep 17, 2020 at 11:46:22AM -0700, Matthias Kaehlcke wrote:
+> > The main issue this driver addresses is that a USB hub needs to be
+> > powered before it can be discovered. For onboard hubs this is often
+> > solved by supplying the hub with an 'always-on' regulator, which is
+> > kind of a hack. Some onboard hubs may require further initialization
+> > steps, like changing the state of a GPIO or enabling a clock, which
+> > requires further hacks. This driver creates a platform device
+> > representing the hub which performs the necessary initialization.
+> > Currently it only supports switching on a single regulator, support
+> > for multiple regulators or other actions can be added as needed.
+> > Different initialization sequences can be supported based on the
+> > compatible string.
+> > 
+> > Besides performing the initialization the driver can be configured
+> > to power the hub off during system suspend. This can help to extend
+> > battery life on battery powered devices which have no requirements
+> > to keep the hub powered during suspend. The driver can also be
+> > configured to leave the hub powered when a wakeup capable USB device
+> > is connected when suspending, and power it off otherwise.
+> > 
+> > Technically the driver consists of two drivers, the platform driver
+> > described above and a very thin USB driver that subclasses the
+> > generic driver. The purpose of this driver is to provide the platform
+> > driver with the USB devices corresponding to the hub(s) (a hub
+> > controller may provide multiple 'logical' hubs, e.g. one to support
+> > USB 2.0 and another for USB 3.x).
+> > 
+> > Co-developed-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> > Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> 
+> > +config USB_ONBOARD_HUB
+> > +	tristate "Onboard USB hub support"
+> > +	depends on OF
+> > +	help
+> > +	  Say Y here if you want to support onboard USB hubs. The driver
+> > +	  powers supported hubs on and may perform other initialization
+> > +	  steps.
+> 
+> I have a nagging feeling that this description may be too vague for a
+> lot of people to understand.  Does everybody know what an "onboard"
+> USB hub is?
+> 
+> Consider for example that Intel's current EHCI host controllers all
+> come with a USB hub built into the chipset.  That built-in hub
+> certainly could be considered "onboard", but it doesn't need this
+> driver.
+> 
+> Maybe also give some examples of devices that require this driver, to
+> help make the idea clear to readers.
 
+Ok, I'll try to come up with a better description.
 
-Eine kurze Einf=C3=BChrung.
+> > +static int __maybe_unused onboard_hub_suspend(struct device *dev)
+> > +{
+> > +	struct onboard_hub *hub = dev_get_drvdata(dev);
+> > +	struct udev_node *node;
+> > +	int rc = 0;
+> > +
+> > +	hub->has_wakeup_capable_descendants = false;
+> > +
+> > +	if (!hub->power_off_in_suspend)
+> > +		return 0;
+> > +
+> > +	mutex_lock(&hub->lock);
+> > +
+> > +	list_for_each_entry(node, &hub->udev_list, list) {
+> > +		if (!device_may_wakeup(node->udev->bus->controller))
+> > +			break;
+> 
+> You're assuming that node->udev->bus->controller is going to be the
+> same for the nodes on the list, right?
 
-Wir sind ein f=C3=BChrendes Finanzierungsunternehmen in Europa. Wir finanzi=
-eren Startups / etablierte Unternehmen, finanzieren Gro=C3=9Fprojekte (Bau,=
- Landwirtschaft, Immobilien und dergleichen) zu einem niedrigen Zinssatz vo=
-n 2% pro Jahr.
+Yes, that is the assumption, although you have a point that this isn't
+necessarily the case. It's probably true in the vast majority of cases,
+but a hub could be wired up to multiple controllers. I'll change the
+loop to set the flag without breaking, it's a micro-optimization
+anyway.
 
+> > +
+> > +		if (usb_wakeup_enabled_descendants(node->udev)) {
+> > +			hub->has_wakeup_capable_descendants = true;
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> > +	mutex_unlock(&hub->lock);
+> > +
+> > +	if (!hub->has_wakeup_capable_descendants)
+> > +		rc = onboard_hub_power_off(hub);
+> > +
+> > +	return rc;
+> > +}
+> > +
+> > +static int __maybe_unused onboard_hub_resume(struct device *dev)
+> > +{
+> > +	struct onboard_hub *hub = dev_get_drvdata(dev);
+> > +	int rc = 0;
+> > +
+> > +	if (hub->power_off_in_suspend && !hub->has_wakeup_capable_descendants)
+> 
+> Instead of this cumbersome two-condition test, how about simply
+> having a hub->is_powered_on flag?  Then
+> hub->has_wakeup_capable_descendants wouldn't be needed.
 
-Darlehensverfahren
+Ok, less cumbersome code is always good :)
 
-1. Sie m=C3=BCssen das Online-Bewerbungsformular ausf=C3=BCllen und eine or=
-dnungsgem=C3=A4=C3=9F unterschriebene Kopie an uns zur=C3=BCcksenden.
+> > +		rc = onboard_hub_power_on(hub);
+> > +
+> > +	return rc;
+> > +}
+> 
+> > +static int onboard_hub_remove_usbdev(struct onboard_hub *hub, struct usb_device *udev)
+> > +{
+> > +	struct udev_node *node;
+> > +
+> > +	mutex_lock(&hub->lock);
+> > +
+> > +	list_for_each_entry(node, &hub->udev_list, list) {
+> > +		if (node->udev == udev) {
+> > +			list_del(&node->list);
+> > +			devm_kfree(hub->dev, node);
+> 
+> Why have an explicit kfree here but not anywhere else?  And if you do
+> have an explicit kfree, why use devm_kzalloc rather than plain kzalloc?
 
-2. M=C3=B6glicherweise m=C3=BCssen Sie Finanzdokumente als unterst=C3=BCtze=
-nden Nachweis f=C3=BCr die F=C3=A4higkeit zur R=C3=BCckzahlung von Krediten=
- vorlegen.
+The motivation of the explicit kfree was to avoid hogging memory if the
+USB device disappears and reappears repeatedly. However this doesn't seem
+to be a very common scenario so maybe we can ignore it.
 
-3. Wenn Ihr Darlehen genehmigt wurde, m=C3=BCssen Sie eine Versicherungsgar=
-antie f=C3=BCr die Darlehenssicherheit vorlegen. Wir empfehlen eine Versich=
-erungsgesellschaft. Sie sind allein verantwortlich f=C3=BCr die Zahlung und=
- den Erwerb der Anleihe, die als Sicherheit dienen. Die H=C3=B6he der Anlei=
-he h=C3=A4ngt von Ihrem Darlehensbetrag ab. Die Versicherungsgesellschaft w=
-ird Sie durch den Prozess f=C3=BChren. (F=C3=BCr Gro=C3=9Fprojekte)
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> > +	mutex_unlock(&hub->lock);
+> > +
+> > +	if (node == NULL)
+> > +		return -EINVAL;
+> 
+> This test is wrong.  Look at the definition of list_for_each_entry;
+> node will never be NULL.  Probably the best approach is to use a local
+> "ret" variable.
 
-4. Ihr =C3=9Cberweisungsprozess wird eingeleitet, sobald die Versicherungsa=
-nleihe =C3=BCberpr=C3=BCft wurde. Ihr Darlehensr=C3=BCckzahlungsplan wird i=
-m NC-Darlehensvertragsformular aufgef=C3=BChrt.
+Ack, thanks for catching!
 
-Wenn die Bedingungen Sie beruhigen, k=C3=B6nnen Sie uns =C3=BCber die Whats=
-App-Nummer / E-Mail kontaktieren und auch unsere Website besuchen, um weite=
-re Informationen zu erhalten. Wir freuen uns darauf, von Ihnen zu h=C3=B6re=
-n.
+> > +
+> > +	return 0;
+> > +}
+> 
+> > +static int onboard_hub_remove(struct platform_device *pdev)
+> > +{
+> > +	struct onboard_hub *hub = dev_get_drvdata(&pdev->dev);
+> > +
+> > +	sysfs_remove_file(&pdev->dev.kobj, &dev_attr_power_off_in_suspend.attr);
+> > +
+> > +	return onboard_hub_power_off(hub);
+> > +}
+> 
+> Shouldn't this routine unbind the onboard_hub_usbdev driver from all
+> the associated devices?  Otherwise you end up with more-or-less
+> dangling references to hub (I say more-or-less because with the devm
+> allocations, the structures will hang around as zombies for a while).
 
-WhatsApp: + 90-552-365-3483
-E-Mail: info@bluelmtg.net
+True, the dangling references aren't a good idea. Initially I thought
+that the USB devices holding a reference of the hub device would prevent
+this, but apparently that was wishful thinking. IIUC unbinding would be
+done through device_driver_detach().
+
+> Relying on the onboard_hub_power_off call to do this for you isn't a
+> great idea, because the effect won't happen immediately.
+> 
+> > +static int onboard_hub_usbdev_probe(struct usb_device *udev)
+> > +{
+> > +	struct device *dev = &udev->dev;
+> > +	struct onboard_hub *hub;
+> > +
+> > +	/* ignore supported hubs without device tree node */
+> > +	if (!dev->of_node)
+> > +		return -ENODEV;
+> > +
+> > +	hub = _find_onboard_hub(dev);
+> > +	if (IS_ERR(hub))
+> > +		return PTR_ERR(dev);
+> > +
+> > +	dev_set_drvdata(dev, hub);
+> > +
+> > +	onboard_hub_add_usbdev(hub, udev);
+> 
+> Ignoring the return code?  Then why does that routine return int rather
+> than void?
+
+Ok, will abort if the function returns an error.
+
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+> > +{
+> > +	struct onboard_hub *hub = dev_get_drvdata(&udev->dev);
+> > +
+> > +	onboard_hub_remove_usbdev(hub, udev);
+> 
+> Ditto.
+
+In this case it's probably better to change the return type to void, since
+there is not really an alternative course of action.
+
+> > +
+> > +	put_device(hub->dev);
+> 
+> Is there a matching get_device somewhere (like in _find_onboard_hub)?
+> If so, I didn't see it.  And I don't see any reason for it.
+
+Yes, implicitly, of_find_device_by_node() "takes a reference to the
+embedded struct device which needs to be dropped after use."
