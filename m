@@ -2,147 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE5A274472
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 16:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5183527457A
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 17:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbgIVOje (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 10:39:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36396 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726507AbgIVOje (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Sep 2020 10:39:34 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E3D5C23A1B;
-        Tue, 22 Sep 2020 14:39:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600785573;
-        bh=QKG2tziZ1CH6LbmKRnL15/kqe5HEQWJM9XiL9GC6EGU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=US7v4tXvzH5E5RcEmEjXOgPzhwK/mHKxZidFPNvqj6WkVUZKIdObiseq1f3WpH2Yo
-         aidu1x6M+qVUOW2cI+1io7j9TB+7IgXpYt9hE6gIDQ8NnI/kwZjR6WwvfiwKw/FBCH
-         dUbG+wE9lEZS8igvubGKhkeua/AM290Q9Z9wmv8k=
-Received: by mail-ed1-f46.google.com with SMTP id t16so16418740edw.7;
-        Tue, 22 Sep 2020 07:39:32 -0700 (PDT)
-X-Gm-Message-State: AOAM530fewolPNvj40a+rBk4BS4oWQ1afhtsSPzhdi52Toc3y1eAYZuA
-        hWkmmtVKwd0sDYJGI9jJMa0BXaN+aGsranH7mQY=
-X-Google-Smtp-Source: ABdhPJxZf2ZAXPghgEtaXHGvgbnerAjzDXax3vuylPKt7zWG4WKlAcuvZranqON20EG/druAkSSUTbfMud9uF0jvZH0=
-X-Received: by 2002:a05:6402:180a:: with SMTP id g10mr4207133edy.18.1600785571397;
- Tue, 22 Sep 2020 07:39:31 -0700 (PDT)
+        id S1726662AbgIVPjQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 11:39:16 -0400
+Received: from mr01.mx01.tldhost.de ([62.108.36.247]:48699 "EHLO
+        mr01.mx01.tldhost.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726566AbgIVPjQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 11:39:16 -0400
+X-Greylist: delayed 356 seconds by postgrey-1.27 at vger.kernel.org; Tue, 22 Sep 2020 11:39:15 EDT
+Received: from mx01.tldhost.de (localhost [127.0.0.1])
+        by mx01.tldhost.de (Postfix) with ESMTP id D421912010F
+        for <linux-usb@vger.kernel.org>; Tue, 22 Sep 2020 17:33:17 +0200 (CEST)
+Received: by mx01.tldhost.de (Postfix, from userid 1001)
+        id C9AD3120287; Tue, 22 Sep 2020 17:33:17 +0200 (CEST)
+X-Spam-Status: No, score=-1.9 required=7.0 tests=BAYES_00,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.2
+Received: from server12.tldhost.de (server12.tldhost.de [84.19.26.112])
+        by mx01.tldhost.de (Postfix) with ESMTPS id D767E12010F;
+        Tue, 22 Sep 2020 17:33:16 +0200 (CEST)
+Received: from fw-emea.rohde-schwarz.com (fw-emea.rohde-schwarz.com
+ [80.246.32.33]) by webmail.kiener-muenchen.de (Horde Framework) with HTTPS;
+ Tue, 22 Sep 2020 15:33:17 +0000
+Date:   Tue, 22 Sep 2020 15:33:17 +0000
+Message-ID: <20200922153317.Horde.kYfFgpOej2x7e8K3swKnHnz@webmail.kiener-muenchen.de>
+From:   guido@kiener-muenchen.de
+To:     George McCollister <george.mccollister@gmail.com>
+Cc:     linux-usb@vger.kernel.org, guido.kiener@rohde-schwarz.com,
+        dpenkler@gmail.com, steve_bayless@keysight.com
+Subject: Re: usbtmc: stb race condition introduced by
+ 4f3c8d6eddc272b386464524235440a418ed2029
+References: <CAFSKS=Pv1Ji4XqHjVMCAnszq_HjFYYk7GuzeeCCScHd1NMumDA@mail.gmail.com>
+ <20200901185903.Horde.NHT9rmY1GQT34m6C6YMUCNF@webmail.kiener-muenchen.de>
+ <CAFSKS=M8xh3UVFEt+QxcCr_Ghie8tBkudrbLO15hpvEzQEbGfQ@mail.gmail.com>
+ <20200902152514.Horde.-6-I20fjCayIQgkkuxwk-o2@webmail.kiener-muenchen.de>
+ <CAFSKS=P-kY=CJhbf_QCAPRJKrZQ1OR9FyrrMSzm-7Wm6BxSgYA@mail.gmail.com>
+ <20200903165401.Horde.0plv-8-wrkSbaoSekydKWEy@webmail.kiener-muenchen.de>
+In-Reply-To: <20200903165401.Horde.0plv-8-wrkSbaoSekydKWEy@webmail.kiener-muenchen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
 MIME-Version: 1.0
-References: <1600771612-30727-1-git-send-email-jun.li@nxp.com> <1600771612-30727-6-git-send-email-jun.li@nxp.com>
-In-Reply-To: <1600771612-30727-6-git-send-email-jun.li@nxp.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 22 Sep 2020 16:39:19 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPc2AWHEQmxBT2tRgYcRSwrm0ZpWYiG1ifkh5at+F7-sQw@mail.gmail.com>
-Message-ID: <CAJKOXPc2AWHEQmxBT2tRgYcRSwrm0ZpWYiG1ifkh5at+F7-sQw@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] arm64: dtsi: imx8mp: add usb nodes
-To:     Li Jun <jun.li@nxp.com>
-Cc:     robh+dt@kernel.org, shawnguo@kernel.org, balbi@kernel.org,
-        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, Anson.Huang@nxp.com, aisheng.dong@nxp.com,
-        peng.fan@nxp.com, fugang.duan@nxp.com, qiangqing.zhang@nxp.com,
-        horia.geanta@nxp.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Disposition: inline
+X-PPP-Message-ID: <20200922153317.31734.60203@server12.tldhost.de>
+X-PPP-Vhost: kiener-muenchen.de
+X-POWERED-BY: TLDHost.de - AV:CLEAN SPAM:OK
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 22 Sep 2020 at 12:56, Li Jun <jun.li@nxp.com> wrote:
->
-> imx8mp integrates 2 identical dwc3 based USB3 controllers and
-> Synopsys phys, each instance has additional wakeup logic to
-> support low power mode, so the glue layer need a node with dwc3
-> core sub node.
->
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 88 +++++++++++++++++++++++++++++++
->  1 file changed, 88 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> index 9de2aa1..1b7ed4c 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> @@ -750,5 +750,93 @@
->                         reg = <0x3d800000 0x400000>;
->                         interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
->                 };
-> +
-> +               usb3_phy0: usb-phy@381f0040 {
-> +                       compatible = "fsl,imx8mp-usb-phy";
-> +                       reg = <0x381f0040 0x40>;
-> +                       clocks = <&clk IMX8MP_CLK_USB_PHY_ROOT>;
-> +                       clock-names = "phy";
-> +                       assigned-clocks = <&clk IMX8MP_CLK_USB_PHY_REF>;
-> +                       assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-> +                       #phy-cells = <0>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               usb3_0: usb@32f10100 {
-> +                       compatible = "fsl,imx8mp-dwc3";
-> +                       reg = <0x32f10100 0x8>;
-> +                       clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
-> +                                <&clk IMX8MP_CLK_USB_ROOT>;
-> +                       clock-names = "hsio", "suspend";
-> +                       interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
-> +                       #address-cells = <1>;
-> +                       #size-cells = <1>;
-> +                       ranges;
-> +                       status = "disabled";
-> +
-> +                       usb_dwc3_0: dwc3@38100000 {
-> +                               compatible = "snps,dwc3";
-> +                               reg = <0x38100000 0x10000>;
-> +                               clocks = <&clk IMX8MP_CLK_HSIO_AXI>,
-> +                                        <&clk IMX8MP_CLK_USB_CORE_REF>,
-> +                                        <&clk IMX8MP_CLK_USB_ROOT>;
-> +                               clock-names = "bus_early", "ref", "suspend";
-> +                               assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI>;
-> +                               assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
-> +                               assigned-clock-rates = <500000000>;
-> +                               interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
-> +                               phys = <&usb3_phy0>, <&usb3_phy0>;
-> +                               phy-names = "usb2-phy", "usb3-phy";
-> +                               snps,dis-u2-freeclk-exists-quirk;
-> +                               xhci-64bit-support-disable;
-> +                               status = "disabled";
-> +                       };
-> +
-> +               };
-> +
-> +               usb3_phy1: usb-phy@382f0040 {
-> +                       compatible = "fsl,imx8mp-usb-phy";
-> +                       reg = <0x382f0040 0x40>;
-> +                       clocks = <&clk IMX8MP_CLK_USB_PHY_ROOT>;
-> +                       clock-names = "phy";
-> +                       assigned-clocks = <&clk IMX8MP_CLK_USB_PHY_REF>;
-> +                       assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-> +                       #phy-cells = <0>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               usb3_1: usb@32f10108 {
-> +                       compatible = "fsl,imx8mp-dwc3";
-> +                       reg = <0x32f10108 0x8>;
-> +                       clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
-> +                                <&clk IMX8MP_CLK_USB_ROOT>;
-> +                       clock-names = "hsio", "suspend";
-> +                       assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI_SRC>;
 
-This does not validate against your own schema:
-arch/arm64/boot/dts/freescale/imx8mp-evk.dt.yaml: usb@32f10108:
-'assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' do
-not match any of the regexes: '^dwc3@[0-9a-f]+$', 'pinctrl-[0-9]+'
+Hi George,
 
-Please, stop adding new schema and DTS which from day one have
-warnings/violations.
+We discussed some solutions to solve the race you found.
 
-It's really a lot of effort (and commits) to clean this up later.
+Since we want to avoid future requests and compatibility problems
+regarding the SRQ and Status Byte, we will fix the current ioctl.
+Furthermore we add two ioctls which return the original status
+message and avoid assumptions about the USB488 subclass definition.
 
-Best regards,
-Krzysztof
+We will have the 3 STB ioctls:
+
+1) USBTMC488_IOCTL_READ_STB always reads the STB from the device and
+if the associated file descriptor has the srq_asserted bit set it ors
+in the RQS bit to the returned STB and clears the srq_asserted bit.
+
+Comment: This ioctl will return the latest status byte again, but will
+not loose the RQS bit sent by intermediate SRQ messages. This ioctl
+should be conform with 488.2 devices.
+
+2) USBTMC_IOCTL_GET_STB always reads the STB from the device and returns
+the STB unmodified to the application. The srq_asserted bit is not changed.
+
+3) USBTMC_IOCTL_GET_SRQ_STB if the associated file descriptor has the
+srq_asserted bit set it returns the STB originally sent in the device
+SRQ message and clears the srq_asserted bit otherwise it returns error
+code ENOMSG.
+
+Please let us know your feedback and comments.
+
+Regards,
+
+Guido
+
+
