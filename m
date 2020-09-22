@@ -2,162 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C39F274B10
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 23:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9636274D09
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 01:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbgIVVVa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 17:21:30 -0400
-Received: from node.akkea.ca ([192.155.83.177]:48000 "EHLO node.akkea.ca"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726179AbgIVVVa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Sep 2020 17:21:30 -0400
-X-Greylist: delayed 359 seconds by postgrey-1.27 at vger.kernel.org; Tue, 22 Sep 2020 17:21:30 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by node.akkea.ca (Postfix) with ESMTP id 6EBFF4E2010;
-        Tue, 22 Sep 2020 21:15:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1600809331; bh=VUGrSclU1XhJlSqt4y7Ch9vosKRFqpaAskysoliTNms=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=Wup8Z4HMpjDujueL03kwleUiePN0hk5QSWMIsEAEnJ3BYF25+5HyfArDwCGZx8eTN
-         7vW6bpSgaToRE24jS9taWcyCNCul/ZsXvYoLItJoxVYYAB3x4Hpz+mW2CU01MWgYO3
-         GHxbUxD4xFgE0I+gBRysXKcg6NpPV4M9/+LbMge0=
-X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
-Received: from node.akkea.ca ([127.0.0.1])
-        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UXrQtiTzuDm7; Tue, 22 Sep 2020 21:15:29 +0000 (UTC)
-Received: from www.akkea.ca (node.akkea.ca [192.155.83.177])
-        by node.akkea.ca (Postfix) with ESMTPSA id BE8CC4E200E;
-        Tue, 22 Sep 2020 21:15:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1600809329; bh=VUGrSclU1XhJlSqt4y7Ch9vosKRFqpaAskysoliTNms=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=reDGxY+7L5s/bi6qVWNI5DAG6aKZexmsmteICFuggDm8vzZOfQNqndWqSEA9BNxHc
-         jFb9+s2BjESG4YHdkGsCdqtluMgd1HvQYSt5sosFpN3Mtpana+X4w7e5Xx+lVHvUHz
-         RDjoIuDDUZ+ivfgo/izelK5TN47sXjLGZ/3eCqDI=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 22 Sep 2020 14:15:29 -0700
-From:   Angus Ainslie <angus@akkea.ca>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     kernel@puri.sm, MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
+        id S1726654AbgIVXDS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 19:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbgIVXDS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 19:03:18 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81562C061755
+        for <linux-usb@vger.kernel.org>; Tue, 22 Sep 2020 16:03:18 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id m7so22935529oie.0
+        for <linux-usb@vger.kernel.org>; Tue, 22 Sep 2020 16:03:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=j7SkZDfC2KmUJU0iZY35f0jqKt3MsVACF2CocO4OH+Y=;
+        b=LG0cqv5G917FUuXaPKLLH3lMM9K2B21Io9jX7P0YwznHNftVVt+DNwADL+kWrCHqTt
+         y730Lsdc8UNPGy1Ra65kxTonNEeQli51B3RJmmnkY1h7Gx+7RmhWgCI4VcALp3YBJC7W
+         1XMSJDcrGiGD1TrJHVo/ogSdC4qp4oBeocPIQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=j7SkZDfC2KmUJU0iZY35f0jqKt3MsVACF2CocO4OH+Y=;
+        b=OarwuOyw1CD61AarqFsElhI2VzX/1NqqH0cLzSoLBLaF/MS4cjED7wOKWGg289OdTN
+         ej/3FoL/T8eWFuB8IcWQ0AXQJ91CpgPijCHYARdIHp8LYi83Wy+8NVtAGS55bo65obZK
+         4pJrxLXKcX3WFYP4nNFDTNODYYyS+hqgoQ7t5+pb2BrUPKCvUluKbX3iCjj3xPu7j+0v
+         Fjxm4YIdhDTx0nhKT5dUkLmg2D8xMVsuVMyEFNAajmtpYLCrMOe4eeru/7vM1E0nXswM
+         cm0nFmaRT1owbRiDAodXLkdJZJWCPuEqBElLbUJp5hBQtnSclJrnAP16Hr7xPO7Kv+nx
+         /2OQ==
+X-Gm-Message-State: AOAM531+bKYBs3LamjLp9/RnL9xZoKKjHgTQLHyXoLcW1sJX+mKECq4H
+        UHW4dTrnAWP7OalrNARbjPYd/A==
+X-Google-Smtp-Source: ABdhPJxSQWfEh5NxtWq0suCxJI4s7oxPr1qqJkjYtNThV5ywEhpVxXaOjibP7aUW9tQm7ShuZ7o3gA==
+X-Received: by 2002:aca:4a4d:: with SMTP id x74mr3820223oia.6.1600815797731;
+        Tue, 22 Sep 2020 16:03:17 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id x21sm7833048oie.49.2020.09.22.16.03.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Sep 2020 16:03:17 -0700 (PDT)
+Subject: Re: [PATCH v3 1/4] Revert "usbip: Implement a match function to fix
+ usbip"
+To:     "M. Vefa Bicakci" <m.v.b@runbox.com>, linux-usb@vger.kernel.org
+Cc:     stable@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bryan.odonoghue@linaro.org
-Subject: Re: [PATCH 0/4] RFC: USB C extcon patchset for the tps6598x
-In-Reply-To: <20200921143757.GG1630537@kuha.fi.intel.com>
-References: <20200914164639.1487650-1-angus@akkea.ca>
- <20200921143757.GG1630537@kuha.fi.intel.com>
-Message-ID: <a2d1df939e59e270bc8924b43b4dcf8a@akkea.ca>
-X-Sender: angus@akkea.ca
-User-Agent: Roundcube Webmail/1.3.6
+        Alan Stern <stern@rowland.harvard.edu>,
+        syzkaller@googlegroups.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20200922110703.720960-1-m.v.b@runbox.com>
+ <20200922110703.720960-2-m.v.b@runbox.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a1f72e70-6eb2-743b-fc5b-f7e09ec466ce@linuxfoundation.org>
+Date:   Tue, 22 Sep 2020 17:03:15 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200922110703.720960-2-m.v.b@runbox.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+On 9/22/20 5:07 AM, M. Vefa Bicakci wrote:
+> This commit reverts commit 7a2f2974f265 ("usbip: Implement a match
+> function to fix usbip").
+> 
+> In summary, commit d5643d2249b2 ("USB: Fix device driver race")
+> inadvertently broke usbip functionality, which I resolved in an incorrect
+> manner by introducing a match function to usbip, usbip_match(), that
+> unconditionally returns true.
+> 
+> However, the usbip_match function, as is, causes usbip to take over
+> virtual devices used by syzkaller for USB fuzzing, which is a regression
+> reported by Andrey Konovalov.
+> 
+> Furthermore, in conjunction with the fix of another bug, handled by another
+> patch titled "usbcore/driver: Fix specific driver selection" in this patch
+> set, the usbip_match function causes unexpected USB subsystem behaviour
+> when the usbip_host driver is loaded. The unexpected behaviour can be
+> qualified as follows:
+> - If commit 41160802ab8e ("USB: Simplify USB ID table match") is included
+>    in the kernel, then all USB devices are bound to the usbip_host
+>    driver, which appears to the user as if all USB devices were
+>    disconnected.
+> - If the same commit (41160802ab8e) is not in the kernel (as is the case
+>    with v5.8.10) then all USB devices are re-probed and re-bound to their
+>    original device drivers, which appears to the user as a disconnection
+>    and re-connection of USB devices.
+> 
+> Please note that this commit will make usbip non-operational again,
+> until yet another patch in this patch set is merged, titled
+> "usbcore/driver: Accommodate usbip".
+> 
+> Reported-by: Andrey Konovalov <andreyknvl@google.com>
+> Link: https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/
+> Cc: <stable@vger.kernel.org> # 5.8: 41160802ab8e: USB: Simplify USB ID table match
+> Cc: <stable@vger.kernel.org> # 5.8
+> Cc: Bastien Nocera <hadess@hadess.net>
+> Cc: Valentina Manea <valentina.manea.m@gmail.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: <syzkaller@googlegroups.com>
+> Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
+> 
+> ---
+> v3: New patch in the patch set.
+> 
+>      Note for stable tree maintainers: I have marked the following commit
+>      as a dependency of this patch, because that commit resolves a bug that
+>      the next commit in this patch set uncovers, where if a driver does
+>      not have an id_table, then its match function is not considered for
+>      execution at all.
+>        commit 41160802ab8e ("USB: Simplify USB ID table match")
+> ---
+>   drivers/usb/usbip/stub_dev.c | 6 ------
+>   1 file changed, 6 deletions(-)
+> 
+> diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+> index 9d7d642022d1..2305d425e6c9 100644
+> --- a/drivers/usb/usbip/stub_dev.c
+> +++ b/drivers/usb/usbip/stub_dev.c
+> @@ -461,11 +461,6 @@ static void stub_disconnect(struct usb_device *udev)
+>   	return;
+>   }
+>   
+> -static bool usbip_match(struct usb_device *udev)
+> -{
+> -	return true;
+> -}
+> -
+>   #ifdef CONFIG_PM
+>   
+>   /* These functions need usb_port_suspend and usb_port_resume,
+> @@ -491,7 +486,6 @@ struct usb_device_driver stub_driver = {
+>   	.name		= "usbip-host",
+>   	.probe		= stub_probe,
+>   	.disconnect	= stub_disconnect,
+> -	.match		= usbip_match,
+>   #ifdef CONFIG_PM
+>   	.suspend	= stub_suspend,
+>   	.resume		= stub_resume,
+> 
 
-On 2020-09-21 07:37, Heikki Krogerus wrote:
-> On Mon, Sep 14, 2020 at 09:46:35AM -0700, Angus Ainslie wrote:
->> We have a complex set of hardware components to manage our USB C data 
->> and
->> power. For these to work together we decided to use extcon to 
->> communicate
->> the system changes as various cables and devices are plugged in/out. 
->> We did
->> look at usb_roleswitch and the charging framework but thought it would 
->> be
->> preferable to keep all of the information together in one system.
->> 
->> The components we have in the system are:
->> 
->> 1) TPS65982 type USB type C controller
->> 2) dwc3 IP in the imx8mq
->> 3) BQ25895 battery charger
->> 
->> I'll break this into 2 parts the data role and the power role.
->> 
->> For the data role the TPS65982 senses connect and disconnect as well 
->> as data
->> source/sink. It is also controlling the USB 3 data lanes. The display 
->> port and
->> USB 3 muxing is handled by a different chip and we'll submit patches 
->> for that
->> later on. The dwc3 controls the USB 2 data lanes.
->> 
->> On the power side there are even more moving pieces. The TPS65982 
->> negotiates
->> the power delivery contract, the dwc3 senses the BC1.2 charging 
->> current and the
->> BQ25895 sets whether we are sinking or sourcing current and what the 
->> current
->> limit is of the sink and source.
->> 
->> For both the data and power roles no single chip has all of the 
->> required
->> information. Is using extcon the correct way of doing this and if not 
->> what
->> are the alternatives ?
-> 
-> Do not use extcon with the Type-C drivers unless you have some really
-> good reason for not using the dedicated frameworks for each thing. The
-> reason why we even have some of the dedicated frameworks in the first
-> place, for example the USB role switch class, is because extcon simply
-> could not be made to work on every type of hardware architecture.
-> 
-> So you will need to register a power supply in tps6598x.c just like
-> the other USB Type-C drivers like tcpm.c and ucsi.c if the TPS65982
-> does not communicated directly with the BQ25895. That can be one
-> of "supplied_from" (and also "supplied_to" if needed for sourcing) for
-> the bq25890_changer. You probable only need to implement the
-> external_power_changed() hook for it if it's missing in order to make
-> it work. You can also register a power supply in dwc3 and use it as a
-> second supply for bq25890 if you still really need to handle BC1.2.
-> 
-> The data role should already be handled for you. dwc3 already
-> registers an USB role switch, and tps6598x.c already configures one.
-> For data role you should not need any additional code.
-> 
-> Please note that there is also framework for the alt mode muxes.
-> 
+Thank you for finding a solution that works for usbip
 
-Thanks for looking this over. I'll investigate the power supply 
-framework.
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Angus
-
-> 
->> The extcon extensions allow us to communicate the the power roles 
->> amongst
->> the various chips.
->> 
->> This patch series has been tested with the 5.9-rc4 kernel on the 
->> Purism
->> Librem5 HW. Assuming this is the correct way to use extcon there will 
->> be
->> follow on patches to the BQ25895 and dwc3 drivers.
->> 
->> Strictly speaking only the first 3 patches are needed for extcon 
->> support, the
->> forth patch decodes the power delivery contracts which makes use of 
->> the extcon
->> system.
->> 
->> 
->> Angus Ainslie (4):
->>   extcon: Add USB VBUS properties
->>   usb: typec: tps6589x: register as an extcon provider
->>   usb: typec: tps6598x: Add the extcon USB chargers
->>   usb: typec: tps6598x: Add the power delivery irq
->> 
->>  drivers/usb/typec/tps6598x.c | 488 
->> ++++++++++++++++++++++++++++++++++-
->>  include/linux/extcon.h       |  17 +-
->>  2 files changed, 503 insertions(+), 2 deletions(-)
->> 
->> --
->> 2.25.1
-> 
-> thanks,
+thanks,
+-- Shuah
