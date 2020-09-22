@@ -2,74 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2012741EE
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 14:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7F1274230
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 14:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726563AbgIVMSb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 08:18:31 -0400
-Received: from m17618.mail.qiye.163.com ([59.111.176.18]:39915 "EHLO
-        m17618.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726531AbgIVMS3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 08:18:29 -0400
-Received: from vivo-HP-ProDesk-680-G4-PCI-MT.vivo.xyz (unknown [58.251.74.231])
-        by m17618.mail.qiye.163.com (Hmail) with ESMTPA id ACD7B4E114D;
-        Tue, 22 Sep 2020 20:18:25 +0800 (CST)
-From:   Wang Qing <wangqing@vivo.com>
-To:     Andreas Noever <andreas.noever@gmail.com>,
+        id S1726681AbgIVMi6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 08:38:58 -0400
+Received: from mga14.intel.com ([192.55.52.115]:23179 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726505AbgIVMi6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Sep 2020 08:38:58 -0400
+IronPort-SDR: Q0YM6ACecPBlhEKSf39OQlltbjcSvOJD6EwIe7GsWpgTIXgbP/D4b69+kGEwJ+j27llTkcUbV0
+ 3Rs25jy6udsg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9751"; a="159881992"
+X-IronPort-AV: E=Sophos;i="5.77,290,1596524400"; 
+   d="scan'208";a="159881992"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2020 05:38:58 -0700
+IronPort-SDR: rrbJlf5lCJDP9JLWjISeP/CIPDPlFa64KzngGbvNVuaxl2S6kCNzwwWwx7cc8Ggh0k4koPTqKE
+ cKzZjrcbUC7w==
+X-IronPort-AV: E=Sophos;i="5.77,290,1596524400"; 
+   d="scan'208";a="454479654"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2020 05:38:55 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 22 Sep 2020 15:38:52 +0300
+Date:   Tue, 22 Sep 2020 15:38:52 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Wang Qing <wangqing@vivo.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
         Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Yehezkel Bernat <YehezkelShB@gmail.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] thunderbolt: use kobj_to_dev()
-Date:   Tue, 22 Sep 2020 20:18:13 +0800
-Message-Id: <1600777096-25725-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZGE0dHx1CGUgfSU5LVkpNS0tMTExKS01LTkJVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
-        FZT0tIVUpKS0hKTFVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PRA6Tzo6Pj8oCg4uMA8hPho8
-        HTMKCjhVSlVKTUtLTExMSktNT0xLVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
-        SU5KVUxPVUlISllXWQgBWUFJSUxINwY+
-X-HM-Tid: 0a74b5c032139376kuwsacd7b4e114d
+Subject: Re: [PATCH] thunderbolt: use kobj_to_dev()
+Message-ID: <20200922123852.GZ2495@lahna.fi.intel.com>
+References: <1600777096-25725-1-git-send-email-wangqing@vivo.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1600777096-25725-1-git-send-email-wangqing@vivo.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use kobj_to_dev() instead of container_of()
+On Tue, Sep 22, 2020 at 08:18:13PM +0800, Wang Qing wrote:
+> Use kobj_to_dev() instead of container_of()
+> 
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- drivers/thunderbolt/domain.c | 2 +-
- drivers/thunderbolt/switch.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks but I have already queued a similar patch from Tian Tao:
 
-diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
-index bba4cbf..7a192b7
---- a/drivers/thunderbolt/domain.c
-+++ b/drivers/thunderbolt/domain.c
-@@ -275,7 +275,7 @@ static struct attribute *domain_attrs[] = {
- static umode_t domain_attr_is_visible(struct kobject *kobj,
- 				      struct attribute *attr, int n)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct tb *tb = container_of(dev, struct tb, dev);
- 
- 	if (attr == &dev_attr_boot_acl.attr) {
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 3845db5..99effd6
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -1648,7 +1648,7 @@ static struct attribute *switch_attrs[] = {
- static umode_t switch_attr_is_visible(struct kobject *kobj,
- 				      struct attribute *attr, int n)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct tb_switch *sw = tb_to_switch(dev);
- 
- 	if (attr == &dev_attr_device.attr) {
--- 
-2.7.4
-
+  https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git/commit/?h=next&id=fff15f23b8e74c2f969a5d25f29d0565e76e7137
