@@ -2,125 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC02A274989
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 21:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C39F274B10
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 23:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726682AbgIVTyO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 15:54:14 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:34031 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726617AbgIVTyN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 15:54:13 -0400
-Received: by mail-io1-f66.google.com with SMTP id m17so21068251ioo.1;
-        Tue, 22 Sep 2020 12:54:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+qF2EAj+xZ27M9bstX87bUprxWqOcd9qGhCKaOFiGNc=;
-        b=K1tsSEABTJtF80U2hngG6anJgaHEvEkXykeeK/sZEWuSP0W0nXzUiBmEtJOr8UgP/C
-         j/O85hmFqosCgS1pmso/HWrTptRFx2Gaz/3OsEcxDxKQDOkS+F0mHCFXJpGHctNEYeQh
-         aeESxILJPH9AaBsDzDJLwuQXoszTBYF4w3r38CuF29r7kaTmGXQpQbJLVpfyAa8TJ7oR
-         GoUhM1/2QNRbobR1rubOZcHve+FBOnShiNX20QX54SSj2XMcv1k2J0C0OrNwmIHTXPXj
-         J359t5JFq3VhzTe18+puqB08LXGNnSVvIZRbnosSRumh0a1x775y3V1YxC2f48KGZiEQ
-         kHpg==
-X-Gm-Message-State: AOAM532cla4nZ38KK449zXJD566XpRiCKRxoPzQ46NIs6EBvgsC9Dh1h
-        wABzDseRGhKrvUMUPSG6aEgg+5NW/Hxc
-X-Google-Smtp-Source: ABdhPJzijmPheoOp8k8M0D8ZYTknwbf0gqU6P2fI0sRjA5TFSpfxcEdmfuQ37IRLZxfB19R2VHB5Zg==
-X-Received: by 2002:a05:6602:2e0e:: with SMTP id o14mr4889500iow.111.1600804452622;
-        Tue, 22 Sep 2020 12:54:12 -0700 (PDT)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id e9sm9498571ilr.20.2020.09.22.12.54.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 12:54:11 -0700 (PDT)
-Received: (nullmailer pid 3131804 invoked by uid 1000);
-        Tue, 22 Sep 2020 19:54:10 -0000
-Date:   Tue, 22 Sep 2020 13:54:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Manish Narani <manish.narani@xilinx.com>
-Cc:     gregkh@linuxfoundation.org, michal.simek@xilinx.com,
-        balbi@kernel.org, p.zabel@pengutronix.de,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation
- for Versal DWC3 Controller
-Message-ID: <20200922195410.GA3122345@bogus>
-References: <1599678185-119412-1-git-send-email-manish.narani@xilinx.com>
- <1599678185-119412-2-git-send-email-manish.narani@xilinx.com>
+        id S1726652AbgIVVVa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 17:21:30 -0400
+Received: from node.akkea.ca ([192.155.83.177]:48000 "EHLO node.akkea.ca"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726179AbgIVVVa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Sep 2020 17:21:30 -0400
+X-Greylist: delayed 359 seconds by postgrey-1.27 at vger.kernel.org; Tue, 22 Sep 2020 17:21:30 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by node.akkea.ca (Postfix) with ESMTP id 6EBFF4E2010;
+        Tue, 22 Sep 2020 21:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
+        t=1600809331; bh=VUGrSclU1XhJlSqt4y7Ch9vosKRFqpaAskysoliTNms=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=Wup8Z4HMpjDujueL03kwleUiePN0hk5QSWMIsEAEnJ3BYF25+5HyfArDwCGZx8eTN
+         7vW6bpSgaToRE24jS9taWcyCNCul/ZsXvYoLItJoxVYYAB3x4Hpz+mW2CU01MWgYO3
+         GHxbUxD4xFgE0I+gBRysXKcg6NpPV4M9/+LbMge0=
+X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
+Received: from node.akkea.ca ([127.0.0.1])
+        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UXrQtiTzuDm7; Tue, 22 Sep 2020 21:15:29 +0000 (UTC)
+Received: from www.akkea.ca (node.akkea.ca [192.155.83.177])
+        by node.akkea.ca (Postfix) with ESMTPSA id BE8CC4E200E;
+        Tue, 22 Sep 2020 21:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
+        t=1600809329; bh=VUGrSclU1XhJlSqt4y7Ch9vosKRFqpaAskysoliTNms=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=reDGxY+7L5s/bi6qVWNI5DAG6aKZexmsmteICFuggDm8vzZOfQNqndWqSEA9BNxHc
+         jFb9+s2BjESG4YHdkGsCdqtluMgd1HvQYSt5sosFpN3Mtpana+X4w7e5Xx+lVHvUHz
+         RDjoIuDDUZ+ivfgo/izelK5TN47sXjLGZ/3eCqDI=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1599678185-119412-2-git-send-email-manish.narani@xilinx.com>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 22 Sep 2020 14:15:29 -0700
+From:   Angus Ainslie <angus@akkea.ca>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     kernel@puri.sm, MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bryan.odonoghue@linaro.org
+Subject: Re: [PATCH 0/4] RFC: USB C extcon patchset for the tps6598x
+In-Reply-To: <20200921143757.GG1630537@kuha.fi.intel.com>
+References: <20200914164639.1487650-1-angus@akkea.ca>
+ <20200921143757.GG1630537@kuha.fi.intel.com>
+Message-ID: <a2d1df939e59e270bc8924b43b4dcf8a@akkea.ca>
+X-Sender: angus@akkea.ca
+User-Agent: Roundcube Webmail/1.3.6
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 12:33:04AM +0530, Manish Narani wrote:
-> Add documentation for Versal DWC3 controller. Add required property
-> 'reg' for the same. Also add optional properties for snps,dwc3.
-> 
-> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
-> ---
->  .../devicetree/bindings/usb/dwc3-xilinx.txt   | 20 +++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
-> index 4aae5b2cef56..219b5780dbee 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
-> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
-> @@ -1,7 +1,8 @@
->  Xilinx SuperSpeed DWC3 USB SoC controller
->  
->  Required properties:
-> -- compatible:	Should contain "xlnx,zynqmp-dwc3"
-> +- compatible:	May contain "xlnx,zynqmp-dwc3" or "xlnx,versal-dwc3"
-> +- reg:		Base address and length of the register control block
->  - clocks:	A list of phandles for the clocks listed in clock-names
->  - clock-names:	Should contain the following:
->    "bus_clk"	 Master/Core clock, have to be >= 125 MHz for SS
-> @@ -13,12 +14,24 @@ Required child node:
->  A child node must exist to represent the core DWC3 IP block. The name of
->  the node is not important. The content of the node is defined in dwc3.txt.
->  
-> +Optional properties for snps,dwc3:
-> +- dma-coherent:	Enable this flag if CCI is enabled in design. Adding this
-> +		flag configures Global SoC bus Configuration Register and
-> +		Xilinx USB 3.0 IP - USB coherency register to enable CCI.
-> +- snps,enable-hibernation: Add this flag to enable hibernation support for
-> +		peripheral mode.
+Hi Heikki,
 
-This belongs in the DWC3 binding. It also implies that hibernation is 
-not supported by any other DWC3 based platform. Can't this be implied by 
-the compatible string (in the parent)?
-
-> +- interrupt-names: Should contain the following:
-> +  "dwc_usb3"	USB gadget mode interrupts
-> +  "otg"		USB OTG mode interrupts
-> +  "hiber"	USB hibernation interrupts
-> +
->  Example device node:
->  
->  		usb@0 {
->  			#address-cells = <0x2>;
->  			#size-cells = <0x1>;
->  			compatible = "xlnx,zynqmp-dwc3";
-> +			reg = <0x0 0xff9d0000 0x0 0x100>;
->  			clock-names = "bus_clk" "ref_clk";
->  			clocks = <&clk125>, <&clk125>;
->  			ranges;
-> @@ -26,7 +39,10 @@ Example device node:
->  			dwc3@fe200000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x0 0xfe200000 0x40000>;
-> -				interrupts = <0x0 0x41 0x4>;
-> +				interrupt-names = "dwc_usb3", "otg", "hiber";
-> +				interrupts = <0 65 4>, <0 69 4>, <0 75 4>;
->  				dr_mode = "host";
-> +				dma-coherent;
-> +				snps,enable-hibernation;
->  			};
->  		};
-> -- 
-> 2.17.1
+On 2020-09-21 07:37, Heikki Krogerus wrote:
+> On Mon, Sep 14, 2020 at 09:46:35AM -0700, Angus Ainslie wrote:
+>> We have a complex set of hardware components to manage our USB C data 
+>> and
+>> power. For these to work together we decided to use extcon to 
+>> communicate
+>> the system changes as various cables and devices are plugged in/out. 
+>> We did
+>> look at usb_roleswitch and the charging framework but thought it would 
+>> be
+>> preferable to keep all of the information together in one system.
+>> 
+>> The components we have in the system are:
+>> 
+>> 1) TPS65982 type USB type C controller
+>> 2) dwc3 IP in the imx8mq
+>> 3) BQ25895 battery charger
+>> 
+>> I'll break this into 2 parts the data role and the power role.
+>> 
+>> For the data role the TPS65982 senses connect and disconnect as well 
+>> as data
+>> source/sink. It is also controlling the USB 3 data lanes. The display 
+>> port and
+>> USB 3 muxing is handled by a different chip and we'll submit patches 
+>> for that
+>> later on. The dwc3 controls the USB 2 data lanes.
+>> 
+>> On the power side there are even more moving pieces. The TPS65982 
+>> negotiates
+>> the power delivery contract, the dwc3 senses the BC1.2 charging 
+>> current and the
+>> BQ25895 sets whether we are sinking or sourcing current and what the 
+>> current
+>> limit is of the sink and source.
+>> 
+>> For both the data and power roles no single chip has all of the 
+>> required
+>> information. Is using extcon the correct way of doing this and if not 
+>> what
+>> are the alternatives ?
 > 
+> Do not use extcon with the Type-C drivers unless you have some really
+> good reason for not using the dedicated frameworks for each thing. The
+> reason why we even have some of the dedicated frameworks in the first
+> place, for example the USB role switch class, is because extcon simply
+> could not be made to work on every type of hardware architecture.
+> 
+> So you will need to register a power supply in tps6598x.c just like
+> the other USB Type-C drivers like tcpm.c and ucsi.c if the TPS65982
+> does not communicated directly with the BQ25895. That can be one
+> of "supplied_from" (and also "supplied_to" if needed for sourcing) for
+> the bq25890_changer. You probable only need to implement the
+> external_power_changed() hook for it if it's missing in order to make
+> it work. You can also register a power supply in dwc3 and use it as a
+> second supply for bq25890 if you still really need to handle BC1.2.
+> 
+> The data role should already be handled for you. dwc3 already
+> registers an USB role switch, and tps6598x.c already configures one.
+> For data role you should not need any additional code.
+> 
+> Please note that there is also framework for the alt mode muxes.
+> 
+
+Thanks for looking this over. I'll investigate the power supply 
+framework.
+
+Angus
+
+> 
+>> The extcon extensions allow us to communicate the the power roles 
+>> amongst
+>> the various chips.
+>> 
+>> This patch series has been tested with the 5.9-rc4 kernel on the 
+>> Purism
+>> Librem5 HW. Assuming this is the correct way to use extcon there will 
+>> be
+>> follow on patches to the BQ25895 and dwc3 drivers.
+>> 
+>> Strictly speaking only the first 3 patches are needed for extcon 
+>> support, the
+>> forth patch decodes the power delivery contracts which makes use of 
+>> the extcon
+>> system.
+>> 
+>> 
+>> Angus Ainslie (4):
+>>   extcon: Add USB VBUS properties
+>>   usb: typec: tps6589x: register as an extcon provider
+>>   usb: typec: tps6598x: Add the extcon USB chargers
+>>   usb: typec: tps6598x: Add the power delivery irq
+>> 
+>>  drivers/usb/typec/tps6598x.c | 488 
+>> ++++++++++++++++++++++++++++++++++-
+>>  include/linux/extcon.h       |  17 +-
+>>  2 files changed, 503 insertions(+), 2 deletions(-)
+>> 
+>> --
+>> 2.25.1
+> 
+> thanks,
