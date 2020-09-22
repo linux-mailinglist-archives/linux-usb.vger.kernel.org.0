@@ -2,60 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EB927410C
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 13:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67B8274119
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 13:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726543AbgIVLia (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 07:38:30 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:58838 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbgIVLi3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 07:38:29 -0400
-Received: from fsav105.sakura.ne.jp (fsav105.sakura.ne.jp [27.133.134.232])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 08MBcHCG043679;
-        Tue, 22 Sep 2020 20:38:17 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav105.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav105.sakura.ne.jp);
- Tue, 22 Sep 2020 20:38:17 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav105.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 08MBcHWH043636
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
-        Tue, 22 Sep 2020 20:38:17 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [RFC 7/7] CDC-WDM: making flush() interruptible
-To:     Oliver Neukum <oneukum@suse.com>
-References: <20200922112126.16919-1-oneukum@suse.com>
- <20200922112126.16919-8-oneukum@suse.com>
-Cc:     bjorn@mork.no, linux-usb@vger.kernel.org
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <5277d73f-725c-7960-669e-8c7a81532d73@i-love.sakura.ne.jp>
-Date:   Tue, 22 Sep 2020 20:38:14 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-MIME-Version: 1.0
-In-Reply-To: <20200922112126.16919-8-oneukum@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S1726550AbgIVLmN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 07:42:13 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51616 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726562AbgIVLlj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Sep 2020 07:41:39 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1600774883;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/W5u4DwssKiLpxMOfFZcGb1OtVlE2FL5pG1Dh/ZjlXM=;
+        b=OW856cMNn/Xejro5OTGBtRaNqybP5vs/oe9ZlLwi/yGXH9dXNL9PErtfCyAel2boyk/LoF
+        /5/O3SWBif/1gsTYnL5fsGwM42S/NQ5sGZfWRa9FAaQxhUFcY5x5I9q08ahTA8/VFpZL2u
+        becMnN3g2J2XMLd0LsW132bsiOVTww4=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 853CFAF1F;
+        Tue, 22 Sep 2020 11:42:00 +0000 (UTC)
+Message-ID: <1600774866.6926.18.camel@suse.com>
+Subject: Re: [PATCH v2 4/4] USB: cdc-acm: clean up no-union-descriptor
+ handling
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Erik Slagter <erik@slagter.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
+Date:   Tue, 22 Sep 2020 13:41:06 +0200
+In-Reply-To: <20200922105446.GC24441@localhost>
+References: <20200921135951.24045-1-johan@kernel.org>
+         <20200921135951.24045-5-johan@kernel.org>
+         <1600697816.2424.102.camel@suse.com> <20200921142806.GX24441@localhost>
+         <1600700674.2424.105.camel@suse.com> <20200921151605.GY24441@localhost>
+         <1600708657.2942.2.camel@suse.com> <20200922070506.GZ24441@localhost>
+         <1600771242.6926.16.camel@suse.com> <20200922105446.GC24441@localhost>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/09/22 20:21, Oliver Neukum wrote:
-> There is no need for flush() to be uninterruptible. close(2)
-> is allowed to return -EINTR.
+Am Dienstag, den 22.09.2020, 12:54 +0200 schrieb Johan Hovold:
+
+> Heh. Did you actually read the commit message?
 > 
-> 30 seconds is quite long a time to sleep in an uninterruptible state.
-> Change it to an interruptible sleep.
+> 	"Add NO_DATA_INTERFACE quirk to tell the driver that "control"
+> 	 and "data" interfaces are not separated for this device, which
+> 	 prevents dereferencing a null pointer in the device probe
+> 	 code."
+> 
+> Convinced yet?
 
-Doesn't this conflict with
+This patch does not fully match its description. Very well. Proceed.
+Could you resubmit and I'll ack?
 
-  Making the wait for IO interruptible would not solve the
-  issue. While it would avoid a hang, it would not allow any progress
-  and we would end up with an unclosable fd.
+	Regards
+		Oliver
 
-in [RFC 2/7] ? I suggested killable version, for giving up upon SIGKILL
-implies automatically closing fds by terminating that userspace process.
