@@ -2,97 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A964273EC6
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 11:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31540273EF3
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 11:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726533AbgIVJpv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 05:45:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53606 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726470AbgIVJpu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Sep 2020 05:45:50 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1600767949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rExkCtx23UHvbgYSddRrOZtcNUlUxf+1M2O6bYuU6GY=;
-        b=oYvd43rq8lasTnXB6dFqArnoTLjev62oX6jVRexgy0sWdJy/7qiY10d34OzdPzItkq8dTB
-        xWAgkPrFq86GfEyW5rt8gnyJ9OU8hN/I2gK3pYcTQ1k6z47Ri5ba6vTLFsRup9UhVwl3qn
-        7ohYDbFaDTHQCsgqrCbwHogfmr6z2Ac=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 78535AD1A;
-        Tue, 22 Sep 2020 09:46:26 +0000 (UTC)
-Message-ID: <1600767931.6926.13.camel@suse.com>
-Subject: Re: [RFC 0/5] fix races in CDC-WDM
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     bjorn@mork.no, linux-usb@vger.kernel.org
-Date:   Tue, 22 Sep 2020 11:45:31 +0200
-In-Reply-To: <94896ccd-e1b3-11c5-be98-954ee01081ac@i-love.sakura.ne.jp>
-References: <20200812132034.14363-1-oneukum@suse.com>
-         <ee0af733-903f-8e8f-8027-b5490a37032f@i-love.sakura.ne.jp>
-         <1599728957.10822.9.camel@suse.com>
-         <4f285044-aae9-c3be-23ba-90790cd624f1@i-love.sakura.ne.jp>
-         <1600161279.2424.5.camel@suse.com>
-         <4b8f6305-52fd-cb72-eb13-9d0a0bf07319@i-love.sakura.ne.jp>
-         <1600251486.2424.17.camel@suse.com>
-         <4e724e07-3993-bcaa-79e9-45a2f7e1f759@i-love.sakura.ne.jp>
-         <1600336214.2424.39.camel@suse.com>
-         <0bd0995d-d8a0-321a-0695-f4013bbc88ec@i-love.sakura.ne.jp>
-         <1600352222.2424.57.camel@suse.com>
-         <52714f66-c2ec-7a31-782a-9365ba900111@i-love.sakura.ne.jp>
-         <1600685578.2424.72.camel@suse.com>
-         <fab1cbfc-7284-73f4-b633-1e060c38acdb@i-love.sakura.ne.jp>
-         <1600759983.6926.9.camel@suse.com>
-         <94896ccd-e1b3-11c5-be98-954ee01081ac@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726470AbgIVJxn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 05:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726353AbgIVJxn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 05:53:43 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3FEC061755;
+        Tue, 22 Sep 2020 02:53:43 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id o5so16304571wrn.13;
+        Tue, 22 Sep 2020 02:53:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:to:cc:subject:references:date:in-reply-to
+         :user-agent:mime-version;
+        bh=6dBT2dqpLWNwfIVtTr97x8ZWf+SXjYzPHkyJeDHUMEE=;
+        b=cO6YpJiolHAzZWZPzy2/ARKhpiVN+XV+e4IoDE9PjYOtrNfutT5jQh/NAx6G0Kc+zr
+         1hx3kLSbut9pYYDoYeeS6r7ZBuBiDOvUuO7EDj/pgtaRF2xl0ZYsH8gHCIELcPMVxpCq
+         PRRnu19V+NafFJUoWlWfu0Z6DSKMzYDNZl+BkKcPbuygYDCbE0HCtIw6VLeCP2ZSXSQR
+         EYZHRJVKoOhEvf7czhH3FOyR9nbQpKe7wSiTPSjG/bWvuIKuebwzipngt45kD+LtDmpi
+         lyh26stR2ZwXy2JuDWITyZ3UMJoBpQGUo6IZxeMXZLSZ3syyzJIC8HkwxaOZF2boujQN
+         hWVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:to:cc:subject:references:date
+         :in-reply-to:user-agent:mime-version;
+        bh=6dBT2dqpLWNwfIVtTr97x8ZWf+SXjYzPHkyJeDHUMEE=;
+        b=RoBpiVpRLafO+A0A+U6eGDm9mmHjbMLa1SdtVC2c3UGYvn796m0OuD5+oAxqt2uZSj
+         6l0rVjR1S0MQLTd97Tmu3KbTdMS7xgH3XEwFsKu6Rx4c2vTOxh0f3s3oONMTlPnbAr4J
+         I7U+r4AOjxBZ7hywMk98F8/mlQBwE3O0KpkpQprVxSH73BeBSvLVOieaKjimAZ9Bhi0L
+         SX7q74G9gf/HRCUxdCdKnQxPaJYKSH9K/lQzN8C9Q8tPXr87UB56bB6MrUEoxrrKflJm
+         BPmX25wolt31FEQ6U9f0UECWxUAbJFSYOJ3g3MnrtAfYievH554/DR4Jdy63GXLRb0PE
+         g4SQ==
+X-Gm-Message-State: AOAM532YgSU6k0stVIaoqNQcK+XKd/6aQbxu33CNYeXFaBgRkU3FmtWA
+        fP4RdYn2pfuQaWTztTml436vNlHEeO4jlw==
+X-Google-Smtp-Source: ABdhPJze9NbuykH8o0aCwRaM4W3RembhFS1YOKxV5djnl6zg1bgkpSsSBSstQS+r8EdRyfC/fM5OVA==
+X-Received: by 2002:adf:9027:: with SMTP id h36mr4336706wrh.259.1600768421749;
+        Tue, 22 Sep 2020 02:53:41 -0700 (PDT)
+Received: from daniel-ThinkPad-X230 ([2a01:e35:1387:1640:1853:cc4f:48fd:e3ca])
+        by smtp.gmail.com with ESMTPSA id y1sm3721354wma.36.2020.09.22.02.53.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2020 02:53:40 -0700 (PDT)
+Message-ID: <5f69c9a4.1c69fb81.b5b0d.9c89@mx.google.com>
+X-Google-Original-Message-ID: <87v9g6p270.fsf@gmail.com>>
+From:   <f1rmb.daniel@gmail.com> (<Daniel Caujolle-Bert>)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] USB: cdc-acm: handle broken union descriptors
+References: <20200921135951.24045-1-johan@kernel.org>
+        <20200921135951.24045-3-johan@kernel.org>
+Date:   Tue, 22 Sep 2020 11:53:39 +0200
+In-Reply-To: <20200921135951.24045-3-johan@kernel.org> (Johan Hovold's message
+        of "Mon, 21 Sep 2020 15:59:49 +0200")
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 22.09.2020, 17:34 +0900 schrieb Tetsuo Handa:
-> On 2020/09/22 16:33, Oliver Neukum wrote:
-> > Am Dienstag, den 22.09.2020, 10:56 +0900 schrieb Tetsuo Handa:
-> > > On 2020/09/21 19:52, Oliver Neukum wrote:
-> > > To understand it, I must understand why it is safe to defer error reporting.
-> > 
-> > It is not. There is nothing to understand here. If user space needs
-> > a guarantee that data has been pushed out without an error, it will
-> > have to call fsync()
-> > > I'm querying you about characteristics of data passed to wdm_write().
-> > > Without knowing the difference between writing to cdc-wdm driver and normal file on
-> > > some filesystem, I can't judge whether it is acceptable to defer reporting errors.
-> > 
-> > That is simply not a decision you or I make. The man page clearly
-> > says that it is acceptable. If user space does not like that, it must
-> > call fsync() after write().
-> 
-> Then, cdc-wdm driver did not implement fsync() was a big problem. Userspace
-> needs to be careful not to give up upon -EINVAL when running on older kernels
-> which did not implement wdm_fsync().
-
-Very well. So I'll call the lack of fsync() a bug, which should be
-fixed in stable.
-
-> The remaining concern would be how to handle unresponding hardware, for blocking
-> wdm_write()/wdm_read() and wdm_fsync() are using wait_event_interruptible(). If
-> the caller do not have a mean to send a signal, the caller might hung up forever
-> when the hardware stopped responding. Please add a comment that userspace needs to
-> be careful when calling these functions.
-
-wdm_flush() has such a comment. Yet no driver can make a guarantee that
-a device will make progress in IO. The driver must, however, provide
-a means of dealing with such cases. Usually that means handling
-signals. That is the normal semantics of a write() syscall.
-
-I believe we are covered on that.
-
-	Regards
-		Oliver
-
+Tested-by: Daniel Caujolle-Bert <f1rmb.daniel@gmail.com>
