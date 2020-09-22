@@ -2,69 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6922745E1
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 17:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDAB27460A
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 18:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbgIVP7N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 11:59:13 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:38044 "EHLO
+        id S1726714AbgIVQES (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 12:04:18 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:33290 "EHLO
         mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726566AbgIVP7N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 11:59:13 -0400
-Received: by mail-il1-f196.google.com with SMTP id t18so17801981ilp.5;
-        Tue, 22 Sep 2020 08:59:12 -0700 (PDT)
+        with ESMTP id S1726340AbgIVQEP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Sep 2020 12:04:15 -0400
+Received: by mail-il1-f196.google.com with SMTP id y2so7120105ila.0;
+        Tue, 22 Sep 2020 09:04:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=EFVKF4d/g5CR+iQuSKq+wsklSzMxkKSkhkVK2gTQu/A=;
-        b=DYsWoy32xk9HNpdyOvr7iIQU60Z6HE/nkDT10YrhfXEKxE6BGSlZ2ft54Qr/7jb13a
-         iN/s1UUfn0BSLQRyp/Yks90ihyjH+XDT/I9C7eRA9aBX04Axc5wD//RkId8KHMISVb57
-         zEYSQpYQe3Q8AHEUxvwEkvgdDL0WY8LO4vV5SnwP/wRKBDFG32m9i96yoE2xculyNEnI
-         u2H7MKVmDjsjf7y8Dq7f5iC7fwarUchp0GWfHzS39LdTj2cw62n9f3nSka5eZty0g47+
-         C625PuYomKAmY4A2/V4qxcemkJM9VYYRFjJEKhNW29DhgLjtPeR3a61WsZ0NF9gHe1X5
-         ELKA==
-X-Gm-Message-State: AOAM533kqZ1VDQBF0WgRe9BR6bGYdRo4tOeaA0jgR2oQ/ed8NSE0tgyi
-        j5c6y3IpprnHktitFZMGC/qT+ol0WtBm
-X-Google-Smtp-Source: ABdhPJxHli8PSuJK8257OPkqzqv/ebWdRG6dEP5LcYibIHbtDkiD9cWhKZQxWQ0vbFxxOxBMUdtCYQ==
-X-Received: by 2002:a05:6e02:1085:: with SMTP id r5mr4900199ilj.44.1600790352186;
-        Tue, 22 Sep 2020 08:59:12 -0700 (PDT)
+        bh=Y5UBXUYHwiRbLDcx9i+bBAPlyBEamPYidNq5SghUBeA=;
+        b=ijQGf49zeA+VOxjS0pruYXdCndTID6YG9Sp4Pjmwyq4ieF88yIWuStnn2O0C1Gn5eS
+         73PQcKQQsCW9PamkXzoLceIV+O/QRxtqXUlilS+87g9FpYDaH9AlfXn8Duw/jW87hK38
+         9VtSDJE9oj7okwDK0ULfVorkVAy/HkrNsW24RiXK8PBMCfUFuH58ZMVZR4ocWXyFUWFx
+         Kc/VQcXWcBLgqWZEu/iMrySkYczMRamuTTcCbweZD7JAE+6Z1C5RAy5stDUOzAjAycJk
+         0HbCUcMNpCrys66fvD+Pxhg3wC0tF9cbzWt0XmCB0mplwgfwkN4zBs7B9kDiTGJrBjYO
+         0qdQ==
+X-Gm-Message-State: AOAM530KJHsl5t8HY/pK0jMO2mNRhaOdlPtZRLuslHiVbKHodRZv25qr
+        uktvxG+WLn9A+7aLSpXMTQ==
+X-Google-Smtp-Source: ABdhPJwfnzMWGepFKpgu7yurXWMFsieJecm07nvuf24tFNfnFoNylfhg3XyYdwCTmcovJXzxu6JHBA==
+X-Received: by 2002:a92:d842:: with SMTP id h2mr2347658ilq.176.1600790653559;
+        Tue, 22 Sep 2020 09:04:13 -0700 (PDT)
 Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id z4sm7709161iol.52.2020.09.22.08.59.10
+        by smtp.gmail.com with ESMTPSA id f21sm7521752ioh.1.2020.09.22.09.04.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 08:59:11 -0700 (PDT)
-Received: (nullmailer pid 2760083 invoked by uid 1000);
-        Tue, 22 Sep 2020 15:59:10 -0000
-Date:   Tue, 22 Sep 2020 09:59:10 -0600
+        Tue, 22 Sep 2020 09:04:12 -0700 (PDT)
+Received: (nullmailer pid 2767983 invoked by uid 1000);
+        Tue, 22 Sep 2020 16:04:11 -0000
+Date:   Tue, 22 Sep 2020 10:04:11 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <treding@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Badhri Jagan Sridharan <badhri@google.com>,
+        Amelie Delaunay <amelie.delaunay@st.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        devicetree@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
         Mark Brown <broonie@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH v8 03/11] dt-bindings: usb: Maxim type-c controller
- device tree binding document
-Message-ID: <20200922155910.GA2759479@bogus>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 05/11] dt-bindings: connector: Add property to set
+ initial current cap for FRS
+Message-ID: <20200922160411.GB2759479@bogus>
 References: <20200921195555.1050731-1-badhri@google.com>
- <20200921195555.1050731-3-badhri@google.com>
+ <20200921195555.1050731-5-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200921195555.1050731-3-badhri@google.com>
+In-Reply-To: <20200921195555.1050731-5-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 21 Sep 2020 12:55:47 -0700, Badhri Jagan Sridharan wrote:
-> Add device tree binding document for Maxim TCPCI based Type-C chip driver
+On Mon, Sep 21, 2020 at 12:55:49PM -0700, Badhri Jagan Sridharan wrote:
+> This change adds frs-typec-current which allows setting the initial current
+> capability of the new source when vSafe5V is applied during PD3.0
+> sink Fast Role Swap.
 > 
 > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 > ---
@@ -72,31 +74,35 @@ On Mon, 21 Sep 2020 12:55:47 -0700, Badhri Jagan Sridharan wrote:
 > - Changing patch version to v6 to fix version number confusion.
 > 
 > Changes since v6:
-> - Migrated to yaml format.
+> - Removed the redundant usb-connector.txt that I created by mistake.
+> - Moved to yaml.
 > 
 > Changes since v7:
-> - Rebase on usb-next
->  .../devicetree/bindings/usb/maxim,tcpci.yaml  | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/maxim,tcpci.yaml
+> - Rebase 
+> ---
+>  .../devicetree/bindings/connector/usb-connector.yaml   |  8 ++++++++
+>  include/dt-bindings/usb/pd.h                           | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> index 9bd52e63c935..1ca8e6a337e5 100644
+> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> @@ -142,6 +142,14 @@ properties:
+>      required:
+>        - port@0
+>  
+> +  frs-typec-current:
+> +    description: Initial current capability of the new source when vSafe5V
+> +      is applied during PD3.0 Fast Role Swap. "Table 6-14 Fixed Supply PDO - Sink"
+> +      of "USB Power Delivery Specification Revision 3.0, Version 1.2" provides the
+> +      different power levels and "6.4.1.3.1.6 Fast Role Swap USB Type-C Current"
+> +      provides a detailed description of the field.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
+Looks the same/similar to this[1]. Please come up with a common 
+approach to cover both.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Rob
 
-Error: Documentation/devicetree/bindings/usb/maxim,tcpci.example.dts:38.36-37 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/usb/maxim,tcpci.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1366: dt_binding_check] Error 2
-
-
-See https://patchwork.ozlabs.org/patch/1368587
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
-
+https://lore.kernel.org/linux-arm-kernel/20200902075707.9052-2-amelie.delaunay@st.com/
