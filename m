@@ -2,43 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F90E274457
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 16:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE5A274472
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Sep 2020 16:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726625AbgIVOdA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Sep 2020 10:33:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33722 "EHLO mail.kernel.org"
+        id S1726633AbgIVOje (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Sep 2020 10:39:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36396 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726494AbgIVOc7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Sep 2020 10:32:59 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        id S1726507AbgIVOje (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Sep 2020 10:39:34 -0400
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 977EB239E5;
-        Tue, 22 Sep 2020 14:32:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E3D5C23A1B;
+        Tue, 22 Sep 2020 14:39:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600785178;
-        bh=iasRiDoscB8RQGc1B7ahh0O0NY83ofVDe3BIh/9UiXQ=;
+        s=default; t=1600785573;
+        bh=QKG2tziZ1CH6LbmKRnL15/kqe5HEQWJM9XiL9GC6EGU=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TlAZF21XZ3ML7hOT1h1dkRIeSSQMA8vFzlS561jACZ8ho9sBq9xj/wIBhb7P7TTVy
-         3bCxMRL1XksrI5fLMACScGU+R9ECW1WaZbP4dwoaK1gHmmQG6Idhk9lgPv36u4qQ8Y
-         GCE2OVsgOpVDpHqmz+y7XjpH3UFzn/Z5mIhJYBSg=
-Received: by mail-ed1-f49.google.com with SMTP id c8so16390977edv.5;
-        Tue, 22 Sep 2020 07:32:58 -0700 (PDT)
-X-Gm-Message-State: AOAM5301QV9ij23vjWFy8o5F6unYf2WOiS5oJC/0GhidjqsWx9Qm1NHI
-        TCc6XLin+1SoieThf2xASQjXwD3qFra934SmQ5Y=
-X-Google-Smtp-Source: ABdhPJwL0FWetiMV2ZBTJY1nyf9ErWVwOBz9YMwZaUj1XXBB7jWGnDD/oueiTZMGL/DYVeWN+qydwkmcwsKXsVOSeXg=
-X-Received: by 2002:a05:6402:515:: with SMTP id m21mr4266498edv.348.1600785177034;
- Tue, 22 Sep 2020 07:32:57 -0700 (PDT)
+        b=US7v4tXvzH5E5RcEmEjXOgPzhwK/mHKxZidFPNvqj6WkVUZKIdObiseq1f3WpH2Yo
+         aidu1x6M+qVUOW2cI+1io7j9TB+7IgXpYt9hE6gIDQ8NnI/kwZjR6WwvfiwKw/FBCH
+         dUbG+wE9lEZS8igvubGKhkeua/AM290Q9Z9wmv8k=
+Received: by mail-ed1-f46.google.com with SMTP id t16so16418740edw.7;
+        Tue, 22 Sep 2020 07:39:32 -0700 (PDT)
+X-Gm-Message-State: AOAM530fewolPNvj40a+rBk4BS4oWQ1afhtsSPzhdi52Toc3y1eAYZuA
+        hWkmmtVKwd0sDYJGI9jJMa0BXaN+aGsranH7mQY=
+X-Google-Smtp-Source: ABdhPJxZf2ZAXPghgEtaXHGvgbnerAjzDXax3vuylPKt7zWG4WKlAcuvZranqON20EG/druAkSSUTbfMud9uF0jvZH0=
+X-Received: by 2002:a05:6402:180a:: with SMTP id g10mr4207133edy.18.1600785571397;
+ Tue, 22 Sep 2020 07:39:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <1600771612-30727-1-git-send-email-jun.li@nxp.com> <1600771612-30727-4-git-send-email-jun.li@nxp.com>
-In-Reply-To: <1600771612-30727-4-git-send-email-jun.li@nxp.com>
+References: <1600771612-30727-1-git-send-email-jun.li@nxp.com> <1600771612-30727-6-git-send-email-jun.li@nxp.com>
+In-Reply-To: <1600771612-30727-6-git-send-email-jun.li@nxp.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 22 Sep 2020 16:32:44 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPfocQZY-5Xmn5q=oetmS1doe0zXsQH=uXx0+CxGaESgUg@mail.gmail.com>
-Message-ID: <CAJKOXPfocQZY-5Xmn5q=oetmS1doe0zXsQH=uXx0+CxGaESgUg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] dt-bindings: usb: dwc3-imx8mp: add imx8mp dwc3
- glue bindings
+Date:   Tue, 22 Sep 2020 16:39:19 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPc2AWHEQmxBT2tRgYcRSwrm0ZpWYiG1ifkh5at+F7-sQw@mail.gmail.com>
+Message-ID: <CAJKOXPc2AWHEQmxBT2tRgYcRSwrm0ZpWYiG1ifkh5at+F7-sQw@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] arm64: dtsi: imx8mp: add usb nodes
 To:     Li Jun <jun.li@nxp.com>
 Cc:     robh+dt@kernel.org, shawnguo@kernel.org, balbi@kernel.org,
         mathias.nyman@intel.com, gregkh@linuxfoundation.org,
@@ -54,98 +53,96 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Tue, 22 Sep 2020 at 12:56, Li Jun <jun.li@nxp.com> wrote:
 >
-> NXP imx8mp integrates 2 dwc3 3.30b IP and add some wakeup logic
-> to support low power mode, the glue layer is for this wakeup
-> functionality, which has a separated interrupt, can support
-> wakeup from U3 and connect events for host, and vbus wakeup for
-> device.
+> imx8mp integrates 2 identical dwc3 based USB3 controllers and
+> Synopsys phys, each instance has additional wakeup logic to
+> support low power mode, so the glue layer need a node with dwc3
+> core sub node.
 >
 > Signed-off-by: Li Jun <jun.li@nxp.com>
 > ---
->  .../devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml   | 99 ++++++++++++++++++++++
->  1 file changed, 99 insertions(+)
+>  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 88 +++++++++++++++++++++++++++++++
+>  1 file changed, 88 insertions(+)
 >
-> diff --git a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-> new file mode 100644
-> index 0000000..a5d5566
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-> @@ -0,0 +1,99 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (c) 2020 NXP
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/fsl,imx8mp-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> index 9de2aa1..1b7ed4c 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> @@ -750,5 +750,93 @@
+>                         reg = <0x3d800000 0x400000>;
+>                         interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
+>                 };
 > +
-> +title: NXP iMX8MP Soc USB Controller
+> +               usb3_phy0: usb-phy@381f0040 {
+> +                       compatible = "fsl,imx8mp-usb-phy";
+> +                       reg = <0x381f0040 0x40>;
+> +                       clocks = <&clk IMX8MP_CLK_USB_PHY_ROOT>;
+> +                       clock-names = "phy";
+> +                       assigned-clocks = <&clk IMX8MP_CLK_USB_PHY_REF>;
+> +                       assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
+> +                       #phy-cells = <0>;
+> +                       status = "disabled";
+> +               };
 > +
-> +maintainers:
-> +  - Li Jun <jun.li@nxp.com>
+> +               usb3_0: usb@32f10100 {
+> +                       compatible = "fsl,imx8mp-dwc3";
+> +                       reg = <0x32f10100 0x8>;
+> +                       clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
+> +                                <&clk IMX8MP_CLK_USB_ROOT>;
+> +                       clock-names = "hsio", "suspend";
+> +                       interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
+> +                       #address-cells = <1>;
+> +                       #size-cells = <1>;
+> +                       ranges;
+> +                       status = "disabled";
 > +
-> +properties:
-> +  compatible:
-> +    items:
+> +                       usb_dwc3_0: dwc3@38100000 {
+> +                               compatible = "snps,dwc3";
+> +                               reg = <0x38100000 0x10000>;
+> +                               clocks = <&clk IMX8MP_CLK_HSIO_AXI>,
+> +                                        <&clk IMX8MP_CLK_USB_CORE_REF>,
+> +                                        <&clk IMX8MP_CLK_USB_ROOT>;
+> +                               clock-names = "bus_early", "ref", "suspend";
+> +                               assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI>;
+> +                               assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
+> +                               assigned-clock-rates = <500000000>;
+> +                               interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
+> +                               phys = <&usb3_phy0>, <&usb3_phy0>;
+> +                               phy-names = "usb2-phy", "usb3-phy";
+> +                               snps,dis-u2-freeclk-exists-quirk;
+> +                               xhci-64bit-support-disable;
+> +                               status = "disabled";
+> +                       };
+> +
+> +               };
+> +
+> +               usb3_phy1: usb-phy@382f0040 {
+> +                       compatible = "fsl,imx8mp-usb-phy";
+> +                       reg = <0x382f0040 0x40>;
+> +                       clocks = <&clk IMX8MP_CLK_USB_PHY_ROOT>;
+> +                       clock-names = "phy";
+> +                       assigned-clocks = <&clk IMX8MP_CLK_USB_PHY_REF>;
+> +                       assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
+> +                       #phy-cells = <0>;
+> +                       status = "disabled";
+> +               };
+> +
+> +               usb3_1: usb@32f10108 {
+> +                       compatible = "fsl,imx8mp-dwc3";
+> +                       reg = <0x32f10108 0x8>;
+> +                       clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
+> +                                <&clk IMX8MP_CLK_USB_ROOT>;
+> +                       clock-names = "hsio", "suspend";
+> +                       assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI_SRC>;
 
-Items are not necessary
+This does not validate against your own schema:
+arch/arm64/boot/dts/freescale/imx8mp-evk.dt.yaml: usb@32f10108:
+'assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' do
+not match any of the regexes: '^dwc3@[0-9a-f]+$', 'pinctrl-[0-9]+'
 
+Please, stop adding new schema and DTS which from day one have
+warnings/violations.
 
-> +    - const: fsl,imx8mp-dwc3
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: Address and length of the register set for the wrapper of
-> +      dwc3 core on the SOC.
-> +
-> +  "#address-cells":
-> +    enum: [ 1, 2 ]
-> +
-> +  "#size-cells":
-> +    enum: [ 1, 2 ]
-> +
-> +  ranges: true
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: The interrupt that is asserted when a wakeup event is
-> +      received.
-> +
-> +  clocks:
-> +    description:
-> +      A list of phandle and clock-specifier pairs for the clocks
-> +      listed in clock-names.
-> +    items:
-> +      - description: system hsio root clock.
-> +      - description: suspend clock, used for usb wakeup logic.
-> +
-> +  clock-names:
-> +    items:
-> +      - const: hsio
-> +      - const: suspend
-> +
-> +# Required child node:
-> +
-> +patternProperties:
-> +  "^dwc3@[0-9a-f]+$":
-> +    type: object
-> +    description:
-> +      A child node must exist to represent the core DWC3 IP block
-> +      The content of the node is defined in dwc3.txt.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - ranges
-> +  - clocks
-> +  - clock-names
-> +  - interrupts
-> +
-> +additionalProperties: false
-
-Do you actually validate your DTS changes with this schema? They do
-not look like passing the validation...
+It's really a lot of effort (and commits) to clean this up later.
 
 Best regards,
 Krzysztof
