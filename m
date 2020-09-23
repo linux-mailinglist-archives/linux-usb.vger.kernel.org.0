@@ -2,34 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B6D2758F7
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 15:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3A22758F8
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 15:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbgIWNoU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Sep 2020 09:44:20 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33442 "EHLO mx2.suse.de"
+        id S1726672AbgIWNoV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Sep 2020 09:44:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33444 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726630AbgIWNoT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S1726632AbgIWNoT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Wed, 23 Sep 2020 09:44:19 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
         t=1600868657;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=vfC9XPNad+kdZK1rgemg6BP3RZYWacVZU0lxrppC9Lc=;
-        b=s51Yd8db9ccRb+7WiAuENgjo0NO8v5sWqPXOGDt8T1034qClHC5HFIi07AGWDBM6Luoto/
-        f2s5LujxYG+JFRYnrb9HbA95t2V96kPy6H4rtym0ACJdoECx14jFGV2Rvi5oU3E75522mW
-        qFzS581omUDJk0vSk8HlDvFVnq0UVvI=
+        bh=4phvKJ0SZ2JhYuDOrybT7FClnROMhg12sNuEuEf1yK0=;
+        b=eJ81hEHgbXpojNbe3Kx9GDvdPxG2RSK71WpUiM5FjDJph6G9t/FJBwSlN5+mwdW6uUaRDZ
+        OpBvQ1b/AcIEBvZkVXjohFjIA9afChi4xmtOSau7PYcMayYa3g5U4PjlYQIuBUT+Al5hNO
+        Bubabj5UKpOEhcEk3J6X4hNxB1rBKUo=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 4A17EB164;
+        by mx2.suse.de (Postfix) with ESMTP id 7EDACADEE;
         Wed, 23 Sep 2020 13:44:54 +0000 (UTC)
 From:   Oliver Neukum <oneukum@suse.com>
 To:     himadrispandya@gmail.com, gregKH@linuxfoundation.org,
         stern@rowland.harvard.edu, linux-usb@vger.kernel.org
 Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [RFC 07/14] Revert "USB: legousbtower: use usb_control_msg_recv()"
-Date:   Wed, 23 Sep 2020 15:43:41 +0200
-Message-Id: <20200923134348.23862-8-oneukum@suse.com>
+Subject: [RFC 08/14] USB: correct API of usb_control_msg_send/recv
+Date:   Wed, 23 Sep 2020 15:43:42 +0200
+Message-Id: <20200923134348.23862-9-oneukum@suse.com>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200923134348.23862-1-oneukum@suse.com>
 References: <20200923134348.23862-1-oneukum@suse.com>
@@ -37,132 +37,140 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit be40c366416bf6ff74b25fd02e38cb6eaba497d1.
-The API has to be changed.
+They need to specify how memory is to be allocated,
+as control messages need to work in contexts that require GFP_NOIO.
 
 Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- drivers/usb/misc/legousbtower.c | 60 ++++++++++++++++++++++++++++-------------
- 1 file changed, 41 insertions(+), 19 deletions(-)
+ drivers/usb/core/message.c | 25 ++++++++++++++++---------
+ include/linux/usb.h        |  6 ++++--
+ 2 files changed, 20 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
-index c3583df4c324..f922544056de 100644
---- a/drivers/usb/misc/legousbtower.c
-+++ b/drivers/usb/misc/legousbtower.c
-@@ -308,9 +308,15 @@ static int tower_open(struct inode *inode, struct file *file)
- 	int subminor;
- 	int retval = 0;
- 	struct usb_interface *interface;
--	struct tower_reset_reply reset_reply;
-+	struct tower_reset_reply *reset_reply;
- 	int result;
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index 1580694e3b95..f4107b9e8c38 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -174,6 +174,7 @@ EXPORT_SYMBOL_GPL(usb_control_msg);
+  * @size: length in bytes of the data to send
+  * @timeout: time in msecs to wait for the message to complete before timing
+  *	out (if 0 the wait is forever)
++ * @memflags: the flags for memory allocation for buffers
+  *
+  * Context: !in_interrupt ()
+  *
+@@ -196,7 +197,8 @@ EXPORT_SYMBOL_GPL(usb_control_msg);
+  */
+ int usb_control_msg_send(struct usb_device *dev, __u8 endpoint, __u8 request,
+ 			 __u8 requesttype, __u16 value, __u16 index,
+-			 const void *driver_data, __u16 size, int timeout)
++			 const void *driver_data, __u16 size, int timeout,
++			 gfp_t memflags)
+ {
+ 	unsigned int pipe = usb_sndctrlpipe(dev, endpoint);
+ 	int ret;
+@@ -206,7 +208,7 @@ int usb_control_msg_send(struct usb_device *dev, __u8 endpoint, __u8 request,
+ 		return -EINVAL;
  
-+	reset_reply = kmalloc(sizeof(*reset_reply), GFP_KERNEL);
-+	if (!reset_reply) {
-+		retval = -ENOMEM;
-+		goto exit;
-+	}
-+
- 	nonseekable_open(inode, file);
- 	subminor = iminor(inode);
- 
-@@ -341,11 +347,15 @@ static int tower_open(struct inode *inode, struct file *file)
+ 	if (size) {
+-		data = kmemdup(driver_data, size, GFP_KERNEL);
++		data = kmemdup(driver_data, size, memflags);
+ 		if (!data)
+ 			return -ENOMEM;
  	}
+@@ -235,6 +237,7 @@ EXPORT_SYMBOL_GPL(usb_control_msg_send);
+  * @size: length in bytes of the data to be received
+  * @timeout: time in msecs to wait for the message to complete before timing
+  *	out (if 0 the wait is forever)
++ * @memflags: the flags for memory allocation for buffers
+  *
+  * Context: !in_interrupt ()
+  *
+@@ -263,7 +266,8 @@ EXPORT_SYMBOL_GPL(usb_control_msg_send);
+  */
+ int usb_control_msg_recv(struct usb_device *dev, __u8 endpoint, __u8 request,
+ 			 __u8 requesttype, __u16 value, __u16 index,
+-			 void *driver_data, __u16 size, int timeout)
++			 void *driver_data, __u16 size, int timeout,
++			 gfp_t memflags)
+ {
+ 	unsigned int pipe = usb_rcvctrlpipe(dev, endpoint);
+ 	int ret;
+@@ -272,7 +276,7 @@ int usb_control_msg_recv(struct usb_device *dev, __u8 endpoint, __u8 request,
+ 	if (!size || !driver_data || usb_pipe_type_check(dev, pipe))
+ 		return -EINVAL;
  
- 	/* reset the tower */
--	result = usb_control_msg_recv(dev->udev, 0,
--				      LEGO_USB_TOWER_REQUEST_RESET,
--				      USB_TYPE_VENDOR | USB_DIR_IN | USB_RECIP_DEVICE,
--				      0, 0,
--				      &reset_reply, sizeof(reset_reply), 1000);
-+	result = usb_control_msg(dev->udev,
-+				 usb_rcvctrlpipe(dev->udev, 0),
-+				 LEGO_USB_TOWER_REQUEST_RESET,
-+				 USB_TYPE_VENDOR | USB_DIR_IN | USB_RECIP_DEVICE,
-+				 0,
-+				 0,
-+				 reset_reply,
-+				 sizeof(*reset_reply),
-+				 1000);
- 	if (result < 0) {
- 		dev_err(&dev->udev->dev,
- 			"LEGO USB Tower reset control request failed\n");
-@@ -384,6 +394,7 @@ static int tower_open(struct inode *inode, struct file *file)
- 	mutex_unlock(&dev->lock);
+-	data = kmalloc(size, GFP_KERNEL);
++	data = kmalloc(size, memflags);
+ 	if (!data)
+ 		return -ENOMEM;
  
- exit:
-+	kfree(reset_reply);
- 	return retval;
+@@ -1085,7 +1089,8 @@ int usb_set_isoch_delay(struct usb_device *dev)
+ 			USB_REQ_SET_ISOCH_DELAY,
+ 			USB_DIR_OUT | USB_TYPE_STANDARD | USB_RECIP_DEVICE,
+ 			dev->hub_delay, 0, NULL, 0,
+-			USB_CTRL_SET_TIMEOUT);
++			USB_CTRL_SET_TIMEOUT,
++			GFP_NOIO);
  }
  
-@@ -742,7 +753,7 @@ static int tower_probe(struct usb_interface *interface, const struct usb_device_
- 	struct device *idev = &interface->dev;
- 	struct usb_device *udev = interface_to_usbdev(interface);
- 	struct lego_usb_tower *dev;
--	struct tower_get_version_reply get_version_reply;
-+	struct tower_get_version_reply *get_version_reply = NULL;
- 	int retval = -ENOMEM;
- 	int result;
+ /**
+@@ -1206,7 +1211,7 @@ int usb_clear_halt(struct usb_device *dev, int pipe)
+ 	result = usb_control_msg_send(dev, 0,
+ 				      USB_REQ_CLEAR_FEATURE, USB_RECIP_ENDPOINT,
+ 				      USB_ENDPOINT_HALT, endp, NULL, 0,
+-				      USB_CTRL_SET_TIMEOUT);
++				      USB_CTRL_SET_TIMEOUT, GFP_NOIO);
  
-@@ -787,25 +798,34 @@ static int tower_probe(struct usb_interface *interface, const struct usb_device_
- 	dev->interrupt_in_interval = interrupt_in_interval ? interrupt_in_interval : dev->interrupt_in_endpoint->bInterval;
- 	dev->interrupt_out_interval = interrupt_out_interval ? interrupt_out_interval : dev->interrupt_out_endpoint->bInterval;
+ 	/* don't un-halt or force to DATA0 except on success */
+ 	if (result)
+@@ -1574,7 +1579,8 @@ int usb_set_interface(struct usb_device *dev, int interface, int alternate)
+ 		ret = usb_control_msg_send(dev, 0,
+ 					   USB_REQ_SET_INTERFACE,
+ 					   USB_RECIP_INTERFACE, alternate,
+-					   interface, NULL, 0, 5000);
++					   interface, NULL, 0, 5000,
++					   GFP_NOIO);
  
-+	get_version_reply = kmalloc(sizeof(*get_version_reply), GFP_KERNEL);
-+	if (!get_version_reply) {
-+		retval = -ENOMEM;
-+		goto error;
-+	}
-+
- 	/* get the firmware version and log it */
--	result = usb_control_msg_recv(udev, 0,
--				      LEGO_USB_TOWER_REQUEST_GET_VERSION,
--				      USB_TYPE_VENDOR | USB_DIR_IN | USB_RECIP_DEVICE,
--				      0,
--				      0,
--				      &get_version_reply,
--				      sizeof(get_version_reply),
--				      1000);
--	if (!result) {
-+	result = usb_control_msg(udev,
-+				 usb_rcvctrlpipe(udev, 0),
-+				 LEGO_USB_TOWER_REQUEST_GET_VERSION,
-+				 USB_TYPE_VENDOR | USB_DIR_IN | USB_RECIP_DEVICE,
-+				 0,
-+				 0,
-+				 get_version_reply,
-+				 sizeof(*get_version_reply),
-+				 1000);
-+	if (result != sizeof(*get_version_reply)) {
-+		if (result >= 0)
-+			result = -EIO;
- 		dev_err(idev, "get version request failed: %d\n", result);
- 		retval = result;
- 		goto error;
+ 	/* 9.4.10 says devices don't need this and are free to STALL the
+ 	 * request if the interface only has one alternate setting.
+@@ -1710,7 +1716,8 @@ int usb_reset_configuration(struct usb_device *dev)
  	}
- 	dev_info(&interface->dev,
- 		 "LEGO USB Tower firmware version is %d.%d build %d\n",
--		 get_version_reply.major,
--		 get_version_reply.minor,
--		 le16_to_cpu(get_version_reply.build_no));
-+		 get_version_reply->major,
-+		 get_version_reply->minor,
-+		 le16_to_cpu(get_version_reply->build_no));
+ 	retval = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
+ 				      config->desc.bConfigurationValue, 0,
+-				      NULL, 0, USB_CTRL_SET_TIMEOUT);
++				      NULL, 0, USB_CTRL_SET_TIMEOUT,
++				      GFP_NOIO);
+ 	if (retval) {
+ 		usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
+ 		usb_enable_lpm(dev);
+@@ -2098,7 +2105,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
  
- 	/* we can register the device now, as it is ready */
- 	usb_set_intfdata(interface, dev);
-@@ -824,9 +844,11 @@ static int tower_probe(struct usb_interface *interface, const struct usb_device_
- 		 USB_MAJOR, dev->minor);
- 
- exit:
-+	kfree(get_version_reply);
- 	return retval;
- 
- error:
-+	kfree(get_version_reply);
- 	tower_delete(dev);
- 	return retval;
- }
+ 	ret = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
+ 				   configuration, 0, NULL, 0,
+-				   USB_CTRL_SET_TIMEOUT);
++				   USB_CTRL_SET_TIMEOUT, GFP_NOIO);
+ 	if (ret && cp) {
+ 		/*
+ 		 * All the old state is gone, so what else can we do?
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index a5460f08126e..7d72c4e0713c 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1804,10 +1804,12 @@ extern int usb_bulk_msg(struct usb_device *usb_dev, unsigned int pipe,
+ /* wrappers around usb_control_msg() for the most common standard requests */
+ int usb_control_msg_send(struct usb_device *dev, __u8 endpoint, __u8 request,
+ 			 __u8 requesttype, __u16 value, __u16 index,
+-			 const void *data, __u16 size, int timeout);
++			 const void *data, __u16 size, int timeout,
++			 gfp_t memflags);
+ int usb_control_msg_recv(struct usb_device *dev, __u8 endpoint, __u8 request,
+ 			 __u8 requesttype, __u16 value, __u16 index,
+-			 void *data, __u16 size, int timeout);
++			 void *data, __u16 size, int timeout,
++			 gfp_t memflags);
+ extern int usb_get_descriptor(struct usb_device *dev, unsigned char desctype,
+ 	unsigned char descindex, void *buf, int size);
+ extern int usb_get_status(struct usb_device *dev,
 -- 
 2.16.4
 
