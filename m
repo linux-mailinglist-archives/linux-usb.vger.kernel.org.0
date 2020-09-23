@@ -2,200 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA1227539D
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 10:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAA32753A3
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 10:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbgIWIr0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Sep 2020 04:47:26 -0400
-Received: from mail-eopbgr1320095.outbound.protection.outlook.com ([40.107.132.95]:59132
-        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        id S1726265AbgIWItK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Sep 2020 04:49:10 -0400
+Received: from mail-eopbgr130047.outbound.protection.outlook.com ([40.107.13.47]:33252
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726342AbgIWIrZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Sep 2020 04:47:25 -0400
+        id S1726244AbgIWItK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Sep 2020 04:49:10 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZsvDdBdmwj3a7nB0AZM29q1FxauDIrWZ1a8Te9eWaJeDBiG00pAPtfnLteDYJeZ5r0pv50inSIi+eYXVChllSSl2H//e2PXr3Hk8hGZx7wbMTZnVhgJV+IXH/pF305eXqxdr93Yitc0pVEeuLn//TNQe7vicZSQwsKwMwkF2enC5MZ2wW59GDaPXl+PH1/hJR6khChXBkkoa8t1gr/pkqhNkzNfA003+oUi4LE/7P0JdWyZgQf+lhzLPhS60f+6pn+dTLow5R0gVw0ZoSMRyTkKI7QDBHv4Ba27LdvMoCuXQhpP3ZzJGqo59W0Rd1yuvJnJbwKVFBCr8ww1MLcSTGw==
+ b=QshjauApqZKrTYWLnQ61YPR7Pv5IYFF952FQHPqq2559uPUxLbFZfIqz59An4/cCsv5e086xQXAXPGa1zdNZD8Ka7ZX+BuEm6CsFc99zrziYeI9ZdDyGaxPO08UsMUbN9+6ib4SeSFOOmDMuAzc7j6vO9bweVs3FlSkVrurBn0OM/tV19wn3MpzBj0+uew9UcQpF2FrjVA9UoQrrFkgJ3XSQVw6ZvCSwbm4qNTVJNPRVEqjQR+PJqztFx9+N2XJMlvXex6rzoPil5yb62qraCDFrgiRrNdCtzPgaUgq1CimedhIityL+oXylGS0m4V8paFCsFHTVQqEG9quofQ281w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8E/4XumCEPkVdnJ2/9Wkdgq+sUFXX/dONAeJdCPrTyM=;
- b=j1gTS75dV6SYKJELyb4nehsyZv+nQSVy4ADPIpkcLJxZOb2turucNd0Cds88WvsT5EFez3cYzAK7BFqSi5tap9cyI3Nbfzc53Gb1WbSchZOyv2dMdjtXVqjnmch1a0nvrI9H2B7/i6TdKYgQbm52cULBWvR8ka/graukpH/r+RJSlI/x9AyrNuMCv62343aQSaQPtmdl6kknuF0GertEjH7YJmHOcF/rRQB1szmduK+StxUKZXnn++uX6sePnFb8bT792rTCsMvz1fAA98NzoJbAOJsZDii3m1z4nf7Edxb6Chi5yNeFFvb+CLziKt2IyXOMLFKayoqCWC5Vu0X/gg==
+ bh=T/iAM6DadWaPI3yy4W0PNa+QYF7LKdAioCjLZ520Sbg=;
+ b=PE46e8nCSqpF/raCYH/RGIPN1XPGSk/Tz7f4VN0P17mEG6xwC3H2N/DWHUHd67j3FXwC4XpvBbfwbJFYwSSDzvcjc0Oe2CINct4NTCzOrmYzR5DWvL3v9sSO5y0xH4BdQtSgcKPWWQOkd3kWRVVeKB+nvJDu5fHBo6173yUhHGicsMEL+MoBrlhQzd+wZtqC1pwBOBZ0hTfLleAV3UzByDd68+xj/6Q0x7cGCJjZLmJZJrHsVhq3pMMEgzjrODB7ZthJa86cOSpgHPxb8M9UZGMz8qr6RWSZvKaGnugswFNI6DeaG8f33lYmZJ79UDamkK5OOJvnusp0DBZfx6IRtw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8E/4XumCEPkVdnJ2/9Wkdgq+sUFXX/dONAeJdCPrTyM=;
- b=btaS3d69Ma+UF6ZJfBba8CEOdh/jsHiYPSq2SCYsbz0FLUWxPMwRdKsurj19umoc79PuYFwtO0bI8lYDhCokU9TT0ZbqhwV4JIhMlBNITgiB9sTzGyQ0rDIpiRh6eeEk0Zijk5Uq4et5u4qZWXxJsQq4XO8uBKEzB2vgLQR/WNE=
-Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com (2603:1096:404:d5::22)
- by TY2PR01MB4506.jpnprd01.prod.outlook.com (2603:1096:404:119::19) with
+ bh=T/iAM6DadWaPI3yy4W0PNa+QYF7LKdAioCjLZ520Sbg=;
+ b=gzZnml35sH1w/MBCmLM1haXwO/vr5NbwZURrdujMg1FyfmXI771KwQZ9PC000epgqfdr62MUywRIEc/pD3kauGK3dh3M6KQFVblrDqczHS+iZGl7OlL+SIjUaYbc3c2WmeuMe17x0neoE6eGA1J1lnmol1vphizy/hzNRkaRCBk=
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
+ by VI1PR0402MB2911.eurprd04.prod.outlook.com (2603:10a6:800:b8::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.11; Wed, 23 Sep
- 2020 08:47:14 +0000
-Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com
- ([fe80::9055:525d:2d64:b625]) by TY2PR01MB3692.jpnprd01.prod.outlook.com
- ([fe80::9055:525d:2d64:b625%5]) with mapi id 15.20.3391.027; Wed, 23 Sep 2020
- 08:47:14 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>, Jann Horn <jannh@google.com>,
-        Jason Yan <yanaijie@huawei.com>, Arnd Bergmann <arnd@arndb.de>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
-        Saurav Girepunje <saurav.girepunje@gmail.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.20; Wed, 23 Sep
+ 2020 08:49:02 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::acd3:d354:3f34:3af7]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::acd3:d354:3f34:3af7%4]) with mapi id 15.20.3412.021; Wed, 23 Sep 2020
+ 08:49:02 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Andy Duan <fugang.duan@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: RE: [PATCH v4 04/11] usb: xhci-rcar: convert to
- readl_poll_timeout_atomic()
-Thread-Topic: [PATCH v4 04/11] usb: xhci-rcar: convert to
- readl_poll_timeout_atomic()
-Thread-Index: AQHWj97WeuTEVdT9kUKqeRXYZHMso6l16stw
-Date:   Wed, 23 Sep 2020 08:47:14 +0000
-Message-ID: <TY2PR01MB3692184CBB3C12EE8A02BA48D8380@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-References: <1600668815-12135-1-git-send-email-chunfeng.yun@mediatek.com>
- <1600668815-12135-4-git-send-email-chunfeng.yun@mediatek.com>
-In-Reply-To: <1600668815-12135-4-git-send-email-chunfeng.yun@mediatek.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH v3 5/6] arm64: dtsi: imx8mp: add usb nodes
+Thread-Topic: [PATCH v3 5/6] arm64: dtsi: imx8mp: add usb nodes
+Thread-Index: AQHWkM7DXkEXgbilUUGiAK82DqBrNKl12tgAgAAQB0A=
+Date:   Wed, 23 Sep 2020 08:49:02 +0000
+Message-ID: <VE1PR04MB6528E04C7D110000509B6D3C89380@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <1600771612-30727-1-git-send-email-jun.li@nxp.com>
+ <1600771612-30727-6-git-send-email-jun.li@nxp.com>
+ <20200923075040.GD25328@pengutronix.de>
+In-Reply-To: <20200923075040.GD25328@pengutronix.de>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: mediatek.com; dkim=none (message not signed)
- header.d=none;mediatek.com; dmarc=none action=none header.from=renesas.com;
-x-originating-ip: [124.210.22.195]
+authentication-results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 18b3fa72-7c64-4f94-2254-08d85f9d44f8
-x-ms-traffictypediagnostic: TY2PR01MB4506:
-x-microsoft-antispam-prvs: <TY2PR01MB45066FFE4117BA5D3D747F4FD8380@TY2PR01MB4506.jpnprd01.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: 291852a4-04bb-4899-e4fa-08d85f9d8549
+x-ms-traffictypediagnostic: VI1PR0402MB2911:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR0402MB291107D1EFEEC908E821D50E89380@VI1PR0402MB2911.eurprd04.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:8273;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wWpdmCbU7vfEl4OwptWsXKwncwUD0XVZ8JPDhwXEvuKofquo0sIT6NvZfb3LsFqwUv9KshOUxs66jJvxZyaj2H8xaeMosMXJmRo0AziziGDctEJwAV0XKx13rDROw+EwJ/MSuNQTwrHFxzRT/EpQXtxmfZ/mndYs1aAJ7jj+un/xZRhpfqKyfxyFo0/3G85HB98JxnKhtLNo1WFnjfnO/Wx1SezKjD0mu6b75b9VUreddoiVMPk+p9qzMv0+z8FLgzecEIrPJGgjKSXnozYurL6ylsJoLQqCx+gQvDe/UvSiuUYcEWYuQSc4zzJABbVYQXQExPV97hkMOtTHdwJzId/QNRbvBIkoDyJz6JHMJI1i+jBaphfCcamUIAMoW2qt
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3692.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(346002)(376002)(396003)(39860400002)(26005)(52536014)(86362001)(2906002)(6506007)(186003)(7696005)(8936002)(5660300002)(6916009)(8676002)(55236004)(55016002)(9686003)(33656002)(71200400001)(478600001)(54906003)(316002)(7416002)(66556008)(66446008)(4326008)(64756008)(66946007)(76116006)(83380400001)(66476007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: vhCdG7K9t0Jz8grsOxqpQwdcxmZqZ6gTk4qYmKJY2k55L9DoBRfsru6S1DGvKudCGTGkKN/OSp7DaPw4XGgH79/wzOt+Q0yXvULn5CJVNH2paSnErvakn4RyLsTZTeiBqLQxFheZUOfDY6/dsLFHlRsli2mfozWoxuDKXcAlq5sPb4i3ijlUjXRNtzg70kIDsKH1GPYFK4vtyAQN2mCGBmc/hLsfMoP3clX0BnrPn8ez92A8WnqeqkhRHnbSNv4DF934Pm4urM1EQsKZ4lflgtawlBUm/5/kOXN4xVZ1i5F2M6tc0yDTrFTXoouV9q6OEcu9ELP2zKAQrILaIZPUkNHRwTAHzEQNb6UdVjvqwTjllQ+9Oe3AOEC2Ibv0GWAC9NXTbKr7mLuHYlENuNKpSxlyrC8xeOtdtFX634Fu3PV//ERF1/qLAcDJz6pqCebUzqj1dKyuueHRFi2upszjtg0X2mWTEGHqES1MCfJRnkV292JBTOjF2MoEOsbkTFOBEeSIbcgfujguoxSYKVsMxMv0dLEdeQDcbIsjSVzGs6k77K8Hd/V+gEmel7wnO/6ddCviJY2axw6tv+/a6QO7BTsc6ZC7QFyqGsLxe3w78NY9D9iqfO8kfVezEOXUl1bavovn5n9nGPz7sjZFqYdB1w==
-x-ms-exchange-transport-forked: True
+x-microsoft-antispam-message-info: p4sY4n5OZlpG5o3tmTrnWdo5f9EeDzi3w0aJVkZtMsejG/soDeRLph6GTTK5MOoRcrIpaCyFWLVcRZgfmges38x7dCXkBfXCLt4s5vdYBzKkXmEBtNqx1xOwlYInkaM6rqj5rXUzRCcAKcuqp0kmdBf+a+v7vss/iaajnalqGvSuMSwRYlnwf++BZGydGkwVRcd8A67iy+WpulSBH2ucsCTc9XMEu4mK68bx0mztiAiDjcPqe2GHYigIaJLw60Fy7UJb/IJlWOuD+xXQ47FQkL8YBj0uDI16sLeELuHFptCbb+rCUeg0uTJxs1nX4+tycceaYbVErqUtqCoaiFJFyZcsZogTf4hQ99xnYZYRLCf89hCMoGWcQeDkK57uLMZibsO2ukq0ahN263bssytLA2ABMv/CpkIDYxV+xARP3kv+QPg7kbx6CHlYtFm4brYKRMpWWTCSbWuteJuLumr/8urCQIH0Ysn0xgYyxKNJP3d8S+8Gw654Jgw+E1ebZ8ms
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(346002)(376002)(366004)(136003)(52536014)(53546011)(8676002)(76116006)(45080400002)(44832011)(186003)(66476007)(66556008)(478600001)(966005)(26005)(8936002)(55016002)(2906002)(6916009)(64756008)(66946007)(7416002)(4326008)(6506007)(66446008)(316002)(83080400001)(71200400001)(83380400001)(33656002)(9686003)(54906003)(86362001)(7696005)(5660300002)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: SZLZkP6086y806Qk3lN3fMSc/C6+Q/TeTJxpUSdHGTlrfLF5y5+tx2jdorTQsKrY/6dgzbISX6AhZNsLxypjMgsDqEm07/URIHvWsyUkN1VmbASp0t2GLd2vxGeUaVlD6XS72QbeOzl6hnWnQWFwVd+XpHdm2vn/YonPJVX7RToO94WomKnALMn/0obq71uG3PkIH+nespj5xp57q6/6IwBshWn1JjVPhM3VQU2OS610UIv7fv9zFp+C9VtaENDML0IDiUY0AR1u+5hApjTE9wXoL4FfTpcQrk77ljFGStTbtsw0j+J/3VdyFNfyXv72GUEVDHNsGPFLd8f/0KtTapWbDgdOcJtt375FEw0/piN4Iz9QvOUXv0GObdauFXck78XS9ngqKSEo4MWoxi2bu8D1WKGxhx5z/JUaluSpyEyukkfb6jFiqW0pblds7DrtW8JCUYEYzvxeOzLTACBf833KmTcFVWWuM9PAkVCKJ5U12dw5dkjX25xkjFztH50IBgUrwdy8gsNTqxG9cgd6EpDIJExwvyzYLtkry6XGJ1uukQ1rIaqz7iUAB1QweFFxFrV4gJviKjOgLCCaR3TK+MmPydICS+2RuX1TmekAANjbmwTNoekvU3YcYaX0IlBbzaGmH3QfUsZxDVbcAT1Nfw==
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3692.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18b3fa72-7c64-4f94-2254-08d85f9d44f8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2020 08:47:14.2213
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 291852a4-04bb-4899-e4fa-08d85f9d8549
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2020 08:49:02.2792
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: n49f2EA9kreUV3Qeb9pOFWVNnsSEgZNg4tncohVzEaW1fn3FHMzyfR/hbzgnsRBNt6FGu1l1xDZ70caTVi/IJ9NPFqY7aQfAF6nyum/KQfYaQSW1U/ublyEbal1TLm0h
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB4506
+X-MS-Exchange-CrossTenant-userprincipalname: uk/m9NRTWe0HKum+yMUxiAs2sC6ez+gRiOIN9IkpiF9LS9jkN/xlRE0vGqwMzxsX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2911
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Chungeng,
 
-Thank you for the patch!
 
-> From: Chunfeng Yun, Sent: Monday, September 21, 2020 3:13 PM
+> -----Original Message-----
+> From: Sascha Hauer <s.hauer@pengutronix.de>
+> Sent: Wednesday, September 23, 2020 3:51 PM
+> To: Jun Li <jun.li@nxp.com>
+> Cc: robh+dt@kernel.org; shawnguo@kernel.org; balbi@kernel.org;
+> mathias.nyman@intel.com; gregkh@linuxfoundation.org;
+> kernel@pengutronix.de; festevam@gmail.com; dl-linux-imx
+> <linux-imx@nxp.com>; Anson Huang <anson.huang@nxp.com>; Aisheng Dong
+> <aisheng.dong@nxp.com>; Peng Fan <peng.fan@nxp.com>; Andy Duan
+> <fugang.duan@nxp.com>; Joakim Zhang <qiangqing.zhang@nxp.com>; Horia
+> Geanta <horia.geanta@nxp.com>; linux-usb@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org
+> Subject: Re: [PATCH v3 5/6] arm64: dtsi: imx8mp: add usb nodes
 >=20
-> Use readl_poll_timeout_atomic() to simplify code
+> On Tue, Sep 22, 2020 at 06:46:51PM +0800, Li Jun wrote:
+> > imx8mp integrates 2 identical dwc3 based USB3 controllers and Synopsys
+> > phys, each instance has additional wakeup logic to support low power
+> > mode, so the glue layer need a node with dwc3 core sub node.
+> >
+> > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > ---
+> >  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 88
+> > +++++++++++++++++++++++++++++++
+> >  1 file changed, 88 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > index 9de2aa1..1b7ed4c 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > +		usb3_1: usb@32f10108 {
+> > +			compatible =3D "fsl,imx8mp-dwc3";
+> > +			reg =3D <0x32f10108 0x8>;
+> > +			clocks =3D <&clk IMX8MP_CLK_HSIO_ROOT>,
+> > +				 <&clk IMX8MP_CLK_USB_ROOT>;
+> > +			clock-names =3D "hsio", "suspend";
+> > +			assigned-clocks =3D <&clk IMX8MP_CLK_HSIO_AXI_SRC>;
 >=20
-> Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v4: changes
->     1. remove unnecessary parentheses suggested by Yoshihiro
->     2. fix the wrong return value suggested by Yoshihiro & Daniel
->=20
-> v2~v3: no changes
-> ---
->  drivers/usb/host/xhci-rcar.c | 43 ++++++++++++--------------------------=
------
->  1 file changed, 12 insertions(+), 31 deletions(-)
->=20
-> diff --git a/drivers/usb/host/xhci-rcar.c b/drivers/usb/host/xhci-rcar.c
-> index c1025d3..1bc4fe7 100644
-> --- a/drivers/usb/host/xhci-rcar.c
-> +++ b/drivers/usb/host/xhci-rcar.c
-> @@ -6,6 +6,7 @@
->   */
->=20
->  #include <linux/firmware.h>
-> +#include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/of.h>
-> @@ -127,8 +128,7 @@ static int xhci_rcar_download_firmware(struct usb_hcd=
- *hcd)
->  	void __iomem *regs =3D hcd->regs;
->  	struct xhci_plat_priv *priv =3D hcd_to_xhci_priv(hcd);
->  	const struct firmware *fw;
-> -	int retval, index, j, time;
-> -	int timeout =3D 10000;
-> +	int retval, index, j;
->  	u32 data, val, temp;
->  	u32 quirks =3D 0;
->  	const struct soc_device_attribute *attr;
-> @@ -166,32 +166,19 @@ static int xhci_rcar_download_firmware(struct usb_h=
-cd *hcd)
->  		temp |=3D RCAR_USB3_DL_CTRL_FW_SET_DATA0;
->  		writel(temp, regs + RCAR_USB3_DL_CTRL);
->=20
-> -		for (time =3D 0; time < timeout; time++) {
-> -			val =3D readl(regs + RCAR_USB3_DL_CTRL);
-> -			if ((val & RCAR_USB3_DL_CTRL_FW_SET_DATA0) =3D=3D 0)
-> -				break;
-> -			udelay(1);
-> -		}
-> -		if (time =3D=3D timeout) {
-> -			retval =3D -ETIMEDOUT;
-> +		retval =3D readl_poll_timeout_atomic(regs + RCAR_USB3_DL_CTRL,
-> +				val, !(val & RCAR_USB3_DL_CTRL_FW_SET_DATA0),
-> +				1, 10000);
-> +		if (retval < 0)
->  			break;
-> -		}
->  	}
->=20
->  	temp =3D readl(regs + RCAR_USB3_DL_CTRL);
->  	temp &=3D ~RCAR_USB3_DL_CTRL_ENABLE;
->  	writel(temp, regs + RCAR_USB3_DL_CTRL);
->=20
-> -	for (time =3D 0; time < timeout; time++) {
-> -		val =3D readl(regs + RCAR_USB3_DL_CTRL);
-> -		if (val & RCAR_USB3_DL_CTRL_FW_SUCCESS) {
-> -			retval =3D 0;
-> -			break;
-> -		}
-> -		udelay(1);
-> -	}
-> -	if (time =3D=3D timeout)
-> -		retval =3D -ETIMEDOUT;
-> +	retval =3D readl_poll_timeout_atomic((regs + RCAR_USB3_DL_CTRL),
+> In Linux-5.9-rc6 this clock doesn't exist anymore. Should be
+> IMX8MP_CLK_HSIO_AXI
 
-We can also remove these unnecessary parentheses like below.
+Will change.
 
-+	retval =3D readl_poll_timeout_atomic(regs + RCAR_USB3_DL_CTRL,
+>=20
+> > +			assigned-clock-parents =3D <&clk IMX8MP_SYS_PLL2_500M>;
+> > +			assigned-clock-rates =3D <500000000>;
+> > +			interrupts =3D <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
+> > +			#address-cells =3D <1>;
+> > +			#size-cells =3D <1>;
+> > +			ranges;
+> > +			status =3D "disabled";
+> > +
+> > +			usb_dwc3_1: dwc3@38200000 {
+> > +				compatible =3D "snps,dwc3";
+> > +				reg =3D <0x38200000 0x10000>;
+> > +				clocks =3D <&clk IMX8MP_CLK_HSIO_AXI>,
+> > +					 <&clk IMX8MP_CLK_USB_CORE_REF>,
+> > +					 <&clk IMX8MP_CLK_USB_ROOT>;
+> > +				clock-names =3D "bus_early", "ref", "suspend";
+> > +				assigned-clocks =3D <&clk IMX8MP_CLK_HSIO_AXI>;
+> > +				assigned-clock-parents =3D <&clk IMX8MP_SYS_PLL2_500M>;
+> > +				assigned-clock-rates =3D <500000000>;
+> > +				interrupts =3D <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
+> > +				phys =3D <&usb3_phy1>, <&usb3_phy1>;
+> > +				phy-names =3D "usb2-phy", "usb3-phy";
+> > +				snps,dis-u2-freeclk-exists-quirk;
+> > +				xhci-64bit-support-disable;
+> > +				status =3D "disabled";
+>=20
+> Does it make sense for a board to enable the parent node and leave this o=
+ne
+> disabled? If not you can drop this status =3D "disabled" here.
 
-After fixed this:
+OK, will drop it.
 
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-
-Best regards,
-Yoshihiro Shimoda
-
+Thanks
+Li Jun
+>=20
+> Sascha
+>=20
+> --
+> Pengutronix e.K.                           |                             =
+|
+> Steuerwalder Str. 21                       |
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.pe
+> ngutronix.de%2F&amp;data=3D02%7C01%7Cjun.li%40nxp.com%7Cadbbbfe2edec4cca1
+> 38908d85f956382%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6373644425
+> 20571896&amp;sdata=3D07ku8kTQCv8lv8qdRiOcU3CX4lly3503LO4bUDIbjow%3D&amp;r
+> eserved=3D0  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
+|
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
+|
