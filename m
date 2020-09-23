@@ -2,123 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D812A275BE3
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 17:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192CC275D5D
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 18:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbgIWPcq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Sep 2020 11:32:46 -0400
-Received: from lan.nucleusys.com ([92.247.61.126]:60650 "EHLO
-        zztop.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726265AbgIWPcq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Sep 2020 11:32:46 -0400
-X-Greylist: delayed 2630 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 11:32:45 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4DYJKE8l8EdESOXVwsp+gos89esEsmURD8s5B4Bsfec=; b=RSQ+DQS4PaLen4FanX1zUpusmC
-        OHWXejqIFItnVTGDp+b/dg12zVaDRxod2M2lHqBTd1wuU9VdN4tAlPOYuXIbLyW6webaKVGsHb4sU
-        +Zv3/lgtW70dj7YK6MLfjmP/UtcK+EgPmtQCn+YK7eXj64c571iIXke3Ne1v7OP9dCYU=;
-Received: from [94.26.108.4] (helo=karbon)
-        by zztop.nucleusys.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <petkan@nucleusys.com>)
-        id 1kL64P-0005m4-T2; Wed, 23 Sep 2020 17:48:34 +0300
-Date:   Wed, 23 Sep 2020 17:48:32 +0300
-From:   Petko Manolov <petkan@nucleusys.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Himadri Pandya <himadrispandya@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, pankaj.laxminarayan.bharadiya@intel.com,
-        keescook@chromium.org, yuehaibing@huawei.com, ogiannou@gmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH 3/4] net: usb: rtl8150: use usb_control_msg_recv() and
- usb_control_msg_send()
-Message-ID: <20200923144832.GA11151@karbon>
-References: <20200923090519.361-1-himadrispandya@gmail.com>
- <20200923090519.361-4-himadrispandya@gmail.com>
- <1600856557.26851.6.camel@suse.com>
+        id S1726780AbgIWQ0m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Sep 2020 12:26:42 -0400
+Received: from out28-101.mail.aliyun.com ([115.124.28.101]:42822 "EHLO
+        out28-101.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726178AbgIWQ0k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Sep 2020 12:26:40 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08793781|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0310931-0.0113857-0.957521;FP=0|0|0|0|0|-1|-1|-1;HT=e01a16378;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.IbH0qkb_1600878388;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.IbH0qkb_1600878388)
+          by smtp.aliyun-inc.com(10.147.41.187);
+          Thu, 24 Sep 2020 00:26:34 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     vkoul@kernel.org, kishon@ti.com, gregkh@linuxfoundation.org,
+        balbi@kernel.org, paul@crapouillou.net
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: [PATCH v6 0/2] Use the generic PHY framework for Ingenic USB PHY.
+Date:   Thu, 24 Sep 2020 00:25:58 +0800
+Message-Id: <20200923162600.44105-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1600856557.26851.6.camel@suse.com>
-X-Spam-Score: -1.0 (-)
-X-Spam-Report: Spam detection software, running on the system "zztop.nucleusys.com",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  On 20-09-23 12:22:37, Oliver Neukum wrote: > Am Mittwoch,
-   den 23.09.2020, 14:35 +0530 schrieb Himadri Pandya: > > Hi, > > > Many usage
-    of usb_control_msg() do not have proper error check on return > > [...] 
- Content analysis details:   (-1.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-09-23 12:22:37, Oliver Neukum wrote:
-> Am Mittwoch, den 23.09.2020, 14:35 +0530 schrieb Himadri Pandya:
-> 
-> Hi,
-> 
-> > Many usage of usb_control_msg() do not have proper error check on return
-> > value leaving scope for bugs on short reads. New usb_control_msg_recv()
-> > and usb_control_msg_send() nicely wraps usb_control_msg() with proper
-> > error check. Hence use the wrappers instead of calling usb_control_msg()
-> > directly.
-> > 
-> > Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
-> Nacked-by: Oliver Neukum <oneukum@suse.com>
-> 
-> > ---
-> >  drivers/net/usb/rtl8150.c | 32 ++++++--------------------------
-> >  1 file changed, 6 insertions(+), 26 deletions(-)
-> > 
-> > diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
-> > index 733f120c852b..e3002b675921 100644
-> > --- a/drivers/net/usb/rtl8150.c
-> > +++ b/drivers/net/usb/rtl8150.c
-> > @@ -152,36 +152,16 @@ static const char driver_name [] = "rtl8150";
-> >  */
-> >  static int get_registers(rtl8150_t * dev, u16 indx, u16 size, void *data)
-> >  {
-> > -	void *buf;
-> > -	int ret;
-> > -
-> > -	buf = kmalloc(size, GFP_NOIO);
-> 
-> GFP_NOIO is used here for a reason. You need to use this helper
-> while in contexts of error recovery and runtime PM.
-> 
-> > -	if (!buf)
-> > -		return -ENOMEM;
-> > -
-> > -	ret = usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
-> > -			      RTL8150_REQ_GET_REGS, RTL8150_REQT_READ,
-> > -			      indx, 0, buf, size, 500);
-> > -	if (ret > 0 && ret <= size)
-> > -		memcpy(data, buf, ret);
-> > -	kfree(buf);
-> > -	return ret;
-> > +	return usb_control_msg_recv(dev->udev, 0, RTL8150_REQ_GET_REGS,
-> > +				    RTL8150_REQT_READ, indx, 0, data,
-> > +				    size, 500);
-> 
-> This internally uses kmemdup() with GFP_KERNEL.
-> You cannot make this change. The API does not support it.
-> I am afraid we will have to change the API first, before more
-> such changes are done.
+v3->v4:
+Only add new generic-PHY driver, without removing the old one. Because the
+jz4740-musb driver is not ready to use the generic PHY framework. When the
+jz4740-musb driver is modified to use the generic PHY framework, the old
+jz4770-phy driver can be "retired".
 
-One possible fix is to add yet another argument to usb_control_msg_recv(), which 
-would be the GFP_XYZ flag to pass on to kmemdup().  Up to Greg, of course.
+v4->v5:
+1.Add an extra blank line between "devm_of_phy_provider_register" and "return".
+2.Remove unnecessary "phy_set_drvdata".
+3.Add Paul Cercueil's Reviewed-by.
 
+v5->v6:
+1.Revert the removal of "phy_set_drvdata" in v5, removing "phy_set_drvdata" will
+  cause a kernel panic on CI20.
+  Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
+2.Rewrite the macro definitions, replace the original code with "FIELD_PREP()"
+  and "u32p_replace_bits()" according to Vinod Koul's suggestion.
 
-cheers,
-Petko
+周琰杰 (Zhou Yanjie) (2):
+  USB: PHY: JZ4770: Remove unnecessary function calls.
+  PHY: Ingenic: Add USB PHY driver using generic PHY framework.
+
+ drivers/phy/Kconfig                   |   1 +
+ drivers/phy/Makefile                  |   1 +
+ drivers/phy/ingenic/Kconfig           |  12 ++
+ drivers/phy/ingenic/Makefile          |   2 +
+ drivers/phy/ingenic/phy-ingenic-usb.c | 378 ++++++++++++++++++++++++++++++++++
+ drivers/usb/phy/phy-jz4770.c          |   2 +-
+ 6 files changed, 395 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/phy/ingenic/Kconfig
+ create mode 100644 drivers/phy/ingenic/Makefile
+ create mode 100644 drivers/phy/ingenic/phy-ingenic-usb.c
+
+-- 
+2.11.0
+
