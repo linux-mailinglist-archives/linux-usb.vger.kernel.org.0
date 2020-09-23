@@ -2,133 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA02D27596A
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 16:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0769F275996
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 16:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbgIWOI0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Sep 2020 10:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
+        id S1726638AbgIWONA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Sep 2020 10:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726526AbgIWOI0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Sep 2020 10:08:26 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9E2C0613CE;
-        Wed, 23 Sep 2020 07:08:26 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j2so161571wrx.7;
-        Wed, 23 Sep 2020 07:08:26 -0700 (PDT)
+        with ESMTP id S1726130AbgIWONA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Sep 2020 10:13:00 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D422C0613CE;
+        Wed, 23 Sep 2020 07:13:00 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id n13so19955342edo.10;
+        Wed, 23 Sep 2020 07:13:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=googlemail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4uOSBvkeFCtt0jtghI6Iaa1Oo8+32MdaZFs6lvK60t8=;
-        b=hIsdByJzmuRZb2kuHY+GIbDpMgWlvIUBRMTXmdV1C4IB9eRgcQy/OMVs2LdsuXRALc
-         OPjiJGytcYJ+AqzYQ5+tx7xtLh+HPD1VxW1yvp/tZNOtCvSnydgapNZUVaFkMSapnkUV
-         dn9rUUzdxM28cMyXFHXi4gXE32x+JjKe7gj8YX07quIKnNYjNcsA1Hj71H1/YIqtk+An
-         vqMD9ip4rhlImUBqeu7EzMTx6OQe7a94hq6HBB21V+1x2Kk7PgLgb+t2XF8Njo6T8Qlv
-         QgC7XqKrVAt5bRwL5i4A/pXjwpHdnhvjfMKRd9HDdfGzo52JbJhYPkcUFq8/+7FfOHMB
-         7HJg==
+        bh=mdUO4rdr50MnV1BrXIxomFi8tZf9S0Tgpb4dKKT+L6M=;
+        b=qlSdUE8aJwkzEyqt8pukPEy+fB5tlgAI1XHvSUkYNRGQisCEteg2hs4Iepm4PZeiwU
+         8m+mkoyE/1pOHPh7PVzJqGr+Uc1dzry7NtHAWfhCmKGc8hHQvDurueKu923retm890hN
+         iUUkliEUdO2O5eisL4i1tikUqshX4h/nMgTvoWuolVnOFfGW8F0JUSLH22XSeOpWX95M
+         C8ZtUMOk0VeCYdodJ1WZg/Qrargt6j7qhP9nm/UP1x+GoINIVXFNyhYpknpqt62ZHT1c
+         +faQbRuldVK+eF113zrmX2nsDbtI2JB3eISYl3NeOdrw2tFtrzz9WcAsVTLKRSpCiJb/
+         jV6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4uOSBvkeFCtt0jtghI6Iaa1Oo8+32MdaZFs6lvK60t8=;
-        b=OXNimDKPLSN5JT13A7joN6I+TTlH7+Cggq0KGMe0t4tjaXjnNq9jLjQNm1ecqwRJcF
-         OE0ElszMFiSGwLJWUAi/AyxjMXXUMj9ukuj4EXXDDzTGEqjKLkP5ugO5AAhlltwj5XkX
-         DIf4NGI1QCCwb7wsrrMNM1HnRespiS63ylRAAOVCQvTae1kDubvzvBM0aqLSq2RzsoGl
-         rqRGkwbnxTVGtwsZD5CdBbqfhxua0FCWd1QY5gJS1vz9t4fs1clEADazd/4ikc90MElC
-         J/Az2r1kgkJyPtR9/aGauRBh8uUxvQE/cfZnLO8UXWOhONPk3+dEi+HABbQX9KMJDCXU
-         ztBw==
-X-Gm-Message-State: AOAM531KsiDWC6xcRThBmHyK6WaYeyWZ/rDNy62sLdOG87rWnXOA+/1o
-        RZbdVBH/Y+qDXsmJdSP/sd0wPc/S4KbkcouDE68=
-X-Google-Smtp-Source: ABdhPJwfifO44HBhduMMKEMbLd2291rc6s++c2z9Q98+xivVO3BJPwzCQSMyA1phXsZQ4fDrwn6LpOEPvUyk8VM1Cs4=
-X-Received: by 2002:adf:9b8b:: with SMTP id d11mr1141570wrc.71.1600870104795;
- Wed, 23 Sep 2020 07:08:24 -0700 (PDT)
+        bh=mdUO4rdr50MnV1BrXIxomFi8tZf9S0Tgpb4dKKT+L6M=;
+        b=jaba29vkYl8M9IUMDDPoCrfWr11lT2qjmxQ/Vm7SNO0IHqarPJWKyo/GiLGDyHCzGO
+         Blel+nZZAw+IONG/JiKpAQ5LWH63Jy7Nsac+NRsFjSAdkMMrJbFnR4iqmJZfa0v7zejL
+         ujLLupt+EjRBfbyuFmvsredRLDJyI1ZR1+VIK6ouddu1SmuXlzGH/bveY5I4BNT2Hdh3
+         1H8Z2AWZhF4GBJ3BoN9KobSzNBCqwqmSTD9ueqmdeVP4Izy0uSQothTZu4hzuTA1KQPn
+         74otT6gj3NPRl/xABuOMBzrTSYUO2J9dNwkx51UxK55UeRUgezmKvXgCb37DdWHrdYLM
+         iyqQ==
+X-Gm-Message-State: AOAM533+ND1A9qtaMrGU3KBH2DKazXmEhukZSEXiafql6aMflXKEvFQW
+        479NEpc60zxrEXt7uFAEppiUD02pLNNY7ySsKVK76JbvJSk=
+X-Google-Smtp-Source: ABdhPJz60qOETLJanuZwtWyp2XoZ9fAx9QVXf7xhJCsy78hkEewN3uePBgTaDz3zT33MlvorJbD0T0a+uFA3r34Egmw=
+X-Received: by 2002:aa7:da42:: with SMTP id w2mr9728548eds.287.1600870378866;
+ Wed, 23 Sep 2020 07:12:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200923090519.361-1-himadrispandya@gmail.com>
- <20200923090519.361-2-himadrispandya@gmail.com> <20200923102425.GC3154647@kroah.com>
-In-Reply-To: <20200923102425.GC3154647@kroah.com>
-From:   Himadri Pandya <himadrispandya@gmail.com>
-Date:   Wed, 23 Sep 2020 19:38:13 +0530
-Message-ID: <CAOY-YVk3Vio=jKndTMnn66h-dZAnFUpZU701KqvdYh51ZQFk+g@mail.gmail.com>
-Subject: Re: [PATCH 1/4] net: usbnet: use usb_control_msg_recv() and usb_control_msg_send()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        pankaj.laxminarayan.bharadiya@intel.com,
-        Kees Cook <keescook@chromium.org>, yuehaibing@huawei.com,
-        petkan@nucleusys.com, ogiannou@gmail.com,
-        USB list <linux-usb@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
+References: <20200917065949.3476-1-narmstrong@baylibre.com> <20200917065949.3476-4-narmstrong@baylibre.com>
+In-Reply-To: <20200917065949.3476-4-narmstrong@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 23 Sep 2020 16:12:47 +0200
+Message-ID: <CAFBinCCqqT_pNurE0Lj5Md0gdi+PU7NwnspsmFkag5y9cw7bqA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] usb: dwc-meson-g12a: Add support for USB on AXG SoCs
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     khilman@baylibre.com, balbi@kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 3:54 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Sep 23, 2020 at 02:35:16PM +0530, Himadri Pandya wrote:
-> > Potential incorrect use of usb_control_msg() has resulted in new wrapper
-> > functions to enforce its correct usage with proper error check. Hence
-> > use these new wrapper functions instead of calling usb_control_msg()
-> > directly.
-> >
-> > Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
-> > ---
-> >  drivers/net/usb/usbnet.c | 46 ++++------------------------------------
-> >  1 file changed, 4 insertions(+), 42 deletions(-)
-> >
-> > diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> > index 2b2a841cd938..a38a85bef46a 100644
-> > --- a/drivers/net/usb/usbnet.c
-> > +++ b/drivers/net/usb/usbnet.c
-> > @@ -1982,64 +1982,26 @@ EXPORT_SYMBOL(usbnet_link_change);
-> >  static int __usbnet_read_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
-> >                            u16 value, u16 index, void *data, u16 size)
-> >  {
-> > -     void *buf = NULL;
-> > -     int err = -ENOMEM;
-> > -
-> >       netdev_dbg(dev->net, "usbnet_read_cmd cmd=0x%02x reqtype=%02x"
-> >                  " value=0x%04x index=0x%04x size=%d\n",
-> >                  cmd, reqtype, value, index, size);
-> >
-> > -     if (size) {
-> > -             buf = kmalloc(size, GFP_KERNEL);
-> > -             if (!buf)
-> > -                     goto out;
-> > -     }
-> > -
-> > -     err = usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
-> > -                           cmd, reqtype, value, index, buf, size,
-> > +     return usb_control_msg_recv(dev->udev, 0,
-> > +                           cmd, reqtype, value, index, data, size,
-> >                             USB_CTRL_GET_TIMEOUT);
-> > -     if (err > 0 && err <= size) {
-> > -        if (data)
-> > -            memcpy(data, buf, err);
-> > -        else
-> > -            netdev_dbg(dev->net,
-> > -                "Huh? Data requested but thrown away.\n");
-> > -    }
-> > -     kfree(buf);
-> > -out:
-> > -     return err;
-> >  }
->
-> Now there is no real need for these wrapper functions at all, except for
-> the debugging which I doubt anyone needs anymore.
->
-> So how about just deleting these and calling the real function instead?
->
+Hi Neil,
 
-Yes, that would be a better thing to do.
+thanks for updating this patch!
 
-Thanks,
-Himadri
-
-> thanks,
+On Thu, Sep 17, 2020 at 9:00 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
 >
-> greg k-h
+> The Amlogic AXG is close to the GXL Glue but with a single OTG PHY.
+>
+> It needs the same init sequence as GXL & GXM, but it seems it doesn't need
+> the host disconnect bit.
+>
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
