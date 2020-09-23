@@ -2,35 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41AB2758FF
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 15:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D6C2758FC
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 15:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbgIWNo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Sep 2020 09:44:28 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33516 "EHLO mx2.suse.de"
+        id S1726516AbgIWNoZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Sep 2020 09:44:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33520 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726652AbgIWNoU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Sep 2020 09:44:20 -0400
+        id S1726648AbgIWNoV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Sep 2020 09:44:21 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1600868657;
+        t=1600868658;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=9gBWBURTzUv0WnRJZJxZd+G+ZLDTK1dLpxjaFBsX294=;
-        b=qLTJBhWTRGwDnFwbz+uednDwW5l0+SlJxjecgGWX6GU0cXMDyuS1mQYh2t2WVac+bnXQe5
-        l9oIfbDvLSIjwasc1XU166Zuz26FyXwj2HunCO//yFWHvymPDfzCnNZRbdPd9lvkN+DUpt
-        omI690ikToFWDvCUli/tYusSdozwycc=
+        bh=A0SLqdQOgt7r1yxVF4MnON32ZU4vIOB9jRiWgTSt+L4=;
+        b=esDU2k41bvxKjjzDDZsqXmy+Riu2rJ0TkOfRRs7gS1p0iNuJr5Nbchp164DX9Gfx3DxKCq
+        K3R8d3qMGXd9ElYelsoSuvPbkN/TqLRlb/7+RSLlGAjIiRKQmrRD0tB8YAXNDvztl7yVIg
+        VBLzUzoAdwFmYRE/j/YR2rJk2FzOOCw=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 3A0C7B1B1;
+        by mx2.suse.de (Postfix) with ESMTP id 7C833AD2C;
         Wed, 23 Sep 2020 13:44:55 +0000 (UTC)
 From:   Oliver Neukum <oneukum@suse.com>
 To:     himadrispandya@gmail.com, gregKH@linuxfoundation.org,
         stern@rowland.harvard.edu, linux-usb@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Stuber <starblue@users.sourceforge.net>
-Subject: [RFC 11/14] USB: legousbtower: use usb_control_msg_recv()
-Date:   Wed, 23 Sep 2020 15:43:45 +0200
-Message-Id: <20200923134348.23862-12-oneukum@suse.com>
+        Jaroslav Kysela <perex@perex.cz>,
+        Vasily Khoruzhick <anarsoul@gmail.com>
+Subject: [RFC 12/14] sound: line6: move to use usb_control_msg_send() and usb_control_msg_recv()
+Date:   Wed, 23 Sep 2020 15:43:46 +0200
+Message-Id: <20200923134348.23862-13-oneukum@suse.com>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200923134348.23862-1-oneukum@suse.com>
 References: <20200923134348.23862-1-oneukum@suse.com>
@@ -40,139 +41,234 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-The usb_control_msg_recv() function can handle data on the stack, as
-well as properly detecting short reads, so move to use that function
-instead of the older usb_control_msg() call.  This ends up removing a
-lot of extra lines in the driver.
+The usb_control_msg_send() and usb_control_msg_recv() calls can return
+an error if a "short" write/read happens, and they can handle data off
+of the stack, so move the driver over to using those calls instead,
+saving some logic when dynamically allocating memory.
 
-v2: change API of usb_control_msg_send()
+v2: API change of use usb_control_msg_send() and usb_control_msg_recv()
 
-Cc: Juergen Stuber <starblue@users.sourceforge.net>
-Link: https://lore.kernel.org/r/20200914153756.3412156-6-gregkh@linuxfoundation.org
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Vasily Khoruzhick <anarsoul@gmail.com>
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/20200914153756.3412156-9-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/misc/legousbtower.c | 61 ++++++++++++++---------------------------
- 1 file changed, 20 insertions(+), 41 deletions(-)
+ sound/usb/line6/driver.c   | 72 +++++++++++++++++++---------------------------
+ sound/usb/line6/podhd.c    | 23 ++++++---------
+ sound/usb/line6/toneport.c |  9 +++---
+ 3 files changed, 44 insertions(+), 60 deletions(-)
 
-diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
-index f922544056de..ba655b4af4fc 100644
---- a/drivers/usb/misc/legousbtower.c
-+++ b/drivers/usb/misc/legousbtower.c
-@@ -308,15 +308,9 @@ static int tower_open(struct inode *inode, struct file *file)
- 	int subminor;
- 	int retval = 0;
- 	struct usb_interface *interface;
--	struct tower_reset_reply *reset_reply;
-+	struct tower_reset_reply reset_reply;
- 	int result;
+diff --git a/sound/usb/line6/driver.c b/sound/usb/line6/driver.c
+index 60674ce4879b..a030dd65eb28 100644
+--- a/sound/usb/line6/driver.c
++++ b/sound/usb/line6/driver.c
+@@ -337,23 +337,18 @@ int line6_read_data(struct usb_line6 *line6, unsigned address, void *data,
+ {
+ 	struct usb_device *usbdev = line6->usbdev;
+ 	int ret;
+-	unsigned char *len;
++	u8 len;
+ 	unsigned count;
  
--	reset_reply = kmalloc(sizeof(*reset_reply), GFP_KERNEL);
--	if (!reset_reply) {
--		retval = -ENOMEM;
--		goto exit;
--	}
+ 	if (address > 0xffff || datalen > 0xff)
+ 		return -EINVAL;
+ 
+-	len = kmalloc(1, GFP_KERNEL);
+-	if (!len)
+-		return -ENOMEM;
 -
- 	nonseekable_open(inode, file);
- 	subminor = iminor(inode);
+ 	/* query the serial number: */
+-	ret = usb_control_msg(usbdev, usb_sndctrlpipe(usbdev, 0), 0x67,
+-			      USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
+-			      (datalen << 8) | 0x21, address,
+-			      NULL, 0, LINE6_TIMEOUT * HZ);
+-
+-	if (ret < 0) {
++	ret = usb_control_msg_send(usbdev, 0, 0x67,
++				   USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
++				   (datalen << 8) | 0x21, address, NULL, 0,
++				   LINE6_TIMEOUT * HZ, GFP_KERNEL);
++	if (ret) {
+ 		dev_err(line6->ifcdev, "read request failed (error %d)\n", ret);
+ 		goto exit;
+ 	}
+@@ -362,45 +357,42 @@ int line6_read_data(struct usb_line6 *line6, unsigned address, void *data,
+ 	for (count = 0; count < LINE6_READ_WRITE_MAX_RETRIES; count++) {
+ 		mdelay(LINE6_READ_WRITE_STATUS_DELAY);
  
-@@ -347,15 +341,12 @@ static int tower_open(struct inode *inode, struct file *file)
+-		ret = usb_control_msg(usbdev, usb_rcvctrlpipe(usbdev, 0), 0x67,
+-				      USB_TYPE_VENDOR | USB_RECIP_DEVICE |
+-				      USB_DIR_IN,
+-				      0x0012, 0x0000, len, 1,
+-				      LINE6_TIMEOUT * HZ);
+-		if (ret < 0) {
++		ret = usb_control_msg_recv(usbdev, 0, 0x67,
++					   USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
++					   0x0012, 0x0000, &len, 1,
++					   LINE6_TIMEOUT * HZ, GFP_KERNEL);
++		if (ret) {
+ 			dev_err(line6->ifcdev,
+ 				"receive length failed (error %d)\n", ret);
+ 			goto exit;
+ 		}
+ 
+-		if (*len != 0xff)
++		if (len != 0xff)
+ 			break;
  	}
  
- 	/* reset the tower */
--	result = usb_control_msg(dev->udev,
--				 usb_rcvctrlpipe(dev->udev, 0),
--				 LEGO_USB_TOWER_REQUEST_RESET,
--				 USB_TYPE_VENDOR | USB_DIR_IN | USB_RECIP_DEVICE,
--				 0,
--				 0,
--				 reset_reply,
--				 sizeof(*reset_reply),
--				 1000);
-+	result = usb_control_msg_recv(dev->udev, 0,
-+				      LEGO_USB_TOWER_REQUEST_RESET,
-+				      USB_TYPE_VENDOR | USB_DIR_IN | USB_RECIP_DEVICE,
-+				      0, 0,
-+				      &reset_reply, sizeof(reset_reply), 1000,
-+				      GFP_KERNEL);
- 	if (result < 0) {
- 		dev_err(&dev->udev->dev,
- 			"LEGO USB Tower reset control request failed\n");
-@@ -394,7 +385,6 @@ static int tower_open(struct inode *inode, struct file *file)
- 	mutex_unlock(&dev->lock);
- 
- exit:
--	kfree(reset_reply);
- 	return retval;
- }
- 
-@@ -753,7 +743,7 @@ static int tower_probe(struct usb_interface *interface, const struct usb_device_
- 	struct device *idev = &interface->dev;
- 	struct usb_device *udev = interface_to_usbdev(interface);
- 	struct lego_usb_tower *dev;
--	struct tower_get_version_reply *get_version_reply = NULL;
-+	struct tower_get_version_reply get_version_reply;
- 	int retval = -ENOMEM;
- 	int result;
- 
-@@ -798,34 +788,25 @@ static int tower_probe(struct usb_interface *interface, const struct usb_device_
- 	dev->interrupt_in_interval = interrupt_in_interval ? interrupt_in_interval : dev->interrupt_in_endpoint->bInterval;
- 	dev->interrupt_out_interval = interrupt_out_interval ? interrupt_out_interval : dev->interrupt_out_endpoint->bInterval;
- 
--	get_version_reply = kmalloc(sizeof(*get_version_reply), GFP_KERNEL);
--	if (!get_version_reply) {
--		retval = -ENOMEM;
--		goto error;
--	}
--
- 	/* get the firmware version and log it */
--	result = usb_control_msg(udev,
--				 usb_rcvctrlpipe(udev, 0),
--				 LEGO_USB_TOWER_REQUEST_GET_VERSION,
--				 USB_TYPE_VENDOR | USB_DIR_IN | USB_RECIP_DEVICE,
--				 0,
--				 0,
--				 get_version_reply,
--				 sizeof(*get_version_reply),
--				 1000);
--	if (result != sizeof(*get_version_reply)) {
--		if (result >= 0)
--			result = -EIO;
-+	result = usb_control_msg_recv(udev, 0,
-+				      LEGO_USB_TOWER_REQUEST_GET_VERSION,
-+				      USB_TYPE_VENDOR | USB_DIR_IN | USB_RECIP_DEVICE,
-+				      0,
-+				      0,
-+				      &get_version_reply,
-+				      sizeof(get_version_reply),
-+				      1000, GFP_KERNEL);
-+	if (!result) {
- 		dev_err(idev, "get version request failed: %d\n", result);
- 		retval = result;
- 		goto error;
+ 	ret = -EIO;
+-	if (*len == 0xff) {
++	if (len == 0xff) {
+ 		dev_err(line6->ifcdev, "read failed after %d retries\n",
+ 			count);
+ 		goto exit;
+-	} else if (*len != datalen) {
++	} else if (len != datalen) {
+ 		/* should be equal or something went wrong */
+ 		dev_err(line6->ifcdev,
+ 			"length mismatch (expected %d, got %d)\n",
+-			(int)datalen, (int)*len);
++			(int)datalen, len);
+ 		goto exit;
  	}
- 	dev_info(&interface->dev,
- 		 "LEGO USB Tower firmware version is %d.%d build %d\n",
--		 get_version_reply->major,
--		 get_version_reply->minor,
--		 le16_to_cpu(get_version_reply->build_no));
-+		 get_version_reply.major,
-+		 get_version_reply.minor,
-+		 le16_to_cpu(get_version_reply.build_no));
  
- 	/* we can register the device now, as it is ready */
- 	usb_set_intfdata(interface, dev);
-@@ -844,11 +825,9 @@ static int tower_probe(struct usb_interface *interface, const struct usb_device_
- 		 USB_MAJOR, dev->minor);
+ 	/* receive the result: */
+-	ret = usb_control_msg(usbdev, usb_rcvctrlpipe(usbdev, 0), 0x67,
+-			      USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
+-			      0x0013, 0x0000, data, datalen,
+-			      LINE6_TIMEOUT * HZ);
+-
+-	if (ret < 0)
++	ret = usb_control_msg_recv(usbdev, 0, 0x67,
++				   USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
++				   0x0013, 0x0000, data, datalen, LINE6_TIMEOUT * HZ,
++				   GFP_KERNEL);
++	if (ret)
+ 		dev_err(line6->ifcdev, "read failed (error %d)\n", ret);
  
  exit:
--	kfree(get_version_reply);
- 	return retval;
- 
- error:
--	kfree(get_version_reply);
- 	tower_delete(dev);
- 	return retval;
+-	kfree(len);
+ 	return ret;
  }
+ EXPORT_SYMBOL_GPL(line6_read_data);
+@@ -423,12 +415,11 @@ int line6_write_data(struct usb_line6 *line6, unsigned address, void *data,
+ 	if (!status)
+ 		return -ENOMEM;
+ 
+-	ret = usb_control_msg(usbdev, usb_sndctrlpipe(usbdev, 0), 0x67,
+-			      USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
+-			      0x0022, address, data, datalen,
+-			      LINE6_TIMEOUT * HZ);
+-
+-	if (ret < 0) {
++	ret = usb_control_msg_send(usbdev, 0, 0x67,
++				   USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
++				   0x0022, address, data, datalen, LINE6_TIMEOUT * HZ,
++				   GFP_KERNEL);
++	if (ret) {
+ 		dev_err(line6->ifcdev,
+ 			"write request failed (error %d)\n", ret);
+ 		goto exit;
+@@ -437,14 +428,11 @@ int line6_write_data(struct usb_line6 *line6, unsigned address, void *data,
+ 	for (count = 0; count < LINE6_READ_WRITE_MAX_RETRIES; count++) {
+ 		mdelay(LINE6_READ_WRITE_STATUS_DELAY);
+ 
+-		ret = usb_control_msg(usbdev, usb_rcvctrlpipe(usbdev, 0),
+-				      0x67,
+-				      USB_TYPE_VENDOR | USB_RECIP_DEVICE |
+-				      USB_DIR_IN,
+-				      0x0012, 0x0000,
+-				      status, 1, LINE6_TIMEOUT * HZ);
+-
+-		if (ret < 0) {
++		ret = usb_control_msg_recv(usbdev, 0, 0x67,
++					   USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
++					   0x0012, 0x0000, status, 1, LINE6_TIMEOUT * HZ,
++					   GFP_KERNEL);
++		if (ret) {
+ 			dev_err(line6->ifcdev,
+ 				"receiving status failed (error %d)\n", ret);
+ 			goto exit;
+diff --git a/sound/usb/line6/podhd.c b/sound/usb/line6/podhd.c
+index eef45f7fef0d..28794a35949d 100644
+--- a/sound/usb/line6/podhd.c
++++ b/sound/usb/line6/podhd.c
+@@ -183,29 +183,25 @@ static const struct attribute_group podhd_dev_attr_group = {
+ static int podhd_dev_start(struct usb_line6_podhd *pod)
+ {
+ 	int ret;
+-	u8 *init_bytes;
++	u8 init_bytes[8];
+ 	int i;
+ 	struct usb_device *usbdev = pod->line6.usbdev;
+ 
+-	init_bytes = kmalloc(8, GFP_KERNEL);
+-	if (!init_bytes)
+-		return -ENOMEM;
+-
+-	ret = usb_control_msg(usbdev, usb_sndctrlpipe(usbdev, 0),
++	ret = usb_control_msg_send(usbdev, 0,
+ 					0x67, USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
+ 					0x11, 0,
+-					NULL, 0, LINE6_TIMEOUT * HZ);
+-	if (ret < 0) {
++					NULL, 0, LINE6_TIMEOUT * HZ, GFP_KERNEL);
++	if (ret) {
+ 		dev_err(pod->line6.ifcdev, "read request failed (error %d)\n", ret);
+ 		goto exit;
+ 	}
+ 
+ 	/* NOTE: looks like some kind of ping message */
+-	ret = usb_control_msg(usbdev, usb_rcvctrlpipe(usbdev, 0), 0x67,
++	ret = usb_control_msg_recv(usbdev, 0, 0x67,
+ 					USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
+ 					0x11, 0x0,
+-					init_bytes, 3, LINE6_TIMEOUT * HZ);
+-	if (ret < 0) {
++					init_bytes, 3, LINE6_TIMEOUT * HZ, GFP_KERNEL);
++	if (ret) {
+ 		dev_err(pod->line6.ifcdev,
+ 			"receive length failed (error %d)\n", ret);
+ 		goto exit;
+@@ -220,13 +216,12 @@ static int podhd_dev_start(struct usb_line6_podhd *pod)
+ 			goto exit;
+ 	}
+ 
+-	ret = usb_control_msg(usbdev, usb_sndctrlpipe(usbdev, 0),
++	ret = usb_control_msg_send(usbdev, 0,
+ 					USB_REQ_SET_FEATURE,
+ 					USB_TYPE_STANDARD | USB_RECIP_DEVICE | USB_DIR_OUT,
+ 					1, 0,
+-					NULL, 0, LINE6_TIMEOUT * HZ);
++					NULL, 0, LINE6_TIMEOUT * HZ, GFP_KERNEL);
+ exit:
+-	kfree(init_bytes);
+ 	return ret;
+ }
+ 
+diff --git a/sound/usb/line6/toneport.c b/sound/usb/line6/toneport.c
+index 94dd5e7ab2e6..4e5693c97aa4 100644
+--- a/sound/usb/line6/toneport.c
++++ b/sound/usb/line6/toneport.c
+@@ -126,11 +126,12 @@ static int toneport_send_cmd(struct usb_device *usbdev, int cmd1, int cmd2)
+ {
+ 	int ret;
+ 
+-	ret = usb_control_msg(usbdev, usb_sndctrlpipe(usbdev, 0), 0x67,
+-			      USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
+-			      cmd1, cmd2, NULL, 0, LINE6_TIMEOUT * HZ);
++	ret = usb_control_msg_send(usbdev, 0, 0x67,
++				   USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
++				   cmd1, cmd2, NULL, 0, LINE6_TIMEOUT * HZ,
++				   GFP_KERNEL);
+ 
+-	if (ret < 0) {
++	if (ret) {
+ 		dev_err(&usbdev->dev, "send failed (error %d)\n", ret);
+ 		return ret;
+ 	}
 -- 
 2.16.4
 
