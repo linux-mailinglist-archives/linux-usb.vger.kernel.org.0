@@ -2,197 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB75275131
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 08:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6FA2751BD
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 08:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726629AbgIWGIr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Sep 2020 02:08:47 -0400
-Received: from aibo.runbox.com ([91.220.196.211]:45976 "EHLO aibo.runbox.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726615AbgIWGIq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Sep 2020 02:08:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject;
-        bh=pdGamrJY4LQ2MZqrinWxe2ZCdq4g4ZeeDZ9SZc33rTM=; b=cSXiovudqiAi7C0v5/IHqc+aG0
-        C5Ewyknj01Hwcirs5ZW56RDS8QzZ5xTKNAZOi78tKqIezvlefCE/94zLsTEQYLnXWDvDk1iuroqnb
-        RxAFMuidki9dmPlTIcRv7Iika7BD/hbhZBnJNOFgMZZg/+7zcfqyxF4q6EDHp4WtWxYt/YcVmPKOV
-        8ogpOTJ8bzWawxtZqn/Cuosas71WeGvu75OpIC8hWxsY9k/njfdQYDEz+DKey9By+CVCMNR53DE8A
-        VMocejFHbK/vEdFVswRmHXDoM3+eTLGgSKONwBHuIypv7addhuQ0BMv+uJMzgypwAI+OIs8SnFMWk
-        HeKLbUgQ==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1kKxxH-0007s9-Rf; Wed, 23 Sep 2020 08:08:39 +0200
-Received: by submission03.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1kKxwz-0004jw-Pi; Wed, 23 Sep 2020 08:08:21 +0200
-Subject: Re: [PATCH v3 4/4] usbcore/driver: Accommodate usbip
-To:     Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org
-Cc:     stable@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller@googlegroups.com
-References: <20200922110703.720960-1-m.v.b@runbox.com>
- <20200922110703.720960-5-m.v.b@runbox.com>
- <471ef25b-c2e8-0ffb-b1a0-1d9693ee3f7b@linuxfoundation.org>
-From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
-Message-ID: <5facd0a0-7b94-6ae4-dad0-f75e9725cb27@runbox.com>
-Date:   Wed, 23 Sep 2020 09:08:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726650AbgIWGlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Sep 2020 02:41:55 -0400
+Received: from thsbbfxrt01p.thalesgroup.com ([192.54.144.131]:44976 "EHLO
+        thsbbfxrt01p.thalesgroup.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726179AbgIWGly (ORCPT
+        <rfc822;Linux-usb@vger.kernel.org>); Wed, 23 Sep 2020 02:41:54 -0400
+X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 02:41:51 EDT
+Received: from thsbbfxrt01p.thalesgroup.com (localhost [127.0.0.1])
+        by localhost (Postfix) with SMTP id 4Bx7kT2qg8z45QG;
+        Wed, 23 Sep 2020 08:36:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thalesgroup.com;
+        s=xrt20181201; t=1600843009;
+        bh=bY/AJ+8L5SI8hL8Gfg8qI8VKKezBOKQfYvdQxuiUs6M=;
+        h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+         Content-Transfer-Encoding:MIME-Version:From;
+        b=zRyZ5kTE3hHa35zQgxOcIThVfI8T6yHVc9z52hOrnK6cCHSzdHyPYq/JOP5x5RkfR
+         TZ+W3lpdhXVDP6f75UWe9pBumBBSlVZiteFKiHgB6ABY9YEALWRBWuwLaz4FtlZP1h
+         htDIG2mVZody3WANbfb9J8Xq/8ihOSw/4AVfgKXpEgOcyFZFo/C/mvVItfutIl+Y5P
+         U2y9Qp9nyjKcqUxZCTmTVuGT829/1NLAKdBJo5C8Q+h6Lu31p1gWC7w9qcP9IFl43T
+         CrQIEx+fgUS6yT9bhqT9pNZhYeP8oOXYYQOYKDuRbrUAttE+l/mPH393xLUOgLIspm
+         3g8nWZqKBJ+9w==
+X-MTA-CheckPoint: {5F6AECF9-0-C52F090A-6656}
+Authentication-Results: thsbbfxss01p.thalesgroup.com;
+        dkim=pass (1024-bit key; unprotected) header.d=thalesgroup.onmicrosoft.com header.i=@thalesgroup.onmicrosoft.com header.b="5AZLdpcz";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b8oiE18JIO2fy4/Hnkt+DMsZehQFBv7H8yPhIABObmIA69a16kq4Xl9WZ8DhaaVCOgiNb8ggAiH+6T7vpASGlF17V4YMIb+3SO9bc6Q74KNyCPZdX4Yx5/TEeF4RAhzB/qpYDOfEPOVGMr3Nv2YW5W57Pj4tCnDl4Yfxbl2F/vpsvQMibD4bhPesXOHNI901/tDTGEBIBLxi5OvCe38FBy8VvRjZx5cPhu11KuJyIpXYWuUaBHAaNcecRTR/90ChTymJ5E23+H0WuVmlUiCkSR4a38wNi6d50OB4emW3qN1WVSq+U4VSC5xqPO8kBUecYED5ZDmch8NiufIPdkGU9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bY/AJ+8L5SI8hL8Gfg8qI8VKKezBOKQfYvdQxuiUs6M=;
+ b=fMDccQRBRXYkG+vvFEg3HUnD/kItr/SyjRECJj8gvTYrCMZabecUtHmMbg/Mk12euam7Xsic+1if3giE1eYAZLEVGFB92G+bFMskai3lhNwqd/Cit5Rb4tS0ACkJqdwvgqZs7cMNfHQxLJBUHAPHK6//lc37SGMAir53qas8/j03GEsZDqNmMHrtbBwgtoUVOqa6i+VDFdBPaaadEl9qnWIIlmHHdMgIf0LhkCVUKpY43O1f/WpE5dIuf/lC23X0LyHRCTkglnB/yJTfoblrbcnJOTCyRmlHjE4L2D3yg0U3+feI6uNyIo7gDyYiD8g+lanwnqCLUpY2SBiJJSjzkw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=thalesgroup.com; dmarc=pass action=none
+ header.from=thalesgroup.com; dkim=pass header.d=thalesgroup.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=thalesgroup.onmicrosoft.com; s=selector2-thalesgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bY/AJ+8L5SI8hL8Gfg8qI8VKKezBOKQfYvdQxuiUs6M=;
+ b=5AZLdpczQgb+FBsDGDFqitgUB6f+Pps/125i8Ec+1AcrQwZDj+s8SOH9/vma/qghBMUBRm4PsRE3jXrSfNN4S66b0D2pYyEYu3w80hqDiMcxjLQ0YtOCFhyZE2uS0VvEvCf8EmgW+ZjwZxcNo/Cz0b5Djl9ZGKo52OWpyMuV6Sw=
+From:   GARG Shivam <shivam.garg@thalesgroup.com>
+To:     "Linux-usb@vger.kernel.org" <Linux-usb@vger.kernel.org>
+CC:     Peter Chen <hzpeterchen@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: RE: Linux Crash with Gadget serial driver
+Thread-Topic: Linux Crash with Gadget serial driver
+Thread-Index: AdZ7Aw+onVx5vBMuRyOE8DOq7nQmHAAAc6OAABHIIAAADx4bQAAA8gQABXlXoRA=
+Date:   Wed, 23 Sep 2020 06:36:40 +0000
+Message-ID: <MRXP264MB09044A6FBB51DFFB273EA6B1F8380@MRXP264MB0904.FRAP264.PROD.OUTLOOK.COM>
+References: <MRXP264MB0904FFAD5E50E6A6F4AB6419F8570@MRXP264MB0904.FRAP264.PROD.OUTLOOK.COM>
+ <CAL411-oBThK1PqKWhbdUSEsCuApi6CWT5wzxye6P6RXsQuXhfg@mail.gmail.com>
+ <MRXP264MB09048712EAB615DD8CF7AF5BF8540@MRXP264MB0904.FRAP264.PROD.OUTLOOK.COM>
+ <20200826093534.GA2474406@kroah.com>
+In-Reply-To: <20200826093534.GA2474406@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=thalesgroup.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c83448ba-3122-4cc1-5a34-08d85f8b0796
+x-ms-traffictypediagnostic: MR2P264MB0801:
+x-microsoft-antispam-prvs: <MR2P264MB0801BB69DE45BD280689B0F9F8380@MR2P264MB0801.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: T40MfcsJ/wbqZp0usgF2Z4Z+jHo2udAqTyvnG26GWh8MlanpiuID+mHR8ivnRxKsZk2qRfsTA/zWjOz5TJJPhmk1yEplH4rKps+rf8ChWPF2hTtXWfDO44BAEM9SSEiJieF7LP7l0Q12jCvuACl3GSJ0X5dlevGavL5FTabyaDr4cAuHK3MZsl6zmXlSk6zVoKgmsB5spsWBnnEOsXdUODsbVskdqqCEeFgBONIJe42lYrN4dEbDKmM3N9fmmRlCEcy4UuM6WqoNWTY6uBsg8MkKGkWhLgReUVTOuAe5eUIEDzyZGwWYnDvVJYsMuOuu
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRXP264MB0904.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(396003)(346002)(376002)(39860400002)(136003)(366004)(7696005)(86362001)(186003)(26005)(6506007)(55236004)(83380400001)(8676002)(6916009)(53546011)(8936002)(9686003)(71200400001)(478600001)(64756008)(33656002)(55016002)(76116006)(2906002)(66476007)(4326008)(66946007)(66556008)(66446008)(5660300002)(316002)(52536014)(54906003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: I9RR/r1Yz3Q8cYQjakJa71qu3VH9Oy0t5wgxpJx4fT1mu2PU6TicLeAiivPqZxbf1J1GI5l/bsEEcMFSCo4QPLp+t0JRrxcdJVFSOPMr0vC3kot/HqfBP4DeGw0KvXVHdPwAQVpY3WR4J5IlhLhPKcP8+vtvXmshtpH7yRvm0Y9z/A8ppgNyYBJH1WPISE40pc3gDPGGiaBPxrHqI6kanNYNiIQm1uCudxVpbUJHjQ/uXOknjBkYNOniv6DnIDU050WXVRfT8taFEsHaJ4otQ/EDmP0zNbrSo1Rvd6K6Plas0vjgKhMuI3XKdrSFrLqEUHS0HOSYqkmvsFwTDVvaZ4uxUzJ6BefDslPe9H2KI6FzuninS3Ook0nhSsmdC1aXmgu0LxG8p5/X0yAQ1QHg9b4/EZsfNejCF1bdWpPDai1OqNtXw2WnDXfkN35LxwNP97Iu5x60+0f+jD2WzrY2+iBQnkLzsY8UhhIgO7S78qPv/TS3TRy0JyzjJADWSp5Te48L7M7hqKgja9dHMKO1D7x/KP2VIH8NQ05NEdW7wiEcKaiFU3nXtGJtFVUhJB05Q60ra2h3ayMf98onkitxrCeo++8j8dO4XOrOEmMtzrJmc55n39NZdtf+HhGo3OiYMp1zjc5VBBYtOTDn6W97yg==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <471ef25b-c2e8-0ffb-b1a0-1d9693ee3f7b@linuxfoundation.org>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: Thalesgroup.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRXP264MB0904.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: c83448ba-3122-4cc1-5a34-08d85f8b0796
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2020 06:36:40.4122
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 6e603289-5e46-4e26-ac7c-03a85420a9a5
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ABSBL3XC1nIT5we5CLCXNreKT+rgXjKdDguITL44h4bGUg0beug3f9GEKKCMlaYf/N9tIxkKGjjBi9Qdc1kcWAOHmdhxBXOpNI04bA3yoh0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR2P264MB0801
+X-PMX-Version: 6.4.8.2820816, Antispam-Engine: 2.7.2.2107409, Antispam-Data: 2020.9.23.63018, AntiVirus-Engine: 5.77.0, AntiVirus-Data: 2020.9.23.5770000
+X-Sophos-SenderHistory: ip=104.47.24.109,fs=369142,da=49557532,mc=5517,sc=0,hc=5517,sp=0,fso=48184434,re=64,sd=0,hd=30
+X-PMX-Spam: Gauge=IIIIIIIII, Probability=9%, Report='
+ MULTIPLE_RCPTS 0.1, HTML_00_01 0.05, HTML_00_10 0.05, SUPERLONG_LINE 0.05, BODYTEXTP_SIZE_3000_LESS 0, BODY_SIZE_2000_2999 0, BODY_SIZE_5000_LESS 0, BODY_SIZE_7000_LESS 0, DKIM_SIGNATURE 0, DQ_S_H 0, IN_REP_TO 0, KNOWN_MTA_TFX 0, LEGITIMATE_SIGNS 0, MSG_THREAD 0, NO_CTA_URI_FOUND 0, NO_URI_HTTPS 0, REFERENCES 0, SPF_SOFTFAIL 0, SXL_IP_TFX_WM 0, WEBMAIL_SOURCE 0, WEBMAIL_XOIP 0, WEBMAIL_X_IP_HDR 0, __ANY_URI 0, __ARCAUTH_DKIM_PASSED 0, __ARCAUTH_DMARC_PASSED 0, __ARCAUTH_PASSED 0, __ARC_SEAL_MICROSOFT 0, __ARC_SIGNATURE_MICROSOFT 0, __AUTH_RES_DKIM_PASS 0, __BODY_NO_MAILTO 0, __BOUNCE_CHALLENGE_SUBJ 0, __BOUNCE_NDR_SUBJ_EXEMPT 0, __CC_NAME 0, __CC_NAME_DIFF_FROM_ACC 0, __CC_REAL_NAMES 0, __CP_AGE_BODY 0, __CT 0, __CTE 0, __CT_TEXT_PLAIN 0, __DQ_IP_FSO_LARGE 0, __DQ_NEG_HEUR 0, __DQ_NEG_IP 0, __DQ_S_HIST_1 0, __DQ_S_HIST_2 0, __DQ_S_IP_MC_100_P 0, __DQ_S_IP_MC_10_P 0,
+ __DQ_S_IP_MC_1K_P 0, __DQ_S_IP_MC_1_P 0, __DQ_S_IP_MC_5_P 0, __FORWARDED_MSG 0, __FRAUD_BODY_WEBMAIL 0, __FRAUD_MONEY_BIG_COIN 0, __FRAUD_MONEY_BIG_COIN_DIG 0, __FRAUD_WEBMAIL 0, __FUR_RDNS_OUTLOOK 0, __HAS_CC_HDR 0, __HAS_FROM 0, __HAS_MSGID 0, __HAS_REFERENCES 0, __HAS_XOIP 0, __INT_PROD_GPS 0, __IN_REP_TO 0, __MAIL_CHAIN 0, __MIME_TEXT_ONLY 0, __MIME_TEXT_P 0, __MIME_TEXT_P1 0, __MIME_VERSION 0, __MULTIPLE_RCPTS_CC_X2 0, __MULTIPLE_RCPTS_TO_X2 0, __NO_HTML_TAG_RAW 0, __RDNS_WEBMAIL 0, __REFERENCES 0, __SANE_MSGID 0, __SUBJ_ALPHA_END 0, __SUBJ_ALPHA_NEGATE 0, __SUBJ_REPLY 0, __TO_MALFORMED_2 0, __TO_NAME 0, __TO_NO_NAME 0, __URI_MAILTO 0, __URI_NO_WWW 0, __URI_NS '
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23/09/2020 02.04, Shuah Khan wrote:
-> On 9/22/20 5:07 AM, M. Vefa Bicakci wrote:
->> Commit 88b7381a939d ("USB: Select better matching USB drivers when
->> available") inadvertently broke usbip functionality. The commit in
->> question allows USB device drivers to be explicitly matched with
->> USB devices via the use of driver-provided identifier tables and
->> match functions, which is useful for a specialised device driver
->> to be chosen for a device that can also be handled by another,
->> more generic, device driver.
->>
->> Prior, the USB device section of usb_device_match() had an
->> unconditional "return 1" statement, which allowed user-space to bind
->> USB devices to the usbip_host device driver, if desired. However,
->> the aforementioned commit changed the default/fallback return
->> value to zero. This breaks device drivers such as usbip_host, so
->> this commit restores the legacy behaviour, but only if a device
->> driver does not have an id_table and a match() function.
->>
->> In addition, if usb_device_match is called for a device driver
->> and device pair where the device does not match the id_table of the
->> device driver in question, then the device driver will be disqualified
->> for the device. This allows avoiding the default case of "return 1",
->> which prevents undesirable probe() calls to a driver even though
->> its id_table did not match the device.
->>
->> Finally, this commit changes the specialised-driver-to-generic-driver
->> transition code so that when a device driver returns -ENODEV, a more
->> generic device driver is only considered if the current device driver
->> does not have an id_table and a match() function. This ensures that
->> "generic" drivers such as usbip_host will not be considered specialised
->> device drivers and will not cause the device to be locked in to the
->> generic device driver, when a more specialised device driver could be
->> tried.
->>
->> All of these changes restore usbip functionality without regressions,
->> ensure that the specialised/generic device driver selection logic works
->> as expected with the usb and apple-mfi-fastcharge drivers, and do not
->> negatively affect the use of devices provided by dummy_hcd.
->>
->> Fixes: 88b7381a939d ("USB: Select better matching USB drivers when available")
->> Link: https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/
->> Cc: <stable@vger.kernel.org> # 5.8
->> Cc: Bastien Nocera <hadess@hadess.net>
->> Cc: Valentina Manea <valentina.manea.m@gmail.com>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: Alan Stern <stern@rowland.harvard.edu>
->> Cc: <syzkaller@googlegroups.com>
->> Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
->>
->> ---
->> v3: New patch in this patch set.
->>      For reviewers' awareness, another option for usb_device_match would
->>      be as follows. This allows the driver's match() function to act
->>      as a fallback in case the driver has an id_table, but the id_table
->>      does not include the device.
->>
->>     if (!udrv->id_table && !udrv->match) {
->>         /* Allow usbip and similar drivers to bind to
->>          * arbitrary devices; let their probe functions
->>          * decide.
->>          */
->>         return 1;
->>     }
->>
->>     if (udrv->id_table &&
->>         usb_device_match_id(udev, udrv->id_table) != NULL)
->>         return 1;
->>
->>     if (udrv->match && udrv->match(udev))
->>         return 1;
->>
->>     return 0;
->> ---
->>   drivers/usb/core/driver.c | 37 +++++++++++++++++++++++++++++++------
->>   1 file changed, 31 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
->> index 7d90cbe063ec..98b7449c11f3 100644
->> --- a/drivers/usb/core/driver.c
->> +++ b/drivers/usb/core/driver.c
->> @@ -269,8 +269,30 @@ static int usb_probe_device(struct device *dev)
->>       if (error)
->>           return error;
->> +    /* Probe the USB device with the driver in hand, but only
->> +     * defer to a generic driver in case the current USB
->> +     * device driver has an id_table or a match function; i.e.,
->> +     * when the device driver was explicitly matched against
->> +     * a device.
->> +     *
->> +     * If the device driver does not have either of these,
->> +     * then we assume that it can bind to any device and is
->> +     * not truly a more specialized/non-generic driver, so a
->> +     * return value of -ENODEV should not force the device
->> +     * to be handled by the generic USB driver, as there
->> +     * can still be another, more specialized, device driver.
->> +     *
->> +     * This accommodates the usbip driver.
->> +     *
->> +     * TODO: What if, in the future, there are multiple
->> +     * specialized USB device drivers for a particular device?
->> +     * In such cases, there is a need to try all matching
->> +     * specialised device drivers prior to setting the
->> +     * use_generic_driver bit.
->> +     */
->>       error = udriver->probe(udev);
->> -    if (error == -ENODEV && udriver != &usb_generic_driver) {
->> +    if (error == -ENODEV && udriver != &usb_generic_driver &&
->> +        (udriver->id_table || udriver->match)) {
->>           udev->use_generic_driver = 1;
->>           return -EPROBE_DEFER;
->>       }
->> @@ -831,14 +853,17 @@ static int usb_device_match(struct device *dev, struct device_driver *drv)
->>           udev = to_usb_device(dev);
->>           udrv = to_usb_device_driver(drv);
->> -        if (udrv->id_table &&
->> -            usb_device_match_id(udev, udrv->id_table) != NULL) {
->> -            return 1;
->> -        }
->> +        if (udrv->id_table)
->> +            return usb_device_match_id(udev, udrv->id_table) != NULL;
->>           if (udrv->match)
->>               return udrv->match(udev);
->> -        return 0;
->> +
->> +        /* If the device driver under consideration does not have a
->> +         * id_table or a match function, then let the driver's probe
->> +         * function decide.
->> +         */
->> +        return 1;
->>       } else if (is_usb_interface(dev)) {
->>           struct usb_interface *intf;
->>
-> 
-> Thank you for finding a solution that works for usbip case.
-> 
-> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> thanks,
-> -- Shuah
+Hi All,
 
-Thank you for the feedback, Shuah!
+I agree it is an old kernel but still can you look into the backtrace and g=
+uide me how I can proceed to stop the host crash.
 
-Vefa
+Below is the backtrace info that is coming as soon as I connect my gadget s=
+erial driver supported device(USB) to FreeBSD.
+
+Backtrace #1
+
+root@(none):~# INFO: rcu_sched detected stalls on CPUs/tasks:
+6: (39 GPs behind) idle=3D83d/1/0 softirq=3D0/0 fqs=3D5228
+(detected by 4, t=3D5254 jiffies, g=3D8752, c=3D8751, q=3D75869)
+Task dump for CPU 6:
+swapper/6 R running task 0 0 1 0x00000804
+Call Trace:
+[c0000001f01379f0] [c000000000005e18] .do_IRQ+0x84/0x118 (unreliable)
+[c0000001f0137a80] [c00000000001793c] exc_0x500_common+0xfc/0x100
+- interrupt: 501 at .book3e_idle+0x24/0x4c
+LR =3D .book3e_idle+0x24/0x4c
+[c0000001f0137d70] [c0000000000094a8] .arch_cpu_idle+0x34/0xa0 (unreliable)
+[c0000001f0137de0] [c000000000086bd0] .cpu_startup_entry+0x204/0x2ac
+[c0000001f0137ee0] [c00000000001edf8] .start_secondary+0x2b0/0x2d4
+[c0000001f0137f90] [c00000000000046c] start_secondary_prolog+0x10/0x14
+
+This is also seen sometimes:
+
+INFO: task udhcpc:3285 blocked for more than 120 seconds.
+Tainted: G O 4.1.8-rt8+gbd51baffc04e #1
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+udhcpc D 00003fff87215f78 0 3285 3245 0x00000000
+Call Trace:
+[c0000001c42ef710] [c000000000008878] .__switch_to+0x8c/0xc4
+[c0000001c42ef790] [c0000000009604cc] .__schedule+0x230/0x53c
+[c0000001c42ef840] [c00000000096081c] .schedule+0x44/0xe4
+[c0000001c42ef8c0] [c000000000963de4] .schedule_timeout+0x194/0x210
+[c0000001c42ef9a0] [c0000000009616c4] .wait_for_common+0x170/0x1d0
+[c0000001c42efa60] [c00000000009d4ec] .wait_rcu_gp+0x5c/0x74
+[c0000001c42efb10] [c00000000009ee7c] .synchronize_sched+0x4c/0x70
+[c0000001c42efb80] [c0000000007df974] .synchronize_net+0x20/0x4c
+[c0000001c42efbf0] [c000000000906874] .__unregister_prot_hook+0x124/0x1c8
+[c0000001c42efc80] [c000000000907014] .packet_do_bind+0x184/0x1e4
+[c0000001c42efd10] [c0000000007c2d8c] .SyS_bind+0xf4/0x110
+[c0000001c42efe30] [c000000000000698] system_call+0x38/0xc4
+
+
+Thanks
+Shivam
+
+
+
+-----Original Message-----
+From: Greg KH <gregkh@linuxfoundation.org>=20
+Sent: Wednesday, August 26, 2020 3:06 PM
+To: GARG Shivam <shivam.garg@thalesgroup.com>
+Cc: Peter Chen <hzpeterchen@gmail.com>; Linux-usb@vger.kernel.org
+Subject: Re: Linux Crash with Gadget serial driver
+
+On Wed, Aug 26, 2020 at 09:09:32AM +0000, GARG Shivam wrote:
+> I am with Kernel version 4.1.
+
+4.1 is over 6 years old and over 500 thousand changes and fixes behind what=
+ we are all working with now.
+
+Please work with your vendor who is forcing you to remain on an obsolete ke=
+rnel version like this, as you are paying them for that type of support, th=
+ere is nothing that we can do here with this, sorry.
+
+good luck!
+
+greg k-h
