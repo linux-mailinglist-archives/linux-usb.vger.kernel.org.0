@@ -2,118 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB045275277
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 09:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA1227539D
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 10:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726184AbgIWHvB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Sep 2020 03:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgIWHvA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Sep 2020 03:51:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE16C061755
-        for <linux-usb@vger.kernel.org>; Wed, 23 Sep 2020 00:51:00 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1kKzY2-0001VP-LH; Wed, 23 Sep 2020 09:50:42 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1kKzY0-00068p-6f; Wed, 23 Sep 2020 09:50:40 +0200
-Date:   Wed, 23 Sep 2020 09:50:40 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     robh+dt@kernel.org, shawnguo@kernel.org, balbi@kernel.org,
-        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        Anson.Huang@nxp.com, aisheng.dong@nxp.com, peng.fan@nxp.com,
-        fugang.duan@nxp.com, qiangqing.zhang@nxp.com, horia.geanta@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 5/6] arm64: dtsi: imx8mp: add usb nodes
-Message-ID: <20200923075040.GD25328@pengutronix.de>
-References: <1600771612-30727-1-git-send-email-jun.li@nxp.com>
- <1600771612-30727-6-git-send-email-jun.li@nxp.com>
+        id S1726497AbgIWIr0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Sep 2020 04:47:26 -0400
+Received: from mail-eopbgr1320095.outbound.protection.outlook.com ([40.107.132.95]:59132
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726342AbgIWIrZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Sep 2020 04:47:25 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZsvDdBdmwj3a7nB0AZM29q1FxauDIrWZ1a8Te9eWaJeDBiG00pAPtfnLteDYJeZ5r0pv50inSIi+eYXVChllSSl2H//e2PXr3Hk8hGZx7wbMTZnVhgJV+IXH/pF305eXqxdr93Yitc0pVEeuLn//TNQe7vicZSQwsKwMwkF2enC5MZ2wW59GDaPXl+PH1/hJR6khChXBkkoa8t1gr/pkqhNkzNfA003+oUi4LE/7P0JdWyZgQf+lhzLPhS60f+6pn+dTLow5R0gVw0ZoSMRyTkKI7QDBHv4Ba27LdvMoCuXQhpP3ZzJGqo59W0Rd1yuvJnJbwKVFBCr8ww1MLcSTGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8E/4XumCEPkVdnJ2/9Wkdgq+sUFXX/dONAeJdCPrTyM=;
+ b=j1gTS75dV6SYKJELyb4nehsyZv+nQSVy4ADPIpkcLJxZOb2turucNd0Cds88WvsT5EFez3cYzAK7BFqSi5tap9cyI3Nbfzc53Gb1WbSchZOyv2dMdjtXVqjnmch1a0nvrI9H2B7/i6TdKYgQbm52cULBWvR8ka/graukpH/r+RJSlI/x9AyrNuMCv62343aQSaQPtmdl6kknuF0GertEjH7YJmHOcF/rRQB1szmduK+StxUKZXnn++uX6sePnFb8bT792rTCsMvz1fAA98NzoJbAOJsZDii3m1z4nf7Edxb6Chi5yNeFFvb+CLziKt2IyXOMLFKayoqCWC5Vu0X/gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8E/4XumCEPkVdnJ2/9Wkdgq+sUFXX/dONAeJdCPrTyM=;
+ b=btaS3d69Ma+UF6ZJfBba8CEOdh/jsHiYPSq2SCYsbz0FLUWxPMwRdKsurj19umoc79PuYFwtO0bI8lYDhCokU9TT0ZbqhwV4JIhMlBNITgiB9sTzGyQ0rDIpiRh6eeEk0Zijk5Uq4et5u4qZWXxJsQq4XO8uBKEzB2vgLQR/WNE=
+Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com (2603:1096:404:d5::22)
+ by TY2PR01MB4506.jpnprd01.prod.outlook.com (2603:1096:404:119::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.11; Wed, 23 Sep
+ 2020 08:47:14 +0000
+Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com
+ ([fe80::9055:525d:2d64:b625]) by TY2PR01MB3692.jpnprd01.prod.outlook.com
+ ([fe80::9055:525d:2d64:b625%5]) with mapi id 15.20.3391.027; Wed, 23 Sep 2020
+ 08:47:14 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>, Jann Horn <jannh@google.com>,
+        Jason Yan <yanaijie@huawei.com>, Arnd Bergmann <arnd@arndb.de>,
+        Chuhong Yuan <hslester96@gmail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
+        Saurav Girepunje <saurav.girepunje@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: RE: [PATCH v4 04/11] usb: xhci-rcar: convert to
+ readl_poll_timeout_atomic()
+Thread-Topic: [PATCH v4 04/11] usb: xhci-rcar: convert to
+ readl_poll_timeout_atomic()
+Thread-Index: AQHWj97WeuTEVdT9kUKqeRXYZHMso6l16stw
+Date:   Wed, 23 Sep 2020 08:47:14 +0000
+Message-ID: <TY2PR01MB3692184CBB3C12EE8A02BA48D8380@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+References: <1600668815-12135-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1600668815-12135-4-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1600668815-12135-4-git-send-email-chunfeng.yun@mediatek.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: mediatek.com; dkim=none (message not signed)
+ header.d=none;mediatek.com; dmarc=none action=none header.from=renesas.com;
+x-originating-ip: [124.210.22.195]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 18b3fa72-7c64-4f94-2254-08d85f9d44f8
+x-ms-traffictypediagnostic: TY2PR01MB4506:
+x-microsoft-antispam-prvs: <TY2PR01MB45066FFE4117BA5D3D747F4FD8380@TY2PR01MB4506.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wWpdmCbU7vfEl4OwptWsXKwncwUD0XVZ8JPDhwXEvuKofquo0sIT6NvZfb3LsFqwUv9KshOUxs66jJvxZyaj2H8xaeMosMXJmRo0AziziGDctEJwAV0XKx13rDROw+EwJ/MSuNQTwrHFxzRT/EpQXtxmfZ/mndYs1aAJ7jj+un/xZRhpfqKyfxyFo0/3G85HB98JxnKhtLNo1WFnjfnO/Wx1SezKjD0mu6b75b9VUreddoiVMPk+p9qzMv0+z8FLgzecEIrPJGgjKSXnozYurL6ylsJoLQqCx+gQvDe/UvSiuUYcEWYuQSc4zzJABbVYQXQExPV97hkMOtTHdwJzId/QNRbvBIkoDyJz6JHMJI1i+jBaphfCcamUIAMoW2qt
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3692.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(346002)(376002)(396003)(39860400002)(26005)(52536014)(86362001)(2906002)(6506007)(186003)(7696005)(8936002)(5660300002)(6916009)(8676002)(55236004)(55016002)(9686003)(33656002)(71200400001)(478600001)(54906003)(316002)(7416002)(66556008)(66446008)(4326008)(64756008)(66946007)(76116006)(83380400001)(66476007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: vhCdG7K9t0Jz8grsOxqpQwdcxmZqZ6gTk4qYmKJY2k55L9DoBRfsru6S1DGvKudCGTGkKN/OSp7DaPw4XGgH79/wzOt+Q0yXvULn5CJVNH2paSnErvakn4RyLsTZTeiBqLQxFheZUOfDY6/dsLFHlRsli2mfozWoxuDKXcAlq5sPb4i3ijlUjXRNtzg70kIDsKH1GPYFK4vtyAQN2mCGBmc/hLsfMoP3clX0BnrPn8ez92A8WnqeqkhRHnbSNv4DF934Pm4urM1EQsKZ4lflgtawlBUm/5/kOXN4xVZ1i5F2M6tc0yDTrFTXoouV9q6OEcu9ELP2zKAQrILaIZPUkNHRwTAHzEQNb6UdVjvqwTjllQ+9Oe3AOEC2Ibv0GWAC9NXTbKr7mLuHYlENuNKpSxlyrC8xeOtdtFX634Fu3PV//ERF1/qLAcDJz6pqCebUzqj1dKyuueHRFi2upszjtg0X2mWTEGHqES1MCfJRnkV292JBTOjF2MoEOsbkTFOBEeSIbcgfujguoxSYKVsMxMv0dLEdeQDcbIsjSVzGs6k77K8Hd/V+gEmel7wnO/6ddCviJY2axw6tv+/a6QO7BTsc6ZC7QFyqGsLxe3w78NY9D9iqfO8kfVezEOXUl1bavovn5n9nGPz7sjZFqYdB1w==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1600771612-30727-6-git-send-email-jun.li@nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:44:39 up 216 days, 15:15, 146 users,  load average: 0.01, 0.10,
- 0.14
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3692.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18b3fa72-7c64-4f94-2254-08d85f9d44f8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2020 08:47:14.2213
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: n49f2EA9kreUV3Qeb9pOFWVNnsSEgZNg4tncohVzEaW1fn3FHMzyfR/hbzgnsRBNt6FGu1l1xDZ70caTVi/IJ9NPFqY7aQfAF6nyum/KQfYaQSW1U/ublyEbal1TLm0h
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB4506
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 22, 2020 at 06:46:51PM +0800, Li Jun wrote:
-> imx8mp integrates 2 identical dwc3 based USB3 controllers and
-> Synopsys phys, each instance has additional wakeup logic to
-> support low power mode, so the glue layer need a node with dwc3
-> core sub node.
-> 
-> Signed-off-by: Li Jun <jun.li@nxp.com>
+Hi Chungeng,
+
+Thank you for the patch!
+
+> From: Chunfeng Yun, Sent: Monday, September 21, 2020 3:13 PM
+>=20
+> Use readl_poll_timeout_atomic() to simplify code
+>=20
+> Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
->  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 88 +++++++++++++++++++++++++++++++
->  1 file changed, 88 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> index 9de2aa1..1b7ed4c 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> +		usb3_1: usb@32f10108 {
-> +			compatible = "fsl,imx8mp-dwc3";
-> +			reg = <0x32f10108 0x8>;
-> +			clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
-> +				 <&clk IMX8MP_CLK_USB_ROOT>;
-> +			clock-names = "hsio", "suspend";
-> +			assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI_SRC>;
+> v4: changes
+>     1. remove unnecessary parentheses suggested by Yoshihiro
+>     2. fix the wrong return value suggested by Yoshihiro & Daniel
+>=20
+> v2~v3: no changes
+> ---
+>  drivers/usb/host/xhci-rcar.c | 43 ++++++++++++--------------------------=
+-----
+>  1 file changed, 12 insertions(+), 31 deletions(-)
+>=20
+> diff --git a/drivers/usb/host/xhci-rcar.c b/drivers/usb/host/xhci-rcar.c
+> index c1025d3..1bc4fe7 100644
+> --- a/drivers/usb/host/xhci-rcar.c
+> +++ b/drivers/usb/host/xhci-rcar.c
+> @@ -6,6 +6,7 @@
+>   */
+>=20
+>  #include <linux/firmware.h>
+> +#include <linux/iopoll.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/of.h>
+> @@ -127,8 +128,7 @@ static int xhci_rcar_download_firmware(struct usb_hcd=
+ *hcd)
+>  	void __iomem *regs =3D hcd->regs;
+>  	struct xhci_plat_priv *priv =3D hcd_to_xhci_priv(hcd);
+>  	const struct firmware *fw;
+> -	int retval, index, j, time;
+> -	int timeout =3D 10000;
+> +	int retval, index, j;
+>  	u32 data, val, temp;
+>  	u32 quirks =3D 0;
+>  	const struct soc_device_attribute *attr;
+> @@ -166,32 +166,19 @@ static int xhci_rcar_download_firmware(struct usb_h=
+cd *hcd)
+>  		temp |=3D RCAR_USB3_DL_CTRL_FW_SET_DATA0;
+>  		writel(temp, regs + RCAR_USB3_DL_CTRL);
+>=20
+> -		for (time =3D 0; time < timeout; time++) {
+> -			val =3D readl(regs + RCAR_USB3_DL_CTRL);
+> -			if ((val & RCAR_USB3_DL_CTRL_FW_SET_DATA0) =3D=3D 0)
+> -				break;
+> -			udelay(1);
+> -		}
+> -		if (time =3D=3D timeout) {
+> -			retval =3D -ETIMEDOUT;
+> +		retval =3D readl_poll_timeout_atomic(regs + RCAR_USB3_DL_CTRL,
+> +				val, !(val & RCAR_USB3_DL_CTRL_FW_SET_DATA0),
+> +				1, 10000);
+> +		if (retval < 0)
+>  			break;
+> -		}
+>  	}
+>=20
+>  	temp =3D readl(regs + RCAR_USB3_DL_CTRL);
+>  	temp &=3D ~RCAR_USB3_DL_CTRL_ENABLE;
+>  	writel(temp, regs + RCAR_USB3_DL_CTRL);
+>=20
+> -	for (time =3D 0; time < timeout; time++) {
+> -		val =3D readl(regs + RCAR_USB3_DL_CTRL);
+> -		if (val & RCAR_USB3_DL_CTRL_FW_SUCCESS) {
+> -			retval =3D 0;
+> -			break;
+> -		}
+> -		udelay(1);
+> -	}
+> -	if (time =3D=3D timeout)
+> -		retval =3D -ETIMEDOUT;
+> +	retval =3D readl_poll_timeout_atomic((regs + RCAR_USB3_DL_CTRL),
 
-In Linux-5.9-rc6 this clock doesn't exist anymore. Should be
-IMX8MP_CLK_HSIO_AXI
+We can also remove these unnecessary parentheses like below.
 
-> +			assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
-> +			assigned-clock-rates = <500000000>;
-> +			interrupts = <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +			status = "disabled";
-> +
-> +			usb_dwc3_1: dwc3@38200000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0x38200000 0x10000>;
-> +				clocks = <&clk IMX8MP_CLK_HSIO_AXI>,
-> +					 <&clk IMX8MP_CLK_USB_CORE_REF>,
-> +					 <&clk IMX8MP_CLK_USB_ROOT>;
-> +				clock-names = "bus_early", "ref", "suspend";
-> +				assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI>;
-> +				assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
-> +				assigned-clock-rates = <500000000>;
-> +				interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
-> +				phys = <&usb3_phy1>, <&usb3_phy1>;
-> +				phy-names = "usb2-phy", "usb3-phy";
-> +				snps,dis-u2-freeclk-exists-quirk;
-> +				xhci-64bit-support-disable;
-> +				status = "disabled";
++	retval =3D readl_poll_timeout_atomic(regs + RCAR_USB3_DL_CTRL,
 
-Does it make sense for a board to enable the parent node and leave this
-one disabled? If not you can drop this status = "disabled" here.
+After fixed this:
 
-Sascha
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Best regards,
+Yoshihiro Shimoda
+
