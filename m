@@ -2,34 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2952759CD
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 16:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DAD275A24
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Sep 2020 16:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726595AbgIWOVU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Sep 2020 10:21:20 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56154 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726130AbgIWOVU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Sep 2020 10:21:20 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1600870879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tZWkBOW6OkyhpRIUicvESlEm1fQJupW4N/xDOD1gvLc=;
-        b=Th4XZjSPlywXH6zCrM7dRqvtQDp/fjEjNRk//qQhxhFDqdpwg8cWymJ+mAtRzt5503Jpwl
-        oqI/f5UQ1RzPm60+DU2G6I4H8HG/3tzW8mykBylZ2wrfIGGbT94h3014agaNVmMh+TVh+b
-        G8SR8D939WpImyI4CKO44vvds1G44Ok=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 6FBEAB29E;
-        Wed, 23 Sep 2020 14:21:56 +0000 (UTC)
-Message-ID: <1600870858.25088.1.camel@suse.com>
-Subject: Re: [PATCH 3/4] net: usb: rtl8150: use usb_control_msg_recv() and
- usb_control_msg_send()
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Himadri Pandya <himadrispandya@gmail.com>
+        id S1726676AbgIWOdK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Sep 2020 10:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726587AbgIWOc7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Sep 2020 10:32:59 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093D0C0613D1;
+        Wed, 23 Sep 2020 07:32:59 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id t10so307559wrv.1;
+        Wed, 23 Sep 2020 07:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GGRsimobAk7x9LK53KoArxzuwgLweU0zv4O8HtxU3QU=;
+        b=guhvDUgj7+1dXFzvcpFXADDm35dNnDDQkjJHeoeSzaJ5Jk49QzA0LbQ1uUJMRmIqwc
+         l2SUPj2ZQoOdMOS5hGsHo4H1knkD5sIYGO/VRiaxyRC2jHZ/zKDU9gN47kYPszK4MNXD
+         zvlKfcAjx8BA0+uvZ0StohuB9f8/NbMirKXB/FBEKrIedceDhM5wH7n9/x80ybGTlIor
+         e2m0YG91VSiSjJZNGHO+kHRObIXqJ+Qh9eSEND15zhZMs6dGyFJyh0CDq0NUC7TA+AAu
+         8q0oUJIMwgEcEfPf2rQZNOOH3FzqfBm6iZxLzX5h9hNAQBrvgeK2iHank5P0LsFNSoLD
+         vkqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GGRsimobAk7x9LK53KoArxzuwgLweU0zv4O8HtxU3QU=;
+        b=pgyozQiSLAjks2jLkAgXHCB7RZO+4Mz+8QTzkNOHPB/NQf8mbwwANSiPQstBQIZ6iF
+         vijP8VDPgnAssAB/a8SdLkgbUCm5hi7LZ+TrxCe2ndSq1WSmvHhkDmXVObJk6ANe1wCN
+         lvZmoax2IG8GFZZeEKRh4gZHA3l61rOO9e+vWDJIq+jeSUVbNDKtUB3XfXfYMPdR5gw4
+         XWEGUowTIMkjZidfEzmlLjp66wJIcB3p0gLa4KJ3JuQVOSVfubjOnvRZaUmFWOaYDmxK
+         aZDrfXvpKd3Uap853mzdn83qt3i6eSMX6Pqnv1HJHjKJUSfhTFFVyt8IA1MBkrrQcIkN
+         +FeQ==
+X-Gm-Message-State: AOAM532p/7YEdKPvxl95jp6FJ2PjFjNoPAAgMY195Gb6x7rmjBU9QYIE
+        EOG5nrX57VQOHGO28LYmvjWP+JZgPvxPf3RUQyU=
+X-Google-Smtp-Source: ABdhPJw3bJWXUQEbxcOWG3BwMQnvs4bzdMoNz2+ECyQzSG2TYRvZiHkcRHjLhdvWlUL3SNf4cg5/E1g2Ls1K+PiJxik=
+X-Received: by 2002:adf:9b8b:: with SMTP id d11mr1269065wrc.71.1600871577757;
+ Wed, 23 Sep 2020 07:32:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200923090519.361-1-himadrispandya@gmail.com>
+ <20200923090519.361-4-himadrispandya@gmail.com> <1600856557.26851.6.camel@suse.com>
+ <CAOY-YVkHycXqem_Xr6nQLgKEunk3MNc7dBtZ=5Aym4Y06vs9xQ@mail.gmail.com> <1600870858.25088.1.camel@suse.com>
+In-Reply-To: <1600870858.25088.1.camel@suse.com>
+From:   Himadri Pandya <himadrispandya@gmail.com>
+Date:   Wed, 23 Sep 2020 20:02:45 +0530
+Message-ID: <CAOY-YVkciMUgtS7USbBh_Uy_=fVWwMMDeHv=Ub_H3GaY0FKZyQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] net: usb: rtl8150: use usb_control_msg_recv() and usb_control_msg_send()
+To:     Oliver Neukum <oneukum@suse.com>
 Cc:     David Miller <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         pankaj.laxminarayan.bharadiya@intel.com,
@@ -40,37 +63,38 @@ Cc:     David Miller <davem@davemloft.net>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-kernel-mentees@lists.linuxfoundation.org,
         Greg KH <gregkh@linuxfoundation.org>
-Date:   Wed, 23 Sep 2020 16:20:58 +0200
-In-Reply-To: <CAOY-YVkHycXqem_Xr6nQLgKEunk3MNc7dBtZ=5Aym4Y06vs9xQ@mail.gmail.com>
-References: <20200923090519.361-1-himadrispandya@gmail.com>
-         <20200923090519.361-4-himadrispandya@gmail.com>
-         <1600856557.26851.6.camel@suse.com>
-         <CAOY-YVkHycXqem_Xr6nQLgKEunk3MNc7dBtZ=5Aym4Y06vs9xQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 23.09.2020, 19:36 +0530 schrieb Himadri Pandya:
-> On Wed, Sep 23, 2020 at 3:52 PM Oliver Neukum <oneukum@suse.com> wrote:
-> > 
-> > Am Mittwoch, den 23.09.2020, 14:35 +0530 schrieb Himadri Pandya:
+On Wed, Sep 23, 2020 at 7:51 PM Oliver Neukum <oneukum@suse.com> wrote:
+>
+> Am Mittwoch, den 23.09.2020, 19:36 +0530 schrieb Himadri Pandya:
+> > On Wed, Sep 23, 2020 at 3:52 PM Oliver Neukum <oneukum@suse.com> wrote:
+> > >
+> > > Am Mittwoch, den 23.09.2020, 14:35 +0530 schrieb Himadri Pandya:
+>
+> > > GFP_NOIO is used here for a reason. You need to use this helper
+> > > while in contexts of error recovery and runtime PM.
+> > >
+> >
+> > Understood. Apologies for proposing such a stupid change.
+>
+> Hi,
+>
+> sorry if you concluded that the patch was stupid. That was not my
+> intent. It was the best the API allowed for. If an API makes it
+> easy to make a mistake, the problem is with the API, not the developer.
+>
+>         Regards
+>                 Oliver
+>
 
-> > GFP_NOIO is used here for a reason. You need to use this helper
-> > while in contexts of error recovery and runtime PM.
-> > 
-> 
-> Understood. Apologies for proposing such a stupid change.
+I meant that it was stupid to change it without properly understanding
+the significance of GFP_NOIO in this context.
 
-Hi,
+So now, do we re-write the wrapper functions with flag passed as a parameter?
 
-sorry if you concluded that the patch was stupid. That was not my
-intent. It was the best the API allowed for. If an API makes it
-easy to make a mistake, the problem is with the API, not the developer.
-
-	Regards
-		Oliver
-
+Regards,
+Himadri
