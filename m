@@ -2,137 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF726276D8C
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 11:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E44276DDF
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 11:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726412AbgIXJdp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 05:33:45 -0400
-Received: from mail-eopbgr40070.outbound.protection.outlook.com ([40.107.4.70]:55070
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726267AbgIXJdp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Sep 2020 05:33:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XETivqR48JmmU/VfdYfZz0Fa8fJpoDUTV+LU/UQhDiz/e7vZvUkBsu2gTmTwLE/ZjVI1EmtTKloYeRlW9vZKKxTQxCsWnruhwJpETaKDjXvwmKy/SKF3AQ73WDbOxp4f/jVCVAxXsKcPoNmr2JK7YvI5qDL8f1hQpELaV4DGpjdp+5PnsncZchjFIcIYCgLDCwuVgUdeYDS5EWODu449nb9j/oR+7/4gyKgflp99ppe4jhL0M673CKB4fdVWJaX0mZZtn2xIvWm2WP3Hai77mjGBd7CNnyyK7adYoW85UkIPPB6gfn2XUy+kRgUiN7IrMqb/u1WFoUkJBWL3zgfCVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WsOEuzG4k8ShI5XELK75tP51dN+3RJlUi/W61VULY54=;
- b=ERppJ4EGGGd0fHIObCmD8LOo2m9w4rdTHkv/Bbf4mICFkf5ztY3PB9wPS4iUZ4hRHNiGzDBRjIpCxVcJhk5WDkcwndyj4uEUtRR5hNqwaNnEOMTcvU9+ePJgGZMg/kU+RTETsUQUxtdL3uc2HyOYAvTLsHKawyOFjHnctW/1rLogiuEHnxzyzBbj2UBTyoj/YFqY5HVAG6nt3+ImJLRF2vVyTEUAAxDJxpm7vTE7qMruuvEoTW6J8OZKrvIH4E++CcVnjPHm7/TKVawP2oZkfklAG/V6TPq5Pt2pRy/cjY1TXqNqi5Z7INpODWOLJi/3UZyZhhJcRhEc5//GxJutHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WsOEuzG4k8ShI5XELK75tP51dN+3RJlUi/W61VULY54=;
- b=eCYbbgAZaZRhXq13XCoYNmBDHPaHBogWbSbFgLJAG2UQhoucud6SbhnQgR5KwZSoOyPHroM7c7qceX6LB6X9qcW+LF9NUtuFQl7pQY3HRwLhnZRuhdu+6Xo1MwO6g0HSt6dA0B/3oad6ufk917lh3B6VhGg4tNQ0E9rMvwlRTgc=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB6150.eurprd04.prod.outlook.com (2603:10a6:20b:71::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.22; Thu, 24 Sep
- 2020 09:33:41 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%4]) with mapi id 15.20.3412.020; Thu, 24 Sep 2020
- 09:33:41 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Felipe Balbi <balbi@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Jun Li <jun.li@nxp.com>
-Subject: RE: [PATCH v2 1/8] usb: cdns3: gadget: using correct sg operations
-Thread-Topic: [PATCH v2 1/8] usb: cdns3: gadget: using correct sg operations
-Thread-Index: AQHWh1J65T529oHJzUK4DV982MdnFKl3eZmAgAAirQA=
-Date:   Thu, 24 Sep 2020 09:33:41 +0000
-Message-ID: <AM7PR04MB7157E8B31971129B3E5113968B390@AM7PR04MB7157.eurprd04.prod.outlook.com>
-References: <20200910091130.20937-1-peter.chen@nxp.com>
- <20200910091130.20937-2-peter.chen@nxp.com> <87ft77eisu.fsf@kernel.org>
-In-Reply-To: <87ft77eisu.fsf@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [92.121.68.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: aa183c52-bb99-4232-3a68-08d8606cec8f
-x-ms-traffictypediagnostic: AM6PR04MB6150:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR04MB615020518FFB999D299E04AF8B390@AM6PR04MB6150.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EvXTeLRkIV8NWHPfL2WJk87X6aG4RGdtgtzsTJOuRM4auARmTjAcXiKjw4Wvf6ptHqXwSTZQ48gXgKa/UnufDzpRrbTMbqWp6NDXH2wJ5WDGS0PCGjeP9Ia6GldPMAONnOOoL4MfyzQ8FMTIreSqovLfcNiqkAG2KWFTYzICHN4U30RQxaHviZmsePPb596dm7n52H7gUFLNsGSdXvzsDX92LbakBalRVybyJ4wgIz1FU6ODJuVd2mJMR112F8yii/w2aZ0TA5dx675YNb6U+jDmmaEI/n3ORVURCoFW0CBjiRVXyuZ1Z8RQ2nA1pN590nEVKnAXxip17fnldezahA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(396003)(346002)(366004)(39860400002)(136003)(7696005)(316002)(6506007)(86362001)(478600001)(2906002)(54906003)(33656002)(186003)(6916009)(26005)(71200400001)(66946007)(66446008)(9686003)(55016002)(4326008)(76116006)(44832011)(64756008)(5660300002)(66476007)(66556008)(52536014)(8936002)(83380400001)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: KNHCMHy6eTKL8KEgGfgXjG4YeuTHAeeAP5BASMQ1XmkfqBxC/hMTRYMlbcBUdwcDxGinm0gqKt4COZhzcnHzKzkE4Vv879NOePdyASF1BDnHmXXmwRYQR3yev7EImjuw1bwv0EmB0bTHMq8OIuzYSJrVLLrL1fOoaF5ltCTUHGitF304RhoaXbbHIncveJjfqpTJWnp7+vvS643zhmLyPM7OGOhhJ0IHcRkCqAIjhA9hD52OQm7kKmAXhbp4yNg4oKgsw8mIreEt6g/loPAo7U+5o9sk7VWtkG5fsw/fcBkPfwZDXZFAFEl5GGmY9ut9sZtC/3iyltjBDomUU4JxNlUi6hAN6++C37uEit0XJmhe+wY+M5Vezo0yRG+LjeeSUtjm2wqVq7XNQIZ6HLM2aHItAGiuq1He+y+rm0PLaSSyKkqq3Afq74uMHHqP6IS2DU50ETe2fWWifZznH6WK3uoa136RevrKb81AxZe+VaQ46TwkY2TnTjx1LDN8tjNPmKTZVVfDpTgnBvV1Fn50iXmFXnVMb3g9t66bGAEQSqFO6LW4yMiE6KuD3EdZesGXh8c0gIMju3XlteJRcBVR0Zev9ibyomtjQUQo7meNcqx39n8BNCrJp2i1kF26xOVwvPscHAhTa8Rb7efNSyPSig==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727170AbgIXJvn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 05:51:43 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:40438 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726380AbgIXJvm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 05:51:42 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 08O9pcbj001598;
+        Thu, 24 Sep 2020 04:51:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1600941098;
+        bh=ABf1wJk9pN6HyOKvz8iubl9Rlb0wrsJB4GHUiChsgdk=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=oCbtcEYTdXSxUbWbDAJab5mozeA4FTR6HYpDRQslKLwWqiboj9AIZwvPfi7rBUQVj
+         wBw8Xp3ORPi7eIOrc4lV/IPQ3KRKNddBaKbMmCPpCwczMcgfJ2gSEqCooj+t9RDSPK
+         xZLm5Bk4nVdHbowKUErforyLkd7g2wKcVwN/gkF4=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 08O9pcJa076302
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 24 Sep 2020 04:51:38 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 24
+ Sep 2020 04:51:38 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 24 Sep 2020 04:51:38 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 08O9pZUP085506;
+        Thu, 24 Sep 2020 04:51:36 -0500
+Subject: Re: [PATCH v3 2/3] dt-bindings: usb: cdns,usb3: Add
+ cdns,phyrst-a-enable property
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>, <balbi@kernel.org>
+CC:     <pawell@cadence.com>, <kurahul@cadence.com>, <nsekhar@ti.com>,
+        <vigneshr@ti.com>, <robh+dt@kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20200915114543.2599-1-rogerq@ti.com>
+ <20200915114543.2599-3-rogerq@ti.com>
+ <1b45d695-0874-69c7-8398-5d14033f0788@gmail.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <20b1126a-d328-ab79-2624-7ddece6b56b0@ti.com>
+Date:   Thu, 24 Sep 2020 12:51:35 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa183c52-bb99-4232-3a68-08d8606cec8f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2020 09:33:41.3772
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: i6Elvss6MH/UV+h6OG8wYOtGgYZtX1aYBzNdVlWEhG5vUyWf7ZgGrRygTcQQ1gKKIB7mHEg/0kWEoRDCjG+uLw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6150
+In-Reply-To: <1b45d695-0874-69c7-8398-5d14033f0788@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
->=20
-> Peter Chen <peter.chen@nxp.com> writes:
->=20
-> > It needs to use request->num_mapped_sgs to indicate mapped sg number,
-> > the request->num_sgs is the sg number before the mapping. These two
-> > entries have different values for the platforms which iommu or swiotlb
-> > is used. Besides, it needs to use correct sg APIs for mapped sg list
-> > for TRB assignment.
-> >
-> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
->=20
-> fails to apply to my testing/next
->=20
-> checking file drivers/usb/cdns3/gadget.c Hunk #1 succeeded at 1099 (offse=
-t 1
-> line).
-> Hunk #2 succeeded at 1165 (offset 1 line).
-> Hunk #3 FAILED at 1176.
-> Hunk #4 succeeded at 1221 with fuzz 2 (offset 1 line).
-> 1 out of 4 hunks FAILED
->=20
-=20
-It could work now, I think the possible reason is you have already applied =
-other cdns3 patches during
-these two hours. My git log likes below:
+Hi Sergei,
 
-ca71afbe0c52 (HEAD -> felipe_testing_next) usb: cdns3: gadget: enlarge the =
-TRB ring length
-50599e28f626 usb: cdns3: gadget: sg_support is only for DEV_VER_V2 or above
-ed1e5b0fe5b2 usb: cdns3: gadget: need to handle sg case for workaround 2 ca=
-se
-95c952507262 usb: cdns3: gadget: handle sg list use case at completion corr=
-ectly
-9d45b67cf0c3 usb: cdns3: gadget: add CHAIN and ISP bit for sg list use case
-28e5fd2c3fae usb: cdns3: gadget: calculate TDL correctly
-f57692f1a9a4 usb: cdns3: gadget: improve the dump TRB operation at cdns3_ep=
-_run_transfer
-5f94832916b5 usb: cdns3: gadget: using correct sg operations
-bed7c9e9a5aa (felipe/testing/next) usb: dwc3: gadget: Rename misleading fun=
-ction names
-3d7ce113c2d0 usb: dwc3: gadget: Refactor preparing last TRBs
-43365b1e90af usb: dwc3: gadget: Set IOC if not enough for extra TRBs
-ea52ca3fdefb usb: dwc3: gadget: Check for number of TRBs prepared
-e6ccecf58b1b usb: dwc3: gadget: Return the number of prepared TRBs
+On 15/09/2020 19:15, Sergei Shtylyov wrote:
+> Hello!
+> 
+> On 9/15/20 2:45 PM, Roger Quadros wrote:
+> 
+>> Controller version 0x0002450D has USB2 PHY RX sensitivity issues
+>> that needs to be worked around by enabling phyrst-a-enable bit
+>> in PHYRST_CFG register.
+>>
+>> There is no way to know controller version before device controller
+>> is started and the workaround needs to be applied for both host and
+>> device modes, so we add this DT property.
+>>
+>> Signed-off-by: Roger Quadros <rogerq@ti.com>
+>> Acked-by: Rob Herring <robh@kernel.org>
+>> ---
+>>   Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+>> index 9b14c8443d39..ac20b98e9910 100644
+>> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+>> @@ -61,6 +61,10 @@ properties:
+>>         buffers expressed in KB
+>>       $ref: /schemas/types.yaml#/definitions/uint32
+>>   
+>> +  cdns,phyrst-a-enable:
+>> +    description: Enable resetting of PHY if Rx fail is detected
+> 
+>     Failure?
 
-Thanks,
-Peter
+Actually the IP manual says "Reset PHY if Rx fail is detected".
+
+So let's leave it like that.
+> 
+> [...]
+> 
+> MBR, Sergei
+> 
+
+cheers,
+-roger
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
