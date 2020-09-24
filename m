@@ -2,93 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A38276905
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 08:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29601276A1A
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 09:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727014AbgIXGg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 02:36:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48156 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726846AbgIXGg0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Sep 2020 02:36:26 -0400
-Received: from localhost (unknown [84.241.198.81])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 75E792311A;
-        Thu, 24 Sep 2020 06:36:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600929385;
-        bh=k/MfKAr0I4G8TJNbm1gV8eI6DluYKtODXwraB9Gmu9w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RqDQn+PucuvysvMgPEHFI5GTxoWvKOMTOz19Zk5TzG40nqUB3KlTT0mzRPEXLKV46
-         bwaJzWy8ZvB+iSqfpcjXjj/EJzcLWxIY3gYrn+9e7RYR8EWd9pwFaS+qpLuXFLihKM
-         eEhqIhPkCGFqdJymm8De0UYbEnXy9xZplotKzuCo=
-Date:   Thu, 24 Sep 2020 08:36:21 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v2 2/2] USB: misc: Add onboard_usb_hub driver
-Message-ID: <20200924063621.GA593410@kroah.com>
-References: <20200917114600.v2.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200917114600.v2.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <20200920141720.GD2915460@kroah.com>
- <20200922011837.GE21107@google.com>
- <20200923222545.GB2105328@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200923222545.GB2105328@google.com>
+        id S1727027AbgIXHKk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 24 Sep 2020 03:10:40 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:45485 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727001AbgIXHKk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 03:10:40 -0400
+Received: from mail-pj1-f69.google.com ([209.85.216.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1kLLOn-0003b0-UI
+        for linux-usb@vger.kernel.org; Thu, 24 Sep 2020 07:10:38 +0000
+Received: by mail-pj1-f69.google.com with SMTP id p11so1325146pjv.2
+        for <linux-usb@vger.kernel.org>; Thu, 24 Sep 2020 00:10:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Nbrq59GvwtLcN9qKevu8+3dfH8r78wKpe+smKwZezME=;
+        b=ZwSwTe/Ajutax9aaHE94Mj85bAGGSoGJCZ9YkYgDXmbiywFmaLBtEqzWU7JTgKhg+r
+         MtTjURXICEjmvgXIZsS5XUcaXJUnxukhvVpYXEN/pmDufoqd4R8ViiI6YdQSnUfLHZAL
+         0kPUFTmMnzbIw3XwX0uQWdYRMkbbRv0UQ/eD/dF0dCnEIYvlj6oIjxhe3gaJ2odcZd6t
+         IMdrpJyjQ3D0wCcAavPmOonTlAKK6QKbOab53i6PCMT+SnGj38oLLkqrc3uDwTzgdWRt
+         FheOhLiiupE+8GSQWUEl5lcRDLEKaXkEz0Hz7OluJqUUip4NLxnwof0Wwdtolh+KiayM
+         DbDA==
+X-Gm-Message-State: AOAM532Jq3Vs7B7DzVUo+MQ3du91RZ+LHN5gAZaAcIUvIY0rZ+2/YtRt
+        Y06xB+p3IEsicByDS+3Yh7U0nB/S8Jif1Heb6F3Tcp1HQZ12+lP5HWHV7VlsEaVrbrJg/wj5Gz3
+        8H9AuzPWEoO7qrVwDCpWF+83j2E562sq8GFLhQA==
+X-Received: by 2002:a17:90a:2ecb:: with SMTP id h11mr2601224pjs.195.1600931436189;
+        Thu, 24 Sep 2020 00:10:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzCk7vzCBN/l74QQtaNp+k0MuChSSLUgg5AfeBO3OsjJTBVY/G00Wpe7vMaVKlvc6su9uo1Ig==
+X-Received: by 2002:a17:90a:2ecb:: with SMTP id h11mr2601198pjs.195.1600931435690;
+        Thu, 24 Sep 2020 00:10:35 -0700 (PDT)
+Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
+        by smtp.gmail.com with ESMTPSA id q10sm1351546pja.48.2020.09.24.00.10.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 24 Sep 2020 00:10:35 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
+Subject: Re: [PATCH] Bluetooth: btusb: Avoid unnecessary reset upon system
+ resume
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <CANFp7mV7fC9_EZHd7B0Cu-owgCVdA6CNd2bb7XwFf5+6b7FVpg@mail.gmail.com>
+Date:   Thu, 24 Sep 2020 15:10:31 +0800
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Alex Lu <alex_lu@realsil.com.cn>,
+        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <A6F728DB-A07B-4323-83A5-3DABA8FDC156@canonical.com>
+References: <20200923175602.9523-1-kai.heng.feng@canonical.com>
+ <CANFp7mV7fC9_EZHd7B0Cu-owgCVdA6CNd2bb7XwFf5+6b7FVpg@mail.gmail.com>
+To:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+X-Mailer: Apple Mail (2.3608.120.23.2.1)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 03:25:45PM -0700, Matthias Kaehlcke wrote:
-> On Mon, Sep 21, 2020 at 06:18:37PM -0700, Matthias Kaehlcke wrote:
-> > On Sun, Sep 20, 2020 at 04:17:20PM +0200, Greg Kroah-Hartman wrote:
-> > > On Thu, Sep 17, 2020 at 11:46:22AM -0700, Matthias Kaehlcke wrote:
-> > > >
-> > > > ...
-> > > >
-> > > > +static int __init onboard_hub_init(void)
-> > > > +{
-> > > > +	int rc;
-> > > > +
-> > > > +	rc = platform_driver_register(&onboard_hub_driver);
-> > > > +	if (rc)
-> > > > +		return rc;
-> > > > +
-> > > > +	return usb_register_device_driver(&onboard_hub_usbdev_driver, THIS_MODULE);
-> > > 
-> > > No unwinding of the platform driver register if this fails?
-> > 
-> > Right, will add unwinding.
-> > 
-> > > And THIS_MODULE should not be needed, did we get the api wrong here?
-> > 
-> > It seems you suggest to use usb_register() instead, SGTM
+[+Cc linux-usb]
+
+Hi Abhishek,
+
+> On Sep 24, 2020, at 04:41, Abhishek Pandit-Subedi <abhishekpandit@chromium.org> wrote:
 > 
-> Actually usb_register() is for registering a struct usb_driver, however
-> this is a struct usb_device_driver, there doesn't seem to be a
-> registration function/macro that doesn't require THIS_MODULE. Please
-> provide a pointer if I'm wrong.
+> Hi Kai-Heng,
+> 
+> Which Realtek controller is this on?'
 
-You are correct, I was just making a meta-comment that we got this api
-wrong when adding it to the kernel and need to fix it up so that you do
-not have to manually pass in the module owner.  i.e. make it much like
-usb_register() does.
+The issue happens on 8821CE.
 
-thanks,
+> 
+> Specifically for RTL8822CE, we tested without reset_resume being set
+> and that was causing the controller being reset without bluez ever
+> learning about it (resulting in devices being unusable without
+> toggling the BT power).
 
-greg k-h
+The reset is done by the kernel, so how does that affect bluez?
+
+From what you described, it sounds more like runtime resume since bluez is already running.
+If we need reset resume for runtime resume, maybe it's another bug which needs to be addressed?
+
+> If the firmware doesn't cut off power during suspend, maybe you
+> shouldn't set the BTUSB_WAKEUP_DISABLE flag for that controller.
+
+We don't know beforehand if the platform firmware (BIOS for my case) will cut power off or not.
+
+In general, laptops will cut off the USB power during S3.
+When AC is plugged, some laptops cuts USB power off and some don't. This also applies to many desktops. Not to mention there can be BIOS options to control USB power under S3/S4/S5...
+
+So we don't know beforehand.
+
+> 
+> I would prefer this doesn't get accepted in its current state.
+
+Of course.
+I think we need to find the root cause for your case before applying this one.
+
+Kai-Heng
+
+> 
+> Abhishek
+> 
+> On Wed, Sep 23, 2020 at 10:56 AM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+>> 
+>> Realtek bluetooth controller may fail to work after system sleep:
+>> [ 1272.707670] Bluetooth: hci0: command 0x1001 tx timeout
+>> [ 1280.835712] Bluetooth: hci0: RTL: HCI_OP_READ_LOCAL_VERSION failed (-110)
+>> 
+>> If platform firmware doesn't cut power off during suspend, the firmware
+>> is considered retained in controller but the driver is still asking USB
+>> core to perform a reset-resume. This can make bluetooth controller
+>> unusable.
+>> 
+>> So avoid unnecessary reset to resolve the issue.
+>> 
+>> For devices that really lose power during suspend, USB core will detect
+>> and handle reset-resume correctly.
+>> 
+>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>> ---
+>> drivers/bluetooth/btusb.c | 8 +++-----
+>> 1 file changed, 3 insertions(+), 5 deletions(-)
+>> 
+>> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+>> index 8d2608ddfd08..de86ef4388f9 100644
+>> --- a/drivers/bluetooth/btusb.c
+>> +++ b/drivers/bluetooth/btusb.c
+>> @@ -4255,17 +4255,15 @@ static int btusb_suspend(struct usb_interface *intf, pm_message_t message)
+>>                enable_irq(data->oob_wake_irq);
+>>        }
+>> 
+>> -       /* For global suspend, Realtek devices lose the loaded fw
+>> -        * in them. But for autosuspend, firmware should remain.
+>> -        * Actually, it depends on whether the usb host sends
+>> +       /* For global suspend, Realtek devices lose the loaded fw in them if
+>> +        * platform firmware cut power off. But for autosuspend, firmware
+>> +        * should remain.  Actually, it depends on whether the usb host sends
+>>         * set feature (enable wakeup) or not.
+>>         */
+>>        if (test_bit(BTUSB_WAKEUP_DISABLE, &data->flags)) {
+>>                if (PMSG_IS_AUTO(message) &&
+>>                    device_can_wakeup(&data->udev->dev))
+>>                        data->udev->do_remote_wakeup = 1;
+>> -               else if (!PMSG_IS_AUTO(message))
+>> -                       data->udev->reset_resume = 1;
+>>        }
+>> 
+>>        return 0;
+>> --
+>> 2.17.1
+>> 
+
