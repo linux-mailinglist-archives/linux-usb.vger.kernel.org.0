@@ -2,95 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E47B3276CA1
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 11:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB56276CCA
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 11:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727211AbgIXJBU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 05:01:20 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:13686 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727345AbgIXJBR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 05:01:17 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08O8vdTU024333;
-        Thu, 24 Sep 2020 11:01:03 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=MA+9poxCALvNJJsLDbmOc9iqUepm6Qqt4V8rDPuLSBo=;
- b=Vr08c0asAPnpgf9MFQsacatabxYeq8v6+kmyZHFHzVnYURtzswgNJk6DIuLa4EJNWDJx
- icRwfwBXkW+MyCd1GI6BbkMhdTLHqhD052xx0jABOt6aEQJMuPJ7CRnjAY1j2tcbDoSj
- PAap00cdvUsqRtW101AcBJfCOo/JJt69vj44WAio1MKFWfG/CMk7YZlmG/b7TftPND9n
- K4g7z9DlPrR31WItc5o+SBTKyIfjQv7LwsTD6CEyASnYYrIyt0xflr7mglyQnrb6kG7q
- RnJkbf1Kh1WwW+f15Iu474E3gawsd6htcIX7PouRo5HY3Pp8qLY+gcL5vdBpl7Cz8+kr fQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 33n748cs6j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Sep 2020 11:01:03 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 30D23100038;
-        Thu, 24 Sep 2020 11:01:03 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1E0BA2A4D64;
-        Thu, 24 Sep 2020 11:01:03 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 24 Sep 2020 11:01:02
- +0200
-From:   Amelie Delaunay <amelie.delaunay@st.com>
-To:     Rob Herring <robh+dt@kernel.org>,
+        id S1727433AbgIXJG4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 05:06:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60996 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727336AbgIXJG4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Sep 2020 05:06:56 -0400
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3A49E206CD;
+        Thu, 24 Sep 2020 09:06:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600938415;
+        bh=1odkQUMRqD/zPzL+E82ClrVt6KBWiA9z4c4uyHXpAKg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=VnkAiv+Tlv7jpZTFpJYqx/8A0W5RfqOPvg5TrkvexE+hxPz4wHt2R23xLIBVEGykX
+         UWxGjZ/45jjdmeNIjudvmzNN6vdB5RZaT4p0OvXDLPJZe9VFjKx/ZLNtmqOwXhZpDx
+         AZuYdHvP7M9rxLvC01nbxpklLaZgANwB2+MCrFeY=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-Subject: [PATCH v3 6/6] ARM: multi_v7_defconfig: enable STUSB160X Type-C port controller support
-Date:   Thu, 24 Sep 2020 11:00:49 +0200
-Message-ID: <20200924090049.9041-7-amelie.delaunay@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200924090049.9041-1-amelie.delaunay@st.com>
-References: <20200924090049.9041-1-amelie.delaunay@st.com>
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH v2 6/7] usb: dwc3: gadget: Rename misleading function names
+In-Reply-To: <87v9g3d095.fsf@kernel.org>
+References: <cover.1596767991.git.thinhn@synopsys.com>
+ <554c6d34c5936630bbe292114fad9c3322a7161e.1596767991.git.thinhn@synopsys.com>
+ <874knnehul.fsf@kernel.org>
+ <129eda75-c6af-70db-a341-e0ce7fccc38f@synopsys.com>
+ <87v9g3d095.fsf@kernel.org>
+Date:   Thu, 24 Sep 2020 12:06:47 +0300
+Message-ID: <87sgb7czmg.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-24_05:2020-09-24,2020-09-24 signatures=0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable support for the STMicroelectronics STUSB160X USB Type-C port
-controller driver by turning on CONFIG_TYPEC and CONFIG_TYPEC_STUSB160X as
-modules.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
----
-No changes in v3.
-No changes in v2.
----
- arch/arm/configs/multi_v7_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index e9e76e32f10f..d90fba19fcdb 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -826,6 +826,8 @@ CONFIG_USB_CONFIGFS_F_HID=y
- CONFIG_USB_CONFIGFS_F_UVC=y
- CONFIG_USB_CONFIGFS_F_PRINTER=y
- CONFIG_USB_ETH=m
-+CONFIG_TYPEC=m
-+CONFIG_TYPEC_STUSB160X=m
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=16
- CONFIG_MMC_ARMMMCI=y
--- 
-2.17.1
+Hi,
 
+Felipe Balbi <balbi@kernel.org> writes:
+
+> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+>
+>> Hi Felipe,
+>>
+>> Felipe Balbi wrote:
+>>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+>>>
+>>>> The functions dwc3_prepare_one_trb_sg and dwc3_prepare_one_trb_linear
+>>>> are not necessarily preparing "one" TRB, it can prepare multiple TRBs.
+>>>> Rename these functions as follow:
+>>>>
+>>>> dwc3_prepare_one_trb_sg -> dwc3_prepare_trbs_sg
+>>>> dwc3_prepare_one_trb_linear -> dwc3_prepare_trbs_linear
+>>>>
+>>>> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+>>> Tried to apply on top of -rc6:
+>>>
+>>> checking file drivers/usb/dwc3/gadget.c
+>>> Hunk #1 FAILED at 1161.
+>>> Hunk #2 FAILED at 1231.
+>>> Hunk #3 FAILED at 1266.
+>>> Hunk #4 FAILED at 1294.
+>>> 4 out of 4 hunks FAILED
+>>>
+>>
+>> I'll rebase send out a new series with a bunch of fixes.
+>>
+>> Btw, the patches you just merged are not the latest:
+>> usb: dwc3: gadget: Resume pending requests after CLEAR_STALL
+>> usb: dwc3: gadget: END_TRANSFER before CLEAR_STALL command
+>>
+>> The latest are on your "testing/fixes" branch
+>
+> Argh, nice catch. I'll fix it shortly.
+
+should be corrected now. Thanks
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9sYacRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQbPYA/8DWbgffbwiN46j0Py/8PPvECayB11ZSpw
+u36OBkagMW/TFBoFoIiR5nq48iHFoPl0FGHuhP6HF6jgjlla2i3jXVrVZBd8ePp1
+E8Yl6RhMgRF/Haz/uYeUJ2zjpgRtWYeKfBJFeje9UFJ4xt+9qgkVkyvcg1r8xgsn
+lIeBlvpEQ6kMwkhYdCg67yVycXKPX4l5OmF76Wz5s8q4QQzXss2shDXwqvElWZM8
+3l07UV6BfJahU2Pi+uKyRlgAHhTeBsTaAh1GRN4EmDuHQmB2TWZSN8+mH6J0qpeU
+LWfa8LsNf2kYZIv13yAGL+dJJeKrXLhpP6X8RTklsEhNAZm/ZTspGLm+C117J9HY
+WNluBekshYeXd0ca6DzKoCSi+WQZlVNteDVBeQ4JuFoW/CTnfGAFMPB4Rwto+Psx
+W8ru7eepwgVLxz3mXpDrYJSAgf/9eN+ZQ/kANkyvwByPqHFkoQ/0FJX4UhJR0rwG
+aROIyohAj5bMIVlqLnE99vb7aTQmQ8M8v9kAoMVz0ukTkLMFd3ZiMZUcciCwkUTl
+SGaDND7XWAbPrSoNJNI3R9g+zDb3sUhvpiJV856wneH2Wcd0ZAhcmUne+0x5udPn
+//xZK8eRuMl5qMDQg+dapMDSOlGxgT7uWmaiL7r4rGOByXbJSg0Brdb2dw5FN9rt
+JwEUM6AID8g=
+=67YP
+-----END PGP SIGNATURE-----
+--=-=-=--
