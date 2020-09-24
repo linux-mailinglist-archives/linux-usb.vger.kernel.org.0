@@ -2,177 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF8027754D
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 17:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C575277543
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 17:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728440AbgIXP2v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 11:28:51 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:60383 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728368AbgIXP2v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 11:28:51 -0400
-X-Greylist: delayed 369 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Sep 2020 11:28:49 EDT
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4BxzLl4qF3z1qs0Y;
-        Thu, 24 Sep 2020 17:22:39 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4BxzLl42xcz1r12t;
-        Thu, 24 Sep 2020 17:22:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id zCXoiBsYmpzO; Thu, 24 Sep 2020 17:22:38 +0200 (CEST)
-X-Auth-Info: Mg4TILaI2HacphWNVRN/Ss+p9Lq0ghtD8wz7YWPogA8=
-Received: from maia.denx.de (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Thu, 24 Sep 2020 17:22:38 +0200 (CEST)
-Message-ID: <f6946d36092ab6c6160f0ef8abc8cfb5686df22b.camel@denx.de>
-Subject: Re: [PATCH] USB: gadget: f_ncm: Fix NDP16 datagram validation
-From:   Harald Seiler <hws@denx.de>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Brooke Basile <brookebasile@gmail.com>,
-        stable <stable@kernel.org>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Date:   Thu, 24 Sep 2020 17:22:28 +0200
-In-Reply-To: <20200920170158.1217068-1-bryan.odonoghue@linaro.org>
-References: <20200920170158.1217068-1-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+        id S1728384AbgIXP2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 11:28:07 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:39619 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728413AbgIXP2A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 11:28:00 -0400
+Received: (qmail 1340421 invoked by uid 1000); 24 Sep 2020 11:27:58 -0400
+Date:   Thu, 24 Sep 2020 11:27:58 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-usb@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v3 2/2] USB: misc: Add onboard_usb_hub driver
+Message-ID: <20200924152758.GA1337044@rowland.harvard.edu>
+References: <20200923180952.v3.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20200923180952.v3.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200923180952.v3.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 2020-09-20 at 18:01 +0100, Bryan O'Donoghue wrote:
-> commit 2b74b0a04d3e ("USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()")
-> adds important bounds checking however it unfortunately also introduces  a
-> bug with respect to section 3.3.1 of the NCM specification.
+On Wed, Sep 23, 2020 at 06:10:12PM -0700, Matthias Kaehlcke wrote:
+> The main issue this driver addresses is that a USB hub needs to be
+> powered before it can be discovered. For discrete onboard hubs (an
+> example for such a hub is the Realtek RTS5411) this is often solved
+> by supplying the hub with an 'always-on' regulator, which is kind
+> of a hack. Some onboard hubs may require further initialization
+> steps, like changing the state of a GPIO or enabling a clock, which
+> requires even more hacks. This driver creates a platform device
+> representing the hub which performs the necessary initialization.
+> Currently it only supports switching on a single regulator, support
+> for multiple regulators or other actions can be added as needed.
+> Different initialization sequences can be supported based on the
+> compatible string.
 > 
-> wDatagramIndex[1] : "Byte index, in little endian, of the second datagram
-> described by this NDP16. If zero, then this marks the end of the sequence
-> of datagrams in this NDP16."
+> Besides performing the initialization the driver can be configured
+> to power the hub off during system suspend. This can help to extend
+> battery life on battery powered devices which have no requirements
+> to keep the hub powered during suspend. The driver can also be
+> configured to leave the hub powered when a wakeup capable USB device
+> is connected when suspending, and power it off otherwise.
 > 
-> wDatagramLength[1]: "Byte length, in little endian, of the second datagram
-> described by this NDP16. If zero, then this marks the end of the sequence
-> of datagrams in this NDP16."
+> Technically the driver consists of two drivers, the platform driver
+> described above and a very thin USB driver that subclasses the
+> generic driver. The purpose of this driver is to provide the platform
+> driver with the USB devices corresponding to the hub(s) (a hub
+> controller may provide multiple 'logical' hubs, e.g. one to support
+> USB 2.0 and another for USB 3.x).
 > 
-> wDatagramIndex[1] and wDatagramLength[1] respectively then may be zero but
-> that does not mean we should throw away the data referenced by
-> wDatagramIndex[0] and wDatagramLength[0] as is currently the case.
-> 
-> Breaking the loop on (index2 == 0 || dg_len2 == 0) should come at the end
-> as was previously the case and checks for index2 and dg_len2 should be
-> removed since zero is valid.
-> 
-> I'm not sure how much testing the above patch received but for me right now
-> after enumeration ping doesn't work. Reverting the commit restores ping,
-> scp, etc.
-
-Same regression for me.  The last datagram of any NTB from the host is
-ignored so most networking is broken.  With this patch, I'm able to
-communicate from host to device again.
-
-> The extra validation associated with wDatagramIndex[0] and
-> wDatagramLength[0] appears to be valid so, this change removes the incorrect
-> restriction on wDatagramIndex[1] and wDatagramLength[1] restoring data
-> processing between host and device.
-> 
-> Fixes: 2b74b0a04d3e ("USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()")
-> Cc: Ilja Van Sprundel <ivansprundel@ioactive.com>
-> Cc: Brooke Basile <brookebasile@gmail.com>
-> Cc: stable <stable@kernel.org>
-
-Tested-by: Harald Seiler <hws@denx.de>
-Reviewed-by: Harald Seiler <hws@denx.de>
-
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Co-developed-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
->  drivers/usb/gadget/function/f_ncm.c | 30 ++---------------------------
->  1 file changed, 2 insertions(+), 28 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-> index b4206b0dede5..1f638759a953 100644
-> --- a/drivers/usb/gadget/function/f_ncm.c
-> +++ b/drivers/usb/gadget/function/f_ncm.c
-> @@ -1189,7 +1189,6 @@ static int ncm_unwrap_ntb(struct gether *port,
->  	const struct ndp_parser_opts *opts = ncm->parser_opts;
->  	unsigned	crc_len = ncm->is_crc ? sizeof(uint32_t) : 0;
->  	int		dgram_counter;
-> -	bool		ndp_after_header;
->  
->  	/* dwSignature */
->  	if (get_unaligned_le32(tmp) != opts->nth_sign) {
-> @@ -1216,7 +1215,6 @@ static int ncm_unwrap_ntb(struct gether *port,
->  	}
->  
->  	ndp_index = get_ncm(&tmp, opts->ndp_index);
-> -	ndp_after_header = false;
->  
->  	/* Run through all the NDP's in the NTB */
->  	do {
-> @@ -1232,8 +1230,6 @@ static int ncm_unwrap_ntb(struct gether *port,
->  			     ndp_index);
->  			goto err;
->  		}
-> -		if (ndp_index == opts->nth_size)
-> -			ndp_after_header = true;
->  
->  		/*
->  		 * walk through NDP
-> @@ -1312,37 +1308,13 @@ static int ncm_unwrap_ntb(struct gether *port,
->  			index2 = get_ncm(&tmp, opts->dgram_item_len);
->  			dg_len2 = get_ncm(&tmp, opts->dgram_item_len);
->  
-> -			if (index2 == 0 || dg_len2 == 0)
-> -				break;
-> -
->  			/* wDatagramIndex[1] */
-> -			if (ndp_after_header) {
-> -				if (index2 < opts->nth_size + opts->ndp_size) {
-> -					INFO(port->func.config->cdev,
-> -					     "Bad index: %#X\n", index2);
-> -					goto err;
-> -				}
-> -			} else {
-> -				if (index2 < opts->nth_size + opts->dpe_size) {
-> -					INFO(port->func.config->cdev,
-> -					     "Bad index: %#X\n", index2);
-> -					goto err;
-> -				}
-> -			}
->  			if (index2 > block_len - opts->dpe_size) {
->  				INFO(port->func.config->cdev,
->  				     "Bad index: %#X\n", index2);
->  				goto err;
->  			}
->  
-> -			/* wDatagramLength[1] */
-> -			if ((dg_len2 < 14 + crc_len) ||
-> -					(dg_len2 > frame_max)) {
-> -				INFO(port->func.config->cdev,
-> -				     "Bad dgram length: %#X\n", dg_len);
-> -				goto err;
-> -			}
-> -
->  			/*
->  			 * Copy the data into a new skb.
->  			 * This ensures the truesize is correct
-> @@ -1359,6 +1331,8 @@ static int ncm_unwrap_ntb(struct gether *port,
->  			ndp_len -= 2 * (opts->dgram_item_len * 2);
->  
->  			dgram_counter++;
-> +			if (index2 == 0 || dg_len2 == 0)
-> +				break;
->  		} while (ndp_len > 2 * (opts->dgram_item_len * 2));
->  	} while (ndp_index);
->  
-> -- 
-> 2.27.0
-> 
--- 
-Harald
 
+> --- a/drivers/usb/misc/Kconfig
+> +++ b/drivers/usb/misc/Kconfig
+> @@ -275,3 +275,19 @@ config USB_CHAOSKEY
+>  
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called chaoskey.
+> +
+> +config USB_ONBOARD_HUB
+> +	tristate "Onboard USB hub support"
+> +	depends on OF || COMPILE_TEST
+> +	help
+> +	  Say Y here if you want to support discrete onboard USB hubs that
+> +	  don't require an additional control bus for initialization (an
+
+... but does require nontrivial form of initialization, such as
+enabling a power regulator.
+
+
+> +static void onboard_hub_remove_usbdev(struct onboard_hub *hub, struct usb_device *udev)
+> +{
+> +	struct udev_node *node;
+> +
+> +	smp_rmb();
+> +	if (hub->going_away) {
+> +		/*
+> +		 * We are most likely being called as a result of unbinding a USB device from
+> +		 * onboard_hub_remove(). This function also holds the lock and iterates over
+> +		 * 'udev_list'. Skip deleting the node in this case to avoid a self deadlock,
+> +		 * keeping the node in the list isn't a problem, since the device is about to go
+> +		 * away.
+> +		 */
+> +		return;
+> +	}
+
+This part has a suspicious look.  For one thing, there's no comment
+explaining the purpose of the smp_rmb().  For another, that barrier
+doesn't seem to pair with any other memory barrier in the driver.
+
+I get that you want to avoid self-deadlock here.  But there must be a
+better way.  See below.
+
+> +static int onboard_hub_remove(struct platform_device *pdev)
+> +{
+> +	struct onboard_hub *hub = dev_get_drvdata(&pdev->dev);
+> +	struct udev_node *node;
+> +
+> +	hub->going_away = true;
+> +
+> +	mutex_lock(&hub->lock);
+> +
+> +	/* unbind the USB devices to avoid dangling references to this device */
+> +	list_for_each_entry(node, &hub->udev_list, list)
+> +		device_release_driver(&node->udev->dev);
+> +
+> +	mutex_unlock(&hub->lock);
+
+Alternative approach:
+
+	/* unbind the USB devices to avoid dangling references to this device */
+	mutex_lock(&hub->lock);
+	while (!list_empty(&hub->udev_list)) {
+		node = list_first_entry(&hub->udev_list, struct udev_node, list);
+		udev = node->udev;
+
+		/*
+		 * Unbinding the driver will call onboard_hub_remove_usbdev(),
+		 * which acquires hub->lock.  We must release the lock first.
+		 */
+		usb_get_device(udev);
+		mutex_unlock(&hub->lock);
+		device_release_driver(&udev->dev);
+		usb_put_device(udev);
+		mutex_lock(&hub->lock);
+	}
+	mutex_unlock(&hub->lock);
+
+> +static int onboard_hub_usbdev_probe(struct usb_device *udev)
+> +{
+> +	struct device *dev = &udev->dev;
+> +	struct onboard_hub *hub;
+> +
+> +	/* ignore supported hubs without device tree node */
+> +	if (!dev->of_node)
+> +		return -ENODEV;
+> +
+> +	hub = _find_onboard_hub(dev);
+> +	if (IS_ERR(hub))
+> +		return PTR_ERR(dev);
+
+hub, not dev.
+
+Alan Stern
