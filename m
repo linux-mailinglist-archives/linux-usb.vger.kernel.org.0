@@ -2,96 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CD02768FD
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 08:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A38276905
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 08:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726952AbgIXGfO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 02:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726721AbgIXGfN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 02:35:13 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D33C0613CE
-        for <linux-usb@vger.kernel.org>; Wed, 23 Sep 2020 23:35:13 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id n14so1272762pff.6
-        for <linux-usb@vger.kernel.org>; Wed, 23 Sep 2020 23:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=labau-com-tw.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id;
-        bh=WdbXNUPD6MY2k7zfhudyHvM2eQJZTVebaDaCbQjjSc4=;
-        b=R4ZRBj8YXWIGdZwMOechCKdR8uAv2fnfhQwdmfxjzpD1CjkGzjhKxac1qzn/LpOIsQ
-         kzMuCcp3Q1QSx7fgXJ2H47e+BHVMvzTeRvR/cVyHyzGHEpcHm3qHHcaAdNlHeUxns+6E
-         e5WTCqYUGcfnVEvTmUJq1cG7OW1smjI/ZDRITipA1GqH9APx6JLucfGeC6E9OFzHjUgQ
-         Y9oMhUw4jewY845zC5Zu00ZmLv0Ndh8NikpTff+ungAF6alTS5na1cqZsJvvsWZXNsBl
-         sTkwRw9jMUuSR8KqLnu2d8Ne1fPQAjmw+KeksySBlqLLGgYpiEiX8ehAR5M7L2/pAS9m
-         ZCRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=WdbXNUPD6MY2k7zfhudyHvM2eQJZTVebaDaCbQjjSc4=;
-        b=qRv0wyeAI/B6dLj9FKF6xeYINls5hzKcP1hyBXAgft7xwqIhj1ygUsq0L/RfaafxRm
-         6FLBHAe13m/ioJsYPMiA5ZEqxR7DKExm4DGDW65/zzVLRdP4kE3ZKt2RgNpB8BOj+sRs
-         wQ6Os2ylpGIQfg19FjVennIBRwq98maSLcHbjPhs16WOGfHo+L7nP5Bi1OoyzIAqnw3x
-         Huz2ZgLQ61U2LixJWSQK/kjrfoO9uKZELT3LHot3WkQkbAB4w4fuMUlPBE00aV75gVF1
-         Fwb7rE6A66KxXsi1TChPGS3HZyl4wrnEI7AoKlEx4r3zNWI3PMoAsIc/zBqZX9ss+wBz
-         D3ww==
-X-Gm-Message-State: AOAM532u+mhlovdoTllAS7vpqvLN3SGrtZVk00Lh3ATfHcQ3+WeLLs8H
-        CCKERzHYmV3dllTU2fRiDZByNA==
-X-Google-Smtp-Source: ABdhPJzikG7gxmnbljPjmCLOet8UO5lrllVUo0qfMOp0FRkGfzZZ/16CkCAL5dUv0RHCsC0TmnEMNg==
-X-Received: by 2002:a63:4d5b:: with SMTP id n27mr2722132pgl.360.1600929313019;
-        Wed, 23 Sep 2020 23:35:13 -0700 (PDT)
-Received: from localhost.localdomain (60-251-64-13.HINET-IP.hinet.net. [60.251.64.13])
-        by smtp.gmail.com with ESMTPSA id z9sm1493939pfk.118.2020.09.23.23.35.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2020 23:35:12 -0700 (PDT)
-From:   Scott Chen <scott@labau.com.tw>
-Cc:     young@labau.com.tw, jocelyn@labau.com.tw,
-        Scott Chen <scott@labau.com.tw>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: serial: pl2303: add device-id for HP GC device
-Date:   Thu, 24 Sep 2020 14:27:45 +0800
-Message-Id: <20200924062745.5791-1-scott@labau.com.tw>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S1727014AbgIXGg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 02:36:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48156 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726846AbgIXGg0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Sep 2020 02:36:26 -0400
+Received: from localhost (unknown [84.241.198.81])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 75E792311A;
+        Thu, 24 Sep 2020 06:36:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600929385;
+        bh=k/MfKAr0I4G8TJNbm1gV8eI6DluYKtODXwraB9Gmu9w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RqDQn+PucuvysvMgPEHFI5GTxoWvKOMTOz19Zk5TzG40nqUB3KlTT0mzRPEXLKV46
+         bwaJzWy8ZvB+iSqfpcjXjj/EJzcLWxIY3gYrn+9e7RYR8EWd9pwFaS+qpLuXFLihKM
+         eEhqIhPkCGFqdJymm8De0UYbEnXy9xZplotKzuCo=
+Date:   Thu, 24 Sep 2020 08:36:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v2 2/2] USB: misc: Add onboard_usb_hub driver
+Message-ID: <20200924063621.GA593410@kroah.com>
+References: <20200917114600.v2.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20200917114600.v2.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <20200920141720.GD2915460@kroah.com>
+ <20200922011837.GE21107@google.com>
+ <20200923222545.GB2105328@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200923222545.GB2105328@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is adds a device id for HP LD381 which is a pl2303GC-base device.
+On Wed, Sep 23, 2020 at 03:25:45PM -0700, Matthias Kaehlcke wrote:
+> On Mon, Sep 21, 2020 at 06:18:37PM -0700, Matthias Kaehlcke wrote:
+> > On Sun, Sep 20, 2020 at 04:17:20PM +0200, Greg Kroah-Hartman wrote:
+> > > On Thu, Sep 17, 2020 at 11:46:22AM -0700, Matthias Kaehlcke wrote:
+> > > >
+> > > > ...
+> > > >
+> > > > +static int __init onboard_hub_init(void)
+> > > > +{
+> > > > +	int rc;
+> > > > +
+> > > > +	rc = platform_driver_register(&onboard_hub_driver);
+> > > > +	if (rc)
+> > > > +		return rc;
+> > > > +
+> > > > +	return usb_register_device_driver(&onboard_hub_usbdev_driver, THIS_MODULE);
+> > > 
+> > > No unwinding of the platform driver register if this fails?
+> > 
+> > Right, will add unwinding.
+> > 
+> > > And THIS_MODULE should not be needed, did we get the api wrong here?
+> > 
+> > It seems you suggest to use usb_register() instead, SGTM
+> 
+> Actually usb_register() is for registering a struct usb_driver, however
+> this is a struct usb_device_driver, there doesn't seem to be a
+> registration function/macro that doesn't require THIS_MODULE. Please
+> provide a pointer if I'm wrong.
 
-Signed-off-by: Scott Chen <scott@labau.com.tw>
----
- drivers/usb/serial/pl2303.c | 1 +
- drivers/usb/serial/pl2303.h | 1 +
- 2 files changed, 2 insertions(+)
+You are correct, I was just making a meta-comment that we got this api
+wrong when adding it to the kernel and need to fix it up so that you do
+not have to manually pass in the module owner.  i.e. make it much like
+usb_register() does.
 
-diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-index 048452d8a4a4..be8067017eaa 100644
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -100,6 +100,7 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LD220_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LD220TA_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LD381_PRODUCT_ID) },
-+	{ USB_DEVICE(HP_VENDOR_ID, HP_LD381GC_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LD960_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LD960TA_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM220_PRODUCT_ID) },
-diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
-index 7d3090ee7e0c..b0f399a8c628 100644
---- a/drivers/usb/serial/pl2303.h
-+++ b/drivers/usb/serial/pl2303.h
-@@ -127,6 +127,7 @@
- 
- /* Hewlett-Packard POS Pole Displays */
- #define HP_VENDOR_ID		0x03f0
-+#define HP_LD381GC_PRODUCT_ID   0x0183
- #define HP_LM920_PRODUCT_ID	0x026b
- #define HP_TD620_PRODUCT_ID	0x0956
- #define HP_LD960_PRODUCT_ID	0x0b39
--- 
-2.17.1
+thanks,
 
+greg k-h
