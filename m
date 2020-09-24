@@ -2,162 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29601276A1A
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 09:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEF1276A74
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 09:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbgIXHKk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 24 Sep 2020 03:10:40 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:45485 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727001AbgIXHKk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 03:10:40 -0400
-Received: from mail-pj1-f69.google.com ([209.85.216.69])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1kLLOn-0003b0-UI
-        for linux-usb@vger.kernel.org; Thu, 24 Sep 2020 07:10:38 +0000
-Received: by mail-pj1-f69.google.com with SMTP id p11so1325146pjv.2
-        for <linux-usb@vger.kernel.org>; Thu, 24 Sep 2020 00:10:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=Nbrq59GvwtLcN9qKevu8+3dfH8r78wKpe+smKwZezME=;
-        b=ZwSwTe/Ajutax9aaHE94Mj85bAGGSoGJCZ9YkYgDXmbiywFmaLBtEqzWU7JTgKhg+r
-         MtTjURXICEjmvgXIZsS5XUcaXJUnxukhvVpYXEN/pmDufoqd4R8ViiI6YdQSnUfLHZAL
-         0kPUFTmMnzbIw3XwX0uQWdYRMkbbRv0UQ/eD/dF0dCnEIYvlj6oIjxhe3gaJ2odcZd6t
-         IMdrpJyjQ3D0wCcAavPmOonTlAKK6QKbOab53i6PCMT+SnGj38oLLkqrc3uDwTzgdWRt
-         FheOhLiiupE+8GSQWUEl5lcRDLEKaXkEz0Hz7OluJqUUip4NLxnwof0Wwdtolh+KiayM
-         DbDA==
-X-Gm-Message-State: AOAM532Jq3Vs7B7DzVUo+MQ3du91RZ+LHN5gAZaAcIUvIY0rZ+2/YtRt
-        Y06xB+p3IEsicByDS+3Yh7U0nB/S8Jif1Heb6F3Tcp1HQZ12+lP5HWHV7VlsEaVrbrJg/wj5Gz3
-        8H9AuzPWEoO7qrVwDCpWF+83j2E562sq8GFLhQA==
-X-Received: by 2002:a17:90a:2ecb:: with SMTP id h11mr2601224pjs.195.1600931436189;
-        Thu, 24 Sep 2020 00:10:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzCk7vzCBN/l74QQtaNp+k0MuChSSLUgg5AfeBO3OsjJTBVY/G00Wpe7vMaVKlvc6su9uo1Ig==
-X-Received: by 2002:a17:90a:2ecb:: with SMTP id h11mr2601198pjs.195.1600931435690;
-        Thu, 24 Sep 2020 00:10:35 -0700 (PDT)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id q10sm1351546pja.48.2020.09.24.00.10.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 24 Sep 2020 00:10:35 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
-Subject: Re: [PATCH] Bluetooth: btusb: Avoid unnecessary reset upon system
- resume
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <CANFp7mV7fC9_EZHd7B0Cu-owgCVdA6CNd2bb7XwFf5+6b7FVpg@mail.gmail.com>
-Date:   Thu, 24 Sep 2020 15:10:31 +0800
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Alex Lu <alex_lu@realsil.com.cn>,
-        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <A6F728DB-A07B-4323-83A5-3DABA8FDC156@canonical.com>
-References: <20200923175602.9523-1-kai.heng.feng@canonical.com>
- <CANFp7mV7fC9_EZHd7B0Cu-owgCVdA6CNd2bb7XwFf5+6b7FVpg@mail.gmail.com>
-To:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-X-Mailer: Apple Mail (2.3608.120.23.2.1)
+        id S1727177AbgIXHQu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 03:16:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39170 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727093AbgIXHQu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Sep 2020 03:16:50 -0400
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BC72A20936;
+        Thu, 24 Sep 2020 07:16:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600931809;
+        bh=oFLY62TJgHh8pZ8uAIN/iFnnuE+w2IUAcEdP3wJ0qP0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=V7HkS4k7c/lJjO1VAeIyqVG8+nofirtVlkifPRFCCJqKcYsqfm1ccPWbUE5RW67Xe
+         RMB4OM8jx/oGLmqfpojNnArVIKG6y/fMdECxi31AZFhk/1rUJCfQeNiroyQL6Qb2LS
+         Nr3VzxuaV7wb5XA45/btaED4JWJgS3HF8dRjqgnQ=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Rob Herring <robh@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>
+Cc:     gregkh@linuxfoundation.org, michal.simek@xilinx.com,
+        p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, git@xilinx.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation
+ for Versal DWC3 Controller
+In-Reply-To: <20200922195410.GA3122345@bogus>
+References: <1599678185-119412-1-git-send-email-manish.narani@xilinx.com>
+ <1599678185-119412-2-git-send-email-manish.narani@xilinx.com>
+ <20200922195410.GA3122345@bogus>
+Date:   Thu, 24 Sep 2020 10:16:41 +0300
+Message-ID: <87wo0jejae.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[+Cc linux-usb]
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Hi Abhishek,
+Rob Herring <robh@kernel.org> writes:
 
-> On Sep 24, 2020, at 04:41, Abhishek Pandit-Subedi <abhishekpandit@chromium.org> wrote:
-> 
-> Hi Kai-Heng,
-> 
-> Which Realtek controller is this on?'
-
-The issue happens on 8821CE.
-
-> 
-> Specifically for RTL8822CE, we tested without reset_resume being set
-> and that was causing the controller being reset without bluez ever
-> learning about it (resulting in devices being unusable without
-> toggling the BT power).
-
-The reset is done by the kernel, so how does that affect bluez?
-
-From what you described, it sounds more like runtime resume since bluez is already running.
-If we need reset resume for runtime resume, maybe it's another bug which needs to be addressed?
-
-> If the firmware doesn't cut off power during suspend, maybe you
-> shouldn't set the BTUSB_WAKEUP_DISABLE flag for that controller.
-
-We don't know beforehand if the platform firmware (BIOS for my case) will cut power off or not.
-
-In general, laptops will cut off the USB power during S3.
-When AC is plugged, some laptops cuts USB power off and some don't. This also applies to many desktops. Not to mention there can be BIOS options to control USB power under S3/S4/S5...
-
-So we don't know beforehand.
-
-> 
-> I would prefer this doesn't get accepted in its current state.
-
-Of course.
-I think we need to find the root cause for your case before applying this one.
-
-Kai-Heng
-
-> 
-> Abhishek
-> 
-> On Wed, Sep 23, 2020 at 10:56 AM Kai-Heng Feng
-> <kai.heng.feng@canonical.com> wrote:
->> 
->> Realtek bluetooth controller may fail to work after system sleep:
->> [ 1272.707670] Bluetooth: hci0: command 0x1001 tx timeout
->> [ 1280.835712] Bluetooth: hci0: RTL: HCI_OP_READ_LOCAL_VERSION failed (-110)
->> 
->> If platform firmware doesn't cut power off during suspend, the firmware
->> is considered retained in controller but the driver is still asking USB
->> core to perform a reset-resume. This can make bluetooth controller
->> unusable.
->> 
->> So avoid unnecessary reset to resolve the issue.
->> 
->> For devices that really lose power during suspend, USB core will detect
->> and handle reset-resume correctly.
->> 
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> On Thu, Sep 10, 2020 at 12:33:04AM +0530, Manish Narani wrote:
+>> Add documentation for Versal DWC3 controller. Add required property
+>> 'reg' for the same. Also add optional properties for snps,dwc3.
+>>=20
+>> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
 >> ---
->> drivers/bluetooth/btusb.c | 8 +++-----
->> 1 file changed, 3 insertions(+), 5 deletions(-)
->> 
->> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
->> index 8d2608ddfd08..de86ef4388f9 100644
->> --- a/drivers/bluetooth/btusb.c
->> +++ b/drivers/bluetooth/btusb.c
->> @@ -4255,17 +4255,15 @@ static int btusb_suspend(struct usb_interface *intf, pm_message_t message)
->>                enable_irq(data->oob_wake_irq);
->>        }
->> 
->> -       /* For global suspend, Realtek devices lose the loaded fw
->> -        * in them. But for autosuspend, firmware should remain.
->> -        * Actually, it depends on whether the usb host sends
->> +       /* For global suspend, Realtek devices lose the loaded fw in them if
->> +        * platform firmware cut power off. But for autosuspend, firmware
->> +        * should remain.  Actually, it depends on whether the usb host sends
->>         * set feature (enable wakeup) or not.
->>         */
->>        if (test_bit(BTUSB_WAKEUP_DISABLE, &data->flags)) {
->>                if (PMSG_IS_AUTO(message) &&
->>                    device_can_wakeup(&data->udev->dev))
->>                        data->udev->do_remote_wakeup = 1;
->> -               else if (!PMSG_IS_AUTO(message))
->> -                       data->udev->reset_resume = 1;
->>        }
->> 
->>        return 0;
->> --
->> 2.17.1
->> 
+>>  .../devicetree/bindings/usb/dwc3-xilinx.txt   | 20 +++++++++++++++++--
+>>  1 file changed, 18 insertions(+), 2 deletions(-)
+>>=20
+>> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt b/Doc=
+umentation/devicetree/bindings/usb/dwc3-xilinx.txt
+>> index 4aae5b2cef56..219b5780dbee 100644
+>> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+>> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+>> @@ -1,7 +1,8 @@
+>>  Xilinx SuperSpeed DWC3 USB SoC controller
+>>=20=20
+>>  Required properties:
+>> -- compatible:	Should contain "xlnx,zynqmp-dwc3"
+>> +- compatible:	May contain "xlnx,zynqmp-dwc3" or "xlnx,versal-dwc3"
+>> +- reg:		Base address and length of the register control block
+>>  - clocks:	A list of phandles for the clocks listed in clock-names
+>>  - clock-names:	Should contain the following:
+>>    "bus_clk"	 Master/Core clock, have to be >=3D 125 MHz for SS
+>> @@ -13,12 +14,24 @@ Required child node:
+>>  A child node must exist to represent the core DWC3 IP block. The name of
+>>  the node is not important. The content of the node is defined in dwc3.t=
+xt.
+>>=20=20
+>> +Optional properties for snps,dwc3:
+>> +- dma-coherent:	Enable this flag if CCI is enabled in design. Adding th=
+is
+>> +		flag configures Global SoC bus Configuration Register and
+>> +		Xilinx USB 3.0 IP - USB coherency register to enable CCI.
+>> +- snps,enable-hibernation: Add this flag to enable hibernation support =
+for
+>> +		peripheral mode.
+>
+> This belongs in the DWC3 binding. It also implies that hibernation is=20
+> not supported by any other DWC3 based platform. Can't this be implied by=
+=20
+> the compatible string (in the parent)?
 
+hibernation support is detectable in runtime, and we've been using that.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9sR9kRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQYAig/+OhB2zQwnRA05Qkau2CCR0WR5Qjjg/a1P
+3vsdNjgxOK55PaZfoIkAtlRXNGmtf9fwlSe37VbLT3FPMV3gs8C7w1Atk8KZhJr9
+MuWIxyQV4hsbzB3+zmEn0xNCkTQK0m3h9S2oIVfsLgudon2iX6JYkpWxQrql7to+
+yvgUx3fbd/eKqRwvRNHSnT6ZC1fSqsz+xUcbYX4/j9xSTM86D67En2sWzmeuAK+y
+BdFvYzsrY/btPQAViC2lcfI6m+he0VoGl3b6lAhU8IOVT9b9/iUtsTt7ZRKDkuFO
+woAZxK4E8H4tiayEdvxWqSJr123zdVmvEZr4PUWSYJM0kAgY84fTeTi/xazjba4q
+i/wQ/EXtUx8Km0vfrtf5SK+d/PuW38QeTeusd7Sq14f0zmJYB3HWsMpb5it3W4A5
+qkED951fHjipBE5S2KuhDyf5wY/fvxXE3NUH0pCIl9kQlzNyF2KkrEQVOC306JLc
+MrZXuba9SjMeVgc5IwIpLZNUTFkmeSsgtd3Yywhg3egZoSD4VXIzBhg4X4Sn27UK
+IGL1DF2XYdYJwgL+UuQKHtd2Wbu+6hxHc2cJhm1j8P5tXls0xeXz5zr7g40NzmYA
+cMw8D5DLY51aLhPfyuweVejQULqEaghkayGoHRoh/v3Vx+3jX2DMnEn8YVEdLtIa
+V384q0NUImE=
+=/nk5
+-----END PGP SIGNATURE-----
+--=-=-=--
