@@ -2,167 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C575277543
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 17:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24C52775A1
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 17:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728384AbgIXP2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 11:28:07 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:39619 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728413AbgIXP2A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 11:28:00 -0400
-Received: (qmail 1340421 invoked by uid 1000); 24 Sep 2020 11:27:58 -0400
-Date:   Thu, 24 Sep 2020 11:27:58 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-usb@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        id S1728419AbgIXPk4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 11:40:56 -0400
+Received: from lan.nucleusys.com ([92.247.61.126]:32904 "EHLO
+        zztop.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728139AbgIXPk4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 11:40:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Q/o5cuCHNMfZCC5DXURaTMfkvGumctmEhF5/EQbiobo=; b=bcW/P9rAhkU6dQ/Y+qika/Jg25
+        ECxp3eVyEuMkpAf9XsRDNWEZKhx3qRYj3Z2ZZZfQdIafBMGmLaBgbGOM/uKEXifVGoiqk4whfC9ld
+        9XywUqHm1tgliViap8mdaLSrl2EjqaqPD88EO4NwYqd5j6nfohlGOq8xmMkwbAGlybc0=;
+Received: from [94.26.108.4] (helo=carbon.lan)
+        by zztop.nucleusys.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <petkan@nucleusys.com>)
+        id 1kLTMC-0000QU-Sy; Thu, 24 Sep 2020 18:40:29 +0300
+Date:   Thu, 24 Sep 2020 18:40:26 +0300
+From:   Petko Manolov <petkan@nucleusys.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Himadri Pandya <himadrispandya@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, pankaj.laxminarayan.bharadiya@intel.com,
+        keescook@chromium.org, yuehaibing@huawei.com, ogiannou@gmail.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v3 2/2] USB: misc: Add onboard_usb_hub driver
-Message-ID: <20200924152758.GA1337044@rowland.harvard.edu>
-References: <20200923180952.v3.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200923180952.v3.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH 3/4] net: usb: rtl8150: use usb_control_msg_recv() and
+ usb_control_msg_send()
+Message-ID: <20200924154026.GA9761@carbon.lan>
+References: <20200923090519.361-1-himadrispandya@gmail.com>
+ <20200923090519.361-4-himadrispandya@gmail.com>
+ <1600856557.26851.6.camel@suse.com>
+ <20200923144832.GA11151@karbon>
+ <2f997848ed05c1f060125f7567f6bc3fae7410bb.camel@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200923180952.v3.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <2f997848ed05c1f060125f7567f6bc3fae7410bb.camel@suse.com>
+X-Spam-Score: -1.0 (-)
+X-Spam-Report: Spam detection software, running on the system "zztop.nucleusys.com",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ the administrator of that system for details.
+ Content preview:  On 20-09-24 13:09:05, Oliver Neukum wrote: > Am Mittwoch,
+   den 23.09.2020, 17:48 +0300 schrieb Petko Manolov: > > > One possible fix
+   is to add yet another argument to usb_control_msg_recv(), > > which [...] 
+ Content analysis details:   (-1.0 points, 5.0 required)
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+ -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 06:10:12PM -0700, Matthias Kaehlcke wrote:
-> The main issue this driver addresses is that a USB hub needs to be
-> powered before it can be discovered. For discrete onboard hubs (an
-> example for such a hub is the Realtek RTS5411) this is often solved
-> by supplying the hub with an 'always-on' regulator, which is kind
-> of a hack. Some onboard hubs may require further initialization
-> steps, like changing the state of a GPIO or enabling a clock, which
-> requires even more hacks. This driver creates a platform device
-> representing the hub which performs the necessary initialization.
-> Currently it only supports switching on a single regulator, support
-> for multiple regulators or other actions can be added as needed.
-> Different initialization sequences can be supported based on the
-> compatible string.
+On 20-09-24 13:09:05, Oliver Neukum wrote:
+> Am Mittwoch, den 23.09.2020, 17:48 +0300 schrieb Petko Manolov:
 > 
-> Besides performing the initialization the driver can be configured
-> to power the hub off during system suspend. This can help to extend
-> battery life on battery powered devices which have no requirements
-> to keep the hub powered during suspend. The driver can also be
-> configured to leave the hub powered when a wakeup capable USB device
-> is connected when suspending, and power it off otherwise.
+> > One possible fix is to add yet another argument to usb_control_msg_recv(), 
+> > which would be the GFP_XYZ flag to pass on to kmemdup().  Up to Greg, of 
+> > course.
 > 
-> Technically the driver consists of two drivers, the platform driver
-> described above and a very thin USB driver that subclasses the
-> generic driver. The purpose of this driver is to provide the platform
-> driver with the USB devices corresponding to the hub(s) (a hub
-> controller may provide multiple 'logical' hubs, e.g. one to support
-> USB 2.0 and another for USB 3.x).
-> 
-> Co-developed-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
-> Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
+> submitted. The problem is those usages that are very hard to trace. I'd 
+> dislike to just slab GFP_NOIO on them for no obvious reason.
 
-> --- a/drivers/usb/misc/Kconfig
-> +++ b/drivers/usb/misc/Kconfig
-> @@ -275,3 +275,19 @@ config USB_CHAOSKEY
->  
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called chaoskey.
-> +
-> +config USB_ONBOARD_HUB
-> +	tristate "Onboard USB hub support"
-> +	depends on OF || COMPILE_TEST
-> +	help
-> +	  Say Y here if you want to support discrete onboard USB hubs that
-> +	  don't require an additional control bus for initialization (an
-
-... but does require nontrivial form of initialization, such as
-enabling a power regulator.
+Do you mean you submitted a patch for usb_control_msg_recv() (because i don't 
+see it on linux-netdev) or i'm reading this all wrong?
 
 
-> +static void onboard_hub_remove_usbdev(struct onboard_hub *hub, struct usb_device *udev)
-> +{
-> +	struct udev_node *node;
-> +
-> +	smp_rmb();
-> +	if (hub->going_away) {
-> +		/*
-> +		 * We are most likely being called as a result of unbinding a USB device from
-> +		 * onboard_hub_remove(). This function also holds the lock and iterates over
-> +		 * 'udev_list'. Skip deleting the node in this case to avoid a self deadlock,
-> +		 * keeping the node in the list isn't a problem, since the device is about to go
-> +		 * away.
-> +		 */
-> +		return;
-> +	}
-
-This part has a suspicious look.  For one thing, there's no comment
-explaining the purpose of the smp_rmb().  For another, that barrier
-doesn't seem to pair with any other memory barrier in the driver.
-
-I get that you want to avoid self-deadlock here.  But there must be a
-better way.  See below.
-
-> +static int onboard_hub_remove(struct platform_device *pdev)
-> +{
-> +	struct onboard_hub *hub = dev_get_drvdata(&pdev->dev);
-> +	struct udev_node *node;
-> +
-> +	hub->going_away = true;
-> +
-> +	mutex_lock(&hub->lock);
-> +
-> +	/* unbind the USB devices to avoid dangling references to this device */
-> +	list_for_each_entry(node, &hub->udev_list, list)
-> +		device_release_driver(&node->udev->dev);
-> +
-> +	mutex_unlock(&hub->lock);
-
-Alternative approach:
-
-	/* unbind the USB devices to avoid dangling references to this device */
-	mutex_lock(&hub->lock);
-	while (!list_empty(&hub->udev_list)) {
-		node = list_first_entry(&hub->udev_list, struct udev_node, list);
-		udev = node->udev;
-
-		/*
-		 * Unbinding the driver will call onboard_hub_remove_usbdev(),
-		 * which acquires hub->lock.  We must release the lock first.
-		 */
-		usb_get_device(udev);
-		mutex_unlock(&hub->lock);
-		device_release_driver(&udev->dev);
-		usb_put_device(udev);
-		mutex_lock(&hub->lock);
-	}
-	mutex_unlock(&hub->lock);
-
-> +static int onboard_hub_usbdev_probe(struct usb_device *udev)
-> +{
-> +	struct device *dev = &udev->dev;
-> +	struct onboard_hub *hub;
-> +
-> +	/* ignore supported hubs without device tree node */
-> +	if (!dev->of_node)
-> +		return -ENODEV;
-> +
-> +	hub = _find_onboard_hub(dev);
-> +	if (IS_ERR(hub))
-> +		return PTR_ERR(dev);
-
-hub, not dev.
-
-Alan Stern
+		Petko
