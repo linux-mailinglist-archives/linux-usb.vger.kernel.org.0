@@ -2,82 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58159277AD0
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 22:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC58277BB6
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 00:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726637AbgIXUyR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 16:54:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46226 "EHLO mail.kernel.org"
+        id S1726681AbgIXWn3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 18:43:29 -0400
+Received: from mga06.intel.com ([134.134.136.31]:49798 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726242AbgIXUyR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Sep 2020 16:54:17 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 928AF221EB;
-        Thu, 24 Sep 2020 20:54:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600980856;
-        bh=tVjYj9L6bZlyfmQII/W2YskHWml8UCyVZRJQUGN3Hew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iSnYpDRhlNSQLE336fF32Fw3x7t7F7vSL4XkGh8Ah/H0Y9tPbXGBZJs0x/j3SqtKA
-         pu6F0VIA+ia1EI+gcsnbPDrAUQO9GPIpyQQdaXVpIk85n7VwtJhn74SfswoKAEdv4+
-         m7dm/7zkj42sSjYFFleRXcs0C8HBfnxz4uIr8z08=
-Date:   Thu, 24 Sep 2020 16:54:15 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.4 041/330] USB: serial: mos7840: fix probe
- error handling
-Message-ID: <20200924205415.GQ2431@sasha-vm>
-References: <20200918020110.2063155-1-sashal@kernel.org>
- <20200918020110.2063155-41-sashal@kernel.org>
- <20200918065300.GA21896@localhost>
+        id S1726448AbgIXWn2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Sep 2020 18:43:28 -0400
+IronPort-SDR: 110aLQT/s3a/MvlOiKNiaJ04C7GLfaUF7FM1YIoARl5t9LZb9LA8kBeZ0rgHeUdV8UkxkNaOp5
+ ersoxchFdMDA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9754"; a="222957475"
+X-IronPort-AV: E=Sophos;i="5.77,299,1596524400"; 
+   d="scan'208";a="222957475"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2020 15:43:28 -0700
+IronPort-SDR: r6WtI3ZWVWtkhW+J6yFHctzWlDmm7ZEejZbpDuH/+Xr8/XF9R1hXx8ZcxcSFdWSyhFP8UsqHIG
+ 63gXLIAvhGUg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,299,1596524400"; 
+   d="scan'208";a="348018944"
+Received: from lkp-server01.sh.intel.com (HELO d1a6b931d9c6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Sep 2020 15:43:26 -0700
+Received: from kbuild by d1a6b931d9c6 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kLZxW-00009w-0h; Thu, 24 Sep 2020 22:43:26 +0000
+Date:   Fri, 25 Sep 2020 06:43:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [balbi-usb:testing/next] BUILD SUCCESS
+ 1b28687a9c679499ddaa46dac6ca3660e46801c5
+Message-ID: <5f6d20f5.c/siK4iQCHRzQPcN%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200918065300.GA21896@localhost>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 18, 2020 at 08:53:00AM +0200, Johan Hovold wrote:
->On Thu, Sep 17, 2020 at 09:56:21PM -0400, Sasha Levin wrote:
->> From: Johan Hovold <johan@kernel.org>
->>
->> [ Upstream commit 960fbd1ca584a5b4cd818255769769d42bfc6dbe ]
->>
->> The driver would return success and leave the port structures
->> half-initialised if any of the register accesses during probe fails.
->>
->> This would specifically leave the port control urb unallocated,
->> something which could trigger a NULL pointer dereference on interrupt
->> events.
->>
->> Fortunately the interrupt implementation is completely broken and has
->> never even been enabled...
->>
->> Note that the zero-length-enable register write used to set the zle-flag
->> for all ports is moved to attach.
->>
->> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Signed-off-by: Johan Hovold <johan@kernel.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->Please drop this from all stable queues. As the commit message and
->missing stable-cc tag suggests, it's not needed.
->
->Sasha, please stop sending AUTOSEL patches for usb-serial. I think this
->the fourth time I ask you now.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
+branch HEAD: 1b28687a9c679499ddaa46dac6ca3660e46801c5  usb: dwc3: gadget: Rename misleading function names
 
-Right, this series is a bit different because it didn't originate from
-the AUTOSEL work but rather was an audit of patches picked up by
-downstream kernels as fixes.
+elapsed time: 724m
 
-I'll drop it, sorry for the noise.
+configs tested: 130
+configs skipped: 3
 
--- 
-Thanks,
-Sasha
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                    sam440ep_defconfig
+sh                      rts7751r2d1_defconfig
+powerpc                    klondike_defconfig
+arm                       imx_v6_v7_defconfig
+sh                        sh7757lcr_defconfig
+mips                  maltasmvp_eva_defconfig
+m68k                         apollo_defconfig
+mips                      bmips_stb_defconfig
+arc                     nsimosci_hs_defconfig
+i386                             alldefconfig
+arm                        mini2440_defconfig
+mips                         tb0226_defconfig
+m68k                           sun3_defconfig
+microblaze                          defconfig
+s390                                defconfig
+mips                         rt305x_defconfig
+arm                       mainstone_defconfig
+powerpc64                           defconfig
+xtensa                              defconfig
+m68k                        stmark2_defconfig
+sh                          rsk7264_defconfig
+arm                        neponset_defconfig
+powerpc                      makalu_defconfig
+powerpc                      cm5200_defconfig
+arm                           h5000_defconfig
+m68k                        mvme147_defconfig
+powerpc                     tqm8560_defconfig
+powerpc                     kmeter1_defconfig
+arc                      axs103_smp_defconfig
+powerpc                 linkstation_defconfig
+arm                     am200epdkit_defconfig
+ia64                      gensparse_defconfig
+powerpc                      pcm030_defconfig
+parisc                           alldefconfig
+mips                          malta_defconfig
+powerpc                     sbc8548_defconfig
+arc                             nps_defconfig
+h8300                    h8300h-sim_defconfig
+sh                           se7705_defconfig
+powerpc                    amigaone_defconfig
+arc                        nsim_700_defconfig
+c6x                              allyesconfig
+arm                         axm55xx_defconfig
+sh                          polaris_defconfig
+sh                ecovec24-romimage_defconfig
+csky                                defconfig
+sh                          lboxre2_defconfig
+nds32                             allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20200924
+i386                 randconfig-a006-20200924
+i386                 randconfig-a003-20200924
+i386                 randconfig-a004-20200924
+i386                 randconfig-a005-20200924
+i386                 randconfig-a001-20200924
+i386                 randconfig-a002-20200923
+i386                 randconfig-a006-20200923
+i386                 randconfig-a003-20200923
+i386                 randconfig-a004-20200923
+i386                 randconfig-a005-20200923
+i386                 randconfig-a001-20200923
+x86_64               randconfig-a011-20200923
+x86_64               randconfig-a013-20200923
+x86_64               randconfig-a014-20200923
+x86_64               randconfig-a015-20200923
+x86_64               randconfig-a012-20200923
+x86_64               randconfig-a016-20200923
+i386                 randconfig-a012-20200923
+i386                 randconfig-a014-20200923
+i386                 randconfig-a016-20200923
+i386                 randconfig-a013-20200923
+i386                 randconfig-a011-20200923
+i386                 randconfig-a015-20200923
+i386                 randconfig-a012-20200924
+i386                 randconfig-a014-20200924
+i386                 randconfig-a016-20200924
+i386                 randconfig-a013-20200924
+i386                 randconfig-a011-20200924
+i386                 randconfig-a015-20200924
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a006-20200923
+x86_64               randconfig-a005-20200923
+x86_64               randconfig-a003-20200923
+x86_64               randconfig-a004-20200923
+x86_64               randconfig-a002-20200923
+x86_64               randconfig-a001-20200923
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
