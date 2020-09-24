@@ -2,44 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DAC276C6C
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 10:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FD7276C70
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 10:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727266AbgIXIw2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 04:52:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56364 "EHLO mail.kernel.org"
+        id S1727309AbgIXIxU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 04:53:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726786AbgIXIw2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Sep 2020 04:52:28 -0400
+        id S1727300AbgIXIxU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Sep 2020 04:53:20 -0400
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE4DB23772;
-        Thu, 24 Sep 2020 08:52:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6D46623772;
+        Thu, 24 Sep 2020 08:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600937548;
-        bh=mBjA4D2VMWYFlYuqa+60PBE7U14syE/8c8cGg3SgmXs=;
+        s=default; t=1600937599;
+        bh=258zIvWka2irDjhBXdTbAihERSYBCQYmQWoH7138GD4=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=SxL9ACiq5PWoi3i88bsR51Ga/IdTnc94g9DcEYSkr1gEBTfBdLm7LAmc5cNCulYIO
-         tZ+0MfVmxVI7KcNnUPyYCb/4r3/gGjSxASP6myLfD+4BNkfWdAFbOkFAx2jpOiP6Vz
-         O85mdxkrO/zUo6e3m48OZR3EJTRJWP+2mjaxSSSM=
+        b=cmK2jbqYbc19c12/w4MhLJnL8XLbcFvq3R9Fi8lg7BbsGpMmk5yk+JVzEqYntIr8c
+         3NZRNPH87MmFsBulbnNYUpd/ytDzt/mnFwNgjnzdsFUzu5Snkdg85CZTSVFM3JpgZx
+         HcAyOUyfAs4bZq8duS4sgMqRzL7mmoOjWvSPtkDM=
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Kevin Cernekee <cernekee@gmail.com>,
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: bcm63xx_udc: fix up the error of
- undeclared usb_debug_root
-In-Reply-To: <1600936119.21970.4.camel@mhfsdcap03>
-References: <1600061930-778-1-git-send-email-chunfeng.yun@mediatek.com>
- <871rirehqq.fsf@kernel.org> <1600936119.21970.4.camel@mhfsdcap03>
-Date:   Thu, 24 Sep 2020 11:52:18 +0300
-Message-ID: <87y2kzd0al.fsf@kernel.org>
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH v2 6/7] usb: dwc3: gadget: Rename misleading function names
+In-Reply-To: <129eda75-c6af-70db-a341-e0ce7fccc38f@synopsys.com>
+References: <cover.1596767991.git.thinhn@synopsys.com>
+ <554c6d34c5936630bbe292114fad9c3322a7161e.1596767991.git.thinhn@synopsys.com>
+ <874knnehul.fsf@kernel.org>
+ <129eda75-c6af-70db-a341-e0ce7fccc38f@synopsys.com>
+Date:   Thu, 24 Sep 2020 11:53:10 +0300
+Message-ID: <87v9g3d095.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -51,29 +48,40 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
 
-Hi,
+> Hi Felipe,
+>
+> Felipe Balbi wrote:
+>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+>>
+>>> The functions dwc3_prepare_one_trb_sg and dwc3_prepare_one_trb_linear
+>>> are not necessarily preparing "one" TRB, it can prepare multiple TRBs.
+>>> Rename these functions as follow:
+>>>
+>>> dwc3_prepare_one_trb_sg -> dwc3_prepare_trbs_sg
+>>> dwc3_prepare_one_trb_linear -> dwc3_prepare_trbs_linear
+>>>
+>>> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+>> Tried to apply on top of -rc6:
+>>
+>> checking file drivers/usb/dwc3/gadget.c
+>> Hunk #1 FAILED at 1161.
+>> Hunk #2 FAILED at 1231.
+>> Hunk #3 FAILED at 1266.
+>> Hunk #4 FAILED at 1294.
+>> 4 out of 4 hunks FAILED
+>>
+>
+> I'll rebase send out a new series with a bunch of fixes.
+>
+> Btw, the patches you just merged are not the latest:
+> usb: dwc3: gadget: Resume pending requests after CLEAR_STALL
+> usb: dwc3: gadget: END_TRANSFER before CLEAR_STALL command
+>
+> The latest are on your "testing/fixes" branch
 
-Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
-> On Thu, 2020-09-24 at 10:50 +0300, Felipe Balbi wrote:
->> Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
->>=20
->> > Fix up the build error caused by undeclared usb_debug_root
->> >
->> > Cc: stable <stable@vger.kernel.org>
->> > Fixes: a66ada4f241c("usb: gadget: bcm63xx_udc: create debugfs director=
-y under usb root")
->> > Reported-by: kernel test robot <lkp@intel.com>
->> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
->>=20
->> $ patch -p1 --dry-run p.patch
->> /usr/bin/patch: **** Only garbage was found in the patch input.
->>=20
-> Please try to apply v2, https://patchwork.kernel.org/patch/11772911/
-> I indeed add a line code
-
-that worked, but the problem I have is that your patches always come
-base64 encoded. Make sure they come as plain text in the future :-)
+Argh, nice catch. I'll fix it shortly.
 
 =2D-=20
 balbi
@@ -83,19 +91,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9sXkIRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQa0zQ/8Cj7wlmX4BmMvMJ5ZRB4QinYugLxxudcX
-pe06n6i8BViYdJASEMxb0TFXAvX4ApxghdeyzPM6lr/xH87fsIH2vvrQs8HIwGH3
-DirmtLbSORa6sVjysCGFW9YjtqcvENYoFwcV0QePH05ExS9nB8jsX/qZQ+W1Ga6k
-edhk2a464Fbb8UkGyuXJubHZqbiYf2qXNfkXZUcA0ZSRa/k1tW9oDATyXqPL/RMZ
-TYFCsAx37J+xYatVfwt55sItpUjvXEHNfPUSBqQYBivFg530tqBK+sAYPHqdOFqa
-DsU/qjBwkdGRAXEdl1C3Qf7vWz9R7sXNZ1wQcY6FTx9O87KAlaadkA843QD7uasf
-vZSMsivR8clEXLLZCPMWGbrj9f74lRU8XGKKDvih5c+ySKc+4nQRrBadzf4Z2Iem
-Zo7CnIZG6X+aAtk5Jm6WBF4uwAXZbrCW/k0cVLHld2n9DGZW/qlZu7FZIFZrkg3i
-DNK92DJIwQKBt2T1d5ljdjHD2ISYiopvWfMa0t9/MzZgrDabSzc0zn5Ensl6XMfd
-Eqe03LVQ/GnZ8HdHVLte64qo7B+lROsAkCxQq1ZTXILxoV8ARTCVBb/Yu53tVBt6
-5MmjHZJt6MvMLCCwzDXfOnKvz+5f0E4Yqq1TCmViQUrZTU24EUm1hK3AR+lAzt3U
-HKB56BVkXzk=
-=2QfB
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9sXnYRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQarfhAAlPjg50r4FmB4TPDJLmKpdxvWgrEoCGhF
+G9zooWUuPh/1bwWiPEYKT60vaKMJR4AiIEsK1j9pjXxohX0wJHiDdPDGJPVqahkE
+o0/AE610RkjjXRHicw1i0uDxZwovSHLPSfTYJeNGb1X0qH8VOPP6owKzJz9L1ZDA
+5T7bwhgGMSSXY1fzh2/69nHqwQ8lJH/88TOOO4wKDf7jOKlgmbKxTyt2f7tTaK2z
+nwTB6HCtOsTERz/koRPBOa56clECiN6sDKCMD2pHy65eRUS6cZI2As/x4/znSJU2
+wv1+MCgO67QCr8PjJuVptiZgNl+sEAw4ZTge3loWDEpek6ARFC96r9JxogerRwQj
+06Q7lE2POSEyHUVWiHz+LsgAz4dEFDhSldxjuvxj4wIDqJoHe1NZE6I1lhWsIYQQ
+tBB/YPQAFmaqAhNDD9mo2t3rgLILtH+6VPIQicKZLbErYvziNK0M7ipRbivNMjDo
+Vi67ntmsxDtUYknugQPelFbmgLqkxf0uem3Yi+FJuwQTw8b6TENDz2r4L0p7HXWx
+LcT6K21f0DR7OCg7LpKvsk0WIhTtJTlWHK+uS7GwW/olvf93lK+EgdqEVjgdI68U
+I2w0owkMLA2jOy4+xE807IU0ddpxs6zYR0g0mnUMK2swfrnS1j08tx0anZ22BYMM
+oXLgrHX0Rzw=
+=qUCR
 -----END PGP SIGNATURE-----
 --=-=-=--
