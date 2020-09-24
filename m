@@ -2,176 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6FD276E3F
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 12:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E03D276E90
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Sep 2020 12:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727374AbgIXKJt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 06:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
+        id S1727375AbgIXKVn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 06:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726597AbgIXKJt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 06:09:49 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D52C0613CE
-        for <linux-usb@vger.kernel.org>; Thu, 24 Sep 2020 03:09:49 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id e2so1768920vsr.7
-        for <linux-usb@vger.kernel.org>; Thu, 24 Sep 2020 03:09:49 -0700 (PDT)
+        with ESMTP id S1726380AbgIXKVn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 06:21:43 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C78C0613CE;
+        Thu, 24 Sep 2020 03:21:43 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id a17so3187818wrn.6;
+        Thu, 24 Sep 2020 03:21:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Kn2+qFRHRQOFTB6gfC/64B7vTCRTjfTNnHcSfiSmojw=;
-        b=VYMiEvadE+WuOWqt/EcqxrrkP8QD00ZygSDrvjt8aoyL8sIU14aJa05m1iQk5pz9Iu
-         O8Uh26VAivvoQQqERo8dTYKRAMe1oE9ANoleiHjeO/6lI9plFqHWisfmKJ2pfVTJJvUm
-         Sxr9Sy2h8nHmMXDPxOqiB5s03zHnvUo0DUU+DliKpbTSbkcfIsNFoUyxBrVNpXGNZ1VE
-         4d86O5wmvGzZWf7ruyX1pCA2FA7mtxp46VXPMS00t5OB5nQc75OgfnIj36idQ8J5TejF
-         5MPNR1U3AUr+I++LcNQ1jBS0M+l/xRYg9vac3IMvtUNPMu1+NxnEpToZr6/TPdReMmkS
-         4lLQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=F7hKavhEcupnToKUFzbg3DWL90gfwumnqBNWj3kdfcE=;
+        b=UUvmS7FQpCtHfwVQUrlQgsHWgbBJa/ItZg7JlzPUch8LP+TJAGvdjwJZLS+Gfl/yAy
+         It005gDiuLxpg/iTcrZQxl+qucOX8hgrvmTz40ZFbNX28UljalzIA7Bqu8XoqpCpGzG9
+         oAB3kwuleVD6MXP4x6aSYYRlDnWbXK6MPOHUARkhwjYkeFkWg8P6+tisZYQWu9V/9iUv
+         L+wCGwBtTgIwfMFrrgF0zR48u6A4DIjZOdLGExSXJX0N2z1WIxiXyldRBlu9Ii+tLA+f
+         BfCTw4MW+ielaX9l4vxNqR7C6y76BhlwVzU9AkqG5PiVEMoQ0CE41OuXKbiE4pmgqx06
+         uK2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Kn2+qFRHRQOFTB6gfC/64B7vTCRTjfTNnHcSfiSmojw=;
-        b=MMVwcCmx5+du4fiamJqmb+zYGSPmriOo5cuq6pc6f32n5D3RwAThqpNUitRb2eCUul
-         pyfE5VIyUEEVoUqfz9IGary1AAhBhdkSFzggQjZo/71rjSPBlEDUb0dceepAjh6xlZ40
-         lQ2zo1lwJyOg3ztLtMxhFATK0Srv0MuBMcfpOtceq+IEA0cxeWboZCKC225ge/zUkOII
-         gmCNly1gQ8wdO1DLWsM6mlyb71ar09t1zjAOG8F8dznbGLVM01u2U2CwtBMbb87Nwhcy
-         6sdsvbeARIesciCgz4CYVC3vE1LTM2sWDz3q6GiJ+LtKi6LpmdRwOWorQuZqdOmK7WCx
-         +3uw==
-X-Gm-Message-State: AOAM5321ifF2syew6hLw1n0kykVbC5GJsPQXhCt6jVDxM1T/g+X2MnCG
-        BVYb4n/fuq8dJeY5cOfOYSaXS9BV8e6C9A+IG/91dA==
-X-Google-Smtp-Source: ABdhPJySvYeu90LKO46pZkw8wIQQ250ltBHpKKI1sljR9Dq4TQ44KVfWZV5qMGz+JOJRF1qnnK/GgYtvbzAbI4fPQ8E=
-X-Received: by 2002:a67:e3d4:: with SMTP id k20mr2925429vsm.60.1600942188382;
- Thu, 24 Sep 2020 03:09:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=F7hKavhEcupnToKUFzbg3DWL90gfwumnqBNWj3kdfcE=;
+        b=CBJH1dy0ET0xP752hjX56k+a180aHA257AxCTmKVAiNAHVqFzS5mUzbkl/l6ZcN8Oi
+         ALBrqRtqbhplVPOy85wn35NQAY++30yU/JoueUyeRykq2XAFWJok5ME/3MRLSJriDwst
+         EBc88De236M1tYwGDdbRElonloJ6oPqtIp4z+9a66CeFunq6ar7RYG1nYCHhh32M3vq/
+         qJmtSpXc0O2kazNZbk8Oc8yQ1TvHRnRl5k6c4KYnizSdamsGa9h6VMLTMewW/ZHgi9DM
+         oPlldVY5xot75/Ppv88TdOtd4nBFQNDGGIOFU27IBWuBfV7jMHsCBMHXUexGFOPvidFG
+         W0dQ==
+X-Gm-Message-State: AOAM533yjkUkXroqpZMJUhMURhj6Hfii+TPRFS5J6CZkcOidG1+qjADD
+        YAjHOot7XETdTadLhVenZRo=
+X-Google-Smtp-Source: ABdhPJyUOvK4kZ/jUWxtxlWqb7JBR1DiNby1Da9/TxNUdxyX9VeEZwrEMbhiMEnyjd1n4P+7CiOf0w==
+X-Received: by 2002:adf:eacf:: with SMTP id o15mr4625705wrn.12.1600942902078;
+        Thu, 24 Sep 2020 03:21:42 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id 70sm3121819wmb.41.2020.09.24.03.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2020 03:21:40 -0700 (PDT)
+Date:   Thu, 24 Sep 2020 12:21:39 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Tang Bin <tangbin@cmss.chinamobile.com>,
+        gregkh@linuxfoundation.org, jonathanh@nvidia.com,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Subject: Re: [PATCH] usb: phy: tegra: Use IS_ERR() to check and simplify code
+Message-ID: <20200924102139.GF2483160@ulmo>
+References: <20200910115607.11392-1-tangbin@cmss.chinamobile.com>
+ <87imc3eiug.fsf@kernel.org>
 MIME-Version: 1.0
-References: <20200921195555.1050731-1-badhri@google.com> <20200921195555.1050731-5-badhri@google.com>
- <CAKgpwJUqfyZv1+-A4R8R--O-u2R65T+VUxL6PtW4c6kG0FJWfg@mail.gmail.com>
-In-Reply-To: <CAKgpwJUqfyZv1+-A4R8R--O-u2R65T+VUxL6PtW4c6kG0FJWfg@mail.gmail.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Thu, 24 Sep 2020 03:09:12 -0700
-Message-ID: <CAPTae5LcTqoc52C01rQjL9NzA5Yh=NH0zvvJNosih8n2kMTn+A@mail.gmail.com>
-Subject: Re: [PATCH v8 05/11] dt-bindings: connector: Add property to set
- initial current cap for FRS
-To:     Jun Li <lijun.kernel@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="f61P+fpdnY2FZS1u"
+Content-Disposition: inline
+In-Reply-To: <87imc3eiug.fsf@kernel.org>
+User-Agent: Mutt/1.14.7 (2020-08-29)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jun,
 
-Thanks for the feedback !
-The sink PDO from current source reflects the current source's(i.e.
-transmitter of the FRS signal) power requirement during fr swap.
-The current sink (i.e. receiver of the FRS signal) should check if it
-will be able to satisfy the current source's
-requirement during frswap before enabling the frs signal reception.
-The property in this patch refers to maximum current capability
-that the current sink can satisfy. Perhaps, I should name it
-sink-frs-typec-current. Does that make sense to you ?
+--f61P+fpdnY2FZS1u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Badhri
+On Thu, Sep 24, 2020 at 10:26:15AM +0300, Felipe Balbi wrote:
+> Tang Bin <tangbin@cmss.chinamobile.com> writes:
+>=20
+> > Use IS_ERR() and PTR_ERR() instead of PTR_ERR_OR_ZERO() to
+> > simplify code, avoid redundant judgements.
+> >
+> > Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+> > Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+>=20
+> Applied for next merge window. Make sure to get this driver out of
+> drivers/usb/phy and moved into drivers/phy ASAP.
 
-On Wed, Sep 23, 2020 at 3:43 AM Jun Li <lijun.kernel@gmail.com> wrote:
->
-> Badhri Jagan Sridharan <badhri@google.com> =E4=BA=8E2020=E5=B9=B49=E6=9C=
-=8822=E6=97=A5=E5=91=A8=E4=BA=8C =E4=B8=8A=E5=8D=883:57=E5=86=99=E9=81=93=
-=EF=BC=9A
-> >
-> > This change adds frs-typec-current which allows setting the initial cur=
-rent
-> > capability of the new source when vSafe5V is applied during PD3.0
-> > sink Fast Role Swap.
-> >
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > ---
-> > Changes since v1:
-> > - Changing patch version to v6 to fix version number confusion.
-> >
-> > Changes since v6:
-> > - Removed the redundant usb-connector.txt that I created by mistake.
-> > - Moved to yaml.
-> >
-> > Changes since v7:
-> > - Rebase
-> > ---
-> >  .../devicetree/bindings/connector/usb-connector.yaml   |  8 ++++++++
-> >  include/dt-bindings/usb/pd.h                           | 10 ++++++++++
-> >  2 files changed, 18 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/connector/usb-connector.=
-yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > index 9bd52e63c935..1ca8e6a337e5 100644
-> > --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > @@ -142,6 +142,14 @@ properties:
-> >      required:
-> >        - port@0
-> >
-> > +  frs-typec-current:
-> > +    description: Initial current capability of the new source when vSa=
-fe5V
-> > +      is applied during PD3.0 Fast Role Swap. "Table 6-14 Fixed Supply=
- PDO - Sink"
-> > +      of "USB Power Delivery Specification Revision 3.0, Version 1.2" =
-provides the
-> > +      different power levels and "6.4.1.3.1.6 Fast Role Swap USB Type-=
-C Current"
-> > +      provides a detailed description of the field.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
->
-> If it's a part of sink PDO, I think you don't need a new property for thi=
-s, just
-> define it directly into sink-pdos by adding a new PDO define for PD 3.0,
-> something like:
->
-> sink-pdos =3D <PDO_FIXED_v3(5000, 3000, PDO_FIXED_USB_COMM, FRS_CURRENT_1=
-P5A)>;
->
-> Li Jun
-> > +
-> >  required:
-> >    - compatible
-> >
-> > diff --git a/include/dt-bindings/usb/pd.h b/include/dt-bindings/usb/pd.=
-h
-> > index 985f2bbd4d24..db1ad4532197 100644
-> > --- a/include/dt-bindings/usb/pd.h
-> > +++ b/include/dt-bindings/usb/pd.h
-> > @@ -35,6 +35,16 @@
-> >
-> >  #define VSAFE5V 5000 /* mv units */
-> >
-> > +/*
-> > + * Based on "Table 6-14 Fixed Supply PDO - Sink" of "USB Power Deliver=
-y Specification Revision 3.0,
-> > + * Version 1.2"
-> > + * Initial current capability of the new source when vSafe5V is applie=
-d.
-> > + */
-> > +#define FRS_NOT_SUPPORTED      0
-> > +#define FRS_DEFAULT_POWER      1
-> > +#define FRS_5V_1P5A            2
-> > +#define FRS_5V_3A              3
-> > +
-> >  #define PDO_BATT_MAX_VOLT_SHIFT        20      /* 50mV units */
-> >  #define PDO_BATT_MIN_VOLT_SHIFT        10      /* 50mV units */
-> >  #define PDO_BATT_MAX_PWR_SHIFT 0       /* 250mW units */
-> > --
-> > 2.28.0.681.g6f77f65b4e-goog
-> >
+Sergei had commented on this patch with valid concerns, see here in case
+you don't have his reply in your inbox:
+
+    http://patchwork.ozlabs.org/project/linux-tegra/patch/20200910115607.11=
+392-1-tangbin@cmss.chinamobile.com/#2526208
+
+I agree with those concerns. This patch is broken because it will output
+the wrong error code on failure. I don't fully agree with Sergei's point
+that this patch isn't worth redoing. I do like the idiomatic error
+handling better, but I think we shouldn't be breaking the error messages
+like this.
+
+Thierry
+
+--f61P+fpdnY2FZS1u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9sczMACgkQ3SOs138+
+s6Fl0w//W0lviwOWICGtlYukVhARQtGJ/GQCFz2gLD1NWsmrnfdCuN868rubQfyF
+DNj6B7RShzGs9SWzKRfmL9IeOp2TZ30YbjOSHNYqGaErbuj2p0sXuqoSF0fg5aRq
+2Sp9G6uJSgmOZDPZvWsI4s5UEt58um+LM9zsROCG5y5rQGkSSWdROp7xY0yDy+0T
+s06ufbcZqLTTwbxHI00kNeHTurdDhhzP3LZpXHUYs39ge7oArp/g3a0JaxnnFN4g
+bTE1o5LA5mYKN6fSgNH7C08bkrJu7GKpoocjPlCbuv8seoDCtGE3q0y07zJo+Mlh
+h3hp6t7xGzO+QNfOgEoHwadLDhXq/2+ycAKMf/mmmsadzeILc2uWC3qRxSEuP/Pd
+ghj/01b4o4aEPqfbbc0+x5+YYpcOZuyTxVz77VZljgw2e09iAdBhpQ18ssA/O9Tw
+dw/+zPMpz9rpHBV/RWnO0i/01sDST3M7T8odcfcScoUeM6HMgMqtAf2LFxldflf8
+69CeZOFfdzCyZGYU4QNn1cRzU36/VaJ8voOkcIagzUM8oZYylxvDlhviT5RFr1kf
+Wxt9+Bl2CmnzIwAMI5MKln6i3bDndFYCn99eoJ5mk2o82PrgZgdCIRDaY2dJ4h1t
+v/SBOkjnksCkxlnWPfHN67VpridtIb4ZrBdh7ZEenz7xXEi8dE8=
+=gIrU
+-----END PGP SIGNATURE-----
+
+--f61P+fpdnY2FZS1u--
