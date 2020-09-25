@@ -2,69 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D12278CD2
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 17:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2216278D44
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 17:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729003AbgIYPer (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Sep 2020 11:34:47 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:60446 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728406AbgIYPer (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Sep 2020 11:34:47 -0400
-Received: from fsav109.sakura.ne.jp (fsav109.sakura.ne.jp [27.133.134.236])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 08PFYTOe015669;
-        Sat, 26 Sep 2020 00:34:29 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav109.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav109.sakura.ne.jp);
- Sat, 26 Sep 2020 00:34:29 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav109.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 08PFYThV015663
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
-        Sat, 26 Sep 2020 00:34:29 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [RFC] fixes for hangs and error reporting in CDC_WDM
-To:     Greg KH <greg@kroah.com>, Oliver Neukum <oneukum@suse.com>
-Cc:     bjorn@mork.no, linux-usb@vger.kernel.org
-References: <20200922112126.16919-1-oneukum@suse.com>
- <20200925151103.GB3173449@kroah.com>
- <22e1b8f3-947a-6f15-a788-d639cbabde5c@i-love.sakura.ne.jp>
- <20200925152832.GA3191454@kroah.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <c82c8fda-e9a1-ec70-21b1-761f75be5a43@i-love.sakura.ne.jp>
-Date:   Sat, 26 Sep 2020 00:34:24 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1729378AbgIYPyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Sep 2020 11:54:49 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45957 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727733AbgIYPyt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Sep 2020 11:54:49 -0400
+Received: by mail-oi1-f196.google.com with SMTP id z26so3220701oih.12;
+        Fri, 25 Sep 2020 08:54:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DVNYTU7FFF/E24r0BcwvcVIDxk8lN5sG1MykDbolNLA=;
+        b=jYrvVKFQe2qJHA6ItYQIxnOXro2fjGKnPvAwbQ/dOHlc50Elu1ow22dCrNbrQv09c2
+         uGh1nI6Fr5tBde1SR2f4ZSygOwhXVxJeXfDF17+BJBxQBzX4x+uiQZ/Z4HAVTjQV+3pp
+         7J1cBGpnBHPQhtA+ZS/m4nEEZXw0C6aWfpCAtPPfbaf4wbLk0uWkyfza/X2YHu/oO8MF
+         qkZYUoLmjN1CKlOmJvKxQy9l8GM5Zzkl2IL271FdV2mlFIpiwIw7jbqEF7d3q4m98ep4
+         Nit2GVVI25Z7vZ7AhHsnBUEDEYH2U0wjTHntGKA9AYfd/sefFaEGD+meevb6RKxdLtFk
+         QTIA==
+X-Gm-Message-State: AOAM533JO//w6/e7UZ6iBqGEXD8+x1vnQz8Ua/XL1DElQsA68Z5gT1EP
+        FubrahGPsllWNq2bma2Q2SHHCKlUBjhwMChwBxI=
+X-Google-Smtp-Source: ABdhPJwA87XyLesdGbcVmPTUB0mdllEgSKlEKtHEJMchgrhO/ZZmK2DjFvpSWzdq69C+mYCWdh91vz96JnkaxDsqCe4=
+X-Received: by 2002:a05:6808:491:: with SMTP id z17mr53765oid.110.1601049288619;
+ Fri, 25 Sep 2020 08:54:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200925152832.GA3191454@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200825135951.53340-1-heikki.krogerus@linux.intel.com> <20200825135951.53340-2-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20200825135951.53340-2-heikki.krogerus@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 25 Sep 2020 17:54:37 +0200
+Message-ID: <CAJZ5v0jT7Xdcm1WVvAV9okkoicnEsFEvnLSLLNx6eJHMNxwX+Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] software node: Power management operations for
+ software nodes
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/09/26 0:28, Greg KH wrote:
->> Do you want this fix as a series of patches (the former link)?
->> Since I think that the changeset should be atomically applied, I posted the latter link.
-> 
-> A single patch would be good to send to me again, burried at the end of
-> a long thread is hard to dig out.
-> 
-> Also with proper authorship is needed, did Oliver write this, or did
-> you?
+On Tue, Aug 25, 2020 at 3:59 PM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Adding separate PM operations vector for the software nodes.
+> The software node specific PM operations make it possible to
+> handle most PM related quirks separately in their own
+> functions instead of conditionally in the device driver's
+> generic PM functions (and in some cases all over the
+> driver). The software node specific PM operations will also
+> reduce the need to pass platform data in some cases, for
+> example from a core MFD driver to the child device drivers,
+> as from now on the core MFD driver will be able to implement
+> the PM quirks directly for the child devices without the
+> need to touch the drivers of those child devices.
+>
+> If a software node includes the PM operations, those PM
+> operations are always executed separately on top of the
+> other PM operations of the device, so the software node will
+> never replace any of the "normal" PM operations of the
+> device (including the PM domain's operations, class's or
+> bus's PM operations, the device drivers own operations, or
+> any other).
 
-Oliver wrote the majority part. I just squashed the series and updated comments
-and deduplicated the code. Thus, I think main authorship should be given to Oliver.
+This isn't consistent with the code changes AFAICS.
 
-> 
-> There is the co-developed-by: tag, which looks like it might be relevant
-> here, can you do that?
+The swnode PM operations are implemented as a PM domain ops, which
+means that they will be executed instead of any other existing ops
+rather than in addition to those.
 
-If you prefer the co-developed-by: tag, you can add:
+For example, software_node_prepare() will skip bus type ops if they
+are present and there is no "primary" PM domain which seems not
+intended.
 
-Co-developed-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Also some comments might help to understand the design.
 
-Oliver, any comments?
+Cheers!
