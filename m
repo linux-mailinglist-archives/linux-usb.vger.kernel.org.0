@@ -2,75 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF162278D95
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 18:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BD8278E9F
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 18:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727733AbgIYQFj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Sep 2020 12:05:39 -0400
-Received: from lan.nucleusys.com ([92.247.61.126]:33482 "EHLO
-        zztop.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727151AbgIYQFj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Sep 2020 12:05:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ZggEUJLaBIkbKzlcInEoNerQZx3vpTsJWg5G6+7d+Es=; b=rjRLkX6ULJ2aP2WAPEjDr3bAWs
-        KpxzHgTEgx8RCedk6RijGEO+MKlYGmzbY2Ge7n4keXGUYetyKWLpTyzvBMO6n8SSCQQzZbcoKAFMr
-        0FFcHie8UDndtnhZUqAEwD4l9VuzXUIpj62LE91BKhO9GL98keWfqF730+ybu3JnuQV4=;
-Received: from [94.26.108.4] (helo=carbon.lan)
-        by zztop.nucleusys.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <petkan@nucleusys.com>)
-        id 1kLqE4-00025X-EJ; Fri, 25 Sep 2020 19:05:36 +0300
-Date:   Fri, 25 Sep 2020 19:05:37 +0300
-From:   Petko Manolov <petkan@nucleusys.com>
-To:     Greg KH <gregKH@linuxfoundation.org>
-Cc:     oneukum@suse.com, linux-usb@vger.kernel.org,
-        Petko Manolov <petko.manolov@konsulko.com>
-Subject: Re: [PATCH 1/2] net: pegasus: convert control messages to the new
- send/recv scheme.
-Message-ID: <20200925160537.GA2128@carbon.lan>
-References: <20200923134348.23862-9-oneukum@suse.com>
- <20200925093124.22483-1-petkan@nucleusys.com>
- <20200925093124.22483-2-petkan@nucleusys.com>
- <20200925143730.GA3111407@kroah.com>
+        id S1729593AbgIYQcG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Sep 2020 12:32:06 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:39406 "EHLO aibo.runbox.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727733AbgIYQcG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Sep 2020 12:32:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+         s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject;
+        bh=LfKcGhf2cACSxd2zObI/ozoleyZsnV0Tjc0U/dCvQLo=; b=J1UHe5sTsCAKJ5CAnanA5IYoin
+        6GZMnzuYV4DHp38lSA+noHt6MpHNnrWefgR2ibHGqcytuM0H+Y4QVh9n/j4jbmaonQm3C0/QeYjOi
+        WauVbh7l5mybn8xaFVaixL5aAUqQW7q+AeRKhh+rd5TCGxVT3LANgFEK0cONmcvHYustqIgZTv9p9
+        bC0wipl4DnLRoP8I5+4wE7hr3qllLCuxd6VDwr/RfvNrlQek8QRgEdlpXZ0DPhzJCCEaqGmqiHRcn
+        BzygJaTqFNoeATLn4xQrHF1isI4HEjMrMFuCUWlorwL7Ht3eSpGrRdtoSuUhoRsvLfDpAePJJx4Ee
+        WRsA2NkQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <m.v.b@runbox.com>)
+        id 1kLqdc-0000kb-8o; Fri, 25 Sep 2020 18:32:00 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1kLqdN-0000AF-US; Fri, 25 Sep 2020 18:31:46 +0200
+Subject: Re: [PATCH v3 3/4] usbcore/driver: Fix incorrect downcast
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bastien Nocera <hadess@hadess.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        syzkaller@googlegroups.com
+References: <20200922110703.720960-1-m.v.b@runbox.com>
+ <20200922110703.720960-4-m.v.b@runbox.com>
+ <20200925145118.GA3114228@kroah.com>
+From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+Message-ID: <40bf9432-d878-5c16-2dc1-3f03964a8057@runbox.com>
+Date:   Fri, 25 Sep 2020 19:31:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200925143730.GA3111407@kroah.com>
-X-Spam-Score: -1.0 (-)
-X-Spam-Report: Spam detection software, running on the system "zztop.nucleusys.com",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  On 20-09-25 16:37:30, Greg KH wrote: > On Fri, Sep 25, 2020
-    at 12:31:23PM +0300, Petko Manolov wrote: > > From: Petko Manolov <petko.manolov@konsulko.com>
-    > > > > Signed-off-by: Petko Manolov <petko.m [...] 
- Content analysis details:   (-1.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+In-Reply-To: <20200925145118.GA3114228@kroah.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-09-25 16:37:30, Greg KH wrote:
-> On Fri, Sep 25, 2020 at 12:31:23PM +0300, Petko Manolov wrote:
-> > From: Petko Manolov <petko.manolov@konsulko.com>
-> > 
-> > Signed-off-by: Petko Manolov <petko.manolov@konsulko.com>
+On 9/25/20 5:51 PM, Greg Kroah-Hartman wrote:
+> On Tue, Sep 22, 2020 at 02:07:02PM +0300, M. Vefa Bicakci wrote:
+>> This commit resolves a minor bug in the selection/discovery of more
+>> specific USB device drivers for devices that are currently bound to
+>> generic USB device drivers.
+>>
+>> The bug is related to the way a candidate USB device driver is
+>> compared against the generic USB device driver. The code in
+>> is_dev_usb_generic_driver() assumes that the device driver in question
+>> is a USB device driver by calling to_usb_device_driver(dev->driver)
+>> to downcast; however I have observed that this assumption is not always
+>> true, through code instrumentation.
+>>
+>> This commit avoids the incorrect downcast altogether by comparing
+>> the USB device's driver (i.e., dev->driver) to the generic USB
+>> device driver directly. This method was suggested by Alan Stern.
+>>
+>> This bug was found while investigating Andrey Konovalov's report
+>> indicating usbip device driver misbehaviour with the recently merged
+>> generic USB device driver selection feature. The report is linked
+>> below.
+>>
+>> Fixes: d5643d2249 ("USB: Fix device driver race")
 > 
-> I really do not like to take patches without any changelog text at all
-> :(
+> Nit, this should have been:
+> 	Fixes: d5643d2249b2 ("USB: Fix device driver race")
 > 
-> Can you fix this up?
+> I'll go fix it up as my scripts are rejecting it as-is...
 
-I am sorry about this.  Hope v2 is better.
+Noted; sorry for missing this. I will use 12 characters from now on.
 
+I also wanted to thank you for committing the patches.
 
-cheers,
-Petko
+Vefa
