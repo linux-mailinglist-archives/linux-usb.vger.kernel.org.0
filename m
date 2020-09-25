@@ -2,88 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2216278D44
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 17:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA80D278D7C
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 18:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729378AbgIYPyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Sep 2020 11:54:49 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:45957 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727733AbgIYPyt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Sep 2020 11:54:49 -0400
-Received: by mail-oi1-f196.google.com with SMTP id z26so3220701oih.12;
-        Fri, 25 Sep 2020 08:54:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DVNYTU7FFF/E24r0BcwvcVIDxk8lN5sG1MykDbolNLA=;
-        b=jYrvVKFQe2qJHA6ItYQIxnOXro2fjGKnPvAwbQ/dOHlc50Elu1ow22dCrNbrQv09c2
-         uGh1nI6Fr5tBde1SR2f4ZSygOwhXVxJeXfDF17+BJBxQBzX4x+uiQZ/Z4HAVTjQV+3pp
-         7J1cBGpnBHPQhtA+ZS/m4nEEZXw0C6aWfpCAtPPfbaf4wbLk0uWkyfza/X2YHu/oO8MF
-         qkZYUoLmjN1CKlOmJvKxQy9l8GM5Zzkl2IL271FdV2mlFIpiwIw7jbqEF7d3q4m98ep4
-         Nit2GVVI25Z7vZ7AhHsnBUEDEYH2U0wjTHntGKA9AYfd/sefFaEGD+meevb6RKxdLtFk
-         QTIA==
-X-Gm-Message-State: AOAM533JO//w6/e7UZ6iBqGEXD8+x1vnQz8Ua/XL1DElQsA68Z5gT1EP
-        FubrahGPsllWNq2bma2Q2SHHCKlUBjhwMChwBxI=
-X-Google-Smtp-Source: ABdhPJwA87XyLesdGbcVmPTUB0mdllEgSKlEKtHEJMchgrhO/ZZmK2DjFvpSWzdq69C+mYCWdh91vz96JnkaxDsqCe4=
-X-Received: by 2002:a05:6808:491:: with SMTP id z17mr53765oid.110.1601049288619;
- Fri, 25 Sep 2020 08:54:48 -0700 (PDT)
+        id S1727495AbgIYQCW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Sep 2020 12:02:22 -0400
+Received: from lan.nucleusys.com ([92.247.61.126]:33450 "EHLO
+        zztop.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727151AbgIYQCW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Sep 2020 12:02:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=nucleusys.com; s=x; h=Content-Transfer-Encoding:MIME-Version:References:
+        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=HKghntozPatqSbIa/0iRutbq7qGVa77/QxXE6pFe7/c=; b=MyjPr3PFKliFzdaHSujYR948/N
+        qZJG2PRlLlbPstWzLHwVD/l4LVR239gDLp9YiDB/zkxHVCEFA43o4Ay5va25RSXVGiaGQokBuN72s
+        TrhL+PzIwI1UbzqdEyFq8xqkpTsLL4JN9JLXstLmz7PqB73wHy9JiNp02j3OexAwiBlo=;
+Received: from [94.26.108.4] (helo=carbon.lan)
+        by zztop.nucleusys.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <petkan@nucleusys.com>)
+        id 1kLqAr-00024z-GS; Fri, 25 Sep 2020 19:02:17 +0300
+From:   Petko Manolov <petkan@nucleusys.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, oneukum@suse.com,
+        Petko Manolov <petko.manolov@konsulko.com>
+Subject: [PATCH 0/2] [patch v2] utilize the new control message send and receive API
+Date:   Fri, 25 Sep 2020 19:01:58 +0300
+Message-Id: <20200925160200.4364-1-petkan@nucleusys.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200925143730.GA3111407@kroah.com>
+References: <20200925143730.GA3111407@kroah.com>
 MIME-Version: 1.0
-References: <20200825135951.53340-1-heikki.krogerus@linux.intel.com> <20200825135951.53340-2-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20200825135951.53340-2-heikki.krogerus@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Sep 2020 17:54:37 +0200
-Message-ID: <CAJZ5v0jT7Xdcm1WVvAV9okkoicnEsFEvnLSLLNx6eJHMNxwX+Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] software node: Power management operations for
- software nodes
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Report: Spam detection software, running on the system "zztop.nucleusys.com",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ the administrator of that system for details.
+ Content preview:  From: Petko Manolov <petko.manolov@konsulko.com> As discussed
+    at the linux-usb this patch series is moving from old style usb_control_msg()
+    to the new API. For obvious reasons we don't want to open code usb_control_msg_send()
+    and usb_control_msg_rec [...] 
+ Content analysis details:   (-1.0 points, 5.0 required)
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+ -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 3:59 PM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Adding separate PM operations vector for the software nodes.
-> The software node specific PM operations make it possible to
-> handle most PM related quirks separately in their own
-> functions instead of conditionally in the device driver's
-> generic PM functions (and in some cases all over the
-> driver). The software node specific PM operations will also
-> reduce the need to pass platform data in some cases, for
-> example from a core MFD driver to the child device drivers,
-> as from now on the core MFD driver will be able to implement
-> the PM quirks directly for the child devices without the
-> need to touch the drivers of those child devices.
->
-> If a software node includes the PM operations, those PM
-> operations are always executed separately on top of the
-> other PM operations of the device, so the software node will
-> never replace any of the "normal" PM operations of the
-> device (including the PM domain's operations, class's or
-> bus's PM operations, the device drivers own operations, or
-> any other).
+From: Petko Manolov <petko.manolov@konsulko.com>
 
-This isn't consistent with the code changes AFAICS.
+As discussed at the linux-usb this patch series is moving from old style
+usb_control_msg() to the new API.  For obvious reasons we don't want to open
+code usb_control_msg_send() and usb_control_msg_recv() functions.
 
-The swnode PM operations are implemented as a PM domain ops, which
-means that they will be executed instead of any other existing ops
-rather than in addition to those.
+Petko Manolov (2):
+  Convert Pegasus' control messages to the new
+    usb_control_msg_send/recv() scheme.
+  Convert RTL8150's control messages to the new
+    usb_control_msg_send/recv() scheme.
 
-For example, software_node_prepare() will skip bus type ops if they
-are present and there is no "primary" PM domain which seems not
-intended.
+ drivers/net/usb/pegasus.c | 56 +++++++--------------------------------
+ drivers/net/usb/rtl8150.c | 32 +++++-----------------
+ 2 files changed, 15 insertions(+), 73 deletions(-)
 
-Also some comments might help to understand the design.
+-- 
+2.28.0
 
-Cheers!
