@@ -2,192 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3551C278111
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 09:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD8327814D
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 09:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727317AbgIYHET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Sep 2020 03:04:19 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:45080 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727110AbgIYHET (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Sep 2020 03:04:19 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.69 with qID 08P744vN4022469, This message is accepted by code: ctloc85258
-Received: from RSEXMBS01.realsil.com.cn ([172.29.17.195])
-        by rtits2.realtek.com.tw (8.15.2/2.66/5.86) with ESMTPS id 08P744vN4022469
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 25 Sep 2020 15:04:05 +0800
-Received: from RSEXDAG01.realsil.com.cn (172.29.17.199) by
- RSEXMBS01.realsil.com.cn (172.29.17.195) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2044.4; Fri, 25 Sep 2020 15:04:04 +0800
-Received: from RSEXMBS01.realsil.com.cn (172.29.17.195) by
- RSEXDAG01.realsil.com.cn (172.29.17.199) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2044.4; Fri, 25 Sep 2020 15:04:04 +0800
-Received: from RSEXMBS01.realsil.com.cn ([fe80::e186:b533:fb3:8b37]) by
- RSEXMBS01.realsil.com.cn ([fe80::e186:b533:fb3:8b37%7]) with mapi id
- 15.01.2044.004; Fri, 25 Sep 2020 15:04:04 +0800
-From:   =?gb2312?B?wr3W7M6w?= <alex_lu@realsil.com.cn>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-CC:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] Bluetooth: btusb: Avoid unnecessary reset upon system resume
-Thread-Topic: [PATCH] Bluetooth: btusb: Avoid unnecessary reset upon system
- resume
-Thread-Index: AdaTCgz9jigV3dr0CE6uDdt266LELw==
-Date:   Fri, 25 Sep 2020 07:04:04 +0000
-Message-ID: <6b46b6bca9d3486499d0374eb277b00c@realsil.com.cn>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.29.36.107]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S1727379AbgIYHMJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Sep 2020 03:12:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41740 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726990AbgIYHMJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Sep 2020 03:12:09 -0400
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ACB5420759;
+        Fri, 25 Sep 2020 07:12:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601017928;
+        bh=Z0ZVvRPpfsaiJcQiqcQFKPgpL3czOfPus0HdKagcgsg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=cgadSunQUWPmmnfhpWv0mGqcErTSKCCgjkwwbpgQ16/z0DOQgQ9U0s338Qnt5JSzT
+         sDV1wf9ckM8o7ZHPA++463CWn5izWaai34zDwW7ddPeaZzRIrmq6+QiBJ7N9LuKMqn
+         /JlhUQ30kKG8sPoR7P1ncKs6FgS4amYLCJvlEbrM=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Manish Narani <MNARANI@xilinx.com>, Rob Herring <robh@kernel.org>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Michal Simek <michals@xilinx.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>
+Subject: RE: [PATCH v2 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation
+ for Versal DWC3 Controller
+In-Reply-To: <BYAPR02MB5896E374297AF46A63CDAD30C1360@BYAPR02MB5896.namprd02.prod.outlook.com>
+References: <1599678185-119412-1-git-send-email-manish.narani@xilinx.com>
+ <1599678185-119412-2-git-send-email-manish.narani@xilinx.com>
+ <20200922195410.GA3122345@bogus> <87wo0jejae.fsf@kernel.org>
+ <BYAPR02MB5896E374297AF46A63CDAD30C1360@BYAPR02MB5896.namprd02.prod.outlook.com>
+Date:   Fri, 25 Sep 2020 10:11:59 +0300
+Message-ID: <87h7rmcou8.fsf@kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgS2FpLUhlbmcsDQoNCj4gT24gU2VwdGVtYmVyIDI1LCAyMDIwIDE0OjA0LCBLYWktSGVuZyBG
-ZW5nIHdyb3RlOg0KPiANCj4gSGkgQWJoaXNoZWssDQo+ID4gT24gU2VwIDI1LCAyMDIwLCBhdCAx
-MTozMywgQWJoaXNoZWsgUGFuZGl0LVN1YmVkaQ0KPiA8YWJoaXNoZWtwYW5kaXRAY2hyb21pdW0u
-b3JnPiB3cm90ZToNCj4gPg0KPiA+ICsgQWxleCBMdSAod2hvIGNvbnRyaWJ1dGVkIHRoZSBvcmln
-aW5hbCBjaGFuZ2UpDQo+ID4NCj4gPiBIaSBLYWktSGVuZywNCj4gPg0KPiA+DQo+ID4gT24gVGh1
-LCBTZXAgMjQsIDIwMjAgYXQgMTI6MTAgQU0gS2FpLUhlbmcgRmVuZw0KPiA+IDxrYWkuaGVuZy5m
-ZW5nQGNhbm9uaWNhbC5jb20+IHdyb3RlOg0KPiA+Pg0KPiA+PiBbK0NjIGxpbnV4LXVzYl0NCj4g
-Pj4NCj4gPj4gSGkgQWJoaXNoZWssDQo+ID4+DQo+ID4+PiBPbiBTZXAgMjQsIDIwMjAsIGF0IDA0
-OjQxLCBBYmhpc2hlayBQYW5kaXQtU3ViZWRpDQo+IDxhYmhpc2hla3BhbmRpdEBjaHJvbWl1bS5v
-cmc+IHdyb3RlOg0KPiA+Pj4NCj4gPj4+IEhpIEthaS1IZW5nLA0KPiA+Pj4NCj4gPj4+IFdoaWNo
-IFJlYWx0ZWsgY29udHJvbGxlciBpcyB0aGlzIG9uPycNCj4gPj4NCj4gPj4gVGhlIGlzc3VlIGhh
-cHBlbnMgb24gODgyMUNFLg0KPiA+Pg0KPiA+Pj4NCj4gPj4+IFNwZWNpZmljYWxseSBmb3IgUlRM
-ODgyMkNFLCB3ZSB0ZXN0ZWQgd2l0aG91dCByZXNldF9yZXN1bWUgYmVpbmcgc2V0DQo+ID4+PiBh
-bmQgdGhhdCB3YXMgY2F1c2luZyB0aGUgY29udHJvbGxlciBiZWluZyByZXNldCB3aXRob3V0IGJs
-dWV6IGV2ZXINCj4gPj4+IGxlYXJuaW5nIGFib3V0IGl0IChyZXN1bHRpbmcgaW4gZGV2aWNlcyBi
-ZWluZyB1bnVzYWJsZSB3aXRob3V0DQo+ID4+PiB0b2dnbGluZyB0aGUgQlQgcG93ZXIpLg0KPiA+
-Pg0KPiA+PiBUaGUgcmVzZXQgaXMgZG9uZSBieSB0aGUga2VybmVsLCBzbyBob3cgZG9lcyB0aGF0
-IGFmZmVjdCBibHVlej8NCj4gPj4NCj4gPj4gRnJvbSB3aGF0IHlvdSBkZXNjcmliZWQsIGl0IHNv
-dW5kcyBtb3JlIGxpa2UgcnVudGltZSByZXN1bWUgc2luY2UgYmx1ZXoNCj4gaXMgYWxyZWFkeSBy
-dW5uaW5nLg0KPiA+PiBJZiB3ZSBuZWVkIHJlc2V0IHJlc3VtZSBmb3IgcnVudGltZSByZXN1bWUs
-IG1heWJlIGl0J3MgYW5vdGhlciBidWcNCj4gd2hpY2ggbmVlZHMgdG8gYmUgYWRkcmVzc2VkPw0K
-PiA+DQo+ID4gRnJvbSBidHVzYi5jOg0KPiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20v
-bGludXgva2VybmVsL2dpdC9ibHVldG9vdGgvYmx1ZXRvb3RoLQ0KPiBuZXh0LmdpdC90cmVlL2Ry
-aXZlcnMvYmx1ZXRvb3RoL2J0dXNiLmMjbjQxODkNCj4gPiAvKiBSZWFsdGVrIGRldmljZXMgbG9z
-ZSB0aGVpciB1cGRhdGVkIGZpcm13YXJlIG92ZXIgZ2xvYmFsDQo+ID4gKiBzdXNwZW5kIHRoYXQg
-bWVhbnMgaG9zdCBkb2Vzbid0IHNlbmQgU0VUX0ZFQVRVUkUNCj4gPiAqIChERVZJQ0VfUkVNT1RF
-X1dBS0VVUCkNCj4gPiAqLw0KPiA+DQo+ID4gUnVudGltZSBzdXNwZW5kIGFsd2F5cyByZXF1aXJl
-cyByZW1vdGUgd2FrZXVwIHRvIGJlIHNldCBhbmQgcmVzZXQNCj4gPiByZXN1bWUgaXNuJ3QgdXNl
-ZCB0aGVyZS4NCj4gDQo+IFRoYW5rcyBmb3IgdGhlIGNsYXJpZmljYXRpb24uDQo+IA0KPiA+DQo+
-ID4gRHVyaW5nIHN5c3RlbSBzdXNwZW5kLCB3aGVuIHJlbW90ZSB3YWtldXAgaXMgbm90IHNldCwg
-UlRMODgyMkNFIGxvc2VzDQo+ID4gdGhlIEZXIGxvYWRlZCBieSB0aGUgZHJpdmVyIGFuZCBhbnkg
-c3RhdGUgY3VycmVudGx5IGluIHRoZSBjb250cm9sbGVyLg0KPiA+IFRoaXMgY2F1c2VzIHRoZSBr
-ZXJuZWwgYW5kIHRoZSBjb250cm9sbGVyIHN0YXRlIHRvIGdvIG91dCBvZiBzeW5jLg0KPiA+IE9u
-ZSBvZiB0aGUgaXNzdWVzIHdlIG9ic2VydmVkIG9uIHRoZSBSZWFsdGVrIGNvbnRyb2xsZXIgd2l0
-aG91dCB0aGUNCj4gPiByZXNldCByZXN1bWUgcXVpcmsgd2FzIHRoYXQgcGFpcmVkIG9yIGNvbm5l
-Y3RlZCBkZXZpY2VzIHdvdWxkIGp1c3QNCj4gPiBzdG9wIHdvcmtpbmcgYWZ0ZXIgcmVzdW1lLg0K
-PiA+DQo+ID4+DQo+ID4+PiBJZiB0aGUgZmlybXdhcmUgZG9lc24ndCBjdXQgb2ZmIHBvd2VyIGR1
-cmluZyBzdXNwZW5kLCBtYXliZSB5b3UNCj4gPj4+IHNob3VsZG4ndCBzZXQgdGhlIEJUVVNCX1dB
-S0VVUF9ESVNBQkxFIGZsYWcgZm9yIHRoYXQgY29udHJvbGxlci4NCj4gPj4NCj4gPj4gV2UgZG9u
-J3Qga25vdyBiZWZvcmVoYW5kIGlmIHRoZSBwbGF0Zm9ybSBmaXJtd2FyZSAoQklPUyBmb3IgbXkg
-Y2FzZSkNCj4gd2lsbCBjdXQgcG93ZXIgb2ZmIG9yIG5vdC4NCj4gPj4NCj4gPj4gSW4gZ2VuZXJh
-bCwgbGFwdG9wcyB3aWxsIGN1dCBvZmYgdGhlIFVTQiBwb3dlciBkdXJpbmcgUzMuDQo+ID4+IFdo
-ZW4gQUMgaXMgcGx1Z2dlZCwgc29tZSBsYXB0b3BzIGN1dHMgVVNCIHBvd2VyIG9mZiBhbmQgc29t
-ZSBkb24ndC4NCj4gVGhpcyBhbHNvIGFwcGxpZXMgdG8gbWFueSBkZXNrdG9wcy4gTm90IHRvIG1l
-bnRpb24gdGhlcmUgY2FuIGJlIEJJT1MNCj4gb3B0aW9ucyB0byBjb250cm9sIFVTQiBwb3dlciB1
-bmRlciBTMy9TNC9TNS4uLg0KPiA+Pg0KPiA+PiBTbyB3ZSBkb24ndCBrbm93IGJlZm9yZWhhbmQu
-DQo+ID4+DQo+ID4NCj4gPiBJIHRoaW5rIHRoZSBjb25mdXNpb24gaGVyZSBzdGVtcyBmcm9tIHdo
-YXQgaXMgYWN0dWFsbHkgYmVpbmcgdHVybmVkDQo+ID4gb2ZmIGJldHdlZW4gb3VyIHR3byBib2Fy
-ZHMgYW5kIHdoYXQgd2UncmUgcmVmZXJyaW5nIHRvIGFzIGZpcm13YXJlIDopDQo+IA0KPiBZZXMg
-OikNCj4gDQo+ID4NCj4gPiBJbiB5b3VyIGNhc2UsIHRoZSBSZWFsdGVrIGNvbnRyb2xsZXIgcmV0
-YWlucyBmaXJtd2FyZSB1bmxlc3MgdGhlDQo+ID4gcGxhdGZvcm0gY3V0cyBvZiBwb3dlciB0byBV
-U0IgKHdoaWNoIGl0IGRvZXMgZHVyaW5nIFMzKS4NCj4gDQo+IE5vdCBhbGwgcGxhdGZvcm0gZmly
-bXdhcmUgKGkuZS4gQklPUyBmb3IgeDg2KSBjdXQgVVNCIHBvd2VyIGR1cmluZyBTMywgYXMgSQ0K
-PiBkZXNjcmliZSBpbiBsYXN0IHJlcGx5Lg0KPiANCj4gPiBJbiBteSBjYXNlLCB0aGUgUmVhbHRl
-ayBjb250cm9sbGVyIGxvc2VzIGZpcm13YXJlIHdoZW4gUmVtb3RlIFdha2V1cA0KPiA+IGlzbid0
-IHNldCwgZXZlbiBpZiB0aGUgcGxhdGZvcm0gZG9lc24ndCBjdXQgcG93ZXIgdG8gVVNCLg0KPiAN
-Cj4gVGhhbmtzIGZvciB0aGUgY2xhcmlmaWNhdGlvbiwgSSBiZWxpZXZlIGl0J3MgYSBjYXNlIHRo
-YXQgc2hvdWxkIHRvIGJlIGhhbmRsZWQNCj4gc2VwYXJhdGVseS4NCj4gDQo+ID4NCj4gPiBJbiB5
-b3VyIGNhc2UsIHNpbmNlIHlvdSBkb24ndCBuZWVkIHRvIGVuZm9yY2UgdGhlICdSZW1vdGUgV2Fr
-ZXVwJyBiaXQsDQo+ID4gaWYgeW91IHVuc2V0IHRoZSBCVFVTQl9XQUtFVVBfRElTQUJMRSBmb3Ig
-dGhhdCBWSUQ6UElELCB5b3Ugc2hvdWxkIGdldA0KPiA+IHRoZSBkZXNpcmFibGUgYmVoYXZpb3Ig
-KHdoaWNoIGlzIGFjdHVhbGx5IHRoZSBkZWZhdWx0IGJlaGF2aW9yOyByZW1vdGUNCj4gPiB3YWtl
-IHdpbGwgYWx3YXlzIGJlIGFzc2VydGVkIGluc3RlYWQgb2Ygb25seSBkdXJpbmcgUnVudGltZSBT
-dXNwZW5kKS4NCj4gDQo+IFNvIHdlIGhhdmUgdGhyZWUgY2FzZXMgaGVyZS4gQXNzdW1pbmcgcmVz
-ZXRfcmVzdW1lIGlzbid0IGZsYWdnZWQgYnkgYnR1c2I6DQo+IA0KPiAxKSBCb3RoIFVTQiBwb3dl
-ciBhbmQgQlQgZmlybXdhcmUgd2VyZSBsb3N0IGR1cmluZyBzdXNwZW5kLg0KPiBVU0IgY29yZSBm
-aW5kcyBvdXQgcG93ZXIgd2FzIGxvc3QsIHRyeSB0byByZXNldCByZXN1bWUgdGhlIGRldmljZS4g
-U2luY2UNCj4gYnR1c2IgZG9lc24ndCBoYXZlIHJlc2V0X3Jlc3VtZSBjYWxsYmFjaywgVVNCIGNv
-cmUgY2FsbHMgcHJvYmUgaW5zdGVhZC4NCj4gDQo+IDIpIEJvdGggVVNCIHBvd2VyIGFuZCBCVCBm
-aXJtd2FyZSB3ZXJlIGtlcHQgZHVyaW5nIHN1c3BlbmQuIFRoaXMgaXMgbXkNCj4gY2FzZS4NCj4g
-UmVndWxhciByZXN1bWUgaGFuZGxlcyBldmVyeXRoaW5nLg0KPiANCj4gMykgVVNCIHBvd2VyIHdh
-cyBrZXB0IGJ1dCBCVCBmaXJtd2FyZSB3YXMgbG9zdC4gVGhpcyBpcyB5b3VyIGNhc2UuDQo+IFVT
-QiBjb3JlIGZpbmRzIG91dCBwb3dlciB3YXMga2VwdCwgdXNlIHJlZ3VsYXIgcmVzdW1lLiBIb3dl
-dmVyIHRoZSBCVA0KPiBmaXJtd2FyZSB3YXMgbG9zdCwgc28gcmVzdW1lIGZhaWxzLg0KPiBGb3Ig
-dGhpcyBjYXNlLCBtYXliZSB3ZSBjYW4gdXNlIGJ0cnRsX3NldHVwX3JlYWx0ZWsoKSBpbiBidHVz
-Yl9yZXN1bWUoKT8gSXQNCj4gd29uJ3QgcmUtdXBsb2FkIGZpcm13YXJlIGlmIGZpcm13YXJlIGlz
-IHJldGFpbmVkLCBhbmQgd2lsbCBkbyBwcm9wZXINCj4gaW5pdGlhbGl6aW5nIGlmIGZpcm13YXJl
-IHdhcyBsb3N0Lg0KDQpJbiBteSBvcGluaW9ucywNCkZvciB0aGUgMyksIHRoZXJlIGFyZSB0d28g
-Y2FzZXMsIG9uZSBpcyB0aGF0IGZpcm13YXJlIHdhcyBsb3N0IGluIGF1dG8gc3VzcGVuZC4gVGhh
-dCBzaG91bGQgbmV2ZXIgaGFwcGVuLCBiZWNhdXNlIHRoZSBkYXRhLT5pbnRmLT5uZWVkc19yZW1v
-dGVfd2FrZXVwIGlzIHNldCBpbiBidHVzYl9vcGVuKCkgYW5kIGJ0dXNiX2Nsb3NlKCkuIFRoZSBm
-bGFnIG1lYW5zIHRoYXQgaG9zdCB3aWxsIHNlbmQgcmVtb3RlIHdha2V1cCBkdXJpbmcgYXV0b3N1
-c3BlbmQsIGFuZCBmaXJtd2FyZSB3b3VsZG4ndCBkcm9wLg0KQW5vdGhlciBjYXNlIGlzIGZpcm13
-YXJlIGxvc3MgaW4gZ2xvYmFsIHN1c3BlbmQuIEkgdGhpbmsgdGhhdCdzIG5vIHByb2JsZW0sIGRy
-aXZlciBzZXRzIGRhdGEtPnVkZXYtPnJlc2V0X3Jlc3VtZSBpbiBidHVzYl9zdXNwZW5kKCkgYW5k
-IGJ0dXNiIHdpbGwgcmVwcm9iZSBhZnRlciByZXN1bWUuDQoNCj4gDQo+IEthaS1IZW5nDQo+IA0K
-PiA+DQo+ID4gQEFsZXggLS0gV2hhdCBpcyB0aGUgY29tbW9uIGJlaGF2aW9yIGZvciBSZWFsdGVr
-IGNvbnRyb2xsZXJzPyBTaG91bGQNCj4gPiB3ZSBzZXQgQlRVU0JfV0FLRVVQX0RJU0FCTEUgb25s
-eSBvbiBSVEw4ODIyQ0Ugb3Igc2hvdWxkIHdlIHVuc2V0IGl0DQo+ID4gb25seSBvbiBSVEw4ODIx
-Q0U/DQo+ID4NCj4gPj4+DQo+ID4+PiBJIHdvdWxkIHByZWZlciB0aGlzIGRvZXNuJ3QgZ2V0IGFj
-Y2VwdGVkIGluIGl0cyBjdXJyZW50IHN0YXRlLg0KPiA+Pg0KPiA+PiBPZiBjb3Vyc2UuDQo+ID4+
-IEkgdGhpbmsgd2UgbmVlZCB0byBmaW5kIHRoZSByb290IGNhdXNlIGZvciB5b3VyIGNhc2UgYmVm
-b3JlIGFwcGx5aW5nIHRoaXMNCj4gb25lLg0KPiA+Pg0KPiA+PiBLYWktSGVuZw0KPiA+Pg0KPiA+
-Pj4NCj4gPj4+IEFiaGlzaGVrDQo+ID4+Pg0KPiA+Pj4gT24gV2VkLCBTZXAgMjMsIDIwMjAgYXQg
-MTA6NTYgQU0gS2FpLUhlbmcgRmVuZw0KPiA+Pj4gPGthaS5oZW5nLmZlbmdAY2Fub25pY2FsLmNv
-bT4gd3JvdGU6DQo+ID4+Pj4NCj4gPj4+PiBSZWFsdGVrIGJsdWV0b290aCBjb250cm9sbGVyIG1h
-eSBmYWlsIHRvIHdvcmsgYWZ0ZXIgc3lzdGVtIHNsZWVwOg0KPiA+Pj4+IFsgMTI3Mi43MDc2NzBd
-IEJsdWV0b290aDogaGNpMDogY29tbWFuZCAweDEwMDEgdHggdGltZW91dA0KPiA+Pj4+IFsgMTI4
-MC44MzU3MTJdIEJsdWV0b290aDogaGNpMDogUlRMOiBIQ0lfT1BfUkVBRF9MT0NBTF9WRVJTSU9O
-DQo+IGZhaWxlZCAoLTExMCkNCj4gPj4+Pg0KPiA+Pj4+IElmIHBsYXRmb3JtIGZpcm13YXJlIGRv
-ZXNuJ3QgY3V0IHBvd2VyIG9mZiBkdXJpbmcgc3VzcGVuZCwgdGhlDQo+IGZpcm13YXJlDQo+ID4+
-Pj4gaXMgY29uc2lkZXJlZCByZXRhaW5lZCBpbiBjb250cm9sbGVyIGJ1dCB0aGUgZHJpdmVyIGlz
-IHN0aWxsIGFza2luZyBVU0INCj4gPj4+PiBjb3JlIHRvIHBlcmZvcm0gYSByZXNldC1yZXN1bWUu
-IFRoaXMgY2FuIG1ha2UgYmx1ZXRvb3RoIGNvbnRyb2xsZXINCj4gPj4+PiB1bnVzYWJsZS4NCj4g
-Pj4+Pg0KPiA+Pj4+IFNvIGF2b2lkIHVubmVjZXNzYXJ5IHJlc2V0IHRvIHJlc29sdmUgdGhlIGlz
-c3VlLg0KPiA+Pj4+DQo+ID4+Pj4gRm9yIGRldmljZXMgdGhhdCByZWFsbHkgbG9zZSBwb3dlciBk
-dXJpbmcgc3VzcGVuZCwgVVNCIGNvcmUgd2lsbCBkZXRlY3QNCj4gPj4+PiBhbmQgaGFuZGxlIHJl
-c2V0LXJlc3VtZSBjb3JyZWN0bHkuDQo+ID4+Pj4NCj4gPj4+PiBTaWduZWQtb2ZmLWJ5OiBLYWkt
-SGVuZyBGZW5nIDxrYWkuaGVuZy5mZW5nQGNhbm9uaWNhbC5jb20+DQo+ID4+Pj4gLS0tDQo+ID4+
-Pj4gZHJpdmVycy9ibHVldG9vdGgvYnR1c2IuYyB8IDggKysrLS0tLS0NCj4gPj4+PiAxIGZpbGUg
-Y2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQ0KPiA+Pj4+DQo+ID4+Pj4g
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmx1ZXRvb3RoL2J0dXNiLmMgYi9kcml2ZXJzL2JsdWV0b290
-aC9idHVzYi5jDQo+ID4+Pj4gaW5kZXggOGQyNjA4ZGRmZDA4Li5kZTg2ZWY0Mzg4ZjkgMTAwNjQ0
-DQo+ID4+Pj4gLS0tIGEvZHJpdmVycy9ibHVldG9vdGgvYnR1c2IuYw0KPiA+Pj4+ICsrKyBiL2Ry
-aXZlcnMvYmx1ZXRvb3RoL2J0dXNiLmMNCj4gPj4+PiBAQCAtNDI1NSwxNyArNDI1NSwxNSBAQCBz
-dGF0aWMgaW50IGJ0dXNiX3N1c3BlbmQoc3RydWN0DQo+IHVzYl9pbnRlcmZhY2UgKmludGYsIHBt
-X21lc3NhZ2VfdCBtZXNzYWdlKQ0KPiA+Pj4+ICAgICAgICAgICAgICAgZW5hYmxlX2lycShkYXRh
-LT5vb2Jfd2FrZV9pcnEpOw0KPiA+Pj4+ICAgICAgIH0NCj4gPj4+Pg0KPiA+Pj4+IC0gICAgICAg
-LyogRm9yIGdsb2JhbCBzdXNwZW5kLCBSZWFsdGVrIGRldmljZXMgbG9zZSB0aGUgbG9hZGVkIGZ3
-DQo+ID4+Pj4gLSAgICAgICAgKiBpbiB0aGVtLiBCdXQgZm9yIGF1dG9zdXNwZW5kLCBmaXJtd2Fy
-ZSBzaG91bGQgcmVtYWluLg0KPiA+Pj4+IC0gICAgICAgICogQWN0dWFsbHksIGl0IGRlcGVuZHMg
-b24gd2hldGhlciB0aGUgdXNiIGhvc3Qgc2VuZHMNCj4gPj4+PiArICAgICAgIC8qIEZvciBnbG9i
-YWwgc3VzcGVuZCwgUmVhbHRlayBkZXZpY2VzIGxvc2UgdGhlIGxvYWRlZCBmdyBpbiB0aGVtDQo+
-IGlmDQo+ID4+Pj4gKyAgICAgICAgKiBwbGF0Zm9ybSBmaXJtd2FyZSBjdXQgcG93ZXIgb2ZmLiBC
-dXQgZm9yIGF1dG9zdXNwZW5kLA0KPiBmaXJtd2FyZQ0KPiA+Pj4+ICsgICAgICAgICogc2hvdWxk
-IHJlbWFpbi4gIEFjdHVhbGx5LCBpdCBkZXBlbmRzIG9uIHdoZXRoZXIgdGhlIHVzYiBob3N0DQo+
-IHNlbmRzDQo+ID4+Pj4gICAgICAgICogc2V0IGZlYXR1cmUgKGVuYWJsZSB3YWtldXApIG9yIG5v
-dC4NCj4gPj4+PiAgICAgICAgKi8NCj4gPj4+PiAgICAgICBpZiAodGVzdF9iaXQoQlRVU0JfV0FL
-RVVQX0RJU0FCTEUsICZkYXRhLT5mbGFncykpIHsNCj4gPj4+PiAgICAgICAgICAgICAgIGlmIChQ
-TVNHX0lTX0FVVE8obWVzc2FnZSkgJiYNCj4gPj4+PiAgICAgICAgICAgICAgICAgICBkZXZpY2Vf
-Y2FuX3dha2V1cCgmZGF0YS0+dWRldi0+ZGV2KSkNCj4gPj4+PiAgICAgICAgICAgICAgICAgICAg
-ICAgZGF0YS0+dWRldi0+ZG9fcmVtb3RlX3dha2V1cCA9IDE7DQo+ID4+Pj4gLSAgICAgICAgICAg
-ICAgIGVsc2UgaWYgKCFQTVNHX0lTX0FVVE8obWVzc2FnZSkpDQo+ID4+Pj4gLSAgICAgICAgICAg
-ICAgICAgICAgICAgZGF0YS0+dWRldi0+cmVzZXRfcmVzdW1lID0gMTsNCj4gPj4+PiAgICAgICB9
-DQo+ID4+Pj4NCj4gPj4+PiAgICAgICByZXR1cm4gMDsNCj4gPj4+PiAtLQ0KPiA+Pj4+IDIuMTcu
-MQ0KPiANCj4gDQo+IC0tLS0tLVBsZWFzZSBjb25zaWRlciB0aGUgZW52aXJvbm1lbnQgYmVmb3Jl
-IHByaW50aW5nIHRoaXMgZS1tYWlsLg0K
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
+Hi,
+
+Manish Narani <MNARANI@xilinx.com> writes:
+> Hi Rob/Felipe,
+>
+> Thanks for the review.
+>
+>> -----Original Message-----
+>> From: Felipe Balbi <balbi@kernel.org>
+>> Sent: Thursday, September 24, 2020 12:47 PM
+>> To: Rob Herring <robh@kernel.org>; Manish Narani <MNARANI@xilinx.com>
+>> Cc: gregkh@linuxfoundation.org; Michal Simek <michals@xilinx.com>;
+>> p.zabel@pengutronix.de; linux-usb@vger.kernel.org;
+>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>> kernel@vger.kernel.org; git <git@xilinx.com>
+>> Subject: Re: [PATCH v2 1/2] dt-bindings: usb: dwc3-xilinx: Add
+>> documentation for Versal DWC3 Controller
+>>=20
+>> Rob Herring <robh@kernel.org> writes:
+>>=20
+>> > On Thu, Sep 10, 2020 at 12:33:04AM +0530, Manish Narani wrote:
+>> >> Add documentation for Versal DWC3 controller. Add required property
+>> >> 'reg' for the same. Also add optional properties for snps,dwc3.
+>> >>
+>> >> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+>> >> ---
+>> >>  .../devicetree/bindings/usb/dwc3-xilinx.txt   | 20 +++++++++++++++++=
+--
+>> >>  1 file changed, 18 insertions(+), 2 deletions(-)
+>> >>
+>> >> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+>> b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+>> >> index 4aae5b2cef56..219b5780dbee 100644
+>> >> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+>> >> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+>> >> @@ -1,7 +1,8 @@
+>> >>  Xilinx SuperSpeed DWC3 USB SoC controller
+>> >>
+>> >>  Required properties:
+>> >> -- compatible:	Should contain "xlnx,zynqmp-dwc3"
+>> >> +- compatible:	May contain "xlnx,zynqmp-dwc3" or "xlnx,versal-
+>> dwc3"
+>> >> +- reg:		Base address and length of the register control block
+>> >>  - clocks:	A list of phandles for the clocks listed in clock-names
+>> >>  - clock-names:	Should contain the following:
+>> >>    "bus_clk"	 Master/Core clock, have to be >=3D 125 MHz for SS
+>> >> @@ -13,12 +14,24 @@ Required child node:
+>> >>  A child node must exist to represent the core DWC3 IP block. The nam=
+e of
+>> >>  the node is not important. The content of the node is defined in dwc=
+3.txt.
+>> >>
+>> >> +Optional properties for snps,dwc3:
+>> >> +- dma-coherent:	Enable this flag if CCI is enabled in design. Adding=
+ this
+>> >> +		flag configures Global SoC bus Configuration Register and
+>> >> +		Xilinx USB 3.0 IP - USB coherency register to enable CCI.
+>> >> +- snps,enable-hibernation: Add this flag to enable hibernation suppo=
+rt
+>> for
+>> >> +		peripheral mode.
+>> >
+>> > This belongs in the DWC3 binding. It also implies that hibernation is
+>> > not supported by any other DWC3 based platform. Can't this be implied =
+by
+>> > the compatible string (in the parent)?
+>
+> Rob, We can move this to dwc3 bindings. If Felipe is okay with below resp=
+onse.
+>
+>>=20
+>> hibernation support is detectable in runtime, and we've been using that.
+>
+> Felipe, Yes, this flag is to control the enable/disable hibernation.
+> I did not see has_hibernation flag being set anywhere in the driver.
+> Can we control the hibernation enable/disable through DT entry? See below:
+> -----
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 2eb34c8b4065..1baf44d8d566 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -769,8 +769,15 @@ static void dwc3_core_setup_global_control(struct dw=
+c3 *dwc)
+>                         reg &=3D ~DWC3_GCTL_DSBLCLKGTNG;
+>                 break;
+>         case DWC3_GHWPARAMS1_EN_PWROPT_HIB:
+> -               /* enable hibernation here */
+> -               dwc->nr_scratch =3D DWC3_GHWPARAMS4_HIBER_SCRATCHBUFS(hwp=
+arams4);
+> +               if (!device_property_read_bool(dwc->dev,
+> +                                              "snps,enable-hibernation")=
+) {
+> +                       dev_dbg(dwc->dev, "Hibernation not enabled\n");
+> +               } else {
+> +                       /* enable hibernation here */
+> +                       dwc->nr_scratch =3D
+> +                               DWC3_GHWPARAMS4_HIBER_SCRATCHBUFS(hwparam=
+s4);
+> +                       dwc->has_hibernation =3D 1;
+> +               }
+
+I left it off because I didn't have HW to validate. Don't add a new
+binding for this. Set has_hibernation to true and make sure it
+works. Then send me a patch that sets has_hibernation to true whenever
+DWC3_GHWPARAMS1_EN_PWROPT_HIB is valid.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9tmD8RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQaeuA//chqZBfFbCdNea4PB44iidfAHUN7gLaIF
+jd7JF0Hpu21Os4CEOyQLe9PJLLbKmEvwaX5L0cxp3mlhHEWB/TBDZweoYjiKUqC5
+ywWFWBqeOzfSegfERqsECnKEvN23c57rkNh2DcGUcwv4dAmtUvp6MtVn2F6lW0i3
+k0qOfuml4CTrbVrle9VkFKkHSBbm+l+x3b6x/n3VmyfdxYpupwLTzjsvVimODGQP
+rQfSdIObIXVW+EEOJBmiVZGsaUZmZ3gfMNaHXEWGJqciRgjKqEURCRT+6RPt0UuQ
+tsBM40736nPsr1bZZjVKEF1RFIXHxxZEQBD2dho58e8/SRYeBLPchOrdK4m0wp2P
+ZVUqhpgoP+KdAGPsSE+Y+tdO9urF0/KFdHZyS0vv+1b53czMqsRdDppNFqgXtj3+
+wkfLCP0kJB6R5uUUHYprlSi/Kxob7r6jh1KFjxr9EwV8SAIjM2Sb4fvdUPGvKfw1
+0FAmla/DWWHwEuLpr/J7mHmjXH7Hq0XfNZTX9c3ESMuPgILNFYdV8xcrXD4T0GCZ
+K7wBx69JBPYD45TyP0/fBSXXM3zATByw8xo9tsT64bFCBLxE2ahmGBNBR1g699rf
+5Dh/PVVxPgZPxQFboiG8yiol0kWBSnlne8Y5LXkxMOCbhge4z+8384YEPpW65haK
+g2F1XB7n7v8=
+=/YVc
+-----END PGP SIGNATURE-----
+--=-=-=--
