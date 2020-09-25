@@ -2,103 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75405277E17
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 04:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E27277E18
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 04:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727036AbgIYCmW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 22:42:22 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:50874 "EHLO
+        id S1727039AbgIYCm2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 22:42:28 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:50882 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726764AbgIYCmV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 22:42:21 -0400
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        by vger.kernel.org with ESMTP id S1726764AbgIYCm1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 22:42:27 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 6F8FB408D3;
-        Fri, 25 Sep 2020 02:42:21 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 820E9409E3;
+        Fri, 25 Sep 2020 02:42:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1601001741; bh=9j9IOKYQ+2iz0WIvVdK47pVCx84Ln+dxrwyZJRqySVo=;
+        t=1601001747; bh=h9Xwf0J43xLa6QHPltBUdAuGjj2TaDoKU/QghT5cA0o=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=kANvUlerY5g2/SX2sECo+zhu2+JGOmKmHHNLux27ibSD3jLi/5qM+JGPnZDzuscXJ
-         1sO6HFnpwddPHPTbnHhXblPwn9MVeKm5vjpqDYHruOwTDzyBv34sKZjDQxMBl+BiRo
-         cyCdPH3SmY7vAGBUTvKKOy83+77Qq2PPDop5EzZ/tfyIQC1DaOg/avhORkARkOOSrj
-         jlf3V5nARDi07dX4LlaHX9btAa/X1nJiAborY+0K2n6s8gumLdi2nPkqeQfpTV10VA
-         JdoMGh7B7l8+y+M9x3OXP36+DMki/kWwFQ7mLQw7VvbUFw5HHgmB6UENxd4675o0DT
-         NxJhJ2+YrTQ3Q==
+        b=WdulwM8v5OUpeHCTt6zESVkAGbJ5PlSZugoMV2MjBZrANRAIFoFs7GTki5DpWhO9E
+         VNOw+58UbM2hk4AwQas6KRc8QEAs5gDc9MyAVMKdFhkvd1yr+VfAa5kdeIj3aW+Iq+
+         dat68h4Khkh1jVEszKTDt9uGWTJUYqEJ3DuLrT1v1XOeMqVpMDDftHr6Fs1FdJ0Oq2
+         ooQXeDMH9oo570cZNn1xfDXF31elxBNHTmONueg3uXwuUwrRxJEovnfmUjOcFSSvLa
+         WfG+ULKWVv5ihUzYtgEvcmVT8vy+8gwALgMVkX6MK4awRdR1qD+HjvNgBjNOCo5y2V
+         lS8ynCKf1iiJw==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 576E7A01F1;
-        Fri, 25 Sep 2020 02:42:20 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Thu, 24 Sep 2020 19:42:20 -0700
-Date:   Thu, 24 Sep 2020 19:42:20 -0700
-Message-Id: <675520b99f9648e8d4f08dd389b1d93c580ffabd.1601001199.git.Thinh.Nguyen@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 6B1EAA0099;
+        Fri, 25 Sep 2020 02:42:26 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Thu, 24 Sep 2020 19:42:26 -0700
+Date:   Thu, 24 Sep 2020 19:42:26 -0700
+Message-Id: <4e7420d94d109a073d635172778dacf394fbe9aa.1601001199.git.Thinh.Nguyen@synopsys.com>
 In-Reply-To: <cover.1601001199.git.Thinh.Nguyen@synopsys.com>
 References: <cover.1601001199.git.Thinh.Nguyen@synopsys.com>
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v5 06/12] usb: devicetree: Include USB SSP Gen X x Y
+Subject: [PATCH v5 07/12] usb: common: Add and update common functions for SSP speeds
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org
 Cc:     John Youn <John.Youn@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-According to the USB 3.2 spec, a super-speed-plus device can operate at
-gen2x2, gen2x1, or gen1x2. If the USB controller device supports
-multiple lanes at different transfer rates, the user can specify the HW
-capability via these new speed strings:
+The USB "maximum-speed" property now can take these new strings for
+super-speed-plus:
 
 "super-speed-plus-gen2x2"
 "super-speed-plus-gen2x1"
 "super-speed-plus-gen1x2"
 
-If the argument is simply "super-speed-plus", USB controllers should
-default to their maximum transfer rate and number of lanes.
+As a result, let's do the follow:
+* Update usb_get_maximum_speed() to parse these new speed strings
+* Add 2 new common functions to get the Gen number and number of lanes
 
-Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
 Changes in v5:
-- Add Reviewed-by: Rob Herring <robh@kernel.org>
 - Rebase on Felipe's testing/next branch
 - Changed Signed-off-by email to match From: email header
 Changes in v4:
-- None
+- Create 2 functions to get the SSP gen and number of lanes from "maximum-speed" property
+- Update usb_get_maximum_speed() to check new SSP strings with genXxY
+- Update commit message and subject title to reflect the new changes
 Changes in v3:
-- Use "maximum-speed" to include both the num-lane and transfer rate for SSP
-- Remove "num-lanes" and "lane-speed-mantissa-gbps" properties
+- Add new function to parse "maximum-speed" for lanes and transfer rate
+- Remove separate functions getting num_lanes and transfer rate properties
 Changes in v2:
-- Make "num-lanes" and "lane-speed-mantissa-gbps" common USB properties
+- New commit
 
- Documentation/devicetree/bindings/usb/generic.txt | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/usb/common/common.c | 46 ++++++++++++++++++++++++++++++++++++-
+ include/linux/usb/ch9.h     | 30 ++++++++++++++++++++++++
+ 2 files changed, 75 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/generic.txt b/Documentation/devicetree/bindings/usb/generic.txt
-index ba472e7aefc9..8541b9571f2f 100644
---- a/Documentation/devicetree/bindings/usb/generic.txt
-+++ b/Documentation/devicetree/bindings/usb/generic.txt
-@@ -3,10 +3,13 @@ Generic USB Properties
- Optional properties:
-  - maximum-speed: tells USB controllers we want to work up to a certain
- 			speed. Valid arguments are "super-speed-plus",
--			"super-speed", "high-speed", "full-speed" and
--			"low-speed". In case this isn't passed via DT, USB
--			controllers should default to their maximum HW
--			capability.
-+			"super-speed-plus-gen2x2", "super-speed-plus-gen2x1",
-+			"super-speed-plus-gen1x2", "super-speed", "high-speed",
-+			"full-speed" and "low-speed". In case this isn't passed
-+			via DT, USB controllers should default to their maximum
-+			HW capability. Similarly, if the argument is
-+			"super-speed-plus", USB controllers should default to
-+			their maximum transfer rate and number of lanes.
-  - dr_mode: tells Dual-Role USB controllers that we want to work on a
- 			particular mode. Valid arguments are "host",
- 			"peripheral" and "otg". In case this attribute isn't
+diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
+index 1433260d99b4..b3b3972d5be7 100644
+--- a/drivers/usb/common/common.c
++++ b/drivers/usb/common/common.c
+@@ -86,12 +86,56 @@ enum usb_device_speed usb_get_maximum_speed(struct device *dev)
+ 	if (ret < 0)
+ 		return USB_SPEED_UNKNOWN;
+ 
+-	ret = match_string(speed_names, ARRAY_SIZE(speed_names), maximum_speed);
++	if (strncmp("super-speed-plus-gen2x2", maximum_speed, 23) == 0 ||
++	    strncmp("super-speed-plus-gen2x1", maximum_speed, 23) == 0 ||
++	    strncmp("super-speed-plus-gen1x2", maximum_speed, 23) == 0)
++		return USB_SPEED_SUPER_PLUS;
+ 
++	ret = match_string(speed_names, ARRAY_SIZE(speed_names), maximum_speed);
+ 	return (ret < 0) ? USB_SPEED_UNKNOWN : ret;
+ }
+ EXPORT_SYMBOL_GPL(usb_get_maximum_speed);
+ 
++u8 usb_get_ssp_num_lanes(struct device *dev)
++{
++	const char *maximum_speed;
++	int ret;
++
++	ret = device_property_read_string(dev, "maximum-speed", &maximum_speed);
++	if (ret < 0)
++		return 0;
++
++	if (strncmp("super-speed-plus-gen2x1", maximum_speed, 23) == 0)
++		return 1;
++
++	if (strncmp("super-speed-plus-gen2x2", maximum_speed, 23) == 0 ||
++	    strncmp("super-speed-plus-gen1x2", maximum_speed, 23) == 0)
++		return 2;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(usb_get_ssp_num_lanes);
++
++enum usb_phy_gen usb_get_ssp_phy_gen(struct device *dev)
++{
++	const char *maximum_speed;
++	int ret;
++
++	ret = device_property_read_string(dev, "maximum-speed", &maximum_speed);
++	if (ret < 0)
++		return USB_PHY_GEN_UNKNOWN;
++
++	if (strncmp("super-speed-plus-gen1x2", maximum_speed, 23) == 0)
++		return USB_PHY_GEN_1;
++
++	if (strncmp("super-speed-plus-gen2x2", maximum_speed, 23) == 0 ||
++	    strncmp("super-speed-plus-gen2x1", maximum_speed, 23) == 0)
++		return USB_PHY_GEN_2;
++
++	return USB_PHY_GEN_UNKNOWN;
++}
++EXPORT_SYMBOL_GPL(usb_get_ssp_phy_gen);
++
+ const char *usb_state_string(enum usb_device_state state)
+ {
+ 	static const char *const names[] = {
+diff --git a/include/linux/usb/ch9.h b/include/linux/usb/ch9.h
+index 01191649a0ad..bd13d27551e5 100644
+--- a/include/linux/usb/ch9.h
++++ b/include/linux/usb/ch9.h
+@@ -57,6 +57,13 @@ enum usb_link_protocol {
+ 	USB_LP_SSP = 1,
+ };
+ 
++/* USB phy signaling rate generation */
++enum usb_phy_gen {
++	USB_PHY_GEN_UNKNOWN,
++	USB_PHY_GEN_1,
++	USB_PHY_GEN_2,
++};
++
+ /**
+  * struct usb_sublink_speed - sublink speed attribute
+  * @id: sublink speed attribute ID (SSID)
+@@ -105,6 +112,29 @@ extern const char *usb_speed_string(enum usb_device_speed speed);
+  */
+ extern enum usb_device_speed usb_get_maximum_speed(struct device *dev);
+ 
++/**
++ * usb_get_ssp_num_lanes - Get requested number of lanes for a given
++ * super-speed-plus capable USB controller.
++ * @dev: Pointer to the given USB controller device
++ *
++ * If the string from "maximum-speed" property is super-speed-plus-genXxY where
++ * 'Y' is the number of lanes, then this function returns 1 for single lane and
++ * 2 for dual-lane base on 'Y'. If the number of lanes is not specified, then it
++ * returns 0.
++ */
++extern u8 usb_get_ssp_num_lanes(struct device *dev);
++
++/**
++ * usb_get_ssp_phy_gen - Get requested phy signaling rate generation for a given
++ * super-speed-plus capable USB controller.
++ * @dev: Pointer to the given USB controller device
++ *
++ * If the string from "maximum-speed" property is super-speed-plus-genXxY where
++ * 'X' is the Gen number, then this function returns the corresponding enum
++ * usb_phy_gen base on 'X'.
++ */
++extern enum usb_phy_gen usb_get_ssp_phy_gen(struct device *dev);
++
+ /**
+  * usb_state_string - Returns human readable name for the state.
+  * @state: The state to return a human-readable name for. If it's not
 -- 
 2.28.0
 
