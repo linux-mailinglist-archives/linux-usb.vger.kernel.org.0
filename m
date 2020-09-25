@@ -2,279 +2,234 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B3B278154
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 09:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BC92781C3
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 09:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727233AbgIYHOd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 25 Sep 2020 03:14:33 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:55362 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727068AbgIYHOc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Sep 2020 03:14:32 -0400
-Received: from mail-pf1-f197.google.com ([209.85.210.197])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1kLhw6-0005Lt-8O
-        for linux-usb@vger.kernel.org; Fri, 25 Sep 2020 07:14:30 +0000
-Received: by mail-pf1-f197.google.com with SMTP id 8so1458150pfx.6
-        for <linux-usb@vger.kernel.org>; Fri, 25 Sep 2020 00:14:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=y90EgWWcDzxyCaCQZY4DtmLps0FoOxTkn8TK8k+gYCI=;
-        b=lhuFooTSPRCH0ueB1j1uEAPz1zE2hlH1GXpTllQBJzwqgHJiNzaPcf7fAAeWkhqKuc
-         nIhAn74fdRPcIZCRkZKvPJuYamdvA59aY/hUY+oRc4EXPBSvglI66CpEb94gTHYRP78A
-         WtjzTd5UG7UVobFSMyG0RgFnBI433xeOxnzlA6jFXxJmenrGnmJ7SlXDkn1fYVegdxRu
-         1ShhZPksCrIjxabp6uNZ4Ugln/BRRPfvE//UJksbbrC95X/nsrw55W7eXNF+OzeMTg2u
-         v/TfgVnLbdDPSk3vT5dCdTwVG1hmYYW5QASWeh60x/J6DyJgEZCT2KidbfTiXJvOeN/Z
-         JWBA==
-X-Gm-Message-State: AOAM533tJeO6/XP3tIQAsDMgJEOy3vgUU/IAPG8AujXRz8MZ+eKUiLfj
-        8V1R05TLdmfMpCROa05//H0vJ/2yjVoONB8h43c4emzXL3cDXAq6VE8c1yoICBFoS+NVxj51zdi
-        mD50WmQZas1tmDD2pUmOSL2qo3Y54jMXMzYgHRA==
-X-Received: by 2002:a17:90a:cb93:: with SMTP id a19mr1375674pju.207.1601018068073;
-        Fri, 25 Sep 2020 00:14:28 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwvk46AVeIvnXWXVuga0PdEtl2G5HaDcP/B4yNEln86Vawdtf1kz8zpjXrF7G9AqqAvs/+TtQ==
-X-Received: by 2002:a17:90a:cb93:: with SMTP id a19mr1375652pju.207.1601018067542;
-        Fri, 25 Sep 2020 00:14:27 -0700 (PDT)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id z63sm1594672pfz.187.2020.09.25.00.14.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 25 Sep 2020 00:14:18 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
-Subject: Re: [PATCH] Bluetooth: btusb: Avoid unnecessary reset upon system
- resume
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <6b46b6bca9d3486499d0374eb277b00c@realsil.com.cn>
-Date:   Fri, 25 Sep 2020 15:14:15 +0800
-Cc:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <4055CF26-9A1F-42E6-A88A-3726B4532669@canonical.com>
-References: <6b46b6bca9d3486499d0374eb277b00c@realsil.com.cn>
-To:     =?utf-8?B?6ZmG5pyx5Lyf?= <alex_lu@realsil.com.cn>
-X-Mailer: Apple Mail (2.3608.120.23.2.1)
+        id S1727402AbgIYHh3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Sep 2020 03:37:29 -0400
+Received: from mail-dm6nam08on2079.outbound.protection.outlook.com ([40.107.102.79]:63200
+        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727044AbgIYHh3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Sep 2020 03:37:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D0ifLqVrQoMK1AXeEpso4B3FLhXWQtTz7Z1/WXbHGWMyPfMpGeXUe/adD2yVimxoJAXM9pjNEPamHlbEF4WBhK5kyy+/vm0tBuvH9iuWN+AKOnIgaykE5qAN76TGnAgIFMSVUcofx7Tw7P9ofEHy/2BHMfBWSmgB7agLnyla0XflNpdncy0HcyJUDf1p1EXKPutEikCt/p0oobXa+WtAiSkHnTiQhO+rs+5jHW8TTgVWZLUDBaiUrTHyall/b9fMfJUbTBc8jdKHt3BPzI5LGy4sIL5JW7OSqKD/aCIzOJdSE7paVKBXvxdF2mnEmLIb69+e6umEE39177HLS6xUjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UrlLWRJapt+hoDD+INRaLn1inRUzTkaQnswxmSbeQ0Q=;
+ b=Sx+Nd7eNHChyThnDNE7v4YQgykyplJ0ag7dskG84V1Qo911yzP7ByO/jw6rPOid5NBj3D0Lv4WPAKzebtmWo9XTmc87am8Au9rU7AYa8jh0Lmq2FAQBmxVs5RcmX74cHsfBHHSqWer7AYQWyKxtC883cJsVlKVAGOrjH6PunBWV3vBp3k6Uo4fvYUivKRZjtXKwNZ6SNK+sneXEnJE8DwtwJY7o1E54zA9W4cBMWjGCp7ZtqlSf0+YV2viQ4NNSF9WBEQjGO1ZPBCrhWHWi3TtZzp8afXNe3kJjjLHVcDdUW0PhQ73HnE48giWyS3lUXrVQU3EEpjdiEy0jETK5gbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UrlLWRJapt+hoDD+INRaLn1inRUzTkaQnswxmSbeQ0Q=;
+ b=DzBgbYmR9EnNKmGlFo9NMY4U+OwwFqW0t6djcuLm9P7g/mS9mDymVRvqYCWeTgVhX2qEmKnbryLNnqWZuM6UrvH5a2A0QvAue0yHPV8GRYnNCbyc03WSLZy0bAPBsHAVbCOhq0yAlMTYB5QNABPT0/rMuYLmDSbw5gBtdcX+ZGs=
+Received: from BYAPR02MB5896.namprd02.prod.outlook.com (2603:10b6:a03:122::10)
+ by BYAPR02MB5781.namprd02.prod.outlook.com (2603:10b6:a03:121::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.20; Fri, 25 Sep
+ 2020 07:37:23 +0000
+Received: from BYAPR02MB5896.namprd02.prod.outlook.com
+ ([fe80::84b5:71be:1584:f314]) by BYAPR02MB5896.namprd02.prod.outlook.com
+ ([fe80::84b5:71be:1584:f314%7]) with mapi id 15.20.3391.024; Fri, 25 Sep 2020
+ 07:37:23 +0000
+From:   Manish Narani <MNARANI@xilinx.com>
+To:     Felipe Balbi <balbi@kernel.org>, Rob Herring <robh@kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Michal Simek <michals@xilinx.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>
+Subject: RE: [PATCH v2 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation
+ for Versal DWC3 Controller
+Thread-Topic: [PATCH v2 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation
+ for Versal DWC3 Controller
+Thread-Index: AQHWhty7FzdXEfNw1kSmR8l21jgZnKl1JowAgAJRB4CAAXjVwIAAGC+AgAAB1dA=
+Date:   Fri, 25 Sep 2020 07:37:23 +0000
+Message-ID: <BYAPR02MB58965128B42C13113227A0E3C1360@BYAPR02MB5896.namprd02.prod.outlook.com>
+References: <1599678185-119412-1-git-send-email-manish.narani@xilinx.com>
+ <1599678185-119412-2-git-send-email-manish.narani@xilinx.com>
+ <20200922195410.GA3122345@bogus> <87wo0jejae.fsf@kernel.org>
+ <BYAPR02MB5896E374297AF46A63CDAD30C1360@BYAPR02MB5896.namprd02.prod.outlook.com>
+ <87h7rmcou8.fsf@kernel.org>
+In-Reply-To: <87h7rmcou8.fsf@kernel.org>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=xilinx.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [183.83.139.37]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: bab7de08-56d1-4413-59dd-08d86125d7e4
+x-ms-traffictypediagnostic: BYAPR02MB5781:
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR02MB57811CDD4B53E54FB87B4BDCC1360@BYAPR02MB5781.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: N4pemEyQYE30sYivXoaF8x8rUr+cPVYZ6D2byP3Dgc7RlBus+5uP9JpNpbSQKSMAUu4JERJ5sTuLVyunOmM8aAK0lRN8zH6yvSk0S5KTkh9ogZUFFOya8rw6ESkqaYLQ0jjQHO5oQe2hY5wX3yxm6xdN/KoA4xcuuPu5pPPGDKbBtCrwD1Rb9wmuK/1FVIUTqCd3lPYJLqRWyZQAfdaF7CZpBQ+NDdZ9cZmbsjZ9u9ZqpH4CMjMeO+Yqz8gdOHglrjDJXpJ5m1z+dxBrsT2B0z3O9bUf1hwRZOEGDVnAuQKYO/4qnqpKvRZ6TcsDFNq17B8EbBgwATkMRVmIX5Xyag==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR02MB5896.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(39860400002)(366004)(136003)(396003)(71200400001)(6506007)(110136005)(316002)(5660300002)(66946007)(4326008)(66446008)(52536014)(33656002)(44832011)(8936002)(107886003)(55016002)(66556008)(8676002)(2906002)(7416002)(66476007)(64756008)(186003)(7696005)(76116006)(9686003)(54906003)(83380400001)(26005)(53546011)(478600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: C+IRdNw4OwTSdQ4bn40VavBIP0uXl9j5n0dtEX95iz7LjUSKqjBOZoqH9dxMMa0Q3Cigu3NweZvVNaccCE1i5pDq/lNJ6w19di8littzrXgRknN0Vj5dXQNbifxYfzIxMEPELimIsLbnFm7i+7xDFR3mCyMqxHUNEHIPdTeVy6t0Y+CdoGwDgIGTA2DDgOHd23sr6ay/Mdg/PGZB0ly9xj8h68CX+RLSqi5mlDlqquA7Q69VT1JnpV5Z2VlQOs8ZP2T2ZeLlATJoqf6YrFGNPiSPhD8SoI6Jcbl+W5Cyg6zC2Ut2LFNaWKTLYYLu79YLsE/CgJcmMoUG+hejHTRa+/UjlVJpK75mwhIYZxocCNwsZeLsRwJrRQX2DLF5BfTgRUOLUig1D0ZvjSt+UEz+lc/45KFDdXim11umTcaoKA0mGtPUMbCUK5lzPSHjxhXwvjHjCGYhEY1ucQ36kxGIpzybUpkNdEDoDQTbJpfyeWCm/q75uSE7nDstAKfXLlZvrGsy874WRRQIpvZCqu+xdtCMFQelseL9CLk5HW6VO9D8xF8w5jHWk7P3+rOQerpGw1NZsr32Q+P6141Y9hbHoNP611tZ0yjgxq9fNvipddMwAkgJMpmCEJhIv9ebMLIkcz+NlMiBFbY/4DmJYkNGiA==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR02MB5896.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bab7de08-56d1-4413-59dd-08d86125d7e4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Sep 2020 07:37:23.5166
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +VxrYTTzby9iO7MJQU4e3Hf4Ac6En/J53sFSLE7yV2uMB6y1qzapHUt62HP1ZGBkwGkr3I1588QVgqo9p9CxuQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5781
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alex,
+Hi Felipe,
 
-> On Sep 25, 2020, at 15:04, 陆朱伟 <alex_lu@realsil.com.cn> wrote:
-> 
-> Hi Kai-Heng,
-> 
->> On September 25, 2020 14:04, Kai-Heng Feng wrote:
->> 
->> Hi Abhishek,
->>> On Sep 25, 2020, at 11:33, Abhishek Pandit-Subedi
->> <abhishekpandit@chromium.org> wrote:
->>> 
->>> + Alex Lu (who contributed the original change)
->>> 
->>> Hi Kai-Heng,
->>> 
->>> 
->>> On Thu, Sep 24, 2020 at 12:10 AM Kai-Heng Feng
->>> <kai.heng.feng@canonical.com> wrote:
->>>> 
->>>> [+Cc linux-usb]
->>>> 
->>>> Hi Abhishek,
->>>> 
->>>>> On Sep 24, 2020, at 04:41, Abhishek Pandit-Subedi
->> <abhishekpandit@chromium.org> wrote:
->>>>> 
->>>>> Hi Kai-Heng,
->>>>> 
->>>>> Which Realtek controller is this on?'
->>>> 
->>>> The issue happens on 8821CE.
->>>> 
->>>>> 
->>>>> Specifically for RTL8822CE, we tested without reset_resume being set
->>>>> and that was causing the controller being reset without bluez ever
->>>>> learning about it (resulting in devices being unusable without
->>>>> toggling the BT power).
->>>> 
->>>> The reset is done by the kernel, so how does that affect bluez?
->>>> 
->>>> From what you described, it sounds more like runtime resume since bluez
->> is already running.
->>>> If we need reset resume for runtime resume, maybe it's another bug
->> which needs to be addressed?
->>> 
->>> From btusb.c:
->> https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-
->> next.git/tree/drivers/bluetooth/btusb.c#n4189
->>> /* Realtek devices lose their updated firmware over global
->>> * suspend that means host doesn't send SET_FEATURE
->>> * (DEVICE_REMOTE_WAKEUP)
->>> */
->>> 
->>> Runtime suspend always requires remote wakeup to be set and reset
->>> resume isn't used there.
->> 
->> Thanks for the clarification.
->> 
->>> 
->>> During system suspend, when remote wakeup is not set, RTL8822CE loses
->>> the FW loaded by the driver and any state currently in the controller.
->>> This causes the kernel and the controller state to go out of sync.
->>> One of the issues we observed on the Realtek controller without the
->>> reset resume quirk was that paired or connected devices would just
->>> stop working after resume.
->>> 
->>>> 
->>>>> If the firmware doesn't cut off power during suspend, maybe you
->>>>> shouldn't set the BTUSB_WAKEUP_DISABLE flag for that controller.
->>>> 
->>>> We don't know beforehand if the platform firmware (BIOS for my case)
->> will cut power off or not.
->>>> 
->>>> In general, laptops will cut off the USB power during S3.
->>>> When AC is plugged, some laptops cuts USB power off and some don't.
->> This also applies to many desktops. Not to mention there can be BIOS
->> options to control USB power under S3/S4/S5...
->>>> 
->>>> So we don't know beforehand.
->>>> 
->>> 
->>> I think the confusion here stems from what is actually being turned
->>> off between our two boards and what we're referring to as firmware :)
->> 
->> Yes :)
->> 
->>> 
->>> In your case, the Realtek controller retains firmware unless the
->>> platform cuts of power to USB (which it does during S3).
->> 
->> Not all platform firmware (i.e. BIOS for x86) cut USB power during S3, as I
->> describe in last reply.
->> 
->>> In my case, the Realtek controller loses firmware when Remote Wakeup
->>> isn't set, even if the platform doesn't cut power to USB.
->> 
->> Thanks for the clarification, I believe it's a case that should to be handled
->> separately.
->> 
->>> 
->>> In your case, since you don't need to enforce the 'Remote Wakeup' bit,
->>> if you unset the BTUSB_WAKEUP_DISABLE for that VID:PID, you should get
->>> the desirable behavior (which is actually the default behavior; remote
->>> wake will always be asserted instead of only during Runtime Suspend).
->> 
->> So we have three cases here. Assuming reset_resume isn't flagged by btusb:
->> 
->> 1) Both USB power and BT firmware were lost during suspend.
->> USB core finds out power was lost, try to reset resume the device. Since
->> btusb doesn't have reset_resume callback, USB core calls probe instead.
->> 
->> 2) Both USB power and BT firmware were kept during suspend. This is my
->> case.
->> Regular resume handles everything.
->> 
->> 3) USB power was kept but BT firmware was lost. This is your case.
->> USB core finds out power was kept, use regular resume. However the BT
->> firmware was lost, so resume fails.
->> For this case, maybe we can use btrtl_setup_realtek() in btusb_resume()? It
->> won't re-upload firmware if firmware is retained, and will do proper
->> initializing if firmware was lost.
-> 
-> In my opinions,
-> For the 3), there are two cases, one is that firmware was lost in auto suspend. That should never happen, because the data->intf->needs_remote_wakeup is set in btusb_open() and btusb_close(). The flag means that host will send remote wakeup during autosuspend, and firmware wouldn't drop.
-> Another case is firmware loss in global suspend. I think that's no problem, driver sets data->udev->reset_resume in btusb_suspend() and btusb will reprobe after resume.
+> -----Original Message-----
+> From: Felipe Balbi <balbi@kernel.org>
+> Sent: Friday, September 25, 2020 12:42 PM
+> To: Manish Narani <MNARANI@xilinx.com>; Rob Herring <robh@kernel.org>
+> Cc: gregkh@linuxfoundation.org; Michal Simek <michals@xilinx.com>;
+> p.zabel@pengutronix.de; linux-usb@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> kernel@vger.kernel.org; git <git@xilinx.com>
+> Subject: RE: [PATCH v2 1/2] dt-bindings: usb: dwc3-xilinx: Add
+> documentation for Versal DWC3 Controller
+>=20
+>=20
+> Hi,
+>=20
+> Manish Narani <MNARANI@xilinx.com> writes:
+> > Hi Rob/Felipe,
+> >
+> > Thanks for the review.
+> >
+> >> -----Original Message-----
+> >> From: Felipe Balbi <balbi@kernel.org>
+> >> Sent: Thursday, September 24, 2020 12:47 PM
+> >> To: Rob Herring <robh@kernel.org>; Manish Narani
+> <MNARANI@xilinx.com>
+> >> Cc: gregkh@linuxfoundation.org; Michal Simek <michals@xilinx.com>;
+> >> p.zabel@pengutronix.de; linux-usb@vger.kernel.org;
+> >> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linu=
+x-
+> >> kernel@vger.kernel.org; git <git@xilinx.com>
+> >> Subject: Re: [PATCH v2 1/2] dt-bindings: usb: dwc3-xilinx: Add
+> >> documentation for Versal DWC3 Controller
+> >>
+> >> Rob Herring <robh@kernel.org> writes:
+> >>
+> >> > On Thu, Sep 10, 2020 at 12:33:04AM +0530, Manish Narani wrote:
+> >> >> Add documentation for Versal DWC3 controller. Add required property
+> >> >> 'reg' for the same. Also add optional properties for snps,dwc3.
+> >> >>
+> >> >> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+> >> >> ---
+> >> >>  .../devicetree/bindings/usb/dwc3-xilinx.txt   | 20 +++++++++++++++=
+++-
+> -
+> >> >>  1 file changed, 18 insertions(+), 2 deletions(-)
+> >> >>
+> >> >> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> >> b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> >> >> index 4aae5b2cef56..219b5780dbee 100644
+> >> >> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> >> >> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
+> >> >> @@ -1,7 +1,8 @@
+> >> >>  Xilinx SuperSpeed DWC3 USB SoC controller
+> >> >>
+> >> >>  Required properties:
+> >> >> -- compatible:	Should contain "xlnx,zynqmp-dwc3"
+> >> >> +- compatible:	May contain "xlnx,zynqmp-dwc3" or "xlnx,versal-
+> >> dwc3"
+> >> >> +- reg:		Base address and length of the register control block
+> >> >>  - clocks:	A list of phandles for the clocks listed in clock-names
+> >> >>  - clock-names:	Should contain the following:
+> >> >>    "bus_clk"	 Master/Core clock, have to be >=3D 125 MHz for SS
+> >> >> @@ -13,12 +14,24 @@ Required child node:
+> >> >>  A child node must exist to represent the core DWC3 IP block. The
+> name of
+> >> >>  the node is not important. The content of the node is defined in
+> dwc3.txt.
+> >> >>
+> >> >> +Optional properties for snps,dwc3:
+> >> >> +- dma-coherent:	Enable this flag if CCI is enabled in design. Addi=
+ng this
+> >> >> +		flag configures Global SoC bus Configuration Register and
+> >> >> +		Xilinx USB 3.0 IP - USB coherency register to enable CCI.
+> >> >> +- snps,enable-hibernation: Add this flag to enable hibernation sup=
+port
+> >> for
+> >> >> +		peripheral mode.
+> >> >
+> >> > This belongs in the DWC3 binding. It also implies that hibernation i=
+s
+> >> > not supported by any other DWC3 based platform. Can't this be implie=
+d
+> by
+> >> > the compatible string (in the parent)?
+> >
+> > Rob, We can move this to dwc3 bindings. If Felipe is okay with below
+> response.
+> >
+> >>
+> >> hibernation support is detectable in runtime, and we've been using tha=
+t.
+> >
+> > Felipe, Yes, this flag is to control the enable/disable hibernation.
+> > I did not see has_hibernation flag being set anywhere in the driver.
+> > Can we control the hibernation enable/disable through DT entry? See
+> below:
+> > -----
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 2eb34c8b4065..1baf44d8d566 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -769,8 +769,15 @@ static void dwc3_core_setup_global_control(struct
+> dwc3 *dwc)
+> >                         reg &=3D ~DWC3_GCTL_DSBLCLKGTNG;
+> >                 break;
+> >         case DWC3_GHWPARAMS1_EN_PWROPT_HIB:
+> > -               /* enable hibernation here */
+> > -               dwc->nr_scratch =3D
+> DWC3_GHWPARAMS4_HIBER_SCRATCHBUFS(hwparams4);
+> > +               if (!device_property_read_bool(dwc->dev,
+> > +                                              "snps,enable-hibernation=
+")) {
+> > +                       dev_dbg(dwc->dev, "Hibernation not enabled\n");
+> > +               } else {
+> > +                       /* enable hibernation here */
+> > +                       dwc->nr_scratch =3D
+> > +
+> DWC3_GHWPARAMS4_HIBER_SCRATCHBUFS(hwparams4);
+> > +                       dwc->has_hibernation =3D 1;
+> > +               }
+>=20
+> I left it off because I didn't have HW to validate. Don't add a new
+> binding for this. Set has_hibernation to true and make sure it
+> works. Then send me a patch that sets has_hibernation to true whenever
+> DWC3_GHWPARAMS1_EN_PWROPT_HIB is valid.
 
-Apparently for my case, RTL8821CE, firmware was kept without setting remote wakeup.
-Is it okay to also set remote wakeup for global suspend to retain the firmware?
-If firmware was retained, does USB warm reset affect BT controller in anyway?
+OK Felipe. I will remove this property from binding. We have validated
+Device-mode hibernation on Xilinx ZynqMP and Versal platform. I am
+planning to send a separate patch series for hibernation after this.
 
-Kai-Heng
-
-> 
->> 
->> Kai-Heng
->> 
->>> 
->>> @Alex -- What is the common behavior for Realtek controllers? Should
->>> we set BTUSB_WAKEUP_DISABLE only on RTL8822CE or should we unset it
->>> only on RTL8821CE?
->>> 
->>>>> 
->>>>> I would prefer this doesn't get accepted in its current state.
->>>> 
->>>> Of course.
->>>> I think we need to find the root cause for your case before applying this
->> one.
->>>> 
->>>> Kai-Heng
->>>> 
->>>>> 
->>>>> Abhishek
->>>>> 
->>>>> On Wed, Sep 23, 2020 at 10:56 AM Kai-Heng Feng
->>>>> <kai.heng.feng@canonical.com> wrote:
->>>>>> 
->>>>>> Realtek bluetooth controller may fail to work after system sleep:
->>>>>> [ 1272.707670] Bluetooth: hci0: command 0x1001 tx timeout
->>>>>> [ 1280.835712] Bluetooth: hci0: RTL: HCI_OP_READ_LOCAL_VERSION
->> failed (-110)
->>>>>> 
->>>>>> If platform firmware doesn't cut power off during suspend, the
->> firmware
->>>>>> is considered retained in controller but the driver is still asking USB
->>>>>> core to perform a reset-resume. This can make bluetooth controller
->>>>>> unusable.
->>>>>> 
->>>>>> So avoid unnecessary reset to resolve the issue.
->>>>>> 
->>>>>> For devices that really lose power during suspend, USB core will detect
->>>>>> and handle reset-resume correctly.
->>>>>> 
->>>>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>>>>> ---
->>>>>> drivers/bluetooth/btusb.c | 8 +++-----
->>>>>> 1 file changed, 3 insertions(+), 5 deletions(-)
->>>>>> 
->>>>>> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
->>>>>> index 8d2608ddfd08..de86ef4388f9 100644
->>>>>> --- a/drivers/bluetooth/btusb.c
->>>>>> +++ b/drivers/bluetooth/btusb.c
->>>>>> @@ -4255,17 +4255,15 @@ static int btusb_suspend(struct
->> usb_interface *intf, pm_message_t message)
->>>>>>              enable_irq(data->oob_wake_irq);
->>>>>>      }
->>>>>> 
->>>>>> -       /* For global suspend, Realtek devices lose the loaded fw
->>>>>> -        * in them. But for autosuspend, firmware should remain.
->>>>>> -        * Actually, it depends on whether the usb host sends
->>>>>> +       /* For global suspend, Realtek devices lose the loaded fw in them
->> if
->>>>>> +        * platform firmware cut power off. But for autosuspend,
->> firmware
->>>>>> +        * should remain.  Actually, it depends on whether the usb host
->> sends
->>>>>>       * set feature (enable wakeup) or not.
->>>>>>       */
->>>>>>      if (test_bit(BTUSB_WAKEUP_DISABLE, &data->flags)) {
->>>>>>              if (PMSG_IS_AUTO(message) &&
->>>>>>                  device_can_wakeup(&data->udev->dev))
->>>>>>                      data->udev->do_remote_wakeup = 1;
->>>>>> -               else if (!PMSG_IS_AUTO(message))
->>>>>> -                       data->udev->reset_resume = 1;
->>>>>>      }
->>>>>> 
->>>>>>      return 0;
->>>>>> --
->>>>>> 2.17.1
->> 
->> 
->> ------Please consider the environment before printing this e-mail.
-
+Thanks,
+Manish
