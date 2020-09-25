@@ -2,234 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E915127864A
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 13:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D702786F9
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 14:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728242AbgIYLvP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 25 Sep 2020 07:51:15 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:35154 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727720AbgIYLvP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Sep 2020 07:51:15 -0400
-Received: from mail-pj1-f71.google.com ([209.85.216.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1kLmFs-0002v3-Em
-        for linux-usb@vger.kernel.org; Fri, 25 Sep 2020 11:51:12 +0000
-Received: by mail-pj1-f71.google.com with SMTP id 11so1751114pjh.5
-        for <linux-usb@vger.kernel.org>; Fri, 25 Sep 2020 04:51:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=5BRkerAIEsczFoqzPwpTd9ZEzsA8kT3a52lgaI3lgaI=;
-        b=aJhngHdW1YJzgZSphxPi1oa2Y8uaeNowg4MgL1lx5zTD/mxoYmgROkZ0N2gh98lWcE
-         e6lYGXlGD66nSu1LnSceGmmUgJHw4TsNFsii5sFaP+Db3DJyLviHgEoZrDjPGgiexkim
-         4+X/6JsXaPdO0UC5wyRbPvSStPyerncMyFNU2SwDvbVPiO5hcVqtRrrP5VN70AVYc3Y+
-         ACA1UVRQYaNcf/8TzX94/Qm4BMaXycy2LjmbKV/Wow1hU2KTFEAQPEJQ9uvZWydpBpe7
-         yj6FK8LYC7NxfL+4xDxeG4VK5VBife1JoAwnU48BcdkZS3I8epJ5Yb9N38wo3p9Q15Hx
-         0UHA==
-X-Gm-Message-State: AOAM533TmyQsgITpmaXntfTMgAMiI9EaJbCZdHL1mNg9anOeMrLA1UHf
-        BO+RGcX/pPUlmjlvU8OgteD94/mLvEl7ylrRgflgwx+Mu4N3GlgY6NFpQz4zwi5JejyV1VQisrv
-        kZcplfCRbSt82yd6vhlpPs9GvPV2/kA0ZX/m/gw==
-X-Received: by 2002:a62:3001:0:b029:142:2501:39e3 with SMTP id w1-20020a6230010000b0290142250139e3mr3574286pfw.50.1601034670798;
-        Fri, 25 Sep 2020 04:51:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzPpS82lcNLbndhVQqetio5q1/5e7ovsnA1ZdIlMT4OZOipe1Yj42p2RePr+Itf158X7qv5dA==
-X-Received: by 2002:a62:3001:0:b029:142:2501:39e3 with SMTP id w1-20020a6230010000b0290142250139e3mr3574263pfw.50.1601034670375;
-        Fri, 25 Sep 2020 04:51:10 -0700 (PDT)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id q20sm2278991pgm.24.2020.09.25.04.51.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 25 Sep 2020 04:51:09 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
-Subject: Re: [PATCH] Bluetooth: btusb: Avoid unnecessary reset upon system
- resume
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <30ce4ee1eede47c09c3e7f277c26918a@realsil.com.cn>
-Date:   Fri, 25 Sep 2020 19:51:06 +0800
-Cc:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <E2E04FDC-C62A-4F8C-A8EF-20868504A2BC@canonical.com>
-References: <30ce4ee1eede47c09c3e7f277c26918a@realsil.com.cn>
-To:     =?utf-8?B?6ZmG5pyx5Lyf?= <alex_lu@realsil.com.cn>
-X-Mailer: Apple Mail (2.3608.120.23.2.1)
+        id S1728336AbgIYMVC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Sep 2020 08:21:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37980 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727749AbgIYMVC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Sep 2020 08:21:02 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C5E4B21D7A;
+        Fri, 25 Sep 2020 12:21:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601036461;
+        bh=Yzqiewa+QRMYKlCEeSmwhKHrtfdSyQChiuf2bhrHi4o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PZVAxip72/uTvul8Cxjto55o2jFfta5IzLKgjCoMwICr1IgQsuJ0J2SgY3qtqcnuF
+         8hO7GNsoIUHEwqIqLgSqagE4LZQVoyaOVrcgFy/4+m1rpl+fd+6q5qbYtAZIlPrTDi
+         OKJ/drVq2tYxBRVc33p2DcSxrh21b7f0POmIT8FI=
+Date:   Fri, 25 Sep 2020 14:21:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Li Heng <liheng40@huawei.com>, heikki.krogerus@linux.intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] usb: typec: Remove set but not used variable
+Message-ID: <20200925122115.GD2680110@kroah.com>
+References: <1600956767-10427-1-git-send-email-liheng40@huawei.com>
+ <fe671faa-9975-be20-22f5-31a97e3c8859@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fe671faa-9975-be20-22f5-31a97e3c8859@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alex,
-
-> On Sep 25, 2020, at 16:23, 陆朱伟 <alex_lu@realsil.com.cn> wrote:
+On Thu, Sep 24, 2020 at 07:33:59AM -0700, Guenter Roeck wrote:
+> On 9/24/20 7:12 AM, Li Heng wrote:
+> > Fixes gcc '-Wunused-but-set-variable' warning:
+> > 
+> > drivers/usb/typec/tcpm/tcpm.c:1620:39: warning:
+> > ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
+> > 
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Li Heng <liheng40@huawei.com>
 > 
-> Hi Kai-Heng,
-> 
->> On September 25, 2020 at 15:56, Kai-Heng Feng wrote:
->> 
->> Hi Alex,
->> 
->>> On Sep 25, 2020, at 15:42, 陆朱伟 <alex_lu@realsil.com.cn> wrote:
->>> 
->>> Hi Kai-Heng,
->>> 
->>>> On 25 September 2020 at 15:14, Kai-Heng Feng wrote:
->>>> 
->>>> Hi Alex,
->> 
->> [snipped]
->> 
->>>> Apparently for my case, RTL8821CE, firmware was kept without setting
->>>> remote wakeup.
->>> 
->>> So you got the btusb disconnect and reprobe sequence after resume, and "
->> Bluetooth: hci0: command 0x1001 tx timeout " before firmware downloading ?
->> 
->> USB power wasn't lost, but it got USB warm reset because btusb driver
->> explicitly flagged "reset_resume = 1".
->> Then the issue appeared as "Bluetooth: hci0: command 0x1001 tx timeout",
->> before downloading firmware.
->> 
->>> 
->>>> Is it okay to also set remote wakeup for global suspend to retain the
->>>> firmware?
->>> 
->>> Yes, it's ok.
->> 
->> Abhishek, does setting remote wakeup during global suspend works for you?
-> 
-> It depends on your desire on power consumption during global suspend.
-> The BT controller takes less power if firmware was lost during global suspend.
+> I thought there was a patch series underway which started using it,
+> but maybe my memory defeats me. Either case, it doesn't make much sense
+> to remove the ops variable without removing the associated functions
+> as well.
 
-For my case, the firmware is retained after S3, despite of "reset_resume = 1":
+I agree, if this isn't needed, then the functions here should also be
+removed in the same patch.
 
-[ 30.164036] ACPI: Waking up from system sleep state S3 
-[ 30.167913] ACPI: EC: interrupt unblocked
-[ 31.284138] ACPI: EC: event unblocked
-...
-[   31.467484] usb 1-14: reset full-speed USB device number 3 using xhci_hcd
-...
-[   32.732934] Bluetooth: hci0: RTL: examining hci_ver=08 hci_rev=826c lmp_ver=08 lmp_subver=a99e
-[   32.732937] Bluetooth: hci0: RTL: unknown IC info, lmp subver a99e, hci rev 826c, hci ver 0008
-[   32.732937] Bluetooth: hci0: RTL: assuming no firmware upload needed
+thanks,
 
-Kai-Heng
-
-> 
->> 
->>> 
->>>> If firmware was retained, does USB warm reset affect BT controller in
->>>> anyway?
->>> 
->>> USB warm reset shouldn't affect BT controller.
->>> But hci device will not work after resume, because btrtl will find "unknown
->> IC info, lmp subvert ..." and return error when hci device setup is called.
->>> Tips: The lmp subver in controller changes after firmware downloading.
->> And driver will find " unknown IC info, lmp subver  ..." when setup is called
->> with firmware retained.
->> 
->> This should already be fixed by "Bluetooth: btrtl: Restore old logic to assume
->> firmware is already loaded".
->> 
->> Kai-Heng
->> 
->>> 
->>>> 
->>>> Kai-Heng
->>>> 
->>>>> 
->>>>>> 
->>>>>> Kai-Heng
->>>>>> 
->>>>>>> 
->>>>>>> @Alex -- What is the common behavior for Realtek controllers?
->> Should
->>>>>>> we set BTUSB_WAKEUP_DISABLE only on RTL8822CE or should we
->> unset
->>>> it
->>>>>>> only on RTL8821CE?
->>>>>>> 
->>>>>>>>> 
->>>>>>>>> I would prefer this doesn't get accepted in its current state.
->>>>>>>> 
->>>>>>>> Of course.
->>>>>>>> I think we need to find the root cause for your case before applying
->> this
->>>>>> one.
->>>>>>>> 
->>>>>>>> Kai-Heng
->>>>>>>> 
->>>>>>>>> 
->>>>>>>>> Abhishek
->>>>>>>>> 
->>>>>>>>> On Wed, Sep 23, 2020 at 10:56 AM Kai-Heng Feng
->>>>>>>>> <kai.heng.feng@canonical.com> wrote:
->>>>>>>>>> 
->>>>>>>>>> Realtek bluetooth controller may fail to work after system sleep:
->>>>>>>>>> [ 1272.707670] Bluetooth: hci0: command 0x1001 tx timeout
->>>>>>>>>> [ 1280.835712] Bluetooth: hci0: RTL:
->> HCI_OP_READ_LOCAL_VERSION
->>>>>> failed (-110)
->>>>>>>>>> 
->>>>>>>>>> If platform firmware doesn't cut power off during suspend, the
->>>>>> firmware
->>>>>>>>>> is considered retained in controller but the driver is still asking USB
->>>>>>>>>> core to perform a reset-resume. This can make bluetooth
->> controller
->>>>>>>>>> unusable.
->>>>>>>>>> 
->>>>>>>>>> So avoid unnecessary reset to resolve the issue.
->>>>>>>>>> 
->>>>>>>>>> For devices that really lose power during suspend, USB core will
->>>> detect
->>>>>>>>>> and handle reset-resume correctly.
->>>>>>>>>> 
->>>>>>>>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>>>>>>>>> ---
->>>>>>>>>> drivers/bluetooth/btusb.c | 8 +++-----
->>>>>>>>>> 1 file changed, 3 insertions(+), 5 deletions(-)
->>>>>>>>>> 
->>>>>>>>>> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
->>>>>>>>>> index 8d2608ddfd08..de86ef4388f9 100644
->>>>>>>>>> --- a/drivers/bluetooth/btusb.c
->>>>>>>>>> +++ b/drivers/bluetooth/btusb.c
->>>>>>>>>> @@ -4255,17 +4255,15 @@ static int btusb_suspend(struct
->>>>>> usb_interface *intf, pm_message_t message)
->>>>>>>>>>            enable_irq(data->oob_wake_irq);
->>>>>>>>>>    }
->>>>>>>>>> 
->>>>>>>>>> -       /* For global suspend, Realtek devices lose the loaded fw
->>>>>>>>>> -        * in them. But for autosuspend, firmware should remain.
->>>>>>>>>> -        * Actually, it depends on whether the usb host sends
->>>>>>>>>> +       /* For global suspend, Realtek devices lose the loaded fw in
->>>> them
->>>>>> if
->>>>>>>>>> +        * platform firmware cut power off. But for autosuspend,
->>>>>> firmware
->>>>>>>>>> +        * should remain.  Actually, it depends on whether the usb
->> host
->>>>>> sends
->>>>>>>>>>     * set feature (enable wakeup) or not.
->>>>>>>>>>     */
->>>>>>>>>>    if (test_bit(BTUSB_WAKEUP_DISABLE, &data->flags)) {
->>>>>>>>>>            if (PMSG_IS_AUTO(message) &&
->>>>>>>>>>                device_can_wakeup(&data->udev->dev))
->>>>>>>>>>                    data->udev->do_remote_wakeup = 1;
->>>>>>>>>> -               else if (!PMSG_IS_AUTO(message))
->>>>>>>>>> -                       data->udev->reset_resume = 1;
->>>>>>>>>>    }
->>>>>>>>>> 
->>>>>>>>>>    return 0;
->>>>>>>>>> --
->>>>>>>>>> 2.17.1
->>>>>> 
->>>>>> 
->>>>>> ------Please consider the environment before printing this e-mail.
-> 
-
+greg k-h
