@@ -2,170 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BEF277E16
+	by mail.lfdr.de (Postfix) with ESMTP id 75405277E17
 	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 04:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727035AbgIYCmP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 22:42:15 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:50866 "EHLO
+        id S1727036AbgIYCmW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 22:42:22 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:50874 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726829AbgIYCmP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 22:42:15 -0400
+        by vger.kernel.org with ESMTP id S1726764AbgIYCmV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 22:42:21 -0400
 Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7EEBD408D3;
-        Fri, 25 Sep 2020 02:42:15 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 6F8FB408D3;
+        Fri, 25 Sep 2020 02:42:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1601001735; bh=NsKC0NOipmiCvThxY3rTEBe+guJI/7VBpBjzzrO/W84=;
+        t=1601001741; bh=9j9IOKYQ+2iz0WIvVdK47pVCx84Ln+dxrwyZJRqySVo=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=Eka6jWkXB+xQPxAl6hexWh2947N0A8VdsTHuMi5dpaw15Bc2NQVihzEh3rLaOTb5r
-         KctgrJrGbu0ueZnNDXp+1k4Gr2+a+G8L0KJUzLUbeBnMrYIEEe/Xd8rq7Z8/EjWMGn
-         FZnV0cAPyL/UOCm0vkbWk8HRDxaxDBBVH7ce+PQ6hseqZNRTsAdixnutoRNH7UezLr
-         prsboFxrj1VakZn7XHi4e0wNgpcxrniLooJtdDpNkO9YLlPveQWPUc6cL3+qwzFCdM
-         j9kcPZw+HB8Qk+sBDA2+ywyCQjHSsi806doidgT49Yy6Uqe6tIVfPbbx/0qGbnshKu
-         4dt1/sZb8DPOA==
+        b=kANvUlerY5g2/SX2sECo+zhu2+JGOmKmHHNLux27ibSD3jLi/5qM+JGPnZDzuscXJ
+         1sO6HFnpwddPHPTbnHhXblPwn9MVeKm5vjpqDYHruOwTDzyBv34sKZjDQxMBl+BiRo
+         cyCdPH3SmY7vAGBUTvKKOy83+77Qq2PPDop5EzZ/tfyIQC1DaOg/avhORkARkOOSrj
+         jlf3V5nARDi07dX4LlaHX9btAa/X1nJiAborY+0K2n6s8gumLdi2nPkqeQfpTV10VA
+         JdoMGh7B7l8+y+M9x3OXP36+DMki/kWwFQ7mLQw7VvbUFw5HHgmB6UENxd4675o0DT
+         NxJhJ2+YrTQ3Q==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 44EA8A01F3;
-        Fri, 25 Sep 2020 02:42:14 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Thu, 24 Sep 2020 19:42:14 -0700
-Date:   Thu, 24 Sep 2020 19:42:14 -0700
-Message-Id: <fcf8575bdc1cbfd1b1ed1aec7ab0a75069f81db2.1601001199.git.Thinh.Nguyen@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 576E7A01F1;
+        Fri, 25 Sep 2020 02:42:20 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Thu, 24 Sep 2020 19:42:20 -0700
+Date:   Thu, 24 Sep 2020 19:42:20 -0700
+Message-Id: <675520b99f9648e8d4f08dd389b1d93c580ffabd.1601001199.git.Thinh.Nguyen@synopsys.com>
 In-Reply-To: <cover.1601001199.git.Thinh.Nguyen@synopsys.com>
 References: <cover.1601001199.git.Thinh.Nguyen@synopsys.com>
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v5 05/12] usb: composite: Properly report sublink speed
+Subject: [PATCH v5 06/12] usb: devicetree: Include USB SSP Gen X x Y
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org
+        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
 Cc:     John Youn <John.Youn@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use the max sublink speed attributes reported in the gadget structure
-to write to the super-speed-plus BOS descriptor if available.
+According to the USB 3.2 spec, a super-speed-plus device can operate at
+gen2x2, gen2x1, or gen1x2. If the USB controller device supports
+multiple lanes at different transfer rates, the user can specify the HW
+capability via these new speed strings:
 
+"super-speed-plus-gen2x2"
+"super-speed-plus-gen2x1"
+"super-speed-plus-gen1x2"
+
+If the argument is simply "super-speed-plus", USB controllers should
+default to their maximum transfer rate and number of lanes.
+
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
 Changes in v5:
+- Add Reviewed-by: Rob Herring <robh@kernel.org>
 - Rebase on Felipe's testing/next branch
 - Changed Signed-off-by email to match From: email header
 Changes in v4:
 - None
 Changes in v3:
-- None
+- Use "maximum-speed" to include both the num-lane and transfer rate for SSP
+- Remove "num-lanes" and "lane-speed-mantissa-gbps" properties
 Changes in v2:
-- None
+- Make "num-lanes" and "lane-speed-mantissa-gbps" common USB properties
 
- drivers/usb/gadget/composite.c | 76 +++++++++++++++++++++++-----------
- 1 file changed, 52 insertions(+), 24 deletions(-)
+ Documentation/devicetree/bindings/usb/generic.txt | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 0aa4cb49aa53..2d0b7af4b08f 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -729,45 +729,73 @@ static int bos_desc(struct usb_composite_dev *cdev)
- 	/* The SuperSpeedPlus USB Device Capability descriptor */
- 	if (gadget_is_superspeed_plus(cdev->gadget)) {
- 		struct usb_ssp_cap_descriptor *ssp_cap;
-+		unsigned int ssac = 1;
-+		unsigned int ssic = 0;
-+		unsigned int min_ssid = 0;
-+		int i;
-+
-+		if (cdev->gadget->ssac) {
-+			ssac = cdev->gadget->ssac;
-+
-+			/*
-+			 * Paired RX and TX sublink speed attributes share
-+			 * the same SSID.
-+			 */
-+			ssic = (ssac + 1) / 2 - 1;
-+			min_ssid = cdev->gadget->min_speed_ssid;
-+		}
- 
- 		ssp_cap = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
- 		bos->bNumDeviceCaps++;
- 
--		/*
--		 * Report typical values.
--		 */
--
--		le16_add_cpu(&bos->wTotalLength, USB_DT_USB_SSP_CAP_SIZE(1));
--		ssp_cap->bLength = USB_DT_USB_SSP_CAP_SIZE(1);
-+		le16_add_cpu(&bos->wTotalLength, USB_DT_USB_SSP_CAP_SIZE(ssac));
-+		ssp_cap->bLength = USB_DT_USB_SSP_CAP_SIZE(ssac);
- 		ssp_cap->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
- 		ssp_cap->bDevCapabilityType = USB_SSP_CAP_TYPE;
- 		ssp_cap->bReserved = 0;
- 		ssp_cap->wReserved = 0;
- 
- 		ssp_cap->bmAttributes =
--			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_ATTRIBS, 1) |
--				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_IDS, 0));
-+			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_ATTRIBS, ssac) |
-+				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_IDS, ssic));
- 
- 		ssp_cap->wFunctionalitySupport =
--			cpu_to_le16(FIELD_PREP(USB_SSP_MIN_SUBLINK_SPEED_ATTRIBUTE_ID, 0) |
-+			cpu_to_le16(FIELD_PREP(USB_SSP_MIN_SUBLINK_SPEED_ATTRIBUTE_ID, min_ssid) |
- 				    FIELD_PREP(USB_SSP_MIN_RX_LANE_COUNT, 1) |
- 				    FIELD_PREP(USB_SSP_MIN_TX_LANE_COUNT, 1));
- 
--		ssp_cap->bmSublinkSpeedAttr[0] =
--			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_SSID, 0) |
--				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSE, USB_LSE_GBPS) |
--				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_ST,
--					       USB_ST_SYMMETRIC_RX) |
--				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LP, USB_LP_SSP) |
--				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, 10));
--
--		ssp_cap->bmSublinkSpeedAttr[1] =
--			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_SSID, 0) |
--				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSE, USB_LSE_GBPS) |
--				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_ST,
--					       USB_ST_SYMMETRIC_TX) |
--				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LP, USB_LP_SSP) |
--				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, 10));
-+		/*
-+		 * If the sublink speed attributes are not specified, then the
-+		 * default will be a pair symmetric RX/TX sublink speed
-+		 * attributes of 10 Gbps.
-+		 */
-+		for (i = 0; i < ssac + 1; i++) {
-+			struct usb_sublink_speed default_ssa;
-+			struct usb_sublink_speed *ptr;
-+
-+			if (cdev->gadget->ssac) {
-+				ptr = &cdev->gadget->sublink_speed[i];
-+			} else {
-+				default_ssa.id = i / 2;
-+				default_ssa.protocol = USB_LP_SSP;
-+				default_ssa.exponent = USB_LSE_GBPS;
-+				default_ssa.mantissa = 10;
-+
-+				if (i % 2)
-+					default_ssa.type = USB_ST_SYMMETRIC_TX;
-+				else
-+					default_ssa.type = USB_ST_SYMMETRIC_RX;
-+
-+				ptr = &default_ssa;
-+			}
-+
-+			ssp_cap->bmSublinkSpeedAttr[i] =
-+				cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_SSID, ptr->id) |
-+					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSE, ptr->exponent) |
-+					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_ST, ptr->type) |
-+					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LP, ptr->protocol) |
-+					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, ptr->mantissa));
-+		}
- 	}
- 
- 	return le16_to_cpu(bos->wTotalLength);
+diff --git a/Documentation/devicetree/bindings/usb/generic.txt b/Documentation/devicetree/bindings/usb/generic.txt
+index ba472e7aefc9..8541b9571f2f 100644
+--- a/Documentation/devicetree/bindings/usb/generic.txt
++++ b/Documentation/devicetree/bindings/usb/generic.txt
+@@ -3,10 +3,13 @@ Generic USB Properties
+ Optional properties:
+  - maximum-speed: tells USB controllers we want to work up to a certain
+ 			speed. Valid arguments are "super-speed-plus",
+-			"super-speed", "high-speed", "full-speed" and
+-			"low-speed". In case this isn't passed via DT, USB
+-			controllers should default to their maximum HW
+-			capability.
++			"super-speed-plus-gen2x2", "super-speed-plus-gen2x1",
++			"super-speed-plus-gen1x2", "super-speed", "high-speed",
++			"full-speed" and "low-speed". In case this isn't passed
++			via DT, USB controllers should default to their maximum
++			HW capability. Similarly, if the argument is
++			"super-speed-plus", USB controllers should default to
++			their maximum transfer rate and number of lanes.
+  - dr_mode: tells Dual-Role USB controllers that we want to work on a
+ 			particular mode. Valid arguments are "host",
+ 			"peripheral" and "otg". In case this attribute isn't
 -- 
 2.28.0
 
