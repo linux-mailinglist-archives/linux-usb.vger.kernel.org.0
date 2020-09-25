@@ -2,90 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3BD277D5E
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 03:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3F3277DBF
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 03:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbgIYBFy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Sep 2020 21:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726703AbgIYBFy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Sep 2020 21:05:54 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AA2C0613CE
-        for <linux-usb@vger.kernel.org>; Thu, 24 Sep 2020 18:05:54 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id d190so1040899iof.3
-        for <linux-usb@vger.kernel.org>; Thu, 24 Sep 2020 18:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wlgQ+NF7iew+9vMzELXSBFvU/xBgUpfd+l3Fv6Kbjo4=;
-        b=HQIoo0+gk5qq1Duvz3ecTXAQUtJVkzAPLEA3ce3+C3emfkwtp1qvMAIxuruxMdl+fe
-         CTLWwIoTKQdpxfH46UZJwtayezE8dCIDc0SxD6gEttpQRZM5Ic4Ot2oFssP/vlyVzVjH
-         G5rY9c/NIH4VzFdovyR8LSv2FYK7lFBLbOz/0tKtld6LjfKhPBx+PdO1ph1ulhcCj6/d
-         kpHyK5HRwLQJD0f1GqYrYhCw+N1jVWoUJLlSmV3J+vuuhv23gQeOzR4brxVAD2u4huxL
-         zkOjkF6qFiNHp+iVGQCjw+DTA1/Q8CDNsmVDopB4Vs+s7bzCs2BF/b6uatuwUt5Ve2cb
-         bLTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wlgQ+NF7iew+9vMzELXSBFvU/xBgUpfd+l3Fv6Kbjo4=;
-        b=D6Tk7Pi9vH3FPjSCPzDnusYzFvh1oJWlI7YwagvzdalxK4XTqLPhDFCywIMsa1AJ7+
-         Nkw7ZMkDHorHPaN6O5gctdO5oinnzhdNTQdE+UHy8OZ0bVscqO34f1lm739z3uxLbUhH
-         C3psZ80O2UCNSCqEQ3yrV9ICnyI93YbWkIJzZSWsXi9pri+y/D7P9xD2rbNPMSmlStqj
-         E+HaZ+G5guZSBthLd2aUNQSECFdwwVzXSORS0x//x0o7swxWqjCnnRvDkNSrYwkxlfK5
-         ZKApjK7zp2Ai5uRJ8IIY0uEg/50zb4faw/8qZE1/AEmShySDZyW3z+VbxuBvoir3j2Aj
-         nicA==
-X-Gm-Message-State: AOAM533trVR5XWyrzmaXlDVhQIBCwrGFK6SiqsCvFjXSpWDhjctclfkO
-        Q7xBz6ogyOHj8j0kBujjB/zv+eGX/UKH5Q7plRF+KUHO
-X-Google-Smtp-Source: ABdhPJzpz01rr/dO1adAvuVxKHDGW/ZvNtQU4CAX9lRbNzewjlu+h74ibL8V2QQW/CoybvdmPIs+qIeSvTts5ssR5Nw=
-X-Received: by 2002:a02:cb53:: with SMTP id k19mr1306260jap.47.1600995953459;
- Thu, 24 Sep 2020 18:05:53 -0700 (PDT)
+        id S1726756AbgIYB4B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Sep 2020 21:56:01 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:55694 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726704AbgIYBz5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Sep 2020 21:55:57 -0400
+X-Greylist: delayed 584 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Sep 2020 21:55:56 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 8B9AE20418F;
+        Fri, 25 Sep 2020 03:46:10 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Hf1Ab6sUrTjO; Fri, 25 Sep 2020 03:46:08 +0200 (CEST)
+Received: from [192.168.48.23] (host-45-78-251-166.dyn.295.ca [45.78.251.166])
+        by smtp.infotech.no (Postfix) with ESMTPA id E20F7204165;
+        Fri, 25 Sep 2020 03:46:07 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+To:     SCSI development list <linux-scsi@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@ORACLE.COM>,
+        USB list <linux-usb@vger.kernel.org>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Subject: lib/scatterlist.c : sgl_alloc_order promises more than it delivers
+Message-ID: <b9f5c065-7662-30e0-8cbd-27a77d28611e@interlog.com>
+Date:   Thu, 24 Sep 2020 21:46:05 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20200920192114.GB1190206@rowland.harvard.edu> <20200921140342.3813-1-yazzep@gmail.com>
- <20200921144827.GC1213381@rowland.harvard.edu> <CAEt1Rjq-DOwN0+_7F0m-kqUHTzm5YPUaXqUOpTszCsqrfLRt5w@mail.gmail.com>
- <20200921150611.GD1213381@rowland.harvard.edu>
-In-Reply-To: <20200921150611.GD1213381@rowland.harvard.edu>
-From:   yasushi asano <yazzep@gmail.com>
-Date:   Fri, 25 Sep 2020 10:05:37 +0900
-Message-ID: <CAEt1RjoypwL9-NsuOfypvT09sQb_7PYbgzegaAH-RfbjLmL44w@mail.gmail.com>
-Subject: Re: [PATCH] Re: [PATCH v3] USB: hub.c: decrease the number of
- attempts of enumeration scheme
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     andrew_gabbasov@mentor.com,
-        "Rosca, Eugeniu (ADITG/ESM1)" <erosca@de.adit-jv.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Baxter Jim <jim_baxter@mentor.com>, linux-usb@vger.kernel.org,
-        "Nishiguchi, Naohiro (ADITJ/SWG)" <nnishiguchi@jp.adit-jv.com>,
-        "Natsume, Wataru (ADITJ/SWG)" <wnatsume@jp.adit-jv.com>,
-        =?UTF-8?B?5rWF6YeO5oGt5Y+y?= <yasano@jp.adit-jv.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Alan,
-I am waiting for the test result from the customer since Tuesday, but
-I have not received a reply yet. I will inform you as soon as I
-receive the result.
+The signature of this exported function is:
 
-Best regards
-Yasushi Asano
+struct scatterlist *sgl_alloc_order(unsigned long long length,
+                                     unsigned int order, bool chainable,
+                                     gfp_t gfp, unsigned int *nent_p)
 
-2020=E5=B9=B49=E6=9C=8822=E6=97=A5(=E7=81=AB) 0:06 Alan Stern <stern@rowlan=
-d.harvard.edu>:
->
-> On Mon, Sep 21, 2020 at 11:59:31PM +0900, yasushi asano wrote:
-> > Dear Alan
-> >
-> > Thank you very much for the reply.
-> > please merge my modification to your patch.
->
-> Yes.
->
-> I will wait to hear the result of your test before I submit the changes.
->
-> Alan Stern
+That first argument would be better named num_bytes (rather than length).
+Its type (unsigned long long) seems to promise large allocations (is that
+64 or 128 bits?). Due to the implementation it doesn't matter due to this
+check in that function's definition:
+
+         /* Check for integer overflow */
+         if (length > (nent << (PAGE_SHIFT + order)))
+                 return NULL;
+
+Well _integers_ don't wrap, but that pedantic point aside, 'nent' is an
+unsigned int which means the rhs expression cannot represent 2^32 or
+higher. So if length >= 2^32 the function fails (i.e. returns NULL).
+
+On 8 GiB and 16 GiB machines I can easily build 6 or 12 GiB sgl_s (with
+scsi_debug) but only if no single allocation is >= 4 GiB due to the
+above check.
+
+So is the above check intended to do that or is it a bug?
+
+
+Any progress with the "[PATCH] sgl_alloc_order: memory leak" bug fix
+posted on 20200920 ?
+sgl_free() is badly named as it leaks for order > 0 .
+
+Doug Gilbert
+
+
+PS1  vmalloc() which I would like to replace with sgl_alloc_order() in the
+      scsi_debug driver, does not have a 4 GB limit.
+
+PS2  Here are the users of sgl_free() under the drivers directory:
+
+find . -name '*.c' -exec grep "sgl_free(" {} \; -print
+	sgl_free(cmd->req.sg);
+		sgl_free(cmd->req.sg);
+	sgl_free(cmd->req.sg);
+	sgl_free(cmd->req.sg);
+./nvme/target/tcp.c
+	sgl_free(req->sg);
+		sgl_free(req->sg);
+			sgl_free(req->metadata_sg);
+./nvme/target/core.c
+	sgl_free(fod->data_sg);
+./nvme/target/fc.c
+	sgl_free(sgl);
+./usb/usbip/stub_rx.c
+			sgl_free(urb->sg);
+		sgl_free(priv->sgl);
+./usb/usbip/stub_main.c
+
