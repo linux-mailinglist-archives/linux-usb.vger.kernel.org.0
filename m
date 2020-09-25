@@ -2,59 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F042D2790F1
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 20:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57E72791CA
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 22:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729631AbgIYSlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Sep 2020 14:41:55 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:43559 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728069AbgIYSly (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Sep 2020 14:41:54 -0400
-Received: (qmail 54048 invoked by uid 1000); 25 Sep 2020 14:41:53 -0400
-Date:   Fri, 25 Sep 2020 14:41:53 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     yasushi asano <yazzep@gmail.com>
-Cc:     andrew_gabbasov@mentor.com,
-        "Rosca, Eugeniu \(ADITG/ESM1\)" <erosca@de.adit-jv.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Baxter Jim <jim_baxter@mentor.com>, linux-usb@vger.kernel.org,
-        "Nishiguchi, Naohiro \(ADITJ/SWG\)" <nnishiguchi@jp.adit-jv.com>,
-        "Natsume, Wataru \(ADITJ/SWG\)" <wnatsume@jp.adit-jv.com>,
-        =?utf-8?B?5rWF6YeO5oGt5Y+y?= <yasano@jp.adit-jv.com>
-Subject: Re: [PATCH] Re: [PATCH v3] USB: hub.c: decrease the number of
- attempts of enumeration scheme
-Message-ID: <20200925184153.GA53451@rowland.harvard.edu>
-References: <20200920192114.GB1190206@rowland.harvard.edu>
- <20200921140342.3813-1-yazzep@gmail.com>
- <20200921144827.GC1213381@rowland.harvard.edu>
- <CAEt1Rjq-DOwN0+_7F0m-kqUHTzm5YPUaXqUOpTszCsqrfLRt5w@mail.gmail.com>
- <20200921150611.GD1213381@rowland.harvard.edu>
- <CAEt1RjoypwL9-NsuOfypvT09sQb_7PYbgzegaAH-RfbjLmL44w@mail.gmail.com>
- <CAEt1Rjp2GKf47JZaRPAD3YnFWPF5+8mxHGmgY+F7Ta9wc1GvrQ@mail.gmail.com>
+        id S1726808AbgIYUMv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Sep 2020 16:12:51 -0400
+Received: from m42-4.mailgun.net ([69.72.42.4]:25718 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728643AbgIYUKr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Sep 2020 16:10:47 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1601064646; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=g+9rhQIvr1fpY91HSg3TCT9sEG1QB73VLn80CsYZKxw=; b=rUsQGrGJCX03i6oQ7Y0E/yR7q4OsBi9GFdpvwau7XciwpOPexQI8rHIxORF7k0bUPgUnL7c6
+ 7yNe6mdvxW/s4E3Mvy9kb005HUMwE4dpli2YVadTGazuTVHkj9Ez1JAKFOEK+heitkEDj3f4
+ KMkZ820shVLkHejC8XV4jqdMWN4=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 5f6e45ffebb17452ba5fd195 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 25 Sep 2020 19:33:19
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 414E3C433CB; Fri, 25 Sep 2020 19:33:19 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.7.221] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F3B42C433CA;
+        Fri, 25 Sep 2020 19:33:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F3B42C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v3] usb: dwc3: Stop active transfers before halting the
+ controller
+To:     Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org
+References: <20200903210954.24504-1-wcheng@codeaurora.org>
+ <87o8mi151l.fsf@kernel.org>
+ <010101746fab2ee1-91b46c27-fef0-4266-94cb-14dea5ca350e-000000@us-west-2.amazonses.com>
+ <877dsjei8j.fsf@kernel.org> <20200924155005.GB1337044@rowland.harvard.edu>
+ <87mu1ecruw.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <41e8c184-1e14-6d4b-3945-48e3d6b54523@codeaurora.org>
+Date:   Fri, 25 Sep 2020 12:33:15 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEt1Rjp2GKf47JZaRPAD3YnFWPF5+8mxHGmgY+F7Ta9wc1GvrQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <87mu1ecruw.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 26, 2020 at 02:21:50AM +0900, yasushi asano wrote:
-> Dear Alan,
-> I received the test result of applying your patch and
-> my change from customer.
-> It was tested using PETtool. it barely passed the test.
-> It took 29.497 seconds. The patch worked well.
 
-That's awfully close to the limit.  I think PORT_INIT_TRIES should be 
-reduced to 4.
 
-> The following is an excerpt from dmesg.
-> Could you please merge my change and proceed with this PR?
-> I really appreciate your kindness.
+On 9/24/2020 11:06 PM, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Alan Stern <stern@rowland.harvard.edu> writes:
+>>>> Hence, the reason if there was already a pending IRQ triggered, the
+>>>> dwc3_gadget_disable_irq() won't ensure the IRQ is handled.  We can do
+>>>> something like:
+>>>> if (!is_on)
+>>>> 	dwc3_gadget_disable_irq()
+>>>> synchronize_irq()
+>>>> spin_lock_irqsave()
+>>>> if(!is_on) {
+>>>> ...
+>>>>
+>>>> But the logic to only apply this on the pullup removal case is a little
+>>>> messy.  Also, from my understanding, the spin_lock_irqsave() will only
+>>>> disable the local CPU IRQs, but not the interrupt line on the GIC, which
+>>>> means other CPUs can handle it, unless we explicitly set the IRQ
+>>>> affinity to CPUX.
+>>>
+>>> Yeah, the way I understand this can't really happen. But I'm open to
+>>> being educated. Maybe Alan can explain if this is really possibility?
+>>
 
-I'll go ahead and submit the patches.
+Hi Felipe/Alan,
 
-Alan Stern
+Thanks for the detailed explanations and inputs.  Useful information to
+have!
+
+>> It depends on the details of the hardware, but yes, it is possible in
+>> general for an interrupt handler to run after you have turned off the
+>> device's interrupt-request line.  For example:
+>>
+>> 	CPU A				CPU B
+>> 	---------------------------	----------------------
+>> 	Gets an IRQ from the device
+>> 	Calls handler routine		spin_lock_irq
+>> 	  spin_lock_irq			Turns off the IRQ line
+>> 	  ...spins...			spin_unlock_irq
+>> 	  Rest of handler runs
+>> 	  spin_unlock_irq
+>>
+>> That's why we have synchronize_irq().  The usual pattern is something
+>> like this:
+>>
+>> 	spin_lock_irq(&priv->lock);
+>> 	priv->disconnected = true;
+>> 	my_disable_irq(priv);
+>> 	spin_unlock_irq(&priv->lock);
+>> 	synchronize_irq(priv->irq);
+>>
+>> And of course this has to be done in a context that can sleep.
+>>
+>> Does this answer your question?
+> 
+> It does, thank you Alan. It seems like we don't need a call to
+> disable_irq(), only synchronize_irq() is enough, however it should be
+> called with spinlocks released, not held.
+> 
+
+I mean...I'm not against using the synchronize_irq() +
+dwc3_gadget_disable_irq() route, since that will address the concern as
+well.  It was just with the disable/enable IRQ route, I didn't need to
+explicitly check the is_on flag again, since I didn't need to worry
+about overwriting the DEVTEN reg (for the pullup enable case).  Will
+include this on the next version.
+
+Thanks
+Wesley Cheng
+
+> Thanks
+> 
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
