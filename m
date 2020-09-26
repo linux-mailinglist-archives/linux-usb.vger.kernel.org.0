@@ -2,108 +2,217 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E303E2796EF
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 06:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F3427971D
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 07:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730034AbgIZEcr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Sep 2020 00:32:47 -0400
-Received: from mail-pg1-f182.google.com ([209.85.215.182]:45474 "EHLO
-        mail-pg1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729231AbgIZEcq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Sep 2020 00:32:46 -0400
-Received: by mail-pg1-f182.google.com with SMTP id y14so4136439pgf.12;
-        Fri, 25 Sep 2020 21:32:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=4shQRsIdT17fWbtG5QC54RWuUlCCAfeGrv+BSHQqrZY=;
-        b=EdRlomje7/dffht2Jy+9aced8mz+WQG91B0AXH9kRdDVG65ZzS7bon5xaYHofj7hum
-         6/5pTPMQz5LO30CRjeXo4eZZ4FW5vB53ZaA0c7vP37JiZOXxDvaNmH7DvrH90rsG0Hcw
-         DuhcNd/y39IPoUpmu0iKjoQKSDaFUWYZOBhk3gPaHsAC0YDI0Fpu5NoFp+KxfZYbMY/z
-         /gnL0C4unmWeoi0rSNSlfr9xi9YEe8G7sDF5Phc+8r8Ql8l1qNmEETTFvNnXbY6VO0gG
-         +z+fMCQjsFBYVNrSbSec81LnSnNbagXQM0/XTPzpPtuTFbMl9ADmExmNNWH8BDrHOnxf
-         sMwg==
-X-Gm-Message-State: AOAM530+Jx+Q3WepyRzJVdStDc6RDhvd6thkulZbE8NGK2hiOVlo9G4U
-        7JMTmD/JID4L+E/b/mPJKEQTXxanVec=
-X-Google-Smtp-Source: ABdhPJy16DWvqbbX2aZ2nD9wG4dk0ksmFpiO8s8jNedWL1wGpnxeYLX0c1BN3VZS6wXl/m1nDGhVaw==
-X-Received: by 2002:a63:c00d:: with SMTP id h13mr1663256pgg.358.1601094765247;
-        Fri, 25 Sep 2020 21:32:45 -0700 (PDT)
-Received: from ?IPv6:2601:647:4000:d7:8ee4:7db:d6f2:5686? ([2601:647:4000:d7:8ee4:7db:d6f2:5686])
-        by smtp.gmail.com with ESMTPSA id m13sm572576pjl.45.2020.09.25.21.32.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2020 21:32:44 -0700 (PDT)
-Subject: Re: lib/scatterlist.c : sgl_alloc_order promises more than it
- delivers
-To:     dgilbert@interlog.com,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-Cc:     "Martin K. Petersen" <martin.petersen@ORACLE.COM>,
-        USB list <linux-usb@vger.kernel.org>
-References: <b9f5c065-7662-30e0-8cbd-27a77d28611e@interlog.com>
- <d9513f73-fa18-4b71-fabf-be0b9e1614fd@acm.org>
- <d487005a-ef6c-549f-7006-c7056cf3f36d@interlog.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
- mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
- LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
- fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
- AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
- 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
- AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
- igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
- Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
- jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
- macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
- CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
- RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
- PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
- eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
- lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
- T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
- ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
- CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
- oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
- //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
- mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
- goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <da346d8f-b27e-7880-10e8-f2617e0ec7ff@acm.org>
-Date:   Fri, 25 Sep 2020 21:32:43 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726392AbgIZFgJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Sep 2020 01:36:09 -0400
+Received: from mga11.intel.com ([192.55.52.93]:26287 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726311AbgIZFgJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 26 Sep 2020 01:36:09 -0400
+IronPort-SDR: aEPLnlH8Z7jgbjSJpD1PoOH77fcITCRI4VO6XGQNHM8EXUm6dbmtc1/xKC2ijI6XVPgoNNRILc
+ GL2SjJjEHzZA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9755"; a="159043464"
+X-IronPort-AV: E=Sophos;i="5.77,303,1596524400"; 
+   d="scan'208";a="159043464"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 19:57:56 -0700
+IronPort-SDR: dRpyYES4nngo6O0TFG9CbiU726er/0RiFUe8EejVc3BwrTA7BFRtSXmd9b7Gcq+0teE/XiLEo9
+ +JAUL2ufWaWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,303,1596524400"; 
+   d="scan'208";a="293136090"
+Received: from lkp-server01.sh.intel.com (HELO 2dda29302fe3) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Sep 2020 19:57:55 -0700
+Received: from kbuild by 2dda29302fe3 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kM0PK-0000M2-Hd; Sat, 26 Sep 2020 02:57:54 +0000
+Date:   Sat, 26 Sep 2020 10:57:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 3fce39601a1a34d940cf62858ee01ed9dac5d459
+Message-ID: <5f6eae28.LTiLjTAD/9nhphi2%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <d487005a-ef6c-549f-7006-c7056cf3f36d@interlog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020-09-24 21:55, Douglas Gilbert wrote:
-> My code steps down from 1024 KiB elements on failure to 512 KiB and if that
-> fails it tries 256 KiB. Then it gives up. The log output is consistent with
-> my analysis. So your stated equality is an inequality when length >= 4 GiB.
-> There is no promotion of unsigned int nent to uint64_t .
-> 
-> You can write your own test harness if you don't believe me. The test machine
-> doesn't need much ram. Without the call to sgl_free() corrected, if it really
-> did try to get that much ram and failed toward the end, then (partially)
-> freed up what it had obtained, then you would see a huge memory leak ...> 
-> 
-> Now your intention seems to be that a 4 GiB sgl should be valid. Correct?
-> Can that check just be dropped?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: 3fce39601a1a34d940cf62858ee01ed9dac5d459  usbcore/driver: Accommodate usbip
 
-Hi Doug,
+elapsed time: 720m
 
-When I wrote that code, I did not expect that anyone would try to allocate
-4 GiB or more as a single scatterlist. Are there any use cases for which a
-4 GiB scatterlist works better than two or more smaller scatterlists?
+configs tested: 153
+configs skipped: 2
 
-Do you agree that many hardware DMA engines do not support transferring
-4 GiB or more at once?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks,
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                 mpc836x_rdk_defconfig
+arm                         hackkit_defconfig
+arc                            hsdk_defconfig
+powerpc                         wii_defconfig
+sh                           se7619_defconfig
+powerpc                     kmeter1_defconfig
+mips                           gcw0_defconfig
+powerpc                    ge_imp3a_defconfig
+m68k                       m5208evb_defconfig
+sh                          sdk7786_defconfig
+powerpc                        fsp2_defconfig
+powerpc                       holly_defconfig
+arm                        multi_v5_defconfig
+sh                         ecovec24_defconfig
+sh                          rsk7264_defconfig
+mips                    maltaup_xpa_defconfig
+arm                         lpc32xx_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                   bluestone_defconfig
+arc                     haps_hs_smp_defconfig
+sh                          r7785rp_defconfig
+arm                           stm32_defconfig
+powerpc                     taishan_defconfig
+h8300                            alldefconfig
+sh                          landisk_defconfig
+sh                            titan_defconfig
+xtensa                    smp_lx200_defconfig
+arm                       versatile_defconfig
+powerpc                     stx_gp3_defconfig
+sh                           se7780_defconfig
+arm                         at91_dt_defconfig
+m68k                        m5307c3_defconfig
+mips                      bmips_stb_defconfig
+m68k                       m5275evb_defconfig
+mips                            gpr_defconfig
+powerpc                        icon_defconfig
+mips                         tb0287_defconfig
+mips                         db1xxx_defconfig
+arm                            dove_defconfig
+mips                         rt305x_defconfig
+arm                            pleb_defconfig
+powerpc                 mpc832x_mds_defconfig
+arm                            mmp2_defconfig
+powerpc                 mpc837x_mds_defconfig
+xtensa                         virt_defconfig
+sh                                  defconfig
+sh                           se7724_defconfig
+arm                            hisi_defconfig
+ia64                                defconfig
+mips                        jmr3927_defconfig
+sparc                       sparc64_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                     ksi8560_defconfig
+arm                            mps2_defconfig
+um                            kunit_defconfig
+csky                                defconfig
+powerpc               mpc834x_itxgp_defconfig
+sparc                            alldefconfig
+arc                           tb10x_defconfig
+arm                        keystone_defconfig
+mips                        nlm_xlp_defconfig
+powerpc                       maple_defconfig
+arm                        mvebu_v5_defconfig
+c6x                         dsk6455_defconfig
+mips                         mpc30x_defconfig
+sh                            migor_defconfig
+microblaze                          defconfig
+sh                          rsk7269_defconfig
+powerpc                      acadia_defconfig
+powerpc                        cell_defconfig
+sh                           se7721_defconfig
+arm                      tct_hammer_defconfig
+arc                    vdk_hs38_smp_defconfig
+h8300                               defconfig
+mips                          ath79_defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20200925
+i386                 randconfig-a006-20200925
+i386                 randconfig-a003-20200925
+i386                 randconfig-a004-20200925
+i386                 randconfig-a005-20200925
+i386                 randconfig-a001-20200925
+x86_64               randconfig-a011-20200925
+x86_64               randconfig-a013-20200925
+x86_64               randconfig-a014-20200925
+x86_64               randconfig-a015-20200925
+x86_64               randconfig-a012-20200925
+x86_64               randconfig-a016-20200925
+i386                 randconfig-a012-20200925
+i386                 randconfig-a014-20200925
+i386                 randconfig-a016-20200925
+i386                 randconfig-a013-20200925
+i386                 randconfig-a011-20200925
+i386                 randconfig-a015-20200925
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-Bart.
+clang tested configs:
+x86_64               randconfig-a005-20200925
+x86_64               randconfig-a003-20200925
+x86_64               randconfig-a004-20200925
+x86_64               randconfig-a002-20200925
+x86_64               randconfig-a006-20200925
+x86_64               randconfig-a001-20200925
+x86_64               randconfig-a011-20200926
+x86_64               randconfig-a013-20200926
+x86_64               randconfig-a014-20200926
+x86_64               randconfig-a015-20200926
+x86_64               randconfig-a012-20200926
+x86_64               randconfig-a016-20200926
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
