@@ -2,225 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 905492792E5
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Sep 2020 23:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E303E2796EF
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 06:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbgIYVFV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Sep 2020 17:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726309AbgIYVFV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Sep 2020 17:05:21 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E07C0613CE
-        for <linux-usb@vger.kernel.org>; Fri, 25 Sep 2020 14:05:21 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id 185so4171219oie.11
-        for <linux-usb@vger.kernel.org>; Fri, 25 Sep 2020 14:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=NhGblQg5E2ne/zRdnEf3DdyT8Pxnoigkc/MJ11C+hJg=;
-        b=d3IEvm80W8KzFnh/+uc7alPUv+cngdVv6CbJ7GEzGxbmQBZLiBjUkX8+JxGTyOtJaN
-         cLhgJ5PusJVWzuOiy0B8jPa0e3PmoH6pzobAg/D7bnS3UsH98yzmotSOdUztnmmTYROX
-         DIROO4ehX7jsgs+kwTiFfskHTtTssksc0N8yMGcLksaqXPUxPWCqtz5gE2eeUEmnb2dI
-         upqyF3ZMphccPdWwbuv4fH8PVsYtbDW2S9O6A6byo5oblu7DqaemlOT2hTqTzSOgUuQp
-         /VNeTKVBPelx9ZObdlO4fbVN6nWinOIg81yjpYMNN3cOXKDnfx64LXueQKDf+wPluCV7
-         mYBw==
+        id S1730034AbgIZEcr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Sep 2020 00:32:47 -0400
+Received: from mail-pg1-f182.google.com ([209.85.215.182]:45474 "EHLO
+        mail-pg1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729231AbgIZEcq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Sep 2020 00:32:46 -0400
+Received: by mail-pg1-f182.google.com with SMTP id y14so4136439pgf.12;
+        Fri, 25 Sep 2020 21:32:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=NhGblQg5E2ne/zRdnEf3DdyT8Pxnoigkc/MJ11C+hJg=;
-        b=l3rU8qMzP5QV2vDYkbpYqmvsmg7Xi9Sfv9QTnn7PCR8jVvctGKU6pNgL5QcFpTcU5j
-         SrQBcbR5t3HsWrcevJCDM5e3Wwxu/FCaEV3LLUn8KuaK/UdthMe/jSrNwOto6fJpAyO8
-         aXLn4xhe9hZx2xLN7ESRkwXouc4vb9UBRqIRrTie/NYy0kBZCRK838Tw7yzAGoSpa6yd
-         zHpa2wx46m5GSCCOSJehoUAdS8m2Hm7p0AdySUxJMBo3euR9jg5/DC7AAr/80iP4iMI4
-         kBC5JWPCRua810AhP7PJtP6t2uu8gL8q9T+CQ0tyWkcL5yH07AVJumzBlgZ+cI9ub2hl
-         BREQ==
-X-Gm-Message-State: AOAM531pXCo1fLKF7c5kMrihqrdlaDr9x2coNX2Clx8/RXbaZY1KZttk
-        2V34sY2fc1EbyThd2AdXzuV9+8xnRuZ7ufXD
-X-Google-Smtp-Source: ABdhPJyVhx+8CTjlkdvEwbxN/lGm4T4SXDTluGHlN+DjJT7aI+OCmO5IX/JfiUzfuYjiB0xQjOHdzQ==
-X-Received: by 2002:aca:5b09:: with SMTP id p9mr288673oib.68.1601067919922;
-        Fri, 25 Sep 2020 14:05:19 -0700 (PDT)
-Received: from google.com ([2601:285:8380:9270::a07d])
-        by smtp.gmail.com with ESMTPSA id l4sm863908oie.25.2020.09.25.14.05.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2020 14:05:19 -0700 (PDT)
-Date:   Fri, 25 Sep 2020 15:05:17 -0600
-From:   Ross Zwisler <zwisler@google.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Subject: Re: xhci problem -> general protection fault
-Message-ID: <20200925210517.GA4487@google.com>
-References: <65ac3a73-ca57-c3e8-561b-9ba5c15b3c65@collabora.com>
- <a6364bd9-58d9-e66e-5595-7d887a8f3fc9@linux.intel.com>
- <8230c2a2-719c-ef81-e85d-5921bf8e98e6@collabora.com>
- <133c123e-e857-7f83-d146-f39c00afe39f@linux.intel.com>
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=4shQRsIdT17fWbtG5QC54RWuUlCCAfeGrv+BSHQqrZY=;
+        b=EdRlomje7/dffht2Jy+9aced8mz+WQG91B0AXH9kRdDVG65ZzS7bon5xaYHofj7hum
+         6/5pTPMQz5LO30CRjeXo4eZZ4FW5vB53ZaA0c7vP37JiZOXxDvaNmH7DvrH90rsG0Hcw
+         DuhcNd/y39IPoUpmu0iKjoQKSDaFUWYZOBhk3gPaHsAC0YDI0Fpu5NoFp+KxfZYbMY/z
+         /gnL0C4unmWeoi0rSNSlfr9xi9YEe8G7sDF5Phc+8r8Ql8l1qNmEETTFvNnXbY6VO0gG
+         +z+fMCQjsFBYVNrSbSec81LnSnNbagXQM0/XTPzpPtuTFbMl9ADmExmNNWH8BDrHOnxf
+         sMwg==
+X-Gm-Message-State: AOAM530+Jx+Q3WepyRzJVdStDc6RDhvd6thkulZbE8NGK2hiOVlo9G4U
+        7JMTmD/JID4L+E/b/mPJKEQTXxanVec=
+X-Google-Smtp-Source: ABdhPJy16DWvqbbX2aZ2nD9wG4dk0ksmFpiO8s8jNedWL1wGpnxeYLX0c1BN3VZS6wXl/m1nDGhVaw==
+X-Received: by 2002:a63:c00d:: with SMTP id h13mr1663256pgg.358.1601094765247;
+        Fri, 25 Sep 2020 21:32:45 -0700 (PDT)
+Received: from ?IPv6:2601:647:4000:d7:8ee4:7db:d6f2:5686? ([2601:647:4000:d7:8ee4:7db:d6f2:5686])
+        by smtp.gmail.com with ESMTPSA id m13sm572576pjl.45.2020.09.25.21.32.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Sep 2020 21:32:44 -0700 (PDT)
+Subject: Re: lib/scatterlist.c : sgl_alloc_order promises more than it
+ delivers
+To:     dgilbert@interlog.com,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
+Cc:     "Martin K. Petersen" <martin.petersen@ORACLE.COM>,
+        USB list <linux-usb@vger.kernel.org>
+References: <b9f5c065-7662-30e0-8cbd-27a77d28611e@interlog.com>
+ <d9513f73-fa18-4b71-fabf-be0b9e1614fd@acm.org>
+ <d487005a-ef6c-549f-7006-c7056cf3f36d@interlog.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <da346d8f-b27e-7880-10e8-f2617e0ec7ff@acm.org>
+Date:   Fri, 25 Sep 2020 21:32:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <133c123e-e857-7f83-d146-f39c00afe39f@linux.intel.com>
+In-Reply-To: <d487005a-ef6c-549f-7006-c7056cf3f36d@interlog.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 04:40:29PM +0300, Mathias Nyman wrote:
-> On 18.9.2020 17.20, Andrzej Pietrasiewicz wrote:
-> > Hi Mathias,
-> > 
-> > W dniu 18.09.2020 o 12:50, Mathias Nyman pisze:
-> >> On 17.9.2020 18.30, Andrzej Pietrasiewicz wrote:
-> >>> Dear All,
-> >>>
-> >>> I have encountered a problem in xhci which leads to general protection fault.
-> >>>
-> >>> The problem is triggered by running this program:
-> >>>
-> >>> https://gitlab.collabora.com/andrzej.p/bulk-cancel.git
-> >>>
-> >>> $ sudo ./bulk-cancel -D /dev/bus/usb/002/006 -i 1 -b 1
-> >>>
-> >>> where /dev/bus/usb/002/006 is a Gadget Zero:
-> >>>
-> >>> It takes less than a minute until the crash happens.
-> >>> The DMAR (iommu) errors don't happen always, i.e. there are crashes
-> >>> when they are not reported in the system log. In either case the
-> >>>
-> >>> "WARN Cannot submit Set TR Deq Ptr"
-> >>> "A Set TR Deq Ptr command is pending."
-> >>> "WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state."
-> >>>
-> >>> messages do appear.
-> >>>
-> >>
-> >> Nice testcase and report, thanks.
-> >>
-> >> I started looking at issues in this area some time ago, and wrote a couple patches but
-> >> it was left hanging. The two patches (now rebased on 5.9-rc3) can be found in my tree in the
-> >> fix_invalid_context_at_stop_endpoint branch
-> >>
-> >> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_invalid_context_at_stop_endpoint
-> >>
-> >> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=fix_invalid_context_at_stop_endpoint
-> >>
-> >> If you could give those a try and see if they help I'd be grateful.
-> > 
-> > No, it doesn't help, albeit the errors are slightly different:
-> > 
-> > xhci_hcd 0000:00:14.0: WARN Cannot submit Set TR Deq Ptr
-> > xhci_hcd 0000:00:14.0: A Set TR Deq Ptr command is pending.
-> > dmar_fault: 44 callbacks suppressed
-> > DRHD: handling fault status reg 3> DMAR: [DMA Write] Request device [00:14.0] PASID ffffffff fault addr ffcda000 [fault reason 05] PTE Write access is not set
-> > DMAR: DRHD: handling fault status reg 3
+On 2020-09-24 21:55, Douglas Gilbert wrote:
+> My code steps down from 1024 KiB elements on failure to 512 KiB and if that
+> fails it tries 256 KiB. Then it gives up. The log output is consistent with
+> my analysis. So your stated equality is an inequality when length >= 4 GiB.
+> There is no promotion of unsigned int nent to uint64_t .
 > 
-> Ok, thanks, the DMA problems make sense to me now.
+> You can write your own test harness if you don't believe me. The test machine
+> doesn't need much ram. Without the call to sgl_free() corrected, if it really
+> did try to get that much ram and failed toward the end, then (partially)
+> freed up what it had obtained, then you would see a huge memory leak ...> 
 > 
-> If a transfer ring stops on a transfer request (TRB) that should be canceled (manual cancel,
-> or error) it's not enough to just turn the  TRB to a no-op.
-> HW has most likely cached the TRB, and we need to move the transfer ring dequeue pointer past this TRB.
-> Moving deq also clears controller cache.
-> 
-> We do all this, but if we fail to queue the Set TR Deq command the TRB (with DMA  pointers) will stay on the ring,
-> and controller will access the TRB DMA  address once it continues running. At this point xhci driver has already
-> given back the canceled/erroneous TRB, and is probably unmapped already.
-> Hence the DMAR entries.  
-> 
-> Looks like this part of the code needs a more extensive rewrite, on top of this we are not handling
-> races between endpoints halted due errors, and endpoints stopped by driver to cancel URBs. 
-> 
-> -Mathias
+> Now your intention seems to be that a 4 GiB sgl should be valid. Correct?
+> Can that check just be dropped?
 
-I'm chasing a similar problem which is also most easily reproduced using
-Andrzej's bulk-cancel program, though we have seen it in the field many times
-as well with normal usage.
+Hi Doug,
 
-The symptom is that we get the following errors in dmesg:
+When I wrote that code, I did not expect that anyone would try to allocate
+4 GiB or more as a single scatterlist. Are there any use cases for which a
+4 GiB scatterlist works better than two or more smaller scatterlists?
 
- xhci_hcd 0000:00:14.0: Mismatch between completed Set TR Deq Ptr command & xHCI internal state.
- xhci_hcd 0000:00:14.0: ep deq seg = 000000001141d6a0, deq ptr = 00000000ebd28dcf
- xhci_hcd 0000:00:14.0: WARNING: Host System Error
- DMAR: DRHD: handling fault status reg 2
- DMAR: [DMA Read] Request device [00:14.0] PASID ffffffff fault addr 0 [fault reason 06] PTE Read access is not set
- xhci_hcd 0000:00:14.0: xHCI host not responding to stop endpoint command.
- xhci_hcd 0000:00:14.0: USBSTS: HCHalted HSE EINT
- xhci_hcd 0000:00:14.0: xHCI host controller not responding, assume dead
- xhci_hcd 0000:00:14.0: HC died; cleaning up
-
-The xhci USB stack loses all attached devices, and on my system at least has
-only been recoverable by rebooting.
-
-Full dmesg and trace after 'echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable'
-can be found here:
-
-https://gist.github.com/rzwisler/531b926e3d160609ead371c23fc15b55
-https://gist.github.com/rzwisler/4621f805737993fec30b5ae23bfd8289
-
-One interesting bit from the trace is that we observe the ep_ctx->deq pointer
-being 0 in xhci_handle_cmd_set_deq():
-
- xhci_inc_enq: CMD 000000000b6352e0: enq 0x00000000ffffe0c0(0x00000000ffffe000) deq 0x00000000ffffe090(0x00000000ffffe000) segs 1 stream 0 free_trbs 251 bounce 0 cycle 0
- xhci_ring_host_doorbell: Ring doorbell for Command Ring 0
- xhci_urb_giveback: ep7in-bulk: urb 000000003c80b7a8 pipe 3221455744 slot 2 length 0/256 sgs 0/0 stream 0 flags 00010200
- xhci_inc_deq: CMD 000000000b6352e0: enq 0x00000000ffffe0c0(0x00000000ffffe000) deq 0x00000000ffffe0a0(0x00000000ffffe000) segs 1 stream 0 free_trbs 252 bounce 0 cycle 0
- xhci_inc_deq: EVENT 00000000b5c6e6a2: enq 0x00000000ffffc000(0x00000000ffffc000) deq 0x00000000ffffc1b0(0x00000000ffffc000) segs 1 stream 0 free_trbs 254 bounce 0 cycle 1
- xhci_handle_event: EVENT: TRB 00000000ffffe0a0 status 'Success' len 0 slot 4 ep 0 type 'Command Completion Event' flags e:C
- xhci_handle_command: CMD: Set TR Dequeue Pointer Command: deq 00000000fff296a1 stream 0 slot 4 ep 3 flags c
- xhci_handle_cmd_set_deq: RS 00000 full-speed Ctx Entries 15 MEL 0 us Port# 13/0 [TT Slot 0 Port# 0 TTT 0 Intr 0] Addr 4 State configured
- xhci_handle_cmd_set_deq_ep: State stopped mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk IN burst 0 maxp 64 deq 0000000000000000 avg trb len 0
-																	  ^^^^^^^^^^^^^^^^^^^^
- xhci_dbg_cancel_urb: Successful Set TR Deq Ptr cmd, deq = @00000000
-						     ^^^^^^^^^^^^^^^
-
-In successful completions they are real values:
-
- xhci_ring_ep_doorbell: Ring doorbell for Slot 4 ep1in
- xhci_inc_deq: CMD 000000000b6352e0: enq 0x00000000ffffe0c0(0x00000000ffffe000) deq 0x00000000ffffe0b0(0x00000000ffffe000) segs 1 stream 0 free_trbs 253 bounce 0 cycle 0
- xhci_inc_deq: EVENT 00000000b5c6e6a2: enq 0x00000000ffffc000(0x00000000ffffc000) deq 0x00000000ffffc1c0(0x00000000ffffc000) segs 1 stream 0 free_trbs 254 bounce 0 cycle 1
- xhci_handle_event: EVENT: TRB 00000000ffffe0b0 status 'Success' len 0 slot 2 ep 0 type 'Command Completion Event' flags e:C
- xhci_handle_command: CMD: Set TR Dequeue Pointer Command: deq 00000000fff86551 stream 0 slot 2 ep 15 flags c
- xhci_handle_cmd_set_deq: RS 00000 full-speed Ctx Entries 15 MEL 0 us Port# 11/0 [TT Slot 0 Port# 0 TTT 0 Intr 0] Addr 2 State configured
- xhci_handle_cmd_set_deq_ep: State stopped mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk IN burst 0 maxp 16 deq 00000000fff86551 avg trb len 0
-																	  ^^^^^^^^^^^^^^^^^^^^
- xhci_dbg_cancel_urb: Successful Set TR Deq Ptr cmd, deq = @fff86550
-						     ^^^^^^^^^^^^^^^
-
-I've noticed that I have to have CONFIG_INTEL_IOMMU_DEFAULT_ON=y for this
-clean repro case, else the system still fails but I don't always (ever?) see
-the failure to read at address 0.  
-
-Mathias, do you think that your above explanation also covers my failure case?  
-Are we just failing to enqueue a Set TR Deq command, and the HC is processing
-a stale TRB?  Or does the fact that ep_ctx->deq == 0 not fit with that
-explanation?
-
-Other tidbits that I've disovered along the way:
-
-1) We first started noticing this in the field with v4.19 based kernels, but
-   I've been able to reproduce it using bulk-cancel with a v4.18 kernel
-   without much trouble, so I'm pretty sure it's an old issue.
-
-2) This definitely looks like a race which is very sensitive to timing.  If I
-   put a single trace_printk() line in xhci_handle_cmd_set_deq() function, the
-   issue is 10x harder to repro (on average 3 seconds to on average 30
-   seconds).  Similarly, when we turned on tracing in the field to try and get
-   logs the issue reproduces much less frequently.  I also tried to bisect,
-   and it turns out that whether or not it reproduced on my system with older
-   kernels was dependent on how tracing functions were inlined (!!).
-
-   I think that we started seeing this in the field with v4.19 based kernels
-   purely because of a timing change.
-
-3) I did run with your patches from
-   https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=fix_invalid_context_at_stop_endpoint
-   and it didn't change anything for me.
-
-I'm reading up more on xhci and trying to understand this race, but would
-appreciate any help or direction that you're able to provide.
+Do you agree that many hardware DMA engines do not support transferring
+4 GiB or more at once?
 
 Thanks,
-- Ross
+
+Bart.
