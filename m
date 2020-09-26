@@ -2,86 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C805A279726
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 07:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8FE2797AA
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 09:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726392AbgIZFpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Sep 2020 01:45:18 -0400
-Received: from wforward5-smtp.messagingengine.com ([64.147.123.35]:34263 "EHLO
-        wforward5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726210AbgIZFpS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Sep 2020 01:45:18 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailforward.west.internal (Postfix) with ESMTP id 30EE15D4;
-        Sat, 26 Sep 2020 01:45:17 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 26 Sep 2020 01:45:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Sr+ind
-        KzHp6oYp2oxR/q1hpzMJDeXc7R8/i9/pLsMVM=; b=f71Ds7bsfxNlm4ozsAgdcj
-        loUpJjof6QwhQckaDdSqp19BCy/nHOttZ7cTHDIn1zAqmv1436eoBhcVnB0thy7+
-        I5MiBQ3g7j5PFsj/+Iw4QGihhf5XFPUq+HqnRdB0qouAP5ly5Yf26XdlOF9g3l2h
-        urFjMSHtnOTSxrFLv1oyIIlhIoWn24Yo+hVAWY0pbjtLsMNoc4QkQT00fypzOZmx
-        o5nmGQBLO0gGmeGqN0D+HnxSOCMS9g9d/AX5ZxHWOetYNkpZ6ZqaivXULsmEy+Sl
-        5AWgp+AAXrLgjdoH5xObzLuBeNae9ikO3MGCFTpntJQrHlzQpPqam/u3/dwEi+wg
-        ==
-X-ME-Sender: <xms:bNVuXyx4wB22saaHj1u1PnyEv1hZWb0K27fNR3W2oevqUFlc1UmSuQ>
-    <xme:bNVuX-TOcM9pdg99xUOE-NoMNha97aMvT8gMJ-VuJ6CPMfDPzAtMfCJpgCEozevux
-    cKhS3W1PnMU1w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvddugdelvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvghfmjfeslhhinhhugihfohhunhgurghtihhonhdrohhrgheqnecuggftrf
-    grthhtvghrnheptedvleegfffguddtledvvddtteffjeetgfevveeugefgleelhfevveef
-    udeuuddvnecukfhppeekfedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:bNVuX0VHeRY7H9agjrvTFLEaGK5UbgocFEHLMXaZEsZlW4FVnP2ZgQ>
-    <xmx:bNVuX4jCKlaynFLRNM2QAW2TtOhewib-trng4Wdpk3ESpl4WsTpBtg>
-    <xmx:bNVuX0DInpy68YSRvF_goYkJjhbCyLfN5b9aLIreryOzmlk7-6kV4w>
-    <xmx:bNVuX96WVFux643c3OSPQCJVqGIK5Gqq61GlKLfluQu7jpk46DIABWA4BXc>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 29F5D3064680;
-        Sat, 26 Sep 2020 01:45:16 -0400 (EDT)
-Date:   Sat, 26 Sep 2020 07:45:14 +0200
-From:   Greg KH <gregKH@linuxfoundation.org>
-To:     Petko Manolov <petkan@nucleusys.com>
-Cc:     oneukum@suse.com, linux-usb@vger.kernel.org,
-        Petko Manolov <petko.manolov@konsulko.com>
-Subject: Re: [PATCH 1/2] net: pegasus: convert control messages to the new
- send/recv scheme.
-Message-ID: <20200926054514.GD631346@kroah.com>
-References: <20200923134348.23862-9-oneukum@suse.com>
- <20200925093124.22483-1-petkan@nucleusys.com>
- <20200925093124.22483-2-petkan@nucleusys.com>
- <20200925143730.GA3111407@kroah.com>
- <20200925160537.GA2128@carbon.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200925160537.GA2128@carbon.lan>
+        id S1728871AbgIZHzo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Sep 2020 03:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725208AbgIZHzo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Sep 2020 03:55:44 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644DBC0613D3;
+        Sat, 26 Sep 2020 00:55:44 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id x23so1493210wmi.3;
+        Sat, 26 Sep 2020 00:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:content-transfer-encoding:mime-version:subject:message-id:date
+         :cc:to;
+        bh=pTA0hmsHcNqtI2fDLdRBHiVrah9nomJTQoK+wEwr798=;
+        b=M2qZB5X/m3H5K3GEzXLTtYtmeCpkv+I2oOf9AfMMhw2L9ostZgECSYCShrtjuYCzIZ
+         tlmSRnhVu6LS1IgqHXUvxO8GpNH3K5fhLNufRbT7TaLfL+ZzhDdpl0ZowGuzdiZ5KcIJ
+         DMbjGNXpgT4Ltq8aeuPlijaf8B/J8njbPYCBga1UcGM1MsRsF828mrY46juXbG54J/5K
+         9AwRIqswp+Cfj5u6jAWuZyK+NR+9REsWvUwXQQ3K9b2v0MxZHY/A7y6mgOk8dviU6vT+
+         p+nP92EHVn90ZVo3F/eg7TVPJXwU2cUJMT7c/0to1OSysbh6p1yhR6VbsGeXqwgnjcOU
+         Lh5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:content-transfer-encoding:mime-version
+         :subject:message-id:date:cc:to;
+        bh=pTA0hmsHcNqtI2fDLdRBHiVrah9nomJTQoK+wEwr798=;
+        b=FXBnGMFKGHN3AnO4v8zegTuhNTKKYyXsxMTTK9CAhBlgPCrzHYKk34rBWNH/SgGfsQ
+         eiEbBvZO9C6a5JuEcXQTaK9+WKblIxxub+UYHX6wue5DWXj4JvgZIKl9dFJMemxgTTkQ
+         AumHsVrRqs12D7z3u0y0PZsidZq2pjzjPWPydGGYrhtdEadD+gJud8+uYV3sc/n1K+5g
+         /2NWQUmx7aruaFLxbW8ckxIPpGM/ze632scLdoIV8tDJYXx2xpLBSIdm2qiwn02w5rkZ
+         9zPQQ9/5Lv1YFzAxJzR1EzX7dHuUQHVdfZaHjeMqYDc/0KwFrOgolaX76rKV+bGKg/oI
+         v9cw==
+X-Gm-Message-State: AOAM5309mSGPzA2tpvBq1W4o8RNCHf1tdPa7Yla7yH+nNfY8ybfux+Uv
+        449r1VVxbw79B/lFhXAgfu9QIWhnKD4=
+X-Google-Smtp-Source: ABdhPJxN2sf8T0c2574PbIWh7ZWRVLX9R78jkbwc5JkiNrZ7OZvOcpuA3qjy4kdEL2QUwiCZ+bimbA==
+X-Received: by 2002:a7b:c387:: with SMTP id s7mr1464744wmj.171.1601106942638;
+        Sat, 26 Sep 2020 00:55:42 -0700 (PDT)
+Received: from [172.16.20.20] ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id r206sm1735863wma.47.2020.09.26.00.55.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 26 Sep 2020 00:55:42 -0700 (PDT)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.15\))
+Subject: Deadlock under load with Linux 5.9 and other recent kernels
+Message-Id: <5878AC01-8A1B-4F39-B4BD-BDDEFAECFAA2@gmail.com>
+Date:   Sat, 26 Sep 2020 11:55:39 +0400
+Cc:     furkan@fkardame.com, Brad Harper <bjharper@gmail.com>
+To:     linux-block@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-amlogic@lists.infradead.org
+X-Mailer: Apple Mail (2.3445.104.15)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 07:05:37PM +0300, Petko Manolov wrote:
-> On 20-09-25 16:37:30, Greg KH wrote:
-> > On Fri, Sep 25, 2020 at 12:31:23PM +0300, Petko Manolov wrote:
-> > > From: Petko Manolov <petko.manolov@konsulko.com>
-> > > 
-> > > Signed-off-by: Petko Manolov <petko.manolov@konsulko.com>
-> > 
-> > I really do not like to take patches without any changelog text at all
-> > :(
-> > 
-> > Can you fix this up?
-> 
-> I am sorry about this.  Hope v2 is better.
+I am using an ARM SBC device with Amlogic S922X chip (Beelink GS-King-X, =
+an Android STB) to boot the Kodi mediacentre distro LibreELEC (which I =
+work on) although the issue is also reproducible with Manjaro and =
+Armbian on the same hardware, and with the GT-King and GT-King Pro =
+devices from the same vendor - all three devices are using a common =
+dtsi:
 
-Better, but still a bit more work is needed :)
+=
+https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dt=
+s/amlogic/meson-g12b-gsking-x.dts
+=
+https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dt=
+s/amlogic/meson-g12b-gtking-pro.dts
+=
+https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dt=
+s/amlogic/meson-g12b-gtking.dts
+=
+https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dt=
+s/amlogic/meson-g12b-w400.dtsi
 
-thanks,
+I have schematics for the devices, but can only share those privately on =
+request.
 
-greg k-h
+For testing I am booting LibreELEC from SD card. The box has a 4TB SATA =
+drive internally connected with a USB > SATA bridge, see dmesg: =
+http://ix.io/2yLh and I connect a USB stick with a 4GB ISO file that I =
+copy to the internal SATA drive. Within 10-20 seconds of starting the =
+copy the box deadlocks needing a hard power cycle to recover. The timing =
+of the deadlock is variable but the device _always_ deadlocks. Although =
+I am using a simple copy use-case, there are similar reports in Armbian =
+forums performing tasks like installs/updates that involve I/O loads.
+
+Following advice in the #linux-amlogic IRC channel I added =
+CONFIG_SOFTLOCKUP_DETECTOR and CONFIG_DETECT_HUNG_TASK and was able to =
+get output on the HDMI screen (it is not possible to connect to UART =
+pins without destroying the box case). If you advance the following =
+video frame by frame in VLC you can see the output:
+
+https://www.dropbox.com/s/klvcizim8cs5lze/lockup_clip.mov?dl=3D0
+
+I am not a coding developer so the output doesn=E2=80=99t mean much to =
+me, but I am happy to follow guidance or install patches to get more =
+output or test things.
+
+Christian=
