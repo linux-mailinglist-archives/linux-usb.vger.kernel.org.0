@@ -2,54 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B27C92797E5
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 10:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0200527981F
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 11:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgIZIVS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Sep 2020 04:21:18 -0400
-Received: from lan.nucleusys.com ([92.247.61.126]:33674 "EHLO
+        id S1726587AbgIZJNh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Sep 2020 05:13:37 -0400
+Received: from lan.nucleusys.com ([92.247.61.126]:33712 "EHLO
         zztop.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726037AbgIZIVS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Sep 2020 04:21:18 -0400
+        with ESMTP id S1725208AbgIZJNh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Sep 2020 05:13:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        d=nucleusys.com; s=x; h=Content-Transfer-Encoding:MIME-Version:References:
+        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/jBjNyXFVcEkEmYAAIiSZtnG1IQ3YJQhHGhHXds/5fk=; b=UQDKIyHshWjdhAEc9rjixxCGug
-        lOyVMw6stFqiFtOtl9tvlzoBIxIXRElOKl7zk/R79P+kGaDl8ZUKM7/alB4L2N5gOW9QGOujQLbVk
-        uvwY5eV+ZmzMeLKsjtdP4wQR7uykUteet2VfWMWmlNlpntU9vS6uph1jVsis9Vmg2HR8=;
-Received: from [94.26.108.4] (helo=karbon)
+        bh=go/GaGWLYygNLiBbE4FTR7jxg7MC9xdFSKqfaaL676Q=; b=a0IXdxf/9FUHhoNPStg4Dz5c52
+        rUun8GE0sCONEj3aheVaXDodCkU3S1wXpzQRskaHfuBlwFODBIZ0VHvIoDZN6PzpMaxYLfZC2Veou
+        ehNpm23vZTQ21fbaH4RU79rKgt7Ceevgoht6UR/4WbXtqKgyNCqWwaPhPggIO2ItGvfU=;
+Received: from [94.26.108.4] (helo=karbon.lan)
         by zztop.nucleusys.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <petkan@nucleusys.com>)
-        id 1kM5SB-000376-3X; Sat, 26 Sep 2020 11:21:11 +0300
-Date:   Sat, 26 Sep 2020 11:21:08 +0300
+        id 1kM6Gr-0003As-Vh; Sat, 26 Sep 2020 12:13:34 +0300
 From:   Petko Manolov <petkan@nucleusys.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, oneukum@suse.com,
+To:     oneukum@suse.com
+Cc:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org,
         Petko Manolov <petko.manolov@konsulko.com>
-Subject: Re: [PATCH 1/2] net: pegasus: convert control messages to the new
- send/recv scheme.
-Message-ID: <20200926082108.GA6770@karbon>
-References: <20200925143730.GA3111407@kroah.com>
- <20200925160200.4364-1-petkan@nucleusys.com>
- <20200925160200.4364-2-petkan@nucleusys.com>
- <20200926054457.GC631346@kroah.com>
+Subject: [PATCH v3 0/2] Use the new usb control message API.
+Date:   Sat, 26 Sep 2020 12:13:25 +0300
+Message-Id: <20200926091327.8021-1-petkan@nucleusys.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200923134348.23862-9-oneukum@suse.com>
+References: <20200923134348.23862-9-oneukum@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200926054457.GC631346@kroah.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Score: -1.0 (-)
 X-Spam-Report: Spam detection software, running on the system "zztop.nucleusys.com",
  has NOT identified this incoming email as spam.  The original
  message has been attached to this so you can view it or label
  similar future email.  If you have any questions, see
  the administrator of that system for details.
- Content preview:  On 20-09-26 07:44:57, Greg KH wrote: > On Fri, Sep 25, 2020
-    at 07:01:59PM +0300, Petko Manolov wrote: > > From: Petko Manolov <petko.manolov@konsulko.com>
-    > > > > Move all control transfers to safer u [...] 
+ Content preview:  From: Petko Manolov <petko.manolov@konsulko.com> Open coding,
+    ccasional improper error handling by the caller of usb_control_msg() and
+   not flagging partial read as an error requires a new API that takes care of
+    these issues. It took the form of usb_ [...] 
  Content analysis details:   (-1.0 points, 5.0 required)
   pts rule name              description
  ---- ---------------------- --------------------------------------------------
@@ -58,59 +55,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-09-26 07:44:57, Greg KH wrote:
-> On Fri, Sep 25, 2020 at 07:01:59PM +0300, Petko Manolov wrote:
-> > From: Petko Manolov <petko.manolov@konsulko.com>
-> > 
-> > Move all control transfers to safer usb_control_msg_send/recv() API.
-> 
-> This says _what_ the patch does, but we can see that from the diff.  You
-> should describe _why_ we are doing what we are doing, so that everyone
-> understands the need for the change.
+From: Petko Manolov <petko.manolov@konsulko.com>
 
-Didn't want to parrot the reason for usb_control_msg_send/recv() existence, but 
-i guess you're right.  5 years from now i would not remember anything. :)
+Open coding, ccasional improper error handling by the caller of
+usb_control_msg() and not flagging partial read as an error requires a new API
+that takes care of these issues.  It took the form of
+usb_control_msg_send/recv() and this patch series is converting Pegasus and
+RTL8150 drivers to using the proper calls.
 
-> >  static int set_register(pegasus_t *pegasus, __u16 indx, __u8 data)
-> >  {
-> > -	u8 *buf;
-> > -	int ret;
-> > -
-> > -	buf = kmemdup(&data, 1, GFP_NOIO);
-> > -	if (!buf)
-> > -		return -ENOMEM;
-> > -
-> > -	ret = usb_control_msg(pegasus->usb, usb_sndctrlpipe(pegasus->usb, 0),
-> > -			      PEGASUS_REQ_SET_REG, PEGASUS_REQT_WRITE, data,
-> > -			      indx, buf, 1, 1000);
-> > -	if (ret < 0)
-> > -		netif_dbg(pegasus, drv, pegasus->net,
-> > -			  "%s returned %d\n", __func__, ret);
-> > -	kfree(buf);
-> > -	return ret;
-> > +	return usb_control_msg_send(pegasus->usb, 0, PEGASUS_REQ_SET_REG,
-> > +			            PEGASUS_REQT_WRITE, data, indx, &data, 1,
-> > +				    1000, GFP_NOIO);
-> >  }
-> 
-> Again, why isn't set_register() now rewritten to just be:
-> 
-> static int set_register(pegasus_t *pegasus, __u16 indx, __u8 data)
-> {
-> 	return set_registers(pegasus, indx, 1, data);
-> }
-> 
-> Much easier to show that it's all converted properly :)
+Petko Manolov (2):
+  net: pegasus: Use the new usb control message API.
+  net: rtl8150: Use the new usb control message API.
 
-There's a catch - adm8511-based devices can only write to a single register via 
-specific control request.  This request expects the register number in wIndex 
-and the value in wValue.  A bit of a brain fart which is fixed in adm8515.
+ drivers/net/usb/pegasus.c | 61 ++++++++++-----------------------------
+ drivers/net/usb/rtl8150.c | 32 ++++----------------
+ 2 files changed, 21 insertions(+), 72 deletions(-)
 
-Admittedly, I could open code set_register() and avoid a kmemdup() call since in 
-this case 'data' is going to be NULL.  However, set_register() isn't heavily 
-used, except for the setup phase, so i went for the prettier/simpler approach.  
-Which reminds me that i should put a comment explaining why is that.
-
-
-cheers,
-Petko
+-- 
+2.28.0
