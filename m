@@ -2,110 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF9527989A
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 12:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2321D2798BC
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 13:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726309AbgIZKvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Sep 2020 06:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S1727777AbgIZLzY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Sep 2020 07:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726183AbgIZKvn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Sep 2020 06:51:43 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2D6C0613D3
-        for <linux-usb@vger.kernel.org>; Sat, 26 Sep 2020 03:51:42 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id f1so679267plo.13
-        for <linux-usb@vger.kernel.org>; Sat, 26 Sep 2020 03:51:42 -0700 (PDT)
+        with ESMTP id S1726210AbgIZLzY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Sep 2020 07:55:24 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6DAC0613CE;
+        Sat, 26 Sep 2020 04:55:23 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id z4so6788247wrr.4;
+        Sat, 26 Sep 2020 04:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Erv0okPrqcm4hiPfazJ3B+MEgGbrmkvfiAwUSBMTHes=;
-        b=YfemzFvwe1AUIq1uBazHfToqDWIuf2mqgxJ2LU1hQxwGCiJqts77x+ngut+gKDqhyu
-         L0jV/If4cXfKQgI7ofmQQtAASru2NifOZd2OyX48v5BGSlzEhQZc31S2AhbYotm0THAo
-         EnrPESbJ1zEL+w9o8+2tkV9jWWrpDUr6/KCW49HHdbIO62g8Ab/dTtniiVi/JUANGaNK
-         Lrn+ye0CnzQS7a2YmpA+hU/1/cq5tj4KQ88CaZyfGIx7IDfvnEBB1XzTCVrMXB5aBgGJ
-         5Cuqx87fw4us0mVuVmRuuBqnVrp12zGKKKdOgHIcdOKk+It1htLYK11CkzUjZhbgjykB
-         FzEQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=lHpDGO3eipCJBv/JBXAcsVMlGwZEUUhI8iuzgMFtJmM=;
+        b=Wx/M0MAL/yQ+YpBbNrG0u5Kp+tUngk6GDqMhOn8Fj1vTTpFl3vdmWvBK7iUK0yle3d
+         yz1Sea7ZDeFH4VeYCP/HABkNfDDgB1j6L+7JanT/IDuMTty92vWPf7/EleMr22lBYP7i
+         z+3JDbySwyexLBGTRsQPhPuqYAq5PhYQ1G92kovhmnhePz2Y59ZXJPIUMjhSjEAac3Lp
+         Su9A6TgYiV1Cq+jSP1IqIINc0SM6kh541v30iy9uT7grEZE5mloaDht1dxHiO4bVxUiJ
+         Dm08X2uQziSlQbYBLQ8C3QebE4/0XEd1ys7d9hoRJkYO1yraiWQJDSg/P5tBq/LfaB/d
+         xq6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Erv0okPrqcm4hiPfazJ3B+MEgGbrmkvfiAwUSBMTHes=;
-        b=CgNFrklduVhxa+msPuU/7WQKL3I91H19ElMWx2QA645EJq/EL10CrdUmoEVfkx8tqO
-         +ayGVNHu+Mqh/wJY1D29EA7q/1KAISLqZ6QhQnHidPnWfT10SjYy5v1BcMbtrt69wvC7
-         c+v+EsFn25w4deXeybQX4BlT/hn15qwcdRYMnmz4KMMMLOnqqqK42a6AMYTrw44DkmRL
-         3Ja98+ikwXuB9qty3YVQtYo+k8Sh/OgtMwTz02BSRfEU/n444S4E3juEjcEJpkAS7vVG
-         j4VAHCbbIBLjmG8Mn4ciGtJeL+kjQqrsVIHLKjh0TT0tJsHCxmrVbQXUdmIrkibiuWVP
-         BYmg==
-X-Gm-Message-State: AOAM533F2VyiJDEXZOE1kQbZdP9YTP2BkpIX7mUUGA3eDwjbZo/cGEp1
-        aDpFo62wMUGqis3+iQDRMbWNMA==
-X-Google-Smtp-Source: ABdhPJyMU8iWdKoFGvrBKhvoBnMIbxxzkFSzD5yj9YM1Q2QfdUWp4vx7kR8Mt1Q+SkQai4c6OUnaSw==
-X-Received: by 2002:a17:90a:9708:: with SMTP id x8mr1666114pjo.213.1601117502248;
-        Sat, 26 Sep 2020 03:51:42 -0700 (PDT)
-Received: from [192.168.1.134] ([66.219.217.173])
-        by smtp.gmail.com with ESMTPSA id w185sm5619297pfc.36.2020.09.26.03.51.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Sep 2020 03:51:41 -0700 (PDT)
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=lHpDGO3eipCJBv/JBXAcsVMlGwZEUUhI8iuzgMFtJmM=;
+        b=dLIX2suzP3xjkxLBWav0Hm6HfkgS0i7MTC8RU/ovMAC9bUJvVa6hm0FN1+xi0sU1l9
+         oTE96V5VXTBcV++gl+49sGFtHipcqbIFn6cV5cEpmqWmh4VFk/zt4aoiWW1SrnO5tQWL
+         IzYJ3Rmxe77W7L3e7OqnbZfg9/Exq3eOE/YMMbHOdl2HraDasGJyrSIdg6rCa0Yvpm94
+         U7Lmm1itfbmbRLnuKAKhfATMb4TxLrINZULUDnGpuxBVxG6DB3yUki/Vl7H8ZiSyZ8jB
+         WfbtSv4fMMOjBrRbf194dCu7EfMLtbG0hgMoHRBSkyfvbbEfv3n+BfJgbJHNsN53H9Ek
+         eFlA==
+X-Gm-Message-State: AOAM531oIwgxarrHcmOjiS1ZA8qDfQjwyIUW+mjvdxjyGPe3DqMKeyWm
+        DuVRonjFzi+8khKHeNlTVS6hQ1PqDuU=
+X-Google-Smtp-Source: ABdhPJwezDQMRyJjlJ2x54xV5sUJhYCIpJFqrqR8TiMN0dETRCHh5AGT6FWowwiRJAH+y2cy8/HYIg==
+X-Received: by 2002:a5d:660d:: with SMTP id n13mr9515562wru.308.1601121322592;
+        Sat, 26 Sep 2020 04:55:22 -0700 (PDT)
+Received: from [172.16.20.20] ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id c14sm6350811wrm.64.2020.09.26.04.55.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 26 Sep 2020 04:55:22 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.15\))
 Subject: Re: Deadlock under load with Linux 5.9 and other recent kernels
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        linux-block@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-amlogic@lists.infradead.org
-Cc:     furkan@fkardame.com, Brad Harper <bjharper@gmail.com>
+From:   Christian Hewitt <christianshewitt@gmail.com>
+In-Reply-To: <4a51f6d8-486b-73ee-0585-f2154aa90a83@kernel.dk>
+Date:   Sat, 26 Sep 2020 15:55:20 +0400
+Cc:     linux-block@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, furkan@fkardame.com,
+        Brad Harper <bjharper@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <EE8C801E-0AD8-43E2-9C65-92CD512904BE@gmail.com>
 References: <5878AC01-8A1B-4F39-B4BD-BDDEFAECFAA2@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <4a51f6d8-486b-73ee-0585-f2154aa90a83@kernel.dk>
-Date:   Sat, 26 Sep 2020 04:51:40 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <5878AC01-8A1B-4F39-B4BD-BDDEFAECFAA2@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+ <4a51f6d8-486b-73ee-0585-f2154aa90a83@kernel.dk>
+To:     Jens Axboe <axboe@kernel.dk>
+X-Mailer: Apple Mail (2.3445.104.15)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/26/20 1:55 AM, Christian Hewitt wrote:
-> I am using an ARM SBC device with Amlogic S922X chip (Beelink
-> GS-King-X, an Android STB) to boot the Kodi mediacentre distro
-> LibreELEC (which I work on) although the issue is also reproducible
-> with Manjaro and Armbian on the same hardware, and with the GT-King
-> and GT-King Pro devices from the same vendor - all three devices are
-> using a common dtsi:
-> 
-> https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts
-> https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dts
-> https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts
-> https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dts/amlogic/meson-g12b-w400.dtsi
-> 
-> I have schematics for the devices, but can only share those privately
-> on request.
-> 
-> For testing I am booting LibreELEC from SD card. The box has a 4TB
-> SATA drive internally connected with a USB > SATA bridge, see dmesg:
-> http://ix.io/2yLh and I connect a USB stick with a 4GB ISO file that I
-> copy to the internal SATA drive. Within 10-20 seconds of starting the
-> copy the box deadlocks needing a hard power cycle to recover. The
-> timing of the deadlock is variable but the device _always_ deadlocks.
-> Although I am using a simple copy use-case, there are similar reports
-> in Armbian forums performing tasks like installs/updates that involve
-> I/O loads.
-> 
-> Following advice in the #linux-amlogic IRC channel I added
-> CONFIG_SOFTLOCKUP_DETECTOR and CONFIG_DETECT_HUNG_TASK and was able to
-> get output on the HDMI screen (it is not possible to connect to UART
-> pins without destroying the box case). If you advance the following
-> video frame by frame in VLC you can see the output:
-> 
-> https://www.dropbox.com/s/klvcizim8cs5lze/lockup_clip.mov?dl=0
+>=20
+> On 26 Sep 2020, at 2:51 pm, Jens Axboe <axboe@kernel.dk> wrote:
+>=20
+> On 9/26/20 1:55 AM, Christian Hewitt wrote:
+>> I am using an ARM SBC device with Amlogic S922X chip (Beelink
+>> GS-King-X, an Android STB) to boot the Kodi mediacentre distro
+>> LibreELEC (which I work on) although the issue is also reproducible
+>> with Manjaro and Armbian on the same hardware, and with the GT-King
+>> and GT-King Pro devices from the same vendor - all three devices are
+>> using a common dtsi:
+>>=20
+>> =
+https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dt=
+s/amlogic/meson-g12b-gsking-x.dts
+>> =
+https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dt=
+s/amlogic/meson-g12b-gtking-pro.dts
+>> =
+https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dt=
+s/amlogic/meson-g12b-gtking.dts
+>> =
+https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dt=
+s/amlogic/meson-g12b-w400.dtsi
+>>=20
+>> I have schematics for the devices, but can only share those privately
+>> on request.
+>>=20
+>> For testing I am booting LibreELEC from SD card. The box has a 4TB
+>> SATA drive internally connected with a USB > SATA bridge, see dmesg:
+>> http://ix.io/2yLh and I connect a USB stick with a 4GB ISO file that =
+I
+>> copy to the internal SATA drive. Within 10-20 seconds of starting the
+>> copy the box deadlocks needing a hard power cycle to recover. The
+>> timing of the deadlock is variable but the device _always_ deadlocks.
+>> Although I am using a simple copy use-case, there are similar reports
+>> in Armbian forums performing tasks like installs/updates that involve
+>> I/O loads.
+>>=20
+>> Following advice in the #linux-amlogic IRC channel I added
+>> CONFIG_SOFTLOCKUP_DETECTOR and CONFIG_DETECT_HUNG_TASK and was able =
+to
+>> get output on the HDMI screen (it is not possible to connect to UART
+>> pins without destroying the box case). If you advance the following
+>> video frame by frame in VLC you can see the output:
+>>=20
+>> https://www.dropbox.com/s/klvcizim8cs5lze/lockup_clip.mov?dl=3D0
+>=20
+> Try with this patch:
+>=20
+> =
+https://lore.kernel.org/linux-block/20200925191902.543953-1-shakeelb@googl=
+e.com/
 
-Try with this patch:
+It still locks up approx. 25 seconds into the copy operation. Here=E2=80=99=
+s the output in video again (a little blurry):
 
-https://lore.kernel.org/linux-block/20200925191902.543953-1-shakeelb@google.com/
+https://www.dropbox.com/s/3j2czaq509arg6g/lockup_clip2.mov?dl=3D0
 
--- 
-Jens Axboe
-
+Christian=
