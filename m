@@ -2,118 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBBB279821
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 11:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF9527989A
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Sep 2020 12:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729022AbgIZJNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Sep 2020 05:13:40 -0400
-Received: from lan.nucleusys.com ([92.247.61.126]:33728 "EHLO
-        zztop.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725208AbgIZJNj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Sep 2020 05:13:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=nucleusys.com; s=x; h=Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=f5+2fG3fJDSIkP7ccDc5Wy5l42PYi/rcGVgvffhEsFc=; b=lvZOtjwX182RgO+Yq0ezB54WkZ
-        mrQXdgMHMN/YiyDz0dzuM/6zS1afAhaDfSpZuhURl0J4pAZOcZWVx7kAk6iNh/Xs5ZRiFZGIpV+Eu
-        9FEj/VzBFXwGNwRt0vsd3dBVKAvXlEkq9AWptNOEnLbJ17Xaj0Zte0e2/S8jrb4prG6g=;
-Received: from [94.26.108.4] (helo=karbon.lan)
-        by zztop.nucleusys.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <petkan@nucleusys.com>)
-        id 1kM6Gu-0003As-TI; Sat, 26 Sep 2020 12:13:37 +0300
-From:   Petko Manolov <petkan@nucleusys.com>
-To:     oneukum@suse.com
-Cc:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org,
-        Petko Manolov <petko.manolov@konsulko.com>
-Subject: [PATCH v3 2/2] net: rtl8150: Use the new usb control message API.
-Date:   Sat, 26 Sep 2020 12:13:27 +0300
-Message-Id: <20200926091327.8021-3-petkan@nucleusys.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200926091327.8021-1-petkan@nucleusys.com>
-References: <20200923134348.23862-9-oneukum@suse.com>
- <20200926091327.8021-1-petkan@nucleusys.com>
+        id S1726309AbgIZKvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Sep 2020 06:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726183AbgIZKvn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Sep 2020 06:51:43 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2D6C0613D3
+        for <linux-usb@vger.kernel.org>; Sat, 26 Sep 2020 03:51:42 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id f1so679267plo.13
+        for <linux-usb@vger.kernel.org>; Sat, 26 Sep 2020 03:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Erv0okPrqcm4hiPfazJ3B+MEgGbrmkvfiAwUSBMTHes=;
+        b=YfemzFvwe1AUIq1uBazHfToqDWIuf2mqgxJ2LU1hQxwGCiJqts77x+ngut+gKDqhyu
+         L0jV/If4cXfKQgI7ofmQQtAASru2NifOZd2OyX48v5BGSlzEhQZc31S2AhbYotm0THAo
+         EnrPESbJ1zEL+w9o8+2tkV9jWWrpDUr6/KCW49HHdbIO62g8Ab/dTtniiVi/JUANGaNK
+         Lrn+ye0CnzQS7a2YmpA+hU/1/cq5tj4KQ88CaZyfGIx7IDfvnEBB1XzTCVrMXB5aBgGJ
+         5Cuqx87fw4us0mVuVmRuuBqnVrp12zGKKKdOgHIcdOKk+It1htLYK11CkzUjZhbgjykB
+         FzEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Erv0okPrqcm4hiPfazJ3B+MEgGbrmkvfiAwUSBMTHes=;
+        b=CgNFrklduVhxa+msPuU/7WQKL3I91H19ElMWx2QA645EJq/EL10CrdUmoEVfkx8tqO
+         +ayGVNHu+Mqh/wJY1D29EA7q/1KAISLqZ6QhQnHidPnWfT10SjYy5v1BcMbtrt69wvC7
+         c+v+EsFn25w4deXeybQX4BlT/hn15qwcdRYMnmz4KMMMLOnqqqK42a6AMYTrw44DkmRL
+         3Ja98+ikwXuB9qty3YVQtYo+k8Sh/OgtMwTz02BSRfEU/n444S4E3juEjcEJpkAS7vVG
+         j4VAHCbbIBLjmG8Mn4ciGtJeL+kjQqrsVIHLKjh0TT0tJsHCxmrVbQXUdmIrkibiuWVP
+         BYmg==
+X-Gm-Message-State: AOAM533F2VyiJDEXZOE1kQbZdP9YTP2BkpIX7mUUGA3eDwjbZo/cGEp1
+        aDpFo62wMUGqis3+iQDRMbWNMA==
+X-Google-Smtp-Source: ABdhPJyMU8iWdKoFGvrBKhvoBnMIbxxzkFSzD5yj9YM1Q2QfdUWp4vx7kR8Mt1Q+SkQai4c6OUnaSw==
+X-Received: by 2002:a17:90a:9708:: with SMTP id x8mr1666114pjo.213.1601117502248;
+        Sat, 26 Sep 2020 03:51:42 -0700 (PDT)
+Received: from [192.168.1.134] ([66.219.217.173])
+        by smtp.gmail.com with ESMTPSA id w185sm5619297pfc.36.2020.09.26.03.51.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Sep 2020 03:51:41 -0700 (PDT)
+Subject: Re: Deadlock under load with Linux 5.9 and other recent kernels
+To:     Christian Hewitt <christianshewitt@gmail.com>,
+        linux-block@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-amlogic@lists.infradead.org
+Cc:     furkan@fkardame.com, Brad Harper <bjharper@gmail.com>
+References: <5878AC01-8A1B-4F39-B4BD-BDDEFAECFAA2@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <4a51f6d8-486b-73ee-0585-f2154aa90a83@kernel.dk>
+Date:   Sat, 26 Sep 2020 04:51:40 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Report: Spam detection software, running on the system "zztop.nucleusys.com",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  From: Petko Manolov <petko.manolov@konsulko.com> The old usb_control_msg()
-    let the caller handle the error and also did not account for partial reads.
-    Since these are now considered harmful, move the driver over to usb_control_msg_recv/send()
-    calls. 
- Content analysis details:   (-1.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+In-Reply-To: <5878AC01-8A1B-4F39-B4BD-BDDEFAECFAA2@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Petko Manolov <petko.manolov@konsulko.com>
+On 9/26/20 1:55 AM, Christian Hewitt wrote:
+> I am using an ARM SBC device with Amlogic S922X chip (Beelink
+> GS-King-X, an Android STB) to boot the Kodi mediacentre distro
+> LibreELEC (which I work on) although the issue is also reproducible
+> with Manjaro and Armbian on the same hardware, and with the GT-King
+> and GT-King Pro devices from the same vendor - all three devices are
+> using a common dtsi:
+> 
+> https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts
+> https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dts
+> https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts
+> https://github.com/chewitt/linux/blob/amlogic-5.9-integ/arch/arm64/boot/dts/amlogic/meson-g12b-w400.dtsi
+> 
+> I have schematics for the devices, but can only share those privately
+> on request.
+> 
+> For testing I am booting LibreELEC from SD card. The box has a 4TB
+> SATA drive internally connected with a USB > SATA bridge, see dmesg:
+> http://ix.io/2yLh and I connect a USB stick with a 4GB ISO file that I
+> copy to the internal SATA drive. Within 10-20 seconds of starting the
+> copy the box deadlocks needing a hard power cycle to recover. The
+> timing of the deadlock is variable but the device _always_ deadlocks.
+> Although I am using a simple copy use-case, there are similar reports
+> in Armbian forums performing tasks like installs/updates that involve
+> I/O loads.
+> 
+> Following advice in the #linux-amlogic IRC channel I added
+> CONFIG_SOFTLOCKUP_DETECTOR and CONFIG_DETECT_HUNG_TASK and was able to
+> get output on the HDMI screen (it is not possible to connect to UART
+> pins without destroying the box case). If you advance the following
+> video frame by frame in VLC you can see the output:
+> 
+> https://www.dropbox.com/s/klvcizim8cs5lze/lockup_clip.mov?dl=0
 
-The old usb_control_msg() let the caller handle the error and also did not
-account for partial reads.  Since these are now considered harmful, move the
-driver over to usb_control_msg_recv/send() calls.
+Try with this patch:
 
-Signed-off-by: Petko Manolov <petko.manolov@konsulko.com>
----
- drivers/net/usb/rtl8150.c | 32 ++++++--------------------------
- 1 file changed, 6 insertions(+), 26 deletions(-)
+https://lore.kernel.org/linux-block/20200925191902.543953-1-shakeelb@google.com/
 
-diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
-index 733f120c852b..b3a0b188b1a1 100644
---- a/drivers/net/usb/rtl8150.c
-+++ b/drivers/net/usb/rtl8150.c
-@@ -152,36 +152,16 @@ static const char driver_name [] = "rtl8150";
- */
- static int get_registers(rtl8150_t * dev, u16 indx, u16 size, void *data)
- {
--	void *buf;
--	int ret;
--
--	buf = kmalloc(size, GFP_NOIO);
--	if (!buf)
--		return -ENOMEM;
--
--	ret = usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
--			      RTL8150_REQ_GET_REGS, RTL8150_REQT_READ,
--			      indx, 0, buf, size, 500);
--	if (ret > 0 && ret <= size)
--		memcpy(data, buf, ret);
--	kfree(buf);
--	return ret;
-+	return usb_control_msg_recv(dev->udev, 0, RTL8150_REQ_GET_REGS,
-+				    RTL8150_REQT_READ, indx, 0, data, size,
-+				    1000, GFP_NOIO);
- }
- 
- static int set_registers(rtl8150_t * dev, u16 indx, u16 size, const void *data)
- {
--	void *buf;
--	int ret;
--
--	buf = kmemdup(data, size, GFP_NOIO);
--	if (!buf)
--		return -ENOMEM;
--
--	ret = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
--			      RTL8150_REQ_SET_REGS, RTL8150_REQT_WRITE,
--			      indx, 0, buf, size, 500);
--	kfree(buf);
--	return ret;
-+	return usb_control_msg_send(dev->udev, 0, RTL8150_REQ_SET_REGS,
-+				    RTL8150_REQT_WRITE, indx, 0, data, size,
-+				    1000, GFP_NOIO);
- }
- 
- static void async_set_reg_cb(struct urb *urb)
 -- 
-2.28.0
+Jens Axboe
 
