@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D3527A38F
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Sep 2020 22:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC77727A386
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Sep 2020 22:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727094AbgI0UAV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Sep 2020 16:00:21 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:42202 "EHLO
+        id S1727365AbgI0T7r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Sep 2020 15:59:47 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:41642 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726420AbgI0T5i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Sep 2020 15:57:38 -0400
-Message-Id: <20200927194922.245750969@linutronix.de>
+        with ESMTP id S1727028AbgI0T6D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Sep 2020 15:58:03 -0400
+Message-Id: <20200927194922.722439719@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1601236655;
+        s=2020; t=1601236661;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=Fz/Y8tdPmcPxNZ39xs6OXP7t7GmeJEA09IH+iG5eqPY=;
-        b=tqeU52EO2XBZK/ddxUU5a112arkeHUUJxxE9PSVyDXEDKqBLkWy/SqNPHHwWYyb3sGz1JZ
-        lGkGMNhtwBDXIrEFaClRwhU7/O0vbRat1U/HPln4Q+oDTdQQBOI3q84qp9pf16Ab5g85pJ
-        QlJCaUVOiCLDkYSh2yx2xZN5Noqozpd/Li1JhhqRUGYrArnUjtd0jKAyZYEFp/ajaRPpJD
-        eyOmp0cGo2JKISaMxw/wevnANPyTs9dg/RX9PVhj7eacVPKFmZJwmM2GFlq7wE8TYP6JWV
-        eiML7z2T/jG7bgMjXY9Xv+i/fNSvkYhHG+xKystktSgzm9NEOxUntE/v+kEGnQ==
+        bh=WvKjADYjqlirQWpKFkh9jiGNfOCHnSN3m3D0jVUtW0s=;
+        b=XwDPR8KfhhwdgM2h3NXTwz7S032tPQFhsINIdBsrnxyP9xEIwf9JmvxDxIDGkwJhi4fwsG
+        4jvQ/uRtX1vttmdiFbJHm4ezHJNt3bCShDxDaUvSfhBTOm/RkxdeJVnW88dvf9PLLy3OGo
+        vHOr6TBL43ji8aWZNzBoqQJ7OgeTmJ6wp0xFDunenDs+jppIUe4HkFoOgH18K249SYQ6Q3
+        IWsmuizwOoi5ttWgeDOX5I8Zx/OXCLtPXYxotFDSoT8DgXcpWS3+FaUaj2sj338D7H8uqH
+        sT5fHF8WghHkzuK7LQdE7N0LB1JjJR2LsCP5jhxjNwP7oDBbC6vFq6II02AmnA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1601236655;
+        s=2020e; t=1601236661;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=Fz/Y8tdPmcPxNZ39xs6OXP7t7GmeJEA09IH+iG5eqPY=;
-        b=wKmY7sgdpiakGLwk3efR391mD4s4Ls4MU5X6793GEBWur5GfvH8AeOH68vsN1rg1N5GERz
-        9mCHkioqeemMDuAw==
-Date:   Sun, 27 Sep 2020 21:49:10 +0200
+        bh=WvKjADYjqlirQWpKFkh9jiGNfOCHnSN3m3D0jVUtW0s=;
+        b=5eiMnruQvx3MYP7nVlqCqSPo+NiHBVbHE0sWnKSIYRXN5H1WKNKQKtiPGb9iUFiHaZTWcN
+        op8hWZ7x4vBnp6Dg==
+Date:   Sun, 27 Sep 2020 21:49:15 +0200
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -39,17 +39,10 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Paul McKenney <paulmck@kernel.org>,
         Matthew Wilcox <willy@infradead.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
+        Jouni Malinen <j@w1.fi>, Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        brcm80211-dev-list@cypress.com, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
         Christian Benvenuti <benve@cisco.com>,
         Govindarajulu Varadarajan <_govind@gmx.com>,
         Dave Miller <davem@davemloft.net>,
@@ -74,20 +67,26 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Jon Mason <jdmason@kudzu.us>, Daniel Drake <dsd@gentoo.org>,
         Ulrich Kunitz <kune@deine-taler.de>, linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        brcm80211-dev-list@cypress.com,
         Stanislav Yakovlev <stas.yakovlev@gmail.com>,
         Stanislaw Gruszka <stf_xl@wp.pl>,
         Johannes Berg <johannes.berg@intel.com>,
         Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
         Luca Coelho <luciano.coelho@intel.com>,
         Intel Linux Wireless <linuxwifi@intel.com>,
-        Jouni Malinen <j@w1.fi>,
         Amitkumar Karwar <amitkarwar@gmail.com>,
         Ganapathi Bhat <ganapathi.bhat@nxp.com>,
         Xinming Hu <huxinming820@gmail.com>,
         libertas-dev@lists.infradead.org,
         Pascal Terjan <pterjan@google.com>,
         Ping-Ke Shih <pkshih@realtek.com>
-Subject: [patch 24/35] net: brcmfmac: Replace in_interrupt()
+Subject: [patch 29/35] net: hostap: Remove in_interrupt() usage
 References: <20200927194846.045411263@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -98,82 +97,64 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-brcmf_sdio_isr() is using in_interrupt() to distinguish if it is called
-from a interrupt service routine or from a worker thread.
+in_interrupt() is ill defined and does not provide what the name
+suggests. The usage especially in driver code is deprecated and a tree wide
+effort to clean up and consolidate the (ab)usage of in_interrupt() and
+related checks is happening.
 
-Passing such information from the calling context is preferred and
-requested by Linus, so add an argument `in_isr' to brcmf_sdio_isr() and let
-the callers pass the information about the calling context.
+hfa384x_cmd() and prism2_hw_reset() check in_interrupt() at function entry
+and if true emit a printk at debug loglevel and return. This is clearly debug
+code.
+
+Both functions invoke functions which can sleep. These functions already
+have appropriate debug checks which cover all invalid contexts, while
+in_interrupt() fails to detect context which just has preemption or
+interrupts disabled.
+
+Remove both checks as they are incomplete, debug only and already covered
+by the subsequently invoked functions properly. If called from invalid
+context the resulting back trace is definitely more helpful to analyze the
+problem than a printk at debug loglevel.
 
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Arend van Spriel <arend.vanspriel@broadcom.com>
-Cc: Franky Lin <franky.lin@broadcom.com>
-Cc: Hante Meuleman <hante.meuleman@broadcom.com>
-Cc: Chi-Hsien Lin <chi-hsien.lin@cypress.com>
-Cc: Wright Feng <wright.feng@cypress.com>
+Cc: Jouni Malinen <j@w1.fi>
 Cc: Kalle Valo <kvalo@codeaurora.org>
 Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Jakub Kicinski <kuba@kernel.org>
 Cc: linux-wireless@vger.kernel.org
-Cc: brcm80211-dev-list.pdl@broadcom.com
-Cc: brcm80211-dev-list@cypress.com
 Cc: netdev@vger.kernel.org
----
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c |    4 ++--
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c   |    4 ++--
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.h   |    2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
 
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-@@ -73,7 +73,7 @@ static irqreturn_t brcmf_sdiod_oob_irqha
- 		sdiodev->irq_en = false;
- 	}
+---
+ drivers/net/wireless/intersil/hostap/hostap_hw.c |   12 ------------
+ 1 file changed, 12 deletions(-)
+
+--- a/drivers/net/wireless/intersil/hostap/hostap_hw.c
++++ b/drivers/net/wireless/intersil/hostap/hostap_hw.c
+@@ -320,12 +320,6 @@ static int hfa384x_cmd(struct net_device
+ 	iface = netdev_priv(dev);
+ 	local = iface->local;
  
--	brcmf_sdio_isr(sdiodev->bus);
-+	brcmf_sdio_isr(sdiodev->bus, true);
+-	if (in_interrupt()) {
+-		printk(KERN_DEBUG "%s: hfa384x_cmd called from interrupt "
+-		       "context\n", dev->name);
+-		return -1;
+-	}
+-
+ 	if (local->cmd_queue_len >= HOSTAP_CMD_QUEUE_MAX_LEN) {
+ 		printk(KERN_DEBUG "%s: hfa384x_cmd: cmd_queue full\n",
+ 		       dev->name);
+@@ -1560,12 +1554,6 @@ static void prism2_hw_reset(struct net_d
+ 	iface = netdev_priv(dev);
+ 	local = iface->local;
  
- 	return IRQ_HANDLED;
- }
-@@ -85,7 +85,7 @@ static void brcmf_sdiod_ib_irqhandler(st
+-	if (in_interrupt()) {
+-		printk(KERN_DEBUG "%s: driver bug - prism2_hw_reset() called "
+-		       "in interrupt context\n", dev->name);
+-		return;
+-	}
+-
+ 	if (local->hw_downloading)
+ 		return;
  
- 	brcmf_dbg(INTR, "IB intr triggered\n");
- 
--	brcmf_sdio_isr(sdiodev->bus);
-+	brcmf_sdio_isr(sdiodev->bus, false);
- }
- 
- /* dummy handler for SDIO function 2 interrupt */
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
-@@ -3625,7 +3625,7 @@ void brcmf_sdio_trigger_dpc(struct brcmf
- 	}
- }
- 
--void brcmf_sdio_isr(struct brcmf_sdio *bus)
-+void brcmf_sdio_isr(struct brcmf_sdio *bus, bool in_isr)
- {
- 	brcmf_dbg(TRACE, "Enter\n");
- 
-@@ -3636,7 +3636,7 @@ void brcmf_sdio_isr(struct brcmf_sdio *b
- 
- 	/* Count the interrupt call */
- 	bus->sdcnt.intrcount++;
--	if (in_interrupt())
-+	if (in_isr)
- 		atomic_set(&bus->ipend, 1);
- 	else
- 		if (brcmf_sdio_intr_rstatus(bus)) {
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.h
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.h
-@@ -372,7 +372,7 @@ int brcmf_sdiod_remove(struct brcmf_sdio
- 
- struct brcmf_sdio *brcmf_sdio_probe(struct brcmf_sdio_dev *sdiodev);
- void brcmf_sdio_remove(struct brcmf_sdio *bus);
--void brcmf_sdio_isr(struct brcmf_sdio *bus);
-+void brcmf_sdio_isr(struct brcmf_sdio *bus, bool in_isr);
- 
- void brcmf_sdio_wd_timer(struct brcmf_sdio *bus, bool active);
- void brcmf_sdio_wowl_config(struct device *dev, bool enabled);
 
