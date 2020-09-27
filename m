@@ -2,229 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD8F280114
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Oct 2020 16:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6D328035E
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Oct 2020 17:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732478AbgJAOOE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Oct 2020 10:14:04 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37454 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732498AbgJAONW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Oct 2020 10:13:22 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 789CE29C616
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Subject: Re: xhci problem -> general protection fault
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Ross Zwisler <zwisler@google.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel@collabora.com" <kernel@collabora.com>
-References: <65ac3a73-ca57-c3e8-561b-9ba5c15b3c65@collabora.com>
- <a6364bd9-58d9-e66e-5595-7d887a8f3fc9@linux.intel.com>
- <8230c2a2-719c-ef81-e85d-5921bf8e98e6@collabora.com>
- <133c123e-e857-7f83-d146-f39c00afe39f@linux.intel.com>
- <20200925210517.GA4487@google.com>
- <5ec81b1e-2139-7fb9-f08e-240309ca5ccd@collabora.com>
- <501d5a6c-0588-1d0b-17cd-7544932f72a4@linux.intel.com>
-Message-ID: <28500bf0-0ab2-1b49-7e02-96a395a24c15@collabora.com>
-Date:   Thu, 1 Oct 2020 16:13:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1732685AbgJAP64 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Oct 2020 11:58:56 -0400
+Received: from smtprelay0105.hostedemail.com ([216.40.44.105]:43406 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732119AbgJAP6z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Oct 2020 11:58:55 -0400
+X-Greylist: delayed 4252 seconds by postgrey-1.27 at vger.kernel.org; Thu, 01 Oct 2020 11:58:55 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id F2F3218026B0E
+        for <linux-usb@vger.kernel.org>; Sun, 27 Sep 2020 20:22:20 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 12720100E7B40;
+        Sun, 27 Sep 2020 20:22:19 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:967:968:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2393:2525:2560:2563:2682:2685:2693:2828:2859:2892:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4250:4321:5007:6742:6743:7903:9025:10004:10400:10848:11232:11658:11914:12043:12297:12555:12740:12760:12895:12986:13069:13311:13357:13439:14096:14097:14181:14659:14721:21080:21433:21627:21987:30012:30054:30055:30075:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: guide09_05122ab2717b
+X-Filterd-Recvd-Size: 3897
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf10.hostedemail.com (Postfix) with ESMTPA;
+        Sun, 27 Sep 2020 20:22:11 +0000 (UTC)
+Message-ID: <c7a5fd123e3c634ce0bbac9abb4ae32c8c67e0c6.camel@perches.com>
+Subject: Re: [patch 00/35] net: in_interrupt() cleanup and fixes
+From:   Joe Perches <joe@perches.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Govindarajulu Varadarajan <_govind@gmx.com>,
+        Dave Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-doc@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Solarflare linux maintainers <linux-net-drivers@solarflare.com>,
+        Edward Cree <ecree@solarflare.com>,
+        Martin Habets <mhabets@solarflare.com>,
+        Jon Mason <jdmason@kudzu.us>, Daniel Drake <dsd@gentoo.org>,
+        Ulrich Kunitz <kune@deine-taler.de>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        brcm80211-dev-list@cypress.com,
+        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Jouni Malinen <j@w1.fi>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi.bhat@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        libertas-dev@lists.infradead.org,
+        Pascal Terjan <pterjan@google.com>,
+        Ping-Ke Shih <pkshih@realtek.com>
+Date:   Sun, 27 Sep 2020 13:22:10 -0700
+In-Reply-To: <20200927194846.045411263@linutronix.de>
+References: <20200927194846.045411263@linutronix.de>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <501d5a6c-0588-1d0b-17cd-7544932f72a4@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+On Sun, 2020-09-27 at 21:48 +0200, Thomas Gleixner wrote:
+> Folks,
+> 
+> in the discussion about preempt count consistency accross kernel configurations:
+> 
+>   https://lore.kernel.org/r/20200914204209.256266093@linutronix.de/
+> 
+> Linus clearly requested that code in drivers and libraries which changes
+> behaviour based on execution context should either be split up so that
+> e.g. task context invocations and BH invocations have different interfaces
+> or if that's not possible the context information has to be provided by the
+> caller which knows in which context it is executing.
+> 
+> This includes conditional locking, allocation mode (GFP_*) decisions and
+> avoidance of code paths which might sleep.
 
-W dniu 29.09.2020 o 09:13, Mathias Nyman pisze:
-> Hi
-> 
-> On 28.9.2020 16.32, Andrzej Pietrasiewicz wrote:
->> Hi Ross, hi Mathias,
->>
->> W dniu 25.09.2020 o 23:05, Ross Zwisler pisze:
->>> On Fri, Sep 25, 2020 at 04:40:29PM +0300, Mathias Nyman wrote:
->>>> On 18.9.2020 17.20, Andrzej Pietrasiewicz wrote:
->>>>> Hi Mathias,
->>>>>
->>>>> W dniu 18.09.2020 o 12:50, Mathias Nyman pisze:
->>>>>> On 17.9.2020 18.30, Andrzej Pietrasiewicz wrote:
->>>>>>> Dear All,
->>>>>>>
->>>>>>> I have encountered a problem in xhci which leads to general protection fault.
->>>>>>>
->>>>>>> The problem is triggered by running this program:
->>>>>>>
->>>>>>> https://gitlab.collabora.com/andrzej.p/bulk-cancel.git
->>>>>>>
->>>>>>> $ sudo ./bulk-cancel -D /dev/bus/usb/002/006 -i 1 -b 1
->>>>>>>
->>>>>>> where /dev/bus/usb/002/006 is a Gadget Zero:
->>>>>>>
->>>>>>> It takes less than a minute until the crash happens.
->>>>>>> The DMAR (iommu) errors don't happen always, i.e. there are crashes
->>>>>>> when they are not reported in the system log. In either case the
->>>>>>>
->>>>>>> "WARN Cannot submit Set TR Deq Ptr"
->>>>>>> "A Set TR Deq Ptr command is pending."
->>>>>>> "WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state."
->>>>>>>
->>>>>>> messages do appear.
->>>>>>>
->>>>>>
->>>>>> Nice testcase and report, thanks.
->>>>>>
->>>>>> I started looking at issues in this area some time ago, and wrote a couple patches but
->>>>>> it was left hanging. The two patches (now rebased on 5.9-rc3) can be found in my tree in the
->>>>>> fix_invalid_context_at_stop_endpoint branch
->>>>>>
->>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_invalid_context_at_stop_endpoint
->>>>>>
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=fix_invalid_context_at_stop_endpoint
->>>>>>
->>>>>> If you could give those a try and see if they help I'd be grateful.
->>>>>
->>>>> No, it doesn't help, albeit the errors are slightly different:
->>>>>
->>>>> xhci_hcd 0000:00:14.0: WARN Cannot submit Set TR Deq Ptr
->>>>> xhci_hcd 0000:00:14.0: A Set TR Deq Ptr command is pending.
->>>>> dmar_fault: 44 callbacks suppressed
->>>>> DRHD: handling fault status reg 3> DMAR: [DMA Write] Request device [00:14.0] PASID ffffffff fault addr ffcda000 [fault reason 05] PTE Write access is not set
->>>>> DMAR: DRHD: handling fault status reg 3
->>>>
->>>> Ok, thanks, the DMA problems make sense to me now.
->>>>
->>>> If a transfer ring stops on a transfer request (TRB) that should be canceled (manual cancel,
->>>> or error) it's not enough to just turn the  TRB to a no-op.
->>>> HW has most likely cached the TRB, and we need to move the transfer ring dequeue pointer past this TRB.
->>>> Moving deq also clears controller cache.
->>>>
->>>> We do all this, but if we fail to queue the Set TR Deq command the TRB (with DMA  pointers) will stay on the ring,
->>>> and controller will access the TRB DMA  address once it continues running. At this point xhci driver has already
->>>> given back the canceled/erroneous TRB, and is probably unmapped already.
->>>> Hence the DMAR entries.
->>>>
->>>> Looks like this part of the code needs a more extensive rewrite, on top of this we are not handling
->>>> races between endpoints halted due errors, and endpoints stopped by driver to cancel URBs.
->>>>
->>>> -Mathias
->>>
->>> I'm chasing a similar problem which is also most easily reproduced using
->>> Andrzej's bulk-cancel program, though we have seen it in the field many times
->>> as well with normal usage.
->>>
->>> The symptom is that we get the following errors in dmesg:
->>>
->>>    xhci_hcd 0000:00:14.0: Mismatch between completed Set TR Deq Ptr command & xHCI internal state.
->>>    xhci_hcd 0000:00:14.0: ep deq seg = 000000001141d6a0, deq ptr = 00000000ebd28dcf
->>>    xhci_hcd 0000:00:14.0: WARNING: Host System Error
->>>    DMAR: DRHD: handling fault status reg 2
->>>    DMAR: [DMA Read] Request device [00:14.0] PASID ffffffff fault addr 0 [fault reason 06] PTE Read access is not set
->>>    xhci_hcd 0000:00:14.0: xHCI host not responding to stop endpoint command.
->>>    xhci_hcd 0000:00:14.0: USBSTS: HCHalted HSE EINT
->>>    xhci_hcd 0000:00:14.0: xHCI host controller not responding, assume dead
->>>    xhci_hcd 0000:00:14.0: HC died; cleaning up
->>>
->>> The xhci USB stack loses all attached devices, and on my system at least has
->>> only been recoverable by rebooting.
->>>
->>> Full dmesg and trace after 'echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable'
->>> can be found here:
->>>
->>> https://gist.github.com/rzwisler/531b926e3d160609ead371c23fc15b55
->>> https://gist.github.com/rzwisler/4621f805737993fec30b5ae23bfd8289
->>>
->>> One interesting bit from the trace is that we observe the ep_ctx->deq pointer
->>> being 0 in xhci_handle_cmd_set_deq():
->>>
->>>    xhci_inc_enq: CMD 000000000b6352e0: enq 0x00000000ffffe0c0(0x00000000ffffe000) deq 0x00000000ffffe090(0x00000000ffffe000) segs 1 stream 0 free_trbs 251 bounce 0 cycle 0
->>>    xhci_ring_host_doorbell: Ring doorbell for Command Ring 0
->>>    xhci_urb_giveback: ep7in-bulk: urb 000000003c80b7a8 pipe 3221455744 slot 2 length 0/256 sgs 0/0 stream 0 flags 00010200
->>>    xhci_inc_deq: CMD 000000000b6352e0: enq 0x00000000ffffe0c0(0x00000000ffffe000) deq 0x00000000ffffe0a0(0x00000000ffffe000) segs 1 stream 0 free_trbs 252 bounce 0 cycle 0
->>>    xhci_inc_deq: EVENT 00000000b5c6e6a2: enq 0x00000000ffffc000(0x00000000ffffc000) deq 0x00000000ffffc1b0(0x00000000ffffc000) segs 1 stream 0 free_trbs 254 bounce 0 cycle 1
->>>    xhci_handle_event: EVENT: TRB 00000000ffffe0a0 status 'Success' len 0 slot 4 ep 0 type 'Command Completion Event' flags e:C
->>>    xhci_handle_command: CMD: Set TR Dequeue Pointer Command: deq 00000000fff296a1 stream 0 slot 4 ep 3 flags c
->>>    xhci_handle_cmd_set_deq: RS 00000 full-speed Ctx Entries 15 MEL 0 us Port# 13/0 [TT Slot 0 Port# 0 TTT 0 Intr 0] Addr 4 State configured
->>>    xhci_handle_cmd_set_deq_ep: State stopped mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk IN burst 0 maxp 64 deq 0000000000000000 avg trb len 0
->>>                                                                        ^^^^^^^^^^^^^^^^^^^^
->>>    xhci_dbg_cancel_urb: Successful Set TR Deq Ptr cmd, deq = @00000000
->>>                               ^^^^^^^^^^^^^^^
->>>
->>> In successful completions they are real values:
->>>
->>>    xhci_ring_ep_doorbell: Ring doorbell for Slot 4 ep1in
->>>    xhci_inc_deq: CMD 000000000b6352e0: enq 0x00000000ffffe0c0(0x00000000ffffe000) deq 0x00000000ffffe0b0(0x00000000ffffe000) segs 1 stream 0 free_trbs 253 bounce 0 cycle 0
->>>    xhci_inc_deq: EVENT 00000000b5c6e6a2: enq 0x00000000ffffc000(0x00000000ffffc000) deq 0x00000000ffffc1c0(0x00000000ffffc000) segs 1 stream 0 free_trbs 254 bounce 0 cycle 1
->>>    xhci_handle_event: EVENT: TRB 00000000ffffe0b0 status 'Success' len 0 slot 2 ep 0 type 'Command Completion Event' flags e:C
->>>    xhci_handle_command: CMD: Set TR Dequeue Pointer Command: deq 00000000fff86551 stream 0 slot 2 ep 15 flags c
->>>    xhci_handle_cmd_set_deq: RS 00000 full-speed Ctx Entries 15 MEL 0 us Port# 11/0 [TT Slot 0 Port# 0 TTT 0 Intr 0] Addr 2 State configured
->>>    xhci_handle_cmd_set_deq_ep: State stopped mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk IN burst 0 maxp 16 deq 00000000fff86551 avg trb len 0
->>>                                                                        ^^^^^^^^^^^^^^^^^^^^
->>>    xhci_dbg_cancel_urb: Successful Set TR Deq Ptr cmd, deq = @fff86550
->>>                               ^^^^^^^^^^^^^^^
->>>
->>> I've noticed that I have to have CONFIG_INTEL_IOMMU_DEFAULT_ON=y for this
->>> clean repro case, else the system still fails but I don't always (ever?) see
->>> the failure to read at address 0.
->>>
->>> Mathias, do you think that your above explanation also covers my failure case?
->>> Are we just failing to enqueue a Set TR Deq command, and the HC is processing
->>> a stale TRB?  Or does the fact that ep_ctx->deq == 0 not fit with that
->>> explanation?
->>>
->>
->>  From the logs from Ross it seems that the direct cause of the HC dying
->> is Stop Endpoint not completing and, consequently, timing out.
-> Stop endpoint command does not complete due to the 'catastrophic' HSE
-> (host system error) which stops the controller completely.
-> 
-> I'd guess the HSE is related to the zeroed dequeue pointer.
-> 
->>
->> In the xHCI spec, section "4.6.9 Stop Endpoint" we can read:
->>
->> "Note that when an endpoint is stopped, the xHC maintains the state
->> necessary to restart the last active Transfer Ring where it left off,
->> however software may not want to do this. The options are discussed below:
->>
->> 1. Temporarily Stop Transfer Ring Activity - [...]
->>
->> 2. Aborting a Transfer - If, because of a timeout or other reason, software
->> issued the Stop Endpoint Command to abort the current TD. Then the
->> Set TR Dequeue Pointer Command may be used to force the xHC to
->> dump any internal state that it has for the ring and restart activity at the
->> new Transfer Ring location specified by the Set TR Dequeue Pointer Command."
->>
->> If bulk-cancel reproducer is used then the software's intention is definitely
->> to abort a transfer, so indeed a Set TR Dequeue Pointer is needed.
->>
->> On the other hand, in that same spec, in "4.6.10 Set TR Dequeue Pointer"
->> we read:
->>
->> "This command may be executed only if the target endpoint is in the Error
->> or Stopped state."
->>
->> My question is: why in the crash scenario Ross describes "Set TR Dequeue
->> Pointer" is being carried out while Stop Endpoint has not been completed
->> (and timed out instead)?
-> 
-> Every time a URB is canceled the xhci driver will queue a "stop endpoint command"
-> if there isn't one already pending.
-> The Set TR Dequeue command you see is probably for the previous URB, while the stop is
-> for the next URB.
->   Andrzej, any change of getting traces from your case? They would tell more than just
-> the dynamic debug.
-> 
+Are these patches intended to be applied to Linus'
+tree before v5.9 is released?
 
-The problem is I am not getting any trace at all even though it is turned on,
-the system crashes before tail -f /sys/kernel/debug/tracing/trace outputs
-anything.
+This patchset will cause conflicts against -next.
 
-Andrzej
+For instance, in patch 34, RT_TRACE has already
+been removed in -next.
+
 
