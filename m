@@ -2,91 +2,269 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6771327A223
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Sep 2020 19:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F5A27A31E
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Sep 2020 22:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726280AbgI0RvV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 27 Sep 2020 13:51:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54826 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726265AbgI0RvV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 27 Sep 2020 13:51:21 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209411] New: When retrieving string descriptor from mobile
- device returns eproto error
-Date:   Sun, 27 Sep 2020 17:51:20 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: rachithas104@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-209411-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726847AbgI0T5I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Sep 2020 15:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726534AbgI0T5H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Sep 2020 15:57:07 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44057C0613CE;
+        Sun, 27 Sep 2020 12:57:07 -0700 (PDT)
+Message-Id: <20200927194846.045411263@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1601236625;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=v/905bHXbZAUFHN4XYkf18yvHZ9SD3eSQ9Y2N6Cws9U=;
+        b=kywt+2P1PWh3JALwVEbtvQDEUxZYOsU9VBW+PvkYCaatdgH3w6L9VhcXF5dZ9mOT4GFnz+
+        jVydaPXw40Rl4X7GnIGUhA3c3KFHrnwh1WpnqkvdhlsPjuEZx5iNFUJ0BhtXWg+XfyYp2u
+        tkibxf+wwx51bAUZy+PgdJ9ZV+Sfp11TDmP5FfHMLmGCvu8YJgOLMaU2wWpctMRzCPDYE8
+        hBDQQXJ70hpNwCpxUoG/YxCvIs/eXtQj6hE3aOYtAxn/yVQUvcWe96aGaDrPiupTiMPsyh
+        ADOEsaJJ4fSwakD/QjEUlOHqgJQEQQ8rGZhTLPw6O5nTPPgHBXr/HEWsSRJZ7A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1601236625;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=v/905bHXbZAUFHN4XYkf18yvHZ9SD3eSQ9Y2N6Cws9U=;
+        b=CrxMJDaRn76jSL5q41y6NFimygos/92J/EgE5e58Vr9yjn43o6RCx5mvsTqZPlkfwqbMVl
+        eeVFO+Z+9McbGMCA==
+Date:   Sun, 27 Sep 2020 21:48:46 +0200
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Govindarajulu Varadarajan <_govind@gmx.com>,
+        Dave Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-doc@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Solarflare linux maintainers <linux-net-drivers@solarflare.com>,
+        Edward Cree <ecree@solarflare.com>,
+        Martin Habets <mhabets@solarflare.com>,
+        Jon Mason <jdmason@kudzu.us>, Daniel Drake <dsd@gentoo.org>,
+        Ulrich Kunitz <kune@deine-taler.de>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        brcm80211-dev-list@cypress.com,
+        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Jouni Malinen <j@w1.fi>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi.bhat@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        libertas-dev@lists.infradead.org,
+        Pascal Terjan <pterjan@google.com>,
+        Ping-Ke Shih <pkshih@realtek.com>
+Subject: [patch 00/35] net: in_interrupt() cleanup and fixes
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209411
-
-            Bug ID: 209411
-           Summary: When retrieving string descriptor from mobile device
-                    returns eproto error
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 4.19
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: rachithas104@gmail.com
-        Regression: No
-
-I am trying to get get string descriptor from mobile phone,however when trying
-to retrieve one particular index it returns EPROTO,
-
-dev->fd, USB_DIR_IN,USB_REQ_GET_DESCRIPTOR,DESCRIPT_STRING * 256 + index,       
-                                              languageid, sizeof buf, buf);
-
-Return value is -1 for  ioctl(fd, USBDEVFS_CONTROL, &ioctl_ctrl);
-
-kernel: [ 7084.327097] usb 1-1.2: reset high-speed USB device number 12 using
-ehci-pci
-kernel: [ 7084.831056] usb 1-1.2: device not accepting address 12, error -71
-kernel: [ 7085.119075] usb 1-1.2: reset high-speed USB device number 12 using
-ehci-pci
- kernel: [ 7085.431054] usb 1-1.2: reset high-speed USB device number 12 using
-ehci-pci
-[ 7085.935069] usb 1-1.2: device not accepting address 12, error -71
-[ 7086.227132] usb 1-1.2: reset high-speed USB device number 12 using ehci-pci
-S[ 7087.321929] usb 1-1.2: usbfs: USBDEVFS_CONTROL failed cmd ctxusb rqt 128 rq
-6 len 255 ret -71
-  kernel: [ 7087.607093] usb 1-1.2: reset high-speed USB device number 12 using
-ehci-pci
-
-My URB request and without my program in picture request is same
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Rm9sa3MsCgppbiB0aGUgZGlzY3Vzc2lvbiBhYm91dCBwcmVlbXB0IGNvdW50IGNvbnNpc3RlbmN5
+IGFjY3Jvc3Mga2VybmVsIGNvbmZpZ3VyYXRpb25zOgoKICBodHRwczovL2xvcmUua2VybmVsLm9y
+Zy9yLzIwMjAwOTE0MjA0MjA5LjI1NjI2NjA5M0BsaW51dHJvbml4LmRlLwoKTGludXMgY2xlYXJs
+eSByZXF1ZXN0ZWQgdGhhdCBjb2RlIGluIGRyaXZlcnMgYW5kIGxpYnJhcmllcyB3aGljaCBjaGFu
+Z2VzCmJlaGF2aW91ciBiYXNlZCBvbiBleGVjdXRpb24gY29udGV4dCBzaG91bGQgZWl0aGVyIGJl
+IHNwbGl0IHVwIHNvIHRoYXQKZS5nLiB0YXNrIGNvbnRleHQgaW52b2NhdGlvbnMgYW5kIEJIIGlu
+dm9jYXRpb25zIGhhdmUgZGlmZmVyZW50IGludGVyZmFjZXMKb3IgaWYgdGhhdCdzIG5vdCBwb3Nz
+aWJsZSB0aGUgY29udGV4dCBpbmZvcm1hdGlvbiBoYXMgdG8gYmUgcHJvdmlkZWQgYnkgdGhlCmNh
+bGxlciB3aGljaCBrbm93cyBpbiB3aGljaCBjb250ZXh0IGl0IGlzIGV4ZWN1dGluZy4KClRoaXMg
+aW5jbHVkZXMgY29uZGl0aW9uYWwgbG9ja2luZywgYWxsb2NhdGlvbiBtb2RlIChHRlBfKikgZGVj
+aXNpb25zIGFuZAphdm9pZGFuY2Ugb2YgY29kZSBwYXRocyB3aGljaCBtaWdodCBzbGVlcC4KCklu
+IHRoZSBsb25nIHJ1biwgdXNhZ2Ugb2YgJ3ByZWVtcHRpYmxlLCBpbl8qaXJxIGV0Yy4nIHNob3Vs
+ZCBiZSBiYW5uZWQgZnJvbQpkcml2ZXIgY29kZSBjb21wbGV0ZWx5LgoKT3VyIHRlYW0gc3RhcnRl
+ZCB0byBkaWcgdGhyb3VnaCBkcml2ZXJzIGFuZCB0aGlzIGl0IHRoZSBmaXJzdCBiYXRjaCBvZgpj
+bGVhbnVwcyBpbiBkcml2ZXJzL25ldC8uIEl0J3Mgbm90IHlldCBjb21wbGV0ZSwgc28gZXhwZWN0
+IGZ1cnRoZXIgcGF0Y2hlcwppbiB0aGUgbmV4dCBkYXlzLgoKVGhlIHNlcmllcyBjb250YWluczoK
+CiAgICAtIEEgY291cGxlIG9mIGJ1ZyBmaXhlcwoKICAgIC0gUmVtb3ZhbCBvZiB0aGUgYml0cm90
+dGluZyBDQUlGIFNQSSBkcml2ZXIgd2hpY2ggaGFzIG5ldmVyIGhhZCBhCiAgICAgIG1hdGNoaW5n
+IGRyaXZlciBwcm92aWRpbmcgdGhlIG5lY2Vzc2FyeSBwbGF0Zm9ybSBkZXZpY2Ugc3VwcG9ydC4K
+CiAgICAtIFJlbW92YWwgb2YgV0FSTi9CVUcoaW5faW50ZXJydXB0KCkpIGVuIG1hc3NlIGFzIG1v
+c3Qgb2YgdGhlbSBhcmUKICAgICAgaW5jb21wbGV0ZSBiZWNhdXNlIHRoZXkgd29uJ3QgZGV0ZWN0
+IG90aGVyIG5vbi1wcmVlbXB0aWJsZQogICAgICBjb250ZXh0LiBBbGwgb2YgdGhlIGZ1bmN0aW9u
+cyB3aGljaCBoYXZlIHRoZXNlIFdBUk4vQlVHIGludm9rZSBjb3JlCiAgICAgIGNvZGUgZnVuY3Rp
+b25zIHdoaWNoIGNhbiBzbGVlcC4gVGhlc2UgaGF2ZSBwbGVudHkgb2YgY2hlY2tzIHRvIGNhdGNo
+CiAgICAgIF9hbGxfIGludmFsaWQgY29udGV4dHMuIFNvIGl0J3MgcG9pbnRsZXNzIHRvIGhhdmUg
+aW5jb21wbGV0ZSBXQVJOL0JVRwogICAgICBpbiB0aGUgZHJpdmVycy4KCiAgICAgIElmIGEgZHJp
+dmVyIHdhbnRzIHRvIGhhdmUgc3VjaCBhIGNoZWNrIGZvciBwYXJhbm9pYSByZWFzb25zLCB0aGVu
+CiAgICAgIGUuZy4gbG9ja2RlcF9hc3NlcnRfcHJlZW10aW9uX2VuYWJsZWQoKSBpcyB0aGUgcmln
+aHQgbWVjaGFuaXNtIHRvCiAgICAgIGNob3NlIGJlY2F1c2UgbG9ja2RlcCBndWFyYW50ZWVzIHRv
+IGNhdGNoIGFsbCBpbnZhbGlkIGNvbnRleHRzCiAgICAgIGluZGVwZW5kZW50IG9mIGtlcm5lbCBj
+b25maWd1cmF0aW9uIHdoaWxlIGUuZy4gcHJlZW1wdGlibGUoKSBkb2VzCiAgICAgIG5vdC4KCiAg
+ICAtIENvbnZlcnNpb24gb2YgaW5faW50ZXJydXB0KCkgY2hlY2tzIHRvIHVzZSBlaXRoZXIgZGlm
+ZmVyZW50IGZ1bmN0aW9ucwogICAgICBvciB0byBoYW5kIHRoZSBjb250ZXh0IGluZm9ybWF0aW9u
+IGluIGZyb20gdGhlIGNhbGxlci4KCiAgICAtIEZvciBzb21lIGRyaXZlcnMgaGFuZGluZyB0aGUg
+Y29udGV4dCBpbnRvIGZ1bmN0aW9ucyB3aGljaCBkZWNpZGVkCiAgICAgIGJldHdlZW4gbmV0aWZf
+cngoKSBhbmQgbmV0aWZfcnhfbmkoKSB0dXJuZWQgb3V0IHRvIGJlIGltcG9zc2libGUgZHVlCiAg
+ICAgIHRvIGxhY2sgb2YgZHJpdmVyIGtub3dsZWRnZSBhbmQgY29udm9sdXRlZCBjb2RlIHBhdGhl
+cyB3aXRoIG11bHRpcGxlCiAgICAgIGluZGlyZWN0aW9ucy4gRm9yIHRob3NlIGEgY29yZSBjb2Rl
+IGZ1bmN0aW9uIG5ldGlmX3J4X2FueV9jb250ZXh0KCkKICAgICAgaXMgcHJvdmlkZWQgd2hpY2gg
+Y29udGFpbnMgYW4gaW5faW50ZXJydXB0KCkgY2hlY2sgYXMgYSBzdG9wCiAgICAgIGdhcC4gVGhp
+cyBhbGxvd3MgdG8gbWFrZSBwcm9nZXNzIG9uIHRoZSBkcml2ZXIgc2lkZSBjbGVhbnVwIGFuZAog
+ICAgICB0aGUgZnVuY3Rpb24gc2hvdWxkIGdvIGF3YXkgb25jZSB0aGUgZHJpdmVyIHdpemFyZHMg
+aGF2ZSBmaXhlZCBpdAogICAgICB1cCBwcm9wZXIuCgogICAgLSBTaW1wbGlmY2F0aW9uIGFuZCBj
+bGVhbnVwcyBpbiB2YXJpb3VzIHBsYWNlcyB3aGVyZSBjb2RlIHBvaW50bGVzc2x5CiAgICAgIGNv
+bnRhaW5zIGluX2ludGVycnVwdCgpIGNvbmRpdGlvbmFscyB3aGljaCBhcmUgbW9zdGx5IGxlZnRv
+dmVycyBmcm9tCiAgICAgIGNhbGxpbmcgY29udmVudGlvbnMgaW4gb2xkZXIga2VybmVscyBhbmQg
+aGF2ZSBuZXZlciBiZWVuIGNsZWFuZWQgdXAuCgogICAgICBBbG9uZyB3aXRoIHJlbW92aW5nIGlm
+IGZyb20gdGhlIGhvcnJpYmxlIERCR19GT08oKSBtYWNybyBtZXNzIHdoaWNoCiAgICAgIHByb2Jh
+Ymx5IHNob3VsZCBiZSByZW1vdmVkIGNvbXBsZXRlbHkgYXMgdGhlIGtlcm5lbCB0b2RheSBwcm92
+aWRlcwogICAgICB3YXkgbW9yZSBzZW5zaWJsZSBtZWNoYW5pc21zIHRvIGRvIGZ1bmN0aW9uIHRy
+YWNpbmcgYW5kIHNpbWlsYXIuCgogICAgLSBBIGZldyBvdGhlciBjbGVhbnVwcyB3aGljaCB3ZXJl
+IG9idmlvdXMgd2hlbiBjaGFzaW5nIHRoZQogICAgICBpbl9pbnRlcnJ1cHQoKSB1c2FnZS4KClRo
+ZSBwaWxlIGlzIGFsc28gYXZhaWxhYmxlIGZyb206CgogICAgZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcv
+cHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RnbHgvZGV2ZWwuZ2l0IHNvZnRpcnEKClRoZSBkaWZm
+c3RhdCBzdW1tYXJ5IGlzOgoKIDg2IGZpbGVzIGNoYW5nZWQsIDMwMCBpbnNlcnRpb25zKCspLCAy
+MjMzIGRlbGV0aW9ucygtKQoKd2hpY2ggaXMgYmlhc2VkIGJ5IHRoZSBDQUlGIFNQSSByZW1vdmFs
+LiBXaXRob3V0IHRoYXQgaXQgaXM6CgogNzkgZmlsZXMgY2hhbmdlZCwgMzAwIGluc2VydGlvbnMo
+KyksIDY5NyBkZWxldGlvbnMoLSkKClRoYW5rcywKCgl0Z2x4Ci0tLQogRG9jdW1lbnRhdGlvbi9u
+ZXR3b3JraW5nL2NhaWYvc3BpX3BvcnRpbmcucnN0ICAgICAgICAgICAgICAgICAgIHwgIDIyOSAt
+LQogYi9Eb2N1bWVudGF0aW9uL25ldHdvcmtpbmcvY2FpZi9pbmRleC5yc3QgICAgICAgICAgICAg
+ICAgICAgICAgIHwgICAgMSAKIGIvZHJpdmVycy9uZXQvY2FpZi9LY29uZmlnICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMTkgCiBiL2RyaXZlcnMvbmV0L2NhaWYvTWFr
+ZWZpbGUgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICA0IAogYi9kcml2
+ZXJzL25ldC9jYWlmL2NhaWZfaHNpLmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHwgICAxOSAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvYW1kL3N1bjNsYW5jZS5jICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8ICAgMTEgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2F0aGVyb3Mv
+YXRsMWMvYXRsMWNfbWFpbi5jICAgICAgICAgICAgICAgfCAgICAxIAogYi9kcml2ZXJzL25ldC9l
+dGhlcm5ldC9hdGhlcm9zL2F0bDFlL2F0bDFlX21haW4uYyAgICAgICAgICAgICAgIHwgICAgMiAK
+IGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvYXRoZXJvcy9hdGx4L2F0bDIuYyAgICAgICAgICAgICAg
+ICAgICAgICB8ICAgIDEgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2NoZWxzaW8vY3hnYjMvYWRh
+cHRlci5oICAgICAgICAgICAgICAgICAgfCAgICAxIAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9j
+aGVsc2lvL2N4Z2IzL2N4Z2IzX21haW4uYyAgICAgICAgICAgICAgIHwgICAgMiAKIGIvZHJpdmVy
+cy9uZXQvZXRoZXJuZXQvY2hlbHNpby9jeGdiMy9zZ2UuYyAgICAgICAgICAgICAgICAgICAgICB8
+ICAgNDQgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2NoZWxzaW8vY3hnYjQvc2dlLmMgICAgICAg
+ICAgICAgICAgICAgICAgfCAgICAzIAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9jaXNjby9lbmlj
+L2VuaWMuaCAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgMSAKIGIvZHJpdmVycy9uZXQvZXRo
+ZXJuZXQvY2lzY28vZW5pYy9lbmljX2FwaS5jICAgICAgICAgICAgICAgICAgICB8ICAgIDYgCiBi
+L2RyaXZlcnMvbmV0L2V0aGVybmV0L2Npc2NvL2VuaWMvZW5pY19tYWluLmMgICAgICAgICAgICAg
+ICAgICAgfCAgIDI3IAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9mcmVlc2NhbGUvZmVjX21wYzUy
+eHguYyAgICAgICAgICAgICAgICAgIHwgICAxMCAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvaW50
+ZWwvZTEwMC5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgIDQgCiBiL2RyaXZlcnMv
+bmV0L2V0aGVybmV0L2ludGVsL2UxMDAwL2UxMDAwX21haW4uYyAgICAgICAgICAgICAgICAgfCAg
+ICAxIAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9pbnRlbC9mbTEway9mbTEwa19wY2kuYyAgICAg
+ICAgICAgICAgICAgIHwgICAgMiAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvaTQwZS9p
+NDBlX21haW4uYyAgICAgICAgICAgICAgICAgICB8ICAgIDQgCiBiL2RyaXZlcnMvbmV0L2V0aGVy
+bmV0L2ludGVsL2ljZS9pY2VfbWFpbi5jICAgICAgICAgICAgICAgICAgICAgfCAgICAxIAogYi9k
+cml2ZXJzL25ldC9ldGhlcm5ldC9pbnRlbC9pZ2IvaWdiX21haW4uYyAgICAgICAgICAgICAgICAg
+ICAgIHwgICAgMSAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvaWdjL2lnY19tYWluLmMg
+ICAgICAgICAgICAgICAgICAgICB8ICAgIDEgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVs
+L2l4Z2JlL2l4Z2JlX21haW4uYyAgICAgICAgICAgICAgICAgfCAgICAxIAogYi9kcml2ZXJzL25l
+dC9ldGhlcm5ldC9pbnRlbC9peGdiZXZmL2l4Z2JldmZfbWFpbi5jICAgICAgICAgICAgIHwgICAg
+MiAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvbmF0c2VtaS9zb25pYy5jICAgICAgICAgICAgICAg
+ICAgICAgICAgICB8ICAgMjQgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L25hdHNlbWkvc29uaWMu
+aCAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAyIAogYi9kcml2ZXJzL25ldC9ldGhlcm5l
+dC9uZXRlcmlvbi92eGdlL3Z4Z2UtY29uZmlnLmMgICAgICAgICAgICAgIHwgICAgOSAKIGIvZHJp
+dmVycy9uZXQvZXRoZXJuZXQvbmV0ZXJpb24vdnhnZS92eGdlLWNvbmZpZy5oICAgICAgICAgICAg
+ICB8ICAgIDcgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L3BlbnNhbmRvL2lvbmljL2lvbmljX2Rl
+di5jICAgICAgICAgICAgICAgfCAgICAyIAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9wZW5zYW5k
+by9pb25pYy9pb25pY19saWYuYyAgICAgICAgICAgICAgIHwgICA0MyAKIGIvZHJpdmVycy9uZXQv
+ZXRoZXJuZXQvcGVuc2FuZG8vaW9uaWMvaW9uaWNfbGlmLmggICAgICAgICAgICAgICB8ICAgIDIg
+CiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L3BlbnNhbmRvL2lvbmljL2lvbmljX21haW4uYyAgICAg
+ICAgICAgICAgfCAgICA0IAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9zZmMvZWYxMC5jICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAxOCAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQv
+c2ZjL2VmMTAwX25pYy5jICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgIDMgCiBiL2RyaXZl
+cnMvbmV0L2V0aGVybmV0L3NmYy9lZnhfY29tbW9uLmMgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAgICA2IAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9zZmMvZXRodG9vbF9jb21tb24uYyAgICAg
+ICAgICAgICAgICAgICAgIHwgICAgMiAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvc2ZjL25ldF9k
+cml2ZXIuaCAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgIDMgCiBiL2RyaXZlcnMvbmV0L2V0
+aGVybmV0L3NmYy9zaWVuYS5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAzIAog
+Yi9kcml2ZXJzL25ldC9ldGhlcm5ldC9zdW4vc3VuYm1hYy5jICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgICAxOCAKIGIvZHJpdmVycy9uZXQvcGh5L21kaW9fYnVzLmMgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8ICAgMTUgCiBiL2RyaXZlcnMvbmV0L3VzYi9rYXdldGgu
+YyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMjYxIC0tCiBiL2RyaXZl
+cnMvbmV0L3VzYi9uZXQxMDgwLmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAgICAxIAogYi9kcml2ZXJzL25ldC93YW4vbG1jL2xtY19kZWJ1Zy5jICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgICAxOCAKIGIvZHJpdmVycy9uZXQvd2FuL2xtYy9sbWNfZGVidWcu
+aCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgIDEgCiBiL2RyaXZlcnMvbmV0L3dh
+bi9sbWMvbG1jX21haW4uYyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMTA1IC0K
+IGIvZHJpdmVycy9uZXQvd2FuL2xtYy9sbWNfbWVkaWEuYyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB8ICAgIDQgCiBiL2RyaXZlcnMvbmV0L3dhbi9sbWMvbG1jX3Byb3RvLmMgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDE2IAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9i
+cm9hZGNvbS9icmNtODAyMTEvYnJjbWZtYWMvYmNtc2RoLmMgICAgIHwgICAgNCAKIGIvZHJpdmVy
+cy9uZXQvd2lyZWxlc3MvYnJvYWRjb20vYnJjbTgwMjExL2JyY21mbWFjL2J1cy5oICAgICAgICB8
+ICAgIDUgCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2Jyb2FkY29tL2JyY204MDIxMS9icmNtZm1h
+Yy9jb3JlLmMgICAgICAgfCAgIDIwIAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9icm9hZGNvbS9i
+cmNtODAyMTEvYnJjbWZtYWMvZndlaC5jICAgICAgIHwgICAgOCAKIGIvZHJpdmVycy9uZXQvd2ly
+ZWxlc3MvYnJvYWRjb20vYnJjbTgwMjExL2JyY21mbWFjL2Z3ZWguaCAgICAgICB8ICAgIDcgCiBi
+L2RyaXZlcnMvbmV0L3dpcmVsZXNzL2Jyb2FkY29tL2JyY204MDIxMS9icmNtZm1hYy9tc2didWYu
+YyAgICAgfCAgICAyIAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9icm9hZGNvbS9icmNtODAyMTEv
+YnJjbWZtYWMvc2Rpby5jICAgICAgIHwgICAxMiAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYnJv
+YWRjb20vYnJjbTgwMjExL2JyY21mbWFjL3NkaW8uaCAgICAgICB8ICAgIDIgCiBiL2RyaXZlcnMv
+bmV0L3dpcmVsZXNzL2Jyb2FkY29tL2JyY204MDIxMS9icmNtZm1hYy91c2IuYyAgICAgICAgfCAg
+ICAyIAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9pbnRlbC9pcHcyeDAwL2lwdzIxMDAuYyAgICAg
+ICAgICAgICAgICAgIHwgICAgMyAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvaW50ZWwvaXB3Mngw
+MC9pcHcyMjAwLmggICAgICAgICAgICAgICAgICB8ICAgIDYgCiBiL2RyaXZlcnMvbmV0L3dpcmVs
+ZXNzL2ludGVsL2lwdzJ4MDAvbGliaXB3LmggICAgICAgICAgICAgICAgICAgfCAgICAzIAogYi9k
+cml2ZXJzL25ldC93aXJlbGVzcy9pbnRlbC9pd2xlZ2FjeS9jb21tb24uaCAgICAgICAgICAgICAg
+ICAgIHwgICAgNCAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvaW50ZWwvaXdsd2lmaS9pd2wtZGVi
+dWcuYyAgICAgICAgICAgICAgICB8ICAgIDUgCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2ludGVs
+L2l3bHdpZmkvaXdsLWRldnRyYWNlLW1zZy5oICAgICAgICAgfCAgICA2IAogYi9kcml2ZXJzL25l
+dC93aXJlbGVzcy9pbnRlcnNpbC9ob3N0YXAvaG9zdGFwX2h3LmMgICAgICAgICAgICAgIHwgICAx
+MiAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWFydmVsbC9saWJlcnRhcy9kZWZzLmggICAgICAg
+ICAgICAgICAgICB8ICAgIDMgCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL21hcnZlbGwvbGliZXJ0
+YXMvcnguYyAgICAgICAgICAgICAgICAgICAgfCAgIDExIAogYi9kcml2ZXJzL25ldC93aXJlbGVz
+cy9tYXJ2ZWxsL2xpYmVydGFzX3RmL2RlYl9kZWZzLmggICAgICAgICAgIHwgICAgMyAKIGIvZHJp
+dmVycy9uZXQvd2lyZWxlc3MvbWFydmVsbC9td2lmaWV4L3VhcF90eHJ4LmMgICAgICAgICAgICAg
+ICB8ICAgIDYgCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL21hcnZlbGwvbXdpZmlleC91dGlsLmMg
+ICAgICAgICAgICAgICAgICAgfCAgICA2IAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVr
+L3J0bHdpZmkvYmFzZS5jICAgICAgICAgICAgICAgICAgIHwgICA0NyAKIGIvZHJpdmVycy9uZXQv
+d2lyZWxlc3MvcmVhbHRlay9ydGx3aWZpL2Jhc2UuaCAgICAgICAgICAgICAgICAgICB8ICAgIDMg
+CiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsd2lmaS9idGNvZXhpc3QvaGFsYnRj
+b3V0c3JjLmMgfCAgIDEyIAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0bHdpZmkv
+Y29yZS5jICAgICAgICAgICAgICAgICAgIHwgICAgNiAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3Mv
+cmVhbHRlay9ydGx3aWZpL2RlYnVnLmMgICAgICAgICAgICAgICAgICB8ICAgMjAgCiBiL2RyaXZl
+cnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsd2lmaS9kZWJ1Zy5oICAgICAgICAgICAgICAgICAg
+fCAgICA2IAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0bHdpZmkvcGNpLmMgICAg
+ICAgICAgICAgICAgICAgIHwgICAgNCAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9y
+dGx3aWZpL3BzLmMgICAgICAgICAgICAgICAgICAgICB8ICAgMjcgCiBiL2RyaXZlcnMvbmV0L3dp
+cmVsZXNzL3JlYWx0ZWsvcnRsd2lmaS9wcy5oICAgICAgICAgICAgICAgICAgICAgfCAgIDEwIAog
+Yi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0bHdpZmkvd2lmaS5oICAgICAgICAgICAg
+ICAgICAgIHwgICAgMyAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvenlkYXMvemQxMjExcncvemRf
+dXNiLmMgICAgICAgICAgICAgICAgICB8ICAgIDEgCiBiL2luY2x1ZGUvbGludXgvbmV0ZGV2aWNl
+LmggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAxIAogYi9uZXQvY29y
+ZS9kZXYuYyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+ICAxNSAKIGRyaXZlcnMvbmV0L2NhaWYvY2FpZl9zcGkuYyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICA4NzQgLS0tLS0tLS0tLQogZHJpdmVycy9uZXQvY2FpZi9jYWlmX3Nw
+aV9zbGF2ZS5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDI1NCAtLQogaW5jbHVk
+ZS9uZXQvY2FpZi9jYWlmX3NwaS5oICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHwgIDE1NSAtCiA4NiBmaWxlcyBjaGFuZ2VkLCAzMDAgaW5zZXJ0aW9ucygrKSwgMjIzMyBkZWxl
+dGlvbnMoLSkK
