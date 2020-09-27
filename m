@@ -2,75 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7624C27A15C
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Sep 2020 16:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCB227A1A5
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Sep 2020 17:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726281AbgI0OOw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Sep 2020 10:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbgI0OOw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Sep 2020 10:14:52 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53A6C0613CE
-        for <linux-usb@vger.kernel.org>; Sun, 27 Sep 2020 07:14:51 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id y6so1962629plt.9
-        for <linux-usb@vger.kernel.org>; Sun, 27 Sep 2020 07:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=iuh9XaK9/401tqBgf0N/B0toq11uZ4nl4T4WKndc3a0=;
-        b=C9zHUnE/cFmqqjGwgBOAOrg4vFMrXKumNVEL7x3afA6ce9Ia51MCd5Z3qqODBNvRdF
-         U+EJNAVLIUolQivLBTYiK/rP+w3UxcYWFyYd095wk48v0NiOEhf48xXJjLb+5rJCh3r4
-         ZRxLFJ4Og7TcIw10SkvRL9dGgfY6C9JnjTaPbgV+J7XktOEFatwPtOHAWEnc7iucQgaz
-         RJxs1aY5ydwCeMKVYwVKDHmoEVtllHlGz4bn44wiNc9kzTGd2URwQGP+XLjsnagPFchI
-         FXgDtB8KMCS3yygH945IS1Is7jt5cCfuS7l6oUzZwgOA/av9kfc6v7J40eoIo9nMdvHZ
-         ALog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=iuh9XaK9/401tqBgf0N/B0toq11uZ4nl4T4WKndc3a0=;
-        b=QA8gSomu6hHoH/wlnqx+abKmi4aGwKhBYmDycqm6lHves3FLAq9Q54h7M0F4Ir2vcF
-         uiputMIKm1tBLhWwItcBIuz9dvqbW835kk96K0iFUU1beNfuQnyyTiF3RyQKrZJr7xCm
-         9dBx+DRJ8FVuYpJfM8ru3HEF6hjo6ghfRKwA0otysxmugYC9r3+O4k78PBBS6Wpjk9pH
-         ibe14BbqBKiLZNjt1HcyanWpOTtqDerUW8Su5OkTsSoID7wXkHx6jjepdGf2L6EdN2oz
-         cKZBobV4FQCTFPk3E8W2Pe2rLnVPRjfHlx6NAjGhYWKC5J/i0CVaywiykglvH5J+92f3
-         xKwA==
-X-Gm-Message-State: AOAM530ND9cLRL0n5jbMdArDb5BrsH7uGQ68RCiOxvvmuHviHNGXRY0/
-        z5iPRLrGB68icCQWx+J3N5QU2qPL/cbkK6QALFVlK2hrhsM=
-X-Google-Smtp-Source: ABdhPJy/OLtezbDTSLyisCkVwfYqrLDiPZ09Gy2TpKFFvYrZBLrSLsHHkz+0eqHiw2wOjl29Ti6hePWjtAImGlbn8JU=
-X-Received: by 2002:a17:902:784d:b029:d1:e7cf:83e6 with SMTP id
- e13-20020a170902784db02900d1e7cf83e6mr7248033pln.63.1601216090832; Sun, 27
- Sep 2020 07:14:50 -0700 (PDT)
-MIME-Version: 1.0
-From:   Kiran <kiranmkota@gmail.com>
-Date:   Sun, 27 Sep 2020 07:14:39 -0700
-Message-ID: <CAAn0qaXmysJ9vx3ZEMkViv_B19ju-_ExN8Yn_uSefxpjS6g4Lw@mail.gmail.com>
-Subject: /net/usb/ipheth.c incompatibility with Apple iOS 14
+        id S1726255AbgI0Peh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 27 Sep 2020 11:34:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50030 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726210AbgI0Peh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 27 Sep 2020 11:34:37 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-usb@vger.kernel.org
+Subject: [Bug 209407] New: skb_over_panic in cdc_mbim_tx_fixup
+Date:   Sun, 27 Sep 2020 15:34:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jks@iki.fi
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-209407-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Effect on end user: when a linux machine is connected via USB to an
-iPhone that has been updated to iOS 14 and has personal hotspot mode
-turned on, the user cannot connect to the internet.
+https://bugzilla.kernel.org/show_bug.cgi?id=209407
 
-Troubleshooting: DNS works, the linux machine can ping the iPhone
-gateway, pinging google.com hangs. It appears that there is a change
-to the USB packets that iOS expects.
+            Bug ID: 209407
+           Summary: skb_over_panic in cdc_mbim_tx_fixup
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.8.12
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: jks@iki.fi
+        Regression: No
 
-Here is a link to what I think is the most relevant part of a Github
-issue discussion with more specific details:
+Created attachment 292681
+  --> https://bugzilla.kernel.org/attachment.cgi?id=292681&action=edit
+Debug information including the dmesg dump
 
-https://github.com/libimobiledevice/libimobiledevice/issues/1038#issuecomment-699630379
+I'm running a PCEngines APU3C4 system as a router, with a Huawei
+909s-120 LTE module for the upstream connection. It has been crashing
+once every few days. I found a way to cause the crash (or at least one
+case of it) quite reliably by transferring a large file from a host to
+AWS S3 via the router. This happened initially on Debian's kernel
+4.19.132-1 but I can reproduce it on an unmodified 5.8.12. The
+following dumps are all from 5.8.12.
 
-This is my first linux bug report and I'm not familiar with kernel
-development. The other people in the Github post will be better to
-talk to regarding a fix. But if I can provide more info, just let me
-know.
+Some lines from the dmesg dump (the full dump in the attachment along
+with other debug information):
 
-Thanks,
+> [ 2297.135441] skbuff: skb_over_panic: text:ffffffffc09bf27a len:122 put:122
+> head:0000000000000000 data:0000000000000000 tail:0x7a end:0x0 dev:<NULL>
+> [ 2297.137499] BUG: unable to handle page fault for address: ffff90b01631c000
+> [ 2297.167354] Call Trace:
+> [ 2297.167369]  <IRQ>
+> [ 2297.167409]  cdc_ncm_fill_tx_frame+0x83a/0x970 [cdc_ncm]
+> [ 2297.306125]  cdc_mbim_tx_fixup+0x1d9/0x240 [cdc_mbim]
+> [ 2297.311578]  usbnet_start_xmit+0x5d/0x720 [usbnet]
+> [ 2297.316682]  dev_hard_start_xmit+0x93/0x1f0
 
-Kiran
+cdc_ncm_fill_tx_frame+0x83a is in cdc_ncm_fill_tx_frame
+(./include/linux/skbuff.h:2252):
+
+> 2246  static inline void *skb_put_zero(struct sk_buff *skb, unsigned int len)
+> 2247  {
+> 2248          void *tmp = skb_put(skb, len);
+> 2249
+> 2250          memset(tmp, 0, len);
+> 2251
+> 2252          return tmp;
+> 2253  }
+
+cdc_mbim_tx_fixup+0x1d9 is in cdc_mbim_tx_fixup
+(drivers/net/usb/cdc_mbim.c:292):
+
+> 288                   }
+> 289           }
+> 290
+> 291           spin_lock_bh(&ctx->mtx);
+> 292           skb_out = cdc_ncm_fill_tx_frame(dev, skb, sign);
+> 293           spin_unlock_bh(&ctx->mtx);
+> 294           return skb_out;
+
+
+My corresponding Debian bug report is at
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=970736
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
