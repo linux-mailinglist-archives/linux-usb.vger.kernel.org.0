@@ -2,72 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B063279E8B
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Sep 2020 07:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 204B7279F84
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Sep 2020 10:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730354AbgI0Fwa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Sep 2020 01:52:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49778 "EHLO mail.kernel.org"
+        id S1730476AbgI0IK0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Sep 2020 04:10:26 -0400
+Received: from mail5.windriver.com ([192.103.53.11]:59518 "EHLO mail5.wrs.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727614AbgI0Fwa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 27 Sep 2020 01:52:30 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 530A623A03;
-        Sun, 27 Sep 2020 05:52:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601185950;
-        bh=kHKLO/+ZkO726T7hWNZVIANgTTKBLmXVn8k2Klhf0Zw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0QJbvrqkmJolxgy2wlwYrkXJSfOpp/og/5ZVx9+anRgZ17PT4bEX+h1bh+mkvDula
-         dsn2uBIaT4C0FjpS/jIlPXPMMy0yrcOuQaRoHVL4bFqyepdL5o4YOXDZFaRR9HcOUe
-         pt8mW37ZeCYOi1VSzPikgqk2N18RtZx7Ip+EBPg4=
-Date:   Sun, 27 Sep 2020 07:52:26 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 6/6] USB: cdc-acm: blacklist ETAS ES58X device
-Message-ID: <20200927055226.GA701624@kroah.com>
-References: <20200926175810.278529-1-mailhol.vincent@wanadoo.fr>
- <20200926175810.278529-7-mailhol.vincent@wanadoo.fr>
- <20200927054520.GB699448@kroah.com>
+        id S1727263AbgI0IK0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 27 Sep 2020 04:10:26 -0400
+X-Greylist: delayed 453 seconds by postgrey-1.27 at vger.kernel.org; Sun, 27 Sep 2020 04:10:26 EDT
+Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com [147.11.189.40])
+        by mail5.wrs.com (8.15.2/8.15.2) with ESMTPS id 08R81SIl029042
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Sun, 27 Sep 2020 01:01:39 -0700
+Received: from pek-qzhang2-d1.wrs.com (128.224.162.183) by
+ ALA-HCA.corp.ad.wrs.com (147.11.189.40) with Microsoft SMTP Server id
+ 14.3.487.0; Sun, 27 Sep 2020 01:01:17 -0700
+From:   <qiang.zhang@windriver.com>
+To:     <laurent.pinchart@ideasonboard.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>
+Subject: [PATCH] usb: gadget: uvc: Fix the wrong v4l2_device_unregister call
+Date:   Sun, 27 Sep 2020 16:01:16 +0800
+Message-ID: <20200927080116.24763-1-qiang.zhang@windriver.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200927054520.GB699448@kroah.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Sep 27, 2020 at 07:45:20AM +0200, Greg Kroah-Hartman wrote:
-> On Sun, Sep 27, 2020 at 02:57:56AM +0900, Vincent Mailhol wrote:
-> > The ES58X devices are incorrectly recognized as USB Modem (CDC ACM),
-> > preventing the etas-es58x module to load.
-> > 
-> > Thus, these have been added
-> > to the ignore list in drivers/usb/class/cdc-acm.c
-> > 
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> >  drivers/usb/class/cdc-acm.c | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> 
-> Did you mean to send this twice?
-> 
-> And where are the 5 other patches in this series?
-> 
-> And finally, it's a good idea to include the output of 'lsusb -v' for
-> devices that need quirks so we can figure things out later on, can you
-> fix up your changelog to include that information?
+From: Zqiang <qiang.zhang@windriver.com>
 
-Also, why is the device saying it is a cdc-acm compliant device when it
-is not?  Why lie to the operating system like that?
+If an error occurred before calling the 'v4l2_device_register' func,
+and then goto error, but no need to call 'v4l2_device_unregister'
+func.
 
-thanks,
+Signed-off-by: Zqiang <qiang.zhang@windriver.com>
+---
+ drivers/usb/gadget/function/f_uvc.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-greg k-h
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 0b9712616455..44b4352a2676 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -740,20 +740,20 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 	/* Initialise video. */
+ 	ret = uvcg_video_init(&uvc->video, uvc);
+ 	if (ret < 0)
+-		goto error;
++		goto v4l2_error;
+ 
+ 	/* Register a V4L2 device. */
+ 	ret = uvc_register_video(uvc);
+ 	if (ret < 0) {
+ 		uvcg_err(f, "failed to register video device\n");
+-		goto error;
++		goto v4l2_error;
+ 	}
+ 
+ 	return 0;
+ 
+-error:
++v4l2_error:
+ 	v4l2_device_unregister(&uvc->v4l2_dev);
+-
++error:
+ 	if (uvc->control_req)
+ 		usb_ep_free_request(cdev->gadget->ep0, uvc->control_req);
+ 	kfree(uvc->control_buf);
+-- 
+2.17.1
+
