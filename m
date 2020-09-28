@@ -2,174 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8CD27B324
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 19:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC4827B397
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 19:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbgI1R0R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 13:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726547AbgI1R0Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 13:26:16 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24141C0613CE
-        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 10:26:16 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id x22so1635818pfo.12
-        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 10:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=xu75CUkAEe8YKESDX+6RMXTyhfVPWONUsVk2klTLLIw=;
-        b=0/6i+LzwyathOMbvG6oG2ll/0evYhsEXpg9MB8BFBLC+1GFyqK6z7LlJJBxzxFdfbJ
-         05TEF7DdGGpuvCMyi2NZv1Q92KQL0cR+D9CHNZcApVdI271h571JbWXG7v8ceUFtVFtf
-         iwjyPFqYKOGDgEmB8LpvoaUN93/ZIPIYVvLAUawMj6Y4rR+hfMhita75OZvkqLyaAvUf
-         xvE+pK94Tr93FIKvvY4r5qpOHmvw3WITNJyYhNThNqO4q29c3wTZYVBQe7Tq8UTIL6k4
-         0ZHjkrbMpMyKmBmkJEdjYVDtZTHnR2/b6Pa/4fNUCUmKUcc1eo5AP/szp3Nr9ULAH1LL
-         Gszg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=xu75CUkAEe8YKESDX+6RMXTyhfVPWONUsVk2klTLLIw=;
-        b=kV7/aHWAcRIeC3Y6lkEUU/oLHnpFQqdfEZbWTVYu9M9Tn8Jy+s9eTLHmOPhkLe/Ygq
-         M7M+SmgQ+j0z7N3RHMcuf7dPQqhv1WVVoXuE3QUavg3W8wt5qmov7OzRfId2OFEaq0Sw
-         /dTLHDx9ajvkrsWrZDcxKEMrsIK1tNXyUzZh7Xdjp2/9CRgRSCADtmAIu7Xxsxp6G2RI
-         +sPaYPQ7/9vVSeKeVaY9+OwFnLuMWtMjNBWSdPkiUdYlZB0Ofy4ECCg2dlP06QTvXIlV
-         uvc/fh6xayGZgD8n/3gL2+SzaLTQpFxSpE9bwdKGzZw8g/KeEnXPgUNugBIzKkMBA90w
-         Dkbw==
-X-Gm-Message-State: AOAM532JBEg57LSkiKyCV9ug4KgnrkmVstKqoBo+EwK7noVNk6IinBww
-        xRaWEBZaSlVV/Qq0lGsrPL6Y9Q==
-X-Google-Smtp-Source: ABdhPJzwfjXkCsxEu3XfK2aVP501w1BXp/1/rfPP3H13WpeMSgLae7v91sNjQ8w4DmdYg1Jo2bc1PA==
-X-Received: by 2002:a63:595a:: with SMTP id j26mr130244pgm.406.1601313975665;
-        Mon, 28 Sep 2020 10:26:15 -0700 (PDT)
-Received: from Shannons-MacBook-Pro.local (static-50-53-47-17.bvtn.or.frontiernet.net. [50.53.47.17])
-        by smtp.gmail.com with ESMTPSA id j18sm1986127pgm.30.2020.09.28.10.26.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2020 10:26:15 -0700 (PDT)
-Subject: Re: [patch 12/35] net: ionic: Remove WARN_ON(in_interrupt()).
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Pensando Drivers <drivers@pensando.io>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Christian Benvenuti <benve@cisco.com>,
-        Govindarajulu Varadarajan <_govind@gmx.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-doc@vger.kernel.org,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        intel-wired-lan@lists.osuosl.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Solarflare linux maintainers <linux-net-drivers@solarflare.com>,
-        Edward Cree <ecree@solarflare.com>,
-        Martin Habets <mhabets@solarflare.com>,
-        Jon Mason <jdmason@kudzu.us>, Daniel Drake <dsd@gentoo.org>,
-        Ulrich Kunitz <kune@deine-taler.de>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        brcm80211-dev-list.pdl@broadcom.com,
-        brcm80211-dev-list@cypress.com,
-        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Jouni Malinen <j@w1.fi>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi.bhat@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        libertas-dev@lists.infradead.org,
-        Pascal Terjan <pterjan@google.com>,
-        Ping-Ke Shih <pkshih@realtek.com>
-References: <20200927194846.045411263@linutronix.de>
- <20200927194921.026798214@linutronix.de>
-From:   Shannon Nelson <snelson@pensando.io>
-Message-ID: <96baeba9-eb5f-1462-2dcc-ecb9793727a1@pensando.io>
-Date:   Mon, 28 Sep 2020 10:26:10 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.12.0
+        id S1726442AbgI1Rtn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 28 Sep 2020 13:49:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53418 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726310AbgI1Rtn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Sep 2020 13:49:43 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 209411] When retrieving string descriptor from mobile device
+ returns eproto error
+Date:   Mon, 28 Sep 2020 17:49:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: greg@kroah.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-209411-208809-f6NfPKg92P@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-209411-208809@https.bugzilla.kernel.org/>
+References: <bug-209411-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <20200927194921.026798214@linutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/27/20 12:48 PM, Thomas Gleixner wrote:
-> From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
->
-> in_interrupt() is ill defined and does not provide what the name
-> suggests. The usage especially in driver code is deprecated and a tree wide
-> effort to clean up and consolidate the (ab)usage of in_interrupt() and
-> related checks is happening.
->
-> In this case the check covers only parts of the contexts in which these
-> functions cannot be called. It fails to detect preemption or interrupt
-> disabled invocations.
->
-> As the functions which are invoked from ionic_adminq_post() and
-> ionic_dev_cmd_wait() contain a broad variety of checks (always enabled or
-> debug option dependent) which cover all invalid conditions already, there
-> is no point in having inconsistent warnings in those drivers.
->
-> Just remove them.
->
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Shannon Nelson <snelson@pensando.io>
-> Cc: Pensando Drivers <drivers@pensando.io>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: netdev@vger.kernel.org
-Thanks.
+https://bugzilla.kernel.org/show_bug.cgi?id=209411
 
-Acked-by: Shannon Nelson <snelson@pensando.io>
+--- Comment #1 from Greg Kroah-Hartman (greg@kroah.com) ---
+On Sun, Sep 27, 2020 at 05:51:20PM +0000, bugzilla-daemon@bugzilla.kernel.org
+wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=209411
+> 
+>             Bug ID: 209411
+>            Summary: When retrieving string descriptor from mobile device
+>                     returns eproto error
+>            Product: Drivers
+>            Version: 2.5
+>     Kernel Version: 4.19
+>           Hardware: All
+>                 OS: Linux
+>               Tree: Mainline
+>             Status: NEW
+>           Severity: normal
+>           Priority: P1
+>          Component: USB
+>           Assignee: drivers_usb@kernel-bugs.kernel.org
+>           Reporter: rachithas104@gmail.com
+>         Regression: No
+> 
+> I am trying to get get string descriptor from mobile phone,however when
+> trying
+> to retrieve one particular index it returns EPROTO,
+> 
+> dev->fd, USB_DIR_IN,USB_REQ_GET_DESCRIPTOR,DESCRIPT_STRING * 256 + index,     
+>                                               languageid, sizeof buf, buf);
+> 
+> Return value is -1 for  ioctl(fd, USBDEVFS_CONTROL, &ioctl_ctrl);
+> 
+> kernel: [ 7084.327097] usb 1-1.2: reset high-speed USB device number 12 using
+> ehci-pci
+> kernel: [ 7084.831056] usb 1-1.2: device not accepting address 12, error -71
+> kernel: [ 7085.119075] usb 1-1.2: reset high-speed USB device number 12 using
+> ehci-pci
+>  kernel: [ 7085.431054] usb 1-1.2: reset high-speed USB device number 12
+>  using
+> ehci-pci
+> [ 7085.935069] usb 1-1.2: device not accepting address 12, error -71
+> [ 7086.227132] usb 1-1.2: reset high-speed USB device number 12 using
+> ehci-pci
+> S[ 7087.321929] usb 1-1.2: usbfs: USBDEVFS_CONTROL failed cmd ctxusb rqt 128
+> rq
+> 6 len 255 ret -71
+>   kernel: [ 7087.607093] usb 1-1.2: reset high-speed USB device number 12
+>   using
+> ehci-pci
+> 
+> My URB request and without my program in picture request is same
 
-> ---
->   drivers/net/ethernet/pensando/ionic/ionic_main.c |    4 ----
->   1 file changed, 4 deletions(-)
->
-> --- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
-> +++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-> @@ -248,8 +248,6 @@ static int ionic_adminq_post(struct ioni
->   	struct ionic_queue *adminq;
->   	int err = 0;
->   
-> -	WARN_ON(in_interrupt());
-> -
->   	if (!lif->adminqcq)
->   		return -EIO;
->   
-> @@ -346,8 +344,6 @@ int ionic_dev_cmd_wait(struct ionic *ion
->   	int done;
->   	int err;
->   
-> -	WARN_ON(in_interrupt());
-> -
->   	/* Wait for dev cmd to complete, retrying if we get EAGAIN,
->   	 * but don't wait any longer than max_seconds.
->   	 */
->
+Not all strings are readable from the device, are you sure that is a
+valid string descriptor index to be requesting?
 
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
