@@ -2,137 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F9B27B0D2
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 17:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2040F27B2DA
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 19:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbgI1PWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 11:22:19 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:50347 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726424AbgI1PWT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 11:22:19 -0400
-Received: (qmail 136930 invoked by uid 1000); 28 Sep 2020 11:22:17 -0400
-Date:   Mon, 28 Sep 2020 11:22:17 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <greg@kroah.com>
-Cc:     yasushi asano <yazzep@gmail.com>, andrew_gabbasov@mentor.com,
-        "Rosca, Eugeniu \(ADITG/ESM1\)" <erosca@de.adit-jv.com>,
-        Baxter Jim <jim_baxter@mentor.com>, linux-usb@vger.kernel.org,
-        "Nishiguchi, Naohiro \(ADITJ/SWG\)" <nnishiguchi@jp.adit-jv.com>,
-        "Natsume, Wataru \(ADITJ/SWG\)" <wnatsume@jp.adit-jv.com>,
-        =?utf-8?B?5rWF6YeO5oGt5Y+y?= <yasano@jp.adit-jv.com>
-Subject: [Patch 2/2]: USB: hub: Add Kconfig option to reduce number of port
- initialization retries
-Message-ID: <20200928152217.GB134701@rowland.harvard.edu>
-References: <20200920192114.GB1190206@rowland.harvard.edu>
- <20200921140342.3813-1-yazzep@gmail.com>
- <20200921144827.GC1213381@rowland.harvard.edu>
- <CAEt1Rjq-DOwN0+_7F0m-kqUHTzm5YPUaXqUOpTszCsqrfLRt5w@mail.gmail.com>
- <20200921150611.GD1213381@rowland.harvard.edu>
- <CAEt1RjoypwL9-NsuOfypvT09sQb_7PYbgzegaAH-RfbjLmL44w@mail.gmail.com>
- <CAEt1Rjp2GKf47JZaRPAD3YnFWPF5+8mxHGmgY+F7Ta9wc1GvrQ@mail.gmail.com>
- <20200925184153.GA53451@rowland.harvard.edu>
- <CAEt1Rjo_H5f0CD+o5y-jDBfU8__gEPie0PvqzsV48aaakO7JkA@mail.gmail.com>
- <20200928152050.GA134701@rowland.harvard.edu>
+        id S1726670AbgI1ROA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 13:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726661AbgI1RN7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 13:13:59 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9498FC0613CE
+        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 10:13:59 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id b17so1017830pji.1
+        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 10:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6LRa3EvjxYw5aX67BhkFrS+Y1RXh3J3rTX/vMwJ4fBY=;
+        b=fUmFEKMPipnra4fmuQoqW2QD7diKt59CdvKRgJUQsIz3kme6UzweIUnkraR8O8Dxe+
+         Lnj32eVJfWh211rHwYWM214y6149q4KKfvonKPYpPw0+E2VmREcBHn9tBfuDTm6HxMxk
+         DnPAvbL8Hr7mCPlxxhDX5GFz9Ta8qYSDLN2lQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6LRa3EvjxYw5aX67BhkFrS+Y1RXh3J3rTX/vMwJ4fBY=;
+        b=MbICtrVDLzvj8cWV9X9HjdcF8i6DOYw+NjpuVr6Vh3UohRsTn0BYZJJhX1ZHBXnank
+         bVk3HB9NmB7wWziMbC0UMTgsKWR2JHPoo0/cZlPyoGyh7QcQq0EZiYOPh0wSTLHiciIh
+         sEFe2mBh8iZNry/a4OUwOl/iyRp2j610y9NoOZHTP7uSnbJSPLRuyVUhHxGQS2iBDe/s
+         Nj2sZ1bOkqInqlyapkgOQ9doKNiFPHUITMuDzRjH1O3ZpXDDuTgtNcrugb7SSn8R3U1k
+         roC7L6rAFSazw72iobB6haVb7OrUM0kLN5s/LXQU7hn9nARTaaKp9hWsGRoT9j/sLpON
+         UnnQ==
+X-Gm-Message-State: AOAM533CBzFyQom0F7K3rx1QLfuNx+j1nA4s0o9Ll6G21bYSGt6jZEOx
+        lXBIrfMRbTihhHRmUGJENvbfeQ==
+X-Google-Smtp-Source: ABdhPJyy/zNJpHFnMQFB7JuPIm4GDw3cJVD1GeygsRruKUtVR+7mZzv+HgAc6/mIiMlJZgHS/5Q9Wg==
+X-Received: by 2002:a17:90a:ca17:: with SMTP id x23mr263620pjt.96.1601313239051;
+        Mon, 28 Sep 2020 10:13:59 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id gq14sm1869082pjb.44.2020.09.28.10.13.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Sep 2020 10:13:58 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Bastien Nocera <hadess@hadess.net>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete onboard USB hubs
+Date:   Mon, 28 Sep 2020 10:13:54 -0700
+Message-Id: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+X-Mailer: git-send-email 2.28.0.709.gb0816b6eb0-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200928152050.GA134701@rowland.harvard.edu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Description based on one by Yasushi Asano:
+Discrete onboard USB hubs (an example for such a hub is the Realtek
+RTS5411) need to be powered and may require initialization of other
+resources (like GPIOs or clocks) to work properly. This adds a device
+tree binding for these hubs.
 
-According to 6.7.22 A-UUT “Device No Response” for connection timeout
-of USB OTG and EH automated compliance plan v1.2, enumeration failure
-has to be detected within 30 seconds.  However, the old and new
-enumeration schemes each make a total of 12 attempts, and each attempt
-can take 5 seconds to time out, so the PET test fails.
-
-This patch adds a new Kconfig option (CONFIG_USB_FEW_INIT_RETRIES);
-when the option is set all the initialization retry loops except the
-outermost are reduced to a single iteration.  This reduces the total
-number of attempts to four, allowing Linux hosts to pass the PET test.
-
-The new option is disabled by default to preserve the existing
-behavior.  The reduced number of retries may fail to initialize a few
-devices that currently do work, but for the most part there should be
-no change.  And in cases where the initialization does fail, it will
-fail much more quickly.
-
-Reported-and-tested-by: yasushi asano <yazzep@gmail.com>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 ---
 
+(no changes since v3)
 
-[as1945]
+Changes in v3:
+- updated commit message
+- removed recursive reference to $self
+- adjusted 'compatible' definition to support multiple entries
+- changed USB controller phandle to be a node
 
+Changes in v2:
+- removed 'wakeup-source' and 'power-off-in-suspend' properties
+- consistently use spaces for indentation in example
 
- drivers/usb/core/Kconfig |   14 ++++++++++++++
- drivers/usb/core/hub.c   |   13 ++++++++++++-
- 2 files changed, 26 insertions(+), 1 deletion(-)
+ .../bindings/usb/onboard_usb_hub.yaml         | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
 
-Index: usb-devel/drivers/usb/core/Kconfig
-===================================================================
---- usb-devel.orig/drivers/usb/core/Kconfig
-+++ usb-devel/drivers/usb/core/Kconfig
-@@ -32,6 +32,20 @@ config USB_DEFAULT_PERSIST
- 	  If you have any questions about this, say Y here, only say N
- 	  if you know exactly what you are doing.
- 
-+config USB_FEW_INIT_RETRIES
-+	bool "Limit USB device initialization to only a few retries"
-+	help
-+	  When a new USB device is detected, the kernel tries very hard
-+	  to initialize and enumerate it, with lots of nested retry loops.
-+	  This almost always works, but when it fails it can take a long time.
-+	  This option tells the kernel to make only a few retry attempts,
-+	  so that the total time required for a failed initialization is
-+	  no more than 30 seconds (as required by the USB OTG spec).
+diff --git a/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+new file mode 100644
+index 000000000000..c9783da3e75c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/onboard_usb_hub.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	  Say N here unless you require new-device enumeration failure to
-+	  occur within 30 seconds (as might be needed in an embedded
-+	  application).
++title: Binding for onboard USB hubs
 +
- config USB_DYNAMIC_MINORS
- 	bool "Dynamic USB minor allocation"
- 	help
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -2705,10 +2705,20 @@ static unsigned hub_is_wusb(struct usb_h
- }
- 
- 
-+#ifdef CONFIG_USB_FEW_INIT_RETRIES
-+#define PORT_RESET_TRIES	2
-+#define SET_ADDRESS_TRIES	1
-+#define GET_DESCRIPTOR_TRIES	1
-+#define GET_MAXPACKET0_TRIES	1
-+#define PORT_INIT_TRIES		4
++maintainers:
++  - Matthias Kaehlcke <mka@chromium.org>
 +
-+#else
- #define PORT_RESET_TRIES	5
- #define SET_ADDRESS_TRIES	2
- #define GET_DESCRIPTOR_TRIES	2
-+#define GET_MAXPACKET0_TRIES	3
- #define PORT_INIT_TRIES		4
-+#endif	/* CONFIG_USB_FEW_INIT_RETRIES */
- 
- #define HUB_ROOT_RESET_TIME	60	/* times are in msec */
- #define HUB_SHORT_RESET_TIME	10
-@@ -4691,7 +4701,8 @@ hub_port_init(struct usb_hub *hub, struc
- 			 * 255 is for WUSB devices, we actually need to use
- 			 * 512 (WUSB1.0[4.8.1]).
- 			 */
--			for (operations = 0; operations < 3; ++operations) {
-+			for (operations = 0; operations < GET_MAXPACKET0_TRIES;
-+					++operations) {
- 				buf->bMaxPacketSize0 = 0;
- 				r = usb_control_msg(udev, usb_rcvaddr0pipe(),
- 					USB_REQ_GET_DESCRIPTOR, USB_DIR_IN,
++properties:
++  compatible:
++    items:
++      - enum:
++        - realtek,rts5411
++      - const: onboard-usb-hub
++
++  vdd-supply:
++    description:
++      phandle to the regulator that provides power to the hub.
++
++required:
++  - compatible
++  - vdd-supply
++
++examples:
++  - |
++    usb_hub: usb-hub {
++        compatible = "realtek,rts5411", "onboard-usb-hub";
++        vdd-supply = <&pp3300_hub>;
++    };
++
++    usb_controller {
++        dr_mode = "host";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        /* 2.0 hub on port 1 */
++        hub@1 {
++            compatible = "usbbda,5411";
++            reg = <1>;
++            hub = <&usb_hub>;
++        };
++
++        /* 3.0 hub on port 2 */
++        hub@2 {
++            compatible = "usbbda,411";
++            reg = <2>;
++            hub = <&usb_hub>;
++        };
++    };
++
++...
+-- 
+2.28.0.709.gb0816b6eb0-goog
+
