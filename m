@@ -2,108 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4D227A465
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 01:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D95327A4F2
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 02:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726461AbgI0XB4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Sep 2020 19:01:56 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:58492 "EHLO vps0.lunn.ch"
+        id S1726414AbgI1Awu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Sep 2020 20:52:50 -0400
+Received: from crapouillou.net ([89.234.176.41]:41284 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726328AbgI0XB4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 27 Sep 2020 19:01:56 -0400
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94)
-        (envelope-from <andrew@lunn.ch>)
-        id 1kMff2-00GSDf-Dy; Mon, 28 Sep 2020 01:00:52 +0200
-Date:   Mon, 28 Sep 2020 01:00:52 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Christian Benvenuti <benve@cisco.com>,
-        Govindarajulu Varadarajan <_govind@gmx.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-doc@vger.kernel.org,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        intel-wired-lan@lists.osuosl.org,
-        Shannon Nelson <snelson@pensando.io>,
-        Pensando Drivers <drivers@pensando.io>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Solarflare linux maintainers <linux-net-drivers@solarflare.com>,
-        Edward Cree <ecree@solarflare.com>,
-        Martin Habets <mhabets@solarflare.com>,
-        Jon Mason <jdmason@kudzu.us>, Daniel Drake <dsd@gentoo.org>,
-        Ulrich Kunitz <kune@deine-taler.de>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
+        id S1726396AbgI1Awt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 27 Sep 2020 20:52:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1601254367; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uU9mEhp+bofOdqwM+UmLX04vTcdRLkBuJKUG0hs8TDk=;
+        b=kb0XHpdJ2nM/+kdvGWkHKWf79KrlAV78MrWa/VnHxVCIAQ4Qe/7LynhiYK4J0I8JoKiTtQ
+        G2uqVi2BK39a5Etx0Q2xkkFIIgtscjAwjGYPheZr5meefwYjiF41gS99cNr9x80EoMb6Tc
+        3HJgFVz3JjYqdMuZVEx3+UySHVSwv7U=
+Date:   Mon, 28 Sep 2020 02:52:35 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] usb: musb: Fix runtime PM race in musb_queue_resume_work
+To:     Bin Liu <b-liu@ti.com>
+Cc:     Tony Lindgren <tony@atomide.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        brcm80211-dev-list.pdl@broadcom.com,
-        brcm80211-dev-list@cypress.com,
-        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Jouni Malinen <j@w1.fi>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi.bhat@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        libertas-dev@lists.infradead.org,
-        Pascal Terjan <pterjan@google.com>,
-        Ping-Ke Shih <pkshih@realtek.com>
-Subject: Re: [patch 13/35] net: mdiobus: Remove WARN_ON_ONCE(in_interrupt())
-Message-ID: <20200927230052.GG3889809@lunn.ch>
-References: <20200927194846.045411263@linutronix.de>
- <20200927194921.137019811@linutronix.de>
+        Johan Hovold <johan@kernel.org>, od@zcrc.me,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Message-Id: <NRFCHQ.NJA64RB57HU9@crapouillou.net>
+In-Reply-To: <20200817105926.GF2994@atomide.com>
+References: <20200809125359.31025-1-paul@crapouillou.net>
+        <20200817105926.GF2994@atomide.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200927194921.137019811@linutronix.de>
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Sep 27, 2020 at 09:48:59PM +0200, Thomas Gleixner wrote:
-> From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> 
-> in_interrupt() is ill defined and does not provide what the name
-> suggests. The usage especially in driver code is deprecated and a tree wide
-> effort to clean up and consolidate the (ab)usage of in_interrupt() and
-> related checks is happening.
-> 
-> In this case the check covers only parts of the contexts in which these
-> functions cannot be called. It fails to detect preemption or interrupt
-> disabled invocations.
-> 
-> As the functions which contain these warnings invoke mutex_lock() which
-> contains a broad variety of checks (always enabled or debug option
-> dependent) and therefore covers all invalid conditions already, there is no
-> point in having inconsistent warnings in those drivers. The conditional
-> return is not really valuable in practice either.
-> 
-> Just remove them.
-> 
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Hi,
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Le lun. 17 ao=FBt 2020 =E0 13:59, Tony Lindgren <tony@atomide.com> a=20
+=E9crit :
+> * Paul Cercueil <paul@crapouillou.net> [200809 12:54]:
+>>  musb_queue_resume_work() would call the provided callback if the=20
+>> runtime
+>>  PM status was 'active'. Otherwise, it would enqueue the request if=20
+>> the
+>>  hardware was still suspended (musb->is_runtime_suspended is true).
+>>=20
+>>  This causes a race with the runtime PM handlers, as it is possible=20
+>> to be
+>>  in the case where the runtime PM status is not yet 'active', but the
+>>  hardware has been awaken (PM resume function has been called).
+>>=20
+>>  When hitting the race, the resume work was not enqueued, which=20
+>> probably
+>>  triggered other bugs further down the stack. For instance, a telnet
+>>  connection on Ingenic SoCs would result in a 50/50 chance of a
+>>  segmentation fault somewhere in the musb code.
+>>=20
+>>  Rework the code so that either we call the callback directly if
+>>  (musb->is_runtime_suspended =3D=3D 0), or enqueue the query otherwise.
+>=20
+> Yes we should use is_runtime_suspended, thanks for fixing it.
+> Things still work for me so:
+>=20
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Tested-by: Tony Lindgren <tony@atomide.com>
 
-    Andrew
+Bin, can you take this patch?
+
+Thanks,
+-Paul
+
+
