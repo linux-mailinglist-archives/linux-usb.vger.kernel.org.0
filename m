@@ -2,157 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6625127AA55
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 11:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8575027AA8D
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 11:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726565AbgI1JKc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 28 Sep 2020 05:10:32 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:48682 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726504AbgI1JK3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 05:10:29 -0400
-Received: from mail-pg1-f199.google.com ([209.85.215.199])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1kMpAw-0001Pu-LJ
-        for linux-usb@vger.kernel.org; Mon, 28 Sep 2020 09:10:26 +0000
-Received: by mail-pg1-f199.google.com with SMTP id u1so164672pga.16
-        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 02:10:26 -0700 (PDT)
+        id S1726654AbgI1JUD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 05:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726547AbgI1JUC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 05:20:02 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F26C0613CE
+        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 02:20:02 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id q124so1387628vkb.8
+        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 02:20:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QQu91B+AW3IRpHZjKS2p4lMu3W034IPbEyQrKhHugtA=;
+        b=h0nsKxQ1792AaIhUo13P82vgGVMXclf9CkIZ3KapAzb2X/3tNBKYsSGecwrBlaGlfj
+         Tfj/C9Zv83pHcreLOpATprEGXKgXE7GflMxTk85DdzpRec/t1LnE+wiAfP6b5BIHasHY
+         Ignqf7gF7vwjnL8HCCY3lSkGXTjCE+cuCHlYoEe1V1ud1mcWehNemRROw+dC/JdC1/0c
+         0PedcFoH2tLhd3HHLNfHHJrCV/CVoz/bfJ60yVp2iKXm17ESSv95/LpX2Y/Dg/8GDOjv
+         2ofiMkyoa80M4iYbgDGr8oelbtFwixNkB383I0V8notORYCLMV89a0h5ooLViuYHEZeT
+         ZUiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=1Z4Ynk0YDXFBxI1+/Ju1b4BbhEAznZ0+BUQSH+xMqdU=;
-        b=Kv6if16h5rbC4CYNsRPYgHYF673NAEl6jr0HkikUuUHIHZ73yOsVQfAE0mwWf0kXlH
-         g1HJT+UOARTOxoDPqUtO1vFQxFueinNVqXQUNcWqGf3qgGSqW3SrQnjhmKbGNLOjUSR8
-         g4OlXKuBtPdbAF1F9qrj/Dkxn0jU+5hAGPaUjBX7+frlJaKnMwpIIjC1koNQFUHv76dV
-         u9kp63xudNKucz6EpIjnL6q7itgvdxtWpfqRIKt1qQqJ83QyBKpSQX5Cienjfhivq2Il
-         qv3HKAWmOiF6+hzKQLzdGjktD8KSSkAe5H/ST7horw+wQkUsMOFUuL6al9wBz+li0a9X
-         +v3w==
-X-Gm-Message-State: AOAM531kmQ5t/0jdyy2uvHre9IqdNEhsvtEylmz8B5Oo8tKqhKcymgGD
-        VFJHNWjNYUxITKra9XuGDdYFgvoPWYXPC52ms+daqLL0AEBlfTWL8VocV+HfKUyDp2GrrfaLaws
-        WaY3BvySH271Jiv6+4K1kjGSBT4SjExUcv5i9rw==
-X-Received: by 2002:a17:902:a987:b029:d2:8a38:5bbe with SMTP id bh7-20020a170902a987b02900d28a385bbemr704948plb.60.1601284224841;
-        Mon, 28 Sep 2020 02:10:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx40c8Z3kL5j9XyTPIGfTiec3Mg2G7yjpHgKzTReaRCQuRkkkZ2x1cuXHYXS0pfYSc8YAVF5Q==
-X-Received: by 2002:a17:902:a987:b029:d2:8a38:5bbe with SMTP id bh7-20020a170902a987b02900d28a385bbemr704929plb.60.1601284224525;
-        Mon, 28 Sep 2020 02:10:24 -0700 (PDT)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id j6sm757371pfi.129.2020.09.28.02.10.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Sep 2020 02:10:23 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH v3] xhci: Prevent runtime suspend on Etron EJ168
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <0F26EE78-D4F4-4CCB-892B-999E203BF515@canonical.com>
-Date:   Mon, 28 Sep 2020 17:10:22 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <14291E1B-6580-4C69-9EF8-3B30BC78B8D0@canonical.com>
-References: <20200504171642.26947-1-kai.heng.feng@canonical.com>
- <0F26EE78-D4F4-4CCB-892B-999E203BF515@canonical.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QQu91B+AW3IRpHZjKS2p4lMu3W034IPbEyQrKhHugtA=;
+        b=MI9iVo3F8L8tAhrRfdBvmxdzuQPjj7srLDYCVItYeE0fiWyQIsrl27IKPuQKt/xKJ7
+         6f/1E5l/WU0/q6bjd6+OdB1MUxz/oWHrQXJOrO80wLqxVqEdd37jEZD4GGk7VUvptX1m
+         qIm8IrPt3jBfi96Bdi866NLrsykbEvyhnyIpSUx9xp2pCLK4sTAoED+plHIsPQzvi5ko
+         HsYniggg+68lpXjPEY8JZptg3QqjJTl+CA1MJObO1aEbpQRVBSQ7PIvAMw9qKI0dXN7E
+         WgFnSZGp6YQMNR866tKDOzZRxyy+TUd7iUdcCW6zT4nKNkQ37Vo1qkLKTEDFHlWBr/ti
+         Hfcg==
+X-Gm-Message-State: AOAM531g9eLf6VK5kf8n4zjHaN7w9WMfa0iv+/75v6Y9JR+snhvgHnlF
+        zdE26tt64RQ16kFBvz431inLdxT/a2miwzjaoCKaIw==
+X-Google-Smtp-Source: ABdhPJyIPAnJj5fPmVsL4k9MF4OtxiE77/7ix/Qafm1hzLnqts1eYR1koTMhcOn/iv3ljy6H8r2txH0J3D7/fATe+GY=
+X-Received: by 2002:ac5:c748:: with SMTP id b8mr4530997vkn.6.1601284801206;
+ Mon, 28 Sep 2020 02:20:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200927194846.045411263@linutronix.de> <20200927194922.245750969@linutronix.de>
+ <a345ad51-4db7-5e4f-3ff9-f1673c12da99@broadcom.com>
+In-Reply-To: <a345ad51-4db7-5e4f-3ff9-f1673c12da99@broadcom.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 28 Sep 2020 11:19:25 +0200
+Message-ID: <CAPDyKFrC2j5S7NrtTRCBga=rttKBp-OZnsEnAEgnXj8zj11p0w@mail.gmail.com>
+Subject: Re: [patch 24/35] net: brcmfmac: Replace in_interrupt()
+To:     Arend Van Spriel <arend.vanspriel@broadcom.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        brcm80211-dev-list <brcm80211-dev-list@cypress.com>,
+        netdev <netdev@vger.kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Govindarajulu Varadarajan <_govind@gmx.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Solarflare linux maintainers <linux-net-drivers@solarflare.com>,
+        Edward Cree <ecree@solarflare.com>,
+        Martin Habets <mhabets@solarflare.com>,
+        Jon Mason <jdmason@kudzu.us>, Daniel Drake <dsd@gentoo.org>,
+        Ulrich Kunitz <kune@deine-taler.de>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Jouni Malinen <j@w1.fi>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi.bhat@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        libertas-dev@lists.infradead.org,
+        Pascal Terjan <pterjan@google.com>,
+        Ping-Ke Shih <pkshih@realtek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, 28 Sep 2020 at 09:35, Arend Van Spriel
+<arend.vanspriel@broadcom.com> wrote:
+>
+> + Uffe
+>
+> On 9/27/2020 9:49 PM, Thomas Gleixner wrote:
+> > @@ -85,7 +85,7 @@ static void brcmf_sdiod_ib_irqhandler(st
+> >
+> >       brcmf_dbg(INTR, "IB intr triggered\n");
+> >
+> > -     brcmf_sdio_isr(sdiodev->bus);
+> > +     brcmf_sdio_isr(sdiodev->bus, false);
+> >   }
+>
+> Hi Uffe,
+>
+> I assume the above code is okay, but want to confirm. Is the SDIO
+> interrupt guaranteed to be on a worker thread?
 
+Correct.
 
-> On Jun 8, 2020, at 11:56, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> 
-> 
-> 
->> On May 5, 2020, at 01:16, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
->> 
->> Etron EJ168 USB 3.0 Host Controller stops working after S3, if it was
->> runtime suspended previously:
->> [  370.080359] pci 0000:02:00.0: can't change power state from D3cold to D0 (config space inaccessible)
->> [  370.080477] xhci_hcd 0000:04:00.0: can't change power state from D3cold to D0 (config space inaccessible)
->> [  370.080532] pcieport 0000:00:1c.0: DPC: containment event, status:0x1f05 source:0x0200
->> [  370.080533] pcieport 0000:00:1c.0: DPC: ERR_FATAL detected
->> [  370.080536] xhci_hcd 0000:04:00.0: can't change power state from D3hot to D0 (config space inaccessible)
->> [  370.080552] xhci_hcd 0000:04:00.0: AER: can't recover (no error_detected callback)
->> [  370.080566] usb usb3: root hub lost power or was reset
->> [  370.080566] usb usb4: root hub lost power or was reset
->> [  370.080572] xhci_hcd 0000:04:00.0: Host halt failed, -19
->> [  370.080574] xhci_hcd 0000:04:00.0: Host not accessible, reset failed.
->> [  370.080575] xhci_hcd 0000:04:00.0: PCI post-resume error -19!
->> [  370.080586] xhci_hcd 0000:04:00.0: HC died; cleaning up
->> 
->> This can be fixed by not runtime suspend the controller at all.
->> 
->> So disable runtime suspend for EJ168 xHCI device.
->> 
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> 
-> A gentle ping...
+As a matter of fact, the sdio irqs can be delivered through a couple
+of different paths. The legacy (scheduled for removal), is from a
+dedicated kthread. The more "modern" way is either from the context of
+a threaded IRQ handler or via a workqueue.
 
-Another gentle ping...
+However, there are also so-called out of band SDIO irqs, typically
+routed via a separate GPIO line. This isn't managed by the MMC/SDIO
+subsystem, but the SDIO functional driver itself.
 
-> 
->> ---
->> v3:
->> - Balance rpm refcount in remove callback.
->> 
->> v2:
->> - Use a new quirk to avoid changing existing behavior.
->> 
->> drivers/usb/host/xhci-pci.c | 7 ++++++-
->> drivers/usb/host/xhci.h     | 1 +
->> 2 files changed, 7 insertions(+), 1 deletion(-)
->> 
->> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->> index 766b74723e64..67b4b433a93e 100644
->> --- a/drivers/usb/host/xhci-pci.c
->> +++ b/drivers/usb/host/xhci-pci.c
->> @@ -227,6 +227,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->> 		xhci->quirks |= XHCI_RESET_ON_RESUME;
->> 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
->> 		xhci->quirks |= XHCI_BROKEN_STREAMS;
->> +		xhci->quirks |= XHCI_DISABLE_RUNTIME_SUSPEND;
->> 	}
->> 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
->> 	    pdev->device == 0x0014) {
->> @@ -371,7 +372,8 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
->> 		xhci->shared_hcd->can_do_streams = 1;
->> 
->> 	/* USB-2 and USB-3 roothubs initialized, allow runtime pm suspend */
->> -	pm_runtime_put_noidle(&dev->dev);
->> +	if (!(xhci->quirks & XHCI_DISABLE_RUNTIME_SUSPEND))
->> +		pm_runtime_put_noidle(&dev->dev);
->> 
->> 	if (xhci->quirks & XHCI_DEFAULT_PM_RUNTIME_ALLOW)
->> 		pm_runtime_allow(&dev->dev);
->> @@ -397,6 +399,9 @@ static void xhci_pci_remove(struct pci_dev *dev)
->> 	if (xhci->quirks & XHCI_DEFAULT_PM_RUNTIME_ALLOW)
->> 		pm_runtime_forbid(&dev->dev);
->> 
->> +	if (!(xhci->quirks & XHCI_DISABLE_RUNTIME_SUSPEND))
->> +		pm_runtime_get_noresume(&dev->dev);
->> +
->> 	if (xhci->shared_hcd) {
->> 		usb_remove_hcd(xhci->shared_hcd);
->> 		usb_put_hcd(xhci->shared_hcd);
->> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
->> index 86cfefdd6632..d9c209a10d3f 100644
->> --- a/drivers/usb/host/xhci.h
->> +++ b/drivers/usb/host/xhci.h
->> @@ -1873,6 +1873,7 @@ struct xhci_hcd {
->> #define XHCI_DEFAULT_PM_RUNTIME_ALLOW	BIT_ULL(33)
->> #define XHCI_RESET_PLL_ON_DISCONNECT	BIT_ULL(34)
->> #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
->> +#define XHCI_DISABLE_RUNTIME_SUSPEND    BIT_ULL(36)
->> 
->> 	unsigned int		num_active_eps;
->> 	unsigned int		limit_active_eps;
->> -- 
->> 2.17.1
->> 
-> 
-
+Kind regards
+Uffe
