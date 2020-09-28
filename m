@@ -2,223 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E708B27AFE1
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 16:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D88D27B0CF
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 17:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726615AbgI1OSH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 10:18:07 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:53010 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726327AbgI1OSG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 10:18:06 -0400
-Received: from fsav101.sakura.ne.jp (fsav101.sakura.ne.jp [27.133.134.228])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 08SEI4Wh050365;
-        Mon, 28 Sep 2020 23:18:04 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav101.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav101.sakura.ne.jp);
- Mon, 28 Sep 2020 23:18:04 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav101.sakura.ne.jp)
-Received: from localhost.localdomain (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 08SEHx39050281
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 28 Sep 2020 23:18:04 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Greg KH <greg@kroah.com>, Oliver Neukum <oneukum@suse.com>
-Cc:     andreyknvl@google.com, arnd@arndb.de, bjorn@mork.no,
-        colin.king@canonical.com, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu,
-        syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH (repost)] USB: cdc-wdm: Make wdm_flush() interruptible and add wdm_fsync().
-Date:   Mon, 28 Sep 2020 23:17:55 +0900
-Message-Id: <20200928141755.3476-1-penguin-kernel@I-love.SAKURA.ne.jp>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <b27841ab-a88c-13e2-a66f-6df7af1f46b4@i-love.sakura.ne.jp>
-References: <b27841ab-a88c-13e2-a66f-6df7af1f46b4@i-love.sakura.ne.jp>
+        id S1726485AbgI1PUw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 11:20:52 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:60855 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726465AbgI1PUv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 11:20:51 -0400
+Received: (qmail 136874 invoked by uid 1000); 28 Sep 2020 11:20:50 -0400
+Date:   Mon, 28 Sep 2020 11:20:50 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <greg@kroah.com>
+Cc:     yasushi asano <yazzep@gmail.com>, andrew_gabbasov@mentor.com,
+        "Rosca, Eugeniu \(ADITG/ESM1\)" <erosca@de.adit-jv.com>,
+        Baxter Jim <jim_baxter@mentor.com>, linux-usb@vger.kernel.org,
+        "Nishiguchi, Naohiro \(ADITJ/SWG\)" <nnishiguchi@jp.adit-jv.com>,
+        "Natsume, Wataru \(ADITJ/SWG\)" <wnatsume@jp.adit-jv.com>,
+        =?utf-8?B?5rWF6YeO5oGt5Y+y?= <yasano@jp.adit-jv.com>
+Subject: [Patch 1/2]: USB: hub: Clean up use of port initialization schemes
+ and retries
+Message-ID: <20200928152050.GA134701@rowland.harvard.edu>
+References: <20200920192114.GB1190206@rowland.harvard.edu>
+ <20200921140342.3813-1-yazzep@gmail.com>
+ <20200921144827.GC1213381@rowland.harvard.edu>
+ <CAEt1Rjq-DOwN0+_7F0m-kqUHTzm5YPUaXqUOpTszCsqrfLRt5w@mail.gmail.com>
+ <20200921150611.GD1213381@rowland.harvard.edu>
+ <CAEt1RjoypwL9-NsuOfypvT09sQb_7PYbgzegaAH-RfbjLmL44w@mail.gmail.com>
+ <CAEt1Rjp2GKf47JZaRPAD3YnFWPF5+8mxHGmgY+F7Ta9wc1GvrQ@mail.gmail.com>
+ <20200925184153.GA53451@rowland.harvard.edu>
+ <CAEt1Rjo_H5f0CD+o5y-jDBfU8__gEPie0PvqzsV48aaakO7JkA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEt1Rjo_H5f0CD+o5y-jDBfU8__gEPie0PvqzsV48aaakO7JkA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+The SET_CONFIG_TRIES macro in hub.c is badly named; it controls the
+number of port-initialization retry attempts rather than the number of
+Set-Configuration attempts.  Furthermore, the USE_NEW_SCHEME macro and
+use_new_scheme() function are written in a very confusing manner,
+making it almost impossible to figure out exactly what they do or
+check that they are correct.
 
-syzbot is reporting hung task at wdm_flush() [1], for there is a circular
-dependency that wdm_flush() from flip_close() for /dev/cdc-wdm0 forever
-waits for /dev/raw-gadget to be closed while close() for /dev/raw-gadget
-cannot be called unless close() for /dev/cdc-wdm0 completes.
+This patch renames SET_CONFIG_TRIES to PORT_INIT_TRIES, removes
+USE_NEW_SCHEME entirely, and rewrites use_new_scheme() to be much more
+transparent, with added comments explaining how it works.  The patch
+also pulls the single call site of use_new_scheme() out from the
+Get-Descriptor retry loop (where it returns the same value each time)
+and renames the local variable used to store the result.
 
-Tetsuo Handa considered that such circular dependency is an usage error [2]
-which corresponds to an unresponding broken hardware [3]. But Alan Stern
-responded that we should be prepared for such hardware [4]. Therefore,
-this patch changes wdm_flush() to use wait_event_interruptible_timeout()
-which gives up after 30 seconds, for hardware that remains silent must be
-ignored. The 30 seconds are coming out of thin air.
+The overall effect is a minor cleanup.  However, there is one
+functional change: If the "use_both_schemes" module parameter isn't
+set (by default it is set), the existing code does only two retry
+iterations.  After this patch it will always perform four, regardless
+of the parameter's value.
 
-Changing wait_event() to wait_event_interruptible_timeout() makes error
-reporting from close() syscall less reliable. To compensate it, this patch
-also implements wdm_fsync() which does not use timeout. Those who want to
-be very sure that data has gone out to the device are now advised to call
-fsync(), with a caveat that fsync() can return -EINVAL when running on
-older kernels which do not implement wdm_fsync().
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 
-This patch also fixes three more problems (listed below) found during
-exhaustive discussion and testing.
-
-  Since multiple threads can concurrently call wdm_write()/wdm_flush(),
-  we need to use wake_up_all() whenever clearing WDM_IN_USE in order to
-  make sure that all waiters are woken up. Also, error reporting needs
-  to use fetch-and-clear approach in order not to report same error for
-  multiple times.
-
-  Since wdm_flush() checks WDM_DISCONNECTING, wdm_write() should as well
-  check WDM_DISCONNECTING.
-
-  In wdm_flush(), since locks are not held, it is not safe to dereference
-  desc->intf after checking that WDM_DISCONNECTING is not set [5]. Thus,
-  remove dev_err() from wdm_flush().
-
-[1] https://syzkaller.appspot.com/bug?id=e7b761593b23eb50855b9ea31e3be5472b711186
-[2] https://lkml.kernel.org/r/27b7545e-8f41-10b8-7c02-e35a08eb1611@i-love.sakura.ne.jp
-[3] https://lkml.kernel.org/r/79ba410f-e0ef-2465-b94f-6b9a4a82adf5@i-love.sakura.ne.jp
-[4] https://lkml.kernel.org/r/20200530011040.GB12419@rowland.harvard.edu
-[5] https://lkml.kernel.org/r/c85331fc-874c-6e46-a77f-0ef1dc075308@i-love.sakura.ne.jp
-
-Reported-by: syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>
-Co-developed-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>
 ---
- drivers/usb/class/cdc-wdm.c | 72 ++++++++++++++++++++++++++++---------
- 1 file changed, 55 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 7f5de956a2fc..02d0cfd23bb2 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -58,6 +58,9 @@ MODULE_DEVICE_TABLE (usb, wdm_ids);
+
+[as1944]
+
+
+ drivers/usb/core/hub.c |   49 ++++++++++++++++++++++++++-----------------------
+ 1 file changed, 26 insertions(+), 23 deletions(-)
+
+Index: usb-devel/drivers/usb/core/hub.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hub.c
++++ usb-devel/drivers/usb/core/hub.c
+@@ -2708,8 +2708,7 @@ static unsigned hub_is_wusb(struct usb_h
+ #define PORT_RESET_TRIES	5
+ #define SET_ADDRESS_TRIES	2
+ #define GET_DESCRIPTOR_TRIES	2
+-#define SET_CONFIG_TRIES	(2 * (use_both_schemes + 1))
+-#define USE_NEW_SCHEME(i, scheme)	((i) / 2 == (int)(scheme))
++#define PORT_INIT_TRIES		4
  
- #define WDM_MAX			16
+ #define HUB_ROOT_RESET_TIME	60	/* times are in msec */
+ #define HUB_SHORT_RESET_TIME	10
+@@ -2717,23 +2716,31 @@ static unsigned hub_is_wusb(struct usb_h
+ #define HUB_LONG_RESET_TIME	200
+ #define HUB_RESET_TIMEOUT	800
  
-+/* we cannot wait forever at flush() */
-+#define WDM_FLUSH_TIMEOUT	(30 * HZ)
-+
- /* CDC-WMC r1.1 requires wMaxCommand to be "at least 256 decimal (0x100)" */
- #define WDM_DEFAULT_BUFSIZE	256
- 
-@@ -151,7 +154,7 @@ static void wdm_out_callback(struct urb *urb)
- 	kfree(desc->outbuf);
- 	desc->outbuf = NULL;
- 	clear_bit(WDM_IN_USE, &desc->flags);
--	wake_up(&desc->wait);
-+	wake_up_all(&desc->wait);
- }
- 
- static void wdm_in_callback(struct urb *urb)
-@@ -393,6 +396,9 @@ static ssize_t wdm_write
- 	if (test_bit(WDM_RESETTING, &desc->flags))
- 		r = -EIO;
- 
-+	if (test_bit(WDM_DISCONNECTING, &desc->flags))
-+		r = -ENODEV;
-+
- 	if (r < 0) {
- 		rv = r;
- 		goto out_free_mem_pm;
-@@ -424,6 +430,7 @@ static ssize_t wdm_write
- 	if (rv < 0) {
- 		desc->outbuf = NULL;
- 		clear_bit(WDM_IN_USE, &desc->flags);
-+		wake_up_all(&desc->wait); /* for wdm_wait_for_response() */
- 		dev_err(&desc->intf->dev, "Tx URB error: %d\n", rv);
- 		rv = usb_translate_errors(rv);
- 		goto out_free_mem_pm;
-@@ -583,28 +590,58 @@ static ssize_t wdm_read
- 	return rv;
- }
- 
--static int wdm_flush(struct file *file, fl_owner_t id)
-+static int wdm_wait_for_response(struct file *file, long timeout)
+-/*
+- * "New scheme" enumeration causes an extra state transition to be
+- * exposed to an xhci host and causes USB3 devices to receive control
+- * commands in the default state.  This has been seen to cause
+- * enumeration failures, so disable this enumeration scheme for USB3
+- * devices.
+- */
+ static bool use_new_scheme(struct usb_device *udev, int retry,
+ 			   struct usb_port *port_dev)
  {
- 	struct wdm_device *desc = file->private_data;
-+	long rv; /* Use long here because (int) MAX_SCHEDULE_TIMEOUT < 0. */
-+
-+	/*
-+	 * Needs both flags. We cannot do with one because resetting it would
-+	 * cause a race with write() yet we need to signal a disconnect.
-+	 */
-+	rv = wait_event_interruptible_timeout(desc->wait,
-+			      !test_bit(WDM_IN_USE, &desc->flags) ||
-+			      test_bit(WDM_DISCONNECTING, &desc->flags),
-+			      timeout);
+ 	int old_scheme_first_port =
+-		port_dev->quirks & USB_PORT_QUIRK_OLD_SCHEME;
++		(port_dev->quirks & USB_PORT_QUIRK_OLD_SCHEME) ||
++		old_scheme_first;
  
--	wait_event(desc->wait,
--			/*
--			 * needs both flags. We cannot do with one
--			 * because resetting it would cause a race
--			 * with write() yet we need to signal
--			 * a disconnect
--			 */
--			!test_bit(WDM_IN_USE, &desc->flags) ||
--			test_bit(WDM_DISCONNECTING, &desc->flags));
--
--	/* cannot dereference desc->intf if WDM_DISCONNECTING */
 +	/*
-+	 * To report the correct error. This is best effort.
-+	 * We are inevitably racing with the hardware.
++	 * "New scheme" enumeration causes an extra state transition to be
++	 * exposed to an xhci host and causes USB3 devices to receive control
++	 * commands in the default state.  This has been seen to cause
++	 * enumeration failures, so disable this enumeration scheme for USB3
++	 * devices.
 +	 */
- 	if (test_bit(WDM_DISCONNECTING, &desc->flags))
- 		return -ENODEV;
--	if (desc->werr < 0)
--		dev_err(&desc->intf->dev, "Error in flush path: %d\n",
--			desc->werr);
-+	if (!rv)
-+		return -EIO;
-+	if (rv < 0)
-+		return -EINTR;
-+
-+	spin_lock_irq(&desc->iuspin);
-+	rv = desc->werr;
-+	desc->werr = 0;
-+	spin_unlock_irq(&desc->iuspin);
-+
-+	return usb_translate_errors(rv);
-+
-+}
-+
-+/*
-+ * You need to send a signal when you react to malicious or defective hardware.
-+ * Also, don't abort when fsync() returned -EINVAL, for older kernels which do
-+ * not implement wdm_flush() will return -EINVAL.
-+ */
-+static int wdm_fsync(struct file *file, loff_t start, loff_t end, int datasync)
-+{
-+	return wdm_wait_for_response(file, MAX_SCHEDULE_TIMEOUT);
-+}
+ 	if (udev->speed >= USB_SPEED_SUPER)
+ 		return false;
  
--	return usb_translate_errors(desc->werr);
-+/*
-+ * Same with wdm_fsync(), except it uses finite timeout in order to react to
-+ * malicious or defective hardware which ceased communication after close() was
-+ * implicitly called due to process termination.
-+ */
-+static int wdm_flush(struct file *file, fl_owner_t id)
-+{
-+	return wdm_wait_for_response(file, WDM_FLUSH_TIMEOUT);
+-	return USE_NEW_SCHEME(retry, old_scheme_first_port || old_scheme_first);
++	/*
++	 * If use_both_schemes is set, use the first scheme (whichever
++	 * it is) for the larger half of the retries, then use the other
++	 * scheme.  Otherwise, use the first scheme for all the retries.
++	 */
++	if (use_both_schemes && retry >= (PORT_INIT_TRIES + 1) / 2)
++		return old_scheme_first_port;	/* Second half */
++	return !old_scheme_first_port;		/* First half or all */
  }
  
- static __poll_t wdm_poll(struct file *file, struct poll_table_struct *wait)
-@@ -729,6 +766,7 @@ static const struct file_operations wdm_fops = {
- 	.owner =	THIS_MODULE,
- 	.read =		wdm_read,
- 	.write =	wdm_write,
-+	.fsync =	wdm_fsync,
- 	.open =		wdm_open,
- 	.flush =	wdm_flush,
- 	.release =	wdm_release,
--- 
-2.25.1
-
+ /* Is a USB 3.0 port in the Inactive or Compliance Mode state?
+@@ -4545,6 +4552,7 @@ hub_port_init(struct usb_hub *hub, struc
+ 	const char		*speed;
+ 	int			devnum = udev->devnum;
+ 	const char		*driver_name;
++	bool			do_new_scheme;
+ 
+ 	/* root hub ports have a slightly longer reset period
+ 	 * (from USB 2.0 spec, section 7.1.7.5)
+@@ -4657,14 +4665,13 @@ hub_port_init(struct usb_hub *hub, struc
+ 	 * first 8 bytes of the device descriptor to get the ep0 maxpacket
+ 	 * value.
+ 	 */
+-	for (retries = 0; retries < GET_DESCRIPTOR_TRIES; (++retries, msleep(100))) {
+-		bool did_new_scheme = false;
++	do_new_scheme = use_new_scheme(udev, retry_counter, port_dev);
+ 
+-		if (use_new_scheme(udev, retry_counter, port_dev)) {
++	for (retries = 0; retries < GET_DESCRIPTOR_TRIES; (++retries, msleep(100))) {
++		if (do_new_scheme) {
+ 			struct usb_device_descriptor *buf;
+ 			int r = 0;
+ 
+-			did_new_scheme = true;
+ 			retval = hub_enable_device(udev);
+ 			if (retval < 0) {
+ 				dev_err(&udev->dev,
+@@ -4773,11 +4780,7 @@ hub_port_init(struct usb_hub *hub, struc
+ 			 *  - read ep0 maxpacket even for high and low speed,
+ 			 */
+ 			msleep(10);
+-			/* use_new_scheme() checks the speed which may have
+-			 * changed since the initial look so we cache the result
+-			 * in did_new_scheme
+-			 */
+-			if (did_new_scheme)
++			if (do_new_scheme)
+ 				break;
+ 		}
+ 
+@@ -5106,7 +5109,7 @@ static void hub_port_connect(struct usb_
+ 		unit_load = 100;
+ 
+ 	status = 0;
+-	for (i = 0; i < SET_CONFIG_TRIES; i++) {
++	for (i = 0; i < PORT_INIT_TRIES; i++) {
+ 
+ 		/* reallocate for each attempt, since references
+ 		 * to the previous one can escape in various ways
+@@ -5239,7 +5242,7 @@ loop:
+ 			break;
+ 
+ 		/* When halfway through our retry count, power-cycle the port */
+-		if (i == (SET_CONFIG_TRIES / 2) - 1) {
++		if (i == (PORT_INIT_TRIES - 1) / 2) {
+ 			dev_info(&port_dev->dev, "attempt power cycle\n");
+ 			usb_hub_set_port_power(hdev, hub, port1, false);
+ 			msleep(2 * hub_power_on_good_delay(hub));
+@@ -5770,7 +5773,7 @@ static int usb_reset_and_verify_device(s
+ 	bos = udev->bos;
+ 	udev->bos = NULL;
+ 
+-	for (i = 0; i < SET_CONFIG_TRIES; ++i) {
++	for (i = 0; i < PORT_INIT_TRIES; ++i) {
+ 
+ 		/* ep0 maxpacket size may change; let the HCD know about it.
+ 		 * Other endpoints will be handled by re-enumeration. */
