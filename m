@@ -2,46 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F5527A9BC
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 10:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380B027A9E4
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 10:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbgI1IkW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 04:40:22 -0400
-Received: from cmccmta3.chinamobile.com ([221.176.66.81]:49904 "EHLO
-        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726328AbgI1IkW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 04:40:22 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.3]) by rmmx-syy-dmz-app11-12011 (RichMail) with SMTP id 2eeb5f71a167e92-f0d3d; Mon, 28 Sep 2020 16:40:07 +0800 (CST)
-X-RM-TRANSID: 2eeb5f71a167e92-f0d3d
+        id S1726559AbgI1IqW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 04:46:22 -0400
+Received: from cmccmta1.chinamobile.com ([221.176.66.79]:22001 "EHLO
+        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726328AbgI1IqW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 04:46:22 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.17]) by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee45f71a2ae565-f1855; Mon, 28 Sep 2020 16:45:34 +0800 (CST)
+X-RM-TRANSID: 2ee45f71a2ae565-f1855
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG: 00000000
 Received: from [192.168.21.77] (unknown[10.42.68.12])
-        by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee25f71a166719-a64bf;
-        Mon, 28 Sep 2020 16:40:07 +0800 (CST)
-X-RM-TRANSID: 2ee25f71a166719-a64bf
+        by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee95f71a2ace47-a72e9;
+        Mon, 28 Sep 2020 16:45:33 +0800 (CST)
+X-RM-TRANSID: 2ee95f71a2ace47-a72e9
 Subject: Re: [PATCH] usb: bdc: Remove duplicate error message in bdc_probe()
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20200927134218.20028-1-tangbin@cmss.chinamobile.com>
- <1601275744.29336.12.camel@mhfsdcap03>
+ <20200927134550.GA302849@kroah.com>
 From:   Tang Bin <tangbin@cmss.chinamobile.com>
-Message-ID: <20c1b250-bc9a-98fd-8029-99a4c92a1c94@cmss.chinamobile.com>
-Date:   Mon, 28 Sep 2020 16:40:01 +0800
+Message-ID: <e895f44b-2c53-a883-322b-e3768fdb6733@cmss.chinamobile.com>
+Date:   Mon, 28 Sep 2020 16:45:29 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <1601275744.29336.12.camel@mhfsdcap03>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200927134550.GA302849@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Greg KH:
 
-在 2020/9/28 14:49, Chunfeng Yun 写道:
-> On Sun, 2020-09-27 at 21:42 +0800, Tang Bin wrote:
+在 2020/9/27 21:45, Greg KH 写道:
+> On Sun, Sep 27, 2020 at 09:42:18PM +0800, Tang Bin wrote:
 >> In this function, we don't need dev_err() message because
 >> when something goes wrong, devm_platform_ioremap_resource()
 >> can print an error message itself, so remove the redundant
@@ -65,17 +66,22 @@ X-Mailing-List: linux-usb@vger.kernel.org
 >> -		dev_err(dev, "ioremap error\n");
 >> +	if (IS_ERR(bdc->regs))
 >>   		return -ENOMEM;
->> -	}
->>   	irq = platform_get_irq(pdev, 0);
->>   	if (irq < 0)
->>   		return irq;
-> Cc bdc's maintainer:  Florian Fainelli <f.fainelli@gmail.com>
+> Why not return the error given to us?
 
-Got it, thanks.
+Because when get ioremap failed, devm_platform_ioremap_resource() can 
+print error message
+
+"dev_err(dev, "ioremap failed for resource %pR\n", res)" in it's called 
+function. So I think this's place's
+
+dev_err(dev, "ioremap error\n") is redundant.
+
+
+Thanks
 
 Tang Bin
 
->
+
 >
 
 
