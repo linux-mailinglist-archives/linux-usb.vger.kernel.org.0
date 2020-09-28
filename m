@@ -2,102 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 568D627ABC4
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 12:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A930327AC4B
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 12:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726651AbgI1KZH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 06:25:07 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:38042 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726625AbgI1KZF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 06:25:05 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1601288703;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RS8aaD/teCyQjHIzfzURMvl8u+n+j/rIgE5B0tuRdqE=;
-        b=gefvSazqCe4P8yXMo6E5U3J2nl9MRIsoO0COTSGGhv6CaqV3kK47f3WLpsoS162+/W9/Vc
-        Wkzqk6yvWPGwPTL2eAmHgrG3XH/+ywXzrlCVryyrOnGaUtfzn4Tijwv/s1YNtCkS0vEhrG
-        +4YN1IIfcrakr2TzIlS9lSPb9AyFXfZrXkhJw1HF7Pi6y5zrgk9waDEU48V9Kw+lPeZLly
-        Wu1mg8ha3QHNKHUEwLgWa6tKTwRcGJLzAda1mhslxVkZ1je+KWGN3kAPZD7ly/wCWCC4CD
-        OnKYpfAfsMlO2sywS2GlLfQG5j5EJ4fk8dHmS+9cCbyjOqWVrFmGedLp39lLug==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1601288703;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RS8aaD/teCyQjHIzfzURMvl8u+n+j/rIgE5B0tuRdqE=;
-        b=OxHd7EyfzbyMOnvuIYpsPknE9szpQG6fIVC/UtImzmuMTucnagAwUguEK0km7NFiEUZ3/L
-        u706LrSyXdPBgFAg==
-To:     David Miller <davem@davemloft.net>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        torvalds@linuxfoundation.org, paulmck@kernel.org,
-        willy@infradead.org, benve@cisco.com, _govind@gmx.com,
-        kuba@kernel.org, netdev@vger.kernel.org, corbet@lwn.net,
-        mchehab+huawei@kernel.org, linux-doc@vger.kernel.org,
-        bigeasy@linutronix.de, luc.vanoostenryck@gmail.com,
-        jcliburn@gmail.com, chris.snook@gmail.com, vishal@chelsio.com,
-        jeffrey.t.kirsher@intel.com, intel-wired-lan@lists.osuosl.org,
-        snelson@pensando.io, drivers@pensando.io, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk,
-        tsbogend@alpha.franken.de, linux-net-drivers@solarflare.com,
-        ecree@solarflare.com, mhabets@solarflare.com, jdmason@kudzu.us,
-        dsd@gentoo.org, kune@deine-taler.de, kvalo@codeaurora.org,
-        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, arend.vanspriel@broadcom.com,
-        franky.lin@broadcom.com, hante.meuleman@broadcom.com,
-        chi-hsien.lin@cypress.com, wright.feng@cypress.com,
-        brcm80211-dev-list.pdl@broadcom.com,
-        brcm80211-dev-list@cypress.com, stas.yakovlev@gmail.com,
-        stf_xl@wp.pl, johannes.berg@intel.com, emmanuel.grumbach@intel.com,
-        luciano.coelho@intel.com, linuxwifi@intel.com
-Subject: Re: [patch 00/35] net: in_interrupt() cleanup and fixes
-In-Reply-To: <20200927.135707.1699954431349573308.davem@davemloft.net>
-References: <20200927194846.045411263@linutronix.de> <20200927.135707.1699954431349573308.davem@davemloft.net>
-Date:   Mon, 28 Sep 2020 12:25:02 +0200
-Message-ID: <87blhqkxkx.fsf@nanos.tec.linutronix.de>
+        id S1726497AbgI1Kz7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 06:55:59 -0400
+Received: from cmccmta1.chinamobile.com ([221.176.66.79]:6840 "EHLO
+        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726465AbgI1Kz7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 06:55:59 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.17]) by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee25f71c123e4c-f35db; Mon, 28 Sep 2020 18:55:31 +0800 (CST)
+X-RM-TRANSID: 2ee25f71c123e4c-f35db
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from [192.168.21.77] (unknown[10.42.68.12])
+        by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee95f71c120132-ad49b;
+        Mon, 28 Sep 2020 18:55:31 +0800 (CST)
+X-RM-TRANSID: 2ee95f71c120132-ad49b
+Subject: Re: [PATCH] usb: bdc: Remove duplicate error message in bdc_probe()
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>
+References: <20200927134218.20028-1-tangbin@cmss.chinamobile.com>
+ <20200927134550.GA302849@kroah.com>
+ <e895f44b-2c53-a883-322b-e3768fdb6733@cmss.chinamobile.com>
+ <87sgb29r3g.fsf@kernel.org>
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+Message-ID: <02162cfc-cbe3-4747-e518-7f3b3d7a0e7f@cmss.chinamobile.com>
+Date:   Mon, 28 Sep 2020 18:55:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <87sgb29r3g.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Sep 27 2020 at 13:57, David Miller wrote:
+Hi Balbi：
 
-> From: Thomas Gleixner <tglx@linutronix.de>
-> Date: Sun, 27 Sep 2020 21:48:46 +0200
+在 2020/9/28 17:40, Felipe Balbi 写道:
+> Hi,
 >
->> in the discussion about preempt count consistency accross kernel configu=
-rations:
+> Tang Bin <tangbin@cmss.chinamobile.com> writes:
+>> Hi Greg KH:
+>>
+>> 在 2020/9/27 21:45, Greg KH 写道:
+>>> On Sun, Sep 27, 2020 at 09:42:18PM +0800, Tang Bin wrote:
+>>>> In this function, we don't need dev_err() message because
+>>>> when something goes wrong, devm_platform_ioremap_resource()
+>>>> can print an error message itself, so remove the redundant
+>>>> one.
+>>>>
+>>>> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+>>>> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+>>>> ---
+>>>>    drivers/usb/gadget/udc/bdc/bdc_core.c | 4 +---
+>>>>    1 file changed, 1 insertion(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
+>>>> index 02a3a7746..9454f179e 100644
+>>>> --- a/drivers/usb/gadget/udc/bdc/bdc_core.c
+>>>> +++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
+>>>> @@ -508,10 +508,8 @@ static int bdc_probe(struct platform_device *pdev)
+>>>>    	bdc->clk = clk;
+>>>>    
+>>>>    	bdc->regs = devm_platform_ioremap_resource(pdev, 0);
+>>>> -	if (IS_ERR(bdc->regs)) {
+>>>> -		dev_err(dev, "ioremap error\n");
+>>>> +	if (IS_ERR(bdc->regs))
+>>>>    		return -ENOMEM;
+>>> Why not return the error given to us?
+>> Because when get ioremap failed, devm_platform_ioremap_resource() can
+>> print error message
+>>
+>> "dev_err(dev, "ioremap failed for resource %pR\n", res)" in it's called
+>> function. So I think this's place's
+>>
+>> dev_err(dev, "ioremap error\n") is redundant.
+> that's not what Greg point you at, though. Greg's concern is valid in
+> that instead of passing along the error within bdc->regs, you always
+> return -ENOMEM. OTW, your code should read like so:
 >
-> Please respin this against net-next, some of the patches in here are alre=
-ady
-> in net-next (the wireless debug macro one) and even after that the series
-> doesn't build:
+> 	if (IS_ERR(bdc->regs))
+>          	return PTR_ERR(bdc->regs);
 
-Will do.
+Thanks for your explain，when I send the patch yesterday, my point is at 
+dev_err(), and not aimed at IS_ERR() & PTR_ERR(),
 
-> drivers/net/ethernet/cisco/enic/enic_main.c: In function =E2=80=98enic_re=
-set=E2=80=99:
-> drivers/net/ethernet/cisco/enic/enic_main.c:2315:2: error: implicit decla=
-ration of function =E2=80=98enic_set_api_state=E2=80=99; did you mean =E2=
-=80=98enic_set_api_busy=E2=80=99? [-Werror=3Dimplicit-function-declaration]
->  2315 |  enic_set_api_state(enic, true);
->       |  ^~~~~~~~~~~~~~~~~~
->       |  enic_set_api_busy
-> At top level:
-> drivers/net/ethernet/cisco/enic/enic_main.c:2298:13: warning: =E2=80=98en=
-ic_set_api_busy=E2=80=99 defined but not used [-Wunused-function]
->  2298 | static void enic_set_api_busy(struct enic *enic, bool busy)
->       |             ^~~~~~~~~~~~~~~~~
+if it's Greg's point, I will change this patch after his reply.
 
-Duh, not sure how I managed that. Sorry. will fix and rebase.
 
-Thanks,
+Thank you very much.
 
-        tglx
+Tang Bin
+
+
+
+
+
+
