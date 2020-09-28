@@ -2,98 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7666927ACBC
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 13:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D77427AD6B
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 14:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbgI1LcZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 07:32:25 -0400
-Received: from mga18.intel.com ([134.134.136.126]:62254 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726380AbgI1LcZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Sep 2020 07:32:25 -0400
-IronPort-SDR: jhDOPDNa/y56Zvd+kMP860Io9j1XjHIwriLNHSoXK+skiCwIswz1BbatAvN6WnWDrtWzR+2xC2
- AIaVLHvo4R3g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9757"; a="149750857"
-X-IronPort-AV: E=Sophos;i="5.77,313,1596524400"; 
-   d="scan'208";a="149750857"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 04:32:23 -0700
-IronPort-SDR: wmwjLpx0vZ4fe9wPGrkgmvd3yCF9t5adWQZYclHblL03grnn1EqDHcYvjQZGOiceRKPDkOqwX1
- lbA4zn0exFFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,313,1596524400"; 
-   d="scan'208";a="414950724"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 28 Sep 2020 04:32:21 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 28 Sep 2020 14:32:20 +0300
-Date:   Mon, 28 Sep 2020 14:32:20 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH 1/3] software node: Power management operations for
- software nodes
-Message-ID: <20200928113220.GA3987353@kuha.fi.intel.com>
-References: <20200825135951.53340-1-heikki.krogerus@linux.intel.com>
- <20200825135951.53340-2-heikki.krogerus@linux.intel.com>
- <CAJZ5v0jT7Xdcm1WVvAV9okkoicnEsFEvnLSLLNx6eJHMNxwX+Q@mail.gmail.com>
+        id S1726558AbgI1MBV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 08:01:21 -0400
+Received: from cmccmta2.chinamobile.com ([221.176.66.80]:24101 "EHLO
+        cmccmta2.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726513AbgI1MBU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 08:01:20 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.5]) by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee75f71d077242-f63b6; Mon, 28 Sep 2020 20:00:58 +0800 (CST)
+X-RM-TRANSID: 2ee75f71d077242-f63b6
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[223.112.105.130])
+        by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee35f71d078268-40e0d;
+        Mon, 28 Sep 2020 20:00:58 +0800 (CST)
+X-RM-TRANSID: 2ee35f71d078268-40e0d
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+To:     f.fainelli@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        chunfeng.yun@mediatek.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Subject: [PATCH v2] usb: bdc: Fix the return value and remove duplicate error message
+Date:   Mon, 28 Sep 2020 20:00:51 +0800
+Message-Id: <20200928120051.21748-1-tangbin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.20.1.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jT7Xdcm1WVvAV9okkoicnEsFEvnLSLLNx6eJHMNxwX+Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 05:54:37PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Aug 25, 2020 at 3:59 PM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > Adding separate PM operations vector for the software nodes.
-> > The software node specific PM operations make it possible to
-> > handle most PM related quirks separately in their own
-> > functions instead of conditionally in the device driver's
-> > generic PM functions (and in some cases all over the
-> > driver). The software node specific PM operations will also
-> > reduce the need to pass platform data in some cases, for
-> > example from a core MFD driver to the child device drivers,
-> > as from now on the core MFD driver will be able to implement
-> > the PM quirks directly for the child devices without the
-> > need to touch the drivers of those child devices.
-> >
-> > If a software node includes the PM operations, those PM
-> > operations are always executed separately on top of the
-> > other PM operations of the device, so the software node will
-> > never replace any of the "normal" PM operations of the
-> > device (including the PM domain's operations, class's or
-> > bus's PM operations, the device drivers own operations, or
-> > any other).
-> 
-> This isn't consistent with the code changes AFAICS.
-> 
-> The swnode PM operations are implemented as a PM domain ops, which
-> means that they will be executed instead of any other existing ops
-> rather than in addition to those.
-> 
-> For example, software_node_prepare() will skip bus type ops if they
-> are present and there is no "primary" PM domain which seems not
-> intended.
+When call function devm_platform_ioremap_resource(), we should use
+IS_ERR() to check the return value and return PTR_ERR() if failed,
+and it can print an error message itself if failed. So remove the
+redundant dev_err() in this place.
 
-True. I thought the pm_generic_*() functions will take care of also
-the bus ops, but of course they don't do that.
+Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+---
+Changes from v1
+ - fix the subject and commit message
+ - fix the code of right return if failed
+---
+ drivers/usb/gadget/udc/bdc/bdc_core.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-> Also some comments might help to understand the design.
-
-OK.
-
-thanks,
-
+diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
+index 02a3a7746..70ff31bc8 100644
+--- a/drivers/usb/gadget/udc/bdc/bdc_core.c
++++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
+@@ -508,10 +508,9 @@ static int bdc_probe(struct platform_device *pdev)
+ 	bdc->clk = clk;
+ 
+ 	bdc->regs = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(bdc->regs)) {
+-		dev_err(dev, "ioremap error\n");
+-		return -ENOMEM;
+-	}
++	if (IS_ERR(bdc->regs))
++		return PTR_ERR(bdc->regs);
++
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
+ 		return irq;
 -- 
-heikki
+2.20.1.windows.1
+
+
+
