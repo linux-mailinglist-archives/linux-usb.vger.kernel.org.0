@@ -2,64 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7807D27B3A6
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 19:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8F827B427
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Sep 2020 20:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726655AbgI1Ruq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 13:50:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53926 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726409AbgI1Ruq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Sep 2020 13:50:46 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E4B320739;
-        Mon, 28 Sep 2020 17:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601315445;
-        bh=DtmjWP3bxklOw2yPoWKGOJ2ab6CvFBGzDnh+KmCO9Iw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hE9IUU1nUneaD2uBTQbkAqT2xaXQbz7UyaD4ueFsEGYLPJjtS88dDvJncg33l/Ra8
-         CD9JO4aUC5DdbYz+Z6nVPfgP1kDzM0qZuRuzbG3O5rTAimbIewjbI0MCxSEr7b+5zS
-         uUJEp3N3OzAsTzYiEkAzixKX2RwbDyhrFnFhvwIM=
-Date:   Mon, 28 Sep 2020 19:50:53 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kiran <kiranmkota@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: /net/usb/ipheth.c incompatibility with Apple iOS 14
-Message-ID: <20200928175053.GA2202486@kroah.com>
-References: <CAAn0qaXmysJ9vx3ZEMkViv_B19ju-_ExN8Yn_uSefxpjS6g4Lw@mail.gmail.com>
+        id S1726610AbgI1SMt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 14:12:49 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38361 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726466AbgI1SMt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 14:12:49 -0400
+Received: by mail-ot1-f66.google.com with SMTP id y5so1867943otg.5;
+        Mon, 28 Sep 2020 11:12:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/PtsW+8x2QZLtcNsrjnLIk2PYfpyw6cjz6HIC4oDjYI=;
+        b=SR+Loz/9Y3EVx0YuyMAZztVVUmCt+5ctVfHmHgQWdyk6wiD0Uh/FieJ+MVcrpXsSnT
+         ezChba7ltpbcA2j42q4pW25V54nZ5RvZzgPa5KJe9PZEEefn2YayU1CijW5Vp0twIbXt
+         p0adsEX5zcbcRq3KEKHH80GcOp2erwq0t8jd1H8g0ah7IBU3XDrDWxod0X0uZif0C7mi
+         dg+AIY8U0YNYH6/meW41prtxxbsxA3EkRV5NitWtjWeMvXePmbarUpNeuYZZB1gj6XOl
+         lHpS2iq/TjcdLX4oniyy+0F63Ijr2QxJpTzDh6Q2N4pPGiTFgNe8TjpZOsn5p7H+5sr6
+         2QmA==
+X-Gm-Message-State: AOAM530m08/8+TJDYBkvg9PcOK/0xBy/Kq+/vgnJn8+F1FpP+JF+8E2v
+        D+b/EFQ0VzpPwkQiwstmOw==
+X-Google-Smtp-Source: ABdhPJwEPb10fj9w9+iuDh14GzpFtGbcUbBT9YQT7EfkJduKMoyN4IcMJ50ib2BBgXy5CWOTTsFcig==
+X-Received: by 2002:a9d:6e91:: with SMTP id a17mr166967otr.284.1601316768301;
+        Mon, 28 Sep 2020 11:12:48 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id e22sm397977oib.18.2020.09.28.11.12.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2020 11:12:47 -0700 (PDT)
+Received: (nullmailer pid 3011832 invoked by uid 1000);
+        Mon, 28 Sep 2020 18:12:47 -0000
+Date:   Mon, 28 Sep 2020 13:12:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: usb: add properties for hard wired devices
+Message-ID: <20200928181247.GA3008733@bogus>
+References: <20200928063950.64722-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAn0qaXmysJ9vx3ZEMkViv_B19ju-_ExN8Yn_uSefxpjS6g4Lw@mail.gmail.com>
+In-Reply-To: <20200928063950.64722-1-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Sep 27, 2020 at 07:14:39AM -0700, Kiran wrote:
-> Effect on end user: when a linux machine is connected via USB to an
-> iPhone that has been updated to iOS 14 and has personal hotspot mode
-> turned on, the user cannot connect to the internet.
+On Mon, Sep 28, 2020 at 02:39:50PM +0800, Chunfeng Yun wrote:
+> Add some optional properties which are needed for hard wired devices
 > 
-> Troubleshooting: DNS works, the linux machine can ping the iPhone
-> gateway, pinging google.com hangs. It appears that there is a change
-> to the USB packets that iOS expects.
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/usb/usb-hcd.yaml | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> Here is a link to what I think is the most relevant part of a Github
-> issue discussion with more specific details:
-> 
-> https://github.com/libimobiledevice/libimobiledevice/issues/1038#issuecomment-699630379
-> 
-> This is my first linux bug report and I'm not familiar with kernel
-> development. The other people in the Github post will be better to
-> talk to regarding a fix. But if I can provide more info, just let me
-> know.
+> diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+> index 7263b7f2b510..1194a82887e7 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+> +++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+> @@ -22,6 +22,17 @@ properties:
+>      description:
+>        Name specifier for the USB PHY
+>  
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +patternProperties:
+> +  "^hub|device@[0-9a-f]+$":
 
-Not much we can do about this, but if you come up with a patch that
-works, please let us know and we will be glad to review it.
+Could be any class of device, so '@[0-9a-f]+$'
 
-good luck!
+> +    type: object
+> +    description: The hard wired USB devices. See usb/usb-device.txt
 
-greg k-h
+Ideally, we'd convert usb-device.txt to schema and reference it here.
+
+> +
+>  examples:
+>    - |
+>      usb {
+> -- 
+> 2.18.0
