@@ -2,195 +2,397 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05ED227DC89
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 01:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DA727DC75
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 01:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728384AbgI2XNI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Sep 2020 19:13:08 -0400
-Received: from freecalypso.org ([195.154.163.71]:38988 "EHLO freecalypso.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728471AbgI2XNI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Sep 2020 19:13:08 -0400
-Received: by freecalypso.org (Postfix, from userid 1001)
-        id 4195737403AE; Tue, 29 Sep 2020 23:05:25 +0000 (UTC)
-From:   "Mychaela N. Falconia" <falcon@freecalypso.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, mychaela.falconia@gmail.com
-Subject: [PATCH v2 2/2] USB: serial: ftdi_sio: add support for FreeCalypso
- DUART28C adapter
-Message-Id: <20200929230525.4195737403AE@freecalypso.org>
-Date:   Tue, 29 Sep 2020 23:05:24 +0000 (UTC)
+        id S1728968AbgI2XHH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Sep 2020 19:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728291AbgI2XHG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 19:07:06 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AECC0613D1
+        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 16:07:06 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id s31so5201995pga.7
+        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 16:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pensando.io; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=T56W4rlwKM3h0w7+QjGBQRIaXGTOjqoGepwvZvifopA=;
+        b=u7ctPNw/bCJlHLZao4KrUwd8YSTNwu0ScSWSkn38YGsAWZv9zrDlzkmqrUrwD5aLem
+         /w0yuGo+dbSRL1jimX9qU98ulfFvQ3MsEB1I1SUz3NFIS6T8xwWTKPBZL8MqMhx4+j7h
+         XOXdJNg0vgO/7B0eq6AL4pBli99xvTVSeVcCfN1sBsU2KCSlQBq1qpQX93SDqNFk8Riz
+         UMysDx5VYIkhLrI4K10saFmbuZ93NW3LS7O2/s/36I97FP0z7gpZghd1APyIc3fO2Hfm
+         YREFwEWNc570IMUD4jhkE36VZ5py8gvbC0AK+KcPo34NQiNUV3BFr8tB5tehXj2wvMoU
+         1G7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=T56W4rlwKM3h0w7+QjGBQRIaXGTOjqoGepwvZvifopA=;
+        b=OvYYVJ+dkll4xeBToq+GZqDc9FfiWxkSpKMtywsjDaUxtrfxRrNzMlAIVDyTxHv8rV
+         IOU9Z3d+rULoL07PZqUjxQsxJKhr4UYZT6pi016We5tvKadJj5crdQF+W5weWGPjpjOt
+         PHsivPoDq3sXqn4DYOvQ6NOZJ8l4Qi4Hs+SKQmaYHHeFfzKHGVRuFPAfKCpKD7AZs7vV
+         FNsHjEDphpo2hPhWw6x4J2XG5V2DAonhiG967Kp2bgugZxkNzaN8RN2Ed+K6yaHy10q6
+         OHJjjEvzEnbOx9zC5E4nrRTCFYQFfE02glhk7nC1IqGEmf9GI4hcTQfgwCjo4Wh9pMaX
+         LxAg==
+X-Gm-Message-State: AOAM531QNms82O8jeE8Wxi0fO1MwqiwLbIiL/yrtaUgJ9wrYIIe1G8bF
+        NXFy0QotwnzRTTzZ0Ng0uHX3/Q==
+X-Google-Smtp-Source: ABdhPJzpobBeVD0QizR5JNx2IEww3/DSsVZ79uzkw55sMm1JxKZo1kgF0e0ARRsarK31gnzhNU0N1A==
+X-Received: by 2002:a63:df02:: with SMTP id u2mr4908192pgg.270.1601420826006;
+        Tue, 29 Sep 2020 16:07:06 -0700 (PDT)
+Received: from Shannons-MacBook-Pro.local (static-50-53-47-17.bvtn.or.frontiernet.net. [50.53.47.17])
+        by smtp.gmail.com with ESMTPSA id 134sm5798661pgf.55.2020.09.29.16.07.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Sep 2020 16:07:05 -0700 (PDT)
+Subject: Re: [patch V2 11/36] net: ionic: Replace in_interrupt() usage.
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Govindarajulu Varadarajan <_govind@gmx.com>,
+        Dave Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-doc@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        Pensando Drivers <drivers@pensando.io>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Solarflare linux maintainers <linux-net-drivers@solarflare.com>,
+        Edward Cree <ecree@solarflare.com>,
+        Martin Habets <mhabets@solarflare.com>,
+        Jon Mason <jdmason@kudzu.us>, Daniel Drake <dsd@gentoo.org>,
+        Ulrich Kunitz <kune@deine-taler.de>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        brcm80211-dev-list@cypress.com,
+        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Jouni Malinen <j@w1.fi>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi.bhat@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        libertas-dev@lists.infradead.org,
+        Pascal Terjan <pterjan@google.com>,
+        Ping-Ke Shih <pkshih@realtek.com>
+References: <20200929202509.673358734@linutronix.de>
+ <20200929203500.579810110@linutronix.de>
+From:   Shannon Nelson <snelson@pensando.io>
+Message-ID: <04ec3648-9735-b901-6492-606468d47158@pensando.io>
+Date:   Tue, 29 Sep 2020 16:06:59 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <20200929203500.579810110@linutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-FreeCalypso DUART28C is an FT2232D-based USB to dual UART adapter
-with a special quirk: Channel B RTS and DTR outputs (BDBUS2 and BDBUS4
-on the chip) have been repurposed to drive PWON and RESET controls
-on Calypso targets.  The circuit is wired such that BDBUS[24] high
-(RTS/DTR inactive) is the normal state with Iota VRPC controls
-NOT activated, whereas BDBUS[24] low (RTS or DTR active) turn ON
-the corresponding open drain control signal drivers.
+On 9/29/20 1:25 PM, Thomas Gleixner wrote:
+> From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>
+> The in_interrupt() usage in this driver tries to figure out which context
+> may sleep and which context may not sleep. in_interrupt() is not really
+> suitable as it misses both preemption disabled and interrupt disabled
+> invocations from task context.
+>
+> Conditionals like that in driver code are frowned upon in general because
+> invocations of functions from invalid contexts might not be detected
+> as the conditional papers over it.
+>
+> ionic_lif_addr() and _ionoc_lif_rx_mode() can be called from:
+>
+>   1) ->ndo_set_rx_mode() which is under netif_addr_lock_bh()) so it must not
+>      sleep.
+>
+>   2) Init and setup functions which are in fully preemptible task context.
+>
+> ionic_link_status_check_request() has two call paths:
+>
+>   1) NAPI which obviously cannot sleep
+>
+>   2) Setup which is again fully preemptible task context
+>
+> Add arguments which convey the execution context to the affected functions
+> and let the callers provide the context instead of letting the functions
+> deduce it.
+>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+> V2: Treat _ionoc_lif_rx_mode() correclty (Shannon)
 
-A special ftdi_sio driver quirk is needed in order to suppress
-automatic assertion of DTR & RTS on device open: this device's
-special PWON and RESET control drivers MUST NOT be activated
-when the port is ordinarily opened for plain serial communication,
-instead they must only be activated when a special userspace
-application explicitly requests such activation with a TIOCMBIS ioctl.
-These special userspace applications are responsible for making the
-needed pulse with a TIOCMBIS, delay, TIOCMBIC sequence.
+Is it fair to poke at the comments?
+s/ionoc/ionic/
+s/correclty/correctly/
 
-The special quirk is conditionalized on the DUART28C adapter's custom
-USB ID, and is further limited to FT2232D Channel B only: Channel A
-is wired normally, with the chip's ADBUS2 and ADBUS4 outputs
-actually being RTS and DTR rather than something else.
+> ---
+>   drivers/net/ethernet/pensando/ionic/ionic_dev.c |    2
+>   drivers/net/ethernet/pensando/ionic/ionic_lif.c |   64 ++++++++++++++++--------
+>   drivers/net/ethernet/pensando/ionic/ionic_lif.h |    2
+>   3 files changed, 47 insertions(+), 21 deletions(-)
+>
+> --- a/drivers/net/ethernet/pensando/ionic/ionic_dev.c
+> +++ b/drivers/net/ethernet/pensando/ionic/ionic_dev.c
+> @@ -22,7 +22,7 @@ static void ionic_watchdog_cb(struct tim
+>   	hb = ionic_heartbeat_check(ionic);
+>   
+>   	if (hb >= 0 && ionic->lif)
+> -		ionic_link_status_check_request(ionic->lif);
+> +		ionic_link_status_check_request(ionic->lif, false);
+>   }
+>   
+>   void ionic_init_devinfo(struct ionic *ionic)
+> --- a/drivers/net/ethernet/pensando/ionic/ionic_lif.c
+> +++ b/drivers/net/ethernet/pensando/ionic/ionic_lif.c
+> @@ -151,7 +151,7 @@ static void ionic_link_status_check(stru
+>   	clear_bit(IONIC_LIF_F_LINK_CHECK_REQUESTED, lif->state);
+>   }
+>   
+> -void ionic_link_status_check_request(struct ionic_lif *lif)
+> +void ionic_link_status_check_request(struct ionic_lif *lif, bool can_sleep)
+>   {
+>   	struct ionic_deferred_work *work;
+>   
+> @@ -159,7 +159,7 @@ void ionic_link_status_check_request(str
+>   	if (test_and_set_bit(IONIC_LIF_F_LINK_CHECK_REQUESTED, lif->state))
+>   		return;
+>   
+> -	if (in_interrupt()) {
+> +	if (!can_sleep) {
+>   		work = kzalloc(sizeof(*work), GFP_ATOMIC);
+>   		if (!work)
+>   			return;
+> @@ -798,7 +798,7 @@ static bool ionic_notifyq_service(struct
+>   
+>   	switch (le16_to_cpu(comp->event.ecode)) {
+>   	case IONIC_EVENT_LINK_CHANGE:
+> -		ionic_link_status_check_request(lif);
+> +		ionic_link_status_check_request(lif, false);
+>   		break;
+>   	case IONIC_EVENT_RESET:
+>   		work = kzalloc(sizeof(*work), GFP_ATOMIC);
+> @@ -981,7 +981,8 @@ static int ionic_lif_addr_del(struct ion
+>   	return 0;
+>   }
+>   
+> -static int ionic_lif_addr(struct ionic_lif *lif, const u8 *addr, bool add)
+> +static int ionic_lif_addr(struct ionic_lif *lif, const u8 *addr, bool add,
+> +			  bool can_sleep)
+>   {
+>   	struct ionic *ionic = lif->ionic;
+>   	struct ionic_deferred_work *work;
+> @@ -1010,7 +1011,7 @@ static int ionic_lif_addr(struct ionic_l
+>   			lif->nucast--;
+>   	}
+>   
+> -	if (in_interrupt()) {
+> +	if (!can_sleep) {
+>   		work = kzalloc(sizeof(*work), GFP_ATOMIC);
+>   		if (!work) {
+>   			netdev_err(lif->netdev, "%s OOM\n", __func__);
+> @@ -1036,12 +1037,22 @@ static int ionic_lif_addr(struct ionic_l
+>   
+>   static int ionic_addr_add(struct net_device *netdev, const u8 *addr)
+>   {
+> -	return ionic_lif_addr(netdev_priv(netdev), addr, true);
+> +	return ionic_lif_addr(netdev_priv(netdev), addr, true, true);
+> +}
+> +
+> +static int ionic_ndo_addr_add(struct net_device *netdev, const u8 *addr)
+> +{
+> +	return ionic_lif_addr(netdev_priv(netdev), addr, true, false);
+>   }
+>   
+>   static int ionic_addr_del(struct net_device *netdev, const u8 *addr)
+>   {
+> -	return ionic_lif_addr(netdev_priv(netdev), addr, false);
+> +	return ionic_lif_addr(netdev_priv(netdev), addr, false, true);
+> +}
+> +
+> +static int ionic_ndo_addr_del(struct net_device *netdev, const u8 *addr)
+> +{
+> +	return ionic_lif_addr(netdev_priv(netdev), addr, false, false);
+>   }
 
-Signed-off-by: Mychaela N. Falconia <falcon@freecalypso.org>
----
+These changes are reasonable, tho' I'm not fond of parameter lists of 
+"true" and "false" with no context.  I'd prefer to have some constants like
+#define can_sleep true
+so the code can be a little more readable.
 
-Changes from the first version of this patch:
+Yes, I know we have this problem already in the call to 
+ionic_lif_addr(), which I'm annoyed with but haven't addressed yet.
 
-* The logic in the quirk port_probe function for determining which
-interface number is being considered has been changed as asked by
-the reviewer.  The specific magic for retrieving the interface number
-has been copied from the existing ftdi_determine_type() function,
-which is called immediately after quirk->port_probe().
+So, if you want to deal with this now, fine, otherwise I'll take care of 
+them both later.
 
-* Comments have been updated in the hope of providing a better
-explanation of how this quirk works in the hardware and why it is
-needed.
+Meanwhile,
 
----
- drivers/usb/serial/ftdi_sio.c     | 60 +++++++++++++++++++++++++++++++++++----
- drivers/usb/serial/ftdi_sio_ids.h |  1 +
- 2 files changed, 56 insertions(+), 5 deletions(-)
+Acked-by: Shannon Nelson <snelson@pensando.io>
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 1e401898f2f6..5b550f1927a2 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -69,6 +69,8 @@ struct ftdi_private {
- 				   this value */
- 	int force_rtscts;	/* if non-zero, force RTS-CTS to always
- 				   be enabled */
-+	int no_auto_dtr_rts;	/* if non-zero, suppress automatic assertion
-+				   of DTR & RTS on device open */
- 
- 	unsigned int latency;		/* latency setting in use */
- 	unsigned short max_packet_size;
-@@ -97,6 +99,7 @@ static int   ftdi_stmclite_probe(struct usb_serial *serial);
- static int   ftdi_8u2232c_probe(struct usb_serial *serial);
- static void  ftdi_USB_UIRT_setup(struct usb_serial_port *port);
- static void  ftdi_HE_TIRA1_setup(struct usb_serial_port *port);
-+static void  ftdi_duart28c_setup(struct usb_serial_port *port);
- 
- static const struct ftdi_sio_quirk ftdi_jtag_quirk = {
- 	.probe	= ftdi_jtag_probe,
-@@ -122,6 +125,10 @@ static const struct ftdi_sio_quirk ftdi_8u2232c_quirk = {
- 	.probe	= ftdi_8u2232c_probe,
- };
- 
-+static const struct ftdi_sio_quirk ftdi_duart28c_quirk = {
-+	.port_probe = ftdi_duart28c_setup,
-+};
-+
- /*
-  * The 8U232AM has the same API as the sio except for:
-  * - it can support MUCH higher baudrates; up to:
-@@ -1042,6 +1049,8 @@ static const struct usb_device_id id_table_combined[] = {
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
- 	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_JTAG_UNBUF_PID),
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-+	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_DUART28C_PID),
-+		.driver_info = (kernel_ulong_t)&ftdi_duart28c_quirk },
- 	{ }					/* Terminating entry */
- };
- 
-@@ -2388,6 +2397,38 @@ static int ftdi_stmclite_probe(struct usb_serial *serial)
- 	return 0;
- }
- 
-+/*
-+ * FreeCalypso DUART28C is an FT2232D-based USB to dual UART adapter
-+ * with a special quirk: Channel B RTS and DTR outputs (BDBUS2 and BDBUS4
-+ * on the chip) have been repurposed to drive PWON and RESET controls
-+ * on Calypso targets.  The circuit is wired such that BDBUS[24] high
-+ * (RTS/DTR inactive) is the normal state with Iota VRPC controls
-+ * NOT activated, whereas BDBUS[24] low (RTS or DTR active) turn ON
-+ * the corresponding open drain control signal drivers.
-+ *
-+ * A special ftdi_sio driver quirk is needed in order to suppress
-+ * automatic assertion of DTR & RTS on device open: this device's
-+ * special PWON and RESET control drivers MUST NOT be activated
-+ * when the port is ordinarily opened for plain serial communication,
-+ * instead they must only be activated when a special userspace
-+ * application explicitly requests such activation with a TIOCMBIS ioctl.
-+ * These special userspace applications are responsible for making the
-+ * needed pulse with a TIOCMBIS, delay, TIOCMBIC sequence.
-+ *
-+ * The special quirk must be applied only to FT2232D Channel B:
-+ * Channel A is wired normally, with the chip's ADBUS2 and ADBUS4 outputs
-+ * actually being RTS and DTR rather than something else.
-+ */
-+static void ftdi_duart28c_setup(struct usb_serial_port *port)
-+{
-+	struct ftdi_private *priv = usb_get_serial_port_data(port);
-+	struct usb_serial *serial = port->serial;
-+	int ifnum = serial->interface->altsetting->desc.bInterfaceNumber;
-+
-+	if (ifnum == 1)
-+		priv->no_auto_dtr_rts = 1;
-+}
-+
- static int ftdi_sio_port_remove(struct usb_serial_port *port)
- {
- 	struct ftdi_private *priv = usb_get_serial_port_data(port);
-@@ -2439,10 +2480,18 @@ static void ftdi_dtr_rts(struct usb_serial_port *port, int on)
- 			dev_err(&port->dev, "error from flowcontrol urb\n");
- 		}
- 	}
--	/* drop RTS and DTR */
--	if (on)
--		set_mctrl(port, TIOCM_DTR | TIOCM_RTS);
--	else
-+	/*
-+	 * Assert or negate RTS and DTR as requested.  When DUART28C
-+	 * quirk is applied, we suppress automatic assertion, but
-+	 * automatic negation on device close is retained - these
-+	 * special control signals are meant to be pulsed, and leaving
-+	 * either of them stuck on when the responsible userspace
-+	 * program has terminated unexpectedly is undesirable.
-+	 */
-+	if (on) {
-+		if (!priv->no_auto_dtr_rts)
-+			set_mctrl(port, TIOCM_DTR | TIOCM_RTS);
-+	} else
- 		clear_mctrl(port, TIOCM_DTR | TIOCM_RTS);
- }
- 
-@@ -2790,7 +2839,8 @@ static void ftdi_set_termios(struct tty_struct *tty,
- 			dev_err(ddev, "%s urb failed to set baudrate\n", __func__);
- 		mutex_unlock(&priv->cfg_lock);
- 		/* Ensure RTS and DTR are raised when baudrate changed from 0 */
--		if (old_termios && (old_termios->c_cflag & CBAUD) == B0)
-+		if (old_termios && (old_termios->c_cflag & CBAUD) == B0
-+		    && !priv->no_auto_dtr_rts)
- 			set_mctrl(port, TIOCM_DTR | TIOCM_RTS);
- 	}
- 
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 3d47c6d72256..3081b8916a0a 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -45,6 +45,7 @@
-  */
- #define FTDI_FALCONIA_JTAG_BUF_PID	0x7150
- #define FTDI_FALCONIA_JTAG_UNBUF_PID	0x7151
-+#define FTDI_FALCONIA_DUART28C_PID	0x7152
- 
- /* Sienna Serial Interface by Secyourit GmbH */
- #define FTDI_SIENNA_PID		0x8348
--- 
-2.9.0
+
+
+
+>   
+>   static void ionic_lif_rx_mode(struct ionic_lif *lif, unsigned int rx_mode)
+> @@ -1081,11 +1092,12 @@ static void ionic_lif_rx_mode(struct ion
+>   		lif->rx_mode = rx_mode;
+>   }
+>   
+> -static void _ionic_lif_rx_mode(struct ionic_lif *lif, unsigned int rx_mode)
+> +static void _ionic_lif_rx_mode(struct ionic_lif *lif, unsigned int rx_mode,
+> +			       bool from_ndo)
+>   {
+>   	struct ionic_deferred_work *work;
+>   
+> -	if (in_interrupt()) {
+> +	if (from_ndo) {
+>   		work = kzalloc(sizeof(*work), GFP_ATOMIC);
+>   		if (!work) {
+>   			netdev_err(lif->netdev, "%s OOM\n", __func__);
+> @@ -1100,7 +1112,16 @@ static void _ionic_lif_rx_mode(struct io
+>   	}
+>   }
+>   
+> -static void ionic_set_rx_mode(struct net_device *netdev)
+> +static void ionic_dev_uc_sync(struct net_device *netdev, bool from_ndo)
+> +{
+> +	if (from_ndo)
+> +		__dev_uc_sync(netdev, ionic_ndo_addr_add, ionic_ndo_addr_del);
+> +	else
+> +		__dev_uc_sync(netdev, ionic_addr_add, ionic_addr_del);
+> +
+> +}
+> +
+> +static void ionic_set_rx_mode(struct net_device *netdev, bool from_ndo)
+>   {
+>   	struct ionic_lif *lif = netdev_priv(netdev);
+>   	struct ionic_identity *ident;
+> @@ -1122,7 +1143,7 @@ static void ionic_set_rx_mode(struct net
+>   	 *       we remove our overflow flag and check the netdev flags
+>   	 *       to see if we can disable NIC PROMISC
+>   	 */
+> -	__dev_uc_sync(netdev, ionic_addr_add, ionic_addr_del);
+> +	ionic_dev_uc_sync(netdev, from_ndo);
+>   	nfilters = le32_to_cpu(ident->lif.eth.max_ucast_filters);
+>   	if (netdev_uc_count(netdev) + 1 > nfilters) {
+>   		rx_mode |= IONIC_RX_MODE_F_PROMISC;
+> @@ -1134,7 +1155,7 @@ static void ionic_set_rx_mode(struct net
+>   	}
+>   
+>   	/* same for multicast */
+> -	__dev_mc_sync(netdev, ionic_addr_add, ionic_addr_del);
+> +	ionic_dev_uc_sync(netdev, from_ndo);
+>   	nfilters = le32_to_cpu(ident->lif.eth.max_mcast_filters);
+>   	if (netdev_mc_count(netdev) > nfilters) {
+>   		rx_mode |= IONIC_RX_MODE_F_ALLMULTI;
+> @@ -1146,7 +1167,12 @@ static void ionic_set_rx_mode(struct net
+>   	}
+>   
+>   	if (lif->rx_mode != rx_mode)
+> -		_ionic_lif_rx_mode(lif, rx_mode);
+> +		_ionic_lif_rx_mode(lif, rx_mode, from_ndo);
+> +}
+> +
+> +static void ionic_ndo_set_rx_mode(struct net_device *netdev)
+> +{
+> +	ionic_set_rx_mode(netdev, true);
+>   }
+>   
+>   static __le64 ionic_netdev_features_to_nic(netdev_features_t features)
+> @@ -1391,7 +1417,7 @@ static int ionic_start_queues_reconfig(s
+>   	 */
+>   	err = ionic_txrx_init(lif);
+>   	mutex_unlock(&lif->queue_lock);
+> -	ionic_link_status_check_request(lif);
+> +	ionic_link_status_check_request(lif, true);
+>   	netif_device_attach(lif->netdev);
+>   
+>   	return err;
+> @@ -1720,7 +1746,7 @@ static int ionic_txrx_init(struct ionic_
+>   	if (lif->netdev->features & NETIF_F_RXHASH)
+>   		ionic_lif_rss_init(lif);
+>   
+> -	ionic_set_rx_mode(lif->netdev);
+> +	ionic_set_rx_mode(lif->netdev, false);
+>   
+>   	return 0;
+>   
+> @@ -2093,7 +2119,7 @@ static const struct net_device_ops ionic
+>   	.ndo_stop               = ionic_stop,
+>   	.ndo_start_xmit		= ionic_start_xmit,
+>   	.ndo_get_stats64	= ionic_get_stats64,
+> -	.ndo_set_rx_mode	= ionic_set_rx_mode,
+> +	.ndo_set_rx_mode	= ionic_ndo_set_rx_mode,
+>   	.ndo_set_features	= ionic_set_features,
+>   	.ndo_set_mac_address	= ionic_set_mac_address,
+>   	.ndo_validate_addr	= eth_validate_addr,
+> @@ -2521,7 +2547,7 @@ static void ionic_lif_handle_fw_up(struc
+>   	}
+>   
+>   	clear_bit(IONIC_LIF_F_FW_RESET, lif->state);
+> -	ionic_link_status_check_request(lif);
+> +	ionic_link_status_check_request(lif, true);
+>   	netif_device_attach(lif->netdev);
+>   	dev_info(ionic->dev, "FW Up: LIFs restarted\n");
+>   
+> @@ -2713,7 +2739,7 @@ static int ionic_station_set(struct ioni
+>   		 */
+>   		if (!ether_addr_equal(ctx.comp.lif_getattr.mac,
+>   				      netdev->dev_addr))
+> -			ionic_lif_addr(lif, netdev->dev_addr, true);
+> +			ionic_lif_addr(lif, netdev->dev_addr, true, true);
+>   	} else {
+>   		/* Update the netdev mac with the device's mac */
+>   		memcpy(addr.sa_data, ctx.comp.lif_getattr.mac, netdev->addr_len);
+> @@ -2730,7 +2756,7 @@ static int ionic_station_set(struct ioni
+>   
+>   	netdev_dbg(lif->netdev, "adding station MAC addr %pM\n",
+>   		   netdev->dev_addr);
+> -	ionic_lif_addr(lif, netdev->dev_addr, true);
+> +	ionic_lif_addr(lif, netdev->dev_addr, true, true);
+>   
+>   	return 0;
+>   }
+> --- a/drivers/net/ethernet/pensando/ionic/ionic_lif.h
+> +++ b/drivers/net/ethernet/pensando/ionic/ionic_lif.h
+> @@ -245,7 +245,7 @@ static inline u32 ionic_coal_usec_to_hw(
+>   
+>   typedef void (*ionic_reset_cb)(struct ionic_lif *lif, void *arg);
+>   
+> -void ionic_link_status_check_request(struct ionic_lif *lif);
+> +void ionic_link_status_check_request(struct ionic_lif *lif, bool can_sleep);
+>   void ionic_get_stats64(struct net_device *netdev,
+>   		       struct rtnl_link_stats64 *ns);
+>   void ionic_lif_deferred_enqueue(struct ionic_deferred *def,
+>
 
