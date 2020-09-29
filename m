@@ -2,123 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 750C627BAFF
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 04:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E224D27BB16
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 04:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727582AbgI2Cku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 22:40:50 -0400
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:56615 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727529AbgI2Ckt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 22:40:49 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6DA705C0124
-        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 22:40:48 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute6.internal (MEProxy); Mon, 28 Sep 2020 22:40:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:date:from:to:subject:content-type
-        :content-transfer-encoding; s=fm2; bh=YCrmGVzvm+r0YBGCeeq97UJHVn
-        MCypzpKlA4Jl9fcFs=; b=UQY2E6VAmr9mhahDy8MNhoyXKxYtXnU19fzJvmK9Dv
-        IsnwUAHb/aerHAQYa6G+mWh7xPFN6oCErp994/yypdiziJ7VJgD2Ao41rfZw+BpL
-        vVN2Dov0ROcBZ+tpJGc0RyCMBb/xPPp1rUOmIyRnezN3O1m7MfGP3S5kHHQRHdWm
-        flU9aaXJ7zhFHKqdd+MQjLYxhSkNqjRf3cIAQw/5eax40AWy3HyWXWedHK+SS1dx
-        ITCaQn6naRHzEVZP4QfhY/C/HykT4VyMOFeTmoOZ6M1aoMmspn6de00WbrbnSwVi
-        EfLCAO5nFHSsOMcAftbLuwL+1mKR4v6qPlferFtAus2w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=content-transfer-encoding:content-type
-        :date:from:message-id:mime-version:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=YCrmGV
-        zvm+r0YBGCeeq97UJHVnMCypzpKlA4Jl9fcFs=; b=abEpO/P54bHSSz42rD792F
-        SLCEbbOWpdHD1oFrBl8nO4vxpMSYywgI+6adi2vQkgPMAPAwmMxvSD/7QEnD0CuG
-        AIka/Nd41KdaIULL4ThzNp2Clm7wwEgLuxIZbAaBZW4wuK0+TxwGgi/oHxIobPxQ
-        Z8DwGkOzLqhwqDqReCkVjqIISW1Y9zmGm/KEZWmOu9mnlNpcUJwn1zQ4GXDOmw6i
-        LUBxkwG9uJE5rXWIJB1EtDD9kTaHTEp90z0+C6J8rhS5OOZcEHuU248TRvs+koDC
-        vBslbur1q5WnN9XHQnydWyN2mGbxOkaX57fT/z1FF9oBCIgzfDMBOkAWvhju1tOA
-        ==
-X-ME-Sender: <xms:sJ5yXz15uI5knDDE6uYUai7K1kotPX5ndktRU63lCpoWG7gnCdWaAQ>
-    <xme:sJ5yXyGJqnM-5JLSHfJ7swQ5OVuOB7MrvKodXUmWC5UGYo-jKwYPbUN5YEUWEosRf
-    GOqpgqFtsxt96y9NbI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdejgdeifecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepofgfggfkfffhvffutgfgsehtqhertd
-    erreejnecuhfhrohhmpedfufhiugcuufhprhihfdcuoehsihgusegrvggrmhdruhhsqeen
-    ucggtffrrghtthgvrhhnpeetvdffiedvgfejhfeiledtueefgfegteehtdelgeeiuedtfe
-    ffjefgteehkedtteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
-    fhhrohhmpehsihgusegrvggrmhdruhhs
-X-ME-Proxy: <xmx:sJ5yXz5hnHZvUknwFt1CHsN6Q4n5AnHqAvlBw9UmbmoOKknrfQ-7sQ>
-    <xmx:sJ5yX42H_q0tXskvcGE-xNSeGlJ6kfNlQONKWsx55nZJw0IiecXOgA>
-    <xmx:sJ5yX2EpaDue5nLA1quf8rZadApoedoaEhuO3UaCbvcfA-N1zek1gA>
-    <xmx:sJ5yX6TuNe709oZklLr1g2ekYTVWtFhPcVdomt452KAJJrYGc1_8hA>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1B2C9660069; Mon, 28 Sep 2020 22:40:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-355-g3ece53b-fm-20200922.004-g3ece53b9
-Mime-Version: 1.0
-Message-Id: <ce4fc6f6-726e-48b3-97bb-0de2b3801615@www.fastmail.com>
-Date:   Mon, 28 Sep 2020 21:40:27 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     linux-usb@vger.kernel.org
-Subject: ConfigFS: bcdUSB forced to 0x0210
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S1727570AbgI2Cmd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 22:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727077AbgI2Cmc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 22:42:32 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877CEC061755
+        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 19:42:32 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id j3so2060080vsm.0
+        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 19:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uw5nh9RN7R8U+ZfvbK0LtQsN77w7IZwaYJoxj3Q8zTU=;
+        b=E7VInnTq9YtJfNECE3WhKz1gAcEfu2eoQ9hfsWJ+pYVHD/ULkNL/f47iZFimBIyzNM
+         jgyB/Lq+OZDNtdGMnuHz15GEfjV0VeT5k96cpLK9NUxVewPXsNuGNoU4oImBlZ+u/2SC
+         BmPs988t0J8fGIfP+xfMYtcUe828ipQuQnLdeaJUePjpbUjrrDqFaNIn99x09WfBsHyZ
+         KOqZVGs62a/Yz+9ZWJwtmO7fDeNcfNoZpRW8ldbc2XJLUIOYlhyr/IcvmHH7qLNluvTD
+         tJ6f6laWejUu2optt11xWdWX9fW2PHA2RN8zg1NShsr112WGQ9u5GNaKxIRhd5+riSHc
+         iang==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uw5nh9RN7R8U+ZfvbK0LtQsN77w7IZwaYJoxj3Q8zTU=;
+        b=IXRJ6w9tzFKuRmL8128+S74wAABG0ezRfP06tDag+WG1kNop/PLITNtvdPaIa/NOv7
+         en01iA1/WSrNs+AhslXvmmbg5x6pqe3pXNsyRGehgyZqUINhB463wFMLf72RHzT09OBm
+         yY6MeUwZ0xl9UJAv66gW2SwIjVWb8MuS04hR7X33MvBHnRe7z5uoVQGZrvIWrLzL/0vB
+         VVhAWHxyMQ7MrpKq6Pm4oVV7tMQSe+xLRdrWHTJNjEa+UPh/Wd362fX8rwKM3dwziUnK
+         Zkh8bkLfTujsncxHWrSvfuId36YPNJ4Xtw4lgraAQpVTWNYfbbEJFk0kRsLCXPzam9wq
+         4JnA==
+X-Gm-Message-State: AOAM533kHOKA7j1ueMYUzxLkh9sI3YIYY5R7SbwJGq5CVFJaa4Me6kbl
+        PqyZp1dx38breaCJdowL0BNocKH8CcMEkMi2f876IBCTaiA=
+X-Google-Smtp-Source: ABdhPJzUOhalNuyQlawgnc0Ao2D/WTkcabtSxp8DpUZ9Rx7W8PpIMnHiINcJa7hNtuSHiG6LpOi0mMD/whksr4Je/ac=
+X-Received: by 2002:a67:e3d4:: with SMTP id k20mr1614553vsm.60.1601347351497;
+ Mon, 28 Sep 2020 19:42:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200921195555.1050731-1-badhri@google.com> <20200921195555.1050731-3-badhri@google.com>
+ <20200922155910.GA2759479@bogus>
+In-Reply-To: <20200922155910.GA2759479@bogus>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Mon, 28 Sep 2020 19:41:54 -0700
+Message-ID: <CAPTae5JijeJEZUzFQK18rzevYj1231_-0OKKzQj84PXEAKm1OQ@mail.gmail.com>
+Subject: Re: [PATCH v8 03/11] dt-bindings: usb: Maxim type-c controller device
+ tree binding document
+To:     Rob Herring <robh@kernel.org>
+Cc:     USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, I can't enable USB3 with e.g. f_ncm because bcdUSB is always reset t=
-o 0x0210:
+On Tue, Sep 22, 2020 at 8:59 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, 21 Sep 2020 12:55:47 -0700, Badhri Jagan Sridharan wrote:
+> > Add device tree binding document for Maxim TCPCI based Type-C chip driver
+> >
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > ---
+> > Changes since v1:
+> > - Changing patch version to v6 to fix version number confusion.
+> >
+> > Changes since v6:
+> > - Migrated to yaml format.
+> >
+> > Changes since v7:
+> > - Rebase on usb-next
+> >  .../devicetree/bindings/usb/maxim,tcpci.yaml  | 63 +++++++++++++++++++
+> >  1 file changed, 63 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/maxim,tcpci.yaml
+> >
+>
+>
+> My bot found errors running 'make dt_binding_check' on your patch:
+>
+> Error: Documentation/devicetree/bindings/usb/maxim,tcpci.example.dts:38.36-37 syntax error
+> FATAL ERROR: Unable to parse input tree
+> make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/usb/maxim,tcpci.example.dt.yaml] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1366: dt_binding_check] Error 2
+>
+>
+> See https://patchwork.ozlabs.org/patch/1368587
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure dt-schema is up to date:
+>
+> pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+>
+> Please check and re-submit.
+>
 
-$ sudo sh -c 'echo "0x0300" > /sys/kernel/config/usb_gadget/g11/bcdUSB'
-$ cat /sys/kernel/config/usb_gadget/g11/bcdUSB=20
-0x0300
-$ sudo sh -c 'echo "fe800000.usb" > /sys/kernel/config/usb_gadget/g11/UD=
-C'
-$ cat /sys/kernel/config/usb_gadget/g11/bcdUSB=20
-0x0210
-$ tree /sys/kernel/config/usb_gadget/g11
-/sys/kernel/config/usb_gadget/g11
-=E2=94=9C=E2=94=80=E2=94=80 bcdDevice
-=E2=94=9C=E2=94=80=E2=94=80 bcdUSB
-=E2=94=9C=E2=94=80=E2=94=80 bDeviceClass
-=E2=94=9C=E2=94=80=E2=94=80 bDeviceProtocol
-=E2=94=9C=E2=94=80=E2=94=80 bDeviceSubClass
-=E2=94=9C=E2=94=80=E2=94=80 bMaxPacketSize0
-=E2=94=9C=E2=94=80=E2=94=80 configs
-=E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 c.1
-=E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 bmAttributes
-=E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 MaxPower
-=E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 ncm.0 -> ../../../=
-../usb_gadget/g11/functions/ncm.0
-=E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=E2=94=80 strings
-=E2=94=82=C2=A0=C2=A0         =E2=94=94=E2=94=80=E2=94=80 0x409
-=E2=94=82=C2=A0=C2=A0             =E2=94=94=E2=94=80=E2=94=80 configurat=
-ion
-=E2=94=9C=E2=94=80=E2=94=80 functions
-=E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 ncm.0
-=E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 dev_addr
-=E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 host_addr
-=E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 ifname
-=E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 os_desc
-=E2=94=82=C2=A0=C2=A0     =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=
-=80 interface.ncm
-=E2=94=82=C2=A0=C2=A0     =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=
-=94=80 compatible_id
-=E2=94=82=C2=A0=C2=A0     =E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=E2=
-=94=80 sub_compatible_id
-=E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=E2=94=80 qmult
-=E2=94=9C=E2=94=80=E2=94=80 idProduct
-=E2=94=9C=E2=94=80=E2=94=80 idVendor
-=E2=94=9C=E2=94=80=E2=94=80 max_speed
-=E2=94=9C=E2=94=80=E2=94=80 os_desc
-=E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 b_vendor_code
-=E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 qw_sign
-=E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 use
-=E2=94=9C=E2=94=80=E2=94=80 strings
-=E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 0x409
-=E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 manufacturer
-=E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 product
-=E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=E2=94=80 serialnumber
-=E2=94=94=E2=94=80=E2=94=80 UDC
+Fixed in v9 and have sent it out.
 
-Board is a RK3399 based RockPro64.
+Thanks,
+Badhri
