@@ -2,175 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8F727DB77
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 00:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE8827DBFB
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 00:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728851AbgI2WJP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Sep 2020 18:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728825AbgI2WJP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 18:09:15 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4E1C0613D1
-        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 15:09:14 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id h23so2386417pjv.5
-        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 15:09:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8fC27h9ZgDNL2axWTEutG+gx93n8Yc9ucaXhlyytfCs=;
-        b=EfZtR0Qr0tu9rn4I7XKHQgJEVbI8JywQ+y/MRkyNqRlmhY+TDgTFzOnLz7tL959Q22
-         2yetaoLrkqAmf9znNgBrl5+TeS37a6kDUc1TyYpq5CP39U+2kou5CYExO20RxnTh+8tl
-         FXtPJiPiZWnBNWz7ycVAWQFpUmD5H68oPQY88=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8fC27h9ZgDNL2axWTEutG+gx93n8Yc9ucaXhlyytfCs=;
-        b=Lwt6/pS3iba3s07GeX4FzxUklrVDNysxuguFbH6phSIZsbVsPY8b/S0j1dZjwvRZtP
-         b2oClMcitCMhQImeBuZMLGSM7gy5194+VQJbKD/Zu7TdVPOF59CN7ij2HfhE3i86TbA9
-         MJzhF0QglpqgHFmchXyHCP6TsX90IxG99retuNlKJo+drdJOp9AVRbJUc4H6wiScvzFm
-         58ZeT3efK3iQC8oelx2IbogigRJn677+SUixkVnA4snhUUjHxOxiORPEpat6rxIu72JU
-         JyNlXBb2VIB61oKlfmntWpCzfG7nxXHPl6eMQ/CHi13qqyKPqE3hH1sfcva8A2zvuOBr
-         2p0Q==
-X-Gm-Message-State: AOAM530u3lnrCoscHWlqnGT/uRkIkOC7AsJ7g88iBX1bErpb0j4BUQ+Z
-        0YZcUxastD2qAadaJJIx/tHZRg==
-X-Google-Smtp-Source: ABdhPJxTYRtJRMu/SXLDA4x5xCJTpWeBSfOlq+vQ95AwOTdOXivReBz7xAPyU89owMQ29ex5vahf7Q==
-X-Received: by 2002:a17:90a:fa8b:: with SMTP id cu11mr5623209pjb.10.1601417354186;
-        Tue, 29 Sep 2020 15:09:14 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id h11sm5930115pgi.10.2020.09.29.15.09.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Sep 2020 15:09:13 -0700 (PDT)
-Date:   Tue, 29 Sep 2020 15:09:12 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
- onboard USB hubs
-Message-ID: <20200929220912.GF1621304@google.com>
-References: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200929201701.GA1080459@bogus>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200929201701.GA1080459@bogus>
+        id S1728262AbgI2W0b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Sep 2020 18:26:31 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:37126 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728192AbgI2W0b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 18:26:31 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 4A2DF42808;
+        Tue, 29 Sep 2020 22:26:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1601418391; bh=EjsJLWo7vauAzIWS21XH6KAsr6JNxKmE2vthl5OwzdA=;
+        h=Date:From:Subject:To:Cc:From;
+        b=IwxdVHdJFOg4kGjCBL+0J4uGweiQ97I4byju7bKpfhpA6fwxaoKpiIytJKuI22KJB
+         9RJVkKck4fUqBH8IfVg2+yhPkTYYOCksMSQa3aE7p4dFu/rdzbB4PJuhMjtZpHz6+y
+         Txt2rcBW57FIaWxZF8/Fo4XhaxmSK5Tpm4J9rcBdHo6vpF+Xorgkp4bas+di0j9LvO
+         zNdG1WWw0jdZ9WcSAFYFUWJrfskjIJwT/9r+gcERWiF+xi1A139MhP2bm4IO8wW+hT
+         8PbMwuNaydBQo1oBHkSpn6TjvdbN0MXu89+akytBTNGxikqLhkPtXWnhOyCKH6Afmo
+         lhJQFWnQOarBQ==
+Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id F1628A0096;
+        Tue, 29 Sep 2020 22:26:29 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Tue, 29 Sep 2020 15:26:29 -0700
+Date:   Tue, 29 Sep 2020 15:26:29 -0700
+Message-Id: <41fcbd971c1a976e5353978172f11364a5534453.1601418253.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] usb: dwc3: gadget: Support up to max stream id
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+DWC3 IPs can use the maximum stream id (up to 2^16) specified by the
+USB 3.x specs. Don't limit to stream id 2^15 only. Note that this does
+not reflect the number of concurrent streams the controller handles
+internally.
 
-On Tue, Sep 29, 2020 at 03:17:01PM -0500, Rob Herring wrote:
-> On Mon, Sep 28, 2020 at 10:13:54AM -0700, Matthias Kaehlcke wrote:
-> > Discrete onboard USB hubs (an example for such a hub is the Realtek
-> > RTS5411) need to be powered and may require initialization of other
-> > resources (like GPIOs or clocks) to work properly. This adds a device
-> > tree binding for these hubs.
-> > 
-> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
-> > 
-> > (no changes since v3)
-> > 
-> > Changes in v3:
-> > - updated commit message
-> > - removed recursive reference to $self
-> > - adjusted 'compatible' definition to support multiple entries
-> > - changed USB controller phandle to be a node
-> > 
-> > Changes in v2:
-> > - removed 'wakeup-source' and 'power-off-in-suspend' properties
-> > - consistently use spaces for indentation in example
-> > 
-> >  .../bindings/usb/onboard_usb_hub.yaml         | 54 +++++++++++++++++++
-> >  1 file changed, 54 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> > new file mode 100644
-> > index 000000000000..c9783da3e75c
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> > @@ -0,0 +1,54 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/onboard_usb_hub.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Binding for onboard USB hubs
-> > +
-> > +maintainers:
-> > +  - Matthias Kaehlcke <mka@chromium.org>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +        - realtek,rts5411
-> > +      - const: onboard-usb-hub
-> > +
-> > +  vdd-supply:
-> > +    description:
-> > +      phandle to the regulator that provides power to the hub.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - vdd-supply
-> > +
-> > +examples:
-> > +  - |
-> > +    usb_hub: usb-hub {
-> > +        compatible = "realtek,rts5411", "onboard-usb-hub";
-> > +        vdd-supply = <&pp3300_hub>;
-> > +    };
-> 
-> As I said in prior version, this separate node and 'hub' phandle is not 
-> going to work. You are doing this because you want a platform driver for 
-> "realtek,rts5411". That may be convenient for Linux, but doesn't reflect 
-> the h/w.
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+ drivers/usb/dwc3/gadget.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I agree that the hardware representation isn't totally straightforward, however
-the description isn't limited to Linux:
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 76c383eecfd3..bfae949dc3c6 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2510,7 +2510,7 @@ static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
+ 
+ 	usb_ep_set_maxpacket_limit(&dep->endpoint, size);
+ 
+-	dep->endpoint.max_streams = 15;
++	dep->endpoint.max_streams = 16;
+ 	dep->endpoint.ops = &dwc3_gadget_ep_ops;
+ 	list_add_tail(&dep->endpoint.ep_list,
+ 			&dwc->gadget->ep_list);
+@@ -2559,7 +2559,7 @@ static int dwc3_gadget_init_out_endpoint(struct dwc3_ep *dep)
+ 		size /= 3;
+ 
+ 	usb_ep_set_maxpacket_limit(&dep->endpoint, size);
+-	dep->endpoint.max_streams = 15;
++	dep->endpoint.max_streams = 16;
+ 	dep->endpoint.ops = &dwc3_gadget_ep_ops;
+ 	list_add_tail(&dep->endpoint.ep_list,
+ 			&dwc->gadget->ep_list);
 
-- there is a single IC (like the Realtek RTS5411)
-- the IC may require several resources to be initialized in a certain way
-  - this may require executing hardware specific code by some driver, which
-    isn't a USB device driver
-- the IC can 'contain' multiple USB hub devices, which can be connected to
-  separate USB busses
-- the IC doesn't have a control bus, which somewhat resembles the
-  'simple-audio-amplifier' driver, which also registers a platform device
-  to initialize its resources
+base-commit: 8e9f3908b995a33443821dc3a977277f69a4adc3
+-- 
+2.28.0
 
-- to provide the functionality of powering down the hub conditionally during
-  system suspend the driver (whether it's a platform driver or something else)
-  needs know which USB (hub) devices correspond to it. This is a real world
-  problem, on hardware that might see wide distribution.
-
-There were several attempts to solve this problem in the past, but none of them
-was accepted. So far Alan Stern seems to think the driver (not necessarily the
-binding as is) is a suitable solution, Greg KH also spent time reviewing it,
-without raising conceptual concerns. So it seems we have solution that would
-be generally landable from the USB side.
-
-I understand that your goal is to keep the device tree sane, which I'm sure
-can be challenging. If you really can't be convinced that the binding might
-be acceptable in its current or similiar form then please offer guidance
-on possible alternatives which allow to achieve the same functionality.
-
-Thanks
-
-Matthias
