@@ -2,81 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E13A27C274
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 12:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4112827C28F
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 12:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbgI2Kdc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Sep 2020 06:33:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40140 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbgI2Kdc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Sep 2020 06:33:32 -0400
-Received: from saruman (91-155-214-30.elisa-laajakaista.fi [91.155.214.30])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7DE6F207C4;
-        Tue, 29 Sep 2020 10:33:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601375612;
-        bh=bAPtax7RD0CoQ/R2rcD84KgfgLQp5cy751IU25Gs3Ko=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=GkV7lnovyXkbNt1b4tRVfvV2m/7Vnokv9MrDEeOfOSERhAPp1pmSIvLy0BaBwQzWj
-         3hqCqroFfh5JtdUYNuKelzxVL5HcFaiPpwxFPmS7/WV4VLz/B2M2pfK3WdBxtWT+g8
-         o0YhdAdYWFVMf93ZzdRgrc6XrAWUVEJ9GLw8ofxM=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>, khilman@baylibre.com,
-        kishon@ti.com, martin.blumenstingl@googlemail.com
-Cc:     linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] usb: dwc-meson-g12a: Add support for USB on S400
- board
-In-Reply-To: <5e69947c-8a91-af7f-ed86-996920109e79@baylibre.com>
-References: <20200917065949.3476-1-narmstrong@baylibre.com>
- <5e69947c-8a91-af7f-ed86-996920109e79@baylibre.com>
-Date:   Tue, 29 Sep 2020 13:33:24 +0300
-Message-ID: <87eemkan4b.fsf@kernel.org>
+        id S1725535AbgI2Klu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Sep 2020 06:41:50 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:45224 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725306AbgI2Klu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 06:41:50 -0400
+Received: by mail-lf1-f67.google.com with SMTP id z17so4882701lfi.12
+        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 03:41:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pgTQIlfJ1uDWcIBdlqsdKwk2q9yqJ4wRdLRdpk4kMLQ=;
+        b=Zxs6Pck9oTAA1aE3mttulC6dd8cZTzhJN5SnT7m2OxEL6SVSb8axtELemvRV7oR9Sp
+         0g3FD6ROTMPeqwdI+7MDWEuHMxDFKzLyQgzIyL+R1wDev/BAaqvTOTwmfuwNjnZ0eTmI
+         A6TqD+QSCVMFu5nFIjrnHKOpJP1DCrUT2nH0IoPE/cg3omQhrV+nnQsEBKOeK/+JAjxy
+         xlca5C/PTxegEXPB6fjynT5oDa47yvGWYrjpvjyJUH4kCdmgHYXEFbLa3eVB3UeEYjAT
+         XZcRn7Bq3/fYhdXV73YA7ZukcB6yAx2BV7tQsHcbUqGmiMQ5yf/dnNzH56EKn0VHl/qz
+         R5XA==
+X-Gm-Message-State: AOAM532RPmEWwiAUFMSqC/pggJawaA/ev2cETEjfiyzMhu0uWelyjW13
+        Bp3TucRNBNCOpNE7VaDtNs9S36yclxk=
+X-Google-Smtp-Source: ABdhPJzo32bq/8cMHlM3KTWEdwNxqMl89cadpLKCKzGBuWhGJDLYJbxDBIUGUkQE1wOjHXo+pr/fbw==
+X-Received: by 2002:ac2:4352:: with SMTP id o18mr909100lfl.496.1601376107182;
+        Tue, 29 Sep 2020 03:41:47 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id z2sm3169603lfc.209.2020.09.29.03.41.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 03:41:46 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@xi.terra>)
+        id 1kND4n-0001rT-7X; Tue, 29 Sep 2020 12:41:41 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     linux-usb@vger.kernel.org
+Cc:     "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH] USB: serial: ftdi_sio: clean up jtag quirks
+Date:   Tue, 29 Sep 2020 12:41:16 +0200
+Message-Id: <20200929104116.7107-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Drivers should not assume that interface descriptors have been parsed in
+any particular order so match on interface number instead when rejecting
+JTAG interfaces.
 
-Neil Armstrong <narmstrong@baylibre.com> writes:
+Also use the interface struct device for notifications so that the
+interface number is included.
 
-> Hi Felipe,
->
-> Is there anything to change in this serie ?
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/ftdi_sio.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-I've been waiting for Kishon's review of drivers/phy parts. I can take
-the rest, but without Kishon's ack, drivers/phy will be left out.
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index 8d89a1650dad..12a4b74ca1f4 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -2335,12 +2335,11 @@ static int ftdi_NDI_device_setup(struct usb_serial *serial)
+  */
+ static int ftdi_jtag_probe(struct usb_serial *serial)
+ {
+-	struct usb_device *udev = serial->dev;
+-	struct usb_interface *interface = serial->interface;
++	struct usb_interface *intf = serial->interface;
++	int ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
+ 
+-	if (interface == udev->actconfig->interface[0]) {
+-		dev_info(&udev->dev,
+-			 "Ignoring serial port reserved for JTAG\n");
++	if (ifnum == 0) {
++		dev_info(&intf->dev, "Ignoring interface reserved for JTAG\n");
+ 		return -ENODEV;
+ 	}
+ 
+@@ -2372,12 +2371,11 @@ static int ftdi_8u2232c_probe(struct usb_serial *serial)
+  */
+ static int ftdi_stmclite_probe(struct usb_serial *serial)
+ {
+-	struct usb_device *udev = serial->dev;
+-	struct usb_interface *interface = serial->interface;
++	struct usb_interface *intf = serial->interface;
++	int ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
+ 
+-	if (interface == udev->actconfig->interface[0] ||
+-	    interface == udev->actconfig->interface[1]) {
+-		dev_info(&udev->dev, "Ignoring serial port reserved for JTAG\n");
++	if (ifnum < 2) {
++		dev_info(&intf->dev, "Ignoring interface reserved for JTAG\n");
+ 		return -ENODEV;
+ 	}
+ 
+-- 
+2.26.2
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9zDXQRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZXiw//chxtvTjBs+jiNPt7tUMjifjIDCHu21fs
-u7W2cgENV+fMPM8LHPnWYHqIKR1vb3UtxapUdmDJ3oZKncXUU3KWgJBh50Ge9pCP
-JoGi3HTyz9RX/Rixq0RvCAqHOJaUIcckSiWs0R9XVdjUK6fGIeMOULYkMXxBv0ZV
-2acywkHbL2/3tEzjo5SyYZymkDF2VtitAqyjo4l5E6QuKG74BiycpFumP7zv5gTp
-hbXfNgJ1i0/jkrr7GrMuW5UN2D1q8IDFEl20SICrT4t2+WkN6MpTyio9Hd13xP5w
-v3QVP4wi2tmn2KB+Ws5urK8ei8B4mJ/qL0RU7ayg1DCs/YrYYBJZOd3t2xLbewCD
-YTnLmmbQglU4MzyV1Ksagiu96jgz015M9qNVvsPQJd+OuLPkj4M3Tgj7lpnBI0gX
-3JBf/ckeBrxp6+Z9hUFcxl2Snmi7kyIlwdW9RgTkaZRzVGWZxqsibrOhQooh7lnL
-gsh7u7x6yDq4V0XjrcbADfOiRh7STgCaNCiUl37RY/XNijYMBpe4I46QBH0M0O4Q
-IP7mYZes99dpVNoW/1PWHbU0lAQkk2rCHCzfctK2Hme3E4btfhdE6VDt19m2+rPL
-miLW3nnu6EklacrOOSGxlIu4aldQek5d2OoanvScM8by5lzwsUN2i23BQNkmqvgk
-km83ncYBpHQ=
-=0oUh
------END PGP SIGNATURE-----
---=-=-=--
