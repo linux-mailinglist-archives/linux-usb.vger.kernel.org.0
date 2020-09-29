@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B78C27BCD3
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 08:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EFE27BD03
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 08:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727650AbgI2GJb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Sep 2020 02:09:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45356 "EHLO mail.kernel.org"
+        id S1725710AbgI2GVd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Sep 2020 02:21:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727646AbgI2GJa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Sep 2020 02:09:30 -0400
-Received: from coco.lan (ip5f5ad5bc.dynamic.kabel-deutschland.de [95.90.213.188])
+        id S1725320AbgI2GVd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 29 Sep 2020 02:21:33 -0400
+Received: from saruman (91-155-214-30.elisa-laajakaista.fi [91.155.214.30])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CD3EC20BED;
-        Tue, 29 Sep 2020 06:09:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B71E20BED;
+        Tue, 29 Sep 2020 06:21:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601359770;
-        bh=vato/ATkmRSyEajlKkDTPiR91f1ZuLn1H05fHRPJIXI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hsBBarug0eTLR0DdQoJPu/by5DwGDQC7SYYDTOD27s61Vy0BOQHwQz4j7Xt1hVIiC
-         rbpE8SLADwz5cHcQlG2g6xcfSRRL9dU3l8QskPH/1ccyc0wzBtrn1GKhpny08jTL9v
-         FuTA4Jv7iX7W2T9whs/rt7MUyUNDD6WAwstmUrhQ=
-Date:   Tue, 29 Sep 2020 08:09:23 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Rob Herring <robh@kernel.org>, Felipe Balbi <balbi@kernel.org>
+        s=default; t=1601360492;
+        bh=dnqbDMCRs84eTHz5elPvtLuyKRU7ZTZKZvZADL2pPH8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=hWroEyfWj9Yc2joeUSG7hgz8U+CHLD+pt3IWHBMy8QwSvcoG3EJF391iNm9LIYLjs
+         C1STzMJO+GtvRVwb/e507InQghxe9tI/wSPk90xYNqvuJXpLwdlgg6kbF9Wrlp3jN1
+         F3nh9lU5dejfLk7Utnv2ZS/ZkPgRE056Tg/CODGU=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Rob Herring <robh@kernel.org>
 Cc:     Linuxarm <linuxarm@huawei.com>, mauro.chehab@huawei.com,
         John Stultz <john.stultz@linaro.org>,
         Manivannan Sadhasivam <mani@kernel.org>,
@@ -34,45 +34,76 @@ Cc:     Linuxarm <linuxarm@huawei.com>, mauro.chehab@huawei.com,
         devicetree@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH 2/2] dt-bindings: document a new quirk for dwc3
-Message-ID: <20200929080923.2a365748@coco.lan>
-In-Reply-To: <CAL_JsqLucKWwgBVAoyXpm1mCD5-OvFj2pM_q2+tcyA+K9fCnKg@mail.gmail.com>
+In-Reply-To: <20200929080923.2a365748@coco.lan>
 References: <cover.1599549364.git.mchehab+huawei@kernel.org>
-        <cb821a8b5ef2d44ce32c8ce1d01c34b7afb70eb2.1599549364.git.mchehab+huawei@kernel.org>
-        <20200915163814.GA2084568@bogus>
-        <20200917091821.0de18caa@coco.lan>
-        <CAL_JsqLucKWwgBVAoyXpm1mCD5-OvFj2pM_q2+tcyA+K9fCnKg@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+ <cb821a8b5ef2d44ce32c8ce1d01c34b7afb70eb2.1599549364.git.mchehab+huawei@kernel.org>
+ <20200915163814.GA2084568@bogus> <20200917091821.0de18caa@coco.lan>
+ <CAL_JsqLucKWwgBVAoyXpm1mCD5-OvFj2pM_q2+tcyA+K9fCnKg@mail.gmail.com>
+ <20200929080923.2a365748@coco.lan>
+Date:   Tue, 29 Sep 2020 09:21:24 +0300
+Message-ID: <87pn659k7v.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Ping.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Felipe,
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
 
-Em Thu, 17 Sep 2020 08:47:48 -0600
-Rob Herring <robh@kernel.org> escreveu:
+> Ping.
+>
+> Felipe,
+>
+> Em Thu, 17 Sep 2020 08:47:48 -0600
+> Rob Herring <robh@kernel.org> escreveu:
+>
+>> On Thu, Sep 17, 2020 at 1:18 AM Mauro Carvalho Chehab
+>> <mchehab+huawei@kernel.org> wrote:
+>> >
+>
+>> > IMO, adding a new quirk is cleaner, and adopts the same solution
+>> > that it is currently used by other drivers with Designware IP.=20=20
+>>=20
+>> We already have a bunch of quirk properties. What's one more, sigh. So
+>> if that's what you want, fine.
+>>=20
+>> Rob
+>
+> It sounds that this is the last piece for us to have everything
+> needed at the drivers in order to provide upstream support for
+> the Hikey 970 USB hub.
+>
+> Could you please merge it?
 
-> On Thu, Sep 17, 2020 at 1:18 AM Mauro Carvalho Chehab
-> <mchehab+huawei@kernel.org> wrote:
-> >
+Pushed to testing/next. I'll send a pull request to Greg this week,
+unless something goes terribly wrong on linux-next
 
-> > IMO, adding a new quirk is cleaner, and adopts the same solution
-> > that it is currently used by other drivers with Designware IP.  
-> 
-> We already have a bunch of quirk properties. What's one more, sigh. So
-> if that's what you want, fine.
-> 
-> Rob
+=2D-=20
+balbi
 
-It sounds that this is the last piece for us to have everything
-needed at the drivers in order to provide upstream support for
-the Hikey 970 USB hub.
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Could you please merge it?
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Mauro
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9y0mQRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZR/g/6A/awS1ucwGO2YXjX09+rNM5M8NTvj65D
+NjsVi4GdO4vN1iy4jv7PhCd8MxSTAnqTn/c9Zm65zw875VvY9GFEtLXEcwMell8W
+IRNz38FLbaGED16qy4uyKEJDWLJS9/LmDXE8Ssof/VKF9rwD5ZEAds05mEz1IDZv
+ccgWY8dNnN2bNDLI9TblHHsqJmGJKUrGNuDxoCRURR3Bqg8pVZ4r64O/8PxnrCEc
+OWtgX9sVOrLz9QIXWTu1at5BlnBK8LW+jYA2Bmb8yy7CmUTFNByrbQ+AdfIZoNMw
+O1yveWGWfAsU454cF42bJNuN580rANCNcXQEy/tRdAZTKNvh/gohZ32gyYoHsXFm
+eiC4O5AYVqp3vRr0C7JHByZyzh64msFyBmr3N3d15sH431amNKDZ5O5tXJhK9sKB
+PzzxDyNYlrTK1fNs4ny998Wx9qONolpvEqFvLUwiyYM4n2P0OBew+H/q+3Ktn+b7
+qjIb64a1WfSwXglPcYDmM7GSFw2LuVpMmya2AzSPJyTbTwFHcWHw869/gQYlFtvM
+Ex4O3suwNl/SRoYXu2ekA1bmjQTuphbi+AWlxQ8yYgeFNRHo2e+E3iYMu/we54gb
+Y49wUh6xJpOZCqfN23m3fbdurAz1R+FVspj7QPzk2Gt/GbrNC6EpaZgOjskrdNv+
+d6ZsJowIemE=
+=KOoM
+-----END PGP SIGNATURE-----
+--=-=-=--
