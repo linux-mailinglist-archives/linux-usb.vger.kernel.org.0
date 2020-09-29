@@ -2,73 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2188727B955
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 03:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8A027BA37
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 03:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbgI2BYh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 21:24:37 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:49786 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725272AbgI2BYg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 21:24:36 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 963FC401F6;
-        Tue, 29 Sep 2020 01:24:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1601342676; bh=NB7gys4OD2wsuGWDVJQV+bsrYM2tgb5Peqfl5Py/WiM=;
-        h=Date:From:Subject:To:Cc:From;
-        b=VqbZto/cjwX8NC1bf9fqqeng4wXYAv4QDqITR7uTgjvBdTjkPCzO7L0df3WZxvGHv
-         oXUTSjHOdoy2oJLLAC4ZNDh0tuBvVKmfHMkX2Ouc66MvPhJ2R2K0e4pLGwPuWKnfFe
-         GWLjPFALmK+L5ZyMckFY7UJ8wApQHv6u1j7hkka4rM7QuqwrWoBH/T3HBeYPKS0oV1
-         S618sT8N2Gw/muq20QHVjPUV2rlR3MECppGTAj62e4jvG4D6ZaCW6CMpPC8SfElX2O
-         DTgkmDDYVnTjiYJNsdaOcA06txV/qEPABArb7161Gv7UCYtAeGsc3XAR6esgNf7nCv
-         Eo6L1uDBXEdMg==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        id S1728133AbgI2Bga (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 21:36:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39730 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727386AbgI2Ban (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Sep 2020 21:30:43 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 512C7A0099;
-        Tue, 29 Sep 2020 01:24:35 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Mon, 28 Sep 2020 18:24:35 -0700
-Date:   Mon, 28 Sep 2020 18:24:35 -0700
-Message-Id: <d2664c6b9cbaa091c1ce7bea25e02989fc7f6272.1601342393.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: gadget: Allow restarting a transfer
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id EBDBD21734;
+        Tue, 29 Sep 2020 01:30:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601343042;
+        bh=jCAJpA4MoOkk1Y3avzyE2lD63xoo8nkUKvGvEriN85g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Qjp4i2nzbPPmi3dKUIuhXdeshi2KZmNcqZEs7/HaPhbr5OuyGb7/D1ewiOh6Xax7D
+         cjHbzhOnL9oIy+/7fG3e1i/G4bx+HOST/GhzfM5XkBCtxCWOjNvAV8XEiPXutGo7IS
+         NZxtAG7WLvh7RWo70S4C+mElE8scetxtYSovJoqI=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Olympia Giannou <ogiannou@gmail.com>,
+        Olympia Giannou <olympia.giannou@leica-geosystems.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 11/29] rndis_host: increase sleep time in the query-response loop
+Date:   Mon, 28 Sep 2020 21:30:08 -0400
+Message-Id: <20200929013027.2406344-11-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200929013027.2406344-1-sashal@kernel.org>
+References: <20200929013027.2406344-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For streams, sometime host may reject a stream and the device may need
-to reinitiate that stream by stopping and restarting a transfer. In this
-case, all the TRBs may have already been prepared. Allow the
-__dwc3_gadget_kick_transfer() to go through to reinitiate the stream.
+From: Olympia Giannou <ogiannou@gmail.com>
 
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+[ Upstream commit 4202c9fdf03d79dedaa94b2c4cf574f25793d669 ]
+
+Some WinCE devices face connectivity issues via the NDIS interface. They
+fail to register, resulting in -110 timeout errors and failures during the
+probe procedure.
+
+In this kind of WinCE devices, the Windows-side ndis driver needs quite
+more time to be loaded and configured, so that the linux rndis host queries
+to them fail to be responded correctly on time.
+
+More specifically, when INIT is called on the WinCE side - no other
+requests can be served by the Client and this results in a failed QUERY
+afterwards.
+
+The increase of the waiting time on the side of the linux rndis host in
+the command-response loop leaves the INIT process to complete and respond
+to a QUERY, which comes afterwards. The WinCE devices with this special
+"feature" in their ndis driver are satisfied by this fix.
+
+Signed-off-by: Olympia Giannou <olympia.giannou@leica-geosystems.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/gadget.c | 2 +-
+ drivers/net/usb/rndis_host.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 82bc075ba97c..c53a22f0d952 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1327,7 +1327,7 @@ static int __dwc3_gadget_kick_transfer(struct dwc3_ep *dep)
- 	u32				cmd;
- 
- 	ret = dwc3_prepare_trbs(dep);
--	if (ret <= 0)
-+	if (ret < 0)
- 		return ret;
- 
- 	starting = !(dep->flags & DWC3_EP_TRANSFER_STARTED);
-
-base-commit: 53139e6fa28fa0faa0a40476b033e13da25751fe
+diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
+index bd9c07888ebb4..6fa7a009a24a4 100644
+--- a/drivers/net/usb/rndis_host.c
++++ b/drivers/net/usb/rndis_host.c
+@@ -201,7 +201,7 @@ int rndis_command(struct usbnet *dev, struct rndis_msg_hdr *buf, int buflen)
+ 			dev_dbg(&info->control->dev,
+ 				"rndis response error, code %d\n", retval);
+ 		}
+-		msleep(20);
++		msleep(40);
+ 	}
+ 	dev_dbg(&info->control->dev, "rndis response timeout\n");
+ 	return -ETIMEDOUT;
 -- 
-2.28.0
+2.25.1
 
