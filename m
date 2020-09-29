@@ -2,50 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4DA27DB54
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 00:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6740127DB6C
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 00:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbgI2WEc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Sep 2020 18:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
+        id S1728688AbgI2WHy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Sep 2020 18:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728142AbgI2WEb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 18:04:31 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AD4C0613D0
-        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 15:04:31 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id fa1so3524086pjb.0
-        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 15:04:31 -0700 (PDT)
+        with ESMTP id S1728260AbgI2WHo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 18:07:44 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8034C0613D0
+        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 15:07:43 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id 7so5045424pgm.11
+        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 15:07:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to;
-        bh=Ozbvl81yzEdao+V+0+KTYl+21UJtwgT7LA7xz5d8LPs=;
-        b=YG7eCsiAlkJ+aqwK2OiFxtiUQKREoKhH7VSo93BQFlSGfJ0+qkIWs9ybI1L41FreeF
-         8VG6nd4UKA+vBQgmcLO6rAYTkSc9LnKkGovzZjcVfh6VmOna74TXThUSxU9ThKl8IPPP
-         QE4ksmgGtVBmlPkF8xZyCPnMNt4we/YLjw/oQ=
+        bh=cE3s9SwT+G7KqsfOrDGVhB4Z+MJR3Lbo+jxmtEOax9I=;
+        b=Vu36m4XgQ72hWIRzJaHk10V033IRzHHg+upx57i6VdNgZuPXoloicmd1qaq0iAVbAc
+         xifHSWldsXmTjdRpJKh7VQGJ0c+YYYYUgiLruyc93MySmZ6Xjv7RhC/okXGbw10ZDU0C
+         PFpFW/XLrIxgI91TwAVVYOz35FxvnElpTCpqc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to;
-        bh=Ozbvl81yzEdao+V+0+KTYl+21UJtwgT7LA7xz5d8LPs=;
-        b=X/ESE1ZvJcWzNW2bW3X+pv6AmELpVtCVLgTBF7wtnj3/nyT/B4zGoxCDUcpKQemvVv
-         QVF8PffXhWVuK9IPnLMtS8Od4vm/BN86cSg1slbq+hPUsPjaREW/3+B2SkAmsH02Bw7Z
-         gitaGMRv/Ym1abORpd6hZz43wVjuPgkugO+olpsppUi6B2eWKTXUC1TqhkG7th2GRUxX
-         dcbO+pO+1XPKbuh7gGtuMWIuixOhvrhsoSwA2QqE/nuTT5adkl+dXVufSW4u/8ogKCOj
-         1Bwzki72Un+z+bk3mUlFWDsdaHsZPWvVoX5U5n/6yJCoAV9Z4aZdMKpAhkhBP0IDOzB1
-         12Tg==
-X-Gm-Message-State: AOAM533vwv5cXJqXOtcpcVXd006GA2YO/OaHf91rWe5qLw2mLxElffuj
-        aIALH0jO18qI6ySahQphvyZipA==
-X-Google-Smtp-Source: ABdhPJxV8EYQ9JnZPsQ8dHML9HhEOBxyLiQEpEqoA3u063+yClHhtgTpIqKkckYAsWnYdNPuZLZSzw==
-X-Received: by 2002:a17:90b:80a:: with SMTP id bk10mr5622687pjb.53.1601417071046;
-        Tue, 29 Sep 2020 15:04:31 -0700 (PDT)
+        bh=cE3s9SwT+G7KqsfOrDGVhB4Z+MJR3Lbo+jxmtEOax9I=;
+        b=tg4KqFAqAyZI4xmq4uwgh84C0VlXmuzLkSAmlVvJEJDSbiishC6G+apx0tmU16gCRK
+         wN1SlYyQ/hycqndOtVZp2qtg/d893NHmsbDbrh2Eyv4llq7uSf+pOU+aAZZzKq3vLpA8
+         4SXY+6d6ivX8f9XT+EYtfMqkwHuWhw8V7ogmUW07swOuKuy356N9ZHT9CFnTZRE3/FBO
+         w52h4dV9nvVcTbgMNh1sJ94yhKU8s1pOjR75FIaVA2ZPTmPObB4ZIUOQWQt0oTzbBUBb
+         PYd2Nwih67BVGMkb/7ff0Js6WOLWzglSRZweiJlz3jp6c3ieiIHKOT8y9TO62UxPcREw
+         LSMw==
+X-Gm-Message-State: AOAM531rCJwKEoWNGkdBoWaOThA2FPtwpU4Bzv9Qi4C/mP2Ladj+ODeU
+        h/5PSA7I7cxsjh5yFTJi8++OVg==
+X-Google-Smtp-Source: ABdhPJxBc5zsDsmSyhashbX/PxCC3L6VtkRhu/YMWfBpT3q96/RllS7cR/QOMPbMCXrcPBLhVgsIhQ==
+X-Received: by 2002:a17:902:fe0b:b029:d1:9bd3:6e20 with SMTP id g11-20020a170902fe0bb02900d19bd36e20mr6663658plj.31.1601417263123;
+        Tue, 29 Sep 2020 15:07:43 -0700 (PDT)
 Received: from [192.168.178.129] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id q193sm6593198pfq.127.2020.09.29.15.04.02
+        by smtp.gmail.com with ESMTPSA id h12sm6336925pfo.68.2020.09.29.15.07.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Sep 2020 15:04:30 -0700 (PDT)
-Subject: Re: [patch V2 26/36] net: brcmfmac: Convey execution context via
- argument to brcmf_netif_rx()
+        Tue, 29 Sep 2020 15:07:42 -0700 (PDT)
+Subject: Re: [patch V2 27/36] net: brcmfmac: Convey allocation mode as
+ argument
 To:     Thomas Gleixner <tglx@linutronix.de>,
         LKML <linux-kernel@vger.kernel.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -99,79 +99,59 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Pascal Terjan <pterjan@google.com>,
         Ping-Ke Shih <pkshih@realtek.com>
 References: <20200929202509.673358734@linutronix.de>
- <20200929203502.084703195@linutronix.de>
+ <20200929203502.180883992@linutronix.de>
 From:   Arend Van Spriel <arend.vanspriel@broadcom.com>
-Message-ID: <0f26e8be-bfb1-7e69-3a8d-a5ef2bf22b25@broadcom.com>
-Date:   Wed, 30 Sep 2020 00:03:59 +0200
+Message-ID: <d64a84f6-2ae6-ab26-e7a7-969f45b8cfb8@broadcom.com>
+Date:   Wed, 30 Sep 2020 00:07:30 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200929203502.084703195@linutronix.de>
+In-Reply-To: <20200929203502.180883992@linutronix.de>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000aefa4d05b07af712"
+        boundary="000000000000216eb505b07b0351"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000aefa4d05b07af712
+--000000000000216eb505b07b0351
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 On 9/29/2020 10:25 PM, Thomas Gleixner wrote:
-> bcrmgf_netif_rx() uses in_interrupt to chose between netif_rx() and
-> netif_rx_ni(). in_interrupt() usage in drivers is phased out.
+> From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 > 
-> Convey the execution mode via an 'inirq' argument through the various
-> callchains leading to brcmf_netif_rx():
+> The usage of in_interrupt() in drivers is phased out and Linus clearly
+> requested that code which changes behaviour depending on context should
+> either be seperated or the context be conveyed in an argument passed by the
+> caller, which usually knows the context.
 > 
-> brcmf_pcie_isr_thread()		    <- Task context
->    brcmf_proto_msgbuf_rx_trigger()
->      brcmf_msgbuf_process_rx()
->        brcmf_msgbuf_process_msgtype()
->          brcmf_msgbuf_process_rx_complete()
-> 	  brcmf_netif_mon_rx()
-> 	     brcmf_netif_rx(isirq = false)
-> 	  brcmf_netif_rx(isirq = false)
+> brcmf_fweh_process_event() uses in_interrupt() to select the allocation
+> mode GFP_KERNEL/GFP_ATOMIC. Aside of the above reasons this check is
+> incomplete as it cannot detect contexts which just have preemption or
+> interrupts disabled.
 > 
-> brcmf_sdio_readframes()  <- Task context sdio_claim_host() might sleep
->    brcmf_rx_frame(isirq = false)
+> All callchains leading to brcmf_fweh_process_event() can clearly identify
+> the calling context. Convey a 'gfp' argument through the callchains and let
+> the callers hand in the appropriate GFP mode.
 > 
-> brcmf_sdio_rxglom()      <- Task context sdio_claim_host() might sleep
->    brcmf_rx_frame(isirq = false)
-> 
-> brcmf_usb_rx_complete()  <- Interrupt context
->    brcmf_rx_frame(isirq = true)
-> 
-> brcmf_rx_frame()
->    brcmf_proto_rxreorder()
->      brcmf_proto_bcdc_rxreorder()
->        brcmf_fws_rxreorder()
->          brcmf_netif_rx()
->        brcmf_netif_rx()
-
-Thanks for taking the dive.
+> This has also the advantage that any change of execution context or
+> preemption/interrupt state in these callchains will be detected by the
+> memory allocator for all GFP_KERNEL allocations.
 
 Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Cc: Kalle Valo <kvalo@codeaurora.org>
 > ---
-> V2: New patch. Using an argument instead of switching to netif_rx_any_context()
+> V2: Adopt to the 'inirq' changes
 > ---
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcdc.c     |    4 +--
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/bus.h      |    3 +-
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/core.c     |   16 ++++++------
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/core.h     |    2 -
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwsignal.c |   10 +++----
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwsignal.h |    2 -
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/msgbuf.c   |    5 ++-
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/proto.h    |    6 ++--
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c     |    4 +--
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c      |    2 -
->   10 files changed, 29 insertions(+), 25 deletions(-)
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/core.c   |   10 ++++++----
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/fweh.c   |    8 ++------
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/fweh.h   |    7 ++++---
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/msgbuf.c |    2 +-
+>   4 files changed, 13 insertions(+), 14 deletions(-)
 
---000000000000aefa4d05b07af712
+--000000000000216eb505b07b0351
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -242,13 +222,13 @@ WwHVQUbAn+xLMIQpycIQFoJIGJX4MeaTSMfLNP2w7nP2uLNgIeleF284vS0XVkBXSCgIGylP4SN+
 HQYrv7fVCbtp+c7nFvP7MYICbzCCAmsCAQEwbTBdMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xv
 YmFsU2lnbiBudi1zYTEzMDEGA1UEAxMqR2xvYmFsU2lnbiBQZXJzb25hbFNpZ24gMiBDQSAtIFNI
 QTI1NiAtIEczAgxR3m7Pj6LvQiWjJy0wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIE
-INJ8F6w6EaA9wgPRH3Sdj0IbzO/Po40dTzz45z3/fFdhMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
-BwEwHAYJKoZIhvcNAQkFMQ8XDTIwMDkyOTIyMDQzMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgB
+IIuMKD8R1d3dTMFYq0C8kaH43I3CaH55tKZnji15616RMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
+BwEwHAYJKoZIhvcNAQkFMQ8XDTIwMDkyOTIyMDc0M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgB
 ZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQow
-CwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCK/4TQqgRRDqyjck+9
-LWboW9/YxwzH2vrmoYtwS/9rIjLv7TsUnFzyChuroz85ir9JDBGjoPakVZC01hEyUfAIncvpXJ17
-7vAzEpzNFY/fTMWyDRi6miG0c+fnHvLTTWQyrHQxUWra7jnq8yZNchT8PMsL1238IxkZ4Pzk/iK6
-FEZn24/CXQHAMf6MNRciKBlYhZ79++nfHUz56jz7wIVMyaFF4EpPmlkdiJHALV2X8nZgjKMt2NDQ
-xis2OiLPNzEa7G6iRQUCTK2XN6+jBFehUCwPsnPHU6ugMfc0s63/tvDRjq6/V9v5OUccqGTd+cfh
-GJOI1HbKrmruLU2nASsy
---000000000000aefa4d05b07af712--
+CwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAyFr8g5BAy5xlHh6m0
+pAKb6kfrp9bG+c03cQSNarxjD0bJgEfiCmgtF5Ow4Gwbs7YAqZ77/ykDFMQYBRCwDjjbPfByzhnk
+DuegEaAUUZlknAeY2hOPLls1ybPx/o2kYzs/xjorK1FwYzz7/Bn3c6kLOL9EAXeDqEeZOg53kMd7
+AkBK2Sw2MrlJPnpHK4yTUzKGSWwjvYffYSlyND7qCTWW2S+ZFzCUAedbIMXMSI6ad/IkAFBoJoCe
+CW9UY/f52BaZ23VzKikxq5W1KEdA+WAWD7IM0s5dxsIs5GTyZzjKli6xETCWmCbmIdUmGQBz935A
+Ok2HNqnQ1+StXVWyTXYA
+--000000000000216eb505b07b0351--
