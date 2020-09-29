@@ -2,89 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE61527B9B2
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 03:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F6227BA6E
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 03:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727883AbgI2Bcn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 21:32:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41832 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727790AbgI2BcL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Sep 2020 21:32:11 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 95B8F2075A;
-        Tue, 29 Sep 2020 01:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601343128;
-        bh=krMwwb9kglF5rmiiF6Q1YgXrmnRlIkkhZ1zwowzi0ps=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UK4XLpfsnCJTK6YrLRoVB0Eg/MsmTbN7Tt1nzTV/M1WdjGkQP/HBU/whgrjiM4YLF
-         q70LlBSEcUTkbTciRNKgfdba4bVvt2xrWsMB64+zjy3YuwFY5x/4QhHcAEwfhecK+m
-         Bg8hQBT3UfxJLuWktZ3UIMfcyYwklRU4osHe/Vuw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Olympia Giannou <ogiannou@gmail.com>,
-        Olympia Giannou <olympia.giannou@leica-geosystems.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 2/4] rndis_host: increase sleep time in the query-response loop
-Date:   Mon, 28 Sep 2020 21:32:03 -0400
-Message-Id: <20200929013205.2407201-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200929013205.2407201-1-sashal@kernel.org>
-References: <20200929013205.2407201-1-sashal@kernel.org>
+        id S1727334AbgI2Bn6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 21:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727279AbgI2Bn6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 21:43:58 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4996EC061755
+        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 18:43:58 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id j19so647672pjl.4
+        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 18:43:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Fo2RrYUf1cReiMQEx0TU5FOkDdexrCuS8Ny7Goxj60k=;
+        b=CUmodB9nAQCcmCu41vOpT+Akx3puaskkx8AAA2/8c0KgerETOBMOFci90fs8Cmvxbt
+         Fdo4NmGL9tdHAw35IQ4DTJNpRM8j2XDvXLPrQ3h1vnUt697xIEEmYIx6WRD1Q7mzd8wZ
+         pm308NYBKMi7mYYY9gsKKTORP3CStWgbAmxBg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Fo2RrYUf1cReiMQEx0TU5FOkDdexrCuS8Ny7Goxj60k=;
+        b=fjsMNvS+me6vcK9UTp8ed0kCf3Rx5xu//DDsOrewbhiornL0Z9d5p6qe3NDPsiaVsX
+         Vn8J126uweGcI+7Wm0BGsWtuUiSUcPC0SCg6LjkK5feSvzxorY8HpSJG+d/SxrdTAdBl
+         gX5tq8c29VtlmWq0j/Gji783o2lVMIz5EL9xmZDUph4cBIMx1rGQiA2XTu77B69fN3ZC
+         fY93esJMbl6FFUcESjxnLf7LvPwvG1I+gAkGzBBX+ihGn2gwd8kn5FWuB/yuTGQrXZHx
+         sUMx1cgxQZY/0Y2LgM1PNN83ExPsVL559dtyuEB3CcdTnmnjLSnLjZEclag43boJkvyR
+         gs1w==
+X-Gm-Message-State: AOAM532l7Gcz2p9ZA/ee9GJhLYZI3bMvanVWoSyEc9Hz7qXI8soS6XGQ
+        vRopiQ2ZK9/1GoXy2/sWNkY1mQ==
+X-Google-Smtp-Source: ABdhPJyEmEODYkMb0O/Ba/x4y/swdruOA3A4V8pF4WK7blH245iFVfeRTaXzLOGXI3gVm64nowNsHQ==
+X-Received: by 2002:a17:90a:d986:: with SMTP id d6mr1716338pjv.108.1601343837607;
+        Mon, 28 Sep 2020 18:43:57 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id f4sm2903758pfa.125.2020.09.28.18.43.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Sep 2020 18:43:57 -0700 (PDT)
+Date:   Mon, 28 Sep 2020 18:43:55 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Bastien Nocera <hadess@hadess.net>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Johan Hovold <johan@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4 2/2] USB: misc: Add onboard_usb_hub driver
+Message-ID: <20200929014355.GA1099144@google.com>
+References: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20200928101326.v4.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <20200928184759.GB142254@rowland.harvard.edu>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200928184759.GB142254@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Olympia Giannou <ogiannou@gmail.com>
+On Mon, Sep 28, 2020 at 02:47:59PM -0400, Alan Stern wrote:
+> On Mon, Sep 28, 2020 at 10:13:55AM -0700, Matthias Kaehlcke wrote:
+> > The main issue this driver addresses is that a USB hub needs to be
+> > powered before it can be discovered. For discrete onboard hubs (an
+> > example for such a hub is the Realtek RTS5411) this is often solved
+> > by supplying the hub with an 'always-on' regulator, which is kind
+> > of a hack. Some onboard hubs may require further initialization
+> > steps, like changing the state of a GPIO or enabling a clock, which
+> > requires even more hacks. This driver creates a platform device
+> > representing the hub which performs the necessary initialization.
+> > Currently it only supports switching on a single regulator, support
+> > for multiple regulators or other actions can be added as needed.
+> > Different initialization sequences can be supported based on the
+> > compatible string.
+> > 
+> > Besides performing the initialization the driver can be configured
+> > to power the hub off during system suspend. This can help to extend
+> > battery life on battery powered devices which have no requirements
+> > to keep the hub powered during suspend. The driver can also be
+> > configured to leave the hub powered when a wakeup capable USB device
+> > is connected when suspending, and power it off otherwise.
+> > 
+> > Technically the driver consists of two drivers, the platform driver
+> > described above and a very thin USB driver that subclasses the
+> > generic driver. The purpose of this driver is to provide the platform
+> > driver with the USB devices corresponding to the hub(s) (a hub
+> > controller may provide multiple 'logical' hubs, e.g. one to support
+> > USB 2.0 and another for USB 3.x).
+> > 
+> > Co-developed-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> > Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> 
+> Minor cut & paste error:
+> 
+> > +static int onboard_hub_power_off(struct onboard_hub *hub)
+> > +{
+> > +	int err;
+> > +
+> > +	err = regulator_disable(hub->vdd);
+> > +	if (err) {
+> > +		dev_err(hub->dev, "failed to enable regulator: %d\n", err);
+> 
+> s/enable/disable/
 
-[ Upstream commit 4202c9fdf03d79dedaa94b2c4cf574f25793d669 ]
+yup, will fix
 
-Some WinCE devices face connectivity issues via the NDIS interface. They
-fail to register, resulting in -110 timeout errors and failures during the
-probe procedure.
+> Have you tried manually unbinding and rebinding the two drivers a few
+> times to make sure they will still work?
 
-In this kind of WinCE devices, the Windows-side ndis driver needs quite
-more time to be loaded and configured, so that the linux rndis host queries
-to them fail to be responded correctly on time.
+I went through a few dozen bund/unbind cycles for both drivers and things
+looked good overall, but then last minute I found that determining whether
+wakeup capable devices are connected doesn't always work as (I) expected.
+I didn't see this earlier, it seems to be reproduce more easily after
+unbinding and rebinding the platform driver.
 
-More specifically, when INIT is called on the WinCE side - no other
-requests can be served by the Client and this results in a failed QUERY
-afterwards.
+During development I already noticed that usb_wakeup_enabled_descendants()
+returns a cached value, which was a problem for an earlier version of the
+driver. The values are updated by hub_suspend(), my (flawed) assumption
+was that the USB driver would always suspend before the platform driver.
+This generally seems to be the case on my development platform after boot,
+but not necessarily after unbinding and rebinding the driver. Using the
+_suspend_late hook instead of _suspend seems to be a reliable workaround.
 
-The increase of the waiting time on the side of the linux rndis host in
-the command-response loop leaves the INIT process to complete and respond
-to a QUERY, which comes afterwards. The WinCE devices with this special
-"feature" in their ndis driver are satisfied by this fix.
+> I'm a little concerned about  all the devm_* stuff in here; does that
+> get released when the driver is unbound from the device or when the device
+> is unregistered?  And if the latter, what happens if you have multiple
+> sysfs attribute groups going at the same time?
 
-Signed-off-by: Olympia Giannou <olympia.giannou@leica-geosystems.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/rndis_host.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The memory gets released when the device is unbound:
 
-diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
-index 524a47a281207..b20b380d91bf6 100644
---- a/drivers/net/usb/rndis_host.c
-+++ b/drivers/net/usb/rndis_host.c
-@@ -213,7 +213,7 @@ int rndis_command(struct usbnet *dev, struct rndis_msg_hdr *buf, int buflen)
- 			dev_dbg(&info->control->dev,
- 				"rndis response error, code %d\n", retval);
- 		}
--		msleep(20);
-+		msleep(40);
- 	}
- 	dev_dbg(&info->control->dev, "rndis response timeout\n");
- 	return -ETIMEDOUT;
--- 
-2.25.1
+device_release_driver
+  device_release_driver_internal
+    __device_release_driver
+      devres_release_all
 
+Anyway, if you prefer I can change the driver to use kmalloc/kfree.
+
+> Apart from those worries and the typo, this looks pretty good to me.
+> 
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+Great, thanks for taking the time to review!
