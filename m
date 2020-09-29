@@ -2,53 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CE127BAE2
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 04:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949A627BAE5
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 04:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727000AbgI2CkL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 22:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        id S1727306AbgI2CkN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 22:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725272AbgI2CkL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 22:40:11 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D18BC0613CF
-        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 19:40:11 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id n13so3239774ybk.9
-        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 19:40:10 -0700 (PDT)
+        with ESMTP id S1727186AbgI2CkM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Sep 2020 22:40:12 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F596C0613CF
+        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 19:40:12 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id r2so3273078yba.7
+        for <linux-usb@vger.kernel.org>; Mon, 28 Sep 2020 19:40:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=fUNDNepzGaiGXAFhfkvJ0RSbCFD3wqyJd1yrtWxeUj8=;
-        b=IoHqVaUbKcxLhyR1E/x98m/4a3etB97/ByKN3fmpKhAU/yIpgGoXK83g3Qd1IX2UDU
-         1ZUtrDoMfdBcWpDZ2LyKNvlLnBDixrKvVU6MfpADkYztdZeN6XYU3cejo9FI6Xa1AqaH
-         FdOtaRUlNJdLNfwrKRD3ftlZ3bmhNcZzD5VnV29ORmm/jIFxzYnr9FJ2bIgaXnoHvSH0
-         YvQ+VRzkzdoq1TfIh47EIBPxCoebhMwcNSWL2q75Z9qFPiNOXVBTXGTIixJyjKuP4E2p
-         FG0rOfhrWCtgmdYvYqz7V4XX6oIiqDzBU8FN5bYWIKYJZfWK8P9735CRrjXQeMfdtQAM
-         h75A==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=MiJtLKkZASzxH1ZW8q4MQf29sD0tLNozhPhg5qpkXao=;
+        b=eklywUZmu6WqYSPdfZcI5lTgxnq/RHddv6srVPv7W87soTIzSKlaUU1f3dji2U9SVd
+         QML3+RzdKPnIi0i4Pgy5V8zD8s6GvSQ2MqgOnxpV8JB0rNGJSNWcFoDJHUp72sGaMH5g
+         k26GtPtxznbnFqPre3aMNuzhhrVbIat89+jfJ80deqlPVNDtpPwdbmsLmanb6/EhmyBu
+         y/ZpJCZWaI/j3GpLUUJhNQ/mZ5aOf4UoCFMalU1rvlBg04+wH4nM3BBl9ZqK/po2+1+x
+         HWGSWJDpMyZsza1dXXThOuiySCsEBXoypB8Es0RwJducv6QRqBNki57roYN/GSlLHVPN
+         rYSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=fUNDNepzGaiGXAFhfkvJ0RSbCFD3wqyJd1yrtWxeUj8=;
-        b=HEM8xbBwo9zQHBKh3XgpCC8KWc7Ij8mIeNSOhZ+CpLpmFgLpXkmVPrEBAbke6ySBkG
-         wnxwKHrs3VeHd9u4a39XLh+zLL2iqOfvEhKPDDONJRzbiFHFNSDVcfD1L3WWfbXvO3E0
-         KktAx58JkGKOx3hM+pv/N1vsytI6Hc6Yx+b80WsvkkNIAJ9nAmt89Mw1i5COAilzFJte
-         U0x+Xj1c1kZf5w7tARRMni0zX0C4GA068n/+iKcci7dsiUKdaWdr9tJvqDt1O1kIOwiZ
-         x/fhMpKr5a+e7ATrTmfabodDZvBf1G/MNr/LiADo8v2C6XeJv2slbaEwV3yaV+TyA8Ta
-         t2gg==
-X-Gm-Message-State: AOAM532x0z4b9v2LIHgTXp2bqb5MnuvIaTTcNqu+rg+ty3D26tICqF2J
-        3UtsiJTFuXvvzAk9nuwEyeNmcI79a64=
-X-Google-Smtp-Source: ABdhPJwWXU59duMCBuhqcj11SshhXEPhlM0S15Xa3yI/4xvIvgERj3QGHigEMR+6CTNyprPNRCKAT6YejKk=
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=MiJtLKkZASzxH1ZW8q4MQf29sD0tLNozhPhg5qpkXao=;
+        b=C9uE7yT64iqPcclFqMb+cI8T4ozUWbpQpZuSPBj5rDyQDLZqT84j7kSK9AmZ/KXQD2
+         r2buUSFIlPdvxl2pQ0LgHbpGS20OnWOOjty5/gMjO++Tk2MF11MLfCiGC+SPJPg7jwpC
+         9CyytRJUWtlVyDcCRcbnloUseEntndhI7T3hCeuO9zuEOgS8biw5I2TuSHgwY4xbnqqI
+         MapDM75ygvgVeh6kB4ZvGtfzaNU1TwGU6woNjjJqrRcv8Q3hjBT7tDC0cJKWWdx6D+bt
+         SpPkK04Msw9MGP6QKwSBt0BEx8sk4XRRaIym+UiyC0cuf9sDOQB7VKwmQmvhBoVv/UDN
+         iT6w==
+X-Gm-Message-State: AOAM533zJh7kN3DVbgL15kZvFxq/bA3PYShyxXk6e5QVfXhNb3yEJtQ+
+        CHEr4GojSMmUTIG7+SZfZxvvqHMvFX8=
+X-Google-Smtp-Source: ABdhPJwOe+NOkp+j1RNkpXNHyqZ8h4Kva1lWHOE2ZmpQmLsbJiWtUoMzhBrpJo2qEByX/j6pNydm1Z5dnEM=
 Sender: "badhri via sendgmr" <badhri@badhri.mtv.corp.google.com>
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:1:f292:1cff:fee0:66cf])
- (user=badhri job=sendgmr) by 2002:a25:1381:: with SMTP id 123mr3584065ybt.406.1601347209808;
- Mon, 28 Sep 2020 19:40:09 -0700 (PDT)
-Date:   Mon, 28 Sep 2020 19:39:49 -0700
-Message-Id: <20200929024004.244992-1-badhri@google.com>
+ (user=badhri job=sendgmr) by 2002:a25:6a56:: with SMTP id f83mr3122863ybc.311.1601347211799;
+ Mon, 28 Sep 2020 19:40:11 -0700 (PDT)
+Date:   Mon, 28 Sep 2020 19:39:50 -0700
+In-Reply-To: <20200929024004.244992-1-badhri@google.com>
+Message-Id: <20200929024004.244992-2-badhri@google.com>
 Mime-Version: 1.0
+References: <20200929024004.244992-1-badhri@google.com>
 X-Mailer: git-send-email 2.28.0.709.gb0816b6eb0-goog
-Subject: [PATCH v9 00/15] TCPM support for FRS and AutoDischarge Disconnect
+Subject: [PATCH v9 01/15] usb: typec: tcpci: Add a getter method to retrieve
+ tcpm_port reference
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -68,75 +72,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Allow chip level drivers to retrieve reference to tcpm_port.
 
-Addressed three comments from v8:
-1. Fixed the make dt_binding_check that Rob Herring pointed out in
-   "dt-bindings: usb: Maxim type-c controller device tree binding
-   document"
-   https://lkml.org/lkml/2020/9/22/720
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+Change since v1:
+- Changing patch version to v6 to fix version number confusion.
 
-2. Moved to string based enums for new-source-frs-typec-current to
-   address comments from Rob herring for:
-   "dt-bindings: connector: Add property to set initial current cap
-   for FRS". As a result, introduced another patch:
-   "usb: typec: tcpm: Parse frs type-c current from device tree"
-   to refactor tcpm code to read new-source-frs-typec-current from
-   device tree. Previously this is was a uint32.
-   https://lkml.org/lkml/2020/9/22/729
+Change since v6:
+- Rebase on usb-next
+- Added Reviewed-by from Heikki.
 
-3. To address Heikki's comment on Auto discharge disconnect threshold
-   https://lkml.org/lkml/2020/9/21/1857
-   a. Removed the call to tcpm_set_auto_vbus_discharge_threshold
-      from source attach path.
-   b. Moved logic of setting TCPC_VBUS_SINK_DISCONNECT_THRESH_MAX to
-      tcpci.c as the tcpci_maxim was actually setting the default
-      values. Removed the get_auto_vbus_discharge_threshold callback
-      from tcpci_data for now. Can be added later if needed.
+Change since v7:
+- Rebase on usb-next
 
-4. Added additional patches to address an isssue where vbus was being
-   left post disconnect after Fast Role Swap operation is executed.
-   a. usb: typec: tcpm: frs sourcing vbus callback
-   b. usb: typec: tcpci: frs sourcing vbus callback
-   c. usb: typec: tcpci_max77759: Fix vbus stuck on upon diconnecting sink
+Change since v8:
+- None
+---
+ drivers/usb/typec/tcpm/tcpci.c | 6 ++++++
+ drivers/usb/typec/tcpm/tcpci.h | 2 ++
+ 2 files changed, 8 insertions(+)
 
-Thanks,
-Badhri.
-
-Badhri Jagan Sridharan (15):
-  usb: typec: tcpci: Add a getter method to retrieve tcpm_port reference
-  usb: typec: tcpci: Add set_vbus tcpci callback
-  dt-bindings: usb: Maxim type-c controller device tree binding document
-  usb: typec: tcpci_maxim: Chip level TCPC driver
-  dt-bindings: connector: Add property to set initial current cap for
-    FRS
-  usb: typec: tcpm: Add support for Sink Fast Role SWAP(FRS)
-  usb: typec: tcpci: Implement callbacks for FRS
-  usb: typec: tcpci_maxim: Add support for Sink FRS
-  usb: typec: tcpm: frs sourcing vbus callback
-  usb: typec: tcpci: frs sourcing vbus callback
-  usb: typec: tcpci_max77759: Fix vbus stuck on upon diconnecting sink
-  usb: typec: tcpm: Parse frs type-c current from device tree
-  usb: typec: tcpm: Implement enabling Auto Discharge disconnect support
-  usb: typec: tcpci: Implement Auto discharge disconnect callbacks
-  usb: typec: tcpci_maxim: Enable auto discharge disconnect
-
- .../bindings/connector/usb-connector.yaml     |  26 +
- .../devicetree/bindings/usb/maxim,tcpci.yaml  |  68 +++
- drivers/usb/typec/tcpm/Kconfig                |   6 +
- drivers/usb/typec/tcpm/Makefile               |  15 +-
- drivers/usb/typec/tcpm/tcpci.c                | 102 +++-
- drivers/usb/typec/tcpm/tcpci.h                |  30 +-
- drivers/usb/typec/tcpm/tcpci_maxim.c          | 504 ++++++++++++++++++
- drivers/usb/typec/tcpm/tcpm.c                 | 299 ++++++++++-
- include/dt-bindings/usb/pd.h                  |  10 +
- include/linux/usb/pd.h                        |  19 +-
- include/linux/usb/tcpm.h                      |  27 +-
- include/linux/usb/typec.h                     |  12 +
- 12 files changed, 1093 insertions(+), 25 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/maxim,tcpci.yaml
- create mode 100644 drivers/usb/typec/tcpm/tcpci_maxim.c
-
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index 7d9491ba62fb..b960fe5a0f28 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -38,6 +38,12 @@ struct tcpci_chip {
+ 	struct tcpci_data data;
+ };
+ 
++struct tcpm_port *tcpci_get_tcpm_port(struct tcpci *tcpci)
++{
++	return tcpci->port;
++}
++EXPORT_SYMBOL_GPL(tcpci_get_tcpm_port);
++
+ static inline struct tcpci *tcpc_to_tcpci(struct tcpc_dev *tcpc)
+ {
+ 	return container_of(tcpc, struct tcpci, tcpc);
+diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
+index cf9d8b63adcb..04c49a0b0368 100644
+--- a/drivers/usb/typec/tcpm/tcpci.h
++++ b/drivers/usb/typec/tcpm/tcpci.h
+@@ -150,4 +150,6 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
+ void tcpci_unregister_port(struct tcpci *tcpci);
+ irqreturn_t tcpci_irq(struct tcpci *tcpci);
+ 
++struct tcpm_port;
++struct tcpm_port *tcpci_get_tcpm_port(struct tcpci *tcpci);
+ #endif /* __LINUX_USB_TCPCI_H */
 -- 
 2.28.0.709.gb0816b6eb0-goog
 
