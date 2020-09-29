@@ -2,131 +2,233 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D43C27D7D9
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 22:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D5527D853
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 22:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728825AbgI2URE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Sep 2020 16:17:04 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:44202 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725372AbgI2URE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 16:17:04 -0400
-Received: by mail-ot1-f66.google.com with SMTP id a2so5714754otr.11;
-        Tue, 29 Sep 2020 13:17:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GF1S+O6TcCTua7IiLpMCQUTQhVT/wWc1LlYe9jO62rw=;
-        b=f9sW/e4uN7VQbHFuizFNwO6/w7ChbfERMyZkX/jZE1nkbyKXeF/KBSnpRmZode42tp
-         2wbtSI67BJOrsV734RyUORGwV9YyK8K/Y2qQH2VolnKs+4Nc7vcOZy+7dkMvZzJZCyVz
-         5f1pLhIlfFK2entKujV7Cejl56dNAfckxaWJX7H1WIq5MepvgUv4wHg9AD/j0kfz/djX
-         NrqEeN0z7UicC+eqZYVkJvEWXoyrgRTpXCxXqQaUgHWnYxblWYJ0pQYMD8ka+X+PGueR
-         daRl8Rq/fhRCNzkAtUmUuZffYYwGFGDd/8rUgjkt9ZsUrUaHqp5VevISbGvk3stq8Ffz
-         6ggQ==
-X-Gm-Message-State: AOAM530ToKXMJMZnhKwTS5+5atIWcf0tk8JXRXaOxxrkQdOLA5KrYbna
-        DawxS7YUpzQstqy407Zq2A==
-X-Google-Smtp-Source: ABdhPJwXlYj46ql9N4QV6q3UzHTUW9NrH00DqjEu+h2M9Wj4krankN8F/kzuSpSVFz5EUKv8RTJzmw==
-X-Received: by 2002:a05:6830:1f13:: with SMTP id u19mr4168856otg.127.1601410623317;
-        Tue, 29 Sep 2020 13:17:03 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id s20sm3175800oot.15.2020.09.29.13.17.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 13:17:02 -0700 (PDT)
-Received: (nullmailer pid 1092114 invoked by uid 1000);
-        Tue, 29 Sep 2020 20:17:01 -0000
-Date:   Tue, 29 Sep 2020 15:17:01 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
- onboard USB hubs
-Message-ID: <20200929201701.GA1080459@bogus>
-References: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+        id S1729309AbgI2Ufr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Sep 2020 16:35:47 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:48362 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726623AbgI2Ufl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 16:35:41 -0400
+Message-Id: <20200929202509.673358734@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1601411738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A9VmTcwkFTXzbdbbw121qWEfo2p4m5jmwhJ1CmJQMec=;
+        b=dEktkI17Grpony7lZDKecnFEOdfjaxY0ryQd1B5sA+JU4DH7ltvZM5y90/S5ZbQN7kor0p
+        nLbgJyFkDdibeBt0Ws0AFUWAwfpK6RKbtbq32hFBmipn16rznFFbSlROeQFlp+ycGanNWP
+        QRMD1DrNO0zkyj7xOFwIs6S016IM/aeJPP/9HiWrKgxBMq9Sp/2CemfdS7b/xDowDOdaxh
+        oUQcMLQPDEHoUThhcs+bMPyOJgTUxDiH6L6XKP3eajz21AjfzkSNNqe1W42cLHSqj4tk8o
+        0aWkLxpZPgyBQNI6QCrDgY/PPpvKnuff2Aj0OUVYn/NAyfr2M4CjSm3+dt2zUw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1601411738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A9VmTcwkFTXzbdbbw121qWEfo2p4m5jmwhJ1CmJQMec=;
+        b=pmrmwnMCbZFXDvPzt7v5jtJqkDoyPinCfkEKPf5sb51+5GYnhW1aOS8+hkZk3HEdGnrxXP
+        lrF/CHb/+X9mNiBw==
+Date:   Tue, 29 Sep 2020 22:25:09 +0200
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Govindarajulu Varadarajan <_govind@gmx.com>,
+        Dave Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-doc@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Solarflare linux maintainers <linux-net-drivers@solarflare.com>,
+        Edward Cree <ecree@solarflare.com>,
+        Martin Habets <mhabets@solarflare.com>,
+        Jon Mason <jdmason@kudzu.us>, Daniel Drake <dsd@gentoo.org>,
+        Ulrich Kunitz <kune@deine-taler.de>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        brcm80211-dev-list@cypress.com,
+        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Jouni Malinen <j@w1.fi>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi.bhat@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        libertas-dev@lists.infradead.org,
+        Pascal Terjan <pterjan@google.com>,
+        Ping-Ke Shih <pkshih@realtek.com>
+Subject: [patch V2 00/36] net: in_interrupt() cleanup and fixes
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 10:13:54AM -0700, Matthias Kaehlcke wrote:
-> Discrete onboard USB hubs (an example for such a hub is the Realtek
-> RTS5411) need to be powered and may require initialization of other
-> resources (like GPIOs or clocks) to work properly. This adds a device
-> tree binding for these hubs.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> 
-> (no changes since v3)
-> 
-> Changes in v3:
-> - updated commit message
-> - removed recursive reference to $self
-> - adjusted 'compatible' definition to support multiple entries
-> - changed USB controller phandle to be a node
-> 
-> Changes in v2:
-> - removed 'wakeup-source' and 'power-off-in-suspend' properties
-> - consistently use spaces for indentation in example
-> 
->  .../bindings/usb/onboard_usb_hub.yaml         | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> new file mode 100644
-> index 000000000000..c9783da3e75c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> @@ -0,0 +1,54 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/onboard_usb_hub.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Binding for onboard USB hubs
-> +
-> +maintainers:
-> +  - Matthias Kaehlcke <mka@chromium.org>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +        - realtek,rts5411
-> +      - const: onboard-usb-hub
-> +
-> +  vdd-supply:
-> +    description:
-> +      phandle to the regulator that provides power to the hub.
-> +
-> +required:
-> +  - compatible
-> +  - vdd-supply
-> +
-> +examples:
-> +  - |
-> +    usb_hub: usb-hub {
-> +        compatible = "realtek,rts5411", "onboard-usb-hub";
-> +        vdd-supply = <&pp3300_hub>;
-> +    };
-
-As I said in prior version, this separate node and 'hub' phandle is not 
-going to work. You are doing this because you want a platform driver for 
-"realtek,rts5411". That may be convenient for Linux, but doesn't reflect 
-the h/w.
-
-Rob
+Rm9sa3MsCgppbiB0aGUgZGlzY3Vzc2lvbiBhYm91dCBwcmVlbXB0IGNvdW50IGNvbnNpc3RlbmN5
+IGFjY3Jvc3Mga2VybmVsIGNvbmZpZ3VyYXRpb25zOgoKICBodHRwczovL2xvcmUua2VybmVsLm9y
+Zy9yLzIwMjAwOTE0MjA0MjA5LjI1NjI2NjA5M0BsaW51dHJvbml4LmRlLwoKTGludXMgY2xlYXJs
+eSByZXF1ZXN0ZWQgdGhhdCBjb2RlIGluIGRyaXZlcnMgYW5kIGxpYnJhcmllcyB3aGljaCBjaGFu
+Z2VzCmJlaGF2aW91ciBiYXNlZCBvbiBleGVjdXRpb24gY29udGV4dCBzaG91bGQgZWl0aGVyIGJl
+IHNwbGl0IHVwIHNvIHRoYXQKZS5nLiB0YXNrIGNvbnRleHQgaW52b2NhdGlvbnMgYW5kIEJIIGlu
+dm9jYXRpb25zIGhhdmUgZGlmZmVyZW50IGludGVyZmFjZXMKb3IgaWYgdGhhdCdzIG5vdCBwb3Nz
+aWJsZSB0aGUgY29udGV4dCBpbmZvcm1hdGlvbiBoYXMgdG8gYmUgcHJvdmlkZWQgYnkgdGhlCmNh
+bGxlciB3aGljaCBrbm93cyBpbiB3aGljaCBjb250ZXh0IGl0IGlzIGV4ZWN1dGluZy4KClRoaXMg
+aW5jbHVkZXMgY29uZGl0aW9uYWwgbG9ja2luZywgYWxsb2NhdGlvbiBtb2RlIChHRlBfKikgZGVj
+aXNpb25zIGFuZAphdm9pZGFuY2Ugb2YgY29kZSBwYXRocyB3aGljaCBtaWdodCBzbGVlcC4KCklu
+IHRoZSBsb25nIHJ1biwgdXNhZ2Ugb2YgJ3ByZWVtcHRpYmxlLCBpbl8qaXJxIGV0Yy4nIHNob3Vs
+ZCBiZSBiYW5uZWQgZnJvbQpkcml2ZXIgY29kZSBjb21wbGV0ZWx5LgoKVGhpcyBpcyB0aGUgc2Vj
+b25kIHZlcnNpb24gb2YgdGhlIGZpcnN0IGJhdGNoIG9mIHJlbGF0ZWQgY2hhbmdlcy4gVjEgY2Fu
+IGJlCmZvdW5kIGhlcmU6CgogICAgIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvMjAyMDA5Mjcx
+OTQ4NDYuMDQ1NDExMjYzQGxpbnV0cm9uaXguZGUKCkNoYW5nZXMgdnMuIFYxOgoKICAtIFJlYmFz
+ZWQgdG8gbmV0LW5leHQKCiAgLSBGaXhlZCB0aGUgaGFsZiBkb25lIHJlbmFtZSBzaWxseW5lc3Mg
+aW4gdGhlIEVOSUMgcGF0Y2guCgogIC0gRml4ZWQgdGhlIElPTklDIGRyaXZlciBmYWxsb3V0LgoK
+ICAtIFBpY2tlZCB1cCB0aGUgU0ZDIGZpeCBmcm9tIEVkd2FyZCBhbmQgYWRqdXN0ZWQgdGhlIEdG
+UF9LRVJORUwgY2hhbmdlCiAgICBhY2NvcmRpbmdseS4KCiAgLSBBZGRyZXNzZWQgdGhlIHJldmll
+dyBjb21tZW50cyB2cy4gQkNSRk1BQy4KCiAgLSBDb2xsZWN0ZWQgUmV2aWV3ZWQvQWNrZWQtYnkg
+dGFncyBhcyBhcHByb3ByaWF0ZS4KClRoZSBwaWxlIGlzIGFsc28gYXZhaWxhYmxlIGZyb206Cgog
+ICAgZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RnbHgvZGV2
+ZWwuZ2l0IG5ldC9jbGVhbnVwCgpUaGFua3MsCgoJdGdseAotLS0KIERvY3VtZW50YXRpb24vbmV0
+d29ya2luZy9jYWlmL3NwaV9wb3J0aW5nLnJzdCAgICAgICAgICAgICAgICAgICB8ICAyMjkgLS0K
+IGIvRG9jdW1lbnRhdGlvbi9uZXR3b3JraW5nL2NhaWYvaW5kZXgucnN0ICAgICAgICAgICAgICAg
+ICAgICAgICB8ICAgIDEgCiBiL2RyaXZlcnMvbmV0L2NhaWYvS2NvbmZpZyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDE5IAogYi9kcml2ZXJzL25ldC9jYWlmL01ha2Vm
+aWxlICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgNCAKIGIvZHJpdmVy
+cy9uZXQvY2FpZi9jYWlmX2hzaS5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8
+ICAgMTkgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2FtZC9zdW4zbGFuY2UuYyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgIDExIAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9hdGhlcm9zL2F0
+bDFjL2F0bDFjX21haW4uYyAgICAgICAgICAgICAgIHwgICAgMSAKIGIvZHJpdmVycy9uZXQvZXRo
+ZXJuZXQvYXRoZXJvcy9hdGwxZS9hdGwxZV9tYWluLmMgICAgICAgICAgICAgICB8ICAgIDIgCiBi
+L2RyaXZlcnMvbmV0L2V0aGVybmV0L2F0aGVyb3MvYXRseC9hdGwyLmMgICAgICAgICAgICAgICAg
+ICAgICAgfCAgICAxIAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9jaGVsc2lvL2N4Z2IzL2FkYXB0
+ZXIuaCAgICAgICAgICAgICAgICAgIHwgICAgMSAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvY2hl
+bHNpby9jeGdiMy9jeGdiM19tYWluLmMgICAgICAgICAgICAgICB8ICAgIDIgCiBiL2RyaXZlcnMv
+bmV0L2V0aGVybmV0L2NoZWxzaW8vY3hnYjMvc2dlLmMgICAgICAgICAgICAgICAgICAgICAgfCAg
+IDQ0IAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9jaGVsc2lvL2N4Z2I0L3NnZS5jICAgICAgICAg
+ICAgICAgICAgICAgIHwgICAgMyAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvY2lzY28vZW5pYy9l
+bmljLmggICAgICAgICAgICAgICAgICAgICAgICB8ICAgIDEgCiBiL2RyaXZlcnMvbmV0L2V0aGVy
+bmV0L2Npc2NvL2VuaWMvZW5pY19hcGkuYyAgICAgICAgICAgICAgICAgICAgfCAgICA2IAogYi9k
+cml2ZXJzL25ldC9ldGhlcm5ldC9jaXNjby9lbmljL2VuaWNfbWFpbi5jICAgICAgICAgICAgICAg
+ICAgIHwgICAyNyAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvZnJlZXNjYWxlL2ZlY19tcGM1Mnh4
+LmMgICAgICAgICAgICAgICAgICB8ICAgMTAgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVs
+L2UxMDAuYyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICA0IAogYi9kcml2ZXJzL25l
+dC9ldGhlcm5ldC9pbnRlbC9lMTAwMC9lMTAwMF9tYWluLmMgICAgICAgICAgICAgICAgIHwgICAg
+MSAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvZm0xMGsvZm0xMGtfcGNpLmMgICAgICAg
+ICAgICAgICAgICB8ICAgIDIgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVsL2k0MGUvaTQw
+ZV9tYWluLmMgICAgICAgICAgICAgICAgICAgfCAgICA0IAogYi9kcml2ZXJzL25ldC9ldGhlcm5l
+dC9pbnRlbC9pY2UvaWNlX21haW4uYyAgICAgICAgICAgICAgICAgICAgIHwgICAgMSAKIGIvZHJp
+dmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvaWdiL2lnYl9tYWluLmMgICAgICAgICAgICAgICAgICAg
+ICB8ICAgIDEgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVsL2lnYy9pZ2NfbWFpbi5jICAg
+ICAgICAgICAgICAgICAgICAgfCAgICAxIAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9pbnRlbC9p
+eGdiZS9peGdiZV9tYWluLmMgICAgICAgICAgICAgICAgIHwgICAgMSAKIGIvZHJpdmVycy9uZXQv
+ZXRoZXJuZXQvaW50ZWwvaXhnYmV2Zi9peGdiZXZmX21haW4uYyAgICAgICAgICAgICB8ICAgIDIg
+CiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L25hdHNlbWkvc29uaWMuYyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgfCAgIDI0IAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9uYXRzZW1pL3NvbmljLmgg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgMiAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQv
+bmV0ZXJpb24vdnhnZS92eGdlLWNvbmZpZy5jICAgICAgICAgICAgICB8ICAgIDkgCiBiL2RyaXZl
+cnMvbmV0L2V0aGVybmV0L25ldGVyaW9uL3Z4Z2UvdnhnZS1jb25maWcuaCAgICAgICAgICAgICAg
+fCAgICA3IAogYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9wZW5zYW5kby9pb25pYy9pb25pY19kZXYu
+YyAgICAgICAgICAgICAgIHwgICAgMiAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvcGVuc2FuZG8v
+aW9uaWMvaW9uaWNfbGlmLmMgICAgICAgICAgICAgICB8ICAgNjQgCiBiL2RyaXZlcnMvbmV0L2V0
+aGVybmV0L3BlbnNhbmRvL2lvbmljL2lvbmljX2xpZi5oICAgICAgICAgICAgICAgfCAgICAyIAog
+Yi9kcml2ZXJzL25ldC9ldGhlcm5ldC9wZW5zYW5kby9pb25pYy9pb25pY19tYWluLmMgICAgICAg
+ICAgICAgIHwgICAgNCAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvc2ZjL2VmMTAuYyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8ICAgMjQgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L3Nm
+Yy9lZnhfY29tbW9uLmMgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAyIAogYi9kcml2ZXJz
+L25ldC9ldGhlcm5ldC9zZmMvbmV0X2RyaXZlci5oICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+ICAgNSAKIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvc2ZjL25pY19jb21tb24uaCAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAgIDcgCiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L3N1bi9zdW5ibWFj
+LmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDE4IAogYi9kcml2ZXJzL25ldC9waHkv
+bWRpb19idXMuYyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAxNSAKIGIv
+ZHJpdmVycy9uZXQvdXNiL2thd2V0aC5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICB8ICAyNjEgLS0KIGIvZHJpdmVycy9uZXQvdXNiL25ldDEwODAuYyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8ICAgIDEgCiBiL2RyaXZlcnMvbmV0L3dhbi9sbWMvbG1j
+X2RlYnVnLmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDE4IAogYi9kcml2ZXJz
+L25ldC93YW4vbG1jL2xtY19kZWJ1Zy5oICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+ICAgMSAKIGIvZHJpdmVycy9uZXQvd2FuL2xtYy9sbWNfbWFpbi5jICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAxMDUgLQogYi9kcml2ZXJzL25ldC93YW4vbG1jL2xtY19tZWRpYS5j
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgNCAKIGIvZHJpdmVycy9uZXQvd2Fu
+L2xtYy9sbWNfcHJvdG8uYyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMTYgCiBi
+L2RyaXZlcnMvbmV0L3dpcmVsZXNzL2Jyb2FkY29tL2JyY204MDIxMS9icmNtZm1hYy9iY2RjLmMg
+ICAgICAgfCAgICA0IAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9icm9hZGNvbS9icmNtODAyMTEv
+YnJjbWZtYWMvYmNtc2RoLmMgICAgIHwgICAgNCAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYnJv
+YWRjb20vYnJjbTgwMjExL2JyY21mbWFjL2J1cy5oICAgICAgICB8ICAgIDMgCiBiL2RyaXZlcnMv
+bmV0L3dpcmVsZXNzL2Jyb2FkY29tL2JyY204MDIxMS9icmNtZm1hYy9jb3JlLmMgICAgICAgfCAg
+IDI2IAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9icm9hZGNvbS9icmNtODAyMTEvYnJjbWZtYWMv
+Y29yZS5oICAgICAgIHwgICAgMiAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYnJvYWRjb20vYnJj
+bTgwMjExL2JyY21mbWFjL2Z3ZWguYyAgICAgICB8ICAgIDggCiBiL2RyaXZlcnMvbmV0L3dpcmVs
+ZXNzL2Jyb2FkY29tL2JyY204MDIxMS9icmNtZm1hYy9md2VoLmggICAgICAgfCAgICA3IAogYi9k
+cml2ZXJzL25ldC93aXJlbGVzcy9icm9hZGNvbS9icmNtODAyMTEvYnJjbWZtYWMvZndzaWduYWwu
+YyAgIHwgICAxMCAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYnJvYWRjb20vYnJjbTgwMjExL2Jy
+Y21mbWFjL2Z3c2lnbmFsLmggICB8ICAgIDIgCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2Jyb2Fk
+Y29tL2JyY204MDIxMS9icmNtZm1hYy9tc2didWYuYyAgICAgfCAgICA3IAogYi9kcml2ZXJzL25l
+dC93aXJlbGVzcy9icm9hZGNvbS9icmNtODAyMTEvYnJjbWZtYWMvcHJvdG8uaCAgICAgIHwgICAg
+NiAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYnJvYWRjb20vYnJjbTgwMjExL2JyY21mbWFjL3Nk
+aW8uYyAgICAgICB8ICAgIDggCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2Jyb2FkY29tL2JyY204
+MDIxMS9icmNtZm1hYy9zZGlvLmggICAgICAgfCAgICAyIAogYi9kcml2ZXJzL25ldC93aXJlbGVz
+cy9icm9hZGNvbS9icmNtODAyMTEvYnJjbWZtYWMvdXNiLmMgICAgICAgIHwgICAgMiAKIGIvZHJp
+dmVycy9uZXQvd2lyZWxlc3MvaW50ZWwvaXB3MngwMC9pcHcyMTAwLmMgICAgICAgICAgICAgICAg
+ICB8ICAgIDMgCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2ludGVsL2lwdzJ4MDAvaXB3MjIwMC5o
+ICAgICAgICAgICAgICAgICAgfCAgICA2IAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9pbnRlbC9p
+cHcyeDAwL2xpYmlwdy5oICAgICAgICAgICAgICAgICAgIHwgICAgMyAKIGIvZHJpdmVycy9uZXQv
+d2lyZWxlc3MvaW50ZWwvaXdsZWdhY3kvY29tbW9uLmggICAgICAgICAgICAgICAgICB8ICAgIDQg
+CiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2ludGVsL2l3bHdpZmkvaXdsLWRlYnVnLmMgICAgICAg
+ICAgICAgICAgfCAgICA1IAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9pbnRlbC9pd2x3aWZpL2l3
+bC1kZXZ0cmFjZS1tc2cuaCAgICAgICAgIHwgICAgNiAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3Mv
+aW50ZXJzaWwvaG9zdGFwL2hvc3RhcF9ody5jICAgICAgICAgICAgICB8ICAgMTIgCiBiL2RyaXZl
+cnMvbmV0L3dpcmVsZXNzL21hcnZlbGwvbGliZXJ0YXMvZGVmcy5oICAgICAgICAgICAgICAgICAg
+fCAgICAzIAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9tYXJ2ZWxsL2xpYmVydGFzL3J4LmMgICAg
+ICAgICAgICAgICAgICAgIHwgICAxMSAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWFydmVsbC9s
+aWJlcnRhc190Zi9kZWJfZGVmcy5oICAgICAgICAgICB8ICAgIDMgCiBiL2RyaXZlcnMvbmV0L3dp
+cmVsZXNzL21hcnZlbGwvbXdpZmlleC91YXBfdHhyeC5jICAgICAgICAgICAgICAgfCAgICA2IAog
+Yi9kcml2ZXJzL25ldC93aXJlbGVzcy9tYXJ2ZWxsL213aWZpZXgvdXRpbC5jICAgICAgICAgICAg
+ICAgICAgIHwgICAgNiAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydGx3aWZpL2Jh
+c2UuYyAgICAgICAgICAgICAgICAgICB8ICAgNDcgCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3Jl
+YWx0ZWsvcnRsd2lmaS9iYXNlLmggICAgICAgICAgICAgICAgICAgfCAgICAzIAogYi9kcml2ZXJz
+L25ldC93aXJlbGVzcy9yZWFsdGVrL3J0bHdpZmkvYnRjb2V4aXN0L2hhbGJ0Y291dHNyYy5jIHwg
+ICAxMiAKIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydGx3aWZpL2NvcmUuYyAgICAg
+ICAgICAgICAgICAgICB8ICAgIDYgCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRs
+d2lmaS9kZWJ1Zy5jICAgICAgICAgICAgICAgICAgfCAgIDIwIAogYi9kcml2ZXJzL25ldC93aXJl
+bGVzcy9yZWFsdGVrL3J0bHdpZmkvZGVidWcuaCAgICAgICAgICAgICAgICAgIHwgICAgOCAKIGIv
+ZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydGx3aWZpL3BjaS5jICAgICAgICAgICAgICAg
+ICAgICB8ICAgIDQgCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsd2lmaS9wcy5j
+ICAgICAgICAgICAgICAgICAgICAgfCAgIDI3IAogYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFs
+dGVrL3J0bHdpZmkvcHMuaCAgICAgICAgICAgICAgICAgICAgIHwgICAxMCAKIGIvZHJpdmVycy9u
+ZXQvd2lyZWxlc3MvcmVhbHRlay9ydGx3aWZpL3dpZmkuaCAgICAgICAgICAgICAgICAgICB8ICAg
+IDMgCiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3p5ZGFzL3pkMTIxMXJ3L3pkX3VzYi5jICAgICAg
+ICAgICAgICAgICAgfCAgICAxIAogYi9pbmNsdWRlL2xpbnV4L25ldGRldmljZS5oICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgMSAKIGIvbmV0L2NvcmUvZGV2LmMgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMTUgCiBkcml2
+ZXJzL25ldC9jYWlmL2NhaWZfc3BpLmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCAgODc0IC0tLS0tLS0tLS0KIGRyaXZlcnMvbmV0L2NhaWYvY2FpZl9zcGlfc2xhdmUuYyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyNTQgLS0KIGluY2x1ZGUvbmV0L2NhaWYv
+Y2FpZl9zcGkuaCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxNTUgLQog
+ODkgZmlsZXMgY2hhbmdlZCwgMzU0IGluc2VydGlvbnMoKyksIDIyMzQgZGVsZXRpb25zKC0pCgo=
