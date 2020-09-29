@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8353927B9DB
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 03:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BDC27B9E2
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 03:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727757AbgI2BcH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Sep 2020 21:32:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40918 "EHLO mail.kernel.org"
+        id S1727396AbgI2BeD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Sep 2020 21:34:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41454 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727454AbgI2Bbm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Sep 2020 21:31:42 -0400
+        id S1727718AbgI2Bbv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Sep 2020 21:31:51 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E249D21734;
-        Tue, 29 Sep 2020 01:31:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F3F0E21D46;
+        Tue, 29 Sep 2020 01:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601343095;
+        s=default; t=1601343110;
         bh=fdfSUfuqrP6v5BOz4Lj512uAGEUUlzP7Hf+dNXo6xxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=The6mXqhLyUtJIxNMxwY9oMx26I9hv1V0tvwJgnPhx/4QTqHpYnhYR+ufZ4ysIE0S
-         Kk4tb9K5zHf6Y2aUl0MW/vW9LJ8/0rw+2g0b3CKDFOjeus5dn0doQobZ4doXU1doiQ
-         SZoVI0WrMwobKfixnaJYNqe4az0Jv6z5ek00BvDA=
+        b=wfbvRbi2SvN0RJkHLVKsfXOuEO6WDUIGqnfjekJ4gNFQywyM7E66285oa38LNeKvj
+         4CdJQioQ7yQfah0cJqJXRDc5Vkr2/kvftOu7zqZAwzG39POk1xY6MdQKfOoZR2uBwa
+         Yg5ZKKlV25r2wB7R7mKai3IKA6Zhtwhb5bn6wWqE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Olympia Giannou <ogiannou@gmail.com>,
@@ -30,12 +30,12 @@ Cc:     Olympia Giannou <ogiannou@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 04/11] rndis_host: increase sleep time in the query-response loop
-Date:   Mon, 28 Sep 2020 21:31:22 -0400
-Message-Id: <20200929013129.2406832-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 4/9] rndis_host: increase sleep time in the query-response loop
+Date:   Mon, 28 Sep 2020 21:31:39 -0400
+Message-Id: <20200929013144.2406985-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200929013129.2406832-1-sashal@kernel.org>
-References: <20200929013129.2406832-1-sashal@kernel.org>
+In-Reply-To: <20200929013144.2406985-1-sashal@kernel.org>
+References: <20200929013144.2406985-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
