@@ -2,87 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC2027C291
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 12:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10A127C2B2
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 12:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725779AbgI2Kmy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Sep 2020 06:42:54 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:44222 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbgI2Kmy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 06:42:54 -0400
-Received: by mail-lj1-f193.google.com with SMTP id b19so3583597lji.11
-        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 03:42:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WZ7rk4VezO4t8SMhI50aq1Jtu6SepOpAz4rBtAI+WdM=;
-        b=iCJI8U4ILJvbcuMOxkxBZdoC+SDDRJBRbkYSy8QQfwjEsL8fxb09VFqfo9JeT4ujOE
-         GL6rMPfsBfrFctG5DhEo8boSXJx1E1s834vwiUGPFUyLIQ4g2TEoQkwRja6Wqhbe6zeY
-         r86UG0GBNt2gT/JqvS52gS1ulV4iHa1PY8uvfhBxRdGAXoptSmDgJU5YebKwGAu+gckr
-         YEF8aVAnQu4bbgduPCgtcWIawkjANstyfHzY4KMKIHALhaMFqRETnj5sW9jq2GxkkhdY
-         t7mm4zR0+tmVJvKftwSBmKEfg+uKZfRi4cHpf4aSIudCQ14cbhiywd4vWCN7Ti++gDE0
-         a9Rg==
-X-Gm-Message-State: AOAM5320+050SBVxfOt2cK6MrCg51+7N2jL5yV+z2JPaxWnbUY1+W1Jv
-        OB29oK3C4NBvoPPLcyw6bVhr4aaND2U=
-X-Google-Smtp-Source: ABdhPJyuT/FMtJHcaFpM5C28WlT0cdal398f3AaL5QA7zMclXIEhGae+OVIJwMRxpXTwVxt0I/7tUQ==
-X-Received: by 2002:a2e:9d83:: with SMTP id c3mr1019108ljj.385.1601376171388;
-        Tue, 29 Sep 2020 03:42:51 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id o128sm3189003lfa.110.2020.09.29.03.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 03:42:50 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@xi.terra>)
-        id 1kND5p-0001tA-FT; Tue, 29 Sep 2020 12:42:45 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>
-Subject: [PATCH] USB: serial: qcserial: fix altsetting probing
-Date:   Tue, 29 Sep 2020 12:42:39 +0200
-Message-Id: <20200929104239.7214-1-johan@kernel.org>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1728251AbgI2KsT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Sep 2020 06:48:19 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:59739 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728183AbgI2KsN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 06:48:13 -0400
+Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 29 Sep 2020 03:48:13 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 29 Sep 2020 03:48:11 -0700
+X-QCInternal: smtphost
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 29 Sep 2020 16:17:39 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id BAB882D57; Tue, 29 Sep 2020 16:17:38 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH v3 0/5] USB DWC3 host wake up support from system suspend
+Date:   Tue, 29 Sep 2020 16:17:27 +0530
+Message-Id: <1601376452-31839-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Drivers should not assume that interface descriptors have been parsed in
-any particular order so use the interface number to look up the second
-alternate setting. That number is also what the driver later use to
-switch setting.
+Avoiding phy powerdown in host mode so that it can be wake up by devices.
+Set GENPD_FLAG_ACTIVE_WAKEUP flag to keep usb30_prim gdsc active
+when wakeup capable devices are connected to the host.
+Using PDC interrupts instead of GIC interrupst to support wakeup in
+xo shutdown case.
 
-Note that although the driver could end up verifying the existence of
-the expected endpoints on the wrong interface, a later sanity check in
-usb_wwan_port_probe() would have caught this before it could cause any
-real damage.
+Changes in v3:
+Removed need_phy_for_wakeup flag and by default avoiding phy powerdown.
+Addressed Matthias comments and added entry for DEV_SUPERSPEED.
+Added suspend_quirk in dwc3 host and moved the dwc3_set_phy_speed_flags.
+Added wakeup-source dt entry and reading in dwc-qcom.c glue driver.
 
-Fixes: a78b42824dd7 ("USB: serial: add qualcomm wireless modem driver")
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/qcserial.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v2:
+Dropped the patch in clock to set GENPD_FLAG_ACTIVE_WAKEUP flag and 
+setting in usb dwc3 driver.
+Separated the core patch and glue driver patch.
+Made need_phy_for_wakeup flag part of dwc structure and 
+hs_phy_flags as unsgined int.
+Adrressed the comment on device_init_wakeup call.
+Corrected offset for reading portsc register.
+Added pacth to support wakeup in xo shutdown case.
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index c8d1ea0e6e6f..83da8236e3c8 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -243,11 +243,11 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
- 		/* QDL mode */
- 		/* Gobi 2000 has a single altsetting, older ones have two */
- 		if (serial->interface->num_altsetting == 2)
--			intf = &serial->interface->altsetting[1];
-+			intf = usb_altnum_to_altsetting(serial->interface, 1);
- 		else if (serial->interface->num_altsetting > 2)
- 			goto done;
- 
--		if (intf->desc.bNumEndpoints == 2 &&
-+		if (intf && intf->desc.bNumEndpoints == 2 &&
- 		    usb_endpoint_is_bulk_in(&intf->endpoint[0].desc) &&
- 		    usb_endpoint_is_bulk_out(&intf->endpoint[1].desc)) {
- 			dev_dbg(dev, "QDL port found\n");
+Sandeep Maheswaram (5):
+  usb: dwc3: core: Host wake up support from system suspend
+  usb: dwc3: host: Add suspend_quirk for dwc3 host
+  usb: dwc3: qcom: Configure wakeup interrupts and set genpd active
+    wakeup flag
+  arm64: dts: qcom: sc7180: Use pdc interrupts for USB instead of GIC
+    interrupts
+  arm64: dts: qcom: sc7180: Add wakeup-source property for USB
+    controller node
+
+ arch/arm64/boot/dts/qcom/sc7180-idp.dts      |  1 +
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi |  1 +
+ arch/arm64/boot/dts/qcom/sc7180.dtsi         |  8 +--
+ drivers/usb/dwc3/core.c                      | 14 ++----
+ drivers/usb/dwc3/core.h                      |  3 ++
+ drivers/usb/dwc3/dwc3-qcom.c                 | 74 ++++++++++++++++++++++------
+ drivers/usb/dwc3/host.c                      | 49 ++++++++++++++++++
+ 7 files changed, 120 insertions(+), 30 deletions(-)
+
 -- 
-2.26.2
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
