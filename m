@@ -2,397 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DA727DC75
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 01:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA1127DC8C
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 01:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728968AbgI2XHH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Sep 2020 19:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728291AbgI2XHG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 19:07:06 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AECC0613D1
-        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 16:07:06 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id s31so5201995pga.7
-        for <linux-usb@vger.kernel.org>; Tue, 29 Sep 2020 16:07:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=T56W4rlwKM3h0w7+QjGBQRIaXGTOjqoGepwvZvifopA=;
-        b=u7ctPNw/bCJlHLZao4KrUwd8YSTNwu0ScSWSkn38YGsAWZv9zrDlzkmqrUrwD5aLem
-         /w0yuGo+dbSRL1jimX9qU98ulfFvQ3MsEB1I1SUz3NFIS6T8xwWTKPBZL8MqMhx4+j7h
-         XOXdJNg0vgO/7B0eq6AL4pBli99xvTVSeVcCfN1sBsU2KCSlQBq1qpQX93SDqNFk8Riz
-         UMysDx5VYIkhLrI4K10saFmbuZ93NW3LS7O2/s/36I97FP0z7gpZghd1APyIc3fO2Hfm
-         YREFwEWNc570IMUD4jhkE36VZ5py8gvbC0AK+KcPo34NQiNUV3BFr8tB5tehXj2wvMoU
-         1G7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=T56W4rlwKM3h0w7+QjGBQRIaXGTOjqoGepwvZvifopA=;
-        b=OvYYVJ+dkll4xeBToq+GZqDc9FfiWxkSpKMtywsjDaUxtrfxRrNzMlAIVDyTxHv8rV
-         IOU9Z3d+rULoL07PZqUjxQsxJKhr4UYZT6pi016We5tvKadJj5crdQF+W5weWGPjpjOt
-         PHsivPoDq3sXqn4DYOvQ6NOZJ8l4Qi4Hs+SKQmaYHHeFfzKHGVRuFPAfKCpKD7AZs7vV
-         FNsHjEDphpo2hPhWw6x4J2XG5V2DAonhiG967Kp2bgugZxkNzaN8RN2Ed+K6yaHy10q6
-         OHJjjEvzEnbOx9zC5E4nrRTCFYQFfE02glhk7nC1IqGEmf9GI4hcTQfgwCjo4Wh9pMaX
-         LxAg==
-X-Gm-Message-State: AOAM531QNms82O8jeE8Wxi0fO1MwqiwLbIiL/yrtaUgJ9wrYIIe1G8bF
-        NXFy0QotwnzRTTzZ0Ng0uHX3/Q==
-X-Google-Smtp-Source: ABdhPJzpobBeVD0QizR5JNx2IEww3/DSsVZ79uzkw55sMm1JxKZo1kgF0e0ARRsarK31gnzhNU0N1A==
-X-Received: by 2002:a63:df02:: with SMTP id u2mr4908192pgg.270.1601420826006;
-        Tue, 29 Sep 2020 16:07:06 -0700 (PDT)
-Received: from Shannons-MacBook-Pro.local (static-50-53-47-17.bvtn.or.frontiernet.net. [50.53.47.17])
-        by smtp.gmail.com with ESMTPSA id 134sm5798661pgf.55.2020.09.29.16.07.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Sep 2020 16:07:05 -0700 (PDT)
-Subject: Re: [patch V2 11/36] net: ionic: Replace in_interrupt() usage.
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Govindarajulu Varadarajan <_govind@gmx.com>,
-        Dave Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-doc@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        intel-wired-lan@lists.osuosl.org,
-        Pensando Drivers <drivers@pensando.io>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Solarflare linux maintainers <linux-net-drivers@solarflare.com>,
-        Edward Cree <ecree@solarflare.com>,
-        Martin Habets <mhabets@solarflare.com>,
-        Jon Mason <jdmason@kudzu.us>, Daniel Drake <dsd@gentoo.org>,
-        Ulrich Kunitz <kune@deine-taler.de>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        brcm80211-dev-list.pdl@broadcom.com,
-        brcm80211-dev-list@cypress.com,
-        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Jouni Malinen <j@w1.fi>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi.bhat@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        libertas-dev@lists.infradead.org,
-        Pascal Terjan <pterjan@google.com>,
-        Ping-Ke Shih <pkshih@realtek.com>
-References: <20200929202509.673358734@linutronix.de>
- <20200929203500.579810110@linutronix.de>
-From:   Shannon Nelson <snelson@pensando.io>
-Message-ID: <04ec3648-9735-b901-6492-606468d47158@pensando.io>
-Date:   Tue, 29 Sep 2020 16:06:59 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.12.0
-MIME-Version: 1.0
-In-Reply-To: <20200929203500.579810110@linutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        id S1728471AbgI2XRB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Sep 2020 19:17:01 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:47879 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728206AbgI2XRB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 19:17:01 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id B36725C01B7;
+        Tue, 29 Sep 2020 19:17:00 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute1.internal (MEProxy); Tue, 29 Sep 2020 19:17:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
+        mime-version:message-id:in-reply-to:references:date:from:to
+        :subject:content-type:content-transfer-encoding; s=fm2; bh=UZQus
+        BmYk+20Lo+h5akVoOg62n+utPgekj+0Z64SmXY=; b=Z6qGxHLHT2C1vil8A5rvl
+        9/yyyLPuC0RTzHpOkG35/w+QeGj/mgxGGIOdV9ai2MKryx25if5KjPaxlviX8F/w
+        h2+rtVGCy6vTh7oLFsDXmRrBs6lTaokWvKPqybXraKMjU7vGnijTaJXAoRWql0oG
+        97Ehaw8k5gtPKD87e0/DNpI0zbKdCYnsdR9PCzMfN+8YY0DL1pYeg+kleuklMm76
+        l22FvaBGOJk6sNQUXZDm+WRQnqf4koJhifM8w/jt8NhuSabAw7sftXKNEfSdVZzp
+        p0L2lMFYKVlavQeF+6HM00CQMdYW7lB2Qav5LwRXaOuIwQnS4a4etCfy69cjTMfa
+        Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=UZQusBmYk+20Lo+h5akVoOg62n+utPgekj+0Z64Sm
+        XY=; b=PmkUVF/TWbZNcloZiZcXMVsLjbUke3gYb5hS8rBGLovixUlC0IJUYyVCt
+        GCkynMc4CMMj3fIo0fUJQMMcKqxKrMCmHA9L+5DrYr5+VkGxrZhgCqXBqzl7UJRr
+        Czfm1oD5ULXID0HYFFqrZGZUKnyvGsGpEIVGQBP0MEbM73K4T718/KUECsm2XAbD
+        jePNyQE4wtjIeMz4RTsaZxO8jMuAHaUAy+u6UvfAgPZAdN7huAc0Dfc53tdIvz8l
+        SKhUpgR2VTDuc89xAj7gn7aWgeRt9bOFHKyp8MMVMpnal24Yt0lTCsy0o+TdpMU/
+        y9P2MtWDzBKBX0nPzsNJ/+n/bG22g==
+X-ME-Sender: <xms:bMBzX4yeR78Dw79AqRFYd7cDFvHn8ImEJts_knhaCobfw8PwIn2Eag>
+    <xme:bMBzX8Rl9qJnZDP8LRNd8mGK1zowIC9yPPGc8exqAqouQdBh2gGLFpc8W6wGjq3mv
+    wwx8kxj4UnkjkgwYF8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrfedtgddujecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdfuihgu
+    ucfuphhrhidfuceoshhiugesrggvrghmrdhusheqnecuggftrfgrthhtvghrnhepvdetud
+    ffudejgfegueeuffekgfejheeuhffffefgteffffffhfehffetjedtgedvnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhiugesrggvrghmrd
+    hush
+X-ME-Proxy: <xmx:bMBzX6XEZ4KmQpZgMcXY2WUZgCoreC6NVadRFOApTCSzCbIgFDR8wA>
+    <xmx:bMBzX2hk2mNRXwjDU-icXJioZ-eo_AymkdkvzPWDX8qb4IvwSd8c6g>
+    <xmx:bMBzX6D0VbZRLUfFwPshW7os92r-keCpr0jZCJHOEmNq0NxNXR33Eg>
+    <xmx:bMBzXx8NEOxCdFCyzusqIW-GGuKIL2SBsyy8iV0KAr5xrg-bUQAllQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5A7D9660069; Tue, 29 Sep 2020 19:16:52 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-382-ge235179-fm-20200928.002-ge2351794
+Mime-Version: 1.0
+Message-Id: <8baba7f6-35aa-49a6-89eb-f57164cab41f@www.fastmail.com>
+In-Reply-To: <87k0wd9jog.fsf@kernel.org>
+References: <ce4fc6f6-726e-48b3-97bb-0de2b3801615@www.fastmail.com>
+ <87k0wd9jog.fsf@kernel.org>
+Date:   Tue, 29 Sep 2020 18:16:40 -0500
+From:   "Sid Spry" <sid@aeam.us>
+To:     "Felipe Balbi" <balbi@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: ConfigFS: bcdUSB forced to 0x0210
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/29/20 1:25 PM, Thomas Gleixner wrote:
-> From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
->
-> The in_interrupt() usage in this driver tries to figure out which context
-> may sleep and which context may not sleep. in_interrupt() is not really
-> suitable as it misses both preemption disabled and interrupt disabled
-> invocations from task context.
->
-> Conditionals like that in driver code are frowned upon in general because
-> invocations of functions from invalid contexts might not be detected
-> as the conditional papers over it.
->
-> ionic_lif_addr() and _ionoc_lif_rx_mode() can be called from:
->
->   1) ->ndo_set_rx_mode() which is under netif_addr_lock_bh()) so it must not
->      sleep.
->
->   2) Init and setup functions which are in fully preemptible task context.
->
-> ionic_link_status_check_request() has two call paths:
->
->   1) NAPI which obviously cannot sleep
->
->   2) Setup which is again fully preemptible task context
->
-> Add arguments which convey the execution context to the affected functions
-> and let the callers provide the context instead of letting the functions
-> deduce it.
->
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
-> V2: Treat _ionoc_lif_rx_mode() correclty (Shannon)
+On Tue, Sep 29, 2020, at 1:33 AM, Felipe Balbi wrote:
+>=20
+> Hi,
+>=20
+> "Sid Spry" <sid@aeam.us> writes:
+> > Hi, I can't enable USB3 with e.g. f_ncm because bcdUSB is always res=
+et to 0x0210:
+> >
+> > $ sudo sh -c 'echo "0x0300" > /sys/kernel/config/usb_gadget/g11/bcdU=
+SB'
+> > $ cat /sys/kernel/config/usb_gadget/g11/bcdUSB=20
+> > 0x0300
+> > $ sudo sh -c 'echo "fe800000.usb" > /sys/kernel/config/usb_gadget/g1=
+1/UDC'
+> > $ cat /sys/kernel/config/usb_gadget/g11/bcdUSB=20
+> > 0x0210
+> > $ tree /sys/kernel/config/usb_gadget/g11
+> > /sys/kernel/config/usb_gadget/g11
+> > =E2=94=9C=E2=94=80=E2=94=80 bcdDevice
+> > =E2=94=9C=E2=94=80=E2=94=80 bcdUSB
+> > =E2=94=9C=E2=94=80=E2=94=80 bDeviceClass
+> > =E2=94=9C=E2=94=80=E2=94=80 bDeviceProtocol
+> > =E2=94=9C=E2=94=80=E2=94=80 bDeviceSubClass
+> > =E2=94=9C=E2=94=80=E2=94=80 bMaxPacketSize0
+> > =E2=94=9C=E2=94=80=E2=94=80 configs
+> > =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 c.1
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 bmAttributes
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 MaxPower
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 ncm.0 -> ../..=
+/../../usb_gadget/g11/functions/ncm.0
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=E2=94=80 strings
+> > =E2=94=82=C2=A0=C2=A0         =E2=94=94=E2=94=80=E2=94=80 0x409
+> > =E2=94=82=C2=A0=C2=A0             =E2=94=94=E2=94=80=E2=94=80 config=
+uration
+> > =E2=94=9C=E2=94=80=E2=94=80 functions
+> > =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 ncm.0
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 dev_addr
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 host_addr
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 ifname
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 os_desc
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=
+=94=80 interface.ncm
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=
+=E2=94=80 compatible_id
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=
+=E2=94=80 sub_compatible_id
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=E2=94=80 qmult
+> > =E2=94=9C=E2=94=80=E2=94=80 idProduct
+> > =E2=94=9C=E2=94=80=E2=94=80 idVendor
+> > =E2=94=9C=E2=94=80=E2=94=80 max_speed
+> > =E2=94=9C=E2=94=80=E2=94=80 os_desc
+> > =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 b_vendor_code
+> > =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 qw_sign
+> > =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 use
+> > =E2=94=9C=E2=94=80=E2=94=80 strings
+> > =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 0x409
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 manufacturer
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 product
+> > =E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=E2=94=80 serialnumber
+> > =E2=94=94=E2=94=80=E2=94=80 UDC
+> >
+> > Board is a RK3399 based RockPro64.
+>=20
+> what's your max_speed?
+>=20
 
-Is it fair to poke at the comments?
-s/ionoc/ionic/
-s/correclty/correctly/
+$ cat /sys/kernel/config/usb_gadget/g11/max_speed=20
+super-speed
 
-> ---
->   drivers/net/ethernet/pensando/ionic/ionic_dev.c |    2
->   drivers/net/ethernet/pensando/ionic/ionic_lif.c |   64 ++++++++++++++++--------
->   drivers/net/ethernet/pensando/ionic/ionic_lif.h |    2
->   3 files changed, 47 insertions(+), 21 deletions(-)
->
-> --- a/drivers/net/ethernet/pensando/ionic/ionic_dev.c
-> +++ b/drivers/net/ethernet/pensando/ionic/ionic_dev.c
-> @@ -22,7 +22,7 @@ static void ionic_watchdog_cb(struct tim
->   	hb = ionic_heartbeat_check(ionic);
->   
->   	if (hb >= 0 && ionic->lif)
-> -		ionic_link_status_check_request(ionic->lif);
-> +		ionic_link_status_check_request(ionic->lif, false);
->   }
->   
->   void ionic_init_devinfo(struct ionic *ionic)
-> --- a/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-> +++ b/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-> @@ -151,7 +151,7 @@ static void ionic_link_status_check(stru
->   	clear_bit(IONIC_LIF_F_LINK_CHECK_REQUESTED, lif->state);
->   }
->   
-> -void ionic_link_status_check_request(struct ionic_lif *lif)
-> +void ionic_link_status_check_request(struct ionic_lif *lif, bool can_sleep)
->   {
->   	struct ionic_deferred_work *work;
->   
-> @@ -159,7 +159,7 @@ void ionic_link_status_check_request(str
->   	if (test_and_set_bit(IONIC_LIF_F_LINK_CHECK_REQUESTED, lif->state))
->   		return;
->   
-> -	if (in_interrupt()) {
-> +	if (!can_sleep) {
->   		work = kzalloc(sizeof(*work), GFP_ATOMIC);
->   		if (!work)
->   			return;
-> @@ -798,7 +798,7 @@ static bool ionic_notifyq_service(struct
->   
->   	switch (le16_to_cpu(comp->event.ecode)) {
->   	case IONIC_EVENT_LINK_CHANGE:
-> -		ionic_link_status_check_request(lif);
-> +		ionic_link_status_check_request(lif, false);
->   		break;
->   	case IONIC_EVENT_RESET:
->   		work = kzalloc(sizeof(*work), GFP_ATOMIC);
-> @@ -981,7 +981,8 @@ static int ionic_lif_addr_del(struct ion
->   	return 0;
->   }
->   
-> -static int ionic_lif_addr(struct ionic_lif *lif, const u8 *addr, bool add)
-> +static int ionic_lif_addr(struct ionic_lif *lif, const u8 *addr, bool add,
-> +			  bool can_sleep)
->   {
->   	struct ionic *ionic = lif->ionic;
->   	struct ionic_deferred_work *work;
-> @@ -1010,7 +1011,7 @@ static int ionic_lif_addr(struct ionic_l
->   			lif->nucast--;
->   	}
->   
-> -	if (in_interrupt()) {
-> +	if (!can_sleep) {
->   		work = kzalloc(sizeof(*work), GFP_ATOMIC);
->   		if (!work) {
->   			netdev_err(lif->netdev, "%s OOM\n", __func__);
-> @@ -1036,12 +1037,22 @@ static int ionic_lif_addr(struct ionic_l
->   
->   static int ionic_addr_add(struct net_device *netdev, const u8 *addr)
->   {
-> -	return ionic_lif_addr(netdev_priv(netdev), addr, true);
-> +	return ionic_lif_addr(netdev_priv(netdev), addr, true, true);
-> +}
-> +
-> +static int ionic_ndo_addr_add(struct net_device *netdev, const u8 *addr)
-> +{
-> +	return ionic_lif_addr(netdev_priv(netdev), addr, true, false);
->   }
->   
->   static int ionic_addr_del(struct net_device *netdev, const u8 *addr)
->   {
-> -	return ionic_lif_addr(netdev_priv(netdev), addr, false);
-> +	return ionic_lif_addr(netdev_priv(netdev), addr, false, true);
-> +}
-> +
-> +static int ionic_ndo_addr_del(struct net_device *netdev, const u8 *addr)
-> +{
-> +	return ionic_lif_addr(netdev_priv(netdev), addr, false, false);
->   }
+Looks ok. From Windows, the xHCI driver reports that the device supports=
 
-These changes are reasonable, tho' I'm not fond of parameter lists of 
-"true" and "false" with no context.  I'd prefer to have some constants like
-#define can_sleep true
-so the code can be a little more readable.
-
-Yes, I know we have this problem already in the call to 
-ionic_lif_addr(), which I'm annoyed with but haven't addressed yet.
-
-So, if you want to deal with this now, fine, otherwise I'll take care of 
-them both later.
-
-Meanwhile,
-
-Acked-by: Shannon Nelson <snelson@pensando.io>
-
-
-
-
->   
->   static void ionic_lif_rx_mode(struct ionic_lif *lif, unsigned int rx_mode)
-> @@ -1081,11 +1092,12 @@ static void ionic_lif_rx_mode(struct ion
->   		lif->rx_mode = rx_mode;
->   }
->   
-> -static void _ionic_lif_rx_mode(struct ionic_lif *lif, unsigned int rx_mode)
-> +static void _ionic_lif_rx_mode(struct ionic_lif *lif, unsigned int rx_mode,
-> +			       bool from_ndo)
->   {
->   	struct ionic_deferred_work *work;
->   
-> -	if (in_interrupt()) {
-> +	if (from_ndo) {
->   		work = kzalloc(sizeof(*work), GFP_ATOMIC);
->   		if (!work) {
->   			netdev_err(lif->netdev, "%s OOM\n", __func__);
-> @@ -1100,7 +1112,16 @@ static void _ionic_lif_rx_mode(struct io
->   	}
->   }
->   
-> -static void ionic_set_rx_mode(struct net_device *netdev)
-> +static void ionic_dev_uc_sync(struct net_device *netdev, bool from_ndo)
-> +{
-> +	if (from_ndo)
-> +		__dev_uc_sync(netdev, ionic_ndo_addr_add, ionic_ndo_addr_del);
-> +	else
-> +		__dev_uc_sync(netdev, ionic_addr_add, ionic_addr_del);
-> +
-> +}
-> +
-> +static void ionic_set_rx_mode(struct net_device *netdev, bool from_ndo)
->   {
->   	struct ionic_lif *lif = netdev_priv(netdev);
->   	struct ionic_identity *ident;
-> @@ -1122,7 +1143,7 @@ static void ionic_set_rx_mode(struct net
->   	 *       we remove our overflow flag and check the netdev flags
->   	 *       to see if we can disable NIC PROMISC
->   	 */
-> -	__dev_uc_sync(netdev, ionic_addr_add, ionic_addr_del);
-> +	ionic_dev_uc_sync(netdev, from_ndo);
->   	nfilters = le32_to_cpu(ident->lif.eth.max_ucast_filters);
->   	if (netdev_uc_count(netdev) + 1 > nfilters) {
->   		rx_mode |= IONIC_RX_MODE_F_PROMISC;
-> @@ -1134,7 +1155,7 @@ static void ionic_set_rx_mode(struct net
->   	}
->   
->   	/* same for multicast */
-> -	__dev_mc_sync(netdev, ionic_addr_add, ionic_addr_del);
-> +	ionic_dev_uc_sync(netdev, from_ndo);
->   	nfilters = le32_to_cpu(ident->lif.eth.max_mcast_filters);
->   	if (netdev_mc_count(netdev) > nfilters) {
->   		rx_mode |= IONIC_RX_MODE_F_ALLMULTI;
-> @@ -1146,7 +1167,12 @@ static void ionic_set_rx_mode(struct net
->   	}
->   
->   	if (lif->rx_mode != rx_mode)
-> -		_ionic_lif_rx_mode(lif, rx_mode);
-> +		_ionic_lif_rx_mode(lif, rx_mode, from_ndo);
-> +}
-> +
-> +static void ionic_ndo_set_rx_mode(struct net_device *netdev)
-> +{
-> +	ionic_set_rx_mode(netdev, true);
->   }
->   
->   static __le64 ionic_netdev_features_to_nic(netdev_features_t features)
-> @@ -1391,7 +1417,7 @@ static int ionic_start_queues_reconfig(s
->   	 */
->   	err = ionic_txrx_init(lif);
->   	mutex_unlock(&lif->queue_lock);
-> -	ionic_link_status_check_request(lif);
-> +	ionic_link_status_check_request(lif, true);
->   	netif_device_attach(lif->netdev);
->   
->   	return err;
-> @@ -1720,7 +1746,7 @@ static int ionic_txrx_init(struct ionic_
->   	if (lif->netdev->features & NETIF_F_RXHASH)
->   		ionic_lif_rss_init(lif);
->   
-> -	ionic_set_rx_mode(lif->netdev);
-> +	ionic_set_rx_mode(lif->netdev, false);
->   
->   	return 0;
->   
-> @@ -2093,7 +2119,7 @@ static const struct net_device_ops ionic
->   	.ndo_stop               = ionic_stop,
->   	.ndo_start_xmit		= ionic_start_xmit,
->   	.ndo_get_stats64	= ionic_get_stats64,
-> -	.ndo_set_rx_mode	= ionic_set_rx_mode,
-> +	.ndo_set_rx_mode	= ionic_ndo_set_rx_mode,
->   	.ndo_set_features	= ionic_set_features,
->   	.ndo_set_mac_address	= ionic_set_mac_address,
->   	.ndo_validate_addr	= eth_validate_addr,
-> @@ -2521,7 +2547,7 @@ static void ionic_lif_handle_fw_up(struc
->   	}
->   
->   	clear_bit(IONIC_LIF_F_FW_RESET, lif->state);
-> -	ionic_link_status_check_request(lif);
-> +	ionic_link_status_check_request(lif, true);
->   	netif_device_attach(lif->netdev);
->   	dev_info(ionic->dev, "FW Up: LIFs restarted\n");
->   
-> @@ -2713,7 +2739,7 @@ static int ionic_station_set(struct ioni
->   		 */
->   		if (!ether_addr_equal(ctx.comp.lif_getattr.mac,
->   				      netdev->dev_addr))
-> -			ionic_lif_addr(lif, netdev->dev_addr, true);
-> +			ionic_lif_addr(lif, netdev->dev_addr, true, true);
->   	} else {
->   		/* Update the netdev mac with the device's mac */
->   		memcpy(addr.sa_data, ctx.comp.lif_getattr.mac, netdev->addr_len);
-> @@ -2730,7 +2756,7 @@ static int ionic_station_set(struct ioni
->   
->   	netdev_dbg(lif->netdev, "adding station MAC addr %pM\n",
->   		   netdev->dev_addr);
-> -	ionic_lif_addr(lif, netdev->dev_addr, true);
-> +	ionic_lif_addr(lif, netdev->dev_addr, true, true);
->   
->   	return 0;
->   }
-> --- a/drivers/net/ethernet/pensando/ionic/ionic_lif.h
-> +++ b/drivers/net/ethernet/pensando/ionic/ionic_lif.h
-> @@ -245,7 +245,7 @@ static inline u32 ionic_coal_usec_to_hw(
->   
->   typedef void (*ionic_reset_cb)(struct ionic_lif *lif, void *arg);
->   
-> -void ionic_link_status_check_request(struct ionic_lif *lif);
-> +void ionic_link_status_check_request(struct ionic_lif *lif, bool can_sleep);
->   void ionic_get_stats64(struct net_device *netdev,
->   		       struct rtnl_link_stats64 *ns);
->   void ionic_lif_deferred_enqueue(struct ionic_deferred *def,
->
-
+super speed but chooses high speed. I can't see this info from a Linux h=
+ost.
