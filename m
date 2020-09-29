@@ -2,51 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA4927C6F8
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 13:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C132F27C81F
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Sep 2020 13:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730693AbgI2LuZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Sep 2020 07:50:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53892 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731269AbgI2Lt6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Sep 2020 07:49:58 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 542DF206E5;
-        Tue, 29 Sep 2020 11:49:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601380197;
-        bh=73vELVkbudOyu5/cNMZZUkpOORrJRg3cL+YzLgIiOJ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sPXyhVTbStN2i5gM0Y1uA3apKBiOK3iTu8REBIqbOtL5a0GLPco+KDuqXxdpJTYXp
-         6617Ads6rJAo329jOHMygDEEm3GDT3iJpq47xKCa0RknQoYIFTUJX8l4D2pFbONTOa
-         O4osHHI+W9u4bW8mNELQoCIUd+GYVcvU3ui6hB2Q=
-Date:   Tue, 29 Sep 2020 13:06:51 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>
-Subject: Re: [PATCH] USB: serial: ftdi_sio: clean up jtag quirks
-Message-ID: <20200929110651.GC1160194@kroah.com>
-References: <20200929104116.7107-1-johan@kernel.org>
+        id S1730960AbgI2L7H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Sep 2020 07:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730315AbgI2Lla (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 07:41:30 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18360C0613D1;
+        Tue, 29 Sep 2020 04:41:30 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id a22so3715513ljp.13;
+        Tue, 29 Sep 2020 04:41:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DKj1Mi05r/lPkJStEzGXk91YP8pjP5KDZ2CpBgL5/fY=;
+        b=VtT92NPWEcjOGfhJuW86rj6W4WZTh2U8cHuHVrjGwqFoNczhNyPIJnekCrseB6gbud
+         pXXTV7ZV5Rvffb+ND/Mw84w0sOy0cgauXMCMjbPQj6mCayHpaCwGC0eApOV8aXJkkHqU
+         gsX0iXZkHRGTuQl4OLDlqVHJqzBNrrzCivUsGWYjo3P0fbVwVVtsI5N613V0i+SKNvQ9
+         CwHj4wFKqZDrMcFHDX/GobZ0kWMvP9Nhd504rUVIUygsEVsN0Wf6tHpJqZz2NL2yxEfa
+         NwB/QByCqqCaAizWPhDclWoLfgTSvAuiyM8VsNzeloj+V4kOGdGzYB1IhvTiAaAi2sF+
+         yIjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=DKj1Mi05r/lPkJStEzGXk91YP8pjP5KDZ2CpBgL5/fY=;
+        b=uHkKDU68d6nVy/ID+vFg2DgBhBTTcWFYSNzxWY+C3quQSvPRh7JUxgyKjN7q4vtoJL
+         Kmu9dMk5TPQeMamLA8xObPC3Sm5kuywKsfXtIbWmmTLPpRPCg/E00gMA1kNmxn5qb+Z0
+         Rilj/UIH1PzxHkbOXqWSMTlwHyQu2+YoIMWsuHD2u53Oz2KriMsAR/QDajX/Wh7YxN5D
+         K67Gt/wNfCa4Gskv+djmWEb9pJ5h0/MhuXhGAebdY0ppaTHP0z/68oYSDmqXNatSHBjv
+         Omeel7sPuxKPtkjHa8+bb28b8njA/MloC756x0WLfSVjM/njqHdMT+XaGeOk6uMS9rto
+         rlBg==
+X-Gm-Message-State: AOAM530HwHvUffIaRrjm62tgVI5zr+Vm/BUJ9gNDTBPvsfkQhTD7CPW7
+        +UCmC8L1+UAeHHXlA6OPgBU=
+X-Google-Smtp-Source: ABdhPJwcjlq0rjwvPdAuofQsWvJsOAit69kPFga73785R9VtbDaR1mTaMCt2hikSTX5+1iG4kI5CHw==
+X-Received: by 2002:a2e:8798:: with SMTP id n24mr948762lji.373.1601379688550;
+        Tue, 29 Sep 2020 04:41:28 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:861:66d4:f163:48a3:b6d3:9d73? ([2a00:1fa0:861:66d4:f163:48a3:b6d3:9d73])
+        by smtp.gmail.com with ESMTPSA id v17sm3197612lfr.42.2020.09.29.04.41.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Sep 2020 04:41:28 -0700 (PDT)
+Subject: Re: [PATCH v3 4/5] arm64: dts: qcom: sc7180: Use pdc interrupts for
+ USB instead of GIC interrupts
+To:     Sandeep Maheswaram <sanm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>
+References: <1601376452-31839-1-git-send-email-sanm@codeaurora.org>
+ <1601376452-31839-5-git-send-email-sanm@codeaurora.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <07de71c5-71d0-fbf1-8aa7-c039aeb9dffd@gmail.com>
+Date:   Tue, 29 Sep 2020 14:41:19 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200929104116.7107-1-johan@kernel.org>
+In-Reply-To: <1601376452-31839-5-git-send-email-sanm@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 12:41:16PM +0200, Johan Hovold wrote:
-> Drivers should not assume that interface descriptors have been parsed in
-> any particular order so match on interface number instead when rejecting
-> JTAG interfaces.
-> 
-> Also use the interface struct device for notifications so that the
-> interface number is included.
-> 
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+Hello!
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On 29.09.2020 13:47, Sandeep Maheswaram wrote:
+
+> Using pdc interrupts for USB instead of GIC interrupts to
+> support wake up in case xo shutdown.
+
+    s/xo/of/?
+
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+[...]
+
+MBR, Sergei
+
