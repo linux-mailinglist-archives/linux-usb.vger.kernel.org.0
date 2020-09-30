@@ -2,152 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C77827E13C
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 08:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D308427E1EC
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 08:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727599AbgI3Ggo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Sep 2020 02:36:44 -0400
-Received: from mga03.intel.com ([134.134.136.65]:17146 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728341AbgI3Ggn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Sep 2020 02:36:43 -0400
-IronPort-SDR: IgRDGQkuuWR0HR3AraSe/F9vaosQlelnhm6iixB1FlWBeBKsrg6zaeTJRgyKsUaRnVdayiXKpf
- ds/Iu6YH2MhQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9759"; a="162436447"
-X-IronPort-AV: E=Sophos;i="5.77,321,1596524400"; 
-   d="scan'208";a="162436447"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2020 23:36:38 -0700
-IronPort-SDR: 8+pO2zE/2y+1bLuMVvxeFqvBYwp7G15Y5A8+gAr4djQW45LSoWuvIRfeOXTWIf9jYkbQp1+nIb
- ZBhM7D+o7oZQ==
-X-IronPort-AV: E=Sophos;i="5.77,321,1596524400"; 
-   d="scan'208";a="495889818"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2020 23:36:35 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 30 Sep 2020 09:36:32 +0300
-Date:   Wed, 30 Sep 2020 09:36:32 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
-Subject: [GIT PULL] Thunderbolt/USB4 changes for v5.10 merge window
-Message-ID: <20200930063632.GR2495@lahna.fi.intel.com>
+        id S1728229AbgI3G6r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Sep 2020 02:58:47 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:34636 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725320AbgI3G6r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 02:58:47 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08U6ePvV008865;
+        Tue, 29 Sep 2020 23:58:41 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=GcHUWKnkocUYYLM9Ab6mSJtqJ5faAkc/4ctx2NK6Mto=;
+ b=DhxfTmn8lePePDUJOBYCCdLhIxIRMFLDRYnxLnnl8F1NHvP1HgGGGKcJ2cxh51kM48d3
+ zfAFBGrOK8/KroMW1F2pIE2z0OONe+2BkImACFcIw8aAFsuoWKriunsAr1t1VvnmGzJB
+ Tc1E2N9Ec622hwt9AG/+CHMx9qH/1x+/aUyQtoeT81KXUUuvLWdUrYadj8/RVAL/dZh9
+ 99fBuczO+fjd8mhWsRgLMAczXHMqJhG41HDyo624sO1dW9FQh/hVL37nwmZhSOjzLTjZ
+ s7eXvfgYW+7k2F+NrXUoBBmuxv6RwtBJFnA/TWxFRukSwALsvNxyFX0qm9HxVqJW1m5a /g== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2171.outbound.protection.outlook.com [104.47.59.171])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 33t17x5tfy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Sep 2020 23:58:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jPbi6W437paFFTTszIhUj5rB15rWX5VZjmNvxYVbmoR9kEKZGso2YjCEBNQVb2U4T98QnVOtvq8qt/joYqJT/zkE1ouyqWhJ0neEY5TbcR+Qp35oYV5ZTZd15OqhU2aYC5dtnNLSs50YGcLABwjyLvFGkc2j1EK+KMDbYvzQOipgfGnZOp3dgmeMp0JM8kmBAIZMYVgxV8KzGIDN7ndDQVbhyASlUrUtFOmNvCTTWxYvwIBylBHiD6EVurJRFnKmLXjZpWKVYyooBnXQh5wmQloSm5mQsH20Yg/FmbEcCzxZR2rG0vdc/hRc/v+dvWnaNPYppsvcVudNhTt+ZwIkOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GcHUWKnkocUYYLM9Ab6mSJtqJ5faAkc/4ctx2NK6Mto=;
+ b=gLTXOxKhjxcZnnZdrYmp2qP4661ojE6J6hFm0s+NPusoz++7n8CuafrmcB8bZeBh0ZpRWxTYjZfrHf7zb/pwigxB6evdHY1uqXzGbj4WBx+yBXT6r0I34nicOsB+qe+563IF7T2bVsxYfD1hEF+aAakT10WZrOviabjKIp1kaq2ZSrMFpFuuAT3jtg1N1RSjZ96ch1h/9zh9yvFBHOzI3GbhtUnUHDNwJfm4d1JesuPcm0OyMbfNgPobmpPrsaIyRBpkjuQ9vZ4YA32vuglXM4kyBLfnJFToaOZypyQnNQEhBNIDuTRp9MLQUXeXWgBmeeCgzpLg/nGpfAEnjxzyPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 199.43.4.23) smtp.rcpttodomain=ti.com smtp.mailfrom=cadence.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=cadence.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GcHUWKnkocUYYLM9Ab6mSJtqJ5faAkc/4ctx2NK6Mto=;
+ b=fgJWp5W0qBfLSi4y5iu3aCbZG5D0Ic0H3Rld3mWFGhjsP9m51zvJcsumKO4H+tce1/gRfsDeO3EsCmLDEf+GieBvcPD1G2iQGN7YPcquGSZQ+u6bmFU0SFbvsjaDbMi9MxZBlGmP4vjAtBVnsvF//Qlc2qDrEzCVlwjPHydQUvM=
+Received: from DM5PR06CA0091.namprd06.prod.outlook.com (2603:10b6:3:4::29) by
+ CY4PR0701MB3780.namprd07.prod.outlook.com (2603:10b6:910:8f::34) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.28; Wed, 30 Sep
+ 2020 06:58:39 +0000
+Received: from DM6NAM12FT006.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:3:4:cafe::e1) by DM5PR06CA0091.outlook.office365.com
+ (2603:10b6:3:4::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.34 via Frontend
+ Transport; Wed, 30 Sep 2020 06:58:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 199.43.4.23)
+ smtp.mailfrom=cadence.com; ti.com; dkim=none (message not signed)
+ header.d=none;ti.com; dmarc=pass action=none header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 199.43.4.23 as permitted sender) receiver=protection.outlook.com;
+ client-ip=199.43.4.23; helo=rmmaillnx1.cadence.com;
+Received: from rmmaillnx1.cadence.com (199.43.4.23) by
+ DM6NAM12FT006.mail.protection.outlook.com (10.13.178.234) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3433.14 via Frontend Transport; Wed, 30 Sep 2020 06:58:39 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by rmmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 08U6wbhS021304
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Wed, 30 Sep 2020 02:58:37 -0400
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3; Wed, 30 Sep 2020 08:58:36 +0200
+Received: from vleu-orange.cadence.com (10.160.88.83) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Wed, 30 Sep 2020 08:58:36 +0200
+Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
+        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 08U6waTv024457;
+        Wed, 30 Sep 2020 08:58:36 +0200
+Received: (from pawell@localhost)
+        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 08U6wads024456;
+        Wed, 30 Sep 2020 08:58:36 +0200
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     <balbi@kernel.org>
+CC:     <peter.chen@nxp.org>, <pawell@cadence.com>, <rogerq@ti.com>,
+        <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kurahul@cadence.com>
+Subject: [PATCH] usb: cdns3: platform_get_irq_byname_optional instead platform_get_irq_byname
+Date:   Wed, 30 Sep 2020 08:57:58 +0200
+Message-ID: <20200930065758.23740-1-pawell@cadence.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fc1c162d-35f2-4af9-f42c-08d8650e42a8
+X-MS-TrafficTypeDiagnostic: CY4PR0701MB3780:
+X-Microsoft-Antispam-PRVS: <CY4PR0701MB37808BA947244EC7D5957B34DD330@CY4PR0701MB3780.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:235;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZKQP0WdxUPSOGn/0NNV3O5InprYXFCBjFjGWo6SlpjKv9cxWQxGO99/9j2J4fNsWSLXsk2Oi3t7FCQfsjMrGXCL8zOu4o6Kqj8oNpur/Al/fUm/ebM1PAjyw41SwYcCKaVuR2/+YdyVDuJNAuJMssmem3gecRRVepIb0vdS98GxOQIk/QlodDzoDTnNWSoFg7nhwWH0JQKfRUQ/3weQfAqIl+WJtlq4BpAROXe/lml6hvBvoYfuWWu02c35ai0sCZTQAsPTZpCxUdQNyUqMaUQEvDLp0ElNJeiYQYwqxnyd/j+qCaemSe/CNv9DDh6GQnpOqvSv5FW796TweSXlqnr0n0qt4IvpmPPaJA5WAu/foy4NFjtWc14zJNzU0kq2YV5SPdlB+awuVN50g5wir/NXwec1BLlOM73cYb7HNRidQthrR4URBdcVxgbrmTsAK/phjOWTcPn+pUrjtMIowBOtdeXfigJDIEypduHIrjKo=
+X-Forefront-Antispam-Report: CIP:199.43.4.23;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:rmmaillnx1.cadence.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(376002)(346002)(136003)(39850400004)(396003)(36092001)(46966005)(5660300002)(47076004)(70586007)(70206006)(86362001)(356005)(83380400001)(82740400003)(82310400003)(1076003)(81166007)(4326008)(42186006)(186003)(6916009)(36756003)(478600001)(6666004)(316002)(54906003)(36906005)(336012)(2906002)(426003)(2616005)(107886003)(8936002)(26005)(8676002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2020 06:58:39.4352
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc1c162d-35f2-4af9-f42c-08d8650e42a8
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[199.43.4.23];Helo=[rmmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT006.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR0701MB3780
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-30_03:2020-09-29,2020-09-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 adultscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ spamscore=0 impostorscore=0 phishscore=0 mlxlogscore=408 clxscore=1011
+ suspectscore=1 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009300053
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+To avoid duplicate error information patch replaces platform_get_irq_byname
+into platform_get_irq_byname_optional.
 
-The following changes since commit f75aef392f869018f78cfedf3c320a6b3fcfda6b:
+A change was suggested during reviewing CDNSP driver by Chunfeng Yun.
 
-  Linux 5.9-rc3 (2020-08-30 16:01:54 -0700)
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+---
+ drivers/usb/cdns3/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-are available in the Git repository at:
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index a0f73d4711ae..a3f6dc44cf3a 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -465,7 +465,7 @@ static int cdns3_probe(struct platform_device *pdev)
+ 
+ 	cdns->xhci_res[1] = *res;
+ 
+-	cdns->dev_irq = platform_get_irq_byname(pdev, "peripheral");
++	cdns->dev_irq = platform_get_irq_byname_optional(pdev, "peripheral");
+ 	if (cdns->dev_irq == -EPROBE_DEFER)
+ 		return cdns->dev_irq;
+ 
+@@ -477,7 +477,7 @@ static int cdns3_probe(struct platform_device *pdev)
+ 		return PTR_ERR(regs);
+ 	cdns->dev_regs	= regs;
+ 
+-	cdns->otg_irq = platform_get_irq_byname(pdev, "otg");
++	cdns->otg_irq = platform_get_irq_byname_optional(pdev, "otg");
+ 	if (cdns->otg_irq == -EPROBE_DEFER)
+ 		return cdns->otg_irq;
+ 
+-- 
+2.17.1
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.10-rc1
-
-for you to fetch changes up to 810278da901c15fba475394edb7f1271c3806658:
-
-  thunderbolt: Capitalize comment on top of QUIRK_FORCE_POWER_LINK_CONTROLLER (2020-09-16 14:57:46 +0300)
-
-----------------------------------------------------------------
-thunderbolt: Changes for v5.10 merge window
-
-This includes following Thunderbolt/USB4 changes for v5.10 merge window:
-
-  * A couple of optimizations around Tiger Lake force power logic and
-    NHI (Native Host Interface) LC (Link Controller) mailbox command
-    processing
-
-  * Power management improvements for Software Connection Manager
-
-  * Debugfs support
-
-  * Allow KUnit tests to be enabled also when Thunderbolt driver is
-    configured as module.
-
-  * Few minor cleanups and fixes
-
-All these have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      thunderbolt: debugfs: Fix uninitialized return in counters_write()
-
-Gil Fine (2):
-      thunderbolt: Introduce tb_switch_is_tiger_lake()
-      thunderbolt: Add debugfs interface
-
-Mika Westerberg (31):
-      thunderbolt: Software CM only should set force power in Tiger Lake
-      thunderbolt: Use bit 31 to check if Firmware CM is running in Tiger Lake
-      thunderbolt: Do not program NFC buffers for USB4 router protocol adapters
-      thunderbolt: No need to log an error if tb_switch_lane_bonding_enable() fails
-      thunderbolt: Send reset only to first generation routers
-      thunderbolt: Tear down DP tunnels when suspending
-      thunderbolt: Initialize TMU again on resume
-      thunderbolt: Do not change default USB4 router notification timeout
-      thunderbolt: Configure link after lane bonding is enabled
-      thunderbolt: Set port configured for both ends of the link
-      thunderbolt: Configure port for XDomain
-      thunderbolt: Disable lane 1 for XDomain connection
-      thunderbolt: Enable wakes from system suspend
-      PCI / thunderbolt: Switch to use device links instead of PCI quirk
-      ACPI: Export acpi_get_first_physical_node() to modules
-      thunderbolt: Create device links from ACPI description
-      thunderbolt: Add runtime PM for Software CM
-      thunderbolt: Move struct tb_cap_any to tb_regs.h
-      thunderbolt: Introduce tb_port_next_cap()
-      thunderbolt: Introduce tb_switch_next_cap()
-      thunderbolt: Introduce tb_port_is_nhi()
-      thunderbolt: Check for Intel vendor ID when identifying controller
-      thunderbolt: Introduce tb_switch_is_ice_lake()
-      thunderbolt: No need to warn in TB_CFG_ERROR_INVALID_CONFIG_SPACE
-      thunderbolt: Only stop control channel when entering freeze
-      thunderbolt: Allow KUnit tests to be built also when CONFIG_USB4=m
-      thunderbolt: Use "if USB4" instead of "depends on" in Kconfig
-      thunderbolt: Handle ERR_LOCK notification
-      thunderbolt: Log correct zeroX entries in decode_error()
-      thunderbolt: Correct tb_check_quirks() kernel-doc
-      thunderbolt: Capitalize comment on top of QUIRK_FORCE_POWER_LINK_CONTROLLER
-
-Rajmohan Mani (2):
-      thunderbolt: Optimize Force Power logic
-      thunderbolt: Optimize NHI LC mailbox command processing
-
-Tian Tao (1):
-      thunderbolt: Use kobj_to_dev() instead of container_of()
-
- drivers/acpi/bus.c            |   1 +
- drivers/pci/quirks.c          |  57 ----
- drivers/thunderbolt/Kconfig   |  14 +-
- drivers/thunderbolt/Makefile  |   4 +-
- drivers/thunderbolt/acpi.c    | 117 +++++++
- drivers/thunderbolt/cap.c     | 136 +++++---
- drivers/thunderbolt/ctl.c     |  23 +-
- drivers/thunderbolt/debugfs.c | 701 ++++++++++++++++++++++++++++++++++++++++++
- drivers/thunderbolt/domain.c  |  48 ++-
- drivers/thunderbolt/icm.c     |   5 +-
- drivers/thunderbolt/lc.c      | 151 +++++++--
- drivers/thunderbolt/nhi.c     |  90 +++++-
- drivers/thunderbolt/nhi_ops.c |  31 +-
- drivers/thunderbolt/quirks.c  |   2 +-
- drivers/thunderbolt/switch.c  | 216 +++++++++++--
- drivers/thunderbolt/tb.c      | 207 ++++++++++++-
- drivers/thunderbolt/tb.h      | 160 +++++++---
- drivers/thunderbolt/tb_msgs.h |   1 +
- drivers/thunderbolt/tb_regs.h |  34 +-
- drivers/thunderbolt/test.c    |  13 +-
- drivers/thunderbolt/usb4.c    | 251 +++++++++++----
- 21 files changed, 1971 insertions(+), 291 deletions(-)
- create mode 100644 drivers/thunderbolt/acpi.c
- create mode 100644 drivers/thunderbolt/debugfs.c
