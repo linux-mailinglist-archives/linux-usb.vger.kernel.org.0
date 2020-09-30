@@ -2,247 +2,265 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1946227EC52
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 17:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E2427EC8A
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 17:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730910AbgI3PWB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Sep 2020 11:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S1728805AbgI3P2g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Sep 2020 11:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727749AbgI3PVo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 11:21:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C41FC0613D1
-        for <linux-usb@vger.kernel.org>; Wed, 30 Sep 2020 08:21:44 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kNdvD-0001n2-96; Wed, 30 Sep 2020 17:21:35 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:b742:a929:3f3f:414e] (2a03-f580-87bc-d400-b742-a929-3f3f-414e.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:b742:a929:3f3f:414e])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B107A56E96B;
-        Wed, 30 Sep 2020 15:21:24 +0000 (UTC)
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        "open list:USB ACM DRIVER" <linux-usb@vger.kernel.org>
-References: <20200926175810.278529-1-mailhol.vincent@wanadoo.fr>
- <20200930144602.10290-3-mailhol.vincent@wanadoo.fr>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH v2 2/6] can: dev: add a helper function to get the correct
- length of Classical frames
-Message-ID: <1798400d-abc1-e6dd-2d19-41e82ca6e43e@pengutronix.de>
-Date:   Wed, 30 Sep 2020 17:21:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        with ESMTP id S1728232AbgI3P2f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 11:28:35 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D8EC061755
+        for <linux-usb@vger.kernel.org>; Wed, 30 Sep 2020 08:28:34 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id z193so1141960vsz.10
+        for <linux-usb@vger.kernel.org>; Wed, 30 Sep 2020 08:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KI6flaN45h6c4S1U3iS1qLPc2mhSgihfQFoOlFOrNoM=;
+        b=ARgjJDxIblSfCQxhmZ0tgJOwgQoXvkcDgIEd8BELIEsCD3a/b4+rIFKwD18gMYz1QV
+         EgcLIbGZ0igKWTWOObPuByRRi8Y9K6D8sqUBo3QwYRPUtfi+wt/663tFcVI+fOx0aw8m
+         38+eZxRGicAHtzfJtaWrqBcrmoZ6kcWFrKX2Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KI6flaN45h6c4S1U3iS1qLPc2mhSgihfQFoOlFOrNoM=;
+        b=TTmKklfiBevosBB3kq73Qp8jOyywY+gtwYFMeuk1SSFuqiHymVJXnNsFygszpprJzw
+         gKY16nZ+S2HQKEZTaFb1BdWJoL9LHE+fbt2OVpBvwd7PsVUZVzVqf+OqDkrMsfw2ra3U
+         7HeHD8EoSFRUHzrwStjPIOQ/YOcWg1YpYKWk1KWWW7ikUp6pBkBcvncXFtRlxb4XK8OR
+         z8arJkt4Wt00ftCuDzYV5EAO+vEpFJmjudNRc7llyYqNTkRO2ub7BBDS66LetgIdeufC
+         K3hMVQGe5OekdnghFVMgiSoiKlc2VNE9QPdnRU93i1shd9Hs1HDpLO6EKJlwgFhpBY5B
+         9QnA==
+X-Gm-Message-State: AOAM530KW+Wkv6LWPu7U8Et5kJTh8qXrAKXHh0FMCgwSVjcjtMANrAtf
+        GlMGIHBqzm8QlbtDG1gwpxvQFqKn/pNhsg==
+X-Google-Smtp-Source: ABdhPJyjeauMUm2eUorwhBXvdBNI//pltHqUArEp8RWd5brAHmnYldmKpsUcudSoYyU4IrirMglQ5g==
+X-Received: by 2002:a67:2bc5:: with SMTP id r188mr1944408vsr.16.1601479713102;
+        Wed, 30 Sep 2020 08:28:33 -0700 (PDT)
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com. [209.85.221.170])
+        by smtp.gmail.com with ESMTPSA id x125sm277573vsb.30.2020.09.30.08.28.31
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Sep 2020 08:28:31 -0700 (PDT)
+Received: by mail-vk1-f170.google.com with SMTP id n7so463769vkq.5
+        for <linux-usb@vger.kernel.org>; Wed, 30 Sep 2020 08:28:31 -0700 (PDT)
+X-Received: by 2002:ac5:c297:: with SMTP id h23mr1852218vkk.21.1601479710319;
+ Wed, 30 Sep 2020 08:28:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200930144602.10290-3-mailhol.vincent@wanadoo.fr>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="sQZpGVhjMHWRxljLBs1RfHjAtMSzlvl89"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+References: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20200929201701.GA1080459@bogus> <20200929220912.GF1621304@google.com>
+ <20200930013229.GB194665@rowland.harvard.edu> <20200930124915.GA1826870@google.com>
+ <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
+In-Reply-To: <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 30 Sep 2020 08:28:17 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
+Message-ID: <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete onboard
+ USB hubs
+To:     Rob Herring <robh@kernel.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---sQZpGVhjMHWRxljLBs1RfHjAtMSzlvl89
-Content-Type: multipart/mixed; boundary="0PLD90LKZkF4UcdYyOK9gT6o0Z49KwvvP";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
- "David S . Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>, Oliver Neukum <oneukum@suse.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Masahiro Yamada <masahiroy@kernel.org>,
- Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
- "open list:USB ACM DRIVER" <linux-usb@vger.kernel.org>
-Message-ID: <1798400d-abc1-e6dd-2d19-41e82ca6e43e@pengutronix.de>
-Subject: Re: [PATCH v2 2/6] can: dev: add a helper function to get the correct
- length of Classical frames
-References: <20200926175810.278529-1-mailhol.vincent@wanadoo.fr>
- <20200930144602.10290-3-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20200930144602.10290-3-mailhol.vincent@wanadoo.fr>
+Hi,
 
---0PLD90LKZkF4UcdYyOK9gT6o0Z49KwvvP
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+On Wed, Sep 30, 2020 at 7:44 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Wed, Sep 30, 2020 at 7:49 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > Hi Alan,
+> >
+> > On Tue, Sep 29, 2020 at 09:32:29PM -0400, Alan Stern wrote:
+> > > On Tue, Sep 29, 2020 at 03:09:12PM -0700, Matthias Kaehlcke wrote:
+> > > > Hi Rob,
+> > > >
+> > > > On Tue, Sep 29, 2020 at 03:17:01PM -0500, Rob Herring wrote:
+> > > > > As I said in prior version, this separate node and 'hub' phandle is not
+> > > > > going to work. You are doing this because you want a platform driver for
+> > > > > "realtek,rts5411". That may be convenient for Linux, but doesn't reflect
+> > > > > the h/w.
+> > > >
+> > > > I agree that the hardware representation isn't totally straightforward, however
+> > > > the description isn't limited to Linux:
+> > > >
+> > > > - there is a single IC (like the Realtek RTS5411)
+> > > > - the IC may require several resources to be initialized in a certain way
+> > > >   - this may require executing hardware specific code by some driver, which
+> > > >     isn't a USB device driver
+> > > > - the IC can 'contain' multiple USB hub devices, which can be connected to
+> > > >   separate USB busses
+> > > > - the IC doesn't have a control bus, which somewhat resembles the
+> > > >   'simple-audio-amplifier' driver, which also registers a platform device
+> > > >   to initialize its resources
+> > > >
+> > > > - to provide the functionality of powering down the hub conditionally during
+> > > >   system suspend the driver (whether it's a platform driver or something else)
+> > > >   needs know which USB (hub) devices correspond to it. This is a real world
+> > > >   problem, on hardware that might see wide distribution.
+> > > >
+> > > > There were several attempts to solve this problem in the past, but none of them
+> > > > was accepted. So far Alan Stern seems to think the driver (not necessarily the
+> > > > binding as is) is a suitable solution, Greg KH also spent time reviewing it,
+> > > > without raising conceptual concerns. So it seems we have solution that would
+> > > > be generally landable from the USB side.
+>
+> Just as I spend no time reviewing the driver side typically, I don't
+> think Alan or Greg spend any time on the DT side.
+>
+> > > > I understand that your goal is to keep the device tree sane, which I'm sure
+> > > > can be challenging. If you really can't be convinced that the binding might
+> > > > be acceptable in its current or similiar form then please offer guidance
+> > > > on possible alternatives which allow to achieve the same functionality.
+> > >
+> > > You're really trying to represent this special IC in DT, right?
+> >
+> > Yes
+> >
+> > > Maybe  if you don't call it a "hub" but instead something that better reflects
+> > > what it actually is and does, the description will be more palatable.
+>
+> It's a hub. The name is not the problem.
+>
+> > Thanks for your suggestion.
+> >
+> > Datasheets from different manufacturers refer to these ICs as "USB hub
+> > controller". Calling the node "usb-hub-controller" would indeed help to
+> > distinguish it from the USB hub devices and represent existing hardware.
+> > And the USB device could have a "hub-controller" property, which also
+> > would be clearer than the current "hub" property.
+>
+> There aren't 2 (or 3) devices here. There's a single USB device (a
+> hub) and the DT representation should reflect that.
 
-On 9/30/20 4:45 PM, Vincent Mailhol wrote:
-> In classical CAN, the length of the data (i.e. CAN payload) is not
-> always equal to the DLC! If the frame is a Remote Transmission Request
-> (RTR), data length is always zero regardless of DLC value and else, if
-> the DLC is greater than 8, the length is 8. Contrary to common belief,
-> ISO 11898-1 Chapter 8.4.2.3 (DLC field) do allow DLCs greater than 8
-> for Classical Frames and specifies that those DLCs shall indicate that
-> the data field is 8 bytes long.
->=20
-> Above facts are widely unknown and so many developpers uses the "len"
-> field of "struct canfd_frame" to get the length of classical CAN
-> frames: this is incorrect!
->=20
-> This patch introduces function get_can_len() which can be used in
-> remediation. The function takes the SKB as an input in order to be
-> able to determine if the frame is classical or FD.
->=20
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
->  include/linux/can/dev.h | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->=20
-> diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-> index 5e3d45525bd3..72a8a60c0094 100644
-> --- a/include/linux/can/dev.h
-> +++ b/include/linux/can/dev.h
-> @@ -177,6 +177,29 @@ u8 can_dlc2len(u8 can_dlc);
->  /* map the sanitized data length to an appropriate data length code */=
-
->  u8 can_len2dlc(u8 len);
-> =20
-> +/*
-> + * get_can_len(skb) - get the length of the CAN payload.
-> + *
-> + * In classical CAN, the length of the data (i.e. CAN payload) is not
-> + * always equal to the DLC! If the frame is a Remote Transmission
-> + * Request (RTR), data length is always zero regardless of DLC value
-> + * and else, if the DLC is greater than 8, the length is 8. Contrary
-> + * to common belief, ISO 11898-1 Chapter 8.4.2.3 (DLC field) do allow
-> + * DLCs greater than 8 for Classical Frames and specifies that those
-> + * DLCs shall indicate that the data field is 8 bytes long.
-> + */
-> +static inline int get_can_len(struct sk_buff *skb)
-
-make this return an u8
-make the skb const
-
-> +{
-> +	struct canfd_frame *cf =3D (struct canfd_frame *)skb->data;
-
-const
-
-> +
-> +	if (can_is_canfd_skb(skb))
-> +		return min_t(__u8, cf->len, CANFD_MAX_DLEN);
-
-u8
-
-> +	else if (cf->can_id & CAN_RTR_FLAG)
-> +		return 0;
-> +	else
-> +		return min_t(__u8, cf->len, CAN_MAX_DLEN);
-
-u8
-
-> +}
-> +
->  struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo=
-_skb_max,
->  				    unsigned int txqs, unsigned int rxqs);
->  #define alloc_candev(sizeof_priv, echo_skb_max) \
->=20
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+That's not completely true, though, is it?  As I understand it, a USB
+3 port is defined as containing both a USB 2 controller and a USB 3
+controller.  While it's one port, it's still conceptually two
+(separable) things.  The fact that they are on the same physical chip
+doesn't mean that they are one thing any more than a SoC (one chip)
+needs to be represented by one thing in the device tree.  Though, of
+course, I'm not the expert here, the argument that this IC is a USB 2
+hub, a USB 3 hub, and some control logic doesn't seem totally
+insane...
 
 
---0PLD90LKZkF4UcdYyOK9gT6o0Z49KwvvP--
+> We already have hubs in DT. See [1][2][3][4]. What's new here? Simply,
+> vdd-supply needs to be enabled for the hub to be enumerated. That's
+> not a unique problem for USB, but common for all "discoverable" buses
+> with MDIO being the most recent example I pointed you to. I'm not sure
+> what happened with the previous attempt for USB[5]. It didn't look
+> like there was a major issue. 'generic' power sequencing can't really
+> handle every case, but as long as bindings allow doing something
+> device specific I don't care so much. The driver side can evolve. The
+> DT bindings can't.
+>
+> So what should this look like? There are 2 issues here. First, how do
+> we represent a USB3 device if that means multiple ports. I'm not
+> really sure other than it needs to be defined and documented. I think
+> the choices are: ignore the USB3 part (USB2 is always there and what's
+> used for enumeration, right?) or allow multiple ports in reg.
 
---sQZpGVhjMHWRxljLBs1RfHjAtMSzlvl89
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+Interesting question, that one.  When trying to optimize board designs
+we have certainly talked about separating out the USB 2 and USB 3 [1].
+For instance, we could take the USB 3 lines from the root hub and send
+them off to a high speed camera and then take the USB 2 lines and
+route them to a hub which then went to some low speed devices.  We
+chickened out and didn't do this, but we believed that it would work.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl90onEACgkQqclaivrt
-76mXMAgAjc5YqTfkyCIYKMyMeKBJZKhx1QY+odwh4T8OgwSQrPdmGj1qxYBLkubX
-P9pIMNts966DbfZZQudqFg4L8ZjAdmy1fGJN3pl8FZk9idi+QWfUZzQ54AHNwxFn
-7BbPmY8aAVjP35P5XyM+fZjgEX6up4NllmqEHdPuWUwjpx6UvfytCKFu4MlJDSjr
-c5T7fAkQdYZOiSgz9zQvgfcfXZ2/mVWPA1jfBa8zSkjV2E1F9exxSqNLGr22MSQt
-gHQdrjUlfv3911YcXOX5wTFisjlOKZBTasXFGlILJuwZs/IXNRckdHUmcU/Sz+Al
-lDyYsezsC27SrDXsEl5Cx1Y217YFAw==
-=zF8r
------END PGP SIGNATURE-----
+> Do hubs
+> really have 2 ports for each connection?
 
---sQZpGVhjMHWRxljLBs1RfHjAtMSzlvl89--
+Yup.  It's really two hubs.
+
+localhost ~ # lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 5000M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+
+localhost ~ # lsusb
+Bus 002 Device 002: ID 0bda:0411 Realtek Semiconductor Corp.
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 002: ID 0bda:5411 Realtek Semiconductor Corp.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+I think this means that we're already forced to split this one device
+across two nodes in the device tree, right?  Oh, or I guess you said
+we could change the binding to allow more than one port in one reg?
+What would that look like?  You'd have more than one VID/PID listed in
+the compatible string and more than one "reg"?
+
+
+> The 2nd issue is where do extra properties for a device go. That's
+> nothing new nor special to USB. They go with the device node. We
+> already went thru that with the last attempt.
+>
+> So for this case, we'd have something like this:
+>
+>     usb_controller {
+>         dr_mode = "host";
+>         #address-cells = <1>;
+>         #size-cells = <0>;
+>
+>         hub@1 {
+>             compatible = "usbbda,5411";
+>             reg = <1>;
+>             vdd-supply = <&pp3300_hub>;
+>         };
+>     };
+>
+> This is no different than needing a reset line deasserted as the prior
+> attempt did.
+
+I'd believe that the above could be made to work with enough software
+change in the USB stack.  Presumably we wouldn't want to actually do a
+full probe of the device until USB actually enumerated it, but I guess
+you could add some type of optional "pre-probe" step where a driver is
+called?  So you'd call a pre-probe on whatever driver implements
+"usbbda,5411" and it would turn on the power supply.  ...then, if the
+device is actually there, the normal probe would be called?  I guess
+that'd work...
+
+One thing that strikes me as a possible problem, though, is that I
+totally envision HW guys coming back and saying: "oh, we want to
+second source that USB hub and randomly stuff a different hub on some
+boards".  In theory that's a reasonable suggestion, right?  USB is a
+probable bus.  We turn on power to the USB hub (and the regulator to
+turn on power is the same no matter which hub is stuffed) and then we
+can just check which device got enumerated.  It's likely that both
+hubs would behave the same from a software point of view, but they
+would have different VID/PID.
+
+As far as I understand the current USB bindings account for the fact
+that the device(s) specified in the device tree might or might not be
+there.  Adding a node under the controller like you show above means:
+"if something is plugged into port 1 of this USB hub and if that thing
+matches 0x0bda/0x5411 then here are the extra properties (vdd-supply)
+for it".  With your proposal I believe we're changing it to mean
+"there will definitely be a device plugged into port 1 of this USB hub
+and it will match 0x0bda/0x5411."  Unless I'm mistaken, that will have
+potential impacts on the ability to second source things.  I guess
+both pre-probe functions could be called and (since there can be
+multiple users of a regulator) it'd be OK, but if we get into reset
+lines it's not much fun.  However, describing the device more like
+Matthias has done it will be nicely compatible with second sourcing.
+
+
+[1] https://lore.kernel.org/r/CAHNYxRzH3F7r4A3hOJYWw8fwoSLBESyyN7XQ4HYfw1Y3qoNbJg@mail.gmail.com
