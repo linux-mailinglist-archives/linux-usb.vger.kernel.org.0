@@ -2,112 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1442E27E0FA
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 08:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D4227E0FC
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 08:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725843AbgI3GWz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Sep 2020 02:22:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725320AbgI3GWz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Sep 2020 02:22:55 -0400
+        id S1725799AbgI3GXO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Sep 2020 02:23:14 -0400
+Received: from wforward4-smtp.messagingengine.com ([64.147.123.34]:56515 "EHLO
+        wforward4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725320AbgI3GXO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 02:23:14 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailforward.west.internal (Postfix) with ESMTP id 9C5CDE95;
+        Wed, 30 Sep 2020 02:23:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 30 Sep 2020 02:23:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=EHftFM
+        ttCpevAcDvlJQU/s7jFGAiMjupSu6QGUp2usc=; b=fXal1ix1NqTVsB1yPdjazN
+        by+INGGTWhY+ritILNNE7YDYTRXMnAjBmhIx4KSRAJNMAJtEuAdjUOAldptvqh2B
+        m2EDPe2GKUuUcWKUwdgeK6LSUEJcsKq3IOZ0Wmk/3dOtC3MxHRD2ZnxuV/TGNPdM
+        l6crtZdWFQzY0D2iFvZ+8nJjzt090tVW6P9feYLG1MWIef9e/JNPhOUAW+gf5EA7
+        92J4SqMV2S7kZd+CftM0YbdNyrGIYLspa2p7dzrpPacG5XtZZqsP+hqaEDigEjJ2
+        yZE2N04qv4bqBx5DXvJbFZh/tujX/+6y2ABRefawUEq5qENkpoAimxANXaK5bzVQ
+        ==
+X-ME-Sender: <xms:UCR0X6dGs60u6VYtzvF6e3UvNTvrfANok6NJ0y15JqTHFdbqFXsibQ>
+    <xme:UCR0X0M7uUIrbFJv88DyrUchpS-ECRDI0PGEaUAG-01JiU256Fs8Xl72G1tOdsUnH
+    pb8l5CXPTZCcQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrfedtgddutdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgmffjsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgqeenucggtf
+    frrghtthgvrhhnpeetvdelgeffgfdutdelvddvtdetffejtefgveevueeggfellefhveev
+    feduueduvdenucfkphepkeefrdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:USR0X7jFQIe9WCr7rhi2uxpefeSMjbUOFxfCvMdNrdDqCHKECzxq_g>
+    <xmx:USR0X3_ruuKWPpLjMSRVrh0wHYKgHkmr_J67xORHKP4D-l-6dLUOIw>
+    <xmx:USR0X2sjgvD3Jo0Z23BeUxSv6cRMcGdURHqKmkeh3IMykr7XrXLRVw>
+    <xmx:USR0X7VHDljqCNaYkqfbGEL1bXW3NwfW61IGnme1ey9ha8Y8Tj2VVuDldxI>
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2E6772075A;
-        Wed, 30 Sep 2020 06:22:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601446974;
-        bh=EXxvDUn4XGcHD/Ca0uIvwF+PRWacJD69F4bcem0AxSw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cehjbcseNzUjHSH9H/NUjRZOIUzHKfq3q9Ty7fj3LwMusdc294CGdNFS7gdzKtiiK
-         WI3Y6zw4SOZB4Y+SdZFlplaofN7HquwtrvQZ+Gb1v7JjPvLnN0MAysxbZB2TYeExGL
-         zOFWw3q77zfFM0MabdV5ksP31I3MmAp6bGMxarjQ=
-Date:   Wed, 30 Sep 2020 08:22:58 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Govindarajulu Varadarajan <_govind@gmx.com>,
-        Dave Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-doc@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        intel-wired-lan@lists.osuosl.org,
-        Shannon Nelson <snelson@pensando.io>,
-        Pensando Drivers <drivers@pensando.io>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Solarflare linux maintainers <linux-net-drivers@solarflare.com>,
-        Edward Cree <ecree@solarflare.com>,
-        Martin Habets <mhabets@solarflare.com>,
-        Jon Mason <jdmason@kudzu.us>, Daniel Drake <dsd@gentoo.org>,
-        Ulrich Kunitz <kune@deine-taler.de>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        brcm80211-dev-list.pdl@broadcom.com,
-        brcm80211-dev-list@cypress.com,
-        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Jouni Malinen <j@w1.fi>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi.bhat@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        libertas-dev@lists.infradead.org,
-        Pascal Terjan <pterjan@google.com>,
-        Ping-Ke Shih <pkshih@realtek.com>
-Subject: Re: [patch V2 21/36] net: usb: kaweth: Replace kaweth_control() with
- usb_control_msg()
-Message-ID: <20200930062258.GA1471881@kroah.com>
-References: <20200929202509.673358734@linutronix.de>
- <20200929203501.588965483@linutronix.de>
+        by mail.messagingengine.com (Postfix) with ESMTPA id 957BA3280060;
+        Wed, 30 Sep 2020 02:23:12 -0400 (EDT)
+Date:   Wed, 30 Sep 2020 08:23:15 +0200
+From:   Greg KH <gregKH@linuxfoundation.org>
+To:     David Miller <davem@davemloft.net>
+Cc:     petko.manolov@konsulko.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH RESEND v3 0/2] Use the new usb control message API.
+Message-ID: <20200930062315.GB1471881@kroah.com>
+References: <20200927124909.16380-1-petko.manolov@konsulko.com>
+ <20200928.160058.501175525907482710.davem@davemloft.net>
+ <20200929045911.GA4393@carbon>
+ <20200929.125849.710595543531143236.davem@davemloft.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200929203501.588965483@linutronix.de>
+In-Reply-To: <20200929.125849.710595543531143236.davem@davemloft.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 10:25:30PM +0200, Thomas Gleixner wrote:
-> From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+On Tue, Sep 29, 2020 at 12:58:49PM -0700, David Miller wrote:
+> From: Petko Manolov <petko.manolov@konsulko.com>
+> Date: Tue, 29 Sep 2020 07:59:11 +0300
 > 
-> kaweth_control() is almost the same as usb_control_msg() except for the
-> memory allocation mode (GFP_ATOMIC vs GFP_NOIO) and the in_interrupt()
-> check.
+> > On 20-09-28 16:00:58, David Miller wrote:
+> >> From: Petko Manolov <petko.manolov@konsulko.com> Date: Sun, 27 Sep 2020 
+> >> 15:49:07 +0300
+> >> 
+> >> > Re-sending these, now CC-ing the folks at linux-netdev.
+> >> 
+> >> I can't apply these since the helpers do not exist in the networking tree.
+> > 
+> > Right, Greg was only asking for ack (or nack) from your side.
 > 
-> All the invocations of kaweth_control() are within the probe function in
-> fully preemtible context so there is no reason to use atomic allocations,
-> GFP_NOIO which is used by usb_control_msg() is perfectly fine.
-> 
-> Replace kaweth_control() invocations from probe with usb_control_msg().
-> 
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Acked-by: David S. Miller <davem@davemloft.net>
 
-Note, the usb_control_msg_send/recv() new functions that will show up in
-5.10-rc1 will help a bit with this logic, but for what you have now,
-this is fine, nice cleanups.
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Thanks!
