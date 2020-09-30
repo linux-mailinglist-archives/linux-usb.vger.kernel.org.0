@@ -2,84 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE32427DDC8
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 03:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7126427DF22
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 06:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729658AbgI3Bca (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Sep 2020 21:32:30 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:50017 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729404AbgI3Bca (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Sep 2020 21:32:30 -0400
-Received: (qmail 194760 invoked by uid 1000); 29 Sep 2020 21:32:29 -0400
-Date:   Tue, 29 Sep 2020 21:32:29 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
- onboard USB hubs
-Message-ID: <20200930013229.GB194665@rowland.harvard.edu>
-References: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200929201701.GA1080459@bogus>
- <20200929220912.GF1621304@google.com>
+        id S1725790AbgI3ECW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Sep 2020 00:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725306AbgI3ECV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 00:02:21 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82FFC061755;
+        Tue, 29 Sep 2020 21:02:21 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id x16so277301pgj.3;
+        Tue, 29 Sep 2020 21:02:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-transfer-encoding:content-language;
+        bh=A6Iu8CK+fvMEAi5WAmBNnIyxewSXT0brLKenSVEGXL4=;
+        b=FOUG2k8+MaztgIzts4HwDlrGsCudjd56IKZWBLbgBRGW/+cSpuwEsCSWMlu5X5nBBu
+         8v6RNE3ofy5cTam6TcIjkuItXIvPyc7BnaDjbojyP6bpWtePhAM6lThFjdqzXAhLVzGv
+         rJbQKjncIrbIlyRWHDJ29BFUMMRVe0Y5VsBPbLsl3Bst+P8Ktaa043qBw5dyOe+/kXhe
+         UYwVUTDrG5ZOP70fROR05CZtKDJ9zhOZyHz1hblG2GGXhyuRq1b96FSREuL9ukVIUWXe
+         18YjjTXSkaJR3uRKRYnMtw/wPv5ezudgB2hkwL7x8DllO4HhtpI+cExOxnfKNgTAw4d1
+         a28Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=A6Iu8CK+fvMEAi5WAmBNnIyxewSXT0brLKenSVEGXL4=;
+        b=VcRc6mu+7brWc75q6ILlvYGzEL6KabQ23PT5qCQEAUJ26350zKIcCrIa9ueDPpQl7g
+         tmauz128WqxRYuV0/aJSrrs03p+GWwlUrLn34I3Q4/mKCh7dMapxTNeGAaD5LHKbO9R8
+         BdGwSp8Mq+z4wrccAaXtIvIZnHX8YBYi7y3qqrAKN3NeoZc3QkALRfZESJFG3Wj3kaql
+         gSiKk7QOXWogOwuXeBkvq5oBvKVwClUsYV6V0YoQEohOGkLD2uNd9SdTcq1A8RMjShMG
+         5suLpl9qAgM+7SRmLg10aAlvHqU+0UX1wYr5OoAV0PEEURvumOeeTrR9AGeOMfRrabc2
+         y94A==
+X-Gm-Message-State: AOAM5331xaOuVIzMSKRR4G7p4gGVGfROG5u3spkiwnjHBM2RJ0eB6eLQ
+        Nt71zBF5XpISpvpn6TzuX0wxGR7licyYlqdzwoQ=
+X-Google-Smtp-Source: ABdhPJyA5nA4I3XO3XKaf/fb/M89xL8cx8S1ztqnn2lD6/kSbg6onBEyGX/DZDqqLsywchH+AQJnXQ==
+X-Received: by 2002:a63:a51a:: with SMTP id n26mr624314pgf.1.1601438540777;
+        Tue, 29 Sep 2020 21:02:20 -0700 (PDT)
+Received: from [192.168.0.104] ([49.207.218.220])
+        by smtp.gmail.com with ESMTPSA id f19sm354554pfd.45.2020.09.29.21.02.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Sep 2020 21:02:19 -0700 (PDT)
+Subject: Re: [Linux-kernel-mentees][PATCH] net: usb: rtl8150: prevent
+ set_ethernet_addr from setting uninit address
+To:     linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com,
+        Petko Manolov <petkan@nucleusys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200929082028.50540-1-anant.thazhemadam@gmail.com>
+ <20200929084752.GA8101@carbon>
+From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Message-ID: <b5542434-7d12-0bba-8e54-8c5edfcb33b3@gmail.com>
+Date:   Wed, 30 Sep 2020 09:32:15 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200929220912.GF1621304@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200929084752.GA8101@carbon>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 03:09:12PM -0700, Matthias Kaehlcke wrote:
-> Hi Rob,
-> 
-> On Tue, Sep 29, 2020 at 03:17:01PM -0500, Rob Herring wrote:
-> > As I said in prior version, this separate node and 'hub' phandle is not 
-> > going to work. You are doing this because you want a platform driver for 
-> > "realtek,rts5411". That may be convenient for Linux, but doesn't reflect 
-> > the h/w.
-> 
-> I agree that the hardware representation isn't totally straightforward, however
-> the description isn't limited to Linux:
-> 
-> - there is a single IC (like the Realtek RTS5411)
-> - the IC may require several resources to be initialized in a certain way
->   - this may require executing hardware specific code by some driver, which
->     isn't a USB device driver
-> - the IC can 'contain' multiple USB hub devices, which can be connected to
->   separate USB busses
-> - the IC doesn't have a control bus, which somewhat resembles the
->   'simple-audio-amplifier' driver, which also registers a platform device
->   to initialize its resources
-> 
-> - to provide the functionality of powering down the hub conditionally during
->   system suspend the driver (whether it's a platform driver or something else)
->   needs know which USB (hub) devices correspond to it. This is a real world
->   problem, on hardware that might see wide distribution.
-> 
-> There were several attempts to solve this problem in the past, but none of them
-> was accepted. So far Alan Stern seems to think the driver (not necessarily the
-> binding as is) is a suitable solution, Greg KH also spent time reviewing it,
-> without raising conceptual concerns. So it seems we have solution that would
-> be generally landable from the USB side.
-> 
-> I understand that your goal is to keep the device tree sane, which I'm sure
-> can be challenging. If you really can't be convinced that the binding might
-> be acceptable in its current or similiar form then please offer guidance
-> on possible alternatives which allow to achieve the same functionality.
 
-You're really trying to represent this special IC in DT, right?  Maybe 
-if you don't call it a "hub" but instead something that better reflects 
-what it actually is and does, the description will be more palatable.
+On 29/09/20 2:17 pm, Petko Manolov wrote:
+> On 20-09-29 13:50:28, Anant Thazhemadam wrote:
+>> When get_registers() fails (which happens when usb_control_msg() fails)
+>> in set_ethernet_addr(), the uninitialized value of node_id gets copied
+>> as the address.
+>>
+>> Checking for the return values appropriately, and handling the case
+>> wherein set_ethernet_addr() fails like this, helps in avoiding the
+>> mac address being incorrectly set in this manner.
+>>
+>> Reported-by: syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com
+>> Tested-by: syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com
+>> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+>> ---
+>>  drivers/net/usb/rtl8150.c | 24 ++++++++++++++++--------
+>>  1 file changed, 16 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+>> index 733f120c852b..e542a9ab2ff8 100644
+>> --- a/drivers/net/usb/rtl8150.c
+>> +++ b/drivers/net/usb/rtl8150.c
+>> @@ -150,7 +150,7 @@ static const char driver_name [] = "rtl8150";
+>>  **	device related part of the code
+>>  **
+>>  */
+>> -static int get_registers(rtl8150_t * dev, u16 indx, u16 size, void *data)
+>> +static int get_registers(rtl8150_t *dev, u16 indx, u16 size, void *data)
+>>  {
+>>  	void *buf;
+>>  	int ret;
+>> @@ -274,12 +274,17 @@ static int write_mii_word(rtl8150_t * dev, u8 phy, __u8 indx, u16 reg)
+>>  		return 1;
+>>  }
+>>  
+>> -static inline void set_ethernet_addr(rtl8150_t * dev)
+>> +static bool set_ethernet_addr(rtl8150_t *dev)
+>>  {
+>>  	u8 node_id[6];
+>> +	int ret;
+>>  
+>> -	get_registers(dev, IDR, sizeof(node_id), node_id);
+>> -	memcpy(dev->netdev->dev_addr, node_id, sizeof(node_id));
+>> +	ret = get_registers(dev, IDR, sizeof(node_id), node_id);
+>> +	if (ret > 0 && ret <= sizeof(node_id)) {
+> get_registers() was recently modified to use usb_control_msg_recv() which does
+> not return partial reads.  IOW you'll either get negative value or
+> sizeof(node_id).  Since it is good to be paranoid i'd convert the above check
+> to:
+>
+> 	if (ret == sizeof(node_id)) {
+>
+> and fail in any other case.  Apart from this minor detail the rest of the patch 
+> looks good to me.
+>
+> Acked-by: Petko Manolov
+Got it. I'll be sure to include this in a v2, and send that in soon enough.
+Thanks for pointing that out. :)
 
-Alan Stern
+Thanks,
+Anant
+
+
+
