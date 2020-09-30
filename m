@@ -2,68 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFF027F0F8
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 20:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FA027F279
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 21:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729395AbgI3SA5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Sep 2020 14:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728031AbgI3SA4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 14:00:56 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30896C0613D1
-        for <linux-usb@vger.kernel.org>; Wed, 30 Sep 2020 11:00:55 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id n26so716172uao.8
-        for <linux-usb@vger.kernel.org>; Wed, 30 Sep 2020 11:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ION+wzhBe/H3HfVhVn+aQX6OzRaoZpbpam2ANPg8S4M=;
-        b=WlaLzAfIf8gOrN61qUpliyZBNgObrr8xUTvxW9ednPw5sEUmkOlDoTRsT+tZIJiEk+
-         us0nNAvOS0At26rSTh8xkL+17Pg+KGnqWPys/tJv23e2ngAd5AyuMaDSTJvI2/Vj8E1d
-         52d5VerCqA/Zzxk3XPVyGQoWIzXc6R5108cCk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ION+wzhBe/H3HfVhVn+aQX6OzRaoZpbpam2ANPg8S4M=;
-        b=ZF7v/A5bUW8k8NaiVnoacZSpgpSTEl7z5qW3k2QgjdRc1JPNtn1vGySNIZFqmwWXHN
-         DLR1QbFMJ9+2Zrvv7RNZdXJ6W3oTBeXws2SKPZSz+6WVqcUYqUqZ6tM/jXcoxs1EEW8A
-         njQMFpRgwbpHLsMDRzc+/jzIVlw7SvdzPpA2/X3DUltx827Cytpgd91ShLYbOhEi9A54
-         WOGYHXUuTeosXtyVRTBJDIMJeChnKOmkOo1JFFySzcCi6fRX6XhSN57vKar+nwlYpGCC
-         0SPViMzBVUQAgEZ4Zn7C+iDaFKHVfaiW/iIlmGjNXRUrggW4Cez+dsF0ZBW35wHN4izz
-         gi/g==
-X-Gm-Message-State: AOAM531F4USpQthPRHpTfjRVc3gYqPp6OQvUBl8NDBsMrfFTxCxDJVym
-        bZ871O/YZnim8qLpdqAm7FXnkRWZgG4vAQ==
-X-Google-Smtp-Source: ABdhPJz17RFpmKg2OQ+6mWg8vj5aevYxqs83ITpDTIWU+h3k8bOPn7BLcDnd/eoMVJ6IY024BMEvfg==
-X-Received: by 2002:ab0:130a:: with SMTP id g10mr2629586uae.100.1601488853809;
-        Wed, 30 Sep 2020 11:00:53 -0700 (PDT)
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
-        by smtp.gmail.com with ESMTPSA id f3sm351027vkk.32.2020.09.30.11.00.51
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Sep 2020 11:00:52 -0700 (PDT)
-Received: by mail-vs1-f50.google.com with SMTP id 7so1384996vsp.6
-        for <linux-usb@vger.kernel.org>; Wed, 30 Sep 2020 11:00:51 -0700 (PDT)
-X-Received: by 2002:a05:6102:2f7:: with SMTP id j23mr2430596vsj.37.1601488851471;
- Wed, 30 Sep 2020 11:00:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200929201701.GA1080459@bogus> <20200929220912.GF1621304@google.com>
- <20200930013229.GB194665@rowland.harvard.edu> <20200930124915.GA1826870@google.com>
- <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com> <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
-In-Reply-To: <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 30 Sep 2020 11:00:39 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WhowcppEhmd=QG7YFk5iSVaCKsfGJkGBQJTwMs=bwekA@mail.gmail.com>
-Message-ID: <CAD=FV=WhowcppEhmd=QG7YFk5iSVaCKsfGJkGBQJTwMs=bwekA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete onboard
- USB hubs
-To:     Rob Herring <robh@kernel.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        id S1729660AbgI3TTT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Sep 2020 15:19:19 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:54773 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728916AbgI3TTT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 15:19:19 -0400
+Received: (qmail 223323 invoked by uid 1000); 30 Sep 2020 15:19:17 -0400
+Date:   Wed, 30 Sep 2020 15:19:17 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Frank Rowand <frowand.list@gmail.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -74,43 +27,86 @@ Cc:     Matthias Kaehlcke <mka@chromium.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
+ onboard USB hubs
+Message-ID: <20200930191917.GA221711@rowland.harvard.edu>
+References: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20200929201701.GA1080459@bogus>
+ <20200929220912.GF1621304@google.com>
+ <20200930013229.GB194665@rowland.harvard.edu>
+ <20200930124915.GA1826870@google.com>
+ <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
+ <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-> On Wed, Sep 30, 2020 at 7:44 AM Rob Herring <robh@kernel.org> wrote:
+On Wed, Sep 30, 2020 at 08:28:17AM -0700, Doug Anderson wrote:
+> > The 2nd issue is where do extra properties for a device go. That's
+> > nothing new nor special to USB. They go with the device node. We
+> > already went thru that with the last attempt.
 > >
-> > We already have hubs in DT. See [1][2][3][4]. What's new here?
+> > So for this case, we'd have something like this:
+> >
+> >     usb_controller {
+> >         dr_mode = "host";
+> >         #address-cells = <1>;
+> >         #size-cells = <0>;
+> >
+> >         hub@1 {
+> >             compatible = "usbbda,5411";
+> >             reg = <1>;
+> >             vdd-supply = <&pp3300_hub>;
+> >         };
+> >     };
+> >
+> > This is no different than needing a reset line deasserted as the prior
+> > attempt did.
+> 
+> I'd believe that the above could be made to work with enough software
+> change in the USB stack.  Presumably we wouldn't want to actually do a
+> full probe of the device until USB actually enumerated it, but I guess
+> you could add some type of optional "pre-probe" step where a driver is
+> called?  So you'd call a pre-probe on whatever driver implements
+> "usbbda,5411" and it would turn on the power supply.  ...then, if the
+> device is actually there, the normal probe would be called?  I guess
+> that'd work...
 
-After I sent my response I kept thinking about this and I realized
-that I have prior art I can point out too!  :-)  Check out
-"smsc,usb3503a".  That is describing a USB hub too and, at least on
-"exynos5250-spring.dts" is is a top level node.  Since "smsc,usb3503a"
-can be optionally connected to an i2c bus too, it could be listed
-under an i2c controller as well (I believe it wasn't hooked up to i2c
-on spring).
+Would a better approach be to move the code into the xhci-platform
+driver, rather than adding a new artificial platform device as
+Matthias's patch does?  That's the way other platform-specific DT
+issues have generally been handled in the USB stack.
 
-Interestingly enough, the USB Hub that Matthias is trying to add
-support for can _also_ be hooked up to i2c.  We don't actually have
-i2c hooked up on our board, but conceivably it could be.  Presumably,
-if i2c was hooked up, we would have no other choice but to represent
-this chip as several device tree nodes: at least one under the i2c
-controller and one (or two) under the USB controller.  Just because
-(on this board) i2c isn't hooked up doesn't change the fact that there
-is some extra control logic that could be represented in its own
-device tree node.  To me, this seems to give extra evidence that the
-correct way to model this device in device tree is with several nodes.
+> One thing that strikes me as a possible problem, though, is that I
+> totally envision HW guys coming back and saying: "oh, we want to
+> second source that USB hub and randomly stuff a different hub on some
+> boards".  In theory that's a reasonable suggestion, right?  USB is a
+> probable bus.  We turn on power to the USB hub (and the regulator to
+> turn on power is the same no matter which hub is stuffed) and then we
+> can just check which device got enumerated.  It's likely that both
+> hubs would behave the same from a software point of view, but they
+> would have different VID/PID.
+> 
+> As far as I understand the current USB bindings account for the fact
+> that the device(s) specified in the device tree might or might not be
+> there.  Adding a node under the controller like you show above means:
+> "if something is plugged into port 1 of this USB hub and if that thing
+> matches 0x0bda/0x5411 then here are the extra properties (vdd-supply)
+> for it".  With your proposal I believe we're changing it to mean
+> "there will definitely be a device plugged into port 1 of this USB hub
+> and it will match 0x0bda/0x5411."  Unless I'm mistaken, that will have
+> potential impacts on the ability to second source things.  I guess
+> both pre-probe functions could be called and (since there can be
+> multiple users of a regulator) it'd be OK, but if we get into reset
+> lines it's not much fun.  However, describing the device more like
+> Matthias has done it will be nicely compatible with second sourcing.
 
-I'll point out that on "exynos5250-spring.dts" we didn't have to solve
-the problem that Matthias is trying to solve here because we never
-actually supported waking up from USB devices there.  Thus the
-regulator for the hub on spring can be unconditionally powered off in
-suspend.  On newer boards we'd like to support waking up from USB
-devices but also to save power if no wakeup devices are plugged into
-USB.  In order to achieve this we need some type of link from the
-top-level hub device to the actual USB devices that were enumerated.
+Can the matching be done purely by port number under the controller's root
+hub without regard to the VID/PID?
 
--Doug
+Alan Stern
