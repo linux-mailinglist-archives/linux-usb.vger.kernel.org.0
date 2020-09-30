@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C46AC27EB6B
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 16:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E35827EB73
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 16:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730520AbgI3OwV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 30 Sep 2020 10:52:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52388 "EHLO mail.kernel.org"
+        id S1730247AbgI3OxV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 30 Sep 2020 10:53:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52830 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729767AbgI3OwV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Sep 2020 10:52:21 -0400
+        id S1730107AbgI3OxV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 30 Sep 2020 10:53:21 -0400
 From:   bugzilla-daemon@bugzilla.kernel.org
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 209411] When retrieving string descriptor from mobile device
  returns eproto error
-Date:   Wed, 30 Sep 2020 14:52:21 +0000
+Date:   Wed, 30 Sep 2020 14:53:20 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -32,7 +32,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209411-208809-VI9sxx3xmo@https.bugzilla.kernel.org/>
+Message-ID: <bug-209411-208809-htBsQqPZHl@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-209411-208809@https.bugzilla.kernel.org/>
 References: <bug-209411-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -46,36 +46,9 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=209411
 
---- Comment #12 from rachithas104@gmail.com ---
-(In reply to Alan Stern from comment #11)
-> The traces aren't really complete, because you didn't start them until after
-> the USB cable was plugged in.  Also, the traces start out with the computer
-> reading string descriptors 1, 2, 3, 4, and 6 (in the non-working trace), and
-> the values of the descriptors are different in the two traces.  In the
-> working trace, the values are:
-> 
->   1: "Xiaomi"
->   2: "MI MAX"
->   3: "d553b4b6"
->   4: "ADB Interface"
-> 
-> In the non-working trace:
-> 
->   1: "Xiaomi"
->   2: "Redmi K30 5G"
->   3: "c2a85d7"
->   4: "ptp_adb"
->   6: "ADB Interface"
-> 
-> It looks like you used two different phones for the tests, or one phone with
-> two different ROMs installed.  Is that what you did?
-> 
-> Are you asking why one phone works and the other phone doesn't?
-
-Yes Mi Max works ,Redmi doesn't. The traces were taken after  I have plugged
-the device and changed it to PTP mode
-Mainly the traces has info when my program starts enumerating. Can I know is
-there any tool you used to get this info
+--- Comment #13 from rachithas104@gmail.com ---
+My program issues reset command, it works with MiMax ,but fails with other
+device
 
 -- 
 You are receiving this mail because:
