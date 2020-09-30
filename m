@@ -2,74 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7C227EFAE
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 18:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E1727EFBE
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 18:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731221AbgI3Qwf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Sep 2020 12:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
+        id S1728292AbgI3QyR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Sep 2020 12:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgI3Qwe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 12:52:34 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AA3C061755;
-        Wed, 30 Sep 2020 09:52:34 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id d13so1437940pgl.6;
-        Wed, 30 Sep 2020 09:52:34 -0700 (PDT)
+        with ESMTP id S1725355AbgI3QyR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 12:54:17 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A68C061755;
+        Wed, 30 Sep 2020 09:54:15 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id f1so1382386plo.13;
+        Wed, 30 Sep 2020 09:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=+YsaxwbfWVm9IFurTjwCUMxSyQutFwvjtbnnkumX19M=;
-        b=u3844wxgYnVwyWa4w0p3mTTnwhl7Fw+TjOYFjmX8MhxYBMAaEM9uNfKf6g6gBgOoNW
-         3k7VlSuh/pcMQ45YvtUQBGfjqAHwrAGVleWPcj40j7SiTTLTGBxdNMtpbJcqF+6cKwAK
-         +CQ+mKiImaxtnB6+1j60FY6GdcZwR8zzLk2idGIM4nS7JEJQ2/IS9kQyrqR9qPBhYIXY
-         MzcU0Vc4RcHFhFU/okXq+u2NJVMfqDkxRA1fOQ8tC56Lm4OOuxAvtP2q/h0mFG6g5FaG
-         +yNtijMH0UiW2Dqdvlr0it4WAT+je7x6JwH7E1FzW1OLg3UHZ1dX+lNc2DeSfhx4U6Vq
-         e2xw==
+        bh=a+511h/yRt0hAA530rhVf+uoJRBXRfwSraxYw7O/kA4=;
+        b=gIyzm/LMhzk6FmcrH/7F0RNZbSSNuIox03V/NLAc7uhQqZOnGw/v9WAuwtjpk4/RQY
+         XEpq9jhXtvSdVu94k5qKQOY3C5IEKNbbw5Bvf0KfJCtDCzFqXGNuWsXiBHXvhWSYSSLC
+         LkMgyB5FEeg5osBePET6/2KYORZWx7FaA54whxElkY+wMODcQ1mWmgEF2rxIa99COPLs
+         Du3GQhn5WOMk1QnHxrVk5fyHenVzPaJ0WuPTdRshqMsDj6smYr400lgsVHYIVG7f+CUd
+         tufeR0zq0+xx5Dw9a5Qx6WFxekg7M+70Da60wDPBpZoBeb7pSlWA/U1MmPVaLKhnBN7t
+         WukQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+YsaxwbfWVm9IFurTjwCUMxSyQutFwvjtbnnkumX19M=;
-        b=Qr9Pb8k5CJMLvvUSnERkmDN94Dwkf4xaihtwy8DxsxSsORcTSGh8yld6M/fuXpXVNW
-         rQm5XQW7o65eGVODSp2SAxiF/exCxaRT2d97SVqUFYyOAqKV6QE9r0vJPB8qSyK1+1CI
-         S1s+Jkq95/2PJlYZ52J9gg4wFEzglkObM4BD06zO/EiT89bExwr8kVMvkw2ZuXvf8H5w
-         yRooNy8ocztzm5aiy5dshnzrLv5HOyhFmEydx5BQ//zLDMWUyNyx3OMzxZpVJRlZvf+Z
-         J7Bai0Vp8JPFwLAqUpLyDxH08OP6Kk0Bz4ctC7fsx5GWIqQaXW0Z4PHcRKDpCAOkO9Ez
-         oNOw==
-X-Gm-Message-State: AOAM531q8Iuj2T69Kn75b1Iz2T/GyIq4NnXoz/dEfUBxgB9+xn2V8EZb
-        OdjyIAYLLudyDT5iDO9KfxE=
-X-Google-Smtp-Source: ABdhPJxe7Y8PEYrteg+lJFZ9ldu33jakNS/cEF4k+L41nnRzTbkCmZk9s7On+r/ByoQGhHJfCXwmNw==
-X-Received: by 2002:a63:e40b:: with SMTP id a11mr2913850pgi.450.1601484754295;
-        Wed, 30 Sep 2020 09:52:34 -0700 (PDT)
+        bh=a+511h/yRt0hAA530rhVf+uoJRBXRfwSraxYw7O/kA4=;
+        b=LFfxyHhgKtSQmpuvTFxvdgcwPds5xnkEL70cFXmd/9whLUnXTUn+OYstQ/F410Vwiw
+         6PBYHDisfnp6Y3IgV8b+iM/hq8ehvLBJ4fpA84BP6C3kp24xFlP0Jf7NbnugYZ1neva1
+         nxH4KAj8sFcEmM7Pwam0b+LOHBeznIR5xkMHwiC8BGXFUX5x13wumgBtYfpS8pVYmfPC
+         q+AxRzneWMVt4BOh+iJ7HYQiC7NopTahhZdE9JptVfDvu95DeNv/p15p5v2rprO5yCkR
+         8xK0Mgpycu42ly1CNSagA5MfwT+mvv0CZ+vXr1BHsKQqlHxz7vUiZ3pG1F0hyh2YwcUf
+         2deA==
+X-Gm-Message-State: AOAM530OwpzbEKjibhP9SK3urVOCtiT1LVs5uZD3Twe7NO5AIsypnXuA
+        ztHC/c+6loOqS7HFPcJECVs=
+X-Google-Smtp-Source: ABdhPJxwezn+YlJ0I0Lsa/QSD/QW96cOmMj3PWOOxNwHQmumz6Lo0kuB7h+fFEjaG5LEvcuSBTpVLg==
+X-Received: by 2002:a17:90a:bc08:: with SMTP id w8mr3317041pjr.168.1601484855301;
+        Wed, 30 Sep 2020 09:54:15 -0700 (PDT)
 Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
-        by smtp.gmail.com with ESMTPSA id x3sm2944015pgg.54.2020.09.30.09.52.33
+        by smtp.gmail.com with ESMTPSA id l141sm2960368pfd.47.2020.09.30.09.54.14
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 30 Sep 2020 09:52:33 -0700 (PDT)
-Date:   Wed, 30 Sep 2020 09:52:31 -0700
+        Wed, 30 Sep 2020 09:54:14 -0700 (PDT)
+Date:   Wed, 30 Sep 2020 09:54:12 -0700
 From:   Tao Ren <rentao.bupt@gmail.com>
 To:     Ryan Chen <ryan_chen@aspeedtech.com>
 Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
         linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, bmc-sw@aspeedtech.com
-Subject: Re: [PATCH 2/3] usb: host: add uhci compatible support for
- ast2600-uhci
-Message-ID: <20200930165230.GB25872@taoren-ubuntu-R90MNF91>
+Subject: Re: [PATCH 3/3] ARM: dts: add ehci uhci enable in evb dts
+Message-ID: <20200930165411.GC25872@taoren-ubuntu-R90MNF91>
 References: <20200930040823.26065-1-ryan_chen@aspeedtech.com>
- <20200930040823.26065-3-ryan_chen@aspeedtech.com>
+ <20200930040823.26065-4-ryan_chen@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200930040823.26065-3-ryan_chen@aspeedtech.com>
+In-Reply-To: <20200930040823.26065-4-ryan_chen@aspeedtech.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 30, 2020 at 12:08:22PM +0800, Ryan Chen wrote:
-> Add support for AST2600 SOC UHCI driver.
+On Wed, Sep 30, 2020 at 12:08:23PM +0800, Ryan Chen wrote:
+> Add EHCI UHCI enable build in aspeed-ast2600-evb.dts
 > 
 > Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
 
