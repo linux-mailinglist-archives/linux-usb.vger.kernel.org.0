@@ -2,170 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0BC27EB34
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 16:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341D527EB44
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Sep 2020 16:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730584AbgI3Oon (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Sep 2020 10:44:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46644 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726680AbgI3Oon (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Sep 2020 10:44:43 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5903D207C3;
-        Wed, 30 Sep 2020 14:44:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601477082;
-        bh=BOq6LyRCWyDbwgviicHXV9zK30oNwH9I4OjbgV2jSu4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XR0RwAIPyQ/gwoNxiS88Uk+kAVw3+/FLiFaigjZLT4HV5VQy4Ww3O/g1jXuWikQzB
-         axjW1dfGZqeWCCzdNQ6XaP0mZluNmin2ugM6f0bP5BYuoUoxuCvjwCrdqTFSL0yXKl
-         an1D6qvzFpsL6App6vM17CZ0c760qmr7PMCWCUPM=
-Received: by mail-ot1-f43.google.com with SMTP id g96so2032251otb.12;
-        Wed, 30 Sep 2020 07:44:42 -0700 (PDT)
-X-Gm-Message-State: AOAM533d9h10XEX0w2wLxklXpB5bU3PFcMIIcO/1mSFzae9Vn0E4Iijc
-        598+QmRS2B0xeSP/roqmYLxLYJgp/iPXmha6sg==
-X-Google-Smtp-Source: ABdhPJwNZ8YRYNRFl8N0imfJdwtVm0sAg6EbUrKo41F4WMvrHs3g9tMmeVkEIDtGWsvHj9HWx1E7yxbfEqO0Uhna7Hw=
-X-Received: by 2002:a05:6830:1008:: with SMTP id a8mr1646798otp.107.1601477081549;
- Wed, 30 Sep 2020 07:44:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200929201701.GA1080459@bogus> <20200929220912.GF1621304@google.com>
- <20200930013229.GB194665@rowland.harvard.edu> <20200930124915.GA1826870@google.com>
-In-Reply-To: <20200930124915.GA1826870@google.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 30 Sep 2020 09:44:30 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
-Message-ID: <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete onboard
- USB hubs
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        id S1730611AbgI3Oqh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Sep 2020 10:46:37 -0400
+Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:59945 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730229AbgI3Oqh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 10:46:37 -0400
+Received: from tomoyo.flets-east.jp ([153.230.197.127])
+        by mwinf5d69 with ME
+        id aEmH2300J2lQRaH03EmS5y; Wed, 30 Sep 2020 16:46:33 +0200
+X-ME-Helo: tomoyo.flets-east.jp
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 30 Sep 2020 16:46:33 +0200
+X-ME-IP: 153.230.197.127
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-usb@vger.kernel.org (open list:USB ACM DRIVER)
+Subject: [PATCH v2 0/6] can: add support for ETAS ES58X CAN USB
+Date:   Wed, 30 Sep 2020 23:45:27 +0900
+Message-Id: <20200930144602.10290-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200926175810.278529-1-mailhol.vincent@wanadoo.fr>
+References: <20200926175810.278529-1-mailhol.vincent@wanadoo.fr>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 30, 2020 at 7:49 AM Matthias Kaehlcke <mka@chromium.org> wrote:
->
-> Hi Alan,
->
-> On Tue, Sep 29, 2020 at 09:32:29PM -0400, Alan Stern wrote:
-> > On Tue, Sep 29, 2020 at 03:09:12PM -0700, Matthias Kaehlcke wrote:
-> > > Hi Rob,
-> > >
-> > > On Tue, Sep 29, 2020 at 03:17:01PM -0500, Rob Herring wrote:
-> > > > As I said in prior version, this separate node and 'hub' phandle is not
-> > > > going to work. You are doing this because you want a platform driver for
-> > > > "realtek,rts5411". That may be convenient for Linux, but doesn't reflect
-> > > > the h/w.
-> > >
-> > > I agree that the hardware representation isn't totally straightforward, however
-> > > the description isn't limited to Linux:
-> > >
-> > > - there is a single IC (like the Realtek RTS5411)
-> > > - the IC may require several resources to be initialized in a certain way
-> > >   - this may require executing hardware specific code by some driver, which
-> > >     isn't a USB device driver
-> > > - the IC can 'contain' multiple USB hub devices, which can be connected to
-> > >   separate USB busses
-> > > - the IC doesn't have a control bus, which somewhat resembles the
-> > >   'simple-audio-amplifier' driver, which also registers a platform device
-> > >   to initialize its resources
-> > >
-> > > - to provide the functionality of powering down the hub conditionally during
-> > >   system suspend the driver (whether it's a platform driver or something else)
-> > >   needs know which USB (hub) devices correspond to it. This is a real world
-> > >   problem, on hardware that might see wide distribution.
-> > >
-> > > There were several attempts to solve this problem in the past, but none of them
-> > > was accepted. So far Alan Stern seems to think the driver (not necessarily the
-> > > binding as is) is a suitable solution, Greg KH also spent time reviewing it,
-> > > without raising conceptual concerns. So it seems we have solution that would
-> > > be generally landable from the USB side.
+The purpose of this patch series is to introduce a new CAN USB
+driver to support ETAS USB interfaces (ES58X series).
 
-Just as I spend no time reviewing the driver side typically, I don't
-think Alan or Greg spend any time on the DT side.
+During development, issues in drivers/net/can/dev.c where discovered,
+the fix for those issues are included in this patch series.
 
-> > > I understand that your goal is to keep the device tree sane, which I'm sure
-> > > can be challenging. If you really can't be convinced that the binding might
-> > > be acceptable in its current or similiar form then please offer guidance
-> > > on possible alternatives which allow to achieve the same functionality.
-> >
-> > You're really trying to represent this special IC in DT, right?
->
-> Yes
->
-> > Maybe  if you don't call it a "hub" but instead something that better reflects
-> > what it actually is and does, the description will be more palatable.
+We also propose to add two helper functions in include/linux/can/dev.h
+which we think can benefit other drivers: get_can_len() and
+can_bit_time().
 
-It's a hub. The name is not the problem.
+The driver indirectly relies on https://lkml.org/lkml/2020/9/26/251
+([PATCH] can: raw: add missing error queue support) for the call to
+skb_tx_timestamp() to work but can still compile without it.
 
-> Thanks for your suggestion.
->
-> Datasheets from different manufacturers refer to these ICs as "USB hub
-> controller". Calling the node "usb-hub-controller" would indeed help to
-> distinguish it from the USB hub devices and represent existing hardware.
-> And the USB device could have a "hub-controller" property, which also
-> would be clearer than the current "hub" property.
+*Side notes*: scripts/checkpatch.pl returns 4 'checks' findings in
+[PATCH 5/6]. All those findings are of type: "Macro argument reuse 'x'
+possible side-effects?".  Those arguments reuse are actually made by
+calling either __stringify() or sizeof_field() which are both
+pre-processor constant. Furthermore, those macro are never called with
+arguments sensible to side-effects. So no actual side effect would
+occur.
 
-There aren't 2 (or 3) devices here. There's a single USB device (a
-hub) and the DT representation should reflect that.
+ChangeLog:
+v2:
+  - Fixed -W1 warnings in PATCH 5/6 (v1 was tested with GCC -WExtra
+  but not with -W1).
+  - Added lsusb -v information in PATCH 6/6 and rephrased the comment.
+  - Take care to put everyone in CC of each of the patch of the series
+  (sorry for the mess in v1...)
 
-We already have hubs in DT. See [1][2][3][4]. What's new here? Simply,
-vdd-supply needs to be enabled for the hub to be enumerated. That's
-not a unique problem for USB, but common for all "discoverable" buses
-with MDIO being the most recent example I pointed you to. I'm not sure
-what happened with the previous attempt for USB[5]. It didn't look
-like there was a major issue. 'generic' power sequencing can't really
-handle every case, but as long as bindings allow doing something
-device specific I don't care so much. The driver side can evolve. The
-DT bindings can't.
+Vincent Mailhol (6):
+  can: dev: can_get_echo_skb(): prevent call to kfree_skb() in hard IRQ
+    context
+  can: dev: add a helper function to get the correct length of Classical
+    frames
+  can: dev: __can_get_echo_skb(): fix the return length
+  can: dev: add a helper function to calculate the duration of one bit
+  can: usb: etas_es58X: add support for ETAS ES58X CAN USB interfaces
+  usb: cdc-acm: add quirk to blacklist ETAS ES58X devices
 
-So what should this look like? There are 2 issues here. First, how do
-we represent a USB3 device if that means multiple ports. I'm not
-really sure other than it needs to be defined and documented. I think
-the choices are: ignore the USB3 part (USB2 is always there and what's
-used for enumeration, right?) or allow multiple ports in reg. Do hubs
-really have 2 ports for each connection?
+ drivers/net/can/dev.c                       |   26 +-
+ drivers/net/can/usb/Kconfig                 |    9 +
+ drivers/net/can/usb/Makefile                |    1 +
+ drivers/net/can/usb/etas_es58x/Makefile     |    3 +
+ drivers/net/can/usb/etas_es58x/es581_4.c    |  559 ++++
+ drivers/net/can/usb/etas_es58x/es581_4.h    |  237 ++
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 2725 +++++++++++++++++++
+ drivers/net/can/usb/etas_es58x/es58x_core.h |  700 +++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.c   |  648 +++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.h   |  243 ++
+ drivers/usb/class/cdc-acm.c                 |   11 +
+ include/linux/can/dev.h                     |   38 +
+ 12 files changed, 5186 insertions(+), 14 deletions(-)
+ create mode 100644 drivers/net/can/usb/etas_es58x/Makefile
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.h
 
-The 2nd issue is where do extra properties for a device go. That's
-nothing new nor special to USB. They go with the device node. We
-already went thru that with the last attempt.
+-- 
+2.26.2
 
-So for this case, we'd have something like this:
-
-    usb_controller {
-        dr_mode = "host";
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        hub@1 {
-            compatible = "usbbda,5411";
-            reg = <1>;
-            vdd-supply = <&pp3300_hub>;
-        };
-    };
-
-This is no different than needing a reset line deasserted as the prior
-attempt did.
-
-Rob
-
-[1] arch/arm/boot/dts/omap5-uevm.dts
-[2] arch/arm/boot/dts/omap5-igep0050.dts
-[3] arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-[4] arch/arm/boot/dts/bcm283x-rpi-lan7515.dtsi
-[5] https://lore.kernel.org/lkml/CAPDyKFpOQWTPpdd__OBP1DcW58CbqnygGAOxiEFq5kqqvCm0QA@mail.gmail.com/
