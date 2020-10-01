@@ -2,79 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8BF27F6D9
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Oct 2020 02:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B85127F6F6
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Oct 2020 03:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732234AbgJAAol (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Sep 2020 20:44:41 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:55904 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730155AbgJAAok (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 20:44:40 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 1EEDFC08E7;
-        Thu,  1 Oct 2020 00:44:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1601513080; bh=w4bQMMPMytV5Fqto2kYUq5ZP20jsNlOdXC9UuB1FQB0=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=RGPOXfy4J/jJXe6W4dWXKAMEfi41122rh2B+GmsSpuXW8whbAinNxPoVs+rwy5agz
-         9pd55FtMs9/A/KElJ8ahN0WDMthhwzvwSJfw11XaGVNGSyay7X3UFP7BiP9xq+Uum3
-         29F5A2aRWs5nSEVtVJBiNzIvlH+aWAVbeOL1W1s/XhbxZQJUbhak5orMriYSklxYH6
-         ocmwuFHC4sRDaEhJQsRNFwzHt852jOILzAyLkDiAsdX2G22u5S5A0p8ZZegM6dErgb
-         qXTvs0cYqwuR3kQlrVynSn5est6CKIUZU3iqm1fRNd/5Xkc7GdFg/Nv40oxOkQ3RfS
-         paoUzEUsPhB8A==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id E1949A00A0;
-        Thu,  1 Oct 2020 00:44:38 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Wed, 30 Sep 2020 17:44:38 -0700
-Date:   Wed, 30 Sep 2020 17:44:38 -0700
-Message-Id: <d6992af19d752076b77d3097b84135f11e33e70d.1601511883.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <cover.1601511883.git.Thinh.Nguyen@synopsys.com>
-References: <cover.1601511883.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 4/4] usb: dwc3: gadget: Return early if no TRB update
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S1730221AbgJABGC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Sep 2020 21:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729645AbgJABGC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 21:06:02 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D610BC061755
+        for <linux-usb@vger.kernel.org>; Wed, 30 Sep 2020 18:06:00 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id e18so2544689pgd.4
+        for <linux-usb@vger.kernel.org>; Wed, 30 Sep 2020 18:06:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=zL8xjJsBADSVoFlPgbDkouIEkvt2AYMvyMdtXFtG7H0=;
+        b=NekKWeDWpuTY8U9ohdARon+7nvpPaHnrKRcwi+C6KMdA92wc1YUP8+9/KpJU/80/L5
+         11cFT+pJ2QVtraJ5wqgLJqH5km1fF8BVLQvSyDi43Vr5/xBik+CieplcYZPu4UVAXSkH
+         r6V7i5Tu9IUs49Ki0zFsQM/cRcJxUtVsdnobA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=zL8xjJsBADSVoFlPgbDkouIEkvt2AYMvyMdtXFtG7H0=;
+        b=ERQXaqfk4DODxYbbr1ADPntaA1+NS1lqIs5Cjv7a1vQVxZfXlItQnGdfHOm/FO+AvA
+         KxPFsQke+T3etCiWsg72HuS4pTN706DqrVOj9msyn9o1pXKRtCbkTXmLcRdWpq2/9dQd
+         99kfS57421a1SPbo5b4DFm4TSMsWfJB9ATPM/4X2YR8SUMklC9PmqpJfGbO139a2tSbL
+         cDZLcT8N2l2KugWiFf4EN472n7REB7fKPxMUSt+p/n/SwJyl8NEFi40BAXNczMOs62hl
+         LqdTiXWLYBPNdxZRH/VVq15RoA8cPPpIABYrMYg+AMi4I91h/4KZM7a9Qkb0hY1m6f3x
+         XV8Q==
+X-Gm-Message-State: AOAM5300sKLSabKlvs2C79RygJ+ZJtIcP1wZKtz78/JUSwyQEcfZQyxl
+        67XUvX5T16k5bqA0lp/O3xYaX7bUcvI27A==
+X-Google-Smtp-Source: ABdhPJxCtxu+w+3zMHtbrJqtldE0NgWYgFsgY++8k0lwgPQq/FpT1yNpnZZQr0gNut6bRotLDDAuOg==
+X-Received: by 2002:aa7:8f21:0:b029:142:2501:39e0 with SMTP id y1-20020aa78f210000b0290142250139e0mr4760606pfr.47.1601514360152;
+        Wed, 30 Sep 2020 18:06:00 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
+        by smtp.gmail.com with ESMTPSA id k5sm3917793pfp.214.2020.09.30.18.05.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2020 18:05:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <07de71c5-71d0-fbf1-8aa7-c039aeb9dffd@gmail.com>
+References: <1601376452-31839-1-git-send-email-sanm@codeaurora.org> <1601376452-31839-5-git-send-email-sanm@codeaurora.org> <07de71c5-71d0-fbf1-8aa7-c039aeb9dffd@gmail.com>
+Subject: Re: [PATCH v3 4/5] arm64: dts: qcom: sc7180: Use pdc interrupts for USB instead of GIC interrupts
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Date:   Wed, 30 Sep 2020 18:05:57 -0700
+Message-ID: <160151435796.310579.15010135021160402839@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the transfer had already started and there's no TRB to update, then
-there's no need to go through __dwc3_gadget_kick_transfer(). There is
-no problem reissuing UPDATE_TRANSFER command. This change just saves
-the driver from doing a few operations. This happens when we run out of
-TRB and function driver still queues for more requests.
+Quoting Sergei Shtylyov (2020-09-29 04:41:19)
+> Hello!
+>=20
+> On 29.09.2020 13:47, Sandeep Maheswaram wrote:
+>=20
+> > Using pdc interrupts for USB instead of GIC interrupts to
+> > support wake up in case xo shutdown.
+>=20
+>     s/xo/of/?
 
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- drivers/usb/dwc3/gadget.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+No it is xo. If anything it could be capitalized because it's the
+pin name and usually stands for "crystal oscillator".
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index ff924656f690..da1f2ad2ad90 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1347,6 +1347,13 @@ static int __dwc3_gadget_kick_transfer(struct dwc3_ep *dep)
- 
- 	starting = !(dep->flags & DWC3_EP_TRANSFER_STARTED);
- 
-+	/*
-+	 * If there's no new TRB prepared and we don't need to restart a
-+	 * transfer, there's no need to update the transfer.
-+	 */
-+	if (!ret && !starting)
-+		return ret;
-+
- 	req = next_request(&dep->started_list);
- 	if (!req) {
- 		dep->flags |= DWC3_EP_PENDING_REQUEST;
--- 
-2.28.0
-
+>=20
+> > Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
