@@ -2,196 +2,229 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0363328008C
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Oct 2020 15:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD8F280114
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Oct 2020 16:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732208AbgJANzY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Oct 2020 09:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732020AbgJANzY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Oct 2020 09:55:24 -0400
-Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039A1C0613D0
-        for <linux-usb@vger.kernel.org>; Thu,  1 Oct 2020 06:55:24 -0700 (PDT)
-Received: by mail-vk1-xa41.google.com with SMTP id c63so1044109vkb.7
-        for <linux-usb@vger.kernel.org>; Thu, 01 Oct 2020 06:55:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Y9wXc2FL41clBWsp7rvXXZv0AtepezSEVuo0O/dks5k=;
-        b=QU8ojKUo1IKM4m+9xmGFyhjLAgwLGZ8/lgfMKhKu/eJCkfcHqYBgx9MzdTwNj6D6Pt
-         HEydpLCUaOLBglg7GnCsW+IiSOGSvOqeAOL/Qc39KndUMe0g5FyVnRIByXrLMXhJ3LAd
-         xq9DoPQ0BRLl31KnCk8at7/DwrItAFExlUW934H7zxd8FDPotNw1A1E+06tF/tUUho02
-         RCxJF+Ysai4yHjIxrYpYPmFj2a/OO/xukDKEIsOdMgCTwQRUn7Bww+NSD6v2kbHjnDrB
-         bdsmPGOqWPirU/uDbZJUWj9phxavANppXzHFsJBh+B2VKgIzEad1U5MM2e+S+kqsMUpR
-         VE/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Y9wXc2FL41clBWsp7rvXXZv0AtepezSEVuo0O/dks5k=;
-        b=dp8wiBhmR6ohC+XAK8MUGKFcAqO983fg6hStN6kMJ9EkobK5HSX/u0XnTu5pRSeFK6
-         +xrGLtlDRIr9NrP6gXBDQwpI0OO2Ov5AbBxIa2IChqRbDBY+AD1s+MrOBWKok+HiFnDY
-         djquuXvqoUSs4PbqjfboRRsfebhenRfIBfM6RiLp8OJEzQCc3A7YnUM2X7mJO+1Maujd
-         05cNiSrDBWqZX8UYqhfdlYiAEeUsThpSuXCs7djSZgpijblM+OJjOv6YMvIaASZ572Wk
-         yS0TizhfwwyBab1+SsG6g8mMY2jFLQbi0e/oWAmZoNE1GqNgp1IFG7C67Ml5kFALfW5E
-         itMA==
-X-Gm-Message-State: AOAM530CqPNSmWTDmFgb0c30CZeYawn4nJTiHnfUMcEDbbooaphp8w19
-        KeH01SLq54iVAnAZKXcVdN2H5+rZn1neRppDORr06g==
-X-Google-Smtp-Source: ABdhPJx90eHaIEvg1hFaxASdCVIylukofMwKDlZ7N7MQ6og3cNUASp0AJvobq/ik+73iaUTJ+jVSmoV3KLpyUYQIQIg=
-X-Received: by 2002:a1f:9913:: with SMTP id b19mr4797101vke.4.1601560523107;
- Thu, 01 Oct 2020 06:55:23 -0700 (PDT)
+        id S1732478AbgJAOOE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Oct 2020 10:14:04 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37454 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732498AbgJAONW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Oct 2020 10:13:22 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 789CE29C616
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Subject: Re: xhci problem -> general protection fault
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Ross Zwisler <zwisler@google.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <65ac3a73-ca57-c3e8-561b-9ba5c15b3c65@collabora.com>
+ <a6364bd9-58d9-e66e-5595-7d887a8f3fc9@linux.intel.com>
+ <8230c2a2-719c-ef81-e85d-5921bf8e98e6@collabora.com>
+ <133c123e-e857-7f83-d146-f39c00afe39f@linux.intel.com>
+ <20200925210517.GA4487@google.com>
+ <5ec81b1e-2139-7fb9-f08e-240309ca5ccd@collabora.com>
+ <501d5a6c-0588-1d0b-17cd-7544932f72a4@linux.intel.com>
+Message-ID: <28500bf0-0ab2-1b49-7e02-96a395a24c15@collabora.com>
+Date:   Thu, 1 Oct 2020 16:13:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20201001132758.12280-1-aouledameur@baylibre.com>
-In-Reply-To: <20201001132758.12280-1-aouledameur@baylibre.com>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Date:   Thu, 1 Oct 2020 15:55:11 +0200
-Message-ID: <CAHNvnFO=kH25CqrAcndVO4xTQ2pGDFi5ZHEALpFaZaGL=e_c0Q@mail.gmail.com>
-Subject: Re: [PATCH] reset: Add reset controller API
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-usb@vger.kernel.org, Jerome Brunet <jbrunet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <501d5a6c-0588-1d0b-17cd-7544932f72a4@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-An update on the patch title, since we don't add an API but extend it,
-The title should rather be: Add a new call to the reset framework
+Hi Mathias,
 
-Le jeu. 1 oct. 2020 =C3=A0 15:28, Amjad Ouled-Ameur
-<aouledameur@baylibre.com> a =C3=A9crit :
->
-> The current reset framework API does not allow to release what is done by
-> reset_control_reset(), IOW decrement triggered_count. Add the new
-> reset_control_resettable() call to do so.
->
-> When reset_control_reset() has been called once, the counter
-> triggered_count, in the reset framework, is incremented i.e the resource
-> under the reset is in-use and the reset should not be done again.
-> reset_control_resettable() would be the way to state that the resource is
-> no longer used and, that from the caller's perspective, the reset can be
-> fired again if necessary.
->
-> This patch will fix a usb suspend warning seen on the libretech-cc
-> related to the shared reset line. This warning was addressed by the
-> previously reverted commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shar=
-ed
-> reset control use")
->
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Reported-by: Jerome Brunet <jbrunet@baylibre.com>
-> ---
->  drivers/reset/core.c  | 57 +++++++++++++++++++++++++++++++++++++++++++
->  include/linux/reset.h |  1 +
->  2 files changed, 58 insertions(+)
->
-> diff --git a/drivers/reset/core.c b/drivers/reset/core.c
-> index 01c0c7aa835c..53653d4b55c4 100644
-> --- a/drivers/reset/core.c
-> +++ b/drivers/reset/core.c
-> @@ -207,6 +207,19 @@ static int reset_control_array_reset(struct reset_co=
-ntrol_array *resets)
->         return 0;
->  }
->
-> +static int reset_control_array_resettable(struct reset_control_array *re=
-sets)
-> +{
-> +       int ret, i;
-> +
-> +       for (i =3D 0; i < resets->num_rstcs; i++) {
-> +               ret =3D reset_control_resettable(resets->rstc[i]);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  static int reset_control_array_assert(struct reset_control_array *resets=
-)
->  {
->         int ret, i;
-> @@ -324,6 +337,50 @@ int reset_control_reset(struct reset_control *rstc)
->  }
->  EXPORT_SYMBOL_GPL(reset_control_reset);
->
-> +/**
-> + * reset_control_resettable - decrements triggered_count of the controll=
-ed device
-> + * @rstc: reset controller
-> + *
-> + * On a shared reset line the actual reset pulse is only triggered once =
-for the
-> + * lifetime of the reset_control instance, except if this function is us=
-ed.
-> + * In fact, It decrements triggered_count that makes sure of not allowin=
-g
-> + * a reset if triggered_count is not null.
-> + *
-> + * This is a no-op in case triggered_count is already null i.e shared re=
-set line
-> + * is ready to be triggered.
-> + *
-> + * Consumers must not use reset_control_(de)assert on shared reset lines=
- when
-> + * reset_control_reset has been used.
-> + *
-> + * If rstc is NULL it is an optional clear and the function will just
-> + * return 0.
-> + */
-> +int reset_control_resettable(struct reset_control *rstc)
-> +{
-> +       if (!rstc)
-> +               return 0;
-> +
-> +       if (WARN_ON(IS_ERR(rstc)))
-> +               return -EINVAL;
-> +
-> +       if (reset_control_is_array(rstc))
-> +               return reset_control_array_resettable(rstc_to_array(rstc)=
-);
-> +
-> +       if (rstc->shared) {
-> +               if (WARN_ON(atomic_read(&rstc->deassert_count) !=3D 0))
-> +                       return -EINVAL;
-> +
-> +               if (atomic_read(&rstc->triggered_count) > 0)
-> +                       atomic_dec(&rstc->triggered_count);
-> +       } else {
-> +               if (!rstc->acquired)
-> +                       return -EPERM;
-> +       }
-> +
-> +       return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(reset_control_resettable);
-> +
->  /**
->   * reset_control_assert - asserts the reset line
->   * @rstc: reset controller
-> diff --git a/include/linux/reset.h b/include/linux/reset.h
-> index 05aa9f440f48..ffa447d0d1d6 100644
-> --- a/include/linux/reset.h
-> +++ b/include/linux/reset.h
-> @@ -13,6 +13,7 @@ struct reset_control;
->  #ifdef CONFIG_RESET_CONTROLLER
->
->  int reset_control_reset(struct reset_control *rstc);
-> +int reset_control_resettable(struct reset_control *rstc);
->  int reset_control_assert(struct reset_control *rstc);
->  int reset_control_deassert(struct reset_control *rstc);
->  int reset_control_status(struct reset_control *rstc);
-> --
-> 2.17.1
->
+W dniu 29.09.2020 o 09:13, Mathias Nyman pisze:
+> Hi
+> 
+> On 28.9.2020 16.32, Andrzej Pietrasiewicz wrote:
+>> Hi Ross, hi Mathias,
+>>
+>> W dniu 25.09.2020 o 23:05, Ross Zwisler pisze:
+>>> On Fri, Sep 25, 2020 at 04:40:29PM +0300, Mathias Nyman wrote:
+>>>> On 18.9.2020 17.20, Andrzej Pietrasiewicz wrote:
+>>>>> Hi Mathias,
+>>>>>
+>>>>> W dniu 18.09.2020 o 12:50, Mathias Nyman pisze:
+>>>>>> On 17.9.2020 18.30, Andrzej Pietrasiewicz wrote:
+>>>>>>> Dear All,
+>>>>>>>
+>>>>>>> I have encountered a problem in xhci which leads to general protection fault.
+>>>>>>>
+>>>>>>> The problem is triggered by running this program:
+>>>>>>>
+>>>>>>> https://gitlab.collabora.com/andrzej.p/bulk-cancel.git
+>>>>>>>
+>>>>>>> $ sudo ./bulk-cancel -D /dev/bus/usb/002/006 -i 1 -b 1
+>>>>>>>
+>>>>>>> where /dev/bus/usb/002/006 is a Gadget Zero:
+>>>>>>>
+>>>>>>> It takes less than a minute until the crash happens.
+>>>>>>> The DMAR (iommu) errors don't happen always, i.e. there are crashes
+>>>>>>> when they are not reported in the system log. In either case the
+>>>>>>>
+>>>>>>> "WARN Cannot submit Set TR Deq Ptr"
+>>>>>>> "A Set TR Deq Ptr command is pending."
+>>>>>>> "WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state."
+>>>>>>>
+>>>>>>> messages do appear.
+>>>>>>>
+>>>>>>
+>>>>>> Nice testcase and report, thanks.
+>>>>>>
+>>>>>> I started looking at issues in this area some time ago, and wrote a couple patches but
+>>>>>> it was left hanging. The two patches (now rebased on 5.9-rc3) can be found in my tree in the
+>>>>>> fix_invalid_context_at_stop_endpoint branch
+>>>>>>
+>>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_invalid_context_at_stop_endpoint
+>>>>>>
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=fix_invalid_context_at_stop_endpoint
+>>>>>>
+>>>>>> If you could give those a try and see if they help I'd be grateful.
+>>>>>
+>>>>> No, it doesn't help, albeit the errors are slightly different:
+>>>>>
+>>>>> xhci_hcd 0000:00:14.0: WARN Cannot submit Set TR Deq Ptr
+>>>>> xhci_hcd 0000:00:14.0: A Set TR Deq Ptr command is pending.
+>>>>> dmar_fault: 44 callbacks suppressed
+>>>>> DRHD: handling fault status reg 3> DMAR: [DMA Write] Request device [00:14.0] PASID ffffffff fault addr ffcda000 [fault reason 05] PTE Write access is not set
+>>>>> DMAR: DRHD: handling fault status reg 3
+>>>>
+>>>> Ok, thanks, the DMA problems make sense to me now.
+>>>>
+>>>> If a transfer ring stops on a transfer request (TRB) that should be canceled (manual cancel,
+>>>> or error) it's not enough to just turn the  TRB to a no-op.
+>>>> HW has most likely cached the TRB, and we need to move the transfer ring dequeue pointer past this TRB.
+>>>> Moving deq also clears controller cache.
+>>>>
+>>>> We do all this, but if we fail to queue the Set TR Deq command the TRB (with DMA  pointers) will stay on the ring,
+>>>> and controller will access the TRB DMA  address once it continues running. At this point xhci driver has already
+>>>> given back the canceled/erroneous TRB, and is probably unmapped already.
+>>>> Hence the DMAR entries.
+>>>>
+>>>> Looks like this part of the code needs a more extensive rewrite, on top of this we are not handling
+>>>> races between endpoints halted due errors, and endpoints stopped by driver to cancel URBs.
+>>>>
+>>>> -Mathias
+>>>
+>>> I'm chasing a similar problem which is also most easily reproduced using
+>>> Andrzej's bulk-cancel program, though we have seen it in the field many times
+>>> as well with normal usage.
+>>>
+>>> The symptom is that we get the following errors in dmesg:
+>>>
+>>>    xhci_hcd 0000:00:14.0: Mismatch between completed Set TR Deq Ptr command & xHCI internal state.
+>>>    xhci_hcd 0000:00:14.0: ep deq seg = 000000001141d6a0, deq ptr = 00000000ebd28dcf
+>>>    xhci_hcd 0000:00:14.0: WARNING: Host System Error
+>>>    DMAR: DRHD: handling fault status reg 2
+>>>    DMAR: [DMA Read] Request device [00:14.0] PASID ffffffff fault addr 0 [fault reason 06] PTE Read access is not set
+>>>    xhci_hcd 0000:00:14.0: xHCI host not responding to stop endpoint command.
+>>>    xhci_hcd 0000:00:14.0: USBSTS: HCHalted HSE EINT
+>>>    xhci_hcd 0000:00:14.0: xHCI host controller not responding, assume dead
+>>>    xhci_hcd 0000:00:14.0: HC died; cleaning up
+>>>
+>>> The xhci USB stack loses all attached devices, and on my system at least has
+>>> only been recoverable by rebooting.
+>>>
+>>> Full dmesg and trace after 'echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable'
+>>> can be found here:
+>>>
+>>> https://gist.github.com/rzwisler/531b926e3d160609ead371c23fc15b55
+>>> https://gist.github.com/rzwisler/4621f805737993fec30b5ae23bfd8289
+>>>
+>>> One interesting bit from the trace is that we observe the ep_ctx->deq pointer
+>>> being 0 in xhci_handle_cmd_set_deq():
+>>>
+>>>    xhci_inc_enq: CMD 000000000b6352e0: enq 0x00000000ffffe0c0(0x00000000ffffe000) deq 0x00000000ffffe090(0x00000000ffffe000) segs 1 stream 0 free_trbs 251 bounce 0 cycle 0
+>>>    xhci_ring_host_doorbell: Ring doorbell for Command Ring 0
+>>>    xhci_urb_giveback: ep7in-bulk: urb 000000003c80b7a8 pipe 3221455744 slot 2 length 0/256 sgs 0/0 stream 0 flags 00010200
+>>>    xhci_inc_deq: CMD 000000000b6352e0: enq 0x00000000ffffe0c0(0x00000000ffffe000) deq 0x00000000ffffe0a0(0x00000000ffffe000) segs 1 stream 0 free_trbs 252 bounce 0 cycle 0
+>>>    xhci_inc_deq: EVENT 00000000b5c6e6a2: enq 0x00000000ffffc000(0x00000000ffffc000) deq 0x00000000ffffc1b0(0x00000000ffffc000) segs 1 stream 0 free_trbs 254 bounce 0 cycle 1
+>>>    xhci_handle_event: EVENT: TRB 00000000ffffe0a0 status 'Success' len 0 slot 4 ep 0 type 'Command Completion Event' flags e:C
+>>>    xhci_handle_command: CMD: Set TR Dequeue Pointer Command: deq 00000000fff296a1 stream 0 slot 4 ep 3 flags c
+>>>    xhci_handle_cmd_set_deq: RS 00000 full-speed Ctx Entries 15 MEL 0 us Port# 13/0 [TT Slot 0 Port# 0 TTT 0 Intr 0] Addr 4 State configured
+>>>    xhci_handle_cmd_set_deq_ep: State stopped mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk IN burst 0 maxp 64 deq 0000000000000000 avg trb len 0
+>>>                                                                        ^^^^^^^^^^^^^^^^^^^^
+>>>    xhci_dbg_cancel_urb: Successful Set TR Deq Ptr cmd, deq = @00000000
+>>>                               ^^^^^^^^^^^^^^^
+>>>
+>>> In successful completions they are real values:
+>>>
+>>>    xhci_ring_ep_doorbell: Ring doorbell for Slot 4 ep1in
+>>>    xhci_inc_deq: CMD 000000000b6352e0: enq 0x00000000ffffe0c0(0x00000000ffffe000) deq 0x00000000ffffe0b0(0x00000000ffffe000) segs 1 stream 0 free_trbs 253 bounce 0 cycle 0
+>>>    xhci_inc_deq: EVENT 00000000b5c6e6a2: enq 0x00000000ffffc000(0x00000000ffffc000) deq 0x00000000ffffc1c0(0x00000000ffffc000) segs 1 stream 0 free_trbs 254 bounce 0 cycle 1
+>>>    xhci_handle_event: EVENT: TRB 00000000ffffe0b0 status 'Success' len 0 slot 2 ep 0 type 'Command Completion Event' flags e:C
+>>>    xhci_handle_command: CMD: Set TR Dequeue Pointer Command: deq 00000000fff86551 stream 0 slot 2 ep 15 flags c
+>>>    xhci_handle_cmd_set_deq: RS 00000 full-speed Ctx Entries 15 MEL 0 us Port# 11/0 [TT Slot 0 Port# 0 TTT 0 Intr 0] Addr 2 State configured
+>>>    xhci_handle_cmd_set_deq_ep: State stopped mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk IN burst 0 maxp 16 deq 00000000fff86551 avg trb len 0
+>>>                                                                        ^^^^^^^^^^^^^^^^^^^^
+>>>    xhci_dbg_cancel_urb: Successful Set TR Deq Ptr cmd, deq = @fff86550
+>>>                               ^^^^^^^^^^^^^^^
+>>>
+>>> I've noticed that I have to have CONFIG_INTEL_IOMMU_DEFAULT_ON=y for this
+>>> clean repro case, else the system still fails but I don't always (ever?) see
+>>> the failure to read at address 0.
+>>>
+>>> Mathias, do you think that your above explanation also covers my failure case?
+>>> Are we just failing to enqueue a Set TR Deq command, and the HC is processing
+>>> a stale TRB?  Or does the fact that ep_ctx->deq == 0 not fit with that
+>>> explanation?
+>>>
+>>
+>>  From the logs from Ross it seems that the direct cause of the HC dying
+>> is Stop Endpoint not completing and, consequently, timing out.
+> Stop endpoint command does not complete due to the 'catastrophic' HSE
+> (host system error) which stops the controller completely.
+> 
+> I'd guess the HSE is related to the zeroed dequeue pointer.
+> 
+>>
+>> In the xHCI spec, section "4.6.9 Stop Endpoint" we can read:
+>>
+>> "Note that when an endpoint is stopped, the xHC maintains the state
+>> necessary to restart the last active Transfer Ring where it left off,
+>> however software may not want to do this. The options are discussed below:
+>>
+>> 1. Temporarily Stop Transfer Ring Activity - [...]
+>>
+>> 2. Aborting a Transfer - If, because of a timeout or other reason, software
+>> issued the Stop Endpoint Command to abort the current TD. Then the
+>> Set TR Dequeue Pointer Command may be used to force the xHC to
+>> dump any internal state that it has for the ring and restart activity at the
+>> new Transfer Ring location specified by the Set TR Dequeue Pointer Command."
+>>
+>> If bulk-cancel reproducer is used then the software's intention is definitely
+>> to abort a transfer, so indeed a Set TR Dequeue Pointer is needed.
+>>
+>> On the other hand, in that same spec, in "4.6.10 Set TR Dequeue Pointer"
+>> we read:
+>>
+>> "This command may be executed only if the target endpoint is in the Error
+>> or Stopped state."
+>>
+>> My question is: why in the crash scenario Ross describes "Set TR Dequeue
+>> Pointer" is being carried out while Stop Endpoint has not been completed
+>> (and timed out instead)?
+> 
+> Every time a URB is canceled the xhci driver will queue a "stop endpoint command"
+> if there isn't one already pending.
+> The Set TR Dequeue command you see is probably for the previous URB, while the stop is
+> for the next URB.
+>   Andrzej, any change of getting traces from your case? They would tell more than just
+> the dynamic debug.
+> 
 
+The problem is I am not getting any trace at all even though it is turned on,
+the system crashes before tail -f /sys/kernel/debug/tracing/trace outputs
+anything.
 
---=20
-Amjad Ouled-Ameur
-Embedded Linux Engineer - Villeneuve Loubet, FR
-Engit@BayLibre - At the Heart of Embedded Linux
+Andrzej
+
