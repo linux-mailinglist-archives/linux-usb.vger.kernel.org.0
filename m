@@ -2,260 +2,223 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EE127F755
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Oct 2020 03:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9429D27F8C3
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Oct 2020 06:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730385AbgJABYP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Sep 2020 21:24:15 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:33923 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729645AbgJABYO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Sep 2020 21:24:14 -0400
-Received: (qmail 232901 invoked by uid 1000); 30 Sep 2020 21:24:13 -0400
-Date:   Wed, 30 Sep 2020 21:24:13 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
+        id S1725883AbgJAEle (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Oct 2020 00:41:34 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:27524 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725823AbgJAEle (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Oct 2020 00:41:34 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0914YUTf011662;
+        Wed, 30 Sep 2020 21:40:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=UIDqe+ZAKVgCY1pUTmz0b3KOkLzBErBw4d67ou987cQ=;
+ b=QSLRx224x0M73aqUdcYPyjT+KbmMfGPT/z4IHSJc2tNGLcYw58gcAxghmLedMcRROK3o
+ QlJ29NsCUI300Fo/h5banjLdWCD3teBzkMuKikpAEexmtVMklA1fBVbmrMROK5+7dfuq
+ d2F2BO87c1aESVeVn+yPbjsJGm5VJnlQJvME+vqSHoyxXtmt0dDMNfEpk0JG+I6sCVFu
+ 2WoOBBx1MxFVJX6LhDiTrok5iJHTqtryM8EpVhZJV8nIkUMc0Kk81Xrq/b7Du1Glrkpc
+ U9UIpsvou9DNHpFLnwUxl8zGpZmtaUaTtXUXLPEuLrk1NTUErqNRh0HfK7ktH8X2s5Oo mA== 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2171.outbound.protection.outlook.com [104.47.55.171])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 33t17xahk4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Sep 2020 21:40:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ML265VKzCf4E6nyNAoXy6VvlQlQnsW+BhXkrDTmDTM+4tW/vBLQZ/OjmAy9RF1CgKGt4w2vCOgUOqqMR/+fVASFjNWz2VFx7ngsqH/kBv+s2uctJCjqpaixACG0VlR+eXssOLXG9Hmgja49u1oczyO0NC5XrnucJ58BNldha/qfJVQm/o5rCqk213kvCvTj/cC5cQ63bDUR9o9cA6Ov5/MKU6G8sv8Vn+D2O6bf5fA9XgvuERRquNFE8Db/s2geV3Hej9mBZf6F74E8wz36eSFJT68W9cS0MKfU5llN4k3tqQn3M2UCBY8BB0wIlgd36nLYB0X7UzQ6D5iz/9q8YfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UIDqe+ZAKVgCY1pUTmz0b3KOkLzBErBw4d67ou987cQ=;
+ b=V+tjT5pomZdBGh9iCpxZbaGvqNSAdOgOAaXjkVMqIQf/403bc3zbl0FqGQvSsxLokoXITtusXQttvBuvl9xXI76wQuKDnpL3VgNy6N7wj1qwLc44p8rRqtTQn/wy6BiqPgDCTBKxUEgPsyctOZe5eUIaLNBHho0dkfmtDc0Z7N6yq5lzcZOsvgPLBHurzWFJBLG6lbhwOs4PQJIv2ng4NekHDsQxEb2ApOMW72mse1DwEVOzHyIaNkAuBc28nF7xX+RtBkeTwJ95+cblBX0ANRa/pAVNcGlOJQxD3YuQq2DPbOh1UdnYiYLmipayztsQICHYFILsvjZ3/peQxfWycQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UIDqe+ZAKVgCY1pUTmz0b3KOkLzBErBw4d67ou987cQ=;
+ b=HU9GPSfNPOm6XqUUhgPvVR4kULs6kUbpnWonys85Kh0R1cNBlkcUJE6p1Ok4YTKpLSZZnaZJlYVpfzmhANpgL9QaCPI4k7m9BK5IjH0hudKSRTYkoPxsfTZuMuCUjO5di9MPKxpFwGV73k54llXit6guSlSqnWHRk8S9FBHf34A=
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
+ DM5PR07MB3498.namprd07.prod.outlook.com (2603:10b6:4:61::33) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3433.37; Thu, 1 Oct 2020 04:40:06 +0000
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::2087:7f2b:5dc6:a960]) by DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::2087:7f2b:5dc6:a960%6]) with mapi id 15.20.3433.037; Thu, 1 Oct 2020
+ 04:40:06 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
- onboard USB hubs
-Message-ID: <20201001012413.GA232049@rowland.harvard.edu>
-References: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200929201701.GA1080459@bogus>
- <20200929220912.GF1621304@google.com>
- <20200930013229.GB194665@rowland.harvard.edu>
- <20200930124915.GA1826870@google.com>
- <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
- <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
- <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        Jayshri Dajiram Pawar <jpawar@cadence.com>,
+        Rahul Kumar <kurahul@cadence.com>,
+        Sanket Parmar <sparmar@cadence.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "chunfeng.yun@mediatek.com" <chunfeng.yun@mediatek.com>,
+        "yanaijie@huawei.com" <yanaijie@huawei.com>
+Subject: RE: [PATCH 5/8] usb: cdns3: Changed type of gadget_dev in cdns
+ structure
+Thread-Topic: [PATCH 5/8] usb: cdns3: Changed type of gadget_dev in cdns
+ structure
+Thread-Index: AQHWlZOWAZZyZIyAvEqOj9uQKqZ+Val/CPYAgAMhoZA=
+Date:   Thu, 1 Oct 2020 04:40:06 +0000
+Message-ID: <DM6PR07MB55293E7DAC48DBB3000AE6EEDD300@DM6PR07MB5529.namprd07.prod.outlook.com>
+References: <20200928122741.17884-1-pawell@cadence.com>
+ <20200928122741.17884-6-pawell@cadence.com>
+ <20200929043508.GC9076@b29397-desktop>
+In-Reply-To: <20200929043508.GC9076@b29397-desktop>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctMmJiNzc0NzEtMDNhMC0xMWViLTg3NmItMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDJiYjc3NDcyLTAzYTAtMTFlYi04NzZiLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMzM3MyIgdD0iMTMyNDYwMDA4MDM4NjI0MTU2IiBoPSJNY3pWSy9lUkF5TFV3dlpuZHY3VTJ0WUZsaDQ9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=cadence.com;
+x-originating-ip: [185.217.253.59]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 421dba61-c649-48f0-5cf5-08d865c41229
+x-ms-traffictypediagnostic: DM5PR07MB3498:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR07MB34988B0E0E58FEAECC01FFDBDD300@DM5PR07MB3498.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yx5mwlTcgeap/P9eZbSJ/cuKEaDPjCPzVae2RhQAWqioas647K5D5mMAHkN2Zs+rqSmxQQNntr9xvqT6/QOL93touRnGaw4gY/9N3zhsR+S4e9gH8LdfpdVT9cgvjfQwTDeZIVrXtBk1VvBNmRN9YD9p5YhoZx1rl2qqjQUiyG5YvNOuBiRQnEeObKU+kEdKWpVA4EyNO/WvdGRfVddMww78oR70YUuSjUWuAP7ZWOTN+NcvqJBSLuQ5gCkDFtwRx9JQvRh8MFYvXk28F5Hae4NuTjOYkEeONMCq5rCvJWdyqxHIpPPI4m/ohNml5SUuoGXei23/l7eMSHK7BeMppII571qPmYILwEcLj7qTBZTjiV7uflqCsK7Kzm2ZiSyd
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(396003)(346002)(136003)(39860400002)(36092001)(66446008)(64756008)(66476007)(76116006)(66556008)(66946007)(33656002)(6506007)(478600001)(86362001)(83380400001)(7416002)(8936002)(2906002)(186003)(8676002)(6916009)(4326008)(9686003)(55016002)(7696005)(54906003)(26005)(5660300002)(52536014)(316002)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: fJnzx+Wvy0BmbBojt70slwF3LaBjTTIN6ZbJurpSSVRYH33wWMCHekuqit71LRyvN4c43UMao3EM5M+6CoZgl9yUhH/T4BnbC1Achn5zQ5f0bRUfwevcPFuR8WEbFvZ2yI8KZrlxtGI9jWNT8stgEgZ8R6yHMiAICH5WIf4jZS5o111R832qixmu4RWuWk0iguEQu8kXYRQ+VFtpJOBwZtUM6ilFigFrZ9Fdd9ZadX2sq3rYEy94NLvpgayPGpupox9mV074WOfZPjTYVPUnqC3r5+CRhn+IluyDlH8+9QI1Z1HeIdqinFg3kb5jxVyZOG9aSInoVSpB/5KDRCGNtPVSbaMpYxGJc8Y9L6Mh5Rg6ZB/OHmSQmmCDJMdRxiTiDSbPjEjCLx8YUU6ZygxoC10tRIWicWS2eOsZGjEUh22ugQU0oX6vuMlHxaBmEspoSzmUX5RT2Nq/48kXK13/Rd66dV/gCknV6Qmo6zm5x0dMcEwEELB69GXcbxnQQr5aBtHX/K1gCrqmCoZEfE/ZLDDswRDarjtLwap+1wDFcthgDHStE1Si0d4iJSzneNaXb1rK/tfr6iJAdisFvMNzE+8xzAcmbK+ylI7qLcbZnlmEz3IoDd0vYammPYdJlwshVfg+tbx1GFk4J5kLrHU+hQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 421dba61-c649-48f0-5cf5-08d865c41229
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2020 04:40:06.3642
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KY3qiFwEpRap50ZBJnEiK429zTDsJm8yhvZFLbmrwU3Kk4btZisvGZSdU8BtuNG+jvmagjvbWj35KNWbSUx9wgFbdy8HMobGfKdTyG56Oww=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR07MB3498
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-01_02:2020-10-01,2020-10-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 adultscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ spamscore=0 impostorscore=0 phishscore=0 mlxlogscore=683 clxscore=1015
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2010010042
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 30, 2020 at 03:20:28PM -0500, Rob Herring wrote:
-> On Wed, Sep 30, 2020 at 10:28 AM Doug Anderson <dianders@chromium.org> wrote:
+>
+>On 20-09-28 14:27:38, Pawel Laszczak wrote:
+>> Patch changes the type for gadget_dev pointer in cdns structure from
+>> pointer to cdns3_device structure to void pointer.
+>> This filed is in reusable code and after this change it will be used to
+>> point to both cdns3_device or cdnsp_device objects.
+>>
+>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+>> ---
+>>  drivers/usb/cdns3/core.h   | 4 ++--
+>>  drivers/usb/cdns3/gadget.c | 6 ++++++
+>>  2 files changed, 8 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+>> index 0c6e14683b36..267923904a37 100644
+>> --- a/drivers/usb/cdns3/core.h
+>> +++ b/drivers/usb/cdns3/core.h
+>> @@ -55,7 +55,7 @@ struct cdns_role_driver {
+>>   * @roles: array of supported roles for this controller
+>>   * @role: current role
+>>   * @host_dev: the child host device pointer for cdns core
+>> - * @gadget_dev: the child gadget device pointer for cdns3 core
+>> + * @gadget_dev: the child gadget device pointer
+>>   * @usb2_phy: pointer to USB2 PHY
+>>   * @usb3_phy: pointer to USB3 PHY
+>>   * @mutex: the mutex for concurrent code at driver
+>> @@ -87,7 +87,7 @@ struct cdns {
+>>  	struct cdns_role_driver	*roles[USB_ROLE_DEVICE + 1];
+>>  	enum usb_role			role;
+>>  	struct platform_device		*host_dev;
+>> -	struct cdns3_device		*gadget_dev;
+>> +	void				*gadget_dev;
+>>  	struct phy			*usb2_phy;
+>>  	struct phy			*usb3_phy;
+>>  	/* mutext used in workqueue*/
+>> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+>> index 26f68182e65e..f9cbc84bbfb8 100644
+>> --- a/drivers/usb/cdns3/gadget.c
+>> +++ b/drivers/usb/cdns3/gadget.c
+>> @@ -3177,7 +3177,9 @@ static int __cdns3_gadget_init(struct cdns *cdns)
+>>  static int cdns3_gadget_suspend(struct cdns *cdns, bool do_wakeup)
+>>  {
+>>  	struct cdns3_device *priv_dev =3D cdns->gadget_dev;
+>> +	unsigned long flags;
+>>
+>> +	spin_lock_irqsave(&priv_dev->lock, flags);
+>
+>unrelated changes?
 
-> > > There aren't 2 (or 3) devices here. There's a single USB device (a
-> > > hub) and the DT representation should reflect that.
-> >
-> > That's not completely true, though, is it?
-> 
-> I was referring to the hub. I only see 1 datasheet, 1 IC and 1 block
-> diagram... Lots of devices have more than one interface though usually
-> not different speeds of the same thing.
-> 
-> > As I understand it, a USB
-> > 3 port is defined as containing both a USB 2 controller and a USB 3
-> > controller.  While it's one port, it's still conceptually two
-> > (separable) things.  The fact that they are on the same physical chip
-> > doesn't mean that they are one thing any more than a SoC (one chip)
-> > needs to be represented by one thing in the device tree.  Though, of
-> > course, I'm not the expert here, the argument that this IC is a USB 2
-> > hub, a USB 3 hub, and some control logic doesn't seem totally
-> > insane...
-> 
-> Until there's a shared resource.
+It's needed but this patch has missing removing this line from:
+cdns3_suspend/cdns3_resume from core.c file.=20
+It exists in patch 2 (usb: cdns3: Split core.c into cdns3-plat and core.c f=
+ile).
+I will correct this patch.=20
 
-Here's how the hardware works:
+I had to move this spin_lock because in core.c we don't know the=20
+cdns->gadget_dev type (void * gadget_dev).
 
-A USB-3 cable contains two sets of data wires: one set running at <=
-480 Mb/s and carrying USB-2 protocol packets, and one set running at
->= 5000 Mb/s and carrying USB-3 protocol packets.  The two sets are
-logically and physically independent and act as separate data buses.
-In fact, I believe it is possible to put one of the buses into runtime
-suspend while the other continues to operate normally.
+Thanks,
+Pawel Laszczak
 
-Every device attached to a USB-3 cable must use only one set of these
-wires at a time -- except for hubs.  A USB-3 hub must use both sets
-and will appear to the host as two independent hubs, one on each bus.
-
-Whether you want to represent a USB-3 hub as two separate devices in
-DT is up to you.  I think doing so makes sense, but I don't know very
-much about Device Tree.
-
-> > > We already have hubs in DT. See [1][2][3][4]. What's new here? Simply,
-> > > vdd-supply needs to be enabled for the hub to be enumerated. That's
-> > > not a unique problem for USB, but common for all "discoverable" buses
-> > > with MDIO being the most recent example I pointed you to. I'm not sure
-> > > what happened with the previous attempt for USB[5]. It didn't look
-> > > like there was a major issue. 'generic' power sequencing can't really
-> > > handle every case, but as long as bindings allow doing something
-> > > device specific I don't care so much. The driver side can evolve. The
-> > > DT bindings can't.
-> > >
-> > > So what should this look like? There are 2 issues here. First, how do
-> > > we represent a USB3 device if that means multiple ports. I'm not
-> > > really sure other than it needs to be defined and documented. I think
-> > > the choices are: ignore the USB3 part (USB2 is always there and what's
-> > > used for enumeration, right?) or allow multiple ports in reg.
-> >
-> > Interesting question, that one.  When trying to optimize board designs
-> > we have certainly talked about separating out the USB 2 and USB 3 [1].
-> > For instance, we could take the USB 3 lines from the root hub and send
-> > them off to a high speed camera and then take the USB 2 lines and
-> > route them to a hub which then went to some low speed devices.  We
-> > chickened out and didn't do this, but we believed that it would work.
-> 
-> Great. :( No doubt that we'll see this at some point. Though I'd
-> assume if connectors are involved, USB3 only is not USB compliant and
-> that will ripple to all the upstream ports. I guess it could be as
-> crazy as any USB2 port and any USB3 port in one connector. One from a
-> hub and one from the root port. Though aren't there port power
-> controls which would probably prevent such craziness.
-
-A hub that attaches only to the USB-3 data wires in a cable is not USB
-compliant.  A USB-2 device plugged into such a hub would not work.
-
-But ports can be wired up in weird ways.  For example, it is possible
-to have the USB-3 wires from a port going directly to the host
-controller, while the USB-2 wires from the same port go through a
-USB-2 hub which is then connected to a separate host controller.  (In
-fact, my office computer has just such an arrangement.)
-
-> We certainly have separate host controllers as well.
-> 
-> > > Do hubs
-> > > really have 2 ports for each connection?
-> >
-> > Yup.  It's really two hubs.
-> >
-> > localhost ~ # lsusb -t
-> > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 5000M
-> >     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
-> > /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 480M
-> >     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
-> 
-> Humm, seems we're mixing buses and ports in the numbering. The USB
-
-The "Port 1" numbers on the "Bus" lines doesn't make any sense; they
-are meaningless.  If you ignore them the rest is logical.
-
-> binding says it's ports. Not sure that matters, but something to think
-> about.
-> 
-> > localhost ~ # lsusb
-> > Bus 002 Device 002: ID 0bda:0411 Realtek Semiconductor Corp.
-> > Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> > Bus 001 Device 002: ID 0bda:5411 Realtek Semiconductor Corp.
-> > Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> >
-> > I think this means that we're already forced to split this one device
-> > across two nodes in the device tree, right?  Oh, or I guess you said
-> > we could change the binding to allow more than one port in one reg?
-> > What would that look like?
-> 
-> reg = <1 2>;
-> 
-> Though that's not going to work if you have 2 separate host controllers.
-> 
-> I think splitting devices is the wrong approach. I think we want to
-> link USB2 and USB3 ports instead. We've already got some property to
-> do this, but at the host controller level. Called 'companion'
-> something IIRC. Probably that needs to be more flexible.
-
-The USB term is "peer" ports.  That is, given a USB-3 hub (which shows
-up as one hub on the USB-3 bus and one on the USB-2 bus), port N on
-the the USB-3 incarnation of the hub is the peer of port M on the
-USB-2 incarnation (for some value of M which doesn't always have to be
-the same as N).  In other words, suppose that when you plug a USB-3
-device into the hub it shows up on (logical) port N, and when you plug
-a USB-2 device into the same port on that hub it shows up on (logical)
-port M.  Then ports N and M on the USB-3 and USB-2 incarnations of the
-hub are peers.
-
-To make things even more confusing, the USB-2 and USB-3 incarnations
-of a USB hub don't have to have the same number of ports!  Some of the
-physical ports on the hub may be USB-2 only.
-
-> > You'd have more than one VID/PID listed in
-> > the compatible string and more than one "reg"?
-> 
-> 2 compatible strings I guess.
-> 
-> > > The 2nd issue is where do extra properties for a device go. That's
-> > > nothing new nor special to USB. They go with the device node. We
-> > > already went thru that with the last attempt.
-> > >
-> > > So for this case, we'd have something like this:
-> > >
-> > >     usb_controller {
-> > >         dr_mode = "host";
-> > >         #address-cells = <1>;
-> > >         #size-cells = <0>;
-> > >
-> > >         hub@1 {
-> > >             compatible = "usbbda,5411";
-> > >             reg = <1>;
-> > >             vdd-supply = <&pp3300_hub>;
-> > >         };
-> > >     };
-> > >
-> > > This is no different than needing a reset line deasserted as the prior
-> > > attempt did.
-> >
-> > I'd believe that the above could be made to work with enough software
-> > change in the USB stack.
-> 
-> I believe the prior attempt did just that.
-> 
-> >  Presumably we wouldn't want to actually do a
-> > full probe of the device until USB actually enumerated it, but I guess
-> > you could add some type of optional "pre-probe" step where a driver is
-> > called?  So you'd call a pre-probe on whatever driver implements
-> > "usbbda,5411" and it would turn on the power supply.  ...then, if the
-> > device is actually there, the normal probe would be called?  I guess
-> > that'd work...
-> 
-> Yes, I've been saying for some time we need a pre-probe. Or we need a
-> forced probe where the subsystem walks the DT nodes for the bus and
-> probes the devices in DT (if they're in DT, we know they are present).
-> This was the discussion only a few weeks ago for MDIO (which I think
-> concluded with they already do the latter).
-
-This is why I suggested putting the new code into the xhci-platform
-driver.  That is the right place for doing these "pre-probes" of DT
-nodes for hubs attached to the host controller.
-
-> Instead, I typically see attempts at 'generic' properties for doing
-> power sequencing. That is a never ending stream of properties to add
-> more controls or more timing constraints on the sequences.
-> 
-> > One thing that strikes me as a possible problem, though, is that I
-> > totally envision HW guys coming back and saying: "oh, we want to
-> > second source that USB hub and randomly stuff a different hub on some
-> > boards".  In theory that's a reasonable suggestion, right?  USB is a
-> > probable bus.  We turn on power to the USB hub (and the regulator to
-> > turn on power is the same no matter which hub is stuffed) and then we
-> > can just check which device got enumerated.  It's likely that both
-> > hubs would behave the same from a software point of view, but they
-> > would have different VID/PID.
-> 
-> A 2nd compatible string solves this. Or the s/w needs to tolerate a
-> mismatch in VID/PID. Pre-probe matches on compatible string and real
-> probe matches on VID/PID and there doesn't have to be any relationship
-> between the 2.
-> 
-> If you have another way to power the device other than just 'Vbus' or
-> self-powered, then you aren't really USB compliant.
-
-That statement is questionable.  After all, "self-powered" really
-means nothing more than "not bus-powered" (apart from borderline cases
-of devices that take part of their power from the bus and part from
-somewhere else).
-
-Alan Stern
+>
+>>  	cdns3_disconnect_gadget(priv_dev);
+>>
+>>  	priv_dev->gadget.speed =3D USB_SPEED_UNKNOWN;
+>> @@ -3186,6 +3188,7 @@ static int cdns3_gadget_suspend(struct cdns *cdns,=
+ bool do_wakeup)
+>>
+>>  	/* disable interrupt for device */
+>>  	writel(0, &priv_dev->regs->usb_ien);
+>> +	spin_unlock_irqrestore(&priv_dev->lock, flags);
+>>
+>>  	return 0;
+>>  }
+>> @@ -3193,11 +3196,14 @@ static int cdns3_gadget_suspend(struct cdns *cdn=
+s, bool do_wakeup)
+>>  static int cdns3_gadget_resume(struct cdns *cdns, bool hibernated)
+>>  {
+>>  	struct cdns3_device *priv_dev =3D cdns->gadget_dev;
+>> +	unsigned long flags;
+>>
+>>  	if (!priv_dev->gadget_driver)
+>>  		return 0;
+>>
+>> +	spin_lock_irqsave(&priv_dev->lock, flags);
+>
+>ditto
+>
+>>  	cdns3_gadget_config(priv_dev);
+>> +	spin_unlock_irqrestore(&priv_dev->lock, flags);
+>>
+>>  	return 0;
+>>  }
+>> --
+>> 2.17.1
+>>
+>
+>--
+>
+>Thanks,
+>Peter Chen
