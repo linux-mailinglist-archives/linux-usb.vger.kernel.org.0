@@ -2,160 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D345827FA56
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Oct 2020 09:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DC827FB2F
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Oct 2020 10:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731349AbgJAHdW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Oct 2020 03:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        id S1731483AbgJAIPI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Oct 2020 04:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725878AbgJAHdW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Oct 2020 03:33:22 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3E0C0613D0;
-        Thu,  1 Oct 2020 00:33:20 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id k8so3703531pfk.2;
-        Thu, 01 Oct 2020 00:33:20 -0700 (PDT)
+        with ESMTP id S1725894AbgJAIPI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Oct 2020 04:15:08 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBD5C0613D0;
+        Thu,  1 Oct 2020 01:15:06 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id b19so3846763lji.11;
+        Thu, 01 Oct 2020 01:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=MMQaSvH0Kx6bA3nvjTwxRxny7XPXqNvhRkFHeW4802Q=;
-        b=D72DiC0Y4x01OSsq8PYVmh2eyPP1awTN2KmJxwDa2llYQkx4PYUuNyQN/dmE6ZDm2P
-         NbUUEkSI0e/8ZqqVSO2NmXqzvDVFTO5Sf8Ylmd/SqzLrhK7fx6Pp+5msfOi8tH+43zxS
-         yX7dALP9mpNFLvpC++q6WplnJaKkvI2e/vu/Kpvi+U+5no6MKrwTcsZjP7wq+mt0pQae
-         1WZ3AHCJrH8Bn9KokXVZd3139UU9OZYe6z3NnnfEMN7/71YgzjgKqMM3F8ErL8Af/WxG
-         HCVr0MOemfFzIx3ZjE/PX5wk5UuxEpPlsPjBTwCmDL6o/R5a7FOHlzF4gLBVlPQi67HM
-         9DDg==
+        bh=aUUVeqRwkBYrQVEK/UzZRxRNNQt/Zxuufn7DOR6D2tw=;
+        b=r80diBXJwyeo0EkkDukjWFUW6oDkzGj3hQk88hB5dKgc1vckC2eoYJ06DHuGPp6CbJ
+         LEr5NIY5d9jOlwMkTPdTIz1mDS2K2fHa/INEJpwyzBjg+Ps44cKLHB/bt5rJd74Dumc7
+         lDTpEAmYo0n7Fai56DU/URyBj5vTHKz9C9Vv+Qf/L/9An+bVaylj5OVfx74J8M3BZRe8
+         qu9XaCEvPFr3MH0iwZej65tdmExqH+Nk2ijEImUlbL++ZMj/2aYrk1QN0WZF+lFlORlH
+         X/3/rw+bsRikyJVgnGuj/0g4hbpkf7rxt5+rlzdcydonvubgV9n7ReQKEirYnvCIhAhO
+         Rhlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MMQaSvH0Kx6bA3nvjTwxRxny7XPXqNvhRkFHeW4802Q=;
-        b=FsetFPlwztg5Y+ZdW8AzDsPdVzjwUy9DnRrE5IEOEiMjzX+SXNXbWNpEHRH81JXJlv
-         MDfxD0tav2LrxU1bAuvBS3vbnUUuIp+Pc47RzSS3tVWKriY4p0Zohb948ASro4XdrG0E
-         kb3dvD7Dct5mGOCqxYYpaWINRK7nRpix/OOPNgVni707Qr5ra1vPFUp1GBb5w4/6mM/i
-         LVpAjQYX7fndWT7T0ev454V7IWSzOndr8USfjjNGwOdvl7YfiC83gfLJFZMEjvWz4kgh
-         m2wnu6Anzw2WoC2VgfAwOGbPpbj0bHo7lBz0x7qQtDkN/tkzUE/BV2YxE0HbgJkes6E1
-         R/pQ==
-X-Gm-Message-State: AOAM533qhgSPwk4KsGP8NVWXl4ecRem7Ok4GUgyS5NHAk3m3HsC+1gTn
-        On7cm/ghIGUwLxXq8Oy1WZ0=
-X-Google-Smtp-Source: ABdhPJwuU76xzp1pRklPBcovrJe7OwB7CKUmZLAEVCOio2OiSt94fQu2tR4KKcbO4pQVITEWWqgagQ==
-X-Received: by 2002:a63:e1a:: with SMTP id d26mr5191223pgl.190.1601537599777;
-        Thu, 01 Oct 2020 00:33:19 -0700 (PDT)
-Received: from localhost.localdomain ([49.207.212.76])
-        by smtp.gmail.com with ESMTPSA id u14sm5058589pfm.80.2020.10.01.00.33.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2020 00:33:18 -0700 (PDT)
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com,
-        Petko Manolov <petkan@nucleusys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [Linux-kernel-mentees][PATCH v2] net: usb: rtl8150: prevent set_ethernet_addr from setting uninit address
-Date:   Thu,  1 Oct 2020 13:02:20 +0530
-Message-Id: <20201001073221.239618-1-anant.thazhemadam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=aUUVeqRwkBYrQVEK/UzZRxRNNQt/Zxuufn7DOR6D2tw=;
+        b=JYSA/44rIAHjTj1PofP0ERnyv3SdOjdruYR2q93dIawqu+K7xDqP8gcndc6B1GzvsW
+         aNwDuQEOCE9XkBzwtaSMOGICsLWnBjDXrbW0sO4Yi8dAqM6zFtz+N5FDzDrt/62B/wT/
+         NOKWiPxwsaBwmG1oet2+zdJlR6/Icb3fYqC6NxmV2zx1TECpPBesKtYKSsfRYXZV8mRn
+         qppcAhrz7uWnseFtRyZy8byZvP1RMtKTYfwy77DQERlzbajBRuejd6GzpdA7g29lz+UR
+         leBJF4tQfyGsiX44S50xT91Jwg5hxjP9z4TOqE9xX8ukthhC5sbWjTlq2v8wjJIEoZwM
+         5wBw==
+X-Gm-Message-State: AOAM530a0GM7AcprwDujYUxVx/XfnTPx7uuDfzHXWL5CZrjIK1cLk/Ip
+        xHccbo7uTot0poX49vlJBde/1BK44sdRNg==
+X-Google-Smtp-Source: ABdhPJwJ3p25brycCQk0ug1xWVQXq4mMwgUt1thwnF1wAjjBckD3tyMvnHgJlqZSngFMrtfBm+kXgQ==
+X-Received: by 2002:a05:651c:505:: with SMTP id o5mr2071308ljp.177.1601540104970;
+        Thu, 01 Oct 2020 01:15:04 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:429a:7583:e8d3:5f22:8a90:2c65? ([2a00:1fa0:429a:7583:e8d3:5f22:8a90:2c65])
+        by smtp.gmail.com with ESMTPSA id 192sm467509lfb.154.2020.10.01.01.15.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Oct 2020 01:15:04 -0700 (PDT)
+Subject: Re: [PATCH v3 4/5] arm64: dts: qcom: sc7180: Use pdc interrupts for
+ USB instead of GIC interrupts
+To:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>
+References: <1601376452-31839-1-git-send-email-sanm@codeaurora.org>
+ <1601376452-31839-5-git-send-email-sanm@codeaurora.org>
+ <07de71c5-71d0-fbf1-8aa7-c039aeb9dffd@gmail.com>
+ <160151435796.310579.15010135021160402839@swboyd.mtv.corp.google.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <e04f3a59-6b65-6bfd-3589-11c985912dbb@gmail.com>
+Date:   Thu, 1 Oct 2020 11:14:51 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <160151435796.310579.15010135021160402839@swboyd.mtv.corp.google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When get_registers() fails (which happens when usb_control_msg() fails)
-in set_ethernet_addr(), the uninitialized value of node_id gets copied
-as the address.
+On 01.10.2020 4:05, Stephen Boyd wrote:
 
-Checking for the return values appropriately, and handling the case
-wherein set_ethernet_addr() fails like this, helps in avoiding the
-mac address being incorrectly set in this manner.
+[...]
+>>> Using pdc interrupts for USB instead of GIC interrupts to
+>>> support wake up in case xo shutdown.
+>>
+>>      s/xo/of/?
+> 
+> No it is xo. If anything it could be capitalized because it's the
+> pin name and usually stands for "crystal oscillator".
 
-Reported-by: syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com
-Tested-by: syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com
-Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Acked-by: Petko Manolov <petkan@nucleusys.com>
----
-Changes in v2:
-	* Modified condition checking get_registers()'s return value to 
-		ret == sizeof(node_id)
-	  for stricter checking in compliance with the new usb_control_msg_recv()
-	  API
-	* Added Acked-by: Petko Manolov
+    In this case, "of" is still needed. :-)
 
-Since Petko didn't explicitly mention an email-id in his Ack, I put the
-email-id present in the MAINTAINERS file. I hope that's not an issue.
+>>> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+>>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-
- drivers/net/usb/rtl8150.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
-index 733f120c852b..e542a9ab2ff8 100644
---- a/drivers/net/usb/rtl8150.c
-+++ b/drivers/net/usb/rtl8150.c
-@@ -150,7 +150,7 @@ static const char driver_name [] = "rtl8150";
- **	device related part of the code
- **
- */
--static int get_registers(rtl8150_t * dev, u16 indx, u16 size, void *data)
-+static int get_registers(rtl8150_t *dev, u16 indx, u16 size, void *data)
- {
- 	void *buf;
- 	int ret;
-@@ -274,12 +274,17 @@ static int write_mii_word(rtl8150_t * dev, u8 phy, __u8 indx, u16 reg)
- 		return 1;
- }
- 
--static inline void set_ethernet_addr(rtl8150_t * dev)
-+static bool set_ethernet_addr(rtl8150_t *dev)
- {
- 	u8 node_id[6];
-+	int ret;
- 
--	get_registers(dev, IDR, sizeof(node_id), node_id);
--	memcpy(dev->netdev->dev_addr, node_id, sizeof(node_id));
-+	ret = get_registers(dev, IDR, sizeof(node_id), node_id);
-+	if (ret == sizeof(node_id)) {
-+		memcpy(dev->netdev->dev_addr, node_id, sizeof(node_id));
-+		return true;
-+	}
-+	return false;
- }
- 
- static int rtl8150_set_mac_address(struct net_device *netdev, void *p)
-@@ -909,21 +914,24 @@ static int rtl8150_probe(struct usb_interface *intf,
- 		goto out1;
- 	}
- 	fill_skb_pool(dev);
--	set_ethernet_addr(dev);
--
-+	if (!set_ethernet_addr(dev)) {
-+		dev_err(&intf->dev, "couldn't set the ethernet address for the device\n");
-+		goto out2;
-+	}
- 	usb_set_intfdata(intf, dev);
- 	SET_NETDEV_DEV(netdev, &intf->dev);
- 	if (register_netdev(netdev) != 0) {
- 		dev_err(&intf->dev, "couldn't register the device\n");
--		goto out2;
-+		goto out3;
- 	}
- 
- 	dev_info(&intf->dev, "%s: rtl8150 is detected\n", netdev->name);
- 
- 	return 0;
- 
--out2:
-+out3:
- 	usb_set_intfdata(intf, NULL);
-+out2:
- 	free_skb_pool(dev);
- out1:
- 	free_all_urbs(dev);
--- 
-2.25.1
-
+MBR, Sergei
