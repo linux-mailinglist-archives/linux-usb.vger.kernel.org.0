@@ -2,83 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02027281518
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 16:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62A628161B
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 17:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388072AbgJBO3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 10:29:20 -0400
-Received: from lan.nucleusys.com ([92.247.61.126]:33252 "EHLO
-        zztop.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726017AbgJBO3U (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 10:29:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=U+46LdM6PcDOkzQb5JDU0b6k7u6FWkT7DMAIIJ4jYqA=; b=Aw5vGkll/h+gwLv9n0jja96gT1
-        UJ6NwKXEuQQ6w0Ti7GrZtrtXb0iz7YGLmNe5yGAE5k02mxXqk7/7yThcWdcr84YLZOEA9KrnSLNUK
-        DJLZtGNWhcvs+hgMbWiznzrw3tztBR+nHzb8+0Qrt7yTmkwFPbVaSfa6Bz1BP7kUIbJ4=;
-Received: from [94.26.108.4] (helo=carbon)
-        by zztop.nucleusys.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <petkan@nucleusys.com>)
-        id 1kOM3S-00015G-U7; Fri, 02 Oct 2020 17:29:03 +0300
-Date:   Fri, 2 Oct 2020 17:29:01 +0300
-From:   Petko Manolov <petkan@nucleusys.com>
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     Greg KH <greg@kroah.com>, David Miller <davem@davemloft.net>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com,
-        kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: usb: rtl8150: prevent set_ethernet_addr from
- setting uninit address
-Message-ID: <20201002142901.GA3901@carbon>
-Mail-Followup-To: Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        Greg KH <greg@kroah.com>, David Miller <davem@davemloft.net>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com,
-        kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20201001073221.239618-1-anant.thazhemadam@gmail.com>
- <20201001.191522.1749084221364678705.davem@davemloft.net>
- <83804e93-8f59-4d35-ec61-e9b5e6f00323@gmail.com>
- <20201002115453.GA3338729@kroah.com>
- <a19aa514-14a9-8c92-d41a-0b9e17daa8e3@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a19aa514-14a9-8c92-d41a-0b9e17daa8e3@gmail.com>
-X-Spam-Score: -1.0 (-)
-X-Spam-Report: Spam detection software, running on the system "zztop.nucleusys.com",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  On 20-10-02 17:35:25, Anant Thazhemadam wrote: > > Yes, this
-    clears things up for me. I'll see to it that this gets done in a v3. If set_ethernet_addr()
-    fail, don't return error, but use eth_hw_addr_random() instead to set random
-    MAC address and continue with the probing. 
- Content analysis details:   (-1.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+        id S2388174AbgJBPHv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 11:07:51 -0400
+Received: from mail.ispras.ru ([83.149.199.84]:49010 "EHLO mail.ispras.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726017AbgJBPHu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Oct 2020 11:07:50 -0400
+X-Greylist: delayed 343 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 11:07:49 EDT
+Received: from hellwig.intra.ispras.ru (unknown [10.10.2.182])
+        by mail.ispras.ru (Postfix) with ESMTPS id 2649D40A1DAC;
+        Fri,  2 Oct 2020 15:02:05 +0000 (UTC)
+From:   Evgeny Novikov <novikov@ispras.ru>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Evgeny Novikov <novikov@ispras.ru>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: [PATCH] usb: gadget: goku_udc: fix potential crashes in probe
+Date:   Fri,  2 Oct 2020 18:01:55 +0300
+Message-Id: <20201002150155.7560-1-novikov@ispras.ru>
+X-Mailer: git-send-email 2.16.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-10-02 17:35:25, Anant Thazhemadam wrote:
-> 
-> Yes, this clears things up for me. I'll see to it that this gets done in a v3.
+goku_probe() goes to error label "err" and invokes goku_remove()
+in case of failures of pci_enable_device(), pci_resource_start()
+and ioremap(). goku_remove() gets a device from
+pci_get_drvdata(pdev) and works with it without any checks, in
+particular it dereferences a corresponding pointer. But
+goku_probe() did not set this device yet. So, one can expect
+various crashes. The patch moves setting the device just after
+allocation of memory for it.
 
-If set_ethernet_addr() fail, don't return error, but use eth_hw_addr_random() 
-instead to set random MAC address and continue with the probing.
+Found by Linux Driver Verification project (linuxtesting.org).
 
-You can take a look here:
-https://lore.kernel.org/netdev/20201002075604.44335-1-petko.manolov@konsulko.com/
+Reported-by: Pavel Andrianov <andrianov@ispras.ru>
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+---
+ drivers/usb/gadget/udc/goku_udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
+index 25c1d6ab5adb..3e1267d38774 100644
+--- a/drivers/usb/gadget/udc/goku_udc.c
++++ b/drivers/usb/gadget/udc/goku_udc.c
+@@ -1760,6 +1760,7 @@ static int goku_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		goto err;
+ 	}
+ 
++	pci_set_drvdata(pdev, dev);
+ 	spin_lock_init(&dev->lock);
+ 	dev->pdev = pdev;
+ 	dev->gadget.ops = &goku_ops;
+@@ -1793,7 +1794,6 @@ static int goku_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	}
+ 	dev->regs = (struct goku_udc_regs __iomem *) base;
+ 
+-	pci_set_drvdata(pdev, dev);
+ 	INFO(dev, "%s\n", driver_desc);
+ 	INFO(dev, "version: " DRIVER_VERSION " %s\n", dmastr());
+ 	INFO(dev, "irq %d, pci mem %p\n", pdev->irq, base);
+-- 
+2.26.2
 
-cheers,
-Petko
