@@ -2,124 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FAD28114A
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 13:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3081281163
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 13:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733260AbgJBLeU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 07:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725964AbgJBLeU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 07:34:20 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E529AC0613D0;
-        Fri,  2 Oct 2020 04:34:19 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id b17so630643pji.1;
-        Fri, 02 Oct 2020 04:34:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=K/VaKn9dzizOyY0tltyu5tEET9jo6PeHo4lcG4paeq0=;
-        b=N/P8MSVo1U7BtuFJNE+SodhonKVZR1CF9QluHq6s1h4xYwl0pq+ntYF26z+gMRnOXE
-         6LgTRMiqijNo2Y8ssN8VEjntS9nRhWXTYwT6dDNpxSsbFvbewFF3QRgZzC1jTqcF7agX
-         jiWOxq9ewa5mxXWI4qmX7PTTmptU+gNdS50sf4IywX8iEzX8NMPwOf/JNQ9jw4S3s7DQ
-         gJFdOzqvBT0OA6fih/uObjx9sR9b4X7Fgq9jU/IZcmnyt5NyDSVuVvpQ1qQkrsGlDp1u
-         wPqFVsk4SjzaaYe83DRml7OcBvcw75TrRcuL/X6CqctILk25k6ty9wW5wPVGyTLW88Jb
-         BpTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=K/VaKn9dzizOyY0tltyu5tEET9jo6PeHo4lcG4paeq0=;
-        b=fbozXZjA2ICcGoF9D9XcND0ihG2SUZkd1+Tv5q89tRNLCVJFPqi1p/rJ3w4lIcZOmD
-         zDGQbfhlnPaVEIrxO3DBxfgjRkNlDb9vi6nVxfxTnLCp5PABMkTLi+n2a4OeZR58p1Hd
-         e2Bnthb0PrmcCidTX+DH4WN5w0FZghRDMXmkHgnYC79PhBJXqDeSNHQmC2uS+PZU0lDe
-         6EIwnz59qdk7ckjShVm2GcE8d3MV7HEmD6n/te1qkgV0UUEh/bML6hwqomSgYeUg5WXT
-         VOBxw/Ml7ExnOVGg0bnSkKyjM3mcJ9E4wSCzv2H0ZD75sLQzyySiSVfAfC4B0ndUUbEG
-         AIsA==
-X-Gm-Message-State: AOAM533hhNEDrXbgcuzqJYVYlJ4PaxC4iTsC0yDN+bJ844EVLU+z0J68
-        goOoxKehKLujIqcS2gJ8HXIQgrhS3Mn/eBG/sCs=
-X-Google-Smtp-Source: ABdhPJxPrRC7D283hGCMowzaj1PXBI6zxmqIXpXGnLKzL8vrGcn+vdjdMI1G45WDEiowYR/4q7PJWg==
-X-Received: by 2002:a17:90a:ea0a:: with SMTP id w10mr2245628pjy.165.1601638458700;
-        Fri, 02 Oct 2020 04:34:18 -0700 (PDT)
-Received: from [192.168.0.104] ([49.207.217.69])
-        by smtp.gmail.com with ESMTPSA id f5sm1468026pgg.68.2020.10.02.04.34.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2020 04:34:17 -0700 (PDT)
-Subject: Re: [PATCH v2] net: usb: rtl8150: prevent set_ethernet_addr from
- setting uninit address
-To:     David Miller <davem@davemloft.net>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com,
-        petkan@nucleusys.com, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201001073221.239618-1-anant.thazhemadam@gmail.com>
- <20201001.191522.1749084221364678705.davem@davemloft.net>
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Message-ID: <83804e93-8f59-4d35-ec61-e9b5e6f00323@gmail.com>
-Date:   Fri, 2 Oct 2020 17:04:13 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2387772AbgJBLn0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 07:43:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39850 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725964AbgJBLn0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Oct 2020 07:43:26 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E810D206E3;
+        Fri,  2 Oct 2020 11:43:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601639004;
+        bh=Um0ftaims7pCV0EgtbpdXAsPSGzpFNfGBGqMRGVKZDk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=H017jt+AENqlGNPFcbs3k6i35nY2cX3xdETy+xt4hgTl/ENbHnxT2819pviiNxPny
+         rOSe1grXkX5H33e0dFYd29v8z3K4uS/4vUKif55N4lqt/X31ds6JC/QHQgGzdLBBei
+         bReBhEINXuK54Sa82lKc4iwK9cB3pPlRfBRaroXA=
+Date:   Fri, 2 Oct 2020 13:43:23 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     netdev@vger.kernel.org
+Cc:     Tuba Yavuz <tuba@ece.ufl.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2] net: hso: do not call unregister if not registered
+Message-ID: <20201002114323.GA3296553@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20201001.191522.1749084221364678705.davem@davemloft.net>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Tuba Yavuz <tuba@ece.ufl.edu>
 
-On 02/10/20 7:45 am, David Miller wrote:
-> From: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-> Date: Thu,  1 Oct 2020 13:02:20 +0530
->
->> When get_registers() fails (which happens when usb_control_msg() fails)
->> in set_ethernet_addr(), the uninitialized value of node_id gets copied
->> as the address.
->>
->> Checking for the return values appropriately, and handling the case
->> wherein set_ethernet_addr() fails like this, helps in avoiding the
->> mac address being incorrectly set in this manner.
->>
->> Reported-by: syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com
->> Tested-by: syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com
->> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
->> Acked-by: Petko Manolov <petkan@nucleusys.com>
-> First, please remove "Linux-kernel-mentees" from the Subject line.
->
-> All patch submitters should have their work judged equally, whoever
-> they are.  So this Subject text gives no extra information, and it
-> simply makes scanning Subject lines in one's mailer more difficult.
-I will keep that in mind for all future submissions. Thank you.
+On an error path inside the hso_create_net_device function of the hso
+driver, hso_free_net_device gets called. This causes a use-after-free
+and a double-free if register_netdev has not been called yet as
+hso_free_net_device calls unregister_netdev regardless. I think the
+driver should distinguish these cases and call unregister_netdev only if
+register_netdev has been called.
 
-> Second, when a MAC address fails to probe a random MAC address should
-> be selected.  We have helpers for this.  This way an interface still
-> comes up and is usable, even in the event of a failed MAC address
-> probe.
+Signed-off-by: Tuba Yavuz <tuba@ece.ufl.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+v2: format cleaned up based on feedback from previous review
+    Forward to Greg to submit due to email problems on Tuba's side
 
-Okay... I see.
-But this patch is about ensuring that an uninitialized variable's
-value (whatever that may be) is not set as the ethernet address
-blindly (without any form of checking if get_registers() worked
-as expected, or not). And I didn't think uninitialized values being
-set as MAC address was considered a good outcome (after all, it
-seemed to have triggered a bug), especially when it could have
-been avoided by introducing a simple check that doesn't break
-anything.
-However, if I was mistaken, and if that is something that we can live
-with after all, then I don't really see the understand the purpose of
-similar checks being made (in all the many places that the return
-value of get_registers() (or a similar function gets checked) in the first
-place at all.
-
-In all honesty, this confused me a little more than it provided clarity,
-and I hope someone could help me shift that balance back to clarity
-again.
-
-Thank you for your time.
-
-Thanks,
-Anant
+diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+index 2bb28db89432..e6b56bdf691d 100644
+--- a/drivers/net/usb/hso.c
++++ b/drivers/net/usb/hso.c
+@@ -2366,7 +2366,8 @@ static void hso_free_net_device(struct hso_device *hso_dev, bool bailout)
+ 
+ 	remove_net_device(hso_net->parent);
+ 
+-	if (hso_net->net)
++	if (hso_net->net &&
++	    hso_net->net->reg_state == NETREG_REGISTERED)
+ 		unregister_netdev(hso_net->net);
+ 
+ 	/* start freeing */
