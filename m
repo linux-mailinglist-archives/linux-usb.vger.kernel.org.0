@@ -2,167 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D4C281EC1
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Oct 2020 00:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7233B281ECB
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Oct 2020 01:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725782AbgJBW6f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 18:58:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44704 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725283AbgJBW6f (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 2 Oct 2020 18:58:35 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 398C7206FA;
-        Fri,  2 Oct 2020 22:58:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601679514;
-        bh=kcgoZa2FML0rIwT6XbrrIjjoXmqKbfCgFpDorfrshps=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dPNLZjPQ+Gie0FqEHETgS8rjP8PH1KEwxxTUj3iu/Rl3xP9qmXeHfPHJndVuss/Mm
-         C/HteBa7MlygE9u3slxynzGh/Po+/KqQ/G1y0pn3Lg6a8GZhFn7emUoj4QKRZwFn7/
-         c0KyXxvIIT9j0dV1ILSvPlVZwO5qI88sKl78g4VA=
-Received: by mail-ot1-f52.google.com with SMTP id s66so3011477otb.2;
-        Fri, 02 Oct 2020 15:58:34 -0700 (PDT)
-X-Gm-Message-State: AOAM5318jS0sPP8v/x6KWr2ks422ZoKVF9l0Q1iTU59VsBLeXkhlr1cY
-        mmmhrhPwJYJqS2mLL8c6IerUK/2XKBabGPPrRQ==
-X-Google-Smtp-Source: ABdhPJxEmXxNEtMkiFWap/kdASetpxroZKkBdAu1ipH8rGGfLySK+JHQ9y8EdrYrLKHmls+JVOFTu1wBuZPYvSBAeZk=
-X-Received: by 2002:a05:6830:1008:: with SMTP id a8mr3123918otp.107.1601679513550;
- Fri, 02 Oct 2020 15:58:33 -0700 (PDT)
+        id S1725764AbgJBXA0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 19:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725283AbgJBXAY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 19:00:24 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C37DC0613D0
+        for <linux-usb@vger.kernel.org>; Fri,  2 Oct 2020 16:00:22 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id u24so1813762pgi.1
+        for <linux-usb@vger.kernel.org>; Fri, 02 Oct 2020 16:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=JuO3l5D3g+3T4SopoCD1TZFCSQFWdr/9/z0cbTHWU18=;
+        b=B1baeRItQM93CJgK/YQaUbahw9W1IYNY7bMP2HAJr7olWXk3R7xYuQbTuve+4PtRhi
+         j9be8RFID77t45nV1YB8hFQ4gHp1lYjQkDZ58bSVGkCBmcDxrLnn3MYI+6rVhemK78si
+         BJ6RKv0c7UBvMtfkb6NQmugokTqrIlAuj0PgM88zx1UQXOXQV7wgudSSZgexyFcaWX0F
+         Oqy38o3bX+0R1OKQdWTl8HMo5FwTNdkw2tMa337wAL/zr4RhPn0nLFZmSYL/Fqp3NYri
+         4vHrJxiBOdZhK7U+IMIxPjlnl7qzGyWhMkDd7dXcHtq9UYXQi+ofXtIf6lKw/fjf1OQs
+         6vaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=JuO3l5D3g+3T4SopoCD1TZFCSQFWdr/9/z0cbTHWU18=;
+        b=jNedN1RSB8NSAiQSf+Xxl+teAibxOVYgc0u6Ag71HI9mC35xqr47jeUz81zqXV8ieo
+         O50jJohZTuY2yVjnqBoRRD4GZ7goT+spk1QSDU8JG5awXf8vLZPmfuXiMiY4i0H3U98e
+         e/ZERt+H9F09Sko0NcJQAIfQl3NQGmzXs9xuT4Be4LHQxLOYAomGDHM21jlgNpkF0rNG
+         eSjfJGXPOxaLuakzQDxEchEllEHsDWItqoHWcbzFHRzDTR5bgFDlztD1Cc3fczpoMBMs
+         45AzJ8LXmWextnyP2nmpy7y+T85EDQeGSXELf8B87vrwnnCY2drsgvCNl52MUhhr2Rjs
+         yCyQ==
+X-Gm-Message-State: AOAM531zuIwIYp/h5jF6dd+hrtyl+0lx5BgzChVlcfzmUyv4j0ibGKv7
+        lcD/K9fXfZRHXgt1SdjeefgCug==
+X-Google-Smtp-Source: ABdhPJzn4JlwbkeCh9IWyceUYlpcHYJn0xrj6G9mjjr10oe8uHor+PZAi4+w1vypBagk+phU6kVkOw==
+X-Received: by 2002:a63:c74f:: with SMTP id v15mr4169592pgg.143.1601679621965;
+        Fri, 02 Oct 2020 16:00:21 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id t3sm2616889pje.43.2020.10.02.16.00.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2020 16:00:21 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-usb@vger.kernel.org, Jerome Brunet <jbrunet@baylibre.com>
+Subject: Re: [PATCH] reset: Add reset controller API
+In-Reply-To: <20201001132758.12280-1-aouledameur@baylibre.com>
+References: <20201001132758.12280-1-aouledameur@baylibre.com>
+Date:   Fri, 02 Oct 2020 16:00:20 -0700
+Message-ID: <7hh7rckzcr.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <20200928101326.v4.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20200929201701.GA1080459@bogus> <20200929220912.GF1621304@google.com>
- <20200930013229.GB194665@rowland.harvard.edu> <20200930124915.GA1826870@google.com>
- <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
- <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
- <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
- <CAD=FV=WJrvWBLk3oLpv6Q3uY4w7YeQBXVdkpn+SAS5dnxp9-=Q@mail.gmail.com> <20201002183633.GA296334@rowland.harvard.edu>
-In-Reply-To: <20201002183633.GA296334@rowland.harvard.edu>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 2 Oct 2020 17:58:22 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKHFA5RWz1SRLkR2JXydURL2pA+4C0+C+4SrJR_h4M0dw@mail.gmail.com>
-Message-ID: <CAL_JsqKHFA5RWz1SRLkR2JXydURL2pA+4C0+C+4SrJR_h4M0dw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete onboard
- USB hubs
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 2, 2020 at 1:36 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, Oct 02, 2020 at 10:08:17AM -0700, Doug Anderson wrote:
-> > As a more similar example of single device that is listed in more than
-> > one location in the device tree, we can also look at embedded SDIO
-> > BT/WiFi combo cards.  This single device often provides WiFi under an
-> > SDIO bus and BT under a serial / USB bus.  I'm not 100% sure there are
-> > actually cases were the same board provides device tree data to both
-> > at the same time, but "brcm,bcm43540-bt" is an example of providing
-> > data to the Bluetooth (connected over serial port) and
-> > "brcm,bcm4329-fmac" to the WiFi (connected over the SDIO bus).  Of
-> > course WiFi/BT cheat in that the control logic is represented by the
-> > SDIO power sequencing stuff...
-> >
-> >
-> > Back to our case, though.  I guess the issue here is that we're the
-> > child of more than one bus.  Let's first pretend that the i2c lines of
-> > this hub are actually hooked up and establish how that would look
-> > first.  Then we can think about how it looks if this same device isn't
-> > hooked up via i2c.  In this case, it sounds as if you still don't want
-> > the device split among two nodes.  So I guess you'd prefer something
-> > like:
-> >
-> > i2c {
-> >   usb-hub@xx {
-> >     reg = <xx>;
-> >     compatible = "realtek,rts5411", "onboard-usb-hub";
-> >     vdd-supply = <&pp3300_hub>;
-> >     usb-devices = <&usb_controller 1>;
-> >   };
-> > };
-> >
-> > ...and then you wouldn't have anything under the USB controller
-> > itself.  Is that correct?  So even though there are existing bindings
-> > saying that a USB device should be listed via VID/PID, the desire to
-> > represent this as a single node overrides that, right?  (NOTE: this is
-> > similar to what Matthias proposed in his response except that I've
-> > added an index so that we don't need _anything_ under the controller).
-> >
-> > Having this primarily listed under the i2c bus makes sense because the
-> > control logic for the hub is hooked up via i2c.  Having the power
-> > supply associated with it also makes some amount of sense since it's a
-> > control signal.  It's also convenient that i2c devices have their
-> > probe called _before_ we try to detect if they're there because it's
-> > common that i2c devices need power applied first.
-> >
-> > Now, just because we don't have the i2c bus hooked up doesn't change
-> > the fact that there is control logic.  We also certainly wouldn't want
-> > two ways of describing this same hub: one way if the i2c is hooked up
-> > and one way if it's not hooked up.  To me this means that the we
-> > should be describing this hub as a top-level node if i2c isn't hooked
-> > up, just like we do with "smsc,usb3503a"
-> >
-> > Said another way, we have these points:
-> >
-> > a) The control logic for this bus could be hooked up to an i2c bus.
-> >
-> > b) If the control logic is hooked up to an i2c bus it feels like
-> > that's where the device's primary node should be placed, not under the
-> > USB controller.
-> >
-> > c) To keep the i2c and non-i2c case as similar as possible, if the i2c
-> > bus isn't hooked up the hub's primary node should be a top-level node,
-> > not under the USB controller.
-> >
-> >
-> > NOTE ALSO: the fact that we might want to list this hub under an i2c
-> > controller also seems like it's a good argument against putting this
-> > logic in the xhci-platform driver?
->
-> More and more we are going to see devices that are attached to multiple
-> buses.  In this case, one for power control and another for
-> commands/data.  If DT doesn't already have a canonical way of handling
-> such situations, it needs to develop one soon.
+Amjad Ouled-Ameur <aouledameur@baylibre.com> writes:
 
-Attached to multiple buses directly is kind of rare from what I've
-seen. Most of the time, it's regulators, GPIOs, clocks, etc. which are
-well defined in DT. If there is a 2nd bus, it's almost always I2C.
-
-> One can make a case that there should be multiple device nodes in this
-> situation, somehow referring to each other so that the system knows they
-> all describe the same device.  Maybe one "primary" node for the device
-> and the others acting kind of like symbolic links.
+> The current reset framework API does not allow to release what is done by
+> reset_control_reset(), IOW decrement triggered_count. Add the new
+> reset_control_resettable() call to do so.
 >
-> Regardless of how the situation is represented in DT, there remains the
-> issue of where (i.e., in which driver module) the appropriate code
-> belongs.  This goes far beyond USB.  In general, what happens when one
-> sort of device normally isn't hooked up through a power regulator, so
-> its driver doesn't have any code to enable a regulator, but then some
-> system does exactly that?
+> When reset_control_reset() has been called once, the counter
+> triggered_count, in the reset framework, is incremented i.e the resource
+> under the reset is in-use and the reset should not be done again.
+> reset_control_resettable() would be the way to state that the resource is 
+> no longer used and, that from the caller's perspective, the reset can be 
+> fired again if necessary.
 >
-> Even worse, what if the device is on a discoverable bus, so the driver
-> doesn't get invoked at all until the device is discovered, but on the
-> new system it can't be discovered until the regulator is enabled?
+> This patch will fix a usb suspend warning seen on the libretech-cc
+> related to the shared reset line. This warning was addressed by the 
+> previously reverted commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared
+> reset control use")
 
-Yep, it's the same issue here with USB, MDIO which just came up a few
-weeks ago, MMC/SD which hacked around it with 'mmc-pwrseq' binding
-(not something I want to duplicate) and every other discoverable bus.
-What do they all have in common? The kernel's driver model being
-unable to cope with this situation. We really need a common solution
-here and not bus or device specific hack-arounds.
+Could you also send a patch that shows how your new feature can be used
+to fix the problem that was originally fixed by that patch (and still
+exists, now that it was reverted.)
 
-Rob
+Thanks,
+
+Kevin
