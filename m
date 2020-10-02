@@ -2,188 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC2328177B
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 18:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7613281800
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 18:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388062AbgJBQIv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 12:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387984AbgJBQIv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 12:08:51 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E23C0613E3
-        for <linux-usb@vger.kernel.org>; Fri,  2 Oct 2020 09:08:50 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id q4so1122874pjh.5
-        for <linux-usb@vger.kernel.org>; Fri, 02 Oct 2020 09:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+fnkCRnu87XrPPwPAXvTK0+WH+kB4qR2/orTOS8Bb18=;
-        b=VKY/ZwEEoMKuGn9NoyHtvpV5xd23RapB/8ROFjgdKqqPw4ud3Mb+2KEuqkBum0+F7W
-         0ZVi7Z7XhuszSAxdDT+z53l99wQl/NeOqY70UPkqnWi/ufvolH510qMz7Ej0cPzjZRSQ
-         yoPgg1SxaKyVrLFW8u57TsaCk5pNUD1oDOhcw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+fnkCRnu87XrPPwPAXvTK0+WH+kB4qR2/orTOS8Bb18=;
-        b=XzBHjturNAvY13EM7gVDZS/l9B/njHw/l1uWeRsa7ENE+cS9Km8MXZbf6ABBa5++WZ
-         AI3syjLwg4dAVXrCy5Mj5F3KX919xLY42Xy65NTH3+VsMG4Ry7sRGXgccv9UU4qcL13i
-         CPGpWxnQqXaBMvS1M+dUoZ2vHqhUlJGAVZe5atF/F2DZL3SRzeULHuUlbCA6RGc4Lknv
-         ciPku/wC6TGlsSvcPGX+4F9s4FwB8xnlRUxBhDwabvrH+5T6NG14tQ987gtgm/wfss+F
-         ZL6ktetpOkjNa4fSUJ66z4duuC7mgEKb9ydwvO4Mx7GqJqzk+7ZtYWOXIwlWPCBdP9YJ
-         gd4A==
-X-Gm-Message-State: AOAM532MwzPQa6hAtT+oI8N77MAmZ0UrW6C2sNCSQrFhBvQ6QL8bftDn
-        uRuVZJOIw6G7mDJrqdJWmPbNCg==
-X-Google-Smtp-Source: ABdhPJyc9LPKpmQnwick/WQtT8a3qWJMiSceUD3Ppt/TUKDZA99mJMpvjeCMOO7NGFJUOZPxKGWfbA==
-X-Received: by 2002:a17:90a:1702:: with SMTP id z2mr3538485pjd.88.1601654929473;
-        Fri, 02 Oct 2020 09:08:49 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id gk14sm2068634pjb.41.2020.10.02.09.08.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2020 09:08:48 -0700 (PDT)
-Date:   Fri, 2 Oct 2020 09:08:47 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Rob Herring <robh@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
- onboard USB hubs
-Message-ID: <20201002160847.GA2704892@google.com>
-References: <20200929201701.GA1080459@bogus>
- <20200929220912.GF1621304@google.com>
- <20200930013229.GB194665@rowland.harvard.edu>
- <20200930124915.GA1826870@google.com>
- <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
- <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
- <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
- <20201001012413.GA232049@rowland.harvard.edu>
- <20201001215412.GB2362632@google.com>
- <20201002012153.GA270859@rowland.harvard.edu>
+        id S2387958AbgJBQe6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 12:34:58 -0400
+Received: from mail-vi1eur05on2043.outbound.protection.outlook.com ([40.107.21.43]:53056
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1733260AbgJBQe6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Oct 2020 12:34:58 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gSyvmpcbfDJx05tlte6IkSphhzXl5yajm0sWLzttTAyXUXXgTjTYAFCDNQK/k7EDeoEO71anS0gteg55qa24HPWsqANxjzPtxLhmi8QubGiKczTLkimV97wPAMpHhhrAQaRYLGvunIg/JPLqUDfiUm47KxQvAjm6BES1+1y+k3gPjTezGnM+AViXhB/AGZJaTzPyBOEgTUMZLRfZgskbprhqc7bsqy2/JCt44rFDE58GmYhv3KojcWUV7FOwUliYb4OBjsfKEOgyVpLYxkQs2kYZkoknRqRcWX715EMa4sUG/KYumVvEZNQCCvCvG9P61LWmikzgY9wf7VIit4hLjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hV2k7N9wGxMRqVWRWsYn7cS/F5t+J3NOHCb87l3n9tA=;
+ b=FlYbt48QNp6ZFubCQGcO1reKUXnGn4iz0myJlmdeQAegsHT8R1k5VCXic/BnWuSt7ZqBoxA43Wv1YYq9s5hD4o33Tuz9YmN35gFARL2FcxsQvO68ODfothahI4M+71wehsWTu7Yvj3/aUt+CQlj+8E6enreKCpGuzMWD8eIP+JYTgvzzAv4yrX7S+JgqL23JK5ysEfie1F1Fm0yjCreZsdFef525k2H4bsAV3fYqLSkC257KiqaH4TgdeFa4GgTdwto/zYraZ3VgGxORDIn2WAg+DKMmo3P9GazCkeVrHDt4iXffvKrIL+hPktWznR6ipTaP3AIgAmStnweWjO/JnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hV2k7N9wGxMRqVWRWsYn7cS/F5t+J3NOHCb87l3n9tA=;
+ b=OkbpYbdlKXCrKOvmYxNoc6G5vs5bry7wMoAUcZJSkg0NueFtkf/T/UCcX0g/UCuYN8ZCPxSvAd4Y+gBNjXMMGeEhU9PiFKyZ3zozBD2omOZeBqYMjUulScIaAwLtZOkTs8Lj24oy1CCjEWGMdEK00FSuxQBWHNMye+Lao/c/lK8=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
+ by VI1PR04MB5213.eurprd04.prod.outlook.com (2603:10a6:803:54::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.38; Fri, 2 Oct
+ 2020 16:34:54 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::acd3:d354:3f34:3af7]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::acd3:d354:3f34:3af7%4]) with mapi id 15.20.3433.035; Fri, 2 Oct 2020
+ 16:34:54 +0000
+From:   Li Jun <jun.li@nxp.com>
+To:     robh+dt@kernel.org, shawnguo@kernel.org, balbi@kernel.org,
+        mathias.nyman@intel.com
+Cc:     gregkh@linuxfoundation.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        Anson.Huang@nxp.com, jun.li@nxp.com, aisheng.dong@nxp.com,
+        peng.fan@nxp.com, fugang.duan@nxp.com, horia.geanta@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v4 0/4] add NXP imx8mp usb support
+Date:   Sat,  3 Oct 2020 00:30:34 +0800
+Message-Id: <1601656238-22232-1-git-send-email-jun.li@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-Originating-IP: [119.31.174.66]
+X-ClientProxiedBy: SG2PR01CA0106.apcprd01.prod.exchangelabs.com
+ (2603:1096:3:15::32) To VE1PR04MB6528.eurprd04.prod.outlook.com
+ (2603:10a6:803:127::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201002012153.GA270859@rowland.harvard.edu>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.66) by SG2PR01CA0106.apcprd01.prod.exchangelabs.com (2603:1096:3:15::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3433.36 via Frontend Transport; Fri, 2 Oct 2020 16:34:49 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 521b34e9-3206-4cb3-19c6-08d866f11762
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5213:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <VI1PR04MB5213E1704C6D07AA9B8EEA4D89310@VI1PR04MB5213.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7sQnfNgn3UHY5397HSn4uNSafNDLATrmCmaiDmYU+DNMTwuCVAHNBlr+G50RGjgfJxcxdpei0H8XMtO7ok9x+bFF9lyNwVX41cfobpLB+CkVgD3ryFvWTfSKgfkpnIaUjU+A6o9lE7GwGtfvUBC2+zvSZXMPKFAJ17vjlL6DniYM8tBQddiQe7rcsHfp9BLXCK0eepDRBmEl3XFGhSBKX0qZgthCk/QSy0EkAYKbjBayyimTQVK+H2NQOWNp6eyF7+7YsjuUZXUCgAe/bDv9tI1PJiCmcwurJIZZCxn1e+4Nkq3rPWVGjzWuUiJP37hzvFG0sNiLJyBMnYGj5LKU93HPs0AUZaCnfJtb8nFqCZb77fAy/kjToHaMcX9DqIcwkJ4S0F56sD/blKE7fyEp7ZTUACiVqUg7KXT2llZIvG6HRRElKFTZXfu2sZ9HcBUPdVHoU52h2h46XJ86yXUdcEYSHzM4yQ5Hh4UwgBAHEeM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(136003)(376002)(396003)(39860400002)(966005)(6666004)(52116002)(478600001)(8936002)(6506007)(16526019)(4326008)(69590400008)(6486002)(26005)(186003)(83380400001)(2906002)(956004)(316002)(86362001)(8676002)(6512007)(2616005)(83080400001)(36756003)(5660300002)(7416002)(66556008)(66946007)(66476007)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: cP4Za8W34dRyMiRkEPA+5bopv8gQKhdKBHwA1bz4xwQDh8HQd+dQ3uUsLVVOPI3PMW322HQCAEctnuL5q+k1Q110BLIhv57DFwEjk+/m2b/kMasQ3QFbi0cTRJYo1g8jVXXg2KHUSJyxl6jMh+tpme8LghXuhqFpgAuOmPak43eZEG/xQFYGzI3KX5g31yT5ItFo885RVD2Np1ZoOPgLRWFLW0I+jjM0WkREz5Tsqyn9KTidU3LTV/nhQ+9l/QJKSh0oucqSdshDINPgW24H/dZ9qHE4iZJ6wrO7lj68nyZX3XdgcGy7G1FkOisY4FDlGdA0y8A/pXoskuAGs6NvxbE72L5bWVpha+ovv/dK0+i4j+kSWMBzsq6R1pSb969Cw2dVvShJ6VBF5LbG3otk4vUW44WOmVZXohzpjNrVXWNI5eA/nkM4YtcrCv9jfYt5xywnMZ6O3miazFIvNGkCdVFlhBbXD23xVIH6z6xJlo/cSmw8yTi/zfhkzIkv3AHI86PJqkZHnG5xOvrQIW5HWisnyCyBefexf/5g8g5Vc4OxdF9O5wgag4tV2sYZptCloS1m8SLo6SUtwMgWZX+D6d8lJKKf0xNsFvxOtHY/9tD4aBukmt5UgKwi03yvRDKz9KE9ab+rBWqDNfcyStFZug==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 521b34e9-3206-4cb3-19c6-08d866f11762
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Oct 2020 16:34:54.3069
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dS4IyoPleld9cuEol/KA4EhJtG2MpAa0AcpAQf1wh6MB/BRF5j7HTXzx9PAZh5SS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5213
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 01, 2020 at 09:21:53PM -0400, Alan Stern wrote:
-> On Thu, Oct 01, 2020 at 02:54:12PM -0700, Matthias Kaehlcke wrote:
-> > Hi,
-> > 
-> > thanks for providing more insights on the USB hardware!
-> 
-> Sure.
-> 
-> > On Wed, Sep 30, 2020 at 09:24:13PM -0400, Alan Stern wrote:
-> > > A hub that attaches only to the USB-3 data wires in a cable is not USB
-> > > compliant.  A USB-2 device plugged into such a hub would not work.
-> > > 
-> > > But ports can be wired up in weird ways.  For example, it is possible
-> > > to have the USB-3 wires from a port going directly to the host
-> > > controller, while the USB-2 wires from the same port go through a
-> > > USB-2 hub which is then connected to a separate host controller.  (In
-> > > fact, my office computer has just such an arrangement.)
-> > 
-> > It's not clear to me how this case would be addressed when (some of) the
-> > handling is done in xhci-plat.c We have two host controllers now, which one
-> > is supposed to be in charge? I guess the idea is to specify the hub only
-> > for one of the controllers?
-> 
-> I don't grasp the point of this question.  It doesn't seem to be
-> relevant to the case you're concerned about -- your board isn't going to
-> wire up the special hub in this weird way, is it?
+NXP imx8MPlus integrates 2 indentical dwc3 3.30b IP with additional wakeup
+logic to support low power, this wakeup logic has a separated interrupt
+which can generate events with suspend clock(32K); due to SoC integration
+limitation, it only can support 32 bits DMA, so add dma-ranges property,
 
-When doing upstream development I try to look beyond my specific use case
-and aim for solutions that are generally useful.
+changes for v4:
+- Use dma-ranges property to limit 32bits DMA, so don't need the new
+  property "xhci-64bit-support-disable".
+- Fix binding doc to pass dt_binding_check dtbs_check.
 
-I don't know how common a configuration like the one on your office computer
-is. If it isn't a fringe case it seems like we should support it if feasible.
+changes for v3:
+- Add dwc3 core related clocks into dwc3 core node, and glue layer driver
+  only handle the clocks(hsio and suspend) for glue block, this is to
+  match real HW.
+- Change to use property "xhci-64bit-support-disable" to disable 64bit DMA
+  as imx8mp USB integration actully can't support it, so remove platform
+  data in v2.
+- Some changes of imx8mp usb driver binding doc to address comments from Rob
 
-> > > > Yes, I've been saying for some time we need a pre-probe. Or we need a
-> > > > forced probe where the subsystem walks the DT nodes for the bus and
-> > > > probes the devices in DT (if they're in DT, we know they are present).
-> > > > This was the discussion only a few weeks ago for MDIO (which I think
-> > > > concluded with they already do the latter).
-> > > 
-> > > This is why I suggested putting the new code into the xhci-platform
-> > > driver.  That is the right place for doing these "pre-probes" of DT
-> > > nodes for hubs attached to the host controller.
-> > 
-> > Reminder that the driver is not exclusively about powering the hub, but
-> > also about powering it off conditionally during system suspend, depending
-> > on what devices are connected to either of the busses. Should this also
-> > be done in the xhci-platform driver?
-> 
-> It certainly could be.  The platform-specific xhci suspend and resume
-> routines could power the hub on and off as needed, along with powering
-> the host controller.
-> 
-> > Since we are talking about "pre-probes" I imagine the idea is to have a
-> > USB device driver that implements the power on/off sequence (in pre_probe()
-> > and handles the suspend/resume case. I already went through a variant of
-> > this with an earlier version of the onboard_hub_driver, where suspend/resume
-> > case was handled by the USB hub device. One of the problems with this was
-> > that power must only be turned off after both USB hub devices have been
-> > suspended. Some instance needs to be aware that there are two USB devices
-> > and make the decision whether to cut the power during system suspend
-> > or not, which is one of the reasons I ended up with the platform
-> > driver. It's not clear to me how this would be addressed by using
-> > "pre-probes". Potentially some of the handling could be done by
-> > xhci-platform, but would that be really better than a dedicated driver?
-> 
-> _All_ of the handling could be done by xhci-plat.  Since the xHCI
-> controller is the parent of both the USB-2 and USB-3 incarnations of
-> the special hub, it won't get suspended until they are both in
-> suspend, and it will get resumed before either of them.  Similarly,
-> the power to the special hub could be switched on as part of the host
-> controller's probe routine and switched off during the host
-> controller's remove routine.
-> 
-> Using xhci-plat in this way would be better than a dedicated driver in
-> the sense that it wouldn't then be necessary to make up a fictitious
-> platform device and somehow describe it in DT.
-> 
-> The disadvantage is that we would end up with a driver that's
-> nominally meant to handle host controllers but now also manages (at
-> least in part) hubs.  A not-so-clean separation of functions.  But
-> that's not terribly different from the way your current patch works,
-> right?
+Changes for v2:
+- Drop the 2 patches for new property("snps,xhci-dis-64bit-support-quirk")
+  introduction, as suggested, imply by SoC compatible string, this is done
+  by introduce dwc3 core platform data and pass the xhci_plat_priv to
+  xhci-plat for those xhci quirks, so a new patch added:
+  [1/5] usb: dwc3: add platform data to dwc3 core device to pass data.
+  this patch is based on Peter's one patch which is also in review:
+  https://patchwork.kernel.org/patch/11640945/
+- dts change, use the USB power function of TRL logic instead of a always-on
+  regulator to control vbus on/off.
+- Some changes to address Peter's command on patch [2/5].
 
-Yes, this muddling of the xhci-plat code with the handling of hubs was
-one of my concerns, but who am I to argue if you as USB maintainer see
-that preferable over a dedicated driver. I suppose you are taking into
-account that there will be a need for code for different hub models that
-has to live somewhere (could be a dedicated file or directory).
+Li Jun (4):
+  dt-bindings: usb: dwc3-imx8mp: add imx8mp dwc3 glue bindings
+  usb: dwc3: add imx8mp dwc3 glue layer driver
+  arm64: dtsi: imx8mp: add usb nodes
+  arm64: dts: imx8mp-evk: enable usb1 as host mode
 
-And even if it is not my specific use case it would be nice to support
-hubs that are part of a hierarchy and not wired directly to the host
-controller. We don't necessarily have to implement all support for this
-initially, but should have it in mind at least for the bindings.
+ .../devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml   | 106 ++++++
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts       |  21 ++
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |  82 +++++
+ drivers/usb/dwc3/Kconfig                           |  10 +
+ drivers/usb/dwc3/Makefile                          |   1 +
+ drivers/usb/dwc3/dwc3-imx8mp.c                     | 363 +++++++++++++++++++++
+ 6 files changed, 583 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
+ create mode 100644 drivers/usb/dwc3/dwc3-imx8mp.c
 
-Also we would probably lose the ability to use a sysfs attribute to
-configure whether the hub should be always powered during suspend or
-not. This could be worked around with a DT property, however DT
-maintainers tend to be reluctant about configuration entries that
-don't translate directly to the hardware.
+-- 
+2.7.4
 
-I think at this point I should say that I can't personally commit to
-implement such a solution in a foreseeable future due to other
-commitments involved in shipping products. But I also want to make it
-clear that as a project Chrome OS is interested in landing this
-functionality upstream. I might be able to carve out some time, but it's
-not certain. If not we will come back to this eventually, be it myself
-or someone else on behalf of Chrome OS.
