@@ -2,84 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEC3280F0F
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 10:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E53280F14
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 10:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726029AbgJBIh7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 04:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725961AbgJBIh7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 04:37:59 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BD9C0613D0
-        for <linux-usb@vger.kernel.org>; Fri,  2 Oct 2020 01:37:59 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id e5so160415vkm.2
-        for <linux-usb@vger.kernel.org>; Fri, 02 Oct 2020 01:37:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=RySDOEtGGD32o2QkU9ooGytFUyvPsgdbUrYkbeSTAvg=;
-        b=LTFWpxGVP2jVAQntSKZAQHxbNVNA+KoNlw/ak6WT/nVoejIgy1ssijqxfhAYn8ViH5
-         I8pvwCmIqEW1PlToqmm2THREtccRpxa8b7RFhUUGhifW/PYSAsGpLLFaKOFM716deS2V
-         Y5rSOFGdDkl+HgQZAA6K1z2sQK8sekbjX2P4Qd80E0fcE4zIOWwI3YVos9BdJ7vzeabx
-         hynyfXUdMGyc4XlhzHvCK0wQoTzl7iXSjsl6EDm/wreMW0oxnQG+nTlEaCSbOnejBm0U
-         hs/Mg7CdB/DYY1FeGr3qcnvzmbN6ORnMK+0Nkk/EPQC7Zx/RMXTwByjmP2gEQ7u0vkoA
-         Lr+g==
+        id S1726275AbgJBIkK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 04:40:10 -0400
+Received: from mail-lj1-f178.google.com ([209.85.208.178]:37491 "EHLO
+        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725961AbgJBIkK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 04:40:10 -0400
+Received: by mail-lj1-f178.google.com with SMTP id n25so540412ljj.4
+        for <linux-usb@vger.kernel.org>; Fri, 02 Oct 2020 01:40:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=RySDOEtGGD32o2QkU9ooGytFUyvPsgdbUrYkbeSTAvg=;
-        b=j3CaAB2qcsbnPLuc5jQbPsFWpf34R46kgS+6YNPixiRLwAXPyKmVCPBGYn3MCioPWj
-         c29yy4gCwEVcnn7AQFp3ddXGyZnvnqBI/t1opnkGIywhO4aknREw4hO9JvpFvdkP2KG3
-         WB81g4xn9zlL6dNMJcnqX5lxutUEj2cYgS8dpkcYrp3JZDRiL1IZkVK4z8Q+su863Lki
-         zAXwsa40JW99WUr7PUQnNwdNcrtfhIS2IeD+rHvIhGsvv/diif3To9sas33qlO8bp0/U
-         PU0MzKg53yB3u/J+p+Zxszc8yh4xr32bZjGTFKTE+ziDmOSMQG7D0VLKCmvpLNpovqGn
-         KvUg==
-X-Gm-Message-State: AOAM531CAHDqNyUScwqYnULMnnbZ2YYI+8EeVPLs86MhKhXTwKL1KpMK
-        WjnOHt9Tqfueer7IyEKeqwWZaylF4qYzM39U134=
-X-Google-Smtp-Source: ABdhPJyRvQtiKfVjgb2/pfQZv0qxRfTDF9c/tSc0RuIhox1yvPzES1Zn960play+Q6fdJ4DYmp7mBYQ8jz95K1FzA0E=
-X-Received: by 2002:a1f:43d0:: with SMTP id q199mr358110vka.9.1601627878517;
- Fri, 02 Oct 2020 01:37:58 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a9f:22c4:0:0:0:0:0 with HTTP; Fri, 2 Oct 2020 01:37:58 -0700 (PDT)
-In-Reply-To: <20201002070148.GF5141@localhost>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1AsSbmuUbFnG9IeGJ+M9J2J0J/6RZYlXUszXAUmeyKo=;
+        b=Qk403HcK2mCmLcBLNkZiejbfU6GZ54BrkQYcOa/BFAgyHrOih0+i10uL9hGyeyaFol
+         VcapbAvOADdIGpEtXAeVatwhbJMemesYixbDZZmRFeAvYkbdr+i8DT4zs9A+N615klxW
+         JMFl9TJAoAYFEEW6HksdTIbxWab8MeRa6fRQhNth3XB/6gFFgL0OR1hyCzUC5KJ5S2gH
+         mX1BiSKRDFZ2qtPSEPnCLGSiIxffA7FFuKJIWdF/Qv+w04sv3KyQ5TaZfcwqqdaCi0SQ
+         zI06bdWB0n/qyhy2E4BLSo2KGYxaeAfaSfnwEXaATd5THdiBUQ2RYvquoPJmY4PjXElN
+         Fhjw==
+X-Gm-Message-State: AOAM532RCwj4PekrFk+F2Ks/iA0UQW8M0ExuNJE0/OA1xD2aZ2decEtN
+        GdPGrGaA1cRgyWGQpZ0Z5IA=
+X-Google-Smtp-Source: ABdhPJz8GX0WWWMkZjOtCUzF7w8KEX4hRnhNDY9ZC2QuFpM78lWBefCvj97XQk+w2mJ/54TE9CNKag==
+X-Received: by 2002:a2e:a554:: with SMTP id e20mr430389ljn.458.1601628008367;
+        Fri, 02 Oct 2020 01:40:08 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id r132sm169897lff.167.2020.10.02.01.40.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2020 01:40:07 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kOGbh-00071e-7f; Fri, 02 Oct 2020 10:40:01 +0200
+Date:   Fri, 2 Oct 2020 10:40:01 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mychaela Falconia <mychaela.falconia@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [RFC] ftdi_sio driver: use altsetting or cur_altsetting?
+Message-ID: <20201002084001.GG5141@localhost>
 References: <CA+uuBqbCtc3EB0zPUE1WJ9s_+=Oyc5aHzYqUug7D4GpcsgoJcA@mail.gmail.com>
  <20201002070148.GF5141@localhost>
-From:   Mychaela Falconia <mychaela.falconia@gmail.com>
-Date:   Fri, 2 Oct 2020 00:37:58 -0800
-Message-ID: <CA+uuBqZg+GJk+7FNUh9V4LhCU5L0QSHsM_3Q5bVfsOecBkAnQw@mail.gmail.com>
-Subject: Re: [RFC] ftdi_sio driver: use altsetting or cur_altsetting?
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+ <CA+uuBqZg+GJk+7FNUh9V4LhCU5L0QSHsM_3Q5bVfsOecBkAnQw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+uuBqZg+GJk+7FNUh9V4LhCU5L0QSHsM_3Q5bVfsOecBkAnQw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
+On Fri, Oct 02, 2020 at 12:37:58AM -0800, Mychaela Falconia wrote:
+> Hi Johan,
+> 
+> > As long as you only access bNumInterfaces, which by definition is
+> > identical for all altsettings, it's not wrong per se.
+> 
+> But the code in ftdi_determine_type() that uses the altsetting pointer
+> is not looking at bNumInterfaces, it is looking at bInterfaceNumber
+> instead:
+> 
+>   inter = serial->interface->altsetting->desc.bInterfaceNumber;
 
-> As long as you only access bNumInterfaces, which by definition is
-> identical for all altsettings, it's not wrong per se.
+Sorry, I meant bInterfaceNumber above.
 
-But the code in ftdi_determine_type() that uses the altsetting pointer
-is not looking at bNumInterfaces, it is looking at bInterfaceNumber
-instead:
-
-  inter = serial->interface->altsetting->desc.bInterfaceNumber;
-
-> Yes, please use that for new code.
-
-OK, I will make a new version of my DUART28 patch with cur_altsetting
-instead of altsetting.
-
-> > Should I also make a patch to ftdi_determine_type() changing it to use
-> > cur_altsetting as well?
->
-> Sure; it's not needed for correctness, but let's do it for consistency.
-
-OK, I will include that patch as well in the next version of my series.
-
-M~
+Johan
