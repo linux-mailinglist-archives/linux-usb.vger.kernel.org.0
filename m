@@ -2,207 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60106281776
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 18:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC2328177B
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 18:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388002AbgJBQIl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 12:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
+        id S2388062AbgJBQIv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 12:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733260AbgJBQIl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 12:08:41 -0400
-Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E845EC0613D0
-        for <linux-usb@vger.kernel.org>; Fri,  2 Oct 2020 09:08:40 -0700 (PDT)
-Received: by mail-ua1-x942.google.com with SMTP id d18so294974uae.0
-        for <linux-usb@vger.kernel.org>; Fri, 02 Oct 2020 09:08:40 -0700 (PDT)
+        with ESMTP id S2387984AbgJBQIv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 12:08:51 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E23C0613E3
+        for <linux-usb@vger.kernel.org>; Fri,  2 Oct 2020 09:08:50 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id q4so1122874pjh.5
+        for <linux-usb@vger.kernel.org>; Fri, 02 Oct 2020 09:08:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+xu/Uk9wb4/SRX/lNOg251KFRQf7KzG5P3wRuNCk78Q=;
-        b=a3BhqywDHcthMTGATAxbl3NdAD83stTIBlQ2FfQ5ezFmBlhdJvMt0IZndBwDKvAmc8
-         m+njQ9M9skhmu9Q/AVESIG77rI8bC3IK0wnCXevl9VVVWrYn3rpllhfvcm+gW9GJJj8J
-         xyRSvc901uFfOxXZfBSXUGKak3C+AmMBhUi5k8Drd2CrZwMk7O+tPHNydC6bfHTcC3dw
-         fRSzIi96ECelYHaGgttb+oHit6lsATIJzcNO/nYihWqoxu8BxtY4PnIhFP7dwqUCsOue
-         DBH466z6r4OG/3+B3AHF8j/iKMdojiqmAcjVIlSIAK5myL3TxprvK7eP34QlWAiIWg7o
-         HraQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+fnkCRnu87XrPPwPAXvTK0+WH+kB4qR2/orTOS8Bb18=;
+        b=VKY/ZwEEoMKuGn9NoyHtvpV5xd23RapB/8ROFjgdKqqPw4ud3Mb+2KEuqkBum0+F7W
+         0ZVi7Z7XhuszSAxdDT+z53l99wQl/NeOqY70UPkqnWi/ufvolH510qMz7Ej0cPzjZRSQ
+         yoPgg1SxaKyVrLFW8u57TsaCk5pNUD1oDOhcw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+xu/Uk9wb4/SRX/lNOg251KFRQf7KzG5P3wRuNCk78Q=;
-        b=emQNQ6rJ849j6G8hwGq1S0zwGvrxhIKe/mFLOTboKcuSgTCdeH38FLp/AxeyAUcb0R
-         WsGH3RwrLZHN8VRKG/CU0plvNGxA5CtVsBYvtlpHA4+tad1BRUGKIGiGj1AcCsvOnWkH
-         WG/XQ1dSJZNPQnrDRqNWllz+o9KN/WFhe5qALQdyK3CKP6NG8qyYHTKbDwVAx46bvkNd
-         hfafQ79TnFFxJWnhj0Jh1vKILclCc+tVXvoyAlyG8ZHc/ujnaN4U9xJLBOoc33nAVN4q
-         go4oUYq6Ab3RkZ5t8dqqmt/iJKnC4OHLUFAwvg5D5XH7AR8NrgEOeaRBY2NwoHzaVTII
-         9LMQ==
-X-Gm-Message-State: AOAM533aa0iUYAB0cFXeuAk5TpoKeMP9JBMdH1CFkXq8Zpv91MBzWZ++
-        RQWsc+Act0TJBG2C6p6SCg6QqXKRl+3yireIBhBE1g==
-X-Google-Smtp-Source: ABdhPJygv1guoMmOlqYRQxvkcv9hBfbPNVn1KMr3qe8rFpypjiJPn3b/GKYn1BpK1Fr1JuCtbnaxJj09Zqlzs4FZwWo=
-X-Received: by 2002:ab0:768:: with SMTP id h95mr1573232uah.23.1601654916896;
- Fri, 02 Oct 2020 09:08:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200929024004.244992-1-badhri@google.com> <20200929024004.244992-3-badhri@google.com>
- <20201002133952.GA3411859@kroah.com> <20201002134041.GA3412330@kroah.com>
-In-Reply-To: <20201002134041.GA3412330@kroah.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Fri, 2 Oct 2020 09:08:00 -0700
-Message-ID: <CAPTae5LBeY1qifPmGce+6Cu2hjVx=QZazk53Y=n6RPPRAuozLA@mail.gmail.com>
-Subject: Re: [PATCH v9 02/15] usb: typec: tcpci: Add set_vbus tcpci callback
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Prashant Malani <pmalani@chromium.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+fnkCRnu87XrPPwPAXvTK0+WH+kB4qR2/orTOS8Bb18=;
+        b=XzBHjturNAvY13EM7gVDZS/l9B/njHw/l1uWeRsa7ENE+cS9Km8MXZbf6ABBa5++WZ
+         AI3syjLwg4dAVXrCy5Mj5F3KX919xLY42Xy65NTH3+VsMG4Ry7sRGXgccv9UU4qcL13i
+         CPGpWxnQqXaBMvS1M+dUoZ2vHqhUlJGAVZe5atF/F2DZL3SRzeULHuUlbCA6RGc4Lknv
+         ciPku/wC6TGlsSvcPGX+4F9s4FwB8xnlRUxBhDwabvrH+5T6NG14tQ987gtgm/wfss+F
+         ZL6ktetpOkjNa4fSUJ66z4duuC7mgEKb9ydwvO4Mx7GqJqzk+7ZtYWOXIwlWPCBdP9YJ
+         gd4A==
+X-Gm-Message-State: AOAM532MwzPQa6hAtT+oI8N77MAmZ0UrW6C2sNCSQrFhBvQ6QL8bftDn
+        uRuVZJOIw6G7mDJrqdJWmPbNCg==
+X-Google-Smtp-Source: ABdhPJyc9LPKpmQnwick/WQtT8a3qWJMiSceUD3Ppt/TUKDZA99mJMpvjeCMOO7NGFJUOZPxKGWfbA==
+X-Received: by 2002:a17:90a:1702:: with SMTP id z2mr3538485pjd.88.1601654929473;
+        Fri, 02 Oct 2020 09:08:49 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id gk14sm2068634pjb.41.2020.10.02.09.08.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Oct 2020 09:08:48 -0700 (PDT)
+Date:   Fri, 2 Oct 2020 09:08:47 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Rob Herring <robh@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
+ onboard USB hubs
+Message-ID: <20201002160847.GA2704892@google.com>
+References: <20200929201701.GA1080459@bogus>
+ <20200929220912.GF1621304@google.com>
+ <20200930013229.GB194665@rowland.harvard.edu>
+ <20200930124915.GA1826870@google.com>
+ <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
+ <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
+ <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
+ <20201001012413.GA232049@rowland.harvard.edu>
+ <20201001215412.GB2362632@google.com>
+ <20201002012153.GA270859@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201002012153.GA270859@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On Thu, Oct 01, 2020 at 09:21:53PM -0400, Alan Stern wrote:
+> On Thu, Oct 01, 2020 at 02:54:12PM -0700, Matthias Kaehlcke wrote:
+> > Hi,
+> > 
+> > thanks for providing more insights on the USB hardware!
+> 
+> Sure.
+> 
+> > On Wed, Sep 30, 2020 at 09:24:13PM -0400, Alan Stern wrote:
+> > > A hub that attaches only to the USB-3 data wires in a cable is not USB
+> > > compliant.  A USB-2 device plugged into such a hub would not work.
+> > > 
+> > > But ports can be wired up in weird ways.  For example, it is possible
+> > > to have the USB-3 wires from a port going directly to the host
+> > > controller, while the USB-2 wires from the same port go through a
+> > > USB-2 hub which is then connected to a separate host controller.  (In
+> > > fact, my office computer has just such an arrangement.)
+> > 
+> > It's not clear to me how this case would be addressed when (some of) the
+> > handling is done in xhci-plat.c We have two host controllers now, which one
+> > is supposed to be in charge? I guess the idea is to specify the hub only
+> > for one of the controllers?
+> 
+> I don't grasp the point of this question.  It doesn't seem to be
+> relevant to the case you're concerned about -- your board isn't going to
+> wire up the special hub in this weird way, is it?
 
-Yes I tested it on usb-next before sending it out.
+When doing upstream development I try to look beyond my specific use case
+and aim for solutions that are generally useful.
 
-  630 |  tcpci->tcpc.enable_frs =3D tcpci_enable_frs;
+I don't know how common a configuration like the one on your office computer
+is. If it isn't a fringe case it seems like we should support it if feasible.
 
-In https://patchwork.kernel.org/project/linux-usb/list/?series=3D356837
-i.e v9 version of this series,
-Patch 7 i.e. https://patchwork.kernel.org/patch/11804847/ is where the
-above line is added.
+> > > > Yes, I've been saying for some time we need a pre-probe. Or we need a
+> > > > forced probe where the subsystem walks the DT nodes for the bus and
+> > > > probes the devices in DT (if they're in DT, we know they are present).
+> > > > This was the discussion only a few weeks ago for MDIO (which I think
+> > > > concluded with they already do the latter).
+> > > 
+> > > This is why I suggested putting the new code into the xhci-platform
+> > > driver.  That is the right place for doing these "pre-probes" of DT
+> > > nodes for hubs attached to the host controller.
+> > 
+> > Reminder that the driver is not exclusively about powering the hub, but
+> > also about powering it off conditionally during system suspend, depending
+> > on what devices are connected to either of the busses. Should this also
+> > be done in the xhci-platform driver?
+> 
+> It certainly could be.  The platform-specific xhci suspend and resume
+> routines could power the hub on and off as needed, along with powering
+> the host controller.
+> 
+> > Since we are talking about "pre-probes" I imagine the idea is to have a
+> > USB device driver that implements the power on/off sequence (in pre_probe()
+> > and handles the suspend/resume case. I already went through a variant of
+> > this with an earlier version of the onboard_hub_driver, where suspend/resume
+> > case was handled by the USB hub device. One of the problems with this was
+> > that power must only be turned off after both USB hub devices have been
+> > suspended. Some instance needs to be aware that there are two USB devices
+> > and make the decision whether to cut the power during system suspend
+> > or not, which is one of the reasons I ended up with the platform
+> > driver. It's not clear to me how this would be addressed by using
+> > "pre-probes". Potentially some of the handling could be done by
+> > xhci-platform, but would that be really better than a dedicated driver?
+> 
+> _All_ of the handling could be done by xhci-plat.  Since the xHCI
+> controller is the parent of both the USB-2 and USB-3 incarnations of
+> the special hub, it won't get suspended until they are both in
+> suspend, and it will get resumed before either of them.  Similarly,
+> the power to the special hub could be switched on as part of the host
+> controller's probe routine and switched off during the host
+> controller's remove routine.
+> 
+> Using xhci-plat in this way would be better than a dedicated driver in
+> the sense that it wouldn't then be necessary to make up a fictitious
+> platform device and somehow describe it in DT.
+> 
+> The disadvantage is that we would end up with a driver that's
+> nominally meant to handle host controllers but now also manages (at
+> least in part) hubs.  A not-so-clean separation of functions.  But
+> that's not terribly different from the way your current patch works,
+> right?
 
-I restested in combinations [1]  [2] [3] [4]. All of them were clear
-cherry-picks. I didnt any merge conflicts.
+Yes, this muddling of the xhci-plat code with the handling of hubs was
+one of my concerns, but who am I to argue if you as USB maintainer see
+that preferable over a dedicated driver. I suppose you are taking into
+account that there will be a need for code for different hub models that
+has to live somewhere (could be a dedicated file or directory).
 
-Maybe you are applying patches in a different order ?
-If so can you post the git log for me to apply in the same order and test ?
+And even if it is not my specific use case it would be nice to support
+hubs that are part of a hierarchy and not wired directly to the host
+controller. We don't necessarily have to implement all support for this
+initially, but should have it in mind at least for the bindings.
 
-Or Do you want me to rebase on top of usb-testing ?
-I didnt see any merge conflicts though.
+Also we would probably lose the ability to use a sysfs attribute to
+configure whether the hub should be always powered during suspend or
+not. This could be worked around with a DT property, however DT
+maintainers tend to be reluctant about configuration entries that
+don't translate directly to the hardware.
 
-Thanks,
-Badhri
-
-
-[1] usb-testing all patches in series
-https://patchwork.kernel.org/project/linux-usb/list/?series=3D356837
-07684bb88ed4 (HEAD -> usb-testing) usb: typec: tcpci_maxim: Enable
-auto discharge disconnect
-1c97f5e32ba6 usb: typec: tcpci: Implement Auto discharge disconnect callbac=
-ks
-1b829a062e6e usb: typec: tcpm: Implement enabling Auto Discharge
-disconnect support
-7ba4edfd9155 usb: typec: tcpm: Parse frs type-c current from device tree
-01d47f2e98ba usb: typec: tcpci_max77759: Fix vbus stuck on upon
-diconnecting sink
-9e8ed3d8809c usb: typec: tcpci: frs sourcing vbus callback
-8804a3f75563 usb: typec: tcpm: frs sourcing vbus callback
-69fe6c1c7648 usb: typec: tcpci_maxim: Add support for Sink FRS
-0a22d446c026 usb: typec: tcpci: Implement callbacks for FRS
-93c622006aa6 usb: typec: tcpm: Add support for Sink Fast Role SWAP(FRS)
-14672081f2fd dt-bindings: connector: Add property to set initial
-current cap for FRS
-58372bd1d8e8 usb: typec: tcpci_maxim: Chip level TCPC driver
-c16b09eaf60f dt-bindings: usb: Maxim type-c controller device tree
-binding document
-32d66c0449e1 usb: typec: tcpci: Add set_vbus tcpci callback
-85e90e5054d6 usb: typec: tcpci: Add a getter method to retrieve
-tcpm_port reference
-97b65223c18f (origin/usb-testing) USB: core: remove polling for
-/sys/kernel/debug/usb/devices
-da0cb6310094 usb: typec: add support for STUSB160x Type-C controller family
-
-[2] usb-testing: till patch4 in series
-https://patchwork.kernel.org/project/linux-usb/list/?series=3D356837
-58372bd1d8e8 (HEAD -> usb-testing) usb: typec: tcpci_maxim: Chip level
-TCPC driver
-c16b09eaf60f dt-bindings: usb: Maxim type-c controller device tree
-binding document
-32d66c0449e1 usb: typec: tcpci: Add set_vbus tcpci callback
-85e90e5054d6 usb: typec: tcpci: Add a getter method to retrieve
-tcpm_port reference
-97b65223c18f (origin/usb-testing) USB: core: remove polling for
-/sys/kernel/debug/usb/devices
-da0cb6310094 usb: typec: add support for STUSB160x Type-C controller family
-
-[3] usb-next all patches in series
-https://patchwork.kernel.org/project/linux-usb/list/?series=3D356837
-62b5171538da (HEAD -> usb-next) usb: typec: tcpci_maxim: Enable auto
-discharge disconnect
-ea8987805ba6 usb: typec: tcpci: Implement Auto discharge disconnect callbac=
-ks
-af9a12b19352 usb: typec: tcpm: Implement enabling Auto Discharge
-disconnect support
-33aec604a529 usb: typec: tcpm: Parse frs type-c current from device tree
-31df45f3df20 usb: typec: tcpci_max77759: Fix vbus stuck on upon
-diconnecting sink
-0945795f170d usb: typec: tcpci: frs sourcing vbus callback
-c49080982064 usb: typec: tcpm: frs sourcing vbus callback
-67a3ff254cc1 usb: typec: tcpci_maxim: Add support for Sink FRS
-299582bbf78f usb: typec: tcpci: Implement callbacks for FRS
-bb4eb3fb65df usb: typec: tcpm: Add support for Sink Fast Role SWAP(FRS)
-5aad64e80460 dt-bindings: connector: Add property to set initial
-current cap for FRS
-6c59a16ddee2 usb: typec: tcpci_maxim: Chip level TCPC driver
-172274d3e327 dt-bindings: usb: Maxim type-c controller device tree
-binding document
-bdba308a7164 usb: typec: tcpci: Add set_vbus tcpci callback
-66b7b0d83399 usb: typec: tcpci: Add a getter method to retrieve
-tcpm_port reference
-59ee364bafb2 (origin/usb-next) Merge tag 'thunderbolt-for-v5.10-rc1'
-of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt
-into usb-next
-bf1c67449833 USB: cdc-acm: clean up no-union-descriptor handling
-
-[4] usb-next till patch4 in series
-https://patchwork.kernel.org/project/linux-usb/list/?series=3D356837
-6c59a16ddee2 (HEAD -> usb-next) usb: typec: tcpci_maxim: Chip level TCPC dr=
-iver
-172274d3e327 dt-bindings: usb: Maxim type-c controller device tree
-binding document
-bdba308a7164 usb: typec: tcpci: Add set_vbus tcpci callback
-66b7b0d83399 usb: typec: tcpci: Add a getter method to retrieve
-tcpm_port reference
-59ee364bafb2 (origin/usb-next) Merge tag 'thunderbolt-for-v5.10-rc1'
-of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt
-into usb-next
-bf1c67449833 USB: cdc-acm: clean up no-union-descriptor handling
-
-
-On Fri, Oct 2, 2020 at 6:40 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Oct 02, 2020 at 03:39:52PM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Sep 28, 2020 at 07:39:51PM -0700, Badhri Jagan Sridharan wrote:
-> > > set_vbus callback allows TCPC which are TCPCI based, however,
-> > > does not support turning on sink and source mode through
-> > > Command.SinkVbus and Command.SourceVbusDefaultVoltage.
-> > >
-> > > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >
-> > This patch breaks the build, are you sure you tested it?
->
-> Sorry, not this patch, patch 4:
->
-> drivers/usb/typec/tcpm/tcpci.c: In function =E2=80=98tcpci_register_port=
-=E2=80=99:
-> drivers/usb/typec/tcpm/tcpci.c:630:13: error: =E2=80=98struct tcpc_dev=E2=
-=80=99 has no member named =E2=80=98enable_frs=E2=80=99
->   630 |  tcpci->tcpc.enable_frs =3D tcpci_enable_frs;
->       |             ^
->
->
-> thanks,
->
-> greg k-h
+I think at this point I should say that I can't personally commit to
+implement such a solution in a foreseeable future due to other
+commitments involved in shipping products. But I also want to make it
+clear that as a project Chrome OS is interested in landing this
+functionality upstream. I might be able to carve out some time, but it's
+not certain. If not we will come back to this eventually, be it myself
+or someone else on behalf of Chrome OS.
