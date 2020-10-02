@@ -2,116 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08135280F4F
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 10:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5774280F64
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 11:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbgJBIyF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 04:54:05 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:55368 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgJBIyF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 04:54:05 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0928s11M027860;
-        Fri, 2 Oct 2020 03:54:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1601628841;
-        bh=qK1L55KSfGNxl5yZH44hYOSd5RrT+2Tiy4CzcoiMp8w=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=CjGLMEl9/HIDjXDQ6B/4cmefDpNn7EfWKURg7lJUcLUPI7fx0dVQtOLli8sXM/Wyj
-         YixbHu5tc4vdO7FQ3575B7C2xi8g6z+8prVSbQwkSb4qr/2o4V2McWXFMBboIWDhnE
-         Z0XcvGYuFQxnSyhRd+vceQ1pkcvdRpWDMo2zo81k=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0928s1Nt022521
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 2 Oct 2020 03:54:01 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 2 Oct
- 2020 03:54:00 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 2 Oct 2020 03:54:00 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0928rwou018386;
-        Fri, 2 Oct 2020 03:53:58 -0500
-Subject: Re: [PATCH] usb: cdns3: platform_get_irq_byname_optional instead
- platform_get_irq_byname
-To:     Pawel Laszczak <pawell@cadence.com>, <balbi@kernel.org>
-CC:     <peter.chen@nxp.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kurahul@cadence.com>
-References: <20200930065758.23740-1-pawell@cadence.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <722fa58e-604b-bc34-d404-caf7939bb176@ti.com>
-Date:   Fri, 2 Oct 2020 11:53:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726813AbgJBJBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 05:01:31 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:40386 "EHLO aibo.runbox.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725993AbgJBJBb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Oct 2020 05:01:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+         s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject;
+        bh=iKgcxn0i1/cv46SgFMPp/05i4iv/GdMjt7BrOzXUMqE=; b=CiDs3gPR3UJl7ZWmxxAc8c1mr1
+        3mT8MYl1iByMQOSG1hjJJZapU4UVOaxnqSq29xw2cl42x5aNBn/qbInxcjcP7IVzulwrvEWLckllU
+        hE0SJh94v6zr3ra/hsoJa2RzsK8ZN+b6YFXV40L3Rzqqtk49Dfdrma5KBwcdDE05hRTJ/Ea3JMy8A
+        c1YnxxISU2ErZK2CBJQr3FQjsLzWJYU4d4vjvTtSu55q1TXWapMZha7841PCqtLs6oLGnEEIX5pSh
+        hKEvhm9/Upaz5symRfR3h3VSTs0v1feDu1ki2O/p+NLLq+FNUnveJmMpkjNGhgBSyQOuKGT7k7z3m
+        kiJUcrPQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <m.v.b@runbox.com>)
+        id 1kOGwN-0001m0-UC; Fri, 02 Oct 2020 11:01:24 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1kOGw7-0004sC-Fb; Fri, 02 Oct 2020 11:01:07 +0200
+Subject: Re: [PATCH v3 0/4] Fixes for usbip and specialised USB driver
+ selection
+To:     Brooke Basile <brookebasile@gmail.com>, linux-usb@vger.kernel.org
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        syzkaller@googlegroups.com
+References: <20200922110703.720960-1-m.v.b@runbox.com>
+ <36a8c401-029e-54ae-2468-04d557f3c31f@gmail.com>
+From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+Message-ID: <a0a61fc1-eb83-f4a3-1e06-63e0c67bf4ae@runbox.com>
+Date:   Fri, 2 Oct 2020 12:00:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-In-Reply-To: <20200930065758.23740-1-pawell@cadence.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <36a8c401-029e-54ae-2468-04d557f3c31f@gmail.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Pawel,
-
-On 30/09/2020 09:57, Pawel Laszczak wrote:
-> To avoid duplicate error information patch replaces platform_get_irq_byname
-> into platform_get_irq_byname_optional.
-
-What is duplicate error information?
-
+On 10/2/20 6:11 AM, Brooke Basile wrote:
+> On 9/22/20 7:06 AM, M. Vefa Bicakci wrote:
+>> Hello all,
+>>
+>> This is the third version of the patch sets originally published in the
+>> e-mail thread thread at [1]. As mentioned in the same e-mail thread with
+>> the e-mail at [2], I was able to find a more acceptable solution to the
+>> issue reported by Andrey Konovalov, where usbip takes over the
+>> dummy_hcd-provided devices set up by the USB fuzzing instance of the
+>> syzkaller fuzzer.
+>>
+>> In summary, the approach involves:
+>>
+>> * Removal of the usbip_match function.
+>> * Fixing two bugs in the specialised USB driver selection code.
+>> * Accommodating usbip by changing the logic in the specialised USB
+>>    driver selection code, while preserving legacy/previous behaviour.
+>>
+>> I have tested this patch set with Greg Kroah-Hartman's usb-next tree
+>> based on v5.9-rc6 with the base commit mentioned below in this e-mail,
+>> and I can report that usbip works as expected, with no regressions in
+>> the usbip_test.sh self-test suite output compared to v4.14.119. I have
+>> also verified that the apple-mfi-fastcharge driver is correctly used
+>> when an iPhone is plugged in to my system. Finally, I can report that
+>> Andrey Konovalov's "keyboard" test program making use of dummy_hcd,
+>> found at [3], also works as expected.
+>>
+>> I would appreciate your comments.
+>>
+>> Thank you,
+>>
+>> Vefa
+>>
+>> [1] https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=OE8T=O9208B9HP_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/
+>> [2] https://lore.kernel.org/linux-usb/9f332d7b-e33d-ebd0-3154-246fbfb69128@runbox.com/
+>> [3] https://github.com/xairy/raw-gadget
+>>
+>> Cc: Bastien Nocera <hadess@hadess.net>
+>> Cc: Valentina Manea <valentina.manea.m@gmail.com>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: Alan Stern <stern@rowland.harvard.edu>
+>> Cc: <syzkaller@googlegroups.com>
+>>
+>> M. Vefa Bicakci (4):
+>>    Revert "usbip: Implement a match function to fix usbip"
+>>    usbcore/driver: Fix specific driver selection
+>>    usbcore/driver: Fix incorrect downcast
+>>    usbcore/driver: Accommodate usbip
+>>
+>>   drivers/usb/core/driver.c    | 50 ++++++++++++++++++++++++------------
+>>   drivers/usb/usbip/stub_dev.c |  6 -----
+>>   2 files changed, 34 insertions(+), 22 deletions(-)
+>>
+>>
+>> base-commit: 55be22adf11b48c80ea181366685ec91a4700b7e
+>>
 > 
-> A change was suggested during reviewing CDNSP driver by Chunfeng Yun.
+> Hi,
 > 
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
->   drivers/usb/cdns3/core.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> I ran into this issue when trying to use two different FTDI serial TTL cables on my laptop, running 5.9-rc7.
 > 
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index a0f73d4711ae..a3f6dc44cf3a 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -465,7 +465,7 @@ static int cdns3_probe(struct platform_device *pdev)
->   
->   	cdns->xhci_res[1] = *res;
->   
-> -	cdns->dev_irq = platform_get_irq_byname(pdev, "peripheral");
-> +	cdns->dev_irq = platform_get_irq_byname_optional(pdev, "peripheral");
-
-As per DT binding document, these are mandatory properties
-
-  - interrupts: Interrupts used by cdns3 controller:
-         "host" - interrupt used by XHCI driver.
-         "peripheral" - interrupt used by device driver
-         "otg" - interrupt used by DRD/OTG  part of driver
-
-for dr_mode == "otg" -> all 3 are mandatory.
-for dr_mode == "host" -> "otg" and "peripheral" IRQs are not required.
-for dr_mode == "periphearal" -> "otg" and "host" IRQs are not required.
-
->   	if (cdns->dev_irq == -EPROBE_DEFER)
->   		return cdns->dev_irq;
->   
-> @@ -477,7 +477,7 @@ static int cdns3_probe(struct platform_device *pdev)
->   		return PTR_ERR(regs);
->   	cdns->dev_regs	= regs;
->   
-> -	cdns->otg_irq = platform_get_irq_byname(pdev, "otg");
-> +	cdns->otg_irq = platform_get_irq_byname_optional(pdev, "otg");
->   	if (cdns->otg_irq == -EPROBE_DEFER)
->   		return cdns->otg_irq;
->   
+> This patch set fixes the issue.
 > 
+> Oddly, I was unable to reproduce the issue on another laptop, also running 5.9-rc7.
+> 
+> Tested-by: Brooke Basile <brookebasile@gmail.com>
+> 
+> Thank you!
+> Brooke Basile
 
-cheers,
--roger
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Hello Brooke,
+
+Thank you for the feedback! Greg Kroah-Hartman has committed the patches
+to the usb-linus branch of the USB git tree about a week ago, so it may
+unfortunately be a bit late to add your Tested-by tag to the patch series.
+Nevertheless, I appreciate your success report!
+
+In case you are interested, the committed patches can be seen here:
+   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/log/?h=usb-linus&id=3fce39601a1a34d940cf62858ee01ed9dac5d459
+
+Thanks again,
+
+Vefa
