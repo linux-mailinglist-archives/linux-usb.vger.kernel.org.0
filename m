@@ -2,108 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A32280DAE
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 08:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2D6280DC2
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 09:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726010AbgJBGyq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 02:54:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48312 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725948AbgJBGyq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 2 Oct 2020 02:54:46 -0400
-Received: from saruman (91-155-214-30.elisa-laajakaista.fi [91.155.214.30])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1B00A206DD;
-        Fri,  2 Oct 2020 06:54:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601621685;
-        bh=z4hrLfS2vbsNKuA/4CFaG1UIGVRS4fPgGADyjGM/3UU=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=mqm5tG2wZFAUQHwvREi9paYIQnAtqCyeqs3lRjvpdLz3boBauvUaL7OB9OlWC51xC
-         uZccn3dzS1h69bDvRo7N7BH1aTsXOh9HT1pWJ077vE/71abh2rc83UKzhYWECe97vI
-         p2m+W4uA3e1WVR3Vxkvqy5ya0XT19FwNGrSGNG4Q=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Sid Spry <sid@aeam.us>, linux-usb@vger.kernel.org
-Subject: Re: ConfigFS: bcdUSB forced to 0x0210
-In-Reply-To: <8baba7f6-35aa-49a6-89eb-f57164cab41f@www.fastmail.com>
-References: <ce4fc6f6-726e-48b3-97bb-0de2b3801615@www.fastmail.com>
- <87k0wd9jog.fsf@kernel.org>
- <8baba7f6-35aa-49a6-89eb-f57164cab41f@www.fastmail.com>
-Date:   Fri, 02 Oct 2020 09:54:39 +0300
-Message-ID: <87ft6xxgls.fsf@kernel.org>
+        id S1726099AbgJBHB7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 03:01:59 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:46203 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725948AbgJBHB6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 03:01:58 -0400
+Received: by mail-lj1-f195.google.com with SMTP id a22so326740ljp.13
+        for <linux-usb@vger.kernel.org>; Fri, 02 Oct 2020 00:01:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1BnrX27+prQRJRNwGZWZtT64hnMA+2EyDsdJm6xJ93M=;
+        b=E5StnfiG5iXtDpqWJdYCdPSSVpt7tJh18/k40L8ZS0uuWwPY/H7YOSC+uMj261k8Zi
+         kqzGCRWOsdYwBPER0kK2nGD8HsgPs5A+9lp4ufv2ygJePCSMqcWnxJ5M2Nmj53XLFXwg
+         RditZiFmmbc1+oMhnd6x1hIim0+yvlwaN9w5/wUEQJS8wAyZf92l/YtlwyZeMu1D/9d3
+         kBlDTMz+08vm9vR0GPGmE2sMnThea6e3yBw4g2+BDPSs0vji+2GaE+zHB8dER6dk5jZa
+         qiD+p87UcxG6ctZ6wMvk8tnXRR80H1vPyGELg6ZN88UvqvAw316e9IA+h6ETBHRfQnYk
+         SIgQ==
+X-Gm-Message-State: AOAM532HWlF4iwwYXA6yM9vL1LIsJYSlqO/EXcsNHY8z8CO9TJLNfe8P
+        AI5978Zu44j6Ub/JdXchHi0=
+X-Google-Smtp-Source: ABdhPJxW1Tk2JxQ+maDf6wrBO7TafFTVckMrtWZS8LgXYyBnZdAFerWPD4+HDiXL5MJ8D74nAMv1AQ==
+X-Received: by 2002:a2e:8705:: with SMTP id m5mr264643lji.459.1601622116684;
+        Fri, 02 Oct 2020 00:01:56 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id k14sm127280lfm.90.2020.10.02.00.01.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2020 00:01:55 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kOF4e-0006VY-L1; Fri, 02 Oct 2020 09:01:48 +0200
+Date:   Fri, 2 Oct 2020 09:01:48 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mychaela Falconia <mychaela.falconia@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [RFC] ftdi_sio driver: use altsetting or cur_altsetting?
+Message-ID: <20201002070148.GF5141@localhost>
+References: <CA+uuBqbCtc3EB0zPUE1WJ9s_+=Oyc5aHzYqUug7D4GpcsgoJcA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+uuBqbCtc3EB0zPUE1WJ9s_+=Oyc5aHzYqUug7D4GpcsgoJcA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
+On Thu, Oct 01, 2020 at 11:20:08AM -0800, Mychaela Falconia wrote:
+> Hello esteemed linux-usb folks,
+> 
+> While I am trying to get a little quirk for my custom hardware device
+> added to the ftdi_sio driver, I noticed an inconsistency between use
+> of interface->altsetting vs. interface->cur_altsetting in the existing
+> driver code.  Specifically:
+> 
+> * ftdi_determine_type() function uses this construct to get the number
+>   of the interface it is operating on:
+> 
+>   inter = serial->interface->altsetting->desc.bInterfaceNumber;
+> 
+> * ftdi_set_max_packet_size() uses interface->cur_altsetting to get to
+>   desc.bNumEndpoints and endpoint[i].desc
+> 
+> * The JTAG cleanup patch which Johan just applied uses
+>   intf->cur_altsetting->desc.bInterfaceNumber
 
-DQpIaSwNCg0KIlNpZCBTcHJ5IiA8c2lkQGFlYW0udXM+IHdyaXRlczoNCj4gT24gVHVlLCBTZXAg
-MjksIDIwMjAsIGF0IDE6MzMgQU0sIEZlbGlwZSBCYWxiaSB3cm90ZToNCj4+IA0KPj4gSGksDQo+
-PiANCj4+ICJTaWQgU3ByeSIgPHNpZEBhZWFtLnVzPiB3cml0ZXM6DQo+PiA+IEhpLCBJIGNhbid0
-IGVuYWJsZSBVU0IzIHdpdGggZS5nLiBmX25jbSBiZWNhdXNlIGJjZFVTQiBpcyBhbHdheXMgcmVz
-ZXQgdG8gMHgwMjEwOg0KPj4gPg0KPj4gPiAkIHN1ZG8gc2ggLWMgJ2VjaG8gIjB4MDMwMCIgPiAv
-c3lzL2tlcm5lbC9jb25maWcvdXNiX2dhZGdldC9nMTEvYmNkVVNCJw0KPj4gPiAkIGNhdCAvc3lz
-L2tlcm5lbC9jb25maWcvdXNiX2dhZGdldC9nMTEvYmNkVVNCIA0KPj4gPiAweDAzMDANCj4+ID4g
-JCBzdWRvIHNoIC1jICdlY2hvICJmZTgwMDAwMC51c2IiID4gL3N5cy9rZXJuZWwvY29uZmlnL3Vz
-Yl9nYWRnZXQvZzExL1VEQycNCj4+ID4gJCBjYXQgL3N5cy9rZXJuZWwvY29uZmlnL3VzYl9nYWRn
-ZXQvZzExL2JjZFVTQiANCj4+ID4gMHgwMjEwDQo+PiA+ICQgdHJlZSAvc3lzL2tlcm5lbC9jb25m
-aWcvdXNiX2dhZGdldC9nMTENCj4+ID4gL3N5cy9rZXJuZWwvY29uZmlnL3VzYl9nYWRnZXQvZzEx
-DQo+PiA+IOKUnOKUgOKUgCBiY2REZXZpY2UNCj4+ID4g4pSc4pSA4pSAIGJjZFVTQg0KPj4gPiDi
-lJzilIDilIAgYkRldmljZUNsYXNzDQo+PiA+IOKUnOKUgOKUgCBiRGV2aWNlUHJvdG9jb2wNCj4+
-ID4g4pSc4pSA4pSAIGJEZXZpY2VTdWJDbGFzcw0KPj4gPiDilJzilIDilIAgYk1heFBhY2tldFNp
-emUwDQo+PiA+IOKUnOKUgOKUgCBjb25maWdzDQo+PiA+IOKUgsKgwqAg4pSU4pSA4pSAIGMuMQ0K
-Pj4gPiDilILCoMKgICAgICDilJzilIDilIAgYm1BdHRyaWJ1dGVzDQo+PiA+IOKUgsKgwqAgICAg
-IOKUnOKUgOKUgCBNYXhQb3dlcg0KPj4gPiDilILCoMKgICAgICDilJzilIDilIAgbmNtLjAgLT4g
-Li4vLi4vLi4vLi4vdXNiX2dhZGdldC9nMTEvZnVuY3Rpb25zL25jbS4wDQo+PiA+IOKUgsKgwqAg
-ICAgIOKUlOKUgOKUgCBzdHJpbmdzDQo+PiA+IOKUgsKgwqAgICAgICAgICDilJTilIDilIAgMHg0
-MDkNCj4+ID4g4pSCwqDCoCAgICAgICAgICAgICDilJTilIDilIAgY29uZmlndXJhdGlvbg0KPj4g
-PiDilJzilIDilIAgZnVuY3Rpb25zDQo+PiA+IOKUgsKgwqAg4pSU4pSA4pSAIG5jbS4wDQo+PiA+
-IOKUgsKgwqAgICAgIOKUnOKUgOKUgCBkZXZfYWRkcg0KPj4gPiDilILCoMKgICAgICDilJzilIDi
-lIAgaG9zdF9hZGRyDQo+PiA+IOKUgsKgwqAgICAgIOKUnOKUgOKUgCBpZm5hbWUNCj4+ID4g4pSC
-wqDCoCAgICAg4pSc4pSA4pSAIG9zX2Rlc2MNCj4+ID4g4pSCwqDCoCAgICAg4pSCwqDCoCDilJTi
-lIDilIAgaW50ZXJmYWNlLm5jbQ0KPj4gPiDilILCoMKgICAgICDilILCoMKgICAgICDilJzilIDi
-lIAgY29tcGF0aWJsZV9pZA0KPj4gPiDilILCoMKgICAgICDilILCoMKgICAgICDilJTilIDilIAg
-c3ViX2NvbXBhdGlibGVfaWQNCj4+ID4g4pSCwqDCoCAgICAg4pSU4pSA4pSAIHFtdWx0DQo+PiA+
-IOKUnOKUgOKUgCBpZFByb2R1Y3QNCj4+ID4g4pSc4pSA4pSAIGlkVmVuZG9yDQo+PiA+IOKUnOKU
-gOKUgCBtYXhfc3BlZWQNCj4+ID4g4pSc4pSA4pSAIG9zX2Rlc2MNCj4+ID4g4pSCwqDCoCDilJzi
-lIDilIAgYl92ZW5kb3JfY29kZQ0KPj4gPiDilILCoMKgIOKUnOKUgOKUgCBxd19zaWduDQo+PiA+
-IOKUgsKgwqAg4pSU4pSA4pSAIHVzZQ0KPj4gPiDilJzilIDilIAgc3RyaW5ncw0KPj4gPiDilILC
-oMKgIOKUlOKUgOKUgCAweDQwOQ0KPj4gPiDilILCoMKgICAgICDilJzilIDilIAgbWFudWZhY3R1
-cmVyDQo+PiA+IOKUgsKgwqAgICAgIOKUnOKUgOKUgCBwcm9kdWN0DQo+PiA+IOKUgsKgwqAgICAg
-IOKUlOKUgOKUgCBzZXJpYWxudW1iZXINCj4+ID4g4pSU4pSA4pSAIFVEQw0KPj4gPg0KPj4gPiBC
-b2FyZCBpcyBhIFJLMzM5OSBiYXNlZCBSb2NrUHJvNjQuDQo+PiANCj4+IHdoYXQncyB5b3VyIG1h
-eF9zcGVlZD8NCj4+IA0KPg0KPiAkIGNhdCAvc3lzL2tlcm5lbC9jb25maWcvdXNiX2dhZGdldC9n
-MTEvbWF4X3NwZWVkIA0KPiBzdXBlci1zcGVlZA0KPg0KPiBMb29rcyBvay4gRnJvbSBXaW5kb3dz
-LCB0aGUgeEhDSSBkcml2ZXIgcmVwb3J0cyB0aGF0IHRoZSBkZXZpY2Ugc3VwcG9ydHMNCj4gc3Vw
-ZXIgc3BlZWQgYnV0IGNob29zZXMgaGlnaCBzcGVlZC4gSSBjYW4ndCBzZWUgdGhpcyBpbmZvIGZy
-b20gYSBMaW51eCBob3N0Lg0KDQpJdCdzIHByb2JhYmx5IGZhaWxpbmcgUnguRGV0ZWN0IGFuZCBm
-YWxsaW5nIGJhY2sgdG8gaGlnaC1zcGVlZC4gV2hpY2gNClVTQiBQZXJpcGhlcmFsIENvbnRyb2xs
-ZXIgaXMgdGhhdD8NCg0KLS0gDQpiYWxiaQ0K
+Yeah, I noticed that too.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+> So which is the right one to use, intf->altsetting or intf->cur_altsetting?
+> The comments in include/linux/usb.h say that the altsetting member
+> points to an array of struct usb_host_interface stored in no particular
+> order, so using that pointer in ftdi_determine_type() seems wrong -
+> but then I am a total novice in this area, hence I am hoping that
+> someone more knowledgeable could confirm.
 
------BEGIN PGP SIGNATURE-----
+As long as you only access bNumInterfaces, which by definition is
+identical for all altsettings, it's not wrong per se. But in general,
+drivers should use cur_altsetting to not have to worry about such
+subtleties and as a safe guard in case further fields are ever needed.
+ 
+> The most recent version of my DUART28C quirk adding patch uses
+> serial->interface->altsetting, copied from ftdi_determine_type() -
+> should I change my proposed patch to use cur_altsetting instead?
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl92zq8RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYH0xAAwVgiZU4VWEsvzaqPjnvQDoU4bezZfiST
-zbkoNAqcV1d4V/eo8sysCVidPAYoTYP9T1TA6uN5YSPhPBLLGCCf6E7N6i9xQx2j
-muYSSwEKaSYnb+J43Sb1VPNq0PberN1VymSU7RdBkbIVSfwJHqX5cU15LL5cTJOl
-fXo5FxcWHK2kNcFiAz9RXPYJdDYQ7Usc+mYh13QnXqEMOD37KzhQgrHKcgOZAdru
-IgI0WQMFJCpZlt+90c8PytFNa5o/TzJ+xCvlzYmWTBTeWWaDTzI0OYpoUVEu07E0
-7YkJ6rj+GZOl5aUwe3EW/rLtbcC73BqHMj45FJHS2SmZ1O7wV1qhgusf7bTC96t8
-ygDj+KzfiOgySlklvzZE4fXZUyUNnv23Rd2cHv+7NEV/c+E5JhsGHyrMm53FQlwV
-mekp5ERFMnh4XTH8J56JqfACbaWGbBfvVUpD1Mc5zAcfr6v3vHd2DSRI1oUhCrrS
-QPy5OxAo5wdzVFZ6y7JcZVCHab37VvrOUov/5MCqLhg8T1nBb9r7QdJIdgshU/zL
-Udt44TJ51sT6Ot34/P3cNQRBw5KmGE2FGJ2FVeJdpMHwbud6Lr+I7+qsinn8OhVe
-jk3CBOuU9ECRxCTIAIlWP7hRS1OyFid1/G4jtHzwAHiUZSv/PB3hJvBD+g2l+kCJ
-gP/7bx2Y1II=
-=ydJc
------END PGP SIGNATURE-----
---=-=-=--
+Yes, please use that for new code.
+
+> Should I also make a patch to ftdi_determine_type() changing it to use
+> cur_altsetting as well?
+
+Sure; it's not needed for correctness, but let's do it for consistency.
+
+Johan
