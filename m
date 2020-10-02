@@ -2,69 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E53280F14
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 10:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08135280F4F
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 10:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgJBIkK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 04:40:10 -0400
-Received: from mail-lj1-f178.google.com ([209.85.208.178]:37491 "EHLO
-        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725961AbgJBIkK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 04:40:10 -0400
-Received: by mail-lj1-f178.google.com with SMTP id n25so540412ljj.4
-        for <linux-usb@vger.kernel.org>; Fri, 02 Oct 2020 01:40:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1AsSbmuUbFnG9IeGJ+M9J2J0J/6RZYlXUszXAUmeyKo=;
-        b=Qk403HcK2mCmLcBLNkZiejbfU6GZ54BrkQYcOa/BFAgyHrOih0+i10uL9hGyeyaFol
-         VcapbAvOADdIGpEtXAeVatwhbJMemesYixbDZZmRFeAvYkbdr+i8DT4zs9A+N615klxW
-         JMFl9TJAoAYFEEW6HksdTIbxWab8MeRa6fRQhNth3XB/6gFFgL0OR1hyCzUC5KJ5S2gH
-         mX1BiSKRDFZ2qtPSEPnCLGSiIxffA7FFuKJIWdF/Qv+w04sv3KyQ5TaZfcwqqdaCi0SQ
-         zI06bdWB0n/qyhy2E4BLSo2KGYxaeAfaSfnwEXaATd5THdiBUQ2RYvquoPJmY4PjXElN
-         Fhjw==
-X-Gm-Message-State: AOAM532RCwj4PekrFk+F2Ks/iA0UQW8M0ExuNJE0/OA1xD2aZ2decEtN
-        GdPGrGaA1cRgyWGQpZ0Z5IA=
-X-Google-Smtp-Source: ABdhPJz8GX0WWWMkZjOtCUzF7w8KEX4hRnhNDY9ZC2QuFpM78lWBefCvj97XQk+w2mJ/54TE9CNKag==
-X-Received: by 2002:a2e:a554:: with SMTP id e20mr430389ljn.458.1601628008367;
-        Fri, 02 Oct 2020 01:40:08 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id r132sm169897lff.167.2020.10.02.01.40.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2020 01:40:07 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kOGbh-00071e-7f; Fri, 02 Oct 2020 10:40:01 +0200
-Date:   Fri, 2 Oct 2020 10:40:01 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Mychaela Falconia <mychaela.falconia@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [RFC] ftdi_sio driver: use altsetting or cur_altsetting?
-Message-ID: <20201002084001.GG5141@localhost>
-References: <CA+uuBqbCtc3EB0zPUE1WJ9s_+=Oyc5aHzYqUug7D4GpcsgoJcA@mail.gmail.com>
- <20201002070148.GF5141@localhost>
- <CA+uuBqZg+GJk+7FNUh9V4LhCU5L0QSHsM_3Q5bVfsOecBkAnQw@mail.gmail.com>
+        id S1726274AbgJBIyF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 04:54:05 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:55368 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725993AbgJBIyF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 04:54:05 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0928s11M027860;
+        Fri, 2 Oct 2020 03:54:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1601628841;
+        bh=qK1L55KSfGNxl5yZH44hYOSd5RrT+2Tiy4CzcoiMp8w=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=CjGLMEl9/HIDjXDQ6B/4cmefDpNn7EfWKURg7lJUcLUPI7fx0dVQtOLli8sXM/Wyj
+         YixbHu5tc4vdO7FQ3575B7C2xi8g6z+8prVSbQwkSb4qr/2o4V2McWXFMBboIWDhnE
+         Z0XcvGYuFQxnSyhRd+vceQ1pkcvdRpWDMo2zo81k=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0928s1Nt022521
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 2 Oct 2020 03:54:01 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 2 Oct
+ 2020 03:54:00 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 2 Oct 2020 03:54:00 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0928rwou018386;
+        Fri, 2 Oct 2020 03:53:58 -0500
+Subject: Re: [PATCH] usb: cdns3: platform_get_irq_byname_optional instead
+ platform_get_irq_byname
+To:     Pawel Laszczak <pawell@cadence.com>, <balbi@kernel.org>
+CC:     <peter.chen@nxp.org>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kurahul@cadence.com>
+References: <20200930065758.23740-1-pawell@cadence.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <722fa58e-604b-bc34-d404-caf7939bb176@ti.com>
+Date:   Fri, 2 Oct 2020 11:53:57 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+uuBqZg+GJk+7FNUh9V4LhCU5L0QSHsM_3Q5bVfsOecBkAnQw@mail.gmail.com>
+In-Reply-To: <20200930065758.23740-1-pawell@cadence.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 02, 2020 at 12:37:58AM -0800, Mychaela Falconia wrote:
-> Hi Johan,
-> 
-> > As long as you only access bNumInterfaces, which by definition is
-> > identical for all altsettings, it's not wrong per se.
-> 
-> But the code in ftdi_determine_type() that uses the altsetting pointer
-> is not looking at bNumInterfaces, it is looking at bInterfaceNumber
-> instead:
-> 
->   inter = serial->interface->altsetting->desc.bInterfaceNumber;
+Pawel,
 
-Sorry, I meant bInterfaceNumber above.
+On 30/09/2020 09:57, Pawel Laszczak wrote:
+> To avoid duplicate error information patch replaces platform_get_irq_byname
+> into platform_get_irq_byname_optional.
 
-Johan
+What is duplicate error information?
+
+> 
+> A change was suggested during reviewing CDNSP driver by Chunfeng Yun.
+> 
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>   drivers/usb/cdns3/core.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+> index a0f73d4711ae..a3f6dc44cf3a 100644
+> --- a/drivers/usb/cdns3/core.c
+> +++ b/drivers/usb/cdns3/core.c
+> @@ -465,7 +465,7 @@ static int cdns3_probe(struct platform_device *pdev)
+>   
+>   	cdns->xhci_res[1] = *res;
+>   
+> -	cdns->dev_irq = platform_get_irq_byname(pdev, "peripheral");
+> +	cdns->dev_irq = platform_get_irq_byname_optional(pdev, "peripheral");
+
+As per DT binding document, these are mandatory properties
+
+  - interrupts: Interrupts used by cdns3 controller:
+         "host" - interrupt used by XHCI driver.
+         "peripheral" - interrupt used by device driver
+         "otg" - interrupt used by DRD/OTG  part of driver
+
+for dr_mode == "otg" -> all 3 are mandatory.
+for dr_mode == "host" -> "otg" and "peripheral" IRQs are not required.
+for dr_mode == "periphearal" -> "otg" and "host" IRQs are not required.
+
+>   	if (cdns->dev_irq == -EPROBE_DEFER)
+>   		return cdns->dev_irq;
+>   
+> @@ -477,7 +477,7 @@ static int cdns3_probe(struct platform_device *pdev)
+>   		return PTR_ERR(regs);
+>   	cdns->dev_regs	= regs;
+>   
+> -	cdns->otg_irq = platform_get_irq_byname(pdev, "otg");
+> +	cdns->otg_irq = platform_get_irq_byname_optional(pdev, "otg");
+>   	if (cdns->otg_irq == -EPROBE_DEFER)
+>   		return cdns->otg_irq;
+>   
+> 
+
+cheers,
+-roger
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
