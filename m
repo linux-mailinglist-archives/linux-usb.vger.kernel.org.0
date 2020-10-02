@@ -2,137 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87977281808
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 18:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D167D28181C
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 18:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388134AbgJBQfV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 12:35:21 -0400
-Received: from mail-vi1eur05on2055.outbound.protection.outlook.com ([40.107.21.55]:30241
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        id S2388126AbgJBQjM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 12:39:12 -0400
+Received: from mail-am6eur05on2061.outbound.protection.outlook.com ([40.107.22.61]:62943
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1733260AbgJBQfU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 2 Oct 2020 12:35:20 -0400
+        id S1726017AbgJBQjM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Oct 2020 12:39:12 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YyPNgmrMv1hQPZz7oKaCyM6mcqnXd77WhCEs9GLKI4FS7woJs8GaBO3oOZIC+XDpaTiCPP93cJi9mNf/llTzSI/ra2HESQNaQUyRIzzzNhQiNFoUdeEKyOqIFzy6XM8sfXnFjYxjRpFG9SyO43IX8dkdh1a5ihO/rBUn0lPcHvC0OTl6pZMl1Kz/0v7UvkUJHACrc0EJo3MgpKy+93CyUsHpCrogrez4d0dzh1oCtjgu2ItzUg60Z+uPp3aWFSBAiJ0XkWwh+twSx+Gs0F4xukasPtMHuLiWxEGWL7EHxg7wuzjRRRJQiXqwwxymfm8MLU04JdTEhqLAWWL0DGlVyg==
+ b=YAi+pNKguh5hn089TBoAReKvQlpGfy2JmT32Qqeyx80idmeSaGGm6irUYQqvPK9ZnbsbcrP4RHV1v6/mbCYYWBfk24j7TFoh6GizXgpu2fw+SWSXJx+5EHRglko+LtCp5KS9Wunh74G0SlkjRmWhYWK84mXBrx8vSvdLrK8s5/PYvTGvUPROVrjy7TV1Fq2kdjofKxCO7fDpL73jJfPgqlE+U2omseoYaTp4zDQQ07B7fx3hDWnjvvwoEo3svsln7RmiZVYWHCnuDtp+iPO80526LLvils4fhEIDyEONF4G9VMm7xlP2xmbUR+NlYTRkv6kHcWcCWxPh26aQFwAJ3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QI4zXmZg7Uo6OKFNqSKKwim+JAGdaV75yasTPS+Lg1k=;
- b=fF7cWdJONzvTKzTBVvS26GWE6HFauMhg79VM1m8JOzw/sqV5AszRtYm83cYoBnH1WCiBdU35HPq/nbNYU7qfEzfjfJSWGrVLMO0CafL2+OSq7tRXai1Ezb8kKULMn4eT4evDWH2VQKjxlh5LWpZsUckuSkLWQBgL6R4B6/T4tltEPupn91C3Vp6X3Q1vu4w5fB8fl1oFvOIGoBVEiQ2kIP5yk+Uv3ZK9r+hhOABtQUCkCA1sTXHze4fh10CHPkH7wmevSG22czH4uvzm1E6fNGbiQ0M2wnmvGXFT8DBz9tWJYTZ3wuGV7FgWV8pvIUQmanic7koppeLRqB/OVpqT4w==
+ bh=1gv4iEcMYx0OyvkqEPjT+zyiD0KFIWrrQgQNvESD/3U=;
+ b=LB3xgkHYi5eBxcLSuBzN/nqLlRCsBHjAvECHPFy9QjF3D2ZVjzyHobMHu4y1gC6zm1nK6uw/sk/HSkhEi4LTfBz20o084o+mMxCEAEO2Zt++kfSj5+ve+ZVdlul1V8crducHp5TGVyJXFigHc6NtAPqY62jbH4ooe1WiMqjmUCt2ZVTb/L8l4IsOad6UcTLNWZWJUu2rVVQEsguEtFY16em9QhWkHa8++urqNps0MTpoLLn0uW9qZIcLTevksiZHp0jX1WX7OI44BN/NxnyuwiKl07GbVJeJidJJHM7CtTzNfiUpSnErOG+9LVHw90ybPJlbSX5lDRUhyRJzVS4QSw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QI4zXmZg7Uo6OKFNqSKKwim+JAGdaV75yasTPS+Lg1k=;
- b=WiZK6GSacd3A9m3b+3vWQL+7PynYaDZ+oS2P62JPyzQ2I1vx1SzMLIcadi9k2RUPkGcA2ay2ZSjLsu9U0M6233fwdyOYVdAPr20vPcQL0e/gFdInYUOtUFBzByiE9yE8UxQA+mUFw78DyNlLcbUgdtbruQERb3wlBU/9p3y6hKI=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+ bh=1gv4iEcMYx0OyvkqEPjT+zyiD0KFIWrrQgQNvESD/3U=;
+ b=ZCjQJWvG6huMj9jM+yXv1HtbImfTttgytlbazbdGnWgv8VE9x29pCsfGUx9uWU5dNwDW/DFFdto0VSC4hpkBlTaAuiS3MW9BawR/IspXEiM3/E6HrfzXhEohmNHHMzrrhqdRhm/5M6CuDE7t29DDCAVceo3vAKipIEFIXz5Z0F4=
 Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
- by VI1PR04MB5213.eurprd04.prod.outlook.com (2603:10a6:803:54::21) with
+ by VI1PR04MB4063.eurprd04.prod.outlook.com (2603:10a6:803:43::28) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.38; Fri, 2 Oct
- 2020 16:35:17 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.34; Fri, 2 Oct
+ 2020 16:39:08 +0000
 Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
  ([fe80::acd3:d354:3f34:3af7]) by VE1PR04MB6528.eurprd04.prod.outlook.com
  ([fe80::acd3:d354:3f34:3af7%4]) with mapi id 15.20.3433.035; Fri, 2 Oct 2020
- 16:35:17 +0000
-From:   Li Jun <jun.li@nxp.com>
-To:     robh+dt@kernel.org, shawnguo@kernel.org, balbi@kernel.org,
-        mathias.nyman@intel.com
-Cc:     gregkh@linuxfoundation.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        Anson.Huang@nxp.com, jun.li@nxp.com, aisheng.dong@nxp.com,
-        peng.fan@nxp.com, fugang.duan@nxp.com, horia.geanta@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 4/4] arm64: dts: imx8mp-evk: enable usb1 as host mode
-Date:   Sat,  3 Oct 2020 00:30:38 +0800
-Message-Id: <1601656238-22232-5-git-send-email-jun.li@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1601656238-22232-1-git-send-email-jun.li@nxp.com>
-References: <1601656238-22232-1-git-send-email-jun.li@nxp.com>
-Content-Type: text/plain
-X-Originating-IP: [119.31.174.66]
-X-ClientProxiedBy: SG2PR01CA0106.apcprd01.prod.exchangelabs.com
- (2603:1096:3:15::32) To VE1PR04MB6528.eurprd04.prod.outlook.com
- (2603:10a6:803:127::18)
+ 16:39:08 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Andy Duan <fugang.duan@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH v3 1/6] dt-bindings: usb: xhci: add property to disable
+ xhci 64bit support
+Thread-Topic: [PATCH v3 1/6] dt-bindings: usb: xhci: add property to disable
+ xhci 64bit support
+Thread-Index: AQHWkM61QrKLPu36k064JwjfY8gEcKl/9jEAgAScaLA=
+Date:   Fri, 2 Oct 2020 16:39:07 +0000
+Message-ID: <VE1PR04MB65289A63097155D84736D64589310@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <1600771612-30727-1-git-send-email-jun.li@nxp.com>
+ <1600771612-30727-2-git-send-email-jun.li@nxp.com>
+ <20200929181108.GA885311@bogus>
+In-Reply-To: <20200929181108.GA885311@bogus>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.68]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: b157fce4-35ec-4bc6-d364-08d866f1aee8
+x-ms-traffictypediagnostic: VI1PR04MB4063:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB4063769CB4AF379AC7DF704F89310@VI1PR04MB4063.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: R+qWEwUWRKlTf9oKCRAY+jen/1gkUSp1n5TNqWu8UhZEuFQuK6v9nLTY+EedhKWonBpiuWpsA1bkHgq+fuV4qMrzvseeudeHjTKwvGnHDfKpLekVt/CJIU5ImEq1Onkef3RQju5Jx7SamlI6SvbnpduxmCSwebzZVRRdW2/pze+AKXP7gwRiPwnRsI1iGMuR9YJrIhXoi73xC1Rlm50pSwsBUePLPjSVJ8jIeW/yN/MxcoC8IwKjVHGwoHHpqGZtPB1ofqFM5bhZ4hgznLWHn8hW91VpG62nToaIv5seHfP7rzjelZdnX6ArGFJYCc+glupI5ZpCRwJS37czKvHoHw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(66946007)(64756008)(71200400001)(83380400001)(76116006)(2906002)(66446008)(66556008)(66476007)(33656002)(9686003)(5660300002)(6506007)(8676002)(55016002)(7696005)(44832011)(86362001)(186003)(52536014)(54906003)(4326008)(316002)(8936002)(478600001)(26005)(53546011)(7416002)(6916009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: ysOmlDiXtcO85rI2KJ2PLDAeoCjedFyhtIS1ZtByIvDRNgQ6nGkV3Qm7shI3GamxzyVv/QEITulD7B1vKzkxKVk1f6ETKDqApbPtY0XCtIOLiYTlO6YAPHJj8Dm668tiDt6K+hsZpI6Zt9tOR1thf+Sqxk9HkYebZaj82dCWWXCRIxMdu4jnSLA7IWTnA51UtHR9m0qSUa1xQu7lAZuLhUjCn5EW1Wr5EENnUMTG7dJLB4KRvCaXkc7dFUArXK8zMCv6t3SnppOwvIT+uCQRYh4o+3C9BZzBqHW6qcIRJradTcW0MW9Gl/eIf2jJZERYY/+djQU7ifCFtHfXxeSDemjpDyiw/RR+gmr9ZMsRuRwYzHyEg1nUSRyWtUbfi0umXpNtiIG4DvTT/Mjt77VxcI/ZtrIywe81oXlec82ChARcvrV1sKGKtrY5TRlKpek4Hyvi/LWQj5TndwA6OmUivsxfITzXF08akwdrhtgXuDAjsfw0VY6FiA0lRD+TjatqC7IfV+9fiReXZeOptSoDKY8/5oWxbcETREaAhcRSDnAzg1yuzStlvi1A9G08Btm6aqx6xqd+RCZlA6DW6iMsZx2FmrBf3NULZpwGZjJcDXaEt4J00WTHe4G1X4MIDRYT18k2PS+wPYyq/u1S0QtxQw==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR01CA0106.apcprd01.prod.exchangelabs.com (2603:1096:3:15::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3433.36 via Frontend Transport; Fri, 2 Oct 2020 16:35:12 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 4d19faee-1c29-454d-0129-08d866f12501
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5213:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VI1PR04MB521382D3E14995DA0CBB867989310@VI1PR04MB5213.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:200;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QVb/3A7KvefgU/pJZLRjN2OL03G0U7BC39LGXVgDLn0sC60qt19VCXrPIwx1KGMvO4DKGrZcKE6d2fzcDfUUwsjTt1LOT9RI5sJ494337prQ6ROOk420P7FM5/6cZc4a/ARgbzGBtY34kBlxci53+VhDbgH5j0/gW10uyEuJ5n+M31R5QTqpYYkhqHG7xE9oSaXBoclOtfYP16AyZ5iJZoaKbyUxgCTbg84ifrTIs/1mUI6J7g49iMCvHazAuJV51oGHMRr/FYOXq21a8/4ZUtLFovuYnXJ8ZGjrsKyCiy9RIotENLmQ6OTKsc/lvxATBC33rb0xnsGGmSnn9VCwvBmyTQt7f1gqGsKhNFTc2gL4HXhrZcj3I8ehMw9GhxAC9oC20lIYVwphpqMkUHDsy4ABYAawGcHSZ5pOrSDEi/Xs3/o3p/O1UEVHSDdPJBRj65v+kCdK8e4awnmOMSc+wQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(136003)(376002)(396003)(39860400002)(6666004)(52116002)(478600001)(8936002)(4744005)(6506007)(16526019)(4326008)(69590400008)(6486002)(26005)(186003)(83380400001)(2906002)(956004)(316002)(86362001)(8676002)(6512007)(2616005)(36756003)(5660300002)(7416002)(66556008)(66946007)(66476007)(32563001)(414714003)(473944003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: Zge0Ousali8M9fmonFK+JMePowg3XCYMsiB+r5w8P4uYasgXJFXHCuwamHtrPTymep+5Fyr+0CKOLncxk7aJoa29y2QET6xd0CgGRN59pJdXImQOFHvLMlai6hT3yrrA6t1MvxQflGiHgGnAs0IEjw7G9NrcPIMsUJenbWI4BfPrey6XD8xyuGgSYcqUlJNvprrQ0zMOX8HnMrjFqFKSep2RQ3IprRPjQHtPkknxHN4iRj3U903ZeaxWvAV5VlQ5U0eH0KkAWBX8lCUmswXWk6H4Hq8h/LqcziRFYaZNQ+Fr1s6AdOPu3n76WPTM2ogcRSfdKcYToj01HVPDMjr1f7vVOUBOfzqc441NXhk5reAGKEqjlZWJ7Dz6S9CZ1VnhGwXX0wrIwuP2maWRgCe0L+M+eSZCZHglvBU7zOwayJpYQX+zXm4JxHo0wCq6S9+byLxOWHBai+iBjJJrhFtGFqIMb5hEqwSwvPtRajeRcRGLk0y/w7a/kQUZteo9Fk5Ax7aZABuxrFNCvwvlykr8HFd7AhKhQPWO5DLnnUmMmh5OAEMhEA2hTX8C2HEHBDMyWzdVHSZJ7/4KMBxuEyaiBBGDLCFOz3272M7t/kW5ULDmkKL/I0Nv6mTy1mtI9B/Lu+Y+3IsPfO2vyDXcxw+yog==
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d19faee-1c29-454d-0129-08d866f12501
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Oct 2020 16:35:17.1197
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b157fce4-35ec-4bc6-d364-08d866f1aee8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2020 16:39:07.8561
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VFFKkLuZl2W5St41snfg8LxFa/vwiyEITGFiZHyDitGmQV43Jqp+pDQx0sTfGGmZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5213
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OfDzdoWvd9bY4oSQDuZFzPo5Kbhu/mmUyU+llGGt6yxC0+C6e3O93N2aOcrl81hq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4063
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable usb host port with type-A connector on imx8mp-evk board.
 
-Signed-off-by: Li Jun <jun.li@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+Hi Rob,
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: Wednesday, September 30, 2020 2:11 AM
+> To: Jun Li <jun.li@nxp.com>
+> Cc: shawnguo@kernel.org; balbi@kernel.org; mathias.nyman@intel.com;
+> gregkh@linuxfoundation.org; s.hauer@pengutronix.de;
+> kernel@pengutronix.de; festevam@gmail.com; dl-linux-imx
+> <linux-imx@nxp.com>; Anson Huang <anson.huang@nxp.com>; Aisheng Dong
+> <aisheng.dong@nxp.com>; Peng Fan <peng.fan@nxp.com>; Andy Duan
+> <fugang.duan@nxp.com>; Joakim Zhang <qiangqing.zhang@nxp.com>; Horia
+> Geanta <horia.geanta@nxp.com>; linux-usb@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org
+> Subject: Re: [PATCH v3 1/6] dt-bindings: usb: xhci: add property to disab=
+le
+> xhci 64bit support
+>=20
+> On Tue, Sep 22, 2020 at 06:46:47PM +0800, Li Jun wrote:
+> > Add a property "xhci-64bit-support-disable" to disable xhci 64bit
+> > address dma, some SoC integration may not support 64bit DMA but the
+> > AC64 bit (bit 0) of HCCPARAMS1 is kept to be 1.
+>=20
+> Use 'dma-ranges' for this.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-index 432c1a7..0cb3b16 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-@@ -176,6 +176,21 @@
- 	};
- };
- 
-+&usb3_phy1 {
-+	status = "okay";
-+};
-+
-+&usb3_1 {
-+	status = "okay";
-+};
-+
-+&usb_dwc3_1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb1_vbus>;
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
- &usdhc2 {
- 	assigned-clocks = <&clk IMX8MP_CLK_USDHC2>;
- 	assigned-clock-rates = <400000000>;
-@@ -276,6 +291,12 @@
- 		>;
- 	};
- 
-+	pinctrl_usb1_vbus: usb1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO14__HSIOMIX_usb2_OTG_PWR	0x19
-+		>;
-+	};
-+
- 	pinctrl_usdhc2: usdhc2grp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x190
--- 
-2.7.4
+Thanks, sent out v4 with dma-ranges property approach.
 
+Li Jun
+>=20
+> > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/usb-xhci.txt | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> > b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> > index 0c5cff8..26446fb 100644
+> > --- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> > +++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> > @@ -28,6 +28,9 @@ Optional properties:
+> >    - quirk-broken-port-ped: set if the controller has broken port disab=
+le
+> mechanism
+> >    - imod-interval-ns: default interrupt moderation interval is 5000ns
+> >    - phys : see usb-hcd.yaml in the current directory
+> > +  - xhci-64bit-support-disable: set if the AC64 bit (bit 0) of HCCPARA=
+MS1
+> is
+> > +    set to be 1, but the controller actually can't handle 64-bit addre=
+ss
+> > +    due to SoC integration.
+> >
+> >  additionally the properties from usb-hcd.yaml (in the current
+> > directory) are  supported.
+> > --
+> > 2.7.4
+> >
