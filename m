@@ -2,162 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD2A281049
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 12:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C83E281110
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 13:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387707AbgJBKGc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 06:06:32 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:33308 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgJBKGc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 06:06:32 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 092A6RPU085459;
-        Fri, 2 Oct 2020 05:06:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1601633187;
-        bh=xBCGG8uSnuwgHbQccQCfe/sl8mZ7XEzoHyACYS52sj0=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=PV71i67yQPdfMOxmof/v+w2EFQB40MUadDaoHjSuZXyRKxo5kwIdezpSHa9IAomc+
-         oBL1T1ycF6bIXTfCM3FqJgdyH8Fz24vBlapbBYG0sYJnrJKQO4WkpU3UtmnGO1nbZ4
-         qteN95HaeLjxOXQ5fUQRBUm19HVMGIQy0L3OH2nU=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 092A6Rgo004194
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 2 Oct 2020 05:06:27 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 2 Oct
- 2020 05:06:27 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 2 Oct 2020 05:06:27 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 092A6PBk106642;
-        Fri, 2 Oct 2020 05:06:25 -0500
-Subject: Re: [PATCH] usb: cdns3: platform_get_irq_byname_optional instead
- platform_get_irq_byname
-To:     Pawel Laszczak <pawell@cadence.com>,
-        "balbi@kernel.org" <balbi@kernel.org>
-CC:     "peter.chen@nxp.org" <peter.chen@nxp.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rahul Kumar <kurahul@cadence.com>
-References: <20200930065758.23740-1-pawell@cadence.com>
- <722fa58e-604b-bc34-d404-caf7939bb176@ti.com>
- <DM6PR07MB5529095F1B656C5065CBA8B4DD310@DM6PR07MB5529.namprd07.prod.outlook.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <b73f6bb7-8e5e-d5f9-5adf-f6b10bdb5fb6@ti.com>
-Date:   Fri, 2 Oct 2020 13:06:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2387765AbgJBLOX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 2 Oct 2020 07:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725920AbgJBLOU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 07:14:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1934C0613D0
+        for <linux-usb@vger.kernel.org>; Fri,  2 Oct 2020 04:14:19 -0700 (PDT)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1kOJ0y-0002nf-TV; Fri, 02 Oct 2020 13:14:16 +0200
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1kOJ0y-0004FX-Ay; Fri, 02 Oct 2020 13:14:16 +0200
+Message-ID: <87ac087154f461b6cac632bb62b92b8b94d90a67.camel@pengutronix.de>
+Subject: Re: [PATCH] reset: Add reset controller API
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-usb@vger.kernel.org, Jerome Brunet <jbrunet@baylibre.com>
+Date:   Fri, 02 Oct 2020 13:14:16 +0200
+In-Reply-To: <CAHNvnFO=kH25CqrAcndVO4xTQ2pGDFi5ZHEALpFaZaGL=e_c0Q@mail.gmail.com>
+References: <20201001132758.12280-1-aouledameur@baylibre.com>
+         <CAHNvnFO=kH25CqrAcndVO4xTQ2pGDFi5ZHEALpFaZaGL=e_c0Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-In-Reply-To: <DM6PR07MB5529095F1B656C5065CBA8B4DD310@DM6PR07MB5529.namprd07.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Pawel,
+Hi Amjad,
 
-On 02/10/2020 12:08, Pawel Laszczak wrote:
-> Roger,
-> 
->>
->> On 30/09/2020 09:57, Pawel Laszczak wrote:
->>> To avoid duplicate error information patch replaces platform_get_irq_byname
->>> into platform_get_irq_byname_optional.
->>
->> What is duplicate error information?
-> 
-> The function platform_get_irq_byname print:
-> " dev_err(&dev->dev, "IRQ %s not found\n", name);" if error occurred.
-> 
-> In core.c we have the another error message below invoking this function.
-> e.g
-> 	if (cdns->dev_irq < 0)
-> 		dev_err(dev, "couldn't get peripheral irq\n");
-> 
-> So, it's looks like one dev_err is  redundant.
+Thank you for the patch, comments below:
 
-If we want all 3 IRQs to be valid irrespective of dr_mode then we should
-use platform_get_irq_byname() and error out in probe if (ret < 0 && ret != -EPROBE_DEFER).
+On Thu, 2020-10-01 at 15:55 +0200, Amjad Ouled-Ameur wrote:
+> An update on the patch title, since we don't add an API but extend it,
+> The title should rather be: Add a new call to the reset framework
 
-We can get rid of the irq check and duplicate error message in other places.
+I think it should even say what functionality is added, for example
 
-cheers,
--roger
+"reset: make shared pulsed reset controls re-triggerable"
 
-> 
->>
->>>
->>> A change was suggested during reviewing CDNSP driver by Chunfeng Yun.
->>>
->>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->>> ---
->>>    drivers/usb/cdns3/core.c | 4 ++--
->>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
->>> index a0f73d4711ae..a3f6dc44cf3a 100644
->>> --- a/drivers/usb/cdns3/core.c
->>> +++ b/drivers/usb/cdns3/core.c
->>> @@ -465,7 +465,7 @@ static int cdns3_probe(struct platform_device *pdev)
->>>
->>>    	cdns->xhci_res[1] = *res;
->>>
->>> -	cdns->dev_irq = platform_get_irq_byname(pdev, "peripheral");
->>> +	cdns->dev_irq = platform_get_irq_byname_optional(pdev, "peripheral");
->>
->> As per DT binding document, these are mandatory properties
-> 
-> I think that name platform_get_irq_byname_optional is little confusing.
-> Function descriptions show that both are almost identical:
-> /**
->   * platform_get_irq_byname_optional - get an optional IRQ for a device by name
->   * @dev: platform device
->   * @name: IRQ name
->   *
->   * Get an optional IRQ by name like platform_get_irq_byname(). Except that it
->   * does not print an error message if an IRQ can not be obtained.
->   *
->   * Return: non-zero IRQ number on success, negative error number on failure.
->   */
-> 
->>
->>   - interrupts: Interrupts used by cdns3 controller:
->>          "host" - interrupt used by XHCI driver.
->>          "peripheral" - interrupt used by device driver
->>          "otg" - interrupt used by DRD/OTG  part of driver
->>
->> for dr_mode == "otg" -> all 3 are mandatory.
->> for dr_mode == "host" -> "otg" and "peripheral" IRQs are not required.
->> for dr_mode == "periphearal" -> "otg" and "host" IRQs are not required.
->>
->>>    	if (cdns->dev_irq == -EPROBE_DEFER)
->>>    		return cdns->dev_irq;
->>>
->>> @@ -477,7 +477,7 @@ static int cdns3_probe(struct platform_device *pdev)
->>>    		return PTR_ERR(regs);
->>>    	cdns->dev_regs	= regs;
->>>
->>> -	cdns->otg_irq = platform_get_irq_byname(pdev, "otg");
->>> +	cdns->otg_irq = platform_get_irq_byname_optional(pdev, "otg");
->>>    	if (cdns->otg_irq == -EPROBE_DEFER)
->>>    		return cdns->otg_irq;
->>>
->>>
->>
-> 
-> Regards,
-> Pawel
-> 
+> Le jeu. 1 oct. 2020 à 15:28, Amjad Ouled-Ameur
+> <aouledameur@baylibre.com> a écrit :
+> > The current reset framework API does not allow to release what is done by
+> > reset_control_reset(), IOW decrement triggered_count. Add the new
+> > reset_control_resettable() call to do so.
+> > 
+> > When reset_control_reset() has been called once, the counter
+> > triggered_count, in the reset framework, is incremented i.e the resource
+> > under the reset is in-use and the reset should not be done again.
+> > reset_control_resettable() would be the way to state that the resource is
+> > no longer used and, that from the caller's perspective, the reset can be
+> > fired again if necessary.
+> > 
+> > This patch will fix a usb suspend warning seen on the libretech-cc
+> > related to the shared reset line. This warning was addressed by the
+> > previously reverted commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared
+> > reset control use")
+> > 
+> > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> > Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+> > ---
+> >  drivers/reset/core.c  | 57 +++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/reset.h |  1 +
+> >  2 files changed, 58 insertions(+)
+> > 
+> > diff --git a/drivers/reset/core.c b/drivers/reset/core.c
+> > index 01c0c7aa835c..53653d4b55c4 100644
+> > --- a/drivers/reset/core.c
+> > +++ b/drivers/reset/core.c
+> > @@ -207,6 +207,19 @@ static int reset_control_array_reset(struct reset_control_array *resets)
+> >         return 0;
+> >  }
+> > 
+> > +static int reset_control_array_resettable(struct reset_control_array *resets)
+> > +{
+> > +       int ret, i;
+> > +
+> > +       for (i = 0; i < resets->num_rstcs; i++) {
+> > +               ret = reset_control_resettable(resets->rstc[i]);
+> > +               if (ret)
+> > +                       return ret;
+> > +       }
 
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+This is tricky, as we can't really roll back decrementing
+triggered_count in case just one of those fails.
+
+I think reset_control_array_resettable has to be open coded to first
+check for errors and only then loop through all controls and decrement
+their triggered_count.
+
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  static int reset_control_array_assert(struct reset_control_array *resets)
+> >  {
+> >         int ret, i;
+> > @@ -324,6 +337,50 @@ int reset_control_reset(struct reset_control *rstc)
+> >  }
+> >  EXPORT_SYMBOL_GPL(reset_control_reset);
+> > 
+> > +/**
+> > + * reset_control_resettable - decrements triggered_count of the controlled device
+> > + * @rstc: reset controller
+
+It is more important to document the purpose of the function than the
+mechanism by which it is achieved. triggered_count is an implementation
+detail.
+
+Maybe "allow shared reset line to be triggered again" or similar. 
+
+> > + *
+> > + * On a shared reset line the actual reset pulse is only triggered once for the
+> > + * lifetime of the reset_control instance, except if this function is used.
+> > + * In fact, It decrements triggered_count that makes sure of not allowing
+> > + * a reset if triggered_count is not null.
+> > + *
+> > + * This is a no-op in case triggered_count is already null i.e shared reset line
+> > + * is ready to be triggered.
+
+This is not a good idea IMHO. It would be better to document that calls
+to this function must be balanced with calls to reset_control_reset, and
+then throw a big warning below in case deassert_count ever dips below 0.
+
+Otherwise nothing stops drivers from silently decrementing other
+driver's trigger count by accidentally calling this multiple times.
+
+> > + *
+> > + * Consumers must not use reset_control_(de)assert on shared reset lines when
+> > + * reset_control_reset has been used.
+> > + *
+> > + * If rstc is NULL it is an optional clear and the function will just
+> > + * return 0.
+> > + */
+> > +int reset_control_resettable(struct reset_control *rstc)
+> > +{
+> > +       if (!rstc)
+> > +               return 0;
+> > +
+> > +       if (WARN_ON(IS_ERR(rstc)))
+> > +               return -EINVAL;
+> > +
+> > +       if (reset_control_is_array(rstc))
+> > +               return reset_control_array_resettable(rstc_to_array(rstc));
+> > +
+> > +       if (rstc->shared) {
+> > +               if (WARN_ON(atomic_read(&rstc->deassert_count) != 0))
+> > +                       return -EINVAL;
+> > +
+> > +               if (atomic_read(&rstc->triggered_count) > 0)
+> > +                       atomic_dec(&rstc->triggered_count);
+
+I think this should be
+
+		WARN_ON(atomic_dec_return(&rstc->triggered_count) < 0);
+
+regards
+Philipp
