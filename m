@@ -2,197 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3244280F74
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 11:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65055280F89
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Oct 2020 11:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387660AbgJBJFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 05:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387654AbgJBJFJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 05:05:09 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E500C0613D0
-        for <linux-usb@vger.kernel.org>; Fri,  2 Oct 2020 02:05:09 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id w12so615481qki.6
-        for <linux-usb@vger.kernel.org>; Fri, 02 Oct 2020 02:05:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4KLGIY8kBZKQW79md08Gf33a5SrMCafAhLuF6uyuXZU=;
-        b=ZTARo13FwOJBk4hUyi+czT3bpWxbBZgs6RxxBwBlogM8KH+GRE64DOJJpb7e1pvKtt
-         8KPGjfSDznNeTGDNHvmtDDRfq1QuP4T7r2I4lOgeyN5HyZmEYiSNoI8sVvt8hEy/rv5H
-         ewjYGd9G4DQ0p9+2OKrfCisWRBDxBTKTbGgueDWd0ASZFJVX4b4NVx2udhFxx//pFc2g
-         jp+SIRGST/fM1kRMhmD3w/rk+cSEna6k4LcSFCmD6oeGRWHDWn0LNFKNKa+t1Z7FFEw6
-         By5Ayu1eIe4YL47X3NLwZjZDlJpVp+s5mkA9PHBstGA1q32eVZNylIT361ufldp8dqzw
-         4a9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4KLGIY8kBZKQW79md08Gf33a5SrMCafAhLuF6uyuXZU=;
-        b=fR1XO7UnoKD+3zRp/uB4H1IhgwVIhL6qqFOzfRlWK9WmAm9ZjkfOVB6fIxMsun8HUc
-         Ej8aM4SSM+33sHVZ5M6EvlymRnRYou0TAVwkk1vS/bVZYKxPFKigBvO1lA10Tiuc3GDk
-         MSesIQpZ+9mB1nXAUDyuxrA76VXwtgXEo/YhHq5FaUGG35EFSWtPPb48+gBe8Q7+YFL+
-         VN3MT2PoOoYZf1TD83upe9tv6fyljuQkA8W/49QS51z0y9wawLeIUz6bJ6OtTxtT5PJB
-         JWlIOkWbhhw1lRd5QxYvehTfBy+MBsNfQUjHXaPuK0o3R2IN5QtK+tjAe2ftEZj9rmU+
-         fTTA==
-X-Gm-Message-State: AOAM531ICsfS6fJ0C+1CvWGQpxTL3FpbAo7KTPvMbSiygSqJ4fXgl5QC
-        Mi5q85uVcP1ZvPqqIGThU7U=
-X-Google-Smtp-Source: ABdhPJy/jILnfWqRBJ/hLIJmuYZW7T/uFcKJmpwJS64Uddff4KJbpT7AxMvydKzXF+7+rCeHeDV0sQ==
-X-Received: by 2002:a05:620a:4c3:: with SMTP id 3mr1130875qks.105.1601629508315;
-        Fri, 02 Oct 2020 02:05:08 -0700 (PDT)
-Received: from [192.168.1.181] (pool-173-75-208-99.phlapa.fios.verizon.net. [173.75.208.99])
-        by smtp.gmail.com with ESMTPSA id 206sm669840qkk.27.2020.10.02.02.05.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2020 02:05:07 -0700 (PDT)
-Subject: Re: [PATCH v3 0/4] Fixes for usbip and specialised USB driver
- selection
-To:     "M. Vefa Bicakci" <m.v.b@runbox.com>, linux-usb@vger.kernel.org
-Cc:     Bastien Nocera <hadess@hadess.net>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller@googlegroups.com
-References: <20200922110703.720960-1-m.v.b@runbox.com>
- <36a8c401-029e-54ae-2468-04d557f3c31f@gmail.com>
- <a0a61fc1-eb83-f4a3-1e06-63e0c67bf4ae@runbox.com>
-From:   Brooke Basile <brookebasile@gmail.com>
-Message-ID: <46d06a65-82b7-30ab-c59c-0061903addc0@gmail.com>
-Date:   Fri, 2 Oct 2020 05:05:06 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
-MIME-Version: 1.0
-In-Reply-To: <a0a61fc1-eb83-f4a3-1e06-63e0c67bf4ae@runbox.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S2387659AbgJBJIp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 05:08:45 -0400
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:17252 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725993AbgJBJIp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 05:08:45 -0400
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09296nvL012077;
+        Fri, 2 Oct 2020 02:08:39 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=Dp/hjLiK+wAD1zl98fUPXu4CaIyODvgpLxnH+fWE4Ss=;
+ b=XFyyZnjFCIiJSKQc/IT0LIN7NZ9o0cSuYmdm1+MzVDwTArh4PjdNzIRPj/iQyntMVhwu
+ esaWBPenEgCVkp+iZwsNNEGDprh2axcrGOOY7mqeTMIjpstbO1HYGUwPnHBFaZPlxySi
+ +uZkoO8ikWSjk+K9KW2zrezHjOqsgvPXAtWNySljRQEB0J0wT+/62f5/b2HPMLdC3oot
+ yj1vrAFhWgX7nkqmtgz6Dyqa+zvBG1fDerfjo83JrJjnuVXfl+WSKwZbqZZJWNanIUZ7
+ VkIv0jHXmMq63kez2FqqXzi/qf63b6nQjtAQBIugJKqUEozGEs8BFpElYnHseEqzxrTN 0g== 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 33t26xy1v5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Oct 2020 02:08:38 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UozoVunRN8T2YacofgOvLpSD6FPxcYiCuJi0Wtun/v//ubhz19iMf1aMNq2XB5F0IcL8WM3siHaztBFrwnVRdmCpqXQmUlJ1q4xqUnDLnmx7WFJ1V9G6GAQRMcZp/CKWurqjPrWlSVUlckbYcZqF5/n5BOgqe8y55OqA7yzN7DOalK3GpiBIFcTBEIOk6OxoAfs10eviGY6g96O/ZYnwc+u0LwF4F5FSMZm99qtHbJwLxajOvpNiAaPEokKJghCsxyfYjMrF8PQB7EuQjxHbn0g3F6wFUAEGBvPEcKdTmREael6lCGd+WceBP/n8DDOIZ5ZyZNj2YIahqIK9o4G6WA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Dp/hjLiK+wAD1zl98fUPXu4CaIyODvgpLxnH+fWE4Ss=;
+ b=YCu+H6xL/e7HQsTAfiG+8Td+GctY+XZtxEIzDUTHJ3C+gAufoijT0H7pq67Nw47iqK0B9y9hpgzyVwqVagY1NCWCKyisYwLzzRWyWKHIJ5AFj5CecmT/5UvW1LFfnH+pgew8nfjuXzCl4PHKr3jnZkIHMztCInrMDSC1q3MElBq1Yc/0mN0FidiBQRHCmEX+vJZ7VkNcndMhAe4UAw9XpEoBqlGIe3DDqSNGdcYj+KKr183DysJ8/gYY/z489/a3szVEEKG4xkOizbrAQJEs3SjHgLqjGtpH7qLKDAT2n8QTHAtHoGBlPghLwM3AxQtQFG4wgyAa8FyAzLgvpU6w7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Dp/hjLiK+wAD1zl98fUPXu4CaIyODvgpLxnH+fWE4Ss=;
+ b=2WT99eQo8/AVzisQNuiC4l3hj92ctM2eIztW8t09PLmogA6atvlsohIl7zclonbsIzoM0uHClL3vvFAty9Uh4B9keCKHBgHvfErrPu+MmPsG7yVNrfOlxOHtLsF3sQ74mikZI1vto5Daw9Z0y+ZdsOL1qC7CBkPxC7vGWB0hKMg=
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
+ DM6PR07MB5099.namprd07.prod.outlook.com (2603:10b6:5:4b::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3433.38; Fri, 2 Oct 2020 09:08:36 +0000
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::2087:7f2b:5dc6:a960]) by DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::2087:7f2b:5dc6:a960%6]) with mapi id 15.20.3433.037; Fri, 2 Oct 2020
+ 09:08:35 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Roger Quadros <rogerq@ti.com>,
+        "balbi@kernel.org" <balbi@kernel.org>
+CC:     "peter.chen@nxp.org" <peter.chen@nxp.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rahul Kumar <kurahul@cadence.com>
+Subject: RE: [PATCH] usb: cdns3: platform_get_irq_byname_optional instead
+ platform_get_irq_byname
+Thread-Topic: [PATCH] usb: cdns3: platform_get_irq_byname_optional instead
+ platform_get_irq_byname
+Thread-Index: AQHWlvch/Roy1G/8IkO8ykqpdGeiF6mEBTKAgAAA+RA=
+Date:   Fri, 2 Oct 2020 09:08:35 +0000
+Message-ID: <DM6PR07MB5529095F1B656C5065CBA8B4DD310@DM6PR07MB5529.namprd07.prod.outlook.com>
+References: <20200930065758.23740-1-pawell@cadence.com>
+ <722fa58e-604b-bc34-d404-caf7939bb176@ti.com>
+In-Reply-To: <722fa58e-604b-bc34-d404-caf7939bb176@ti.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctZDc5NjAwYjQtMDQ4ZS0xMWViLTg3NmItMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XGQ3OTYwMGI1LTA0OGUtMTFlYi04NzZiLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMjgwOCIgdD0iMTMyNDYxMDMzMTI0MzE5Njk2IiBoPSJWaFhSVkRXRHhILy8xeHBZTHZXWVlDWXJZZ009IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+authentication-results: ti.com; dkim=none (message not signed)
+ header.d=none;ti.com; dmarc=none action=none header.from=cadence.com;
+x-originating-ip: [185.217.253.59]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: af1ccfde-9e66-4176-14d4-08d866b2be7f
+x-ms-traffictypediagnostic: DM6PR07MB5099:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR07MB5099018200FD7E5F5719790DDD310@DM6PR07MB5099.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2089;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rUeOondZnJn6DNPhx3+4lRXSU/m0UhDokeR/T7+e5zfqnHp8LEjMnu3MqCGyVxldKX7fHLnt5U4ep+LyFHSSrqmB92gzWNXtDy0ezCvGL4LxP9gSacCJJzjSBd3ijbdsmPwg/xx/eFYiw71xOhuL978vcM6Sqxqi7uQqaX9YLG64Xo5V0VFy1B6wLvdNs3zf7IsfrFjxDTcVlTO7nStThCpsjoWOj4HzFVhRybUd033+Vwgx0rEY7xh4UOCgpCLBH6Z9QBxgqjtyJ/j9gwayHxk+3/zBGB6T2lCgetMK3vYkdOORUi9hGUoK9i8ETJ5fBqQ3ARMyOaKqwyAeC/MJoee2J4JWZWgGQpSkGZ7THblCizufKKpUOuWxpECDMd5G
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(136003)(346002)(376002)(366004)(36092001)(110136005)(316002)(54906003)(52536014)(5660300002)(8676002)(186003)(26005)(2906002)(86362001)(107886003)(6506007)(66446008)(66556008)(66476007)(64756008)(55016002)(76116006)(66946007)(9686003)(478600001)(8936002)(33656002)(4326008)(83380400001)(7696005)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: KFfZMzx4nrXDv6XNE7DKn8yDkZb59OhvbBJRk8uoVmL89YQ6PL/5TfD6TQMCIwDpClcn8z6NvZypFjnMQS3OjeNECGbzTggtO174iAtYB2UzOAMdC8aN5OVGjJY3Y1TYdTsJ19AIxWZSL+c0/HM8rV6d8vobxz8Btl4UIYMvdJqS+tyBgydLPXKgZdDqDekYjMAZFMZgFyifrG7PUxfB8adT6cmaBqrgqexBX9IsAt3mzdkpSQLRwq9GO9Vgn3C01y2rwrD87kaQyyrsUWB6ca4ExCwHb2N77odBbJqwHXQ4taNP8sBVyLCV12mRpIIPb9VjdczgirP7uM3jktV7lST5/9UDXdr+9BgqtAYf2/0ov8kPU1LN0Of/tEOvPcEVLDeqW/qr2UqvaUJ43kNxF54Onrjlr2wdC8/679R0RTTN6V2V3j6NgdF86PuXCBsx8M2DbwkpwAf5RpeE/WTIcwxNo/ifgm5PPHkdB5t4O9YIHN49SjBopKIrJMgoiw/z/+lCcd8nnvpMkVeG0oahmTCzWrlUOazbKSVDlt6DoD5ZUE9UKgdD9sr6iWqM8P0ButMrNFKxPJoZTjWTwcJMJ6vBHhY9NW9ongQZQ2Ngp9pRubj+XXMexTdSkfa7/y0LBJAh46D2g/0Jw1xhNRBkLg==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af1ccfde-9e66-4176-14d4-08d866b2be7f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2020 09:08:35.7817
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: th4cggtdHedjsEEbu+xiOcJ5KOZfsjP1+uWmUpWtn8SvTQoQqmVYGMxpTsAhRCFmPzKPrariMmVpkxYBmkXNVn1OVlnwglELHUzsWGrwyVQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB5099
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-02_05:2020-10-02,2020-10-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 bulkscore=0
+ adultscore=0 priorityscore=1501 clxscore=1015 spamscore=0 phishscore=0
+ malwarescore=0 mlxscore=0 impostorscore=0 suspectscore=0 mlxlogscore=406
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2010020073
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/2/20 5:00 AM, M. Vefa Bicakci wrote:
-> On 10/2/20 6:11 AM, Brooke Basile wrote:
->> On 9/22/20 7:06 AM, M. Vefa Bicakci wrote:
->>> Hello all,
->>>
->>> This is the third version of the patch sets originally published in t=
-he
->>> e-mail thread thread at [1]. As mentioned in the same e-mail thread w=
-ith
->>> the e-mail at [2], I was able to find a more acceptable solution to t=
-he
->>> issue reported by Andrey Konovalov, where usbip takes over the
->>> dummy_hcd-provided devices set up by the USB fuzzing instance of the
->>> syzkaller fuzzer.
->>>
->>> In summary, the approach involves:
->>>
->>> * Removal of the usbip_match function.
->>> * Fixing two bugs in the specialised USB driver selection code.
->>> * Accommodating usbip by changing the logic in the specialised USB
->>> =C2=A0=C2=A0 driver selection code, while preserving legacy/previous =
-behaviour.
->>>
->>> I have tested this patch set with Greg Kroah-Hartman's usb-next tree
->>> based on v5.9-rc6 with the base commit mentioned below in this e-mail=
-,
->>> and I can report that usbip works as expected, with no regressions in=
-
->>> the usbip_test.sh self-test suite output compared to v4.14.119. I hav=
-e
->>> also verified that the apple-mfi-fastcharge driver is correctly used
->>> when an iPhone is plugged in to my system. Finally, I can report that=
-
->>> Andrey Konovalov's "keyboard" test program making use of dummy_hcd,
->>> found at [3], also works as expected.
->>>
->>> I would appreciate your comments.
->>>
->>> Thank you,
->>>
->>> Vefa
->>>
->>> [1]=20
->>> https://lore.kernel.org/linux-usb/CAAeHK+zOrHnxjRFs=3DOE8T=3DO9208B9H=
-P_oo8RZpyVOZ9AJ54pAA@mail.gmail.com/=20
->>>
->>> [2]=20
->>> https://lore.kernel.org/linux-usb/9f332d7b-e33d-ebd0-3154-246fbfb6912=
-8@runbox.com/=20
->>>
->>> [3] https://github.com/xairy/raw-gadget
->>>
->>> Cc: Bastien Nocera <hadess@hadess.net>
->>> Cc: Valentina Manea <valentina.manea.m@gmail.com>
->>> Cc: Shuah Khan <shuah@kernel.org>
->>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> Cc: Alan Stern <stern@rowland.harvard.edu>
->>> Cc: <syzkaller@googlegroups.com>
->>>
->>> M. Vefa Bicakci (4):
->>> =C2=A0=C2=A0 Revert "usbip: Implement a match function to fix usbip"
->>> =C2=A0=C2=A0 usbcore/driver: Fix specific driver selection
->>> =C2=A0=C2=A0 usbcore/driver: Fix incorrect downcast
->>> =C2=A0=C2=A0 usbcore/driver: Accommodate usbip
->>>
->>> =C2=A0 drivers/usb/core/driver.c=C2=A0=C2=A0=C2=A0 | 50 +++++++++++++=
-+++++++++++------------
->>> =C2=A0 drivers/usb/usbip/stub_dev.c |=C2=A0 6 -----
->>> =C2=A0 2 files changed, 34 insertions(+), 22 deletions(-)
->>>
->>>
->>> base-commit: 55be22adf11b48c80ea181366685ec91a4700b7e
->>>
->>
->> Hi,
->>
->> I ran into this issue when trying to use two different FTDI serial TTL=
-=20
->> cables on my laptop, running 5.9-rc7.
->>
->> This patch set fixes the issue.
->>
->> Oddly, I was unable to reproduce the issue on another laptop, also=20
->> running 5.9-rc7.
->>
->> Tested-by: Brooke Basile <brookebasile@gmail.com>
->>
->> Thank you!
->> Brooke Basile
->=20
-> Hello Brooke,
->=20
-> Thank you for the feedback! Greg Kroah-Hartman has committed the patche=
-s
-> to the usb-linus branch of the USB git tree about a week ago, so it may=
-
-> unfortunately be a bit late to add your Tested-by tag to the patch seri=
-es.
-> Nevertheless, I appreciate your success report!
->=20
-> In case you are interested, the committed patches can be seen here:
->   =20
-> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/log/?h=3D=
-usb-linus&id=3D3fce39601a1a34d940cf62858ee01ed9dac5d459=20
->=20
->=20
-> Thanks again,
->=20
-> Vefa
->=20
-
-Vefa,
-
-Ah, no worries at all!  Sorry, I didn't see this on LKML so I assumed it =
-
-hadn't been merged yet.
-Thanks for the link!
-
-Best,
-Brooke Basile
-
-
+Um9nZXIsDQoNCj4NCj5PbiAzMC8wOS8yMDIwIDA5OjU3LCBQYXdlbCBMYXN6Y3phayB3cm90ZToN
+Cj4+IFRvIGF2b2lkIGR1cGxpY2F0ZSBlcnJvciBpbmZvcm1hdGlvbiBwYXRjaCByZXBsYWNlcyBw
+bGF0Zm9ybV9nZXRfaXJxX2J5bmFtZQ0KPj4gaW50byBwbGF0Zm9ybV9nZXRfaXJxX2J5bmFtZV9v
+cHRpb25hbC4NCj4NCj5XaGF0IGlzIGR1cGxpY2F0ZSBlcnJvciBpbmZvcm1hdGlvbj8NCg0KVGhl
+IGZ1bmN0aW9uIHBsYXRmb3JtX2dldF9pcnFfYnluYW1lIHByaW50Og0KIiBkZXZfZXJyKCZkZXYt
+PmRldiwgIklSUSAlcyBub3QgZm91bmRcbiIsIG5hbWUpOyIgaWYgZXJyb3Igb2NjdXJyZWQuIA0K
+DQpJbiBjb3JlLmMgd2UgaGF2ZSB0aGUgYW5vdGhlciBlcnJvciBtZXNzYWdlIGJlbG93IGludm9r
+aW5nIHRoaXMgZnVuY3Rpb24uDQplLmcgDQoJaWYgKGNkbnMtPmRldl9pcnEgPCAwKQ0KCQlkZXZf
+ZXJyKGRldiwgImNvdWxkbid0IGdldCBwZXJpcGhlcmFsIGlycVxuIik7DQoNClNvLCBpdCdzIGxv
+b2tzIGxpa2Ugb25lIGRldl9lcnIgaXMgIHJlZHVuZGFudC4NCg0KPg0KPj4NCj4+IEEgY2hhbmdl
+IHdhcyBzdWdnZXN0ZWQgZHVyaW5nIHJldmlld2luZyBDRE5TUCBkcml2ZXIgYnkgQ2h1bmZlbmcg
+WXVuLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IFBhd2VsIExhc3pjemFrIDxwYXdlbGxAY2FkZW5j
+ZS5jb20+DQo+PiAtLS0NCj4+ICAgZHJpdmVycy91c2IvY2RuczMvY29yZS5jIHwgNCArKy0tDQo+
+PiAgIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+Pg0K
+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NkbnMzL2NvcmUuYyBiL2RyaXZlcnMvdXNiL2Nk
+bnMzL2NvcmUuYw0KPj4gaW5kZXggYTBmNzNkNDcxMWFlLi5hM2Y2ZGM0NGNmM2EgMTAwNjQ0DQo+
+PiAtLS0gYS9kcml2ZXJzL3VzYi9jZG5zMy9jb3JlLmMNCj4+ICsrKyBiL2RyaXZlcnMvdXNiL2Nk
+bnMzL2NvcmUuYw0KPj4gQEAgLTQ2NSw3ICs0NjUsNyBAQCBzdGF0aWMgaW50IGNkbnMzX3Byb2Jl
+KHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+Pg0KPj4gICAJY2Rucy0+eGhjaV9yZXNb
+MV0gPSAqcmVzOw0KPj4NCj4+IC0JY2Rucy0+ZGV2X2lycSA9IHBsYXRmb3JtX2dldF9pcnFfYnlu
+YW1lKHBkZXYsICJwZXJpcGhlcmFsIik7DQo+PiArCWNkbnMtPmRldl9pcnEgPSBwbGF0Zm9ybV9n
+ZXRfaXJxX2J5bmFtZV9vcHRpb25hbChwZGV2LCAicGVyaXBoZXJhbCIpOw0KPg0KPkFzIHBlciBE
+VCBiaW5kaW5nIGRvY3VtZW50LCB0aGVzZSBhcmUgbWFuZGF0b3J5IHByb3BlcnRpZXMNCg0KSSB0
+aGluayB0aGF0IG5hbWUgcGxhdGZvcm1fZ2V0X2lycV9ieW5hbWVfb3B0aW9uYWwgaXMgbGl0dGxl
+IGNvbmZ1c2luZy4gDQpGdW5jdGlvbiBkZXNjcmlwdGlvbnMgc2hvdyB0aGF0IGJvdGggYXJlIGFs
+bW9zdCBpZGVudGljYWw6DQovKioNCiAqIHBsYXRmb3JtX2dldF9pcnFfYnluYW1lX29wdGlvbmFs
+IC0gZ2V0IGFuIG9wdGlvbmFsIElSUSBmb3IgYSBkZXZpY2UgYnkgbmFtZQ0KICogQGRldjogcGxh
+dGZvcm0gZGV2aWNlDQogKiBAbmFtZTogSVJRIG5hbWUNCiAqDQogKiBHZXQgYW4gb3B0aW9uYWwg
+SVJRIGJ5IG5hbWUgbGlrZSBwbGF0Zm9ybV9nZXRfaXJxX2J5bmFtZSgpLiBFeGNlcHQgdGhhdCBp
+dA0KICogZG9lcyBub3QgcHJpbnQgYW4gZXJyb3IgbWVzc2FnZSBpZiBhbiBJUlEgY2FuIG5vdCBi
+ZSBvYnRhaW5lZC4NCiAqDQogKiBSZXR1cm46IG5vbi16ZXJvIElSUSBudW1iZXIgb24gc3VjY2Vz
+cywgbmVnYXRpdmUgZXJyb3IgbnVtYmVyIG9uIGZhaWx1cmUuDQogKi8NCg0KPg0KPiAgLSBpbnRl
+cnJ1cHRzOiBJbnRlcnJ1cHRzIHVzZWQgYnkgY2RuczMgY29udHJvbGxlcjoNCj4gICAgICAgICAi
+aG9zdCIgLSBpbnRlcnJ1cHQgdXNlZCBieSBYSENJIGRyaXZlci4NCj4gICAgICAgICAicGVyaXBo
+ZXJhbCIgLSBpbnRlcnJ1cHQgdXNlZCBieSBkZXZpY2UgZHJpdmVyDQo+ICAgICAgICAgIm90ZyIg
+LSBpbnRlcnJ1cHQgdXNlZCBieSBEUkQvT1RHICBwYXJ0IG9mIGRyaXZlcg0KPg0KPmZvciBkcl9t
+b2RlID09ICJvdGciIC0+IGFsbCAzIGFyZSBtYW5kYXRvcnkuDQo+Zm9yIGRyX21vZGUgPT0gImhv
+c3QiIC0+ICJvdGciIGFuZCAicGVyaXBoZXJhbCIgSVJRcyBhcmUgbm90IHJlcXVpcmVkLg0KPmZv
+ciBkcl9tb2RlID09ICJwZXJpcGhlYXJhbCIgLT4gIm90ZyIgYW5kICJob3N0IiBJUlFzIGFyZSBu
+b3QgcmVxdWlyZWQuDQo+DQo+PiAgIAlpZiAoY2Rucy0+ZGV2X2lycSA9PSAtRVBST0JFX0RFRkVS
+KQ0KPj4gICAJCXJldHVybiBjZG5zLT5kZXZfaXJxOw0KPj4NCj4+IEBAIC00NzcsNyArNDc3LDcg
+QEAgc3RhdGljIGludCBjZG5zM19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0K
+Pj4gICAJCXJldHVybiBQVFJfRVJSKHJlZ3MpOw0KPj4gICAJY2Rucy0+ZGV2X3JlZ3MJPSByZWdz
+Ow0KPj4NCj4+IC0JY2Rucy0+b3RnX2lycSA9IHBsYXRmb3JtX2dldF9pcnFfYnluYW1lKHBkZXYs
+ICJvdGciKTsNCj4+ICsJY2Rucy0+b3RnX2lycSA9IHBsYXRmb3JtX2dldF9pcnFfYnluYW1lX29w
+dGlvbmFsKHBkZXYsICJvdGciKTsNCj4+ICAgCWlmIChjZG5zLT5vdGdfaXJxID09IC1FUFJPQkVf
+REVGRVIpDQo+PiAgIAkJcmV0dXJuIGNkbnMtPm90Z19pcnE7DQo+Pg0KPj4NCj4NCg0KUmVnYXJk
+cywNClBhd2VsDQo=
