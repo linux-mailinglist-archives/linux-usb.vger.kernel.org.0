@@ -2,181 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BA628208E
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Oct 2020 04:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF462821AD
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Oct 2020 07:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725681AbgJCCf2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 22:35:28 -0400
-Received: from mga06.intel.com ([134.134.136.31]:64198 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725536AbgJCCf2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 2 Oct 2020 22:35:28 -0400
-IronPort-SDR: mbZATxHJa/5PJH5PMZI3OjJFeOEOAfIMbiwqiZBbTFNEG0za/mG2X8k4T2w9gOpZi9K9yoAyGn
- fn4iAvMom2Fg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9762"; a="224743982"
-X-IronPort-AV: E=Sophos;i="5.77,330,1596524400"; 
-   d="scan'208";a="224743982"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2020 19:35:24 -0700
-IronPort-SDR: aukvVGpbPp71qSE6ANebB/AKTzQF2ihFIkWf4EPBQs54tqY8tiAAf6Xl1QDn5ZBskqFNKPkkQk
- xOKQSdEw36mQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,330,1596524400"; 
-   d="scan'208";a="386033584"
-Received: from lkp-server02.sh.intel.com (HELO 404f47266ee4) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 02 Oct 2020 19:35:23 -0700
-Received: from kbuild by 404f47266ee4 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kOXON-0000Ct-4a; Sat, 03 Oct 2020 02:35:23 +0000
-Date:   Sat, 03 Oct 2020 10:35:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 97b65223c18f131e18d662448381b727c04c2325
-Message-ID: <5f77e366.Xo+2lCEGS0Roy14v%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725769AbgJCFvT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Oct 2020 01:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725446AbgJCFvS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Oct 2020 01:51:18 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F571C0613D0;
+        Fri,  2 Oct 2020 22:51:18 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id f18so2920525pfa.10;
+        Fri, 02 Oct 2020 22:51:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-transfer-encoding:content-language;
+        bh=U+/EF2NGSw6neafVxjjcMYfRuR3DJX5CJ+tBNvZuiek=;
+        b=eDbrYQ1/6M4Lf6dtXjKmLkb9Mpk8YOQkWgLQJl7Oybb05dEBctkf1oZygTp3ea4U8f
+         b3yZcFTPBznd6uF9FFO/lpuyPcWr2iurLrwLPyBknKv8/VyV2/sbbpO6bP90/BInq29w
+         VQljsPxkIwjV9HjOZMB2tV+Xz6bWfJ0eafxtyOQm97yO09RiL3AIfjft1VcCc+NU+XSH
+         WESdAhGBYBMYW2F3voe9glrz/Jsquhvm5ZFpUJUK2ppJGPNnItFyRCV8o8AObWEw7kdq
+         bzBk18xgA7yASU/6crkWS18fPEYV4QFgB10WUxn1uxLu0qGV3DuRE2dCby+taRQe7wD0
+         E+nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=U+/EF2NGSw6neafVxjjcMYfRuR3DJX5CJ+tBNvZuiek=;
+        b=XwiwD//6QkObxTCXlnyeqmVob0VAg8FirmlMB09W4VSHHBx4y3V/o+slpsbD8jdX3p
+         13i+gk+reqJl7KqHITgs3AFVC3iKyCrdIXvyQXyf+r2lmX2B0Gyd2VFvTCqZtsfTAG9Z
+         1NHWZI1yreifSVl8Yxf9855YytbJ/IUonPBgiInLpkoIrZ3GPEgFXP095kFW0Y2skeH8
+         S8nlP1IxLYCDNyCBBj8NO3Qs4Wy+GC4prVRNnJjNzQBntdQVsIWwWTBA+fouGj0HaUCD
+         1y6otM5tKxmYMGq77c3DiTAebqrje+B8bA5acJ/GPe/YaffvtcCJITKyKANkZaSIVQBW
+         UJjA==
+X-Gm-Message-State: AOAM532sHjlCda8kdWJGHM9pc/Pot1GXkGZvtFxELLhEdG8nQn2RjgbQ
+        f45+R4LHvyza90aCfy03ttMpDajjIsKbA1Ref0M=
+X-Google-Smtp-Source: ABdhPJziRclfzdzIVFLhkgcO4yRti4HLZ85RSEV/uXYO2t1/x37D1oe8GpDX/yrv1LkEUj6D6VYeNQ==
+X-Received: by 2002:a63:f807:: with SMTP id n7mr5433763pgh.311.1601704277432;
+        Fri, 02 Oct 2020 22:51:17 -0700 (PDT)
+Received: from [192.168.0.104] ([49.207.217.69])
+        by smtp.gmail.com with ESMTPSA id d17sm4215270pfq.157.2020.10.02.22.51.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Oct 2020 22:51:16 -0700 (PDT)
+Subject: Re: [PATCH v2] net: usb: rtl8150: prevent set_ethernet_addr from
+ setting uninit address
+To:     Greg KH <greg@kroah.com>, David Miller <davem@davemloft.net>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com,
+        kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20201001073221.239618-1-anant.thazhemadam@gmail.com>
+ <20201001.191522.1749084221364678705.davem@davemloft.net>
+ <83804e93-8f59-4d35-ec61-e9b5e6f00323@gmail.com>
+ <20201002115453.GA3338729@kroah.com>
+ <a19aa514-14a9-8c92-d41a-0b9e17daa8e3@gmail.com>
+ <20201002142901.GA3901@carbon>
+From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Message-ID: <dbd92308-2443-0c1d-92f1-f506339e0a5e@gmail.com>
+Date:   Sat, 3 Oct 2020 11:21:12 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20201002142901.GA3901@carbon>
+Content-Type: text/plain; charset=windows-1252
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 97b65223c18f131e18d662448381b727c04c2325  USB: core: remove polling for /sys/kernel/debug/usb/devices
 
-elapsed time: 720m
+On 02-10-2020 19:59, Petko Manolov wrote:
+> On 20-10-02 17:35:25, Anant Thazhemadam wrote:
+>> Yes, this clears things up for me. I'll see to it that this gets done in a v3.
+> If set_ethernet_addr() fail, don't return error, but use eth_hw_addr_random() 
+> instead to set random MAC address and continue with the probing.
+>
+> You can take a look here:
+> https://lore.kernel.org/netdev/20201002075604.44335-1-petko.manolov@konsulko.com/
+>
+>
+> cheers,
+> Petko
+Thank you for this reference. :)
 
-configs tested: 117
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                       imx_v4_v5_defconfig
-powerpc                    klondike_defconfig
-mips                          malta_defconfig
-arc                        nsim_700_defconfig
-arm                          badge4_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                      ppc6xx_defconfig
-arm                         s3c2410_defconfig
-arm                           viper_defconfig
-arm                         lpc18xx_defconfig
-powerpc                      ep88xc_defconfig
-powerpc                      ppc64e_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                          ep93xx_defconfig
-arm                         palmz72_defconfig
-m68k                       m5475evb_defconfig
-sh                   secureedge5410_defconfig
-arm                           tegra_defconfig
-sh                           se7619_defconfig
-mips                       lemote2f_defconfig
-mips                 decstation_r4k_defconfig
-arm                         axm55xx_defconfig
-powerpc                     tqm5200_defconfig
-mips                     loongson1b_defconfig
-sh                          sdk7786_defconfig
-arm                     am200epdkit_defconfig
-arm                            lart_defconfig
-mips                           jazz_defconfig
-c6x                         dsk6455_defconfig
-arm                        mini2440_defconfig
-c6x                        evmc6474_defconfig
-arm                          imote2_defconfig
-arm                       omap2plus_defconfig
-sh                          rsk7264_defconfig
-mips                        bcm47xx_defconfig
-powerpc                 canyonlands_defconfig
-arm                        multi_v7_defconfig
-mips                  cavium_octeon_defconfig
-s390                          debug_defconfig
-sh                           se7751_defconfig
-arm                        mvebu_v7_defconfig
-arm                        vexpress_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20201002
-x86_64               randconfig-a001-20201002
-x86_64               randconfig-a002-20201002
-x86_64               randconfig-a005-20201002
-x86_64               randconfig-a003-20201002
-x86_64               randconfig-a006-20201002
-i386                 randconfig-a006-20201002
-i386                 randconfig-a005-20201002
-i386                 randconfig-a001-20201002
-i386                 randconfig-a004-20201002
-i386                 randconfig-a003-20201002
-i386                 randconfig-a002-20201002
-i386                 randconfig-a014-20201002
-i386                 randconfig-a013-20201002
-i386                 randconfig-a015-20201002
-i386                 randconfig-a016-20201002
-i386                 randconfig-a011-20201002
-i386                 randconfig-a012-20201002
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a012-20201002
-x86_64               randconfig-a015-20201002
-x86_64               randconfig-a014-20201002
-x86_64               randconfig-a013-20201002
-x86_64               randconfig-a011-20201002
-x86_64               randconfig-a016-20201002
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Anant
