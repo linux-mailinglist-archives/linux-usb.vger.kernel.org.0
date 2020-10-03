@@ -2,170 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45967282066
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Oct 2020 04:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BA628208E
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Oct 2020 04:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725802AbgJCCH0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Oct 2020 22:07:26 -0400
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:40373 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725562AbgJCCH0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Oct 2020 22:07:26 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id ABAC4D05;
-        Fri,  2 Oct 2020 22:07:25 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute4.internal (MEProxy); Fri, 02 Oct 2020 22:07:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:in-reply-to:references:date:from:to
-        :subject:content-type:content-transfer-encoding; s=fm2; bh=5kE1+
-        iTFDLInIffdVuVV0jXx5w/AvKJ6XDovjiufB3M=; b=VKXHEzPVQiP+MegDVqQqu
-        wVmvYjuRvLQneJ/tp+uaf6HpmoLTydSEJKMq9PJPJKDQ4eq4GONoDeX6m6ba94+y
-        lmb4LcXT7NCkIT5fNe4AWEq9uNDGofsz3ucKiQOHSnjlvuZgidpEWXdM/whGSJ0x
-        PTtw5U4V0d8yD9olwSRr49G8/P6s+WLsmfcW+E4cXeqJDRAJwNcXU6nF57Hqy4hx
-        mIJCLF8J3I+6jZnNhva07H54XjolqpOSWIPg/BBBTOZ866s2HJDsP6SjPtnX1czr
-        MNLwUixvPsWa3eP7O6LaXasuI0TlebQQ3jBnuadPo8Kjvh9WwxH5a+JcF7rTe63Z
-        g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=5kE1+iTFDLInIffdVuVV0jXx5w/AvKJ6XDovjiufB
-        3M=; b=sR6tLlVwgSWnLyASlxCF9XR7o0e45LmjmyuVJie9SbcDJld2hjAKnCArb
-        t2XGa/wF1sErAMYslK71dsxfPMiES5PlrtWyEN+D5VtNQ3eoV0dY+vndCssWTPA8
-        oHZcQGoYibaIHjaeaesYlcu9HD5nZsm4/8UWAoiVA+wCVn/E/RKRVC32HJFufLXG
-        7fi01sQA5VgNHviztITi/eUVnbLdol/+17PZrXwx3gwlZLhBYm7/669xkVv8tPoO
-        Yent76UTZtBQ8so7EHqlD3uQ8JPJHRm6ct/Fb5DRG7+jZ04Q3+mwBq5t7xT6zeKl
-        k1jlacNewqQD/i/neAerr3Jl9Qqlw==
-X-ME-Sender: <xms:3dx3X4Nsy6FAdSW0IIsahOe6zyd7uuyWPzqo8AL6APQ8vRHdg4h5Vg>
-    <xme:3dx3X-8B1ZERBgOVo3ySI8IefQC-hER3dY-u5HlBuRQsemEPv7WooYocbNy1F9zIm
-    b-M8AM1oPOwDL45GYE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrfeejgdehhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdfuihgu
-    ucfuphhrhidfuceoshhiugesrggvrghmrdhusheqnecuggftrfgrthhtvghrnhepvdetud
-    ffudejgfegueeuffekgfejheeuhffffefgteffffffhfehffetjedtgedvnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhiugesrggvrghmrd
-    hush
-X-ME-Proxy: <xmx:3dx3X_TkInnBe7hABPjjCrEK2WjrwtjSA4Koi2ygnnfrmqlIkLjQ_A>
-    <xmx:3dx3XwsgYtvDNUMlncjUd8BcwsuWb0MpBBvcVTO4IDMOqaDNwbnjAQ>
-    <xmx:3dx3XwdL-eEmKc0aR1oCytxHRRIjK8cwqS2E-vxbS7zS_gFX9gc6Nw>
-    <xmx:3dx3X6rj90D0peGCUI-ewRM4UGso6yDnhLIQ-4zvw7KrXR7ki8p8cg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A0F2C660069; Fri,  2 Oct 2020 22:07:16 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-382-ge235179-fm-20200928.002-ge2351794
-Mime-Version: 1.0
-Message-Id: <7d974f24-c297-4e4f-97aa-76ae85f897db@www.fastmail.com>
-In-Reply-To: <87ft6xxgls.fsf@kernel.org>
-References: <ce4fc6f6-726e-48b3-97bb-0de2b3801615@www.fastmail.com>
- <87k0wd9jog.fsf@kernel.org>
- <8baba7f6-35aa-49a6-89eb-f57164cab41f@www.fastmail.com>
- <87ft6xxgls.fsf@kernel.org>
-Date:   Fri, 02 Oct 2020 21:07:03 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     "Felipe Balbi" <balbi@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: ConfigFS: bcdUSB forced to 0x0210
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S1725681AbgJCCf2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Oct 2020 22:35:28 -0400
+Received: from mga06.intel.com ([134.134.136.31]:64198 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725536AbgJCCf2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Oct 2020 22:35:28 -0400
+IronPort-SDR: mbZATxHJa/5PJH5PMZI3OjJFeOEOAfIMbiwqiZBbTFNEG0za/mG2X8k4T2w9gOpZi9K9yoAyGn
+ fn4iAvMom2Fg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9762"; a="224743982"
+X-IronPort-AV: E=Sophos;i="5.77,330,1596524400"; 
+   d="scan'208";a="224743982"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2020 19:35:24 -0700
+IronPort-SDR: aukvVGpbPp71qSE6ANebB/AKTzQF2ihFIkWf4EPBQs54tqY8tiAAf6Xl1QDn5ZBskqFNKPkkQk
+ xOKQSdEw36mQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,330,1596524400"; 
+   d="scan'208";a="386033584"
+Received: from lkp-server02.sh.intel.com (HELO 404f47266ee4) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 02 Oct 2020 19:35:23 -0700
+Received: from kbuild by 404f47266ee4 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kOXON-0000Ct-4a; Sat, 03 Oct 2020 02:35:23 +0000
+Date:   Sat, 03 Oct 2020 10:35:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 97b65223c18f131e18d662448381b727c04c2325
+Message-ID: <5f77e366.Xo+2lCEGS0Roy14v%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 2, 2020, at 1:54 AM, Felipe Balbi wrote:
->=20
-> Hi,
->=20
-> "Sid Spry" <sid@aeam.us> writes:
-> > On Tue, Sep 29, 2020, at 1:33 AM, Felipe Balbi wrote:
-> >>=20
-> >> Hi,
-> >>=20
-> >> "Sid Spry" <sid@aeam.us> writes:
-> >> > Hi, I can't enable USB3 with e.g. f_ncm because bcdUSB is always =
-reset to 0x0210:
-> >> >
-> >> > $ sudo sh -c 'echo "0x0300" > /sys/kernel/config/usb_gadget/g11/b=
-cdUSB'
-> >> > $ cat /sys/kernel/config/usb_gadget/g11/bcdUSB=20
-> >> > 0x0300
-> >> > $ sudo sh -c 'echo "fe800000.usb" > /sys/kernel/config/usb_gadget=
-/g11/UDC'
-> >> > $ cat /sys/kernel/config/usb_gadget/g11/bcdUSB=20
-> >> > 0x0210
-> >> > $ tree /sys/kernel/config/usb_gadget/g11
-> >> > /sys/kernel/config/usb_gadget/g11
-> >> > =E2=94=9C=E2=94=80=E2=94=80 bcdDevice
-> >> > =E2=94=9C=E2=94=80=E2=94=80 bcdUSB
-> >> > =E2=94=9C=E2=94=80=E2=94=80 bDeviceClass
-> >> > =E2=94=9C=E2=94=80=E2=94=80 bDeviceProtocol
-> >> > =E2=94=9C=E2=94=80=E2=94=80 bDeviceSubClass
-> >> > =E2=94=9C=E2=94=80=E2=94=80 bMaxPacketSize0
-> >> > =E2=94=9C=E2=94=80=E2=94=80 configs
-> >> > =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 c.1
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 bmAttribute=
-s
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 MaxPower
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 ncm.0 -> ..=
-/../../../usb_gadget/g11/functions/ncm.0
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=E2=94=80 strings
-> >> > =E2=94=82=C2=A0=C2=A0         =E2=94=94=E2=94=80=E2=94=80 0x409
-> >> > =E2=94=82=C2=A0=C2=A0             =E2=94=94=E2=94=80=E2=94=80 con=
-figuration
-> >> > =E2=94=9C=E2=94=80=E2=94=80 functions
-> >> > =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 ncm.0
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 dev_addr
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 host_addr
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 ifname
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 os_desc
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=
-=E2=94=80 interface.ncm
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=
-=80=E2=94=80 compatible_id
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=
-=80=E2=94=80 sub_compatible_id
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=E2=94=80 qmult
-> >> > =E2=94=9C=E2=94=80=E2=94=80 idProduct
-> >> > =E2=94=9C=E2=94=80=E2=94=80 idVendor
-> >> > =E2=94=9C=E2=94=80=E2=94=80 max_speed
-> >> > =E2=94=9C=E2=94=80=E2=94=80 os_desc
-> >> > =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 b_vendor_code
-> >> > =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 qw_sign
-> >> > =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 use
-> >> > =E2=94=9C=E2=94=80=E2=94=80 strings
-> >> > =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 0x409
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 manufacture=
-r
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=9C=E2=94=80=E2=94=80 product
-> >> > =E2=94=82=C2=A0=C2=A0     =E2=94=94=E2=94=80=E2=94=80 serialnumbe=
-r
-> >> > =E2=94=94=E2=94=80=E2=94=80 UDC
-> >> >
-> >> > Board is a RK3399 based RockPro64.
-> >>=20
-> >> what's your max_speed?
-> >>=20
-> >
-> > $ cat /sys/kernel/config/usb_gadget/g11/max_speed=20
-> > super-speed
-> >
-> > Looks ok. From Windows, the xHCI driver reports that the device supp=
-orts
-> > super speed but chooses high speed. I can't see this info from a Lin=
-ux host.
->=20
-> It's probably failing Rx.Detect and falling back to high-speed. Which
-> USB Peripheral Controller is that?
->=20
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 97b65223c18f131e18d662448381b727c04c2325  USB: core: remove polling for /sys/kernel/debug/usb/devices
 
-It's a dwc3. I recently found that if I plug the device into itself (the=
-re are two
-dwc3, one on a C port, one on a female A port) the device enumerates at
-superspeed with the NCM configfs driver. But connecting to my x86 machin=
-es
-fails.
+elapsed time: 720m
 
-In an earlier thread I found that the type C port would not work with US=
-B2
-or 3 if in the "normal" direction (as opposed to "reversed").
+configs tested: 117
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                       imx_v4_v5_defconfig
+powerpc                    klondike_defconfig
+mips                          malta_defconfig
+arc                        nsim_700_defconfig
+arm                          badge4_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                      ppc6xx_defconfig
+arm                         s3c2410_defconfig
+arm                           viper_defconfig
+arm                         lpc18xx_defconfig
+powerpc                      ep88xc_defconfig
+powerpc                      ppc64e_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                          ep93xx_defconfig
+arm                         palmz72_defconfig
+m68k                       m5475evb_defconfig
+sh                   secureedge5410_defconfig
+arm                           tegra_defconfig
+sh                           se7619_defconfig
+mips                       lemote2f_defconfig
+mips                 decstation_r4k_defconfig
+arm                         axm55xx_defconfig
+powerpc                     tqm5200_defconfig
+mips                     loongson1b_defconfig
+sh                          sdk7786_defconfig
+arm                     am200epdkit_defconfig
+arm                            lart_defconfig
+mips                           jazz_defconfig
+c6x                         dsk6455_defconfig
+arm                        mini2440_defconfig
+c6x                        evmc6474_defconfig
+arm                          imote2_defconfig
+arm                       omap2plus_defconfig
+sh                          rsk7264_defconfig
+mips                        bcm47xx_defconfig
+powerpc                 canyonlands_defconfig
+arm                        multi_v7_defconfig
+mips                  cavium_octeon_defconfig
+s390                          debug_defconfig
+sh                           se7751_defconfig
+arm                        mvebu_v7_defconfig
+arm                        vexpress_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20201002
+x86_64               randconfig-a001-20201002
+x86_64               randconfig-a002-20201002
+x86_64               randconfig-a005-20201002
+x86_64               randconfig-a003-20201002
+x86_64               randconfig-a006-20201002
+i386                 randconfig-a006-20201002
+i386                 randconfig-a005-20201002
+i386                 randconfig-a001-20201002
+i386                 randconfig-a004-20201002
+i386                 randconfig-a003-20201002
+i386                 randconfig-a002-20201002
+i386                 randconfig-a014-20201002
+i386                 randconfig-a013-20201002
+i386                 randconfig-a015-20201002
+i386                 randconfig-a016-20201002
+i386                 randconfig-a011-20201002
+i386                 randconfig-a012-20201002
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a012-20201002
+x86_64               randconfig-a015-20201002
+x86_64               randconfig-a014-20201002
+x86_64               randconfig-a013-20201002
+x86_64               randconfig-a011-20201002
+x86_64               randconfig-a016-20201002
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
