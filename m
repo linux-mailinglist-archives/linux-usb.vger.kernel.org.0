@@ -2,96 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E22CE2821B3
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Oct 2020 07:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07052821CB
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Oct 2020 08:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725780AbgJCFyk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Oct 2020 01:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725765AbgJCFyk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Oct 2020 01:54:40 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3CAC0613D0;
-        Fri,  2 Oct 2020 22:54:40 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id x2so2269486pjk.0;
-        Fri, 02 Oct 2020 22:54:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=m4KS3848PrcvqXAzCFiimfxqlRCB/TpZjyjy6cihM+Q=;
-        b=IO+9gt4yl9NCpu4sQPrBhRhiq5PV/m3qFdVc/+KFj2wzRA54BRBSYhOFP4yre5nL1Z
-         IvyPI5DZJfh1pijkFXH987LFSnTBVMRjhchmXLXetC9o2ANdZw/k3XIL1n8iI/laaYEd
-         8VSL/vFWvDG22QjOI2U4WEjNmvqd2LuXbmIwxXVH6mUqaKW1Rwq2cBPVeCVOt1DT8aKN
-         bqjRNeYSkp14h2PoUGJ+ubwJdAK9o4emmXR1wjlAlqhfTob8AeeMy5V1H3A8vNYehaOV
-         K3nSRxXhAWNzjNKYzK//SAKFxwVg+2LRaxusM0Rulwcp5k+sRWWLpq5hNKTG/DHmstLk
-         +nqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=m4KS3848PrcvqXAzCFiimfxqlRCB/TpZjyjy6cihM+Q=;
-        b=tbeUM60RlrCvJxPQZSUuXGYcxH/qLy4zx96SaRAPzciuVi4IP443DVNORPh6QWIwSy
-         2y6PHBi5B33DtIlnRe3NZbgEtSLkD9k3TbDtXRMB6TgQHq0ZtsiCHS68YeWfWoafJV2g
-         aYkNPtjeohRlGfW+cYAj/3wSRO7scXP3pSV6kGjt9hnLj8Ey51mUXkFnFgFNYLkmRkn0
-         AWbyvePLiqJVauuHeaWtxubIP8+p1B2gsvNiQz6W9fBUpKj/8zzq/lQQJe4SiUD1hPt1
-         zWxvz87lNzHr7SN40DKWHkaOaSKZxvM8TinmVxLKXhOg8QNfGrySxZDm0Ihzk6R7xa2p
-         BKZQ==
-X-Gm-Message-State: AOAM533yF20NA6g7LjfmfqPEcSWXkst9dkg/PtbXKmgi2Bbb7SzhFEjQ
-        8r5O7+U4ZMi9/DvGGQDeh0jfe07O0+/OH0jeY6c=
-X-Google-Smtp-Source: ABdhPJwH2hfwWWdulLEsYcNVwJzjU39Yd92fij21PqSuzUnMzFUBCn3JLuFtQAF1U5BbEiTcaEkSFA==
-X-Received: by 2002:a17:90a:5588:: with SMTP id c8mr6110448pji.224.1601704479116;
-        Fri, 02 Oct 2020 22:54:39 -0700 (PDT)
-Received: from [192.168.0.104] ([49.207.217.69])
-        by smtp.gmail.com with ESMTPSA id j19sm4245113pfi.51.2020.10.02.22.54.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2020 22:54:38 -0700 (PDT)
-Subject: Re: [PATCH v2] net: usb: rtl8150: prevent set_ethernet_addr from
- setting uninit address
-To:     David Miller <davem@davemloft.net>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com,
-        petkan@nucleusys.com, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201001073221.239618-1-anant.thazhemadam@gmail.com>
- <20201001.191522.1749084221364678705.davem@davemloft.net>
- <83804e93-8f59-4d35-ec61-e9b5e6f00323@gmail.com>
- <20201002.153849.1212074263659708172.davem@davemloft.net>
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Message-ID: <2e4f7bdb-76c0-9ee4-88bf-5d31ded17116@gmail.com>
-Date:   Sat, 3 Oct 2020 11:24:34 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        id S1725681AbgJCGIF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Oct 2020 02:08:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33592 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725446AbgJCGIF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 3 Oct 2020 02:08:05 -0400
+Received: from saruman (91-155-214-30.elisa-laajakaista.fi [91.155.214.30])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1F6F9206DD;
+        Sat,  3 Oct 2020 06:08:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601705284;
+        bh=o+Xt6lOesTuVXUr0tBaf0ZxxkIERyNCyMlNyvdfJNQw=;
+        h=From:To:Subject:In-Reply-To:References:Date:From;
+        b=dON61oHvYPAtqB3Po5c88ximxgUuyaNJKYvq9Qy8YNMNUolmGgq1U1EgF3Hz+oCnM
+         oncRykCbDt19ljl18Sr4QJXJUBEVyKL3TeUH9fx8a+S03V4mJBNnwHWQPkUoUV8LUH
+         ngq6TJn7wDGX4K9JZSV2QgHjkKXPWA/lsxZpj0L4=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sid Spry <sid@aeam.us>, linux-usb@vger.kernel.org
+Subject: Re: ConfigFS: bcdUSB forced to 0x0210
+In-Reply-To: <7d974f24-c297-4e4f-97aa-76ae85f897db@www.fastmail.com>
+References: <ce4fc6f6-726e-48b3-97bb-0de2b3801615@www.fastmail.com>
+ <87k0wd9jog.fsf@kernel.org>
+ <8baba7f6-35aa-49a6-89eb-f57164cab41f@www.fastmail.com>
+ <87ft6xxgls.fsf@kernel.org>
+ <7d974f24-c297-4e4f-97aa-76ae85f897db@www.fastmail.com>
+Date:   Sat, 03 Oct 2020 09:07:57 +0300
+Message-ID: <87d01zyh8i.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20201002.153849.1212074263659708172.davem@davemloft.net>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
 
-On 03-10-2020 04:08, David Miller wrote:
-> From: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-> Date: Fri, 2 Oct 2020 17:04:13 +0530
->
->> But this patch is about ensuring that an uninitialized variable's
->> value (whatever that may be) is not set as the ethernet address
->> blindly (without any form of checking if get_registers() worked
->> as expected, or not).
-> Right, and if you are going to check for errors then you have to
-> handle the error properly.
->
-> And the proper way to handle this error is to set a random ethernet
-> address on the device.
+DQpIaSwNCg0KIlNpZCBTcHJ5IiA8c2lkQGFlYW0udXM+IHdyaXRlczoNCj4+ID4+ICJTaWQgU3By
+eSIgPHNpZEBhZWFtLnVzPiB3cml0ZXM6DQo+PiA+PiA+IEhpLCBJIGNhbid0IGVuYWJsZSBVU0Iz
+IHdpdGggZS5nLiBmX25jbSBiZWNhdXNlIGJjZFVTQiBpcyBhbHdheXMgcmVzZXQgdG8gMHgwMjEw
+Og0KPj4gPj4gPg0KPj4gPj4gPiAkIHN1ZG8gc2ggLWMgJ2VjaG8gIjB4MDMwMCIgPiAvc3lzL2tl
+cm5lbC9jb25maWcvdXNiX2dhZGdldC9nMTEvYmNkVVNCJw0KPj4gPj4gPiAkIGNhdCAvc3lzL2tl
+cm5lbC9jb25maWcvdXNiX2dhZGdldC9nMTEvYmNkVVNCIA0KPj4gPj4gPiAweDAzMDANCj4+ID4+
+ID4gJCBzdWRvIHNoIC1jICdlY2hvICJmZTgwMDAwMC51c2IiID4gL3N5cy9rZXJuZWwvY29uZmln
+L3VzYl9nYWRnZXQvZzExL1VEQycNCj4+ID4+ID4gJCBjYXQgL3N5cy9rZXJuZWwvY29uZmlnL3Vz
+Yl9nYWRnZXQvZzExL2JjZFVTQiANCj4+ID4+ID4gMHgwMjEwDQo+PiA+PiA+ICQgdHJlZSAvc3lz
+L2tlcm5lbC9jb25maWcvdXNiX2dhZGdldC9nMTENCj4+ID4+ID4gL3N5cy9rZXJuZWwvY29uZmln
+L3VzYl9nYWRnZXQvZzExDQo+PiA+PiA+IOKUnOKUgOKUgCBiY2REZXZpY2UNCj4+ID4+ID4g4pSc
+4pSA4pSAIGJjZFVTQg0KPj4gPj4gPiDilJzilIDilIAgYkRldmljZUNsYXNzDQo+PiA+PiA+IOKU
+nOKUgOKUgCBiRGV2aWNlUHJvdG9jb2wNCj4+ID4+ID4g4pSc4pSA4pSAIGJEZXZpY2VTdWJDbGFz
+cw0KPj4gPj4gPiDilJzilIDilIAgYk1heFBhY2tldFNpemUwDQo+PiA+PiA+IOKUnOKUgOKUgCBj
+b25maWdzDQo+PiA+PiA+IOKUgsKgwqAg4pSU4pSA4pSAIGMuMQ0KPj4gPj4gPiDilILCoMKgICAg
+ICDilJzilIDilIAgYm1BdHRyaWJ1dGVzDQo+PiA+PiA+IOKUgsKgwqAgICAgIOKUnOKUgOKUgCBN
+YXhQb3dlcg0KPj4gPj4gPiDilILCoMKgICAgICDilJzilIDilIAgbmNtLjAgLT4gLi4vLi4vLi4v
+Li4vdXNiX2dhZGdldC9nMTEvZnVuY3Rpb25zL25jbS4wDQo+PiA+PiA+IOKUgsKgwqAgICAgIOKU
+lOKUgOKUgCBzdHJpbmdzDQo+PiA+PiA+IOKUgsKgwqAgICAgICAgICDilJTilIDilIAgMHg0MDkN
+Cj4+ID4+ID4g4pSCwqDCoCAgICAgICAgICAgICDilJTilIDilIAgY29uZmlndXJhdGlvbg0KPj4g
+Pj4gPiDilJzilIDilIAgZnVuY3Rpb25zDQo+PiA+PiA+IOKUgsKgwqAg4pSU4pSA4pSAIG5jbS4w
+DQo+PiA+PiA+IOKUgsKgwqAgICAgIOKUnOKUgOKUgCBkZXZfYWRkcg0KPj4gPj4gPiDilILCoMKg
+ICAgICDilJzilIDilIAgaG9zdF9hZGRyDQo+PiA+PiA+IOKUgsKgwqAgICAgIOKUnOKUgOKUgCBp
+Zm5hbWUNCj4+ID4+ID4g4pSCwqDCoCAgICAg4pSc4pSA4pSAIG9zX2Rlc2MNCj4+ID4+ID4g4pSC
+wqDCoCAgICAg4pSCwqDCoCDilJTilIDilIAgaW50ZXJmYWNlLm5jbQ0KPj4gPj4gPiDilILCoMKg
+ICAgICDilILCoMKgICAgICDilJzilIDilIAgY29tcGF0aWJsZV9pZA0KPj4gPj4gPiDilILCoMKg
+ICAgICDilILCoMKgICAgICDilJTilIDilIAgc3ViX2NvbXBhdGlibGVfaWQNCj4+ID4+ID4g4pSC
+wqDCoCAgICAg4pSU4pSA4pSAIHFtdWx0DQo+PiA+PiA+IOKUnOKUgOKUgCBpZFByb2R1Y3QNCj4+
+ID4+ID4g4pSc4pSA4pSAIGlkVmVuZG9yDQo+PiA+PiA+IOKUnOKUgOKUgCBtYXhfc3BlZWQNCj4+
+ID4+ID4g4pSc4pSA4pSAIG9zX2Rlc2MNCj4+ID4+ID4g4pSCwqDCoCDilJzilIDilIAgYl92ZW5k
+b3JfY29kZQ0KPj4gPj4gPiDilILCoMKgIOKUnOKUgOKUgCBxd19zaWduDQo+PiA+PiA+IOKUgsKg
+wqAg4pSU4pSA4pSAIHVzZQ0KPj4gPj4gPiDilJzilIDilIAgc3RyaW5ncw0KPj4gPj4gPiDilILC
+oMKgIOKUlOKUgOKUgCAweDQwOQ0KPj4gPj4gPiDilILCoMKgICAgICDilJzilIDilIAgbWFudWZh
+Y3R1cmVyDQo+PiA+PiA+IOKUgsKgwqAgICAgIOKUnOKUgOKUgCBwcm9kdWN0DQo+PiA+PiA+IOKU
+gsKgwqAgICAgIOKUlOKUgOKUgCBzZXJpYWxudW1iZXINCj4+ID4+ID4g4pSU4pSA4pSAIFVEQw0K
+Pj4gPj4gPg0KPj4gPj4gPiBCb2FyZCBpcyBhIFJLMzM5OSBiYXNlZCBSb2NrUHJvNjQuDQo+PiA+
+PiANCj4+ID4+IHdoYXQncyB5b3VyIG1heF9zcGVlZD8NCj4+ID4+IA0KPj4gPg0KPj4gPiAkIGNh
+dCAvc3lzL2tlcm5lbC9jb25maWcvdXNiX2dhZGdldC9nMTEvbWF4X3NwZWVkIA0KPj4gPiBzdXBl
+ci1zcGVlZA0KPj4gPg0KPj4gPiBMb29rcyBvay4gRnJvbSBXaW5kb3dzLCB0aGUgeEhDSSBkcml2
+ZXIgcmVwb3J0cyB0aGF0IHRoZSBkZXZpY2Ugc3VwcG9ydHMNCj4+ID4gc3VwZXIgc3BlZWQgYnV0
+IGNob29zZXMgaGlnaCBzcGVlZC4gSSBjYW4ndCBzZWUgdGhpcyBpbmZvIGZyb20gYSBMaW51eCBo
+b3N0Lg0KPj4gDQo+PiBJdCdzIHByb2JhYmx5IGZhaWxpbmcgUnguRGV0ZWN0IGFuZCBmYWxsaW5n
+IGJhY2sgdG8gaGlnaC1zcGVlZC4gV2hpY2gNCj4+IFVTQiBQZXJpcGhlcmFsIENvbnRyb2xsZXIg
+aXMgdGhhdD8NCj4+IA0KPg0KPiBJdCdzIGEgZHdjMy4gSSByZWNlbnRseSBmb3VuZCB0aGF0IGlm
+IEkgcGx1ZyB0aGUgZGV2aWNlIGludG8gaXRzZWxmICh0aGVyZSBhcmUgdHdvDQo+IGR3YzMsIG9u
+ZSBvbiBhIEMgcG9ydCwgb25lIG9uIGEgZmVtYWxlIEEgcG9ydCkgdGhlIGRldmljZSBlbnVtZXJh
+dGVzIGF0DQo+IHN1cGVyc3BlZWQgd2l0aCB0aGUgTkNNIGNvbmZpZ2ZzIGRyaXZlci4gQnV0IGNv
+bm5lY3RpbmcgdG8gbXkgeDg2IG1hY2hpbmVzDQo+IGZhaWxzLg0KPg0KPiBJbiBhbiBlYXJsaWVy
+IHRocmVhZCBJIGZvdW5kIHRoYXQgdGhlIHR5cGUgQyBwb3J0IHdvdWxkIG5vdCB3b3JrIHdpdGgg
+VVNCMg0KPiBvciAzIGlmIGluIHRoZSAibm9ybWFsIiBkaXJlY3Rpb24gKGFzIG9wcG9zZWQgdG8g
+InJldmVyc2VkIikuDQoNCnNvdW5kcyBsaWtlIGEgYm9hcmQgbGF5b3V0IHByb2JsZW0gdG8gbWUu
+IENhbiB5b3UgY2FwdHVyZSBkd2MzDQp0cmFjZXBvaW50cz8gTW9yZSBpbmZvcm1hdGlvbiBoZXJl
+Og0KaHR0cHM6Ly93d3cua2VybmVsLm9yZy9kb2MvaHRtbC9sYXRlc3QvZHJpdmVyLWFwaS91c2Iv
+ZHdjMy5odG1sI3JlcG9ydGluZy1idWdzDQoNCi0tIA0KYmFsYmkNCg==
 
-Yes, I've understood that now.
-I've prepared and tested a v3 accordingly, and will have it sent in soon enough.
-Thank you so much for this!  :)
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Anant
+-----BEGIN PGP SIGNATURE-----
 
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl94FT0RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQbJJBAAs30Lz4oxwiD5UfR1Sc14EhDjZJkXhfmI
+R/IquHUq7B7m6q4Mo9job/Mi7Aw2qL5EP3KrAgV1Ff7eks4QP8ukCj3MT+1b1FOJ
+bQxaU/zNY8kUnienZWnfIGs0k6epw95RaHmDNyn/yi+FsrDXIxiWYm89Dua2OvOC
+8fCXaZhx9U/TGFlMIffvfHRF7TWdHGJtooftAE9zd2Hwe7xCu5Oh6va4i33UPAze
+pOvGWWBbjJFcg9lydameN1INP3KpzA/Z/TozT2ubeWzUCSa/NzEIIAuUsRL46jrm
+j7FLPEI977aT4FfdaQ4gQaVDqjrWbcmUAnQLQW4c6XeFHyoHchkG4ztK+J45otCo
+v2SO+cWCz3rDCiA7T5PCqNdFkBNo9/Q9uY6pD873CGVrmy8a5HDYuGFuJH0IYD/7
+hhMUhNbt30i533CmEY6QTZc/ByV9iXStrE1k/xdmqZv9x4Pp1Obd+vNI6MdmbP/n
+Su8W9y1nZjoVQNImG/MkJMNZkaRMITrLct2XkuU6hVa2RA4zRevgrlejiY7PD/sp
+XGBZuOLt0ZZlvwPcWCa/SE0VfCmuikm6qvBfH8Fx8Gyv+asX1WGDKQ2SlzuF/QfH
+0/hGzUhzF3aidMDSmt4bRHI4LY8EIqw6XXStB8RFUwc+yBMllHvIUf8xs57pRlZU
+sW4SIRn/6iw=
+=r9D+
+-----END PGP SIGNATURE-----
+--=-=-=--
