@@ -2,93 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA67282B74
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Oct 2020 17:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F63282B9A
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Oct 2020 17:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725832AbgJDPad (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Oct 2020 11:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
+        id S1725832AbgJDP6b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Oct 2020 11:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725825AbgJDPad (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Oct 2020 11:30:33 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03EFC0613CE;
-        Sun,  4 Oct 2020 08:30:32 -0700 (PDT)
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 094FTfgN022348
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sun, 4 Oct 2020 17:29:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1601825382; bh=otlkCb4M1uogpYT/wrOGg/R30bdTqv6TKwIuGVESdeU=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=mdGzJrrpxRS+ybmc2gxees5gkDanuPK5BB6jUNJc/M6lLs/tXp8d/eE718pN+yTMJ
-         KRmn5IRiqa7ABXsOMA/Tc9CPDcmy9GwF7JAssYzdonA314uCudF3AG2I7At16rwTQY
-         Sl/V3NlsBoVxfdLvnSSICzLLnZxlh5GQM5UtTPHA=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
-        (envelope-from <bjorn@mork.no>)
-        id 1kP5xD-000lRZ-0n; Sun, 04 Oct 2020 17:29:39 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Wilken Gottwalt <wilken.gottwalt@mailbox.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
+        with ESMTP id S1725825AbgJDP6b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Oct 2020 11:58:31 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F04DC0613CE;
+        Sun,  4 Oct 2020 08:58:30 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id t10so6905523wrv.1;
+        Sun, 04 Oct 2020 08:58:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sbPKtU+2Vj2U0mDyjUNFtD/agRfISoKPjjCAyVi5nTs=;
+        b=Q5vRHG1i0DUprP9x6Ktq1Ryb1kUZaIH/9kBaSM61W+wJIWVzXnE5wDqhOGnhuglaw7
+         efCgfYyV/5lF1mupvOtqa21RAROI9sQxDxQIBj/J5ZoqNPT/deLnnoyPBDx3z3AxUD5n
+         BUdwKdlzv7cpFD3WxVd3AXZYX3/wsybgNRYSfjBCCgO+Z0NXrIknuUQvYulceKoCEvs1
+         4srljRsqnMbUqbHlpoEABoYjHv0H51MbMSFf1RNk0GOgob7e/ZQdAdeG+qJtWdMa71Mg
+         VQxIjWeZNzlYUhhWDfz/Nq/8yqBaSEKa6hEE132CXd6Woh8ubcu4psnTn6g8Dj/+oMvw
+         Rh4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sbPKtU+2Vj2U0mDyjUNFtD/agRfISoKPjjCAyVi5nTs=;
+        b=oTngeuPHhiii7GkCflBc5JpZlGf4iYOjQX4/8RvIkcccX1WdHcj0b2H0/QdpKLOBuw
+         j8F8Lh+guGJVou7wqeqlNzXlWLyZqYyip5JDhxMvnmRPIbl7mCO8w3nUjl3rGGIVtcNV
+         HG9dPeOBQtlHrGA+bWM0Dr22qpv52ys2Ee8KCup2gnRqgBYlyQZniSLRpxzr/h7FxHXx
+         leSWLxDktkhq2slG3IHDw5UpL7t4CZVDbRL8nDxujzgB8/i7ZYyo8GB9sfUy0GtEjspN
+         Gv+VY8ReIlif5FdpQb//EyoJGR6cBVmI2XXVsxHBYu1pk8ARBRccA4ev9Blc52DWE63U
+         /9vA==
+X-Gm-Message-State: AOAM531C7KyqNkwHnKiqybj5aDGkS8iOWQvd2TFU8Zx4qVBa7aRzXno9
+        MrZAIrCScIX+eNxa41Vr+1sUGUWFQHWzrw==
+X-Google-Smtp-Source: ABdhPJxr2pAMjLNRNNibR57pHqPH95IYVy97bfmRUmPAg07VDzz30I3NJrWTEbF/P71hey69DrVhuw==
+X-Received: by 2002:adf:f24f:: with SMTP id b15mr14040574wrp.301.1601827108991;
+        Sun, 04 Oct 2020 08:58:28 -0700 (PDT)
+Received: from localhost.localdomain (80.178.78.235.adsl.012.net.il. [80.178.78.235])
+        by smtp.gmail.com with ESMTPSA id f14sm10078575wrv.72.2020.10.04.08.58.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Oct 2020 08:58:28 -0700 (PDT)
+From:   Leonid Bloch <lb.workbox@gmail.com>
+To:     linux-kernel@vger.kernel.org, Lars Melin <larsm17@gmail.com>
+Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: serial: qmi_wwan: add Cellient MPL200 card
-Organization: m
-References: <cover.1601715478.git.wilken.gottwalt@mailbox.org>
-        <4688927cbf36fe0027340ea5e0c3aaf1445ba256.1601715478.git.wilken.gottwalt@mailbox.org>
-Date:   Sun, 04 Oct 2020 17:29:38 +0200
-In-Reply-To: <4688927cbf36fe0027340ea5e0c3aaf1445ba256.1601715478.git.wilken.gottwalt@mailbox.org>
-        (Wilken Gottwalt's message of "Sat, 3 Oct 2020 11:39:55 +0200")
-Message-ID: <87d01yovq5.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        Johan Hovold <johan@kernel.org>,
+        Leonid Bloch <leonidb@asocscloud.com>
+Subject: [PATCH v2] USB: serial: option: Add Telit FT980-KS composition
+Date:   Sun,  4 Oct 2020 18:58:13 +0300
+Message-Id: <20201004155813.2342-1-lb.workbox@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.102.4 at canardo
-X-Virus-Status: Clean
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Wilken Gottwalt <wilken.gottwalt@mailbox.org> writes:
+This commit adds the following Telit FT980-KS composition:
 
-> Add usb ids of the Cellient MPL200 card.
->
-> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@mailbox.org>
-> ---
->  drivers/net/usb/qmi_wwan.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> index 07c42c0719f5..0bf2b19d5d54 100644
-> --- a/drivers/net/usb/qmi_wwan.c
-> +++ b/drivers/net/usb/qmi_wwan.c
+0x1054: rndis, diag, adb, nmea, modem, modem, aux
 
-This is not a 'usb: serial' driver. Please resend with a less confusing
-subject prefix.
+AT commands can be sent to /dev/ttyUSB2.
 
-> @@ -1432,6 +1432,7 @@ static const struct usb_device_id products[] =3D {
->  	{QMI_GOBI_DEVICE(0x1199, 0x901b)},	/* Sierra Wireless MC7770 */
->  	{QMI_GOBI_DEVICE(0x12d1, 0x14f1)},	/* Sony Gobi 3000 Composite */
->  	{QMI_GOBI_DEVICE(0x1410, 0xa021)},	/* Foxconn Gobi 3000 Modem device (N=
-ovatel E396) */
-> +	{QMI_FIXED_INTF(0x2692, 0x9025, 4)},	/* Cellient MPL200 (rebranded Qual=
-comm 0x05c6) */
->=20=20
->  	{ }					/* END */
->  };
+Signed-off-by: Leonid Bloch <lb.workbox@gmail.com>
+---
 
+The full composition is not tested, and it is the default one according
+to Telit support. What is tested, is that this commit makes
+/dev/ttyUSB{0..4} appear upon connecting the FT980-KS, and allows
+sending AT commands to /dev/ttyUSB2.
 
-This table is supposed to be organized by device type.  The last section
-is for Gobi2k and Gobi3k devices.  Please try to put new devices into
-the correct section.
+Changes since v1:
 
-Thanks
+* Interface #3 (ADB) is blacklisted.
+* NCTRL flag is set to the diag interface.
 
+These changes (relative to v1) also allow ModemManager to recognize the
+device.
 
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Bj=C3=B8rn
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 0c6f160a214a..fe76710167f8 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1186,6 +1186,8 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1053, 0xff),	/* Telit FN980 (ECM) */
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1054, 0xff),	/* Telit FT980-KS */
++	  .driver_info = NCTRL(2) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
+-- 
+2.28.0
+
