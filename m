@@ -2,51 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 887EB2827A2
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Oct 2020 02:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB83282910
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Oct 2020 07:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726233AbgJDAde (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Oct 2020 20:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726207AbgJDAde (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Oct 2020 20:33:34 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862F5C0613D0;
-        Sat,  3 Oct 2020 17:33:34 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 79B9311E3E4CB;
-        Sat,  3 Oct 2020 17:16:46 -0700 (PDT)
-Date:   Sat, 03 Oct 2020 17:33:33 -0700 (PDT)
-Message-Id: <20201003.173333.1571796326419022684.davem@davemloft.net>
-To:     gustavoars@kernel.org
-Cc:     oneukum@suse.com, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] usbnet: Use fallthrough pseudo-keyword
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20201002225315.GA1484@embeddedor>
-References: <20201002225315.GA1484@embeddedor>
-X-Mailer: Mew version 6.8 on Emacs 27.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [2620:137:e000::1:9]); Sat, 03 Oct 2020 17:16:46 -0700 (PDT)
+        id S1725826AbgJDFRb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Oct 2020 01:17:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51712 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725821AbgJDFRb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 4 Oct 2020 01:17:31 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 086392068E;
+        Sun,  4 Oct 2020 05:17:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601788650;
+        bh=3qVFkra62m6VKWNZU53WNA9U+ftgMpquElg1Cq2XFI4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NhqtuyIEe82i8G9Be4vStwUMAmBDPW0248OyC9SmUKeof71/woFRl5hKbhd/AgvA4
+         e9PxWYcnYONhtD4lSAixFMN/k6QedXA7gm/lEIo85eGpSHLC5bDP7P/ffk2+k1GgBI
+         8iW2wMTpGGkt6tHdKD39yGdu8jbN1qeKp1l9CSDo=
+Date:   Sun, 4 Oct 2020 07:17:27 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Byron Stanoszek <gandalf@winds.org>
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "M. Vefa Bicakci" <m.v.b@runbox.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: USBIP is claiming all my USB devices - Commit 7a2f2974f265 is
+ broken
+Message-ID: <20201004051727.GA133949@kroah.com>
+References: <alpine.LNX.2.23.451.2010031259080.4257@winds.org>
+ <20201003172738.GA1526548@kroah.com>
+ <alpine.LNX.2.23.451.2010031353180.5043@winds.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LNX.2.23.451.2010031353180.5043@winds.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Date: Fri, 2 Oct 2020 17:53:15 -0500
-
-> Replace // FALLTHROUGH comment with the new pseudo-keyword macro
-> fallthrough[1].
+On Sat, Oct 03, 2020 at 01:54:46PM -0400, Byron Stanoszek wrote:
+> On Sat, 3 Oct 2020, Greg Kroah-Hartman wrote:
 > 
-> [1] https://www.kernel.org/doc/html/v5.7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
+> > On Sat, Oct 03, 2020 at 01:18:36PM -0400, Byron Stanoszek wrote:
+> > > All,
+> > > 
+> > > I was testing Linux 5.9-rc7 today when I realized that none of my USB devices
+> > > were responding anymore. For instance, my mouse does not respond and its usual
+> > > red LED is not on.
+> > > 
+> > > Reverting git commit 7a2f2974f265 solved the problem for me.
+> > 
+> > Can you try the patches listed here:
+> > 	https://lore.kernel.org/r/20201003142651.GA794077@kroah.com
+> > 
+> > As this issue should be solved with them.  Hopefully :)
 > 
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> I confirm this also solved the problem for me.
 
-Applied.
+Great!  Those patches are now in Linus's tree so all should be good.
+
+thanks for testing and letting me know.
+
+greg k-h
