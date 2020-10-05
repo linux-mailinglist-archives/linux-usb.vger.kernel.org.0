@@ -2,84 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C7F283192
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 10:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0832831C3
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 10:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725923AbgJEIMr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Oct 2020 04:12:47 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:37985 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725880AbgJEIMr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 04:12:47 -0400
-Received: by mail-lj1-f194.google.com with SMTP id w3so6550497ljo.5;
-        Mon, 05 Oct 2020 01:12:44 -0700 (PDT)
+        id S1726028AbgJEITv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Oct 2020 04:19:51 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:35263 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725885AbgJEITu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 04:19:50 -0400
+Received: by mail-lf1-f67.google.com with SMTP id w11so9803249lfn.2;
+        Mon, 05 Oct 2020 01:19:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=mkxWr9E/CroBQmAhb8VdlWm/fB0P2a9C/PsFZ/1djLA=;
-        b=IFhYIn/YAMmh0WsBft+8uWeGDxlxekOU9E4oQoPI5N4bnzNWPl99+FNBWLx4YYdMzt
-         aNXM2BX8u6PoqeI4S24f6ETMAmVV5qTMDOT2PfWkKlNdWxxH5diafRWs0NT4kFwVym2k
-         MS3kZOrRifd3hPgGGEeSkgXqV3T5LNhx+YYZ2R35lwa3s1IDEXzLcZPs6ValJfsz4qe/
-         sfXvS6ykfTjw3lZpPSuz5ws6ylFnYQzTG7CPMnSHT/a9lgQOGL5FVrTXq74WZd37pV4I
-         QGn/m45pbtQ2Ydtf80umAAaEe8NjPo8xe1nSfslYMeHOXRgVPZSI5vkx7djgFF/uWTqD
-         ECyw==
-X-Gm-Message-State: AOAM532wZzzNfysi00xvsx1vJ6rl/nx49iYxbL+gcA2+u53WmepjNW3n
-        LoK/TnJwoonbkQZ/my0LrdqkuXJLxt8=
-X-Google-Smtp-Source: ABdhPJxHHsUhAAVWeqUziQwahT31dly1Vzl988KVvpUeJRzg6GjYi+CcPvw8rEho4mVsZFD/eMi/pA==
-X-Received: by 2002:a2e:a177:: with SMTP id u23mr3948602ljl.104.1601885563332;
-        Mon, 05 Oct 2020 01:12:43 -0700 (PDT)
+        bh=Q4XZrXEeQD517Aqzlbe9SxhNn9MS2ME8Yf3Gk4LM/sc=;
+        b=Z0eTS6wkdakt7z8JAuccJ3Bo/6i9KkIAnCR/lVi130QkTevqXszRWzOGBDRIWQeux/
+         PcImaqDeDYKn7EqqgON0tHwD0SM4XASHx8RIIl67ucQxDCmVTJFGEnut0QdXF85NzoAO
+         Bdq4vwKGXUSjsdLDThF3aQi85uduV8gzzTKP2alGzONOdRLVYw832Zm98R2bTQem/8g5
+         Ae3l9rKQ866HZMqD3+82ehM4XRhXqEm2S9WlXVvVXUM4MbF9FgR0RY2804OXjo0qAMrv
+         oCI0Hkm5fgqfsKmk3E7jYeVhhe4MiuUeU58t92TETlw4ZIadmWNL/dV4zwFHYNAjKFZH
+         ecFw==
+X-Gm-Message-State: AOAM530bMyH95brR8KFs3gDQmQnV5wucIfLMLqLD4SFZJEmkPycfyyjz
+        aIeTiI+UQ3CCjPbwhARM1Gs=
+X-Google-Smtp-Source: ABdhPJzBO+i0G1WlEF/XcGMfyolfNZxzJtOqB8x0vXbXApEAKorWqT2Xqz9AF+kZWMnBtTWOyZs8SQ==
+X-Received: by 2002:a05:6512:31d:: with SMTP id t29mr2351786lfp.327.1601885989265;
+        Mon, 05 Oct 2020 01:19:49 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id v6sm2594987lfa.295.2020.10.05.01.12.42
+        by smtp.gmail.com with ESMTPSA id a28sm264798lfi.60.2020.10.05.01.19.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 01:12:42 -0700 (PDT)
+        Mon, 05 Oct 2020 01:19:48 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1kPLbq-0000Jk-5k; Mon, 05 Oct 2020 10:12:38 +0200
-Date:   Mon, 5 Oct 2020 10:12:38 +0200
+        id 1kPLii-0001TC-FA; Mon, 05 Oct 2020 10:19:45 +0200
+Date:   Mon, 5 Oct 2020 10:19:44 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Leonid Bloch <lb.workbox@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Lars Melin <larsm17@gmail.com>,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Wilken Gottwalt <wilken.gottwalt@mailbox.org>
+Cc:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Johan Hovold <johan@kernel.org>,
-        Leonid Bloch <leonidb@asocscloud.com>
-Subject: Re: [PATCH v2] USB: serial: option: Add Telit FT980-KS composition
-Message-ID: <20201005081238.GJ5141@localhost>
-References: <20201004155813.2342-1-lb.workbox@gmail.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: serial: qmi_wwan: add Cellient MPL200 card
+Message-ID: <20201005081944.GK5141@localhost>
+References: <cover.1601715478.git.wilken.gottwalt@mailbox.org>
+ <4688927cbf36fe0027340ea5e0c3aaf1445ba256.1601715478.git.wilken.gottwalt@mailbox.org>
+ <87d01yovq5.fsf@miraculix.mork.no>
+ <20201004203042.093ac473@monster.powergraphx.local>
+ <20201005080612.GI5141@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201004155813.2342-1-lb.workbox@gmail.com>
+In-Reply-To: <20201005080612.GI5141@localhost>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Oct 04, 2020 at 06:58:13PM +0300, Leonid Bloch wrote:
-> This commit adds the following Telit FT980-KS composition:
-> 
-> 0x1054: rndis, diag, adb, nmea, modem, modem, aux
-> 
-> AT commands can be sent to /dev/ttyUSB2.
-> 
-> Signed-off-by: Leonid Bloch <lb.workbox@gmail.com>
-> ---
-> 
-> The full composition is not tested, and it is the default one according
-> to Telit support. What is tested, is that this commit makes
-> /dev/ttyUSB{0..4} appear upon connecting the FT980-KS, and allows
-> sending AT commands to /dev/ttyUSB2.
-> 
-> Changes since v1:
-> 
-> * Interface #3 (ADB) is blacklisted.
-> * NCTRL flag is set to the diag interface.
-> 
-> These changes (relative to v1) also allow ModemManager to recognize the
-> device.
+On Mon, Oct 05, 2020 at 10:06:12AM +0200, Johan Hovold wrote:
+> On Sun, Oct 04, 2020 at 08:30:42PM +0200, Wilken Gottwalt wrote:
 
-Now applied.
+> > Oh sorry, looks like I got it mixed up a bit. It was my first attempt to submit
+> > a patch set. Which is the best way to resubmit an update if the other part of
+> > the patch set gets accepted? The documentation about re-/submitting patch sets
+> > is a bit thin.
+> 
+> Just send these as individual patches (not a series) as they are
+> independent and go through separate trees.
+> 
+> Also, I never received the USB serial patch, only this one, so you need
+> to resend both anyway.
 
-And thanks for reviewing, Lars.
+Found it flagged spam, so no need to resend that one.
+
+Just resend the networking one with a v2 prefix. In general, you could
+mention in a changelog in the cover letter that you've removed patches
+that have already been applied.
 
 Johan
