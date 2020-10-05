@@ -2,155 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E50AC283747
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 16:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F87E2837DC
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 16:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726389AbgJEOEU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Oct 2020 10:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbgJEOEU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 10:04:20 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C58BC0613A7
-        for <linux-usb@vger.kernel.org>; Mon,  5 Oct 2020 07:04:20 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id nl2so59380pjb.1
-        for <linux-usb@vger.kernel.org>; Mon, 05 Oct 2020 07:04:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7k3Iq0WdPKvMtclmO+miPSypiVYJLITa1Qn3fNfnyew=;
-        b=I0WKi0HUUi7WYcIFqh8PgdvSqyF0o/Sbhoi1aYxH0QtUG83neoRMYxgRj10bN5NgFq
-         RPpv34DMtblMWNWmsvlZzc3/owkjyEbA8J0rxwLnikIkNwfUKydkelSKcWVzBBG7Kghu
-         VJ81BCe3z3iWFZeg7+7J2Q1Iq92W9+3tco8wQ+6IY5mrjlQAbHXx9/ZJNgoZCMWjfyj/
-         ykxCqrI1iboQu+3vyJQkHQKnPGGrhecneWZQ39McUbTCCWZYMdfnzVHxdvaQkmLuQuhM
-         ugolOAijswT24Xfx0DvyoprBJN1gDbDmZu/YgfIpIlZvlRiOYuglKgpqquhox2icySdI
-         7Ing==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7k3Iq0WdPKvMtclmO+miPSypiVYJLITa1Qn3fNfnyew=;
-        b=c9/ECNBCYpYgdpFETCyeRGocIf6keJrxXSzhzVK9f0mNO9nfCTtkNwcrSUfXbQmitM
-         FIFFwEsIvBxIYLCiQxPD8k12AM9Ag5dAR5uDkw3VbtP7EATGJqzBsi96uymAqLSpF9/P
-         82H9Lk+FfgXMFi4qKgs5YK5kb4IQwblH/4GGBN/SnUtaSnXUpBFnn5WMXWiIY8GTZn9K
-         ukL3zySyvFz750b5cbyz/dhH87bh4eRz7dxv1ysbmzAcGdyHMYtCQdowCIlKIDv3p3zs
-         VNxY385ELfVurIxsEBzXwMWqsiXck46n2ZNvbITs0LGUoO25FU4o+R2n8Kp2uDZQPP+y
-         jx9w==
-X-Gm-Message-State: AOAM532+QQd5eajfxT3/v7uPdXz8yQ0DTBphK2XCdclkWUqWBHsGUnKD
-        JF01QR3Sy/ShBAFb8In68VH0aWDmsLBYBE59I92K3g==
-X-Google-Smtp-Source: ABdhPJx6JVhtt2tsGa5V+fifJPM7qghyn0NDTgPijg+ypM/h8ZUzomF9gpsVBWkUl1wOKSAIcb1pk+/xRnK2WOELm2s=
-X-Received: by 2002:a17:90b:807:: with SMTP id bk7mr8176229pjb.166.1601906659307;
- Mon, 05 Oct 2020 07:04:19 -0700 (PDT)
+        id S1726017AbgJEOb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Oct 2020 10:31:29 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:33203 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725954AbgJEOb3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 10:31:29 -0400
+Received: (qmail 378125 invoked by uid 1000); 5 Oct 2020 10:31:28 -0400
+Date:   Mon, 5 Oct 2020 10:31:28 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+9b802f11efb574105ec5@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, eli.billauer@gmail.com,
+        gregkh@linuxfoundation.org, gustavoars@kernel.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, oneukum@suse.com,
+        syzkaller-bugs@googlegroups.com, tiwai@suse.de
+Subject: Re: WARNING in handle_bug/usb_submit_urb
+Message-ID: <20201005143128.GD376584@rowland.harvard.edu>
+References: <000000000000fefa4f05b0ea5fcd@google.com>
 MIME-Version: 1.0
-References: <000000000000810a4405b0ece316@google.com>
-In-Reply-To: <000000000000810a4405b0ece316@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 5 Oct 2020 16:04:08 +0200
-Message-ID: <CAAeHK+xWQp87S=bF2RfUjcudGaLVjk3yKLL-bxRzVM=YNRtzRA@mail.gmail.com>
-Subject: Re: KASAN: null-ptr-deref Write in event_handler
-To:     Shuah Khan <shuah@kernel.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+bf1a360e305ee719e364@syzkaller.appspotmail.com>,
-        Nazime Hande Harputluoglu <handeharputlu@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000fefa4f05b0ea5fcd@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 5, 2020 at 3:59 PM syzbot
-<syzbot+bf1a360e305ee719e364@syzkaller.appspotmail.com> wrote:
->
+On Mon, Oct 05, 2020 at 03:59:22AM -0700, syzbot wrote:
 > Hello,
->
+> 
 > syzbot found the following issue on:
->
-> HEAD commit:    d3d45f82 Merge tag 'pinctrl-v5.9-2' of git://git.kernel.or..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15781d8f900000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=89ab6a0c48f30b49
-> dashboard link: https://syzkaller.appspot.com/bug?extid=bf1a360e305ee719e364
+> 
+> HEAD commit:    168ae5a7 Merge 5.9-rc8 into usb-next
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12bec877900000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5429f3643ebc37a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9b802f11efb574105ec5
 > compiler:       gcc (GCC) 10.1.0-syz 20200507
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16cbaa7d900000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1364f367900000
->
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=120aa50b900000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=134fa5c0500000
+> 
 > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+bf1a360e305ee719e364@syzkaller.appspotmail.com
->
-> vhci_hcd: stop threads
-> vhci_hcd: release socket
-> vhci_hcd: disconnect device
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in instrument_atomic_write include/linux/instrumented.h:71 [inline]
-> BUG: KASAN: null-ptr-deref in atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
-> BUG: KASAN: null-ptr-deref in refcount_add include/linux/refcount.h:201 [inline]
-> BUG: KASAN: null-ptr-deref in refcount_inc include/linux/refcount.h:241 [inline]
-> BUG: KASAN: null-ptr-deref in get_task_struct include/linux/sched/task.h:104 [inline]
-> BUG: KASAN: null-ptr-deref in kthread_stop+0x90/0x7e0 kernel/kthread.c:591
-> Write of size 4 at addr 000000000000001c by task kworker/u4:5/2519
->
-> CPU: 1 PID: 2519 Comm: kworker/u4:5 Not tainted 5.9.0-rc7-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: usbip_event event_handler
-> Call Trace:
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x198/0x1fd lib/dump_stack.c:118
->  __kasan_report mm/kasan/report.c:517 [inline]
->  kasan_report.cold+0x5/0x37 mm/kasan/report.c:530
->  check_memory_region_inline mm/kasan/generic.c:186 [inline]
->  check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
->  instrument_atomic_write include/linux/instrumented.h:71 [inline]
->  atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
->  refcount_add include/linux/refcount.h:201 [inline]
->  refcount_inc include/linux/refcount.h:241 [inline]
->  get_task_struct include/linux/sched/task.h:104 [inline]
->  kthread_stop+0x90/0x7e0 kernel/kthread.c:591
->  vhci_shutdown_connection+0x170/0x2a0 drivers/usb/usbip/vhci_hcd.c:1015
->  event_handler+0x1a5/0x450 drivers/usb/usbip/usbip_event.c:78
->  process_one_work+0x94c/0x1670 kernel/workqueue.c:2269
->  worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
->  kthread+0x3b5/0x4a0 kernel/kthread.c:292
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-> ==================================================================
+> Reported-by: syzbot+9b802f11efb574105ec5@syzkaller.appspotmail.com
+> 
+> usb 1-1: Manufacturer: syz
+> usb 1-1: SerialNumber: syz
+> usb 1-1: ath9k_htc: Firmware ath9k_htc/htc_9271-1.4.0.fw requested
+> usb 1-1: ath9k_htc: Transferred FW: ath9k_htc/htc_9271-1.4.0.fw, size: 51008
+> ------------[ cut here ]------------
+> usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+> WARNING: CPU: 1 PID: 21 at drivers/usb/core/urb.c:493 usb_submit_urb+0xce2/0x14e0 drivers/usb/core/urb.c:493
 > Kernel panic - not syncing: panic_on_warn set ...
-> CPU: 1 PID: 2519 Comm: kworker/u4:5 Tainted: G    B             5.9.0-rc7-syzkaller #0
+> CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.9.0-rc8-syzkaller #0
 > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: usbip_event event_handler
+> Workqueue: events request_firmware_work_func
 > Call Trace:
 >  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x198/0x1fd lib/dump_stack.c:118
->  panic+0x382/0x7fb kernel/panic.c:231
->  end_report+0x4d/0x53 mm/kasan/report.c:104
->  __kasan_report mm/kasan/report.c:520 [inline]
->  kasan_report.cold+0xd/0x37 mm/kasan/report.c:530
->  check_memory_region_inline mm/kasan/generic.c:186 [inline]
->  check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
->  instrument_atomic_write include/linux/instrumented.h:71 [inline]
->  atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
->  refcount_add include/linux/refcount.h:201 [inline]
->  refcount_inc include/linux/refcount.h:241 [inline]
->  get_task_struct include/linux/sched/task.h:104 [inline]
->  kthread_stop+0x90/0x7e0 kernel/kthread.c:591
->  vhci_shutdown_connection+0x170/0x2a0 drivers/usb/usbip/vhci_hcd.c:1015
->  event_handler+0x1a5/0x450 drivers/usb/usbip/usbip_event.c:78
->  process_one_work+0x94c/0x1670 kernel/workqueue.c:2269
->  worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
->  kthread+0x3b5/0x4a0 kernel/kthread.c:292
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-> Kernel Offset: disabled
-> Rebooting in 86400 seconds..
+>  dump_stack+0x107/0x16e lib/dump_stack.c:118
+>  panic+0x2cb/0x702 kernel/panic.c:231
+>  __warn.cold+0x20/0x44 kernel/panic.c:600
+>  report_bug+0x1bd/0x210 lib/bug.c:198
+>  handle_bug+0x41/0x80 arch/x86/kernel/traps.c:234
+>  exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:254
+>  asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:536
+> RIP: 0010:usb_submit_urb+0xce2/0x14e0 drivers/usb/core/urb.c:493
+> Code: 84 04 03 00 00 e8 3e 98 c6 fd 4c 89 ef e8 66 b6 12 ff 41 89 d8 44 89 e1 4c 89 f2 48 89 c6 48 c7 c7 20 b3 5d 86 e8 d0 ba 9a fd <0f> 0b e9 c6 f8 ff ff e8 12 98 c6 fd 48 81 c5 40 06 00 00 e9 f2 f7
+> RSP: 0018:ffff8881da33f808 EFLAGS: 00010286
 
-Hi Valentina and Shuah,
+Andrey, what happened here?  Where's the rest of the stack trace?
 
-There appears to be a race condition in the USB/IP vhci_hcd shutdown
-procedure. It happens quite often during fuzzing with syzkaller, and
-prevents us from going deeper into the USB/IP code.
-
-Could you advise us what would be the best fix for this?
-
-Thanks in advance!
+Alan Stern
