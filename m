@@ -2,99 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDA52838AD
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 17:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B330A28390B
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 17:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726720AbgJEPBs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Oct 2020 11:01:48 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:37172 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725981AbgJEPBq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 11:01:46 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 3DF5F1C0B7C; Mon,  5 Oct 2020 17:01:43 +0200 (CEST)
-Date:   Mon, 5 Oct 2020 17:01:42 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another round of adding missing
- 'additionalProperties'
-Message-ID: <20201005150142.GA28675@duo.ucw.cz>
-References: <20201002234143.3570746-1-robh@kernel.org>
+        id S1726694AbgJEPI1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Oct 2020 11:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725970AbgJEPIZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 11:08:25 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AF3C0613CE
+        for <linux-usb@vger.kernel.org>; Mon,  5 Oct 2020 08:08:23 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id n14so7108596pff.6
+        for <linux-usb@vger.kernel.org>; Mon, 05 Oct 2020 08:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=1S/FkXYTFn2oVLi29cIaAZFlPFb57vgrFD3svNFFhFE=;
+        b=NwHhgJZg6oIyqBZiAJHMCgsRAKWrCLIrSD/1NL2vxuXuH2+LWyo00AH7v4AEnJdvGk
+         fEoQodjkLw/LRrBW/+ptXC/s0GhTuHD84NsuoCDpCMul9ffo/WIc+h63rtncD6XQSD5J
+         TZATynjHjKIQCY00zPcVLUkqZfV0GukjQFbs8SSG0IzhIS68CglsZoeqX+6K/p82t68U
+         BCYzp4BX9O9cs5shPRqRHkwiMzAjXq8Z2dVcpRZ66B+Dx4Lu/ooo0dHSW5On9b5HIxdC
+         +rKL8DyUzKUUkbbE9RSsG5u/jRKDw8c1swue5mZ0srtRR/kg8ZS1GSsWqL4s4zEJBNZD
+         sMyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=1S/FkXYTFn2oVLi29cIaAZFlPFb57vgrFD3svNFFhFE=;
+        b=hexV7+zfmBW+2mUzPDk1TLDiW9y1/YprUMM6LFcwOFKsebp2NB+r6VDToHdD8ZrpqW
+         XZWHROa3Z/vQW9D6tp0Jox1TS1VzQi3yniiiryTN5u1ybPUnrEQNmL8H+GRiScZOntde
+         6vt0MaUuDl8NFr7tTz85fg6SJuZJLyHEQWDq12Lc+Jd9lJimnuBYXbBKdxBhkDFQ5cA8
+         oBxxSpwkDCf9kWR0rPf9d3UjGAJn34teLJo6TPY4Y+ciQwdvUWY+HKcEu6W6ziJ5336F
+         d/NGd3zHULpzclT/j+4V4dNG/IIgLRJYBLL4kvQlBSL2nkyOQPngR+StYkfZ1qE92izM
+         jSIA==
+X-Gm-Message-State: AOAM532saKuDCWLzNvh7j8G+o1uls4IMDhLYsmALHBT8WKcc33m8Cxdn
+        kWcgZfugoX0VnxpySvUxUB+SjJMi7yKC0gNUrD3i0Q==
+X-Google-Smtp-Source: ABdhPJyHnO9QHIoG0zf/drGaDwjFyllVTYoa9Xo8ie4XOoCP9wjijxD4g1PK0MIzaT/mBobIZoLiNKs/EbUW9TvasVI=
+X-Received: by 2002:a63:d56:: with SMTP id 22mr15491292pgn.286.1601910502282;
+ Mon, 05 Oct 2020 08:08:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="xHFwDpU9dbj6ez1V"
-Content-Disposition: inline
-In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 5 Oct 2020 17:08:11 +0200
+Message-ID: <CAAeHK+wb4k-LGTjK9F5YbJNviF_+yU+wE_=Vpo9Rn7KFN8vG6Q@mail.gmail.com>
+Subject: Is usb_hcd_giveback_urb() allowed in task context?
+To:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Nazime Hande Harputluoglu <handeharputlu@google.com>,
+        syzkaller <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Dear USB and USB/IP maintainers,
 
---xHFwDpU9dbj6ez1V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+While fuzzing the USB/IP stack with syzkaller we've stumbled upon an issue.
 
-Hi!
+Currently kcov (the subsystem that is used for coverage collection)
+USB-related callbacks assume that usb_hcd_giveback_urb() can only be
+called from interrupt context, as indicated by the comment before the
+function definition. In the USB/IP code, however, it's called from the
+task context (see the stack trace below).
 
-> Another round of wack-a-mole. The json-schema default is additional
-> unknown properties are allowed, but for DT all properties should be
-> defined.
+Is this something that is allowed and we need to fix kcov? Or is this
+a bug in USB/IP?
 
-for leds:
+Thank you!
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
-
-I assume you apply it..?
-								Pavel
-							=09
-
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---xHFwDpU9dbj6ez1V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX3s1VgAKCRAw5/Bqldv6
-8owIAKDAkiq29W/tD49n7es9bNcHQLqXywCfWHIfHZ6OrlZTPZUQgy45PCK/EKM=
-=qVmv
------END PGP SIGNATURE-----
-
---xHFwDpU9dbj6ez1V--
+------------[ cut here ]------------
+WARNING: CPU: 2 PID: 57 at kernel/kcov.c:834
+kcov_remote_start+0xa7/0x400 kernel/kcov.c:834
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 2 PID: 57 Comm: kworker/2:1 Not tainted 5.9.0-rc7+ #45
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1 04/01/2014
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x14b/0x19d lib/dump_stack.c:118
+ panic+0x319/0x765 kernel/panic.c:231
+ __warn.cold+0x2f/0x2f kernel/panic.c:600
+ report_bug+0x273/0x300 lib/bug.c:198
+ handle_bug+0x38/0x90 arch/x86/kernel/traps.c:234
+ exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:254
+ asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:536
+RIP: 0010:kcov_remote_start+0xa7/0x400 kernel/kcov.c:834
+Code: 84 26 03 00 00 fa 66 0f 1f 44 00 00 65 8b 05 50 13 93 7e a9 00
+01 ff 00 41 8b 94 24 50 0a 00 00 75 1a 81 e2 ff ff ff bf 74 12 <0f> 0b
+48 83 3d 17 c4 26 08 00 0f 85 62 01 00 00 0f 0b 65 8b 05 20
+RSP: 0018:ffffc9000030f600 EFLAGS: 00010002
+RAX: 0000000080000000 RBX: 0100000000000003 RCX: ffffc90014cd1000
+RDX: 0000000000000002 RSI: ffffffff85199fcc RDI: 0100000000000003
+RBP: 0000000000000282 R08: ffff88806d594640 R09: fffff52000061eca
+R10: 0000000000000003 R11: fffff52000061ec9 R12: ffff88806d594640
+R13: 0000000000000000 R14: 0100000000000003 R15: 0000000000000000
+ kcov_remote_start_usb include/linux/kcov.h:52 [inline]
+ __usb_hcd_giveback_urb+0x284/0x4b0 drivers/usb/core/hcd.c:1649
+ usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1716
+ vhci_urb_enqueue.cold+0x37f/0x4c5 drivers/usb/usbip/vhci_hcd.c:801
+ usb_hcd_submit_urb+0x2b1/0x20d0 drivers/usb/core/hcd.c:1547
+ usb_submit_urb+0x6e5/0x13b0 drivers/usb/core/urb.c:570
+ usb_start_wait_urb+0x10f/0x2c0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+ hub_set_address drivers/usb/core/hub.c:4472 [inline]
+ hub_port_init+0x23f6/0x2d20 drivers/usb/core/hub.c:4748
+ hub_port_connect drivers/usb/core/hub.c:5140 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x1cc9/0x38d0 drivers/usb/core/hub.c:5576
+ process_one_work+0x7b6/0x1190 kernel/workqueue.c:2269
+ worker_thread+0x94/0xdc0 kernel/workqueue.c:2415
+ kthread+0x372/0x450 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+Kernel Offset: disabled
+Rebooting in 1 seconds..
