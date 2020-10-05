@@ -2,93 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEA62833D2
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 12:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014D428341C
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 12:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725966AbgJEKHg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Oct 2020 06:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S1726031AbgJEKhK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Oct 2020 06:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbgJEKHg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 06:07:36 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35176C0613CE;
-        Mon,  5 Oct 2020 03:07:36 -0700 (PDT)
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 095A7Eld017632
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Mon, 5 Oct 2020 12:07:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1601892435; bh=PqmCIbdmGhzQjUN7EiP+m0+p7uGY3mf6YJwZ9pKQlyY=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=M8CCDT0uuaWsIR4WtnFhfSmKkCp0+1fGkT7oNM0BUlkg+BNSA8Xbdoquqo2DGm6wq
-         +zA4nLazFyPe8I6Cslr90X/Srm7AjF/hmfBMNyHn4jkF7PllyPi13zMnzulD69SHV3
-         hN+A1E7AfVGpBSmicYtxITfv4ltzyQNtdRjKXIJM=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
-        (envelope-from <bjorn@mork.no>)
-        id 1kPNOi-000oZA-E0; Mon, 05 Oct 2020 12:07:12 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Wilken Gottwalt <wilken.gottwalt@mailbox.org>
-Cc:     linux-kernel@vger.kernel.org,
+        with ESMTP id S1725936AbgJEKhH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 06:37:07 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CE0C0613CE;
+        Mon,  5 Oct 2020 03:37:07 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id ce10so11165146ejc.5;
+        Mon, 05 Oct 2020 03:37:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=EQcMf3aBHGTHbFtiLcGPyEnLeByAfRIiKvJYpM7dHjI=;
+        b=JMXtpOzBphG2KW05zXFj2vXclgc2K+H8JNLe4wZm7v+D9biCrsBBlunvumrZBdu1ay
+         dGsC3P+vCBgpuvq8Us5VYT17QD/j1PGdTs3yayROXo3Im6WBME+yzVPRs9dhmCnhv+Kp
+         deAaGEl4mX/k8HNSg+lcAp97KgIlUIgmSSwwdLTGDqN7XE8+lWKnDQvOaVfL9MZ14U+a
+         QRIvo/0Rw3hXEZYEYP0VkWPlkV5tVRSOzoq3CiZiRn3rvyx0WeBnBNIUIK3FrMGOYn9N
+         QIQdKyuVIgtZvtCvpApddnOAphNZZn8AUAHtmpPXbjSAxqojzQj+J6GDsnofUdkYSHTP
+         MAYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=EQcMf3aBHGTHbFtiLcGPyEnLeByAfRIiKvJYpM7dHjI=;
+        b=GTjT0sqgscirFuksdmXhumGdg9b7CDq+MuYYKd/R/tiveGwbYDIsoVDOonn3+CdVZG
+         zGnQHQv5HLeyQC1vdwUY0CQJ9C7JFuUApte2C8IbnOSboyF0BKedtG288fjX7st+OBQ1
+         9g8621CtHzat/D6890n/ih3J30ugDkacwKA3tyv1vENQk7JmMuJFcSwThFl4o/0Q5a24
+         ByJWNHeV1Uv9Edk5xHosWLmCBM3NATuXfCDaPGX6BZHKFQ8NszqQ8tCO1RRiSNYbwYRp
+         ka2FFVC3MTIUoW4HJyU0SimKcFXz31tSLnOgFZBFKyn8S3ykM6K37lEJaKJ3cSJiyJ4t
+         p53w==
+X-Gm-Message-State: AOAM5337dIcGvB9GV+KsxhVtmS+4COZ0Qa1NSuAir03dDOQ+oekzj5Y/
+        XDaNJ8qvSWUpaD+I/F7q+t8=
+X-Google-Smtp-Source: ABdhPJyAUrA9v+oT7mNxthuQoeotTCXMOOGXsGx3LdAG3pM2W9hPKJEenugRGvwJUGZXAZHqegPZ7g==
+X-Received: by 2002:a17:906:6545:: with SMTP id u5mr14725364ejn.346.1601894226145;
+        Mon, 05 Oct 2020 03:37:06 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id yz15sm7567670ejb.9.2020.10.05.03.37.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Oct 2020 03:37:04 -0700 (PDT)
+Date:   Mon, 5 Oct 2020 12:37:03 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: serial: qmi_wwan: add Cellient MPL200 card
-Organization: m
-References: <cover.1601715478.git.wilken.gottwalt@mailbox.org>
-        <4688927cbf36fe0027340ea5e0c3aaf1445ba256.1601715478.git.wilken.gottwalt@mailbox.org>
-        <87d01yovq5.fsf@miraculix.mork.no>
-        <20201004203042.093ac473@monster.powergraphx.local>
-Date:   Mon, 05 Oct 2020 12:07:12 +0200
-In-Reply-To: <20201004203042.093ac473@monster.powergraphx.local> (Wilken
-        Gottwalt's message of "Sun, 4 Oct 2020 20:30:42 +0200")
-Message-ID: <87eemdnfzj.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another round of adding missing
+ 'additionalProperties'
+Message-ID: <20201005103703.GN425362@ulmo>
+References: <20201002234143.3570746-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.102.4 at canardo
-X-Virus-Status: Clean
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="CQDko/0aYvuiEzgn"
+Content-Disposition: inline
+In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
+User-Agent: Mutt/1.14.7 (2020-08-29)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Wilken Gottwalt <wilken.gottwalt@mailbox.org> writes:
 
-> Oh sorry, looks like I got it mixed up a bit. It was my first attempt to =
-submit
-> a patch set. Which is the best way to resubmit an update if the other par=
-t of
-> the patch set gets accepted? The documentation about re-/submitting patch=
- sets
-> is a bit thin.
+--CQDko/0aYvuiEzgn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I see that Johan already has answered this.  Just wanted to add that you
-don't need to worry about doing anything wrong.  It was not my intention
-to scare you :-) Fixing up and resending patches is a natural part of
-the patch submission process.  Don't be afraid to resubmit.  The worst
-that can happen is that you'll be asked to fix up something else.
-That's not a problem.
+On Fri, Oct 02, 2020 at 06:41:43PM -0500, Rob Herring wrote:
+[...]
+>  .../arm/tegra/nvidia,tegra20-pmc.yaml         |  2 ++
+[...]
+>  .../bindings/sound/nvidia,tegra186-dspk.yaml  |  2 ++
+>  .../sound/nvidia,tegra210-admaif.yaml         |  2 ++
+>  .../bindings/sound/nvidia,tegra210-dmic.yaml  |  2 ++
+>  .../bindings/sound/nvidia,tegra210-i2s.yaml   |  2 ++
+[...]
+>  .../bindings/usb/nvidia,tegra-xudc.yaml       |  2 ++
+[...]
 
-The most important part is to make it clear that a resubmission replaces
-an earlier version of the same patch.  This should be visible in the
-subject.  E.g by using a revision number inside the brackes, like
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-  [PATCH v2] net: qmi_wwan: add Cellient MPL200 card
+--CQDko/0aYvuiEzgn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-This tells us that the patch is a revised "v2" of an earlier patch, and
-that it replaces "v1".  Patches without an explicit revision will then
-be assumed to be "v1".
+-----BEGIN PGP SIGNATURE-----
 
-If you are sending a series, then the whole series should usually be
-resubmitted with the new revsion number.  Even patches without any
-changes. The cover letter should then also summarize the changes for
-each revisions.  But as Johan said: The USB serial and net patches go
-through different trees and are therefore best handled as standalone
-patches, even if they deal with the same USB composite device.=20
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl96908ACgkQ3SOs138+
+s6Hn/g/+OAyAW+yLaNZ0EuRduaLOLtd19HpvVqZdf68FWcAxWHANPdIKnVuc++CF
+2r+nHjgPy4zI3LGP1bGlgPufCdAapy2QTx9sGt/VeTEOuo9uTjb6J4Y7xXC11qQT
+pVI+v4ofSi48FN6vY6VWsotDscDJFLkJy/eZdb1RRuU44SG4dw04Z3fn1STm9wAN
+PS6hKtpUTbZYzgI0hngx2Ph30t7fyu18NIRPsKZ6/3WgR4HwD8cdpVi+06ThN3GQ
+s5CEQ/J7l9z1tfQhUypxLic1JV21su9fCERZQd96CKyIvcpJ5RByk7d7EnnZ4A53
+ZDRzwiymRP29X0IUzvEoHc7XvUP/mIZIkRNtTc3tLGZHZ34+Gc805Hcy5slbzhRz
+V+Gl3oXG56OhWLSbyNQXOOlbJJAmdFS1IDAoV752G6kq5fFZ397AW34DLF5YJX0k
+lYF3NWBTpuxxWCGuceKkACfscLE1dAifN2Rtgf9mbM1k2mIG7mVa6tdpxJ3sjf8Y
+1T0v3HYAwfOKTajaYUY4UYLMIJcZNjjJsw/olvcM6a9c8x/g79W3BgSjS6F/pEww
+DtuObW8366dl2WoqlYTJ9eWvKXSbCHRBhPpYLamHRBOBj7HKqGSHyyq0hEGPvd6X
+Hr+OJUghj7CHS+5vXEq5oNiT4bE6x9ytJdHNf5hIiRchRu6TeOQ=
+=hMJa
+-----END PGP SIGNATURE-----
 
-
-Bj=C3=B8rn
+--CQDko/0aYvuiEzgn--
