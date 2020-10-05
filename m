@@ -2,108 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B16BA283FC1
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 21:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03152283FCF
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 21:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729436AbgJETg7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Oct 2020 15:36:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46444 "EHLO mail.kernel.org"
+        id S1727744AbgJETpM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Oct 2020 15:45:12 -0400
+Received: from mga11.intel.com ([192.55.52.93]:24919 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729302AbgJETg7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Oct 2020 15:36:59 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 57D2F208C3;
-        Mon,  5 Oct 2020 19:36:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601926618;
-        bh=vreY1y62/ItgoHOJ39jEJGGc3di0cHUuXUf77P7UR1w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=S+9CifhFTwQLlw+6zIJ9ah8Z/6N/m341dhtALdQOvNKiRh0NqMZRe2a+eFAq9ykxm
-         oKaoMYWUT21eE5jdZgPAtIWeCuiKlSv9mopIwmVEyO6a9okjX9CrZm3OipQP9x0TZ4
-         xWhltWEP/Ta37jIywC0h0YXDh8dNUciQEGbabPGw=
-Received: by mail-oi1-f179.google.com with SMTP id l85so9897630oih.10;
-        Mon, 05 Oct 2020 12:36:58 -0700 (PDT)
-X-Gm-Message-State: AOAM531YWB3blrqy0JH6Cx/Bur8en8lD2pPZ2AIGzH9JViyUm4HMc+qK
-        53yqImM1SetbSNy6sGn3AUdeIND/wU7BQyUCOw==
-X-Google-Smtp-Source: ABdhPJz240L0hq+6F8XKH9jRgQJVciEISdxexf5/3GhR8YRDq3mAALJWx+vwopo1kJq2T637u6DxmRyHxDXEwJqE/UA=
-X-Received: by 2002:a54:4f89:: with SMTP id g9mr598009oiy.106.1601926617529;
- Mon, 05 Oct 2020 12:36:57 -0700 (PDT)
+        id S1727007AbgJETpM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Oct 2020 15:45:12 -0400
+IronPort-SDR: dhX+TQXWjBUfMc7H4a+FH0LHiTpv1NM+7VYrO0cCk95M8tW8Rz/UUvDJMa+98/5FQZx/bpL3uc
+ Tq7N0RrNNCtg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9765"; a="160831348"
+X-IronPort-AV: E=Sophos;i="5.77,340,1596524400"; 
+   d="scan'208";a="160831348"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP; 05 Oct 2020 12:45:04 -0700
+IronPort-SDR: GExHgBupLNrVy5H840jCMzxpeINaATrhbw2qbGlgIoSGnpw6dzp9bg0ktiFqjH9nSKvlNySuoF
+ S3hTfQvl251A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,340,1596524400"; 
+   d="scan'208";a="343176399"
+Received: from lkp-server02.sh.intel.com (HELO b5ae2f167493) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 05 Oct 2020 12:41:14 -0700
+Received: from kbuild by b5ae2f167493 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kPWMD-0000uy-KW; Mon, 05 Oct 2020 19:41:13 +0000
+Date:   Tue, 06 Oct 2020 03:40:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-next] BUILD SUCCESS
+ 168ae5a74b4a9ebf0bd9c5ea7008af0b7a6ccf04
+Message-ID: <5f7b76cb./LmYig3R7mF3hHuW%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20200930124915.GA1826870@google.com> <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
- <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
- <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
- <CAD=FV=WJrvWBLk3oLpv6Q3uY4w7YeQBXVdkpn+SAS5dnxp9-=Q@mail.gmail.com>
- <20201002183633.GA296334@rowland.harvard.edu> <CAL_JsqKHFA5RWz1SRLkR2JXydURL2pA+4C0+C+4SrJR_h4M0dw@mail.gmail.com>
- <20201003124142.GA318272@rowland.harvard.edu> <20201005160655.GA4135817@google.com>
- <20201005161527.GI376584@rowland.harvard.edu> <20201005191812.GB4135817@google.com>
-In-Reply-To: <20201005191812.GB4135817@google.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 5 Oct 2020 14:36:45 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+-kcDoFjp7a9ESa78Ar-ObLapXfuzn-WFNT-8rro_bJQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+-kcDoFjp7a9ESa78Ar-ObLapXfuzn-WFNT-8rro_bJQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete onboard
- USB hubs
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Doug Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 5, 2020 at 2:18 PM Matthias Kaehlcke <mka@chromium.org> wrote:
->
-> On Mon, Oct 05, 2020 at 12:15:27PM -0400, Alan Stern wrote:
-> > On Mon, Oct 05, 2020 at 09:06:55AM -0700, Matthias Kaehlcke wrote:
-> > > On Sat, Oct 03, 2020 at 08:41:42AM -0400, Alan Stern wrote:
-> > > > The decision to enable the power regulator at system startup would be
-> > > > kernel policy, not a part of the DT description.  But there ought to be
-> > > > a standard way of recognizing which resource requirements of this sort
-> > > > should be handled at startup.  Then there could be a special module (in
-> > > > the driver model core? -- that doesn't really seem appropriate) which
-> > > > would search through the whole DT database for resources of this kind
-> > > > and enable them.
-> > >
-> > > This might work for some cases that only have a single resource or multiple
-> > > resources but no timing/sequencing requirements. For the more complex cases
-> > > it would probably end up in something similar to the pwrseq series
-> > > (https://lore.kernel.org/patchwork/project/lkml/list/?series=314989&state=%2A&archive=both),
-> > > which was nack-ed by Rafael, Rob also expressed he didn't want to go
-> > > down that road.
-> > >
-> > > It seems to me that initialization of the resources needs to be done by
-> > > the/a driver for the device, which knows about the sequencing requirements.
-> > > Potentially this could be done in a pre-probe function that you brought up
-> > > earlier.
-> >
-> > One of the important points of my suggestion was that the resource init
-> > should be done _outside_ of the device's driver, precisely because the
-> > driver module might not even be loaded until the resources are set up
-> > and the device is discovered.
-> >
-> > The conclusion is that we need to have code that is aware of some
-> > detailed needs of a specific device but is not part of the device's
-> > driver.  I'm not sure what the best way to implement this would be.
->
-> Wouldn't it be possible to load the module when the DT specifies that
-> the device exists? For USB the kernel would need the VID/PID to identify
-> the module, these could be extracted from the compatible string.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-next
+branch HEAD: 168ae5a74b4a9ebf0bd9c5ea7008af0b7a6ccf04  Merge 5.9-rc8 into usb-next
 
-You don't even have to do that. Just add the MODULE_DEVICE_TABLE with
-the compatible strings and module loading will just work once you walk
-the USB bus in DT. Though probably you'd still need the VID/PID to
-create the device.
+elapsed time: 722m
 
-Rob
+configs tested: 139
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                     pq2fads_defconfig
+riscv                            alldefconfig
+mips                           ip32_defconfig
+arc                          axs103_defconfig
+arm                  colibri_pxa300_defconfig
+arc                        nsimosci_defconfig
+sh                          rsk7201_defconfig
+powerpc                          allmodconfig
+riscv                          rv32_defconfig
+powerpc                           allnoconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                      katmai_defconfig
+mips                          ath79_defconfig
+powerpc                     skiroot_defconfig
+powerpc                     ksi8560_defconfig
+arm                        shmobile_defconfig
+powerpc                    socrates_defconfig
+mips                        jmr3927_defconfig
+arm                         vf610m4_defconfig
+arm                        neponset_defconfig
+mips                           ip22_defconfig
+powerpc                     tqm8541_defconfig
+arm                         axm55xx_defconfig
+arm                          moxart_defconfig
+mips                           xway_defconfig
+sh                              ul2_defconfig
+i386                             alldefconfig
+microblaze                          defconfig
+powerpc                        icon_defconfig
+nds32                             allnoconfig
+m68k                         apollo_defconfig
+arm                        spear6xx_defconfig
+sparc                               defconfig
+mips                          malta_defconfig
+arm                          ep93xx_defconfig
+arm                          tango4_defconfig
+arm                        clps711x_defconfig
+sh                             espt_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                      makalu_defconfig
+m68k                        mvme16x_defconfig
+sh                            titan_defconfig
+arc                             nps_defconfig
+sh                             shx3_defconfig
+powerpc                      ppc44x_defconfig
+arm                            zeus_defconfig
+mips                         tb0219_defconfig
+arm                       omap2plus_defconfig
+m68k                            q40_defconfig
+mips                     decstation_defconfig
+arm                           spitz_defconfig
+arm                            hisi_defconfig
+openrisc                    or1ksim_defconfig
+powerpc                      walnut_defconfig
+sh                ecovec24-romimage_defconfig
+sh                          r7785rp_defconfig
+arm                      footbridge_defconfig
+arm                          pxa168_defconfig
+arm                           corgi_defconfig
+powerpc                      ep88xc_defconfig
+arm                            pleb_defconfig
+c6x                              alldefconfig
+powerpc64                           defconfig
+sh                          urquell_defconfig
+powerpc                 mpc8313_rdb_defconfig
+sh                        apsh4ad0a_defconfig
+mips                         mpc30x_defconfig
+arm                        spear3xx_defconfig
+riscv                    nommu_virt_defconfig
+arm                            dove_defconfig
+sh                           se7619_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+i386                 randconfig-a006-20201005
+i386                 randconfig-a005-20201005
+i386                 randconfig-a001-20201005
+i386                 randconfig-a004-20201005
+i386                 randconfig-a003-20201005
+i386                 randconfig-a002-20201005
+x86_64               randconfig-a012-20201005
+x86_64               randconfig-a015-20201005
+x86_64               randconfig-a014-20201005
+x86_64               randconfig-a013-20201005
+x86_64               randconfig-a011-20201005
+x86_64               randconfig-a016-20201005
+i386                 randconfig-a014-20201005
+i386                 randconfig-a015-20201005
+i386                 randconfig-a013-20201005
+i386                 randconfig-a016-20201005
+i386                 randconfig-a011-20201005
+i386                 randconfig-a012-20201005
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a004-20201005
+x86_64               randconfig-a002-20201005
+x86_64               randconfig-a001-20201005
+x86_64               randconfig-a003-20201005
+x86_64               randconfig-a005-20201005
+x86_64               randconfig-a006-20201005
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
