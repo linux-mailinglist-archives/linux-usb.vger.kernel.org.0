@@ -2,106 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FF6283FF7
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 21:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463FE28401F
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 22:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729488AbgJET7R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Oct 2020 15:59:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56946 "EHLO mail.kernel.org"
+        id S1729600AbgJEUDF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Oct 2020 16:03:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59932 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729424AbgJET7R (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Oct 2020 15:59:17 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1729424AbgJEUDD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Oct 2020 16:03:03 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 92FED2100A;
-        Mon,  5 Oct 2020 19:59:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F4C920848;
+        Mon,  5 Oct 2020 20:03:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601927956;
-        bh=lZLALtjavDkXurE9Is+8RTaRVsXxwohHJkUhoRrYMA8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NyeL888xOvfoVXZGiW1dPmrcZ9gswWQQqe+nc6Ex5K0Ie0kJXh7C32oTCfqyX1jLj
-         gDVpFxS5geiuCdw89ui6zzL1ud1xBE2Etcw44DYvPOonUEY/wUGW18XykhmcUlcGvI
-         QzHbNQMA+kHhTw1nen3JBk7XDTQLuSvDkQ80xYi4=
-Received: by mail-oi1-f169.google.com with SMTP id c13so9977640oiy.6;
-        Mon, 05 Oct 2020 12:59:16 -0700 (PDT)
-X-Gm-Message-State: AOAM532P4DLmnUmg0MTCoe53dMKqrbVomTtC0ucHHynrD9ppiMS46hgx
-        pZ1YaU9GqiE9PS3ABME9fhhg/nf0WlgLigsZYw==
-X-Google-Smtp-Source: ABdhPJxEl1lGVEtl2PfV0oWDWrsUbMTd7JVujQTh7El1xeMA1UkxI2WFTrP8Sa5CQ5G7EJnljCPTP1NbDiDj5mNWn9g=
-X-Received: by 2002:a54:4f89:: with SMTP id g9mr653207oiy.106.1601927955868;
- Mon, 05 Oct 2020 12:59:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
- <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
- <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
- <CAD=FV=WJrvWBLk3oLpv6Q3uY4w7YeQBXVdkpn+SAS5dnxp9-=Q@mail.gmail.com>
- <20201002183633.GA296334@rowland.harvard.edu> <CAL_JsqKHFA5RWz1SRLkR2JXydURL2pA+4C0+C+4SrJR_h4M0dw@mail.gmail.com>
- <20201003124142.GA318272@rowland.harvard.edu> <20201005160655.GA4135817@google.com>
- <20201005161527.GI376584@rowland.harvard.edu> <20201005191812.GB4135817@google.com>
- <20201005193611.GA389867@rowland.harvard.edu>
-In-Reply-To: <20201005193611.GA389867@rowland.harvard.edu>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 5 Oct 2020 14:59:04 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqK8V9PUCUD1iZQr52b28G39JraY=doZWzk0gNvu15qW-g@mail.gmail.com>
-Message-ID: <CAL_JsqK8V9PUCUD1iZQr52b28G39JraY=doZWzk0gNvu15qW-g@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete onboard
- USB hubs
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
+        s=default; t=1601928181;
+        bh=LDBMzSKRgXu0amszn1omwesfIy1frb2RvkSUHKCGJBk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DbgBQYYNY8Z0bctQfKlo46vuzwcO7cAJTUA6WI13L1pEYpu6vA8L99qk3PZzFWPH2
+         fgJHuHFAkVTZdQ53sCs+i/L1PeWZsSHlt6UaHeg3IMRhnUNJ4vPDlRp6puBpdniGsC
+         UK6eoAqXgECVDuSR5AsDUKOCMwvFsyrqkopv5GUw=
+Date:   Mon, 5 Oct 2020 21:01:58 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        dri-devel@lists.freedesktop.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jonathan Cameron <jic23@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Richard Weinberger <richard@nod.at>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
+Message-ID: <20201005200158.GG5139@sirena.org.uk>
+References: <20201005183830.486085-1-robh@kernel.org>
+ <20201005183830.486085-2-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E69HUUNAyIJqGpVn"
+Content-Disposition: inline
+In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+X-Cookie: Most of your faults are not your fault.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 5, 2020 at 2:36 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, Oct 05, 2020 at 12:18:12PM -0700, Matthias Kaehlcke wrote:
-> > On Mon, Oct 05, 2020 at 12:15:27PM -0400, Alan Stern wrote:
-> > > The conclusion is that we need to have code that is aware of some
-> > > detailed needs of a specific device but is not part of the device's
-> > > driver.  I'm not sure what the best way to implement this would be.
-> >
-> > Wouldn't it be possible to load the module when the DT specifies that
-> > the device exists? For USB the kernel would need the VID/PID to identify
-> > the module, these could be extracted from the compatible string.
->
-> Loading a driver module whenever DT says a device exists?  Not a bad
-> idea.  I don't know what would be involved, but no doubt it is possible.
 
-MODULE_DEVICE_TABLE mostly as I mentioned in my other reply.
+--E69HUUNAyIJqGpVn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Note that, except for a few special cases, the kernel identifies the
-> appropriate driver for USB hubs not by the VID/PID but instead by the
-> device class or interface class.  I suppose the compatible string could
-> include that information too?
+On Mon, Oct 05, 2020 at 01:38:27PM -0500, Rob Herring wrote:
+> This doesn't yet do anything in the tools, but make it explicit so we can
+> check either 'unevaluatedProperties' or 'additionalProperties' is present
+> in schemas.
 
-We can go back to 1998 OpenFirmware and it's already there[1].
-'usb,class9' for a hub. There's a few other variations defined.
+Acked-by: Mark Brown <broonie@kernel.org>
 
-> > Having the initialization code outside of the driver could lead to code
-> > duplication, since the driver might want to power the device down in
-> > certain situations (e.g. system suspend).
->
-> True.  On the other hand, how common do you think it would be for
-> drivers not to want to mess with the power settings?
+--E69HUUNAyIJqGpVn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I think in that case you'd generally want firmware to enable things
-and the kernel then does no power control.
+-----BEGIN PGP SIGNATURE-----
 
-We have ~1500 boards using DT and maybe ~10 with USB devices described
-in DT. So the whole thing is not common to begin with.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl97e7UACgkQJNaLcl1U
+h9Cm0Af/WUxMT7VSA2xsxQr5K/rX2H6z1aD4Hr9f+lQLJCFBiUYhNvb9mQnNDvLq
+GQeaW1Z1gDtmjIiEOvan3CP1ZUF3VENvyt8orPUmES76eFXx7xEyryHHut1YFimr
+3LEvyKzDAcn3KGj/wv37knBc5sifrmqjF+Y1eYYZD6yKKVPbgpA7kKZ0EAqOLxiv
+/FbGoxWGWbB7Vfyaboo2dDw/SyuwkZ9+0pr+IhFWbCjIjgkeUq0v857luuRCJMxH
+GyPjPkM7+KaeIBbXlY1hRHLTKKbBL7G+dXQ16uS4Ny/DYIf8LXyitPDAfosxQisG
+FhLawubQBH3MNzD5RRYvcLznUaJJJA==
+=+I0x
+-----END PGP SIGNATURE-----
 
-Rob
-
-[1] https://www.devicetree.org/open-firmware/bindings/usb/usb-1_0.ps
+--E69HUUNAyIJqGpVn--
