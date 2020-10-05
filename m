@@ -2,92 +2,259 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4B028349F
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 13:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467142834A2
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 13:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725978AbgJELGr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Oct 2020 07:06:47 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:40361 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725891AbgJELGr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 07:06:47 -0400
-Received: by mail-lf1-f66.google.com with SMTP id a9so942606lfc.7;
-        Mon, 05 Oct 2020 04:06:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=C0dTs41OrVTZ/P3AA4ZGUtSfP+cxizWeFj5N633TtGU=;
-        b=MRj7/Kz0pN3IxSfMzwCesa0lCbX/3Qzl92i/G74YfAjrYTinK9i/dxpnJ64Q1C9d17
-         4zMAof/YsrJP3alKFefv9KaDZWT6se/xw/OeSsX17h+XFXZy6CzYCXDYUS1lT8tjfDOC
-         xG+/zrHcnq8yR/x0Eba3EZT0TUUt4uW+n0GFcj0pUWAyzRJHQSKStoKjyYUvC2QRIbAl
-         zYf9+UbUipjUmTnUoa/1id4z+qJRkB81sd9Mc1xZF8+PVSaHNHiHTzv+pE/T3f7Rk9gx
-         t6nVo6TuK9ibFJ7LgvblB3wjhZxU//lb/MD7ZInpXuU+6AtreOHBcIHY+b+iOfevUXAB
-         Y6aw==
-X-Gm-Message-State: AOAM531xDiY2Ao6R66O4lTAXsR9QHIlKYYB6KkaWouGTbamw5EW+5PCh
-        Iz4N/iAnBYHC1b3fPkQPz/M=
-X-Google-Smtp-Source: ABdhPJx9G9aqy1qlXknI5yEktHc6rcJv5HV+UYF/KiP7CyF7kqiPPQPhCtUL6V1N2Baa5momlM8J8A==
-X-Received: by 2002:ac2:4c31:: with SMTP id u17mr5089372lfq.1.1601896002590;
-        Mon, 05 Oct 2020 04:06:42 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id c1sm2583968ljd.105.2020.10.05.04.06.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 04:06:41 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kPOKE-0005gb-P8; Mon, 05 Oct 2020 13:06:38 +0200
-Date:   Mon, 5 Oct 2020 13:06:38 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Wilken Gottwalt <wilken.gottwalt@mailbox.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: serial: option: add Cellient MPL200 card
-Message-ID: <20201005110638.GP5141@localhost>
-References: <cover.1601715478.git.wilken.gottwalt@mailbox.org>
- <3db5418fe9e516f4b290736c5a199c9796025e3c.1601715478.git.wilken.gottwalt@mailbox.org>
- <20201005082045.GL5141@localhost>
- <20201005130134.459b4de9@monster.powergraphx.local>
+        id S1726019AbgJELHZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Oct 2020 07:07:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55314 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725914AbgJELHY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Oct 2020 07:07:24 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5DD53206CB;
+        Mon,  5 Oct 2020 11:07:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601896042;
+        bh=aiB74UBX50eB78Vr1MNMCSYA/Urhg7ub9kQL64a2k8A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=seAghN8PVpd1pAXHRcJLcU+a/ksHouhOb1AXGy12PXR5zni5WaRHWc+v1wfBZIOvV
+         s5HBW1/NQ96lNcyKrf02kfdBtRc0Io5ByGq4owaPefBWeWuVDYtj9QyYB/5gdm6VVb
+         2efNZeF5iNONrdkyhKIHilRfEx9/uVk7x5XlAEYI=
+Date:   Mon, 5 Oct 2020 13:08:08 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     ChiYuan Huang <u0084500@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cy_huang <cy_huang@richtek.com>
+Subject: Re: [PATCH] usb: typec: tcpm: Fix if vbus before cc,
+ hard_reset_count not reset issue
+Message-ID: <20201005110808.GA298743@kroah.com>
+References: <1599060933-8092-1-git-send-email-u0084500@gmail.com>
+ <20200902165713.GG56237@roeck-us.net>
+ <CADiBU3_iHk4aoM8o6GcaTmWDZT4ymvb0Ff-XeLLZ0C9dhCnLZQ@mail.gmail.com>
+ <fd2a33fc-2383-66cb-0fd7-d5aa0cc9111f@roeck-us.net>
+ <CADiBU3_vYAmHDCONrExzyM+1CTfqJx_eS1hYG8aHkNWFzTcwfg@mail.gmail.com>
+ <63c7f5e4-eff2-1420-30a5-a0b98a7815e0@roeck-us.net>
+ <CADiBU3-83rVLqhVAqqSGc0qQ66PHsGVVcp_m3sm_4ZS5A+GXKQ@mail.gmail.com>
+ <CADiBU3_c5O-yUac-ytp5WoQQ12edkU+4wn+WNBOVGRGM15NBJA@mail.gmail.com>
+ <20201002133145.GA3384841@kroah.com>
+ <c2d689eb-5538-6af2-614f-766521100273@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201005130134.459b4de9@monster.powergraphx.local>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c2d689eb-5538-6af2-614f-766521100273@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 01:01:34PM +0200, Wilken Gottwalt wrote:
-> On Mon, 5 Oct 2020 10:20:45 +0200
-> Johan Hovold <johan@kernel.org> wrote:
-> 
-> > On Sat, Oct 03, 2020 at 11:40:29AM +0200, Wilken Gottwalt wrote:
-> > > Add usb ids of the Cellient MPL200 card.
-> > > 
-> > > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@mailbox.org>
-> > > ---
-
-> > > @@ -1982,6 +1983,8 @@ static const struct usb_device_id option_ids[] = {
-> > >  	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_DC_4COM2, 0xff,
-> > > 0x02, 0x01) }, { USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_DC_4COM2,
-> > > 0xff, 0x00, 0x00) }, { USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MEN200) },
-> > > +	{ USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MPL200),
-> > > +	  .driver_info = RSVD(1) | RSVD(4) },
+On Fri, Oct 02, 2020 at 07:26:24AM -0700, Guenter Roeck wrote:
+> On 10/2/20 6:31 AM, Greg KH wrote:
+> > On Tue, Sep 15, 2020 at 11:07:18AM +0800, ChiYuan Huang wrote:
+> >> Hi, Guenter:
+> >>
+> >> ChiYuan Huang <u0084500@gmail.com> 於 2020年9月6日 週日 下午11:22寫道：
+> >>>
+> >>> Guenter Roeck <linux@roeck-us.net> 於 2020年9月5日 週六 下午11:51寫道：
+> >>>>
+> >>>> On 9/4/20 6:24 PM, ChiYuan Huang wrote:
+> >>>>> Guenter Roeck <linux@roeck-us.net> 於 2020年9月5日 週六 上午3:41寫道：
+> >>>>>>
+> >>>>>> On 9/3/20 9:21 AM, ChiYuan Huang wrote:
+> >>>>>>> Guenter Roeck <linux@roeck-us.net> 於 2020年9月3日 週四 上午12:57寫道：
+> >>>>>>>>
+> >>>>>>>> On Wed, Sep 02, 2020 at 11:35:33PM +0800, cy_huang wrote:
+> >>>>>>>>> From: ChiYuan Huang <cy_huang@richtek.com>
+> >>>>>>>>>
+> >>>>>>>>> Fix: If vbus event is before cc_event trigger, hard_reset_count
+> >>>>>>>>> won't bt reset for some case.
+> >>>>>>>>>
+> >>>>>>>>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> >>>>>>>>> ---
+> >>>>>>>>> Below's the flow.
+> >>>>>>>>>
+> >>>>>>>>> _tcpm_pd_vbus_off() -> run_state_machine to change state to SNK_UNATTACHED
+> >>>>>>>>> call tcpm_snk_detach() -> tcpm_snk_detach() -> tcpm_detach()
+> >>>>>>>>> tcpm_port_is_disconnected() will be called.
+> >>>>>>>>> But port->attached is still true and port->cc1=open and port->cc2=open
+> >>>>>>>>>
+> >>>>>>>>> It cause tcpm_port_is_disconnected return false, then hard_reset_count won't be reset.
+> >>>>>>>>> After that, tcpm_reset_port() is called.
+> >>>>>>>>> port->attached become false.
+> >>>>>>>>>
+> >>>>>>>>> After that, cc now trigger cc_change event, the hard_reset_count will be kept.
+> >>>>>>>>> Even tcpm_detach will be called, due to port->attached is false, tcpm_detach()
+> >>>>>>>>> will directly return.
+> >>>>>>>>>
+> >>>>>>>>> CC_EVENT will only trigger drp toggling again.
+> >>>>>>>>> ---
+> >>>>>>>>>  drivers/usb/typec/tcpm/tcpm.c | 3 +--
+> >>>>>>>>>  1 file changed, 1 insertion(+), 2 deletions(-)
+> >>>>>>>>>
+> >>>>>>>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> >>>>>>>>> index a48e3f90..5c73e1d 100644
+> >>>>>>>>> --- a/drivers/usb/typec/tcpm/tcpm.c
+> >>>>>>>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> >>>>>>>>> @@ -2797,8 +2797,7 @@ static void tcpm_detach(struct tcpm_port *port)
+> >>>>>>>>>               port->tcpc->set_bist_data(port->tcpc, false);
+> >>>>>>>>>       }
+> >>>>>>>>>
+> >>>>>>>>> -     if (tcpm_port_is_disconnected(port))
+> >>>>>>>>> -             port->hard_reset_count = 0;
+> >>>>>>>>> +     port->hard_reset_count = 0;
+> >>>>>>>>>
+> >>>>>>>>
+> >>>>>>>> Doesn't that mean that the state machine will never enter
+> >>>>>>>> error recovery ?
+> >>>>>>>>
+> >>>>>>> I think it does't affect the error recovery.
+> >>>>>>> All error recovery seems to check pd_capable flag.
+> >>>>>>>
+> >>>>>>> >From my below case, it's A to C cable only. There is no USBPD contract
+> >>>>>>> will be estabilished.
+> >>>>>>>
+> >>>>>>> This case occurred following by the below test condition
+> >>>>>>> Cable -> A to C (default Rp bind to vbus) connected to PC.
+> >>>>>>> 1. first time plugged in the cable with PC
+> >>>>>>> It will make HARD_RESET_COUNT  to be equal 2
+> >>>>>>> 2. And then plug out. At that time HARD_RESET_COUNT is till 2.
+> >>>>>>> 3. next time plugged in again.
+> >>>>>>> Due to hard_reset_count is still 2 , after wait_cap_timeout, the state
+> >>>>>>> eventually changed to SNK_READY.
+> >>>>>>> But during the state transition, no hard_reset  be sent.
+> >>>>>>>
+> >>>>>>> Defined in the USBPD policy engine, typec transition to USBPD, all
+> >>>>>>> variables must be reset included hard_reset_count.
+> >>>>>>> So it expected SNK must send hard_reset again.
+> >>>>>>>
+> >>>>>>> The original code defined hard_reset_count must be reset only when
+> >>>>>>> tcpm_port_is_disconnected.
+> >>>>>>>
+> >>>>>>> It doesn't make sense that it only occurred in some scenario.
+> >>>>>>> If tcpm_detach is called, hard_reset count must be reset also.
+> >>>>>>>
+> >>>>>>
+> >>>>>> If a hard reset fails, the state machine may cycle through states
+> >>>>>> HARD_RESET_SEND, HARD_RESET_START, SRC_HARD_RESET_VBUS_OFF,
+> >>>>>> SRC_HARD_RESET_VBUS_ON back to SRC_UNATTACHED. In this state,
+> >>>>>> tcpm_src_detach() and with it tcpm_detach() is called. The hard
+> >>>>>> reset counter is incremented in HARD_RESET_SEND. If tcpm_detach()
+> >>>>>> resets the counter, the state machine will keep cycling through hard
+> >>>>>> resets without ever entering the error recovery state. I am not
+> >>>>>> entirely sure where the counter should be reset, but tcpm_detach()
+> >>>>>> seems to be the wrong place.
+> >>>>>
+> >>>>> This case you specified means locally error occurred.
+> >>>>
+> >>>> It could be a local error (with the local hardware), or with the
+> >>>> remote partner not accepting the reset. We only know that an error
+> >>>> occurred.
+> >>>>
+> >>>>> It intended to re-run the state machine from typec  to USBPD.
+> >>>>> >From my understanding, hard_reset_count to be reset is reasonable.
+> >>>>>
+> >>>>> The normal stare from the state transition you specified is
+> >>>>> HARD_RESET_SEND, HARD_RESET_START -> SRC_HARD_RESET_VBUS_OFF,
+> >>>>> SRC_HARD_RESET_VBUS_ON -> received VBUS_EVENT then go to SRC_STARTUP.
+> >>>>>
+> >>>> The operational word is "normal". Error recovery is expected to handle
+> >>>> situations which are not normal.
+> >>>
+> >>> Following by the USBPD 3.0 revision 1.2, section 8.3.3.24.1
+> >>> The ErrorRecovery state is  used to electronically disconnect Port
+> >>> Partner using the USB Type-C connector.
+> >>> And there's one sentence to be said "The ErrorRecovery staste shall
+> >>> map to USB Type-C Error Recovery state operations".
+> >>> I also read ErrorRecovery state in USB TYPE-C 1.3 spec.
+> >>> Section 4.5.2.2.2.1   ErrorRecovery state requirement listed the below text.
+> >>> The port shall not drive VBUS or VCONN, and shall present a
+> >>> high-impedance to ground (above
+> >>> zOPEN) on its CC1 and CC2 pins.
+> >>> Section 4.5.2.2.2.2 Exiting from the error recovery state
+> >>> I read the description. The roughly meaning is to change the state to
+> >>> Unattached(Src or Snk) after tErrorRecovery.
+> >>>
+> >>> Summary the above text.
+> >>> Reset HardResetCounter is ok in tcpm_detach.
+> >>> My patch is just to relax the counter reset conditions during tcpm_detach().
+> >>> If not, it will check tcpm_port_is_disconnected().
+> >>> And only two scenario, the hard reset count will be cleared to 0 at this case.
+> >>> 1) port not attached and cc1=open and cc2=open
+> >>> 2) port attached and either (polarity=cc1, cc1=open) or (polarity=cc2, cc2=open)
+> >>>
+> >>> I think this judgement is narrow in tcpm_detach case.
+> >>>
+> >>>>
+> >>>> I don't question the need to reset the counter. The only question
+> >>>> is where and when to reset it.
+> >>>>
+> >>> I re-check all tcpm code for hard reset counter about the increment and reset.
+> >>> They all meets USBPD spec. Only the detach case, I'm wondering why it
+> >>> need to add the check for tcpm_port_is_disconnected().
+> >>>
+> >> Below's the real case log.
+> >> [ 4848.046358] VBUS off
+> >> [ 4848.046384] state change SNK_READY -> SNK_UNATTACHED
+> >> [ 4848.050908] Setting voltage/current limit 0 mV 0 mA
+> >> [ 4848.050936] polarity 0
+> >> [ 4848.052593] Requesting mux state 0, usb-role 0, orientation 0
+> >> [ 4848.053222] Start toggling
+> >> [ 4848.086500] state change SNK_UNATTACHED -> TOGGLING
+> >> [ 4848.089983] CC1: 0 -> 0, CC2: 3 -> 3 [state TOGGLING, polarity 0, connected]
+> >> [ 4848.089993] state change TOGGLING -> SNK_ATTACH_WAIT
+> >> [ 4848.090031] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 200 ms
+> >> [ 4848.141162] CC1: 0 -> 0, CC2: 3 -> 0 [state SNK_ATTACH_WAIT,
+> >> polarity 0, disconnected]
+> >> [ 4848.141170] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT
+> >> [ 4848.141184] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @ 20 ms
+> >> [ 4848.163156] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed 20 ms]
+> >> [ 4848.163162] Start toggling
+> >> [ 4848.216918] CC1: 0 -> 0, CC2: 0 -> 3 [state TOGGLING, polarity 0, connected]
+> >> [ 4848.216954] state change TOGGLING -> SNK_ATTACH_WAIT
+> >> [ 4848.217080] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 200 ms
+> >> [ 4848.231771] CC1: 0 -> 0, CC2: 3 -> 0 [state SNK_ATTACH_WAIT,
+> >> polarity 0, disconnected]
+> >> [ 4848.231800] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT
+> >> [ 4848.231857] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @ 20 ms
+> >> [ 4848.256022] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed 20 ms]
+> >> [ 4848.256049] Start toggling
+> >> [ 4848.871148] VBUS on
+> >> [ 4848.885324] CC1: 0 -> 0, CC2: 0 -> 3 [state TOGGLING, polarity 0, connected]
+> >> [ 4848.885372] state change TOGGLING -> SNK_ATTACH_WAIT
+> >> [ 4848.885548] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 200 ms
+> >> [ 4849.088240] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 200 ms]
+> >> [ 4849.088284] state change SNK_DEBOUNCED -> SNK_ATTACHED
+> >> [ 4849.088291] polarity 1
+> >> [ 4849.088769] Requesting mux state 1, usb-role 2, orientation 2
+> >> [ 4849.088895] state change SNK_ATTACHED -> SNK_STARTUP
+> >> [ 4849.088907] state change SNK_STARTUP -> SNK_DISCOVERY
+> >> [ 4849.088915] Setting voltage/current limit 5000 mV 0 mA
+> >> [ 4849.088927] vbus=0 charge:=1
+> >> [ 4849.090505] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES
+> >> [ 4849.090828] pending state change SNK_WAIT_CAPABILITIES -> SNK_READY @ 240 ms
+> >> [ 4849.335878] state change SNK_WAIT_CAPABILITIES -> SNK_READY [delayed 240 ms]
+> >>
+> >> You can see the next type c attach log.
+> >> It directly change state from SNK_WAIT_CAPABILITIES to SNK_READY due
+> >> to not reset hard_reset_count.
+> >>
+> >> It's easy to reproduce if you plugout USB Adapater w/i AtoC cable connected.
 > > 
-> > Would you mind posting the output of "lsusb -v" for this device?
+> > What ever happened with this patch, is there still disagreement?
+> > 
 > 
-> I would like to, but unfortunately I lost access to this really rare hardware
-> about a month ago. It is a Qualcomm device (0x05c6:0x9025) with a slightly
-> modified firmware to rebrand it as a Cellient product with a different vendor
-> id. How to proceed here, if I have no access to it anymore? Drop it?
+> Yes, there is. I wouldn't have added the conditional without reason,
+> and I am concerned that removing it entirely will open another problem.
+> Feel free to apply, though - I can't prove that my concern is valid,
+> and after all we'll get reports from the field later if it is.
 
-No, that's ok, I've applied the patch now. It's just that in case we
-ever need to revisit the handling of quirky devices, it has proven
-useful to have a record the descriptors.
+Ok, can I get an ack so I know who to come back to in the future if
+there are issues?  :)
 
-Do you remember the interface layout and why you blacklisted interface
-1?
+thanks,
 
-Johan
+greg k-h
