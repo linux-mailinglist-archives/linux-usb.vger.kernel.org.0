@@ -2,149 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DCC283A07
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 17:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F553283B1D
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 17:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727771AbgJEPa2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Oct 2020 11:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727765AbgJEPa1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 11:30:27 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08F4C0613CE;
-        Mon,  5 Oct 2020 08:30:26 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id n61so8976357ota.10;
-        Mon, 05 Oct 2020 08:30:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zJlBMZLVQK99uxF6XScuil+96wjg9IWjq8L2Wv9P0jc=;
-        b=PbIuzA/aJIOaI17xWfF5gRvOaSslfutC3A+Ni7GIY81Aw9ExJjq5aVnJ/0TfKeqpJM
-         MtzjHjKCjGLOQ9EZCXeQlkVFaz3hi84RCiKRPTFE8dwkV2ahlIlCtJyHwsHgMcxhzJlc
-         64O1iXzefN5CK+ZpfT5SSMceN4btNkivU8mCy4aM2YktAeK2M1aXvBdC6I440aRAVgw6
-         V5bV8EYJRhZlzVEYV3eDZOS8ZrHfrPPzaZhLRzxfxjUgqafrwLvtt2yCuYZwiB08dmmP
-         Q3upGYRW4wz4A8oTn0VLz8GN5syYZs3uBbiL+i1G77BYM9poO/1v72PSCOmnUkKNc+CS
-         Z43Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=zJlBMZLVQK99uxF6XScuil+96wjg9IWjq8L2Wv9P0jc=;
-        b=bGF7QsL6ASDSnwM4H9VR4vNCtBR31ATQDOl5V0oHU/rxnvG/pMoDNQBoulsdQHakau
-         wfQdFsiocl0O5ctvvC4QA430STAmOAf1Y+Nnm5W/mgM/290GzZfqqKk1Mln5aLwyorFx
-         xQTDOkNTVOa3PXEMAq+1y9MDnilsMinCWwxlUFyagZ9tLJy3GxqTpu9IfYLhnjCTZzRl
-         D/peazpG9mUSAaxk5abyvTSpfaKHY2GPMloA6lzop3iXqePVpVuOKgl1LjRiiSVFAYfq
-         HC7ie5A7pcFIQRBSPieAzTmViInfpAK3ogRhjXuq0wVeCoEiWi7uhCHeMIJTGURMPAf8
-         Hvlg==
-X-Gm-Message-State: AOAM532LqMVR5Nwx/ycEWckE3EI+0jMJGRHhF98UQlCGvO2lZ4hvyOe8
-        PgcaNKhQsaa2GaJ/LNYXTAirOO2BKJg=
-X-Google-Smtp-Source: ABdhPJwGxA2q75JGDVjUtHBx+De6qyW/3zPkXsPojFLIHcrDwzaG/quK9Y9seSXCWfZ74jFqAxst6g==
-X-Received: by 2002:a9d:3ee5:: with SMTP id b92mr12321966otc.156.1601911826378;
-        Mon, 05 Oct 2020 08:30:26 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f26sm570otq.50.2020.10.05.08.30.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Oct 2020 08:30:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpm: Fix if vbus before cc, hard_reset_count
- not reset issue
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     ChiYuan Huang <u0084500@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cy_huang <cy_huang@richtek.com>
-References: <1599060933-8092-1-git-send-email-u0084500@gmail.com>
- <20200902165713.GG56237@roeck-us.net>
- <CADiBU3_iHk4aoM8o6GcaTmWDZT4ymvb0Ff-XeLLZ0C9dhCnLZQ@mail.gmail.com>
- <fd2a33fc-2383-66cb-0fd7-d5aa0cc9111f@roeck-us.net>
- <CADiBU3_vYAmHDCONrExzyM+1CTfqJx_eS1hYG8aHkNWFzTcwfg@mail.gmail.com>
- <63c7f5e4-eff2-1420-30a5-a0b98a7815e0@roeck-us.net>
- <CADiBU3-83rVLqhVAqqSGc0qQ66PHsGVVcp_m3sm_4ZS5A+GXKQ@mail.gmail.com>
- <CADiBU3_c5O-yUac-ytp5WoQQ12edkU+4wn+WNBOVGRGM15NBJA@mail.gmail.com>
- <20201002133145.GA3384841@kroah.com>
- <c2d689eb-5538-6af2-614f-766521100273@roeck-us.net>
- <20201005110808.GA298743@kroah.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <88586992-650f-a4a1-2fa0-8cef313380fb@roeck-us.net>
-Date:   Mon, 5 Oct 2020 08:30:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728700AbgJEPji (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Oct 2020 11:39:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42716 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727972AbgJEPjW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Oct 2020 11:39:22 -0400
+Received: from earth.universe (dyndsl-095-033-158-146.ewe-ip-backbone.de [95.33.158.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CD5C2085B;
+        Mon,  5 Oct 2020 15:39:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601912361;
+        bh=YDa9qgcYN/rLvsHl7wxHnDzXxyPxrajJMh139W2bTQc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yt3ruZa68573tch0c/Ho1ALzHfCpTDMLesbdlPmWRDYNKB50IT55EoZp87fsRkzgz
+         7+6j5JNoNjJ3AsqOjA1un0djegx8x339kHr5uakI101R3J4o5G+KgoyioglXZXg5dL
+         Bxy38eyfhsJbMySPsKZTFlatV3r6LR8AuCR8oLYA=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 1CDCB3C0C87; Mon,  5 Oct 2020 17:39:19 +0200 (CEST)
+Date:   Mon, 5 Oct 2020 17:39:19 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-iio@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
+        linux-leds@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rockchip@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-gpio@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-hwmon@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-spi@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, netdev@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH] dt-bindings: Another round of adding missing
+ 'additionalProperties'
+Message-ID: <20201005153919.llmcjbz4hiqvzd4x@earth.universe>
+References: <20201002234143.3570746-1-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20201005110808.GA298743@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ruzfmjzmyxibtjj5"
+Content-Disposition: inline
+In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/5/20 4:08 AM, Greg KH wrote:
-[ ... ]
->>> What ever happened with this patch, is there still disagreement?
->>>
->>
->> Yes, there is. I wouldn't have added the conditional without reason,
->> and I am concerned that removing it entirely will open another problem.
->> Feel free to apply, though - I can't prove that my concern is valid,
->> and after all we'll get reports from the field later if it is.
-> 
-> Ok, can I get an ack so I know who to come back to in the future if
-> there are issues?  :)
-> 
 
-Not from me, for the reasons I stated. I would be ok with something like:
+--ruzfmjzmyxibtjj5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--	if (tcpm_port_is_disconnected(port))
-+	if (tcpm_port_is_disconnected(port) ||
-+           (tcpm_cc_is_open(port->cc1) && tcpm_cc_is_open(port->cc2)))
+On Fri, Oct 02, 2020 at 06:41:43PM -0500, Rob Herring wrote:
+> Another round of wack-a-mole. The json-schema default is additional
+> unknown properties are allowed, but for DT all properties should be
+> defined.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>=20
+> I'll take this thru the DT tree.
+>=20
+>  [...]
+>  .../bindings/power/supply/cw2015_battery.yaml |  2 ++
+>  .../bindings/power/supply/rohm,bd99954.yaml   |  8 ++++++++
+> [...]
 
-to narrow down the condition.
+Acked-by: Sebastian Reichel <sre@kernel.org>
 
-Guenter
+-- Sebastian
+
+--ruzfmjzmyxibtjj5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl97PhAACgkQ2O7X88g7
++pqkbg/9HQHD97P7Thh0rG2tNf/oTuwqdbqpGz8XffiIbWso3SaAukPavFc/b34T
+Bhf9ldAe4Jy7Sz8qDavKYO8qMWOF8av5Je5ajNG3fFmRAO28Jz1vcRsxn7JiTvlU
+SnlrNgxMlppGfzCt59G/IH6GyJVUVhZduf1HhaterbutugRNLE6LKY85rtwPlCR6
+d4+sJE+gKYJmNhxj1XYyVrXoWQs22IA8nJggb2g2l5nHfFolffKHFRXTX5Ax7WFL
+vhm/uSgz/4T9RyObm3lx4ODSSZqC3oc1E0DR3jf97rWH6xGUVFuJoAtE5ZpS5AJt
+uC3k2QQJ8mCt5fUA+khtnS4DIsF07uOzd5Hbex8NcXiFnlO/9GYWlmGXxlAnhdrk
+vSk8jlPgslc4xKpae1y8DFQiMndd9+1g0b4ZOJ6RnhaNpnOoFOIIPmC2ViRnQ8/0
+kv5w7Hop2CIxAYj3Jk1IzlmtbmJeQt39ya7uHNJhV2ISd8P3AmrkcNedPd8OV7MO
+7DrV+n/aKjH2gLYX0+377iH59APbluDQd64e+iDir2L5PP4BWXmyMOGqZ+Od7ScJ
+YT7hlpoKPVwZ1lqta77S7LDpYrRtyv8Ce5EsFineimEc1b4N51GTMh6lDPIGVcXz
+Xa1GC6kpGXU9Cx39fOb5K64cnrJ5Whplgiyv+4xd1suU1q25CZM=
+=XHTx
+-----END PGP SIGNATURE-----
+
+--ruzfmjzmyxibtjj5--
