@@ -2,122 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB111284126
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 22:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3C72841A0
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Oct 2020 22:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729819AbgJEUf7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Oct 2020 16:35:59 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:38967 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725864AbgJEUf4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 16:35:56 -0400
-Received: by mail-wm1-f68.google.com with SMTP id d3so840440wma.4;
-        Mon, 05 Oct 2020 13:35:51 -0700 (PDT)
+        id S1729215AbgJEUo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Oct 2020 16:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725864AbgJEUoZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Oct 2020 16:44:25 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD06C0613CE
+        for <linux-usb@vger.kernel.org>; Mon,  5 Oct 2020 13:44:23 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id m13so10021200otl.9
+        for <linux-usb@vger.kernel.org>; Mon, 05 Oct 2020 13:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=i+a+onhnw5zyB3us1wI7DEbzeIgfstqEDNNlUgwfzAs=;
+        b=KosbtFW5QSv368/xZbHD/8mJiLgmkIx7Mv5QznpfN9xqaMYO4OM4i7lUgxBCD6D4v5
+         WmWe7YHNnti+6Yp3JVDoHwOaWXH2a9x+r9N55PnZF1zfReTFjQ0dKBrJCFXSLnkHGvzM
+         9zgkhP2Cpsn2QZJjCDio0V3Li1x/WU4UPLmNI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Q5iceblLTPLNAqCbEFyOg5x/SMGcxOoUyYeFBZajQxA=;
-        b=foDi3ukWfhIXBNcp5QQtGEV3cKtFKMW8Y6/7/sAVChxavwzYQE+/8au8hxHm31C0Wp
-         IMJaglp2LFmFZHeHSJ3p6JbYVMsQ1k8eoyyHjo3Ypd3ntATlB5udFYtjJOFadp+CIb8z
-         hkQiCLEpHjQYqsP59nsqGMa49WWOvSpklE89ap7ksjEJpUl3u177OGylMZ5mGs4a+LSP
-         Bhfyt5v9IFBbfxNZnHxMLICSQuz/qoN1+qACij3jFGIgDGQmBAl2QCfhOwwnk2ofVKRD
-         F8CNq5/Ji41fLjBfvY5uaiij1Xwb17Dn8PqPNK0cCj0kPVGUK/iVAo4BbSLtPD8+70zo
-         TZbA==
-X-Gm-Message-State: AOAM530cU4ZqYIFpZe9WbA5WEtjq97IESAwGzVqtJ5ClhXDYFTN0pyKb
-        /BnMfxs3eXrdtKTjsL/gEH8=
-X-Google-Smtp-Source: ABdhPJybS6GmuQGaGKAgw2oZTDndQ8lnfNHzVvN45dT21OuWH7lzG5fHAPseKBE0Hl5nmJW71d+taQ==
-X-Received: by 2002:a1c:2d94:: with SMTP id t142mr1128839wmt.74.1601930150569;
-        Mon, 05 Oct 2020 13:35:50 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.194])
-        by smtp.googlemail.com with ESMTPSA id j134sm985707wmj.7.2020.10.05.13.35.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 05 Oct 2020 13:35:49 -0700 (PDT)
-Date:   Mon, 5 Oct 2020 22:35:44 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
- in common schemas
-Message-ID: <20201005203544.GD23742@kozik-lap>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-5-robh@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=i+a+onhnw5zyB3us1wI7DEbzeIgfstqEDNNlUgwfzAs=;
+        b=QaJ/5jPWpenB2/YN2Mg8MYOs6LWo1xKNxdOpRVaE87ErwCz4QxJLoRx0+uCMcYsh8f
+         30jhG/FtiqXBYgA7Iqdz+QnJu4rRL5Z7JTNeJWxfCLopI6f/FE0xK4h0VWcHsiyj5/BY
+         i6CuWqidpNw+OB6xdkgeXQAThJfhyTuy1rTLcDomYo3yt6j+8ORZpvVMLXI77C9fdu7D
+         jNA2NVdIEvt0EoTpmFQ+o5gmYgNkAHGyEihRCj9VOOb/8XGyd7dIrJmtLfj9TTcjNy12
+         0KtwQ0AYEFBklujpar9ojDDBUemGJh5jkoeWC36LEImZhCIsDY8Q6w/dAAWdP9g2ax0R
+         rDxg==
+X-Gm-Message-State: AOAM532rDpuvt/KarF9q0Xrv0wamhennGwHhvHZ6lC/pw4xpDtZNNbB4
+        l+JSj6LQY0KaiBxb+upruP7enGmctMTghA==
+X-Google-Smtp-Source: ABdhPJzy5iU3wH7kPqTGaJbPbc+1Alw03U6xfQy9cQQn617uy8ppWkmJUPmDPNWEb/PRIjO1b04qLA==
+X-Received: by 2002:a05:6830:17d8:: with SMTP id p24mr807078ota.111.1601930662637;
+        Mon, 05 Oct 2020 13:44:22 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id l23sm229649otk.79.2020.10.05.13.44.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Oct 2020 13:44:21 -0700 (PDT)
+Subject: Re: KASAN: null-ptr-deref Write in event_handler
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        syzbot <syzbot+bf1a360e305ee719e364@syzkaller.appspotmail.com>,
+        Nazime Hande Harputluoglu <handeharputlu@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <000000000000810a4405b0ece316@google.com>
+ <CAAeHK+xWQp87S=bF2RfUjcudGaLVjk3yKLL-bxRzVM=YNRtzRA@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <2947473d-76cd-a663-049a-4d51a97e2a3e@linuxfoundation.org>
+Date:   Mon, 5 Oct 2020 14:44:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAAeHK+xWQp87S=bF2RfUjcudGaLVjk3yKLL-bxRzVM=YNRtzRA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 01:38:30PM -0500, Rob Herring wrote:
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As common/shared
-> schema are included by other schemas, they should always allow for
-> additionalProperties.
+On 10/5/20 8:04 AM, Andrey Konovalov wrote:
+> On Mon, Oct 5, 2020 at 3:59 PM syzbot
+> <syzbot+bf1a360e305ee719e364@syzkaller.appspotmail.com> wrote:
+>>
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    d3d45f82 Merge tag 'pinctrl-v5.9-2' of git://git.kernel.or..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=15781d8f900000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=89ab6a0c48f30b49
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=bf1a360e305ee719e364
+>> compiler:       gcc (GCC) 10.1.0-syz 20200507
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16cbaa7d900000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1364f367900000
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+bf1a360e305ee719e364@syzkaller.appspotmail.com
+>>
+>> vhci_hcd: stop threads
+>> vhci_hcd: release socket
+>> vhci_hcd: disconnect device
+>> ==================================================================
+>> BUG: KASAN: null-ptr-deref in instrument_atomic_write include/linux/instrumented.h:71 [inline]
+>> BUG: KASAN: null-ptr-deref in atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
+>> BUG: KASAN: null-ptr-deref in refcount_add include/linux/refcount.h:201 [inline]
+>> BUG: KASAN: null-ptr-deref in refcount_inc include/linux/refcount.h:241 [inline]
+>> BUG: KASAN: null-ptr-deref in get_task_struct include/linux/sched/task.h:104 [inline]
+>> BUG: KASAN: null-ptr-deref in kthread_stop+0x90/0x7e0 kernel/kthread.c:591
+>> Write of size 4 at addr 000000000000001c by task kworker/u4:5/2519
+>>
+>> CPU: 1 PID: 2519 Comm: kworker/u4:5 Not tainted 5.9.0-rc7-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>> Workqueue: usbip_event event_handler
+>> Call Trace:
+>>   __dump_stack lib/dump_stack.c:77 [inline]
+>>   dump_stack+0x198/0x1fd lib/dump_stack.c:118
+>>   __kasan_report mm/kasan/report.c:517 [inline]
+>>   kasan_report.cold+0x5/0x37 mm/kasan/report.c:530
+>>   check_memory_region_inline mm/kasan/generic.c:186 [inline]
+>>   check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
+>>   instrument_atomic_write include/linux/instrumented.h:71 [inline]
+>>   atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
+>>   refcount_add include/linux/refcount.h:201 [inline]
+>>   refcount_inc include/linux/refcount.h:241 [inline]
+>>   get_task_struct include/linux/sched/task.h:104 [inline]
+>>   kthread_stop+0x90/0x7e0 kernel/kthread.c:591
+>>   vhci_shutdown_connection+0x170/0x2a0 drivers/usb/usbip/vhci_hcd.c:1015
+>>   event_handler+0x1a5/0x450 drivers/usb/usbip/usbip_event.c:78
+>>   process_one_work+0x94c/0x1670 kernel/workqueue.c:2269
+>>   worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+>>   kthread+0x3b5/0x4a0 kernel/kthread.c:292
+>>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+>> ==================================================================
+>> Kernel panic - not syncing: panic_on_warn set ...
+>> CPU: 1 PID: 2519 Comm: kworker/u4:5 Tainted: G    B             5.9.0-rc7-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>> Workqueue: usbip_event event_handler
+>> Call Trace:
+>>   __dump_stack lib/dump_stack.c:77 [inline]
+>>   dump_stack+0x198/0x1fd lib/dump_stack.c:118
+>>   panic+0x382/0x7fb kernel/panic.c:231
+>>   end_report+0x4d/0x53 mm/kasan/report.c:104
+>>   __kasan_report mm/kasan/report.c:520 [inline]
+>>   kasan_report.cold+0xd/0x37 mm/kasan/report.c:530
+>>   check_memory_region_inline mm/kasan/generic.c:186 [inline]
+>>   check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
+>>   instrument_atomic_write include/linux/instrumented.h:71 [inline]
+>>   atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
+>>   refcount_add include/linux/refcount.h:201 [inline]
+>>   refcount_inc include/linux/refcount.h:241 [inline]
+>>   get_task_struct include/linux/sched/task.h:104 [inline]
+>>   kthread_stop+0x90/0x7e0 kernel/kthread.c:591
+>>   vhci_shutdown_connection+0x170/0x2a0 drivers/usb/usbip/vhci_hcd.c:1015
+>>   event_handler+0x1a5/0x450 drivers/usb/usbip/usbip_event.c:78
+>>   process_one_work+0x94c/0x1670 kernel/workqueue.c:2269
+>>   worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+>>   kthread+0x3b5/0x4a0 kernel/kthread.c:292
+>>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+>> Kernel Offset: disabled
+>> Rebooting in 86400 seconds..
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Hi Valentina and Shuah,
+> 
+> There appears to be a race condition in the USB/IP vhci_hcd shutdown
+> procedure. It happens quite often during fuzzing with syzkaller, and
+> prevents us from going deeper into the USB/IP code.
+> 
+> Could you advise us what would be the best fix for this?
+> 
 
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+Hi Andrey,
 
-Best regards,
-Krzysztof
+Reading the comments for this routine, looks like there is an assumption
+that context begins cleanup and race conditions aren't considered.
+
+The right fix is holding vhci->lock and vdev->priv_lock to protect
+critical sections in this routine. I will send a patch for this.
+
+thanks,
+-- Shuah
+
+
