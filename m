@@ -2,88 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B02284D77
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 16:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD10284D85
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 16:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726000AbgJFOSV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Oct 2020 10:18:21 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:57811 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725906AbgJFOSV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Oct 2020 10:18:21 -0400
-Received: (qmail 417731 invoked by uid 1000); 6 Oct 2020 10:18:20 -0400
-Date:   Tue, 6 Oct 2020 10:18:20 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
- onboard USB hubs
-Message-ID: <20201006141820.GA416765@rowland.harvard.edu>
-References: <20200929220912.GF1621304@google.com>
- <20200930013229.GB194665@rowland.harvard.edu>
- <20200930124915.GA1826870@google.com>
- <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
- <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
- <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
- <CAD=FV=WJrvWBLk3oLpv6Q3uY4w7YeQBXVdkpn+SAS5dnxp9-=Q@mail.gmail.com>
- <CAL_JsqLWmBCjrbs2D-d+9naJAKkNhDAbmRtqvCDY8jv=L_q-xA@mail.gmail.com>
- <CAD=FV=XkV2eGuPhpo-v4bYy12DVNtDAtjyzpKs7r6SOUZf6-sg@mail.gmail.com>
- <20201006004510.GD4135817@google.com>
+        id S1726439AbgJFOW2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 6 Oct 2020 10:22:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46552 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725947AbgJFOW2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Oct 2020 10:22:28 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 203419] Logitech Group USB audio stopped working in 5.1-rc6
+Date:   Tue, 06 Oct 2020 14:22:26 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: dirk.gajewski@uni-hamburg.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-203419-208809-titfRnecnY@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-203419-208809@https.bugzilla.kernel.org/>
+References: <bug-203419-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201006004510.GD4135817@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 05:45:10PM -0700, Matthias Kaehlcke wrote:
-> I did some prototyping, it seems a binding like this would work for
-> case a) or b):
-> 
-> &usb_1_dwc3 {
->         hub_2_0: hub@1 {
->                 compatible = "usbbda,5411";
->                 reg = <1>;
-> 	};
-> 
->         hub_3_0: hub@2 {
->                 compatible = "usbbda,411";
->                 reg = <2>;
->                 vdd-supply = <&pp3300_hub>;
-> 		companion-hubs = <&hub_2_0>;
->         };
-> };
-> 
-> It still requires specifying both hubs (which reflects the actual wiring).
-> Supporting something like "reg = <1 2>" seems more complex due to the need to
-> obtain the hub USB device at runtime (a DT node makes that trivial), possibly
-> this could be solved by adding new APIs.
-> 
-> In terms of implementation would I envision to keep a platform driver. This
-> would keep the hubby parts out of xhci-plat (except for populating the platform
-> devices), support systems with cascaded hubs and provide a device for the sysfs
-> attribute.
+https://bugzilla.kernel.org/show_bug.cgi?id=203419
 
-What will you do if a system has more than one of these power-regulated 
-hubs?  That is, how will the user know which platform device handles the 
-power control for a particular hub (and vice versa)?  You'd probably 
-have to create a pair of symlinks going back and forth in the sysfs 
-directories.
+Dirk Gajewski (dirk.gajewski@uni-hamburg.de) changed:
 
-Wouldn't it be easier to put the power-control attribute directly in the 
-hub's sysfs directory (or .../power subdirectory)?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |dirk.gajewski@uni-hamburg.d
+                   |                            |e
 
-Alan Stern
+--- Comment #48 from Dirk Gajewski (dirk.gajewski@uni-hamburg.de) ---
+I can second the previous comment. Kernel 5.8.12: no success for Logitech
+conference cam. Camera is working but no audio (084b, 084c, 084e).
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
