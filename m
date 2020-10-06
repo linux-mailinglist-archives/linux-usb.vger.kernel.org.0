@@ -2,165 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C20128525D
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 21:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285332852FB
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 22:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbgJFTZj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Oct 2020 15:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726981AbgJFTZj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Oct 2020 15:25:39 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D013C061755
-        for <linux-usb@vger.kernel.org>; Tue,  6 Oct 2020 12:25:39 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id a1so2099923pjd.1
-        for <linux-usb@vger.kernel.org>; Tue, 06 Oct 2020 12:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=H1S1hI//ma3FrCrBRy7TahA+GV00pTI+UDYuYZhYl2A=;
-        b=ob6fTCeBTR795PxooQw1KGe059sDXLIl9lbcDbuvxoQKniAPqI6M3vfw7ml33E0DcA
-         YQAnJnCd8Lr2T1RToppS2IMw1mIfDTd2vmJjz8wDCwvXAmTKAkDLbJ4IziD4qrj/XrXq
-         m+DiCBLmVer2rn8x15SwdCCVR8cEhBjhcf99E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H1S1hI//ma3FrCrBRy7TahA+GV00pTI+UDYuYZhYl2A=;
-        b=W/a31rXzbro2WrlNdlYfH5TusuTXA1s4AAjG5PQ1n6GU6cw/iRkaFWGt8QR8CRQr4S
-         GviUFCQCNndaV7PCkCkq3cDrV5VPVfh7D1W4sIxb2O245Cx2E5n+4uGr0ohs24s69vUy
-         5oqiA1OHukbJ9ZmhsipqkyoM/wjWfIRhMtAjVnrgKT0hr4A99wauesaODADYVGRPNpvN
-         +++xcxY318tgux6mhkdUhreTNI1KsV5JF5ZS7yd80wg3hTCnIfWM1yrzhS7QvstdHmnA
-         3OqDVNoEkSEYKWR0LwZLp6CJsrtUtsEmGHYGMfchFQ8RlI7sKctEkm0SEzQN/D969x4b
-         g5RA==
-X-Gm-Message-State: AOAM532xclZCgKzRYhhZepXgmYw/cbQtyazmmItu6uj8c9eZWO6nYb3a
-        CxcDP7REqpix/EiDmgNrOkWzCg==
-X-Google-Smtp-Source: ABdhPJzgB5N4X4KsJXjTcXOMMdQXiLuFRdlGTAyjj5WeOA2UuLcIgpWjx9Rw3qhPySO1kloU/HVS9g==
-X-Received: by 2002:a17:902:b70d:b029:d2:6277:385f with SMTP id d13-20020a170902b70db02900d26277385fmr4672800pls.25.1602012338722;
-        Tue, 06 Oct 2020 12:25:38 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id r6sm4731805pfq.11.2020.10.06.12.25.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Oct 2020 12:25:38 -0700 (PDT)
-Date:   Tue, 6 Oct 2020 12:25:36 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
- onboard USB hubs
-Message-ID: <20201006192536.GB191572@google.com>
-References: <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
- <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
- <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
- <CAD=FV=WJrvWBLk3oLpv6Q3uY4w7YeQBXVdkpn+SAS5dnxp9-=Q@mail.gmail.com>
- <CAL_JsqLWmBCjrbs2D-d+9naJAKkNhDAbmRtqvCDY8jv=L_q-xA@mail.gmail.com>
- <CAD=FV=XkV2eGuPhpo-v4bYy12DVNtDAtjyzpKs7r6SOUZf6-sg@mail.gmail.com>
- <20201006004510.GD4135817@google.com>
- <20201006141820.GA416765@rowland.harvard.edu>
- <20201006165957.GA191572@google.com>
- <20201006171524.GB423499@rowland.harvard.edu>
+        id S1726766AbgJFURm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Oct 2020 16:17:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42718 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725962AbgJFURm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Oct 2020 16:17:42 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9D3A02083B;
+        Tue,  6 Oct 2020 20:17:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602015460;
+        bh=/xeiEwVIau/OQM9Ovo2zdAF2yIa3fokVBf5shjtFFt4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vO42SI5I6NbshVNtwj7Qi4xmUyUP0vM2HW913nAcbxruwZU9zD1X5NSY2zFFSZFaj
+         axxZJc+nnpTon2yOpva+Aqm/9j7RFhHx+0dn6KpwcG/B09/DDNyOkzuZ2HZyFguDSK
+         HoqwGQzJOzOL5tLAruf29trfMLXoTkTRIUVWlUto=
+Date:   Tue, 6 Oct 2020 22:18:25 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     stable <stable@kernel.org>, balbi@kernel.org,
+        linux-usb@vger.kernel.org,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Brooke Basile <brookebasile@gmail.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH] USB: gadget: f_ncm: Fix NDP16 datagram validation
+Message-ID: <20201006201825.GA188912@kroah.com>
+References: <20200920170158.1217068-1-bryan.odonoghue@linaro.org>
+ <20201006182943.GA12648@lxhi-065.adit-jv.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201006171524.GB423499@rowland.harvard.edu>
+In-Reply-To: <20201006182943.GA12648@lxhi-065.adit-jv.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 06, 2020 at 01:15:24PM -0400, Alan Stern wrote:
-> On Tue, Oct 06, 2020 at 09:59:57AM -0700, Matthias Kaehlcke wrote:
-> > On Tue, Oct 06, 2020 at 10:18:20AM -0400, Alan Stern wrote:
-> > > On Mon, Oct 05, 2020 at 05:45:10PM -0700, Matthias Kaehlcke wrote:
-> > > > I did some prototyping, it seems a binding like this would work for
-> > > > case a) or b):
-> > > > 
-> > > > &usb_1_dwc3 {
-> > > >         hub_2_0: hub@1 {
-> > > >                 compatible = "usbbda,5411";
-> > > >                 reg = <1>;
-> > > > 	};
-> > > > 
-> > > >         hub_3_0: hub@2 {
-> > > >                 compatible = "usbbda,411";
-> > > >                 reg = <2>;
-> > > >                 vdd-supply = <&pp3300_hub>;
-> > > > 		companion-hubs = <&hub_2_0>;
-> > > >         };
-> > > > };
-> > > > 
-> > > > It still requires specifying both hubs (which reflects the actual wiring).
-> > > > Supporting something like "reg = <1 2>" seems more complex due to the need to
-> > > > obtain the hub USB device at runtime (a DT node makes that trivial), possibly
-> > > > this could be solved by adding new APIs.
-> > > > 
-> > > > In terms of implementation would I envision to keep a platform driver. This
-> > > > would keep the hubby parts out of xhci-plat (except for populating the platform
-> > > > devices), support systems with cascaded hubs and provide a device for the sysfs
-> > > > attribute.
-> > > 
-> > > What will you do if a system has more than one of these power-regulated 
-> > > hubs?  That is, how will the user know which platform device handles the 
-> > > power control for a particular hub (and vice versa)?  You'd probably 
-> > > have to create a pair of symlinks going back and forth in the sysfs 
-> > > directories.
+On Tue, Oct 06, 2020 at 08:29:43PM +0200, Eugeniu Rosca wrote:
+> Hello Greg,
+> Hello stable maintainers,
+> 
+> On Sun, Sep 20, 2020 at 06:01:58PM +0100, Bryan O'Donoghue wrote:
+> > commit 2b74b0a04d3e ("USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()")
+> > adds important bounds checking however it unfortunately also introduces  a
+> > bug with respect to section 3.3.1 of the NCM specification.
 > > 
-> > The platform device would use the same DT node as the USB device, hence the
-> > sysfs path of the platform device could be derived from the DT.
-> 
-> That doesn't do the user (or a program the user is running) any good.  
-> You can't expect them to go searching through the system's DT 
-> description looking for this information.  All they know is the hub's 
-> location in sysfs.
-> 
-> > > Wouldn't it be easier to put the power-control attribute directly in the 
-> > > hub's sysfs directory (or .../power subdirectory)?
+> > wDatagramIndex[1] : "Byte index, in little endian, of the second datagram
+> > described by this NDP16. If zero, then this marks the end of the sequence
+> > of datagrams in this NDP16."
 > > 
-> > Not sure. In terms of implementation it would be more complex (but not rocket
-> > science either), from a userspace perspective there are pros and cons.
+> > wDatagramLength[1]: "Byte length, in little endian, of the second datagram
+> > described by this NDP16. If zero, then this marks the end of the sequence
+> > of datagrams in this NDP16."
 > > 
-> > A platform driver (or some other control instance) is needed anyway, to check
-> > the connected devices on both hubs and cut power only after the USB devices
-> > are suspended. With the sysfs attribute associated with the platform device
-> > it wouldn't even be necessary to have a separate USB driver. The platform
-> > driver would have to evaluate the sysfs attribute of the USB device(s), which
-> > can be done but is a bit odd.
+> > wDatagramIndex[1] and wDatagramLength[1] respectively then may be zero but
+> > that does not mean we should throw away the data referenced by
+> > wDatagramIndex[0] and wDatagramLength[0] as is currently the case.
+> > 
+> > Breaking the loop on (index2 == 0 || dg_len2 == 0) should come at the end
+> > as was previously the case and checks for index2 and dg_len2 should be
+> > removed since zero is valid.
+> > 
+> > I'm not sure how much testing the above patch received but for me right now
+> > after enumeration ping doesn't work. Reverting the commit restores ping,
+> > scp, etc.
+> > 
+> > The extra validation associated with wDatagramIndex[0] and
+> > wDatagramLength[0] appears to be valid so, this change removes the incorrect
+> > restriction on wDatagramIndex[1] and wDatagramLength[1] restoring data
+> > processing between host and device.
+> > 
+> > Fixes: 2b74b0a04d3e ("USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()")
+> > Cc: Ilja Van Sprundel <ivansprundel@ioactive.com>
+> > Cc: Brooke Basile <brookebasile@gmail.com>
+> > Cc: stable <stable@kernel.org>
+> > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> > ---
+> >  drivers/usb/gadget/function/f_ncm.c | 30 ++---------------------------
+> >  1 file changed, 2 insertions(+), 28 deletions(-)
 > 
-> You don't need a platform device or a new driver to do this.  The code 
-> can go in the existing hub driver.
-
-Maybe. IIUC currently USB drivers don't support/use suspend_late. Could that
-be added? It would simplify matters, otherwise all hubs need to know their
-peers and check in suspend if they are the last hub standing, only then the
-power can be switched off. It would be simpler if a single instance (e.g. the
-hub with the DT entries) is in control.
-
-> > For a user it might be slightly simpler if they don't have to care about the
-> > existence of a platform device (but it's just a matter of knowing). The
-> > attribute must only be associated with one of the USB devices, which might
-> > be confusing, however it would be messy if each hub had an attribute. The
-> > attribute could be only associated with the 'primary hub', i.e. the one that
-> > specifies 'vdd-supply' or other attributes needed by the driver.
+> This patch appears to be pushed to 4.19, 5.4 and 5.8 stable trees via:
 > 
-> Okay.  Or you could always put it in the USB-2 hub.
+> https://lore.kernel.org/lkml/20201005142108.771915994@linuxfoundation.org/
+> https://lore.kernel.org/lkml/20201005142109.966570222@linuxfoundation.org/
+> https://lore.kernel.org/lkml/20201005142114.960807335@linuxfoundation.org/
+> 
+> Will you push this patch to v4.14.y, in order to fix v4.14.196 commit
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=b88ad6e714284b
+> ("USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()") ?
 
-Yes, some criteria like this.
+It also need to go to 4.9.y, and is already queued up in the stable
+queues for those trees for the next round of kernels that are released
+for them.
 
-> Incidentally, the peering information is already present in sysfs, 
-> although it is associated with a device's port on its upstream hub 
-> rather than with the device itself.
+thanks,
 
-That might also help the hub driver to determine its peers without needing the
-'companion-hubs' property.
+greg k-h
