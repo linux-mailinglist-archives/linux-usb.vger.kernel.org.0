@@ -2,103 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E15552848DC
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 10:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC2B28490B
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 11:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726115AbgJFI4s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Oct 2020 04:56:48 -0400
-Received: from mx2.suse.de ([195.135.220.15]:45466 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725891AbgJFI4s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Oct 2020 04:56:48 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 491D6AD08;
-        Tue,  6 Oct 2020 08:56:46 +0000 (UTC)
-Message-ID: <0b0de451147224657e5ac42d755c05447ee530b0.camel@suse.de>
-Subject: Re: INFO: task hung in hub_port_init
-From:   Oliver Neukum <oneukum@suse.de>
-To:     syzbot <syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com>,
-        coreteam@netfilter.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, gustavoars@kernel.org,
-        ingrassia@epigenesys.com, kaber@trash.net,
-        kadlec@blackhole.kfki.hu, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        niklas.soderlund+renesas@ragnatech.se, pablo@netfilter.org,
-        sergei.shtylyov@cogentembedded.com, syzkaller-bugs@googlegroups.com
-Date:   Tue, 06 Oct 2020 10:56:40 +0200
-In-Reply-To: <0000000000004831d405b0fc41d2@google.com>
-References: <0000000000004831d405b0fc41d2@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1726217AbgJFJNY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Oct 2020 05:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726131AbgJFJNW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Oct 2020 05:13:22 -0400
+Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09225C0613A8
+        for <linux-usb@vger.kernel.org>; Tue,  6 Oct 2020 02:13:18 -0700 (PDT)
+Received: by mail-ua1-x943.google.com with SMTP id c1so1001208uap.3
+        for <linux-usb@vger.kernel.org>; Tue, 06 Oct 2020 02:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8dDgYnCSpFzq6wD68V8dBs1dGtEohkus4tfFLo0MV6k=;
+        b=mMV78gRfUiTX0Fhq7sbtPeAZE51FANqXe2ffb+yEjr5QoeawgMMwQ8XSrhilmLvHtx
+         sEQF9fUq5Cmu8qOzxjbqa7RQXLkqpoqkoe++HcWkcaLYHbckkwjq/ue7xT3XAD7Uwx43
+         V06RGxgjHInxMdw3DBkk+/9rjGYrV+FnbFAksujQ3/k0njBC0ztFm62WAFNts1zyT9yx
+         oCohLIW+tNgNLvhP4H4CyiMr4WGBCs1Zex5WjzDVN9v47A0drQeaNuCYVRG5QCA6OMto
+         TQSAPGix4TPbAEDvrfDxLrnk+h7EjMNps8LmL2KLypfVwnIUdvEC6slFmF9jTy6w85lq
+         wAsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8dDgYnCSpFzq6wD68V8dBs1dGtEohkus4tfFLo0MV6k=;
+        b=eoZC37CbvhAfGiSGuSWmwrco/Z72VptB+PKjl7lMu9Gk7uFsu22jcpsamsB9353YCt
+         nGkoSkvGEFuCYjiE4HrgUU7qPnFeaFC/Ipywp0GG8QnPVvkZg548kL+3S99/Lc/yjtf5
+         bYWbQbjvDPldLfDxKEgs/STbxdaP88R808rUUMNtAsd/PohHM5nORx+qWxuDpcZl9KCb
+         ZlSpbJQZwmtYxL3dgmD9wWsyOPI9XZakEG/CTu8++exZl57LPaJf6EufrPZUU5A4uBy4
+         MTa+8nHlM7f2Yn45E/xeHAP8lh6TAQcaSizZgnwWewdrKo9Xp5//3H8dHoIvvXcVYyuw
+         c+xg==
+X-Gm-Message-State: AOAM531vTCMPnFGOdLZ5Ix7fICpOkCsji8bxL3GG28VeyIrdX0amgRcn
+        dF/SiXsowXw2HKFEv+ifIIXuiewFd/FLJcu1DJuuZzUxJHFMuA==
+X-Google-Smtp-Source: ABdhPJyShwqC7yW6UgNo8q98koC+vDiOR29TMFNqADEMu067y863m4dqGu1r37N7vNMGC6BIcV2u4BNvWr4WQc/Y4R4=
+X-Received: by 2002:ab0:130a:: with SMTP id g10mr2309765uae.100.1601975596602;
+ Tue, 06 Oct 2020 02:13:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201005183830.486085-1-robh@kernel.org> <20201005183830.486085-2-robh@kernel.org>
+In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 6 Oct 2020 11:12:39 +0200
+Message-ID: <CAPDyKFqMic9_3OBvSWrdrXonDjeC+8kjDobTunijxvL6gYDPjQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
+To:     Rob Herring <robh@kernel.org>
+Cc:     DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Richard Weinberger <richard@nod.at>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-can@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        linux-mtd@lists.infradead.org,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, linux-pwm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 06.10.2020, 01:19 -0700 schrieb syzbot:
+On Mon, 5 Oct 2020 at 20:38, Rob Herring <robh@kernel.org> wrote:
+>
+> This doesn't yet do anything in the tools, but make it explicit so we can
+> check either 'unevaluatedProperties' or 'additionalProperties' is present
+> in schemas.
+>
+> 'unevaluatedProperties' is appropriate when including another schema (via
+> '$ref') and all possible properties and/or child nodes are not
+> explicitly listed in the schema with the '$ref'.
+>
+> This is in preparation to add a meta-schema to check for missing
+> 'unevaluatedProperties' or 'additionalProperties'. This has been a
+> constant source of review issues.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Hi,
+[...]
 
-> HEAD commit:    d3d45f82 Merge tag 'pinctrl-v5.9-2' of git://git.kernel.or..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14c3b3db900000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=89ab6a0c48f30b49
-> dashboard link: https://syzkaller.appspot.com/bug?extid=74d6ef051d3d2eacf428
-> compiler:       gcc (GCC) 10.1.0-syz 20200507
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=153bf5bd900000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124c92af900000
-> 
-> The issue was bisected to:
-> 
-> commit 6dcf45e514974a1ff10755015b5e06746a033e5f
-> Author: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> Date:   Mon Jan 9 15:34:04 2017 +0000
-> 
->     sh_eth: use correct name for ECMR_MPDE bit
+>  .../devicetree/bindings/mmc/amlogic,meson-mx-sdhc.yaml       | 2 ++
+>  Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml        | 2 ++
+>  Documentation/devicetree/bindings/mmc/ingenic,mmc.yaml       | 2 ++
+>  Documentation/devicetree/bindings/mmc/owl-mmc.yaml           | 2 ++
+>  Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml  | 2 ++
+>  Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml         | 2 ++
+>  .../devicetree/bindings/mmc/socionext,uniphier-sd.yaml       | 2 ++
+>  Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml  | 2 ++
 
-I am afraid this has bisected a race condition into neverland.
+For mmc:
 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=152bb760500000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=172bb760500000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=132bb760500000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
-> Fixes: 6dcf45e51497 ("sh_eth: use correct name for ECMR_MPDE bit")
-> 
-> INFO: task kworker/0:0:5 blocked for more than 143 seconds.
->       Not tainted 5.9.0-rc7-syzkaller #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:kworker/0:0     state:D stack:27664 pid:    5 ppid:     2 flags:0x00004000
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->  context_switch kernel/sched/core.c:3778 [inline]
->  __schedule+0xec9/0x2280 kernel/sched/core.c:4527
->  schedule+0xd0/0x2a0 kernel/sched/core.c:4602
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-By this time urb_dequeue() has been killed and has returned.
+[...]
 
->  usb_kill_urb.part.0+0x197/0x220 drivers/usb/core/urb.c:696
->  usb_kill_urb+0x7c/0x90 drivers/usb/core/urb.c:691
->  usb_start_wait_urb+0x24a/0x2b0 drivers/usb/core/message.c:64
->  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
->  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
->  hub_port_init+0x11ae/0x2d80 drivers/usb/core/hub.c:4689
->  hub_port_connect drivers/usb/core/hub.c:5140 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
->  port_event drivers/usb/core/hub.c:5494 [inline]
-> 
-
-This looks like it should.
-
-Which HC driver are you using for these tests? It looks like
-the HCD is not acting on urb_dequeue(), rather than a locking
-issue.
-
-	Regards
-		Oliver
-
-
+Kind regards
+Uffe
