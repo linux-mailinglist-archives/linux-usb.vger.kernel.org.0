@@ -2,119 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBA3284A04
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 12:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6752284BF6
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 14:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbgJFKCc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Oct 2020 06:02:32 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2959 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725939AbgJFKC3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Oct 2020 06:02:29 -0400
-Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 339F145D8CC503B2B5EB;
-        Tue,  6 Oct 2020 11:02:25 +0100 (IST)
-Received: from localhost (10.52.123.13) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 6 Oct 2020
- 11:02:22 +0100
-Date:   Tue, 6 Oct 2020 11:00:36 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        "Andrew Lunn" <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        <dmaengine@vger.kernel.org>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Lars-Peter Clausen" <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "Marc Zyngier" <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "MyungJoo Ham" <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Peter Meerwald-Stadler" <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-can@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-leds@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-pci@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-rtc@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
- in common schemas
-Message-ID: <20201006100036.00007ec7@Huawei.com>
-In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
-References: <20201005183830.486085-1-robh@kernel.org>
-        <20201005183830.486085-5-robh@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
+        id S1726629AbgJFMsg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Oct 2020 08:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726517AbgJFMsg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Oct 2020 08:48:36 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2F9C0613D4
+        for <linux-usb@vger.kernel.org>; Tue,  6 Oct 2020 05:48:35 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id i3so1561844pjz.4
+        for <linux-usb@vger.kernel.org>; Tue, 06 Oct 2020 05:48:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sQ1ZRFw1JVrb5mdbUnbQ1Xk6xyYpoV5fP4T8uAyz2hw=;
+        b=UalqqU/Z4KF3vbZHbjIAfQig+pegJIOxqYiWL3gE2jPszs3jZTgNm72XNKp1ktSBl0
+         P0DrPhYxjP92TkK+Tfx4UYVBfVvTOTHUbzfIpsmDtsGUQgPnAwTNyL0jhjDrXIjKmjwS
+         25f+VrZAN7jHTdovX7Sm84YxtK/nCdB3vj14lNHA3QFSdyYd5XYXrRc9GhYmJOXaWCDW
+         0l+as7z3dms6Lv2sT1SCz0TJqDJUfL8YrQBsu3pBXkmqTsom0EVy23LLx/xm+YEsDpOl
+         Vx0HH0Dt104si2kx4f5kc+7p+JWCuVudnHX3f+XCG7amVwTzGlBGKAsNSQYgPCdevAq2
+         Ve9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sQ1ZRFw1JVrb5mdbUnbQ1Xk6xyYpoV5fP4T8uAyz2hw=;
+        b=KCHVf43lmzLSOwrqqhplUrHicNw2mpMyavAV75KPZfWHk5/kYVK1hyTE9ClX5guchZ
+         i7tLDU2/KtgxGvc8afWJvsPfOY5mYEzvdYfYArGHz86ixJrlM7BIPkl73ngXUJUGzlIU
+         OG9bIXo+Q07fCmjjv3+e8PeTv2ZeAyTIKKFgFsxYt0JChFzSo885m1EcfUhImANYddXG
+         CixspwtWy2bUW7E5BwVqTiho/F4iCgg30inHKCNF7qV4s2CILrZKeq6Fze/lWLC8j58D
+         1mp6aophRtQj2P72y7LTWtqyKspWZOnz04jcs3EbDIjqV4GIJvvzOU8XH+Vs2FNyaPjT
+         cl3Q==
+X-Gm-Message-State: AOAM5305zYe2GIYETgcIRz1Ec1ZRSeY1Ytg6Lp8YIZtM/hyhNCkE7FMv
+        PS0qvCc4kXN9ViT/wlGkIClDhwP20tjYqeDygBopSg==
+X-Google-Smtp-Source: ABdhPJxuTIkgeLojC1+VzV9TJd68luIqrRj+YDKPNYmX1CJV4VYlVmG35Q89ehXC3dXM9OFSlZ37iW033GsrkAVyMuI=
+X-Received: by 2002:a17:90a:6043:: with SMTP id h3mr4137676pjm.41.1601988514966;
+ Tue, 06 Oct 2020 05:48:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.123.13]
-X-ClientProxiedBy: lhreml716-chm.china.huawei.com (10.201.108.67) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+References: <0000000000004831d405b0fc41d2@google.com> <0b0de451147224657e5ac42d755c05447ee530b0.camel@suse.de>
+In-Reply-To: <0b0de451147224657e5ac42d755c05447ee530b0.camel@suse.de>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 6 Oct 2020 14:48:23 +0200
+Message-ID: <CAAeHK+xf6dxUcTyP_5+wJ0tZTXgn8TYcyxM9biomiPKSkf3e2g@mail.gmail.com>
+Subject: Re: INFO: task hung in hub_port_init
+To:     Oliver Neukum <oneukum@suse.de>
+Cc:     syzbot <syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com>,
+        coreteam@netfilter.org, "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        gustavoars@kernel.org, ingrassia@epigenesys.com,
+        Patrick McHardy <kaber@trash.net>,
+        Jozsef Kadlecsik <kadlec@blackhole.kfki.hu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        USB list <linux-usb@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
+        niklas.soderlund+renesas@ragnatech.se,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        sergei.shtylyov@cogentembedded.com,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 5 Oct 2020 13:38:30 -0500
-Rob Herring <robh@kernel.org> wrote:
+On Tue, Oct 6, 2020 at 10:56 AM Oliver Neukum <oneukum@suse.de> wrote:
+>
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=152bb760500000
+> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=172bb760500000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=132bb760500000
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
+> > Fixes: 6dcf45e51497 ("sh_eth: use correct name for ECMR_MPDE bit")
+> >
+> > INFO: task kworker/0:0:5 blocked for more than 143 seconds.
+> >       Not tainted 5.9.0-rc7-syzkaller #0
+> > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> > task:kworker/0:0     state:D stack:27664 pid:    5 ppid:     2 flags:0x00004000
+> > Workqueue: usb_hub_wq hub_event
+> > Call Trace:
+> >  context_switch kernel/sched/core.c:3778 [inline]
+> >  __schedule+0xec9/0x2280 kernel/sched/core.c:4527
+> >  schedule+0xd0/0x2a0 kernel/sched/core.c:4602
+>
+> By this time urb_dequeue() has been killed and has returned.
+>
+> >  usb_kill_urb.part.0+0x197/0x220 drivers/usb/core/urb.c:696
+> >  usb_kill_urb+0x7c/0x90 drivers/usb/core/urb.c:691
+> >  usb_start_wait_urb+0x24a/0x2b0 drivers/usb/core/message.c:64
+> >  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+> >  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+> >  hub_port_init+0x11ae/0x2d80 drivers/usb/core/hub.c:4689
+> >  hub_port_connect drivers/usb/core/hub.c:5140 [inline]
+> >  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+> >  port_event drivers/usb/core/hub.c:5494 [inline]
+> >
+>
+> This looks like it should.
+>
+> Which HC driver are you using for these tests?
 
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As common/shared
-> schema are included by other schemas, they should always allow for
-> additionalProperties.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hi Oliver,
 
->  Documentation/devicetree/bindings/iio/common.yaml            | 2 ++
-For IIO
+This is the USB/IP one, based on what I see in the reproducer.
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->  ...
+Thanks!
 
-
+> It looks like
+> the HCD is not acting on urb_dequeue(), rather than a locking
+> issue.
