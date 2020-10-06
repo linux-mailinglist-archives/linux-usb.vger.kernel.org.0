@@ -2,51 +2,19 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 238EB285063
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 19:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8955228508C
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 19:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726164AbgJFRAA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Oct 2020 13:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbgJFRAA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Oct 2020 13:00:00 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408D3C0613D1
-        for <linux-usb@vger.kernel.org>; Tue,  6 Oct 2020 10:00:00 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id gm14so1834335pjb.2
-        for <linux-usb@vger.kernel.org>; Tue, 06 Oct 2020 10:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=W+OwvA2XgottYqNbj2m2Re63qow6EKIPKlH3dYZhaIo=;
-        b=TUIAHmCfa2ApU50+62vetEj4FJKpNKzLypA4i9rbCzgaXdTbMbdRYyWxgn2IVyarya
-         5x3/C3Yi3bBsbRSj6p4s6lVWOVqK0vD2QiR5QLaB1SRy4DfpWziqXBRb5xHjSHOXP5Zm
-         FQDevgm9fnFhCdpf+lBod5gAPIcXrbeV/XMlU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=W+OwvA2XgottYqNbj2m2Re63qow6EKIPKlH3dYZhaIo=;
-        b=ah5KLfXBiDnXa3l+y9IoNawf0+DNxOod2SejVlG5tFjk8IW9JLNuPkXJJmb05Hlj7H
-         MLNwmU18DoWr4PHsmEaih7KaJRwCbapEhhXMWoqxdmIxDxbudZEqFCZtE7NMtplSlWv/
-         kj/DAL7IItaGz7KjmXxz0SERt7J1rh4EJlzKewK2qrl5C//W21ORg3RoHqvvGVQ1jPrS
-         gu8987II1PjrpmlatNIUMWJXhJ4WbPQcrsiyCYEIsXHDKUTXFpqSyPhzrePoq55jwpgK
-         x4zoRugLzu1Dx1oW08S1fkvy3rP2g2PSQTrxH2MPaq8eFED695Xfa+HbhmaukQyeO22/
-         LQ6g==
-X-Gm-Message-State: AOAM531ZcYUq0ge4fhnLoTjGxHptWGa2Ht5MaNjzVl8+Wh2LNpDXP5EI
-        7KGFYdEr19skcLglmrcH/LajCg==
-X-Google-Smtp-Source: ABdhPJyXK9tnuldrWA9ft1+RbKXTOVvB4cSKziqBem1JndW/z49Cbi82Gcv89qsl0Sf8CbQwswqecw==
-X-Received: by 2002:a17:902:ab88:b029:d3:b2d3:5708 with SMTP id f8-20020a170902ab88b02900d3b2d35708mr4029517plr.70.1602003599755;
-        Tue, 06 Oct 2020 09:59:59 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id a11sm3332141pju.22.2020.10.06.09.59.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Oct 2020 09:59:59 -0700 (PDT)
-Date:   Tue, 6 Oct 2020 09:59:57 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
+        id S1726329AbgJFRP0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Oct 2020 13:15:26 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42143 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725769AbgJFRPZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Oct 2020 13:15:25 -0400
+Received: (qmail 424636 invoked by uid 1000); 6 Oct 2020 13:15:24 -0400
+Date:   Tue, 6 Oct 2020 13:15:24 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Matthias Kaehlcke <mka@chromium.org>
 Cc:     Doug Anderson <dianders@chromium.org>,
         Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -61,9 +29,8 @@ Cc:     Doug Anderson <dianders@chromium.org>,
         <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
 Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
  onboard USB hubs
-Message-ID: <20201006165957.GA191572@google.com>
-References: <20200930013229.GB194665@rowland.harvard.edu>
- <20200930124915.GA1826870@google.com>
+Message-ID: <20201006171524.GB423499@rowland.harvard.edu>
+References: <20200930124915.GA1826870@google.com>
  <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
  <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
  <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
@@ -72,68 +39,87 @@ References: <20200930013229.GB194665@rowland.harvard.edu>
  <CAD=FV=XkV2eGuPhpo-v4bYy12DVNtDAtjyzpKs7r6SOUZf6-sg@mail.gmail.com>
  <20201006004510.GD4135817@google.com>
  <20201006141820.GA416765@rowland.harvard.edu>
+ <20201006165957.GA191572@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201006141820.GA416765@rowland.harvard.edu>
+In-Reply-To: <20201006165957.GA191572@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 06, 2020 at 10:18:20AM -0400, Alan Stern wrote:
-> On Mon, Oct 05, 2020 at 05:45:10PM -0700, Matthias Kaehlcke wrote:
-> > I did some prototyping, it seems a binding like this would work for
-> > case a) or b):
+On Tue, Oct 06, 2020 at 09:59:57AM -0700, Matthias Kaehlcke wrote:
+> On Tue, Oct 06, 2020 at 10:18:20AM -0400, Alan Stern wrote:
+> > On Mon, Oct 05, 2020 at 05:45:10PM -0700, Matthias Kaehlcke wrote:
+> > > I did some prototyping, it seems a binding like this would work for
+> > > case a) or b):
+> > > 
+> > > &usb_1_dwc3 {
+> > >         hub_2_0: hub@1 {
+> > >                 compatible = "usbbda,5411";
+> > >                 reg = <1>;
+> > > 	};
+> > > 
+> > >         hub_3_0: hub@2 {
+> > >                 compatible = "usbbda,411";
+> > >                 reg = <2>;
+> > >                 vdd-supply = <&pp3300_hub>;
+> > > 		companion-hubs = <&hub_2_0>;
+> > >         };
+> > > };
+> > > 
+> > > It still requires specifying both hubs (which reflects the actual wiring).
+> > > Supporting something like "reg = <1 2>" seems more complex due to the need to
+> > > obtain the hub USB device at runtime (a DT node makes that trivial), possibly
+> > > this could be solved by adding new APIs.
+> > > 
+> > > In terms of implementation would I envision to keep a platform driver. This
+> > > would keep the hubby parts out of xhci-plat (except for populating the platform
+> > > devices), support systems with cascaded hubs and provide a device for the sysfs
+> > > attribute.
 > > 
-> > &usb_1_dwc3 {
-> >         hub_2_0: hub@1 {
-> >                 compatible = "usbbda,5411";
-> >                 reg = <1>;
-> > 	};
-> > 
-> >         hub_3_0: hub@2 {
-> >                 compatible = "usbbda,411";
-> >                 reg = <2>;
-> >                 vdd-supply = <&pp3300_hub>;
-> > 		companion-hubs = <&hub_2_0>;
-> >         };
-> > };
-> > 
-> > It still requires specifying both hubs (which reflects the actual wiring).
-> > Supporting something like "reg = <1 2>" seems more complex due to the need to
-> > obtain the hub USB device at runtime (a DT node makes that trivial), possibly
-> > this could be solved by adding new APIs.
-> > 
-> > In terms of implementation would I envision to keep a platform driver. This
-> > would keep the hubby parts out of xhci-plat (except for populating the platform
-> > devices), support systems with cascaded hubs and provide a device for the sysfs
-> > attribute.
+> > What will you do if a system has more than one of these power-regulated 
+> > hubs?  That is, how will the user know which platform device handles the 
+> > power control for a particular hub (and vice versa)?  You'd probably 
+> > have to create a pair of symlinks going back and forth in the sysfs 
+> > directories.
 > 
-> What will you do if a system has more than one of these power-regulated 
-> hubs?  That is, how will the user know which platform device handles the 
-> power control for a particular hub (and vice versa)?  You'd probably 
-> have to create a pair of symlinks going back and forth in the sysfs 
-> directories.
+> The platform device would use the same DT node as the USB device, hence the
+> sysfs path of the platform device could be derived from the DT.
 
-The platform device would use the same DT node as the USB device, hence the
-sysfs path of the platform device could be derived from the DT.
+That doesn't do the user (or a program the user is running) any good.  
+You can't expect them to go searching through the system's DT 
+description looking for this information.  All they know is the hub's 
+location in sysfs.
 
-> Wouldn't it be easier to put the power-control attribute directly in the 
-> hub's sysfs directory (or .../power subdirectory)?
+> > Wouldn't it be easier to put the power-control attribute directly in the 
+> > hub's sysfs directory (or .../power subdirectory)?
+> 
+> Not sure. In terms of implementation it would be more complex (but not rocket
+> science either), from a userspace perspective there are pros and cons.
+> 
+> A platform driver (or some other control instance) is needed anyway, to check
+> the connected devices on both hubs and cut power only after the USB devices
+> are suspended. With the sysfs attribute associated with the platform device
+> it wouldn't even be necessary to have a separate USB driver. The platform
+> driver would have to evaluate the sysfs attribute of the USB device(s), which
+> can be done but is a bit odd.
 
-Not sure. In terms of implementation it would be more complex (but not rocket
-science either), from a userspace perspective there are pros and cons.
+You don't need a platform device or a new driver to do this.  The code 
+can go in the existing hub driver.
 
-A platform driver (or some other control instance) is needed anyway, to check
-the connected devices on both hubs and cut power only after the USB devices
-are suspended. With the sysfs attribute associated with the platform device
-it wouldn't even be necessary to have a separate USB driver. The platform
-driver would have to evaluate the sysfs attribute of the USB device(s), which
-can be done but is a bit odd.
+> For a user it might be slightly simpler if they don't have to care about the
+> existence of a platform device (but it's just a matter of knowing). The
+> attribute must only be associated with one of the USB devices, which might
+> be confusing, however it would be messy if each hub had an attribute. The
+> attribute could be only associated with the 'primary hub', i.e. the one that
+> specifies 'vdd-supply' or other attributes needed by the driver.
 
-For a user it might be slightly simpler if they don't have to care about the
-existence of a platform device (but it's just a matter of knowing). The
-attribute must only be associated with one of the USB devices, which might
-be confusing, however it would be messy if each hub had an attribute. The
-attribute could be only associated with the 'primary hub', i.e. the one that
-specifies 'vdd-supply' or other attributes needed by the driver.
+Okay.  Or you could always put it in the USB-2 hub.
+
+Incidentally, the peering information is already present in sysfs, 
+although it is associated with a device's port on its upstream hub 
+rather than with the device itself.
+
+Alan Stern
