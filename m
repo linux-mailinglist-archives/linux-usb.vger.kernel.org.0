@@ -2,105 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 285332852FB
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 22:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A347E28541E
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 23:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726766AbgJFURm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Oct 2020 16:17:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42718 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725962AbgJFURm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Oct 2020 16:17:42 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D3A02083B;
-        Tue,  6 Oct 2020 20:17:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602015460;
-        bh=/xeiEwVIau/OQM9Ovo2zdAF2yIa3fokVBf5shjtFFt4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vO42SI5I6NbshVNtwj7Qi4xmUyUP0vM2HW913nAcbxruwZU9zD1X5NSY2zFFSZFaj
-         axxZJc+nnpTon2yOpva+Aqm/9j7RFhHx+0dn6KpwcG/B09/DDNyOkzuZ2HZyFguDSK
-         HoqwGQzJOzOL5tLAruf29trfMLXoTkTRIUVWlUto=
-Date:   Tue, 6 Oct 2020 22:18:25 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     stable <stable@kernel.org>, balbi@kernel.org,
-        linux-usb@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Brooke Basile <brookebasile@gmail.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH] USB: gadget: f_ncm: Fix NDP16 datagram validation
-Message-ID: <20201006201825.GA188912@kroah.com>
-References: <20200920170158.1217068-1-bryan.odonoghue@linaro.org>
- <20201006182943.GA12648@lxhi-065.adit-jv.com>
+        id S1727499AbgJFVvv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Oct 2020 17:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727478AbgJFVvu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Oct 2020 17:51:50 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7965C0613D2
+        for <linux-usb@vger.kernel.org>; Tue,  6 Oct 2020 14:51:50 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id l8so68919ioh.11
+        for <linux-usb@vger.kernel.org>; Tue, 06 Oct 2020 14:51:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nSCTqSSaowrClPgifoMVMPmt7o3BdWesTezGGK/fWcI=;
+        b=cUzTZXB/1CJjFTTolO/0RuHF+1eavPEIRNfxUbFFbNl3XGvP79jZoJM2+H8vm4m60a
+         1j+Xee4jAMrA39XGq6XgiErgXK04Lh3hkPhyFnDzFX8gUfcxzsMlbQI0utLLQaWChMbP
+         NW0ZrKttZ0kk5QiZBq+lElDJ4iE+UkcZryPA8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nSCTqSSaowrClPgifoMVMPmt7o3BdWesTezGGK/fWcI=;
+        b=h9qH2zPHJ1OxAGVtJYNHbMj5zieW4yVUYBXuQjPHJHzkJgjDxXCz8GSiz29XWFnH2b
+         c/BpsHFSHcb1dbVPDmEoaFFSzvSngAnMvHsjK29+t0Opcp0wXfi319p0dWD3hoqHBSq/
+         sdcsuDFp6ISNSt6XgqC/6YnBUjaTuv/UUZBRvWNEUI5Qb37VpfaFqa2BB4NF1MV1gjGq
+         RLzCohwnKBPeW3m2joYzZKaYG7TYT1cL8EzTfj6mLp7mao1SeSzMdNhEdlquQCLB35sb
+         7SRFG76yB/UuKFfx8kkPKhOZVBbnmao9gVDXZDhYScUMtgSO2kxwryoEw+dXIBocUPTA
+         qQtw==
+X-Gm-Message-State: AOAM532MilV7lmWRVKheb9ZyhRXj8h9fAmkwLY9QJ+tiwh5xBNikhBVM
+        DugjUwZoUAkYIJ7nZ+W1+y8uZw==
+X-Google-Smtp-Source: ABdhPJzb5ozGPovahu892+l0m/4MFKcs+Bgc7nt2hbumIO7xCZMbLEjJSaN/5HiQkLjKnYuncJtVjw==
+X-Received: by 2002:a5d:9d15:: with SMTP id j21mr2856215ioj.100.1602021109910;
+        Tue, 06 Oct 2020 14:51:49 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id v17sm41556ilm.48.2020.10.06.14.51.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Oct 2020 14:51:49 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        andreyknvl@google.com
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usbip: vhci_hcd: fix calling usb_hcd_giveback_urb() with irqs enabled
+Date:   Tue,  6 Oct 2020 15:51:47 -0600
+Message-Id: <20201006215147.35146-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201006182943.GA12648@lxhi-065.adit-jv.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 06, 2020 at 08:29:43PM +0200, Eugeniu Rosca wrote:
-> Hello Greg,
-> Hello stable maintainers,
-> 
-> On Sun, Sep 20, 2020 at 06:01:58PM +0100, Bryan O'Donoghue wrote:
-> > commit 2b74b0a04d3e ("USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()")
-> > adds important bounds checking however it unfortunately also introduces  a
-> > bug with respect to section 3.3.1 of the NCM specification.
-> > 
-> > wDatagramIndex[1] : "Byte index, in little endian, of the second datagram
-> > described by this NDP16. If zero, then this marks the end of the sequence
-> > of datagrams in this NDP16."
-> > 
-> > wDatagramLength[1]: "Byte length, in little endian, of the second datagram
-> > described by this NDP16. If zero, then this marks the end of the sequence
-> > of datagrams in this NDP16."
-> > 
-> > wDatagramIndex[1] and wDatagramLength[1] respectively then may be zero but
-> > that does not mean we should throw away the data referenced by
-> > wDatagramIndex[0] and wDatagramLength[0] as is currently the case.
-> > 
-> > Breaking the loop on (index2 == 0 || dg_len2 == 0) should come at the end
-> > as was previously the case and checks for index2 and dg_len2 should be
-> > removed since zero is valid.
-> > 
-> > I'm not sure how much testing the above patch received but for me right now
-> > after enumeration ping doesn't work. Reverting the commit restores ping,
-> > scp, etc.
-> > 
-> > The extra validation associated with wDatagramIndex[0] and
-> > wDatagramLength[0] appears to be valid so, this change removes the incorrect
-> > restriction on wDatagramIndex[1] and wDatagramLength[1] restoring data
-> > processing between host and device.
-> > 
-> > Fixes: 2b74b0a04d3e ("USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()")
-> > Cc: Ilja Van Sprundel <ivansprundel@ioactive.com>
-> > Cc: Brooke Basile <brookebasile@gmail.com>
-> > Cc: stable <stable@kernel.org>
-> > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> > ---
-> >  drivers/usb/gadget/function/f_ncm.c | 30 ++---------------------------
-> >  1 file changed, 2 insertions(+), 28 deletions(-)
-> 
-> This patch appears to be pushed to 4.19, 5.4 and 5.8 stable trees via:
-> 
-> https://lore.kernel.org/lkml/20201005142108.771915994@linuxfoundation.org/
-> https://lore.kernel.org/lkml/20201005142109.966570222@linuxfoundation.org/
-> https://lore.kernel.org/lkml/20201005142114.960807335@linuxfoundation.org/
-> 
-> Will you push this patch to v4.14.y, in order to fix v4.14.196 commit
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=b88ad6e714284b
-> ("USB: gadget: f_ncm: add bounds checks to ncm_unwrap_ntb()") ?
+Fix the following warning from kcov regarding usb_hcd_giveback_urb()
+call being made without disabling interrupts.
 
-It also need to go to 4.9.y, and is already queued up in the stable
-queues for those trees for the next round of kernels that are released
-for them.
+usb_hcd_giveback_urb() is called from vhci's urb_enqueue, when it
+determines it doesn't need to xmit the urb and can give it back.
+This path runs in task context.
 
-thanks,
+Disable irqs around usb_hcd_giveback_urb() call.
 
-greg k-h
+WARNING: CPU: 2 PID: 57 at kernel/kcov.c:834
+kcov_remote_start+0xa7/0x400 kernel/kcov.c:834
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 2 PID: 57 Comm: kworker/2:1 Not tainted 5.9.0-rc7+ #45
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1 04/01/2014
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x14b/0x19d lib/dump_stack.c:118
+ panic+0x319/0x765 kernel/panic.c:231
+ __warn.cold+0x2f/0x2f kernel/panic.c:600
+ report_bug+0x273/0x300 lib/bug.c:198
+ handle_bug+0x38/0x90 arch/x86/kernel/traps.c:234
+ exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:254
+ asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:536
+RIP: 0010:kcov_remote_start+0xa7/0x400 kernel/kcov.c:834
+Code: 84 26 03 00 00 fa 66 0f 1f 44 00 00 65 8b 05 50 13 93 7e a9 00
+01 ff 00 41 8b 94 24 50 0a 00 00 75 1a 81 e2 ff ff ff bf 74 12 <0f> 0b
+48 83 3d 17 c4 26 08 00 0f 85 62 01 00 00 0f 0b 65 8b 05 20
+RSP: 0018:ffffc9000030f600 EFLAGS: 00010002
+RAX: 0000000080000000 RBX: 0100000000000003 RCX: ffffc90014cd1000
+RDX: 0000000000000002 RSI: ffffffff85199fcc RDI: 0100000000000003
+RBP: 0000000000000282 R08: ffff88806d594640 R09: fffff52000061eca
+R10: 0000000000000003 R11: fffff52000061ec9 R12: ffff88806d594640
+R13: 0000000000000000 R14: 0100000000000003 R15: 0000000000000000
+ kcov_remote_start_usb include/linux/kcov.h:52 [inline]
+ __usb_hcd_giveback_urb+0x284/0x4b0 drivers/usb/core/hcd.c:1649
+ usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1716
+ vhci_urb_enqueue.cold+0x37f/0x4c5 drivers/usb/usbip/vhci_hcd.c:801
+ usb_hcd_submit_urb+0x2b1/0x20d0 drivers/usb/core/hcd.c:1547
+ usb_submit_urb+0x6e5/0x13b0 drivers/usb/core/urb.c:570
+ usb_start_wait_urb+0x10f/0x2c0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+ hub_set_address drivers/usb/core/hub.c:4472 [inline]
+ hub_port_init+0x23f6/0x2d20 drivers/usb/core/hub.c:4748
+ hub_port_connect drivers/usb/core/hub.c:5140 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x1cc9/0x38d0 drivers/usb/core/hub.c:5576
+ process_one_work+0x7b6/0x1190 kernel/workqueue.c:2269
+ worker_thread+0x94/0xdc0 kernel/workqueue.c:2415
+ kthread+0x372/0x450 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+Kernel Offset: disabled
+Rebooting in 1 seconds..
+
+Reported-by: Andrey Konovalov <andreyknvl@google.com>
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ drivers/usb/usbip/vhci_hcd.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 1b598db5d8b9..66cde5e5f796 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -797,8 +797,14 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 	usb_hcd_unlink_urb_from_ep(hcd, urb);
+ no_need_unlink:
+ 	spin_unlock_irqrestore(&vhci->lock, flags);
+-	if (!ret)
++	if (!ret) {
++		/* usb_hcd_giveback_urb() should be called with
++		 * irqs disabled
++		 */
++		local_irq_disable();
+ 		usb_hcd_giveback_urb(hcd, urb, urb->status);
++		local_irq_enable();
++	}
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
+
