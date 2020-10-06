@@ -2,66 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E982851BE
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 20:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C20128525D
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 21:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726847AbgJFSl2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Oct 2020 14:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S1727084AbgJFTZj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Oct 2020 15:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726844AbgJFSl2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Oct 2020 14:41:28 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30B6C0613D7
-        for <linux-usb@vger.kernel.org>; Tue,  6 Oct 2020 11:41:27 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id u8so19153069ejg.1
-        for <linux-usb@vger.kernel.org>; Tue, 06 Oct 2020 11:41:27 -0700 (PDT)
+        with ESMTP id S1726981AbgJFTZj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Oct 2020 15:25:39 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D013C061755
+        for <linux-usb@vger.kernel.org>; Tue,  6 Oct 2020 12:25:39 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id a1so2099923pjd.1
+        for <linux-usb@vger.kernel.org>; Tue, 06 Oct 2020 12:25:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=C8GBCgQbcL72bHfuvAY+Zdl7rDxtS++c+cKqr1GrZYs=;
-        b=DjuJ/p24mQDEl/vbTYnWHBbmgNI9BSc0YKBExESfRytQ6pfYduML0M70l4DO6jipI2
-         zaX+9OrKjTaumELrIGwrKGRM2EXzuMkBrJnSRljYKOHVmkQ6E/cLd3MK4KvQ8oAnqJbm
-         UpxCAUlOuV7STQXFSNMIEdRxiwdEW36wXZThR9e6+j6jXEVPG/GcIb7QBPh9EiTy7Tu3
-         8GhHeU4/UQhsP5UREXADAaMQ2TaQeTtuRgxCYGYxoRhYGaWu0PwEr++ETasnNHi+M2k4
-         j3FoRYxuc5fexqm8AS9165nxSRcnGJezi56zpM2HsiZcbEp+jCVj0TvMO8izM05Sz+VK
-         Scrg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=H1S1hI//ma3FrCrBRy7TahA+GV00pTI+UDYuYZhYl2A=;
+        b=ob6fTCeBTR795PxooQw1KGe059sDXLIl9lbcDbuvxoQKniAPqI6M3vfw7ml33E0DcA
+         YQAnJnCd8Lr2T1RToppS2IMw1mIfDTd2vmJjz8wDCwvXAmTKAkDLbJ4IziD4qrj/XrXq
+         m+DiCBLmVer2rn8x15SwdCCVR8cEhBjhcf99E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=C8GBCgQbcL72bHfuvAY+Zdl7rDxtS++c+cKqr1GrZYs=;
-        b=U8BCVXsJjGY7YV88ywbMcON2UoSuuX7wDBgGam7GGm9/zq5aKk1h4VJfzgVe75NJLV
-         IqUmYYvpYxLIoX1FrNbowTNChXEgyIc42QbhZAoDKUW6j5yPhHqXrbZTEJClcjs6MJBQ
-         NS0WSGf/6NAPGD+dzvUvaRmrDT+Kgxq3WEOFvaImsGWXCYT4OXwWxS345u4iwjsDHqdk
-         k9GmR9I3f0YLSLQc57gVgVIpduROEC5ynVohwbp3Si3ilDkgkTldEF7tO8CkKZUDH2gx
-         03UUh9tVhKuA4mZyVqQweVCuZA1p5W/4Xe6oi6tW4sSuxAfewTgxZJjTkaUVpNzj0JQA
-         8xXQ==
-X-Gm-Message-State: AOAM531Y0b4Y1TaJ3x2agfbLHIoqSrKR5x+ROXtQe6z3xbr04SmXFpnb
-        pfDHnsZzqP/P3/FumZfDBybd+WCpMZ+4JiXZd2Y=
-X-Google-Smtp-Source: ABdhPJwxxh6PGu/CiD43ih/QOxChqReyXCVpm+S5i7eBm5XszzzFBNZYupRSu3v7y35kr7/OJFx65zzal/TZxdtBGKc=
-X-Received: by 2002:a17:906:a51:: with SMTP id x17mr945268ejf.137.1602009686244;
- Tue, 06 Oct 2020 11:41:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H1S1hI//ma3FrCrBRy7TahA+GV00pTI+UDYuYZhYl2A=;
+        b=W/a31rXzbro2WrlNdlYfH5TusuTXA1s4AAjG5PQ1n6GU6cw/iRkaFWGt8QR8CRQr4S
+         GviUFCQCNndaV7PCkCkq3cDrV5VPVfh7D1W4sIxb2O245Cx2E5n+4uGr0ohs24s69vUy
+         5oqiA1OHukbJ9ZmhsipqkyoM/wjWfIRhMtAjVnrgKT0hr4A99wauesaODADYVGRPNpvN
+         +++xcxY318tgux6mhkdUhreTNI1KsV5JF5ZS7yd80wg3hTCnIfWM1yrzhS7QvstdHmnA
+         3OqDVNoEkSEYKWR0LwZLp6CJsrtUtsEmGHYGMfchFQ8RlI7sKctEkm0SEzQN/D969x4b
+         g5RA==
+X-Gm-Message-State: AOAM532xclZCgKzRYhhZepXgmYw/cbQtyazmmItu6uj8c9eZWO6nYb3a
+        CxcDP7REqpix/EiDmgNrOkWzCg==
+X-Google-Smtp-Source: ABdhPJzgB5N4X4KsJXjTcXOMMdQXiLuFRdlGTAyjj5WeOA2UuLcIgpWjx9Rw3qhPySO1kloU/HVS9g==
+X-Received: by 2002:a17:902:b70d:b029:d2:6277:385f with SMTP id d13-20020a170902b70db02900d26277385fmr4672800pls.25.1602012338722;
+        Tue, 06 Oct 2020 12:25:38 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id r6sm4731805pfq.11.2020.10.06.12.25.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Oct 2020 12:25:38 -0700 (PDT)
+Date:   Tue, 6 Oct 2020 12:25:36 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
+ onboard USB hubs
+Message-ID: <20201006192536.GB191572@google.com>
+References: <CAL_JsqLq9ZJm_CMiqWwbQhgGeu_ac_j43pvk4+xCFueSbyL4wA@mail.gmail.com>
+ <CAD=FV=WcDzgcHNn1+gH+gq_WEwpD0XXdJGm2fBVpAB=3fVbzZA@mail.gmail.com>
+ <CAL_Jsq+Zi+hCmUEiSmYw=pVK472=OW1ZjLnkH1NodWUm8FA5+g@mail.gmail.com>
+ <CAD=FV=WJrvWBLk3oLpv6Q3uY4w7YeQBXVdkpn+SAS5dnxp9-=Q@mail.gmail.com>
+ <CAL_JsqLWmBCjrbs2D-d+9naJAKkNhDAbmRtqvCDY8jv=L_q-xA@mail.gmail.com>
+ <CAD=FV=XkV2eGuPhpo-v4bYy12DVNtDAtjyzpKs7r6SOUZf6-sg@mail.gmail.com>
+ <20201006004510.GD4135817@google.com>
+ <20201006141820.GA416765@rowland.harvard.edu>
+ <20201006165957.GA191572@google.com>
+ <20201006171524.GB423499@rowland.harvard.edu>
 MIME-Version: 1.0
-Received: by 2002:a17:906:bc55:0:0:0:0 with HTTP; Tue, 6 Oct 2020 11:41:24
- -0700 (PDT)
-Reply-To: mfdp@tlen.pl
-From:   Mr Bill T Winters <missfavourkip@gmail.com>
-Date:   Tue, 6 Oct 2020 11:41:24 -0700
-Message-ID: <CAJc0UUnUJvey7LoCQ_rsx28BKJ4u1pYKARah2rS2M9ttjqHKkg@mail.gmail.com>
-Subject: Good Morning!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201006171524.GB423499@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Greetings,
-I Mr Bill T, did you Receive the (FUND), that was paid to you?
-Let me know with your full name:...  immediately,
+On Tue, Oct 06, 2020 at 01:15:24PM -0400, Alan Stern wrote:
+> On Tue, Oct 06, 2020 at 09:59:57AM -0700, Matthias Kaehlcke wrote:
+> > On Tue, Oct 06, 2020 at 10:18:20AM -0400, Alan Stern wrote:
+> > > On Mon, Oct 05, 2020 at 05:45:10PM -0700, Matthias Kaehlcke wrote:
+> > > > I did some prototyping, it seems a binding like this would work for
+> > > > case a) or b):
+> > > > 
+> > > > &usb_1_dwc3 {
+> > > >         hub_2_0: hub@1 {
+> > > >                 compatible = "usbbda,5411";
+> > > >                 reg = <1>;
+> > > > 	};
+> > > > 
+> > > >         hub_3_0: hub@2 {
+> > > >                 compatible = "usbbda,411";
+> > > >                 reg = <2>;
+> > > >                 vdd-supply = <&pp3300_hub>;
+> > > > 		companion-hubs = <&hub_2_0>;
+> > > >         };
+> > > > };
+> > > > 
+> > > > It still requires specifying both hubs (which reflects the actual wiring).
+> > > > Supporting something like "reg = <1 2>" seems more complex due to the need to
+> > > > obtain the hub USB device at runtime (a DT node makes that trivial), possibly
+> > > > this could be solved by adding new APIs.
+> > > > 
+> > > > In terms of implementation would I envision to keep a platform driver. This
+> > > > would keep the hubby parts out of xhci-plat (except for populating the platform
+> > > > devices), support systems with cascaded hubs and provide a device for the sysfs
+> > > > attribute.
+> > > 
+> > > What will you do if a system has more than one of these power-regulated 
+> > > hubs?  That is, how will the user know which platform device handles the 
+> > > power control for a particular hub (and vice versa)?  You'd probably 
+> > > have to create a pair of symlinks going back and forth in the sysfs 
+> > > directories.
+> > 
+> > The platform device would use the same DT node as the USB device, hence the
+> > sysfs path of the platform device could be derived from the DT.
+> 
+> That doesn't do the user (or a program the user is running) any good.  
+> You can't expect them to go searching through the system's DT 
+> description looking for this information.  All they know is the hub's 
+> location in sysfs.
+> 
+> > > Wouldn't it be easier to put the power-control attribute directly in the 
+> > > hub's sysfs directory (or .../power subdirectory)?
+> > 
+> > Not sure. In terms of implementation it would be more complex (but not rocket
+> > science either), from a userspace perspective there are pros and cons.
+> > 
+> > A platform driver (or some other control instance) is needed anyway, to check
+> > the connected devices on both hubs and cut power only after the USB devices
+> > are suspended. With the sysfs attribute associated with the platform device
+> > it wouldn't even be necessary to have a separate USB driver. The platform
+> > driver would have to evaluate the sysfs attribute of the USB device(s), which
+> > can be done but is a bit odd.
+> 
+> You don't need a platform device or a new driver to do this.  The code 
+> can go in the existing hub driver.
 
-Sincerely Yours, Respectfully,
+Maybe. IIUC currently USB drivers don't support/use suspend_late. Could that
+be added? It would simplify matters, otherwise all hubs need to know their
+peers and check in suspend if they are the last hub standing, only then the
+power can be switched off. It would be simpler if a single instance (e.g. the
+hub with the DT entries) is in control.
 
-Mr Bill T Winters,
-Group Chief Executive Officer & Executive Director,
+> > For a user it might be slightly simpler if they don't have to care about the
+> > existence of a platform device (but it's just a matter of knowing). The
+> > attribute must only be associated with one of the USB devices, which might
+> > be confusing, however it would be messy if each hub had an attribute. The
+> > attribute could be only associated with the 'primary hub', i.e. the one that
+> > specifies 'vdd-supply' or other attributes needed by the driver.
+> 
+> Okay.  Or you could always put it in the USB-2 hub.
+
+Yes, some criteria like this.
+
+> Incidentally, the peering information is already present in sysfs, 
+> although it is associated with a device's port on its upstream hub 
+> rather than with the device itself.
+
+That might also help the hub driver to determine its peers without needing the
+'companion-hubs' property.
