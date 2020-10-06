@@ -2,95 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5AD928543A
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Oct 2020 23:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC131285460
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Oct 2020 00:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbgJFV7w convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 6 Oct 2020 17:59:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46282 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726248AbgJFV7w (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Oct 2020 17:59:52 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209555] New: dwc2 driver stops working after sudden disconnect
-Date:   Tue, 06 Oct 2020 21:59:51 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: tomasz@grobelny.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression attachments.created
-Message-ID: <bug-209555-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726955AbgJFWQb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Oct 2020 18:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726137AbgJFWQa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Oct 2020 18:16:30 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0490EC061755
+        for <linux-usb@vger.kernel.org>; Tue,  6 Oct 2020 15:16:28 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id r10so97173pgb.10
+        for <linux-usb@vger.kernel.org>; Tue, 06 Oct 2020 15:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TZnPth6VE++hvzuNUfaHWicTx8/+4Slf0WDCf2FuLRc=;
+        b=gR0n4ubdEdVO4WV/3XKYG27xL6p/ZtBAtqQAC6whuiZuOGYMz8bF2TMNtLr6vHpV4y
+         gsyzCKJLQtShQeLL8Vog5N7deC3xuhZEj5J3Xr1QZBD08/iQw/Bw3T51udXUsZDiI8sw
+         IMCty4759uTuXOkZBjsY2fG79kWo0H4MPq4805DG7Y9SX/V4KxX93Q//dDew0ea2ui6Z
+         nU7G8tohGaBwspFk8x60m4MbKXY2CVfdMoeH83tRgl17e5180Yphnu2jEv+FIvMdw6n8
+         M6WlNqyCE4P9eOhYVH5R4BT4f+VuCEi+uYeR0p2GlP84gEq92JApbyC84lTSKWVcQLtS
+         UAGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TZnPth6VE++hvzuNUfaHWicTx8/+4Slf0WDCf2FuLRc=;
+        b=ik8tIp+geR/cjxef08nlF91Mb56I+YQ+Qb4ILXNeUfPwwVlSRJXpFPYILmIM7D4eYL
+         Ro8G3cYy91X8tsmQOPXDGZMPtqhtuWh0Vv5rmEsRlP8aV3u5SrYUiCCcSOENFsmdEsNp
+         FLxEDxKwIQzdn/bXwZARWrAp/6x8AYsDeU4dEnPzl0stWPAL/HRaVri68l6M+Dl5goKl
+         lnCgQgNjzuX6w2oOUhfzKNxzLj0CS3M7eCobb5AHp2g3ZjIkOaKlEm/UUepmGpy47//F
+         C8xQTahUZVJKNJI4yG6TlPsiv4sQTr67P0ldIvuLrQvIZsKcbpbONbLhkd8V1eeGEhX+
+         aG7g==
+X-Gm-Message-State: AOAM530XXbG2oWd+hjG+0MCAmky1LtBqQ6hQgvx57qj/NojnD0YhIKzG
+        33CwBPeOInGBkWV7wFWUcrjaMrDend1eBm5gTmy9Nw==
+X-Google-Smtp-Source: ABdhPJwdJy8g0LlZPYfzlhUdhMsLIvpCBugytTpZRvhK5IM+CWH8zBNe2LajgIJWefDQEB8lwpe1l93L94uXeaZXuGc=
+X-Received: by 2002:a62:ee10:0:b029:142:2501:3972 with SMTP id
+ e16-20020a62ee100000b029014225013972mr119379pfi.55.1602022588112; Tue, 06 Oct
+ 2020 15:16:28 -0700 (PDT)
 MIME-Version: 1.0
+References: <20201006215147.35146-1-skhan@linuxfoundation.org>
+In-Reply-To: <20201006215147.35146-1-skhan@linuxfoundation.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Wed, 7 Oct 2020 00:16:16 +0200
+Message-ID: <CAAeHK+yve84dKiNbwwTDJHMcCECM8N3GodoL5UeBPPL6REVg8Q@mail.gmail.com>
+Subject: Re: [PATCH] usbip: vhci_hcd: fix calling usb_hcd_giveback_urb() with
+ irqs enabled
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209555
+On Tue, Oct 6, 2020 at 11:51 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> Fix the following warning from kcov regarding usb_hcd_giveback_urb()
+> call being made without disabling interrupts.
 
-            Bug ID: 209555
-           Summary: dwc2 driver stops working after sudden disconnect
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.9.0-rc6
-          Hardware: ARM
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: tomasz@grobelny.net
-        Regression: No
+Hi Shuah,
 
-Created attachment 292875
-  --> https://bugzilla.kernel.org/attachment.cgi?id=292875&action=edit
-dmesg
+This won't fix the kcov warning, as it still requires its own fix,
+which I'll send separately. But this will fix the improper usage of
+usb_hcd_giveback_urb() in USB/IP.
 
-Setup:
-# uname -a
-Linux odroid 5.9.0-rc6-dirty #1 SMP PREEMPT Tue Oct 6 20:04:44 UTC 2020 aarch64
-aarch64 aarch64 GNU/Linux
+Thank you for working on this!
 
-dwc2 driver working in gadget mode on Odroid N2 using function fs
-kernel: branch next from
-git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git
-
-Scenario:
-Odroid connects as custom gadget (with mass storage function, see second 114
-and 134), then is switched to Android Open Accessory mode and start
-transmission using function fs (uses ep0,ep1,ep2 channels). Suddenly the USB
-cable is pulled out (roughly second 122).
-
-Running the same sequence of actions (second 134) does not work any more until
-reboot. In dmesg one can see timeouts. Also, before enabling debug output I
-could see "HANG! Soft Reset timeout GRSTCTL_CSFTRST_DONE" line in dmesg output
-(drivers/usb/dwc2/core.c:538)
-
-Therefore my conclusion is that there is something wrong with handling device
-disconnect.
-
-Due to number of produced debug messages dmesg output might be incomplete.
-Please let me know if I can somehow help to fix this bug.
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+>
+> usb_hcd_giveback_urb() is called from vhci's urb_enqueue, when it
+> determines it doesn't need to xmit the urb and can give it back.
+> This path runs in task context.
+>
+> Disable irqs around usb_hcd_giveback_urb() call.
+>
+> WARNING: CPU: 2 PID: 57 at kernel/kcov.c:834
+> kcov_remote_start+0xa7/0x400 kernel/kcov.c:834
+> Kernel panic - not syncing: panic_on_warn set ...
+> CPU: 2 PID: 57 Comm: kworker/2:1 Not tainted 5.9.0-rc7+ #45
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1 04/01/2014
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0x14b/0x19d lib/dump_stack.c:118
+>  panic+0x319/0x765 kernel/panic.c:231
+>  __warn.cold+0x2f/0x2f kernel/panic.c:600
+>  report_bug+0x273/0x300 lib/bug.c:198
+>  handle_bug+0x38/0x90 arch/x86/kernel/traps.c:234
+>  exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:254
+>  asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:536
+> RIP: 0010:kcov_remote_start+0xa7/0x400 kernel/kcov.c:834
+> Code: 84 26 03 00 00 fa 66 0f 1f 44 00 00 65 8b 05 50 13 93 7e a9 00
+> 01 ff 00 41 8b 94 24 50 0a 00 00 75 1a 81 e2 ff ff ff bf 74 12 <0f> 0b
+> 48 83 3d 17 c4 26 08 00 0f 85 62 01 00 00 0f 0b 65 8b 05 20
+> RSP: 0018:ffffc9000030f600 EFLAGS: 00010002
+> RAX: 0000000080000000 RBX: 0100000000000003 RCX: ffffc90014cd1000
+> RDX: 0000000000000002 RSI: ffffffff85199fcc RDI: 0100000000000003
+> RBP: 0000000000000282 R08: ffff88806d594640 R09: fffff52000061eca
+> R10: 0000000000000003 R11: fffff52000061ec9 R12: ffff88806d594640
+> R13: 0000000000000000 R14: 0100000000000003 R15: 0000000000000000
+>  kcov_remote_start_usb include/linux/kcov.h:52 [inline]
+>  __usb_hcd_giveback_urb+0x284/0x4b0 drivers/usb/core/hcd.c:1649
+>  usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1716
+>  vhci_urb_enqueue.cold+0x37f/0x4c5 drivers/usb/usbip/vhci_hcd.c:801
+>  usb_hcd_submit_urb+0x2b1/0x20d0 drivers/usb/core/hcd.c:1547
+>  usb_submit_urb+0x6e5/0x13b0 drivers/usb/core/urb.c:570
+>  usb_start_wait_urb+0x10f/0x2c0 drivers/usb/core/message.c:58
+>  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+>  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+>  hub_set_address drivers/usb/core/hub.c:4472 [inline]
+>  hub_port_init+0x23f6/0x2d20 drivers/usb/core/hub.c:4748
+>  hub_port_connect drivers/usb/core/hub.c:5140 [inline]
+>  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+>  port_event drivers/usb/core/hub.c:5494 [inline]
+>  hub_event+0x1cc9/0x38d0 drivers/usb/core/hub.c:5576
+>  process_one_work+0x7b6/0x1190 kernel/workqueue.c:2269
+>  worker_thread+0x94/0xdc0 kernel/workqueue.c:2415
+>  kthread+0x372/0x450 kernel/kthread.c:292
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+> Dumping ftrace buffer:
+>    (ftrace buffer empty)
+> Kernel Offset: disabled
+> Rebooting in 1 seconds..
+>
+> Reported-by: Andrey Konovalov <andreyknvl@google.com>
+> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>  drivers/usb/usbip/vhci_hcd.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+> index 1b598db5d8b9..66cde5e5f796 100644
+> --- a/drivers/usb/usbip/vhci_hcd.c
+> +++ b/drivers/usb/usbip/vhci_hcd.c
+> @@ -797,8 +797,14 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+>         usb_hcd_unlink_urb_from_ep(hcd, urb);
+>  no_need_unlink:
+>         spin_unlock_irqrestore(&vhci->lock, flags);
+> -       if (!ret)
+> +       if (!ret) {
+> +               /* usb_hcd_giveback_urb() should be called with
+> +                * irqs disabled
+> +                */
+> +               local_irq_disable();
+>                 usb_hcd_giveback_urb(hcd, urb, urb->status);
+> +               local_irq_enable();
+> +       }
+>         return ret;
+>  }
+>
+> --
+> 2.25.1
+>
