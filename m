@@ -2,100 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5AC285A3F
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Oct 2020 10:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD35285BB1
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Oct 2020 11:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727709AbgJGIPO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Oct 2020 04:15:14 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:43356 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725976AbgJGIPO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Oct 2020 04:15:14 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0978F7pD107578;
-        Wed, 7 Oct 2020 03:15:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1602058507;
-        bh=wqXQa7yDqeTfTN4+dVx9Ap6+imKExZWyNom9gVP47/I=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=riBrpFE3gjypVvqiCcriCxFJndWJBkIcq0JtpIZ7tMTQXshIrRpPFZpCMF4DxYkRo
-         IWpuO8gKC9WTkKQYeylTJ+gs+Auqm/sf7nL6RI1Zefz3U1gxxhlcIVBhM6M1XMzjii
-         NKuqVoBNemdry7bhYM1anTTo7Nt+c9PT9KSzCMtQ=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0978F7VH001165
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 7 Oct 2020 03:15:07 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 7 Oct
- 2020 03:15:04 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 7 Oct 2020 03:15:04 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0978F1Xq119443;
-        Wed, 7 Oct 2020 03:15:02 -0500
-Subject: =?UTF-8?B?UmU6IFtQQVRDSCAyLzJdIHVzYjogY2RuczM6IFZhcmlhYmxlIOKAmGxl?=
- =?UTF-8?Q?ngth=e2=80=99_set_but_not_used?=
-To:     Pawel Laszczak <pawell@cadence.com>, <balbi@kernel.org>
-CC:     <peter.chen@nxp.com>, <nsekhar@ti.com>,
-        <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kurahul@cadence.com>
-References: <20201007033932.23050-1-pawell@cadence.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <8994106d-2cc5-fa2c-bbcc-6526632ff80b@ti.com>
-Date:   Wed, 7 Oct 2020 11:15:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726986AbgJGJOU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Oct 2020 05:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726307AbgJGJOT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Oct 2020 05:14:19 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68ED6C0613D3
+        for <linux-usb@vger.kernel.org>; Wed,  7 Oct 2020 02:14:19 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id h20so1212666lji.9
+        for <linux-usb@vger.kernel.org>; Wed, 07 Oct 2020 02:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R38D306cOdCH6gNOKn2dfXzMIdx9cVWTJ2EnhMSHPgI=;
+        b=K8VM3Lt7he4DbXomcBl3P1LJNqMltD6OgLwpi66vIZr+U4091oDg8WzFZwthUfNZxM
+         7C3DSeIGUrUU442GfpAuHECgrAXYpLu2i7jiJ+tc6NndlzfBRXWLyNPCYaNORPl5LkFO
+         j3yVM1TBGLTi9OzIO8xmg8KIb9XE9xmNm50yhZZUafUFC94LNH6xELqQcJEXdcb/FW4z
+         44xqj1ig+cU6YFysClUu3zjTOkqGuvBvWXZiSdDxbhsSmOFnipKSHBKJ+wUCBXNHBrs5
+         uGh4kXbK7c8M4OfTPTFIVLc9+ICXIqD7n5c2eMHJ2raESyevz/KFuf+fgzJR7Sc1K+iE
+         CkyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R38D306cOdCH6gNOKn2dfXzMIdx9cVWTJ2EnhMSHPgI=;
+        b=Mhx4Y2Q2BNRedC9slIjZLDoeFcjom62DSajzK44QKUV0Ud0wvMWBfcCvkW/+cPYOX/
+         xd+nuoyWG+sH7EAi6yMZ8iOGxMBF2YW+KyPHMprKBO8xhjtITp5POgFLX8BuYbwApacK
+         CQSnFaN77XL0yAMcNnL0tatsNNjmJvpRZpTv9pA0odgUGBbbpNejVeCHkvTATuHTV7GN
+         wjB+mMUYqtOCAFk7KakMwLu9q/3DdKkorqs6CbLpgCPzcaYwaWsFtq7xoLt7Pa7aqhId
+         0DZZooN5iVchyVrYLzSAsIaQcx+VAzpdCZkFieAdGVDFM5h+HlXfD4iWmuAhG5aVsG58
+         cvQQ==
+X-Gm-Message-State: AOAM532BkR6cjSuz2RDb8gbxykvRY4xT4GIEkQB+GMWsc+KIsoCLCTMV
+        VB8JacI3Za1fx4nuFCSbs/uhgjb5R5Bfwtjpt3X3lg==
+X-Google-Smtp-Source: ABdhPJxbc/bmd6ODDC9I5vRdhThK0GMJxuWPkDmiYh8tJC4/GZdchNUlcn3p1SbgotwVnTnpAIL7su86RHImnlHNlZE=
+X-Received: by 2002:a2e:810e:: with SMTP id d14mr941823ljg.100.1602062057729;
+ Wed, 07 Oct 2020 02:14:17 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201007033932.23050-1-pawell@cadence.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20201004162908.3216898-1-martin.blumenstingl@googlemail.com> <20201004162908.3216898-2-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20201004162908.3216898-2-martin.blumenstingl@googlemail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 7 Oct 2020 11:14:06 +0200
+Message-ID: <CACRpkdbscEpV6oP7q1AcbCcR-XUBG2PnnapQ695xug63VQ830w@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/3] PCI: Add the IDs for Etron EJ168 and EJ188
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-usb <linux-usb@vger.kernel.org>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sun, Oct 4, 2020 at 8:00 PM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
 
+> Add the vendor ID for Etron Technology, Inc. as well as the device IDs
+> for the two USB xHCI controllers EJ168 and EJ188.
+>
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-On 07/10/2020 06:39, Pawel Laszczak wrote:
-> Patch removes not used variable 'length' from
-> cdns3_wa2_descmiss_copy_data function.
-> 
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+(...)
 
-Fixes: commit 141e70fef4ee ("usb: cdns3: gadget: need to handle sg case for workaround 2 case")
+>  #define PCI_VENDOR_ID_REDHAT           0x1b36
+>
+> +#define PCI_VENDOR_ID_ETRON            0x1b6f
+> +#define PCI_DEVICE_ID_ETRON_EJ168      0x7023
+> +#define PCI_DEVICE_ID_ETRON_EJ188      0x7052
 
-Acked-by: Roger Quadros <rogerq@ti.com>
+If you're defining that here, I think it should also be
+removed in
+drivers/usb/host/xhci-pci.c
+by including this file instead?
 
-> ---
->   drivers/usb/cdns3/gadget.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-> index 6e7b70a2e352..692acf7b9b14 100644
-> --- a/drivers/usb/cdns3/gadget.c
-> +++ b/drivers/usb/cdns3/gadget.c
-> @@ -506,7 +506,6 @@ static void cdns3_wa2_descmiss_copy_data(struct cdns3_endpoint *priv_ep,
->   
->   	while (!list_empty(&priv_ep->wa2_descmiss_req_list)) {
->   		int chunk_end;
-> -		int length;
->   
->   		descmiss_priv_req =
->   			cdns3_next_priv_request(&priv_ep->wa2_descmiss_req_list);
-> @@ -517,7 +516,6 @@ static void cdns3_wa2_descmiss_copy_data(struct cdns3_endpoint *priv_ep,
->   			break;
->   
->   		chunk_end = descmiss_priv_req->flags & REQUEST_INTERNAL_CH;
-> -		length = request->actual + descmiss_req->actual;
->   		request->status = descmiss_req->status;
->   		__cdns3_descmiss_copy_data(request, descmiss_req);
->   		list_del_init(&descmiss_priv_req->list);
-> 
-
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Yours,
+Linus Walleij
