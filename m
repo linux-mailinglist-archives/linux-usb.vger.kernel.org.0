@@ -2,90 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A71285CE3
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Oct 2020 12:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B084B285D41
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Oct 2020 12:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727694AbgJGK2p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Oct 2020 06:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727460AbgJGK2p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Oct 2020 06:28:45 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B97C061755;
-        Wed,  7 Oct 2020 03:28:44 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id a7so601064lfk.9;
-        Wed, 07 Oct 2020 03:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=H2N8UG6dic65TiBzlWgQu1CisgZIiaE0Rlzl4pcozag=;
-        b=dQZAzOpLSe+lUXEaHN6i1aw7a5TaOeFrdXOH2fNI2pe6gMyFxHCoX25QpUjcmwtSff
-         SqhLOXoXM5nmrEmv/gkd8R79Oe2MU4SnwRyzKBg9QN0pvUTMjMRFOzQda266SPjRJuCD
-         rOku4rtjcbgptU43sta5UXoalx33PAsqNisO/dA2x05z3Rgfvpy3fUZrdqcMJy3zn3pP
-         lvTbI5fSElsHhLyjBtR8uTLE1TNZmD2Fk5bC2EltQ7fSJDh6EP6mTqXtrvriABmsawGz
-         EKCt+0sig1cn70EJ8vKfsAMK5Ic92jUFl8J1qJVqE6b0bMRlhKljp2aZ5zJ6cV4lEqAg
-         IhIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=H2N8UG6dic65TiBzlWgQu1CisgZIiaE0Rlzl4pcozag=;
-        b=SPV3QDtSo30h4KEiR7qkLQv3v04swWw4FToP/RwZ/mhnqbhHlzx5hMKWlZi8RJyklC
-         Pd2cI87yEKq6DVT/MDpEg+nfTlLARzJS4CxETLOjUVgjylM2fEyf6ab/NOuNkK4tEyo5
-         +DJ+SSIha/EJqsH8wWyC/cjEQTU6MUnIentrku5VRq79kNcqPpJNC/sRyJmAwnpXM6+O
-         BNE5fYNzDIyoAmLQUrW489Bo480ZCaJEy4pz3qKTq3cQFbeVVFKUuYCZWwERY9/8XULl
-         AeB/L+6tQsk89bXkOQUDeYeMibcWlOSTdONdLNyM9+Agmm1KiJaUH/c3itUyPwnF93Jj
-         yd/Q==
-X-Gm-Message-State: AOAM533HWSvuhbQoq5n5NciVXT9r/ROUeNS7p30GkHkNrB6ZF4AdxBP9
-        N2YHjZpOquQem0HfYHOYsp4=
-X-Google-Smtp-Source: ABdhPJzuS/fxGr0bBPYvubbiVZY9aJgTugLhxEnxd2+B2P4zw8n4WX1edPzG52Mqq3TE4dwGb5/H4A==
-X-Received: by 2002:a19:4151:: with SMTP id o78mr694102lfa.408.1602066523199;
-        Wed, 07 Oct 2020 03:28:43 -0700 (PDT)
-Received: from wasted.omprussia.ru ([2a00:1fa0:826:1518:6ea7:4f6b:1e21:3742])
-        by smtp.gmail.com with ESMTPSA id c20sm271406lfg.15.2020.10.07.03.28.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Oct 2020 03:28:42 -0700 (PDT)
-Subject: =?UTF-8?B?UmU6IFtQQVRDSCAyLzJdIHVzYjogY2RuczM6IFZhcmlhYmxlIOKAmGxl?=
- =?UTF-8?Q?ngth=e2=80=99_set_but_not_used?=
-To:     Roger Quadros <rogerq@ti.com>, Pawel Laszczak <pawell@cadence.com>,
-        balbi@kernel.org
-Cc:     peter.chen@nxp.com, nsekhar@ti.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kurahul@cadence.com
-References: <20201007033932.23050-1-pawell@cadence.com>
- <8994106d-2cc5-fa2c-bbcc-6526632ff80b@ti.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <18bf46b7-d86a-fbf0-9ce7-c2d0765758f1@gmail.com>
-Date:   Wed, 7 Oct 2020 13:28:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1728202AbgJGKti convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 7 Oct 2020 06:49:38 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:55594 "EHLO mx.metalurgs.lv"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728198AbgJGKth (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 7 Oct 2020 06:49:37 -0400
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 8D525638EA
+        for <linux-usb@vger.kernel.org>; Wed,  7 Oct 2020 13:49:21 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 0103C66331
+        for <linux-usb@vger.kernel.org>; Wed,  7 Oct 2020 13:49:21 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id 5F0C466227; Wed,  7 Oct 2020 13:49:20 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.55])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 15A61638EA;
+        Wed,  7 Oct 2020 13:49:13 +0300 (EEST)
 MIME-Version: 1.0
-In-Reply-To: <8994106d-2cc5-fa2c-bbcc-6526632ff80b@ti.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Wed, 07 Oct 2020 07:49:04 -0300
+Reply-To: hmurrah39@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201007104920.5F0C466227@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan./mmm,
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201007 notchecked
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+Hello Dear,
 
-On 10/7/20 11:15 AM, Roger Quadros wrote:
 
-[...]
->> Patch removes not used variable 'length' from
->> cdns3_wa2_descmiss_copy_data function.
->>
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> 
-> Fixes: commit 141e70fef4ee ("usb: cdns3: gadget: need to handle sg case for workaround 2 case")
+We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
 
-   No "commit" is needed here.
 
-> Acked-by: Roger Quadros <rogerq@ti.com>
-[...]
+We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
 
-MBR, Sergei
+
+Please get back to me if you are interested for more
+
+details.
+
+
+Yours faithfully,
+
+Hashim Murrah
