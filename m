@@ -2,118 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7E42868AB
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Oct 2020 21:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DE72868BE
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Oct 2020 22:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727527AbgJGTzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Oct 2020 15:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbgJGTzJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Oct 2020 15:55:09 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288E2C0613D2
-        for <linux-usb@vger.kernel.org>; Wed,  7 Oct 2020 12:55:09 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id e10so2018434pfj.1
-        for <linux-usb@vger.kernel.org>; Wed, 07 Oct 2020 12:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z1nIr7U6QQK+eKV1AqoVrPMZ6TfX5sEiAi786fm49fw=;
-        b=UpSaDqgjCT7Tht8mdHOhS5ieHrnDGYukp1sMbtG+cMb8+wUEMs20Etk2bUUBM8nx71
-         44smUHBfYm6VeS4jH+5AFzutTw/byjl9ulFKv0z/73Wd3POerxhFoN676H8cKNb+pRg9
-         uNQd9gOyy0Bw0yxPA7tR+6iYmV/8BH088GvdekAKqzMl+mL2wM4EcuuSMgyd51h7Na5n
-         +trgAI0PIV0Q3hw+rGNYqWAoBXeSbujGc0qkEDswskIkJuEEB5OPMfH7jAHq7So+fNzg
-         dmTS0FNWphLEKds67LByWMVabWlH/SnnWmoB4LOZP8Z25MY1gREZlo94YUe9Nk5EvrDm
-         kcXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z1nIr7U6QQK+eKV1AqoVrPMZ6TfX5sEiAi786fm49fw=;
-        b=n2R9VNsml1nTViCG0ku3pcV6Wy/JjGPj+e+7OnS4McKxW5nIEnqKK+w3wUDivZVilb
-         DAFFshxyjxZEctIKjSdOKXKymQ4vy+5mh2plEgZOkwNm4b1ardoDW1te85CNJIUEwazS
-         HVB3XwdZ6e9A7NMMKCEMiLZQHNHRfAZ60zuxY38hQhWFjW+O7GOuLsc5Cq605vks84LQ
-         PIHGzSsByqvgZyOg3u/KsllaqpJ0lGE9ZZmBifYGNFXo/NqWzUrTpccQ9lehLuG2ICX5
-         bO4KUg/DBYnlWqy0gIei7eNTOKXi5biam9vCMg+SKSOEmGe+sKozk1G9zRK85JGlFqAf
-         1Nkw==
-X-Gm-Message-State: AOAM533lXdIOuJ1vJ+zcJh+On7a7dkYR613YqcaWYJOkstsJJzvoDyL+
-        E2dO3CwhHlKmepyBN7Cp7QHR21Ck8O+2Pa+nqxa3qwNOZy0opJF7
-X-Google-Smtp-Source: ABdhPJyAr2r2MEVZi+BvPW15TYdt0AHpUY+efF8zbIYRM8BNUsYRCsDObuErLqq3dR5FB3hRK6ks0qU5ktWnS1C34lY=
-X-Received: by 2002:a17:90a:cb92:: with SMTP id a18mr4188421pju.136.1602100508165;
- Wed, 07 Oct 2020 12:55:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <8c71349c3cd9698b8edcfbfc9631c5dcc3b29a37.1602091732.git.andreyknvl@google.com>
- <20201007192945.GB468921@rowland.harvard.edu>
-In-Reply-To: <20201007192945.GB468921@rowland.harvard.edu>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 7 Oct 2020 21:54:57 +0200
-Message-ID: <CAAeHK+yV=mmrgyor=AeYq6SpLaqvpieHP51iTMrjNHLBhKDzyQ@mail.gmail.com>
-Subject: Re: [PATCH] kcov, usb, vhost: specify contexts for remote coverage sections
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Nazime Hande Harputluoglu <handeharputlu@google.com>
+        id S1727689AbgJGUAX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 7 Oct 2020 16:00:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38564 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726009AbgJGUAX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 7 Oct 2020 16:00:23 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 209555] dwc2 driver stops working after sudden disconnect
+Date:   Wed, 07 Oct 2020 20:00:22 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: tomasz@grobelny.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-209555-208809-00s8GYVO5Z@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-209555-208809@https.bugzilla.kernel.org/>
+References: <bug-209555-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 7, 2020 at 9:29 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Wed, Oct 07, 2020 at 07:30:51PM +0200, Andrey Konovalov wrote:
-> > Currently there's a KCOV remote coverage collection section in
-> > __usb_hcd_giveback_urb(). Initially that section was added based on the
-> > assumption that usb_hcd_giveback_urb() can only be called in interrupt
-> > context as indicated by a comment before it.
-> >
-> > As it turns out, it's actually valid to call usb_hcd_giveback_urb() in task
-> > context, provided that the caller turned off the interrupts; USB/IP actually
-> > does that. This can lead to a nested KCOV remote coverage collection
-> > sections both trying to collect coverage in task context. This isn't
-> > supported by KCOV, and leads to a WARNING.
-> >
-> > The approach this patch takes is to annotate every call of kcov_remote_*()
-> > callbacks with the context those callbacks are supposed to be executed in.
-> > If the current context doesn't match the mask provided to a callback,
-> > that callback is ignored. KCOV currently only supports collecting remote
-> > coverage in two contexts: task and softirq.
-> >
-> > As the result, the coverage from USB/IP related usb_hcd_giveback_urb() calls
-> > won't be collected, but the WARNING is fixed.
-> >
-> > A potential future improvement would be to support nested remote coverage
-> > collection sections, but this patch doesn't address that.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > ---
->
-> > --- a/drivers/usb/core/hcd.c
-> > +++ b/drivers/usb/core/hcd.c
-> > @@ -1646,9 +1646,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
-> >
-> >       /* pass ownership to the completion handler */
-> >       urb->status = status;
-> > -     kcov_remote_start_usb((u64)urb->dev->bus->busnum);
-> > +     kcov_remote_start_usb((u64)urb->dev->bus->busnum, KCOV_CONTEXT_SOFTIRQ);
-> >       urb->complete(urb);
-> > -     kcov_remote_stop();
-> > +     kcov_remote_stop(KCOV_CONTEXT_SOFTIRQ);
->
-> This isn't right.  __usb_hcd_giveback_urb() can execute in pretty much
-> any context; its constraint is that interrupts must be disabled.
+https://bugzilla.kernel.org/show_bug.cgi?id=209555
 
-You're right, but here we constraint kcov to only collect coverage in
-case __usb_hcd_giveback_urb() is  executed in softirq context. This is
-what happens when we're fuzzing USB with the dummy driver, which is
-the case we currently take care of. Whenever someone has a desire to
-collect coverage in other contexts, it will need to be implemented
-separately.
+--- Comment #1 from Tomasz Grobelny (tomasz@grobelny.net) ---
+Here is annotated dmesg without debugging info:
+
+[   31.709214] USB_PWR_EN: disabling
+//here I connect the cable and run my program
+[   54.771552] Mass Storage Function, version: 2009/09/11
+[   54.771561] LUN: removable file: (no medium)
+[   54.781721] file system registered
+[   54.782484] read descriptors
+[   54.782495] read strings
+[   54.786939] dwc2 ff400000.usb: bound driver configfs-gadget
+[   54.976434] dwc2 ff400000.usb: new device is high-speed
+[   55.090994] dwc2 ff400000.usb: new device is high-speed
+[   55.142436] dwc2 ff400000.usb: new address 4
+[   56.219325] ffs_data_put(): freeing
+[   56.219828] unloading
+//here the switch to AOA mode happens: it is as if the device was disconected
+and entirely new device (different vid, pid) connected
+[   56.257710] file system registered
+[   56.258362] read descriptors
+[   56.258373] read strings
+[   56.262135] dwc2 ff400000.usb: bound driver configfs-gadget
+[   56.454364] dwc2 ff400000.usb: new device is high-speed
+[   56.568367] dwc2 ff400000.usb: new device is high-speed
+[   56.620390] dwc2 ff400000.usb: new address 5
+// here the cable is disconnected
+[   79.288505] dwc2 ff400000.usb: dwc2_hsotg_ep_stop_xfr: timeout
+DIEPINT.NAKEFF
+[   79.288625] dwc2 ff400000.usb: dwc2_hsotg_ep_stop_xfr: timeout
+DOEPCTL.EPDisable
+[   79.299850] dwc2 ff400000.usb: dwc2_flush_tx_fifo:  HANG! AHB Idle GRSCTL
+[   79.299982] dwc2 ff400000.usb: dwc2_hsotg_ep_stop_xfr: timeout
+GINTSTS.GOUTNAKEFF
+[   79.300105] dwc2 ff400000.usb: dwc2_hsotg_ep_stop_xfr: timeout
+DOEPCTL.EPDisable
+[   79.307060] ffs_data_put(): freeing
+[   79.307355] unloading
+// rmmod dwc2 && modprobe dwc2
+[  119.388282] dwc2 ff400000.usb: supply vusb_d not found, using dummy
+regulator
+[  119.388349] dwc2 ff400000.usb: supply vusb_a not found, using dummy
+regulator
+[  119.388500] dwc2 ff400000.usb: Bad value for GSNPSID: 0x00000000
+// run my program again, as you see it doesn't reach the "bound driver
+configfs-gadget" line seen above
+[  255.814129] Mass Storage Function, version: 2009/09/11
+[  255.814138] LUN: removable file: (no medium)
+[  255.814545] file system registered
+[  255.815119] read descriptors
+[  255.815128] read strings
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
