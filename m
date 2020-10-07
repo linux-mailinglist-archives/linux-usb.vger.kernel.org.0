@@ -2,298 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FF0286876
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Oct 2020 21:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826CF28687A
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Oct 2020 21:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728364AbgJGTla (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Oct 2020 15:41:30 -0400
-Received: from mga11.intel.com ([192.55.52.93]:34607 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728412AbgJGTlZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 7 Oct 2020 15:41:25 -0400
-IronPort-SDR: nnR/igpH87AiCgZB7IJ9J8Y17968mg3cIPjAMlTs21jgi3YpMwi2NEd3emctj1r/XpVFD3P7tV
- +0TU8XNlkN5A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9767"; a="161668338"
-X-IronPort-AV: E=Sophos;i="5.77,348,1596524400"; 
-   d="scan'208";a="161668338"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2020 12:35:50 -0700
-IronPort-SDR: tCCLc4Gi0BmoEDUqIV6RQy0mPlPXeJDVOaDHLheQM58ViYgtoZ/Pems4XsUCIqjeCLXhFtA/uo
- jDgDkhqWyp2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,348,1596524400"; 
-   d="scan'208";a="388501795"
-Received: from lkp-server02.sh.intel.com (HELO b5ae2f167493) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 07 Oct 2020 12:35:48 -0700
-Received: from kbuild by b5ae2f167493 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kQFE4-0001mN-8y; Wed, 07 Oct 2020 19:35:48 +0000
-Date:   Thu, 08 Oct 2020 03:35:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 9e8586827a7061fdb183e6571fac63af378be013
-Message-ID: <5f7e1865.BmzItczLbMDEO4P0%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728434AbgJGTme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Oct 2020 15:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728336AbgJGTme (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Oct 2020 15:42:34 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84B8C061755
+        for <linux-usb@vger.kernel.org>; Wed,  7 Oct 2020 12:42:32 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id e10so1994990pfj.1
+        for <linux-usb@vger.kernel.org>; Wed, 07 Oct 2020 12:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+MTNsq1y/zL9otQzntOcuNP+rJZZdA/q9TeNguwjb4o=;
+        b=co2PrZHK+kSFOoCGdvqvpAnvZdvxRs6PRJq4XjX26qVaG8wxBfHLYJ8oW6D1J5HCS1
+         R6VDgIF3XUaw0xyJ6lz6Q/SmnJcF127xDDBiF0xVb12sPxhbPIyFAXAq0wQ2bZ8GJ8wo
+         I1Yl3QaqHBHr50xYVOYmub6KXmEQ+YPdTzr/M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+MTNsq1y/zL9otQzntOcuNP+rJZZdA/q9TeNguwjb4o=;
+        b=YgtDwqjMMTMyaY52XOROCbD8VMETm+Pi56or8SXZhwJSnBSFZT7nExzt0axY058RRw
+         GXGHXXgwZiGwFYQxuXWluws4uypWvt2NJXUPLgVQhtDSqxsotHgj2yy1ND+jgiZBTwKc
+         Z3OJNXc+yVhIZ1B2R2DTTaGlG21MeIHWl7cZq6Q6rdsr9LYRqu9vV9/qUEV1dPIHfAr6
+         tXZLtmtzOQWhP9X1n3cICrvNe7N3+AWXPfHdfjiODy3mftkQvEIbJugsJGlaqm0WQtWP
+         +adiraW4Pj9nv3sEwXozV60gJ5LQ1Gz5cq2v/X7+1d+SEOPzBFtM1/nO43/NVsNYpHpe
+         Pp3A==
+X-Gm-Message-State: AOAM533KPgZkxlbBw6kcwtaA2ySKXU4uflUvXUXw5p73sy4v4C4Ix1KM
+        j+ihmmPHIK55L6e95lLLFUhhRw==
+X-Google-Smtp-Source: ABdhPJyL2g1I4C7VbuYxHrv5bxnCSiByaTaRhewc2kNH07T06Ix7Lro8CkW5H6L2ZyQMomwa4f5Xsg==
+X-Received: by 2002:a17:90b:14d4:: with SMTP id jz20mr4143682pjb.106.1602099752450;
+        Wed, 07 Oct 2020 12:42:32 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id f15sm1521957pfk.21.2020.10.07.12.42.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Oct 2020 12:42:31 -0700 (PDT)
+Date:   Wed, 7 Oct 2020 12:42:29 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
+ onboard USB hubs
+Message-ID: <20201007194229.GC620323@google.com>
+References: <20201006004510.GD4135817@google.com>
+ <20201006141820.GA416765@rowland.harvard.edu>
+ <20201006165957.GA191572@google.com>
+ <20201006171524.GB423499@rowland.harvard.edu>
+ <20201006192536.GB191572@google.com>
+ <20201007010023.GA438733@rowland.harvard.edu>
+ <20201007160336.GA620323@google.com>
+ <20201007163838.GA457977@rowland.harvard.edu>
+ <20201007172847.GB620323@google.com>
+ <20201007192542.GA468921@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201007192542.GA468921@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 9e8586827a7061fdb183e6571fac63af378be013  usbip: vhci_hcd: fix calling usb_hcd_giveback_urb() with irqs enabled
+On Wed, Oct 07, 2020 at 03:25:42PM -0400, Alan Stern wrote:
+> On Wed, Oct 07, 2020 at 10:28:47AM -0700, Matthias Kaehlcke wrote:
+> > On Wed, Oct 07, 2020 at 12:38:38PM -0400, Alan Stern wrote:
+> > > On Wed, Oct 07, 2020 at 09:03:36AM -0700, Matthias Kaehlcke wrote:
+> > > > Ok, I wasn't sure if the hubs suspend asynchronously from each other. If they
+> > > > do it should indeed not be a problem to have the "master" wait for its peers.
+> > > 
+> > > Well, order of suspending is selectable by the user.  It can be either 
+> > > asynchronous or reverse order of device registration, which might pose a 
+> > > problem.  We don't know in advance which of two peer hubs will be 
+> > > registered first.  It might be necessary to introduce some additional 
+> > > explicit synchronization.
+> > 
+> > I'm not sure we are understanding each other completely. I agree that
+> > synchronization is needed to have the primary hub wait for its peers, that
+> > was one of my initial concerns.
+> > 
+> > Lets use an example to clarify my secondary concern: a hub chip provides a
+> > USB 3 and a USB 2 hub, lets say the USB 3 hub is the primary.
+> > 
+> > Here is some pseudo-code for the suspend function:
+> > 
+> > hub_suspend(hub)
+> >   ...
+> > 
+> >   if (hub->primary) {
+> >     device_pm_wait_for_dev(hub->peer)
+> > 
+> >     // check for connected devices and turn regulator off
+> >   }
+> > 
+> >   ...
+> > }
+> > 
+> > What I meant with 'asynchronous suspend' in this context:
+> > 
+> > Can hub_suspend() of the peer hub be executed (asynchronously) while the
+> > primary is blocked on device_pm_wait_for_dev(),
+> 
+> Yes, that's exactly what would happen with async suspend.
+> 
+> >  or would the primary wait
+> > forever if the peer hub isn't suspended yet?
+> 
+> That wouldn't happen.  device_pm_wait_for_dev is smart; it will return 
+> immediately if neither device uses async suspend.  But in that case you 
+> could end up removing power from the peer hub before it had suspended.
+> 
+> That's why I said you might need to add additional synchronization.  The 
+> suspend routines for the two hubs could each check to see whether the 
+> other device had suspended yet, and the last one would handle the power 
+> regulator.  The additional synchronization is for the case where the two 
+> checks end up being concurrent.
 
-elapsed time: 721m
+That was exactly my initial concern and one of the reasons I favor(ed) a
+platform instead of a USB driver:
 
-configs tested: 234
-configs skipped: 3
+> otherwise all hubs need to know their peers and check in suspend if they
+> are the last hub standing, only then the power can be switched off.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+To which you replied:
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                  colibri_pxa300_defconfig
-powerpc                    mvme5100_defconfig
-sh                             espt_defconfig
-powerpc                     mpc512x_defconfig
-powerpc                     rainier_defconfig
-sh                        apsh4ad0a_defconfig
-arm                          ixp4xx_defconfig
-mips                        bcm63xx_defconfig
-mips                           ip28_defconfig
-mips                        omega2p_defconfig
-arc                             nps_defconfig
-mips                      pistachio_defconfig
-sh                           se7721_defconfig
-arm                           stm32_defconfig
-csky                             alldefconfig
-arm                       versatile_defconfig
-m68k                        mvme147_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                      ep88xc_defconfig
-xtensa                    xip_kc705_defconfig
-powerpc                      arches_defconfig
-arm                         palmz72_defconfig
-mips                malta_qemu_32r6_defconfig
-arm                        magician_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                     mpc5200_defconfig
-arm                            zeus_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                      obs600_defconfig
-powerpc                 mpc8313_rdb_defconfig
-sh                     sh7710voipgw_defconfig
-sh                   sh7724_generic_defconfig
-arm64                            alldefconfig
-powerpc                          g5_defconfig
-arm                           sunxi_defconfig
-arm                       imx_v4_v5_defconfig
-powerpc                    adder875_defconfig
-m68k                       bvme6000_defconfig
-powerpc                        warp_defconfig
-microblaze                      mmu_defconfig
-arm                          pxa168_defconfig
-arm                          moxart_defconfig
-sh                          urquell_defconfig
-arm                            mmp2_defconfig
-m68k                         amcore_defconfig
-sparc64                          alldefconfig
-powerpc                 mpc8560_ads_defconfig
-arc                           tb10x_defconfig
-powerpc                         wii_defconfig
-riscv                             allnoconfig
-h8300                            alldefconfig
-mips                        workpad_defconfig
-powerpc               mpc834x_itxgp_defconfig
-arm                           h3600_defconfig
-arm                              zx_defconfig
-powerpc                 canyonlands_defconfig
-arm                       imx_v6_v7_defconfig
-arm                        mvebu_v5_defconfig
-powerpc                     tqm8555_defconfig
-mips                            e55_defconfig
-arc                          axs101_defconfig
-arm                         lpc18xx_defconfig
-alpha                            allyesconfig
-arm                          exynos_defconfig
-powerpc                     ppa8548_defconfig
-h8300                     edosk2674_defconfig
-arc                              allyesconfig
-parisc                generic-64bit_defconfig
-sh                   secureedge5410_defconfig
-mips                           ip32_defconfig
-h8300                       h8s-sim_defconfig
-powerpc                    ge_imp3a_defconfig
-mips                      malta_kvm_defconfig
-parisc                generic-32bit_defconfig
-sh                           se7705_defconfig
-sh                               alldefconfig
-arm                      footbridge_defconfig
-c6x                        evmc6472_defconfig
-sh                         ecovec24_defconfig
-nios2                            alldefconfig
-m68k                       m5208evb_defconfig
-powerpc                       eiger_defconfig
-mips                         tb0226_defconfig
-mips                        nlm_xlr_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                            qcom_defconfig
-arm                             rpc_defconfig
-c6x                              alldefconfig
-arm                      integrator_defconfig
-sh                        sh7757lcr_defconfig
-powerpc                     redwood_defconfig
-sh                          rsk7269_defconfig
-arm                              alldefconfig
-powerpc                 xes_mpc85xx_defconfig
-sh                          sdk7786_defconfig
-mips                         mpc30x_defconfig
-powerpc                     mpc83xx_defconfig
-arm                           corgi_defconfig
-m68k                          amiga_defconfig
-mips                     cu1000-neo_defconfig
-arm                         hackkit_defconfig
-powerpc                      pcm030_defconfig
-arm                          gemini_defconfig
-ia64                        generic_defconfig
-arm                          tango4_defconfig
-arm                    vt8500_v6_v7_defconfig
-s390                             allyesconfig
-s390                       zfcpdump_defconfig
-powerpc                       ebony_defconfig
-mips                         bigsur_defconfig
-arm                           h5000_defconfig
-powerpc                 mpc836x_mds_defconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                 mpc832x_rdb_defconfig
-arm                       aspeed_g5_defconfig
-sh                           se7619_defconfig
-arm                         nhk8815_defconfig
-sh                           se7722_defconfig
-mips                    maltaup_xpa_defconfig
-mips                      loongson3_defconfig
-nds32                             allnoconfig
-powerpc                      cm5200_defconfig
-sh                   sh7770_generic_defconfig
-arm                           spitz_defconfig
-arm                          iop32x_defconfig
-sh                          r7780mp_defconfig
-sh                              ul2_defconfig
-microblaze                          defconfig
-mips                           ip22_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-parisc                              defconfig
-s390                                defconfig
-parisc                           allyesconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20201006
-x86_64               randconfig-a002-20201006
-x86_64               randconfig-a001-20201006
-x86_64               randconfig-a005-20201006
-x86_64               randconfig-a003-20201006
-x86_64               randconfig-a006-20201006
-i386                 randconfig-a006-20201005
-i386                 randconfig-a005-20201005
-i386                 randconfig-a001-20201005
-i386                 randconfig-a004-20201005
-i386                 randconfig-a003-20201005
-i386                 randconfig-a002-20201005
-i386                 randconfig-a006-20201007
-i386                 randconfig-a005-20201007
-i386                 randconfig-a001-20201007
-i386                 randconfig-a004-20201007
-i386                 randconfig-a003-20201007
-i386                 randconfig-a002-20201007
-x86_64               randconfig-a012-20201005
-x86_64               randconfig-a015-20201005
-x86_64               randconfig-a014-20201005
-x86_64               randconfig-a013-20201005
-x86_64               randconfig-a011-20201005
-x86_64               randconfig-a016-20201005
-x86_64               randconfig-a012-20201007
-x86_64               randconfig-a015-20201007
-x86_64               randconfig-a014-20201007
-x86_64               randconfig-a013-20201007
-x86_64               randconfig-a011-20201007
-x86_64               randconfig-a016-20201007
-i386                 randconfig-a015-20201008
-i386                 randconfig-a013-20201008
-i386                 randconfig-a014-20201008
-i386                 randconfig-a016-20201008
-i386                 randconfig-a011-20201008
-i386                 randconfig-a012-20201008
-i386                 randconfig-a014-20201005
-i386                 randconfig-a015-20201005
-i386                 randconfig-a013-20201005
-i386                 randconfig-a016-20201005
-i386                 randconfig-a011-20201005
-i386                 randconfig-a012-20201005
-i386                 randconfig-a014-20201007
-i386                 randconfig-a013-20201007
-i386                 randconfig-a015-20201007
-i386                 randconfig-a016-20201007
-i386                 randconfig-a011-20201007
-i386                 randconfig-a012-20201007
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+> you just need to make the "master" hub wait for its peer to suspend, which
+> is easy to do.
 
-clang tested configs:
-x86_64               randconfig-a004-20201007
-x86_64               randconfig-a002-20201007
-x86_64               randconfig-a001-20201007
-x86_64               randconfig-a005-20201007
-x86_64               randconfig-a003-20201007
-x86_64               randconfig-a006-20201007
-x86_64               randconfig-a004-20201005
-x86_64               randconfig-a002-20201005
-x86_64               randconfig-a001-20201005
-x86_64               randconfig-a003-20201005
-x86_64               randconfig-a005-20201005
-x86_64               randconfig-a006-20201005
+However that apparently only works if async suspend is enabled, and we
+can't rely on that.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+With the peers checking on each other you lose effectively the notion
+of a primary.
+
+Going back to the binding:
+
+  &usb_1_dwc3 {
+    hub_2_0: hub@1 {
+      compatible = "usbbda,5411";
+      reg = <1>;
+    };
+
+    hub_3_0: hub@2 {
+      compatible = "usbbda,411";
+      reg = <2>;
+      vdd-supply = <&pp3300_hub>;
+      companion-hubs = <&hub_2_0>;
+    };
+  };
+
+How does 'hub_2_0' know that its peer is hub_3_0 and that it has a regulator
+(and potentially other resources)?
+
+All this mess can be avoided by having a single instance in control of the
+resources which is guaranteed to suspend after the USB devices.
