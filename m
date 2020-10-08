@@ -2,67 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B318286FBD
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 09:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7BF286FC4
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 09:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727303AbgJHHpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Oct 2020 03:45:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60268 "EHLO mail.kernel.org"
+        id S1727887AbgJHHq1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 8 Oct 2020 03:46:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33518 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725899AbgJHHpR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Oct 2020 03:45:17 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4B9A02184D;
-        Thu,  8 Oct 2020 07:45:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602143116;
-        bh=Cht0AAlXCeqIAyO4xP3T6BPPZYtciZXHc+YFx0n8WOg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YmjRIAUMIbprCKDN16qg6QaLwl/mO/PO7bjszExYHGwtlHqYqTYrRSmDShDARFHqG
-         DS3QtwSKpXbR2ip8bgE1yv4UVQa3d5qYNYgvdzNkv0xftq6AORoj8GYXrzIs8tKqI1
-         7Pi41pzPk0jAs6j/xw7QhnHtfwICvzIVTAFvafn0=
-Date:   Thu, 8 Oct 2020 09:46:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Amelie Delaunay <amelie.delaunay@st.com>
-Subject: Re: [PATCH v10 00/15] TCPM support for FRS and AutoDischarge
- Disconnect
-Message-ID: <20201008074600.GA247486@kroah.com>
-References: <20201008061556.1402293-1-badhri@google.com>
+        id S1725899AbgJHHq1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Oct 2020 03:46:27 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 209555] dwc2 driver stops working after sudden disconnect
+Date:   Thu, 08 Oct 2020 07:46:26 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: Minas.Harutyunyan@synopsys.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-209555-208809-TlUfJl4kIK@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-209555-208809@https.bugzilla.kernel.org/>
+References: <bug-209555-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201008061556.1402293-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 07, 2020 at 11:15:41PM -0700, Badhri Jagan Sridharan wrote:
-> Hi,
-> 
-> Made two changes:
-> 
-> 1. Added "additionalProperties: false" as suggested by Rob Herring in
-> https://lore.kernel.org/linux-usb/20201005144618.GA154206@bogus/
-> 
-> 2. Removed FRS dts binding constants to address Rob Herring's comment in
-> https://lore.kernel.org/linux-usb/20201006182940.GA2574941@bogus/
+https://bugzilla.kernel.org/show_bug.cgi?id=209555
 
-That worked better.  I've applied the patches that Heikki had reviewed
-to my usb-testing branch now.
+Minas Harutyunyan (Minas.Harutyunyan@synopsys.com) changed:
 
-thanks,
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |Minas.Harutyunyan@synopsys.
+                   |                            |com
 
-greg k-h
+--- Comment #2 from Minas Harutyunyan (Minas.Harutyunyan@synopsys.com) ---
+Hi Tomasz,
+
+Could you please disable power optimization by follow workaround and test
+again:
+
+file: params.c
+
+static void dwc2_set_param_power_down(struct dwc2_hsotg *hsotg)
+{
+        int val;
+
+        if (hsotg->hw_params.hibernation)
+                val = DWC2_POWER_DOWN_PARAM_HIBERNATION;
+        else if (hsotg->hw_params.power_optimized)
+                val = DWC2_POWER_DOWN_PARAM_PARTIAL;
+        else
+                val = DWC2_POWER_DOWN_PARAM_NONE;
+
+        hsotg->params.power_down = 0; //val; WA
+}
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
