@@ -2,110 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE9B2875B1
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 16:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586B428762E
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 16:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730508AbgJHOJ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Oct 2020 10:09:29 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:43991 "HELO
+        id S1729992AbgJHOfo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Oct 2020 10:35:44 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:35399 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730492AbgJHOJ2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Oct 2020 10:09:28 -0400
-Received: (qmail 496113 invoked by uid 1000); 8 Oct 2020 10:09:27 -0400
-Date:   Thu, 8 Oct 2020 10:09:27 -0400
+        with SMTP id S1730683AbgJHOfn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Oct 2020 10:35:43 -0400
+Received: (qmail 497089 invoked by uid 1000); 8 Oct 2020 10:35:42 -0400
+Date:   Thu, 8 Oct 2020 10:35:42 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
- onboard USB hubs
-Message-ID: <20201008140927.GB495091@rowland.harvard.edu>
-References: <20201006171524.GB423499@rowland.harvard.edu>
- <20201006192536.GB191572@google.com>
- <20201007010023.GA438733@rowland.harvard.edu>
- <20201007160336.GA620323@google.com>
- <20201007163838.GA457977@rowland.harvard.edu>
- <20201007172847.GB620323@google.com>
- <20201007192542.GA468921@rowland.harvard.edu>
- <20201007194229.GC620323@google.com>
- <20201007201732.GE468921@rowland.harvard.edu>
- <20201007214226.GA669360@google.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [Bug 209137] USB is not working since update from 5.0 to
+ 5.3.0-26. And with 5.4 still not working.
+Message-ID: <20201008143542.GC495091@rowland.harvard.edu>
+References: <bug-209137-208809@https.bugzilla.kernel.org/>
+ <bug-209137-208809-GmYB1n8NUL@https.bugzilla.kernel.org/>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201007214226.GA669360@google.com>
+In-Reply-To: <bug-209137-208809-GmYB1n8NUL@https.bugzilla.kernel.org/>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 07, 2020 at 02:42:26PM -0700, Matthias Kaehlcke wrote:
-> On Wed, Oct 07, 2020 at 04:17:32PM -0400, Alan Stern wrote:
-> > The peering relation goes both ways, so it should be included in the 
-> > hub_2_0 description too.  Given that, the driver could check hub_2_0's 
-> > peer's DT description for the appropriate resources.
-> 
-> That mitigates the issue somewhat, however we still have to convince Rob that
-> both references are needed.
+Jiri and Benjamin:
 
-Strictly speaking, the peering relation applies to ports, not
-devices.  The representation in DT doesn't have to be symmetrical; as
-long as the kernel understands it, the kernel can set up its own
-internal symmetrical respresentation.
+Please look at Bugzilla # 209137:
 
-> > > All this mess can be avoided by having a single instance in control of the
-> > > resources which is guaranteed to suspend after the USB devices.
-> > 
-> > Yes.  At the cost of registering, adding a driver for, and making users 
-> > aware of a fictitious platform device.
-> 
-> Registration is trivial and the driver code will be needed anyway, I'm
-> pretty convinced that a separate platform driver will be simpler than
-> plumbing things into the hub driver, with the additional checks of who is
-> suspended or not, etc. If other resources like resets are involved there
-> could be further possible race conditions at probe time. Another issue is
-> the sysfs attribute. We said to attach it to the primary hub. What happens
-> when the primary hub goes away? I guess we could force unbinding the peers
-> as we did in the driver under discussion to avoid confusion/inconsistencies,
-> but it's another tradeoff.
-> 
-> My view of the pros and cons of extending the hub driver vs. having a platform
-> driver:
-> 
-> - pros
->   - sysfs attribute is attached to a USB hub device
->   - no need to register a platform device (trivial)
->   - potentially more USB awareness (not clear if needed)
-> 
-> - cons
->   - possible races involving resources between peer hubs during initialization
->   - increased complexity from keeping track of peers, checking suspend order
->     and avoiding races
->   - peers are forced to unbind when primary goes away
->   - need DT links to peers for all USB hubs, not only in the primary
->   - pollution of the generic hub code with device specific stuff instead
->     of keeping it in a self contained driver
->   - sysfs attribute is attached to only one of the hubs, which is better than
->     having it on both, but not necessarily better than attaching it to the
->     platform device with the 'control logic'
-> 
-> So yes, there are tradeoffs, IMO balance isn't as clear as your comment
-> suggests.
+	https://bugzilla.kernel.org/show_bug.cgi?id=209137
 
-Well, I guess I'm okay with either approach.
+Somewhere between 5.0 and 5.4, the logitech-djreceiver driver stopped 
+binding to the user's Logitech wireless device.  Here are relevant parts 
+of the kernel logs.  From 5.0 (working):
 
-One more thing to keep in mind, though: With the platform device,
-there should be symlinks from the hubs' sysfs directories to the
-platform device (and possibly symlinks going the other way as well).
+[    2.857770] logitech-djreceiver 0003:046D:C52B.0003: hiddev0,hidraw0: USB HID v1.11 Device [Logitech USB Receiver] on usb-0000:00:14.0-4/input2
+[    2.985339] input: Logitech Unifying Device. Wireless PID:1024 Mouse as /devices/pci0000:00/0000:00:14.0/usb3/3-4/3-4:1.2/0003:046D:C52B.0003/0003:046D:1024.0004/input/input13
+[    2.985410] hid-generic 0003:046D:1024.0004: input,hidraw1: USB HID v1.11 Mouse [Logitech Unifying Device. Wireless PID:1024] on usb-0000:00:14.0-4:1
+[    2.995266] input: Logitech K520 as /devices/pci0000:00/0000:00:14.0/usb3/3-4/3-4:1.2/0003:046D:C52B.0003/0003:046D:2011.0005/input/input17
+[    3.026985] logitech-hidpp-device 0003:046D:2011.0005: input,hidraw1: USB HID v1.11 Keyboard [Logitech K520] on usb-0000:00:14.0-4:2
+[    3.033173] input: Logitech M310 as /devices/pci0000:00/0000:00:14.0/usb3/3-4/3-4:1.2/0003:046D:C52B.0003/0003:046D:1024.0004/input/input18
+[    3.033358] logitech-hidpp-device 0003:046D:1024.0004: input,hidraw2: USB HID v1.11 Mouse [Logitech M310] on usb-0000:00:14.0-4:1
+
+From 5.4 (non-working):
+
+[    2.908901] hid-generic 0003:046D:C52B.0001: input,hidraw0: USB HID v1.11 Keyboard [Logitech USB Receiver] on usb-0000:00:14.0-4/input0
+[    2.909003] hid-generic 0003:046D:C52B.0002: unknown main item tag 0x0
+[    2.909016] hid-generic 0003:046D:C52B.0002: unknown main item tag 0x0
+[    2.909019] hid-generic 0003:046D:C52B.0002: unknown main item tag 0x0
+[    2.909023] hid-generic 0003:046D:C52B.0002: unknown main item tag 0x0
+[    2.909030] hid-generic 0003:046D:C52B.0002: unexpected long global item
+[    2.909038] hid-generic: probe of 0003:046D:C52B.0002 failed with error -22
+[    2.909196] hid-generic 0003:046D:C52B.0003: hiddev0,hidraw1: USB HID v1.11 Device [Logitech USB Receiver] on usb-0000:00:14.0-4/input2
+[    2.910586] logitech-djreceiver 0003:046D:C52B.0002: unknown main item tag 0x0
+[    2.910601] logitech-djreceiver 0003:046D:C52B.0002: unknown main item tag 0x0
+[    2.910605] logitech-djreceiver 0003:046D:C52B.0002: unknown main item tag 0x0
+[    2.910609] logitech-djreceiver 0003:046D:C52B.0002: unknown main item tag 0x0
+[    2.910616] logitech-djreceiver 0003:046D:C52B.0002: unexpected long global item
+[    2.910620] logitech-djreceiver 0003:046D:C52B.0002: logi_dj_probe: parse failed
+[    2.910623] logitech-djreceiver: probe of 0003:046D:C52B.0002 failed with error -22
+
+FYI, intf 0 is a boot-interface keyboard, intf 1 is a boot-interface 
+mouse, and intf 2 is the wireless HID interface.
+
+It's not immediately obvious to me where the problem lies.
+
+Thanks,
 
 Alan Stern
