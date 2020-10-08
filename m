@@ -2,130 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1572286B2C
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 00:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFE0286C1E
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 02:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728944AbgJGWsl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Oct 2020 18:48:41 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:38265 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727353AbgJGWsi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Oct 2020 18:48:38 -0400
-X-Greylist: delayed 500 seconds by postgrey-1.27 at vger.kernel.org; Wed, 07 Oct 2020 18:48:33 EDT
-X-Originating-IP: 90.65.88.165
-Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id D577D1BF203;
-        Wed,  7 Oct 2020 22:48:27 +0000 (UTC)
-Date:   Thu, 8 Oct 2020 00:48:27 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
-Message-ID: <20201007224827.GK2804081@piout.net>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-2-robh@kernel.org>
+        id S1727781AbgJHAne (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Oct 2020 20:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbgJHAne (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Oct 2020 20:43:34 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3A4C0613D2
+        for <linux-usb@vger.kernel.org>; Wed,  7 Oct 2020 17:43:34 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id 5so2158298vsu.5
+        for <linux-usb@vger.kernel.org>; Wed, 07 Oct 2020 17:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s1vFaQwEYAj+kfpG7wmgAvUX+m94PjPvEEFq0pb+beU=;
+        b=Wp5sVtYz9RFuTf8HwWQcjRqk2whZSdWTSRmHelxkoLivWhEMRrU80IIg0ORfASmxcF
+         Ds2gAwd6GPVZHTi/jSu3NlpIeC4hjGoeQIyn5acmCD0zUs8scF+bGfKwqLd2r3XhPu1M
+         ogURv6eN7z1wFOaBtykUW+a7yfiKds6xXU3Y3C1Ao18Q1zmYxBy6YSU06qV996aDEVBU
+         nzriS/au8lNLN/M3eaZWcLp9AMuLe8B/V4YNR3PGTIEQXYIU0XQrTnB3qmBuAZEzch8D
+         i+qDFMouMGrrxDkWn8dGpbnf8TguzX5KTzBv7yTMa81v5/14Ac4UNNCXox5W8DI/tEMA
+         XEyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s1vFaQwEYAj+kfpG7wmgAvUX+m94PjPvEEFq0pb+beU=;
+        b=Yen9mhK/z5l79t3uWby06fsDRXL7hmWoivirTO5f4i8uCkxio1V4vg+Z1M0fKGKSlY
+         JqHMhWpxKsNf4ZueymrPFs2TvNvduu27qXaHyeslwrxo023MEuc+/cXwzSu/JBw/8lze
+         EeBLGNe+msXjqDA702pzNeO+uIsZ+0BD20NJ3okdW+P4o5kiD/yQ5r4zcHHUU7j9ZOBl
+         12KqPqpNBlmZBDqaIh230cms/gm5ES8RFQQmbAOA/SD1snHhJVv13CVEbaKkkadBpMBZ
+         bbCTlo70KosupL7W1MGtj3vwKMYQSKm6FnY2FJmIe4J+CaW6SP9/GsNn7N8NHJSfURJA
+         UMUw==
+X-Gm-Message-State: AOAM5315i04b7gPSjEUNGu5KMAlOLTSHFl8uUcdhdGxz624CPg4NYz2J
+        QsCkNcjZVyYv/EFohLMaJAaC2PQbPm2riixTpAgCpA==
+X-Google-Smtp-Source: ABdhPJz+HZTLyoGMy4yKKuwstafPHRZcaQ9eu/Qk3P+I6Eahit+EF/pbkIYjvwdX4S62JcdOrVR2+idvgFxLuQUKg40=
+X-Received: by 2002:a67:ee1a:: with SMTP id f26mr3620209vsp.48.1602117813213;
+ Wed, 07 Oct 2020 17:43:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+References: <20200929024004.244992-1-badhri@google.com> <20200929024004.244992-4-badhri@google.com>
+ <20201005144618.GA154206@bogus>
+In-Reply-To: <20201005144618.GA154206@bogus>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Wed, 7 Oct 2020 17:42:57 -0700
+Message-ID: <CAPTae5+e74k22Vcf-cnFLFGnR-mBdb9qvN6i-E-31VexhpUSeA@mail.gmail.com>
+Subject: Re: [PATCH v9 03/15] dt-bindings: usb: Maxim type-c controller device
+ tree binding document
+To:     Rob Herring <robh@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Robb,
 
-On 05/10/2020 13:38:27-0500, Rob Herring wrote:
-> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> index bc2c7e53a28e..60e93e86ad9d 100644
-> --- a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> @@ -68,6 +68,8 @@ required:
->    - clocks
->    - clock-names
->  
-> +unevaluatedProperties: false
+Thanks for the reviews ! Responses inline.
 
-This one could be additionalProperties: false after adding start-year to
-the properties
+Regards,
+Badhri
 
-> +
->  examples:
->    - |
->      #include <dt-bindings/clock/jz4740-cgu.h>
-> diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> index 76bbf8b7555b..d51b236939bf 100644
-> --- a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> @@ -74,6 +74,8 @@ allOf:
->            items:
->              - const: rtc
->  
-> +unevaluatedProperties: false
+On Mon, Oct 5, 2020 at 7:46 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Sep 28, 2020 at 07:39:52PM -0700, Badhri Jagan Sridharan wrote:
+> > Add device tree binding document for Maxim TCPCI based Type-C chip driver
+> >
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > ---
+> > Changes since v1:
+> > - Changing patch version to v6 to fix version number confusion.
+> >
+> > Changes since v6:
+> > - Migrated to yaml format.
+> >
+> > Changes since v7:
+> > - Rebase on usb-next
+> >
+> > Changes since v8:
+> > - Fix errors from make dt_binding_check as suggested by
+> >   Rob Herring.
+> > ---
+> >  .../devicetree/bindings/usb/maxim,tcpci.yaml  | 68 +++++++++++++++++++
+> >  1 file changed, 68 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/maxim,tcpci.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/maxim,tcpci.yaml b/Documentation/devicetree/bindings/usb/maxim,tcpci.yaml
+> > new file mode 100644
+> > index 000000000000..f4b5f1a09b98
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/maxim,tcpci.yaml
+> > @@ -0,0 +1,68 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: "http://devicetree.org/schemas/usb/maxim,tcpci.yaml#"
+> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > +
+> > +title: Maxim TCPCI Type-C PD controller DT bindings
+> > +
+> > +maintainers:
+> > +  - Badhri Jagan Sridharan <badhri@google.com>
+> > +
+> > +description: Maxim TCPCI Type-C PD controller
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - maxim,tcpci
+>
+> Is there a datasheet for this? Searching for 'tcpci' doesn't really come
+> up with anything other than this patch. Only chip I found is MAX77958.
+> Bindings are for specific h/w devices.
 
-This one can be simply additionalProperties: false
+Unfortunately the datasheet cannot be made public yet. Has the datasheet
+have to be made public before sending the bindings ?
 
+>
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  connector:
+> > +    type: object
+> > +    $ref: ../connector/usb-connector.yaml#
+> > +    description:
+> > +      Properties for usb c connector.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+>
+> additionalProperties: false
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ACK. Adding to the next version of the patch.
+
+>
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +    #include <dt-bindings/usb/pd.h>
+> > +    i2c0 {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        maxtcpc@25 {
+> > +            compatible = "maxim,tcpc";
+> > +            reg = <0x25>;
+> > +            interrupt-parent = <&gpa8>;
+> > +            interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
+> > +
+> > +            connector {
+> > +                compatible = "usb-c-connector";
+> > +                label = "USB-C";
+> > +                data-role = "dual";
+> > +                power-role = "dual";
+> > +                try-power-role = "sink";
+> > +                self-powered;
+> > +                op-sink-microwatt = <2600000>;
+> > +                source-pdos = <PDO_FIXED(5000, 900,
+> > +                                         PDO_FIXED_SUSPEND |
+> > +                                         PDO_FIXED_USB_COMM |
+> > +                                         PDO_FIXED_DATA_SWAP |
+> > +                                         PDO_FIXED_DUAL_ROLE)>;
+> > +                sink-pdos = <PDO_FIXED(5000, 3000,
+> > +                                       PDO_FIXED_USB_COMM |
+> > +                                       PDO_FIXED_DATA_SWAP |
+> > +                                       PDO_FIXED_DUAL_ROLE)
+> > +                                       PDO_FIXED(9000, 2000, 0)>;
+> > +            };
+> > +        };
+> > +    };
+> > +...
+> > --
+> > 2.28.0.709.gb0816b6eb0-goog
+> >
