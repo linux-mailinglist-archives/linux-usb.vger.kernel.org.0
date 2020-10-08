@@ -2,63 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B8928762F
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 16:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C78287640
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 16:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730675AbgJHOf5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 8 Oct 2020 10:35:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36062 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730618AbgJHOf5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Oct 2020 10:35:57 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209137] USB is not working since update from 5.0 to 5.3.0-26.
- And with 5.4 still not working.
-Date:   Thu, 08 Oct 2020 14:35:56 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209137-208809-50R6LR7DlY@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209137-208809@https.bugzilla.kernel.org/>
-References: <bug-209137-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1730668AbgJHOjc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Oct 2020 10:39:32 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:46274 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729770AbgJHOjc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Oct 2020 10:39:32 -0400
+Received: by mail-lj1-f195.google.com with SMTP id c21so5994465ljn.13
+        for <linux-usb@vger.kernel.org>; Thu, 08 Oct 2020 07:39:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=hMgIVcp4/vtRJVTD+khHQswmn+Tgqr3vzGDp8l0UoeY=;
+        b=hZ3GUeuXgGU3IQApnhdBoLTE9U1CmAmuuHnNFUFVCPoO4tV/kvfNW2DgORNYQVi3/S
+         ynPOgG08GI7wXBdam1bfaVdv5UNlSR/0T6cuuKTpUfgZTsBhBWtN+fcisCVeUnRpTlRb
+         V4orPkqqQbLWxFnk50MD+c4EjD2MdxI9NetbSXilXbnt/ejkYhRob/FgejaeMY7IwJ/i
+         vVjQBzheTF8UYQxHuFcmukiR+w5+/3TD6sUiRPZSQp/MCAd2LIRRLOR29BVs0KakInij
+         AysXlraON9+QJZpVK1Sf76vy9D8KhIk2sXuoUHHqdpPxSGifCfRmA2jgbvu9POR8x7J3
+         4yOw==
+X-Gm-Message-State: AOAM533q79tqphT5G01LA0Q6+YDlkRZenmZZt6xxytqRnu8RpZwHc8NT
+        JeWTaTIwCjsY6HELVy+tvI2Ur/kRUSk=
+X-Google-Smtp-Source: ABdhPJw0wxVzbew7Brd2TmMn2DXaCGlrEAcchc12VskJeuOlILUUoTNEqowv5P9Iw0Y6pDyMqFhoTw==
+X-Received: by 2002:a2e:9f4d:: with SMTP id v13mr140203ljk.379.1602167969810;
+        Thu, 08 Oct 2020 07:39:29 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id o6sm974658ljc.33.2020.10.08.07.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2020 07:39:29 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kQX4m-0006zo-PF; Thu, 08 Oct 2020 16:39:24 +0200
+Date:   Thu, 8 Oct 2020 16:39:24 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB-serial updates for 5.10-rc1
+Message-ID: <20201008143924.GA26847@localhost>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209137
+Hi Greg,
 
---- Comment #11 from Alan Stern (stern@rowland.harvard.edu) ---
-Did you run lsusb as root?  I ask because the report descriptors are missing
-from the output, and this is typically what happens when lsusb is run as a
-normal user, not root.
+Here are the USB serial updates for 5.10.
 
-Also, the dmesg logs indicate that you weren't running the -stable kernel
-versions.  It's possible that this problem has already been fixed in those
-versions.  For the same reason, you might try running a 5.8 kernel.
+Note that I fixed up a Link tag in the last commit while preparing the series,
+hence the late commit timestamp.
 
-If none of those work, you can always try running git-bisect to find the
-particular commit which caused the problem to appear somewhere between 5.0 and
-5.4.
+Johan
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+
+The following changes since commit ba4f184e126b751d1bffad5897f263108befc780:
+
+  Linux 5.9-rc6 (2020-09-20 16:33:55 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.10-rc1
+
+for you to fetch changes up to 3e765cab8abe7f84cb80d4a7a973fc97d5742647:
+
+  USB: serial: option: add Cellient MPL200 card (2020-10-08 16:30:29 +0200)
+
+----------------------------------------------------------------
+USB-serial updates for 5.10-rc1
+
+Here are the USB-serial updates for 5.10-rc1, including:
+
+ - new device ids
+ - various clean ups
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Johan Hovold (2):
+      USB: serial: ftdi_sio: clean up jtag quirks
+      USB: serial: qcserial: fix altsetting probing
+
+Leonid Bloch (1):
+      USB: serial: option: Add Telit FT980-KS composition
+
+Mychaela N. Falconia (2):
+      USB: serial: ftdi_sio: add support for FreeCalypso JTAG+UART adapters
+      USB: serial: ftdi_sio: use cur_altsetting for consistency
+
+Scott Chen (1):
+      USB: serial: pl2303: add device-id for HP GC device
+
+Wilken Gottwalt (1):
+      USB: serial: option: add Cellient MPL200 card
+
+ drivers/usb/serial/ftdi_sio.c     | 37 ++++++++++++++++++++-----------------
+ drivers/usb/serial/ftdi_sio_ids.h |  7 +++++++
+ drivers/usb/serial/option.c       |  5 +++++
+ drivers/usb/serial/pl2303.c       |  1 +
+ drivers/usb/serial/pl2303.h       |  1 +
+ drivers/usb/serial/qcserial.c     |  4 ++--
+ 6 files changed, 36 insertions(+), 19 deletions(-)
