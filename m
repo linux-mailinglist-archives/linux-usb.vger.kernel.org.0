@@ -2,112 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE9C286F68
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 09:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800FD286F74
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 09:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726028AbgJHH3u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Oct 2020 03:29:50 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:46432 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725849AbgJHH3u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Oct 2020 03:29:50 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0987ThGe055125;
-        Thu, 8 Oct 2020 02:29:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1602142183;
-        bh=0fJP+PjiMjaHur0vYWV+WdV/MjQ3t6LWtmw89pujeog=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=VjUejw/FNINArgmkrPMZaGBvN+Jr2FTp/BG0ltrftx4XDh6ULdu/E8VshoGzfpOZ5
-         i5BJdhNeFV5DOKiCajZK1xvXEv50MOVMuolDx/GEJWYj28zM8bQD2yQ6DMrsAtZIWN
-         VjaFuDkPiQFj2u0FII84rukeF/VxUg5jE4byemYU=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0987ThLv126887
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 8 Oct 2020 02:29:43 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 8 Oct
- 2020 02:29:43 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 8 Oct 2020 02:29:43 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0987TfRt088630;
-        Thu, 8 Oct 2020 02:29:41 -0500
-Subject: =?UTF-8?B?UmU6IFtQQVRDSCAyLzJdIHVzYjogY2RuczM6IFZhcmlhYmxlIOKAmGxl?=
- =?UTF-8?Q?ngth=e2=80=99_set_but_not_used?=
-To:     Pawel Laszczak <pawell@cadence.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        "balbi@kernel.org" <balbi@kernel.org>
-CC:     "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rahul Kumar <kurahul@cadence.com>
-References: <20201007033932.23050-1-pawell@cadence.com>
- <8994106d-2cc5-fa2c-bbcc-6526632ff80b@ti.com>
- <18bf46b7-d86a-fbf0-9ce7-c2d0765758f1@gmail.com>
- <DM6PR07MB552984371C356A6E31D8D116DD0B0@DM6PR07MB5529.namprd07.prod.outlook.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <d88c92c7-acc6-df22-09e2-f5ddfba1d76b@ti.com>
-Date:   Thu, 8 Oct 2020 10:29:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726099AbgJHHbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Oct 2020 03:31:35 -0400
+Received: from mail-lj1-f176.google.com ([209.85.208.176]:40229 "EHLO
+        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725849AbgJHHbf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Oct 2020 03:31:35 -0400
+Received: by mail-lj1-f176.google.com with SMTP id f21so4650809ljh.7;
+        Thu, 08 Oct 2020 00:31:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+1g36aKYcNrXZCi0eKfetb55THHV9Hf9K+OzdAh90uU=;
+        b=lkNd0Kl9fFlfcFOESoSP/B36V+cDkRm+iejuSyJlSsd7O4zGWyIvSazfcUutaLalnB
+         pPTXSPiXY1hqEcz6Zfy/msgQO6U3AShk24lBEVX376mg9hFMtKhS4YSjxGKn8xODN4K7
+         rWBHhLMbqgvkPQU1PS+O/A0Ld8nhqPkTUI39YXpqaMX2wXn7wZDbVbL4rBmYJOKOTEH2
+         6/UYpZ5Z4CN9LxPgF42MPrliYxam9hXC/pXmlPw0VujDgDWnE/nJlWNRNNQ0Blh+7LCV
+         s/TFb3Crqa75+2Z5TdgTlrEa9F29ETErr5HqB/TU+3QSq9ja2ujwsE5+iO2rmaMfAggx
+         UzGw==
+X-Gm-Message-State: AOAM531sh7eFM6CXaGNX+R1q8z95WWrBrrXJKWLQU7c6/CMmWM1oQ9fN
+        yxftY/+nunNBshBuK4QnRAA=
+X-Google-Smtp-Source: ABdhPJyXd1soH2qzb3AiRG9NyrEwiO1y3XgoMYHfLNfkVS2YrpoVPo3s2hHaiuQIEZMBHNvrEAxWSg==
+X-Received: by 2002:a2e:978f:: with SMTP id y15mr2476766lji.300.1602142293522;
+        Thu, 08 Oct 2020 00:31:33 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id u23sm719491lfq.173.2020.10.08.00.31.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2020 00:31:32 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kQQOd-0006eJ-Jo; Thu, 08 Oct 2020 09:31:27 +0200
+Date:   Thu, 8 Oct 2020 09:31:27 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Wilken Gottwalt <wilken.gottwalt@mailbox.org>
+Cc:     linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] usb: serial: option: add Cellient MPL200 card
+Message-ID: <20201008073127.GH26280@localhost>
+References: <cover.1602140720.git.wilken.gottwalt@mailbox.org>
+ <be90904f21494eaa8235db962829a8842025b22e.1602140720.git.wilken.gottwalt@mailbox.org>
 MIME-Version: 1.0
-In-Reply-To: <DM6PR07MB552984371C356A6E31D8D116DD0B0@DM6PR07MB5529.namprd07.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be90904f21494eaa8235db962829a8842025b22e.1602140720.git.wilken.gottwalt@mailbox.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Pawel,
+On Thu, Oct 08, 2020 at 09:22:19AM +0200, Wilken Gottwalt wrote:
+> Add usb ids of the Cellient MPL200 card.
+> 
+> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@mailbox.org>
+> ---
 
-On 08/10/2020 06:57, Pawel Laszczak wrote:
-> Siergei,
-> 
->>
->> On 10/7/20 11:15 AM, Roger Quadros wrote:
->>
->> [...]
->>>> Patch removes not used variable 'length' from
->>>> cdns3_wa2_descmiss_copy_data function.
->>>>
->>>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->>>
->>> Fixes: commit 141e70fef4ee ("usb: cdns3: gadget: need to handle sg case for workaround 2 case")
->>
->>    No "commit" is needed here.
-> 
-> Can you explain why?
-> 
-> I guess it's because commit 141e70fef4ee is quite new and it's not yet included in any stable kernel version,
-> or because it's only warning - not error.
-> 
-> Am I right ?
+So I had already applied this one (which didn't change since v1).
 
-Siergei meant that the word "commit" should not be used. So it should be
+Thanks again.
 
-Fixes: 141e70fef4ee ("usb: cdns3: gadget: need to handle sg case for workaround 2 case")
-
-cheers,
--roger
-
-> 
->>
->>> Acked-by: Roger Quadros <rogerq@ti.com>
->> [...]
->>
-> 
-> Regards,
-> Pawel
-> 
-
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Johan
