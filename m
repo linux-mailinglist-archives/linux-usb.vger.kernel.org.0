@@ -2,83 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC16287075
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 10:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C312870B1
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 10:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728477AbgJHIHn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Oct 2020 04:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbgJHIHl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Oct 2020 04:07:41 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26CDC061755;
-        Thu,  8 Oct 2020 01:07:40 -0700 (PDT)
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 09887LOr003713
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Thu, 8 Oct 2020 10:07:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1602144441; bh=tV+r+n/6hptr1Cjyk7c2jxN8WJX6lDayGAgagQDk9Xw=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=DXGPI+o/dUVXiVieloQ1PRWctameELzK7jd/ESotw2hhcSjZmyntimMD5vBp6N4Ec
-         CVnpb23wimIavRSTEEJoPujYT0Q+H0EvLy3Ig70Xm0DBvPx9PLlQ93S7nZpp4Kfj9q
-         bTcul6ptT6eokqWwArwCKcpvlPdVMpNY/ePJSY28=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
-        (envelope-from <bjorn@mork.no>)
-        id 1kQQxM-0017cV-Le; Thu, 08 Oct 2020 10:07:20 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Wilken Gottwalt <wilken.gottwalt@mailbox.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] net: usb: qmi_wwan: add Cellient MPL200 card
-Organization: m
-References: <cover.1602140720.git.wilken.gottwalt@mailbox.org>
-        <f5858ed121df35460ef17591152d606a78aa65db.1602140720.git.wilken.gottwalt@mailbox.org>
-Date:   Thu, 08 Oct 2020 10:07:20 +0200
-In-Reply-To: <f5858ed121df35460ef17591152d606a78aa65db.1602140720.git.wilken.gottwalt@mailbox.org>
-        (Wilken Gottwalt's message of "Thu, 8 Oct 2020 09:21:38 +0200")
-Message-ID: <87d01ti1jb.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        id S1728724AbgJHIaC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Oct 2020 04:30:02 -0400
+Received: from out28-50.mail.aliyun.com ([115.124.28.50]:47485 "EHLO
+        out28-50.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726013AbgJHIaC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Oct 2020 04:30:02 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08470301|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0162693-0.00889103-0.97484;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.Iga.miA_1602145789;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Iga.miA_1602145789)
+          by smtp.aliyun-inc.com(10.147.43.95);
+          Thu, 08 Oct 2020 16:29:56 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, kishon@ti.com,
+        vkoul@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, paul@crapouillou.net
+Subject: [PATCH v7 0/2] Use the generic PHY framework for Ingenic USB PHY.
+Date:   Thu,  8 Oct 2020 16:29:25 +0800
+Message-Id: <20201008082927.85233-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.102.4 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Wilken Gottwalt <wilken.gottwalt@mailbox.org> writes:
+v3->v4:
+Only add new generic-PHY driver, without removing the old one. Because the
+jz4740-musb driver is not ready to use the generic PHY framework. When the
+jz4740-musb driver is modified to use the generic PHY framework, the old
+jz4770-phy driver can be "retired".
 
-> Add usb ids of the Cellient MPL200 card.
->
-> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@mailbox.org>
-> ---
->  drivers/net/usb/qmi_wwan.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> index 07c42c0719f5..5ca1356b8656 100644
-> --- a/drivers/net/usb/qmi_wwan.c
-> +++ b/drivers/net/usb/qmi_wwan.c
-> @@ -1375,6 +1375,7 @@ static const struct usb_device_id products[] =3D {
->  	{QMI_QUIRK_SET_DTR(0x2cb7, 0x0104, 4)},	/* Fibocom NL678 series */
->  	{QMI_FIXED_INTF(0x0489, 0xe0b4, 0)},	/* Foxconn T77W968 LTE */
->  	{QMI_FIXED_INTF(0x0489, 0xe0b5, 0)},	/* Foxconn T77W968 LTE with eSIM s=
-upport*/
-> +	{QMI_FIXED_INTF(0x2692, 0x9025, 4)},    /* Cellient MPL200 (rebranded Q=
-ualcomm 05c6:9025) */
->=20=20
->  	/* 4. Gobi 1000 devices */
->  	{QMI_GOBI1K_DEVICE(0x05c6, 0x9212)},	/* Acer Gobi Modem Device */
+v4->v5:
+1.Add an extra blank line between "devm_of_phy_provider_register" and "return".
+2.Remove unnecessary "phy_set_drvdata".
+3.Add Paul Cercueil's Reviewed-by.
 
+v5->v6:
+1.Revert the removal of "phy_set_drvdata" in v5, removing "phy_set_drvdata" will
+  cause a kernel panic on CI20.
+  Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
+2.Rewrite the macro definitions, replace the original code with "FIELD_PREP()"
+  and "u32p_replace_bits()" according to Vinod Koul's suggestion.
 
-Thanks.  Looks nice now.
+v6->v7:
+1.Remove the stray tab character.
+2.Remove unnecessary "platform_set_drvdata".
+3.Remove the "dev" field in priv structure, and use &phy->dev instead.
 
-Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+周琰杰 (Zhou Yanjie) (2):
+  USB: PHY: JZ4770: Remove unnecessary function calls.
+  PHY: Ingenic: Add USB PHY driver using generic PHY framework.
+
+ drivers/phy/Kconfig                   |   1 +
+ drivers/phy/Makefile                  |   1 +
+ drivers/phy/ingenic/Kconfig           |  12 ++
+ drivers/phy/ingenic/Makefile          |   2 +
+ drivers/phy/ingenic/phy-ingenic-usb.c | 374 ++++++++++++++++++++++++++++++++++
+ drivers/usb/phy/phy-jz4770.c          |   2 +-
+ 6 files changed, 391 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/phy/ingenic/Kconfig
+ create mode 100644 drivers/phy/ingenic/Makefile
+ create mode 100644 drivers/phy/ingenic/phy-ingenic-usb.c
+
+-- 
+2.11.0
+
