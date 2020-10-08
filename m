@@ -2,108 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 570FA287709
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 17:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 428AF287725
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Oct 2020 17:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730982AbgJHPVL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Oct 2020 11:21:11 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:38701 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730550AbgJHPVL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Oct 2020 11:21:11 -0400
-Received: by mail-lf1-f67.google.com with SMTP id c141so313677lfg.5;
-        Thu, 08 Oct 2020 08:21:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qdx7FXoulf6+KPVkuCgYPh/M6PGV5WCjB+JKWP2F7cM=;
-        b=J20gJy+UhC0NVGIXtG4TrgXsA/qMY4vqAVccPoDoLXAI2ypZaZhrQmUooA3eNshPdI
-         eqaoRy3ArHbVk84GCdMRnRogUhYSQ4ZO9GAfBEQ7c95NLIuRVMiumR1AJb9+7ZJMGW7D
-         SqYMj+O8ZWQ4eOp37+jdGIEJFBJ2Gdf1tSMe0K+bxzAgmsUoIExwSvG0PHzd2gwfBAze
-         M/CXPk+WPejf6qHNH68mYCbOZfHEWhaIn0UqvHvsS5YgxXG8mDe0y/Ir8eXg5RY71pBA
-         nMX77nLbla7/EGszRPSHSz/BlaWAYFJzHgWxooppHhJumT4feNQAYWe6lSfUEK4zBY/W
-         boBQ==
-X-Gm-Message-State: AOAM530ZShypIGd0ckNir/qhdfrTfq+FMjMJLnsLlGYwlSG7gySjMVSZ
-        oqdd1acoPEnbsrjIX5f4C5U=
-X-Google-Smtp-Source: ABdhPJy+Ly+jsWC46OYzqg9Ez1Qcu80smXv99kE8n47XWxVqqo9MljznCwTRar6pNDX4j0Il5aMkiA==
-X-Received: by 2002:a05:6512:1182:: with SMTP id g2mr479865lfr.198.1602170468914;
-        Thu, 08 Oct 2020 08:21:08 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id z84sm166953lfa.45.2020.10.08.08.21.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2020 08:21:08 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kQXj5-0007GR-7u; Thu, 08 Oct 2020 17:21:03 +0200
-Date:   Thu, 8 Oct 2020 17:21:03 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ftdi_sio: Fix serial port stall after resume
-Message-ID: <20201008152103.GK26280@localhost>
-References: <20200929193327.GA13987@ls3530.fritz.box>
+        id S1730985AbgJHP3o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Oct 2020 11:29:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57780 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731063AbgJHP3l (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Oct 2020 11:29:41 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1175921924;
+        Thu,  8 Oct 2020 15:29:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602170980;
+        bh=aGMJitN1gVlJ1O25AciwAxco2naFSdSV4byKCma50EA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BSp3x6iGYOLzK3xbEK20mqojW/pteMLdGhc3kWywq9maN3ZGgOTc+K8ZyJMluiRlV
+         tAasayBsdHkiGVTSWehWA6+5hQWYlILw/3rqX8YSyM0rO9fuDeSVES6veZkJxtBTaa
+         t6/E5EmHNUu36FLNpZ3hHttN/s9dmLjxbwbvVpSU=
+Date:   Thu, 8 Oct 2020 17:30:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial updates for 5.10-rc1
+Message-ID: <20201008153013.GA541917@kroah.com>
+References: <20201008143924.GA26847@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200929193327.GA13987@ls3530.fritz.box>
+In-Reply-To: <20201008143924.GA26847@localhost>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 09:33:27PM +0200, Helge Deller wrote:
-> With a 4-port serial USB HUB with FT232BM chips the serial ports stop
-> working after a software suspend/resume cycle.
-> Rewriting the latency timer during the resume phase fixes it.
-
-Hmm. This sounds weird. Why would the latency timer make such a
-difference?
-
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Helge Deller <deller@gmx.de>
+On Thu, Oct 08, 2020 at 04:39:24PM +0200, Johan Hovold wrote:
+> Hi Greg,
 > 
-> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-> index 9823bb424abd..8ee6cf6215c1 100644
-> --- a/drivers/usb/serial/ftdi_sio.c
-> +++ b/drivers/usb/serial/ftdi_sio.c
-> @@ -1092,6 +1092,7 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base);
->  static u32 ftdi_232bm_baud_to_divisor(int baud);
->  static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
->  static u32 ftdi_2232h_baud_to_divisor(int baud);
-> +static int ftdi_reset_resume(struct usb_serial *serial);
+> Here are the USB serial updates for 5.10.
 > 
->  static struct usb_serial_driver ftdi_sio_device = {
->  	.driver = {
-> @@ -1122,6 +1123,7 @@ static struct usb_serial_driver ftdi_sio_device = {
->  	.set_termios =		ftdi_set_termios,
->  	.break_ctl =		ftdi_break_ctl,
->  	.tx_empty =		ftdi_tx_empty,
-> +	.reset_resume =		ftdi_reset_resume,
->  };
+> Note that I fixed up a Link tag in the last commit while preparing the series,
+> hence the late commit timestamp.
 > 
->  static struct usb_serial_driver * const serial_drivers[] = {
-> @@ -2379,6 +2381,16 @@ static int ftdi_stmclite_probe(struct usb_serial *serial)
->  	return 0;
->  }
+> Johan
 > 
-> +static int ftdi_reset_resume(struct usb_serial *serial)
-> +{
-> +	struct usb_serial_port *port = serial->port[0];
-> +
-> +	if (tty_port_initialized(&port->port))
-> +		write_latency_timer(port);
+> 
+> The following changes since commit ba4f184e126b751d1bffad5897f263108befc780:
+> 
+>   Linux 5.9-rc6 (2020-09-20 16:33:55 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.10-rc1
 
-Why are you only doing this for open ports?
+Pulled and pushed out, thanks.
 
-> +
-> +	return usb_serial_generic_resume(serial);
-> +}
-
-And if the device has been reset there may need to reconfigured the
-termios settings for open ports.
-
-Could you expand a bit on what the problem is here?
-
-Johan
+greg k-h
