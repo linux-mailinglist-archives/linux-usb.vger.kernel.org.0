@@ -2,87 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 058E428851F
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 10:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 224C1288544
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 10:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732710AbgJIIW4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Oct 2020 04:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732337AbgJIIWz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Oct 2020 04:22:55 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765B1C0613D2;
-        Fri,  9 Oct 2020 01:22:55 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id y16so7602435ljk.1;
-        Fri, 09 Oct 2020 01:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=z4PYgixxEo74naXVTGCu473YIzjZyoMssDBGjCVNhz8=;
-        b=DvEcPpSsHXvt+QCKNgFD0OGbS0cOIPIHELaLxGjbP37VbXYPPozfcIRAdrSmOR8HvV
-         S0tXg49NuxysApDt+TalMm467uLyRoSZH2lrDZZLGXmK8gSf7V+wzyQgEb6o61PcH5Eu
-         /SuIDyKLxzATkYuFFkoZlx6a4PFXw02IiWr6VZs+tCcpjLnbSgJe1xMkU7OsWzpp2T83
-         6oc/b4AfsTwrDsWLkm4NURIQhxqyyTGdolrTaI2z401NHkwA98DrBFAPgRZL6kXk6lIi
-         fTcClX+nTlqX7peXiWnk3fFFg5pFFegtt5+0QvuQbsaFt8F9gJcm5/zw03TVhozozCz1
-         ecHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=z4PYgixxEo74naXVTGCu473YIzjZyoMssDBGjCVNhz8=;
-        b=EZP3mKv6UWLm2Fzb8sDRCOBHfqyZuK/JNitwyNLdU9KWPegQi+ebRwVJQM3E+qQHwJ
-         y0W/rk26qUpOLsgejP2c8A7nCwGDpuMfVRDsql+SxUlg+fyxFRexJViFORPFrgsMnQ3m
-         8uLd6awEHOhJE0Q8Eet/Ag619jZAAABC5iqnh/HQ6zX44cz9ESI2JrAqS2NDo7DUTof4
-         OnK8eXJFK+ZfpODTU0OIGuKXErTQQFhvaD9ZkEGx0uW4V8lMAXwaLxrDnfs9EzvbtEyr
-         1WJnbYwfKAqIGB3KnRlUQgoe3lxoDMslW3N86fmcgrDJFuYa1IvAfMp3+wtg+UlbZ3l2
-         r0Ww==
-X-Gm-Message-State: AOAM532UpHeaDg7xyTOWiga+bPxoXqvpvfcdeL5JuQRbeigfkwjjiBaa
-        C+eClQM3ZjZsYeWvrUMH4lQVuBAd/P7Vwg==
-X-Google-Smtp-Source: ABdhPJyCc0AibnzQbXHWDVK6b5qd4dQXk2CIZ+rxQ8FfNIh/3E1HoS8vWe1fFdjiMjJKICo8WL7eRw==
-X-Received: by 2002:a2e:8159:: with SMTP id t25mr4863515ljg.137.1602231773820;
-        Fri, 09 Oct 2020 01:22:53 -0700 (PDT)
-Received: from [192.168.1.100] ([213.87.137.199])
-        by smtp.gmail.com with ESMTPSA id v11sm682269ljk.109.2020.10.09.01.22.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Oct 2020 01:22:53 -0700 (PDT)
-Subject: Re: [PATCH v2 3/3] ARM: dts: add ehci uhci enable in evb dts
-To:     Ryan Chen <ryan_chen@aspeedtech.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, bmc-sw@aspeedtech.com,
-        Alan Stern <stern@rowland.harvard.edu>
-References: <20200930040823.26065-4-ryan_chen@aspeedtech.com>
- <20201009024937.11246-1-ryan_chen@aspeedtech.com>
- <20201009024937.11246-4-ryan_chen@aspeedtech.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <4efff4e7-27e0-35be-c112-5377f222a478@gmail.com>
-Date:   Fri, 9 Oct 2020 11:22:38 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S1732855AbgJII3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Oct 2020 04:29:20 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:12872 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732445AbgJII3T (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Oct 2020 04:29:19 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1602232159; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=uf4TnRUZvsyH9PBe5TksQ6NqIrwgHTUAWa5148sHftE=; b=H8+hU8PA5Lt2KEvQ5Gg5watw31nN6pYuElebbVXreleSJTBCn/+8hFhBLP8TwUvRZHZtp+Y2
+ XDavffzeT/4U4YY08A54bJ8qIikG0L247DrqWtixzLXsIsB+Fqt4lh2nDmp9Yhhh//41Zduc
+ 8q8XCYp8svFs4SSb6xDNOFJ/GnA=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 5f801f41aad2c3cd1c5820cb (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 09 Oct 2020 08:28:49
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 49108C433FF; Fri,  9 Oct 2020 08:28:48 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AEEABC433FF;
+        Fri,  9 Oct 2020 08:28:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org AEEABC433FF
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     vkoul@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        kishon@ti.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH v2 0/4] Enable USB type C support on SM8150
+Date:   Fri,  9 Oct 2020 01:28:39 -0700
+Message-Id: <20201009082843.28503-1-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <20201009024937.11246-4-ryan_chen@aspeedtech.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-HEllo!
+Changes in v2:
+ - Added patch to fix a typo in dwc3_qcom_vbus_override_enable()
+ - Modified dwc3_qcom_find_usb_connector_match() to search the child nodes for
+   the connector device as well
+ - Moved out the DRD switch remote endpoint from the connector node in the
+   pm8150b_typec device
 
-On 09.10.2020 5:49, Ryan Chen wrote:
+This series adds support for setting of the orientation multiplexor within the
+QMP PHY based on the detection output from the PM8150B.  It will also introduce
+a role switch in DWC3 QCOM, which is used so that the DWC3 QCOM glue can receive
+role switch change events, and set the vbus override accordingly.  This event
+will then be propagated down to the DWC3 core driver, by the DWC3 QCOM getting a
+handle to the DWC3 core's role switch.
 
-> Add EHCI UHCI enable build in aspeed-ast2600-evb.dts
+Wesley Cheng (4):
+  arm64: boot: dts: qcom: sm8150: Add nodes for PMIC based typec
+    detection
+  phy: qcom-qmp: Register as a typec switch for orientation detection
+  usb: dwc3: dwc3-qcom: Find USB connector and register role switch
+  usb: dwc3: dwc3-qcom: Fix typo in the dwc3 vbus override API
 
-    Enable ECHI/UHCI for the  Aspeed AST2600 EVB, perhaps?
+ arch/arm64/boot/dts/qcom/sm8150-mtp.dts |  40 +++++++-
+ drivers/phy/qualcomm/Kconfig            |  11 ++
+ drivers/phy/qualcomm/phy-qcom-qmp.c     |  70 ++++++++++++-
+ drivers/usb/dwc3/dwc3-qcom.c            | 128 ++++++++++++++++++++++--
+ 4 files changed, 239 insertions(+), 10 deletions(-)
 
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-[...]
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-MBR, Sergei
