@@ -2,277 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD96288DBC
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 18:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0707428900A
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 19:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389492AbgJIQG3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Oct 2020 12:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389144AbgJIQG2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Oct 2020 12:06:28 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04111C0613D2;
-        Fri,  9 Oct 2020 09:06:27 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id r127so11208209lff.12;
-        Fri, 09 Oct 2020 09:06:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hVM3wtpHG/QwknzCZDjPbZZwN5F8vjj/ZrYHWh9NZ7g=;
-        b=RGwkmFzpAa0LIDU2sfh/kpdO8Ob+aaYCKuip5WJdj2QHrvE3saKd97qgpp+Hr80zIp
-         aSJN4aeRp80n9lH7FPHxjaY3eOVDZUYyhAM3M74QgiBBU2nXvfBoVgAjsWIE8Tfv9lhh
-         lGnyFgXlhAkOL7ZMBTeVNLDKNeptoifLMhFoLTCfSz5ApxWKk1HFXCk+yiLwiOtd14P/
-         6evWyAsxIlfwsJR7cITVLgQb8d1q7BuX4A3lwcRBgWATA3/7Qb4QxnTXIbHZxDxvMoqI
-         KxvvFeZuUEVzjDWsLcVbfqY3MOElL3Rp7cWX+YafA9XgcJMExgHKaSIYdfy6hTc69OQK
-         EUkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hVM3wtpHG/QwknzCZDjPbZZwN5F8vjj/ZrYHWh9NZ7g=;
-        b=JGAZg/FaVfZS7/xLNecX3nqAyDnha6Zv2+7/LHGr0UisZxIXtaSrpCWyhpJ425Vy+F
-         dbCHH+DOFTPITCahdfs3HZfjBwjzKkH7UbYPBemEIsf1LguPlZ1beCUfjsqzVvLeU1/D
-         D1FhYDf0Uv3u83DmPjMFzE/H9kOk76Q3Jeqcv/xRegb/c/pFZuPawkbYpPesvmvxmKBi
-         qlaiQ5kCRXA6OBAtelinvpxaAeaSa3arXgRZscPKc8zvTV6qD1nJPWIFLrSnyWTIlw/M
-         b6+eJ0ym6tESKsE9lghfDN++XEzgGzvh/WBfpYo8JlHD6xMrikm5ANL3/txDVjsk3at+
-         av2g==
-X-Gm-Message-State: AOAM53290vJG1b4Cs7eZIYvHRLLCyB1SMmaNT/3xlw6vTUn5naSJQFug
-        Injs5KYSC2T0EyeNWy4QeOk8uqY6gZuNNxNc5Lg=
-X-Google-Smtp-Source: ABdhPJzS/RTF66VORQsC5HkYJjNUswX0Xrsu3VrHvwmmlzhy+F9N8feTY4i+IP9TTtVNQj74Mu0nO46k0vqCQ8KwIS8=
-X-Received: by 2002:a19:2346:: with SMTP id j67mr4213461lfj.427.1602259585224;
- Fri, 09 Oct 2020 09:06:25 -0700 (PDT)
+        id S2387536AbgJIRck (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Oct 2020 13:32:40 -0400
+Received: from sonic312-21.consmr.mail.bf2.yahoo.com ([74.6.128.83]:37322 "EHLO
+        sonic312-21.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732276AbgJIRcE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Oct 2020 13:32:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1602264722; bh=NajTNMrfMLb6UXcjRhYpYerQX8PtVBLz0oFgaMINSWY=; h=Date:From:Reply-To:Subject:References:From:Subject; b=i4yeVMf1WmzzZ2gNvIXKaGXddbat6nzn+ZsvKRd8ZJfHnUksDGlOOtNXW7RxYs+O2aetC1K9JojQy8eayXuZwtfsAiDX51e1kblPPWDW/1c2ZHYERqKc0eyhOY5p1BorHyx5/U7ekEOnKs0L3FHelY3KgJJgrDA0iqjH82Urne0vQml3XBEyQSn+1Lw4YCqrMyvlrGKZCQt/4CesS0hQu+EstL2rg0LsaE3Wy4nYz9XX5E7uLoAxvhUOEWuIFs+O4ikuXYJso807XWtS81AW9pNGNPEvIQbOdrmsny/gXVd+W4L2+AH4keCBvhyz636G+azc+97+Hj9PCHWqihoqvA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1602264722; bh=RYhzEYt6qJdZ7zGcneJUohepkSKimQxPkalnlCDY/ci=; h=Date:From:Subject; b=lwLZ11brptxByuXUNSgg0U8FccqLztm2gaIeu/WWUEbzHpWYP45h/Z0Jg4lGNYbfAjkSuLkDvhPvg3N/iWhlVBAfuNaQeO+AFWZ6H62ZLQzxUpCEPuez8aWuc78tAQ8AbqqBqx5TlZwN+0pTNUZPJeilUKl99w76hRsEGjpIX0Aj8RIjb6z4KHkGQkUPudkmTRROFgUapnAKRmbSlR4n52+4bDxkvEwEg+VPAke+QJoVbzsxYuMzuie7reK/8bgXc7fA63Odu5tPMho1Gj8CxkOo4WnweUpF6iBinH83hLbIP7Xq98R+e7X/Dj/stZwTABKa7LPMdZ0dIpCcXeMFRA==
+X-YMail-OSG: QXkto0IVM1ksLG3UQ9KQPAfw3n9W0qoZNAGtiXfYg5lvdmWUY_vV5aTvOFc8OMy
+ ejyIt2PoAfxSHpazWNO5nRO40J1vp8HmGAfehAEO0nBkem0aJ.a.GhhA4gHvW1oXNkdUMKigVsaa
+ YfE1xYIasd39pmw4MQ7BmUcrtHH02j9oRTXj7q87Hv0XTH2vg_chjbOTk42fHPkOjQmcYaj5GXJK
+ mY2.RI55WH4H29BALUInGlp6QCbdWpoDc4JlOnvyp6d9z9fDnny2JtX9rO0NpTJY72.PGYicVBMy
+ 6EuRjFMrMCEml9HKSo8QBDh548EtkaNjBYWxEDxt_4YWn6567fxVvIvN6.l1TihiOhCRJBZe64hi
+ zewXIaJqwaw0RxpQkUSCfjPnluHixpJ8S.s_2kDi0muJJmiVjY_Mjd.pkJXjjHFngRmPS6aNR02G
+ hr2UAIg1.jzsokjfdOjFZ9Yy21SkrxwsfNQAu5bZDy7DzyAPhoe94PV5VrduJdvrMgrbwuCa_d4e
+ qu2MVwJRey5UUcPTWp8EPfeGR.0dhFAZoXVlCj_FV.mfiWDdnkkdluekA1010s5ocS.uo.4VN4Q2
+ OKJp76lUQGFka7lwtAkYh1Ff5gWabgU5AtYcQ72gDFk1VUysTrqXJtwu_NzzabJV.DYzfLGmIH.L
+ 8x_.mERlyZu7qeezcbQ3LUGlfihdNUfXctWx6KqrkiOF.nPJZzonrdUAKWCv7XhuIjA2PLET3dss
+ w4NqAm9Wf7oB3PX8UHQIOBrqb5zjv3WNDc_0e06GHVOTTdF1wp7nXq2.siS60jsvTC0wDGBI.vpv
+ UE_w2qgAMUJ3smCYfwub3qblns7p3KNvglfh4UQgjYUKa8XVdughXSIyMY3mCW86k9k4.MUPOPdW
+ Brci5etghJNnQAde3ywRA8N0IwYLpF_PfjVPMWi90Fsb8IISYwMQpv4xPR_aXEzqPTIeY4qgZ.2_
+ 62KwcfSQ5fRCBMTwRmJcGmVr9JysknJjf3CHnyL.VeHdrnVuZLQPYEiaeS_sEj_mm_VEbbAWZWE1
+ wN9GGsnEMuTrLgONZ0ijRDb240Oo4B.bWGcXBqN4Um_qAKv5700iQxkp0Q1NekobD6bIDBRneU27
+ 4RPfR6_rJGyFePxc8lkpYX4_4keULcFaO9EYENGr7RieKhu61olI3qDe8HTSFoD7NEY__EoNPDqJ
+ Xyd2k5x3.Qrr1_dOS4ozUu1mU9TOongnD0Xsf5Z8s5fbXSdgyLcx0WGmsdwHAtXyPBm.TLH94KcT
+ wWSwh7dcRTtsdTaF3MElT0rE1d5MVtbD8TbWeQEz14hti3nL8A_n9bhgEuT1tb8yfaorO0vscM5B
+ Awc.YvDWKllstzj9lIhEYHCWmA9nMHoYjD4Lo6DNivzL_sBScyAmHcrcVIxrqT_7oNx4N3YJpWdA
+ uymTMNlmf18Cd5mwzvjVSBO_mEPj1_N8zXemTERO1J3KXqcKc
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.bf2.yahoo.com with HTTP; Fri, 9 Oct 2020 17:32:02 +0000
+Date:   Fri, 9 Oct 2020 17:32:00 +0000 (UTC)
+From:   Ms lisa Hugh <lisahugh531@gmail.com>
+Reply-To: ms.lisahugh000@gmail.com
+Message-ID: <70189328.794834.1602264720676@mail.yahoo.com>
+Subject: BUSINESS CO-OPERATION FROM (Ms Lisa Hugh).
 MIME-Version: 1.0
-References: <1599060933-8092-1-git-send-email-u0084500@gmail.com>
- <20200902165713.GG56237@roeck-us.net> <CADiBU3_iHk4aoM8o6GcaTmWDZT4ymvb0Ff-XeLLZ0C9dhCnLZQ@mail.gmail.com>
- <fd2a33fc-2383-66cb-0fd7-d5aa0cc9111f@roeck-us.net> <CADiBU3_vYAmHDCONrExzyM+1CTfqJx_eS1hYG8aHkNWFzTcwfg@mail.gmail.com>
- <63c7f5e4-eff2-1420-30a5-a0b98a7815e0@roeck-us.net> <CADiBU3-83rVLqhVAqqSGc0qQ66PHsGVVcp_m3sm_4ZS5A+GXKQ@mail.gmail.com>
- <CADiBU3_c5O-yUac-ytp5WoQQ12edkU+4wn+WNBOVGRGM15NBJA@mail.gmail.com>
- <20201002133145.GA3384841@kroah.com> <c2d689eb-5538-6af2-614f-766521100273@roeck-us.net>
- <20201005110808.GA298743@kroah.com> <88586992-650f-a4a1-2fa0-8cef313380fb@roeck-us.net>
- <CADiBU38wk825SqtFRAiYqqV47Wwi43AuWKut19qeTbGBZFqPow@mail.gmail.com>
- <CAKgpwJWwyvUyVj+jQ0y2i_eK1XEN2g3NvR0zgrRLfcmtgn8DDg@mail.gmail.com>
- <CADiBU3_TADpGmV7-BXJd3YaPNiv8Eg8zmKUD_OoB9CG1MT12mg@mail.gmail.com>
- <CADiBU392ZL6AHf6Dns61KXFVuvwh6grfnJjXmcFE4Ma2gjK6EA@mail.gmail.com> <VE1PR04MB6528CF55BE68A8DCF4B7904689080@VE1PR04MB6528.eurprd04.prod.outlook.com>
-In-Reply-To: <VE1PR04MB6528CF55BE68A8DCF4B7904689080@VE1PR04MB6528.eurprd04.prod.outlook.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Sat, 10 Oct 2020 00:06:13 +0800
-Message-ID: <CADiBU38-jX=4sbQ9aFoA=Xr6S7cFbfQy8tpdohoZdpaY-AK-Vw@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpm: Fix if vbus before cc, hard_reset_count
- not reset issue
-To:     Jun Li <jun.li@nxp.com>
-Cc:     Jun Li <lijun.kernel@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        cy_huang <cy_huang@richtek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <70189328.794834.1602264720676.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16795 YMailNodin Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Jun Li <jun.li@nxp.com> =E6=96=BC 2020=E5=B9=B410=E6=9C=889=E6=97=A5 =E9=80=
-=B1=E4=BA=94 =E4=B8=8B=E5=8D=882:12=E5=AF=AB=E9=81=93=EF=BC=9A
->
->
->
-> > -----Original Message-----
-> > From: ChiYuan Huang <u0084500@gmail.com>
-> > Sent: Wednesday, October 7, 2020 6:13 PM
-> > To: Jun Li <lijun.kernel@gmail.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>; Greg KH
-> > <gregkh@linuxfoundation.org>; Heikki Krogerus
-> > <heikki.krogerus@linux.intel.com>; Linux USB List
-> > <linux-usb@vger.kernel.org>; lkml <linux-kernel@vger.kernel.org>;
-> > cy_huang <cy_huang@richtek.com>; Jun Li <jun.li@nxp.com>
-> > Subject: Re: [PATCH] usb: typec: tcpm: Fix if vbus before cc, hard_rese=
-t_count
-> > not reset issue
-> >
-> > ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2020=E5=B9=B410=E6=9C=887=
-=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=881:39=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-> > >
-> > > Jun Li <lijun.kernel@gmail.com> =E6=96=BC 2020=E5=B9=B410=E6=9C=887=
-=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=8812:52=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> > > >
-> > > > ChiYuan Huang <u0084500@gmail.com> =E4=BA=8E2020=E5=B9=B410=E6=9C=
-=886=E6=97=A5=E5=91=A8=E4=BA=8C =E4=B8=8B=E5=8D=8812:38=E5=86=99
-> > =E9=81=93=EF=BC=9A
-> > > > >
-> > > > > Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2020=E5=B9=B410=E6=
-=9C=885=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=8811:30
-> > =E5=AF=AB=E9=81=93=EF=BC=9A
-> > > > > >
-> > > > > > On 10/5/20 4:08 AM, Greg KH wrote:
-> > > > > > [ ... ]
-> > > > > > >>> What ever happened with this patch, is there still disagree=
-ment?
-> > > > > > >>>
-> > > > > > >>
-> > > > > > >> Yes, there is. I wouldn't have added the conditional without
-> > > > > > >> reason, and I am concerned that removing it entirely will op=
-en
-> > another problem.
-> > > > > > >> Feel free to apply, though - I can't prove that my concern i=
-s
-> > > > > > >> valid, and after all we'll get reports from the field later =
-if
-> > it is.
-> > > > > > >
-> > > > > > > Ok, can I get an ack so I know who to come back to in the
-> > > > > > > future if there are issues?  :)
-> > > > > > >
-> > > > > >
-> > > > > > Not from me, for the reasons I stated. I would be ok with somet=
-hing
-> > like:
-> > > > > >
-> > > > > > -       if (tcpm_port_is_disconnected(port))
-> > > > > > +       if (tcpm_port_is_disconnected(port) ||
-> > > > > > +           (tcpm_cc_is_open(port->cc1) &&
-> > > > > > + tcpm_cc_is_open(port->cc2)))
-> > > > > >
-> > > > > > to narrow down the condition.
-> > > > >
-> > > > > I have tried the above comment and It doesn't work.
-> > > > > How about to change the judgement like as below
-> > > > >
-> > > > > -       if (tcpm_port_is_disconnected(port))
-> > > > > +       if (tcpm_port_is_disconnected(port) ||
-> > > > > + !port->vbus_present)
-> > > > >
-> > > > > The hard_reset_count not reset issue is following by the below
-> > > > > order 1. VBUS off ( at the same time, cc is still detected as
-> > > > > attached)
-> > > > > port->attached become false and cc is not open
-> > > > > 2. After that, cc detached.
-> > > > > due to port->attached is false, tcpm_detach() directly return.
-> > > >
-> > > > If tcpm_detach() return directly, then how your patch can reset
-> > > > hard_reset_count?
-> > > >
-> > > Yes, it can. We know vbus_present change from true to false and cc
-> > > detach both trigger tcpm_detach.
-> > > My change is whenever tcpm_detach to be called, hard_reset_count will
-> > > be reset to zero.
-> > >
-> > > > I am seeing the same issue on my platform, the proposed change:
-> > > > -       if (tcpm_port_is_disconnected(port))
-> > > > -               port->hard_reset_count =3D 0;
-> > > > +       port->hard_reset_count =3D 0;
-> > > > can't resolve it on my platform.
-> > > >
-> > > I'm not sure what's your condition. Could you directly paste the tcpm
-> > > log for the check?
-> > > > How about reset hard_reset_count in SNK_READY?
-> > > > @@ -3325,6 +3329,7 @@ static void run_state_machine(struct tcpm_por=
-t
-> > *port)
-> > > >         case SNK_READY:
-> > > >                 port->try_snk_count =3D 0;
-> > > >                 port->update_sink_caps =3D false;
-> > > > +               port->hard_reset_count =3D 0;
-> > > >                 if (port->explicit_contract) {
-> > > >                         typec_set_pwr_opmode(port->typec_port,
-> > > >                                              TYPEC_PWR_MODE_PD);
-> > > >
-> > > > can this resolve your problem?
-> > > I'm not sure. It need to have a try, then I can answer you.
-> > > But from USBPD spec, the hard_reset_count need to reset zero only whe=
-n
-> > > 1. At src state, pe_src_send_cap and receive GoodCRC 2. At snk state,
-> > > pe_snk_evaluate_cap need to reset hard_reset_count
->
-> 3.
-> 8.3.3.3.8 PE_SNK_Hard_Reset state
-> "Note: The HardResetCounter is reset on a power cycle or Detach."
->
-> > > >
-> > > > Li Jun
-> > > > >
-> > > > > And that's why hard_reset_count is not reset to 0.
-> >
-> > I tried in snk_ready to reset hard_reset_count.
-> > At normal case, it works.
-> > But it seems still the possible fail case like as below.
-> > 200ms -> cc debounce max time
-> > 240ms -> snk_waitcap max time
-> > If the plugin/out period is between (200+240) and (200+ 2* 240)ms , and=
- the
-> > src side plug out like as the described scenario.
-> > From this case, hard_reset_count may still 1.
-> > And we expect the next plugin hard_reset_count is 0. But not, actually =
-it
-> > never reset.
-> > So at next plugin, only one hard_reset will be sent and reach hard_rese=
-t_count
-> > max (2).
-> >
-> > This case is hard to reproduce. But actually it's possible.
->
-> Make sense.
->
-> Then I propose doing this at SNK_UNATTACHED
-> @@ -3156,6 +3156,7 @@ static void run_state_machine(struct tcpm_port *por=
-t)
->                 if (!port->non_pd_role_swap)
->                         tcpm_swap_complete(port, -ENOTCONN);
->                 tcpm_pps_complete(port, -ENOTCONN);
-> +               port->hard_reset_count =3D 0;
->                 tcpm_snk_detach(port);
->                 if (tcpm_start_toggling(port, TYPEC_CC_RD)) {
->                         tcpm_set_state(port, TOGGLING, 0);
-> Li Jun
 
-For the current power role is snk, I think it may work.
-How about the src role? src role only reset the hard_reset_count in
-tcpm_detach and src_ready state?
 
-I check the flow that  you mentioned in the previous mail. It's really
-a special case from any state to port_reset.
-If the case is considered, how about to reset  the hard_reset_count
-and don't care the port is attached or not in tcpm_detach function
-like as below.
+Dear Friend,
 
-@@ -2789,6 +2789,8 @@ static void tcpm_reset_port(struct tcpm_port *port)
+I am Ms Lisa hugh, work with the department of Audit and accounting manager here in the Bank(B.O.A).
 
- static void tcpm_detach(struct tcpm_port *port)
- {
-+       port->hard_reset_count =3D 0;
-+
-        if (!port->attached)
-                return;
+Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment, amount (US$4.5M DOLLARS).
 
-@@ -2797,9 +2799,6 @@ static void tcpm_detach(struct tcpm_port *port)
-                port->tcpc->set_bist_data(port->tcpc, false);
-        }
+I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me for success.
 
--       if (tcpm_port_is_disconnected(port))
--               port->hard_reset_count =3D 0;
--
-        tcpm_reset_port(port);
- }
+Note/ 50% for you why 50% for me after success of the transfer to your bank account.
 
-Like I mentioned before, whatever the condition is, hard_reset_count
-must be reset to zero during tcpm_detach.
+Below information is what i need from you so will can be reaching each other
 
-But refer to Guenter's mail,  he prefer to narrow down the condition
-to reset this counter.
+1)Full name ...
+2)Private telephone number...
+3)Age...
+4)Nationality...
+5)Occupation ...
 
-I think the original thought is important why to put this line there.
 
-Hi, Guenter:
-   From the discussion, we really need to know why you put the reset
-line below port attached is false and also make some judgement.
-I think there may be ome condition that we don't considered.
+Thanks.
 
->
-> >
-> > > > > >
-> > > > > > Guenter
+Ms Lisa hugh.
