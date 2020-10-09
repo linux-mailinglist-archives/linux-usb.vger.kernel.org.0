@@ -2,272 +2,277 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A3E288BAD
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 16:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD96288DBC
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 18:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388875AbgJIOlF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Oct 2020 10:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
+        id S2389492AbgJIQG3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Oct 2020 12:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388736AbgJIOlE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Oct 2020 10:41:04 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B26C0613D6;
-        Fri,  9 Oct 2020 07:41:04 -0700 (PDT)
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94)
-        (envelope-from <benjamin@sipsolutions.net>)
-        id 1kQtZt-002KHD-SI; Fri, 09 Oct 2020 16:41:02 +0200
-From:   Benjamin Berg <benjamin@sipsolutions.net>
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Benjamin Berg <bberg@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: [PATCH 2/2] usb: typec: ucsi: Work around PPM losing change information
-Date:   Fri,  9 Oct 2020 16:40:47 +0200
-Message-Id: <20201009144047.505957-3-benjamin@sipsolutions.net>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201009144047.505957-1-benjamin@sipsolutions.net>
-References: <20201009144047.505957-1-benjamin@sipsolutions.net>
+        with ESMTP id S2389144AbgJIQG2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Oct 2020 12:06:28 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04111C0613D2;
+        Fri,  9 Oct 2020 09:06:27 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id r127so11208209lff.12;
+        Fri, 09 Oct 2020 09:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hVM3wtpHG/QwknzCZDjPbZZwN5F8vjj/ZrYHWh9NZ7g=;
+        b=RGwkmFzpAa0LIDU2sfh/kpdO8Ob+aaYCKuip5WJdj2QHrvE3saKd97qgpp+Hr80zIp
+         aSJN4aeRp80n9lH7FPHxjaY3eOVDZUYyhAM3M74QgiBBU2nXvfBoVgAjsWIE8Tfv9lhh
+         lGnyFgXlhAkOL7ZMBTeVNLDKNeptoifLMhFoLTCfSz5ApxWKk1HFXCk+yiLwiOtd14P/
+         6evWyAsxIlfwsJR7cITVLgQb8d1q7BuX4A3lwcRBgWATA3/7Qb4QxnTXIbHZxDxvMoqI
+         KxvvFeZuUEVzjDWsLcVbfqY3MOElL3Rp7cWX+YafA9XgcJMExgHKaSIYdfy6hTc69OQK
+         EUkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hVM3wtpHG/QwknzCZDjPbZZwN5F8vjj/ZrYHWh9NZ7g=;
+        b=JGAZg/FaVfZS7/xLNecX3nqAyDnha6Zv2+7/LHGr0UisZxIXtaSrpCWyhpJ425Vy+F
+         dbCHH+DOFTPITCahdfs3HZfjBwjzKkH7UbYPBemEIsf1LguPlZ1beCUfjsqzVvLeU1/D
+         D1FhYDf0Uv3u83DmPjMFzE/H9kOk76Q3Jeqcv/xRegb/c/pFZuPawkbYpPesvmvxmKBi
+         qlaiQ5kCRXA6OBAtelinvpxaAeaSa3arXgRZscPKc8zvTV6qD1nJPWIFLrSnyWTIlw/M
+         b6+eJ0ym6tESKsE9lghfDN++XEzgGzvh/WBfpYo8JlHD6xMrikm5ANL3/txDVjsk3at+
+         av2g==
+X-Gm-Message-State: AOAM53290vJG1b4Cs7eZIYvHRLLCyB1SMmaNT/3xlw6vTUn5naSJQFug
+        Injs5KYSC2T0EyeNWy4QeOk8uqY6gZuNNxNc5Lg=
+X-Google-Smtp-Source: ABdhPJzS/RTF66VORQsC5HkYJjNUswX0Xrsu3VrHvwmmlzhy+F9N8feTY4i+IP9TTtVNQj74Mu0nO46k0vqCQ8KwIS8=
+X-Received: by 2002:a19:2346:: with SMTP id j67mr4213461lfj.427.1602259585224;
+ Fri, 09 Oct 2020 09:06:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1599060933-8092-1-git-send-email-u0084500@gmail.com>
+ <20200902165713.GG56237@roeck-us.net> <CADiBU3_iHk4aoM8o6GcaTmWDZT4ymvb0Ff-XeLLZ0C9dhCnLZQ@mail.gmail.com>
+ <fd2a33fc-2383-66cb-0fd7-d5aa0cc9111f@roeck-us.net> <CADiBU3_vYAmHDCONrExzyM+1CTfqJx_eS1hYG8aHkNWFzTcwfg@mail.gmail.com>
+ <63c7f5e4-eff2-1420-30a5-a0b98a7815e0@roeck-us.net> <CADiBU3-83rVLqhVAqqSGc0qQ66PHsGVVcp_m3sm_4ZS5A+GXKQ@mail.gmail.com>
+ <CADiBU3_c5O-yUac-ytp5WoQQ12edkU+4wn+WNBOVGRGM15NBJA@mail.gmail.com>
+ <20201002133145.GA3384841@kroah.com> <c2d689eb-5538-6af2-614f-766521100273@roeck-us.net>
+ <20201005110808.GA298743@kroah.com> <88586992-650f-a4a1-2fa0-8cef313380fb@roeck-us.net>
+ <CADiBU38wk825SqtFRAiYqqV47Wwi43AuWKut19qeTbGBZFqPow@mail.gmail.com>
+ <CAKgpwJWwyvUyVj+jQ0y2i_eK1XEN2g3NvR0zgrRLfcmtgn8DDg@mail.gmail.com>
+ <CADiBU3_TADpGmV7-BXJd3YaPNiv8Eg8zmKUD_OoB9CG1MT12mg@mail.gmail.com>
+ <CADiBU392ZL6AHf6Dns61KXFVuvwh6grfnJjXmcFE4Ma2gjK6EA@mail.gmail.com> <VE1PR04MB6528CF55BE68A8DCF4B7904689080@VE1PR04MB6528.eurprd04.prod.outlook.com>
+In-Reply-To: <VE1PR04MB6528CF55BE68A8DCF4B7904689080@VE1PR04MB6528.eurprd04.prod.outlook.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Sat, 10 Oct 2020 00:06:13 +0800
+Message-ID: <CADiBU38-jX=4sbQ9aFoA=Xr6S7cFbfQy8tpdohoZdpaY-AK-Vw@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: tcpm: Fix if vbus before cc, hard_reset_count
+ not reset issue
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Jun Li <lijun.kernel@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        cy_huang <cy_huang@richtek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Benjamin Berg <bberg@redhat.com>
+Jun Li <jun.li@nxp.com> =E6=96=BC 2020=E5=B9=B410=E6=9C=889=E6=97=A5 =E9=80=
+=B1=E4=BA=94 =E4=B8=8B=E5=8D=882:12=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+>
+>
+> > -----Original Message-----
+> > From: ChiYuan Huang <u0084500@gmail.com>
+> > Sent: Wednesday, October 7, 2020 6:13 PM
+> > To: Jun Li <lijun.kernel@gmail.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>; Greg KH
+> > <gregkh@linuxfoundation.org>; Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com>; Linux USB List
+> > <linux-usb@vger.kernel.org>; lkml <linux-kernel@vger.kernel.org>;
+> > cy_huang <cy_huang@richtek.com>; Jun Li <jun.li@nxp.com>
+> > Subject: Re: [PATCH] usb: typec: tcpm: Fix if vbus before cc, hard_rese=
+t_count
+> > not reset issue
+> >
+> > ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2020=E5=B9=B410=E6=9C=887=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=881:39=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> > >
+> > > Jun Li <lijun.kernel@gmail.com> =E6=96=BC 2020=E5=B9=B410=E6=9C=887=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=8812:52=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> > > >
+> > > > ChiYuan Huang <u0084500@gmail.com> =E4=BA=8E2020=E5=B9=B410=E6=9C=
+=886=E6=97=A5=E5=91=A8=E4=BA=8C =E4=B8=8B=E5=8D=8812:38=E5=86=99
+> > =E9=81=93=EF=BC=9A
+> > > > >
+> > > > > Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2020=E5=B9=B410=E6=
+=9C=885=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=8811:30
+> > =E5=AF=AB=E9=81=93=EF=BC=9A
+> > > > > >
+> > > > > > On 10/5/20 4:08 AM, Greg KH wrote:
+> > > > > > [ ... ]
+> > > > > > >>> What ever happened with this patch, is there still disagree=
+ment?
+> > > > > > >>>
+> > > > > > >>
+> > > > > > >> Yes, there is. I wouldn't have added the conditional without
+> > > > > > >> reason, and I am concerned that removing it entirely will op=
+en
+> > another problem.
+> > > > > > >> Feel free to apply, though - I can't prove that my concern i=
+s
+> > > > > > >> valid, and after all we'll get reports from the field later =
+if
+> > it is.
+> > > > > > >
+> > > > > > > Ok, can I get an ack so I know who to come back to in the
+> > > > > > > future if there are issues?  :)
+> > > > > > >
+> > > > > >
+> > > > > > Not from me, for the reasons I stated. I would be ok with somet=
+hing
+> > like:
+> > > > > >
+> > > > > > -       if (tcpm_port_is_disconnected(port))
+> > > > > > +       if (tcpm_port_is_disconnected(port) ||
+> > > > > > +           (tcpm_cc_is_open(port->cc1) &&
+> > > > > > + tcpm_cc_is_open(port->cc2)))
+> > > > > >
+> > > > > > to narrow down the condition.
+> > > > >
+> > > > > I have tried the above comment and It doesn't work.
+> > > > > How about to change the judgement like as below
+> > > > >
+> > > > > -       if (tcpm_port_is_disconnected(port))
+> > > > > +       if (tcpm_port_is_disconnected(port) ||
+> > > > > + !port->vbus_present)
+> > > > >
+> > > > > The hard_reset_count not reset issue is following by the below
+> > > > > order 1. VBUS off ( at the same time, cc is still detected as
+> > > > > attached)
+> > > > > port->attached become false and cc is not open
+> > > > > 2. After that, cc detached.
+> > > > > due to port->attached is false, tcpm_detach() directly return.
+> > > >
+> > > > If tcpm_detach() return directly, then how your patch can reset
+> > > > hard_reset_count?
+> > > >
+> > > Yes, it can. We know vbus_present change from true to false and cc
+> > > detach both trigger tcpm_detach.
+> > > My change is whenever tcpm_detach to be called, hard_reset_count will
+> > > be reset to zero.
+> > >
+> > > > I am seeing the same issue on my platform, the proposed change:
+> > > > -       if (tcpm_port_is_disconnected(port))
+> > > > -               port->hard_reset_count =3D 0;
+> > > > +       port->hard_reset_count =3D 0;
+> > > > can't resolve it on my platform.
+> > > >
+> > > I'm not sure what's your condition. Could you directly paste the tcpm
+> > > log for the check?
+> > > > How about reset hard_reset_count in SNK_READY?
+> > > > @@ -3325,6 +3329,7 @@ static void run_state_machine(struct tcpm_por=
+t
+> > *port)
+> > > >         case SNK_READY:
+> > > >                 port->try_snk_count =3D 0;
+> > > >                 port->update_sink_caps =3D false;
+> > > > +               port->hard_reset_count =3D 0;
+> > > >                 if (port->explicit_contract) {
+> > > >                         typec_set_pwr_opmode(port->typec_port,
+> > > >                                              TYPEC_PWR_MODE_PD);
+> > > >
+> > > > can this resolve your problem?
+> > > I'm not sure. It need to have a try, then I can answer you.
+> > > But from USBPD spec, the hard_reset_count need to reset zero only whe=
+n
+> > > 1. At src state, pe_src_send_cap and receive GoodCRC 2. At snk state,
+> > > pe_snk_evaluate_cap need to reset hard_reset_count
+>
+> 3.
+> 8.3.3.3.8 PE_SNK_Hard_Reset state
+> "Note: The HardResetCounter is reset on a power cycle or Detach."
+>
+> > > >
+> > > > Li Jun
+> > > > >
+> > > > > And that's why hard_reset_count is not reset to 0.
+> >
+> > I tried in snk_ready to reset hard_reset_count.
+> > At normal case, it works.
+> > But it seems still the possible fail case like as below.
+> > 200ms -> cc debounce max time
+> > 240ms -> snk_waitcap max time
+> > If the plugin/out period is between (200+240) and (200+ 2* 240)ms , and=
+ the
+> > src side plug out like as the described scenario.
+> > From this case, hard_reset_count may still 1.
+> > And we expect the next plugin hard_reset_count is 0. But not, actually =
+it
+> > never reset.
+> > So at next plugin, only one hard_reset will be sent and reach hard_rese=
+t_count
+> > max (2).
+> >
+> > This case is hard to reproduce. But actually it's possible.
+>
+> Make sense.
+>
+> Then I propose doing this at SNK_UNATTACHED
+> @@ -3156,6 +3156,7 @@ static void run_state_machine(struct tcpm_port *por=
+t)
+>                 if (!port->non_pd_role_swap)
+>                         tcpm_swap_complete(port, -ENOTCONN);
+>                 tcpm_pps_complete(port, -ENOTCONN);
+> +               port->hard_reset_count =3D 0;
+>                 tcpm_snk_detach(port);
+>                 if (tcpm_start_toggling(port, TYPEC_CC_RD)) {
+>                         tcpm_set_state(port, TOGGLING, 0);
+> Li Jun
 
-Some/many PPMs are simply clearing the change bitfield when a
-notification on a port is acknowledge. Unfortunately, doing so means
-that any changes between the GET_CONNECTOR_STATUS and ACK_CC_CI commands
-is simply lost.
+For the current power role is snk, I think it may work.
+How about the src role? src role only reset the hard_reset_count in
+tcpm_detach and src_ready state?
 
-Work around this by re-fetching the connector status afterwards. We can
-then infer any changes that we see have happened but that may not be
-respresented in the change bitfield.
+I check the flow that  you mentioned in the previous mail. It's really
+a special case from any state to port_reset.
+If the case is considered, how about to reset  the hard_reset_count
+and don't care the port is attached or not in tcpm_detach function
+like as below.
 
-We end up with the following actions:
- 1. UCSI_GET_CONNECTOR_STATUS, store result, update unprocessed_changes
- 2. UCSI_GET_CAM_SUPPORTED, discard result
- 3. ACK connector change
- 4. UCSI_GET_CONNECTOR_STATUS, store result
- 5. Infere lost changes by comparing UCSI_GET_CONNECTOR_STATUS results
- 6. If PPM reported a new change, then restart in order to ACK
- 7. Process everything as usual.
+@@ -2789,6 +2789,8 @@ static void tcpm_reset_port(struct tcpm_port *port)
 
-The worker is also changed to re-schedule itself if a new change
-notification happened while it was running.
+ static void tcpm_detach(struct tcpm_port *port)
+ {
++       port->hard_reset_count =3D 0;
++
+        if (!port->attached)
+                return;
 
-Doing this fixes quite commonly occurring issues where e.g. the UCSI
-power supply would remain online even thought the ThunderBolt cable was
-unplugged.
+@@ -2797,9 +2799,6 @@ static void tcpm_detach(struct tcpm_port *port)
+                port->tcpc->set_bist_data(port->tcpc, false);
+        }
 
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Benjamin Berg <bberg@redhat.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 125 ++++++++++++++++++++++++++++------
- drivers/usb/typec/ucsi/ucsi.h |   2 +
- 2 files changed, 107 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 758b988ac518..fad8680be7ab 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -53,7 +53,7 @@ static int ucsi_acknowledge_connector_change(struct ucsi *ucsi)
- 	ctrl = UCSI_ACK_CC_CI;
- 	ctrl |= UCSI_ACK_CONNECTOR_CHANGE;
- 
--	return ucsi->ops->async_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
-+	return ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
- }
- 
- static int ucsi_exec_command(struct ucsi *ucsi, u64 command);
-@@ -625,21 +625,113 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 	struct ucsi_connector *con = container_of(work, struct ucsi_connector,
- 						  work);
- 	struct ucsi *ucsi = con->ucsi;
-+	struct ucsi_connector_status pre_ack_status;
-+	struct ucsi_connector_status post_ack_status;
- 	enum typec_role role;
-+	u16 inferred_changes;
-+	u16 changed_flags;
- 	u64 command;
- 	int ret;
- 
- 	mutex_lock(&con->lock);
- 
-+	/*
-+	 * Some/many PPMs have an issue where all fields in the change bitfield
-+	 * are cleared when an ACK is send. This will causes any change
-+	 * between GET_CONNECTOR_STATUS and ACK to be lost.
-+	 *
-+	 * We work around this by re-fetching the connector status afterwards.
-+	 * We then infer any changes that we see have happened but that may not
-+	 * be represented in the change bitfield.
-+	 *
-+	 * Also, even though we don't need to know the currently supported alt
-+	 * modes, we run the GET_CAM_SUPPORTED command to ensure the PPM does
-+	 * not get stuck in case it assumes we do.
-+	 * Always do this, rather than relying on UCSI_CONSTAT_CAM_CHANGE to be
-+	 * set in the change bitfield.
-+	 *
-+	 * We end up with the following actions:
-+	 *  1. UCSI_GET_CONNECTOR_STATUS, store result, update unprocessed_changes
-+	 *  2. UCSI_GET_CAM_SUPPORTED, discard result
-+	 *  3. ACK connector change
-+	 *  4. UCSI_GET_CONNECTOR_STATUS, store result
-+	 *  5. Infere lost changes by comparing UCSI_GET_CONNECTOR_STATUS results
-+	 *  6. If PPM reported a new change, then restart in order to ACK
-+	 *  7. Process everything as usual.
-+	 *
-+	 * We may end up seeing a change twice, but we can only miss extremely
-+	 * short transitional changes.
-+	 */
-+
-+	/* 1. First UCSI_GET_CONNECTOR_STATUS */
-+	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
-+	ret = ucsi_send_command(ucsi, command, &pre_ack_status,
-+				sizeof(pre_ack_status));
-+	if (ret < 0) {
-+		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
-+			__func__, ret);
-+		goto out_unlock;
-+	}
-+	con->unprocessed_changes |= pre_ack_status.change;
-+
-+	/* 2. Run UCSI_GET_CAM_SUPPORTED and discard the result. */
-+	command = UCSI_GET_CAM_SUPPORTED;
-+	command |= UCSI_CONNECTOR_NUMBER(con->num);
-+	ucsi_send_command(con->ucsi, command, NULL, 0);
-+
-+	/* 3. ACK connector change */
-+	clear_bit(EVENT_PENDING, &ucsi->flags);
-+	ret = ucsi_acknowledge_connector_change(ucsi);
-+	if (ret) {
-+		dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
-+		goto out_unlock;
-+	}
-+
-+	/* 4. Second UCSI_GET_CONNECTOR_STATUS */
- 	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
--	ret = ucsi_send_command(ucsi, command, &con->status,
--				sizeof(con->status));
-+	ret = ucsi_send_command(ucsi, command, &post_ack_status,
-+				sizeof(post_ack_status));
- 	if (ret < 0) {
- 		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
- 			__func__, ret);
- 		goto out_unlock;
- 	}
- 
-+	/* 5. Inferre any missing changes */
-+	changed_flags = pre_ack_status.flags ^ post_ack_status.flags;
-+	inferred_changes = 0;
-+	if (UCSI_CONSTAT_PWR_OPMODE(changed_flags) != 0)
-+		inferred_changes |= UCSI_CONSTAT_POWER_OPMODE_CHANGE;
-+
-+	if (changed_flags & UCSI_CONSTAT_CONNECTED)
-+		inferred_changes |= UCSI_CONSTAT_CONNECT_CHANGE;
-+
-+	if (changed_flags & UCSI_CONSTAT_PWR_DIR)
-+		inferred_changes |= UCSI_CONSTAT_POWER_DIR_CHANGE;
-+
-+	if (UCSI_CONSTAT_PARTNER_FLAGS(changed_flags) != 0)
-+		inferred_changes |= UCSI_CONSTAT_PARTNER_CHANGE;
-+
-+	if (UCSI_CONSTAT_PARTNER_TYPE(changed_flags) != 0)
-+		inferred_changes |= UCSI_CONSTAT_PARTNER_CHANGE;
-+
-+	/* Mask out anything that was correctly notified in the later call. */
-+	inferred_changes &= ~post_ack_status.change;
-+	if (inferred_changes)
-+		dev_dbg(ucsi->dev, "%s: Inferred changes that would have been lost: 0x%04x\n",
-+			__func__, inferred_changes);
-+
-+	con->unprocessed_changes |= inferred_changes;
-+
-+	/* 6. If PPM reported a new change, then restart in order to ACK */
-+	if (post_ack_status.change)
-+		goto out_unlock;
-+
-+	/* 7. Continue as if nothing happened */
-+	con->status = post_ack_status;
-+	con->status.change = con->unprocessed_changes;
-+	con->unprocessed_changes = 0;
-+
- 	role = !!(con->status.flags & UCSI_CONSTAT_PWR_DIR);
- 
- 	if (con->status.change & UCSI_CONSTAT_POWER_OPMODE_CHANGE ||
-@@ -676,28 +768,19 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 			ucsi_unregister_partner(con);
- 	}
- 
--	if (con->status.change & UCSI_CONSTAT_CAM_CHANGE) {
--		/*
--		 * We don't need to know the currently supported alt modes here.
--		 * Running GET_CAM_SUPPORTED command just to make sure the PPM
--		 * does not get stuck in case it assumes we do so.
--		 */
--		command = UCSI_GET_CAM_SUPPORTED;
--		command |= UCSI_CONNECTOR_NUMBER(con->num);
--		ucsi_send_command(con->ucsi, command, NULL, 0);
--	}
+-       if (tcpm_port_is_disconnected(port))
+-               port->hard_reset_count =3D 0;
 -
- 	if (con->status.change & UCSI_CONSTAT_PARTNER_CHANGE)
- 		ucsi_partner_change(con);
- 
--	ret = ucsi_acknowledge_connector_change(ucsi);
--	if (ret)
--		dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
--
- 	trace_ucsi_connector_change(con->num, &con->status);
- 
- out_unlock:
--	clear_bit(EVENT_PENDING, &ucsi->flags);
-+	if (test_and_clear_bit(EVENT_PENDING, &ucsi->flags)) {
-+		schedule_work(&con->work);
-+		mutex_unlock(&con->lock);
-+		return;
-+	}
-+
-+	clear_bit(EVENT_PROCESSING, &ucsi->flags);
- 	mutex_unlock(&con->lock);
+        tcpm_reset_port(port);
  }
- 
-@@ -715,7 +798,9 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num)
- 		return;
- 	}
- 
--	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
-+	set_bit(EVENT_PENDING, &ucsi->flags);
-+
-+	if (!test_and_set_bit(EVENT_PROCESSING, &ucsi->flags))
- 		schedule_work(&con->work);
- }
- EXPORT_SYMBOL_GPL(ucsi_connector_change);
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index cba6f77bea61..543d54a33cb9 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -296,6 +296,7 @@ struct ucsi {
- #define EVENT_PENDING	0
- #define COMMAND_PENDING	1
- #define ACK_PENDING	2
-+#define EVENT_PROCESSING	3
- };
- 
- #define UCSI_MAX_SVID		5
-@@ -322,6 +323,7 @@ struct ucsi_connector {
- 
- 	struct typec_capability typec_cap;
- 
-+	u16 unprocessed_changes;
- 	struct ucsi_connector_status status;
- 	struct ucsi_connector_capability cap;
- 	struct power_supply *psy;
--- 
-2.26.2
 
+Like I mentioned before, whatever the condition is, hard_reset_count
+must be reset to zero during tcpm_detach.
+
+But refer to Guenter's mail,  he prefer to narrow down the condition
+to reset this counter.
+
+I think the original thought is important why to put this line there.
+
+Hi, Guenter:
+   From the discussion, we really need to know why you put the reset
+line below port attached is false and also make some judgement.
+I think there may be ome condition that we don't considered.
+
+>
+> >
+> > > > > >
+> > > > > > Guenter
