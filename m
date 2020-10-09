@@ -2,109 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E3F287F58
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 02:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B44C288080
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 04:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730965AbgJIAAO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Oct 2020 20:00:14 -0400
-Received: from m42-4.mailgun.net ([69.72.42.4]:53891 "EHLO m42-4.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729829AbgJIAAK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Oct 2020 20:00:10 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1602201610; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=svOoRqtJ5cLu3s1vASk0kRY90uC+P608o+2VET2Fo2I=; b=rPooc77zqaYxfNeKTjhkPYQmWAwQ4XJ0RkHdkbAX+eSDA6msybnPozR0JjLWuwJOZAKT4fy7
- 2RAIeL0rETohCNpx7ACOyuQct5N6UWzo2QOQ8V06tie7kyr6qfr8RpQrAh74OAfCT5GA9rfw
- faoxbBEmA22Wikfg/ywWZl5O5OA=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 5f7fa7f2d6d00c7a9e28c5eb (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 08 Oct 2020 23:59:45
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B77F5C43452; Thu,  8 Oct 2020 23:59:42 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9131DC43443;
-        Thu,  8 Oct 2020 23:59:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9131DC43443
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     sboyd@kernel.org, heikki.krogerus@linux.intel.com,
-        agross@kernel.org, robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org, sergei.shtylyov@gmail.com,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH v10 4/4] arm64: boot: dts: qcom: pm8150b: Add DTS node for PMIC VBUS booster
-Date:   Thu,  8 Oct 2020 16:59:34 -0700
-Message-Id: <20201008235934.8931-5-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201008235934.8931-1-wcheng@codeaurora.org>
-References: <20201008235934.8931-1-wcheng@codeaurora.org>
+        id S1731050AbgJICuj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Oct 2020 22:50:39 -0400
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:40905 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728008AbgJICuj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Oct 2020 22:50:39 -0400
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 0992liiC054349;
+        Fri, 9 Oct 2020 10:47:44 +0800 (GMT-8)
+        (envelope-from ryan_chen@aspeedtech.com)
+Received: from localhost.localdomain (192.168.10.9) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 9 Oct
+ 2020 10:49:41 +0800
+From:   Ryan Chen <ryan_chen@aspeedtech.com>
+To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <bmc-sw@aspeedtech.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     Ryan Chen <ryan_chen@aspeedtech.com>
+Subject: [PATCH v2 0/3] Enable USB host for AST2600
+Date:   Fri, 9 Oct 2020 10:49:34 +0800
+Message-ID: <20201009024937.11246-1-ryan_chen@aspeedtech.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200930040823.26065-4-ryan_chen@aspeedtech.com>
+References: <20200930040823.26065-4-ryan_chen@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [192.168.10.9]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 0992liiC054349
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the required DTS node for the USB VBUS output regulator, which is
-available on PM8150B.  This will provide the VBUS source to connected
-peripherals.
+v2:
+ -[1/3]: Add SCSI,BLK_DEV_SD,USB_STORAGE in defconfig.
+ -[2/3]: Fix continuation lines.
+v1:
+ -The patches enable UHCI driver in AST2600 and also 
+  enable USB host in aspeed-ast2600-evb.dts.
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/pm8150b.dtsi   | 6 ++++++
- arch/arm64/boot/dts/qcom/sm8150-mtp.dts | 4 ++++
- 2 files changed, 10 insertions(+)
+Ryan Chen (3):
+  configs: aspeed: enable UHCI driver in defconfig
+  usb: host: add uhci compatible support for ast2600-uhci
+  ARM: dts: add ehci uhci enable in evb dts
 
-diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-index 2bf385f5a55a..49ea597cc0c5 100644
---- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-@@ -53,6 +53,12 @@ power-on@800 {
- 			status = "disabled";
- 		};
- 
-+		pm8150b_vbus: regulator@1100 {
-+			compatible = "qcom,pm8150b-vbus-reg";
-+			status = "disabled";
-+			reg = <0x1100>;
-+		};
-+
- 		pm8150b_typec: usb-typec@1500 {
- 			compatible = "qcom,pm8150b-usb-typec";
- 			status = "disabled";
-diff --git a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-index 6c6325c3af59..ba3b5b802954 100644
---- a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-@@ -409,6 +409,10 @@ &ufs_mem_phy {
- 	vdda-pll-max-microamp = <19000>;
- };
- 
-+&pm8150b_vbus {
-+	status = "okay";
-+};
-+
- &usb_1_hsphy {
- 	status = "okay";
- 	vdda-pll-supply = <&vdd_usb_hs_core>;
+ arch/arm/boot/dts/aspeed-ast2600-evb.dts | 8 ++++++++
+ arch/arm/configs/aspeed_g5_defconfig     | 4 ++++
+ drivers/usb/host/uhci-platform.c         | 3 ++-
+ 3 files changed, 14 insertions(+), 1 deletion(-)
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.17.1
 
