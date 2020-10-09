@@ -2,123 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF1028853B
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 10:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AAD288550
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 10:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732838AbgJII3J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Oct 2020 04:29:09 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:64698 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732801AbgJII3F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Oct 2020 04:29:05 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1602232145; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=kONjvJS0RvHBNA3ckVrjHd8i1nrVYQN5I4UTud+UJyg=; b=TmsgU4YRnOkEmw8zaEfOdikR3ii/9siOjYICx111LgwoY55RFH+tQu/zm1b1XeIl1p794xTL
- 0rIg14W+n/yfgdNVg88rt6zJ+gGmmHtoDeczY22MAnIvSGuC404/vFTok+WbB+FXTSqjMyaf
- KnkAxMRoMlspbeLhxdRxlGQaUCA=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 5f801f4306d81bc48da4f908 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 09 Oct 2020 08:28:51
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 12282C433FF; Fri,  9 Oct 2020 08:28:51 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1373EC433BA;
-        Fri,  9 Oct 2020 08:28:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1373EC433BA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     vkoul@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        kishon@ti.com, balbi@kernel.org, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH v2 4/4] usb: dwc3: dwc3-qcom: Fix typo in the dwc3 vbus override API
-Date:   Fri,  9 Oct 2020 01:28:43 -0700
-Message-Id: <20201009082843.28503-5-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201009082843.28503-1-wcheng@codeaurora.org>
-References: <20201009082843.28503-1-wcheng@codeaurora.org>
+        id S1732664AbgJIIbW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Oct 2020 04:31:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20947 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732588AbgJIIbV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Oct 2020 04:31:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602232279;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w88CjEh5DGPG+OvvFpYPp9Ob3qQjnkFqi0cSeZc/Stc=;
+        b=YZ1TXijB9pa+bWI7RjdEHFe9k0C3S2sI2Kx7Q+o7XGBQwKuA8Ht+FA/DBkO5gLx63QYCHx
+        gHnshUAQUUjFeODygG6y/3m0tPGyVFnXUTpKfmXzLybd9CiL1hNyQxNvJgX+cXpTiMCg0w
+        FzZQXC58FKsfWNWGtHGXj3D+e2JPNGU=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-537-6FXTIZ9MNJyu5T8u90MoWg-1; Fri, 09 Oct 2020 04:31:16 -0400
+X-MC-Unique: 6FXTIZ9MNJyu5T8u90MoWg-1
+Received: by mail-pg1-f199.google.com with SMTP id g5so6082665pgn.1
+        for <linux-usb@vger.kernel.org>; Fri, 09 Oct 2020 01:31:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w88CjEh5DGPG+OvvFpYPp9Ob3qQjnkFqi0cSeZc/Stc=;
+        b=PFYSBylxfS6C1ACvI9MrSb15zQPULhj3FZQ9r26aWQiyCbHPsj3M8AOrbsTi1WGLUE
+         6fHI2PhJ/CCM3D/WA4t9vPaq5zlvDpmRUbZZaTgwMhadACTUYNE9+bdNSVG7s7IeHruw
+         SzX65gO7CJ9xSa5hAtW2K+EnFEb28SESiv/BtjZMbxgh/HRfBSBRsCoUXD1mjC2BgoUC
+         KMxMTkGC22hUFykdIFhD5CNTxeECOXqUs15yWLDhp7sBedYRMKPZQ2tL7ZOaSItKlpb7
+         ghwwVTqZHXKdBbfzgVk2Kv9IYtU2DRy5wYAEMoWBRQifNhjl4mm1DstQccErChkKfIjT
+         RKkQ==
+X-Gm-Message-State: AOAM530hXlcVYp3VXpYiZmSwu6UfWMclne2LQAnlb1Pbb93jHNCZm8hX
+        pBKIq+pNwqsS+8JaLkHzLhQEPYM6Ch7Ax+M7tTQHdDCEiprZOjKS9wsezrAn9qm+KgqIUaVTl97
+        Mko1np/TyfMkTHVSS5x7dmJyoILlvWLtdJMQW
+X-Received: by 2002:a63:490e:: with SMTP id w14mr2553456pga.275.1602232275587;
+        Fri, 09 Oct 2020 01:31:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzN6PrgTEVSDz0+cEbBmurVWkmBYakoT6dmDghlIIii5XZOYY7qjAD5Gmb5Kkd3av8aMxliKX9dSHmoBL3lLQY=
+X-Received: by 2002:a63:490e:: with SMTP id w14mr2553438pga.275.1602232275242;
+ Fri, 09 Oct 2020 01:31:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <bug-209137-208809@https.bugzilla.kernel.org/> <bug-209137-208809-GmYB1n8NUL@https.bugzilla.kernel.org/>
+ <20201008143542.GC495091@rowland.harvard.edu>
+In-Reply-To: <20201008143542.GC495091@rowland.harvard.edu>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 9 Oct 2020 10:31:03 +0200
+Message-ID: <CAO-hwJL1gMscTkzaiuKBcmftuG8TGmUXqNDrkA3wqQxyuKxZUg@mail.gmail.com>
+Subject: Re: [Bug 209137] USB is not working since update from 5.0 to
+ 5.3.0-26. And with 5.4 still not working.
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There was an extra character in the dwc3_qcom_vbus_override_enable()
-function.  Removed the extra character.
+Hi Alan,
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+On Thu, Oct 8, 2020 at 4:42 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> Jiri and Benjamin:
+>
+> Please look at Bugzilla # 209137:
+>
+>         https://bugzilla.kernel.org/show_bug.cgi?id=209137
+>
+> Somewhere between 5.0 and 5.4, the logitech-djreceiver driver stopped
+> binding to the user's Logitech wireless device.  Here are relevant parts
+> of the kernel logs.  From 5.0 (working):
+>
+> [    2.857770] logitech-djreceiver 0003:046D:C52B.0003: hiddev0,hidraw0: USB HID v1.11 Device [Logitech USB Receiver] on usb-0000:00:14.0-4/input2
+> [    2.985339] input: Logitech Unifying Device. Wireless PID:1024 Mouse as /devices/pci0000:00/0000:00:14.0/usb3/3-4/3-4:1.2/0003:046D:C52B.0003/0003:046D:1024.0004/input/input13
+> [    2.985410] hid-generic 0003:046D:1024.0004: input,hidraw1: USB HID v1.11 Mouse [Logitech Unifying Device. Wireless PID:1024] on usb-0000:00:14.0-4:1
+> [    2.995266] input: Logitech K520 as /devices/pci0000:00/0000:00:14.0/usb3/3-4/3-4:1.2/0003:046D:C52B.0003/0003:046D:2011.0005/input/input17
+> [    3.026985] logitech-hidpp-device 0003:046D:2011.0005: input,hidraw1: USB HID v1.11 Keyboard [Logitech K520] on usb-0000:00:14.0-4:2
+> [    3.033173] input: Logitech M310 as /devices/pci0000:00/0000:00:14.0/usb3/3-4/3-4:1.2/0003:046D:C52B.0003/0003:046D:1024.0004/input/input18
+> [    3.033358] logitech-hidpp-device 0003:046D:1024.0004: input,hidraw2: USB HID v1.11 Mouse [Logitech M310] on usb-0000:00:14.0-4:1
+>
+> From 5.4 (non-working):
+>
+> [    2.908901] hid-generic 0003:046D:C52B.0001: input,hidraw0: USB HID v1.11 Keyboard [Logitech USB Receiver] on usb-0000:00:14.0-4/input0
+> [    2.909003] hid-generic 0003:046D:C52B.0002: unknown main item tag 0x0
+> [    2.909016] hid-generic 0003:046D:C52B.0002: unknown main item tag 0x0
+> [    2.909019] hid-generic 0003:046D:C52B.0002: unknown main item tag 0x0
+> [    2.909023] hid-generic 0003:046D:C52B.0002: unknown main item tag 0x0
+> [    2.909030] hid-generic 0003:046D:C52B.0002: unexpected long global item
+> [    2.909038] hid-generic: probe of 0003:046D:C52B.0002 failed with error -22
+> [    2.909196] hid-generic 0003:046D:C52B.0003: hiddev0,hidraw1: USB HID v1.11 Device [Logitech USB Receiver] on usb-0000:00:14.0-4/input2
+> [    2.910586] logitech-djreceiver 0003:046D:C52B.0002: unknown main item tag 0x0
+> [    2.910601] logitech-djreceiver 0003:046D:C52B.0002: unknown main item tag 0x0
+> [    2.910605] logitech-djreceiver 0003:046D:C52B.0002: unknown main item tag 0x0
+> [    2.910609] logitech-djreceiver 0003:046D:C52B.0002: unknown main item tag 0x0
+> [    2.910616] logitech-djreceiver 0003:046D:C52B.0002: unexpected long global item
+> [    2.910620] logitech-djreceiver 0003:046D:C52B.0002: logi_dj_probe: parse failed
+> [    2.910623] logitech-djreceiver: probe of 0003:046D:C52B.0002 failed with error -22
+>
+> FYI, intf 0 is a boot-interface keyboard, intf 1 is a boot-interface
+> mouse, and intf 2 is the wireless HID interface.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 340760ef0e01..236afbfe01d9 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -107,7 +107,7 @@ static inline void dwc3_qcom_clrbits(void __iomem *base, u32 offset, u32 val)
- 	readl(base + offset);
- }
- 
--static void dwc3_qcom_vbus_overrride_enable(struct dwc3_qcom *qcom, bool enable)
-+static void dwc3_qcom_vbus_override_enable(struct dwc3_qcom *qcom, bool enable)
- {
- 	if (enable) {
- 		dwc3_qcom_setbits(qcom->qscratch_base, QSCRATCH_SS_PHY_CTRL,
-@@ -128,7 +128,7 @@ static int dwc3_qcom_vbus_notifier(struct notifier_block *nb,
- 	struct dwc3_qcom *qcom = container_of(nb, struct dwc3_qcom, vbus_nb);
- 
- 	/* enable vbus override for device mode */
--	dwc3_qcom_vbus_overrride_enable(qcom, event);
-+	dwc3_qcom_vbus_override_enable(qcom, event);
- 	qcom->mode = event ? USB_DR_MODE_PERIPHERAL : USB_DR_MODE_HOST;
- 
- 	return NOTIFY_DONE;
-@@ -140,7 +140,7 @@ static int dwc3_qcom_host_notifier(struct notifier_block *nb,
- 	struct dwc3_qcom *qcom = container_of(nb, struct dwc3_qcom, host_nb);
- 
- 	/* disable vbus override in host mode */
--	dwc3_qcom_vbus_overrride_enable(qcom, !event);
-+	dwc3_qcom_vbus_override_enable(qcom, !event);
- 	qcom->mode = event ? USB_DR_MODE_HOST : USB_DR_MODE_PERIPHERAL;
- 
- 	return NOTIFY_DONE;
-@@ -223,7 +223,7 @@ static int dwc3_qcom_usb_role_switch_set(struct usb_role_switch *sw,
- 
- 	qcom->mode = (role == USB_ROLE_HOST) ? USB_DR_MODE_HOST :
- 					       USB_DR_MODE_PERIPHERAL;
--	dwc3_qcom_vbus_overrride_enable(qcom, enable);
-+	dwc3_qcom_vbus_override_enable(qcom, enable);
- 	return 0;
- }
- 
-@@ -750,7 +750,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 
- 	/* enable vbus override for device mode */
- 	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
--		dwc3_qcom_vbus_overrride_enable(qcom, true);
-+		dwc3_qcom_vbus_override_enable(qcom, true);
- 
- 	if (dwc3_qcom_find_usb_connector(pdev)) {
- 		ret = dwc3_qcom_setup_role_switch(qcom);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+That is weird. I also have (several) C52B devices here, and I don't
+see the problem (though arguably there are several firmware versions
+out in the open).
+
+The first part of failures show that even hid-generic can not parse
+the report descriptor. This means that the provided report descriptor
+is incorrect, which is weird because the one I just tested works fine.
+The second part (with logitech-dj) is showing the same errors, so
+that's expected given the previous problem.
+
+To actually get the report descriptors, `lsub -v` works fine if the
+HID subsystem is not bounded. So there we need to ask the reporter to
+run the command with the HID subsystem not handling the device, or
+simply in the working case use hid-recorder from
+https://gitlab.freedesktop.org/libevdev/hid-tools/.
+
+Another solution if the report descriptor is identical to what I have
+here (in the working case), would be to write a BPF kprobe to dump
+what hid_parse sees. It should be straightforward to write one, I got
+everything in place for i2c-hid at
+https://gitlab.freedesktop.org/bentiss/hid-bpf (though for using the
+CO-RE BPF program, I am not sure 5.4 is recent enough).
+
+>
+> It's not immediately obvious to me where the problem lies.
+
+Not obvious to me either...
+
+Cheers,
+Benjamin
+
+>
+> Thanks,
+>
+> Alan Stern
+>
 
