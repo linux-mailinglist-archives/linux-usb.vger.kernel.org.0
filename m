@@ -2,77 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07023288564
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 10:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3698228884F
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 14:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730726AbgJIIhz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 9 Oct 2020 04:37:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48310 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726118AbgJIIhy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Oct 2020 04:37:54 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209137] USB is not working since update from 5.0 to 5.3.0-26.
- And with 5.4 still not working.
-Date:   Fri, 09 Oct 2020 08:37:53 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: benjamin.tissoires@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc attachments.created
-Message-ID: <bug-209137-208809-6j9o00OvkK@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209137-208809@https.bugzilla.kernel.org/>
-References: <bug-209137-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S2388380AbgJIMLL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Oct 2020 08:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732957AbgJIMLJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Oct 2020 08:11:09 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AB4C0613D2;
+        Fri,  9 Oct 2020 05:11:07 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id u8so12753714ejg.1;
+        Fri, 09 Oct 2020 05:11:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=d3YdrBOFHDSRVDjKGNClxkEqeRQoEPb/8URXW9wI3bc=;
+        b=X4LtL/EZsx93wLJRBRg+wFWEVStqNa5Wra7WxrKmnRtlcYkwqQngNGm9xWqreuvkkZ
+         3JXCggCrQ3vWHZwxiqjy4Gcxbe9SAxbaHmetIAsoomW/nSKyWJHKaSwOyh9N4QzjON5K
+         E/mw7bDYdDve2CxIHK5FxwsK224fY3arWD9fdipkLhUqhAytBpwKZE4FXv+WG8FKl/gg
+         pyOuIPvaLIvn3goX6C8d6ZQHQ8v2DZ67/YQA8SaYLKzCaXjDSvFJHH7uQSfByBm/YIQA
+         d5cLAmlg3jYGJXocb3p8hYbUNXOgWKGa1I/QOywwBTimySieQpOWn9qixguh32U1NeZO
+         Dwbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=d3YdrBOFHDSRVDjKGNClxkEqeRQoEPb/8URXW9wI3bc=;
+        b=r5HXDWJfI0RrBqix3CTUevLw+OnpyKrGVq+bvb1C7NZ+6MxdpEkmrEJNYBXTK23rA9
+         uj0E8DI2+G6tk2MwCD/9gnOsy+VUjSxLQmKNH1XIubwvPorkFHNtri7chRGvT1wVoxZq
+         AgAJjopyhf/ZUndjipYDRBVsKRAkAvPyZp6EnkdNCibDETg1rzrfY9iY+SAK7jPR3694
+         X0TZvkfFIEp047CwDCfTrSV4uu17Wo/80z2t7RBSSmxLTp7cBj93sufcj7TO6kVVsayF
+         6VSovtlCE8cAPQOYGSeyucJlXS2UXESfcgKh+pCmsu7Lj4x5DV7OMRJcizLi88dmBFZY
+         cwQg==
+X-Gm-Message-State: AOAM530e9Y6K2HsncPeo6VBRN/0sKyeJsxvmCVzLmUrrbxkGV71TBowS
+        89WybW7pM3FSWanu46T2tcIk1xwTKdO/Iw==
+X-Google-Smtp-Source: ABdhPJx+iQTn0NOfo3iNXau8j7qg1pe9acEEgwrFVc1hUsmNTN906IcXdTeiv1Ifhdgc78TfGLhanw==
+X-Received: by 2002:a17:906:8157:: with SMTP id z23mr13440895ejw.274.1602245465940;
+        Fri, 09 Oct 2020 05:11:05 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8f00:6a00:e538:757:aee0:c25f? (p200300ea8f006a00e5380757aee0c25f.dip0.t-ipconnect.de. [2003:ea:8f00:6a00:e538:757:aee0:c25f])
+        by smtp.googlemail.com with ESMTPSA id dr7sm6167171ejc.32.2020.10.09.05.11.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Oct 2020 05:11:05 -0700 (PDT)
+To:     Oliver Neukum <oneukum@suse.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH net-next] net: usbnet: remove driver version
+Message-ID: <bb7c95e6-30a5-dbd9-f335-51553e48d628@gmail.com>
+Date:   Fri, 9 Oct 2020 14:10:57 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209137
+Obviously this driver version doesn't make sense. Go with the default
+and let ethtool display the kernel version.
 
-Benjamin Tissoires (benjamin.tissoires@gmail.com) changed:
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/net/usb/usbnet.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |benjamin.tissoires@gmail.co
-                   |                            |m
-
---- Comment #13 from Benjamin Tissoires (benjamin.tissoires@gmail.com) ---
-Created attachment 292905
-  --> https://bugzilla.kernel.org/attachment.cgi?id=292905&action=edit
-report descriptor of a working C52B receiver
-
-Regarding the `lsub -v` not working, could you:
-- boot on the working kernel
-- use hid-recorder (as root) from
-https://gitlab.freedesktop.org/libevdev/hid-tools/ to record all the "Logitech
-USB Receiver" that shows up in the list
-
-For a point of comparison, I attached the report descriptors of the working
-C52B I have here (only the wireless interface).
-
-If there is no differences between your dumps and mine, then there is something
-wrong happening in the usbhid driver or lower, and we will need more logs at
-that point.
-
-FTR, this Logitech receiver I have here works fine with 5.8.4 on Fedora 32...
-
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index bf6c58240..963d260d1 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -34,9 +34,6 @@
+ #include <linux/kernel.h>
+ #include <linux/pm_runtime.h>
+ 
+-#define DRIVER_VERSION		"22-Aug-2005"
+-
+-
+ /*-------------------------------------------------------------------------*/
+ 
+ /*
+@@ -1047,7 +1044,6 @@ void usbnet_get_drvinfo (struct net_device *net, struct ethtool_drvinfo *info)
+ 	struct usbnet *dev = netdev_priv(net);
+ 
+ 	strlcpy (info->driver, dev->driver_name, sizeof info->driver);
+-	strlcpy (info->version, DRIVER_VERSION, sizeof info->version);
+ 	strlcpy (info->fw_version, dev->driver_info->description,
+ 		sizeof info->fw_version);
+ 	usb_make_path (dev->udev, info->bus_info, sizeof info->bus_info);
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+2.28.0
+
