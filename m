@@ -2,70 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B72D289B44
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Oct 2020 23:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2CE289C0B
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Oct 2020 01:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403815AbgJIVzK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Oct 2020 17:55:10 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:44451 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403794AbgJIVzJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Oct 2020 17:55:09 -0400
-Received: by mail-io1-f72.google.com with SMTP id d135so7237615iof.11
-        for <linux-usb@vger.kernel.org>; Fri, 09 Oct 2020 14:55:08 -0700 (PDT)
+        id S1726209AbgJIXNt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Oct 2020 19:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726000AbgJIXNr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Oct 2020 19:13:47 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF976C0613D5
+        for <linux-usb@vger.kernel.org>; Fri,  9 Oct 2020 16:13:46 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id g9so8458478pgh.8
+        for <linux-usb@vger.kernel.org>; Fri, 09 Oct 2020 16:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=R6gKWk0XgYJ+bRnJwNiMBZzjtd7hCRQG5lPlBLNpIXg=;
+        b=SvBHuBUELCUejxiMecoCCc4s6g/H5gNRiExeY5Is+T+5LzTbZxIEgmCj9P6gp9rWzN
+         /kVobTkY+otVFfZ6XhrktP3GuZVzkcodQU4FnXs464qkoOVPELG4L9FfHo1yk42cjJk5
+         EnMK8Oympvig2CRehaT+Oium1B2tLhdyhCa3Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=1VcEVtYsHrkseU7vptlx/kj9v0Fozh++G0GQ+AuTmvI=;
-        b=jP6a1qBY6+ukXnURWkIIGyjhspq8ggTzD96vcdShJxkF7BmVevFHGAVkpxwYEPVwxH
-         3HISndBRc0POD9niiKzsVKZr5JZ8WaiziWsvu9L5YG1RROtPfjDbo/kn+BK42yBUFzcO
-         3ve6OGmRIeucMEqESxWs8kadHhIGXRpskHQWXNPt6K/DtL1Pkm9DqylQjU7WTgL9XUcT
-         os/AnwnqOcMYMhKuNwPB9cSXxKEjBgQASoaEWU04Bq2H1YCJycpccL1W0oe+ON4WLrGS
-         COA+YlsA58W5/9IIPzdT1qyNVJFs6MfehsiNLhNlSNmvioRzOOsEEhADpuvR8GRTNTFF
-         l0nw==
-X-Gm-Message-State: AOAM531nzhWqnm2EU8bOe72EUUpHmMoUdqmOy3JIIJtimJuw+xJhxLfH
-        5O+5u9NLeIswab6oICKrRvi75KKtzUkgjUHWrrfaYffLfueL
-X-Google-Smtp-Source: ABdhPJyh/O/l/hmeASCTUXqkfyiy9y9I9hjw/xEinrgZIlXVFxou+3t5RefQj7UbiDLsd17zTFz7TRjpgDr4EEdyQQc/f1Il9Y++
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R6gKWk0XgYJ+bRnJwNiMBZzjtd7hCRQG5lPlBLNpIXg=;
+        b=B87GVstAF0exDcm2YC7Q0jjYSJFzdGcHKSbW1MlxbzDb+Ok9LYXuFSQsHfvoxTiGnB
+         ZWw6A2jLwklzAgXE1/TSyHtVzgY4uSEreuNOEMuNsFsJwVfSy6Jgn9ArV7rKR13CeHw5
+         vpO2JQ5EweqOseyAoIEmUeIt4fMk6oiyaKE0QjITa3MzrMS30PeCqyQn2w7aP6U4Oq3L
+         2wKaGaCIAHowD6MXWWNiIz1S2lYq7irNw7AVOKRFml/TeXk4z7Q8qjszTDNBNSAAz0jO
+         5ZQPvarM3WqPYBGMtwattq5lYdDnw6eCj0EUwNMr8+2Yb5MCbpxy0ZIybWn4Ph8XgcPQ
+         8yFQ==
+X-Gm-Message-State: AOAM530PESw/AkqJiI7warsNUK99iSl8iYktPSCQLIBs5wUPzWWD1z/9
+        9JIEe6Dq0WbFffYFPCSejGeiEg==
+X-Google-Smtp-Source: ABdhPJzy8dpSt4depYawxqjmWVuoIHMAgsxXHG0jJxI96tFDpbhg+3/cQEJxcqVr55/jRvbazfFHrQ==
+X-Received: by 2002:a63:dd4e:: with SMTP id g14mr5038012pgj.44.1602285226319;
+        Fri, 09 Oct 2020 16:13:46 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id y5sm13316996pge.62.2020.10.09.16.13.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Oct 2020 16:13:45 -0700 (PDT)
+Date:   Fri, 9 Oct 2020 16:13:43 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add binding for discrete
+ onboard USB hubs
+Message-ID: <20201009231343.GC1292413@google.com>
+References: <20201006192536.GB191572@google.com>
+ <20201007010023.GA438733@rowland.harvard.edu>
+ <20201007160336.GA620323@google.com>
+ <20201007163838.GA457977@rowland.harvard.edu>
+ <20201007172847.GB620323@google.com>
+ <20201007192542.GA468921@rowland.harvard.edu>
+ <20201007194229.GC620323@google.com>
+ <20201007201732.GE468921@rowland.harvard.edu>
+ <20201007214226.GA669360@google.com>
+ <20201008140927.GB495091@rowland.harvard.edu>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8245:: with SMTP id n5mr10283207ioo.149.1602280508394;
- Fri, 09 Oct 2020 14:55:08 -0700 (PDT)
-Date:   Fri, 09 Oct 2020 14:55:08 -0700
-In-Reply-To: <20201009185548.GA546075@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000088939405b1440053@google.com>
-Subject: Re: WARNING in hif_usb_send/usb_submit_urb
-From:   syzbot <syzbot+f5378bcf0f0cab45c1c6@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
-        eli.billauer@gmail.com, gregkh@linuxfoundation.org,
-        gustavoars@kernel.org, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, oneukum@suse.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        tiwai@suse.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201008140927.GB495091@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Thu, Oct 08, 2020 at 10:09:27AM -0400, Alan Stern wrote:
+> On Wed, Oct 07, 2020 at 02:42:26PM -0700, Matthias Kaehlcke wrote:
+> > On Wed, Oct 07, 2020 at 04:17:32PM -0400, Alan Stern wrote:
+> > > The peering relation goes both ways, so it should be included in the 
+> > > hub_2_0 description too.  Given that, the driver could check hub_2_0's 
+> > > peer's DT description for the appropriate resources.
+> > 
+> > That mitigates the issue somewhat, however we still have to convince Rob that
+> > both references are needed.
+> 
+> Strictly speaking, the peering relation applies to ports, not
+> devices.  The representation in DT doesn't have to be symmetrical; as
+> long as the kernel understands it, the kernel can set up its own
+> internal symmetrical respresentation.
+> 
+> > > > All this mess can be avoided by having a single instance in control of the
+> > > > resources which is guaranteed to suspend after the USB devices.
+> > > 
+> > > Yes.  At the cost of registering, adding a driver for, and making users 
+> > > aware of a fictitious platform device.
+> > 
+> > Registration is trivial and the driver code will be needed anyway, I'm
+> > pretty convinced that a separate platform driver will be simpler than
+> > plumbing things into the hub driver, with the additional checks of who is
+> > suspended or not, etc. If other resources like resets are involved there
+> > could be further possible race conditions at probe time. Another issue is
+> > the sysfs attribute. We said to attach it to the primary hub. What happens
+> > when the primary hub goes away? I guess we could force unbinding the peers
+> > as we did in the driver under discussion to avoid confusion/inconsistencies,
+> > but it's another tradeoff.
+> > 
+> > My view of the pros and cons of extending the hub driver vs. having a platform
+> > driver:
+> > 
+> > - pros
+> >   - sysfs attribute is attached to a USB hub device
+> >   - no need to register a platform device (trivial)
+> >   - potentially more USB awareness (not clear if needed)
+> > 
+> > - cons
+> >   - possible races involving resources between peer hubs during initialization
+> >   - increased complexity from keeping track of peers, checking suspend order
+> >     and avoiding races
+> >   - peers are forced to unbind when primary goes away
+> >   - need DT links to peers for all USB hubs, not only in the primary
+> >   - pollution of the generic hub code with device specific stuff instead
+> >     of keeping it in a self contained driver
+> >   - sysfs attribute is attached to only one of the hubs, which is better than
+> >     having it on both, but not necessarily better than attaching it to the
+> >     platform device with the 'control logic'
+> > 
+> > So yes, there are tradeoffs, IMO balance isn't as clear as your comment
+> > suggests.
+> 
+> Well, I guess I'm okay with either approach.
 
-syzbot tried to test the proposed patch but the build/boot failed:
+Thanks for being flexible.
 
-drivers/net/wireless/ath/ath9k/hif_usb.c:1319:7: error: implicit declaration of function 'usb_find_bulk_in'; did you mean 'usb_fill_bulk_urb'? [-Werror=implicit-function-declaration]
-drivers/net/wireless/ath/ath9k/hif_usb.c:1319:24: error: implicit declaration of function 'endpoint' [-Werror=implicit-function-declaration]
-drivers/net/wireless/ath/ath9k/hif_usb.c:1321:7: error: implicit declaration of function 'usb_find_bulk_out'; did you mean 'usb_fill_bulk_urb'? [-Werror=implicit-function-declaration]
-drivers/net/wireless/ath/ath9k/hif_usb.c:1322:46: error: expected ')' before 'return'
-drivers/net/wireless/ath/ath9k/hif_usb.c:1357:13: error: expected ')' before '}' token
-drivers/net/wireless/ath/ath9k/hif_usb.c:1358:1: error: expected expression before '}' token
+I'm also open to the other approach, if you or others are convinced that a
+platform device is a really bad idea.
 
+> One more thing to keep in mind, though: With the platform device,
+> there should be symlinks from the hubs' sysfs directories to the
+> platform device (and possibly symlinks going the other way as well).
 
-Tested on:
-
-commit:         6c8cf369 usb: typec: Add QCOM PMIC typec detection driver
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-dashboard link: https://syzkaller.appspot.com/bug?extid=f5378bcf0f0cab45c1c6
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12e0fd84500000
-
+Ok, I hoped we could get away with no USB driver at all, but I think it will
+be needed to create the symlinks (on its own the platform driver wouldn't notice
+when the USB devices come and go). Anyway, it's a relatively thin layer of code,
+so it's not too bad. With the new binding the USB devices still should be able
+to find the platform device if it uses the same DT node as the primary USB hub.
