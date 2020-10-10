@@ -2,123 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE70B28A1CD
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 00:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF0528A1C5
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 00:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731890AbgJJWXO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Oct 2020 18:23:14 -0400
-Received: from hosting.gsystem.sk ([212.5.213.30]:49448 "EHLO
-        hosting.gsystem.sk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387537AbgJJURp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Oct 2020 16:17:45 -0400
-Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id 54AAB7A0414;
-        Sat, 10 Oct 2020 16:01:23 +0200 (CEST)
-From:   Ondrej Zary <linux@zary.sk>
-To:     Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] cx82310_eth: use netdev_err instead of dev_err
-Date:   Sat, 10 Oct 2020 16:00:47 +0200
-Message-Id: <20201010140048.12067-2-linux@zary.sk>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201010140048.12067-1-linux@zary.sk>
-References: <20201010140048.12067-1-linux@zary.sk>
+        id S1731744AbgJJWVF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Oct 2020 18:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731373AbgJJTO1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Oct 2020 15:14:27 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B44AC05BD2D;
+        Sat, 10 Oct 2020 08:46:49 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id n61so11782298ota.10;
+        Sat, 10 Oct 2020 08:46:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=77d5X5ZtNoznypcZc20yzAR7XwV/B5sLmMBtpT0eIs0=;
+        b=ohpYkoynygMJmbx+5NSwRmH1cm6Hng5v/a9GY5se13KSOkkewhSdPXh1cGMKdDDXqB
+         h58Wny6D7atBtEWDNCfFVtjKw9qEw2TrktCIwoUA88AVlx/cB4gD54C/xKNgJkjOFG6L
+         5KM9o3MfCIuGyy/ehmvTXggU9fjUzk7aoAw69kqxz/EZL0N22MRtwiAJ8UHCEXfOPK99
+         Q5TrmOqqI7u73oqH7EIsN0SJ2pFpp25r9fmHf7Z0EHyDr1rlq07ktHXq73297iWVjuE8
+         sJ4YL3cyjUTRlB0rCKtmcwS0Ai45seLP6l3/0UWyLIbqeH5ZfifBGxxBJEcmOFshaJYw
+         DHYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=77d5X5ZtNoznypcZc20yzAR7XwV/B5sLmMBtpT0eIs0=;
+        b=RqriGVCbVC6R29IPV3xNSFfH2OIJI1uHVELzwsC2XUdJ4Kshp44Ff62ldH8fK/TEkv
+         5NYJVLgHZbNIZFzMRmHcRVNYieVbW2CyNj7NX+k180162E2489/O9eYs46osIcPdW2EN
+         ytiaJBXNy6bcah2HYv6Wfo9fEmWU8iMiPNHQ1/vt3i4Vc+WuhTZWZsaTS2TcyLuonsOq
+         A/TjRP5WbPjWC40X8+lTh/wO7CXlFe2tiHCXY1lichE0inUkWCnF7RjREJ6ejhLXGi3Z
+         uvKbAVpWl2nMnmcSpcIc9eD4XhfQKJWGv9T6g+1wgK/GOyQhDS6FajUGuhDg2P8Dar1v
+         97Yg==
+X-Gm-Message-State: AOAM530w6xDeOEF2YK/WElF0sE2uYJa2P1ZbOpWurqfQkhdYwCzzZOjZ
+        8ven5rhblNFkETIbHPEatjs=
+X-Google-Smtp-Source: ABdhPJwJ8/KFoOpJH+/Rhaywb9izxpn2VePM1efrrg/odMP8bzl1T6Q76eiJrj0O/VoaFkgsvr2XJw==
+X-Received: by 2002:a9d:7993:: with SMTP id h19mr11115721otm.289.1602344808241;
+        Sat, 10 Oct 2020 08:46:48 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 81sm7133889oti.79.2020.10.10.08.46.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 10 Oct 2020 08:46:47 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 10 Oct 2020 08:46:46 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Jun Li <jun.li@nxp.com>, Jun Li <lijun.kernel@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        cy_huang <cy_huang@richtek.com>
+Subject: Re: [PATCH] usb: typec: tcpm: Fix if vbus before cc,
+ hard_reset_count not reset issue
+Message-ID: <20201010154646.GA248582@roeck-us.net>
+References: <20201002133145.GA3384841@kroah.com>
+ <c2d689eb-5538-6af2-614f-766521100273@roeck-us.net>
+ <20201005110808.GA298743@kroah.com>
+ <88586992-650f-a4a1-2fa0-8cef313380fb@roeck-us.net>
+ <CADiBU38wk825SqtFRAiYqqV47Wwi43AuWKut19qeTbGBZFqPow@mail.gmail.com>
+ <CAKgpwJWwyvUyVj+jQ0y2i_eK1XEN2g3NvR0zgrRLfcmtgn8DDg@mail.gmail.com>
+ <CADiBU3_TADpGmV7-BXJd3YaPNiv8Eg8zmKUD_OoB9CG1MT12mg@mail.gmail.com>
+ <CADiBU392ZL6AHf6Dns61KXFVuvwh6grfnJjXmcFE4Ma2gjK6EA@mail.gmail.com>
+ <VE1PR04MB6528CF55BE68A8DCF4B7904689080@VE1PR04MB6528.eurprd04.prod.outlook.com>
+ <CADiBU38-jX=4sbQ9aFoA=Xr6S7cFbfQy8tpdohoZdpaY-AK-Vw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADiBU38-jX=4sbQ9aFoA=Xr6S7cFbfQy8tpdohoZdpaY-AK-Vw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use netdev_err for better device identification in syslog.
+On Sat, Oct 10, 2020 at 12:06:13AM +0800, ChiYuan Huang wrote:
+[ ... ]
+> 
+> Like I mentioned before, whatever the condition is, hard_reset_count
+> must be reset to zero during tcpm_detach.
+> 
+> But refer to Guenter's mail,  he prefer to narrow down the condition
+> to reset this counter.
+> 
+> I think the original thought is important why to put this line there.
+> 
+> Hi, Guenter:
+>    From the discussion, we really need to know why you put the reset
+> line below port attached is false and also make some judgement.
+> I think there may be ome condition that we don't considered.
+> 
+As I am sure I have mentioned before, it was to handle misbehaving
+partners, to enforce that the system goes into error recovery state
+and (hopefully) recover the partner enough to be able to reconnect.
+This is the same reason why resetting the counter is commented out
+in SRC_SEND_CAPABILITIES and reset in SRC_READY instead. The typical
+sequence was that the state machine would process from SRC_UNATTACHED
+to some point and then stall / time out, but never be in disconnected
+state.
 
-Signed-off-by: Ondrej Zary <linux@zary.sk>
----
- drivers/net/usb/cx82310_eth.c | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
+Always resetting the hard reset counter in tcpm_detach() would disable
+error recovery in that situation, and affected partners would never
+recover. Effectively it would disable error recovery in any state machine
+cycle which involves an unattached state, which makes me really question
+if it is indeed mandated by the specification to reset the hard reset
+counter at that point.
 
-diff --git a/drivers/net/usb/cx82310_eth.c b/drivers/net/usb/cx82310_eth.c
-index 043679311399..ca89d8258dd3 100644
---- a/drivers/net/usb/cx82310_eth.c
-+++ b/drivers/net/usb/cx82310_eth.c
-@@ -71,8 +71,8 @@ static int cx82310_cmd(struct usbnet *dev, enum cx82310_cmd cmd, bool reply,
- 			   CMD_PACKET_SIZE, &actual_len, CMD_TIMEOUT);
- 	if (ret < 0) {
- 		if (cmd != CMD_GET_LINK_STATUS)
--			dev_err(&dev->udev->dev, "send command %#x: error %d\n",
--				cmd, ret);
-+			netdev_err(dev->net, "send command %#x: error %d\n",
-+				   cmd, ret);
- 		goto end;
- 	}
- 
-@@ -84,30 +84,27 @@ static int cx82310_cmd(struct usbnet *dev, enum cx82310_cmd cmd, bool reply,
- 					   CMD_TIMEOUT);
- 			if (ret < 0) {
- 				if (cmd != CMD_GET_LINK_STATUS)
--					dev_err(&dev->udev->dev,
--						"reply receive error %d\n",
--						ret);
-+					netdev_err(dev->net, "reply receive error %d\n",
-+						   ret);
- 				goto end;
- 			}
- 			if (actual_len > 0)
- 				break;
- 		}
- 		if (actual_len == 0) {
--			dev_err(&dev->udev->dev, "no reply to command %#x\n",
--				cmd);
-+			netdev_err(dev->net, "no reply to command %#x\n", cmd);
- 			ret = -EIO;
- 			goto end;
- 		}
- 		if (buf[0] != cmd) {
--			dev_err(&dev->udev->dev,
--				"got reply to command %#x, expected: %#x\n",
--				buf[0], cmd);
-+			netdev_err(dev->net, "got reply to command %#x, expected: %#x\n",
-+				   buf[0], cmd);
- 			ret = -EIO;
- 			goto end;
- 		}
- 		if (buf[1] != STATUS_SUCCESS) {
--			dev_err(&dev->udev->dev, "command %#x failed: %#x\n",
--				cmd, buf[1]);
-+			netdev_err(dev->net, "command %#x failed: %#x\n", cmd,
-+				   buf[1]);
- 			ret = -EIO;
- 			goto end;
- 		}
-@@ -194,7 +191,7 @@ static int cx82310_bind(struct usbnet *dev, struct usb_interface *intf)
- 		msleep(500);
- 	}
- 	if (!timeout) {
--		dev_err(&udev->dev, "firmware not ready in time\n");
-+		netdev_err(dev->net, "firmware not ready in time\n");
- 		ret = -ETIMEDOUT;
- 		goto err;
- 	}
-@@ -207,7 +204,7 @@ static int cx82310_bind(struct usbnet *dev, struct usb_interface *intf)
- 	ret = cx82310_cmd(dev, CMD_GET_MAC_ADDR, true, NULL, 0,
- 			  dev->net->dev_addr, ETH_ALEN);
- 	if (ret) {
--		dev_err(&udev->dev, "unable to read MAC address: %d\n", ret);
-+		netdev_err(dev->net, "unable to read MAC address: %d\n", ret);
- 		goto err;
- 	}
- 
-@@ -284,8 +281,7 @@ static int cx82310_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 			netdev_info(dev->net, "router was rebooted, re-enabling ethernet mode");
- 			schedule_work(&priv->reenable_work);
- 		} else if (len > CX82310_MTU) {
--			dev_err(&dev->udev->dev, "RX packet too long: %d B\n",
--				len);
-+			netdev_err(dev->net, "RX packet too long: %d B\n", len);
- 			return 0;
- 		}
- 
--- 
-Ondrej Zary
-
+Guenter
