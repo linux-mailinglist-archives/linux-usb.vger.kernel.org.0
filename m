@@ -2,252 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C524289F54
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Oct 2020 10:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C60289F88
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Oct 2020 11:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730121AbgJJITl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Oct 2020 04:19:41 -0400
-Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:16496 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729923AbgJJINI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Oct 2020 04:13:08 -0400
-Received: from tomoyo.flets-east.jp ([153.230.197.127])
-        by mwinf5d29 with ME
-        id e8Cm230022lQRaH038Cs69; Sat, 10 Oct 2020 10:13:00 +0200
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 10 Oct 2020 10:13:00 +0200
-X-ME-IP: 153.230.197.127
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        id S1728290AbgJJJZ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Oct 2020 05:25:56 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:60144 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726644AbgJJIyO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Oct 2020 04:54:14 -0400
+X-UUID: 60f623058bf74bf09871f1c4bdbfda02-20201010
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=iSQ1hpnMnLh8W1/4JrBxCauTivhg/FEQi1Z9TFxO7/E=;
+        b=X3mnZKBUfMRrIojKI4VUVAFKISr8U3699CDSFO8DxSuxiatL17rk81Ink2Uofr3/Cl6LuDVlhA9unbaYM+qYDAU/sw6pEHUB5/IOGZO2mOkr9oI1LiwK5zYV2fL62KeY0UsKCmX17/ll6QGQnidOSkKoZ2B3dQAzRwer9F9akQs=;
+X-UUID: 60f623058bf74bf09871f1c4bdbfda02-20201010
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 161135131; Sat, 10 Oct 2020 16:43:16 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 10 Oct 2020 16:43:14 +0800
+Received: from mtkslt301.mediatek.inc (10.21.14.114) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 10 Oct 2020 16:43:14 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "open list:USB ACM DRIVER" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v3 6/7] can: usb: etas_es58X: add support for ETAS ES58X CAN USB interfaces
-Date:   Sat, 10 Oct 2020 17:12:11 +0900
-Message-Id: <20201010081211.392860-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <c501e9ea-5412-fa90-b403-d34ca4720c89@pengutronix.de>
-References: <20201002154219.4887-1-mailhol.vincent@wanadoo.fr> <20201002154219.4887-7-mailhol.vincent@wanadoo.fr> <c501e9ea-5412-fa90-b403-d34ca4720c89@pengutronix.de>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [PATCH v2 1/4] dt-bindings: usb: convert usb-device.txt to YAML schema
+Date:   Sat, 10 Oct 2020 16:43:11 +0800
+Message-ID: <3db52d534065dcf28e9a10b8129bea3eced0193e.1602318869.git.chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: F28444144C45D7059AEFFB31F2699552160DF9233AEA5309A055B8E77F362FF62000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Just one header file for now :)
+Q29udmVydCB1c2ItZGV2aWNlLnR4dCB0byBZQU1MIHNjaGVtYSB1c2ItZGV2aWNlLnlhbWwNCg0K
+U2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0K
+LS0tDQp2MjogbmV3IHBhdGNoIHN1Z2dlc3RlZCBieSBSb2INCi0tLQ0KIC4uLi9kZXZpY2V0cmVl
+L2JpbmRpbmdzL3VzYi91c2ItZGV2aWNlLnR4dCAgICB8IDEwMiAtLS0tLS0tLS0tLS0tLQ0KIC4u
+Li9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91c2ItZGV2aWNlLnlhbWwgICB8IDEyOSArKysrKysr
+KysrKysrKysrKysNCiAyIGZpbGVzIGNoYW5nZWQsIDEyOSBpbnNlcnRpb25zKCspLCAxMDIgZGVs
+ZXRpb25zKC0pDQogZGVsZXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
+aW5kaW5ncy91c2IvdXNiLWRldmljZS50eHQNCiBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRh
+dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91c2ItZGV2aWNlLnlhbWwNCg0KZGlmZiAtLWdp
+dCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWRldmljZS50eHQg
+Yi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3VzYi1kZXZpY2UudHh0DQpk
+ZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQNCmluZGV4IDAzNmJlMTcyYjFhZS4uMDAwMDAwMDAwMDAw
+DQotLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3VzYi1kZXZpY2Uu
+dHh0DQorKysgL2Rldi9udWxsDQpAQCAtMSwxMDIgKzAsMCBAQA0KLUdlbmVyaWMgVVNCIERldmlj
+ZSBQcm9wZXJ0aWVzDQotDQotVXN1YWxseSwgd2Ugb25seSB1c2UgZGV2aWNlIHRyZWUgZm9yIGhh
+cmQgd2lyZWQgVVNCIGRldmljZS4NCi1UaGUgcmVmZXJlbmNlIGJpbmRpbmcgZG9jIGlzIGZyb206
+DQotaHR0cDovL3d3dy5kZXZpY2V0cmVlLm9yZy9vcGVuLWZpcm13YXJlL2JpbmRpbmdzL3VzYi91
+c2ItMV8wLnBzDQotDQotRm91ciB0eXBlcyBvZiBkZXZpY2UtdHJlZSBub2RlcyBhcmUgZGVmaW5l
+ZDogImhvc3QtY29udHJvbGxlciBub2RlcyINCi1yZXByZXNlbnRpbmcgVVNCIGhvc3QgY29udHJv
+bGxlcnMsICJkZXZpY2Ugbm9kZXMiIHJlcHJlc2VudGluZyBVU0IgZGV2aWNlcywNCi0iaW50ZXJm
+YWNlIG5vZGVzIiByZXByZXNlbnRpbmcgVVNCIGludGVyZmFjZXMgYW5kICJjb21iaW5lZCBub2Rl
+cyINCi1yZXByZXNlbnRpbmcgc2ltcGxlIFVTQiBkZXZpY2VzLg0KLQ0KLUEgY29tYmluZWQgbm9k
+ZSBzaGFsbCBiZSB1c2VkIGluc3RlYWQgb2YgYSBkZXZpY2Ugbm9kZSBhbmQgYW4gaW50ZXJmYWNl
+IG5vZGUNCi1mb3IgZGV2aWNlcyBvZiBjbGFzcyAwIG9yIDkgKGh1Yikgd2l0aCBhIHNpbmdsZSBj
+b25maWd1cmF0aW9uIGFuZCBhIHNpbmdsZQ0KLWludGVyZmFjZS4NCi0NCi1BICJodWIgbm9kZSIg
+aXMgYSBjb21iaW5lZCBub2RlIG9yIGFuIGludGVyZmFjZSBub2RlIHRoYXQgcmVwcmVzZW50cyBh
+IFVTQg0KLWh1Yi4NCi0NCi0NCi1SZXF1aXJlZCBwcm9wZXJ0aWVzIGZvciBkZXZpY2Ugbm9kZXM6
+DQotLSBjb21wYXRpYmxlOiAidXNiVklELFBJRCIsIHdoZXJlIFZJRCBpcyB0aGUgdmVuZG9yIGlk
+IGFuZCBQSUQgdGhlIHByb2R1Y3QgaWQuDQotICBUaGUgdGV4dHVhbCByZXByZXNlbnRhdGlvbiBv
+ZiBWSUQgYW5kIFBJRCBzaGFsbCBiZSBpbiBsb3dlciBjYXNlIGhleGFkZWNpbWFsDQotICB3aXRo
+IGxlYWRpbmcgemVyb2VzIHN1cHByZXNzZWQuIFRoZSBvdGhlciBjb21wYXRpYmxlIHN0cmluZ3Mg
+ZnJvbSB0aGUgYWJvdmUNCi0gIHN0YW5kYXJkIGJpbmRpbmcgY291bGQgYWxzbyBiZSB1c2VkLCBi
+dXQgYSBkZXZpY2UgYWRoZXJpbmcgdG8gdGhpcyBiaW5kaW5nDQotICBtYXkgbGVhdmUgb3V0IGFs
+bCBleGNlcHQgZm9yICJ1c2JWSUQsUElEIi4NCi0tIHJlZzogdGhlIG51bWJlciBvZiB0aGUgVVNC
+IGh1YiBwb3J0IG9yIHRoZSBVU0IgaG9zdC1jb250cm9sbGVyIHBvcnQgdG8gd2hpY2gNCi0gIHRo
+aXMgZGV2aWNlIGlzIGF0dGFjaGVkLiBUaGUgcmFuZ2UgaXMgMS0yNTUuDQotDQotDQotUmVxdWly
+ZWQgcHJvcGVydGllcyBmb3IgZGV2aWNlIG5vZGVzIHdpdGggaW50ZXJmYWNlIG5vZGVzOg0KLS0g
+I2FkZHJlc3MtY2VsbHM6IHNoYWxsIGJlIDINCi0tICNzaXplLWNlbGxzOiBzaGFsbCBiZSAwDQot
+DQotDQotUmVxdWlyZWQgcHJvcGVydGllcyBmb3IgaW50ZXJmYWNlIG5vZGVzOg0KLS0gY29tcGF0
+aWJsZTogInVzYmlmVklELFBJRC5jb25maWdDTi5JTiIsIHdoZXJlIFZJRCBpcyB0aGUgdmVuZG9y
+IGlkLCBQSUQgaXMNCi0gIHRoZSBwcm9kdWN0IGlkLCBDTiBpcyB0aGUgY29uZmlndXJhdGlvbiB2
+YWx1ZSBhbmQgSU4gaXMgdGhlIGludGVyZmFjZQ0KLSAgbnVtYmVyLiBUaGUgdGV4dHVhbCByZXBy
+ZXNlbnRhdGlvbiBvZiBWSUQsIFBJRCwgQ04gYW5kIElOIHNoYWxsIGJlIGluIGxvd2VyDQotICBj
+YXNlIGhleGFkZWNpbWFsIHdpdGggbGVhZGluZyB6ZXJvZXMgc3VwcHJlc3NlZC4gVGhlIG90aGVy
+IGNvbXBhdGlibGUNCi0gIHN0cmluZ3MgZnJvbSB0aGUgYWJvdmUgc3RhbmRhcmQgYmluZGluZyBj
+b3VsZCBhbHNvIGJlIHVzZWQsIGJ1dCBhIGRldmljZQ0KLSAgYWRoZXJpbmcgdG8gdGhpcyBiaW5k
+aW5nIG1heSBsZWF2ZSBvdXQgYWxsIGV4Y2VwdCBmb3INCi0gICJ1c2JpZlZJRCxQSUQuY29uZmln
+Q04uSU4iLg0KLS0gcmVnOiB0aGUgaW50ZXJmYWNlIG51bWJlciBhbmQgY29uZmlndXJhdGlvbiB2
+YWx1ZQ0KLQ0KLVRoZSBjb25maWd1cmF0aW9uIGNvbXBvbmVudCBpcyBub3QgaW5jbHVkZWQgaW4g
+dGhlIHRleHR1YWwgcmVwcmVzZW50YXRpb24gb2YNCi1hbiBpbnRlcmZhY2Utbm9kZSB1bml0IGFk
+ZHJlc3MgZm9yIGNvbmZpZ3VyYXRpb24gMS4NCi0NCi0NCi1SZXF1aXJlZCBwcm9wZXJ0aWVzIGZv
+ciBjb21iaW5lZCBub2RlczoNCi0tIGNvbXBhdGlibGU6ICJ1c2JWSUQsUElEIiwgd2hlcmUgVklE
+IGlzIHRoZSB2ZW5kb3IgaWQgYW5kIFBJRCB0aGUgcHJvZHVjdCBpZC4NCi0gIFRoZSB0ZXh0dWFs
+IHJlcHJlc2VudGF0aW9uIG9mIFZJRCBhbmQgUElEIHNoYWxsIGJlIGluIGxvd2VyIGNhc2UgaGV4
+YWRlY2ltYWwNCi0gIHdpdGggbGVhZGluZyB6ZXJvZXMgc3VwcHJlc3NlZC4gVGhlIG90aGVyIGNv
+bXBhdGlibGUgc3RyaW5ncyBmcm9tIHRoZSBhYm92ZQ0KLSAgc3RhbmRhcmQgYmluZGluZyBjb3Vs
+ZCBhbHNvIGJlIHVzZWQsIGJ1dCBhIGRldmljZSBhZGhlcmluZyB0byB0aGlzIGJpbmRpbmcNCi0g
+IG1heSBsZWF2ZSBvdXQgYWxsIGV4Y2VwdCBmb3IgInVzYlZJRCxQSUQiLg0KLS0gcmVnOiB0aGUg
+bnVtYmVyIG9mIHRoZSBVU0IgaHViIHBvcnQgb3IgdGhlIFVTQiBob3N0LWNvbnRyb2xsZXIgcG9y
+dCB0byB3aGljaA0KLSAgdGhpcyBkZXZpY2UgaXMgYXR0YWNoZWQuIFRoZSByYW5nZSBpcyAxLTI1
+NS4NCi0NCi0NCi1SZXF1aXJlZCBwcm9wZXJ0aWVzIGZvciBodWIgbm9kZXMgd2l0aCBkZXZpY2Ug
+bm9kZXM6DQotLSAjYWRkcmVzcy1jZWxsczogc2hhbGwgYmUgMQ0KLS0gI3NpemUtY2VsbHM6IHNo
+YWxsIGJlIDANCi0NCi0NCi1SZXF1aXJlZCBwcm9wZXJ0aWVzIGZvciBob3N0LWNvbnRyb2xsZXIg
+bm9kZXMgd2l0aCBkZXZpY2Ugbm9kZXM6DQotLSAjYWRkcmVzcy1jZWxsczogc2hhbGwgYmUgMQ0K
+LS0gI3NpemUtY2VsbHM6IHNoYWxsIGJlIDANCi0NCi0NCi1FeGFtcGxlOg0KLQ0KLSZ1c2IxIHsJ
+LyogaG9zdCBjb250cm9sbGVyICovDQotCSNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KLQkjc2l6ZS1j
+ZWxscyA9IDwwPjsNCi0NCi0JaHViQDEgewkJLyogaHViIGNvbm5lY3RlZCB0byBwb3J0IDEgKi8N
+Ci0JCWNvbXBhdGlibGUgPSAidXNiNWUzLDYwOCI7DQotCQlyZWcgPSA8MT47DQotCX07DQotDQot
+CWRldmljZUAyIHsJLyogZGV2aWNlIGNvbm5lY3RlZCB0byBwb3J0IDIgKi8NCi0JCWNvbXBhdGli
+bGUgPSAidXNiMTIzLDQ1NjciOw0KLQkJcmVnID0gPDI+Ow0KLQl9Ow0KLQ0KLQlkZXZpY2VAMyB7
+IAkvKiBkZXZpY2UgY29ubmVjdGVkIHRvIHBvcnQgMyAqLw0KLQkJY29tcGF0aWJsZSA9ICJ1c2Ix
+MjMsYWJjZCI7DQotCQlyZWcgPSA8Mz47DQotDQotCQkjYWRkcmVzcy1jZWxscyA9IDwyPjsNCi0J
+CSNzaXplLWNlbGxzID0gPDA+Ow0KLQ0KLQkJaW50ZXJmYWNlQDAgewkvKiBpbnRlcmZhY2UgMCBv
+ZiBjb25maWd1cmF0aW9uIDEgKi8NCi0JCQljb21wYXRpYmxlID0gInVzYmlmMTIzLGFiY2QuY29u
+ZmlnMS4wIjsNCi0JCQlyZWcgPSA8MCAxPjsNCi0JCX07DQotDQotCQlpbnRlcmZhY2VAMCwyIHsJ
+LyogaW50ZXJmYWNlIDAgb2YgY29uZmlndXJhdGlvbiAyICovDQotCQkJY29tcGF0aWJsZSA9ICJ1
+c2JpZjEyMyxhYmNkLmNvbmZpZzIuMCI7DQotCQkJcmVnID0gPDAgMj47DQotCQl9Ow0KLQl9Ow0K
+LX07DQpkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91
+c2ItZGV2aWNlLnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3Vz
+Yi1kZXZpY2UueWFtbA0KbmV3IGZpbGUgbW9kZSAxMDA2NDQNCmluZGV4IDAwMDAwMDAwMDAwMC4u
+NTdlNzE2YjhjZDI5DQotLS0gL2Rldi9udWxsDQorKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRy
+ZWUvYmluZGluZ3MvdXNiL3VzYi1kZXZpY2UueWFtbA0KQEAgLTAsMCArMSwxMjkgQEANCisjIFNQ
+RFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkNCisl
+WUFNTCAxLjINCistLS0NCiskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFzL3VzYi91
+c2ItZGV2aWNlLnlhbWwjDQorJHNjaGVtYTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2No
+ZW1hcy9jb3JlLnlhbWwjDQorDQordGl0bGU6IFRoZSBkZXZpY2UgdHJlZSBiaW5kaW5ncyBmb3Ig
+dGhlIEdlbmVyaWMgVVNCIERldmljZQ0KKw0KK21haW50YWluZXJzOg0KKyAgLSBHcmVnIEtyb2Fo
+LUhhcnRtYW4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPg0KKw0KK2Rlc2NyaXB0aW9uOiB8
+DQorICBVc3VhbGx5LCB3ZSBvbmx5IHVzZSBkZXZpY2UgdHJlZSBmb3IgaGFyZCB3aXJlZCBVU0Ig
+ZGV2aWNlLg0KKyAgVGhlIHJlZmVyZW5jZSBiaW5kaW5nIGRvYyBpcyBmcm9tOg0KKyAgaHR0cDov
+L3d3dy5kZXZpY2V0cmVlLm9yZy9vcGVuLWZpcm13YXJlL2JpbmRpbmdzL3VzYi91c2ItMV8wLnBz
+DQorDQorICBGb3VyIHR5cGVzIG9mIGRldmljZS10cmVlIG5vZGVzIGFyZSBkZWZpbmVkOiAiaG9z
+dC1jb250cm9sbGVyIG5vZGVzIg0KKyAgcmVwcmVzZW50aW5nIFVTQiBob3N0IGNvbnRyb2xsZXJz
+LCAiZGV2aWNlIG5vZGVzIiByZXByZXNlbnRpbmcgVVNCIGRldmljZXMsDQorICAiaW50ZXJmYWNl
+IG5vZGVzIiByZXByZXNlbnRpbmcgVVNCIGludGVyZmFjZXMgYW5kICJjb21iaW5lZCBub2RlcyIN
+CisgIHJlcHJlc2VudGluZyBzaW1wbGUgVVNCIGRldmljZXMuDQorDQorICBBIGNvbWJpbmVkIG5v
+ZGUgc2hhbGwgYmUgdXNlZCBpbnN0ZWFkIG9mIGEgZGV2aWNlIG5vZGUgYW5kIGFuIGludGVyZmFj
+ZSBub2RlDQorICBmb3IgZGV2aWNlcyBvZiBjbGFzcyAwIG9yIDkgKGh1Yikgd2l0aCBhIHNpbmds
+ZSBjb25maWd1cmF0aW9uIGFuZCBhIHNpbmdsZQ0KKyAgaW50ZXJmYWNlLg0KKw0KKyAgQSAiaHVi
+IG5vZGUiIGlzIGEgY29tYmluZWQgbm9kZSBvciBhbiBpbnRlcmZhY2Ugbm9kZSB0aGF0IHJlcHJl
+c2VudHMgYSBVU0INCisgIGh1Yi4NCisNCitwcm9wZXJ0aWVzOg0KKyAgJG5vZGVuYW1lOg0KKyAg
+ICBkZXNjcmlwdGlvbjogVXN1YWxseSBpbmNsdWRlcyAiaHViIiBvciB0aGUgc3RhbmRhcmQgbm9k
+ZSBuYW1lIGZvcg0KKyAgICAgIFVTQiBjbGFzcyBvZiBkZXZpY2UsIGZvciBleGFtcGxlLCAiZXRo
+ZXJuZXQiIGZvciB0aGUgVVNCIGV0aGVybmV0DQorICAgICAgYWRhcHRlciwgImJ0IiBmb3IgYnR1
+c2IsICJjYW1lcmEiIGZvciB0aGUgVVNCIGltYWdlIHNlbnNvciBldGMuDQorICAgIHBhdHRlcm46
+ICJeW2EtZl0rQFswLTlhLWZdKyQiDQorDQorICBjb21wYXRpYmxlOg0KKyAgICBkZXNjcmlwdGlv
+bjogRGV2aWNlIG5vZGVzIG9yIGNvbWJpbmVkIG5vZGVzLg0KKyAgICAgICJ1c2JWSUQsUElEIiwg
+d2hlcmUgVklEIGlzIHRoZSB2ZW5kb3IgaWQgYW5kIFBJRCB0aGUgcHJvZHVjdCBpZC4NCisgICAg
+ICBUaGUgdGV4dHVhbCByZXByZXNlbnRhdGlvbiBvZiBWSUQgYW5kIFBJRCBzaGFsbCBiZSBpbiBs
+b3dlciBjYXNlDQorICAgICAgaGV4YWRlY2ltYWwgd2l0aCBsZWFkaW5nIHplcm9lcyBzdXBwcmVz
+c2VkLiBUaGUgb3RoZXIgY29tcGF0aWJsZQ0KKyAgICAgIHN0cmluZ3MgZnJvbSB0aGUgYWJvdmUg
+c3RhbmRhcmQgYmluZGluZyBjb3VsZCBhbHNvIGJlIHVzZWQsDQorICAgICAgYnV0IGEgZGV2aWNl
+IGFkaGVyaW5nIHRvIHRoaXMgYmluZGluZyBtYXkgbGVhdmUgb3V0IGFsbCBleGNlcHQNCisgICAg
+ICBmb3IgInVzYlZJRCxQSUQiLg0KKyAgICBpdGVtczoNCisgICAgICAtIHBhdHRlcm46ICJedXNi
+WzAtOWEtZl0rLFswLTlhLWZdKyQiDQorDQorICByZWc6DQorICAgIGRlc2NyaXB0aW9uOiB0aGUg
+bnVtYmVyIG9mIHRoZSBVU0IgaHViIHBvcnQgb3IgdGhlIFVTQiBob3N0LWNvbnRyb2xsZXINCisg
+ICAgICBwb3J0IHRvIHdoaWNoIHRoaXMgZGV2aWNlIGlzIGF0dGFjaGVkLiBUaGUgcmFuZ2UgaXMg
+MS0yNTUuDQorICAgIG1heEl0ZW1zOiAxDQorDQorICAiI2FkZHJlc3MtY2VsbHMiOg0KKyAgICBk
+ZXNjcmlwdGlvbjogc2hvdWxkIGJlIDEgZm9yIGh1YiBub2RlcyB3aXRoIGRldmljZSBub2RlcywN
+CisgICAgICBzaG91bGQgYmUgMiBmb3IgZGV2aWNlIG5vZGVzIHdpdGggaW50ZXJmYWNlIG5vZGVz
+Lg0KKyAgICBlbnVtOiBbMSwgMl0NCisNCisgICIjc2l6ZS1jZWxscyI6DQorICAgIGNvbnN0OiAw
+DQorDQorcGF0dGVyblByb3BlcnRpZXM6DQorICAiXmludGVyZmFjZUBbMC05XSsoLFswLTldKykk
+IjoNCisgICAgdHlwZTogb2JqZWN0DQorICAgIGRlc2NyaXB0aW9uOiBVU0IgaW50ZXJmYWNlIG5v
+ZGVzLg0KKyAgICAgIFRoZSBjb25maWd1cmF0aW9uIGNvbXBvbmVudCBpcyBub3QgaW5jbHVkZWQg
+aW4gdGhlIHRleHR1YWwNCisgICAgICByZXByZXNlbnRhdGlvbiBvZiBhbiBpbnRlcmZhY2Utbm9k
+ZSB1bml0IGFkZHJlc3MgZm9yIGNvbmZpZ3VyYXRpb24gMS4NCisNCisgICAgcHJvcGVydGllczoN
+CisgICAgICBjb21wYXRpYmxlOg0KKyAgICAgICAgZGVzY3JpcHRpb246IHwNCisgICAgICAgICAg
+InVzYmlmVklELFBJRC5jb25maWdDTi5JTiIsIHdoZXJlIFZJRCBpcyB0aGUgdmVuZG9yIGlkLCBQ
+SUQgaXMNCisgICAgICAgICAgdGhlIHByb2R1Y3QgaWQsIENOIGlzIHRoZSBjb25maWd1cmF0aW9u
+IHZhbHVlIGFuZCBJTiBpcyB0aGUgaW50ZXJmYWNlDQorICAgICAgICAgIG51bWJlci4gVGhlIHRl
+eHR1YWwgcmVwcmVzZW50YXRpb24gb2YgVklELCBQSUQsIENOIGFuZCBJTiBzaGFsbCBiZQ0KKyAg
+ICAgICAgICBpbiBsb3dlciBjYXNlIGhleGFkZWNpbWFsIHdpdGggbGVhZGluZyB6ZXJvZXMgc3Vw
+cHJlc3NlZC4NCisgICAgICAgICAgVGhlIG90aGVyIGNvbXBhdGlibGUgc3RyaW5ncyBmcm9tIHRo
+ZSBhYm92ZSBzdGFuZGFyZCBiaW5kaW5nIGNvdWxkDQorICAgICAgICAgIGFsc28gYmUgdXNlZCwg
+YnV0IGEgZGV2aWNlIGFkaGVyaW5nIHRvIHRoaXMgYmluZGluZyBtYXkgbGVhdmUgb3V0DQorICAg
+ICAgICAgIGFsbCBleGNlcHQgZm9yICJ1c2JpZlZJRCxQSUQuY29uZmlnQ04uSU4iLg0KKyAgICAg
+ICAgaXRlbXM6DQorICAgICAgICAgIC0gcGF0dGVybjogIl51c2JpZlswLTlhLWZdKyxbMC05YS1m
+XSsuY29uZmlnWzAtOWEtZl0rLlswLTlhLWZdKyQiDQorDQorICAgICAgcmVnOg0KKyAgICAgICAg
+ZGVzY3JpcHRpb246IHNob3VsZCBiZSAyIGNlbGxzIGxvbmcsIHRoZSBmaXJzdCBjZWxsIHJlcHJl
+c2VudHMNCisgICAgICAgICAgdGhlIGludGVyZmFjZSBudW1iZXIgYW5kIHRoZSBzZWNvbmQgY2Vs
+bCByZXByZXNlbnRzIHRoZQ0KKyAgICAgICAgICBjb25maWd1cmF0aW9uIHZhbHVlLg0KKyAgICAg
+ICAgbWF4SXRlbXM6IDENCisNCityZXF1aXJlZDoNCisgIC0gY29tcGF0aWxlDQorICAtIHJlZw0K
+Kw0KK2V4YW1wbGVzOg0KKyAgI2h1YiBjb25uZWN0ZWQgdG8gcG9ydCAxDQorICAjZGV2aWNlIGNv
+bm5lY3RlZCB0byBwb3J0IDINCisgICNkZXZpY2UgY29ubmVjdGVkIHRvIHBvcnQgMw0KKyAgIyAg
+ICBpbnRlcmZhY2UgMCBvZiBjb25maWd1cmF0aW9uIDENCisgICMgICAgaW50ZXJmYWNlIDAgb2Yg
+Y29uZmlndXJhdGlvbiAyDQorICAtIHwNCisgICAgdXNiQDExMjcwMDAwIHsNCisgICAgICAgIHJl
+ZyA9IDwweDExMjcwMDAwIDB4MTAwMD47DQorICAgICAgICAjYWRkcmVzcy1jZWxscyA9IDwxPjsN
+CisgICAgICAgICNzaXplLWNlbGxzID0gPDA+Ow0KKw0KKyAgICAgICAgaHViQDEgew0KKyAgICAg
+ICAgICAgIGNvbXBhdGlibGUgPSAidXNiNWUzLDYwOCI7DQorICAgICAgICAgICAgcmVnID0gPDE+
+Ow0KKyAgICAgICAgfTsNCisNCisgICAgICAgIGRldmljZUAyIHsNCisgICAgICAgICAgICBjb21w
+YXRpYmxlID0gInVzYjEyMyw0NTY3IjsNCisgICAgICAgICAgICByZWcgPSA8Mj47DQorICAgICAg
+ICB9Ow0KKw0KKyAgICAgICAgZGV2aWNlQDMgew0KKyAgICAgICAgICAgIGNvbXBhdGlibGUgPSAi
+dXNiMTIzLGFiY2QiOw0KKyAgICAgICAgICAgIHJlZyA9IDwzPjsNCisNCisgICAgICAgICAgICAj
+YWRkcmVzcy1jZWxscyA9IDwyPjsNCisgICAgICAgICAgICAjc2l6ZS1jZWxscyA9IDwwPjsNCisN
+CisgICAgICAgICAgICBpbnRlcmZhY2VAMCB7DQorICAgICAgICAgICAgICAgIGNvbXBhdGlibGUg
+PSAidXNiaWYxMjMsYWJjZC5jb25maWcxLjAiOw0KKyAgICAgICAgICAgICAgICByZWcgPSA8MCAx
+PjsNCisgICAgICAgICAgICB9Ow0KKw0KKyAgICAgICAgICAgIGludGVyZmFjZUAwLDIgew0KKyAg
+ICAgICAgICAgICAgICBjb21wYXRpYmxlID0gInVzYmlmMTIzLGFiY2QuY29uZmlnMi4wIjsNCisg
+ICAgICAgICAgICAgICAgcmVnID0gPDAgMj47DQorICAgICAgICAgICAgfTsNCisgICAgICAgIH07
+DQorICAgIH07DQotLSANCjIuMTguMA0K
 
-Thanks for the review, very constructive comments :)
-
-I acknowledge all the trivial fixes (space, new line, // comments,
-naming...), those will be fixed in v4 (will also review other files
-for similar mistakes). In this reply, I will only focus on the points
-which need explanations.
-
-v4 will come a bit later.
-
-
-> > +/* Threshold on consecutive CAN_STATE_ERROR_PASSIVE. If we receive
-> > + * ES58X_CONSECUTIVE_ERR_PASSIVE_MAX times the event
-> > + * ES58X_ERR_CRTL_PASSIVE in a row without any successful Rx or Tx,
-> > + * we force the device to switch to CAN_STATE_BUS_OFF state.
-> > + */
-> > +#define ES58X_CONSECUTIVE_ERR_PASSIVE_MAX 254
-> 
-> Does the device recover from bus off automatically or why is this needed?
-> 
-
-Will be answered below together with your other question on
-@err_passive_before_rtx_success of struct es58x_priv.
-
-> > +
-> > +enum es58x_physical_media {
-> > +	ES58X_MEDIA_HIGH_SPEED = 1,
-> > +	ES58X_MEDIA_FAULT_TOLERANT = 2
-> 
-> You mean with FAULT_TOLERANT you mean ISO 11898-3? According to [1] they should
-> be named low speed.
-
-Two comments:
- 1/ Yes, this is "low speed". I did not know about the ISO 11898-3,
-    thanks for the hint.
- 2/ After double checking, this option is not supported by the devices
-    in scope of this driver (other devices of the ESxxx portfolio
-    might support it).
-This option will be removed in v4.
-
-> > +};
-> > +
-> > +enum es58x_samples_per_bit {
-> > +	ES58X_ONE_SAMPLE_PER_BIT = 1,
-> > +
-> > +	/* Some CAN controllers do not support three samples per
-> > +	 * bit. In this case the default value of one sample per bit
-> > +	 * is used, even if the configuration is set to
-> > +	 * ES58X_THREE_SAMPLES_PER_BIT.
-> > +	 */
-> 
-> Can you autodetect the controller and avoid announcing tripple sample mode to
-> the driver framework?
-
-Will be addressed in v4. Your remarks made me realized that some of
-the controller modes might not have been announced correctly. Will
-double check the other CAN_CTRLMODE_* as well.
-
-> > +	ES58X_THREE_SAMPLES_PER_BIT = 2
-> > +};
-> > +
-> > +enum es58x_sync_edge {
-> > +	/* ISO CAN specification defines the use of a single edge
-> > +	 * synchronization. The synchronization should be done on
-> > +	 * recessive to dominant level change.
-> > +	 */
-> > +	ES58X_SINGLE_SYNC_EDGE = 1,
-> > +
-> > +	/* In addition to the ISO CAN specification, a double
-> > +	 * synchronization is also supported: recessive to dominant
-> > +	 * level change and dominant to recessive level change.
-> > +	 */
-> > +	ES58X_DUAL_SYNC_EDGE = 2
-> 
-> >We don't have a setting in the CAN framework for this....
-
-The idea here was just to let know people that the option exists so
-that if someone needs the feature one day, he or she can hack the
-driver for his or her own use.
-
-Is it OK to keep it (maybe with a comment such as "not implemented in
-this driver") or should it be simply removed?
-
-There are other similar references in other files. Will change these
-accordingly to your answer on above question.
-
-> > +/**
-> > + * struct es58x_abstracted_can_frame - Common structure to hold can
-> > + *	frame information.
-> 
-> why do you have an itermediate can frame format? We have the struct can_frame
-> and the skb for this.
-
-The goal of this structure was to factorize code when calculating the
-CAN flags. I will try to rethink this part in v4.
-
-> > +union es58x_urb_cmd {
-> > +	u8 raw_cmd[0];
-> 
-> I have to polish my C, what's an empty array in the beginning of a struct?
-
-This is not a struct but a union (it would indeed make no sense at the
-beginning of a struct).
-
-Because it is in a union, the order of the fields does not make a
-difference (if you prefer this to be at the end, I can fix it).
-
-This field is used to cast the union to an u8 array. Because the
-length is unknown it is declared as empty.
-
-For reference, I could at least find a few other references of union
-starting with an empty array in the kernel. One example here:
-https://elixir.bootlin.com/linux/latest/source/include/linux/bpf.h#L821
-
-> 
-> > +/**
-> > + * struct es58x_priv - All information specific to a can channel.
-> > + * @can: struct can_priv must be the first member (Socket CAN relies
-> > + *	on the fact that function netdev_priv() returns a pointer to
-> > + *	a struct can_priv).
-> > + * @es58x_dev: pointer to the corresponding ES58X device.
-> > + * @echo_skb_spinlock: Spinlock to protect the access to the echo skb
-> > + *	FIFO.
-> > + * @current_packet_idx: Keeps track of the packet indexes.
-> > + * @echo_skb_tail_idx: beginning of the echo skb FIFO, i.e. index of
-> > + *	the first element.
-> > + * @echo_skb_head_idx: end of the echo skb FIFO plus one, i.e. first
-> > + *	free index.
-> > + * @num_echo_skb: actual number of elements in the FIFO. Thus, the end
-> > + *	of the FIFO is echo_skb_head = (echo_skb_tail_idx +
-> > + *	num_echo_skb) % can.echo_skb_max.
-> > + * @tx_urb: Used as a buffer to concatenate the TX messages and to do
-> > + *	a bulk send. Please refer to es58x_start_xmit() for more
-> > + *	details.
-> > + * @tx_can_msg_is_fd: false: all messages in @tx_urb are non-FD CAN,
-> > + *	true: all messages in @tx_urb are CAN-FD. Rationale: ES58X FD
-> > + *	devices do not allow to mix standard and FD CAN in one single
-> > + *	bulk transmission.
-> > + * @tx_can_msg_cnt: Number of messages in @tx_urb.
-> > + * @err_passive_before_rtx_success: The ES58X device might enter in a
-> > + *	state in which it keeps alternating between error passive
-> > + *	and active state. This counter keeps track of the number of
-> > + *	error passive and if it gets bigger than
-> > + *	ES58X_CONSECUTIVE_ERR_PASSIVE_MAX, es58x_rx_err_msg() will
-> > + *	force the status to bus-off.
-> 
-> Is this a bug or a feature?
-
-This is a bug of the device.
-
-Rationale: According to ISO 11898-1, paragraph 12.1.4.2 "Error
-counting", the two only possible scenarios to decrements the error
-counter are "After the successful transmission of a frame" (paragraph
-g) and "After the successful reception of a frame" (paragraph h).
-
-Here, the device switch from error passive state to error active state
-without any successful Tx or Rx of a frame. This means that the error
-counter does not behave as stipulated in the ISO.
-
-When the issue occurs, the only solution would be to set down the
-network. Forcing the bus off allows at least the user to recover (with
-restart or restart-ms).
-
-For information, this issue was only witnessed when the device is
-trying to send frames on a bus which is already at 100% load.
-
-Example to reproduce: have can0 and can1 on the same bus and do:
-cangen -g0 can0
-cangen -g0 can1
-
-Note: development team of the device's firmware was informed of this
-issue and will consider how to fix it.
-
-> > +#define ES58X_SIZEOF_ES58X_DEVICE(es58x_dev_param)			\
-> > +	(offsetof(struct es58x_device, rx_cmd_buf) +			\
-> > +		(es58x_dev_param)->rx_urb_cmd_max_len)
-> 
-> can this be made a static inline?
-
-Yes. Will be fixed in v4.
-
-> > + * Must be a macro in order to retrieve the actual size using
-> > + * sizeof(). Can be use with any of the messages which have a fixed
-> > + * length. Check for an exact match of the size.
-> 
-> You can provide an outer macro that does the sizeof() and then calls the a
-> normal (static inline) function to do the actual work. Applied to the next 3 macros.
-
-OK. Will be fixed in v4.
-
-> > +#define ES58X_SIZEOF_URB_CMD(es58x_urb_cmd_type, msg_field)		\
-> > +	(offsetof(es58x_urb_cmd_type, raw_msg)				\
-> > +		+ sizeof_field(es58x_urb_cmd_type, msg_field)		\
-> > +		+ sizeof_field(es58x_urb_cmd_type,			\
-> > +			reserved_for_crc16_do_not_use))
-> 
-> static inline?
-
-Sorry but this one can not be converted into a static inline: the
-first argument is a type (that will become the first argument of
-offsetof() and sizeof_field()).
-
-
-One more time, thank you for your time and your review!
-
-Yours sincerely,
-Vincent Mailhol
