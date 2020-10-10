@@ -2,94 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED0928A1B2
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 00:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721EE28A1B8
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 00:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730899AbgJJWJi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Oct 2020 18:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730153AbgJJSyk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Oct 2020 14:54:40 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE00CC08EC25;
-        Sat, 10 Oct 2020 10:48:17 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id 10so184193pfp.5;
-        Sat, 10 Oct 2020 10:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=UsvyoolCXPGifPPput5EkvxYqIiH/fv+ohqKnbks3LY=;
-        b=oDOJ/GnHCr6v2RHN7CitzpPwAsdyNuQVzl1AmdPweTLbtzJF5YvAtlgHh+rWf1R5Q8
-         vU2NdYIlI22hDKgUHAkZ3zMAQ7goFtKHR+4hm5Pz3zCLyWDvYFVxfks3H4PyfkY3Au0y
-         1QWF9mC5UIE9s1pg0MSDMKnV2bx9ndgvDMZ/sDfODAossxH63zeiZJvfSLfjdMQtM56E
-         L8JW2LKeyODqV/wi7xEKdm8xs4oyp7jMI2p734Gh9DSDjOZ7Nphx35klhJXZjOlp9B7/
-         GtHrFcrbxqBPUETOta6ulKS2PS30whxTqqd8e5MoSngklEjQV00awzXHmLwr7YgcHXCv
-         L1rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=UsvyoolCXPGifPPput5EkvxYqIiH/fv+ohqKnbks3LY=;
-        b=ZXAoGORxz06f6528i8UvYDmSZVTsklRH+wBfsTy/V6YJ1lyqdMz9FMtTVRw2yHyfhz
-         VKDQZapS/JKHbATlxWPVXXpfCBQjUzhuuw+oyuKj8JVYQwU81hPh9b8oCp8x6/9bzlv3
-         /nA7vRTbOfdv2Djy2mi2H9q71P7lUbr4n3UvwNFJa5/dvHO8WcUrYzqN+Lpslc6Cj4Gd
-         AjmA9ZEGfda+V2qlNHfumlFtidHjpN77d4XMZePc+Kn9PvsoxetBiHlLjrXR+hAd7F+N
-         nSE+jN3K/kEedBvz+t51BQb2UNiRlIPf8m5u8SNKE1+ivnaUKh7nkfxzKFplkCnOOYAF
-         wl4A==
-X-Gm-Message-State: AOAM533VC/MhEw+sraLc2HVb7Fj+0TOxE3NCGJ6hAIZeUg6yGcnEXAqW
-        dDldYxKkbF5OshOVebZ+ua+k61fnPcG3FL2+Fzo=
-X-Google-Smtp-Source: ABdhPJw7WCTIgQ8Skg+SBGmSpdINI/2sBT2t0utzFWNf3VFe7deMusnEM5z10SkPi1B2LyQcKIsYUA==
-X-Received: by 2002:a17:90a:e453:: with SMTP id jp19mr11518525pjb.34.1602352096486;
-        Sat, 10 Oct 2020 10:48:16 -0700 (PDT)
-Received: from [192.168.0.104] ([49.207.200.2])
-        by smtp.gmail.com with ESMTPSA id g4sm14652311pgg.75.2020.10.10.10.48.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Oct 2020 10:48:15 -0700 (PDT)
-Subject: Re: [PATCH] net: usb: usbnet: update __usbnet_{read|write}_cmd() to
- use new API
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201010065623.10189-1-anant.thazhemadam@gmail.com>
- <20201010100346.158cbf62@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Message-ID: <c7a7c934-1971-612e-a783-997a36bb69a3@gmail.com>
-Date:   Sat, 10 Oct 2020 23:18:11 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1731098AbgJJWOv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sat, 10 Oct 2020 18:14:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48688 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731111AbgJJTCW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 10 Oct 2020 15:02:22 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 209411] When retrieving string descriptor from mobile device
+ returns eproto error
+Date:   Sat, 10 Oct 2020 18:02:47 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: rachithas104@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-209411-208809-HwXO0GTaZA@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-209411-208809@https.bugzilla.kernel.org/>
+References: <bug-209411-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <20201010100346.158cbf62@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=209411
 
-On 10/10/20 10:33 pm, Jakub Kicinski wrote:
-> On Sat, 10 Oct 2020 12:26:23 +0530 Anant Thazhemadam wrote:
->> GPF_KERNEL
-> You haven't even built this, let alone tested :/
+--- Comment #28 from rachithas104@gmail.com ---
+(In reply to Alan Stern from comment #25)
+> If your software isn't running, then what software issues the
+> Get-String-Descriptor request for string descriptor 4 that causes the EPROTO
+> error?
+> 
+> If the same packets are present with or without your software, then your
+> software isn't sending any packets.  Is this really what you mean?
+> 
+> In any case, the EPROTO error is caused by the code running on the phone.  I
+> can't give you much advice about that.
 
-I'm really sorry about this.
-Turns out, my .config wasn't set generated by make allyesconfig, and thus
-this regression went undetected.
+Hello I see similar thread which you have fixed
+https://www.spinics.net/lists/linux-usb/msg199677.html
+I also see the same problem when calling setconfiguration
+How can I test the fix mentioned in thread,can you kindly help
 
-I can submit a v2 that doesn't break the build, and which is build tested
-properly.
-However, I'm not clear on how else I could locally run unit tests pertaining to this
-patch. I understand the critical requirement for testing changes and would really
-appreciate it if someone could direct me towards some resource or another that
-could help me figure that out too.
-
-Once again, I'm really sorry for this oversight.
-Thank you for your time.
-
-Thanks,
-Anant
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
