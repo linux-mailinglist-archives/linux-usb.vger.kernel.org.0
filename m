@@ -2,15 +2,15 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 949D1289F6B
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Oct 2020 10:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177D9289F93
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Oct 2020 11:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbgJJIu4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Oct 2020 04:50:56 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:2923 "EHLO
+        id S1728885AbgJJJ0a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Oct 2020 05:26:30 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:28298 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726366AbgJJIqO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Oct 2020 04:46:14 -0400
+        with ESMTP id S1726817AbgJJIyH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Oct 2020 04:54:07 -0400
 X-UUID: 1ee4d5bc92554d7e958543434527e1b6-20201010
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
         h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=pCXxuHl4NEKBv1fodutwA2PDZlk+wI3nQWXYl98dgik=;
