@@ -2,106 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D355F28A348
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 01:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF8F28A47D
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 01:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727261AbgJJXH6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Oct 2020 19:07:58 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:57896 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbgJJXH5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Oct 2020 19:07:57 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id DC6488002547;
-        Sat, 10 Oct 2020 22:41:37 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4maO7b5Sdc2M; Sun, 11 Oct 2020 01:41:37 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH 18/18] dt-bindings: usb: qcom,dwc3: Validate DWC3 sub-node
-Date:   Sun, 11 Oct 2020 01:41:21 +0300
-Message-ID: <20201010224121.12672-19-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
-References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
+        id S2387523AbgJJXlA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Oct 2020 19:41:00 -0400
+Received: from mail-eopbgr70043.outbound.protection.outlook.com ([40.107.7.43]:55877
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726989AbgJJXlA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 10 Oct 2020 19:41:00 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eArVUn3kI1vY2opaWDngT6NK1B4QECBV8EjEAOOZK5ipevUPzrmu4x06BzjL48Wf3atRMI1A/VvgJ38CdctjQ4VpNQs+Fy263dMGwn+g6liORcmUesoCa2GQ3VCqPxEWUcMuqOF5PH3NcCFCMvqGpXQipsZM3CFGMAMAbNmIzIzBIZf/fzWzSw6Iil+IzZpMo8+wPh1Oo33sOWjOWs9SZe2vlOB94w5DGf4euKpRQAL+wbu0CeEoKQzUxPLyarhIyETk4NUydYLo81D2QwiEx4QWfEovb7BbaqZ28mbkWshlZEM9A74sbHjhOXrWlfbEsygFSmF+naLZkGxzZtANgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b5wAntxq+9TE0g7PNZNxBuXDLYdS4G25ouLpHBEhLxA=;
+ b=IXQsy4uuAZ6fs9YwzTaUNEuDM/vxuCL/ttjimVNWfJcCnaYEZb6d6zE7uu9A9813eh0Mxe2m9q2JTeKAgty1DI53t9ZNyO0YtiGAzg//IHyl/ggDTmhHJ8MH2xmq3w7PK4ehBCgAZcxiOPSaGP2CJ9hsNAvkw54KRsCTBl/mkoZ9xWpJbwAlRjMefueHkoLJZfHB2sPGduM1xBFYu7fLNoMdiCSy7gcSC5iK5htySt4c2LCV1KVGP7+i6yRxnfMP6PhXtD7+X+5UPlVmTYdQ5fqdnC3CPNlY3FZznffVEab2e14MjCxj4UASyYT01IKMkWbAFv77Nb4PzcrS9qtOxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b5wAntxq+9TE0g7PNZNxBuXDLYdS4G25ouLpHBEhLxA=;
+ b=UWbzy3rpPNgaOydYdFce+9RI2pMX99hgqMpBqw9CFYQ00YS4lHWGNw+GlfLzGtF39X29XLKI2/pGMD/ySXyKXLxtrxqBKp1o5qLkUtz01dqKvOp5WDG5H841D7UvUeU1KTI5RZszuh4otK74pTB5bh3tWR9fKVkEtcSCE1ikwus=
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
+ by AM0PR04MB4417.eurprd04.prod.outlook.com (2603:10a6:208:76::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.26; Sat, 10 Oct
+ 2020 23:40:56 +0000
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::ad01:9b1c:3b4b:3a77]) by AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::ad01:9b1c:3b4b:3a77%7]) with mapi id 15.20.3455.028; Sat, 10 Oct 2020
+ 23:40:55 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Ran Wang <ran.wang_1@nxp.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jun Li <jun.li@nxp.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: host: fsl-mph-dr-of: check return of dma_set_mask()
+Thread-Topic: [PATCH] usb: host: fsl-mph-dr-of: check return of dma_set_mask()
+Thread-Index: AQHWnsxMafGOyChLpEqh4ZaQKTdKaqmRf+CA
+Date:   Sat, 10 Oct 2020 23:40:55 +0000
+Message-ID: <20201010234028.GA16433@b29397-desktop>
+References: <20201010060308.33693-1-ran.wang_1@nxp.com>
+In-Reply-To: <20201010060308.33693-1-ran.wang_1@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 0fe317c8-1728-4a2b-678a-08d86d75eeeb
+x-ms-traffictypediagnostic: AM0PR04MB4417:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB4417C14C7BE712A1903A9DC08B090@AM0PR04MB4417.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:792;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qtvIQPxtNy7UFnSCbuIb9xD7fRd2VPOVFAVeR8YxaIVYxhoa7YiLaVWoM3MTFLe2PP9wfhNljfE45gjfvUNUwpOkShJAqSaV5UWYkLgjCW1N0PMZaMVSxSVvgTUPVadZgeh/bqRgLpAOlCelJcOUBlpJWB/JcbdQn/HTsSArZgjZGbvzpQQSTF6fWkYkyrKml4btaWDOv/BcmbVIH0nRj4qb6clMeyO8sLqATORBgJN2gdxsSOxxYtCmiS++F2mfdI7go6dLPN2rFdpsviXPfhDOQCu2LJ2Mcm1W0JeIxEf24CWYIzFg/ISuPhR8ZNe5TnedCcw1GOZI6R9CVcZy9Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(39860400002)(376002)(136003)(366004)(346002)(396003)(91956017)(9686003)(8936002)(66946007)(86362001)(71200400001)(64756008)(6512007)(66556008)(66446008)(76116006)(66476007)(54906003)(186003)(316002)(53546011)(6506007)(6636002)(44832011)(8676002)(478600001)(6486002)(83380400001)(1076003)(33716001)(5660300002)(33656002)(4326008)(26005)(2906002)(6862004);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: NxEWXVuIyUFpDp0IxQEmPiQ2ZxTvw/4t05qGmC6IibcOnRK04b1BdYn6Pp8/d6XRsr92hQkSqYUD+0p1/qly9e+HkJLxjQp9CnBX+l6Bp4xntFOWaSyi8malCxQx9cPnuW6yW9xy8qjko4fXydPFDjar+zjfHGDoKRCWKKO53gn2y3+cbVaDswElwVTaZmRmIJAHRJUY/A3a1hB9mAuW7q0oeiWvASwy3bdH89Htfs8weJOhH0EvmWy08VG8ePrVrdMnqTmt03V9Y+6mjlnoxeIc8dzh3jYfvd/5x/Uts03e7d/mNV5g6WW84PacfWDsd2j1LWzN6bj++9B9//xyixOssx6cg5TIqGX8SqlDvHs8fVujtsUFIuKDBgBDeZFUeogBzcSVD28OX7jREU3WGKurgmjAW+lh+6tY8IZG5fRpBPyGokPfIqrNoB7K211dvgVYNTNCyrWSn0PrmI1Kdd1b5XzSvsK6IE4ENhY/rq1NE/JvO9WbkV7FA4XheInMKJaXkOb2HfJazAApCBXYNnxsZmfltJqqKjELgvDTNUcglOch0hsfBUmS1MtxCA6cx7djh/ed6/qeSLuKMtYnmjzQldEnJ7icJ8lJfRfNugPY7Ujk2swiVPabGtb8357QBSS2P7jxIFzkU4ahhl/xNw==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <B7AD5C457915104989BE8079B8DAEF0E@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fe317c8-1728-4a2b-678a-08d86d75eeeb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Oct 2020 23:40:55.8527
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZDsb81wKufnrdp4VC1r82nR5x2W8jMIIlWtR7GSmJ7IBW/mrl1abhouH7C5A/ccgscVWSt1O2pmNsShK8o+KMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4417
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Qualcomm msm8996/sc7180/sdm845 DWC3 compatible DT nodes are supposed to
-have a DWC USB3 compatible sub-node to describe a fully functioning USB
-interface. Let's use the available DWC USB3 DT schema to validate
-the Qualcomm DWC3 sub-nodes.
+On 20-10-10 14:03:08, Ran Wang wrote:
+> fsl_usb2_device_register() should stop init if dma_set_mask() return
+> error.
+>=20
+> Fixes: cae058610465 ("drivers/usb/host: fsl: Set DMA_MASK of usb platform=
+ device")
+> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> ---
+>  drivers/usb/host/fsl-mph-dr-of.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/usb/host/fsl-mph-dr-of.c b/drivers/usb/host/fsl-mph-=
+dr-of.c
+> index ae8f60f..44a7e58 100644
+> --- a/drivers/usb/host/fsl-mph-dr-of.c
+> +++ b/drivers/usb/host/fsl-mph-dr-of.c
+> @@ -94,10 +94,13 @@ static struct platform_device *fsl_usb2_device_regist=
+er(
+> =20
+>  	pdev->dev.coherent_dma_mask =3D ofdev->dev.coherent_dma_mask;
+> =20
+> -	if (!pdev->dev.dma_mask)
+> +	if (!pdev->dev.dma_mask) {
+>  		pdev->dev.dma_mask =3D &ofdev->dev.coherent_dma_mask;
+> -	else
+> -		dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
+> +	} else {
+> +		retval =3D dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
+> +		if (retval)
+> +			goto error;
+> +	}
+> =20
+>  	retval =3D platform_device_add_data(pdev, pdata, sizeof(*pdata));
+>  	if (retval)
+> --=20
+> 2.7.4
+>=20
 
-Note since the generic DWC USB3 DT node is supposed to be named as
-generic USB HCD ("^usb(@.*)?") we have to accordingly extend the sub-nodes
-naming space and fix the DT node example.
+Reviewed-by: Peter Chen <peter.chen@nxp.com>
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+One more place need to fix, if platform_device_alloc returns NULL,
+it should not call platform_device_put to release platform
+device memory.
 
----
+	pdev =3D platform_device_alloc(name, id);
+	if (!pdev) {
+		retval =3D -ENOMEM;
+		goto error;
+	}
+	...
+error:
+	platform_device_put(pdev);
+	return ERR_PTR(retval);
+--=20
 
-Alas there are many Qualcomm DTS files, which have got the Qualcomm DWC3
-node defined with sub-nodes named as "^dwc3@.*". Since the generic DWC USB3
-DT schema will be automatically selected for them and the naming doesn't
-comply with the USB HCD DT schema, the dtbs_check procedure will fail.
-I don't really know what is a most suitable way to fix that. It's either
-to alter all the Qualcomm DTS files, or extend the USB HCD schema to
-accept the "dwc3@.*" nodes, or redesign the usb-hcd.yaml schema. What do
-you think?
----
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index dac10848dd7f..b3737f0e4dc1 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -103,11 +103,8 @@ properties:
- # Required child node:
- 
- patternProperties:
--  "^dwc3@[0-9a-f]+$":
--    type: object
--    description:
--      A child node must exist to represent the core DWC3 IP block
--      The content of the node is defined in dwc3.txt.
-+  "^(usb|dwc3)@[0-9a-f]+$":
-+    $ref: snps,dwc3.yaml#
- 
- required:
-   - compatible
-@@ -160,7 +157,7 @@ examples:
- 
-             resets = <&gcc GCC_USB30_PRIM_BCR>;
- 
--            dwc3@a600000 {
-+            usb@a600000 {
-                 compatible = "snps,dwc3";
-                 reg = <0 0x0a600000 0 0xcd00>;
-                 interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
--- 
-2.27.0
-
+Thanks,
+Peter Chen=
