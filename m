@@ -2,70 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0047289D23
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Oct 2020 03:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FF5289D85
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Oct 2020 04:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729666AbgJJBja (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Oct 2020 21:39:30 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:44467 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729432AbgJJBIT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Oct 2020 21:08:19 -0400
-Received: (qmail 557695 invoked by uid 1000); 9 Oct 2020 21:08:17 -0400
-Date:   Fri, 9 Oct 2020 21:08:17 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+f5378bcf0f0cab45c1c6@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
-        eli.billauer@gmail.com, gregkh@linuxfoundation.org,
-        gustavoars@kernel.org, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, oneukum@suse.com,
-        syzkaller-bugs@googlegroups.com, tiwai@suse.de
-Subject: Re: WARNING in hif_usb_send/usb_submit_urb
-Message-ID: <20201010010817.GA557391@rowland.harvard.edu>
-References: <20201010004944.GB557008@rowland.harvard.edu>
- <000000000000ef564605b1468771@google.com>
+        id S1729693AbgJJBkg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Oct 2020 21:40:36 -0400
+Received: from mga01.intel.com ([192.55.52.88]:28677 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729286AbgJJBWx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Oct 2020 21:22:53 -0400
+IronPort-SDR: zpCJEbBguZqg/aUlMebdphzDmSP9P9+MDf+Qd6bwcdVuNGh2UmGDDoPBqdflTUSVJOI1sFIBPm
+ 9Fm96E1eRpLQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="183003309"
+X-IronPort-AV: E=Sophos;i="5.77,357,1596524400"; 
+   d="scan'208";a="183003309"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 18:22:41 -0700
+IronPort-SDR: LJmXXeBBXzmB7Es3nL2XqXgQxdwt5GASNb4e2zCHXMdc3ebbMD3yK26Hn+sut81dfhO++zCHMC
+ 2YG377g9LynA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,357,1596524400"; 
+   d="scan'208";a="298609588"
+Received: from lkp-server02.sh.intel.com (HELO 80eb06af76cf) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Oct 2020 18:22:40 -0700
+Received: from kbuild by 80eb06af76cf with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kR3aq-0000oj-4k; Sat, 10 Oct 2020 01:22:40 +0000
+Date:   Sat, 10 Oct 2020 09:22:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 6c8cf369517640edcb4305b38a27f592a54b7bbe
+Message-ID: <5f810cba.c5KlDgTnMDV/Ylkt%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000ef564605b1468771@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 05:56:09PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot tried to test the proposed patch but the build/boot failed:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 6c8cf369517640edcb4305b38a27f592a54b7bbe  usb: typec: Add QCOM PMIC typec detection driver
 
-Oops.  One more try, with the typos fixed.
+elapsed time: 725m
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v5.9-rc8
+configs tested: 152
+configs skipped: 2
 
-Index: usb-devel/drivers/net/wireless/ath/ath9k/hif_usb.c
-===================================================================
---- usb-devel.orig/drivers/net/wireless/ath/ath9k/hif_usb.c
-+++ usb-devel/drivers/net/wireless/ath/ath9k/hif_usb.c
-@@ -1307,6 +1307,20 @@ static int ath9k_hif_usb_probe(struct us
- 	struct usb_device *udev = interface_to_usbdev(interface);
- 	struct hif_device_usb *hif_dev;
- 	int ret = 0;
-+	struct usb_host_interface *alt;
-+	struct usb_endpoint_descriptor *epd;
-+
-+	/* Verify the expected endpoints are present */
-+	alt = interface->cur_altsetting;
-+	if (!usb_find_int_in_endpoint(alt, &epd) ||
-+			usb_endpoint_num(epd) != USB_REG_IN_PIPE ||
-+	    !usb_find_int_out_endpoint(alt, &epd) ||
-+			usb_endpoint_num(epd) != USB_REG_OUT_PIPE ||
-+	    !usb_find_bulk_in_endpoint(alt, &epd) ||
-+			usb_endpoint_num(epd) != USB_WLAN_RX_PIPE ||
-+	    !usb_find_bulk_out_endpoint(alt, &epd) ||
-+			usb_endpoint_num(epd) != USB_WLAN_TX_PIPE)
-+		return -ENODEV;
- 
- 	if (id->driver_info == STORAGE_DEVICE)
- 		return send_eject_command(interface);
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                          landisk_defconfig
+sh                          kfr2r09_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                             allmodconfig
+c6x                                 defconfig
+sparc64                          alldefconfig
+arm                          iop32x_defconfig
+m68k                       m5249evb_defconfig
+powerpc                     rainier_defconfig
+powerpc                     tqm8548_defconfig
+arm                          imote2_defconfig
+nios2                         3c120_defconfig
+powerpc                      walnut_defconfig
+powerpc                       ppc64_defconfig
+xtensa                          iss_defconfig
+sh                             shx3_defconfig
+arm                            lart_defconfig
+m68k                          atari_defconfig
+powerpc                     pseries_defconfig
+mips                       rbtx49xx_defconfig
+arc                     nsimosci_hs_defconfig
+sh                        sh7757lcr_defconfig
+arc                      axs103_smp_defconfig
+arm                           sama5_defconfig
+ia64                        generic_defconfig
+sparc                       sparc64_defconfig
+arm                          pxa910_defconfig
+sh                           se7721_defconfig
+arm                          gemini_defconfig
+powerpc                        warp_defconfig
+mips                       lemote2f_defconfig
+powerpc                     ppa8548_defconfig
+arm                           corgi_defconfig
+arm                         s3c6400_defconfig
+powerpc                   motionpro_defconfig
+sparc64                             defconfig
+arc                        nsim_700_defconfig
+arm                        multi_v7_defconfig
+mips                          rm200_defconfig
+sh                               j2_defconfig
+arm                           spitz_defconfig
+h8300                    h8300h-sim_defconfig
+mips                      maltasmvp_defconfig
+openrisc                    or1ksim_defconfig
+sh                          sdk7780_defconfig
+arm                          prima2_defconfig
+powerpc                    gamecube_defconfig
+c6x                        evmc6472_defconfig
+mips                      loongson3_defconfig
+arm                         cm_x300_defconfig
+mips                     loongson1b_defconfig
+arc                             nps_defconfig
+mips                           gcw0_defconfig
+sh                          rsk7203_defconfig
+powerpc                 mpc832x_mds_defconfig
+sh                        dreamcast_defconfig
+xtensa                              defconfig
+arm                       mainstone_defconfig
+powerpc                     tqm5200_defconfig
+um                             i386_defconfig
+openrisc                 simple_smp_defconfig
+sh                        edosk7705_defconfig
+sh                         microdev_defconfig
+arm                        mvebu_v5_defconfig
+arm                            xcep_defconfig
+parisc                generic-32bit_defconfig
+microblaze                    nommu_defconfig
+xtensa                  audio_kc705_defconfig
+microblaze                      mmu_defconfig
+sh                        sh7785lcr_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                          rsk7264_defconfig
+m68k                             allmodconfig
+powerpc                     tqm8540_defconfig
+microblaze                          defconfig
+sh                           se7705_defconfig
+arm                     davinci_all_defconfig
+riscv                    nommu_k210_defconfig
+powerpc                      bamboo_defconfig
+m68k                         amcore_defconfig
+arm                             ezx_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20201009
+i386                 randconfig-a005-20201009
+i386                 randconfig-a001-20201009
+i386                 randconfig-a004-20201009
+i386                 randconfig-a002-20201009
+i386                 randconfig-a003-20201009
+x86_64               randconfig-a012-20201009
+x86_64               randconfig-a015-20201009
+x86_64               randconfig-a013-20201009
+x86_64               randconfig-a014-20201009
+x86_64               randconfig-a011-20201009
+x86_64               randconfig-a016-20201009
+i386                 randconfig-a015-20201009
+i386                 randconfig-a013-20201009
+i386                 randconfig-a014-20201009
+i386                 randconfig-a016-20201009
+i386                 randconfig-a011-20201009
+i386                 randconfig-a012-20201009
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a006-20201009
+x86_64               randconfig-a004-20201009
+x86_64               randconfig-a003-20201009
+x86_64               randconfig-a005-20201009
+x86_64               randconfig-a001-20201009
+x86_64               randconfig-a002-20201009
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
