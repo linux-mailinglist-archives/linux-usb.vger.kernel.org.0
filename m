@@ -2,26 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C32028A921
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 20:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE5D28A929
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 20:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726259AbgJKSFS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Oct 2020 14:05:18 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:59048 "EHLO
+        id S1726805AbgJKSHA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Oct 2020 14:07:00 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:59096 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725844AbgJKSFS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Oct 2020 14:05:18 -0400
+        with ESMTP id S1726235AbgJKSG7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Oct 2020 14:06:59 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 65B918030867;
-        Sun, 11 Oct 2020 18:05:16 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 99C0D8030866;
+        Sun, 11 Oct 2020 18:06:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id cZ_G844yYGtS; Sun, 11 Oct 2020 21:05:14 +0300 (MSK)
-Date:   Sun, 11 Oct 2020 21:05:14 +0300
+        with ESMTP id XHyqDGoe6BJt; Sun, 11 Oct 2020 21:06:57 +0300 (MSK)
+Date:   Sun, 11 Oct 2020 21:06:56 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -39,7 +40,7 @@ CC:     Mathias Nyman <mathias.nyman@intel.com>,
         <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH 05/18] dt-bindings: usb: usb-hcd: Add "tpl-support"
  property
-Message-ID: <20201011180514.l3pn2fp2ehdkc2pc@mobilestation>
+Message-ID: <20201011180656.dl7f7d5f7lhgym7d@mobilestation>
 References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
  <20201010224121.12672-6-Sergey.Semin@baikalelectronics.ru>
  <ada3becf-ab69-6bac-9459-c9fb076b3bf4@gmail.com>
