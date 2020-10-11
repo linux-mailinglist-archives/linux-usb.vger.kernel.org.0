@@ -2,82 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC9728A66F
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 10:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3747628A67A
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 11:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387424AbgJKI43 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Oct 2020 04:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S1729459AbgJKJEP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Oct 2020 05:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387397AbgJKI42 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Oct 2020 04:56:28 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04684C0613CE;
-        Sun, 11 Oct 2020 01:56:26 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id f21so13846841ljh.7;
-        Sun, 11 Oct 2020 01:56:26 -0700 (PDT)
+        with ESMTP id S1725844AbgJKJEO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Oct 2020 05:04:14 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D27FC0613CE;
+        Sun, 11 Oct 2020 02:04:14 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id l2so15255634lfk.0;
+        Sun, 11 Oct 2020 02:04:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:organization:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Av8iAeeJxUiyFO/5WdyIDg1zCHvYHT1L81w3SGv8akA=;
-        b=kOgDEeS6BoOVfPvzdy+8ZqJ4Dw0PYzHZzdDTfdSjH+RnAcpJg6HNcLeppjjocH2af2
-         ttICfqYhuH+XpMqcpXFJU+feojPisEiqHBCvdMsV5pOc331p9/wMLJVOUvExwTw8Js8S
-         bRf/9c9FJ+lZhjeYASAAmPReoUFosLjbJnlK0Xped+o7R8s+KlOzyWCBEYK+NiYTqcBL
-         ZGqL+GISx2gaRFc1b3cFpLWpCW38SfLa3rmHfIck9T4w3h16xOIEOk8BKE+GwWBFz1fr
-         xapxoIU94QwUYcqqTKd6tWGrKFUVvgrfD5/vfQql8ENZg8h6LdLVOdCrK9Pj2L7eR1/f
-         DEWw==
+        bh=op4C1dyWec2MNa3n2GiL3r5ejlKfwUOPFae3SX3BS8g=;
+        b=O0Zh2Agmj9c2F6bcDOpxYHA0I1hTC5fcHKvfoW9Z1KjYaqRh0LetmEjRf0Lv590+pb
+         tEGg2Av318WMZ/P9KhjD3GAuyApXIqh8RwErMIuLWDUEHI8nERnEQMntA7zUj8Oguyui
+         +57mxemkp5I/ztJm/KgXSliTowi/ayeHsb07L8SOwJ7ft40qMNZPRtLxCd2CoPTcMvV7
+         +QaABO0hI2dDYWtagDwlTlBz0aQ9/JtL9uWT14l3KRQGH01926DEr/txlbN3U5K/Jy8h
+         LV+vtyupb6FhTq7/CI9q3E63fLsAuDn0XimEm7IBIkC7hmwBTb9wU/bRXnanSWfimdjO
+         GgKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:organization
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Av8iAeeJxUiyFO/5WdyIDg1zCHvYHT1L81w3SGv8akA=;
-        b=fiXgAKV4ZGMPf4mDA/+7klAV08dg0KOg7nr5w3g9kaYld3+oc3utlx5vEhdQ5PzG+R
-         omohWUR78sga4gSgy0VvGAG6nMYVCmdAPUJR4ToA7HlYa3Nn9KUOiPETOBpZJNFz1vmk
-         kIqeZR7fG9/yRsI+/ZmlraaNKRrPUTm9M0SP0GNyaKDXrcwkKA4MNqWQ60WgFmwBawTE
-         7rzFGceFU6i73kf2sAGlXDn259WZyhGg7C02D1zLPGAG0enIE+lO71LcZ9PF2NdL6qCb
-         vh7zFcTxWW+oilqz9FD6Xk3vYMYagP7lHPxZRv6tC6n9goQUpzQnGJUEVcUjoD0FWPce
-         X53A==
-X-Gm-Message-State: AOAM533O/g7Mv5mWYjUpUFoaNrJ52OBL6U0ICkf1jQUq3VxMPNyWRWy3
-        CcAgegfIDTGowmrD2oxtV2eKHE+nfcXKww==
-X-Google-Smtp-Source: ABdhPJx35lBDessle3fqVVBE1Qxfco3IimdGm/48RbiIgMJQXQhamZwV+P2ukrfdUZCsu91d7rbhVw==
-X-Received: by 2002:a2e:681a:: with SMTP id c26mr8685853lja.56.1602406585182;
-        Sun, 11 Oct 2020 01:56:25 -0700 (PDT)
+        bh=op4C1dyWec2MNa3n2GiL3r5ejlKfwUOPFae3SX3BS8g=;
+        b=DS1ouHgFeSVMK6tVfUFWorhvLu7+U2rY9zDc2N7xMqhs+VpFXIKw7GPzDz/T51K0/e
+         5H6Z/bI4RM3f+JnoYsiDKdKfnmKZmV0orIzbz10TLKBZHAjRgys89UfNbfmgCqku63nN
+         eRg+E2ykRYIm03NmK1lSjWvMlHwlKx+KA2Aic1++dXqQZHZDEWmiWJ8QeNYIl8uDsbEG
+         cpfmx9c7JxGFifWM0vexjomvWpCAs7NgohoGCpkPt4JkSycYyTyEIRjkhWnzrpmCHoLx
+         ls1gWQoixz7lPCfbZkXZyxeG2u/6jHp+9FhtVdtatEj7eUcEXfmsdGfM+lbiy1JVkWqu
+         byMQ==
+X-Gm-Message-State: AOAM5306jyN5IYmqc2ffSQCJG10hArT6R0Aw8lV7zdLbGA+VPIZvZjFs
+        5bl/KVUHoqM+r2wXHJ+I7Prnh8EbXiznYg==
+X-Google-Smtp-Source: ABdhPJz9EE8xjySHoMmnUEBpfYu6Ux45Y8E7ZtSK9JIWShZAxJR5+2GBYjtFb14je8t8HABotww5MQ==
+X-Received: by 2002:ac2:5294:: with SMTP id q20mr6756421lfm.538.1602407051227;
+        Sun, 11 Oct 2020 02:04:11 -0700 (PDT)
 Received: from ?IPv6:2a00:1fa0:4275:c0a:6554:d910:ceb:9024? ([2a00:1fa0:4275:c0a:6554:d910:ceb:9024])
-        by smtp.gmail.com with ESMTPSA id g9sm2450350lfd.1.2020.10.11.01.56.23
+        by smtp.gmail.com with ESMTPSA id r17sm2441887lff.239.2020.10.11.02.04.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Oct 2020 01:56:24 -0700 (PDT)
-Subject: Re: [PATCH 13/18] dt-bindings: usb: dwc3: Add Tx De-emphasis
- restrictions
+        Sun, 11 Oct 2020 02:04:10 -0700 (PDT)
+Subject: Re: [PATCH 17/18] dt-bindings: usb: keystone-dwc3: Validate DWC3
+ sub-node
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
+        Rob Herring <robh+dt@kernel.org>, Roger Quadros <rogerq@ti.com>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
- <20201010224121.12672-14-Sergey.Semin@baikalelectronics.ru>
+ <20201010224121.12672-18-Sergey.Semin@baikalelectronics.ru>
 From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
 Organization: Brain-dead Software
-Message-ID: <4b256e47-d058-a74f-0ad1-677886a03e74@gmail.com>
-Date:   Sun, 11 Oct 2020 11:56:21 +0300
+Message-ID: <874c8ba6-bd0c-4f4e-f4ee-29c7f6ae563a@gmail.com>
+Date:   Sun, 11 Oct 2020 12:04:06 +0300
 User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.1
 MIME-Version: 1.0
-In-Reply-To: <20201010224121.12672-14-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201010224121.12672-18-Sergey.Semin@baikalelectronics.ru>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -87,16 +86,12 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On 11.10.2020 1:41, Serge Semin wrote:
 
-> In accordance with the driver comments the PIPE3 de-emphasis can be tunned
+> TI Keystone DWC3 compatible DT node is supposed to have a DWC USB3
+> compatible sub-node to describe a fully functioning USB interface.
+> Since DWC USB3 has now got a DT schema describing it' DT node, let's make
+                                                     ^^^ its?
 
-    Tuned.
-
-> to be either -6dB, or -2.5dB or disabled. Let's add the de-emphasis
-
-    Either -6dB, -2.5dB, or disabled?
-
-> property restriction so the DT schema would make sure the controller DT
-> node is equipped with correct values.
+> sure the TI Keystone DWC3 sub-node passes validation against it.
 > 
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 [...]
