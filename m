@@ -2,94 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793DC28A894
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 19:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C28E28A8E6
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 19:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388322AbgJKRxp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Oct 2020 13:53:45 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:58984 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbgJKRxp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Oct 2020 13:53:45 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id C28F18030865;
-        Sun, 11 Oct 2020 17:53:41 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id gTghl0HaVN0J; Sun, 11 Oct 2020 20:53:41 +0300 (MSK)
-Date:   Sun, 11 Oct 2020 20:53:33 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 02/18] dt-bindings: usb: usb-hcd: Add "wireless"
- maximum-speed property value
-Message-ID: <20201011175333.2v46x6kiugqnvlpk@mobilestation>
-References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
- <20201010224121.12672-3-Sergey.Semin@baikalelectronics.ru>
- <20201011144236.GA271079@kroah.com>
+        id S1730575AbgJKR7o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Oct 2020 13:59:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50578 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730562AbgJKR7h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 11 Oct 2020 13:59:37 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 337F22222A;
+        Sun, 11 Oct 2020 17:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602439176;
+        bh=kpHPm3b0x7774/V3XF7AlNsW2/7DQu7ykW7w2QiUHmg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=X/9CsasW2yL1pDtbweT1nLYwhP/IWANFFTYZLgSlQLC9spG79Z0kOx81/ozKTmB8j
+         jCEwZevWT/u4sqWInkWxOEy+mK6obAoprAAAuo2t66AGRdZ0w6kZHolfC2gb+B8bNa
+         Nk3po15C7XSE86KlKYuXKZp2UYn9AzvLNtPoyd2g=
+Date:   Sun, 11 Oct 2020 10:59:34 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Cc:     petkan@nucleusys.com, davem@davemloft.net,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au
+Subject: Re: [PATCH v2] net: usb: rtl8150: don't incorrectly assign random
+ MAC addresses
+Message-ID: <20201011105934.5c988cd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201011173030.141582-1-anant.thazhemadam@gmail.com>
+References: <20201010064459.6563-1-anant.thazhemadam@gmail.com>
+        <20201011173030.141582-1-anant.thazhemadam@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20201011144236.GA271079@kroah.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Oct 11, 2020 at 04:42:36PM +0200, Greg Kroah-Hartman wrote:
-> On Sun, Oct 11, 2020 at 01:41:05AM +0300, Serge Semin wrote:
-> > It appears that the "maximum-speed" property can also accept the
-> > "wireless" value. Add it to the enumeration of the possible property
-> > values then.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  Documentation/devicetree/bindings/usb/usb-hcd.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-> > index 815de24127db..e1a82a2b3295 100644
-> > --- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-> > @@ -28,7 +28,7 @@ properties:
-> >       isn't passed via DT, USB controllers should default to their maximum HW
-> >       capability.
-> >     $ref: /schemas/types.yaml#/definitions/string
-> > -   enum: ["low-speed", "full-speed", "high-speed", "super-speed",
-> > +   enum: ["low-speed", "full-speed", "high-speed", "wireless", "super-speed",
-> >            "super-speed-plus"]
+On Sun, 11 Oct 2020 23:00:30 +0530 Anant Thazhemadam wrote:
+> In set_ethernet_addr(), if get_registers() succeeds, the ethernet address
+> that was read must be copied over. Otherwise, a random ethernet address
+> must be assigned.
 > 
-
-> Are you sure?  wireless usb has been removed from the kernel, where do
-> you see a user of this?  If it's still in there, we need to just drop
-> it.
-
-My decision on suggesting this patch has been based purely on the speed types
-the USB core API supports and what usb_get_maximum_speed() can return.
-USB_SPEED_WIRELESS type is one of the possible return values. As I can see
-aside the rest of the USB speeds the wireless speed is also defined
-in the kernel USB subsystem. Moreover it is used in some kernel drivers.
-(See the USB_SPEED_WIRELESS enumeration constant usage.)
-Are you sure that the wireless speed support has been really removed?
-
--Sergey
-
+> get_registers() returns 0 if successful, and negative error number
+> otherwise. However, in set_ethernet_addr(), this return value is
+> incorrectly checked.
 > 
-> thanks,
+> Since this return value will never be equal to sizeof(node_id), a
+> random MAC address will always be generated and assigned to the
+> device; even in cases when get_registers() is successful.
 > 
-> greg k-h
+> Correctly modifying the condition that checks if get_registers() was
+> successful or not fixes this problem, and copies the ethernet address
+> appropriately.
+> 
+> Fixes: f45a4248ea4c ("net: usb: rtl8150: set random MAC address when set_ethernet_addr() fails")
+> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+
+This patch is a fix to a conflict resolution in linux-next.
+
+linux-next is not a "real" tree, it's an integration tree used to
+figure out conflicts early.
+
+We had let Stephen know about the problem already. Please wait one
+week, and if the problem is still present resend this.
+
+Thank you.
