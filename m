@@ -2,74 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C28E28A8E6
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 19:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9667F28A91E
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 20:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730575AbgJKR7o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Oct 2020 13:59:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50578 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730562AbgJKR7h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 11 Oct 2020 13:59:37 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 337F22222A;
-        Sun, 11 Oct 2020 17:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602439176;
-        bh=kpHPm3b0x7774/V3XF7AlNsW2/7DQu7ykW7w2QiUHmg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X/9CsasW2yL1pDtbweT1nLYwhP/IWANFFTYZLgSlQLC9spG79Z0kOx81/ozKTmB8j
-         jCEwZevWT/u4sqWInkWxOEy+mK6obAoprAAAuo2t66AGRdZ0w6kZHolfC2gb+B8bNa
-         Nk3po15C7XSE86KlKYuXKZp2UYn9AzvLNtPoyd2g=
-Date:   Sun, 11 Oct 2020 10:59:34 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     petkan@nucleusys.com, davem@davemloft.net,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au
-Subject: Re: [PATCH v2] net: usb: rtl8150: don't incorrectly assign random
- MAC addresses
-Message-ID: <20201011105934.5c988cd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201011173030.141582-1-anant.thazhemadam@gmail.com>
-References: <20201010064459.6563-1-anant.thazhemadam@gmail.com>
-        <20201011173030.141582-1-anant.thazhemadam@gmail.com>
+        id S1725995AbgJKSDr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Oct 2020 14:03:47 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:59012 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725844AbgJKSDr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Oct 2020 14:03:47 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 30D708030866;
+        Sun, 11 Oct 2020 18:03:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IWFHi5PHKBw4; Sun, 11 Oct 2020 21:03:44 +0300 (MSK)
+Date:   Sun, 11 Oct 2020 21:03:38 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 04/18] dt-bindings: usb: usb-hcd: Add "ulpi/serial/hsic"
+ PHY types
+Message-ID: <20201011180338.sdwsy4wzehqyrr3c@mobilestation>
+References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
+ <20201010224121.12672-5-Sergey.Semin@baikalelectronics.ru>
+ <a1fcac64-934a-c68a-cd71-032efce3d0bc@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <a1fcac64-934a-c68a-cd71-032efce3d0bc@gmail.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 11 Oct 2020 23:00:30 +0530 Anant Thazhemadam wrote:
-> In set_ethernet_addr(), if get_registers() succeeds, the ethernet address
-> that was read must be copied over. Otherwise, a random ethernet address
-> must be assigned.
+On Sun, Oct 11, 2020 at 11:49:10AM +0300, Sergei Shtylyov wrote:
+> On 11.10.2020 1:41, Serge Semin wrote:
 > 
-> get_registers() returns 0 if successful, and negative error number
-> otherwise. However, in set_ethernet_addr(), this return value is
-> incorrectly checked.
+> > Aside from the UTMI+ there are also ULPI, Serial and HSIC PHY types
 > 
-> Since this return value will never be equal to sizeof(node_id), a
-> random MAC address will always be generated and assigned to the
-> device; even in cases when get_registers() is successful.
+
+>    "That" missing after "types"?
+
+Thanks. It really is. I'll fix it in v2.
+
+-Sergey
+
 > 
-> Correctly modifying the condition that checks if get_registers() was
-> successful or not fixes this problem, and copies the ethernet address
-> appropriately.
+> > can be specified in the phy_type HCD property. Add them to the
+> > enumeration of the acceptable values.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> [...]
 > 
-> Fixes: f45a4248ea4c ("net: usb: rtl8150: set random MAC address when set_ethernet_addr() fails")
-> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-
-This patch is a fix to a conflict resolution in linux-next.
-
-linux-next is not a "real" tree, it's an integration tree used to
-figure out conflicts early.
-
-We had let Stephen know about the problem already. Please wait one
-week, and if the problem is still present resend this.
-
-Thank you.
+> MBR, Sergei
