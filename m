@@ -2,133 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B2628A9AA
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 21:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E40D28A9B1
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Oct 2020 21:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728833AbgJKTbi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Oct 2020 15:31:38 -0400
-Received: from lan.nucleusys.com ([92.247.61.126]:36238 "EHLO
-        zztop.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726333AbgJKTbi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Oct 2020 15:31:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lfk8Bx8ZAaoT2rdzuE84wdKCTPTT1fgZZGAXDO2auPE=; b=nPqyL0SK9P/XrtyKOaMoUKTbsZ
-        xRYgVjG8lNxwEy1FVQuILLK6LVFkNT/94RWWgrAA/k77UvxU3yrKlBY9HOozL6Qf5vZF6+nFO0Pce
-        KyKp6tbXGyNRzOl/OpmTfvS/Bw+c79ZjIMEqJyenZ8b5RTfuh1hNzw75fV1Cxn1Da/pU=;
-Received: from 78-83-68-78.spectrumnet.bg ([78.83.68.78] helo=p310)
-        by zztop.nucleusys.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <petkan@nucleusys.com>)
-        id 1kRh3v-0007ru-He; Sun, 11 Oct 2020 22:31:19 +0300
-Date:   Sun, 11 Oct 2020 22:31:19 +0300
-From:   Petko Manolov <petkan@nucleusys.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        davem@davemloft.net, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au
-Subject: Re: [PATCH v2] net: usb: rtl8150: don't incorrectly assign random
- MAC addresses
-Message-ID: <20201011193119.GA4061@p310>
-References: <20201010064459.6563-1-anant.thazhemadam@gmail.com>
- <20201011173030.141582-1-anant.thazhemadam@gmail.com>
- <20201011105934.5c988cd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <6307397bd43636fea2e7341d24417cbbc3aaf922.camel@perches.com>
+        id S1728929AbgJKTfK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Oct 2020 15:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726120AbgJKTfK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Oct 2020 15:35:10 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F389C0613CE;
+        Sun, 11 Oct 2020 12:35:10 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id md26so20278965ejb.10;
+        Sun, 11 Oct 2020 12:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=K8aM+wsuH+b5e/V3iFm/UCWXbcrACCoUfMzBFSDIIjs=;
+        b=OGKP0cnrBvlbfHqjtgQ++A7bU89/HXGWVwoiLiIwjNoiSWZn7j8YDzKW+WyqhBCQAy
+         59ENx6/8OuM1/S9qpbMITd2j1UORS7BdCvX1OtGEE0ZcVyhyvXLJ2mu/OE/oxSrYraP6
+         p9KXtbnTRgxqFqRZILQr+TsSa2DiLph2aaBfa7XO1vPzme1evZh9JwhMvyepRPbmIoCS
+         xtDQ90Mu1Hbx/oieGYQT1OMM1D8D9lOfAHIVhNc6cABc4PGjM6LP5qKlIcYeMJureXus
+         Jv8zEGwRQNqNVjDuqiuDsMjLZOyfuhm5VP4SIGfrkGtOaqNwZ/EK2WBscLO42wbjSSup
+         acjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=K8aM+wsuH+b5e/V3iFm/UCWXbcrACCoUfMzBFSDIIjs=;
+        b=DOcul6iPs4yJqR7d91y2KmvQ2EJAtcIfSv6/WEVr+h1Wk5udyZSBc7ulPoV0TWtu4s
+         aTBtu6fQVLWWvi4RtP4R3mIl5Vcww8o7AligM8hFAiD9pF/ydO4PAgY7va4jEN97BkLq
+         qRA704jG2ZPgGfXk6u9Gr3u/QhD/wWA+mrArFXUdeJfLLaDld1lQcq5+3Ecvh5VAUay/
+         Ssvw0VE4uwTzDYImKzuv5Aq77J07nCQMpTq7apuv7cCS3Hab1JH5RlJQZfh5y8fPsjsl
+         aNu5Kju2OTMdu/jD2/ncyFYEMrC3+gJH1YhQA9Kbxzogu4RTkq5UCJpeVAXTmCDkyO2Y
+         5Y4Q==
+X-Gm-Message-State: AOAM533ecW3XvaXSFVZOJboVodEvKfqzDc1zgIBT2yRM/HEIlP/+xlHl
+        bby9PgQg2Zg7hWKzV1978ME=
+X-Google-Smtp-Source: ABdhPJzVlyVjU16DJNx2PSPP4M89OX3yHiUWJFeQbTo2OLpXzAvIWhOQ3EiLBn5Q+FtKAFhT6sPXdg==
+X-Received: by 2002:a17:906:1a0b:: with SMTP id i11mr24887327ejf.472.1602444908702;
+        Sun, 11 Oct 2020 12:35:08 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8f00:6a00:51b7:bf4f:604:7d3d? (p200300ea8f006a0051b7bf4f06047d3d.dip0.t-ipconnect.de. [2003:ea:8f00:6a00:51b7:bf4f:604:7d3d])
+        by smtp.googlemail.com with ESMTPSA id w13sm2595839ede.89.2020.10.11.12.35.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Oct 2020 12:35:08 -0700 (PDT)
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH net-next 00/12] net: add and use function
+ dev_fetch_sw_netstats for fetching pcpu_sw_netstats
+To:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>,
+        Oliver Neukum <oneukum@suse.com>,
+        Igor Mitsyanko <imitsyanko@quantenna.com>,
+        Sergey Matyukevich <geomatsi@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        linux-rdma@vger.kernel.org,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        bridge@lists.linux-foundation.org
+Message-ID: <a46f539e-a54d-7e92-0372-cd96bb280729@gmail.com>
+Date:   Sun, 11 Oct 2020 21:34:58 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6307397bd43636fea2e7341d24417cbbc3aaf922.camel@perches.com>
-X-Spam-Score: -1.0 (-)
-X-Spam-Report: Spam detection software, running on the system "zztop.nucleusys.com",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  On 20-10-11 11:33:00, Joe Perches wrote: > On Sun, 2020-10-11
-    at 10:59 -0700, Jakub Kicinski wrote: > > On Sun, 11 Oct 2020 23:00:30 +0530
-    Anant Thazhemadam wrote: > > > In set_ethernet_addr(), if get [...] 
- Content analysis details:   (-1.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
-  0.0 TVD_RCVD_IP            Message was received from an IP address
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-10-11 11:33:00, Joe Perches wrote:
-> On Sun, 2020-10-11 at 10:59 -0700, Jakub Kicinski wrote:
-> > On Sun, 11 Oct 2020 23:00:30 +0530 Anant Thazhemadam wrote:
-> > > In set_ethernet_addr(), if get_registers() succeeds, the ethernet address
-> > > that was read must be copied over. Otherwise, a random ethernet address
-> > > must be assigned.
-> > > 
-> > > get_registers() returns 0 if successful, and negative error number
-> > > otherwise. However, in set_ethernet_addr(), this return value is
-> > > incorrectly checked.
-> > > 
-> > > Since this return value will never be equal to sizeof(node_id), a
-> > > random MAC address will always be generated and assigned to the
-> > > device; even in cases when get_registers() is successful.
-> > > 
-> > > Correctly modifying the condition that checks if get_registers() was
-> > > successful or not fixes this problem, and copies the ethernet address
-> > > appropriately.
-> 
-> There are many unchecked uses of set_registers and get_registers
->  in this file.
-> 
-> If failures are really expected, then it might be better to fix
-> them up too.
+In several places the same code is used to populate rtnl_link_stats64
+fields with data from pcpu_sw_netstats. Therefore factor out this code
+to a new function dev_fetch_sw_netstats().
 
-Checking the return value of each get/set_registers() is going to be a PITA and
-not very helpful.  Doing so when setting the MAC address _does_ make sense as in
-that case it is not a hard error.
+Heiner Kallweit (12):
+  net: core: add function dev_fetch_sw_netstats for fetching
+    pcpu_sw_netstats
+  IB/hfi1: use new function dev_fetch_sw_netstats
+  net: macsec: use new function dev_fetch_sw_netstats
+  net: usb: qmi_wwan: use new function dev_fetch_sw_netstats
+  net: usbnet: use new function dev_fetch_sw_netstats
+  qtnfmac: use new function dev_fetch_sw_netstats
+  net: bridge: use new function dev_fetch_sw_netstats
+  net: dsa: use new function dev_fetch_sw_netstats
+  iptunnel: use new function dev_fetch_sw_netstats
+  mac80211: use new function dev_fetch_sw_netstats
+  net: openvswitch: use new function dev_fetch_sw_netstats
+  xfrm: use new function dev_fetch_sw_netstats
 
-In almost all other occasions if usb_control_msg_send/recv() return an error i'd
-rather dump an error message (from within get/set_registers()) and let the user
-decide whether to get rid of this adapter or start debugging it.
+ drivers/infiniband/hw/hfi1/ipoib_main.c       | 34 +-----------------
+ drivers/net/macsec.c                          | 25 +------------
+ drivers/net/usb/qmi_wwan.c                    | 24 +------------
+ drivers/net/usb/usbnet.c                      | 24 +------------
+ drivers/net/wireless/quantenna/qtnfmac/core.c | 27 +-------------
+ include/linux/netdevice.h                     |  2 ++
+ net/bridge/br_device.c                        | 21 +----------
+ net/core/dev.c                                | 36 +++++++++++++++++++
+ net/dsa/slave.c                               | 21 +----------
+ net/ipv4/ip_tunnel_core.c                     | 23 +-----------
+ net/mac80211/iface.c                          | 23 +-----------
+ net/openvswitch/vport-internal_dev.c          | 20 +----------
+ net/xfrm/xfrm_interface.c                     | 22 +-----------
+ 13 files changed, 49 insertions(+), 253 deletions(-)
 
+-- 
+2.28.0
 
-cheers,
-Petko
-
-
-> $ git grep -w '[gs]et_registers' drivers/net/usb/rtl8150.c
-> drivers/net/usb/rtl8150.c:static int get_registers(rtl8150_t * dev, u16 indx, u16 size, void *data)
-> drivers/net/usb/rtl8150.c:static int set_registers(rtl8150_t * dev, u16 indx, u16 size, const void *data)
-> drivers/net/usb/rtl8150.c:      set_registers(dev, PHYADD, sizeof(data), data);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, PHYCNT, 1, &tmp);
-> drivers/net/usb/rtl8150.c:              get_registers(dev, PHYCNT, 1, data);
-> drivers/net/usb/rtl8150.c:              get_registers(dev, PHYDAT, 2, data);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, PHYADD, sizeof(data), data);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, PHYCNT, 1, &tmp);
-> drivers/net/usb/rtl8150.c:              get_registers(dev, PHYCNT, 1, data);
-> drivers/net/usb/rtl8150.c:      ret = get_registers(dev, IDR, sizeof(node_id), node_id);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, IDR, netdev->addr_len, netdev->dev_addr);
-> drivers/net/usb/rtl8150.c:      get_registers(dev, CR, 1, &cr);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, CR, 1, &cr);
-> drivers/net/usb/rtl8150.c:              set_registers(dev, IDR_EEPROM + (i * 2), 2,
-> drivers/net/usb/rtl8150.c:      set_registers(dev, CR, 1, &cr);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, CR, 1, &data);
-> drivers/net/usb/rtl8150.c:              get_registers(dev, CR, 1, &data);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, RCR, 1, &rcr);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, TCR, 1, &tcr);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, CR, 1, &cr);
-> drivers/net/usb/rtl8150.c:      get_registers(dev, MSR, 1, &msr);
-> drivers/net/usb/rtl8150.c:      get_registers(dev, CR, 1, &cr);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, CR, 1, &cr);
-> drivers/net/usb/rtl8150.c:      get_registers(dev, CSCR, 2, &tmp);
-> drivers/net/usb/rtl8150.c:      set_registers(dev, IDR, 6, netdev->dev_addr);
-> drivers/net/usb/rtl8150.c:      get_registers(dev, BMCR, 2, &bmcr);
-> drivers/net/usb/rtl8150.c:      get_registers(dev, ANLP, 2, &lpa);
-> 
-> 
-> 
