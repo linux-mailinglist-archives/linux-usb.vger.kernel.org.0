@@ -2,121 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 508C828B577
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 15:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF89E28B5BC
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 15:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729423AbgJLNF3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Oct 2020 09:05:29 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:33672 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730223AbgJLNF2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 09:05:28 -0400
-Received: by mail-io1-f70.google.com with SMTP id m10so10506155ioq.0
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 06:05:26 -0700 (PDT)
+        id S1730472AbgJLNPA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 09:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730431AbgJLNPA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 09:15:00 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C42DC0613D0
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 06:15:00 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id h10so6005873oie.5
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 06:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=n3JIyI4XrolAYQK2FWnE52kJDJziCbID4EfBID/Ook8=;
+        b=XvPiTWaU0mACJ9epWfhqtXbyOO9d0R43O7jjcNEjEhqkex8VbrflqlfCnXruP/XCjl
+         PDXrxnTkEz5MoZQbB7HQRUA9h3dOLiO+iR45njq/Bcp6w2OFtDjnfGrKP/y14ui+DSSc
+         iQ/cUkazdM3NHTkz3FvCjM2XxjPoV8sbOzoq4Oh4iDD6WFrTPFmgzwy7GJia89ivJZVZ
+         flqL97hsS6cIJymRTHrGtTiIPclrQmSYy1X3lzRngf1kpJaY5F5Y1/CEfm4KlqGRzUvl
+         tc5W7xT8TNLxUu7Ovk7DxichTCnf1NXLynKWRuyUHg6ge6e0LPmX1gCnDKPcOik/+bDc
+         6CCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=weOKzOEYd6OnFmuQPwghpwImZizE+A7XLRWBwiZyCtE=;
-        b=CT8UFygurB+MWOdMIEPMC7tTda6RfZfTsUdkLvM1gmi0d2et4nGm9059tArCZ6vfFI
-         BCnYPi29rC/3RvbwYUwtCcfKuNIO93fMHx7BTh9DelqbxrUyFVi8dznPui8WlmYysitR
-         0rS4AmTs2FB8t2WqyqhDHnNVJh59j92GpSlLnZYsQzCR7otVpfga8YQ8bgIEXYPgOFMR
-         9hEo7cQ46yWEkmpjam/E1UqyPxEUCpvMpbDicBIxTdqfjmLOBMXc48Bfr3kpJHlTDrp3
-         dRFq0ep9PTjpnF0cuLBTaeoiXwYbnuAqyNSs+xPE9rtKLvaC/QxXujbGBn6t3D8x8luC
-         AFaQ==
-X-Gm-Message-State: AOAM533lhixw8WSTYoMeezAsiVOezcO0n4Q/0Bo2QtfdSD/oK+UFLhUn
-        7gwHNugfct5JSNzTKllxOXSvV+oTkxhishFgMi0qa/NdPB2F
-X-Google-Smtp-Source: ABdhPJzpCKLxmcGgUteT0I4AlfOG13qRkR+f1Rwh7GcQREsOjIOSrBicc9i1TdFoVskDaa0eUsZmnnaeD4K/FTjEVdYgo20PtNYD
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=n3JIyI4XrolAYQK2FWnE52kJDJziCbID4EfBID/Ook8=;
+        b=jrCQEygTjsrhXVGR3ZbvI7L5gT8o7kl6LUu3ZBaakOokNBXhm6SJsrXnBHNTpyLG1E
+         ZnI/8/vBvcD3VAGE2roL0C9nyQFduKwx+zJULyK68exu2141RJDtLluRX8jHvYcJzDOS
+         Ta2jp5QsEZ64VQ7nVV6spWALvb1dt7pyFgji8weegr72HKOf4qDdYS0NkEzN/CP1Xu4c
+         oRg1FefaajIpdIUV5XrTw97aoLASjN12CzBH/a5o6xcOnWr62+AGJHKCiJn8ikxeIbPp
+         NBmd+ZpFHqzXh5Da6SbZo16C/IaIWhFabtqHbNMtosXJRzwjkdoPnP2ybASTW/Sjpbcw
+         O7HA==
+X-Gm-Message-State: AOAM531b+aGogJItMU2hJ32ABy/SIdIy0tjYRFcj3T7iaqIdhqszaTfL
+        GqOG1cEJMr4gzvDRBlIDnW8=
+X-Google-Smtp-Source: ABdhPJwAoRfhi8KcuDq8C2tDI1WDC2RqLYCsPoxs2JL2afELTjw+gfjpPtdpL/xSvuJi+qlG5v5ByQ==
+X-Received: by 2002:aca:db06:: with SMTP id s6mr10148976oig.64.1602508499717;
+        Mon, 12 Oct 2020 06:14:59 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i12sm4717661oto.34.2020.10.12.06.14.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 12 Oct 2020 06:14:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 12 Oct 2020 06:14:58 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Li Jun <jun.li@nxp.com>
+Cc:     gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        cy_huang@richtek.com, u0084500@gmail.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: reset hard_reset_count for any
+ disconnect
+Message-ID: <20201012131458.GA6394@roeck-us.net>
+References: <1602500592-3817-1-git-send-email-jun.li@nxp.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c74c:: with SMTP id y12mr19435920ilp.19.1602507925674;
- Mon, 12 Oct 2020 06:05:25 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 06:05:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a8e10f05b178f3f9@google.com>
-Subject: KASAN: out-of-bounds Read in v4l2_fh_init
-From:   syzbot <syzbot+431a2669cfb42d234b9c@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1602500592-3817-1-git-send-email-jun.li@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, Oct 12, 2020 at 07:03:12PM +0800, Li Jun wrote:
+> Current tcpm_detach() only reset hard_reset_count if port->attached
+> is true, this may cause this counter clear is missed if the CC
+> disconnect event is generated after tcpm_port_reset() is done
+> by other events, e.g. VBUS off comes first before CC disconect for
+> a power sink, in that case the first tcpm_detach() will only clear
+> port->attached flag but leave hard_reset_count there because
+> tcpm_port_is_disconnected() is still false, then later tcpm_detach()
+> by CC disconnect will directly return due to port->attached is cleared,
+> finally this will result tcpm will not try hard reset or error recovery
+> for later attach.
+> 
+> ChiYuan reported this issue on his platform with below tcpm trace:
+> After power sink session setup after hard reset 2 times, detach
+> from the power source and then attach:
+> [ 4848.046358] VBUS off
+> [ 4848.046384] state change SNK_READY -> SNK_UNATTACHED
+> [ 4848.050908] Setting voltage/current limit 0 mV 0 mA
+> [ 4848.050936] polarity 0
+> [ 4848.052593] Requesting mux state 0, usb-role 0, orientation 0
+> [ 4848.053222] Start toggling
+> [ 4848.086500] state change SNK_UNATTACHED -> TOGGLING
+> [ 4848.089983] CC1: 0 -> 0, CC2: 3 -> 3 [state TOGGLING, polarity 0, connected]
+> [ 4848.089993] state change TOGGLING -> SNK_ATTACH_WAIT
+> [ 4848.090031] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @200 ms
+> [ 4848.141162] CC1: 0 -> 0, CC2: 3 -> 0 [state SNK_ATTACH_WAIT, polarity 0, disconnected]
+> [ 4848.141170] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT
+> [ 4848.141184] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @20 ms
+> [ 4848.163156] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed 20 ms]
+> [ 4848.163162] Start toggling
+> [ 4848.216918] CC1: 0 -> 0, CC2: 0 -> 3 [state TOGGLING, polarity 0, connected]
+> [ 4848.216954] state change TOGGLING -> SNK_ATTACH_WAIT
+> [ 4848.217080] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @200 ms
+> [ 4848.231771] CC1: 0 -> 0, CC2: 3 -> 0 [state SNK_ATTACH_WAIT, polarity 0, disconnected]
+> [ 4848.231800] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT
+> [ 4848.231857] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @20 ms
+> [ 4848.256022] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed20 ms]
+> [ 4848.256049] Start toggling
+> [ 4848.871148] VBUS on
+> [ 4848.885324] CC1: 0 -> 0, CC2: 0 -> 3 [state TOGGLING, polarity 0, connected]
+> [ 4848.885372] state change TOGGLING -> SNK_ATTACH_WAIT
+> [ 4848.885548] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @200 ms
+> [ 4849.088240] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed200 ms]
+> [ 4849.088284] state change SNK_DEBOUNCED -> SNK_ATTACHED
+> [ 4849.088291] polarity 1
+> [ 4849.088769] Requesting mux state 1, usb-role 2, orientation 2
+> [ 4849.088895] state change SNK_ATTACHED -> SNK_STARTUP
+> [ 4849.088907] state change SNK_STARTUP -> SNK_DISCOVERY
+> [ 4849.088915] Setting voltage/current limit 5000 mV 0 mA
+> [ 4849.088927] vbus=0 charge:=1
+> [ 4849.090505] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES
+> [ 4849.090828] pending state change SNK_WAIT_CAPABILITIES -> SNK_READY @240 ms
+> [ 4849.335878] state change SNK_WAIT_CAPABILITIES -> SNK_READY [delayed240 ms]
+> 
+> this patch fix this issue by clear hard_reset_count at any cases
+> of cc disconnect, í.e. don't check port->attached flag.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 4b4e02c83167 ("typec: tcpm: Move out of staging")
+> Reported-and-tested-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: Li Jun <jun.li@nxp.com>
 
-syzbot found the following issue on:
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-HEAD commit:    93578a25 usb: musb: gadget: Use fallthrough pseudo-keyword
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1480f19f900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=df3bb4023c36d114
-dashboard link: https://syzkaller.appspot.com/bug?extid=431a2669cfb42d234b9c
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+431a2669cfb42d234b9c@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: out-of-bounds in v4l2_fh_init+0x279/0x2c0 drivers/media/v4l2-core/v4l2-fh.c:25
-Read of size 8 at addr ffff8881c72788c0 by task v4l_id/11388
-
-CPU: 1 PID: 11388 Comm: v4l_id Not tainted 5.9.0-rc8-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0+0x1c/0x210 mm/kasan/report.c:383
- __kasan_report mm/kasan/report.c:513 [inline]
- kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
- v4l2_fh_init+0x279/0x2c0 drivers/media/v4l2-core/v4l2-fh.c:25
- v4l2_fh_open+0x88/0xc0 drivers/media/v4l2-core/v4l2-fh.c:63
- em28xx_v4l2_open+0x11c/0x570 drivers/media/usb/em28xx/em28xx-video.c:2163
- v4l2_open+0x20f/0x3d0 drivers/media/v4l2-core/v4l2-dev.c:423
- chrdev_open+0x266/0x770 fs/char_dev.c:414
- do_dentry_open+0x4b4/0x1090 fs/open.c:817
- do_open fs/namei.c:3251 [inline]
- path_openat+0x190d/0x2690 fs/namei.c:3368
- do_filp_open+0x17e/0x3c0 fs/namei.c:3395
- do_sys_openat2+0x16d/0x420 fs/open.c:1168
- do_sys_open fs/open.c:1184 [inline]
- __do_sys_open fs/open.c:1192 [inline]
- __se_sys_open fs/open.c:1188 [inline]
- __x64_sys_open+0x119/0x1c0 fs/open.c:1188
- do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x7fee3e895840
-Code: 73 01 c3 48 8b 0d 68 77 20 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 bb 20 00 00 75 10 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e f6 ff ff 48 89 04 24
-RSP: 002b:00007ffc37239888 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007ffc372399f8 RCX: 00007fee3e895840
-RDX: 00007fee3e881ea0 RSI: 0000000000000000 RDI: 00007ffc37239f22
-RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000002 R11: 0000000000000246 R12: 0000555d9d9f38d0
-R13: 00007ffc372399f0 R14: 0000000000000000 R15: 0000000000000000
-
-The buggy address belongs to the page:
-page:00000000914a1a5b refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1c7278
-flags: 0x200000000000000()
-raw: 0200000000000000 dead000000000100 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881c7278780: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8881c7278800: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff8881c7278880: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                                           ^
- ffff8881c7278900: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8881c7278980: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 55535c4..a6fae1f 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -2890,6 +2890,9 @@ static void tcpm_reset_port(struct tcpm_port *port)
+>  
+>  static void tcpm_detach(struct tcpm_port *port)
+>  {
+> +	if (tcpm_port_is_disconnected(port))
+> +		port->hard_reset_count = 0;
+> +
+>  	if (!port->attached)
+>  		return;
+>  
+> @@ -2898,9 +2901,6 @@ static void tcpm_detach(struct tcpm_port *port)
+>  		port->tcpc->set_bist_data(port->tcpc, false);
+>  	}
+>  
+> -	if (tcpm_port_is_disconnected(port))
+> -		port->hard_reset_count = 0;
+> -
+>  	tcpm_reset_port(port);
+>  }
+>  
+> -- 
+> 2.7.4
+> 
