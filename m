@@ -2,162 +2,279 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7472D28BED2
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 19:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16FE28BEE7
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 19:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404085AbgJLRKq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Oct 2020 13:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
+        id S2404035AbgJLRRV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 13:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404033AbgJLRKn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 13:10:43 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B6EC0613D1
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 10:10:41 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id f126so13157400qke.17
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 10:10:41 -0700 (PDT)
+        with ESMTP id S2404020AbgJLRRV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 13:17:21 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164C7C0613D1
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 10:17:21 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id y45so11200154qve.15
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 10:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=GiteUeefhedmcujA7Gl+XRhg8qxQ0VOJlBmMbUTsQlA=;
-        b=BYygvMgshAwMaBLGICwa9MuOOg1BvZdzlLIfwZ66VS9B1bbJYsUSP6HJ9F4F4wpdz8
-         0c1Izeu+rksBr5Sxqwzs0rQ9nYDE8i9TAa1R+S5t5lGlrlzLSH5ZLIy6NawmcN3yly75
-         3xkQ4qxBtgBDDE9ycUeuFKXtQCvNA8NiVtdbKL6IazXpz97Ipo2Nc/0Uf1J2aN2nV+ff
-         aCby2Phu5q9wakXFVGj60cvIA6MCJIYMSv5GQPJqZiPCKK51RBehxVG5mge2pnULcXPH
-         0IfzQH/67YKbOo5tF60UomHITrDqqqO/LVdAQ84z4+Jui3IuuSQV8LIMOqFcnwf/uB1u
-         PL1Q==
+        bh=iftzmkGj+wEWSbxIj0LtgdSqgUlxBbSobE6NvMeXE1k=;
+        b=taIzv5OlhST2Zc1P/rubs2NGB6QZNl6ot+eta151F7y0DPGOvka4ArYxmFrdWao4Ld
+         em+3qctGjpNnaVcebsSHvgnKrBhq0T1NJkPA88Nzyq6wB6Qg7lISi5a+miTYwoC+g4Ee
+         3BTdcni9U92gmCuoaDm1At6zXVxM1/+fdzjsiFGeuTqmdQOkEF2IxrRN/3oe1tNjQkFI
+         v6Q00UbiVGVLBJOUZlrwNUjNXcOl+LcER6zZFZOK1g5xBwFj4Z59aPuxQDmyJ9roO7IO
+         glIMRMYNXcZJGxf6joaXvwepuAbdXqOdYfQJeuUxGHVIh1qGMmB0RWM24Wd04ozBku+H
+         vCdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
          :to:cc;
-        bh=GiteUeefhedmcujA7Gl+XRhg8qxQ0VOJlBmMbUTsQlA=;
-        b=f9xwBx1GPxeMbGbFp8b9f+dUVHcKyKKGlQUs1Dp6N+EtWXTNgVGj74szX5pJ3voaCr
-         uiGLc9U5E7Cune2VMAVnmxk9JlDDlOnLBa2gS3u/70NgOwL/Gfl4A0Dl5OSzHJVU6g9o
-         fF78N1KzVG7WyCaczPPwZlfJV3NhJLQSlX802yvfd/eprhozWB/XZOHem17umF+EZCMF
-         Su88tsYP/vPqLONFXC6wl20c7I8KWxxUMjgOftQOEtw4rA0xbLzN1iqa/KIyL/TH4G90
-         JbfGqHwZIbqqHjLc8g+YD6fxBslNMg1FpA/uhvaxD3JqGX0uFwHOZWwG8YUwQ2sQUBBR
-         tePg==
-X-Gm-Message-State: AOAM533DBvjCC+qnUiBVVTx+5+ZE73mLibq+UVwUvJLs0rF5vOfjlUuQ
-        GiR3TPpq/+AU/A7WvLlW0WK2S1f0hyznHno3
-X-Google-Smtp-Source: ABdhPJxY9DkqxXQsHKgxJMC05bjZBAxx6CvmJ98+UShYdEPQMVKb99vgi2WaaVhG98qFwSt8Dz231r6OYnC9D/kf
+        bh=iftzmkGj+wEWSbxIj0LtgdSqgUlxBbSobE6NvMeXE1k=;
+        b=XUL9NEYDKU/aDLq1IJmvMkpdrJe2+m+nvn2xhmO5qTaYzFSDlUi/O04oP9UwcZTOc6
+         tcYN1Jrnhq4PFjLqULYwQpCuVY6gg+I+y8kgfeaBc/QsuaW3nT+6egqsPkSrUIH3XHhv
+         gVmeNTPIjWTQql2TN7fKhJzhTQ8OzkCrc8ynXl8OUSibSrdNdF7rtHQPlaHdajQ7JU1K
+         DOawhwyEw7fXmOvvfcAhlZ4HLxNdUCBSgCqhXRptYcEdAGoP7OOS0OpuhugBK7fBegku
+         +z6g7KODLp1cLkIP2EL/O3wfClljP+QYhnbn4N3dJtt4VCLfFSSowYoNeFNg19sEU/rI
+         xkcA==
+X-Gm-Message-State: AOAM532F+7uhGg3rP1f0s8Du5fKz00ZAM/5fEMBDfGBJ0AMLWUs0Nm47
+        jdmcSZFIVxrVqOJ8bX9D4Ud5Cf/zE2RzS/kD
+X-Google-Smtp-Source: ABdhPJy8OcaT6FoXJMdq3WHdkDyXe1RWsv5vnH6sy3ogRmfuI/Hha2hcMBPjUXPL4XhMWdUZy2rcExIj3S8OTUXk
 Sender: "andreyknvl via sendgmr" <andreyknvl@andreyknvl3.muc.corp.google.com>
 X-Received: from andreyknvl3.muc.corp.google.com ([2a00:79e0:15:13:7220:84ff:fe09:7e9d])
- (user=andreyknvl job=sendgmr) by 2002:a0c:c548:: with SMTP id
- y8mr19235733qvi.41.1602522640803; Mon, 12 Oct 2020 10:10:40 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 19:10:21 +0200
-Message-Id: <c07a2deae7a75e394de272c1a33cfcc1f667af92.1602522185.git.andreyknvl@google.com>
+ (user=andreyknvl job=sendgmr) by 2002:a0c:bd85:: with SMTP id
+ n5mr25605380qvg.22.1602523039990; Mon, 12 Oct 2020 10:17:19 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 19:17:12 +0200
+Message-Id: <c229372e5526b84ed0542028437111c2eb83d55f.1602522784.git.andreyknvl@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
-Subject: [PATCH v2] kcov, usbip: collect coverage from vhci_rx_loop
+Subject: [PATCH v4] kcov, usb: specify contexts for remote coverage sections
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         Shuah Khan <shuah@kernel.org>,
         Alexander Potapenko <glider@google.com>,
         Marco Elver <elver@google.com>,
         Aleksandr Nogikh <nogikh@google.com>,
-        Nazime Hande Harputluoglu <handeharput@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Nazime Hande Harputluoglu <handeharputlu@google.com>
+        Andrey Konovalov <andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Nazime Hande Harputluoglu <handeharputlu@google.com>
+Currently there's a KCOV remote coverage collection section in
+__usb_hcd_giveback_urb(). Initially that section was added based on the
+assumption that usb_hcd_giveback_urb() can only be called in interrupt
+context as indicated by a comment before it. This is what happens when
+syzkaller is fuzzing the USB stack via the dummy_hcd driver.
 
-Add kcov_remote_start()/kcov_remote_stop() annotations to the
-vhci_rx_loop() function, which is responsible for parsing USB/IP packets
-coming into USB/IP client.
+As it turns out, it's actually valid to call usb_hcd_giveback_urb() in task
+context, provided that the caller turned off the interrupts; USB/IP does
+exactly that. This can lead to a nested KCOV remote coverage collection
+sections both trying to collect coverage in task context. This isn't
+supported by KCOV, and leads to a WARNING.
 
-Since vhci_rx_loop() threads are spawned per vhci_hcd device instance, the
-common kcov handle is used for kcov_remote_start()/stop() annotations
-(see Documentation/dev-tools/kcov.rst for details). As the result kcov
-can now be used to collect coverage from vhci_rx_loop() threads.
+The approach this patch takes is to add another set of kcov_remote_*()
+callbacks that specify the context they are supposed to be executed in.
+If the current context doesn't match the mask provided to a callback,
+that callback is ignored. KCOV currently only supports collecting remote
+coverage in two contexts: task and softirq. This patch constraints KCOV to
+only collect coverage from __usb_hcd_giveback_urb() when it's executed in
+softirq context.
 
-Signed-off-by: Nazime Hande Harputluoglu <handeharputlu@google.com>
+As the result, the coverage from USB/IP related usb_hcd_giveback_urb()
+calls won't be collected, but the WARNING is fixed.
+
+A potential future improvement would be to support nested remote coverage
+collection sections, but this patch doesn't address that.
+
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Acked-by: Marco Elver <elver@google.com>
 ---
 
-Changes v1->v2:
-- Fix spacing issues.
-- Add ifdef CONFIG_KCOV around kcov_handle in usbip_device struct.
+Changes v3->v4:
+- Drop unnecessary returns from kcov callbacks.
 
 ---
- drivers/usb/usbip/usbip_common.h |  4 ++++
- drivers/usb/usbip/vhci_rx.c      |  3 +++
- drivers/usb/usbip/vhci_sysfs.c   | 12 +++++++-----
- 3 files changed, 14 insertions(+), 5 deletions(-)
+ Documentation/dev-tools/kcov.rst |  6 ++++++
+ drivers/usb/core/hcd.c           |  4 ++--
+ include/linux/kcov.h             | 31 +++++++++++++++++++++++++++++--
+ kernel/kcov.c                    | 26 +++++++++++++++++++-------
+ 4 files changed, 56 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/usb/usbip/usbip_common.h b/drivers/usb/usbip/usbip_common.h
-index 8be857a4fa13..0906182011d6 100644
---- a/drivers/usb/usbip/usbip_common.h
-+++ b/drivers/usb/usbip/usbip_common.h
-@@ -277,6 +277,10 @@ struct usbip_device {
- 		void (*reset)(struct usbip_device *);
- 		void (*unusable)(struct usbip_device *);
- 	} eh_ops;
+diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
+index 8548b0b04e43..2c0f58988512 100644
+--- a/Documentation/dev-tools/kcov.rst
++++ b/Documentation/dev-tools/kcov.rst
+@@ -235,6 +235,12 @@ saved to the kcov_handle field in the current task_struct and needs to be
+ passed to the newly spawned threads via custom annotations. Those threads
+ should in turn be annotated with kcov_remote_start()/kcov_remote_stop().
+ 
++Besides the annotations that only accept a handle, there are also
++kcov_remote_start_context()/kcov_remote_stop_context() that accept a
++context mask. This mask describes the contexts in which these annotations
++should be applied. E.g. specifying KCOV_CONTEXT_SOFTIRQ will result in the
++corresponding annotations being ignored in any context other than softirq.
 +
-+#ifdef CONFIG_KCOV
-+	u64 kcov_handle;
-+#endif
+ Internally kcov stores handles as u64 integers. The top byte of a handle
+ is used to denote the id of a subsystem that this handle belongs to, and
+ the lower 4 bytes are used to denote the id of a thread instance within
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index a33b849e8beb..ea93d9ebcb2e 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1646,9 +1646,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 
+ 	/* pass ownership to the completion handler */
+ 	urb->status = status;
+-	kcov_remote_start_usb((u64)urb->dev->bus->busnum);
++	kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
+ 	urb->complete(urb);
+-	kcov_remote_stop();
++	kcov_remote_stop_softirq();
+ 
+ 	usb_anchor_resume_wakeups(anchor);
+ 	atomic_dec(&urb->use_count);
+diff --git a/include/linux/kcov.h b/include/linux/kcov.h
+index a10e84707d82..a9c025c3e1df 100644
+--- a/include/linux/kcov.h
++++ b/include/linux/kcov.h
+@@ -22,6 +22,10 @@ enum kcov_mode {
+ 	KCOV_MODE_TRACE_CMP = 3,
  };
  
- #define kthread_get_run(threadfn, data, namefmt, ...)			   \
-diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
-index 266024cbb64f..473f14587bd5 100644
---- a/drivers/usb/usbip/vhci_rx.c
-+++ b/drivers/usb/usbip/vhci_rx.c
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2003-2008 Takahiro Hirofuchi
-  */
++#define KCOV_CONTEXT_TASK	(1u << 0)
++#define KCOV_CONTEXT_SOFTIRQ	(1u << 1)
++#define KCOV_CONTEXT_MASK	(KCOV_CONTEXT_TASK | KCOV_CONTEXT_SOFTIRQ)
++
+ #define KCOV_IN_CTXSW	(1 << 30)
  
-+#include <linux/kcov.h>
- #include <linux/kthread.h>
- #include <linux/slab.h>
+ void kcov_task_init(struct task_struct *t);
+@@ -38,10 +42,21 @@ do {						\
+ } while (0)
  
-@@ -261,7 +262,9 @@ int vhci_rx_loop(void *data)
- 		if (usbip_event_happened(ud))
- 			break;
+ /* See Documentation/dev-tools/kcov.rst for usage details. */
+-void kcov_remote_start(u64 handle);
+-void kcov_remote_stop(void);
++
++void kcov_remote_start_context(u64 handle, unsigned int context);
++void kcov_remote_stop_context(unsigned int context);
+ u64 kcov_common_handle(void);
  
-+		kcov_remote_start_common(ud->kcov_handle);
- 		vhci_rx_pdu(ud);
-+		kcov_remote_stop();
++static inline void kcov_remote_start(u64 handle)
++{
++	kcov_remote_start_context(handle, KCOV_CONTEXT_MASK);
++}
++
++static inline void kcov_remote_stop(void)
++{
++	kcov_remote_stop_context(KCOV_CONTEXT_MASK);
++}
++
+ static inline void kcov_remote_start_common(u64 id)
+ {
+ 	kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_COMMON, id));
+@@ -52,6 +67,16 @@ static inline void kcov_remote_start_usb(u64 id)
+ 	kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_USB, id));
+ }
+ 
++static inline void kcov_remote_start_usb_softirq(u64 id)
++{
++	kcov_remote_start_context(kcov_remote_handle(KCOV_SUBSYSTEM_USB, id), KCOV_CONTEXT_SOFTIRQ);
++}
++
++static inline void kcov_remote_stop_softirq(void)
++{
++	kcov_remote_stop_context(KCOV_CONTEXT_SOFTIRQ);
++}
++
+ #else
+ 
+ static inline void kcov_task_init(struct task_struct *t) {}
+@@ -66,6 +91,8 @@ static inline u64 kcov_common_handle(void)
+ }
+ static inline void kcov_remote_start_common(u64 id) {}
+ static inline void kcov_remote_start_usb(u64 id) {}
++static inline void kcov_remote_start_usb_softirq(u64 id) {}
++static inline void kcov_remote_stop_softirq(void) {}
+ 
+ #endif /* CONFIG_KCOV */
+ #endif /* _LINUX_KCOV_H */
+diff --git a/kernel/kcov.c b/kernel/kcov.c
+index 6b8368be89c8..3ccdbe060f47 100644
+--- a/kernel/kcov.c
++++ b/kernel/kcov.c
+@@ -808,7 +808,8 @@ static void kcov_remote_softirq_stop(struct task_struct *t)
  	}
+ }
  
- 	return 0;
-diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-index be37aec250c2..966f1f5cafb1 100644
---- a/drivers/usb/usbip/vhci_sysfs.c
-+++ b/drivers/usb/usbip/vhci_sysfs.c
-@@ -4,6 +4,7 @@
-  * Copyright (C) 2015-2016 Nobuo Iwata
-  */
+-void kcov_remote_start(u64 handle)
++/* Also see kcov_remote_start() defined in include/linux/kcov.h. */
++void kcov_remote_start_context(u64 handle, unsigned int context)
+ {
+ 	struct task_struct *t = current;
+ 	struct kcov_remote *remote;
+@@ -821,7 +822,11 @@ void kcov_remote_start(u64 handle)
  
-+#include <linux/kcov.h>
- #include <linux/kthread.h>
- #include <linux/file.h>
- #include <linux/net.h>
-@@ -378,11 +379,12 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
- 	dev_info(dev, "devid(%u) speed(%u) speed_str(%s)\n",
- 		 devid, speed, usb_speed_string(speed));
+ 	if (WARN_ON(!kcov_check_handle(handle, true, true, true)))
+ 		return;
+-	if (!in_task() && !in_serving_softirq())
++	if (WARN_ON((context & ~KCOV_CONTEXT_MASK) || !context))
++		return;
++	if (in_task() && !(context & KCOV_CONTEXT_TASK))
++		return;
++	if (in_serving_softirq() && !(context & KCOV_CONTEXT_SOFTIRQ))
+ 		return;
  
--	vdev->devid         = devid;
--	vdev->speed         = speed;
--	vdev->ud.sockfd     = sockfd;
--	vdev->ud.tcp_socket = socket;
--	vdev->ud.status     = VDEV_ST_NOTASSIGNED;
-+	vdev->devid          = devid;
-+	vdev->speed          = speed;
-+	vdev->ud.sockfd      = sockfd;
-+	vdev->ud.tcp_socket  = socket;
-+	vdev->ud.status      = VDEV_ST_NOTASSIGNED;
-+	vdev->ud.kcov_handle = kcov_common_handle();
+ 	local_irq_save(flags);
+@@ -894,7 +899,7 @@ void kcov_remote_start(u64 handle)
+ 	local_irq_restore(flags);
  
- 	spin_unlock(&vdev->ud.lock);
- 	spin_unlock_irqrestore(&vhci->lock, flags);
+ }
+-EXPORT_SYMBOL(kcov_remote_start);
++EXPORT_SYMBOL(kcov_remote_start_context);
+ 
+ static void kcov_move_area(enum kcov_mode mode, void *dst_area,
+ 				unsigned int dst_area_size, void *src_area)
+@@ -951,8 +956,11 @@ static void kcov_move_area(enum kcov_mode mode, void *dst_area,
+ 	}
+ }
+ 
+-/* See the comment before kcov_remote_start() for usage details. */
+-void kcov_remote_stop(void)
++/*
++ * Also see kcov_remote_stop() defined in include/linux/kcov.h.
++ * See the comment before kcov_remote_start_context() for usage details.
++ */
++void kcov_remote_stop_context(unsigned int context)
+ {
+ 	struct task_struct *t = current;
+ 	struct kcov *kcov;
+@@ -962,7 +970,11 @@ void kcov_remote_stop(void)
+ 	int sequence;
+ 	unsigned long flags;
+ 
+-	if (!in_task() && !in_serving_softirq())
++	if (WARN_ON((context & ~KCOV_CONTEXT_MASK) || !context))
++		return;
++	if (in_task() && !(context & KCOV_CONTEXT_TASK))
++		return;
++	if (in_serving_softirq() && !(context & KCOV_CONTEXT_SOFTIRQ))
+ 		return;
+ 
+ 	local_irq_save(flags);
+@@ -1018,7 +1030,7 @@ void kcov_remote_stop(void)
+ 	/* Get in kcov_remote_start(). */
+ 	kcov_put(kcov);
+ }
+-EXPORT_SYMBOL(kcov_remote_stop);
++EXPORT_SYMBOL(kcov_remote_stop_context);
+ 
+ /* See the comment before kcov_remote_start() for usage details. */
+ u64 kcov_common_handle(void)
 -- 
 2.28.0.1011.ga647a8990f-goog
 
