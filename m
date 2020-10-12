@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A973528BECC
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 19:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7472D28BED2
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 19:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404115AbgJLRJE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Oct 2020 13:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
+        id S2404085AbgJLRKq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 13:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404114AbgJLRI4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 13:08:56 -0400
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69634C0613D1
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 10:08:56 -0700 (PDT)
-Received: by mail-wm1-x349.google.com with SMTP id c204so5977072wmd.5
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 10:08:56 -0700 (PDT)
+        with ESMTP id S2404033AbgJLRKn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 13:10:43 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B6EC0613D1
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 10:10:41 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id f126so13157400qke.17
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 10:10:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:message-id:mime-version:subject:from:to:cc;
         bh=GiteUeefhedmcujA7Gl+XRhg8qxQ0VOJlBmMbUTsQlA=;
-        b=UQwrqnNl9bttN2st5o+e1I97Ik31gSsTuOTKKWjJwjtJdLsV6uXmL76RIk4YLIOuRD
-         mG6ob4SY5zR57ce6fvfvscLHfREXGARHVhHJAMhDu5KhmgGey5v4ThO3xH19stea6i5Y
-         3hfMyt0wG78qw5hnPmmsP73SlzsJ7MwjaCliEYDhsuu/tBDrkmM7fO/CadHEflBvplIm
-         LItUvxoPYV6CXQZQJCA3ZVv27iZ5zZuSvfEBBtFs71cNCTzteliZc6RMR2M/a8bLhWiv
-         adTWhqzet90tJ1tZF1IdRKCfz5B4K5HMqknUyX07eNqYSz+c0MTc9l4Evb5cRxyAYO9d
-         V63Q==
+        b=BYygvMgshAwMaBLGICwa9MuOOg1BvZdzlLIfwZ66VS9B1bbJYsUSP6HJ9F4F4wpdz8
+         0c1Izeu+rksBr5Sxqwzs0rQ9nYDE8i9TAa1R+S5t5lGlrlzLSH5ZLIy6NawmcN3yly75
+         3xkQ4qxBtgBDDE9ycUeuFKXtQCvNA8NiVtdbKL6IazXpz97Ipo2Nc/0Uf1J2aN2nV+ff
+         aCby2Phu5q9wakXFVGj60cvIA6MCJIYMSv5GQPJqZiPCKK51RBehxVG5mge2pnULcXPH
+         0IfzQH/67YKbOo5tF60UomHITrDqqqO/LVdAQ84z4+Jui3IuuSQV8LIMOqFcnwf/uB1u
+         PL1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
          :to:cc;
         bh=GiteUeefhedmcujA7Gl+XRhg8qxQ0VOJlBmMbUTsQlA=;
-        b=VPHPsBhUh5Ub9k1BQgclEyFWOIccFOKXdwW4y+c9HaQqcw8XE7QIXtdrNFaJm57si0
-         aS2lgIlZRlssv7j0ZLmMqG0YXzp0yvDqcxut6sfLqjVi9zo15jtgoSySsfuV7VS/8Bfh
-         h5fKdiNkhPr+J5B/IgZYarVUYMdrZSSXh3xk5j8/lrVVez8Vh8xataJvL8puGBmft31W
-         HVkP7hvGhsEp4D7jX1cYsTdsn+B6jNZqyPmFaFAl8BQPcOJxMUAP6VhlTsm2hyRs9b33
-         S1+Rc4ZBU4cJg7GfbqYXLs+YePQOODtM6S18hiUZXT9GTp9uL3CN124H2IpiV102YQkH
-         CwSQ==
-X-Gm-Message-State: AOAM531duL7t6U6suZ2LOSoVv9OYJNTgO2aJNBnLeWYDSDKs9q0VrsR+
-        3ww2hf2AE0bdKYPkj6diuFJfOQIR4eXZ8NuQ
-X-Google-Smtp-Source: ABdhPJw8Nay4C7k703MetiSSMrQWLpB/N5fHBuREXZOnZ++6Izul9okxKMTHUt/nEdPX0Nlgup5jgsERTvGmG2hM
+        b=f9xwBx1GPxeMbGbFp8b9f+dUVHcKyKKGlQUs1Dp6N+EtWXTNgVGj74szX5pJ3voaCr
+         uiGLc9U5E7Cune2VMAVnmxk9JlDDlOnLBa2gS3u/70NgOwL/Gfl4A0Dl5OSzHJVU6g9o
+         fF78N1KzVG7WyCaczPPwZlfJV3NhJLQSlX802yvfd/eprhozWB/XZOHem17umF+EZCMF
+         Su88tsYP/vPqLONFXC6wl20c7I8KWxxUMjgOftQOEtw4rA0xbLzN1iqa/KIyL/TH4G90
+         JbfGqHwZIbqqHjLc8g+YD6fxBslNMg1FpA/uhvaxD3JqGX0uFwHOZWwG8YUwQ2sQUBBR
+         tePg==
+X-Gm-Message-State: AOAM533DBvjCC+qnUiBVVTx+5+ZE73mLibq+UVwUvJLs0rF5vOfjlUuQ
+        GiR3TPpq/+AU/A7WvLlW0WK2S1f0hyznHno3
+X-Google-Smtp-Source: ABdhPJxY9DkqxXQsHKgxJMC05bjZBAxx6CvmJ98+UShYdEPQMVKb99vgi2WaaVhG98qFwSt8Dz231r6OYnC9D/kf
 Sender: "andreyknvl via sendgmr" <andreyknvl@andreyknvl3.muc.corp.google.com>
 X-Received: from andreyknvl3.muc.corp.google.com ([2a00:79e0:15:13:7220:84ff:fe09:7e9d])
- (user=andreyknvl job=sendgmr) by 2002:a7b:c156:: with SMTP id
- z22mr2912419wmi.0.1602522534241; Mon, 12 Oct 2020 10:08:54 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 19:08:35 +0200
+ (user=andreyknvl job=sendgmr) by 2002:a0c:c548:: with SMTP id
+ y8mr19235733qvi.41.1602522640803; Mon, 12 Oct 2020 10:10:40 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 19:10:21 +0200
 Message-Id: <c07a2deae7a75e394de272c1a33cfcc1f667af92.1602522185.git.andreyknvl@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
@@ -60,6 +60,7 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Marco Elver <elver@google.com>,
         Aleksandr Nogikh <nogikh@google.com>,
         Nazime Hande Harputluoglu <handeharput@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
         Nazime Hande Harputluoglu <handeharputlu@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
