@@ -2,137 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 133D928BB92
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 17:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6128C28BB9C
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 17:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389425AbgJLPKZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Oct 2020 11:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388977AbgJLPKY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 11:10:24 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893A6C0613D0;
-        Mon, 12 Oct 2020 08:10:24 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id t9so19583307wrq.11;
-        Mon, 12 Oct 2020 08:10:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=mkuNs+7XxlEVvtkC9IIAwWFcSgj3h27AZFQnWZFm0XA=;
-        b=lUD7+AsC3gIYyuLjGVkGz6YiVnzefUHoKy63QYSNowSifa9yEth6OS7GbALyfbMTnr
-         LvGTXyj7YkXluF2uD9dqQnuvjVR8sebs6lreneRQ5UYklalKSg8hSwL7XtVYdSCITphA
-         6VmeQ8r4y2fXb8UQaxh/FVLnvuhzoyWwEaHfgjCtgA6EeO7agVwqK2i9dtf7U4DPMEMJ
-         LSkgWoHtBoO8sD9NxY3EpZKVM+gxKt5WvICVfVYmWCRk6YWntGNc7G57vVSObnOVCAIo
-         IMtIdelwKZzw7FmbW3qiIxI/3aCDdjnWAjhC82l+zk0ZJvGPVPq6q7bjlp3AmYTk8rZM
-         6KPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=mkuNs+7XxlEVvtkC9IIAwWFcSgj3h27AZFQnWZFm0XA=;
-        b=o2vGmNCz1MUut4ppU+ejY3KLXSpoC4kZ0q8aT1BoW6FXki+baAlgUlI8UG7Y8eNind
-         GFrF72FHv6DDu5FPtZJynDwSGc0I7MnzdBZaLJQUEtEir9AbKVknU3rWCk9W9hLvIV5K
-         e78jOAOPXFgKmrsv5BcS1FjPsW6aig/D/5RI1yODTDVFgdXik+f2NYShMTK2HF884Yas
-         fVohy0mqN/DJnrlQYCKzSnQkvCsD7aeXcciT9uJ+8MKftmKhGPdeqY/JhWzPJ00hKxVn
-         I5FQl4sMNBPXyqtXJ/L2zl/PwljnAubc7lBl0uo0vGU+TB0TiFF26TzEK/bK9gUUSqcx
-         eryA==
-X-Gm-Message-State: AOAM531/QHT9uRorEPavkm3BXW/on2s3CwkZHTm84MlYWKbPPt71PSkt
-        iEq9pROIoIyaJD4NOZ27svpMKjNCUfhgG1R3
-X-Google-Smtp-Source: ABdhPJyFfLN8mAuNx/DYHdt0jVUfqeX8Dq1RkoyYSUAkOjaB1Na7Vv03X4kTC2bPoZCBiPZ8BFtgGA==
-X-Received: by 2002:adf:f305:: with SMTP id i5mr25025707wro.346.1602515423074;
-        Mon, 12 Oct 2020 08:10:23 -0700 (PDT)
-Received: from felia ([2001:16b8:2d57:fc00:8472:203c:3ecb:c442])
-        by smtp.gmail.com with ESMTPSA id c185sm2406624wma.44.2020.10.12.08.10.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2020 08:10:22 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-X-Google-Original-From: Lukas Bulwahn <lukas@gmail.com>
-Date:   Mon, 12 Oct 2020 17:10:21 +0200 (CEST)
-X-X-Sender: lukas@felia
-To:     Alan Stern <stern@rowland.harvard.edu>
-cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        id S2389670AbgJLPNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 11:13:33 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:35408 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389640AbgJLPNc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 11:13:32 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 68C5F8030865;
+        Mon, 12 Oct 2020 15:13:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 18g_bu0glQOE; Mon, 12 Oct 2020 18:13:28 +0300 (MSK)
+Date:   Mon, 12 Oct 2020 18:13:26 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-safety@lists.elisa.tech,
-        linux-usb@vger.kernel.org
-Subject: Re: [linux-safety] [PATCH] usb: host: ehci-sched: add comment about
- find_tt() not returning error
-In-Reply-To: <20201012145710.GA631710@rowland.harvard.edu>
-Message-ID: <alpine.DEB.2.21.2010121659040.6487@felia>
-References: <20201011205008.24369-1-sudipm.mukherjee@gmail.com> <alpine.DEB.2.21.2010121550300.6487@felia> <20201012145710.GA631710@rowland.harvard.edu>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>
+Subject: Re: [PATCH 15/18] dt-bindings: usb: meson-g12a-usb: Discard FL-adj
+ property
+Message-ID: <20201012151326.peu4yq6fhmi5utnb@mobilestation>
+References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
+ <20201010224121.12672-16-Sergey.Semin@baikalelectronics.ru>
+ <329129ac-ff44-4928-bca4-805297a8c456@baylibre.com>
+ <20201012142201.7fr2n5xwvei23yog@mobilestation>
+ <f6e38330-146c-eb7c-5a99-7e156454e90b@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f6e38330-146c-eb7c-5a99-7e156454e90b@baylibre.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On Mon, 12 Oct 2020, Alan Stern wrote:
-
-> On Mon, Oct 12, 2020 at 04:11:38PM +0200, Lukas Bulwahn wrote:
-> > 
-> > 
-> > On Sun, 11 Oct 2020, Sudip Mukherjee wrote:
-> > 
-> > > Add a comment explaining why find_tt() will not return error even though
-> > > find_tt() is checking for NULL and other errors.
-> > > 
-> > > Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-> > 
-> > I get the intent of the comment but there is a large risk that somebody 
-> > could remove the find_tt() call before the calling the function and there 
-> > is no chance to then see later that the comment is actually wrong.
+On Mon, Oct 12, 2020 at 05:01:43PM +0200, Neil Armstrong wrote:
+> Hi,
 > 
-> Why would anybody do that?  Who would deliberately go change a driver in 
-> a way that is obviously wrong and would break it?  Especially when such 
-> changes are likely to cause compile errors?
-> 
-> There are tons of changes one might make to any program that will leave 
-> it syntactically valid but will cause it to fail.  What's special about 
-> removing the early calls to find_tt()?
-> 
-> > I guess you want to link this comment here to a code line above and
-> > request anyone touching the line above to reconsider the comment then.
-> 
-> That really seems unnecessary.
-> 
-> > But there is no 'concept' for such kind of requests to changes and 
-> > comments.
+> On 12/10/2020 16:22, Serge Semin wrote:
+> > On Mon, Oct 12, 2020 at 09:54:25AM +0200, Neil Armstrong wrote:
+> >> Hi,
+> >>
+> >> On 11/10/2020 00:41, Serge Semin wrote:
+> >>> An empty snps,quirk-frame-length-adjustment won't cause any change
+> >>> performed by the driver. Moreover the DT schema validation will fail,
+> >>> since it expects the property being assigned with some value. So just
+> >>> discard the property declaration then from the example.
+> >>>
+> >>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> >>>
+> >>> ---
+> >>>
+> >>> Note the same problem is in the DT source file
+> >>> arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi .
+> >>> ---
+> >>>  .../devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml     | 1 -
+> >>>  1 file changed, 1 deletion(-)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> >>> index 5b04a7dfa018..88184d7e26cc 100644
+> >>> --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> >>> +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> >>> @@ -209,6 +209,5 @@ examples:
+> >>>                interrupts = <30>;
+> >>>                dr_mode = "host";
+> >>>                snps,dis_u2_susphy_quirk;
+> >>> -              snps,quirk-frame-length-adjustment;
+> >>>            };
+> >>>      };
+> >>>
+> >>
 > > 
-> > So, the comment is true now, but might be true or wrong later.
+> >> Thanks for reporting this, actually the fladj must be 0x20 on this hw,
+> >> but we do set this on the PHY side, so we can let the dwc3 side 0 here.
 > > 
-> > I am wondering if such comment deserves to be included if we cannot check 
-> > its validity later...
-> > 
-> > I would prefer a simple tool that could check that your basic assumption 
-> > on the code is valid and if it the basic assumption is still valid, 
-> > just shut up any stupid tool that simply does not get that these calls 
-> > here cannot return any error.
+> > I can convert this patch to initializing the "snps,quirk-frame-length-adjustment"
+> > property with 0x20 value instead. Since most likely I'll have to send a v2/v3/etc
+> > of this patchset, that modification won't be too much work to do. What do you think?
 > 
-> Real code contains so many assumptions, especially if you include ones 
-> which are obvious to everybody, that such a tool seems impractical.
->
 
-I fear that problem applies to all static code analysis tools I have seen; 
-at some point, the remaining findings are simply obviously wrong to 
-everybody but the tool does not get those assumptions and continues 
-complaining, making the tool seem impractical.
+> Yes, do this please,
 
-Alan, so would you be willing to take patches where _anyone_ simply adds 
-comments on what functions returns, depending on what this person might 
-consider just not obvious enough?
+Ok. Shall I preserve your Acked-by tag in the new patch or you'd prefer to
+review it first?
 
-Or are you going to simply reject this 'added a comment' patch here?
+> anyway it's only an example so it's ok.
 
-I am not arguing either way, it is just that it is unclear to me what the 
-added value of the comment really is here.
+Actually examples are also validated by "make dt_binding_check". That's why I
+had to fix the amlogic,meson-g12a-usb-ctrl example for at least so the new
+snps,dwc3.yaml DT schema wouldn't break that full DT bindings
+validation procedure.)
 
-And for the static analysis finding, we need to find a way to ignore this 
-finding without simply ignoring all findings or new findings that just 
-look very similar to the original finding, but which are valid.
+-Sergey
 
-Lukas
+> 
+> > 
+> > Anyway please note, that I've fixed the improper property usage in the DT schema
+> > example only. "snps,quirk-frame-length-adjustment" defined as boolean still
+> > persists in the DTS file: arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi .
+> > So if you ever try to validate that dts file with "make dtbs_check" scenario, it
+> > will fail.
+> 
+> Yes, I'll push a fix to pass the dtbs_check when this is merged.
+> 
+> Thanks,
+> Neil
+> 
+> > 
+> > -Sergey
+> > 
+> >>
+> >> Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+> >>
+> >> Neil
+> >>
+> 
