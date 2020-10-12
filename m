@@ -2,109 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1919428C3E6
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 23:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B03E28C45A
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 23:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731838AbgJLVTN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Oct 2020 17:19:13 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:36672 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726897AbgJLVTM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 17:19:12 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 67B7080307C2;
-        Mon, 12 Oct 2020 21:19:09 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id S_-sb4mYbKKE; Tue, 13 Oct 2020 00:19:08 +0300 (MSK)
-Date:   Tue, 13 Oct 2020 00:19:05 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 02/18] dt-bindings: usb: usb-hcd: Add "wireless"
- maximum-speed property value
-Message-ID: <20201012211905.6x4lfj4phxit5zi4@mobilestation>
-References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
- <20201010224121.12672-3-Sergey.Semin@baikalelectronics.ru>
- <20201011144236.GA271079@kroah.com>
- <20201011175333.2v46x6kiugqnvlpk@mobilestation>
- <20201012154150.GA1565332@kroah.com>
+        id S1729717AbgJLVxw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 17:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726428AbgJLVxw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 17:53:52 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567BAC0613D0
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 14:53:52 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id u19so19298385ion.3
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 14:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hW1H38JvCNEuBb0B4hXYVTsDxG145EF/Om+Dx14o90k=;
+        b=g2MJQ0fQFvTtfhF0O3M+eykGsl4lQPFoweg4/uwGP88m5NlP8ikW5uZYoZePdshdWJ
+         DIkg3Z7/RC/hdNetgVaopvnSknImxWwiFxrB/p8cNxuLvElAOLe1nWWf4NMcOV/hKmJ6
+         9DzqCl866hmImBkkzyq98o+2WsrLDQnVI0w8iZfdyYfFOHQ4hS2NOjwn6WjFAZZpROEr
+         7VGlUlBsOh5oaBk4BWhH1ScjfKv15L4aNUSsiDlOziKGtI78jbJAii6oMcj7cae5ACTQ
+         SOcmt2lc61gLIbwSeumWKixj0ijmNrEMx1XNmt3nK3Qh8ceRVpuGDVtXhqHfbml+QrZv
+         FB1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hW1H38JvCNEuBb0B4hXYVTsDxG145EF/Om+Dx14o90k=;
+        b=ef4gGIqdTeV8nqfbvaaKh3f+O/FM8u9iGiQcWRTKHRQ5vFaWvN88O93hlDqLIWRYmH
+         3/4RyHwQK+ZUxfJSOPpt1zaqPe1U6xa3nE+FWdrT6UffPj8AB1U5cbpqV7ndHVZRIr+Q
+         L940dOPE3FnXYM2XeH9st7QezwPFW7raaVQGDxi2DQk8u0GC1mfSA+oIDJk5zKVpAY36
+         LoPvT/jjv2xV/mHfz38U9hWevWTdaWEA2Fr4rM2KpBUWgcnYVpdwrteoWjw4EOT4Xi5A
+         HJckWervoG06T2B2CxtLKx7GG0nee2Xzg0G+k1Q5EXLaVmojTMmrvzr1qKgHR/PPmODc
+         /4lw==
+X-Gm-Message-State: AOAM532HlwwcBTpiMwk6D9X/IKMFgCeZk5xC6X4B/IXaGZiJVsbO61Ls
+        Qekqh0CR8uMk5Wj3o/o6OB9rOA==
+X-Google-Smtp-Source: ABdhPJxBW4KDF2Lft4fqT0qi5qkDgGZKAfQ9XF+m2/rLgUEFCRBy4hnxcxCYAQhfz2GlLlAbu6EzzQ==
+X-Received: by 2002:a05:6638:12cc:: with SMTP id v12mr16626798jas.75.1602539631170;
+        Mon, 12 Oct 2020 14:53:51 -0700 (PDT)
+Received: from google.com ([2601:285:8380:9270::42c])
+        by smtp.gmail.com with ESMTPSA id t13sm1349068ilj.41.2020.10.12.14.53.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2020 14:53:49 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 15:53:48 -0600
+From:   zwisler@google.com
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel@collabora.com" <kernel@collabora.com>
+Subject: Re: xhci problem -> general protection fault
+Message-ID: <20201012215348.GA3324220@google.com>
+References: <65ac3a73-ca57-c3e8-561b-9ba5c15b3c65@collabora.com>
+ <a6364bd9-58d9-e66e-5595-7d887a8f3fc9@linux.intel.com>
+ <8230c2a2-719c-ef81-e85d-5921bf8e98e6@collabora.com>
+ <133c123e-e857-7f83-d146-f39c00afe39f@linux.intel.com>
+ <20200925210517.GA4487@google.com>
+ <7e38c533-6ea1-63a6-fc92-2ecef7ee1f84@linux.intel.com>
+ <20201001164352.GA13249@google.com>
+ <69f8cbc3-0ae7-cfb2-2fdd-556ada77381f@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201012154150.GA1565332@kroah.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <69f8cbc3-0ae7-cfb2-2fdd-556ada77381f@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 05:41:50PM +0200, Greg Kroah-Hartman wrote:
-> On Sun, Oct 11, 2020 at 08:53:33PM +0300, Serge Semin wrote:
-> > On Sun, Oct 11, 2020 at 04:42:36PM +0200, Greg Kroah-Hartman wrote:
-> > > On Sun, Oct 11, 2020 at 01:41:05AM +0300, Serge Semin wrote:
-> > > > It appears that the "maximum-speed" property can also accept the
-> > > > "wireless" value. Add it to the enumeration of the possible property
-> > > > values then.
-> > > > 
-> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/usb/usb-hcd.yaml | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-> > > > index 815de24127db..e1a82a2b3295 100644
-> > > > --- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-> > > > +++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-> > > > @@ -28,7 +28,7 @@ properties:
-> > > >       isn't passed via DT, USB controllers should default to their maximum HW
-> > > >       capability.
-> > > >     $ref: /schemas/types.yaml#/definitions/string
-> > > > -   enum: ["low-speed", "full-speed", "high-speed", "super-speed",
-> > > > +   enum: ["low-speed", "full-speed", "high-speed", "wireless", "super-speed",
-> > > >            "super-speed-plus"]
-> > > 
+On Mon, Oct 12, 2020 at 10:20:31PM +0300, Mathias Nyman wrote:
+> On 1.10.2020 19.43, zwisler@google.com wrote:
+> > On Tue, Sep 29, 2020 at 01:35:31AM +0300, Mathias Nyman wrote:
+
+> I'm rewriting how xhci driver handles halted and canceled transfers.
+> While looking into it I found an older case where hardware gives bad data 
+> in the output context. This was 10 years ago and on some specic hardware,
+> see commit:
+> 
+> ac9d8fe7c6a8 USB: xhci: Add quirk for Fresco Logic xHCI hardware.
+> 
 > > 
-> > > Are you sure?  wireless usb has been removed from the kernel, where do
-> > > you see a user of this?  If it's still in there, we need to just drop
-> > > it.
-> > 
-> > My decision on suggesting this patch has been based purely on the speed types
-> > the USB core API supports and what usb_get_maximum_speed() can return.
-> > USB_SPEED_WIRELESS type is one of the possible return values. As I can see
-> > aside the rest of the USB speeds the wireless speed is also defined
-> > in the kernel USB subsystem. Moreover it is used in some kernel drivers.
-> > (See the USB_SPEED_WIRELESS enumeration constant usage.)
-> > Are you sure that the wireless speed support has been really removed?
+> > I'm happy to gather logs with more debug or run other experiments, if that
+> > would be helpful.  As it is I don't really know how to debug the internal
+> > state of the HC further, but hopefully the knowledge that the patch below
+> > makes a difference will help us move forward.
 > 
+> Great thanks, it will take some time before rewrite is ready.
 
-> All of the drivers that implement and support this should have been
-> removed.  Code in the USB core is probably not removed, but patches are
-> gladly welcome.
-> 
-> Please do not add new wireless support as it is not going to happen,
-> because there are no wireless devices in the world.
+Should we/I invest time in trying to create a quirk similar to
 
-Ok. Thanks for clarification. I'll drop this patch then.
+> ac9d8fe7c6a8 USB: xhci: Add quirk for Fresco Logic xHCI hardware.
 
--Sergey
-
-> 
-> thanks,
-> 
-> greg k-h
+in the mean time, or should we just wait for your rewrite?
