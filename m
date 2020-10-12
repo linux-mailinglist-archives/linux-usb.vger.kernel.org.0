@@ -2,280 +2,229 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 951AE28BBC6
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 17:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE0F28BBDA
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 17:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389902AbgJLPZX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Oct 2020 11:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
+        id S2389540AbgJLP3M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 11:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389540AbgJLPZW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 11:25:22 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BEAC0613D1
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 08:25:22 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id b41so9661579qtk.21
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 08:25:22 -0700 (PDT)
+        with ESMTP id S2389370AbgJLP3M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 11:29:12 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD847C0613D2
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 08:29:10 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id e23so10480281wme.2
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 08:29:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=jIHa8q4IkmT9vd9Bfnkau/RKxHufFOeKij/xuNE1mRI=;
-        b=k7FyQ2VOygaxXJ6PGSWN6PzoYEnz6Ce/Zq/BAMvbKmK0HMAmhS6VQB46jpUwH9gCuw
-         8e5EN7ipPc2oakWIujzbbWYnVDmnJksBBBXyiugdgeqpcUoXfaV3V6PcokdIFdlwkiym
-         IeLHO2skfW9PFqHr9cmLpOb/zmXlOCrKAP8d+1zmOK9PGb6V+z7b4jhibHKR/6tgywFa
-         YFDI6ezcB1KuibAttGxD2vf43VVxO/1qDHZi5Mj5A++4crdiLn5HuSdEdQYLgkQPC6Qf
-         Im6DnvOfe8vgX8x1SG1bJ+z/ZOO+NicPhMsGcQDdxwom4CuLUCbSgEbqKxmG5vqf0kW8
-         kh+A==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KoXohj2jp2K4/+dv4SfjlpJpBX/PPhJeM1REhLiZnoQ=;
+        b=F+/oI/q5TM1/S6wyB5NSXYk6MdwUCXutPzQ0JmTJIhw4NAIxIEmA7o6vRHYF3heZro
+         CexbpmGYRqEi8DV7yqU/BJR2lNko3gQ0A9LFPe8NqxKqtFEexzw0YQUL2SnI3WLQP5mZ
+         pG8nNM2AbxaguSD5o/k9BidcLSA4fzysgFn+fGjpfuvJQT0nXtxkvrSqfp1GIWJAM6z7
+         b6ttuLIXi5RW9We6R2Z+02FzarKzm/jSsdbCXHjm3MeCZu2Cv6f1hkf9C3D6J1jinRYM
+         GI1AxxtJAhiixwo005bs5ejmSu29SSmLECTjgR1z0uEuyxM6cQe/snaU8Xto4gj81/lN
+         LLlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=jIHa8q4IkmT9vd9Bfnkau/RKxHufFOeKij/xuNE1mRI=;
-        b=OR+pyzZSlcS/KUuf/ICHO3RNHTvI2zWr6txWyroTHj8d9NAK8bsr1MeWTtFiMcQ21U
-         ByDvsN9KqpLzzrMri3Yiz5wJKwcYyxBew2y0tAsuBjz/KPEt+lDLU/r2D4zsDy/AGBxV
-         UofeuuYFVRis5QD72BjoBt4Un5+s4cwDjsc9Z0XfZCrOmPygMomG0UBwBbkuN7Ad1VVE
-         i++3eIic9MFw23xUiq0obLaqivssf9vuW+RGJHKcPMoqgrV+Py6l3PTDnc7/DYfVcDfo
-         TxEtG4m0MXaSsx2InMNfjszg8LBWoJd5QLOGdHcY2popAB73hG+UWxMgA/Awwla+ArNY
-         0tgg==
-X-Gm-Message-State: AOAM532UePpSjFLH3xQ/f9V8R2szP6NE6hSjLGBgSFBgr92Kszmfn9iC
-        piMfltUS3QwGoVwP8OeAVNfEHUlaNCWcKRFl
-X-Google-Smtp-Source: ABdhPJxCobCNF8eSvpi3lYRqvqWOYP+riWm3d8tWr5cm+EkDZAAfvjq+Gg/GDRl/m7eEEepAywbI7pOAN1cJyTwE
-Sender: "andreyknvl via sendgmr" <andreyknvl@andreyknvl3.muc.corp.google.com>
-X-Received: from andreyknvl3.muc.corp.google.com ([2a00:79e0:15:13:7220:84ff:fe09:7e9d])
- (user=andreyknvl job=sendgmr) by 2002:a05:6214:1192:: with SMTP id
- t18mr19208611qvv.49.1602516321742; Mon, 12 Oct 2020 08:25:21 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 17:25:16 +0200
-Message-Id: <6b6f14a32fc13e2f8de0f384cab5ae32ce5eb8e0.1602516273.git.andreyknvl@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
-Subject: [PATCH v3] kcov, usb: specify contexts for remote coverage sections
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=KoXohj2jp2K4/+dv4SfjlpJpBX/PPhJeM1REhLiZnoQ=;
+        b=LXYefi7miJWqWlIsArRj8mqnYyNp/asafBt0dPL/3Xa7ZjB8hb1cQ3r77YuNxLs84Q
+         B0ep2zOJjHtqvwbaKHv78UznGOsMZOPxAWKEKhIcOS1xeB684zP+kgu1OjlB7ID3Rboz
+         XvBWlbt3upQdqy9hdSPp71Jzaj6zsyQUiZ6a/I1V1t1SEBIH8PXUxIH/jMszOe7AEhA5
+         EOR1+Txjj96Je2anY7AKF720EGM9PeanEqs+4bh7eHd//2Eah2ytK+sxNz997XHqgTLG
+         auttJleCgC/vdI79uH/N6d7tMIV8DnS5Mm6spdZcFssdu6+Q8CFOPC8r5BhoyhPvP48D
+         CVeQ==
+X-Gm-Message-State: AOAM533DbZa8k6/Fjo/amY9XQFjBnTx2NEZB+dsW+dAJcw3rRbdWPB5G
+        n8wH6757ZSe+ylBtteILrSJHUw==
+X-Google-Smtp-Source: ABdhPJyyBxwThzynIHXf/CkMTN1M/sJnhUWgASHTfkASYtNU4OqIAVso9iyixeqPgUumo+ig3h5FyQ==
+X-Received: by 2002:a1c:9854:: with SMTP id a81mr11149885wme.72.1602516549071;
+        Mon, 12 Oct 2020 08:29:09 -0700 (PDT)
+Received: from ?IPv6:2a01:e35:2ec0:82b0:35de:80a8:f551:6aa3? ([2a01:e35:2ec0:82b0:35de:80a8:f551:6aa3])
+        by smtp.gmail.com with ESMTPSA id c185sm2451212wma.44.2020.10.12.08.29.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Oct 2020 08:29:08 -0700 (PDT)
+Subject: Re: [PATCH 15/18] dt-bindings: usb: meson-g12a-usb: Discard FL-adj
+ property
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
+ <20201010224121.12672-16-Sergey.Semin@baikalelectronics.ru>
+ <329129ac-ff44-4928-bca4-805297a8c456@baylibre.com>
+ <20201012142201.7fr2n5xwvei23yog@mobilestation>
+ <f6e38330-146c-eb7c-5a99-7e156454e90b@baylibre.com>
+ <20201012151326.peu4yq6fhmi5utnb@mobilestation>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ ZaTUOEkgIor5losDrePdPgE=
+Organization: Baylibre
+Message-ID: <8e026a39-53e3-3cbc-cd52-e3dbc9d5c20f@baylibre.com>
+Date:   Mon, 12 Oct 2020 17:29:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20201012151326.peu4yq6fhmi5utnb@mobilestation>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently there's a KCOV remote coverage collection section in
-__usb_hcd_giveback_urb(). Initially that section was added based on the
-assumption that usb_hcd_giveback_urb() can only be called in interrupt
-context as indicated by a comment before it. This is what happens when
-syzkaller is fuzzing the USB stack via the dummy_hcd driver.
+On 12/10/2020 17:13, Serge Semin wrote:
+> On Mon, Oct 12, 2020 at 05:01:43PM +0200, Neil Armstrong wrote:
+>> Hi,
+>>
+>> On 12/10/2020 16:22, Serge Semin wrote:
+>>> On Mon, Oct 12, 2020 at 09:54:25AM +0200, Neil Armstrong wrote:
+>>>> Hi,
+>>>>
+>>>> On 11/10/2020 00:41, Serge Semin wrote:
+>>>>> An empty snps,quirk-frame-length-adjustment won't cause any change
+>>>>> performed by the driver. Moreover the DT schema validation will fail,
+>>>>> since it expects the property being assigned with some value. So just
+>>>>> discard the property declaration then from the example.
+>>>>>
+>>>>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+>>>>>
+>>>>> ---
+>>>>>
+>>>>> Note the same problem is in the DT source file
+>>>>> arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi .
+>>>>> ---
+>>>>>  .../devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml     | 1 -
+>>>>>  1 file changed, 1 deletion(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+>>>>> index 5b04a7dfa018..88184d7e26cc 100644
+>>>>> --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+>>>>> @@ -209,6 +209,5 @@ examples:
+>>>>>                interrupts = <30>;
+>>>>>                dr_mode = "host";
+>>>>>                snps,dis_u2_susphy_quirk;
+>>>>> -              snps,quirk-frame-length-adjustment;
+>>>>>            };
+>>>>>      };
+>>>>>
+>>>>
+>>>
+>>>> Thanks for reporting this, actually the fladj must be 0x20 on this hw,
+>>>> but we do set this on the PHY side, so we can let the dwc3 side 0 here.
+>>>
+>>> I can convert this patch to initializing the "snps,quirk-frame-length-adjustment"
+>>> property with 0x20 value instead. Since most likely I'll have to send a v2/v3/etc
+>>> of this patchset, that modification won't be too much work to do. What do you think?
+>>
+> 
+>> Yes, do this please,
+> 
+> Ok. Shall I preserve your Acked-by tag in the new patch or you'd prefer to
+> review it first?
 
-As it turns out, it's actually valid to call usb_hcd_giveback_urb() in task
-context, provided that the caller turned off the interrupts; USB/IP does
-exactly that. This can lead to a nested KCOV remote coverage collection
-sections both trying to collect coverage in task context. This isn't
-supported by KCOV, and leads to a WARNING.
+Yes, preserve it,
+Thanks,
+Neil
 
-The approach this patch takes is to add another set of kcov_remote_*()
-callbacks that specify the context they are supposed to be executed in.
-If the current context doesn't match the mask provided to a callback,
-that callback is ignored. KCOV currently only supports collecting remote
-coverage in two contexts: task and softirq. This patch constraints KCOV to
-only collect coverage from __usb_hcd_giveback_urb() when it's executed in
-softirq context.
-
-As the result, the coverage from USB/IP related usb_hcd_giveback_urb() calls
-won't be collected, but the WARNING is fixed.
-
-A potential future improvement would be to support nested remote coverage
-collection sections, but this patch doesn't address that.
-
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
-
-Changes v2->v3:
-- Keep behavoir of existing callbacks the same except for the
-  __usb_hcd_giveback_urb() one.
-- Fix build error with KOV disabled.
-
----
- Documentation/dev-tools/kcov.rst |  6 ++++++
- drivers/usb/core/hcd.c           |  4 ++--
- include/linux/kcov.h             | 31 +++++++++++++++++++++++++++++--
- kernel/kcov.c                    | 26 +++++++++++++++++++-------
- 4 files changed, 56 insertions(+), 11 deletions(-)
-
-diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
-index 8548b0b04e43..2c0f58988512 100644
---- a/Documentation/dev-tools/kcov.rst
-+++ b/Documentation/dev-tools/kcov.rst
-@@ -235,6 +235,12 @@ saved to the kcov_handle field in the current task_struct and needs to be
- passed to the newly spawned threads via custom annotations. Those threads
- should in turn be annotated with kcov_remote_start()/kcov_remote_stop().
- 
-+Besides the annotations that only accept a handle, there are also
-+kcov_remote_start_context()/kcov_remote_stop_context() that accept a
-+context mask. This mask describes the contexts in which these annotations
-+should be applied. E.g. specifying KCOV_CONTEXT_SOFTIRQ will result in the
-+corresponding annotations being ignored in any context other than softirq.
-+
- Internally kcov stores handles as u64 integers. The top byte of a handle
- is used to denote the id of a subsystem that this handle belongs to, and
- the lower 4 bytes are used to denote the id of a thread instance within
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index a33b849e8beb..ea93d9ebcb2e 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1646,9 +1646,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
- 
- 	/* pass ownership to the completion handler */
- 	urb->status = status;
--	kcov_remote_start_usb((u64)urb->dev->bus->busnum);
-+	kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
- 	urb->complete(urb);
--	kcov_remote_stop();
-+	kcov_remote_stop_softirq();
- 
- 	usb_anchor_resume_wakeups(anchor);
- 	atomic_dec(&urb->use_count);
-diff --git a/include/linux/kcov.h b/include/linux/kcov.h
-index a10e84707d82..9e31b71ee3f9 100644
---- a/include/linux/kcov.h
-+++ b/include/linux/kcov.h
-@@ -22,6 +22,10 @@ enum kcov_mode {
- 	KCOV_MODE_TRACE_CMP = 3,
- };
- 
-+#define KCOV_CONTEXT_TASK	(1u << 0)
-+#define KCOV_CONTEXT_SOFTIRQ	(1u << 1)
-+#define KCOV_CONTEXT_MASK	(KCOV_CONTEXT_TASK | KCOV_CONTEXT_SOFTIRQ)
-+
- #define KCOV_IN_CTXSW	(1 << 30)
- 
- void kcov_task_init(struct task_struct *t);
-@@ -38,10 +42,21 @@ do {						\
- } while (0)
- 
- /* See Documentation/dev-tools/kcov.rst for usage details. */
--void kcov_remote_start(u64 handle);
--void kcov_remote_stop(void);
-+
-+void kcov_remote_start_context(u64 handle, unsigned int context);
-+void kcov_remote_stop_context(unsigned int context);
- u64 kcov_common_handle(void);
- 
-+static inline void kcov_remote_start(u64 handle)
-+{
-+	return kcov_remote_start_context(handle, KCOV_CONTEXT_MASK);
-+}
-+
-+static inline void kcov_remote_stop(void)
-+{
-+	return kcov_remote_stop_context(KCOV_CONTEXT_MASK);
-+}
-+
- static inline void kcov_remote_start_common(u64 id)
- {
- 	kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_COMMON, id));
-@@ -52,6 +67,16 @@ static inline void kcov_remote_start_usb(u64 id)
- 	kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_USB, id));
- }
- 
-+static inline void kcov_remote_start_usb_softirq(u64 id)
-+{
-+	kcov_remote_start_context(kcov_remote_handle(KCOV_SUBSYSTEM_USB, id), KCOV_CONTEXT_SOFTIRQ);
-+}
-+
-+static inline void kcov_remote_stop_softirq(void)
-+{
-+	return kcov_remote_stop_context(KCOV_CONTEXT_SOFTIRQ);
-+}
-+
- #else
- 
- static inline void kcov_task_init(struct task_struct *t) {}
-@@ -66,6 +91,8 @@ static inline u64 kcov_common_handle(void)
- }
- static inline void kcov_remote_start_common(u64 id) {}
- static inline void kcov_remote_start_usb(u64 id) {}
-+static inline void kcov_remote_start_usb_softirq(u64 id) {}
-+static inline void kcov_remote_stop_softirq(void) {}
- 
- #endif /* CONFIG_KCOV */
- #endif /* _LINUX_KCOV_H */
-diff --git a/kernel/kcov.c b/kernel/kcov.c
-index 6b8368be89c8..3ccdbe060f47 100644
---- a/kernel/kcov.c
-+++ b/kernel/kcov.c
-@@ -808,7 +808,8 @@ static void kcov_remote_softirq_stop(struct task_struct *t)
- 	}
- }
- 
--void kcov_remote_start(u64 handle)
-+/* Also see kcov_remote_start() defined in include/linux/kcov.h. */
-+void kcov_remote_start_context(u64 handle, unsigned int context)
- {
- 	struct task_struct *t = current;
- 	struct kcov_remote *remote;
-@@ -821,7 +822,11 @@ void kcov_remote_start(u64 handle)
- 
- 	if (WARN_ON(!kcov_check_handle(handle, true, true, true)))
- 		return;
--	if (!in_task() && !in_serving_softirq())
-+	if (WARN_ON((context & ~KCOV_CONTEXT_MASK) || !context))
-+		return;
-+	if (in_task() && !(context & KCOV_CONTEXT_TASK))
-+		return;
-+	if (in_serving_softirq() && !(context & KCOV_CONTEXT_SOFTIRQ))
- 		return;
- 
- 	local_irq_save(flags);
-@@ -894,7 +899,7 @@ void kcov_remote_start(u64 handle)
- 	local_irq_restore(flags);
- 
- }
--EXPORT_SYMBOL(kcov_remote_start);
-+EXPORT_SYMBOL(kcov_remote_start_context);
- 
- static void kcov_move_area(enum kcov_mode mode, void *dst_area,
- 				unsigned int dst_area_size, void *src_area)
-@@ -951,8 +956,11 @@ static void kcov_move_area(enum kcov_mode mode, void *dst_area,
- 	}
- }
- 
--/* See the comment before kcov_remote_start() for usage details. */
--void kcov_remote_stop(void)
-+/*
-+ * Also see kcov_remote_stop() defined in include/linux/kcov.h.
-+ * See the comment before kcov_remote_start_context() for usage details.
-+ */
-+void kcov_remote_stop_context(unsigned int context)
- {
- 	struct task_struct *t = current;
- 	struct kcov *kcov;
-@@ -962,7 +970,11 @@ void kcov_remote_stop(void)
- 	int sequence;
- 	unsigned long flags;
- 
--	if (!in_task() && !in_serving_softirq())
-+	if (WARN_ON((context & ~KCOV_CONTEXT_MASK) || !context))
-+		return;
-+	if (in_task() && !(context & KCOV_CONTEXT_TASK))
-+		return;
-+	if (in_serving_softirq() && !(context & KCOV_CONTEXT_SOFTIRQ))
- 		return;
- 
- 	local_irq_save(flags);
-@@ -1018,7 +1030,7 @@ void kcov_remote_stop(void)
- 	/* Get in kcov_remote_start(). */
- 	kcov_put(kcov);
- }
--EXPORT_SYMBOL(kcov_remote_stop);
-+EXPORT_SYMBOL(kcov_remote_stop_context);
- 
- /* See the comment before kcov_remote_start() for usage details. */
- u64 kcov_common_handle(void)
--- 
-2.28.0.1011.ga647a8990f-goog
+>> anyway it's only an example so it's ok.
+> 
+> Actually examples are also validated by "make dt_binding_check". That's why I
+> had to fix the amlogic,meson-g12a-usb-ctrl example for at least so the new
+> snps,dwc3.yaml DT schema wouldn't break that full DT bindings
+> validation procedure.)
+> 
+> -Sergey
+> 
+>>
+>>>
+>>> Anyway please note, that I've fixed the improper property usage in the DT schema
+>>> example only. "snps,quirk-frame-length-adjustment" defined as boolean still
+>>> persists in the DTS file: arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi .
+>>> So if you ever try to validate that dts file with "make dtbs_check" scenario, it
+>>> will fail.
+>>
+>> Yes, I'll push a fix to pass the dtbs_check when this is merged.
+>>
+>> Thanks,
+>> Neil
+>>
+>>>
+>>> -Sergey
+>>>
+>>>>
+>>>> Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+>>>>
+>>>> Neil
+>>>>
+>>
 
