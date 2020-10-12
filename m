@@ -2,53 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D97EA28AB03
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 00:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD8128AB37
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 02:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387780AbgJKWzm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Oct 2020 18:55:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34916 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgJKWzm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 11 Oct 2020 18:55:42 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 899B32076E;
-        Sun, 11 Oct 2020 22:55:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602456941;
-        bh=KvDRy898tZkJV1H44iDrW5fdptEiyvUv8AeifK7jE9k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q0mFFIyvRoV278p7Jk5P76lPAglEnFI38QGRWSs8ljqd2iW/PFeTBxkEaljMTDFJX
-         1aIXMTh3LDQ3nPAcR5Pq9zsxaGbgo2Cv3Vto0pus0aVfdohHh10BlqyAG/nwsPbQoR
-         HCF8yIh0NI4rovD880UL20ZS/djeYJjlQlDErT/c=
-Date:   Sun, 11 Oct 2020 15:55:39 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cx82310_eth: re-enable ethernet mode after router
- reboot
-Message-ID: <20201011155539.315bf5aa@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201010140048.12067-1-linux@zary.sk>
-References: <20201010140048.12067-1-linux@zary.sk>
+        id S1726768AbgJLA1L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Oct 2020 20:27:11 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40221 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726737AbgJLA1L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Oct 2020 20:27:11 -0400
+Received: (qmail 615163 invoked by uid 1000); 11 Oct 2020 20:27:09 -0400
+Date:   Sun, 11 Oct 2020 20:27:09 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-safety@lists.elisa.tech,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ehci-sched: add comment about find_tt() not
+ returning error
+Message-ID: <20201012002709.GA614913@rowland.harvard.edu>
+References: <20201011205008.24369-1-sudipm.mukherjee@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201011205008.24369-1-sudipm.mukherjee@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 10 Oct 2020 16:00:46 +0200 Ondrej Zary wrote:
-> When the router is rebooted without a power cycle, the USB device
-> remains connected but its configuration is reset. This results in
-> a non-working ethernet connection with messages like this in syslog:
-> 	usb 2-2: RX packet too long: 65535 B
+On Sun, Oct 11, 2020 at 09:50:08PM +0100, Sudip Mukherjee wrote:
+> Add a comment explaining why find_tt() will not return error even though
+> find_tt() is checking for NULL and other errors.
 > 
-> Re-enable ethernet mode when receiving a packet with invalid size of
-> 0xffff.
+> Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+> ---
+>  drivers/usb/host/ehci-sched.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ehci-sched.c b/drivers/usb/host/ehci-sched.c
+> index 6dfb242f9a4b..0f85aa9b2fb1 100644
+> --- a/drivers/usb/host/ehci-sched.c
+> +++ b/drivers/usb/host/ehci-sched.c
+> @@ -244,6 +244,12 @@ static void reserve_release_intr_bandwidth(struct ehci_hcd *ehci,
+>  
+>  	/* FS/LS bus bandwidth */
+>  	if (tt_usecs) {
+> +		/*
+> +		 * find_tt() will not return any error here as we have
+> +		 * already called find_tt() before calling this function
+> +		 * and checked for any error return. The previous call
+> +		 * would have created the data structure.
+> +		 */
+>  		tt = find_tt(qh->ps.udev);
+>  		if (sign > 0)
+>  			list_add_tail(&qh->ps.ps_list, &tt->ps_list);
+> @@ -1337,6 +1343,12 @@ static void reserve_release_iso_bandwidth(struct ehci_hcd *ehci,
+>  			}
+>  		}
+>  
+> +		/*
+> +		 * find_tt() will not return any error here as we have
+> +		 * already called find_tt() before calling this function
+> +		 * and checked for any error return. The previous call
+> +		 * would have created the data structure.
+> +		 */
+>  		tt = find_tt(stream->ps.udev);
+>  		if (sign > 0)
+>  			list_add_tail(&stream->ps.ps_list, &tt->ps_list);
 
-Patch looks good, but could you explain what's a reboot without a power
-cycle in this case? The modem gets reset but USB subsystem doesn't know
-it and doesn't go though a unbind() + bind() cycle?
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
