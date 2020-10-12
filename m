@@ -2,110 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CB128BAB6
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 16:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E1928BB23
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 16:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389479AbgJLOWM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Oct 2020 10:22:12 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:35204 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389097AbgJLOWM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 10:22:12 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 289818030867;
-        Mon, 12 Oct 2020 14:22:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bHN2z32UxKxQ; Mon, 12 Oct 2020 17:22:03 +0300 (MSK)
-Date:   Mon, 12 Oct 2020 17:22:01 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>
-Subject: Re: [PATCH 15/18] dt-bindings: usb: meson-g12a-usb: Discard FL-adj
- property
-Message-ID: <20201012142201.7fr2n5xwvei23yog@mobilestation>
-References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
- <20201010224121.12672-16-Sergey.Semin@baikalelectronics.ru>
- <329129ac-ff44-4928-bca4-805297a8c456@baylibre.com>
+        id S2389031AbgJLOrk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 12 Oct 2020 10:47:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388334AbgJLOrk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Oct 2020 10:47:40 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 209411] When retrieving string descriptor from mobile device
+ returns eproto error
+Date:   Mon, 12 Oct 2020 14:47:39 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-209411-208809-KE3oPBHDCc@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-209411-208809@https.bugzilla.kernel.org/>
+References: <bug-209411-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <329129ac-ff44-4928-bca4-805297a8c456@baylibre.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 09:54:25AM +0200, Neil Armstrong wrote:
-> Hi,
-> 
-> On 11/10/2020 00:41, Serge Semin wrote:
-> > An empty snps,quirk-frame-length-adjustment won't cause any change
-> > performed by the driver. Moreover the DT schema validation will fail,
-> > since it expects the property being assigned with some value. So just
-> > discard the property declaration then from the example.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Note the same problem is in the DT source file
-> > arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi .
-> > ---
-> >  .../devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml     | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> > index 5b04a7dfa018..88184d7e26cc 100644
-> > --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> > @@ -209,6 +209,5 @@ examples:
-> >                interrupts = <30>;
-> >                dr_mode = "host";
-> >                snps,dis_u2_susphy_quirk;
-> > -              snps,quirk-frame-length-adjustment;
-> >            };
-> >      };
-> > 
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=209411
 
-> Thanks for reporting this, actually the fladj must be 0x20 on this hw,
-> but we do set this on the PHY side, so we can let the dwc3 side 0 here.
+--- Comment #35 from Alan Stern (stern@rowland.harvard.edu) ---
+Come to think of it, that particular change probably _won't_ affect your
+Get-String-Descriptor call.  It only affects bulk and interrupt endpoints, not
+control or isochronous endpoints, and Get-String-Descriptor uses endpoint 0
+(which is a control endpoint).
 
-I can convert this patch to initializing the "snps,quirk-frame-length-adjustment"
-property with 0x20 value instead. Since most likely I'll have to send a v2/v3/etc
-of this patchset, that modification won't be too much work to do. What do you think?
+Not calling Set-Config seems like the best workaround.  Is there any reason why
+your program calls it in the first place?  Isn't the device already using the
+configuration you want?
 
-Anyway please note, that I've fixed the improper property usage in the DT schema
-example only. "snps,quirk-frame-length-adjustment" defined as boolean still
-persists in the DTS file: arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi .
-So if you ever try to validate that dts file with "make dtbs_check" scenario, it
-will fail.
-
--Sergey
-
-> 
-> Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-> 
-> Neil
-> 
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
