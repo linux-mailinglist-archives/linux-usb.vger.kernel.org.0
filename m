@@ -2,42 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C2528C050
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 21:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2337D28C109
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 21:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390767AbgJLTD0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Oct 2020 15:03:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52634 "EHLO mail.kernel.org"
+        id S2391640AbgJLTII (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 15:08:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390256AbgJLTDL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Oct 2020 15:03:11 -0400
+        id S2390640AbgJLTD0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Oct 2020 15:03:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0423F21D6C;
-        Mon, 12 Oct 2020 19:03:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 503BF221FC;
+        Mon, 12 Oct 2020 19:03:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602529391;
-        bh=gn7sQyPcqCnwAEuNLbcoNvuuewmlJjKo3FCITW0Y9AU=;
+        s=default; t=1602529403;
+        bh=/11yYPFBHQOT+4upP8tZijZHl27k2jneMtbDOcUOZew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RWq31lLziTMlOp+7exwJWW2Ai7dVxEUGXAlQAYyxhiN+H4kYkOVbS59W/fz6hqb7Z
-         amVukimH+MgHWDm8/f/vUujzuBufjF4RtGep5JExfSbg+YrLVUuRw3q3ADjyFuO0Su
-         Ug9ZttYD/s9gipPRPdHNVUZnxjGvx9uA4bv+xsY4=
+        b=gpLBm6PacWKWcXg6BNw9XwGqJji2/u4k9vXYG4TqDWo3o8uDyXoHL39pX4mfJvUqx
+         uKUuv0yeeeJQU6UcJuebPhWNOd2SnShL022274Wq22YBtmm2Mrhlmyxk54q/aIFgjo
+         KZC+NiDPZwCSOnobHDKyIK4Kz6MmYv3zPvtjA/cc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Wilken Gottwalt <wilken.gottwalt@mailbox.org>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 24/24] net: usb: qmi_wwan: add Cellient MPL200 card
-Date:   Mon, 12 Oct 2020 15:02:39 -0400
-Message-Id: <20201012190239.3279198-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 07/15] net: usb: ax88179_178a: add Toshiba usb 3.0 adapter
+Date:   Mon, 12 Oct 2020 15:03:04 -0400
+Message-Id: <20201012190313.3279397-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201012190239.3279198-1-sashal@kernel.org>
-References: <20201012190239.3279198-1-sashal@kernel.org>
+In-Reply-To: <20201012190313.3279397-1-sashal@kernel.org>
+References: <20201012190313.3279397-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -47,30 +45,53 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Wilken Gottwalt <wilken.gottwalt@mailbox.org>
 
-[ Upstream commit 28802e7c0c9954218d1830f7507edc9d49b03a00 ]
+[ Upstream commit e42d72fea91f8f2e82b65808739ca04b7a8cd7a8 ]
 
-Add usb ids of the Cellient MPL200 card.
+Adds the driver_info and usb ids of the AX88179 based Toshiba USB 3.0
+ethernet adapter.
 
 Signed-off-by: Wilken Gottwalt <wilken.gottwalt@mailbox.org>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/usb/ax88179_178a.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 07c42c0719f5b..5ca1356b8656f 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1375,6 +1375,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_QUIRK_SET_DTR(0x2cb7, 0x0104, 4)},	/* Fibocom NL678 series */
- 	{QMI_FIXED_INTF(0x0489, 0xe0b4, 0)},	/* Foxconn T77W968 LTE */
- 	{QMI_FIXED_INTF(0x0489, 0xe0b5, 0)},	/* Foxconn T77W968 LTE with eSIM support*/
-+	{QMI_FIXED_INTF(0x2692, 0x9025, 4)},    /* Cellient MPL200 (rebranded Qualcomm 05c6:9025) */
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index df2f7cc6dc03a..37caa93f7d49a 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1724,6 +1724,19 @@ static const struct driver_info belkin_info = {
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
  
- 	/* 4. Gobi 1000 devices */
- 	{QMI_GOBI1K_DEVICE(0x05c6, 0x9212)},	/* Acer Gobi Modem Device */
++static const struct driver_info toshiba_info = {
++	.description = "Toshiba USB Ethernet Adapter",
++	.bind	= ax88179_bind,
++	.unbind = ax88179_unbind,
++	.status = ax88179_status,
++	.link_reset = ax88179_link_reset,
++	.reset	= ax88179_reset,
++	.stop = ax88179_stop,
++	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
++	.rx_fixup = ax88179_rx_fixup,
++	.tx_fixup = ax88179_tx_fixup,
++};
++
+ static const struct usb_device_id products[] = {
+ {
+ 	/* ASIX AX88179 10/100/1000 */
+@@ -1757,6 +1770,10 @@ static const struct usb_device_id products[] = {
+ 	/* Belkin B2B128 USB 3.0 Hub + Gigabit Ethernet Adapter */
+ 	USB_DEVICE(0x050d, 0x0128),
+ 	.driver_info = (unsigned long)&belkin_info,
++}, {
++	/* Toshiba USB 3.0 GBit Ethernet Adapter */
++	USB_DEVICE(0x0930, 0x0a13),
++	.driver_info = (unsigned long)&toshiba_info,
+ },
+ 	{ },
+ };
 -- 
 2.25.1
 
