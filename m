@@ -2,60 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E1928BB23
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 16:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6942328BB6C
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 16:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389031AbgJLOrk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 12 Oct 2020 10:47:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388334AbgJLOrk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Oct 2020 10:47:40 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209411] When retrieving string descriptor from mobile device
- returns eproto error
-Date:   Mon, 12 Oct 2020 14:47:39 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209411-208809-KE3oPBHDCc@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209411-208809@https.bugzilla.kernel.org/>
-References: <bug-209411-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1729959AbgJLO5L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 10:57:11 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:41387 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728269AbgJLO5L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 10:57:11 -0400
+Received: (qmail 632421 invoked by uid 1000); 12 Oct 2020 10:57:10 -0400
+Date:   Mon, 12 Oct 2020 10:57:10 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-safety@lists.elisa.tech,
+        linux-usb@vger.kernel.org
+Subject: Re: [linux-safety] [PATCH] usb: host: ehci-sched: add comment about
+ find_tt() not returning error
+Message-ID: <20201012145710.GA631710@rowland.harvard.edu>
+References: <20201011205008.24369-1-sudipm.mukherjee@gmail.com>
+ <alpine.DEB.2.21.2010121550300.6487@felia>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2010121550300.6487@felia>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209411
+On Mon, Oct 12, 2020 at 04:11:38PM +0200, Lukas Bulwahn wrote:
+> 
+> 
+> On Sun, 11 Oct 2020, Sudip Mukherjee wrote:
+> 
+> > Add a comment explaining why find_tt() will not return error even though
+> > find_tt() is checking for NULL and other errors.
+> > 
+> > Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+> 
+> I get the intent of the comment but there is a large risk that somebody 
+> could remove the find_tt() call before the calling the function and there 
+> is no chance to then see later that the comment is actually wrong.
 
---- Comment #35 from Alan Stern (stern@rowland.harvard.edu) ---
-Come to think of it, that particular change probably _won't_ affect your
-Get-String-Descriptor call.  It only affects bulk and interrupt endpoints, not
-control or isochronous endpoints, and Get-String-Descriptor uses endpoint 0
-(which is a control endpoint).
+Why would anybody do that?  Who would deliberately go change a driver in 
+a way that is obviously wrong and would break it?  Especially when such 
+changes are likely to cause compile errors?
 
-Not calling Set-Config seems like the best workaround.  Is there any reason why
-your program calls it in the first place?  Isn't the device already using the
-configuration you want?
+There are tons of changes one might make to any program that will leave 
+it syntactically valid but will cause it to fail.  What's special about 
+removing the early calls to find_tt()?
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+> I guess you want to link this comment here to a code line above and
+> request anyone touching the line above to reconsider the comment then.
+
+That really seems unnecessary.
+
+> But there is no 'concept' for such kind of requests to changes and 
+> comments.
+> 
+> So, the comment is true now, but might be true or wrong later.
+> 
+> I am wondering if such comment deserves to be included if we cannot check 
+> its validity later...
+> 
+> I would prefer a simple tool that could check that your basic assumption 
+> on the code is valid and if it the basic assumption is still valid, 
+> just shut up any stupid tool that simply does not get that these calls 
+> here cannot return any error.
+
+Real code contains so many assumptions, especially if you include ones 
+which are obvious to everybody, that such a tool seems impractical.
+
+Alan Stern
