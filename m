@@ -2,70 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FCC28C005
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 20:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617C928C12A
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 21:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730073AbgJLSuT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 12 Oct 2020 14:50:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48108 "EHLO mail.kernel.org"
+        id S2388079AbgJLTJb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 15:09:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52196 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726267AbgJLSuT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Oct 2020 14:50:19 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209411] When retrieving string descriptor from mobile device
- returns eproto error
-Date:   Mon, 12 Oct 2020 18:50:18 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: rachithas104@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209411-208809-YuzEHCgL2a@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209411-208809@https.bugzilla.kernel.org/>
-References: <bug-209411-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1730847AbgJLTCy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Oct 2020 15:02:54 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7E6BA208FE;
+        Mon, 12 Oct 2020 19:02:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602529373;
+        bh=0a+Di7YlgN5HRSShppmp+yVKmT72PyxoFLhMjy+6XGI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=0mLB7VgwvqcIB7OmAbBAt8Fy51oEP1RjC9rsw3o1+c1UU+ZdUIJxJrKO0a8iKOEjh
+         HkrHw+lI7GIvGnYU92bxXpPwNKTuNDV6YpXajSNAK5V185XSYJQIjrMAgFh6Do/td6
+         AMs0HGRIPrPVmftubNv1p3AQ6VD42L4kHEVV5+04=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Wilken Gottwalt <wilken.gottwalt@mailbox.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 10/24] net: usb: ax88179_178a: add Toshiba usb 3.0 adapter
+Date:   Mon, 12 Oct 2020 15:02:25 -0400
+Message-Id: <20201012190239.3279198-10-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201012190239.3279198-1-sashal@kernel.org>
+References: <20201012190239.3279198-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209411
+From: Wilken Gottwalt <wilken.gottwalt@mailbox.org>
 
---- Comment #39 from rachithas104@gmail.com ---
-(In reply to Alan Stern from comment #38)
-> \Is there any way to find out exactly what Windows sends to the device? 
-> Maybe it's different from what your program sends.
-> 
-> Keep in mind also that the kernel sends a Set-Config request to the device
-> when you plug it into the computer.  That request doesn't appear to cause
-> problems either.
-> 
-> The only logs which might give you more information about what's happening
-> on the device are the device's own logs.  Maybe you can learn something, for
-> example, by running dmesg in a terminal app on the device.
+[ Upstream commit e42d72fea91f8f2e82b65808739ca04b7a8cd7a8 ]
 
-Keep in mind also that the kernel sends a Set-Config request to the device when
-you plug it into the computer.  That request doesn't appear to cause problems
-either-This doesn't cause problem when the kernel first sends set-config,only
-problem happens when there is one more select-config call on the same device
+Adds the driver_info and usb ids of the AX88179 based Toshiba USB 3.0
+ethernet adapter.
 
-Its happening only with mobile,other devices are working fine
+Signed-off-by: Wilken Gottwalt <wilken.gottwalt@mailbox.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/ax88179_178a.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index a38e868e44d46..125f7bf57590b 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1828,6 +1828,19 @@ static const struct driver_info belkin_info = {
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+ 
++static const struct driver_info toshiba_info = {
++	.description = "Toshiba USB Ethernet Adapter",
++	.bind	= ax88179_bind,
++	.unbind = ax88179_unbind,
++	.status = ax88179_status,
++	.link_reset = ax88179_link_reset,
++	.reset	= ax88179_reset,
++	.stop = ax88179_stop,
++	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
++	.rx_fixup = ax88179_rx_fixup,
++	.tx_fixup = ax88179_tx_fixup,
++};
++
+ static const struct usb_device_id products[] = {
+ {
+ 	/* ASIX AX88179 10/100/1000 */
+@@ -1861,6 +1874,10 @@ static const struct usb_device_id products[] = {
+ 	/* Belkin B2B128 USB 3.0 Hub + Gigabit Ethernet Adapter */
+ 	USB_DEVICE(0x050d, 0x0128),
+ 	.driver_info = (unsigned long)&belkin_info,
++}, {
++	/* Toshiba USB 3.0 GBit Ethernet Adapter */
++	USB_DEVICE(0x0930, 0x0a13),
++	.driver_info = (unsigned long)&toshiba_info,
+ },
+ 	{ },
+ };
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+2.25.1
+
