@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2729428AF1E
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 09:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E5628AF79
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 09:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727372AbgJLHiK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Oct 2020 03:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
+        id S1726982AbgJLHyf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 03:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727097AbgJLHiH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 03:38:07 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BFAC0613CE
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 00:38:05 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id n15so17952276wrq.2
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 00:38:05 -0700 (PDT)
+        with ESMTP id S1726395AbgJLHyb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 03:54:31 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2F7C0613D0
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 00:54:29 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id q5so16567903wmq.0
+        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 00:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:autocrypt:organization:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=QIcL7JMERC4ZLU9Dg9Ld8Wb3V3NyNSCRf0bIDwM+jiQ=;
-        b=wbNHMHbgX1EvB5VADLK8RNScj/3J3y2ETQ9zbuRwxuhcJZ5+snsKGorCFX2T3hUPvX
-         JqXNyrFrBpkBicycs3XgfMkTcZSm10V/52RT4hMgzhW+C3X/CeACAcb4YWDkk6qVKdQ1
-         WcO0FfC2+fR3BFpEdeNFFfPtYxE6gyGmaNAU68FWNBnF7LfR6I5b0PgQHWa3Y5rQ1cs+
-         9LhLoZsN2Ckopaj487S6lS/iM1pvYcAvd7ui1IicmkylUFF1gbQJcuVTqLVYY/Swvo/m
-         lsRT2UEpvoCrrekQ39TvvJloBpria3gqZHj3fPFL7+MshPd1BZWnl+zm9kDxsHPuRVJl
-         0sZQ==
+        bh=gfelOd4Sv4YbUFPNQ+VjVQQLCAZTIvB7sNLGxjZ/tks=;
+        b=ksbgMa1fE1zUgaurFC+k100/c2MUbger7D3vgupmQ9fykmpUls5C+Mfrocng5ryjiC
+         H3VeEjBudW2PWMBA9w5i2IecHKgkcs4/Iq4ujs61MTHBjM95N27BS10rdIz64vJ+pgB7
+         IivUTA3iARtdfTu0805vrt8zNin5okN8eA8CP0cfa7K5Bt+b5EfQxNxDgQe605Ws0Tp4
+         oXYbH2sPwmkucq3oq/9aqDJQj3ahzuIazwfwXBI2um/U0tA7IM+k1/0t79lMMIscy3VA
+         SLi74rZtgJZNiSd/OtT6EHbliN/vYLJouULYuJhyCmhT4EtQSfISaXSOQgDf2xsyLxJY
+         BGcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :organization:message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=QIcL7JMERC4ZLU9Dg9Ld8Wb3V3NyNSCRf0bIDwM+jiQ=;
-        b=W7647GOQuuZjn2abZo9ijFSc/P6wFW9yB2bPoJ8tpsOHsOErsCuZPfRhbGwfsKA2DC
-         qsCi8TcarVp7trNPgaOefBmsIYxuxbZLj9H9oCbY1aCYBR4qRtL139BlYgH27ruuqLlt
-         RYYga0feBtyUnZfWHEkxLnn4fFp1xpCh5wdF7i1QRcNY28/jKjrq/Nh/gciaLTWNLl6v
-         QjCEVzYmIrMJiQoW6O/X6xLzcUEjWJQ0QwPFUhM2eNlT3IbBRYMVCC+O6R9LFYhMf7OH
-         vCD0ta96Pdyv0DIYl88MTzIbA8rlZxJhjKvrRcBqbap2rdcdhz+OqAil7mw0ri2sguWk
-         jjGQ==
-X-Gm-Message-State: AOAM532tz3SI6eLJZRyh4HxyHAKIcOlh4WN1hjmqbKePkEQnRWZX+VCB
-        /7R1M/+Vp/nZL3PNWkU3s0IuOg==
-X-Google-Smtp-Source: ABdhPJzpZ5CWmzwz6pYHAQqV0MnGJWqhpu0x0pFo9wfHHSJHll5RflV4KHFc8XyipDre+yXtvUh9NQ==
-X-Received: by 2002:adf:e412:: with SMTP id g18mr5525502wrm.211.1602488284193;
-        Mon, 12 Oct 2020 00:38:04 -0700 (PDT)
+        bh=gfelOd4Sv4YbUFPNQ+VjVQQLCAZTIvB7sNLGxjZ/tks=;
+        b=H/loWEHTqvap1Wj+gDs0LA+IUgKC99orIpXRjLbcegZZHvT9a9BMC0g1XrRyB3fNC/
+         nu9q89bFmJEuNBnZiirNhLSq856gR+A1TEghfBgyPoa9PLHs3eGvNnqxmfaz4F5kCtN0
+         ZoUi1s1zzC2F5B9jzTOl9tySDuM1amnbSk0FXswsxcYtZ2avmpmhcEGLjwU797xLPkCd
+         ZIw1DZKbdgoOGFGqXxNGEYfCHlR4bJuP6ik5vAqUSiHzX4mQjc+lz+F0MY85fB1TeSxe
+         5je/mdddoh9oen6tmNGIUKpaL16zZ42sMlgPo8Itqx0SdMcv2jAeGRSSY2h8qXnbl8mO
+         9FoA==
+X-Gm-Message-State: AOAM533L25wB9TavpAyu3HSubb1+DHByHXDq4VJc0kMcPe+b0thoo2sf
+        lONcxeBFWaxdzEI8d38pFfGhmQ==
+X-Google-Smtp-Source: ABdhPJwoMOVAl87/UerHDNtOMwcRGgYqtTOCNeDHI3ff2VeztZMK1WS6p9jzGPj/U1IPp4ufAvSyLQ==
+X-Received: by 2002:a7b:ca50:: with SMTP id m16mr9692183wml.106.1602489267758;
+        Mon, 12 Oct 2020 00:54:27 -0700 (PDT)
 Received: from ?IPv6:2a01:e35:2ec0:82b0:4c04:e3e3:70da:b5c6? ([2a01:e35:2ec0:82b0:4c04:e3e3:70da:b5c6])
-        by smtp.gmail.com with ESMTPSA id f8sm11083483wrw.85.2020.10.12.00.38.02
+        by smtp.gmail.com with ESMTPSA id b5sm1577547wrs.97.2020.10.12.00.54.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Oct 2020 00:38:03 -0700 (PDT)
-Subject: Re: [PATCH 16/18] dt-bindings: usb: meson-g12a-usb: Validate
- DWC2/DWC3 sub-nodes
+        Mon, 12 Oct 2020 00:54:26 -0700 (PDT)
+Subject: Re: [PATCH 15/18] dt-bindings: usb: meson-g12a-usb: Discard FL-adj
+ property
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
@@ -72,7 +72,7 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org
 References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
- <20201010224121.12672-17-Sergey.Semin@baikalelectronics.ru>
+ <20201010224121.12672-16-Sergey.Semin@baikalelectronics.ru>
 From:   Neil Armstrong <narmstrong@baylibre.com>
 Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  mQENBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -124,12 +124,12 @@ Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  VsbXrP9BZ6snXyHfebPnno/te5XRqZTL9aJOytB/1iUna+1MAwBxGFPvqeEUUyT+gx1l3Acl
  ZaTUOEkgIor5losDrePdPgE=
 Organization: Baylibre
-Message-ID: <444d81ce-12e3-a5a1-15fb-dc87c5600e93@baylibre.com>
-Date:   Mon, 12 Oct 2020 09:38:01 +0200
+Message-ID: <329129ac-ff44-4928-bca4-805297a8c456@baylibre.com>
+Date:   Mon, 12 Oct 2020 09:54:25 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201010224121.12672-17-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201010224121.12672-16-Sergey.Semin@baikalelectronics.ru>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -137,43 +137,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
+
 On 11/10/2020 00:41, Serge Semin wrote:
-> Amlogic G12A USB DT sub-nodes are supposed to be compatible with the
-> generic DWC USB2 and USB3 devices. Since now we've got DT schemas for
-> both of the later IP cores let's make sure that the Amlogic G12A USB
-> DT nodes are fully evaluated including the DWC sub-nodes.
+> An empty snps,quirk-frame-length-adjustment won't cause any change
+> performed by the driver. Moreover the DT schema validation will fail,
+> since it expects the property being assigned with some value. So just
+> discard the property declaration then from the example.
 > 
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
 > ---
->  .../bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
+> 
+> Note the same problem is in the DT source file
+> arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi .
+> ---
+>  .../devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml     | 1 -
+>  1 file changed, 1 deletion(-)
 > 
 > diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> index 88184d7e26cc..3e8ac0ff90de 100644
+> index 5b04a7dfa018..88184d7e26cc 100644
 > --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
 > +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> @@ -78,7 +78,20 @@ properties:
->  
->  patternProperties:
->    "^usb@[0-9a-f]+$":
-> -    type: object
-> +    allOf:
-> +      - if:
-> +          properties:
-> +            compatible:
-> +              contains:
-> +                const: snps,dwc2
-> +        then:
-> +          $ref: dwc2.yaml#
-> +      - if:
-> +          properties:
-> +            compatible:
-> +              const: snps,dwc3
-> +        then:
-> +          $ref: snps,dwc3.yaml#
->  
->  additionalProperties: false
->  
+> @@ -209,6 +209,5 @@ examples:
+>                interrupts = <30>;
+>                dr_mode = "host";
+>                snps,dis_u2_susphy_quirk;
+> -              snps,quirk-frame-length-adjustment;
+>            };
+>      };
 > 
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Thanks for reporting this, actually the fladj must be 0x20 on this hw,
+but we do set this on the PHY side, so we can let the dwc3 side 0 here.
+
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+
+Neil
+
