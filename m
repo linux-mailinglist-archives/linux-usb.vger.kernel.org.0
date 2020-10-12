@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 332DB28C0F9
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 21:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD6028C0EC
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 21:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391238AbgJLTIH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Oct 2020 15:08:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52928 "EHLO mail.kernel.org"
+        id S1731205AbgJLTHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 15:07:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52954 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390610AbgJLTD0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Oct 2020 15:03:26 -0400
+        id S2390878AbgJLTD2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Oct 2020 15:03:28 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ABADF2067C;
-        Mon, 12 Oct 2020 19:03:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 442E421BE5;
+        Mon, 12 Oct 2020 19:03:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602529404;
-        bh=I1XsZeVmpItT7tBlG6tp50V00Zxc9iD3Rn5Nhi1zOeU=;
+        s=default; t=1602529408;
+        bh=oExfZzcB/cB/TLYZPs0rtpwRF71fcM4e3u1D5ml+csQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kniNQNC+UwDGdIYlNJ+yCYrZS+DfnkaeHOWobCuP9PPafhg357CEXj2I3qu4w/9Y4
-         YWOrgySnNssXX/rfje+I0hsA5KytMA7qP+qAWI/Pk8dhKVZjcWeg/Xt41Qh2bem7Ps
-         Oq/z/r+62WsRKB1uKeoyFfXs19ivfNigITMCD5nY=
+        b=KBwKfi81ZDRPwqx6PrWy3IAWm8ck9Yvu5zOf8z0H0xf6gLywMF1JIRQmsOwFGUkAf
+         jzBp6ZuHAentjjkZhuBsMHaOn4YMLQVjNh5LRDbV+Wg9lDOCd6oPb4XI2MLfDSLtUZ
+         8xfBYS9hvTHDy75fv7K/KeQalLyBscAcTsoXFtHo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wilken Gottwalt <wilken.gottwalt@mailbox.org>,
+Cc:     Petko Manolov <petko.manolov@konsulko.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 08/15] net: usb: ax88179_178a: add MCT usb 3.0 adapter
-Date:   Mon, 12 Oct 2020 15:03:05 -0400
-Message-Id: <20201012190313.3279397-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 11/15] net: usb: pegasus: Proper error handing when setting pegasus' MAC address
+Date:   Mon, 12 Oct 2020 15:03:08 -0400
+Message-Id: <20201012190313.3279397-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201012190313.3279397-1-sashal@kernel.org>
 References: <20201012190313.3279397-1-sashal@kernel.org>
@@ -43,55 +43,89 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Wilken Gottwalt <wilken.gottwalt@mailbox.org>
+From: Petko Manolov <petko.manolov@konsulko.com>
 
-[ Upstream commit c92a79829c7c169139874aa1d4bf6da32d10c38a ]
+[ Upstream commit f30e25a9d1b25ac8d40071c4dc2679ad0fcdc55a ]
 
-Adds the driver_info and usb ids of the AX88179 based MCT U3-A9003 USB
-3.0 ethernet adapter.
+v2:
 
-Signed-off-by: Wilken Gottwalt <wilken.gottwalt@mailbox.org>
+If reading the MAC address from eeprom fail don't throw an error, use randomly
+generated MAC instead.  Either way the adapter will soldier on and the return
+type of set_ethernet_addr() can be reverted to void.
+
+v1:
+
+Fix a bug in set_ethernet_addr() which does not take into account possible
+errors (or partial reads) returned by its helpers.  This can potentially lead to
+writing random data into device's MAC address registers.
+
+Signed-off-by: Petko Manolov <petko.manolov@konsulko.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/ax88179_178a.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/net/usb/pegasus.c | 35 +++++++++++++++++++++++++++--------
+ 1 file changed, 27 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 37caa93f7d49a..9297cbc8d5c03 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1737,6 +1737,19 @@ static const struct driver_info toshiba_info = {
- 	.tx_fixup = ax88179_tx_fixup,
- };
+diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+index f7d117d80cfbb..ffa7f5adeea3f 100644
+--- a/drivers/net/usb/pegasus.c
++++ b/drivers/net/usb/pegasus.c
+@@ -359,28 +359,47 @@ fail:
+ }
+ #endif				/* PEGASUS_WRITE_EEPROM */
  
-+static const struct driver_info mct_info = {
-+	.description = "MCT USB 3.0 Gigabit Ethernet Adapter",
-+	.bind	= ax88179_bind,
-+	.unbind	= ax88179_unbind,
-+	.status	= ax88179_status,
-+	.link_reset = ax88179_link_reset,
-+	.reset	= ax88179_reset,
-+	.stop	= ax88179_stop,
-+	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
-+	.rx_fixup = ax88179_rx_fixup,
-+	.tx_fixup = ax88179_tx_fixup,
-+};
-+
- static const struct usb_device_id products[] = {
+-static inline void get_node_id(pegasus_t *pegasus, __u8 *id)
++static inline int get_node_id(pegasus_t *pegasus, u8 *id)
  {
- 	/* ASIX AX88179 10/100/1000 */
-@@ -1774,6 +1787,10 @@ static const struct usb_device_id products[] = {
- 	/* Toshiba USB 3.0 GBit Ethernet Adapter */
- 	USB_DEVICE(0x0930, 0x0a13),
- 	.driver_info = (unsigned long)&toshiba_info,
-+}, {
-+	/* Magic Control Technology U3-A9003 USB 3.0 Gigabit Ethernet Adapter */
-+	USB_DEVICE(0x0711, 0x0179),
-+	.driver_info = (unsigned long)&mct_info,
- },
- 	{ },
- };
+-	int i;
+-	__u16 w16;
++	int i, ret;
++	u16 w16;
+ 
+ 	for (i = 0; i < 3; i++) {
+-		read_eprom_word(pegasus, i, &w16);
++		ret = read_eprom_word(pegasus, i, &w16);
++		if (ret < 0)
++			return ret;
+ 		((__le16 *) id)[i] = cpu_to_le16(w16);
+ 	}
++
++	return 0;
+ }
+ 
+ static void set_ethernet_addr(pegasus_t *pegasus)
+ {
+-	__u8 node_id[6];
++	int ret;
++	u8 node_id[6];
+ 
+ 	if (pegasus->features & PEGASUS_II) {
+-		get_registers(pegasus, 0x10, sizeof(node_id), node_id);
++		ret = get_registers(pegasus, 0x10, sizeof(node_id), node_id);
++		if (ret < 0)
++			goto err;
+ 	} else {
+-		get_node_id(pegasus, node_id);
+-		set_registers(pegasus, EthID, sizeof(node_id), node_id);
++		ret = get_node_id(pegasus, node_id);
++		if (ret < 0)
++			goto err;
++		ret = set_registers(pegasus, EthID, sizeof(node_id), node_id);
++		if (ret < 0)
++			goto err;
+ 	}
++
+ 	memcpy(pegasus->net->dev_addr, node_id, sizeof(node_id));
++
++	return;
++err:
++	eth_hw_addr_random(pegasus->net);
++	dev_info(&pegasus->intf->dev, "software assigned MAC address.\n");
++
++	return;
+ }
+ 
+ static inline int reset_mac(pegasus_t *pegasus)
 -- 
 2.25.1
 
