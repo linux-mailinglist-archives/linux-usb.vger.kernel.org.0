@@ -2,47 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9B128C1A2
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 21:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D94728C140
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 21:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727367AbgJLTtB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 12 Oct 2020 15:49:01 -0400
-Received: from dcgsx-mrd02.server-mail.com ([114.31.72.18]:49868 "EHLO
-        dcgsx-mrd02.server-mail.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726676AbgJLTtB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 15:49:01 -0400
-X-Greylist: delayed 2034 seconds by postgrey-1.27 at vger.kernel.org; Mon, 12 Oct 2020 15:49:00 EDT
-Received: from wic002mz.server-mail.com (wic002mz.server-mail.com [210.247.173.2])
-        by dcgsx-mrd02.server-mail.com (Postfix) with ESMTP id C72E243A6A
-        for <linux-usb@vger.kernel.org>; Tue, 13 Oct 2020 05:11:00 +1000 (EST)
-Received: from bne3-0001mrs.server-mail.com ([203.147.156.145])
-        by wic002mz.server-mail.com with -
-        id f7B02301W38VzNr017B0jw; Tue, 13 Oct 2020 05:11:00 +1000
-Message-Id: <20201013051100.f7B02301W38VzNr017B0jw@wic002mz.server-mail.com>
-Received: from [193.169.253.121] (unknown [193.169.253.121])
-        (Authenticated sender: mb584893g)
-        by bne3-0001mrs.server-mail.com (Postfix) with ESMTPA id 3CC8D6018D;
-        Tue, 13 Oct 2020 05:10:24 +1000 (AEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S2391068AbgJLTLX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 15:11:23 -0400
+Received: from smtprelay0133.hostedemail.com ([216.40.44.133]:37514 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388013AbgJLTLX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Oct 2020 15:11:23 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id E3DE9100E7B44;
+        Mon, 12 Oct 2020 19:11:20 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:967:973:988:989:1260:1277:1311:1313:1314:1345:1359:1431:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2525:2560:2563:2682:2685:2828:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:3870:3871:3872:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4250:4321:4605:5007:7514:7576:7903:9025:9165:10004:10400:10471:10481:10848:11026:11232:11658:11914:12043:12296:12297:12438:12555:12740:12760:12895:13069:13255:13311:13357:13439:13972:14181:14659:14721:19900:21080:21451:21611:21627:21788:21939:21990:30003:30012:30054:30070:30079:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: lamp55_0c0ae3f271fc
+X-Filterd-Recvd-Size: 2942
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf03.hostedemail.com (Postfix) with ESMTPA;
+        Mon, 12 Oct 2020 19:11:19 +0000 (UTC)
+Message-ID: <c93d120c850c5fecadaea845517f0fdbfd9a61c7.camel@perches.com>
+Subject: Re: [PATCH AUTOSEL 5.8 18/24] net: usb: rtl8150: set random MAC
+ address when set_ethernet_addr() fails
+From:   Joe Perches <joe@perches.com>
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com,
+        Petko Manolov <petkan@nucleusys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Date:   Mon, 12 Oct 2020 12:11:18 -0700
+In-Reply-To: <20201012190239.3279198-18-sashal@kernel.org>
+References: <20201012190239.3279198-1-sashal@kernel.org>
+         <20201012190239.3279198-18-sashal@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Your urgent response needed 
-To:     "Dip.Davidl Lee" <reception@spencergulfcoaches.com.au>
-From:   "Mr. David Lee" <reception@spencergulfcoaches.com.au>
-Date:   Mon, 12 Oct 2020 12:09:46 -0700
-Reply-To: dip.davidlee@gmail.com
-X-Priority: 1 (High)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-My name is David Lee and i am  from United Kingdom,I was browsing and I saw your email, So i decided to write you if you a letter if only your profile is real, I have been diagnosed with esophageal cancer. It has defiled all forms of medical treatment, and right now I have only about a few months to live. I am very rich, but was never generous; I have given most of my assets to my immediate family members.
+On Mon, 2020-10-12 at 15:02 -0400, Sasha Levin wrote:
+> From: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+> 
+> [ Upstream commit f45a4248ea4cc13ed50618ff066849f9587226b2 ]
+> 
+> When get_registers() fails in set_ethernet_addr(),the uninitialized
+> value of node_id gets copied over as the address.
+> So, check the return value of get_registers().
+> 
+> If get_registers() executed successfully (i.e., it returns
+> sizeof(node_id)), copy over the MAC address using ether_addr_copy()
+> (instead of using memcpy()).
+> 
+> Else, if get_registers() failed instead, a randomly generated MAC
+> address is set as the MAC address instead.
 
-I have decided to give alms to charity organizations. I cannot do this myself anymore because of my health. I once asked members of my family to give some money to charity organizations, they refused and kept the money. I have a huge cash deposit of Eighteen Million dollars with RASCO PRIVATE AGENCY DELIVERY. I will want you to help me collect this deposit and dispatch it to charity organizations. You will take out 20% of these funds for your assistance
+This autosel is premature.
 
-I will like you to get back to me as soon as possible and treats with absolute confidentiality and sincerity
+This patch always sets a random MAC.
+See the follow on patch: https://lkml.org/lkml/2020/10/11/131
+To my knowledge, this follow-ob has yet to be applied:
 
+> diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+[]
+> @@ -274,12 +274,20 @@ static int write_mii_word(rtl8150_t * dev, u8 phy, __u8 indx, u16 reg)
+>  		return 1;
+>  }
+>  
+> -static inline void set_ethernet_addr(rtl8150_t * dev)
+> +static void set_ethernet_addr(rtl8150_t *dev)
+>  {
+> -	u8 node_id[6];
+> +	u8 node_id[ETH_ALEN];
+> +	int ret;
+> +
+> +	ret = get_registers(dev, IDR, sizeof(node_id), node_id);
+>  
+> -	get_registers(dev, IDR, sizeof(node_id), node_id);
+> -	memcpy(dev->netdev->dev_addr, node_id, sizeof(node_id));
+> +	if (ret == sizeof(node_id)) {
 
-Thank you
-David Lee
+So this needs to use
+	if (!ret) {
+
+or 
+	if (ret < 0)
+
+and reversed code blocks
+
+> +		ether_addr_copy(dev->netdev->dev_addr, node_id);
+> +	} else {
+> +		eth_hw_addr_random(dev->netdev);
+> +		netdev_notice(dev->netdev, "Assigned a random MAC address: %pM\n",
+> +			      dev->netdev->dev_addr);
+> +	}
+>  }
+>  
+>  static int rtl8150_set_mac_address(struct net_device *netdev, void *p)
+
