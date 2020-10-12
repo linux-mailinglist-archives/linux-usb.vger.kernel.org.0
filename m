@@ -2,63 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 737B728BE6A
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 18:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E84728BE70
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Oct 2020 18:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390669AbgJLQtU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 12 Oct 2020 12:49:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39120 "EHLO mail.kernel.org"
+        id S2390697AbgJLQup (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Oct 2020 12:50:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39374 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388766AbgJLQtU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Oct 2020 12:49:20 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209411] When retrieving string descriptor from mobile device
- returns eproto error
-Date:   Mon, 12 Oct 2020 16:49:20 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: rachithas104@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209411-208809-QLI8bcsAio@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209411-208809@https.bugzilla.kernel.org/>
-References: <bug-209411-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726742AbgJLQuo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Oct 2020 12:50:44 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 47A302080A;
+        Mon, 12 Oct 2020 16:50:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602521444;
+        bh=hY/CEJqHsosCubZ93vuYlbFvOgJSyT40CbOhQjScUH4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nSUHzawX68KPmLkfQR074vFJATFk73RqZihzuJUxc1Q1oJb6wUVY0MsZqpp6eheqy
+         Nhp/WLdsGsMKxqvSw5s9TkH2Wnc7sLN3OxzGH2joB/TJcRzrE56Fn3qT+l20Yv/MNg
+         5DkwuXTq3/An9EkC8peCVoMmTZsn4KgIl2mvdWi4=
+Date:   Mon, 12 Oct 2020 09:50:42 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ondrej Zary <linux@zary.sk>
+Cc:     Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cx82310_eth: re-enable ethernet mode after router
+ reboot
+Message-ID: <20201012095042.4f5b4843@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <202010121242.55826.linux@zary.sk>
+References: <20201010140048.12067-1-linux@zary.sk>
+        <20201011155539.315bf5aa@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <202010121242.55826.linux@zary.sk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209411
-
---- Comment #37 from rachithas104@gmail.com ---
-(In reply to Alan Stern from comment #35)
-> Come to think of it, that particular change probably _won't_ affect your
-> Get-String-Descriptor call.  It only affects bulk and interrupt endpoints,
-> not control or isochronous endpoints, and Get-String-Descriptor uses
-> endpoint 0 (which is a control endpoint).
+On Mon, 12 Oct 2020 12:42:55 +0200 Ondrej Zary wrote:
+> On Monday 12 October 2020, Jakub Kicinski wrote:
+> > On Sat, 10 Oct 2020 16:00:46 +0200 Ondrej Zary wrote:  
+> > > When the router is rebooted without a power cycle, the USB device
+> > > remains connected but its configuration is reset. This results in
+> > > a non-working ethernet connection with messages like this in syslog:
+> > > 	usb 2-2: RX packet too long: 65535 B
+> > >
+> > > Re-enable ethernet mode when receiving a packet with invalid size of
+> > > 0xffff.  
+> >
+> > Patch looks good, but could you explain what's a reboot without a power
+> > cycle in this case? The modem gets reset but USB subsystem doesn't know
+> > it and doesn't go though a unbind() + bind() cycle?  
 > 
-> Not calling Set-Config seems like the best workaround.  Is there any reason
-> why your program calls it in the first place?  Isn't the device already
-> using the configuration you want?
+> The router can be rebooted through the web interface. The reboot does not 
+> disconnect the USB device - it remains connected as if nothing happened. Only 
+> wrong data starts to come in.
 
-I also see when Set-Config is called from Windows device there is no issue
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+I see. Applied to net-next, thanks!
