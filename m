@@ -2,311 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EEA28C8C4
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 08:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD85C28C90A
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 09:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389760AbgJMGqc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 02:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
+        id S2389928AbgJMHQb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 03:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389628AbgJMGqb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 02:46:31 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC206C0613D1
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 23:46:31 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id m65so818593qte.11
-        for <linux-usb@vger.kernel.org>; Mon, 12 Oct 2020 23:46:31 -0700 (PDT)
+        with ESMTP id S2389829AbgJMHQb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 03:16:31 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90B4C0613D0;
+        Tue, 13 Oct 2020 00:16:30 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id b8so9443519wrn.0;
+        Tue, 13 Oct 2020 00:16:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5irtA2jkHQbU2ITZvu6wNBUQHWFzNw08dNtFmsE76sw=;
-        b=LpseO/xAWOX3mkoIoTuks/bdbwz15CH0CJwR5ZPVKnvIIMBfVmEe8SBzWiCZasDfM/
-         i4BU/k5y6wiR74vd1HKdDUBzUJwzu7UIL6Hkjd3t2QJfq589kgnd0TeJ4o66Z/jlT17T
-         7Mhk53lWSbrjQTqkFFUpt2zRHm8xJ+iGpzkG3pRy+ZjUW4Ilp2Ab5GRMqvwfZkoGp2Og
-         Ri4ZcNKhfSrasJnH09HxlUlMKum7aEFZW0XgklPRK157gDzgnLFZBCoaW4llQIb02Uw6
-         veTWsgbTHw8q4TKr0yyix7hgsgxSWDXeAbrpwEKC1qAbXKidlgqIGR1rWMnNts8BxfJp
-         cI4Q==
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=DcKf4Igwhaviy61SA4WHjZouchJcTwduIzK16MDmf0w=;
+        b=ej7mfZMw+AJQ6G9Vucsjm+oMaAkXHHlw1ni25tfh2Lq5F+Zb3WIjtPQbaIMl58u8Pn
+         PoKKaBagqq80jKCP3rHmBYKhuMFCLMfvoxNgeGQZdzFNGdX/S9t1e/8UNThBlatBHz8w
+         6GwiMP+xLdF7cYTRLZYDFdM3Go574m+zk36DnWjm+EvDuwP/XS3hkXiISv24+PGADOZ4
+         jBsuKkFkFDOmb7putnuDaUrW2ntFmOUOGs6ErljEXg2Sl/klcsf3lv5Pasdo9HUQirtV
+         ZrnR/F2aem7501EiT/vKvhS7rO/TjrmG+msjGmUq3AGVgyMKVN4zOGFdOLbrYhooZBEE
+         axXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5irtA2jkHQbU2ITZvu6wNBUQHWFzNw08dNtFmsE76sw=;
-        b=YbuciQGmFdwW+UqaVny68nKCw4OI1Elk+m2C/vrvmw2ZV+Bj7tSeupBuj4adummalQ
-         MbSjh9oQLCLoKq8t9v0D0VoBfqJHbWqZa3kU0IsO5ZvZiwD05QIWYqHwJ9JgkbntH5UI
-         /xlkKAcTq1+flqJk5Hbb3fXq+Ap4l28b4kUDJn9vBTSdjFO7w2rC/8oeIw5+rI1eA23m
-         m8eT/RGHNe2YHGVRXA2L/wAg3Ml8H+RlEsmJyOb7f87CoH4/d8jZ6p8pYmnNnyYfuMuG
-         Ya2JMAa9jZlslc78QjX8Q3hKdwpvTRnNKRzH2QywcDqUpX+4JIQnnvKOyVRNCblVQod0
-         +9Uw==
-X-Gm-Message-State: AOAM530rfDsd9wRcs0DmbWRqIivLlaLWfVo/NHXBRPCfZNwPN1/PiMJG
-        P6DYj83Wq0hYrpDqiEK/yvwQziMaSWpAS/9ApaDCzA==
-X-Google-Smtp-Source: ABdhPJzg+or6BTg4jL1yNKAdtTwKyhUmU6Bm2SpDJ1ay+mcuzBiAWglV+PzjVliadqdz3jRq11YdjhvOtXTJdqzNp84=
-X-Received: by 2002:ac8:22a8:: with SMTP id f37mr8642814qta.57.1602571590305;
- Mon, 12 Oct 2020 23:46:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <c229372e5526b84ed0542028437111c2eb83d55f.1602522784.git.andreyknvl@google.com>
-In-Reply-To: <c229372e5526b84ed0542028437111c2eb83d55f.1602522784.git.andreyknvl@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 13 Oct 2020 08:46:18 +0200
-Message-ID: <CACT4Y+aX-LN=tz2Xu3509K1tfrGiLWWKZQwMtRCg059whv-Gvg@mail.gmail.com>
-Subject: Re: [PATCH v4] kcov, usb: specify contexts for remote coverage sections
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=DcKf4Igwhaviy61SA4WHjZouchJcTwduIzK16MDmf0w=;
+        b=J82r+7SEKv0xf0NA3RvB2D3ur4fG8bxJvo+g0PtUUo2RdwezEz5Uo3nw/LlYEqseoJ
+         3Y9myXGTI9My24UmgjTAvmHkCCieqN3iPW6FHdUrL7ebr5h7BA7W74H6N8M4ej5LVeIJ
+         +eo7fYfr9B5kNCilrAJwXqjC5QIRNlZDqTqoBb8DSpcQjDMJRVa1+/XZklbkxR/tTCfe
+         8DQN+OAAVKHdeA1+9Ch+Fe/ihMHOIQzZJ/npLuZyS4ntt+iGh8n9BPlETRIokUR0/Qq7
+         bCRXCnnoWW1iZlPdFk98LRisF9cofZJXEEDeggqneePQ1egDQDIhdXqvzmc+wy8Fktdb
+         DRUg==
+X-Gm-Message-State: AOAM530btx1Feas7GmPN3PFi2T8SzOX4wvYKEPHPcwL2/eWEmUEdrcZ8
+        RfaQ8MiHJBEAfFt/xSZdyXcs2F9pAbb2ZiM7
+X-Google-Smtp-Source: ABdhPJyx6KT11BLP3trQp4aNEqqx6hIIuFxre/14f4df/UX7QUoLCKbM8zg+ws7q2u+RwOSNd+23Ug==
+X-Received: by 2002:adf:bbd2:: with SMTP id z18mr36301800wrg.166.1602573389304;
+        Tue, 13 Oct 2020 00:16:29 -0700 (PDT)
+Received: from felia ([2001:16b8:2d05:8100:95ae:bd1a:3e4e:4242])
+        by smtp.gmail.com with ESMTPSA id l1sm7560503wrb.1.2020.10.13.00.16.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2020 00:16:28 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+X-Google-Original-From: Lukas Bulwahn <lukas@gmail.com>
+Date:   Tue, 13 Oct 2020 09:16:27 +0200 (CEST)
+X-X-Sender: lukas@felia
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-safety@lists.elisa.tech,
+        linux-usb@vger.kernel.org
+Subject: Re: [linux-safety] [PATCH] usb: host: ehci-sched: add comment about
+ find_tt() not returning error
+In-Reply-To: <20201013063636.GA1663576@kroah.com>
+Message-ID: <alpine.DEB.2.21.2010130850410.14590@felia>
+References: <20201011205008.24369-1-sudipm.mukherjee@gmail.com> <alpine.DEB.2.21.2010121550300.6487@felia> <20201012145710.GA631710@rowland.harvard.edu> <alpine.DEB.2.21.2010121659040.6487@felia> <20201012151816.GA1559916@kroah.com> <alpine.DEB.2.21.2010122022250.17866@felia>
+ <20201013052317.GB330398@kroah.com> <alpine.DEB.2.21.2010130725370.14590@felia> <20201013063636.GA1663576@kroah.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 7:17 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> Currently there's a KCOV remote coverage collection section in
-> __usb_hcd_giveback_urb(). Initially that section was added based on the
-> assumption that usb_hcd_giveback_urb() can only be called in interrupt
-> context as indicated by a comment before it. This is what happens when
-> syzkaller is fuzzing the USB stack via the dummy_hcd driver.
->
-> As it turns out, it's actually valid to call usb_hcd_giveback_urb() in task
-> context, provided that the caller turned off the interrupts; USB/IP does
-> exactly that. This can lead to a nested KCOV remote coverage collection
-> sections both trying to collect coverage in task context. This isn't
-> supported by KCOV, and leads to a WARNING.
-
-How does this recursion happen? There is literal recursion in the task
-context? A function starts a remote coverage section and calls another
-function that also starts a remote coverage section?
-
-Or is there recursion between task context and softirq context? But
-this should not happen if softirq's disabled around
-usb_hcd_giveback_urb call in task context...
-
-We do want to collect coverage from usb_hcd_giveback_urb in the task
-context eventually, right?
-Is this API supposed to be final? Or it only puts down fire re the warning?
-
-I don't understand how this API can be used in other contexts.
-Let's say there is recursion in task context and we want to collect
-coverage in task context (the function is only called in task
-context). This API won't help.
-Let's say a function is called from both task and softirq context and
-these can recurse (softirq arrive while in remote task section). This
-API won't help. It will force to choose either task or softirq, but
-let's say you can't make that choice because they are equally
-important.
-The API helps to work around the unimplemented recursion in KCOV, but
-it's also specific to this particular case. It's not necessary that
-recursion is specific to one context only and it's not necessary that
-a user can choose to sacrifice one of the contexts.
-Also, if we support recursion in one way or another, we will never
-want to use this API, right?
 
 
+On Tue, 13 Oct 2020, Greg Kroah-Hartman wrote:
 
-> The approach this patch takes is to add another set of kcov_remote_*()
-> callbacks that specify the context they are supposed to be executed in.
-> If the current context doesn't match the mask provided to a callback,
-> that callback is ignored. KCOV currently only supports collecting remote
-> coverage in two contexts: task and softirq. This patch constraints KCOV to
-> only collect coverage from __usb_hcd_giveback_urb() when it's executed in
-> softirq context.
+> On Tue, Oct 13, 2020 at 07:37:34AM +0200, Lukas Bulwahn wrote:
+> > 
+> > 
+> > On Tue, 13 Oct 2020, Greg Kroah-Hartman wrote:
+> > 
+> > > On Mon, Oct 12, 2020 at 08:25:30PM +0200, Lukas Bulwahn wrote:
+> > > > 
+> > > > 
+> > > > On Mon, 12 Oct 2020, Greg Kroah-Hartman wrote:
+> > > > 
+> > > > > On Mon, Oct 12, 2020 at 05:10:21PM +0200, Lukas Bulwahn wrote:
+> > > > > > And for the static analysis finding, we need to find a way to ignore this 
+> > > > > > finding without simply ignoring all findings or new findings that just 
+> > > > > > look very similar to the original finding, but which are valid.
+> > > > > 
+> > > > > Then I suggest you fix the tool that "flagged" this, surely this is not
+> > > > > the only thing it detected with a test like this, right?
+> > > > > 
+> > > > > What tool reported this?
+> > > > >
+> > > > 
+> > > > Sudip and I are following on clang analyzer findings.
+> > > > 
+> > > > On linux-next, there is new build target 'make clang-analyzer' that 
+> > > > outputs a bunch of warnings, just as you would expect from such static 
+> > > > analysis tools.
+> > > 
+> > > Why not fix the things that it finds that are actually issues?  If there
+> > > are no actual issues found, then perhaps you should use a better tool?  :)
+> > >
+> > 
+> > Completely agree. That is why I was against adding comments here and 
+> > elsewhere just to have the "good feeling of doing something" after the 
+> > tool reported a warning and we spend some time understanding the code to 
+> > conclude that we now understand the code better than the tool.
+> > 
+> > If you know a better tool, we will use it :) unfortunately, there is no 
+> > easy way of finding out that a tool just reports false positives and not a 
+> > single true positive among 1000 reports...
+> 
+> Who is "forcing" you to use any tool?  What is your goal here?
 >
-> As the result, the coverage from USB/IP related usb_hcd_giveback_urb()
-> calls won't be collected, but the WARNING is fixed.
->
-> A potential future improvement would be to support nested remote coverage
-> collection sections, but this patch doesn't address that.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> Acked-by: Marco Elver <elver@google.com>
-> ---
->
-> Changes v3->v4:
-> - Drop unnecessary returns from kcov callbacks.
->
-> ---
->  Documentation/dev-tools/kcov.rst |  6 ++++++
->  drivers/usb/core/hcd.c           |  4 ++--
->  include/linux/kcov.h             | 31 +++++++++++++++++++++++++++++--
->  kernel/kcov.c                    | 26 +++++++++++++++++++-------
->  4 files changed, 56 insertions(+), 11 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
-> index 8548b0b04e43..2c0f58988512 100644
-> --- a/Documentation/dev-tools/kcov.rst
-> +++ b/Documentation/dev-tools/kcov.rst
-> @@ -235,6 +235,12 @@ saved to the kcov_handle field in the current task_struct and needs to be
->  passed to the newly spawned threads via custom annotations. Those threads
->  should in turn be annotated with kcov_remote_start()/kcov_remote_stop().
->
-> +Besides the annotations that only accept a handle, there are also
-> +kcov_remote_start_context()/kcov_remote_stop_context() that accept a
-> +context mask. This mask describes the contexts in which these annotations
-> +should be applied. E.g. specifying KCOV_CONTEXT_SOFTIRQ will result in the
-> +corresponding annotations being ignored in any context other than softirq.
-> +
->  Internally kcov stores handles as u64 integers. The top byte of a handle
->  is used to denote the id of a subsystem that this handle belongs to, and
->  the lower 4 bytes are used to denote the id of a thread instance within
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index a33b849e8beb..ea93d9ebcb2e 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -1646,9 +1646,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
->
->         /* pass ownership to the completion handler */
->         urb->status = status;
-> -       kcov_remote_start_usb((u64)urb->dev->bus->busnum);
-> +       kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
->         urb->complete(urb);
-> -       kcov_remote_stop();
-> +       kcov_remote_stop_softirq();
->
->         usb_anchor_resume_wakeups(anchor);
->         atomic_dec(&urb->use_count);
-> diff --git a/include/linux/kcov.h b/include/linux/kcov.h
-> index a10e84707d82..a9c025c3e1df 100644
-> --- a/include/linux/kcov.h
-> +++ b/include/linux/kcov.h
-> @@ -22,6 +22,10 @@ enum kcov_mode {
->         KCOV_MODE_TRACE_CMP = 3,
->  };
->
-> +#define KCOV_CONTEXT_TASK      (1u << 0)
-> +#define KCOV_CONTEXT_SOFTIRQ   (1u << 1)
-> +#define KCOV_CONTEXT_MASK      (KCOV_CONTEXT_TASK | KCOV_CONTEXT_SOFTIRQ)
-> +
->  #define KCOV_IN_CTXSW  (1 << 30)
->
->  void kcov_task_init(struct task_struct *t);
-> @@ -38,10 +42,21 @@ do {                                                \
->  } while (0)
->
->  /* See Documentation/dev-tools/kcov.rst for usage details. */
-> -void kcov_remote_start(u64 handle);
-> -void kcov_remote_stop(void);
-> +
-> +void kcov_remote_start_context(u64 handle, unsigned int context);
-> +void kcov_remote_stop_context(unsigned int context);
->  u64 kcov_common_handle(void);
->
-> +static inline void kcov_remote_start(u64 handle)
-> +{
-> +       kcov_remote_start_context(handle, KCOV_CONTEXT_MASK);
-> +}
-> +
-> +static inline void kcov_remote_stop(void)
-> +{
-> +       kcov_remote_stop_context(KCOV_CONTEXT_MASK);
-> +}
-> +
->  static inline void kcov_remote_start_common(u64 id)
->  {
->         kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_COMMON, id));
-> @@ -52,6 +67,16 @@ static inline void kcov_remote_start_usb(u64 id)
->         kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_USB, id));
->  }
->
-> +static inline void kcov_remote_start_usb_softirq(u64 id)
-> +{
-> +       kcov_remote_start_context(kcov_remote_handle(KCOV_SUBSYSTEM_USB, id), KCOV_CONTEXT_SOFTIRQ);
-> +}
-> +
-> +static inline void kcov_remote_stop_softirq(void)
-> +{
-> +       kcov_remote_stop_context(KCOV_CONTEXT_SOFTIRQ);
-> +}
-> +
->  #else
->
->  static inline void kcov_task_init(struct task_struct *t) {}
-> @@ -66,6 +91,8 @@ static inline u64 kcov_common_handle(void)
->  }
->  static inline void kcov_remote_start_common(u64 id) {}
->  static inline void kcov_remote_start_usb(u64 id) {}
-> +static inline void kcov_remote_start_usb_softirq(u64 id) {}
-> +static inline void kcov_remote_stop_softirq(void) {}
->
->  #endif /* CONFIG_KCOV */
->  #endif /* _LINUX_KCOV_H */
-> diff --git a/kernel/kcov.c b/kernel/kcov.c
-> index 6b8368be89c8..3ccdbe060f47 100644
-> --- a/kernel/kcov.c
-> +++ b/kernel/kcov.c
-> @@ -808,7 +808,8 @@ static void kcov_remote_softirq_stop(struct task_struct *t)
->         }
->  }
->
-> -void kcov_remote_start(u64 handle)
-> +/* Also see kcov_remote_start() defined in include/linux/kcov.h. */
-> +void kcov_remote_start_context(u64 handle, unsigned int context)
->  {
->         struct task_struct *t = current;
->         struct kcov_remote *remote;
-> @@ -821,7 +822,11 @@ void kcov_remote_start(u64 handle)
->
->         if (WARN_ON(!kcov_check_handle(handle, true, true, true)))
->                 return;
-> -       if (!in_task() && !in_serving_softirq())
-> +       if (WARN_ON((context & ~KCOV_CONTEXT_MASK) || !context))
-> +               return;
-> +       if (in_task() && !(context & KCOV_CONTEXT_TASK))
-> +               return;
-> +       if (in_serving_softirq() && !(context & KCOV_CONTEXT_SOFTIRQ))
->                 return;
->
->         local_irq_save(flags);
-> @@ -894,7 +899,7 @@ void kcov_remote_start(u64 handle)
->         local_irq_restore(flags);
->
->  }
-> -EXPORT_SYMBOL(kcov_remote_start);
-> +EXPORT_SYMBOL(kcov_remote_start_context);
->
->  static void kcov_move_area(enum kcov_mode mode, void *dst_area,
->                                 unsigned int dst_area_size, void *src_area)
-> @@ -951,8 +956,11 @@ static void kcov_move_area(enum kcov_mode mode, void *dst_area,
->         }
->  }
->
-> -/* See the comment before kcov_remote_start() for usage details. */
-> -void kcov_remote_stop(void)
-> +/*
-> + * Also see kcov_remote_stop() defined in include/linux/kcov.h.
-> + * See the comment before kcov_remote_start_context() for usage details.
-> + */
-> +void kcov_remote_stop_context(unsigned int context)
->  {
->         struct task_struct *t = current;
->         struct kcov *kcov;
-> @@ -962,7 +970,11 @@ void kcov_remote_stop(void)
->         int sequence;
->         unsigned long flags;
->
-> -       if (!in_task() && !in_serving_softirq())
-> +       if (WARN_ON((context & ~KCOV_CONTEXT_MASK) || !context))
-> +               return;
-> +       if (in_task() && !(context & KCOV_CONTEXT_TASK))
-> +               return;
-> +       if (in_serving_softirq() && !(context & KCOV_CONTEXT_SOFTIRQ))
->                 return;
->
->         local_irq_save(flags);
-> @@ -1018,7 +1030,7 @@ void kcov_remote_stop(void)
->         /* Get in kcov_remote_start(). */
->         kcov_put(kcov);
->  }
-> -EXPORT_SYMBOL(kcov_remote_stop);
-> +EXPORT_SYMBOL(kcov_remote_stop_context);
->
->  /* See the comment before kcov_remote_start() for usage details. */
->  u64 kcov_common_handle(void)
-> --
-> 2.28.0.1011.ga647a8990f-goog
->
+
+No force involved.
+
+For some of us, it is 'just for fun' and the interest to understand the 
+capabilities of those existing static analysis tools. To understand their 
+capabilities and limits, we simply go through those warnings and try to 
+reason if they are true positives (and deserve a patch) or false positives 
+(which we at least try to reasonably document for later statistics and 
+learning on systematic tool weaknesses).
+
+Some others actually believe that the use of static analysis tools 
+increase software quality and ONLY IF a static analysis tool is used, a 
+specific level of software quality is achieved and they want to prove 
+that the software reaches a certain level that way. (I do not 
+understand that argument but some have been repeating it quite often 
+around me. This argument seems to come from a specific interpretation of 
+safety standards that claim to have methods to predict the absense of 
+bugs up to a certain confidence.)
+
+I am doing it for the fun and learning about tools, and I am not such a 
+believer but those others would be forced by their beliefs until they 
+understand what static analysis tools and their janitors really already 
+contribute to the kernel development and where the real gaps might be.
+
+I hope that helps to get a bit of the motivation. Consider us 
+kernel newbies :)
+
+Lukas
