@@ -2,111 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A368E28CE8D
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 14:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A54E28CE90
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 14:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728017AbgJMMmG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 08:42:06 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:40234 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727077AbgJMMmG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 08:42:06 -0400
-Received: by mail-oi1-f196.google.com with SMTP id m128so22292429oig.7;
-        Tue, 13 Oct 2020 05:42:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9a9S8jqFI1z/da5IKYstSGsQ5P0heyKtA+nDpAbWxis=;
-        b=ae0JiDRUGc6UhmD2+npHtsX8/Co/tEckAlfJgyZ2ekhWEdLLjluqcdHHgkocSNuVL0
-         dpQ3ZwXEsYaNblb8oN+VnCPcCaLoUsgYTCTXkEoYLkMQnAzToeV5tksKtoUQB68lKoBV
-         l86jnp4pVyjGR6gWzI3sPdngFR0X3+Gex5dU3O1gNTw+5VakzOJFWQgQfaWRWEvzdikY
-         R9aJ8b4cLVFsUqaZ1LGkzT1vAXyRc13IGkJE08OXLWPWPfaE1sS2wNZ/HftbjBKZ3psv
-         1wyGuoxnzdqo/VmsZkI+/zmKdZXRosytEUaC6rAeMmSZW8FN38PT6+Ytplsy70yHJhvI
-         muBA==
-X-Gm-Message-State: AOAM5333Z8cyzkIFNQ+kHlKMsbSoNPgIWvgI6R/k1gmwi6DYmzLVEX29
-        zgYhdMRnc90Y6NIrZR7i6Q==
-X-Google-Smtp-Source: ABdhPJzik5HzirfRUO8Rt3aNEPIrxservslx8BbKUyJWQUJ9c+zphQ1dJb0v+CV4goeTVMBvVtFbNg==
-X-Received: by 2002:aca:fc85:: with SMTP id a127mr14056058oii.125.1602592925132;
-        Tue, 13 Oct 2020 05:42:05 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id o15sm10002746otj.3.2020.10.13.05.42.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2020 05:42:04 -0700 (PDT)
-Received: (nullmailer pid 3312154 invoked by uid 1000);
-        Tue, 13 Oct 2020 12:42:03 -0000
-Date:   Tue, 13 Oct 2020 07:42:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        id S1727785AbgJMMnM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 08:43:12 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:46124 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727077AbgJMMnM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 08:43:12 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 3DB6BC0347;
+        Tue, 13 Oct 2020 12:43:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1602592991; bh=wL1BJU6m2jy9lSYYmpV2etMteTnIvZvDitl4TiHkmo8=;
+        h=Date:From:Subject:To:Cc:From;
+        b=EZsJpm4t6J87RK9MgvbnJHr6rCahCrHxksoOYj8q739niaiOBIOlPI4GDEmoI70c4
+         qYLkDD6YITMF16IMa/RNgTTanq+LgKH7SdXrmFVqPYosk3Ou0QAbE5uk94EVfUOUy7
+         wNxzYy72bbLzKAuu2ltbqLiqPdXRDIE8CoXYLLNCv9emn9kuW/C9yKl64dTz2y9/1E
+         RgMKWA+C9v4Ulj+k/zN5aU5thF0sZ0NzCUgWJHUPG7UYdFBtz3yQdm832dYMoAOb8b
+         /RwLCPdqKekxRRz3xTM1cchJSHs1j8TLRrfRfCnXV1jRj7tHfjeA3NiNPH+O6Rn1AX
+         fyQ3z8qVsuYJw==
+Received: from tejas-VirtualBox (joglekar-e7480.internal.synopsys.com [10.146.18.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 6906CA005E;
+        Tue, 13 Oct 2020 12:43:07 +0000 (UTC)
+Received: by tejas-VirtualBox (sSMTP sendmail emulation); Tue, 13 Oct 2020 18:13:05 +0530
+Date:   Tue, 13 Oct 2020 18:13:05 +0530
+Message-Id: <cover.1602592488.git.joglekar@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
+Subject: [PATCH v4 0/3] Add logic to consolidate TRBs for Synopsys xHC
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH 16/18] dt-bindings: usb: meson-g12a-usb: Validate
- DWC2/DWC3 sub-nodes
-Message-ID: <20201013124203.GE3269269@bogus>
-References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
- <20201010224121.12672-17-Sergey.Semin@baikalelectronics.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201010224121.12672-17-Sergey.Semin@baikalelectronics.ru>
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Cc:     John Youn <John.Youn@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Oct 11, 2020 at 01:41:19AM +0300, Serge Semin wrote:
-> Amlogic G12A USB DT sub-nodes are supposed to be compatible with the
-> generic DWC USB2 and USB3 devices. Since now we've got DT schemas for
-> both of the later IP cores let's make sure that the Amlogic G12A USB
-> DT nodes are fully evaluated including the DWC sub-nodes.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  .../bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> index 88184d7e26cc..3e8ac0ff90de 100644
-> --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-> @@ -78,7 +78,20 @@ properties:
->  
->  patternProperties:
->    "^usb@[0-9a-f]+$":
-> -    type: object
-> +    allOf:
-> +      - if:
-> +          properties:
-> +            compatible:
-> +              contains:
-> +                const: snps,dwc2
-> +        then:
-> +          $ref: dwc2.yaml#
-> +      - if:
-> +          properties:
-> +            compatible:
-> +              const: snps,dwc3
-> +        then:
-> +          $ref: snps,dwc3.yaml#
+The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
+each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
+for HS. The controller loads and updates the TRB cache from the
+transfer ring in system memory whenever the driver issues a start
+transfer or update transfer command.
 
-It should be enough to do just:
+For chained TRBs, the Synopsys xHC requires that the total amount of
+bytes for all TRBs loaded in the TRB cache be greater than or equal to
+1 MPS. Or the chain ends within the TRB cache (with a last TRB).
 
-oneOf:
-  - $ref: dwc2.yaml#
-  - $ref: snps,dwc3.yaml#
+If this requirement is not met, the controller will not be able to
+send or receive a packet and it will hang causing a driver timeout and
+error.
+
+This patch set adds logic to the XHCI driver to detect and prevent this
+from happening along with the quirk to enable this logic for Synopsys
+HAPS platform.
+
+Based on Mathias's feedback on previous implementation where consolidation
+was done in TRB cache, with this patch series the implementation is done
+during mapping of the URB by consolidating the SG list into a temporary
+buffer if the SG list buffer sizes within TRB_CACHE_SIZE is less than MPS.
+
+Changes since v3:
+ - Removed the dt-binding patch
+ - Added new patch to pass the quirk as platform data
+ - Modified the patch to set the quirk
+
+Changes since v2:
+ - Modified the xhci_unmap_temp_buffer function to unmap dma and c
+   the dma flag
+ - Removed RFC tag
+
+Changes since v1:
+ - Comments from Greg are addressed on [PATCH 4/4] and [PATCH 1/4]
+ - Renamed the property and quirk as in other patches based on [PATCH 1/4]
+
+
+
+Tejas Joglekar (3):
+  usb: xhci: Set quirk for XHCI_SG_TRB_CACHE_SIZE_QUIRK
+  usb: xhci: Use temporary buffer to consolidate SG
+  usb: dwc3: Pass quirk as platform data
+
+ drivers/usb/dwc3/host.c      |  14 ++++
+ drivers/usb/host/xhci-plat.c |   3 +
+ drivers/usb/host/xhci-ring.c |   2 +-
+ drivers/usb/host/xhci.c      | 137 ++++++++++++++++++++++++++++++++++-
+ drivers/usb/host/xhci.h      |   5 ++
+ 5 files changed, 159 insertions(+), 2 deletions(-)
+
+-- 
+2.28.0
+
