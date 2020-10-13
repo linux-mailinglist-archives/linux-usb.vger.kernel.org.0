@@ -2,56 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE29F28D12F
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 17:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F6128D173
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 17:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731202AbgJMPY2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 11:24:28 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:37767 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727818AbgJMPY1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 11:24:27 -0400
-Received: (qmail 673224 invoked by uid 1000); 13 Oct 2020 11:24:26 -0400
-Date:   Tue, 13 Oct 2020 11:24:26 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Pratham Pratap <prathampratap@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, rafael.j.wysocki@intel.com,
-        mathias.nyman@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sallenki@codeaurora.org, mgautam@codeaurora.org,
-        jackp@codeaurora.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: core: Don't wait for completion of urbs
-Message-ID: <20201013152426.GB670875@rowland.harvard.edu>
-References: <1602586022-13239-1-git-send-email-prathampratap@codeaurora.org>
+        id S1731144AbgJMPqJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 11:46:09 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:41536 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727830AbgJMPqJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 11:46:09 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 2F6A58030867;
+        Tue, 13 Oct 2020 15:46:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id JtZOFWp1UD6R; Tue, 13 Oct 2020 18:46:05 +0300 (MSK)
+Date:   Tue, 13 Oct 2020 18:45:58 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Rob Herring <robh@kernel.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 14/18] dt-bindings: usb: dwc3: Add Frame Length Adj
+ restrictions
+Message-ID: <20201013154558.cmz4iheaxfe44ago@mobilestation>
+References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
+ <20201010224121.12672-15-Sergey.Semin@baikalelectronics.ru>
+ <20201013123859.GD3269269@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1602586022-13239-1-git-send-email-prathampratap@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201013123859.GD3269269@bogus>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 04:17:02PM +0530, Pratham Pratap wrote:
-> Consider a case where host is trying to submit urbs to the
-> connected device while holding the us->dev_mutex and due to
-> some reason it is stuck while waiting for the completion of
-> the urbs. Now the scsi error mechanism kicks in and it calls
+On Tue, Oct 13, 2020 at 07:38:59AM -0500, Rob Herring wrote:
+> On Sun, Oct 11, 2020 at 01:41:17AM +0300, Serge Semin wrote:
+> > In accordance with the IP core databook the
+> > snps,quirk-frame-length-adjustment property can be set within [0, 0x3F].
+> > Let's make sure the DT schema applies a correct restriction on the
+> > property.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > index 36d4b8060d7c..f1e6c3dab1ff 100644
+> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > @@ -226,6 +226,8 @@ properties:
+> >        length adjustment when the fladj_30mhz_sdbnd signal is invalid or
+> >        incorrect.
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> > +    minimum: 0
+> > +    maximum: 0x3f
+> 
 
-Are you talking about usb-storage?  You should describe the context 
-better -- judging by the patch title, it looks like you're talking 
-about a core driver instead.
+> It's fine if you add the constraints during the conversion.
 
-> the device reset handler which is trying to acquire the same
-> mutex causing a deadlock situation.
+Ok. I'll keep it in mind next time.)
 
-That isn't supposed to happen.  The SCSI error handler should always 
-cancel all the outstanding commands before invoking the device reset 
-handler.  Cancelling the commands will cause the URBs to complete.
+-Sergey
 
-If you found a test case where this doesn't happen, it probably means 
-there's a bug in the SCSI core code or the USB host controller driver.  
-That bug should be fixed; don't introduce random timeout values to try 
-and work around it.
-
-Alan Stern
+> 
+> >  
+> >    snps,rx-thr-num-pkt-prd:
+> >      description: |
+> > -- 
+> > 2.27.0
+> > 
