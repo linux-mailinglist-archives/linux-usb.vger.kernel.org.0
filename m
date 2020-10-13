@@ -2,118 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C20328C9B6
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 10:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BEC28CA34
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 10:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390708AbgJMICx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 04:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
+        id S2391409AbgJMIZH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 04:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390591AbgJMICr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 04:02:47 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E78C0613D0;
-        Tue, 13 Oct 2020 01:02:47 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id t25so26879474ejd.13;
-        Tue, 13 Oct 2020 01:02:47 -0700 (PDT)
+        with ESMTP id S2390218AbgJMIZH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 04:25:07 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840F5C0613D0;
+        Tue, 13 Oct 2020 01:25:05 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id b138so13179581yba.5;
+        Tue, 13 Oct 2020 01:25:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=Nlo+ICeKz+qCTf+x4IerNhRGMWRTbpLUIF6/RSAckKo=;
-        b=fFXcbyA5ROqDDWnjwA2mdrpNGdVVXDmgbZtslUt9b1Er8Lgmb6GdDKv4m2RuLU9U8d
-         MKUl8XffdlKiyGBaxVMMHBRQFZaLzi0t2XYcjrvencmZAXJ4RkZflp4wOXt/2A65KT2v
-         sIlQH9TPwnkXo8u/UBJHiSAp0Y/UQAppjf+CaglLysf9PnM3dcVYRtpMI28BJ5d4EAoB
-         72YZG+jVqgMvuF2gbtsk2TpgPR1A9u9vxbVpSaqznar9xMVMxufDPx6wmWvw9twn1PCH
-         SL66tYIoLxWgFr9OxtoRvfR/L8fwPl2AC8eyGijNNq+f/CZ06qYbFZHzkkx7WAUI/nNK
-         O2PA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Yb8uf1yPz5kaBwo/Czxv6SGb8eqvWHd/MSZ3XQ2Vi/0=;
+        b=QUjOIjM0KrH/aLS1ph9lySWsHWQx1pHFSw1wYRy9z8pn6WVQwNzB1V9aoKeAXVE6CX
+         VWGSpt8a0vzTG+LUJypOBnACtBk0Fc56LLMnqqWDrl5B8VEPayx/YtAEBZ38zwbuDMd0
+         ed4iN3Amc2mpGFHz004yjbejwN4iwub6dpZR74j0wps7vnTRUR8/r/XtWb56KAdadEJa
+         9iEzZfxtKZbVSsNIW0hDW89UdRPxjwmo6KMs6+affBm68FCwfEmpMKsfzVDjE/VK+S7f
+         xt18lMJDnyV2I4rZOziUZ1P8NU/UZGccqhG42lEVrbHp8xs9Ybc10Hz03Ld+Y4lbw+C2
+         BuRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=Nlo+ICeKz+qCTf+x4IerNhRGMWRTbpLUIF6/RSAckKo=;
-        b=cSXRHpbjblPt9IDVDdOH1hIezpaG42bhsXofG0kwesplgVvH+oS6Ag1WGRPY1uiXvX
-         Dyze/ShUQFMMliFtGrj3Fh/ko7923snE0nHRAg3eqVsc3ewOzl8wEggy3LRQYvmjLrRQ
-         jz8o1pDqWwJcLrVtIrct5rj/AHqH3x7oOOEGaMdPhh4H7yxw2BG5XhDvvC+z7hfXPsD8
-         IbVHD8AUylxqtZ4IPM4VJzWQS4eju6ADn/TJLOebJpn7zelE6uhrzp1H3ail18prtBFd
-         6PHmDVyX03XtmOew5gaGT50RXWMqhlYJ/xHQ8Gh4q4lAKFyEq5PeMB4giNj4oz+O4kUL
-         QDpQ==
-X-Gm-Message-State: AOAM5311OJUgUE+QZfUY9lF73MHkvr2oYccMIgKB2Bndj5ZrcP+KZchr
-        vfEDej5+108L5imIfvgS7X8=
-X-Google-Smtp-Source: ABdhPJyLFkBZSBBn/rB2G6MUdeWoKMj+AJ4gkZlhm7FuDYga4WD8VPHx68gUCzdFaDVqLWTGbDRsCA==
-X-Received: by 2002:a17:906:453:: with SMTP id e19mr33287437eja.391.1602576166191;
-        Tue, 13 Oct 2020 01:02:46 -0700 (PDT)
-Received: from felia ([2001:16b8:2d05:8100:95ae:bd1a:3e4e:4242])
-        by smtp.gmail.com with ESMTPSA id r11sm11970080edi.91.2020.10.13.01.02.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2020 01:02:45 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-X-Google-Original-From: Lukas Bulwahn <lukas@gmail.com>
-Date:   Tue, 13 Oct 2020 10:02:43 +0200 (CEST)
-X-X-Sender: lukas@felia
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-safety@lists.elisa.tech,
-        linux-usb@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yb8uf1yPz5kaBwo/Czxv6SGb8eqvWHd/MSZ3XQ2Vi/0=;
+        b=ryoKjf9HBL1Jl2FSz2IAn8oRF2xDmomwPBNHq+0SHn6WPADRBK+YLRJy4DQOr+7/bj
+         gynbfZ3Uw3csxqieFu0N0onSNSs49WivMnlKvabZ6Qf1dAhVoBdgI/EUCnF14wMPTlV7
+         qXzloBE8GBc0pttKP4fvrYi4wTHJ7hzstUisKvoyHIohnWW2Tq2HgMnqBHbC2WwRRKt8
+         usPq+bIYebdT3peC4BG1ssc1hn9tijT+wLczfPcDq5RadTyDh9SG+DxECwdcO6deqpoC
+         Iok062JgUzWsRdIhpvcAmtGqZlDgVoj6EKNZKdxfuEfNsTozCNfyLUDPIAQDhFCCjT8F
+         A30g==
+X-Gm-Message-State: AOAM531i1iial4gGiZi4fuo/CPXhL5pH9rC6wJZ6GOSnaNsMR8UglUSc
+        SlGfeps7WvQKK8GCB8bCzyGCnCLaWWPcYLOqbLs=
+X-Google-Smtp-Source: ABdhPJySApp9x9zfOYAVifM5CshLWnRdvhNLRlJpT7ZLNFcQEbmf6GC1o6S1rHaDXsk1JeO08TWzANjnU5JDtt6QRQ8=
+X-Received: by 2002:a25:e046:: with SMTP id x67mr36342627ybg.342.1602577504560;
+ Tue, 13 Oct 2020 01:25:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201011205008.24369-1-sudipm.mukherjee@gmail.com>
+ <alpine.DEB.2.21.2010121550300.6487@felia> <20201012145710.GA631710@rowland.harvard.edu>
+ <alpine.DEB.2.21.2010121659040.6487@felia> <20201012151816.GA1559916@kroah.com>
+ <alpine.DEB.2.21.2010122022250.17866@felia> <20201013052317.GB330398@kroah.com>
+ <alpine.DEB.2.21.2010130725370.14590@felia>
+In-Reply-To: <alpine.DEB.2.21.2010130725370.14590@felia>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Tue, 13 Oct 2020 09:24:28 +0100
+Message-ID: <CADVatmNcUzT6Df4+V7VdwO0AzZ=74Sai7X0aFpYU5SO7b2NVSg@mail.gmail.com>
 Subject: Re: [linux-safety] [PATCH] usb: host: ehci-sched: add comment about
  find_tt() not returning error
-In-Reply-To: <20201013073524.GA1674118@kroah.com>
-Message-ID: <alpine.DEB.2.21.2010130957110.14590@felia>
-References: <20201011205008.24369-1-sudipm.mukherjee@gmail.com> <alpine.DEB.2.21.2010121550300.6487@felia> <20201012145710.GA631710@rowland.harvard.edu> <alpine.DEB.2.21.2010121659040.6487@felia> <20201012151816.GA1559916@kroah.com> <alpine.DEB.2.21.2010122022250.17866@felia>
- <20201013052317.GB330398@kroah.com> <alpine.DEB.2.21.2010130725370.14590@felia> <20201013063636.GA1663576@kroah.com> <alpine.DEB.2.21.2010130850410.14590@felia> <20201013073524.GA1674118@kroah.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-safety@lists.elisa.tech, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Lukas,
 
-
-On Tue, 13 Oct 2020, Greg Kroah-Hartman wrote:
-
-> On Tue, Oct 13, 2020 at 09:16:27AM +0200, Lukas Bulwahn wrote:
-> > Some others actually believe that the use of static analysis tools 
-> > increase software quality and ONLY IF a static analysis tool is used, a 
-> > specific level of software quality is achieved and they want to prove 
-> > that the software reaches a certain level that way. (I do not 
-> > understand that argument but some have been repeating it quite often 
-> > around me. This argument seems to come from a specific interpretation of 
-> > safety standards that claim to have methods to predict the absense of 
-> > bugs up to a certain confidence.)
-> 
-> So do those others also audit the static analysis tools to ensure that
-> they actually work as they "think" they do?  If not, then their
-> requirement is pretty pointless :)
+On Tue, Oct 13, 2020 at 6:37 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 >
-
-Yes, they do audit the tools, but those audits and why that proves the 
-absense of a bug class is yet a completely different story...
-
-> > I am doing it for the fun and learning about tools, and I am not such a 
-> > believer but those others would be forced by their beliefs until they 
-> > understand what static analysis tools and their janitors really already 
-> > contribute to the kernel development and where the real gaps might be.
-> > 
-> > I hope that helps to get a bit of the motivation. Consider us 
-> > kernel newbies :)
-> 
-> Watch out, sending patches to subsystems to "fix" issues that really
-> are not real problems is a sure way to get your patches rejected and
-> make maintainers grumpy.
-> 
-> I recommend starting out with code that we all "know" needs help, in
-> drivers/staging/ for stuff like this, so you can learn the process
-> better, as well as start to understand the limitations of your tools
-> better.
-> 
-> good luck!
 >
+>
+> On Tue, 13 Oct 2020, Greg Kroah-Hartman wrote:
+>
+> > On Mon, Oct 12, 2020 at 08:25:30PM +0200, Lukas Bulwahn wrote:
+> > >
+> > >
+> > > On Mon, 12 Oct 2020, Greg Kroah-Hartman wrote:
+> > >
+> > > > On Mon, Oct 12, 2020 at 05:10:21PM +0200, Lukas Bulwahn wrote:
+> > > > > And for the static analysis finding, we need to find a way to ignore this
+> > > > > finding without simply ignoring all findings or new findings that just
+> > > > > look very similar to the original finding, but which are valid.
+> > > >
+<snip>
+> >
+> > Why not fix the things that it finds that are actually issues?  If there
+> > are no actual issues found, then perhaps you should use a better tool?  :)
+> >
+>
+> Completely agree. That is why I was against adding comments here and
+> elsewhere just to have the "good feeling of doing something" after the
+> tool reported a warning and we spend some time understanding the code to
+> conclude that we now understand the code better than the tool.
 
-Thanks for the advice. We will need to learn about the limitations and 
-what is worth a patch and what is not and we will need luck on the way 
-learning that.
+I think you are missing the point here. I sent the comment not because
+of any tool, I sent it because the code there was not that simple like
+other drivers and at a first glance its not apparent why there are no
+error checks. And, afaik, the only purpose of comments is to make the
+source code easier to understand.
 
-Lukas
+
+-- 
+Regards
+Sudip
