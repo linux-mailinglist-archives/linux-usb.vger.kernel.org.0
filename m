@@ -2,259 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E77028D035
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 16:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95C728D053
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 16:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388602AbgJMO3W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 10:29:22 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:41132 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387516AbgJMO3W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 10:29:22 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id D035D8030719;
-        Tue, 13 Oct 2020 14:29:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id M3o6heArBTLz; Tue, 13 Oct 2020 17:29:13 +0300 (MSK)
-Date:   Tue, 13 Oct 2020 17:29:11 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 07/18] dt-bindings: usb: Convert xHCI bindings to DT
- schema
-Message-ID: <20201013142911.pay7g6gi2a5d72q3@mobilestation>
-References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
- <20201010224121.12672-8-Sergey.Semin@baikalelectronics.ru>
- <20201013123004.GB3269269@bogus>
+        id S1730024AbgJMOiQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 10:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729854AbgJMOiP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 10:38:15 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C65C0613D0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Oct 2020 07:38:13 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id h2so10805788pll.11
+        for <linux-usb@vger.kernel.org>; Tue, 13 Oct 2020 07:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R/zhEg0dNpXhH+pDUGJuAqxBZu+cNp3JAbQ0iH2743s=;
+        b=tQKWMv0GMGQ69/NG2DriXticCxNTeqK/pUl2tLRujmpxtMkz35U1QateWHn8+8ptX8
+         U9XimeECJknPPs8xDaaEEpUO/hyq0ivzblk+bSCq7zQ/LXiWt0hEv/603zXTrBACaJSu
+         O2lWxusOEyxvuwHnqDVErqw7/XykmxgwAN0Nd+npLLeDuslnz/4wN5JPOJ0rv2HV1oiU
+         vEIZ0F+Df44j/wJPTpJxxrKdLbGofiUG1phspFrlRDuEwhLcjoG09EoZ/IZv0n0LaTUc
+         a47bYnsRuBIIGFW/BGr2Jyqp6U1+5jqyopj6hmymkk2tMN5a8tw/y2oj8qFM8kqL1cuo
+         jpFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R/zhEg0dNpXhH+pDUGJuAqxBZu+cNp3JAbQ0iH2743s=;
+        b=R43pfogdZ1jO5q/MAIrameHGpiO6wwi/mMp4yK0JOjpGQdlQQs+C52WbHtvoOOaT7P
+         9PgsurcOTdpWmGOQJ2HiH6vUBSSU5bygJ5Rf7tkEZ4i/d+VgdwNvnNizZu24eNxhoBKD
+         Ql3SaAo1SrYOBKhA0vLE0skrANrD1Vn3I2f7IJyNYjRmsmh7BjCkjDwlzof/vVnTkIZW
+         kJBT+2t2Cs6sBNATpinfOV9l11Vj+bR8u1KTChRj2z9cERGkWa7/D063Gg5H9MVl+UzE
+         5oXc/VeUb5rrUXdyY/6uVhyRbRMqdD0mdM6I5wlS+mgMQk3Ri15JzlOwdX7xKd3O6ZNs
+         /0kw==
+X-Gm-Message-State: AOAM531m1Jj6O8WcWIBks32c/I6mN2wn+ju6jFgWpFV4dY17mlJfa+7C
+        ppUNmrz1uDWoFhjO31HaCvP7fE9dgAJWLttXBf4Ez5svMNA=
+X-Google-Smtp-Source: ABdhPJxQvBIwmfXGqjOkxhwNlRVLccTZxw4vK/ybW7FaIYErIJGyCaqrw3P60glbbdZ07hvQ63ceVQkiO6z3WOj2rys=
+X-Received: by 2002:a17:902:b40a:b029:d4:e1c7:db59 with SMTP id
+ x10-20020a170902b40ab02900d4e1c7db59mr91867plr.85.1602599892643; Tue, 13 Oct
+ 2020 07:38:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20201013123004.GB3269269@bogus>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+References: <c229372e5526b84ed0542028437111c2eb83d55f.1602522784.git.andreyknvl@google.com>
+ <CACT4Y+aX-LN=tz2Xu3509K1tfrGiLWWKZQwMtRCg059whv-Gvg@mail.gmail.com>
+ <CAAeHK+zur-CpmCj2bBucwVSAKkk8XBKZsQoGA8AmWraXuDctvA@mail.gmail.com> <CACT4Y+ZYUWqFemUE8_xJ-XyBrvnkmiNxokrwUNjjq3ShTLTz9Q@mail.gmail.com>
+In-Reply-To: <CACT4Y+ZYUWqFemUE8_xJ-XyBrvnkmiNxokrwUNjjq3ShTLTz9Q@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 13 Oct 2020 16:38:01 +0200
+Message-ID: <CAAeHK+zWaurHxxo0VwvbRmOsRBDGV3wbzhEzGwTBZqO2iAZtXA@mail.gmail.com>
+Subject: Re: [PATCH v4] kcov, usb: specify contexts for remote coverage sections
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Aleksandr Nogikh <nogikh@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 07:30:04AM -0500, Rob Herring wrote:
-> On Sun, Oct 11, 2020 at 01:41:10AM +0300, Serge Semin wrote:
-> > Currently the DT bindings of Generic xHCI Controllers are described by means
-> > of the legacy text file. Since such format is deprecated in favor of the
-> > DT schema, let's convert the Generic xHCI Controllers bindings file to the
-> > corresponding yaml files. There will be two of them: a DT schema for the
-> > xHCI controllers on a generic platform and a DT schema validating a generic
-> > xHCI controllers properties. The later will be used to validate the xHCI
-> > controllers, which aside from some vendor-specific features support the
-> > basic xHCI functionality.
-> > 
-> > An xHCI-compatible DT node shall support the standard USB HCD properties
-> > and custom ones like: usb2-lpm-disable, usb3-lpm-capable,
-> > quirk-broken-port-ped and imod-interval-ns. In addition if a generic xHCI
-> > controller is being validated against the DT schema it is also supposed to
-> > be equipped with mandatory compatible string, single registers range,
-> > single interrupts source, and is supposed to optionally contain up to two
-> > reference clocks for the controller core and CSRs.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  .../devicetree/bindings/usb/generic-xhci.yaml | 63 +++++++++++++++++++
-> >  .../devicetree/bindings/usb/usb-xhci.txt      | 41 ------------
-> >  .../devicetree/bindings/usb/usb-xhci.yaml     | 40 ++++++++++++
-> >  3 files changed, 103 insertions(+), 41 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/generic-xhci.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/usb/usb-xhci.txt
-> >  create mode 100644 Documentation/devicetree/bindings/usb/usb-xhci.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/generic-xhci.yaml b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-> > new file mode 100644
-> > index 000000000000..1ea1d49a8175
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-> > @@ -0,0 +1,63 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/generic-xhci.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: USB xHCI Controller Device Tree Bindings
-> > +
-> > +maintainers:
-> > +  - Mathias Nyman <mathias.nyman@intel.com>
-> > +
-> > +allOf:
-> > +  - $ref: "usb-xhci.yaml#"
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - description: Generic xHCI device
-> > +        const: generic-xhci
-> > +      - description: Armada 37xx/375/38x/8k SoCs
-> > +        items:
-> > +          - enum:
-> > +              - marvell,armada3700-xhci
-> > +              - marvell,armada-375-xhci
-> > +              - marvell,armada-380-xhci
-> > +              - marvell,armada-8k-xhci
-> > +          - const: generic-xhci
-> > +      - description: Broadcom STB SoCs with xHCI
-> > +        const: brcm,bcm7445-xhci
-> > +      - description: Generic xHCI device
-> > +        const: xhci-platform
-> > +        deprecated: true
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    minItems: 1
-> > +    maxItems: 2
-> > +
-> > +  clock-names:
-> > +    minItems: 1
-> > +    items:
-> > +      - const: core
-> > +      - const: reg
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +
-> > +examples:
-> > +  - |
-> > +    usb@f0931000 {
-> > +      compatible = "generic-xhci";
-> > +      reg = <0xf0931000 0x8c8>;
-> > +      interrupts = <0x0 0x4e 0x0>;
-> > +    };
-> > diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-> > deleted file mode 100644
-> > index 0c5cff84a969..000000000000
-> > --- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
-> > +++ /dev/null
-> > @@ -1,41 +0,0 @@
-> > -USB xHCI controllers
-> > -
-> > -Required properties:
-> > -  - compatible: should be one or more of
-> > -
-> > -    - "generic-xhci" for generic XHCI device
-> > -    - "marvell,armada3700-xhci" for Armada 37xx SoCs
-> > -    - "marvell,armada-375-xhci" for Armada 375 SoCs
-> > -    - "marvell,armada-380-xhci" for Armada 38x SoCs
-> > -    - "brcm,bcm7445-xhci" for Broadcom STB SoCs with XHCI
-> > -    - "xhci-platform" (deprecated)
-> > -
-> > -    When compatible with the generic version, nodes must list the
-> > -    SoC-specific version corresponding to the platform first
-> > -    followed by the generic version.
-> > -
-> > -  - reg: should contain address and length of the standard XHCI
-> > -    register set for the device.
-> > -  - interrupts: one XHCI interrupt should be described here.
-> > -
-> > -Optional properties:
-> > -  - clocks: reference to the clocks
-> > -  - clock-names: mandatory if there is a second clock, in this case
-> > -    the name must be "core" for the first clock and "reg" for the
-> > -    second one
-> > -  - usb2-lpm-disable: indicate if we don't want to enable USB2 HW LPM
-> > -  - usb3-lpm-capable: determines if platform is USB3 LPM capable
-> > -  - quirk-broken-port-ped: set if the controller has broken port disable mechanism
-> > -  - imod-interval-ns: default interrupt moderation interval is 5000ns
-> > -  - phys : see usb-hcd.yaml in the current directory
-> > -
-> > -additionally the properties from usb-hcd.yaml (in the current directory) are
-> > -supported.
-> > -
-> > -
-> > -Example:
-> > -	usb@f0931000 {
-> > -		compatible = "generic-xhci";
-> > -		reg = <0xf0931000 0x8c8>;
-> > -		interrupts = <0x0 0x4e 0x0>;
-> > -	};
-> > diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.yaml b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
-> > new file mode 100644
-> > index 000000000000..c5c177f2e055
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
-> > @@ -0,0 +1,40 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/usb-xhci.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Generic USB xHCI Controller Device Tree Bindings
-> > +
-> > +maintainers:
-> > +  - Mathias Nyman <mathias.nyman@intel.com>
-> > +
-> > +allOf:
-> > +  - $ref: "usb-hcd.yaml#"
-> > +
-> > +properties:
-> > +  usb2-lpm-disable:
-> > +    description: Indicates if we don't want to enable USB2 HW LPM
-> > +    type: boolean
-> > +
-> > +  usb3-lpm-capable:
-> > +    description: Determines if platform is USB3 LPM capable
-> > +    type: boolean
-> > +
-> > +  quirk-broken-port-ped:
-> > +    description: Set if the controller has broken port disable mechanism
-> > +    type: boolean
-> > +
-> > +  imod-interval-ns:
-> > +    description: Interrupt moderation interval
-> > +    default: 5000
-> 
+On Tue, Oct 13, 2020 at 4:15 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Tue, Oct 13, 2020 at 3:58 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> > > > Currently there's a KCOV remote coverage collection section in
+> > > > __usb_hcd_giveback_urb(). Initially that section was added based on the
+> > > > assumption that usb_hcd_giveback_urb() can only be called in interrupt
+> > > > context as indicated by a comment before it. This is what happens when
+> > > > syzkaller is fuzzing the USB stack via the dummy_hcd driver.
+> > > >
+> > > > As it turns out, it's actually valid to call usb_hcd_giveback_urb() in task
+> > > > context, provided that the caller turned off the interrupts; USB/IP does
+> > > > exactly that. This can lead to a nested KCOV remote coverage collection
+> > > > sections both trying to collect coverage in task context. This isn't
+> > > > supported by KCOV, and leads to a WARNING.
+> > >
+> > > How does this recursion happen? There is literal recursion in the task
+> > > context? A function starts a remote coverage section and calls another
+> > > function that also starts a remote coverage section?
+> >
+> > Yes, a literal recursion. Background thread for processing requests
+> > for USB/IP hub (which we collect coverage from) calls
+> > __usb_hcd_giveback_urb().
+> >
+> > Here's the stack trace:
+> >
+> >  kcov_remote_start_usb include/linux/kcov.h:52 [inline]
+> >  __usb_hcd_giveback_urb+0x284/0x4b0 drivers/usb/core/hcd.c:1649
+> >  usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1716
+> >  vhci_urb_enqueue.cold+0x37f/0x4c5 drivers/usb/usbip/vhci_hcd.c:801
+> >  usb_hcd_submit_urb+0x2b1/0x20d0 drivers/usb/core/hcd.c:1547
+> >  usb_submit_urb+0x6e5/0x13b0 drivers/usb/core/urb.c:570
+> >  usb_start_wait_urb+0x10f/0x2c0 drivers/usb/core/message.c:58
+> >  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+> >  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+> >  hub_set_address drivers/usb/core/hub.c:4472 [inline]
+> >  hub_port_init+0x23f6/0x2d20 drivers/usb/core/hub.c:4748
+> >  hub_port_connect drivers/usb/core/hub.c:5140 [inline]
+> >  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+> >  port_event drivers/usb/core/hub.c:5494 [inline]
+> >  hub_event+0x1cc9/0x38d0 drivers/usb/core/hub.c:5576
+> >  process_one_work+0x7b6/0x1190 kernel/workqueue.c:2269
+> >  worker_thread+0x94/0xdc0 kernel/workqueue.c:2415
+> >  kthread+0x372/0x450 kernel/kthread.c:292
+> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+> >
+> > > Or is there recursion between task context and softirq context?
+> >
+> > No. This kind of recursion is actually supported by kcov right now. A
+> > softirq with a coverage collection section can come in the middle of a
+> > coverage collection section for a task.
+> >
+> > > But
+> > > this should not happen if softirq's disabled around
+> > > usb_hcd_giveback_urb call in task context...
+> >
+> > [...]
+> >
+> > > We do want to collect coverage from usb_hcd_giveback_urb in the task
+> > > context eventually, right?
+> >
+> > Ideally, eventually, yes.
+> >
+> > > Is this API supposed to be final? Or it only puts down fire re the warning?
+> >
+> > Only puts down the fire.
+> >
+> > > I don't understand how this API can be used in other contexts.
+> > > Let's say there is recursion in task context and we want to collect
+> > > coverage in task context (the function is only called in task
+> > > context). This API won't help.
+> >
+> > No, it won't. Full recursion support is required for this.
+> >
+> > > Let's say a function is called from both task and softirq context and
+> > > these can recurse (softirq arrive while in remote task section). This
+> > > API won't help. It will force to choose either task or softirq, but
+> > > let's say you can't make that choice because they are equally
+> > > important.
+> >
+> > This currently works, everything that happens in a softirq gets
+> > associated with softirq, everything else - with the task. This seems
+> > to be the only logical approach here, it makes no sense to associate
+> > what happens in a softirq with the task where the softirq happened.
+> >
+> > > The API helps to work around the unimplemented recursion in KCOV, but
+> > > it's also specific to this particular case. It's not necessary that
+> > > recursion is specific to one context only and it's not necessary that
+> > > a user can choose to sacrifice one of the contexts.
+> > > Also, if we support recursion in one way or another, we will never
+> > > want to use this API, right?
+> >
+> > Correct.
+>
+>
+> I see.
+> The following is simpler option that does what this patch achieves but
+> in a more direct way:
+>
+> // Because ...
+> if (in_serving_softirq())
+>     kcov_remote_start_usb((u64)urb->dev->bus->busnum);
 
-> Having additionalProperties or unevaluatedProperties is going to be 
-> mandatory, so for this add:
-> 
-> additionalProperties: true
-
-Ok. I'll get to remember this.
-
--Sergey
-
-> 
-> > +
-> > +examples:
-> > +  - |
-> > +    usb@f0930000 {
-> > +      compatible = "generic-xhci";
-> > +      reg = <0xf0930000 0x8c8>;
-> > +      interrupts = <0x0 0x4e 0x0>;
-> > +      usb2-lpm-disable;
-> > +      usb3-lpm-capable;
-> > +    };
-> > -- 
-> > 2.27.0
-> > 
+Hmm, this actually makes a lot of sense. I wonder why I haven't
+thought of that :) Will do in v4.
