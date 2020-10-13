@@ -2,45 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 763DB28CE7C
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 14:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A368E28CE8D
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 14:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727811AbgJMMjD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 08:39:03 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40784 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726492AbgJMMjD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 08:39:03 -0400
-Received: by mail-ot1-f65.google.com with SMTP id l4so18872153ota.7;
-        Tue, 13 Oct 2020 05:39:01 -0700 (PDT)
+        id S1728017AbgJMMmG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 08:42:06 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:40234 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727077AbgJMMmG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 08:42:06 -0400
+Received: by mail-oi1-f196.google.com with SMTP id m128so22292429oig.7;
+        Tue, 13 Oct 2020 05:42:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=6VjdKl317iT5Zg1TyENnjjsaX0N6ri1mllKle5EFEgU=;
-        b=oICdWroBV7nykj5GBmSi1zn8I47GLThwNlpoG02kxSraTAaFwfB0B+piOTjJTRZAKN
-         PL37+bQzn9Mld/K1BT2uBM8EiJbI8QKVADutBNNhavIDvJ5wdvKZMdNsH9+0XY2YSMg2
-         Aytehz8AceUha67m74I1imRzoLtMe37sUm2IiUFDevbokLquMzFxeLyMQYkDxEnycKgo
-         ORIOuFQtaCZPiITBsKj4kgUV3o8FJhbc3eoUPgLEiSL3W9krkUfFxxn22DkH49bSygZs
-         5TJYxR3aHE3J9G3UULG96Y0Yv65af/LeWPu+YbubaMQvqICmLRydJqoBoMZtg14SCpcc
-         WUhQ==
-X-Gm-Message-State: AOAM533u/WIqy5MK/CArXKfBOHdoHmbKYyiq5L1XAzVgXmU0e/8iemNu
-        ROw7ZKnAVRSnwZVaLSWZkA==
-X-Google-Smtp-Source: ABdhPJw/LR0WlluFnNsI3nVPTl/zhtRz16XPBXAFDEXrvfPVEt+NDhPPkdFKLyjjLI6RccT70G+B+Q==
-X-Received: by 2002:a9d:2487:: with SMTP id z7mr20713927ota.133.1602592741146;
-        Tue, 13 Oct 2020 05:39:01 -0700 (PDT)
+        bh=9a9S8jqFI1z/da5IKYstSGsQ5P0heyKtA+nDpAbWxis=;
+        b=ae0JiDRUGc6UhmD2+npHtsX8/Co/tEckAlfJgyZ2ekhWEdLLjluqcdHHgkocSNuVL0
+         dpQ3ZwXEsYaNblb8oN+VnCPcCaLoUsgYTCTXkEoYLkMQnAzToeV5tksKtoUQB68lKoBV
+         l86jnp4pVyjGR6gWzI3sPdngFR0X3+Gex5dU3O1gNTw+5VakzOJFWQgQfaWRWEvzdikY
+         R9aJ8b4cLVFsUqaZ1LGkzT1vAXyRc13IGkJE08OXLWPWPfaE1sS2wNZ/HftbjBKZ3psv
+         1wyGuoxnzdqo/VmsZkI+/zmKdZXRosytEUaC6rAeMmSZW8FN38PT6+Ytplsy70yHJhvI
+         muBA==
+X-Gm-Message-State: AOAM5333Z8cyzkIFNQ+kHlKMsbSoNPgIWvgI6R/k1gmwi6DYmzLVEX29
+        zgYhdMRnc90Y6NIrZR7i6Q==
+X-Google-Smtp-Source: ABdhPJzik5HzirfRUO8Rt3aNEPIrxservslx8BbKUyJWQUJ9c+zphQ1dJb0v+CV4goeTVMBvVtFbNg==
+X-Received: by 2002:aca:fc85:: with SMTP id a127mr14056058oii.125.1602592925132;
+        Tue, 13 Oct 2020 05:42:05 -0700 (PDT)
 Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id j83sm11176124oia.19.2020.10.13.05.38.59
+        by smtp.gmail.com with ESMTPSA id o15sm10002746otj.3.2020.10.13.05.42.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2020 05:39:00 -0700 (PDT)
-Received: (nullmailer pid 3308114 invoked by uid 1000);
-        Tue, 13 Oct 2020 12:38:59 -0000
-Date:   Tue, 13 Oct 2020 07:38:59 -0500
+        Tue, 13 Oct 2020 05:42:04 -0700 (PDT)
+Received: (nullmailer pid 3312154 invoked by uid 1000);
+        Tue, 13 Oct 2020 12:42:03 -0000
+Date:   Tue, 13 Oct 2020 07:42:03 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
@@ -50,49 +54,59 @@ Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Roger Quadros <rogerq@ti.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/18] dt-bindings: usb: dwc3: Add Frame Length Adj
- restrictions
-Message-ID: <20201013123859.GD3269269@bogus>
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH 16/18] dt-bindings: usb: meson-g12a-usb: Validate
+ DWC2/DWC3 sub-nodes
+Message-ID: <20201013124203.GE3269269@bogus>
 References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
- <20201010224121.12672-15-Sergey.Semin@baikalelectronics.ru>
+ <20201010224121.12672-17-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201010224121.12672-15-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201010224121.12672-17-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Oct 11, 2020 at 01:41:17AM +0300, Serge Semin wrote:
-> In accordance with the IP core databook the
-> snps,quirk-frame-length-adjustment property can be set within [0, 0x3F].
-> Let's make sure the DT schema applies a correct restriction on the
-> property.
+On Sun, Oct 11, 2020 at 01:41:19AM +0300, Serge Semin wrote:
+> Amlogic G12A USB DT sub-nodes are supposed to be compatible with the
+> generic DWC USB2 and USB3 devices. Since now we've got DT schemas for
+> both of the later IP cores let's make sure that the Amlogic G12A USB
+> DT nodes are fully evaluated including the DWC sub-nodes.
 > 
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index 36d4b8060d7c..f1e6c3dab1ff 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -226,6 +226,8 @@ properties:
->        length adjustment when the fladj_30mhz_sdbnd signal is invalid or
->        incorrect.
->      $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 0x3f
-
-It's fine if you add the constraints during the conversion.
-
+> diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> index 88184d7e26cc..3e8ac0ff90de 100644
+> --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> @@ -78,7 +78,20 @@ properties:
 >  
->    snps,rx-thr-num-pkt-prd:
->      description: |
-> -- 
-> 2.27.0
-> 
+>  patternProperties:
+>    "^usb@[0-9a-f]+$":
+> -    type: object
+> +    allOf:
+> +      - if:
+> +          properties:
+> +            compatible:
+> +              contains:
+> +                const: snps,dwc2
+> +        then:
+> +          $ref: dwc2.yaml#
+> +      - if:
+> +          properties:
+> +            compatible:
+> +              const: snps,dwc3
+> +        then:
+> +          $ref: snps,dwc3.yaml#
+
+It should be enough to do just:
+
+oneOf:
+  - $ref: dwc2.yaml#
+  - $ref: snps,dwc3.yaml#
