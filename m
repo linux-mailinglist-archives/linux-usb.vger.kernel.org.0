@@ -2,150 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A7728D002
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 16:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBF428D021
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 16:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388484AbgJMOQO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 10:16:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60458 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729032AbgJMOQN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Oct 2020 10:16:13 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8910A247FD;
-        Tue, 13 Oct 2020 14:16:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602598572;
-        bh=5Lk25OLCC32WS63IlcGvOhBrDcQgWDeXJsC5Zyy3gvc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gbtZWHBlNeLwIICi6kiE7crT/GvF7AZBBDByae5w6Knu0AfIqirczFW23FnE/ojJq
-         Xltb/xtegpsj3onoDvKtRYU11edbX2gTqY7tyeAtchIewGRm9R0wtjXpdtkFqVz6pw
-         cIKdnzL0MMeEu9kA0HjCi2nxUpzM4rezhbNk9zYg=
-Received: by mail-ot1-f51.google.com with SMTP id i12so113495ota.5;
-        Tue, 13 Oct 2020 07:16:12 -0700 (PDT)
-X-Gm-Message-State: AOAM531rX781SwpOTQn1qCYiFuNzw8rM3d/5mH29CvGp5E0HTtricLW7
-        96xIR/evUqrVVWqqiwcv+LUq7+ID/CBwhqoR0Q==
-X-Google-Smtp-Source: ABdhPJycrrYkiUDNpjBSkSAYzAMb1vVcJHqVOx0KqxuWylYsusqkJFbzfmLBJ0Z4MepVkK3qz6EVKGpnhTz+V91NZOI=
-X-Received: by 2002:a9d:5e14:: with SMTP id d20mr12866634oti.107.1602598569659;
- Tue, 13 Oct 2020 07:16:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200929024004.244992-1-badhri@google.com> <20200929024004.244992-6-badhri@google.com>
- <20201006182940.GA2574941@bogus> <CAPTae5L6UFGNJ0pxxfFAS3=KDNDVU-WDW-OHk6prLStbe+EaOQ@mail.gmail.com>
-In-Reply-To: <CAPTae5L6UFGNJ0pxxfFAS3=KDNDVU-WDW-OHk6prLStbe+EaOQ@mail.gmail.com>
+        id S1729992AbgJMOWp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 10:22:45 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:33509 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729683AbgJMOWp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 10:22:45 -0400
+Received: by mail-ot1-f66.google.com with SMTP id t15so166524otk.0;
+        Tue, 13 Oct 2020 07:22:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X2OPUF6hLvyo2zbCRQtk4GShfyN48+lkdnulYVh78p0=;
+        b=h0P9nSrS9YiEzSjS1fagP9qiVty9VuKBjSv9Fu8aOuRhf62k48xHibAzqgXw48D9S2
+         sJG8V7BXdzNm6RtvENEV2WBWduWwr9qwAU+c4tHSiBu6XzJ4HigX8Ej1WGyheKgL0mxw
+         SV6DITcaaNZUYoBgdh/OJJgEioSTwYRG7dZ5JOKuFRM7omlQF2Epj+U4vngxN/wv/T+w
+         rEPywlBnB2jExlNW4zmWWqi5iJtISKJWuhWujpnPEhQm2f44BTwbPKk5TiuGaEOFgRWs
+         pt1nbGNwcXWesXr/nF90kkIpXjhywtlpRwos94Vza1T7HEsk3jlHyzMs7/tsyfTL7zti
+         qfyA==
+X-Gm-Message-State: AOAM531kxViOeJ19k6NT8cuXn0r9B1Zst4bDQJkmFtrkOxKAI6IDTYT7
+        J6+AxTRKkwOJ/wvioX+k9g==
+X-Google-Smtp-Source: ABdhPJxx9u6/kZVY8K22eqdOb8C41IRPu74rOUg09vn74HyLEKIVhnueMVZw5SBfmuk1ASMt6aBa1A==
+X-Received: by 2002:a9d:5547:: with SMTP id h7mr23056541oti.248.1602598964628;
+        Tue, 13 Oct 2020 07:22:44 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id d11sm2366320oti.69.2020.10.13.07.22.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2020 07:22:43 -0700 (PDT)
+Received: (nullmailer pid 3448875 invoked by uid 1000);
+        Tue, 13 Oct 2020 14:22:43 -0000
+Date:   Tue, 13 Oct 2020 09:22:43 -0500
 From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 13 Oct 2020 09:15:58 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKxW9BeFQGsLqa-ZRurR8gDDrTSaDYs=mj7TYtF9ZDiYQ@mail.gmail.com>
-Message-ID: <CAL_JsqKxW9BeFQGsLqa-ZRurR8gDDrTSaDYs=mj7TYtF9ZDiYQ@mail.gmail.com>
-Subject: Re: [PATCH v9 05/15] dt-bindings: connector: Add property to set
- initial current cap for FRS
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Amelie Delaunay <amelie.delaunay@st.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Manish Narani <manish.narani@xilinx.com>
+Cc:     devicetree@vger.kernel.org, git@xilinx.com, p.zabel@pengutronix.de,
+        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org, balbi@kernel.org,
+        linux-arm-kernel@lists.infradead.org, michal.simek@xilinx.com
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: dwc3-xilinx: Add documentation
+ for Versal DWC3 Controller
+Message-ID: <20201013142243.GA3448825@bogus>
+References: <1602162416-28058-1-git-send-email-manish.narani@xilinx.com>
+ <1602162416-28058-2-git-send-email-manish.narani@xilinx.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1602162416-28058-2-git-send-email-manish.narani@xilinx.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 7, 2020 at 8:07 PM Badhri Jagan Sridharan <badhri@google.com> wrote:
->
-> On Tue, Oct 6, 2020 at 11:29 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Mon, Sep 28, 2020 at 07:39:54PM -0700, Badhri Jagan Sridharan wrote:
-> > > This change adds frs-typec-current which allows setting the initial current
-> > > capability of the new source when vSafe5V is applied during PD3.0
-> > > sink Fast Role Swap.
-> >
-> > Shouldn't you Cc the person you copied this from?
-> Not sure whether I get this comment. The patch wasn't copied. Maybe you were
-> expecting me to CC amelie.delaunay@st.com ? if so, just now CC'ed.
->
-> >
-> >
-> > > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > > ---
-> > > Changes since v1:
-> > > - Changing patch version to v6 to fix version number confusion.
-> > >
-> > > Changes since v6:
-> > > - Removed the redundant usb-connector.txt that I created by mistake.
-> > > - Moved to yaml.
-> > >
-> > > Changes since v7:
-> > > - Rebase
-> > >
-> > > Changes since v8:
-> > > - Redefine new-source-frs-typec-current as string enums to address
-> > >   Rob Herring's comment.
-> > > ---
-> > >  .../bindings/connector/usb-connector.yaml     | 26 +++++++++++++++++++
-> > >  include/dt-bindings/usb/pd.h                  | 10 +++++++
-> > >  2 files changed, 36 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > index 9bd52e63c935..0b8cd08a8678 100644
-> > > --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > > @@ -142,6 +142,32 @@ properties:
-> > >      required:
-> > >        - port@0
-> > >
-> > > +  new-source-frs-typec-current:
-> > > +    description: Initial current capability of the new source when vSafe5V
-> > > +      is applied during PD3.0 Fast Role Swap. "Table 6-14 Fixed Supply PDO - Sink"
-> > > +      of "USB Power Delivery Specification Revision 3.0, Version 1.2" provides the
-> > > +      different power levels and "6.4.1.3.1.6 Fast Role Swap USB Type-C Current"
-> > > +      provides a detailed description of the field. The sink PDO from current source
-> > > +      reflects the current source's(i.e. transmitter of the FRS signal) power
-> > > +      requirement during fr swap. The current sink (i.e. receiver of the FRS signal),
-> > > +      a.k.a new source, should check if it will be able to satisfy the current source's,
-> > > +      new sink's, requirement during frswap before enabling the frs signal reception.
-> > > +      This property refers to maximum current capability that the current sink can
-> > > +      satisfy. During FRS, VBUS voltage is at 5V, as the partners are in implicit
-> > > +      contract, hence, the power level is only a function of the current capability.
-> > > +      "not-supported" implies sink to source fast role swap not supported.
-> > > +      "default" refers to default USB power level as described by
-> > > +      "Table 6-14 Fixed Supply PDO - Sink".
-> > > +      "1.5A" refers to 1.5A@5V.
-> > > +      "3.0A" refers to 3.0A@5V.
-> >
-> >
-> > > +
-> > > +    $ref: /schemas/types.yaml#/definitions/string
-> > > +    enum:
-> > > +      - not-supported
-> > > +      - default
-> > > +      - 1.5A
-> > > +      - 3.0A
-> >
-> > What happens if the property is not present?
->
-> The behavior would be the same as "not-supported".
+On Thu, 08 Oct 2020 18:36:55 +0530, Manish Narani wrote:
+> Add documentation for Versal DWC3 controller. Add required property
+> 'reg' for the same. Also add optional properties for snps,dwc3.
+> 
+> Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+> ---
+>  .../devicetree/bindings/usb/dwc3-xilinx.txt     | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+> 
 
-Then you don't need 'not-supported'.
-
->
-> >
-> > I'm not crazy about mixing strings and what could be a number.
->
-> v8 version[1] of the patch was using uint32. I moved to using strings
-> as you were asking to unify with the approach in [2]. Since [3] was using
-> string enums, I moved to that. I don't have a strong preference here, so
-> I can move back to using u32 if you feel so.
-
-Since the u32 values are based on the USB spec, I think I prefer that.
-Should be easier to deal with in the driver than doing strcmp's.
-
-Rob
+Reviewed-by: Rob Herring <robh@kernel.org>
