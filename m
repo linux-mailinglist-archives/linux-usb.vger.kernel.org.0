@@ -2,105 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BEC28CA34
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 10:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2949228CA42
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 10:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391409AbgJMIZH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 04:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
+        id S2390626AbgJMI34 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 04:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390218AbgJMIZH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 04:25:07 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840F5C0613D0;
-        Tue, 13 Oct 2020 01:25:05 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id b138so13179581yba.5;
-        Tue, 13 Oct 2020 01:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Yb8uf1yPz5kaBwo/Czxv6SGb8eqvWHd/MSZ3XQ2Vi/0=;
-        b=QUjOIjM0KrH/aLS1ph9lySWsHWQx1pHFSw1wYRy9z8pn6WVQwNzB1V9aoKeAXVE6CX
-         VWGSpt8a0vzTG+LUJypOBnACtBk0Fc56LLMnqqWDrl5B8VEPayx/YtAEBZ38zwbuDMd0
-         ed4iN3Amc2mpGFHz004yjbejwN4iwub6dpZR74j0wps7vnTRUR8/r/XtWb56KAdadEJa
-         9iEzZfxtKZbVSsNIW0hDW89UdRPxjwmo6KMs6+affBm68FCwfEmpMKsfzVDjE/VK+S7f
-         xt18lMJDnyV2I4rZOziUZ1P8NU/UZGccqhG42lEVrbHp8xs9Ybc10Hz03Ld+Y4lbw+C2
-         BuRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Yb8uf1yPz5kaBwo/Czxv6SGb8eqvWHd/MSZ3XQ2Vi/0=;
-        b=ryoKjf9HBL1Jl2FSz2IAn8oRF2xDmomwPBNHq+0SHn6WPADRBK+YLRJy4DQOr+7/bj
-         gynbfZ3Uw3csxqieFu0N0onSNSs49WivMnlKvabZ6Qf1dAhVoBdgI/EUCnF14wMPTlV7
-         qXzloBE8GBc0pttKP4fvrYi4wTHJ7hzstUisKvoyHIohnWW2Tq2HgMnqBHbC2WwRRKt8
-         usPq+bIYebdT3peC4BG1ssc1hn9tijT+wLczfPcDq5RadTyDh9SG+DxECwdcO6deqpoC
-         Iok062JgUzWsRdIhpvcAmtGqZlDgVoj6EKNZKdxfuEfNsTozCNfyLUDPIAQDhFCCjT8F
-         A30g==
-X-Gm-Message-State: AOAM531i1iial4gGiZi4fuo/CPXhL5pH9rC6wJZ6GOSnaNsMR8UglUSc
-        SlGfeps7WvQKK8GCB8bCzyGCnCLaWWPcYLOqbLs=
-X-Google-Smtp-Source: ABdhPJySApp9x9zfOYAVifM5CshLWnRdvhNLRlJpT7ZLNFcQEbmf6GC1o6S1rHaDXsk1JeO08TWzANjnU5JDtt6QRQ8=
-X-Received: by 2002:a25:e046:: with SMTP id x67mr36342627ybg.342.1602577504560;
- Tue, 13 Oct 2020 01:25:04 -0700 (PDT)
+        with ESMTP id S2390540AbgJMI3z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 04:29:55 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D97C0613D0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Oct 2020 01:29:55 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 12A711F44F2B
+Subject: Re: xhci problem -> general protection fault
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>, zwisler@google.com
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <65ac3a73-ca57-c3e8-561b-9ba5c15b3c65@collabora.com>
+ <a6364bd9-58d9-e66e-5595-7d887a8f3fc9@linux.intel.com>
+ <8230c2a2-719c-ef81-e85d-5921bf8e98e6@collabora.com>
+ <133c123e-e857-7f83-d146-f39c00afe39f@linux.intel.com>
+ <20200925210517.GA4487@google.com>
+ <7e38c533-6ea1-63a6-fc92-2ecef7ee1f84@linux.intel.com>
+ <20201001164352.GA13249@google.com>
+ <69f8cbc3-0ae7-cfb2-2fdd-556ada77381f@linux.intel.com>
+ <20201012215348.GA3324220@google.com>
+ <ad976018-31ec-3b1e-464c-363a08538ef5@linux.intel.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Message-ID: <48f2e022-1937-6ecc-ad8e-ef293fd2bfe1@collabora.com>
+Date:   Tue, 13 Oct 2020 10:29:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20201011205008.24369-1-sudipm.mukherjee@gmail.com>
- <alpine.DEB.2.21.2010121550300.6487@felia> <20201012145710.GA631710@rowland.harvard.edu>
- <alpine.DEB.2.21.2010121659040.6487@felia> <20201012151816.GA1559916@kroah.com>
- <alpine.DEB.2.21.2010122022250.17866@felia> <20201013052317.GB330398@kroah.com>
- <alpine.DEB.2.21.2010130725370.14590@felia>
-In-Reply-To: <alpine.DEB.2.21.2010130725370.14590@felia>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Tue, 13 Oct 2020 09:24:28 +0100
-Message-ID: <CADVatmNcUzT6Df4+V7VdwO0AzZ=74Sai7X0aFpYU5SO7b2NVSg@mail.gmail.com>
-Subject: Re: [linux-safety] [PATCH] usb: host: ehci-sched: add comment about
- find_tt() not returning error
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-safety@lists.elisa.tech, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <ad976018-31ec-3b1e-464c-363a08538ef5@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Lukas,
+Hi,
 
-On Tue, Oct 13, 2020 at 6:37 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
->
->
-> On Tue, 13 Oct 2020, Greg Kroah-Hartman wrote:
->
-> > On Mon, Oct 12, 2020 at 08:25:30PM +0200, Lukas Bulwahn wrote:
-> > >
-> > >
-> > > On Mon, 12 Oct 2020, Greg Kroah-Hartman wrote:
-> > >
-> > > > On Mon, Oct 12, 2020 at 05:10:21PM +0200, Lukas Bulwahn wrote:
-> > > > > And for the static analysis finding, we need to find a way to ignore this
-> > > > > finding without simply ignoring all findings or new findings that just
-> > > > > look very similar to the original finding, but which are valid.
-> > > >
-<snip>
-> >
-> > Why not fix the things that it finds that are actually issues?  If there
-> > are no actual issues found, then perhaps you should use a better tool?  :)
-> >
->
-> Completely agree. That is why I was against adding comments here and
-> elsewhere just to have the "good feeling of doing something" after the
-> tool reported a warning and we spend some time understanding the code to
-> conclude that we now understand the code better than the tool.
+W dniu 13.10.2020 o 09:49, Mathias Nyman pisze:
+> On 13.10.2020 0.53, zwisler@google.com wrote:
+>> On Mon, Oct 12, 2020 at 10:20:31PM +0300, Mathias Nyman wrote:
+>>> On 1.10.2020 19.43, zwisler@google.com wrote:
+>>>> On Tue, Sep 29, 2020 at 01:35:31AM +0300, Mathias Nyman wrote:
+>>
+>>> I'm rewriting how xhci driver handles halted and canceled transfers.
+>>> While looking into it I found an older case where hardware gives bad data
+>>> in the output context. This was 10 years ago and on some specic hardware,
+>>> see commit:
+>>>
+>>> ac9d8fe7c6a8 USB: xhci: Add quirk for Fresco Logic xHCI hardware.
+>>>
+>>>>
+>>>> I'm happy to gather logs with more debug or run other experiments, if that
+>>>> would be helpful.  As it is I don't really know how to debug the internal
+>>>> state of the HC further, but hopefully the knowledge that the patch below
+>>>> makes a difference will help us move forward.
+>>>
+>>> Great thanks, it will take some time before rewrite is ready.
+>>
+>> Should we/I invest time in trying to create a quirk similar to
+>>
+>>> ac9d8fe7c6a8 USB: xhci: Add quirk for Fresco Logic xHCI hardware.
+>>
+>> in the mean time, or should we just wait for your rewrite?
+>>
+> 
+> I've been focusing on this part so rewrite shouldn't take long.
 
-I think you are missing the point here. I sent the comment not because
-of any tool, I sent it because the code there was not that simple like
-other drivers and at a first glance its not apparent why there are no
-error checks. And, afaik, the only purpose of comments is to make the
-source code easier to understand.
+Thank you for doing that!
 
+Should you be sending your patches not as a reply in this thread
+kindly Cc me andrzej.p@collabora.com.
 
--- 
-Regards
-Sudip
+Regards,
+
+Andrzej
