@@ -2,161 +2,249 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E5F28CFA2
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 15:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6707C28CFBC
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 16:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388107AbgJMN6Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 09:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387583AbgJMN6Z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 09:58:25 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5C1C0613D0
-        for <linux-usb@vger.kernel.org>; Tue, 13 Oct 2020 06:58:24 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id a1so40891pjd.1
-        for <linux-usb@vger.kernel.org>; Tue, 13 Oct 2020 06:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4GdnNvEoUKgxX4qOhs3krtiPwGsAdHL1Le9swFYFabo=;
-        b=fqz9Lk8Tn3f41eiWhfzfyM8sxQFqw39PVqXAmHDl4gqxgy9SH4gW5iqO2xVGRNuuKT
-         EUkrFal2KddYMHBWlPPpZaToe30PfAv7tWMHNaCUCfjSXkJ6U8RD7fvoLjBPkN4/0DpV
-         KtebXA47d27sNS3Re0EncSGN7nWVKGWcSVvqOioRjyMPKhS6co87W9JFWm2YjxvrjaXO
-         8yTZ2qhubxiYsFMzoHZRUxEUhvoWRx9Da8kDirPV/3wvGgidA+SmxKBr7v8SN6JUjz9A
-         a9kLtg/5w7d/9qEmPJHW93kJgoLookI/os79BdAmmfEE16TpmvUhykapN+RqI+BiQMRk
-         srhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4GdnNvEoUKgxX4qOhs3krtiPwGsAdHL1Le9swFYFabo=;
-        b=LGzKbI51GHJCK1MTpfCxv6kmQQ5fPI4P127+pL55h3SBwI2JYzzvutbhPces9e/aBl
-         Je8JI+XLa7NA83A3DfMaktGUyq2fStsw0R3FpEFIuB/61JrIzrYrezbes8JJNhe1NSmO
-         lnZFK0BvkPDIlemJ0CLydjZZ7OKNMOpk2FplzaJ/3nEPiW9SPUBe9UAi8/g5rsr8QJ1o
-         opztPbmoMOPfJOz76brjfYywKv5aJ119CoWQu86p0TvMShhXMAEFS0YU9ULq1Dfpiocc
-         /igiRY939w/bq1oqHGt+pd058NghlRwWH4MjOARkp6oDYH2LRlKJOAK3K0wEZfeqmgHn
-         b4Ug==
-X-Gm-Message-State: AOAM533yyvC7vQAzrGCm6Paj1E2WHcaidb8+3BhSjKRu6SuvCh/kE8u5
-        9Z/7MSZ5uYIyFX4Cr7kZuyyrs7SSWluJJ+/HC0islQ==
-X-Google-Smtp-Source: ABdhPJwvC9F2gzr+AS6o+Ox4RKAQqXdjO+PQ5LENDvXkm1/v9K/jJclxQcOPW2gVzXn/gyVhMCrZs4z/IpWWio2WRqg=
-X-Received: by 2002:a17:902:b40a:b029:d4:e1c7:db59 with SMTP id
- x10-20020a170902b40ab02900d4e1c7db59mr2623786plr.85.1602597503671; Tue, 13
- Oct 2020 06:58:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <c229372e5526b84ed0542028437111c2eb83d55f.1602522784.git.andreyknvl@google.com>
- <CACT4Y+aX-LN=tz2Xu3509K1tfrGiLWWKZQwMtRCg059whv-Gvg@mail.gmail.com>
-In-Reply-To: <CACT4Y+aX-LN=tz2Xu3509K1tfrGiLWWKZQwMtRCg059whv-Gvg@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 13 Oct 2020 15:58:12 +0200
-Message-ID: <CAAeHK+zur-CpmCj2bBucwVSAKkk8XBKZsQoGA8AmWraXuDctvA@mail.gmail.com>
-Subject: Re: [PATCH v4] kcov, usb: specify contexts for remote coverage sections
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        id S1729012AbgJMOA5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 10:00:57 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40980 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbgJMOA5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 10:00:57 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 685658030719;
+        Tue, 13 Oct 2020 14:00:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lv4tIgF3X7hf; Tue, 13 Oct 2020 17:00:47 +0300 (MSK)
+Date:   Tue, 13 Oct 2020 17:00:45 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Rob Herring <robh@kernel.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/18] dt-bindings: usb: usb-hcd: Convert generic USB
+ properties to DT schema
+Message-ID: <20201013140045.aznrmrop3z3ujdss@mobilestation>
+References: <20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru>
+ <20201010224121.12672-2-Sergey.Semin@baikalelectronics.ru>
+ <20201013121441.GA3269269@bogus>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20201013121441.GA3269269@bogus>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 8:46 AM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Mon, Oct 12, 2020 at 7:17 PM Andrey Konovalov <andreyknvl@google.com> wrote:
-> >
-> > Currently there's a KCOV remote coverage collection section in
-> > __usb_hcd_giveback_urb(). Initially that section was added based on the
-> > assumption that usb_hcd_giveback_urb() can only be called in interrupt
-> > context as indicated by a comment before it. This is what happens when
-> > syzkaller is fuzzing the USB stack via the dummy_hcd driver.
-> >
-> > As it turns out, it's actually valid to call usb_hcd_giveback_urb() in task
-> > context, provided that the caller turned off the interrupts; USB/IP does
-> > exactly that. This can lead to a nested KCOV remote coverage collection
-> > sections both trying to collect coverage in task context. This isn't
-> > supported by KCOV, and leads to a WARNING.
->
-> How does this recursion happen? There is literal recursion in the task
-> context? A function starts a remote coverage section and calls another
-> function that also starts a remote coverage section?
+On Tue, Oct 13, 2020 at 07:14:41AM -0500, Rob Herring wrote:
+> On Sun, Oct 11, 2020 at 01:41:04AM +0300, Serge Semin wrote:
+> > The generic USB HCD properties have been described in the legacy bindings
+> > text file: Documentation/devicetree/bindings/usb/generic.txt . Let's
+> > convert it' content into the USB HCD DT schema properties so all USB DT
+> > nodes would be validated to have them properly utilized.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  .../devicetree/bindings/usb/generic.txt       | 57 -------------
+> >  .../devicetree/bindings/usb/usb-hcd.yaml      | 84 +++++++++++++++++++
+> >  2 files changed, 84 insertions(+), 57 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/usb/generic.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/generic.txt b/Documentation/devicetree/bindings/usb/generic.txt
+> > deleted file mode 100644
+> > index ba472e7aefc9..000000000000
+> > --- a/Documentation/devicetree/bindings/usb/generic.txt
+> > +++ /dev/null
+> > @@ -1,57 +0,0 @@
+> > -Generic USB Properties
+> > -
+> > -Optional properties:
+> > - - maximum-speed: tells USB controllers we want to work up to a certain
+> > -			speed. Valid arguments are "super-speed-plus",
+> > -			"super-speed", "high-speed", "full-speed" and
+> > -			"low-speed". In case this isn't passed via DT, USB
+> > -			controllers should default to their maximum HW
+> > -			capability.
+> > - - dr_mode: tells Dual-Role USB controllers that we want to work on a
+> > -			particular mode. Valid arguments are "host",
+> > -			"peripheral" and "otg". In case this attribute isn't
+> > -			passed via DT, USB DRD controllers should default to
+> > -			OTG.
+> > - - phy_type: tells USB controllers that we want to configure the core to support
+> > -			a UTMI+ PHY with an 8- or 16-bit interface if UTMI+ is
+> > -			selected. Valid arguments are "utmi" and "utmi_wide".
+> > -			In case this isn't passed via DT, USB controllers should
+> > -			default to HW capability.
+> > - - otg-rev: tells usb driver the release number of the OTG and EH supplement
+> > -			with which the device and its descriptors are compliant,
+> > -			in binary-coded decimal (i.e. 2.0 is 0200H). This
+> > -			property is used if any real OTG features(HNP/SRP/ADP)
+> > -			is enabled, if ADP is required, otg-rev should be
+> > -			0x0200 or above.
+> > - - companion: phandle of a companion
+> > - - hnp-disable: tells OTG controllers we want to disable OTG HNP, normally HNP
+> > -			is the basic function of real OTG except you want it
+> > -			to be a srp-capable only B device.
+> > - - srp-disable: tells OTG controllers we want to disable OTG SRP, SRP is
+> > -			optional for OTG device.
+> > - - adp-disable: tells OTG controllers we want to disable OTG ADP, ADP is
+> > -			optional for OTG device.
+> > - - usb-role-switch: boolean, indicates that the device is capable of assigning
+> > -			the USB data role (USB host or USB device) for a given
+> > -			USB connector, such as Type-C, Type-B(micro).
+> > -			see connector/usb-connector.yaml.
+> > - - role-switch-default-mode: indicating if usb-role-switch is enabled, the
+> > -			device default operation mode of controller while usb
+> > -			role is USB_ROLE_NONE. Valid arguments are "host" and
+> > -			"peripheral". Defaults to "peripheral" if not
+> > -			specified.
+> > -
+> > -
+> > -This is an attribute to a USB controller such as:
+> > -
+> > -dwc3@4a030000 {
+> > -	compatible = "synopsys,dwc3";
+> > -	reg = <0x4a030000 0xcfff>;
+> > -	interrupts = <0 92 4>
+> > -	usb-phy = <&usb2_phy>, <&usb3,phy>;
+> > -	maximum-speed = "super-speed";
+> > -	dr_mode = "otg";
+> > -	phy_type = "utmi_wide";
+> > -	otg-rev = <0x0200>;
+> > -	adp-disable;
+> > -};
+> > diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+> > index 7263b7f2b510..815de24127db 100644
+> > --- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+> > @@ -22,9 +22,93 @@ properties:
+> >      description:
+> >        Name specifier for the USB PHY
+> >  
+> > +  maximum-speed:
+> > +   description: |
+> 
 
-Yes, a literal recursion. Background thread for processing requests
-for USB/IP hub (which we collect coverage from) calls
-__usb_hcd_giveback_urb().
+> Drop the '|' if there's no formatting to preserve.
 
-Here's the stack trace:
+Thanks for noticing this. I should have refreshed my YAML multi-line
+knowledge https://yaml-multiline.info/ .) I'll fix it in all the patches of
+the series.
 
- kcov_remote_start_usb include/linux/kcov.h:52 [inline]
- __usb_hcd_giveback_urb+0x284/0x4b0 drivers/usb/core/hcd.c:1649
- usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1716
- vhci_urb_enqueue.cold+0x37f/0x4c5 drivers/usb/usbip/vhci_hcd.c:801
- usb_hcd_submit_urb+0x2b1/0x20d0 drivers/usb/core/hcd.c:1547
- usb_submit_urb+0x6e5/0x13b0 drivers/usb/core/urb.c:570
- usb_start_wait_urb+0x10f/0x2c0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
- hub_set_address drivers/usb/core/hub.c:4472 [inline]
- hub_port_init+0x23f6/0x2d20 drivers/usb/core/hub.c:4748
- hub_port_connect drivers/usb/core/hub.c:5140 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
- port_event drivers/usb/core/hub.c:5494 [inline]
- hub_event+0x1cc9/0x38d0 drivers/usb/core/hub.c:5576
- process_one_work+0x7b6/0x1190 kernel/workqueue.c:2269
- worker_thread+0x94/0xdc0 kernel/workqueue.c:2415
- kthread+0x372/0x450 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+> 
+> > +     Tells USB controllers we want to work up to a certain speed. In case this
+> > +     isn't passed via DT, USB controllers should default to their maximum HW
+> > +     capability.
+> > +   $ref: /schemas/types.yaml#/definitions/string
+> > +   enum: ["low-speed", "full-speed", "high-speed", "super-speed",
+> > +          "super-speed-plus"]
+> 
 
-> Or is there recursion between task context and softirq context?
+> One per line and drop the quotes.
 
-No. This kind of recursion is actually supported by kcov right now. A
-softirq with a coverage collection section can come in the middle of a
-coverage collection section for a task.
+Ok.
 
-> But
-> this should not happen if softirq's disabled around
-> usb_hcd_giveback_urb call in task context...
+-Sergey
 
-[...]
-
-> We do want to collect coverage from usb_hcd_giveback_urb in the task
-> context eventually, right?
-
-Ideally, eventually, yes.
-
-> Is this API supposed to be final? Or it only puts down fire re the warning?
-
-Only puts down the fire.
-
-> I don't understand how this API can be used in other contexts.
-> Let's say there is recursion in task context and we want to collect
-> coverage in task context (the function is only called in task
-> context). This API won't help.
-
-No, it won't. Full recursion support is required for this.
-
-> Let's say a function is called from both task and softirq context and
-> these can recurse (softirq arrive while in remote task section). This
-> API won't help. It will force to choose either task or softirq, but
-> let's say you can't make that choice because they are equally
-> important.
-
-This currently works, everything that happens in a softirq gets
-associated with softirq, everything else - with the task. This seems
-to be the only logical approach here, it makes no sense to associate
-what happens in a softirq with the task where the softirq happened.
-
-> The API helps to work around the unimplemented recursion in KCOV, but
-> it's also specific to this particular case. It's not necessary that
-> recursion is specific to one context only and it's not necessary that
-> a user can choose to sacrifice one of the contexts.
-> Also, if we support recursion in one way or another, we will never
-> want to use this API, right?
-
-Correct.
+> 
+> > +
+> > +  dr_mode:
+> > +    description: |
+> > +      Tells Dual-Role USB controllers that we want to work on a particular
+> > +      mode. In case this attribute isn't passed via DT, USB DRD controllers
+> > +      should default to OTG.
+> > +    $ref: /schemas/types.yaml#/definitions/string
+> > +    enum: ["host", "peripheral", "otg"]
+> > +
+> > +  phy_type:
+> > +    description: |
+> > +      Tells USB controllers that we want to configure the core to support a
+> > +      UTMI+ PHY with an 8- or 16-bit interface if UTMI+ is selected. In case
+> > +      this isn't passed via DT, USB controllers should default to HW
+> > +      capability.
+> > +    $ref: /schemas/types.yaml#/definitions/string
+> > +    enum: ["utmi", "utmi_wide"]
+> > +
+> > +  otg-rev:
+> > +    description: |
+> > +      Tells usb driver the release number of the OTG and EH supplement with
+> > +      which the device and its descriptors are compliant, in binary-coded
+> > +      decimal (i.e. 2.0 is 0200H). This property is used if any real OTG
+> > +      features (HNP/SRP/ADP) is enabled. If ADP is required, otg-rev should be
+> > +      0x0200 or above.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  companion:
+> > +    description: Phandle of a companion device
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +
+> > +  hnp-disable:
+> > +    description: |
+> > +      Tells OTG controllers we want to disable OTG HNP. Normally HNP is the
+> > +      basic function of real OTG except you want it to be a srp-capable only B
+> > +      device.
+> > +    type: boolean
+> > +
+> > +  srp-disable:
+> > +    description: |
+> > +      Tells OTG controllers we want to disable OTG SRP. SRP is optional for OTG
+> > +      device.
+> > +    type: boolean
+> > +
+> > +  adp-disable:
+> > +    description: |
+> > +      Tells OTG controllers we want to disable OTG ADP. ADP is optional for OTG
+> > +      device.
+> > +    type: boolean
+> > +
+> > +  usb-role-switch:
+> > +    description: |
+> > +      Indicates that the device is capable of assigning the USB data role
+> > +      (USB host or USB device) for a given USB connector, such as Type-C,
+> > +      Type-B(micro). See connector/usb-connector.yaml.
+> > +
+> > +  role-switch-default-mode:
+> > +    description: |
+> > +      Indicates if usb-role-switch is enabled, the device default operation
+> > +      mode of controller while usb role is USB_ROLE_NONE.
+> > +    $ref: /schemas/types.yaml#/definitions/string
+> > +    enum: ["host", "peripheral"]
+> > +    default: "peripheral"
+> > +
+> >  examples:
+> >    - |
+> >      usb {
+> >          phys = <&usb2_phy1>, <&usb3_phy1>;
+> >          phy-names = "usb";
+> >      };
+> > +  - |
+> > +    usb@4a030000 {
+> > +        compatible = "snps,dwc3";
+> > +        reg = <0x4a030000 0xcfff>;
+> > +        interrupts = <0 92 4>;
+> > +        usb-phy = <&usb2_phy>, <&usb3_phy>;
+> > +        maximum-speed = "super-speed";
+> > +        dr_mode = "otg";
+> > +        phy_type = "utmi_wide";
+> > +        otg-rev = <0x0200>;
+> > +        adp-disable;
+> > +    };
+> > -- 
+> > 2.27.0
+> > 
