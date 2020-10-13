@@ -2,95 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 199D228CE93
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 14:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C33B28CEAF
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 14:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727948AbgJMMoX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 08:44:23 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:49622 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726492AbgJMMoX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 08:44:23 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id D021E4083B;
-        Tue, 13 Oct 2020 12:44:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1602593063; bh=zs9+cfaZee8kANbbEIgzPeWpko0vsbx8JTYJUWCZARA=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=P4VRgRsC0FmTm+dHrJSRqY+2rkOOIZk4Pc5nJTomTvzqcSQc78+6uZaEKPfR9Jxu3
-         qUlT5DxU+9qMOpsetYGu918sLn3BCgtPhVjArbKeQOboXm3nwu6mUCN2I0m7C8Ea4y
-         pRwRAvCdqkeD77y0gzoEkauLNNVQNERWz2yJMGLbbS7A1pNZVbfebvTJNENU0gQjwB
-         biJ45W0b4EuLjMxXx6DcGH4dP2Onz1ofStZpMRyaQeqZy2pjitWapCk8dkAnKxvKp5
-         9AT0Z8Sp8J+VnVfLBuDpnt/6dP5TWbX4oLln4QV41FWEQaTfzzQJ8dywi9quXPsPiH
-         u6vs5bma0h1/Q==
-Received: from tejas-VirtualBox (joglekar-e7480.internal.synopsys.com [10.146.18.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 8571FA005E;
-        Tue, 13 Oct 2020 12:44:19 +0000 (UTC)
-Received: by tejas-VirtualBox (sSMTP sendmail emulation); Tue, 13 Oct 2020 18:14:17 +0530
-Date:   Tue, 13 Oct 2020 18:14:17 +0530
-Message-Id: <b3dbe5d9de39fb5105b8474e9c560917a78e2c63.1602592488.git.joglekar@synopsys.com>
-In-Reply-To: <cover.1602592488.git.joglekar@synopsys.com>
-References: <cover.1602592488.git.joglekar@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Subject: [PATCH v4 3/3] usb: dwc3: Pass quirk as platform data
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S1728033AbgJMMtu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 08:49:50 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:41305 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727260AbgJMMtt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 08:49:49 -0400
+Received: by mail-oi1-f196.google.com with SMTP id q136so21153854oic.8;
+        Tue, 13 Oct 2020 05:49:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=h+4lx1NmWtXfOrC3rFHXIicegWjQFHB1Qz6MGdDJkro=;
+        b=o9sHpTqXW2nFNeJUT+Xgmp4506jhKUYxCeTnrydwZDYP1AJCacrtpnmYwqn4jdFpW/
+         GagM+s7eMz+efvyDpPS5b5MXvh9XjRJIbn7aSRMWvj83/jg5KpUPOkllahEIK4Tn34pz
+         8PoNHNI55hkc3RaUKMfEWcbaiiaHFduQpMTZgwOYJNwsq02YfbLEiTcsjmDUzSty/Mb3
+         zfgbbTmpT/pALGX85QQqdhEPNI9dIGn0g5AdtqUw5xucXSL9rRiuJkElzY2i3uVnKjFS
+         /d09dF2+Ce8KvGLr92Rs8Mec+1FYKtTtLN+xSuWaqhEIzjQcz8Cy5OO2w4MhdUE1dueQ
+         CKDQ==
+X-Gm-Message-State: AOAM531dru8v7/exEIlaYXTa3w/Bugl2K6AZG4sdBhzZNqz8RwGz4Msu
+        I/UzZGVRsIihqJt1Iyc+uw==
+X-Google-Smtp-Source: ABdhPJzzBhpFlOx96qHNV3x8rQzmHhlP80ozoqo1sj8XLzaIjsAHsnPOnKQvXA/PKTfjxDJM1j/OZA==
+X-Received: by 2002:a05:6808:f:: with SMTP id u15mr6766651oic.34.1602593388830;
+        Tue, 13 Oct 2020 05:49:48 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id a192sm7632544ooc.12.2020.10.13.05.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2020 05:49:47 -0700 (PDT)
+Received: (nullmailer pid 3322788 invoked by uid 1000);
+        Tue, 13 Oct 2020 12:49:46 -0000
+Date:   Tue, 13 Oct 2020 07:49:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, CK Hu <ck.hu@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        devicetree@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        David Airlie <airlied@linux.ie>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Min Guo <min.guo@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-usb@vger.kernel.org,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: Re: [PATCH v2 7/8] dt-bindings: usb: convert mediatek,mtu3.txt to
+ YAML schema
+Message-ID: <20201013124946.GA3322281@bogus>
+References: <20201013085207.17749-1-chunfeng.yun@mediatek.com>
+ <20201013085207.17749-7-chunfeng.yun@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201013085207.17749-7-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This commit adds the platform device data to setup
-the XHCI_SG_TRB_CACHE_SIZE_QUIRK quirk. DWC3 hosts
-which are PCI devices does not use OF to create platform device
-but create xhci-plat platform device runtime. So
-this patch allow parent device to supply the quirk
-through platform data.
+On Tue, 13 Oct 2020 16:52:06 +0800, Chunfeng Yun wrote:
+> Convert mediatek,mtu3.txt to YAML schema mediatek,mtu3.yaml
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v2: new patch
+> ---
+>  .../devicetree/bindings/usb/mediatek,mtu3.txt | 108 ---------
+>  .../bindings/usb/mediatek,mtu3.yaml           | 227 ++++++++++++++++++
+>  2 files changed, 227 insertions(+), 108 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> 
 
-Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
----
- drivers/usb/dwc3/host.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index e195176580de..dd7c742333f7 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -11,6 +11,15 @@
- #include <linux/platform_device.h>
- 
- #include "core.h"
-+#include "../host/xhci-plat.h"
-+
-+static const struct xhci_plat_priv dwc3_pdata = {
-+	.plat_start = NULL,
-+	.init_quirk = NULL,
-+	.suspend_quirk = NULL,
-+	.resume_quirk = NULL,
-+	.quirks = XHCI_SG_TRB_CACHE_SIZE_QUIRK,
-+};
- 
- static int dwc3_host_get_irq(struct dwc3 *dwc)
- {
-@@ -87,6 +96,11 @@ int dwc3_host_init(struct dwc3 *dwc)
- 		goto err;
- 	}
- 
-+	ret = platform_device_add_data(xhci, &dwc3_pdata, sizeof(dwc3_pdata));
-+	if (ret) {
-+		dev_err(dwc->dev, "couldn't add platform data to xHCI device\n");
-+		goto err;
-+	}
- 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
- 
- 	if (dwc->usb3_lpm_capable)
--- 
-2.28.0
+My bot found errors running 'make dt_binding_check' on your patch:
+
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/mediatek,tphy.example.dt.yaml: usb@11271000: compatible: ['mediatek,mt8173-mtu3'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/mediatek,tphy.example.dt.yaml: usb@11271000: 'clocks' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/mediatek,tphy.example.dt.yaml: usb@11271000: 'clock-names' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+
+
+See https://patchwork.ozlabs.org/patch/1381414
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
 
