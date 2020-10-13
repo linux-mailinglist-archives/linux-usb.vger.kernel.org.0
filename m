@@ -2,54 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8D228C81A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 07:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C5228C83F
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 07:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732277AbgJMFKP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 13 Oct 2020 01:10:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54522 "EHLO mail.kernel.org"
+        id S1732381AbgJMFV4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 01:21:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57530 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727482AbgJMFKP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Oct 2020 01:10:15 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209411] When retrieving string descriptor from mobile device
- returns eproto error
-Date:   Tue, 13 Oct 2020 05:10:15 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: larsm17@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209411-208809-ZIRVtcX7Oc@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209411-208809@https.bugzilla.kernel.org/>
-References: <bug-209411-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1732320AbgJMFV4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Oct 2020 01:21:56 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C4C4020872;
+        Tue, 13 Oct 2020 05:21:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602566514;
+        bh=OwXE0mUrRwYdSzEBDK6eQZjP0OakM/fXBcxny4Xq+7k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=deU+CRa4uzH8T+zyXk7acVOs8sL0fHLlYQBijZGWwn5C6mWkwygTdPaqY1h6KEIt4
+         sYsHg5rqB23ZQ6tL5O1rlczJc+yEOYaDtowSPqG14ZAonH8p6pP3Xx2tWfDukOJsM1
+         RNt/BV220toadS89VgomzvXmjXQRT/l5bOBS/75g=
+Date:   Tue, 13 Oct 2020 07:21:50 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-safety@lists.elisa.tech,
+        linux-usb@vger.kernel.org
+Subject: Re: [linux-safety] [PATCH] usb: host: ehci-sched: add comment about
+ find_tt() not returning error
+Message-ID: <20201013052150.GA330398@kroah.com>
+References: <20201011205008.24369-1-sudipm.mukherjee@gmail.com>
+ <alpine.DEB.2.21.2010121550300.6487@felia>
+ <20201012145710.GA631710@rowland.harvard.edu>
+ <alpine.DEB.2.21.2010121659040.6487@felia>
+ <20201012160013.GA632789@rowland.harvard.edu>
+ <alpine.DEB.2.21.2010122008370.17866@felia>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2010122008370.17866@felia>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209411
+On Mon, Oct 12, 2020 at 08:17:34PM +0200, Lukas Bulwahn wrote:
+> > If you are suggesting some sort of special code annotation that the tool 
+> > would understand, I am open to that.  But I'm not aware of any even 
+> > vaguely standard way of marking up a particular function call to 
+> > indicate it will not return an error.
+> 
+> I cannot yet say if some annotation would work, we, Sudip and me, need to 
+> investigate. It could be that something like, assert(!IS_ERR(tt)), is 
+> sufficient to let the tools know that they can safely assume that the 
+> path they are complaining about is not possible.
+> 
+> We could make the assert() a nop, so it would not effect the resulting 
+> object code in any way.
 
---- Comment #42 from Lars Melin (larsm17@gmail.com) ---
-It won't take you long to change your program to select config#0, wait 100mS,
-then select the intended config in order to test if that is the problem.
+Things like assert() have been rejected numberous times in the past in
+the kernel, good luck with that :)
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+greg k-h
