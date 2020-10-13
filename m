@@ -2,66 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CB428D35B
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 19:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D566C28D388
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 20:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727323AbgJMR6U convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 13 Oct 2020 13:58:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56564 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727190AbgJMR6U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Oct 2020 13:58:20 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209411] When retrieving string descriptor from mobile device
- returns eproto error
-Date:   Tue, 13 Oct 2020 17:58:19 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: rachithas104@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209411-208809-NwfjtwBj43@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209411-208809@https.bugzilla.kernel.org/>
-References: <bug-209411-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1728216AbgJMSVM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 14:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728188AbgJMSVM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 14:21:12 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B106FC0613D0;
+        Tue, 13 Oct 2020 11:21:11 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5EF43B87;
+        Tue, 13 Oct 2020 20:21:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1602613267;
+        bh=uNdQgYBn6J6CRCexb0fARlaAUo2p5ArcS4xeWUhOs6s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=io1UsLL9//j2D/vqza6k35qzJzan6exhFZexus9mEjA8Unk7vMMjVG0gcle/gSGeX
+         KhjbKHCK2dY9UvFy4Gvtf/CnIuQC90glnVynYEQkJyXhM6KgXbo3zaqVUCtOJXQxqc
+         hyLuJVfPzQA1b5n3K2+2TzhqS3NTmSQqjoiTInn8=
+Date:   Tue, 13 Oct 2020 21:20:21 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-usb@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [patch 2/4] media: omap3isp: Remove misleading comment
+Message-ID: <20201013182021.GE11939@pendragon.ideasonboard.com>
+References: <20201013142616.118697527@linutronix.de>
+ <20201013143731.704783731@linutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201013143731.704783731@linutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=209411
+Hi Thomas,
 
---- Comment #50 from rachithas104@gmail.com ---
-(In reply to Lars Melin from comment #44)
-> (In reply to rachithas104 from comment #43)
+Thank you for the patch.
+
+On Tue, Oct 13, 2020 at 04:26:18PM +0200, Thomas Gleixner wrote:
+> in_interrupt() covers hard and soft interrupt servicing and bottom half
+> disabled contexts, which is semantically ill defined.
+> 
+> The comment for __ccdc_lsc_configure() "Context: in_interrupt()" is
+> therefore as useful as "Context: unknown'. Remove it.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: linux-media@vger.kernel.org
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/media/platform/omap3isp/ispccdc.c |    5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> --- a/drivers/media/platform/omap3isp/ispccdc.c
+> +++ b/drivers/media/platform/omap3isp/ispccdc.c
+> @@ -299,11 +299,10 @@ static int ccdc_lsc_busy(struct isp_ccdc
+>  			     ISPCCDC_LSC_BUSY;
+>  }
 >  
-> > There is only one configuration
+> -/* __ccdc_lsc_configure - Apply a new configuration to the LSC engine
+> +/*
+> + * __ccdc_lsc_configure - Apply a new configuration to the LSC engine
+>   * @ccdc: Pointer to ISP CCDC device
+>   * @req: New configuration request
+> - *
+> - * context: in_interrupt()
+>   */
+>  static int __ccdc_lsc_configure(struct isp_ccdc_device *ccdc,
+>  				struct ispccdc_lsc_config_req *req)
 > 
-> So why do you then select configuration when the configuration descriptor
-> tells you that there is only one?
-> 
-> You have a 'user space driver' attached to the PTP interface, are you
-> running under a virtual machine or what is that driver?
-
-I have attached traces when I am trying to enumerate mobile device in PTP mode 
-Working-without calling SelectConfiguration
-Non-working -calling SelectConfiguration
 
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Regards,
+
+Laurent Pinchart
