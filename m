@@ -2,73 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6BF28CCAE
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 13:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D128628CCF1
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 13:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727102AbgJMLma (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 07:42:30 -0400
-Received: from mga06.intel.com ([134.134.136.31]:34062 "EHLO mga06.intel.com"
+        id S1727807AbgJMLzV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 07:55:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726388AbgJMLm3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Oct 2020 07:42:29 -0400
-IronPort-SDR: Xvpqxlhl4wwiS7y0TSejNfA+9gwuJeKsh2bCqwSmJ8MXZqtr2HnbNC/OqxD27RTwe9dKCJGQQ3
- tFUQr48x7AEQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9772"; a="227533114"
-X-IronPort-AV: E=Sophos;i="5.77,370,1596524400"; 
-   d="scan'208";a="227533114"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2020 04:42:26 -0700
-IronPort-SDR: 4DLS+NwWImG7ltnbt45OuGGxGfkBzEsEWhp/3BkEZOwoeK64dwt3EgnXutdmw/HWlL1xeJscVv
- E0Vw0vVyR4Fw==
-X-IronPort-AV: E=Sophos;i="5.77,370,1596524400"; 
-   d="scan'208";a="318263274"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2020 04:42:24 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kSIiD-005mp7-1D; Tue, 13 Oct 2020 14:43:25 +0300
-Date:   Tue, 13 Oct 2020 14:43:25 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jing Xiangfeng <jingxiangfeng@huawei.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Add the missed ida_simple_remove() in
- ring_request_msix()
-Message-ID: <20201013114325.GK4077@smile.fi.intel.com>
-References: <20201013024518.195557-1-jingxiangfeng@huawei.com>
+        id S1727784AbgJMLzP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Oct 2020 07:55:15 -0400
+Received: from mail.kernel.org (ip5f5ad5b2.dynamic.kabel-deutschland.de [95.90.213.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 965D422A99;
+        Tue, 13 Oct 2020 11:54:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602590081;
+        bh=uAmqZ5lhgQiIp+ZbTBM+IlrsfVig3NUg8EB06Ii3lck=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=2AUv003PEQqzp/imI9kPO7WeM/6rd/WU2eND45jdZjIN9DKJA4sGPPIxyWQ5FGAIi
+         QmWvS3GEar59Anl5Ay4udv9oVByPhCSUrO70oIN+3S/iT45MqoYrkhR6s2DnLGTpKi
+         uTmpBcYN6D4HxgegcKbTyXzQ+YMLvosOxAp0pLo8=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kSIt5-006CWK-Kf; Tue, 13 Oct 2020 13:54:39 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v6 67/80] usb: docs: document altmode register/unregister functions
+Date:   Tue, 13 Oct 2020 13:54:22 +0200
+Message-Id: <4bbcc5551b3b991f6f4934381b3c2b114a93083a.1602589096.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1602589096.git.mchehab+huawei@kernel.org>
+References: <cover.1602589096.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201013024518.195557-1-jingxiangfeng@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 10:45:18AM +0800, Jing Xiangfeng wrote:
-> ring_request_msix() misses to call ida_simple_remove() in an error path.
-> Add the missed function call to fix it.
+The typec_bus.rst asks for documentation of those two
+functions, but they don't exist:
 
-...
+	./drivers/usb/typec/bus.c:1: warning: 'typec_altmode_unregister_driver' not found
+	./drivers/usb/typec/bus.c:1: warning: 'typec_altmode_register_driver' not found
 
->  	ring->irq = pci_irq_vector(ring->nhi->pdev, ring->vector);
-> -	if (ring->irq < 0)
-> +	if (ring->irq < 0) {
-> +		ida_simple_remove(&nhi->msix_ida, ret);
->  		return ring->irq;
-> +	}
->  
->  	irqflags = no_suspend ? IRQF_NO_SUSPEND : 0;
->  	return request_irq(ring->irq, ring_msix, irqflags, "thunderbolt", ring);
+Also, they're not declared on bus.c but, instead, at a header
+file (typec_altmode.h).
 
-According to your logic don't you need it here as well?
+So, add documentation for both functions at the header and
+change the kernel-doc markup under typec_bus.rst to point
+to the right place.
 
+While here, also place the documentation for both structs
+declared on typec_altmode.h at the rst file.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/driver-api/usb/typec_bus.rst |  8 +++++++-
+ include/linux/usb/typec_altmode.h          | 16 ++++++++++++++++
+ 2 files changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/driver-api/usb/typec_bus.rst b/Documentation/driver-api/usb/typec_bus.rst
+index 03dfa9c018b7..21c890ae17e5 100644
+--- a/Documentation/driver-api/usb/typec_bus.rst
++++ b/Documentation/driver-api/usb/typec_bus.rst
+@@ -91,10 +91,16 @@ their control.
+ Driver API
+ ----------
+ 
++Alternate mode structs
++~~~~~~~~~~~~~~~~~~~~~~
++
++.. kernel-doc:: include/linux/usb/typec_altmode.h
++   :functions: typec_altmode_driver typec_altmode_ops
++
+ Alternate mode driver registering/unregistering
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-.. kernel-doc:: drivers/usb/typec/bus.c
++.. kernel-doc:: include/linux/usb/typec_altmode.h
+    :functions: typec_altmode_register_driver typec_altmode_unregister_driver
+ 
+ Alternate mode driver operations
+diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+index a4b65eaa0f62..5e0a7b7647c3 100644
+--- a/include/linux/usb/typec_altmode.h
++++ b/include/linux/usb/typec_altmode.h
+@@ -152,10 +152,26 @@ struct typec_altmode_driver {
+ #define to_altmode_driver(d) container_of(d, struct typec_altmode_driver, \
+ 					  driver)
+ 
++/**
++ * typec_altmode_register_driver - registers a USB Type-C alternate mode
++ * 				   device driver
++ * @drv: pointer to struct typec_altmode_driver
++ *
++ * These drivers will be bind to the partner alternate mode devices. They will
++ * handle all SVID specific communication.
++ */
+ #define typec_altmode_register_driver(drv) \
+ 		__typec_altmode_register_driver(drv, THIS_MODULE)
+ int __typec_altmode_register_driver(struct typec_altmode_driver *drv,
+ 				    struct module *module);
++/**
++ * typec_altmode_unregister_driver - unregisters a USB Type-C alternate mode
++ * 				     device driver
++ * @drv: pointer to struct typec_altmode_driver
++ *
++ * These drivers will be bind to the partner alternate mode devices. They will
++ * handle all SVID specific communication.
++ */
+ void typec_altmode_unregister_driver(struct typec_altmode_driver *drv);
+ 
+ #define module_typec_altmode_driver(__typec_altmode_driver) \
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.26.2
 
