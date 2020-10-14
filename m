@@ -2,92 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64DE28DB9F
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 10:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8B728DBBA
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 10:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729041AbgJNIdj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Oct 2020 04:33:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54714 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728529AbgJNIdj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Oct 2020 04:33:39 -0400
-Received: from localhost (unknown [213.57.247.131])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0D8EC20BED;
-        Wed, 14 Oct 2020 08:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602664421;
-        bh=/dGk88bZs3Ic6n91kz7PXwwQ+Cneh7yiXetXdzrM3Qg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J0FGzleLohyyZw/qGL9hzcktx4vPA2EWddr7acwRoTbMHX+8V06iva4bmTnmgabb3
-         xglAFl+u2v7dUp7UPNuw0WjK0WCknlx3tSoBiZBEutnjeNZ3fmjzId0zkemPtgwMYC
-         95Feopd2RItcnVSgVJrneWxst3xYmbg6Il2pH7P4=
-Date:   Wed, 14 Oct 2020 11:33:36 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Oliver Neukum <oneukum@suse.com>,
-        Igor Mitsyanko <imitsyanko@quantenna.com>,
-        Sergey Matyukevich <geomatsi@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        linux-rdma@vger.kernel.org,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next v2 00/12] net: add and use function
- dev_fetch_sw_netstats for fetching pcpu_sw_netstats
-Message-ID: <20201014083336.GH6305@unreal>
-References: <d77b65de-1793-f808-66b5-aaa4e7c8a8f0@gmail.com>
- <20201013173951.25677bcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20201014054250.GB6305@unreal>
- <3be8fd19-1c7e-0e05-6039-e5404b2682b9@gmail.com>
- <20201014075310.GG6305@unreal>
- <cb02626b-71bd-360d-c864-5dac2a1a7603@gmail.com>
- <fde05983ff9bc6584ad7ee5136b9f9f17902e600.camel@sipsolutions.net>
+        id S1729657AbgJNIhR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Oct 2020 04:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729472AbgJNIhR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Oct 2020 04:37:17 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE756C051111
+        for <linux-usb@vger.kernel.org>; Wed, 14 Oct 2020 01:37:16 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id a7so2755029lfk.9
+        for <linux-usb@vger.kernel.org>; Wed, 14 Oct 2020 01:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Fdlp1OkYjpA8k3eS7clBSf+ezld3M1TODVaJQo9WX5Q=;
+        b=np44jYrcryqxuO52hoPLfQJAh+lcm1zm+1BUExjP+E29qmMK16+KzljnpXftRVnzYJ
+         iMa0ygRhdVFFKKs808rV09fkHTdxApqbJUiUIWpKfTk7TB9Rqn0S4xr1zr0sHa+i4jcw
+         v5fWJxJiOQL6cUGS0jBiEp+3gxjQhrWavrpkovgQW7Xhz5+8lLzFICWL6D6ary745AyY
+         ImfYx68wNqhxVBqb+/PBRi/dhy9zhf0xsf/+fc7Tm6CtHc09QblY3CfyX+YIoHndjreS
+         mtk2qM8Rwmg8GjV+WusMR3Abwecxa8gZaQqp9RVFmGdj/xtksT2ulF0i1XY3hXiONmC2
+         z5tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Fdlp1OkYjpA8k3eS7clBSf+ezld3M1TODVaJQo9WX5Q=;
+        b=c+XcrX7taAh95dAI6TG5hxf01yenxXSl0fTSdqDfsAKVKYB3onrlPSqxa3yrIcZ6t+
+         yMegRn5zbvOJV+8L6omZ/dn08Vi8ehHoHlQiRZn5tZ8tpU2tCkVcEMpg9cobRgFJRR6y
+         30yy/AQKIASPYMRHKQakOvJYYixqCBfXIWzMM3M5rUD/uSfgGbCmAuarO2JiOgTLxslw
+         aREzc41Ppo//NcbJ2AsVEQ6PSEjMeggv02G+Q3Jgx2m3o6PCHKCIEtjyTFwW1gdbHolz
+         NBewmFjo5UpSxv3X35GIQLITGUIu8I+mHixYq1KyXzrIqdiWSIUQyd84cQtzN+vMje/W
+         0WHw==
+X-Gm-Message-State: AOAM533k4aHDNcNQpLE0eEmXBsZggZkbajv/9JXE9itnNrFZuTcPOSrN
+        11TPpORE/dKqY+T+DVY5Ig1g7QTQYkw=
+X-Google-Smtp-Source: ABdhPJzc8tYAr2MQycsibbArnHIaB+kKzSYTQkGccqJDrsovTVJjFSSvKTdjgL5VqkeVA9Xq1t4n/Q==
+X-Received: by 2002:ac2:5c4b:: with SMTP id s11mr940873lfp.545.1602664635039;
+        Wed, 14 Oct 2020 01:37:15 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:81c:8735:1811:e3d4:3826:3ef4? ([2a00:1fa0:81c:8735:1811:e3d4:3826:3ef4])
+        by smtp.gmail.com with ESMTPSA id w142sm873316lff.108.2020.10.14.01.37.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Oct 2020 01:37:14 -0700 (PDT)
+Subject: Re: [PATCH v4 3/3] usb: dwc3: Pass quirk as platform data
+To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>
+References: <cover.1602592488.git.joglekar@synopsys.com>
+ <b3dbe5d9de39fb5105b8474e9c560917a78e2c63.1602592488.git.joglekar@synopsys.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <29322e22-3b5b-037d-82ba-8e8ac28cd325@gmail.com>
+Date:   Wed, 14 Oct 2020 11:37:04 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fde05983ff9bc6584ad7ee5136b9f9f17902e600.camel@sipsolutions.net>
+In-Reply-To: <b3dbe5d9de39fb5105b8474e9c560917a78e2c63.1602592488.git.joglekar@synopsys.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 10:01:20AM +0200, Johannes Berg wrote:
-> On Wed, 2020-10-14 at 09:59 +0200, Heiner Kallweit wrote:
-> >
-> > > Do you have a link? What is the benefit and how can we use it?
-> > >
-> > https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1873080.html
+Hello!
 
-So why is it usable?
-The combination of Link, b4 and git range-diff gives everything in much
-more reliable way.
+On 13.10.2020 15:44, Tejas Joglekar wrote:
 
->
-> There was also a long discussion a year or so back, starting at
->
-> http://lore.kernel.org/r/7b73e1b7-cc34-982d-2a9c-acf62b88da16@linuxfoundation.org
+> This commit adds the platform device data to setup
+> the XHCI_SG_TRB_CACHE_SIZE_QUIRK quirk. DWC3 hosts
+> which are PCI devices does not use OF to create platform device
+> but create xhci-plat platform device runtime. So
+                                       ^ at
 
-I participated in that discussion too :)
+> this patch allow parent device to supply the quirk
 
-Thanks
+    Allows.
 
->
-> johannes
->
+> through platform data.
+> 
+> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
+> ---
+>   drivers/usb/dwc3/host.c | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index e195176580de..dd7c742333f7 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -11,6 +11,15 @@
+>   #include <linux/platform_device.h>
+>   
+>   #include "core.h"
+> +#include "../host/xhci-plat.h"
+> +
+> +static const struct xhci_plat_priv dwc3_pdata = {
+> +	.plat_start = NULL,
+> +	.init_quirk = NULL,
+> +	.suspend_quirk = NULL,
+> +	.resume_quirk = NULL,
+
+    Why not rely on the compiler to fill these with zeros?
+
+> +	.quirks = XHCI_SG_TRB_CACHE_SIZE_QUIRK,
+> +};
+>   
+>   static int dwc3_host_get_irq(struct dwc3 *dwc)
+>   {
+[...]
+
+MBR, Sergei
