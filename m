@@ -2,77 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F7128DB0C
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 10:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042E128DAE0
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 10:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729034AbgJNITk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Oct 2020 04:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728945AbgJNITe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Oct 2020 04:19:34 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86540C051131;
-        Wed, 14 Oct 2020 01:02:19 -0700 (PDT)
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1kSbj1-005Zm4-FC; Wed, 14 Oct 2020 10:01:31 +0200
-Message-ID: <fde05983ff9bc6584ad7ee5136b9f9f17902e600.camel@sipsolutions.net>
-Subject: Re: [PATCH net-next v2 00/12] net: add and use function
- dev_fetch_sw_netstats for fetching pcpu_sw_netstats
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        =?ISO-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Oliver Neukum <oneukum@suse.com>,
-        Igor Mitsyanko <imitsyanko@quantenna.com>,
-        Sergey Matyukevich <geomatsi@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        linux-rdma@vger.kernel.org,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        bridge@lists.linux-foundation.org
-Date:   Wed, 14 Oct 2020 10:01:20 +0200
-In-Reply-To: <cb02626b-71bd-360d-c864-5dac2a1a7603@gmail.com> (sfid-20201014_095918_492295_7EC63AAF)
-References: <d77b65de-1793-f808-66b5-aaa4e7c8a8f0@gmail.com>
-         <20201013173951.25677bcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-         <20201014054250.GB6305@unreal>
-         <3be8fd19-1c7e-0e05-6039-e5404b2682b9@gmail.com>
-         <20201014075310.GG6305@unreal>
-         <cb02626b-71bd-360d-c864-5dac2a1a7603@gmail.com>
-         (sfid-20201014_095918_492295_7EC63AAF)
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+        id S1728518AbgJNIMM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Oct 2020 04:12:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47476 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727975AbgJNIMM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Oct 2020 04:12:12 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB84E20BED;
+        Wed, 14 Oct 2020 08:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602663131;
+        bh=lH0KrnmsAQwSxyXbijcTJR6ZvATZeoZEXThXqLDOPsQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1ecuOvSpJPmeEYBXS6rG3ByF3A4tWfONx2O8sAeDIKrG7/ZvYxUwNmmYnveHcUz/j
+         I24dSJgVjvFdM9KymDQTzPcY/DYGBnqx15srsMwzjGoBKKYWIpLtYd9cPxY9f9fWv+
+         91OgOIzPA+pvpQNHXa0jVzgETHDb4jBY1TkJxoxw=
+Date:   Wed, 14 Oct 2020 10:12:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Zqiang <qiang.zhang@windriver.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: function: printer: Fix usb function
+ descriptors leak
+Message-ID: <20201014081246.GB3009479@kroah.com>
+References: <20201014075523.15688-1-qiang.zhang@windriver.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201014075523.15688-1-qiang.zhang@windriver.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2020-10-14 at 09:59 +0200, Heiner Kallweit wrote:
+On Wed, Oct 14, 2020 at 03:55:23PM +0800, Zqiang wrote:
+> If an error occurs after call 'usb_assign_descriptors' func, the
+> 'usb_free_all_descriptors' need to be call to release memory space
+> occupied by function descriptors.
 > 
-> > Do you have a link? What is the benefit and how can we use it?
-> > 
-> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1873080.html
+> Signed-off-by: Zqiang <qiang.zhang@windriver.com>
 
-There was also a long discussion a year or so back, starting at
+Please use your ful name for the From: and signed-off-by lines, as the
+documentation states is required.  If this is your full name, then why
+does it not match the name on your email address from your employer?
 
-http://lore.kernel.org/r/7b73e1b7-cc34-982d-2a9c-acf62b88da16@linuxfoundation.org
+> ---
+>  drivers/usb/gadget/function/f_printer.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+> index 64a4112068fc..2f1eb2e81d30 100644
+> --- a/drivers/usb/gadget/function/f_printer.c
+> +++ b/drivers/usb/gadget/function/f_printer.c
+> @@ -1162,6 +1162,7 @@ static int printer_func_bind(struct usb_configuration *c,
+>  		printer_req_free(dev->in_ep, req);
+>  	}
+>  
+> +	usb_free_all_descriptors(f);
 
-johannes
+What commit caused this problem?
 
+thanks,
+
+greg k-h
