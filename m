@@ -2,107 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F7528E362
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 17:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC1A28E381
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 17:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727924AbgJNPiH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Oct 2020 11:38:07 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:59450 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726819AbgJNPiH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Oct 2020 11:38:07 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1602689885;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m2iWZa0Dgtln2P067G8zfxg1NzKCpf1TIelo7BayWic=;
-        b=rWYeJo9YAtgTogv3yuYKQVrRYvAm3UcZ/87Mt+UDIq1wWNmSZafPXRmB3rhzhrEblMEitU
-        WzJKYuP9hg6QiNW6RTN4XVWTU8MXC3Y2VXyHMRSuWtryTC77scdMxaHJwer7uVDmOSOQxO
-        XdPA6I6lsNXtB+KYB2EeKQ4KnTJNNGargqZPYe7ueosQSKefSZCCcJfTS/onQqD3Eqq7D5
-        jAHJGRTpbMJZ+hntQVji7kmJT4XQKf+Ef0ZCZRHyFT5mZ/4uFyzoajSnZXbaktYhRN+IpS
-        lJTR4RaFJS+FGEKbScZeKbtIZMOJy8JagmqbTUMgP1qe90ICF98pXxJObjM0KQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1602689885;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m2iWZa0Dgtln2P067G8zfxg1NzKCpf1TIelo7BayWic=;
-        b=wOVi2pp78esrGxAluLINELnbH1L/UdCJbQaHUg9n8fdNb3rWysQw0MPzRsSMV2yerpq398
-        D59dBYhIGKb5ChBA==
-To:     LKML <linux-kernel@vger.kernel.org>
+        id S1729605AbgJNPqB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Oct 2020 11:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387507AbgJNPpy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Oct 2020 11:45:54 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801E5C0613D4
+        for <linux-usb@vger.kernel.org>; Wed, 14 Oct 2020 08:45:52 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id k21so1862314ioa.9
+        for <linux-usb@vger.kernel.org>; Wed, 14 Oct 2020 08:45:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GVsFzR74egr+o93/X35XS2maZ1vLsmxHPBrJlJDsuhI=;
+        b=X4aAHpmKSHgU3/84qpUaV903w1xkwCtvsv7XMV8dUuc9QnpjmB/jKfLFcdpqh7UmY4
+         IG9lWFz+HRgkE8tRa/pOXAXobj0l94fXgiNfyoap+V7yrzg1LQqQgDVrbGZk1Qt7MpXw
+         IsWNMw7UDTAPcoV7udFaMBNkFCpbRweWEvQFc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GVsFzR74egr+o93/X35XS2maZ1vLsmxHPBrJlJDsuhI=;
+        b=n1xa0ALMORRd7CadgL+FADFaXheFUkTcC2vTTHXX+VAecWFiGrKJXDbeWZR3ZfsA8y
+         /thuV8slAwzXds9MOarCODDthigzHpcCO7IZKint7DAmhN/zdoN8Pg/L/ntnkXqPUbzx
+         vilHEzWJgX17TDereLNoJvqc/SXikYQmzW1tAG6Gm2pmUxpRo9NwBXhZXZQjWL6sFHaY
+         dt/gFfQLzyYSrTbdn0DwAWGx3Zb+xBL/3qUsSwbDyhieloCMzKI+EfbfdTC4FBnEhyl4
+         Q2YmQX8Pwscd8tyLzY0YH49LroeULJ7OvTiunZOAHHPoFi3/WiHWLXVq7jygvZ6pKFdm
+         4Omw==
+X-Gm-Message-State: AOAM530GdlkFXdpdwzeh2rRXdq5FKSsMiO40j76BFsbgjyg8/KdG/dFj
+        LupZ5unauFE44d+y9M88oWkxig==
+X-Google-Smtp-Source: ABdhPJxFL0dEO8+kC0xlhiweNLkyf1APFnjIPT9B9l6CjUgbzU9W6XQstgVJjfauCC4EZCo/jPEspg==
+X-Received: by 2002:a02:a510:: with SMTP id e16mr43790jam.51.1602690351653;
+        Wed, 14 Oct 2020 08:45:51 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id t22sm3922965ili.9.2020.10.14.08.45.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Oct 2020 08:45:50 -0700 (PDT)
+Subject: Re: [patch 07/12] usbip: Remove in_interrupt() check
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org
-Subject: [patch V2 4/4] media: cx231xx: Consolidate dmesg output
-In-Reply-To: <20201013143731.974452990@linutronix.de>
-References: <20201013142616.118697527@linutronix.de> <20201013143731.974452990@linutronix.de>
-Date:   Wed, 14 Oct 2020 17:38:04 +0200
-Message-ID: <87lfg8byxv.fsf@nanos.tec.linutronix.de>
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        Johan Hovold <johan@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Duncan Sands <duncan.sands@free.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201014145215.518912759@linutronix.de>
+ <20201014145727.828083323@linutronix.de>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <fa656cc7-a323-7013-8435-915a1f8b5866@linuxfoundation.org>
+Date:   Wed, 14 Oct 2020 09:45:49 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20201014145727.828083323@linutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The memory allocations in cx231xx_init_*() happen all in task context with
-GFP_KERNEL. Therefore a dev_err() trying to deduce whether this is called
-from task or interrupt context is pretty useless.
+On 10/14/20 8:52 AM, Thomas Gleixner wrote:
+> From: Ahmed S. Darwish <a.darwish@linutronix.de>
+> 
+> The usage of in_interrupt() in drivers is phased out and Linus clearly
+> requested that code which changes behaviour depending on context should
+> either be separated or the context be conveyed in an argument passed by the
+> caller, which usually knows the context.
+> 
+> usbip_recv() uses in_interrupt() to conditionally print context information
+> for debugging messages. The value is zero as the function is only called
+> from various *_rx_loop() kthread functions. Remove it.
+> 
+> Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Valentina Manea <valentina.manea.m@gmail.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> 
+> ---
+>   drivers/usb/usbip/usbip_common.c |    5 -----
+>   1 file changed, 5 deletions(-)
+> 
+> --- a/drivers/usb/usbip/usbip_common.c
+> +++ b/drivers/usb/usbip/usbip_common.c
+> @@ -324,11 +324,6 @@ int usbip_recv(struct socket *sock, void
+>   	} while (msg_data_left(&msg));
+>   
+>   	if (usbip_dbg_flag_xmit) {
+> -		if (!in_interrupt())
+> -			pr_debug("%-10s:", current->comm);
+> -		else
+> -			pr_debug("interrupt  :");
+> -
+>   		pr_debug("receiving....\n");
+>   		usbip_dump_buffer(buf, size);
+>   		pr_debug("received, osize %d ret %d size %zd total %d\n",
+> 
+> 
 
-Remove these historical leftovers.
+Looks good to me.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: linux-media@vger.kernel.org
----
-V2: Removed the extra format specifier (0day)
----
- drivers/media/usb/cx231xx/cx231xx-core.c |   10 ++++------
- drivers/media/usb/cx231xx/cx231xx-vbi.c  |    5 ++---
- 2 files changed, 6 insertions(+), 9 deletions(-)
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
---- a/drivers/media/usb/cx231xx/cx231xx-core.c
-+++ b/drivers/media/usb/cx231xx/cx231xx-core.c
-@@ -1065,9 +1065,8 @@ int cx231xx_init_isoc(struct cx231xx *de
- 				       &urb->transfer_dma);
- 		if (!dev->video_mode.isoc_ctl.transfer_buffer[i]) {
- 			dev_err(dev->dev,
--				"unable to allocate %i bytes for transfer buffer %i%s\n",
--				sb_size, i,
--				in_interrupt() ? " while in int" : "");
-+				"unable to allocate %i bytes for transfer buffer %i\n",
-+				sb_size, i);
- 			cx231xx_uninit_isoc(dev);
- 			return -ENOMEM;
- 		}
-@@ -1201,9 +1200,8 @@ int cx231xx_init_bulk(struct cx231xx *de
- 				     &urb->transfer_dma);
- 		if (!dev->video_mode.bulk_ctl.transfer_buffer[i]) {
- 			dev_err(dev->dev,
--				"unable to allocate %i bytes for transfer buffer %i%s\n",
--				sb_size, i,
--				in_interrupt() ? " while in int" : "");
-+				"unable to allocate %i bytes for transfer buffer %i\n",
-+				sb_size, i);
- 			cx231xx_uninit_bulk(dev);
- 			return -ENOMEM;
- 		}
---- a/drivers/media/usb/cx231xx/cx231xx-vbi.c
-+++ b/drivers/media/usb/cx231xx/cx231xx-vbi.c
-@@ -408,9 +408,8 @@ int cx231xx_init_vbi_isoc(struct cx231xx
- 		    kzalloc(sb_size, GFP_KERNEL);
- 		if (!dev->vbi_mode.bulk_ctl.transfer_buffer[i]) {
- 			dev_err(dev->dev,
--				"unable to allocate %i bytes for transfer buffer %i%s\n",
--				sb_size, i,
--				in_interrupt() ? " while in int" : "");
-+				"unable to allocate %i bytes for transfer buffer %i\n",
-+				sb_size, i);
- 			cx231xx_uninit_vbi_isoc(dev);
- 			return -ENOMEM;
- 		}
+thanks,
+-- Shuah
+
