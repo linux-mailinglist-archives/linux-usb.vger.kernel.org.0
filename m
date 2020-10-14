@@ -2,165 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FF328E45B
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 18:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F68F28E461
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 18:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387396AbgJNQ0G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Oct 2020 12:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727071AbgJNQ0G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Oct 2020 12:26:06 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1115EC0613D2
-        for <linux-usb@vger.kernel.org>; Wed, 14 Oct 2020 09:26:06 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id m9so2608036qth.7
-        for <linux-usb@vger.kernel.org>; Wed, 14 Oct 2020 09:26:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ezb7YqWZVrJaCKJV67gX4kc5lKOmF1DjdN8/j6/OFck=;
-        b=ewcOW6EvnspyZ52QGl9rHoQ67VpyCbxngY5O/0oQ31cyVRqtwx2LN2OljA7OnWfRIb
-         2KyYn46i1C/pNtWgEAEYFLSzIKNr/BRfWA3+abPLpkymDj2eLko+3P8ZJ14v1LVpEuUW
-         mxYgPzQnirrJHecfl9p+vClPguOvxc5gFj4QfWqZ+ys2yzr6iejdCC0xqmLG7ciLWGht
-         YJkUAYipdvLrrZ3MGqD1VjyoT/ve0eHdqe56brWFLa5qcs+CXQALzA+DF4KnqB77WI3y
-         OQGggC7wzxo40AJ4M46Krk2X93dnAP3N0YDIbGedK3V3y3+hq8TjgdY876j/U+KxdRp/
-         QVKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ezb7YqWZVrJaCKJV67gX4kc5lKOmF1DjdN8/j6/OFck=;
-        b=XbTTNx8euxed8sbq1lHuNiXr3gmIDSPc1CV6TxiP0UZJU38BxnyGkM8LTwnD045Eik
-         Niut6js9nh5wicAdJ3RSlLJnJVJXElBGh9y/NoOiJEt/OIi4WKF0IYWnA4Szbs2oI2Z3
-         R1VoLuKxP6ZSxlkfDKXPXg6yIQ11ObykYTeIKt6ikypO3wE/jpBKY0AIpmwCD31sod4Q
-         Zh4ze6bttcAAMxmpy1YVexbLiryb2fK3uMkaknRSdxQvlzxfIid99LOpCEIv7i3hPQ+U
-         X/EumwAhsUwoxQesWm5TQMTzsASvNiWx6k7ReqRlmCg5rzQcbbUwOyY1d7Pc6F1AY5CI
-         vlmw==
-X-Gm-Message-State: AOAM533g9t7NyXCpJ9KEav+VLqqYC0Ui1jJDVex9K60pQ/LsecxHPhOO
-        A98Cr78ElB8aMxjWOXXacL4Bu+ewGHsgQV9m9M2uew==
-X-Google-Smtp-Source: ABdhPJyFs+okr+cN5qm0GDm0Z6tBqa97vLdQe5IacZVByeQY5q3d+xmwB6sFgr7AQ2eHzOGUc+J8DirYRjc4b28ZJK8=
-X-Received: by 2002:ac8:57c1:: with SMTP id w1mr5560420qta.290.1602692764783;
- Wed, 14 Oct 2020 09:26:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000d3c499057536ce86@google.com> <000000000000c69c7805adef8597@google.com>
- <20200829012415.GB486691@rowland.harvard.edu> <CAAeHK+z2KDbNVW5_5BA8P+r=8+VQY1p9ksJmny6ZW0xR3zBobA@mail.gmail.com>
-In-Reply-To: <CAAeHK+z2KDbNVW5_5BA8P+r=8+VQY1p9ksJmny6ZW0xR3zBobA@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 14 Oct 2020 18:25:53 +0200
-Message-ID: <CACT4Y+YUu6YzUwTYBYYyFLVkeW_AxftwE=qmQpQe4jMuwUjVSA@mail.gmail.com>
-Subject: Re: INFO: task hung in usb_bulk_msg
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>, Johan Hovold <johan@kernel.org>,
-        Kai Heng Feng <kai.heng.feng@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
+        id S2388297AbgJNQ1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Oct 2020 12:27:21 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:59738 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727071AbgJNQ1S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Oct 2020 12:27:18 -0400
+Date:   Wed, 14 Oct 2020 18:27:14 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1602692836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iCzjYxqIDkmw4xzx1KXku7b0cbN/u38jxZbnzmQ3jN8=;
+        b=L+xCqI9GxpRCoP8PngWCWAQ9wkdzpZ5WodbiV80p51AGMLkCWCgkkJouSD5NDTKKaAroqH
+        bEi6bv6abvSonjh+1Y12R0IyATkDhSK/gIBIqmUccHFDatfo1IDsEiCXwj/KvxA6xcB969
+        +QvmLvKCGJH+ljJRLWshZ7jhABUTtdtr7oF3r534O+65KNP+5PElTQ4ZLtbTPMG9aD58PS
+        cDKitk7SPcV0bjRsHW8LaycZTd7vJ45QOKO9ZwUrJBaHGZ0duR9einY6Sx9lu0AsA6t7MA
+        d8RfzgrkXilE9GPgUHUD0YyBNnf1JF+Rhl06BFTBmLBY5d1iHAlG7C7OIEDXqQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1602692836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iCzjYxqIDkmw4xzx1KXku7b0cbN/u38jxZbnzmQ3jN8=;
+        b=Tcm1BnHk6fiDiswRFgM+Nea81sLWNx1RNxoZwpZ/WAKUDTLpiU48x1RzsOa3CKc7I7gjpu
+        NnAHKINmRZmU+DAw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        rafael.j.wysocki@intel.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        Peter Zijlstra <peterz@infradead.org>,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-omap@vger.kernel.org,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Duncan Sands <duncan.sands@free.fr>
+Subject: Re: [patch 03/12] USB: serial: keyspan_pda: Consolidate room query
+Message-ID: <20201014162714.ctv5earlhwsp4iqs@linutronix.de>
+References: <20201014145215.518912759@linutronix.de>
+ <20201014145727.338773481@linutronix.de>
+ <20201014161433.GB712494@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201014161433.GB712494@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 31, 2020 at 3:08 PM 'Andrey Konovalov' via syzkaller-bugs
-<syzkaller-bugs@googlegroups.com> wrote:
->
-> On Sat, Aug 29, 2020 at 3:24 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Fri, Aug 28, 2020 at 05:52:16AM -0700, syzbot wrote:
-> > > syzbot has found a reproducer for the following issue on:
-> > >
-> > > HEAD commit:    15bc20c6 Merge tag 'tty-5.9-rc3' of git://git.kernel.org/p..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=1052a669900000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=978db74cb30aa994
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=7a7613e5ba9ae7bd15f9
-> > > compiler:       gcc (GCC) 10.1.0-syz 20200507
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101c328e900000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155eff41900000
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com
-> > >
-> > > INFO: task syz-executor790:9958 blocked for more than 143 seconds.
-> > >       Not tainted 5.9.0-rc2-syzkaller #0
-> > > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > > task:syz-executor790 state:D stack:28240 pid: 9958 ppid:  6854 flags:0x00004004
-> > > Call Trace:
-> > >  context_switch kernel/sched/core.c:3778 [inline]
-> > >  __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
-> > >  schedule+0xd0/0x2a0 kernel/sched/core.c:4602
-> > >  schedule_timeout+0x1d8/0x250 kernel/time/timer.c:1855
-> > >  do_wait_for_common kernel/sched/completion.c:85 [inline]
-> > >  __wait_for_common kernel/sched/completion.c:106 [inline]
-> > >  wait_for_common kernel/sched/completion.c:117 [inline]
-> > >  wait_for_completion_timeout+0x15e/0x270 kernel/sched/completion.c:157
-> > >  usb_start_wait_urb+0x144/0x2b0 drivers/usb/core/message.c:63
-> > >  usb_bulk_msg+0x226/0x550 drivers/usb/core/message.c:254
-> > >  do_proc_bulk+0x39b/0x710 drivers/usb/core/devio.c:1231
-> > >  proc_bulk drivers/usb/core/devio.c:1268 [inline]
-> > >  usbdev_do_ioctl drivers/usb/core/devio.c:2542 [inline]
-> > >  usbdev_ioctl+0x586/0x3360 drivers/usb/core/devio.c:2708
-> >
-> > I'm confused about this bug report.
-> >
-> > Here's the syz reproducer from the link listed above:
-> >
-> > #
-> > https://syzkaller.appspot.com/bug?id=bf172344c5f1d3487a4feff67c3dd30e08d5b635
-> > # See https://goo.gl/kgGztJ for information about syzkaller reproducers.
-> > #{"threaded":true,"repeat":true,"procs":6,"sandbox":"none","fault_call":-1,"netdev":true,"close_fds":true}
-> > r0 = syz_open_dev$usbfs(&(0x7f0000000040)='/dev/bus/usb/00#/00#\x00',
-> > 0x4000000000000071, 0x28081)
-> > r1 = socket$inet6(0xa, 0x2, 0x0)
-> > r2 = dup(r1)
-> > ioctl$PERF_EVENT_IOC_ENABLE(r2, 0x8912, 0x400200)
-> > socketpair$unix(0x1, 0x0, 0x0, &(0x7f0000000000))
-> > ioctl$USBDEVFS_CONTROL(r0, 0x8108551b, &(0x7f0000001140)={0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
-> > ioctl$USBDEVFS_CLEAR_HALT(r0, 0xc0185502, &(0x7f0000000000)={0x1, 0x1})
-> >
-> > As far as I can see, the only USB ioctls used in this test are
-> > USBDEVFS_CONTROL and USBDEVFS_CLEAR_HALT.  Neither of those calls
-> > do_proc_bulk() or usb_bulk_msg(), so how did those routines end up in
-> > the stack trace?
-> >
-> > In fact, do_proc_bulk() is called only for USBDEVFS_BULK.  But the test
-> > doesn't use that ioctl!
-> >
-> > What's going on?  Am I missing part of the test?
->
-> Hi Alan,
->
-> Yeah, it's a bit confusing, sorry for that. Since syzkaller mutates
-> the values that are passed into syscalls, it might mutate the cmd
-> value of an ioctl. This results in a mismatch between the name of a
-> syscall in syzkaller's notation, and the actual cmd value. In this
-> case we have:
->
-> ioctl$USBDEVFS_CONTROL(r0, 0x8108551b, ...)
->
-> where 0x8108551b == 2164806939, which is the value for
-> USBDEVFS_DISCONNECT_CLAIM [1], and
->
-> ioctl$USBDEVFS_CLEAR_HALT(r0, 0xc0185502, ...)
->
-> where 0xc0185502 == 3222820098, which is the value for USBDEVFS_BULK [2].
->
-> I remember Dmitry did some changes to this part, but I think syzkaller
-> only avoids getting disabled ioctls during mutations. Dmitry, maybe it
-> would make sense to avoid getting other known ioctls during mutations?
+On 2020-10-14 12:14:33 [-0400], Alan Stern wrote:
+> Instead, consider using the new usb_control_msg_recv() API.  But it 
+> might be better to allocate the buffer once and for all.
 
-Agree, it would make sense. I've started working on it but wasn't able
-to finish. It also affects get/setsockopt, fcntl, prctl, bpf and
-others. In this more general context it turns out to be an interesting
-problem figuring out what is that exactly we don't want to mutate and
-to what values.
+This will still allocate and free buffer on each invocation. What about
+moving the query_buf to the begin of the struct / align it?
+
+> Alan Stern
+
+Sebastian
