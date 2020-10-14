@@ -2,136 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCEC28DC5C
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 11:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCE428DEB3
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 12:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727589AbgJNJGi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Oct 2020 05:06:38 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:14541 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726032AbgJNJGi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:06:38 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1602666397; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=MYYoWLeS8eltVgolk99JskKAu43wy+MVbWHV08U+L7w=; b=RrlfH8X87tKzxfGG7+lUuDCFtWCbgUGA7lqaw4jnstYAkVpVho0R9+Ken3yO+MACER/RyBNS
- M8DFmxx/PXmcpjQAGgP7e/K4MUXaVOHznfUbM+Z0D8F7oqpzyebmJh7noAKMb/QCWJTzmjBV
- zWBnR2NSwwt9O4WpPO4grgFXnSM=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 5f86bf6bad37af35eccc1645 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 14 Oct 2020 09:05:47
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id AB5EDC43395; Wed, 14 Oct 2020 09:05:47 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.66.241] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 02532C433C9;
-        Wed, 14 Oct 2020 09:05:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 02532C433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v10 4/4] arm64: boot: dts: qcom: pm8150b: Add DTS node for
- PMIC VBUS booster
-To:     Rob Herring <robh@kernel.org>
-Cc:     sboyd@kernel.org, heikki.krogerus@linux.intel.com,
-        agross@kernel.org, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jackp@codeaurora.org,
-        sergei.shtylyov@gmail.com
-References: <20201008235934.8931-1-wcheng@codeaurora.org>
- <20201008235934.8931-5-wcheng@codeaurora.org>
- <20201013150316.GB3497815@bogus>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <77530347-cef9-2b06-dabe-678ae02ea7d5@codeaurora.org>
-Date:   Wed, 14 Oct 2020 02:05:45 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        id S1730148AbgJNKPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Oct 2020 06:15:48 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:45872 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729489AbgJNKON (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Oct 2020 06:14:13 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 96C84803202C;
+        Wed, 14 Oct 2020 10:14:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id b2-7tKniDWXL; Wed, 14 Oct 2020 13:14:06 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 00/20] dt-bindings: usb: Add generic USB HCD, xHCI, DWC USB3 DT schema
+Date:   Wed, 14 Oct 2020 13:13:42 +0300
+Message-ID: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-In-Reply-To: <20201013150316.GB3497815@bogus>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+We've performed some work on the Generic USB HCD, xHCI and DWC USB3 DT
+bindings in the framework of the Baikal-T1 SoC support integration into
+the kernel. This patchset is a result of that work.
 
+First of all we moved the generic USB properties from the legacy text
+bindings into the USB HCD DT schema. So now the generic USB HCD-compatible
+DT nodes are validated taking into account the optional properties like:
+maximum-speed, dr_mode, otg-rev, usb-role-switch, etc. We've fixed these
+properties a bit so they would correspond to what functionality kernel
+currently supports.
 
-On 10/13/2020 8:03 AM, Rob Herring wrote:
-> On Thu, Oct 08, 2020 at 04:59:34PM -0700, Wesley Cheng wrote:
->> Add the required DTS node for the USB VBUS output regulator, which is
->> available on PM8150B.  This will provide the VBUS source to connected
->> peripherals.
->>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> ---
->>  arch/arm64/boot/dts/qcom/pm8150b.dtsi   | 6 ++++++
->>  arch/arm64/boot/dts/qcom/sm8150-mtp.dts | 4 ++++
->>  2 files changed, 10 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
->> index 2bf385f5a55a..49ea597cc0c5 100644
->> --- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
->> @@ -53,6 +53,12 @@ power-on@800 {
->>  			status = "disabled";
->>  		};
->>  
->> +		pm8150b_vbus: regulator@1100 {
->> +			compatible = "qcom,pm8150b-vbus-reg";
->> +			status = "disabled";
->> +			reg = <0x1100>;
->> +		};
->> +
->>  		pm8150b_typec: usb-typec@1500 {
->>  			compatible = "qcom,pm8150b-usb-typec";
->>  			status = "disabled";
->> diff --git a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
->> index 6c6325c3af59..ba3b5b802954 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
->> +++ b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
->> @@ -409,6 +409,10 @@ &ufs_mem_phy {
->>  	vdda-pll-max-microamp = <19000>;
->>  };
->>  
->> +&pm8150b_vbus {
->> +	status = "okay";
->> +};
-> 
-> Why aren't you enabling the TypeC node and providing a complete example?
-> 
+Secondly we converted generic USB xHCI text bindings file into the DT
+schema. It had to be split up into two bindings: DT schema with generic
+xHCI properties and a generic xHCI device DT schema. The later will be
+used to validate the pure xHCI-based nodes, while the former can be
+utilized by some vendor-specific versions of xHCI.
 
-Hi Rob,
+Thirdly, what was primarily intended to be done for Baikal-T1 SoC USB we
+converted the legacy text-based DWC USB3 bindings to DT schema and altered
+the result a bit so it would be more coherent with what actually
+controller and its driver support. Since we've now got the DWC USB3 DT
+schema, we made it used to validate the sub-nodes of the Qualcom, TI and
+Amlogic DWC3 DT nodes.
 
-I have another patch series which enables the type C node and adds QMP
-PHY driver changes for setting the SS lane select MUX.
+Finally we've also fixed all the OHCI/EHCI, xHCI and DW USB3 compatible DT
+nodes so they would comply with the nodes naming scema declared in the USB
+HCD DT bindings file.
 
-https://patchwork.kernel.org/project/linux-arm-msm/list/?series=361971
+Link: https://lore.kernel.org/linux-usb/20201010224121.12672-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Thanks to Sergei Shtylyov for suggesting the commit logs grammar fixes:
+  [PATCH 04/18] dt-bindings: usb: usb-hcd: Add "ulpi/serial/hsic" PHY types
+  [PATCH 05/18] dt-bindings: usb: usb-hcd: Add "tpl-support" property
+  [PATCH 11/18] dt-bindings: usb: dwc3: Add interrupt-names property support
+  [PATCH 13/18] dt-bindings: usb: dwc3: Add Tx De-emphasis restrictions
+  [PATCH 17/18] dt-bindings: usb: keystone-dwc3: Validate DWC3 sub-node
+- Set FL-adj of the amlogiv,meson-g12a-usb controller with value 0x20 instead
+  of completely removing the property.
+- Drop the patch:
+  [PATCH 02/18] dt-bindings: usb: usb-hcd: Add "wireless" maximum-speed
+                property value
+  since "wireless" speed type is depracated due to lack of the device
+  supporting it.
+- Drop quotes from around the compat string constant.
+- Discard '|' from the property descriptions, since we don't need to preserve
+  the text formatting.
+- Convert abbreviated form of the "maximum-speed" enum constraint into
+  the multi-lined version of the list.
+- Fix the DW USB3 "clock-names" prop description to be refererring to the
+  enumerated clock-names instead of the ones from the Databook.
+- Add explicit "additionalProperties: true" to the usb-xhci.yaml schema,
+  since additionalProperties/unevaluatedProperties are going to be mandary
+  for each binding.
+- Use "oneOf: [dwc2.yaml#, snps,dwc3.yaml#]" instead of the bulky "if:
+  properties: compatibe: ..." statement.
+- Discard the "^dwc3@[0-9a-f]+$" nodes from being acceptable as sub-nodes
+  of the Qualcomm DWC3 DT nodes.
+- Add new patches:
+  [PATCH 18/20] arch: dts: Fix EHCI/OHCI DT nodes name
+  [PATCH 19/20] arch: dts: Fix xHCI DT nodes name
+  [PATCH 20/20] arch: dts: Fix DWC USB3 DT nodes name
 
-Just wanted to work on getting a PMIC based type C driver out there,
-which can be utilized in designs where the QMP PHY lane select mux is
-not going to be used. (ie using a FUSB340 as a lane select mux instead
-of the QMP PHY mux)
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Manu Gautam <mgautam@codeaurora.org>
+Cc: Roger Quadros <rogerq@ti.com>
+Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-usb@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-Thanks
+Serge Semin (20):
+  dt-bindings: usb: usb-hcd: Convert generic USB properties to DT schema
+  dt-bindings: usb: usb-hcd: Add "otg-rev" property restriction
+  dt-bindings: usb: usb-hcd: Add "ulpi/serial/hsic" PHY types
+  dt-bindings: usb: usb-hcd: Add "tpl-support" property
+  dt-bindings: usb: usb-hcd: Add generic "usb-phy" property
+  dt-bindings: usb: Convert xHCI bindings to DT schema
+  dt-bindings: usb: xhci: Add Broadcom STB v2 compatible device
+  dt-bindings: usb: renesas-xhci: Refer to the usb-xhci.yaml file
+  dt-bindings: usb: Convert DWC USB3 bindings to DT schema
+  dt-bindings: usb: dwc3: Add interrupt-names property support
+  dt-bindings: usb: dwc3: Add synopsys,dwc3 compatible string
+  dt-bindings: usb: dwc3: Add Tx De-emphasis restrictions
+  dt-bindings: usb: dwc3: Add Frame Length Adj restrictions
+  dt-bindings: usb: meson-g12a-usb: Fix FL-adj property value
+  dt-bindings: usb: meson-g12a-usb: Validate DWC2/DWC3 sub-nodes
+  dt-bindings: usb: keystone-dwc3: Validate DWC3 sub-node
+  dt-bindings: usb: qcom,dwc3: Validate DWC3 sub-node
+  arch: dts: Fix EHCI/OHCI DT nodes name
+  arch: dts: Fix xHCI DT nodes name
+  arch: dts: Fix DWC USB3 DT nodes name
 
-Regards,
-Wesley Cheng
+ .../usb/amlogic,meson-g12a-usb-ctrl.yaml      |   6 +-
+ .../devicetree/bindings/usb/dwc3.txt          | 125 -------
+ .../devicetree/bindings/usb/generic-xhci.yaml |  65 ++++
+ .../devicetree/bindings/usb/generic.txt       |  57 ----
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |   9 +-
+ .../bindings/usb/renesas,usb-xhci.yaml        |   4 +-
+ .../devicetree/bindings/usb/snps,dwc3.yaml    | 315 ++++++++++++++++++
+ .../bindings/usb/ti,keystone-dwc3.yaml        |   4 +-
+ .../devicetree/bindings/usb/usb-hcd.yaml      | 104 ++++++
+ .../devicetree/bindings/usb/usb-xhci.txt      |  41 ---
+ .../devicetree/bindings/usb/usb-xhci.yaml     |  42 +++
+ arch/arc/boot/dts/axs10x_mb.dtsi              |   4 +-
+ arch/arc/boot/dts/hsdk.dts                    |   4 +-
+ arch/arc/boot/dts/vdk_axs10x_mb.dtsi          |   2 +-
+ arch/arm/boot/dts/armada-375.dtsi             |   2 +-
+ arch/arm/boot/dts/bcm5301x.dtsi               |   6 +-
+ arch/arm/boot/dts/bcm53573.dtsi               |   4 +-
+ arch/arm/boot/dts/exynos5250.dtsi             |   2 +-
+ arch/arm/boot/dts/exynos54xx.dtsi             |   4 +-
+ arch/arm/boot/dts/hisi-x5hd2.dtsi             |   4 +-
+ arch/arm/boot/dts/keystone-k2e.dtsi           |   4 +-
+ arch/arm/boot/dts/keystone.dtsi               |   2 +-
+ arch/arm/boot/dts/lpc18xx.dtsi                |   4 +-
+ arch/arm/boot/dts/ls1021a.dtsi                |   2 +-
+ arch/arm/boot/dts/omap5-l4.dtsi               |   2 +-
+ arch/arm/boot/dts/stih407-family.dtsi         |   2 +-
+ arch/arm/boot/dts/stm32mp151.dtsi             |   4 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  |   2 +-
+ arch/arm64/boot/dts/exynos/exynos5433.dtsi    |   4 +-
+ arch/arm64/boot/dts/exynos/exynos7.dtsi       |   2 +-
+ .../arm64/boot/dts/freescale/fsl-ls1012a.dtsi |   4 +-
+ .../arm64/boot/dts/freescale/fsl-ls1043a.dtsi |   6 +-
+ .../arm64/boot/dts/freescale/fsl-ls1088a.dtsi |   4 +-
+ .../arm64/boot/dts/freescale/fsl-ls208xa.dtsi |   4 +-
+ arch/arm64/boot/dts/hisilicon/hi3660.dtsi     |   2 +-
+ .../arm64/boot/dts/hisilicon/hi3798cv200.dtsi |   4 +-
+ arch/arm64/boot/dts/hisilicon/hip06.dtsi      |   4 +-
+ arch/arm64/boot/dts/hisilicon/hip07.dtsi      |   4 +-
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi |   4 +-
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi  |   4 +-
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi         |   4 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |   4 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/qcs404-evb.dtsi      |   2 +-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |   4 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   4 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |   2 +-
+ arch/mips/boot/dts/ingenic/jz4740.dtsi        |   2 +-
+ arch/mips/boot/dts/ingenic/jz4770.dtsi        |   2 +-
+ arch/mips/boot/dts/mti/sead3.dts              |   2 +-
+ arch/mips/boot/dts/ralink/mt7628a.dtsi        |   2 +-
+ arch/powerpc/boot/dts/akebono.dts             |   6 +-
+ 53 files changed, 605 insertions(+), 305 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/dwc3.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/generic-xhci.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/generic.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/usb-xhci.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/usb-xhci.yaml
 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.27.0
+
