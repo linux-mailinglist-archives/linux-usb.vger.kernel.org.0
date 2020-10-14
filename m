@@ -2,89 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D566C28D388
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Oct 2020 20:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A6328D792
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 02:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728216AbgJMSVM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Oct 2020 14:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728188AbgJMSVM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Oct 2020 14:21:12 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B106FC0613D0;
-        Tue, 13 Oct 2020 11:21:11 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5EF43B87;
-        Tue, 13 Oct 2020 20:21:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1602613267;
-        bh=uNdQgYBn6J6CRCexb0fARlaAUo2p5ArcS4xeWUhOs6s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=io1UsLL9//j2D/vqza6k35qzJzan6exhFZexus9mEjA8Unk7vMMjVG0gcle/gSGeX
-         KhjbKHCK2dY9UvFy4Gvtf/CnIuQC90glnVynYEQkJyXhM6KgXbo3zaqVUCtOJXQxqc
-         hyLuJVfPzQA1b5n3K2+2TzhqS3NTmSQqjoiTInn8=
-Date:   Tue, 13 Oct 2020 21:20:21 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        linux-usb@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: [patch 2/4] media: omap3isp: Remove misleading comment
-Message-ID: <20201013182021.GE11939@pendragon.ideasonboard.com>
-References: <20201013142616.118697527@linutronix.de>
- <20201013143731.704783731@linutronix.de>
+        id S1730549AbgJNAjy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Oct 2020 20:39:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54422 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728029AbgJNAjx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Oct 2020 20:39:53 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B88D921D40;
+        Wed, 14 Oct 2020 00:39:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602635993;
+        bh=CFDyw8SnopRjOQTv0trN9Zq7Ipl3I4xqiXTNATXIglw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nIH5M255GwfPrbDQw7nysc73Kb4lCHwXLccsHykUZ7j00IujiVWARwvphAzSdGbQP
+         IuFY/nrDgxcHpobYsKZV6FppHfBO0ll8YvibDiZtw3KPKZ62M3T+AvO8PaoLzgQAhZ
+         If59RIypN65WfSLeZIhy6Wa8MEgwOEApPF5WA8eU=
+Date:   Tue, 13 Oct 2020 17:39:51 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
+        Oliver Neukum <oneukum@suse.com>,
+        Igor Mitsyanko <imitsyanko@quantenna.com>,
+        Sergey Matyukevich <geomatsi@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        linux-rdma@vger.kernel.org,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next v2 00/12] net: add and use function
+ dev_fetch_sw_netstats for fetching pcpu_sw_netstats
+Message-ID: <20201013173951.25677bcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <d77b65de-1793-f808-66b5-aaa4e7c8a8f0@gmail.com>
+References: <d77b65de-1793-f808-66b5-aaa4e7c8a8f0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201013143731.704783731@linutronix.de>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thomas,
-
-Thank you for the patch.
-
-On Tue, Oct 13, 2020 at 04:26:18PM +0200, Thomas Gleixner wrote:
-> in_interrupt() covers hard and soft interrupt servicing and bottom half
-> disabled contexts, which is semantically ill defined.
+On Mon, 12 Oct 2020 10:00:11 +0200 Heiner Kallweit wrote:
+> In several places the same code is used to populate rtnl_link_stats64
+> fields with data from pcpu_sw_netstats. Therefore factor out this code
+> to a new function dev_fetch_sw_netstats().
 > 
-> The comment for __ccdc_lsc_configure() "Context: in_interrupt()" is
-> therefore as useful as "Context: unknown'. Remove it.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: linux-media@vger.kernel.org
+> v2:
+> - constify argument netstats
+> - don't ignore netstats being NULL or an ERRPTR
+> - switch to EXPORT_SYMBOL_GPL
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/media/platform/omap3isp/ispccdc.c |    5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> --- a/drivers/media/platform/omap3isp/ispccdc.c
-> +++ b/drivers/media/platform/omap3isp/ispccdc.c
-> @@ -299,11 +299,10 @@ static int ccdc_lsc_busy(struct isp_ccdc
->  			     ISPCCDC_LSC_BUSY;
->  }
->  
-> -/* __ccdc_lsc_configure - Apply a new configuration to the LSC engine
-> +/*
-> + * __ccdc_lsc_configure - Apply a new configuration to the LSC engine
->   * @ccdc: Pointer to ISP CCDC device
->   * @req: New configuration request
-> - *
-> - * context: in_interrupt()
->   */
->  static int __ccdc_lsc_configure(struct isp_ccdc_device *ccdc,
->  				struct ispccdc_lsc_config_req *req)
-> 
-
--- 
-Regards,
-
-Laurent Pinchart
+Applied, thank you!
