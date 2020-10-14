@@ -2,116 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A9428DA4D
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 09:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEFD28DAA5
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Oct 2020 09:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727925AbgJNHHq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Oct 2020 03:07:46 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:61231 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726141AbgJNHHq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Oct 2020 03:07:46 -0400
-X-UUID: 597ff07714d449a18eed34164f43ca0d-20201014
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=liqqNPZ7bhnTmHQkiIXmgSnZuggaH0is3HAOFrjhmfI=;
-        b=rJ47ziMLdbDOQz4WrNOmGUq+hrZ/ysAxMX2mxZGu1FikYksj9EtRVM+/pNzT6Lsn0OYVrvm+jySBPKJPYnhlVIQ5fv0TCz0g7DD6k29OSMWQVDSfWz4SdfVJmtqJjJsc6wpwm8QWZZe2spDEwvIo7C8tv4P7MEje4TzBUwDAU5o=;
-X-UUID: 597ff07714d449a18eed34164f43ca0d-20201014
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1753992200; Wed, 14 Oct 2020 15:07:36 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 14 Oct
- 2020 15:07:33 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 14 Oct 2020 15:07:32 +0800
-Message-ID: <1602659253.29336.79.camel@mhfsdcap03>
-Subject: Re: [PATCH v2 4/8] dt-bindings: phy: convert HDMI PHY binding to
- YAML schema
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Min Guo <min.guo@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
-Date:   Wed, 14 Oct 2020 15:07:33 +0800
-In-Reply-To: <1602650671.27998.2.camel@mtksdaap41>
-References: <20201013085207.17749-1-chunfeng.yun@mediatek.com>
-         <20201013085207.17749-4-chunfeng.yun@mediatek.com>
-         <1602650671.27998.2.camel@mtksdaap41>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1727068AbgJNHtV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Oct 2020 03:49:21 -0400
+Received: from mail-eopbgr70052.outbound.protection.outlook.com ([40.107.7.52]:52007
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726348AbgJNHtV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Oct 2020 03:49:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c764yrlMiv4Nxr4ODganYR11WUL1Xe5bGxa0sU/8qKIgs3v8bYqxqAlIWFdykWKy1wsTX0iOYj7yEAxUEjnrsrxLnEyhQWsP67Z+IGkjPgaba/Y3+TZsbKGldSSMtLOs5ofdmq0Rh8heJCeltZE+vFyvTUEANPJTFNJork2PpHX1+kf+8TheB/BKPsCmEPZxR9mjzOy1V39KEH7u9im2jUioIsUy+E9461/LfEQ8ct83NPhdAJKoT3kk1eBYnyDJx4vODCPgBppQH/DUFxUT6b04sPwiTXhmzTggJsKMdAKcgtuGCcl/ZnEXUSGTVpq7JKlWvslw1TFzhZCMviHMIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=En/0WB8Xhbke5xeKsZQUU3Ct6LKayMrWLwcq+V/DdCc=;
+ b=PNdBlw/b5A/T0X/9UWpPH/fdAym7HQT7r1ptWuO9u75EpLocCNZHb8jGTr3hE8TqB+xBF/wLx2ZvkNEa7Np88ML++unS/mOuH5kkoOyrce2n7DmzTioCdCYxXjuLSl7JgpfKmsJSIDxkOPWfR/VUDzbFPLcI8Im4ni/axtnH8Ap22y2hd0DzefRvjFg403AV9YuXkFmsSGt9V9Wfr15YmB7QJe+EsucML297TM5DJYteIhqzWrm07xY/kWfn2YN5wBaqzTR5m7JHVD7bVrSmtFYM0pNQrSVyNMbSJ/bo3aQpXbCUlL6lafPI2V1iJuTmQkGz+XPP5WMbv1qmW2LJiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=En/0WB8Xhbke5xeKsZQUU3Ct6LKayMrWLwcq+V/DdCc=;
+ b=Wr8AdJHF4YVhAzpxHp6lIucHNyThCDMZxFFsVeQLJDh2h/nU8ikUrJI2901Wbhs9VbU5cegdytS1HWAA1Vp+VgQmJQHozWVnVaJMUdXBkKbISlTXj+2fZRdvIIBJJgntK6UbhEM+5sne03L6/dNyzsJXAnQ16ZV4mu7q5zEgvDQ=
+Received: from AM6PR04MB5413.eurprd04.prod.outlook.com (2603:10a6:20b:96::28)
+ by AM6PR04MB4744.eurprd04.prod.outlook.com (2603:10a6:20b:5::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.23; Wed, 14 Oct
+ 2020 07:49:17 +0000
+Received: from AM6PR04MB5413.eurprd04.prod.outlook.com
+ ([fe80::1953:c81a:cca2:60ec]) by AM6PR04MB5413.eurprd04.prod.outlook.com
+ ([fe80::1953:c81a:cca2:60ec%7]) with mapi id 15.20.3477.021; Wed, 14 Oct 2020
+ 07:49:17 +0000
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jun Li <jun.li@nxp.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] usb: host: fsl-mph-dr-of: check return of dma_set_mask()
+Thread-Topic: [PATCH] usb: host: fsl-mph-dr-of: check return of dma_set_mask()
+Thread-Index: AQHWnsxMrWuAbFJbHUG0vd4wVtv8WqmRf/+AgAU+0tA=
+Date:   Wed, 14 Oct 2020 07:49:17 +0000
+Message-ID: <AM6PR04MB541398FE3D01D0759D9D98EBF1050@AM6PR04MB5413.eurprd04.prod.outlook.com>
+References: <20201010060308.33693-1-ran.wang_1@nxp.com>
+ <20201010234028.GA16433@b29397-desktop>
+In-Reply-To: <20201010234028.GA16433@b29397-desktop>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 2d0882d7-4c82-43f6-efb1-08d87015a72d
+x-ms-traffictypediagnostic: AM6PR04MB4744:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR04MB47444A2EE8AC3342C260ABD5F1050@AM6PR04MB4744.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:285;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Jb2FxJR1/7uSfg66jcvHSYiKbyGyc4OjK9xx4tF5uH9WML/kCAFrSvJxY4C7DHEu6cTa2xo5orXSTei90EM+vJqegt4r6WLfJyDtfaYB8fQNN7qUpyeHQfxqT0LEK+n6SJ+nNySSA4EgiRJWMZ25J9Xck42KoBjqTMSvQJJ6wOY2EXR+cpph3vPNVBvvhifCWN7nwkD3sRM4TVXY9tdGwXcMlz3xuH2H84Ys/I3LDE7Rc6fETd/8wARhgnSkzNUx8Vqy6IytGB3BSpD/Nz4hCrgStkOFq9w9u7bdBXf+pGa3UjRnBehBJCrp6IrMP6Rn3kuW+efX/7mGUcV8eBfd2g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5413.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(366004)(136003)(39860400002)(396003)(316002)(64756008)(7696005)(66476007)(52536014)(66446008)(8676002)(71200400001)(478600001)(66556008)(8936002)(26005)(83380400001)(86362001)(6862004)(33656002)(53546011)(9686003)(5660300002)(4326008)(6636002)(2906002)(6506007)(55016002)(186003)(66946007)(76116006)(54906003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: UmScYELk8RACXqyn2nLZVCHing5qds6+hSguSupcHAIOGqCXVjuMj3sDi8yn8KCmgdmL/eHTyESTFgKuEiLcM8DiJsz2C8rdznSWVnJ5GzcBxIZ8AboJVMMoCL16N/LZ7Nf3r32VFYiyuL+X1rOp+kI3OMFV07Cbb+ffpcmC9N+1E4TVp2NAXkvICKic2NZUbZ51aJ7kXOtr2g2eG90RS5ZOKB/ZOmUbo3gI/vc6usBvtfg8U/7zu5TEW76jgTQPT/FvBoYByjTozaxzr2JyVk+FLzj7DMh6rWU3i2jy0N7Ii5CeECOlMk2gQL3Tf1fJAQUasvLIIK4xFvp6J+lGWlv2hw0ltu8Fs8WMGhKbRY0f3yGdTsy4Erm2BUuS8lii6IqSKvaxEJOuGcdn52XrWHCHpOCowIWcTzhfEeh1Eri+B2NDKixnM3ayGNFnaa5cS6jwZK0BVvSIohgCDsxjXPJdv0U8D/eGS0XDc6mXFRbGVKv/GoHuY9Nk+5ow2ZmxLbnhqwj3CisRG3K+qX0yt4oKf59+rp8tEz0zQF7pGMnnhVL9IMVYnOGBng1pvVZAIGOPLhOxErHGiIEaVFqkIqBMVNOB7DLtWr7wRMBiOJhG3mdroYzqVDjBa/12vV+H5HfCyKECNbm4hL/YI30ikg==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 7D3A8E0BF2FC977AE7986068420E20580FCD3FFE574376E72318CF014D5E6D432000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5413.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d0882d7-4c82-43f6-efb1-08d87015a72d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Oct 2020 07:49:17.2445
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pQmBWPbeHoXLnS+JMi6PnD3japijLvpQHh2vXhEgv8w+f8oES9iOsqt/ilI8qGq635s6h/aU9QU/KfFkp/M6lA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4744
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gV2VkLCAyMDIwLTEwLTE0IGF0IDEyOjQ0ICswODAwLCBDSyBIdSB3cm90ZToNCj4gSGksIENo
-dW5mZW5nOg0KPiANCj4gT24gVHVlLCAyMDIwLTEwLTEzIGF0IDE2OjUyICswODAwLCBDaHVuZmVu
-ZyBZdW4gd3JvdGU6DQo+ID4gQ29udmVydCBIRE1JIFBIWSBiaW5kaW5nIHRvIFlBTUwgc2NoZW1h
-IG1lZGlhdGVrLHVmcy1waHkueWFtbA0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IENodW5mZW5n
-IFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiB2MjogZml4IGJp
-bmRpbmcgY2hlY2sgd2FybmluZyBvZiByZWcgaW4gZXhhbXBsZQ0KPiA+IC0tLQ0KPiA+ICAuLi4v
-ZGlzcGxheS9tZWRpYXRlay9tZWRpYXRlayxoZG1pLnR4dCAgICAgICAgfCAxNyArLS0tDQo+ID4g
-IC4uLi9iaW5kaW5ncy9waHkvbWVkaWF0ZWssaGRtaS1waHkueWFtbCAgICAgICB8IDkwICsrKysr
-KysrKysrKysrKysrKysNCj4gPiAgMiBmaWxlcyBjaGFuZ2VkLCA5MSBpbnNlcnRpb25zKCspLCAx
-NiBkZWxldGlvbnMoLSkNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy9waHkvbWVkaWF0ZWssaGRtaS1waHkueWFtbA0KPiA+IA0KPiA+IGRp
-ZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZGlzcGxheS9tZWRp
-YXRlay9tZWRpYXRlayxoZG1pLnR4dCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
-cy9kaXNwbGF5L21lZGlhdGVrL21lZGlhdGVrLGhkbWkudHh0DQo+ID4gaW5kZXggN2IxMjQyNDJi
-MGM1Li5lZGFjMTg5NTFhNzUgMTAwNjQ0DQo+ID4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0
-cmVlL2JpbmRpbmdzL2Rpc3BsYXkvbWVkaWF0ZWsvbWVkaWF0ZWssaGRtaS50eHQNCj4gPiArKysg
-Yi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZGlzcGxheS9tZWRpYXRlay9tZWRp
-YXRlayxoZG1pLnR4dA0KPiA+IEBAIC01MCwyMiArNTAsNyBAQCBSZXF1aXJlZCBwcm9wZXJ0aWVz
-Og0KPiA+ICANCj4gPiAgSERNSSBQSFkNCj4gPiAgPT09PT09PT0NCj4gPiAtDQo+ID4gLVRoZSBI
-RE1JIFBIWSBzZXJpYWxpemVzIHRoZSBIRE1JIGVuY29kZXIncyB0aHJlZSBjaGFubmVsIDEwLWJp
-dCBwYXJhbGxlbA0KPiA+IC1vdXRwdXQgYW5kIGRyaXZlcyB0aGUgSERNSSBwYWRzLg0KPiA+IC0N
-Cj4gPiAtUmVxdWlyZWQgcHJvcGVydGllczoNCj4gPiAtLSBjb21wYXRpYmxlOiAibWVkaWF0ZWss
-PGNoaXA+LWhkbWktcGh5Ig0KPiA+IC0tIHJlZzogUGh5c2ljYWwgYmFzZSBhZGRyZXNzIGFuZCBs
-ZW5ndGggb2YgdGhlIG1vZHVsZSdzIHJlZ2lzdGVycw0KPiA+IC0tIGNsb2NrczogUExMIHJlZmVy
-ZW5jZSBjbG9jaw0KPiA+IC0tIGNsb2NrLW5hbWVzOiBtdXN0IGNvbnRhaW4gInBsbF9yZWYiDQo+
-ID4gLS0gY2xvY2stb3V0cHV0LW5hbWVzOiBtdXN0IGJlICJoZG1pdHhfZGlnX2N0cyIgb24gbXQ4
-MTczDQo+ID4gLS0gI3BoeS1jZWxsczogbXVzdCBiZSA8MD4NCj4gPiAtLSAjY2xvY2stY2VsbHM6
-IG11c3QgYmUgPDA+DQo+ID4gLQ0KPiA+IC1PcHRpb25hbCBwcm9wZXJ0aWVzOg0KPiA+IC0tIG1l
-ZGlhdGVrLGliaWFzOiBUWCBEUlYgYmlhcyBjdXJyZW50IGZvciA8MS42NUdicHMsIGRlZmF1bHRz
-IHRvIDB4YQ0KPiA+IC0tIG1lZGlhdGVrLGliaWFzX3VwOiBUWCBEUlYgYmlhcyBjdXJyZW50IGZv
-ciA+MS42NUdicHMsIGRlZmF1bHRzIHRvIDB4MWMNCj4gPiArU2VlIHBoeS9tZWRpYXRlayxoZG1p
-LXBoeS55YW1sDQo+ID4gIA0KPiA+ICBFeGFtcGxlOg0KPiA+ICANCj4gPiBkaWZmIC0tZ2l0IGEv
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BoeS9tZWRpYXRlayxoZG1pLXBoeS55
-YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BoeS9tZWRpYXRlayxoZG1p
-LXBoeS55YW1sDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAw
-MDAuLjc3ZGY1MDIwNDYwNg0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9Eb2N1bWVudGF0
-aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGh5L21lZGlhdGVrLGhkbWktcGh5LnlhbWwNCj4gPiBA
-QCAtMCwwICsxLDkwIEBADQo+ID4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4w
-LW9ubHkgT1IgQlNELTItQ2xhdXNlKQ0KPiA+ICsjIENvcHlyaWdodCAoYykgMjAyMCBNZWRpYVRl
-aw0KPiA+ICslWUFNTCAxLjINCj4gPiArLS0tDQo+ID4gKyRpZDogaHR0cDovL2RldmljZXRyZWUu
-b3JnL3NjaGVtYXMvcGh5L21lZGlhdGVrLGhkbWktcGh5LnlhbWwjDQo+ID4gKyRzY2hlbWE6IGh0
-dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiA+ICsNCj4gPiAr
-dGl0bGU6IE1lZGlhVGVrIEhpZ2ggRGVmaW5pdGlvbiBNdWx0aW1lZGlhIEludGVyZmFjZSAoSERN
-SSkgUEhZIGJpbmRpbmcNCj4gPiArDQo+ID4gK21haW50YWluZXJzOg0KPiA+ICsgIC0gQ0sgSHUg
-PGNrLmh1QG1lZGlhdGVrLmNvbT4NCj4gDQo+IEkgdGhpbmsgeW91IHNob3VsZCByZW1vdmUgIkNL
-IEh1IDxjay5odUBtZWRpYXRlay5jb20+IiBhbmQgYWRkIGxhdGVzdA0KPiBtZWRpYXRlayBkcm0g
-bWFpbnRhaW5lcjoNCk9rLCB3aWxsIGRvIGl0LCB0aGFua3MNCg0KPiANCj4gRFJNIERSSVZFUlMg
-Rk9SIE1FRElBVEVLDQo+IE06CUNodW4tS3VhbmcgSHUgPGNodW5rdWFuZy5odUBrZXJuZWwub3Jn
-Pg0KPiBNOglQaGlsaXBwIFphYmVsIDxwLnphYmVsQHBlbmd1dHJvbml4LmRlPg0KPiBMOglkcmkt
-ZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnDQo+IFM6CVN1cHBvcnRlZA0KPiBGOglEb2N1bWVu
-dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZGlzcGxheS9tZWRpYXRlay8NCj4gRjoJZHJpdmVy
-cy9ncHUvZHJtL21lZGlhdGVrLw0KPiANCj4gUmVnYXJkcywNCj4gQ0sNCg0K
+Hi Peter,
+
+On Sunday, October 11, 2020 7:41 AM Peter Chen wrote:
+>=20
+> On 20-10-10 14:03:08, Ran Wang wrote:
+> > fsl_usb2_device_register() should stop init if dma_set_mask() return
+> > error.
+> >
+> > Fixes: cae058610465 ("drivers/usb/host: fsl: Set DMA_MASK of usb
+> > platform device")
+> > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> > ---
+> >  drivers/usb/host/fsl-mph-dr-of.c | 9 ++++++---
+> >  1 file changed, 6 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/usb/host/fsl-mph-dr-of.c
+> > b/drivers/usb/host/fsl-mph-dr-of.c
+> > index ae8f60f..44a7e58 100644
+> > --- a/drivers/usb/host/fsl-mph-dr-of.c
+> > +++ b/drivers/usb/host/fsl-mph-dr-of.c
+> > @@ -94,10 +94,13 @@ static struct platform_device
+> > *fsl_usb2_device_register(
+> >
+> >  	pdev->dev.coherent_dma_mask =3D ofdev->dev.coherent_dma_mask;
+> >
+> > -	if (!pdev->dev.dma_mask)
+> > +	if (!pdev->dev.dma_mask) {
+> >  		pdev->dev.dma_mask =3D &ofdev->dev.coherent_dma_mask;
+> > -	else
+> > -		dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
+> > +	} else {
+> > +		retval =3D dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
+> > +		if (retval)
+> > +			goto error;
+> > +	}
+> >
+> >  	retval =3D platform_device_add_data(pdev, pdata, sizeof(*pdata));
+> >  	if (retval)
+> > --
+> > 2.7.4
+> >
+>=20
+> Reviewed-by: Peter Chen <peter.chen@nxp.com>
+>=20
+> One more place need to fix, if platform_device_alloc returns NULL,
+> it should not call platform_device_put to release platform
+> device memory.
+>=20
+> 	pdev =3D platform_device_alloc(name, id);
+> 	if (!pdev) {
+> 		retval =3D -ENOMEM;
+> 		goto error;
+> 	}
+> 	...
+> error:
+> 	platform_device_put(pdev);
+> 	return ERR_PTR(retval);
+
+Got it, let me check this later.
+
+Thanks & Regards,
+Ran
 
