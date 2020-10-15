@@ -2,203 +2,260 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D9328ECFB
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Oct 2020 08:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180BA28ED59
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Oct 2020 09:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728505AbgJOGOu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Oct 2020 02:14:50 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:35371 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725922AbgJOGOt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Oct 2020 02:14:49 -0400
-Received: by mail-ed1-f68.google.com with SMTP id cq12so1877028edb.2;
-        Wed, 14 Oct 2020 23:14:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1Yh1i1pVwz9B/Ey4Y4vzL4xLN24S+rgzxEnczu+jN+M=;
-        b=s4utGE2ldX5A4a0Pabye4aUFh+rodihSo5V90mq5TuaevguMq+1u+OQSYmOmJk2JqU
-         49hIzOVjeXRYk/QtASbnZ6Pf7kWu83V1UrrL6EQooJwfxkM95qbTBvZFfuNHVAEbVvyN
-         IPVey0yuwXxSkvm7YrMaeWAfO4KxnTqlHewg62mxtAE5k2uCDM6dxj+GMTg/MUdflP97
-         Invt/RQSdlsaJ7IV+icVE/FvbYsBeBJjnarv6lUVccdVFldA89Tvp7YMHFkYz6DjKZhs
-         pC8iYc3pno4Mx26keMSdaUJi8drgdpxIwdMKsSP3RCI/ftgEHi7gCEtlLCTim+G5ediw
-         xYbw==
-X-Gm-Message-State: AOAM531fWTaX2HbH0BqBWdxQKK1sFdjoAsWeatGcbkEvbuEVJQ/voDkl
-        Pt7I+WOJ80YPM2E5x2HjbRA=
-X-Google-Smtp-Source: ABdhPJx/0Dmc4LC7mLB//wjFSeMp2WMfJCq3UaAMSzV7yKFc9sP2yaW4576pAgucyVbatWtI1/sCow==
-X-Received: by 2002:a50:f613:: with SMTP id c19mr2718068edn.81.1602742484585;
-        Wed, 14 Oct 2020 23:14:44 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.171])
-        by smtp.googlemail.com with ESMTPSA id e7sm900601ejm.4.2020.10.14.23.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2020 23:14:43 -0700 (PDT)
-Date:   Thu, 15 Oct 2020 08:14:39 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Wei Xu <xuwei5@hisilicon.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-omap@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 20/20] arch: dts: Fix DWC USB3 DT nodes name
-Message-ID: <20201015061439.GA2926@kozik-lap>
-References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
- <20201014101402.18271-21-Sergey.Semin@baikalelectronics.ru>
- <CAJKOXPeErocR5-3xCDqBR3-k3w_2EQ_768d71n229cbzeo4TtQ@mail.gmail.com>
- <20201014171640.bup52mgaz4jvhtsy@mobilestation>
- <CAJKOXPcHi_=jea=0YrPNo4dh6k03+63Tc2Uo+sd0u8+XPdQjOw@mail.gmail.com>
- <20201014235105.kj4rtwiidph7gyen@mobilestation>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201014235105.kj4rtwiidph7gyen@mobilestation>
+        id S1726636AbgJOHEi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Oct 2020 03:04:38 -0400
+Received: from m12-18.163.com ([220.181.12.18]:39827 "EHLO m12-18.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725208AbgJOHEi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 15 Oct 2020 03:04:38 -0400
+X-Greylist: delayed 911 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Oct 2020 03:04:20 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=eekp+vePaR58kKs2/D
+        zKasR7RTLEDIkhqKj4rE3F0/Q=; b=KKACyZCSQw6jMz8iMA7YQocfsahlqRKsVj
+        s0Ej6SB1lX2501M3Tip8tbZNmdvQiS779mvxyYdSSNxkw+q2J0mCgOJH3ZbF9xab
+        BSbGBviokwLJVH3EbKWqaY7AC2OjKWA7bsFLklgRFdD9U/j0O/wTc6G01w30KbmA
+        54VfRLLTw=
+Received: from localhost.localdomain (unknown [118.113.10.145])
+        by smtp14 (Coremail) with SMTP id EsCowAAnL6OB8IdffjV4TQ--.823S4;
+        Thu, 15 Oct 2020 14:47:30 +0800 (CST)
+From:   Sheng Long Wang <china_shenglong@163.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wang Sheng Long <shenglong.wang.ext@siemens.com>
+Subject: [PATCH v5] usb-serial:cp210x: add support to software flow control
+Date:   Thu, 15 Oct 2020 14:47:10 +0800
+Message-Id: <20201015064710.19786-1-china_shenglong@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: EsCowAAnL6OB8IdffjV4TQ--.823S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW3JF45Jw18Jr45GF1rXr48Crg_yoWxWr4UpF
+        1rKrWFyFWDZa1YgF4FyF4Uur98ua1SqFyqyFyak39IyF43G3yfKF1xGa4Yyw1UAr48Jry5
+        JrnIyFyDuF4DArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jDSdDUUUUU=
+X-Originating-IP: [118.113.10.145]
+X-CM-SenderInfo: xfkl0tpbvkv0xjor0wi6rwjhhfrp/1tbiXwK+sl15zLxgCwAAsu
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 02:51:05AM +0300, Serge Semin wrote:
- > >
-> > > So to speak thanks for suggesting it. I'll try it to validate the proposed
-> > > changes.
-> > >
-> > > Two questions:
-> > > 1) Any advise of a good inliner/command to compile all dtbs at once? Of course I
-> > > can get all the updated dtsi'es, then find out all the dts'es which include
-> > > them, then directly use dtc to compile the found dts'es... On the other hand I
-> > > can just compile all dts'es, then compare old and new ones. The diff of the
-> > > non-modified dtb'es will be just empty...
-> > 
-> 
-> > make dtbs
-> 
-> It's not that easy.) "make dtbs" will build dtbs only for enabled boards, which
-> first need to be enabled in the kernel config. So I'll need to have a config
-> with all the affected dts. The later is the same as if I just found all the
-> affected dts and built them one-by-one by directly calling dtc.
+From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
 
-True. Sometimes allyesconfig for given arch might be helpful but not
-always (e.g. for ARM it does not select all of ARMv4 and ARMv5 boards).
-Most likely your approach is actually faster/more reliable.
+When data is transmitted between two serial ports,
+the phenomenon of data loss often occurs. The two kinds
+of flow control commonly used in serial communication
+are hardware flow control and software flow control.
 
-> 
-> > touch your dts or git stash pop
-> > make dtbs
-> > compare
-> > diff for all unchanged will be simply empty, so easy to spot
-> > 
-> > > 2) What crosc64 is?
-> > 
-> > Ah, just an alias for cross compiling + ccache + kbuild out. I just
-> > copied you my helpers, so you need to tweak them.
-> > 
-> > >
-> > > >
-> > > > 2. Split it per arm architectures (and proper subject prefix - not
-> > > > "arch") and subarchitectures so maintainers can pick it up.
-> > >
-> > > Why? The changes are simple and can be formatted as a single patch. I've seen
-> > > tons of patches submitted like that, accepted and then merged. What you suggest
-> > > is just much more work, which I don't see quite required.
-> > 
-> 
-> > DTS changes go separate between arm64 and arm. There is nothing
-> > unusual here - all changes are submitted like this.
-> > Second topic is to split by subarchitectures which is necessary if you
-> > want it to be picked up by maintainers. It also makes it easier to
-> > review.
-> 
-> The current patches are easy enough for review. The last three patches of the
-> series is a collection of the one-type changes concerning the same type of
-> nodes. So reviewing them won't cause any difficulty. But I assume that's not
-> the main point in this discussion.
-> 
-> > Sure, without split ber subarchitectures this could be picked
-> > up by SoC folks but you did not even CC them. So if you do not want to
-> > split it per subarchitectures for maintainers and you do not CC SoC,
-> > then how do you believe this should be picked up? Out of the regular
-> > patch submission way? That's not how the changes are handled.
-> 
-> AFAIU there are another ways of merging comprehensive patches. If they get to collect
-> all the Acked-by tags, they could be merged in, for instance, through Greg' or Rob'
-> (for dts) repos, if of course they get to agree with doing that. Am I wrong?
-> 
-> My hope was to ask Rob or Greg to get the patches merged in when they get
-> to collect all the ackes, since I thought it was an option in such cases. So if
-> they refuse to do so I'll have no choice but to split the series up into a
-> smaller patches as you say.
+In serial communication, If you only use RX/TX/GND Pins, you
+can't do hardware flow. So we often used software flow control
+and prevent data loss. The user sets the software flow control
+through the application program, and the application program
+sets the software flow control mode for the serial port
+chip through the driver.
 
-This is neither Rob's nor Greg's patch to pick up, but ARM SoC (which was
-not CCed here). And most likely they won't pick it up because judging by
-contents it is obvious it should go via ARM SoC.
+For the cp210 serial port chip, its driver lacks the
+software flow control setting code, so the user cannot set
+the software flow control function through the application
+program. This adds the missing software flow control.
 
-Sure, if there are dependencies between some patches they can go with
-acks through unrelated trees, but this not the usual way. This is an
-exception in the process to solve particular dependency problem.  It has
-drawbacks - increases the chances of annoying conflicts.
+Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
 
-The case here does not fall into this criteria - there is no dependency
-of this patch on the others  Therefore there is no reason to use the
-unusual/exceptional way of handling patches.  There is no reason why
-this shouldn't go via either specific ARM subarchitecture maintainers or
-via ARM SoC.
+Changes in v3:
+- fixed code style, It mainly adjusts the code style acccording
+  to kernel specification.
 
-> > > > 3. The subject title could be more accurate - there is no fix here
-> > > > because there was no errors in the first place. Requirement of DWC
-> > > > node names comes recently, so it is more alignment with dtschema.
-> > > > Otherwise automatic-pickup-stable-bot might want to pick up... and it
-> > > > should not go to stable.
-> > >
-> > > Actually it is a fix, because the USB DT nodes should have been named with "usb"
-> > > prefix in the first place. Legacy DWC USB3 bindings didn't define the nodes
-> > > naming, but implied to be "usb"-prefixed by the USB HCD schema. The Qualcomm
-> > > DWC3 schema should have defined the sub-nodes as "dwc3@"-prefixed, which was
-> > > wrong in the first place.
-> > 
-> 
-> > Not following the naming convention of DT spec which was loosely
-> > enforced is not an error which should be "fixed". Simply wrong title.
-> > This is an alignment with dtschema or correcting naming convention.
-> > Not fixing errors.
-> 
-> From your perspective it wasn't an error, from mine and most likely Rob' it
-> was.) Anyway as I said I don't care that much about preserving the subject
-> wording, so what about the next one:
-> <arch>: <subarch>: Harmonize DWC USB3 nodes name with DT schema
-> ?
+Changes in v4:
+- It mainly adjusts the patch based on the last usb-next branch
+  of the usb-serial.
 
-Looks good.
+Changes in v5:
+- Fixes:
+  * According to the cp210x specification, use usb_control_msg()
+    requesttype 'REQTYPE_DEVICE_TO_HOST' is modified to
+    'REQTYPE_INTERFACE_TO_HOST' in cp210x_get_chars().
 
-Best regards,
-Krzysztof
+  * If modify IXOFF/IXON has been changed, we can call set software
+    flow control code.
+
+  * If the setting software flow control wrong, do not continue
+    processing proceed with updating software flow control.
+---
+ drivers/usb/serial/cp210x.c | 128 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 123 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index d0c05aa8a0d6..d2edf9e4d484 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -412,6 +412,15 @@ struct cp210x_comm_status {
+ 	u8       bReserved;
+ } __packed;
+ 
++struct cp210x_special_chars {
++	u8	bEofChar;
++	u8	bErrorChar;
++	u8	bBreakChar;
++	u8	bEventChar;
++	u8	bXonChar;
++	u8	bXoffChar;
++};
++
+ /*
+  * CP210X_PURGE - 16 bits passed in wValue of USB request.
+  * SiLabs app note AN571 gives a strange description of the 4 bits:
+@@ -675,6 +684,70 @@ static int cp210x_read_vendor_block(struct usb_serial *serial, u8 type, u16 val,
+ 	return result;
+ }
+ 
++static int cp210x_get_chars(struct usb_serial_port *port, void *buf)
++{
++	struct usb_serial *serial = port->serial;
++	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
++	struct cp210x_special_chars *special_chars;
++	void *dmabuf;
++	int result;
++
++	dmabuf = kmemdup(buf, sizeof(*special_chars), GFP_KERNEL);
++	if (!dmabuf)
++		return -ENOMEM;
++
++	result = usb_control_msg(serial->dev,
++				usb_rcvctrlpipe(serial->dev, 0),
++				CP210X_GET_CHARS, REQTYPE_INTERFACE_TO_HOST, 0,
++				port_priv->bInterfaceNumber,
++				dmabuf, sizeof(*special_chars),
++				USB_CTRL_GET_TIMEOUT);
++
++	if (result == sizeof(*special_chars)) {
++		memcpy(buf, dmabuf, sizeof(*special_chars));
++		result = 0;
++	} else {
++		dev_err(&port->dev, "failed to get special chars: %d\n", result);
++		if (result >= 0)
++			result = -EIO;
++	}
++
++	kfree(dmabuf);
++
++	return result;
++}
++
++static int cp210x_set_chars(struct usb_serial_port *port, void *buf)
++{
++	struct usb_serial *serial = port->serial;
++	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
++	struct cp210x_special_chars *special_chars;
++	void *dmabuf;
++	int result;
++
++	dmabuf = kmemdup(buf, sizeof(*special_chars), GFP_KERNEL);
++	if (!dmabuf)
++		return -ENOMEM;
++
++	result = usb_control_msg(serial->dev,
++				usb_sndctrlpipe(serial->dev, 0),
++				CP210X_SET_CHARS, REQTYPE_HOST_TO_INTERFACE, 0,
++				port_priv->bInterfaceNumber,
++				dmabuf, sizeof(*special_chars), USB_CTRL_SET_TIMEOUT);
++
++	if (result == sizeof(*special_chars)) {
++		result = 0;
++	} else {
++		dev_err(&port->dev, "failed to set special chars: %d\n", result);
++		if (result >= 0)
++			result = -EIO;
++	}
++
++	kfree(dmabuf);
++
++	return result;
++}
++
+ /*
+  * Writes any 16-bit CP210X_ register (req) whose value is passed
+  * entirely in the wValue field of the USB request.
+@@ -1356,11 +1429,18 @@ static void cp210x_set_termios(struct tty_struct *tty,
+ 		struct usb_serial_port *port, struct ktermios *old_termios)
+ {
+ 	struct device *dev = &port->dev;
+-	unsigned int cflag, old_cflag;
++	unsigned int cflag, old_cflag, iflag, old_iflag;
++	struct cp210x_special_chars special_chars;
++	struct cp210x_flow_ctl flow_ctl;
+ 	u16 bits;
++	int result;
++	u32 ctl_hs;
++	u32 flow_repl;
+ 
+ 	cflag = tty->termios.c_cflag;
++	iflag = tty->termios.c_iflag;
+ 	old_cflag = old_termios->c_cflag;
++	old_iflag = old_termios->c_iflag;
+ 
+ 	if (tty->termios.c_ospeed != old_termios->c_ospeed)
+ 		cp210x_change_speed(tty, port, old_termios);
+@@ -1434,10 +1514,6 @@ static void cp210x_set_termios(struct tty_struct *tty,
+ 	}
+ 
+ 	if ((cflag & CRTSCTS) != (old_cflag & CRTSCTS)) {
+-		struct cp210x_flow_ctl flow_ctl;
+-		u32 ctl_hs;
+-		u32 flow_repl;
+-
+ 		cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
+ 				sizeof(flow_ctl));
+ 		ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
+@@ -1474,6 +1550,48 @@ static void cp210x_set_termios(struct tty_struct *tty,
+ 				sizeof(flow_ctl));
+ 	}
+ 
++	if (((iflag & IXOFF) != (old_iflag & IXOFF)) ||
++		((iflag & IXON) != (old_iflag & IXON))) {
++		result = cp210x_get_chars(port, &special_chars);
++		if (result < 0)
++			goto out;
++
++		special_chars.bXonChar  = START_CHAR(tty);
++		special_chars.bXoffChar = STOP_CHAR(tty);
++
++		result = cp210x_set_chars(port, &special_chars);
++		if (result < 0)
++			goto out;
++
++		result = cp210x_read_reg_block(port,
++					CP210X_GET_FLOW,
++					&flow_ctl,
++					sizeof(flow_ctl));
++		if (result < 0)
++			goto out;
++
++		flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
++
++		if (iflag & IXOFF)
++			flow_repl |= CP210X_SERIAL_AUTO_RECEIVE;
++		else
++			flow_repl &= ~CP210X_SERIAL_AUTO_RECEIVE;
++
++		if (iflag & IXON)
++			flow_repl |= CP210X_SERIAL_AUTO_TRANSMIT;
++		else
++			flow_repl &= ~CP210X_SERIAL_AUTO_TRANSMIT;
++
++		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
++		result = cp210x_write_reg_block(port,
++					CP210X_SET_FLOW,
++					&flow_ctl,
++					sizeof(flow_ctl));
++	}
++out:
++	if (result < 0)
++		dev_err(dev, "failed to set software flow control: %d\n", result);
++
+ 	/*
+ 	 * Enable event-insertion mode only if input parity checking is
+ 	 * enabled for now.
+-- 
+2.17.1
+
 
