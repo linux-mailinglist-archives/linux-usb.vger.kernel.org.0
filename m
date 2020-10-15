@@ -2,136 +2,326 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B977628EE2B
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Oct 2020 10:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16BD28EE34
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Oct 2020 10:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728048AbgJOIIL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Oct 2020 04:08:11 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:40770 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730385AbgJOIH2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Oct 2020 04:07:28 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09F810KF022265;
-        Thu, 15 Oct 2020 10:05:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=glhTCKVcnbc8lpjOZBjcwL/WddjOBnrvQMsvFgpIX9U=;
- b=0oTWPBOxS3dHCpvop3Yn8LtnhruTiBArA0yscaywKM5jRBukrtlORwr/OlTPsO/MuqpZ
- NxiXz4Nvydwfc6H86n+++QoVfKWlkVK6RwSl08U860IelLWDFi6VfYxV1c49lArFXN0l
- AFDe3yXM7+VozPw8LXqj2LRtKWO4kRrD6cgMmP7U9tLEM1gC6uz4J1P7UBVkolbWZPMC
- 0c23ip1jx4I4AYDVB506N+iPL276OKcmTrJwevYifEHpP48qXDA8TdK71per8cKZVT4H
- PfdxOAWlYV0XFPa9ElhEi0cBzBscOmgtycug9z9NV8KOyMMJP+rSe/YeUgH1QAaLqKx4 LA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34356ekf4q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Oct 2020 10:05:56 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0884E100034;
-        Thu, 15 Oct 2020 10:05:47 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8D2CD20602D;
-        Thu, 15 Oct 2020 10:05:47 +0200 (CEST)
-Received: from lmecxl0995.lme.st.com (10.75.127.49) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 15 Oct
- 2020 10:05:44 +0200
-Subject: Re: [PATCH 18/20] arch: dts: Fix EHCI/OHCI DT nodes name
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-mediatek@lists.infradead.org>
-References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
- <20201014101402.18271-19-Sergey.Semin@baikalelectronics.ru>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <a68552c5-3284-7196-3873-61711aaf5007@st.com>
-Date:   Thu, 15 Oct 2020 10:05:43 +0200
+        id S2387724AbgJOII1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Oct 2020 04:08:27 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:18761 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387427AbgJOIIW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Oct 2020 04:08:22 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f88034a0000>; Thu, 15 Oct 2020 01:07:38 -0700
+Received: from [10.19.101.17] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 15 Oct
+ 2020 08:08:18 +0000
+Subject: Re: [PATCH v3 12/15] phy: tegra: xusb: Add wake/sleepwalk for
+ Tegra186
+To:     Thierry Reding <thierry.reding@gmail.com>
+CC:     <gregkh@linuxfoundation.org>, <robh@kernel.org>,
+        <jonathanh@nvidia.com>, <kishon@ti.com>,
+        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nkristam@nvidia.com>
+References: <20200909081041.3190157-1-jckuo@nvidia.com>
+ <20200909081041.3190157-13-jckuo@nvidia.com> <20200928135021.GM3065790@ulmo>
+X-Nvconfidentiality: public
+From:   JC Kuo <jckuo@nvidia.com>
+Message-ID: <dff331bf-9126-5841-cb14-66ac9b3589e9@nvidia.com>
+Date:   Thu, 15 Oct 2020 16:08:16 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201014101402.18271-19-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20200928135021.GM3065790@ulmo>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG4NODE3.st.com (10.75.127.12) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-15_03:2020-10-14,2020-10-15 signatures=0
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1602749258; bh=u31K7QfghIARj2BxweQ1NufcjldhMy4w8W9I5Fztz54=;
+        h=Subject:To:CC:References:X-Nvconfidentiality:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=sMDGP+jKlqecFzcxbvcf0WzXWUsMwVOtaG8yoyBsfon1LFnSeoCVkeXc6JU+zqcW6
+         8jiInkFElkilaLqgMu4AFvTwwvAg7GrfG7rBiQ8VgCf1n4k26DhoIekZxCkcZx2r/i
+         p7pZeGWQVDEFVOAV6XgsMJzUbSgJpTcyeWkogD2v83uLWENe3dRmvKJa45vklYs8ho
+         SIgK9hnWfBWIcUXoMhQPQRwS1ONsButB4mr+79KWyHZSsC7v3jfkhPDeNv6ukXb+yW
+         w8qANg3LkvNPu9ueSwHFaz4ayuD3K7MvqfMTSTNMPKHo2vMPYPzynXXfFdoCfHztUs
+         x50l+le13/jHw==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Serge,
+I will amend accordingly and submit new patch.
 
-On 10/14/20 12:14 PM, Serge Semin wrote:
-> In accordance with the Generic EHCI/OHCI bindings the corresponding node
-> name is suppose to comply with the Generic USB HCD DT schema, which
-> requires the USB nodes to have the name acceptable by the regexp:
-> "^usb(@.*)?"  . Let's fix the DTS files, which have the nodes defined with
-> incompatible names.
+Thanks for review.
+JC
+
+On 9/28/20 9:50 PM, Thierry Reding wrote:
+> On Wed, Sep 09, 2020 at 04:10:38PM +0800, JC Kuo wrote:
+>> This commit implements Tegra186/Tegra194 XUSB PADCTL/AO wake and
+>> sleepwalk operations.
+>>
+>> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+>> ---
+>> v3:
+>>    move 'ao_regs' to the top of 'struct tegra186_xusb_padctl'
+>>    change return data of .phy_remote_wake_detected() to 'bool'
+>>    change input parameter of .phy_remote_wake_detected() to 'struct phy*'
+>>    remove unnecessary 'else'
+>>    rename 'val' with 'value'
+>>
+>>  drivers/phy/tegra/xusb-tegra186.c | 626 ++++++++++++++++++++++++++++++
+>>  1 file changed, 626 insertions(+)
+>>
+>> diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
+>> index 5d64f69b39a9..104e2a8496b4 100644
+>> --- a/drivers/phy/tegra/xusb-tegra186.c
+>> +++ b/drivers/phy/tegra/xusb-tegra186.c
+>> @@ -113,6 +113,117 @@
+>>  #define  ID_OVERRIDE_FLOATING			ID_OVERRIDE(8)
+>>  #define  ID_OVERRIDE_GROUNDED			ID_OVERRIDE(0)
+>>  
+>> +/* XUSB AO registers */
+>> +#define XUSB_AO_USB_DEBOUNCE_DEL		(0x4)
+>> +#define   UHSIC_LINE_DEB_CNT(x)			(((x) & 0xf) << 4)
+>> +#define   UTMIP_LINE_DEB_CNT(x)			((x) & 0xf)
+>> +
+>> +#define XUSB_AO_UTMIP_TRIGGERS(x)		(0x40 + (x) * 4)
+>> +#define   CLR_WALK_PTR				(1 << 0)
+>> +#define   CAP_CFG				(1 << 1)
+>> +#define   CLR_WAKE_ALARM			(1 << 3)
+>> +
+>> +#define XUSB_AO_UHSIC_TRIGGERS(x)		(0x60 + (x) * 4)
+>> +#define   HSIC_CLR_WALK_PTR			(1 << 0)
+>> +#define   HSIC_CLR_WAKE_ALARM			(1 << 3)
+>> +#define   HSIC_CAP_CFG				(1 << 4)
+>> +
+>> +#define XUSB_AO_UTMIP_SAVED_STATE(x)		(0x70 + (x) * 4)
+>> +#define   SPEED(x)				((x) & 0x3)
+>> +#define     UTMI_HS				SPEED(0)
+>> +#define     UTMI_FS				SPEED(1)
+>> +#define     UTMI_LS				SPEED(2)
+>> +#define     UTMI_RST				SPEED(3)
+>> +
+>> +#define XUSB_AO_UHSIC_SAVED_STATE(x)		(0x90 + (x) * 4)
+>> +#define   MODE(x)				((x) & 0x1)
+>> +#define   MODE_HS				MODE(0)
+>> +#define   MODE_RST				MODE(1)
+>> +
+>> +#define XUSB_AO_UTMIP_SLEEPWALK_CFG(x)		(0xd0 + (x) * 4)
+>> +#define XUSB_AO_UHSIC_SLEEPWALK_CFG(x)		(0xf0 + (x) * 4)
+>> +#define   FAKE_USBOP_VAL			(1 << 0)
+>> +#define   FAKE_USBON_VAL			(1 << 1)
+>> +#define   FAKE_USBOP_EN				(1 << 2)
+>> +#define   FAKE_USBON_EN				(1 << 3)
+>> +#define   FAKE_STROBE_VAL			(1 << 0)
+>> +#define   FAKE_DATA_VAL				(1 << 1)
+>> +#define   FAKE_STROBE_EN			(1 << 2)
+>> +#define   FAKE_DATA_EN				(1 << 3)
+>> +#define   WAKE_WALK_EN				(1 << 14)
+>> +#define   MASTER_ENABLE				(1 << 15)
+>> +#define   LINEVAL_WALK_EN			(1 << 16)
+>> +#define   WAKE_VAL(x)				(((x) & 0xf) << 17)
+>> +#define     WAKE_VAL_NONE			WAKE_VAL(12)
+>> +#define     WAKE_VAL_ANY			WAKE_VAL(15)
+>> +#define     WAKE_VAL_DS10			WAKE_VAL(2)
+>> +#define   LINE_WAKEUP_EN			(1 << 21)
+>> +#define   MASTER_CFG_SEL			(1 << 22)
+>> +
+>> +#define XUSB_AO_UTMIP_SLEEPWALK(x)		(0x100 + (x) * 4)
+>> +/* phase A */
+>> +#define   USBOP_RPD_A				(1 << 0)
+>> +#define   USBON_RPD_A				(1 << 1)
+>> +#define   AP_A					(1 << 4)
+>> +#define   AN_A					(1 << 5)
+>> +#define   HIGHZ_A				(1 << 6)
+>> +/* phase B */
+>> +#define   USBOP_RPD_B				(1 << 8)
+>> +#define   USBON_RPD_B				(1 << 9)
+>> +#define   AP_B					(1 << 12)
+>> +#define   AN_B					(1 << 13)
+>> +#define   HIGHZ_B				(1 << 14)
+>> +/* phase C */
+>> +#define   USBOP_RPD_C				(1 << 16)
+>> +#define   USBON_RPD_C				(1 << 17)
+>> +#define   AP_C					(1 << 20)
+>> +#define   AN_C					(1 << 21)
+>> +#define   HIGHZ_C				(1 << 22)
+>> +/* phase D */
+>> +#define   USBOP_RPD_D				(1 << 24)
+>> +#define   USBON_RPD_D				(1 << 25)
+>> +#define   AP_D					(1 << 28)
+>> +#define   AN_D					(1 << 29)
+>> +#define   HIGHZ_D				(1 << 30)
+>> +
+>> +#define XUSB_AO_UHSIC_SLEEPWALK(x)		(0x120 + (x) * 4)
+>> +/* phase A */
+>> +#define   RPD_STROBE_A				(1 << 0)
+>> +#define   RPD_DATA0_A				(1 << 1)
+>> +#define   RPU_STROBE_A				(1 << 2)
+>> +#define   RPU_DATA0_A				(1 << 3)
+>> +/* phase B */
+>> +#define   RPD_STROBE_B				(1 << 8)
+>> +#define   RPD_DATA0_B				(1 << 9)
+>> +#define   RPU_STROBE_B				(1 << 10)
+>> +#define   RPU_DATA0_B				(1 << 11)
+>> +/* phase C */
+>> +#define   RPD_STROBE_C				(1 << 16)
+>> +#define   RPD_DATA0_C				(1 << 17)
+>> +#define   RPU_STROBE_C				(1 << 18)
+>> +#define   RPU_DATA0_C				(1 << 19)
+>> +/* phase D */
+>> +#define   RPD_STROBE_D				(1 << 24)
+>> +#define   RPD_DATA0_D				(1 << 25)
+>> +#define   RPU_STROBE_D				(1 << 26)
+>> +#define   RPU_DATA0_D				(1 << 27)
+>> +
+>> +#define XUSB_AO_UTMIP_PAD_CFG(x)		(0x130 + (x) * 4)
+>> +#define   FSLS_USE_XUSB_AO			(1 << 3)
+>> +#define   TRK_CTRL_USE_XUSB_AO			(1 << 4)
+>> +#define   RPD_CTRL_USE_XUSB_AO			(1 << 5)
+>> +#define   RPU_USE_XUSB_AO			(1 << 6)
+>> +#define   VREG_USE_XUSB_AO			(1 << 7)
+>> +#define   USBOP_VAL_PD				(1 << 8)
+>> +#define   USBON_VAL_PD				(1 << 9)
+>> +#define   E_DPD_OVRD_EN				(1 << 10)
+>> +#define   E_DPD_OVRD_VAL			(1 << 11)
+>> +
+>> +#define XUSB_AO_UHSIC_PAD_CFG(x)		(0x150 + (x) * 4)
+>> +#define   STROBE_VAL_PD				(1 << 0)
+>> +#define   DATA0_VAL_PD				(1 << 1)
+>> +#define   USE_XUSB_AO				(1 << 4)
+>> +
+>>  #define TEGRA186_LANE(_name, _offset, _shift, _mask, _type)		\
+>>  	{								\
+>>  		.name = _name,						\
+>> @@ -130,7 +241,15 @@ struct tegra_xusb_fuse_calibration {
+>>  	u32 rpd_ctrl;
+>>  };
+>>  
+>> +struct tegra186_xusb_padctl_context {
+>> +	u32 vbus_id;
+>> +	u32 usb2_pad_mux;
+>> +	u32 usb2_port_cap;
+>> +	u32 ss_port_cap;
+>> +};
+>> +
+>>  struct tegra186_xusb_padctl {
+>> +	void __iomem *ao_regs;
+>>  	struct tegra_xusb_padctl base;
 > 
-> Signed-off-by: Serge Semin<Sergey.Semin@baikalelectronics.ru>
+> base should always be the first element in the structure to optimize
+> container_of().
 > 
-> diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-> index bfe29023fbd5..576f7da564c5 100644
-> --- a/arch/arm/boot/dts/stm32mp151.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp151.dtsi
-> @@ -1404,7 +1404,7 @@ ethernet0: ethernet@5800a000 {
->   			status = "disabled";
->   		};
->   
-> -		usbh_ohci: usbh-ohci@5800c000 {
-> +		usbh_ohci: usb@5800c000 {
->   			compatible = "generic-ohci";
->   			reg = <0x5800c000 0x1000>;
->   			clocks = <&rcc USBH>;
-> @@ -1413,7 +1413,7 @@ usbh_ohci: usbh-ohci@5800c000 {
->   			status = "disabled";
->   		};
->   
-> -		usbh_ehci: usbh-ehci@5800d000 {
-> +		usbh_ehci: usb@5800d000 {
->   			compatible = "generic-ehci";
->   			reg = <0x5800d000 0x1000>;
->   			clocks = <&rcc USBH>;
-
-For STM32MP151:
-
-Acked-by: Amelie Delaunay <amelie.delaunay@st.com>
-
-Thanks,
-Amelie
+>>  
+>>  	struct tegra_xusb_fuse_calibration calib;
+>> @@ -138,8 +257,25 @@ struct tegra186_xusb_padctl {
+>>  	/* UTMI bias and tracking */
+>>  	struct clk *usb2_trk_clk;
+>>  	unsigned int bias_pad_enable;
+>> +
+>> +	/* padctl context */
+>> +	struct tegra186_xusb_padctl_context context;
+>>  };
+>>  
+>> +static inline void ao_writel(struct tegra186_xusb_padctl *priv, u32 value, unsigned long offset)
+> 
+> I prefer offsets to be unsigned int because the _l_ in read_l_() and
+> write_l_() was originally meant to be "long" (from back when long meant
+> 32-bit). An unsigned long parameter can therefore be easily mistaken for
+> the value. That's arguably less of an issue with 64-bit because u32 is
+> an unsigned int. I guess making the offset unsigned int could also be
+> confusing on 64-bit because now both the value and the offset are
+> unsigned int, but for compatibility's sake I think that's okay.
+> 
+> Also, offsets are usually pretty small, so a full 64-bit integer isn't
+> really warranted.
+> 
+> [...]
+>> +static int tegra186_xusb_padctl_enable_phy_sleepwalk(struct tegra_xusb_padctl *padctl,
+>> +						     struct phy *phy,
+>> +						     enum usb_device_speed speed)
+>> +{
+>> +	if (is_usb3_phy(phy))
+>> +		return tegra186_usb3_phy_enable_sleepwalk(phy);
+>> +
+>> +	if (is_utmi_phy(phy))
+>> +		return tegra186_utmi_phy_enable_sleepwalk(phy, speed);
+>> +
+>> +	return -EINVAL;
+>> +}
+>> +
+>> +static int tegra186_xusb_padctl_disable_phy_sleepwalk(struct tegra_xusb_padctl *padctl,
+>> +						      struct phy *phy)
+>> +{
+>> +	if (is_usb3_phy(phy))
+>> +		return tegra186_usb3_phy_disable_sleepwalk(phy);
+>> +
+>> +	if (is_utmi_phy(phy))
+>> +		return tegra186_utmi_phy_disable_sleepwalk(phy);
+>> +
+>> +	return -EINVAL;
+>> +}
+>> +
+>> +static int tegra186_xusb_padctl_enable_phy_wake(struct tegra_xusb_padctl *padctl, struct phy *phy)
+>> +{
+>> +	if (is_usb3_phy(phy))
+>> +		return tegra186_usb3_phy_enable_wake(phy);
+>> +
+>> +	if (is_utmi_phy(phy))
+>> +		return tegra186_utmi_phy_enable_wake(phy);
+>> +
+>> +	return -EINVAL;
+>> +}
+>> +
+>> +static int tegra186_xusb_padctl_disable_phy_wake(struct tegra_xusb_padctl *padctl, struct phy *phy)
+>> +{
+>> +	if (is_usb3_phy(phy))
+>> +		return tegra186_usb3_phy_disable_wake(phy);
+>> +
+>> +	if (is_utmi_phy(phy))
+>> +		return tegra186_utmi_phy_disable_wake(phy);
+>> +
+>> +	return -EINVAL;
+>> +}
+>> +
+>> +static bool tegra186_xusb_padctl_remote_wake_detected(struct phy *phy)
+>> +{
+>> +	if (is_utmi_phy(phy))
+>> +		return tegra186_utmi_phy_remote_wake_detected(phy);
+>> +
+>> +	if (is_usb3_phy(phy))
+>> +		return tegra186_usb3_phy_remote_wake_detected(phy);
+>> +
+>> +	return false;
+>> +}
+> 
+> These are pretty much the same multiplexers as for Tegra210. If we had
+> lane ops function pointers we could make this code more generic.
+> 
+>> +
+>>  static void tegra186_xusb_padctl_remove(struct tegra_xusb_padctl *padctl)
+>>  {
+>>  }
+>> @@ -937,7 +1556,14 @@ static void tegra186_xusb_padctl_remove(struct tegra_xusb_padctl *padctl)
+>>  static const struct tegra_xusb_padctl_ops tegra186_xusb_padctl_ops = {
+>>  	.probe = tegra186_xusb_padctl_probe,
+>>  	.remove = tegra186_xusb_padctl_remove,
+>> +	.suspend_noirq = tegra186_xusb_padctl_suspend_noirq,
+>> +	.resume_noirq = tegra186_xusb_padctl_resume_noirq,
+>>  	.vbus_override = tegra186_xusb_padctl_vbus_override,
+>> +	.enable_phy_sleepwalk = tegra186_xusb_padctl_enable_phy_sleepwalk,
+>> +	.disable_phy_sleepwalk = tegra186_xusb_padctl_disable_phy_sleepwalk,
+>> +	.enable_phy_wake = tegra186_xusb_padctl_enable_phy_wake,
+>> +	.disable_phy_wake = tegra186_xusb_padctl_disable_phy_wake,
+>> +	.remote_wake_detected = tegra186_xusb_padctl_remote_wake_detected,
+> 
+> We might even be able to get rid of these callbacks because the code
+> that needs to call these can directly call into the lane ops.
+> 
+> Thierry
+> 
