@@ -2,107 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A99C628F068
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Oct 2020 12:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDE428F13F
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Oct 2020 13:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728432AbgJOKyJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Oct 2020 06:54:09 -0400
-Received: from mga05.intel.com ([192.55.52.43]:2525 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728009AbgJOKyJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Oct 2020 06:54:09 -0400
-IronPort-SDR: 5RfIHasnXjmCJZFiT5LLic1yMXiPzvVIPC+6t1A9tdBDChWneDZXRriddeIv7z3tkNHIZ8AE+v
- nib7W2W1i0fg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9774"; a="251010715"
-X-IronPort-AV: E=Sophos;i="5.77,378,1596524400"; 
-   d="scan'208";a="251010715"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 03:54:08 -0700
-IronPort-SDR: oTlPNGogSA3vCiKBES+jH8XEQ+PM/jK/9DMxGEIHvWvzODG2XE7+vWO0m6lFarEv3eAll85fpP
- QqXe1HlZUnXQ==
-X-IronPort-AV: E=Sophos;i="5.77,378,1596524400"; 
-   d="scan'208";a="390936528"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 03:54:05 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kT0ua-007NHO-BV; Thu, 15 Oct 2020 13:55:08 +0300
-Date:   Thu, 15 Oct 2020 13:55:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jing Xiangfeng <jingxiangfeng@huawei.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] thunderbolt: Add the missed ida_simple_remove() in
- ring_request_msix()
-Message-ID: <20201015105508.GT4077@smile.fi.intel.com>
-References: <20201015084053.56158-1-jingxiangfeng@huawei.com>
+        id S1729752AbgJOL3r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Oct 2020 07:29:47 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:51556 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729746AbgJOL3g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Oct 2020 07:29:36 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09FBTTlf073783;
+        Thu, 15 Oct 2020 06:29:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1602761369;
+        bh=t1SeR8tYhrhyovLm6t3PgzEHxjV8nllU9xUheyJtGJo=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=YvhL3F3J5a+0lG9R/1gMS/QF/7JGMynnhcjWVgEOtWY7LGsIroaKU7a7XUSwajzf+
+         P8AZgWJC10QNBmHrKqbY4xDQkOHWQ3tBqYem3uE35Iz7/+EMWFtxXIg1F9q8tx1j3t
+         4m/YdDoPPmGycMjBOv8AnQJNQ+Qm8U4iJyNNmr8c=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09FBTT2C098486
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Oct 2020 06:29:29 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 15
+ Oct 2020 06:29:28 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 15 Oct 2020 06:29:28 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09FBTQTf116716;
+        Thu, 15 Oct 2020 06:29:27 -0500
+Subject: Re: [PATCH v4] usb: cdns3: Rids of duplicate error message
+To:     Pawel Laszczak <pawell@cadence.com>, <peter.chen@nxp.com>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kurahul@cadence.com>
+References: <20201015045447.1440-1-pawell@cadence.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <5dc23ed8-8c7f-ff04-1d86-4910f1a49428@ti.com>
+Date:   Thu, 15 Oct 2020 14:29:26 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201015084053.56158-1-jingxiangfeng@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20201015045447.1440-1-pawell@cadence.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 04:40:53PM +0800, Jing Xiangfeng wrote:
-> ring_request_msix() misses to call ida_simple_remove() in an error path.
-> Add a label 'err_ida_remove' and jump to it.
 
-FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> Fixes: 046bee1f9ab8 ("thunderbolt: Add MSI-X support")
-> Signed-off-by: Jing Xiangfeng <jingxiangfeng@huawei.com>
-> ---
-
-When new version is issued do not forget to add changelog here (after cutter '---' line).
-
->  drivers/thunderbolt/nhi.c | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
+On 15/10/2020 07:54, Pawel Laszczak wrote:
+> On failure, the platform_get_irq_byname prints an error message,
+> so patch removes error message related to this function from
+> core.c file.
 > 
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index 5f7489fa1327..a331e52789e3 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -405,12 +405,23 @@ static int ring_request_msix(struct tb_ring *ring, bool no_suspend)
->  
->  	ring->vector = ret;
->  
-> -	ring->irq = pci_irq_vector(ring->nhi->pdev, ring->vector);
-> -	if (ring->irq < 0)
-> -		return ring->irq;
-> +	ret = pci_irq_vector(ring->nhi->pdev, ring->vector);
-> +	if (ret < 0)
-> +		goto err_ida_remove;
-> +
-> +	ring->irq = ret;
->  
->  	irqflags = no_suspend ? IRQF_NO_SUSPEND : 0;
-> -	return request_irq(ring->irq, ring_msix, irqflags, "thunderbolt", ring);
-> +	ret = request_irq(ring->irq, ring_msix, irqflags, "thunderbolt", ring);
-> +	if (ret)
-> +		goto err_ida_remove;
-> +
-> +	return 0;
-> +
-> +err_ida_remove:
-> +	ida_simple_remove(&nhi->msix_ida, ring->vector);
-> +
-> +	return ret;
->  }
->  
->  static void ring_release_msix(struct tb_ring *ring)
-> -- 
-> 2.17.1
+> A change was suggested during reviewing CDNSP driver by Chunfeng Yun.
+> 
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> Acked-by: Peter Chen <peter.chen@nxp.com>
+
+Acked-by: Roger Quadros <rogerq@ti.com>
+
+> ---
+> Changelog:
+> v4
+> - fixed typo.
+> - "Acked-by" tag has been added.
+> v3
+> - changed error condition checking for dev_irq.
+> v2
+> - simplified code as sugested by Roger Quadros.
+> 
+>   drivers/usb/cdns3/core.c | 12 ++----------
+>   1 file changed, 2 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+> index a0f73d4711ae..f2dedce3a40e 100644
+> --- a/drivers/usb/cdns3/core.c
+> +++ b/drivers/usb/cdns3/core.c
+> @@ -466,11 +466,8 @@ static int cdns3_probe(struct platform_device *pdev)
+>   	cdns->xhci_res[1] = *res;
+>   
+>   	cdns->dev_irq = platform_get_irq_byname(pdev, "peripheral");
+> -	if (cdns->dev_irq == -EPROBE_DEFER)
+> -		return cdns->dev_irq;
+> -
+>   	if (cdns->dev_irq < 0)
+> -		dev_err(dev, "couldn't get peripheral irq\n");
+> +		return cdns->dev_irq;
+>   
+>   	regs = devm_platform_ioremap_resource_byname(pdev, "dev");
+>   	if (IS_ERR(regs))
+> @@ -478,14 +475,9 @@ static int cdns3_probe(struct platform_device *pdev)
+>   	cdns->dev_regs	= regs;
+>   
+>   	cdns->otg_irq = platform_get_irq_byname(pdev, "otg");
+> -	if (cdns->otg_irq == -EPROBE_DEFER)
+> +	if (cdns->otg_irq < 0)
+>   		return cdns->otg_irq;
+>   
+> -	if (cdns->otg_irq < 0) {
+> -		dev_err(dev, "couldn't get otg irq\n");
+> -		return cdns->otg_irq;
+> -	}
+> -
+>   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otg");
+>   	if (!res) {
+>   		dev_err(dev, "couldn't get otg resource\n");
 > 
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
