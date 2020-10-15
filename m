@@ -2,260 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 180BA28ED59
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Oct 2020 09:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B977628EE2B
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Oct 2020 10:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbgJOHEi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Oct 2020 03:04:38 -0400
-Received: from m12-18.163.com ([220.181.12.18]:39827 "EHLO m12-18.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725208AbgJOHEi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Oct 2020 03:04:38 -0400
-X-Greylist: delayed 911 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Oct 2020 03:04:20 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=eekp+vePaR58kKs2/D
-        zKasR7RTLEDIkhqKj4rE3F0/Q=; b=KKACyZCSQw6jMz8iMA7YQocfsahlqRKsVj
-        s0Ej6SB1lX2501M3Tip8tbZNmdvQiS779mvxyYdSSNxkw+q2J0mCgOJH3ZbF9xab
-        BSbGBviokwLJVH3EbKWqaY7AC2OjKWA7bsFLklgRFdD9U/j0O/wTc6G01w30KbmA
-        54VfRLLTw=
-Received: from localhost.localdomain (unknown [118.113.10.145])
-        by smtp14 (Coremail) with SMTP id EsCowAAnL6OB8IdffjV4TQ--.823S4;
-        Thu, 15 Oct 2020 14:47:30 +0800 (CST)
-From:   Sheng Long Wang <china_shenglong@163.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wang Sheng Long <shenglong.wang.ext@siemens.com>
-Subject: [PATCH v5] usb-serial:cp210x: add support to software flow control
-Date:   Thu, 15 Oct 2020 14:47:10 +0800
-Message-Id: <20201015064710.19786-1-china_shenglong@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: EsCowAAnL6OB8IdffjV4TQ--.823S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW3JF45Jw18Jr45GF1rXr48Crg_yoWxWr4UpF
-        1rKrWFyFWDZa1YgF4FyF4Uur98ua1SqFyqyFyak39IyF43G3yfKF1xGa4Yyw1UAr48Jry5
-        JrnIyFyDuF4DArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jDSdDUUUUU=
-X-Originating-IP: [118.113.10.145]
-X-CM-SenderInfo: xfkl0tpbvkv0xjor0wi6rwjhhfrp/1tbiXwK+sl15zLxgCwAAsu
+        id S1728048AbgJOIIL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Oct 2020 04:08:11 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:40770 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730385AbgJOIH2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Oct 2020 04:07:28 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09F810KF022265;
+        Thu, 15 Oct 2020 10:05:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=glhTCKVcnbc8lpjOZBjcwL/WddjOBnrvQMsvFgpIX9U=;
+ b=0oTWPBOxS3dHCpvop3Yn8LtnhruTiBArA0yscaywKM5jRBukrtlORwr/OlTPsO/MuqpZ
+ NxiXz4Nvydwfc6H86n+++QoVfKWlkVK6RwSl08U860IelLWDFi6VfYxV1c49lArFXN0l
+ AFDe3yXM7+VozPw8LXqj2LRtKWO4kRrD6cgMmP7U9tLEM1gC6uz4J1P7UBVkolbWZPMC
+ 0c23ip1jx4I4AYDVB506N+iPL276OKcmTrJwevYifEHpP48qXDA8TdK71per8cKZVT4H
+ PfdxOAWlYV0XFPa9ElhEi0cBzBscOmgtycug9z9NV8KOyMMJP+rSe/YeUgH1QAaLqKx4 LA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 34356ekf4q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Oct 2020 10:05:56 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0884E100034;
+        Thu, 15 Oct 2020 10:05:47 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8D2CD20602D;
+        Thu, 15 Oct 2020 10:05:47 +0200 (CEST)
+Received: from lmecxl0995.lme.st.com (10.75.127.49) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 15 Oct
+ 2020 10:05:44 +0200
+Subject: Re: [PATCH 18/20] arch: dts: Fix EHCI/OHCI DT nodes name
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-mediatek@lists.infradead.org>
+References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
+ <20201014101402.18271-19-Sergey.Semin@baikalelectronics.ru>
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+Message-ID: <a68552c5-3284-7196-3873-61711aaf5007@st.com>
+Date:   Thu, 15 Oct 2020 10:05:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20201014101402.18271-19-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG4NODE3.st.com (10.75.127.12) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-15_03:2020-10-14,2020-10-15 signatures=0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+Hi Serge,
 
-When data is transmitted between two serial ports,
-the phenomenon of data loss often occurs. The two kinds
-of flow control commonly used in serial communication
-are hardware flow control and software flow control.
+On 10/14/20 12:14 PM, Serge Semin wrote:
+> In accordance with the Generic EHCI/OHCI bindings the corresponding node
+> name is suppose to comply with the Generic USB HCD DT schema, which
+> requires the USB nodes to have the name acceptable by the regexp:
+> "^usb(@.*)?"  . Let's fix the DTS files, which have the nodes defined with
+> incompatible names.
+> 
+> Signed-off-by: Serge Semin<Sergey.Semin@baikalelectronics.ru>
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+> index bfe29023fbd5..576f7da564c5 100644
+> --- a/arch/arm/boot/dts/stm32mp151.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp151.dtsi
+> @@ -1404,7 +1404,7 @@ ethernet0: ethernet@5800a000 {
+>   			status = "disabled";
+>   		};
+>   
+> -		usbh_ohci: usbh-ohci@5800c000 {
+> +		usbh_ohci: usb@5800c000 {
+>   			compatible = "generic-ohci";
+>   			reg = <0x5800c000 0x1000>;
+>   			clocks = <&rcc USBH>;
+> @@ -1413,7 +1413,7 @@ usbh_ohci: usbh-ohci@5800c000 {
+>   			status = "disabled";
+>   		};
+>   
+> -		usbh_ehci: usbh-ehci@5800d000 {
+> +		usbh_ehci: usb@5800d000 {
+>   			compatible = "generic-ehci";
+>   			reg = <0x5800d000 0x1000>;
+>   			clocks = <&rcc USBH>;
 
-In serial communication, If you only use RX/TX/GND Pins, you
-can't do hardware flow. So we often used software flow control
-and prevent data loss. The user sets the software flow control
-through the application program, and the application program
-sets the software flow control mode for the serial port
-chip through the driver.
+For STM32MP151:
 
-For the cp210 serial port chip, its driver lacks the
-software flow control setting code, so the user cannot set
-the software flow control function through the application
-program. This adds the missing software flow control.
+Acked-by: Amelie Delaunay <amelie.delaunay@st.com>
 
-Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
-
-Changes in v3:
-- fixed code style, It mainly adjusts the code style acccording
-  to kernel specification.
-
-Changes in v4:
-- It mainly adjusts the patch based on the last usb-next branch
-  of the usb-serial.
-
-Changes in v5:
-- Fixes:
-  * According to the cp210x specification, use usb_control_msg()
-    requesttype 'REQTYPE_DEVICE_TO_HOST' is modified to
-    'REQTYPE_INTERFACE_TO_HOST' in cp210x_get_chars().
-
-  * If modify IXOFF/IXON has been changed, we can call set software
-    flow control code.
-
-  * If the setting software flow control wrong, do not continue
-    processing proceed with updating software flow control.
----
- drivers/usb/serial/cp210x.c | 128 ++++++++++++++++++++++++++++++++++--
- 1 file changed, 123 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index d0c05aa8a0d6..d2edf9e4d484 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -412,6 +412,15 @@ struct cp210x_comm_status {
- 	u8       bReserved;
- } __packed;
- 
-+struct cp210x_special_chars {
-+	u8	bEofChar;
-+	u8	bErrorChar;
-+	u8	bBreakChar;
-+	u8	bEventChar;
-+	u8	bXonChar;
-+	u8	bXoffChar;
-+};
-+
- /*
-  * CP210X_PURGE - 16 bits passed in wValue of USB request.
-  * SiLabs app note AN571 gives a strange description of the 4 bits:
-@@ -675,6 +684,70 @@ static int cp210x_read_vendor_block(struct usb_serial *serial, u8 type, u16 val,
- 	return result;
- }
- 
-+static int cp210x_get_chars(struct usb_serial_port *port, void *buf)
-+{
-+	struct usb_serial *serial = port->serial;
-+	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-+	struct cp210x_special_chars *special_chars;
-+	void *dmabuf;
-+	int result;
-+
-+	dmabuf = kmemdup(buf, sizeof(*special_chars), GFP_KERNEL);
-+	if (!dmabuf)
-+		return -ENOMEM;
-+
-+	result = usb_control_msg(serial->dev,
-+				usb_rcvctrlpipe(serial->dev, 0),
-+				CP210X_GET_CHARS, REQTYPE_INTERFACE_TO_HOST, 0,
-+				port_priv->bInterfaceNumber,
-+				dmabuf, sizeof(*special_chars),
-+				USB_CTRL_GET_TIMEOUT);
-+
-+	if (result == sizeof(*special_chars)) {
-+		memcpy(buf, dmabuf, sizeof(*special_chars));
-+		result = 0;
-+	} else {
-+		dev_err(&port->dev, "failed to get special chars: %d\n", result);
-+		if (result >= 0)
-+			result = -EIO;
-+	}
-+
-+	kfree(dmabuf);
-+
-+	return result;
-+}
-+
-+static int cp210x_set_chars(struct usb_serial_port *port, void *buf)
-+{
-+	struct usb_serial *serial = port->serial;
-+	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-+	struct cp210x_special_chars *special_chars;
-+	void *dmabuf;
-+	int result;
-+
-+	dmabuf = kmemdup(buf, sizeof(*special_chars), GFP_KERNEL);
-+	if (!dmabuf)
-+		return -ENOMEM;
-+
-+	result = usb_control_msg(serial->dev,
-+				usb_sndctrlpipe(serial->dev, 0),
-+				CP210X_SET_CHARS, REQTYPE_HOST_TO_INTERFACE, 0,
-+				port_priv->bInterfaceNumber,
-+				dmabuf, sizeof(*special_chars), USB_CTRL_SET_TIMEOUT);
-+
-+	if (result == sizeof(*special_chars)) {
-+		result = 0;
-+	} else {
-+		dev_err(&port->dev, "failed to set special chars: %d\n", result);
-+		if (result >= 0)
-+			result = -EIO;
-+	}
-+
-+	kfree(dmabuf);
-+
-+	return result;
-+}
-+
- /*
-  * Writes any 16-bit CP210X_ register (req) whose value is passed
-  * entirely in the wValue field of the USB request.
-@@ -1356,11 +1429,18 @@ static void cp210x_set_termios(struct tty_struct *tty,
- 		struct usb_serial_port *port, struct ktermios *old_termios)
- {
- 	struct device *dev = &port->dev;
--	unsigned int cflag, old_cflag;
-+	unsigned int cflag, old_cflag, iflag, old_iflag;
-+	struct cp210x_special_chars special_chars;
-+	struct cp210x_flow_ctl flow_ctl;
- 	u16 bits;
-+	int result;
-+	u32 ctl_hs;
-+	u32 flow_repl;
- 
- 	cflag = tty->termios.c_cflag;
-+	iflag = tty->termios.c_iflag;
- 	old_cflag = old_termios->c_cflag;
-+	old_iflag = old_termios->c_iflag;
- 
- 	if (tty->termios.c_ospeed != old_termios->c_ospeed)
- 		cp210x_change_speed(tty, port, old_termios);
-@@ -1434,10 +1514,6 @@ static void cp210x_set_termios(struct tty_struct *tty,
- 	}
- 
- 	if ((cflag & CRTSCTS) != (old_cflag & CRTSCTS)) {
--		struct cp210x_flow_ctl flow_ctl;
--		u32 ctl_hs;
--		u32 flow_repl;
--
- 		cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
- 				sizeof(flow_ctl));
- 		ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
-@@ -1474,6 +1550,48 @@ static void cp210x_set_termios(struct tty_struct *tty,
- 				sizeof(flow_ctl));
- 	}
- 
-+	if (((iflag & IXOFF) != (old_iflag & IXOFF)) ||
-+		((iflag & IXON) != (old_iflag & IXON))) {
-+		result = cp210x_get_chars(port, &special_chars);
-+		if (result < 0)
-+			goto out;
-+
-+		special_chars.bXonChar  = START_CHAR(tty);
-+		special_chars.bXoffChar = STOP_CHAR(tty);
-+
-+		result = cp210x_set_chars(port, &special_chars);
-+		if (result < 0)
-+			goto out;
-+
-+		result = cp210x_read_reg_block(port,
-+					CP210X_GET_FLOW,
-+					&flow_ctl,
-+					sizeof(flow_ctl));
-+		if (result < 0)
-+			goto out;
-+
-+		flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
-+
-+		if (iflag & IXOFF)
-+			flow_repl |= CP210X_SERIAL_AUTO_RECEIVE;
-+		else
-+			flow_repl &= ~CP210X_SERIAL_AUTO_RECEIVE;
-+
-+		if (iflag & IXON)
-+			flow_repl |= CP210X_SERIAL_AUTO_TRANSMIT;
-+		else
-+			flow_repl &= ~CP210X_SERIAL_AUTO_TRANSMIT;
-+
-+		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
-+		result = cp210x_write_reg_block(port,
-+					CP210X_SET_FLOW,
-+					&flow_ctl,
-+					sizeof(flow_ctl));
-+	}
-+out:
-+	if (result < 0)
-+		dev_err(dev, "failed to set software flow control: %d\n", result);
-+
- 	/*
- 	 * Enable event-insertion mode only if input parity checking is
- 	 * enabled for now.
--- 
-2.17.1
-
-
+Thanks,
+Amelie
