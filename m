@@ -2,131 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0D1290CBD
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Oct 2020 22:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A854A290CD5
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Oct 2020 22:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393629AbgJPUaF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Oct 2020 16:30:05 -0400
-Received: from static.214.254.202.116.clients.your-server.de ([116.202.254.214]:47248
-        "EHLO ciao.gmane.io" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393627AbgJPUaF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Oct 2020 16:30:05 -0400
-X-Greylist: delayed 300 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Oct 2020 16:30:03 EDT
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-        (envelope-from <glug-linux-usb@m.gmane-mx.org>)
-        id 1kTWHe-0008iO-4k
-        for linux-usb@vger.kernel.org; Fri, 16 Oct 2020 22:25:02 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To:     linux-usb@vger.kernel.org
-From:   Ferry Toth <fntoth@gmail.com>
-Subject: BUG with linux 5.9.0 with dwc3 in gadget mode
-Date:   Fri, 16 Oct 2020 22:21:19 +0200
-Message-ID: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-Cc:     felipe.balbi@linux.intel.com
-X-Mozilla-News-Host: news://news.gmane.org:119
-Content-Language: en-US
+        id S2408364AbgJPUqh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Oct 2020 16:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408077AbgJPUqh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Oct 2020 16:46:37 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEB3C061755;
+        Fri, 16 Oct 2020 13:46:36 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id md26so5048299ejb.10;
+        Fri, 16 Oct 2020 13:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mAY0QDFqvIDjx5HUOQ+MdvNYA3kylWMqxJWjR23AFzk=;
+        b=Pge7XeimtOGQPWwobIeFhAVFY6hovQZpX0ZLcKzZ8AVgQQQ672h2NV6G4tVk7cpmI+
+         1+gpE/GaiJ6rOXia2sUQl2tkgPYRwpujI/1jI9yUuZbMHNhhdIPSSFFZisDCvdGyMNCm
+         Bv7XKMjurquBEjLiG0g7MIjYLAxlPxapoizFVEWiVkAHI83UW9jV/Zr0Oj+Y0jv0AGkL
+         cttkNhvMmB1Ql9iOu8/GJqu+JOcP+inoZKVjC8g7gRUssTThoHFHguWhzOQMKNXZP0Bi
+         /t44sdZ14d2mGGgRgIH93pq2zHZDD0h2Gi9RGZg69aSc7fX52eFBBVlYAcrwgabfDNox
+         6p+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mAY0QDFqvIDjx5HUOQ+MdvNYA3kylWMqxJWjR23AFzk=;
+        b=po1m8uwegap4OUymmHUBI9SwKOHwckXU2OC+oiIfQhE+ThvXWPpo5k4oN7rLNr72Zt
+         d99Bn9ezles6r2hqXk5bc610CUl5TA7TVO5Pz9NGo3Pg8wu51mlZTbsj4WD8St9qR6Be
+         h3U1sav7E7VSqxNAn+NE0nU98gO3SKATKmFFzbZuVxy+ZiiDSK6DnrWggX1G5keX2Oay
+         zdU5Sj2rYvz2F+hca8SvlOAcOVf5TU7zygVi7aSnWMBTXqHXCNKiXV/30AbaN+OLcTpT
+         /YQJX6LcgiRhDzhgfoaBcKcV/04RKBRkKgtLlz/+QTDHuwgEvJ0wp/h7jqUOHZ9uhbW4
+         YHSA==
+X-Gm-Message-State: AOAM530Tt76x/TK4Bs8Ke5DCe6WyeIN8qMozxEQmk0rN5vpF6whMs7Fx
+        FNCrF2FBXh+k3n2UCGvBvjuh361MEtqB/VT9zsYy7DZgW9c=
+X-Google-Smtp-Source: ABdhPJzZH9WV53owno/ZkjiRehR4EVV/83Ve6RR9ZDeTZs5Z1Fi5I5Jf9JSdZ0IMRjggvROTLl8Mkpi59PwKfkncEXs=
+X-Received: by 2002:a17:906:cc0d:: with SMTP id ml13mr5630435ejb.2.1602881195652;
+ Fri, 16 Oct 2020 13:46:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru> <20201014101402.18271-15-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201014101402.18271-15-Sergey.Semin@baikalelectronics.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Fri, 16 Oct 2020 22:46:24 +0200
+Message-ID: <CAFBinCDYu+C62P37QjY75xG8iXa+MwZEL-agNhoOsaXQ0OQpgQ@mail.gmail.com>
+Subject: Re: [PATCH 14/20] dt-bindings: usb: meson-g12a-usb: Fix FL-adj
+ property value
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This occurs with edison-arduino board, that has a nifty switch allowing 
-to switch between gadget/host mode. In host mode it boot fine, then 
-crashes when I flip the switch to gadget.
-
-The below trace if what I get from the console when booting with gadget 
-mode selected.
-
-The last kernel is used where everything is obviously working fine is 5.6.0.
-
-The kernel is built specifically for the platform, nothing suspcious 
-going on the the dwc3 area, see 
-https://github.com/edison-fw/linux/commits/eds-acpi-5.9.0
-
-Magic signature found
-
-Starting kernel ...
-
-[    2.395631] Initramfs unpacking failed: invalid magic at start of 
-compressed archive
-Scanning for Btrfs filesystems
-Starting version 243.2+
-Kernel with acpi enabled detected
-Loading acpi tables
-Waiting for root device /dev/mmcblk0p8
-   10Found device '/run/media/mmcblk0p8'
-   9Init found, booting...
-[   10.834272] brcmfmac: brcmf_fw_alloc_request: using 
-brcm/brcmfmac43340-sdio for chip BCM43340/2
-[   11.179662] brcmfmac: brcmf_fw_alloc_request: using 
-brcm/brcmfmac43340-sdio for chip BCM43340/2
-[   11.194223] brcmfmac: brcmf_c_process_clm_blob: no clm_blob available 
-(err=-2), device may have limited channels available
-[   11.234779] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM43340/2 
-wl0: Oct 23 2017 08:41:23 version 6.10.190.70 (r674464) FWID 01-98d71006
-[   12.401620] BUG: unable to handle page fault for address: 
-0000000100000000
-[   12.408496] #PF: supervisor instruction fetch in kernel mode
-[   12.414145] #PF: error_code(0x0010) - not-present page
-[   12.419276] PGD 0 P4D 0
-[   12.421817] Oops: 0010 [#1] SMP PTI
-[   12.425307] CPU: 0 PID: 488 Comm: irq/15-dwc3 Not tainted 
-5.9.0-edison-acpi-standard #1
-[   12.433297] Hardware name: Intel Corporation Merrifield/BODEGA BAY, 
-BIOS 542 2015.01.21:18.19.48
-[   12.442075] RIP: 0010:0x100000000
-[   12.445382] Code: Bad RIP value.
-[   12.448605] RSP: 0000:ffff9a95403fbbf8 EFLAGS: 00010046
-[   12.453827] RAX: 0000000100000000 RBX: ffff8ee8bd32f828 RCX: 
-ffff8ee8bacc4000
-[   12.460950] RDX: 00000000ffffff94 RSI: ffff8ee8bc01a5a0 RDI: 
-ffff8ee887228700
-[   12.468075] RBP: ffff8ee8bc01a5a0 R08: 0000000000000046 R09: 
-0000000000000238
-[   12.475199] R10: 0000000000000004 R11: ffff8ee8ba8ba248 R12: 
-ffff8ee887228700
-[   12.482322] R13: ffff8ee8bd32f828 R14: 0000000000000002 R15: 
-ffff8ee8bae93200
-[   12.489449] FS:  0000000000000000(0000) GS:ffff8ee8be200000(0000) 
-knlGS:0000000000000000
-[   12.497524] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   12.503262] CR2: 0000000100000000 CR3: 000000003c5ae000 CR4: 
-00000000001006f0
-[   12.510382] Call Trace:
-[   12.512841]  ? dwc3_gadget_giveback+0xbf/0x120
-[   12.517286]  ? __dwc3_gadget_ep_disable+0xc5/0x250
-[   12.522077]  ? dwc3_gadget_ep_disable+0x3d/0xd0
-[   12.526608]  ? usb_ep_disable+0x1d/0x80
-[   12.530451]  ? u_audio_stop_capture+0x87/0x9a [u_audio]
-[   12.535680]  ? afunc_set_alt+0x73/0x80 [usb_f_uac2]
-[   12.540562]  ? composite_setup+0x20f/0x1b20 [libcomposite]
-[   12.546053]  ? configfs_composite_setup+0x6b/0x90 [libcomposite]
-[   12.552060]  ? configfs_composite_setup+0x6b/0x90 [libcomposite]
-[   12.558062]  ? dwc3_ep0_delegate_req+0x24/0x40
-[   12.562502]  ? dwc3_ep0_interrupt+0x40a/0x9d8
-[   12.566858]  ? dwc3_thread_interrupt+0x880/0xf70
-[   12.571475]  ? __schedule+0x3ee/0x640
-[   12.575143]  ? irq_forced_thread_fn+0x70/0x70
-[   12.579497]  ? irq_thread_fn+0x1b/0x60
-[   12.583245]  ? irq_thread+0xd3/0x150
-[   12.586821]  ? wake_threads_waitq+0x30/0x30
-[   12.591001]  ? irq_thread_dtor+0x80/0x80
-[   12.594925]  ? kthread+0xf9/0x130
-[   12.598238]  ? kthread_park+0x80/0x80
-[   12.601901]  ? ret_from_fork+0x22/0x30
-[   12.605644] Modules linked in: spi_pxa2xx_platform dw_dmac usb_f_uac2 
-u_audio usb_f_mass_storage usb_f_eem u_ether usb_f_serial u_serial 
-libcomposite pwm_lpss_pci snd_sof_pci snd_sof_intel_byt pwm_lpss 
-snd_sof_intel_ipc snd_sof_xtensa_dsp intel_mrfld_pwrbtn intel_mrfld_adc 
-snd_sof snd_sof_nocodec snd_soc_acpi spi_pxa2xx_pci brcmfmac brcmutil 
-leds_gpio hci_uart btbcm ti_ads7950 industrialio_triggered_buffer 
-kfifo_buf spidev ledtrig_heartbeat mmc_block extcon_intel_mrfld 
-sdhci_pci cqhci sdhci led_class mmc_core intel_soc_pmic_mrfld btrfs 
-libcrc32c xor zstd_compress zlib_deflate raid6_pq
-[   12.657416] CR2: 0000000100000000
-[   12.660729] ---[ end trace 9b92dea6da33c71e ]---
-
+On Wed, Oct 14, 2020 at 12:14 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+>
+> An empty snps,quirk-frame-length-adjustment won't cause any change
+> performed by the driver. Moreover the DT schema validation will fail,
+> since it expects the property being assigned with some value. So set
+> fix the example by setting a valid FL-adj value in accordance with
+> Neil Armstrong comment.
+>
+> Link: https://lore.kernel.org/linux-usb/20201010224121.12672-16-Sergey.Semin@baikalelectronics.ru/
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
