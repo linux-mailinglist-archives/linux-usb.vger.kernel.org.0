@@ -2,132 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A05C229073C
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Oct 2020 16:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00ED62908B9
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Oct 2020 17:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408890AbgJPOdf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Oct 2020 10:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408881AbgJPOdc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Oct 2020 10:33:32 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8858EC061755
-        for <linux-usb@vger.kernel.org>; Fri, 16 Oct 2020 07:33:32 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id f21so2087004qko.5
-        for <linux-usb@vger.kernel.org>; Fri, 16 Oct 2020 07:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5B2JHx1oEsLnYhPJ0E0oLsxJSDwxjG1w2DFx5zPQCSM=;
-        b=Oe/2QOCSG/SDi0QQrY46fSiCcCIK2j3PJumDTv536yxaxYM4LY2q5W62Nzl8BTk/xG
-         C5LteZVDRMdC+rJH0F64uebkLipY9PuIOWof+ZEwMDCWzY90R1r52WR2MOMyFuEAxo7x
-         a2pcBC+vxs2HImfAC3aYVyYEvYeN9LUWhPiN482y/5zeOkitXcziNyPS5iwbLHR8s81J
-         jnFo4d8ht2QN99WibP6Vilm16N0AI4qoDvZJjG5PjRMiyx3Lf1rQb3Ji3fb4USS40qqI
-         wDzTdQyEK3fuRpMf/QmVX9rWWlBgYvrLhBNbBcehMkmxKrbC9UqzyJJCD+K65zkFl0pM
-         tqPQ==
+        id S2410369AbgJPPoK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Oct 2020 11:44:10 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:37991 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408644AbgJPPoJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Oct 2020 11:44:09 -0400
+Received: by mail-ot1-f67.google.com with SMTP id i12so2800149ota.5;
+        Fri, 16 Oct 2020 08:44:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5B2JHx1oEsLnYhPJ0E0oLsxJSDwxjG1w2DFx5zPQCSM=;
-        b=nKl8AP+oiwZt55Iyxs9+K0keQHDO9IRA3SYsQHX5l+DfN1muWvkDka7n0b+XlXtS/N
-         4p435L5h+mgVxe2Y3/0PVzNomwJPJN3dmKo01z/xoWjbd+RxuVypo9n67bwWZulfZbe4
-         R4s0hOKesgvwxwzY4wISTheYCcOJvsUlBA6TrNbtWa4ULLekBrawI7TExOZuGEbAhRUG
-         j+I5l+1yFYy2TGlG0XZ+XmOvZf73WmRU4GwXKQ3r53Io6K5LD/5IrxHwuWCmlB4vA0MR
-         DoDxJQt+T3bPVmVAVnKz81CVCtHqKrNUzl9xockri2vE0x/uAt7VDvu4EERhbI+bl0Qs
-         lU9A==
-X-Gm-Message-State: AOAM533I27KOx9kSq5c96q+UxKmRm+wvb5KhwvNx67pu+RDzvg1ih7UY
-        ExmP60KeXMmiYWni+XbSj5ZGdCdKWPoua+qMn5xfDA==
-X-Google-Smtp-Source: ABdhPJzOJJ39ZBF5KaEMQ76r/h2btQRvYOvm74EvptPnSWp8UnZ/OFvXcD5bVPD6sLskLrqThHaqMucuZlnGVojmHa4=
-X-Received: by 2002:a05:620a:1188:: with SMTP id b8mr1888251qkk.265.1602858811326;
- Fri, 16 Oct 2020 07:33:31 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y6uUrO47xJuekVbKZFp61eOF00usAMuQ8nla70UX51Q=;
+        b=bfDZdKMfUChC3ieC0oqXkGkkXdaml38F0N2cURVjGWfXPSVXFIus1hgl2LHdt5HihK
+         hlNITOROAV46r3pLknjiWtb3HapuWR+0gT9ZjdYPwUR+jMRe9L3XqOLauigKxB5OCs+j
+         f6MgwXOefI80oL3AUJxbtz2+H5R0RG5fVlk42nDp+5qqK5+FP4TBI39nhLXNq0Ea8aoJ
+         ALGzxcgupEPcEjL/Sj3CxrH6YDMkUyp88OpOBR73Gaz2bqhbIy0g4+dStcxZXKTz4uZN
+         3OrzUjHyv/lYU37P0hAm52VHz+tfTbgrliTlGANcx8KyrERBaF9Bidk7NWzNaV9ccw2x
+         rUvQ==
+X-Gm-Message-State: AOAM5337E0LJ+GwuXG3ypLikjIzjhAZYxnZoXxagjvC0q6Y19uy0sUY+
+        /DbkwkDWjeXyIjHb3cw+1g==
+X-Google-Smtp-Source: ABdhPJzyKW8ZO4qbCpHyH61FZ7oq0uCuGGIquis4K3Bt8t41p/hh05+oeioUYSSIX2RPEiqRi1znjQ==
+X-Received: by 2002:a9d:7387:: with SMTP id j7mr3154048otk.18.1602863048717;
+        Fri, 16 Oct 2020 08:44:08 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id n23sm1257578oon.14.2020.10.16.08.44.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Oct 2020 08:44:08 -0700 (PDT)
+Received: (nullmailer pid 1466778 invoked by uid 1000);
+        Fri, 16 Oct 2020 15:44:06 -0000
+Date:   Fri, 16 Oct 2020 10:44:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        devicetree@vger.kernel.org, Roger Quadros <rogerq@ti.com>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-mips@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>
+Subject: Re: [PATCH 04/20] dt-bindings: usb: usb-hcd: Add "tpl-support"
+ property
+Message-ID: <20201016154406.GA1452617@bogus>
+References: <20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru>
+ <20201014101402.18271-5-Sergey.Semin@baikalelectronics.ru>
+ <20201014132756.GA1538723@bogus>
+ <20201014172710.iay3lvb37saeksaj@mobilestation>
 MIME-Version: 1.0
-References: <f3a7a153f0719cb53ec385b16e912798bd3e4cf9.1602856358.git.andreyknvl@google.com>
-In-Reply-To: <f3a7a153f0719cb53ec385b16e912798bd3e4cf9.1602856358.git.andreyknvl@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 16 Oct 2020 16:33:19 +0200
-Message-ID: <CACT4Y+a4RZvZf=XjvE8eUTma8n5y-pqSxG=f37LRUjPwaVVm2w@mail.gmail.com>
-Subject: Re: [PATCH v4] kcov, usb: only collect coverage from
- __usb_hcd_giveback_urb in softirq
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Nazime Hande Harputluoglu <handeharput@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201014172710.iay3lvb37saeksaj@mobilestation>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 16, 2020 at 3:57 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> Currently there's a KCOV remote coverage collection section in
-> __usb_hcd_giveback_urb(). Initially that section was added based on the
-> assumption that usb_hcd_giveback_urb() can only be called in interrupt
-> context as indicated by a comment before it. This is what happens when
-> syzkaller is fuzzing the USB stack via the dummy_hcd driver.
->
-> As it turns out, it's actually valid to call usb_hcd_giveback_urb() in task
-> context, provided that the caller turned off the interrupts; USB/IP does
-> exactly that. This can lead to a nested KCOV remote coverage collection
-> sections both trying to collect coverage in task context. This isn't
-> supported by KCOV, and leads to a WARNING.
->
-> Change __usb_hcd_giveback_urb() to only call kcov_remote_*() callbacks
-> when it's being executed in a softirq. As the result, the coverage from
-> USB/IP related usb_hcd_giveback_urb() calls won't be collected, but the
-> WARNING is fixed.
->
-> A potential future improvement would be to support nested remote coverage
-> collection sections, but this patch doesn't address that.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> Acked-by: Marco Elver <elver@google.com>
-> ---
->
-> Changes v3->v4:
-> - Don't make any kcov changes, do a softirq context check in usb code
->   instead.
->
-> ---
->  drivers/usb/core/hcd.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index a33b849e8beb..2f6a39e09dc6 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -1646,9 +1646,16 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
->
->         /* pass ownership to the completion handler */
->         urb->status = status;
-> -       kcov_remote_start_usb((u64)urb->dev->bus->busnum);
-> +       /*
-> +        * This function can be called in task context inside another remote
-> +        * coverage collection section, but KCOV doesn't support that kind of
-> +        * recursion yet. Only collect coverage in softirq context for now.
-> +        */
-> +       if (in_serving_softirq())
-> +               kcov_remote_start_usb((u64)urb->dev->bus->busnum);
->         urb->complete(urb);
-> -       kcov_remote_stop();
-> +       if (in_serving_softirq())
-> +               kcov_remote_stop();
+On Wed, Oct 14, 2020 at 08:27:10PM +0300, Serge Semin wrote:
+> On Wed, Oct 14, 2020 at 08:27:56AM -0500, Rob Herring wrote:
+> > On Wed, 14 Oct 2020 13:13:46 +0300, Serge Semin wrote:
+> > > The host controller device might be designed to work for the particular
+> > > products or applications. In that case its DT node is supposed to be
+> > > equipped with the tpl-support property.
+> > > 
+> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > 
+> > > ---
+> > > 
+> > > Changelog v2:
+> > > - Grammar fix: "s/it'/its"
+> > > - Discard '|' from the property description, since we don't need to preserve
+> > >   the text formatting.
+> > > ---
+> > >  Documentation/devicetree/bindings/usb/usb-hcd.yaml | 6 ++++++
+> > >  1 file changed, 6 insertions(+)
+> > > 
+> > 
+> > 
+> > My bot found errors running 'make dt_binding_check' on your patch:
+> > 
+> > Traceback (most recent call last):
+> >   File "/usr/local/bin/dt-extract-example", line 45, in <module>
+> >     binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+> >   File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 343, in load
+> >     return constructor.get_single_data()
+> >   File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 111, in get_single_data
+> >     node = self.composer.get_single_node()
+> >   File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+> >   File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+> >   File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+> >   File "_ruamel_yaml.pyx", line 891, in _ruamel_yaml.CParser._compose_mapping_node
+> >   File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+> > ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
+> >   in "<unicode string>", line 27, column 14
+> > make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/usb/usb-hcd.example.dts] Error 1
+> > make[1]: *** Deleting file 'Documentation/devicetree/bindings/usb/usb-hcd.example.dts'
+> > make[1]: *** Waiting for unfinished jobs....
+> > ./Documentation/devicetree/bindings/usb/usb-hcd.yaml:27:14: [error] syntax error: mapping values are not allowed here (syntax)
+> > make[1]: *** [Documentation/devicetree/bindings/Makefile:59: Documentation/devicetree/bindings/processed-schema-examples.json] Error 123
+> > make: *** [Makefile:1366: dt_binding_check] Error 2
+> > 
+> > 
+> > See https://patchwork.ozlabs.org/patch/1382001
+> > 
+> > If you already ran 'make dt_binding_check' and didn't see the above
+> > error(s), then make sure dt-schema is up to date:
+> > 
+> > pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+> > 
+> > Please check and re-submit.
+> 
+> Hm, that's weird. Of course I did the dt_binding_check before submission, but
+> even after the dt-schema repo update I failed to see the error:
+> 
+> $ make -j8 ARCH=mips CROSS_COMPILE=mipsel-baikal-linux- dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/usb/usb-hcd.yaml
+>   CHKDT   Documentation/devicetree/bindings/usb/usb-hcd.yaml
+>   SCHEMA  Documentation/devicetree/bindings/processed-schema-examples.yaml
+>   DTC     Documentation/devicetree/bindings/usb/usb-hcd.example.dt.yaml
+>   CHECK   Documentation/devicetree/bindings/usb/usb-hcd.example.dt.yaml
+> 
+> Rob, any idea why has the bot got mad at me?
 
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+Humm, I'm not sure. We'll see if it happens again when you send v2.
 
-Looks simpler :)
+Note that yamllint is also run now and that's the line with '[error]'. 
+So neither yamllint nor ruamel are happy (could be the same parser code 
+ultimately).
 
->         usb_anchor_resume_wakeups(anchor);
->         atomic_dec(&urb->use_count);
-> --
-> 2.29.0.rc1.297.gfa9743e501-goog
->
+Rob
