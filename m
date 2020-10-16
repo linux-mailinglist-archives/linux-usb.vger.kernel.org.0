@@ -2,243 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDB7290C6D
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Oct 2020 21:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0D1290CBD
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Oct 2020 22:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411159AbgJPTsF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Oct 2020 15:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2411129AbgJPTsE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Oct 2020 15:48:04 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1650C061755
-        for <linux-usb@vger.kernel.org>; Fri, 16 Oct 2020 12:48:02 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id u19so5394544ion.3
-        for <linux-usb@vger.kernel.org>; Fri, 16 Oct 2020 12:48:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language;
-        bh=oIHWgAPAlJGpXNJ9CkfTC+TmqbPOy0Eq8ny6o9WXrC4=;
-        b=aaooTPFUG0+7nk/NaTfmd6J+HvKUBMWXoJ9WD6ETtr/AUjAyKBykA+68zLbitpoPHl
-         DOoWpn0c1u564KpDtwSzxd4xkWP+dWzFXIfv0id2lJoMcReAUGorRVEF3AUKbWildfya
-         MUNGtUyIUzn70Hlvok69ID/hq/bSQX6TGq3jY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language;
-        bh=oIHWgAPAlJGpXNJ9CkfTC+TmqbPOy0Eq8ny6o9WXrC4=;
-        b=NE2Gj/iFiIP9zSmOEf63yWsNvRWDYpbDEShAfQyE5RQv7iEASqCSYmfHZCvkpSsq90
-         quFjTLWSCIMNOTC6h2GW7bQCU6SWTwH85t2D8piaKAWcnXChcM0hUBEIg5KMjjzne4r7
-         tl87sHhZVv6Gkp59s+g2iK4GLRC/vd3JHj5p83/VD8qHgXVkfqHnQsR//TVLVMMcFlJm
-         WasPJKTlQambhu/uvoom+bINRu6bVRodwE9bEIltJkOshhyLvC2OWy0e1CYkm3lVZM1C
-         t9X88aV+wpX6osUOTa9JNfC/c1IqUdEwcRR2Q3JFCunWpLKJTrKq6Blpp386j9ePO1dP
-         ENQg==
-X-Gm-Message-State: AOAM5325MFlhux1ElQUDMFpznLDCeYuxXsTj9UMt2SSYoQKc1djqn+W9
-        YZJ7nCmOb+KkuQC4rAhw1M7kvA==
-X-Google-Smtp-Source: ABdhPJxYId5Twz3cb+wkNjf6UyNkgCc4kg+9HoEDy0a1n9sO4JfQ3cc61TnEcpjSECYukcKd38DwSQ==
-X-Received: by 2002:a02:5e04:: with SMTP id h4mr4171962jab.6.1602877682311;
-        Fri, 16 Oct 2020 12:48:02 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id q16sm2775889ilj.71.2020.10.16.12.48.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Oct 2020 12:48:01 -0700 (PDT)
-Subject: Re: KASAN: null-ptr-deref Write in event_handler
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+bf1a360e305ee719e364@syzkaller.appspotmail.com>,
-        Nazime Hande Harputluoglu <handeharputlu@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <000000000000810a4405b0ece316@google.com>
- <CAAeHK+xWQp87S=bF2RfUjcudGaLVjk3yKLL-bxRzVM=YNRtzRA@mail.gmail.com>
- <2947473d-76cd-a663-049a-4d51a97e2a3e@linuxfoundation.org>
- <4b6c9d53-a4de-8749-e0b1-055dbb42703b@linuxfoundation.org>
- <CAAeHK+wZGwovnT969F-aq+EzH8-K21GxJ7YJ0S0Ynd4GM_B4kA@mail.gmail.com>
- <5e0e21bd-5cc9-f1d8-d45e-ec7f10edbfba@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <9256b41b-fe27-a453-ab30-8999379bc1e3@linuxfoundation.org>
-Date:   Fri, 16 Oct 2020 13:48:00 -0600
+        id S2393629AbgJPUaF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Oct 2020 16:30:05 -0400
+Received: from static.214.254.202.116.clients.your-server.de ([116.202.254.214]:47248
+        "EHLO ciao.gmane.io" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393627AbgJPUaF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Oct 2020 16:30:05 -0400
+X-Greylist: delayed 300 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Oct 2020 16:30:03 EDT
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+        (envelope-from <glug-linux-usb@m.gmane-mx.org>)
+        id 1kTWHe-0008iO-4k
+        for linux-usb@vger.kernel.org; Fri, 16 Oct 2020 22:25:02 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To:     linux-usb@vger.kernel.org
+From:   Ferry Toth <fntoth@gmail.com>
+Subject: BUG with linux 5.9.0 with dwc3 in gadget mode
+Date:   Fri, 16 Oct 2020 22:21:19 +0200
+Message-ID: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <5e0e21bd-5cc9-f1d8-d45e-ec7f10edbfba@linuxfoundation.org>
-Content-Type: multipart/mixed;
- boundary="------------E76659FECC40DD1FA21751DE"
+Cc:     felipe.balbi@linux.intel.com
+X-Mozilla-News-Host: news://news.gmane.org:119
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------E76659FECC40DD1FA21751DE
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+This occurs with edison-arduino board, that has a nifty switch allowing 
+to switch between gadget/host mode. In host mode it boot fine, then 
+crashes when I flip the switch to gadget.
 
-On 10/7/20 9:48 AM, Shuah Khan wrote:
-> On 10/7/20 8:28 AM, Andrey Konovalov wrote:
->> On Wed, Oct 7, 2020 at 3:56 PM Shuah Khan <skhan@linuxfoundation.org> 
->> wrote:
->>>
+The below trace if what I get from the console when booting with gadget 
+mode selected.
 
-[snip]
+The last kernel is used where everything is obviously working fine is 5.6.0.
 
->>>
->>> Hi Andrey,
->>>
->>> I have been unable to reproduce the problem with the reproducer
->>> so far. You mentioned it happens quite often.
->>>
->>> - matched config with yours
->>> - load vhci_hcd module and run the reproducer
->>
->> Hm, if you matched the config, then the module should be built-in?
->>
-> 
-> Right. I did notice that your config has built-in. This shouldn't
-> matter, I have a kernel built with it static. I will try it to
-> see if it makes a difference.
-> 
->>>
->>> I do see the messages during shutdown - stop threads etc.
->>>
->>> What am I missing?
->>
->> This appears to be a race that requires precise timings. I failed to
->> reproduce it with the C reproducer, but I managed to reproduce it with
->> the syzkaller repro program:
->>
->> https://syzkaller.appspot.com/x/repro.syz?x=16cbaa7d900000
->>
->> To do that you need to build syzkaller, and copy ./bin/syz-execprog
->> and ./bin/syz-executor into your testing environment, and then do:
->>
->> ./syz-execprog -sandbox=none -repeat=0 -procs=6 ./repro.prog
->>
-> 
+The kernel is built specifically for the platform, nothing suspcious 
+going on the the dwc3 area, see 
+https://github.com/edison-fw/linux/commits/eds-acpi-5.9.0
 
-Andrey,
+Magic signature found
 
-I am unable to reproduce the problem. I even tweaked the reproducer
-to launch 10 procs and 100 threads.
+Starting kernel ...
 
-Can you test the following patch with your setup
+[    2.395631] Initramfs unpacking failed: invalid magic at start of 
+compressed archive
+Scanning for Btrfs filesystems
+Starting version 243.2+
+Kernel with acpi enabled detected
+Loading acpi tables
+Waiting for root device /dev/mmcblk0p8
+   10Found device '/run/media/mmcblk0p8'
+   9Init found, booting...
+[   10.834272] brcmfmac: brcmf_fw_alloc_request: using 
+brcm/brcmfmac43340-sdio for chip BCM43340/2
+[   11.179662] brcmfmac: brcmf_fw_alloc_request: using 
+brcm/brcmfmac43340-sdio for chip BCM43340/2
+[   11.194223] brcmfmac: brcmf_c_process_clm_blob: no clm_blob available 
+(err=-2), device may have limited channels available
+[   11.234779] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM43340/2 
+wl0: Oct 23 2017 08:41:23 version 6.10.190.70 (r674464) FWID 01-98d71006
+[   12.401620] BUG: unable to handle page fault for address: 
+0000000100000000
+[   12.408496] #PF: supervisor instruction fetch in kernel mode
+[   12.414145] #PF: error_code(0x0010) - not-present page
+[   12.419276] PGD 0 P4D 0
+[   12.421817] Oops: 0010 [#1] SMP PTI
+[   12.425307] CPU: 0 PID: 488 Comm: irq/15-dwc3 Not tainted 
+5.9.0-edison-acpi-standard #1
+[   12.433297] Hardware name: Intel Corporation Merrifield/BODEGA BAY, 
+BIOS 542 2015.01.21:18.19.48
+[   12.442075] RIP: 0010:0x100000000
+[   12.445382] Code: Bad RIP value.
+[   12.448605] RSP: 0000:ffff9a95403fbbf8 EFLAGS: 00010046
+[   12.453827] RAX: 0000000100000000 RBX: ffff8ee8bd32f828 RCX: 
+ffff8ee8bacc4000
+[   12.460950] RDX: 00000000ffffff94 RSI: ffff8ee8bc01a5a0 RDI: 
+ffff8ee887228700
+[   12.468075] RBP: ffff8ee8bc01a5a0 R08: 0000000000000046 R09: 
+0000000000000238
+[   12.475199] R10: 0000000000000004 R11: ffff8ee8ba8ba248 R12: 
+ffff8ee887228700
+[   12.482322] R13: ffff8ee8bd32f828 R14: 0000000000000002 R15: 
+ffff8ee8bae93200
+[   12.489449] FS:  0000000000000000(0000) GS:ffff8ee8be200000(0000) 
+knlGS:0000000000000000
+[   12.497524] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   12.503262] CR2: 0000000100000000 CR3: 000000003c5ae000 CR4: 
+00000000001006f0
+[   12.510382] Call Trace:
+[   12.512841]  ? dwc3_gadget_giveback+0xbf/0x120
+[   12.517286]  ? __dwc3_gadget_ep_disable+0xc5/0x250
+[   12.522077]  ? dwc3_gadget_ep_disable+0x3d/0xd0
+[   12.526608]  ? usb_ep_disable+0x1d/0x80
+[   12.530451]  ? u_audio_stop_capture+0x87/0x9a [u_audio]
+[   12.535680]  ? afunc_set_alt+0x73/0x80 [usb_f_uac2]
+[   12.540562]  ? composite_setup+0x20f/0x1b20 [libcomposite]
+[   12.546053]  ? configfs_composite_setup+0x6b/0x90 [libcomposite]
+[   12.552060]  ? configfs_composite_setup+0x6b/0x90 [libcomposite]
+[   12.558062]  ? dwc3_ep0_delegate_req+0x24/0x40
+[   12.562502]  ? dwc3_ep0_interrupt+0x40a/0x9d8
+[   12.566858]  ? dwc3_thread_interrupt+0x880/0xf70
+[   12.571475]  ? __schedule+0x3ee/0x640
+[   12.575143]  ? irq_forced_thread_fn+0x70/0x70
+[   12.579497]  ? irq_thread_fn+0x1b/0x60
+[   12.583245]  ? irq_thread+0xd3/0x150
+[   12.586821]  ? wake_threads_waitq+0x30/0x30
+[   12.591001]  ? irq_thread_dtor+0x80/0x80
+[   12.594925]  ? kthread+0xf9/0x130
+[   12.598238]  ? kthread_park+0x80/0x80
+[   12.601901]  ? ret_from_fork+0x22/0x30
+[   12.605644] Modules linked in: spi_pxa2xx_platform dw_dmac usb_f_uac2 
+u_audio usb_f_mass_storage usb_f_eem u_ether usb_f_serial u_serial 
+libcomposite pwm_lpss_pci snd_sof_pci snd_sof_intel_byt pwm_lpss 
+snd_sof_intel_ipc snd_sof_xtensa_dsp intel_mrfld_pwrbtn intel_mrfld_adc 
+snd_sof snd_sof_nocodec snd_soc_acpi spi_pxa2xx_pci brcmfmac brcmutil 
+leds_gpio hci_uart btbcm ti_ads7950 industrialio_triggered_buffer 
+kfifo_buf spidev ledtrig_heartbeat mmc_block extcon_intel_mrfld 
+sdhci_pci cqhci sdhci led_class mmc_core intel_soc_pmic_mrfld btrfs 
+libcrc32c xor zstd_compress zlib_deflate raid6_pq
+[   12.657416] CR2: 0000000100000000
+[   12.660729] ---[ end trace 9b92dea6da33c71e ]---
 
-Here it is - also attached.
-
-=======================================================================
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 66cde5e5f796..3fdcb93b667d 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -997,14 +997,12 @@ static void vhci_device_unlink_cleanup(struct 
-vhci_device *vdev)
-  	spin_unlock_irqrestore(&vhci->lock, flags);
-  }
-
--/*
-- * The important thing is that only one context begins cleanup.
-- * This is why error handling and cleanup become simple.
-- * We do not want to consider race condition as possible.
-- */
-  static void vhci_shutdown_connection(struct usbip_device *ud)
-  {
-  	struct vhci_device *vdev = container_of(ud, struct vhci_device, ud);
-+	struct vhci_hcd *vhci_hcd = vdev_to_vhci_hcd(vdev);
-+	struct vhci *vhci = vhci_hcd->vhci;
-+	unsigned long flags;
-
-  	/* need this? see stub_dev.c */
-  	if (ud->tcp_socket) {
-@@ -1012,6 +1010,10 @@ static void vhci_shutdown_connection(struct 
-usbip_device *ud)
-  		kernel_sock_shutdown(ud->tcp_socket, SHUT_RDWR);
-  	}
-
-+	/* avoid races during shutdown */
-+	spin_lock_irqsave(&vhci->lock, flags);
-+	spin_lock(&vdev->priv_lock);
-+
-  	/* kill threads related to this sdev */
-  	if (vdev->ud.tcp_rx) {
-  		kthread_stop_put(vdev->ud.tcp_rx);
-@@ -1031,6 +1033,10 @@ static void vhci_shutdown_connection(struct 
-usbip_device *ud)
-  	}
-  	pr_info("release socket\n");
-
-+	/* unlock - vhci_device_unlink_cleanup() holds the locks */
-+	spin_unlock(&vdev->priv_lock);
-+	spin_unlock_irqrestore(&vhci->lock, flags);
-+
-  	vhci_device_unlink_cleanup(vdev);
-
-  	/*
-=======================================================================
-
-thanks,
--- Shuah
-
-
-
-
-
-
---------------E76659FECC40DD1FA21751DE
-Content-Type: text/x-patch; charset=UTF-8;
- name="vhci_hcd_shutdown.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="vhci_hcd_shutdown.diff"
-
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 66cde5e5f796..3fdcb93b667d 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -997,14 +997,12 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
- 	spin_unlock_irqrestore(&vhci->lock, flags);
- }
- 
--/*
-- * The important thing is that only one context begins cleanup.
-- * This is why error handling and cleanup become simple.
-- * We do not want to consider race condition as possible.
-- */
- static void vhci_shutdown_connection(struct usbip_device *ud)
- {
- 	struct vhci_device *vdev = container_of(ud, struct vhci_device, ud);
-+	struct vhci_hcd *vhci_hcd = vdev_to_vhci_hcd(vdev);
-+	struct vhci *vhci = vhci_hcd->vhci;
-+	unsigned long flags;
- 
- 	/* need this? see stub_dev.c */
- 	if (ud->tcp_socket) {
-@@ -1012,6 +1010,10 @@ static void vhci_shutdown_connection(struct usbip_device *ud)
- 		kernel_sock_shutdown(ud->tcp_socket, SHUT_RDWR);
- 	}
- 
-+	/* avoid races during shutdown */
-+	spin_lock_irqsave(&vhci->lock, flags);
-+	spin_lock(&vdev->priv_lock);
-+
- 	/* kill threads related to this sdev */
- 	if (vdev->ud.tcp_rx) {
- 		kthread_stop_put(vdev->ud.tcp_rx);
-@@ -1031,6 +1033,10 @@ static void vhci_shutdown_connection(struct usbip_device *ud)
- 	}
- 	pr_info("release socket\n");
- 
-+	/* unlock - vhci_device_unlink_cleanup() holds the locks */
-+	spin_unlock(&vdev->priv_lock);
-+	spin_unlock_irqrestore(&vhci->lock, flags);
-+
- 	vhci_device_unlink_cleanup(vdev);
- 
- 	/*
-
---------------E76659FECC40DD1FA21751DE--
