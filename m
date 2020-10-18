@@ -2,91 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 100A82917A7
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Oct 2020 15:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0622917BF
+	for <lists+linux-usb@lfdr.de>; Sun, 18 Oct 2020 16:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbgJRNrp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 18 Oct 2020 09:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726474AbgJRNrp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 18 Oct 2020 09:47:45 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29F7C061755;
-        Sun, 18 Oct 2020 06:47:44 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id h6so4408062pgk.4;
-        Sun, 18 Oct 2020 06:47:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yITj8dBRv3eP6s3AyfeUdrvXg5i+GxFPHwm8RZEHOO4=;
-        b=rM3pr12X746v1vIOK9QDqXttSIZ/dMOc3OTtp+397Zu3cQJG0VQd4BKvi2rDYM94vN
-         SrQvNnlXb0aZUnNox/kB4aCnA+9PwI0aQch683c38FCO46FAk+xWkw7bWp6uGDj7JZ8c
-         8wlCBUzGVOySCVAqGHTW7E6evkbXxDSAeoqxeQxLX+bhORLD019TH1bJhCUyUasAgRqz
-         Q64BiMR3/G1tD8HRxKVK0/NoY5l9HT0irpGxdFsKCPZo0GtG2xPShc2bjWUJlfYqsuoM
-         /+CfwlH8CSO1JPNpOn5H9WHhBrnA9i3ShwgyTxOLzXGWPEuoDVKhmBdh+Lu0BJrdrxV+
-         vvdg==
+        id S1726957AbgJROFK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 18 Oct 2020 10:05:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:39197 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726986AbgJROFA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 18 Oct 2020 10:05:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603029898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kBVMPnQfqrYuRmZ0mFLSkNqYWCaxPfshC6ZYuKW12NQ=;
+        b=CE3TTm0ZWS3xUbYzjwLA7+TYTk7Dg+VxIL4Zp73oDsqTuzAXXNjBX0Doq5M5Cu6ffXkYev
+        bZ3C9BpL47kMqRFuXYSmeuVfmCYD0R8cyybmNyMbwair6n3qDaCsRQ2KiiaxG8Fe9Zs8sm
+        6xUrramWNvo4ZIP3aUKUh3vEKSsfIgI=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-380--ri2cDFUPuqaRVgookoBYw-1; Sun, 18 Oct 2020 10:04:56 -0400
+X-MC-Unique: -ri2cDFUPuqaRVgookoBYw-1
+Received: by mail-qv1-f70.google.com with SMTP id s8so4460277qvv.18
+        for <linux-usb@vger.kernel.org>; Sun, 18 Oct 2020 07:04:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yITj8dBRv3eP6s3AyfeUdrvXg5i+GxFPHwm8RZEHOO4=;
-        b=ne15rntq+hANH2pekuEoLGUJKa0oNPv3XPAW7DHu3+2KFDeucBVF71YJNLTZOYT4P1
-         GlRY9LQwIRRwd4Ut2U1F2nfKXPmShdAONBWHgdPfu/a7bSO70Ovv1X5G+C5vCoWd2phz
-         xrJ5GddU/FZrHDTfFDm9/EbGoT7Md0mGAnfkzmZ5DCnV9O9T9i33RPoZi50sNBx01GoS
-         BBwXpT356D5h3xukhnA4l1g8mt3XZAtwkaT9zB1vATCXtyWhOnIlEDJ4hDYYeutrjDIy
-         8kvFzVAe9K/0E51Xahece/k17mXztyBgOZ4wz+PAgKfxd8UIkKR1t9ZVXJXvJjzl6SOW
-         BcOg==
-X-Gm-Message-State: AOAM530H2bRhSHzeyQxbbnBZr0PgPOOYh+cKpAeK9MO3lAIAhoP+CJnk
-        XQz+6jSgLmj7tZDzZJRpsp8=
-X-Google-Smtp-Source: ABdhPJzka8p1UURxATgAVhikDTB9qma4UG+5S5LaXOXMtfgGri2oh+7X/CWHrm3EtEB8URamSAfemA==
-X-Received: by 2002:a63:1849:: with SMTP id 9mr10498295pgy.393.1603028864215;
-        Sun, 18 Oct 2020 06:47:44 -0700 (PDT)
-Received: from localhost ([204.124.180.191])
-        by smtp.gmail.com with ESMTPSA id o2sm8428946pgg.3.2020.10.18.06.47.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 18 Oct 2020 06:47:43 -0700 (PDT)
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
-Subject: [PATCH v1] usb: dwc3: core: fix a issue about clear connect state
-Date:   Sun, 18 Oct 2020 21:47:34 +0800
-Message-Id: <20201018134734.10406-1-zhengdejin5@gmail.com>
-X-Mailer: git-send-email 2.25.0
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=kBVMPnQfqrYuRmZ0mFLSkNqYWCaxPfshC6ZYuKW12NQ=;
+        b=dCPnwzhx+kGhHgFNFnFxZbAVm7SORWVDkeIQpknk5+a7NYo307jSvZbGow2FHuoF/d
+         VFzfFmFbxd3JhyztRGlytx1VE+As3wq36CrW+bar2rBmAUyDjKUsCDFyOcGSofgX7Q4R
+         hTMDSvxmX44Cb/X05DhBLf3F2aV8cS71D7HfX0Ab222uM1BshjAXRRgvEQt8zY4JFcvQ
+         LNDqdNeCfJXLsnjsjW4wQe5R529UZVrSwTM5ArhrL8KeQkj5z1melQofBjvevyn5DEsa
+         i9gWIr2TndM9tQCPUgpB1m20pC5JhrRHGfhhrBA5evV7WCi+yZgiRXyF8Z0lXdyxjHOu
+         ffwQ==
+X-Gm-Message-State: AOAM5331zM4k6uliJpGA49pfBNpN3Pn8uR9CXyKiUlRcxrjpvBYc982f
+        g8RrAexgMNew83C3ZbDQ2kjfPCqNvqkq3wOLL6eW7voMB6G4eijgVB7AS5N2G6qxjISKvMZpP64
+        9PpCqV5CZI8tGtxREA+UD
+X-Received: by 2002:a05:620a:1287:: with SMTP id w7mr12724313qki.436.1603029896365;
+        Sun, 18 Oct 2020 07:04:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy6z5rS79nBj0nCbIqVRZ9qmkAzjArqewdITB0rtwnhi1UUe/kvxLZTENMJDRITA4iBlrUAlw==
+X-Received: by 2002:a05:620a:1287:: with SMTP id w7mr12724258qki.436.1603029896034;
+        Sun, 18 Oct 2020 07:04:56 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id u16sm3288927qth.42.2020.10.18.07.04.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Oct 2020 07:04:55 -0700 (PDT)
+Subject: Re: [RFC] treewide: cleanup unreachable breaks
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
+        linux-nvdimm@lists.01.org, linux-pci@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        storagedev@microchip.com, devel@driverdev.osuosl.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        bpf@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        alsa-devel@alsa-project.org, clang-built-linux@googlegroups.com
+References: <20201017160928.12698-1-trix@redhat.com>
+ <20201018054332.GB593954@kroah.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <eecb7c3e-88b2-ec2f-0235-280da51ae69c@redhat.com>
+Date:   Sun, 18 Oct 2020 07:04:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201018054332.GB593954@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-According to Synopsys Programming Guide chapter 2.2 Register Resets,
-it cannot reset the DCTL register by set DCTL.CSFTRST for Core Soft Reset,
-if DWC3 controller as a slave device and stay connected with a usb host,
-then, reboot linux, it will fail to reinitialize dwc3 as a slave device
-when the DWC3 controller did not power off. because the connection status
-is incorrect, so we also need clear DCTL.RUN_STOP bit for disable connect
-when do core soft reset.
 
-Fixes: f59dcab176293b6 ("usb: dwc3: core: improve reset sequence")
-Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
----
- drivers/usb/dwc3/core.c | 1 +
- 1 file changed, 1 insertion(+)
+On 10/17/20 10:43 PM, Greg KH wrote:
+> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> This is a upcoming change to clean up a new warning treewide.
+>> I am wondering if the change could be one mega patch (see below) or
+>> normal patch per file about 100 patches or somewhere half way by collecting
+>> early acks.
+> Please break it up into one-patch-per-subsystem, like normal, and get it
+> merged that way.
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 2eb34c8b4065..239636c454c2 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -256,6 +256,7 @@ static int dwc3_core_soft_reset(struct dwc3 *dwc)
- 
- 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
- 	reg |= DWC3_DCTL_CSFTRST;
-+	reg &= ~DWC3_DCTL_RUN_STOP;
- 	dwc3_writel(dwc->regs, DWC3_DCTL, reg);
- 
- 	/*
--- 
-2.25.0
+OK.
+
+Thanks,
+
+Tom
+
+>
+> Sending us a patch, without even a diffstat to review, isn't going to
+> get you very far...
+>
+> thanks,
+>
+> greg k-h
+>
 
