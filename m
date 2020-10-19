@@ -2,76 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C58292659
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 13:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A467292727
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 14:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727436AbgJSL1s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 07:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbgJSL1r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 07:27:47 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980D9C0613CE
-        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 04:27:47 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id k25so12465635ioh.7
-        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 04:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=lnnlmXT2smNsFULtRy5NWN+lEjO92ZjkCQFdwtEXrZs=;
-        b=jOS6tTX/dteBzHOHrNsWD7V5IM6mqVgehEoSffj1cvPCKBMd5fz5Ecnex8OzALQ7g/
-         iGF/hbTd4VB/GNoROzCswB5hKtRp8f3UxDhdC/RnnM+o5bUd2bAcgE4HZNBJg2jB/Eai
-         +eX7Ob47tOLapfAB52lgJuPGs9G92JJF57EWzYCYzz1yXfW4CtByL9IUk26LLBbAFPjW
-         4Er9asTfMe7LGazwRVnmYXF/OBYlKzBqOAna9DRfBG7KvEq3Jf8b19BrwmGjzcr8FWZf
-         XmO+tcHUd1fCZ6DOjiNuTj0Aju2OyUO+Ck3jZDkHTwLqvIBZdAaL+QSzTEvzFS8+0Rw/
-         zEuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=lnnlmXT2smNsFULtRy5NWN+lEjO92ZjkCQFdwtEXrZs=;
-        b=sxLzmvA5J/62b5HaqyDYWn8Q3pOwAjd9HglOEeSJIKb4Hc9/rm3ukSf8YymChodISI
-         pj07HvNyFLlEqYmap+wH+NwPkN5SP+F/20/qVHrxRZltEvD8OOEc7VUt7Hgb00Spfl7V
-         M7MBjT+zcria+PhY44VoZxd9RHjnLAQiNtzK2szajIrRunpDPs2p4uNh7UbFT3pHq9B2
-         FQ3ytKQLcioniMQwghnUxPf0k0kFl9hg7cNzB9la+a6NuZuWtoJUbDnzlTKAoAuRsv0T
-         IWKr7gamwmUFEPnmuHaZOwDX9LzdHeiJ6TJD4aQq5af5EmkpRgbwRMt7qS/tvFZmz1cI
-         SUZw==
-X-Gm-Message-State: AOAM531fuBncs2eHiNbUVLX1+CSpz8zsqzRme/1xlPSxoRHwij9S0+bK
-        YW7lLW2x1EkQOUbJErxbwFe0uqQHdLS5Qtrf1gJ/aeNbVoFkNA==
-X-Google-Smtp-Source: ABdhPJzveoyBFOay0UBHOPvGZKKhXwKuYko1dpBBmi925fDP4InqNgdqUFJ9PNbX+j9bbKMwKMr5vctAsr6d3p3EI8c=
-X-Received: by 2002:a6b:8e08:: with SMTP id q8mr9962921iod.83.1603106866799;
- Mon, 19 Oct 2020 04:27:46 -0700 (PDT)
+        id S1726932AbgJSMYV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 08:24:21 -0400
+Received: from mga07.intel.com ([134.134.136.100]:6495 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726249AbgJSMYU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 19 Oct 2020 08:24:20 -0400
+IronPort-SDR: n7qudlwflOkZsXxGqqgcDl5/IdBigM9QqTqMzJYVmqGhQ7VMxaAM01gNk49z3d16KZ7D3TqvFD
+ 7yIgDmkT4U8Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9778"; a="231206985"
+X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
+   d="scan'208";a="231206985"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 05:24:17 -0700
+IronPort-SDR: zqFcZX/WkWZrVH1Uu8b6XaIxX3lFXCPrOKfWfberjQZgiPbHADDIh3NJ4JcASaKpuvjDz0DwaL
+ O7joVYOhglwA==
+X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
+   d="scan'208";a="315654594"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 05:24:14 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kUUE0-00AZjb-7P; Mon, 19 Oct 2020 15:25:16 +0300
+Date:   Mon, 19 Oct 2020 15:25:16 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Li Jun <jun.li@nxp.com>
+Cc:     heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
+        rafael@kernel.org, gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        lee.jones@linaro.org, mika.westerberg@linux.intel.com,
+        dmitry.torokhov@gmail.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-imx@nxp.com, peter.chen@nxp.com
+Subject: Re: [PATCH v4 2/4] device property: Add fwnode_is_compatible() and
+ device_is_compatible() helpers
+Message-ID: <20201019122516.GN4077@smile.fi.intel.com>
+References: <1603098195-9923-1-git-send-email-jun.li@nxp.com>
+ <1603098195-9923-2-git-send-email-jun.li@nxp.com>
 MIME-Version: 1.0
-From:   "Dmitry N. Mikushin" <maemarcus@gmail.com>
-Date:   Mon, 19 Oct 2020 13:27:35 +0200
-Message-ID: <CAGR4S9HQiZCsA7Y5_47j-xBOkydKiT2Exam=36L=-vwRjt+UWA@mail.gmail.com>
-Subject: Any example of USB gadget for DRD device mode on Intel Gemini Lake?
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1603098195-9923-2-git-send-email-jun.li@nxp.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear All,
+On Mon, Oct 19, 2020 at 05:03:13PM +0800, Li Jun wrote:
+> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> 
+> Since there are also some ACPI platforms where the
+> "compatible" property is used, introducing a generic helper
+> function fwnode_is_compatible() that can be used with
+> DT, ACPI and swnodes, and a wrapper function
+> device_is_compatible() with it.
+> 
+> The function calls of_device_is_comaptible() with OF nodes,
+> and with ACPI and swnodes it matches the given string
+> against the "compatible" string property array.
 
-I'm confused by the USB gadget mode on the recent Intel SoCs, such as
-Gemini Lake. The /sys/class/udc is empty, and a SoC can't present
-itself as a IoT gadget this way, yet definitely being designed as
-such. I've noticed the concept of dual-role-device, which seems to
-replace the OTG. Particularly, Harry Pan mentioned that Gemini Lake
-supports DRD in port 0.
+...
 
-Indeed, if I do:
+> + * Match the compatible strings of @fwnode against @compat. Returns positive
+> + * value on match, and 0 when no matching compatible string is found.
 
-sudo sh -c "echo device >/sys/class/usb_role/intel_xhci_usb_sw-role-switch/role"
+Please move Returns... to a separate paragraph.
+
+Btw, this is not true...
+
+> +int fwnode_is_compatible(struct fwnode_handle *fwnode, const char *compat)
+> +{
+> +	int ret;
+> +
+> +	if (is_of_node(fwnode))
+> +		return of_device_is_compatible(to_of_node(fwnode), compat);
+> +
+> +	ret = fwnode_property_match_string(fwnode, "compatible", compat);
+> +
+
+> +	return ret < 0 ? 0 : 1;
+
+...and this is at least strange after all.
+
+> +}
+
+> + * Match the compatible strings of @dev against @compat. Returns positive value
+> + * on match, and 0 when no matching compatible string is found.
+
+So does this.
+
+...
+
+> +int fwnode_is_compatible(struct fwnode_handle *fwnode, const char *compat);
+> +int device_is_compatible(struct device *dev, const char *compat);
+
+Please, group them rather device_is_compatible() with device_* and fwnode_*
+ones respectively.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-then one of the ports gets successfully recognized as a new USB
-device, if connected with a cable to another laptop.
-
-But I'm wondering, how exactly could I construct a logical device
-class for this case, e.g. similarly to uvc gadget for OTG? Completely
-lacking any example of code, currently it's a big confusion.
-
-Thanks & Kind regards,
-- Dmitry.
