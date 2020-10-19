@@ -2,35 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C50B82922DB
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 09:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558462922FF
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 09:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727366AbgJSHO1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 03:14:27 -0400
-Received: from static.214.254.202.116.clients.your-server.de ([116.202.254.214]:57232
-        "EHLO ciao.gmane.io" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727223AbgJSHO1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 03:14:27 -0400
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-        (envelope-from <glug-linux-usb@m.gmane-mx.org>)
-        id 1kUPNA-000AcW-AJ
-        for linux-usb@vger.kernel.org; Mon, 19 Oct 2020 09:14:24 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To:     linux-usb@vger.kernel.org
-From:   Ferry Toth <fntoth@gmail.com>
+        id S1727682AbgJSHeh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 03:34:37 -0400
+Received: from mailfilter06-out31.webhostingserver.nl ([141.138.169.48]:49397
+        "EHLO mailfilter06-out31.webhostingserver.nl" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727614AbgJSHeg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 03:34:36 -0400
+X-Greylist: delayed 964 seconds by postgrey-1.27 at vger.kernel.org; Mon, 19 Oct 2020 03:34:34 EDT
+X-Halon-ID: 458bd49b-11db-11eb-86c7-001a4a4cb958
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter06.webhostingserver.nl (Halon) with ESMTPSA
+        id 458bd49b-11db-11eb-86c7-001a4a4cb958;
+        Mon, 19 Oct 2020 09:18:22 +0200 (CEST)
+Received: from cust-178-250-146-69.breedbanddelft.nl ([178.250.146.69] helo=[10.8.0.6])
+        by s198.webhostingserver.nl with esmtpa (Exim 4.92.3)
+        (envelope-from <fntoth@gmail.com>)
+        id 1kUPR0-001jVw-IP; Mon, 19 Oct 2020 09:18:22 +0200
 Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
-Date:   Mon, 19 Oct 2020 09:14:19 +0200
-Message-ID: <b23536fb-13d4-e1b5-2b61-c8f9d4dbcef8@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     felipe.balbi@linux.intel.com
 References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
  <87a6wig461.fsf@kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Ferry Toth <fntoth@gmail.com>
+Message-ID: <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
+Date:   Mon, 19 Oct 2020 09:18:21 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
-Cc:     felipe.balbi-VuQAYsv1563Yd54FQh9/CA@public.gmane.org
+MIME-Version: 1.0
 In-Reply-To: <87a6wig461.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -138,10 +145,10 @@ Op 19-10-2020 om 07:45 schreef Felipe Balbi:
 > 
 > It this something you can reproduce on your end? Ferry, can you get dwc3
 > trace logs when this happens? ftrace_dump_on_oops may help here.
-> 
 I will do that tonight. Is flipping on ftrace_dump_on_oops sufficient or 
 do I need to do more?
 
 BTW after posting this I found in host mode dwc3 is not working properly 
 either. No oops, but no driver get loaded on device plug in.
+
 
