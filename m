@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B30D729265F
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 13:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DEB29283C
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 15:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727524AbgJSLaS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 07:30:18 -0400
-Received: from 340352.cloudwaysapps.com ([157.245.90.55]:48112 "EHLO
+        id S1727893AbgJSNeY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 09:34:24 -0400
+Received: from 340352.cloudwaysapps.com ([157.245.90.55]:40588 "EHLO
         340352.cloudwaysapps.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725799AbgJSLaR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 07:30:17 -0400
+        by vger.kernel.org with ESMTP id S1727811AbgJSNeY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 09:34:24 -0400
 Received: by 340352.cloudwaysapps.com (Postfix, from userid 1006)
-        id F3F941CCAD7; Mon, 19 Oct 2020 10:45:17 +0000 (UTC)
+        id 2E5EEE7322; Mon, 19 Oct 2020 11:22:36 +0000 (UTC)
 To:     linux-usb@vger.kernel.org
 Subject: Re: YOUR DIPLOMATIC PACKAGE
 X-PHP-Originating-Script: 1006:plexos.php
-Date:   Mon, 19 Oct 2020 10:45:17 +0000
+Date:   Mon, 19 Oct 2020 11:22:36 +0000
 From:   OPEN DOORS <support@wholesalehilltribesilver.com>
 Reply-To: clintonmorgan@paymentcenteroffice.com
-Message-ID: <33a75a964b11acd296e434e3f7f5c225@wholesalehilltribesilver.com>
+Message-ID: <d9d8d6904907a9973f8a2f9d8f7adea2@wholesalehilltribesilver.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
