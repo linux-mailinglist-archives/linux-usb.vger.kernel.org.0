@@ -2,143 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F162928A9
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 15:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4582928AB
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 15:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728557AbgJSN4l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 09:56:41 -0400
-Received: from mga04.intel.com ([192.55.52.120]:58918 "EHLO mga04.intel.com"
+        id S1728636AbgJSN6y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 09:58:54 -0400
+Received: from mga09.intel.com ([134.134.136.24]:24248 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728344AbgJSN4k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 19 Oct 2020 09:56:40 -0400
-IronPort-SDR: LeuIfm9izajAu7mXQ8RT7uewe66gVTI1oVLnFmLte+FXCJaLc3PiVngA7ac9wk6M1Ynh0Yhlii
- Y20e9SFDqOiQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9778"; a="164417592"
+        id S1728344AbgJSN6y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 19 Oct 2020 09:58:54 -0400
+IronPort-SDR: AUvylMeurAW/WQoFIm6v2Zv98wHTWHR88qgDkqmdscWpVOMMn6HYo5m5fGtdLCSOzZYUsy5YkJ
+ OKqDkt8CrZmA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9778"; a="167144768"
 X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
-   d="scan'208";a="164417592"
+   d="scan'208";a="167144768"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 06:56:40 -0700
-IronPort-SDR: o5hNjvW8dbMA3UFNLnruyOLOCht/WOWpY7pExSeWoZYgHtmB1HJniHuQj/movLP4l0rjnSb2Lc
- 23w68452IKyw==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 06:58:53 -0700
+IronPort-SDR: FKZix4vtRyAEvoZVpVTSNpQJwX4eosj9NAfk0T9u6GaoJEvxSLHgqFNXzo98V32bTsqXg1GwDL
+ Wzdz0wSbqtSQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
-   d="scan'208";a="422188080"
+   d="scan'208";a="422188671"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 19 Oct 2020 06:56:38 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Oct 2020 16:56:37 +0300
-Date:   Mon, 19 Oct 2020 16:56:37 +0300
+  by fmsmga001.fm.intel.com with SMTP; 19 Oct 2020 06:58:49 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Oct 2020 16:58:48 +0300
+Date:   Mon, 19 Oct 2020 16:58:48 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        cy_huang@richtek.com, u0084500@gmail.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: reset hard_reset_count for any
- disconnect
-Message-ID: <20201019135637.GK1667571@kuha.fi.intel.com>
-References: <1602500592-3817-1-git-send-email-jun.li@nxp.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        David Cohen <david.a.cohen@linux.intel.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] usb: dwc3: ulpi: Fix UPLI registers read/write ops
+Message-ID: <20201019135848.GL1667571@kuha.fi.intel.com>
+References: <20201010222351.7323-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1602500592-3817-1-git-send-email-jun.li@nxp.com>
+In-Reply-To: <20201010222351.7323-1-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 07:03:12PM +0800, Li Jun wrote:
-> Current tcpm_detach() only reset hard_reset_count if port->attached
-> is true, this may cause this counter clear is missed if the CC
-> disconnect event is generated after tcpm_port_reset() is done
-> by other events, e.g. VBUS off comes first before CC disconect for
-> a power sink, in that case the first tcpm_detach() will only clear
-> port->attached flag but leave hard_reset_count there because
-> tcpm_port_is_disconnected() is still false, then later tcpm_detach()
-> by CC disconnect will directly return due to port->attached is cleared,
-> finally this will result tcpm will not try hard reset or error recovery
-> for later attach.
+On Sun, Oct 11, 2020 at 01:23:48AM +0300, Serge Semin wrote:
+> Our Baikal-T1 SoC is equipped with DWC USB3 IP core as a USB2.0 bus
+> controller. In general the DWC USB3 driver is working well for it except
+> the ULPI-bus part. We've found out that the DWC USB3 ULPI-bus driver detected
+> PHY with VID:PID tuple as 0x0000:0x0000, which of course wasn't true since
+> it was supposed to be 0x0424:0x0006. After a short digging inside the
+> ulpi.c code and studying the DWC USB3 documentation, it has been
+> discovered that the ULPI bus IO ops didn't work quite correct. The
+> busy-loop had stopped waiting before the actual operation was finished. We
+> found out that the problem was caused by several bugs hidden in the DWC
+> USB3 ULPI-bus IO implementation.
 > 
-> ChiYuan reported this issue on his platform with below tcpm trace:
-> After power sink session setup after hard reset 2 times, detach
-> from the power source and then attach:
-> [ 4848.046358] VBUS off
-> [ 4848.046384] state change SNK_READY -> SNK_UNATTACHED
-> [ 4848.050908] Setting voltage/current limit 0 mV 0 mA
-> [ 4848.050936] polarity 0
-> [ 4848.052593] Requesting mux state 0, usb-role 0, orientation 0
-> [ 4848.053222] Start toggling
-> [ 4848.086500] state change SNK_UNATTACHED -> TOGGLING
-> [ 4848.089983] CC1: 0 -> 0, CC2: 3 -> 3 [state TOGGLING, polarity 0, connected]
-> [ 4848.089993] state change TOGGLING -> SNK_ATTACH_WAIT
-> [ 4848.090031] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @200 ms
-> [ 4848.141162] CC1: 0 -> 0, CC2: 3 -> 0 [state SNK_ATTACH_WAIT, polarity 0, disconnected]
-> [ 4848.141170] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT
-> [ 4848.141184] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @20 ms
-> [ 4848.163156] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed 20 ms]
-> [ 4848.163162] Start toggling
-> [ 4848.216918] CC1: 0 -> 0, CC2: 0 -> 3 [state TOGGLING, polarity 0, connected]
-> [ 4848.216954] state change TOGGLING -> SNK_ATTACH_WAIT
-> [ 4848.217080] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @200 ms
-> [ 4848.231771] CC1: 0 -> 0, CC2: 3 -> 0 [state SNK_ATTACH_WAIT, polarity 0, disconnected]
-> [ 4848.231800] state change SNK_ATTACH_WAIT -> SNK_ATTACH_WAIT
-> [ 4848.231857] pending state change SNK_ATTACH_WAIT -> SNK_UNATTACHED @20 ms
-> [ 4848.256022] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [delayed20 ms]
-> [ 4848.256049] Start toggling
-> [ 4848.871148] VBUS on
-> [ 4848.885324] CC1: 0 -> 0, CC2: 0 -> 3 [state TOGGLING, polarity 0, connected]
-> [ 4848.885372] state change TOGGLING -> SNK_ATTACH_WAIT
-> [ 4848.885548] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @200 ms
-> [ 4849.088240] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed200 ms]
-> [ 4849.088284] state change SNK_DEBOUNCED -> SNK_ATTACHED
-> [ 4849.088291] polarity 1
-> [ 4849.088769] Requesting mux state 1, usb-role 2, orientation 2
-> [ 4849.088895] state change SNK_ATTACHED -> SNK_STARTUP
-> [ 4849.088907] state change SNK_STARTUP -> SNK_DISCOVERY
-> [ 4849.088915] Setting voltage/current limit 5000 mV 0 mA
-> [ 4849.088927] vbus=0 charge:=1
-> [ 4849.090505] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES
-> [ 4849.090828] pending state change SNK_WAIT_CAPABILITIES -> SNK_READY @240 ms
-> [ 4849.335878] state change SNK_WAIT_CAPABILITIES -> SNK_READY [delayed240 ms]
+> First of all in accordance with the DWC USB3 databook [1] the ULPI IO
+> busy-loop is supposed to use the GUSB2PHYACCn.VStsDone flag as an
+> indication of the PHY vendor control access completion. Instead it polled
+> the GUSB2PHYACCn.VStsBsy flag, which as we discovered can be cleared a
+> bit before the VStsDone flag.
 > 
-> this patch fix this issue by clear hard_reset_count at any cases
-> of cc disconnect, í.e. don't check port->attached flag.
+> Secondly having the simple counter-based loop in the modern kernel is
+> really a weak design of the busy-looping pattern especially seeing the
+> ULPI operations delay can be easily estimated [2], since the bus clock is
+> fixed to 60MHz.
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 4b4e02c83167 ("typec: tcpm: Move out of staging")
-> Reported-and-tested-by: ChiYuan Huang <cy_huang@richtek.com>
-> Signed-off-by: Li Jun <jun.li@nxp.com>
+> Finally the root cause of the denoted in the prologue problem was due to
+> the Suspend PHY DWC USB3 feature perception. The commit e0082698b689
+> ("usb: dwc3: ulpi: conditionally resume ULPI PHY") introduced the Suspend
+> USB2.0 HS/FS/LS PHY regression as the Low-power consumption mode would be
+> disable after a first attempt to read/write from the ULPI PHY control
+> registers, and still didn't fix the problem it was originally intended for
+> since the very first attempt of the ULPI PHY control registers IO would
+> need much more time than the busy-loop provided. So instead of disabling
+> the Suspend USB2.0 HS/FS/LS PHY feature we suggest to just extend the
+> busy-loop delay in case if the GUSB2PHYCFGn.SusPHY flag set to 1. By doing
+> so we'll eliminate the regression and the fix the false busy-loop timeout
+> problem.
+> 
+> [1] Synopsys DesignWare Cores SuperSpeed USB 3.0 xHCI Host Controller
+>     Databook, 2.70a, December 2013, p.388
+> 
+> [1] UTMI+ Low Pin Interface (ULPI) Specification, Revision 1.1,
+>     October 20, 2004, pp. 30 - 36.
+> 
+> Fixes: e0082698b689 ("usb: dwc3: ulpi: conditionally resume ULPI PHY")
+> Fixes: 88bc9d194ff6 ("usb: dwc3: add ULPI interface support")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> 
+> Serge Semin (3):
+>   usb: dwc3: ulpi: Use VStsDone to detect PHY regs access completion
+>   usb: dwc3: ulpi: Replace CPU-based busyloop with Protocol-based one
+>   usb: dwc3: ulpi: Fix USB2.0 HS/FS/LS PHY suspend regression
+> 
+>  drivers/usb/dwc3/core.h |  1 +
+>  drivers/usb/dwc3/ulpi.c | 38 +++++++++++++++++++++-----------------
+>  2 files changed, 22 insertions(+), 17 deletions(-)
 
-FWIW:
+FWIW, for the whole series:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 55535c4..a6fae1f 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -2890,6 +2890,9 @@ static void tcpm_reset_port(struct tcpm_port *port)
->  
->  static void tcpm_detach(struct tcpm_port *port)
->  {
-> +	if (tcpm_port_is_disconnected(port))
-> +		port->hard_reset_count = 0;
-> +
->  	if (!port->attached)
->  		return;
->  
-> @@ -2898,9 +2901,6 @@ static void tcpm_detach(struct tcpm_port *port)
->  		port->tcpc->set_bist_data(port->tcpc, false);
->  	}
->  
-> -	if (tcpm_port_is_disconnected(port))
-> -		port->hard_reset_count = 0;
-> -
->  	tcpm_reset_port(port);
->  }
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 thanks,
 
