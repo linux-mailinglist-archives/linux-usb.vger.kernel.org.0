@@ -2,70 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2666D292842
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 15:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DD729285F
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 15:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727893AbgJSNgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 09:36:11 -0400
-Received: from mga11.intel.com ([192.55.52.93]:1543 "EHLO mga11.intel.com"
+        id S1728425AbgJSNkz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 09:40:55 -0400
+Received: from mga02.intel.com ([134.134.136.20]:62031 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727297AbgJSNgL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 19 Oct 2020 09:36:11 -0400
-IronPort-SDR: aUXDBMHqHsfeQJWE4jsBbwO4QchpG+HdXueYsI/ziV35pDjqfBDUJWeaZkpMIoO1K+0Rl4Zqwb
- UgBNXjkeCZeQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9778"; a="163543497"
+        id S1727297AbgJSNky (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 19 Oct 2020 09:40:54 -0400
+IronPort-SDR: hJMWP7h+0WeN5xHhFDbgksCPiD3gno/dFhH/K3kKUQGYzHjGZAyMknIVnZhJB1b6/IWnMyN/9w
+ a60qZU2HVKoQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9778"; a="153968907"
 X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
-   d="scan'208";a="163543497"
+   d="scan'208";a="153968907"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 06:36:09 -0700
-IronPort-SDR: DEDioaHQNQfGihUOZ2WZ6kdJ6QOT0PkV5nBkfI5GgCGodfqUcPmU+cmCtGOVJ9HSEdy4kQL/eR
- 11TG78iD4vIg==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 06:40:52 -0700
+IronPort-SDR: HwdKJjM+FFjAHLcoyEnAhnOdI6GWkqpEcAkzCZQfuGNHPF6bGWigCKH5j0AqE5nYJoF6Z2EsM4
+ b6RPQ2V1qEAg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
-   d="scan'208";a="422182289"
+   d="scan'208";a="422183357"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 19 Oct 2020 06:36:08 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Oct 2020 16:36:07 +0300
-Date:   Mon, 19 Oct 2020 16:36:07 +0300
+  by fmsmga001.fm.intel.com with SMTP; 19 Oct 2020 06:40:48 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Oct 2020 16:40:48 +0300
+Date:   Mon, 19 Oct 2020 16:40:48 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Dmitry N. Mikushin" <maemarcus@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Any example of USB gadget for DRD device mode on Intel Gemini
- Lake?
-Message-ID: <20201019133607.GC1667571@kuha.fi.intel.com>
-References: <CAGR4S9HQiZCsA7Y5_47j-xBOkydKiT2Exam=36L=-vwRjt+UWA@mail.gmail.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Amelie Delaunay <amelie.delaunay@st.com>
+Subject: Re: [PATCH v10 09/15] usb: typec: tcpm: frs sourcing vbus callback
+Message-ID: <20201019134048.GD1667571@kuha.fi.intel.com>
+References: <20201008061556.1402293-1-badhri@google.com>
+ <20201008061556.1402293-10-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGR4S9HQiZCsA7Y5_47j-xBOkydKiT2Exam=36L=-vwRjt+UWA@mail.gmail.com>
+In-Reply-To: <20201008061556.1402293-10-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 01:27:35PM +0200, Dmitry N. Mikushin wrote:
-> Dear All,
+On Wed, Oct 07, 2020 at 11:15:50PM -0700, Badhri Jagan Sridharan wrote:
+> During FRS hardware autonomously starts to source vbus. Provide
+> callback to perform chip specific operations.
 > 
-> I'm confused by the USB gadget mode on the recent Intel SoCs, such as
-> Gemini Lake. The /sys/class/udc is empty, and a SoC can't present
-> itself as a IoT gadget this way, yet definitely being designed as
-> such. I've noticed the concept of dual-role-device, which seems to
-> replace the OTG. Particularly, Harry Pan mentioned that Gemini Lake
-> supports DRD in port 0.
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-So do you have the dwc3 (the USB device controller) PCI device
-available/visible on your system? What do you get if you run:
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-        lspci -nn|grep USB
-
-The DWC3 PCI device ID on Gemini lake is 0x31aa (search
-PCI_DEVICE_ID_INTEL_GLK in drivers/usb/dwc3/dwc3-pci.c).
-
-Which board/product are you using.
-Which kernel are you using?
-Is the dwc3 driver enabled in your kernel?
-Which gadget are you testing with? g_zero?
+> ---
+> Introduced in v9. No chages since then.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 9 +++++++++
+>  include/linux/usb/tcpm.h      | 4 ++++
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 55535c4f66bf..02b7f623f584 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4090,7 +4090,16 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
+>  	case SRC_TRY_DEBOUNCE:
+>  		/* Do nothing, waiting for sink detection */
+>  		break;
+> +	case FR_SWAP_SEND:
+> +	case FR_SWAP_SEND_TIMEOUT:
+> +	case FR_SWAP_SNK_SRC_TRANSITION_TO_OFF:
+> +	case FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED:
+> +		if (port->tcpc->frs_sourcing_vbus)
+> +			port->tcpc->frs_sourcing_vbus(port->tcpc);
+> +		break;
+>  	case FR_SWAP_SNK_SRC_NEW_SINK_READY:
+> +		if (port->tcpc->frs_sourcing_vbus)
+> +			port->tcpc->frs_sourcing_vbus(port->tcpc);
+>  		tcpm_set_state(port, FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED, 0);
+>  		break;
+>  
+> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+> index 09762d26fa0c..7303f518ba49 100644
+> --- a/include/linux/usb/tcpm.h
+> +++ b/include/linux/usb/tcpm.h
+> @@ -83,6 +83,9 @@ enum tcpm_transmit_type {
+>   *		Optional; Called to enable/disable PD 3.0 fast role swap.
+>   *		Enabling frs is accessory dependent as not all PD3.0
+>   *		accessories support fast role swap.
+> + * @frs_sourcing_vbus:
+> + *		Optional; Called to notify that vbus is now being sourced.
+> + *		Low level drivers can perform chip specific operations, if any.
+>   */
+>  struct tcpc_dev {
+>  	struct fwnode_handle *fwnode;
+> @@ -109,6 +112,7 @@ struct tcpc_dev {
+>  			   const struct pd_message *msg);
+>  	int (*set_bist_data)(struct tcpc_dev *dev, bool on);
+>  	int (*enable_frs)(struct tcpc_dev *dev, bool enable);
+> +	void (*frs_sourcing_vbus)(struct tcpc_dev *dev);
+>  };
+>  
+>  struct tcpm_port;
+> -- 
+> 2.28.0.806.g8561365e88-goog
 
 thanks,
 
