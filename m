@@ -2,185 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA4B292DCB
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 20:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A6D292EA2
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 21:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730464AbgJSSwc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 14:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S1731317AbgJSTmn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 15:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727681AbgJSSwc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 14:52:32 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98968C0613CE
-        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 11:52:32 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id f37so619544otf.12
-        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 11:52:32 -0700 (PDT)
+        with ESMTP id S1731275AbgJSTmb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 15:42:31 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07ABC0613D9
+        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 12:42:27 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id b19so343134pld.0
+        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 12:42:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wwPRXAaMYxjFqM/YIzNWQCJWcq2FDVHsw8/2EBq/9VU=;
-        b=QXyH1Uoh0HaPVS3ogACUfZSrONjtnanEi7sYkrOLGnRqNeDWL0KFCnPyRn4EDO091X
-         gCFc2qpmlsYMAORzxra1AkYBosy1H29fHnn3M3o1wgkDOYQ58pTQ4sZg+aiqsI4YxZru
-         Rt085B2812Ju/Od92PjjFINlzvZn7chwiyltU=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=no6WOfZDuAXhTDfVia9Vunkz4L7BthY0F8m0jo4//vs=;
+        b=vqIoQqfPtCUD7ceHGEmbvFqqUZd/9dE0IpLQQ4p4nyONBXQMSFxBG5OzgCaJfT8eu8
+         Ez0DMwUntzcU9c2WJzs/WqMvxG3bzlj0mstlcz+E4fW0gt02sZNjrL1HdU6SHVwmCE5R
+         WFeHYzJRJuPZspqj8YJ2wlUmUN4Mc8MNrI6kLekCJ8yejCepkvkgEUeb7TbpDze1NnEh
+         TP2SjhqdakZDUedR00qYjd62k5W2m7FgfHIpcuS/rhjqMGxVL3Apppn+UDRO/ftdIfoh
+         duvoKavmXDacw9mysFV+xdp1Tg4QxCPiDxNSeCeZyO+34Y2S1kYSdX61NJzSKhmGsX5T
+         HLpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wwPRXAaMYxjFqM/YIzNWQCJWcq2FDVHsw8/2EBq/9VU=;
-        b=k8PKnaMiB6/h2LetyR+6f69emTWbljjJRulywf8MSMavveT+mfYnOpPC0dSOKwJxvX
-         STbKwXfvMqd1AjJKN1zZDHDj6uqkc5VztEhiQP9oPwDFQOlgxvR32AzwOtT0x1vMbE6f
-         YL9Dyk4l4XKLwSCOqFU182hFuRehtsTibPir2geh/J4eGtUTSuap9Q2FMij+bJZX37D8
-         k7yWhn8ByGX8hKkqqpOX8IpViAbYLtnjkdOFcZ3/DQIiq6THB5GLeUABBLDB5ifG/vY2
-         MJ1YBhNSN03O+N4714FAyVX77Ock3IVy+AIrrOIqWf04Cv/hFXFOWY4Dj7JADJwMQQTV
-         xx/g==
-X-Gm-Message-State: AOAM531YqItKhYnQMbyDsaj0Gh1Bskq18mGQ1eoozkALElpSzK+WvMwx
-        52/ZaXwyMWkFB3wGQNNKM2N7Pg==
-X-Google-Smtp-Source: ABdhPJzdSd2LvaOxu/5mKLj3tQrTLEdoRYuVpFdhu/ztrTOVEnY3w1zEPrR9+Jpu4jkJD8gDRtkUJA==
-X-Received: by 2002:a05:6830:19d9:: with SMTP id p25mr997145otp.135.1603133551820;
-        Mon, 19 Oct 2020 11:52:31 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id x15sm201142oor.33.2020.10.19.11.52.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Oct 2020 11:52:31 -0700 (PDT)
-Subject: Re: [PATCH v3] kcov, usbip: collect coverage from vhci_rx_loop
-To:     Andrey Konovalov <andreyknvl@google.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Nazime Hande Harputluoglu <handeharput@gmail.com>,
-        Nazime Hande Harputluoglu <handeharputlu@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <e626ad10573bdc561c6f00667a31c87ee7725044.1603127827.git.andreyknvl@google.com>
- <ca9c83b0-364a-6a26-4539-e38373a455aa@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2ee45dd7-0735-fcbb-545c-352d9c5d8689@linuxfoundation.org>
-Date:   Mon, 19 Oct 2020 12:52:30 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=no6WOfZDuAXhTDfVia9Vunkz4L7BthY0F8m0jo4//vs=;
+        b=uHotyZxWVKuqNopXxaPYhGw4hFFJ36PGYAq5NrgQzxhmT1RLMFLNDRQcSDs/q+518T
+         I8wc9Y8rcol+gTHsWWbVKtUxPhO8QPGFcWDvk/xe6GySlWHSzyG+R0CDufatAQWVnSwr
+         67YOhWatBcOwbTEMsltX+50LqnCZfWvDtb6eE833pYyScQIQriZ0lNFoeHhv5cpVtDIX
+         614pqv6tY0GuvAwRelvpW4WKbB5KIVxDadU/A+bBEInp16OGmfcdSHah4Xrdax5qIXdl
+         +LS6jdpoNhqpbDfmsqBn3V/R3sImCQqhyJ+q5jJROZC1WFhpQ/vtHLgaBFdmSwnu6SkN
+         F22w==
+X-Gm-Message-State: AOAM531CD/yc+LMW75mDI2h9wIphLfWVrYKV4nOgPiOky5HU1Ph2IvIL
+        shilC1+e9l/bbLMgkehRNPCBwOGvwpL4qWC828adkw==
+X-Google-Smtp-Source: ABdhPJxy4K+2uRaBuhFTeTSlHPetqrP1uAAP7dKvm6UBZz10SCa23PJUxb54E5JJmlle9J/y892Qp+TTrKvO4GeNXIk=
+X-Received: by 2002:a17:90a:ee87:: with SMTP id i7mr921476pjz.25.1603136546933;
+ Mon, 19 Oct 2020 12:42:26 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <ca9c83b0-364a-6a26-4539-e38373a455aa@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20201017160928.12698-1-trix@redhat.com> <20201018054332.GB593954@kroah.com>
+In-Reply-To: <20201018054332.GB593954@kroah.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 19 Oct 2020 12:42:15 -0700
+Message-ID: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+Subject: Re: [RFC] treewide: cleanup unreachable breaks
+To:     Tom Rix <trix@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        storagedev@microchip.com, devel@driverdev.osuosl.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        George Burgess <gbiv@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/19/20 12:49 PM, Shuah Khan wrote:
-> On 10/19/20 11:20 AM, Andrey Konovalov wrote:
->> From: Nazime Hande Harputluoglu <handeharputlu@google.com>
->>
->> Add kcov_remote_start()/kcov_remote_stop() annotations to the
->> vhci_rx_loop() function, which is responsible for parsing USB/IP packets
->> coming into USB/IP client.
->>
->> Since vhci_rx_loop() threads are spawned per vhci_hcd device instance, 
->> the
->> common kcov handle is used for kcov_remote_start()/stop() annotations
->> (see Documentation/dev-tools/kcov.rst for details). As the result kcov
->> can now be used to collect coverage from vhci_rx_loop() threads.
->>
->> Signed-off-by: Nazime Hande Harputluoglu <handeharputlu@google.com>
->> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
->> ---
->>
->> Changes v2->v3:
->> - Fix build without KCOV enabled.
->>
->> ---
->>   drivers/usb/usbip/usbip_common.h | 4 ++++
->>   drivers/usb/usbip/vhci_rx.c      | 7 +++++++
->>   drivers/usb/usbip/vhci_sysfs.c   | 4 ++++
->>   3 files changed, 15 insertions(+)
->>
->> diff --git a/drivers/usb/usbip/usbip_common.h 
->> b/drivers/usb/usbip/usbip_common.h
->> index 8be857a4fa13..0906182011d6 100644
->> --- a/drivers/usb/usbip/usbip_common.h
->> +++ b/drivers/usb/usbip/usbip_common.h
->> @@ -277,6 +277,10 @@ struct usbip_device {
->>           void (*reset)(struct usbip_device *);
->>           void (*unusable)(struct usbip_device *);
->>       } eh_ops;
->> +
->> +#ifdef CONFIG_KCOV
->> +    u64 kcov_handle;
->> +#endif
->>   };
->>   #define kthread_get_run(threadfn, data, namefmt, ...)               \
->> diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
->> index 266024cbb64f..68ec0aa64f69 100644
->> --- a/drivers/usb/usbip/vhci_rx.c
->> +++ b/drivers/usb/usbip/vhci_rx.c
->> @@ -3,6 +3,7 @@
->>    * Copyright (C) 2003-2008 Takahiro Hirofuchi
->>    */
->> +#include <linux/kcov.h>
->>   #include <linux/kthread.h>
->>   #include <linux/slab.h>
->> @@ -261,7 +262,13 @@ int vhci_rx_loop(void *data)
->>           if (usbip_event_happened(ud))
->>               break;
->> +#ifdef CONFIG_KCOV
->> +        kcov_remote_start_common(ud->kcov_handle);
->> +#endif
->>           vhci_rx_pdu(ud);
->> +#ifdef CONFIG_KCOV
->> +        kcov_remote_stop();
->> +#endif
->>       }
-> 
-> Let's move these into usbip_common.h as inline functions along
-> the line of
-> 
-> #ifdef CONFIG_KCOV
-> usbip_kcov_remote_start_common(ud)
-> {
->    kcov_remote_start_common(ud->kcov_handle);
-> }
-> 
-> usbip_kcov_remote_stop_common(ud)
-> {
->    kcov_remote_stop_common(ud->kcov_handle);
-> }
-> #else
-> stubs that do nothing
-> #endif
-> 
->>       return 0;
->> diff --git a/drivers/usb/usbip/vhci_sysfs.c 
->> b/drivers/usb/usbip/vhci_sysfs.c
->> index be37aec250c2..e167b8a445ad 100644
->> --- a/drivers/usb/usbip/vhci_sysfs.c
->> +++ b/drivers/usb/usbip/vhci_sysfs.c
->> @@ -4,6 +4,7 @@
->>    * Copyright (C) 2015-2016 Nobuo Iwata
->>    */
->> +#include <linux/kcov.h>
->>   #include <linux/kthread.h>
->>   #include <linux/file.h>
->>   #include <linux/net.h>
->> @@ -383,6 +384,9 @@ static ssize_t attach_store(struct device *dev, 
->> struct device_attribute *attr,
->>       vdev->ud.sockfd     = sockfd;
->>       vdev->ud.tcp_socket = socket;
->>       vdev->ud.status     = VDEV_ST_NOTASSIGNED;
->> +#ifdef CONFIG_KCOV
->> +    vdev->ud.kcov_handle = kcov_common_handle();
->> +#endif
-> 
-> 
-> Same here add a usbip_kcov_handle_init(ud)
-> 
+On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
+> > From: Tom Rix <trix@redhat.com>
+> >
+> > This is a upcoming change to clean up a new warning treewide.
+> > I am wondering if the change could be one mega patch (see below) or
+> > normal patch per file about 100 patches or somewhere half way by collecting
+> > early acks.
+>
+> Please break it up into one-patch-per-subsystem, like normal, and get it
+> merged that way.
+>
+> Sending us a patch, without even a diffstat to review, isn't going to
+> get you very far...
 
-btw - I am seeing bounces on handeharputlu@google.com address.
+Tom,
+If you're able to automate this cleanup, I suggest checking in a
+script that can be run on a directory.  Then for each subsystem you
+can say in your commit "I ran scripts/fix_whatever.py on this subdir."
+ Then others can help you drive the tree wide cleanup.  Then we can
+enable -Wunreachable-code-break either by default, or W=2 right now
+might be a good idea.
 
-thanks,
--- Shuah
+Ah, George (gbiv@, cc'ed), did an analysis recently of
+`-Wunreachable-code-loop-increment`, `-Wunreachable-code-break`, and
+`-Wunreachable-code-return` for Android userspace.  From the review:
+```
+Spoilers: of these, it seems useful to turn on
+-Wunreachable-code-loop-increment and -Wunreachable-code-return by
+default for Android
+...
+While these conventions about always having break arguably became
+obsolete when we enabled -Wfallthrough, my sample turned up zero
+potential bugs caught by this warning, and we'd need to put a lot of
+effort into getting a clean tree. So this warning doesn't seem to be
+worth it.
+```
+Looks like there's an order of magnitude of `-Wunreachable-code-break`
+than the other two.
+
+We probably should add all 3 to W=2 builds (wrapped in cc-option).
+I've filed https://github.com/ClangBuiltLinux/linux/issues/1180 to
+follow up on.
+-- 
+Thanks,
+~Nick Desaulniers
