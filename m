@@ -2,60 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 707D4292A0B
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 17:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE02292A43
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 17:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729716AbgJSPLF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 11:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
+        id S1729852AbgJSPW0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 11:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728311AbgJSPLF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 11:11:05 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E3BC0613CE
-        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 08:11:05 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id p3so127223pjd.0
-        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 08:11:05 -0700 (PDT)
+        with ESMTP id S1730019AbgJSPWZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 11:22:25 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFDBC0613D0
+        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 08:22:24 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id q1so494176ilt.6
+        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 08:22:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aRF1c5DvJ2k0xtgiFCBpM8FTbcAucOYZGdY9IkjWwK0=;
-        b=rnho9+h9h549976m5EuvzBhToDYxAzJi4uU9NCjZQ3D+SQGUqLQiFio+UcuoHVxgBm
-         iLlrXINPkO/Px5dsrLR5iRzvhBahE1ZAj1GHteiqhVrmgv74c+W2noaLPWN5Sfusu+TM
-         /kKEMH/AQMUEZJqRFV8sikBQPMntvl5tB7zGKLyC2rtiz8p5O3Ajnw6eH9zwWyZGMNeh
-         6anllb/0W9+76zZLWpme6OPdjXAzs/JJ9PJ2a/e6NKIYU0Sy6FWmjEnTJH8vz+Y+PSCW
-         HZUBzuzx6IN3F7MIEP3BTeorNMk/JMuH06j2KbIkUV1jNj6JOaG+JYAljzHnOjD78L5L
-         5M2g==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6itkt5xjcu8RJ55TJDt9qjiT96VHBXsR7l8iWPY1kfM=;
+        b=T4D43KSTr/BTZjGGXxrmUHSbiu48CcOR1IihLZ++3IJorWFAh0aDEeHzPtRnxxLfvO
+         soZc07fiT7+VOUM/7S+JFQom9wsrxs5n5uB0tXTuPWW/0qaK1ycLJpfyZ/hpsRQoHGhq
+         uag4o/d0JTSQJdnpQ4cfcd06rks2pyqhpwoNc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aRF1c5DvJ2k0xtgiFCBpM8FTbcAucOYZGdY9IkjWwK0=;
-        b=DCLkUihB6HXQQ9W66+cTmsVEDm2V9Kpv07W8SvUCbBRQKBkxlG/xuMgP2EJTzbp3zf
-         G5By2q5Iy+qMcL1D0B0qK2zgk/wai/miuZHSfvCRTUsMC/RhlMBqPeiigDHwi7pu0mVO
-         FMLtWRUFa16awjIJ2Ng/UE7Z6nTSCa/QkJWWr6jV9KpBMaCaXLguCGjORwP6a/198oOe
-         tw2A7ZFSUrz7kHnsJNPe20GXzvtCtHdOlfqPUfPfLhqEvCoesERHwJzT8YMy2ImwudY0
-         cnFJthzW9tle8hWUnWBQ1/+ZOicGxMvRve9gCwBW7BPGM/kV5/nEhNMMkoWxMYfb8aWT
-         uvCQ==
-X-Gm-Message-State: AOAM531Z6aPUqiBfmFCzNo7rzR6O8OtH0t8DBWWs26d2GodyU4MKa+2e
-        kSarruRxEXc/LF0RS1h4EqvHjx9/nyc2M3JgYnnuug==
-X-Google-Smtp-Source: ABdhPJzQOXixEUWET+yFnpTEwP6b1ucwjhmqq4XKTA2J7zZg2ERaGT3ZvQ8lTvAarqE6KEvr95Q3SjX8WpJOKTGx1DE=
-X-Received: by 2002:a17:902:d888:b029:d0:cb2d:f274 with SMTP id
- b8-20020a170902d888b02900d0cb2df274mr246188plz.13.1603120264396; Mon, 19 Oct
- 2020 08:11:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000810a4405b0ece316@google.com> <CAAeHK+xWQp87S=bF2RfUjcudGaLVjk3yKLL-bxRzVM=YNRtzRA@mail.gmail.com>
- <2947473d-76cd-a663-049a-4d51a97e2a3e@linuxfoundation.org>
- <4b6c9d53-a4de-8749-e0b1-055dbb42703b@linuxfoundation.org>
- <CAAeHK+wZGwovnT969F-aq+EzH8-K21GxJ7YJ0S0Ynd4GM_B4kA@mail.gmail.com>
- <5e0e21bd-5cc9-f1d8-d45e-ec7f10edbfba@linuxfoundation.org> <9256b41b-fe27-a453-ab30-8999379bc1e3@linuxfoundation.org>
-In-Reply-To: <9256b41b-fe27-a453-ab30-8999379bc1e3@linuxfoundation.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 19 Oct 2020 17:10:53 +0200
-Message-ID: <CAAeHK+xpbCExXG2xP5xGBbMpJg4sesHLsMn++Qz47jfNELhXjQ@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6itkt5xjcu8RJ55TJDt9qjiT96VHBXsR7l8iWPY1kfM=;
+        b=aXjIq1YORZAAFPsJqUxfGxCfOMON/IiQyCHrGbnA5ZQh0WyyNVTegm70gnxrdkGfZY
+         Gv/pu9xycpTlYo0xoIAODs7xBVekwS8EouaQ2DaDmdngry6LoOLZEZsdkiHcsg/FP2Dl
+         OKgHWZpi41BAvSwZIxFcgl5RyshhcHwlu8h+z92AHPkQq+x3PkL74lH5T/7ZQgcu6Wjx
+         uhTijkVQmNBysTWt8f7spQ5BGgt5NGFStVJZpl7X8ulIVL7zghv32SAR7KyAZ8czwutP
+         Oljy2ycTXD5l77SdiCzsENbcgit9vKwhi5uPEFACK2Lg9tgF/tntVENDk1ELqT+3iK1B
+         4yig==
+X-Gm-Message-State: AOAM530T7lNJyO6qRZye5P3nDTT25OLgPos/wYByn62rmjTGJtMYVABJ
+        EW9D0gD64KQo3TSq/XOh/V7cMA==
+X-Google-Smtp-Source: ABdhPJwacLcR2tRiPH6QS15W2qKZIkZ7mASOYnynQOhrw4LWuYYvA0e8BYLaUibr1/V5EPN4JSsx2Q==
+X-Received: by 2002:a92:ab07:: with SMTP id v7mr434994ilh.82.1603120943821;
+        Mon, 19 Oct 2020 08:22:23 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id d21sm49343ioi.39.2020.10.19.08.22.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Oct 2020 08:22:23 -0700 (PDT)
 Subject: Re: KASAN: null-ptr-deref Write in event_handler
-To:     Shuah Khan <skhan@linuxfoundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
 Cc:     Shuah Khan <shuah@kernel.org>,
         Valentina Manea <valentina.manea.m@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -63,108 +54,60 @@ Cc:     Shuah Khan <shuah@kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
         syzbot <syzbot+bf1a360e305ee719e364@syzkaller.appspotmail.com>,
-        Nazime Hande Harputluoglu <handeharputlu@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Nazime Hande Harputluoglu <handeharputlu@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <000000000000810a4405b0ece316@google.com>
+ <CAAeHK+xWQp87S=bF2RfUjcudGaLVjk3yKLL-bxRzVM=YNRtzRA@mail.gmail.com>
+ <2947473d-76cd-a663-049a-4d51a97e2a3e@linuxfoundation.org>
+ <4b6c9d53-a4de-8749-e0b1-055dbb42703b@linuxfoundation.org>
+ <CAAeHK+wZGwovnT969F-aq+EzH8-K21GxJ7YJ0S0Ynd4GM_B4kA@mail.gmail.com>
+ <5e0e21bd-5cc9-f1d8-d45e-ec7f10edbfba@linuxfoundation.org>
+ <9256b41b-fe27-a453-ab30-8999379bc1e3@linuxfoundation.org>
+ <CAAeHK+xpbCExXG2xP5xGBbMpJg4sesHLsMn++Qz47jfNELhXjQ@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <9887a296-b98e-ef2b-553f-448cd9ad72b6@linuxfoundation.org>
+Date:   Mon, 19 Oct 2020 09:22:21 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAAeHK+xpbCExXG2xP5xGBbMpJg4sesHLsMn++Qz47jfNELhXjQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 16, 2020 at 9:48 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> Andrey,
->
-> I am unable to reproduce the problem. I even tweaked the reproducer
-> to launch 10 procs and 100 threads.
->
-> Can you test the following patch with your setup
->
-> Here it is - also attached.
+On 10/19/20 9:10 AM, Andrey Konovalov wrote:
+> On Fri, Oct 16, 2020 at 9:48 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> Andrey,
+>>
+>> I am unable to reproduce the problem. I even tweaked the reproducer
+>> to launch 10 procs and 100 threads.
+>>
+>> Can you test the following patch with your setup
+>>
+>> Here it is - also attached.
+> 
+> Hi Shuah,
+> 
+> I get the crash below with this change. It complains about
+> kthread_stop_put() being called in atomic context.
+> 
 
-Hi Shuah,
+Thanks for testing. I was concerned about that. I will try to
+reproduce the problem again.
 
-I get the crash below with this change. It complains about
-kthread_stop_put() being called in atomic context.
+I am running into a amd_gpu issue during boot on my test system
+with KASAN enabled which results in disabling lock debugging. This
+makes it harder to debug and fix this null-ptr-deref Write in
+event_handler as it needs KASAN enabled. Fun stuff.
 
-BUG: sleeping function called from invalid context at
-kernel/sched/completion.c:101
-in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 112, name: kworker/u4:2
-4 locks held by kworker/u4:2/112:
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-set_work_data kernel/workqueue.c:616 [inline]
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-set_work_pool_and_clear_pending kernel/workqueue.c:643 [inline]
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-process_one_work+0x841/0x15c0 kernel/workqueue.c:2243
- #1: ffffc900001dfdc0 (usbip_work){+.+.}-{0:0}, at:
-process_one_work+0x874/0x15c0 kernel/workqueue.c:2247
- #2: ffff88801371d280 (&vhci_hcd->vhci->lock){....}-{2:2}, at:
-vhci_shutdown_connection+0xd2/0x360 drivers/usb/usbip/vhci_hcd.c:1019
- #3: ffff88801a904890 (&vdev->priv_lock){....}-{2:2}, at: spin_lock
-include/linux/spinlock.h:354 [inline]
- #3: ffff88801a904890 (&vdev->priv_lock){....}-{2:2}, at:
-vhci_shutdown_connection+0xeb/0x360 drivers/usb/usbip/vhci_hcd.c:1020
-irq event stamp: 1298372
-hardirqs last  enabled at (1298371): [<ffffffff81b6ebd6>]
-kfree+0x236/0x290 mm/slab.c:3759
-hardirqs last disabled at (1298372): [<ffffffff8844b5f9>]
-__raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (1298372): [<ffffffff8844b5f9>]
-_raw_spin_lock_irqsave+0xa9/0xd0 kernel/locking/spinlock.c:159
-softirqs last  enabled at (1298362): [<ffffffff87fdcae1>]
-spin_unlock_bh include/linux/spinlock.h:399 [inline]
-softirqs last  enabled at (1298362): [<ffffffff87fdcae1>]
-batadv_nc_purge_paths+0x2d1/0x400 net/batman-adv/network-coding.c:470
-softirqs last disabled at (1298360): [<ffffffff87fdc8ef>] spin_lock_bh
-include/linux/spinlock.h:359 [inline]
-softirqs last disabled at (1298360): [<ffffffff87fdc8ef>]
-batadv_nc_purge_paths+0xdf/0x400 net/batman-adv/network-coding.c:441
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 0 PID: 112 Comm: kworker/u4:2 Not tainted 5.9.0+ #29
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1 04/01/2014
-Workqueue: usbip_event event_handler
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x198/0x1fb lib/dump_stack.c:118
- ___might_sleep.cold+0x1ef/0x235 kernel/sched/core.c:7298
- __wait_for_common kernel/sched/completion.c:101 [inline]
- wait_for_common kernel/sched/completion.c:117 [inline]
- wait_for_completion+0x85/0x270 kernel/sched/completion.c:138
- kthread_stop+0x17d/0x720 kernel/kthread.c:596
- vhci_shutdown_connection+0x121/0x360 drivers/usb/usbip/vhci_hcd.c:1024
- event_handler+0x1a4/0x3b0 drivers/usb/usbip/usbip_event.c:78
- process_one_work+0x953/0x15c0 kernel/workqueue.c:2272
- worker_thread+0x96/0xe20 kernel/workqueue.c:2418
- kthread+0x3b5/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-BUG: scheduling while atomic: kworker/u4:2/112/0x00000003
-4 locks held by kworker/u4:2/112:
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-set_work_data kernel/workqueue.c:616 [inline]
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-set_work_pool_and_clear_pending kernel/workqueue.c:643 [inline]
- #0: ffff888012a7b138 ((wq_completion)usbip_event){+.+.}-{0:0}, at:
-process_one_work+0x841/0x15c0 kernel/workqueue.c:2243
- #1: ffffc900001dfdc0 (usbip_work){+.+.}-{0:0}, at:
-process_one_work+0x874/0x15c0 kernel/workqueue.c:2247
- #2: ffff88801371d280 (&vhci_hcd->vhci->lock){+.+.}-{2:2}, at:
-vhci_shutdown_connection+0xd2/0x360 drivers/usb/usbip/vhci_hcd.c:1019
- #3: ffff88801a904890 (&vdev->priv_lock){+.+.}-{2:2}, at: spin_lock
-include/linux/spinlock.h:354 [inline]
- #3: ffff88801a904890 (&vdev->priv_lock){+.+.}-{2:2}, at:
-vhci_shutdown_connection+0xeb/0x360 drivers/usb/usbip/vhci_hcd.c:1020
-Modules linked in:
-Preemption disabled at:
-[<0000000000000000>] 0x0
+I will switch to a different test system and see if I can reproduce
+the problem first.
+
+Thanks again for testing.
+
+thanks,
+-- Shuah
