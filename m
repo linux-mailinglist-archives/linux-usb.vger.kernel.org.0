@@ -2,153 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 558462922FF
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 09:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675A8292465
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 11:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727682AbgJSHeh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 03:34:37 -0400
-Received: from mailfilter06-out31.webhostingserver.nl ([141.138.169.48]:49397
-        "EHLO mailfilter06-out31.webhostingserver.nl" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727614AbgJSHeg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 03:34:36 -0400
-X-Greylist: delayed 964 seconds by postgrey-1.27 at vger.kernel.org; Mon, 19 Oct 2020 03:34:34 EDT
-X-Halon-ID: 458bd49b-11db-11eb-86c7-001a4a4cb958
-Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-        by mailfilter06.webhostingserver.nl (Halon) with ESMTPSA
-        id 458bd49b-11db-11eb-86c7-001a4a4cb958;
-        Mon, 19 Oct 2020 09:18:22 +0200 (CEST)
-Received: from cust-178-250-146-69.breedbanddelft.nl ([178.250.146.69] helo=[10.8.0.6])
-        by s198.webhostingserver.nl with esmtpa (Exim 4.92.3)
-        (envelope-from <fntoth@gmail.com>)
-        id 1kUPR0-001jVw-IP; Mon, 19 Oct 2020 09:18:22 +0200
-Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
-To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     felipe.balbi@linux.intel.com
-References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
- <87a6wig461.fsf@kernel.org>
-From:   Ferry Toth <fntoth@gmail.com>
-Message-ID: <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
-Date:   Mon, 19 Oct 2020 09:18:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728064AbgJSJKN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 05:10:13 -0400
+Received: from mail-eopbgr60076.outbound.protection.outlook.com ([40.107.6.76]:14403
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727235AbgJSJKN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 19 Oct 2020 05:10:13 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YA0Dme/QLItciHa17FJGYNxkZ+wQUfdNsf0z/12n5vD6EFjx+ov3xgmofsXWPGz6fiBjPRPcjKgB+6IRsEJ1dFH9dw1xhk6WZ6gAbKS7hQVynJL8FFlR/V8dUEcXiNe8VNJ5KzshF7wxkxwGfMj+vo59SR7KLt0HWeEVeEHuJH3sqFqJsL1+c++uFWGf8YWm2O4m6Et7hKk7DOeTsw42ktq7+AJVnb7dbYhxZqo5Dd0TlfM6mpqg22limIkYSQMcjEfYpw3PWM+An7iSIWmot59LscKH3cG7lZrfSqk3w6wwhDqOZo1fcaYOXbuGn2LLNqBjwYqmAZOSGhbVDX1psw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Beg3QnEiQRH+PfPlHy6n1+tg6XtXGaljM3uvHLxni7Q=;
+ b=TowTO32es+PEtkhNQFjiQ3EEYZQ0cp5OxflCqJWEWPc3YV+vBiaN76Smwst6w5+KSV5F2OL3iRFUirQf0EPBFW72Hld7zc012R2R4PcDxCllTlKbmAaEZ13vw15QJnBxPVmrE5bWmnd5vVnw2FvKag76+BQ7/bgtw3WAcd0pTd7wfIrlS74bePmQNbNTnQYinr/LepkDoS+fnQsVTDp7wP2b6up3nn1wbb9Ya88rhmqTjzzkFz8D6h/jUBmNdLR+LpdJsMyAwpwsxyh3yte10dz6jcgfWklNY6hNL6MIbcAXaKFTWD0H8zfe9euMFJY6saireQvkBHU0xJALVxboSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Beg3QnEiQRH+PfPlHy6n1+tg6XtXGaljM3uvHLxni7Q=;
+ b=QV1BtBShuB54m2Z87LT/m5+j+8He0OMrXo51CeI78XAY/FsI/LZf+MZ9RUdm7glKOdWHtddUrnrQG6yJ+/fNiSwbXY5716ujwiYddsDNARNDcu6hpYyA2GG0YS/MYC5l4iIveFfgBHKPVnoK90xtuMFv1r9xkTusqE/a/6L3kLw=
+Authentication-Results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none header.from=nxp.com;
+Received: from DB8PR04MB6523.eurprd04.prod.outlook.com (2603:10a6:10:10f::26)
+ by DB6PR0401MB2342.eurprd04.prod.outlook.com (2603:10a6:4:4e::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.25; Mon, 19 Oct
+ 2020 09:10:09 +0000
+Received: from DB8PR04MB6523.eurprd04.prod.outlook.com
+ ([fe80::35e9:2f0b:112b:28c3]) by DB8PR04MB6523.eurprd04.prod.outlook.com
+ ([fe80::35e9:2f0b:112b:28c3%6]) with mapi id 15.20.3477.028; Mon, 19 Oct 2020
+ 09:10:09 +0000
+From:   Li Jun <jun.li@nxp.com>
+To:     heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
+        rafael@kernel.org
+Cc:     gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        hdegoede@redhat.com, lee.jones@linaro.org,
+        mika.westerberg@linux.intel.com, dmitry.torokhov@gmail.com,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-imx@nxp.com, peter.chen@nxp.com
+Subject: [PATCH v4 1/4] dt-bindings: usb: add documentation for typec switch simple driver
+Date:   Mon, 19 Oct 2020 17:03:12 +0800
+Message-Id: <1603098195-9923-1-git-send-email-jun.li@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-Originating-IP: [119.31.174.66]
+X-ClientProxiedBy: SG2PR01CA0128.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:40::32) To DB8PR04MB6523.eurprd04.prod.outlook.com
+ (2603:10a6:10:10f::26)
 MIME-Version: 1.0
-In-Reply-To: <87a6wig461.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.66) by SG2PR01CA0128.apcprd01.prod.exchangelabs.com (2603:1096:4:40::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3477.21 via Frontend Transport; Mon, 19 Oct 2020 09:10:04 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 749526a9-3135-4111-dd38-08d8740ec6d6
+X-MS-TrafficTypeDiagnostic: DB6PR0401MB2342:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DB6PR0401MB2342BEBA3E157DA747AEDD4B891E0@DB6PR0401MB2342.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: x59XFxft0RLCOuTdtKWM38+HjOtOAaY8VN8Dfu5x3JDN1/I0VP39f56LKu3lpfthvZbTU3Q2s1HIXN7YrMPEEROzotB1JDkeuJxz/q4ugWP9Ftnu+vM9EAlsM3YzbTDd/J5GsvlPRW+UTdqZCd7IbcybZEoiKQNcwGddn1XoMnY56HUdtSbmCAixcm9R8qNH2T/ukuF4Uh8i7qoKxzG1O/qlTtMZP40dVKNRwEtPAVK5lQOlmBT7ebPYEYikNLWsVloukgh7W4oQNtBu90doDRdrxy/7vKIW25s0/l22ljzCsEoba0uk1qgQ+gWMpNEWERmy3mJrExaXUid94Pj+9pC7oJbbYJriFpqINdvZIYELM2EspZJ7+aPsEFo1iPiQGKe60/MGnlUaYFT7EvJMcwcJ2cWzAok2PZamzMO0Cko0gx2SVV4irfxNvh6RLfL11vLqbAuX2up9neGkOB2FpA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6523.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(366004)(376002)(136003)(39860400002)(6666004)(8936002)(66556008)(7416002)(316002)(5660300002)(6512007)(4326008)(36756003)(66476007)(66946007)(8676002)(52116002)(69590400008)(478600001)(2616005)(956004)(2906002)(16526019)(26005)(86362001)(186003)(966005)(6506007)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: zMwt+A8xrSL/nUJXlabP6dLyoc/a7Z6Cj4+1pZFdDmb0x00Xmj+WcZcuh19EE025Rx+Vx75V6uLv1f+c7YiouVlqizXVKGxLk1d60Lr024g8aa0RCJDM7TeVjKSozy+lmghSy4bTxWH+8FBwDNxkoGD+VNGmPT2y3HSHRfkV2WzhV3XUi4OS00qYem+0QXO1U0jl67YlBlWnNf4oz313jtpi7S/6SOSicLwlB8JMtuwzH1LGoFft6YP+f84bAjHZhhxFvv1dZBg/U2Ws7SWJ0bChcJ86RKgDoMFMLaSnqqEvhKQpcfaiy0RNBvPL6iXmAu2LuhSahJyCg+FP3s5K5cYfwk0Fxz06JrIxvB0LvoMfSV9NRLq8e1CGuwgzwp8lwaCfNaR/lvIaSJPXdkUNveNA3+/Ud0RlsBV2Kg0LBKRVmRy5Nu7Krd3ao4GPczETxgjD5nY/EiPQtvFDEQl1DXD6NWdU5ymrbUUeZMoZTthOGghPeDl2m8OYC07CtFwYHs/ZtT+NKz9hNDNrzbRvYyOK07hJCXH3VSI0d9OcGBZf8dSc6peTA26LELRfVOVskos2kxh/5IBofiNImChxbZWb+qV6sOzC4BhgJn2IclMOKSguzKtQOMoOhH4VCI6m/sXGvkgkUq2IgMp3VRafqQ==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 749526a9-3135-4111-dd38-08d8740ec6d6
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6523.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2020 09:10:09.4195
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RnyDjWWiRZsE2UjMQ5/vfNSjtrhBLg2EweyI+5yRfBYsIazu4i0GGahvq4vY5HKo
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2342
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Op 19-10-2020 om 07:45 schreef Felipe Balbi:
-> 
-> Hi Andy,
-> 
-> Ferry Toth <fntoth@gmail.com> writes:
->> This occurs with edison-arduino board, that has a nifty switch allowing
->> to switch between gadget/host mode. In host mode it boot fine, then
->> crashes when I flip the switch to gadget.
->>
->> The below trace if what I get from the console when booting with gadget
->> mode selected.
->>
->> The last kernel is used where everything is obviously working fine is 5.6.0.
->>
->> The kernel is built specifically for the platform, nothing suspcious
->> going on the the dwc3 area, see
->> https://github.com/edison-fw/linux/commits/eds-acpi-5.9.0
->>
->> Magic signature found
->>
->> Starting kernel ...
->>
->> [    2.395631] Initramfs unpacking failed: invalid magic at start of
->> compressed archive
->> Scanning for Btrfs filesystems
->> Starting version 243.2+
->> Kernel with acpi enabled detected
->> Loading acpi tables
->> Waiting for root device /dev/mmcblk0p8
->>     10Found device '/run/media/mmcblk0p8'
->>     9Init found, booting...
->> [   10.834272] brcmfmac: brcmf_fw_alloc_request: using
->> brcm/brcmfmac43340-sdio for chip BCM43340/2
->> [   11.179662] brcmfmac: brcmf_fw_alloc_request: using
->> brcm/brcmfmac43340-sdio for chip BCM43340/2
->> [   11.194223] brcmfmac: brcmf_c_process_clm_blob: no clm_blob available
->> (err=-2), device may have limited channels available
->> [   11.234779] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM43340/2
->> wl0: Oct 23 2017 08:41:23 version 6.10.190.70 (r674464) FWID 01-98d71006
->> [   12.401620] BUG: unable to handle page fault for address:
->> 0000000100000000
->> [   12.408496] #PF: supervisor instruction fetch in kernel mode
->> [   12.414145] #PF: error_code(0x0010) - not-present page
->> [   12.419276] PGD 0 P4D 0
->> [   12.421817] Oops: 0010 [#1] SMP PTI
->> [   12.425307] CPU: 0 PID: 488 Comm: irq/15-dwc3 Not tainted
->> 5.9.0-edison-acpi-standard #1
->> [   12.433297] Hardware name: Intel Corporation Merrifield/BODEGA BAY,
->> BIOS 542 2015.01.21:18.19.48
->> [   12.442075] RIP: 0010:0x100000000
->> [   12.445382] Code: Bad RIP value.
->> [   12.448605] RSP: 0000:ffff9a95403fbbf8 EFLAGS: 00010046
->> [   12.453827] RAX: 0000000100000000 RBX: ffff8ee8bd32f828 RCX:
->> ffff8ee8bacc4000
->> [   12.460950] RDX: 00000000ffffff94 RSI: ffff8ee8bc01a5a0 RDI:
->> ffff8ee887228700
->> [   12.468075] RBP: ffff8ee8bc01a5a0 R08: 0000000000000046 R09:
->> 0000000000000238
->> [   12.475199] R10: 0000000000000004 R11: ffff8ee8ba8ba248 R12:
->> ffff8ee887228700
->> [   12.482322] R13: ffff8ee8bd32f828 R14: 0000000000000002 R15:
->> ffff8ee8bae93200
->> [   12.489449] FS:  0000000000000000(0000) GS:ffff8ee8be200000(0000)
->> knlGS:0000000000000000
->> [   12.497524] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> [   12.503262] CR2: 0000000100000000 CR3: 000000003c5ae000 CR4:
->> 00000000001006f0
->> [   12.510382] Call Trace:
->> [   12.512841]  ? dwc3_gadget_giveback+0xbf/0x120
->> [   12.517286]  ? __dwc3_gadget_ep_disable+0xc5/0x250
->> [   12.522077]  ? dwc3_gadget_ep_disable+0x3d/0xd0
->> [   12.526608]  ? usb_ep_disable+0x1d/0x80
->> [   12.530451]  ? u_audio_stop_capture+0x87/0x9a [u_audio]
->> [   12.535680]  ? afunc_set_alt+0x73/0x80 [usb_f_uac2]
->> [   12.540562]  ? composite_setup+0x20f/0x1b20 [libcomposite]
->> [   12.546053]  ? configfs_composite_setup+0x6b/0x90 [libcomposite]
->> [   12.552060]  ? configfs_composite_setup+0x6b/0x90 [libcomposite]
->> [   12.558062]  ? dwc3_ep0_delegate_req+0x24/0x40
->> [   12.562502]  ? dwc3_ep0_interrupt+0x40a/0x9d8
->> [   12.566858]  ? dwc3_thread_interrupt+0x880/0xf70
->> [   12.571475]  ? __schedule+0x3ee/0x640
->> [   12.575143]  ? irq_forced_thread_fn+0x70/0x70
->> [   12.579497]  ? irq_thread_fn+0x1b/0x60
->> [   12.583245]  ? irq_thread+0xd3/0x150
->> [   12.586821]  ? wake_threads_waitq+0x30/0x30
->> [   12.591001]  ? irq_thread_dtor+0x80/0x80
->> [   12.594925]  ? kthread+0xf9/0x130
->> [   12.598238]  ? kthread_park+0x80/0x80
->> [   12.601901]  ? ret_from_fork+0x22/0x30
->> [   12.605644] Modules linked in: spi_pxa2xx_platform dw_dmac usb_f_uac2
->> u_audio usb_f_mass_storage usb_f_eem u_ether usb_f_serial u_serial
->> libcomposite pwm_lpss_pci snd_sof_pci snd_sof_intel_byt pwm_lpss
->> snd_sof_intel_ipc snd_sof_xtensa_dsp intel_mrfld_pwrbtn intel_mrfld_adc
->> snd_sof snd_sof_nocodec snd_soc_acpi spi_pxa2xx_pci brcmfmac brcmutil
->> leds_gpio hci_uart btbcm ti_ads7950 industrialio_triggered_buffer
->> kfifo_buf spidev ledtrig_heartbeat mmc_block extcon_intel_mrfld
->> sdhci_pci cqhci sdhci led_class mmc_core intel_soc_pmic_mrfld btrfs
->> libcrc32c xor zstd_compress zlib_deflate raid6_pq
->> [   12.657416] CR2: 0000000100000000
->> [   12.660729] ---[ end trace 9b92dea6da33c71e ]---
-> 
-> It this something you can reproduce on your end? Ferry, can you get dwc3
-> trace logs when this happens? ftrace_dump_on_oops may help here.
-I will do that tonight. Is flipping on ftrace_dump_on_oops sufficient or 
-do I need to do more?
+Some platforms need a simple driver to do some controls according to
+typec orientation, this can be extended to be a generic driver with
+compatible with "typec-orientation-switch".
 
-BTW after posting this I found in host mode dwc3 is not working properly 
-either. No oops, but no driver get loaded on device plug in.
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+changes on v4:
+- Use compatible instead of bool property for switch matching.
+- Change switch GPIO to be switch simple.
+- Change the active channel selection GPIO to be optional.
 
+previsou discussion:
+http://patchwork.ozlabs.org/patch/1054342/
+
+ .../bindings/usb/typec-switch-simple.yaml          | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+new file mode 100644
+index 0000000..244162d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/typec-switch-simple.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Typec Orientation Switch Simple Solution Bindings
++
++maintainers:
++  - Li Jun <jun.li@nxp.com>
++
++description: |-
++  USB SuperSpeed (SS) lanes routing to which side of typec connector is
++  decided by orientation, this maybe achieved by some simple control like
++  GPIO toggle.
++
++properties:
++  compatible:
++    const: typec-orientation-switch
++
++  switch-gpios:
++    description: |
++      gpio specifier to switch the super speed active channel,
++      GPIO_ACTIVE_HIGH: GPIO state high for cc1;
++      GPIO_ACTIVE_LOW:  GPIO state low for cc1.
++    maxItems: 1
++
++  port:
++    type: object
++    additionalProperties: false
++    description: -|
++      Connection to the remote endpoint using OF graph bindings that model SS
++      data bus to typec connector.
++
++    properties:
++      endpoint:
++        type: object
++        additionalProperties: false
++
++        properties:
++          remote-endpoint: true
++
++        required:
++          - remote-endpoint
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    ptn36043 {
++        compatible = "typec-orientation-switch";
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_ss_sel>;
++        switch-gpios = <&gpio3 15 GPIO_ACTIVE_HIGH>;
++
++        port {
++                usb3_data_ss: endpoint {
++                        remote-endpoint = <&typec_con_ss>;
++                };
++        };
++    };
+-- 
+2.7.4
 
