@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0220A292865
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 15:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039AD29287D
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 15:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728339AbgJSNli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 09:41:38 -0400
-Received: from mga17.intel.com ([192.55.52.151]:27697 "EHLO mga17.intel.com"
+        id S1728628AbgJSNpX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 09:45:23 -0400
+Received: from mga18.intel.com ([134.134.136.126]:16468 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727796AbgJSNli (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 19 Oct 2020 09:41:38 -0400
-IronPort-SDR: Q5iSzDY53nNwGE4xyQCLQSxpQPh7MH2YIcHbeABbgraRBQfq6cuOjA7eUjNcClY2H3EGQJw5uP
- LxOJadBOhcow==
-X-IronPort-AV: E=McAfee;i="6000,8403,9778"; a="146890174"
+        id S1728590AbgJSNpW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 19 Oct 2020 09:45:22 -0400
+IronPort-SDR: QxA5siPEOOSpAUm78x2UplnceZzZbRTWnRiOhqVgb7TracLCq2ORJaKdrndzNPd4hZd/dQZyQo
+ 6oUI2YRxbcQg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9778"; a="154820462"
 X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
-   d="scan'208";a="146890174"
+   d="scan'208";a="154820462"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 06:41:37 -0700
-IronPort-SDR: tE7NqGOjh23Ez0tt0O8aR0eBLBovkxERKJjkwDV6kW8YynteJUhL7az+0YS7ab+6m7ZNZlV0To
- 1cYBHzx1KTzg==
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 06:45:03 -0700
+IronPort-SDR: N6/ETYpLoqkD1hFWoKNnpnbVAWaazbj33PbiPrixCj/NXNPo1Xk2oKZyigm6eAbLGLm0yInLam
+ Fip6xN61yrAw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
-   d="scan'208";a="422183600"
+   d="scan'208";a="422184607"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 19 Oct 2020 06:41:33 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Oct 2020 16:41:33 +0300
-Date:   Mon, 19 Oct 2020 16:41:33 +0300
+  by fmsmga001.fm.intel.com with SMTP; 19 Oct 2020 06:44:58 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Oct 2020 16:44:58 +0300
+Date:   Mon, 19 Oct 2020 16:44:58 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Badhri Jagan Sridharan <badhri@google.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
@@ -42,88 +42,89 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         Prashant Malani <pmalani@chromium.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, Amelie Delaunay <amelie.delaunay@st.com>
-Subject: Re: [PATCH v10 10/15] usb: typec: tcpci: frs sourcing vbus callback
-Message-ID: <20201019134133.GE1667571@kuha.fi.intel.com>
+Subject: Re: [PATCH v10 11/15] usb: typec: tcpci_max77759: Fix vbus stuck on
+ upon diconnecting sink
+Message-ID: <20201019134458.GF1667571@kuha.fi.intel.com>
 References: <20201008061556.1402293-1-badhri@google.com>
- <20201008061556.1402293-11-badhri@google.com>
+ <20201008061556.1402293-12-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201008061556.1402293-11-badhri@google.com>
+In-Reply-To: <20201008061556.1402293-12-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 07, 2020 at 11:15:51PM -0700, Badhri Jagan Sridharan wrote:
-> During FRS hardware autonomously starts to source vbus. Provide
-> callback to perform chip specific operations.
+On Wed, Oct 07, 2020 at 11:15:52PM -0700, Badhri Jagan Sridharan wrote:
+> Occasionally, POWER_STATUS.sourcing_vbus takes a while to clear after
+> writing to  MAX_BUCK_BOOST_OP register. This causes vbus to turn back
+> on while disconnecting the sink. Overcome this issue by writing into
+> MAX_BUCK_BOOST_OP during frs while sourcing vbu, instead of always
+> into the register whenever POWER_STATUS.sourcing_vbus is set.
 > 
 > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
-> v9 is the first version of this patch in the series. Added to fix
+> v9 is the first version of this patch. Added to fix
 > occasional bug of vbus turning back on when disconnecting the FRS accessory
 > after disconnect. No changes since v9.
 > ---
->  drivers/usb/typec/tcpm/tcpci.c | 9 +++++++++
->  drivers/usb/typec/tcpm/tcpci.h | 4 ++++
->  2 files changed, 13 insertions(+)
+>  drivers/usb/typec/tcpm/tcpci_maxim.c | 28 ++++++++++++++--------------
+>  1 file changed, 14 insertions(+), 14 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index f9f0af64da5f..f91688e43991 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -284,6 +284,14 @@ static int tcpci_enable_frs(struct tcpc_dev *dev, bool enable)
->  	return ret;
->  }
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> index 723d7dd38f75..43dcad95e897 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> @@ -238,23 +238,22 @@ static void process_power_status(struct max_tcpci_chip *chip)
+>  	if (ret < 0)
+>  		return;
 >  
-> +static void tcpci_frs_sourcing_vbus(struct tcpc_dev *dev)
-> +{
-> +	struct tcpci *tcpci = tcpc_to_tcpci(dev);
-> +
-> +	if (tcpci->data->frs_sourcing_vbus)
-> +		tcpci->data->frs_sourcing_vbus(tcpci, tcpci->data);
+> -	if (pwr_status == 0xff) {
+> +	if (pwr_status == 0xff)
+>  		max_tcpci_init_regs(chip);
+> -	} else if (pwr_status & TCPC_POWER_STATUS_SOURCING_VBUS) {
+> +	else if (pwr_status & TCPC_POWER_STATUS_SOURCING_VBUS)
+>  		tcpm_sourcing_vbus(chip->port);
+> -		/*
+> -		 * Alawys re-enable boost here.
+> -		 * In normal case, when say an headset is attached, TCPM would
+> -		 * have instructed to TCPC to enable boost, so the call is a
+> -		 * no-op.
+> -		 * But for Fast Role Swap case, Boost turns on autonomously without
+> -		 * AP intervention, but, needs AP to enable source mode explicitly
+> -		 * for AP to regain control.
+> -		 */
+> -		max_tcpci_set_vbus(chip->tcpci, &chip->data, true, false);
+> -	} else {
+> +	else
+>  		tcpm_vbus_change(chip->port);
+> -	}
 > +}
 > +
->  static int tcpci_set_bist_data(struct tcpc_dev *tcpc, bool enable)
->  {
->  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> @@ -628,6 +636,7 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
->  	tcpci->tcpc.pd_transmit = tcpci_pd_transmit;
->  	tcpci->tcpc.set_bist_data = tcpci_set_bist_data;
->  	tcpci->tcpc.enable_frs = tcpci_enable_frs;
-> +	tcpci->tcpc.frs_sourcing_vbus = tcpci_frs_sourcing_vbus;
+> +static void max_tcpci_frs_sourcing_vbus(struct tcpci *tcpci, struct tcpci_data *tdata)
+> +{
+> +	/*
+> +	 * For Fast Role Swap case, Boost turns on autonomously without
+> +	 * AP intervention, but, needs AP to enable source mode explicitly
+> +	 * for AP to regain control.
+> +	 */
+> +	max_tcpci_set_vbus(tcpci, tdata, true, false);
+>  }
 >  
->  	err = tcpci_parse_config(tcpci);
->  	if (err < 0)
-> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-> index 5ef07a56d67a..b418fe11b527 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.h
-> +++ b/drivers/usb/typec/tcpm/tcpci.h
-> @@ -143,6 +143,9 @@
->  /*
->   * @TX_BUF_BYTE_x_hidden
->   *		optional; Set when TX_BUF_BYTE_x can only be accessed through I2C_WRITE_BYTE_COUNT.
-> + * @frs_sourcing_vbus:
-> + *		Optional; Callback to perform chip specific operations when FRS
-> + *		is sourcing vbus.
->   */
->  struct tcpci;
->  struct tcpci_data {
-> @@ -154,6 +157,7 @@ struct tcpci_data {
->  	int (*start_drp_toggling)(struct tcpci *tcpci, struct tcpci_data *data,
->  				  enum typec_cc_status cc);
->  	int (*set_vbus)(struct tcpci *tcpci, struct tcpci_data *data, bool source, bool sink);
-> +	void (*frs_sourcing_vbus)(struct tcpci *tcpci, struct tcpci_data *data);
->  };
+>  static void process_tx(struct max_tcpci_chip *chip, u16 status)
+> @@ -441,6 +440,7 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
+>  	chip->data.start_drp_toggling = max_tcpci_start_toggling;
+>  	chip->data.TX_BUF_BYTE_x_hidden = true;
+>  	chip->data.init = tcpci_init;
+> +	chip->data.frs_sourcing_vbus = max_tcpci_frs_sourcing_vbus;
 >  
->  struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
+>  	max_tcpci_init_regs(chip);
+>  	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
 > -- 
 > 2.28.0.806.g8561365e88-goog
-
-thanks,
 
 -- 
 heikki
