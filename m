@@ -2,194 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEA6292C55
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 19:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0750C292C8D
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Oct 2020 19:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730916AbgJSRHU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 13:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
+        id S1730691AbgJSRUt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 13:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730552AbgJSRHU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 13:07:20 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E584DC0613D0
-        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 10:07:19 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id q5so274680wmq.0
-        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 10:07:19 -0700 (PDT)
+        with ESMTP id S1730186AbgJSRUs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 13:20:48 -0400
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842BEC0613D0
+        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 10:20:48 -0700 (PDT)
+Received: by mail-wm1-x34a.google.com with SMTP id f191so65536wmf.9
+        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 10:20:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=alpewE00yXzmI7Wi7PY5Ma42ivdK56tHgSnMNmqIKdI=;
-        b=wILwX6IgS/QRLVq6y+au7F8UPimahLdD0MUritsRMgZPZe7QxTBektepkNW4nJC1Ud
-         hqdWAh7+pp3jnH8nbWH9wtEqgMzhdGcEDTyPyrmXxZT2GNB5hDtP1FEpZcpF3lrIpSxo
-         vnGcVYsA+uGXxVgcctK3oX84iRf+NZDgXXo84TDctnuYuPGNXeFkru+I3ZL5d0U2W7DA
-         hp52U6mMyfXKzE2f9OkTZ8n/poUrORTLObezlhihdhg83hKXhzIXMO36PmjeCpoZoHcn
-         Jq8XCSMcsi/xdo62pOeCQHGhRMMJepDIcnAjT02chIaUL11OYe7TVJgf70r1d6vsFg7b
-         pfyg==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=oLyFbvVyh8t1G2Jgr/VNnQVbLfRE2s2oaGoLMyVB/+Y=;
+        b=QA/gpvn/weCYDRfAhPS9AHRvT3Ox7xsd0qyTMybRFASSfVHCFwFSrLrfWREgdpgQfU
+         LgpwvVs26QB34xOwyyVVivzhL0IjPWpKLvkHdiQs51v+R/Cmlu2w9ax5zs+FaHbtl9LE
+         TqmE7eKQGxmcIN2eHzc3icH5+z8f5EH95PLCxUexv+x+02pLABWP625QKzv4v7meH81l
+         ARKHqxzR/FKoaGmj7HFW8R3B71tpkYLFSn61Gk7J4hCaaQvZiVbSL1PPZXQRNdWh3Aqd
+         k8j8G3LobkyNrsE6Or7q5E6lt2d29E0ngxP+1hbpTceIOm88Qy0JJH7DBMQh4sKEOXwg
+         qB0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=alpewE00yXzmI7Wi7PY5Ma42ivdK56tHgSnMNmqIKdI=;
-        b=jA8o6H7TXePdbQ4paU1dobdBkd2AaW/+SpiUXjy4Wc0Qw+nCjW2TiZQjfwbMAHrqmv
-         vM9G809nXh7AP1YDg3wWWrfn9iJj1DHIaGIORvL/G97xKD2VjrjkOzo4/nw7MZ4gPi+g
-         F6aYeFTynyTCbsnVAEO8e6XfDPrr0HJ31y41kHX4r3HG/y7Beoa+tcr5Y7Ix65grph0o
-         IrjI3iUmyGB7OdvM4hZyV+u67TBCpYrBVI1C5F6yS5QSEZUlYXSYevWqMComg3akuF3M
-         M1poO2yv56uLrt9wKdNrs9A18lYiYg2b7P26X+Mar6Foh7k2qjQh8owM5p+T3k5fyF5w
-         IOSQ==
-X-Gm-Message-State: AOAM5305pOz4zXHzKti0gRVRtcPgKi0kOPK6Jmjv+PFWZ+IkQagFC40k
-        NtF5vVaFbeCCWcXAQ8nxVQbqNQ==
-X-Google-Smtp-Source: ABdhPJxXUESfjuL3zj5bPTCDGG2II3qWxLcfUVSBfsea8i53fj8i820FBG0svJsw5lYqPrpSxtjdIQ==
-X-Received: by 2002:a1c:55c1:: with SMTP id j184mr208272wmb.180.1603127238604;
-        Mon, 19 Oct 2020 10:07:18 -0700 (PDT)
-Received: from starbuck.lan (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.googlemail.com with ESMTPSA id p9sm242544wma.12.2020.10.19.10.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2020 10:07:17 -0700 (PDT)
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Pascal Vizeli <pascal.vizeli@nabucasa.com>
-Subject: [PATCH] usb: cdc-acm: fix cooldown mechanism
-Date:   Mon, 19 Oct 2020 19:07:02 +0200
-Message-Id: <20201019170702.150534-1-jbrunet@baylibre.com>
-X-Mailer: git-send-email 2.25.4
-MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=oLyFbvVyh8t1G2Jgr/VNnQVbLfRE2s2oaGoLMyVB/+Y=;
+        b=o8aoZ0R59Cyyffz57JJ4K4GFbeRdDi5YjCD/t11MoukFh5buoCly6/c2dAnvgFXltM
+         F/nfAcn+OnDZ7L4FMnQhJZw7dA2CP8Nii+aTj9QRhCsuDDJbk6Hy4ydTyZCNLWIWh9R7
+         mpSxAeRWJA0y61vqatmfO81NgdcGkxKnJXPShvlc/GUPe5o0ohslC+D0HvcKVtExjVpB
+         2NiojsprtzgfAUrYItw0AcKm1EzRoGZn63ObKVlL+VEkMAFtN3CYOoSu8mU/fiZNj4Qx
+         +LNrVN+YvIofkytyfxhMMb023dXhDrX8SfZDLZzH73vHcmqrOeNIwbYOkr8gurq0N0Pk
+         vCNA==
+X-Gm-Message-State: AOAM53244QtqcIRlkzUZ/b22tCho8KXsp8EofshceMDeB8yek82ZF7se
+        0C6GRokN7euk1Ey3TjJzioGfxVu9jy+gg+kx
+X-Google-Smtp-Source: ABdhPJxht0EJX4I6pAo/83wjoOyt+kuKsluu4Kq97PXwynyRClGvKWnoO2xTq/zOMOse1zYq2CwA9mFap7eKNXb+
+Sender: "andreyknvl via sendgmr" <andreyknvl@andreyknvl3.muc.corp.google.com>
+X-Received: from andreyknvl3.muc.corp.google.com ([2a00:79e0:15:13:7220:84ff:fe09:7e9d])
+ (user=andreyknvl job=sendgmr) by 2002:a1c:7518:: with SMTP id
+ o24mr243180wmc.137.1603128046330; Mon, 19 Oct 2020 10:20:46 -0700 (PDT)
+Date:   Mon, 19 Oct 2020 19:20:42 +0200
+Message-Id: <e626ad10573bdc561c6f00667a31c87ee7725044.1603127827.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
+Subject: [PATCH v3] kcov, usbip: collect coverage from vhci_rx_loop
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Nazime Hande Harputluoglu <handeharput@gmail.com>,
+        Nazime Hande Harputluoglu <handeharputlu@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit a4e7279cd1d1 ("cdc-acm: introduce a cool down") is causing
-regression if there is some USB error, such as -EPROTO.
+From: Nazime Hande Harputluoglu <handeharputlu@google.com>
 
-This has been reported on some samples of the Odroid-N2 using the Combee II
-Zibgee USB dongle.
+Add kcov_remote_start()/kcov_remote_stop() annotations to the
+vhci_rx_loop() function, which is responsible for parsing USB/IP packets
+coming into USB/IP client.
 
-> struct acm *acm = container_of(work, struct acm, work)
+Since vhci_rx_loop() threads are spawned per vhci_hcd device instance, the
+common kcov handle is used for kcov_remote_start()/stop() annotations
+(see Documentation/dev-tools/kcov.rst for details). As the result kcov
+can now be used to collect coverage from vhci_rx_loop() threads.
 
-is incorrect in case of a delayed work and causes warnings, usually from
-the workqueue:
-
-> WARNING: CPU: 0 PID: 0 at kernel/workqueue.c:1474 __queue_work+0x480/0x528.
-
-When this happens, USB eventually stops working completely after a while.
-Also the ACM_ERROR_DELAY bit is never set, so the cooldown mechanism
-previously introduced cannot be triggered and acm_submit_read_urb() is
-never called.
-
-This changes makes the cdc-acm driver use a single delayed work, fixing the
-pointer arithmetic in acm_softint() and set the ACM_ERROR_DELAY when the
-cooldown mechanism appear to be needed.
-
-Fixes: a4e7279cd1d1 ("cdc-acm: introduce a cool down")
-Reported-by: Pascal Vizeli <pascal.vizeli@nabucasa.com>
-Cc: Oliver Neukum <oneukum@suse.com>
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+Signed-off-by: Nazime Hande Harputluoglu <handeharputlu@google.com>
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
 
- Hi,
+Changes v2->v3:
+- Fix build without KCOV enabled.
 
- I tried to fix problem introduced by
- commit a4e7279cd1d1 ("cdc-acm: introduce a cool down") while keeping the
- original intent, or at least what I understand of it.
+---
+ drivers/usb/usbip/usbip_common.h | 4 ++++
+ drivers/usb/usbip/vhci_rx.c      | 7 +++++++
+ drivers/usb/usbip/vhci_sysfs.c   | 4 ++++
+ 3 files changed, 15 insertions(+)
 
- A plain revert of the original commit also works for me.
-
- drivers/usb/class/cdc-acm.c | 12 +++++-------
- drivers/usb/class/cdc-acm.h |  3 +--
- 2 files changed, 6 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index f1a9043bdfe5..172cd2d21914 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -507,6 +507,7 @@ static void acm_read_bulk_callback(struct urb *urb)
- 			"%s - cooling babbling device\n", __func__);
- 		usb_mark_last_busy(acm->dev);
- 		set_bit(rb->index, &acm->urbs_in_error_delay);
-+		set_bit(ACM_ERROR_DELAY, &acm->flags);
- 		cooldown = true;
- 		break;
- 	default:
-@@ -532,7 +533,7 @@ static void acm_read_bulk_callback(struct urb *urb)
+diff --git a/drivers/usb/usbip/usbip_common.h b/drivers/usb/usbip/usbip_common.h
+index 8be857a4fa13..0906182011d6 100644
+--- a/drivers/usb/usbip/usbip_common.h
++++ b/drivers/usb/usbip/usbip_common.h
+@@ -277,6 +277,10 @@ struct usbip_device {
+ 		void (*reset)(struct usbip_device *);
+ 		void (*unusable)(struct usbip_device *);
+ 	} eh_ops;
++
++#ifdef CONFIG_KCOV
++	u64 kcov_handle;
++#endif
+ };
  
- 	if (stopped || stalled || cooldown) {
- 		if (stalled)
--			schedule_work(&acm->work);
-+			schedule_delayed_work(&acm->dwork, 0);
- 		else if (cooldown)
- 			schedule_delayed_work(&acm->dwork, HZ / 2);
- 		return;
-@@ -562,13 +563,13 @@ static void acm_write_bulk(struct urb *urb)
- 	acm_write_done(acm, wb);
- 	spin_unlock_irqrestore(&acm->write_lock, flags);
- 	set_bit(EVENT_TTY_WAKEUP, &acm->flags);
--	schedule_work(&acm->work);
-+	schedule_delayed_work(&acm->dwork, 0);
- }
+ #define kthread_get_run(threadfn, data, namefmt, ...)			   \
+diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
+index 266024cbb64f..68ec0aa64f69 100644
+--- a/drivers/usb/usbip/vhci_rx.c
++++ b/drivers/usb/usbip/vhci_rx.c
+@@ -3,6 +3,7 @@
+  * Copyright (C) 2003-2008 Takahiro Hirofuchi
+  */
  
- static void acm_softint(struct work_struct *work)
- {
- 	int i;
--	struct acm *acm = container_of(work, struct acm, work);
-+	struct acm *acm = container_of(work, struct acm, dwork.work);
++#include <linux/kcov.h>
+ #include <linux/kthread.h>
+ #include <linux/slab.h>
  
- 	if (test_bit(EVENT_RX_STALL, &acm->flags)) {
- 		smp_mb(); /* against acm_suspend() */
-@@ -584,7 +585,7 @@ static void acm_softint(struct work_struct *work)
- 	if (test_and_clear_bit(ACM_ERROR_DELAY, &acm->flags)) {
- 		for (i = 0; i < acm->rx_buflimit; i++)
- 			if (test_and_clear_bit(i, &acm->urbs_in_error_delay))
--					acm_submit_read_urb(acm, i, GFP_NOIO);
-+				acm_submit_read_urb(acm, i, GFP_KERNEL);
+@@ -261,7 +262,13 @@ int vhci_rx_loop(void *data)
+ 		if (usbip_event_happened(ud))
+ 			break;
+ 
++#ifdef CONFIG_KCOV
++		kcov_remote_start_common(ud->kcov_handle);
++#endif
+ 		vhci_rx_pdu(ud);
++#ifdef CONFIG_KCOV
++		kcov_remote_stop();
++#endif
  	}
  
- 	if (test_and_clear_bit(EVENT_TTY_WAKEUP, &acm->flags))
-@@ -1352,7 +1353,6 @@ static int acm_probe(struct usb_interface *intf,
- 	acm->ctrlsize = ctrlsize;
- 	acm->readsize = readsize;
- 	acm->rx_buflimit = num_rx_buf;
--	INIT_WORK(&acm->work, acm_softint);
- 	INIT_DELAYED_WORK(&acm->dwork, acm_softint);
- 	init_waitqueue_head(&acm->wioctl);
- 	spin_lock_init(&acm->write_lock);
-@@ -1562,7 +1562,6 @@ static void acm_disconnect(struct usb_interface *intf)
- 	}
+ 	return 0;
+diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
+index be37aec250c2..e167b8a445ad 100644
+--- a/drivers/usb/usbip/vhci_sysfs.c
++++ b/drivers/usb/usbip/vhci_sysfs.c
+@@ -4,6 +4,7 @@
+  * Copyright (C) 2015-2016 Nobuo Iwata
+  */
  
- 	acm_kill_urbs(acm);
--	cancel_work_sync(&acm->work);
- 	cancel_delayed_work_sync(&acm->dwork);
++#include <linux/kcov.h>
+ #include <linux/kthread.h>
+ #include <linux/file.h>
+ #include <linux/net.h>
+@@ -383,6 +384,9 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
+ 	vdev->ud.sockfd     = sockfd;
+ 	vdev->ud.tcp_socket = socket;
+ 	vdev->ud.status     = VDEV_ST_NOTASSIGNED;
++#ifdef CONFIG_KCOV
++	vdev->ud.kcov_handle = kcov_common_handle();
++#endif
  
- 	tty_unregister_device(acm_tty_driver, acm->minor);
-@@ -1605,7 +1604,6 @@ static int acm_suspend(struct usb_interface *intf, pm_message_t message)
- 		return 0;
- 
- 	acm_kill_urbs(acm);
--	cancel_work_sync(&acm->work);
- 	cancel_delayed_work_sync(&acm->dwork);
- 	acm->urbs_in_error_delay = 0;
- 
-diff --git a/drivers/usb/class/cdc-acm.h b/drivers/usb/class/cdc-acm.h
-index cd5e9d8ab237..b95ff769072e 100644
---- a/drivers/usb/class/cdc-acm.h
-+++ b/drivers/usb/class/cdc-acm.h
-@@ -112,8 +112,7 @@ struct acm {
- #		define ACM_ERROR_DELAY	3
- 	unsigned long urbs_in_error_delay;		/* these need to be restarted after a delay */
- 	struct usb_cdc_line_coding line;		/* bits, stop, parity */
--	struct work_struct work;			/* work queue entry for various purposes*/
--	struct delayed_work dwork;			/* for cool downs needed in error recovery */
-+	struct delayed_work dwork;		        /* work queue entry for various purposes */
- 	unsigned int ctrlin;				/* input control lines (DCD, DSR, RI, break, overruns) */
- 	unsigned int ctrlout;				/* output control lines (DTR, RTS) */
- 	struct async_icount iocount;			/* counters for control line changes */
+ 	spin_unlock(&vdev->ud.lock);
+ 	spin_unlock_irqrestore(&vhci->lock, flags);
 -- 
-2.25.4
+2.29.0.rc1.297.gfa9743e501-goog
 
