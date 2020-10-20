@@ -2,136 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 533A42931C8
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 01:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE6B293319
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 04:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388871AbgJSXGC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Oct 2020 19:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728028AbgJSXFt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 19:05:49 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AF9C0613D8
-        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 16:05:49 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id q9so54794iow.6
-        for <linux-usb@vger.kernel.org>; Mon, 19 Oct 2020 16:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KZcwJitFojA7RhzeD/UU8gbzehCBdvf6g5ia0ZYCrq4=;
-        b=R0THCPfeT+NjRv5n7wRuWr3+iQQVH5mYQugrcFEorv7jMlZOJpq4gWO8x2sltRZ1S3
-         8+uXkfK+0xraFRPc7RLEyC+L1Eqn+lwfgcQ60rCu3Ir6T0iqCUlHxkXPI8IxQxljNihW
-         MxA7dERE+Fo0B6yhfEPLGm6gbjuMrGvt0ee7i4ozPAa6C0OwTV1SJBaz+sj8rzyyiIix
-         DQ1LhxNguLsVQ2r9xWcmCur9QDHoeimXQtC/UVpN+4Yl8O9ZbpYKUwlrKFZtzYHwjpgZ
-         iC+kREvCZvwgmOBCIm7DmgxG6/6ncKrp6QDCnbxkp/qIzrhuMyauJsg53LWTp//HSslk
-         z+3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KZcwJitFojA7RhzeD/UU8gbzehCBdvf6g5ia0ZYCrq4=;
-        b=L3FrEG4RWp6sDMbwS0JPJKy/kqQMDDVednVZ43Rzpm+7vJNR2TFEproydlKXP3O3A4
-         EtYTRb7qL4FXKZg8/aIbyfbwX5TQrLY+mRiobL4LMXSweXaqm41xfnquLw2nYPqRMcWg
-         cla9h6tS4Ntix586NqfD9CyYKY+L2+/SGi2ptURVO6ewn4hzc0hzXCtwq9ZJVTROSH2J
-         sBKAoHuYd4eXx+TS+laEoiLxd5k+17/nq7O4quCV7A9NyPqdbncTUQbmRq4MU/ESPLZL
-         CGBR5V1WTjp882AJ7akEdwf1TGyTN5plVAAEPhX9uzJYO6eQVTf3nvArnJ8lMCt01KXM
-         c1cw==
-X-Gm-Message-State: AOAM530X2n/T4MEPr1CG9eUXlBbDc9mo/bbW3zu+7nIjtHGMjM18vpo9
-        PdMHSWG8xr8nYbs9ZJENgoeMlw==
-X-Google-Smtp-Source: ABdhPJwE/qhLAedndnNRaUrUDMs331Onaq8Iz+VDEVRJN+4h4B5ckC67pNXDnvS9MRF/DxLJjNlnIQ==
-X-Received: by 2002:a6b:5019:: with SMTP id e25mr44377iob.123.1603148748578;
-        Mon, 19 Oct 2020 16:05:48 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id u8sm7938ilm.36.2020.10.19.16.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2020 16:05:47 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kUeDq-002hRf-LL; Mon, 19 Oct 2020 20:05:46 -0300
-Date:   Mon, 19 Oct 2020 20:05:46 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Tom Rix <trix@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-block@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
-        storagedev@microchip.com, devel@driverdev.osuosl.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        George Burgess <gbiv@google.com>
-Subject: Re: [RFC] treewide: cleanup unreachable breaks
-Message-ID: <20201019230546.GH36674@ziepe.ca>
-References: <20201017160928.12698-1-trix@redhat.com>
- <20201018054332.GB593954@kroah.com>
- <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+        id S2390625AbgJTCaV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Oct 2020 22:30:21 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:41872 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2390611AbgJTCaV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Oct 2020 22:30:21 -0400
+X-UUID: db9b1113f116439b854c52e598c87f49-20201020
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Meq6SMM9NCGXd0ezAvIYe7RYnC+ZkZUEfKlU7K9AvO0=;
+        b=Jk3PsQHlj1xArPyMeyfpnbKcv8E0Skq620YzqEKS9shjuBWWNJZWqErb2tm24GM+wS4C6G8/ukwDEe8ZVNSbxjmY5dFu9/aOllDD/Jt4gBV8GId/IksqGvsX39L3qbgzAxIKOxJf4PiuKEluxbRRrk3LDilcSIWnjKQ6af78HLc=;
+X-UUID: db9b1113f116439b854c52e598c87f49-20201020
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1283119071; Tue, 20 Oct 2020 10:30:13 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 20 Oct
+ 2020 10:30:10 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 20 Oct 2020 10:30:10 +0800
+Message-ID: <1603161010.29336.138.camel@mhfsdcap03>
+Subject: Re: [PATCH v2 1/8] dt-bindings: phy: convert phy-mtk-xsphy.txt to
+ YAML schema
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "CK Hu" <ck.hu@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Min Guo <min.guo@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
+Date:   Tue, 20 Oct 2020 10:30:10 +0800
+In-Reply-To: <20201016170003.GA1562276@bogus>
+References: <20201013085207.17749-1-chunfeng.yun@mediatek.com>
+         <20201016170003.GA1562276@bogus>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+X-TM-SNTS-SMTP: DBCCCD990EB25D087AF48EDB6BFB253E0AAAA7B568F8028A17DF86A16663C7DB2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 12:42:15PM -0700, Nick Desaulniers wrote:
-> On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
-> > > From: Tom Rix <trix@redhat.com>
-> > >
-> > > This is a upcoming change to clean up a new warning treewide.
-> > > I am wondering if the change could be one mega patch (see below) or
-> > > normal patch per file about 100 patches or somewhere half way by collecting
-> > > early acks.
-> >
-> > Please break it up into one-patch-per-subsystem, like normal, and get it
-> > merged that way.
-> >
-> > Sending us a patch, without even a diffstat to review, isn't going to
-> > get you very far...
-> 
-> Tom,
-> If you're able to automate this cleanup, I suggest checking in a
-> script that can be run on a directory.  Then for each subsystem you
-> can say in your commit "I ran scripts/fix_whatever.py on this subdir."
->  Then others can help you drive the tree wide cleanup.  Then we can
-> enable -Wunreachable-code-break either by default, or W=2 right now
-> might be a good idea.
+T24gRnJpLCAyMDIwLTEwLTE2IGF0IDEyOjAwIC0wNTAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
+T24gVHVlLCBPY3QgMTMsIDIwMjAgYXQgMDQ6NTI6MDBQTSArMDgwMCwgQ2h1bmZlbmcgWXVuIHdy
+b3RlOg0KPiA+IENvbnZlcnQgcGh5LW10ay14c3BoeS50eHQgdG8gWUFNTCBzY2hlbWEgbWVkaWF0
+ZWsseHNwaHkueWFtbA0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1
+bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiB2MjogbW9kaWZ5IGRlc2NyaXB0
+aW9uIGFuZCBjb21wYXRpYmxlIGRlZmluaXRpb24gc3VnZ2VzdGVkIGJ5IFJvYg0KPiA+IC0tLQ0K
+PiA+ICAuLi4vYmluZGluZ3MvcGh5L21lZGlhdGVrLHhzcGh5LnlhbWwgICAgICAgICAgfCAyMDAg
+KysrKysrKysrKysrKysrKysrDQo+ID4gIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BoeS9waHkt
+bXRrLXhzcGh5LnR4dCB8IDEwOSAtLS0tLS0tLS0tDQo+ID4gIDIgZmlsZXMgY2hhbmdlZCwgMjAw
+IGluc2VydGlvbnMoKyksIDEwOSBkZWxldGlvbnMoLSkNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
+IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9waHkvbWVkaWF0ZWsseHNwaHkueWFt
+bA0KPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL3BoeS9waHktbXRrLXhzcGh5LnR4dA0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGh5L21lZGlhdGVrLHhzcGh5LnlhbWwgYi9Eb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGh5L21lZGlhdGVrLHhzcGh5LnlhbWwNCj4g
+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uODY1MTFmMTky
+NzdhDQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
+ZS9iaW5kaW5ncy9waHkvbWVkaWF0ZWsseHNwaHkueWFtbA0KPiA+IEBAIC0wLDAgKzEsMjAwIEBA
+DQo+ID4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1IgQlNELTIt
+Q2xhdXNlKQ0KPiA+ICsjIENvcHlyaWdodCAoYykgMjAyMCBNZWRpYVRlaw0KPiA+ICslWUFNTCAx
+LjINCj4gPiArLS0tDQo+ID4gKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvcGh5
+L21lZGlhdGVrLHhzcGh5LnlhbWwjDQo+ID4gKyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9y
+Zy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiA+ICsNCj4gPiArdGl0bGU6IE1lZGlhVGVrIFhT
+LVBIWSBDb250cm9sbGVyIERldmljZSBUcmVlIEJpbmRpbmdzDQo+ID4gKw0KPiA+ICttYWludGFp
+bmVyczoNCj4gPiArICAtIENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4N
+Cj4gPiArDQo+ID4gK2Rlc2NyaXB0aW9uOiB8DQo+ID4gKyAgVGhlIFhTLVBIWSBjb250cm9sbGVy
+IHN1cHBvcnRzIHBoeXNpY2FsIGxheWVyIGZ1bmN0aW9uYWxpdHkgZm9yIFVTQjMuMQ0KPiA+ICsg
+IEdFTjIgY29udHJvbGxlciBvbiBNZWRpYVRlayBTb0NzLg0KWy4uLl0NCj4gPiArDQo+ID4gKyAg
+cmFuZ2VzOiB0cnVlDQo+ID4gKw0KPiA+ICsgIG1lZGlhdGVrLHNyYy1yZWYtY2xrLW1oejoNCj4g
+PiArICAgIGRlc2NyaXB0aW9uOg0KPiA+ICsgICAgICBGcmVxdWVuY3kgb2YgcmVmZXJlbmNlIGNs
+b2NrIGZvciBzbGV3IHJhdGUgY2FsaWJyYXRlDQo+ID4gKyAgICAkcmVmOiAvc2NoZW1hcy90eXBl
+cy55YW1sIy9kZWZpbml0aW9ucy91aW50MzINCj4gDQo+IFByb3BlcnRpZXMgd2l0aCBhIHN0YW5k
+YXJkIHVuaXQgc3VmZml4IGRvbid0IG5lZWQgYSB0eXBlLg0KT2ssIHdpbGwgcmVtb3ZlIGl0LCBh
+bmQgYWxzbyBkbyBpdCBmb3Igb3RoZXIgcGF0Y2hlcywgdGhhbmtzDQoNCj4gPiAtLSANClsuLi5d
+DQo+ID4gMi4xOC4wDQoNCg==
 
-I remember using clang-modernize in the past to fix issues very
-similar to this, if clang machinery can generate the warning, can't
-something like clang-tidy directly generate the patch?
-
-You can send me a patch for drivers/infiniband/* as well
-
-Thanks,
-Jason
