@@ -2,60 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3686F2935D9
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 09:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619F92935F8
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 09:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405255AbgJTHdX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 20 Oct 2020 03:33:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56934 "EHLO mail.kernel.org"
+        id S1731713AbgJTHmI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 03:42:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35684 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405253AbgJTHdX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Oct 2020 03:33:23 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208891] Thunderbolt hotplug fails on HP x360 13t-aw000/86FA
- with HP Thunderbolt 3 Dock
-Date:   Tue, 20 Oct 2020 07:33:22 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mika.westerberg@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-208891-208809-sERLJh0pWo@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208891-208809@https.bugzilla.kernel.org/>
-References: <bug-208891-208809@https.bugzilla.kernel.org/>
+        id S1731568AbgJTHmI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Oct 2020 03:42:08 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1603179726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IyHsTupE9fuRCreVd/5Khl5usGRzJYicWfZVGY98Tjk=;
+        b=o88PlNkVACqAvIX4H5PqG/DTmKfZqGqoXRwIJizXfHw8wI1qJGLezu0+0hNa0tQV/TiFBj
+        HLI9fye+zlRG5VDv7wrokipiFK/zb4Gf3j7Caf4jKrTMzfYglJaGtXwsYizmkOd091BNaY
+        u3UbVvQuDv0THJu8SzSxBe8n/rYNTtU=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 9F0A6AE09;
+        Tue, 20 Oct 2020 07:42:06 +0000 (UTC)
+Message-ID: <09636f3b8dbd3838ba7a568f611a0323e85c4404.camel@suse.com>
+Subject: Re: [PATCH] usb: cdc-acm: fix cooldown mechanism
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Pascal Vizeli <pascal.vizeli@nabucasa.com>
+Date:   Tue, 20 Oct 2020 09:41:34 +0200
+In-Reply-To: <20201019170702.150534-1-jbrunet@baylibre.com>
+References: <20201019170702.150534-1-jbrunet@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208891
+Am Montag, den 19.10.2020, 19:07 +0200 schrieb Jerome Brunet:
+> Commit a4e7279cd1d1 ("cdc-acm: introduce a cool down") is causing
+> regression if there is some USB error, such as -EPROTO.
+> 
+> This has been reported on some samples of the Odroid-N2 using the Combee II
+> Zibgee USB dongle.
+> 
+> > struct acm *acm = container_of(work, struct acm, work)
+> 
+> is incorrect in case of a delayed work and causes warnings, usually from
+> the workqueue:
+> 
+> > WARNING: CPU: 0 PID: 0 at kernel/workqueue.c:1474 __queue_work+0x480/0x528.
+> 
+> When this happens, USB eventually stops working completely after a while.
+> Also the ACM_ERROR_DELAY bit is never set, so the cooldown mechanism
+> previously introduced cannot be triggered and acm_submit_read_urb() is
+> never called.
+> 
+> This changes makes the cdc-acm driver use a single delayed work, fixing the
+> pointer arithmetic in acm_softint() and set the ACM_ERROR_DELAY when the
+> cooldown mechanism appear to be needed.
+> 
+> Fixes: a4e7279cd1d1 ("cdc-acm: introduce a cool down")
+> Reported-by: Pascal Vizeli <pascal.vizeli@nabucasa.com>
+> Cc: Oliver Neukum <oneukum@suse.com>
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+Acked-by: Oliver Neukum <oneukum@suse.com>
 
---- Comment #44 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-Sorry for the delay from my side. I was on vacation last week.
-
-From the logs I can see that the ports runtime suspend and resume so with the
-patch and "pcie_port_pm=off" in the kernel command line should in theory work
-the problem around.
-
-It would help if you can ship the device to me to our Finland office and if the
-dock is also Intel I suggest to ship that too so I can replicate the issue.
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
