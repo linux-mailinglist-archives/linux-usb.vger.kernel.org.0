@@ -2,229 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D466293A76
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5FF293AE6
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403974AbgJTMAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 08:00:41 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:52370 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403765AbgJTMAj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 08:00:39 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id B5BE1803071A;
-        Tue, 20 Oct 2020 12:00:34 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id yFO_V1obEfJ3; Tue, 20 Oct 2020 15:00:34 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
-Date:   Tue, 20 Oct 2020 14:59:59 +0300
-Message-ID: <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
-References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
+        id S2394235AbgJTMDq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 08:03:46 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:49798 "EHLO aibo.runbox.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2394233AbgJTMDq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Oct 2020 08:03:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+         s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject;
+        bh=b4/9JNOv8WOIJkZklNNw32fULFEm1U90ImNpiICzduM=; b=ZOUOwnZneENVr0ZzrW3BySQB5B
+        FuOgY3WX0UxDaR0lLzs7LITqn/4ynTL35LAEwTFWv56BS8p2Tgi/K727ZA6G7LsbOvjDIQRysZNYA
+        pwSQFuRf+A0GbUS/AY8E2PB6XPAxlZ1FDoEcch1S7D7EYxxVR0Q4C6eIT1JmwhheqIZ7hhSy9vl01
+        0FgfUjoP7w3CDvrgyVs2Res2qVlCDb3qwKr8A8LXbPiOysKITpTi4YMSqHh4pMNTMSsCYDbz0fI6e
+        Nh6Pb3WU2omu6S/ZRPH7YV7y3rnYIdz2pqiPZKI390V2+S+/Oillo0f4agWrJ1xSs3U6WAzLayNl8
+        8kWdlVQA==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <m.v.b@runbox.com>)
+        id 1kUqMg-0005V0-FB; Tue, 20 Oct 2020 14:03:42 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1kUqMQ-0003av-M5; Tue, 20 Oct 2020 14:03:26 +0200
+Subject: Re: Bug caused by 53965c79c2db (USB: Fix device driver race)
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Pany <pany@fedoraproject.org>
+Cc:     Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org
+References: <CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com>
+ <20201017200200.GB842001@rowland.harvard.edu>
+ <CAE3RAxvNUvzqKT+GK3A4cQ7Tm_tFRQJKfJ01r0ic-5066fikDA@mail.gmail.com>
+ <20201019174028.GF898631@rowland.harvard.edu>
+From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+Message-ID: <cf1e7059-e1d2-2e7a-89c1-0c162850fbb4@runbox.com>
+Date:   Tue, 20 Oct 2020 08:03:23 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20201019174028.GF898631@rowland.harvard.edu>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In accordance with the DWC USB3 bindings the corresponding node
-name is suppose to comply with the Generic USB HCD DT schema, which
-requires the USB nodes to have the name acceptable by the regexp:
-"^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
-named.
+On 19/10/2020 13.40, Alan Stern wrote:
+> On Mon, Oct 19, 2020 at 09:36:00AM +0000, Pany wrote:
+>> On Sat, Oct 17, 2020 at 8:02 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>>>
+>>> On Sat, Oct 17, 2020 at 04:07:11PM +0000, Pany wrote:
+>>>> Hi,
+>>>>
+>>>> I installed fedora 32 into an SD card, with which I booted my Macbook.
+>>>> It had worked well before, until I upgraded the kernel from 5.8.5 to
+>>>> 5.8.6 [1].
+>>>>
+>>>> With kernel-5.8.6-200.fc32.x86_64.rpm [2] installed, the boot process
+>>>> would be stuck at "A start job is running for
+>>>> /dev/mapper/fedora_localhost_--live-home (<time> / no limit)" (See the
+>>>> photo of screen [3]).
+>>>>
+>>>> By appending "systemd.debug-shell=1" to the kernel cmdline, I saved
+>>>> the journal [4].
+>>>>
+>>>> This issue has been bisected to commit
+>>>> 53965c79c2dbdc898ffc7fdbab37e920594f5e14 ("USB: Fix device driver
+>>>> race")
+>>>>
+>>>> If I revert this commit, the kernel 5.8.6 would boot successfully.
+>>>
+>>> This should have been fixed in 5.8.14 or 5.8.15 (5.8.14 was released on
+>>> the same day that the fix was installed; I'm not sure which came first).
+>>> At any rate it certainly should work with the most recent 5.8.y kernel.
+>>>
+>>> Alan Stern
+>>
+>> I tried, but neither 5.8.14 nor 5.8.15 worked for me.
+> 
+> Hmmm.  Looking at the system log you captured, it appears that the
+> problem the SD card reader's driver getting reprobed incorrectly.  The
+> details aren't clear, but the log shows the device getting probed twice,
+> once as sdb and once as sdc.  If the system tried to mount one of the
+> sdb partitions as the root, and then sdb disappeared, that could explain
+> what you see.
+> 
+> I don't know why this is happening.  But you can try adding some
+> debugging messages of your own.  In drivers/usb/core/driver.c, the
+> routine __usb_bus_reprobe_drivers() should never reach the line that
+> calls device_reprobe() unless the USBIP or apple-mfi-fastcharge driver
+> is installed -- and neither of those should be involved with the card
+> reader device.  You can add a line saying:
+> 
+> 	dev_info(dev, "new driver %s\n", new_udriver->name);
+> 
+> at that point and see what it produces in the log.
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi | 4 ++--
- arch/arm64/boot/dts/qcom/ipq8074.dtsi        | 4 ++--
- arch/arm64/boot/dts/qcom/msm8996.dtsi        | 4 ++--
- arch/arm64/boot/dts/qcom/msm8998.dtsi        | 2 +-
- arch/arm64/boot/dts/qcom/qcs404-evb.dtsi     | 2 +-
- arch/arm64/boot/dts/qcom/qcs404.dtsi         | 4 ++--
- arch/arm64/boot/dts/qcom/sc7180.dtsi         | 2 +-
- arch/arm64/boot/dts/qcom/sdm845.dtsi         | 4 ++--
- arch/arm64/boot/dts/qcom/sm8150.dtsi         | 2 +-
- 9 files changed, 14 insertions(+), 14 deletions(-)
+Hello all,
 
-diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi b/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi
-index defcbd15edf9..34e97da98270 100644
---- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi
-+++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi
-@@ -1064,7 +1064,7 @@ &usb2 {
- 	status = "okay";
- 	extcon = <&usb2_id>;
- 
--	dwc3@7600000 {
-+	usb@7600000 {
- 		extcon = <&usb2_id>;
- 		dr_mode = "otg";
- 		maximum-speed = "high-speed";
-@@ -1075,7 +1075,7 @@ &usb3 {
- 	status = "okay";
- 	extcon = <&usb3_id>;
- 
--	dwc3@6a00000 {
-+	usb@6a00000 {
- 		extcon = <&usb3_id>;
- 		dr_mode = "otg";
- 	};
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 96a5ec89b5f0..1129062a4ca1 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -427,7 +427,7 @@ usb_0: usb@8af8800 {
- 			resets = <&gcc GCC_USB0_BCR>;
- 			status = "disabled";
- 
--			dwc_0: dwc3@8a00000 {
-+			dwc_0: usb@8a00000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x8a00000 0xcd00>;
- 				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-@@ -468,7 +468,7 @@ usb_1: usb@8cf8800 {
- 			resets = <&gcc GCC_USB1_BCR>;
- 			status = "disabled";
- 
--			dwc_1: dwc3@8c00000 {
-+			dwc_1: usb@8c00000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x8c00000 0xcd00>;
- 				interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 9951286db775..66b6d2f0a093 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -1767,7 +1767,7 @@ usb3: usb@6af8800 {
- 			power-domains = <&gcc USB30_GDSC>;
- 			status = "disabled";
- 
--			dwc3@6a00000 {
-+			usb@6a00000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x06a00000 0xcc00>;
- 				interrupts = <0 131 IRQ_TYPE_LEVEL_HIGH>;
-@@ -1978,7 +1978,7 @@ usb2: usb@76f8800 {
- 			power-domains = <&gcc USB30_GDSC>;
- 			status = "disabled";
- 
--			dwc3@7600000 {
-+			usb@7600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x07600000 0xcc00>;
- 				interrupts = <0 138 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-index c45870600909..7cc7897e7b83 100644
---- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-@@ -1678,7 +1678,7 @@ usb3: usb@a8f8800 {
- 
- 			resets = <&gcc GCC_USB_30_BCR>;
- 
--			usb3_dwc3: dwc3@a800000 {
-+			usb3_dwc3: usb@a800000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x0a800000 0xcd00>;
- 				interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-index 6422cf9d5855..88d7b7a53743 100644
---- a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-@@ -337,7 +337,7 @@ &usb2_phy_sec {
- &usb3 {
- 	status = "okay";
- 
--	dwc3@7580000 {
-+	usb@7580000 {
- 		dr_mode = "host";
- 	};
- };
-diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-index b654b802e95c..f6ef17553064 100644
---- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-@@ -544,7 +544,7 @@ usb3: usb@7678800 {
- 			assigned-clock-rates = <19200000>, <200000000>;
- 			status = "disabled";
- 
--			dwc3@7580000 {
-+			usb@7580000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x07580000 0xcd00>;
- 				interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-@@ -573,7 +573,7 @@ usb2: usb@79b8800 {
- 			assigned-clock-rates = <19200000>, <133333333>;
- 			status = "disabled";
- 
--			dwc3@78c0000 {
-+			usb@78c0000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x078c0000 0xcc00>;
- 				interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index d46b3833e52f..bbc9a2b5c570 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -2673,7 +2673,7 @@ usb_1: usb@a6f8800 {
- 					<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_USB3>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
--			usb_1_dwc3: dwc3@a600000 {
-+			usb_1_dwc3: usb@a600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a600000 0 0xe000>;
- 				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 2884577dcb77..ca20e4e91f61 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -3573,7 +3573,7 @@ usb_1: usb@a6f8800 {
- 					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_USB3_0>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
--			usb_1_dwc3: dwc3@a600000 {
-+			usb_1_dwc3: usb@a600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a600000 0 0xcd00>;
- 				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-@@ -3621,7 +3621,7 @@ usb_2: usb@a8f8800 {
- 					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_USB3_1>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
--			usb_2_dwc3: dwc3@a800000 {
-+			usb_2_dwc3: usb@a800000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a800000 0 0xcd00>;
- 				interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index b86a7ead3006..167d14dda974 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -846,7 +846,7 @@ usb_1: usb@a6f8800 {
- 
- 			resets = <&gcc GCC_USB30_PRIM_BCR>;
- 
--			usb_1_dwc3: dwc3@a600000 {
-+			usb_1_dwc3: usb@a600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a600000 0 0xcd00>;
- 				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
--- 
-2.27.0
+Sorry for my lateness!
 
+I reviewed Pany's logs, and the issue appears to be related to the
+automatic loading of the apple-mfi-fastcharge USB driver, which triggers
+a re-probe of the SD card reader, as pointed out earlier.
+
+This happens because the id_table of the aforementioned USB driver
+(mfi_fc_id_table) matches all USB products manufactured by Apple:
+
+  35 static const struct usb_device_id mfi_fc_id_table[] = {
+  36         { .idVendor = APPLE_VENDOR_ID,
+  37           .match_flags = USB_DEVICE_ID_MATCH_VENDOR },
+  38         {},
+  39 };
+  ...
+218 static struct usb_device_driver mfi_fc_driver = {
+219         .name =         "apple-mfi-fastcharge",
+220         .probe =        mfi_fc_probe,
+221         .disconnect =   mfi_fc_disconnect,
+222         .id_table =     mfi_fc_id_table,
+223         .generic_subclass = 1,
+224 };
+
+
+... and Pany's system has multiple USB devices manufactured by Apple
+(including the SD card reader), with the vendor code 0x05ac, which is
+the value included by the id_table of the apple-mfi-fastcharge driver:
+
+Sep 29 15:22:48 fedora.local kernel: usb 2-3: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+Sep 29 15:22:48 fedora.local kernel: usb 2-3: New USB device found, idVendor=05ac, idProduct=8406, bcdDevice= 8.20
+Sep 29 15:22:48 fedora.local kernel: usb 2-3: New USB device strings: Mfr=3, Product=4, SerialNumber=5
+Sep 29 15:22:48 fedora.local kernel: usb 2-3: Product: Card Reader
+Sep 29 15:22:48 fedora.local kernel: usb 2-3: Manufacturer: Apple
+...
+Sep 29 15:22:48 fedora.local kernel: usb 1-5: new full-speed USB device number 3 using xhci_hcd
+Sep 29 15:22:48 fedora.local kernel: usb 1-5: New USB device found, idVendor=05ac, idProduct=0273, bcdDevice= 6.22
+Sep 29 15:22:48 fedora.local kernel: usb 1-5: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+Sep 29 15:22:48 fedora.local kernel: usb 1-5: Product: Apple Internal Keyboard / Trackpad
+Sep 29 15:22:48 fedora.local kernel: usb 1-5: Manufacturer: Apple Inc.
+...
+
+One way to fix this issue would be to implement a match function in the
+apple-mfi-fastcharge driver, possibly instead of an id_table, so that it
+does not match devices that it cannot bind to. This may require other
+changes in the USB core that I cannot fathom at the moment.
+
+Pany, in the mean-time, could you add the following string to your kernel's
+command line (i.e., via GRUB, or the actual boot-loader that you use) and
+let us know whether it helps to *work around* this issue with the latest
+versions of 5.8.y kernels?
+
+	module_blacklist=apple-mfi-fastcharge
+
+To emphasize, I am only suggesting this as a work-around, not as an actual
+solution.
+
+My time is a bit limited due to having restarted full-time employment,
+but I can work on this issue during the weekend.
+
+Thanks!
+
+Vefa
