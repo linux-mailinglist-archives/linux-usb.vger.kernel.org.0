@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C969E293842
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 11:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C456A293827
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 11:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405715AbgJTJhO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 05:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51070 "EHLO
+        id S2405729AbgJTJgs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 05:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405702AbgJTJgn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 05:36:43 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8C7C0613D4
-        for <linux-usb@vger.kernel.org>; Tue, 20 Oct 2020 02:36:41 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id j10so1432373ybl.19
-        for <linux-usb@vger.kernel.org>; Tue, 20 Oct 2020 02:36:41 -0700 (PDT)
+        with ESMTP id S2392934AbgJTJgo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 05:36:44 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2468BC0613D1
+        for <linux-usb@vger.kernel.org>; Tue, 20 Oct 2020 02:36:43 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id k6so857844qvg.9
+        for <linux-usb@vger.kernel.org>; Tue, 20 Oct 2020 02:36:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=68+qkqJJ0yGLVD99S4hdTLHhp4Q61Io/XotXvcoBiV8=;
-        b=ZR2wc6dslObVvINB9BUikIlKrnpZm/ejNhWBSswVwuHXvxAX9xWLlasnBYoDLa2QFX
-         S3aAcemb9GkFUrue0XxER8DBdvl91wF3vcDl7FtI8k+F4cNA+/8PcCwYjSz/Klcs37SW
-         zI7QywfZicOrHzgPcypyayEfKcsIE3m7k0jgGsDoGEh386tmay9J3AwoAPUcMit7307F
-         1kvgZAJJ33mie4RXZSuuw4BXx+AdTYXnoEWClQ+HzXuTIti4Y5YXApZgujTAoa2c+1ve
-         aGmsQoyeXW0qPmqWKsLQ3JdYooQko3Lu8UDl+FINeY1tWZGngo+nglwnFAv5W/AEPLLL
-         hWjg==
+        bh=RO8+F+AZynQ8z9gnNYSkehQkLC4PdmM+7OgKF65OMag=;
+        b=J2YN8PeeFWvC4FqnPy0juAGSztPEz73SSov7sHYge5N5T/oEGGGypUdyXF1i711W+9
+         noEv04bglt9VXr107ZNu3D9U4XvADbdh8JN6ee0a5Uk7KAO9jphg4wvXUK6KEUCjxced
+         xzwRhdTBkSUCZLNA/tRcriV15ikmZVeGdEqNbMY5ZzIfoQCidMpjLoyKoFYEHbMTFoih
+         kmIrMauF+PbOiZjA7CGcG+PY9BxM183bRGBkU+0IZBqcyyXX85yUYt2OS/nXk4FMSoI+
+         ShrLZu+hIri57MgNd3bZErvYqWPlWU78wtI3fcsYJOgNzJ9afUoXOdAf8hS1y4gwFAVF
+         61MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=68+qkqJJ0yGLVD99S4hdTLHhp4Q61Io/XotXvcoBiV8=;
-        b=nd6MyXdwHbQFabN98QQCJSrTKHFMdyrxTcOO9mxzQaBvEOXgheUEELU/biIc5WPaTC
-         vovnRI01fEf3HA7SqVL2SjI4quXOZCZFVoMrseTuKjPDwVOlK1yzJSJeRiB9aMnypfU3
-         VhuC+Qy08/yM5fsn5xFNMoyMLstF4EVcOCxz8HjrLt0VYhfBjXWiEHPUbTiv47RaLaot
-         qDeqz33DVAaR+U886iXvR+PpuXcMu5hGAzHhHfzp84V2jugQEKVvYrX6HIao4bth0epN
-         J223VfFfrpDyfsjmENVB1NrfX4Nk0vckwA13VxCAtoKUiEXSQJfeOrd5DZ/F1Jxrzje0
-         OSpQ==
-X-Gm-Message-State: AOAM532uH1/DbLJelv2dE80FQOmaTJ0TcWjiY8bNyqqohppRgRWoUA8Y
-        wTzfk/b2DX6lYFIP2h+KlNZAT7Klpnc=
-X-Google-Smtp-Source: ABdhPJyil+TPK0fD0mAFL5BbejbF9pJeXKE7dbv/JGrJAocl14Pd/3zIJQ3exhUfNX3qiZIpkT8FNM8G4Os=
+        bh=RO8+F+AZynQ8z9gnNYSkehQkLC4PdmM+7OgKF65OMag=;
+        b=WjTLOZIAbBPVpjW0PdTmbhI/Wzp63e1kFLrP09EwUoBxjgSkM9dgsRVVefVxcoPRRw
+         Q/HfX0Fh7qX4UeIkuFOQreZK1MRXm9/P8mDT9xHPtbnmFFT7q16gGjvzz1LACzIu6fwl
+         WMV8a6wZ4gOH8C+YD4cw1cb21X7HLiv+KuiHzDz+6x9u0H1WMPiDL85JYP7qmDPBaP75
+         Qo3FikvglrJKsTOoP2sEve/8s3MjaWhHXRtg2/2dvCjb3e1pkD4nb5STzVnxj7KDVrww
+         MwXxj+v0vGhOToe6DNPd1AQluIRdEu58H1h9sMLz17EhFZwykmQX6Qwehw5MJT0NGZZu
+         DdkA==
+X-Gm-Message-State: AOAM5320Anc9PHmNmXrxcSRncthWik4gRkM5Y87jTen7vlvsyI+zHZHA
+        fz3oh/bxcvuVXarIaRO5NIPFmlDePZM=
+X-Google-Smtp-Source: ABdhPJxNUWy8MGQheEG5DT4g6p4ce7dS600GhbxebDD+eleqGUeWD64PLCAMr3ylmd1nojOGxXcAhfKgow8=
 Sender: "badhri via sendgmr" <badhri@badhri.mtv.corp.google.com>
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:1:f292:1cff:fee0:66cf])
- (user=badhri job=sendgmr) by 2002:a25:84cd:: with SMTP id x13mr2587479ybm.430.1603186600445;
- Tue, 20 Oct 2020 02:36:40 -0700 (PDT)
-Date:   Tue, 20 Oct 2020 02:36:21 -0700
+ (user=badhri job=sendgmr) by 2002:ad4:5547:: with SMTP id v7mr2301078qvy.9.1603186602279;
+ Tue, 20 Oct 2020 02:36:42 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 02:36:22 -0700
 In-Reply-To: <20201020093627.256885-1-badhri@google.com>
-Message-Id: <20201020093627.256885-5-badhri@google.com>
+Message-Id: <20201020093627.256885-6-badhri@google.com>
 Mime-Version: 1.0
 References: <20201020093627.256885-1-badhri@google.com>
 X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-Subject: [PATCH v11 04/10] usb: typec: tcpm: Refactor logic for new-source-frs-typec-current
+Subject: [PATCH v11 05/10] usb: typec: tcpm: frs sourcing vbus callback
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -71,77 +71,64 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-New source's current capability is now defined through
-new-source-frs-typec-current. Refactor tcpm code to parse
-new-source-frs-typec-current and infer local port's new source current
-capability during frs.
+During FRS hardware autonomously starts to source vbus. Provide
+callback to perform chip specific operations.
 
 Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
-v9 is the first version of this patch in this series to rebase
-TCPM code to read new source frs current from
-new-source-frs-typec-current.
+Introduced in v9.
 
 Changes since v10:
-- Moving back to u32 for new-source-frs-typec-current.
+Added Reviewed-by: Heikki Krogerus
 ---
- drivers/usb/typec/tcpm/tcpm.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c | 9 +++++++++
+ include/linux/usb/tcpm.h      | 4 ++++
+ 2 files changed, 13 insertions(+)
 
 diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 55535c4f66bf..561480b67bce 100644
+index 561480b67bce..0123d2f14c96 100644
 --- a/drivers/usb/typec/tcpm/tcpm.c
 +++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -363,8 +363,8 @@ struct tcpm_port {
- 	/* port belongs to a self powered device */
- 	bool self_powered;
+@@ -4091,7 +4091,16 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
+ 	case SRC_TRY_DEBOUNCE:
+ 		/* Do nothing, waiting for sink detection */
+ 		break;
++	case FR_SWAP_SEND:
++	case FR_SWAP_SEND_TIMEOUT:
++	case FR_SWAP_SNK_SRC_TRANSITION_TO_OFF:
++	case FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED:
++		if (port->tcpc->frs_sourcing_vbus)
++			port->tcpc->frs_sourcing_vbus(port->tcpc);
++		break;
+ 	case FR_SWAP_SNK_SRC_NEW_SINK_READY:
++		if (port->tcpc->frs_sourcing_vbus)
++			port->tcpc->frs_sourcing_vbus(port->tcpc);
+ 		tcpm_set_state(port, FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED, 0);
+ 		break;
  
--	/* FRS */
--	enum frs_typec_current frs_current;
-+	/* Sink FRS */
-+	enum frs_typec_current new_source_frs_current;
+diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+index 09762d26fa0c..7303f518ba49 100644
+--- a/include/linux/usb/tcpm.h
++++ b/include/linux/usb/tcpm.h
+@@ -83,6 +83,9 @@ enum tcpm_transmit_type {
+  *		Optional; Called to enable/disable PD 3.0 fast role swap.
+  *		Enabling frs is accessory dependent as not all PD3.0
+  *		accessories support fast role swap.
++ * @frs_sourcing_vbus:
++ *		Optional; Called to notify that vbus is now being sourced.
++ *		Low level drivers can perform chip specific operations, if any.
+  */
+ struct tcpc_dev {
+ 	struct fwnode_handle *fwnode;
+@@ -109,6 +112,7 @@ struct tcpc_dev {
+ 			   const struct pd_message *msg);
+ 	int (*set_bist_data)(struct tcpc_dev *dev, bool on);
+ 	int (*enable_frs)(struct tcpc_dev *dev, bool enable);
++	void (*frs_sourcing_vbus)(struct tcpc_dev *dev);
+ };
  
- 	/* Sink caps have been queried */
- 	bool sink_cap_done;
-@@ -1713,7 +1713,7 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
- 	unsigned int cnt = pd_header_cnt_le(msg->header);
- 	unsigned int rev = pd_header_rev_le(msg->header);
- 	unsigned int i;
--	enum frs_typec_current frs_current;
-+	enum frs_typec_current partner_frs_current;
- 	bool frs_enable;
- 	int ret;
- 
-@@ -1786,12 +1786,13 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
- 		for (i = 0; i < cnt; i++)
- 			port->sink_caps[i] = le32_to_cpu(msg->payload[i]);
- 
--		frs_current = (port->sink_caps[0] & PDO_FIXED_FRS_CURR_MASK) >>
-+		partner_frs_current = (port->sink_caps[0] & PDO_FIXED_FRS_CURR_MASK) >>
- 			PDO_FIXED_FRS_CURR_SHIFT;
--		frs_enable = frs_current && (frs_current <= port->frs_current);
-+		frs_enable = partner_frs_current && (partner_frs_current <=
-+						     port->new_source_frs_current);
- 		tcpm_log(port,
- 			 "Port partner FRS capable partner_frs_current:%u port_frs_current:%u enable:%c",
--			 frs_current, port->frs_current, frs_enable ? 'y' : 'n');
-+			 partner_frs_current, port->new_source_frs_current, frs_enable ? 'y' : 'n');
- 		if (frs_enable) {
- 			ret  = port->tcpc->enable_frs(port->tcpc, true);
- 			tcpm_log(port, "Enable FRS %s, ret:%d\n", ret ? "fail" : "success", ret);
-@@ -4808,9 +4809,10 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
- 
- 	/* FRS can only be supported byb DRP ports */
- 	if (port->port_type == TYPEC_PORT_DRP) {
--		ret = fwnode_property_read_u32(fwnode, "frs-typec-current", &frs_current);
-+		ret = fwnode_property_read_u32(fwnode, "new-source-frs-typec-current",
-+					       &frs_current);
- 		if (ret >= 0 && frs_current <= FRS_5V_3A)
--			port->frs_current = frs_current;
-+			port->new_source_frs_current = frs_current;
- 	}
- 
- 	return 0;
+ struct tcpm_port;
 -- 
 2.29.0.rc1.297.gfa9743e501-goog
 
