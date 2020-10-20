@@ -2,63 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 045F4293BB5
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA476293BB8
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406183AbgJTMex (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 08:34:53 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38767 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406178AbgJTMew (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 08:34:52 -0400
-Received: by mail-wr1-f67.google.com with SMTP id n18so1930038wrs.5;
-        Tue, 20 Oct 2020 05:34:49 -0700 (PDT)
+        id S2406202AbgJTMfN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 08:35:13 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:38814 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406195AbgJTMfN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 08:35:13 -0400
+Received: by mail-wr1-f65.google.com with SMTP id n18so1931443wrs.5;
+        Tue, 20 Oct 2020 05:35:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=EzhYPUdwTpekJ2zsw7haamkzlXbtKEq69o4o4bB7xkI=;
-        b=ernRjXKlFQuucIV9bVH08TbjAHwpKcMZRLEoDb5sMnAZmMjXXWqGm2jS6iZzLv7q+L
-         r00xhRwBV+a1lL5LgmUb/tF4n1Mty2djk0REYZu4iKz7s60Zj9zLzZ+4E0YRZ78FuOd1
-         uRXCY2RU107KWOyJ+m7Pvdx755b+ReZyV4HIZxs3jzFAUJFoWGIdiSUlPQSgp8WDHoLB
-         FAujKMDf8p1x8CVLrbfcrsZVpNcuXIELzJ7YTYoaBke3sv9p0V6V3/j5PCv4OdxXM7xo
-         rN1Eryct7qP23j8OGtsKU2tlHV7hHosxC6xvJqZHserdhprHfQ/lLFrR5V/iZW/SfjBu
-         rMIw==
-X-Gm-Message-State: AOAM532VL7bVCCttaRep04HMp/9Mx9nRdh3RgNJWGKT6ZW+kybrkKmTf
-        ruQJWcfN5WYdmYdRZ0cgVjw=
-X-Google-Smtp-Source: ABdhPJzWCzcMNSO3BE4qxJu4ChjhMCwjDA39L1oCuXq1p8BjmT82IBBFy3kZTwCSqqH2MyFmJnuajQ==
-X-Received: by 2002:a5d:4c4f:: with SMTP id n15mr3178316wrt.137.1603197289250;
-        Tue, 20 Oct 2020 05:34:49 -0700 (PDT)
+        bh=K0ziud5U7z2Be3d39hiZg1oazX3EmquJNPRbj25dtTg=;
+        b=g6V0cJ6Oua1g4u25i2olzRt1GoT3WjExQ38v0s3ae2JpNhP2nb0RkiGHeWryynVaOS
+         c/P3KG78/Y5KeUT0N3dnUm8+XMIjcHKboetTTQVVoOUISzoYx3Zvfm/QAtXsIxv+WvCj
+         aR4o5JL2ukofrAu9OU4n2nyoDHzVberr1LDjIiK+TrbONV+8OWWCeR6LqtoEokumddb2
+         rNZvC9wn2SIUXLeF5cxPJcu5oWrPE27R073meoB88Q4PWz+hYStdbjSb3ys8jBnhbClq
+         BEveEmt47wpFgCf9wNzyYQG7aVmVs8pNQj5SUVcEboi2yHm0k63IJPCK9QtviE1rdXh2
+         K8IQ==
+X-Gm-Message-State: AOAM533qVuF7DTsr8qhE74luGHStchdRzywqnQUI6Nh4e0MoKCztiYcL
+        vk1Qa7v5oGlriER5Yc+kziA=
+X-Google-Smtp-Source: ABdhPJzItdVZsGvx1zFnzZFr5qmOriiBF1A5jL8niYXLbDo1Jr3pvxQ9WttgwmR+Hj9OE0w00JY/Zw==
+X-Received: by 2002:adf:f246:: with SMTP id b6mr3280040wrp.111.1603197311141;
+        Tue, 20 Oct 2020 05:35:11 -0700 (PDT)
 Received: from kozik-lap ([194.230.155.171])
-        by smtp.googlemail.com with ESMTPSA id s2sm2724354wmf.45.2020.10.20.05.34.47
+        by smtp.googlemail.com with ESMTPSA id a17sm3212629wra.29.2020.10.20.05.35.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2020 05:34:48 -0700 (PDT)
-Date:   Tue, 20 Oct 2020 14:34:46 +0200
+        Tue, 20 Oct 2020 05:35:09 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 14:35:06 +0200
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Felipe Balbi <balbi@kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
         Serge Semin <fancer.lancer@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/29] arm: dts: bcm53x: Harmonize EHCI/OHCI DT nodes name
-Message-ID: <20201020123446.GD127386@kozik-lap>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org
+Subject: Re: [PATCH 06/29] arc: dts: Harmonize EHCI/OHCI DT nodes name
+Message-ID: <20201020123506.GE127386@kozik-lap>
 References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
- <20201020115959.2658-8-Sergey.Semin@baikalelectronics.ru>
+ <20201020115959.2658-7-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201020115959.2658-8-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201020115959.2658-7-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 02:59:37PM +0300, Serge Semin wrote:
+On Tue, Oct 20, 2020 at 02:59:36PM +0300, Serge Semin wrote:
 > In accordance with the Generic EHCI/OHCI bindings the corresponding node
 > name is suppose to comply with the Generic USB HCD DT schema, which
 > requires the USB nodes to have the name acceptable by the regexp:
@@ -66,11 +66,14 @@ On Tue, Oct 20, 2020 at 02:59:37PM +0300, Serge Semin wrote:
 > nodes are correctly named.
 > 
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
 > ---
->  arch/arm/boot/dts/bcm5301x.dtsi | 4 ++--
->  arch/arm/boot/dts/bcm53573.dtsi | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  arch/arc/boot/dts/axc003.dtsi        | 4 ++--
+>  arch/arc/boot/dts/axc003_idu.dtsi    | 4 ++--
+>  arch/arc/boot/dts/axs10x_mb.dtsi     | 4 ++--
+>  arch/arc/boot/dts/hsdk.dts           | 4 ++--
+>  arch/arc/boot/dts/vdk_axs10x_mb.dtsi | 2 +-
+>  5 files changed, 9 insertions(+), 9 deletions(-)
 
 Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 
