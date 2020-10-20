@@ -2,160 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB33E2936EA
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 10:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190CF293716
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 10:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392079AbgJTIiT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 04:38:19 -0400
-Received: from mga06.intel.com ([134.134.136.31]:49501 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389186AbgJTIiS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Oct 2020 04:38:18 -0400
-IronPort-SDR: 2k1pMts9SK1tWAyIYBlP/IlerfxqeMz7NVd6MduF9TNzCzcNT/0vnohWzrjTyHHpJ7+VfU0Ocq
- rH0NBQtuINmQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9779"; a="228807687"
-X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
-   d="scan'208";a="228807687"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 01:38:18 -0700
-IronPort-SDR: RP3FdSmMreYjhdxcme3Vo2lAvsGEFrhPKj/zd0zI46EI9im9pLk3KbgRY47Z9erwthPgqPB2Nr
- uNDldZKHTYbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
-   d="scan'208";a="523428781"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Oct 2020 01:38:16 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CF3E5377; Tue, 20 Oct 2020 11:38:15 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] usb: dwc3: Simplify with dev_err_probe()
-Date:   Tue, 20 Oct 2020 11:38:15 +0300
-Message-Id: <20201020083815.89275-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.28.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S2392142AbgJTItJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 04:49:09 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:41530 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389490AbgJTItF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 04:49:05 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09K8i7rI188082;
+        Tue, 20 Oct 2020 08:48:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : message-id :
+ content-type : mime-version : subject : date : in-reply-to : cc : to :
+ references; s=corp-2020-01-29;
+ bh=UBSvDuZX45rcdCwz1yIzvCzCqfd2joSCizhea4x+Xao=;
+ b=q8gn83IPPWdFm1HT3taLhd9DUF/VTUU+yXtsd8f9nD6wriupB19ul4FsqzWGdtIZMcde
+ GW+G9oeRVHaGmJfZ8muagtVwvuWLE6AywXuhak+OXkSgdFP6EIR2H2OqKDUhR7yIW2Vz
+ zpamQMFlTWRfwdWHBA7I0p8HYGgPlEg7NOi5pNpKeOCI5/Zqu82RI3DyvlSb3YeNhNvu
+ 1nAbi2LxPOnr/RtC4QoVHdNGHfdCdQB+x9xvmqx+BqjtbEr8lrxt1aMjIali/bjhTn7W
+ dzqjxrXdOv4FjsFo2kwRKNjQX5RScYby9/qqSUitUFXIKeMy4YBvXYVTZYkhax1TMfnU 0w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 347s8msmp0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 20 Oct 2020 08:48:12 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09K8is45150623;
+        Tue, 20 Oct 2020 08:48:12 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 348ahw07cp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 20 Oct 2020 08:48:12 +0000
+Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09K8mAEe159753;
+        Tue, 20 Oct 2020 08:48:10 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 348ahw07bh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Oct 2020 08:48:10 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09K8lvTX021447;
+        Tue, 20 Oct 2020 08:47:58 GMT
+Received: from [10.175.164.120] (/10.175.164.120)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 20 Oct 2020 01:47:57 -0700
+From:   John Haxby <john.haxby@oracle.com>
+Message-Id: <27A23102-A7F5-48C5-8972-48CE4C283C6E@oracle.com>
+Content-Type: multipart/signed;
+        boundary="Apple-Mail=_9F9749E9-79EA-41AB-B516-003ECE07BEE3";
+        protocol="application/pgp-signature";
+        micalg=pgp-sha256
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
+Subject: Re: [Ocfs2-devel] [RFC] treewide: cleanup unreachable breaks
+Date:   Tue, 20 Oct 2020 09:47:45 +0100
+In-Reply-To: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+Cc:     Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        storagedev@microchip.com,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        virtualization@lists.linux-foundation.org,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        ath10k@lists.infradead.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        linux-acpi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-pci@vger.kernel.org, spice-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-nfc@lists.01.org, linux-pm@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-amlogic@lists.infradead.org,
+        openipmi-developer@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, George Burgess <gbiv@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>, patches@opensource.cirrus.com,
+        bpf <bpf@vger.kernel.org>, ocfs2-devel@oss.oracle.com,
+        linux-power@fi.rohmeurope.com
+To:     Nick Desaulniers <ndesaulniers@google.com>
+References: <20201017160928.12698-1-trix@redhat.com>
+ <20201018054332.GB593954@kroah.com>
+ <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.4)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9779 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
+ phishscore=0 clxscore=1011 bulkscore=0 impostorscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010200059
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Common pattern of handling deferred probe can be simplified with
-dev_err_probe(). Less code and the error value gets printed.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/dwc3/core.c | 44 +++++++++++------------------------------
- 1 file changed, 11 insertions(+), 33 deletions(-)
+--Apple-Mail=_9F9749E9-79EA-41AB-B516-003ECE07BEE3
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=us-ascii
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index bdf0925da6b6..8787dff5342e 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1126,11 +1126,8 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
- 		ret = PTR_ERR(dwc->usb2_phy);
- 		if (ret == -ENXIO || ret == -ENODEV) {
- 			dwc->usb2_phy = NULL;
--		} else if (ret == -EPROBE_DEFER) {
--			return ret;
- 		} else {
--			dev_err(dev, "no usb2 phy configured\n");
--			return ret;
-+			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
- 		}
- 	}
- 
-@@ -1138,11 +1135,8 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
- 		ret = PTR_ERR(dwc->usb3_phy);
- 		if (ret == -ENXIO || ret == -ENODEV) {
- 			dwc->usb3_phy = NULL;
--		} else if (ret == -EPROBE_DEFER) {
--			return ret;
- 		} else {
--			dev_err(dev, "no usb3 phy configured\n");
--			return ret;
-+			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
- 		}
- 	}
- 
-@@ -1151,11 +1145,8 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
- 		ret = PTR_ERR(dwc->usb2_generic_phy);
- 		if (ret == -ENOSYS || ret == -ENODEV) {
- 			dwc->usb2_generic_phy = NULL;
--		} else if (ret == -EPROBE_DEFER) {
--			return ret;
- 		} else {
--			dev_err(dev, "no usb2 phy configured\n");
--			return ret;
-+			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
- 		}
- 	}
- 
-@@ -1164,11 +1155,8 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
- 		ret = PTR_ERR(dwc->usb3_generic_phy);
- 		if (ret == -ENOSYS || ret == -ENODEV) {
- 			dwc->usb3_generic_phy = NULL;
--		} else if (ret == -EPROBE_DEFER) {
--			return ret;
- 		} else {
--			dev_err(dev, "no usb3 phy configured\n");
--			return ret;
-+			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
- 		}
- 	}
- 
-@@ -1190,11 +1178,8 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
- 		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
- 
- 		ret = dwc3_gadget_init(dwc);
--		if (ret) {
--			if (ret != -EPROBE_DEFER)
--				dev_err(dev, "failed to initialize gadget\n");
--			return ret;
--		}
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to initialize gadget\n");
- 		break;
- 	case USB_DR_MODE_HOST:
- 		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-@@ -1205,20 +1190,14 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
- 		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
- 
- 		ret = dwc3_host_init(dwc);
--		if (ret) {
--			if (ret != -EPROBE_DEFER)
--				dev_err(dev, "failed to initialize host\n");
--			return ret;
--		}
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to initialize host\n");
- 		break;
- 	case USB_DR_MODE_OTG:
- 		INIT_WORK(&dwc->drd_work, __dwc3_set_mode);
- 		ret = dwc3_drd_init(dwc);
--		if (ret) {
--			if (ret != -EPROBE_DEFER)
--				dev_err(dev, "failed to initialize dual-role\n");
--			return ret;
--		}
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to initialize dual-role\n");
- 		break;
- 	default:
- 		dev_err(dev, "Unsupported mode of operation %d\n", dwc->dr_mode);
-@@ -1555,8 +1534,7 @@ static int dwc3_probe(struct platform_device *pdev)
- 
- 	ret = dwc3_core_init(dwc);
- 	if (ret) {
--		if (ret != -EPROBE_DEFER)
--			dev_err(dev, "failed to initialize core: %d\n", ret);
-+		dev_err_probe(dev, ret, "failed to initialize core\n");
- 		goto err4;
- 	}
- 
--- 
-2.28.0
 
+
+> On 19 Oct 2020, at 20:42, Nick Desaulniers <ndesaulniers@google.com> =
+wrote:
+>=20
+> We probably should add all 3 to W=3D2 builds (wrapped in cc-option).
+> I've filed https://github.com/ClangBuiltLinux/linux/issues/1180 to
+> follow up on.
+
+It looks as though the URL mangling has been fixed.   If anyone sees =
+that specific URL mangled, please let me know.
+
+jch
+
+--Apple-Mail=_9F9749E9-79EA-41AB-B516-003ECE07BEE3
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
+
+-----BEGIN PGP SIGNATURE-----
+Comment: GPGTools - http://gpgtools.org
+
+iHUEAREIAB0WIQT+pxvb11CFWUkNSOVFC7t+lC+jyAUCX46kMQAKCRBFC7t+lC+j
+yBKiAP90JVXdPzuAwtRGkROpw1eVCo7wCaZ5nOa8Oo0sN6gC9gD/S0eGTqQhmg+n
+sXPJxPYqQsg09qmS6k/HX+AP5Oz2AMo=
+=xx66
+-----END PGP SIGNATURE-----
+
+--Apple-Mail=_9F9749E9-79EA-41AB-B516-003ECE07BEE3--
