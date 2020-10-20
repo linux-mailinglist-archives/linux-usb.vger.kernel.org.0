@@ -2,155 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B83F3293E2D
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 16:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38361293F91
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 17:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407871AbgJTOJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 10:09:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34595 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2407864AbgJTOJd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 10:09:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603202972;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rOdQp2iOSkahNa0CfH1+VDlgH/zqWEjNOjN0qUXEes0=;
-        b=ewDv3aOrdJ+x5A6s7YiY6e3DZ/xG19fiCFYxEBc219ynzJxgu/51wlX4XbcPcMAU2oHyfD
-        PtMot7BJZaqOvPJXq6YGOAgeRSVWl5/eHGglGFP0XXl1T9R1hHW25Ri1M+zqhWdXytm0kf
-        dEEfBPozJhD9ETuNOOZz/yhFPpgdSTo=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-291-3DDhq-WsMDm8jx3vSpG1Ug-1; Tue, 20 Oct 2020 10:09:30 -0400
-X-MC-Unique: 3DDhq-WsMDm8jx3vSpG1Ug-1
-Received: by mail-qt1-f200.google.com with SMTP id d1so1691106qtq.12
-        for <linux-usb@vger.kernel.org>; Tue, 20 Oct 2020 07:09:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=rOdQp2iOSkahNa0CfH1+VDlgH/zqWEjNOjN0qUXEes0=;
-        b=Djo3wkNk5WlBd8Y2ygH2abxq+PGrY4HioEqRWgbRWrnWlC68Xkb6c9lUEV1+MTwX9Z
-         aD5JHkbwMaXMBIhvILRL37SE75KC/x1JtRfufl12KtkDt5SUrdr+7vFmIFdcNy1xk8Dr
-         5psnpch6KuY6biyR1j2nAH+ePSZz99pmmORPIVF8W0IXXoQWKI7lEtZX4qzx1mFt+6hN
-         G6WTJRrJ+440mV1eGUrI5jO8IE1/QBo9hmGj96I9WlwMwc0HcBbpTmtvRtWDJpgtQmi2
-         n11CiGnGDrw1Me1nHz4yCBNQakm0fZNC/U3L9QISg3vbrf2FcCCh0humRawcDhIGtDQz
-         tHFg==
-X-Gm-Message-State: AOAM530muHJvwuH/+P/zlVXaSkdQw0/ossoRjeImFnGD8sW7zlbcwFha
-        PTgsd6ekD3XKIoe0t48yHuu6tTEV+zWQZPzvVRGPnAQQ1mGQgMlCnOvENTlaVr69ls0My4XFVhO
-        y9kqcc//FhZg7rA/o5b8o
-X-Received: by 2002:a05:620a:2195:: with SMTP id g21mr2990063qka.358.1603202969735;
-        Tue, 20 Oct 2020 07:09:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwKUy8N8weGLwzCzHDZ8oTBMtQsWbHEBLlPfZD5zpEfJ13ExA6QvxSe7FmqqHnm4D1jNxINeQ==
-X-Received: by 2002:a05:620a:2195:: with SMTP id g21mr2990039qka.358.1603202969497;
-        Tue, 20 Oct 2020 07:09:29 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id o14sm785284qto.16.2020.10.20.07.09.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2020 07:09:28 -0700 (PDT)
-Subject: Re: [RFC] treewide: cleanup unreachable breaks
-To:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
-        storagedev@microchip.com, devel@driverdev.osuosl.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        George Burgess <gbiv@google.com>
-References: <20201017160928.12698-1-trix@redhat.com>
- <20201018054332.GB593954@kroah.com>
- <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
- <20201019230546.GH36674@ziepe.ca>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <859ff6ff-3e10-195c-6961-7b2902b151d4@redhat.com>
-Date:   Tue, 20 Oct 2020 07:09:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1731766AbgJTP3B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 11:29:01 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:41765 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1731679AbgJTP3A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 11:29:00 -0400
+Received: (qmail 946601 invoked by uid 1000); 20 Oct 2020 11:28:59 -0400
+Date:   Tue, 20 Oct 2020 11:28:59 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "M. Vefa Bicakci" <m.v.b@runbox.com>
+Cc:     Pany <pany@fedoraproject.org>, Bastien Nocera <hadess@hadess.net>,
+        linux-usb@vger.kernel.org
+Subject: Re: Bug caused by 53965c79c2db (USB: Fix device driver race)
+Message-ID: <20201020152859.GA945128@rowland.harvard.edu>
+References: <CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com>
+ <20201017200200.GB842001@rowland.harvard.edu>
+ <CAE3RAxvNUvzqKT+GK3A4cQ7Tm_tFRQJKfJ01r0ic-5066fikDA@mail.gmail.com>
+ <20201019174028.GF898631@rowland.harvard.edu>
+ <cf1e7059-e1d2-2e7a-89c1-0c162850fbb4@runbox.com>
 MIME-Version: 1.0
-In-Reply-To: <20201019230546.GH36674@ziepe.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cf1e7059-e1d2-2e7a-89c1-0c162850fbb4@runbox.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Oct 20, 2020 at 08:03:23AM -0400, M. Vefa Bicakci wrote:
+> On 19/10/2020 13.40, Alan Stern wrote:
+> > On Mon, Oct 19, 2020 at 09:36:00AM +0000, Pany wrote:
+> > > On Sat, Oct 17, 2020 at 8:02 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > > 
+> > > > On Sat, Oct 17, 2020 at 04:07:11PM +0000, Pany wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > I installed fedora 32 into an SD card, with which I booted my Macbook.
+> > > > > It had worked well before, until I upgraded the kernel from 5.8.5 to
+> > > > > 5.8.6 [1].
+> > > > > 
+> > > > > With kernel-5.8.6-200.fc32.x86_64.rpm [2] installed, the boot process
+> > > > > would be stuck at "A start job is running for
+> > > > > /dev/mapper/fedora_localhost_--live-home (<time> / no limit)" (See the
+> > > > > photo of screen [3]).
+> > > > > 
+> > > > > By appending "systemd.debug-shell=1" to the kernel cmdline, I saved
+> > > > > the journal [4].
+> > > > > 
+> > > > > This issue has been bisected to commit
+> > > > > 53965c79c2dbdc898ffc7fdbab37e920594f5e14 ("USB: Fix device driver
+> > > > > race")
+> > > > > 
+> > > > > If I revert this commit, the kernel 5.8.6 would boot successfully.
+> > > > 
+> > > > This should have been fixed in 5.8.14 or 5.8.15 (5.8.14 was released on
+> > > > the same day that the fix was installed; I'm not sure which came first).
+> > > > At any rate it certainly should work with the most recent 5.8.y kernel.
+> > > > 
+> > > > Alan Stern
+> > > 
+> > > I tried, but neither 5.8.14 nor 5.8.15 worked for me.
+> > 
+> > Hmmm.  Looking at the system log you captured, it appears that the
+> > problem the SD card reader's driver getting reprobed incorrectly.  The
+> > details aren't clear, but the log shows the device getting probed twice,
+> > once as sdb and once as sdc.  If the system tried to mount one of the
+> > sdb partitions as the root, and then sdb disappeared, that could explain
+> > what you see.
+> > 
+> > I don't know why this is happening.  But you can try adding some
+> > debugging messages of your own.  In drivers/usb/core/driver.c, the
+> > routine __usb_bus_reprobe_drivers() should never reach the line that
+> > calls device_reprobe() unless the USBIP or apple-mfi-fastcharge driver
+> > is installed -- and neither of those should be involved with the card
+> > reader device.  You can add a line saying:
+> > 
+> > 	dev_info(dev, "new driver %s\n", new_udriver->name);
+> > 
+> > at that point and see what it produces in the log.
+> 
+> Hello all,
+> 
+> Sorry for my lateness!
+> 
+> I reviewed Pany's logs, and the issue appears to be related to the
+> automatic loading of the apple-mfi-fastcharge USB driver, which triggers
+> a re-probe of the SD card reader, as pointed out earlier.
+> 
+> This happens because the id_table of the aforementioned USB driver
+> (mfi_fc_id_table) matches all USB products manufactured by Apple:
+> 
+>  35 static const struct usb_device_id mfi_fc_id_table[] = {
+>  36         { .idVendor = APPLE_VENDOR_ID,
+>  37           .match_flags = USB_DEVICE_ID_MATCH_VENDOR },
+>  38         {},
+>  39 };
+>  ...
+> 218 static struct usb_device_driver mfi_fc_driver = {
+> 219         .name =         "apple-mfi-fastcharge",
+> 220         .probe =        mfi_fc_probe,
+> 221         .disconnect =   mfi_fc_disconnect,
+> 222         .id_table =     mfi_fc_id_table,
+> 223         .generic_subclass = 1,
+> 224 };
+> 
+> 
+> ... and Pany's system has multiple USB devices manufactured by Apple
+> (including the SD card reader), with the vendor code 0x05ac, which is
+> the value included by the id_table of the apple-mfi-fastcharge driver:
+> 
+> Sep 29 15:22:48 fedora.local kernel: usb 2-3: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+> Sep 29 15:22:48 fedora.local kernel: usb 2-3: New USB device found, idVendor=05ac, idProduct=8406, bcdDevice= 8.20
+> Sep 29 15:22:48 fedora.local kernel: usb 2-3: New USB device strings: Mfr=3, Product=4, SerialNumber=5
+> Sep 29 15:22:48 fedora.local kernel: usb 2-3: Product: Card Reader
+> Sep 29 15:22:48 fedora.local kernel: usb 2-3: Manufacturer: Apple
+> ...
+> Sep 29 15:22:48 fedora.local kernel: usb 1-5: new full-speed USB device number 3 using xhci_hcd
+> Sep 29 15:22:48 fedora.local kernel: usb 1-5: New USB device found, idVendor=05ac, idProduct=0273, bcdDevice= 6.22
+> Sep 29 15:22:48 fedora.local kernel: usb 1-5: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> Sep 29 15:22:48 fedora.local kernel: usb 1-5: Product: Apple Internal Keyboard / Trackpad
+> Sep 29 15:22:48 fedora.local kernel: usb 1-5: Manufacturer: Apple Inc.
+> ...
+> 
+> One way to fix this issue would be to implement a match function in the
+> apple-mfi-fastcharge driver, possibly instead of an id_table, so that it
+> does not match devices that it cannot bind to. This may require other
+> changes in the USB core that I cannot fathom at the moment.
 
-On 10/19/20 4:05 PM, Jason Gunthorpe wrote:
-> On Mon, Oct 19, 2020 at 12:42:15PM -0700, Nick Desaulniers wrote:
->> On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->>> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
->>>> From: Tom Rix <trix@redhat.com>
->>>>
->>>> This is a upcoming change to clean up a new warning treewide.
->>>> I am wondering if the change could be one mega patch (see below) or
->>>> normal patch per file about 100 patches or somewhere half way by collecting
->>>> early acks.
->>> Please break it up into one-patch-per-subsystem, like normal, and get it
->>> merged that way.
->>>
->>> Sending us a patch, without even a diffstat to review, isn't going to
->>> get you very far...
->> Tom,
->> If you're able to automate this cleanup, I suggest checking in a
->> script that can be run on a directory.  Then for each subsystem you
->> can say in your commit "I ran scripts/fix_whatever.py on this subdir."
->>  Then others can help you drive the tree wide cleanup.  Then we can
->> enable -Wunreachable-code-break either by default, or W=2 right now
->> might be a good idea.
-> I remember using clang-modernize in the past to fix issues very
-> similar to this, if clang machinery can generate the warning, can't
-> something like clang-tidy directly generate the patch?
+How about matching on the vendor ID and the product ID?  That would be 
+an easy addition to the ID table.  Do the fastcharge devices have a well 
+known product ID?
 
-Yes clang-tidy and similar are good tools.
+Alan Stern
 
-Sometimes they change too much and your time shifts
-
-from editing to analyzing and dropping changes.
-
-
-I am looking at them for auto changing api.
-
-When i have something greater than half baked i will post.
-
-Tom
-
->
-> You can send me a patch for drivers/infiniband/* as well
->
-> Thanks,
-> Jason
->
-
+> Pany, in the mean-time, could you add the following string to your kernel's
+> command line (i.e., via GRUB, or the actual boot-loader that you use) and
+> let us know whether it helps to *work around* this issue with the latest
+> versions of 5.8.y kernels?
+> 
+> 	module_blacklist=apple-mfi-fastcharge
+> 
+> To emphasize, I am only suggesting this as a work-around, not as an actual
+> solution.
+> 
+> My time is a bit limited due to having restarted full-time employment,
+> but I can work on this issue during the weekend.
+> 
+> Thanks!
+> 
+> Vefa
