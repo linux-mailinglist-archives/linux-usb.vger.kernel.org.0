@@ -2,69 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2E6293C10
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F85293C17
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406476AbgJTMoM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 08:44:12 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:53024 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406354AbgJTMoM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 08:44:12 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 711BF803071B;
-        Tue, 20 Oct 2020 12:44:10 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id iv3grK-qK-Jr; Tue, 20 Oct 2020 15:44:09 +0300 (MSK)
-Date:   Tue, 20 Oct 2020 15:44:04 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        id S2406505AbgJTMof (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 08:44:35 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36329 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406500AbgJTMoe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 08:44:34 -0400
+Received: by mail-wm1-f66.google.com with SMTP id e2so1725727wme.1;
+        Tue, 20 Oct 2020 05:44:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IzZX4zGGwluZ70Rb48zONj29b5Z7XTIenJHYm8MJX6U=;
+        b=R9y6LLdqu19zCUOVcHWCf2aRzwTUxAaPyrKCM8hsgieDig4ecaRRsU+TtR2B2skGhS
+         s5BPzbOnDAo1Ja8lHgqmiSg9XUpd6UjwoS6/WAjNTcafgWGzBSngGBKBpwcUmJaJRVpf
+         Qvkd1bvugT2hPU7UyPEMF9uwJfJ5vAd3Z9WO+a9v5GUSkqx0iay+NpZq9Qpa9PBudM2F
+         gICTQP+Zsyx/7UbwUn9h5LAW05W7fnqu2LfjMEGgVfmM4sbBlmDcsqnVJf3vVjOhxgKw
+         a66f2NM9hZcrS875nhQBN+jAYNrFpzbm3g/hbwLhYWXOOSbDkHu7Vhlk6HPA4acdyR1d
+         rj3A==
+X-Gm-Message-State: AOAM531unJFlI8SJdWXUxP24nDIYxFOOLFEGBWTzpSlw7JU+iM+F1d+2
+        Y5vhdjdyPsV/62c4aflBPokWh2V8hLQjK+a2
+X-Google-Smtp-Source: ABdhPJyGjKoqZPYMot+a1OkS+n8PXkomZ+8CgF1E4gXdXXoRvO2bbYazsP6IjtG1H/mg+x6uuoXGnQ==
+X-Received: by 2002:a1c:6643:: with SMTP id a64mr2861815wmc.142.1603197872185;
+        Tue, 20 Oct 2020 05:44:32 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.171])
+        by smtp.googlemail.com with ESMTPSA id u2sm2554384wme.1.2020.10.20.05.44.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2020 05:44:31 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 14:44:28 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-amlogic@lists.infradead.org>
-Subject: Re: [PATCH 05/29] arm64: dts: amlogic: meson-g12: Set FL-adj
- property value
-Message-ID: <20201020124404.by7skr6rvqrqwgbi@mobilestation.baikal.int>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
+Message-ID: <20201020124428.GX127386@kozik-lap>
 References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
- <20201020115959.2658-6-Sergey.Semin@baikalelectronics.ru>
- <20201020123404.GC127386@kozik-lap>
+ <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201020123404.GC127386@kozik-lap>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 02:34:04PM +0200, Krzysztof Kozlowski wrote:
-> On Tue, Oct 20, 2020 at 02:59:35PM +0300, Serge Semin wrote:
-> > In accordance with the DWC USB3 bindings the property is supposed to have
-> > uint32 type. It's erroneous from the DT schema and driver points of view
-> > to declare it as boolean.
+On Tue, Oct 20, 2020 at 02:59:59PM +0300, Serge Semin wrote:
+> In accordance with the DWC USB3 bindings the corresponding node
+> name is suppose to comply with the Generic USB HCD DT schema, which
+> requires the USB nodes to have the name acceptable by the regexp:
+> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
+> named.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+>  arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi | 4 ++--
+>  arch/arm64/boot/dts/qcom/ipq8074.dtsi        | 4 ++--
+>  arch/arm64/boot/dts/qcom/msm8996.dtsi        | 4 ++--
+>  arch/arm64/boot/dts/qcom/msm8998.dtsi        | 2 +-
+>  arch/arm64/boot/dts/qcom/qcs404-evb.dtsi     | 2 +-
+>  arch/arm64/boot/dts/qcom/qcs404.dtsi         | 4 ++--
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi         | 2 +-
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi         | 4 ++--
+>  arch/arm64/boot/dts/qcom/sm8150.dtsi         | 2 +-
+>  9 files changed, 14 insertions(+), 14 deletions(-)
 > 
 
-> I think the driver uses it as u32, so what do you mean by "declare" in
-> context of a driver?
+Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-I meant that both the driver and DT schema expects it to be uint32, while the
-dts has got the property as boolean, which is wrong. The same problem has
-been fixed in the Amlogic Meson-g12 DT schema example:
-https://lore.kernel.org/linux-usb/20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru/T/#m225585212162b9f5cccb1a7088850fab8792b7b3
-
--Sergey
-
-> 
-> Best regards,
-> Krzysztof
+Best regards,
+Krzysztof
