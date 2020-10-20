@@ -2,78 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BA1293BAB
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED2E293BB0
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406105AbgJTMdU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 08:33:20 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:52766 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405887AbgJTMdT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 08:33:19 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id D67B5803071B;
-        Tue, 20 Oct 2020 12:33:16 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id p-CM0Wfp74i7; Tue, 20 Oct 2020 15:33:16 +0300 (MSK)
-Date:   Tue, 20 Oct 2020 15:33:15 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     Florian Fainelli <f.fainelli@gmail.com>,
+        id S2406091AbgJTMeL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 08:34:11 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:56143 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405905AbgJTMeK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 08:34:10 -0400
+Received: by mail-wm1-f68.google.com with SMTP id a72so1602510wme.5;
+        Tue, 20 Oct 2020 05:34:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=o05XnIP+Bg3BaL7qnMAypA1wj6djC3Q9AjunxR2fiXE=;
+        b=pXV8lgBeQNQSMcM2S4wo39+5MEzS1OpESEUIFFYyhm/HuNj8tt+uxZFjaA5fubhdGE
+         CrM1aM9b5V6PvARztzJrtAgLGMD37cDFhdvpOtH9w8eDUol+2IVXlLqeYR2bho5Ds/eh
+         IvENOr3BrPtHCg9WLqIT3yA34HyZ+VAYddAsDA4oVNuDOIbG0ozshJy+SuDTNLv5C/ET
+         jgv9QM9+xNksL5PxyjfCNvPRMnlmYfwTPIbjjMMx6JVVounDhlB4XUtrVBhwfgHG9bEx
+         y440BfK25POcDCZohVirwXTRu8xswrKoMuXrDLZTmYkarDnUilz81Elfh81ATfz79aa8
+         T1Hg==
+X-Gm-Message-State: AOAM5312UaZHfp1DqUazGKhDw88BvbvU07L8oSFQY5x0drwxModBLfJd
+        5BMV50xY0xtwSt1zeXZP/E0=
+X-Google-Smtp-Source: ABdhPJwBRAsCi93ZLg6efPLo+MWBmBwBPiFAgJGSZxHN3kxdrnWuhiAWc+LcQZlxoXTxlsITeFwVpw==
+X-Received: by 2002:a1c:9949:: with SMTP id b70mr2762243wme.116.1603197248325;
+        Tue, 20 Oct 2020 05:34:08 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.171])
+        by smtp.googlemail.com with ESMTPSA id n9sm2774115wrq.72.2020.10.20.05.34.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2020 05:34:07 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 14:34:04 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        USB <linux-usb@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/29] usb: dwc3: Discard synopsys,dwc3 compatibility
- string
-Message-ID: <20201020123315.636cwjrajowihxa6@mobilestation.baikal.int>
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH 05/29] arm64: dts: amlogic: meson-g12: Set FL-adj
+ property value
+Message-ID: <20201020123404.GC127386@kozik-lap>
 References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
- <20201020115959.2658-2-Sergey.Semin@baikalelectronics.ru>
- <CAHp75VfS-f39uyb7GcFXPzgZLktWmXTESv798LvKY3-+-GQPrw@mail.gmail.com>
- <20201020122801.GB126891@kozik-lap>
+ <20201020115959.2658-6-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201020122801.GB126891@kozik-lap>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20201020115959.2658-6-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 02:28:01PM +0200, Krzysztof Kozlowski wrote:
-> On Tue, Oct 20, 2020 at 03:15:06PM +0300, Andy Shevchenko wrote:
-> > On Tue, Oct 20, 2020 at 3:02 PM Serge Semin
-> > <Sergey.Semin@baikalelectronics.ru> wrote:
-> > >
-> > > Syonpsys IP cores are supposed to be defined with "snps" vendor-prefix.
-> > > Discard a DW USB3 compatible string with the deprecated prefix seeing
-> > > one isn't used by any dts file anymore.
-> > 
+On Tue, Oct 20, 2020 at 02:59:35PM +0300, Serge Semin wrote:
+> In accordance with the DWC USB3 bindings the property is supposed to have
+> uint32 type. It's erroneous from the DT schema and driver points of view
+> to declare it as boolean.
 
-> > I'm afraid it's no go.
-> > It's an ABI from the moment when the driver started supporting this
-> > compatible string.
-> 
-> Exactly.
-> 
-> Please mark the compatible as deprecated in bindings, correct the DTSes
-> and optionally after one or two years (or any time later) remove the
-> support for deprecated bindings.
+I think the driver uses it as u32, so what do you mean by "declare" in
+context of a driver?
 
-Ok. I'll just get the original patch back then:
-https://lore.kernel.org/linux-usb/20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru/T/#m0f92acafbd740e63b7156efac58850e0757d2110
-and resend the series later after the rest of the patchset have been cooked
-a bit.
-
--Sergey
-
-> 
-> Best regards,
-> Krzysztof
-> 
+Best regards,
+Krzysztof
