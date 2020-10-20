@@ -2,81 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CE8293B06
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B69B293B8C
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394286AbgJTMOT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 08:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394277AbgJTMOS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 08:14:18 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C299C061755;
-        Tue, 20 Oct 2020 05:14:17 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id hk7so877646pjb.2;
-        Tue, 20 Oct 2020 05:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wF5K4AQBC58Q99HaXJmQx/bo3MhAOG0onhbqD6ipgo8=;
-        b=CSt9eRfLKdp2mWyuUdD4yj7WhC97MurvVuapsPYp8XyjP4SfY/1wP9wIv5aGZYb1qP
-         08Qpm1zmwKty1JPEeiULtKgrN245S9GuawGgPkw93x8eqyV0k8noM7FV57P+w8g/Q/55
-         04e1RBKH6If+IFWe4KTIYzPp7jEhVtvzkURSgQJSHbundDKYBMMzHKVhNkbNyUqvUQXY
-         aUd5bnCN+y3S+1sDY6W5AHSvEPceZ3h8ObboIIuqHtc59X+EKEEhlOPjgVqMT11BL+VS
-         0X1k1ORytLidYNgIBDmoF3Wn2J/8VdcnIfNJWooTsnkcQAN8qlODZN+mAFst/W06jOdl
-         rVig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wF5K4AQBC58Q99HaXJmQx/bo3MhAOG0onhbqD6ipgo8=;
-        b=L5umFvs9N0WD9BSr8A8Vp0333032JNZCfwVI/lhIYQ4JbHIJADnOvLQJsUd1JormE8
-         84mAEqT56n0ofBrr/CR28BJ0jKVsZeUQ042zsIeDYo5o7ySIX4ndRBzlJ6LGzlOQlIPg
-         lDwUmiORh5rD1A1J5J1pTo/ly3kWaCYlLmocRpnM0qySMRmIQ9muGKoxC8EwRleKA99G
-         9kxbCqCDMcjHLArYjIYg3wg3qCfDwNu3vFWbR+/ra50+IeQKo73y4eXIykuM2c6rr9gH
-         ELqXoythLkh3cF680gRtAOHiEXEN2rzYpBOi1nx7Y86ENHqEcT2ISiQ73tUfEeD6WKBm
-         vUig==
-X-Gm-Message-State: AOAM532DbOctC/X2OsDhcrDCqwT0jJFsr2RpOV8B+lEgfk0kcWq8hhkM
-        T0FifXTdDoRXBbd5ilNGjLDQF/GDJjrBHyXNcFPIPrejfKqT4g==
-X-Google-Smtp-Source: ABdhPJw6c0Coi0xFClU40U2tBHv6ep6vZNU0tRqBiec7/VP84yZ8EjsvCffmAzLHXj+Ng2mdC8BXdmKDSDxZQp9t2ik=
-X-Received: by 2002:a17:90a:fb92:: with SMTP id cp18mr2615753pjb.228.1603196057093;
- Tue, 20 Oct 2020 05:14:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru> <20201020115959.2658-2-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20201020115959.2658-2-Sergey.Semin@baikalelectronics.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 20 Oct 2020 15:15:06 +0300
-Message-ID: <CAHp75VfS-f39uyb7GcFXPzgZLktWmXTESv798LvKY3-+-GQPrw@mail.gmail.com>
-Subject: Re: [PATCH 01/29] usb: dwc3: Discard synopsys,dwc3 compatibility string
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S2406006AbgJTM1f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 08:27:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44574 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405865AbgJTM1e (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Oct 2020 08:27:34 -0400
+Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4DE4F22265;
+        Tue, 20 Oct 2020 12:27:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603196854;
+        bh=CXwIAOAAiDM5n26S2GQanT1lT++P41Kk26MXto8vtsA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Lv8QJo4kllgitzcw4QMHvECo7YuLc8bhAe98/bkFd9GDbF1oP16qU0qaksQwPFWND
+         EGNRlkOqcqxlSDDN6fpK2Rqo8H53qNV+5cvHmthM3D8g+Z9ivmafV8Fmt60cDNWe0W
+         xucRUo8S7D/cx/O4VSaoBtpKeMM/xRcP09SlT0o0=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        USB <linux-usb@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/29] usb: dwc3: Discard synopsys,dwc3 compatibility
+ string
+In-Reply-To: <20201020115959.2658-2-Sergey.Semin@baikalelectronics.ru>
+References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
+ <20201020115959.2658-2-Sergey.Semin@baikalelectronics.ru>
+Date:   Tue, 20 Oct 2020 15:27:25 +0300
+Message-ID: <877drlf5g2.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 3:02 PM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
->
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
+Hi,
+
+Serge Semin <Sergey.Semin@baikalelectronics.ru> writes:
 > Syonpsys IP cores are supposed to be defined with "snps" vendor-prefix.
 > Discard a DW USB3 compatible string with the deprecated prefix seeing
 > one isn't used by any dts file anymore.
+>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+>  drivers/usb/dwc3/core.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 2eb34c8b4065..28440250e798 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1878,9 +1878,6 @@ static const struct of_device_id of_dwc3_match[] =
+=3D {
+>  	{
+>  		.compatible =3D "snps,dwc3"
+>  	},
+> -	{
+> -		.compatible =3D "synopsys,dwc3"
+> -	},
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, of_dwc3_match);
 
-I'm afraid it's no go.
-It's an ABI from the moment when the driver started supporting this
-compatible string.
+sorry, no. You can't guarantee that there isn't a FW in ROM somewhere
+using the old string.
 
--- 
-With Best Regards,
-Andy Shevchenko
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+O160RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQaY5Q//TC223tVQ0VR9Z/KOGxt6n0fg+EORCbMh
+1VYozCtosc94UaPd2jxbtcXwnVYV3VbdlivEMLhcXEzuweS+KFAXtLNJnJwMLTvw
+bhV6gfqdixpB+o5rFdq3I+6w1e9AVqnCo/vWTY+1bW5Bq6wRE/7us2KmvkgLeQ6E
+e7im3i6zA9m6GdVsgsCF0eRp3m7zk5iRgqtY4FJWgho9+VIkm9kucCg8aVJRVLCO
+cpsECo83OrLVd2wORmIOXeAWrRe/0gaSi+BY9rYNXvGYfTgdl0VDc9/06X2myicU
+mT6X8Lw3ftGAEfvTKbRi5XboJKZmkawFDcZMOHmrrft0zk5wkd8E9o1JG5F2ZmJt
+XeWfXs58/suZ2Squ8D/bvVP1B5mJbu5XNR64hatwy5OlYab0mGHTqViZ9ZKgM5zW
+ODg463cnyDo/IDzvq2JNx6seT0AGS+EwJeKvRhNmoJ9PC0y7zC/L7lICNHb3edxQ
+nqKqCwMeuXh4q/X5aD5ziP6Ov5jBuuwIrMjN+41LJqYtwNptnZb8ed1SXOH3S+an
+ry9oTvSmLCzFUwGb3wtN7sWRsoRvJGsBC45Xw6rcnC6cWk+ce7QgFwKJpc/hrchx
+qpfVxogK/iJQcxXzkR01vjzYKH7JlUOUWAjkB7m8dPSJljor5tKuAAqqbEYBr9iR
+e23hydvTGoM=
+=jEm6
+-----END PGP SIGNATURE-----
+--=-=-=--
