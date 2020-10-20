@@ -2,73 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76053293B9D
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0953293BA2
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Oct 2020 14:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406050AbgJTMbV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 08:31:21 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:38095 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394373AbgJTMbU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 08:31:20 -0400
-Received: by mail-wm1-f67.google.com with SMTP id b127so1670221wmb.3;
-        Tue, 20 Oct 2020 05:31:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3CBkp9wh8pC8AE+JuGneoDSmlRYGKaXzA/ZH4H7EC8I=;
-        b=YFZ/EBspnX4VGk7G8oi1NnoqOFH0f5ZCaKFVxbOr8CaTjZ9TcJjgWuMY8HnXo+zZYu
-         Be8dokwdyLZINPQ1L+QtnLBYb9ubu4AK6lDvn7E9hJuQIbAUJ7xktAN2NmC3zbRdb1yL
-         QsLD9JOvU5sEiiNRqj9gT+w/Fp3IRvrFAJjA9f1CcBksFoNImlqEYctnxB3Z8d2k5t04
-         L4hdExwbEU3pfbTjW6JL6rfCwKVwQBAISzXtPU7N5okusmu41a8tVL+ZV0S/gVGry/eJ
-         HjcWc221MT35H9fgjHZNZCSBrlwaEqnmcZSGLhsrNkFnLGlKD/9NiU0FRmNvTV9yUorV
-         tJnw==
-X-Gm-Message-State: AOAM531Z9nf9Q98Sh+LyIuBxkQo+gXjAmmRlLLU3XdM6UZIgUl8QTN7f
-        6SOc20iy79P+3zhTruEE13M=
-X-Google-Smtp-Source: ABdhPJz7v2CQrMv1UeA209tUYKORZKIkNjPVZDyOy0NQgDNWRKVmgrZn2wqsWApZ6lfAW+35MKsbfQ==
-X-Received: by 2002:a1c:2586:: with SMTP id l128mr2718275wml.49.1603197078260;
-        Tue, 20 Oct 2020 05:31:18 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.171])
-        by smtp.googlemail.com with ESMTPSA id t5sm2877491wrb.21.2020.10.20.05.31.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2020 05:31:16 -0700 (PDT)
-Date:   Tue, 20 Oct 2020 14:31:14 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: Re: [PATCH 03/29] arm: dts: am437x: Correct DWC USB3 compatible
- string
-Message-ID: <20201020123114.GB127386@kozik-lap>
-References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
- <20201020115959.2658-4-Sergey.Semin@baikalelectronics.ru>
+        id S2406091AbgJTMcV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 08:32:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46278 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2406077AbgJTMcV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Oct 2020 08:32:21 -0400
+Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9BC4222282;
+        Tue, 20 Oct 2020 12:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603197140;
+        bh=CpI03KrZmOMisH5RfgUH++7KvUW8XwawMAJfeV9NE6g=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=p+03NEZJTMdh0F7ArAyccnXcb0AfmlXKWoh+g3xKzvHeDis3AXSV2/3dm4UoTe2A1
+         QNZQD9fIlPI/6EOr8tfMQgZFicpqbpc6XuPKbUSzlOZVVgx0i5i1ue2elbiMIg/JjF
+         jO3h+5u4LB/Pou5JRnK8N1z1u/Ar5M752u06t/Jc=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Ferry Toth <fntoth@gmail.com>, linux-usb@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     felipe.balbi@linux.intel.com
+Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
+In-Reply-To: <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
+References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
+ <87a6wig461.fsf@kernel.org>
+ <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
+Date:   Tue, 20 Oct 2020 15:32:12 +0300
+Message-ID: <874kmpf583.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201020115959.2658-4-Sergey.Semin@baikalelectronics.ru>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 02:59:33PM +0300, Serge Semin wrote:
-> Syonpsys IP cores are supposed to be defined with "snps" vendor-prefix.
-> Use it instead of the deprecated "synopsys" one.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  arch/arm/boot/dts/am437x-l4.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Best regards,
-Krzysztof
+Hi,
+
+Ferry Toth <fntoth@gmail.com> writes:
+
+8< snip
+
+>>> [   12.657416] CR2: 0000000100000000
+>>> [   12.660729] ---[ end trace 9b92dea6da33c71e ]---
+>>=20
+>> It this something you can reproduce on your end? Ferry, can you get dwc3
+>> trace logs when this happens? ftrace_dump_on_oops may help here.
+> I will do that tonight. Is flipping on ftrace_dump_on_oops sufficient or=
+=20
+> do I need to do more?
+
+you'd have to enable dwc3 trace events first ;-)
+
+> BTW after posting this I found in host mode dwc3 is not working properly=
+=20
+> either. No oops, but no driver get loaded on device plug in.
+
+okay
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+O2MwRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQb6dA/+PwTQZnIaI5uwAE3o0GIcAeEnpqJ32ASm
+patr3fWV2nDqxltnrvCP9L4yLxDY+dxDFpM6ozGhwkhNmTcSeoFhCa4sQlTimBhR
+iFRYY+1lGZKK1MycaLV7I/qJASg3qUXrGAOTntR2km3EuyZzQ9D1/eP9neLT3gP9
+EEyqEpfdlkuHMqeUw1jW3yM3mphX7p6lw9XsA3Fvadr0VRIev36F03qWr5GB32a3
+uzU+BUCUzp5CoDgUvPCwF6Em8nQmbjqW7KMnxhD01jt01/BqcngjhuLrMElm4rPj
+VjNbrUkDBYHLuJRGIaa6ZkHySoKJApXvh+J3kGHVrN7vXXx31cqqTGmnFy+lP3qV
+EwSb8+GMtv2qlQjvIdzH8oxUKp5MaLBVDXHzGmZhjbJRAP2l2jyGCaIF9Nux2Ay/
+aHITKWRn2rslRwOwGXIItXEt8QZpOJepap2rW2qWEoycThvziqFzkZTHV7K9YLh8
+ECKcD/qZJaAUO4tNNXg5oqS0MCbrhgH2Bqv2kYqoidz6HmKuYCIyvtSYtjnE+hq6
+r+7fCTroZzGtRzkMh0nuDVzD4KlG8R82RKEBWWgRFclDVjnOVhnzj46hsM+R+LDW
+HZXyEuoTSD6Kl3N8oziP7wlvst7uZJxnoMFjfam9DjQI37XRlBoA7rKjkTpmw41K
+v6XYwO27Ip4=
+=LMD7
+-----END PGP SIGNATURE-----
+--=-=-=--
