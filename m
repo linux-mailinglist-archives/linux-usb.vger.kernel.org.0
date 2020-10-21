@@ -2,100 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A765A295405
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 23:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E28295445
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 23:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2506002AbgJUVSI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Oct 2020 17:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S2506224AbgJUVdy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Oct 2020 17:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505999AbgJUVSI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 17:18:08 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5DBC0613CE
-        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 14:18:07 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id 19so2231245pge.12
-        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 14:18:07 -0700 (PDT)
+        with ESMTP id S2506219AbgJUVdx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 17:33:53 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6840FC0613CF
+        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 14:33:53 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id e20so3219903otj.11
+        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 14:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IpBAZMqjgB/XzFmJFn/5epEGec881cvLKDsKQ0vHwJo=;
-        b=Xp2SPtQZMd7B8LolzXDN8SNxw3qRwXnLnzgpYn+uzlxDVGVyFC+3f35YxUYCruqRIn
-         1ESx/Ngs7Qn87MtkloJ6Eb34NLC54mIzUKZs4NQcAVUbvnsjKAtmQTOJr15PbtFGnpG7
-         RIpEWSWWJZOd/LWvXvRHs8QhkVwOdTTmZMNOE=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XCjYvUCIgbQ3TCtD4YfecFPhaqfiZUwN7ivTobgZQY0=;
+        b=lx4WkpT2GzaDerBpdUAWiK7Fk5vr7DQ65sS1KJ5w9QzgSXXyi1BcdYVoDIaXXrWft2
+         yC4htW78VmVnZz6BIcXn5NCdHwKSfCMa2P2uw8B6RVUVzzpTYLAkcOgy0f4LhDikDhh4
+         O+fIkWJPhWeQac0XW7kwgXkButPH3W8HhOQujJC2+2w+GIMEFkmYYHWeYHQFLeiO3iyZ
+         ED/m5VEzlWFv5k7F3+aVCm3m4XX9wEK0lxjyR/0+e9IXmZ56qWY3SP3CJw3s6T5PoRWf
+         1E0u6XOCinCRV31hLekEZJjzyNArUBgyoR0GBWhujH6Nl5x7JGF1zMbK/GCMHbte2Ei7
+         mb9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IpBAZMqjgB/XzFmJFn/5epEGec881cvLKDsKQ0vHwJo=;
-        b=fhz/2eJftLoa72qzcVlgP4uFTRbImiUZ4DkGXLjsiu/OOrs3D8go7GpnoRkn9jXiSC
-         TqraQ7gsAoqxuU4TuhI3zVPxGpCQkWW7TFZam31CcxITKqokhSCXWr5oHO8KzEi+acTZ
-         fEAgMV/MX85e4vd98NkwDqIlq9TXpKZnq7n+WDBynYJTGEfYp+GIzEWwDr+RDU+fAduq
-         3C4Y6yDjbgw2JDkcXPF8nDnZ/w8Aaaqv+eKoIcCGDX4Dj3fqfngt4i9JrCx9usNPbS/y
-         DBOvsaN6EV6SIcutGLK6nmMx1amcH2fjteUtXEy++6M4Hv75JUranr17LPiotkrswVS6
-         5iWg==
-X-Gm-Message-State: AOAM532d1Vlc4+40YVOHxaRI/Sh6C5e1ilHItp1rPuqdrYxiOurVOgV1
-        w/BEMnaZMbCpoeyO7+G1+NzY4Ltk5i7IAw==
-X-Google-Smtp-Source: ABdhPJxYEVu5eRDg9Wrmva5G/iMHHEShQyGN3eeGMktzBr2VqReqkr6LwQZsOLF9xsQ7/ivKtIJOKQ==
-X-Received: by 2002:a62:77c4:0:b029:155:6332:e1bd with SMTP id s187-20020a6277c40000b02901556332e1bdmr5438224pfc.35.1603315087190;
-        Wed, 21 Oct 2020 14:18:07 -0700 (PDT)
-Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
-        by smtp.gmail.com with ESMTPSA id b6sm3068337pjq.42.2020.10.21.14.18.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2020 14:18:06 -0700 (PDT)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: [PATCH] usb: typec: Expose Product Type VDOs via sysfs
-Date:   Wed, 21 Oct 2020 14:18:02 -0700
-Message-Id: <20201021211802.774854-1-pmalani@chromium.org>
-X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XCjYvUCIgbQ3TCtD4YfecFPhaqfiZUwN7ivTobgZQY0=;
+        b=t+/YXnlwwjh5TPwH4NvKmdbMlpOxrMllKq1jxrqPkpm3hs176ACozxWdu1P++YLOOu
+         hy4OHtdThqQxKWR+OnySYw3I1Ede80DDUbJH6/VSSsMvK/65NwE3PXVwFrUyZ9hSL88d
+         2A0LhdFFCxYIPd4EWdkuJQus89QM+ludTHXQ8RUXBwB+I1NLaB3wH+Yp29SIkiFaWJ6R
+         Iy8cTcyLQj4NMtETtv/LMa+UO52mKxMKbF4MN9qNcdMIphBP/M7wDOqQznFRa3CF25eF
+         4DoVFSuGauGGPPz0CFLgoOCgGS0HGfpDhhW0TB9+JtjXJp64lb8NyvQMYMS67InEzeP1
+         +Jkg==
+X-Gm-Message-State: AOAM530qenrhlvU+DivXsFdVClAdon69fsw1cfpq8yKt6fO0InZ92pQD
+        EJPbVoA2urMobKL1jyZGUKMjJ2/SBmcOt2DQQ8oXWA==
+X-Google-Smtp-Source: ABdhPJxQft8N8pQfRzj0OP/DL2xjFlTkw1NWDG+V/uw4WSqVGubKlth/Yii+jjfy9m4PYJyes8XdUPNOygcqb5fQfrI=
+X-Received: by 2002:a05:6830:1558:: with SMTP id l24mr2909744otp.352.1603316032781;
+ Wed, 21 Oct 2020 14:33:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201021181803.79650-1-john.stultz@linaro.org> <77de4aaa-14a5-6078-bd0b-c4942e97ab36@synopsys.com>
+In-Reply-To: <77de4aaa-14a5-6078-bd0b-c4942e97ab36@synopsys.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 21 Oct 2020 14:33:41 -0700
+Message-ID: <CALAqxLVyszFbOnWAOMekQuWbGgmMZpEfFiY6gyAPYmGXPz5sHA@mail.gmail.com>
+Subject: Re: [RFC][PATCH] usb: dwc3: Add quirk to trigger a GCTL soft reset
+ for Hisilicon Kirin Soc Platform
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A PD-capable device can return up to 3 Product Type VDOs as part of its
-DiscoverIdentity Response (USB PD Spec, Rev 3.0, Version 2.0, Section
-6.4.4.3.1). Add a sysfs attribute to expose these to userspace.
+On Wed, Oct 21, 2020 at 12:14 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>
+> John Stultz wrote:
+> > From: Yu Chen <chenyu56@huawei.com>
+> >
+> > With the current dwc3 code on the HiKey960 we often see the
+> > COREIDLE flag get stuck off in __dwc3_gadget_start(), which
+> > seems to prevent the reset irq and causes the USB gadget to
+> > fail to initialize.
+> >
+> > We had seen occasional initialization failures with older
+> > kernels but with recent 5.x era kernels it seemed to be becoming
+> > much more common, so I dug back through some older trees and
+> > realized I dropped this quirk from Yu Chen during upstreaming
+> > as I couldn't provide a proper rational for it and it didn't
+> > seem to be necessary. I now realize I was wrong.
+> >
+> > On the upside, I can now understand more why such a quirk is
+> > needed.
+>
+> This shouldn't be a quirk. It's part of the programming guide when
+> switching mode in DRD. I don't know how we missed this.
 
-Cc: Benson Leung <bleung@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
- drivers/usb/typec/class.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Ah! That's great, as it should simplify the patch a bit and avoid
+introducing another dt bindings!
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 35eec707cb51..e6abb0dee9fa 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -122,10 +122,20 @@ static ssize_t product_show(struct device *dev, struct device_attribute *attr,
- }
- static DEVICE_ATTR_RO(product);
- 
-+static ssize_t product_type_vdo_show(struct device *dev, struct device_attribute *attr,
-+				     char *buf)
-+{
-+	struct usb_pd_identity *id = get_pd_identity(dev);
-+
-+	return sprintf(buf, "0x%08x\n0x%08x\n0x%08x\n", id->vdo[0], id->vdo[1], id->vdo[2]);
-+}
-+static DEVICE_ATTR_RO(product_type_vdo);
-+
- static struct attribute *usb_pd_id_attrs[] = {
- 	&dev_attr_id_header.attr,
- 	&dev_attr_cert_stat.attr,
- 	&dev_attr_product.attr,
-+	&dev_attr_product_type_vdo.attr,
- 	NULL
- };
- 
--- 
-2.29.0.rc1.297.gfa9743e501-goog
 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index bdf0925da6b6..b138c67e3892 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -114,6 +114,19 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+> >       dwc->current_dr_role = mode;
+> >  }
+> >
+> > +static void dwc3_gctl_core_soft_reset(struct dwc3 *dwc)
+> > +{
+> > +     int reg;
+> > +
+> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+> > +     reg |= (DWC3_GCTL_CORESOFTRESET);
+> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+> > +
+> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+> > +     reg &= ~(DWC3_GCTL_CORESOFTRESET);
+> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+> > +}
+> > +
+> >  static void __dwc3_set_mode(struct work_struct *work)
+> >  {
+> >       struct dwc3 *dwc = work_to_dwc(work);
+> > @@ -178,6 +191,10 @@ static void __dwc3_set_mode(struct work_struct *work)
+> >               }
+> >               break;
+> >       case DWC3_GCTL_PRTCAP_DEVICE:
+> > +             /* Execute a GCTL Core Soft Reset when switch mode */
+> > +             if (dwc->gctl_reset_quirk)
+> > +                     dwc3_gctl_core_soft_reset(dwc);
+> > +
+>
+> This should be done before dwc3_set_prtcap(), and this applies when
+> switching from device to host mode also. Make sure to check if the
+> controller is DRD before doing this.
+
+Sorry, by checking that the controller is DRD, I'm not sure exactly
+what you mean.
+Checking DWC3_GHWPARAMS0_MODE_DRD?  Or something else?
+
+Thanks so much for the review and feedback!
+-john
