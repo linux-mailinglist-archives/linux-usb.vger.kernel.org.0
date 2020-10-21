@@ -2,118 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3692947BA
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 07:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D06294AE4
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 11:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440410AbgJUFTR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Oct 2020 01:19:17 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:35973 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440408AbgJUFTR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 01:19:17 -0400
-Received: by mail-il1-f195.google.com with SMTP id p10so1159917ile.3
-        for <linux-usb@vger.kernel.org>; Tue, 20 Oct 2020 22:19:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IHQLhiahxjzBExZWVYRG4MzYtEx/IzjTTclICTJR3vw=;
-        b=B1dY+aLL9BAJ/haZrK1ZbhSpI3lHGmTeABbZuRjPen3XKf+WyXUWq9zBnga23nAfSJ
-         C8oHuJBPA+CcZCTkRN0I22KfClbuvrwhQm7GAhBqtf4aH42wP57aqiQBlSXYmuZs6ZIT
-         WrczIjVg5MBah2kzrLj637CnQkk9US2cpKhvt8fYs+9vvCy15Uha9bErMxv6LZ0v67dg
-         h3K5cXxn74lJNruQRg+QH7xCLzPLK3eMbYCwDLiysk9QBzSsd738KeAhvrJ0MB/8zkei
-         PFvez9CQ5Sms+Vbj59zNetkm0ppZtlkYKawYhs/4jJhTv4I0ybY8yWCUIXT0tBCJgPbm
-         2bQA==
-X-Gm-Message-State: AOAM532FTMOgijopuep3vZ0FbTn7dGbI/pVpjGBulNHZdRP+NzVL7gaR
-        YNw1s8VHjPk5tKM17M7b90oKj+kJLIS3m2p5
-X-Google-Smtp-Source: ABdhPJzCgeHIxCp9btJODOzW5C+pMBM3PEhDyK312YmGNN8aa8krWN/XwEgsC5YDGFNW2XUiXojHbw==
-X-Received: by 2002:a05:6e02:1283:: with SMTP id y3mr1081882ilq.305.1603257555688;
-        Tue, 20 Oct 2020 22:19:15 -0700 (PDT)
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com. [209.85.166.169])
-        by smtp.gmail.com with ESMTPSA id j3sm507870ilq.85.2020.10.20.22.19.15
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2020 22:19:15 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id g7so1104580ilr.12
-        for <linux-usb@vger.kernel.org>; Tue, 20 Oct 2020 22:19:15 -0700 (PDT)
-X-Received: by 2002:a92:da05:: with SMTP id z5mr1044881ilm.182.1603257555073;
- Tue, 20 Oct 2020 22:19:15 -0700 (PDT)
+        id S2438339AbgJUJ5a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Oct 2020 05:57:30 -0400
+Received: from mail-02.mail-europe.com ([51.89.119.103]:51702 "EHLO
+        mail-02.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438327AbgJUJ53 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 05:57:29 -0400
+Date:   Wed, 21 Oct 2020 09:57:22 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1603274244;
+        bh=H+RKzN6UhakiRlOo2OklFUd/Aq2bIDma4Z1bifkQaXc=;
+        h=Date:To:From:Reply-To:Subject:From;
+        b=oqj2bcIis+Kn/oqaVQsI1o//axIet44d4M2DV69zy0E+zXWEkBE9AdFJb1kq3FzFc
+         LBBmcnIVGgnCwXPtDhhhnFHH1Txixn3r6xojRyJetn+ByT1VwnBak+M/vKqUOjDmTh
+         J/CYHRyJPHzXa2xqXQNdsRb67xqNVlLaRq/1ctwM=
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+From:   trees1010 <trees1010@protonmail.com>
+Reply-To: trees1010 <trees1010@protonmail.com>
+Subject: External monitors not detected via thunderbolt 3 dock in Devuan, but okay in Popos
+Message-ID: <lF-Ayl8JXcksvw4NuDTxAgfBjbP8_q8efV2c-UPDwmYXtUBu4Z8rXRy_uprTc3KCQbCXwV1q_w6xcxUjvELyQtAD26ucI2etYNHfaihvKnE=@protonmail.com>
 MIME-Version: 1.0
-References: <CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com>
- <20201017200200.GB842001@rowland.harvard.edu> <CAE3RAxvNUvzqKT+GK3A4cQ7Tm_tFRQJKfJ01r0ic-5066fikDA@mail.gmail.com>
- <20201019174028.GF898631@rowland.harvard.edu> <cf1e7059-e1d2-2e7a-89c1-0c162850fbb4@runbox.com>
- <CAE3RAxuX6SBKx22q6XZ7wTVYQNzJqZ=2Vsc4jOqK3V2-mgYOqQ@mail.gmail.com> <3fcc724f-5b5e-e441-fd12-31365d140773@runbox.com>
-In-Reply-To: <3fcc724f-5b5e-e441-fd12-31365d140773@runbox.com>
-From:   Pany <pany@fedoraproject.org>
-Date:   Wed, 21 Oct 2020 05:19:03 +0000
-X-Gmail-Original-Message-ID: <CAE3RAxvmZ-quV121smHyNk5MDW44WgLzfSJCPWTHrbkQ_zbVKA@mail.gmail.com>
-Message-ID: <CAE3RAxvmZ-quV121smHyNk5MDW44WgLzfSJCPWTHrbkQ_zbVKA@mail.gmail.com>
-Subject: Re: Bug caused by 53965c79c2db (USB: Fix device driver race)
-To:     "M. Vefa Bicakci" <m.v.b@runbox.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.7 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thank you Vefa!
+Hi everyone,
 
-Appending module_blacklist=apple_mfi_fastcharge works for me!
+I hope I have come to the right place, otherwise let me know where I should=
+ direct this question/problem.
 
-Actually I checked the output of "sudo lsmod | grep fastcharge" with
-the working kernel, and I should have noticed that module name
-apple_mfi_fastcharge, but I missed it.
+I have a problem with using external monitors attached to a thunderbolt 3 d=
+ock (Dell, WD19TB) that is OS specific.
+The two external monitors attached via DisplayPorts to the dock are detecte=
+d and used automatically by PopOS/Ubuntu 20, Kernel 5.4 (default configurat=
+ion).
+However, Devuan Beowulf (Debian based) with the default or latest 5.8 Kerne=
+l does not detect the monitors and so they cannot be used.
 
-Thank you for your suggestion again. If you need more information or
-debug log, please let me know.
+The docking station is authorised using the 'bolt' utility (https://gitlab.=
+freedesktop.org/bolt/bolt) for both PopOS and Devuan.
 
-On Wed, Oct 21, 2020 at 4:19 AM M. Vefa Bicakci <m.v.b@runbox.com> wrote:
->
-> On 20/10/2020 23.17, Pany wrote:
-> > Thank you so much for guiding me!
-> > On Tue, Oct 20, 2020 at 12:04 PM M. Vefa Bicakci <m.v.b@runbox.com> wrote:
-> [Snipped by Vefa]
-> >> Pany, in the mean-time, could you add the following string to your kernel's
-> >> command line (i.e., via GRUB, or the actual boot-loader that you use) and
-> >> let us know whether it helps to *work around* this issue with the latest
-> >> versions of 5.8.y kernels?
-> >>
-> >>          module_blacklist=apple-mfi-fastcharge
-> >
-> > And I also installed the official built kernel-5.8.15-201.fc32.x86_64.rpm [5].
-> >
-> > Adding module_blacklist=apple-mfi-fastcharge to the GRUB entry did not
-> > succeed in the kernel booting.
-> >
-> > With following kernel cmdline, I captured the journal [6]:
-> >
-> > kernel: Command line:
-> > BOOT_IMAGE=(hd5,gpt3)/vmlinuz-5.8.15-201.fc32.x86_64
-> > root=/dev/mapper/fedora_localhost--live-root ro
-> > resume=/dev/mapper/fedora_localhost--live-swap
-> > rd.lvm.lv=fedora_localhost-live/root
-> > rd.luks.uuid=luks-65d9ed28-ea08-4ea5-a1dd-7b2b086f5e09
-> > rd.lvm.lv=fedora_localhost-live/swap
-> > module_blacklist=apple-mfi-fastcharge systemd.debug-shell=1
->
-> Hello Pany,
->
-> My apologies, the original kernel command line entry I mentioned was
-> incorrect; the module name needs to be specified with underscore characters
-> ("_") instead of dash ("-") characters. Could you try the following as well?
->
->    module_blacklist=apple_mfi_fastcharge
->
-> Using this string in the kernel command line causes "modprobe apple-mfi-fastcharge"
-> to fail with -EPERM on my system, and hence I am hoping that this should
-> at least unblock your day-to-day use of recent kernels.
->
-> Sorry again for the mistake in my earlier suggestion.
->
-> Vefa
+# boltctl
+=E2=97=8F Dell WD19TB Thunderbolt Dock
+=C2=A0=C2=A0 =E2=94=9C=E2=94=80 type:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 peripheral
+=C2=A0=C2=A0 =E2=94=9C=E2=94=80 name:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 WD19TB Thunderbolt Dock
+=C2=A0=C2=A0 =E2=94=9C=E2=94=80 vendor:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 Dell
+=C2=A0=C2=A0 =E2=94=9C=E2=94=80 uuid:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 <UUID>
+=C2=A0=C2=A0 =E2=94=9C=E2=94=80 generation:=C2=A0=C2=A0=C2=A0 Thunderbolt 3
+=C2=A0=C2=A0 =E2=94=9C=E2=94=80 status:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 authorized
+=C2=A0=C2=A0 =E2=94=82=C2=A0 =E2=94=9C=E2=94=80 domain:=C2=A0=C2=A0=C2=
+=A0=C2=A0 <DOMAIN>
+=C2=A0=C2=A0 =E2=94=82=C2=A0 =E2=94=9C=E2=94=80 rx speed:=C2=A0=C2=A0 40 Gb=
+/s =3D 2 lanes * 20 Gb/s
+=C2=A0=C2=A0 =E2=94=82=C2=A0 =E2=94=9C=E2=94=80 tx speed:=C2=A0=C2=A0 40 Gb=
+/s =3D 2 lanes * 20 Gb/s
+=C2=A0=C2=A0 =E2=94=82=C2=A0 =E2=94=94=E2=94=80 authflags:=C2=A0 none
+=C2=A0=C2=A0 =E2=94=9C=E2=94=80 authorized:=C2=A0=C2=A0=C2=A0 Wed 07 Oct 20=
+20 09:01:32 UTC
+=C2=A0=C2=A0 =E2=94=9C=E2=94=80 connected:=C2=A0=C2=A0=C2=A0=C2=A0 Wed 21 O=
+ct 2020 19:43:20 UTC
+=C2=A0=C2=A0 =E2=94=94=E2=94=80 stored:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 Wed 07 Oct 2020 08:12:45 UTC
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =E2=94=9C=E2=94=80 policy:=C2=A0=C2=A0=C2=
+=A0=C2=A0 auto
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =E2=94=94=E2=94=80 key:=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 no
 
--- 
-Regards,
-Pany
-pany@fedoraproject.org
+Both popos and devuan detect the thunderbolt dock being connected and the d=
+ocks own USB hub.
+I can attached USB devices, like a USB camera, to the dock and it works in =
+both devaun and popos.
+
+There is nothing obvious in the popos or devuan logs that would
+indicate a major difference as to why the monitors don't work in devuan. Th=
+ere are no errors in the devuan logs to
+show why it does not detect the monitors (xrandr shows no extra connections=
+ from the docking station when plugged in).
+
+Popos Xorg.0.log shows the monitors being attached when the dock is connect=
+ed to the laptop. Whilst nothing is
+logged in Xorg.0.log in the case of devuan.
+I can plug external monitors directly to the laptop via mini-dp and HDMI an=
+d they are detected and can be used to display an extended desktop.
+
+The only key difference I have found is by using '$ sudo ddcutil interrogat=
+e'.
+
+It shows that popos detects the DDC via i2c bus of the two external monitor=
+s, whilst devuan does not detect anything.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PopOS with 5.4 kernel:
+
+*** Primary Check 1: Identify video card and driver ***
+
+Obtaining card and driver information from /sys...
+Primary video controller at PCI address 0000:00:02.0 (boot_vga flag is set)
+Device class: x030000 VGA compatible controller
+Vendor: x8086 Intel Corporation
+Device: x9b41 UHD Graphics
+Subvendor/Subdevice: 8086/2212 Intel Corporation
+Driver name: i915
+Driver version: Unable to determine
+I2C device: i2c-3 name: i915 gmbus dpc
+I2C device: i2c-8 name: DPMST
+I2C device: i2c-4 name: i915 gmbus misc
+I2C device: i2c-2 name: i915 gmbus dpb
+I2C device: i2c-9 name: DPMST
+I2C device: i2c-5 name: i915 gmbus dpd
+
+<SNIP>
+
+Examining /sys/bus/i2c/devices...
+/sys/bus/i2c/devices/i2c-3/name: i915 gmbus dpc
+/sys/bus/i2c/devices/i2c-1/name: Synopsys DesignWare I2C adapter
+/sys/bus/i2c/devices/i2c-8/name: DPMST
+/sys/bus/i2c/devices/i2c-6/name: DPDDC-A
+/sys/bus/i2c/devices/i2c-4/name: i915 gmbus misc
+/sys/bus/i2c/devices/i2c-2/name: i915 gmbus dpb
+/sys/bus/i2c/devices/i2c-0/name: SMBus I801 adapter at efa0
+/sys/bus/i2c/devices/i2c-9/name: DPMST
+/sys/bus/i2c/devices/i2c-7/name: DPDDC-B
+/sys/bus/i2c/devices/i2c-5/name: i915 gmbus dpd
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Devuan with 5.8 kernel:
+
+*** Primary Check 1: Identify video card and driver ***
+
+Obtaining card and driver information from /sys...
+Primary video controller at PCI address 0000:00:02.0 (boot_vga flag is set)
+Device class: x030000 VGA compatible controller
+Vendor: x8086 Intel Corporation
+Device: x9b41 UHD Graphics
+Subvendor/Subdevice: 8086/2212 Intel Corporation
+Driver name: i915
+Driver version: Unable to determine
+I2C device: i2c-3 name: i915 gmbus dpc
+I2C device: i2c-4 name: i915 gmbus misc
+I2C device: i2c-2 name: i915 gmbus dpb
+I2C device: i2c-5 name: i915 gmbus dpd
+
+<SNIP>
+
+Examining /sys/bus/i2c/devices...
+/sys/bus/i2c/devices/i2c-3/name: i915 gmbus dpc
+/sys/bus/i2c/devices/0-0050/name: ee1004
+(each_i2c_device ) Unexpected /sys/bus/i2c/devices file name: 0-0050
+/sys/bus/i2c/devices/i2c-1/name: Synopsys DesignWare I2C adapter
+/sys/bus/i2c/devices/i2c-6/name: AUX A/port A
+/sys/bus/i2c/devices/i2c-4/name: i915 gmbus misc
+/sys/bus/i2c/devices/i2c-2/name: i915 gmbus dpb
+/sys/bus/i2c/devices/i2c-0/name: SMBus I801 adapter at efa0
+/sys/bus/i2c/devices/i2c-7/name: AUX B/port B
+/sys/bus/i2c/devices/i2c-5/name: i915 gmbus dpd
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The kernel Thunderbolt documentation (https://www.kernel.org/doc/html/v5.4/=
+admin-guide/thunderbolt.html) does not show how to
+debug problems like this.
+
+Q1. How to turn on debugging in the kernel and/or modules to provide more i=
+nformation about the connection process and why it fails?
+
+Q2. How does the kernel detect DP/HDMI ports through the thunderbolt 3 dock=
+? I.e. What is meant to happen and should be seen in the logs or /sys/bus/i=
+2c/devices, etc?
+
+Q3. Is there any documentation on how the USB/DP/HDMI/Thunderbolt 3/dock sy=
+stem work? Thunderspy.io was the only place I could find decent description=
+ of the architecture.
+
+Any advice appreciated.
