@@ -2,240 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8B4295391
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 22:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F5929539F
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 22:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409801AbgJUUma (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Oct 2020 16:42:30 -0400
-Received: from static.214.254.202.116.clients.your-server.de ([116.202.254.214]:46488
-        "EHLO ciao.gmane.io" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405621AbgJUUma (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 16:42:30 -0400
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-        (envelope-from <glug-linux-usb@m.gmane-mx.org>)
-        id 1kVKwE-0009qY-QN
-        for linux-usb@vger.kernel.org; Wed, 21 Oct 2020 22:42:26 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To:     linux-usb@vger.kernel.org
-From:   Ferry Toth <fntoth@gmail.com>
-Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
-Date:   Wed, 21 Oct 2020 22:42:21 +0200
-Message-ID: <2cc783ac-6b71-190b-49fc-9e2bceeacd4b@gmail.com>
-References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
- <87a6wig461.fsf@kernel.org> <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
- <874kmpf583.fsf@kernel.org> <d0aca346-353c-d74e-6f00-ccd2a4ed26ef@gmail.com>
- <976cea12-e54e-fbca-6c53-e6ef5c554094@synopsys.com>
- <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
- <2b6586e6-528c-86e8-9d92-0061bc44866d@gmail.com>
- <aad327a8-95bc-40ec-abf7-ad216a02fad0@synopsys.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-Cc:     "felipe.balbi-VuQAYsv1563Yd54FQh9/CA-XMD5yJDbdMReXY1tMh2IBg-XMD5yJDbdMReXY1tMh2IBg@public.gmane.org" 
-        <felipe.balbi-VuQAYsv1563Yd54FQh9/CA-XMD5yJDbdMReXY1tMh2IBg-XMD5yJDbdMReXY1tMh2IBg@public.gmane.org>,
-        Heikki Krogerus 
-        <heikki.krogerus-VuQAYsv1563Yd54FQh9/CA@public.gmane.org>,
-        Andy Shevchenko 
-        <andriy.shevchenko-VuQAYsv1563Yd54FQh9/CA@public.gmane.org>
-In-Reply-To: <aad327a8-95bc-40ec-abf7-ad216a02fad0@synopsys.com>
-Content-Language: en-US
+        id S2439614AbgJUUtY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Oct 2020 16:49:24 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:50670 "EHLO aibo.runbox.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405190AbgJUUtY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Oct 2020 16:49:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+         s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject;
+        bh=CzH3SRellZ72GYzuAuSkXtCCJZ5Hg0QEgOahMSDZbec=; b=CXk8u7ephMlujjFXeUfHbi9vMg
+        wMZAvQjs6Ymr2YSKS8NiqoYmAe9Pab4Us4sENLXU+R2sxSSUl+zc8o+OnijXYcZWi69dcSIsgH6BT
+        5tWoW3ShT00c01ER/XK7/tKnhJsDTd0Rdv49etYtDPNhtOH/jGEgk7vXvd1DtmXXVNn2Jam7u4mwZ
+        h2QM8y6Mfq98PFPcfQdMI6sljOo0FQSLHXraQQmssOozUaqiq5Rlfk8MXbbrU44dWS9ZXtSflFcTK
+        nF3rwOAPP5cjCgrZ9FLhn7/KXQDZj3klh8KIPROVkYZNn3Nrwanb+SnWmsbKpl+aWQ59VHN8gq36r
+        CLGJ45bA==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <m.v.b@runbox.com>)
+        id 1kVL2u-0001Gj-I8; Wed, 21 Oct 2020 22:49:20 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1kVL2n-0006hV-35; Wed, 21 Oct 2020 22:49:13 +0200
+Subject: Re: Bug caused by 53965c79c2db (USB: Fix device driver race)
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Pany <pany@fedoraproject.org>, linux-usb@vger.kernel.org
+References: <CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com>
+ <20201017200200.GB842001@rowland.harvard.edu>
+ <CAE3RAxvNUvzqKT+GK3A4cQ7Tm_tFRQJKfJ01r0ic-5066fikDA@mail.gmail.com>
+ <20201019174028.GF898631@rowland.harvard.edu>
+ <cf1e7059-e1d2-2e7a-89c1-0c162850fbb4@runbox.com>
+ <20201020152859.GA945128@rowland.harvard.edu>
+ <74e25095-53fa-b98c-6baf-c97eea574d1c@runbox.com>
+ <e7ecea72755147dc3252e8d5c1735903993caa1e.camel@hadess.net>
+ <83bd4ab7-15a6-73c2-decd-1da1c393bad0@runbox.com>
+ <5d2dc161951d0717d1ccfc88049c241c8ce8d1e6.camel@hadess.net>
+From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+Message-ID: <4cc0e162-c607-3fdf-30c9-1b3a77f6cf20@runbox.com>
+Date:   Wed, 21 Oct 2020 16:49:09 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.3
+MIME-Version: 1.0
+In-Reply-To: <5d2dc161951d0717d1ccfc88049c241c8ce8d1e6.camel@hadess.net>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Op 21-10-2020 om 21:50 schreef Thinh Nguyen:
-> Ferry Toth wrote:
->> Op 21-10-2020 om 00:58 schreef Thinh Nguyen:
->>> Thinh Nguyen wrote:
->>>> Hi,
->>>>
->>>> Ferry Toth wrote:
->>>>> Op 20-10-2020 om 14:32 schreef Felipe Balbi:
->>>>>> Hi,
->>>>>>
->>>>>> Ferry Toth <fntoth@gmail.com> writes:
->>>>>>
->>>>>> 8< snip
->>>>>>
->>>>>>>>> [   12.657416] CR2: 0000000100000000
->>>>>>>>> [   12.660729] ---[ end trace 9b92dea6da33c71e ]---
->>>>>>>> It this something you can reproduce on your end? Ferry, can you get
->>>>>>>> dwc3
->>>>>>>> trace logs when this happens? ftrace_dump_on_oops may help here.
->>>>>>> I will do that tonight. Is flipping on ftrace_dump_on_oops
->>>>>>> sufficient or
->>>>>>> do I need to do more?
->>>>>> you'd have to enable dwc3 trace events first ;-)
->>>>>>
->>>>>>> BTW after posting this I found in host mode dwc3 is not working
->>>>>>> properly
->>>>>>> either. No oops, but no driver get loaded on device plug in.
->>>>>> okay
->>>>>>
->>>>> Ehem, you maybe only me to enable /dwc3/dwc3_ep_dequeue/enable:
->>>>>
->>>>> root@edison:/boot# uname -a
->>>>> Linux edison 5.9.0-edison-acpi-standard #1 SMP Mon Oct 19 20:17:04 UTC
->>>>> 2020 x86_64 x86_64 x86_64 GNU/Linux
->>>>> root@edison:/boot# echo 1 >
->>>>> /sys/kernel/debug/tracing/events/dwc3/dwc3_ep_dequeue/enable
->>>>> root@edison:/boot# echo 1 > /proc/sys/kernel/ftrace_dump_on_oops
->>>>> root@edison:/boot#
->>>>> root@edison:/boot# [ 2608.585323] BUG: kernel NULL pointer
->>>>> dereference, address: 0000000000000000
->>>>> [ 2608.592288] #PF: supervisor read access in kernel mode
->>>>> [ 2608.597419] #PF: error_code(0x0000) - not-present page
->>>>> [ 2608.602549] PGD 0 P4D 0
->>>>> [ 2608.605090] Oops: 0000 [#1] SMP PTI
->>>>> [ 2608.608580] CPU: 1 PID: 733 Comm: irq/15-dwc3 Not tainted
->>>>> 5.9.0-edison-acpi-standard #1
->>>>> [ 2608.616571] Hardware name: Intel Corporation Merrifield/BODEGA BAY,
->>>>> BIOS 542 2015.01.21:18.19.48
->>>>> [ 2608.625356] RIP: 0010:dwc3_gadget_ep_dequeue+0x41/0x1c0
->>>>> [ 2608.630580] Code: e9 51 01 00 00 4c 8d a3 30 01 00 00 4c 89 e7 e8
->>>>> 15 e6 42 00 49 8b 4e 48 49 89 c5 49 8d 46 48 48 8d 51 a0 48 39 c8 75
->>>>> 0f eb 2e <48> 8b 4a 60 48 8d 51 a0 48 39 c8 74 21 48 39 d5 75 ee 45 31
->>>>> f6 4c
->>>>> [ 2608.649320] RSP: 0018:ffffa838002a7c40 EFLAGS: 00010087
->>>>> [ 2608.654543] RAX: ffff9a5f4609c048 RBX: ffff9a5f46f48028 RCX:
->>>>> 0000000000000000
->>>>> [ 2608.661666] RDX: ffffffffffffffa0 RSI: 0000000000000008 RDI:
->>>>> ffff9a5f46f48158
->>>>> [ 2608.668790] RBP: ffff9a5f7bd09b40 R08: 00000000000002d8 R09:
->>>>> ffff9a5f7dd6a000
->>>>> [ 2608.675913] R10: ffffa838002a7d90 R11: ffff9a5f46f48300 R12:
->>>>> ffff9a5f46f48158
->>>>> [ 2608.683039] R13: 0000000000000046 R14: ffff9a5f4609c000 R15:
->>>>> ffff9a5f7ad77e00
->>>>> [ 2608.690165] FS:  0000000000000000(0000) GS:ffff9a5f7e300000(0000)
->>>>> knlGS:0000000000000000
->>>>> [ 2608.698244] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>> [ 2608.703980] CR2: 0000000000000000 CR3: 000000003780a000 CR4:
->>>>> 00000000001006e0
->>>>> [ 2608.711102] Call Trace:
->>>>> [ 2608.713561]  usb_ep_dequeue+0x19/0x80
->>>>> [ 2608.717234]  u_audio_stop_capture+0x54/0x9a [u_audio]
->>>>> [ 2608.722289]  afunc_set_alt+0x73/0x80 [usb_f_uac2]
->>>> I took a look at how the audio function is handling switching alternate
->>>> setting and dequeuing endpoints, and I think I found the issue.
->>>>
->>>> Here's a snippet of the free_ep() code in u_audio.c:
->>>>
->>>> static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep
->>>> *ep)
->>>> {
->>>>       .....
->>>>           for (i = 0; i < params->req_number; i++) {
->>>>                   if (prm->ureq[i].req) {
->>>>                           usb_ep_dequeue(ep, prm->ureq[i].req);
->>>>                           usb_ep_free_request(ep, prm->ureq[i].req);
->>>>                           prm->ureq[i].req = NULL;
->>>>                   }
->>>>           }
->>>>     ....
->>>>
->>>>
->>>> usb_ep_dequeue() can be asynchronous. The dwc3 still has ownership of
->>>> the request until it gives back the request. Freeing the request
->>>> immediately here will cause a problem.
+On 21/10/2020 09.18, Bastien Nocera wrote:
+> On Wed, 2020-10-21 at 09:08 -0400, M. Vefa Bicakci wrote:
+>> On 21/10/2020 07.53, Bastien Nocera wrote:
+>> [Snipped by Vefa]
 >>>
->>> To confirm my suspicion, can you try this and see if you still get oops?
+>>> I have no idea why there isn't a match function. Patch v1 had a
+>>> huge
+>>> table:
+>>> https://marc.info/?l=linux-usb&m=157062863431186&w=2
+>>> and v2 already didn't had that comment, but no .match function:
+>>> https://marc.info/?l=linux-usb&m=157114990905421&w=2
 >>>
->>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>> index eec8e9a9e3ed..b66eb24ec070 100644
->>> --- a/drivers/usb/dwc3/gadget.c
->>> +++ b/drivers/usb/dwc3/gadget.c
->>> @@ -2031,6 +2031,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep
->>> *ep,
->>>                           list_for_each_entry_safe(r, t,
->>> &dep->started_list, list)
->>>                                   dwc3_gadget_move_cancelled_request(r);
->>>    +
->>> dwc3_gadget_ep_cleanup_cancelled_requests(dep);
->>>                           goto out;
->>>                   }
->>>           }
->>>
->>>
->>> This will make usb_ep_dequeue() synchronous. (Note that this is not
->>> tested).
+>>> I'll prepare a patch that adds a match function. I'll let you
+>>> (Vefa)
+>>> look at which of your patches need backporting though, as I'm
+>>> really
+>>> quite a bit lost in the different patch sets and branches :/
 >>
->> Unfortunately, it doesn't work. The trace changes to:
->> root@edison:~# [  104.418264] BUG: kernel NULL pointer dereference,
->> address: 0000000000000000
->> [  104.425227] #PF: supervisor instruction fetch in kernel mode
->> [  104.430877] #PF: error_code(0x0010) - not-present page
->> [  104.436007] PGD 0 P4D 0
->> [  104.438547] Oops: 0010 [#1] SMP PTI
->> [  104.442039] CPU: 1 PID: 605 Comm: irq/15-dwc3 Not tainted
->> 5.9.0-edison-acpi-standard #1
->> [  104.450027] Hardware name: Intel Corporation Merrifield/BODEGA BAY,
->> BIOS 542 2015.01.21:18.19.48
->> [  104.458802] RIP: 0010:0x0
->> [  104.461425] Code: Bad RIP value.
->> [  104.464649] RSP: 0018:ffffae584034fbf8 EFLAGS: 00010046
->> [  104.469870] RAX: 0000000000000000 RBX: ffff8c198608a028 RCX:
->> ffff8c19bb87fa00
->> [  104.476993] RDX: 00000000ffffff94 RSI: ffff8c19bafa54e0 RDI:
->> ffff8c198609ee00
->> [  104.484118] RBP: ffff8c19bafa54e0 R08: 0000000000000046 R09:
->> 0000000000000238
->> [  104.491241] R10: 000000000000002c R11: ffff8c19bcf62490 R12:
->> ffff8c198609ee00
->> [  104.498366] R13: ffff8c198608a028 R14: 0000000000000002 R15:
->> ffff8c19bb8ff000
->> [  104.505493] FS:  0000000000000000(0000) GS:ffff8c19be300000(0000)
->> knlGS:0000000000000000
->> [  104.513572] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> [  104.519309] CR2: ffffffffffffffd6 CR3: 000000002e80a000 CR4:
->> 00000000001006e0
->> [  104.526432] Call Trace:
->> [  104.528892]  dwc3_gadget_giveback+0xbf/0x120
->> [  104.533169]  __dwc3_gadget_ep_disable+0xc5/0x250
->> [  104.537789]  dwc3_gadget_ep_disable+0x3d/0xd0
->> [  104.542149]  usb_ep_disable+0x1d/0x80
->> [  104.545823]  u_audio_stop_capture+0x87/0x9a [u_audio]
->> [  104.550880]  afunc_set_alt+0x73/0x80 [usb_f_uac2]
->> [  104.555594]  composite_setup+0x20f/0x1b20 [libcomposite]
->> [  104.560912]  ? configfs_composite_setup+0x6b/0x90 [libcomposite]
->> [  104.566921]  configfs_composite_setup+0x6b/0x90 [libcomposite]
->> [  104.572752]  dwc3_ep0_delegate_req+0x24/0x40
->> [  104.577022]  dwc3_ep0_interrupt+0x40a/0x9d8
->> [  104.581205]  dwc3_thread_interrupt+0x880/0xf70
+>> Hello Bastien,
 >>
+>> Having found the root cause of the issue by going through Pany's
+>> logs and having proposed a solution, I was hoping to get credit
+>> for the resolution of the issue by authoring the patch.
 > 
-> Oops, looks like I can't make it synchronous this way. Can you try
-> Jack's change to the u_audio.c instead?
-
-Oops indeed goes away with Jack's change, but usb connection goes 
-up/down continuously, meaning: my host sees usb network and audio device 
-appearing / disappearing.
-
-mass_storage device does not appear all.
-
-Host:
-21-10-2020 22:36	kernel	sd 7:0:0:0: [sdd] tag#0 device offline or changed
-21-10-2020 22:36	kernel	blk_update_request: I/O error, dev sdd, sector 0 
-op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-21-10-2020 22:36	kernel	Buffer I/O error on dev sdd, logical block 0, 
-async page read
-
-And on edison:
-Oct 21 22:37:37 edison kernel: IPv6: ADDRCONF(NETDEV_CHANGE): usb0: link 
-becomes ready
-Oct 21 22:37:37 edison kernel[499]: [  436.595952] IPv6: 
-ADDRCONF(NETDEV_CHANGE): usb0: link b>
-Oct 21 22:37:37 edison systemd-networkd[521]: usb0: Gained carrier
-Oct 21 22:37:38 edison systemd-networkd[521]: usb0: Gained IPv6LL
-Oct 21 22:38:07 edison systemd-networkd[521]: usb0: Lost carrier
-Oct 21 22:38:07 edison systemd-journald[435]: Forwarding to syslog 
-missed 4 messages.
-
-
-> Thanks,
-> Thinh
+> I don't care either way. Attached are the 2 patches I had made and was
+> in the process of compiling and testing, feel free to adapt them,
+> change the authorship, etc.
 > 
+> Note that you mentioned you'd need to "replace the ID table with
+> a match function", which will mean that the driver isn't automatically
+> loaded when a device gets plugged in. So that wouldn't have worked.
+> 
+> Let me know when you've made your patch, as I'll need to update this
+> bug when there's something to test:
+> https://bugzilla.redhat.com/show_bug.cgi?id=1878347
+> 
+> Cheers
 
+Hello Bastien,
 
+Sorry about my delayed reply. Thank you, and I appreciate your understanding.
+I intend to continue the work starting later today, and I will make
+sure that you are credited by using the co-developed-by tag in the
+patches, as you have mentioned in your more recent e-mail in this thread.
+
+I will investigate/verify the ID table vs. match function aspect
+as well; I understand that my suggestion could be incorrect.
+
+Thanks again,
+
+Vefa
