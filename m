@@ -2,193 +2,223 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCBF2945D2
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 02:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0D6294658
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 03:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439532AbgJUAQQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 20:16:16 -0400
-Received: from mail-eopbgr10054.outbound.protection.outlook.com ([40.107.1.54]:40159
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2439515AbgJUAQQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Oct 2020 20:16:16 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mm3UYSCHAqWWYagmwCJygKHqFl1Io1vozFxjCAvTtQZZyBN6Is41GXqw7tlmOTJ3xy3XMTeDGsvYbSqoS2WmmcigoX7UFNFCepvl400V3JaQfWa62UHSYrPmk9V8+zsdQtKqdn8AkY1g5p7DN5VmdT5ihvghpHf9rQfxgG6pr/zzW9QU1C8+rGuwACUq51CYr5XWO1EYWablh81m4M8tBbFZgnUGsQ5uOWXEFo+NxsNwJ8IPVVUAx+XU9oQBGjfdxxrkc8ghL3P8q5Gyaq9MtaIWMigjxl/2+SqljDqvLRkmJT7bs485K5iu+Kmk4yVF5T2/hlzLkIbUTS4mLDnGJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4j7IxDzrSTuHT6AjSpya2JA0YXMW2BfRQmtE674QTIc=;
- b=ZurizO8/g8EIatQvO/1GXCJWLzcC5586/xGMIa8FDuJfls4yiZi3JgFPVLwgm4HXUN6cHxoPBUZPRHgni5SFTrv9Szw8uiEfZho9nJArYDSUQT33iG5ieLHDDmoGSu4n8yXkouv/y6uXq5qWR8LIHqm3smlHm0vr9nt0je32RHWCWSs+rK49W91pl5Uxyeh5L9bnoBMtUwsjDEEspRQulg6GLzy2ponzXWslE41FoXSwhhXI7unR/WHSstoIE3TGq1wMTo9e1RrzeCxg1tCFhDLxVYNivC1XeL1K0FoiJYhnUFlBMbUI2ag+MBKYu/SJVm2huqQKngGOAPVVpknzMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4j7IxDzrSTuHT6AjSpya2JA0YXMW2BfRQmtE674QTIc=;
- b=JSbzlXQZyDmH1heOR4UUmhnsGv7WoeKPoCO8HLNgFAh5zLsFus41DnwTqJWd8iZmk4vREh/c+36h/SH8n4anNISarvxdB5tIKHiuwy/JlAtwINR2qNZGTaJ3ul1DCa2UUaJoRFJ3Xp9C2RiGr1mP4f6V/CIwj3hwEtBeszxOPYA=
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
- by AM0PR04MB4803.eurprd04.prod.outlook.com (2603:10a6:208:c7::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.20; Wed, 21 Oct
- 2020 00:16:05 +0000
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Wed, 21 Oct 2020
- 00:16:05 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Jun Li <jun.li@nxp.com>
-CC:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "prabhakar.mahadev-lad.rj@bp.renesas.com" 
-        <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "laurent.pinchart+renesas@ideasonboard.com" 
-        <laurent.pinchart+renesas@ideasonboard.com>,
+        id S2439879AbgJUBrf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 21:47:35 -0400
+Received: from m42-4.mailgun.net ([69.72.42.4]:44672 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2439862AbgJUBrf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Oct 2020 21:47:35 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1603244853; h=In-Reply-To: Content-Transfer-Encoding:
+ Content-Type: MIME-Version: References: Message-ID: Subject: Cc: To:
+ From: Date: Sender; bh=wFHu37kzKF9fQAzvjssPeJi+hKQWbibFgYJweBSq16A=; b=hMC2Ex/9DU5+4LUWWo8Gy7M/3t7r+vz5cXKZZGOtFFwR8Ps7IsGfsdpWS8toUxnbjf5OY4yL
+ M/HeK872O87EIgumNDu6VYAEySN6AkMfRm1h1SKGk6BMv0LPBV6oGCpUZWzfqYrMO2H+CBTX
+ yeicNOsHAq9av7Peo/1pyFZKDQo=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 5f8f9335d6d00c7a9e72a441 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 21 Oct 2020 01:47:33
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 31CD6C433FE; Wed, 21 Oct 2020 01:47:33 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 49008C433F1;
+        Wed, 21 Oct 2020 01:47:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 49008C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+Date:   Tue, 20 Oct 2020 18:47:25 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v4 3/4] usb: typec: mux: add "compatible" property for
- switch match
-Thread-Topic: [PATCH v4 3/4] usb: typec: mux: add "compatible" property for
- switch match
-Thread-Index: AQHWpfeqzYLPux/yckakQge4yJtm56mgAeUAgAB0tACAALwSAA==
-Date:   Wed, 21 Oct 2020 00:16:05 +0000
-Message-ID: <20201021001538.GA26381@b29397-desktop>
-References: <1603098195-9923-1-git-send-email-jun.li@nxp.com>
- <1603098195-9923-3-git-send-email-jun.li@nxp.com>
- <20201020060448.GA29717@b29397-desktop>
- <VE1PR04MB65285BE4972D3C7EB36E27D4891F0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-In-Reply-To: <VE1PR04MB65285BE4972D3C7EB36E27D4891F0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: nxp.com; dkim=none (message not signed)
- header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: db2881a4-b010-4043-65bb-08d87556807c
-x-ms-traffictypediagnostic: AM0PR04MB4803:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR04MB48032A0DC81C08FF0AF6C3088B1C0@AM0PR04MB4803.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: g0zBE+wd+Noj/qKwRltdtzriKihj4GJKgGyA084/ZNCp9tan95dGgRVpuB/HB5qZILZUMRS1+KRgiTrUx4ZFFurBL8E4/eDUeALej2cgvTVEpBW74SvFzN9ujcb1NXGqU1G0PP7KLqcbUjk35hTNgybvvB5bgPVtpZL3Ih84tPaQV9VpjPcqBt4hCqiMY92tKbEj7DUOoZ++4SPT5wrWui4yl3dVAvxYXtkEMzb5zWXXHgwfhqu6SWT4Fp7fOkrnntTV1FlxSBQLCYnk+sM3tAF4UpQp/AbT41Czdf+fskCMVvVI78GaXFgcz1O5YMCLhBzcOYlEWV7ay+tTOjxc9g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(136003)(396003)(376002)(39860400002)(366004)(346002)(26005)(64756008)(66476007)(186003)(2906002)(53546011)(66556008)(33656002)(7416002)(6486002)(83380400001)(8676002)(4326008)(44832011)(66946007)(6862004)(33716001)(71200400001)(316002)(478600001)(76116006)(66446008)(91956017)(6512007)(54906003)(9686003)(1076003)(5660300002)(86362001)(6506007)(8936002)(6636002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: xe/NU1jppNPOknNrA73vCqeSRif5jUVdWBK61EeDMSmM/UcwcjU9yj7kBizgswUG3zzd+JagGKuepyBzkx/YVjhuE+MqwdfHd6wE14liMPgc7+6lmttcb7WgHKFd8GJprXNObd5dHKNzq8M10gT6V8Z7fG2gGz0YkgpDMEJkpD/wKFzjp3Z1r7kHeM/H9C7INQOXkrqgYNVbODFUjD9pDcnp7NKLZXI5HMFbnYheaBDAACC2zqpDAb+7qdCoEa9cIr+9U/L7w6ikrU2RmruU+jAMvVuun3Dt/w4GVYdhZ2P0fDP7kgbq13Sfr4RXbRrJozxqtVmACnjvoY/FcdzxJZ6Z51sKTvsQfythg8buFEwnO913VAHLjgbPayEY0l3/8kPFHy2HSoatoJCt0vBmWHAjYWAuQoWTSoMDQIydWInq2hrTnBLUdKr67F6TYPhSUF68Em4cSQaYjZfq3zTTSLundYdh6AE2DXAbp16khRFIJQKDrEAgnmAhBxCqaGPSIsYoPtuWl+h29lpBoQ6srKfehbU2ffvUsJitqOfbN76UhPJiLMW0dxhdkRxjfsD84X82HDqZq+MLMtOj6jdWolPjm8Ho4iY/TKRJEI0Dx/zbr7jQxL9Q3JXjmR/rLcqSvFMhlx07sd5J/2/JLoc+CA==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C7C6658DB6FDB84AA5E579DF1A8E5503@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        "felipe.balbi-VuQAYsv1563Yd54FQh9/CA@public.gmane.org" 
+        <felipe.balbi-VuQAYsv1563Yd54FQh9/CA@public.gmane.org>
+Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
+Message-ID: <20201021014725.GA26640@jackp-linux.qualcomm.com>
+References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
+ <87a6wig461.fsf@kernel.org>
+ <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
+ <874kmpf583.fsf@kernel.org>
+ <d0aca346-353c-d74e-6f00-ccd2a4ed26ef@gmail.com>
+ <976cea12-e54e-fbca-6c53-e6ef5c554094@synopsys.com>
+ <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db2881a4-b010-4043-65bb-08d87556807c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2020 00:16:05.5501
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cP7wim3GGCJ1P861w670R0fJ0NkPAJrVMs/qj1yRUu2rn/39W4rUEKhah82BZkdfdbvfuA8e4WHSk2aO1QZu2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4803
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-10-20 13:02:30, Jun Li wrote:
->=20
->=20
-> > -----Original Message-----
-> > From: Peter Chen <peter.chen@nxp.com>
-> > Sent: Tuesday, October 20, 2020 2:05 PM
-> > To: Jun Li <jun.li@nxp.com>
-> > Cc: heikki.krogerus@linux.intel.com; robh+dt@kernel.org;
-> > rafael@kernel.org; gregkh@linuxfoundation.org;
-> > andriy.shevchenko@linux.intel.com; hdegoede@redhat.com;
-> > lee.jones@linaro.org; mika.westerberg@linux.intel.com;
-> > dmitry.torokhov@gmail.com; prabhakar.mahadev-lad.rj@bp.renesas.com;
-> > laurent.pinchart+renesas@ideasonboard.com; linux-usb@vger.kernel.org;
-> > devicetree@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>
-> > Subject: Re: [PATCH v4 3/4] usb: typec: mux: add "compatible" property =
-for
-> > switch match
-> >=20
-> > On 20-10-19 17:03:14, Li Jun wrote:
-> > > For those need a dedicated typec switch simple solution driver, use
-> > > compatible property for matching.
-> > >
-> > > Signed-off-by: Li Jun <jun.li@nxp.com>
-> > > ---
-> > > New patch for v4.
-> > >
-> > >  drivers/usb/typec/mux.c | 7 ++++---
-> > >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c index
-> > > 52ad277..3da17d1 100644
-> > > --- a/drivers/usb/typec/mux.c
-> > > +++ b/drivers/usb/typec/mux.c
-> > > @@ -39,7 +39,8 @@ static void *typec_switch_match(struct
-> > > device_connection *con, int ep,  {
-> > >  	struct device *dev;
-> > >
-> > > -	if (con->id && !fwnode_property_present(con->fwnode, con->id))
-> > > +	if (con->id && !fwnode_is_compatible(con->fwnode, con->id) &&
-> > > +		       !fwnode_property_present(con->fwnode, con->id))
-> > >  		return NULL;
-> >=20
-> > If property is not present, should not fwnode_is_compatible return NULL=
-?
->=20
-> Do you want to say:
->=20
-> If property is not present, should not *typec_switch_match* return NULL?
+Hi Thinh, Ferry,
 
-If fwnode_is_compatible returns true, it should mean the fwnode_property_pr=
-esent is
-true too. But if fwnode_is_compatible is false, the fwnode_property_present=
- may return
-true, the code does not return NULL. Then, with this new patch, what change=
-s compared
-to original logic?
+On Tue, Oct 20, 2020 at 10:58:31PM +0000, Thinh Nguyen wrote:
+> Thinh Nguyen wrote:
+> > Hi,
+> >
+> > Ferry Toth wrote:
+> >> Op 20-10-2020 om 14:32 schreef Felipe Balbi:
+> >>> Hi,
+> >>>
+> >>> Ferry Toth <fntoth@gmail.com> writes:
+> >>>
+> >>> 8< snip
+> >>>
+> >>>>>> [   12.657416] CR2: 0000000100000000
+> >>>>>> [   12.660729] ---[ end trace 9b92dea6da33c71e ]---
+> >>>>> It this something you can reproduce on your end? Ferry, can you get
+> >>>>> dwc3
+> >>>>> trace logs when this happens? ftrace_dump_on_oops may help here.
+> >>>> I will do that tonight. Is flipping on ftrace_dump_on_oops
+> >>>> sufficient or
+> >>>> do I need to do more?
+> >>> you'd have to enable dwc3 trace events first ;-)
+> >>>
+> >>>> BTW after posting this I found in host mode dwc3 is not working
+> >>>> properly
+> >>>> either. No oops, but no driver get loaded on device plug in.
+> >>> okay
+> >>>
+> >> Ehem, you maybe only me to enable /dwc3/dwc3_ep_dequeue/enable:
+> >>
+> >> root@edison:/boot# uname -a
+> >> Linux edison 5.9.0-edison-acpi-standard #1 SMP Mon Oct 19 20:17:04 UTC
+> >> 2020 x86_64 x86_64 x86_64 GNU/Linux
+> >> root@edison:/boot# echo 1 >
+> >> /sys/kernel/debug/tracing/events/dwc3/dwc3_ep_dequeue/enable
+> >> root@edison:/boot# echo 1 > /proc/sys/kernel/ftrace_dump_on_oops
+> >> root@edison:/boot#
+> >> root@edison:/boot# [ 2608.585323] BUG: kernel NULL pointer
+> >> dereference, address: 0000000000000000
+> >> [ 2608.592288] #PF: supervisor read access in kernel mode
+> >> [ 2608.597419] #PF: error_code(0x0000) - not-present page
+> >> [ 2608.602549] PGD 0 P4D 0
+> >> [ 2608.605090] Oops: 0000 [#1] SMP PTI
+> >> [ 2608.608580] CPU: 1 PID: 733 Comm: irq/15-dwc3 Not tainted
+> >> 5.9.0-edison-acpi-standard #1
+> >> [ 2608.616571] Hardware name: Intel Corporation Merrifield/BODEGA BAY,
+> >> BIOS 542 2015.01.21:18.19.48
+> >> [ 2608.625356] RIP: 0010:dwc3_gadget_ep_dequeue+0x41/0x1c0
+> >> [ 2608.630580] Code: e9 51 01 00 00 4c 8d a3 30 01 00 00 4c 89 e7 e8
+> >> 15 e6 42 00 49 8b 4e 48 49 89 c5 49 8d 46 48 48 8d 51 a0 48 39 c8 75
+> >> 0f eb 2e <48> 8b 4a 60 48 8d 51 a0 48 39 c8 74 21 48 39 d5 75 ee 45 31
+> >> f6 4c
+> >> [ 2608.649320] RSP: 0018:ffffa838002a7c40 EFLAGS: 00010087
+> >> [ 2608.654543] RAX: ffff9a5f4609c048 RBX: ffff9a5f46f48028 RCX:
+> >> 0000000000000000
+> >> [ 2608.661666] RDX: ffffffffffffffa0 RSI: 0000000000000008 RDI:
+> >> ffff9a5f46f48158
+> >> [ 2608.668790] RBP: ffff9a5f7bd09b40 R08: 00000000000002d8 R09:
+> >> ffff9a5f7dd6a000
+> >> [ 2608.675913] R10: ffffa838002a7d90 R11: ffff9a5f46f48300 R12:
+> >> ffff9a5f46f48158
+> >> [ 2608.683039] R13: 0000000000000046 R14: ffff9a5f4609c000 R15:
+> >> ffff9a5f7ad77e00
+> >> [ 2608.690165] FS:  0000000000000000(0000) GS:ffff9a5f7e300000(0000)
+> >> knlGS:0000000000000000
+> >> [ 2608.698244] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> [ 2608.703980] CR2: 0000000000000000 CR3: 000000003780a000 CR4:
+> >> 00000000001006e0
+> >> [ 2608.711102] Call Trace:
+> >> [ 2608.713561]  usb_ep_dequeue+0x19/0x80
+> >> [ 2608.717234]  u_audio_stop_capture+0x54/0x9a [u_audio]
+> >> [ 2608.722289]  afunc_set_alt+0x73/0x80 [usb_f_uac2]
+> > I took a look at how the audio function is handling switching alternate
+> > setting and dequeuing endpoints, and I think I found the issue.
+> >
+> > Here's a snippet of the free_ep() code in u_audio.c:
+> >
+> > static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
+> > {
+> >     .....
+> >         for (i = 0; i < params->req_number; i++) {
+> >                 if (prm->ureq[i].req) {
+> >                         usb_ep_dequeue(ep, prm->ureq[i].req);
+> >                         usb_ep_free_request(ep, prm->ureq[i].req);
+> >                         prm->ureq[i].req = NULL;
+> >                 }
+> >         }
+> >   ....
+> >
+> >
+> > usb_ep_dequeue() can be asynchronous. The dwc3 still has ownership of
+> > the request until it gives back the request. Freeing the request
+> > immediately here will cause a problem.
+> 
+> To confirm my suspicion, can you try this and see if you still get oops?
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index eec8e9a9e3ed..b66eb24ec070 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -2031,6 +2031,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>                         list_for_each_entry_safe(r, t,
+> &dep->started_list, list)
+>                                 dwc3_gadget_move_cancelled_request(r);
+>  
+> +                       dwc3_gadget_ep_cleanup_cancelled_requests(dep);
+>                         goto out;
+>                 }
+>         }
+> 
+> 
+> This will make usb_ep_dequeue() synchronous. (Note that this is not tested).
 
-Peter
+But only for dwc3 right? In general do other UDC drivers provide
+synchronous behavior? It does states clearly in the kerneldoc for
+usb_ep_dequeue() that the completion is asynchronous.  From
+drivers/usb/gadget/udc/core.c:
 
-> >=20
-> > >
-> > >  	dev =3D class_find_device(&typec_mux_class, NULL, con->fwnode, @@
-> > > -61,8 +62,8 @@ struct typec_switch *fwnode_typec_switch_get(struct
-> > > fwnode_handle *fwnode)  {
-> > >  	struct typec_switch *sw;
-> > >
-> > > -	sw =3D fwnode_connection_find_match(fwnode, "orientation-switch", N=
-ULL,
-> > > -					  typec_switch_match);
-> > > +	sw =3D fwnode_connection_find_match(fwnode, "typec-orientation-swit=
-ch",
-> > > +					  NULL, typec_switch_match);
-> > >  	if (!IS_ERR_OR_NULL(sw))
-> > >  		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
-> > >
-> > > --
-> > > 2.7.4
-> > >
-> >=20
-> > --
-> >=20
-> > Thanks,
-> > Peter Chen
+ * If the request is still active on the endpoint, it is dequeued and
+ * eventually its completion routine is called (with status -ECONNRESET);
+ * else a negative error code is returned.  This routine is asynchronous,
+ * that is, it may return before the completion routine runs.
 
---=20
+Alternatively, could we not fix up u_audio.c to deal with this?
 
-Thanks,
-Peter Chen=
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index 56906d15fb55..f08f036d520e 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -89,7 +89,12 @@ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
+	struct snd_uac_chip *uac = prm->uac;
+
+	/* i/f shutting down */
+-	if (!prm->ep_enabled || req->status == -ESHUTDOWN)
++	if (!prm->ep_enabled) {
++		usb_ep_free_request(ep, req);
++		return;
++	}
++
++	if (req->status == -ESHUTDOWN)
+		return;
+
+	/*
+@@ -352,7 +357,6 @@ static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
+	for (i = 0; i < params->req_number; i++) {
+		if (prm->ureq[i].req) {
+			usb_ep_dequeue(ep, prm->ureq[i].req);
+-			usb_ep_free_request(ep, prm->ureq[i].req);
+			prm->ureq[i].req = NULL;
+		}
+	}
+
+Jack
