@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A59F294C02
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 13:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4BE294C2C
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 14:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439627AbgJULx2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Oct 2020 07:53:28 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:52149 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2410976AbgJULx2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 07:53:28 -0400
+        id S2439945AbgJUMC7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Oct 2020 08:02:59 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:39719 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2411191AbgJUMC7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 08:02:59 -0400
 X-Originating-IP: 82.255.60.242
 Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
         (Authenticated sender: hadess@hadess.net)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 37377E000D;
-        Wed, 21 Oct 2020 11:53:25 +0000 (UTC)
-Message-ID: <e7ecea72755147dc3252e8d5c1735903993caa1e.camel@hadess.net>
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id CC5564000A;
+        Wed, 21 Oct 2020 12:02:55 +0000 (UTC)
+Message-ID: <530352a1e69aaf7c8c0933b56aaba68119e0b7fa.camel@hadess.net>
 Subject: Re: Bug caused by 53965c79c2db (USB: Fix device driver race)
 From:   Bastien Nocera <hadess@hadess.net>
 To:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
         Alan Stern <stern@rowland.harvard.edu>
 Cc:     Pany <pany@fedoraproject.org>, linux-usb@vger.kernel.org
-Date:   Wed, 21 Oct 2020 13:53:24 +0200
-In-Reply-To: <74e25095-53fa-b98c-6baf-c97eea574d1c@runbox.com>
+Date:   Wed, 21 Oct 2020 14:02:55 +0200
+In-Reply-To: <e7ecea72755147dc3252e8d5c1735903993caa1e.camel@hadess.net>
 References: <CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com>
          <20201017200200.GB842001@rowland.harvard.edu>
          <CAE3RAxvNUvzqKT+GK3A4cQ7Tm_tFRQJKfJ01r0ic-5066fikDA@mail.gmail.com>
@@ -31,112 +31,66 @@ References: <CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com>
          <cf1e7059-e1d2-2e7a-89c1-0c162850fbb4@runbox.com>
          <20201020152859.GA945128@rowland.harvard.edu>
          <74e25095-53fa-b98c-6baf-c97eea574d1c@runbox.com>
+         <e7ecea72755147dc3252e8d5c1735903993caa1e.camel@hadess.net>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.38.1 (3.38.1-1.fc33) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2020-10-21 at 00:18 -0400, M. Vefa Bicakci wrote:
-> On 20/10/2020 11.28, Alan Stern wrote:
-> > On Tue, Oct 20, 2020 at 08:03:23AM -0400, M. Vefa Bicakci wrote:
-> > > On 19/10/2020 13.40, Alan Stern wrote:
-> > > > On Mon, Oct 19, 2020 at 09:36:00AM +0000, Pany wrote:
-> [Snipped by Vefa]
-> > > 
-> > > ... and Pany's system has multiple USB devices manufactured by
-> > > Apple
-> > > (including the SD card reader), with the vendor code 0x05ac,
-> > > which is
-> > > the value included by the id_table of the apple-mfi-fastcharge
-> > > driver:
-> > > 
-> > > Sep 29 15:22:48 fedora.local kernel: usb 2-3: new SuperSpeed Gen
-> > > 1 USB device number 2 using xhci_hcd
-> > > Sep 29 15:22:48 fedora.local kernel: usb 2-3: New USB device
-> > > found, idVendor=05ac, idProduct=8406, bcdDevice= 8.20
-> > > Sep 29 15:22:48 fedora.local kernel: usb 2-3: New USB device
-> > > strings: Mfr=3, Product=4, SerialNumber=5
-> > > Sep 29 15:22:48 fedora.local kernel: usb 2-3: Product: Card
-> > > Reader
-> > > Sep 29 15:22:48 fedora.local kernel: usb 2-3: Manufacturer: Apple
-> > > ...
-> > > Sep 29 15:22:48 fedora.local kernel: usb 1-5: new full-speed USB
-> > > device number 3 using xhci_hcd
-> > > Sep 29 15:22:48 fedora.local kernel: usb 1-5: New USB device
-> > > found, idVendor=05ac, idProduct=0273, bcdDevice= 6.22
-> > > Sep 29 15:22:48 fedora.local kernel: usb 1-5: New USB device
-> > > strings: Mfr=1, Product=2, SerialNumber=3
-> > > Sep 29 15:22:48 fedora.local kernel: usb 1-5: Product: Apple
-> > > Internal Keyboard / Trackpad
-> > > Sep 29 15:22:48 fedora.local kernel: usb 1-5: Manufacturer: Apple
-> > > Inc.
-> > > ...
-> > > 
-> > > One way to fix this issue would be to implement a match function
-> > > in the
-> > > apple-mfi-fastcharge driver, possibly instead of an id_table, so
-> > > that it
-> > > does not match devices that it cannot bind to. This may require
-> > > other
-> > > changes in the USB core that I cannot fathom at the moment.
-> > 
-> > How about matching on the vendor ID and the product ID?  That would
-> > be
-> > an easy addition to the ID table.  Do the fastcharge devices have a
-> > well
-> > known product ID?
-> > 
-> > Alan Stern
-> 
-> Hello Alan,
-> 
-> Thank you for the feedback! Judging from the driver's code, it looks
-> like
-> the product identifiers are known, but there unfortunately appear to
-> be
-> 256 possible product identifiers (i.e., 0x00->0xFF):
-> 
-> 
->   23 /* The product ID is defined as starting with 0x12nn, as per the
->   24  * "Choosing an Apple Device USB Configuration" section in
->   25  * release R9 (2012) of the "MFi Accessory Hardware
-> Specification"
->   26  *
->   27  * To distinguish an Apple device, a USB host can check the
-> device
->   28  * descriptor of attached USB devices for the following fields:
->   29  * - Vendor ID: 0x05AC
->   30  * - Product ID: 0x12nn
->   31  *
->   32  * Those checks will be done in .match() and .probe().
->   33  */
-> ...
-> 166 static int mfi_fc_probe(struct usb_device *udev)
-> 167 {
-> ...
-> 171
-> 172         idProduct = le16_to_cpu(udev->descriptor.idProduct);
-> 173         /* See comment above mfi_fc_id_table[] */
-> 174         if (idProduct < 0x1200 || idProduct > 0x12ff) {
-> 175                 return -ENODEV;
-> 176         }
-> 
-> A quick look at drivers/usb/core/driver.c::usb_match_device indicates
-> that it is not yet possible to specify ranges in ID tables of USB
-> drivers, so I think that we would need to replace the ID table with
-> a match function. Interestingly enough, the comment block quoted
-> above mentions the use of a match function as well.
+On Wed, 2020-10-21 at 13:53 +0200, Bastien Nocera wrote:
+<snip>
+> I'll prepare a patch that adds a match function. I'll let you (Vefa)
+> look at which of your patches need backporting though, as I'm really
+> quite a bit lost in the different patch sets and branches :/
 
-I have no idea why there isn't a match function. Patch v1 had a huge
-table:
-https://marc.info/?l=linux-usb&m=157062863431186&w=2
-and v2 already didn't had that comment, but no .match function:
-https://marc.info/?l=linux-usb&m=157114990905421&w=2
+Something like that (untested):
 
-I'll prepare a patch that adds a match function. I'll let you (Vefa)
-look at which of your patches need backporting though, as I'm really
-quite a bit lost in the different patch sets and branches :/
+diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c b/drivers/usb/misc/apple-mfi-fastcharge.c
+index b403094a6b3a..bb89dde018b1 100644
+--- a/drivers/usb/misc/apple-mfi-fastcharge.c
++++ b/drivers/usb/misc/apple-mfi-fastcharge.c
+@@ -163,17 +163,26 @@ static const struct power_supply_desc apple_mfi_fc_desc = {
+        .property_is_writeable  = apple_mfi_fc_property_is_writeable
+ };
+ 
++static bool mfi_fc_match(struct usb_device *udev)
++{
++       int idProduct, idVendor;
++
++       idVendor = le16_to_cpu(udev->descriptor.idVendor);
++       idProduct = le16_to_cpu(udev->descriptor.idProduct);
++       /* See comment above mfi_fc_id_table[] */
++       return (idVendor == APPLE_VENDOR_ID &&
++               idProduct >= 0x1200 &&
++               idProduct <= 0x12ff);
++}
++
+ static int mfi_fc_probe(struct usb_device *udev)
+ {
+        struct power_supply_config battery_cfg = {};
+        struct mfi_device *mfi = NULL;
+-       int err, idProduct;
++       int err;
+ 
+-       idProduct = le16_to_cpu(udev->descriptor.idProduct);
+-       /* See comment above mfi_fc_id_table[] */
+-       if (idProduct < 0x1200 || idProduct > 0x12ff) {
++       if (!mfi_fc_probe(udev))
+                return -ENODEV;
+-       }
+ 
+        mfi = kzalloc(sizeof(struct mfi_device), GFP_KERNEL);
+        if (!mfi) {
+@@ -217,6 +226,7 @@ static void mfi_fc_disconnect(struct usb_device *udev)
+ 
+ static struct usb_device_driver mfi_fc_driver = {
+        .name =         "apple-mfi-fastcharge",
++       .match =        mfi_fc_match,
+        .probe =        mfi_fc_probe,
+        .disconnect =   mfi_fc_disconnect,
+        .id_table =     mfi_fc_id_table,
+
 
