@@ -2,193 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D06294AE4
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 11:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A59F294C02
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 13:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438339AbgJUJ5a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Oct 2020 05:57:30 -0400
-Received: from mail-02.mail-europe.com ([51.89.119.103]:51702 "EHLO
-        mail-02.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438327AbgJUJ53 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 05:57:29 -0400
-Date:   Wed, 21 Oct 2020 09:57:22 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1603274244;
-        bh=H+RKzN6UhakiRlOo2OklFUd/Aq2bIDma4Z1bifkQaXc=;
-        h=Date:To:From:Reply-To:Subject:From;
-        b=oqj2bcIis+Kn/oqaVQsI1o//axIet44d4M2DV69zy0E+zXWEkBE9AdFJb1kq3FzFc
-         LBBmcnIVGgnCwXPtDhhhnFHH1Txixn3r6xojRyJetn+ByT1VwnBak+M/vKqUOjDmTh
-         J/CYHRyJPHzXa2xqXQNdsRb67xqNVlLaRq/1ctwM=
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-From:   trees1010 <trees1010@protonmail.com>
-Reply-To: trees1010 <trees1010@protonmail.com>
-Subject: External monitors not detected via thunderbolt 3 dock in Devuan, but okay in Popos
-Message-ID: <lF-Ayl8JXcksvw4NuDTxAgfBjbP8_q8efV2c-UPDwmYXtUBu4Z8rXRy_uprTc3KCQbCXwV1q_w6xcxUjvELyQtAD26ucI2etYNHfaihvKnE=@protonmail.com>
+        id S2439627AbgJULx2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Oct 2020 07:53:28 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:52149 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2410976AbgJULx2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 07:53:28 -0400
+X-Originating-IP: 82.255.60.242
+Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
+        (Authenticated sender: hadess@hadess.net)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 37377E000D;
+        Wed, 21 Oct 2020 11:53:25 +0000 (UTC)
+Message-ID: <e7ecea72755147dc3252e8d5c1735903993caa1e.camel@hadess.net>
+Subject: Re: Bug caused by 53965c79c2db (USB: Fix device driver race)
+From:   Bastien Nocera <hadess@hadess.net>
+To:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Pany <pany@fedoraproject.org>, linux-usb@vger.kernel.org
+Date:   Wed, 21 Oct 2020 13:53:24 +0200
+In-Reply-To: <74e25095-53fa-b98c-6baf-c97eea574d1c@runbox.com>
+References: <CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com>
+         <20201017200200.GB842001@rowland.harvard.edu>
+         <CAE3RAxvNUvzqKT+GK3A4cQ7Tm_tFRQJKfJ01r0ic-5066fikDA@mail.gmail.com>
+         <20201019174028.GF898631@rowland.harvard.edu>
+         <cf1e7059-e1d2-2e7a-89c1-0c162850fbb4@runbox.com>
+         <20201020152859.GA945128@rowland.harvard.edu>
+         <74e25095-53fa-b98c-6baf-c97eea574d1c@runbox.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.1 (3.38.1-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.7 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi everyone,
+On Wed, 2020-10-21 at 00:18 -0400, M. Vefa Bicakci wrote:
+> On 20/10/2020 11.28, Alan Stern wrote:
+> > On Tue, Oct 20, 2020 at 08:03:23AM -0400, M. Vefa Bicakci wrote:
+> > > On 19/10/2020 13.40, Alan Stern wrote:
+> > > > On Mon, Oct 19, 2020 at 09:36:00AM +0000, Pany wrote:
+> [Snipped by Vefa]
+> > > 
+> > > ... and Pany's system has multiple USB devices manufactured by
+> > > Apple
+> > > (including the SD card reader), with the vendor code 0x05ac,
+> > > which is
+> > > the value included by the id_table of the apple-mfi-fastcharge
+> > > driver:
+> > > 
+> > > Sep 29 15:22:48 fedora.local kernel: usb 2-3: new SuperSpeed Gen
+> > > 1 USB device number 2 using xhci_hcd
+> > > Sep 29 15:22:48 fedora.local kernel: usb 2-3: New USB device
+> > > found, idVendor=05ac, idProduct=8406, bcdDevice= 8.20
+> > > Sep 29 15:22:48 fedora.local kernel: usb 2-3: New USB device
+> > > strings: Mfr=3, Product=4, SerialNumber=5
+> > > Sep 29 15:22:48 fedora.local kernel: usb 2-3: Product: Card
+> > > Reader
+> > > Sep 29 15:22:48 fedora.local kernel: usb 2-3: Manufacturer: Apple
+> > > ...
+> > > Sep 29 15:22:48 fedora.local kernel: usb 1-5: new full-speed USB
+> > > device number 3 using xhci_hcd
+> > > Sep 29 15:22:48 fedora.local kernel: usb 1-5: New USB device
+> > > found, idVendor=05ac, idProduct=0273, bcdDevice= 6.22
+> > > Sep 29 15:22:48 fedora.local kernel: usb 1-5: New USB device
+> > > strings: Mfr=1, Product=2, SerialNumber=3
+> > > Sep 29 15:22:48 fedora.local kernel: usb 1-5: Product: Apple
+> > > Internal Keyboard / Trackpad
+> > > Sep 29 15:22:48 fedora.local kernel: usb 1-5: Manufacturer: Apple
+> > > Inc.
+> > > ...
+> > > 
+> > > One way to fix this issue would be to implement a match function
+> > > in the
+> > > apple-mfi-fastcharge driver, possibly instead of an id_table, so
+> > > that it
+> > > does not match devices that it cannot bind to. This may require
+> > > other
+> > > changes in the USB core that I cannot fathom at the moment.
+> > 
+> > How about matching on the vendor ID and the product ID?  That would
+> > be
+> > an easy addition to the ID table.  Do the fastcharge devices have a
+> > well
+> > known product ID?
+> > 
+> > Alan Stern
+> 
+> Hello Alan,
+> 
+> Thank you for the feedback! Judging from the driver's code, it looks
+> like
+> the product identifiers are known, but there unfortunately appear to
+> be
+> 256 possible product identifiers (i.e., 0x00->0xFF):
+> 
+> 
+>   23 /* The product ID is defined as starting with 0x12nn, as per the
+>   24  * "Choosing an Apple Device USB Configuration" section in
+>   25  * release R9 (2012) of the "MFi Accessory Hardware
+> Specification"
+>   26  *
+>   27  * To distinguish an Apple device, a USB host can check the
+> device
+>   28  * descriptor of attached USB devices for the following fields:
+>   29  * - Vendor ID: 0x05AC
+>   30  * - Product ID: 0x12nn
+>   31  *
+>   32  * Those checks will be done in .match() and .probe().
+>   33  */
+> ...
+> 166 static int mfi_fc_probe(struct usb_device *udev)
+> 167 {
+> ...
+> 171
+> 172         idProduct = le16_to_cpu(udev->descriptor.idProduct);
+> 173         /* See comment above mfi_fc_id_table[] */
+> 174         if (idProduct < 0x1200 || idProduct > 0x12ff) {
+> 175                 return -ENODEV;
+> 176         }
+> 
+> A quick look at drivers/usb/core/driver.c::usb_match_device indicates
+> that it is not yet possible to specify ranges in ID tables of USB
+> drivers, so I think that we would need to replace the ID table with
+> a match function. Interestingly enough, the comment block quoted
+> above mentions the use of a match function as well.
 
-I hope I have come to the right place, otherwise let me know where I should=
- direct this question/problem.
+I have no idea why there isn't a match function. Patch v1 had a huge
+table:
+https://marc.info/?l=linux-usb&m=157062863431186&w=2
+and v2 already didn't had that comment, but no .match function:
+https://marc.info/?l=linux-usb&m=157114990905421&w=2
 
-I have a problem with using external monitors attached to a thunderbolt 3 d=
-ock (Dell, WD19TB) that is OS specific.
-The two external monitors attached via DisplayPorts to the dock are detecte=
-d and used automatically by PopOS/Ubuntu 20, Kernel 5.4 (default configurat=
-ion).
-However, Devuan Beowulf (Debian based) with the default or latest 5.8 Kerne=
-l does not detect the monitors and so they cannot be used.
+I'll prepare a patch that adds a match function. I'll let you (Vefa)
+look at which of your patches need backporting though, as I'm really
+quite a bit lost in the different patch sets and branches :/
 
-The docking station is authorised using the 'bolt' utility (https://gitlab.=
-freedesktop.org/bolt/bolt) for both PopOS and Devuan.
-
-# boltctl
-=E2=97=8F Dell WD19TB Thunderbolt Dock
-=C2=A0=C2=A0 =E2=94=9C=E2=94=80 type:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 peripheral
-=C2=A0=C2=A0 =E2=94=9C=E2=94=80 name:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 WD19TB Thunderbolt Dock
-=C2=A0=C2=A0 =E2=94=9C=E2=94=80 vendor:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 Dell
-=C2=A0=C2=A0 =E2=94=9C=E2=94=80 uuid:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 <UUID>
-=C2=A0=C2=A0 =E2=94=9C=E2=94=80 generation:=C2=A0=C2=A0=C2=A0 Thunderbolt 3
-=C2=A0=C2=A0 =E2=94=9C=E2=94=80 status:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 authorized
-=C2=A0=C2=A0 =E2=94=82=C2=A0 =E2=94=9C=E2=94=80 domain:=C2=A0=C2=A0=C2=
-=A0=C2=A0 <DOMAIN>
-=C2=A0=C2=A0 =E2=94=82=C2=A0 =E2=94=9C=E2=94=80 rx speed:=C2=A0=C2=A0 40 Gb=
-/s =3D 2 lanes * 20 Gb/s
-=C2=A0=C2=A0 =E2=94=82=C2=A0 =E2=94=9C=E2=94=80 tx speed:=C2=A0=C2=A0 40 Gb=
-/s =3D 2 lanes * 20 Gb/s
-=C2=A0=C2=A0 =E2=94=82=C2=A0 =E2=94=94=E2=94=80 authflags:=C2=A0 none
-=C2=A0=C2=A0 =E2=94=9C=E2=94=80 authorized:=C2=A0=C2=A0=C2=A0 Wed 07 Oct 20=
-20 09:01:32 UTC
-=C2=A0=C2=A0 =E2=94=9C=E2=94=80 connected:=C2=A0=C2=A0=C2=A0=C2=A0 Wed 21 O=
-ct 2020 19:43:20 UTC
-=C2=A0=C2=A0 =E2=94=94=E2=94=80 stored:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 Wed 07 Oct 2020 08:12:45 UTC
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =E2=94=9C=E2=94=80 policy:=C2=A0=C2=A0=C2=
-=A0=C2=A0 auto
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =E2=94=94=E2=94=80 key:=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 no
-
-Both popos and devuan detect the thunderbolt dock being connected and the d=
-ocks own USB hub.
-I can attached USB devices, like a USB camera, to the dock and it works in =
-both devaun and popos.
-
-There is nothing obvious in the popos or devuan logs that would
-indicate a major difference as to why the monitors don't work in devuan. Th=
-ere are no errors in the devuan logs to
-show why it does not detect the monitors (xrandr shows no extra connections=
- from the docking station when plugged in).
-
-Popos Xorg.0.log shows the monitors being attached when the dock is connect=
-ed to the laptop. Whilst nothing is
-logged in Xorg.0.log in the case of devuan.
-I can plug external monitors directly to the laptop via mini-dp and HDMI an=
-d they are detected and can be used to display an extended desktop.
-
-The only key difference I have found is by using '$ sudo ddcutil interrogat=
-e'.
-
-It shows that popos detects the DDC via i2c bus of the two external monitor=
-s, whilst devuan does not detect anything.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-PopOS with 5.4 kernel:
-
-*** Primary Check 1: Identify video card and driver ***
-
-Obtaining card and driver information from /sys...
-Primary video controller at PCI address 0000:00:02.0 (boot_vga flag is set)
-Device class: x030000 VGA compatible controller
-Vendor: x8086 Intel Corporation
-Device: x9b41 UHD Graphics
-Subvendor/Subdevice: 8086/2212 Intel Corporation
-Driver name: i915
-Driver version: Unable to determine
-I2C device: i2c-3 name: i915 gmbus dpc
-I2C device: i2c-8 name: DPMST
-I2C device: i2c-4 name: i915 gmbus misc
-I2C device: i2c-2 name: i915 gmbus dpb
-I2C device: i2c-9 name: DPMST
-I2C device: i2c-5 name: i915 gmbus dpd
-
-<SNIP>
-
-Examining /sys/bus/i2c/devices...
-/sys/bus/i2c/devices/i2c-3/name: i915 gmbus dpc
-/sys/bus/i2c/devices/i2c-1/name: Synopsys DesignWare I2C adapter
-/sys/bus/i2c/devices/i2c-8/name: DPMST
-/sys/bus/i2c/devices/i2c-6/name: DPDDC-A
-/sys/bus/i2c/devices/i2c-4/name: i915 gmbus misc
-/sys/bus/i2c/devices/i2c-2/name: i915 gmbus dpb
-/sys/bus/i2c/devices/i2c-0/name: SMBus I801 adapter at efa0
-/sys/bus/i2c/devices/i2c-9/name: DPMST
-/sys/bus/i2c/devices/i2c-7/name: DPDDC-B
-/sys/bus/i2c/devices/i2c-5/name: i915 gmbus dpd
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Devuan with 5.8 kernel:
-
-*** Primary Check 1: Identify video card and driver ***
-
-Obtaining card and driver information from /sys...
-Primary video controller at PCI address 0000:00:02.0 (boot_vga flag is set)
-Device class: x030000 VGA compatible controller
-Vendor: x8086 Intel Corporation
-Device: x9b41 UHD Graphics
-Subvendor/Subdevice: 8086/2212 Intel Corporation
-Driver name: i915
-Driver version: Unable to determine
-I2C device: i2c-3 name: i915 gmbus dpc
-I2C device: i2c-4 name: i915 gmbus misc
-I2C device: i2c-2 name: i915 gmbus dpb
-I2C device: i2c-5 name: i915 gmbus dpd
-
-<SNIP>
-
-Examining /sys/bus/i2c/devices...
-/sys/bus/i2c/devices/i2c-3/name: i915 gmbus dpc
-/sys/bus/i2c/devices/0-0050/name: ee1004
-(each_i2c_device ) Unexpected /sys/bus/i2c/devices file name: 0-0050
-/sys/bus/i2c/devices/i2c-1/name: Synopsys DesignWare I2C adapter
-/sys/bus/i2c/devices/i2c-6/name: AUX A/port A
-/sys/bus/i2c/devices/i2c-4/name: i915 gmbus misc
-/sys/bus/i2c/devices/i2c-2/name: i915 gmbus dpb
-/sys/bus/i2c/devices/i2c-0/name: SMBus I801 adapter at efa0
-/sys/bus/i2c/devices/i2c-7/name: AUX B/port B
-/sys/bus/i2c/devices/i2c-5/name: i915 gmbus dpd
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The kernel Thunderbolt documentation (https://www.kernel.org/doc/html/v5.4/=
-admin-guide/thunderbolt.html) does not show how to
-debug problems like this.
-
-Q1. How to turn on debugging in the kernel and/or modules to provide more i=
-nformation about the connection process and why it fails?
-
-Q2. How does the kernel detect DP/HDMI ports through the thunderbolt 3 dock=
-? I.e. What is meant to happen and should be seen in the logs or /sys/bus/i=
-2c/devices, etc?
-
-Q3. Is there any documentation on how the USB/DP/HDMI/Thunderbolt 3/dock sy=
-stem work? Thunderspy.io was the only place I could find decent description=
- of the architecture.
-
-Any advice appreciated.
