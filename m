@@ -2,108 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACFD295062
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 18:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31079295086
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 18:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502765AbgJUQGR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Oct 2020 12:06:17 -0400
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:52203 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2502762AbgJUQGR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 12:06:17 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1171A5C0227;
-        Wed, 21 Oct 2020 12:06:16 -0400 (EDT)
-Received: from imap10 ([10.202.2.60])
-  by compute4.internal (MEProxy); Wed, 21 Oct 2020 12:06:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=septs.pw; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm1; bh=7iRL84+Ugv9Vl9dV9rOTDR1uJK/G0lb
-        YzOiNJlNesBs=; b=lMAYadK9oedM3ADQN3HgvxQupxAGq+sjvh8fTrQ+ErpWZTt
-        7N0Srt9VuD1HfNbu5zpmv525bgR6jVCmNqOBLksveuWa+VNyQP1T/8puMU4xk4XM
-        JRfjIGsdffiXnGpg/SGGQZYnDkoPiPktEzwPQUdf3boKmt3yjhN8B6cyHaZaBLBJ
-        x9e6bmy0bXy6b7l1uiHEXDv3wjxiGRRh24lovzCp7wju8SsauIFFSMKFw1MpSMIG
-        a6wwsovuopN2PTJkmfJU+7mHqLc4eP2aqq8cNHsHR3uxHJlVEIj9LG5QWidl8ipC
-        UbxOomOSdhfd3rVxTGKrhOwf0GEqPti/jvJ+LUQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=7iRL84
-        +Ugv9Vl9dV9rOTDR1uJK/G0lbYzOiNJlNesBs=; b=Vi2VixV6tcSH2dRgDgw2f6
-        hE6OzcweT9Wi3khf9uxE2/uS1c0wAB7LsUIp/35xX1gWPzCMduDk0LlLsEDAlinR
-        Y2ATQoqA7a69iYQZmHog7ds4GLcej7q66Arz2cZpxOEVneKp3Kc4eT7GfQvVoRfV
-        C+bBBoJp746W49SkWQq5rayNN2x5eeTsB9RgLeMgEQfTSpnNAbXuEWZQlTJ3xykL
-        t4dK/DG2NrXs3sTMsC4MBH3KD65JUepIpxbPhHPGsVboG4+mwUWaMbgDViNDhHUz
-        REp6MpIIWKnooYnOo6eBQjlNzXjExvX/RzIoseHeWXsi2N59xsyrGWpM/r1etmeA
-        ==
-X-ME-Sender: <xms:d1yQXyAeNmAQMErFfo3rbtIrJxDySO1GNY91082lEimpcobRoJOYQA>
-    <xme:d1yQX8ivkWOaXCb-K3MDRxHhfYsRjV0kuKtk9bHXRhqBsjra9QYjea9txxHuz2zBS
-    rdzhLt3Vd95Hqk3mw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrjeehgdeljecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculdduhedmnecujfgurhepofgfggfkjghffffhvffutgesthdtredtreer
-    jeenucfhrhhomhepfdgkihihihcuvegrohdfuceokhgvrhhnvghlsehsvghpthhsrdhpfi
-    eqnecuggftrfgrthhtvghrnhepkeeihefgjeefleetveefudeihffgkeejgfejkedttdej
-    feegkeduleekueegveelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepkhgvrhhnvghlsehsvghpthhsrdhpfi
-X-ME-Proxy: <xmx:d1yQX1ngtbz8nI3sxYTgnpo23ombql6sox5k2IBwxDw8JhtNcU5zIQ>
-    <xmx:d1yQXwzo7wXhqZ2prtmphbkpnW-Fq8JIG1XJf3f94XzTaYZBq_NP_g>
-    <xmx:d1yQX3RZ9KCkMaLArZIhCWvhfdQVFnragcBYIxn6Mz1AWuuVhL77sw>
-    <xmx:eFyQX-JoH96LZO9gOnnKOw6rtOk6o5ESMovi5hDS6_s0CgwA8V3WxQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AF5D120075; Wed, 21 Oct 2020 12:06:15 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-502-gfef6c88-fm-20201019.001-gfef6c888
-Mime-Version: 1.0
-Message-Id: <209b0a93-ff0e-4e1a-b180-92e8f6214fb2@www.fastmail.com>
-In-Reply-To: <17f8a2a3-ce0f-4be7-8544-8fdf286907d0@www.fastmail.com>
-References: <17f8a2a3-ce0f-4be7-8544-8fdf286907d0@www.fastmail.com>
-Date:   Thu, 22 Oct 2020 00:05:55 +0800
-From:   "Ziyi Cao" <kernel@septs.pw>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     "Johan Hovold" <johan@kernel.org>, linux-usb@vger.kernel.org,
+        id S2502917AbgJUQOE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Oct 2020 12:14:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57572 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2395293AbgJUQOE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Oct 2020 12:14:04 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5830F2087D;
+        Wed, 21 Oct 2020 16:14:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603296844;
+        bh=i2r8+LLdXk82cLTC6WhfL3hmWJYUtjMthlbx3M7e3vU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J7mQu3kONyq4FHBUhDPUDm7RWPDAkDIlY0FUuRhTIoILQOeGMgizsR/oKvnIRDjHc
+         eW2E8gEiIzI2zdX2F5PlBlyeNwMmNPPyhSrHrG5BqzLzGnymTzCpRb5aezXiTsPeT9
+         dxJWmvktmRa5Qs2kuXLD1Hb0DEe+XeW1ib2RLRR0=
+Date:   Wed, 21 Oct 2020 18:14:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ziyi Cao <kernel@septs.pw>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: =?UTF-8?Q?Re:_[PATCH_1/1]_usb:_serial:_option:_add_Quectel_EC200T_module?=
- =?UTF-8?Q?_support?=
-Content-Type: text/plain
+Subject: Re: [PATCH 1/1] usb: serial: option: add Quectel EC200T module
+ support
+Message-ID: <20201021161443.GA1197225@kroah.com>
+References: <17f8a2a3-ce0f-4be7-8544-8fdf286907d0@www.fastmail.com>
+ <209b0a93-ff0e-4e1a-b180-92e8f6214fb2@www.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <209b0a93-ff0e-4e1a-b180-92e8f6214fb2@www.fastmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Request to accept this patch, thanks.
+On Thu, Oct 22, 2020 at 12:05:55AM +0800, Ziyi Cao wrote:
+> Request to accept this patch, thanks.
+> 
+> On Tue, Oct 20, 2020, at 00:08, Ziyi Cao wrote:
 
-On Tue, Oct 20, 2020, at 00:08, Ziyi Cao wrote:
-> Add usb product id of the Quectel EC200T module.
-> 
-> Signed-off-by: Ziyi Cao <kernel@septs.pw>
-> ---
->  drivers/usb/serial/option.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 2a3bfd6f8..7e879233b 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -250,6 +250,7 @@ static void option_instat_callback(struct urb *urb);
->  #define QUECTEL_PRODUCT_EP06			0x0306
->  #define QUECTEL_PRODUCT_EM12			0x0512
->  #define QUECTEL_PRODUCT_RM500Q			0x0800
-> +#define QUECTEL_PRODUCT_EC200T			0x6026
->  
->  #define CMOTECH_VENDOR_ID			0x16d8
->  #define CMOTECH_PRODUCT_6001			0x6001
-> @@ -1117,6 +1118,7 @@ static const struct usb_device_id option_ids[] = {
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, 
-> QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, 
-> QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
->  	  .driver_info = ZLP },
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, 
-> QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
->  
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
-> -- 
-> 2.25.1
->
+It's been less than days, in the middle of the merge window, when we are
+all totally busy and we can't take patches anyway.
+
+Please relax, there is no rush.  If, after 2 weeks of not hearing
+anything, then it is ok to ask what is up with a patch, or to resend it.
+
+But to top-post after 1 1/2 days?  That's a recipe to get your patch
+ignored :(
+
+thanks,
+
+greg k-h
