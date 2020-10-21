@@ -2,209 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6778F2946CA
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 05:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5EF2946E2
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 05:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406573AbgJUDAw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Oct 2020 23:00:52 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:32014 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2406510AbgJUDAw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 23:00:52 -0400
-X-UUID: bfdcb39a477d4622842528e573a75b07-20201021
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=/iKtVrC60W8Ht9PLV1xcIWqrBacl7AEML6GCLswWhVg=;
-        b=O5gyu5GO8o7RPPeVjRzKjyxJ3d+NlctHg+//xdF2fPsU2+SMY3lJwMXeeYeG1JiWU4LrByHSq3i6C88irBwEETdQnHDoipxT2bV6It25I1Tckr1C7Oj3IPbOD7XtVT4KzEoRr6vxKOTCoUD1/XD+BWvi7yqbKhVHDHEQIT5Atoc=;
-X-UUID: bfdcb39a477d4622842528e573a75b07-20201021
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1349775153; Wed, 21 Oct 2020 11:00:41 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 21 Oct
- 2020 11:00:37 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 21 Oct 2020 11:00:36 +0800
-Message-ID: <1603249236.31607.9.camel@mhfsdcap03>
-Subject: Re: [PATCH v3 01/16] dt-bindings: usb: usb-hcd: Convert generic USB
- properties to DT schema
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Date:   Wed, 21 Oct 2020 11:00:36 +0800
-In-Reply-To: <20201020112101.19077-2-Sergey.Semin@baikalelectronics.ru>
-References: <20201020112101.19077-1-Sergey.Semin@baikalelectronics.ru>
-         <20201020112101.19077-2-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S2406398AbgJUDRY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Oct 2020 23:17:24 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:39859 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406353AbgJUDRY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Oct 2020 23:17:24 -0400
+Received: by mail-io1-f67.google.com with SMTP id q9so1192928iow.6
+        for <linux-usb@vger.kernel.org>; Tue, 20 Oct 2020 20:17:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w/LxdK/NaucqVJsYsOzw9rnbT5Epww9H8oV27v56zZ4=;
+        b=JTgAq8nPAJZG/A+ua1QPKeIb79LVCCzku1F/M2OYhyOMDiuqJpthoYJeufkVy5xMCw
+         7ZyZodZ3Z4WobzlllSknm5La8NOfUpLxzP9i9UGOJfnd4vFXkm4om9IIDGWSHPQDHuCv
+         5LbGdcRuMVYdcwkEU3zoxAYci5F2m6D2n1qBlnRohufWP8oq7DTePPh24lCPkBcWhwfE
+         1rMC3kXvzoWqtJK48yYxUZVvFBKyWgvRa7+GP6SJYVbRP3htG8uWp5LMoN+MNAkBW0bz
+         dQiZ8Au3SY6FCpno7GePhR0peTqBhemIBA2A6u3Bly7vvSemrnqAGVEW8ZExnADDNHiu
+         aG2w==
+X-Gm-Message-State: AOAM532UH4D3jSInrYZe0Zug1lPc+NWGTeJJBUdl82CHjNE0YIsNHKBB
+        iqbM1EcaGQGxkzzfk17crVIbiFXO4GZQPFHr
+X-Google-Smtp-Source: ABdhPJy6SM2qyF3KSKwaYL584R7Z//ZgSDgOLR9gVpyIUNtEzqz3icz66W7RhItmgSu2f1aJl6SbRg==
+X-Received: by 2002:a05:6602:2d85:: with SMTP id k5mr1058669iow.165.1603250242441;
+        Tue, 20 Oct 2020 20:17:22 -0700 (PDT)
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com. [209.85.166.169])
+        by smtp.gmail.com with ESMTPSA id a6sm408587ili.11.2020.10.20.20.17.22
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2020 20:17:22 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id l16so939547ilj.9
+        for <linux-usb@vger.kernel.org>; Tue, 20 Oct 2020 20:17:22 -0700 (PDT)
+X-Received: by 2002:a92:9e94:: with SMTP id s20mr896629ilk.102.1603250241718;
+ Tue, 20 Oct 2020 20:17:21 -0700 (PDT)
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 3C612C300D75B9D840779466513725D6819DC7FF11D1B86F2C1C754B59618B642000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com>
+ <20201017200200.GB842001@rowland.harvard.edu> <CAE3RAxvNUvzqKT+GK3A4cQ7Tm_tFRQJKfJ01r0ic-5066fikDA@mail.gmail.com>
+ <20201019174028.GF898631@rowland.harvard.edu> <cf1e7059-e1d2-2e7a-89c1-0c162850fbb4@runbox.com>
+In-Reply-To: <cf1e7059-e1d2-2e7a-89c1-0c162850fbb4@runbox.com>
+From:   Pany <pany@fedoraproject.org>
+Date:   Wed, 21 Oct 2020 03:17:10 +0000
+X-Gmail-Original-Message-ID: <CAE3RAxuX6SBKx22q6XZ7wTVYQNzJqZ=2Vsc4jOqK3V2-mgYOqQ@mail.gmail.com>
+Message-ID: <CAE3RAxuX6SBKx22q6XZ7wTVYQNzJqZ=2Vsc4jOqK3V2-mgYOqQ@mail.gmail.com>
+Subject: Re: Bug caused by 53965c79c2db (USB: Fix device driver race)
+To:     "M. Vefa Bicakci" <m.v.b@runbox.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTEwLTIwIGF0IDE0OjIwICswMzAwLCBTZXJnZSBTZW1pbiB3cm90ZToNCj4g
-VGhlIGdlbmVyaWMgVVNCIEhDRCBwcm9wZXJ0aWVzIGhhdmUgYmVlbiBkZXNjcmliZWQgaW4gdGhl
-IGxlZ2FjeSBiaW5kaW5ncw0KPiB0ZXh0IGZpbGU6IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
-aW5kaW5ncy91c2IvZ2VuZXJpYy50eHQgLiBMZXQncw0KPiBjb252ZXJ0IGl0JyBjb250ZW50IGlu
-dG8gdGhlIFVTQiBIQ0QgRFQgc2NoZW1hIHByb3BlcnRpZXMgc28gYWxsIFVTQiBEVA0KICAgICAg
-ICAgIF4gaXRzPw0KPiBub2RlcyB3b3VsZCBiZSB2YWxpZGF0ZWQgdG8gaGF2ZSB0aGVtIHByb3Bl
-cmx5IHV0aWxpemVkLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogU2VyZ2UgU2VtaW4gPFNlcmdleS5T
-ZW1pbkBiYWlrYWxlbGVjdHJvbmljcy5ydT4NCj4gUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5nIDxy
-b2JoQGtlcm5lbC5vcmc+DQo+IA0KPiAtLS0NCj4gDQo+IENoYW5nZWxvZyB2MjoNCj4gLSBEaXNj
-YXJkICd8JyBpbiBhbGwgdGhlIG5ldyBwcm9wZXJ0aWVzLCBzaW5jZSB3ZSBkb24ndCBuZWVkIHRv
-IHByZXNlcnZlDQo+ICAgdGhlIHRleHQgZm9ybWF0dGluZy4NCj4gLSBDb252ZXJ0IGFiYnJldmlh
-dGVkIGZvcm0gb2YgdGhlICJtYXhpbXVtLXNwZWVkIiBlbnVtIHJlc3RyaWN0aW9uIGludG8NCj4g
-ICB0aGUgbXVsdGktbGluZWQgdmVyc2lvbiBvZiB0aGUgbGlzdC4NCj4gLSBEcm9wIHF1b3RlcyBm
-cm9tIGFyb3VuZCB0aGUgc3RyaW5nIGNvbnN0YW50cy4NCj4gLS0tDQo+ICAuLi4vZGV2aWNldHJl
-ZS9iaW5kaW5ncy91c2IvZ2VuZXJpYy50eHQgICAgICAgfCA1NyAtLS0tLS0tLS0tLS0NCj4gIC4u
-Li9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91c2ItaGNkLnlhbWwgICAgICB8IDg4ICsrKysrKysr
-KysrKysrKysrKysNCkRvIHdlIG5lZWQgY2hhbmdlIHRoZSBmaWxlIG5hbWUgb3IgbW9kaWZ5IGl0
-J3MgdGl0bGU/DQp0aGUgdGl0bGUgaXMgIkdlbmVyaWMgVVNCIEhvc3QgQ29udHJvbGxlciBEZXZp
-Y2UgVHJlZSBCaW5kaW5ncyIsIGJ1dA0Kc29tZSBnZW5lcmljIHByb3BlcnRpZXMsIHN1Y2ggYXMs
-IGRyX21vZGUsIHVzYi1yb2xlLXN3aXRjaCwgb3RnIHJlbGF0ZWQNCm9uZXMsIGFyZSB1c3VhbGx5
-IHVzZWQgYnkgRFJEIGNvbnRyb2xsZXIsIHRoaXMgbWF5IGNhdXNlIHNvbWUgY29uZnVzaW9uLg0K
-DQo+ICAyIGZpbGVzIGNoYW5nZWQsIDg4IGluc2VydGlvbnMoKyksIDU3IGRlbGV0aW9ucygtKQ0K
-PiAgZGVsZXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91
-c2IvZ2VuZXJpYy50eHQNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRy
-ZWUvYmluZGluZ3MvdXNiL2dlbmVyaWMudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL3VzYi9nZW5lcmljLnR4dA0KPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5k
-ZXggYmE0NzJlN2FlZmM5Li4wMDAwMDAwMDAwMDANCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL3VzYi9nZW5lcmljLnR4dA0KPiArKysgL2Rldi9udWxsDQo+IEBAIC0x
-LDU3ICswLDAgQEANCj4gLUdlbmVyaWMgVVNCIFByb3BlcnRpZXMNCj4gLQ0KPiAtT3B0aW9uYWwg
-cHJvcGVydGllczoNCj4gLSAtIG1heGltdW0tc3BlZWQ6IHRlbGxzIFVTQiBjb250cm9sbGVycyB3
-ZSB3YW50IHRvIHdvcmsgdXAgdG8gYSBjZXJ0YWluDQo+IC0JCQlzcGVlZC4gVmFsaWQgYXJndW1l
-bnRzIGFyZSAic3VwZXItc3BlZWQtcGx1cyIsDQo+IC0JCQkic3VwZXItc3BlZWQiLCAiaGlnaC1z
-cGVlZCIsICJmdWxsLXNwZWVkIiBhbmQNCj4gLQkJCSJsb3ctc3BlZWQiLiBJbiBjYXNlIHRoaXMg
-aXNuJ3QgcGFzc2VkIHZpYSBEVCwgVVNCDQo+IC0JCQljb250cm9sbGVycyBzaG91bGQgZGVmYXVs
-dCB0byB0aGVpciBtYXhpbXVtIEhXDQo+IC0JCQljYXBhYmlsaXR5Lg0KPiAtIC0gZHJfbW9kZTog
-dGVsbHMgRHVhbC1Sb2xlIFVTQiBjb250cm9sbGVycyB0aGF0IHdlIHdhbnQgdG8gd29yayBvbiBh
-DQo+IC0JCQlwYXJ0aWN1bGFyIG1vZGUuIFZhbGlkIGFyZ3VtZW50cyBhcmUgImhvc3QiLA0KPiAt
-CQkJInBlcmlwaGVyYWwiIGFuZCAib3RnIi4gSW4gY2FzZSB0aGlzIGF0dHJpYnV0ZSBpc24ndA0K
-PiAtCQkJcGFzc2VkIHZpYSBEVCwgVVNCIERSRCBjb250cm9sbGVycyBzaG91bGQgZGVmYXVsdCB0
-bw0KPiAtCQkJT1RHLg0KPiAtIC0gcGh5X3R5cGU6IHRlbGxzIFVTQiBjb250cm9sbGVycyB0aGF0
-IHdlIHdhbnQgdG8gY29uZmlndXJlIHRoZSBjb3JlIHRvIHN1cHBvcnQNCj4gLQkJCWEgVVRNSSsg
-UEhZIHdpdGggYW4gOC0gb3IgMTYtYml0IGludGVyZmFjZSBpZiBVVE1JKyBpcw0KPiAtCQkJc2Vs
-ZWN0ZWQuIFZhbGlkIGFyZ3VtZW50cyBhcmUgInV0bWkiIGFuZCAidXRtaV93aWRlIi4NCj4gLQkJ
-CUluIGNhc2UgdGhpcyBpc24ndCBwYXNzZWQgdmlhIERULCBVU0IgY29udHJvbGxlcnMgc2hvdWxk
-DQo+IC0JCQlkZWZhdWx0IHRvIEhXIGNhcGFiaWxpdHkuDQo+IC0gLSBvdGctcmV2OiB0ZWxscyB1
-c2IgZHJpdmVyIHRoZSByZWxlYXNlIG51bWJlciBvZiB0aGUgT1RHIGFuZCBFSCBzdXBwbGVtZW50
-DQo+IC0JCQl3aXRoIHdoaWNoIHRoZSBkZXZpY2UgYW5kIGl0cyBkZXNjcmlwdG9ycyBhcmUgY29t
-cGxpYW50LA0KPiAtCQkJaW4gYmluYXJ5LWNvZGVkIGRlY2ltYWwgKGkuZS4gMi4wIGlzIDAyMDBI
-KS4gVGhpcw0KPiAtCQkJcHJvcGVydHkgaXMgdXNlZCBpZiBhbnkgcmVhbCBPVEcgZmVhdHVyZXMo
-SE5QL1NSUC9BRFApDQo+IC0JCQlpcyBlbmFibGVkLCBpZiBBRFAgaXMgcmVxdWlyZWQsIG90Zy1y
-ZXYgc2hvdWxkIGJlDQo+IC0JCQkweDAyMDAgb3IgYWJvdmUuDQo+IC0gLSBjb21wYW5pb246IHBo
-YW5kbGUgb2YgYSBjb21wYW5pb24NCj4gLSAtIGhucC1kaXNhYmxlOiB0ZWxscyBPVEcgY29udHJv
-bGxlcnMgd2Ugd2FudCB0byBkaXNhYmxlIE9URyBITlAsIG5vcm1hbGx5IEhOUA0KPiAtCQkJaXMg
-dGhlIGJhc2ljIGZ1bmN0aW9uIG9mIHJlYWwgT1RHIGV4Y2VwdCB5b3Ugd2FudCBpdA0KPiAtCQkJ
-dG8gYmUgYSBzcnAtY2FwYWJsZSBvbmx5IEIgZGV2aWNlLg0KPiAtIC0gc3JwLWRpc2FibGU6IHRl
-bGxzIE9URyBjb250cm9sbGVycyB3ZSB3YW50IHRvIGRpc2FibGUgT1RHIFNSUCwgU1JQIGlzDQo+
-IC0JCQlvcHRpb25hbCBmb3IgT1RHIGRldmljZS4NCj4gLSAtIGFkcC1kaXNhYmxlOiB0ZWxscyBP
-VEcgY29udHJvbGxlcnMgd2Ugd2FudCB0byBkaXNhYmxlIE9URyBBRFAsIEFEUCBpcw0KPiAtCQkJ
-b3B0aW9uYWwgZm9yIE9URyBkZXZpY2UuDQo+IC0gLSB1c2Itcm9sZS1zd2l0Y2g6IGJvb2xlYW4s
-IGluZGljYXRlcyB0aGF0IHRoZSBkZXZpY2UgaXMgY2FwYWJsZSBvZiBhc3NpZ25pbmcNCj4gLQkJ
-CXRoZSBVU0IgZGF0YSByb2xlIChVU0IgaG9zdCBvciBVU0IgZGV2aWNlKSBmb3IgYSBnaXZlbg0K
-PiAtCQkJVVNCIGNvbm5lY3Rvciwgc3VjaCBhcyBUeXBlLUMsIFR5cGUtQihtaWNybykuDQo+IC0J
-CQlzZWUgY29ubmVjdG9yL3VzYi1jb25uZWN0b3IueWFtbC4NCj4gLSAtIHJvbGUtc3dpdGNoLWRl
-ZmF1bHQtbW9kZTogaW5kaWNhdGluZyBpZiB1c2Itcm9sZS1zd2l0Y2ggaXMgZW5hYmxlZCwgdGhl
-DQo+IC0JCQlkZXZpY2UgZGVmYXVsdCBvcGVyYXRpb24gbW9kZSBvZiBjb250cm9sbGVyIHdoaWxl
-IHVzYg0KPiAtCQkJcm9sZSBpcyBVU0JfUk9MRV9OT05FLiBWYWxpZCBhcmd1bWVudHMgYXJlICJo
-b3N0IiBhbmQNCj4gLQkJCSJwZXJpcGhlcmFsIi4gRGVmYXVsdHMgdG8gInBlcmlwaGVyYWwiIGlm
-IG5vdA0KPiAtCQkJc3BlY2lmaWVkLg0KPiAtDQo+IC0NCj4gLVRoaXMgaXMgYW4gYXR0cmlidXRl
-IHRvIGEgVVNCIGNvbnRyb2xsZXIgc3VjaCBhczoNCj4gLQ0KPiAtZHdjM0A0YTAzMDAwMCB7DQo+
-IC0JY29tcGF0aWJsZSA9ICJzeW5vcHN5cyxkd2MzIjsNCj4gLQlyZWcgPSA8MHg0YTAzMDAwMCAw
-eGNmZmY+Ow0KPiAtCWludGVycnVwdHMgPSA8MCA5MiA0Pg0KPiAtCXVzYi1waHkgPSA8JnVzYjJf
-cGh5PiwgPCZ1c2IzLHBoeT47DQo+IC0JbWF4aW11bS1zcGVlZCA9ICJzdXBlci1zcGVlZCI7DQo+
-IC0JZHJfbW9kZSA9ICJvdGciOw0KPiAtCXBoeV90eXBlID0gInV0bWlfd2lkZSI7DQo+IC0Jb3Rn
-LXJldiA9IDwweDAyMDA+Ow0KPiAtCWFkcC1kaXNhYmxlOw0KPiAtfTsNCj4gZGlmZiAtLWdpdCBh
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWhjZC55YW1sIGIvRG9j
-dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91c2ItaGNkLnlhbWwNCj4gaW5kZXgg
-NzI2M2I3ZjJiNTEwLi5lZTdlYTIwNWM3MWQgMTAwNjQ0DQo+IC0tLSBhL0RvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWhjZC55YW1sDQo+ICsrKyBiL0RvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWhjZC55YW1sDQo+IEBAIC0yMiw5ICsyMiw5
-NyBAQCBwcm9wZXJ0aWVzOg0KPiAgICAgIGRlc2NyaXB0aW9uOg0KPiAgICAgICAgTmFtZSBzcGVj
-aWZpZXIgZm9yIHRoZSBVU0IgUEhZDQo+ICANCj4gKyAgbWF4aW11bS1zcGVlZDoNCj4gKyAgIGRl
-c2NyaXB0aW9uOg0KPiArICAgICBUZWxscyBVU0IgY29udHJvbGxlcnMgd2Ugd2FudCB0byB3b3Jr
-IHVwIHRvIGEgY2VydGFpbiBzcGVlZC4gSW4gY2FzZSB0aGlzDQo+ICsgICAgIGlzbid0IHBhc3Nl
-ZCB2aWEgRFQsIFVTQiBjb250cm9sbGVycyBzaG91bGQgZGVmYXVsdCB0byB0aGVpciBtYXhpbXVt
-IEhXDQo+ICsgICAgIGNhcGFiaWxpdHkuDQo+ICsgICAkcmVmOiAvc2NoZW1hcy90eXBlcy55YW1s
-Iy9kZWZpbml0aW9ucy9zdHJpbmcNCj4gKyAgIGVudW06DQo+ICsgICAgIC0gbG93LXNwZWVkDQo+
-ICsgICAgIC0gZnVsbC1zcGVlZA0KPiArICAgICAtIGhpZ2gtc3BlZWQNCj4gKyAgICAgLSBzdXBl
-ci1zcGVlZA0KPiArICAgICAtIHN1cGVyLXNwZWVkLXBsdXMNCj4gKw0KPiArICBkcl9tb2RlOg0K
-PiArICAgIGRlc2NyaXB0aW9uOg0KPiArICAgICAgVGVsbHMgRHVhbC1Sb2xlIFVTQiBjb250cm9s
-bGVycyB0aGF0IHdlIHdhbnQgdG8gd29yayBvbiBhIHBhcnRpY3VsYXINCj4gKyAgICAgIG1vZGUu
-IEluIGNhc2UgdGhpcyBhdHRyaWJ1dGUgaXNuJ3QgcGFzc2VkIHZpYSBEVCwgVVNCIERSRCBjb250
-cm9sbGVycw0KPiArICAgICAgc2hvdWxkIGRlZmF1bHQgdG8gT1RHLg0KPiArICAgICRyZWY6IC9z
-Y2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3N0cmluZw0KPiArICAgIGVudW06IFtob3N0
-LCBwZXJpcGhlcmFsLCBvdGddDQo+ICsNCj4gKyAgcGh5X3R5cGU6DQo+ICsgICAgZGVzY3JpcHRp
-b246DQo+ICsgICAgICBUZWxscyBVU0IgY29udHJvbGxlcnMgdGhhdCB3ZSB3YW50IHRvIGNvbmZp
-Z3VyZSB0aGUgY29yZSB0byBzdXBwb3J0IGENCj4gKyAgICAgIFVUTUkrIFBIWSB3aXRoIGFuIDgt
-IG9yIDE2LWJpdCBpbnRlcmZhY2UgaWYgVVRNSSsgaXMgc2VsZWN0ZWQuIEluIGNhc2UNCj4gKyAg
-ICAgIHRoaXMgaXNuJ3QgcGFzc2VkIHZpYSBEVCwgVVNCIGNvbnRyb2xsZXJzIHNob3VsZCBkZWZh
-dWx0IHRvIEhXDQo+ICsgICAgICBjYXBhYmlsaXR5Lg0KPiArICAgICRyZWY6IC9zY2hlbWFzL3R5
-cGVzLnlhbWwjL2RlZmluaXRpb25zL3N0cmluZw0KPiArICAgIGVudW06IFt1dG1pLCB1dG1pX3dp
-ZGVdDQo+ICsNCj4gKyAgb3RnLXJldjoNCj4gKyAgICBkZXNjcmlwdGlvbjoNCj4gKyAgICAgIFRl
-bGxzIHVzYiBkcml2ZXIgdGhlIHJlbGVhc2UgbnVtYmVyIG9mIHRoZSBPVEcgYW5kIEVIIHN1cHBs
-ZW1lbnQgd2l0aA0KPiArICAgICAgd2hpY2ggdGhlIGRldmljZSBhbmQgaXRzIGRlc2NyaXB0b3Jz
-IGFyZSBjb21wbGlhbnQsIGluIGJpbmFyeS1jb2RlZA0KPiArICAgICAgZGVjaW1hbCAoaS5lLiAy
-LjAgaXMgMDIwMEgpLiBUaGlzIHByb3BlcnR5IGlzIHVzZWQgaWYgYW55IHJlYWwgT1RHDQo+ICsg
-ICAgICBmZWF0dXJlcyAoSE5QL1NSUC9BRFApIGlzIGVuYWJsZWQuIElmIEFEUCBpcyByZXF1aXJl
-ZCwgb3RnLXJldiBzaG91bGQgYmUNCj4gKyAgICAgIDB4MDIwMCBvciBhYm92ZS4NCj4gKyAgICAk
-cmVmOiAvc2NoZW1hcy90eXBlcy55YW1sIy9kZWZpbml0aW9ucy91aW50MzINCj4gKw0KPiArICBj
-b21wYW5pb246DQo+ICsgICAgZGVzY3JpcHRpb246IFBoYW5kbGUgb2YgYSBjb21wYW5pb24gZGV2
-aWNlDQo+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvcGhhbmRs
-ZQ0KPiArDQo+ICsgIGhucC1kaXNhYmxlOg0KPiArICAgIGRlc2NyaXB0aW9uOg0KPiArICAgICAg
-VGVsbHMgT1RHIGNvbnRyb2xsZXJzIHdlIHdhbnQgdG8gZGlzYWJsZSBPVEcgSE5QLiBOb3JtYWxs
-eSBITlAgaXMgdGhlDQo+ICsgICAgICBiYXNpYyBmdW5jdGlvbiBvZiByZWFsIE9URyBleGNlcHQg
-eW91IHdhbnQgaXQgdG8gYmUgYSBzcnAtY2FwYWJsZSBvbmx5IEINCj4gKyAgICAgIGRldmljZS4N
-Cj4gKyAgICB0eXBlOiBib29sZWFuDQo+ICsNCj4gKyAgc3JwLWRpc2FibGU6DQo+ICsgICAgZGVz
-Y3JpcHRpb246DQo+ICsgICAgICBUZWxscyBPVEcgY29udHJvbGxlcnMgd2Ugd2FudCB0byBkaXNh
-YmxlIE9URyBTUlAuIFNSUCBpcyBvcHRpb25hbCBmb3IgT1RHDQo+ICsgICAgICBkZXZpY2UuDQo+
-ICsgICAgdHlwZTogYm9vbGVhbg0KPiArDQo+ICsgIGFkcC1kaXNhYmxlOg0KPiArICAgIGRlc2Ny
-aXB0aW9uOg0KPiArICAgICAgVGVsbHMgT1RHIGNvbnRyb2xsZXJzIHdlIHdhbnQgdG8gZGlzYWJs
-ZSBPVEcgQURQLiBBRFAgaXMgb3B0aW9uYWwgZm9yIE9URw0KPiArICAgICAgZGV2aWNlLg0KPiAr
-ICAgIHR5cGU6IGJvb2xlYW4NCj4gKw0KPiArICB1c2Itcm9sZS1zd2l0Y2g6DQo+ICsgICAgZGVz
-Y3JpcHRpb246DQo+ICsgICAgICBJbmRpY2F0ZXMgdGhhdCB0aGUgZGV2aWNlIGlzIGNhcGFibGUg
-b2YgYXNzaWduaW5nIHRoZSBVU0IgZGF0YSByb2xlDQo+ICsgICAgICAoVVNCIGhvc3Qgb3IgVVNC
-IGRldmljZSkgZm9yIGEgZ2l2ZW4gVVNCIGNvbm5lY3Rvciwgc3VjaCBhcyBUeXBlLUMsDQo+ICsg
-ICAgICBUeXBlLUIobWljcm8pLiBTZWUgY29ubmVjdG9yL3VzYi1jb25uZWN0b3IueWFtbC4NCj4g
-Kw0KPiArICByb2xlLXN3aXRjaC1kZWZhdWx0LW1vZGU6DQo+ICsgICAgZGVzY3JpcHRpb246DQo+
-ICsgICAgICBJbmRpY2F0ZXMgaWYgdXNiLXJvbGUtc3dpdGNoIGlzIGVuYWJsZWQsIHRoZSBkZXZp
-Y2UgZGVmYXVsdCBvcGVyYXRpb24NCj4gKyAgICAgIG1vZGUgb2YgY29udHJvbGxlciB3aGlsZSB1
-c2Igcm9sZSBpcyBVU0JfUk9MRV9OT05FLg0KPiArICAgICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlh
-bWwjL2RlZmluaXRpb25zL3N0cmluZw0KPiArICAgIGVudW06IFtob3N0LCBwZXJpcGhlcmFsXQ0K
-PiArICAgIGRlZmF1bHQ6IHBlcmlwaGVyYWwNCj4gKw0KPiAgZXhhbXBsZXM6DQo+ICAgIC0gfA0K
-PiAgICAgIHVzYiB7DQo+ICAgICAgICAgIHBoeXMgPSA8JnVzYjJfcGh5MT4sIDwmdXNiM19waHkx
-PjsNCj4gICAgICAgICAgcGh5LW5hbWVzID0gInVzYiI7DQo+ICAgICAgfTsNCj4gKyAgLSB8DQo+
-ICsgICAgdXNiQDRhMDMwMDAwIHsNCj4gKyAgICAgICAgY29tcGF0aWJsZSA9ICJzbnBzLGR3YzMi
-Ow0KPiArICAgICAgICByZWcgPSA8MHg0YTAzMDAwMCAweGNmZmY+Ow0KPiArICAgICAgICBpbnRl
-cnJ1cHRzID0gPDAgOTIgND47DQo+ICsgICAgICAgIHVzYi1waHkgPSA8JnVzYjJfcGh5PiwgPCZ1
-c2IzX3BoeT47DQo+ICsgICAgICAgIG1heGltdW0tc3BlZWQgPSAic3VwZXItc3BlZWQiOw0KPiAr
-ICAgICAgICBkcl9tb2RlID0gIm90ZyI7DQo+ICsgICAgICAgIHBoeV90eXBlID0gInV0bWlfd2lk
-ZSI7DQo+ICsgICAgICAgIG90Zy1yZXYgPSA8MHgwMjAwPjsNCj4gKyAgICAgICAgYWRwLWRpc2Fi
-bGU7DQo+ICsgICAgfTsNCg0K
+Thank you so much for guiding me!
 
+On Tue, Oct 20, 2020 at 12:04 PM M. Vefa Bicakci <m.v.b@runbox.com> wrote:
+>
+> On 19/10/2020 13.40, Alan Stern wrote:
+> > On Mon, Oct 19, 2020 at 09:36:00AM +0000, Pany wrote:
+> >> On Sat, Oct 17, 2020 at 8:02 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >>>
+> >>> On Sat, Oct 17, 2020 at 04:07:11PM +0000, Pany wrote:
+> >>>> Hi,
+> >>>>
+> >>>> I installed fedora 32 into an SD card, with which I booted my Macbook.
+> >>>> It had worked well before, until I upgraded the kernel from 5.8.5 to
+> >>>> 5.8.6 [1].
+> >>>>
+> >>>> With kernel-5.8.6-200.fc32.x86_64.rpm [2] installed, the boot process
+> >>>> would be stuck at "A start job is running for
+> >>>> /dev/mapper/fedora_localhost_--live-home (<time> / no limit)" (See the
+> >>>> photo of screen [3]).
+> >>>>
+> >>>> By appending "systemd.debug-shell=1" to the kernel cmdline, I saved
+> >>>> the journal [4].
+> >>>>
+> >>>> This issue has been bisected to commit
+> >>>> 53965c79c2dbdc898ffc7fdbab37e920594f5e14 ("USB: Fix device driver
+> >>>> race")
+> >>>>
+> >>>> If I revert this commit, the kernel 5.8.6 would boot successfully.
+> >>>
+> >>> This should have been fixed in 5.8.14 or 5.8.15 (5.8.14 was released on
+> >>> the same day that the fix was installed; I'm not sure which came first).
+> >>> At any rate it certainly should work with the most recent 5.8.y kernel.
+> >>>
+> >>> Alan Stern
+> >>
+> >> I tried, but neither 5.8.14 nor 5.8.15 worked for me.
+> >
+> > Hmmm.  Looking at the system log you captured, it appears that the
+> > problem the SD card reader's driver getting reprobed incorrectly.  The
+> > details aren't clear, but the log shows the device getting probed twice,
+> > once as sdb and once as sdc.  If the system tried to mount one of the
+> > sdb partitions as the root, and then sdb disappeared, that could explain
+> > what you see.
+> >
+> > I don't know why this is happening.  But you can try adding some
+> > debugging messages of your own.  In drivers/usb/core/driver.c, the
+> > routine __usb_bus_reprobe_drivers() should never reach the line that
+> > calls device_reprobe() unless the USBIP or apple-mfi-fastcharge driver
+> > is installed -- and neither of those should be involved with the card
+> > reader device.  You can add a line saying:
+> >
+> >       dev_info(dev, "new driver %s\n", new_udriver->name);
+> >
+> > at that point and see what it produces in the log.
+
+I added a line and made a patch[1], but I had no idea whether
+dev_info() had been inserted to the right place (I'm not good at C
+language).
+
+Then I compiled the kernel with build id `usbdebug` on copr[2] (a
+build system provided by Fedora), here is the build log[3].
+With following kernel cmdline, I captured the journal for
+kernel-5.8.15-201.usbdebug.fc32 [4]:
+
+kernel: Command line:
+BOOT_IMAGE=(hd5,gpt3)/vmlinuz-5.8.15-201.usbdebug.fc32.x86_64
+root=/dev/mapper/fedora_localhost--live-root ro
+resume=/dev/mapper/fedora_localhost--live-swap
+rd.lvm.lv=fedora_localhost-live/root
+rd.luks.uuid=luks-65d9ed28-ea08-4ea5-a1dd-7b2b086f5e09
+rd.lvm.lv=fedora_localhost-live/swap
+module-blacklist=apple-mfi-fastcharge systemd.debug-shell=1
+
+>
+> Hello all,
+>
+> Sorry for my lateness!
+>
+> I reviewed Pany's logs, and the issue appears to be related to the
+> automatic loading of the apple-mfi-fastcharge USB driver, which triggers
+> a re-probe of the SD card reader, as pointed out earlier.
+>
+> This happens because the id_table of the aforementioned USB driver
+> (mfi_fc_id_table) matches all USB products manufactured by Apple:
+>
+>   35 static const struct usb_device_id mfi_fc_id_table[] = {
+>   36         { .idVendor = APPLE_VENDOR_ID,
+>   37           .match_flags = USB_DEVICE_ID_MATCH_VENDOR },
+>   38         {},
+>   39 };
+>   ...
+> 218 static struct usb_device_driver mfi_fc_driver = {
+> 219         .name =         "apple-mfi-fastcharge",
+> 220         .probe =        mfi_fc_probe,
+> 221         .disconnect =   mfi_fc_disconnect,
+> 222         .id_table =     mfi_fc_id_table,
+> 223         .generic_subclass = 1,
+> 224 };
+>
+>
+> ... and Pany's system has multiple USB devices manufactured by Apple
+> (including the SD card reader), with the vendor code 0x05ac, which is
+> the value included by the id_table of the apple-mfi-fastcharge driver:
+>
+> Sep 29 15:22:48 fedora.local kernel: usb 2-3: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+> Sep 29 15:22:48 fedora.local kernel: usb 2-3: New USB device found, idVendor=05ac, idProduct=8406, bcdDevice= 8.20
+> Sep 29 15:22:48 fedora.local kernel: usb 2-3: New USB device strings: Mfr=3, Product=4, SerialNumber=5
+> Sep 29 15:22:48 fedora.local kernel: usb 2-3: Product: Card Reader
+> Sep 29 15:22:48 fedora.local kernel: usb 2-3: Manufacturer: Apple
+> ...
+> Sep 29 15:22:48 fedora.local kernel: usb 1-5: new full-speed USB device number 3 using xhci_hcd
+> Sep 29 15:22:48 fedora.local kernel: usb 1-5: New USB device found, idVendor=05ac, idProduct=0273, bcdDevice= 6.22
+> Sep 29 15:22:48 fedora.local kernel: usb 1-5: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> Sep 29 15:22:48 fedora.local kernel: usb 1-5: Product: Apple Internal Keyboard / Trackpad
+> Sep 29 15:22:48 fedora.local kernel: usb 1-5: Manufacturer: Apple Inc.
+> ...
+>
+> One way to fix this issue would be to implement a match function in the
+> apple-mfi-fastcharge driver, possibly instead of an id_table, so that it
+> does not match devices that it cannot bind to. This may require other
+> changes in the USB core that I cannot fathom at the moment.
+>
+> Pany, in the mean-time, could you add the following string to your kernel's
+> command line (i.e., via GRUB, or the actual boot-loader that you use) and
+> let us know whether it helps to *work around* this issue with the latest
+> versions of 5.8.y kernels?
+>
+>         module_blacklist=apple-mfi-fastcharge
+
+And I also installed the official built kernel-5.8.15-201.fc32.x86_64.rpm [5].
+
+Adding module_blacklist=apple-mfi-fastcharge to the GRUB entry did not
+succeed in the kernel booting.
+
+With following kernel cmdline, I captured the journal [6]:
+
+kernel: Command line:
+BOOT_IMAGE=(hd5,gpt3)/vmlinuz-5.8.15-201.fc32.x86_64
+root=/dev/mapper/fedora_localhost--live-root ro
+resume=/dev/mapper/fedora_localhost--live-swap
+rd.lvm.lv=fedora_localhost-live/root
+rd.luks.uuid=luks-65d9ed28-ea08-4ea5-a1dd-7b2b086f5e09
+rd.lvm.lv=fedora_localhost-live/swap
+module_blacklist=apple-mfi-fastcharge systemd.debug-shell=1
+
+>
+> To emphasize, I am only suggesting this as a work-around, not as an actual
+> solution.
+>
+> My time is a bit limited due to having restarted full-time employment,
+> but I can work on this issue during the weekend.
+>
+> Thanks!
+>
+> Vefa
+
+[1] https://pany.fedorapeople.org/0001-usb-driver-debug.patch
+[2] https://copr.fedorainfracloud.org/coprs/pany/kernel-macbook/build/1713250/
+[3] https://download.copr.fedorainfracloud.org/results/pany/kernel-macbook/fedora-32-x86_64/01713250-kernel/builder-live.log.gz
+[4] https://pany.fedorapeople.org/kernel-5.8.15-module_blacklist=apple-mfi-fastcharge-dev_info.txt
+[5] https://koji.fedoraproject.org/koji/buildinfo?buildID=1625939
+[6] https://pany.fedorapeople.org/kernel-5.8.15-module_blacklist=apple-mfi-fastcharge.txt
