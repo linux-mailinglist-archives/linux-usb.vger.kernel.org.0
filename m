@@ -2,140 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E28295445
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Oct 2020 23:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BE92954E2
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 00:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2506224AbgJUVdy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Oct 2020 17:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S2506906AbgJUWqY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Oct 2020 18:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2506219AbgJUVdx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 17:33:53 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6840FC0613CF
-        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 14:33:53 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id e20so3219903otj.11
-        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 14:33:53 -0700 (PDT)
+        with ESMTP id S2506896AbgJUWqX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 18:46:23 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33D2C0613CE
+        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 15:46:23 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id r10so2356310pgb.10
+        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 15:46:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XCjYvUCIgbQ3TCtD4YfecFPhaqfiZUwN7ivTobgZQY0=;
-        b=lx4WkpT2GzaDerBpdUAWiK7Fk5vr7DQ65sS1KJ5w9QzgSXXyi1BcdYVoDIaXXrWft2
-         yC4htW78VmVnZz6BIcXn5NCdHwKSfCMa2P2uw8B6RVUVzzpTYLAkcOgy0f4LhDikDhh4
-         O+fIkWJPhWeQac0XW7kwgXkButPH3W8HhOQujJC2+2w+GIMEFkmYYHWeYHQFLeiO3iyZ
-         ED/m5VEzlWFv5k7F3+aVCm3m4XX9wEK0lxjyR/0+e9IXmZ56qWY3SP3CJw3s6T5PoRWf
-         1E0u6XOCinCRV31hLekEZJjzyNArUBgyoR0GBWhujH6Nl5x7JGF1zMbK/GCMHbte2Ei7
-         mb9A==
+        h=from:to:cc:subject:date:message-id;
+        bh=Yl4Y/ZzUqbDL5fTVWgJ1VesNcpeRsTPqSs1TyvB5H2Y=;
+        b=QTnweYnCBSxbl9b89sHHA2Js7kV+ZTm0DcM5UkLUlAzkP0Pvld2y1wtens9HEwZGsT
+         rppkETMLwVDexknu09JBjcK2bQi32XeHHAdP0oXwyl3PgSC/f3vT/jaGQ9TbJnKjKQbu
+         xFmU0G/uOkVUNlr/tJdp0sJpzYpF5AwfWrIhoObgpmx6sCswvaeGPSYvHGjLKwqKr2p+
+         G8uJ74VHjlCOXrZ+koqFK747eem/sP7Qsv/zNFxeE9EPIZ72o6Mky9Acdto/ZpJ4XYGa
+         EN7Vnmt8xh7wNGutYiFuhZPJJWUnt3Zc1Iv/aoVaT8OP5xS65wDKh/i77rxbk2YKMwUX
+         TH4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XCjYvUCIgbQ3TCtD4YfecFPhaqfiZUwN7ivTobgZQY0=;
-        b=t+/YXnlwwjh5TPwH4NvKmdbMlpOxrMllKq1jxrqPkpm3hs176ACozxWdu1P++YLOOu
-         hy4OHtdThqQxKWR+OnySYw3I1Ede80DDUbJH6/VSSsMvK/65NwE3PXVwFrUyZ9hSL88d
-         2A0LhdFFCxYIPd4EWdkuJQus89QM+ludTHXQ8RUXBwB+I1NLaB3wH+Yp29SIkiFaWJ6R
-         Iy8cTcyLQj4NMtETtv/LMa+UO52mKxMKbF4MN9qNcdMIphBP/M7wDOqQznFRa3CF25eF
-         4DoVFSuGauGGPPz0CFLgoOCgGS0HGfpDhhW0TB9+JtjXJp64lb8NyvQMYMS67InEzeP1
-         +Jkg==
-X-Gm-Message-State: AOAM530qenrhlvU+DivXsFdVClAdon69fsw1cfpq8yKt6fO0InZ92pQD
-        EJPbVoA2urMobKL1jyZGUKMjJ2/SBmcOt2DQQ8oXWA==
-X-Google-Smtp-Source: ABdhPJxQft8N8pQfRzj0OP/DL2xjFlTkw1NWDG+V/uw4WSqVGubKlth/Yii+jjfy9m4PYJyes8XdUPNOygcqb5fQfrI=
-X-Received: by 2002:a05:6830:1558:: with SMTP id l24mr2909744otp.352.1603316032781;
- Wed, 21 Oct 2020 14:33:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201021181803.79650-1-john.stultz@linaro.org> <77de4aaa-14a5-6078-bd0b-c4942e97ab36@synopsys.com>
-In-Reply-To: <77de4aaa-14a5-6078-bd0b-c4942e97ab36@synopsys.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Yl4Y/ZzUqbDL5fTVWgJ1VesNcpeRsTPqSs1TyvB5H2Y=;
+        b=GpnBdadH0TOUnR9iNtzN/IzdENPPqJkjqhklq1thBlZVff9XWURpWwheEn0SYvqL5W
+         2jkJpOVOmxvK3gqfCU2OjRE2najmJItnoQxw/uXXVQXzvKCGm3WiFfoBiep/2oH9hkl5
+         H20cEeqdcAl+tqNm9q5w3pkavQ7G0O2J6qc7sUbC5+qfVT+LulhXqIQ/a8LwALzAzygX
+         /zsd867infXMETIvUGQ4uJhq8eh4PZRfucTCd0Oncwo2nWhYfKjbvlJHerLQZkG7TON2
+         eL4sBPmYERBQ5ld5HF+8GVhTtmDbWRcOwmSNGWW7Ra1G39KJPNus6dD68t8GMcaXN+My
+         Sp/A==
+X-Gm-Message-State: AOAM533hApi9dfemXbagT4d3h8D8pWRasIGa7rvVWgKV50jjRQURmx4w
+        f0lf1rO7Ge0orN84Rf3lFxxY5A==
+X-Google-Smtp-Source: ABdhPJxO62PrV4abUHN2Yj7VIbT+tfAB3XC9h3CbEu9WwUuD0xeTMCm+GIrU1xeH1Fnju0TRZ9UIdg==
+X-Received: by 2002:a62:e308:0:b029:152:8cc3:ebdc with SMTP id g8-20020a62e3080000b02901528cc3ebdcmr153798pfh.42.1603320383159;
+        Wed, 21 Oct 2020 15:46:23 -0700 (PDT)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id q123sm3327432pfq.56.2020.10.21.15.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2020 15:46:22 -0700 (PDT)
 From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 21 Oct 2020 14:33:41 -0700
-Message-ID: <CALAqxLVyszFbOnWAOMekQuWbGgmMZpEfFiY6gyAPYmGXPz5sHA@mail.gmail.com>
-Subject: Re: [RFC][PATCH] usb: dwc3: Add quirk to trigger a GCTL soft reset
- for Hisilicon Kirin Soc Platform
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     Yu Chen <chenyu56@huawei.com>, Felipe Balbi <balbi@kernel.org>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
         Yang Fei <fei.yang@intel.com>,
         YongQin Liu <yongqin.liu@linaro.org>,
         Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
         Jun Li <lijun.kernel@gmail.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-usb@vger.kernel.org, John Stultz <john.stultz@linaro.org>
+Subject: [PATCH v2] usb: dwc3: Trigger a GCTL soft reset when switching modes in DRD
+Date:   Wed, 21 Oct 2020 22:46:19 +0000
+Message-Id: <20201021224619.20796-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 12:14 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
->
-> John Stultz wrote:
-> > From: Yu Chen <chenyu56@huawei.com>
-> >
-> > With the current dwc3 code on the HiKey960 we often see the
-> > COREIDLE flag get stuck off in __dwc3_gadget_start(), which
-> > seems to prevent the reset irq and causes the USB gadget to
-> > fail to initialize.
-> >
-> > We had seen occasional initialization failures with older
-> > kernels but with recent 5.x era kernels it seemed to be becoming
-> > much more common, so I dug back through some older trees and
-> > realized I dropped this quirk from Yu Chen during upstreaming
-> > as I couldn't provide a proper rational for it and it didn't
-> > seem to be necessary. I now realize I was wrong.
-> >
-> > On the upside, I can now understand more why such a quirk is
-> > needed.
->
-> This shouldn't be a quirk. It's part of the programming guide when
-> switching mode in DRD. I don't know how we missed this.
+From: Yu Chen <chenyu56@huawei.com>
 
-Ah! That's great, as it should simplify the patch a bit and avoid
-introducing another dt bindings!
+With the current dwc3 code on the HiKey960 we often see the
+COREIDLE flag get stuck off in __dwc3_gadget_start(), which
+seems to prevent the reset irq and causes the USB gadget to
+fail to initialize.
 
+We had seen occasional initialization failures with older
+kernels but with recent 5.x era kernels it seemed to be becoming
+much more common, so I dug back through some older trees and
+realized I dropped this quirk from Yu Chen during upstreaming
+as I couldn't provide a proper rational for it and it didn't
+seem to be necessary. I now realize I was wrong.
 
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index bdf0925da6b6..b138c67e3892 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -114,6 +114,19 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
-> >       dwc->current_dr_role = mode;
-> >  }
-> >
-> > +static void dwc3_gctl_core_soft_reset(struct dwc3 *dwc)
-> > +{
-> > +     int reg;
-> > +
-> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-> > +     reg |= (DWC3_GCTL_CORESOFTRESET);
-> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-> > +
-> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-> > +     reg &= ~(DWC3_GCTL_CORESOFTRESET);
-> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-> > +}
-> > +
-> >  static void __dwc3_set_mode(struct work_struct *work)
-> >  {
-> >       struct dwc3 *dwc = work_to_dwc(work);
-> > @@ -178,6 +191,10 @@ static void __dwc3_set_mode(struct work_struct *work)
-> >               }
-> >               break;
-> >       case DWC3_GCTL_PRTCAP_DEVICE:
-> > +             /* Execute a GCTL Core Soft Reset when switch mode */
-> > +             if (dwc->gctl_reset_quirk)
-> > +                     dwc3_gctl_core_soft_reset(dwc);
-> > +
->
-> This should be done before dwc3_set_prtcap(), and this applies when
-> switching from device to host mode also. Make sure to check if the
-> controller is DRD before doing this.
+After resubmitting the quirk Thinh Nguyen pointed out that it
+shouldn't be a quirk and it is actually mentioned in the
+programming guide that it should be done when switching modes
+in DRD.
 
-Sorry, by checking that the controller is DRD, I'm not sure exactly
-what you mean.
-Checking DWC3_GHWPARAMS0_MODE_DRD?  Or something else?
+So, to avoid these !COREIDLE lockups seen on HiKey960, this
+patch issues GCTL soft reset when switching modes if the
+controller is in DRD mode.
 
-Thanks so much for the review and feedback!
--john
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+Cc: Yang Fei <fei.yang@intel.com>
+Cc: YongQin Liu <yongqin.liu@linaro.org>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: Jun Li <lijun.kernel@gmail.com>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Yu Chen <chenyu56@huawei.com>
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+---
+v2:
+* Rework to always call the GCTL soft reset in DRD mode,
+  rather then using a quirk as suggested by Thinh Nguyen
+
+---
+ drivers/usb/dwc3/core.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index bdf0925da6b6..ca94f3a2a83c 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -114,10 +114,24 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+ 	dwc->current_dr_role = mode;
+ }
+ 
++static void dwc3_gctl_core_soft_reset(struct dwc3 *dwc)
++{
++	int reg;
++
++	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
++	reg |= (DWC3_GCTL_CORESOFTRESET);
++	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
++
++	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
++	reg &= ~(DWC3_GCTL_CORESOFTRESET);
++	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
++}
++
+ static void __dwc3_set_mode(struct work_struct *work)
+ {
+ 	struct dwc3 *dwc = work_to_dwc(work);
+ 	unsigned long flags;
++	int hw_mode;
+ 	int ret;
+ 	u32 reg;
+ 
+@@ -154,6 +168,11 @@ static void __dwc3_set_mode(struct work_struct *work)
+ 		break;
+ 	}
+ 
++	/* Execute a GCTL Core Soft Reset when switch mode in DRD*/
++	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
++	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD)
++		dwc3_gctl_core_soft_reset(dwc);
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 
+ 	dwc3_set_prtcap(dwc, dwc->desired_dr_role);
+-- 
+2.17.1
+
