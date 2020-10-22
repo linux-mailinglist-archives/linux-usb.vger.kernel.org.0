@@ -2,450 +2,279 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5E02955DD
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 02:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC2A2955EE
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 03:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2894514AbgJVAz7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Oct 2020 20:55:59 -0400
-Received: from mail-eopbgr140089.outbound.protection.outlook.com ([40.107.14.89]:31714
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        id S2894574AbgJVBHX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Oct 2020 21:07:23 -0400
+Received: from mail-eopbgr70041.outbound.protection.outlook.com ([40.107.7.41]:40165
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2894510AbgJVAz7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Oct 2020 20:55:59 -0400
+        id S2894545AbgJVBHX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Oct 2020 21:07:23 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZingxS/fFxk8Cl9esuCjvKaOQxhmXVsFkEljiaScL8MZmeHtIuPEtcB7Le6X2rlJy+UCMZLTb7eKwGGadcuxZSpgOcbkQevberT6H3S7jD8vvePsk1cMGJl8x0AM6FzB2BEvW71p3MQx3BPWqeK1LFOf1oHIJV6kDE0dKHMeg+2jV35JO/mBY3mHMFwwGit8f2c1kVzdWTLNGmT43MSeTZTHedwUOpRKaKzg8jWW+de9CB8BFcxHmaTV/n8AcJ8oPt1Rr24i58+rHOWCqRQX/hcrPkBCb9UcL/yH6d0hGsxbOlPK5u+0Io61DAhw5hIZj5OQtMjAtCR+4Xf6JOh/nA==
+ b=NEHvj2+PcraHaXjWcoXgOHoCKH6FyTC4S4PrsqQeNMwEHACrE9qwEz/vQAx0LIUUvjqqDGgO/8dNC8fgqA3o1NO75H9mqvNLRAcV7aYKTUPNizskrenFHmykXdZ2j3kpvE8jrU1Y2F38SApwofG9Sjop3W2zL05jBoJNpEC+oHjkocxhDxCRftKJ3k/7VgXCYlIF8FwnvMIWu3xrakraVf1YeLkV3iLejU1w/3OF4kNJajAYTmrRGsuD6jif7KIzbtZXIUE2N+twj1B7w6qoptBr52sRg3+0PCvmJdCUucPpmN9qF51g4HhUthn1lq9MfeZkjvCj3DYxX7BFnyrnfw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lX9ZZ4IEdt4fZ9XOACd8KSDjN7SVTNVMi4IXdX/jFaw=;
- b=C/LCprsQjntMxyRIRLrVK+S2401sUaZGRMCH45F5B9Qps1WraOg2O0IOg9Z44nEGLHsiR3Atwa3xL9EpCataPyxWEhEfGw1gtcboMeuvb0GVXlagF7QlDqAnoNMIxUGALQvAazFvQfovKO6pI+svkGna+tNdIC1z4UFIwSVc5ceMKTwwvufhI7/AQslp3TKChWOy3n7CdkAYW0nEmplfG21v7iOfBCKn2leFK8KHZuGcF2RqilHUrpaHzo9oYIC/h/Z4LbzXU6AySv/tlf5vICAN41bn8Qbvr+ozoIGQU3/JjIOp5N18I4jdgPQu4i6mNaQlEdasKhAUx2KcaVwoOA==
+ bh=6oPoXfcjT+XmY3QRm4QH6v/Tp5XDsq/bkpEJoruv1y0=;
+ b=YJfaooiX3RaqF/1DfpGMY+pYm4jHC9I24UouOwhBNdD0Rh+2dXIDltTdF6h6+2U/FCYzu0Hc+jb0AYPk0UkiecwidHgmdVEp8J2zb9PEiC6NJf0cwUItFDch5sPmIcbKBphX+GubhOTsVCsYdYviLIbX9tZWUFZnZXkKJ6KJ4U0QDJOWLS+yDoTuA47lG6G0RruhMwir0MB4fbGXx3MIG3a4Kbx/MhXKKOlgeWwZc6mEQNBAl4rMwPADg/u0+MBTgOw3IWPnzzKzeKIktznp34cU/KSMr9ELB8PXmF125oegK+N7T0IWZ6KxjpJ8/7PJQPuOfyDZCLL7RdZwrORXTw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lX9ZZ4IEdt4fZ9XOACd8KSDjN7SVTNVMi4IXdX/jFaw=;
- b=LLU8mmkluuIzg+KHYuSgogAGMGEn82FApzeVpQSgELTQpbpsskSYmVM0DI+/l9ZtwjIKdCIk8of3qX5nDxBUZIDdg6LIXU8l++AIbLzTGlS//whvjbs7Mh4NK1J0xwaK9Zv//eU58CtOXisokqpYGDOZvKOS0L5EFaMI2OpdOwk=
-Authentication-Results: cadence.com; dkim=none (message not signed)
- header.d=none;cadence.com; dmarc=none action=none header.from=nxp.com;
+ bh=6oPoXfcjT+XmY3QRm4QH6v/Tp5XDsq/bkpEJoruv1y0=;
+ b=q7ld+BBEKR5ZsDU5GZ3FrliWMC3e+XL5RxYL4Z3bcPMJ8bKv6PofjQV0nsZkaI+mPxEO76t46fEf8Hyd9QY4B3Vwy5K0tBOng68KRErIz7sE9M3udd803LkdrnAfz2V8MdlS/aY4Z+HdLCATRQPsW1QRLdc79fstW+UDVVr5FxQ=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
 Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
- by AM0PR04MB4355.eurprd04.prod.outlook.com (2603:10a6:208:5a::22) with
+ by AM0PR04MB6371.eurprd04.prod.outlook.com (2603:10a6:208:178::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Thu, 22 Oct
- 2020 00:55:54 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.25; Thu, 22 Oct
+ 2020 01:07:17 +0000
 Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
  ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
  ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Thu, 22 Oct 2020
- 00:55:54 +0000
+ 01:07:17 +0000
 From:   Peter Chen <peter.chen@nxp.com>
-To:     pawell@cadence.com, rogerq@ti.com
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        gregkh@linuxfoundation.org, jun.li@nxp.com, stable@vger.kernel.org,
-        Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH v2 3/3] usb: cdns3: Fix on-chip memory overflow issue
-Date:   Thu, 22 Oct 2020 08:55:05 +0800
-Message-Id: <20201022005505.24167-4-peter.chen@nxp.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-imx@nxp.com, jun.li@nxp.com, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 1/1] usb: chipidea: add tracepoint support for udc
+Date:   Thu, 22 Oct 2020 09:06:40 +0800
+Message-Id: <20201022010640.24831-1-peter.chen@nxp.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201022005505.24167-1-peter.chen@nxp.com>
-References: <20201022005505.24167-1-peter.chen@nxp.com>
 Content-Type: text/plain
 X-Originating-IP: [119.31.174.66]
-X-ClientProxiedBy: SG2PR01CA0102.apcprd01.prod.exchangelabs.com
- (2603:1096:3:15::28) To AM8PR04MB7300.eurprd04.prod.outlook.com
+X-ClientProxiedBy: SG2PR01CA0094.apcprd01.prod.exchangelabs.com
+ (2603:1096:3:15::20) To AM8PR04MB7300.eurprd04.prod.outlook.com
  (2603:10a6:20b:1c7::12)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR01CA0102.apcprd01.prod.exchangelabs.com (2603:1096:3:15::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18 via Frontend Transport; Thu, 22 Oct 2020 00:55:51 +0000
+Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR01CA0094.apcprd01.prod.exchangelabs.com (2603:1096:3:15::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.27 via Frontend Transport; Thu, 22 Oct 2020 01:07:15 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 64dfddb1-0e13-494e-b5cc-08d876253a48
-X-MS-TrafficTypeDiagnostic: AM0PR04MB4355:
+X-MS-Office365-Filtering-Correlation-Id: 8db101f5-639b-489c-b106-08d87626d1b8
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6371:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM0PR04MB43557A7D27ECE34DC13D71F88B1D0@AM0PR04MB4355.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Microsoft-Antispam-PRVS: <AM0PR04MB63715264BD487C6ECC3B6BD98B1D0@AM0PR04MB6371.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:758;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m/c7AbccxjMCwPPxZEX1VEl5rRuvSmCy+Nxwv4psSL96G1t5hqKVddOH2SLxLFNDl9j1YOiyQaYktLiWteKf9amqJ63eveHbtvGunb/f0n8AzoSofiOq+3w93NLsFr80Cb6ch3Y6AQpMX4wfjP1TZjwRUJXJyK3536ws2+lke/T47XD6xzYD6EC5YNxfDG0arXdzqPI3LUzBICxgKRY2qIN870Y8CpeQHCNKaWr/Xm0FdvNnJN24vxb+zXg/Y+p9GH95XLIIt87ZR5uC+VTlS985TdshbuRD4+8alpf5sPlPBgyMHwP5eb/2UTKtv0XEZlPDO703KBQmklnZxdy1GI6N+/N2RdkVnOZr4zxivs5XkPUTARwIADg9uEYCD/yW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(346002)(366004)(136003)(376002)(86362001)(956004)(8936002)(6486002)(2906002)(30864003)(66946007)(6666004)(66476007)(66556008)(5660300002)(1076003)(36756003)(316002)(6512007)(44832011)(2616005)(16526019)(26005)(478600001)(8676002)(52116002)(83380400001)(186003)(6506007)(4326008)(309714004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: EhtPfcCScr65Idsq2OT/ZpbpjD1KiZGLFJFb0SGkZQ4txJ2S9vlLXvoKCzLbFde0Pj9k176ndczJOkBC/mx6zC3E4ETt2cb2aewnvbbfNjoT1yHEW+p0jm9gXd+IbrFbNHXJFJnY7JXgobFfbz0aDlzhQiaKjNIkeIaecu6Bgq5cssXsyXy/XAFSYHUhAY0wfKrCY9Lwh41qItxvaDO6g/TpmANb5S7RC3/Jwd5BvxEsW3FoGZk3x8xXBg96wf4zAya9uHrNQKd3foOzrhhIg5HyiLAqm7dRVay+aeOO0iyrsl4ak6A8cqlcGsIgH4yYCuymzL7N1iyeXTSmFD01RAOdjMCTSzG/FDmL/2By8hV7U4XV1VHh21pqJBhugeYJjvMaOxshgBy/2/BqdN+T7MGUQhskuyBS/ZMbQWpACOyGN9ig+Shsoj8x+gu5nghqL/cONz5IR6JN0ARP+a0qVjeDakowQMK0Mz7rdoroz/PJMQPS6UnzKkH4zK5Lw773ABvLlqpa++h7zFOE8HtowM81qPbIhvtxx5wUuTAJleROWCmAgRN6ZKkhKvJ5D+9jiEylwvaVX59qtv7+RlwHStUIoAuyjUXoN9YZAmHFeT3MmmZ9ZGkVNzUV2VlxPzP3gDUeNfJUGd4wcJ0T81/StQ==
+X-Microsoft-Antispam-Message-Info: HIuc11uxg3QWjOYhKXTd84QN9RnqzSjZB23RM1iTamLff1DXwkdXdrQq8i4YLN4SA3JbmuqOaq8GuNkr3Fi7IEwpWI/OJz0zovfLuTixUc3OAvbJm2dXWZGlENObw5J2pCMT11K6CiVeg1y6vTdlhC78diRKQgQkn1On+1ruQb82BenZ4QghA4vrpvdaMp+mpodceqSg6NkP8UHK4zaZIl6oMURjKUgDlDWOXQhk8WnJMi9KtJ3wvUAYWouOpC1xn6m4nbXjfGVrQIwlD0U4kATExcs+glU/cf1UhuaHKkaRbzW3ARoAzYH9AO420+jl
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(346002)(366004)(39860400002)(396003)(44832011)(6666004)(6506007)(66476007)(5660300002)(6486002)(86362001)(316002)(2906002)(6512007)(478600001)(36756003)(66946007)(16526019)(66556008)(8676002)(4326008)(52116002)(6916009)(186003)(8936002)(956004)(2616005)(83380400001)(26005)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: ftnQPVBWCdoVNhPl1qC9uJtJuYVM/iFBaKvbYVxU7COk9+Upy/Glpj5JPn4yvIqfrRjYd4/4p3H8+gmZAVQVFrQLtNhMVPijxyahkLM+QsxaSVEaQ+UcBofSoOfb5VlWjvatZm5UAMmzvWmF/O7t37SC5qAQmPzSZKD17l84bP8cX92hdgJR3SmzgCfO0BbjdUYf6P3BpUxsoOXTroifnNKcGMGyZrUIq8kjZth5iWU6fUsqoBpkEd8z5MrwDnREuYMlQPsuje7N7lyYcSN35pLF8cva7fmpLAeZVRQFF88desXefS1jfd1ORTRL42XbsrEitL0YvI+5AMTbX5YObc7cq9xEaOlZmAvLsVsVWZ7RV51KAnMnuRsk3po7aQOdZ/rlFZV7S7g/JO8UKpHnMV3k2aqS5FNF+54cPme/fQ3oR8C+TY+TineciVb8Mtd2RhL9C/v4hN64RfQJ4vtt9m89jLReIKNW+uEoG4A2q6uM6vjvllNooQBy1dIq5SllEX836khEAgkNH73C40UsFxR5o6S8aZCaDjqYFSPiNv9WV2J540/tSB+P4BXk9YPpBs1hTrymqXsk30izNuqGMj7K7gWaNtcGc1HE7x98pzKNzFl4muZF0/qj87rT2drkRpgUMKrBVmusSMc7faliFg==
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64dfddb1-0e13-494e-b5cc-08d876253a48
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8db101f5-639b-489c-b106-08d87626d1b8
 X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2020 00:55:53.9254
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2020 01:07:17.5000
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a1t8wnMpJVZkLaK+g1/nJJAw1rLVETT0KRIY5siqSYN1WmrLkCZDN+wPRlq9mkTTs9Bo8dW7SMfSNBB9WXbpdQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4355
+X-MS-Exchange-CrossTenant-UserPrincipalName: QUcYNRjDYUZAQfdnH472IiiYeL7wCQn4ZcKqd4usRavOf4f+dfdfxFLKU0iNNJH9iB5Fmb4eDfR22FepsN68BQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6371
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pawel Laszczak <pawell@cadence.com>
+Add basic tracepoint support for udc driver.
 
-Patch fixes issue caused setting On-chip memory overflow bit in usb_sts
-register. The issue occurred because EP_CFG register was set twice
-before USB_STS.CFGSTS was set. Every write operation on EP_CFG.BUFFERING
-causes that controller increases internal counter holding the number
-of reserved on-chip buffers. First time this register was updated in
-function cdns3_ep_config before delegating SET_CONFIGURATION request
-to class driver and again it was updated when class wanted to enable
-endpoint.  This patch fixes this issue by configuring endpoints
-enabled by class driver in cdns3_gadget_ep_enable and others just
-before status stage.
-
-Cc: <stable@vger.kernel.org> #v5.8+
-Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-Reported-and-tested-by: Peter Chen <peter.chen@nxp.com>
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+Reviewed-by: Jun Li <jun.li@nxp.com>
 Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
- drivers/usb/cdns3/ep0.c    |  65 ++++++++++++-----------
- drivers/usb/cdns3/gadget.c | 102 +++++++++++++++++++++----------------
- drivers/usb/cdns3/gadget.h |   3 +-
- 3 files changed, 94 insertions(+), 76 deletions(-)
+ drivers/usb/chipidea/Makefile |  5 +-
+ drivers/usb/chipidea/trace.c  | 23 +++++++++
+ drivers/usb/chipidea/trace.h  | 91 +++++++++++++++++++++++++++++++++++
+ drivers/usb/chipidea/udc.c    | 10 +++-
+ 4 files changed, 126 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/usb/chipidea/trace.c
+ create mode 100644 drivers/usb/chipidea/trace.h
 
-diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c
-index 4761c852d9c4..d3121a32cc68 100644
---- a/drivers/usb/cdns3/ep0.c
-+++ b/drivers/usb/cdns3/ep0.c
-@@ -137,48 +137,36 @@ static int cdns3_req_ep0_set_configuration(struct cdns3_device *priv_dev,
- 					   struct usb_ctrlrequest *ctrl_req)
- {
- 	enum usb_device_state device_state = priv_dev->gadget.state;
--	struct cdns3_endpoint *priv_ep;
- 	u32 config = le16_to_cpu(ctrl_req->wValue);
- 	int result = 0;
--	int i;
- 
- 	switch (device_state) {
- 	case USB_STATE_ADDRESS:
--		/* Configure non-control EPs */
--		for (i = 0; i < CDNS3_ENDPOINTS_MAX_COUNT; i++) {
--			priv_ep = priv_dev->eps[i];
--			if (!priv_ep)
--				continue;
--
--			if (priv_ep->flags & EP_CLAIMED)
--				cdns3_ep_config(priv_ep);
--		}
--
- 		result = cdns3_ep0_delegate_req(priv_dev, ctrl_req);
- 
--		if (result)
--			return result;
--
--		if (!config) {
--			cdns3_hw_reset_eps_config(priv_dev);
--			usb_gadget_set_state(&priv_dev->gadget,
--					     USB_STATE_ADDRESS);
--		}
-+		if (result || !config)
-+			goto reset_config;
- 
- 		break;
- 	case USB_STATE_CONFIGURED:
- 		result = cdns3_ep0_delegate_req(priv_dev, ctrl_req);
-+		if (!config && !result)
-+			goto reset_config;
- 
--		if (!config && !result) {
--			cdns3_hw_reset_eps_config(priv_dev);
--			usb_gadget_set_state(&priv_dev->gadget,
--					     USB_STATE_ADDRESS);
--		}
- 		break;
- 	default:
--		result = -EINVAL;
-+		return -EINVAL;
- 	}
- 
-+	return 0;
+diff --git a/drivers/usb/chipidea/Makefile b/drivers/usb/chipidea/Makefile
+index fae779a23866..6f4a3deced35 100644
+--- a/drivers/usb/chipidea/Makefile
++++ b/drivers/usb/chipidea/Makefile
+@@ -1,8 +1,11 @@
+ # SPDX-License-Identifier: GPL-2.0
 +
-+reset_config:
-+	if (result != USB_GADGET_DELAYED_STATUS)
-+		cdns3_hw_reset_eps_config(priv_dev);
++# define_trace.h needs to know how to find our header
++CFLAGS_trace.o			:= -I$(src)
+ obj-$(CONFIG_USB_CHIPIDEA)		+= ci_hdrc.o
+ 
+ ci_hdrc-y				:= core.o otg.o debug.o ulpi.o
+-ci_hdrc-$(CONFIG_USB_CHIPIDEA_UDC)	+= udc.o
++ci_hdrc-$(CONFIG_USB_CHIPIDEA_UDC)	+= udc.o trace.o
+ ci_hdrc-$(CONFIG_USB_CHIPIDEA_HOST)	+= host.o
+ ci_hdrc-$(CONFIG_USB_OTG_FSM)		+= otg_fsm.o
+ 
+diff --git a/drivers/usb/chipidea/trace.c b/drivers/usb/chipidea/trace.c
+new file mode 100644
+index 000000000000..f6402630a58e
+--- /dev/null
++++ b/drivers/usb/chipidea/trace.c
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Chipidea Device Mode Trace Support
++ *
++ * Copyright (C) 2020 NXP
++ *
++ * Author: Peter Chen <peter.chen@nxp.com>
++ */
 +
-+	usb_gadget_set_state(&priv_dev->gadget,
-+			     USB_STATE_ADDRESS);
++#define CREATE_TRACE_POINTS
++#include "trace.h"
 +
- 	return result;
- }
- 
-@@ -705,6 +693,7 @@ static int cdns3_gadget_ep0_queue(struct usb_ep *ep,
- 	unsigned long flags;
- 	int ret = 0;
- 	u8 zlp = 0;
-+	int i;
- 
- 	spin_lock_irqsave(&priv_dev->lock, flags);
- 	trace_cdns3_ep0_queue(priv_dev, request);
-@@ -720,6 +709,17 @@ static int cdns3_gadget_ep0_queue(struct usb_ep *ep,
- 		u32 val;
- 
- 		cdns3_select_ep(priv_dev, 0x00);
++void ci_log(struct ci_hdrc *ci, const char *fmt, ...)
++{
++	struct va_format vaf;
++	va_list args;
 +
-+		/*
-+		 * Configure all non-control EPs which are not enabled by class driver
-+		 */
-+		for (i = 0; i < CDNS3_ENDPOINTS_MAX_COUNT; i++) {
-+			priv_ep = priv_dev->eps[i];
-+			if (priv_ep && priv_ep->flags & EP_CLAIMED &&
-+			    !(priv_ep->flags & EP_ENABLED))
-+				cdns3_ep_config(priv_ep, 0);
-+		}
++	va_start(args, fmt);
++	vaf.fmt = fmt;
++	vaf.va = &args;
++	trace_ci_log(ci, &vaf);
++	va_end(args);
++}
+diff --git a/drivers/usb/chipidea/trace.h b/drivers/usb/chipidea/trace.h
+new file mode 100644
+index 000000000000..a5c483a078d2
+--- /dev/null
++++ b/drivers/usb/chipidea/trace.h
+@@ -0,0 +1,91 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Trace support header file for device mode
++ *
++ * Copyright (C) 2020 NXP
++ *
++ * Author: Peter Chen <peter.chen@nxp.com>
++ */
 +
- 		cdns3_set_hw_configuration(priv_dev);
- 		cdns3_ep0_complete_setup(priv_dev, 0, 1);
- 		/* wait until configuration set */
-@@ -811,6 +811,7 @@ void cdns3_ep0_config(struct cdns3_device *priv_dev)
- 	struct cdns3_usb_regs __iomem *regs;
- 	struct cdns3_endpoint *priv_ep;
- 	u32 max_packet_size = 64;
-+	u32 ep_cfg;
- 
- 	regs = priv_dev->regs;
- 
-@@ -842,8 +843,10 @@ void cdns3_ep0_config(struct cdns3_device *priv_dev)
- 				       BIT(0) | BIT(16));
- 	}
- 
--	writel(EP_CFG_ENABLE | EP_CFG_MAXPKTSIZE(max_packet_size),
--	       &regs->ep_cfg);
-+	ep_cfg = EP_CFG_ENABLE | EP_CFG_MAXPKTSIZE(max_packet_size);
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM chipidea
 +
-+	if (!(priv_ep->flags & EP_CONFIGURED))
-+		writel(ep_cfg, &regs->ep_cfg);
- 
- 	writel(EP_STS_EN_SETUPEN | EP_STS_EN_DESCMISEN | EP_STS_EN_TRBERREN,
- 	       &regs->ep_sts_en);
-@@ -851,8 +854,10 @@ void cdns3_ep0_config(struct cdns3_device *priv_dev)
- 	/* init ep in */
- 	cdns3_select_ep(priv_dev, USB_DIR_IN);
- 
--	writel(EP_CFG_ENABLE | EP_CFG_MAXPKTSIZE(max_packet_size),
--	       &regs->ep_cfg);
-+	if (!(priv_ep->flags & EP_CONFIGURED))
-+		writel(ep_cfg, &regs->ep_cfg);
++#if !defined(__LINUX_CHIPIDEA_TRACE) || defined(TRACE_HEADER_MULTI_READ)
++#define __LINUX_CHIPIDEA_TRACE
 +
-+	priv_ep->flags |= EP_CONFIGURED;
- 
- 	writel(EP_STS_EN_SETUPEN | EP_STS_EN_TRBERREN, &regs->ep_sts_en);
- 
-diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-index c127af6c0fe8..5fa89baa53da 100644
---- a/drivers/usb/cdns3/gadget.c
-+++ b/drivers/usb/cdns3/gadget.c
-@@ -296,6 +296,8 @@ static void cdns3_ep_stall_flush(struct cdns3_endpoint *priv_ep)
-  */
- void cdns3_hw_reset_eps_config(struct cdns3_device *priv_dev)
- {
-+	int i;
++#include <linux/types.h>
++#include <linux/tracepoint.h>
++#include "ci.h"
++#include "udc.h"
 +
- 	writel(USB_CONF_CFGRST, &priv_dev->regs->usb_conf);
- 
- 	cdns3_allow_enable_l1(priv_dev, 0);
-@@ -304,6 +306,10 @@ void cdns3_hw_reset_eps_config(struct cdns3_device *priv_dev)
- 	priv_dev->out_mem_is_allocated = 0;
- 	priv_dev->wait_for_setup = 0;
- 	priv_dev->using_streams = 0;
++#define CHIPIDEA_MSG_MAX	500
 +
-+	for (i = 0; i < CDNS3_ENDPOINTS_MAX_COUNT; i++)
-+		if (priv_dev->eps[i])
-+			priv_dev->eps[i]->flags &= ~EP_CONFIGURED;
- }
- 
- /**
-@@ -1976,27 +1982,6 @@ static int cdns3_ep_onchip_buffer_reserve(struct cdns3_device *priv_dev,
- 	return 0;
- }
- 
--static void cdns3_stream_ep_reconfig(struct cdns3_device *priv_dev,
--				     struct cdns3_endpoint *priv_ep)
--{
--	if (!priv_ep->use_streams || priv_dev->gadget.speed < USB_SPEED_SUPER)
--		return;
--
--	if (priv_dev->dev_ver >= DEV_VER_V3) {
--		u32 mask = BIT(priv_ep->num + (priv_ep->dir ? 16 : 0));
--
--		/*
--		 * Stream capable endpoints are handled by using ep_tdl
--		 * register. Other endpoints use TDL from TRB feature.
--		 */
--		cdns3_clear_register_bit(&priv_dev->regs->tdl_from_trb, mask);
--	}
--
--	/*  Enable Stream Bit TDL chk and SID chk */
--	cdns3_set_register_bit(&priv_dev->regs->ep_cfg, EP_CFG_STREAM_EN |
--			       EP_CFG_TDL_CHK | EP_CFG_SID_CHK);
--}
--
- static void cdns3_configure_dmult(struct cdns3_device *priv_dev,
- 				  struct cdns3_endpoint *priv_ep)
- {
-@@ -2034,8 +2019,9 @@ static void cdns3_configure_dmult(struct cdns3_device *priv_dev,
- /**
-  * cdns3_ep_config Configure hardware endpoint
-  * @priv_ep: extended endpoint object
-+ * @enable: set EP_CFG_ENABLE bit in ep_cfg register.
-  */
--void cdns3_ep_config(struct cdns3_endpoint *priv_ep)
-+int cdns3_ep_config(struct cdns3_endpoint *priv_ep, bool enable)
- {
- 	bool is_iso_ep = (priv_ep->type == USB_ENDPOINT_XFER_ISOC);
- 	struct cdns3_device *priv_dev = priv_ep->cdns3_dev;
-@@ -2096,7 +2082,7 @@ void cdns3_ep_config(struct cdns3_endpoint *priv_ep)
- 		break;
- 	default:
- 		/* all other speed are not supported */
--		return;
-+		return -EINVAL;
- 	}
- 
- 	if (max_packet_size == 1024)
-@@ -2106,11 +2092,33 @@ void cdns3_ep_config(struct cdns3_endpoint *priv_ep)
- 	else
- 		priv_ep->trb_burst_size = 16;
- 
--	ret = cdns3_ep_onchip_buffer_reserve(priv_dev, buffering + 1,
--					     !!priv_ep->dir);
--	if (ret) {
--		dev_err(priv_dev->dev, "onchip mem is full, ep is invalid\n");
--		return;
-+	/* onchip buffer is only allocated before configuration */
-+	if (!priv_dev->hw_configured_flag) {
-+		ret = cdns3_ep_onchip_buffer_reserve(priv_dev, buffering + 1,
-+						     !!priv_ep->dir);
-+		if (ret) {
-+			dev_err(priv_dev->dev, "onchip mem is full, ep is invalid\n");
-+			return ret;
-+		}
-+	}
++void ci_log(struct ci_hdrc *ci, const char *fmt, ...);
 +
-+	if (enable)
-+		ep_cfg |= EP_CFG_ENABLE;
++TRACE_EVENT(ci_log,
++	TP_PROTO(struct ci_hdrc *ci, struct va_format *vaf),
++	TP_ARGS(ci, vaf),
++	TP_STRUCT__entry(
++		__string(name, dev_name(ci->dev))
++		__dynamic_array(char, msg, CHIPIDEA_MSG_MAX)
++	),
++	TP_fast_assign(
++		__assign_str(name, dev_name(ci->dev));
++		vsnprintf(__get_str(msg), CHIPIDEA_MSG_MAX, vaf->fmt, *vaf->va);
++	),
++	TP_printk("%s: %s", __get_str(name), __get_str(msg))
++);
 +
-+	if (priv_ep->use_streams && priv_dev->gadget.speed >= USB_SPEED_SUPER) {
-+		if (priv_dev->dev_ver >= DEV_VER_V3) {
-+			u32 mask = BIT(priv_ep->num + (priv_ep->dir ? 16 : 0));
++DECLARE_EVENT_CLASS(ci_log_trb,
++	TP_PROTO(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq, struct td_node *td),
++	TP_ARGS(hwep, hwreq, td),
++	TP_STRUCT__entry(
++		__string(name, hwep->name)
++		__field(struct td_node *, td)
++		__field(struct usb_request *, req)
++		__field(dma_addr_t, dma)
++		__field(s32, td_remaining_size)
++		__field(u32, next)
++		__field(u32, token)
++		__field(u32, type)
++	),
++	TP_fast_assign(
++		__assign_str(name, hwep->name);
++		__entry->req = &hwreq->req;
++		__entry->td = td;
++		__entry->dma = td->dma;
++		__entry->td_remaining_size = td->td_remaining_size;
++		__entry->next = td->ptr->next;
++		__entry->token = td->ptr->token;
++		__entry->type = usb_endpoint_type(hwep->ep.desc);
++	),
++	TP_printk("%s: req: %p, td: %p, td_dma_address: %pad, remaining_size: %d, "
++	       "next: %x, total bytes: %d, status: %lx",
++		__get_str(name), __entry->req, __entry->td, &__entry->dma,
++		__entry->td_remaining_size, __entry->next,
++		(int)((__entry->token & TD_TOTAL_BYTES) >> __ffs(TD_TOTAL_BYTES)),
++		__entry->token & TD_STATUS
++	)
++);
 +
-+			/*
-+			 * Stream capable endpoints are handled by using ep_tdl
-+			 * register. Other endpoints use TDL from TRB feature.
-+			 */
-+			cdns3_clear_register_bit(&priv_dev->regs->tdl_from_trb,
-+						 mask);
-+		}
++DEFINE_EVENT(ci_log_trb, ci_prepare_td,
++	TP_PROTO(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq, struct td_node *td),
++	TP_ARGS(hwep, hwreq, td)
++);
 +
-+		/*  Enable Stream Bit TDL chk and SID chk */
-+		ep_cfg |=  EP_CFG_STREAM_EN | EP_CFG_TDL_CHK | EP_CFG_SID_CHK;
- 	}
- 
- 	ep_cfg |= EP_CFG_MAXPKTSIZE(max_packet_size) |
-@@ -2120,9 +2128,12 @@ void cdns3_ep_config(struct cdns3_endpoint *priv_ep)
- 
- 	cdns3_select_ep(priv_dev, bEndpointAddress);
- 	writel(ep_cfg, &priv_dev->regs->ep_cfg);
-+	priv_ep->flags |= EP_CONFIGURED;
- 
- 	dev_dbg(priv_dev->dev, "Configure %s: with val %08x\n",
- 		priv_ep->name, ep_cfg);
++DEFINE_EVENT(ci_log_trb, ci_complete_td,
++	TP_PROTO(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq, struct td_node *td),
++	TP_ARGS(hwep, hwreq, td)
++);
 +
-+	return 0;
- }
- 
- /* Find correct direction for HW endpoint according to description */
-@@ -2263,7 +2274,7 @@ static int cdns3_gadget_ep_enable(struct usb_ep *ep,
- 	u32 bEndpointAddress;
- 	unsigned long flags;
- 	int enable = 1;
--	int ret;
-+	int ret = 0;
- 	int val;
- 
- 	priv_ep = ep_to_cdns3_ep(ep);
-@@ -2302,6 +2313,17 @@ static int cdns3_gadget_ep_enable(struct usb_ep *ep,
- 	bEndpointAddress = priv_ep->num | priv_ep->dir;
- 	cdns3_select_ep(priv_dev, bEndpointAddress);
- 
-+	/*
-+	 * For some versions of controller at some point during ISO OUT traffic
-+	 * DMA reads Transfer Ring for the EP which has never got doorbell.
-+	 * This issue was detected only on simulation, but to avoid this issue
-+	 * driver add protection against it. To fix it driver enable ISO OUT
-+	 * endpoint before setting DRBL. This special treatment of ISO OUT
-+	 * endpoints are recommended by controller specification.
-+	 */
-+	if (priv_ep->type == USB_ENDPOINT_XFER_ISOC  && !priv_ep->dir)
-+		enable = 0;
++#endif /* __LINUX_CHIPIDEA_TRACE */
 +
- 	if (usb_ss_max_streams(comp_desc) && usb_endpoint_xfer_bulk(desc)) {
- 		/*
- 		 * Enable stream support (SS mode) related interrupts
-@@ -2312,13 +2334,17 @@ static int cdns3_gadget_ep_enable(struct usb_ep *ep,
- 				EP_STS_EN_SIDERREN | EP_STS_EN_MD_EXITEN |
- 				EP_STS_EN_STREAMREN;
- 			priv_ep->use_streams = true;
--			cdns3_stream_ep_reconfig(priv_dev, priv_ep);
-+			ret = cdns3_ep_config(priv_ep, enable);
- 			priv_dev->using_streams |= true;
- 		}
-+	} else {
-+		ret = cdns3_ep_config(priv_ep, enable);
- 	}
++/* this part must be outside header guard */
++
++#undef TRACE_INCLUDE_PATH
++#define TRACE_INCLUDE_PATH .
++
++#undef TRACE_INCLUDE_FILE
++#define TRACE_INCLUDE_FILE trace
++
++#include <trace/define_trace.h>
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index 60ea932afe2b..c16d900cdaee 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -26,6 +26,7 @@
+ #include "bits.h"
+ #include "otg.h"
+ #include "otg_fsm.h"
++#include "trace.h"
  
--	ret = cdns3_allocate_trb_pool(priv_ep);
-+	if (ret)
-+		goto exit;
- 
-+	ret = cdns3_allocate_trb_pool(priv_ep);
+ /* control endpoint description */
+ static const struct usb_endpoint_descriptor
+@@ -569,14 +570,18 @@ static int _hardware_enqueue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
  	if (ret)
- 		goto exit;
+ 		return ret;
  
-@@ -2348,20 +2374,6 @@ static int cdns3_gadget_ep_enable(struct usb_ep *ep,
- 
- 	writel(reg, &priv_dev->regs->ep_sts_en);
- 
--	/*
--	 * For some versions of controller at some point during ISO OUT traffic
--	 * DMA reads Transfer Ring for the EP which has never got doorbell.
--	 * This issue was detected only on simulation, but to avoid this issue
--	 * driver add protection against it. To fix it driver enable ISO OUT
--	 * endpoint before setting DRBL. This special treatment of ISO OUT
--	 * endpoints are recommended by controller specification.
--	 */
--	if (priv_ep->type == USB_ENDPOINT_XFER_ISOC  && !priv_ep->dir)
--		enable = 0;
+-	firstnode = list_first_entry(&hwreq->tds, struct td_node, td);
 -
--	if (enable)
--		cdns3_set_register_bit(&priv_dev->regs->ep_cfg, EP_CFG_ENABLE);
--
- 	ep->desc = desc;
- 	priv_ep->flags &= ~(EP_PENDING_REQUEST | EP_STALLED | EP_STALL_PENDING |
- 			    EP_QUIRK_ISO_OUT_EN | EP_QUIRK_EXTRA_BUF_EN);
-diff --git a/drivers/usb/cdns3/gadget.h b/drivers/usb/cdns3/gadget.h
-index 737377913788..21fa461c518e 100644
---- a/drivers/usb/cdns3/gadget.h
-+++ b/drivers/usb/cdns3/gadget.h
-@@ -1159,6 +1159,7 @@ struct cdns3_endpoint {
- #define EP_QUIRK_EXTRA_BUF_DET	BIT(12)
- #define EP_QUIRK_EXTRA_BUF_EN	BIT(13)
- #define EP_TDLCHK_EN		BIT(15)
-+#define EP_CONFIGURED		BIT(16)
- 	u32			flags;
+ 	lastnode = list_entry(hwreq->tds.prev,
+ 		struct td_node, td);
  
- 	struct cdns3_request	*descmis_req;
-@@ -1360,7 +1361,7 @@ void cdns3_gadget_giveback(struct cdns3_endpoint *priv_ep,
- int cdns3_init_ep0(struct cdns3_device *priv_dev,
- 		   struct cdns3_endpoint *priv_ep);
- void cdns3_ep0_config(struct cdns3_device *priv_dev);
--void cdns3_ep_config(struct cdns3_endpoint *priv_ep);
-+int cdns3_ep_config(struct cdns3_endpoint *priv_ep, bool enable);
- void cdns3_check_ep0_interrupt_proceed(struct cdns3_device *priv_dev, int dir);
- int __cdns3_gadget_wakeup(struct cdns3_device *priv_dev);
+ 	lastnode->ptr->next = cpu_to_le32(TD_TERMINATE);
+ 	if (!hwreq->req.no_interrupt)
+ 		lastnode->ptr->token |= cpu_to_le32(TD_IOC);
++
++	list_for_each_entry_safe(firstnode, lastnode, &hwreq->tds, td)
++		trace_ci_prepare_td(hwep, hwreq, firstnode);
++
++	firstnode = list_first_entry(&hwreq->tds, struct td_node, td);
++
+ 	wmb();
+ 
+ 	hwreq->req.actual = 0;
+@@ -671,6 +676,7 @@ static int _hardware_dequeue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
+ 
+ 	list_for_each_entry_safe(node, tmpnode, &hwreq->tds, td) {
+ 		tmptoken = le32_to_cpu(node->ptr->token);
++		trace_ci_complete_td(hwep, hwreq, node);
+ 		if ((TD_STATUS_ACTIVE & tmptoken) != 0) {
+ 			int n = hw_ep_bit(hwep->num, hwep->dir);
  
 -- 
 2.17.1
