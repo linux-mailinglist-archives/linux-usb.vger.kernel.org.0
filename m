@@ -2,114 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC68295623
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 03:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54C5295652
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 04:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2894793AbgJVBoz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Oct 2020 21:44:55 -0400
-Received: from mail-am6eur05on2078.outbound.protection.outlook.com ([40.107.22.78]:5857
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2894779AbgJVBoy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Oct 2020 21:44:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kpTVPL///Dd/mCWaDL1vnDhfhUGhZi1wbrSn36M5LeS8/s+kokhPNPQ9hZ/X+mU4bx89Dgk7pBcd6R69brapBW9BjZc+egDLMmcxhElECeHWp/OKIFlqyE/aGpQ/xU2PZNgWBs4iGtMovs6tcQMRkd1tLWP/ZzsjTNM++5aC97oZffYm9zh5lJf5ckZGi//jLb92fFgk9fh2/99edY8Ds4UHvWDERB31JWfqf/UMhhlOxNhMqRJQ2yAK4baDyLGEqdcsDfu+ZKcWFuMzMJYE6BIVRp0jdWNEcP9l2qTtPyvmZkPaL5m4Fy0WuZqbs95jDH2YDdihj54TF2/NgKjC+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BS1g07yGxCYLJMy+io9URR4I6y5m3vkNJmZmGt6AvQc=;
- b=PxDom4URzK7+5Wt8CCfXoL83lmFUTy91eEb56gT63tOjvZLHFn5nRRl4fAy+QvZBJrt4TGI2SKkYj2D6Vge2lr9XbhrCYAmHEcQoBtfDaSnSsK5y0kCo7fabqsYn+BnJ3irCMGX7LumV8f/MQyxUrJErqk8JK4T3meHc6GnMU9vr3HI8C+/MlCoYnfewTwdrqV0Wu65eBOf08XgD/e4JojwPeUHwJvVhACqCyYE12PAQmog0UTz0Ne6VCs0as0hcsLvJo3UdVF5mSC/3Opady36NoXKldOLkYllZTdGaF020vkPnE+7Ljq4mBgF0HZ1+9Cn4KQTBuSqhm7tyoTGJTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BS1g07yGxCYLJMy+io9URR4I6y5m3vkNJmZmGt6AvQc=;
- b=OndY0hOW7+8RW8oHeoJ/RbJ9eY/0IktfccaaMKXvlBx6skRNGXfgA9Yq3BE5W9K1CWbVl2p9SJegwyK0weBRfZjiLvqs7E+IX3iguT8EUKIU4zRkijHlZgxjvii8rjxHJk397Dfkt059BoB/bh6oOd5OhN41vWLH8REiyQpw6gs=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
- by AM0PR0402MB3539.eurprd04.prod.outlook.com (2603:10a6:208:1b::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.27; Thu, 22 Oct
- 2020 01:44:50 +0000
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Thu, 22 Oct 2020
- 01:44:50 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-imx@nxp.com, pawell@cadence.com, rogerq@ti.com,
-        jun.li@nxp.com, Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 6/6] doc: dt-binding: cdns,usb3: add wakeup-irq
-Date:   Thu, 22 Oct 2020 09:44:11 +0800
-Message-Id: <20201022014411.2343-1-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-Originating-IP: [119.31.174.66]
-X-ClientProxiedBy: SG2PR02CA0102.apcprd02.prod.outlook.com
- (2603:1096:4:92::18) To AM8PR04MB7300.eurprd04.prod.outlook.com
- (2603:10a6:20b:1c7::12)
+        id S2894975AbgJVCVW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Oct 2020 22:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2894966AbgJVCVU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 22:21:20 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157A2C0613CE
+        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 19:21:19 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id k27so119357oij.11
+        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 19:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ubAi3rBrtdzXL869KERynnLnwRD0Qs9+rarRmKHfSPM=;
+        b=WhKUzyxcoDDVdx5pPCbPp0upWI1eQBpR59+we54m7jVAi3XPmUZcFy2KNHTe8/Bt1K
+         00bRuYLOkRUVl9JthNKKxz6PUP4k4wGZbJQprYj6WdQxNQ7BYcteCXi/1G/0gE2+k21p
+         CpjsJs2AlTTwrBcn7gaoCNHNsOvxzVXhg5T6PvQrettdeJpCUbeb5Bo9fGnYwFPjN78+
+         qgQEk1rMLtFgxVkFZh/54DikaGaysH2Vio2c/hLVWFaE2oH3p3tflnkh6ywtARU5Hcyp
+         vpKxecc5fNxdpvm/A/g1f7xh1Fb2RmSIVeNvfDQSTcGnSSyOg00gBoLHwFq86woKyccZ
+         9KMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ubAi3rBrtdzXL869KERynnLnwRD0Qs9+rarRmKHfSPM=;
+        b=Uclz4H7rsGLVUAs9IlSM6u52T2E7ErhMwkmEbfUL8U/AegwxhQ60uuL2BJGzSkJV5z
+         mY0tlIaV6T1MJDVKq2aTp/yf6eWiXwOebKQTq+EChLIFJDFlveny3Ylh9TLBdBF39bGg
+         26XwsHYw/51WsBggDO69KlSUYA00yLjMeyXazBf2MTHXn1x0AvBBK6W3ElFjq1gbzrP5
+         7Wzrbh1kMbdFldmDyflQ4b8dgwyihciYFKdVGi6kYpIoLngQhUMt3nzuYAH9TeAZv6vx
+         N34KG1V2UNhlCGYFc3PftGySLL+4eIQD2CdrrATiZsRERhBZ+SkjhnsUon6ljYKMxKdr
+         dPCg==
+X-Gm-Message-State: AOAM5316tojtEqHAIX3GGDkg0HnBuDmdopAfQKT9gjvk+j0M8EXmt8sA
+        exsQruNqjrYdn9nIsCE8nZCAXwx1d4Ve33pLXvSSLQ==
+X-Google-Smtp-Source: ABdhPJwhMv1WcYFKossdaXy07p4bNvebNrwEbw2Er4FqmmQfqj7iB1xQTPQfabU0uw+Ev7JXSWFGlf/uhDxLNqld59s=
+X-Received: by 2002:a05:6808:578:: with SMTP id j24mr119875oig.10.1603333278313;
+ Wed, 21 Oct 2020 19:21:18 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR02CA0102.apcprd02.prod.outlook.com (2603:1096:4:92::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18 via Frontend Transport; Thu, 22 Oct 2020 01:44:47 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 651c9be8-9211-4af8-9ea3-08d8762c106b
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3539:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM0PR0402MB35397CD8033CDBD2F667D0D98B1D0@AM0PR0402MB3539.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2vHdKwVQU2C0PdecpOtgrQHC92f4NyG06j2Al12wlUOcj267wZC2xcE53spMtanE5C9uFO5FfWYZgpcD7Jy7Y3mndcsKqnWkQt5n58rmP8I0swXrraNln/5Wy75z1mOF5WuqECt5zj3La4zvaVdTCwysq9fhRj3b9Rc+JbpkVKAME3ztawCRtETopD7LdQNLrxUO5iKw+hQBveqB4uYbetGNanYHI5iTLONdWwmjphgvheGmEzcx+fCn36t+exgFBsGq7vVFCpYRglz4norP16TYkLchQWt/4VLX0J3EnCtk/Ixi2Vdnl6zmCXMMTeiFJWwP0iot+U2Sh1GK0roVQA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(366004)(346002)(39860400002)(376002)(66556008)(66946007)(66476007)(478600001)(5660300002)(6506007)(26005)(6512007)(44832011)(6666004)(8936002)(186003)(16526019)(1076003)(86362001)(4326008)(36756003)(52116002)(2616005)(956004)(6486002)(8676002)(316002)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: TLYCKDqb49iBh5d8CoyLaoaZwtHHgjiN57dbxnYH0JiQbrnNqHpCrhHyLGwNh5yvaRUFupnkQrK3DGxlnYUHZR8r7g5W6LI59v2EfMtdiXpUnYfzB2Thklbx2fiJS95nW3cgrmdVPT7AoiVfM7mlSfIirMQw3Fp4vE8p0cUh+y0o6c6K8eFr5Fk2TMY/UiuGY+aGQ2boyLJYcnpeKsrHpGWvtVJP+5Xhk/krsCAcxF3sme20C3niD0jvxZlZ3h/PyDlT8FkvFp3NEciSeEW3E15zXpbWScEQ83i8OQFPRXkfYCV1z4TV/z5VTF8Apjf9vfO6r8bbTSzQbwdAkAZCVR8tA0oFhLJwpg6a87JCoB2sE2OxgH1iIZnL7dIktiYUWhyUK6Bp+9x9ZPxM+nshY+V/XuN/u3O6K2oNDvvC2QajP0S2nLYwKVMUIDNiI+nUu4wKE5teiQhYMuj5mIdE2FV5Cf/Xtl/ZCqTSGFP2WOjOw557Z+HnmRELKQXe3MyFvzbyBYf1vxb/TH0gC9T3DDjPxeNh2e8mBkVJH3SnJkBEWKTakoayAVLF7hgoxLFp6amtTTPJ6JROsSokZjp/TSC1tljU7q80Qw5vvIBOv2xO2ZaiGo/VbQxtWWg+TDAja35DQY0jRA1Qi30HhmHZCw==
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 651c9be8-9211-4af8-9ea3-08d8762c106b
-X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2020 01:44:50.2098
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Eh9tqBVANDVKX9HwxBrjRtRZoOqbR0VPkgbcHpX1h8UwUmFSMm04Ekm0+d/Y/182xwXqPIKfI3ZKCiJAl6DYDA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3539
+References: <20201021224619.20796-1-john.stultz@linaro.org> <d9c241a5-f31b-b044-bc15-1c5e4d445a69@synopsys.com>
+In-Reply-To: <d9c241a5-f31b-b044-bc15-1c5e4d445a69@synopsys.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 21 Oct 2020 19:21:06 -0700
+Message-ID: <CALAqxLX30jZvHdpMyPMwJUXzMP9EJRaW-vo9x2gkEvqxSKZaZA@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: dwc3: Trigger a GCTL soft reset when switching
+ modes in DRD
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To support low power mode for controller, the driver needs wakeup-irq
-to reflect the signal changing after controller is stopped, and waking
-the controller up accordingly.
+On Wed, Oct 21, 2020 at 6:17 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>
+> John Stultz wrote:
+> > From: Yu Chen <chenyu56@huawei.com>
+> >
+> > With the current dwc3 code on the HiKey960 we often see the
+> > COREIDLE flag get stuck off in __dwc3_gadget_start(), which
+> > seems to prevent the reset irq and causes the USB gadget to
+> > fail to initialize.
+> >
+> > We had seen occasional initialization failures with older
+> > kernels but with recent 5.x era kernels it seemed to be becoming
+> > much more common, so I dug back through some older trees and
+> > realized I dropped this quirk from Yu Chen during upstreaming
+> > as I couldn't provide a proper rational for it and it didn't
+> > seem to be necessary. I now realize I was wrong.
+> >
+> > After resubmitting the quirk Thinh Nguyen pointed out that it
+> > shouldn't be a quirk and it is actually mentioned in the
+> > programming guide that it should be done when switching modes
+> > in DRD.
+> >
+> > So, to avoid these !COREIDLE lockups seen on HiKey960, this
+> > patch issues GCTL soft reset when switching modes if the
+> > controller is in DRD mode.
+> >
+> > Cc: Felipe Balbi <balbi@kernel.org>
+> > Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+> > Cc: Yang Fei <fei.yang@intel.com>
+> > Cc: YongQin Liu <yongqin.liu@linaro.org>
+> > Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> > Cc: Thinh Nguyen <thinhn@synopsys.com>
+> > Cc: Jun Li <lijun.kernel@gmail.com>
+> > Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: linux-usb@vger.kernel.org
+> > Signed-off-by: Yu Chen <chenyu56@huawei.com>
+> > Signed-off-by: John Stultz <john.stultz@linaro.org>
+> > ---
+> > v2:
+> > * Rework to always call the GCTL soft reset in DRD mode,
+> >   rather then using a quirk as suggested by Thinh Nguyen
+> >
+> > ---
+> >  drivers/usb/dwc3/core.c | 19 +++++++++++++++++++
+> >  1 file changed, 19 insertions(+)
+> >
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index bdf0925da6b6..ca94f3a2a83c 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -114,10 +114,24 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+> >       dwc->current_dr_role = mode;
+> >  }
+> >
+> > +static void dwc3_gctl_core_soft_reset(struct dwc3 *dwc)
+> > +{
+> > +     int reg;
+> > +
+> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+> > +     reg |= (DWC3_GCTL_CORESOFTRESET);
+> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+> > +
+> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+> > +     reg &= ~(DWC3_GCTL_CORESOFTRESET);
+> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+> > +}
+> > +
+> >  static void __dwc3_set_mode(struct work_struct *work)
+> >  {
+> >       struct dwc3 *dwc = work_to_dwc(work);
+> >       unsigned long flags;
+> > +     int hw_mode;
+> >       int ret;
+> >       u32 reg;
+> >
+> > @@ -154,6 +168,11 @@ static void __dwc3_set_mode(struct work_struct *work)
+> >               break;
+> >       }
+> >
+> > +     /* Execute a GCTL Core Soft Reset when switch mode in DRD*/
+> > +     hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> > +     if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD)
+> > +             dwc3_gctl_core_soft_reset(dwc);
+> > +
+>
+> I think this should be done inside the spin_lock.
+>
+> >       spin_lock_irqsave(&dwc->lock, flags);
+> >
+> >       dwc3_set_prtcap(dwc, dwc->desired_dr_role);
+>
+> The DRD mode change sequence should be like this if we want to switch
+> from host -> device according to the programming guide (for all DRD IPs):
+> 1. Reset controller with GCTL.CoreSoftReset
+> 2. Set GCTL.PrtCapDir(device)
+> 3. Soft reset with DCTL.CSftRst
+> 4. Then follow up with the initializing registers sequence
+>
+> However, from code review, with this patch, it follows this sequence:
+> a. Soft reset with DCTL.CSftRst on driver probe
+> b. Reset controller with GCTL.CoreSoftReset
+> c. Set GCTL.PrtCapDir(device)
+> d. < missing DCTL.CSftRst >
+> e. Then follow up with initializing registers sequence
+>
+> It may work, but it doesn't follow the programming guide.
 
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+Much appreciated for the guidance here. I don't believe I have access
+to the programming guide (unless its publicly available somewhere?),
+so I'm just working with what I can experimentally figure out and
+vendor patch history.
 
-diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-index ac20b98e9910..0171e64ef95e 100644
---- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-+++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-@@ -30,12 +30,15 @@ properties:
-       - description: OTG/DRD controller interrupt
-       - description: XHCI host controller interrupt
-       - description: Device controller interrupt
-+      - description: interrupt used to wake up core, eg: when usbcmd.rs is
-+      cleared by xhci core, this interrupt is optional.
- 
-   interrupt-names:
-     items:
-       - const: host
-       - const: peripheral
-       - const: otg
-+      - const: wakeup
- 
-   dr_mode:
-     enum: [host, otg, peripheral]
--- 
-2.17.1
+So I'll try to translate the above into the driver as best I can, but
+again, I really appreciate your review and corrections here!
 
+thanks
+-john
