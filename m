@@ -2,108 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 113EC296079
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE0D29607A
 	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 15:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2900522AbgJVNzs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Oct 2020 09:55:48 -0400
-Received: from aibo.runbox.com ([91.220.196.211]:51528 "EHLO aibo.runbox.com"
+        id S2900521AbgJVNzr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Oct 2020 09:55:47 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:54282 "EHLO aibo.runbox.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2895101AbgJVNzr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S2442869AbgJVNzr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Thu, 22 Oct 2020 09:55:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
          s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
         :Message-Id:Date:Subject:Cc:To:From;
-        bh=+MXeMYFQO8thYieih8I7NJ7PuJN+lO/UerkNKTkxNCc=; b=DBIHJr/yWc11cM5gXSvzurrKET
-        l34GuGPIG/g64leqdKja9p7oAD0dOS4nc1RQD7i9WuxzSkcmVnfyaGY4xYV+iFOGj4wBlSFsIGEmS
-        7PmmxZUsVYJSxJ8G8hphZuqkJE3W4nDAaPNfOTBRoSTSKiLit+Yu+V1t6ocwhekbQAMn7BA21xlMD
-        FEEiX0eqLPYlMeK9PW5MnAOc6hzks7ujY8doEgQRoU7yMIbbaGDQugVj2CMnh9zKWpU4dcuNZXwrr
-        a3506aXekyDtF6aClszB36IFcxciSLhovX5VsK17suTMnDQ6rgT3PF90+JTfbWl9o0FRp0ZehNN8s
-        pCicnGzA==;
+        bh=RLOsQAWw+vGlqNwVSZlDdr2JvP1N7nTxGdiLPOxd2ig=; b=mndfz1QUR5OU9krOjL1SwlCZmm
+        Ovvlf5HCkf39Cd0aXktZJRlYPatwQULtaM8xc0CQtmnW8q3Io1Tym60/A2Jz2fjdth/Nlu6gPVibt
+        WxQ+CI3qjniHav7Y9LpJ6bo0IGRN2roRURDYChNi7dxy5NP89Jod+Fj61yjqy+Td0i1v5AtG8AeRS
+        GBnwUv7D1BTeIcKoQn1GJPg/ZDehQNSOIV2R5bEmcTW2RkMJBjMUE/U3D2teLNB7eorO3IVq5Yw/O
+        Bm8alus2125OOoh9Ojl+GTSJyq3smYtty+XST4zZoCKhzgaefuRogPpBTxTj5jQev48+ovw9FZknb
+        ah4FoncQ==;
 Received: from [10.9.9.72] (helo=submission01.runbox)
-        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
         (envelope-from <m.v.b@runbox.com>)
-        id 1kVb4D-0001P2-7u; Thu, 22 Oct 2020 15:55:45 +0200
+        id 1kVb4C-0001ZH-JV; Thu, 22 Oct 2020 15:55:44 +0200
 Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.90_1)
-        id 1kVb41-0008Qw-Ec; Thu, 22 Oct 2020 15:55:33 +0200
+        id 1kVb42-0008Qw-OZ; Thu, 22 Oct 2020 15:55:35 +0200
 From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
 To:     linux-usb@vger.kernel.org
-Cc:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
-        Bastien Nocera <hadess@hadess.net>,
+Cc:     Bastien Nocera <hadess@hadess.net>, stable@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Pany <pany@fedoraproject.org>
-Subject: [PATCH 0/2] Patches to prevent re-probing all Apple USB devices on apple-mfi-fastcharge load
-Date:   Thu, 22 Oct 2020 09:55:19 -0400
-Message-Id: <20201022135521.375211-1-m.v.b@runbox.com>
+        "M . Vefa Bicakci" <m.v.b@runbox.com>
+Subject: [PATCH 1/2] usbcore: Check both id_table and match() when both available
+Date:   Thu, 22 Oct 2020 09:55:20 -0400
+Message-Id: <20201022135521.375211-2-m.v.b@runbox.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <4cc0e162-c607-3fdf-30c9-1b3a77f6cf20@runbox.com>
+In-Reply-To: <20201022135521.375211-1-m.v.b@runbox.com>
 References: <4cc0e162-c607-3fdf-30c9-1b3a77f6cf20@runbox.com>
+ <20201022135521.375211-1-m.v.b@runbox.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello all,
+From: Bastien Nocera <hadess@hadess.net>
 
-This thread is intended to continue the thread at [1], where Pany
-reported an issue involving the apple-mfi-fastcharge driver. The
-bug in question causes a re-probe of all Apple USB devices when the
-driver in question is loaded, including an Apple SD card reader,
-which in turn causes a boot-up failure. (The original bug report
-is in the RedHat Bugzilla at [2].)
+From: Bastien Nocera <hadess@hadess.net>
 
-These two patches aim to resolve this issue by implementing a match
-function in the apple-mfi-fastcharge driver to ensure that this driver
-is only matched with devices it is intended to be used with, and by
-modifying the USB core to ensure that when a device driver has an
-ID table and a match function, they are both taken into account.
-(The previous behaviour did not check the result of the driver's
-match() if the driver's id_table matched the device.)
+When a USB device driver has both an id_table and a match() function, make
+sure to check both to find a match, first matching the id_table, then
+checking the match() function.
 
-These changes have been verified to not cause regressions on a
-5.8.16-based kernel by (1) verifying apple-mfi-fastcharge behaviour
-with an iPhone, (2) running the usbip regression test to ensure that
-the changes in USB core are harmless to usbip, and (3) using the
-patched kernel with other USB devices (a keyboard, a mouse and a
-webcam). Greg Kroah-Hartman's usb-next tree has been verified to
-compile with these patches and was briefly runtime tested as well.
-(The base commit in usb-next is listed below.)
+This makes it possible to have module autoloading done through the
+id_table when devices are plugged in, before checking for further
+device eligibility in the match() function.
 
-Credits: The first patch was co-developed by Bastien Nocera and
-myself, with the main idea (i.e., the use of id_table *and* the
-match function) coming from Bastien. The second patch was
-developed solely by Bastien, and I only added a few tags to the
-patch description.
-
-Bastien, sorry for the delay!
-
-Thank you,
-
-Vefa
-
-[1] https://lore.kernel.org/linux-usb/CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com/
-[2] https://bugzilla.redhat.com/show_bug.cgi?id=1878347
-
-Cc: Bastien Nocera <hadess@hadess.net>
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+Cc: <stable@vger.kernel.org> # 5.8
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Pany <pany@fedoraproject.org>
+Co-developed-by: M. Vefa Bicakci <m.v.b@runbox.com>
+Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
+---
+ drivers/usb/core/driver.c  | 30 +++++++++++++++++++++---------
+ drivers/usb/core/generic.c |  4 +---
+ drivers/usb/core/usb.h     |  2 ++
+ 3 files changed, 24 insertions(+), 12 deletions(-)
 
-Bastien Nocera (2):
-  usbcore: Check both id_table and match() when both available
-  USB: apple-mfi-fastcharge: don't probe unhandled devices
-
- drivers/usb/core/driver.c               | 30 +++++++++++++++++--------
- drivers/usb/core/generic.c              |  4 +---
- drivers/usb/core/usb.h                  |  2 ++
- drivers/usb/misc/apple-mfi-fastcharge.c | 17 +++++++++-----
- 4 files changed, 36 insertions(+), 17 deletions(-)
-
-
-base-commit: 270315b8235e3d10c2e360cff56c2f9e0915a252
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 98b7449c11f3..4dfa44d6cc3c 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -839,6 +839,22 @@ const struct usb_device_id *usb_device_match_id(struct usb_device *udev,
+ 	return NULL;
+ }
+ 
++bool usb_driver_applicable(struct usb_device *udev,
++			   struct usb_device_driver *udrv)
++{
++	if (udrv->id_table && udrv->match)
++		return usb_device_match_id(udev, udrv->id_table) != NULL &&
++		       udrv->match(udev);
++
++	if (udrv->id_table)
++		return usb_device_match_id(udev, udrv->id_table) != NULL;
++
++	if (udrv->match)
++		return udrv->match(udev);
++
++	return false;
++}
++
+ static int usb_device_match(struct device *dev, struct device_driver *drv)
+ {
+ 	/* devices and interfaces are handled separately */
+@@ -853,17 +869,14 @@ static int usb_device_match(struct device *dev, struct device_driver *drv)
+ 		udev = to_usb_device(dev);
+ 		udrv = to_usb_device_driver(drv);
+ 
+-		if (udrv->id_table)
+-			return usb_device_match_id(udev, udrv->id_table) != NULL;
+-
+-		if (udrv->match)
+-			return udrv->match(udev);
+-
+ 		/* If the device driver under consideration does not have a
+ 		 * id_table or a match function, then let the driver's probe
+ 		 * function decide.
+ 		 */
+-		return 1;
++		if (!udrv->id_table && !udrv->match)
++			return 1;
++
++		return usb_driver_applicable(udev, udrv);
+ 
+ 	} else if (is_usb_interface(dev)) {
+ 		struct usb_interface *intf;
+@@ -941,8 +954,7 @@ static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
+ 		return 0;
+ 
+ 	udev = to_usb_device(dev);
+-	if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
+-	    (!new_udriver->match || new_udriver->match(udev) == 0))
++	if (!usb_driver_applicable(udev, new_udriver))
+ 		return 0;
+ 
+ 	ret = device_reprobe(dev);
+diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
+index 22c887f5c497..26f9fb9f67ca 100644
+--- a/drivers/usb/core/generic.c
++++ b/drivers/usb/core/generic.c
+@@ -205,9 +205,7 @@ static int __check_for_non_generic_match(struct device_driver *drv, void *data)
+ 	udrv = to_usb_device_driver(drv);
+ 	if (udrv == &usb_generic_driver)
+ 		return 0;
+-	if (usb_device_match_id(udev, udrv->id_table) != NULL)
+-		return 1;
+-	return (udrv->match && udrv->match(udev));
++	return usb_driver_applicable(udev, udrv);
+ }
+ 
+ static bool usb_generic_driver_match(struct usb_device *udev)
+diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
+index c893f54a3420..82538daac8b8 100644
+--- a/drivers/usb/core/usb.h
++++ b/drivers/usb/core/usb.h
+@@ -74,6 +74,8 @@ extern int usb_match_device(struct usb_device *dev,
+ 			    const struct usb_device_id *id);
+ extern const struct usb_device_id *usb_device_match_id(struct usb_device *udev,
+ 				const struct usb_device_id *id);
++extern bool usb_driver_applicable(struct usb_device *udev,
++				  struct usb_device_driver *udrv);
+ extern void usb_forced_unbind_intf(struct usb_interface *intf);
+ extern void usb_unbind_and_rebind_marked_interfaces(struct usb_device *udev);
+ 
 -- 
 2.26.2
 
