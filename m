@@ -2,69 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B59A62960CE
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 16:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4591296293
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 18:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2900796AbgJVOVR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Oct 2020 10:21:17 -0400
-Received: from mga02.intel.com ([134.134.136.20]:55111 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2900764AbgJVOVR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Oct 2020 10:21:17 -0400
-IronPort-SDR: /HO3qUQvHxRbTNjN0qc7oKvslPof9r0ZvIQzF6StIoL5CCPY2Gv6PiOR7R5xQEd2N4iafpnxMq
- HxlWzEFCAgrw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9781"; a="154485999"
-X-IronPort-AV: E=Sophos;i="5.77,404,1596524400"; 
-   d="scan'208";a="154485999"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2020 07:21:15 -0700
-IronPort-SDR: /BIOu7vwq2pI3cd9ST+/ILnIqGeUW4ipyIJtNqfiM6qBFpvhmE6GTW6FRPYf7d7ui4uxBShqKl
- 8AN5ZEE4T9JQ==
-X-IronPort-AV: E=Sophos;i="5.77,404,1596524400"; 
-   d="scan'208";a="524295100"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2020 07:21:11 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kVbTp-00DL3d-T9; Thu, 22 Oct 2020 17:22:13 +0300
-Date:   Thu, 22 Oct 2020 17:22:13 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Luo Jiaxing <luojiaxing@huawei.com>
-Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        john.garry@huawei.com, himanshu.madhani@cavium.com,
-        felipe.balbi@linux.intel.com, gregkh@linuxfoundation.org,
-        uma.shankar@intel.com, anshuman.gupta@intel.com,
-        animesh.manna@intel.com, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linuxarm@huawei.com
-Subject: Re: [PATCH v1 1/5] seq_file: Introduce DEFINE_STORE_ATTRIBUTE()
- helper macro
-Message-ID: <20201022142213.GC4077@smile.fi.intel.com>
-References: <1603355997-32350-1-git-send-email-luojiaxing@huawei.com>
- <1603355997-32350-2-git-send-email-luojiaxing@huawei.com>
+        id S2901636AbgJVQVA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Oct 2020 12:21:00 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:48033 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2896713AbgJVQU7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Oct 2020 12:20:59 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Thu, 22 Oct 2020 12:20:59 EDT
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 53E3C5802A0;
+        Thu, 22 Oct 2020 12:13:51 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 22 Oct 2020 12:13:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=ixh/510Haf/p9X2/V7HbKAJjNIS
+        VDdGLgM5TvEAXzfU=; b=UxvDlTqozmSDWjwT9SYPVhrvwNNbuW4FWhkZ6u7+eVE
+        0DhToDftB2Bxb4N7txF383B/xDhANSlpGnhjqtr1eKo6jL8JFBrT7qurwLCNpy4i
+        MYxrAokTa/8Yzo8NPugTM59OCCMH71FdMlloEHwphYs6p7i0KsBpmFLaA1At1Mob
+        plAVwHzDqGNTvJtor7m0KwECw8wzwU8G9DeoI8Y0kQHAFzfnPH8srXP+yaqxjY6a
+        P9W1de80tyLiuakn65a1+08JEvr9eBjqW8/Ua66sqdAegW2eeYEOEGytjTJrsz7y
+        SUPGyn2Q115M0Og8uHZUuWazn4W0YfxNfGgvkmKSybw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=ixh/51
+        0Haf/p9X2/V7HbKAJjNISVDdGLgM5TvEAXzfU=; b=I3QzhkwzE/3XjJUFFv+EQo
+        LIezOs9zPrppuzGFAfBrL36sD+yMhqVd6zRfTbNzR5cVqdTjGvLvY5G1O0LCCS0M
+        QkaJbMVpv+akQAHzItPlMTnBkllngZuriZd4xLlGkRQHYiJdpKN2W6YykfeJlfmv
+        LW4fHhXtKDytknBzHgKgsHntvOevALB2QOF8m+CY0Te7OwGeY6zzMlpRAm65tqDs
+        l1ca96/GFbCsGMyOWOE+r4YA0hAgaK45AinwJLz9W8AaLV1y0aNKDHLoxhUthF/Z
+        qYWpm15izz3yVj+bcuGdcA6a0Q2NbMrFWAlynIP6EW5+tqUfwlLbLjRI1GsKGywg
+        ==
+X-ME-Sender: <xms:va-RX6mtffWuYcQeRxTHY0HBEWNM3bP_4FVBQd_1gOpG2qoejcxoeg>
+    <xme:va-RXx3jSl4dqsWtS5Mw5S0ULq3H5SG2sPBq_JAKK6KY2XLqEkXcGu1olOcM_Tvts
+    fGbWI9QcioZVsaBreM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrjeekgdduiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:va-RX4oZC-oxkr8LO-2O5SQYq8o8-xGoS0O3_6pl6WV3ldSjkux5vA>
+    <xmx:va-RX-lHxxvyhyqD_-4Q0cH33nZpVACyMcaPGfgOBvhZQ-RmKYXWLQ>
+    <xmx:va-RX424hHNG_l7CpMI8DD-9opEucSd-upLtS9InEohHZTrOjK0Ubg>
+    <xmx:v6-RX-w00q5Nsjs3Avwi45i0qL1Dx2l6lJx3b6Sr9Q-GjCRnQxJk3A>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id EBB053064682;
+        Thu, 22 Oct 2020 12:13:48 -0400 (EDT)
+Date:   Thu, 22 Oct 2020 18:13:47 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 24/29] arm64: dts: allwinner: h6: Harmonize DWC USB3 DT
+ nodes name
+Message-ID: <20201022161347.llvnqaof7fy4i2rp@gilmour.lan>
+References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
+ <20201020115959.2658-25-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tp4zfrkdauye4fpq"
 Content-Disposition: inline
-In-Reply-To: <1603355997-32350-2-git-send-email-luojiaxing@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20201020115959.2658-25-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 04:39:53PM +0800, Luo Jiaxing wrote:
-> We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
-> for read-only file, but we found many of drivers want a helper marco for
-> read-write file too.
 
-I would expect that DEFINE_STORE maps to WO attribute...
-For RW SHOW_STORE would be more appropriate.
+--tp4zfrkdauye4fpq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Otherwise I think it makes sense.
+On Tue, Oct 20, 2020 at 02:59:54PM +0300, Serge Semin wrote:
+> In accordance with the DWC USB3 bindings the corresponding node
+> name is suppose to comply with the Generic USB HCD DT schema, which
+> requires the USB nodes to have the name acceptable by the regexp:
+> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
+> named.
+>=20
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Queued for 5.11, thanks!
+Maxime
 
+--tp4zfrkdauye4fpq
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX5GvuwAKCRDj7w1vZxhR
+xe4eAQCm6UBIAoNdAQl4UOCa+VvbwdUDqEEuCOJTtKU3dz6xTgEA79+0F9ioRVTo
+DjGx5094pbmIuS4Cp5UvZ8Du/3q7ewo=
+=Ffyq
+-----END PGP SIGNATURE-----
+
+--tp4zfrkdauye4fpq--
