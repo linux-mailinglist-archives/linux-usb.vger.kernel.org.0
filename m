@@ -2,114 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B69295F7D
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 15:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699C229603B
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 15:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2899400AbgJVNOP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Oct 2020 09:14:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45736 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2899395AbgJVNOP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Oct 2020 09:14:15 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 71D5824178;
-        Thu, 22 Oct 2020 13:14:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603372454;
-        bh=ewhdFI2cl7uU5ebPSxO7bSJrTEC5WCyZWiaEoBBCKPM=;
-        h=Date:From:To:Subject:From;
-        b=nEBcXe3wTi9iqECZGG+7yw0BCjZ7v1K8S7wakKe5QxlvBDTf7o4r1MRZ8bsqcZmu9
-         bfKj3U0xDylGlnjnf0ZcdngN3ci7ia/bhjain+DpZisWDvIxObGo6m5UH7w8CSgoMT
-         t9D213kFKSx+/k9JjzVnbUiZPNVECQEYkjXhxUaY=
-Date:   Thu, 22 Oct 2020 15:14:51 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: usbutils 013 release
-Message-ID: <20201022131451.GA1779379@kroah.com>
+        id S2503632AbgJVNmx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Oct 2020 09:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2444568AbgJVNmx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Oct 2020 09:42:53 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E655CC0613CE
+        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 06:42:52 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id t14so971238pgg.1
+        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 06:42:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kxwesvm7CvQAxawGi5468guP8tm7KIPJfw/4s/j0Bsk=;
+        b=SX8oMJpC5qG0LtCMCHeJr52q5pYquJWCj84Eaa2SGn/H0K6n5F5j66AGyEhh6fbY76
+         Sx4blFtO6WXRbbUAVSGSYuW0IA78//PIZXNAM6+65tpQr260RB/Shy3XkdNUA3OAO09h
+         oeEgo9KJFV/bKafxminOQHgT2e6hva9rjG/VOS9Oiow7j/LmvSgX6wmCOEV/hYjvt8LN
+         nUVDZSF2i1oJOl2rk2zjUGh+TgKlVE1oI/DNuoCKEQf5vRt4Lq2fvGVAmtVxP5X6vhxu
+         GdLN8am5wwvPsLSv8Q+VX1HjXPg18/f5WFWyWPnPFQy3u3SD1rlK/2FVtCGfLqU6IufQ
+         5JsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kxwesvm7CvQAxawGi5468guP8tm7KIPJfw/4s/j0Bsk=;
+        b=cSAvZzPMue4WRO8CU9IWpQudyeB0op9LIujo62+M5PXEWwLSMBVAp/YhfPqnQR8NuC
+         UcihL9znpm1eMXbHMk2RaMsGhaCSXw8Cs8tRx4iU6h9AOKg/9+yE023c2J5du7dypABy
+         AcUyGjuUGm5I7IVHmk5n8hJP8uZUJT8A6Vs2fFm25SoRPTJo2vk2Jz93+61hOJPsq2Uv
+         3H/U5NOY67YG9v5d8XixkUsOlljLlZsEFUFDq2iH/jVqnG0E0CA2GnPQAU6ARNaxdYpJ
+         q+tW/iadLU0hzS8o7nwWYghc0yv8/Wuo2SwVQXM3SqT4sUM5BE+HJ9p4JPgjulDLsJ4g
+         jajA==
+X-Gm-Message-State: AOAM5322jKcOFQn6ERY+Hkd1rlsFwt3U6OReDw04kZSKkTVwSfUIFXcF
+        N9S+PbzAYIrzpXbxSWUax16gIcGf73ts1dnFIgU=
+X-Google-Smtp-Source: ABdhPJxBdG0GBrLxP8DCQkSebCavm+/dBNJpdB0Dlx1J/b3sgtC+jppQqYQhM0qeG5cpNhgdKDyAGgusZnRZFKnA/Gk=
+X-Received: by 2002:a65:47c2:: with SMTP id f2mr2249904pgs.4.1603374172514;
+ Thu, 22 Oct 2020 06:42:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
+ <87a6wig461.fsf@kernel.org> <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
+ <874kmpf583.fsf@kernel.org> <d0aca346-353c-d74e-6f00-ccd2a4ed26ef@gmail.com>
+ <976cea12-e54e-fbca-6c53-e6ef5c554094@synopsys.com> <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
+ <2b6586e6-528c-86e8-9d92-0061bc44866d@gmail.com> <aad327a8-95bc-40ec-abf7-ad216a02fad0@synopsys.com>
+ <2cc783ac-6b71-190b-49fc-9e2bceeacd4b@gmail.com> <920590dc-5430-7f8b-b2e1-1a4c37f4dfbe@synopsys.com>
+In-Reply-To: <920590dc-5430-7f8b-b2e1-1a4c37f4dfbe@synopsys.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 22 Oct 2020 16:43:41 +0300
+Message-ID: <CAHp75Vfs9AoOYSVGTpw30h11ptPOSPNf1AsWBKdiVrDL=9X3PQ@mail.gmail.com>
+Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "felipe.balbi-VuQAYsv1563Yd54FQh9/CA-XMD5yJDbdMReXY1tMh2IBg-XMD5yJDbdMReXY1tMh2IBg@public.gmane.org" 
+        <felipe.balbi-VuQAYsv1563Yd54FQh9/CA-XMD5yJDbdMReXY1tMh2IBg-XMD5yJDbdMReXY1tMh2IBg@public.gmane.org>,
+        Heikki Krogerus 
+        <heikki.krogerus-VuQAYsv1563Yd54FQh9/CA@public.gmane.org>,
+        Andy Shevchenko 
+        <andriy.shevchenko-VuQAYsv1563Yd54FQh9/CA@public.gmane.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It's been a long time, and there have been a number of tiny bugfixes in
-the usbutils package backing up, as well as one major issue finally
-fixed that had been reported a lot, so it's time for a new release.
+On Thu, Oct 22, 2020 at 4:21 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> Ferry Toth wrote:
+> > Op 21-10-2020 om 21:50 schreef Thinh Nguyen:
+> >> Ferry Toth wrote:
 
-One other "major" change is we now trust sysfs to have the string values
-for the vendor/product descriptors, instead of having to ask the device
-directly for them.  That should save a bit of USB bandwidth, but for
-containers that have sysfs blocked off, this might cause some problems.
-If so, please let me know.
+...
 
-Tarballs can be found on kernel.org here:
-	https://www.kernel.org/pub/linux/utils/usb/usbutils/
+> >> Oops, looks like I can't make it synchronous this way. Can you try
+> >> Jack's change to the u_audio.c instead?
+> >
+> > Oops indeed goes away with Jack's change, but usb connection goes
+> > up/down continuously, meaning: my host sees usb network and audio
+> > device appearing / disappearing.
+>
+> Ok, thanks for verifying that it went away.
+>
+> > mass_storage device does not appear all.
+>
+> There are some fixes to dwc3 in kernel mainline. Is it possible to test
+> this against linux-next?
 
-Or the github/kernel.org repo also have the updated trees:
-	https://github.com/gregkh/usbutils
-	https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usbutils.git
+I think the best is to wait for v5.10-rc1 and retest.
 
-and the full shortlog is below.
-
-thanks,
-
-greg k-h
-
-------------
-
-usbutils 013
-============
-
-Aurelien Jarno (1):
-      lsusb.8.in: do not mention usb.ids
-
-Baruch Siach (1):
-      usb-devices.1: don't mention bash
-
-Greg Kroah-Hartman (15):
-      usbhid-dump: move manpage to main directory out of subdir
-      usbhid-dump.8: add SPDX header
-      usbhid-dump.8: autogenerate it with the usbutils version number
-      .gitignore: add usbhid-dump.8
-      usbhid-dump: add SPDX identifiers to all files.
-      usbhid-dump: remove libusb.h libusb_strerror() implementation
-      usbhid-dump: remove lib directory
-      usbhid-dump: move .h files into src/ directory
-      Makefile.am: add usbhid-dump.8 to distclean list
-      usbhid-dump: some autoconf cleanup
-      usbhid-dump: remove some dev_list functions that were never used
-      dump_audiostreaming_interface(): remove unused variable
-      usbmisc: initialize string buffer before reading from device.
-      lsusb.py: drop trailing space on non-hub devices
-      lsusb.py: strip whitespace from device strings
-
-Jakub Wilk (2):
-      lsusb(8): fix formatting
-      lsusb(8): document --tree
-
-Pino Toscano (1):
-      lsusb.py: remove private paths for usb.ids
-
-Rob Gill (1):
-      Additional device classes for usb-devices script
-
-Rosen Penev (1):
-      usbhid-dump: Do not use rindex
-
-Thomas Hebb (4):
-      Move read_sysfs_prop() from names.c to its own file
-      sysfs: Don't return bogus data for devices under a hub
-      lsusb: Use vendor and product name fallback logic in -D mode too
-      lsusb: Get manufacturer, product, and serial from sysfs
-
-Timothy Robert Bednarzyk (1):
-      bootstrap: change /bin/bash to /bin/sh
-
-Torleiv Sundre (1):
-      lsusb: fix two typos in UVC Extension Unit descriptor
-
-Tormod Volden (1):
-      usbhid-dump: Put back autoconf check for libusb_set_option()
+-- 
+With Best Regards,
+Andy Shevchenko
