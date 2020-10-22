@@ -2,140 +2,230 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FF3295A97
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 10:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2574295BA7
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 11:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2509393AbgJVIj2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Oct 2020 04:39:28 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:15759 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2509384AbgJVIj1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Oct 2020 04:39:27 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 49D07166FD9E9F0C1324;
-        Thu, 22 Oct 2020 16:39:24 +0800 (CST)
-Received: from huawei.com (10.69.192.56) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Thu, 22 Oct 2020
- 16:39:16 +0800
-From:   Luo Jiaxing <luojiaxing@huawei.com>
-To:     <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>,
-        <andriy.shevchenko@linux.intel.com>
-CC:     <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <john.garry@huawei.com>, <himanshu.madhani@cavium.com>,
-        <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <uma.shankar@intel.com>, <anshuman.gupta@intel.com>,
-        <animesh.manna@intel.com>, <linux-usb@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>
-Subject: [PATCH v1 5/5] drm/i915/display: Introduce DEFINE_STORE_ATTRIBUTE for debugfs
-Date:   Thu, 22 Oct 2020 16:39:57 +0800
-Message-ID: <1603355997-32350-6-git-send-email-luojiaxing@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1603355997-32350-1-git-send-email-luojiaxing@huawei.com>
-References: <1603355997-32350-1-git-send-email-luojiaxing@huawei.com>
+        id S2508549AbgJVJXx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Oct 2020 05:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2508495AbgJVJXw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Oct 2020 05:23:52 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68C0C0613CE
+        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 02:23:52 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id bh6so638427plb.5
+        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 02:23:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=enFThnl7+jaM4i/Qit295wRuF91z0nRhNte2UcXGHm0=;
+        b=qwPwM0XYkNJdNA0egSKz02SV/+67R0iRw3oiLZBfkT6s85nJYcb0+7gZGKvTcmvi5+
+         0ltqQDp7ywjdf1fPzqXWDZ/gG9A0s51Edsdb5Hr0Q8bPzZj1eVKLqeCr5Bkzu2jAWZGC
+         RxRas6nBYI1qXFFAXOWPK83AtePolAykIkrgL/s8YhDnL1ruPryMpXA8vtqTFlFcT1Li
+         oCbZn5EW2cqvU89ZuB7TBJBbBLGoRjTdqI8udTdD8thM3qOftDs1QfyyMhD/AQ69cDYH
+         +kXUBIFREDP5NGA7JrEqcXW2Xj/69O37LYxzUNMNsT3x5iJzhVzA0QRkQQyq828B+iaY
+         04vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=enFThnl7+jaM4i/Qit295wRuF91z0nRhNte2UcXGHm0=;
+        b=GtdGzltDOnx6sWwVQiRLo7CfR69G7RM0njZJB+KK7oZPHAmpMXml/aeUc/WwRqFtRE
+         YPE7i95z3DX0WUJ/OE64YbEXN7d/scHPbpYPdk1q3t+E3yqEbzM2RGX5sUc+bqSmJ6MR
+         S9Q+k/3ac6JuFAXdtoiHjnWA8dxJeTQHOGxSHwgg64gpE6iXecg0Mq+6rwwSnNhFFlxc
+         ejVy8xKwFtPXlS4gaOA6w+/uWiasf25Ih0ytbUFH0NYukHRj0P97BnMad7v5NZ8TlZRs
+         LuFENDtaJZLGminScPmmo+h8vddDMJ2PotrGhyAoc0crbgOySYoa/Nb21doC5LweenJx
+         HWrw==
+X-Gm-Message-State: AOAM530PPYB0rPznoh7eD7OZJGlk3ziI0ak8KCojpFKH8+vP5LHBLhWN
+        5XttbLU70/NPEtX0Jc+6RmkLZCXEDAbKmkpBJGokBusJDCrMlA==
+X-Google-Smtp-Source: ABdhPJzAiWv5veGKW0wCr1VSKDkxNCIw78l4aywVMGG1k1BXBkioNgSDCLkCZY4beshBdCS5GroW7g8eZ6z2Ooj7GZA=
+X-Received: by 2002:a17:90b:305:: with SMTP id ay5mr1543967pjb.129.1603358632386;
+ Thu, 22 Oct 2020 02:23:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
+ <87a6wig461.fsf@kernel.org> <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
+ <874kmpf583.fsf@kernel.org> <d0aca346-353c-d74e-6f00-ccd2a4ed26ef@gmail.com>
+ <976cea12-e54e-fbca-6c53-e6ef5c554094@synopsys.com> <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
+ <20201021014725.GA26640@jackp-linux.qualcomm.com>
+In-Reply-To: <20201021014725.GA26640@jackp-linux.qualcomm.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 22 Oct 2020 12:23:35 +0300
+Message-ID: <CAHp75Ve5CnPqV3FAgS08CnvT9Oskyxhh2VEBBDgeWpprFEuu=Q@mail.gmail.com>
+Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
+To:     Jack Pham <jackp@codeaurora.org>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "felipe.balbi-VuQAYsv1563Yd54FQh9/CA@public.gmane.org" 
+        <felipe.balbi-VuQAYsv1563Yd54FQh9/CA@public.gmane.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Seq instroduce a new helper marco DEFINE_STORE_ATTRIBUTE for
-Read-Write file, So we apply it at drm/i915/display to reduce some
-duplicate code.
++Cc: Ruslan (maybe you have an insight)
+On Wed, Oct 21, 2020 at 3:03 PM Jack Pham <jackp@codeaurora.org> wrote:
+>
+> Hi Thinh, Ferry,
+>
+> On Tue, Oct 20, 2020 at 10:58:31PM +0000, Thinh Nguyen wrote:
+> > Thinh Nguyen wrote:
+> > > Hi,
+> > >
+> > > Ferry Toth wrote:
+> > >> Op 20-10-2020 om 14:32 schreef Felipe Balbi:
+> > >>> Hi,
+> > >>>
+> > >>> Ferry Toth <fntoth@gmail.com> writes:
+> > >>>
+> > >>> 8< snip
+> > >>>
+> > >>>>>> [   12.657416] CR2: 0000000100000000
+> > >>>>>> [   12.660729] ---[ end trace 9b92dea6da33c71e ]---
+> > >>>>> It this something you can reproduce on your end? Ferry, can you get
+> > >>>>> dwc3
+> > >>>>> trace logs when this happens? ftrace_dump_on_oops may help here.
+> > >>>> I will do that tonight. Is flipping on ftrace_dump_on_oops
+> > >>>> sufficient or
+> > >>>> do I need to do more?
+> > >>> you'd have to enable dwc3 trace events first ;-)
+> > >>>
+> > >>>> BTW after posting this I found in host mode dwc3 is not working
+> > >>>> properly
+> > >>>> either. No oops, but no driver get loaded on device plug in.
+> > >>> okay
+> > >>>
+> > >> Ehem, you maybe only me to enable /dwc3/dwc3_ep_dequeue/enable:
+> > >>
+> > >> root@edison:/boot# uname -a
+> > >> Linux edison 5.9.0-edison-acpi-standard #1 SMP Mon Oct 19 20:17:04 UTC
+> > >> 2020 x86_64 x86_64 x86_64 GNU/Linux
+> > >> root@edison:/boot# echo 1 >
+> > >> /sys/kernel/debug/tracing/events/dwc3/dwc3_ep_dequeue/enable
+> > >> root@edison:/boot# echo 1 > /proc/sys/kernel/ftrace_dump_on_oops
+> > >> root@edison:/boot#
+> > >> root@edison:/boot# [ 2608.585323] BUG: kernel NULL pointer
+> > >> dereference, address: 0000000000000000
+> > >> [ 2608.592288] #PF: supervisor read access in kernel mode
+> > >> [ 2608.597419] #PF: error_code(0x0000) - not-present page
+> > >> [ 2608.602549] PGD 0 P4D 0
+> > >> [ 2608.605090] Oops: 0000 [#1] SMP PTI
+> > >> [ 2608.608580] CPU: 1 PID: 733 Comm: irq/15-dwc3 Not tainted
+> > >> 5.9.0-edison-acpi-standard #1
+> > >> [ 2608.616571] Hardware name: Intel Corporation Merrifield/BODEGA BAY,
+> > >> BIOS 542 2015.01.21:18.19.48
+> > >> [ 2608.625356] RIP: 0010:dwc3_gadget_ep_dequeue+0x41/0x1c0
+> > >> [ 2608.630580] Code: e9 51 01 00 00 4c 8d a3 30 01 00 00 4c 89 e7 e8
+> > >> 15 e6 42 00 49 8b 4e 48 49 89 c5 49 8d 46 48 48 8d 51 a0 48 39 c8 75
+> > >> 0f eb 2e <48> 8b 4a 60 48 8d 51 a0 48 39 c8 74 21 48 39 d5 75 ee 45 31
+> > >> f6 4c
+> > >> [ 2608.649320] RSP: 0018:ffffa838002a7c40 EFLAGS: 00010087
+> > >> [ 2608.654543] RAX: ffff9a5f4609c048 RBX: ffff9a5f46f48028 RCX:
+> > >> 0000000000000000
+> > >> [ 2608.661666] RDX: ffffffffffffffa0 RSI: 0000000000000008 RDI:
+> > >> ffff9a5f46f48158
+> > >> [ 2608.668790] RBP: ffff9a5f7bd09b40 R08: 00000000000002d8 R09:
+> > >> ffff9a5f7dd6a000
+> > >> [ 2608.675913] R10: ffffa838002a7d90 R11: ffff9a5f46f48300 R12:
+> > >> ffff9a5f46f48158
+> > >> [ 2608.683039] R13: 0000000000000046 R14: ffff9a5f4609c000 R15:
+> > >> ffff9a5f7ad77e00
+> > >> [ 2608.690165] FS:  0000000000000000(0000) GS:ffff9a5f7e300000(0000)
+> > >> knlGS:0000000000000000
+> > >> [ 2608.698244] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > >> [ 2608.703980] CR2: 0000000000000000 CR3: 000000003780a000 CR4:
+> > >> 00000000001006e0
+> > >> [ 2608.711102] Call Trace:
+> > >> [ 2608.713561]  usb_ep_dequeue+0x19/0x80
+> > >> [ 2608.717234]  u_audio_stop_capture+0x54/0x9a [u_audio]
+> > >> [ 2608.722289]  afunc_set_alt+0x73/0x80 [usb_f_uac2]
+> > > I took a look at how the audio function is handling switching alternate
+> > > setting and dequeuing endpoints, and I think I found the issue.
+> > >
+> > > Here's a snippet of the free_ep() code in u_audio.c:
+> > >
+> > > static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
+> > > {
+> > >     .....
+> > >         for (i = 0; i < params->req_number; i++) {
+> > >                 if (prm->ureq[i].req) {
+> > >                         usb_ep_dequeue(ep, prm->ureq[i].req);
+> > >                         usb_ep_free_request(ep, prm->ureq[i].req);
+> > >                         prm->ureq[i].req = NULL;
+> > >                 }
+> > >         }
+> > >   ....
+> > >
+> > >
+> > > usb_ep_dequeue() can be asynchronous. The dwc3 still has ownership of
+> > > the request until it gives back the request. Freeing the request
+> > > immediately here will cause a problem.
+> >
+> > To confirm my suspicion, can you try this and see if you still get oops?
+> >
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index eec8e9a9e3ed..b66eb24ec070 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -2031,6 +2031,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+> >                         list_for_each_entry_safe(r, t,
+> > &dep->started_list, list)
+> >                                 dwc3_gadget_move_cancelled_request(r);
+> >
+> > +                       dwc3_gadget_ep_cleanup_cancelled_requests(dep);
+> >                         goto out;
+> >                 }
+> >         }
+> >
+> >
+> > This will make usb_ep_dequeue() synchronous. (Note that this is not tested).
+>
+> But only for dwc3 right? In general do other UDC drivers provide
+> synchronous behavior? It does states clearly in the kerneldoc for
+> usb_ep_dequeue() that the completion is asynchronous.  From
+> drivers/usb/gadget/udc/core.c:
+>
+>  * If the request is still active on the endpoint, it is dequeued and
+>  * eventually its completion routine is called (with status -ECONNRESET);
+>  * else a negative error code is returned.  This routine is asynchronous,
+>  * that is, it may return before the completion routine runs.
+>
+> Alternatively, could we not fix up u_audio.c to deal with this?
+>
+> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+> index 56906d15fb55..f08f036d520e 100644
+> --- a/drivers/usb/gadget/function/u_audio.c
+> +++ b/drivers/usb/gadget/function/u_audio.c
+> @@ -89,7 +89,12 @@ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
+>         struct snd_uac_chip *uac = prm->uac;
+>
+>         /* i/f shutting down */
+> -       if (!prm->ep_enabled || req->status == -ESHUTDOWN)
+> +       if (!prm->ep_enabled) {
+> +               usb_ep_free_request(ep, req);
+> +               return;
+> +       }
+> +
+> +       if (req->status == -ESHUTDOWN)
+>                 return;
+>
+>         /*
+> @@ -352,7 +357,6 @@ static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
+>         for (i = 0; i < params->req_number; i++) {
+>                 if (prm->ureq[i].req) {
+>                         usb_ep_dequeue(ep, prm->ureq[i].req);
+> -                       usb_ep_free_request(ep, prm->ureq[i].req);
+>                         prm->ureq[i].req = NULL;
+>                 }
+>         }
+>
+> Jack
 
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
----
- .../gpu/drm/i915/display/intel_display_debugfs.c   | 55 ++--------------------
- 1 file changed, 4 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/display/intel_display_debugfs.c b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-index 0bf31f9..89d38d2 100644
---- a/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-+++ b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-@@ -1329,21 +1329,7 @@ static int i915_displayport_test_active_show(struct seq_file *m, void *data)
- 	return 0;
- }
- 
--static int i915_displayport_test_active_open(struct inode *inode,
--					     struct file *file)
--{
--	return single_open(file, i915_displayport_test_active_show,
--			   inode->i_private);
--}
--
--static const struct file_operations i915_displayport_test_active_fops = {
--	.owner = THIS_MODULE,
--	.open = i915_displayport_test_active_open,
--	.read = seq_read,
--	.llseek = seq_lseek,
--	.release = single_release,
--	.write = i915_displayport_test_active_write
--};
-+DEFINE_STORE_ATTRIBUTE(i915_displayport_test_active);
- 
- static int i915_displayport_test_data_show(struct seq_file *m, void *data)
- {
-@@ -1733,19 +1719,7 @@ static ssize_t i915_hpd_storm_ctl_write(struct file *file,
- 	return len;
- }
- 
--static int i915_hpd_storm_ctl_open(struct inode *inode, struct file *file)
--{
--	return single_open(file, i915_hpd_storm_ctl_show, inode->i_private);
--}
--
--static const struct file_operations i915_hpd_storm_ctl_fops = {
--	.owner = THIS_MODULE,
--	.open = i915_hpd_storm_ctl_open,
--	.read = seq_read,
--	.llseek = seq_lseek,
--	.release = single_release,
--	.write = i915_hpd_storm_ctl_write
--};
-+DEFINE_STORE_ATTRIBUTE(i915_hpd_storm_ctl);
- 
- static int i915_hpd_short_storm_ctl_show(struct seq_file *m, void *data)
- {
-@@ -1811,14 +1785,7 @@ static ssize_t i915_hpd_short_storm_ctl_write(struct file *file,
- 	return len;
- }
- 
--static const struct file_operations i915_hpd_short_storm_ctl_fops = {
--	.owner = THIS_MODULE,
--	.open = i915_hpd_short_storm_ctl_open,
--	.read = seq_read,
--	.llseek = seq_lseek,
--	.release = single_release,
--	.write = i915_hpd_short_storm_ctl_write,
--};
-+DEFINE_STORE_ATTRIBUTE(i915_hpd_short_storm_ctl);
- 
- static int i915_drrs_ctl_set(void *data, u64 val)
- {
-@@ -2181,21 +2148,7 @@ static ssize_t i915_dsc_fec_support_write(struct file *file,
- 	return len;
- }
- 
--static int i915_dsc_fec_support_open(struct inode *inode,
--				     struct file *file)
--{
--	return single_open(file, i915_dsc_fec_support_show,
--			   inode->i_private);
--}
--
--static const struct file_operations i915_dsc_fec_support_fops = {
--	.owner = THIS_MODULE,
--	.open = i915_dsc_fec_support_open,
--	.read = seq_read,
--	.llseek = seq_lseek,
--	.release = single_release,
--	.write = i915_dsc_fec_support_write
--};
-+DEFINE_STORE_ATTRIBUTE(i915_dsc_fec_support);
- 
- /**
-  * intel_connector_debugfs_add - add i915 specific connector debugfs files
+
 -- 
-2.7.4
-
+With Best Regards,
+Andy Shevchenko
