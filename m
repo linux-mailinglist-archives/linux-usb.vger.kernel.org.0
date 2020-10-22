@@ -2,107 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA2029665D
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 23:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA76296696
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 23:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S372146AbgJVVHN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Oct 2020 17:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2897417AbgJVVHM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Oct 2020 17:07:12 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342ECC0613CE
-        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 14:07:11 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id a20so3023913ilk.13
-        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 14:07:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4/MmXkGYQSAWqtMuBewX+h/2Dgjot3Uv3Om1CU78wuw=;
-        b=OOHRv5NlkvZCCS38aXZcR0tAfuZNuLr01E0Q+21vV47tOI5ispvXYQzQ7sesgsEnob
-         mdE0HXcyadTEbhXEsAf22ZsFzCRn/ihqP+Z8ggy1vFbyp5Sl+9tnUADFwqLEUym3S2YQ
-         K+6CSbUxMnle+4tuEqwbaW7JytG1m72QVVKimrC0Nh7AWl+K+SnTTVVRuWYd2FePTyqT
-         rB1ZxkwVmBNaYNfrHIsJAezJR9QIElmpWg+tFXP5ifUMCX5kKykFkxGnpC3CAchVbZl+
-         EkFioiwFPtC01+f3vSpyUxWu0svNYUlHK7vOM1LufsfDDkGZ1fWpidXAutZun4PEp3TL
-         kb2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4/MmXkGYQSAWqtMuBewX+h/2Dgjot3Uv3Om1CU78wuw=;
-        b=ePWSQq5SENT8pFQCEyIAWajMWoZ0qnQHczv/2JXM8h7yof0GbC+LCmXwGoYnymgjgr
-         Ahj4TthsyDub1DUYn+PhfLUNn2dbAy9utiA+qrQjV1BiS/RPWHnSbSSbFF0SHN5YvUrt
-         gCV8TPpabNaj0YT4JzwNsw/wpxEvMlMj8Dhpd0InekLMCwKA/6+P59dOWN8OWeILXYZw
-         SsVMfAgGfRnfdCR0BRu6HHnyevj5kviDcDJ/rjSM5ZJ/ZysffV3i0mxBKBx8C89CKZJ4
-         dOjP0TnxWYK7xEP24mBvJ9QkBM7cx1R4sR8eqKmLWbg0yqU831DYq7earL147BZbl+8A
-         JkSA==
-X-Gm-Message-State: AOAM530bxObXQH+FinLq5ir9wxCGB3RbeJqyYHMQmIb+gcGnemtGfkZF
-        54p9jIXy0/AzOCqlz14YZBQDEc2HpVJDsFRXMxWiJIuvw8+uEw==
-X-Google-Smtp-Source: ABdhPJw7/c1R9L4ZeWw6mEF6GrbSTzyMJLlhKYtqYWmQSmlFomXsPNCoyf1F5gWBwpybnIWQysDTeqYcIzAP27sH8Hw=
-X-Received: by 2002:a92:1911:: with SMTP id 17mr3226301ilz.129.1603400830520;
- Thu, 22 Oct 2020 14:07:10 -0700 (PDT)
-MIME-Version: 1.0
+        id S2506264AbgJVV0G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Oct 2020 17:26:06 -0400
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:46555 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2505954AbgJVV0G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Oct 2020 17:26:06 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1959B5C0131;
+        Thu, 22 Oct 2020 17:26:05 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute4.internal (MEProxy); Thu, 22 Oct 2020 17:26:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm3; bh=5lnsQpvweDGNV0drWUXmlf/DnP8rDt7
+        /D92qGxrCcAY=; b=D4I6pLAHxujnA9fwZeA1nzVrM6SKS34397q2qsCtqkbxA73
+        dpkmRgugls9rhqFvDzpMk78Mv0o83ivUt3qwQ58B5UuFdLkxgodzBSiZSm2DeLgd
+        JrIZLoU0peYrvPfE1x1fLznLepTxioXzrdibmD2Qwv5opI5shht19teQRbEk/4vq
+        uAo9/cyUl2s8DKX1cPH36aBPRnf1QmMYgmayEZcJ66W0bjUF1WZcTU4eR0iomTba
+        o4Xr3OMfVFb2YQ5RWRM1CoPXmttFU9Gm1dYCB4rRNeCWEnWAKaAuANvKRdpkTrb8
+        g+nwzCqCT57vYLWAP4muQ1KqKd81XW4CwBT69hQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=5lnsQp
+        vweDGNV0drWUXmlf/DnP8rDt7/D92qGxrCcAY=; b=K3vObpXdhCKln7p6VxHMt7
+        73eRNLKylqb/5XAyH6WcQCOZwQ3CdMXXRo+8l1IFXhezsmCbmzCzLc0ZCTcVfmbb
+        PX/IyPan40ay5zzsVUSO5zbzVUMmLqOYcP1c9B+zdYC2hJUBxhOXZVc63g+0uOYD
+        dsSyWBIcLSiZMOlVb0EQxeKzpF9L54KY2nP4DcKDuUEAHKYMmm5WryEm9MUJXhKH
+        GCBCXBbz7i5pLSE2COuAXqANdrxQ/Smx//BR9QQcJ/U3CVWbaYfV71CLt7oyv6hz
+        AdGoUJvoz/vSdsXGIsxS02SaJ5z1+KnztaaAgArhXQYON/GS5jOtYvbeEo/wwhWg
+        ==
+X-ME-Sender: <xms:7PiRXxx1RWRJWmZRRavFN0nTDn4agmiJ4cjvM2nUk4dT6KvFnqqAIw>
+    <xme:7PiRXxQhkJ7j24kBmX5yGo0-e47Zm8Kt57K-o1Ca6lwPdLQC7-qhB9cGgaVM1izSy
+    FunWbjoRJHiYcbLMx0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrjeekgdejlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderreejnecuhfhrohhmpedfufhiugcu
+    ufhprhihfdcuoehsihgusegrvggrmhdruhhsqeenucggtffrrghtthgvrhhnpefffeejgf
+    dvhefhueetvdeitedtjeejtdeijedvteevffdtheefieelgefhieeuudenucffohhmrghi
+    nhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepshhiugesrggvrghmrdhush
+X-ME-Proxy: <xmx:7PiRX7Vl5s4qdevn2cc-Yijgm_-7WKn9ZjYEeoJuNr0R5-Gmtqv54w>
+    <xmx:7PiRXzhYORUY53C5HST0f89thQJ-Pxv-wM_pngjqWMwTCZuhZnLCJA>
+    <xmx:7PiRXzCkkK6jjZBolBK_QCuU2AuxFiPQyDVppG4nvJ3IGUIRjaHPvA>
+    <xmx:7fiRX2qkVAuj-iSKoi2mPDKnqeIRg-PJV996RITtOFh9K81oiM4EFw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0DF3A660069; Thu, 22 Oct 2020 17:25:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-529-g69105b1-fm-20201021.003-g69105b13
+Mime-Version: 1.0
+Message-Id: <b2f5eaef-af5f-4c3c-91e6-eece17decd93@www.fastmail.com>
+In-Reply-To: <CAGR4S9F1wdUyywuBxcMYfH9wMa91xw1rL8dmZrhJrGSGbmgbzg@mail.gmail.com>
 References: <CAGR4S9HQiZCsA7Y5_47j-xBOkydKiT2Exam=36L=-vwRjt+UWA@mail.gmail.com>
  <20201019133607.GC1667571@kuha.fi.intel.com>
-In-Reply-To: <20201019133607.GC1667571@kuha.fi.intel.com>
-From:   "Dmitry N. Mikushin" <maemarcus@gmail.com>
-Date:   Thu, 22 Oct 2020 23:06:59 +0200
-Message-ID: <CAGR4S9F1wdUyywuBxcMYfH9wMa91xw1rL8dmZrhJrGSGbmgbzg@mail.gmail.com>
-Subject: Re: Any example of USB gadget for DRD device mode on Intel Gemini Lake?
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ <CAGR4S9F1wdUyywuBxcMYfH9wMa91xw1rL8dmZrhJrGSGbmgbzg@mail.gmail.com>
+Date:   Thu, 22 Oct 2020 16:25:50 -0500
+From:   "Sid Spry" <sid@aeam.us>
+To:     "Dmitry N. Mikushin" <maemarcus@gmail.com>,
+        "Heikki Krogerus" <heikki.krogerus@linux.intel.com>
 Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: =?UTF-8?Q?Re:_Any_example_of_USB_gadget_for_DRD_device_mode_on_Intel_Gem?=
+ =?UTF-8?Q?ini_Lake=3F?=
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Yes, AFAIK PCI_DEVICE_ID_INTEL_GLK_XHCI is actually 0x31a8, and I do have i=
-t:
+On Thu, Oct 22, 2020, at 4:06 PM, Dmitry N. Mikushin wrote:
+> Yes, AFAIK PCI_DEVICE_ID_INTEL_GLK_XHCI is actually 0x31a8, and I do have it:
+> 
+> 00:15.0 USB controller [0c03]: Intel Corporation Device [8086:31a8] (rev 03)
+> 
+> Board is M1K.
+> My kernel is 5.4.0-48-lowlatency with the following additional patch:
+> https://lore.kernel.org/patchwork/patch/1037542/
+> I have dwc3 as a kernel module.
+> I'm not testing any gadget, I just have no idea what to test. Could
+> you please suggest some sources on how I should map gadget onto my
+> dwc3 port?
+> 
+> Thanks & Kind Regards,
+> - Dmitry.
+> 
 
-00:15.0 USB controller [0c03]: Intel Corporation Device [8086:31a8] (rev 03=
-)
+After you set the DRD switch to device do you see a device in /sys/class/udc?
 
-Board is M1K.
-My kernel is 5.4.0-48-lowlatency with the following additional patch:
-https://lore.kernel.org/patchwork/patch/1037542/
-I have dwc3 as a kernel module.
-I'm not testing any gadget, I just have no idea what to test. Could
-you please suggest some sources on how I should map gadget onto my
-dwc3 port?
+I will show you how to use configfs. You must enable USB gadget configfs. It
+is easier to use in my opinion. The other gadget drivers simply need to be
+loaded, but I am unsure how they work with newer DWC3 hardware. Most
+of the code is written for android and android uses configfs.
 
-Thanks & Kind Regards,
-- Dmitry.
+`modprobe libcomposite` then execute the following, using that name:
 
-=D0=BF=D0=BD, 19 =D0=BE=D0=BA=D1=82. 2020 =D0=B3. =D0=B2 15:36, Heikki Krog=
-erus <heikki.krogerus@linux.intel.com>:
->
-> On Mon, Oct 19, 2020 at 01:27:35PM +0200, Dmitry N. Mikushin wrote:
-> > Dear All,
-> >
-> > I'm confused by the USB gadget mode on the recent Intel SoCs, such as
-> > Gemini Lake. The /sys/class/udc is empty, and a SoC can't present
-> > itself as a IoT gadget this way, yet definitely being designed as
-> > such. I've noticed the concept of dual-role-device, which seems to
-> > replace the OTG. Particularly, Harry Pan mentioned that Gemini Lake
-> > supports DRD in port 0.
->
-> So do you have the dwc3 (the USB device controller) PCI device
-> available/visible on your system? What do you get if you run:
->
->         lspci -nn|grep USB
->
-> The DWC3 PCI device ID on Gemini lake is 0x31aa (search
-> PCI_DEVICE_ID_INTEL_GLK in drivers/usb/dwc3/dwc3-pci.c).
->
-> Which board/product are you using.
-> Which kernel are you using?
-> Is the dwc3 driver enabled in your kernel?
-> Which gadget are you testing with? g_zero?
->
-> thanks,
->
-> --
-> heikki
+#!/usr/bin/env bash
+cd /sys/kernel/config/usb_gadget
+if [[ -d "g0" ]]; then
+        echo "" > g0/UDC
+        rm -rf g0;
+fi
+
+mkdir g0
+cd g0
+
+echo "0x1d6b" > idVendor
+echo "0x0104" > idProduct
+
+mkdir strings/0x409
+echo "0000000000" > strings/0x409/serialnumber
+echo "Your Company" > strings/0x409/manufacturer
+echo "Your Device" > strings/0x409/product
+
+mkdir functions/ncm.usb0
+
+mkdir configs/c.1
+ln -s functions/ncm.usb0 configs/c.1
+
+# List /sys/class/udc and take a name for this line:
+echo "" > UDC
+
+This will set up a Ethernet NCM device. There are similar instructions
+from the configfs author in a powerpoint. More device types are in the
+documentation.
