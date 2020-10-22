@@ -2,121 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE59829607C
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 15:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB02296088
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 15:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2900524AbgJVNzs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Oct 2020 09:55:48 -0400
-Received: from aibo.runbox.com ([91.220.196.211]:54286 "EHLO aibo.runbox.com"
+        id S2900538AbgJVN7U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Oct 2020 09:59:20 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:51822 "EHLO aibo.runbox.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2443376AbgJVNzs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Oct 2020 09:55:48 -0400
+        id S2900534AbgJVN7U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Oct 2020 09:59:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
-        :Message-Id:Date:Subject:Cc:To:From;
-        bh=dwydMXV798nhciCIFQ/gte+aPSvBA0iFTXl8RFK4Cx4=; b=hNqwVXzGsLM879CRLqo7vbFSmL
-        9AD/XCUxnDAWHTP4tT61cCBrlQA00txU4cdgAN32aVImTfHlvhHB+wxnB2Egyyvevr5FB5qXmqA3Q
-        bZpdVet/Suf1T5ZWqndbrBFhTFgxUF5gLXLprcG90qvjgxvVplhzPCqRle6RN2NDjuJD6wueNg8S6
-        3LzAetKGpJ96kOIbEMZb2Grzv/x4Upr0X8M35Rc4laTlzM9d+tY++WME0kGbPBLjF8wBy2TYAnFLx
-        I2Ql14cnrbQYg3kLMTRPebSS1mdbgL+cDbvEYb8nonDr3hbh05UFZ+xnO28yXJCOkyDGX03SJD7rq
-        gtpszkzQ==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+         s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject;
+        bh=e4L2Skc/u+U3cTDg4U5BffAKA96T/CEy6T+u2+GyPvk=; b=M0ZtZtZLjDUjRk0LLanee/HAmv
+        xDpADo108zljwYNhaohNC+Z4DzKxc7B+icxWmYZ8KZKFYrVkLwk7CN9wN27ZMT16WXQEynyDF63V3
+        8HfAJP6DY7EcgFmZ12HxcdS5H0sV9tP/7/dU7cKN741xMi98UvZXuEgob3Aq5avb6EBJ9hRO+ijAZ
+        jUlCoEhl4czJxQ0dFp6a2KasuDHSEGUmICt8CSbDHxke/LeDv2hfhXuNuUjY2TdaoRxk7XQ8k6hBH
+        r1dnDVwpHFgJEdG7N8/ZcIqSpkUvfjlDUBn6X5DTSi3Lnob26PpwIJ8mnhCoRF2Z+hlmTCxLqn6YW
+        FF9QgcZw==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
         (envelope-from <m.v.b@runbox.com>)
-        id 1kVb4C-0001Z9-7V; Thu, 22 Oct 2020 15:55:44 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1kVb7c-0001h0-NI; Thu, 22 Oct 2020 15:59:16 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.90_1)
-        id 1kVb44-0008Qw-6o; Thu, 22 Oct 2020 15:55:36 +0200
-From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+        id 1kVb7b-0007Bp-BX; Thu, 22 Oct 2020 15:59:15 +0200
+Subject: Re: [PATCH 1/2] usbcore: Check both id_table and match() when both
+ available
 To:     linux-usb@vger.kernel.org
-Cc:     Bastien Nocera <hadess@hadess.net>, Pany <pany@fedoraproject.org>,
-        stable@vger.kernel.org,
+Cc:     Bastien Nocera <hadess@hadess.net>, stable@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "M . Vefa Bicakci" <m.v.b@runbox.com>
-Subject: [PATCH 2/2] USB: apple-mfi-fastcharge: don't probe unhandled devices
-Date:   Thu, 22 Oct 2020 09:55:21 -0400
-Message-Id: <20201022135521.375211-3-m.v.b@runbox.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201022135521.375211-1-m.v.b@runbox.com>
+        Alan Stern <stern@rowland.harvard.edu>
 References: <4cc0e162-c607-3fdf-30c9-1b3a77f6cf20@runbox.com>
  <20201022135521.375211-1-m.v.b@runbox.com>
+ <20201022135521.375211-2-m.v.b@runbox.com>
+From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+Message-ID: <dc03de23-f1f7-7948-ce18-a1d53567e50a@runbox.com>
+Date:   Thu, 22 Oct 2020 09:59:11 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201022135521.375211-2-m.v.b@runbox.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Bastien Nocera <hadess@hadess.net>
+On 22/10/2020 09.55, M. Vefa Bicakci wrote:
+> From: Bastien Nocera <hadess@hadess.net>
+> 
+> From: Bastien Nocera <hadess@hadess.net>
 
-From: Bastien Nocera <hadess@hadess.net>
+Ah, sorry for this mistake. This is the first time I sent patches
+authored by another person, with git-send-email. I should have
+tested with my own e-mail address initially.
 
-Contrary to the comment above the id table, we didn't implement a match
-function. This meant that every single Apple device that was already
-plugged in to the computer would have its device driver reprobed
-when the apple-mfi-fastcharge driver was loaded, eg. the SD card reader
-could be reprobed when the apple-mfi-fastcharge after pivoting root
-during boot up and the module became available.
+I will fix this mistake with the next patch set version.
 
-Make sure that the driver probe isn't being run for unsupported
-devices by adding a match function that checks the product ID, in
-addition to the id_table checking the vendor ID.
+Thank you,
 
-Fixes: 249fa8217b84 ("USB: Add driver to control USB fast charge for iOS devices")
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
-Reported-by: Pany <pany@fedoraproject.org>
-Link: https://bugzilla.redhat.com/show_bug.cgi?id=1878347
-Link: https://lore.kernel.org/linux-usb/CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com/
-Cc: <stable@vger.kernel.org> # 5.8
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-[m.v.b: Add Link and Reported-by tags to the commit message]
-Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
----
- drivers/usb/misc/apple-mfi-fastcharge.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c b/drivers/usb/misc/apple-mfi-fastcharge.c
-index b403094a6b3a..579d8c84de42 100644
---- a/drivers/usb/misc/apple-mfi-fastcharge.c
-+++ b/drivers/usb/misc/apple-mfi-fastcharge.c
-@@ -163,17 +163,23 @@ static const struct power_supply_desc apple_mfi_fc_desc = {
- 	.property_is_writeable  = apple_mfi_fc_property_is_writeable
- };
- 
-+static bool mfi_fc_match(struct usb_device *udev)
-+{
-+	int idProduct;
-+
-+	idProduct = le16_to_cpu(udev->descriptor.idProduct);
-+	/* See comment above mfi_fc_id_table[] */
-+	return (idProduct >= 0x1200 && idProduct <= 0x12ff);
-+}
-+
- static int mfi_fc_probe(struct usb_device *udev)
- {
- 	struct power_supply_config battery_cfg = {};
- 	struct mfi_device *mfi = NULL;
--	int err, idProduct;
-+	int err;
- 
--	idProduct = le16_to_cpu(udev->descriptor.idProduct);
--	/* See comment above mfi_fc_id_table[] */
--	if (idProduct < 0x1200 || idProduct > 0x12ff) {
-+	if (!mfi_fc_match(udev))
- 		return -ENODEV;
--	}
- 
- 	mfi = kzalloc(sizeof(struct mfi_device), GFP_KERNEL);
- 	if (!mfi) {
-@@ -220,6 +226,7 @@ static struct usb_device_driver mfi_fc_driver = {
- 	.probe =	mfi_fc_probe,
- 	.disconnect =	mfi_fc_disconnect,
- 	.id_table =	mfi_fc_id_table,
-+	.match =	mfi_fc_match,
- 	.generic_subclass = 1,
- };
- 
--- 
-2.26.2
+Vefa
 
