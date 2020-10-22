@@ -2,112 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4591296293
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 18:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8FB296488
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 20:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2901636AbgJVQVA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Oct 2020 12:21:00 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:48033 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2896713AbgJVQU7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Oct 2020 12:20:59 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Thu, 22 Oct 2020 12:20:59 EDT
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 53E3C5802A0;
-        Thu, 22 Oct 2020 12:13:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 22 Oct 2020 12:13:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=ixh/510Haf/p9X2/V7HbKAJjNIS
-        VDdGLgM5TvEAXzfU=; b=UxvDlTqozmSDWjwT9SYPVhrvwNNbuW4FWhkZ6u7+eVE
-        0DhToDftB2Bxb4N7txF383B/xDhANSlpGnhjqtr1eKo6jL8JFBrT7qurwLCNpy4i
-        MYxrAokTa/8Yzo8NPugTM59OCCMH71FdMlloEHwphYs6p7i0KsBpmFLaA1At1Mob
-        plAVwHzDqGNTvJtor7m0KwECw8wzwU8G9DeoI8Y0kQHAFzfnPH8srXP+yaqxjY6a
-        P9W1de80tyLiuakn65a1+08JEvr9eBjqW8/Ua66sqdAegW2eeYEOEGytjTJrsz7y
-        SUPGyn2Q115M0Og8uHZUuWazn4W0YfxNfGgvkmKSybw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=ixh/51
-        0Haf/p9X2/V7HbKAJjNISVDdGLgM5TvEAXzfU=; b=I3QzhkwzE/3XjJUFFv+EQo
-        LIezOs9zPrppuzGFAfBrL36sD+yMhqVd6zRfTbNzR5cVqdTjGvLvY5G1O0LCCS0M
-        QkaJbMVpv+akQAHzItPlMTnBkllngZuriZd4xLlGkRQHYiJdpKN2W6YykfeJlfmv
-        LW4fHhXtKDytknBzHgKgsHntvOevALB2QOF8m+CY0Te7OwGeY6zzMlpRAm65tqDs
-        l1ca96/GFbCsGMyOWOE+r4YA0hAgaK45AinwJLz9W8AaLV1y0aNKDHLoxhUthF/Z
-        qYWpm15izz3yVj+bcuGdcA6a0Q2NbMrFWAlynIP6EW5+tqUfwlLbLjRI1GsKGywg
-        ==
-X-ME-Sender: <xms:va-RX6mtffWuYcQeRxTHY0HBEWNM3bP_4FVBQd_1gOpG2qoejcxoeg>
-    <xme:va-RXx3jSl4dqsWtS5Mw5S0ULq3H5SG2sPBq_JAKK6KY2XLqEkXcGu1olOcM_Tvts
-    fGbWI9QcioZVsaBreM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrjeekgdduiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:va-RX4oZC-oxkr8LO-2O5SQYq8o8-xGoS0O3_6pl6WV3ldSjkux5vA>
-    <xmx:va-RX-lHxxvyhyqD_-4Q0cH33nZpVACyMcaPGfgOBvhZQ-RmKYXWLQ>
-    <xmx:va-RX424hHNG_l7CpMI8DD-9opEucSd-upLtS9InEohHZTrOjK0Ubg>
-    <xmx:v6-RX-w00q5Nsjs3Avwi45i0qL1Dx2l6lJx3b6Sr9Q-GjCRnQxJk3A>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id EBB053064682;
-        Thu, 22 Oct 2020 12:13:48 -0400 (EDT)
-Date:   Thu, 22 Oct 2020 18:13:47 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 24/29] arm64: dts: allwinner: h6: Harmonize DWC USB3 DT
- nodes name
-Message-ID: <20201022161347.llvnqaof7fy4i2rp@gilmour.lan>
-References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
- <20201020115959.2658-25-Sergey.Semin@baikalelectronics.ru>
+        id S2902409AbgJVSTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Oct 2020 14:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2902404AbgJVSTD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Oct 2020 14:19:03 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B77FC0613CE
+        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 11:19:01 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id a23so2566657qkg.13
+        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 11:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DH64Jki2b0cRGtwK2eLq82tqva3V/YIIJDOJFec/tqg=;
+        b=kx4xqwnj6h5/3l+RNf43SX2STa83rjQXy3KG/a57ZTQkXBDa9URlcOtQNuoZxZ+9j8
+         VH5+uCDuYnjNMzJPkQWVKMHY8/xJeN9Xrnwzflr2X5OaBEVrNldjMTOgKYeyqSYOhhaq
+         wa6Spyb+lqtHxPLCUC5GqK82Fa2BOmDT2WLOA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DH64Jki2b0cRGtwK2eLq82tqva3V/YIIJDOJFec/tqg=;
+        b=nYYuCSYeIQcMggYqGpZRIpcUQg8Hu9JZM5tMhXYBS4D82ZW9UHGECHwsisRiW53vz5
+         FSRxjg0fX4OkKZ3mWuk19tNdvttyg6bvPshH74HhthZv/H2zlZt/3Mu46X5dswssPyy6
+         vK4rkTrqvvP9INOkmAWK3CBXjv7f45eOrvr6n5g+IbtrK5sKGleTjsXWcY2cjOTGFRkA
+         8zznNKjGWv9sfamVZGgAQXELnr3q60hACH0ntjpzGkzthGtCjhk+eLoHzOjL9ojWh8WM
+         K5e6EGnhr1z1QthBIxvs5+iwf6pNcKbxBaboqqIyTRrfZ5NHdh2whYB4Orb4U/szRie8
+         z1cg==
+X-Gm-Message-State: AOAM530pKVuEaRI44FaEOXeAF7f9Dt/JHt1+BWvVBKpfAhDa9DTh++0+
+        Dz8m+JY1FAOnQZMOLwglDI4Iky3SBGLgwbyV77M1Fgu/sz4=
+X-Google-Smtp-Source: ABdhPJw5W1L6+mWM55SD0J8J4cwzi+kKAcsvzkV/zqpOXBZzOpkXGXfNRiyR/JmB2qgrw0akBx4ZT225n3JmCsanr70=
+X-Received: by 2002:a37:a9c9:: with SMTP id s192mr2183416qke.128.1603390740776;
+ Thu, 22 Oct 2020 11:19:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tp4zfrkdauye4fpq"
-Content-Disposition: inline
-In-Reply-To: <20201020115959.2658-25-Sergey.Semin@baikalelectronics.ru>
+References: <20201022061554.3418060-1-pmalani@chromium.org>
+ <20201022065719.GA1440360@kroah.com> <CACeCKacvhtSfQ=hGYHi3AdrTT+XY2RpKmPHuYWoxNVmRWMeBBA@mail.gmail.com>
+ <20201022071753.GA1470296@kroah.com> <CACeCKafjm-T5WnQNRbpKm3OwxqYH+_MxLMg60-=RrpJFBzcKyA@mail.gmail.com>
+ <20201022124248.GQ1667571@kuha.fi.intel.com>
+In-Reply-To: <20201022124248.GQ1667571@kuha.fi.intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 22 Oct 2020 11:18:49 -0700
+Message-ID: <CACeCKadwa4-xOrihjv-6mkxxFtR5VeFuExP48hTrmteXw=fr9w@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: typec: Expose Product Type VDOs via sysfs
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Heikki,
 
---tp4zfrkdauye4fpq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for your feedback.
 
-On Tue, Oct 20, 2020 at 02:59:54PM +0300, Serge Semin wrote:
-> In accordance with the DWC USB3 bindings the corresponding node
-> name is suppose to comply with the Generic USB HCD DT schema, which
-> requires the USB nodes to have the name acceptable by the regexp:
-> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
-> named.
->=20
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+On Thu, Oct 22, 2020 at 5:43 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> On Thu, Oct 22, 2020 at 12:25:07AM -0700, Prashant Malani wrote:
+> > Hi Greg,
+> >
+> > On Thu, Oct 22, 2020 at 12:17 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > Given that your current implementation is not acceptable, something has
+> > > to change :)
+> >
+> > Got it. I'd like to see if Heikki has any suggestions on naming these
+> > entries better.
+>
+> Why not have product type specific attribute files?
+>
+> So if the partner is UFP, then we expose ufp1 and ufp2 files that
+> return the UFP1 and UFP2 VDO values and hide the other files:
+>
+>         % ls /sys/class/typec/port0-partner/identity/
+>         id_header cert_stat product ufp1 ufp2
+>
+> If the partner is DFP, then you expose the dfp file and hide
+> everything else:
+>
+>         % ls /sys/class/typec/port0-partner/identity/
+>         id_header cert_stat product dfp
+>
+> And so on.
+>
 
-Queued for 5.11, thanks!
-Maxime
+Makes sense, thanks! The only query I have here is , does the kernel
+*need* to implement this logic? Userspace can read id_header VDO and
+figure this on its own (parse the Product Type specific VDOs
+accordingly).
 
---tp4zfrkdauye4fpq
-Content-Type: application/pgp-signature; name="signature.asc"
+Apart from that, I can work on implementing this if there are no concerns.
 
------BEGIN PGP SIGNATURE-----
+Best regards,
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX5GvuwAKCRDj7w1vZxhR
-xe4eAQCm6UBIAoNdAQl4UOCa+VvbwdUDqEEuCOJTtKU3dz6xTgEA79+0F9ioRVTo
-DjGx5094pbmIuS4Cp5UvZ8Du/3q7ewo=
-=Ffyq
------END PGP SIGNATURE-----
-
---tp4zfrkdauye4fpq--
+> thanks,
+>
+> --
+> heikki
