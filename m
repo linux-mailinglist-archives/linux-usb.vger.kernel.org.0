@@ -2,46 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF30C2959B4
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 09:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E772959BB
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 09:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2509061AbgJVHzX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Oct 2020 03:55:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39120 "EHLO mail.kernel.org"
+        id S2509090AbgJVH6b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Oct 2020 03:58:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41540 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2509056AbgJVHzX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Oct 2020 03:55:23 -0400
+        id S2509085AbgJVH6b (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Oct 2020 03:58:31 -0400
 Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ADC3A222E9;
-        Thu, 22 Oct 2020 07:55:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F2FA8222E9;
+        Thu, 22 Oct 2020 07:58:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603353322;
-        bh=d1bgd52qcrvHmLf6y4Sf3uxls4XbYPCmmdmANVvb0pU=;
+        s=default; t=1603353510;
+        bh=R3GjlbgsAx9M4Z5V/xVVQ17WGhcRX8d0qQvUOfWTD9k=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=P5zTGyN0k1SHuSju513v5RMm7idT3w2mmOuuwWfkWKJtg37DgXaQQWzMtgCHUbhxA
-         sdVhCa4s4vPa+O47lzDjYxtXofBu9dXJxnYW/8pWrrY1ZJV2mYp0ABVdkZQrEA3VMx
-         X4J9f2AYtOI4fxSzGnbsBI4gc2prSy8coouWysEo=
+        b=iEi6a+RS0cISCZe+Xnl4ygnW2xdMiVzjk8atFZZKQSVEatUz1QcDdo5ioJPNnClSE
+         ZJyjipNN8U/7OFMmjpHhpfjfd/hStq/C25IJ4YajF3dc9mrv882rcrtMJ8OUyqIa+z
+         8CKxK3a2P/lW/9HqDD/QF6DtwiISHT4MSx4f2UAo=
 From:   Felipe Balbi <balbi@kernel.org>
-To:     John Stultz <john.stultz@linaro.org>,
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        John Stultz <john.stultz@linaro.org>,
         lkml <linux-kernel@vger.kernel.org>
 Cc:     Yu Chen <chenyu56@huawei.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
         Yang Fei <fei.yang@intel.com>,
         YongQin Liu <yongqin.liu@linaro.org>,
         Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
         Jun Li <lijun.kernel@gmail.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, John Stultz <john.stultz@linaro.org>
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 Subject: Re: [PATCH v2] usb: dwc3: Trigger a GCTL soft reset when switching
  modes in DRD
-In-Reply-To: <20201021224619.20796-1-john.stultz@linaro.org>
+In-Reply-To: <d9c241a5-f31b-b044-bc15-1c5e4d445a69@synopsys.com>
 References: <20201021224619.20796-1-john.stultz@linaro.org>
-Date:   Thu, 22 Oct 2020 10:54:53 +0300
-Message-ID: <87y2jyelv6.fsf@kernel.org>
+ <d9c241a5-f31b-b044-bc15-1c5e4d445a69@synopsys.com>
+Date:   Thu, 22 Oct 2020 10:58:20 +0300
+Message-ID: <87tuumelpf.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -56,28 +57,56 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-John Stultz <john.stultz@linaro.org> writes:
-> From: Yu Chen <chenyu56@huawei.com>
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> John Stultz wrote:
+>>  static void __dwc3_set_mode(struct work_struct *work)
+>>  {
+>>  	struct dwc3 *dwc =3D work_to_dwc(work);
+>>  	unsigned long flags;
+>> +	int hw_mode;
+>>  	int ret;
+>>  	u32 reg;
+>>=20=20
+>> @@ -154,6 +168,11 @@ static void __dwc3_set_mode(struct work_struct *wor=
+k)
+>>  		break;
+>>  	}
+>>=20=20
+>> +	/* Execute a GCTL Core Soft Reset when switch mode in DRD*/
+>> +	hw_mode =3D DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+>> +	if (hw_mode =3D=3D DWC3_GHWPARAMS0_MODE_DRD)
+>> +		dwc3_gctl_core_soft_reset(dwc);
+>> +
 >
-> With the current dwc3 code on the HiKey960 we often see the
-> COREIDLE flag get stuck off in __dwc3_gadget_start(), which
-> seems to prevent the reset irq and causes the USB gadget to
-> fail to initialize.
+> I think this should be done inside the spin_lock.
 >
-> We had seen occasional initialization failures with older
-> kernels but with recent 5.x era kernels it seemed to be becoming
-> much more common, so I dug back through some older trees and
-> realized I dropped this quirk from Yu Chen during upstreaming
-> as I couldn't provide a proper rational for it and it didn't
-> seem to be necessary. I now realize I was wrong.
+>>  	spin_lock_irqsave(&dwc->lock, flags);
+>>=20=20
+>>  	dwc3_set_prtcap(dwc, dwc->desired_dr_role);
+>
+> The DRD mode change sequence should be like this if we want to switch
+> from host -> device according to the programming guide (for all DRD IPs):
+> 1. Reset controller with GCTL.CoreSoftReset
+> 2. Set GCTL.PrtCapDir(device)
+> 3. Soft reset with DCTL.CSftRst
+> 4. Then follow up with the initializing registers sequence
+>
+> However, from code review, with this patch, it follows this sequence:
+> a. Soft reset with DCTL.CSftRst on driver probe
+> b. Reset controller with GCTL.CoreSoftReset
+> c. Set GCTL.PrtCapDir(device)
+> d. < missing DCTL.CSftRst >
+> e. Then follow up with initializing registers sequence
+>
+> It may work, but it doesn't follow the programming guide.
+>
+> For device -> host, it should be fine because the xHCI driver will do
+> USBCMD.HCRST during initialization.
 
-This keeps coming back every few years. It has never been necessary so
-far. Why is it necessary now? The only thing we need to do is verify
-which registers are shadowed between host and peripheral roles and cache
-only those registers.
-
-A full soft reset will take a while and is likely to create other
-issues.
+The only reason why this is needed is because SNPS saves some die area
+by mapping some host and peripheral register to the same physical area
+in the die. I still think a full soft reset is unnecessary as we have
+been running this driver without that soft reset for several years now.
 
 =2D-=20
 balbi
@@ -87,19 +116,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+ROs0RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZ/Vg//ZRZX5T55gObmdwIFAhxCkKCehlJhwW2S
-Lt1X5L2KsJhoa4OAme9nrS6d5wuEfMabymsqwPdcPOJQmKIVLQaX1o5N9JtNp+ju
-7nkIBSQ1PtswV99RtKiccsHMwGG6R6AurZp3pYFkPG52j/fYVmkoqZHS0BZdjpXL
-RwBC2SKMUdrEcUdRmcIoHnIwJGyClBf+hZyg4e3vLTVHU/u6O+f05Py+DZDaRXYB
-i+Oi7qxWfyRZkUV6iaFThdEqBQAgTY7ddl1/7ypmubuZ83/RXaKFjBXACjND+Nl2
-XXEgxlYY0Fnk/gQexUMvWrrM3gq64IeOpOh/ABJ26m2tUEJ7QPwjiQA0mJYjXApH
-p+nB8ZSPQ8IdIcy+Gl+wMuka4Cw2NUH6rQX/+ufZZNH2o6fUhOoBySKjy4E1zGSa
-96CAKrahemoQNxb5cprI1HODRmYCNHYxRcMTzUEJF9C6+AhjiVxcXjKCft+Gqh9c
-fByEvJOzlD0cM0wf2wuy1uCuEE6mu0Ip7wQJSVRL9GEkjAmNItCqKAEXDRPu7Kwc
-h/9LKWf/oX5IaeWm02eX/9DVUV9U1rSUTZP/LimRgbvXqMydSy6ra4xM+fTbUcHI
-sUFTIWXApK6bQIwZ2i+J56bnV8Kw3vDU5Xqgx4mgGxjmHSKiU8IkD1EUp9pjSEsQ
-AIrj0VBu+uU=
-=QfqK
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+RO50RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQYWERAArJPvRoN0gRVmDv0KjAcTbj3ERGO751DQ
+wSCHutD9ZLsxLDywoWOy5dZksoYkGp6rtnvTlO78h2Ve1ks/b3Etwo2QbpuDbgrU
+EnuzhecNaGREVdpK5lQ2UBwQAs/l+4jWeNGTs/JWnTstNJJH1r3iRHJCXzGr0o/N
+tL+HTBg49qHNdqdmIxpxjDIzIdz7vhQ8GDZTI8rW5xwimdHnIUBWrgLMaouM7M8/
+iRIw8f+cC2GmuJ0bpiTTYgAaY+qltzTJms6IJ/f4QQil8WkkSgIHfC2U7zyyYzsp
+9KsK2W5yNtii9JVfbZLY0x+Ut/QrjbgPffqR1I0B9PVMm9HO7sKyqhfYSIheAipa
+xXifm69+74EEnLdhGQV2LPrjcBe59gLmpGVnsTOH274JzrnLLREeXo87nNfhluio
+aWW7BYYenm0xAcU3gSmwdzHEAgFDCYLaHc8yWcsGJKvDt2Y6lO2JB4E7TEgtx6jK
+zh8zWU4F9LP7xQJHLKTC3aduwz1k8CVCtca5aLmfczNhNyd7rxFlsqu8bBOdy1ro
+5+BSQIu9ok7Etdb/Ynh+eDM+Vqzp46fWSHfI93MeHqo2qFFzQPRsp3uLpyq7Du3T
+s1B0egzEdDYUpTsS7iLbGdLNhGLWNSpqnRHUG6Dti+VBWDotUL57KZD4LADkhAax
+oU3nbqiLCxA=
+=1ekg
 -----END PGP SIGNATURE-----
 --=-=-=--
