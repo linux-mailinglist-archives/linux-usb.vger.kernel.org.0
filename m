@@ -2,109 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8FB296488
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 20:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32F0296583
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 21:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2902409AbgJVSTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Oct 2020 14:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
+        id S370426AbgJVTqe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Oct 2020 15:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2902404AbgJVSTD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Oct 2020 14:19:03 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B77FC0613CE
-        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 11:19:01 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id a23so2566657qkg.13
-        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 11:19:01 -0700 (PDT)
+        with ESMTP id S370415AbgJVTqb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Oct 2020 15:46:31 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3087AC0613CF
+        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 12:46:30 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id m128so3028336oig.7
+        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 12:46:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DH64Jki2b0cRGtwK2eLq82tqva3V/YIIJDOJFec/tqg=;
-        b=kx4xqwnj6h5/3l+RNf43SX2STa83rjQXy3KG/a57ZTQkXBDa9URlcOtQNuoZxZ+9j8
-         VH5+uCDuYnjNMzJPkQWVKMHY8/xJeN9Xrnwzflr2X5OaBEVrNldjMTOgKYeyqSYOhhaq
-         wa6Spyb+lqtHxPLCUC5GqK82Fa2BOmDT2WLOA=
+        bh=vgurfa7uICYHznbYitBbS6zGK9tKnDPl24+Alzk+UmQ=;
+        b=FM94cPUKChGVwwWOMYxWmIJ/1Ul4AgBCkn/JIlx6hX/J7MUeinFbyfcH29zLOsc843
+         r6Vx+tpf1c2ttbzWGH9WujJtf4Z1OjWSGBby21tKao0FCms/SdOxuDjpweBK74j3USZy
+         gOvefG+9LGgDDYcJwuy4ln8ZW2r3z3W8ge5+95uv1LgYG0RrPuQuDujKnmPN4NuLOsZ5
+         u067ybT7gerl6qTwJCoyRdAv4RtpbGlMCC6bYp1/gS5OtFcuZdF0orkaLLE2T/9jYAjC
+         cbX1Vt1C7DWCswvCQGA7/6fCwhfbRiG6hvLwJObjTZ1H2C6GmNuIj40p3NP0Nxa9t+34
+         AIFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DH64Jki2b0cRGtwK2eLq82tqva3V/YIIJDOJFec/tqg=;
-        b=nYYuCSYeIQcMggYqGpZRIpcUQg8Hu9JZM5tMhXYBS4D82ZW9UHGECHwsisRiW53vz5
-         FSRxjg0fX4OkKZ3mWuk19tNdvttyg6bvPshH74HhthZv/H2zlZt/3Mu46X5dswssPyy6
-         vK4rkTrqvvP9INOkmAWK3CBXjv7f45eOrvr6n5g+IbtrK5sKGleTjsXWcY2cjOTGFRkA
-         8zznNKjGWv9sfamVZGgAQXELnr3q60hACH0ntjpzGkzthGtCjhk+eLoHzOjL9ojWh8WM
-         K5e6EGnhr1z1QthBIxvs5+iwf6pNcKbxBaboqqIyTRrfZ5NHdh2whYB4Orb4U/szRie8
-         z1cg==
-X-Gm-Message-State: AOAM530pKVuEaRI44FaEOXeAF7f9Dt/JHt1+BWvVBKpfAhDa9DTh++0+
-        Dz8m+JY1FAOnQZMOLwglDI4Iky3SBGLgwbyV77M1Fgu/sz4=
-X-Google-Smtp-Source: ABdhPJw5W1L6+mWM55SD0J8J4cwzi+kKAcsvzkV/zqpOXBZzOpkXGXfNRiyR/JmB2qgrw0akBx4ZT225n3JmCsanr70=
-X-Received: by 2002:a37:a9c9:: with SMTP id s192mr2183416qke.128.1603390740776;
- Thu, 22 Oct 2020 11:19:00 -0700 (PDT)
+        bh=vgurfa7uICYHznbYitBbS6zGK9tKnDPl24+Alzk+UmQ=;
+        b=eTaXtRSLDJXZ9TTo+n/SdoJ6jMsQM6jXtzTFFyvrR3sM+XXtl3eyKs1JYF/D+jJEb4
+         kRA2oX6jN1N07+UrAjN1gf6Eppvs1O+seVMe3Q5S/JNlCtvCl0mdYWUjy71QKpFH8+m4
+         1QT7LOKWuVcCWweNVSC+lY34Fv5tLxdtePdX+3PZEJr6BL8wxLQ0PfepZrS/5cAk7ktC
+         RH7EAu//VZOnqzaobhLI8qntrHFhTLYfeZY8w4iVB1Ix6kKZ0Fdekp2iTYnM3AlRwiri
+         PAlQGcAjm9ZLQaD/O9lek1EXAj2tIa76tfJgDC1iLFBijzw67yV5ttVGUXacidqoHJN3
+         K7HQ==
+X-Gm-Message-State: AOAM533RhbjqkBGbZlLTb+zbhGvxg/TkxwrlBEdMLprrG+5fFapeTT5M
+        1kS0XYwyeTB9xpzFYm+ektgx5mSBWkhkZFdYwo4XVQ==
+X-Google-Smtp-Source: ABdhPJx8TU5XO8TepLmgowcR1Vknk2GNJt4tiyC0sb/EV0k/yaNXW+BtZPWwTk16D8+OrrLR0rAFpqzL08yIRKF2tk8=
+X-Received: by 2002:aca:1a07:: with SMTP id a7mr2439299oia.169.1603395989572;
+ Thu, 22 Oct 2020 12:46:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201022061554.3418060-1-pmalani@chromium.org>
- <20201022065719.GA1440360@kroah.com> <CACeCKacvhtSfQ=hGYHi3AdrTT+XY2RpKmPHuYWoxNVmRWMeBBA@mail.gmail.com>
- <20201022071753.GA1470296@kroah.com> <CACeCKafjm-T5WnQNRbpKm3OwxqYH+_MxLMg60-=RrpJFBzcKyA@mail.gmail.com>
- <20201022124248.GQ1667571@kuha.fi.intel.com>
-In-Reply-To: <20201022124248.GQ1667571@kuha.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 22 Oct 2020 11:18:49 -0700
-Message-ID: <CACeCKadwa4-xOrihjv-6mkxxFtR5VeFuExP48hTrmteXw=fr9w@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: Expose Product Type VDOs via sysfs
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>
+References: <20201021224619.20796-1-john.stultz@linaro.org> <87y2jyelv6.fsf@kernel.org>
+In-Reply-To: <87y2jyelv6.fsf@kernel.org>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Thu, 22 Oct 2020 12:46:18 -0700
+Message-ID: <CALAqxLXxG1oHvUhBtu9doc78EwFo2kj=vfk_GDaR760ae+0YBQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: dwc3: Trigger a GCTL soft reset when switching
+ modes in DRD
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
-
-Thanks for your feedback.
-
-On Thu, Oct 22, 2020 at 5:43 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Thu, Oct 22, 2020 at 12:25:07AM -0700, Prashant Malani wrote:
-> > Hi Greg,
+On Thu, Oct 22, 2020 at 12:55 AM Felipe Balbi <balbi@kernel.org> wrote:
+> John Stultz <john.stultz@linaro.org> writes:
+> > From: Yu Chen <chenyu56@huawei.com>
 > >
-> > On Thu, Oct 22, 2020 at 12:17 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > Given that your current implementation is not acceptable, something has
-> > > to change :)
+> > With the current dwc3 code on the HiKey960 we often see the
+> > COREIDLE flag get stuck off in __dwc3_gadget_start(), which
+> > seems to prevent the reset irq and causes the USB gadget to
+> > fail to initialize.
 > >
-> > Got it. I'd like to see if Heikki has any suggestions on naming these
-> > entries better.
+> > We had seen occasional initialization failures with older
+> > kernels but with recent 5.x era kernels it seemed to be becoming
+> > much more common, so I dug back through some older trees and
+> > realized I dropped this quirk from Yu Chen during upstreaming
+> > as I couldn't provide a proper rational for it and it didn't
+> > seem to be necessary. I now realize I was wrong.
 >
-> Why not have product type specific attribute files?
->
-> So if the partner is UFP, then we expose ufp1 and ufp2 files that
-> return the UFP1 and UFP2 VDO values and hide the other files:
->
->         % ls /sys/class/typec/port0-partner/identity/
->         id_header cert_stat product ufp1 ufp2
->
-> If the partner is DFP, then you expose the dfp file and hide
-> everything else:
->
->         % ls /sys/class/typec/port0-partner/identity/
->         id_header cert_stat product dfp
->
-> And so on.
->
+> This keeps coming back every few years. It has never been necessary so
+> far. Why is it necessary now?
 
-Makes sense, thanks! The only query I have here is , does the kernel
-*need* to implement this logic? Userspace can read id_header VDO and
-figure this on its own (parse the Product Type specific VDOs
-accordingly).
+Sorry, I'm not totally sure I've got all the context here. If you mean
+with regards to the HiKey960, it's because the HiKey960 had a somewhat
+complicated vendor patch stack that others and I had been carrying
+along and trying to upstream slowly over the last few years.  Since
+that process of upstreaming required lots of rework, the patch set
+changed over time fixing a number of issues and in this case (by
+dropping the quirk) introducing others.
 
-Apart from that, I can work on implementing this if there are no concerns.
+The usb functionality on the board was never perfect.  As I said in
+the patch, we saw initialization issues *very* rarely with older
+kernels - which I suspected was due to the oddball mux/hub driver that
+had to be deeply reworked - so the issue was easy to overlook, except
+the frequency of it had grown to be quite noticeable. So now that all
+but the dts bits are upstream, I've been trying to spend occasional
+free cycles figuring out what's wrong.
 
-Best regards,
+That's when I figured out it was the quirk fix I dropped.  But the
+good news is so far with it I've not hit any initialization issues
+(over a few hundred reboots).
 
-> thanks,
->
-> --
-> heikki
+> The only thing we need to do is verify
+> which registers are shadowed between host and peripheral roles and cache
+> only those registers.
+
+Sorry, could you explain this a bit more? Again, I don't have access
+to the hardware docs, so I'm just working with the source and any
+vendor patches I can find.
+
+> A full soft reset will take a while and is likely to create other
+> issues.
+
+I'm also fine with going back to the quirk approach if you think that
+would be lower risk to other devices?
+
+thanks
+-john
