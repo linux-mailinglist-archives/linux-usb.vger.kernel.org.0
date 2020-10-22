@@ -2,91 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7904A295901
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 09:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF30C2959B4
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 09:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2508481AbgJVHZT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Oct 2020 03:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2506380AbgJVHZT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Oct 2020 03:25:19 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA70C0613CF
-        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 00:25:19 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id r8so379846qtp.13
-        for <linux-usb@vger.kernel.org>; Thu, 22 Oct 2020 00:25:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DvfRuzq2t0P16AvKn55ain8yuYvafMCh1JlHhrSFzYk=;
-        b=KJ8HFOnHbfrCizxBWaNMlvuGNfJdHOD3gwbsZ+VUMNGkVi+6ohc/inYKvMISepAVre
-         S4UljXttqHyQc1ZoGQbZG7xEEN1zGhoLCb99sHoabsaNzi84Ra0j6dC1FtUNWrx0iHR2
-         n4taQ+Wyh668FwuSnvpFoUJFH3XdeHTo0RJCA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DvfRuzq2t0P16AvKn55ain8yuYvafMCh1JlHhrSFzYk=;
-        b=Y7AS/GNvcpLLz8LyoIWEr1b48BMd4+vnOrDdTq1Z8BTa3FIfjDqPv76wtIaMC8kDD4
-         OwhCv5lqbucuhcVWm38GCx9ebLTVZgihwZV4eESaoDG8DCMH856p5T3RCGlydQ+ezi4o
-         8RK5yrY9uNuI+zpg5PXwpsRftER3U9x2E0G9iJpfDY1LMqlFXjjNNHO3ELKG1DDiIvt+
-         Hm/Hli8OLwwbEd+pQUUsuJ933tAdQhh+ReV48/gq0OldYD9DU/52aQBM2bauVAY3NcYf
-         Y7uOeMLtfN5na1Zl0pUFXAeI1NchJxFxxP9Mcdimixqn/pwgH1gJj70lNylfqM0qo4+/
-         z4Sw==
-X-Gm-Message-State: AOAM5314QbATfLfEVyL8beo3wBSJQ45LmTEgm5tJ8dALOgTSuvPCPmxJ
-        k6MC2jGWxZB1qjooO3gstXwcx6hRDLoMbBP75ljhZg==
-X-Google-Smtp-Source: ABdhPJz/QZs4ybfZd55bp0vnCtUoz6WIOCxFdqbybUp44s4ZZGlfb97HohIoFIoqkNTev/Rcy/p6hPgBFqyQFALNkA0=
-X-Received: by 2002:aed:22c7:: with SMTP id q7mr728888qtc.141.1603351518703;
- Thu, 22 Oct 2020 00:25:18 -0700 (PDT)
+        id S2509061AbgJVHzX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Oct 2020 03:55:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39120 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2509056AbgJVHzX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Oct 2020 03:55:23 -0400
+Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ADC3A222E9;
+        Thu, 22 Oct 2020 07:55:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603353322;
+        bh=d1bgd52qcrvHmLf6y4Sf3uxls4XbYPCmmdmANVvb0pU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=P5zTGyN0k1SHuSju513v5RMm7idT3w2mmOuuwWfkWKJtg37DgXaQQWzMtgCHUbhxA
+         sdVhCa4s4vPa+O47lzDjYxtXofBu9dXJxnYW/8pWrrY1ZJV2mYp0ABVdkZQrEA3VMx
+         X4J9f2AYtOI4fxSzGnbsBI4gc2prSy8coouWysEo=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Cc:     Yu Chen <chenyu56@huawei.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, John Stultz <john.stultz@linaro.org>
+Subject: Re: [PATCH v2] usb: dwc3: Trigger a GCTL soft reset when switching
+ modes in DRD
+In-Reply-To: <20201021224619.20796-1-john.stultz@linaro.org>
+References: <20201021224619.20796-1-john.stultz@linaro.org>
+Date:   Thu, 22 Oct 2020 10:54:53 +0300
+Message-ID: <87y2jyelv6.fsf@kernel.org>
 MIME-Version: 1.0
-References: <20201022061554.3418060-1-pmalani@chromium.org>
- <20201022065719.GA1440360@kroah.com> <CACeCKacvhtSfQ=hGYHi3AdrTT+XY2RpKmPHuYWoxNVmRWMeBBA@mail.gmail.com>
- <20201022071753.GA1470296@kroah.com>
-In-Reply-To: <20201022071753.GA1470296@kroah.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 22 Oct 2020 00:25:07 -0700
-Message-ID: <CACeCKafjm-T5WnQNRbpKm3OwxqYH+_MxLMg60-=RrpJFBzcKyA@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: Expose Product Type VDOs via sysfs
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 22, 2020 at 12:17 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+
+Hi,
+
+John Stultz <john.stultz@linaro.org> writes:
+> From: Yu Chen <chenyu56@huawei.com>
 >
-> > > > +What:                /sys/class/typec/<port>-partner/identity/product_type_vdo
-> > > > +Date:                October 2020
-> > > > +Contact:     Prashant Malani <pmalani@chromium.org>
-> > > > +Description:
-> > > > +             Product Type VDOs part of Discover Identity command result. 3 values
-> > > > +             are displayed (for the 3 possible Product Type VDOs), one per line.
-> > >
-> > > sysfs is "one value per file", not "one value per line".  This is not
-> > > ok.
-> >
-> > I see. Would listing these out as three separate vdos (i.e vdo0, vdo1,
-> > vdo2) be better?
+> With the current dwc3 code on the HiKey960 we often see the
+> COREIDLE flag get stuck off in __dwc3_gadget_start(), which
+> seems to prevent the reset irq and causes the USB gadget to
+> fail to initialize.
 >
-> Given that your current implementation is not acceptable, something has
-> to change :)
+> We had seen occasional initialization failures with older
+> kernels but with recent 5.x era kernels it seemed to be becoming
+> much more common, so I dug back through some older trees and
+> realized I dropped this quirk from Yu Chen during upstreaming
+> as I couldn't provide a proper rational for it and it didn't
+> seem to be necessary. I now realize I was wrong.
 
-Got it. I'd like to see if Heikki has any suggestions on naming these
-entries better.
+This keeps coming back every few years. It has never been necessary so
+far. Why is it necessary now? The only thing we need to do is verify
+which registers are shadowed between host and peripheral roles and cache
+only those registers.
 
-Thanks again and best regards,
+A full soft reset will take a while and is likely to create other
+issues.
 
--Prashant
+=2D-=20
+balbi
 
->
-> thanks,
->
-> greg k-h
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+ROs0RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZ/Vg//ZRZX5T55gObmdwIFAhxCkKCehlJhwW2S
+Lt1X5L2KsJhoa4OAme9nrS6d5wuEfMabymsqwPdcPOJQmKIVLQaX1o5N9JtNp+ju
+7nkIBSQ1PtswV99RtKiccsHMwGG6R6AurZp3pYFkPG52j/fYVmkoqZHS0BZdjpXL
+RwBC2SKMUdrEcUdRmcIoHnIwJGyClBf+hZyg4e3vLTVHU/u6O+f05Py+DZDaRXYB
+i+Oi7qxWfyRZkUV6iaFThdEqBQAgTY7ddl1/7ypmubuZ83/RXaKFjBXACjND+Nl2
+XXEgxlYY0Fnk/gQexUMvWrrM3gq64IeOpOh/ABJ26m2tUEJ7QPwjiQA0mJYjXApH
+p+nB8ZSPQ8IdIcy+Gl+wMuka4Cw2NUH6rQX/+ufZZNH2o6fUhOoBySKjy4E1zGSa
+96CAKrahemoQNxb5cprI1HODRmYCNHYxRcMTzUEJF9C6+AhjiVxcXjKCft+Gqh9c
+fByEvJOzlD0cM0wf2wuy1uCuEE6mu0Ip7wQJSVRL9GEkjAmNItCqKAEXDRPu7Kwc
+h/9LKWf/oX5IaeWm02eX/9DVUV9U1rSUTZP/LimRgbvXqMydSy6ra4xM+fTbUcHI
+sUFTIWXApK6bQIwZ2i+J56bnV8Kw3vDU5Xqgx4mgGxjmHSKiU8IkD1EUp9pjSEsQ
+AIrj0VBu+uU=
+=QfqK
+-----END PGP SIGNATURE-----
+--=-=-=--
