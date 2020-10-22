@@ -2,186 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B54C5295652
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 04:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3941E29568D
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Oct 2020 05:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2894975AbgJVCVW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Oct 2020 22:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2894966AbgJVCVU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Oct 2020 22:21:20 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157A2C0613CE
-        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 19:21:19 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id k27so119357oij.11
-        for <linux-usb@vger.kernel.org>; Wed, 21 Oct 2020 19:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ubAi3rBrtdzXL869KERynnLnwRD0Qs9+rarRmKHfSPM=;
-        b=WhKUzyxcoDDVdx5pPCbPp0upWI1eQBpR59+we54m7jVAi3XPmUZcFy2KNHTe8/Bt1K
-         00bRuYLOkRUVl9JthNKKxz6PUP4k4wGZbJQprYj6WdQxNQ7BYcteCXi/1G/0gE2+k21p
-         CpjsJs2AlTTwrBcn7gaoCNHNsOvxzVXhg5T6PvQrettdeJpCUbeb5Bo9fGnYwFPjN78+
-         qgQEk1rMLtFgxVkFZh/54DikaGaysH2Vio2c/hLVWFaE2oH3p3tflnkh6ywtARU5Hcyp
-         vpKxecc5fNxdpvm/A/g1f7xh1Fb2RmSIVeNvfDQSTcGnSSyOg00gBoLHwFq86woKyccZ
-         9KMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ubAi3rBrtdzXL869KERynnLnwRD0Qs9+rarRmKHfSPM=;
-        b=Uclz4H7rsGLVUAs9IlSM6u52T2E7ErhMwkmEbfUL8U/AegwxhQ60uuL2BJGzSkJV5z
-         mY0tlIaV6T1MJDVKq2aTp/yf6eWiXwOebKQTq+EChLIFJDFlveny3Ylh9TLBdBF39bGg
-         26XwsHYw/51WsBggDO69KlSUYA00yLjMeyXazBf2MTHXn1x0AvBBK6W3ElFjq1gbzrP5
-         7Wzrbh1kMbdFldmDyflQ4b8dgwyihciYFKdVGi6kYpIoLngQhUMt3nzuYAH9TeAZv6vx
-         N34KG1V2UNhlCGYFc3PftGySLL+4eIQD2CdrrATiZsRERhBZ+SkjhnsUon6ljYKMxKdr
-         dPCg==
-X-Gm-Message-State: AOAM5316tojtEqHAIX3GGDkg0HnBuDmdopAfQKT9gjvk+j0M8EXmt8sA
-        exsQruNqjrYdn9nIsCE8nZCAXwx1d4Ve33pLXvSSLQ==
-X-Google-Smtp-Source: ABdhPJwhMv1WcYFKossdaXy07p4bNvebNrwEbw2Er4FqmmQfqj7iB1xQTPQfabU0uw+Ev7JXSWFGlf/uhDxLNqld59s=
-X-Received: by 2002:a05:6808:578:: with SMTP id j24mr119875oig.10.1603333278313;
- Wed, 21 Oct 2020 19:21:18 -0700 (PDT)
+        id S2895255AbgJVDCS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Oct 2020 23:02:18 -0400
+Received: from mail-eopbgr20052.outbound.protection.outlook.com ([40.107.2.52]:47251
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2895233AbgJVDCR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Oct 2020 23:02:17 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FphDQG1z9MWGQaz+kVUPTynSQKwgJ106GhKNAffm/mqD//DPTr+y9BVtCMOBv2mlm/8OG+IN6Icjorlp1X8/5VEBG7YGihgkTySJzP78pd9DlnExAH6HlIcHtdHp1OCHOGvHxwKirh2Ms0tEAbP2csBEuLTi33b2O/a14QrIuw3Etm2Np5R0kk3+8zL9CQjzvsksaaUV23B9OfkjSahlaNyay6NK/phObI3lZBNX6Q5wmyRZlQTR/uQH+becHLExLrXkif0REwwMCNpVUhkGKa39b0JPi4CXk1bp+1EMxQIfAuV7Xg+cyKZNaP07KPNVhb8FncmbQ/Hw8CR1Enm5Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Yz1hVREAX2h8Cu5cfU+CAzVXBpM1YYLnYIsotluvq5I=;
+ b=BUew8/97lygzEXamF8ptfzELlNfDCuVXYGPUvp2pT1QhCqndpKYIbK3HQpKP6BMv1yTkBsyXSnZbBCMMeNKn13gXNGhDFbld6QmAr7jHyptZQ0SREjngPrzOhBHC5pK9hDn2d1IPxCfjJqI3Bf7g9y6XDXjnXYm6OUEOTT4fKr/SOttvBRgndBpBX1khcNYcbdy9z9ovlqmxDUQk41zTaip+aZ8xWoufncOlW7aPDLcBKWF/u0aiIYwYt/fQ98hjzkxMQ5BJvOcWaMj7wbCrPmqcaj3KmmqtCSqrwft90S2NkxtUwE8rh9c5nNUJci6ZEzW516+Idn0qeF+BmAO/8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Yz1hVREAX2h8Cu5cfU+CAzVXBpM1YYLnYIsotluvq5I=;
+ b=chBfeyXW75krlDPSkpsh/5NIRkhhbayVG8403cz0//eEB+ue/S47CFwIAEfeGMcKtyg62vHZlTcgCa2FO82qUM+cOEdhQjJNu1ISDt6Nx4cmEnpZ1HDTdFCK2VCav5Lpdylwp1dkpLaah92hwuqGFLD4figIJV3N7oEDulJG1a0=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=nxp.com;
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
+ by AM0PR0402MB3857.eurprd04.prod.outlook.com (2603:10a6:208:b::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.28; Thu, 22 Oct
+ 2020 03:02:12 +0000
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Thu, 22 Oct 2020
+ 03:02:12 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-imx@nxp.com, jun.li@nxp.com, Peter Chen <peter.chen@nxp.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@ti.com>
+Subject: [PATCH 1/2] usb: host: add XHCI_CDNS_HOST flag
+Date:   Thu, 22 Oct 2020 11:01:32 +0800
+Message-Id: <20201022030133.19528-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [119.31.174.66]
+X-ClientProxiedBy: SG2PR06CA0224.apcprd06.prod.outlook.com
+ (2603:1096:4:68::32) To AM8PR04MB7300.eurprd04.prod.outlook.com
+ (2603:10a6:20b:1c7::12)
 MIME-Version: 1.0
-References: <20201021224619.20796-1-john.stultz@linaro.org> <d9c241a5-f31b-b044-bc15-1c5e4d445a69@synopsys.com>
-In-Reply-To: <d9c241a5-f31b-b044-bc15-1c5e4d445a69@synopsys.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 21 Oct 2020 19:21:06 -0700
-Message-ID: <CALAqxLX30jZvHdpMyPMwJUXzMP9EJRaW-vo9x2gkEvqxSKZaZA@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: dwc3: Trigger a GCTL soft reset when switching
- modes in DRD
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Yang Fei <fei.yang@intel.com>,
-        YongQin Liu <yongqin.liu@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR06CA0224.apcprd06.prod.outlook.com (2603:1096:4:68::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18 via Frontend Transport; Thu, 22 Oct 2020 03:02:09 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: b28a3f12-a2d1-4584-1736-08d87636df10
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3857:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM0PR0402MB38574923153428EA6E5C23108B1D0@AM0PR0402MB3857.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0KFhsvmMEtmivX+hndl5JwBA5kF9FkW6cIERYv8JLj8mHSWmIb86F7hhP+boTEMogXIfkx5Mcr6Fr0sb8VVcQxpwUtEBPiOm5qh9bcEYsNVbQEtJntJyARegtF8CfEFCYOydzhiITA2Xw+RNghxGGuSLI2CAsT/9+hvcrbcMwKApdoXykG+oRSSghvLxyCZd0xfhS7cjk+gDiR2+WazmvBT7ylVX83kev9oogR+oD1qY7oXYc3A/qDtLM74vMReu4MWspyaAkSqTldmG4/36MtnkCzTOoo1UdXtFaroH38lDxlcNxd8/eFbblapb8yb/OAi4HTvQKptLwwbb1lARUA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(396003)(39860400002)(376002)(346002)(8676002)(6666004)(66476007)(5660300002)(6506007)(4326008)(6512007)(8936002)(66946007)(956004)(66556008)(2616005)(52116002)(36756003)(6916009)(54906003)(26005)(44832011)(316002)(478600001)(186003)(86362001)(1076003)(2906002)(16526019)(83380400001)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: ttTu75cwgHaas5R3YmGazfFcNeQGGkl1AJmxyMIrToNAjb7107BY3b7r4d4wrZhxHyx6ZafR3RQR35aeywUetIpILETkDDhUdtBzSu/oQnbFJ8x51yVln0usdLg+11OGo5ssKQ0B8jUMqaN69QPnq+eUCKHxWH0d1VArVUjtBIzgkxsEEB+Fc89UsZsHJ2E4Ow8eQOO13mEtlRpDgWypyjkCQWRH3CGxZkgjbXX4Y6ZXDBbdD5usrv6nMz+0Gk5uX9MX7wuH53lsudFaSqHEsGa0nQU04Muw3wPlLea7Kg7sP0Z4ufd5UIu2vwJ1+q63pyH76JN1BnKCR/Gy8dtPYn5p5TaDWWQ/EpBD1FnNx05bM+AyAODfcNvvT5tYaKUsgEpnnq5NPJOOHDlVfFuDt4pI0nZj7P6/lLG0UurPsb8vjtXl7gi3pDJTH4YpYHzAZy+vK45sPWd+ShTkqH/F41c2psdWdn8LZ2eNsYTp7mEt4kO309dIO5sdPeIk0KXjP0Q3mNCIbJrnBSpcH0QEcmCtn5HYgEfHUUe+nwpWAr4qA5zn77j6GVfHfK8oLia84lKzWWRl0vdgGV+xM+WHIrf/3ajujdYjcVo2N1z7IGjUau/7IVYbIQ/ul10V41eVTTK4yU6k1OlBm1rc1emhAA==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b28a3f12-a2d1-4584-1736-08d87636df10
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2020 03:02:11.8945
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iO3dkr5TcbrOS63+M8lxtjAJov6WspP/e0TcYKBo4F/I4AzVtMO7/PICC5wd1dgPaI1SmqNQuKqlMW5DOCFwjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3857
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 6:17 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
->
-> John Stultz wrote:
-> > From: Yu Chen <chenyu56@huawei.com>
-> >
-> > With the current dwc3 code on the HiKey960 we often see the
-> > COREIDLE flag get stuck off in __dwc3_gadget_start(), which
-> > seems to prevent the reset irq and causes the USB gadget to
-> > fail to initialize.
-> >
-> > We had seen occasional initialization failures with older
-> > kernels but with recent 5.x era kernels it seemed to be becoming
-> > much more common, so I dug back through some older trees and
-> > realized I dropped this quirk from Yu Chen during upstreaming
-> > as I couldn't provide a proper rational for it and it didn't
-> > seem to be necessary. I now realize I was wrong.
-> >
-> > After resubmitting the quirk Thinh Nguyen pointed out that it
-> > shouldn't be a quirk and it is actually mentioned in the
-> > programming guide that it should be done when switching modes
-> > in DRD.
-> >
-> > So, to avoid these !COREIDLE lockups seen on HiKey960, this
-> > patch issues GCTL soft reset when switching modes if the
-> > controller is in DRD mode.
-> >
-> > Cc: Felipe Balbi <balbi@kernel.org>
-> > Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
-> > Cc: Yang Fei <fei.yang@intel.com>
-> > Cc: YongQin Liu <yongqin.liu@linaro.org>
-> > Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> > Cc: Thinh Nguyen <thinhn@synopsys.com>
-> > Cc: Jun Li <lijun.kernel@gmail.com>
-> > Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: linux-usb@vger.kernel.org
-> > Signed-off-by: Yu Chen <chenyu56@huawei.com>
-> > Signed-off-by: John Stultz <john.stultz@linaro.org>
-> > ---
-> > v2:
-> > * Rework to always call the GCTL soft reset in DRD mode,
-> >   rather then using a quirk as suggested by Thinh Nguyen
-> >
-> > ---
-> >  drivers/usb/dwc3/core.c | 19 +++++++++++++++++++
-> >  1 file changed, 19 insertions(+)
-> >
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index bdf0925da6b6..ca94f3a2a83c 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -114,10 +114,24 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
-> >       dwc->current_dr_role = mode;
-> >  }
-> >
-> > +static void dwc3_gctl_core_soft_reset(struct dwc3 *dwc)
-> > +{
-> > +     int reg;
-> > +
-> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-> > +     reg |= (DWC3_GCTL_CORESOFTRESET);
-> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-> > +
-> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-> > +     reg &= ~(DWC3_GCTL_CORESOFTRESET);
-> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-> > +}
-> > +
-> >  static void __dwc3_set_mode(struct work_struct *work)
-> >  {
-> >       struct dwc3 *dwc = work_to_dwc(work);
-> >       unsigned long flags;
-> > +     int hw_mode;
-> >       int ret;
-> >       u32 reg;
-> >
-> > @@ -154,6 +168,11 @@ static void __dwc3_set_mode(struct work_struct *work)
-> >               break;
-> >       }
-> >
-> > +     /* Execute a GCTL Core Soft Reset when switch mode in DRD*/
-> > +     hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
-> > +     if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD)
-> > +             dwc3_gctl_core_soft_reset(dwc);
-> > +
->
-> I think this should be done inside the spin_lock.
->
-> >       spin_lock_irqsave(&dwc->lock, flags);
-> >
-> >       dwc3_set_prtcap(dwc, dwc->desired_dr_role);
->
-> The DRD mode change sequence should be like this if we want to switch
-> from host -> device according to the programming guide (for all DRD IPs):
-> 1. Reset controller with GCTL.CoreSoftReset
-> 2. Set GCTL.PrtCapDir(device)
-> 3. Soft reset with DCTL.CSftRst
-> 4. Then follow up with the initializing registers sequence
->
-> However, from code review, with this patch, it follows this sequence:
-> a. Soft reset with DCTL.CSftRst on driver probe
-> b. Reset controller with GCTL.CoreSoftReset
-> c. Set GCTL.PrtCapDir(device)
-> d. < missing DCTL.CSftRst >
-> e. Then follow up with initializing registers sequence
->
-> It may work, but it doesn't follow the programming guide.
+The Cadence xHCI host has the same issue with Intel's,
+it is triggered by reboot stress test.
 
-Much appreciated for the guidance here. I don't believe I have access
-to the programming guide (unless its publicly available somewhere?),
-so I'm just working with what I can experimentally figure out and
-vendor patch history.
+Cc: Pawel Laszczak <pawell@cadence.com>
+Cc: Roger Quadros <rogerq@ti.com>
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+ drivers/usb/host/xhci.c | 2 +-
+ drivers/usb/host/xhci.h | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-So I'll try to translate the above into the driver as best I can, but
-again, I really appreciate your review and corrections here!
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 482fe8c5e3b4..fc72a03dc27f 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -193,7 +193,7 @@ int xhci_reset(struct xhci_hcd *xhci)
+ 	 * Without this delay, the subsequent HC register access,
+ 	 * may result in a system hang very rarely.
+ 	 */
+-	if (xhci->quirks & XHCI_INTEL_HOST)
++	if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_CDNS_HOST))
+ 		udelay(1000);
+ 
+ 	ret = xhci_handshake(&xhci->op_regs->command,
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 8be88379c0fb..4b7275c73ea5 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1877,6 +1877,7 @@ struct xhci_hcd {
+ #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
+ #define XHCI_RENESAS_FW_QUIRK	BIT_ULL(36)
+ #define XHCI_SKIP_PHY_INIT	BIT_ULL(37)
++#define XHCI_CDNS_HOST		BIT_ULL(38)
+ 
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
+-- 
+2.17.1
 
-thanks
--john
