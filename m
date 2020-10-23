@@ -2,73 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 787242969B1
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Oct 2020 08:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D43B2969EC
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Oct 2020 08:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S372577AbgJWG3P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Oct 2020 02:29:15 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:33050 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S369627AbgJWG3P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Oct 2020 02:29:15 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id E0EC4BBF3C1F6B357141;
-        Fri, 23 Oct 2020 14:29:12 +0800 (CST)
-Received: from [127.0.0.1] (10.57.22.126) by DGGEMS408-HUB.china.huawei.com
- (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Fri, 23 Oct 2020
- 14:29:06 +0800
-Subject: Re: [PATCH v1 0/5] Introduce a new helper marco
- DEFINE_STORE_ATTRIBUTE at seq_file.c
-To:     Al Viro <viro@zeniv.linux.org.uk>
-CC:     <akpm@linux-foundation.org>, <andriy.shevchenko@linux.intel.com>,
-        <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <john.garry@huawei.com>, <himanshu.madhani@cavium.com>,
-        <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <uma.shankar@intel.com>, <anshuman.gupta@intel.com>,
-        <animesh.manna@intel.com>, <linux-usb@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>
-References: <1603355997-32350-1-git-send-email-luojiaxing@huawei.com>
- <20201022122858.GT3576660@ZenIV.linux.org.uk>
-From:   luojiaxing <luojiaxing@huawei.com>
-Message-ID: <7003f142-5d53-1285-c6cd-a8e8d9c076b7@huawei.com>
-Date:   Fri, 23 Oct 2020 14:29:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S375428AbgJWGtM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Oct 2020 02:49:12 -0400
+Received: from mga07.intel.com ([134.134.136.100]:13317 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S373223AbgJWGtM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 23 Oct 2020 02:49:12 -0400
+IronPort-SDR: gO43Q310XusYyh2yHmbAtrvtlTcnj4xfA/XLfpyJ00Hhm156lME5YnzT1089CSdjiKN6FIT7tj
+ zvHvdaGwXbFQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9782"; a="231829839"
+X-IronPort-AV: E=Sophos;i="5.77,407,1596524400"; 
+   d="scan'208";a="231829839"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2020 23:49:00 -0700
+IronPort-SDR: ykeTLw1IxWW2G/uQJZNGxcMhPHeZHCNqzepoHGYcvWUZl3PsZ4o+UOnRds6ZVim3Poo0GHL53e
+ x4GiS1dmH6qg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,407,1596524400"; 
+   d="scan'208";a="423340790"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 22 Oct 2020 23:48:56 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 23 Oct 2020 09:48:55 +0300
+Date:   Fri, 23 Oct 2020 09:48:55 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Dmitry N. Mikushin" <maemarcus@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Any example of USB gadget for DRD device mode on Intel Gemini
+ Lake?
+Message-ID: <20201023064855.GR1667571@kuha.fi.intel.com>
+References: <CAGR4S9HQiZCsA7Y5_47j-xBOkydKiT2Exam=36L=-vwRjt+UWA@mail.gmail.com>
+ <20201019133607.GC1667571@kuha.fi.intel.com>
+ <CAGR4S9F1wdUyywuBxcMYfH9wMa91xw1rL8dmZrhJrGSGbmgbzg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201022122858.GT3576660@ZenIV.linux.org.uk>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.57.22.126]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGR4S9F1wdUyywuBxcMYfH9wMa91xw1rL8dmZrhJrGSGbmgbzg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+On Thu, Oct 22, 2020 at 11:06:59PM +0200, Dmitry N. Mikushin wrote:
+> Yes, AFAIK PCI_DEVICE_ID_INTEL_GLK_XHCI is actually 0x31a8, and I do have it:
+> 
+> 00:15.0 USB controller [0c03]: Intel Corporation Device [8086:31a8] (rev 03)
 
-On 2020/10/22 20:28, Al Viro wrote:
-> On Thu, Oct 22, 2020 at 04:39:52PM +0800, Luo Jiaxing wrote:
->> We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
->> for read-only file, but we found many of drivers also want a helper marco for
->> read-write file too.
-> DEFINE_SHOW_ATTRIBUTE is a bloody bad idea; let's not replicate the garbage
-> any further.  If you want templates - C++ is over that way...
+That is the xHCI controller, and it is not what you need if you want
+to use the connector in device mode. The xHCI and DWC3 IPs are
+separate IPs on GLK. That is why there is a mux between the two. The
+dwc3 USB device controller has device ID 31aa, so you want to see a
+PCI device with the device ID. It's not there.
 
+So the dwc3 PCI device is not enabled on your board, which means you
+do not have USB device controller to deal with. The connector is in
+host mode only. Sorry.
 
-I am sorry but would you mind to explain it in more detail that why 
-DEFINE_SHOW_ATTRIBUTE is a bad idea?
+If you can enter the BIOS menu, then you can try to find an option
+named XDCI (so that's "XDCI" not "xHCI"). It is usually somewhere
+under some USB menu. If you have that, then enable it, and you should
+see the dwc3 PCI device in the operating system.
 
-I found that DEFINE_SHOW_ATTRIBUTE is convenient and avoids a lot of 
-duplicate code When add some debugfs file for DFX.
+Br,
 
-
-Thanks
-
-Jiaxing
-
-
->
-> .
->
-
+-- 
+heikki
