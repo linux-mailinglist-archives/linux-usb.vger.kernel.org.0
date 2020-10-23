@@ -2,169 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B1829723B
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Oct 2020 17:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529C3297475
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Oct 2020 18:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S465777AbgJWP01 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Oct 2020 11:26:27 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:35645 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S465753AbgJWP0W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Oct 2020 11:26:22 -0400
-Received: by mail-io1-f72.google.com with SMTP id w16so1426176ioa.2
-        for <linux-usb@vger.kernel.org>; Fri, 23 Oct 2020 08:26:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=KqIcLxoWMOgyDIHlPgDtbim81ixqYlsTiyIh2/2tzCw=;
-        b=nzBOnP3e0uyZkMtRTu/b3wE1ktphGimPBe7dyV65Vz3ypUu5DyGN19eY98T5N+1niI
-         +vzgLw3zU4rPNq5AcUUAgCroLZWjNzVapK+iqQI8/7Q5CJu6F8xk5yzraFXXYzmESCCY
-         KfMaDb7moL7Q3IDhxoEdIwuqTGxc5RiwnSGHppDBXcQR0gzN+IZpRqttBhWJjULxCmV9
-         /bRwTZA1tLLvL+6pKTj9FzQ7Vh1Y1XdKEO+402EF0zQGgEy2pM4Z8dSNpkLmV9gJS90m
-         D4XChLN2EUBlcJrdg8F77I/E6dbG+uveZSBiz3ZVWdMcFI42FfI+rOl4VctMkPv+Bpk3
-         Lgrg==
-X-Gm-Message-State: AOAM531yKeR0iMwl2EzQJK2zkII3oeWNy/qtRfH06cB7JBjHgFY3Fmpg
-        EvoFvMixHVDbsGq5UgBLle98iUUAWp6t6euPS6uGO4IPgEHv
-X-Google-Smtp-Source: ABdhPJyQJG0klV3QpY/n69STwAcXuoqdz8cqXb2l79ISbKCrbLFAfWl2C5+b+6t9lIwtd5cVx5M8ahHyAiBJLzLxNWdUg0YFGc8S
+        id S1751276AbgJWQhN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Oct 2020 12:37:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33724 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1751842AbgJWQdu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 23 Oct 2020 12:33:50 -0400
+Received: from mail.kernel.org (ip5f5ad5a3.dynamic.kabel-deutschland.de [95.90.213.163])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 33495246A9;
+        Fri, 23 Oct 2020 16:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603470828;
+        bh=Hv3Ehg3kTw6mL0c8DIamVwpl0TjhhlhRQyeLYyTHoe0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ACDS0rg2ZzKVKSkkIt/nbSZC2aXVth9Lg6KXYJ80ULPC4mmNTxgIrDQCKgpeZT/AB
+         zCb4Nk3UoukNIGd2TE52FlCojs+I+tL0fziMX4NdqZvtpRwj4BftFdlBegQWnaoWd+
+         r3yy5e7f7LEjxE+J/Wg9vK0Y4y0uQMDH6fSZMzhQ=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kW00g-002Awk-3i; Fri, 23 Oct 2020 18:33:46 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v3 31/56] usb: dwc3: fix kernel-doc markups
+Date:   Fri, 23 Oct 2020 18:33:18 +0200
+Message-Id: <0b964be3884def04fcd20ea5c12cb90d0014871c.1603469755.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1603469755.git.mchehab+huawei@kernel.org>
+References: <cover.1603469755.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:cb0c:: with SMTP id j12mr2415315jap.54.1603466781423;
- Fri, 23 Oct 2020 08:26:21 -0700 (PDT)
-Date:   Fri, 23 Oct 2020 08:26:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ea810305b2583377@google.com>
-Subject: memory leak in gadget_bind
-From:   syzbot <syzbot+0a4ec40b66726854dd11@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, balbi@kernel.org, dan.carpenter@oracle.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+There is a common comment marked, instead, with kernel-doc
+notation.
 
-syzbot found the following issue on:
+Also, some identifiers have different names between their
+prototypes and the kernel-doc markup.
 
-HEAD commit:    f9893351 Merge tag 'kconfig-v5.10' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ff53f7900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b8e9005328853c49
-dashboard link: https://syzkaller.appspot.com/bug?extid=0a4ec40b66726854dd11
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=177a731c500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1328d038500000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0a4ec40b66726854dd11@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff888110c4d9c0 (size 32):
-  comm "syz-executor693", pid 8462, jiffies 4294942114 (age 13.040s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000b2b2ae2f>] kmalloc include/linux/slab.h:554 [inline]
-    [<00000000b2b2ae2f>] raw_event_queue_add drivers/usb/gadget/legacy/raw_gadget.c:66 [inline]
-    [<00000000b2b2ae2f>] raw_queue_event drivers/usb/gadget/legacy/raw_gadget.c:225 [inline]
-    [<00000000b2b2ae2f>] gadget_bind+0x223/0x340 drivers/usb/gadget/legacy/raw_gadget.c:303
-    [<000000005cc0921f>] udc_bind_to_driver+0x62/0x150 drivers/usb/gadget/udc/core.c:1413
-    [<000000009fe15fa6>] usb_gadget_probe_driver+0x1c7/0x230 drivers/usb/gadget/udc/core.c:1476
-    [<00000000a41bab17>] raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:512 [inline]
-    [<00000000a41bab17>] raw_ioctl+0x5da/0xf30 drivers/usb/gadget/legacy/raw_gadget.c:1210
-    [<0000000085e98ccd>] vfs_ioctl fs/ioctl.c:48 [inline]
-    [<0000000085e98ccd>] __do_sys_ioctl fs/ioctl.c:753 [inline]
-    [<0000000085e98ccd>] __se_sys_ioctl fs/ioctl.c:739 [inline]
-    [<0000000085e98ccd>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:739
-    [<00000000b1e8d60c>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
-    [<0000000084cf691c>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-BUG: memory leak
-unreferenced object 0xffff88810ba5e4e0 (size 32):
-  comm "softirq", pid 0, jiffies 4294942152 (age 12.660s)
-  hex dump (first 32 bytes):
-    02 00 00 00 08 00 00 00 80 06 00 01 00 00 40 00  ..............@.
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000203e8439>] kmalloc include/linux/slab.h:554 [inline]
-    [<00000000203e8439>] raw_event_queue_add drivers/usb/gadget/legacy/raw_gadget.c:66 [inline]
-    [<00000000203e8439>] raw_queue_event drivers/usb/gadget/legacy/raw_gadget.c:225 [inline]
-    [<00000000203e8439>] gadget_setup+0xf6/0x220 drivers/usb/gadget/legacy/raw_gadget.c:343
-    [<000000009fb695b0>] dummy_timer+0xb9f/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1899
-    [<00000000c61b4b01>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1415
-    [<0000000044ef2390>] expire_timers kernel/time/timer.c:1460 [inline]
-    [<0000000044ef2390>] __run_timers.part.0+0x319/0x400 kernel/time/timer.c:1757
-    [<000000005e8b3107>] __run_timers kernel/time/timer.c:1738 [inline]
-    [<000000005e8b3107>] run_timer_softirq+0x3d/0x80 kernel/time/timer.c:1770
-    [<000000000af0f05c>] __do_softirq+0xcc/0x2c2 kernel/softirq.c:298
-    [<0000000065b29993>] asm_call_irq_on_stack+0xf/0x20
-    [<00000000670a912a>] __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
-    [<00000000670a912a>] run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
-    [<00000000670a912a>] do_softirq_own_stack+0x32/0x40 arch/x86/kernel/irq_64.c:77
-    [<00000000b238919a>] invoke_softirq kernel/softirq.c:393 [inline]
-    [<00000000b238919a>] __irq_exit_rcu kernel/softirq.c:423 [inline]
-    [<00000000b238919a>] irq_exit_rcu+0x91/0xc0 kernel/softirq.c:435
-    [<00000000ab949bfc>] sysvec_apic_timer_interrupt+0x36/0x80 arch/x86/kernel/apic/apic.c:1091
-    [<00000000ae73d7f6>] asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:631
-    [<00000000c54c318f>] native_safe_halt arch/x86/include/asm/irqflags.h:60 [inline]
-    [<00000000c54c318f>] arch_safe_halt arch/x86/include/asm/irqflags.h:103 [inline]
-    [<00000000c54c318f>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
-    [<00000000c54c318f>] acpi_idle_do_entry+0xc3/0xd0 drivers/acpi/processor_idle.c:517
-    [<00000000ac55bfeb>] acpi_idle_enter+0x128/0x1f0 drivers/acpi/processor_idle.c:648
-    [<000000008d561dc0>] cpuidle_enter_state+0xc9/0x650 drivers/cpuidle/cpuidle.c:237
-    [<000000007b67805b>] cpuidle_enter+0x29/0x40 drivers/cpuidle/cpuidle.c:351
-    [<000000001370c1be>] call_cpuidle kernel/sched/idle.c:132 [inline]
-    [<000000001370c1be>] cpuidle_idle_call kernel/sched/idle.c:213 [inline]
-    [<000000001370c1be>] do_idle+0x1c8/0x250 kernel/sched/idle.c:273
-
-BUG: memory leak
-unreferenced object 0xffff888110f48b20 (size 32):
-  comm "softirq", pid 0, jiffies 4294942183 (age 12.350s)
-  hex dump (first 32 bytes):
-    02 00 00 00 08 00 00 00 80 06 00 01 00 00 40 00  ..............@.
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000203e8439>] kmalloc include/linux/slab.h:554 [inline]
-    [<00000000203e8439>] raw_event_queue_add drivers/usb/gadget/legacy/raw_gadget.c:66 [inline]
-    [<00000000203e8439>] raw_queue_event drivers/usb/gadget/legacy/raw_gadget.c:225 [inline]
-    [<00000000203e8439>] gadget_setup+0xf6/0x220 drivers/usb/gadget/legacy/raw_gadget.c:343
-    [<000000009fb695b0>] dummy_timer+0xb9f/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1899
-    [<00000000c61b4b01>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1415
-    [<0000000044ef2390>] expire_timers kernel/time/timer.c:1460 [inline]
-    [<0000000044ef2390>] __run_timers.part.0+0x319/0x400 kernel/time/timer.c:1757
-    [<000000005e8b3107>] __run_timers kernel/time/timer.c:1738 [inline]
-    [<000000005e8b3107>] run_timer_softirq+0x3d/0x80 kernel/time/timer.c:1770
-    [<000000000af0f05c>] __do_softirq+0xcc/0x2c2 kernel/softirq.c:298
-    [<0000000065b29993>] asm_call_irq_on_stack+0xf/0x20
-    [<00000000670a912a>] __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
-    [<00000000670a912a>] run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
-    [<00000000670a912a>] do_softirq_own_stack+0x32/0x40 arch/x86/kernel/irq_64.c:77
-    [<00000000b238919a>] invoke_softirq kernel/softirq.c:393 [inline]
-    [<00000000b238919a>] __irq_exit_rcu kernel/softirq.c:423 [inline]
-    [<00000000b238919a>] irq_exit_rcu+0x91/0xc0 kernel/softirq.c:435
-    [<00000000ab949bfc>] sysvec_apic_timer_interrupt+0x36/0x80 arch/x86/kernel/apic/apic.c:1091
-    [<00000000ae73d7f6>] asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:631
-    [<00000000c54c318f>] native_safe_halt arch/x86/include/asm/irqflags.h:60 [inline]
-    [<00000000c54c318f>] arch_safe_halt arch/x86/include/asm/irqflags.h:103 [inline]
-    [<00000000c54c318f>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
-    [<00000000c54c318f>] acpi_idle_do_entry+0xc3/0xd0 drivers/acpi/processor_idle.c:517
-    [<00000000ac55bfeb>] acpi_idle_enter+0x128/0x1f0 drivers/acpi/processor_idle.c:648
-    [<000000008d561dc0>] cpuidle_enter_state+0xc9/0x650 drivers/cpuidle/cpuidle.c:237
-    [<000000007b67805b>] cpuidle_enter+0x29/0x40 drivers/cpuidle/cpuidle.c:351
-    [<000000001370c1be>] call_cpuidle kernel/sched/idle.c:132 [inline]
-    [<000000001370c1be>] cpuidle_idle_call kernel/sched/idle.c:213 [inline]
-    [<000000001370c1be>] do_idle+0x1c8/0x250 kernel/sched/idle.c:273
-
-
-
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/dwc3/core.c        | 2 +-
+ drivers/usb/dwc3/core.h        | 2 +-
+ drivers/usb/gadget/composite.c | 2 +-
+ drivers/usb/typec/mux.c        | 2 +-
+ include/linux/usb/composite.h  | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index bdf0925da6b6..841daec70b6e 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * core.c - DesignWare USB3 DRD Controller Core file
+  *
+  * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 74323b10a64a..2f95f08ca511 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1277,7 +1277,7 @@ struct dwc3_event_type {
+ #define DWC3_DEPEVT_EPCMDCMPLT		0x07
+ 
+ /**
+- * struct dwc3_event_depvt - Device Endpoint Events
++ * struct dwc3_event_depevt - Device Endpoint Events
+  * @one_bit: indicates this is an endpoint event (not used)
+  * @endpoint_number: number of the endpoint
+  * @endpoint_event: The event we have:
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 05b176c82cc5..c6d455f2bb92 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1245,7 +1245,7 @@ int usb_string_id(struct usb_composite_dev *cdev)
+ EXPORT_SYMBOL_GPL(usb_string_id);
+ 
+ /**
+- * usb_string_ids() - allocate unused string IDs in batch
++ * usb_string_ids_tab() - allocate unused string IDs in batch
+  * @cdev: the device whose string descriptor IDs are being allocated
+  * @str: an array of usb_string objects to assign numbers to
+  * Context: single threaded during gadget setup
+diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+index b069a5122aaa..cf720e944aaa 100644
+--- a/drivers/usb/typec/mux.c
++++ b/drivers/usb/typec/mux.c
+@@ -71,7 +71,7 @@ struct typec_switch *fwnode_typec_switch_get(struct fwnode_handle *fwnode)
+ EXPORT_SYMBOL_GPL(fwnode_typec_switch_get);
+ 
+ /**
+- * typec_put_switch - Release USB Type-C orientation switch
++ * typec_switch_put - Release USB Type-C orientation switch
+  * @sw: USB Type-C orientation switch
+  *
+  * Decrement reference count for @sw.
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 2040696d75b6..a2d229ab63ba 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -437,7 +437,7 @@ static inline struct usb_composite_driver *to_cdriver(
+ #define OS_STRING_IDX			0xEE
+ 
+ /**
+- * struct usb_composite_device - represents one composite usb gadget
++ * struct usb_composite_dev - represents one composite usb gadget
+  * @gadget: read-only, abstracts the gadget's usb peripheral controller
+  * @req: used for control responses; buffer is pre-allocated
+  * @os_desc_req: used for OS descriptors responses; buffer is pre-allocated
+-- 
+2.26.2
+
