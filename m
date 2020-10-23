@@ -2,86 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 914E629713B
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Oct 2020 16:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDD3297239
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Oct 2020 17:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S374055AbgJWOVE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Oct 2020 10:21:04 -0400
-Received: from mga05.intel.com ([192.55.52.43]:10944 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S373823AbgJWOVE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Oct 2020 10:21:04 -0400
-IronPort-SDR: 8gxkZ/JEbeRIYgfZr1HqtrUKwnkVIcBsj+gA72Q3/NfjWzUtv1j1ZzTBbV0KzZbfT1iME59r8T
- 9MkEHs5H6Cgw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9782"; a="252379920"
-X-IronPort-AV: E=Sophos;i="5.77,408,1596524400"; 
-   d="scan'208";a="252379920"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2020 07:21:01 -0700
-IronPort-SDR: MGZKyQLRBj289A0js6fkWAKaqtHtr3cSTsFhDczinfo1hYeZIYRh8vKzfXW/J2iIVbcSilHEA4
- fhj23Pe04DdQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,408,1596524400"; 
-   d="scan'208";a="423437822"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 23 Oct 2020 07:20:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 23 Oct 2020 17:20:57 +0300
-Date:   Fri, 23 Oct 2020 17:20:57 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Benjamin Berg <benjamin@sipsolutions.net>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Benjamin Berg <bberg@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 0/2] UCSI race condition resulting in wrong port state
-Message-ID: <20201023142057.GC614478@kuha.fi.intel.com>
-References: <20201009144047.505957-1-benjamin@sipsolutions.net>
+        id S465774AbgJWP0Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Oct 2020 11:26:25 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:38276 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S465765AbgJWP0Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Oct 2020 11:26:24 -0400
+Received: by mail-il1-f199.google.com with SMTP id p17so1520686ilb.5
+        for <linux-usb@vger.kernel.org>; Fri, 23 Oct 2020 08:26:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=oMIJBTmP0vIg508VNCbknQmv+Io37D65u+fsrIqcKHc=;
+        b=XNEg2bUy9qwEyGW3YSg64CSM85HaREvnkzJHYD/lzjoaVa1TM8kSTNLKe4sTDoyTVo
+         8lSG0wmXHM2+pWyvxAOvDWWFkGhGpbhxwUTwjUn6kb9mrMohH9MokzUUo6t0ZMgFwqfg
+         VGRVi9S0Un5QndJcyHm0Dz4ynF2m8ZuIyhlz8IZUFcMJ778tk16p0GHWk7k0zkpF/aNl
+         4ywht4N9zrIsc7FbTdAOXkwfAoILlTKkBhizbMU/7It8RQWGZlX6orPGJRvQp3njxB+s
+         muHqQPBIRftSGsBcTraCutY8sik2ttepfKwTp6vywQhh7MAbyP2S9FEhG8PgIcFR4ONb
+         8GtQ==
+X-Gm-Message-State: AOAM533u8l2mTTy8FQj9w/n0dxW7vh4Q22izmTHmq3oI0hVPIMAk/+WX
+        danG/qWqFViLmyjbJM16zTD4PIGKiMQa6KB42i4xWsvnDd31
+X-Google-Smtp-Source: ABdhPJyPRb8gqdjGjwDg4eKpR9nluRHSl1mR/EHKx+GllNBM4d74Lqivc4ACh8LUV3kLNWjFjjCchWjWKwZSZWoCWT4ydQHhR03Z
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201009144047.505957-1-benjamin@sipsolutions.net>
+X-Received: by 2002:a05:6638:1508:: with SMTP id b8mr2340163jat.25.1603466781639;
+ Fri, 23 Oct 2020 08:26:21 -0700 (PDT)
+Date:   Fri, 23 Oct 2020 08:26:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000edcabe05b25833f7@google.com>
+Subject: memory leak in gadget_setup
+From:   syzbot <syzbot+bd38200f53df6259e6bf@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, balbi@kernel.org, dan.carpenter@oracle.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 04:40:45PM +0200, Benjamin Berg wrote:
-> From: Benjamin Berg <bberg@redhat.com>
-> 
-> Hi all,
-> 
-> so, I kept running in an issue where the UCSI port information was saying
-> that power was being delivered (online: 1), while no cable was attached.
-> 
-> The core of the problem is that there are scenarios where UCSI change
-> notifications are lost. This happens because querying the changes that
-> happened is done using the GET_CONNECTOR_STATUS command while clearing the
-> bitfield happens from the separate ACK command. Any change in between will
-> be lost.
-> 
-> Note that the problem may be almost invisible in the UI as e.g. GNOME will
-> still show the battery as discharging. But some policies like automatic
-> suspend may be applied incorrectly.
-> 
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Hello,
 
-Both patches:
+syzbot found the following issue on:
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+HEAD commit:    96485e44 Merge tag 'ext4_for_linus' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16f1b91c500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=504c0405f28172a
+dashboard link: https://syzkaller.appspot.com/bug?extid=bd38200f53df6259e6bf
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ead664500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16a44cc4500000
 
-> Benjamin Berg (2):
->   usb: typec: ucsi: acpi: Always decode connector change information
->   usb: typec: ucsi: Work around PPM losing change information
-> 
->  drivers/usb/typec/ucsi/ucsi.c      | 125 ++++++++++++++++++++++++-----
->  drivers/usb/typec/ucsi/ucsi.h      |   2 +
->  drivers/usb/typec/ucsi/ucsi_acpi.c |   5 +-
->  3 files changed, 110 insertions(+), 22 deletions(-)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+bd38200f53df6259e6bf@syzkaller.appspotmail.com
 
-thanks,
+BUG: memory leak
+unreferenced object 0xffff888110622660 (size 32):
+  comm "softirq", pid 0, jiffies 4294941981 (age 12.480s)
+  hex dump (first 32 bytes):
+    02 00 00 00 08 00 00 00 80 06 00 01 00 00 40 00  ..............@.
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000efd29abd>] kmalloc include/linux/slab.h:554 [inline]
+    [<00000000efd29abd>] raw_event_queue_add drivers/usb/gadget/legacy/raw_gadget.c:66 [inline]
+    [<00000000efd29abd>] raw_queue_event drivers/usb/gadget/legacy/raw_gadget.c:225 [inline]
+    [<00000000efd29abd>] gadget_setup+0xf6/0x220 drivers/usb/gadget/legacy/raw_gadget.c:343
+    [<00000000952c4a46>] dummy_timer+0xb9f/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1899
+    [<0000000074ac2c54>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1415
+    [<00000000560a3a79>] expire_timers kernel/time/timer.c:1460 [inline]
+    [<00000000560a3a79>] __run_timers.part.0+0x319/0x400 kernel/time/timer.c:1757
+    [<000000009d9503d0>] __run_timers kernel/time/timer.c:1738 [inline]
+    [<000000009d9503d0>] run_timer_softirq+0x3d/0x80 kernel/time/timer.c:1770
+    [<000000009df27c89>] __do_softirq+0xcc/0x2c2 kernel/softirq.c:298
+    [<000000007a3f1a47>] asm_call_irq_on_stack+0xf/0x20
+    [<000000004a62cc2e>] __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
+    [<000000004a62cc2e>] run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
+    [<000000004a62cc2e>] do_softirq_own_stack+0x32/0x40 arch/x86/kernel/irq_64.c:77
+    [<00000000b0086800>] invoke_softirq kernel/softirq.c:393 [inline]
+    [<00000000b0086800>] __irq_exit_rcu kernel/softirq.c:423 [inline]
+    [<00000000b0086800>] irq_exit_rcu+0x91/0xc0 kernel/softirq.c:435
+    [<00000000175f9523>] sysvec_apic_timer_interrupt+0x36/0x80 arch/x86/kernel/apic/apic.c:1091
+    [<00000000a348e847>] asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:631
+    [<0000000060661100>] native_safe_halt arch/x86/include/asm/irqflags.h:60 [inline]
+    [<0000000060661100>] arch_safe_halt arch/x86/include/asm/irqflags.h:103 [inline]
+    [<0000000060661100>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
+    [<0000000060661100>] acpi_idle_do_entry+0xc3/0xd0 drivers/acpi/processor_idle.c:517
+    [<000000003f413b99>] acpi_idle_enter+0x128/0x1f0 drivers/acpi/processor_idle.c:648
+    [<00000000f5e5afb8>] cpuidle_enter_state+0xc9/0x650 drivers/cpuidle/cpuidle.c:237
+    [<00000000d50d51fc>] cpuidle_enter+0x29/0x40 drivers/cpuidle/cpuidle.c:351
+    [<00000000d674baed>] call_cpuidle kernel/sched/idle.c:132 [inline]
+    [<00000000d674baed>] cpuidle_idle_call kernel/sched/idle.c:213 [inline]
+    [<00000000d674baed>] do_idle+0x1c8/0x250 kernel/sched/idle.c:273
 
--- 
-heikki
+BUG: memory leak
+unreferenced object 0xffff888110622380 (size 32):
+  comm "softirq", pid 0, jiffies 4294942017 (age 12.120s)
+  hex dump (first 32 bytes):
+    02 00 00 00 08 00 00 00 80 06 00 01 00 00 40 00  ..............@.
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000efd29abd>] kmalloc include/linux/slab.h:554 [inline]
+    [<00000000efd29abd>] raw_event_queue_add drivers/usb/gadget/legacy/raw_gadget.c:66 [inline]
+    [<00000000efd29abd>] raw_queue_event drivers/usb/gadget/legacy/raw_gadget.c:225 [inline]
+    [<00000000efd29abd>] gadget_setup+0xf6/0x220 drivers/usb/gadget/legacy/raw_gadget.c:343
+    [<00000000952c4a46>] dummy_timer+0xb9f/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1899
+    [<0000000074ac2c54>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1415
+    [<00000000560a3a79>] expire_timers kernel/time/timer.c:1460 [inline]
+    [<00000000560a3a79>] __run_timers.part.0+0x319/0x400 kernel/time/timer.c:1757
+    [<000000009d9503d0>] __run_timers kernel/time/timer.c:1738 [inline]
+    [<000000009d9503d0>] run_timer_softirq+0x3d/0x80 kernel/time/timer.c:1770
+    [<000000009df27c89>] __do_softirq+0xcc/0x2c2 kernel/softirq.c:298
+    [<000000007a3f1a47>] asm_call_irq_on_stack+0xf/0x20
+    [<000000004a62cc2e>] __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
+    [<000000004a62cc2e>] run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
+    [<000000004a62cc2e>] do_softirq_own_stack+0x32/0x40 arch/x86/kernel/irq_64.c:77
+    [<00000000b0086800>] invoke_softirq kernel/softirq.c:393 [inline]
+    [<00000000b0086800>] __irq_exit_rcu kernel/softirq.c:423 [inline]
+    [<00000000b0086800>] irq_exit_rcu+0x91/0xc0 kernel/softirq.c:435
+    [<00000000175f9523>] sysvec_apic_timer_interrupt+0x36/0x80 arch/x86/kernel/apic/apic.c:1091
+    [<00000000a348e847>] asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:631
+    [<0000000060661100>] native_safe_halt arch/x86/include/asm/irqflags.h:60 [inline]
+    [<0000000060661100>] arch_safe_halt arch/x86/include/asm/irqflags.h:103 [inline]
+    [<0000000060661100>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
+    [<0000000060661100>] acpi_idle_do_entry+0xc3/0xd0 drivers/acpi/processor_idle.c:517
+    [<000000003f413b99>] acpi_idle_enter+0x128/0x1f0 drivers/acpi/processor_idle.c:648
+    [<00000000f5e5afb8>] cpuidle_enter_state+0xc9/0x650 drivers/cpuidle/cpuidle.c:237
+    [<00000000d50d51fc>] cpuidle_enter+0x29/0x40 drivers/cpuidle/cpuidle.c:351
+    [<00000000d674baed>] call_cpuidle kernel/sched/idle.c:132 [inline]
+    [<00000000d674baed>] cpuidle_idle_call kernel/sched/idle.c:213 [inline]
+    [<00000000d674baed>] do_idle+0x1c8/0x250 kernel/sched/idle.c:273
+
+BUG: memory leak
+unreferenced object 0xffff888110dfc020 (size 32):
+  comm "softirq", pid 0, jiffies 4294942067 (age 11.620s)
+  hex dump (first 32 bytes):
+    02 00 00 00 08 00 00 00 80 06 00 01 00 00 40 00  ..............@.
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000efd29abd>] kmalloc include/linux/slab.h:554 [inline]
+    [<00000000efd29abd>] raw_event_queue_add drivers/usb/gadget/legacy/raw_gadget.c:66 [inline]
+    [<00000000efd29abd>] raw_queue_event drivers/usb/gadget/legacy/raw_gadget.c:225 [inline]
+    [<00000000efd29abd>] gadget_setup+0xf6/0x220 drivers/usb/gadget/legacy/raw_gadget.c:343
+    [<00000000952c4a46>] dummy_timer+0xb9f/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1899
+    [<0000000074ac2c54>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1415
+    [<00000000560a3a79>] expire_timers kernel/time/timer.c:1460 [inline]
+    [<00000000560a3a79>] __run_timers.part.0+0x319/0x400 kernel/time/timer.c:1757
+    [<000000009d9503d0>] __run_timers kernel/time/timer.c:1738 [inline]
+    [<000000009d9503d0>] run_timer_softirq+0x3d/0x80 kernel/time/timer.c:1770
+    [<000000009df27c89>] __do_softirq+0xcc/0x2c2 kernel/softirq.c:298
+    [<000000007a3f1a47>] asm_call_irq_on_stack+0xf/0x20
+    [<000000004a62cc2e>] __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
+    [<000000004a62cc2e>] run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
+    [<000000004a62cc2e>] do_softirq_own_stack+0x32/0x40 arch/x86/kernel/irq_64.c:77
+    [<00000000b0086800>] invoke_softirq kernel/softirq.c:393 [inline]
+    [<00000000b0086800>] __irq_exit_rcu kernel/softirq.c:423 [inline]
+    [<00000000b0086800>] irq_exit_rcu+0x91/0xc0 kernel/softirq.c:435
+    [<00000000175f9523>] sysvec_apic_timer_interrupt+0x36/0x80 arch/x86/kernel/apic/apic.c:1091
+    [<00000000a348e847>] asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:631
+    [<0000000060661100>] native_safe_halt arch/x86/include/asm/irqflags.h:60 [inline]
+    [<0000000060661100>] arch_safe_halt arch/x86/include/asm/irqflags.h:103 [inline]
+    [<0000000060661100>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
+    [<0000000060661100>] acpi_idle_do_entry+0xc3/0xd0 drivers/acpi/processor_idle.c:517
+    [<000000003f413b99>] acpi_idle_enter+0x128/0x1f0 drivers/acpi/processor_idle.c:648
+    [<00000000f5e5afb8>] cpuidle_enter_state+0xc9/0x650 drivers/cpuidle/cpuidle.c:237
+    [<00000000d50d51fc>] cpuidle_enter+0x29/0x40 drivers/cpuidle/cpuidle.c:351
+    [<00000000d674baed>] call_cpuidle kernel/sched/idle.c:132 [inline]
+    [<00000000d674baed>] cpuidle_idle_call kernel/sched/idle.c:213 [inline]
+    [<00000000d674baed>] do_idle+0x1c8/0x250 kernel/sched/idle.c:273
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
