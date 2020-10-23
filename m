@@ -2,164 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D6D297022
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Oct 2020 15:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F522970BE
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Oct 2020 15:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S464406AbgJWNPg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Oct 2020 09:15:36 -0400
-Received: from mail-dm6nam11on2041.outbound.protection.outlook.com ([40.107.223.41]:12513
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S464403AbgJWNPf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Oct 2020 09:15:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R7EAqFFW7tuXAXt/x0wH6v//7PFy6Rzr9HBCtDMimZlAjnLtAi6FHU/9txhAwXyQ0UOVVCns6XFSC/kZfF0qwTWMC0Nouw6imMcAb+jp6GBDvEXpWNR+SOQLMaGeBtYJzQ6Bvr2QnGoab8R0QvB8ZXm/QG7gMRMDMIIPYHwhYbGI+dQ7g2gsvYfTGc7pVvz8Kj7JyJHfX6kP+7hG4GpMtsr0oMIUxdGJyeT6A/AXhg3depKr8WY75LLrm2h++oJU5cFxuRnt5+bUGOxFLGIdAvBmLBZT68VrKK1wpUnoERS4IqNQ77nAJD7TEEVj/4nA6AVAGkT5X5aO+bbOCgxbcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RhNF3WIJOI+R7ojiHqcQnYQl9yTi13G+x0CW00x+reQ=;
- b=eA8QNxTYZzmrI9dGJaCHrCSQnQM0CSr+3kQbsFp+Sjsr7BD5KQmFni7sj4KSgE4MnOggKwg28ALtlmuajMSfbeILBAb23dq+X6GPcafACC/NIZ4N+hUMAt0yBPAyDCqXOUvKyMzq5sL6k98Cd2QTlw7JfKr348PDbzH2xe5XbPwoFcfhJsD9vRyHh8c202G7+1Dq6cmyndDGTAU8+wIxWjyOM/0rMyo5Ne4YKKsWLAm1JkJV5I6VE5OG5+wlS5namxLwPKpQowlS0jLa8QQHh2zCzqkWnvRnIAFrcnGfGlmt68QQlMz9OXsFaw7iz65PUoXWHgDalEkGuRTslUWGzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RhNF3WIJOI+R7ojiHqcQnYQl9yTi13G+x0CW00x+reQ=;
- b=W/LT8lhbXlh0fz1oNjX9s8eIAsAh3dKfMUfD92DoxmHd6tGDZrlsdCnWjlLTsAI1a8sjimWvmYCHky+0cTujNs1K8709BPHTCnLDTPMNLCdYMW80bV+0FA3JICo87xhs90/ZrqKH7UAhqo1ceL2NjSSUcPcuDwK1YJYfbAoDiOs=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB4098.namprd12.prod.outlook.com (2603:10b6:a03:205::8)
- by BYAPR12MB4726.namprd12.prod.outlook.com (2603:10b6:a03:98::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Fri, 23 Oct
- 2020 13:15:30 +0000
-Received: from BY5PR12MB4098.namprd12.prod.outlook.com
- ([fe80::e1a3:69b7:a02d:a74d]) by BY5PR12MB4098.namprd12.prod.outlook.com
- ([fe80::e1a3:69b7:a02d:a74d%5]) with mapi id 15.20.3477.029; Fri, 23 Oct 2020
- 13:15:29 +0000
-From:   Sandeep Singh <Sandeep.Singh@amd.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sanket.goswami@amd.com, Nehal-bakulchandra.Shah@amd.com
-Cc:     Shyam-sundar.S-k@amd.com, Sandeep Singh <sandeep.singh@amd.com>,
-        Sanket Goswami <Sanket.Goswami@amd.com>
-Subject: [PATCH v2] usb: xhci: Workaround for S3 issue on AMD SNPS 3.0 xHC
-Date:   Fri, 23 Oct 2020 18:45:03 +0530
-Message-Id: <20201023131503.759671-1-Sandeep.Singh@amd.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [165.204.156.251]
-X-ClientProxiedBy: MAXPR0101CA0062.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:e::24) To BY5PR12MB4098.namprd12.prod.outlook.com
- (2603:10b6:a03:205::8)
+        id S464921AbgJWNhi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Oct 2020 09:37:38 -0400
+Received: from mga01.intel.com ([192.55.52.88]:39937 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S371967AbgJWNhh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 23 Oct 2020 09:37:37 -0400
+IronPort-SDR: cEPw7lSAdDgO0ESr099CstorpFDE5TBH5OzenwZ//zdI/YepF+kudumEwLtAV8aAeOofS8u7mK
+ 6Kv5fWHufbNQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9782"; a="185375265"
+X-IronPort-AV: E=Sophos;i="5.77,408,1596524400"; 
+   d="scan'208";a="185375265"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2020 06:37:33 -0700
+IronPort-SDR: XVFt1D6aj9rEcPEkp0bYJf6esqVIN4ROHFyJfGRDStJJvCkZBl0IH9Klh0v6Ples2rAMgiUG5W
+ X1+b3QpuR0Uw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,408,1596524400"; 
+   d="scan'208";a="302765196"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Oct 2020 06:37:29 -0700
+Subject: Re: [patch 05/12] usb: xhci: Remove in_interrupt() checks
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        Johan Hovold <johan@kernel.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Duncan Sands <duncan.sands@free.fr>
+References: <20201014145215.518912759@linutronix.de>
+ <20201014145727.607191004@linutronix.de>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <916bebd9-6d83-3fa9-5e8b-5ecaa65d799e@linux.intel.com>
+Date:   Fri, 23 Oct 2020 16:38:57 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from jatayu.amd.com (165.204.156.251) by MAXPR0101CA0062.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:e::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.22 via Frontend Transport; Fri, 23 Oct 2020 13:15:27 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: b4828ed8-f13c-4184-89e9-08d87755b6cd
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4726:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR12MB472686EEE2D52F836651910CE01A0@BYAPR12MB4726.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2887;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I5WR4LNaAfxNU0aofTFphZEjgN62aWIe8/Cxb8qcIOY2/K81v5UPh2RwKAVwjbjoaCaia/6VCie1EzgJ0QI3hh9+62bXGjdVGr+Jcq8U2Favc+c7T1jKHkJRd2ZhDOmM1erg8rUgS0qy0TST3QCIq/Iaz5t4lUUHQh2ACYX1XmRfBlAWNjqrCMC3+jcx9pozFG9klRR8AGZohDHRjtaTTlizD+mfcjVNTeQpbMcThZDlhDA+1wI5k4LhsSEiUKB059gQmtN90GuLHp9BME0eLtuRps3uYshtjd57r7sX7urYsrb6hCXhqIb7qkba6hbi6rLE2uxBFbLMcQqcL1FJMafrU5XhVG9o6mpu4wPwJoTczRS0e8ffUmtqcZvhJ0A7LvHbAEeDmeH9MKVX9s0cVQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4098.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(346002)(136003)(39860400002)(376002)(478600001)(54906003)(8936002)(1076003)(6486002)(2616005)(956004)(83380400001)(2906002)(8676002)(6666004)(66946007)(4326008)(36756003)(186003)(16526019)(316002)(66556008)(66476007)(26005)(86362001)(52116002)(7696005)(6636002)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: iY6v9NDUzoiOXIbfbzdQxCagznOqAQ8V9fn10z5mm4uTkMc1oSUMyY1x3L/zmRaUlnk+chvInreyQbNYvYXKnVEXpx+KM50CbNxOaQKwASz49idcWSYIRf8dTxfQzRauCdu9g207IXqwOkLP1EaU0Dr9KtmYD8PHMhYnmXZGxl/9AYqvvrpFilE/AWUP8yGbjtASK0Gc1jO/nfWZQ0vPE7iXBbqM4q/dM1yjaYlwDasd/2PhDTK3L/wyux4Tu7B6CVj2XmuGyI9/RILN1cgbspmSUFzKl7qgJRP2rASQRDJLm/Y8laD6vvYFOZ2lRzFAx27SmCisoY7jW11yDCNSeCqLs7CgUk9W6AkqU31Fgm2BHrZ+H0UroJtIUHCFEtFOB17wexu9WIhJolU+DhgdL4UJdVLMA4Ws/iRIzVjzeNq2fkhV0GJIhpjV/6ixPp81kJvB4s1RWDGyNEEMGkPuDw+AUxtpaL39KRNn5GclOyFcLrrpJoqQOoRE36Q294eSTWlN3zfcJW6ulgM17Y3XXQYbj+pGxvOPTEBPm0iYvnN7LAvMDWEPtoxnAfgtxOnXAtI9ArbKZz4IK/wNNpA+rPWs3QxfTnEIY4pQ0aeMCVxVKaaoG7erMpLIlraSLc8Kh5djVjjnai/bk3ydox7A6Q==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4828ed8-f13c-4184-89e9-08d87755b6cd
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4098.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2020 13:15:29.7212
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2nJNcY/mFhFEAa5Rl29XBRuDEPwYQcSBnfHMQKI87DXw9y7zAUGaEKTrNxzOi17O
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB4726
+In-Reply-To: <20201014145727.607191004@linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sandeep Singh <sandeep.singh@amd.com>
+On 14.10.2020 17.52, Thomas Gleixner wrote:
+> From: Ahmed S. Darwish <a.darwish@linutronix.de>
+> 
+> The usage of in_interrupt() in drivers is phased out for various reasons.
+> 
+> xhci_set_hc_event_deq() has an !in_interrupt() check which is pointless
+> because the function is only invoked from xhci_mem_init() which is clearly
+> task context as it does GFP_KERNEL allocations. Remove it.
+> 
+> xhci_urb_enqueue() prints a debug message if an URB is submitted after the
+> underlying hardware was suspended. But that warning is only issued when
+> in_interrupt() is true, which makes no sense. Simply return -ESHUTDOWN and
+> be done with it.
+> 
+> Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Mathias Nyman <mathias.nyman@intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  drivers/usb/host/xhci-mem.c |    2 +-
+>  drivers/usb/host/xhci.c     |    6 ++----
+>  2 files changed, 3 insertions(+), 5 deletions(-)
 
-On some platform of AMD, S3 fails with HCE and SRE errors. To fix this,
-need to disable a bit which is enable in sparse controller.
-
-Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
-Signed-off-by: Sandeep Singh <sandeep.singh@amd.com>
----
-Changes since v1:(https://lkml.org/lkml/2020/10/23/368)
-	-> Add xhci.h changes
-
- drivers/usb/host/xhci-pci.c | 17 +++++++++++++++++
- drivers/usb/host/xhci.h     |  1 +
- 2 files changed, 18 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index c26c06e5c88c..bf89172c43ca 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -23,6 +23,8 @@
- #define SSIC_PORT_CFG2_OFFSET	0x30
- #define PROG_DONE		(1 << 30)
- #define SSIC_PORT_UNUSED	(1 << 31)
-+#define SPARSE_DISABLE_BIT	17
-+#define SPARSE_CNTL_ENABLE	0xC12C
- 
- /* Device for a quirk */
- #define PCI_VENDOR_ID_FRESCO_LOGIC	0x1b73
-@@ -161,6 +163,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	    (pdev->device == 0x15e0 || pdev->device == 0x15e1))
- 		xhci->quirks |= XHCI_SNPS_BROKEN_SUSPEND;
- 
-+	if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->device == 0x15e5)
-+		xhci->quirks |= XHCI_DISABLE_SPARSE;
-+
- 	if (pdev->vendor == PCI_VENDOR_ID_AMD)
- 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
- 
-@@ -498,6 +503,15 @@ static void xhci_pme_quirk(struct usb_hcd *hcd)
- 	readl(reg);
- }
- 
-+static void xhci_sparse_control_quirk(struct usb_hcd *hcd)
-+{
-+	u32 reg;
-+
-+	reg = readl(hcd->regs + SPARSE_CNTL_ENABLE);
-+	reg &= ~BIT(SPARSE_DISABLE_BIT);
-+	writel(reg, hcd->regs + SPARSE_CNTL_ENABLE);
-+}
-+
- static int xhci_pci_suspend(struct usb_hcd *hcd, bool do_wakeup)
- {
- 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-@@ -517,6 +531,9 @@ static int xhci_pci_suspend(struct usb_hcd *hcd, bool do_wakeup)
- 	if (xhci->quirks & XHCI_SSIC_PORT_UNUSED)
- 		xhci_ssic_port_unused_quirk(hcd, true);
- 
-+	if (xhci->quirks & XHCI_DISABLE_SPARSE)
-+		xhci_sparse_control_quirk(hcd);
-+
- 	ret = xhci_suspend(xhci, do_wakeup);
- 	if (ret && (xhci->quirks & XHCI_SSIC_PORT_UNUSED))
- 		xhci_ssic_port_unused_quirk(hcd, false);
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 8be88379c0fb..ebb359ebb261 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1877,6 +1877,7 @@ struct xhci_hcd {
- #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
- #define XHCI_RENESAS_FW_QUIRK	BIT_ULL(36)
- #define XHCI_SKIP_PHY_INIT	BIT_ULL(37)
-+#define XHCI_DISABLE_SPARSE	BIT_ULL(38)
- 
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
--- 
-2.25.1
+Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 
