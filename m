@@ -2,131 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6AC2982B7
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Oct 2020 18:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EFE2982CE
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Oct 2020 18:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1417588AbgJYRQO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Oct 2020 13:16:14 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:46275 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729178AbgJYRQO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Oct 2020 13:16:14 -0400
-Received: by mail-lj1-f193.google.com with SMTP id c21so7225496ljn.13;
-        Sun, 25 Oct 2020 10:16:12 -0700 (PDT)
+        id S1417716AbgJYRqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Oct 2020 13:46:38 -0400
+Received: from mail-lf1-f46.google.com ([209.85.167.46]:46929 "EHLO
+        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1417704AbgJYRqi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Oct 2020 13:46:38 -0400
+Received: by mail-lf1-f46.google.com with SMTP id v6so8890303lfa.13;
+        Sun, 25 Oct 2020 10:46:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PMXldS4frrwc3ZqG31YTvYd9N3hWa1nWp8tHb7QPcuo=;
-        b=A5o35qXcJnIGGKDb2vQ8pWHU+FKjlNnKTLLPC5Vt2qWiYh+N6qz07YK/YejopSG1L8
-         C8M3pmOOyIV430OJDKRwkl+JEoAEAQrAr1qxorvdqLCSvhW3QU1AM+bm9gOmZYExW0dH
-         jgPYG37sjcMZAefYy9X1jKzIWBVdp5mFn9B9dOHmFZcOGy+qaV1yrF7hkzpKjLytI2Ep
-         eOvCubBtr6MbusPHD66WVq57Ln9kuGjgiDRfikQfFtf9wXk8wXquHXjAPCYv0sc/+0iI
-         hg/TqP2AiRnyxG+ueiZhLL1pVTv4ZDcwhFk5Sg21rW15ift1LnJBP4/5d1Y1qexCLSBa
-         3FsQ==
-X-Gm-Message-State: AOAM533r4RdersgUCyPeqjiaxhOOzfokAwIgFDyl+qU7iweWwAOBpvfg
-        tIECSoZeyf+fDg6UGQEbfd8tHcQRANe/fA==
-X-Google-Smtp-Source: ABdhPJxXubjA+MMwIxWygGmgjStosuhUXTqdl0C1uXV6556piPV6UdgHcGYW5JHodk1O0FLDjxTXBg==
-X-Received: by 2002:a2e:9955:: with SMTP id r21mr4069846ljj.124.1603646171409;
-        Sun, 25 Oct 2020 10:16:11 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0MBTRhTBvsyqduaPDlcHzj7Pu6u26Y6GGbYsif9UVUw=;
+        b=XQ4nf72nwfw3X/ktgPZ3mODRWqYbbqAt+acjQHA7CXo4yhiE75Ig30IYKyHgEHX6eD
+         fG1Aws8V20e+Y4b7saw9MvtIgme3NmODf4WBYm4/vj40YBcxPRG3v2+v4waU9gxU9bd2
+         aVA3Y11WYrkFFOuh/QF2VCZ8bFsqa1SwpOrG1/ufNPdqu5FihpH1HVC/jZ1HLmw/ztKs
+         DAwn+5RMDGOeXMbkH+nK+LE5NIJVFgtxbCvutg3xuQy/X+6Szcwc+C99LcnQIzYpozuH
+         TU77a+VR22gojHuyzFcnJWlB/b5Vtqj3+21RnJvfrS9So4FBVK9F759oQXfaC9ecGfSb
+         9wxA==
+X-Gm-Message-State: AOAM531yTLoA1VvgyyZZ+kYv8LsBXG53BJwSEazpr5LJ24pDX62G4dxC
+        rTNGa4ZN/LaSs8+ZF/RDvwShnPFhIL9VaA==
+X-Google-Smtp-Source: ABdhPJy26bpwVLve4DtalMvpLwEQW9Or1LMJu+OKRTfYFjuWdB8MMtV0x4SWjElSgcbTOxH9SWd6Rw==
+X-Received: by 2002:a19:c10:: with SMTP id 16mr3589986lfm.459.1603647995383;
+        Sun, 25 Oct 2020 10:46:35 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id y21sm789025lfk.49.2020.10.25.10.16.10
+        by smtp.gmail.com with ESMTPSA id f184sm794176lfd.253.2020.10.25.10.46.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2020 10:16:10 -0700 (PDT)
+        Sun, 25 Oct 2020 10:46:34 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kWjcr-0004lp-Dw; Sun, 25 Oct 2020 18:16:14 +0100
-Date:   Sun, 25 Oct 2020 18:16:13 +0100
+        (envelope-from <johan@xi.terra>)
+        id 1kWk6H-0007H6-MS; Sun, 25 Oct 2020 18:46:38 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+To:     linux-usb@vger.kernel.org
+Cc:     "Ahmed S . Darwish" <a.darwish@linutronix.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Thomas Winischhofer <thomas@winischhofer.net>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Duncan Sands <duncan.sands@free.fr>
-Subject: Re: [patch V2 04/13] USB: serial: digi_acceleport: Remove
- in_interrupt() usage
-Message-ID: <20201025171613.GT26280@localhost>
-References: <20201019100629.419020859@linutronix.de>
- <20201019101110.019266389@linutronix.de>
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 00/14] USB: serial: keyspan_pda: fix up write implementation
+Date:   Sun, 25 Oct 2020 18:45:46 +0100
+Message-Id: <20201025174600.27896-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201019101110.019266389@linutronix.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 12:06:33PM +0200, Thomas Gleixner wrote:
-> From: Ahmed S. Darwish <a.darwish@linutronix.de>
-> 
-> The usage of in_interrupt() in drivers is phased out and Linus clearly
-> requested that code which changes behaviour depending on context should
-> either be separated or the context be conveyed in an argument passed by the
-> caller, which usually knows the context.
-> 
-> The debug printk() in digi_write() prints in_interrupt() as context
-> information. TTY writes happen always in preemptible task context and
-> console writes can happen from almost any context, so in_interrupt() is not
-> really helpful.
+This series fixes a number of long-standing issues with the keyspan_pda
+driver and reworks its write implementation so that it can be used with
+any line discipline or for a system console.
 
-The above statement is not correct, TTY writes can and do happen from
-other contexts, including soft IRQ (e.g. PPP).
-
-> Aside of that issuing a printk() from a console->write() callback is not a
-> really brilliant idea for obvious reasons.
-
-True, but we don't need to sprinkle conditionals for the benefit of
-people trying to debug USB serial drivers using a USB serial console.
-They get what they deserve. ;)
-
-> Remove the in_interrupt() printout and make the printk() depend on tty.
-> 
-> Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Johan Hovold <johan@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> 
-> ---
->  drivers/usb/serial/digi_acceleport.c |    7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> --- a/drivers/usb/serial/digi_acceleport.c
-> +++ b/drivers/usb/serial/digi_acceleport.c
-> @@ -911,9 +911,10 @@ static int digi_write(struct tty_struct
->  	unsigned char *data = port->write_urb->transfer_buffer;
->  	unsigned long flags = 0;
->  
-> -	dev_dbg(&port->dev,
-> -		"digi_write: TOP: port=%d, count=%d, in_interrupt=%ld\n",
-> -		priv->dp_port_num, count, in_interrupt());
-> +	if (tty) {
-> +		dev_dbg(&port->dev, "digi_write: TOP: port=%d, count=%d\n",
-> +			priv->dp_port_num, count);
-> +	}
-
-So just drop the in_interrupt() here.
-
-Also note that we already have another unconditional dev_dbg() at the
-end of this function.
-
->  
->  	/* copy user data (which can sleep) before getting spin lock */
->  	count = min(count, port->bulk_out_size-2);
-> 
+The last few patches cleans up the xircom device support and some style
+issues.
 
 Johan
+
+
+Johan Hovold (14):
+  USB: serial: keyspan_pda: fix dropped unthrottle interrupts
+  USB: serial: keyspan_pda: fix write deadlock
+  USB: serial: keyspan_pda: fix stalled writes
+  USB: serial: keyspan_pda: fix write-wakeup use-after-free
+  USB: serial: keyspan_pda: fix tx-unthrottle use-after-free
+  USB: serial: keyspan_pda: fix write unthrottling
+  USB: serial: keyspan_pda: refactor write-room handling
+  USB: serial: keyspan_pda: fix write implementation
+  USB: serial: keyspan_pda: increase transmitter threshold
+  USB: serial: keyspan_pda: add write-fifo support
+  USB: serial: keyspan_pda: clean up xircom/entrega support
+  USB: serial: keyspan_pda: clean up comments and whitespace
+  USB: serial: keyspan_pda: use BIT() macro
+  USB: serial: keyspan_pda: drop redundant usb-serial pointer
+
+ drivers/usb/serial/Kconfig       |  19 +-
+ drivers/usb/serial/Makefile      |   1 -
+ drivers/usb/serial/keyspan_pda.c | 548 +++++++++++++------------------
+ 3 files changed, 241 insertions(+), 327 deletions(-)
+
+-- 
+2.26.2
+
