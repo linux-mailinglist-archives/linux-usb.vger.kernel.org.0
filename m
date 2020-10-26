@@ -2,39 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FFB298F21
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 15:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2E4298FBB
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 15:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1780909AbgJZOWX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Oct 2020 10:22:23 -0400
-Received: from mga11.intel.com ([192.55.52.93]:59469 "EHLO mga11.intel.com"
+        id S1781901AbgJZOpZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Oct 2020 10:45:25 -0400
+Received: from mga03.intel.com ([134.134.136.65]:27523 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1780807AbgJZOWX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Oct 2020 10:22:23 -0400
-IronPort-SDR: 5Pt77JnQPKV2SW/BVZ3sE6DMcdpPtgCkUOgfvkFNGMcQzkLBdL6knijIrSS6MARi9DWlWu3DND
- byv5E3kiO1tA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9785"; a="164431854"
+        id S1781562AbgJZOpY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Oct 2020 10:45:24 -0400
+IronPort-SDR: Rr7aR6GM1q9ic1KoL0lKL5bH7krBL2VVNaLdoIxioKW5EEnZUT0VcRcXEWKDqrvATa7094BDW7
+ DRiHVEy9abeg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9785"; a="168031792"
 X-IronPort-AV: E=Sophos;i="5.77,419,1596524400"; 
-   d="scan'208";a="164431854"
+   d="scan'208";a="168031792"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 07:22:21 -0700
-IronPort-SDR: zx/ut50ICtaU6P7xooH9x7iTUdM05LLmQswxh9qX7+rEM7BI64wCqazhLSfOmolsnyTLTO3OVK
- CzdsByKKeh+A==
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 07:45:23 -0700
+IronPort-SDR: QiNaUaNQh/pEOODGqs2lfdV8v8vw2bVnIdIfb7ZzEvuY+FdmKoFpFR7+OMBr/ueqXnECPsJ5M9
+ U3HVU9zl3jvw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,419,1596524400"; 
-   d="scan'208";a="467941137"
+   d="scan'208";a="467946901"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga004.jf.intel.com with ESMTP; 26 Oct 2020 07:22:18 -0700
-Subject: Re: [PATCH] usb: remove unneeded break
-To:     trix@redhat.com, balbi@kernel.org, gregkh@linuxfoundation.org,
-        mathias.nyman@intel.com, johan@kernel.org,
-        stern@rowland.harvard.edu, gustavoars@kernel.org,
-        viro@zeniv.linux.org.uk, lee.jones@linaro.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-References: <20201019150202.19713-1-trix@redhat.com>
+  by orsmga004.jf.intel.com with ESMTP; 26 Oct 2020 07:45:21 -0700
+Subject: Re: [PATCH v2] usb: xhci: Workaround for S3 issue on AMD SNPS 3.0 xHC
+To:     Sandeep Singh <Sandeep.Singh@amd.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sanket.goswami@amd.com,
+        Nehal-bakulchandra.Shah@amd.com
+Cc:     Shyam-sundar.S-k@amd.com
+References: <20201023131503.759671-1-Sandeep.Singh@amd.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
@@ -78,34 +77,33 @@ Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
  42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
  IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <845e43b3-1c53-3eed-b540-4efa109f33a9@linux.intel.com>
-Date:   Mon, 26 Oct 2020 16:23:47 +0200
+Message-ID: <ed3847f0-f219-547a-e887-cd0d48f77dda@linux.intel.com>
+Date:   Mon, 26 Oct 2020 16:46:50 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201019150202.19713-1-trix@redhat.com>
+In-Reply-To: <20201023131503.759671-1-Sandeep.Singh@amd.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19.10.2020 18.02, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On 23.10.2020 16.15, Sandeep Singh wrote:
+> From: Sandeep Singh <sandeep.singh@amd.com>
 > 
-> A break is not needed if it is preceded by a return or goto
+> On some platform of AMD, S3 fails with HCE and SRE errors. To fix this,
+> need to disable a bit which is enable in sparse controller.
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
+> Signed-off-by: Sandeep Singh <sandeep.singh@amd.com>
 > ---
->  drivers/usb/gadget/function/f_hid.c | 9 ---------
->  drivers/usb/host/xhci-mem.c         | 1 -
->  drivers/usb/misc/iowarrior.c        | 3 ---
->  drivers/usb/serial/iuu_phoenix.c    | 2 --
->  drivers/usb/storage/freecom.c       | 1 -
->  5 files changed, 16 deletions(-)
+> Changes since v1:(https://lkml.org/lkml/2020/10/23/368)
+> 	-> Add xhci.h changes
+> 
 
-Would probably be better to split this into several patches.
-The xhci change looks good (as a separate patch)
+Added to queue.
+This looks like it should go to stable as well.
 
 -Mathias
