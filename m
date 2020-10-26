@@ -2,99 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 142C9298EBC
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 15:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2391298ECA
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 15:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1780874AbgJZOBA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Oct 2020 10:01:00 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:42443 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1780870AbgJZOA7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Oct 2020 10:00:59 -0400
-Received: by mail-oi1-f193.google.com with SMTP id c72so1162770oig.9;
-        Mon, 26 Oct 2020 07:00:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pG/9G2wHZKjQaOLnT3vSPF5oyrBjZ7juAO9aLYBUT1w=;
-        b=V3LMea63jn8rzLiplabmZG6NU3Xw6N/OFAJ31hr99bpAOJq3hJa5axopx1YuuiT6VS
-         /LmseEkdrXhW3IHdZ9NI5EfuTBINGRkRJ0/70ktm9ZWm8AwCfJwoordHhLYaUZANBhGS
-         LFjou0nae+mvP8SNn8QN2LC92/vPuffbsbNGfq7eel90yeTV20AnQUhHALXi8vG4iBeZ
-         bQJHfWo2W4JrvfZqzmq1yJURrst4h7k3pt+UwjUqd/HIaD0+OGL+Rn7M9MGNjZwWSwbP
-         KpagUtN/nacCfQ4VeA3p69890zRMzyEVWnY/CvE0IhzWjTZbd9oy5JGJLLXjXWNqGPpl
-         fydg==
-X-Gm-Message-State: AOAM533kmRlpx8xK0eepmDmVyn+jejFhQSBg+4zS+vAC3w7pEBlv4sLk
-        W5IFrd4abXRz8uiJ78s3jupiHL3NVg==
-X-Google-Smtp-Source: ABdhPJwn+Ve27BSpW3nxAtoP8gce2Vj4YxzDnsNpZoqeACCTOBKA8PL5AzZu8NUmFTMVsuMOzyYcww==
-X-Received: by 2002:aca:be56:: with SMTP id o83mr14057156oif.1.1603720858647;
-        Mon, 26 Oct 2020 07:00:58 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id p10sm3992214oig.37.2020.10.26.07.00.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 07:00:57 -0700 (PDT)
-Received: (nullmailer pid 73839 invoked by uid 1000);
-        Mon, 26 Oct 2020 14:00:56 -0000
-Date:   Mon, 26 Oct 2020 09:00:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S1780906AbgJZODS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Oct 2020 10:03:18 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:40242 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1780899AbgJZODS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Oct 2020 10:03:18 -0400
+Date:   Mon, 26 Oct 2020 15:03:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1603720995;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/XYLTnd4F+MtBkIEH9ciCsQ1o4o3fSs6saBPeUcCQRg=;
+        b=aEC/DFGAzRNOiLoJ+IZswCQThDVstB95WznPoAR3plToyC0oKuWMntD/MsM7Q80qKg/2jO
+        adPxZGvGg7lvDVSirCUS9D2Wta9ebe+TvRe5/DRNz1FIfM2t7IK1H5pDHy9BCMcIONVuvf
+        hIXkpKAYZqrxK0McvVoaTZpzdMK5Xh0abpfujx6J8MPwp7QXTpLwMbLPesXEXLxSbrA1YW
+        1sQ3ujDlOgt1oJHCdV5ZGIrBRDEVIx3GCOuMnAivzUpwnptyXAeoUTcDm4qnFcFG15p4Ge
+        GcW+gOXJLp4nIiVi6zivJuwi5MeCguM7AjBDbyU7GMGleDGoKn+dN6uaA4m15w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1603720995;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/XYLTnd4F+MtBkIEH9ciCsQ1o4o3fSs6saBPeUcCQRg=;
+        b=MBgKbLCjynQlRvNZZxzHBvGsL2zC0Jh0u6i5DMLd7ximjnilFbLyHFIc1rye4RBzvKe46v
+        c744gr3dJcGlRwDg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v11 01/10] dt-bindings: connector: Add property to set
- initial current cap for FRS
-Message-ID: <20201026140056.GA73720@bogus>
-References: <20201020093627.256885-1-badhri@google.com>
- <20201020093627.256885-2-badhri@google.com>
+        linux-usb@vger.kernel.org,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Duncan Sands <duncan.sands@free.fr>
+Subject: [PATCH v3 04/13 ] USB: serial: digi_acceleport: Remove
+ in_interrupt() usage
+Message-ID: <20201026140313.dpg3hkhkje2os4hw@linutronix.de>
+References: <20201019100629.419020859@linutronix.de>
+ <20201019101110.019266389@linutronix.de>
+ <20201025171613.GT26280@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201020093627.256885-2-badhri@google.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20201025171613.GT26280@localhost>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 20 Oct 2020 02:36:18 -0700, Badhri Jagan Sridharan wrote:
-> This change adds frs-typec-current which allows setting the initial current
-> capability of the new source when vSafe5V is applied during PD3.0
-> sink Fast Role Swap.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
-> Changes since v1:
-> - Changing patch version to v6 to fix version number confusion.
-> 
-> Changes since v6:
-> - Removed the redundant usb-connector.txt that I created by mistake.
-> - Moved to yaml.
-> 
-> Changes since v7:
-> - Rebase
-> 
-> Changes since v8:
-> - Redefine new-source-frs-typec-current as string enums to address
->   Rob Herring's comment.
-> 
-> Changes since v9:
-> - Removed FRS constants from usb bindings.
-> 
-> Changes since v10:
-> - Suggestions from Rob Herring:
->  - Going back to u32 for new-source-frs-typec-current
->  - Removed the definition for "not-supported"
-> - Bringing back FRS constants for usb pd binding.
-> ---
->  .../bindings/connector/usb-connector.yaml     | 19 +++++++++++++++++++
->  include/dt-bindings/usb/pd.h                  |  8 ++++++++
->  2 files changed, 27 insertions(+)
-> 
+=46rom: "Ahmed S. Darwish" <a.darwish@linutronix.de>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The usage of in_interrupt() in drivers is phased out and Linus clearly
+requested that code which changes behaviour depending on context should
+either be separated or the context be conveyed in an argument passed by the
+caller, which usually knows the context.
+
+The debug printk() in digi_write() prints in_interrupt() as context
+information. This information is imprecisely as it does not distinguish
+between hard-IRQ or disabled botton half and it does consider disabled
+interrupts or preemption. It is not really helpful.
+
+Remove the in_interrupt() printout.
+
+Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+---
+v2=E2=80=A6v3:
+  - Don't make dev_dbg() conditional on `tty'
+  - Remove the part "tty happens always in process context" from the
+    commit message. Johan pointed out that for PPP it may happen in
+    bottom half.
+
+ drivers/usb/serial/digi_acceleport.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/serial/digi_acceleport.c b/drivers/usb/serial/digi=
+_acceleport.c
+index 91055a191995f..016e7dec31962 100644
+--- a/drivers/usb/serial/digi_acceleport.c
++++ b/drivers/usb/serial/digi_acceleport.c
+@@ -911,9 +911,8 @@ static int digi_write(struct tty_struct *tty, struct us=
+b_serial_port *port,
+ 	unsigned char *data =3D port->write_urb->transfer_buffer;
+ 	unsigned long flags =3D 0;
+=20
+-	dev_dbg(&port->dev,
+-		"digi_write: TOP: port=3D%d, count=3D%d, in_interrupt=3D%ld\n",
+-		priv->dp_port_num, count, in_interrupt());
++	dev_dbg(&port->dev, "digi_write: TOP: port=3D%d, count=3D%d\n",
++		priv->dp_port_num, count);
+=20
+ 	/* copy user data (which can sleep) before getting spin lock */
+ 	count =3D min(count, port->bulk_out_size-2);
+--=20
+2.28.0
+
