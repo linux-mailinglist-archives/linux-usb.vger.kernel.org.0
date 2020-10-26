@@ -2,181 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19968298561
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 02:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDDB2986B3
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 07:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1421195AbgJZBhm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Oct 2020 21:37:42 -0400
-Received: from mail-ej1-f44.google.com ([209.85.218.44]:39844 "EHLO
-        mail-ej1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1419334AbgJZBhm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Oct 2020 21:37:42 -0400
-Received: by mail-ej1-f44.google.com with SMTP id qh17so11113588ejb.6;
-        Sun, 25 Oct 2020 18:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Vt0uSw1mB/ZaasUfNjH+I5OWDz73d0Ci+yC5WIZEzSY=;
-        b=uwO2QrjVeIePWTHQlVOkBBS0TR0nrGUdOQPltqtGQdgnsbvBwHyevFG1t7usK8Nb/y
-         38vyUlHw9Exas5O2d9bwPAKArv1LeaWwECfaRYw2xaSi3nV59G+OXVJvj7yrlJe3lQeC
-         Xbfu58IJyhU5/FQVN2a6nBEY1+w+Y/2ycWt7UNWZE8cVEC9QZSdjNIaXM51ClMAwQf8E
-         pQjs61x72GlxHiUZf7byOtBlSN4kP4IXwe/+VVjV/rm7YP9ZlhtR4VYr/WyYxgoUw3Dy
-         VsGQTt/uMv0MmlloV8u7x7NorvP1511ZBJJCL5zmL//+yd/SRtAre38SOpQRTnmLpLqk
-         Lbbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Vt0uSw1mB/ZaasUfNjH+I5OWDz73d0Ci+yC5WIZEzSY=;
-        b=tfNRxoXdIufsgN7mskimiuGPqRf4WDwqt96aH/l5+OcHCpP7dyATZ15URwmwfKAV1o
-         6vYe/6+wBTAgH6xGqTMIK7tLpMKjjrvky0tgQVfx6cKIH62z0o7Mw+Gm3XDiJ3LhsjzC
-         lshQzcMAzCvo9JRFtX0P2rGiqIA8f82j8igAijKmq8FCP4Vi/BpWLyrmyxwqV1DYCl9+
-         Sj0cLx2/JIfXPr0YekloNf9Ka20oXpFZhnPYpbAMiC7z76LQ8jRdVBr/0v9pnOdKWl86
-         V11XufjnlriZCROdmvuH7kwGAim731gKTB5QtRyeCd8O74OeeY6NGRdPwDmCsXGUWXwS
-         b2fw==
-X-Gm-Message-State: AOAM531pKdcYGuzQBvpqPKVByDHYJNET1DqzOMHALwaZGdO/lPri4Bnr
-        B/UJM01s86tIO7zcA1Q4ZS+vVAxh5ynozUgPuDuSbNosoYc=
-X-Google-Smtp-Source: ABdhPJxYcp/nPeY18elmoannpvGd7nyZOL9ycL9Uo9uQJsKBi+p3UQBlNVwWrViGzHzLHw6mUtYzy/BMlK/dBQTyknQ=
-X-Received: by 2002:a17:906:715a:: with SMTP id z26mr13499333ejj.300.1603676257771;
- Sun, 25 Oct 2020 18:37:37 -0700 (PDT)
+        id S1770189AbgJZGBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Oct 2020 02:01:45 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:43764 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1770187AbgJZGBo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Oct 2020 02:01:44 -0400
+Received: from mailhost.synopsys.com (badc-mailhost3.synopsys.com [10.192.0.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 14919400E5;
+        Mon, 26 Oct 2020 06:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1603692103; bh=FsdOm5gGR2/w5Kxh8y+nS0KonT4YOb+yUL867yxfZdA=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=JJFN/rqV9Y5ELkQJADyEa5Kgy5paPDuU/XgieA+nagXYu1N7D/Bam9rWC8Ty40bW0
+         TMthNp6Nk4tsr5kMYD+8nfNMpGhvaTEFj5Z2wDY8WJhpi7zn8NlSKkkySsX08Lz0KM
+         DzPzEWANvO6tInWxudyvDT+KEmHnoqMTVha5pU4KGTycw4gvcBbQeq+/fmBX8/NwHT
+         4tikeBoI59gRdVxE0xfdOsbS20/llvRnt3aGmQIEAXHox1729BQcmzgq5o3EThAN10
+         36V8A1DqVNNb1UtEtcp5bkPa7e/nEk/GGLdR3BabHll/vdR45DOY9ItwMSi+/Xd8qD
+         /MoQrTAIU9Gsg==
+Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 0ECB7A0063;
+        Mon, 26 Oct 2020 06:01:42 +0000 (UTC)
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2171.outbound.protection.outlook.com [104.47.59.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id AA1A980192;
+        Mon, 26 Oct 2020 06:01:40 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="mosSVG3O";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DdOFoFz9zShlT7580lew5KXPEvUrCQf204xR5D0/q5jwZklMokQwL2a5FI90hlTPnHTPNW2/RVpKp/uwDJUwHf/3eVlQEGOt0zEFlo08uCxa0flEiDxENfWjIUho1SmgqBs51W1LGw4O2+9EIJWSFORA0XzKvHrZi7oXJOI/5Ei6nMHx8951CKzAa6Xuww+aVRpl4GGPNYhC400jWNr3XpnCoS5DNSLgBCVpuAD3Rws/9HWeEEgbo5n3Q7TKTAbBmVaav/gS7m2kL+FQu12KDu/5G14ZdGJPvZEwKrinVDe+yvKXp8HMKA75CA0k0woN3jEBqX53HDze8BMVIvMkew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FsdOm5gGR2/w5Kxh8y+nS0KonT4YOb+yUL867yxfZdA=;
+ b=FnBnmio4HdCEX/RHmipdwfzzA7FKnAar/0llUG+NcYxRg6NXXRp3q7tzKc53XEs23If34EXukHlvJEVMiwiCDMB1u4ZLCFc11uFQxP+fpqPgUtPhyCY+hRO1FFq87QSmc7JRiup7WPJ1Xsa+oy+Ki/Z7znQ2cSGjv8Thhk3lzj+WAcArEjZUSUIJKlg3thETkCcFjMe4dGRNT45qOT4G5tsJofGKu7NWnnGIzCQXf/TasmKAboxBX5fbmP04wY+6shk9wYAyF8oY7zT9A4tT06EujMOQ6FXhlSBqpVJdgDJ0BBTg4BImRungncC94V7zegjsAGUxt3SyZNbErRwdgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FsdOm5gGR2/w5Kxh8y+nS0KonT4YOb+yUL867yxfZdA=;
+ b=mosSVG3OoS0gXBEh0m5IAs2o5OxsGprvBh5lGlxNDmNYLD/OfiTAb2V9R1Sm4cY16ubZKNTJlQxJATJAQT6xB35kwOxSS5mStQbM6oketNZSlquThx37kYlCOPXaE+FuqAiIzq/s/r7NmZH+72S+PnivkDkTQireo9UKkE4HdNg=
+Received: from BY5PR12MB3777.namprd12.prod.outlook.com (2603:10b6:a03:1a9::14)
+ by BYAPR12MB2789.namprd12.prod.outlook.com (2603:10b6:a03:72::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.28; Mon, 26 Oct
+ 2020 06:01:38 +0000
+Received: from BY5PR12MB3777.namprd12.prod.outlook.com
+ ([fe80::dce3:484b:db4f:c21b]) by BY5PR12MB3777.namprd12.prod.outlook.com
+ ([fe80::dce3:484b:db4f:c21b%3]) with mapi id 15.20.3499.018; Mon, 26 Oct 2020
+ 06:01:38 +0000
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] usb: dwc2: Avoid leaving the error_debugfs label unused
+Thread-Topic: [PATCH] usb: dwc2: Avoid leaving the error_debugfs label unused
+Thread-Index: AQHWpKWdgynXZ63qEk2uCDp0fdh8B6mpcaKA
+Date:   Mon, 26 Oct 2020 06:01:38 +0000
+Message-ID: <d9ba8841-ec7a-d599-2036-30ab8a089f09@synopsys.com>
+References: <20201017165012.546729-1-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20201017165012.546729-1-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
+authentication-results: googlemail.com; dkim=none (message not signed)
+ header.d=none;googlemail.com; dmarc=none action=none
+ header.from=synopsys.com;
+x-originating-ip: [37.252.81.52]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a561d833-9a34-46d3-538c-08d879749a87
+x-ms-traffictypediagnostic: BYAPR12MB2789:
+x-microsoft-antispam-prvs: <BYAPR12MB2789B0D0A6D9D338F0AF65DEA7190@BYAPR12MB2789.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3044;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EjbxF/hZgvanS15idANDEEZtQlUq3g/qO60PCZsOJl5x5Rt9bOkpARa3On6demjBvRHqOkrHpRD3kM3LGozr/wBPq8sp/XzWmTLabvVfiJiDq/ZLFtEPVTrQ0VwpysO5BC1ImCIpxBwA6YOEbya7/lzq+tBfi5UOo5Jt/EEyEaChWW/9fWaawY6IIfl7GwvOMtWY97d45ubCTd4ZtLOL9+cJQM8CiFlrvmgPIF8YAOiq3G6W+axEU/QtZOyUThQV8de6qCUfyD8cGmyhd/Gr0v7xhFVf0bKdWJVvhAewfNZfQrHSQChXX0QuO2a/TnaZWDB6PiP6X4G/ydHd0ixMisw6wNNluDNzvyCmfbjCY8mb0BHJ9lIhQn0CPnKpJwrF
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3777.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(366004)(396003)(376002)(39850400004)(71200400001)(6512007)(53546011)(110136005)(5660300002)(6506007)(31696002)(8936002)(83380400001)(54906003)(26005)(36756003)(186003)(2906002)(2616005)(478600001)(86362001)(6486002)(4326008)(66476007)(76116006)(66446008)(31686004)(316002)(66946007)(8676002)(91956017)(64756008)(66556008)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: dWcxps/VClxcCbdgYsTP2R7OkHstOGmqZufoq8pMFFYJH1thFNwCThJV7JNY+C9d4zjLIAk3g8BBExb5xlqAZT691C8UP9C1dKuGKijCBWm/ebe47wwXHABQhfA0ShnDbFf5R4PlwMTld0WE8yF4+S5LeKwEbPQnfkrdtja7V6c8JCXuP2U0Wnud3rv7zVWBCqO24EUN69bKs+ZLBnIlxwikCWQNAeosmeroxK+5ADhra7lSx7Njv7eQABlYnjZP1L53A8GSXqawMHJ8fQBoxj840+znPmXG39FJh8/HRrm5fi8zejR1AUvzVuVVAGp7Ht5rrWu5l9N3W0I47pAblNUTHn+zueNsEUHJrk/Zy8Bfa6NhbQkDen1jufLXlAOFrPXbS5nY2TsggF0oIxa9/SKdba2DHEqW8cPRXDPM//kS63q6ApX+ay5S1ofJ8xDlp0FSwd53X7fx3YgKAIJxG/+feDcQWGjEZLUuOOjBcssTeQBTIDSQWENlpRjVcjDv8Z8BJCodxfJgXGSKQQ+3ChTT7IzqmxGn9O6jblbGoIXIK9ENfDhIbi5HS678FaGsFd63EXtjpouV4MUCICdideHrw9t+O03SjhBZuIWkcKd232xyiWPfW9zzi6inN5E4WcFTuIFHGjjxvionYpv+XA==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5655993886AEC04483D0E5A8B9452742@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-From:   Kyungtae Kim <kt0755@gmail.com>
-Date:   Sun, 25 Oct 2020 21:37:26 -0400
-Message-ID: <CAEAjamu0od7enBZJk08drO6puq6KmkMpLN1qwAQyFqyhOuXGMA@mail.gmail.com>
-Subject: KASAN: use-after-free Write in tty_init_dev
-To:     Greg KH <gregkh@linuxfoundation.org>, Jiri Slaby <jslaby@suse.com>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3777.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a561d833-9a34-46d3-538c-08d879749a87
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2020 06:01:38.8162
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tc97p82IevX0IbZwbrDQMSzPdR2Iu1O8HrSA20duGIdyL2QeOBo1Yy3uD+tNphR5T9TPSZtUxpina82BvS4/jQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2789
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We report a bug (in linux-5.8.13) found by FuzzUSB (a modified version
-of syzkaller).
-
-The bug happens when the freed object tty->port is accessed in
-tty_init_dev (line 1358).
-It seems tty->port is freed during the locking (i.e., tty_ldisc_lock)
-ahead (line 1355).
-
-==================================================================
-BUG: KASAN: use-after-free in tty_init_dev+0x41a/0x440 drivers/tty/tty_io.c:1358
-Write of size 8 at addr ffff888039317128 by task c4_fuzz/2278
-
-CPU: 2 PID: 2278 Comm: c4_fuzz Not tainted 5.8.13 #4
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xa7/0xea lib/dump_stack.c:118
- print_address_description.constprop.8+0x3f/0x60 mm/kasan/report.c:383
- kasan_report.cold.11+0x20/0x37 mm/kasan/report.c:513
- __asan_report_store8_noabort+0x17/0x20 mm/kasan/generic_report.c:151
- tty_init_dev+0x41a/0x440 drivers/tty/tty_io.c:1358
- tty_open_by_driver drivers/tty/tty_io.c:1983 [inline]
- tty_open+0x554/0x870 drivers/tty/tty_io.c:2031
- chrdev_open+0x1e9/0x5b0 fs/char_dev.c:414
- do_dentry_open+0x434/0xf40 fs/open.c:828
- vfs_open+0x9a/0xc0 fs/open.c:942
- do_open fs/namei.c:3243 [inline]
- path_openat+0x1658/0x2570 fs/namei.c:3360
- do_filp_open+0x15e/0x210 fs/namei.c:3387
- do_sys_openat2+0x2e0/0x570 fs/open.c:1179
- do_sys_open+0x88/0xc0 fs/open.c:1195
- ksys_open ./include/linux/syscalls.h:1388 [inline]
- __do_sys_open fs/open.c:1201 [inline]
- __se_sys_open fs/open.c:1199 [inline]
- __x64_sys_open+0x79/0xb0 fs/open.c:1199
- do_syscall_64+0x54/0xa0 arch/x86/entry/common.c:392
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x4379c0
-Code: c2 c0 ff ff ff f7 d8 64 89 02 48 83 c8 ff c3 66 2e 0f 1f 84 00
-00 00 00 00 90 83 3d 51 06 29 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d
-01 f0 ff ff 0f 83 64 4b 00 00 c3 48 83 ec 08 e8 3a 30 00 00
-RSP: 002b:00007ffce63829f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00000000004002b0 RCX: 00000000004379c0
-RDX: 000000000000000a RSI: 0000000000000002 RDI: 00007ffce6382edb
-RBP: 00007ffce6382a40 R08: 00000000006c5b60 R09: 00007ffce6382eee
-R10: 0000000000000400 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000401f20 R14: 0000000000401fb0 R15: 0000000000000000
-
-Allocated by task 1544:
- save_stack+0x21/0x50 mm/kasan/common.c:48
- set_track mm/kasan/common.c:56 [inline]
- __kasan_kmalloc mm/kasan/common.c:494 [inline]
- __kasan_kmalloc.constprop.6+0xc7/0xd0 mm/kasan/common.c:467
- kasan_kmalloc+0x9/0x10 mm/kasan/common.c:508
- kmem_cache_alloc_trace+0x139/0x330 mm/slub.c:2851
- kmalloc ./include/linux/slab.h:555 [inline]
- kzalloc ./include/linux/slab.h:669 [inline]
- gs_port_alloc drivers/usb/gadget/function/u_serial.c:1151 [inline]
- gserial_alloc_line_no_console+0xd7/0x840
-drivers/usb/gadget/function/u_serial.c:1231
- gserial_alloc_line+0x17/0x70 drivers/usb/gadget/function/u_serial.c:1265
- gser_alloc_inst+0x8d/0xf0 drivers/usb/gadget/function/f_serial.c:327
- try_get_usb_function_instance+0x10e/0x1c0 drivers/usb/gadget/functions.c:28
- usb_get_function_instance+0x17/0x80 drivers/usb/gadget/functions.c:44
- function_make+0xf9/0x390 drivers/usb/gadget/configfs.c:588
- configfs_mkdir+0x3f8/0xb40 fs/configfs/dir.c:1344
- vfs_mkdir+0x38f/0x640 fs/namei.c:3641
- do_mkdirat+0x113/0x1e0 fs/namei.c:3664
- __do_sys_mkdir fs/namei.c:3680 [inline]
- __se_sys_mkdir fs/namei.c:3678 [inline]
- __x64_sys_mkdir+0x57/0x80 fs/namei.c:3678
- do_syscall_64+0x54/0xa0 arch/x86/entry/common.c:392
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-Freed by task 2286:
- save_stack+0x21/0x50 mm/kasan/common.c:48
- set_track mm/kasan/common.c:56 [inline]
- kasan_set_free_info mm/kasan/common.c:316 [inline]
- __kasan_slab_free+0x139/0x190 mm/kasan/common.c:455
- kasan_slab_free+0xe/0x10 mm/kasan/common.c:464
- slab_free_hook mm/slub.c:1474 [inline]
- slab_free_freelist_hook mm/slub.c:1507 [inline]
- slab_free mm/slub.c:3072 [inline]
- kfree+0xef/0x3d0 mm/slub.c:4052
- gserial_free_port+0x129/0x250 drivers/usb/gadget/function/u_serial.c:1195
- gserial_free_line+0x11f/0x270 drivers/usb/gadget/function/u_serial.c:1212
- gser_free_inst+0x3b/0x50 drivers/usb/gadget/function/f_serial.c:313
- usb_put_function_instance+0x86/0xb0 drivers/usb/gadget/functions.c:77
- serial_attr_release+0x15/0x20 drivers/usb/gadget/function/f_serial.c:262
- config_item_cleanup fs/configfs/item.c:130 [inline]
- config_item_release fs/configfs/item.c:139 [inline]
- kref_put ./include/linux/kref.h:65 [inline]
- config_item_put.part.1+0x14e/0x1e0 fs/configfs/item.c:151
- config_item_put+0xe/0x20 fs/configfs/item.c:149
- configfs_rmdir+0x59c/0x870 fs/configfs/dir.c:1555
- vfs_rmdir fs/namei.c:3704 [inline]
- vfs_rmdir+0x13f/0x440 fs/namei.c:3683
- do_rmdir+0x2a3/0x330 fs/namei.c:3766
- __do_sys_rmdir fs/namei.c:3784 [inline]
- __se_sys_rmdir fs/namei.c:3782 [inline]
- __x64_sys_rmdir+0x31/0x40 fs/namei.c:3782
- do_syscall_64+0x54/0xa0 arch/x86/entry/common.c:392
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-The buggy address belongs to the object at ffff888039317000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 296 bytes inside of
- 2048-byte region [ffff888039317000, ffff888039317800)
-The buggy address belongs to the page:
-page:ffffea0000e4c400 refcount:1 mapcount:0 mapping:0000000000000000
-index:0x0 head:ffffea0000e4c400 order:3 compound_mapcount:0
-compound_pincount:0
-flags: 0x100000000010200(slab|head)
-raw: 0100000000010200 dead000000000100 dead000000000122 ffff88806c40e080
-raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff888039317000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888039317080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888039317100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                  ^
- ffff888039317180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888039317200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-Regards,
-Kyungtae Kim
+T24gMTAvMTcvMjAyMCA4OjUwIFBNLCBNYXJ0aW4gQmx1bWVuc3RpbmdsIHdyb3RlOg0KPiBUaGUg
+ZXJyb3JfZGVidWdmcyBsYWJlbCBpcyBvbmx5IHVzZWQgd2hlbiBlaXRoZXINCj4gQ09ORklHX1VT
+Ql9EV0MyX1BFUklQSEVSQUwgb3IgQ09ORklHX1VTQl9EV0MyX0RVQUxfUk9MRSBpcyBlbmFibGVk
+LiBBZGQNCj4gdGhlIHNhbWUgI2lmIHRvIHRoZSBlcnJvcl9kZWJ1Z2ZzIGxhYmVsIGl0c2VsZiBh
+cyB0aGUgY29kZSB3aGljaCB1c2VzDQo+IHRoaXMgbGFiZWwgYWxyZWFkeSBoYXMuDQo+IA0KPiBU
+aGlzIGF2b2lkcyB0aGUgZm9sbG93aW5nIGNvbXBpbGVyIHdhcm5pbmc6DQo+ICAgIHdhcm5pbmc6
+IGxhYmVsIOKAmGVycm9yX2RlYnVnZnPigJkgZGVmaW5lZCBidXQgbm90IHVzZWQgWy1XdW51c2Vk
+LWxhYmVsXQ0KPiANCj4gRml4ZXM6IGUxYzA4Y2YyMzE3MmVkICgidXNiOiBkd2MyOiBBZGQgbWlz
+c2luZyBjbGVhbnVwcyB3aGVuIHVzYl9hZGRfZ2FkZ2V0X3VkYygpIGZhaWxzIikNCj4gUmVwb3J0
+ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPg0KPiBSZXBvcnRlZC1ieTog
+SmVucyBBeGJvZSA8YXhib2VAa2VybmVsLmRrPg0KPiBTaWduZWQtb2ZmLWJ5OiBNYXJ0aW4gQmx1
+bWVuc3RpbmdsIDxtYXJ0aW4uYmx1bWVuc3RpbmdsQGdvb2dsZW1haWwuY29tPg0KPiAtLS0NCj4g
+ICBkcml2ZXJzL3VzYi9kd2MyL3BsYXRmb3JtLmMgfCAzICsrKw0KPiAgIDEgZmlsZSBjaGFuZ2Vk
+LCAzIGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MyL3Bs
+YXRmb3JtLmMgYi9kcml2ZXJzL3VzYi9kd2MyL3BsYXRmb3JtLmMNCj4gaW5kZXggZTI4MjA2NzZi
+ZWIxLi41ZjE4YWNhYzc0MDYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2R3YzIvcGxhdGZv
+cm0uYw0KPiArKysgYi9kcml2ZXJzL3VzYi9kd2MyL3BsYXRmb3JtLmMNCj4gQEAgLTYwOCwxMCAr
+NjA4LDEzIEBAIHN0YXRpYyBpbnQgZHdjMl9kcml2ZXJfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rl
+dmljZSAqZGV2KQ0KPiAgICNlbmRpZiAvKiBDT05GSUdfVVNCX0RXQzJfUEVSSVBIRVJBTCB8fCBD
+T05GSUdfVVNCX0RXQzJfRFVBTF9ST0xFICovDQo+ICAgCXJldHVybiAwOw0KPiAgIA0KPiArI2lm
+IElTX0VOQUJMRUQoQ09ORklHX1VTQl9EV0MyX1BFUklQSEVSQUwpIHx8IFwNCj4gKwlJU19FTkFC
+TEVEKENPTkZJR19VU0JfRFdDMl9EVUFMX1JPTEUpDQo+ICAgZXJyb3JfZGVidWdmczoNCj4gICAJ
+ZHdjMl9kZWJ1Z2ZzX2V4aXQoaHNvdGcpOw0KPiAgIAlpZiAoaHNvdGctPmhjZF9lbmFibGVkKQ0K
+PiAgIAkJZHdjMl9oY2RfcmVtb3ZlKGhzb3RnKTsNCj4gKyNlbmRpZg0KPiAgIGVycm9yX2RyZDoN
+Cj4gICAJZHdjMl9kcmRfZXhpdChoc290Zyk7DQo+ICAgDQo+IA0KQWNrZWQtYnk6IE1pbmFzIEhh
+cnV0eXVueWFuIDxNaW5hcy5IYXJ1dHl1bnlhbkBzeW5vcHN5cy5jb20+DQoNCg==
