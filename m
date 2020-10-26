@@ -2,77 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 358E3299636
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 19:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8063429964A
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 19:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1783609AbgJZS50 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Oct 2020 14:57:26 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:44106 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1782903AbgJZS50 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Oct 2020 14:57:26 -0400
-Received: by mail-ed1-f65.google.com with SMTP id t20so10554073edr.11;
-        Mon, 26 Oct 2020 11:57:24 -0700 (PDT)
+        id S1791082AbgJZS6Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Oct 2020 14:58:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23056 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1791073AbgJZS6V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Oct 2020 14:58:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603738701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=kaOCH2p3/Nu0DCrQ0FgXRUQNXyBXyy87Pagb1Hdgksw=;
+        b=HzIRsDT94mT9Nmkbn/ZusB4dromHryY6VVXEyXMGmIz1DtpXMTSoGW+b7byRH0g2AP0H2D
+        cccf6k25lmUWjIfVWowHmHzIplLjkgalCvejffW2FZVAoMBZFNhieUFiEfpXZWxMgLstEC
+        V/bwtSqdvz4RinYE8fKLY6kReBr7dsw=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-535-wygFl8k_PNS0F2nflsgWTA-1; Mon, 26 Oct 2020 14:58:19 -0400
+X-MC-Unique: wygFl8k_PNS0F2nflsgWTA-1
+Received: by mail-oo1-f72.google.com with SMTP id r13so1933578ooi.3
+        for <linux-usb@vger.kernel.org>; Mon, 26 Oct 2020 11:58:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/0/Qeh6M/INK2bAIaSZzTQvAeqNQLbqX6xwvUrGewQM=;
-        b=JoIrML2Au6DTkOy1BaPzzMZh5hR6QPaV9Sj/TwNhFSYlImF9kJY/9sLKPvB7Bg3KPb
-         Ewq5Ac7aYd97+w2YqlUjL0MNclRYFrz1RygBmN7UDyaasu/7VF3pfL4b7wEGpvXryXUb
-         R+Otisqjh34CGj7vqNAXjj2jQC4GQZ8kH4A2a8kZa1dd3A7VqPPt/yj8E9TojhDQ5S3y
-         7/6Q8z2yBBN4MO6Ee8ok7kDnljRopH+Qx8gEiF0q40skJ4A9Uoy7lxSut3IH2VTJfZKN
-         hthIk5rzkxk0lWj1hKVspDJBdRyGV55gHDykEPacfk2Z6/dbpOdPI2vM8HTM0i2iVKRa
-         VquQ==
-X-Gm-Message-State: AOAM532NarU1rxAfZVwSONUYNJaDfSuy5RH9G4D45aEBaUNrPns34PaV
-        iHk4EIhjFvhf1Yb7BwtveDyoChKo2Hg=
-X-Google-Smtp-Source: ABdhPJzQ+0K/G0r0EUW6jHQm6kneOPG5bCd1U7QCfa5Yuxq5JtGaFoWbaki4yVKHyJ89xooxO01GEQ==
-X-Received: by 2002:a50:eb8e:: with SMTP id y14mr17463199edr.285.1603738644205;
-        Mon, 26 Oct 2020 11:57:24 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id ss7sm6365398ejb.28.2020.10.26.11.57.22
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kaOCH2p3/Nu0DCrQ0FgXRUQNXyBXyy87Pagb1Hdgksw=;
+        b=N0qE2xNsMV5kr2OX5NL5ySvvsdRlBCmu+wT7L2JmEe+ll348ZyMjwT0bs5SYmjBEuV
+         dWGURUdSFfXEd9uSOLWd6ZjkP4VlxjG8/bXsTIqPlGF9eM3ZeQhewOEZbmfpI/hPZIcI
+         tDR7s8dYvJuRREf+1Z+1wN7BNy34vT606p9dy9KCdIiJ/q+MApcMQwHLr+WfazIaTVVl
+         JcIbLhgfQuwjSXW8TizqISrObGi2eq7efZskGTCRi7+/Avjox3wZwPY5DAqxH7d2fffy
+         /V1/m9IqObrYfFmud2Z13ySqtKtioDfgNDAgG8SJaswh9SP9W0AumbOzRu2CONaYq9tH
+         cRGQ==
+X-Gm-Message-State: AOAM532O/oAtbEFhDA/6POEcU/upL/BueTP1r8c0uPUFKJUVQfgsQSKn
+        QyDhgeLL/SvcBYHPn0GWWKTw3K+n7fJuBOgdaMzdtOwXGmzin4L9d1I5Vu5AfmwD6m+HiQUbnOW
+        lf6uCOaV7tp4qFZMz7Osj
+X-Received: by 2002:a9d:65c7:: with SMTP id z7mr16068725oth.327.1603738698275;
+        Mon, 26 Oct 2020 11:58:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxnbxRJ34NQlGUWZAODFv8pRoOSuBSReKA6tvsTH8368c1uhSb/dA9yoQ2cjXek2pdoLPyawg==
+X-Received: by 2002:a9d:65c7:: with SMTP id z7mr16068703oth.327.1603738698033;
+        Mon, 26 Oct 2020 11:58:18 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id l204sm3100893oia.32.2020.10.26.11.58.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 11:57:22 -0700 (PDT)
-Date:   Mon, 26 Oct 2020 19:57:20 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 26/29] arm64: dts: exynos: Harmonize DWC USB3 DT nodes
- name
-Message-ID: <20201026185720.GC170936@kozik-lap>
-References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
- <20201020115959.2658-27-Sergey.Semin@baikalelectronics.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201020115959.2658-27-Sergey.Semin@baikalelectronics.ru>
+        Mon, 26 Oct 2020 11:58:17 -0700 (PDT)
+From:   trix@redhat.com
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH v2] usb: host: xhci-mem: remove unneeded break
+Date:   Mon, 26 Oct 2020 11:58:12 -0700
+Message-Id: <20201026185812.1427461-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 02:59:56PM +0300, Serge Semin wrote:
-> In accordance with the DWC USB3 bindings the corresponding node
-> name is suppose to comply with the Generic USB HCD DT schema, which
-> requires the USB nodes to have the name acceptable by the regexp:
-> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
-> named.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  arch/arm64/boot/dts/exynos/exynos5433.dtsi | 4 ++--
->  arch/arm64/boot/dts/exynos/exynos7.dtsi    | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+From: Tom Rix <trix@redhat.com>
 
-Thanks, applied.
+A break is not needed if it is preceded by a return.
 
-Best regards,
-Krzysztof
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+v2: split out as single changed file
+---
+ drivers/usb/host/xhci-mem.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index fe405cd38dbc..b46ef45c4d25 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1144,7 +1144,6 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
+ 	case USB_SPEED_WIRELESS:
+ 		xhci_dbg(xhci, "FIXME xHCI doesn't support wireless speeds\n");
+ 		return -EINVAL;
+-		break;
+ 	default:
+ 		/* Speed was set earlier, this shouldn't happen. */
+ 		return -EINVAL;
+-- 
+2.18.1
 
