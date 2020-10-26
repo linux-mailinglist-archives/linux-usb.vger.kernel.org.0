@@ -2,109 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41979298C6D
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 12:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58027298C89
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 13:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1774156AbgJZLzP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Oct 2020 07:55:15 -0400
-Received: from mail-am6eur05on2054.outbound.protection.outlook.com ([40.107.22.54]:64128
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1774149AbgJZLzN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Oct 2020 07:55:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Quvvtz2yNQWfLEztSp3iAAGFur9zJHsy6TUteoQroHqkM12j8jJIeQ2OMVzLRk/KeYyyHYe9fIkK2ntqusWzGRF4ZBQIv4kpAdeWDsipsVe4B47JpQ/EhOFYVGhmO1NB2Q0AvLopzEQ+PXfEJxiBDAbGP3WI7yje4pI0GLCXyhLMdYkwq3IoeKmFYrIbkFc3G148LKFEDvyeFCDKqkTkNG6LODru6RDlKu54LELiNzt7syCeWt5MZb8kpJoOhELD7pF9bdER3wK1LbRHiIUYkYteswm6lzhV3rWUn7uuRoR1QbC+Xq0PmfHZZtTNO9Zc5h6bcCMOeb+yqqwn+lizog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JCqB2GMsFU5yJYlrjyo6K7kUOfEgg0Mk8PX9SN5mqjA=;
- b=CXTs5keweOuQDq/WEbu9clSk/qEHzPSabn/n/8anEHsTY4UZXzzfM1eBL0IB/bXu9KFhCtotZh1dNldNSDcypLRXRFU2z5kdTdiq1JxucnXjoQWGVM7oCAyI3ALTYO7yzFDJih4X/u+eCLyT9Z0kCGCBNKBcL16Y1qUIUvLn9Qah6txPB8PiQMwuoZqd4e+wlVPPptOS4IWP5YB1ABZSkCN9hLH1yruElFC3l76nMHPb7IHM5lSjlTv8ciXNXr9EElD4em9zdN4/exKnheJD+Z6LePXahlT3tdgKrOQ48M+E0QxsmaiPPMRE1KDuUr6ju5WPymcC++YAoLXvHNn4gA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JCqB2GMsFU5yJYlrjyo6K7kUOfEgg0Mk8PX9SN5mqjA=;
- b=I0RYcfGhFTYSaWJVDDQPOPSuSHHdoDvV7lKF+Vv4ja1ejQ0VKfpkXSLBFEoZ2T0APdnlCL/jpHYg6NPyjKV4g80om4X8PoDV4oX1DQ8+Yey3MFt8TEXmIP6qaHUgj/b9xxdXUhoH95lC4J83kx9dBxwj/8D7DeUg6zEebmDxYo0=
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
- by AM0PR04MB6371.eurprd04.prod.outlook.com (2603:10a6:208:178::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.25; Mon, 26 Oct
- 2020 11:55:09 +0000
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Mon, 26 Oct 2020
- 11:55:09 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Pawel Laszczak <pawell@cadence.com>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "rogerq@ti.com" <rogerq@ti.com>, "nsekhar@ti.com" <nsekhar@ti.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rahul Kumar <kurahul@cadence.com>
-Subject: RE: [PATCH v3] usb: cdns3: Variable 'length' set but not used
-Thread-Topic: [PATCH v3] usb: cdns3: Variable 'length' set but not used
-Thread-Index: AQHWoq98xx7XZYJdVkmeSngJp6ePZqmptLIAgAAh+NA=
-Date:   Mon, 26 Oct 2020 11:55:09 +0000
-Message-ID: <AM8PR04MB7300C4C0BB37319ABC1680528B190@AM8PR04MB7300.eurprd04.prod.outlook.com>
-References: <20201015045529.2022-1-pawell@cadence.com>
- <DM6PR07MB55290EA090C418457C1E293BDD190@DM6PR07MB5529.namprd07.prod.outlook.com>
-In-Reply-To: <DM6PR07MB55290EA090C418457C1E293BDD190@DM6PR07MB5529.namprd07.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: cadence.com; dkim=none (message not signed)
- header.d=none;cadence.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [180.164.158.209]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: a824250c-d570-4aff-5b51-08d879a5fd0e
-x-ms-traffictypediagnostic: AM0PR04MB6371:
-x-microsoft-antispam-prvs: <AM0PR04MB6371CBE3C527DA9D26B772908B190@AM0PR04MB6371.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2XF1pQSwBNq60FYNP+uWfCzKjP+eP8g5Y00qWQ3V7Mu6PbT1yc9PftVJ9n/V0piuo261rkxGCB3N3FZQeL1fFY2tydtV0pqSCoolD82z44IX/K/QMLJjSuy5gf+VE7ffxx7JfzKPsbkYMoF19BzXAiww3YvfYIAC8QUi+oJ/D1KafFW65nR9DGgddA0wxPZwnXmtt604qOLOG9PZnNd6WgjA7fCp1JDU6JN0Iib3c3gsPkxn4sWiVexUyhDCd6XGqU6vNYcReVYiTXS34tSBgsdNasOaSVAfrpGkNKIOxP7sqRAuQGLKpiOXDc0h07yaXNP2cFkLVKOTeCddi7sZOg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(396003)(346002)(376002)(136003)(4326008)(71200400001)(54906003)(8676002)(6916009)(66446008)(66946007)(186003)(83380400001)(478600001)(8936002)(26005)(33656002)(6506007)(44832011)(76116006)(64756008)(66476007)(55016002)(66556008)(9686003)(316002)(2906002)(52536014)(5660300002)(7696005)(4744005)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: G6s9GtvvIUpB4nZLKsG0lCNT51dnwaNt6ytfS350wSII7OaMMfvYIyv5Sqx+W5AC0SybjeU8BR+uh6ipIXqumcPgG1l4jJyuTNv1yOmbYDSSp4BHjVKGC3qzfMHJmVKvUEQn/U2Umv5GMkObe/B8KEmIltMabgCNOYFteJZOI10Bm8QXVQVZ69yjcKE2+JYTzbXlY6c4SpnTH/AscGF5J5XYd9ecqOiODnYycD9Z6tXQDe+WfaRnowssLrOhYpTGpI08seC+d1MruzC9AZryZWkm2jHyvF7D1mA/XVGpU+HeM1DaVUUl9ruIsdPHBcHCKWltENnK+jlZRw8LNwO2wBSstWsBaGxb8W94vT7xtRTXrAZz9iKMEF9FjhWvpzP2dBeRUkuhTVptTFiNSuea96OLLjnnGkpTzWjJ5aoq5gxEMABsypGIoSIkP5L/odEGUT5uwicLclP2OItG0UGuZhkTmZvBSaTnoH2U1A01hUQgbGzl05hME7fynm7gzzlcIb9OuL0uS1V6ZD7wYK0MD3I0Ej4GJ+1WQ2YosFcoxbcQCbqWHCBKHBZn/TOUh0foYIoWI9vWyd0cHV3o+nqmznLU6KJLRbAf6k6jyeyl/oXE76ltVTCUc96iXBgHoVqmj+qMu9SeRA9fTkGEHb+RPw==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1774600AbgJZMAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Oct 2020 08:00:08 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:39504 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1768859AbgJZMAG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Oct 2020 08:00:06 -0400
+Date:   Mon, 26 Oct 2020 13:00:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1603713604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y0pqgjx4S6GWrhq/VAgdXIHvPYenVut2N2gBfaaZqZw=;
+        b=U8/rNVm/z0IACXD2UU7LaiTki3sCbumu6U2jtBig1EUAIGYH2qsByotDR1tgcmN31C1fce
+        lilr8bYHLG3I3tXCCCbTRMly1Bm+6omi72j3BNQI5qFEYNWvWwyhg2BrQJnqfVg8NEn6AM
+        kJIXt6ZLEgFBZc3TAqSwF+thm7cRRRwu+sotND/cC7hz9DAz8wXDm0ETZrJeNMrUI60xfB
+        ch/RgFLO/SwfYxMqhFK2Pr7mexguoiGG6Fypc4En8UVDQzYbjNV8ZIGNBw/tBaeGyDAVID
+        nuKJ0HrkK7QQcTtY7KZ6FYN+JYwrm8o1U11XhsOJ5ZQ6Fp5XbJDQl3zlfGWIKw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1603713604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y0pqgjx4S6GWrhq/VAgdXIHvPYenVut2N2gBfaaZqZw=;
+        b=zXLUWzFTm+ipT4zf63mooubl6hLLyztZ4zs07MRoM3bTgCH6vFd3ungwPU5e2Pd9u5YY8A
+        Lk+CYKRGuAYa0YCQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
+        "Ahmed S . Darwish" <a.darwish@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/14] USB: serial: keyspan_pda: clean up xircom/entrega
+ support
+Message-ID: <20201026120002.vl3htwmizmcvydn3@linutronix.de>
+References: <20201025174600.27896-1-johan@kernel.org>
+ <20201025174600.27896-12-johan@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a824250c-d570-4aff-5b51-08d879a5fd0e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2020 11:55:09.2915
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dPfouR90FC5JtB89KBdadFnsKz7W4eMtUfr5jm2Wbb31MozGl+yFz0UVxlr0/ZLzPLfNJEXnoR+eHBFbJYCWUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6371
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201025174600.27896-12-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 2020-10-25 18:45:57 [+0100], Johan Hovold wrote:
+> Drop the separate Kconfig symbol for Xircom / Entrega and always include
+> support in the keyspan_pda driver.
+> 
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>  drivers/usb/serial/Kconfig       | 19 ++-------
+>  drivers/usb/serial/Makefile      |  1 -
+>  drivers/usb/serial/keyspan_pda.c | 68 +++++---------------------------
+>  3 files changed, 13 insertions(+), 75 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
+> index 4007fa25a8ff..a21ff5ab6df9 100644
+> --- a/drivers/usb/serial/Kconfig
+> +++ b/drivers/usb/serial/Kconfig
+> @@ -538,17 +538,6 @@ config USB_SERIAL_CYBERJACK
+>  
+>  	  If unsure, say N.
+>  
+> -config USB_SERIAL_XIRCOM
 
-=20
->=20
-> A gentle ping.
->=20
-> I assume that you should add this and the rest overdue cdsn3 patches as f=
-irst
-> to you ci-for-usb-next branch.
-> Am I right?
->=20
-=20
-Hi Pawel,
+Should this patch remove this symbol from defconfigs or does it happen
+every now and then on its own? All of them select USB_SERIAL_KEYSPAN_PDA
+so there is no loss.
 
-I queued them locally, and I waited for v5.10-rc1 which was out yesterday, =
-then I will apply them,
-and add cdns3 patches to my kernel.org branch. Will update you these two da=
-ys.
+> -	tristate "USB Xircom / Entrega Single Port Serial Driver"
+> -	select USB_EZUSB_FX2
+> -	help
+> -	  Say Y here if you want to use a Xircom or Entrega single port USB to
+> -	  serial converter device.  This driver makes use of firmware
+> -	  developed from scratch by Brian Warner.
+> -
+> -	  To compile this driver as a module, choose M here: the
+> -	  module will be called keyspan_pda.
+> -
+>  config USB_SERIAL_WWAN
+>  	tristate
+>  
 
-Peter
-
+Sebastian
