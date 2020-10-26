@@ -2,99 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 295F6298742
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 08:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F7029883F
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 09:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1770941AbgJZHLl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Oct 2020 03:11:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47296 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1770936AbgJZHLk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Oct 2020 03:11:40 -0400
-Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BFB0F222EA;
-        Mon, 26 Oct 2020 07:11:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603696299;
-        bh=knOCeL3f1JsdAQ1BwrEpZGQDDRpwc69Fj6F8Nc0TAYQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=k3/kxOgXL9rxlOr7UbDDQ1A83uvIoSmfDRWNjj6KEBmTPRYCT2r/ATQSa4lZ0H8Rt
-         viZ9PKnhYo9zwSjo0Yb6G6vZ66ZuTJuI3zodOxqJ55yiPl12lYkLFicyHCLpYheUw4
-         XVmBG0bvlcMaMv9axKqn0O28ROiqNUiWVLZ/f8d8=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     "Dmitry N. Mikushin" <maemarcus@gmail.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: Any example of USB gadget for DRD device mode on Intel Gemini
- Lake?
-In-Reply-To: <CAGR4S9GnD6CbZXbO+cA0HUY_8BOpRqkWmqcmVw=i4yEtgOhFKg@mail.gmail.com>
-References: <CAGR4S9HQiZCsA7Y5_47j-xBOkydKiT2Exam=36L=-vwRjt+UWA@mail.gmail.com>
- <20201019133607.GC1667571@kuha.fi.intel.com>
- <CAGR4S9F1wdUyywuBxcMYfH9wMa91xw1rL8dmZrhJrGSGbmgbzg@mail.gmail.com>
- <20201023064855.GR1667571@kuha.fi.intel.com> <87lffxdzk4.fsf@kernel.org>
- <CAGR4S9GnD6CbZXbO+cA0HUY_8BOpRqkWmqcmVw=i4yEtgOhFKg@mail.gmail.com>
-Date:   Mon, 26 Oct 2020 09:11:33 +0200
-Message-ID: <87imaxea1m.fsf@kernel.org>
+        id S1771669AbgJZI0F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Oct 2020 04:26:05 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:38147 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1771667AbgJZI0F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Oct 2020 04:26:05 -0400
+Received: by mail-lf1-f67.google.com with SMTP id c141so10628910lfg.5;
+        Mon, 26 Oct 2020 01:26:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V+jakLBrl9A0QRy0ACCLn+POIM4wvTqpKbwiPWwLh/Q=;
+        b=Dfikz2Q0gQx/n0L8u50e80xHJ1DI4lfCNXsOAbOuz6yJ04Cf5zKJ/7CfGt+WX7XlMr
+         gCuJtnywsCz9+kdI8u/ihdefmdl9nK2yRbMlqkD9hKAQN6S+mKaYtUO3AE5zSVGc1wEf
+         /ddHLEQxzmtSKXoNz3pLBk6mZb71Bd0CgqYYomxOs/BSxlrLNBmJnBU2UY1NscWr8wO5
+         Yx66TV3RotU+Gs1rH4TsC6yYDCGcbENydL8BZprAFonxHu4SynlKg7VMID/1xmpNN5nJ
+         489fEo5PCpVFztYGEUNf/ukpLQol/xfxgt2TrCNkIXY+oRd6k4koXcJX63xluIff8wxp
+         2Qpw==
+X-Gm-Message-State: AOAM533ftT0m+FfrZiFQR222D71Ao9jsUxu8CzSlfvTSlW+FfzEcxgmZ
+        O9j6Wi0jgn+vEFfVcqlwUrJmisY5Y8oXWg==
+X-Google-Smtp-Source: ABdhPJyQ2uJccQ59KpQO+0fxZT6r2bgdyJeamwvsQXPtm53K89Gp7AGJVz29970BpKGYASjAYjZKuA==
+X-Received: by 2002:a19:8884:: with SMTP id k126mr5009463lfd.63.1603700762566;
+        Mon, 26 Oct 2020 01:26:02 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id w18sm967685lfc.5.2020.10.26.01.26.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2020 01:26:01 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@xi.terra>)
+        id 1kWxpO-0004gc-Uf; Mon, 26 Oct 2020 09:26:07 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Johan Hovold <johan@kernel.org>, stable <stable@vger.kernel.org>
+Subject: [PATCH] USB: serial: cyberjack: fix write-URB completion race
+Date:   Mon, 26 Oct 2020 09:25:48 +0100
+Message-Id: <20201026082548.17970-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+The write-URB busy flag was being cleared before the completion handler
+was done with the URB, something which could lead to corrupt transfers
+due to a racing write request if the URB is resubmitted.
 
+Fixes: 507ca9bc0476 ("[PATCH] USB: add ability for usb-serial drivers to determine if their write urb is currently being used.")
+Cc: stable <stable@vger.kernel.org>     # 2.6.13
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/cyberjack.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Hi,
+diff --git a/drivers/usb/serial/cyberjack.c b/drivers/usb/serial/cyberjack.c
+index 821970609695..2e40908963da 100644
+--- a/drivers/usb/serial/cyberjack.c
++++ b/drivers/usb/serial/cyberjack.c
+@@ -357,11 +357,12 @@ static void cyberjack_write_bulk_callback(struct urb *urb)
+ 	struct device *dev = &port->dev;
+ 	int status = urb->status;
+ 	unsigned long flags;
++	bool resubmitted = false;
+ 
+-	set_bit(0, &port->write_urbs_free);
+ 	if (status) {
+ 		dev_dbg(dev, "%s - nonzero write bulk status received: %d\n",
+ 			__func__, status);
++		set_bit(0, &port->write_urbs_free);
+ 		return;
+ 	}
+ 
+@@ -394,6 +395,8 @@ static void cyberjack_write_bulk_callback(struct urb *urb)
+ 			goto exit;
+ 		}
+ 
++		resubmitted = true;
++
+ 		dev_dbg(dev, "%s - priv->wrsent=%d\n", __func__, priv->wrsent);
+ 		dev_dbg(dev, "%s - priv->wrfilled=%d\n", __func__, priv->wrfilled);
+ 
+@@ -410,6 +413,8 @@ static void cyberjack_write_bulk_callback(struct urb *urb)
+ 
+ exit:
+ 	spin_unlock_irqrestore(&priv->lock, flags);
++	if (!resubmitted)
++		set_bit(0, &port->write_urbs_free);
+ 	usb_serial_port_softint(port);
+ }
+ 
+-- 
+2.26.2
 
-(please avoid top-posting)
-
-"Dmitry N. Mikushin" <maemarcus@gmail.com> writes:
-> This is what I get from acpidump:
->
-> marcusmae@m1k:~$ sudo acpidump | grep OTDG
-> marcusmae@m1k:~$ sudo acpidump | grep XDCI
->     1AA0: 5F 41 44 52 0C 00 00 15 00 5B 82 0F 58 44 43 49  _ADR.....[..XD=
-CI
->     3160: 42 38 58 44 43 49 14 1A 5F 50 4C 44 00 A4 5E 5E  B8XDCI.._PLD..=
-^^
->     31B0: A0 0E 90 50 4D 45 45 60 86 58 44 43 49 0A 02 5B  ...PMEE`.XDCI.=
-.[
->     3200: 44 44 4E 0D 42 72 6F 78 74 6F 6E 20 58 44 43 49  DDN.Broxton XD=
-CI
->     B170: 00 5C 2F 04 5F 53 42 5F 50 43 49 30 58 44 43 49  .\/._SB_PCI0XD=
-CI
->
-> Does this look sufficient?
-
-you need to decompile it to look at the sources. Have a look at the help
-for acpidump and iasl ;-)
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+WdqURHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZJJhAAsUQO6Q8vOBGFTtackjHFhaXKh9Q3Onm/
-tFazkmOvIzx6sxg7koM9n4HRbsP9XSiCHzRtc0YjBMxXsn/eJvGlU+WMFAtM3VVV
-CcxRXx4psQ70T/ZVl2MlXE2A8UQtx/ZdWgiHMybRt9HAfMB2AI4z44ODF4jPTdgU
-yO+WSEGjrufOQhAhJtLHiNHDO6b3iQcBgQc/684auL868sA+814UbRdS1oARHQmO
-x69jNTiLXsrQ1MSka55xdVws6v6QLn4+sytxSHtrK4gCZ/nAKCpxyMd2DLADR7I3
-MRy0Czi6Rw4O/U+K+y9NN6XnithWYgGT0M4IAyi70Hj+6TsBvxCRBkoK7UTebMWT
-wx62SoZm2M2z24lyQqaRvIzOmNEQsQ/Z+MLoeRcxaUkc3xvPeswxxJsn/5iu1IcZ
-+zQDiEVAFlhGZCsenmDALcIwnzVWXwoIKny/DPLwIzQRJndOJJwHebzgjd+LsCIJ
-GdFTB3dKltGlDOWfZPqwcqdAHPx56cMU8Remdeyp0kPbXTg9V1//w1Xk4bAUZl8A
-nuldHcvrGw8NsuwD6D+06+tlijUSgj6NjxRRkU1zvAcZpIoqBBKv4a+hjIOAgf/B
-CbCm9yMFVFOLu+1Z+eEcQqAu0AgVzOG2N8W/yXg/Xd+wciy5MfC9Cgyg5HtNcqw1
-DC3XISy1xW8=
-=8cUx
------END PGP SIGNATURE-----
---=-=-=--
