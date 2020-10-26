@@ -2,88 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C384A298AC1
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 11:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41979298C6D
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 12:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1771840AbgJZKwN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Oct 2020 06:52:13 -0400
-Received: from mga11.intel.com ([192.55.52.93]:43940 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1771748AbgJZKwM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Oct 2020 06:52:12 -0400
-IronPort-SDR: D0B+n7E/h7A2D0K75VAquRLdVFt/yqhFZTxOJVd1ctNLsPx9pe7/9Ayl1Y+kX1IVBY3XS+EEQj
- mAPpYB7jRo8Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9785"; a="164407008"
-X-IronPort-AV: E=Sophos;i="5.77,419,1596524400"; 
-   d="scan'208";a="164407008"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 03:52:11 -0700
-IronPort-SDR: dzLt06Kk2LD9JCzjm1tVI7Hqf/jL/KSEgs5cnwhXd8cRGtguUNGy/K37mHCLHJ8l/R+R9d+m4O
- n42yR12DWmAA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,419,1596524400"; 
-   d="scan'208";a="424056770"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 26 Oct 2020 03:52:09 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Oct 2020 12:52:08 +0200
-Date:   Mon, 26 Oct 2020 12:52:08 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Amelie Delaunay <amelie.delaunay@st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 1/2 v2] usb: typec: stusb160x: fix an IS_ERR() vs NULL
- check in probe
-Message-ID: <20201026105208.GB1442058@kuha.fi.intel.com>
-References: <20201023112347.GC282278@mwanda>
- <20201023114017.GE18329@kadam>
+        id S1774156AbgJZLzP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Oct 2020 07:55:15 -0400
+Received: from mail-am6eur05on2054.outbound.protection.outlook.com ([40.107.22.54]:64128
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1774149AbgJZLzN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Oct 2020 07:55:13 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Quvvtz2yNQWfLEztSp3iAAGFur9zJHsy6TUteoQroHqkM12j8jJIeQ2OMVzLRk/KeYyyHYe9fIkK2ntqusWzGRF4ZBQIv4kpAdeWDsipsVe4B47JpQ/EhOFYVGhmO1NB2Q0AvLopzEQ+PXfEJxiBDAbGP3WI7yje4pI0GLCXyhLMdYkwq3IoeKmFYrIbkFc3G148LKFEDvyeFCDKqkTkNG6LODru6RDlKu54LELiNzt7syCeWt5MZb8kpJoOhELD7pF9bdER3wK1LbRHiIUYkYteswm6lzhV3rWUn7uuRoR1QbC+Xq0PmfHZZtTNO9Zc5h6bcCMOeb+yqqwn+lizog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JCqB2GMsFU5yJYlrjyo6K7kUOfEgg0Mk8PX9SN5mqjA=;
+ b=CXTs5keweOuQDq/WEbu9clSk/qEHzPSabn/n/8anEHsTY4UZXzzfM1eBL0IB/bXu9KFhCtotZh1dNldNSDcypLRXRFU2z5kdTdiq1JxucnXjoQWGVM7oCAyI3ALTYO7yzFDJih4X/u+eCLyT9Z0kCGCBNKBcL16Y1qUIUvLn9Qah6txPB8PiQMwuoZqd4e+wlVPPptOS4IWP5YB1ABZSkCN9hLH1yruElFC3l76nMHPb7IHM5lSjlTv8ciXNXr9EElD4em9zdN4/exKnheJD+Z6LePXahlT3tdgKrOQ48M+E0QxsmaiPPMRE1KDuUr6ju5WPymcC++YAoLXvHNn4gA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JCqB2GMsFU5yJYlrjyo6K7kUOfEgg0Mk8PX9SN5mqjA=;
+ b=I0RYcfGhFTYSaWJVDDQPOPSuSHHdoDvV7lKF+Vv4ja1ejQ0VKfpkXSLBFEoZ2T0APdnlCL/jpHYg6NPyjKV4g80om4X8PoDV4oX1DQ8+Yey3MFt8TEXmIP6qaHUgj/b9xxdXUhoH95lC4J83kx9dBxwj/8D7DeUg6zEebmDxYo0=
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
+ by AM0PR04MB6371.eurprd04.prod.outlook.com (2603:10a6:208:178::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.25; Mon, 26 Oct
+ 2020 11:55:09 +0000
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Mon, 26 Oct 2020
+ 11:55:09 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Pawel Laszczak <pawell@cadence.com>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "rogerq@ti.com" <rogerq@ti.com>, "nsekhar@ti.com" <nsekhar@ti.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rahul Kumar <kurahul@cadence.com>
+Subject: RE: [PATCH v3] usb: cdns3: Variable 'length' set but not used
+Thread-Topic: [PATCH v3] usb: cdns3: Variable 'length' set but not used
+Thread-Index: AQHWoq98xx7XZYJdVkmeSngJp6ePZqmptLIAgAAh+NA=
+Date:   Mon, 26 Oct 2020 11:55:09 +0000
+Message-ID: <AM8PR04MB7300C4C0BB37319ABC1680528B190@AM8PR04MB7300.eurprd04.prod.outlook.com>
+References: <20201015045529.2022-1-pawell@cadence.com>
+ <DM6PR07MB55290EA090C418457C1E293BDD190@DM6PR07MB5529.namprd07.prod.outlook.com>
+In-Reply-To: <DM6PR07MB55290EA090C418457C1E293BDD190@DM6PR07MB5529.namprd07.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: cadence.com; dkim=none (message not signed)
+ header.d=none;cadence.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [180.164.158.209]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: a824250c-d570-4aff-5b51-08d879a5fd0e
+x-ms-traffictypediagnostic: AM0PR04MB6371:
+x-microsoft-antispam-prvs: <AM0PR04MB6371CBE3C527DA9D26B772908B190@AM0PR04MB6371.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2XF1pQSwBNq60FYNP+uWfCzKjP+eP8g5Y00qWQ3V7Mu6PbT1yc9PftVJ9n/V0piuo261rkxGCB3N3FZQeL1fFY2tydtV0pqSCoolD82z44IX/K/QMLJjSuy5gf+VE7ffxx7JfzKPsbkYMoF19BzXAiww3YvfYIAC8QUi+oJ/D1KafFW65nR9DGgddA0wxPZwnXmtt604qOLOG9PZnNd6WgjA7fCp1JDU6JN0Iib3c3gsPkxn4sWiVexUyhDCd6XGqU6vNYcReVYiTXS34tSBgsdNasOaSVAfrpGkNKIOxP7sqRAuQGLKpiOXDc0h07yaXNP2cFkLVKOTeCddi7sZOg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(396003)(346002)(376002)(136003)(4326008)(71200400001)(54906003)(8676002)(6916009)(66446008)(66946007)(186003)(83380400001)(478600001)(8936002)(26005)(33656002)(6506007)(44832011)(76116006)(64756008)(66476007)(55016002)(66556008)(9686003)(316002)(2906002)(52536014)(5660300002)(7696005)(4744005)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: G6s9GtvvIUpB4nZLKsG0lCNT51dnwaNt6ytfS350wSII7OaMMfvYIyv5Sqx+W5AC0SybjeU8BR+uh6ipIXqumcPgG1l4jJyuTNv1yOmbYDSSp4BHjVKGC3qzfMHJmVKvUEQn/U2Umv5GMkObe/B8KEmIltMabgCNOYFteJZOI10Bm8QXVQVZ69yjcKE2+JYTzbXlY6c4SpnTH/AscGF5J5XYd9ecqOiODnYycD9Z6tXQDe+WfaRnowssLrOhYpTGpI08seC+d1MruzC9AZryZWkm2jHyvF7D1mA/XVGpU+HeM1DaVUUl9ruIsdPHBcHCKWltENnK+jlZRw8LNwO2wBSstWsBaGxb8W94vT7xtRTXrAZz9iKMEF9FjhWvpzP2dBeRUkuhTVptTFiNSuea96OLLjnnGkpTzWjJ5aoq5gxEMABsypGIoSIkP5L/odEGUT5uwicLclP2OItG0UGuZhkTmZvBSaTnoH2U1A01hUQgbGzl05hME7fynm7gzzlcIb9OuL0uS1V6ZD7wYK0MD3I0Ej4GJ+1WQ2YosFcoxbcQCbqWHCBKHBZn/TOUh0foYIoWI9vWyd0cHV3o+nqmznLU6KJLRbAf6k6jyeyl/oXE76ltVTCUc96iXBgHoVqmj+qMu9SeRA9fTkGEHb+RPw==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201023114017.GE18329@kadam>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a824250c-d570-4aff-5b51-08d879a5fd0e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2020 11:55:09.2915
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dPfouR90FC5JtB89KBdadFnsKz7W4eMtUfr5jm2Wbb31MozGl+yFz0UVxlr0/ZLzPLfNJEXnoR+eHBFbJYCWUw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6371
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 23, 2020 at 02:40:17PM +0300, Dan Carpenter wrote:
-> The typec_register_port() function doesn't return NULL, it returns error
-> pointers.
-> 
-> Fixes: da0cb6310094 ("usb: typec: add support for STUSB160x Type-C controller family")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Ah, sorry. You had already fixed the commit message.
+=20
+>=20
+> A gentle ping.
+>=20
+> I assume that you should add this and the rest overdue cdsn3 patches as f=
+irst
+> to you ci-for-usb-next branch.
+> Am I right?
+>=20
+=20
+Hi Pawel,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I queued them locally, and I waited for v5.10-rc1 which was out yesterday, =
+then I will apply them,
+and add cdns3 patches to my kernel.org branch. Will update you these two da=
+ys.
 
-> ---
-> v2: Fix a typo in the commit message.  s/return error pointers/return NULL/.
->     Thanks, Walter!
-> 
->  drivers/usb/typec/stusb160x.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/stusb160x.c b/drivers/usb/typec/stusb160x.c
-> index ce0bd7b3ad88..f7369e371dd4 100644
-> --- a/drivers/usb/typec/stusb160x.c
-> +++ b/drivers/usb/typec/stusb160x.c
-> @@ -729,8 +729,8 @@ static int stusb160x_probe(struct i2c_client *client)
->  	}
->  
->  	chip->port = typec_register_port(chip->dev, &chip->capability);
-> -	if (!chip->port) {
-> -		ret = -ENODEV;
-> +	if (IS_ERR(chip->port)) {
-> +		ret = PTR_ERR(chip->port);
->  		goto all_reg_disable;
->  	}
->  
-> -- 
-> 2.28.0
+Peter
 
-thanks,
-
--- 
-heikki
