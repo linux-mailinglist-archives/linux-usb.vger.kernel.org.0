@@ -2,184 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DA9298ECE
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 15:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FFB298F21
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 15:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1780916AbgJZODZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Oct 2020 10:03:25 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:35442 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1780899AbgJZODY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Oct 2020 10:03:24 -0400
-Received: by mail-oi1-f194.google.com with SMTP id w191so10586526oif.2;
-        Mon, 26 Oct 2020 07:03:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yQxCiGiE7NlPiloxFNOWyASBwj4I+02Aby8eDq3BwvA=;
-        b=gXLbk9s66qOcwEISHScNu4//+fdfyJt+KP98hIw03EQI1N5mmXjRjcx3LU5LLAdae9
-         ZCraOCZByflwuhEXWCAryyWanE36YhI6k+kku7YZl7nzBQYY4oAZVHm7NXrrZNdFWUjD
-         4AUTY7tP/Lh7KwBnGvCYTkrVZ7d2XqjC3cZyyHLmgxPV89q5+Q1RIdEvdwRcGQNhqZsu
-         tKTjVSJWQi2QKhv1MtTnr6uoUYaVAKgJrMyycxz3aE7u1mySsAsQRIKLo5qF51XAhJVa
-         28iLrkMw7HsOsEGBNkWJ/oAwQviyZmjpUBUvQwG+RieCDX6HE3YXxdmqIEdR0tPwC0Qt
-         LGkg==
-X-Gm-Message-State: AOAM532FwJUanJUip95cMsjytSqHhnLXmgzSbUoAyQdd3nLggzN25Arz
-        FoAhF98fSgd+Yy8chW5JxQ==
-X-Google-Smtp-Source: ABdhPJwBgb/kRoqMlR8y8yxrn2+kkR7ptzRTb5/SIg4FuVbYd/YN5Ca9yXxPi6QzUO6OrkEilgZ53g==
-X-Received: by 2002:a05:6808:a90:: with SMTP id q16mr12745941oij.17.1603721003220;
-        Mon, 26 Oct 2020 07:03:23 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h3sm3911140oom.18.2020.10.26.07.03.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 07:03:22 -0700 (PDT)
-Received: (nullmailer pid 77066 invoked by uid 1000);
-        Mon, 26 Oct 2020 14:03:21 -0000
-Date:   Mon, 26 Oct 2020 09:03:21 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v11 02/10] dt-bindings: usb: Maxim type-c controller
- device tree binding document
-Message-ID: <20201026140321.GA73964@bogus>
-References: <20201020093627.256885-1-badhri@google.com>
- <20201020093627.256885-3-badhri@google.com>
+        id S1780909AbgJZOWX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Oct 2020 10:22:23 -0400
+Received: from mga11.intel.com ([192.55.52.93]:59469 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1780807AbgJZOWX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Oct 2020 10:22:23 -0400
+IronPort-SDR: 5Pt77JnQPKV2SW/BVZ3sE6DMcdpPtgCkUOgfvkFNGMcQzkLBdL6knijIrSS6MARi9DWlWu3DND
+ byv5E3kiO1tA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9785"; a="164431854"
+X-IronPort-AV: E=Sophos;i="5.77,419,1596524400"; 
+   d="scan'208";a="164431854"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 07:22:21 -0700
+IronPort-SDR: zx/ut50ICtaU6P7xooH9x7iTUdM05LLmQswxh9qX7+rEM7BI64wCqazhLSfOmolsnyTLTO3OVK
+ CzdsByKKeh+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,419,1596524400"; 
+   d="scan'208";a="467941137"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga004.jf.intel.com with ESMTP; 26 Oct 2020 07:22:18 -0700
+Subject: Re: [PATCH] usb: remove unneeded break
+To:     trix@redhat.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com, johan@kernel.org,
+        stern@rowland.harvard.edu, gustavoars@kernel.org,
+        viro@zeniv.linux.org.uk, lee.jones@linaro.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net
+References: <20201019150202.19713-1-trix@redhat.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <845e43b3-1c53-3eed-b540-4efa109f33a9@linux.intel.com>
+Date:   Mon, 26 Oct 2020 16:23:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201020093627.256885-3-badhri@google.com>
+In-Reply-To: <20201019150202.19713-1-trix@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 02:36:19AM -0700, Badhri Jagan Sridharan wrote:
-> Add device tree binding document for Maxim 33359 Type-C chip driver
+On 19.10.2020 18.02, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 > 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> A break is not needed if it is preceded by a return or goto
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
-> Changes since v1:
-> - Changing patch version to v6 to fix version number confusion.
-> 
-> Changes since v6:
-> - Migrated to yaml format.
-> 
-> Changes since v7:
-> - Rebase on usb-next
-> 
-> Changes since v8:
-> - Fix errors from make dt_binding_check as suggested by
->   Rob Herring.
-> 
-> Changes since v9:
-> - additionalProperties: false as suggested by Rob Herring.
-> 
-> Changes since v10:
-> - Added the chip number to the binding as suggested by Rob Herring.
-> - Renamed the filename as well.
-> 
-> ---
->  .../devicetree/bindings/usb/maxim,33359.yaml  | 75 +++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/maxim,33359.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/maxim,33359.yaml b/Documentation/devicetree/bindings/usb/maxim,33359.yaml
-> new file mode 100644
-> index 000000000000..b02e7b228cde
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/maxim,33359.yaml
-> @@ -0,0 +1,75 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/maxim,33359.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Maxim TCPCI Type-C PD controller DT bindings
-> +
-> +maintainers:
-> +  - Badhri Jagan Sridharan <badhri@google.com>
-> +
-> +description: Maxim TCPCI Type-C PD controller
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - maxim,33359
+>  drivers/usb/gadget/function/f_hid.c | 9 ---------
+>  drivers/usb/host/xhci-mem.c         | 1 -
+>  drivers/usb/misc/iowarrior.c        | 3 ---
+>  drivers/usb/serial/iuu_phoenix.c    | 2 --
+>  drivers/usb/storage/freecom.c       | 1 -
+>  5 files changed, 16 deletions(-)
 
-Maxim parts are generally named 'maxim,max[0-9]+'
+Would probably be better to split this into several patches.
+The xhci change looks good (as a separate patch)
 
-With that,
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  connector:
-> +    type: object
-> +    $ref: ../connector/usb-connector.yaml#
-> +    description:
-> +      Properties for usb c connector.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - connector
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/usb/pd.h>
-> +    i2c0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        maxtcpc@25 {
-> +            compatible = "maxim,33359";
-> +            reg = <0x25>;
-> +            interrupt-parent = <&gpa8>;
-> +            interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +            connector {
-> +                compatible = "usb-c-connector";
-> +                label = "USB-C";
-> +                data-role = "dual";
-> +                power-role = "dual";
-> +                try-power-role = "sink";
-> +                self-powered;
-> +                op-sink-microwatt = <2600000>;
-> +                new-source-frs-typec-current = <FRS_5V_1P5A>;
-> +                source-pdos = <PDO_FIXED(5000, 900,
-> +                                         PDO_FIXED_SUSPEND |
-> +                                         PDO_FIXED_USB_COMM |
-> +                                         PDO_FIXED_DATA_SWAP |
-> +                                         PDO_FIXED_DUAL_ROLE)>;
-> +                sink-pdos = <PDO_FIXED(5000, 3000,
-> +                                       PDO_FIXED_USB_COMM |
-> +                                       PDO_FIXED_DATA_SWAP |
-> +                                       PDO_FIXED_DUAL_ROLE)
-> +                                       PDO_FIXED(9000, 2000, 0)>;
-> +            };
-> +        };
-> +    };
-> +...
-> -- 
-> 2.29.0.rc1.297.gfa9743e501-goog
-> 
+-Mathias
