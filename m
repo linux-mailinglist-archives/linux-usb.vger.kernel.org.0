@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2E4298FBB
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 15:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5656299057
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 16:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1781901AbgJZOpZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Oct 2020 10:45:25 -0400
-Received: from mga03.intel.com ([134.134.136.65]:27523 "EHLO mga03.intel.com"
+        id S1782284AbgJZPAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Oct 2020 11:00:41 -0400
+Received: from mga03.intel.com ([134.134.136.65]:29122 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1781562AbgJZOpY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Oct 2020 10:45:24 -0400
-IronPort-SDR: Rr7aR6GM1q9ic1KoL0lKL5bH7krBL2VVNaLdoIxioKW5EEnZUT0VcRcXEWKDqrvATa7094BDW7
- DRiHVEy9abeg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9785"; a="168031792"
-X-IronPort-AV: E=Sophos;i="5.77,419,1596524400"; 
-   d="scan'208";a="168031792"
+        id S1782238AbgJZPAl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Oct 2020 11:00:41 -0400
+IronPort-SDR: YaJwdODkckSYkNzL2TV6ImmppvnLe9Nlm+ylC2twUUKzaI9xLMnCmJzQufA+jQsCxvQ3UQp4P2
+ O/zAEYXZpldQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9785"; a="168033659"
+X-IronPort-AV: E=Sophos;i="5.77,420,1596524400"; 
+   d="scan'208";a="168033659"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 07:45:23 -0700
-IronPort-SDR: QiNaUaNQh/pEOODGqs2lfdV8v8vw2bVnIdIfb7ZzEvuY+FdmKoFpFR7+OMBr/ueqXnECPsJ5M9
- U3HVU9zl3jvw==
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 08:00:40 -0700
+IronPort-SDR: VVXUxuAcWwOZuoZQp1YxQH4mZz7hiAYOWGp0QPjfL1Ym53j0xpxmH7IouVUVNvSaWV0+0btNPW
+ CZQMF8dXlqsA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,419,1596524400"; 
-   d="scan'208";a="467946901"
+X-IronPort-AV: E=Sophos;i="5.77,420,1596524400"; 
+   d="scan'208";a="467951379"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga004.jf.intel.com with ESMTP; 26 Oct 2020 07:45:21 -0700
-Subject: Re: [PATCH v2] usb: xhci: Workaround for S3 issue on AMD SNPS 3.0 xHC
-To:     Sandeep Singh <Sandeep.Singh@amd.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sanket.goswami@amd.com,
-        Nehal-bakulchandra.Shah@amd.com
-Cc:     Shyam-sundar.S-k@amd.com
-References: <20201023131503.759671-1-Sandeep.Singh@amd.com>
+  by orsmga004.jf.intel.com with ESMTP; 26 Oct 2020 08:00:38 -0700
+Subject: Re: [PATCH 1/2] usb: host: add XHCI_CDNS_HOST flag
+To:     Peter Chen <peter.chen@nxp.com>, mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-imx@nxp.com, jun.li@nxp.com,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@ti.com>
+References: <20201022030133.19528-1-peter.chen@nxp.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
@@ -77,33 +77,58 @@ Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
  42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
  IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <ed3847f0-f219-547a-e887-cd0d48f77dda@linux.intel.com>
-Date:   Mon, 26 Oct 2020 16:46:50 +0200
+Message-ID: <e3f75fb0-8fab-357f-d3f4-ca122995166a@linux.intel.com>
+Date:   Mon, 26 Oct 2020 17:02:06 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201023131503.759671-1-Sandeep.Singh@amd.com>
+In-Reply-To: <20201022030133.19528-1-peter.chen@nxp.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23.10.2020 16.15, Sandeep Singh wrote:
-> From: Sandeep Singh <sandeep.singh@amd.com>
+On 22.10.2020 6.01, Peter Chen wrote:
+> The Cadence xHCI host has the same issue with Intel's,
+> it is triggered by reboot stress test.
 > 
-> On some platform of AMD, S3 fails with HCE and SRE errors. To fix this,
-> need to disable a bit which is enable in sparse controller.
-> 
-> Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
-> Signed-off-by: Sandeep Singh <sandeep.singh@amd.com>
+> Cc: Pawel Laszczak <pawell@cadence.com>
+> Cc: Roger Quadros <rogerq@ti.com>
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
 > ---
-> Changes since v1:(https://lkml.org/lkml/2020/10/23/368)
-> 	-> Add xhci.h changes
+>  drivers/usb/host/xhci.c | 2 +-
+>  drivers/usb/host/xhci.h | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 482fe8c5e3b4..fc72a03dc27f 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -193,7 +193,7 @@ int xhci_reset(struct xhci_hcd *xhci)
+>  	 * Without this delay, the subsequent HC register access,
+>  	 * may result in a system hang very rarely.
+>  	 */
+> -	if (xhci->quirks & XHCI_INTEL_HOST)
+> +	if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_CDNS_HOST))
+>  		udelay(1000);
+>  
+>  	ret = xhci_handshake(&xhci->op_regs->command,
+> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> index 8be88379c0fb..4b7275c73ea5 100644
+> --- a/drivers/usb/host/xhci.h
+> +++ b/drivers/usb/host/xhci.h
+> @@ -1877,6 +1877,7 @@ struct xhci_hcd {
+>  #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
+>  #define XHCI_RENESAS_FW_QUIRK	BIT_ULL(36)
+>  #define XHCI_SKIP_PHY_INIT	BIT_ULL(37)
+> +#define XHCI_CDNS_HOST		BIT_ULL(38)
+>  
+>  	unsigned int		num_active_eps;
+>  	unsigned int		limit_active_eps;
 > 
 
-Added to queue.
-This looks like it should go to stable as well.
+Is the XHCI_CDNS_HOST quirk bit set in some other patchseries?
 
 -Mathias
