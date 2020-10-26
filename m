@@ -2,91 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58027298C89
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 13:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68312298CBC
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Oct 2020 13:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1774600AbgJZMAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Oct 2020 08:00:08 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:39504 "EHLO
+        id S1774814AbgJZMNZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Oct 2020 08:13:25 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:39554 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1768859AbgJZMAG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Oct 2020 08:00:06 -0400
-Date:   Mon, 26 Oct 2020 13:00:02 +0100
+        with ESMTP id S1774804AbgJZMNW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Oct 2020 08:13:22 -0400
+Date:   Mon, 26 Oct 2020 13:13:18 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1603713604;
+        s=2020; t=1603714399;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Y0pqgjx4S6GWrhq/VAgdXIHvPYenVut2N2gBfaaZqZw=;
-        b=U8/rNVm/z0IACXD2UU7LaiTki3sCbumu6U2jtBig1EUAIGYH2qsByotDR1tgcmN31C1fce
-        lilr8bYHLG3I3tXCCCbTRMly1Bm+6omi72j3BNQI5qFEYNWvWwyhg2BrQJnqfVg8NEn6AM
-        kJIXt6ZLEgFBZc3TAqSwF+thm7cRRRwu+sotND/cC7hz9DAz8wXDm0ETZrJeNMrUI60xfB
-        ch/RgFLO/SwfYxMqhFK2Pr7mexguoiGG6Fypc4En8UVDQzYbjNV8ZIGNBw/tBaeGyDAVID
-        nuKJ0HrkK7QQcTtY7KZ6FYN+JYwrm8o1U11XhsOJ5ZQ6Fp5XbJDQl3zlfGWIKw==
+        bh=1EwMJJrJoq9M72TuxMBVkcuO2bqjZo2iMyJDC0rzzx4=;
+        b=4rqaZXU4BBSEieae/fD/UGWny5Um/PgmeSsKtbbvd3XwaRSFEvkXCQUYylCa3X9FXwzPUe
+        6F5IyWwp3nTmg7kVE4yO5bgJgMyy6d7nNjyy8x+eyMrtFtIAw5zfK9FbzxmiLLJZP4DXWX
+        zd/cEIchm5x0eJz9JpWlj72h2J4IXYU3aCn331T9gdoUO754LVHCpv4WOvo1j9MY3QxGRw
+        gfW3nwHFMiIpIOSZMheth+36grrmG5NtUdF4VxhRlqctvMvtTgMmTpsDnK1JV/lAEI3q0w
+        1z0Qde68NzXTR8KD4wiilKoCdmECf5/jK0SyTqofpKD7PypK/BNzrEH1pt8Z/A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1603713604;
+        s=2020e; t=1603714399;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Y0pqgjx4S6GWrhq/VAgdXIHvPYenVut2N2gBfaaZqZw=;
-        b=zXLUWzFTm+ipT4zf63mooubl6hLLyztZ4zs07MRoM3bTgCH6vFd3ungwPU5e2Pd9u5YY8A
-        Lk+CYKRGuAYa0YCQ==
+        bh=1EwMJJrJoq9M72TuxMBVkcuO2bqjZo2iMyJDC0rzzx4=;
+        b=jGsY1SweRtkh/BsUgjkXv2LNWyvLH3vVRVOWKbeSYvleZzXbN1974NtEJ6CbLbCg9zmDi1
+        xN33/mCoWSv/o6CA==
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 To:     Johan Hovold <johan@kernel.org>
 Cc:     linux-usb@vger.kernel.org,
         "Ahmed S . Darwish" <a.darwish@linutronix.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/14] USB: serial: keyspan_pda: clean up xircom/entrega
- support
-Message-ID: <20201026120002.vl3htwmizmcvydn3@linutronix.de>
+Subject: Re: [PATCH 00/14] USB: serial: keyspan_pda: fix up write
+ implementation
+Message-ID: <20201026121318.4mqwkkhahnsujngw@linutronix.de>
 References: <20201025174600.27896-1-johan@kernel.org>
- <20201025174600.27896-12-johan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201025174600.27896-12-johan@kernel.org>
+In-Reply-To: <20201025174600.27896-1-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020-10-25 18:45:57 [+0100], Johan Hovold wrote:
-> Drop the separate Kconfig symbol for Xircom / Entrega and always include
-> support in the keyspan_pda driver.
+On 2020-10-25 18:45:46 [+0100], Johan Hovold wrote:
+> This series fixes a number of long-standing issues with the keyspan_pda
+> driver and reworks its write implementation so that it can be used with
+> any line discipline or for a system console.
 > 
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/usb/serial/Kconfig       | 19 ++-------
->  drivers/usb/serial/Makefile      |  1 -
->  drivers/usb/serial/keyspan_pda.c | 68 +++++---------------------------
->  3 files changed, 13 insertions(+), 75 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
-> index 4007fa25a8ff..a21ff5ab6df9 100644
-> --- a/drivers/usb/serial/Kconfig
-> +++ b/drivers/usb/serial/Kconfig
-> @@ -538,17 +538,6 @@ config USB_SERIAL_CYBERJACK
->  
->  	  If unsure, say N.
->  
-> -config USB_SERIAL_XIRCOM
+> The last few patches cleans up the xircom device support and some style
+> issues.
 
-Should this patch remove this symbol from defconfigs or does it happen
-every now and then on its own? All of them select USB_SERIAL_KEYSPAN_PDA
-so there is no loss.
+Thank you Johan. This series fixes quite some issues including the
+in_interrupt() part. I added the buffer part because it hurt to see an
+allocation for one byte. There is no loss without it :)
 
-> -	tristate "USB Xircom / Entrega Single Port Serial Driver"
-> -	select USB_EZUSB_FX2
-> -	help
-> -	  Say Y here if you want to use a Xircom or Entrega single port USB to
-> -	  serial converter device.  This driver makes use of firmware
-> -	  developed from scratch by Brian Warner.
-> -
-> -	  To compile this driver as a module, choose M here: the
-> -	  module will be called keyspan_pda.
-> -
->  config USB_SERIAL_WWAN
->  	tristate
->  
+Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+
+> Johan
 
 Sebastian
