@@ -2,104 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D38A29A724
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B79129A736
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895238AbgJ0JAr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 05:00:47 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43069 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407456AbgJ0JAq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 05:00:46 -0400
-Received: by mail-lj1-f194.google.com with SMTP id d24so842145ljg.10;
-        Tue, 27 Oct 2020 02:00:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aoc6PFAHcsZ4k1n+rAPEIlc7fJ4qApC7bZXv5nNCWDo=;
-        b=Hjxrq9kxNkaCeXNNiey16mkUKiieLSbNB8I0BFJ/EjxB/Xp5DvX7PHUXPzxtZlihkU
-         tbhKWas2W/MUkHJuculPwl3M63HmV9BDNH0X95j56JbO1gV6UzgVLpXNL+r4AYkw03aE
-         H4CjZE9wrg5x+O/Nc146miRGvn9C3KwNb1o+F67aRHz0H4qU7PHxyX7nvFIB/2DoEV31
-         Uw6fgjxB+J27bOPopaIi7f5OoA/QDZGg330XJaumnCrQr8tP04fJFe3iNAJcw1xRs+sF
-         RSwgA8r80oOu5h/QK5h9EwVTCpm8EAYZDSHyVBOPrXmmfPBpe+rLeVSFZts2mvpOy2zW
-         Fl/A==
-X-Gm-Message-State: AOAM5321ImFGOUG21wyLGTxYKmn3C6gVgHZXCBhJ/DCjx1v+q5sEF9fo
-        gdDG0PKnUXy84vPg/IKvE6E=
-X-Google-Smtp-Source: ABdhPJxJWrT+500Rqae99962YUMyLl1qAq5vzl313eUD61dYENLaqlKCvsUXPJ28lcsc0ayMVZQ7hw==
-X-Received: by 2002:a2e:9905:: with SMTP id v5mr619154lji.222.1603789244634;
-        Tue, 27 Oct 2020 02:00:44 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id f26sm103575lfc.302.2020.10.27.02.00.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 02:00:43 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kXKqR-0002G6-DS; Tue, 27 Oct 2020 10:00:43 +0100
-Date:   Tue, 27 Oct 2020 10:00:43 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ftdi_sio: Fix serial port stall after resume
-Message-ID: <20201027090043.GG4085@localhost>
-References: <20200929193327.GA13987@ls3530.fritz.box>
- <20201008152103.GK26280@localhost>
- <1aefc37b-8976-efda-f397-2d9492b1260a@gmx.de>
+        id S2408185AbgJ0JDi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 05:03:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56410 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2408143AbgJ0JDh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 05:03:37 -0400
+Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 581A3206DC;
+        Tue, 27 Oct 2020 09:03:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603789417;
+        bh=+88N+jaf6zFgt8gBGY6GxL5Kq0Ie4Xujwte+ErsZbrg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=UL33vr29j+dVAhlRaFzJ/uPlfCEPQwT/+SG2eygmGjo5z/siQ+27w3v+iXnOL8YYq
+         c+nh4h+BWxMv3dL59qQiAYmdFb0snTxaaivi6oDjHoqhSE5/WieZGeEgkFxOCSHogu
+         R2Y5dHMoof54GJZsVotOhz2JWrek9M3OyQecylZc=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Peter Chen <peter.chen@nxp.com>, pawell@cadence.com, rogerq@ti.com
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
+        gregkh@linuxfoundation.org, jun.li@nxp.com,
+        Peter Chen <peter.chen@nxp.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: cdns3: gadget: suspicious implicit sign extension
+In-Reply-To: <20201016101659.29482-2-peter.chen@nxp.com>
+References: <20201016101659.29482-1-peter.chen@nxp.com>
+ <20201016101659.29482-2-peter.chen@nxp.com>
+Date:   Tue, 27 Oct 2020 11:03:29 +0200
+Message-ID: <871rhkdori.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1aefc37b-8976-efda-f397-2d9492b1260a@gmx.de>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 08, 2020 at 08:16:02PM +0200, Helge Deller wrote:
-> On 10/8/20 5:21 PM, Johan Hovold wrote:
-> > On Tue, Sep 29, 2020 at 09:33:27PM +0200, Helge Deller wrote:
-> >> With a 4-port serial USB HUB with FT232BM chips the serial ports stop
-> >> working after a software suspend/resume cycle.
-> >> Rewriting the latency timer during the resume phase fixes it.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-> >> +static int ftdi_reset_resume(struct usb_serial *serial)
-> >> +{
-> >> +	struct usb_serial_port *port = serial->port[0];
-> >> +
-> >> +	if (tty_port_initialized(&port->port))
-> >> +		write_latency_timer(port);
-> >
-> > Why are you only doing this for open ports?
-> 
-> I more or less copied it from another driver....
-> 
-> >> +
-> >> +	return usb_serial_generic_resume(serial);
-> >> +}
-> >
-> > And if the device has been reset there may need to reconfigured the
-> > termios settings for open ports.
-> >
-> > Could you expand a bit on what the problem is here?
-> 
-> My testcase is pretty simple:
-> 1. I use e.g. "minicom -D /dev/ttyUSB2". Serial connection works.
-> 2. I exit minicom.
-> 3. I suspend the workstation: "systemctl suspend"
-> 4. I wake up the machine and wait a few seconds.
-> 5. I start "minicom -D /dev/ttyUSB2" again. No transfers on the serial port.
-> 
-> With my patch the minicom serial communications does work.
-> Another way to wake up the connection is to rmmod the driver and
-> insmod it again.
 
-Weird indeed. If you exit minicom before suspend and no other process is
-keeping the port open, then that write_latency_timer() above would never
-be executed.
+Hi,
 
-Could you enable some debugging and provide a dmesg log from a test
-cycle (open/close minicom, suspend/resume, open minicom)?
+Peter Chen <peter.chen@nxp.com> writes:
+> For code:
+> trb->length =3D cpu_to_le32(TRB_BURST_LEN(priv_ep->trb_burst_size)
+> 	       	| TRB_LEN(length));
+>
+> TRB_BURST_LEN(priv_ep->trb_burst_size) may be overflow for int 32 if
+> priv_ep->trb_burst_size is equal or larger than 0x80;
+>
+> Below is the Coverity warning:
+> sign_extension: Suspicious implicit sign extension: priv_ep->trb_burst_si=
+ze
+> with type u8 (8 bits, unsigned) is promoted in priv_ep->trb_burst_size <<=
+ 24
+> to type int (32 bits, signed), then sign-extended to type unsigned long
+> (64 bits, unsigned). If priv_ep->trb_burst_size << 24 is greater than 0x7=
+FFFFFFF,
+> the upper bits of the result will all be 1.
 
-	echo file usb-serial.c +p > /sys/kernel/debug/dynamic_debug/control
+looks like a false positive...
 
-Johan
+> Cc: <stable@vger.kernel.org> #v5.8+
+> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> ---
+>  drivers/usb/cdns3/gadget.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/cdns3/gadget.h b/drivers/usb/cdns3/gadget.h
+> index 1ccecd237530..020936cb9897 100644
+> --- a/drivers/usb/cdns3/gadget.h
+> +++ b/drivers/usb/cdns3/gadget.h
+> @@ -1072,7 +1072,7 @@ struct cdns3_trb {
+>  #define TRB_TDL_SS_SIZE_GET(p)	(((p) & GENMASK(23, 17)) >> 17)
+>=20=20
+>  /* transfer_len bitmasks - bits 31:24 */
+> -#define TRB_BURST_LEN(p)	(((p) << 24) & GENMASK(31, 24))
+> +#define TRB_BURST_LEN(p)	(unsigned int)(((p) << 24) & GENMASK(31, 24))
+
+... because TRB_BURST_LEN() is used to intialize a __le32 type. Even if
+it ends up being sign extended, the top 32-bits will be ignored.
+
+I'll apply, but it looks like a pointless fix. We shouldn't need it for sta=
+ble
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X4mERHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQa8Ug/9GY0hScyIyCfZE4ugHeECPPIsjd1xC2ac
+PpKkhf88Lb1BLLsNOXXEXwMeAza3B2pxt2MQWhZhSNiSU5WOa4P9E1F6nXpcjp46
+RwDTk4mzyWVjfFqQYcF5ZDwT/6+49YKif0TO9OQQg5CGMaa+VK9+o8jLxKl/TYHG
+dKnjfhIwkbA3NPMbfm0d445JT1evMDHCK7qt487eK+ifNRXdv6IWMuB/JHMe+ny/
+V7Ygc7IKSnoo0CaAyj3/oQchsTyW+cleT3TXPYXUQIHjXuGJDvv1E5thVva0D4zF
+yjMKFe+0TIW0SqMflg2ufV9MBQoqNqmzJGWB5N0+nhp4XFBWYts5JEHDejZyVosT
+glhhROCFEMMAieqHb1XwcoPNRmNGvWKdRMhaANyUhBPxMe6Kf50FLbja7cgGay4K
+aRqKlYnw8GbS4de6ZCYj8AZpQPFvHFnX6S2rNSo4hrWrbR5+/rmPVuWwf2tejt21
+Ko7ch82bTNKCdYnu5THByGmOfnckZiTk1fLu8P7ygqcrnfSO8xeKjiARSN98EAgf
+kYqacE90zCysiF7tthEw7cmWaWODBm+JUw/4pgAJingYX9a2Saib/9ZbQ4aFiZhh
+ToHIMovA4z2M9/g/g4IbWsiJEhXDNRI4fpgDDTyxmGRyWgeBnW8JaMSorJt6y8AU
+YQpldMS6fP8=
+=W+KT
+-----END PGP SIGNATURE-----
+--=-=-=--
