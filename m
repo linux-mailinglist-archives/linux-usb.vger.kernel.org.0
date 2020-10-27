@@ -2,88 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A133829A675
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 09:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E16A429A692
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 09:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2894645AbgJ0IXG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 04:23:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43188 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2894642AbgJ0IXG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 04:23:06 -0400
-Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A90C32224E;
-        Tue, 27 Oct 2020 08:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603786985;
-        bh=j6rV2B2ZGonFGY/yYN9m8V9//PANCjhjAhkdaDqkpDw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=rCtP0+uzUyGR1mtQsDOtiiU/w7FxEwZSHpceWRu5Jr+NWol1bmRJ4kfZvuA9tM1E6
-         r3zCIR3sGqu8aVObiWQqK7U+1iAU11nunCMDX03LlzyaLnBq0xflz9DDh8b4B7J9DT
-         6pc52mdgBRYQZbopq2o7hLtBXcRNEOHnp+2xACwE=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        id S2894782AbgJ0I1B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 04:27:01 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:43261 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403961AbgJ0I1B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 04:27:01 -0400
+Received: by mail-lf1-f65.google.com with SMTP id l28so1164470lfp.10;
+        Tue, 27 Oct 2020 01:26:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=XIPWi+l0jdtwe7a/vFhBWIkkHZTxV2Bo329Aduuqz0Y=;
+        b=N1RgbNLj1IGPtDBFi2WyRr67FzoIphdsntAJ05OtLwq5ClTtAT1fmLAqYVBNOarETG
+         zxVqZBxr+SbMU1zuj1WZZaseHIK/KHqXsSYVLvMBQD97WW8uemL8cubOJaL8G9dnZXFo
+         0O1FKm97AFbKJbmKv9q35d+kaYN1GFm8Fbkzo7Z2zK1vSsxRMe67m2rM4EEkyTDtzHV1
+         xWTaMERSuFYTdCwOH0S7Lm6rYTe+JTS0rXdBNCl8aCu54qG9kXNGN0JbmxmRCGjtFloz
+         5iUHqLxw2u5L2ntyZv3ZM8sDuqDFQPJk9Xv2SBR11FWJLM64yFzb2iHGBtxgoJDMGOZI
+         UYSA==
+X-Gm-Message-State: AOAM532QXhkwSyXYtREQ3eymXAClzCvCihPNEjkroLPp+t2kUxO2IyX9
+        d4B4vfSzS72+WoC2qJ/SjSg=
+X-Google-Smtp-Source: ABdhPJxZdvyff6NTZCNh5cgP4gqVTZlusJs7rkzYrG60oCea8SrZ4rbaJhyafEM+9WgvZzCHgo7GvQ==
+X-Received: by 2002:a19:c690:: with SMTP id w138mr416756lff.409.1603787218626;
+        Tue, 27 Oct 2020 01:26:58 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id n19sm95060lfe.142.2020.10.27.01.26.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 01:26:57 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kXKJk-0001LL-9S; Tue, 27 Oct 2020 09:26:57 +0100
+Date:   Tue, 27 Oct 2020 09:26:56 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Subject: Re: [PATCH v2 02/15] usb: dwc2: Add support for dwc2 host/device
- clock gating.
-In-Reply-To: <20201011135122.71764A0061@mailhost.synopsys.com>
-References: <20201011135122.71764A0061@mailhost.synopsys.com>
-Date:   Tue, 27 Oct 2020 10:22:57 +0200
-Message-ID: <87a6w8dqn2.fsf@kernel.org>
+        linux-usb@vger.kernel.org,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Duncan Sands <duncan.sands@free.fr>
+Subject: Re: [PATCH v3 04/13 ] USB: serial: digi_acceleport: Remove
+ in_interrupt() usage
+Message-ID: <20201027082656.GD4085@localhost>
+References: <20201019100629.419020859@linutronix.de>
+ <20201019101110.019266389@linutronix.de>
+ <20201025171613.GT26280@localhost>
+ <20201026140313.dpg3hkhkje2os4hw@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201026140313.dpg3hkhkje2os4hw@linutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 26, 2020 at 03:03:13PM +0100, Sebastian Andrzej Siewior wrote:
+> From: "Ahmed S. Darwish" <a.darwish@linutronix.de>
+> 
+> The usage of in_interrupt() in drivers is phased out and Linus clearly
+> requested that code which changes behaviour depending on context should
+> either be separated or the context be conveyed in an argument passed by the
+> caller, which usually knows the context.
+> 
+> The debug printk() in digi_write() prints in_interrupt() as context
+> information. This information is imprecisely as it does not distinguish
+> between hard-IRQ or disabled botton half and it does consider disabled
+> interrupts or preemption. It is not really helpful.
 
-Artur Petrosyan <Arthur.Petrosyan@synopsys.com> writes:
+I fixed up a couple of typos and added the missing negation above so
+that it reads:
 
-> If core doesn't support hibernation or partial power
-> down power saving options, you can still use clock
-> gating on all the clocks to reduce power consumption
-> considerably.
->
-> - Added control functions for dwc2 host/device mode clock gating.
-> - Moved "bus_suspended" flag to "dwc2_hsotg" struct because we
->   need to set that flag in case when the driver is built in
->   peripheral mode.
+  The debug printk() in digi_write() prints in_interrupt() as context
+  information. This information is imprecise as it does not distinguish
+  between hard-IRQ or disabled bottom half and it does not consider
+  disabled interrupts or preemption. It is not really helpful.
+	
+> Remove the in_interrupt() printout.
+> 
+> Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Johan Hovold <johan@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> ---
+> v2…v3:
+>   - Don't make dev_dbg() conditional on `tty'
+>   - Remove the part "tty happens always in process context" from the
+>     commit message. Johan pointed out that for PPP it may happen in
+>     bottom half.
 
-similarly to previous patch, it seems like this could be broken down
-into two or more patches. Think about doing really small, incremental
-changes that are obviously correct.
+Now applied for -next, thanks.
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X2OERHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQa1zhAAnAXvuHO5sPcVoRZeodnDxyrXnsj7YPNi
-lJsxeNiccZuCyvefAGDL9yYBdMlsRxKIIL5NAj9aOuvtqV6uo7+bP5x+RNCQ3R2S
-6VA3nu9zZ4jDRrO+fRWYq1hXHQmxyvnSMl9y9KwyMXD4AR/od81ZYFXqe9ZFQIRH
-fJJIJ4/t5cbufJHghjehVNABNQFuxeQtkX+ZoSysqIIHyPGm8q++v9q2rLfAWHTO
-VfKl0t3C+LXwmjOrW7MLVyhjz0hgBV50vq0p3rkuMXx1bqIHFxls6FatImhLeS7h
-2j3kKicIv6KHw1GtNeVZC2S8Imw+g+8mpgW7MDk3z1iASg7W1tuK82gzB6WLmDwb
-VbtUbNAffki1JFz35ZcBaZgGLLgsymCJxVf+qw8qV+X3+l56omYhufQBZ5T1+2Zz
-1ym4vvy6FTb3goCzGbt9x1L2ZlrE88P0vNWbVU0ooDHgsfEgiyWuBK7CVrSd/xh9
-/oGjDoX3vGPXNvYgc0ZySksS8LDiAmTCWjyUA4mofGAHk+WtFGyh4bxpTkXqOgwf
-QGZsR1oetl6EU8FqCk4zgtUCVDhW24F9oOPcgbCOMEJGnotOaUMAdeXEx41KqY5o
-rL+HHCqqyWGLpil2IlibOE+6B0BAS9/+l+KL8zuQNSY26HQHB64j5Lz7L+qmkPEw
-zyOSh9m0ngI=
-=QCec
------END PGP SIGNATURE-----
---=-=-=--
+Johan
