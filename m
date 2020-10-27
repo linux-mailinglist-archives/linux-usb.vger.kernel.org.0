@@ -2,160 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC00029A82E
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A75329A83A
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895953AbgJ0Js7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 05:48:59 -0400
-Received: from mail-eopbgr70041.outbound.protection.outlook.com ([40.107.7.41]:49119
+        id S2896011AbgJ0Ju5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 05:50:57 -0400
+Received: from mail-eopbgr70085.outbound.protection.outlook.com ([40.107.7.85]:7046
         "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2895946AbgJ0Js6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 05:48:58 -0400
+        id S2895922AbgJ0Juz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 05:50:55 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZO8eOL1dLy935witw/MnCgyLoiHhLfL9LKJAArzl5Ffhr6h5qf7Ly0QWbiTQd7+mBCQNwKLRDHBTIz1KV7hSbtNmN5W+lD35rMYjOGtwJIXbPxfM/JWSPyaWZ5iBWq2SlFTROIP1MIjG2Dkj1mWeGeLO6+Pm+SRtM/Dvr7T0pNVphTvANzlVimKJguLm3ZLvm8xAwiEmQidotzNMXJtjT8NLsc4W9Z+G0pUEHV2Leh3p/zEwrDq5EMti53bU9s4avSmEr0fERLuF8rHiGVQJSieKX8JLvDSOwbC/kr9YyGYUYana/wF2+HcM2xe+GNVeYjCS/taFDjKJdJiLeo45Hw==
+ b=avlVsZ5NPQxazhhZAbyU2WS9e8Gr4eCXuIDZ4hsZmvFYozN4fuXRnT8x21EUEIBoGovvXL0l23VV0UTIjklw+51ordo2XfSfv7tI1zHlKE8SMxGt9a5I5euALaNue15SJhVk1vswLCnR5Pgawcqq/TpDXSXlX6rMVa2QkyzWc8oQloaWoU9J/PcPJ9Vi6y4/CXqWnyIVeAk+qdiyWmv6g+RQmaOKQQQuTli/mxMUjTGSqMwCD35+SENMyD+oanZr1gZj/g4a5R3HknnAiV5NheDbWGpFtQKwUZSrmkEVg7a3qYaWPyV2LRISj593JfoERHKtxNuyH08bID5baYLo6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8/w6wJRhD8dy4hEb5N1qxURd+6Td063abdU27TyJ6Lg=;
- b=bQZhdfzYneIZrnofAekEkJ783hnRRfhpNd/rkdmkRzufPMAvnM+Bvjt2jESX37Uz0Ei9z6cr7OCwqw/D1rL4wdJjj7/c2LTQIip26rEbRPker8DW9Lxzxtg5A/TAVXVPimvV+Yn8tfKUeCNNyisdDGI+nhaLs/BCjWl/6czITNMnLPqaC8FtBtz3/bQWxp5c+z9A8C2QWhl06N6SIBj8/DGqP5DoPtjebZtqG7SCyIr8p8xqaZ7hz3P4AAU9SxBjXd55eHi688/2JYL/GZNc+iwG2Qf4eDJxuH0XfJtOOhTFpQFJdGWcmMgdH/ED3FhvECi28nw52wNmCv09TfGjsw==
+ bh=a/rmEOdNuNxIiWkUjhPP9dOAjC1qqvsdK5AMY1NvwFE=;
+ b=WDYivhVqkECUq/QBDhvHgMVx0Z4llSnXgzRgjGeDyQYJatGVvOae9z0JLGLcYM2y73dZB1Sw0+FlGDwcHBYBwIXnMWn9L6XibZQUYs29eYskBuvboPR08ApdxFjtEGiICTYb7WAK29qvu5YcowwlVf2Q/CjZxg/dpCmeyvdeJioISMzNTg3a1jWm1W0iyUE6u9irv+YJSPFFleED2F/eYmWDWT3Nx/OKPQnRmGxtNibPkH7NXl5CQpKqy/JAsrCNFQSmkl8fEh5ab5kwA0QaHvug+E+s0tmAjaDp+KO2JAYjjkZDxaYEHlOHB6IPlO+BIhubevcjvyIznt++ME50fw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8/w6wJRhD8dy4hEb5N1qxURd+6Td063abdU27TyJ6Lg=;
- b=dm3wKw39V862WKTSbuRpSCUDQqUj4H7QP8fAqCTriiwSOZKFCDrsA2+Gg1E5hqT6HA33yCHJFUXACJ+tEY7HNkD0+J89Ec4DwDBFn5TONENNIQTFtn8Nl34phWXcBxRwWFMLBnJxgR2zPSRUxdNN3RDgE1VxBszDW91ubAf28yI=
+ bh=a/rmEOdNuNxIiWkUjhPP9dOAjC1qqvsdK5AMY1NvwFE=;
+ b=nSnwDLot5akY7cE6/THruwlBubiPNoOxWbo5kw/LhF5gcyoq2oaHtq/s4t07jp3ua9HLkCYe58Hjv0+CrMgHHYhJnAsvMj5q6FMRWT6F1EDcZhSJsy4usSt5fZpPwO3XcUoowskemzLbOKsSvOc/cFf2pvXnywxOHKlhQ8mQXGs=
 Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
  by AM0PR04MB6852.eurprd04.prod.outlook.com (2603:10a6:208:18c::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.24; Tue, 27 Oct
- 2020 09:48:54 +0000
+ 2020 09:50:52 +0000
 Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
  ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
  ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Tue, 27 Oct 2020
- 09:48:54 +0000
+ 09:50:52 +0000
 From:   Peter Chen <peter.chen@nxp.com>
-To:     Felipe Balbi <balbi@kernel.org>
-CC:     "pawell@cadence.com" <pawell@cadence.com>,
-        "rogerq@ti.com" <rogerq@ti.com>,
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+CC:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Jun Li <jun.li@nxp.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH 1/3] usb: cdns3: gadget: suspicious implicit sign
- extension
-Thread-Topic: [PATCH 1/3] usb: cdns3: gadget: suspicious implicit sign
- extension
-Thread-Index: AQHWo6WTaRKfd0hXEU6nD+tea3QI1qmrOMeAgAAMjoA=
-Date:   Tue, 27 Oct 2020 09:48:54 +0000
-Message-ID: <20201027094825.GA5940@b29397-desktop>
-References: <20201016101659.29482-1-peter.chen@nxp.com>
- <20201016101659.29482-2-peter.chen@nxp.com> <871rhkdori.fsf@kernel.org>
-In-Reply-To: <871rhkdori.fsf@kernel.org>
+        dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@ti.com>
+Subject: Re: [PATCH 1/2] usb: host: add XHCI_CDNS_HOST flag
+Thread-Topic: [PATCH 1/2] usb: host: add XHCI_CDNS_HOST flag
+Thread-Index: AQHWqB+8EkbyC5HZU0qhM2+GN/QOFamqAbAAgAC07bCAAHDwAIAAFWCA
+Date:   Tue, 27 Oct 2020 09:50:51 +0000
+Message-ID: <20201027095023.GB5940@b29397-desktop>
+References: <20201022030133.19528-1-peter.chen@nxp.com>
+ <e3f75fb0-8fab-357f-d3f4-ca122995166a@linux.intel.com>
+ <AM8PR04MB73003D7F9CD52561E69616108B160@AM8PR04MB7300.eurprd04.prod.outlook.com>
+ <1d673d32-5860-c4e2-c88d-df7ef57f1d7a@linux.intel.com>
+In-Reply-To: <1d673d32-5860-c4e2-c88d-df7ef57f1d7a@linux.intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none header.from=nxp.com;
 x-originating-ip: [119.31.174.67]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: efeb8599-78de-480b-067e-08d87a5d8496
+x-ms-office365-filtering-correlation-id: a2f4d01f-95b0-4c48-a691-08d87a5dca83
 x-ms-traffictypediagnostic: AM0PR04MB6852:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR04MB685290991AA011FC8C753BB68B160@AM0PR04MB6852.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-microsoft-antispam-prvs: <AM0PR04MB68521EB3D5AAA0332B6307258B160@AM0PR04MB6852.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1091;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HY66AJgMx7izoMhAp7Syw8jDUcg1bUrfjj8DgMmx5d93jYhrkHGnMf0RLGG3ni4dfOyxCpY2vnF3a+DY4+fFRQt5EpIDaptgXqAHmcAJbkgKySJgh4RbIwxJY4N1ydoQSlcpQeaXqnbcmQy02eis/S5q2hUZZotAsAk+W/KwsQ7oUpcOtoo8bl3zJXiJaU1iEURgB1He8mQTPQ4cjgxLSx7eh/tbSZqlJlvdyzuHfJQmqR6QVfI8V+0pji5eagMbRKTeyuPH3GOlz7aXsK5EX0jgCt+SUgrhC8iSyvpKUkRvt+EPzizvtAqbHH0bnKCEVpLCFgcC1ISr3sD+XNEB4w==
+x-microsoft-antispam-message-info: BtMbi5ODN+hwv6Y4Y/A/24hGYD2jk23wSzQbhbiQtl3XbJ1Br5wgmetFBOtkVVtpPgf/20+xzgNAYm3CfnAYFD4xPtrRuvj3Dzw8EBaR2WBptGyTkJFY7TIfT/QEShF2x5MV31nHlvfN9Ff+9/g377i6MMo8PgBSsZ7Z3inYh/YZW7RFwzfQ+926kIxzghC2gKn39Cac3y9yMPqg4ypOkSE6XKnlWPY6BZ2w9zqUXd3TjhZXNqdvkGbI8kiMuc/PzaX64tXX+76QRbjSqRwzvNu3vGyMEnXv613k5JKhFvbkNKL1UkqNePUCYK6qJgSC9MV40L0wI2IRGEPWIivPBg==
 x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(66946007)(186003)(53546011)(91956017)(6916009)(76116006)(83380400001)(8936002)(66476007)(64756008)(66446008)(2906002)(8676002)(6512007)(71200400001)(66556008)(4326008)(9686003)(478600001)(6506007)(86362001)(6486002)(54906003)(44832011)(33716001)(33656002)(1076003)(5660300002)(316002)(26005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: bTJU23FIS9Hk2lDNKpOeoqc6xuXdbNuFYQ05wdFAlTIDM9bTh0UP7jXoZkVrnTBFcFzvSrjvHlmkyn0AB1qVKLd4oZoUcYokcrtKQw/IyBCjvL4ok79tPRLB0IQAFrLlqrSsdrsOeJ0kl5YfFxygaG4fYqeXKwRkp2hn3TQOmSvQHrPMWvG4lcsCaCBTBQPuzqiZmP3QUvXw4XJvQn0noyEb/tEQK4JPwoimU901NGXxSuyY3XAKRt//aYDBP2TAj11gkoTPGJpW/UHADI4gEREXFcybvSTte6BQOosJjNxYy7WpyZlSw0aZjeHITtloCl3Bow18PcNFkMtHwSB4UvuXlXU+zZfsGOFI+an2H36XcYdGxz64AWXrxDxLTBSzxvj3DoTk+9Q1z/29l+YNGaxe8EFgdmMkT8dE1vIownTsZ40LO/ejhXc6NBoYNsziguN+RpJL/zvbMgvxh0YZPN23MWa9Ben2DN/9CVcTppuy/NXtn0KqXIWagT22JEfR/jqXd47KwEHXla+LUZeRUYycV+aK1PSQvxTTZPonrHqmXYLf9LeKsqvszhWEsi1nET4SXQXJFIRAt7CazxaCPdX8ZQEctLAO8kpnh2dW3yN4ZHnce3TYMWU9ZZY9cwkRYdLTDIMlmv/Y0Y3MkAMxWQ==
+x-ms-exchange-antispam-messagedata: Ibv3LlR0XiFmrjuJbHz6ABdqEitxu44mb4RVbfYG43jNILnDLzzNx4MkLV8WqI3fFPYBpJLRGU4yhfLe3JBQ6I5VvE1ifHzRhuj+YBi2f1MmzkZInD9MVqTMxmxsOlxfPaMwzUhkQNmvyxic7eguVui2BVDGbwMfoi2plooDI4DjKo7Y5JZ5jf1ibYTv++BwigUv0okCzV+2ByGtpMPACK01r3lw3U8/+KnyrUXLNR4peF9wqLuO3D/2MUfVmlESn5WUq6/PCTZP86M6U37kcCenXAtyV9mbkPocSqiTHIgAVJoGzYacnjT/VVQOSQKL30fD3wKk6hHh8P0piGtZRLNiG1FGgmwL33qpnsEiumHJS1+XX3JwLF+ym2K7tnIIOHQUR+28a9aewYni3ODuEcUdBSkYV25lSB3fNC/+nSbHRF7j4m7u5mnQTd9AsbdZMbsASfd3j4zszWFE40G/DidFtZ4UvenH/dkhCXHVG1cnmrt5aBy9AevzQvujjJXJwUjJLbnq+iauWYtg2WrEoKOCbgZiRI247AMdyNf6o5dRaTuoIIT4AqRitSx0hSmEde2nI9ABO1gs8BJAMJMIn+zxbtYF0JGIikTki1RlBq8WZvGD7Uk76gmaT5D8ugj7Cp39y8GDBol8PS8GC6eyNw==
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <55B0B3B87C12E947BBC4C66002572A37@eurprd04.prod.outlook.com>
+Content-ID: <444A0CB0C4781F439E66809EF2D945A4@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: efeb8599-78de-480b-067e-08d87a5d8496
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2020 09:48:54.7060
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2f4d01f-95b0-4c48-a691-08d87a5dca83
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2020 09:50:51.9704
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zOhiPUu63yZt3/C2PZLvrrgz7HKjwyNMJq50LpmmvojYlEYCW3KaxEGpNGreEIW2E/AwlWmLx8/XQwLifnGvzw==
+X-MS-Exchange-CrossTenant-userprincipalname: PnsCaAwz3XekHZDzGV+gmPMDPEVSTDJjivqbaCwt84HbtAiEvKSlIMfMME9Xbx1+MXg1K1PVHLVwvsgE3hupKA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6852
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-10-27 11:03:29, Felipe Balbi wrote:
->=20
-> Hi,
->=20
-> Peter Chen <peter.chen@nxp.com> writes:
-> > For code:
-> > trb->length =3D cpu_to_le32(TRB_BURST_LEN(priv_ep->trb_burst_size)
-> > 	       	| TRB_LEN(length));
-> >
-> > TRB_BURST_LEN(priv_ep->trb_burst_size) may be overflow for int 32 if
-> > priv_ep->trb_burst_size is equal or larger than 0x80;
-> >
-> > Below is the Coverity warning:
-> > sign_extension: Suspicious implicit sign extension: priv_ep->trb_burst_=
-size
-> > with type u8 (8 bits, unsigned) is promoted in priv_ep->trb_burst_size =
-<< 24
-> > to type int (32 bits, signed), then sign-extended to type unsigned long
-> > (64 bits, unsigned). If priv_ep->trb_burst_size << 24 is greater than 0=
-x7FFFFFFF,
-> > the upper bits of the result will all be 1.
->=20
-> looks like a false positive...
->=20
-> > Cc: <stable@vger.kernel.org> #v5.8+
-> > Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> > ---
-> >  drivers/usb/cdns3/gadget.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/cdns3/gadget.h b/drivers/usb/cdns3/gadget.h
-> > index 1ccecd237530..020936cb9897 100644
-> > --- a/drivers/usb/cdns3/gadget.h
-> > +++ b/drivers/usb/cdns3/gadget.h
-> > @@ -1072,7 +1072,7 @@ struct cdns3_trb {
-> >  #define TRB_TDL_SS_SIZE_GET(p)	(((p) & GENMASK(23, 17)) >> 17)
+On 20-10-27 10:33:52, Mathias Nyman wrote:
+> On 27.10.2020 3.50, Peter Chen wrote:
 > > =20
-> >  /* transfer_len bitmasks - bits 31:24 */
-> > -#define TRB_BURST_LEN(p)	(((p) << 24) & GENMASK(31, 24))
-> > +#define TRB_BURST_LEN(p)	(unsigned int)(((p) << 24) & GENMASK(31, 24))
+> >>> Cc: Pawel Laszczak <pawell@cadence.com>
+> >>> Cc: Roger Quadros <rogerq@ti.com>
+> >>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> >>> ---
+> >>>  drivers/usb/host/xhci.c | 2 +-
+> >>>  drivers/usb/host/xhci.h | 1 +
+> >>>  2 files changed, 2 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c index
+> >>> 482fe8c5e3b4..fc72a03dc27f 100644
+> >>> --- a/drivers/usb/host/xhci.c
+> >>> +++ b/drivers/usb/host/xhci.c
+> >>> @@ -193,7 +193,7 @@ int xhci_reset(struct xhci_hcd *xhci)
+> >>>  	 * Without this delay, the subsequent HC register access,
+> >>>  	 * may result in a system hang very rarely.
+> >>>  	 */
+> >>> -	if (xhci->quirks & XHCI_INTEL_HOST)
+> >>> +	if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_CDNS_HOST))
+> >>>  		udelay(1000);
+> >>>
+> >>>  	ret =3D xhci_handshake(&xhci->op_regs->command,
+> >>> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h index
+> >>> 8be88379c0fb..4b7275c73ea5 100644
+> >>> --- a/drivers/usb/host/xhci.h
+> >>> +++ b/drivers/usb/host/xhci.h
+> >>> @@ -1877,6 +1877,7 @@ struct xhci_hcd {
+> >>>  #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
+> >>>  #define XHCI_RENESAS_FW_QUIRK	BIT_ULL(36)
+> >>>  #define XHCI_SKIP_PHY_INIT	BIT_ULL(37)
+> >>> +#define XHCI_CDNS_HOST		BIT_ULL(38)
+> >>>
+> >>>  	unsigned int		num_active_eps;
+> >>>  	unsigned int		limit_active_eps;
+> >>>
+> >>
+> >> Is the XHCI_CDNS_HOST quirk bit set in some other patchseries?
+> >>
+> >=20
+> > Currently, no, only at the function of xhci_reset in this commit.
 >=20
-> ... because TRB_BURST_LEN() is used to intialize a __le32 type. Even if
-> it ends up being sign extended, the top 32-bits will be ignored.
+> I can only see it being checked, not set. Am I missing something?
 >=20
-> I'll apply, but it looks like a pointless fix. We shouldn't need it for s=
-table
+> -Mathias
 >=20
-At my v2:
 
-It is:
-#define TRB_BURST_LEN(p)	((unsigned int)((p) << 24) & GENMASK(31, 24))
-
-It is not related to high 32-bits issue, it is sign extended issue for
-32 bits. If p is a unsigned char data, the compiler will consider
-(p) << 24 is int, but not unsigned int. So, if the p is larger than
-0x80, the (p) << 24 will be overflow.=20
-
-If you compile the code:
-
-unsigned int k =3D 0x80 << 24 + 0x81;
-
-It will report build warning:
-warning: left shift count >=3D width of type [-Wshift-count-overflow]
+Oh, there is a missing patch for cdns3 host change, the code is
+located at drivers/usb/cdns3/host.c. I will merge them together,
+and send v2.
 
 --=20
 
