@@ -2,141 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCE329AC26
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 13:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 907CE29ACAD
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 14:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411902AbgJ0MdS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 08:33:18 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:45848 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2411776AbgJ0MdR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 08:33:17 -0400
-Received: by mail-il1-f199.google.com with SMTP id z18so931735ilb.12
-        for <linux-usb@vger.kernel.org>; Tue, 27 Oct 2020 05:33:16 -0700 (PDT)
+        id S1751653AbgJ0NDH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 09:03:07 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:42435 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751646AbgJ0NDH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 09:03:07 -0400
+Received: by mail-ej1-f66.google.com with SMTP id h24so2085173ejg.9;
+        Tue, 27 Oct 2020 06:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Akn6mMwbEqEcrNKkBd+E5DBkoaC18RuxAMvchT22bhE=;
+        b=Zoq0uqB/jDoZ7Sk/NpQGtwww9G2rqm0eSAK9Lrg/SLYlfNM0+Fh7enuckFfySeqQm7
+         10JN1sD3M4mhLJhD948mDKggfrbBfoLIyLDtvL3lAVcFnIzaBRgAmwbYhiMmuwlxdqqk
+         +A4zS4KypMoUDnNtW2UUW532kAnbhzErHi6C7xT1yRZsCbuuqcGSgvuNOWb3GrMkzJGq
+         scB8aKaY85waMFNdrbsx4Hogk14mwXmXlfhromf5e150EfCyrDBht0pH/7T4dgY/m/Iz
+         7e3Nbi9V12IE09HQb+rBZdiEUJchhefHoWT/cJXLrQVXuR2RSTADjynHKMyeS7c6RCu/
+         oc7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=FofA/azUC/4jOvukNRdRU5+c9AoRXjk/SRFBK/2eTD0=;
-        b=kSsnyZ4Ld7cfCsvYG115g+A0RWds021RUCfwq3qL/vdq+oGa/6laSwhLnQEyV8pZ8o
-         SqBImOgHaGb4hnOIbDShqQJ8MLI5e5HQ0FsNztsmTcCqazKsbGzwKdVZC7fkI2+RiCiw
-         bYLJb+9zcG1DI/BGxy5lQ6kh5//Q2fMs9amZiM46q16PBE5DpeinwOPyhuEZXTbTt5P4
-         RJuBz/fGY8m+2pCTeDe1pueevnx2TMgPGAXhvIXMMXpxoMH7tqoUI+tID0lODU6YgCf/
-         yvnBcq8dk3WLATc9X+QeBGf/12PzdW3GUDJNYAh89wHV78nLTW1ok2ZiIjTqICOV82aF
-         31QQ==
-X-Gm-Message-State: AOAM5321uEK6kfB8YpWw4OD5WR2voihJaBx6+7YNRNSlpD1Vn6KP845d
-        /IZnmrMQnp7qM+xhpH23B5z2HNttfChDcp8FiLGGDsKD2sQ8
-X-Google-Smtp-Source: ABdhPJwSuAcDLBIvSKckcwgm4tsrpSETPpi96K9Rf1JDfHhZ+g87MLAR9Pg4qeWFxwyjgNkKNBjgqPqLoIy4WXDVwqENAIagb47d
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Akn6mMwbEqEcrNKkBd+E5DBkoaC18RuxAMvchT22bhE=;
+        b=bmTMZwpn9mhoF8Dyx4XQkhGsJGxaPP1sQhq/d72FkSjo9HY9mtZZJ809hfOnYoOaFr
+         LWaHNLmJoMI9Z+m7rW0JYfw5mGORzJxXMmKuahJpr1IgDR4qSpsEn9eBJ+74xTkaozVX
+         9D12OixbVGAU0oL2RtPY5MI2g5myAmJaRgdXuDHR2nGamRhPa0M7ia+12a5SHup9lvKt
+         D3Os4FkNGepIHXsv7tVYXOhaGIrzloMW63QUPWbBhzOQPVGujoKr3VixAnjn1CwUzyK+
+         n0b0yFrt1JDHvZVMtoiOdOE+lwO01TuOAilap9O5U1Dra4LqUgQfCpMAOOFXqXaP11xT
+         Fl4Q==
+X-Gm-Message-State: AOAM531pKbZTysvpvUUKXrfVt/X86mL1mpwCD2lovOuVvuLr57flHggn
+        c3q7kU0xEzqqBcNK8LMoHqE=
+X-Google-Smtp-Source: ABdhPJzM5UgjxXHEQvTfepwS2pEiStVoMABpcq+KJMMAyQfFtkSboC6tL/FKRuJabajvNq+NW55nGA==
+X-Received: by 2002:a17:906:6d99:: with SMTP id h25mr2285299ejt.281.1603803784246;
+        Tue, 27 Oct 2020 06:03:04 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id d11sm933442eds.83.2020.10.27.06.03.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 06:03:03 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 14:03:01 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Tang Bin <tangbin@cmss.chinamobile.com>
+Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        jonathanh@nvidia.com, linux-usb@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ehci-tegra: Fix error handling in
+ tegra_ehci_probe()
+Message-ID: <20201027130301.GC1822510@ulmo>
+References: <20201026090657.49988-1-tangbin@cmss.chinamobile.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:d515:: with SMTP id e21mr1862616iom.9.1603801996145;
- Tue, 27 Oct 2020 05:33:16 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 05:33:16 -0700
-In-Reply-To: <000000000000143a4305aba36803@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000045390f05b2a640c4@google.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in ath9k_hif_usb_rx_cb (2)
-From:   syzbot <syzbot+6ecc26112e7241c454ef@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
-        davem@davemloft.net, kuba@kernel.org, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qtZFehHsKgwS5rPz"
+Content-Disposition: inline
+In-Reply-To: <20201026090657.49988-1-tangbin@cmss.chinamobile.com>
+User-Agent: Mutt/1.14.7 (2020-08-29)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    3650b228 Linux 5.10-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=14485e50500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b1c5bd23a80035ea
-dashboard link: https://syzkaller.appspot.com/bug?extid=6ecc26112e7241c454ef
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11d8eff7900000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15130390500000
+--qtZFehHsKgwS5rPz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6ecc26112e7241c454ef@syzkaller.appspotmail.com
+On Mon, Oct 26, 2020 at 05:06:57PM +0800, Tang Bin wrote:
+> If the function platform_get_irq() failed, the negative value
+> returned will not be detected here. So fix error handling in
+> tegra_ehci_probe().
+>=20
+> Fixes: 79ad3b5add4a ("usb: host: Add EHCI driver for NVIDIA Tegra SoCs")
+> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+> ---
+>  drivers/usb/host/ehci-tegra.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/usb/host/ehci-tegra.c b/drivers/usb/host/ehci-tegra.c
+> index 75a075daf..7b0efaf15 100644
+> --- a/drivers/usb/host/ehci-tegra.c
+> +++ b/drivers/usb/host/ehci-tegra.c
+> @@ -479,9 +479,9 @@ static int tegra_ehci_probe(struct platform_device *p=
+dev)
+>  	u_phy->otg->host =3D hcd_to_bus(hcd);
+> =20
+>  	irq =3D platform_get_irq(pdev, 0);
+> -	if (!irq) {
+> -		err =3D -ENODEV;
+> -		goto cleanup_phy;
+> +	if (irq < 0) {
+> +		err =3D irq;
+> +		goto cleanup_phy;
+>  	}
+> =20
+>  	otg_set_host(u_phy->otg, &hcd->self);
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in memcpy include/linux/string.h:399 [inline]
-BUG: KASAN: slab-out-of-bounds in ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:562 [inline]
-BUG: KASAN: slab-out-of-bounds in ath9k_hif_usb_rx_cb+0x3ab/0x1020 drivers/net/wireless/ath/ath9k/hif_usb.c:680
-Read of size 41740 at addr ffff88810bf10000 by task swapper/0/0
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.10.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xae/0x4c8 mm/kasan/report.c:385
- __kasan_report mm/kasan/report.c:545 [inline]
- kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
- check_memory_region_inline mm/kasan/generic.c:186 [inline]
- check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
- memcpy+0x20/0x60 mm/kasan/common.c:105
- memcpy include/linux/string.h:399 [inline]
- ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:562 [inline]
- ath9k_hif_usb_rx_cb+0x3ab/0x1020 drivers/net/wireless/ath/ath9k/hif_usb.c:680
- __usb_hcd_giveback_urb+0x32d/0x560 drivers/usb/core/hcd.c:1650
- usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1716
- dummy_timer+0x11f4/0x3280 drivers/usb/gadget/udc/dummy_hcd.c:1967
- call_timer_fn+0x1a5/0x630 kernel/time/timer.c:1415
- expire_timers kernel/time/timer.c:1460 [inline]
- __run_timers.part.0+0x67c/0xa10 kernel/time/timer.c:1752
- __run_timers kernel/time/timer.c:1733 [inline]
- run_timer_softirq+0x80/0x120 kernel/time/timer.c:1765
- __do_softirq+0x1b2/0x945 kernel/softirq.c:298
- asm_call_irq_on_stack+0xf/0x20
- </IRQ>
- __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
- run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
- do_softirq_own_stack+0x80/0xa0 arch/x86/kernel/irq_64.c:77
- invoke_softirq kernel/softirq.c:393 [inline]
- __irq_exit_rcu kernel/softirq.c:423 [inline]
- irq_exit_rcu+0x110/0x1a0 kernel/softirq.c:435
- sysvec_apic_timer_interrupt+0x43/0xa0 arch/x86/kernel/apic/apic.c:1091
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:631
-RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
-RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:79 [inline]
-RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:169 [inline]
-RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:112 [inline]
-RIP: 0010:acpi_idle_do_entry+0x1c9/0x250 drivers/acpi/processor_idle.c:517
-Code: bd 13 a1 fb 84 db 75 ac e8 64 1b a1 fb e8 8f c1 a6 fb e9 0c 00 00 00 e8 55 1b a1 fb 0f 00 2d 1e be 69 00 e8 49 1b a1 fb fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 e4 13 a1 fb 48 85 db
-RSP: 0018:ffffffff87007d60 EFLAGS: 00000293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 1ffffffff1079e01
-RDX: ffffffff87031000 RSI: ffffffff859daf27 RDI: ffffffff859daf11
-RBP: ffff888103980864 R08: 0000000000000001 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000001
-R13: ffff888103980800 R14: ffff888103980864 R15: ffff88810545e804
- acpi_idle_enter+0x355/0x4f0 drivers/acpi/processor_idle.c:648
- cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
- cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
- call_cpuidle kernel/sched/idle.c:132 [inline]
- cpuidle_idle_call kernel/sched/idle.c:213 [inline]
- do_idle+0x3d5/0x580 kernel/sched/idle.c:273
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:369
- start_kernel+0x472/0x493 init/main.c:1051
- secondary_startup_64_no_verify+0xa6/0xab
+--qtZFehHsKgwS5rPz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The buggy address belongs to the page:
-page:00000000dfda5045 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x10bf10
-head:00000000dfda5045 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0x200000000010000(head)
-raw: 0200000000010000 dead000000000100 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
+-----BEGIN PGP SIGNATURE-----
 
-Memory state around the buggy address:
- ffff88810bf18380: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88810bf18400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff88810bf18480: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fc
-                                                                ^
- ffff88810bf18500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc 00
- ffff88810bf18580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl+YGoUACgkQ3SOs138+
+s6GZUA/+JuSpXjUsoZE9QowE0w/gzP2RDl6eBSJcKvL9KJSOoydP5AHCfKuVk2UO
+f+dCqptwPH32vcASHayD0yaNU9rFJtK7H+7fR8Q8RH9kJ3ZPhro3GjatJZymZtj4
+2zfmR+y+kjoOzDFM2GxLwZil/h4+ACcejpV4oQ1iRYC7VHBbPo3TBOip/Mutb0vr
+1Quu0rehKgZS1hGQdUfSBKf2yr3Xb+OPnYAWzoVW/+a8nh7dyEu3Sp3CkPdHkKRT
+MT9sw8aWaVdRzfjvQhxGJqo2iqV9rQCoDqDrV3erGlxsAc2anmG9K34o6btQejYi
+Ubi+mvCM7dI4dcSaqgEA/OJSNDUAC6aKg1j0dc59JkKj9iALdMvtxZPKonzZdRZM
+YJsLKhXcE+NZ0MxmJsV/NeBmbE7RKmTDuHWASQYZUl5rtmIulc3JyYngH7eQwNUf
+D6peaHPxPOOnQ/IaxL0NP1IauaQMQ1ll36ZyeYUnRzCeMrHsqY0ENkOr2X51Tpy3
+y2OgCArLGumjz2uKESiqmn4Iq83eyIacyXnAzTWC1PB3QQAbPKXFqkORPAef+na5
+1rcfNss+dartFdWfGqUl6TxP0IBnryn4l3Td8Oj15/98RaDafTG8hCAIxq2y/u9u
+mNfMKomGdJpkklLlPGQAp7jTMBuB5l8KsA+c06iR2VPCfgGN3w4=
+=xKhy
+-----END PGP SIGNATURE-----
 
+--qtZFehHsKgwS5rPz--
