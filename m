@@ -2,38 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8894429A742
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A291329A753
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895309AbgJ0JED (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 05:04:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56670 "EHLO mail.kernel.org"
+        id S2895365AbgJ0JIL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 05:08:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58268 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408257AbgJ0JEC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 05:04:02 -0400
+        id S2408763AbgJ0JIL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 05:08:11 -0400
 Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C6C7820870;
-        Tue, 27 Oct 2020 09:03:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3001E20747;
+        Tue, 27 Oct 2020 09:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603789441;
-        bh=5Gcw7k0eUtljJox1AOmH5be3N3M7rGCdkSsXn5sHhMY=;
+        s=default; t=1603789690;
+        bh=g9+Mrr16nseYncNYHO3GxWTdvw7OMBwlKykbZitW48I=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=2TqSgyuRxdL6Z+vnabD+7abFdLlwaIKQzpiyD+Tszjc2AKXnhdAs1Ewgn9txa3p9H
-         akVVQvT4Rw9auyBSIEDIQ2zubuNcJOdxfJnn9JyrF2KEZU1ok/4m5vrAlmL+VvC359
-         xlQ8D9ds40Q7IMoN/W5NsXJRGxifTew7WFDxOUiM=
+        b=LIdAjbf1aaIuMynNH1/XkGlbMSJiBi1r9esIiIUXVZH3YTMCwL/QpZbxBDGNKj3EC
+         KGG0Rg90OETY1z5/9Z3pziYtptBWL+k47MdfbeQ+lDCTAtKlc4qnw3optAI1kEYbeW
+         +7uCyAUFdIxCm5iFSdqT5Oe8RY86pSHp0d752ops=
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Peter Chen <peter.chen@nxp.com>, pawell@cadence.com, rogerq@ti.com
 Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
         gregkh@linuxfoundation.org, jun.li@nxp.com,
-        Peter Chen <peter.chen@nxp.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/3] usb: cdns3: gadget: suspicious implicit sign extension
-In-Reply-To: <20201016101659.29482-2-peter.chen@nxp.com>
+        Peter Chen <peter.chen@nxp.com>
+Subject: Re: [PATCH 2/3] usb: cdns3: gadget: own the lock wrongly at the
+ suspend routine
+In-Reply-To: <20201016101659.29482-3-peter.chen@nxp.com>
 References: <20201016101659.29482-1-peter.chen@nxp.com>
- <20201016101659.29482-2-peter.chen@nxp.com>
-Date:   Tue, 27 Oct 2020 11:03:54 +0200
-Message-ID: <87zh48ca6d.fsf@kernel.org>
+ <20201016101659.29482-3-peter.chen@nxp.com>
+Date:   Tue, 27 Oct 2020 11:08:02 +0200
+Message-ID: <87wnzcc9zh.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -49,48 +50,30 @@ Content-Transfer-Encoding: quoted-printable
 Hi,
 
 Peter Chen <peter.chen@nxp.com> writes:
-> For code:
-> trb->length =3D cpu_to_le32(TRB_BURST_LEN(priv_ep->trb_burst_size)
-> 	       	| TRB_LEN(length));
->
-> TRB_BURST_LEN(priv_ep->trb_burst_size) may be overflow for int 32 if
-> priv_ep->trb_burst_size is equal or larger than 0x80;
->
-> Below is the Coverity warning:
-> sign_extension: Suspicious implicit sign extension: priv_ep->trb_burst_si=
-ze
-> with type u8 (8 bits, unsigned) is promoted in priv_ep->trb_burst_size <<=
- 24
-> to type int (32 bits, signed), then sign-extended to type unsigned long
-> (64 bits, unsigned). If priv_ep->trb_burst_size << 24 is greater than 0x7=
-FFFFFFF,
-> the upper bits of the result will all be 1.
-
-looks like a false positive...
-
-> Cc: <stable@vger.kernel.org> #v5.8+
-> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
->  drivers/usb/cdns3/gadget.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/cdns3/gadget.h b/drivers/usb/cdns3/gadget.h
-> index 1ccecd237530..020936cb9897 100644
-> --- a/drivers/usb/cdns3/gadget.h
-> +++ b/drivers/usb/cdns3/gadget.h
-> @@ -1072,7 +1072,7 @@ struct cdns3_trb {
->  #define TRB_TDL_SS_SIZE_GET(p)	(((p) & GENMASK(23, 17)) >> 17)
+> @@ -1783,7 +1780,9 @@ static void cdns3_check_usb_interrupt_proceed(struc=
+t cdns3_device *priv_dev,
 >=20=20
->  /* transfer_len bitmasks - bits 31:24 */
-> -#define TRB_BURST_LEN(p)	(((p) << 24) & GENMASK(31, 24))
-> +#define TRB_BURST_LEN(p)	(unsigned int)(((p) << 24) & GENMASK(31, 24))
+>  	/* Disconnection detected */
+>  	if (usb_ists & (USB_ISTS_DIS2I | USB_ISTS_DISI)) {
+> +		spin_unlock(&priv_dev->lock);
+>  		cdns3_disconnect_gadget(priv_dev);
+> +		spin_lock(&priv_dev->lock);
 
-... because TRB_BURST_LEN() is used to intialize a __le32 type. Even if
-it ends up being sign extended, the top 32-bits will be ignored.
+don't you need to add sparse __releases() an __acquires() markers?
 
-I'll apply, but it looks like a pointless fix. We shouldn't need it for
-stable.
+>  		priv_dev->gadget.speed =3D USB_SPEED_UNKNOWN;
+>  		usb_gadget_set_state(&priv_dev->gadget, USB_STATE_NOTATTACHED);
+>  		cdns3_hw_reset_eps_config(priv_dev);
+> @@ -3266,7 +3265,9 @@ static int cdns3_gadget_suspend(struct cdns3 *cdns,=
+ bool do_wakeup)
+>  {
+>  	struct cdns3_device *priv_dev =3D cdns->gadget_dev;
+>=20=20
+> +	spin_unlock(&cdns->lock);
+>  	cdns3_disconnect_gadget(priv_dev);
+> +	spin_lock(&cdns->lock);
+
+ditto
 
 =2D-=20
 balbi
@@ -100,19 +83,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X4noRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQb92w/+KT5diuJ2aHTvSkzd+nyEQOaHQARFXHJH
-xYr/LtgQL+51xiV7vi/UEhHuZHmize/4jNXe8bPLkBYsiCSjUkJpV3uptQ64Rj3J
-DBtSOZaPkGZoy2AGyCVjL6iv3c3JvtHoaQSxSEdA6NsGYIFKCI7+QaaKv0nRXaOS
-JF5jQgoLeporKsKmB60xx8TUkKWF0ohG+wxt+CrPDwhF1ONlSKavEzP8z+EHrKZT
-SINn7kCV+mhCa90v4hJD+jk4wrY/VH8KE5ccERyNZqzRoMx8xk7PODSJHybyKhs+
-VWZ9Rb4C/eM1y5/qeGafdaigbE5vQix8mzu00TmmI3QL99jqmwb5SCzjMkjqhQIv
-dzxddMI//AjNTrq//OADL2B/F8J16d7ID0HqX3EXG9ZU4cSxrFtJBfTiW2UAPdyL
-lm0rlQPixCZrEh0pKkbUuWnuvRx71YBXewNkmcjBoAP17EJABRKU2auP65PSCz/m
-9Xx6+ZLgpZeEn4RrVzeNRRFZwbCO9mJkkeiCjckgFwN0hIR95+h/c497cZjILkMk
-CVJmnmDj0F2Y7dJ5fGeRCmLf7s440oDLqnaXUIV7nsO1gFzjd66y0SKsUpsHtyqJ
-5jjsiO1TTQoKjtWhym/UZYy8+QpXNpFali0+FlYvkEfvNg0YJKAZoAkkToOGqf27
-z2jwPm6hvKU=
-=TDeG
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X43IRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQY+nA/+KoF+/NvK21Typ0RDTs4BFz//fhQuB74K
+x/UyZ/i/PBaRHkUCGNtWhQ90/BekHLPVlBTkpVECgMhFiLqG+iZilrAT51LkgVTP
+n/2eq9/0uZl+mWUQ6tPURV4ZsJBqSSg480cdiVWKPqg+Ieqjvexm/tZn4HCirjJI
+4zq9Cdkp0HhJivNihAt7RrjV3/Yi0GoJe6QqWzVSP4nNEWMzdG7XX52J7ix2791R
+jjrBs0FLPZJ6ZGLqAXAsGB790me0coo+KhfFVLpSniRC1/C3IsKpd+Pc9eROLlwo
+3GonLX2fPNkiBW2nZre+peJveTGHbLwxAVKD4wCMO39eGp30W5Ggmz50sR37kOK7
+lUOx9Z/X9FdFlkqvxTbRjAie/hRHd8EPzeFijCbFMC79QWYuOUpCQ+efpAfEEgEA
+Cr1T18qU9qZSoeAR4Ti6hXhHg9LS0V755E2a3N5nEDK0uT4vwDD7UaaF2Ncxgwsn
+qVgksRjluqeUtkqoNsTWJcMk1fIoS2rRB5qXBxEz7yYRY0ejxLqqmEa1GlT1PYy/
+z7CgXE5jENYqlt3MK1eghP4eoDpM2K3aPG66nbj9iRDKNHGTM2zU7xvwdIMxRSN+
+8FAKzoQt86dnqKT/gYyxxOjIBBXuZ3nmlVaiylsjOSPvNB6+pOj725Yuf1IrTPcs
+r7gFpDwDECc=
+=HmcJ
 -----END PGP SIGNATURE-----
 --=-=-=--
