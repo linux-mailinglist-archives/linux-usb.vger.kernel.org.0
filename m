@@ -2,145 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D935B29CAE7
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 22:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACE229CAEB
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 22:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1832031AbgJ0VGN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 17:06:13 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34126 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S370950AbgJ0VGL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 17:06:11 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id C7E348030718;
-        Tue, 27 Oct 2020 21:06:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9jTbhXBZIp3Y; Wed, 28 Oct 2020 00:06:06 +0300 (MSK)
-Date:   Wed, 28 Oct 2020 00:06:04 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Felipe Balbi <balbi@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        David Cohen <david.a.cohen@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@ti.com>
-Subject: Re: [PATCH 2/3] usb: dwc3: ulpi: Replace CPU-based busyloop with
- Protocol-based one
-Message-ID: <20201027210604.4jfecr6zjtdfamsb@mobilestation>
-References: <20201010222351.7323-1-Sergey.Semin@baikalelectronics.ru>
- <20201010222351.7323-3-Sergey.Semin@baikalelectronics.ru>
- <87h7qgc9hg.fsf@kernel.org>
+        id S1832051AbgJ0VH6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 17:07:58 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:64491 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1832049AbgJ0VH6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 17:07:58 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1603832877; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=67K6RJoqZV4jV6Lirkgyf0OeKqOsK/gu9ZFcUIk2CVA=; b=AG7K8vOF/KmwfLzqUM1M+FJ1bTkZ8qijnZ5hrPUNNGFejh9DkyOSjvvH/CPeteQUwbVD80I2
+ zLOMdfsBsIdlqHcZKWQK8Xwn4giYoR1K7tOSQkmdX0xZK6NlZ9BNtLk67Os4cuvvHQ6Tn48i
+ 1gc1mianb51+TULQBqIx5z4xkrM=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 5f988bedda4f464773e2bcb1 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 27 Oct 2020 21:06:53
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D13D1C433F0; Tue, 27 Oct 2020 21:06:53 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9C266C433C9;
+        Tue, 27 Oct 2020 21:06:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9C266C433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+Date:   Tue, 27 Oct 2020 14:06:48 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Ferry Toth <fntoth@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        felipe.balbi@linux.intel.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
+Message-ID: <20201027210648.GB26640@jackp-linux.qualcomm.com>
+References: <874kmpf583.fsf@kernel.org>
+ <d0aca346-353c-d74e-6f00-ccd2a4ed26ef@gmail.com>
+ <976cea12-e54e-fbca-6c53-e6ef5c554094@synopsys.com>
+ <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
+ <2b6586e6-528c-86e8-9d92-0061bc44866d@gmail.com>
+ <aad327a8-95bc-40ec-abf7-ad216a02fad0@synopsys.com>
+ <2cc783ac-6b71-190b-49fc-9e2bceeacd4b@gmail.com>
+ <920590dc-5430-7f8b-b2e1-1a4c37f4dfbe@synopsys.com>
+ <CAHp75Vfs9AoOYSVGTpw30h11ptPOSPNf1AsWBKdiVrDL=9X3PQ@mail.gmail.com>
+ <0089306e-e2ca-9a53-6ffb-202d028050ce@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87h7qgc9hg.fsf@kernel.org>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <0089306e-e2ca-9a53-6ffb-202d028050ce@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 11:18:51AM +0200, Felipe Balbi wrote:
+Hi Ferry,
+
+On Tue, Oct 27, 2020 at 09:13:31PM +0100, Ferry Toth wrote:
+> Hi guys,
 > 
-> Hi,
+> Sorry for messing up the CC list. This was partly thanks to gmane, partly my
+> own stupidity. I hope it is complete now.
 > 
-> Serge Semin <Sergey.Semin@baikalelectronics.ru> writes:
+> I am summarizing the status of this one at the bottom.
 > 
-> > Originally the procedure of the ULPI transaction finish detection has been
-> > developed as a simple busy-loop with just decrementing counter and no
-> > delays. It's wrong since on different systems the loop will take a
-> > different time to complete. So if the system bus and CPU are fast enough
-> > to overtake the ULPI bus and the companion PHY reaction, then we'll get to
-> > take a false timeout error. Fix this by converting the busy-loop procedure
-> > to take the standard bus speed, address value and the registers access
-> > mode into account for the busy-loop delay calculation.
-> >
-> > Here is the way the fix works. It's known that the ULPI bus is clocked
-> > with 60MHz signal. In accordance with [1] the ULPI bus protocol is created
-> > so to spend 5 and 6 clock periods for immediate register write and read
-> > operations respectively, and 6 and 7 clock periods - for the extended
-> > register writes and reads. Based on that we can easily pre-calculate the
-> > time which will be needed for the controller to perform a requested IO
-> > operation. Note we'll still preserve the attempts counter in case if the
-> > DWC USB3 controller has got some internals delays.
-> >
-> > [1] UTMI+ Low Pin Interface (ULPI) Specification, Revision 1.1,
-> >     October 20, 2004, pp. 30 - 36.
-> >
-> > Fixes: 88bc9d194ff6 ("usb: dwc3: add ULPI interface support")
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/usb/dwc3/ulpi.c | 18 +++++++++++++++---
-> >  1 file changed, 15 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/usb/dwc3/ulpi.c b/drivers/usb/dwc3/ulpi.c
-> > index 20f5d9aba317..0dbc826355a5 100644
-> > --- a/drivers/usb/dwc3/ulpi.c
-> > +++ b/drivers/usb/dwc3/ulpi.c
-> > @@ -7,6 +7,8 @@
-> >   * Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >   */
-> >  
-> > +#include <linux/delay.h>
-> > +#include <linux/time64.h>
-> >  #include <linux/ulpi/regs.h>
-> >  
-> >  #include "core.h"
-> > @@ -17,12 +19,22 @@
-> >  		DWC3_GUSB2PHYACC_ADDR(ULPI_ACCESS_EXTENDED) | \
-> >  		DWC3_GUSB2PHYACC_EXTEND_ADDR(a) : DWC3_GUSB2PHYACC_ADDR(a))
-> >  
-> > -static int dwc3_ulpi_busyloop(struct dwc3 *dwc)
-> > +#define DWC3_ULPI_BASE_DELAY	DIV_ROUND_UP(NSEC_PER_SEC, 60000000L)
-> > +
-> > +static int dwc3_ulpi_busyloop(struct dwc3 *dwc, u8 addr, bool read)
-> >  {
-> > +	unsigned long ns = 5L * DWC3_ULPI_BASE_DELAY;
-> >  	unsigned count = 1000;
-> >  	u32 reg;
-> >  
-> > +	if (addr >= ULPI_EXT_VENDOR_SPECIFIC)
-> > +		ns += DWC3_ULPI_BASE_DELAY;
-> > +
-> > +	if (read)
-> > +		ns += DWC3_ULPI_BASE_DELAY;
-> > +
-> >  	while (count--) {
-> > +		ndelay(ns);
+> Op 22-10-2020 om 15:43 schreef Andy Shevchenko:
+> > On Thu, Oct 22, 2020 at 4:21 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> > > Ferry Toth wrote:
+> > > > Op 21-10-2020 om 21:50 schreef Thinh Nguyen:
+> > > > > Ferry Toth wrote:
+> > ...
+> > 
+> > > > > Oops, looks like I can't make it synchronous this way. Can you try
+> > > > > Jack's change to the u_audio.c instead?
+> > > > Oops indeed goes away with Jack's change, but usb connection goes
+> > > > up/down continuously, meaning: my host sees usb network and audio
+> > > > device appearing / disappearing.
+> > > Ok, thanks for verifying that it went away.
+> > > 
+> > > > mass_storage device does not appear all.
+> > > There are some fixes to dwc3 in kernel mainline. Is it possible to test
+> > > this against linux-next?
+> > I think the best is to wait for v5.10-rc1 and retest.
+> > 
+> I looks like there have been at least 3 problems:
 > 
-
-> could we allow for a sleep here instead of a delay?
-
-The kernel ULPI-bus API isn't clear about that. I also couldn't find an example
-of using the ULPI-bus accessors in the atomic context or being implemented with
-the sleeping methods. So there is no certain answer to your question. Anyway I
-added an ms-sleep in the later patch to fix the suspend-regression problem. I
-thought it was reasonable since I couldn't find an example of using the
-accessors in the atomic context.
-
-Regarding this patch. I wouldn't suggest to replace the ndelay with sleeping
-here, since 5-7 ref clock ticks is enough to finish the transaction for the vast
-majority of the cases. It's just 80 - 115 ns, which can't be reached by the
-sleeping procedures.
-
-> Also, I wonder if
-> you need to make this so complex or should we just take the larger
-> access time of 7 clock cycles.
-
-I wouldn't say it's complex. Here I've implemented a simple calculation of the
-time needed to finish the ULPI-bus commands in accordance with the number of
-ticks they normally require. Regarding the while-looping alas we can't get rid
-of it here for the reason I've described in the patch 3 of the series.
-
--Sergey
-
+> 1) dwc3 was not working in host mode, but not causing an oops. This may have
+> been caused by platform changes. Andy has provided a fix for this, dwc3 now
+> working in host mode on 5.9
 > 
-> -- 
-> balbi
+> 2) dwc3 was causing the oops in gadget mode as referenced in this thread.
+> The experimental patch from Jack Phan indeed fixes this.
+> 
+> Code here: https://github.com/edison-fw/linux/commits/eds-acpi-5.9.0
 
+Great, thanks! I'll submit the patch to the list. Is it alright if I
+add a Reported-and-tested-by tag from you?
 
+> 3) With the above 2 fixes gadgets work but seem to be powered down (after 15
+> sec. or so) and up (after 1 sec.) continuously. No oops, no errors in
+> journal. The gadgets I enabled are a network, sound and mass storage. The
+> latter stops working due to going up/down quickly. But my host shows
+> network/sound appearing/disappearing. Journal of edison shows:
+> 
+> systemd-networkd[525]: usb0: Gained carrier
+> systemd-networkd[525]: usb0: Gained IPv6LL
+> systemd-networkd[525]: usb0: Lost carrier
+> systemd-networkd[525]: usb0: Gained carrier
+> systemd-networkd[525]: usb0: Gained IPv6LL
+> systemd-networkd[525]: usb0: Lost carrier
+> 
+> Any ideas how to proceed are highly welcomed!
+
+I suppose you can start with enabling dwc3 trace events and try to see
+what's going on from the gadget side. Please refer to
+Documentation/driver-api/usb/dwc3.rst **Reporting Bugs**
+
+Also what happens if you enable the network, sound and mass storage
+functions individually rather than all at once (assuming you are using
+ConfigFS)?
+
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
