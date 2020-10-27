@@ -2,173 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C77729A7E0
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC00029A82E
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895604AbgJ0JaD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 05:30:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36072 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2895587AbgJ0JaB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 05:30:01 -0400
-Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 16C932225C;
-        Tue, 27 Oct 2020 09:29:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603790999;
-        bh=EP+RJxMRyDXzl24doYQ2hDPaBhxK1tCPAAW10CdFHR0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=m9Cze78q/3PSW/KpXykPApuTZvsUBrXx7El+5M3Fsp3PaN+8CvwEN1j+Aqx6gKNYB
-         bdX1m/bXv5jbXN7JjE9ouOKzDTZHwAYLNeugOPwbSm3eNAj+LKzpCMsxKvIaMNI5gt
-         rylS5AX1fZ2uNTcN8UzkEJGy8F6WEFrxbP7eVL5k=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH v2 00/15] usb: dwc2: Fix and improve power saving modes.
-In-Reply-To: <2edb35af-bf0b-bfab-69c7-9b7f0cac6a69@synopsys.com>
-References: <20201011135035.7C61DA005E@mailhost.synopsys.com>
- <2edb35af-bf0b-bfab-69c7-9b7f0cac6a69@synopsys.com>
-Date:   Tue, 27 Oct 2020 11:29:52 +0200
-Message-ID: <875z6wc8z3.fsf@kernel.org>
+        id S2895953AbgJ0Js7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 05:48:59 -0400
+Received: from mail-eopbgr70041.outbound.protection.outlook.com ([40.107.7.41]:49119
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2895946AbgJ0Js6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 05:48:58 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZO8eOL1dLy935witw/MnCgyLoiHhLfL9LKJAArzl5Ffhr6h5qf7Ly0QWbiTQd7+mBCQNwKLRDHBTIz1KV7hSbtNmN5W+lD35rMYjOGtwJIXbPxfM/JWSPyaWZ5iBWq2SlFTROIP1MIjG2Dkj1mWeGeLO6+Pm+SRtM/Dvr7T0pNVphTvANzlVimKJguLm3ZLvm8xAwiEmQidotzNMXJtjT8NLsc4W9Z+G0pUEHV2Leh3p/zEwrDq5EMti53bU9s4avSmEr0fERLuF8rHiGVQJSieKX8JLvDSOwbC/kr9YyGYUYana/wF2+HcM2xe+GNVeYjCS/taFDjKJdJiLeo45Hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8/w6wJRhD8dy4hEb5N1qxURd+6Td063abdU27TyJ6Lg=;
+ b=bQZhdfzYneIZrnofAekEkJ783hnRRfhpNd/rkdmkRzufPMAvnM+Bvjt2jESX37Uz0Ei9z6cr7OCwqw/D1rL4wdJjj7/c2LTQIip26rEbRPker8DW9Lxzxtg5A/TAVXVPimvV+Yn8tfKUeCNNyisdDGI+nhaLs/BCjWl/6czITNMnLPqaC8FtBtz3/bQWxp5c+z9A8C2QWhl06N6SIBj8/DGqP5DoPtjebZtqG7SCyIr8p8xqaZ7hz3P4AAU9SxBjXd55eHi688/2JYL/GZNc+iwG2Qf4eDJxuH0XfJtOOhTFpQFJdGWcmMgdH/ED3FhvECi28nw52wNmCv09TfGjsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8/w6wJRhD8dy4hEb5N1qxURd+6Td063abdU27TyJ6Lg=;
+ b=dm3wKw39V862WKTSbuRpSCUDQqUj4H7QP8fAqCTriiwSOZKFCDrsA2+Gg1E5hqT6HA33yCHJFUXACJ+tEY7HNkD0+J89Ec4DwDBFn5TONENNIQTFtn8Nl34phWXcBxRwWFMLBnJxgR2zPSRUxdNN3RDgE1VxBszDW91ubAf28yI=
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
+ by AM0PR04MB6852.eurprd04.prod.outlook.com (2603:10a6:208:18c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.24; Tue, 27 Oct
+ 2020 09:48:54 +0000
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Tue, 27 Oct 2020
+ 09:48:54 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     "pawell@cadence.com" <pawell@cadence.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Jun Li <jun.li@nxp.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/3] usb: cdns3: gadget: suspicious implicit sign
+ extension
+Thread-Topic: [PATCH 1/3] usb: cdns3: gadget: suspicious implicit sign
+ extension
+Thread-Index: AQHWo6WTaRKfd0hXEU6nD+tea3QI1qmrOMeAgAAMjoA=
+Date:   Tue, 27 Oct 2020 09:48:54 +0000
+Message-ID: <20201027094825.GA5940@b29397-desktop>
+References: <20201016101659.29482-1-peter.chen@nxp.com>
+ <20201016101659.29482-2-peter.chen@nxp.com> <871rhkdori.fsf@kernel.org>
+In-Reply-To: <871rhkdori.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: efeb8599-78de-480b-067e-08d87a5d8496
+x-ms-traffictypediagnostic: AM0PR04MB6852:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB685290991AA011FC8C753BB68B160@AM0PR04MB6852.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HY66AJgMx7izoMhAp7Syw8jDUcg1bUrfjj8DgMmx5d93jYhrkHGnMf0RLGG3ni4dfOyxCpY2vnF3a+DY4+fFRQt5EpIDaptgXqAHmcAJbkgKySJgh4RbIwxJY4N1ydoQSlcpQeaXqnbcmQy02eis/S5q2hUZZotAsAk+W/KwsQ7oUpcOtoo8bl3zJXiJaU1iEURgB1He8mQTPQ4cjgxLSx7eh/tbSZqlJlvdyzuHfJQmqR6QVfI8V+0pji5eagMbRKTeyuPH3GOlz7aXsK5EX0jgCt+SUgrhC8iSyvpKUkRvt+EPzizvtAqbHH0bnKCEVpLCFgcC1ISr3sD+XNEB4w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(66946007)(186003)(53546011)(91956017)(6916009)(76116006)(83380400001)(8936002)(66476007)(64756008)(66446008)(2906002)(8676002)(6512007)(71200400001)(66556008)(4326008)(9686003)(478600001)(6506007)(86362001)(6486002)(54906003)(44832011)(33716001)(33656002)(1076003)(5660300002)(316002)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: bTJU23FIS9Hk2lDNKpOeoqc6xuXdbNuFYQ05wdFAlTIDM9bTh0UP7jXoZkVrnTBFcFzvSrjvHlmkyn0AB1qVKLd4oZoUcYokcrtKQw/IyBCjvL4ok79tPRLB0IQAFrLlqrSsdrsOeJ0kl5YfFxygaG4fYqeXKwRkp2hn3TQOmSvQHrPMWvG4lcsCaCBTBQPuzqiZmP3QUvXw4XJvQn0noyEb/tEQK4JPwoimU901NGXxSuyY3XAKRt//aYDBP2TAj11gkoTPGJpW/UHADI4gEREXFcybvSTte6BQOosJjNxYy7WpyZlSw0aZjeHITtloCl3Bow18PcNFkMtHwSB4UvuXlXU+zZfsGOFI+an2H36XcYdGxz64AWXrxDxLTBSzxvj3DoTk+9Q1z/29l+YNGaxe8EFgdmMkT8dE1vIownTsZ40LO/ejhXc6NBoYNsziguN+RpJL/zvbMgvxh0YZPN23MWa9Ben2DN/9CVcTppuy/NXtn0KqXIWagT22JEfR/jqXd47KwEHXla+LUZeRUYycV+aK1PSQvxTTZPonrHqmXYLf9LeKsqvszhWEsi1nET4SXQXJFIRAt7CazxaCPdX8ZQEctLAO8kpnh2dW3yN4ZHnce3TYMWU9ZZY9cwkRYdLTDIMlmv/Y0Y3MkAMxWQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <55B0B3B87C12E947BBC4C66002572A37@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: efeb8599-78de-480b-067e-08d87a5d8496
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2020 09:48:54.7060
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zOhiPUu63yZt3/C2PZLvrrgz7HKjwyNMJq50LpmmvojYlEYCW3KaxEGpNGreEIW2E/AwlWmLx8/XQwLifnGvzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6852
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On 20-10-27 11:03:29, Felipe Balbi wrote:
+>=20
+> Hi,
+>=20
+> Peter Chen <peter.chen@nxp.com> writes:
+> > For code:
+> > trb->length =3D cpu_to_le32(TRB_BURST_LEN(priv_ep->trb_burst_size)
+> > 	       	| TRB_LEN(length));
+> >
+> > TRB_BURST_LEN(priv_ep->trb_burst_size) may be overflow for int 32 if
+> > priv_ep->trb_burst_size is equal or larger than 0x80;
+> >
+> > Below is the Coverity warning:
+> > sign_extension: Suspicious implicit sign extension: priv_ep->trb_burst_=
+size
+> > with type u8 (8 bits, unsigned) is promoted in priv_ep->trb_burst_size =
+<< 24
+> > to type int (32 bits, signed), then sign-extended to type unsigned long
+> > (64 bits, unsigned). If priv_ep->trb_burst_size << 24 is greater than 0=
+x7FFFFFFF,
+> > the upper bits of the result will all be 1.
+>=20
+> looks like a false positive...
+>=20
+> > Cc: <stable@vger.kernel.org> #v5.8+
+> > Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> > ---
+> >  drivers/usb/cdns3/gadget.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/cdns3/gadget.h b/drivers/usb/cdns3/gadget.h
+> > index 1ccecd237530..020936cb9897 100644
+> > --- a/drivers/usb/cdns3/gadget.h
+> > +++ b/drivers/usb/cdns3/gadget.h
+> > @@ -1072,7 +1072,7 @@ struct cdns3_trb {
+> >  #define TRB_TDL_SS_SIZE_GET(p)	(((p) & GENMASK(23, 17)) >> 17)
+> > =20
+> >  /* transfer_len bitmasks - bits 31:24 */
+> > -#define TRB_BURST_LEN(p)	(((p) << 24) & GENMASK(31, 24))
+> > +#define TRB_BURST_LEN(p)	(unsigned int)(((p) << 24) & GENMASK(31, 24))
+>=20
+> ... because TRB_BURST_LEN() is used to intialize a __le32 type. Even if
+> it ends up being sign extended, the top 32-bits will be ignored.
+>=20
+> I'll apply, but it looks like a pointless fix. We shouldn't need it for s=
+table
+>=20
+At my v2:
 
+It is:
+#define TRB_BURST_LEN(p)	((unsigned int)((p) << 24) & GENMASK(31, 24))
 
-Hi,
+It is not related to high 32-bits issue, it is sign extended issue for
+32 bits. If p is a unsigned char data, the compiler will consider
+(p) << 24 is int, but not unsigned int. So, if the p is larger than
+0x80, the (p) << 24 will be overflow.=20
 
-Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
-> On 10/11/2020 5:50 PM, Artur Petrosyan wrote:
->> This patch set fixes/improves partial power down, hibernation power
->> saving modes and adds support for host/device clock gating.
->>=20
->> Changes from V1:
->>   - Added new patches.
->>    1. usb: dwc2: Add support for dwc2 host/device clock gating.
->>    2. usb: dwc2: Add exit power saving mode before removing driver.
->>    3. usb: dwc2: Fix HPRT0.PrtSusp bit setting for HiKey 960 board.
->>=20
->>   - Updated patches
->>    1. usb: dwc2: Fix/update enter/exit partial power down.
->> 	- Updated the patch name from "usb: dwc2: Fix
->> 	dwc2_restore_device_registers() function." to "usb: dwc2:
->> 	Fix/update enter/exit partial power down."
->> 	- Updated entering and exiting partial power down function
->> 	flow. Before there was a lot of confusions with core
->> 	entering to partial power down in device or host mode.
->> 	- Added "rem_wakeup" for host exiting from Partial Power
->> 	Down mode from host remote wakeup flow. According to
->> 	programming guide in host mode, port power must be
->> 	turned on when wakeup is detected.
->> 	- Added "in_ppd" flag to indicate the core state after
->> 	entering into Partial Power Down mode.
->>    2. usb: dwc2: Fix wakeup detected and session request interrupt handl=
-ers.
->> 	- According to programming guide added partial power
->> 	down exit flow in wakeup detected interrupt handler.
->> 	- Added clock gating exit flow from wakeup detected
->> 	and session request interrupt handlers.
->>    3. usb: dwc2: Fix suspend state in host mode for partial power down.
->> 	- Added "dwc2_port_suspend" and "dwc2_port_resume" functions to
->> 	"core.h" header file
->> 	- Updated "USB_PORT_FEAT_RESET" flow when core receives port
->> 	reset in Partial Power Down or Hibernation state.
->> 	- Added return "-ENODEV" if core is in suspend state
->> 	in "_dwc2_hcd_urb_enqueue" function to avoid port
->> 	reset issue, when an external hub is connected.
->>    4. usb: dwc2: Add part. power down exit from dwc2_conn_id_status_chan=
-ge().
->> 	- Instead of clearing registers inline for exiting partial power down
->> 	mode, now calling the "dwc2_exit_partial_power_down" function without
->> 	restoring the backup registers.
->>    5. usb: dwc2: Update dwc2_handle_usb_suspend_intr function.
->> 	- Added changes suggested by Douglas Anderson from commit
->> 	"usb: dwc2: Get rid of useless error checks for
->> 	hibernation/partial power down"
->>    6. usb: dwc2: Fix hibernation between host and device modes.
->> 	- Added setting of "hsotg->bus_suspended" flag to 0 because before if
->> 	core exited from "GPWRDN_STS_CHGINT" interrupt in host mode the flag
->> 	remained true not letting enter to hibernation next time.
->>    7. usb: dwc2: Clear fifo_map when resetting core.
->> 	- Added "static inline void dwc2_clear_fifo_map()" helper
->> 	function to clear fifo_map with peripheral or dual role mode.
->> 	- Added a dummy version of "dwc2_clear_fifo_map()" helper
->> 	for host-only mode.
->>    8. usb: dwc2: Add power saving mode support from system issued suspen=
-d/resume.
->> 	- Updated the patch name from "usb: dwc2: Add enter/exit hibernation
->> 	from system scheduled suspend" to "usb: dwc2: Add power saving mode
->> 	support from system issued suspend/resume."
->> 	- Fixed issue related to "spinlock already unlocked" reported by Doug
->> 	Anderson.
->>=20
->>   - Abandoned patches.
->>    1. usb: dwc2: Add port conn. sts. checking in _dwc2_hcd_resume() func=
-tion.
->> 	- The changes of this patch are moved to the "usb: dwc2: Add power
->> 	saving mode support from system issued suspend/resume" patch.
->>    2. usb: dwc2: Add flag and debug messages for Partial Power Down mode.
->> 	- The changes of this patch are moved to the "usb: dwc2: Fix/update
->> 	enter/exit partial power down." patch.
->>=20
->>=20
->> Artur Petrosyan (15):
->>    usb: dwc2: Fix/update enter/exit partial power down.
->>    usb: dwc2: Add support for dwc2 host/device clock gating.
->>    usb: dwc2: Fix wakeup detected and session request interrupt handlers.
->>    usb: dwc2: Fix suspend state in host mode for partial power down.
->>    usb: dwc2: Add part. power down exit from
->>      dwc2_conn_id_status_change().
->>    usb: dwc2: Reset DEVADDR after exiting gadget hibernation.
->>    usb: dwc2: Add default param to control power optimization.
->>    usb: dwc2: Update dwc2_handle_usb_suspend_intr function.
->>    usb: dwc2: Fix hibernation between host and device modes.
->>    usb: dwc2: Fix HPRT0.PrtSusp bit setting for HiKey 960 board.
->>    usb: dwc2: Allow exiting hibernation from gpwrdn rst detect
->>    usb: dwc2: Clear fifo_map when resetting core.
->>    usb: dwc2: Clear GINTSTS_RESTOREDONE bit after restore is generated.
->>    usb: dwc2: Add power saving mode support from system issued
->>      suspend/resume
->>    usb: dwc2: Add exit power saving mode before removing driver
+If you compile the code:
 
-where are all the patches? I only got the cover letter. When resending,
-please collect Minas' acked-by.
+unsigned int k =3D 0x80 << 24 + 0x81;
 
-=2D-=20
-balbi
+It will report build warning:
+warning: left shift count >=3D width of type [-Wshift-count-overflow]
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+--=20
 
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X6JARHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZmIg/+LlaU8LgMCybPfu0lXLTkmjoD9bPr33D1
-FmmBm+9ooSkw038DnAt37xur2B4b6PmR0K+rhu2C+ODkunJjDKzchSVHg+Bm1uDE
-Jf/5Er31FQTs7nu8w6EtrKmJ22roYuajNZnudp7u8KgE8vz2Ga1kmbuanqE+6YKu
-R8p6MmNJt9zKo3iOg+229njNndhc65pg4cLGwu9qi2NLPI1BK881dKtJMPn8/MPt
-AtXd1J/NbvuCWlV08Inp8sKy6pKRo+Wty82wgNLXx9rEY8UEC1UoMpHqo9GeFonb
-ycypM8hyAnmLuZE4UAhPq/hnrl5B4PsxlumpDy/ys2awQYFWNKCPwgu59+C0X9Or
-v6IUJRMcs2QJZQF7uQer2zC+9QlSq8JmBdWSrvFXOqQhgFQyLx1CivXFL6hOASCY
-rmuEKM7M87/6oIsHfHK23N4pPuBuhRzymFeNphWHC3EgzLMxRg3lSryqVFzKHMZy
-59oN+MybvHHMVX2bUNg3Dy8lekFm37gNo3cMfAIU4EABwbP6omtPhhgnWFaxyu+U
-oRyflDhGQkAk3/XIiwEQLJsooml/1Poaq+aQQ2cT5C3mPMtnvISnf8onJHn2TrhE
-RgTntG7i2Z0ypozH0fvtaefh6wlAC2bkkeqDohbuHkSswuZJSi26ouoSN70cEwdO
-pjIydG5Lw/Y=
-=43cs
------END PGP SIGNATURE-----
---=-=-=--
+Thanks,
+Peter Chen=
