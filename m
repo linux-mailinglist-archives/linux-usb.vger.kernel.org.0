@@ -2,75 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A81129A646
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 09:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215A729A65C
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 09:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394395AbgJ0ILE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 04:11:04 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:32797 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393441AbgJ0ILE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 04:11:04 -0400
-Received: by mail-lf1-f65.google.com with SMTP id l2so1203052lfk.0;
-        Tue, 27 Oct 2020 01:11:02 -0700 (PDT)
+        id S2894532AbgJ0IQy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 04:16:54 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:35001 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2894519AbgJ0IQy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 04:16:54 -0400
+Received: by mail-lj1-f195.google.com with SMTP id x16so749409ljh.2;
+        Tue, 27 Oct 2020 01:16:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=c4U/bePG4EkRAuU7q5fD+zQ7TcaCJxzYB3PUucsW7gA=;
-        b=VtvdjqUz4jYjKsVbgEPwdhr2m294Ct33uTTTs/TMruXg3X89PXEMW2CdWV7doa7ubD
-         Erahb4R3z62GIhtHOtC5f8/qWrnTstSaviHvQ/rfh19BWEGZqiDgIi4UoXO4pZVxpSYZ
-         C4dumzqBGHISjXdBc/5ppOIH9cm3TI+s0S3UeNR12+KOXpUTu3AU49t6bVnYZVbHRUC1
-         sBJUrGtgXtoVBijsFdHG2j9s/0hQukvfVDcGh72TYe9hsw7otn1+Nt9EtPenK2x/iud1
-         6vXCHIoEAQul14zlJ1vb7SqFGlSby6QaOCTtSF7U1HfG6/0FOn3a0b50y/NoUcb9Kl4b
-         LIDg==
-X-Gm-Message-State: AOAM533DKyguJdyt/VMXyLrBtPeAjNlSJjUoPv5iW3r+/n1zH2lZYn4I
-        n8LYPlz8gY3NuhdNr8aooaU=
-X-Google-Smtp-Source: ABdhPJx+/yd7bjRy+5Wp+6VCZKqPKqTGc1rcK3Fr4HvX3t1S6NNQLIjX7Q48sgkV24ILhmh+7WKD6g==
-X-Received: by 2002:a19:671c:: with SMTP id b28mr412518lfc.40.1603786261666;
-        Tue, 27 Oct 2020 01:11:01 -0700 (PDT)
+        bh=4X/i6x/+78+fLH0lPper9S35q82PCcSbtWfUqlievPc=;
+        b=dFevk5ljJev2bT1xhviKxC52SYR6aPDG0fLcP1QG38OkfTom6xGNIM//0RZ/foJRP4
+         Ao4uapp0tLfheeZ7KT3I3J10TOuUGQMBiXCGnqilB4vtOf8WX4VVMAl0gr+Hxg/15OOz
+         uz+HV2q/VNfHEgMLJ1fHZ0G26MoCZ/z0QXzcv9HXFrja/NZTHsFXVV3Bb+TjRKpyVAcs
+         +G4kYFP0EOGv3frtkya2LMj4U5YTRkJlSbK9TFIWtiEi7TXpcAGZFrWO2/4K66IUWwMx
+         HKKDf996qnl0iXgKrWL/N6GJ3X/YhTCHqL6Z//W3nD/cGpvWl/RahqO3zGiy/FNIdcVl
+         LpLA==
+X-Gm-Message-State: AOAM531Rwf6a5ewZ5O/OLKRL2LUls8o3KiSvUKE9fLrVY32wEJhyp/3n
+        qeEYvcVSTj7W2f3hLeBSzH8=
+X-Google-Smtp-Source: ABdhPJyiRzqsfEO4O7r5IIRQvb3+7LSAdAe3jrDZoAuW1ZpukGOup5MjnYT7Lif1P6AYdNpMCqJQUQ==
+X-Received: by 2002:a2e:8103:: with SMTP id d3mr545991ljg.384.1603786610328;
+        Tue, 27 Oct 2020 01:16:50 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id f25sm85962ljk.57.2020.10.27.01.11.00
+        by smtp.gmail.com with ESMTPSA id v16sm92687lfq.68.2020.10.27.01.16.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 01:11:00 -0700 (PDT)
+        Tue, 27 Oct 2020 01:16:49 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1kXK4K-0001G5-B5; Tue, 27 Oct 2020 09:11:00 +0100
-Date:   Tue, 27 Oct 2020 09:11:00 +0100
+        id 1kXK9v-0001H7-Vf; Tue, 27 Oct 2020 09:16:48 +0100
+Date:   Tue, 27 Oct 2020 09:16:47 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        "Ahmed S . Darwish" <a.darwish@linutronix.de>,
+Cc:     Johan Hovold <johan@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/14] USB: serial: keyspan_pda: fix up write
- implementation
-Message-ID: <20201027081100.GB4085@localhost>
-References: <20201025174600.27896-1-johan@kernel.org>
- <20201026121318.4mqwkkhahnsujngw@linutronix.de>
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Duncan Sands <duncan.sands@free.fr>
+Subject: Re: [patch V2 02/13] USB: serial: keyspan_pda: Replace
+ in_interrupt() usage
+Message-ID: <20201027081647.GC4085@localhost>
+References: <20201019100629.419020859@linutronix.de>
+ <20201019101109.753597069@linutronix.de>
+ <20201025165647.GR26280@localhost>
+ <20201026124753.btmdh3iwbwnff5dg@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201026121318.4mqwkkhahnsujngw@linutronix.de>
+In-Reply-To: <20201026124753.btmdh3iwbwnff5dg@linutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 01:13:18PM +0100, Sebastian Andrzej Siewior wrote:
-> On 2020-10-25 18:45:46 [+0100], Johan Hovold wrote:
-> > This series fixes a number of long-standing issues with the keyspan_pda
-> > driver and reworks its write implementation so that it can be used with
-> > any line discipline or for a system console.
-> > 
-> > The last few patches cleans up the xircom device support and some style
-> > issues.
+On Mon, Oct 26, 2020 at 01:47:53PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2020-10-25 17:56:47 [+0100], Johan Hovold wrote:
+> > There's a ton of issues with this driver, but this is arguably making
+> > things worse. A line discipline may call write() from just about any
+> > context so we cannot rely on tty being non-NULL here (e.g. PPP).
 > 
-> Thank you Johan. This series fixes quite some issues including the
-> in_interrupt() part. I added the buffer part because it hurt to see an
-> allocation for one byte. There is no loss without it :)
-> 
-> Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> I wasn't aware of that. I've been looking at the callers each time a
+> `tty' was passed it looked like a preemptible context (due to mutex /
+> GFP_KERNEL) and so on.
 
-Sounds good. And thanks for taking a look at the series.
+Yeah, the default line discipline only calls in preemptible context
+(these days), but others do not (e.g. see ppp_async_push()).
 
 Johan
