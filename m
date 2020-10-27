@@ -2,145 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9AA29A3D1
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 06:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A587429A471
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 07:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505594AbgJ0FBq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 01:01:46 -0400
-Received: from letterbox.kde.org ([46.43.1.242]:41274 "EHLO letterbox.kde.org"
+        id S2506179AbgJ0GEN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 02:04:13 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:42091 "EHLO z5.mailgun.us"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2505591AbgJ0FBp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 01:01:45 -0400
-X-Greylist: delayed 378 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Oct 2020 01:01:44 EDT
-Received: from archbox.localdomain (unknown [123.201.39.96])
-        (Authenticated sender: bshah)
-        by letterbox.kde.org (Postfix) with ESMTPSA id 7E1E5285096;
-        Tue, 27 Oct 2020 04:55:22 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kde.org; s=users;
-        t=1603774525; bh=+jQoV5QELo2pHtxGt2jqATJDN6iscHewe0kYCj9ygCg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KoLtrGRXyraVQ8kxNJ8lJoDy121/wx3FjX4+5K9Id3PYUiqc8OaBPNtPsUYaMWI0V
-         nvcd4LNdV9LHvHbT189Up9oxwuppiIjS7uxCqMGc5AW3snOYSnWDbbDKMa8qxnOHRC
-         iSy0bPOE53kEGzx9rqmSTUZHyvqbIKj1o4GNFOzuDBUtqgq5kZp6HcwTI4HwhXRu60
-         ZAKhhxYcuunnw4TZXkO7UZA04NvwteTpJlW40yX1iJxerlVXrycqAv9VHms+jeHTe5
-         7cIslsZ5xy+uXDQ89n7PHcDhAXYYR3rARtX0QOuuP1BU8VDSxys0aGO56oj4ThzRYx
-         ekuyUN9JWDDPQ==
-Date:   Tue, 27 Oct 2020 10:25:19 +0530
-From:   Bhushan Shah <bshah@kde.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Sebastian Reichel <sre@kernel.org>, clayton@craftyguy.net
-Subject: Re: [PATCH] usb: musb: fix idling for suspend after disconnect
- interrupt
-Message-ID: <20201027045519.GA947883@aquila.localdomain>
-References: <20191126034151.38154-1-tony@atomide.com>
+        id S2506168AbgJ0GEM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 02:04:12 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1603778650; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=seJtKEfy2PjEDmV0fkPjUuKiYBaNPY4Fk2XrqHU+wXM=; b=k7E5F5uy4t/jRM6TOyOMN9iT17gcuz+B3HNuJpdFImrUTYcQq/Iexsd/bPvAm/ou/XBx969V
+ ONgpU/jQRAM7HLfUPrWyPiQK1ZWXlFp4ljMUq+MH0iyHQRkgaXjCJJddy/4zQ8fSfACxoocD
+ bmONrpjHsVz8lFwF4ZMh6mS/EYk=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 5f97b859fcd46a2b76b2dbec (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 27 Oct 2020 06:04:09
+ GMT
+Sender: sallenki=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D847DC433C9; Tue, 27 Oct 2020 06:04:09 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [192.168.0.105] (unknown [103.110.145.213])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sallenki)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 99DC7C433F0;
+        Tue, 27 Oct 2020 06:04:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 99DC7C433F0
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sallenki@codeaurora.org
+Subject: Re: [PATCH] usb: typec: Prevent setting invalid opmode value
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jackp@codeaurora.org,
+        mgautam@codeaurora.org, stable@vger.kernel.org
+References: <1603359734-2931-1-git-send-email-sallenki@codeaurora.org>
+ <20201026130522.GC1442058@kuha.fi.intel.com>
+From:   Sriharsha Allenki <sallenki@codeaurora.org>
+Message-ID: <c82b0b9d-209e-2fbd-2e3b-85e8fc688f5f@codeaurora.org>
+Date:   Tue, 27 Oct 2020 11:34:04 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/9DWx/yDrRhgMJTb"
-Content-Disposition: inline
-In-Reply-To: <20191126034151.38154-1-tony@atomide.com>
+In-Reply-To: <20201026130522.GC1442058@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Heikki,
 
---/9DWx/yDrRhgMJTb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks a lot for the review.
 
-Hi Tony,
+On 10/26/2020 6:35 PM, Heikki Krogerus wrote:
+> On Thu, Oct 22, 2020 at 03:12:14PM +0530, Sriharsha Allenki wrote:
+>> Setting opmode to invalid values would lead to a
+>> paging fault failure when there is an access to the
+>> power_operation_mode.
+>>
+>> Prevent this by checking the validity of the value
+>> that the opmode is being set.
+>>
+>> Cc: <stable@vger.kernel.org>
+>> Fixes: fab9288428ec ("usb: USB Type-C connector class")
+>> Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
+>> ---
+>>  drivers/usb/typec/class.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+>> index 35eec70..63efe16 100644
+>> --- a/drivers/usb/typec/class.c
+>> +++ b/drivers/usb/typec/class.c
+>> @@ -1427,7 +1427,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
+>>  {
+>>  	struct device *partner_dev;
+>>  
+>> -	if (port->pwr_opmode == opmode)
+>> +	if ((port->pwr_opmode == opmode) || (opmode < TYPEC_PWR_MODE_USB) ||
+> You don't need to check if opmode < anything. opmode is enum which
+> apparently means that GCC handles it as unsigned. Since
+> TYPEC_PWR_MODE_USB is 0 it means opmode < TYPEC_PWR_MODE_USB is never
+> true.
+>
+>> +						(opmode > TYPEC_PWR_MODE_PD))
+>>  		return;
+> You really need to print an error at the very least. Otherwise we will
+> just silently hide possible driver bugs.
+>
+> To be honest, I'm not a big fan of this kind of checks. They have
+> created more problems than they have fixed in more than one occasion
+> to me. For example, there really is no guarantee that the maximum will
+> always be TYPEC_PWR_MODE_PD, which means we probable should have
+> something like TYPEC_PWR_MODE_MAX defined somewhere that you compare
+> the opmode value to instead of TYPEC_PWR_MODE_PD to play it safe, but
+> let's not bother with that for now (it will create other problems).
+>
+> Basically, with functions like this, especially since it doesn't
+> return anything, the responsibility of checking the validity of the
+> parameters that the caller supplies to it belongs to the caller IMO,
+> not the function itself. I would be happy to explain that in the
+> kernel doc style comment of the function.
+>
+> If you still feel that this change is really necessary, meaning you
+> have some actual case where the caller can _not_ check the range
+> before calling this function, then explain the case you have carefully
+> in the commit message and add the check as a separate condition:
+We had a bug that was setting this out of index opmode leading to the
+mentioned paging fault, and as you have suggested we could have added
+the range check there and prevented this. But there are many calls to
+this function, and I thought it would be a good idea to abstract that
+range check into this function to prevent adding multiple range checks
+over the driver. And further motivation was also to prevent any
+potential unknown bugs.
 
-On Mon, Nov 25, 2019 at 07:41:51PM -0800, Tony Lindgren wrote:
-> When disconnected as USB B-device, we sometimes get a suspend interrupt
-> after disconnect interrupt. In that case we have devctl set to 99 with
-> VBUS still valid and musb_pm_runtime_check_session() wrongly things we
-> have an active session. We have no other interrupts after disconnect
-> coming in this case at least with the omap2430 glue.
+I will resend the patch with the suggested changes; separate condition and
+anerror statement if the above justification is acceptable, else will
+propose a patch to improve the documentation.
 
-So I had been debugging a issue with musb_hrdc driver preventing a
-suspend on the pinephone, which is Allwinner A64 platform.
+Thanks,
+Sriharsha
+>
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 35eec707cb512..7de6913d90f9c 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1430,6 +1430,11 @@ void typec_set_pwr_opmode(struct typec_port *port,
+>         if (port->pwr_opmode == opmode)
+>                 return;
+>  
+> +       if (opmode > TYPEC_PWR_OPMODE_PD) {
+> +               dev_err(&port->dev, "blah-blah-blah\n");
+> +               return;
+> +       }
+> +
+>         port->pwr_opmode = opmode;
+>         sysfs_notify(&port->dev.kobj, NULL, "power_operation_mode");
+>         kobject_uevent(&port->dev.kobj, KOBJ_CHANGE);
+>
+> Otherwise you can just propose a patch that improves the documentation
+> of this function, explaining that it does not take any responsibility
+> over the parameters passed to it for now.
+>
+>
+> thanks,
+>
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-Namely, if I have USB connected, and I try to suspend, it would hang
-until USB is disconnected. After enabling tracing, I realized that is
-hanging after this commit. Reverting it makes device suspend and resume
-correctly.
-
-Some more of debugging notes can be found at,
-
-https://gitlab.com/postmarketOS/pmaports/-/issues/839
-
-I wonder what would be right solution here? Disable this quirk somehow
-for device?
-
-Regards
-
-> Let's fix the issue by checking the interrupt status again with
-> delayed work for the devctl 99 case. In the suspend after disconnect
-> case the devctl session bit has cleared by then and musb can idle.
-> For a typical USB B-device connect case we just continue with normal
-> interrupts.
->=20
-> Cc: Merlijn Wajer <merlijn@wizzup.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
-> ---
->  drivers/usb/musb/musb_core.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-> --- a/drivers/usb/musb/musb_core.c
-> +++ b/drivers/usb/musb/musb_core.c
-> @@ -1943,6 +1943,9 @@ ATTRIBUTE_GROUPS(musb);
->  #define MUSB_QUIRK_B_INVALID_VBUS_91	(MUSB_DEVCTL_BDEVICE | \
->  					 (2 << MUSB_DEVCTL_VBUS_SHIFT) | \
->  					 MUSB_DEVCTL_SESSION)
-> +#define MUSB_QUIRK_B_DISCONNECT_99	(MUSB_DEVCTL_BDEVICE | \
-> +					 (3 << MUSB_DEVCTL_VBUS_SHIFT) | \
-> +					 MUSB_DEVCTL_SESSION)
->  #define MUSB_QUIRK_A_DISCONNECT_19	((3 << MUSB_DEVCTL_VBUS_SHIFT) | \
->  					 MUSB_DEVCTL_SESSION)
-> =20
-> @@ -1965,6 +1968,11 @@ static void musb_pm_runtime_check_session(struct m=
-usb *musb)
->  	s =3D MUSB_DEVCTL_FSDEV | MUSB_DEVCTL_LSDEV |
->  		MUSB_DEVCTL_HR;
->  	switch (devctl & ~s) {
-> +	case MUSB_QUIRK_B_DISCONNECT_99:
-> +		musb_dbg(musb, "Poll devctl in case of suspend after disconnect\n");
-> +		schedule_delayed_work(&musb->irq_work,
-> +				      msecs_to_jiffies(1000));
-> +		break;
->  	case MUSB_QUIRK_B_INVALID_VBUS_91:
->  		if (musb->quirk_retries && !musb->flush_irq_work) {
->  			musb_dbg(musb,
-> --=20
-> 2.24.0
-
---=20
-Bhushan Shah
-http://blog.bshah.in
-IRC Nick : bshah on Freenode
-GPG key fingerprint : 0AAC 775B B643 7A8D 9AF7 A3AC FE07 8411 7FBC E11D
-
---/9DWx/yDrRhgMJTb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEs8s2ZVJUC+Bu6a2XEZaMRJKMrvwFAl+XqDQACgkQEZaMRJKM
-rvwZxQf/Rwr6YcGIHrL5wupDQ4MnUSqnoSkGVDz0vLTydkPb0mjY6gAWTmTYbMgo
-eNQaugYMtGAOxsJ7XzVI22944ea0Y2YHFBTTQp9HmzzskU+9mJgHIsinp/e+tvyr
-MUIzppDxeqsnoDBKW0mKJfBVpcfr0hCi3tA7vMqS6XDywcqACtcB+adzaN6qkmB5
-kSJT+pKVrxnbQVslPQxqkoQ4JP33snXHDUXQlfxL+b38QpkAmQEylmN98D+Z6WQq
-+Jxd7Dh299z8dY5of7FDam7mP0ZhV1TfaT/OpsG1CTXctEA+i1WElQiLO3omsKVG
-aqW2QfTu2WguwnVqml7ij5eI8NsT5g==
-=iXHC
------END PGP SIGNATURE-----
-
---/9DWx/yDrRhgMJTb--
