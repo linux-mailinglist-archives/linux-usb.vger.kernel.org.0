@@ -2,120 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A0129A382
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 04:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9AA29A3D1
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 06:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441484AbgJ0D6v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Oct 2020 23:58:51 -0400
-Received: from mail-eopbgr40057.outbound.protection.outlook.com ([40.107.4.57]:19884
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2410312AbgJ0D6v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Oct 2020 23:58:51 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gxrb584Ftt2m/1CHF0p9hu+6TZWnrlvcqqAn8139/x0rfZYIqzyoJz6WUpImczk/kr9iAUksMTbEPJGBaSWUwY5NhXp5BWBToAnc0kA/OZrss7cQepNB/f7rt3gYjELK9+f2nWOOc1j5WHnWFC7no9V9WfUbRlypU3ffTqDJLzphLVh24sPTqu8weOdBzcraTMyPqEBy4p+NkXt7LIE8ojBEoVIGrcwl+gpG7ku8XbgQp5V5xp4JkS6tWsQgtcw8/sty7sWPs2O6+MSSfMKsJiSkeK0Yi1/mP60V5aPtNLWpCkkVeYcrAcHeJqXBsQJ9zLCd0kIEhG07BeM2XmCEYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=01gCwYe9DzWJBqadbCka6Dds9VvntxqIHF6+vwIi1uU=;
- b=OOhEyncIy813ERS1B6nyXHsApjnXabqJPozM418NlhjtVLvwEY8ISyODDwX1LinqUXY24Gsx/hSKTNBdkCiBVT2Pa23fCCAxOPKRbRJ+WUsoobwqt1oGPkTEFzWB7Ussqh38ZDPa7yUcCA3rLS7pCnrA7ExOEcctq/VeHm4xpW++wwlw+X9twEQK31tp17MAlwoqUdKWlekPxoi6YwOh58FoLEI8yG52gs3F+3pHYc/NN9489Kiu5mYFevQlK/IaONfBjU4uqhQilIqfnycJhk4n4bqH/bNBmK+dldFhPfK27x7QTmSRrT3IB6p0yYWQLqT5QVwcqxQGwqPryBhH1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=01gCwYe9DzWJBqadbCka6Dds9VvntxqIHF6+vwIi1uU=;
- b=GCueQc7RtGMcN/Fq4bX3lPoPtzH7i8snTF08ImKyrPYg5UkX4029hFjjS2uy8GAmIZcWZ3WHzMRh1GiwkXNlQ3Ss81rI6wFkww+OU6gC8iJ1DFBjonm/mAJsiXr1WMHSBRuF2FPYTI+zja6sadffpomxMr6W/OGQS6vBm6yW4z0=
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
- by AM9PR04MB7633.eurprd04.prod.outlook.com (2603:10a6:20b:2d9::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Tue, 27 Oct
- 2020 03:58:48 +0000
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Tue, 27 Oct 2020
- 03:58:48 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Pawel Laszczak <pawell@cadence.com>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "rogerq@ti.com" <rogerq@ti.com>, "nsekhar@ti.com" <nsekhar@ti.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rahul Kumar <kurahul@cadence.com>
-Subject: RE: [PATCH v3] usb: cdns3: Variable 'length' set but not used
-Thread-Topic: [PATCH v3] usb: cdns3: Variable 'length' set but not used
-Thread-Index: AQHWoq98xx7XZYJdVkmeSngJp6ePZqmptLIAgAAh+NCAAQ3WQA==
-Date:   Tue, 27 Oct 2020 03:58:48 +0000
-Message-ID: <AM8PR04MB73000CE28EC53B3402BFC5BE8B160@AM8PR04MB7300.eurprd04.prod.outlook.com>
-References: <20201015045529.2022-1-pawell@cadence.com>
- <DM6PR07MB55290EA090C418457C1E293BDD190@DM6PR07MB5529.namprd07.prod.outlook.com>
- <AM8PR04MB7300C4C0BB37319ABC1680528B190@AM8PR04MB7300.eurprd04.prod.outlook.com>
-In-Reply-To: <AM8PR04MB7300C4C0BB37319ABC1680528B190@AM8PR04MB7300.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: cadence.com; dkim=none (message not signed)
- header.d=none;cadence.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [180.164.158.209]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 923acf57-47c9-45c8-f381-08d87a2c9bf3
-x-ms-traffictypediagnostic: AM9PR04MB7633:
-x-microsoft-antispam-prvs: <AM9PR04MB76338D2C2299AE87C8C972958B160@AM9PR04MB7633.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FfNjPFABuIwEvA8joeXhnd5Bg6+oSI0mfsMqj0eTfrZcSmGXk3ypn/D43S8xPADtXp30nX+QgJE4TTkyAbZjKxFbEQJe/f5oaF6P0TaSHmprTimMZOe2Y88bRB/M96yA/VD/X3jX4Q3XMHORZN/JDq3JVbRxxg5637PoPwr6SQ+sHrPszkf53I/UjLusU8FrkcovR+ylHOJtlJmQYy2HDA108BHqclAnMW/VWSXKa1OB4V6J+7MeO6EgPKZOgReeAA78jIU+kYW4rbJLbftUai7iO03UR5gdksScEkiz5NDnA5xx7wpwBxlS6lxxUI7f
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(39860400002)(136003)(366004)(396003)(186003)(54906003)(55016002)(6506007)(26005)(44832011)(316002)(86362001)(478600001)(33656002)(7696005)(8936002)(76116006)(5660300002)(6916009)(4326008)(9686003)(2906002)(8676002)(83380400001)(4744005)(66946007)(66476007)(52536014)(64756008)(66446008)(71200400001)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: RrpmGF7Br7qXlnZkFK88hT0Oj3AAusk8DnssWrWzP4oZSZo+VWHVG0/IS72iAXHwt+HVehKRfh31/d4/VynlCIRxu2ELaEZDZ1AhO32qFWtWvUpRmBp8R9/nLv6mxpIprZrPTEk8GsYtAS25VhHkvflTOt8lvyZ7mZK0NHYCpnE+vCwzaGZbjW/T9iswk1OfkpkwHCPm3xkUB0xbELorNcKCpv8Y2UPygFd9LSc/wilX2OsGE56cFD7O63rM/PkX+r1gSqUuEvBYD5PFxf9zEmiQSBMGZ9e4icM6Mu1UhsX9yqeOW+KEYB36lh0jn6nJW62hKwICG/K9XVpaIIDO78qqAxyhTot2QzhW5RuoOLdUYh7FEMMpEtNUCnu5c47ivhzQutpvNDgXA20ylsEuTs/ahUvH6jPFSMk6K9Mp06XvqOOnPkZ7V12fBBpLVrqpONiyAONxatnPJ/u8cZaFxOxVThwgNYi88YHoy4KGNGSKdpBR3b6ORWz8SkT9tett3jaZXwsGFheDePmIUoaGO6OTO19PDrk/tGCxb8nR3yXlWYOtDSPgfgEhDYyf36n82PzqQLJ6G8Rv+FzWD0xnFotPug/T0LzpIB/d+u2+XthWcsSdEB+Xj++bQG/pLRGZjSRcM8qOTBzUj+Q+xeg+yg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S2505594AbgJ0FBq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 01:01:46 -0400
+Received: from letterbox.kde.org ([46.43.1.242]:41274 "EHLO letterbox.kde.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2505591AbgJ0FBp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 01:01:45 -0400
+X-Greylist: delayed 378 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Oct 2020 01:01:44 EDT
+Received: from archbox.localdomain (unknown [123.201.39.96])
+        (Authenticated sender: bshah)
+        by letterbox.kde.org (Postfix) with ESMTPSA id 7E1E5285096;
+        Tue, 27 Oct 2020 04:55:22 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kde.org; s=users;
+        t=1603774525; bh=+jQoV5QELo2pHtxGt2jqATJDN6iscHewe0kYCj9ygCg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KoLtrGRXyraVQ8kxNJ8lJoDy121/wx3FjX4+5K9Id3PYUiqc8OaBPNtPsUYaMWI0V
+         nvcd4LNdV9LHvHbT189Up9oxwuppiIjS7uxCqMGc5AW3snOYSnWDbbDKMa8qxnOHRC
+         iSy0bPOE53kEGzx9rqmSTUZHyvqbIKj1o4GNFOzuDBUtqgq5kZp6HcwTI4HwhXRu60
+         ZAKhhxYcuunnw4TZXkO7UZA04NvwteTpJlW40yX1iJxerlVXrycqAv9VHms+jeHTe5
+         7cIslsZ5xy+uXDQ89n7PHcDhAXYYR3rARtX0QOuuP1BU8VDSxys0aGO56oj4ThzRYx
+         ekuyUN9JWDDPQ==
+Date:   Tue, 27 Oct 2020 10:25:19 +0530
+From:   Bhushan Shah <bshah@kde.org>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sre@kernel.org>, clayton@craftyguy.net
+Subject: Re: [PATCH] usb: musb: fix idling for suspend after disconnect
+ interrupt
+Message-ID: <20201027045519.GA947883@aquila.localdomain>
+References: <20191126034151.38154-1-tony@atomide.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 923acf57-47c9-45c8-f381-08d87a2c9bf3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2020 03:58:48.5296
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +h8YSvrW2V/QlObphQ3JPhpnYS9aDpbcyz9Yitq43xJoipJsd6NsxTeCZjgWOE5brdAE0I5Yh1RBfrGkFXeacA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7633
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/9DWx/yDrRhgMJTb"
+Content-Disposition: inline
+In-Reply-To: <20191126034151.38154-1-tony@atomide.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> >
-> > A gentle ping.
-> >
-> > I assume that you should add this and the rest overdue cdsn3 patches
-> > as first to you ci-for-usb-next branch.
-> > Am I right?
-> >
+
+--/9DWx/yDrRhgMJTb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Tony,
+
+On Mon, Nov 25, 2019 at 07:41:51PM -0800, Tony Lindgren wrote:
+> When disconnected as USB B-device, we sometimes get a suspend interrupt
+> after disconnect interrupt. In that case we have devctl set to 99 with
+> VBUS still valid and musb_pm_runtime_check_session() wrongly things we
+> have an active session. We have no other interrupts after disconnect
+> coming in this case at least with the omap2430 glue.
+
+So I had been debugging a issue with musb_hrdc driver preventing a
+suspend on the pinephone, which is Allwinner A64 platform.
+
+Namely, if I have USB connected, and I try to suspend, it would hang
+until USB is disconnected. After enabling tracing, I realized that is
+hanging after this commit. Reverting it makes device suspend and resume
+correctly.
+
+Some more of debugging notes can be found at,
+
+https://gitlab.com/postmarketOS/pmaports/-/issues/839
+
+I wonder what would be right solution here? Disable this quirk somehow
+for device?
+
+Regards
+
+> Let's fix the issue by checking the interrupt status again with
+> delayed work for the devctl 99 case. In the suspend after disconnect
+> case the devctl session bit has cleared by then and musb can idle.
+> For a typical USB B-device connect case we just continue with normal
+> interrupts.
 >=20
-> Hi Pawel,
+> Cc: Merlijn Wajer <merlijn@wizzup.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> ---
+>  drivers/usb/musb/musb_core.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 >=20
-> I queued them locally, and I waited for v5.10-rc1 which was out yesterday=
-, then
-> I will apply them, and add cdns3 patches to my kernel.org branch. Will up=
-date
-> you these two days.
->=20
-> Peter
+> diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+> --- a/drivers/usb/musb/musb_core.c
+> +++ b/drivers/usb/musb/musb_core.c
+> @@ -1943,6 +1943,9 @@ ATTRIBUTE_GROUPS(musb);
+>  #define MUSB_QUIRK_B_INVALID_VBUS_91	(MUSB_DEVCTL_BDEVICE | \
+>  					 (2 << MUSB_DEVCTL_VBUS_SHIFT) | \
+>  					 MUSB_DEVCTL_SESSION)
+> +#define MUSB_QUIRK_B_DISCONNECT_99	(MUSB_DEVCTL_BDEVICE | \
+> +					 (3 << MUSB_DEVCTL_VBUS_SHIFT) | \
+> +					 MUSB_DEVCTL_SESSION)
+>  #define MUSB_QUIRK_A_DISCONNECT_19	((3 << MUSB_DEVCTL_VBUS_SHIFT) | \
+>  					 MUSB_DEVCTL_SESSION)
+> =20
+> @@ -1965,6 +1968,11 @@ static void musb_pm_runtime_check_session(struct m=
+usb *musb)
+>  	s =3D MUSB_DEVCTL_FSDEV | MUSB_DEVCTL_LSDEV |
+>  		MUSB_DEVCTL_HR;
+>  	switch (devctl & ~s) {
+> +	case MUSB_QUIRK_B_DISCONNECT_99:
+> +		musb_dbg(musb, "Poll devctl in case of suspend after disconnect\n");
+> +		schedule_delayed_work(&musb->irq_work,
+> +				      msecs_to_jiffies(1000));
+> +		break;
+>  	case MUSB_QUIRK_B_INVALID_VBUS_91:
+>  		if (musb->quirk_retries && !musb->flush_irq_work) {
+>  			musb_dbg(musb,
+> --=20
+> 2.24.0
 
-Hi Pawel,
+--=20
+Bhushan Shah
+http://blog.bshah.in
+IRC Nick : bshah on Freenode
+GPG key fingerprint : 0AAC 775B B643 7A8D 9AF7 A3AC FE07 8411 7FBC E11D
 
-The cdns3 -next patches pushed to: for-usb-next; cdns3 -fixes patches pushe=
-d to: for-usb-fixes.
-The git is: git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.gi=
-t
+--/9DWx/yDrRhgMJTb
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Currently, I only pushed three of your patches, would you please review my =
-patches, thanks.
+-----BEGIN PGP SIGNATURE-----
 
-Peter
+iQEzBAEBCAAdFiEEs8s2ZVJUC+Bu6a2XEZaMRJKMrvwFAl+XqDQACgkQEZaMRJKM
+rvwZxQf/Rwr6YcGIHrL5wupDQ4MnUSqnoSkGVDz0vLTydkPb0mjY6gAWTmTYbMgo
+eNQaugYMtGAOxsJ7XzVI22944ea0Y2YHFBTTQp9HmzzskU+9mJgHIsinp/e+tvyr
+MUIzppDxeqsnoDBKW0mKJfBVpcfr0hCi3tA7vMqS6XDywcqACtcB+adzaN6qkmB5
+kSJT+pKVrxnbQVslPQxqkoQ4JP33snXHDUXQlfxL+b38QpkAmQEylmN98D+Z6WQq
++Jxd7Dh299z8dY5of7FDam7mP0ZhV1TfaT/OpsG1CTXctEA+i1WElQiLO3omsKVG
+aqW2QfTu2WguwnVqml7ij5eI8NsT5g==
+=iXHC
+-----END PGP SIGNATURE-----
+
+--/9DWx/yDrRhgMJTb--
