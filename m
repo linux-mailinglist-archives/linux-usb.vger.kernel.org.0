@@ -2,69 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE5129A76F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 283DF29A774
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895453AbgJ0JLS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 05:11:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59302 "EHLO mail.kernel.org"
+        id S2895479AbgJ0JMT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 05:12:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59824 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2895450AbgJ0JLS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 05:11:18 -0400
+        id S2895383AbgJ0JMT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 05:12:19 -0400
 Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E405B20747;
-        Tue, 27 Oct 2020 09:11:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 468FB20747;
+        Tue, 27 Oct 2020 09:12:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603789878;
-        bh=3nJVYPqAmda6ppGiGO4U2OH69glESivKp8oHSZq5RgQ=;
+        s=default; t=1603789938;
+        bh=2FkRBoqShA/bmLCc3PG3RGPFCejiLZ3iDbDEpEun+oY=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=BQQ5PYMeAAZOQBfDzfWSSSm1iXaA0ftEvw9m0C3jTA4gElvkiXn39YZX/bhjF0quH
-         F8A9lQk6EBD+k5bHnuv8kBDYkPJoWDICDEbEwAxF6jPMN4+5hkvm+emddAXor9FlpA
-         ENOszDhRCQ+zbSYHIVDp8iHX5LQ9Ybsdb7Vwek38=
+        b=K+VOAPJvQfJVKSQbmIBiqaUL3myfEXlVMTNxg90F1ATJLg8tw9Fv4EDF+OIfR+W2R
+         NAwn4uj7+fmjCOHYLbJKyFmMQYdwWCmMii+cEze+1fz6AYMmDKcX2lCBCOCrQwgPeJ
+         tibrGIUwIIrQLTy1mxZ7/jfRuZhHVZVU3Om3jJlU=
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>, pawell@cadence.com, rogerq@ti.com
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        gregkh@linuxfoundation.org, jun.li@nxp.com, stable@vger.kernel.org,
-        Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH 3/3] usb: cdns3: Fix on-chip memory overflow issue
-In-Reply-To: <20201016101659.29482-4-peter.chen@nxp.com>
-References: <20201016101659.29482-1-peter.chen@nxp.com>
- <20201016101659.29482-4-peter.chen@nxp.com>
-Date:   Tue, 27 Oct 2020 11:11:13 +0200
-Message-ID: <87sga0c9u6.fsf@kernel.org>
+To:     Dejin Zheng <zhengdejin5@gmail.com>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
+Subject: Re: [PATCH v1] usb: dwc3: core: fix a issue about clear connect state
+In-Reply-To: <20201018134734.10406-1-zhengdejin5@gmail.com>
+References: <20201018134734.10406-1-zhengdejin5@gmail.com>
+Date:   Tue, 27 Oct 2020 11:12:14 +0200
+Message-ID: <87pn54c9sh.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
 Hi,
 
-Peter Chen <peter.chen@nxp.com> writes:
-> From: Pawel Laszczak <pawell@cadence.com>
+Dejin Zheng <zhengdejin5@gmail.com> writes:
+> According to Synopsys Programming Guide chapter 2.2 Register Resets,
+> it cannot reset the DCTL register by set DCTL.CSFTRST for Core Soft Reset,
+> if DWC3 controller as a slave device and stay connected with a usb host,
+> then, reboot linux, it will fail to reinitialize dwc3 as a slave device
+> when the DWC3 controller did not power off. because the connection status
+> is incorrect, so we also need clear DCTL.RUN_STOP bit for disable connect
+> when do core soft reset.
 >
-> Patch fixes issue caused setting On-chip memory overflow bit in usb_sts
-> register. The issue occurred because EP_CFG register was set twice
-> before USB_STS.CFGSTS was set. Every write operation on EP_CFG.BUFFERING
-> causes that controller increases internal counter holding the number
-> of reserved on-chip buffers. First time this register was updated in
-> function cdns3_ep_config before delegating SET_CONFIGURATION request
-> to class driver and again it was updated when class wanted to enable
-> endpoint.  This patch fixes this issue by configuring endpoints
-> enabled by class driver in cdns3_gadget_ep_enable and others just
-> before status stage.
+> Fixes: f59dcab176293b6 ("usb: dwc3: core: improve reset sequence")
+> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> ---
+>  drivers/usb/dwc3/core.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> Cc: <stable@vger.kernel.org> #v5.8+
-> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-> Reported-and-tested-by: Peter Chen <peter.chen@nxp.com>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 2eb34c8b4065..239636c454c2 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -256,6 +256,7 @@ static int dwc3_core_soft_reset(struct dwc3 *dwc)
+>  
+>  	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+>  	reg |= DWC3_DCTL_CSFTRST;
+> +	reg &= ~DWC3_DCTL_RUN_STOP;
 
-This looks very large for a fix, are you sure there isn't a minimal fix
-hidden somewhere?
+as I mentioned in the other thread, I would rather figure out why we're
+getting to probe() with RUN_STOP already set.
 
 -- 
 balbi
