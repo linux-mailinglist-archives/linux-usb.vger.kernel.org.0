@@ -2,43 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4311829A77F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB0D29A786
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 10:15:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895516AbgJ0JNX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 05:13:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60168 "EHLO mail.kernel.org"
+        id S2437244AbgJ0JPe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 05:15:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60604 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2895512AbgJ0JNX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 05:13:23 -0400
+        id S2411637AbgJ0JPe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 05:15:34 -0400
 Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4E9DB20735;
-        Tue, 27 Oct 2020 09:13:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4A1A722258;
+        Tue, 27 Oct 2020 09:15:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603790002;
-        bh=B11T/jxpX4uwNSFHjuTvEjy9dCdyt60clvJzRvW3FGE=;
+        s=default; t=1603790132;
+        bh=o5KRhvwObRIIQc6rBh3vrmdNSSuJOyeCIk62E98RJfg=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ii8rBDo5LUmokkIjCnLeNFqTVuJtFJLzKB+aC647ZrsEclPNhX9suc2ZNMvITHWnl
-         uBsgtL1Al85oT9AazTsL2qtQeldC2Fz2g01zvN/uwoImOeRimhpL+rCOZuznzQIjR4
-         LVSJKnc+VmkZqAMPCDu+crXFc9AEZFGxvK1mCf5I=
+        b=z1oLA+RUDnVAlZYMLiieV+BGMBhdaCEYnMv73I489vB5gwnejH1WitUaHxSmQv1dI
+         GXhsGoa37oVDFUlwBfPf8vej2pp+V5DdXCXxFUq+OGNM7w2lx5k8vz6rDvDE5kq1Wj
+         KK478ZVX48QWaYrIoOSU6Zf43fep59D55DCNfAYg=
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        David Cohen <david.a.cohen@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+        Felipe Balbi <balbi@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        John Youn <John.Youn@synopsys.com>
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] usb: dwc3: ulpi: Fix UPLI registers read/write ops
-In-Reply-To: <20201010222351.7323-1-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH 1/3] usb: dwc3: ulpi: Use VStsDone to detect PHY regs
+ access completion
+In-Reply-To: <20201010222351.7323-2-Sergey.Semin@baikalelectronics.ru>
 References: <20201010222351.7323-1-Sergey.Semin@baikalelectronics.ru>
-Date:   Tue, 27 Oct 2020 11:13:14 +0200
-Message-ID: <87mu08c9qt.fsf@kernel.org>
+ <20201010222351.7323-2-Sergey.Semin@baikalelectronics.ru>
+Date:   Tue, 27 Oct 2020 11:15:24 +0200
+Message-ID: <87k0vcc9n7.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -50,67 +52,57 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+
+Hi,
+
 Serge Semin <Sergey.Semin@baikalelectronics.ru> writes:
 
-> Our Baikal-T1 SoC is equipped with DWC USB3 IP core as a USB2.0 bus
-> controller. In general the DWC USB3 driver is working well for it except
-> the ULPI-bus part. We've found out that the DWC USB3 ULPI-bus driver dete=
-cted
-> PHY with VID:PID tuple as 0x0000:0x0000, which of course wasn't true since
-> it was supposed to be 0x0424:0x0006. After a short digging inside the
-> ulpi.c code and studying the DWC USB3 documentation, it has been
-> discovered that the ULPI bus IO ops didn't work quite correct. The
-> busy-loop had stopped waiting before the actual operation was finished. We
-> found out that the problem was caused by several bugs hidden in the DWC
-> USB3 ULPI-bus IO implementation.
->
-> First of all in accordance with the DWC USB3 databook [1] the ULPI IO
-> busy-loop is supposed to use the GUSB2PHYACCn.VStsDone flag as an
-> indication of the PHY vendor control access completion. Instead it polled
-> the GUSB2PHYACCn.VStsBsy flag, which as we discovered can be cleared a
-> bit before the VStsDone flag.
->
-> Secondly having the simple counter-based loop in the modern kernel is
-> really a weak design of the busy-looping pattern especially seeing the
-> ULPI operations delay can be easily estimated [2], since the bus clock is
-> fixed to 60MHz.
->
-> Finally the root cause of the denoted in the prologue problem was due to
-> the Suspend PHY DWC USB3 feature perception. The commit e0082698b689
-> ("usb: dwc3: ulpi: conditionally resume ULPI PHY") introduced the Suspend
-> USB2.0 HS/FS/LS PHY regression as the Low-power consumption mode would be
-> disable after a first attempt to read/write from the ULPI PHY control
-> registers, and still didn't fix the problem it was originally intended for
-> since the very first attempt of the ULPI PHY control registers IO would
-> need much more time than the busy-loop provided. So instead of disabling
-> the Suspend USB2.0 HS/FS/LS PHY feature we suggest to just extend the
-> busy-loop delay in case if the GUSB2PHYCFGn.SusPHY flag set to 1. By doing
-> so we'll eliminate the regression and the fix the false busy-loop timeout
-> problem.
+> In accordance with [1] the DWC_usb3 core sets the GUSB2PHYACCn.VStsDone
+> bit when the PHY vendor control access is done and clears it when the
+> application initiates a new transaction. The doc doesn't say anything
+> about the GUSB2PHYACCn.VStsBsy flag serving for the same purpose. Moreover
+> we've discovered that the VStsBsy flag can be cleared before the VStsDone
+> bit. So using the former as a signal of the PHY control registers
+> completion might be dangerous. Let's have the VStsDone flag utilized
+> instead then.
 >
 > [1] Synopsys DesignWare Cores SuperSpeed USB 3.0 xHCI Host Controller
 >     Databook, 2.70a, December 2013, p.388
 >
-> [1] UTMI+ Low Pin Interface (ULPI) Specification, Revision 1.1,
->     October 20, 2004, pp. 30 - 36.
->
-> Fixes: e0082698b689 ("usb: dwc3: ulpi: conditionally resume ULPI PHY")
-> Fixes: 88bc9d194ff6 ("usb: dwc3: add ULPI interface support")
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+> ---
+>  drivers/usb/dwc3/core.h | 1 +
+>  drivers/usb/dwc3/ulpi.c | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 2f04b3e42bf1..8d5e5bba1bc2 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -284,6 +284,7 @@
+>=20=20
+>  /* Global USB2 PHY Vendor Control Register */
+>  #define DWC3_GUSB2PHYACC_NEWREGREQ	BIT(25)
+> +#define DWC3_GUSB2PHYACC_DONE		BIT(24)
+>  #define DWC3_GUSB2PHYACC_BUSY		BIT(23)
+>  #define DWC3_GUSB2PHYACC_WRITE		BIT(22)
+>  #define DWC3_GUSB2PHYACC_ADDR(n)	(n << 16)
+> diff --git a/drivers/usb/dwc3/ulpi.c b/drivers/usb/dwc3/ulpi.c
+> index e6e6176386a4..20f5d9aba317 100644
+> --- a/drivers/usb/dwc3/ulpi.c
+> +++ b/drivers/usb/dwc3/ulpi.c
+> @@ -24,7 +24,7 @@ static int dwc3_ulpi_busyloop(struct dwc3 *dwc)
+>=20=20
+>  	while (count--) {
+>  		reg =3D dwc3_readl(dwc->regs, DWC3_GUSB2PHYACC(0));
+> -		if (!(reg & DWC3_GUSB2PHYACC_BUSY))
+> +		if (reg & DWC3_GUSB2PHYACC_DONE)
 
-these should go in the relevant commits instead.
+are you sure this works in all supported versions of the core?
 
-> Serge Semin (3):
->   usb: dwc3: ulpi: Use VStsDone to detect PHY regs access completion
->   usb: dwc3: ulpi: Replace CPU-based busyloop with Protocol-based one
->   usb: dwc3: ulpi: Fix USB2.0 HS/FS/LS PHY suspend regression
+John, could you confirm this for us?
 
-make sure fixes don't depend on other rework otherwise they can't be
-taken during the -rc cycle.
+thanks
 
 =2D-=20
 balbi
@@ -120,19 +112,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X5KoRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYpxg//c4FquGHYJbblctk4cOqti54DqjXDLvPZ
-9oa6qkIp3TLXuOYkNxmqKBCKV3cLnDvCh3W8l4lPdsNJuRoKnn8qatEO0nQ2wjNM
-xDuPjTiG0i0ce14i+TGGWAOxN9T7YccJNenOvs19hBP5NgK+meUoJnf/JTE92KGs
-6wM+1Cf3MbYpz4a1R7VH3CjXND8GRY1Q/l+oHpyQPrBa8D3ecmeqE2dblj7hkfL3
-Q5nYZaS8xDt9ud1eHnZthAKPOZJwY9hHEQPfR2xD01yqSMdaXVedreWwAjW3ddWF
-ofw/Fy+E0DxHEj9BEiH1Rw2yzFu9YaB9PWGMMR4HYWmu9YyKZam7h6Hw/tPcDC/1
-3V390t5q4ysgP5jfcC0nfyfGWMdJHbJyXP8yPoe/JScqqfHGzVOPsx6UP4RMwnCw
-EsdurLVo11T8RNB/bu3IutFTuJTJ9++7t2DtepywDNAUU3dm9/u/wibbK+3kP/DB
-6Po4SxyEV2Qr2GS8y37sEywyEhK5gdD+5zKdg+POv22RqNKhrLsfU+Ik6ViFgFkG
-mpyItADD0PvBIlXryFseu+IJC8fYrS5I7xBgzzm202t57Cpfw00s0zo+JzDkbqRI
-uAeYJ2vtCC1/KHO0KcSGV4z9ZrBNkkLqJWKeNpAkf3r2AeoxKn0OkDko5Xx5Y4R9
-iR5Dkmo2GOw=
-=thJo
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X5SwRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZHxA//fg2g3FbmW01YsryQ46l99nUvp3dxAsRX
+WasKiojNKREaCkd7bG6XH8oFt+ibwt8Qhdf4yuFuWgNL1+DfH6i91jj2Rg3aBE10
+CnslZktzo3cph5My6OLb9QZy0ATXkR59K8tJg7WKkzIFtDHMULYRvUDKF+inwnTC
+FHnHbe9JLNwhYtgLg/nSZnh7V3Z6CEYD1H9ToAMWQaDh7nb6+W2RqUCaNovSUe4a
+jB8qrBlKA4hcHV1Xb3XRAHHJ5vFkSR2lSLZlcQLwhz9ACjeE5YEnOsYzZJXk+IB2
+jn2NSqc2kW7UyeMoiSO9Vba2tjuEv2u3cgIQoqDzqk/mbCXgcmCtQVRRhnOv/XfD
+Ar7WdVAOsDpEgpgPHkRA+h5Lj9+7kmy0kvUuj8pDb4lydsOozc0UG1xpfb/SYyYH
+u28wFrvlnOjWgdCUmnebT1Ar/gP1KT8L/XQWl2ru+Av3FRXqLxjUPDuv1Xo9/Obf
+TNAsIiqp4thvq39XRIVqMwXcU8zOVWapFFD+Rup0rQq7UgZr+ikRuT6nyqBVrq0U
+3n3hiK+Q8z6GnnDjwQ8Mn+1/JoG0KKrY+6fCYNkX6/LaCxKEQpKuhRO20GEDSjy8
+Gy/jtG61+yjwCaUd1QY7KAn5Tv+mmCkA5BVXMA/koBFvOGnTFaqSM2xun2LIHOcG
+Od0Jaw8SHyc=
+=UFn6
 -----END PGP SIGNATURE-----
 --=-=-=--
