@@ -2,113 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E16A429A692
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 09:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B728529A6A1
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 09:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2894782AbgJ0I1B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 04:27:01 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:43261 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403961AbgJ0I1B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 04:27:01 -0400
-Received: by mail-lf1-f65.google.com with SMTP id l28so1164470lfp.10;
-        Tue, 27 Oct 2020 01:26:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XIPWi+l0jdtwe7a/vFhBWIkkHZTxV2Bo329Aduuqz0Y=;
-        b=N1RgbNLj1IGPtDBFi2WyRr67FzoIphdsntAJ05OtLwq5ClTtAT1fmLAqYVBNOarETG
-         zxVqZBxr+SbMU1zuj1WZZaseHIK/KHqXsSYVLvMBQD97WW8uemL8cubOJaL8G9dnZXFo
-         0O1FKm97AFbKJbmKv9q35d+kaYN1GFm8Fbkzo7Z2zK1vSsxRMe67m2rM4EEkyTDtzHV1
-         xWTaMERSuFYTdCwOH0S7Lm6rYTe+JTS0rXdBNCl8aCu54qG9kXNGN0JbmxmRCGjtFloz
-         5iUHqLxw2u5L2ntyZv3ZM8sDuqDFQPJk9Xv2SBR11FWJLM64yFzb2iHGBtxgoJDMGOZI
-         UYSA==
-X-Gm-Message-State: AOAM532QXhkwSyXYtREQ3eymXAClzCvCihPNEjkroLPp+t2kUxO2IyX9
-        d4B4vfSzS72+WoC2qJ/SjSg=
-X-Google-Smtp-Source: ABdhPJxZdvyff6NTZCNh5cgP4gqVTZlusJs7rkzYrG60oCea8SrZ4rbaJhyafEM+9WgvZzCHgo7GvQ==
-X-Received: by 2002:a19:c690:: with SMTP id w138mr416756lff.409.1603787218626;
-        Tue, 27 Oct 2020 01:26:58 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id n19sm95060lfe.142.2020.10.27.01.26.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 01:26:57 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kXKJk-0001LL-9S; Tue, 27 Oct 2020 09:26:57 +0100
-Date:   Tue, 27 Oct 2020 09:26:56 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Thomas Winischhofer <thomas@winischhofer.net>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Duncan Sands <duncan.sands@free.fr>
-Subject: Re: [PATCH v3 04/13 ] USB: serial: digi_acceleport: Remove
- in_interrupt() usage
-Message-ID: <20201027082656.GD4085@localhost>
-References: <20201019100629.419020859@linutronix.de>
- <20201019101110.019266389@linutronix.de>
- <20201025171613.GT26280@localhost>
- <20201026140313.dpg3hkhkje2os4hw@linutronix.de>
+        id S2894944AbgJ0IdT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 04:33:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44826 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2894935AbgJ0IdR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 04:33:17 -0400
+Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B82A32070E;
+        Tue, 27 Oct 2020 08:33:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603787597;
+        bh=wdgjE1mW9Gtb6qoZEGa/P3kKvyZpArLH7eHRde/bpmA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=LlworunyfhWsNDoJJ1Nea71XDrxG3oj2OJ6mvb99C87rZULcu15ZO1DLx4iaQ9EvU
+         TYoe76CYZmN286N0bO9g0W4tdT+jcVN07Q5xDVlanl7YPWkT2JMTVwMsRA9R0l/wFS
+         RproVUIBnrb6vgCoXrSyEcUAjdLOTVE4AxOLL+m4=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Dejin Zheng <zhengdejin5@gmail.com>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v3] usb: dwc3: core: fix a issue about clear connect state
+In-Reply-To: <20201020135806.30268-1-zhengdejin5@gmail.com>
+References: <20201020135806.30268-1-zhengdejin5@gmail.com>
+Date:   Tue, 27 Oct 2020 10:33:09 +0200
+Message-ID: <875z6wdq62.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201026140313.dpg3hkhkje2os4hw@linutronix.de>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 03:03:13PM +0100, Sebastian Andrzej Siewior wrote:
-> From: "Ahmed S. Darwish" <a.darwish@linutronix.de>
-> 
-> The usage of in_interrupt() in drivers is phased out and Linus clearly
-> requested that code which changes behaviour depending on context should
-> either be separated or the context be conveyed in an argument passed by the
-> caller, which usually knows the context.
-> 
-> The debug printk() in digi_write() prints in_interrupt() as context
-> information. This information is imprecisely as it does not distinguish
-> between hard-IRQ or disabled botton half and it does consider disabled
-> interrupts or preemption. It is not really helpful.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-I fixed up a couple of typos and added the missing negation above so
-that it reads:
 
-  The debug printk() in digi_write() prints in_interrupt() as context
-  information. This information is imprecise as it does not distinguish
-  between hard-IRQ or disabled bottom half and it does not consider
-  disabled interrupts or preemption. It is not really helpful.
-	
-> Remove the in_interrupt() printout.
-> 
-> Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Johan Hovold <johan@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> ---
-> v2…v3:
->   - Don't make dev_dbg() conditional on `tty'
->   - Remove the part "tty happens always in process context" from the
->     commit message. Johan pointed out that for PPP it may happen in
->     bottom half.
+Hi,
 
-Now applied for -next, thanks.
+Dejin Zheng <zhengdejin5@gmail.com> writes:
+> According to Synopsys Programming Guide chapter 2.2 Register Resets,
+> it cannot reset the DCTL register by setting DCTL.CSFTRST for core soft
+> reset, if DWC3 controller as a slave device and stay connected with a usb
+> host, then, while rebooting linux, it will fail to reinitialize dwc3 as a
+> slave device when the DWC3 controller did not power off. because the
+> connection status is incorrect, so we also need to clear DCTL.RUN_STOP
+> bit for disabling connect when doing core soft reset. There will still
+> be other stale configuration in DCTL, so reset the other fields of DCTL
+> to the default value 0.
 
-Johan
+This commit log is a bit hard to understand. When does this problem
+actually happen? It seems like it's in the case of, perhaps, kexecing
+into a new kernel, is that right?
+
+At the time dwc3_core_soft_reset() is called, the assumption is that
+we're starting with a clean core, from power up. If we have stale
+configuration from a previous run, we should fix this on the exit
+path. Note that if we're reaching probe with pull up connected, we
+already have issues elsewhere.
+
+I think this is not the right fix for the problem.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X20YRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQYvPBAA0dAVUpFk1ZWtu2G8dmKzdZH5mqolEUqW
+Vr8KwPcqSwv6nDdBvFGJjVd0qYXWWDD5DWk7Sn/YN485BOKEHHaMIF0P08dANIW7
+AFYa8QjP2iW1gfQAqTXNJLpzzC9n1/AqChugYnBAQDCmnbjddIYW7T/qhBhllhDj
+uDFJVRnFPMJi1Zn3HabDFprQ1L1uh0EdvtvggX91J7TggNGV9aeCsnWNkloVFExG
+ZqVuLqPogpZeMhIges6U0Qd16E94g4d+pkPw8DluQGH7++tNXItsh7kVQ5/MJ40r
+rk6XsGL/fy3So3F9HsTZKSJKmO1av3XobfyUiyi7AR1RsW1S5KoyGtuY/GJunsad
+9mOQmYk3LmxaaL1w05eTcqOi1IlEEusi9So7rNEUNzfPMyZedXbay8HY6WPdXgxo
+2VoNph/hD5uKTH6UeeHcuBi5M3KZQ5JbnMKuelxHCaovS/i49o2jqKBVu4Tmb5Ne
+0/EAOo6uET4DMKzpGC5k/lNf8h10775E+vNIbDQBsw3VRIiQv3PF2sTvrphlM8Jn
+fYi2STtU7HeVmWClJlDMdne2V/CgnWFofMfIxMxQvSINjnW9XLH04ynEqmRItBoW
+ZTTqPZBfE2FIIgPUTx3ftUby3qOCS0vlqOc7oLXM4F0GIZlRYOQxMQJJBQAQlfrq
+lxS8TOqH5jU=
+=D0Nn
+-----END PGP SIGNATURE-----
+--=-=-=--
