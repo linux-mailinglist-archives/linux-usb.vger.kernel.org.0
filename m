@@ -2,164 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E330029AA30
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 12:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F6729AA75
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 12:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2898844AbgJ0LB6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 07:01:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38624 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2898802AbgJ0LB6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 07:01:58 -0400
-Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 88197218AC;
-        Tue, 27 Oct 2020 11:01:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603796517;
-        bh=rtiaAwqYMXhB+qkfHAwBFqHMH04cfa1g5U/vwn4qr8w=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VAXnknkYHojsVY0wgrAv4B/wUYogK2PgYziRmf6OS3IGZcMpO80mH/mfcs4SwH4jj
-         ofSTWe8e5Z2lFUaJkbCWGyht0Q1sWtDTjkONEAELNO+dONoAvrr2MxaWp/J/sGN2d4
-         4t4YMVF7UE9IlTz8/gSRUmL5toBfczmewsTYp4fY=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v2 01/15] usb: dwc2: Fix/update enter/exit partial power
- down.
-In-Reply-To: <c4ea45e2-e7d4-1299-ced6-c93689546f2c@synopsys.com>
-References: <20201011135059.76B73A005E@mailhost.synopsys.com>
- <87d014dqpo.fsf@kernel.org>
- <c4ea45e2-e7d4-1299-ced6-c93689546f2c@synopsys.com>
-Date:   Tue, 27 Oct 2020 13:01:50 +0200
-Message-ID: <87wnzcaq5d.fsf@kernel.org>
+        id S1422241AbgJ0LWL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 07:22:11 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:52648 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2438671AbgJ0LWJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 07:22:09 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09RBKZqN013257;
+        Tue, 27 Oct 2020 04:22:01 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=SXIvu4hDCMYJ9gf9w6OHvPuIM/ntPGAqk57CWhWcpjo=;
+ b=hJhWKSyLJq3QO5GcAWGROn4wspP381ufv795OiV4SUlZDx8P3hFX6BSJvZ2f4b1zthOy
+ AYIfT4ThOUKOyd4ZjA+w3xST8SxMEsOhj0E8d9Kipdc5lG+sornsb0KQkv/sGbLoRvD0
+ LgO8ACQWTbkjh91A1e5IgdzrOYCCl4XvSgqDoQLewk0mOiQI3Mckkwg8P+mDgUdld3gy
+ s5/w10m0FAkLW058vbW+SortyAETF4ktSt+Wq2xCLSlDBWEMC+ejvu+8Ou9DGrbqSDhJ
+ M8y1NBn+QB7kLXdGlk4zoFY1qOujPkYfiz8qmR3buocQgonRx13j3cj02WtJDdtS/loU Ig== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2102.outbound.protection.outlook.com [104.47.70.102])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 34cfux37k8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Oct 2020 04:22:01 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HIoDvljb6EEDbrbzwoLgIzy0ty4vgXIhzQ1Xakh4OI6pUm6gkAV9gqrSNo8hzB/ETvcW+EVN3M55OR9mUO16loA5uiNy1D3fDFp4RhtImD1JT2F4/Wm5+wNrViaVHQw3iodgfyylMJvhJZlBC5sqRPTo4RuMmW4EzGiQbi5NzLSD44EiYYFpA3bg+9pnihv+yqlaFDB5kEAbHT6TMR3FBElx4hmovUsVE2XogbvUsSZhOGFt1KonF6LVnaNVriesONrw3y7pQJScHbwDJA6HR9Phgn1fSxPoVMrMVds99hg0bNxYtFhszVmT/w9IIpAeZ6IEGUB9dNPVxte3+r4wDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SXIvu4hDCMYJ9gf9w6OHvPuIM/ntPGAqk57CWhWcpjo=;
+ b=TapmBRj0bCglsZZvCt/3RxBkWWr/5hN57WWYB8UGcU8QhVSrT9l23xR+UYfDwTx4qEaNfeCu096pnzz3eYAWMyc50/YYRQ5i66Dz5cYPlZMiziqzE6lINAoVZQI4duhT0oOmnYnMccjT8Eq4y9MipVk0iFRo0f0vTAVXd9loi/2pO5uk7Jp7wW14Twt0D0Zvnuc0TAHMl8nuCzghpaNaMd6b354mqUOCDEiqtMy6KQJx4ol54QvGBxTK/MnqiypAwK0z1qrmjAZcBi2Jc2EDZO4rZah45VQeIBo/YmBpA7SXbit+L+7u/ZmDex92Bp913E1rXqeVkKywyPEew2EpWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SXIvu4hDCMYJ9gf9w6OHvPuIM/ntPGAqk57CWhWcpjo=;
+ b=bL0TPgRhxKYSmP8D0PBTBAH2Wk7ogcrIFdKTPI9V9JEbrNt1OLE9Ho3vVD1p6yTcceVYSNqMgANWJ07joPFAME5XWvg3P02a6Yf7C996RqapDxgHOXwHhddXKIizVamHcPLufZp4kNwAO2MP65JuTboQG0hXNuZ4ykfSICDK7Bc=
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
+ DM5PR07MB4133.namprd07.prod.outlook.com (2603:10b6:4:b3::32) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3477.20; Tue, 27 Oct 2020 11:21:59 +0000
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::2087:7f2b:5dc6:a960]) by DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::2087:7f2b:5dc6:a960%6]) with mapi id 15.20.3477.027; Tue, 27 Oct 2020
+ 11:21:59 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Felipe Balbi <balbi@kernel.org>, Peter Chen <peter.chen@nxp.com>,
+        "rogerq@ti.com" <rogerq@ti.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jun.li@nxp.com" <jun.li@nxp.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Peter Chen <peter.chen@nxp.com>
+Subject: RE: [PATCH v2 3/3] usb: cdns3: Fix on-chip memory overflow issue
+Thread-Topic: [PATCH v2 3/3] usb: cdns3: Fix on-chip memory overflow issue
+Thread-Index: AQHWqA4bmwECGWeMkUCpX9nCXT6rQamrNsEAgAAdW0A=
+Date:   Tue, 27 Oct 2020 11:21:59 +0000
+Message-ID: <DM6PR07MB55299C4481210E50CF571584DD160@DM6PR07MB5529.namprd07.prod.outlook.com>
+References: <20201022005505.24167-1-peter.chen@nxp.com>
+ <20201022005505.24167-4-peter.chen@nxp.com> <878sbsc92j.fsf@kernel.org>
+In-Reply-To: <878sbsc92j.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctOWU4ZDU3ZTAtMTg0Ni0xMWViLTg3NmItMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDllOGQ1N2UxLTE4NDYtMTFlYi04NzZiLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMTQ5MiIgdD0iMTMyNDgyNzEzMTYyMjUxMDUzIiBoPSJNbHBxT1RIblR0d3hNK0RtczdzeWg5N0d0ZUE9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=cadence.com;
+x-originating-ip: [185.217.253.59]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8890b667-3aa0-472d-69b2-08d87a6a852d
+x-ms-traffictypediagnostic: DM5PR07MB4133:
+x-microsoft-antispam-prvs: <DM5PR07MB4133056A30BF6D9FC33E1949DD160@DM5PR07MB4133.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Cl9mEa3jxQBWB7FSxUmnZM8Y3zRgWoiS0uZ0RNVaXtQEjlUFqc48RZTy/+HZbAGU1/2hJ0BTz9EFPK9fXz9WjQxu0nJci0FqkUzEj0cHsms7YT/8yH5cbfG4oM5ucWppeWsBB7yeljE2+Q5K42B/0lphse4vsl8WZF/TVE2QJPcOA9Gb6UpBTvH949IdC4Vy/UBs6i+LAgRpRvMm3h2IV8AjODEtl2xWnGpI7d1IcSqSG/OIdLXVtUWPhCEHl/ogkvGP/W3ceapt6NNTKAaclAd0Y+5gyrT2kejNveIZZJYDvVQbhoXziGyqr51mHHT6/eXE8N0wSHmF16TRoRlMoRBay00MBINRZkHUsXnp+bcIRZRmUgUsxLHatd7jD4Ax
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(346002)(136003)(376002)(366004)(36092001)(26005)(4326008)(9686003)(6506007)(8676002)(8936002)(83380400001)(71200400001)(54906003)(7696005)(316002)(110136005)(186003)(66556008)(66476007)(66946007)(76116006)(52536014)(478600001)(86362001)(64756008)(2906002)(33656002)(5660300002)(55016002)(66446008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: TU9+yTOL45RlC93vE1bja+FFDWEQJ+oV8Tc1Ogk0ughpZr+Abh13T1LZPmVB8k5XyN3wQ1KqWZ+EvFO6kfx8UrVkrmbIr1P260LEvgNh6O2lAab6SYKMD5x14RzojEpIzpDGY6zIBOT+9WKTeVu09Uc3p1aA6qeQN00ygF1oKjdvKCLCIVBYsad+iR5LcKxsJ9dwLUXhsq6YkGiGMqb+EGxJxpH6X1JKGk4IzDMOffMs8hiSmJBdzkAqBwduC06VV4D16Cu/B+fa6kKF7vrfXqA+5LvlTZG0Mg2A264AQFmY587dgQ2GhdMEsvilsuAoNzBJFE6VwnL3zQdYnASZoKS69nQuDNyarrZR+2HT1VEIop565qKSwuJtBiKQbQa9K5iXY/OPXUxmt1Mf3oPpwl9o4cZDmFtrK5vuVKEv0h9tugTWc6nYZsULS97libW0MAbJt9A2yZGREtgErMg/ezJrZOmWJbteWz+pypHPABJB5G/jLt39p5YsRtD4xc5wW0dpirWVVWTOcK/wjLPgOowzL/2cJL2qB6nS9n8b0Y6Kg2WSD2PZRk1ZglYG+/ZMZUVtOjSC6olkFbClw5SQeNvW0ZJjmbSTD9JVCktWVJsFCLo/dfl9qJFzv3EJFDwrRngcJLzRUwmZh+mTZQ9nfg==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8890b667-3aa0-472d-69b2-08d87a6a852d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2020 11:21:59.1553
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Kb3A6NHQ6bmsrY4bkVZdbQfb5R0zW98zscvKMpViyAI9Pr/FmeLts1fhQDzWiC98dfTTGWYzEd+JVhVremY6KHZ0w1TU32tIYO/BVqgu6eE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR07MB4133
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.737
+ definitions=2020-10-27_05:2020-10-26,2020-10-27 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 phishscore=0
+ malwarescore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0 mlxlogscore=787
+ priorityscore=1501 suspectscore=0 spamscore=0 adultscore=0 clxscore=1011
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010270075
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-
 Hi,
 
-Artur Petrosyan <Arthur.Petrosyan@synopsys.com> writes:
-> Hi Felipe,
 >
-> On 10/27/2020 12:21, Felipe Balbi wrote:
->>=20
->> Hi Arthur,
->>=20
->> before I review your series, there are few things I'd like to point out:
->>=20
->> 1. A single patch should do one thing and one thing only
->>=20
->> 2. Every single patch should compile and work on its own
->>=20
->> 3. When sending a series, remember to include a cover letter
->>=20
->> 4. When sending a series, you can rely on git to produce a thread with a
->>     cover letter
->>=20
->> 	git format-patch -o series --cover-letter HEAD~15..
->>=20
->> 5. Remember to run checkpatch on every patch
->>=20
->> 6. Please, read https://www.kernel.org/doc/html/latest/process/submit-ch=
-ecklist.html
-> The above statements are of course done before submitting to LKML.
-> Moreover each patch is first of all tested using Jenkins, and passed a=20
-> review process on gerrit.
+>Peter Chen <peter.chen@nxp.com> writes:
+>> From: Pawel Laszczak <pawell@cadence.com>
+>>
+>> Patch fixes issue caused setting On-chip memory overflow bit in usb_sts
+>> register. The issue occurred because EP_CFG register was set twice
+>> before USB_STS.CFGSTS was set. Every write operation on EP_CFG.BUFFERING
+>> causes that controller increases internal counter holding the number
+>> of reserved on-chip buffers. First time this register was updated in
+>> function cdns3_ep_config before delegating SET_CONFIGURATION request
+>> to class driver and again it was updated when class wanted to enable
+>> endpoint.  This patch fixes this issue by configuring endpoints
+>> enabled by class driver in cdns3_gadget_ep_enable and others just
+>> before status stage.
+>>
+>> Cc: <stable@vger.kernel.org> #v5.8+
+>> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+>> Reported-and-tested-by: Peter Chen <peter.chen@nxp.com>
+>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+>
+>comment from previous thread is still valid. Far too extensive change to
+>qualify for stable or -rc. Sure there isn't a minimal patch possible?
+>
 
-The fact that you're doing multiple things in a single commit should
-have been caught during your internal review process. John, Minas, did
-any of you review these patches before submission? Please make sure
-details such as this are caught before hand ;-)
+I think that it's the only way to fix this issue. This fix require to displ=
+acement=20
+of code fragments and it's the reason why this patch is such extensive.
 
-> Did you see any build error? or checkpatch error?
-
-just a general comment, seen that patches were not send as a reply to
-patch 0, in a separate thread.
-
->> Artur Petrosyan <Arthur.Petrosyan@synopsys.com> writes:
->>> - Updated entering and exiting partial power down function
->>>    flow. Before there was a lot of confusions with core
->>>    entering to partial power down in device or host mode.
->>>
->>> - Added "rem_wakeup" for host exiting from Partial Power
->>>    Down mode from host remote wakeup flow. According to
->>>    programming guide in host mode, port power must be
->>>    turned on when wakeup is detected.
->>>
->>> - Added "in_ppd" flag to indicate the core state after
->>>    entering into Partial Power Down mode.
->>>
->>> - Moved setting of lx_state into partial power down
->>>    specific functions.
->>>
->>> - Added dev_dbg() messages when entering and exiting from
->>>    partial power down.
->>>
->>> - During Partial Power Down exit rely on backuped value of
->>>    "GOTGCTL_CURMODE_HOST" to determine the mode of core
->>>    before entering to PPD.
->>>
->>> - Set missing "DCTL_PWRONPRGDONE" bit when exiting device
->>>    partial power down according to programming guide.
->>>
->>> - Added missing restore of DCFG register in device mode
->>>    according to programming guide.
->>=20
->>  From a quick read, it seems like each of these topics deserve a patch of
->> its own. Could you break this down into smaller patches? Also, you have
->> colleagues who have been dealing with the community for a long time,
->> perhaps ask them to do an internal round of review before submitting?
->>=20
->> That may help you get your patches merged in a timely manner.
->>=20
-> I will work on breaking this patch down into smaller patches I could do=20
-> this before of course the reason I didn't break them down was that I=20
-> didn't want to make the patch series so big.
-
-too big series are not a problem. Too big patches doing multiple things
-generally are. Keep in mind that you want maintainers to receive
-patches that obviously correct.
-
-> Thank you very much for the advice. I will also invite the colleagues to=
+Regards,
+Pawel
 =20
-> test or give a review.
 
-thanks
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X/h4RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYBIRAAoZOPSveU4jPu+KboiHlvTf0svVeSYmkM
-V1JGVjcTl63huRkDjU/JmHstEHqEAhjdOj+TD2i6Eg47z4N5MOiTghP1j1Z6DxYx
-+7GjovK8o9Vz1bEkl0FmvT9qjlPL21DgGRIMSavRnTC981kWnL9tOJacztGVlzuE
-eTulw81TiqIEfjaw8x6Sz9KRXIGwnsKLHHRm2f48crSc/XTbT1Xe9wFrNUFxelFW
-+W+q63f3+9NNZPdyOjNM/J0ldaF3eg9WXSVZ6FNmbrTbnU4p9CkC4CaG3FEmneLG
-ymCA+WvKs8r3LKe7bapVhnh+HEqW5K8f2g8v04ppOHzDMMSCDlbC+1tgwZlpC3Zo
-wd3f3IGHCaI5SQpVkJTIlrWoykIJvZGlC2eblFNzm/CqoG+m+Nw7LLLk6z19Qn3P
-l8psj996W+tx3tyaDvMQrffB7d7iJS3i0Gf14MJxTEdQ3wRqogghUZWi/NTN2vpT
-Y5LQjt9IaA8xXWL/7mNqsYokbKQzKHQJCsG82HSVZj9+lt16u2V7njDE31zNYwO/
-W8UtWzjxv93dfZeJysecVn7eZZXtrlykG97N83Bv5SmaIU/dIC4PDZ9aq92gsj4i
-/atLOSqy8SnkTLYMjjb6oPmM+4LjfdJlkxRBlWFYkjJtxO5JWkSy1FHDbfqjgFmF
-9CUcjE+UdbM=
-=OaHI
------END PGP SIGNATURE-----
---=-=-=--
