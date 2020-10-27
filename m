@@ -2,47 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3238429AA22
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 11:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E330029AA30
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 12:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729393AbgJ0K5E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 06:57:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37900 "EHLO mail.kernel.org"
+        id S2898844AbgJ0LB6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 07:01:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38624 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725811AbgJ0K5E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 06:57:04 -0400
+        id S2898802AbgJ0LB6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 07:01:58 -0400
 Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9871A2224E;
-        Tue, 27 Oct 2020 10:57:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 88197218AC;
+        Tue, 27 Oct 2020 11:01:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603796223;
-        bh=HzIkvC83+y+GZokmoVZEDhfMbPbSNT/Gp0cxE0BYOIo=;
+        s=default; t=1603796517;
+        bh=rtiaAwqYMXhB+qkfHAwBFqHMH04cfa1g5U/vwn4qr8w=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=bbDpiDwbQi0UUVH+z6bPC9RcCJ28fi3s7MxPxRyHQq9f1Kc99Nvn1xhoddukknhgt
-         vwtTuTUkYBf7eYhKPsocuwWMNPoqaWjzO9qDOI3RWoKbdNwEgTHjkGnElJdP5BrgJa
-         VrZm4Ku77aIu/IASpngKl8HkzClie2pmnESl+1Po=
+        b=VAXnknkYHojsVY0wgrAv4B/wUYogK2PgYziRmf6OS3IGZcMpO80mH/mfcs4SwH4jj
+         ofSTWe8e5Z2lFUaJkbCWGyht0Q1sWtDTjkONEAELNO+dONoAvrr2MxaWp/J/sGN2d4
+         4t4YMVF7UE9IlTz8/gSRUmL5toBfczmewsTYp4fY=
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH v2 00/15] usb: dwc2: Fix and improve power saving modes.
-In-Reply-To: <0247ace2-841d-1044-37cd-5ec40997bbab@synopsys.com>
-References: <20201011135035.7C61DA005E@mailhost.synopsys.com>
- <2edb35af-bf0b-bfab-69c7-9b7f0cac6a69@synopsys.com>
- <875z6wc8z3.fsf@kernel.org>
- <0247ace2-841d-1044-37cd-5ec40997bbab@synopsys.com>
-Date:   Tue, 27 Oct 2020 12:56:59 +0200
-Message-ID: <87zh48aqdg.fsf@kernel.org>
+Cc:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH v2 01/15] usb: dwc2: Fix/update enter/exit partial power
+ down.
+In-Reply-To: <c4ea45e2-e7d4-1299-ced6-c93689546f2c@synopsys.com>
+References: <20201011135059.76B73A005E@mailhost.synopsys.com>
+ <87d014dqpo.fsf@kernel.org>
+ <c4ea45e2-e7d4-1299-ced6-c93689546f2c@synopsys.com>
+Date:   Tue, 27 Oct 2020 13:01:50 +0200
+Message-ID: <87wnzcaq5d.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
+
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
 Hi,
@@ -50,117 +54,112 @@ Hi,
 Artur Petrosyan <Arthur.Petrosyan@synopsys.com> writes:
 > Hi Felipe,
 >
-> On 10/27/2020 13:29, Felipe Balbi wrote:
->> 
->> Hi,
->> 
->> Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
->>> On 10/11/2020 5:50 PM, Artur Petrosyan wrote:
->>>> This patch set fixes/improves partial power down, hibernation power
->>>> saving modes and adds support for host/device clock gating.
->>>>
->>>> Changes from V1:
->>>>    - Added new patches.
->>>>     1. usb: dwc2: Add support for dwc2 host/device clock gating.
->>>>     2. usb: dwc2: Add exit power saving mode before removing driver.
->>>>     3. usb: dwc2: Fix HPRT0.PrtSusp bit setting for HiKey 960 board.
->>>>
->>>>    - Updated patches
->>>>     1. usb: dwc2: Fix/update enter/exit partial power down.
->>>> 	- Updated the patch name from "usb: dwc2: Fix
->>>> 	dwc2_restore_device_registers() function." to "usb: dwc2:
->>>> 	Fix/update enter/exit partial power down."
->>>> 	- Updated entering and exiting partial power down function
->>>> 	flow. Before there was a lot of confusions with core
->>>> 	entering to partial power down in device or host mode.
->>>> 	- Added "rem_wakeup" for host exiting from Partial Power
->>>> 	Down mode from host remote wakeup flow. According to
->>>> 	programming guide in host mode, port power must be
->>>> 	turned on when wakeup is detected.
->>>> 	- Added "in_ppd" flag to indicate the core state after
->>>> 	entering into Partial Power Down mode.
->>>>     2. usb: dwc2: Fix wakeup detected and session request interrupt handlers.
->>>> 	- According to programming guide added partial power
->>>> 	down exit flow in wakeup detected interrupt handler.
->>>> 	- Added clock gating exit flow from wakeup detected
->>>> 	and session request interrupt handlers.
->>>>     3. usb: dwc2: Fix suspend state in host mode for partial power down.
->>>> 	- Added "dwc2_port_suspend" and "dwc2_port_resume" functions to
->>>> 	"core.h" header file
->>>> 	- Updated "USB_PORT_FEAT_RESET" flow when core receives port
->>>> 	reset in Partial Power Down or Hibernation state.
->>>> 	- Added return "-ENODEV" if core is in suspend state
->>>> 	in "_dwc2_hcd_urb_enqueue" function to avoid port
->>>> 	reset issue, when an external hub is connected.
->>>>     4. usb: dwc2: Add part. power down exit from dwc2_conn_id_status_change().
->>>> 	- Instead of clearing registers inline for exiting partial power down
->>>> 	mode, now calling the "dwc2_exit_partial_power_down" function without
->>>> 	restoring the backup registers.
->>>>     5. usb: dwc2: Update dwc2_handle_usb_suspend_intr function.
->>>> 	- Added changes suggested by Douglas Anderson from commit
->>>> 	"usb: dwc2: Get rid of useless error checks for
->>>> 	hibernation/partial power down"
->>>>     6. usb: dwc2: Fix hibernation between host and device modes.
->>>> 	- Added setting of "hsotg->bus_suspended" flag to 0 because before if
->>>> 	core exited from "GPWRDN_STS_CHGINT" interrupt in host mode the flag
->>>> 	remained true not letting enter to hibernation next time.
->>>>     7. usb: dwc2: Clear fifo_map when resetting core.
->>>> 	- Added "static inline void dwc2_clear_fifo_map()" helper
->>>> 	function to clear fifo_map with peripheral or dual role mode.
->>>> 	- Added a dummy version of "dwc2_clear_fifo_map()" helper
->>>> 	for host-only mode.
->>>>     8. usb: dwc2: Add power saving mode support from system issued suspend/resume.
->>>> 	- Updated the patch name from "usb: dwc2: Add enter/exit hibernation
->>>> 	from system scheduled suspend" to "usb: dwc2: Add power saving mode
->>>> 	support from system issued suspend/resume."
->>>> 	- Fixed issue related to "spinlock already unlocked" reported by Doug
->>>> 	Anderson.
->>>>
->>>>    - Abandoned patches.
->>>>     1. usb: dwc2: Add port conn. sts. checking in _dwc2_hcd_resume() function.
->>>> 	- The changes of this patch are moved to the "usb: dwc2: Add power
->>>> 	saving mode support from system issued suspend/resume" patch.
->>>>     2. usb: dwc2: Add flag and debug messages for Partial Power Down mode.
->>>> 	- The changes of this patch are moved to the "usb: dwc2: Fix/update
->>>> 	enter/exit partial power down." patch.
->>>>
->>>>
->>>> Artur Petrosyan (15):
->>>>     usb: dwc2: Fix/update enter/exit partial power down.
->>>>     usb: dwc2: Add support for dwc2 host/device clock gating.
->>>>     usb: dwc2: Fix wakeup detected and session request interrupt handlers.
->>>>     usb: dwc2: Fix suspend state in host mode for partial power down.
->>>>     usb: dwc2: Add part. power down exit from
->>>>       dwc2_conn_id_status_change().
->>>>     usb: dwc2: Reset DEVADDR after exiting gadget hibernation.
->>>>     usb: dwc2: Add default param to control power optimization.
->>>>     usb: dwc2: Update dwc2_handle_usb_suspend_intr function.
->>>>     usb: dwc2: Fix hibernation between host and device modes.
->>>>     usb: dwc2: Fix HPRT0.PrtSusp bit setting for HiKey 960 board.
->>>>     usb: dwc2: Allow exiting hibernation from gpwrdn rst detect
->>>>     usb: dwc2: Clear fifo_map when resetting core.
->>>>     usb: dwc2: Clear GINTSTS_RESTOREDONE bit after restore is generated.
->>>>     usb: dwc2: Add power saving mode support from system issued
->>>>       suspend/resume
->>>>     usb: dwc2: Add exit power saving mode before removing driver
->> 
->> where are all the patches? I only got the cover letter. When resending,
->> please collect Minas' acked-by.
->>
->
-> I am not sure how to answer to the question. The patch series including 
-> all the patches has been successfully sent to LKML. My colleagues has 
-> received them. Didn't you get e-mail? because I can see that your e-mail 
-> address is listed in "To" list of all the patches in the series.
+> On 10/27/2020 12:21, Felipe Balbi wrote:
+>>=20
+>> Hi Arthur,
+>>=20
+>> before I review your series, there are few things I'd like to point out:
+>>=20
+>> 1. A single patch should do one thing and one thing only
+>>=20
+>> 2. Every single patch should compile and work on its own
+>>=20
+>> 3. When sending a series, remember to include a cover letter
+>>=20
+>> 4. When sending a series, you can rely on git to produce a thread with a
+>>     cover letter
+>>=20
+>> 	git format-patch -o series --cover-letter HEAD~15..
+>>=20
+>> 5. Remember to run checkpatch on every patch
+>>=20
+>> 6. Please, read https://www.kernel.org/doc/html/latest/process/submit-ch=
+ecklist.html
+> The above statements are of course done before submitting to LKML.
+> Moreover each patch is first of all tested using Jenkins, and passed a=20
+> review process on gerrit.
 
-oh, I see what happened, this is the same series where patches were not
-sent as a reply to the cover letter. Now I understand.
+The fact that you're doing multiple things in a single commit should
+have been caught during your internal review process. John, Minas, did
+any of you review these patches before submission? Please make sure
+details such as this are caught before hand ;-)
 
-> Also related to collection of Minas' acked-by. Do I need to add the 
-> acked-by tag to all the patches or only in the 0 patch? Because the 
-> acked-by tag is now done for only the 0 patch.
+> Did you see any build error? or checkpatch error?
 
-Every patch. Patch 0 doesn't go into git ;-)
+just a general comment, seen that patches were not send as a reply to
+patch 0, in a separate thread.
 
--- 
+>> Artur Petrosyan <Arthur.Petrosyan@synopsys.com> writes:
+>>> - Updated entering and exiting partial power down function
+>>>    flow. Before there was a lot of confusions with core
+>>>    entering to partial power down in device or host mode.
+>>>
+>>> - Added "rem_wakeup" for host exiting from Partial Power
+>>>    Down mode from host remote wakeup flow. According to
+>>>    programming guide in host mode, port power must be
+>>>    turned on when wakeup is detected.
+>>>
+>>> - Added "in_ppd" flag to indicate the core state after
+>>>    entering into Partial Power Down mode.
+>>>
+>>> - Moved setting of lx_state into partial power down
+>>>    specific functions.
+>>>
+>>> - Added dev_dbg() messages when entering and exiting from
+>>>    partial power down.
+>>>
+>>> - During Partial Power Down exit rely on backuped value of
+>>>    "GOTGCTL_CURMODE_HOST" to determine the mode of core
+>>>    before entering to PPD.
+>>>
+>>> - Set missing "DCTL_PWRONPRGDONE" bit when exiting device
+>>>    partial power down according to programming guide.
+>>>
+>>> - Added missing restore of DCFG register in device mode
+>>>    according to programming guide.
+>>=20
+>>  From a quick read, it seems like each of these topics deserve a patch of
+>> its own. Could you break this down into smaller patches? Also, you have
+>> colleagues who have been dealing with the community for a long time,
+>> perhaps ask them to do an internal round of review before submitting?
+>>=20
+>> That may help you get your patches merged in a timely manner.
+>>=20
+> I will work on breaking this patch down into smaller patches I could do=20
+> this before of course the reason I didn't break them down was that I=20
+> didn't want to make the patch series so big.
+
+too big series are not a problem. Too big patches doing multiple things
+generally are. Keep in mind that you want maintainers to receive
+patches that obviously correct.
+
+> Thank you very much for the advice. I will also invite the colleagues to=
+=20
+> test or give a review.
+
+thanks
+
+=2D-=20
 balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X/h4RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQYBIRAAoZOPSveU4jPu+KboiHlvTf0svVeSYmkM
+V1JGVjcTl63huRkDjU/JmHstEHqEAhjdOj+TD2i6Eg47z4N5MOiTghP1j1Z6DxYx
++7GjovK8o9Vz1bEkl0FmvT9qjlPL21DgGRIMSavRnTC981kWnL9tOJacztGVlzuE
+eTulw81TiqIEfjaw8x6Sz9KRXIGwnsKLHHRm2f48crSc/XTbT1Xe9wFrNUFxelFW
++W+q63f3+9NNZPdyOjNM/J0ldaF3eg9WXSVZ6FNmbrTbnU4p9CkC4CaG3FEmneLG
+ymCA+WvKs8r3LKe7bapVhnh+HEqW5K8f2g8v04ppOHzDMMSCDlbC+1tgwZlpC3Zo
+wd3f3IGHCaI5SQpVkJTIlrWoykIJvZGlC2eblFNzm/CqoG+m+Nw7LLLk6z19Qn3P
+l8psj996W+tx3tyaDvMQrffB7d7iJS3i0Gf14MJxTEdQ3wRqogghUZWi/NTN2vpT
+Y5LQjt9IaA8xXWL/7mNqsYokbKQzKHQJCsG82HSVZj9+lt16u2V7njDE31zNYwO/
+W8UtWzjxv93dfZeJysecVn7eZZXtrlykG97N83Bv5SmaIU/dIC4PDZ9aq92gsj4i
+/atLOSqy8SnkTLYMjjb6oPmM+4LjfdJlkxRBlWFYkjJtxO5JWkSy1FHDbfqjgFmF
+9CUcjE+UdbM=
+=OaHI
+-----END PGP SIGNATURE-----
+--=-=-=--
