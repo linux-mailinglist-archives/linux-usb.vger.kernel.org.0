@@ -2,93 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A9D29C4E6
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 19:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCB929C4EB
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 19:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1823654AbgJ0R7Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 13:59:25 -0400
-Received: from mga03.intel.com ([134.134.136.65]:34126 "EHLO mga03.intel.com"
+        id S1823699AbgJ0R7r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 13:59:47 -0400
+Received: from mga06.intel.com ([134.134.136.31]:45500 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1823203AbgJ0R6L (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 13:58:11 -0400
-IronPort-SDR: fW7T60hx1U28IPgMbQ/ufL/NsJsLrDr8h6qOpKkB5QSrnKFjB6eeDphAXriX73rCczz297b1SU
- KEzTXfMmJZLg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9787"; a="168230686"
+        id S1823181AbgJ0R6K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 13:58:10 -0400
+IronPort-SDR: zY4dlnzYXYVAff1pliYoKV1JMbYFiBENB/6+JUdwfsjsm1QE7t7b7I65OBjOOb1znpUWd6frbB
+ LgWchr0lf+mA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9787"; a="229771971"
 X-IronPort-AV: E=Sophos;i="5.77,424,1596524400"; 
-   d="scan'208";a="168230686"
+   d="scan'208";a="229771971"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2020 10:58:10 -0700
-IronPort-SDR: pVBI96o6WMqJ6mq5a8oXe8bATKbSaxP/VCM1wYfH+mNa36hNrOtpMcv+1HKUfbt7UIprRLPVTs
- BcddLyFjzpHQ==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2020 10:58:09 -0700
+IronPort-SDR: r0bFDgqqkmmOy2iDMDA4/n9DmIUZGS2o3t+glU6IWlUh0Q55RLSogZy42xSI9pP0HEE+b3Qrp0
+ nFdMKStw4+gQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,424,1596524400"; 
-   d="scan'208";a="303841822"
+   d="scan'208";a="535893727"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Oct 2020 10:58:07 -0700
+  by orsmga005.jf.intel.com with ESMTP; 27 Oct 2020 10:58:07 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E4DE0179; Tue, 27 Oct 2020 19:58:06 +0200 (EET)
+        id 05EC4249; Tue, 27 Oct 2020 19:58:07 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
-        linux-usb@vger.kernel.org, Peng Hao <peng.hao2@zte.com.cn>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v1 1/5] driver core: platform: Introduce platform_get_mem_or_io_resource()
-Date:   Tue, 27 Oct 2020 19:58:02 +0200
-Message-Id: <20201027175806.20305-1-andriy.shevchenko@linux.intel.com>
+        linux-usb@vger.kernel.org
+Subject: [PATCH v1 3/5] usb: host: sl811: Switch to use platform_get_mem_or_io_resource()
+Date:   Tue, 27 Oct 2020 19:58:04 +0200
+Message-Id: <20201027175806.20305-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201027175806.20305-1-andriy.shevchenko@linux.intel.com>
+References: <20201027175806.20305-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There are at least few existing users of the proposed API which
-retrieves either MEM or IO resource from platform device.
+Switch to use new platform_get_mem_or_io_resource() instead of
+home grown analogue.
 
-Make it common to utilize in the existing and new users.
+Note, the code has been moved upper in the function to allow farther cleanups,
+such as resource sanity check.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Eric Auger <eric.auger@redhat.com>
-Cc: Alex Williamson <alex.williamson@redhat.com>
-Cc: Cornelia Huck <cohuck@redhat.com>
-Cc: kvm@vger.kernel.org
 Cc: linux-usb@vger.kernel.org
-Cc: Peng Hao <peng.hao2@zte.com.cn>
-Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/platform_device.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/usb/host/sl811-hcd.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-index 77a2aada106d..eb8d74744e29 100644
---- a/include/linux/platform_device.h
-+++ b/include/linux/platform_device.h
-@@ -52,6 +52,19 @@ extern struct device platform_bus;
+diff --git a/drivers/usb/host/sl811-hcd.c b/drivers/usb/host/sl811-hcd.c
+index adaf4063690a..7e0d6f686231 100644
+--- a/drivers/usb/host/sl811-hcd.c
++++ b/drivers/usb/host/sl811-hcd.c
+@@ -1614,12 +1614,18 @@ sl811h_probe(struct platform_device *dev)
+ 	void __iomem		*addr_reg;
+ 	void __iomem		*data_reg;
+ 	int			retval;
+-	u8			tmp, ioaddr = 0;
++	u8			tmp, ioaddr;
+ 	unsigned long		irqflags;
  
- extern struct resource *platform_get_resource(struct platform_device *,
- 					      unsigned int, unsigned int);
-+static inline
-+struct resource *platform_get_mem_or_io_resource(struct platform_device *pdev,
-+						 unsigned int num)
-+{
-+	struct resource *res;
+ 	if (usb_disabled())
+ 		return -ENODEV;
+ 
++	/* the chip may be wired for either kind of addressing */
++	addr = platform_get_mem_or_io_resource(dev, 0);
++	data = platform_get_mem_or_io_resource(dev, 1);
++	if (!addr || !data || resource_type(addr) != resource_type(data))
++		return -ENODEV;
 +
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, num);
-+	if (res)
-+		return res;
-+
-+	return platform_get_resource(pdev, IORESOURCE_IO, num);
-+}
-+
- extern struct device *
- platform_find_device_by_driver(struct device *start,
- 			       const struct device_driver *drv);
+ 	/* basic sanity checks first.  board-specific init logic should
+ 	 * have initialized these three resources and probably board
+ 	 * specific platform_data.  we don't probe for IRQs, and do only
+@@ -1632,16 +1638,8 @@ sl811h_probe(struct platform_device *dev)
+ 	irq = ires->start;
+ 	irqflags = ires->flags & IRQF_TRIGGER_MASK;
+ 
+-	/* the chip may be wired for either kind of addressing */
+-	addr = platform_get_resource(dev, IORESOURCE_MEM, 0);
+-	data = platform_get_resource(dev, IORESOURCE_MEM, 1);
+-	retval = -EBUSY;
+-	if (!addr || !data) {
+-		addr = platform_get_resource(dev, IORESOURCE_IO, 0);
+-		data = platform_get_resource(dev, IORESOURCE_IO, 1);
+-		if (!addr || !data)
+-			return -ENODEV;
+-		ioaddr = 1;
++	ioaddr = resource_type(addr) == IORESOURCE_IO;
++	if (ioaddr) {
+ 		/*
+ 		 * NOTE: 64-bit resource->start is getting truncated
+ 		 * to avoid compiler warning, assuming that ->start
 -- 
 2.28.0
 
