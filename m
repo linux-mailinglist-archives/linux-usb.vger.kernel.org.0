@@ -2,86 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 215A729A65C
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 09:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 471D729A66D
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 09:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2894532AbgJ0IQy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 04:16:54 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:35001 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2894519AbgJ0IQy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 04:16:54 -0400
-Received: by mail-lj1-f195.google.com with SMTP id x16so749409ljh.2;
-        Tue, 27 Oct 2020 01:16:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4X/i6x/+78+fLH0lPper9S35q82PCcSbtWfUqlievPc=;
-        b=dFevk5ljJev2bT1xhviKxC52SYR6aPDG0fLcP1QG38OkfTom6xGNIM//0RZ/foJRP4
-         Ao4uapp0tLfheeZ7KT3I3J10TOuUGQMBiXCGnqilB4vtOf8WX4VVMAl0gr+Hxg/15OOz
-         uz+HV2q/VNfHEgMLJ1fHZ0G26MoCZ/z0QXzcv9HXFrja/NZTHsFXVV3Bb+TjRKpyVAcs
-         +G4kYFP0EOGv3frtkya2LMj4U5YTRkJlSbK9TFIWtiEi7TXpcAGZFrWO2/4K66IUWwMx
-         HKKDf996qnl0iXgKrWL/N6GJ3X/YhTCHqL6Z//W3nD/cGpvWl/RahqO3zGiy/FNIdcVl
-         LpLA==
-X-Gm-Message-State: AOAM531Rwf6a5ewZ5O/OLKRL2LUls8o3KiSvUKE9fLrVY32wEJhyp/3n
-        qeEYvcVSTj7W2f3hLeBSzH8=
-X-Google-Smtp-Source: ABdhPJyiRzqsfEO4O7r5IIRQvb3+7LSAdAe3jrDZoAuW1ZpukGOup5MjnYT7Lif1P6AYdNpMCqJQUQ==
-X-Received: by 2002:a2e:8103:: with SMTP id d3mr545991ljg.384.1603786610328;
-        Tue, 27 Oct 2020 01:16:50 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id v16sm92687lfq.68.2020.10.27.01.16.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 01:16:49 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kXK9v-0001H7-Vf; Tue, 27 Oct 2020 09:16:48 +0100
-Date:   Tue, 27 Oct 2020 09:16:47 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        id S2894617AbgJ0IVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 04:21:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42912 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2894615AbgJ0IVb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 04:21:31 -0400
+Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2633320878;
+        Tue, 27 Oct 2020 08:21:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603786890;
+        bh=eoerEQwzTU3BtGUH6HvCc9OoDxXZ3eKxiuuFqwMZQYA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=kQB9VU01KRTVaOvXv9v4e569kiY0cOQc2b8Pw/YukxTPsM8SvJyS76yNu84oNgk4F
+         QcmHnoz9kSudEwgmYOI2rMwFLTXkPsRqS1A/Qf3t+Lk5HxLz4hMZiwtmJWdOoQgZ9f
+         3CnGPDC5UcN2W24dDUJwTos6AmESwFgvGmLyuQlk=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Thomas Winischhofer <thomas@winischhofer.net>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Duncan Sands <duncan.sands@free.fr>
-Subject: Re: [patch V2 02/13] USB: serial: keyspan_pda: Replace
- in_interrupt() usage
-Message-ID: <20201027081647.GC4085@localhost>
-References: <20201019100629.419020859@linutronix.de>
- <20201019101109.753597069@linutronix.de>
- <20201025165647.GR26280@localhost>
- <20201026124753.btmdh3iwbwnff5dg@linutronix.de>
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Subject: Re: [PATCH v2 01/15] usb: dwc2: Fix/update enter/exit partial power
+ down.
+In-Reply-To: <20201011135059.76B73A005E@mailhost.synopsys.com>
+References: <20201011135059.76B73A005E@mailhost.synopsys.com>
+Date:   Tue, 27 Oct 2020 10:21:23 +0200
+Message-ID: <87d014dqpo.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201026124753.btmdh3iwbwnff5dg@linutronix.de>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 01:47:53PM +0100, Sebastian Andrzej Siewior wrote:
-> On 2020-10-25 17:56:47 [+0100], Johan Hovold wrote:
-> > There's a ton of issues with this driver, but this is arguably making
-> > things worse. A line discipline may call write() from just about any
-> > context so we cannot rely on tty being non-NULL here (e.g. PPP).
-> 
-> I wasn't aware of that. I've been looking at the callers each time a
-> `tty' was passed it looked like a preemptible context (due to mutex /
-> GFP_KERNEL) and so on.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, the default line discipline only calls in preemptible context
-(these days), but others do not (e.g. see ppp_async_push()).
 
-Johan
+Hi Arthur,
+
+before I review your series, there are few things I'd like to point out:
+
+1. A single patch should do one thing and one thing only
+
+2. Every single patch should compile and work on its own
+
+3. When sending a series, remember to include a cover letter
+
+4. When sending a series, you can rely on git to produce a thread with a
+   cover letter
+
+	git format-patch -o series --cover-letter HEAD~15..
+
+5. Remember to run checkpatch on every patch
+
+6. Please, read https://www.kernel.org/doc/html/latest/process/submit-check=
+list.html
+
+Artur Petrosyan <Arthur.Petrosyan@synopsys.com> writes:
+> - Updated entering and exiting partial power down function
+>   flow. Before there was a lot of confusions with core
+>   entering to partial power down in device or host mode.
+>
+> - Added "rem_wakeup" for host exiting from Partial Power
+>   Down mode from host remote wakeup flow. According to
+>   programming guide in host mode, port power must be
+>   turned on when wakeup is detected.
+>
+> - Added "in_ppd" flag to indicate the core state after
+>   entering into Partial Power Down mode.
+>
+> - Moved setting of lx_state into partial power down
+>   specific functions.
+>
+> - Added dev_dbg() messages when entering and exiting from
+>   partial power down.
+>
+> - During Partial Power Down exit rely on backuped value of
+>   "GOTGCTL_CURMODE_HOST" to determine the mode of core
+>   before entering to PPD.
+>
+> - Set missing "DCTL_PWRONPRGDONE" bit when exiting device
+>   partial power down according to programming guide.
+>
+> - Added missing restore of DCFG register in device mode
+>   according to programming guide.
+
+From=20a quick read, it seems like each of these topics deserve a patch of
+its own. Could you break this down into smaller patches? Also, you have
+colleagues who have been dealing with the community for a long time,
+perhaps ask them to do an internal round of review before submitting?
+
+That may help you get your patches merged in a timely manner.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+X2IMRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZ4kQ//Szr8CsN1DzT/W945c9vG9Wy9QmFVO/3k
+VHCYvAJGCaMfpNqzg/beH0DyTI/IkEXn6Nl6k/Wtdl0r/4DAQrKSnWOxfcSGybRL
+RDhd7aeNNYi1CEN67Y1TFR6M0oUWL/Sjt6On8fapVEwq2RjYj1WcWIgq2rjA3YNT
+PwNTblBxhZmRn+oIWy1j050+7D+ExgazVPMnOa59Mwr+piNNho0ebBV2ekNY/J7U
+B4EcMxU3rnQDokPulMssozSKhDRGSGVcB4xIuXhk2EBUrYFpgpy2ajgM/Shi6UDE
+84GTc7BZraHyAJdKfvpJXWz2VsoE+rBMmJPLdNoWHEQy2C5vhP6TeqrQvddR0drV
+FLjAfBbT6C6aVmWmEev/8+WBSJXu56xzEt7JF0AEhpwZVdP/hlaegHOYM2/BLNfj
+LonEHZBhtF7CQ4j9K/rL4TYWdvreyR/HgrY53/rAuyBmH4Nk4rb984772oMFaBpf
+xy6PCvfpiBysnffOf1URiTIaa7HsxmLLamuJBdnkO4bLJ/ICtaY7bvSRlf7KGPjm
+QsU/EmVzdNhlWH+14ZGgjbSn2OoR/KR/S9NgmgSSkZuCyO3tcYcngcmJuEgZ2oHV
+8XvC6JSL1VlfuQsLEjymOAnZscygppsZVy8kXZKUQkh2VlQW26HkQTV0WeTDjWZ8
+pL7miWoO+1I=
+=OCu/
+-----END PGP SIGNATURE-----
+--=-=-=--
