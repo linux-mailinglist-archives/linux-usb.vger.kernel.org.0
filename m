@@ -2,112 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF13729C9DE
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 21:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84BF29CA27
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 21:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1830987AbgJ0UNU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 16:13:20 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34028 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1830982AbgJ0UNT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 16:13:19 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 4C56480307C2;
-        Tue, 27 Oct 2020 20:13:17 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id R07BQISyW5GJ; Tue, 27 Oct 2020 23:13:16 +0300 (MSK)
-Date:   Tue, 27 Oct 2020 23:13:15 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Felipe Balbi <balbi@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S2408622AbgJ0U3i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 16:29:38 -0400
+Received: from mailfilter01-out41.webhostingserver.nl ([141.138.168.30]:35229
+        "EHLO mailfilter01-out41.webhostingserver.nl" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2392786AbgJ0U3h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 16:29:37 -0400
+X-Greylist: delayed 962 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Oct 2020 16:29:36 EDT
+X-Halon-ID: e2ec0563-1890-11eb-9248-001a4a4cb906
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter01.webhostingserver.nl (Halon) with ESMTPSA
+        id e2ec0563-1890-11eb-9248-001a4a4cb906;
+        Tue, 27 Oct 2020 21:13:32 +0100 (CET)
+Received: from [2001:981:6fec:1:68dc:4ef6:3eb9:a9b9]
+        by s198.webhostingserver.nl with esmtpa (Exim 4.92.3)
+        (envelope-from <fntoth@gmail.com>)
+        id 1kXVLY-00H0mY-FG; Tue, 27 Oct 2020 21:13:32 +0100
+Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        felipe.balbi@linux.intel.com,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        John Youn <John.Youn@synopsys.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] usb: dwc3: ulpi: Use VStsDone to detect PHY regs
- access completion
-Message-ID: <20201027201315.zp7tmb2eztz5gwjj@mobilestation>
-References: <20201010222351.7323-1-Sergey.Semin@baikalelectronics.ru>
- <20201010222351.7323-2-Sergey.Semin@baikalelectronics.ru>
- <87k0vcc9n7.fsf@kernel.org>
+        Jack Pham <jackp@codeaurora.org>
+References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
+ <87a6wig461.fsf@kernel.org> <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
+ <874kmpf583.fsf@kernel.org> <d0aca346-353c-d74e-6f00-ccd2a4ed26ef@gmail.com>
+ <976cea12-e54e-fbca-6c53-e6ef5c554094@synopsys.com>
+ <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
+ <2b6586e6-528c-86e8-9d92-0061bc44866d@gmail.com>
+ <aad327a8-95bc-40ec-abf7-ad216a02fad0@synopsys.com>
+ <2cc783ac-6b71-190b-49fc-9e2bceeacd4b@gmail.com>
+ <920590dc-5430-7f8b-b2e1-1a4c37f4dfbe@synopsys.com>
+ <CAHp75Vfs9AoOYSVGTpw30h11ptPOSPNf1AsWBKdiVrDL=9X3PQ@mail.gmail.com>
+From:   Ferry Toth <fntoth@gmail.com>
+Message-ID: <0089306e-e2ca-9a53-6ffb-202d028050ce@gmail.com>
+Date:   Tue, 27 Oct 2020 21:13:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <87k0vcc9n7.fsf@kernel.org>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <CAHp75Vfs9AoOYSVGTpw30h11ptPOSPNf1AsWBKdiVrDL=9X3PQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 11:15:24AM +0200, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> Serge Semin <Sergey.Semin@baikalelectronics.ru> writes:
-> 
-> > In accordance with [1] the DWC_usb3 core sets the GUSB2PHYACCn.VStsDone
-> > bit when the PHY vendor control access is done and clears it when the
-> > application initiates a new transaction. The doc doesn't say anything
-> > about the GUSB2PHYACCn.VStsBsy flag serving for the same purpose. Moreover
-> > we've discovered that the VStsBsy flag can be cleared before the VStsDone
-> > bit. So using the former as a signal of the PHY control registers
-> > completion might be dangerous. Let's have the VStsDone flag utilized
-> > instead then.
-> >
-> > [1] Synopsys DesignWare Cores SuperSpeed USB 3.0 xHCI Host Controller
-> >     Databook, 2.70a, December 2013, p.388
-> >
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/usb/dwc3/core.h | 1 +
-> >  drivers/usb/dwc3/ulpi.c | 2 +-
-> >  2 files changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> > index 2f04b3e42bf1..8d5e5bba1bc2 100644
-> > --- a/drivers/usb/dwc3/core.h
-> > +++ b/drivers/usb/dwc3/core.h
-> > @@ -284,6 +284,7 @@
-> >  
-> >  /* Global USB2 PHY Vendor Control Register */
-> >  #define DWC3_GUSB2PHYACC_NEWREGREQ	BIT(25)
-> > +#define DWC3_GUSB2PHYACC_DONE		BIT(24)
-> >  #define DWC3_GUSB2PHYACC_BUSY		BIT(23)
-> >  #define DWC3_GUSB2PHYACC_WRITE		BIT(22)
-> >  #define DWC3_GUSB2PHYACC_ADDR(n)	(n << 16)
-> > diff --git a/drivers/usb/dwc3/ulpi.c b/drivers/usb/dwc3/ulpi.c
-> > index e6e6176386a4..20f5d9aba317 100644
-> > --- a/drivers/usb/dwc3/ulpi.c
-> > +++ b/drivers/usb/dwc3/ulpi.c
-> > @@ -24,7 +24,7 @@ static int dwc3_ulpi_busyloop(struct dwc3 *dwc)
-> >  
-> >  	while (count--) {
-> >  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYACC(0));
-> > -		if (!(reg & DWC3_GUSB2PHYACC_BUSY))
-> > +		if (reg & DWC3_GUSB2PHYACC_DONE)
-> 
+Hi guys,
 
-> are you sure this works in all supported versions of the core?
+Sorry for messing up the CC list. This was partly thanks to gmane, 
+partly my own stupidity. I hope it is complete now.
 
-I can't be sure about that since I've got only the 2.70a version of the
-core. But as I said in the patch log it was a bit incorrect to use the
-BUSY flag here in the first place. So if there is no IP core peculiarity
-here which had been workarounded by polling the BUSY-flag, then I'd stick
-with the DONE-flag in the busy-loop. In the former case I'd suggest to add
-a useful comment why the BUSY-flag is required to be polled though...
+I am summarizing the status of this one at the bottom.
 
--Sergey
+Op 22-10-2020 om 15:43 schreef Andy Shevchenko:
+> On Thu, Oct 22, 2020 at 4:21 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>> Ferry Toth wrote:
+>>> Op 21-10-2020 om 21:50 schreef Thinh Nguyen:
+>>>> Ferry Toth wrote:
+> ...
+>
+>>>> Oops, looks like I can't make it synchronous this way. Can you try
+>>>> Jack's change to the u_audio.c instead?
+>>> Oops indeed goes away with Jack's change, but usb connection goes
+>>> up/down continuously, meaning: my host sees usb network and audio
+>>> device appearing / disappearing.
+>> Ok, thanks for verifying that it went away.
+>>
+>>> mass_storage device does not appear all.
+>> There are some fixes to dwc3 in kernel mainline. Is it possible to test
+>> this against linux-next?
+> I think the best is to wait for v5.10-rc1 and retest.
+>
+I looks like there have been at least 3 problems:
 
-> 
-> John, could you confirm this for us?
-> 
-> thanks
-> 
-> -- 
-> balbi
+1) dwc3 was not working in host mode, but not causing an oops. This may 
+have been caused by platform changes. Andy has provided a fix for this, 
+dwc3 now working in host mode on 5.9
+
+2) dwc3 was causing the oops in gadget mode as referenced in this 
+thread. The experimental patch from Jack Phan indeed fixes this.
+
+Code here: https://github.com/edison-fw/linux/commits/eds-acpi-5.9.0
+
+3) With the above 2 fixes gadgets work but seem to be powered down 
+(after 15 sec. or so) and up (after 1 sec.) continuously. No oops, no 
+errors in journal. The gadgets I enabled are a network, sound and mass 
+storage. The latter stops working due to going up/down quickly. But my 
+host shows network/sound appearing/disappearing. Journal of edison shows:
+
+systemd-networkd[525]: usb0: Gained carrier
+systemd-networkd[525]: usb0: Gained IPv6LL
+systemd-networkd[525]: usb0: Lost carrier
+systemd-networkd[525]: usb0: Gained carrier
+systemd-networkd[525]: usb0: Gained IPv6LL
+systemd-networkd[525]: usb0: Lost carrier
+
+Any ideas how to proceed are highly welcomed!
 
 
