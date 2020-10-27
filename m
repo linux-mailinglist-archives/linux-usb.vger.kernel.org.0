@@ -2,59 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2956E29CAC1
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 21:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7C429CA79
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 21:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1753817AbgJ0UyV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 27 Oct 2020 16:54:21 -0400
-Received: from adm-ngo.ru ([188.68.86.145]:47566 "EHLO mail.adm-ngo.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2507098AbgJ0UyU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Oct 2020 16:54:20 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.adm-ngo.ru (Postfix) with ESMTP id 54F03108049;
-        Tue, 27 Oct 2020 20:33:42 +0500 (+05)
-Received: from mail.adm-ngo.ru ([127.0.0.1])
-        by localhost (mail.adm-ngo.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id N0YoZoqgmFUN; Tue, 27 Oct 2020 20:33:40 +0500 (+05)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.adm-ngo.ru (Postfix) with ESMTP id 5328F1077E8;
-        Tue, 27 Oct 2020 20:33:19 +0500 (+05)
-X-Virus-Scanned: amavisd-new at adm-ngo.ru
-Received: from mail.adm-ngo.ru ([127.0.0.1])
-        by localhost (mail.adm-ngo.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id x0XTSzYbWrom; Tue, 27 Oct 2020 20:33:19 +0500 (+05)
-Received: from [192.168.8.100] (unknown [41.144.72.41])
-        by mail.adm-ngo.ru (Postfix) with ESMTPSA id 72DE8107E15;
-        Tue, 27 Oct 2020 20:32:58 +0500 (+05)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: For your attention.
-To:     Recipients <bsa@adm-ngo.ru>
-From:   "James P. Owen" <bsa@adm-ngo.ru>
-Date:   Tue, 27 Oct 2020 17:32:50 +0200
-Reply-To: j.o.philip@hotmail.com
-Message-Id: <20201027153258.72DE8107E15@mail.adm-ngo.ru>
+        id S2504827AbgJ0Uk3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 16:40:29 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:39488 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1831787AbgJ0Uio (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 16:38:44 -0400
+Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 27 Oct 2020 13:38:44 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 27 Oct 2020 13:38:42 -0700
+X-QCInternal: smtphost
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 28 Oct 2020 02:08:11 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id A86812EC8; Wed, 28 Oct 2020 02:08:10 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH v4 0/5] USB DWC3 host wake up support from system suspend
+Date:   Wed, 28 Oct 2020 02:07:58 +0530
+Message-Id: <1603831083-2025-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Good Day
+Avoiding phy powerdown in host mode so that it can be wake up by devices.
+Set GENPD_FLAG_ACTIVE_WAKEUP flag to keep usb30_prim gdsc active
+when wakeup capable devices are connected to the host.
+Using PDC interrupts instead of GIC interrupst to support wakeup in
+xo shutdown case.
 
-I know this email might come as a surprise to you considering the amount of junk emails we all receive on a daily basis. I can assure you that this email is authentic and I would appreciate if the content of this letter is kept strictly confidential and respect the integrity of the information.
+Changes in v4:
+Addressed Matthias comments raised in v3.
 
-Nevertheless, I have decided to contact you due to the urgency of this transaction. Let me start by introducing myself, I am Mr. James Philips Owen, an account manager in one of the bank here in United Kingdom. I have worked a little more than 15 years now. I am contacting you concerning an abandoned consignment containing the sum of £10 million British Pounds. I was the account manager to Late Mr. Philemon Juan Smith, a foreign contractor with department of works and housing who has an investment account with my bank; I encouraged him to consider various growths of funds with prime ratings, then he invested £10million, based on my advice, we were able to spin the money around various opportunities and made attractive margins for the first few months of our operation. The accrued profit and interest plus capital amount to £17,352,110 (Seventeen million, three hundred and fifty two thousand, one hundred and ten British Pounds). In mid-2007, he instructed that the principal sum of (£10M) be liquidated and made available in cash because he needed to make an urgent investment requiring cash payment of (£10M), we however assisted him and made the cash available in a consignment for him.
+Changes in v3:
+Removed need_phy_for_wakeup flag and by default avoiding phy powerdown.
+Addressed Matthias comments and added entry for DEV_SUPERSPEED.
+Added suspend_quirk in dwc3 host and moved the dwc3_set_phy_speed_flags.
+Added wakeup-source dt entry and reading in dwc-qcom.c glue driver.
 
-After few months; the management of my bank sent several notice to inform him about the cash but without response, on further inquiries we found out that my client was poisoned by the same people he wanted to do business with, that made him to request for cash payment for the business. He died without leaving a WILL and several efforts were made to find his extended family but without success. Because of the sensitive nature of private banking, most customers do not nominate next of kin in their investment, also usually in most cases leave their WILLS in our care, in this case; the deceased client died intestate. It is quite clear now that our dear client died with no identifiable family member. According to practice, the Private banking sector will by the end of the year of 2020 broadcast a request for statement of claim to my Bank, failing to receive viable claims they will probably revert the deposit to the ownership of the UK Government Treasury department according to United Kingdom Banking and financial law.
+Changes in v2:
+Dropped the patch in clock to set GENPD_FLAG_ACTIVE_WAKEUP flag and 
+setting in usb dwc3 driver.
+Separated the core patch and glue driver patch.
+Made need_phy_for_wakeup flag part of dwc structure and 
+hs_phy_flags as unsgined int.
+Adrressed the comment on device_init_wakeup call.
+Corrected offset for reading portsc register.
+Added pacth to support wakeup in xo shutdown case.
 
-I am proposing that you stand as the business associate/next of kin to the late deceased (Mr. Philemon Juan Smith) and after a successful execution of the business deal, the funds will be shared in the ratio of 50/50. I want you to know that I have done my home work already before contacting you. Although the project is CAPITAL INTENSIVE, i will be able to pull it through following proper banking and legal Channels with your assistance on your end. This claim will be executed without breaching any UK laws and success is guaranteed if we cooperate on this.
+Sandeep Maheswaram (5):
+  usb: dwc3: core: Host wake up support from system suspend
+  usb: dwc3: host: Add suspend_quirk for dwc3 host
+  usb: dwc3: qcom: Configure wakeup interrupts and set genpd active
+    wakeup flag
+  arm64: dts: qcom: sc7180: Use pdc interrupts for USB instead of GIC
+    interrupts
+  arm64: dts: qcom: sc7180: Add wakeup-source property for USB node in
+    IDP and trogdor
 
-An opportunity like this only comes once in a lifetime. I would want you to think about this and let me know your decision because such deal happens in the banking industry but only the outside world is not aware. If you give me a positive response, I will give you the relevant INFORMATION for the successful completion of this deal and we both enjoy it in peace. All I require from you is honesty/sincerity; I guarantee that this will be executed under a legitimate arrangement that will protect you from any breach of the law. If you give me positive signals, I will initiate this process towards a conclusion.
+ arch/arm64/boot/dts/qcom/sc7180-idp.dts      |  1 +
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi |  1 +
+ arch/arm64/boot/dts/qcom/sc7180.dtsi         |  8 +--
+ drivers/usb/dwc3/core.c                      | 14 +----
+ drivers/usb/dwc3/core.h                      |  2 +
+ drivers/usb/dwc3/dwc3-qcom.c                 | 82 ++++++++++++++++++----------
+ drivers/usb/dwc3/host.c                      | 51 +++++++++++++++++
+ 7 files changed, 114 insertions(+), 45 deletions(-)
 
-Kindly treat this proposal with utmost confidentially and urgency for a 100% success.
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
-Sincerely,
-
-Mr. James P. Owen
