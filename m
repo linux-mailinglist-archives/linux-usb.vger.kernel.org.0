@@ -2,108 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D84BF29CA27
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 21:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9DB29CA09
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 21:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408622AbgJ0U3i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 16:29:38 -0400
-Received: from mailfilter01-out41.webhostingserver.nl ([141.138.168.30]:35229
-        "EHLO mailfilter01-out41.webhostingserver.nl" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392786AbgJ0U3h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 16:29:37 -0400
-X-Greylist: delayed 962 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Oct 2020 16:29:36 EDT
-X-Halon-ID: e2ec0563-1890-11eb-9248-001a4a4cb906
-Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-        by mailfilter01.webhostingserver.nl (Halon) with ESMTPSA
-        id e2ec0563-1890-11eb-9248-001a4a4cb906;
-        Tue, 27 Oct 2020 21:13:32 +0100 (CET)
-Received: from [2001:981:6fec:1:68dc:4ef6:3eb9:a9b9]
-        by s198.webhostingserver.nl with esmtpa (Exim 4.92.3)
-        (envelope-from <fntoth@gmail.com>)
-        id 1kXVLY-00H0mY-FG; Tue, 27 Oct 2020 21:13:32 +0100
-Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        felipe.balbi@linux.intel.com,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jack Pham <jackp@codeaurora.org>
-References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
- <87a6wig461.fsf@kernel.org> <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
- <874kmpf583.fsf@kernel.org> <d0aca346-353c-d74e-6f00-ccd2a4ed26ef@gmail.com>
- <976cea12-e54e-fbca-6c53-e6ef5c554094@synopsys.com>
- <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
- <2b6586e6-528c-86e8-9d92-0061bc44866d@gmail.com>
- <aad327a8-95bc-40ec-abf7-ad216a02fad0@synopsys.com>
- <2cc783ac-6b71-190b-49fc-9e2bceeacd4b@gmail.com>
- <920590dc-5430-7f8b-b2e1-1a4c37f4dfbe@synopsys.com>
- <CAHp75Vfs9AoOYSVGTpw30h11ptPOSPNf1AsWBKdiVrDL=9X3PQ@mail.gmail.com>
-From:   Ferry Toth <fntoth@gmail.com>
-Message-ID: <0089306e-e2ca-9a53-6ffb-202d028050ce@gmail.com>
-Date:   Tue, 27 Oct 2020 21:13:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1831142AbgJ0USQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 16:18:16 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:46078 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1831139AbgJ0USQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 16:18:16 -0400
+Received: by mail-vs1-f67.google.com with SMTP id r1so1600340vsi.12
+        for <linux-usb@vger.kernel.org>; Tue, 27 Oct 2020 13:18:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=x5S85K1yKGbYgWkn0d3djUo2W9yMnfITU9bTMzcWbVQ=;
+        b=rfoTQNnuz/KOqhjOmm1Hr4/CrQ/T/INA9njPNTxujMU7pKLDfcKhfXxmuyL19uOQ8f
+         5qcJ2Jdnm+1/g1SrU65xypkqe5lHYe7ZGM5fGEYp8q1mn7KlGAiNBdmTtXzPhCOpVhaX
+         vh8vGe7Cx4h3X4Fom43GMdiGhFjnB2SigrPOXbVz+OlLj6UaW35GWH3YDneFy8sYAgwx
+         MQCaIVj8ofIfgNnKGN0qE3kPv07gcutZU+SBXaXtTEhvMka59YSE4f+RhpyXsEZvW5gL
+         zeaZ8PlYKZLE+ijf+sCe+++qLzU4wfnr4puDWYbRSmWNqPU3qjJuXIPhk6vGTe7zg0BR
+         elXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=x5S85K1yKGbYgWkn0d3djUo2W9yMnfITU9bTMzcWbVQ=;
+        b=oOOWgUhe5MrgsrH6ouA32U5fNnGYfzaMbL4hmGjS9AJfnMiACK3HqIEeBYuUqrHodZ
+         pbbMmHglda7RHmtn05koaSq/AZQ4A1Bx/b9lYwGgCdi544QBqVZrCGYakzC3acn8X9eh
+         KOdVz+M+/+hD7qgLBAGKOdBzggM3SCyGmPDqqH7Yn6atw2cDxkkTmQgkByHQiHnO3A0b
+         Gzt1Z7QOMbGc3hdbsynM590mcD3xae9FaZD3tjsEoUMqJEv7sw4q55gW6wDNowapqHgk
+         Q9OVQhuocvUehF09R67iUoVeyePrdiLwQX+YZcHu7OIjcE03SOJmOdQuQrKTxOeEAf0G
+         WayA==
+X-Gm-Message-State: AOAM5332xYS3xLwXIWspqYENvyK6avD9P78Uq+Kcgzl4jaFhtdrYAnRL
+        OasJsR5utc6pdc/4EZkz8ONGAIfgkCd94/+CApM=
+X-Google-Smtp-Source: ABdhPJwEemBe8i7dpwG1HeYmK2mQxRuoJA2pec9dJzUnB6ddimBe3hN6RY0ecmJ4TYyq5x5o1fjiuPY+GBY1gPmFEt4=
+X-Received: by 2002:a67:798e:: with SMTP id u136mr3361341vsc.47.1603829893715;
+ Tue, 27 Oct 2020 13:18:13 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAHp75Vfs9AoOYSVGTpw30h11ptPOSPNf1AsWBKdiVrDL=9X3PQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+Received: by 2002:a9f:264f:0:0:0:0:0 with HTTP; Tue, 27 Oct 2020 13:18:13
+ -0700 (PDT)
+In-Reply-To: <CA+uuBqZ6JhCq1ydU-9A+en3QO=9zX9LuEJ8+P0YvEzUE+9sYoA@mail.gmail.com>
+References: <20200916015621.EFCDA374023F@freecalypso.org> <20200929101330.GQ24441@localhost>
+ <CA+uuBqY83q+UiRsYxBckXvbtYf4sRxqB_8eXXPgEKAOqTwD=vg@mail.gmail.com>
+ <20201005105722.GN5141@localhost> <CA+uuBqZ6JhCq1ydU-9A+en3QO=9zX9LuEJ8+P0YvEzUE+9sYoA@mail.gmail.com>
+From:   Mychaela Falconia <mychaela.falconia@gmail.com>
+Date:   Tue, 27 Oct 2020 12:18:13 -0800
+Message-ID: <CA+uuBqZSozH_513OyiDyuh1DcvPrCkBer=_wedLQEEFSbdDrkw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] a family of FTDI-based devices that need ftdi_sio quirks
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi guys,
+Hi Johan,
 
-Sorry for messing up the CC list. This was partly thanks to gmane, 
-partly my own stupidity. I hope it is complete now.
+Our last exchange regarding my proposed ftdi_sio driver patch adding
+the needed quirk for DUART28C took place 3 weeks ago on October 5.
+Your last argument against my patch was this one:
 
-I am summarizing the status of this one at the bottom.
+https://marc.info/?l=linux-usb&m=160189545216969&w=2
 
-Op 22-10-2020 om 15:43 schreef Andy Shevchenko:
-> On Thu, Oct 22, 2020 at 4:21 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
->> Ferry Toth wrote:
->>> Op 21-10-2020 om 21:50 schreef Thinh Nguyen:
->>>> Ferry Toth wrote:
-> ...
->
->>>> Oops, looks like I can't make it synchronous this way. Can you try
->>>> Jack's change to the u_audio.c instead?
->>> Oops indeed goes away with Jack's change, but usb connection goes
->>> up/down continuously, meaning: my host sees usb network and audio
->>> device appearing / disappearing.
->> Ok, thanks for verifying that it went away.
->>
->>> mass_storage device does not appear all.
->> There are some fixes to dwc3 in kernel mainline. Is it possible to test
->> this against linux-next?
-> I think the best is to wait for v5.10-rc1 and retest.
->
-I looks like there have been at least 3 problems:
+And here is my rebuttal to that argument made the same day:
 
-1) dwc3 was not working in host mode, but not causing an oops. This may 
-have been caused by platform changes. Andy has provided a fix for this, 
-dwc3 now working in host mode on 5.9
+https://marc.info/?l=linux-usb&m=160192817717108&w=2
 
-2) dwc3 was causing the oops in gadget mode as referenced in this 
-thread. The experimental patch from Jack Phan indeed fixes this.
+In your October 5 argument you wrote:
 
-Code here: https://github.com/edison-fw/linux/commits/eds-acpi-5.9.0
+> Let me give this some more thought.
 
-3) With the above 2 fixes gadgets work but seem to be powered down 
-(after 15 sec. or so) and up (after 1 sec.) continuously. No oops, no 
-errors in journal. The gadgets I enabled are a network, sound and mass 
-storage. The latter stops working due to going up/down quickly. But my 
-host shows network/sound appearing/disappearing. Journal of edison shows:
+It has been 3 weeks - do you have any more thoughts that address my
+not yet answered rebuttal arguments in defense of my patch?  My key
+arguments are:
 
-systemd-networkd[525]: usb0: Gained carrier
-systemd-networkd[525]: usb0: Gained IPv6LL
-systemd-networkd[525]: usb0: Lost carrier
-systemd-networkd[525]: usb0: Gained carrier
-systemd-networkd[525]: usb0: Gained IPv6LL
-systemd-networkd[525]: usb0: Lost carrier
+* The "standard" behaviour of Linux and other Unix-derived OSes of
+unconditionally asserting DTR & RTS on tty port open (or upon leaving
+B0 state) without giving userspace any ability to say "no, please
+don't do it" is a philosophical design bug, one that goes all the way
+back to original 1970s UNIX - but long-standing tradition does not
+make right.
 
-Any ideas how to proceed are highly welcomed!
+* Particularly in the present age of USB-serial adapters with LVCMOS
+rather than RS-232 electrical signals, this Unix/POSIX/Linux serial
+port handling philosophical design bug is hampering hardware engineers'
+ability to produce otherwise clean and elegant circuit designs.
 
+* Because Windows does NOT exhibit the same philosophical design bug
+in this regard as Unix/POSIX/Linux, there may be hw devices that were
+made for use with Windows, that depend on glitch-free DTR and/or RTS,
+and which will fail to work correctly with current Linux.  When such
+cases occur, the party at fault is Linux and not the hardware design -
+the hardware engineers were merely exercising their natural right to
+make simple and elegant circuit designs that work well with OSes that
+are free of philosophical design bugs, it is not our fault as hw
+engineers that Linux inherited a philosophical design bug from Ancient
+UNIX by way of POSIX.
 
+* A minimally invasive surgical solution in the form of driver quirks
+that suppress the traditional DTR & RTS behaviour for those specific
+hw devices for which it is unacceptable is more practical than trying
+to fix the root-cause Unix philosophical design bug 45 y too late.
+
+I would appreciate a response to my arguments.
+
+Sincerely,
+Mychaela,
+custom hardware designer,
+she/her/hers
