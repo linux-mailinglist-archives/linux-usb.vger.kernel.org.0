@@ -2,72 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A088529C697
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 19:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A9D29C4E6
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Oct 2020 19:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1827109AbgJ0SVb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Oct 2020 14:21:31 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:41595 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753915AbgJ0OC7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Oct 2020 10:02:59 -0400
-X-Originating-IP: 82.255.60.242
-Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
-        (Authenticated sender: hadess@hadess.net)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 29C601C0009;
-        Tue, 27 Oct 2020 14:02:54 +0000 (UTC)
-Message-ID: <c69233ce20acd04fcba780a0483a18031d9a541e.camel@hadess.net>
-Subject: Re: [PATCH 2/2] USB: apple-mfi-fastcharge: don't probe unhandled
- devices
-From:   Bastien Nocera <hadess@hadess.net>
-To:     "M. Vefa Bicakci" <m.v.b@runbox.com>, linux-usb@vger.kernel.org
-Cc:     Pany <pany@fedoraproject.org>, stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Date:   Tue, 27 Oct 2020 15:02:54 +0100
-In-Reply-To: <20201022135521.375211-3-m.v.b@runbox.com>
-References: <4cc0e162-c607-3fdf-30c9-1b3a77f6cf20@runbox.com>
-         <20201022135521.375211-1-m.v.b@runbox.com>
-         <20201022135521.375211-3-m.v.b@runbox.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.1 (3.38.1-1.fc33) 
+        id S1823654AbgJ0R7Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Oct 2020 13:59:25 -0400
+Received: from mga03.intel.com ([134.134.136.65]:34126 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1823203AbgJ0R6L (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Oct 2020 13:58:11 -0400
+IronPort-SDR: fW7T60hx1U28IPgMbQ/ufL/NsJsLrDr8h6qOpKkB5QSrnKFjB6eeDphAXriX73rCczz297b1SU
+ KEzTXfMmJZLg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9787"; a="168230686"
+X-IronPort-AV: E=Sophos;i="5.77,424,1596524400"; 
+   d="scan'208";a="168230686"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2020 10:58:10 -0700
+IronPort-SDR: pVBI96o6WMqJ6mq5a8oXe8bATKbSaxP/VCM1wYfH+mNa36hNrOtpMcv+1HKUfbt7UIprRLPVTs
+ BcddLyFjzpHQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,424,1596524400"; 
+   d="scan'208";a="303841822"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 27 Oct 2020 10:58:07 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E4DE0179; Tue, 27 Oct 2020 19:58:06 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
+        linux-usb@vger.kernel.org, Peng Hao <peng.hao2@zte.com.cn>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v1 1/5] driver core: platform: Introduce platform_get_mem_or_io_resource()
+Date:   Tue, 27 Oct 2020 19:58:02 +0200
+Message-Id: <20201027175806.20305-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2020-10-22 at 09:55 -0400, M. Vefa Bicakci wrote:
-> From: Bastien Nocera <hadess@hadess.net>
-> 
-> From: Bastien Nocera <hadess@hadess.net>
-> 
-> Contrary to the comment above the id table, we didn't implement a
-> match
-> function. This meant that every single Apple device that was already
-> plugged in to the computer would have its device driver reprobed
-> when the apple-mfi-fastcharge driver was loaded, eg. the SD card
-> reader
-> could be reprobed when the apple-mfi-fastcharge after pivoting root
-> during boot up and the module became available.
-> 
-> Make sure that the driver probe isn't being run for unsupported
-> devices by adding a match function that checks the product ID, in
-> addition to the id_table checking the vendor ID.
-> 
-> Fixes: 249fa8217b84 ("USB: Add driver to control USB fast charge for
-> iOS devices")
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> Reported-by: Pany <pany@fedoraproject.org>
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1878347
-> Link: 
-> https://lore.kernel.org/linux-usb/CAE3RAxt0WhBEz8zkHrVO5RiyEOasayy1QUAjsv-pB0fAbY1GSw@mail.gmail.com/
-> Cc: <stable@vger.kernel.org> # 5.8
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> [m.v.b: Add Link and Reported-by tags to the commit message]
-> Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
+There are at least few existing users of the proposed API which
+retrieves either MEM or IO resource from platform device.
 
-And along with the 1/2 patch:
-Tested-by: Bastien Nocera <hadess@hadess.net>
+Make it common to utilize in the existing and new users.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Eric Auger <eric.auger@redhat.com>
+Cc: Alex Williamson <alex.williamson@redhat.com>
+Cc: Cornelia Huck <cohuck@redhat.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: Peng Hao <peng.hao2@zte.com.cn>
+Cc: Arnd Bergmann <arnd@arndb.de>
+---
+ include/linux/platform_device.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
+index 77a2aada106d..eb8d74744e29 100644
+--- a/include/linux/platform_device.h
++++ b/include/linux/platform_device.h
+@@ -52,6 +52,19 @@ extern struct device platform_bus;
+ 
+ extern struct resource *platform_get_resource(struct platform_device *,
+ 					      unsigned int, unsigned int);
++static inline
++struct resource *platform_get_mem_or_io_resource(struct platform_device *pdev,
++						 unsigned int num)
++{
++	struct resource *res;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, num);
++	if (res)
++		return res;
++
++	return platform_get_resource(pdev, IORESOURCE_IO, num);
++}
++
+ extern struct device *
+ platform_find_device_by_driver(struct device *start,
+ 			       const struct device_driver *drv);
+-- 
+2.28.0
 
