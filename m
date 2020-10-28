@@ -2,144 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFD829E1F4
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 03:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF4F29E240
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 03:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727954AbgJ2CEt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 22:04:49 -0400
-Received: from mail-am6eur05on2042.outbound.protection.outlook.com ([40.107.22.42]:24901
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727036AbgJ1Vso (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:48:44 -0400
+        id S2387580AbgJ2CL7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 22:11:59 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:36522 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726822AbgJ1Vgc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 17:36:32 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09S7K6lY021745;
+        Wed, 28 Oct 2020 00:20:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=qwfMENm5QCXd1OlDUnFPCysqzZTD8wcZVk61ewJx7HI=;
+ b=OLCAKLdPz3vuJZFjYbEOAolZ2YvLfFz9Ci/EY605sQ1BLiUewJwQgM+WFZmQcpEpKICh
+ sKxZyQu+L6z6VGeEV9Zw4g0U4ve2yV4X1fUbIyJj5Y1jhF3XceQOjT6lJTwx+AkJdAmK
+ TCRiMznj3oKloaTt8pVcp2Q1XdDm/HmWuurFkHfuObeyne5omECRkfkr+0nEKCt41SiU
+ zdPRjJ1MAQvrDWC13L+pX+KLiWywhprBt2f9GRqtxWBndrN/E202GuI12IwkKpIlrC49
+ SRtJK2hgsIPt0fal/gtjdxauiXOjfvcT3cRQZtQ5AkuhyZyZk4WnSJSWe4B8spNiszQt og== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2108.outbound.protection.outlook.com [104.47.70.108])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 34cfux72ev-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Oct 2020 00:20:53 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QOglPgfhn2/GEggjysz4cqkfzN1fa8wGXSRYW8pW9S9T7j9obHmhAV1Mv2wUammg5ZUA2OPm5fls/KPWexoE08NhMfkXdXsWg2WX9glRBXDa72xXzPcD3Xy7j2hw2YQ6OEDI83Z5hvDQPwurtuNXVvyJmNjkegpZrPZdWwCGa73EQZ3vjHA0XjCscCYoqp6TnpGGLlel+jf+Ok5LLfFV+/bKZxB6u0ywR/3Ra/lhAce6ts5P5xS9uRdvSIhZoiS7A4h2hXEiBE/EQLU4hSQRujdBqlgwzjx8MQ6UG27glnxAZK7F5vpTnPkwI2Um/zucURSyQg26wwCXuhvh8lFp5Q==
+ b=no1s5I1dGM0lj2s0EZV62RiHX05mp4qP13y2Phx4INooiCxd1tP2Wb1eI2ncey+ytyL9EJHEo7+Kf/fZdkMfTvWGj86Q4YcsSgDmn0hp69TZJsHGtBq4iHS+ZZPqrLhSJKuvAYgqebwi5jbijXXuqEIGMqNsIJ94SoUe84Ink/yyMjjUQfXHkMN5hbHUGd7Eks3gIZl+xgRc9GEFcM8PG74aGCIFOJLVnM8tqG+5MmIU75il402BdZD/sAcG26mzVlDsnfrt77ux4rLXi5+ycWqe255xl6NqIfPOZc2MEs4OznHBk2/V0Ouy8tmbR+qNFrwL/YWcnt1jS8xDZz6TkQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=inqSQJRlJxkNKJwYrr17Pt9m9+IuDSQmQ+cwEF4YTRM=;
- b=bhC5iInmQ4HFEil2CxJFOVSR97Qq9rVAju09QXpZBISh7+faCI1TGxLCjIMX1rVkmnTEDbN9MU4YVCCmaaHpgI6/heSss0MtKrpdTjPLBkoydJJU9oOR+En2RbN26OfQMOhb3OLE17XugePcuKamtYr/vnjzW/yzJOpvxuXLqhgaKkrBpnhlS/YnRiRD3yfq7QE1Aq67bGyUrso8RJybpmtXRR1XghBrXNaoDoA00FNuvdSwIjm5oioTDybROruk5MdMg3zovr1zaXYA/0rHGNZvSG7H/7tdrQ/Ec0n8Mx4USWBRGH6m5Edpxb/AN6VJikPo8hQt9Am18K61EEBnuQ==
+ bh=qwfMENm5QCXd1OlDUnFPCysqzZTD8wcZVk61ewJx7HI=;
+ b=nWQqHF8Kugf/XVXHRL2PbfWi50bG4ErvHo6Gnk7+igdLay8mfojlfXu984wwe3Cywty7mDJoyZfKies5VpwRWTCbsxPLrSP69fzWQ4NBZ84jcYy2fwZelKlxLQhBIbGAvO3Ldz/1eAN3NOhrSx5MqdgjA4dLtTM1c/5IItVuXKDNPdGlkSzKEWo8HQ6Pxv/bwGLzeBoouz5R73TTBFeY+LcBSENZa9vY9/HS6HmzkLFLe8rWFEHh6aA2A+bDYN5KA51Xp0Sq11CAMVtDoXN7zpQMJU7UUGIxDXjR4u3tuBY3J1UWV/qNJJNZJwcPsuc4+l6n42LMt1Q6iA5Q4Sk9qA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=inqSQJRlJxkNKJwYrr17Pt9m9+IuDSQmQ+cwEF4YTRM=;
- b=h3XPMyC5HjjbH82WNTA1YXYBHxeVU194BJCQPe4NREZ4F5SzQywa1DrKQbzPkgKq9tLS0+Dt0PxpH3rxGpQqD5VeKr5diYqgpmVnnA5WC7axgjyUFgCEoYm7olXhhXzIqqIuSD5tRkD2iIWZeL2uFPEr5PII0JBNG0K5m114Uws=
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
- by AM0PR04MB4420.eurprd04.prod.outlook.com (2603:10a6:208:72::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.21; Wed, 28 Oct
- 2020 07:15:31 +0000
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Wed, 28 Oct 2020
- 07:15:31 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Jack Pham <jackp@codeaurora.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
+ bh=qwfMENm5QCXd1OlDUnFPCysqzZTD8wcZVk61ewJx7HI=;
+ b=KPylCGAb3eKdWfHBQlocb6kU8zryIHXa42/pmBMwB11Y2q7eB7BuYLcVuEKC/Fg2C6gW+0DS45nFLVKqmZRLHgQo5P/2kg47fiZGh5bQ1IbV8sWk45cE8Cr43ntUwV/osrbNpk/A2gfK8b8mti68ACoIzG7aqZ1+XycPy9mBIPA=
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
+ DM5PR07MB3499.namprd07.prod.outlook.com (2603:10b6:4:6b::34) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3477.28; Wed, 28 Oct 2020 07:20:51 +0000
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::2087:7f2b:5dc6:a960]) by DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::2087:7f2b:5dc6:a960%6]) with mapi id 15.20.3477.027; Wed, 28 Oct 2020
+ 07:20:51 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "rogerq@ti.com" <rogerq@ti.com>, "nsekhar@ti.com" <nsekhar@ti.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Ferry Toth <fntoth@gmail.com>
-Subject: Re: [PATCH] usb: gadget: audio: Free requests only after callback
-Thread-Topic: [PATCH] usb: gadget: audio: Free requests only after callback
-Thread-Index: AQHWrMsQ48VJ2Jl0c0KvVAXUGskheamsmoWA
-Date:   Wed, 28 Oct 2020 07:15:31 +0000
-Message-ID: <20201028071503.GA21171@b29397-desktop>
-References: <20201027233138.13712-1-jackp@codeaurora.org>
-In-Reply-To: <20201027233138.13712-1-jackp@codeaurora.org>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rahul Kumar <kurahul@cadence.com>
+Subject: RE: [PATCH v3] usb: cdns3: Variable 'length' set but not used
+Thread-Topic: [PATCH v3] usb: cdns3: Variable 'length' set but not used
+Thread-Index: AQHWoq93MTVmC9gJQEy5qA/nl7dl3ampshBwgAAmRYCAAQ0+AIAAiJ9ggAE4DoCAAAd6AA==
+Date:   Wed, 28 Oct 2020 07:20:51 +0000
+Message-ID: <DM6PR07MB55296E10F720D4B7431663A4DD170@DM6PR07MB5529.namprd07.prod.outlook.com>
+References: <20201015045529.2022-1-pawell@cadence.com>
+ <DM6PR07MB55290EA090C418457C1E293BDD190@DM6PR07MB5529.namprd07.prod.outlook.com>
+ <AM8PR04MB7300C4C0BB37319ABC1680528B190@AM8PR04MB7300.eurprd04.prod.outlook.com>
+ <AM8PR04MB73000CE28EC53B3402BFC5BE8B160@AM8PR04MB7300.eurprd04.prod.outlook.com>
+ <DM6PR07MB552997CD8216B5AFD522104CDD160@DM6PR07MB5529.namprd07.prod.outlook.com>
+ <AM8PR04MB7300DE47422D951CF74E006C8B170@AM8PR04MB7300.eurprd04.prod.outlook.com>
+In-Reply-To: <AM8PR04MB7300DE47422D951CF74E006C8B170@AM8PR04MB7300.eurprd04.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: codeaurora.org; dkim=none (message not signed)
- header.d=none;codeaurora.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctMTk1ZTM5NjEtMThlZS0xMWViLTg3NmItMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDE5NWUzOTYyLTE4ZWUtMTFlYi04NzZiLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMTQwMSIgdD0iMTMyNDgzNDMyNDgyMzc5NTM0IiBoPSJSSk5hdjRIMWtveDdvd1NSSVlYVUlHL09WRVE9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=cadence.com;
+x-originating-ip: [185.217.253.59]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 27344058-88e9-49b1-fe59-08d87b1141a1
-x-ms-traffictypediagnostic: AM0PR04MB4420:
-x-microsoft-antispam-prvs: <AM0PR04MB4420DEA064AC1803923448C28B170@AM0PR04MB4420.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-office365-filtering-correlation-id: 0d6eb8d4-32db-4604-53a2-08d87b120013
+x-ms-traffictypediagnostic: DM5PR07MB3499:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR07MB3499EEA1C093E9FBE3D67E82DD170@DM5PR07MB3499.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wrcifJJBXdoxenZnv4z9H3HCHF0eJGbA1KBTv6tEDFLnTng+BgVhZiBqRZeSzT6sAc228j3WtzYoLBRAfL4QgBzSqsV1B2L4HkMw+8PSryeOEp6fHakuus30g3VDFhLe8uxcimdWjYWotRada+j8fAfQ0TxTqiX4tdTKd08WFk5dCv/RhmfADgA2DS6zKtMT5Q97DvA/qB4KbAb3Vu/+piaGpAYcNecNnMFX5p56vlMEEdqJvvTFCvQ2FXIKXMhema52QBB36H7KdeXUDbvZSBXl27Ts0d8HGAt1scJJELfODmgPtqO7wcYCk9HmAvMau5Xjm2JQOFmUwM47MFHixA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(396003)(366004)(346002)(376002)(136003)(39860400002)(478600001)(91956017)(8676002)(83380400001)(76116006)(2906002)(66446008)(64756008)(66556008)(66476007)(66946007)(33656002)(9686003)(6512007)(5660300002)(8936002)(6916009)(4326008)(6506007)(53546011)(1076003)(86362001)(186003)(26005)(71200400001)(33716001)(316002)(44832011)(54906003)(6486002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: BS7w/kUR/N5JfYMdXhVgvZADMhthgq2Q+m+dBFJJnwkT/SYOPsMQ/7SB9CPp/pozT8aSBGw7rmmwJB8womTjLandTdeGtVGCUCGu6hBGbaW5eZ3G6tprtGuQFm7+Sd2EfAYNHlHs74Yiswhcol//YrALGoKnMkkKnPoFrcwTOxKde/rZiiGcpEJSxYY72S6ShlhqWvLsgOHsYKirLdBkHlKJ/n9/fyl6z641/BuxCjzZleZp2mHiV/OPpBeUsrzcM4USL+EFbTgqtWJYYAOr+BRNF9wo4Jz30+y4oFTJFy0p7DEODWEr7rt4B93ucI9B4A14Y6FVhUYXNgqmLNDbNQ8AsE4oXIiXUX2/CP/QtQYW+3LuKIWTDhNsPh1DzkjOmwxKdEmAcynMiSZOmEmj1Bm8xH7TwOaVPB/DethtUM9nR1H0o7iYuflidHD18Bb4LhO0DfNS1CvVYAWQvROLVrn+P+qGAMqGTQb/QuxYi1IgFeLSSrTz65cNIw13XHSeIe5/oU2JfuBc3tPkNzwyC8ghFreUCe1WNbLjvOGqjyr06S7qXCuBeeZGOUaWC2afBRKocr6PcFwNxJzJLd1iFYXq3tZkfH7XTq+A3v9QLHCnxwRIcsNJNhbfNk8nSOePsdionIGCKxF872/IDRn+FQ==
-x-ms-exchange-transport-forked: True
+x-microsoft-antispam-message-info: zba0qmAjah4LQenjqjM11Z0oDvAbe8bLXBV4y9MhXEL+h7dQTom+7WYY3WOVTo+chqV092xayz/I22MsUzgREgBoZSeX6HnYevYr78Ylo1V152cgeTEj+BbfebRKHaGEBn76lRnmfAm5cqwzGd2KGPYSMbWYlh2KAd2tclwn0HY3tOS4Cq/KMmfbiT1RiOck/nA2Uuo1GZHsr9/LrqJ83xC9rCLLVH34azjPwT2qkjZNYJNuoU9PiB09vnQr0PjRInGrxPDTwaKUxhNNIZ7ejOaZ9iLZrd/ORxog5/liZCnbL8rykRwMGGFqFk1OHBZhH/JeDaPOvV0evSGJZRe7iG5NILqQZvSt+V8GVmawsblgGzoYpWQhQVTAYxFCKxYnZRUjFY6Icap7ZaCVjSR4doQCwj/CgWKAYg5mNsR8KprVQTnGEZO+zQoRje54qFLtU/91pGO42zyxyo8W2XYX6A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(346002)(376002)(366004)(136003)(36092001)(8936002)(107886003)(4326008)(6916009)(316002)(5660300002)(71200400001)(966005)(54906003)(33656002)(9686003)(86362001)(7696005)(66946007)(64756008)(76116006)(8676002)(66446008)(66476007)(52536014)(66556008)(83380400001)(2906002)(55016002)(6506007)(186003)(478600001)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: PXRio5a64KwueBNLh72vbcX22e/fA0lrmBcBhOg6kk2cyzUtvk5l9lUd0kndh0MSQO66dbOksPNkfQbXFuiD0620717vsP8amDo3zCwmyNkGx6z67ZfKgJUOFOPTGlIoLa+kttqKGEoHSnMQZ7WgLTcgf65+HEogDKzQiuFzXEOo+70LF7tjXnFCo2n7IWTGSxpg+oJ0QrWiv4+oCbMUeiA7cL7qbzKLwxjFMQIuX9R9ykYfsMaNlW6etv/dpfl2HSokeFqAce00uz4MknM38tVHYFDIB7uk0XtKwzM8Gc4toUuV4II5ORSEkbZ2pQmXKJRqEFHCWicSs6S/EPY1vUFsgNJQmTkbmdKvAYrt7tWcvyMREa41c8yKApd7K2LYUkvVaMIjypsJIbyMCO6LnH9ZcArwwBklTO7vKvtUIJUN1+hgxYl5BGuGAJVVQHxfUPcj9tcD18E+RvK0Ar3NFrvi0OftTVSVy2C+KsBfiH+3qyYcIvpWoPLXUL1SDsXuHgG8QakFiPpS/YC5tFQslrvBGzPZqp7Ndpg1STLltfi4WXtkkDQUK28lP5xVFarMOlsDtrbTYhzUfVn4aUtq6q4rb1fghYuEy6vAKXEMjn7HlTB8A//R5r/O3GYfXIrFR1/mCjoyXu0EvZ5rM+E3lw==
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9DAFE148D57952468C6BA629B694A708@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-OriginatorOrg: cadence.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27344058-88e9-49b1-fe59-08d87b1141a1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2020 07:15:31.7805
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d6eb8d4-32db-4604-53a2-08d87b120013
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2020 07:20:51.2930
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pknm1T6LiL1siKThVtNJ4auUOD4f8TaxeAdgjXQl56fB81GareyXtc8F2SmTKVW4I99bTR8Sxh0Z3+jFPdXEow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4420
+X-MS-Exchange-CrossTenant-userprincipalname: YixhuOsZ1xCiKxJ6ei9yFt4KAextMY1WmGXkHjIwA2ef4cXDUgjolBZ7LxgNfJ+9EaL7TyjvnnI/5NWLq/xtv6h9lDOXXHtINy8XXbgRals=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR07MB3499
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-10-28_01:2020-10-26,2020-10-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 phishscore=0
+ malwarescore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0 mlxlogscore=834
+ priorityscore=1501 suspectscore=0 spamscore=0 adultscore=0 clxscore=1015
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010280047
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-10-27 16:31:38, Jack Pham wrote:
-> As per the kernel doc for usb_ep_dequeue(), it states that "this
-> routine is asynchronous, that is, it may return before the completion
-> routine runs". And indeed since v5.0 the dwc3 gadget driver updated
-> its behavior to place dequeued requests on to a cancelled list to be
-> given back later after the endpoint is stopped.
->=20
-> The free_ep() was incorrectly assuming that a request was ready to
-> be freed after calling dequeue which results in a use-after-free
-> in dwc3 when it traverses its cancelled list. Fix this by moving
-> the usb_ep_free_request() call to the callback itself in case the
-> ep is disabled.
->=20
-> Fixes: eb9fecb9e69b0 ("usb: gadget: f_uac2: split out audio core")
-> Reported-and-tested-by: Ferry Toth <fntoth@gmail.com>
-> Signed-off-by: Jack Pham <jackp@codeaurora.org>
-> ---
->  drivers/usb/gadget/function/u_audio.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/f=
-unction/u_audio.c
-> index e6d32c536781..a3b557fad1fd 100644
-> --- a/drivers/usb/gadget/function/u_audio.c
-> +++ b/drivers/usb/gadget/function/u_audio.c
-> @@ -89,7 +89,12 @@ static void u_audio_iso_complete(struct usb_ep *ep, st=
-ruct usb_request *req)
->  	struct snd_uac_chip *uac =3D prm->uac;
-> =20
->  	/* i/f shutting down */
-> -	if (!prm->ep_enabled || req->status =3D=3D -ESHUTDOWN)
-> +	if (!prm->ep_enabled) {
-> +		usb_ep_free_request(ep, req);
-> +		return;
-> +	}
-> +
-> +	if (req->status =3D=3D -ESHUTDOWN)
->  		return;
-> =20
->  	/*
-> @@ -337,7 +342,6 @@ static inline void free_ep(struct uac_rtd_params *prm=
-, struct usb_ep *ep)
->  	for (i =3D 0; i < params->req_number; i++) {
->  		if (prm->ureq[i].req) {
->  			usb_ep_dequeue(ep, prm->ureq[i].req);
-> -			usb_ep_free_request(ep, prm->ureq[i].req);
 
-Then, for normal base, eg, there is no pending request before calling
-free_ep, then, where these uac request will be freed?
+>
+>> Peter,
+>>
+>> It looks like you missed the " [PATCH v3] usb: cdns3: Variable 'length' =
+set but
+>> not used"
+>>
+>> It's quite important because compiler complains for this when I use W=3D=
+1.
+>>
+>
+>Pawel, it is the bug-fix, and located at branch: for-usb-fixes.
 
---=20
+But I can't see it in this branch:
 
-Thanks,
-Peter Chen=
+https://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/log/?h=
+=3Dfor-usb-fixes&qt=3Dgrep&q=3Dcdns3
+
+I can see there only: usb: cdns3: Rids of duplicate error message.
+
+>
+>> Thanks,
+>> Pawel
+>>
+>> >> >
+>> >> > A gentle ping.
+>> >> >
+>> >> > I assume that you should add this and the rest overdue cdsn3
+>> >> > patches as first to you ci-for-usb-next branch.
+>> >> > Am I right?
+>> >> >
+>> >>
+>> >> Hi Pawel,
+>> >>
+>> >> I queued them locally, and I waited for v5.10-rc1 which was out
+>> >> yesterday, then I will apply them, and add cdns3 patches to my
+>> >> kernel.org branch. Will update you these two days.
+>> >>
+>> >> Peter
+>> >
+>> >Hi Pawel,
+>> >
+>> >The cdns3 -next patches pushed to: for-usb-next; cdns3 -fixes patches p=
+ushed
+>> to: for-usb-fixes.
+>> >The git is:
+>> >git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
+>> >
+>> >Currently, I only pushed three of your patches, would you please review=
+ my
+>> patches, thanks.
+>> >
+>> >Peter
