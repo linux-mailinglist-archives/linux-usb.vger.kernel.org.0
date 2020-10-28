@@ -2,92 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA2D29DB1A
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 00:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D7C29DB20
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 00:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389165AbgJ1XnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 19:43:14 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:39782 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388224AbgJ1Wvs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 18:51:48 -0400
-Received: by mail-pf1-f195.google.com with SMTP id e15so685340pfh.6;
-        Wed, 28 Oct 2020 15:51:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=88zJ9ycLYQdcGqRXYja6/gO2C1Ux6yzl679UI8xpjuk=;
-        b=mDAT2lviXSntEcMhARnMRFfdYuPdGTfEq+Ks1QELqZO8akz6HkytaYKwHoc8KhyU1e
-         uLNprLCtiYJw3sWMc4G9hDPkqnSsHtltWelpEPcOLVAn1hKEuwr6hJhoVCRDZ8zWf97R
-         lLxtn5IjHttyeSMgINQjIPSnX5+/oK1ezwrd9ETGw+DOQ9fohq2wdCRgkIXYi9wGRmUU
-         4eDk6wZYc9duhuA4Pj0SJb+E7r3bD676uIl4J73bqSHKwrvTOnGizVEvEz9mD7QeBjm8
-         r1JbzmusCwqxZN+Iak/DRjHMKftXFaPRiHuFmaD1DKHzKWWo/0pm5TteFwdoxfQ/ZbcC
-         FEPQ==
-X-Gm-Message-State: AOAM530lw6DG7xMF0tnysyIGOY+xne5s2gQsytlHBAyi8xEmTlk8ihnM
-        d94wMPfPCWMnAjbtrJ8Yhkig1Z4TWp0kG2Jx
-X-Google-Smtp-Source: ABdhPJx7FiiYGqO8p9vnvQI0SFfAk/Zy/DLS6frwPi9tU1Ev3+i3tWcwRUuf81mHMu9jTgX4SAzVww==
-X-Received: by 2002:a92:41cf:: with SMTP id o198mr4361886ila.262.1603857675192;
-        Tue, 27 Oct 2020 21:01:15 -0700 (PDT)
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com. [209.85.166.170])
-        by smtp.gmail.com with ESMTPSA id v85sm2051225ilk.50.2020.10.27.21.01.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2020 21:01:14 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id v18so3513249ilg.1;
-        Tue, 27 Oct 2020 21:01:14 -0700 (PDT)
-X-Received: by 2002:a92:cb8d:: with SMTP id z13mr4118140ilo.182.1603857669680;
- Tue, 27 Oct 2020 21:01:09 -0700 (PDT)
+        id S2390639AbgJ1Xnd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 19:43:33 -0400
+Received: from m42-4.mailgun.net ([69.72.42.4]:40324 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390466AbgJ1Xnb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Oct 2020 19:43:31 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1603928611; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=Emczan62bueoEw9QLI1xvenf6hFHn3vzZ6A/GwOjafg=; b=GBCcs9oR19RYagoUWH8cNgD2d38oMwWeDFi3dkckMP8WN8CT4tM0l8xgmNkDhafh5e/bPYGj
+ 47k31s/xj2ogIaEDPaipXik4lI20pCBRobodoXHOgk8ef8OOesFlM1TAQI/ekirFWwwe3kA1
+ F0zgPN3oO3Ho6w47JBBs40VQrIc=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 5f9a02160d38100718416b43 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 28 Oct 2020 23:43:18
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 274E9C43385; Wed, 28 Oct 2020 23:43:18 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C919DC433CB;
+        Wed, 28 Oct 2020 23:43:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C919DC433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH 0/2] Allow DWC3 runtime suspend if UDC is unbinded
+Date:   Wed, 28 Oct 2020 16:43:09 -0700
+Message-Id: <20201028234311.6464-1-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <4cc0e162-c607-3fdf-30c9-1b3a77f6cf20@runbox.com>
- <20201022135521.375211-1-m.v.b@runbox.com> <20201022135521.375211-2-m.v.b@runbox.com>
- <4f367aba2f43b5e3807e0b01a5375e4a024ce765.camel@hadess.net>
-In-Reply-To: <4f367aba2f43b5e3807e0b01a5375e4a024ce765.camel@hadess.net>
-From:   Pany <pany@fedoraproject.org>
-Date:   Wed, 28 Oct 2020 04:00:57 +0000
-X-Gmail-Original-Message-ID: <CAE3RAxuUiejhQtByfgeORrjy6v=QAP4gPrv+L-Ez4roNNsQY=g@mail.gmail.com>
-Message-ID: <CAE3RAxuUiejhQtByfgeORrjy6v=QAP4gPrv+L-Ez4roNNsQY=g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usbcore: Check both id_table and match() when both available
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     "M. Vefa Bicakci" <m.v.b@runbox.com>, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 6:25 PM Bastien Nocera <hadess@hadess.net> wrote:
->
-> On Thu, 2020-10-22 at 09:55 -0400, M. Vefa Bicakci wrote:
-> > From: Bastien Nocera <hadess@hadess.net>
-> >
-> > From: Bastien Nocera <hadess@hadess.net>
-> >
-> > When a USB device driver has both an id_table and a match() function,
-> > make
-> > sure to check both to find a match, first matching the id_table, then
-> > checking the match() function.
-> >
-> > This makes it possible to have module autoloading done through the
-> > id_table when devices are plugged in, before checking for further
-> > device eligibility in the match() function.
-> >
-> > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > Cc: <stable@vger.kernel.org> # 5.8
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Alan Stern <stern@rowland.harvard.edu>
-> > Co-developed-by: M. Vefa Bicakci <m.v.b@runbox.com>
-> > Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
->
-> You can also add my:
-> Tested-by: Bastien Nocera <hadess@hadess.net>
->
+During the following scenario, the DWC3 runtime suspend routine is blocked as
+the connected flag is still true:
 
-This patch works well for me.
-Tested-by: Pan (Pany) YUAN <pany@fedoraproject.org>
+1.  Enumerate device w/ host.
+2.  Gadget is unbinded
+	- echo "" > /sys/kernel/config/usb_gadget/g1/UDC
+3.  Disconnect the USB cable (VBUS low)
+4.  No dwc3_gadget_disconnect_interrupt() seen (since controller is
+   halted from step#1)
+5.  Runtime PM autosuspend fails due to "dwc->connected" being true
+(cleared in dwc3_gadget_disconnect_interrupt())
+6.  Gadget binded
+	- echo udc_name > /sys/kernel/config/usb_gadget/g1/UDC
+7.  No runtime suspend until cable is plugged in and out
+
+Technically, for device initiated disconnects, there is no active session/link
+with the host, so the DWC3 controller should be allowed to go into a low power
+state.  Also, we need to now consider when re-binding the UDC,
+dwc3_gadget_set_speed() is executed before dwc3_gadget_pullup(), so if the DWC3
+controller is suspended/disabled, while accessing the DCFG, that could result in
+bus timeouts, etc...  Change the dwc3_gadget_set_speed() to save the speed
+being requested, and program it during dwc3_gadget_run_stop(), which is executed
+during PM runtime resume.  If not, previous setting will be overridden as we
+execute a DWC3 controller reset during PM runtime resume. 
+
+Wesley Cheng (2):
+  usb: dwc3: gadget: Allow runtime suspend if UDC unbinded
+  usb: dwc3: gadget: Preserve UDC max speed setting
+
+ drivers/usb/dwc3/core.h   |   1 +
+ drivers/usb/dwc3/gadget.c | 114 +++++++++++++++++++++-----------------
+ 2 files changed, 64 insertions(+), 51 deletions(-)
 
 -- 
-Regards,
-Pany
-pany@fedoraproject.org
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
