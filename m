@@ -2,71 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5986629D885
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Oct 2020 23:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE87229D905
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Oct 2020 23:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388132AbgJ1WdG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 18:33:06 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:36301 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388137AbgJ1Wcq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 18:32:46 -0400
-Received: by mail-ed1-f68.google.com with SMTP id l16so1178525eds.3
-        for <linux-usb@vger.kernel.org>; Wed, 28 Oct 2020 15:32:45 -0700 (PDT)
+        id S2388956AbgJ1Wlk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 18:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388979AbgJ1Wip (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 18:38:45 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C5BC0613CF;
+        Wed, 28 Oct 2020 15:38:44 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id 13so668363pfy.4;
+        Wed, 28 Oct 2020 15:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Johbs0Z75egiQIroXUJ+H8W2j2ZD6gGHPT/5rOZ9E7c=;
+        b=OoqhVhER1UzX3UYvODFWFHzjIjN5ME0+4Stvf1J5DRaht5nxVCeMn5gZQmVEdTtXih
+         tU9fU+LWsNZimK/PY/3B/a7/7Zimlqq2KXnQ50N1QT8lFCvmgrupewCjON3RmkhXTewc
+         b6ZvuAWavkDTBO8xa9RM9aYCCqJ+k0tsm8CHCn703paAaKs6HBEzBJRIBoPm4eUT7l+O
+         RFmYTVBV6k0YIdKg0cGPf22vp+OKfs0Nlv0/XZQnmNWIuAkW7+tjbvJbLoE6O+bz54i4
+         UfAxNuik86rIHqZnaiGpc+zuh74r4R3h82qyfK5d+kuQ50eB3gl42gS6Df1vw/3Yx83C
+         Q77w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=AnD14m59RyCYZ+TEcZur1g3L2+9d5Dkc7pSDJYh9J2E=;
-        b=GB6HCSSPJC5bfcPbJCnd2Bvbs1/FvoMTX7HcE+rIU+WzQRu83MSQry3C9DAPYGWGst
-         B4nS4z0r858E/VbvenzZt7UWRHvxXl41Fxl7WMhqXUmuKAa7fid0C7gSK4ahmXsao2Qs
-         n5WwRLA69a2JE1efeGXO2R6OLr4lH1wBR4hog3GotYEdfFCSARJ22HOHiP5Wq/ZjiNAr
-         59Tz4Q3t4XoTb1G5lXc5avzjWHjhv57cC+NnU0VHFCXLwFs+Ikiv8Z7bs+R9xFtDBlGe
-         YIdemVsfa1DWcY3Ws51rNn9Yfq0CYGtuFG+JrxUgD+wAM6KWUTenMDRsfjlfEcvBmQYC
-         pvhQ==
-X-Gm-Message-State: AOAM532AhZR9PijppbI6cy6rjeGrBcG2rkG9hODpKhXFr9nX8WdwQxfv
-        qunwzrsKh4cxLaCZryEh7uAyeniCtTK1DA==
-X-Google-Smtp-Source: ABdhPJwjsYaQufcPYRu0rHRTbqnzc5qGI/FRLmxl91qefKThJlIHykh3mS/aIXDVq+NSZdTc8JWZSw==
-X-Received: by 2002:a19:2d15:: with SMTP id k21mr2345838lfj.276.1603869431773;
-        Wed, 28 Oct 2020 00:17:11 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id c21sm427151lfm.308.2020.10.28.00.17.10
+        bh=Johbs0Z75egiQIroXUJ+H8W2j2ZD6gGHPT/5rOZ9E7c=;
+        b=E6+bP9QWNAA35HuFT7Aso0s519Sk2++kxjoMyZ8wwG95cU04SO1wRo4r7jQyCMsFOM
+         zoJMm/0QmKMu7YGKkN2LiXfxGdR/JR13g7Ocb9OBA/u60q9BtKunBZ/oIygWLPNWyg4U
+         ji46zmqOjG3n9I41m6OU1pqMXdj3BkwdSZ9OkFseKcyNrZ241sR/zL/EVwH89pClMKC9
+         WBA24QUohT2qDqHTbFPhlloPCLPn+TPDjlyYPEbnzwyyhoizV53NRGnzGBirbAM3kaQ/
+         gV273eBW9spfsMULtXWPa+uSjTBpYTvAbXkHcj2oxcsVTQK08qM1/bD0dKHCyw+K19YD
+         c3rw==
+X-Gm-Message-State: AOAM533nv7YdqfFDW2iaZQ2/Cspqh8B648WYU1SR5MnJABfobBhBc0rv
+        wvxhQNC1F2GzvLneJdcOgD3Mkbyes8Xk5g==
+X-Google-Smtp-Source: ABdhPJzrvhA9APnYxoejVZrytwFTXVwlDJ+tezyAIzCrEr05XV1nsPR7nOjQR0dWM6o8UmBfXNUogw==
+X-Received: by 2002:a63:9d04:: with SMTP id i4mr6401980pgd.375.1603892793062;
+        Wed, 28 Oct 2020 06:46:33 -0700 (PDT)
+Received: from localhost (23.83.224.115.16clouds.com. [23.83.224.115])
+        by smtp.gmail.com with ESMTPSA id p22sm5176338pju.48.2020.10.28.06.46.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 00:17:10 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kXfhm-0005m2-QG; Wed, 28 Oct 2020 08:17:10 +0100
-Date:   Wed, 28 Oct 2020 08:17:10 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Mychaela Falconia <mychaela.falconia@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/3] a family of FTDI-based devices that need ftdi_sio
- quirks
-Message-ID: <20201028071710.GI4085@localhost>
-References: <20200916015621.EFCDA374023F@freecalypso.org>
- <20200929101330.GQ24441@localhost>
- <CA+uuBqY83q+UiRsYxBckXvbtYf4sRxqB_8eXXPgEKAOqTwD=vg@mail.gmail.com>
- <20201005105722.GN5141@localhost>
- <CA+uuBqZ6JhCq1ydU-9A+en3QO=9zX9LuEJ8+P0YvEzUE+9sYoA@mail.gmail.com>
- <CA+uuBqZSozH_513OyiDyuh1DcvPrCkBer=_wedLQEEFSbdDrkw@mail.gmail.com>
+        Wed, 28 Oct 2020 06:46:32 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 21:46:29 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v3] usb: dwc3: core: fix a issue about clear connect state
+Message-ID: <20201028125812.GA59692@nuc8i5>
+References: <20201020135806.30268-1-zhengdejin5@gmail.com>
+ <875z6wdq62.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+uuBqZSozH_513OyiDyuh1DcvPrCkBer=_wedLQEEFSbdDrkw@mail.gmail.com>
+In-Reply-To: <875z6wdq62.fsf@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 12:18:13PM -0800, Mychaela Falconia wrote:
+On Tue, Oct 27, 2020 at 10:33:09AM +0200, Felipe Balbi wrote:
+Hi Balbi:
 
-> In your October 5 argument you wrote:
+Thank you so much for your comment.
+
 > 
-> > Let me give this some more thought.
+> Hi,
 > 
-> It has been 3 weeks - do you have any more thoughts that address my
-> not yet answered rebuttal arguments in defense of my patch?
+> Dejin Zheng <zhengdejin5@gmail.com> writes:
+> > According to Synopsys Programming Guide chapter 2.2 Register Resets,
+> > it cannot reset the DCTL register by setting DCTL.CSFTRST for core soft
+> > reset, if DWC3 controller as a slave device and stay connected with a usb
+> > host, then, while rebooting linux, it will fail to reinitialize dwc3 as a
+> > slave device when the DWC3 controller did not power off. because the
+> > connection status is incorrect, so we also need to clear DCTL.RUN_STOP
+> > bit for disabling connect when doing core soft reset. There will still
+> > be other stale configuration in DCTL, so reset the other fields of DCTL
+> > to the default value 0.
+> 
+> This commit log is a bit hard to understand. When does this problem
+> actually happen? It seems like it's in the case of, perhaps, kexecing
+> into a new kernel, is that right?
+> 
+It happens when entering the kernel for the second time after the reboot
+command.
 
-No, sorry, I haven't read your last mail yet. But don't worry it's not
-lost, and I've started processing patches again now that rc1 is out.
+> At the time dwc3_core_soft_reset() is called, the assumption is that
+> we're starting with a clean core, from power up. If we have stale
+> configuration from a previous run, we should fix this on the exit
+> path. Note that if we're reaching probe with pull up connected, we
+> already have issues elsewhere.
+> 
+> I think this is not the right fix for the problem.
+>
+I think you are right, Thinh also suggested me fix it on the exit path
+in the previous patch v2. Do you think I can do these cleanups in the
+shutdown hook of this driver? Balbi, is there a more suitable place to
+do this by your rich experience? Thanks!
 
-Johan
+BR,
+Dejin
+> -- 
+> balbi
+
+
