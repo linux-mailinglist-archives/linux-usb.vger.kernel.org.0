@@ -2,221 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E52729DB29
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 00:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC5129DC2F
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 01:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388237AbgJ1Xnw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 19:43:52 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:30558 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390548AbgJ1Xn3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Oct 2020 19:43:29 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1603928609; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=iLruRk+yzsd+wXgNUHke4eCh3gnpBqt5zQzovjo4slg=; b=aZOvN0Y+qhNDLNn65AHnf2qvo1ylmyKwNMkOKCW/M23uOh/uhSTjckEAEnYxic/4YLKDFhXS
- O703zUJM2hQ5z0/LbzTLpYKO0qsrPIg61gVwE9qmyAVs3tvptSDwlNxGqwgsG9JMBso7gOUJ
- 03U7TgUs4IPGROF7MAVIRkflM4o=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 5f9a02183500ab29c83580b1 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 28 Oct 2020 23:43:20
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 65AA1C433C9; Wed, 28 Oct 2020 23:43:20 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 53137C433A0;
-        Wed, 28 Oct 2020 23:43:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 53137C433A0
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH 2/2] usb: dwc3: gadget: Preserve UDC max speed setting
-Date:   Wed, 28 Oct 2020 16:43:11 -0700
-Message-Id: <20201028234311.6464-3-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201028234311.6464-1-wcheng@codeaurora.org>
-References: <20201028234311.6464-1-wcheng@codeaurora.org>
+        id S2390831AbgJ2AWO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 20:22:14 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:1414 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388930AbgJ1WiG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 18:38:06 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f9937530001>; Wed, 28 Oct 2020 02:18:11 -0700
+Received: from [10.2.171.164] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 28 Oct
+ 2020 09:18:01 +0000
+Subject: Re: [PATCH v4 10/16] dt-bindings: phy: tegra-xusb: Add nvidia,pmc
+ prop
+To:     Rob Herring <robh@kernel.org>, <thierry.reding@gmail.com>
+CC:     <gregkh@linuxfoundation.org>, <jonathanh@nvidia.com>,
+        <kishon@ti.com>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <nkristam@nvidia.com>
+References: <20201016130726.1378666-1-jckuo@nvidia.com>
+ <20201016130726.1378666-11-jckuo@nvidia.com> <20201019214046.GA3645734@bogus>
+X-Nvconfidentiality: public
+From:   JC Kuo <jckuo@nvidia.com>
+Message-ID: <4d190cc1-d01d-9064-0b28-ed7f48858ebd@nvidia.com>
+Date:   Wed, 28 Oct 2020 17:18:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201019214046.GA3645734@bogus>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1603876691; bh=Uicj8tp9XPp1EuN3JiOQD2NdkQG03jiexELbBTYXEFQ=;
+        h=Subject:To:CC:References:X-Nvconfidentiality:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=lCmm40q1pu/ss7empc91Sutt+HYjjOzzxXrZuqa59DIk+5YYJRBGBEU/rGxyI0PqZ
+         zlRqu9mMCv72cKIjAgLv2524f3MbhSAMJG73Bj3CGt7Bdddc2YINS8Rw5WtY3IXQ9D
+         1lAyChykD8CarsLI3vVHxCN70Fkf5DpVZifL017dGi1uBBOEcLxAbReMXAl2Xy+A7m
+         BOhOYGLtGGVTMzpek8DZ+qtGmpPKPWTEZyNSXv+TPVjF7yVeTMT52o/kVJQmFHh936
+         9E3gyu+qopP8HWSF1fXuTGG76wpdHxqdo7yaItJPAmeyOvpWh4wP1vE8hxyWLj91s5
+         zbFQogP8F0/Ow==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB gadget/UDC driver can restrict the DWC3 controller speed using
-dwc3_gadget_set_speed().  Store this setting into a variable, in order for
-this setting to persist across controller resets due to runtime PM.
+On 10/20/20 5:40 AM, Rob Herring wrote:
+> On Fri, Oct 16, 2020 at 09:07:20PM +0800, JC Kuo wrote:
+>> This commit describes the "nvidia,pmc" property for Tegra210 tegra-xusb
+>> PHY driver. It is a phandle and specifier referring to the Tegra210
+>> pmc@7000e400 node.
+>>
+>> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+>> ---
+>> v4:
+>>    new change to document "nvidia,pmc" prop
+>>
+>>  .../devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt      | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt b/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
+>> index 38c5fa21f435..ea559baeb546 100644
+>> --- a/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
+>> +++ b/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
+>> @@ -54,6 +54,7 @@ For Tegra210:
+>>  - avdd-pll-uerefe-supply: PLLE reference PLL power supply. Must supply 1.05 V.
+>>  - dvdd-pex-pll-supply: PCIe/USB3 PLL power supply. Must supply 1.05 V.
+>>  - hvdd-pex-pll-e-supply: High-voltage PLLE power supply. Must supply 1.8 V.
+>> +- nvidia,pmc: phandle and specifier referring to the Tegra210 pmc@7000e400 node.
+> 
+> 'Tegra210 pmc@7000e400' is kind of specific. Going to update this for 
+> every address and chip?
+> 
+> If there's only one PMC, you can just find the compatible PMC node. Then 
+> you don't need a DT update.
+> 
+> Rob
+> 
+Hi Rob,
+Thanks for your review and suggestion. Yes, there is only one PMC node. You mean
+I can retrieve the PMC node with the following code and if do do DT update is
+not required, right?
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- drivers/usb/dwc3/core.h   |   1 +
- drivers/usb/dwc3/gadget.c | 108 ++++++++++++++++++++------------------
- 2 files changed, 58 insertions(+), 51 deletions(-)
+	np = of_find_compatible_node(NULL, NULL, "nvidia,tegra210-pmc");
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 2f04b3e42bf1..390d3deef0ba 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1119,6 +1119,7 @@ struct dwc3 {
- 	u32			nr_scratch;
- 	u32			u1u2;
- 	u32			maximum_speed;
-+	u32			gadget_max_speed;
- 
- 	u32			ip;
- 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 6364429b2122..1a93b92a5e6f 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1941,6 +1941,61 @@ static void dwc3_stop_active_transfers(struct dwc3 *dwc)
- 	}
- }
- 
-+static void __dwc3_gadget_set_speed(struct dwc3 *dwc)
-+{
-+	u32			reg;
-+
-+	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
-+	reg &= ~(DWC3_DCFG_SPEED_MASK);
-+
-+	/*
-+	 * WORKAROUND: DWC3 revision < 2.20a have an issue
-+	 * which would cause metastability state on Run/Stop
-+	 * bit if we try to force the IP to USB2-only mode.
-+	 *
-+	 * Because of that, we cannot configure the IP to any
-+	 * speed other than the SuperSpeed
-+	 *
-+	 * Refers to:
-+	 *
-+	 * STAR#9000525659: Clock Domain Crossing on DCTL in
-+	 * USB 2.0 Mode
-+	 */
-+	if (DWC3_VER_IS_PRIOR(DWC3, 220A) &&
-+	    !dwc->dis_metastability_quirk) {
-+		reg |= DWC3_DCFG_SUPERSPEED;
-+	} else {
-+		switch (dwc->gadget_max_speed) {
-+		case USB_SPEED_LOW:
-+			reg |= DWC3_DCFG_LOWSPEED;
-+			break;
-+		case USB_SPEED_FULL:
-+			reg |= DWC3_DCFG_FULLSPEED;
-+			break;
-+		case USB_SPEED_HIGH:
-+			reg |= DWC3_DCFG_HIGHSPEED;
-+			break;
-+		case USB_SPEED_SUPER:
-+			reg |= DWC3_DCFG_SUPERSPEED;
-+			break;
-+		case USB_SPEED_SUPER_PLUS:
-+			if (DWC3_IP_IS(DWC3))
-+				reg |= DWC3_DCFG_SUPERSPEED;
-+			else
-+				reg |= DWC3_DCFG_SUPERSPEED_PLUS;
-+			break;
-+		default:
-+			dev_err(dwc->dev, "invalid speed (%d)\n", dwc->gadget_max_speed);
-+
-+			if (DWC3_IP_IS(DWC3))
-+				reg |= DWC3_DCFG_SUPERSPEED;
-+			else
-+				reg |= DWC3_DCFG_SUPERSPEED_PLUS;
-+		}
-+	}
-+	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
-+}
-+
- static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
- {
- 	u32			reg;
-@@ -1963,6 +2018,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
- 		if (dwc->has_hibernation)
- 			reg |= DWC3_DCTL_KEEP_CONNECT;
- 
-+		__dwc3_gadget_set_speed(dwc);
- 		dwc->pullups_connected = true;
- 	} else {
- 		reg &= ~DWC3_DCTL_RUN_STOP;
-@@ -2318,59 +2374,9 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
- 	unsigned long		flags;
--	u32			reg;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
--	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
--	reg &= ~(DWC3_DCFG_SPEED_MASK);
--
--	/*
--	 * WORKAROUND: DWC3 revision < 2.20a have an issue
--	 * which would cause metastability state on Run/Stop
--	 * bit if we try to force the IP to USB2-only mode.
--	 *
--	 * Because of that, we cannot configure the IP to any
--	 * speed other than the SuperSpeed
--	 *
--	 * Refers to:
--	 *
--	 * STAR#9000525659: Clock Domain Crossing on DCTL in
--	 * USB 2.0 Mode
--	 */
--	if (DWC3_VER_IS_PRIOR(DWC3, 220A) &&
--	    !dwc->dis_metastability_quirk) {
--		reg |= DWC3_DCFG_SUPERSPEED;
--	} else {
--		switch (speed) {
--		case USB_SPEED_LOW:
--			reg |= DWC3_DCFG_LOWSPEED;
--			break;
--		case USB_SPEED_FULL:
--			reg |= DWC3_DCFG_FULLSPEED;
--			break;
--		case USB_SPEED_HIGH:
--			reg |= DWC3_DCFG_HIGHSPEED;
--			break;
--		case USB_SPEED_SUPER:
--			reg |= DWC3_DCFG_SUPERSPEED;
--			break;
--		case USB_SPEED_SUPER_PLUS:
--			if (DWC3_IP_IS(DWC3))
--				reg |= DWC3_DCFG_SUPERSPEED;
--			else
--				reg |= DWC3_DCFG_SUPERSPEED_PLUS;
--			break;
--		default:
--			dev_err(dwc->dev, "invalid speed (%d)\n", speed);
--
--			if (DWC3_IP_IS(DWC3))
--				reg |= DWC3_DCFG_SUPERSPEED;
--			else
--				reg |= DWC3_DCFG_SUPERSPEED_PLUS;
--		}
--	}
--	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
--
-+	dwc->gadget_max_speed = speed;
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- }
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+JC
