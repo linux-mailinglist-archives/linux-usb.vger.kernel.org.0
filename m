@@ -2,118 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 215B329E177
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 03:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBB229E2EF
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 03:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727880AbgJ2CBV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 22:01:21 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:20991 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727863AbgJ2CBN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Oct 2020 22:01:13 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1603936873; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=OY5Nx8k3+elJDqG8wO1WAHt4XhnVppU+ilRqg8xPj/c=; b=QfWYuZw+kWNINmrzMh5d+72oKS6BcJ2lrLY8Ea5rqO8sSlrdIRi/29TNcR/9ymzUwXSjTxzj
- CPkf47//NQNchyouFSoKD5j4BG87kjqu5UADOdshDBAOsProgNQproZMqA6BJnyIccfUGHiw
- ZqiqEJC61QBbstmaygYS7n2pFrI=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 5f9a226020b52b32d78a4a7c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 29 Oct 2020 02:01:04
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2B229C433FF; Thu, 29 Oct 2020 02:01:03 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.110.82.132] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9B0EDC4339C;
-        Thu, 29 Oct 2020 02:01:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9B0EDC4339C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH 2/2] usb: dwc3: gadget: Preserve UDC max speed setting
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "jackp@codeaurora.org" <jackp@codeaurora.org>
-References: <20201028234311.6464-1-wcheng@codeaurora.org>
- <20201028234311.6464-3-wcheng@codeaurora.org>
- <e6faade6-7c4c-5966-3afd-63be2deefa01@synopsys.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <6748f727-db76-b51c-4333-57467ae3013f@codeaurora.org>
-Date:   Wed, 28 Oct 2020 19:00:59 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.3
+        id S1726190AbgJ1Vdk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 17:33:40 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:41641 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725989AbgJ1Vdf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 17:33:35 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09SF6vEx025320;
+        Wed, 28 Oct 2020 16:17:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=pPYG/LhfAgAZlR2F/GmGEbUodjwV2nmicwRkUApDpvw=;
+ b=u8+ZjN/B6IdqCdgc7M3GIWXSOMeVT8MVxlLAg1Pefm3kw8NCcC8zHorJSszySXZRwPpX
+ Za9HpnTACoRlZSUYIxtMNosjpwV7RxwbdIfxk2hjarJZ9fTNcgUfgZQc3bswesxNRQIK
+ lJHRp6JU3PIGLub3uJapn+xpmqP5xxpH6gVczND8AOAmSLowTAG91C76+0zs8tzwlCOL
+ fjvH71HPG6Gd4MsB3e6ZoCg1MtdV5G7KcF9Vcxo7DsNhb7vGRs2R9qTygJKGlVl42Hh7
+ gm38GDQCWU1vmpZ36ALO0NZTgHQHTozgTPpMJnmAkjo+P8P8eLAxS/witbDaRAaVhnpm aQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 34ccf3tc02-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Oct 2020 16:17:03 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8395E100034;
+        Wed, 28 Oct 2020 16:17:02 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 47AF724F94B;
+        Wed, 28 Oct 2020 16:17:02 +0100 (CET)
+Received: from localhost (10.75.127.44) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 28 Oct 2020 16:17:01
+ +0100
+From:   Amelie Delaunay <amelie.delaunay@st.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>
+Subject: [PATCH 1/1] usb: typec: add missing MODULE_DEVICE_TABLE() to stusb160x
+Date:   Wed, 28 Oct 2020 16:17:03 +0100
+Message-ID: <20201028151703.31195-1-amelie.delaunay@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <e6faade6-7c4c-5966-3afd-63be2deefa01@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-10-28_07:2020-10-28,2020-10-28 signatures=0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+When stusb160x driver is built as a module, no modalias information is
+available, and it prevents the module to be loaded by udev.
+Add MODULE_DEVICE_TABLE() to fix this issue.
 
+Fixes: da0cb6310094 ("usb: typec: add support for STUSB160x Type-C controller family")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+---
+ drivers/usb/typec/stusb160x.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 10/28/2020 5:43 PM, Thinh Nguyen wrote:
-> Hi,
-> 
-> Wesley Cheng wrote:
->> The USB gadget/UDC driver can restrict the DWC3 controller speed using
->> dwc3_gadget_set_speed().  Store this setting into a variable, in order for
->> this setting to persist across controller resets due to runtime PM.
-> 
-> Why do we need to do this? DCFG should persist unless we overwrite it.
-> The current PM shouldn't update the current speed setting.
-> 
-> BR,
-> Thinh
-> 
-
-Hi Thinh,
-
-During runtime PM suspend, the dwc3_suspend_common() will call
-dwc3_core_exit().  On some platforms they register the DWC3 reset
-control to the DWC3 core driver (otherwise could be handled in the DWC3
-glue drivers), which will be asserted here:
-
-static void dwc3_core_exit(struct dwc3 *dwc)
-{
-...
-	reset_control_assert(dwc->reset);
-
-From the SNPS databook (Table 2-2 Resets for Registers) it mentions that
-assertion of the reset signal will reset the DCFG register.
-
-In addition to the above, with the change to allow runtime PM suspend
-during UDC unbind, we need a way to avoid writing to the DCFG during the
-UDC bind path. (if we entered suspend before re-binding the UDC)  If we
-add an early exit based on the PM state (in
-dwc3_gadget_set_udc_speed()), then we basically ignore the max speed
-request from the UDC/gadget layer.
-
-Since it looks like the DWC3 gadget driver doesn't like using
-synchronous PM runtime resumes, by going this route, we can allow the
-async runtime resume handler to do everything, such as writing the speed
-config and re-enabling the controller.
-
-Thanks
-
-Regards,
-Wesley Cheng
+diff --git a/drivers/usb/typec/stusb160x.c b/drivers/usb/typec/stusb160x.c
+index da7f1957bcb3..42076697e26c 100644
+--- a/drivers/usb/typec/stusb160x.c
++++ b/drivers/usb/typec/stusb160x.c
+@@ -633,6 +633,7 @@ static const struct of_device_id stusb160x_of_match[] = {
+ 	{ .compatible = "st,stusb1600", .data = &stusb1600_regmap_config},
+ 	{},
+ };
++MODULE_DEVICE_TABLE(of, stusb160x_of_match);
+ 
+ static int stusb160x_probe(struct i2c_client *client)
+ {
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.17.1
+
