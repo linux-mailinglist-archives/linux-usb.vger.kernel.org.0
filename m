@@ -2,133 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F51429E07F
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 02:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2179629DF72
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 02:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729446AbgJ1WEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 18:04:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42171 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729475AbgJ1WBK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 18:01:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603922468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d0E3QUw/g6o9o9JHCXUwGNfFscBzWeKeD7oM4X4IAdI=;
-        b=BkKNwRWnv15qRNtDQxdk2OtA68NxD8zo84h/0eCiek5aDW8JzQL++DzDRq0FBrjRKZtwUW
-        yV9gwPLPwCJe2f87SYa0LHYokrAdms09LEsV5YL24+KVxHDZhzp7htXMyqM31EwTZM3/G0
-        qM5/J211+WiIEpF1754KKx+NIu5m+78=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-489-RfN3J01fOM-Uq_b06Q6n5g-1; Wed, 28 Oct 2020 06:57:58 -0400
-X-MC-Unique: RfN3J01fOM-Uq_b06Q6n5g-1
-Received: by mail-ed1-f69.google.com with SMTP id cb27so1936012edb.11
-        for <linux-usb@vger.kernel.org>; Wed, 28 Oct 2020 03:57:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=d0E3QUw/g6o9o9JHCXUwGNfFscBzWeKeD7oM4X4IAdI=;
-        b=DD5LK4j0CfVpK7QE0jh5eISNiMWB9BljGr00cjvh6gwzjYjpNTR8EtXXGpH42r9t7h
-         AbWSgKNg88eLUOF/1PZh0Ddv/267YBlsfX4ihWGZyFyjC97oQFZK9IU9Z0ZQ7DRfYKWC
-         AGU8dUqhoxPDP3WMPyIzUVGq0m2RwT8Tj0Um4eS37NlA8XynXsQChOXVwaBvN+9lRjaD
-         WzicDhvMp2cXNhnX88k/XK8sBgd5QiZI2GonPSeu1EpP9mil7NNgAQWDsD/f71PmqtGa
-         TmfpYdOecinGM8OIQGvfHXUiQJd+gW6FKHp+ohVFGlJStf9/KnW99okF+dXt1X0khxPH
-         xjKg==
-X-Gm-Message-State: AOAM533FveT6V/jbqVCBDB9Ns9pIQSrhIPUYL8VP1kxW8qIghfqpU48P
-        SzOztS3Goy/A7ZfUzjFWtouWfjj9gsCk2l5693X4fLLV2KKUUqP64Auj64KY2AUMmk6UofQUFJK
-        FgczOLGeitFNe3RyY57kU
-X-Received: by 2002:a17:906:383:: with SMTP id b3mr6691379eja.351.1603882676672;
-        Wed, 28 Oct 2020 03:57:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwoy+8dhL7T+UNmiZujbif7PLj7gwOkFVBJB4HmU7l9iVL4YlYVwAaOYKiWFov751i5BNkJCQ==
-X-Received: by 2002:a17:906:383:: with SMTP id b3mr6691360eja.351.1603882676412;
-        Wed, 28 Oct 2020 03:57:56 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
-        by smtp.gmail.com with ESMTPSA id s12sm2670372edu.28.2020.10.28.03.57.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2020 03:57:55 -0700 (PDT)
-Subject: Re: New XHCI lockdep oops in 5.10-rc1
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        Mike Galbraith <efault@gmx.de>, Li Jun <jun.li@nxp.com>
-References: <01e273b8-beb9-ef8c-c2a4-925a11b07799@redhat.com>
- <46dc20eb-bc98-c0f9-e72d-dd2a28e993a1@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <39e135d7-34ac-1347-65f2-2306ed746f4c@redhat.com>
-Date:   Wed, 28 Oct 2020 11:57:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        id S1731523AbgJ2BBZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 21:01:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60512 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731518AbgJ1WR1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:17:27 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 95329246C2;
+        Wed, 28 Oct 2020 11:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603884621;
+        bh=pAXgAGuha2+xKcRRbHLg1pp4yYs653DUA9/8tvcyqJM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pbO/aKwvINygU21CbJM27RRUr2nqjYlnmp0tIdNGuK8Ub6uKyG8oV/qYFIgzxR6vF
+         Ejlw6u6iGu5EVhsjV4CTOdgvAP8OwamW5kshmWzeCH/zMFYm6/erH3Q6f/Lh4of5zg
+         Np/LAf9d0d1xxKA65MxsR5B0I5Z3mbvz7gectOdM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Ahmed S . Darwish" <a.darwish@linutronix.de>
+Subject: [PATCH] USB: host: isp1362: delete isp1362_show_regs()
+Date:   Wed, 28 Oct 2020 12:31:07 +0100
+Message-Id: <20201028113107.2007742-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.29.1
 MIME-Version: 1.0
-In-Reply-To: <46dc20eb-bc98-c0f9-e72d-dd2a28e993a1@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+No one is calling this function, so it's pointless to keep around as it
+is triggering automated scanning tools to try to fix up the problems
+with it using in_interrupt().
 
-On 10/28/20 10:31 AM, Mathias Nyman wrote:
-> On 27.10.2020 23.51, Hans de Goede wrote:
->> Hi,
->>
->> I standard run my local kernel builds with lockdep enabled, booting 5.10-rc1 with lockdep enabled results in:
->>
->> [    3.339982] =====================================================
->> [    3.339984] WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
->> [    3.339987] 5.10.0-rc1pdx86+ #8 Not tainted
->> [    3.339988] -----------------------------------------------------
->> [    3.339991] systemd-udevd/386 [HC0[0]:SC0[0]:HE0:SE1] is trying to acquire:
->> [    3.339993] ffffffffb1a94038 (pin_fs_lock){+.+.}-{2:2}, at: simple_pin_fs+0x22/0xa0
->> [    3.339999] 
->>                and this task is already holding:
->> [    3.340002] ffff9e7b87fbc430 (&xhci->lock){-.-.}-{2:2}, at: xhci_alloc_streams+0x5f9/0x810
->> [    3.340008] which would create a new lock dependency:
->> [    3.340009]  (&xhci->lock){-.-.}-{2:2} -> (pin_fs_lock){+.+.}-{2:2}
->> [    3.340013] 
->>                but this new dependency connects a HARDIRQ-irq-safe lock:
->> [    3.340016]  (&xhci->lock){-.-.}-{2:2}
-> 
-> Thanks, just read a similar report from Mike Galbraith <efault@gmx.de>
-> 
-> Looks like 673d74683627 ("usb: xhci: add debugfs support for ep with stream")
-> creates the new xhci debugfs stream files while holding the xhci->lock,
-> creating this dependency.
-> 
-> Below code should help, but I need to find my UAS drive to test it.
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 482fe8c5e3b4..d4a8d0efbbc4 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -3533,11 +3533,14 @@ static int xhci_alloc_streams(struct usb_hcd *hcd, struct usb_device *udev,
->  		xhci_dbg(xhci, "Slot %u ep ctx %u now has streams.\n",
->  			 udev->slot_id, ep_index);
->  		vdev->eps[ep_index].ep_state |= EP_HAS_STREAMS;
-> -		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
->  	}
->  	xhci_free_command(xhci, config_cmd);
->  	spin_unlock_irqrestore(&xhci->lock, flags);
->  
-> +	for (i = 0; i < num_eps; i++) {
-> +		ep_index = xhci_get_endpoint_index(&eps[i]->desc);
-> +		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
-> +	}
->  	/* Subtract 1 for stream 0, which drivers can't use */
->  	return num_streams - 1;
-> 
+So delete the thing.
 
-I can confirm that this patch fixes the lockdep oops.
+Reported-by: Thomas Gleixner <tglx@linutronix.de>
+Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reported-by: Ahmed S. Darwish <a.darwish@linutronix.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/host/isp1362.h | 54 --------------------------------------
+ 1 file changed, 54 deletions(-)
 
-Regards,
-
-Hans
-
+diff --git a/drivers/usb/host/isp1362.h b/drivers/usb/host/isp1362.h
+index 9bbfcc3fdd3c..208705b08d37 100644
+--- a/drivers/usb/host/isp1362.h
++++ b/drivers/usb/host/isp1362.h
+@@ -793,60 +793,6 @@ static void isp1362_write_fifo(struct isp1362_hcd *isp1362_hcd, void *buf, u16 l
+ 			ISP1362_REG_NO(ISP1362_REG_##r), isp1362_read_reg16(d, r));	\
+ }
+ 
+-static void __attribute__((__unused__)) isp1362_show_regs(struct isp1362_hcd *isp1362_hcd)
+-{
+-	isp1362_show_reg(isp1362_hcd, HCREVISION);
+-	isp1362_show_reg(isp1362_hcd, HCCONTROL);
+-	isp1362_show_reg(isp1362_hcd, HCCMDSTAT);
+-	isp1362_show_reg(isp1362_hcd, HCINTSTAT);
+-	isp1362_show_reg(isp1362_hcd, HCINTENB);
+-	isp1362_show_reg(isp1362_hcd, HCFMINTVL);
+-	isp1362_show_reg(isp1362_hcd, HCFMREM);
+-	isp1362_show_reg(isp1362_hcd, HCFMNUM);
+-	isp1362_show_reg(isp1362_hcd, HCLSTHRESH);
+-	isp1362_show_reg(isp1362_hcd, HCRHDESCA);
+-	isp1362_show_reg(isp1362_hcd, HCRHDESCB);
+-	isp1362_show_reg(isp1362_hcd, HCRHSTATUS);
+-	isp1362_show_reg(isp1362_hcd, HCRHPORT1);
+-	isp1362_show_reg(isp1362_hcd, HCRHPORT2);
+-
+-	isp1362_show_reg(isp1362_hcd, HCHWCFG);
+-	isp1362_show_reg(isp1362_hcd, HCDMACFG);
+-	isp1362_show_reg(isp1362_hcd, HCXFERCTR);
+-	isp1362_show_reg(isp1362_hcd, HCuPINT);
+-
+-	if (in_interrupt())
+-		DBG(0, "%-12s[%02x]:     %04x\n", "HCuPINTENB",
+-			 ISP1362_REG_NO(ISP1362_REG_HCuPINTENB), isp1362_hcd->irqenb);
+-	else
+-		isp1362_show_reg(isp1362_hcd, HCuPINTENB);
+-	isp1362_show_reg(isp1362_hcd, HCCHIPID);
+-	isp1362_show_reg(isp1362_hcd, HCSCRATCH);
+-	isp1362_show_reg(isp1362_hcd, HCBUFSTAT);
+-	isp1362_show_reg(isp1362_hcd, HCDIRADDR);
+-	/* Access would advance fifo
+-	 * isp1362_show_reg(isp1362_hcd, HCDIRDATA);
+-	 */
+-	isp1362_show_reg(isp1362_hcd, HCISTLBUFSZ);
+-	isp1362_show_reg(isp1362_hcd, HCISTLRATE);
+-	isp1362_show_reg(isp1362_hcd, HCINTLBUFSZ);
+-	isp1362_show_reg(isp1362_hcd, HCINTLBLKSZ);
+-	isp1362_show_reg(isp1362_hcd, HCINTLDONE);
+-	isp1362_show_reg(isp1362_hcd, HCINTLSKIP);
+-	isp1362_show_reg(isp1362_hcd, HCINTLLAST);
+-	isp1362_show_reg(isp1362_hcd, HCINTLCURR);
+-	isp1362_show_reg(isp1362_hcd, HCATLBUFSZ);
+-	isp1362_show_reg(isp1362_hcd, HCATLBLKSZ);
+-	/* only valid after ATL_DONE interrupt
+-	 * isp1362_show_reg(isp1362_hcd, HCATLDONE);
+-	 */
+-	isp1362_show_reg(isp1362_hcd, HCATLSKIP);
+-	isp1362_show_reg(isp1362_hcd, HCATLLAST);
+-	isp1362_show_reg(isp1362_hcd, HCATLCURR);
+-	isp1362_show_reg(isp1362_hcd, HCATLDTC);
+-	isp1362_show_reg(isp1362_hcd, HCATLDTCTO);
+-}
+-
+ static void isp1362_write_diraddr(struct isp1362_hcd *isp1362_hcd, u16 offset, u16 len)
+ {
+ 	len = (len + 1) & ~1;
+-- 
+2.29.1
 
