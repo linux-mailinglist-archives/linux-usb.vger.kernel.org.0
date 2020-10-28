@@ -2,53 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B3529D746
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Oct 2020 23:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF03529D6C6
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Oct 2020 23:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732667AbgJ1WWZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 18:22:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36800 "EHLO mail.kernel.org"
+        id S1731757AbgJ1WRo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 18:17:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60514 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732650AbgJ1WWX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:22:23 -0400
+        id S1731715AbgJ1WRm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:17:42 -0400
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D0FEC24699;
-        Wed, 28 Oct 2020 09:37:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 84796246BF;
+        Wed, 28 Oct 2020 11:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603877875;
-        bh=BkH7NGQ3stg8sHIeUQW/CzjagGjDM1DLytvfTkbinSs=;
+        s=default; t=1603884420;
+        bh=4Vz9K5VWILkqVQVWRhlSP7/sa3Zk4U9Q0Nqg2nrhOcc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=07Myxs/VbHsC6gZKtmfqw6TVY/h07QGwzR+LugaP6ilLnVi5V7AQD6SggKikQ1ZRc
-         y172F1gCKTpsYMp2PErCZQFbhxGMD4I8KWCR/xfpYcZvARpv4Xz8ncb5+/SIOJ42n/
-         Ls6qCxpEm2G2Hwh/bOeX4gOLspjxW5dUlJhXxARk=
-Date:   Wed, 28 Oct 2020 10:38:48 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        "Ahmed S . Darwish" <a.darwish@linutronix.de>,
+        b=ZWcppmpESqFXU3Hg0RYaM8+OgGedONeP+ja3A+NsQ4iuMHP/cSCdIglAcGPUaQeQS
+         PAd5HVdFzbzPZeTAwuecuMpWvGHv0yrgnuXT6XkHETGQcH4ldJV8qCSGaZ5K6q1Drv
+         jw4UNBjUDtoi+nZuOL+PaVmMvj3p5s0VmetzCJsM=
+Date:   Wed, 28 Oct 2020 12:27:52 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/14] USB: serial: keyspan_pda: fix up write
- implementation
-Message-ID: <20201028093848.GD1953863@kroah.com>
-References: <20201025174600.27896-1-johan@kernel.org>
+        linux-usb@vger.kernel.org,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        Johan Hovold <johan@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Duncan Sands <duncan.sands@free.fr>
+Subject: Re: [patch V2 06/13] usb: host: isp1362: Replace in_interrupt() usage
+Message-ID: <20201028112752.GA1991431@kroah.com>
+References: <20201019100629.419020859@linutronix.de>
+ <20201019101110.240285929@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201025174600.27896-1-johan@kernel.org>
+In-Reply-To: <20201019101110.240285929@linutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Oct 25, 2020 at 06:45:46PM +0100, Johan Hovold wrote:
-> This series fixes a number of long-standing issues with the keyspan_pda
-> driver and reworks its write implementation so that it can be used with
-> any line discipline or for a system console.
+On Mon, Oct 19, 2020 at 12:06:35PM +0200, Thomas Gleixner wrote:
+> isp1362_show_regs() is a debugging-only function, with no call sites. It
+> prints the cached value of the HCuPINTENB register if in_interupt() is
+> true, otherwise it reads the actual register content.
 > 
-> The last few patches cleans up the xircom device support and some style
-> issues.
+> The usage of in_interrupt() in drivers is phased out and Linus clearly
+> requested that code which changes behaviour depending on context should
+> either be separated or the context be conveyed in an argument passed by the
+> caller, which usually knows the context.
+> 
+> Make the conditional based on a function argument.
+> 
+> Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> ---
+> V2: Fix silly typo
+> ---
+>  drivers/usb/host/isp1362.h |    5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> --- a/drivers/usb/host/isp1362.h
+> +++ b/drivers/usb/host/isp1362.h
+> @@ -793,7 +793,8 @@ static void isp1362_write_fifo(struct is
+>  			ISP1362_REG_NO(ISP1362_REG_##r), isp1362_read_reg16(d, r));	\
+>  }
+>  
+> -static void __attribute__((__unused__)) isp1362_show_regs(struct isp1362_hcd *isp1362_hcd)
+> +static void __attribute__((__unused__))
+> +isp1362_show_regs(struct isp1362_hcd *isp1362_hcd, bool cached_inten)
+>  {
+>  	isp1362_show_reg(isp1362_hcd, HCREVISION);
+>  	isp1362_show_reg(isp1362_hcd, HCCONTROL);
+> @@ -815,7 +816,7 @@ static void __attribute__((__unused__))
+>  	isp1362_show_reg(isp1362_hcd, HCXFERCTR);
+>  	isp1362_show_reg(isp1362_hcd, HCuPINT);
+>  
+> -	if (in_interrupt())
+> +	if (cached_inten)
+>  		DBG(0, "%-12s[%02x]:     %04x\n", "HCuPINTENB",
+>  			 ISP1362_REG_NO(ISP1362_REG_HCuPINTENB), isp1362_hcd->irqenb);
+>  	else
+> 
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Let's just delete this whole function, if no one is calling it, it
+should not be present.  I'll go make up a patch for that...
+
+thanks,
+
+greg k-h
