@@ -2,52 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65ADF29DD1A
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 01:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E413329DF13
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 01:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731911AbgJ1WTZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 18:19:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60534 "EHLO mail.kernel.org"
+        id S1728628AbgJ2A6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 20:58:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60530 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731699AbgJ1WRl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:17:41 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        id S1731590AbgJ1WRd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:17:33 -0400
+Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 83D5224199;
-        Wed, 28 Oct 2020 09:37:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D75982474E;
+        Wed, 28 Oct 2020 13:57:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603877855;
-        bh=sl8v2BFNHxcpAXXq1hJ+1ojVtDDnXULzneP2VWqs1K0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R1e5ywetkw4Tmz53gQK9cJarNjZ1NqHPD2Wbhx9G9SHwxyqmqcQ70WDcyii3wOhEc
-         7Xd7o1NQMjojiExneY5VQkfBfS2XZYC6P9EtcaZab7Tsi3ByHoDxVkZpCOTgLYA6Di
-         r4czooYMju1xPdxwJZxb6tqe27HYnu/4FTAzVcqw=
-Date:   Wed, 28 Oct 2020 10:38:27 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, stable <stable@vger.kernel.org>
-Subject: Re: [PATCH] USB: serial: cyberjack: fix write-URB completion race
-Message-ID: <20201028093827.GC1953863@kroah.com>
-References: <20201026082548.17970-1-johan@kernel.org>
+        s=default; t=1603893431;
+        bh=ou8YkSujVcJoedLOVi8IVrmAZ5xwL3bKWujQtDKeyiM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=dd1rBAslmKgbRiMx/reW2ex4P2fRiyTOVjYGfjceUBLuVa0ONJmlCkjmqOJkDppJ/
+         K7ph6zBAc7Ln+K+u4/ZmSGYYwqRWsC4UK1iLz6neiKjuIHad8L0sSlVY/EtX5g6yn8
+         NllpkpKsWOdGfAxalsey1FD/la5y0YVEzVhhow+Q=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v3] usb: dwc3: core: fix a issue about clear connect state
+In-Reply-To: <20201028125812.GA59692@nuc8i5>
+References: <20201020135806.30268-1-zhengdejin5@gmail.com>
+ <875z6wdq62.fsf@kernel.org> <20201028125812.GA59692@nuc8i5>
+Date:   Wed, 28 Oct 2020 15:57:03 +0200
+Message-ID: <87y2jqlahc.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201026082548.17970-1-johan@kernel.org>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 09:25:48AM +0100, Johan Hovold wrote:
-> The write-URB busy flag was being cleared before the completion handler
-> was done with the URB, something which could lead to corrupt transfers
-> due to a racing write request if the URB is resubmitted.
-> 
-> Fixes: 507ca9bc0476 ("[PATCH] USB: add ability for usb-serial drivers to determine if their write urb is currently being used.")
-> Cc: stable <stable@vger.kernel.org>     # 2.6.13
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/usb/serial/cyberjack.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Hi,
+
+Dejin Zheng <zhengdejin5@gmail.com> writes:
+>> Dejin Zheng <zhengdejin5@gmail.com> writes:
+>> > According to Synopsys Programming Guide chapter 2.2 Register Resets,
+>> > it cannot reset the DCTL register by setting DCTL.CSFTRST for core soft
+>> > reset, if DWC3 controller as a slave device and stay connected with a =
+usb
+>> > host, then, while rebooting linux, it will fail to reinitialize dwc3 a=
+s a
+>> > slave device when the DWC3 controller did not power off. because the
+>> > connection status is incorrect, so we also need to clear DCTL.RUN_STOP
+>> > bit for disabling connect when doing core soft reset. There will still
+>> > be other stale configuration in DCTL, so reset the other fields of DCTL
+>> > to the default value 0.
+>>=20
+>> This commit log is a bit hard to understand. When does this problem
+>> actually happen? It seems like it's in the case of, perhaps, kexecing
+>> into a new kernel, is that right?
+>>=20
+> It happens when entering the kernel for the second time after the reboot
+> command.
+>
+>> At the time dwc3_core_soft_reset() is called, the assumption is that
+>> we're starting with a clean core, from power up. If we have stale
+>> configuration from a previous run, we should fix this on the exit
+>> path. Note that if we're reaching probe with pull up connected, we
+>> already have issues elsewhere.
+>>=20
+>> I think this is not the right fix for the problem.
+>>
+> I think you are right, Thinh also suggested me fix it on the exit path
+> in the previous patch v2. Do you think I can do these cleanups in the
+> shutdown hook of this driver? Balbi, is there a more suitable place to
+> do this by your rich experience? Thanks!
+
+I don't think shutdown is called during removal, I'm not sure. I think
+we had some fixes done in shutdown time, though. Test it out, but make
+sure there are no issues with a regular modprobe cycle.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+ZeK8RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQaO9g/+O6gSiZU19vBa6Mw0v0MrGc7xMoZ0HAXa
+DLrp0A/GeQSgDyDu7v7gFpFMlnZBI4e4kPxXMqo7fazBXfKQ77jvqZA7Wg+NFPFQ
+uFnY1sjcRsCdkpe7O5gzTINqlfpYdmRtRdHlJb4+c4MP0p+jwS+8AyLhe6fQJRcs
+fS6+uZucHbWhzz/UmSjtZEbNLdkQYcgXkmzsdiq0Wge0oOoaTTTRcLz+CbhmjnqH
+8dKc5I7EohpbbcwaDu7Jeyhz2qZAVM/0z/1geKcQRAw9044RFr8U44yQAVkp+lnm
+zhsysWF3bkLKkeZpG2jT90SjOPTCH6Mf7YkVNqiiFW3FoVqx9Ri2EgxvXMmOtwE6
+S9IvNvY+LmLlPVOkqfIb0Xva4WQLXZo9vNKzg+njCbAxvzYCNi2Xho7pY42jlaCZ
+ZrZLZLYP9mjrUHn4pyAcVe+2KwCc3W+cJVoNgdWzgxXyBAI9WoUk1F2npLU3u9bH
+teAhZGWtBaDcQMC6NAeaCmAEDLtVaLp4MgF8JMN5LFs0E/2XtgJ411DpYKs5K1Xc
+ng7vvrQe3rRj94rFeyoRniJBeGQ9HqW6b47d9tAHAbAqXJKcTbxHfwUCOPCJrIoq
+nCVL7CxzJ9cHRUHJz6fWoMSaBa7i/CqqZ64ENwXaTIo7iUQnQFUFDjkaJR/A6PIz
+h+hIwvCwSCo=
+=8K1m
+-----END PGP SIGNATURE-----
+--=-=-=--
