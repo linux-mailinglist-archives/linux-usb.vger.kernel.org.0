@@ -2,113 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E48929E076
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 02:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F51429E07F
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 02:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729579AbgJ1WEw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 18:04:52 -0400
-Received: from mail-eopbgr150072.outbound.protection.outlook.com ([40.107.15.72]:16774
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729468AbgJ1WBB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:01:01 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TO7oreyqx/zOITcqHYaEJBt73wvh0ZZ+zyOfSjgACFfRqqav2mFXxA+cDW+K1Jyy8WZgR3e+ZeprcK55gyg6bfKTXtyfN5OjBs+ZMhONqMUKV/pSRcDQf3z88jYlvCHyMwHGSTkugLQ5saqEB27ek+TWi7QMFE0pJw9iwFo9B6zERHt7jszz7+mq5JNlzo5QdFKOy0pi6ATT0WoKX1THWObyWnwjgRTF/cvV5Yw7QRQS/AoRLsNEf3QD/e51acN1Q93ODBE29lDmFwQRD4rdclgdkKAX5Xci6u+MQTbUtgZrKhJAHRyQnOOJPIcjResA4Wh/Fc2mlOGd6gqv95IIEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+X+JRNlUy/JyJXIvSDDUa9LrLPwjd6FWCg2LtfQe1z8=;
- b=fy4UgWa19GK/8EGWstN2P0kEKA66QzMJHvJzzhwh+FJVXwZPscXQ39ykV4vezwt8ZT+0za7fFIqKbvxxvaj0K1udxoLcssdK2lfcEjZnlY9rZsB9hR2z9HoY1/vnAqlguJZDwc/zBJvnhyt1oa7kRhrIKtm4B7h9lYEkC0KXmOKK8wD/Ehl9IqGuMt5XxOUu73QLKGhvoGmHCXFj91t0ylijoNxcmwcQODJ0dmkD+bVXqDIUWl9625ahKE1eZkmyG7hT9AUD0zcTHoNt9FkwprZ+wkvhgDWozkCfa0lBcZuokp5R3t4JpIiXycJHWJbRAlnfb8L13Izafzlz8EJkkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+X+JRNlUy/JyJXIvSDDUa9LrLPwjd6FWCg2LtfQe1z8=;
- b=XeI5SrF63IWwNPCgu5pSjO6VycqHbW/f58BJde9A/3HSkplJUTE5YcYleHyYPlWnjOKMEYUHptgjdHAz56N+9UEmiwqkCRLCD+K1YRNIqhhQuIH57fPfTPxjrakDfd2LbMpUQoXK3943D1+fNviMQn5lBIHxsrIxIcrmJ8yF4QQ=
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
- by AM9PR04MB7601.eurprd04.prod.outlook.com (2603:10a6:20b:285::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.19; Wed, 28 Oct
- 2020 09:33:30 +0000
-Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
- ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Wed, 28 Oct 2020
- 09:33:30 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "pawell@cadence.com" <pawell@cadence.com>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
-Subject: RE: [PATCH v2 0/3] usb: cdns3: three bug fixes for v5.10
-Thread-Topic: [PATCH v2 0/3] usb: cdns3: three bug fixes for v5.10
-Thread-Index: AQHWqA4SCeLvyFR85U61BCyloXYoeqmsw1oAgAAHHFA=
-Date:   Wed, 28 Oct 2020 09:33:30 +0000
-Message-ID: <AM8PR04MB73000068BE5ACE19DE88504D8B170@AM8PR04MB7300.eurprd04.prod.outlook.com>
-References: <20201022005505.24167-1-peter.chen@nxp.com>
- <20201028090716.GA1947336@kroah.com>
-In-Reply-To: <20201028090716.GA1947336@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=nxp.com;
-x-originating-ip: [180.164.158.209]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 3d3a04d0-74f9-41a4-f379-08d87b248836
-x-ms-traffictypediagnostic: AM9PR04MB7601:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM9PR04MB760169D4ED5E9F43F04C884D8B170@AM9PR04MB7601.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4kRII5vGdk+CuvSLoin70PHXcbLYTu+LaGrugJ945gBCDDabWhwd05W0yV9tXxpYmVeHCpg9vTWmOkEItHovim6Xtme9zJJsXot5isgSWgjHuMXDCzTG/HZRQ+R/7EsRvUNN+eDbB77CkjXoD+TA8NZGUALbYy2PBI788OfJ0rv1LJl9UWJq+k5T6SupuBeJL3lLOmoe/yA8UnyVF3xlOChVDHu1idmekOiQM8BRntCUBta3VJLv2yVLz2c9en5OTKwCM/BhbsX8h9ZplUGjIRcDjQuGWBz45a+0yVOsjAk5CWJ6k6sjSRaJ5Ub+DLwjnHCWhsPrQPJz0akQ+iJpow==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39860400002)(346002)(376002)(396003)(136003)(66446008)(66556008)(66476007)(4326008)(5660300002)(52536014)(64756008)(33656002)(86362001)(8676002)(6916009)(83380400001)(316002)(6506007)(71200400001)(26005)(186003)(7696005)(44832011)(76116006)(8936002)(4744005)(2906002)(55016002)(66946007)(54906003)(478600001)(9686003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 8gMNrxogaVtprjaWmVLp2KfJKiWcfYltkSYTrb9g/1xmAPHUR3DQmW6/KwYZS+MmqfFE8jwfJlsY5h8H/YZ+KDy7SCLjA4gfvvZ8LoVrVYxnPBpiu+qhcZA3zxgFbil2063ecv0S35pXlec6dbiJS/0vNnTdOFcrH7A/vI3UQ6dG+KIr98UoJh+NsY7x04Mk2DeCFkp4Ulhxva/bEgbCKD/azvcJcoWwS8qFJGFCN8emrbCZ57U/4+XZYAuWhkl/PGj02cKa4/o1jjxhS7Xop2YaPHx4pEg4bgorgErxFxx9cqoc1gUcImAuY1m1I3kGdD4oKb+c/ImVG+QeAxsUnfgveFztn7eYFdxyXDZwmFtPFOdgC/kYmHv1tPFrn16uuxJGFIHflMxpl43VYcTkk4J4sGOhIpvlCbMpy5UMOMfHwgQD01s9/XExQ2oBm70qrL7rrEAF9EQwDzpEWFs1c7cYuSU8kUS96DrXLH97xtzzwApvJTu6Ex8/Zrnxw6OJdJCtNtkcWkfTP72nCfI05PaTMBneZFT4izpttcnQzLSFM22lMnWK//gXTD4ANJsmW11IO9XxS31E2efjde4fdekWP8Ym092e24xwB55aP3nuNf3HLtFyGq3+5K1pjashaLOek1h/ajcNv/eJo4ZvwA==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1729446AbgJ1WEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 18:04:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42171 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729475AbgJ1WBK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 18:01:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603922468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d0E3QUw/g6o9o9JHCXUwGNfFscBzWeKeD7oM4X4IAdI=;
+        b=BkKNwRWnv15qRNtDQxdk2OtA68NxD8zo84h/0eCiek5aDW8JzQL++DzDRq0FBrjRKZtwUW
+        yV9gwPLPwCJe2f87SYa0LHYokrAdms09LEsV5YL24+KVxHDZhzp7htXMyqM31EwTZM3/G0
+        qM5/J211+WiIEpF1754KKx+NIu5m+78=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-489-RfN3J01fOM-Uq_b06Q6n5g-1; Wed, 28 Oct 2020 06:57:58 -0400
+X-MC-Unique: RfN3J01fOM-Uq_b06Q6n5g-1
+Received: by mail-ed1-f69.google.com with SMTP id cb27so1936012edb.11
+        for <linux-usb@vger.kernel.org>; Wed, 28 Oct 2020 03:57:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=d0E3QUw/g6o9o9JHCXUwGNfFscBzWeKeD7oM4X4IAdI=;
+        b=DD5LK4j0CfVpK7QE0jh5eISNiMWB9BljGr00cjvh6gwzjYjpNTR8EtXXGpH42r9t7h
+         AbWSgKNg88eLUOF/1PZh0Ddv/267YBlsfX4ihWGZyFyjC97oQFZK9IU9Z0ZQ7DRfYKWC
+         AGU8dUqhoxPDP3WMPyIzUVGq0m2RwT8Tj0Um4eS37NlA8XynXsQChOXVwaBvN+9lRjaD
+         WzicDhvMp2cXNhnX88k/XK8sBgd5QiZI2GonPSeu1EpP9mil7NNgAQWDsD/f71PmqtGa
+         TmfpYdOecinGM8OIQGvfHXUiQJd+gW6FKHp+ohVFGlJStf9/KnW99okF+dXt1X0khxPH
+         xjKg==
+X-Gm-Message-State: AOAM533FveT6V/jbqVCBDB9Ns9pIQSrhIPUYL8VP1kxW8qIghfqpU48P
+        SzOztS3Goy/A7ZfUzjFWtouWfjj9gsCk2l5693X4fLLV2KKUUqP64Auj64KY2AUMmk6UofQUFJK
+        FgczOLGeitFNe3RyY57kU
+X-Received: by 2002:a17:906:383:: with SMTP id b3mr6691379eja.351.1603882676672;
+        Wed, 28 Oct 2020 03:57:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwoy+8dhL7T+UNmiZujbif7PLj7gwOkFVBJB4HmU7l9iVL4YlYVwAaOYKiWFov751i5BNkJCQ==
+X-Received: by 2002:a17:906:383:: with SMTP id b3mr6691360eja.351.1603882676412;
+        Wed, 28 Oct 2020 03:57:56 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
+        by smtp.gmail.com with ESMTPSA id s12sm2670372edu.28.2020.10.28.03.57.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Oct 2020 03:57:55 -0700 (PDT)
+Subject: Re: New XHCI lockdep oops in 5.10-rc1
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb <linux-usb@vger.kernel.org>,
+        Mike Galbraith <efault@gmx.de>, Li Jun <jun.li@nxp.com>
+References: <01e273b8-beb9-ef8c-c2a4-925a11b07799@redhat.com>
+ <46dc20eb-bc98-c0f9-e72d-dd2a28e993a1@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <39e135d7-34ac-1347-65f2-2306ed746f4c@redhat.com>
+Date:   Wed, 28 Oct 2020 11:57:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d3a04d0-74f9-41a4-f379-08d87b248836
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2020 09:33:30.6281
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZQ99AKews1mSf40E0tuEkYDHg/XZh/KseVSWu2eaytpJ4QbVRBdvTJ6prDqfi9z6VO8dGEUMM1G2AknRq6F2qA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7601
-X-OriginatorOrg: nxp.com
+In-Reply-To: <46dc20eb-bc98-c0f9-e72d-dd2a28e993a1@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> On Thu, Oct 22, 2020 at 08:55:02AM +0800, Peter Chen wrote:
-> > Changes for v2:
-> > - Move position of explicit cast to unsigned int before ((p) << 24)
-> > [Patch 1/3]
-> > - No changes for other patches.
-> >
-> > Pawel Laszczak (1):
-> >   usb: cdns3: Fix on-chip memory overflow issue
-> >
-> > Peter Chen (2):
-> >   usb: cdns3: gadget: suspicious implicit sign extension
-> >   usb: cdns3: gadget: own the lock wrongly at the suspend routine
->=20
-> Are you going to send me patches to queue up for this driver any time soo=
-n?
-> I've seen lots of different ones fly by, but no "please take this" type o=
-f hint to
-> me, so I have no idea what to do at all...
->=20
+Hi,
 
-I will queue them up after reviewing, thanks.
+On 10/28/20 10:31 AM, Mathias Nyman wrote:
+> On 27.10.2020 23.51, Hans de Goede wrote:
+>> Hi,
+>>
+>> I standard run my local kernel builds with lockdep enabled, booting 5.10-rc1 with lockdep enabled results in:
+>>
+>> [    3.339982] =====================================================
+>> [    3.339984] WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
+>> [    3.339987] 5.10.0-rc1pdx86+ #8 Not tainted
+>> [    3.339988] -----------------------------------------------------
+>> [    3.339991] systemd-udevd/386 [HC0[0]:SC0[0]:HE0:SE1] is trying to acquire:
+>> [    3.339993] ffffffffb1a94038 (pin_fs_lock){+.+.}-{2:2}, at: simple_pin_fs+0x22/0xa0
+>> [    3.339999] 
+>>                and this task is already holding:
+>> [    3.340002] ffff9e7b87fbc430 (&xhci->lock){-.-.}-{2:2}, at: xhci_alloc_streams+0x5f9/0x810
+>> [    3.340008] which would create a new lock dependency:
+>> [    3.340009]  (&xhci->lock){-.-.}-{2:2} -> (pin_fs_lock){+.+.}-{2:2}
+>> [    3.340013] 
+>>                but this new dependency connects a HARDIRQ-irq-safe lock:
+>> [    3.340016]  (&xhci->lock){-.-.}-{2:2}
+> 
+> Thanks, just read a similar report from Mike Galbraith <efault@gmx.de>
+> 
+> Looks like 673d74683627 ("usb: xhci: add debugfs support for ep with stream")
+> creates the new xhci debugfs stream files while holding the xhci->lock,
+> creating this dependency.
+> 
+> Below code should help, but I need to find my UAS drive to test it.
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 482fe8c5e3b4..d4a8d0efbbc4 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -3533,11 +3533,14 @@ static int xhci_alloc_streams(struct usb_hcd *hcd, struct usb_device *udev,
+>  		xhci_dbg(xhci, "Slot %u ep ctx %u now has streams.\n",
+>  			 udev->slot_id, ep_index);
+>  		vdev->eps[ep_index].ep_state |= EP_HAS_STREAMS;
+> -		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
+>  	}
+>  	xhci_free_command(xhci, config_cmd);
+>  	spin_unlock_irqrestore(&xhci->lock, flags);
+>  
+> +	for (i = 0; i < num_eps; i++) {
+> +		ep_index = xhci_get_endpoint_index(&eps[i]->desc);
+> +		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
+> +	}
+>  	/* Subtract 1 for stream 0, which drivers can't use */
+>  	return num_streams - 1;
+> 
 
-Peter
+I can confirm that this patch fixes the lockdep oops.
+
+Regards,
+
+Hans
+
+
