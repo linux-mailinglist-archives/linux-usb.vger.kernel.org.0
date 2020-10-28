@@ -2,150 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B18729D7ED
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Oct 2020 23:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B7D29D7E0
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Oct 2020 23:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732872AbgJ1W2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 18:28:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:32241 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733273AbgJ1W11 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 18:27:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603924045;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fQ/qw+rpiAp4eyZfrSsyasyM1nQM1jdNbFppYd7vqPs=;
-        b=SZDYNoXKTNxbPENU1JFZW+XhTIyjJ83QF6Vdb5cWVlLiBnom2Lima+m6WLEof+3bspItOY
-        28AydZKSw7B3k8dTTfsSYcTr5a7RCwGhW9Pc0v6sQGhA0sOHmMA5kxeMvR9CA8jL9DtaKn
-        IIno9wwHs5zeTOtetGflKiHeZop2ikI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-493-mLbVNdTAMBSjOl0PESJvIw-1; Wed, 28 Oct 2020 08:25:23 -0400
-X-MC-Unique: mLbVNdTAMBSjOl0PESJvIw-1
-Received: by mail-ed1-f70.google.com with SMTP id bc27so823233edb.18
-        for <linux-usb@vger.kernel.org>; Wed, 28 Oct 2020 05:25:23 -0700 (PDT)
+        id S1733306AbgJ1W1g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 18:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733282AbgJ1W1e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 18:27:34 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D79C0613CF;
+        Wed, 28 Oct 2020 15:27:34 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id bl9so564938qvb.10;
+        Wed, 28 Oct 2020 15:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JuzDUdCe2w+w28rdeAmQTlU9jyTM7YJ+llzJx19PImc=;
+        b=g9QU+Foc/no8WnHkeWW+oiFQMFS/hiNSaIlXiN1wtlZuqLDY0oenJ64/CZStC35fsF
+         Pl+0YZ18/sB+/oa3OPTLowJelNafPlRMP7AfI8yCyCEYL8z/IUSvdobX2KPkUdjxrdWA
+         zfshLOj6udgSjmOJ1P/rGwdozTW62K6FlbFm+e6/+ST+78ilg5dtp3BqzW1qm7poWMOF
+         1ks1t6CHVp3zVV1wVMeb05dcSBNkYl0kc0hww3xg9Cl37Rn11d5FeCW/uYXIvoOnmFFs
+         HByXVWBIJwFsSi0gQS305wwgEwXb8/VPr6KKJHjOJ+lCAg/nPXPfC8bpFUB3kaBCONOU
+         a3Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fQ/qw+rpiAp4eyZfrSsyasyM1nQM1jdNbFppYd7vqPs=;
-        b=hr0C0ioRQb2STFB/dbbUV1gArgfO+0WINPpM6cFq5BHlSmrJagqGbJdnQLuM6cFLn8
-         cs94pYbaEW5Ga7dGljgbjpgaUpBiNfs5++zbyTiC5A6hxqIIT5uqSJOka6wttvBv1sBi
-         /x/Y0fHHv9xfquaaCqyQ8lexDQ+B81mj2gl/D9n5RatNuT/afChBwxLAw1my4mhX9lge
-         6rqPIDEq1h0+jtuX9GuIDO4kY1rlxZy9d2cSe4qUMfT/Q+YbV7vZ3u4FXf8aI3ynI26M
-         cC8EqSNl5LxII7wNpVy1LHWWUcPLOjhOH82/TLMZw1U6EuK9Ek49X5AGKBQUeRBqel/u
-         DYtg==
-X-Gm-Message-State: AOAM532J9Q3xrRXthBFZ7RmEH6Rzp9XBOzjLcXs/w6SnyCSIwyaaqFsj
-        rUFxPLSz/1aXYI35KOADL/x70CBHBzfoJavhg12ZctWoZIKfpwwwPU4F8gHcYEJlgduFUfZAH4w
-        IWxQiiMivDYOTc8v9npuk
-X-Received: by 2002:aa7:d550:: with SMTP id u16mr2687426edr.147.1603887922525;
-        Wed, 28 Oct 2020 05:25:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx3zS5a/7wd/Ixqrqur5/2TKJC4vFsWgenFuMVv5p6kleXO+dhizGOhkyFM4C6d5T8z4c6Tkg==
-X-Received: by 2002:aa7:d550:: with SMTP id u16mr2687408edr.147.1603887922333;
-        Wed, 28 Oct 2020 05:25:22 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
-        by smtp.gmail.com with ESMTPSA id c17sm2764287edv.19.2020.10.28.05.25.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2020 05:25:21 -0700 (PDT)
-Subject: Re: New XHCI lockdep oops in 5.10-rc1
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        Mike Galbraith <efault@gmx.de>, Li Jun <jun.li@nxp.com>
-References: <01e273b8-beb9-ef8c-c2a4-925a11b07799@redhat.com>
- <46dc20eb-bc98-c0f9-e72d-dd2a28e993a1@linux.intel.com>
- <39e135d7-34ac-1347-65f2-2306ed746f4c@redhat.com>
- <ac6ce4a6-4250-27eb-8d7e-0a48b9adf5e5@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <4fbf02bb-7fd5-e792-ae4f-8bd50fa8e201@redhat.com>
-Date:   Wed, 28 Oct 2020 13:25:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JuzDUdCe2w+w28rdeAmQTlU9jyTM7YJ+llzJx19PImc=;
+        b=spfWQxyDAldt5ef58KOXD+G+1G6gMK2yUkBenh8yk8jfWqK+sr6p/8Mc6parfBwmJW
+         beBlYrtGV1HXiQoFgdam/HnvOJuW8Sga2heqL0vSJTe4wQiVmkRSzXeHjPM1n3TKVnUe
+         wydve2W06KB13bQpJKiD74VZO9ds2QBtPQyuTzzFtsXWVgED1GAB8aWhnrZVZEXQy7bP
+         9/mUHrDjpY/qDts9rRsHP9C9pnXBiRLwd9wihykzH5RAtVQM01hPC7TU0sBhseiJJSJW
+         eONr1vTgi0UEV7iVtSKFhDviEu+uTErMoNEA1LpU1C1+V4INMWWRLloewnMu5wqsEl2m
+         mCwA==
+X-Gm-Message-State: AOAM533ycJpW07kKeCwLzXmNhXSniCiJrzNXu3kSq7yCp6Mhn9XKvXxw
+        Nr/g7Ekc2hSDxR+fezARtg6f198vk1uK2g==
+X-Google-Smtp-Source: ABdhPJwGQBMGdYPB8lUcMRQ3i+i6C4mdaUQc54gZfkunUxJSpzMfa6QVLivDoIz79GoJBhg43c32SQ==
+X-Received: by 2002:aa7:9622:0:b029:160:7bc:4d00 with SMTP id r2-20020aa796220000b029016007bc4d00mr7761490pfg.51.1603896201478;
+        Wed, 28 Oct 2020 07:43:21 -0700 (PDT)
+Received: from localhost (23.83.224.115.16clouds.com. [23.83.224.115])
+        by smtp.gmail.com with ESMTPSA id x7sm6285203pfr.61.2020.10.28.07.43.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 07:43:20 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 22:43:15 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v3] usb: dwc3: core: fix a issue about clear connect state
+Message-ID: <20201028144315.GA3766@nuc8i5>
+References: <20201020135806.30268-1-zhengdejin5@gmail.com>
+ <875z6wdq62.fsf@kernel.org>
+ <20201028125812.GA59692@nuc8i5>
+ <87y2jqlahc.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <ac6ce4a6-4250-27eb-8d7e-0a48b9adf5e5@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y2jqlahc.fsf@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 10/28/20 1:22 PM, Mathias Nyman wrote:
-> On 28.10.2020 12.57, Hans de Goede wrote:
->> Hi,
->>
->> On 10/28/20 10:31 AM, Mathias Nyman wrote:
->>> On 27.10.2020 23.51, Hans de Goede wrote:
->>>> Hi,
->>>>
->>>> I standard run my local kernel builds with lockdep enabled, booting 5.10-rc1 with lockdep enabled results in:
->>>>
->>>> [    3.339982] =====================================================
->>>> [    3.339984] WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
->>>> [    3.339987] 5.10.0-rc1pdx86+ #8 Not tainted
->>>> [    3.339988] -----------------------------------------------------
->>>> [    3.339991] systemd-udevd/386 [HC0[0]:SC0[0]:HE0:SE1] is trying to acquire:
->>>> [    3.339993] ffffffffb1a94038 (pin_fs_lock){+.+.}-{2:2}, at: simple_pin_fs+0x22/0xa0
->>>> [    3.339999] 
->>>>                and this task is already holding:
->>>> [    3.340002] ffff9e7b87fbc430 (&xhci->lock){-.-.}-{2:2}, at: xhci_alloc_streams+0x5f9/0x810
->>>> [    3.340008] which would create a new lock dependency:
->>>> [    3.340009]  (&xhci->lock){-.-.}-{2:2} -> (pin_fs_lock){+.+.}-{2:2}
->>>> [    3.340013] 
->>>>                but this new dependency connects a HARDIRQ-irq-safe lock:
->>>> [    3.340016]  (&xhci->lock){-.-.}-{2:2}
->>>
->>> Thanks, just read a similar report from Mike Galbraith <efault@gmx.de>
->>>
->>> Looks like 673d74683627 ("usb: xhci: add debugfs support for ep with stream")
->>> creates the new xhci debugfs stream files while holding the xhci->lock,
->>> creating this dependency.
->>>
->>> Below code should help, but I need to find my UAS drive to test it.
->>>
->>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->>> index 482fe8c5e3b4..d4a8d0efbbc4 100644
->>> --- a/drivers/usb/host/xhci.c
->>> +++ b/drivers/usb/host/xhci.c
->>> @@ -3533,11 +3533,14 @@ static int xhci_alloc_streams(struct usb_hcd *hcd, struct usb_device *udev,
->>>  		xhci_dbg(xhci, "Slot %u ep ctx %u now has streams.\n",
->>>  			 udev->slot_id, ep_index);
->>>  		vdev->eps[ep_index].ep_state |= EP_HAS_STREAMS;
->>> -		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
->>>  	}
->>>  	xhci_free_command(xhci, config_cmd);
->>>  	spin_unlock_irqrestore(&xhci->lock, flags);
->>>  
->>> +	for (i = 0; i < num_eps; i++) {
->>> +		ep_index = xhci_get_endpoint_index(&eps[i]->desc);
->>> +		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
->>> +	}
->>>  	/* Subtract 1 for stream 0, which drivers can't use */
->>>  	return num_streams - 1;
->>>
->>
->> I can confirm that this patch fixes the lockdep oops.
+On Wed, Oct 28, 2020 at 03:57:03PM +0200, Felipe Balbi wrote:
 > 
-> Thanks, can I add your Tested-by: tag to it?
-
-Yes please do:
-
-Tested-by: Hans de Goede <hdegoede@redhat.com>
-
-> I found a UAS device and could reproduce the original issue, and verify that the patch
-> resolves it for me as well.
-
-Great :)
-
-Regards,
-
-Hans
+> Hi,
+> 
+> Dejin Zheng <zhengdejin5@gmail.com> writes:
+> >> Dejin Zheng <zhengdejin5@gmail.com> writes:
+> >> > According to Synopsys Programming Guide chapter 2.2 Register Resets,
+> >> > it cannot reset the DCTL register by setting DCTL.CSFTRST for core soft
+> >> > reset, if DWC3 controller as a slave device and stay connected with a usb
+> >> > host, then, while rebooting linux, it will fail to reinitialize dwc3 as a
+> >> > slave device when the DWC3 controller did not power off. because the
+> >> > connection status is incorrect, so we also need to clear DCTL.RUN_STOP
+> >> > bit for disabling connect when doing core soft reset. There will still
+> >> > be other stale configuration in DCTL, so reset the other fields of DCTL
+> >> > to the default value 0.
+> >> 
+> >> This commit log is a bit hard to understand. When does this problem
+> >> actually happen? It seems like it's in the case of, perhaps, kexecing
+> >> into a new kernel, is that right?
+> >> 
+> > It happens when entering the kernel for the second time after the reboot
+> > command.
+> >
+> >> At the time dwc3_core_soft_reset() is called, the assumption is that
+> >> we're starting with a clean core, from power up. If we have stale
+> >> configuration from a previous run, we should fix this on the exit
+> >> path. Note that if we're reaching probe with pull up connected, we
+> >> already have issues elsewhere.
+> >> 
+> >> I think this is not the right fix for the problem.
+> >>
+> > I think you are right, Thinh also suggested me fix it on the exit path
+> > in the previous patch v2. Do you think I can do these cleanups in the
+> > shutdown hook of this driver? Balbi, is there a more suitable place to
+> > do this by your rich experience? Thanks!
+> 
+> I don't think shutdown is called during removal, I'm not sure. I think
+> we had some fixes done in shutdown time, though. Test it out, but make
+> sure there are no issues with a regular modprobe cycle.
+>
+Balbi, thanks for your suggestions, I will do a test in the shutdown
+hook first.
+> -- 
+> balbi
 
 
