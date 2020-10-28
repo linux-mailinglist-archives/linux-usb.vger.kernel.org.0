@@ -2,151 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCBF29D4FF
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Oct 2020 22:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F58429D63D
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Oct 2020 23:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728558AbgJ1V4G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 17:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728235AbgJ1V4F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 17:56:05 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DC8C0613D1;
-        Wed, 28 Oct 2020 14:56:05 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id 141so733212lfn.5;
-        Wed, 28 Oct 2020 14:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=abYJkafoDOKX6fW7qL+UGUXhDXddixsn3/i0RMMQq/s=;
-        b=Nmrv8ERmGuAEq081pt54Hacig+9CAWxGFJQxue3Lde5JR5DFPU+NTw14ySZFu56JVQ
-         ZVBUvIIQyOHqPFc5SwoAMl2fovwtXPZUS9S+p6JAIUYJydbku560HEYmNbCHiDQad/GH
-         pnYrW2rt5czNkupHBUqcuLhGuzSHVk6NrHIsK+bITT3hlNHwWmyp0Uoavii3bfFyxZiQ
-         CdUDy58wKidCW/HnBLvN0L6U8RNiBSUjw9/QPfoivZX5IqJDvkgJKs1l4mgK99STMIXX
-         K4JW1f2alWxu7DLIEYu3n0+kf15nRQ/3wL0yLxaiy+pdyPCTy/gpriGI+gzBSCkPTf1x
-         t8fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=abYJkafoDOKX6fW7qL+UGUXhDXddixsn3/i0RMMQq/s=;
-        b=aURR/h+ZPYn1cmm1Tnx2WjxOaNDFeksR1mm2Q7Z7K7V1ZxPwJ0PUCGHC5sv42Y6bOm
-         UYhdsppBIohZEWLeiEOLX2hJ8pJH0SPP8uYg51yahBjoMPqMMYcItGVsQ8Mx+cZKxlmL
-         8KOfN9AscWa/z/2jPF6uCMFDTuJWO0g/aSSksseYr9tzFWBlYvOeGOOL3Ul9lzPMmLV0
-         2CsRMtUXCjJpEUsqo7sQqGbPjadUhssYEvodkG9p2pbUK14zEL1tnYkn17b9LX+VooDT
-         KndAMGDal/1WjaFh0cLr1kfzE6dSPT44a+2GcL8GLbst8kYSv4L6qbK0Tew7UmBbDFZb
-         6/6g==
-X-Gm-Message-State: AOAM532vcSOMBZ1Op22nQN4TVmXekZplGrXAI3Brlld08yYtFFiyigj0
-        QLKJXmg7qSkhTig9qMKGrEEEn/0ruBcPzTteht8GZK3z
-X-Google-Smtp-Source: ABdhPJzB35jmmC/PPHiICXY1xgzJJ+p5Ci778yCAKdxXqgxg2rVlbi0QN2vSdSBkMesEFTO1D1l9Uchs4NGDNXzdbTU=
-X-Received: by 2002:a17:906:1246:: with SMTP id u6mr933941eja.432.1603918280500;
- Wed, 28 Oct 2020 13:51:20 -0700 (PDT)
+        id S1730815AbgJ1WNA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 18:13:00 -0400
+Received: from mail-am6eur05on2088.outbound.protection.outlook.com ([40.107.22.88]:53248
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730813AbgJ1WM5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:12:57 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DV7EQHlEpHrmqXIwTmf/I7v4z0fGzv88KxTcDm3bbRPv3CBRd32DEiYMEOiqVNTwKiyHnmaK5m9r923CB9IiC2B0NZQxiHOgc6LKrKC0KJtAwWMypnv+7lvqYdiZUI6uuYyyExWxsi0x3kRDKHb2mZV1k/OZyriNCJZrwJCBfP0AiyWamd7ff8Kb97FExWprgS+TPJK6euJ83wSvv6gkrRYkXC/ZdaCuoRxDa92Py/dol9wpgofzxbMBiHtd9HcAy7Kk+mMmYmL1cTk8FU4gp8OT+jPZCLE7MCiVmwuLsRcRKiEA2H731SKVNl41Op1sSs1yMhkC/H3MhQbYINODDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Hq2JOW9l8aZmNgK5FcHlbJQrRV+ZFJT2Rh9kERRxf1c=;
+ b=SWyeLI6OMyTIbN9aQiaTLW4XybtooVXConliVgXV29QHIxuvqHvoWhEKKLbcczQVFia6zr3lvCGmAH3P0MuHTn9Hm9k+yp2ymWgGwbb6YqErL13hXys6yuETlG7Lxy5AGIVOCVxe4rbLt2tKUukM/89dIU/+mr8igk8PKxbzkJ5o5eRpeTpXftx5NrgESm2HOT661nXdR0FF9UNOHAnamMP1nPqaP4cVjLvPub/GU6VfrMuha2AP5eZSSGbkBLCyV8mTulD4A4EwvktUPN/xiomA6d5TVI4bPmwvdTV2s2KLjVquM7pzeZxL114FX8LQs1KASUH4i01MMFjgRP4IXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Hq2JOW9l8aZmNgK5FcHlbJQrRV+ZFJT2Rh9kERRxf1c=;
+ b=bUlWykn8oLoK7GFMLfZD5qG1nP3F7cZtKvZZRcDs8BAgoCnSxmjNMPS0UFKzWazUo1mPPrIgtuE9a7cDSAN6UtlWOFWHhqWmXu22gVFbTh183TQGYPv1iI0rsSyu5BQUi0bFmO6ZMstmfsOiZ4iOflkYeIj+qJii7duws6tk480=
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
+ by AM0PR0402MB3538.eurprd04.prod.outlook.com (2603:10a6:208:1f::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.22; Wed, 28 Oct
+ 2020 06:41:30 +0000
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3477.028; Wed, 28 Oct 2020
+ 06:41:30 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        "pawell@cadence.com" <pawell@cadence.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Jun Li <jun.li@nxp.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH 1/3] usb: cdns3: gadget: suspicious implicit sign
+ extension
+Thread-Topic: [PATCH 1/3] usb: cdns3: gadget: suspicious implicit sign
+ extension
+Thread-Index: AQHWo6WTaRKfd0hXEU6nD+tea3QI1qmrOMeAgAAMjoCAAExEgIAA3u9A
+Date:   Wed, 28 Oct 2020 06:41:29 +0000
+Message-ID: <AM8PR04MB730012810E26CEE055A4E99C8B170@AM8PR04MB7300.eurprd04.prod.outlook.com>
+References: <20201016101659.29482-1-peter.chen@nxp.com>
+ <20201016101659.29482-2-peter.chen@nxp.com> <871rhkdori.fsf@kernel.org>
+ <20201027094825.GA5940@b29397-desktop>
+ <20201027142123.GA1233346@rowland.harvard.edu>
+In-Reply-To: <20201027142123.GA1233346@rowland.harvard.edu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: rowland.harvard.edu; dkim=none (message not signed)
+ header.d=none;rowland.harvard.edu; dmarc=none action=none
+ header.from=nxp.com;
+x-originating-ip: [180.164.158.209]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: ff2df2df-f7d4-4c8c-d8fd-08d87b0c80af
+x-ms-traffictypediagnostic: AM0PR0402MB3538:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR0402MB3538DEC7734D4C2A600B71098B170@AM0PR0402MB3538.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3383;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ERdITCtAn4eIbyXwYwuf2+5sF6PkqKcVuJkh0bVaTJ8Y7OP4J83O0W+jGpaL4LLEc5V2+jjXp3GKvEqIZWCesn/4IEx9gjcfFrB5DfWN1q3PIfeg19t2vdpJj+SYioTnyRiuenHahQwuDKzjsinuUcWnOEn59oeOaBvkqA1AKibyggWyhY7zvK5ltQu5mRsbCMYBkhcxDpC650W4hy+mEfkMmlf2mjdrJZaZVqvWSpGojhCe69OzHxVs1EdO4xloa+o3tvHt4BKht+k0mde10yTQAvnFfSCqF0Lu2kwiJJXnwqv4AbycyEAJbfHOBjsJhiQEcd8hP5lbhZMT/eIvDg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(396003)(346002)(366004)(376002)(478600001)(76116006)(66946007)(9686003)(86362001)(8936002)(66556008)(8676002)(66446008)(64756008)(66476007)(54906003)(316002)(4744005)(6506007)(7696005)(26005)(4326008)(55016002)(33656002)(83380400001)(71200400001)(5660300002)(52536014)(2906002)(44832011)(6916009)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 4B7N212COZtfaq9BNOOdoEIVU31rlDeVK87j/pEjgw/f1YzoztVt1F9Ya5fUuflRz/5jAJ2yxX4Xo/VEwOCgmGPHIGp9EpvI+/B9df9XRYh05m7Olon6WSXIe04H6X7kZwKoQCYLLIPQWlW7Kc7Bcs2STSyaa8CZQiqOffAqOMZS4t74SQKOAXdHEO3Jtob0ndq+P//RnwfS5wwYhQRgDlfIDEIJrYxIhZ5+GtuurfyZQ0raxImiUbt21Y9UxkXNNzS9nKa84pGwRhVCh9lvVVu/yeFoeyuC5tmqU0hEDWMuWr0j3BjRNidpmc4Gd0N5BJbtp/Xpo+/H/z56J5z2GiF0eOjLtHuiRfXAEqq+JELlRjr3Sbi+UR6RXeZWygnc2LccOYsoZ60n95ZiYVv0l0VyLismfeZkjjrceVwBPEM1la6bYvLuHspJxFjdhwmnArrgiW4uAlRU0rFAvt0xQicN6s0uzwrEyhjYo4xW5fBifNtzRFt5426WaqUXhwYS5ZFgJiW6EhCROIx/mJGI5NUvKccMKBdGuvXrL5kC0JDtJRA7WnlbCweTpa0o8b4ZUSXCRU/GuFrswFK8D+hM9Kkcf1CeHyw8Cr7nk8xVR4fq0ZzIWIB7tV8qv1QVHSQ7IV4chEquEQPizDoTMhzHRQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-From:   Kyungtae Kim <kt0755@gmail.com>
-Date:   Wed, 28 Oct 2020 16:51:09 -0400
-Message-ID: <CAEAjamsqOfgS6-7mt4SGd9rou-QRxzRDfQ_wD6dB3veueXtqgw@mail.gmail.com>
-Subject: KASAN: use-after-free Read in do_set_interface
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff2df2df-f7d4-4c8c-d8fd-08d87b0c80af
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2020 06:41:30.0851
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7+UBEZPYuyiIU+vdhVNeglWuG8kg9niJvxRbU+hGi6fS24Ua4mHqI/E07GxecrEJ3JFl3Q7N2rudDthAJnVIxg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3538
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We report a bug (in linux-5.8.13) found by FuzzUSB (a modified version
-of syzkaller).
+=20
+> That's a separate issue.  I believe (but haven't checked) that the << ope=
+rator
+> has lower precedence than +, so the compiler interprets the expression as=
+:
+>=20
+> unsigned int k =3D 0x80 << (24 + 0x81);
+>=20
+> and it's pretty obvious why this causes an error.  Instead, try
+> compiling:
+>=20
+> unsigned int k =3D (0x80 << 24) + 0x81;
+>=20
+> You may get an error message about signed-integer overflow, but not about
+> shift-count overflow.
+>=20
 
-The bug happened when accessing a freed instance of struct fsg_dev
-(i.e., fsg->bulk_in) in do_set_interface() (line 2245).
+Hi Alan,
 
-==================================================================
-BUG: KASAN: use-after-free in do_set_interface.part.7+0xa6b/0xd90
-drivers/usb/gadget/function/f_mass_storage.c:2245
-Read of size 8 at addr ffff88806bc940f8 by task file-storage/2063
+Your analysis is correct, I did not check the warning message correctly.
 
-CPU: 3 PID: 2063 Comm: file-storage Not tainted 5.8.13 #4
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xa7/0xea lib/dump_stack.c:118
- print_address_description.constprop.8+0x3f/0x60 mm/kasan/report.c:383
- kasan_report.cold.11+0x20/0x37 mm/kasan/report.c:513
- __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:146
- do_set_interface.part.7+0xa6b/0xd90
-drivers/usb/gadget/function/f_mass_storage.c:2245
- do_set_interface drivers/usb/gadget/function/f_mass_storage.c:2202 [inline]
- handle_exception drivers/usb/gadget/function/f_mass_storage.c:2426 [inline]
- fsg_main_thread+0x12c7/0x59f1 drivers/usb/gadget/function/f_mass_storage.c:2466
- kthread+0x374/0x480 kernel/kthread.c:291
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
-
-Allocated by task 1910:
- save_stack+0x21/0x50 mm/kasan/common.c:48
- set_track mm/kasan/common.c:56 [inline]
- __kasan_kmalloc mm/kasan/common.c:494 [inline]
- __kasan_kmalloc.constprop.6+0xc7/0xd0 mm/kasan/common.c:467
- kasan_kmalloc+0x9/0x10 mm/kasan/common.c:508
- kmem_cache_alloc_trace+0x139/0x330 mm/slub.c:2851
- kzalloc ./include/linux/slab.h:555 [inline]
- fsg_alloc+0x77/0x290 drivers/usb/gadget/function/f_mass_storage.c:3417
- usb_get_function+0x58/0xc0 drivers/usb/gadget/functions.c:61
- config_usb_cfg_link+0x1ed/0x3a0 drivers/usb/gadget/configfs.c:435
- configfs_symlink+0x4f5/0xf10 fs/configfs/symlink.c:202
- vfs_symlink fs/namei.c:3953 [inline]
- vfs_symlink+0x304/0x540 fs/namei.c:3939
- do_symlinkat+0x104/0x1a0 fs/namei.c:3980
- __do_sys_symlinkat fs/namei.c:3994 [inline]
- __se_sys_symlinkat fs/namei.c:3991 [inline]
- __x64_sys_symlinkat+0x6e/0xb0 fs/namei.c:3991
- do_syscall_64+0x54/0xa0 arch/x86/entry/common.c:392
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-Freed by task 2072:
- save_stack+0x21/0x50 mm/kasan/common.c:48
- set_track mm/kasan/common.c:56 [inline]
- kasan_set_free_info mm/kasan/common.c:316 [inline]
- __kasan_slab_free+0x139/0x190 mm/kasan/common.c:455
- kasan_slab_free+0xe/0x10 mm/kasan/common.c:464
- slab_free_hook mm/slub.c:1474 [inline]
- slab_free_freelist_hook mm/slub.c:1507 [inline]
- slab_free mm/slub.c:3072 [inline]
- kfree+0xef/0x3d0 mm/slub.c:4052
- fsg_free+0x84/0xa0 drivers/usb/gadget/function/f_mass_storage.c:3408
- usb_put_function+0x38/0x50 drivers/usb/gadget/functions.c:87
- config_usb_cfg_unlink+0x2e9/0x3a0 drivers/usb/gadget/configfs.c:476
- configfs_unlink+0x379/0x77e fs/configfs/symlink.c:250
- vfs_unlink+0x241/0x550 fs/namei.c:3825
- do_unlinkat+0x3e7/0x610 fs/namei.c:3889
- __do_sys_unlink fs/namei.c:3936 [inline]
- __se_sys_unlink fs/namei.c:3934 [inline]
- __x64_sys_unlink+0x3d/0x50 fs/namei.c:3934
- do_syscall_64+0x54/0xa0 arch/x86/entry/common.c:392
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-The buggy address belongs to the object at ffff88806bc94000
- which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 248 bytes inside of
- 512-byte region [ffff88806bc94000, ffff88806bc94200)
-The buggy address belongs to the page:
-page:ffffea0001af2500 refcount:1 mapcount:0 mapping:0000000000000000
-index:0x0 head:ffffea0001af2500 order:2 compound_mapcount:0
-compound_pincount:0
-flags: 0x100000000010200(slab|head)
-raw: 0100000000010200 dead000000000100 dead000000000122 ffff88806c40e580
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff88806bc93f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88806bc94000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88806bc94080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                                ^
- ffff88806bc94100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88806bc94180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-Regards,
-Kyungtae Kim
+Peter
