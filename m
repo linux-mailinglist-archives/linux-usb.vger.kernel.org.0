@@ -2,114 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B7D29D7E0
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Oct 2020 23:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2062629D595
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Oct 2020 23:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733306AbgJ1W1g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 18:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S1729980AbgJ1WFR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 18:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733282AbgJ1W1e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 18:27:34 -0400
-Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D79C0613CF;
-        Wed, 28 Oct 2020 15:27:34 -0700 (PDT)
-Received: by mail-qv1-xf43.google.com with SMTP id bl9so564938qvb.10;
-        Wed, 28 Oct 2020 15:27:34 -0700 (PDT)
+        with ESMTP id S1729971AbgJ1WFO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 18:05:14 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35499C0613D1;
+        Wed, 28 Oct 2020 15:05:14 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id b3so615204pfo.2;
+        Wed, 28 Oct 2020 15:05:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JuzDUdCe2w+w28rdeAmQTlU9jyTM7YJ+llzJx19PImc=;
-        b=g9QU+Foc/no8WnHkeWW+oiFQMFS/hiNSaIlXiN1wtlZuqLDY0oenJ64/CZStC35fsF
-         Pl+0YZ18/sB+/oa3OPTLowJelNafPlRMP7AfI8yCyCEYL8z/IUSvdobX2KPkUdjxrdWA
-         zfshLOj6udgSjmOJ1P/rGwdozTW62K6FlbFm+e6/+ST+78ilg5dtp3BqzW1qm7poWMOF
-         1ks1t6CHVp3zVV1wVMeb05dcSBNkYl0kc0hww3xg9Cl37Rn11d5FeCW/uYXIvoOnmFFs
-         HByXVWBIJwFsSi0gQS305wwgEwXb8/VPr6KKJHjOJ+lCAg/nPXPfC8bpFUB3kaBCONOU
-         a3Ow==
+         :content-disposition:in-reply-to:user-agent;
+        bh=GeMX+k14VhxeG76k1/qSlgb4+cXieu72K4e08pwdt1o=;
+        b=InpLHLruF700Q395/JUSDPFi5ct3Q0NFGhIrDU/UmIhGdDThKH8GKD+cw6T2N6QNcD
+         PUvF0K87ShFDKaAjJCfvpeMCAaEiJ8eHb269GNLlCVUSVFBQarvkQDFEeK2v65rPe7+J
+         tC/1aFfwnYWg9j8u/6Ud/Yyen1uhouxurM0nLvzz3MYFdzPpthJUWusVU6lftQoy21uA
+         qiW9X1ZTMFe3cniRtPQ+TCgotIme378DGRcyAXvYYZgBHvV1ur7fGjNBhSILa0vbkqSM
+         tRUkeNha3rVBlOMkNme6QRGiAF7X/US6S2FlZ9tPWrsV95ioL0sZyvBU99MP8xfC1Ema
+         woPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JuzDUdCe2w+w28rdeAmQTlU9jyTM7YJ+llzJx19PImc=;
-        b=spfWQxyDAldt5ef58KOXD+G+1G6gMK2yUkBenh8yk8jfWqK+sr6p/8Mc6parfBwmJW
-         beBlYrtGV1HXiQoFgdam/HnvOJuW8Sga2heqL0vSJTe4wQiVmkRSzXeHjPM1n3TKVnUe
-         wydve2W06KB13bQpJKiD74VZO9ds2QBtPQyuTzzFtsXWVgED1GAB8aWhnrZVZEXQy7bP
-         9/mUHrDjpY/qDts9rRsHP9C9pnXBiRLwd9wihykzH5RAtVQM01hPC7TU0sBhseiJJSJW
-         eONr1vTgi0UEV7iVtSKFhDviEu+uTErMoNEA1LpU1C1+V4INMWWRLloewnMu5wqsEl2m
-         mCwA==
-X-Gm-Message-State: AOAM533ycJpW07kKeCwLzXmNhXSniCiJrzNXu3kSq7yCp6Mhn9XKvXxw
-        Nr/g7Ekc2hSDxR+fezARtg6f198vk1uK2g==
-X-Google-Smtp-Source: ABdhPJwGQBMGdYPB8lUcMRQ3i+i6C4mdaUQc54gZfkunUxJSpzMfa6QVLivDoIz79GoJBhg43c32SQ==
-X-Received: by 2002:aa7:9622:0:b029:160:7bc:4d00 with SMTP id r2-20020aa796220000b029016007bc4d00mr7761490pfg.51.1603896201478;
-        Wed, 28 Oct 2020 07:43:21 -0700 (PDT)
-Received: from localhost (23.83.224.115.16clouds.com. [23.83.224.115])
-        by smtp.gmail.com with ESMTPSA id x7sm6285203pfr.61.2020.10.28.07.43.19
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GeMX+k14VhxeG76k1/qSlgb4+cXieu72K4e08pwdt1o=;
+        b=lzAqOSVmhU6VbRxYBDriHSDMrHey6KVNiVhpaRvSGsyBJZ6oe/lNxa6Kgo9ZeKm7jw
+         72626PUiA4Wzw92EBR2nnt08hZrqLAqQ/pEukMRqcjE9Gy67ZGvTfqHa330OVmqqvsl1
+         dmDUdms+/w5hAwlsY/+6dXLjqapVltPxry1/ThdulwOK6VxdYhdGIuoABnR/xiKn3syz
+         6NuYhb62FMA8Mrng0Lyv3BurqQCXo4F7Wcc/xOFuCz7PhwcnIYVS42WjxIdX66ew7qKd
+         VbLx+X3wuk4lLZooWloUYYTmUrskVoEoAwmKYhTeSUbSaiJIqBT3cdekqIxXywQ+mOlM
+         UbFg==
+X-Gm-Message-State: AOAM533RQkowhIxbHb2inKGnNmAVletJsLE743O6uN+WKsPGXEmBLzY0
+        M12JzlevK7J8lG5GABHnLbBduYkTX45V4g==
+X-Google-Smtp-Source: ABdhPJw+P7PZ1ANDYILo79Hsg7TsK8M0hrdd6+wFNAfXxYnBAlE0Wr2vQTH+qAkmHlbh1+XaD9f7GA==
+X-Received: by 2002:a63:78c3:: with SMTP id t186mr490857pgc.12.1603907075050;
+        Wed, 28 Oct 2020 10:44:35 -0700 (PDT)
+Received: from hoboy.vegasvil.org (c-73-241-114-122.hsd1.ca.comcast.net. [73.241.114.122])
+        by smtp.gmail.com with ESMTPSA id d26sm224049pfo.82.2020.10.28.10.44.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 07:43:20 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 22:43:15 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v3] usb: dwc3: core: fix a issue about clear connect state
-Message-ID: <20201028144315.GA3766@nuc8i5>
-References: <20201020135806.30268-1-zhengdejin5@gmail.com>
- <875z6wdq62.fsf@kernel.org>
- <20201028125812.GA59692@nuc8i5>
- <87y2jqlahc.fsf@kernel.org>
+        Wed, 28 Oct 2020 10:44:34 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 10:44:27 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Javier =?iso-8859-1?Q?Gonz=E1lez?= <javier@javigon.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Benson Leung <bleung@chromium.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bruno Meneguele <bmeneg@redhat.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Dan Murphy <dmurphy@ti.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Konstantin Khlebnikov <koct9i@gmail.com>,
+        Kranthi Kuntala <kranthi.kuntala@intel.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Len Brown <lenb@kernel.org>,
+        Leonid Maksymchuk <leonmaxx@gmail.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Oleh Kravchenko <oleg@kaa.org.ua>,
+        Orson Zhai <orsonzhai@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Peter Rosin <peda@axentia.se>, Petr Mladek <pmladek@suse.com>,
+        Philippe Bergheaud <felix@linux.ibm.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        netdev@vger.kernel.org, xen-devel@lists.xenproject.org
+Subject: Re: [PATCH 20/33] docs: ABI: testing: make the files compatible with
+ ReST output
+Message-ID: <20201028174427.GE9364@hoboy.vegasvil.org>
+References: <cover.1603893146.git.mchehab+huawei@kernel.org>
+ <4ebaaa0320101479e392ce2db4b62e24fdf15ef1.1603893146.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87y2jqlahc.fsf@kernel.org>
+In-Reply-To: <4ebaaa0320101479e392ce2db4b62e24fdf15ef1.1603893146.git.mchehab+huawei@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 03:57:03PM +0200, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> Dejin Zheng <zhengdejin5@gmail.com> writes:
-> >> Dejin Zheng <zhengdejin5@gmail.com> writes:
-> >> > According to Synopsys Programming Guide chapter 2.2 Register Resets,
-> >> > it cannot reset the DCTL register by setting DCTL.CSFTRST for core soft
-> >> > reset, if DWC3 controller as a slave device and stay connected with a usb
-> >> > host, then, while rebooting linux, it will fail to reinitialize dwc3 as a
-> >> > slave device when the DWC3 controller did not power off. because the
-> >> > connection status is incorrect, so we also need to clear DCTL.RUN_STOP
-> >> > bit for disabling connect when doing core soft reset. There will still
-> >> > be other stale configuration in DCTL, so reset the other fields of DCTL
-> >> > to the default value 0.
-> >> 
-> >> This commit log is a bit hard to understand. When does this problem
-> >> actually happen? It seems like it's in the case of, perhaps, kexecing
-> >> into a new kernel, is that right?
-> >> 
-> > It happens when entering the kernel for the second time after the reboot
-> > command.
-> >
-> >> At the time dwc3_core_soft_reset() is called, the assumption is that
-> >> we're starting with a clean core, from power up. If we have stale
-> >> configuration from a previous run, we should fix this on the exit
-> >> path. Note that if we're reaching probe with pull up connected, we
-> >> already have issues elsewhere.
-> >> 
-> >> I think this is not the right fix for the problem.
-> >>
-> > I think you are right, Thinh also suggested me fix it on the exit path
-> > in the previous patch v2. Do you think I can do these cleanups in the
-> > shutdown hook of this driver? Balbi, is there a more suitable place to
-> > do this by your rich experience? Thanks!
-> 
-> I don't think shutdown is called during removal, I'm not sure. I think
-> we had some fixes done in shutdown time, though. Test it out, but make
-> sure there are no issues with a regular modprobe cycle.
->
-Balbi, thanks for your suggestions, I will do a test in the shutdown
-hook first.
-> -- 
-> balbi
+On Wed, Oct 28, 2020 at 03:23:18PM +0100, Mauro Carvalho Chehab wrote:
 
+> diff --git a/Documentation/ABI/testing/sysfs-uevent b/Documentation/ABI/testing/sysfs-uevent
+> index aa39f8d7bcdf..d0893dad3f38 100644
+> --- a/Documentation/ABI/testing/sysfs-uevent
+> +++ b/Documentation/ABI/testing/sysfs-uevent
+> @@ -19,7 +19,8 @@ Description:
+>                  a transaction identifier so it's possible to use the same UUID
+>                  value for one or more synthetic uevents in which case we
+>                  logically group these uevents together for any userspace
+> -                listeners. The UUID value appears in uevent as
+> +                listeners. The UUID value appears in uevent as:
 
+I know almost nothing about Sphinx, but why have one colon here ^^^ and ...
+
+> +
+>                  "SYNTH_UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" environment
+>                  variable.
+>  
+> @@ -30,18 +31,19 @@ Description:
+>                  It's possible to define zero or more pairs - each pair is then
+>                  delimited by a space character ' '. Each pair appears in
+>                  synthetic uevent as "SYNTH_ARG_KEY=VALUE". That means the KEY
+> -                name gains "SYNTH_ARG_" prefix to avoid possible collisions
+> +                name gains `SYNTH_ARG_` prefix to avoid possible collisions
+>                  with existing variables.
+>  
+> -                Example of valid sequence written to the uevent file:
+> +                Example of valid sequence written to the uevent file::
+
+... two here?
+
+Thanks,
+Richard
