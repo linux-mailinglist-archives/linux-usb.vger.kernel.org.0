@@ -2,41 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9734D29DF40
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 02:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E048E29DED6
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 01:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403998AbgJ2BAK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 21:00:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60508 "EHLO mail.kernel.org"
+        id S1727846AbgJ2A4u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 20:56:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60510 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731540AbgJ1WR2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:17:28 -0400
+        id S1731632AbgJ1WRg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:17:36 -0400
 Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 20CD124686;
-        Wed, 28 Oct 2020 09:13:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F102824198;
+        Wed, 28 Oct 2020 09:18:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603876426;
-        bh=UqKkjkU3C8hjvC1W+LqFgUbMLuvOs2IpZy0kfqzvfg8=;
+        s=default; t=1603876689;
+        bh=5/QVRctLr+h1zemQtxbN0N6j6IsxOIoAxnQpXPdLGZc=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=SiqDCILD6wNTBvBAUFBGvQkVhqRg0wHVOhKgBhkS60qwShkLk8DFMALEblRSpnbIB
-         EIMNR2fIr0KDGQMRSDqL0H0lp93uxTLXT6T06snFWHAO6V3vHmPO7jE1ac9Bn0pNZG
-         FGjdn/lQj0YHUHSMEnp1oumNbtzNms+iXXqFlUqQ=
+        b=Tmh6YTH61muPM2qWbAojELJ2xPMG+QFoLG3epgPsUHogqSAhC7S5dbGasslsdwXqF
+         Zx9akCyKmEw7OnTeuuraIhSkrynUaRNUxthjPpVpf8UctNdXgHjDtpkZPSdeeWUm79
+         5sGkZRf9/ir/2/R9SOCC9nq20fwgg1ETUecvHOtg=
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+To:     Ferry Toth <fntoth@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 31/56] usb: dwc3: fix kernel-doc markups
-In-Reply-To: <20201028090813.GB1947336@kroah.com>
-References: <cover.1603469755.git.mchehab+huawei@kernel.org>
- <0b964be3884def04fcd20ea5c12cb90d0014871c.1603469755.git.mchehab+huawei@kernel.org>
- <87ft60dujc.fsf@kernel.org> <20201028090813.GB1947336@kroah.com>
-Date:   Wed, 28 Oct 2020 11:13:34 +0200
-Message-ID: <874kmen269.fsf@kernel.org>
+        Jack Pham <jackp@codeaurora.org>
+Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
+In-Reply-To: <30ab00e4-53ae-fd9e-1689-c94078a31625@gmail.com>
+References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
+ <87a6wig461.fsf@kernel.org>
+ <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
+ <874kmpf583.fsf@kernel.org>
+ <d0aca346-353c-d74e-6f00-ccd2a4ed26ef@gmail.com>
+ <976cea12-e54e-fbca-6c53-e6ef5c554094@synopsys.com>
+ <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
+ <2b6586e6-528c-86e8-9d92-0061bc44866d@gmail.com>
+ <aad327a8-95bc-40ec-abf7-ad216a02fad0@synopsys.com>
+ <2cc783ac-6b71-190b-49fc-9e2bceeacd4b@gmail.com>
+ <920590dc-5430-7f8b-b2e1-1a4c37f4dfbe@synopsys.com>
+ <CAHp75Vfs9AoOYSVGTpw30h11ptPOSPNf1AsWBKdiVrDL=9X3PQ@mail.gmail.com>
+ <0089306e-e2ca-9a53-6ffb-202d028050ce@gmail.com>
+ <CAHp75Vc0P746FhhohJ=wRccsQL4ewn+AECMw3yTD6cuGxHCG9Q@mail.gmail.com>
+ <30ab00e4-53ae-fd9e-1689-c94078a31625@gmail.com>
+Date:   Wed, 28 Oct 2020 11:18:02 +0200
+Message-ID: <871rhin1yt.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -48,35 +60,34 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-> On Tue, Oct 27, 2020 at 08:58:47AM +0200, Felipe Balbi wrote:
->>=20
->> Hi Mauro,
->>=20
->> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
->> > There is a common comment marked, instead, with kernel-doc
->> > notation.
->> >
->> > Also, some identifiers have different names between their
->> > prototypes and the kernel-doc markup.
->> >
->> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
->> > ---
->> >  drivers/usb/dwc3/core.c        | 2 +-
->> >  drivers/usb/dwc3/core.h        | 2 +-
->> >  drivers/usb/gadget/composite.c | 2 +-
->> >  drivers/usb/typec/mux.c        | 2 +-
->> >  include/linux/usb/composite.h  | 2 +-
->>=20
->> mind breaking this into 4 commits? One for dwc3, one for
->> gadget/composite, one for type/mux, and a final for composite.h.
+Hi,
+
+Ferry Toth <fntoth@gmail.com> writes:
+> Op 27-10-2020 om 22:16 schreef Andy Shevchenko:
+>> On Tue, Oct 27, 2020 at 10:13 PM Ferry Toth <fntoth@gmail.com> wrote:
+>>> Op 22-10-2020 om 15:43 schreef Andy Shevchenko:
+>>>> On Thu, Oct 22, 2020 at 4:21 PM Thinh Nguyen <Thinh.Nguyen@synopsys.co=
+m> wrote:
+>>>>> Ferry Toth wrote:
+>> ...
+>>
+>>>>> There are some fixes to dwc3 in kernel mainline. Is it possible to te=
+st
+>>>>> this against linux-next?
+>>>> I think the best is to wait for v5.10-rc1 and retest.
+>> Can you give a try of v5.10-rc1?
 >
-> I'll just take these all at once, it's easy enough :)
+> Yes, I just tried:
+>
+> I booted in host mode, then flip the switch. Gadget come up, go down=20
+> once, then come up again and stay up.
 
-Sure thing, in that case:
+please collect trace events. It's important to figure out why it's going
+down, even if only once. Make sure to collect trace *and* dmesg so we
+can correlate trace with the reenumeration that should show up in dmesg.
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+thanks
 
 =2D-=20
 balbi
@@ -86,19 +97,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+ZNj4RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQagOA//eyKwQho8ZS03MJ9gkVjfW8k7drtTAvLv
-tlCrKvWoTAD5NkAiTlbrtzZTxY8SHgYMiBItwXv9kKPpC5cLjoH7MbjDzWzQToSp
-YkqvksbI5s4RO/+Twl0qly1Nlp2l2pwMh/6iO3sh4rdonqCEg4ByRL2K4D1ALvG4
-i06dddOYUym21CX9d8FV6yebrKibdHfr8SAX51NhdyvVaGY2BzUF6qisRygtMzkf
-Ry4xkZRYsSBh6L/uGsLYQxtrvoKx5fsLKZHR6Zj8XsGYHA/gAMQ/SNOnl67klBLe
-ZriMVILmxRu4kOR8i9TOi7xLrDOkLBczrNCl3ZNaSHpmB86yFprOQVs7USjHjnjl
-0rCJYgmgK0zywCZC3FHH7tUL5WcWMR15hp40p56IkjalFd+cleXV1xjIu4kEuorX
-vj994var0ZVUariLvM6KuLn7T7pnFAEkhFhcoFDsdOkNHzI6wpBcijFLeKubthlv
-8dW3GQquRrOK6/ESE1CQAA6dAIls+QJmaWsMpWlf0Mos+6wZFZwbUjtLA9nFFY7Q
-1T0mYQVEgDZEvJIc8muWb8LS10nkQIiiVdRu+GfAqC+Efz+ysDhsqMtkelNHklx+
-NfnPcRbJfCngrrvHocL/4xteaDFPRaR2KegjmmIwaaEB4gl/72ZOCwD7A8habtN5
-TNXX4XBAyE8=
-=x6JJ
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+ZN0oRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZXhg/9EBxzFRUCm/PWBDYXkBGLjiKBX5ymHKi+
+P2zZIcU5aM4EkSfv/yPqwkA0bz0U+cFJpJ/Vkpjm5zJoWauBrpiSWm2wsPW5dL3C
+gSfNVFqKCBFkG7BMLyWeBvza9LAu3ph0FGJoQbeV3uWjDB1glHqZUi9u5QHp1wbC
+HADulfbIlytYly60BVZ/tRu+WDcQP6+qkTEyt81ln2FLdl8aIk2CZxtqOilWXkL6
+KrHauD9z7tHeUoTnywSTTPDBz+A9zjJMfWXS/C7JUjx4CETvupzTrxG9fewnsdNf
+Dnp16RA33tcpa22pigVD8ruPFESIXLt0LSSTqRniH0llZIhXg2dPgQoonFy2JuRe
+VjtzKTO2czT9Pwxhh/XpPLCG/Nd1hs/ELrd4tT6jzAW4QKJ299t/CKPmKJecK2bT
+RmTt3pmjk3CI8Re6BKWqZbAyrUElud9vYdVRkkVxb/ynhNN+OjX2F0L7Jf9iON9Z
+roXXvVyKnj/+N3YysCQ+sr8UEFscSGBwmYZc5RCGcSK3xIuiMiSd4/W15MDboP91
+UZn9dlPV83iNMLv0qFK/wamSDy+Ti+EN2hR+lb/90GSKgfKOmk0QrrsH4/vSJHVe
+t/OF645FTKg7cKxBk0umVOY7z/lnFZvhl21BcBz21LaEgaqLt1HWjqge5qXF56wy
+yO27zSwEOvM=
+=ccgp
 -----END PGP SIGNATURE-----
 --=-=-=--
