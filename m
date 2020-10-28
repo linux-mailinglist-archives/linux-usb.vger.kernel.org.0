@@ -2,117 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A06A029E322
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 03:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E4229E2E3
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 03:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729978AbgJ2Cpi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 22:45:38 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:39746 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726143AbgJ1Vdg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 17:33:36 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09SFkttw015934;
-        Wed, 28 Oct 2020 16:54:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=My//I8tAAL0mcppmcnPGDlZb1Fs1wApvMcb494W8c+M=;
- b=TUdb7FOxztuv9L0bhgSiWpJxFS1o4nX7zdL8NBWrTajSajyJSYyBDrbMVnOa80seVYZk
- 5cpUEMBy2n2JuCP/VnpRWW+7o10gsLB4XQB2Iwp9/4Dw5/FuyEhvRED6VCxlA5oaQ18/
- WbUxwmG49XZ9F/aqJ5ZdQg4LikWrvinUe9JpXBio5NQjk8/gUlJINjOgvbuUVmODsgAJ
- blEh6E8AxHiE8mXNxk2RlDWxe1bnMUNt5tq5NBlBOJlMx/i/61qktCtuMsyLfFCicEC4
- +q7UMnASGjjK7CwSAx7UXWsVrsRheGhr9smfdMoXHt6ti7RwA67ugWiTyLLLIJuTxghr 0A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34ccffk8hs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Oct 2020 16:54:20 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C78BA100056;
-        Wed, 28 Oct 2020 16:54:17 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 03FF02B8A0E;
-        Wed, 28 Oct 2020 16:53:36 +0100 (CET)
-Received: from localhost (10.75.127.47) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 28 Oct 2020 16:53:35
- +0100
-From:   Amelie Delaunay <amelie.delaunay@st.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-Subject: [PATCH 1/1] usb: typec: stusb160x: fix signedness comparison issue with enum variables
-Date:   Wed, 28 Oct 2020 16:53:37 +0100
-Message-ID: <20201028155337.9196-1-amelie.delaunay@st.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726713AbgJ2Cn6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 22:43:58 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:60421 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726720AbgJ1VfN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 17:35:13 -0400
+X-UUID: b7153164330345f2bd32b659cb69359a-20201029
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=WLEo/31fxwYc8NZ/c76b+9sLBX9X2+RBbZ0M32yrPck=;
+        b=TgFUJ4/UZjwL4huZEy5vKD6YLdydp2x6MU7EpNwaP7brMURqXTRTyxcPGRDiPq/c/cHrjQfY4khcBFExOc004RNaYpdpbbNBGf17ZziWoOSTetCP/Quya7kFfpjMqg8xsGcl4ypr17X9kLKqhnWpvxqCzxVOhLhbC8WQWRzjL2o=;
+X-UUID: b7153164330345f2bd32b659cb69359a-20201029
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 872883384; Thu, 29 Oct 2020 01:59:20 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 29 Oct 2020 01:59:13 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 29 Oct 2020 01:59:13 +0800
+Message-ID: <1603907954.21794.1.camel@mtkswgap22>
+Subject: Re: [PATCH v2] usb: gadget: configfs: Fix use-after-free issue with
+ udc_name
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     <macpaul@gmail.com>
+CC:     <chunfeng.yun@mediatek.com>, <eddie.hung@mediatek.com>,
+        Ainge Hsu <ainge.hsu@mediatek.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <stable@vger.kernel.org>
+Date:   Thu, 29 Oct 2020 01:59:14 +0800
+In-Reply-To: <1603907723-19499-1-git-send-email-macpaul.lin@mediatek.com>
+References: <1603907723-19499-1-git-send-email-macpaul.lin@mediatek.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-10-28_07:2020-10-28,2020-10-28 signatures=0
+X-TM-SNTS-SMTP: 6FF4D9C7666B2DA439629EFF15D866C8945F8FB2572A70F92FE3680A91FDC8B62000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-chip->port_type and chip->pwr_opmode are enums and when GCC considers them
-as unsigned, the conditions are never met.
-This patch takes advantage of the ret variable and fixes the following
-warnings:
-drivers/usb/typec/stusb160x.c:548 stusb160x_get_fw_caps() warn: unsigned 'chip->port_type' is never less than zero.
-drivers/usb/typec/stusb160x.c:570 stusb160x_get_fw_caps() warn: unsigned 'chip->pwr_opmode' is never less than zero.
-
-Fixes: da0cb6310094 ("usb: typec: add support for STUSB160x Type-C controller family")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
----
- drivers/usb/typec/stusb160x.c | 21 +++++++++------------
- 1 file changed, 9 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/typec/stusb160x.c b/drivers/usb/typec/stusb160x.c
-index da7f1957bcb3..8519d33bc3e7 100644
---- a/drivers/usb/typec/stusb160x.c
-+++ b/drivers/usb/typec/stusb160x.c
-@@ -544,11 +544,11 @@ static int stusb160x_get_fw_caps(struct stusb160x *chip,
- 	 */
- 	ret = fwnode_property_read_string(fwnode, "power-role", &cap_str);
- 	if (!ret) {
--		chip->port_type = typec_find_port_power_role(cap_str);
--		if ((int)chip->port_type < 0) {
--			ret = chip->port_type;
-+		ret = typec_find_port_power_role(cap_str);
-+		if (ret < 0)
- 			return ret;
--		}
-+		chip->port_type = ret;
-+
- 	}
- 	chip->capability.type = chip->port_type;
- 
-@@ -565,16 +565,13 @@ static int stusb160x_get_fw_caps(struct stusb160x *chip,
- 	 */
- 	ret = fwnode_property_read_string(fwnode, "power-opmode", &cap_str);
- 	if (!ret) {
--		chip->pwr_opmode = typec_find_pwr_opmode(cap_str);
-+		ret = typec_find_pwr_opmode(cap_str);
- 		/* Power delivery not yet supported */
--		if ((int)chip->pwr_opmode < 0 ||
--		    chip->pwr_opmode == TYPEC_PWR_MODE_PD) {
--			ret = (int)chip->pwr_opmode < 0 ? chip->pwr_opmode :
--							  -EINVAL;
--			dev_err(chip->dev, "bad power operation mode: %d\n",
--				chip->pwr_opmode);
--			return ret;
-+		if (ret < 0 || ret == TYPEC_PWR_MODE_PD) {
-+			dev_err(chip->dev, "bad power operation mode: %d\n", ret);
-+			return -EINVAL;
- 		}
-+		chip->pwr_opmode = ret;
- 	}
- 
- 	return 0;
--- 
-2.17.1
+T24gVGh1LCAyMDIwLTEwLTI5IGF0IDAxOjU1ICswODAwLCBNYWNwYXVsIExpbiB3cm90ZToNCj4g
+RnJvbTogRWRkaWUgSHVuZyA8ZWRkaWUuaHVuZ0BtZWRpYXRlay5jb20+DQo+IA0KPiBUaGVyZSBp
+cyBhIHVzZS1hZnRlci1mcmVlIGlzc3VlLCBpZiBhY2Nlc3MgdWRjX25hbWUNCj4gaW4gZnVuY3Rp
+b24gZ2FkZ2V0X2Rldl9kZXNjX1VEQ19zdG9yZSBhZnRlciBhbm90aGVyIGNvbnRleHQNCj4gZnJl
+ZSB1ZGNfbmFtZSBpbiBmdW5jdGlvbiB1bnJlZ2lzdGVyX2dhZGdldC4NCj4gDQo+IENvbnRleHQg
+MToNCj4gZ2FkZ2V0X2Rldl9kZXNjX1VEQ19zdG9yZSgpLT51bnJlZ2lzdGVyX2dhZGdldCgpLT4N
+Cj4gZnJlZSB1ZGNfbmFtZS0+c2V0IHVkY19uYW1lIHRvIE5VTEwNCj4gDQo+IENvbnRleHQgMjoN
+Cj4gZ2FkZ2V0X2Rldl9kZXNjX1VEQ19zaG93KCktPiBhY2Nlc3MgdWRjX25hbWUNCj4gDQo+IENh
+bGwgdHJhY2U6DQo+IGR1bXBfYmFja3RyYWNlKzB4MC8weDM0MA0KPiBzaG93X3N0YWNrKzB4MTQv
+MHgxYw0KPiBkdW1wX3N0YWNrKzB4ZTQvMHgxMzQNCj4gcHJpbnRfYWRkcmVzc19kZXNjcmlwdGlv
+bisweDc4LzB4NDc4DQo+IF9fa2FzYW5fcmVwb3J0KzB4MjcwLzB4MmVjDQo+IGthc2FuX3JlcG9y
+dCsweDEwLzB4MTgNCj4gX19hc2FuX3JlcG9ydF9sb2FkMV9ub2Fib3J0KzB4MTgvMHgyMA0KPiBz
+dHJpbmcrMHhmNC8weDEzOA0KPiB2c25wcmludGYrMHg0MjgvMHgxNGQwDQo+IHNwcmludGYrMHhl
+NC8weDEyYw0KPiBnYWRnZXRfZGV2X2Rlc2NfVURDX3Nob3crMHg1NC8weDY0DQo+IGNvbmZpZ2Zz
+X3JlYWRfZmlsZSsweDIxMC8weDNhMA0KPiBfX3Zmc19yZWFkKzB4ZjAvMHg0OWMNCj4gdmZzX3Jl
+YWQrMHgxMzAvMHgyYjQNCj4gU3lTX3JlYWQrMHgxMTQvMHgyMDgNCj4gZWwwX3N2Y19uYWtlZCsw
+eDM0LzB4MzgNCj4gDQo+IEFkZCBtdXRleF9sb2NrIHRvIHByb3RlY3QgdGhpcyBraW5kIG9mIHNj
+ZW5hcmlvLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogRWRkaWUgSHVuZyA8ZWRkaWUuaHVuZ0BtZWRp
+YXRlay5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IE1hY3BhdWwgTGluIDxtYWNwYXVsLmxpbkBtZWRp
+YXRlay5jb20+DQo+IFJldmlld2VkLWJ5OiBQZXRlciBDaGVuIDxwZXRlci5jaGVuQG54cC5jb20+
+DQo+IENjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnDQo+IC0tLQ0KPiBDaGFuZ2VzIGZvciB2MjoN
+Cj4gICAtIEZpeCB0eXBvICVzL2NvbnRleC9jb250ZXh0LCBUaGFua3MgUGV0ZXIuDQo+IA0KPiAg
+ZHJpdmVycy91c2IvZ2FkZ2V0L2NvbmZpZ2ZzLmMgfCAgIDExICsrKysrKysrKy0tDQo+ICAxIGZp
+bGUgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9jb25maWdmcy5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0
+L2NvbmZpZ2ZzLmMNCj4gaW5kZXggNTYwNTFiYi4uZDk3NDNmNCAxMDA2NDQNCj4gLS0tIGEvZHJp
+dmVycy91c2IvZ2FkZ2V0L2NvbmZpZ2ZzLmMNCj4gKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Nv
+bmZpZ2ZzLmMNCj4gQEAgLTIyMSw5ICsyMjEsMTYgQEAgc3RhdGljIHNzaXplX3QgZ2FkZ2V0X2Rl
+dl9kZXNjX2JjZFVTQl9zdG9yZShzdHJ1Y3QgY29uZmlnX2l0ZW0gKml0ZW0sDQo+ICANCj4gIHN0
+YXRpYyBzc2l6ZV90IGdhZGdldF9kZXZfZGVzY19VRENfc2hvdyhzdHJ1Y3QgY29uZmlnX2l0ZW0g
+Kml0ZW0sIGNoYXIgKnBhZ2UpDQo+ICB7DQo+IC0JY2hhciAqdWRjX25hbWUgPSB0b19nYWRnZXRf
+aW5mbyhpdGVtKS0+Y29tcG9zaXRlLmdhZGdldF9kcml2ZXIudWRjX25hbWU7DQo+ICsJc3RydWN0
+IGdhZGdldF9pbmZvICpnaSA9IHRvX2dhZGdldF9pbmZvKGl0ZW0pOw0KPiArCWNoYXIgKnVkY19u
+YW1lOw0KPiArCWludCByZXQ7DQo+ICsNCj4gKwltdXRleF9sb2NrKCZnaS0+bG9jayk7DQo+ICsJ
+dWRjX25hbWUgPSBnaS0+Y29tcG9zaXRlLmdhZGdldF9kcml2ZXIudWRjX25hbWU7DQo+ICsJcmV0
+ID0gc3ByaW50ZihwYWdlLCAiJXNcbiIsIHVkY19uYW1lID86ICIiKTsNCj4gKwltdXRleF91bmxv
+Y2soJmdpLT5sb2NrKTsNCj4gIA0KPiAtCXJldHVybiBzcHJpbnRmKHBhZ2UsICIlc1xuIiwgdWRj
+X25hbWUgPzogIiIpOw0KPiArCXJldHVybiByZXQ7DQo+ICB9DQo+ICANCj4gIHN0YXRpYyBpbnQg
+dW5yZWdpc3Rlcl9nYWRnZXQoc3RydWN0IGdhZGdldF9pbmZvICpnaSkNCg0KU29ycnksIGl0IGxv
+b2tzIGxpa2Ugc3RpbGwgYSBiYXNlNjQgZW5jb2RlZCBtYWlsLg0KSSdsbCBmZWVkYmFjayB0byBv
+dXIgSVQgZGVwYXJ0bWVudCBhZ2Fpbi4NClBsZWFzZSBpZ25vcmUgdGhpcyBtYWlsLg0KDQpUaGFu
+a3MNCk1hY3BhdWwgTGluDQoNCg==
 
