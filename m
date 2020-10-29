@@ -2,88 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DADE829E23D
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 03:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215B329E177
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 03:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387551AbgJ2CL6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 22:11:58 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:60972 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726823AbgJ1Vgc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Oct 2020 17:36:32 -0400
-X-UUID: 8a47760e811a42968c2e7d60a0a6ab76-20201029
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=RYETYlae4iO6GU8GFOfcOxXXaKOlfrIac/CifbWh6Vw=;
-        b=BjHkX+IvZPgDq+7JzGY+nHP0lymaLmxvm7712hpivokjnbcG9pXavwuBJY2EHf4kRStgk6gt9oYkIkvOrwlB2Ov3avlTvb605Pgcn4pq9oJIUSaWRNXF0rJ3DMvfeRyTM4L6FN+TcB3LBa91I1V3baaZgCNVr6Fzy0veKzoIiB8=;
-X-UUID: 8a47760e811a42968c2e7d60a0a6ab76-20201029
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 496800390; Thu, 29 Oct 2020 01:55:36 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 29 Oct 2020 01:55:27 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 29 Oct 2020 01:55:27 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     <macpaul@gmail.com>, <chunfeng.yun@mediatek.com>,
-        <eddie.hung@mediatek.com>
-CC:     Ainge Hsu <ainge.hsu@mediatek.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: gadget: configfs: Fix use-after-free issue with udc_name
-Date:   Thu, 29 Oct 2020 01:55:23 +0800
-Message-ID: <1603907723-19499-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S1727880AbgJ2CBV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 22:01:21 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:20991 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727863AbgJ2CBN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Oct 2020 22:01:13 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1603936873; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=OY5Nx8k3+elJDqG8wO1WAHt4XhnVppU+ilRqg8xPj/c=; b=QfWYuZw+kWNINmrzMh5d+72oKS6BcJ2lrLY8Ea5rqO8sSlrdIRi/29TNcR/9ymzUwXSjTxzj
+ CPkf47//NQNchyouFSoKD5j4BG87kjqu5UADOdshDBAOsProgNQproZMqA6BJnyIccfUGHiw
+ ZqiqEJC61QBbstmaygYS7n2pFrI=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 5f9a226020b52b32d78a4a7c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 29 Oct 2020 02:01:04
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 2B229C433FF; Thu, 29 Oct 2020 02:01:03 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.110.82.132] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9B0EDC4339C;
+        Thu, 29 Oct 2020 02:01:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9B0EDC4339C
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH 2/2] usb: dwc3: gadget: Preserve UDC max speed setting
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "jackp@codeaurora.org" <jackp@codeaurora.org>
+References: <20201028234311.6464-1-wcheng@codeaurora.org>
+ <20201028234311.6464-3-wcheng@codeaurora.org>
+ <e6faade6-7c4c-5966-3afd-63be2deefa01@synopsys.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <6748f727-db76-b51c-4333-57467ae3013f@codeaurora.org>
+Date:   Wed, 28 Oct 2020 19:00:59 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 8BA88157233FE31D320A44BF339572E794FB14D30A408FA9247CAD67040C28E02000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <e6faade6-7c4c-5966-3afd-63be2deefa01@synopsys.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RnJvbTogRWRkaWUgSHVuZyA8ZWRkaWUuaHVuZ0BtZWRpYXRlay5jb20+DQoNClRoZXJlIGlzIGEg
-dXNlLWFmdGVyLWZyZWUgaXNzdWUsIGlmIGFjY2VzcyB1ZGNfbmFtZQ0KaW4gZnVuY3Rpb24gZ2Fk
-Z2V0X2Rldl9kZXNjX1VEQ19zdG9yZSBhZnRlciBhbm90aGVyIGNvbnRleHQNCmZyZWUgdWRjX25h
-bWUgaW4gZnVuY3Rpb24gdW5yZWdpc3Rlcl9nYWRnZXQuDQoNCkNvbnRleHQgMToNCmdhZGdldF9k
-ZXZfZGVzY19VRENfc3RvcmUoKS0+dW5yZWdpc3Rlcl9nYWRnZXQoKS0+DQpmcmVlIHVkY19uYW1l
-LT5zZXQgdWRjX25hbWUgdG8gTlVMTA0KDQpDb250ZXh0IDI6DQpnYWRnZXRfZGV2X2Rlc2NfVURD
-X3Nob3coKS0+IGFjY2VzcyB1ZGNfbmFtZQ0KDQpDYWxsIHRyYWNlOg0KZHVtcF9iYWNrdHJhY2Ur
-MHgwLzB4MzQwDQpzaG93X3N0YWNrKzB4MTQvMHgxYw0KZHVtcF9zdGFjaysweGU0LzB4MTM0DQpw
-cmludF9hZGRyZXNzX2Rlc2NyaXB0aW9uKzB4NzgvMHg0NzgNCl9fa2FzYW5fcmVwb3J0KzB4Mjcw
-LzB4MmVjDQprYXNhbl9yZXBvcnQrMHgxMC8weDE4DQpfX2FzYW5fcmVwb3J0X2xvYWQxX25vYWJv
-cnQrMHgxOC8weDIwDQpzdHJpbmcrMHhmNC8weDEzOA0KdnNucHJpbnRmKzB4NDI4LzB4MTRkMA0K
-c3ByaW50ZisweGU0LzB4MTJjDQpnYWRnZXRfZGV2X2Rlc2NfVURDX3Nob3crMHg1NC8weDY0DQpj
-b25maWdmc19yZWFkX2ZpbGUrMHgyMTAvMHgzYTANCl9fdmZzX3JlYWQrMHhmMC8weDQ5Yw0KdmZz
-X3JlYWQrMHgxMzAvMHgyYjQNClN5U19yZWFkKzB4MTE0LzB4MjA4DQplbDBfc3ZjX25ha2VkKzB4
-MzQvMHgzOA0KDQpBZGQgbXV0ZXhfbG9jayB0byBwcm90ZWN0IHRoaXMga2luZCBvZiBzY2VuYXJp
-by4NCg0KU2lnbmVkLW9mZi1ieTogRWRkaWUgSHVuZyA8ZWRkaWUuaHVuZ0BtZWRpYXRlay5jb20+
-DQpTaWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0K
-UmV2aWV3ZWQtYnk6IFBldGVyIENoZW4gPHBldGVyLmNoZW5AbnhwLmNvbT4NCkNjOiBzdGFibGVA
-dmdlci5rZXJuZWwub3JnDQotLS0NCkNoYW5nZXMgZm9yIHYyOg0KICAtIEZpeCB0eXBvICVzL2Nv
-bnRleC9jb250ZXh0LCBUaGFua3MgUGV0ZXIuDQoNCiBkcml2ZXJzL3VzYi9nYWRnZXQvY29uZmln
-ZnMuYyB8ICAgMTEgKysrKysrKysrLS0NCiAxIGZpbGUgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCsp
-LCAyIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L2NvbmZp
-Z2ZzLmMgYi9kcml2ZXJzL3VzYi9nYWRnZXQvY29uZmlnZnMuYw0KaW5kZXggNTYwNTFiYi4uZDk3
-NDNmNCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC9jb25maWdmcy5jDQorKysgYi9k
-cml2ZXJzL3VzYi9nYWRnZXQvY29uZmlnZnMuYw0KQEAgLTIyMSw5ICsyMjEsMTYgQEAgc3RhdGlj
-IHNzaXplX3QgZ2FkZ2V0X2Rldl9kZXNjX2JjZFVTQl9zdG9yZShzdHJ1Y3QgY29uZmlnX2l0ZW0g
-Kml0ZW0sDQogDQogc3RhdGljIHNzaXplX3QgZ2FkZ2V0X2Rldl9kZXNjX1VEQ19zaG93KHN0cnVj
-dCBjb25maWdfaXRlbSAqaXRlbSwgY2hhciAqcGFnZSkNCiB7DQotCWNoYXIgKnVkY19uYW1lID0g
-dG9fZ2FkZ2V0X2luZm8oaXRlbSktPmNvbXBvc2l0ZS5nYWRnZXRfZHJpdmVyLnVkY19uYW1lOw0K
-KwlzdHJ1Y3QgZ2FkZ2V0X2luZm8gKmdpID0gdG9fZ2FkZ2V0X2luZm8oaXRlbSk7DQorCWNoYXIg
-KnVkY19uYW1lOw0KKwlpbnQgcmV0Ow0KKw0KKwltdXRleF9sb2NrKCZnaS0+bG9jayk7DQorCXVk
-Y19uYW1lID0gZ2ktPmNvbXBvc2l0ZS5nYWRnZXRfZHJpdmVyLnVkY19uYW1lOw0KKwlyZXQgPSBz
-cHJpbnRmKHBhZ2UsICIlc1xuIiwgdWRjX25hbWUgPzogIiIpOw0KKwltdXRleF91bmxvY2soJmdp
-LT5sb2NrKTsNCiANCi0JcmV0dXJuIHNwcmludGYocGFnZSwgIiVzXG4iLCB1ZGNfbmFtZSA/OiAi
-Iik7DQorCXJldHVybiByZXQ7DQogfQ0KIA0KIHN0YXRpYyBpbnQgdW5yZWdpc3Rlcl9nYWRnZXQo
-c3RydWN0IGdhZGdldF9pbmZvICpnaSkNCi0tIA0KMS43LjkuNQ0K
 
+
+On 10/28/2020 5:43 PM, Thinh Nguyen wrote:
+> Hi,
+> 
+> Wesley Cheng wrote:
+>> The USB gadget/UDC driver can restrict the DWC3 controller speed using
+>> dwc3_gadget_set_speed().  Store this setting into a variable, in order for
+>> this setting to persist across controller resets due to runtime PM.
+> 
+> Why do we need to do this? DCFG should persist unless we overwrite it.
+> The current PM shouldn't update the current speed setting.
+> 
+> BR,
+> Thinh
+> 
+
+Hi Thinh,
+
+During runtime PM suspend, the dwc3_suspend_common() will call
+dwc3_core_exit().  On some platforms they register the DWC3 reset
+control to the DWC3 core driver (otherwise could be handled in the DWC3
+glue drivers), which will be asserted here:
+
+static void dwc3_core_exit(struct dwc3 *dwc)
+{
+...
+	reset_control_assert(dwc->reset);
+
+From the SNPS databook (Table 2-2 Resets for Registers) it mentions that
+assertion of the reset signal will reset the DCFG register.
+
+In addition to the above, with the change to allow runtime PM suspend
+during UDC unbind, we need a way to avoid writing to the DCFG during the
+UDC bind path. (if we entered suspend before re-binding the UDC)  If we
+add an early exit based on the PM state (in
+dwc3_gadget_set_udc_speed()), then we basically ignore the max speed
+request from the UDC/gadget layer.
+
+Since it looks like the DWC3 gadget driver doesn't like using
+synchronous PM runtime resumes, by going this route, we can allow the
+async runtime resume handler to do everything, such as writing the speed
+config and re-enabling the controller.
+
+Thanks
+
+Regards,
+Wesley Cheng
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
