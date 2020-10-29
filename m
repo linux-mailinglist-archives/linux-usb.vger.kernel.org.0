@@ -2,177 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E907A29DC64
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 01:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7689129DBAC
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 01:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731775AbgJ2A34 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 20:29:56 -0400
-Received: from mout.gmx.net ([212.227.17.22]:42395 "EHLO mout.gmx.net"
+        id S2390704AbgJ2AL3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Oct 2020 20:11:29 -0400
+Received: from mga05.intel.com ([192.55.52.43]:37313 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730278AbgJ2A3Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Oct 2020 20:29:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1603931354;
-        bh=1x1pkj+ajXmsfrHufbFh9PGoA8v8ZYMZRPHOv6rHqKo=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Sq3ghWn4LN0u/zAfvaprxjY97tlK2UqpCsHTtyjVC9oe65QwUkBPFQT2GhCJMUyh0
-         x3Hlu462wFRhboMViEm/+0NefEjannONEUy7RuCoKw+qqZ2TEXccuEWI6GcnH1iQh8
-         kj33/UsXCTo/IvaYSB+DP7xMjV9DOFPJriNj0u8w=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.58] ([92.116.189.175]) by mail.gmx.com (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWRVb-1krzLr0wEl-00XwjY; Wed, 28
- Oct 2020 15:54:36 +0100
-Subject: Re: [PATCH] USB: serial: ftdi_sio: Fix serial port stall after resume
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200929193327.GA13987@ls3530.fritz.box>
- <20201008152103.GK26280@localhost>
- <1aefc37b-8976-efda-f397-2d9492b1260a@gmx.de>
- <20201027090043.GG4085@localhost>
-From:   Helge Deller <deller@gmx.de>
-Autocrypt: addr=deller@gmx.de; keydata=
- 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
- c2TFWAS8k6RLkk41ZUU8ENX8+qZx/Q==
-Message-ID: <a2b84135-761b-6e9c-59d5-857bfa6d0281@gmx.de>
-Date:   Wed, 28 Oct 2020 15:54:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S2388084AbgJ2AL2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Oct 2020 20:11:28 -0400
+IronPort-SDR: 7yyhV8nJw/ySiDqjE0zzy5mZ/yxCucQABJdspjlMbzQXOAzfYR423JMcyJAi2Rd31eVXPl8NCn
+ GcRz6CNOXQ3A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9788"; a="253057916"
+X-IronPort-AV: E=Sophos;i="5.77,428,1596524400"; 
+   d="scan'208";a="253057916"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2020 17:11:27 -0700
+IronPort-SDR: xK6Lq7gMRNkMUj+eR9RdjpcHMi4UCmbhEydi4id3mLpBG32ZGscRN30WYcUyNGz0dMV11Uwzmb
+ hK1jC1/uYqRg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,428,1596524400"; 
+   d="scan'208";a="318782204"
+Received: from lkp-server02.sh.intel.com (HELO 0471ce7c9af6) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 28 Oct 2020 17:11:25 -0700
+Received: from kbuild by 0471ce7c9af6 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kXvXJ-0000Fn-4S; Thu, 29 Oct 2020 00:11:25 +0000
+Date:   Thu, 29 Oct 2020 08:11:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ aee9ddb1d3718d3ba05b50c51622d7792ae749c9
+Message-ID: <5f9a08ac.MLgRHiZDTrXi1Iz8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20201027090043.GG4085@localhost>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:G1UVVWCLE9kHZPkoEqVOqg+lkFWn4s8mCRYk3zd1H0DfGQuGTb2
- qsnnbZ9gGKqfcYrQzPRP3tHOeqkLEiF0HGvb2Y06GyVx1vrgZ4nDsyrhQpbdp58EQ4SzSH1
- yO2ZFNyczR4xn22I4wO5yABRfF/bvkzruJrtDQNy25sygll3N/LNkOPDPCm23H4R7BD6Elb
- 1Jbwr/wHghgiKi/SYaNAw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bgc06VPmeEc=:YsVGB4qGyFx7QY7Jzd0Alr
- KNZhQtLkgyyztzkK467Bmh7M+CO8rK2h9MHCmM3+vEgmbqVI4fnK/XIJexLZmlQWkcuu4AfG6
- l4UVbxHKiebgZJ75I8TlCOtjPqSlYlZ2ij80QnFJSkFIjee6j4OZwkb2o3F8tm4c28JMHR4GG
- pyvObOEmd1i9gm/fDFOi/CSNTvtLb3Iic9yxiRbK+rdkgYStJcmFnvsM49V0gIDrRMxLUTFRk
- 1LhC1WUp34xCuxMYJwIqO3i/04eR8vuYlbZlJjY5MDU1SWkjsFz+LCxGo5nhXj9hqPAIZ/8Ah
- 6pcUJ65rr50zszzKqrD5cPG9RLXmeNa57tw1qZw61V/RLnrUxo9zpOMEzZ+3zatz2LQZlY/kA
- DPEd2bNv3uTBhbId29f6mluKTQ+oLAOkrz5Z/xIM+nndNiZydUSYExNYmzZCVPRMMgQeDfIqH
- bCFGdPm7jchQb6LhoHxLgCdZ7PMYW5Z++tzLXHqrg40zLOBqtfqITFdhzqbwUCwmR7XQzF6ZZ
- KR0iBpUDhqqJ86GsCKE7SFjPRgdEpApYJBq1rct96LPP8qrWG1JdDK1/GYOEQNHjI8DE1TSwG
- ndTEiXoQAW1jRt1zuKUCgUdSz/B8EXgfxw+A+0DM9PGP+gOJiahXU0xhfN5m85SCeh8ZBS1yp
- hArP9hxSXnxKBHQc7uvfFYw/6SUurixYH0yK215gbNIA2pSXYXvMJcd6w5emZ8DtLkc68wwaW
- Vln6XkxyK6/bKNb1wXviIlkYjxgucEyngag+EKhOAcl8ruzv6+6MAJpxco/NE+vy/VMuDmq/t
- cCbtvCKcSrAXZjr4AbUXbaRUVfL3z+uouWde5h7ClFAIRMaH8sZozqr48hjcMpewIpMQnBfdv
- Sk/qqQFsZG+wkWRF8CXg==
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/27/20 10:00 AM, Johan Hovold wrote:
-> On Thu, Oct 08, 2020 at 08:16:02PM +0200, Helge Deller wrote:
->> On 10/8/20 5:21 PM, Johan Hovold wrote:
->>> On Tue, Sep 29, 2020 at 09:33:27PM +0200, Helge Deller wrote:
->>>> With a 4-port serial USB HUB with FT232BM chips the serial ports stop
->>>> working after a software suspend/resume cycle.
->>>> Rewriting the latency timer during the resume phase fixes it.
->
->>>> +static int ftdi_reset_resume(struct usb_serial *serial)
->>>> +{
->>>> +	struct usb_serial_port *port =3D serial->port[0];
->>>> +
->>>> +	if (tty_port_initialized(&port->port))
->>>> +		write_latency_timer(port);
->>>
->>> Why are you only doing this for open ports?
->>
->> I more or less copied it from another driver....
->>
->>>> +
->>>> +	return usb_serial_generic_resume(serial);
->>>> +}
->>>
->>> And if the device has been reset there may need to reconfigured the
->>> termios settings for open ports.
->>>
->>> Could you expand a bit on what the problem is here?
->>
->> My testcase is pretty simple:
->> 1. I use e.g. "minicom -D /dev/ttyUSB2". Serial connection works.
->> 2. I exit minicom.
->> 3. I suspend the workstation: "systemctl suspend"
->> 4. I wake up the machine and wait a few seconds.
->> 5. I start "minicom -D /dev/ttyUSB2" again. No transfers on the serial =
-port.
->>
->> With my patch the minicom serial communications does work.
->> Another way to wake up the connection is to rmmod the driver and
->> insmod it again.
->
-> Weird indeed. If you exit minicom before suspend and no other process is
-> keeping the port open, then that write_latency_timer() above would never
-> be executed.
->
-> Could you enable some debugging and provide a dmesg log from a test
-> cycle (open/close minicom, suspend/resume, open minicom)?
->
-> 	echo file usb-serial.c +p > /sys/kernel/debug/dynamic_debug/control
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: aee9ddb1d3718d3ba05b50c51622d7792ae749c9  kcov, usb: only collect coverage from __usb_hcd_giveback_urb in softirq
 
-I enabled the debugging and tried a few times, but somehow I can not
-reproduce the issue any longer.
+elapsed time: 720m
 
-So, please drop my patch for now.
+configs tested: 161
+configs skipped: 2
 
-Thanks!
-Helge
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+c6x                        evmc6457_defconfig
+sh                            titan_defconfig
+powerpc                     tqm8548_defconfig
+arm                          pxa168_defconfig
+mips                           ip22_defconfig
+sh                               alldefconfig
+sh                          r7780mp_defconfig
+mips                     loongson1b_defconfig
+sh                               j2_defconfig
+sh                        apsh4ad0a_defconfig
+powerpc                    socrates_defconfig
+powerpc64                           defconfig
+arm                         nhk8815_defconfig
+powerpc                     tqm8541_defconfig
+parisc                           alldefconfig
+arm                        spear6xx_defconfig
+riscv                    nommu_k210_defconfig
+nds32                             allnoconfig
+powerpc                     tqm8555_defconfig
+mips                        bcm47xx_defconfig
+sh                     sh7710voipgw_defconfig
+powerpc                  mpc866_ads_defconfig
+arm                         at91_dt_defconfig
+powerpc                     pseries_defconfig
+arm                        magician_defconfig
+arc                     haps_hs_smp_defconfig
+arm                      pxa255-idp_defconfig
+arm                        neponset_defconfig
+xtensa                  nommu_kc705_defconfig
+alpha                            alldefconfig
+arm                            lart_defconfig
+mips                      bmips_stb_defconfig
+m68k                        mvme147_defconfig
+sh                               allmodconfig
+powerpc                      bamboo_defconfig
+powerpc                     kmeter1_defconfig
+c6x                        evmc6474_defconfig
+powerpc                  iss476-smp_defconfig
+arc                          axs103_defconfig
+sh                           se7206_defconfig
+arm                          prima2_defconfig
+m68k                       m5249evb_defconfig
+mips                          rb532_defconfig
+sh                           se7343_defconfig
+sh                         ap325rxa_defconfig
+mips                           jazz_defconfig
+arm                            hisi_defconfig
+x86_64                              defconfig
+mips                          ath25_defconfig
+m68k                             allyesconfig
+mips                            e55_defconfig
+ia64                      gensparse_defconfig
+microblaze                          defconfig
+arm                        multi_v7_defconfig
+powerpc                     akebono_defconfig
+arm                       omap2plus_defconfig
+nds32                               defconfig
+powerpc                mpc7448_hpc2_defconfig
+powerpc                 mpc834x_mds_defconfig
+powerpc                   motionpro_defconfig
+mips                           gcw0_defconfig
+powerpc                 mpc8272_ads_defconfig
+mips                            ar7_defconfig
+h8300                       h8s-sim_defconfig
+powerpc                      pasemi_defconfig
+mips                         bigsur_defconfig
+xtensa                    smp_lx200_defconfig
+arm                          exynos_defconfig
+nds32                            alldefconfig
+um                           x86_64_defconfig
+arm                      tct_hammer_defconfig
+arm                              zx_defconfig
+mips                       bmips_be_defconfig
+arm                           viper_defconfig
+arm                        realview_defconfig
+powerpc                     skiroot_defconfig
+arm                          collie_defconfig
+powerpc                     ppa8548_defconfig
+arm                            zeus_defconfig
+sh                          rsk7264_defconfig
+powerpc                    klondike_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+nios2                               defconfig
+arc                              allyesconfig
+c6x                              allyesconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20201026
+i386                 randconfig-a003-20201026
+i386                 randconfig-a005-20201026
+i386                 randconfig-a001-20201026
+i386                 randconfig-a006-20201026
+i386                 randconfig-a004-20201026
+i386                 randconfig-a002-20201028
+i386                 randconfig-a005-20201028
+i386                 randconfig-a003-20201028
+i386                 randconfig-a001-20201028
+i386                 randconfig-a004-20201028
+i386                 randconfig-a006-20201028
+x86_64               randconfig-a011-20201028
+x86_64               randconfig-a013-20201028
+x86_64               randconfig-a016-20201028
+x86_64               randconfig-a015-20201028
+x86_64               randconfig-a012-20201028
+x86_64               randconfig-a014-20201028
+i386                 randconfig-a016-20201028
+i386                 randconfig-a014-20201028
+i386                 randconfig-a015-20201028
+i386                 randconfig-a013-20201028
+i386                 randconfig-a012-20201028
+i386                 randconfig-a011-20201028
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a001-20201026
+x86_64               randconfig-a003-20201026
+x86_64               randconfig-a002-20201026
+x86_64               randconfig-a006-20201026
+x86_64               randconfig-a004-20201026
+x86_64               randconfig-a005-20201026
+x86_64               randconfig-a001-20201028
+x86_64               randconfig-a002-20201028
+x86_64               randconfig-a003-20201028
+x86_64               randconfig-a006-20201028
+x86_64               randconfig-a005-20201028
+x86_64               randconfig-a004-20201028
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
