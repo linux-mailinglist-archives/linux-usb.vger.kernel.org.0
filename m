@@ -2,83 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DC929EF40
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 16:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C29529EF8D
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 16:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727964AbgJ2PKR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Oct 2020 11:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S1728108AbgJ2PRF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Oct 2020 11:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728024AbgJ2PKQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Oct 2020 11:10:16 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B706C0613D2
-        for <linux-usb@vger.kernel.org>; Thu, 29 Oct 2020 08:10:16 -0700 (PDT)
-Date:   Thu, 29 Oct 2020 16:10:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1603984214;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0YUY98JakYiW/Ckd93gv7a43xghoFCUe/3JyDKC+pKU=;
-        b=OE97/X4qxuL4T81gNobDGQ5bmFSStcnTuR/i/aVny/czGbEK6LTItZWY+AM9N8HIeFPT5N
-        8pE5ArJlFM5Lxtv9cAh0W3tnfyi+t4Ec3R3QdmB0xx0bkFV430zB7SqOgJ+2Zs0OoGL/oc
-        T3APESC+x7ThIw6tp35DTAz32LtmvESBUJ6xhUI0q5BXTpMap54O3QBXcTK3x4Kltol2H/
-        U5xGcQiWRkVX++XfhnPKlTrlof1TCqs7yAZdD3JktPIifiNFykp+cC3mNp99A4B54UGqGu
-        3ddVuCnTXYmzlwHkKDgLJyRiDERCbVHsC2MTa8BthECBewUAebKTAcTH8TkoDQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1603984214;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0YUY98JakYiW/Ckd93gv7a43xghoFCUe/3JyDKC+pKU=;
-        b=BdFnxBDs5DQxITnA0Kc/yrqd9Q5PS5TPDvhK7Tmc5evuTBXnvRAKUbWL1lxjyx6SHG51Go
-        kA6QB4M1H44EZLDg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Mike Galbraith <efault@gmx.de>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Li Jun <jun.li@nxp.com>
-Subject: Re: [PATCH 3/3] xhci: Don't create stream debugfs files with
- spinlock held.
-Message-ID: <20201029151013.zbj6npc736x3o7ux@linutronix.de>
-References: <20201028203124.375344-1-mathias.nyman@linux.intel.com>
- <20201028203124.375344-4-mathias.nyman@linux.intel.com>
- <1cbb8b7defb1db1d4747995c11ebebb3dd9a66ec.camel@gmx.de>
- <30dd5079-375d-a2a3-cab3-1b2740661ea8@linux.intel.com>
- <c8a67a65091404e528297ef5c6b9c59cdc03a2c9.camel@gmx.de>
- <a5d5a21c-d6ff-1097-b9ca-e0147658c8c6@linux.intel.com>
- <20201029113805.tdsissnjq4acemle@linutronix.de>
- <29cf8ca3-0fe7-da51-c8ae-ad5c67af4dde@linux.intel.com>
+        with ESMTP id S1727917AbgJ2PRF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Oct 2020 11:17:05 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1F9C0613CF;
+        Thu, 29 Oct 2020 08:17:05 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id n16so2574434pgv.13;
+        Thu, 29 Oct 2020 08:17:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=820MwFgEaA13M8USX5NcXNh7ShnWbqQ8vCMeLhpqcYs=;
+        b=S5RbO63BxB+kSye4StTkySYsW8Zr4FA0vnzixmEkiwTQwE1vI/VjWC2hHXLdQO05Gw
+         a2OenMl3LvspcJH/IRGLgGitvwqaukn7G8DrfU3oHDyTezcCEYj6xklXXFYhOo1NNYKI
+         QVPMrB3mSSSzLggNqwokNIJnKFLIwJlXJ1J1+NwtbTBbaxgqc3WCf4oBbVZlt9iVDuS+
+         wsvt+vLSQKbDFDNJ80WPqsEOFSPCjg/7nS9LmMBSiUnlSpDYC5guEqq8Nqg3DIlF0yRD
+         orGh7uZuojFX9L9p7wSa1qHFVzik6JXcOt89LntoOjmwSP7G1c713NE8tzeAa7uLzt6X
+         EYzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=820MwFgEaA13M8USX5NcXNh7ShnWbqQ8vCMeLhpqcYs=;
+        b=ew/LtF+3Yt8r5aM4n3UxTORozhhLi7Gz4g0zYpGb2E2ROErwHWMF21nYj9qChDhQHs
+         S6U6D5FDwWwhSt5tw/Ge/J1WXAlcbZXMNtm8Nhjplz7JVYO471CyjTegiXdnuG5KfpVs
+         WvmJUYxdo469T2bVH7DRtZa651dmGXh23OWJUpjsrXA9jZXi7dsEMJRyEXzhIykDsyEh
+         lEMPo+KIzvqA2RuITR/xFN0F4JMF3cQtMb5/Am7OlTiFyB01Vcg7L9J2IjVookD8X8hH
+         ayeUggBw5hEepFwAHOjhPOs6mJWf1Bd7WN9Dcg88+CBp1fIaU/p4hYrsj94ry3f+EPcE
+         pgqQ==
+X-Gm-Message-State: AOAM5330P1Pxglso12Z/xpsh2l0sBaJ8fYllQ673oCLSUgCaI+MZsACu
+        NBCwo0ZSu0Jyvl8A3UZCJ9Y=
+X-Google-Smtp-Source: ABdhPJyY7nixg8TY+WgurAXV+U5HGT8ffPpFyIyVTq773koSVeFgvAYxC4fluR9lXWYW2NDB40cO4g==
+X-Received: by 2002:a17:90a:be18:: with SMTP id a24mr231009pjs.215.1603984624439;
+        Thu, 29 Oct 2020 08:17:04 -0700 (PDT)
+Received: from [192.168.0.104] ([49.207.222.191])
+        by smtp.gmail.com with ESMTPSA id b3sm3143476pfd.66.2020.10.29.08.17.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Oct 2020 08:17:03 -0700 (PDT)
+From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Subject: Re: [PATCH v2] net: usb: usbnet: update __usbnet_{read|write}_cmd()
+ to use new API
+To:     Oliver Neukum <oneukum@suse.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
+References: <20201010065623.10189-1-anant.thazhemadam@gmail.com>
+ <20201029132256.11793-1-anant.thazhemadam@gmail.com>
+Message-ID: <d8417f98-0896-25d0-e72d-dcf111011129@gmail.com>
+Date:   Thu, 29 Oct 2020 20:46:59 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20201029132256.11793-1-anant.thazhemadam@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <29cf8ca3-0fe7-da51-c8ae-ad5c67af4dde@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020-10-29 15:08:06 [+0200], Mathias Nyman wrote:
-> Sebastian, I think you might be missing the first mail in this thread. 
 
-thank you for clearing that up.
+On 29/10/20 6:52 pm, Anant Thazhemadam wrote:
+> Currently, __usbnet_{read|write}_cmd() use usb_control_msg(),
+> and thus consider potential partial reads/writes being done to 
+> be perfectly valid.
+> Quite a few callers of usbnet_{read|write}_cmd() don't enforce
+> checking for partial reads/writes into account either, automatically
+> assuming that a complete read/write occurs.
+>
+> However, the new usb_control_msg_{send|recv}() APIs don't allow partial
+> reads and writes.
+> Using the new APIs also relaxes the return value checking that must
+> be done after usbnet_{read|write}_cmd() is called.
+>
+> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com> <mailto:anant.thazhemadam@gmail.com>
+> ---
+> Changes in v2:
+> 	* Fix build error
+>
+> This patch has been compile and build tested with a .config file that
+> was generated using make allyesconfig, and the build error has been 
+> fixed.
+> Unfortunately, I wasn't able to get my hands on a usbnet adapter for testing,
+> and would appreciate it if someone could do that.
+>
+>  drivers/net/usb/usbnet.c | 52 ++++++++--------------------------------
+>  1 file changed, 10 insertions(+), 42 deletions(-)
+>
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> index bf6c58240bd4..2f7c7b7f4047 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -1982,64 +1982,32 @@ EXPORT_SYMBOL(usbnet_link_change);
+>  static int __usbnet_read_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
+>  			     u16 value, u16 index, void *data, u16 size)
+>  {
+> -	void *buf = NULL;
+> -	int err = -ENOMEM;
+>  
+>  	netdev_dbg(dev->net, "usbnet_read_cmd cmd=0x%02x reqtype=%02x"
+>  		   " value=0x%04x index=0x%04x size=%d\n",
+>  		   cmd, reqtype, value, index, size);
+>  
+> -	if (size) {
+> -		buf = kmalloc(size, GFP_KERNEL);
+> -		if (!buf)
+> -			goto out;
+> -	}
+> -
+> -	err = usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
+> -			      cmd, reqtype, value, index, buf, size,
+> -			      USB_CTRL_GET_TIMEOUT);
+> -	if (err > 0 && err <= size) {
+> -        if (data)
+> -            memcpy(data, buf, err);
+> -        else
+> -            netdev_dbg(dev->net,
+> -                "Huh? Data requested but thrown away.\n");
+> -    }
+> -	kfree(buf);
+> -out:
+> -	return err;
+> +	return usb_control_msg_recv(dev->udev, 0,
+> +			      cmd, reqtype, value, index, data, size,
+> +			      USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
+>  }
+>  
+>  static int __usbnet_write_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
+>  			      u16 value, u16 index, const void *data,
+>  			      u16 size)
+>  {
+> -	void *buf = NULL;
+> -	int err = -ENOMEM;
+> -
+>  	netdev_dbg(dev->net, "usbnet_write_cmd cmd=0x%02x reqtype=%02x"
+>  		   " value=0x%04x index=0x%04x size=%d\n",
+>  		   cmd, reqtype, value, index, size);
+>  
+> -	if (data) {
+> -		buf = kmemdup(data, size, GFP_KERNEL);
+> -		if (!buf)
+> -			goto out;
+> -	} else {
+> -        if (size) {
+> -            WARN_ON_ONCE(1);
+> -            err = -EINVAL;
+> -            goto out;
+> -        }
+> -    }
+> -
+> -	err = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
+> -			      cmd, reqtype, value, index, buf, size,
+> -			      USB_CTRL_SET_TIMEOUT);
+> -	kfree(buf);
+> +	if (size && !data) {
+> +		WARN_ON_ONCE(1);
+> +		return -EINVAL;
+> +	}
+>  
+> -out:
+> -	return err;
+> +	return usb_control_msg_send(dev->udev, 0,
+> +			cmd, reqtype, value, index, data, size,
+> +			USB_CTRL_SET_TIMEOUT, GFP_KERNEL);
+>  }
+>  
+>  /*
 
-> https://lore.kernel.org/linux-usb/20201028203124.375344-4-mathias.nyman@linux.intel.com/
-> 
-> Let me do a quick recap to avoid confusion here. So far we have 2 issues.
-> 
-> 1. Lockdep issue #1, stream debugfs entry created with local interrupts disabled and xhci->lock held
->    Cause: 673d74683627b ("usb: xhci: add debugfs support for ep with stream") in v5.10-rc1
->    Fix:  [PATCH 3/3] xhci: Don't create stream debugfs files with spinlock held. (i.e. the mail we are replying to)
->    Comment: easily reproduced, enable lockdep and uas, mount debugfs and connect a UAS device.
->             discovered by both Hans and Mike
-> .
-> 2. Lockdep issue #2, adding entries to radix tree during (stream) ring expansion with interrupts disabled and xhci->lock held.
->    Cause: unknown, probably a patch since we started using radix trees for finding streams
->    Fix: unknown.
->    Comment: Discovered by Mike when testing fix for issue#1. I suspect it can be reproduced on 5.9 but is 
->    probably really hard as it involves ring expansion.
-> 
-> -Mathias
+I had a v2 prepared and ready but was told to wait for a week before sending it in,
+since usb_control_msg_{send|recv}() that were being used were not present in the
+networking tree at the time, and all the trees would be converged by then.
+So, just to be on the safer side, I waited for two weeks.
+I checked the net tree, and found the APIs there too (defined in usb.h).
 
-Sebastian
+However the build seems to fail here,
+    https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/O2BERGN7SYYC6LNOOKNUGPS2IJLDWYT7/
+
+I'm not entirely sure at this point why this is happening, and would appreciate it if
+someone could take the time to tell me if and how this might be an issue with my
+patch.
+
+Thanks,
+Anant
+
