@@ -2,114 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 264F329F047
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 16:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5357E29F0B6
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 17:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728301AbgJ2PkT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Oct 2020 11:40:19 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:42874 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728275AbgJ2PkT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Oct 2020 11:40:19 -0400
-Received: by mail-ot1-f65.google.com with SMTP id h62so2625753oth.9;
-        Thu, 29 Oct 2020 08:40:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pFK119oKBHUlA5FZkroLBkkbquLP5uElSERBD9V0akk=;
-        b=C9MR8x/it2pugcUt033mWhbKd3+zMWIEFBxTlEvDYzJiTqRaVG66Kmay9GluAM/vee
-         arO7hFF9i9fdIoU1XsLnobuSzUI7wTwn6knG3AsRPgc01MkE9vlkEO5TG8U2lt+QzBTJ
-         crv8gkm0GJ/dda8+J6YNaBuTcce7xICHs8ylu82O1jFLWI/FlSuWmyTuz67HWjbIsX0S
-         rbChFrlha+31BXo+xUiqpF5QXQK0ahDgcPib2CnkmFVY1LhsY1GQ2jHSyG9u5fCQwODW
-         0iRrLGzmJlhXtlaPph7wOMp3H7ELCpW3nK4iaEVDeQamg7W5Gdj09q6av58Y7LaJBTxH
-         mPKw==
-X-Gm-Message-State: AOAM531QCs3rW3h4Ut9crfn1wuyKiwEuWdRHws1CvFSDFwg2PGt9k4xt
-        ICO5i7gWuICwJ4ob6v1m4Q==
-X-Google-Smtp-Source: ABdhPJz/JkJ8C9MRVeRTN9L11T1V3txCS2mQ0fPKSM+XS8DvNISSelFbI4vfJlW1k1+tqtbj0oK9SA==
-X-Received: by 2002:a05:6830:4033:: with SMTP id i19mr3841436ots.127.1603986017758;
-        Thu, 29 Oct 2020 08:40:17 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 76sm681405oty.15.2020.10.29.08.40.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2020 08:40:17 -0700 (PDT)
-Received: (nullmailer pid 1920595 invoked by uid 1000);
-        Thu, 29 Oct 2020 15:40:16 -0000
-Date:   Thu, 29 Oct 2020 10:40:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Amelie Delaunay <amelie.delaunay@st.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-Subject: Re: [RESEND PATCH v3 1/4] dt-bindings: connector: add power-opmode
- optional property to usb-connector
-Message-ID: <20201029154016.GA1917373@bogus>
-References: <20201029095806.10648-1-amelie.delaunay@st.com>
- <20201029095806.10648-2-amelie.delaunay@st.com>
+        id S1728567AbgJ2QCt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Oct 2020 12:02:49 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:21796 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728560AbgJ2QCt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Oct 2020 12:02:49 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1603987369; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=mwrkVzoPFVrb40b/lFDQN9OPUP730QXZl59lU+BuS4E=; b=gil/00/Odk2laesnc4HHFZWaNWCpLcAuo4kaHJdQO17/vHeyyBtweBByzkeOd2SMtc3ennQq
+ tEKzyYwg48lIHDA6u1pfV4r0d08sXL5YZflkNCOufPzlF3jlmQL8ynrEs5VkWWZXtMOZDSW6
+ bc18OZJ+ug2MDTDWOA3HxMPIbKs=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 5f9ae777940cfd47f14663b0 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 29 Oct 2020 16:01:59
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 4822CC43382; Thu, 29 Oct 2020 16:01:59 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0BA8AC433C9;
+        Thu, 29 Oct 2020 16:01:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0BA8AC433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+Date:   Thu, 29 Oct 2020 09:01:43 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Ferry Toth <fntoth@gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: audio: Free requests only after callback
+Message-ID: <20201029160143.GA31406@jackp-linux.qualcomm.com>
+References: <20201029062144.3574-1-jackp@codeaurora.org>
+ <20201029082424.GA30677@b29397-desktop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201029095806.10648-2-amelie.delaunay@st.com>
+In-Reply-To: <20201029082424.GA30677@b29397-desktop>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 10:58:03AM +0100, Amelie Delaunay wrote:
-> Power operation mode may depends on hardware design, so, add the optional
-> property power-opmode for usb-c connector to select the power operation
-> mode capability.
+On Thu, Oct 29, 2020 at 08:24:52AM +0000, Peter Chen wrote:
+> On 20-10-28 23:21:44, Jack Pham wrote:
+> > As per the kernel doc for usb_ep_dequeue(), it states that "this
+> > routine is asynchronous, that is, it may return before the completion
+> > routine runs". And indeed since v5.0 the dwc3 gadget driver updated
+> > its behavior to place dequeued requests on to a cancelled list to be
+> > given back later after the endpoint is stopped.
+> > 
+> > The free_ep() was incorrectly assuming that a request was ready to
+> > be freed after calling dequeue which results in a use-after-free
+> > in dwc3 when it traverses its cancelled list. Fix this by moving
+> > the usb_ep_free_request() call to the callback itself in case the
+> > ep is disabled.
+> > 
+> > Fixes: eb9fecb9e69b0 ("usb: gadget: f_uac2: split out audio core")
+> > Reported-and-tested-by: Ferry Toth <fntoth@gmail.com>
+> > Signed-off-by: Jack Pham <jackp@codeaurora.org>
+> > ---
+> > v2: call free_request() in case of ep_dequeue() failure
+> > 
+> >  drivers/usb/gadget/function/u_audio.c | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+> > index e6d32c536781..6e69ccf02c95 100644
+> > --- a/drivers/usb/gadget/function/u_audio.c
+> > +++ b/drivers/usb/gadget/function/u_audio.c
+> > @@ -89,7 +89,12 @@ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
+> >  	struct snd_uac_chip *uac = prm->uac;
+> >  
+> >  	/* i/f shutting down */
+> > -	if (!prm->ep_enabled || req->status == -ESHUTDOWN)
+> > +	if (!prm->ep_enabled) {
+> > +		usb_ep_free_request(ep, req);
+> > +		return;
+> > +	}
+> > +
+> > +	if (req->status == -ESHUTDOWN)
+> >  		return;
+> >  
+> >  	/*
+> > @@ -336,8 +341,9 @@ static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
+> >  
+> >  	for (i = 0; i < params->req_number; i++) {
+> >  		if (prm->ureq[i].req) {
+> > -			usb_ep_dequeue(ep, prm->ureq[i].req);
+> > -			usb_ep_free_request(ep, prm->ureq[i].req);
+> > +			if (usb_ep_dequeue(ep, prm->ureq[i].req))
+> > +				usb_ep_free_request(ep, req);
 > 
-> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
-> ---
->  .../bindings/connector/usb-connector.yaml      | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+> There is a build error for "req", otherwise:
 > 
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> index 728f82db073d..200d19c60fd5 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> @@ -93,6 +93,24 @@ properties:
->        - device
->        - dual
->  
-> +  power-opmode:
+> Reviewed-and-tested-by: Peter Chen <peter.chen@nxp.com>
 
-I've acked this version:
+Sorry, careless mistake!! Thanks for testing, V3 on its way.
 
-https://lore.kernel.org/r/20201020093627.256885-2-badhri@google.com
+Jack
 
-Please ack it if you are okay with it.
-
-Rob
-
-
-> +    description: Determines the power operation mode that the Type C connector
-> +      will support and will advertise through CC pins when it has no power
-> +      delivery support.
-> +      - "default" corresponds to default USB voltage and current defined by the
-> +        USB 2.0 and USB 3.2 specifications, 5V 500mA for USB 2.0 ports and
-> +        5V 900mA or 1500mA for USB 3.2 ports in single-lane or dual-lane
-> +        operation respectively.
-> +      - "1.5A" and "3.0A", 5V 1.5A and 5V 3.0A respectively, as defined in USB
-> +        Type-C Cable and Connector specification, when Power Delivery is not
-> +        supported.
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#definitions/string
-> +    enum:
-> +      - default
-> +      - 1.5A
-> +      - 3.0A
-> +
->    # The following are optional properties for "usb-c-connector" with power
->    # delivery support.
->    source-pdos:
-> -- 
-> 2.17.1
-> 
+> > +			/* else will be freed in u_audio_iso_complete() */
+> >  			prm->ureq[i].req = NULL;
+> >  		}
+> >  	}
+> > -- 
+> > 2.24.0
+> > 
