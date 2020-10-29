@@ -2,176 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6C429ECCB
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 14:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D1D29EDC3
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 15:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726790AbgJ2NXh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Oct 2020 09:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgJ2NXh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Oct 2020 09:23:37 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA67C0613D2;
-        Thu, 29 Oct 2020 06:23:36 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id t22so1276081plr.9;
-        Thu, 29 Oct 2020 06:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GXWZRuxu4VR36pF/cjVXXRZb5YESqKLE2k0JDNWMpBU=;
-        b=Ba+fdg0/mxmgFjx3BLhYuwhBgDs7yEH1xttYt57NG88+f0TEcVpfvrejTKwXT6T9Jv
-         zd+bPE4ayZFtQJ7MoOoMci+vPQs/fDnVQH9S+u2G0VNACi+uUEOdXhga+LZF8Wm7rBhP
-         LM2/qFbrQ3anWMpqrW3f4TjSyECdwmt4D7T4zqGuoa/9MNQ6hDJZap2lMFf2PZeZvSaR
-         O9Lg8fF1fV01q7Loptb/jRBtEk8XS+YDdjeeVgGOsWWEdHY1WnKTT1nBVYU2zczf9EKB
-         UjFya2ka4Pp1fMueAV1fJQq2xy3acTYSNR7dmiYoXPsbgEAClxUBfpMMtvbQ+UA7gr5/
-         B7IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GXWZRuxu4VR36pF/cjVXXRZb5YESqKLE2k0JDNWMpBU=;
-        b=bTtIicXMv1Vtr1CcAOd5GTDDjNqw+wPxc8CWEwggxBej+Li3B/yjsjHmFvj/6J6yYk
-         AfOsNxNbiTT9lwi6Yy7aCw4NksImEFPWbIR5YWR9T7odOo+IET0Sb6fVivaaUF1t1Y5h
-         zWA6Cxoo370jjqo/nDCGR4TPARsrUqjnhiLqUbN81oGYYfRZZ6qfL8E6C9I3Ii/mZBRm
-         cFR2nvC7+VilzxhoOfhvDAb3RHmsrtUpy1Jf3pW8afeOfcA1a6gqUhpJpXXA3Wzvb/4G
-         DOaXyslbeDG484Z4jPPpuOf128aHKGwtX3p/t60b+jNRC5pSJUyt3Huj6wJJQunnPi1I
-         4nQw==
-X-Gm-Message-State: AOAM533IGmlrWSyDVcIYycs5uW1rKNPc02VjWudgyOAhDXrIEYCeP868
-        LU44s0oTnxjQl0RoNaS6sFo3dvIpqZfTnL3v6NA=
-X-Google-Smtp-Source: ABdhPJwOTAUNTtIHl2nJJxRVPqBOxgwW3ox58eG5wvfAmz1vNeMZX5wHcOnEQ6xyE0OJ2VNHkuFomQ==
-X-Received: by 2002:a17:902:690b:b029:d6:41d8:bdc7 with SMTP id j11-20020a170902690bb02900d641d8bdc7mr3918041plk.7.1603977816207;
-        Thu, 29 Oct 2020 06:23:36 -0700 (PDT)
-Received: from localhost.localdomain ([49.207.222.191])
-        by smtp.gmail.com with ESMTPSA id i1sm2795872pfa.168.2020.10.29.06.23.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2020 06:23:35 -0700 (PDT)
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Subject: [PATCH v2] net: usb: usbnet: update __usbnet_{read|write}_cmd() to use new API
-Date:   Thu, 29 Oct 2020 18:52:56 +0530
-Message-Id: <20201029132256.11793-1-anant.thazhemadam@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201010065623.10189-1-anant.thazhemadam@gmail.com>
-References: <20201010065623.10189-1-anant.thazhemadam@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1725778AbgJ2OBd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 29 Oct 2020 10:01:33 -0400
+Received: from mail.msweet.org ([173.255.209.91]:55930 "EHLO mail.msweet.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726384AbgJ2OAd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Oct 2020 10:00:33 -0400
+X-Greylist: delayed 387 seconds by postgrey-1.27 at vger.kernel.org; Thu, 29 Oct 2020 10:00:33 EDT
+Received: from [10.0.1.64] (host-148-170-144-200.public.eastlink.ca [148.170.144.200])
+        by mail.msweet.org (Postfix) with ESMTPSA id 504E3808B1;
+        Thu, 29 Oct 2020 13:54:06 +0000 (UTC)
+From:   Michael Sweet <msweet@msweet.org>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: 8BIT
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
+Date:   Thu, 29 Oct 2020 09:54:05 -0400
+Subject: [PATCH] USB printer gadget (usb_f_printer) to use default q_len value
+Message-Id: <5A8792F8-6CB3-4161-9EBE-5DD204A4B794@msweet.org>
+To:     linux-usb@vger.kernel.org
+X-Mailer: Apple Mail (2.3608.120.23.2.4)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently, __usbnet_{read|write}_cmd() use usb_control_msg(),
-and thus consider potential partial reads/writes being done to 
-be perfectly valid.
-Quite a few callers of usbnet_{read|write}_cmd() don't enforce
-checking for partial reads/writes into account either, automatically
-assuming that a complete read/write occurs.
+Hi,
 
-However, the new usb_control_msg_{send|recv}() APIs don't allow partial
-reads and writes.
-Using the new APIs also relaxes the return value checking that must
-be done after usbnet_{read|write}_cmd() is called.
+I've been doing some work on Linux-based printer firmware lately (https://www.msweet.org/pappl) and part of that includes support for USB printer gadgets - right now the legacy printer class 1/2 stuff, but soon class 4 IPP-USB.  Since I also want to support functions other than printing (serial for debugging, mass storage for access to SD cards, etc.) I've been working to configure the printer gadget using configfs. After spending a few days puzzling over why the legacy g_printer gadget worked but usb_f_printer didn't I discovered that the default q_len value for the new driver is *0*, which prevents any IO from occurring!  Moreover, once you've configured things and assigned the UDC it is basically impossible to change q_len, so if your Linux distro of choice does any "helpful" initialization for you then you are out of luck...
 
-Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
----
-Changes in v2:
-	* Fix build error
+The following patch uses a default q_len value of 10 (which is what the legacy g_printer driver uses) to minimize the possibility that you end up with a non-working printer gadget.
 
-This patch has been compile and build tested with a .config file that
-was generated using make allyesconfig, and the build error has been 
-fixed.
-Unfortunately, I wasn't able to get my hands on a usbnet adapter for testing,
-and would appreciate it if someone could do that.
 
- drivers/net/usb/usbnet.c | 52 ++++++++--------------------------------
- 1 file changed, 10 insertions(+), 42 deletions(-)
+diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+index 9c7ed2539ff7..4f3161005e4f 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -50,6 +50,8 @@
+ #define GET_PORT_STATUS		1
+ #define SOFT_RESET		2
+ 
++#define DEFAULT_Q_LEN		10 /* same as legacy g_printer gadget */
++
+ static int major, minors;
+ static struct class *usb_gadget_class;
+ static DEFINE_IDA(printer_ida);
+@@ -1317,6 +1319,9 @@ static struct usb_function_instance *gprinter_alloc_inst(void)
+ 	opts->func_inst.free_func_inst = gprinter_free_inst;
+ 	ret = &opts->func_inst;
+ 
++	/* Make sure q_len is initialized, otherwise the bound device can't support read/write! */
++	opts->q_len = DEFAULT_Q_LEN;
++
+ 	mutex_lock(&printer_ida_lock);
+ 
+ 	if (ida_is_empty(&printer_ida)) {
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index bf6c58240bd4..2f7c7b7f4047 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1982,64 +1982,32 @@ EXPORT_SYMBOL(usbnet_link_change);
- static int __usbnet_read_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
- 			     u16 value, u16 index, void *data, u16 size)
- {
--	void *buf = NULL;
--	int err = -ENOMEM;
- 
- 	netdev_dbg(dev->net, "usbnet_read_cmd cmd=0x%02x reqtype=%02x"
- 		   " value=0x%04x index=0x%04x size=%d\n",
- 		   cmd, reqtype, value, index, size);
- 
--	if (size) {
--		buf = kmalloc(size, GFP_KERNEL);
--		if (!buf)
--			goto out;
--	}
--
--	err = usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
--			      cmd, reqtype, value, index, buf, size,
--			      USB_CTRL_GET_TIMEOUT);
--	if (err > 0 && err <= size) {
--        if (data)
--            memcpy(data, buf, err);
--        else
--            netdev_dbg(dev->net,
--                "Huh? Data requested but thrown away.\n");
--    }
--	kfree(buf);
--out:
--	return err;
-+	return usb_control_msg_recv(dev->udev, 0,
-+			      cmd, reqtype, value, index, data, size,
-+			      USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
- }
- 
- static int __usbnet_write_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
- 			      u16 value, u16 index, const void *data,
- 			      u16 size)
- {
--	void *buf = NULL;
--	int err = -ENOMEM;
--
- 	netdev_dbg(dev->net, "usbnet_write_cmd cmd=0x%02x reqtype=%02x"
- 		   " value=0x%04x index=0x%04x size=%d\n",
- 		   cmd, reqtype, value, index, size);
- 
--	if (data) {
--		buf = kmemdup(data, size, GFP_KERNEL);
--		if (!buf)
--			goto out;
--	} else {
--        if (size) {
--            WARN_ON_ONCE(1);
--            err = -EINVAL;
--            goto out;
--        }
--    }
--
--	err = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
--			      cmd, reqtype, value, index, buf, size,
--			      USB_CTRL_SET_TIMEOUT);
--	kfree(buf);
-+	if (size && !data) {
-+		WARN_ON_ONCE(1);
-+		return -EINVAL;
-+	}
- 
--out:
--	return err;
-+	return usb_control_msg_send(dev->udev, 0,
-+			cmd, reqtype, value, index, data, size,
-+			USB_CTRL_SET_TIMEOUT, GFP_KERNEL);
- }
- 
- /*
--- 
-2.25.1
+
+________________________
+Michael Sweet
+
+
 
