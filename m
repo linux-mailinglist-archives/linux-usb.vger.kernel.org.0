@@ -2,159 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6ED29EC74
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 14:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6C429ECCB
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 14:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725964AbgJ2NGi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Oct 2020 09:06:38 -0400
-Received: from mga04.intel.com ([192.55.52.120]:44850 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725798AbgJ2NGi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Oct 2020 09:06:38 -0400
-IronPort-SDR: GZBPg7XHoF2ZxwcC5RmsniUVYZ2HtZ45Vv/dAL3eFgK988VqG7IVHXcGRfCNi8qzStisepNE2T
- /HsmTC2w+FaA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9788"; a="165842568"
-X-IronPort-AV: E=Sophos;i="5.77,430,1596524400"; 
-   d="scan'208";a="165842568"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2020 06:06:38 -0700
-IronPort-SDR: bPeCk+16lu5x5zLw+OhOSYjZhOdaE5kCA2LzaOoxHU4d7V4iG2mNnWY6kj1GkE2U4jGD+WuS2S
- ikK+3/mrh9dQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,430,1596524400"; 
-   d="scan'208";a="351438187"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Oct 2020 06:06:36 -0700
-Subject: Re: [PATCH 3/3] xhci: Don't create stream debugfs files with spinlock
- held.
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Mike Galbraith <efault@gmx.de>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Li Jun <jun.li@nxp.com>
-References: <20201028203124.375344-1-mathias.nyman@linux.intel.com>
- <20201028203124.375344-4-mathias.nyman@linux.intel.com>
- <1cbb8b7defb1db1d4747995c11ebebb3dd9a66ec.camel@gmx.de>
- <30dd5079-375d-a2a3-cab3-1b2740661ea8@linux.intel.com>
- <c8a67a65091404e528297ef5c6b9c59cdc03a2c9.camel@gmx.de>
- <a5d5a21c-d6ff-1097-b9ca-e0147658c8c6@linux.intel.com>
- <20201029113805.tdsissnjq4acemle@linutronix.de>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
- lH4ogPZzQ+pzoJEMlRGXc881BIggKMCMH86fYJGfZKWdfpg9O6mqSxyEuvBHKe9eZCBKPvoC
- L2iwygtO8TcXXSCynvXSeZrOwqAlwnxWNRm4J2ikDck5S5R+Qie0ZLJIfaId1hELofWfuhy+
- tOK0plFR0HgVVp8O7zWYT2ewNcgAzQrRbzidA3LNRfkL7jrzyAxDapuejuK8TMrFQT/wW53e
- uegnXcRJaibJD84RUJt+mJrn5BvZ0MYfyDSc1yHVO+aZcpNr+71yZBQVgVEI/AuEQ0+p9wpt
- O9Wt4zO2KT/R5lq2lSz1MYMJrtfFRKkqC6PsDSB4lGSgl91XbibK5poxrIouVO2g9Jabg04T
- MIPpVUlPme3mkYHLZUsboemRQp5/pxV4HTFR0xNBCmsidBICHOYAepCzNmfLhfo1EW2Uf+t4
- L8IowAaoURKdgcR2ydUXjhACVEA/Ldtp3ftF4hTQ46Qhba/p4MUFtDAQ5yeA5vQVuspiwsqB
- BoL/298+V119JzM998d70Z1clqTc8fiGMXyVnFv92QKShDKyXpiisQn2rrJVWeXEIVoldh6+
- J8M3vTwzetnvIKpoQdSFJ2qxOdQ8iYRtz36WYl7hhT3/hwkHuQARAQABtCdNYXRoaWFzIE55
- bWFuIDxtYXRoaWFzLm55bWFuQGdtYWlsLmNvbT6JAjsEEwECACUCGwMGCwkIBwMCBhUIAgkK
- CwQWAgMBAh4BAheABQJTAeo1AhkBAAoJEFiDn/uYk8VJOdIP/jhA+RpIZ7rdUHFIYkHEKzHw
- tkwrJczGA5TyLgQaI8YTCTPSvdNHU9Rj19mkjhUO/9MKvwfoT2RFYqhkrtk0K92STDaBNXTL
- JIi4IHBqjXOyJ/dPADU0xiRVtCHWkBgjEgR7Wihr7McSdVpgupsaXhbZjXXgtR/N7PE0Wltz
- hAL2GAnMuIeJyXhIdIMLb+uyoydPCzKdH6znfu6Ox76XfGWBCqLBbvqPXvk4oH03jcdt+8UG
- 2nfSeti/To9ANRZIlSKGjddCGMa3xzjtTx9ryf1Xr0MnY5PeyNLexpgHp93sc1BKxKKtYaT0
- lR6p0QEKeaZ70623oB7Sa2Ts4IytqUVxkQKRkJVWeQiPJ/dZYTK5uo15GaVwufuF8VTwnMkC
- 4l5X+NUYNAH1U1bpRtlT40aoLEUhWKAyVdowxW4yGCP3nL5E69tZQQgsag+OnxBa6f88j63u
- wxmOJGNXcwCerkCb+wUPwJzChSifFYmuV5l89LKHgSbv0WHSN9OLkuhJO+I9fsCNvro1Y7dT
- U/yq4aSVzjaqPT3yrnQkzVDxrYT54FLWO1ssFKAOlcfeWzqrT9QNcHIzHMQYf5c03Kyq3yMI
- Xi91hkw2uc/GuA2CZ8dUD3BZhUT1dm0igE9NViE1M7F5lHQONEr7MOCg1hcrkngY62V6vh0f
- RcDeV0ISwlZWuQINBFMB0ccBEACXKmWvojkaG+kh/yipMmqZTrCozsLeGitxJzo5hq9ev31N
- 2XpPGx4AGhpccbco63SygpVN2bOd0W62fJJoxGohtf/g0uVtRSuK43OTstoBPqyY/35+VnAV
- oA5cnfvtdx5kQPIL6LRcxmYKgN4/3+A7ejIxbOrjWFmbWCC+SgX6mzHHBrV0OMki8R+NnrNa
- NkUmMmosi7jBSKdoi9VqDqgQTJF/GftvmaZHqgmVJDWNrCv7UiorhesfIWPt1O/AIk9luxlE
- dHwkx5zkWa9CGYvV6LfP9BznendEoO3qYZ9IcUlW727Le80Q1oh69QnHoI8pODDBBTJvEq1h
- bOWcPm/DsNmDD8Rwr/msRmRyIoxjasFi5WkM/K/pzujICKeUcNGNsDsEDJC5TCmRO/TlvCvm
- 0X+vdfEJRZV6Z+QFBflK1asUz9QHFre5csG8MyVZkwTR9yUiKi3KiqQdaEu+LuDD2CGF5t68
- xEl66Y6mwfyiISkkm3ETA4E8rVZP1rZQBBm83c5kJEDvs0A4zrhKIPTcI1smK+TWbyVyrZ/a
- mGYDrZzpF2N8DfuNSqOQkLHIOL3vuOyx3HPzS05lY3p+IIVmnPOEdZhMsNDIGmVorFyRWa4K
- uYjBP/W3E5p9e6TvDSDzqhLoY1RHfAIadM3I8kEx5wqco67VIgbIHHB9DbRcxQARAQABiQIf
- BBgBAgAJBQJTAdHHAhsMAAoJEFiDn/uYk8VJb7AQAK56tgX8V1Wa6RmZDmZ8dmBC7W8nsMRz
- PcKWiDSMIvTJT5bygMy1lf7gbHXm7fqezRtSfXAXr/OJqSA8LB2LWfThLyuuCvrdNsQNrI+3
- D+hjHJjhW/4185y3EdmwwHcelixPg0X9EF+lHCltV/w29Pv3PiGDkoKxJrnOpnU6jrwiBebz
- eAYBfpSEvrCm4CR4hf+T6MdCs64UzZnNt0nxL8mLCCAGmq1iks9M4bZk+LG36QjCKGh8PDXz
- 9OsnJmCggptClgjTa7pO6040OW76pcVrP2rZrkjo/Ld/gvSc7yMO/m9sIYxLIsR2NDxMNpmE
- q/H7WO+2bRG0vMmsndxpEYS4WnuhKutoTA/goBEhtHu1fg5KC+WYXp9wZyTfeNPrL0L8F3N1
- BCEYefp2JSZ/a355X6r2ROGSRgIIeYjAiSMgGAZMPEVsdvKsYw6BH17hDRzltNyIj5S0dIhb
- Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
- 42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
- IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <29cf8ca3-0fe7-da51-c8ae-ad5c67af4dde@linux.intel.com>
-Date:   Thu, 29 Oct 2020 15:08:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726790AbgJ2NXh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Oct 2020 09:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbgJ2NXh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Oct 2020 09:23:37 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA67C0613D2;
+        Thu, 29 Oct 2020 06:23:36 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id t22so1276081plr.9;
+        Thu, 29 Oct 2020 06:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GXWZRuxu4VR36pF/cjVXXRZb5YESqKLE2k0JDNWMpBU=;
+        b=Ba+fdg0/mxmgFjx3BLhYuwhBgDs7yEH1xttYt57NG88+f0TEcVpfvrejTKwXT6T9Jv
+         zd+bPE4ayZFtQJ7MoOoMci+vPQs/fDnVQH9S+u2G0VNACi+uUEOdXhga+LZF8Wm7rBhP
+         LM2/qFbrQ3anWMpqrW3f4TjSyECdwmt4D7T4zqGuoa/9MNQ6hDJZap2lMFf2PZeZvSaR
+         O9Lg8fF1fV01q7Loptb/jRBtEk8XS+YDdjeeVgGOsWWEdHY1WnKTT1nBVYU2zczf9EKB
+         UjFya2ka4Pp1fMueAV1fJQq2xy3acTYSNR7dmiYoXPsbgEAClxUBfpMMtvbQ+UA7gr5/
+         B7IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GXWZRuxu4VR36pF/cjVXXRZb5YESqKLE2k0JDNWMpBU=;
+        b=bTtIicXMv1Vtr1CcAOd5GTDDjNqw+wPxc8CWEwggxBej+Li3B/yjsjHmFvj/6J6yYk
+         AfOsNxNbiTT9lwi6Yy7aCw4NksImEFPWbIR5YWR9T7odOo+IET0Sb6fVivaaUF1t1Y5h
+         zWA6Cxoo370jjqo/nDCGR4TPARsrUqjnhiLqUbN81oGYYfRZZ6qfL8E6C9I3Ii/mZBRm
+         cFR2nvC7+VilzxhoOfhvDAb3RHmsrtUpy1Jf3pW8afeOfcA1a6gqUhpJpXXA3Wzvb/4G
+         DOaXyslbeDG484Z4jPPpuOf128aHKGwtX3p/t60b+jNRC5pSJUyt3Huj6wJJQunnPi1I
+         4nQw==
+X-Gm-Message-State: AOAM533IGmlrWSyDVcIYycs5uW1rKNPc02VjWudgyOAhDXrIEYCeP868
+        LU44s0oTnxjQl0RoNaS6sFo3dvIpqZfTnL3v6NA=
+X-Google-Smtp-Source: ABdhPJwOTAUNTtIHl2nJJxRVPqBOxgwW3ox58eG5wvfAmz1vNeMZX5wHcOnEQ6xyE0OJ2VNHkuFomQ==
+X-Received: by 2002:a17:902:690b:b029:d6:41d8:bdc7 with SMTP id j11-20020a170902690bb02900d641d8bdc7mr3918041plk.7.1603977816207;
+        Thu, 29 Oct 2020 06:23:36 -0700 (PDT)
+Received: from localhost.localdomain ([49.207.222.191])
+        by smtp.gmail.com with ESMTPSA id i1sm2795872pfa.168.2020.10.29.06.23.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2020 06:23:35 -0700 (PDT)
+From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
+To:     Oliver Neukum <oneukum@suse.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Subject: [PATCH v2] net: usb: usbnet: update __usbnet_{read|write}_cmd() to use new API
+Date:   Thu, 29 Oct 2020 18:52:56 +0530
+Message-Id: <20201029132256.11793-1-anant.thazhemadam@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201010065623.10189-1-anant.thazhemadam@gmail.com>
+References: <20201010065623.10189-1-anant.thazhemadam@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201029113805.tdsissnjq4acemle@linutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29.10.2020 13.38, Sebastian Andrzej Siewior wrote:
-> On 2020-10-29 13:22:20 [+0200], Mathias Nyman wrote:
->> On 29.10.2020 13.11, Mike Galbraith wrote:
->>> On Thu, 2020-10-29 at 11:41 +0200, Mathias Nyman wrote:
->>>> Can you check if this can be reproduced with 5.9 kernel?
->>>
->>> Nope, 5.9.2 didn't reproduce.
->>>
->>
->> Very odd.
->> It might be hard to reproduce as it requires xhci ring expansion to trigger it,
->> meaning at some point there is so much data queued to a device the current ring buffer
->> can't fit it.
->>
->> Other possibility is that there were some radix tree changes in 5.10-rc1, haven't looked into those.
-> 
-> This came with commit
->    673d74683627b ("usb: xhci: add debugfs support for ep with stream")
-> 
-> which is appeared in v5.10-rc1. This hunk below works around it:
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 482fe8c5e3b47..699777fb523b6 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -3533,11 +3533,13 @@ static int xhci_alloc_streams(struct usb_hcd *hcd, struct usb_device *udev,
->  		xhci_dbg(xhci, "Slot %u ep ctx %u now has streams.\n",
->  			 udev->slot_id, ep_index);
->  		vdev->eps[ep_index].ep_state |= EP_HAS_STREAMS;
-> -		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
->  	}
->  	xhci_free_command(xhci, config_cmd);
->  	spin_unlock_irqrestore(&xhci->lock, flags);
->  
-> +	for (i = 0; i < num_eps; i++)
-> +		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
-> +
->  	/* Subtract 1 for stream 0, which drivers can't use */
->  	return num_streams - 1;
->  
+Currently, __usbnet_{read|write}_cmd() use usb_control_msg(),
+and thus consider potential partial reads/writes being done to 
+be perfectly valid.
+Quite a few callers of usbnet_{read|write}_cmd() don't enforce
+checking for partial reads/writes into account either, automatically
+assuming that a complete read/write occurs.
 
-Sebastian, I think you might be missing the first mail in this thread. 
+However, the new usb_control_msg_{send|recv}() APIs don't allow partial
+reads and writes.
+Using the new APIs also relaxes the return value checking that must
+be done after usbnet_{read|write}_cmd() is called.
 
-https://lore.kernel.org/linux-usb/20201028203124.375344-4-mathias.nyman@linux.intel.com/
+Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+---
+Changes in v2:
+	* Fix build error
 
-Let me do a quick recap to avoid confusion here. So far we have 2 issues.
+This patch has been compile and build tested with a .config file that
+was generated using make allyesconfig, and the build error has been 
+fixed.
+Unfortunately, I wasn't able to get my hands on a usbnet adapter for testing,
+and would appreciate it if someone could do that.
 
-1. Lockdep issue #1, stream debugfs entry created with local interrupts disabled and xhci->lock held
-   Cause: 673d74683627b ("usb: xhci: add debugfs support for ep with stream") in v5.10-rc1
-   Fix:  [PATCH 3/3] xhci: Don't create stream debugfs files with spinlock held. (i.e. the mail we are replying to)
-   Comment: easily reproduced, enable lockdep and uas, mount debugfs and connect a UAS device.
-            discovered by both Hans and Mike
-.
-2. Lockdep issue #2, adding entries to radix tree during (stream) ring expansion with interrupts disabled and xhci->lock held.
-   Cause: unknown, probably a patch since we started using radix trees for finding streams
-   Fix: unknown.
-   Comment: Discovered by Mike when testing fix for issue#1. I suspect it can be reproduced on 5.9 but is 
-   probably really hard as it involves ring expansion.
+ drivers/net/usb/usbnet.c | 52 ++++++++--------------------------------
+ 1 file changed, 10 insertions(+), 42 deletions(-)
 
--Mathias
-
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index bf6c58240bd4..2f7c7b7f4047 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1982,64 +1982,32 @@ EXPORT_SYMBOL(usbnet_link_change);
+ static int __usbnet_read_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
+ 			     u16 value, u16 index, void *data, u16 size)
+ {
+-	void *buf = NULL;
+-	int err = -ENOMEM;
+ 
+ 	netdev_dbg(dev->net, "usbnet_read_cmd cmd=0x%02x reqtype=%02x"
+ 		   " value=0x%04x index=0x%04x size=%d\n",
+ 		   cmd, reqtype, value, index, size);
+ 
+-	if (size) {
+-		buf = kmalloc(size, GFP_KERNEL);
+-		if (!buf)
+-			goto out;
+-	}
+-
+-	err = usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
+-			      cmd, reqtype, value, index, buf, size,
+-			      USB_CTRL_GET_TIMEOUT);
+-	if (err > 0 && err <= size) {
+-        if (data)
+-            memcpy(data, buf, err);
+-        else
+-            netdev_dbg(dev->net,
+-                "Huh? Data requested but thrown away.\n");
+-    }
+-	kfree(buf);
+-out:
+-	return err;
++	return usb_control_msg_recv(dev->udev, 0,
++			      cmd, reqtype, value, index, data, size,
++			      USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
+ }
+ 
+ static int __usbnet_write_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
+ 			      u16 value, u16 index, const void *data,
+ 			      u16 size)
+ {
+-	void *buf = NULL;
+-	int err = -ENOMEM;
+-
+ 	netdev_dbg(dev->net, "usbnet_write_cmd cmd=0x%02x reqtype=%02x"
+ 		   " value=0x%04x index=0x%04x size=%d\n",
+ 		   cmd, reqtype, value, index, size);
+ 
+-	if (data) {
+-		buf = kmemdup(data, size, GFP_KERNEL);
+-		if (!buf)
+-			goto out;
+-	} else {
+-        if (size) {
+-            WARN_ON_ONCE(1);
+-            err = -EINVAL;
+-            goto out;
+-        }
+-    }
+-
+-	err = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
+-			      cmd, reqtype, value, index, buf, size,
+-			      USB_CTRL_SET_TIMEOUT);
+-	kfree(buf);
++	if (size && !data) {
++		WARN_ON_ONCE(1);
++		return -EINVAL;
++	}
+ 
+-out:
+-	return err;
++	return usb_control_msg_send(dev->udev, 0,
++			cmd, reqtype, value, index, data, size,
++			USB_CTRL_SET_TIMEOUT, GFP_KERNEL);
+ }
+ 
+ /*
+-- 
+2.25.1
 
