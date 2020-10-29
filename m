@@ -2,197 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C29529EF8D
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 16:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0990229F028
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 16:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728108AbgJ2PRF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Oct 2020 11:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727917AbgJ2PRF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Oct 2020 11:17:05 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1F9C0613CF;
-        Thu, 29 Oct 2020 08:17:05 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id n16so2574434pgv.13;
-        Thu, 29 Oct 2020 08:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=820MwFgEaA13M8USX5NcXNh7ShnWbqQ8vCMeLhpqcYs=;
-        b=S5RbO63BxB+kSye4StTkySYsW8Zr4FA0vnzixmEkiwTQwE1vI/VjWC2hHXLdQO05Gw
-         a2OenMl3LvspcJH/IRGLgGitvwqaukn7G8DrfU3oHDyTezcCEYj6xklXXFYhOo1NNYKI
-         QVPMrB3mSSSzLggNqwokNIJnKFLIwJlXJ1J1+NwtbTBbaxgqc3WCf4oBbVZlt9iVDuS+
-         wsvt+vLSQKbDFDNJ80WPqsEOFSPCjg/7nS9LmMBSiUnlSpDYC5guEqq8Nqg3DIlF0yRD
-         orGh7uZuojFX9L9p7wSa1qHFVzik6JXcOt89LntoOjmwSP7G1c713NE8tzeAa7uLzt6X
-         EYzg==
+        id S1728308AbgJ2Pf2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Oct 2020 11:35:28 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:45483 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728163AbgJ2Pdx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Oct 2020 11:33:53 -0400
+Received: by mail-oi1-f193.google.com with SMTP id j7so3557758oie.12;
+        Thu, 29 Oct 2020 08:33:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=820MwFgEaA13M8USX5NcXNh7ShnWbqQ8vCMeLhpqcYs=;
-        b=ew/LtF+3Yt8r5aM4n3UxTORozhhLi7Gz4g0zYpGb2E2ROErwHWMF21nYj9qChDhQHs
-         S6U6D5FDwWwhSt5tw/Ge/J1WXAlcbZXMNtm8Nhjplz7JVYO471CyjTegiXdnuG5KfpVs
-         WvmJUYxdo469T2bVH7DRtZa651dmGXh23OWJUpjsrXA9jZXi7dsEMJRyEXzhIykDsyEh
-         lEMPo+KIzvqA2RuITR/xFN0F4JMF3cQtMb5/Am7OlTiFyB01Vcg7L9J2IjVookD8X8hH
-         ayeUggBw5hEepFwAHOjhPOs6mJWf1Bd7WN9Dcg88+CBp1fIaU/p4hYrsj94ry3f+EPcE
-         pgqQ==
-X-Gm-Message-State: AOAM5330P1Pxglso12Z/xpsh2l0sBaJ8fYllQ673oCLSUgCaI+MZsACu
-        NBCwo0ZSu0Jyvl8A3UZCJ9Y=
-X-Google-Smtp-Source: ABdhPJyY7nixg8TY+WgurAXV+U5HGT8ffPpFyIyVTq773koSVeFgvAYxC4fluR9lXWYW2NDB40cO4g==
-X-Received: by 2002:a17:90a:be18:: with SMTP id a24mr231009pjs.215.1603984624439;
-        Thu, 29 Oct 2020 08:17:04 -0700 (PDT)
-Received: from [192.168.0.104] ([49.207.222.191])
-        by smtp.gmail.com with ESMTPSA id b3sm3143476pfd.66.2020.10.29.08.17.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2020 08:17:03 -0700 (PDT)
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Subject: Re: [PATCH v2] net: usb: usbnet: update __usbnet_{read|write}_cmd()
- to use new API
-To:     Oliver Neukum <oneukum@suse.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20201010065623.10189-1-anant.thazhemadam@gmail.com>
- <20201029132256.11793-1-anant.thazhemadam@gmail.com>
-Message-ID: <d8417f98-0896-25d0-e72d-dcf111011129@gmail.com>
-Date:   Thu, 29 Oct 2020 20:46:59 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6ocWwIL/dDwTLIUoq7+Qhh4BePPKhfoRf+gfkTAlnfE=;
+        b=Rn1baYeWzNfftye3sWZFii0V+jqMraflrmIN3gN7Ev+Lc1S0ExqF3BFK0dGkdmfjIm
+         Vl06hTPoqwPlvZfoOzvskskn6s0VZBe7oTuBwz14jfFbbSWDpzSQAzjUpMeZ00T4/0hf
+         Fgh5IVu3y8XKgIhYPsP1/0y2Q4c6vjqk+6E46FnhH51wAKPw/otsoYeHduo6ZKTDwDln
+         wFYNKXpHaSKdeFE5StB+dyoy5CKM/G/3Ar5vEyh74wMHqL7EfEGevVofrie4n+MSTYhs
+         Hxz5RjuQxSi1YLH6YHCeS3aGS5iiL0wYjLqpM+jz10xxVk9wNzuaRd2LMb1IS4PI5dze
+         Uqzg==
+X-Gm-Message-State: AOAM532t+IwFf471bE/F4QZfQUskpV3tBXnlvkyGNa9HdVOGdMEzAZgG
+        6rG6BKcjfJhJO9s4bKHhFQ==
+X-Google-Smtp-Source: ABdhPJxx6ksmqAcP54I2X1X7c9qFS8b+Y2kGlos0R+7+8Mquqh1BvZAp60KWBzgBzsYck73exERUTg==
+X-Received: by 2002:aca:4ed4:: with SMTP id c203mr293678oib.120.1603985632692;
+        Thu, 29 Oct 2020 08:33:52 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 9sm657867otp.72.2020.10.29.08.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2020 08:33:52 -0700 (PDT)
+Received: (nullmailer pid 1911924 invoked by uid 1000);
+        Thu, 29 Oct 2020 15:33:51 -0000
+Date:   Thu, 29 Oct 2020 10:33:51 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Prashant Malani <pmalani@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>, linux-usb@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH v12 01/10] dt-bindings: usb: Maxim type-c controller
+ device tree binding document
+Message-ID: <20201029153351.GA1911637@bogus>
+References: <20201029063138.1429760-1-badhri@google.com>
+ <20201029063138.1429760-2-badhri@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20201029132256.11793-1-anant.thazhemadam@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201029063138.1429760-2-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On 29/10/20 6:52 pm, Anant Thazhemadam wrote:
-> Currently, __usbnet_{read|write}_cmd() use usb_control_msg(),
-> and thus consider potential partial reads/writes being done to 
-> be perfectly valid.
-> Quite a few callers of usbnet_{read|write}_cmd() don't enforce
-> checking for partial reads/writes into account either, automatically
-> assuming that a complete read/write occurs.
->
-> However, the new usb_control_msg_{send|recv}() APIs don't allow partial
-> reads and writes.
-> Using the new APIs also relaxes the return value checking that must
-> be done after usbnet_{read|write}_cmd() is called.
->
-> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com> <mailto:anant.thazhemadam@gmail.com>
+On Wed, 28 Oct 2020 23:31:29 -0700, Badhri Jagan Sridharan wrote:
+> Add device tree binding document for Maxim 33359 Type-C chip driver
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
-> Changes in v2:
-> 	* Fix build error
->
-> This patch has been compile and build tested with a .config file that
-> was generated using make allyesconfig, and the build error has been 
-> fixed.
-> Unfortunately, I wasn't able to get my hands on a usbnet adapter for testing,
-> and would appreciate it if someone could do that.
->
->  drivers/net/usb/usbnet.c | 52 ++++++++--------------------------------
->  1 file changed, 10 insertions(+), 42 deletions(-)
->
-> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> index bf6c58240bd4..2f7c7b7f4047 100644
-> --- a/drivers/net/usb/usbnet.c
-> +++ b/drivers/net/usb/usbnet.c
-> @@ -1982,64 +1982,32 @@ EXPORT_SYMBOL(usbnet_link_change);
->  static int __usbnet_read_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
->  			     u16 value, u16 index, void *data, u16 size)
->  {
-> -	void *buf = NULL;
-> -	int err = -ENOMEM;
->  
->  	netdev_dbg(dev->net, "usbnet_read_cmd cmd=0x%02x reqtype=%02x"
->  		   " value=0x%04x index=0x%04x size=%d\n",
->  		   cmd, reqtype, value, index, size);
->  
-> -	if (size) {
-> -		buf = kmalloc(size, GFP_KERNEL);
-> -		if (!buf)
-> -			goto out;
-> -	}
-> -
-> -	err = usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
-> -			      cmd, reqtype, value, index, buf, size,
-> -			      USB_CTRL_GET_TIMEOUT);
-> -	if (err > 0 && err <= size) {
-> -        if (data)
-> -            memcpy(data, buf, err);
-> -        else
-> -            netdev_dbg(dev->net,
-> -                "Huh? Data requested but thrown away.\n");
-> -    }
-> -	kfree(buf);
-> -out:
-> -	return err;
-> +	return usb_control_msg_recv(dev->udev, 0,
-> +			      cmd, reqtype, value, index, data, size,
-> +			      USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
->  }
->  
->  static int __usbnet_write_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
->  			      u16 value, u16 index, const void *data,
->  			      u16 size)
->  {
-> -	void *buf = NULL;
-> -	int err = -ENOMEM;
-> -
->  	netdev_dbg(dev->net, "usbnet_write_cmd cmd=0x%02x reqtype=%02x"
->  		   " value=0x%04x index=0x%04x size=%d\n",
->  		   cmd, reqtype, value, index, size);
->  
-> -	if (data) {
-> -		buf = kmemdup(data, size, GFP_KERNEL);
-> -		if (!buf)
-> -			goto out;
-> -	} else {
-> -        if (size) {
-> -            WARN_ON_ONCE(1);
-> -            err = -EINVAL;
-> -            goto out;
-> -        }
-> -    }
-> -
-> -	err = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
-> -			      cmd, reqtype, value, index, buf, size,
-> -			      USB_CTRL_SET_TIMEOUT);
-> -	kfree(buf);
-> +	if (size && !data) {
-> +		WARN_ON_ONCE(1);
-> +		return -EINVAL;
-> +	}
->  
-> -out:
-> -	return err;
-> +	return usb_control_msg_send(dev->udev, 0,
-> +			cmd, reqtype, value, index, data, size,
-> +			USB_CTRL_SET_TIMEOUT, GFP_KERNEL);
->  }
->  
->  /*
+> Changes since v1:
+> - Changing patch version to v6 to fix version number confusion.
+> 
+> Changes since v6:
+> - Migrated to yaml format.
+> 
+> Changes since v7:
+> - Rebase on usb-next
+> 
+> Changes since v8:
+> - Fix errors from make dt_binding_check as suggested by
+>   Rob Herring.
+> 
+> Changes since v9:
+> - additionalProperties: false as suggested by Rob Herring.
+> 
+> Changes since v10:
+> - Added the chip number to the binding as suggested by Rob Herring.
+> - Renamed the filename as well.
+> 
+> Changes since v11:
+> Addressed comments from Rob Herring to rename from maxim,33359
+> to maxim,max33359
+> ---
+>  .../bindings/usb/maxim,max33359.yaml          | 75 +++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+> 
 
-I had a v2 prepared and ready but was told to wait for a week before sending it in,
-since usb_control_msg_{send|recv}() that were being used were not present in the
-networking tree at the time, and all the trees would be converged by then.
-So, just to be on the safer side, I waited for two weeks.
-I checked the net tree, and found the APIs there too (defined in usb.h).
 
-However the build seems to fail here,
-    https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/O2BERGN7SYYC6LNOOKNUGPS2IJLDWYT7/
+My bot found errors running 'make dt_binding_check' on your patch:
 
-I'm not entirely sure at this point why this is happening, and would appreciate it if
-someone could take the time to tell me if and how this might be an issue with my
-patch.
+yamllint warnings/errors:
 
-Thanks,
-Anant
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/usb/maxim,max33359.example.dts:39.53-54 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/usb/maxim,max33359.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1364: dt_binding_check] Error 2
+
+
+See https://patchwork.ozlabs.org/patch/1389879
+
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
