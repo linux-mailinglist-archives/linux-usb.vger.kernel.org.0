@@ -2,121 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8321929F382
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 18:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25C929F3B6
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 19:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727697AbgJ2Rn4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Oct 2020 13:43:56 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:35036 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726770AbgJ2Rnw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Oct 2020 13:43:52 -0400
-Date:   Thu, 29 Oct 2020 18:43:48 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1603993429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qz333/mnT6zwsHHHgIzhzmyCPc/onyc+Oj7SaMXj7Ro=;
-        b=oSb5+LnIzbYAatm7Akr/OEdggzx6r7VjzY1q44oSsnA/unzmh3kage9a5tfwZ1sf9tjINn
-        SlaA6wBRtftRdYKTj9XKQxD0EGDyaC1f/88Cil0pZ4DL3ELVQ6kqVXZYSo9ycRcI6gdfgN
-        Pn51nP8B0FFsXUlvefAYw4n2XIeeGyxtfBLW95kSh+g8rtJMqNEmW53X6F4jWGQCgcklYw
-        XTgw0c/pRqxcaAPOIvzIHoOTKbk26dtWH+nUwrAGKT2Xsws2B1r41L1LxuQk80+UIXqMPA
-        N1oRzhOuDdXA2Xoz1lpErr6E//jwxhFApteM8OsXt0n+DOK4HMCoPNcQR02ezQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1603993429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qz333/mnT6zwsHHHgIzhzmyCPc/onyc+Oj7SaMXj7Ro=;
-        b=eLaVTtpw94vZ2pJ1cJG68/e7QOyc8MIZV1eikiwyjq0raWwoLw91IC7ruLZWem4qE6L9wF
-        Oy3vIQXKCeriqhAw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Mike Galbraith <efault@gmx.de>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Li Jun <jun.li@nxp.com>, Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 3/3] xhci: Don't create stream debugfs files with
- spinlock held.
-Message-ID: <20201029174348.omqiwjqy64tebg5z@linutronix.de>
-References: <20201028203124.375344-1-mathias.nyman@linux.intel.com>
- <20201028203124.375344-4-mathias.nyman@linux.intel.com>
- <1cbb8b7defb1db1d4747995c11ebebb3dd9a66ec.camel@gmx.de>
- <30dd5079-375d-a2a3-cab3-1b2740661ea8@linux.intel.com>
- <c8a67a65091404e528297ef5c6b9c59cdc03a2c9.camel@gmx.de>
- <a5d5a21c-d6ff-1097-b9ca-e0147658c8c6@linux.intel.com>
- <20201029113805.tdsissnjq4acemle@linutronix.de>
- <29cf8ca3-0fe7-da51-c8ae-ad5c67af4dde@linux.intel.com>
+        id S1725870AbgJ2SBC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Oct 2020 14:01:02 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:18103 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725777AbgJ2SBB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Oct 2020 14:01:01 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1603994461; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=yNoI1+RImo7j9hp4Axx8gUdXF48cWLTExO/dW2nCzlw=; b=XeEwhRJ1fb8aCHnsvpn93S5xFOlw2/epiDt8VerqhIAbAHoZnIDi1VNrweBq1Mykg7dDgfaO
+ amsFIZj3NyJXp+Uzp6kKQetH3kk6aiyLZLSc6zJbqE9jHIMU82kRTdNOA+mKz+i5DSNrj+Vt
+ Q9BtHSnw4bDSg15QZmDRMK7HEjU=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 5f9b03340d38100718439f80 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 29 Oct 2020 18:00:20
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3EDCEC43385; Thu, 29 Oct 2020 18:00:20 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id ECA81C433CB;
+        Thu, 29 Oct 2020 18:00:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org ECA81C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Jack Pham <jackp@codeaurora.org>, Ferry Toth <fntoth@gmail.com>
+Subject: [PATCH v3] usb: gadget: audio: Free requests only after callback
+Date:   Thu, 29 Oct 2020 10:59:48 -0700
+Message-Id: <20201029175949.6052-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <29cf8ca3-0fe7-da51-c8ae-ad5c67af4dde@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020-10-29 15:08:06 [+0200], Mathias Nyman wrote:
-> 2. Lockdep issue #2, adding entries to radix tree during (stream) ring expansion with interrupts disabled and xhci->lock held.
->    Cause: unknown, probably a patch since we started using radix trees for finding streams
->    Fix: unknown.
->    Comment: Discovered by Mike when testing fix for issue#1. I suspect it can be reproduced on 5.9 but is 
->    probably really hard as it involves ring expansion.
+As per the kernel doc for usb_ep_dequeue(), it states that "this
+routine is asynchronous, that is, it may return before the completion
+routine runs". And indeed since v5.0 the dwc3 gadget driver updated
+its behavior to place dequeued requests on to a cancelled list to be
+given back later after the endpoint is stopped.
 
-So lockdep complains with this:
-      CPU0                    CPU1
-      ----                    ----
- lock(lock#2);
-                              local_irq_disable();
-                              lock(&xhci->lock);
-                              lock(lock#2);
- <Interrupt>
-   lock(&xhci->lock);
+The free_ep() was incorrectly assuming that a request was ready to
+be freed after calling dequeue which results in a use-after-free
+in dwc3 when it traverses its cancelled list. Fix this by moving
+the usb_ep_free_request() call to the callback itself in case the
+ep is disabled.
 
-(https://lore.kernel.org/linux-usb/1cbb8b7defb1db1d4747995c11ebebb3dd9a66ec.camel@gmx.de/)
+Fixes: eb9fecb9e69b0 ("usb: gadget: f_uac2: split out audio core")
+Reported-and-tested-by: Ferry Toth <fntoth@gmail.com>
+Reviewed-and-tested-by: Peter Chen <peter.chen@nxp.com>
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
+---
+v3: Fixed incorrect 'req' parameter and added Peter's tag
 
-lockdep does not like that preload is used with disabled interrupts (in
-non-interrupt context) and acquires lock#2 (the local_lock) which could
-lead to a dead-lock as described above.
-The flaw in the logic above is that lock#2 on CPU0 != CPU1.
+v2: call free_request() in case of ep_dequeue() failure
 
-We could make lockdep happy and remove what it observes on CPU1 by doing
-this:
+ drivers/usb/gadget/function/u_audio.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 138ba4528dd3a..2cb8874c1c51f 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -197,12 +197,15 @@ static int xhci_insert_segment_mapping(struct radix_tree_root *trb_address_map,
- 	if (radix_tree_lookup(trb_address_map, key))
- 		return 0;
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index e6d32c536781..6e69ccf02c95 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -89,7 +89,12 @@ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
+ 	struct snd_uac_chip *uac = prm->uac;
  
--	ret = radix_tree_maybe_preload(mem_flags);
--	if (ret)
--		return ret;
--	ret = radix_tree_insert(trb_address_map,
--			key, ring);
--	radix_tree_preload_end();
-+	if (gfpflags_allow_blocking(mem_flags)) {
-+		ret = radix_tree_maybe_preload(mem_flags);
-+		if (ret)
-+			return ret;
+ 	/* i/f shutting down */
+-	if (!prm->ep_enabled || req->status == -ESHUTDOWN)
++	if (!prm->ep_enabled) {
++		usb_ep_free_request(ep, req);
++		return;
 +	}
-+	ret = radix_tree_insert(trb_address_map, key, ring);
 +
-+	if (gfpflags_allow_blocking(mem_flags))
-+		radix_tree_preload_end();
- 	return ret;
- }
++	if (req->status == -ESHUTDOWN)
+ 		return;
  
+ 	/*
+@@ -336,8 +341,9 @@ static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
+ 
+ 	for (i = 0; i < params->req_number; i++) {
+ 		if (prm->ureq[i].req) {
+-			usb_ep_dequeue(ep, prm->ureq[i].req);
+-			usb_ep_free_request(ep, prm->ureq[i].req);
++			if (usb_ep_dequeue(ep, prm->ureq[i].req))
++				usb_ep_free_request(ep, prm->ureq[i].req);
++			/* else will be freed in u_audio_iso_complete() */
+ 			prm->ureq[i].req = NULL;
+ 		}
+ 	}
+-- 
+2.24.0
 
-There is no pre-load in GFP_ATOMIC case but it still acquires the
-local_lock.
-We might be able to drop radix_tree_maybe_preload(). I saw GFP_KERNEL
-only during enumeration from xhci_alloc_streams(). Later, while
-transfers were pending it came always from the scsi stack with disabled
-interrupts and xhci->lock acquired.
-
-> -Mathias
-
-Sebastian
