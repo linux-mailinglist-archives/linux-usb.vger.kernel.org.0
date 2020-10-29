@@ -2,98 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ED629E326
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 03:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3351B29E40F
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Oct 2020 08:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726085AbgJ1Vda (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Oct 2020 17:33:30 -0400
-Received: from mga03.intel.com ([134.134.136.65]:44643 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726025AbgJ1VdT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:33:19 -0400
-IronPort-SDR: q7iquxM/ondJh42HI3aA42p4TxoMCWn74xZ2OjpQibp0R+Bq29dDE80LDUeuhLTFCUCPoCfujb
- QszYg0aEFZ9Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9788"; a="168432581"
-X-IronPort-AV: E=Sophos;i="5.77,428,1596524400"; 
-   d="scan'208";a="168432581"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2020 13:30:08 -0700
-IronPort-SDR: rO3kI377EHDBcOhlUBqeSJDQbQTsStpR+rzc6r+365XZ5H/OKoIxf+36GFSl5FxlvQU+X5XdUJ
- vqhmivUJMx9Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,428,1596524400"; 
-   d="scan'208";a="323467833"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by orsmga006.jf.intel.com with ESMTP; 28 Oct 2020 13:30:07 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mike Galbraith <efault@gmx.de>, Li Jun <jun.li@nxp.com>
-Subject: [PATCH 3/3] xhci: Don't create stream debugfs files with spinlock held.
-Date:   Wed, 28 Oct 2020 22:31:24 +0200
-Message-Id: <20201028203124.375344-4-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201028203124.375344-1-mathias.nyman@linux.intel.com>
-References: <20201028203124.375344-1-mathias.nyman@linux.intel.com>
+        id S1728528AbgJ2HaX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 29 Oct 2020 03:30:23 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:33914 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727906AbgJ2HaB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Oct 2020 03:30:01 -0400
+Received: by mail-pf1-f195.google.com with SMTP id o129so1635557pfb.1
+        for <linux-usb@vger.kernel.org>; Thu, 29 Oct 2020 00:29:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kLnflbG9D/v2dA7LNdvu2mNwh0LIBnekNkTfNwOzZcQ=;
+        b=Dz2HQ0u+Fd5cmb4yeSi14Kb4wmHd9XZWVIe/6eQnj2CC4aWafK7QzkqMaXfpxs8eLd
+         tllyxnODlCS8ZyYqoZE07zEjdDXBXFAB4T+27UM2vGyca453cLlfLZhPpJtZG/738YhN
+         uD/tXLQu0man2kMiDO/lS88hrXUjNnVZZPTfLb0CtY9lBL0zCmHjLBPx/d7D8KdoHES0
+         EAbAaiqUupptfd80vFDt+QcmMSTBNiRXFfOdpZeKEDNbkc7MtX6LKp53b+TyO7akbRO4
+         +nCMc4J5CpP69YppfjYGHk7CZcTBwlfAgw/p0/1zgwu7BV1Vcd20pxEYz5p6Tfw/L4UK
+         t37w==
+X-Gm-Message-State: AOAM533kIbX0RBq16NSr9X77SQbLwjsd4FmNTkvhOPM49EziJCAPvqEj
+        Ex0+TA4UcWpRjOC3TlSXkL0J4icK4oFY2b7T
+X-Google-Smtp-Source: ABdhPJx6mdHF2c14PgHLZI52KEcl/4qqS8Xc5+PJTvyyFavBgZfxvmqfStxc7wK0BWa/sgGIzw/qDg==
+X-Received: by 2002:a05:6e02:bcb:: with SMTP id c11mr1921855ilu.285.1603949728780;
+        Wed, 28 Oct 2020 22:35:28 -0700 (PDT)
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
+        by smtp.gmail.com with ESMTPSA id q196sm1290520iod.17.2020.10.28.22.35.28
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Oct 2020 22:35:28 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id s7so2071689iol.12
+        for <linux-usb@vger.kernel.org>; Wed, 28 Oct 2020 22:35:28 -0700 (PDT)
+X-Received: by 2002:a05:6602:214c:: with SMTP id y12mr2265234ioy.24.1603949727974;
+ Wed, 28 Oct 2020 22:35:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <4cc0e162-c607-3fdf-30c9-1b3a77f6cf20@runbox.com>
+ <20201022135521.375211-1-m.v.b@runbox.com> <20201022135521.375211-2-m.v.b@runbox.com>
+ <4f367aba2f43b5e3807e0b01a5375e4a024ce765.camel@hadess.net>
+ <CAE3RAxuUiejhQtByfgeORrjy6v=QAP4gPrv+L-Ez4roNNsQY=g@mail.gmail.com> <299d5037-f8d7-b71a-f7e7-3a52c06221d2@runbox.com>
+In-Reply-To: <299d5037-f8d7-b71a-f7e7-3a52c06221d2@runbox.com>
+From:   Pany <pany@fedoraproject.org>
+Date:   Thu, 29 Oct 2020 05:35:16 +0000
+X-Gmail-Original-Message-ID: <CAE3RAxsaUa=dEaSj7dVH1jtzGQpf1-4uMvDRxZnTpEBW+WpsoQ@mail.gmail.com>
+Message-ID: <CAE3RAxsaUa=dEaSj7dVH1jtzGQpf1-4uMvDRxZnTpEBW+WpsoQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usbcore: Check both id_table and match() when both available
+To:     "M. Vefa Bicakci" <m.v.b@runbox.com>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Creating debugfs files while loding the spin_lock_irqsave(xhci->lock)
-creates a lock dependecy that could possibly deadlock.
+On Thu, Oct 29, 2020 at 3:34 AM M. Vefa Bicakci <m.v.b@runbox.com> wrote:
+>
+> On 28/10/2020 00.00, Pany wrote:
+> > On Tue, Oct 27, 2020 at 6:25 PM Bastien Nocera <hadess@hadess.net> wrote:
+> >>
+> >> On Thu, 2020-10-22 at 09:55 -0400, M. Vefa Bicakci wrote:
+> >>> From: Bastien Nocera <hadess@hadess.net>
+> >>>
+> >>> From: Bastien Nocera <hadess@hadess.net>
+> >>>
+> >>> When a USB device driver has both an id_table and a match() function,
+> >>> make
+> >>> sure to check both to find a match, first matching the id_table, then
+> >>> checking the match() function.
+> >>>
+> >>> This makes it possible to have module autoloading done through the
+> >>> id_table when devices are plugged in, before checking for further
+> >>> device eligibility in the match() function.
+> >>>
+> >>> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> >>> Cc: <stable@vger.kernel.org> # 5.8
+> >>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >>> Cc: Alan Stern <stern@rowland.harvard.edu>
+> >>> Co-developed-by: M. Vefa Bicakci <m.v.b@runbox.com>
+> >>> Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
+> >>
+> >> You can also add my:
+> >> Tested-by: Bastien Nocera <hadess@hadess.net>
+> >>
+> >
+> > This patch works well for me.
+> > Tested-by: Pan (Pany) YUAN <pany@fedoraproject.org>
+>
+> I realize that I am a bit late to do this, but I would like to thank
+> Bastien and Pany for their efforts in testing (Bastien and Pany) and
+> co-developing (Bastien) the patches.
+>
+> Thanks as well to Greg Kroah-Hartman for committing the patches to
+> the usb-linus branch of the usb git tree and for fixing up the patch
+> descriptions while doing so.
+>
+> Thanks everyone!
+>
+> Vefa
 
-Lockdep warns:
+Thanks to Vefa, Bastien, and everyone for all your efforts! The patch
+is perfect.
 
-=====================================================
-WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
-5.10.0-rc1pdx86+ #8 Not tainted
------------------------------------------------------
-systemd-udevd/386 [HC0[0]:SC0[0]:HE0:SE1] is trying to acquire:
-ffffffffb1a94038 (pin_fs_lock){+.+.}-{2:2}, at: simple_pin_fs+0x22/0xa0
+I’m so honored to be part of this. Thanks again.
 
-and this task is already holding:
-ffff9e7b87fbc430 (&xhci->lock){-.-.}-{2:2}, at: xhci_alloc_streams+0x5f9/0x810
-which would create a new lock dependency:
-(&xhci->lock){-.-.}-{2:2} -> (pin_fs_lock){+.+.}-{2:2}
-
-Create the files a bit later after lock is released.
-
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Reported-by: Mike Galbraith <efault@gmx.de>
-Tested-by: Hans de Goede <hdegoede@redhat.com>
-CC: Li Jun <jun.li@nxp.com>
-Fixes: 673d74683627 ("usb: xhci: add debugfs support for ep with stream")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 482fe8c5e3b4..d4a8d0efbbc4 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3533,11 +3533,14 @@ static int xhci_alloc_streams(struct usb_hcd *hcd, struct usb_device *udev,
- 		xhci_dbg(xhci, "Slot %u ep ctx %u now has streams.\n",
- 			 udev->slot_id, ep_index);
- 		vdev->eps[ep_index].ep_state |= EP_HAS_STREAMS;
--		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
- 	}
- 	xhci_free_command(xhci, config_cmd);
- 	spin_unlock_irqrestore(&xhci->lock, flags);
- 
-+	for (i = 0; i < num_eps; i++) {
-+		ep_index = xhci_get_endpoint_index(&eps[i]->desc);
-+		xhci_debugfs_create_stream_files(xhci, vdev, ep_index);
-+	}
- 	/* Subtract 1 for stream 0, which drivers can't use */
- 	return num_streams - 1;
- 
 -- 
-2.25.1
-
+Regards,
+Pany
+pany@fedoraproject.org
