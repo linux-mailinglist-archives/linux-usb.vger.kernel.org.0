@@ -2,82 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4522A08F2
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 16:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F272A0960
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 16:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbgJ3PBP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Oct 2020 11:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S1726773AbgJ3PPp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Oct 2020 11:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726881AbgJ3PAa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 11:00:30 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA79C061789
-        for <linux-usb@vger.kernel.org>; Fri, 30 Oct 2020 07:59:36 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id t11so6909430edj.13
-        for <linux-usb@vger.kernel.org>; Fri, 30 Oct 2020 07:59:36 -0700 (PDT)
+        with ESMTP id S1726178AbgJ3PPp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 11:15:45 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2C2C0613CF;
+        Fri, 30 Oct 2020 08:15:45 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id x13so5466723pgp.7;
+        Fri, 30 Oct 2020 08:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
-        b=TjZDjTDUyG5IOPAjtKhDz6bJNm6DqwPh3GYjQnJOtk58Qe+VS+LrjG9D+UJTL89L5a
-         hPszd6YttBU2gVDN4Hgd0nVvKmUsgBGa0RfR9y4dU1VG6wqrOSeXXlqa/jT4b2a91QjD
-         sT+ma7QKBtdbME0ZKxl0kc6DEI2BSZsRxuMkNkQsvOWxO6URWAKkh65L3Tk879AJ4LqG
-         Bj9eXYFDUcjXqha9S32esb82rsLCjf9rEdFYrDoZfWxC18Um3HNxqbzetSufrWkdrmWB
-         Hgfuw2XlX0g8ZkLr3paRT5DvZbKL3ccSJq24BaLzNsiQWn1tArC4uUyPSHMQ3hVqPZo6
-         Sb9g==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=h7JEhToi6y0r0qaENRYWLa6TItN+W1AAZgf7V2tBFOA=;
+        b=LzSDbIkS1r2D7W3mbQD2H2LaM3v85qpLNz/NJh7Eqy5oYH5p3NIq1XNckFQoNKTTxw
+         q1Hl0F7kojt8JhRgmsw88WHaBAqe7yo1s6Sjcc+HJgGsWMFoVkod67MFClDIdp4Cdo7V
+         3WWDMkxBfemDHIc8bK5Fq4hDdsRqD/WmdG46tJKm3MLO+g4+izGMMzTF0R3KJt0gjo7o
+         ooUQxl4AiWVt91W/97aTUwQ0rurFdYFn1gqMbwiF64SuS/LbHZ3FoQTQxv1AOF2RryTJ
+         BnqR6eIfZ6DlHk/uv5Ys10fhkDrIEAxlgPXXko5mS5hbiZlLfT3665KLN0uRlx3biGf6
+         dwfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
-        b=G4QO5GXcG0ytURLuRgYN01VqwdC0DCJ0a3n2/EB5RU195w5OT/Bo+NnVxzijgvXL/Y
-         wdZt3tago40Cndg/YWRqmBDk5DAkUdZGzTbYFOsZ4t3/ANjbxfcgiPHiQnW5NuJNqVt6
-         LGpsvkM/C06jxS50bhSXS2JK9hgn2tEZmuBFtgA4rbLgYzmeY1I3bFTXLFIt5edXZA8B
-         jTK+wKfK1A1JDz2nhV5t895C7VzU5uDbMhL4E/6p+SL1z+QcLSaZEiHx7Oybotf9dvQu
-         zWWObP8tK8JnRW+TJtpHE+nVPvN2KPgn+cYlhqfke9/YnJWd4GP79tIVJyJRYYRb1mig
-         uavQ==
-X-Gm-Message-State: AOAM533Np5hDJ1T2YuQtrXTG4JaLlQ0OywpLZlRT3bFnt1/FeSnOp0Ev
-        cwefFOj4GojOD4awts4obuta9E1qXK5Q48qCxvr+7aHldg==
-X-Google-Smtp-Source: ABdhPJz0XXuJnPS5g3+lbBiW+XXmkDUqYoNBDu76t3os6QvlPQSI6Onyl30CWs+Md1o+E0r28qs03HXLpOQosKz8YWo=
-X-Received: by 2002:a50:f307:: with SMTP id p7mr2761574edm.235.1604069974505;
- Fri, 30 Oct 2020 07:59:34 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=h7JEhToi6y0r0qaENRYWLa6TItN+W1AAZgf7V2tBFOA=;
+        b=WYec23Bz0UmI5RBtUaEE9XMKh5hZMt61wwApsuxPXhBIV8nQqNbT31PTcx6DTxSBql
+         IBjp1cF+1/f51laaBUv0Y9Al4rknxEvVvpVQ4COB5TcJudiLt4lJTbXFtvYbLhEgQ34W
+         6qS4JZY4j9i/HPHkI+IpCHIpueDNAazExHnF9QwgIqAyQDm8Esci1y8RzeeZzG9QVBdX
+         y2qYxl5Soolis+i7q71BIV+IR3AysPGtjhrtdVcehHwaBYHUWGq521pz9QIj7I4sRqt7
+         IFvykRiIofoycQDub/uW8Lk0YfBMyUOuP+4UtvgdfUrRoVojmFpWombJDwBdZVB7AN7N
+         Dxrw==
+X-Gm-Message-State: AOAM531dEwkOlKS894HMn81I4sIkpXpCz+7qhNzTc1BFHE9dDMW3r4aK
+        laGNxgB1rMhyu1LdRSmTDPg=
+X-Google-Smtp-Source: ABdhPJzI1jaxOjZiRkPwNeMRQ7loDrLDM2QrsvU0jyOLEg/ssM/oIxyj10iYEwUEe8IRyWqahzG6Sw==
+X-Received: by 2002:a63:1365:: with SMTP id 37mr2630167pgt.247.1604070944766;
+        Fri, 30 Oct 2020 08:15:44 -0700 (PDT)
+Received: from localhost (23.83.224.115.16clouds.com. [23.83.224.115])
+        by smtp.gmail.com with ESMTPSA id b16sm2745870pju.16.2020.10.30.08.15.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2020 08:15:43 -0700 (PDT)
+Date:   Fri, 30 Oct 2020 23:15:40 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v3] usb: dwc3: core: fix a issue about clear connect state
+Message-ID: <20201030151540.GA37515@nuc8i5>
+References: <20201020135806.30268-1-zhengdejin5@gmail.com>
+ <875z6wdq62.fsf@kernel.org>
+ <20201028125812.GA59692@nuc8i5>
+ <87y2jqlahc.fsf@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a50:f14c:0:0:0:0:0 with HTTP; Fri, 30 Oct 2020 07:59:34
- -0700 (PDT)
-Reply-To: li.anable85@gmail.com
-From:   Liliane Abel <k.griest04@gmail.com>
-Date:   Fri, 30 Oct 2020 15:59:34 +0100
-Message-ID: <CABAZL7=b-NWks3DKb=fdDjnu_xt_-CcJCqf-F5s0yQCFVH73-A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y2jqlahc.fsf@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dearest
+On Wed, Oct 28, 2020 at 03:57:03PM +0200, Felipe Balbi wrote:
+Hi Balbi and all:
+> 
+> Hi,
+> 
+> Dejin Zheng <zhengdejin5@gmail.com> writes:
+> >> Dejin Zheng <zhengdejin5@gmail.com> writes:
+> >> > According to Synopsys Programming Guide chapter 2.2 Register Resets,
+> >> > it cannot reset the DCTL register by setting DCTL.CSFTRST for core soft
+> >> > reset, if DWC3 controller as a slave device and stay connected with a usb
+> >> > host, then, while rebooting linux, it will fail to reinitialize dwc3 as a
+> >> > slave device when the DWC3 controller did not power off. because the
+> >> > connection status is incorrect, so we also need to clear DCTL.RUN_STOP
+> >> > bit for disabling connect when doing core soft reset. There will still
+> >> > be other stale configuration in DCTL, so reset the other fields of DCTL
+> >> > to the default value 0.
+> >> 
+> >> This commit log is a bit hard to understand. When does this problem
+> >> actually happen? It seems like it's in the case of, perhaps, kexecing
+> >> into a new kernel, is that right?
+> >> 
+> > It happens when entering the kernel for the second time after the reboot
+> > command.
+> >
+> >> At the time dwc3_core_soft_reset() is called, the assumption is that
+> >> we're starting with a clean core, from power up. If we have stale
+> >> configuration from a previous run, we should fix this on the exit
+> >> path. Note that if we're reaching probe with pull up connected, we
+> >> already have issues elsewhere.
+> >> 
+> >> I think this is not the right fix for the problem.
+> >>
+> > I think you are right, Thinh also suggested me fix it on the exit path
+> > in the previous patch v2. Do you think I can do these cleanups in the
+> > shutdown hook of this driver? Balbi, is there a more suitable place to
+> > do this by your rich experience? Thanks!
+> 
+> I don't think shutdown is called during removal, I'm not sure. I think
+> we had some fixes done in shutdown time, though. Test it out, but make
+> sure there are no issues with a regular modprobe cycle.
+> 
+It has some errors in my commit message, I describe the process of linux
+restart is wrong. A PC is connected to our arm soc development board
+through the usb cable, the adb program runs via usb connection. there is
+a very important application in our linux system. when it goes wrong(halt
+or kernel panic), we want to restart linux. my wrong description happened
+here, when I manually kill this important application for testing, I
+thought it was calling the reboot command to restart linux, which is wrong.
+our real implementation is through watchdog, when the application no
+longer sets the watchdog and the watchdog times out, but watchdog can't 
+reset the whole soc. our soc has 3 cpu clusters, one cluster has a arm 
+Cortex R5 cpu for boot and security. one cluster has 2 arm Cortex A55 for
+linux system. the other cluster for android. when the Cortex R5 detect
+the watchdog timeout and want to restart linux system, it will stop Cortex
+A55 cpu to run, and load linux image to DDR memory from eMMC flash, then
+set Cortex A55 cpu to run new linux system, but it was not reset usb
+controller. so the usb controller's status is incorrect for boot new linux
+system.
 
-Greeting my dear, I am Liliane Abel by name, The only daughter of late
-Mr.Benson Abel. My father is one of the top Politician in our country
-and my mother is a farmers and cocoa merchant when they were both
-alive. After the death of my mother, long ago, my father was
-controlling their business until he was poisoned by his business
-associates which he suffered and died.
+   ------------------------------------------------------------------
+   |                                                                |
+   |	Boot and Security          Linux             Android        |
+   |	----------------     ----------------    ----------------   |
+   |	|  1 Cortex R5  |    | 2 Cortex A55 |    | 4 Cortex A72 |   |
+   |	|    cluster    |    |    cluster   |    |   cluster    |   |
+   |	|---------------|    |--------------|    |--------------|   |
+   |                                                                |
+   |                           SOC                                  |
+   |-----------------------------------------------------------------
 
-Before the death of my father, He told me about (two million five
-hundred thousand united states dollars) which he deposited in the bank
-in Lome-Togo, It was the money he intended to transfer overseas for
-investment before he was poisoned. He also instructed me that I should
-seek for foreign partners in any country of my choice who will assist
-me transfer this money in overseas account where the money will be
-wisely invested.
-I am seeking for your kind assistance in the following ways:  (1) to
-provide a safe bank account into where the money will be transferred
-for investment. (2) To serve as a guardian of this fund since I am a
-girl of 19 years old. (3) To make arrangement for me to come over to
-your country to further my education. This is my reason for writing to
-you. Please if you are willing to assist me I will offer you 25% of
-the total money. Reply if  you are interested
-Best regards.
-Liliane Abel.
+Under normal circumstances, run the reboot command and rmmod the
+corresponding usb module, it will carry out the corresponding state
+processing, all of which can work well.
+
+Balbi, for this case, Currently, the way I can think of is to reset the
+DCTL register every initial time. Could you help me and give me some
+suggestions? thank you very much!
+
+BR,
+Dejin
+
+> -- 
+> balbi
+
+
