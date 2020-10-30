@@ -2,195 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AA82A112C
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 23:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D462A116D
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Oct 2020 00:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725961AbgJ3Wug (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Oct 2020 18:50:36 -0400
-Received: from mga01.intel.com ([192.55.52.88]:40627 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725780AbgJ3Wuf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Oct 2020 18:50:35 -0400
-IronPort-SDR: vkGVcAU+BAMH1rnpXYzlgnnhvWRyl8cQcKZFN35XRs0B6JbR1DA8xveqWLBSsmF6TB2QWkakwJ
- lmlZ6fYdFwMg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9790"; a="186490840"
-X-IronPort-AV: E=Sophos;i="5.77,435,1596524400"; 
-   d="scan'208";a="186490840"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2020 15:50:35 -0700
-IronPort-SDR: qP3XLNybweEiD+AZxKjGkCfThNhtFmp2kqsvOREr0InCj2ldl5EpPd5WQCL8s8/3jI2HmJUcEE
- gpAIjtPcmwSQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,435,1596524400"; 
-   d="scan'208";a="319460786"
-Received: from lkp-server02.sh.intel.com (HELO fcc9f8859912) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Oct 2020 15:50:33 -0700
-Received: from kbuild by fcc9f8859912 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kYdE8-0000KF-W2; Fri, 30 Oct 2020 22:50:32 +0000
-Date:   Sat, 31 Oct 2020 06:49:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 00c27a1df8ff5e99b383e2b4cbf947a4926fb534
-Message-ID: <5f9c988f.QHA1HD0ebqRQA7bK%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725816AbgJ3XIl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Oct 2020 19:08:41 -0400
+Received: from mail-eopbgr50046.outbound.protection.outlook.com ([40.107.5.46]:20548
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725780AbgJ3XIl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 30 Oct 2020 19:08:41 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TXjquM9iwXAISazvSG4cw2L9ugnv3binkJCvxtqE6SaDaZTiq1TRORStnrCTOlzHmxZg1IRxDDKEB/a18T20eTWfE5JeqGgE3zyEKJQbwHAQ8iiuOj/QsCh/FJQ2KEOvZIIaobkUyakLe1rxJlcOI/WyuLDDcltjnwpt7ygG22B0J2bLHEQvo09Y2GGCPCVm9ZzUMaq2vs5Gy9kCb8ghU0FRrGV8mqSPDPQKmvra6j7V5j3SmN7jUMNF57xWYqVLs//eX7xEAqbKTxxtpAeQb1Hci+jo3iQMQi5J0L7xTHx+wXV79hOyd2ZpjmsIguY071wlfYFOddWOzrwssPWBQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=usNFevepz1IFkHNiHTjOVKDEqnl2ayAcJAmLVMzHSpU=;
+ b=OP2I7HhgM4C4UEgsgnrHOaTM4at4c5WiZgjcPHlIJk08ZikFdEgUQvkzwlKIfjBU5C88OKFuHeMlFFQ2gWFt6EypZplkXvFIsUhnGXR8QfDKnggKJ45I6v4C7JFwPea3wUER6Acp51fGUhrRJr+KZbgZyxUTd9tTaZew97HqZ4YcsVPtOqQatD2WBUvl5Rjq3hHTmAbcE2wAGu+isdDuE1Jga6mW6nuQNKhZ1V+o93EE7pnflQ0L8bEaDXK9S7jhLxYmA3cTxqp/4QLeYhWe+rBNtR1l6D+HMgj1FAyMPkUx+w9C3MrwaGzn2ZxQtg89HcU97N55VyZgKpHGlpm3gw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=usNFevepz1IFkHNiHTjOVKDEqnl2ayAcJAmLVMzHSpU=;
+ b=jKXwiUHBIvxvKssuAH/aNJa8VyFHEJie0gp9lW8AKqeZZVglWq7o9Vuh2t/I+sj3d0x3sSswAoixWPNPTNp1usHcVBlEkXGzQadbrP4SMAoTqaHkLnssmQJuWiD/zhz/csONnXlH3AamUs/nQKv3fP68/nTAT685iDnrWAxWExk=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
+ by AM0PR04MB7123.eurprd04.prod.outlook.com (2603:10a6:208:197::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.27; Fri, 30 Oct
+ 2020 23:08:35 +0000
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3499.029; Fri, 30 Oct 2020
+ 23:08:35 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, pawell@cadence.com, rogerq@ti.com,
+        jun.li@nxp.com, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH v2 1/1] doc: dt-binding: cdns,usb3: add wakeup-irq
+Date:   Sat, 31 Oct 2020 07:07:52 +0800
+Message-Id: <20201030230752.2950-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [119.31.174.66]
+X-ClientProxiedBy: SG2PR04CA0145.apcprd04.prod.outlook.com
+ (2603:1096:3:16::29) To AM8PR04MB7300.eurprd04.prod.outlook.com
+ (2603:10a6:20b:1c7::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR04CA0145.apcprd04.prod.outlook.com (2603:1096:3:16::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.19 via Frontend Transport; Fri, 30 Oct 2020 23:08:32 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: d984c3ec-c3f2-434a-f533-08d87d28ba45
+X-MS-TrafficTypeDiagnostic: AM0PR04MB7123:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM0PR04MB712378F3338FDBC2926D7F5A8B150@AM0PR04MB7123.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Am3GG4Sc3GggIVDUho9PnUbqU0LxkXowjfLyuEOcGMuQKPyi6fMJOWdYgrv7YHQUvSzs0TigbLuM72kmU4JR/Rpk+DMVVHNv1A8d0u6up6s7JOOrojYTW150ImeOvo8BXRbzRdC400IcoTPsgyvrAV+9LuCld0fZ/+Bx7dyhIUJNNvqqMgjxCkeQsGj9YL7Y/MESNLpX3eDazLGK/88j5tI+JgcJFc5dmGDFRagaSxSF+W+fGprIOWPw9dU6YvHQcgpAbApgtlInfskiBS2hmzfZOe9Nx1u4wqRi9ybaBf0K3KrFCoWdzMYJ1LmFYekrRPE7pQpp/4CclB0jIOonNA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39850400004)(376002)(366004)(136003)(346002)(66556008)(66946007)(52116002)(66476007)(6486002)(316002)(86362001)(2616005)(44832011)(8676002)(36756003)(478600001)(4326008)(6666004)(6512007)(26005)(6506007)(1076003)(5660300002)(956004)(186003)(8936002)(2906002)(16526019);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: kaiQ/dzahyN3bcFEt8z0r5hGTU0N2pZYBtE6HgX36+gbURM3dxAx0RtjFpXgeDsotOGeHQGJU3ZfI2tnrAutNV0yj3sC6U1fTCoFBYnBChVV/HxxAKibXmB1D4WZ/l/HxCvXbxIGn3ZYWFxiQU2/fzu0sYJtLqiwpFVfFsoxgO57M4pjEe+bZxA3nKKm3CKewgNJeROW8JOnPNk8YHvjKXEXI9wTqrLLDR4NORIRyC5BGMR4LvW5c1YwZAjhzQeo5nxnMEZaNJkey2tll/H9EhE4iIfMRGav1rguo9YimV8We1LSuUwuZ69TlnBQypOqjEzSHSZDA1LWcG8aVBtcqHHPfW6x2rkUNWRQ7XALcYlq/R7Mj1AFCuvsahcAxETIttqmXhGl6lm2iz9Olha3eEx4bDXxMH5HbQfS/6f9HFyKKJbD6YJlyEGlbhP2leGHDn57pQLEMdLIq3Fgj4CFs3zbuowyDUq5mBhNiVzUeMd9u2ei7C7mC5AIQn6Ytk4bYyoD5mUPzTCOAlikGpJ+myq5Vnql5vVTIhdNAoxRXZ/ZWzWRiR90gYGxV2ybNVQKvh6s8YrGMs2UAoeXKf0UAuUdnWA1I8XtU6GVMfO4aoFVlL089PR3gMOSkRR6XiWmxhRdj7qRXpHsyXgcmdu5wA==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d984c3ec-c3f2-434a-f533-08d87d28ba45
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2020 23:08:35.4168
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: k7zUNHEyoMVHlbiYgX3nTFHaS0/2UyjI28oXGQYlkTUdt9pob0Mhqw9xdSHktNv4Srtlm+TwCz9AwruoTGaStw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7123
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: 00c27a1df8ff5e99b383e2b4cbf947a4926fb534  Merge tag 'usb-v5.10-rc2' of git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb into usb-linus
+To support low power mode for controller, the driver needs wakeup-irq
+to reflect the signal changing after controller is stopped, and waking
+the controller up accordingly.
 
-elapsed time: 722m
-
-configs tested: 131
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-h8300                     edosk2674_defconfig
-powerpc                    klondike_defconfig
-sh                             espt_defconfig
-m68k                         amcore_defconfig
-arm                         s3c2410_defconfig
-powerpc                      pasemi_defconfig
-arc                         haps_hs_defconfig
-arm                            pleb_defconfig
-sh                        apsh4ad0a_defconfig
-xtensa                  nommu_kc705_defconfig
-parisc                generic-64bit_defconfig
-powerpc                     asp8347_defconfig
-mips                        jmr3927_defconfig
-sh                          rsk7201_defconfig
-arm                         hackkit_defconfig
-openrisc                            defconfig
-arm                            hisi_defconfig
-h8300                               defconfig
-powerpc                     stx_gp3_defconfig
-arm                              alldefconfig
-sh                           se7712_defconfig
-sparc                       sparc64_defconfig
-i386                                defconfig
-sh                           se7780_defconfig
-arm                           efm32_defconfig
-mips                malta_kvm_guest_defconfig
-mips                           ip22_defconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                      rts7751r2d1_defconfig
-powerpc                     sequoia_defconfig
-powerpc                     tqm8555_defconfig
-arm                     am200epdkit_defconfig
-arm                          badge4_defconfig
-arm                           corgi_defconfig
-sh                          kfr2r09_defconfig
-xtensa                  audio_kc705_defconfig
-mips                      maltaaprp_defconfig
-arm                      tct_hammer_defconfig
-nds32                               defconfig
-powerpc                        warp_defconfig
-sh                     sh7710voipgw_defconfig
-mips                 decstation_r4k_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arc                          axs101_defconfig
-powerpc                     tqm8540_defconfig
-mips                       lemote2f_defconfig
-arm                        oxnas_v6_defconfig
-arm                    vt8500_v6_v7_defconfig
-arm                           spitz_defconfig
-arm                            u300_defconfig
-powerpc                     ppa8548_defconfig
-openrisc                         alldefconfig
-powerpc                      walnut_defconfig
-arm                        mini2440_defconfig
-powerpc                 mpc837x_mds_defconfig
-arm                        clps711x_defconfig
-powerpc                      cm5200_defconfig
-mips                           rs90_defconfig
-arm                        neponset_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a005-20201030
-x86_64               randconfig-a001-20201030
-x86_64               randconfig-a002-20201030
-x86_64               randconfig-a003-20201030
-x86_64               randconfig-a006-20201030
-x86_64               randconfig-a004-20201030
-i386                 randconfig-a005-20201030
-i386                 randconfig-a003-20201030
-i386                 randconfig-a002-20201030
-i386                 randconfig-a001-20201030
-i386                 randconfig-a006-20201030
-i386                 randconfig-a004-20201030
-i386                 randconfig-a011-20201030
-i386                 randconfig-a014-20201030
-i386                 randconfig-a015-20201030
-i386                 randconfig-a012-20201030
-i386                 randconfig-a013-20201030
-i386                 randconfig-a016-20201030
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a013-20201030
-x86_64               randconfig-a014-20201030
-x86_64               randconfig-a015-20201030
-x86_64               randconfig-a016-20201030
-x86_64               randconfig-a011-20201030
-x86_64               randconfig-a012-20201030
-
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes for v2:
+- Add "minItems: 3" to make wakeup irq optional
+
+ Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+index ac20b98e9910..44b19a7298b8 100644
+--- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
++++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+@@ -26,16 +26,21 @@ properties:
+       - const: dev
+ 
+   interrupts:
++    minItems: 3
+     items:
+       - description: OTG/DRD controller interrupt
+       - description: XHCI host controller interrupt
+       - description: Device controller interrupt
++      - description: interrupt used to wake up core, eg: when usbcmd.rs is
++      cleared by xhci core, this interrupt is optional.
+ 
+   interrupt-names:
++    minItems: 3
+     items:
+       - const: host
+       - const: peripheral
+       - const: otg
++      - const: wakeup
+ 
+   dr_mode:
+     enum: [host, otg, peripheral]
+-- 
+2.17.1
+
