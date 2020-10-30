@@ -2,128 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE6F2A07EC
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 15:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4522A08F2
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 16:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgJ3Ocg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Oct 2020 10:32:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34208 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725939AbgJ3Ocg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Oct 2020 10:32:36 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0ACE820637;
-        Fri, 30 Oct 2020 14:32:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604068355;
-        bh=H73aTFe9brejPhv93HXkvU3N5qlIm5iZsJBrgXyq5lE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lN74zVv+y0LBSHf4rqFdraGgS8IsYFsifgokwyPkvmhZM55UCiMlrIHfZCg1QVVgU
-         o9cBQDDIypBFmI+kl3cU8EVY1agALeA8QRQln0r1KkgLuzHVsIyXbLhhl0zaPte5L3
-         xp79GoUiFbPxrvKlG0Qw73+iTpB9MyUMSFvjLnCw=
-Received: by mail-ot1-f44.google.com with SMTP id m22so5721796ots.4;
-        Fri, 30 Oct 2020 07:32:35 -0700 (PDT)
-X-Gm-Message-State: AOAM532+AooKztQEgVi3e6L5o9Hxz8J87AWONyyFMDbMqyt8XAJsIdGa
-        24psNRFQ0Nny5Rc/s0mKzVb89byBC02pYDvrDg==
-X-Google-Smtp-Source: ABdhPJw0/hZSGq4gZvXd4rAw3DV98IaGIIMxB5UmNkdeNZ6nvaElNZ6SNe1QYlhyoHVF6qp+lB3fHjsIxLDfBIhsRlU=
-X-Received: by 2002:a9d:62d1:: with SMTP id z17mr1974117otk.192.1604068354225;
- Fri, 30 Oct 2020 07:32:34 -0700 (PDT)
+        id S1726858AbgJ3PBP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Oct 2020 11:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726881AbgJ3PAa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 11:00:30 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA79C061789
+        for <linux-usb@vger.kernel.org>; Fri, 30 Oct 2020 07:59:36 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id t11so6909430edj.13
+        for <linux-usb@vger.kernel.org>; Fri, 30 Oct 2020 07:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=TjZDjTDUyG5IOPAjtKhDz6bJNm6DqwPh3GYjQnJOtk58Qe+VS+LrjG9D+UJTL89L5a
+         hPszd6YttBU2gVDN4Hgd0nVvKmUsgBGa0RfR9y4dU1VG6wqrOSeXXlqa/jT4b2a91QjD
+         sT+ma7QKBtdbME0ZKxl0kc6DEI2BSZsRxuMkNkQsvOWxO6URWAKkh65L3Tk879AJ4LqG
+         Bj9eXYFDUcjXqha9S32esb82rsLCjf9rEdFYrDoZfWxC18Um3HNxqbzetSufrWkdrmWB
+         Hgfuw2XlX0g8ZkLr3paRT5DvZbKL3ccSJq24BaLzNsiQWn1tArC4uUyPSHMQ3hVqPZo6
+         Sb9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=G4QO5GXcG0ytURLuRgYN01VqwdC0DCJ0a3n2/EB5RU195w5OT/Bo+NnVxzijgvXL/Y
+         wdZt3tago40Cndg/YWRqmBDk5DAkUdZGzTbYFOsZ4t3/ANjbxfcgiPHiQnW5NuJNqVt6
+         LGpsvkM/C06jxS50bhSXS2JK9hgn2tEZmuBFtgA4rbLgYzmeY1I3bFTXLFIt5edXZA8B
+         jTK+wKfK1A1JDz2nhV5t895C7VzU5uDbMhL4E/6p+SL1z+QcLSaZEiHx7Oybotf9dvQu
+         zWWObP8tK8JnRW+TJtpHE+nVPvN2KPgn+cYlhqfke9/YnJWd4GP79tIVJyJRYYRb1mig
+         uavQ==
+X-Gm-Message-State: AOAM533Np5hDJ1T2YuQtrXTG4JaLlQ0OywpLZlRT3bFnt1/FeSnOp0Ev
+        cwefFOj4GojOD4awts4obuta9E1qXK5Q48qCxvr+7aHldg==
+X-Google-Smtp-Source: ABdhPJz0XXuJnPS5g3+lbBiW+XXmkDUqYoNBDu76t3os6QvlPQSI6Onyl30CWs+Md1o+E0r28qs03HXLpOQosKz8YWo=
+X-Received: by 2002:a50:f307:: with SMTP id p7mr2761574edm.235.1604069974505;
+ Fri, 30 Oct 2020 07:59:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201029095806.10648-1-amelie.delaunay@st.com>
- <20201029095806.10648-2-amelie.delaunay@st.com> <20201029154016.GA1917373@bogus>
- <860d5620-4fdf-6e01-9a04-3967d6fcfd6b@st.com> <CAKgpwJVGUR9aSfoMkQ=ZXysgqn+H6n0uJbk5W9SeGiB7VXptwQ@mail.gmail.com>
-In-Reply-To: <CAKgpwJVGUR9aSfoMkQ=ZXysgqn+H6n0uJbk5W9SeGiB7VXptwQ@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 30 Oct 2020 09:32:23 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLbuNTnonH2SqcmF5YF_EB4gTQdS6L3yFKF9pJmaypdKg@mail.gmail.com>
-Message-ID: <CAL_JsqLbuNTnonH2SqcmF5YF_EB4gTQdS6L3yFKF9pJmaypdKg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3 1/4] dt-bindings: connector: add power-opmode
- optional property to usb-connector
-To:     Jun Li <lijun.kernel@gmail.com>
-Cc:     Amelie DELAUNAY <amelie.delaunay@st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
+Received: by 2002:a50:f14c:0:0:0:0:0 with HTTP; Fri, 30 Oct 2020 07:59:34
+ -0700 (PDT)
+Reply-To: li.anable85@gmail.com
+From:   Liliane Abel <k.griest04@gmail.com>
+Date:   Fri, 30 Oct 2020 15:59:34 +0100
+Message-ID: <CABAZL7=b-NWks3DKb=fdDjnu_xt_-CcJCqf-F5s0yQCFVH73-A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 8:55 PM Jun Li <lijun.kernel@gmail.com> wrote:
->
-> Amelie DELAUNAY <amelie.delaunay@st.com> =E4=BA=8E2020=E5=B9=B410=E6=9C=
-=8830=E6=97=A5=E5=91=A8=E4=BA=94 =E4=B8=8A=E5=8D=8812:52=E5=86=99=E9=81=93=
-=EF=BC=9A
-> >
-> >
-> >
-> > On 10/29/20 4:40 PM, Rob Herring wrote:
-> > > On Thu, Oct 29, 2020 at 10:58:03AM +0100, Amelie Delaunay wrote:
-> > >> Power operation mode may depends on hardware design, so, add the opt=
-ional
-> > >> property power-opmode for usb-c connector to select the power operat=
-ion
-> > >> mode capability.
-> > >>
-> > >> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
-> > >> ---
-> > >>   .../bindings/connector/usb-connector.yaml      | 18 ++++++++++++++=
-++++
-> > >>   1 file changed, 18 insertions(+)
-> > >>
-> > >> diff --git a/Documentation/devicetree/bindings/connector/usb-connect=
-or.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > >> index 728f82db073d..200d19c60fd5 100644
-> > >> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > >> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > >> @@ -93,6 +93,24 @@ properties:
-> > >>         - device
-> > >>         - dual
-> > >>
-> > >> +  power-opmode:
-> > >
-> > > I've acked this version:
-> > >
-> > > https://lore.kernel.org/r/20201020093627.256885-2-badhri@google.com
->
-> That is a different property only for FRS.
->
-> > >
-> >
-> > frs is used for Fast Role Swap defined in USB PD spec.
-> > I understand it allows to get the same information but I'm wondering wh=
-y
-> > the property name is limited to -frs- in this case. What about a
-> > non-power delivery USB-C connector ?
->
-> It's only for FRS, FRS is in the scope of power delivery.
->
-> >
-> > Moreover, power-opmode property support is already merged in typec clas=
-s:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/drivers/usb/typec/class.c?h=3Dv5.10-rc1&id=3D12f3467b0d28369d3add7a0deb6=
-5fdac9b503c90
-> > and stusb160x driver uses it :(
-> >
-> > So, do I need to modify stusb160x driver (and bindings) to take into
-> > account this USB PD specific property?
->
-> Only Type-C w/o PD need this "power-opmode" property, so this
-> property is still required.
+Dearest
 
-Yet we have the same set of values. So there's something common...
+Greeting my dear, I am Liliane Abel by name, The only daughter of late
+Mr.Benson Abel. My father is one of the top Politician in our country
+and my mother is a farmers and cocoa merchant when they were both
+alive. After the death of my mother, long ago, my father was
+controlling their business until he was poisoned by his business
+associates which he suffered and died.
 
-Rob
+Before the death of my father, He told me about (two million five
+hundred thousand united states dollars) which he deposited in the bank
+in Lome-Togo, It was the money he intended to transfer overseas for
+investment before he was poisoned. He also instructed me that I should
+seek for foreign partners in any country of my choice who will assist
+me transfer this money in overseas account where the money will be
+wisely invested.
+I am seeking for your kind assistance in the following ways:  (1) to
+provide a safe bank account into where the money will be transferred
+for investment. (2) To serve as a guardian of this fund since I am a
+girl of 19 years old. (3) To make arrangement for me to come over to
+your country to further my education. This is my reason for writing to
+you. Please if you are willing to assist me I will offer you 25% of
+the total money. Reply if  you are interested
+Best regards.
+Liliane Abel.
