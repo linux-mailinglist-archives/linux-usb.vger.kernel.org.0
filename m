@@ -2,156 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E14E52A09D5
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 16:27:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 846D82A0A0C
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 16:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727183AbgJ3P1n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Oct 2020 11:27:43 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:8338 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726307AbgJ3P1n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 11:27:43 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09UF8LL1003715;
-        Fri, 30 Oct 2020 16:27:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=4QYEGEv6Dx43DkeQaT74KojLLBRyD+ORt/fhCMzqZTs=;
- b=iRE+Mcwq8+6u5wET2e5Rw2WxAMM2pJcHvtToopcqvUS1o63ME83HPr+7HCScDjg/MmRn
- oDz1b+FvQ6it4MNNkwAmMLl+zozfkufzi4UvSnWoD1QDQF2jgHm+EPHw5dJUn5/jDSGs
- mbffz9lPaLDR10C1y2/k0zUzFfPApKuZfctIej5UTLXe+ZaXf2xYRRwXEC1oDYch0n+T
- dfNE/SZ0BUbrHkYRPdgoCU0ogRajgN5NMdbkNtlotXRtbbdlboP/CocYT4UqcHVIxqdg
- +geGqafFj6b3KZN8TYAP9J7R6dtOaN6UBg+rl/qfd11PlFQp4HEKFnVHyCUHDKejdzYF XQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34ccmrhjg6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Oct 2020 16:27:17 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9B09F100034;
-        Fri, 30 Oct 2020 16:27:16 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7F5D22257DC;
-        Fri, 30 Oct 2020 16:27:16 +0100 (CET)
-Received: from lmecxl0995.lme.st.com (10.75.127.45) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 30 Oct
- 2020 16:27:15 +0100
-Subject: Re: [RESEND PATCH v3 1/4] dt-bindings: connector: add power-opmode
- optional property to usb-connector
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-References: <20201029095806.10648-1-amelie.delaunay@st.com>
- <20201029095806.10648-2-amelie.delaunay@st.com>
- <20201029154016.GA1917373@bogus>
- <860d5620-4fdf-6e01-9a04-3967d6fcfd6b@st.com>
- <CAL_JsqKs-Po8BdShjQNDNPjNWBCD3FSPdq4KbQGx3=VnV+3nPw@mail.gmail.com>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <ebccf61a-c88f-c7f4-9f06-01d2bd1f43de@st.com>
-Date:   Fri, 30 Oct 2020 16:27:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAL_JsqKs-Po8BdShjQNDNPjNWBCD3FSPdq4KbQGx3=VnV+3nPw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG4NODE2.st.com (10.75.127.11) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-10-30_07:2020-10-30,2020-10-30 signatures=0
+        id S1726806AbgJ3Pj7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Oct 2020 11:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbgJ3Pj7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 11:39:59 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA36C0613CF
+        for <linux-usb@vger.kernel.org>; Fri, 30 Oct 2020 08:39:35 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id y12so6948450wrp.6
+        for <linux-usb@vger.kernel.org>; Fri, 30 Oct 2020 08:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=BLuc3+81IR0xgbrrNnLDKYivTtYHnNXf6doHT1KgVR4=;
+        b=iitN2GkJnM+T4Jy3yP125KsoBsMrcrR1iaUOtJmxHWPN/Q59Z/yGaqfnGxYaOdcptF
+         /7OTJw57+DMgr9BKbcNbjgsD/Z5K8fUanzJHnpcc4OeRpDVU15L/f1vihtZC5GwTwbo/
+         xJcDw4aulFVKgY5l+hmvbhuGbeIV0pfAHhqBPBQ/H0puXc60e1rld2fprAB83kRFGmMw
+         cKtrtxlp6WJaKK0gezOxOwfALZCPdLxjeEzzTRwKZNcKiy5E3+K32XmeAymFKqK67PVb
+         h37E8G9xZe91+QbvbpeNvJMZS8UMUvAbnvlM+96GeVdzjJc2uBD5Hnhfl3V13SDSmiry
+         LinQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=BLuc3+81IR0xgbrrNnLDKYivTtYHnNXf6doHT1KgVR4=;
+        b=MGBEyRuXBQm4z3CweKUhbvqtZ2xFA4O0MJF6eB60h4XfBQPg2BJ5iiVNHmyQsnPgw0
+         x2a9OJql0PZhyK+oCqymQJ8Gwl+N8o2usQkEzTXCtsXfiuEJNKllVxnsR2yCm+3VKgaf
+         Nd0Z8LEIsPs0a76K8j+1btIyJoFamCikOx1HhTWxrvZrmUGBJxBas42VHYm5CZy4vFjn
+         a6m43Mk4yc2TDmKGUdnexrrDPF3R0G6UMo+cNlf9lcLvruQv2WTcKqITembf+g0Xclzj
+         G0lKNTebkG+5nXK6lvXbR5PdK47d5TEJvG48Sg9tD5bmfouwzZXy3lg3DnyfN/rnt5kP
+         ruxA==
+X-Gm-Message-State: AOAM533mUGv8JdUA97xWfGeqh26g32BuUaQE2lFZk3rLDuXKoFYy8IyH
+        MTF3NxD1ooII8E3Fuy7+zTUNDkFNVaXyLA==
+X-Google-Smtp-Source: ABdhPJz6q8KrwsBsiwpcwP0u1jiNTPfVjp1f4I0LZ3FCxI000XqLqKXzQVjSnKbMRWA1IfQaN+7czQ==
+X-Received: by 2002:a05:6000:108:: with SMTP id o8mr3901334wrx.256.1604072374436;
+        Fri, 30 Oct 2020 08:39:34 -0700 (PDT)
+Received: from localhost.localdomain (srvvpn1.y3s.fr. [195.154.42.16])
+        by smtp.gmail.com with ESMTPSA id c18sm4971471wmk.36.2020.10.30.08.39.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 30 Oct 2020 08:39:33 -0700 (PDT)
+Sender: Yann Garras <yanngarras@gmail.com>
+From:   Yann GARRAS <yann.garras@y3s.fr>
+To:     johan@kernel.org
+Cc:     linux-usb@vger.kernel.org, Yann GARRAS <yann.garras@y3s.fr>
+Subject: [PATCH] USB: serial: option: creating of the missings constants for Telit products
+Date:   Fri, 30 Oct 2020 16:39:27 +0100
+Message-Id: <20201030153927.20795-1-yann.garras@y3s.fr>
+X-Mailer: git-send-email 2.17.2 (Apple Git-113)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Replace hard-coded product id values by constants for Telit Products
 
+Signed-off-by: Yann GARRAS <yann.garras@y3s.fr>
+---
+ drivers/usb/serial/option.c | 40 +++++++++++++++++++++++++------------
+ 1 file changed, 27 insertions(+), 13 deletions(-)
 
-On 10/30/20 3:29 PM, Rob Herring wrote:
-> On Thu, Oct 29, 2020 at 11:49 AM Amelie DELAUNAY <amelie.delaunay@st.com> wrote:
->>
->>
->>
->> On 10/29/20 4:40 PM, Rob Herring wrote:
->>> On Thu, Oct 29, 2020 at 10:58:03AM +0100, Amelie Delaunay wrote:
->>>> Power operation mode may depends on hardware design, so, add the optional
->>>> property power-opmode for usb-c connector to select the power operation
->>>> mode capability.
->>>>
->>>> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
->>>> ---
->>>>    .../bindings/connector/usb-connector.yaml      | 18 ++++++++++++++++++
->>>>    1 file changed, 18 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>>> index 728f82db073d..200d19c60fd5 100644
->>>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>>> @@ -93,6 +93,24 @@ properties:
->>>>          - device
->>>>          - dual
->>>>
->>>> +  power-opmode:
->>>
->>> I've acked this version:
->>>
->>> https://lore.kernel.org/r/20201020093627.256885-2-badhri@google.com
->>>
->>
->> frs is used for Fast Role Swap defined in USB PD spec.
->> I understand it allows to get the same information but I'm wondering why
->> the property name is limited to -frs- in this case. What about a
->> non-power delivery USB-C connector ?
-> 
-> I've got no idea. The folks that know USB-C and PD details need to get
-> together and work all this out. To me, it looks like the same thing...
-> 
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 2a3bfd6f8..1bc83b687 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -285,12 +285,22 @@ static void option_instat_callback(struct urb *urb);
+ #define TELIT_PRODUCT_CC864_SINGLE		0x1006
+ #define TELIT_PRODUCT_DE910_DUAL		0x1010
+ #define TELIT_PRODUCT_UE910_V2			0x1012
++#define TELIT_PRODUCT_LE910C1_EUX  0x1031
++#define TELIT_PRODUCT_LE910C1_EUX_ECM  0x1033
+ #define TELIT_PRODUCT_LE922_USBCFG1		0x1040
+ #define TELIT_PRODUCT_LE922_USBCFG2		0x1041
+ #define TELIT_PRODUCT_LE922_USBCFG0		0x1042
+ #define TELIT_PRODUCT_LE922_USBCFG3		0x1043
+ #define TELIT_PRODUCT_LE922_USBCFG5		0x1045
++#define TELIT_PRODUCT_FN980_RMNET  0x1050
++#define TELIT_PRODUCT_FN980_MBIM 0x1051
++#define TELIT_PRODUCT_FN980_RNDIS  0x1052
++#define TELIT_PRODUCT_FN980_ECM  0x1053
++#define TELIT_PRODUCT_FT980_KS 0x1054
+ #define TELIT_PRODUCT_ME910			0x1100
++#define TELIT_PRODUCT_ME910G1  0x110a
++#define TELIT_PRODUCT_ME910G1_ECM  0x110b
++#define TELIT_PRODUCT_ME910_ECM  0x1102
+ #define TELIT_PRODUCT_ME910_DUAL_MODEM		0x1101
+ #define TELIT_PRODUCT_LE920			0x1200
+ #define TELIT_PRODUCT_LE910			0x1201
+@@ -301,6 +311,10 @@ static void option_instat_callback(struct urb *urb);
+ #define TELIT_PRODUCT_LE920A4_1212		0x1212
+ #define TELIT_PRODUCT_LE920A4_1213		0x1213
+ #define TELIT_PRODUCT_LE920A4_1214		0x1214
++#define TELIT_PRODUCT_LN940_QMI	0x1900
++#define TELIT_PRODUCT_LN940_MBIM	0x1901
++#define TELIT_PRODUCT_SBL_FN980_FLASH	0x9010
++
+ 
+ /* ZTE PRODUCTS */
+ #define ZTE_VENDOR_ID				0x19d2
+@@ -1165,9 +1179,9 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_CC864_SINGLE) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_DE910_DUAL) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_UE910_V2) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1031, 0xff),	/* Telit LE910C1-EUX */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_LE910C1_EUX, 0xff),	
+ 	 .driver_info = NCTRL(0) | RSVD(3) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1033, 0xff),	/* Telit LE910C1-EUX (ECM) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_LE910C1_EUX_ECM, 0xff),	
+ 	 .driver_info = NCTRL(0) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_LE922_USBCFG0),
+ 	  .driver_info = RSVD(0) | RSVD(1) | NCTRL(2) | RSVD(3) },
+@@ -1179,25 +1193,25 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) | RSVD(3) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_LE922_USBCFG5, 0xff),
+ 	  .driver_info = RSVD(0) | RSVD(1) | NCTRL(2) | RSVD(3) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1050, 0xff),	/* Telit FN980 (rmnet) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_FN980_RMNET, 0xff),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1051, 0xff),	/* Telit FN980 (MBIM) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_FN980_MBIM, 0xff),
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1052, 0xff),	/* Telit FN980 (RNDIS) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_FN980_RNDIS, 0xff),
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1053, 0xff),	/* Telit FN980 (ECM) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_FN980_ECM, 0xff),	
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1054, 0xff),	/* Telit FT980-KS */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_FT980_KS, 0xff),	
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
+ 	  .driver_info = NCTRL(0) | RSVD(3) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1102, 0xff),	/* Telit ME910 (ECM) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_ECM, 0xff),	
+ 	  .driver_info = NCTRL(0) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x110a, 0xff),	/* Telit ME910G1 */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910G1, 0xff),	
+ 	  .driver_info = NCTRL(0) | RSVD(3) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x110b, 0xff),	/* Telit ME910G1 (ECM) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910G1_ECM, 0xff),	
+ 	  .driver_info = NCTRL(0) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_LE910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+@@ -1219,11 +1233,11 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+-	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1900),				/* Telit LN940 (QMI) */
++	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_LN940_QMI),				
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
+-	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1901, 0xff),	/* Telit LN940 (MBIM) */
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_LN940_MBIM, 0xff),	
+ 	  .driver_info = NCTRL(0) },
+-	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9010),				/* Telit SBL FN980 flashing device */
++	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_SBL_FN980_FLASH),				
+ 	  .driver_info = NCTRL(0) | ZLP },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, ZTE_PRODUCT_MF622, 0xff, 0xff, 0xff) }, /* ZTE WCDMA products */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x0002, 0xff, 0xff, 0xff),
+-- 
+2.17.2 (Apple Git-113)
 
-It looks but...
-
-The purpose of power-opmode property is to configure the USB-C 
-controllers, especially the non-PD USB-C controllers to determine the 
-power operation mode that the Type C connector will support and will 
-advertise through CC pins when it has no power delivery support, 
-whatever the power role: Sink, Source or Dual
-The management of the property is the same that data-role and power-role 
-properties, and done by USB Type-C Connector Class.
-
-new-source-frs-typec-current specifies initial current capability of the 
-new source when vSafe5V is applied during PD3.0 Fast Role Swap. So here, 
-this property is not applied at usb-c controller configuration level, 
-but during PD Fast Role Swap, so when the Sink become the Source.
-Moreover, the related driver code says FRS can only be supported by DRP 
-ports. So new-source-frs-typec-current property, in addition to being 
-specific to PD, is also dedicated to DRP usb-c controller.
-The property is managed by Type-C Port Controller Manager for PD.
-
-> And it's not just this, but the stream of USB-C additions that trickle in.
-> 
->> Moreover, power-opmode property support is already merged in typec class:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb/typec/class.c?h=v5.10-rc1&id=12f3467b0d28369d3add7a0deb65fdac9b503c90
->> and stusb160x driver uses it :(
->>
->> So, do I need to modify stusb160x driver (and bindings) to take into
->> account this USB PD specific property?
-> 
-> If not documented, then it's not an ABI, so yes.
-
-I have tried to document it since months ago
-v1: https://lkml.org/lkml/2020/6/15/927
-v2: https://lkml.org/lkml/2020/7/23/445 integrating your remarks
-v2 RESENT: https://lkml.org/lkml/2020/9/2/174
-v3: https://lkml.org/lkml/2020/9/24/306 integrated Li Jun remarks
-
-Regards,
-Amelie
