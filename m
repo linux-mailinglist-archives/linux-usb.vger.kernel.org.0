@@ -2,61 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D39492A0A1E
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 16:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BF12A09F1
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 16:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726962AbgJ3Pob (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Oct 2020 11:44:31 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:39561 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbgJ3Poa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 11:44:30 -0400
-Received: by mail-lf1-f65.google.com with SMTP id 184so8455975lfd.6
-        for <linux-usb@vger.kernel.org>; Fri, 30 Oct 2020 08:44:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JDEnMmpGHWZVoMMUaKIqF5ZNG7Cpxy19AfHydToiu2k=;
-        b=J7+iV+v+SFllPOzIl2KmjTfhykcd16O16zXcaI/LdLlGRFcd/IzjzIcBJa3Ylf741j
-         MASWWKi5ynzA6BrzAMgMEWpBWTaFBl/NuK70766O8ygHa/3JJEfVPw1mIz9JCX7tCcQX
-         gtavqlvob8qEqHfbfpkmZTyhzNpgVza3J9ZeiF2vbx8hZzOdvES9Z3OtXlWrBrRqGXsn
-         P95ww+SQ7iTejYi+Zt0CKNnLTL2xx67UcnJw9/uNaUS9pkdHN8oaDJ9KNSVUDl46obZh
-         3bl9IXIkKc1sogAlkxLK74WsYU+Yg+T6+n6tVse3GhsDnOstB5FninhL+JXFem3mhLcB
-         u4aA==
-X-Gm-Message-State: AOAM532041bSRpNVqAJnAnSLN+PfnGlX7Q40vWpA7xLN8r1o7b8PsrJD
-        90zl8yA5MYhyrg1nexA3WnqB/CPyShCKug==
-X-Google-Smtp-Source: ABdhPJz7Yj2VGI2ZgfqFdujfKXWngA4Y7YjumGPzfC0MqFk6kG3NMQx7GImvQyf/CLncJjdNRsiW3A==
-X-Received: by 2002:ac2:5e72:: with SMTP id a18mr1127090lfr.343.1604072667400;
-        Fri, 30 Oct 2020 08:44:27 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id l16sm670453lfp.250.2020.10.30.08.44.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2020 08:44:26 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kYWZr-0004Sc-LO; Fri, 30 Oct 2020 16:44:31 +0100
-Date:   Fri, 30 Oct 2020 16:44:31 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Yann GARRAS <yann.garras@y3s.fr>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: creating of the missings constants
- for Telit products
-Message-ID: <20201030154431.GM4085@localhost>
-References: <20201030153927.20795-1-yann.garras@y3s.fr>
+        id S1727060AbgJ3PfH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Oct 2020 11:35:07 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:6994 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726662AbgJ3PfG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 11:35:06 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CN5wR6Rgvzhcjt;
+        Fri, 30 Oct 2020 23:35:03 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Fri, 30 Oct 2020
+ 23:34:56 +0800
+From:   Zhang Qilong <zhangqilong3@huawei.com>
+To:     <hadess@hadess.net>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH] USB: apple-mfi-fastcharge: fix reference leak in apple_mfi_fc_set_property
+Date:   Fri, 30 Oct 2020 23:45:34 +0800
+Message-ID: <20201030154534.98294-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.26.0.106.g9fadedd
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201030153927.20795-1-yann.garras@y3s.fr>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.225]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 04:39:27PM +0100, Yann GARRAS wrote:
-> Replace hard-coded product id values by constants for Telit Products
+pm_runtime_get_sync() will increment pm usage counter even
+it failed. Forgetting to call pm_runtime_put_noidle will
+result in reference leak in apple_mfi_fc_set_property, so
+we should fix it.
 
-The defines don't add anything of value, so I've been trying to move
-away from using them. We should probably do the opposite conversion and
-ditch the remaining defines at some point instead.
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+---
+ drivers/usb/misc/apple-mfi-fastcharge.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Johan
+diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c b/drivers/usb/misc/apple-mfi-fastcharge.c
+index b403094a6b3a..9e1ad4536e36 100644
+--- a/drivers/usb/misc/apple-mfi-fastcharge.c
++++ b/drivers/usb/misc/apple-mfi-fastcharge.c
+@@ -120,8 +120,10 @@ static int apple_mfi_fc_set_property(struct power_supply *psy,
+ 	dev_dbg(&mfi->udev->dev, "prop: %d\n", psp);
+ 
+ 	ret = pm_runtime_get_sync(&mfi->udev->dev);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put_noidle(&mfi->udev->dev);
+ 		return ret;
++	}
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+-- 
+2.17.1
+
