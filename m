@@ -2,117 +2,267 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B62729FC52
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 04:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2230229FCC0
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 05:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726152AbgJ3DwW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Oct 2020 23:52:22 -0400
-Received: from mail-eopbgr60045.outbound.protection.outlook.com ([40.107.6.45]:41088
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725780AbgJ3DwV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Oct 2020 23:52:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gdRcWjHYj40sC+UCB0eR85+i/hJ0IJG1YwoCAnfOCJ15lfjZRKUXsWDJqUqtfhNPQhugRfm00BA56wc0D0Wqkzf6KHsGzLRKOo+vdH3PibmaCVdQ2/YKOr/8qlzDLYkIT+6SlE34cj8LmdLAQUbQaoHCJikbtj3eLts7cmm9+1BoigD/VpSQWmRCVq14gZd3kNgmjjBPV9tzDDJuqt/DajmllxRWLXxAfBHf5t0r9KK140Kp4gjZ9ipnhv4YZc0I0Il9/0C+/Nm4OXaHcY/6RJEEEYzJ05KYqp/bDaiXfV4Nuo3yvLeITOQjuZI48FXyn4KrOsuMYfi2e7WLS1Lr8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EJCqm+jy6UVfSdYjb77qpDJfNu5dnKRPcPhfAiI0g3s=;
- b=Bb1OLo+9CgR6dYrcfgThmuj+wkrjxJgtpMq3QqkTapX8s2fWp3yRbWNHXcn35+FvjmHsFjHsd9uW6oKFZq6Q49fQHju158JtRhF9hppVynZrHFJOI7secpG8DrezUp1BGWske6ZTFFbJptdC0XM0vtPVQoyynDBXxuMU8xrIx6kRtWzUuSWVT8evsKUJd2nqWIjet2eV0FvIdzFQwG7dj1YFCBM0Hm4MDv8M2LYenwMb4Z2N2dpvIbQ6RBNh25cUfmDwUABaOIVkblHVPw5oxdXQs9t1igm0cI1fZ2oCVqQCi/2m1hOmCeStflYYkTkWLQGoiyqaxrsnukGe3MGs6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EJCqm+jy6UVfSdYjb77qpDJfNu5dnKRPcPhfAiI0g3s=;
- b=TxwRiUx3bvyEVuPdrqiDQ/CGo+pZAWiG/1edGjPNZ51D1j9tLCtjFYcbk9NQxfMHKQcQSoJAWhONPChQYdYinPfBhUVZk5muM7qmUf71/mIwif1E9/gT29SHYjSF1wZ4AwuXGHULIC6PfGIkauEXK0JYxKHonhcNU4hUemDNKX4=
-Received: from VE1PR04MB7310.eurprd04.prod.outlook.com (2603:10a6:800:1a2::9)
- by VE1PR04MB7214.eurprd04.prod.outlook.com (2603:10a6:800:1a6::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Fri, 30 Oct
- 2020 03:52:14 +0000
-Received: from VE1PR04MB7310.eurprd04.prod.outlook.com
- ([fe80::4167:2a14:b445:9a7]) by VE1PR04MB7310.eurprd04.prod.outlook.com
- ([fe80::4167:2a14:b445:9a7%2]) with mapi id 15.20.3499.028; Fri, 30 Oct 2020
- 03:52:14 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: [GIT PULL] usb: fixes for cdns3 driver
-Thread-Topic: [GIT PULL] usb: fixes for cdns3 driver
-Thread-Index: Adaub/el1C0keb9rRdGJHBI92kL0zQ==
-Date:   Fri, 30 Oct 2020 03:52:14 +0000
-Message-ID: <VE1PR04MB73105F9B65F5546DF46BAAC48B150@VE1PR04MB7310.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=nxp.com;
-x-originating-ip: [92.121.68.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 42a54a73-9efc-449f-f267-08d87c873054
-x-ms-traffictypediagnostic: VE1PR04MB7214:
-x-microsoft-antispam-prvs: <VE1PR04MB721478D8E8E100A7D8A488AE8B150@VE1PR04MB7214.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:849;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jGMdK1/h47UzLvzGukMnboQpftdOKr/iy0zUpha6SRJs9UiusIMZ5c/lxCeWgo+XpFnPG0vJhL/e60kq5tz6SnIK9w3Dq/1ZtTiNZXkb+1lo5f9FycB6YVYAYpwdXMiL9Tz3lNSpAzZyAdqoWN5rwZpOuWOq+uzhRWnwc9OcoMx27nil01IRHqrswvcEfmwYQhgbQaejyE5sq2On4ZGKBd6EtTwzuR39q1Ua8sQc+GiZ39PAZmbtclXpFkvHIvy7XQ+7Zak6xZcNU1MlThW9IPHgNuKyHY2VBmr8mR3te+FcyJIQZEyDHi9ep1ng8rGy
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB7310.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39860400002)(346002)(396003)(376002)(136003)(9686003)(6916009)(66446008)(44832011)(66946007)(66476007)(76116006)(33656002)(4326008)(66556008)(64756008)(7696005)(316002)(86362001)(55016002)(186003)(26005)(4001150100001)(83380400001)(8676002)(478600001)(5660300002)(2906002)(71200400001)(8936002)(52536014)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 5vU7mFVkEE22fNaw/M1elI6gjKUyoPmRWyovv5pCYpWW4+UlRtWnZoJ0/8YNjWxTwL0+UlyO16zFpv6f4AgC+UeZYr/B5z2RLmeS+SiZXyXitM5Mkt+IhZ9wjL8PI7KFPTNbmQHcKQRUZ+bPPQOFwoVegp3mLp5rman7t57JTXLRDcALJkRxx85od4VEDAralHIeHIJJ2bcbqM+djwC+wzv77xxSPL/zzMzXXxDbjniwN0OU5JEtuOGicI+klnTVbjLBCrHQqK4MOomwgUgPLJHzn/bXlcEcvfh0x5oEfyXwBOVaZHP1qQ0TD9oKOdeEQtpIIZjnZvyICveus7s2ALjHSNR3Hg1TUmqP/Ptf/qIP7OIoCYD44hmKKUaF2RYaiD0RwjGmilMdrvvo2/Myh31iZoJWRJm9H8yywaHRdQfR9j3s0TRvfK7DdzQ0KZyPHxOqHBR0MPrieyoki1IaZ+2YfR2iOtc9LkIb+wmVkjAwFuUZ7jQg74682GwLotrnzgqwDXu+VCWioyejlI3R4q4NOvh2xINwZ1bOcb3J2TFjfQvg2dw7lelA1Cu9zSL+cG7CI2aVqqTNAcxySITdS4MxAYdwCx+v9IqqoiBdGbwJ1EJeLPORXkfWps2aC+xQX055M0m8YVEhJqJbZKNU4A==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1725797AbgJ3Emg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Oct 2020 00:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725831AbgJ3Emg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 00:42:36 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F205BC0613D4
+        for <linux-usb@vger.kernel.org>; Thu, 29 Oct 2020 21:42:31 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id a200so4187692pfa.10
+        for <linux-usb@vger.kernel.org>; Thu, 29 Oct 2020 21:42:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=PVZRt0YkAiKORZguRTElyjMs0Igwt5Q779i6Rt3CboM=;
+        b=q1nnCvEw8fGNhVTLyAnKjBgw4EPNEmuQnFA724r+w/nVyhoVw8z5XEPz1NzPPajclN
+         xg9fUaxm3SIMpo/wmfZuHKvLAfo++5ofnOslnSsvyNgG+Pxb1UUCwIWMLyBwRVdAr2KY
+         ZiXg23T8Nrx8UcthENVuKJDkqK58DzRz8/kmtpH2B5TZb/a3FfqJvqa6f6WDwvNQnjD5
+         6zRK9aJUvF41j/omRdrhyJQiHeyh10ML51WzgqsOW7AkmiyIM6XXXp4inKFUiUguNmr6
+         2BGK5NRMylbo8RMs6Nay5/x5i0ZkgY8zMIiSUMoJVaacnkFdj1zptNaB2MU6TT1Fh+iS
+         5wAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=PVZRt0YkAiKORZguRTElyjMs0Igwt5Q779i6Rt3CboM=;
+        b=MI7VRBapuBQBY2gMoeLGCS84203gIj7svhSL7xukEMx56VMsUspepRhy3M4pjVorDX
+         psyPVmrXcriE0Zlv8H7Hz5RSXjTmVTv3aq65U+65Irsh8h5VLqTLpIW8oedk5JMwD3LX
+         poPpxWZDf+VU90+Apt+QmWl+J+998TKBu4lIoNLJN/fiiwRXl+ElYCpkvlSl4G2q/6q4
+         MaiQ+uhckDzhms4s+n1dsujVs6jLShevhIEfrylJ+gmqw+eZ3F+G04h7YXWHCe2fVFKh
+         whGh9YDjRn1J9xV0dUJ8doWfNnV4hamFssNYsdsJziNQOKLm8PpAe4KCjhEaeb8t8mG2
+         xLSQ==
+X-Gm-Message-State: AOAM532pd8UumXi1HvP1Myoaem9I0swAQXFVQBh9zRU/5gA4XHem+Fxu
+        0i+AXHES0QEPdaZlTqtdplLk/w==
+X-Google-Smtp-Source: ABdhPJxy5DHkYxKJ8dwAT3ogWi0TnUnW4lrDAy7t1vkgRcaLIlmaM4Hd4knv8XFpjmn+nO6KshSg6Q==
+X-Received: by 2002:a62:3857:0:b029:155:37a5:295 with SMTP id f84-20020a6238570000b029015537a50295mr7474198pfa.23.1604032951180;
+        Thu, 29 Oct 2020 21:42:31 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:4a0f:cfff:fe66:e92e])
+        by smtp.gmail.com with ESMTPSA id t129sm4703909pfc.140.2020.10.29.21.42.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2020 21:42:30 -0700 (PDT)
+Sender: Benson Leung <bleung@google.com>
+Date:   Thu, 29 Oct 2020 21:42:24 -0700
+From:   Benson Leung <bleung@chromium.org>
+To:     heikki.krogerus@linux.intel.com
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        bleung@chromium.org, bleung@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pmalani@chromium.org,
+        bleung@google.com
+Subject: [PATCH] typec: Provide USB PD Specification Revision for cable and
+ partner
+Message-ID: <20201030044224.GA1269490@google.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB7310.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 42a54a73-9efc-449f-f267-08d87c873054
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Oct 2020 03:52:14.4545
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ur4nI6JhyElkcImpnXoX2K4H5/I3tFLSfGxpyo6AWgp202IhnVGk12IylxW5HJHyJT5xW9sccpk+Fd/1lOIakg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7214
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec=
-:
+The USB Power Delivery specification Section 6.2.1.1.5 outlines
+revision backward compatibility requirements starting from Revision 3.0.
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+The Port, the Cable Plug, and the Port Partner may support either revision
+2 or revision 3 individually, and communication between ports, partners,
+and cables of different revisions are allowed under rules that the parties
+agree to communicate between each other using the lowest common operating
+revision.
 
-are available in the Git repository at:
+This may mean that Port-to-Port operating revision comms may be different
+than Port-to-CablePlug operating revision comms. For example, it is
+possible for a R3.0 port to communicate with a R3.0 cable using R3.0
+messages, while the R3.0 port (in the same session) must communicate with
+a R2.0 partner using PD R2.0 messages only.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/ tags/us=
-b-v5.10-rc2
+This change will introduce individual revision number tracking for cable
+and port partner so that the port can track them independently.
 
-for you to fetch changes up to e11d2bf271589e70ea80a2ee3e116c40fcac62c2:
+This will also enable future changes which change cable identifier
+decoding and visible sysfs nodes based on revision 2 or 3.
 
-  usb: cdns3: gadget: own the lock wrongly at the suspend routine (2020-10-=
-30 11:40:54 +0800)
+Signed-off-by: Benson Leung <bleung@chromium.org>
+---
+ Documentation/ABI/testing/sysfs-class-typec |  8 +++++
+ drivers/usb/typec/class.c                   | 38 +++++++++++++++------
+ include/linux/usb/typec.h                   | 10 ++++++
+ 3 files changed, 46 insertions(+), 10 deletions(-)
 
-----------------------------------------------------------------
-4 bug fixes for Cadence 3 driver.
-The biggest fix is changing endpoint configuration method to
-avoid FIFO overflow at multiple endpoints situation.
+diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+index b834671522d6..740b226bb80e 100644
+--- a/Documentation/ABI/testing/sysfs-class-typec
++++ b/Documentation/ABI/testing/sysfs-class-typec
+@@ -102,6 +102,14 @@ Description:
+ 		Revision number of the supported USB Power Delivery
+ 		specification, or 0 when USB Power Delivery is not supported.
+ 
++What:		/sys/class/typec/<port>-{partner|cable}/usb_power_delivery_revision
++Date:		October 2020
++Contact:	Benson Leung <bleung@chromium.org>
++Description:
++		Revision number of the supported USB Power Delivery
++		specification of the port partner or cable, or 0 when USB Power
++		Delivery is not supported.
++
+ What:		/sys/class/typec/<port>/usb_typec_revision
+ Date:		April 2017
+ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 35eec707cb51..abae4cbe66d5 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -25,6 +25,7 @@ struct typec_cable {
+ 	enum typec_plug_type		type;
+ 	struct usb_pd_identity		*identity;
+ 	unsigned int			active:1;
++	u16				pd_revision; /* 0300H = "3.0" */
+ };
+ 
+ struct typec_partner {
+@@ -33,6 +34,7 @@ struct typec_partner {
+ 	struct usb_pd_identity		*identity;
+ 	enum typec_accessory		accessory;
+ 	struct ida			mode_ids;
++	u16				pd_revision; /* 0300H = "3.0" */
+ };
+ 
+ struct typec_port {
+@@ -146,6 +148,28 @@ static void typec_report_identity(struct device *dev)
+ 	sysfs_notify(&dev->kobj, "identity", "product");
+ }
+ 
++static ssize_t usb_power_delivery_revision_show(struct device *dev,
++						struct device_attribute *attr,
++						char *buf)
++{
++	if (is_typec_partner(dev)) {
++		struct typec_partner *partner = to_typec_partner(dev);
++
++		return sprintf(buf, "%d\n", (partner->pd_revision >> 8) & 0xff);
++	} else if (is_typec_cable(dev)) {
++		struct typec_cable *cable = to_typec_cable(dev);
++
++		return sprintf(buf, "%d\n", (cable->pd_revision >> 8) & 0xff);
++	} else if (is_typec_port(dev)) {
++		struct typec_port *p = to_typec_port(dev);
++
++		return sprintf(buf, "%d\n", (p->cap->pd_revision >> 8) & 0xff);
++	}
++}
++static DEVICE_ATTR_RO(usb_power_delivery_revision);
++
++
++
+ /* ------------------------------------------------------------------------- */
+ /* Alternate Modes */
+ 
+@@ -535,6 +559,7 @@ static DEVICE_ATTR_RO(supports_usb_power_delivery);
+ static struct attribute *typec_partner_attrs[] = {
+ 	&dev_attr_accessory_mode.attr,
+ 	&dev_attr_supports_usb_power_delivery.attr,
++	&dev_attr_usb_power_delivery_revision.attr,
+ 	NULL
+ };
+ ATTRIBUTE_GROUPS(typec_partner);
+@@ -612,6 +637,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
+ 	ida_init(&partner->mode_ids);
+ 	partner->usb_pd = desc->usb_pd;
+ 	partner->accessory = desc->accessory;
++	partner->pd_revision = desc->pd_revision;
+ 
+ 	if (desc->identity) {
+ 		/*
+@@ -773,6 +799,7 @@ static DEVICE_ATTR_RO(plug_type);
+ static struct attribute *typec_cable_attrs[] = {
+ 	&dev_attr_type.attr,
+ 	&dev_attr_plug_type.attr,
++	&dev_attr_usb_power_delivery_revision.attr,
+ 	NULL
+ };
+ ATTRIBUTE_GROUPS(typec_cable);
+@@ -875,6 +902,7 @@ struct typec_cable *typec_register_cable(struct typec_port *port,
+ 
+ 	cable->type = desc->type;
+ 	cable->active = desc->active;
++	cable->pd_revision = desc->pd_revision;
+ 
+ 	if (desc->identity) {
+ 		/*
+@@ -1240,16 +1268,6 @@ static ssize_t usb_typec_revision_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RO(usb_typec_revision);
+ 
+-static ssize_t usb_power_delivery_revision_show(struct device *dev,
+-						struct device_attribute *attr,
+-						char *buf)
+-{
+-	struct typec_port *p = to_typec_port(dev);
+-
+-	return sprintf(buf, "%d\n", (p->cap->pd_revision >> 8) & 0xff);
+-}
+-static DEVICE_ATTR_RO(usb_power_delivery_revision);
+-
+ static ssize_t orientation_show(struct device *dev,
+ 				   struct device_attribute *attr,
+ 				   char *buf)
+diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+index 6be558045942..2306d40e18a1 100644
+--- a/include/linux/usb/typec.h
++++ b/include/linux/usb/typec.h
+@@ -162,6 +162,7 @@ struct typec_plug_desc {
+  * @type: The plug type from USB PD Cable VDO
+  * @active: Is the cable active or passive
+  * @identity: Result of Discover Identity command
++ * @pd_revision: USB Power Delivery Specification revision if supported
+  *
+  * Represents USB Type-C Cable attached to USB Type-C port.
+  */
+@@ -169,6 +170,8 @@ struct typec_cable_desc {
+ 	enum typec_plug_type	type;
+ 	unsigned int		active:1;
+ 	struct usb_pd_identity	*identity;
++	u16			pd_revision; /* 0300H = "3.0" */
++
+ };
+ 
+ /*
+@@ -176,15 +179,22 @@ struct typec_cable_desc {
+  * @usb_pd: USB Power Delivery support
+  * @accessory: Audio, Debug or none.
+  * @identity: Discover Identity command data
++ * @pd_revision: USB Power Delivery Specification Revision if supported
+  *
+  * Details about a partner that is attached to USB Type-C port. If @identity
+  * member exists when partner is registered, a directory named "identity" is
+  * created to sysfs for the partner device.
++ *
++ * @pd_revision is based on the setting of the "Specification Revision" field
++ * in the message header on the initial "Source Capabilities" message receieved
++ * from the partner, or a "Request" message received from the partner, depending
++ * on whether our port is a Sink or a Source.
+  */
+ struct typec_partner_desc {
+ 	unsigned int		usb_pd:1;
+ 	enum typec_accessory	accessory;
+ 	struct usb_pd_identity	*identity;
++	u16			pd_revision; /* 0300H = "3.0" */
+ };
+ 
+ /**
+-- 
+2.29.1.341.ge80a0c044ae-goog
 
-----------------------------------------------------------------
-Pawel Laszczak (2):
-      usb: cdns3: Variable 'length' set but not used
-      usb: cdns3: Fix on-chip memory overflow issue
 
-Peter Chen (2):
-      usb: cdns3: gadget: suspicious implicit sign extension
-      usb: cdns3: gadget: own the lock wrongly at the suspend routine
-
- drivers/usb/cdns3/ep0.c    |  65 +++++++++++++++++++++++++++++++++--------=
----------------------
- drivers/usb/cdns3/gadget.c | 115 +++++++++++++++++++++++++++++++++++++++++=
-++++++++++++++++++++-------------------------------------------------
- drivers/usb/cdns3/gadget.h |   5 +++--
- 3 files changed, 102 insertions(+), 83 deletions(-)
+-- 
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
