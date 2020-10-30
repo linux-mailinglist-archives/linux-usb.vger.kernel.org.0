@@ -2,82 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2CF2A0D44
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 19:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4574A2A10EE
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Oct 2020 23:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726095AbgJ3SVE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Oct 2020 14:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725844AbgJ3SVE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 14:21:04 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05571C0613D2
-        for <linux-usb@vger.kernel.org>; Fri, 30 Oct 2020 11:11:19 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id j30so9030106lfp.4
-        for <linux-usb@vger.kernel.org>; Fri, 30 Oct 2020 11:11:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Z65a4OQ16/rnMphZkcZN/ywDaNNCsr1xY0tCemvYIk4=;
-        b=CkfAXQxS4WGCbmeKtvOsKpg9l23mkqzCBgFnI30HZsajvwLsfHHpXa27d5s3N6coy+
-         lxb2wVMT2Pg8oKIdolaWisgJail841qfNOt/efQ6xs+2ZZxSHXrpVS5Fkr/OQAvQfSRK
-         3x8bCriEK+j1ZVeu7Rm5GqqEf1WKg24C1R6RFzgHXUTIcAfwXcHF+33UKUh934Y/SPdD
-         qUbMTBydeiLiG0DVYoVC08x/gF0ADVfIFNbiMSYpGTsT3NNMhOu8q9b561GERHnGlZKZ
-         tW8bvPbPL8Ak3yuntr3J5YhsJQBHxvzU9YAve24SqTWMuZqPxRaTmrYuWN7cyiZCgI5Y
-         eTxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Z65a4OQ16/rnMphZkcZN/ywDaNNCsr1xY0tCemvYIk4=;
-        b=W8JqQBXOpKhO+Ci1ZVG0JHemjiiKmkEXaBK3r32xrLwBABTjdTihhjvCsnxwJDZ1LD
-         V9Xxu8TmmJi0VmUvHnxxHK4XJyo0uOeP8XqzTdshHbtwNI8NT9IJdQ0JD1WC3tVXC6s8
-         eGkyCCosUYrU4wkAb8VY0xQTiN1aSGrPPDyi3dmnEHeGK5vNFOaiPsLUTmn778GTXsog
-         OO9y3B3Rm5nVoKqCuj3LSI8DMDIQ4La1ecFmFk31dSi2Jdh2EgPLi9lgl2Re/EJrFeXT
-         YPlQ9awoQBFZNiXwZgOTyRWyaizU8CFr4Qatd2O7U0WbGxDguEXJarsvEL3jMluu2Fjp
-         7ROw==
-X-Gm-Message-State: AOAM532pPBcVLY8Pm8Ih9T2eDwARTIZ4xImdIpUmdNeeEiFrTa+qRVID
-        Vusurx1FIPWCa4GJ6aI+f012T57cle0=
-X-Google-Smtp-Source: ABdhPJwNNfVTh1MYrUpiSrWgMs0IF0eIM/Q2D/1LczRbxQBkJWPR15kp9jw+uzH1Ivejp6tS8D3kDA==
-X-Received: by 2002:a19:ee12:: with SMTP id g18mr1583088lfb.515.1604081477368;
-        Fri, 30 Oct 2020 11:11:17 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:611:8042:b0de:2a12:d02e:8d36? ([2a00:1fa0:611:8042:b0de:2a12:d02e:8d36])
-        by smtp.gmail.com with ESMTPSA id l3sm687251lfp.219.2020.10.30.11.11.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Oct 2020 11:11:16 -0700 (PDT)
-Subject: Re: [PATCH] USB: apple-mfi-fastcharge: fix reference leak in
- apple_mfi_fc_set_property
-To:     Zhang Qilong <zhangqilong3@huawei.com>, hadess@hadess.net
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-References: <20201030154534.98294-1-zhangqilong3@huawei.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <63e4452e-0277-e060-ce89-4fe2dcb30ed4@gmail.com>
-Date:   Fri, 30 Oct 2020 21:11:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
-MIME-Version: 1.0
-In-Reply-To: <20201030154534.98294-1-zhangqilong3@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1725803AbgJ3We2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Oct 2020 18:34:28 -0400
+Received: from mail.msweet.org ([173.255.209.91]:57352 "EHLO mail.msweet.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725791AbgJ3We1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 30 Oct 2020 18:34:27 -0400
+Received: from mbp16-ubuntu-lts (host-24-231-71-254.public.eastlink.ca [24.231.71.254])
+        by mail.msweet.org (Postfix) with ESMTPSA id 1B5CF820E3;
+        Fri, 30 Oct 2020 22:34:27 +0000 (UTC)
+From:   Michael R Sweet <msweet@msweet.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, msweet@msweet.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Fix default q_len for usb_f_printer gadget driver
+Date:   Fri, 30 Oct 2020 18:34:19 -0400
+Message-Id: <20201030223419.3780-1-msweet@msweet.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/30/20 6:45 PM, Zhang Qilong wrote:
+The usb_f_printer gadget driver uses a default q_len value of *0* which prevents
+any IO from occurring.  Moreover, once the driver is instantiated it is
+impossible to change the q_len value.
 
-> pm_runtime_get_sync() will increment pm usage counter even
+The following patch uses a default q_len value of 10 which matches the legacy
+g_printer gadget driver.  This minimizes the possibility that you end up with a
+non-working printer gadget.  It is still possible to set the q_len to a
+different value using the configfs path of the same name.
 
-   You missed when/if in this (and the following) patch.
+Signed-off-by: Michael R Sweet <msweet@msweet.org>
+---
+ drivers/usb/gadget/function/f_printer.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> it failed. Forgetting to call pm_runtime_put_noidle will
-> result in reference leak in apple_mfi_fc_set_property, so
-> we should fix it.
-> 
-> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-[...]
+diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+index 9c7ed2539ff7..4f3161005e4f 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -50,6 +50,8 @@
+ #define GET_PORT_STATUS		1
+ #define SOFT_RESET		2
+ 
++#define DEFAULT_Q_LEN		10 /* same as legacy g_printer gadget */
++
+ static int major, minors;
+ static struct class *usb_gadget_class;
+ static DEFINE_IDA(printer_ida);
+@@ -1317,6 +1319,9 @@ static struct usb_function_instance *gprinter_alloc_inst(void)
+ 	opts->func_inst.free_func_inst = gprinter_free_inst;
+ 	ret = &opts->func_inst;
+ 
++	/* Make sure q_len is initialized, otherwise the bound device can't support read/write! */
++	opts->q_len = DEFAULT_Q_LEN;
++
+ 	mutex_lock(&printer_ida_lock);
+ 
+ 	if (ida_is_empty(&printer_ida)) {
+-- 
+2.17.1
 
-MBR, Sergei
