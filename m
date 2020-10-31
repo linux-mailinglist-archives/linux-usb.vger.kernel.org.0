@@ -2,94 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A30182A154E
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Oct 2020 11:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEF92A18F2
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Oct 2020 18:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbgJaKsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 31 Oct 2020 06:48:02 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:43623 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726697AbgJaKsC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 31 Oct 2020 06:48:02 -0400
-Received: by mail-lj1-f195.google.com with SMTP id d24so9600317ljg.10
-        for <linux-usb@vger.kernel.org>; Sat, 31 Oct 2020 03:47:59 -0700 (PDT)
+        id S1728158AbgJaRTf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 31 Oct 2020 13:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726586AbgJaRTf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 31 Oct 2020 13:19:35 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19FBC0617A6;
+        Sat, 31 Oct 2020 10:19:33 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id o205so1122054qke.10;
+        Sat, 31 Oct 2020 10:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=VQlGBb8M5jgrHCNctQCHW/goIscpJbN90wm8vcO5ynk=;
+        b=vMu1gXrr4HKw49O9BvBSO+oIzPQAaXyHwaCDcXiQwH+XL3kgCNQj62lHxnMQEEkEMd
+         ilPnsVXyRhvYVvDUItIfD+O3Hf2t47ARQz2auIG4rr/JyghXt8CJzWBFbKl7SwRAod2X
+         7vvRjFFlQX7KwUvhg1L13qo/GUvCDbGoQH6PMYu3uXqHw0MHQCzZopJC8etk2i0zk6Ua
+         aEncPepJhLDKskmFIhH2Ry+Pt3e5nM+vcO3feXaKkcpup+TL6rDzI7s4K4pXra4eX5Hs
+         e4sZyadcK3q20Vt1J4rKhWOlFBKcjUBGgvyvjGRUwQB313NNV9hQx7vFT9/Un4wPOdYt
+         g1Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CYbpGfKqo2ahas0djGHZaq+qm1CqSl1MGVSORoPUwiA=;
-        b=nUngT2ffOZWAAVqVRumx5xk0CFMWmAfs4V92JlOQAHtbr6e3cz7WBahadoW++Krg9o
-         5w3YDLSC2r6GLDVZtKFsLRXBZMcipH8X9w+H9qCfPGd745kmIgqkREp01YATqZV9I0kv
-         pvLnfyHyk2uw1f34k9WBpEMrd5OQGFdSGfFfwjf4Aw/lBMXd65VjO967S7YnktfdjybF
-         A/WKjkE3o9x5I7o6jwud7C98hwFUPAxnOW0r//ANSWbhM3yy1164uLLP8dU8c5un5J0n
-         hgx9Oqj/xxb2HyE0PHaWdxnHQPgSBZ6FjHXbhn5liDJg9PwrmNLnXD+AKF2BYzuf9Nwc
-         0MmA==
-X-Gm-Message-State: AOAM5306kdzzdtvxZn7msi0oxi+iImlH9f1+kd/6+K94mlYFVnPxGawD
-        CA5G0/5MLqwW1SIzteSoB8Y=
-X-Google-Smtp-Source: ABdhPJw0e05TRc/a9z0qzbS6gplF2V20rQBH+hSJ9jxo76hcvCvizgnNyvigyZ1BTaelBMEJyDNFJg==
-X-Received: by 2002:a05:651c:10b:: with SMTP id a11mr2846168ljb.49.1604141278937;
-        Sat, 31 Oct 2020 03:47:58 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id m132sm876471lfa.34.2020.10.31.03.47.57
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=VQlGBb8M5jgrHCNctQCHW/goIscpJbN90wm8vcO5ynk=;
+        b=fr966P/6b9sthjAlkjUXjIskh88NLZ7x2LLi6nM+kjT8cj4lvRqvlZ4KV2spLxS2bC
+         tdcP+doP7Bx280gK10OlAsgRawnZR+eB6DKH/QaNo5b017fu58DAqpwpFRPFlfRm3CTQ
+         aoVt2sAobNVjgyWzxM78hhXXwVdtsc/7eHWMLRdvY+1v3wa2KdYDoIF3KOeYsI8Igq4G
+         FPFxaIPxEeGdHRUCf3+oIzPLzPZi6uARsHWrlz4pWy0Lzf0PC9AdSMoVutyRjUYJu06e
+         FzQPbhYYxXeg41vm0oxj4juvIk5XMfpdKdIgovO5EYYehQVQu4nmY9W34S7gRRYa+b/2
+         C5bQ==
+X-Gm-Message-State: AOAM530yQ2HZs4b0rtKq3VL5+XqsepTtTGfNd7K9ELsjUTjBHLf8J0Ld
+        aZ6VmDbUd15sf55jSd0Cuxw=
+X-Google-Smtp-Source: ABdhPJxORmnEl4mCjT7RkUqG2A+iG1mPNrcKGA+6JEE/VxNkQxTmRNDz46NZUWtFi3ViCKpBzWfVqg==
+X-Received: by 2002:a05:620a:2148:: with SMTP id m8mr7651515qkm.19.1604164773134;
+        Sat, 31 Oct 2020 10:19:33 -0700 (PDT)
+Received: from fedora-project ([2604:2000:ffc0:0:74b0:102f:8bef:7279])
+        by smtp.gmail.com with ESMTPSA id r190sm4770134qkf.101.2020.10.31.10.19.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2020 03:47:57 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kYoQT-0008QY-I1; Sat, 31 Oct 2020 11:48:02 +0100
-Date:   Sat, 31 Oct 2020 11:48:01 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Zhang Qilong <zhangqilong3@huawei.com>
-Cc:     hadess@hadess.net, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] USB: apple-mfi-fastcharge: fix reference leak in
- apple_mfi_fc_set_property
-Message-ID: <20201031104801.GN4085@localhost>
-References: <20201031101144.45164-1-zhangqilong3@huawei.com>
+        Sat, 31 Oct 2020 10:19:32 -0700 (PDT)
+Date:   Sat, 31 Oct 2020 13:19:30 -0400
+From:   Nigel Christian <nigel.l.christian@gmail.com>
+To:     gregkh@linuxfoundation.org, lee.jones@linaro.org
+Cc:     linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] usb: core: ledtrig-usbport: use octal permission
+Message-ID: <20201031171930.GA21555@fedora-project>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201031101144.45164-1-zhangqilong3@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Oct 31, 2020 at 06:11:44PM +0800, Zhang Qilong wrote:
-> pm_runtime_get_sync() will increment pm usage at first and it
-> will resume the device later. If runtime of the device is
-> active or has error(else....), resume operation will fail. 
+Change read/write for owner permission from symbolic to octal
+to enhance readability. This patch reduces checkpatch warnings 
+for this file to nil.
 
-That's not a correct description; pm_runtime_get_sync() returns positive
-if the device was already active and that's not a failure (there's
-nothing to resume).
+see: https://lkml.org/lkml/2016/8/2/1945
 
-Please fix up when resending.
+verified via chmod(2) man page
 
-> If
-> we do not call put operation to decrease the reference, the
-> result is that this device cannot enter the idle state and
-> always stay busy or other non-idle state.
-> 
-> Fixes: 249fa8217b846 ("USB: Add driver to control USB fast charge for iOS devices")
-> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-> ---
->  drivers/usb/misc/apple-mfi-fastcharge.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c b/drivers/usb/misc/apple-mfi-fastcharge.c
-> index b403094a6b3a..9e1ad4536e36 100644
-> --- a/drivers/usb/misc/apple-mfi-fastcharge.c
-> +++ b/drivers/usb/misc/apple-mfi-fastcharge.c
-> @@ -120,8 +120,10 @@ static int apple_mfi_fc_set_property(struct power_supply *psy,
->  	dev_dbg(&mfi->udev->dev, "prop: %d\n", psp);
->  
->  	ret = pm_runtime_get_sync(&mfi->udev->dev);
-> -	if (ret < 0)
-> +	if (ret < 0) {
-> +		pm_runtime_put_noidle(&mfi->udev->dev);
->  		return ret;
-> +	}
->  
->  	switch (psp) {
->  	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+Signed-off-by: Nigel Christian <nigel.l.christian@gmail.com>
+---
+ drivers/usb/core/ledtrig-usbport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Johan
+diff --git a/drivers/usb/core/ledtrig-usbport.c b/drivers/usb/core/ledtrig-usbport.c
+index ba371a24ff78..8e9b1c5cc971 100644
+--- a/drivers/usb/core/ledtrig-usbport.c
++++ b/drivers/usb/core/ledtrig-usbport.c
+@@ -211,7 +211,7 @@ static int usbport_trig_add_port(struct usbport_trig_data *usbport_data,
+ 
+ 	sysfs_attr_init(&port->attr.attr);
+ 	port->attr.attr.name = port->port_name;
+-	port->attr.attr.mode = S_IRUSR | S_IWUSR;
++	port->attr.attr.mode = 0600;
+ 	port->attr.show = usbport_trig_port_show;
+ 	port->attr.store = usbport_trig_port_store;
+ 
+-- 
+2.28.0
+
