@@ -2,86 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E749A2A12F5
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Oct 2020 03:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F162A1353
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Oct 2020 04:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726294AbgJaCjN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Oct 2020 22:39:13 -0400
-Received: from server.msgroupspa.com ([185.149.113.111]:35286 "EHLO
-        server.msgroupspa.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725536AbgJaCjI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 22:39:08 -0400
-X-Greylist: delayed 66465 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Oct 2020 22:38:58 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=msgroupspa.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gOeEglh1DIJatPKqyvOsPs4e0Zw8Lzg9wwjnNfQdiM8=; b=nK3IDYT+DT+afspoRk1vnh030x
-        JBANriWCpwGFqkJTHXsxgXz4zPu7XOm+ROYW+1LhSp6Xws1Wm9Gxv0Soi++3fpbt9358vEM1Vilpv
-        5xlCNIs/Y8Yak5vs3SvhE9OTE/TC6Vf04ze0iphAaRgUliWRhAsWS8s68bwFyUv4tdChHxOH/JwR2
-        Vv+jWIv637j1UH3aZ6QLvXZrjdEmRucUTVxZtH4VnCDjrc4XZi9EwE5rzVsYDmyiNG+eYB+1QY+/8
-        bPWWeacOm9DyYRD9g3bLyiVv0uincEH4/sdJ6fuUSabQfGsi095GX6rsmNCONVo4/rhE4INecsjOZ
-        9QdrBN4A==;
-Received: from [::1] (port=55352 helo=server.msgroupspa.com)
-        by server.msgroupspa.com with esmtpa (Exim 4.93)
-        (envelope-from <no-reply@msgroupspa.com>)
-        id 1kYPRU-0006Ky-OT; Fri, 30 Oct 2020 16:07:24 +0800
+        id S1725800AbgJaD3g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Oct 2020 23:29:36 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:2051 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725536AbgJaD3g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Oct 2020 23:29:36 -0400
+Received: from DGGEMM402-HUB.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4CNPmp2j93zVjc3;
+        Sat, 31 Oct 2020 11:29:30 +0800 (CST)
+Received: from dggema706-chm.china.huawei.com (10.3.20.70) by
+ DGGEMM402-HUB.china.huawei.com (10.3.20.210) with Microsoft SMTP Server (TLS)
+ id 14.3.487.0; Sat, 31 Oct 2020 11:29:31 +0800
+Received: from dggema755-chm.china.huawei.com (10.1.198.197) by
+ dggema706-chm.china.huawei.com (10.3.20.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Sat, 31 Oct 2020 11:29:31 +0800
+Received: from dggema755-chm.china.huawei.com ([10.1.198.197]) by
+ dggema755-chm.china.huawei.com ([10.1.198.197]) with mapi id 15.01.1913.007;
+ Sat, 31 Oct 2020 11:29:31 +0800
+From:   zhangqilong <zhangqilong3@huawei.com>
+To:     Bastien Nocera <hadess@hadess.net>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIFVTQjogYXBwbGUtbWZpLWZhc3RjaGFyZ2U6IGZp?=
+ =?utf-8?B?eCByZWZlcmVuY2UgbGVhayBpbiBhcHBsZV9tZmlfZmNfc2V0X3Byb3BlcnR5?=
+Thread-Topic: [PATCH] USB: apple-mfi-fastcharge: fix reference leak in
+ apple_mfi_fc_set_property
+Thread-Index: AQHWrtU+FgDMggzbUkWKHEHOnIu8PamxCHtw
+Date:   Sat, 31 Oct 2020 03:29:31 +0000
+Message-ID: <02c9ff38b0c246c498a5e80dde5fb62b@huawei.com>
+References: <20201030154534.98294-1-zhangqilong3@huawei.com>
+ <0145bd8636cb9f384e5e9b7149a7d9a90bc56825.camel@hadess.net>
+In-Reply-To: <0145bd8636cb9f384e5e9b7149a7d9a90bc56825.camel@hadess.net>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.179.28]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Date:   Fri, 30 Oct 2020 16:07:24 +0800
-From:   "Mr. John Galvan" <no-reply@msgroupspa.com>
-To:     undisclosed-recipients:;
-Subject: Hello/Hallo
-Reply-To: galvan.johnny@outlook.com
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <8970d4ac30f8022b0ae628d9b69a2d43@msgroupspa.com>
-X-Sender: no-reply@msgroupspa.com
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server.msgroupspa.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - msgroupspa.com
-X-Get-Message-Sender-Via: server.msgroupspa.com: authenticated_id: no-reply@msgroupspa.com
-X-Authenticated-Sender: server.msgroupspa.com: no-reply@msgroupspa.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
--- 
-Sir/Madam,
-
-I have access to very vital information that can be used to move a huge 
-amount of money. I have done my homework very well and I have the 
-machineries in place to get it done since I am still in active service. 
-If it was possible for me to do it alone I would not have bothered 
-contacting you. Ultimately I need an honest foreigner to play an 
-important role in the completion of this business transaction. Send 
-responds to this email: galvan.johnny@outlook.com
-
-Regards,
-John Galvan
-
----------------------------------------------------------------
-
-Sir / Madam,
-
-Ich habe Zugang zu sehr wichtigen Informationen, mit denen ich eine 
-große Menge Geld bewegen kann. Ich habe meine Hausaufgaben sehr gut 
-gemacht und ich habe die Maschinen, um sie zu erledigen, da ich immer 
-noch im aktiven Dienst bin. Wenn es mir möglich gewesen wäre, es alleine 
-zu tun, hätte ich mich nicht darum gekümmert, Sie zu kontaktieren. 
-Letztendlich brauche ich einen ehrlichen Ausländer, der eine wichtige 
-Rolle beim Abschluss dieses Geschäftsvorgangs spielt. Senden Sie 
-Antworten auf diese E-Mail: galvan.johnny@outlook.com
-
-Grüße,
-John Galvan
+PiANCj4gT24gRnJpLCAyMDIwLTEwLTMwIGF0IDIzOjQ1ICswODAwLCBaaGFuZyBRaWxvbmcgd3Jv
+dGU6DQo+ID4gcG1fcnVudGltZV9nZXRfc3luYygpIHdpbGwgaW5jcmVtZW50IHBtIHVzYWdlIGNv
+dW50ZXIgZXZlbiBpdCBmYWlsZWQuDQo+ID4gRm9yZ2V0dGluZyB0byBjYWxsIHBtX3J1bnRpbWVf
+cHV0X25vaWRsZSB3aWxsIHJlc3VsdCBpbiByZWZlcmVuY2UgbGVhaw0KPiA+IGluIGFwcGxlX21m
+aV9mY19zZXRfcHJvcGVydHksIHNvIHdlIHNob3VsZCBmaXggaXQuDQo+ID4NCj4gPiBTaWduZWQt
+b2ZmLWJ5OiBaaGFuZyBRaWxvbmcgPHpoYW5ncWlsb25nM0BodWF3ZWkuY29tPg0KPiANCj4gSXQg
+bG9va3MgY29ycmVjdCwgYnV0IEkgZG9uJ3Qga25vdyB3aGV0aGVyIGl0J3MgbmVjZXNzYXJ5Lg0K
+PiBUaGVyZSdzIGEgYm9hdGxvYWQgb2YgdXNlcnMgb2YgdGhhdCBBUEkgdGhhdCBkb24ndCBldmVu
+IGNoZWNrIGZvciB0aGUNCj4gZ2V0X3N5bmMoKSByZXR2YWwsIGFuZCBsb2FkcyBtb3JlIHdoZXJl
+IGl0J3MgY2hlY2tlZCBidXQgbmV2ZXIgYWN0ZWQgdXBvbi4NCj4gDQo+IERvIHlvdSBpbnRlbmQg
+dG8gZml4IGFsbCB0aG9zZSBhcyB3ZWxsPw0KPiANCg0KcG1fcnVudGltZV9nZXRfc3luYyB3aWxs
+IGluY3JlYXNlIHRoZSByZWZlcmVuY2UgY291bnQgYXQgZmlyc3QsIGFuZCBpdCB3aWxsIHJlc3Vt
+ZSB0aGUgZGV2aWNlDQpsYXRlci4gSWYgcnVudGltZSBvZiB0aGUgZGV2aWNlIGlzIGFjdGl2ZSBv
+ciBoYXMgZXJyb3Ioc29tZXRoaW5nIGVsc2UuLi4uKSwgcmVzdW1lIHdpbGwgZmFpbGVkLiBJZiB3
+ZQ0KZG8gbm90IGNhbGwgcHV0IG9wZXJhdGlvbiB0byBkZWNyZWFzZSB0aGUgcmVmZXJlbmNlLCB0
+aGUgcmVzdWx0IGlzIHRoYXQgdGhpcyBkZXZpY2UgY2Fubm90IGVudGVyDQp0aGUgaWRsZSBzdGF0
+ZSBhbmQgYWx3YXlzIHN0YXkgYnVzeSBvciBvdGhlciBub24taWRsZSBzdGF0ZSwgbWF5YmUgaXQg
+Y29uc3VtZXMgbW9yZSBwb3dlciBvcg0KcmFpc2UgYWRkaXRpb25hbCBlcnJvcnMuLi4gQW5kIEkn
+bGwgdHJ5IHRvIGZpeCB0aGVtIDogKQ0KDQpUaGFua3MsIGJlc3Qgd2lzaCENCg0KWmhhbmcgUWls
+b25nDQoNCj4gPiAtLS0NCj4gPiDCoGRyaXZlcnMvdXNiL21pc2MvYXBwbGUtbWZpLWZhc3RjaGFy
+Z2UuYyB8IDQgKysrLQ0KPiA+IMKgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMSBk
+ZWxldGlvbigtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL21pc2MvYXBwbGUt
+bWZpLWZhc3RjaGFyZ2UuYw0KPiA+IGIvZHJpdmVycy91c2IvbWlzYy9hcHBsZS1tZmktZmFzdGNo
+YXJnZS5jDQo+ID4gaW5kZXggYjQwMzA5NGE2YjNhLi45ZTFhZDQ1MzZlMzYgMTAwNjQ0DQo+ID4g
+LS0tIGEvZHJpdmVycy91c2IvbWlzYy9hcHBsZS1tZmktZmFzdGNoYXJnZS5jDQo+ID4gKysrIGIv
+ZHJpdmVycy91c2IvbWlzYy9hcHBsZS1tZmktZmFzdGNoYXJnZS5jDQo+ID4gQEAgLTEyMCw4ICsx
+MjAsMTAgQEAgc3RhdGljIGludCBhcHBsZV9tZmlfZmNfc2V0X3Byb3BlcnR5KHN0cnVjdA0KPiA+
+IHBvd2VyX3N1cHBseSAqcHN5LA0KPiA+IMKgwqDCoMKgwqDCoMKgwqBkZXZfZGJnKCZtZmktPnVk
+ZXYtPmRldiwgInByb3A6ICVkXG4iLCBwc3ApOw0KPiA+DQo+ID4gwqDCoMKgwqDCoMKgwqDCoHJl
+dCA9IHBtX3J1bnRpbWVfZ2V0X3N5bmMoJm1maS0+dWRldi0+ZGV2KTsNCj4gPiAtwqDCoMKgwqDC
+oMKgwqBpZiAocmV0IDwgMCkNCj4gPiArwqDCoMKgwqDCoMKgwqBpZiAocmV0IDwgMCkgew0KPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwbV9ydW50aW1lX3B1dF9ub2lkbGUoJm1m
+aS0+dWRldi0+ZGV2KTsNCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVy
+biByZXQ7DQo+ID4gK8KgwqDCoMKgwqDCoMKgfQ0KPiA+DQo+ID4gwqDCoMKgwqDCoMKgwqDCoHN3
+aXRjaCAocHNwKSB7DQo+ID4gwqDCoMKgwqDCoMKgwqDCoGNhc2UgUE9XRVJfU1VQUExZX1BST1Bf
+Q0hBUkdFX1RZUEU6DQo+IA0KDQo=
