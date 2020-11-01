@@ -2,63 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E56C2A1B8C
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Nov 2020 01:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE122A1B9F
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Nov 2020 02:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726218AbgKAAvA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 31 Oct 2020 20:51:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43474 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726159AbgKAAu7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 31 Oct 2020 20:50:59 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208257] Kingston USB flash drive repeatedly disconnected after
- "Set SEL for device-initiated U2 failed."
-Date:   Sun, 01 Nov 2020 00:50:59 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: julroy67@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-208257-208809-AEenfnXY25@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208257-208809@https.bugzilla.kernel.org/>
-References: <bug-208257-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726389AbgKABkm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 31 Oct 2020 21:40:42 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:50629 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726352AbgKABkl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 31 Oct 2020 21:40:41 -0400
+Received: (qmail 1428690 invoked by uid 1000); 31 Oct 2020 21:40:40 -0400
+Date:   Sat, 31 Oct 2020 21:40:40 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Kyungtae Kim <kt0755@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>
+Subject: Re: KASAN: use-after-free Read in do_set_interface
+Message-ID: <20201101014040.GA1428475@rowland.harvard.edu>
+References: <CAEAjamsqOfgS6-7mt4SGd9rou-QRxzRDfQ_wD6dB3veueXtqgw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEAjamsqOfgS6-7mt4SGd9rou-QRxzRDfQ_wD6dB3veueXtqgw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208257
+On Wed, Oct 28, 2020 at 04:51:09PM -0400, Kyungtae Kim wrote:
+> We report a bug (in linux-5.8.13) found by FuzzUSB (a modified version
+> of syzkaller).
+> 
+> The bug happened when accessing a freed instance of struct fsg_dev
+> (i.e., fsg->bulk_in) in do_set_interface() (line 2245).
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in do_set_interface.part.7+0xa6b/0xd90
+> drivers/usb/gadget/function/f_mass_storage.c:2245
+> Read of size 8 at addr ffff88806bc940f8 by task file-storage/2063
+> 
+> CPU: 3 PID: 2063 Comm: file-storage Not tainted 5.8.13 #4
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0xa7/0xea lib/dump_stack.c:118
+>  print_address_description.constprop.8+0x3f/0x60 mm/kasan/report.c:383
+>  kasan_report.cold.11+0x20/0x37 mm/kasan/report.c:513
+>  __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:146
+>  do_set_interface.part.7+0xa6b/0xd90
+> drivers/usb/gadget/function/f_mass_storage.c:2245
+>  do_set_interface drivers/usb/gadget/function/f_mass_storage.c:2202 [inline]
+>  handle_exception drivers/usb/gadget/function/f_mass_storage.c:2426 [inline]
+>  fsg_main_thread+0x12c7/0x59f1 drivers/usb/gadget/function/f_mass_storage.c:2466
+>  kthread+0x374/0x480 kernel/kthread.c:291
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
 
---- Comment #10 from Julien Humbert (julroy67@gmail.com) ---
-(In reply to Hans de Goede from comment #9)
-> I have prepared a Fedora kernel test-build with the patch added, this is
-> currently building here:
-> https://koji.fedoraproject.org/koji/taskinfo?taskID=54473681
+Is this reproducible?  Can you test patches?
 
-Thank you for the build and the instructions!
-
-I've tested out the kernel and everything works fine, the Kingston USB flash
-drive gets mounted, I can read and copy to it without any problem.
-
-So it took some time, but the patch is working!
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Alan Stern
