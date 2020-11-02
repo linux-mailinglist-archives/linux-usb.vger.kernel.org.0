@@ -2,176 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FCF2A272C
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Nov 2020 10:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7552A2734
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Nov 2020 10:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728259AbgKBJi5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Nov 2020 04:38:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728078AbgKBJi4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Nov 2020 04:38:56 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9354C0617A6;
-        Mon,  2 Nov 2020 01:38:56 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id i7so8368979pgh.6;
-        Mon, 02 Nov 2020 01:38:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KIkUS/F/h0cPY8zoQYXrrVqLmu2PvOEJdmO7uBtIRmA=;
-        b=e8iOFOWnoSM+T3VgJIdvUIoDbCbNf3KV95reaRCqBmp2FvsCbL4CFcbuUYPkHqxmkc
-         YhdotRfTN81ubPChT7zXGTUsqyNxgeFKNBMCf3SzBPvO9TaXdr+qN9rINCzpASxuYsnj
-         N3ZothOUEwZsCsqVm4UXP/NadPUfKNBFMjM6A6dMU7y2wX98kCALGuMEOy3CIoZiAcDP
-         kIvitL06u2RajJIyUxt65QaCyZDajX7Gqg1UkiyD+jmHwo8W88hGTfXBUmFaJ3gAMlcI
-         cEe5O++yDuXwJtyM44W+wXdYOtwJ4mj5w4oXpjaqcWkEeq9B6ecjw1avm597BfmDlIBi
-         xD1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KIkUS/F/h0cPY8zoQYXrrVqLmu2PvOEJdmO7uBtIRmA=;
-        b=Weks0An4NgMi75b4j1Wx6LKQ6xkB9ryVPQ5wDNYuRYoejQDNXnxuj2KYFcMEMS4HXH
-         /zW4nu+8xA30xKsEhiH6I2tbW7M9JnzJgt+vd52Z7NxFnDEXuZotbutiH1duX8UdSCKp
-         AZP6FfQ8+N7fIXunmlKVTChVe8d+Urh03S475Ssm493eSX9FGAY6hI5Aw8pcILSEd7Tw
-         HwnzZxRBJ0MAyaQfX5n83M+EbZhJfG4sytQHjg6TtT1+gTnDKJMF1Bf7rcXNGSzq1W1X
-         EOrAs8/dAvb4qUrYrPsdKz6+C0ZMnpPWpBylHrYuQ4RqHvEhR9kB2o2byMVdiaoSHx5x
-         68qQ==
-X-Gm-Message-State: AOAM531zCnVH5qKQsoBiNwn8HTyxrTlLFpe9wl7rwR8+0Ial3reE1nm4
-        X5Io2W0g2SdKodXFKxOwnA==
-X-Google-Smtp-Source: ABdhPJzCgNIMLBogFRg0xQa7AqfDjpwCrCxnaBYR0EmavPxwn1TrqXYVqyom19qz7drAlhjDOwtHSg==
-X-Received: by 2002:a05:6a00:c8:b029:18b:b0e:e51 with SMTP id e8-20020a056a0000c8b029018b0b0e0e51mr1972116pfj.37.1604309936301;
-        Mon, 02 Nov 2020 01:38:56 -0800 (PST)
-Received: from localhost.localdomain (59-125-13-244.HINET-IP.hinet.net. [59.125.13.244])
-        by smtp.gmail.com with ESMTPSA id u11sm12574877pfk.164.2020.11.02.01.38.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 01:38:55 -0800 (PST)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Thomas Winischhofer <thomas@winischhofer.net>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        George Kennedy <george.kennedy@oracle.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH v2 2/2] tty/vt: Avoid passing struct console_font_op to con_font_copy()
-Date:   Mon,  2 Nov 2020 04:37:55 -0500
-Message-Id: <72c954371ed9b1d050901b2d498a979017de8a3c.1604306433.git.yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <c5563eeea36aae7bd72ea2e985bc610d585ece40.1604306433.git.yepeilin.cs@gmail.com>
-References: <c5563eeea36aae7bd72ea2e985bc610d585ece40.1604306433.git.yepeilin.cs@gmail.com>
+        id S1728392AbgKBJlD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Nov 2020 04:41:03 -0500
+Received: from mx2.suse.de ([195.135.220.15]:50976 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728354AbgKBJlD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Nov 2020 04:41:03 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1604310062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hIRIGrmRocVriYBb0fyOhzMtWmG1OjA+MkhB2ntl4lM=;
+        b=ucSDb1lur32HQbkq3S66LJvOadSLfHnH/nr6NwbP9CIo/nOqDSdrPxCpkxf+161nw5azcY
+        +U0Wy8kLSnShIRPFFbKNMQj0tz/JU5QC24plygLJt3R+guhC7mPg6L6mCrxlGTsyPObxwN
+        nxurDmWnsKigjM2oUTHzp8DvzSPiRqY=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E000BAE65;
+        Mon,  2 Nov 2020 09:41:01 +0000 (UTC)
+Message-ID: <11476cd1da8b63f75d39bd5b8e876ad3968a1903.camel@suse.com>
+Subject: Re: [PATCH v3] net: usb: usbnet: update __usbnet_{read|write}_cmd()
+ to use new API
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Date:   Mon, 02 Nov 2020 10:40:54 +0100
+In-Reply-To: <20201031213533.40829-1-anant.thazhemadam@gmail.com>
+References: <20201029132256.11793-1-anant.thazhemadam@gmail.com>
+         <20201031213533.40829-1-anant.thazhemadam@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-con_font_op() is passing an entire `struct console_font_op *` to
-con_font_copy(), but con_font_copy() only uses `op->height`. Additionally,
-con_font_copy() is silently assigning the unsigned `op->height` to the
-signed `con`, then pass it to fbcon_copy_font().
+Am Sonntag, den 01.11.2020, 03:05 +0530 schrieb Anant Thazhemadam:
+> Currently, __usbnet_{read|write}_cmd() use usb_control_msg().
+> However, this could lead to potential partial reads/writes being
+> considered valid, and since most of the callers of
+> usbnet_{read|write}_cmd() don't take partial reads/writes into account
+> (only checking for negative error number is done), and this can lead to
+> issues.
+> 
 
-Let con_font_copy() and fbcon_copy_font() pass an unsigned int directly.
-Also, add a comment in con_font_op() for less confusion, since ideally
-`op->height` should not be used as a console index, as the field name
-suggests.
+Hi,
 
-This patch depends on patch "console: Remove dummy con_font_op() callback
-implementations".
+plesae send this as a post of its own. We cannot take a new set
+as a reply to an older set.
 
-Suggested-by: Daniel Vetter <daniel@ffwll.ch>
-Signed-off-by: Peilin Ye <yepeilin.cs@gmail.com>
----
-con_font_set(), con_font_get() and con_font_default() also pass an entire
-`console_font_op`.
+	Regards
+		Oliver
 
-con_font_get() and con_font_default() actually update the structure (later
-copied to userspace), so let them be.
-
-con_font_set() does not update the structure, but it uses all fields of it
-except `op`. Avoiding passing `console_font_op` to con_font_set() will
-thus make its signature pretty long (6 parameters).
-
-Changes in v2:
-  - Remove redundant `con < 0` check in con_font_copy() (kernel test robot
-    <lkp@intel.com>)
-  - Remove unnecessary range check in fbcon_copy_font(). con_font_copy()
-    calls vc_cons_allocated(), which does the check
-  - Do not Cc: stable
-  - Rewrite the title and commit message accordingly
-
- drivers/tty/vt/vt.c              | 8 ++++----
- drivers/video/fbdev/core/fbcon.c | 2 +-
- include/linux/console.h          | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 9506a76f3ab6..27821ef97b13 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -4704,9 +4704,8 @@ static int con_font_default(struct vc_data *vc, struct console_font_op *op)
- 	return rc;
- }
- 
--static int con_font_copy(struct vc_data *vc, struct console_font_op *op)
-+static int con_font_copy(struct vc_data *vc, unsigned int con)
- {
--	int con = op->height;
- 	int rc;
- 
- 
-@@ -4715,7 +4714,7 @@ static int con_font_copy(struct vc_data *vc, struct console_font_op *op)
- 		rc = -EINVAL;
- 	else if (!vc->vc_sw->con_font_copy)
- 		rc = -ENOSYS;
--	else if (con < 0 || !vc_cons_allocated(con))
-+	else if (!vc_cons_allocated(con))
- 		rc = -ENOTTY;
- 	else if (con == vc->vc_num)	/* nothing to do */
- 		rc = 0;
-@@ -4735,7 +4734,8 @@ int con_font_op(struct vc_data *vc, struct console_font_op *op)
- 	case KD_FONT_OP_SET_DEFAULT:
- 		return con_font_default(vc, op);
- 	case KD_FONT_OP_COPY:
--		return con_font_copy(vc, op);
-+		/* uses op->height as a console index */
-+		return con_font_copy(vc, op->height);
- 	}
- 	return -ENOSYS;
- }
-diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-index cef437817b0d..cb5b5705ea71 100644
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -2451,7 +2451,7 @@ static int fbcon_do_set_font(struct vc_data *vc, int w, int h,
- 	return 0;
- }
- 
--static int fbcon_copy_font(struct vc_data *vc, int con)
-+static int fbcon_copy_font(struct vc_data *vc, unsigned int con)
- {
- 	struct fbcon_display *od = &fb_display[con];
- 	struct console_font *f = &vc->vc_font;
-diff --git a/include/linux/console.h b/include/linux/console.h
-index 4b1e26c4cb42..34855d3f2afd 100644
---- a/include/linux/console.h
-+++ b/include/linux/console.h
-@@ -62,7 +62,7 @@ struct consw {
- 	int	(*con_font_get)(struct vc_data *vc, struct console_font *font);
- 	int	(*con_font_default)(struct vc_data *vc,
- 			struct console_font *font, char *name);
--	int	(*con_font_copy)(struct vc_data *vc, int con);
-+	int	(*con_font_copy)(struct vc_data *vc, unsigned int con);
- 	int     (*con_resize)(struct vc_data *vc, unsigned int width,
- 			unsigned int height, unsigned int user);
- 	void	(*con_set_palette)(struct vc_data *vc,
--- 
-2.25.1
 
