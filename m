@@ -2,171 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 440F02A31C7
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Nov 2020 18:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 437CD2A348A
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Nov 2020 20:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725801AbgKBRkF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Nov 2020 12:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbgKBRkE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Nov 2020 12:40:04 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49B4C0617A6;
-        Mon,  2 Nov 2020 09:40:04 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id b12so7186584plr.4;
-        Mon, 02 Nov 2020 09:40:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4FUjseBvSlN4iyKlxPmISM29dOoxCX8GBWbbpYhudEI=;
-        b=YIDrIs4hnsMP/+ygcESF72A7xjSFMnE+4x7aP5jyclyeFMB4U2fQxf7SNMdKRo1DDq
-         lToQq5m+es1IdL8lZwGUlLcRoeOFtMZzmlSncRGgKXK3eLOSLPGHlbUIwYox2YI4XYLj
-         wHw7xxgxy0SWGtu4iaNQ0wE31hj4mFT1vDShKd8h0ZYgCuqtmqqm1DulC5hinbhZqUoN
-         YerBaA5W9OHIu1IOOW40wkOdHiHkgmRU5nW6qq841uVGIx1i0smbqKbth84QxdvXZwcm
-         5w/fWByBBWjW8pGJXTBCj75r2EmTZ2uA5r7mw/hzmELaDQAWzB0gxlWgvOEOjW42v4LE
-         05cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4FUjseBvSlN4iyKlxPmISM29dOoxCX8GBWbbpYhudEI=;
-        b=Db5+DYcmeu6p8SKFZgfK/0GqnhxbPNf93HLcEk04+xEO9THyCLs+FdnXoRBHBBdS9a
-         S6Gm4uW3ewNZUGp+tBoi/5dboa3cqTKp/Nihku03grevKNS9/o3IcEsCs40crA87IlJz
-         t9Lv3wkatohYpC8Hw5OeexT1fwReeWJs23sz/2N44DQ6eFi8VJ0/IpSkB5FLfS0vfp/W
-         RBFKP4PHiWFO4jrOYdb2Fc2rqgA+9nZCX7bBw6nl5IfuCFVmIjwasfOAWqGD4SOtDftQ
-         aHYuaSO6935xUOTCjSTQkOdflOXnQBudIDWknLW4wW+sjsUIIc9ofp+kUxx/zhlEpFOh
-         C1dQ==
-X-Gm-Message-State: AOAM533cQOC/5VBPREzvWw6zLc+6EAWT2Uf6OPzLnnz/GHk0oRFC6+dK
-        b1JHbGiJIdp6U2qpSGZxXnpvepaM/VsU+2U8cIA=
-X-Google-Smtp-Source: ABdhPJzOlLg5cWU8Xm1c1s/AkcdP3EMOQfXigJqCCdawvffGOGPdYMWeNktnGnG99fV6j0SFx9dNJA==
-X-Received: by 2002:a17:902:8693:b029:d5:d861:6f03 with SMTP id g19-20020a1709028693b02900d5d8616f03mr21578621plo.19.1604338804184;
-        Mon, 02 Nov 2020 09:40:04 -0800 (PST)
-Received: from localhost.localdomain ([49.207.221.93])
-        by smtp.gmail.com with ESMTPSA id v23sm75234pjh.46.2020.11.02.09.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 09:40:02 -0800 (PST)
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Subject: [RESEND PATCH v3] net: usb: usbnet: update __usbnet_{read|write}_cmd() to use new API
-Date:   Mon,  2 Nov 2020 23:09:46 +0530
-Message-Id: <20201102173946.13800-1-anant.thazhemadam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S1726768AbgKBTsv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Nov 2020 14:48:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38104 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726744AbgKBTrZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Nov 2020 14:47:25 -0500
+Received: from kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net (unknown [163.114.132.3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D594C2072C;
+        Mon,  2 Nov 2020 19:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604346445;
+        bh=7ZGOwAOPwqS8DzA3ybazC0/S7OIj9MQZxcvy8LdRx20=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SW8hA3RN+ysK8KYGsidvGCSnHjDO0NYRzynEvtNpsFhTWAvwQMzfYrc09zgkuGNOr
+         Z/0vcwDZUN4auG8PQpp+vMr3MBWMtqgO6EwrQqtk3oIPKAi8l405AnKx3si8TXNWEF
+         Ut1dUo5x0xRNPhLlBsEwsYOJ5EjlXJWvftl/xZ5g=
+Date:   Mon, 2 Nov 2020 11:47:18 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Hayes Wang <hayeswang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Oliver Neukum <oliver@neukum.org>
+Subject: Re: [PATCH net-next v2] net/usb/r8153_ecm: support ECM mode for
+ RTL8153
+Message-ID: <20201102114718.0118cc12@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <dc7fd1d4d1c544e8898224c7d9b54bda@realtek.com>
+References: <1394712342-15778-387-Taiwan-albertk@realtek.com>
+        <1394712342-15778-388-Taiwan-albertk@realtek.com>
+        <20201031160838.39586608@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <dc7fd1d4d1c544e8898224c7d9b54bda@realtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently, __usbnet_{read|write}_cmd() use usb_control_msg().
-However, this could lead to potential partial reads/writes being
-considered valid, and since most of the callers of
-usbnet_{read|write}_cmd() don't take partial reads/writes into account
-(only checking for negative error number is done), and this can lead to
-issues.
+On Mon, 2 Nov 2020 07:20:15 +0000 Hayes Wang wrote:
+> Jakub Kicinski <kuba@kernel.org>
+> > Can you describe the use case in more detail?
+> > 
+> > AFAICT r8152 defines a match for the exact same device.
+> > Does it not mean that which driver is used will be somewhat random
+> > if both are built?  
+> 
+> I export rtl_get_version() from r8152. It would return none zero
+> value if r8152 could support this device. Both r8152 and r8153_ecm
+> would check the return value of rtl_get_version() in porbe().
+> Therefore, if rtl_get_version() return none zero value, the r8152
+> is used for the device with vendor mode. Otherwise, the r8153_ecm
+> is used for the device with ECM mode.
 
-However, the new usb_control_msg_{send|recv}() APIs don't allow partial
-reads and writes.
-Using the new APIs also relaxes the return value checking that must
-be done after usbnet_{read|write}_cmd() is called.
+Oh, I see, I missed that the rtl_get_version() checking is the inverse
+of r8152.
 
-Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
----
-Changes in v3:
-	* Aligned continuation lines after the opening brackets
-Changes in v2:
-	* Fix build error
+> > > +/* Define these values to match your device */
+> > > +#define VENDOR_ID_REALTEK		0x0bda
+> > > +#define VENDOR_ID_MICROSOFT		0x045e
+> > > +#define VENDOR_ID_SAMSUNG		0x04e8
+> > > +#define VENDOR_ID_LENOVO		0x17ef
+> > > +#define VENDOR_ID_LINKSYS		0x13b1
+> > > +#define VENDOR_ID_NVIDIA		0x0955
+> > > +#define VENDOR_ID_TPLINK		0x2357  
+> > 
+> > $ git grep 0x2357 | grep -i tplink
+> > drivers/net/usb/cdc_ether.c:#define TPLINK_VENDOR_ID	0x2357
+> > drivers/net/usb/r8152.c:#define VENDOR_ID_TPLINK		0x2357
+> > drivers/usb/serial/option.c:#define TPLINK_VENDOR_ID			0x2357
+> > 
+> > $ git grep 0x17ef | grep -i lenovo
+> > drivers/hid/hid-ids.h:#define USB_VENDOR_ID_LENOVO		0x17ef
+> > drivers/hid/wacom.h:#define USB_VENDOR_ID_LENOVO	0x17ef
+> > drivers/net/usb/cdc_ether.c:#define LENOVO_VENDOR_ID	0x17ef
+> > drivers/net/usb/r8152.c:#define VENDOR_ID_LENOVO		0x17ef
+> > 
+> > Time to consolidate those vendor id defines perhaps?  
+> 
+> It seems that there is no such header file which I could include
+> or add the new vendor IDs.
 
+Please create one. (Adding Greg KH to the recipients, in case there is
+a reason that USB subsystem doesn't have a common vendor id header.)
 
- drivers/net/usb/usbnet.c | 52 ++++++++--------------------------------
- 1 file changed, 10 insertions(+), 42 deletions(-)
-
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index bf6c58240bd4..b2df3417a41c 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1982,64 +1982,32 @@ EXPORT_SYMBOL(usbnet_link_change);
- static int __usbnet_read_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
- 			     u16 value, u16 index, void *data, u16 size)
- {
--	void *buf = NULL;
--	int err = -ENOMEM;
- 
- 	netdev_dbg(dev->net, "usbnet_read_cmd cmd=0x%02x reqtype=%02x"
- 		   " value=0x%04x index=0x%04x size=%d\n",
- 		   cmd, reqtype, value, index, size);
- 
--	if (size) {
--		buf = kmalloc(size, GFP_KERNEL);
--		if (!buf)
--			goto out;
--	}
--
--	err = usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
--			      cmd, reqtype, value, index, buf, size,
--			      USB_CTRL_GET_TIMEOUT);
--	if (err > 0 && err <= size) {
--        if (data)
--            memcpy(data, buf, err);
--        else
--            netdev_dbg(dev->net,
--                "Huh? Data requested but thrown away.\n");
--    }
--	kfree(buf);
--out:
--	return err;
-+	return usb_control_msg_recv(dev->udev, 0,
-+				    cmd, reqtype, value, index, data, size,
-+				    USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
- }
- 
- static int __usbnet_write_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
- 			      u16 value, u16 index, const void *data,
- 			      u16 size)
- {
--	void *buf = NULL;
--	int err = -ENOMEM;
--
- 	netdev_dbg(dev->net, "usbnet_write_cmd cmd=0x%02x reqtype=%02x"
- 		   " value=0x%04x index=0x%04x size=%d\n",
- 		   cmd, reqtype, value, index, size);
- 
--	if (data) {
--		buf = kmemdup(data, size, GFP_KERNEL);
--		if (!buf)
--			goto out;
--	} else {
--        if (size) {
--            WARN_ON_ONCE(1);
--            err = -EINVAL;
--            goto out;
--        }
--    }
--
--	err = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
--			      cmd, reqtype, value, index, buf, size,
--			      USB_CTRL_SET_TIMEOUT);
--	kfree(buf);
-+	if (size && !data) {
-+		WARN_ON_ONCE(1);
-+		return -EINVAL;
-+	}
- 
--out:
--	return err;
-+	return usb_control_msg_send(dev->udev, 0,
-+				    cmd, reqtype, value, index, data, size,
-+				    USB_CTRL_SET_TIMEOUT, GFP_KERNEL);
- }
- 
- /*
--- 
-2.25.1
-
+Also please make sure to add Oliver to the CC for v3, to make sure the
+reuse of CDC_ETHER is okay.
