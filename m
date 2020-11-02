@@ -2,181 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C06532A2756
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Nov 2020 10:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7952A2765
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Nov 2020 10:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728334AbgKBJsA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Nov 2020 04:48:00 -0500
-Received: from mail-ej1-f66.google.com ([209.85.218.66]:44269 "EHLO
-        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728156AbgKBJsA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Nov 2020 04:48:00 -0500
-Received: by mail-ej1-f66.google.com with SMTP id j24so17958517ejc.11;
-        Mon, 02 Nov 2020 01:47:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=aBL58c34rn6nb4fMXeoXHFwH4EN0oABK7+YoRvnww4A=;
-        b=FVehcp7B6jXGPG4/aN81kjLJETFIFCmrbhc5fml2g4dyLdCGhON77jh5+XiD66KtyU
-         /n/kaO0rxUIJHy8SBcxyseo6/JEKhdOtk/UrbabSxUSKTWcGIC9XZkS/EZs+5R2LQ9WX
-         mTtV7KbNritZLToxLA5S6qTcuYBCveNeYgwwiCdN7u00reusjUjp9rqnQzKvMIUFX9q2
-         UuyhpepNsbwpjXiKA5vz+4RYe2cPmwYhJsYBYM5ElC844aPYlWh7foyQfAgXbVSTHWFs
-         bUK6BHD4KOx24pC50qUuj+KsbfL3WYWCsSpvZEmgYDYPgu2XLhz0yqRP1+PPcR5qma1s
-         pxeg==
-X-Gm-Message-State: AOAM531jiRG5hXvYxyysZpFFyTfb0Hq6i+neqPQOlWXh9RxpSmy8IcPq
-        +GxEfQCH0+VFOlg9a1TFkIKKoUC1B7c2JA==
-X-Google-Smtp-Source: ABdhPJyT6Zvze4YHMIYPFL++Xloau/cxO3dOk0KGmbVTqK3nh34aV7jQ6EYhRNwau95TEnaQlTZSvQ==
-X-Received: by 2002:a17:906:580e:: with SMTP id m14mr14018843ejq.237.1604310477608;
-        Mon, 02 Nov 2020 01:47:57 -0800 (PST)
-Received: from ?IPv6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id e13sm8525101ejh.65.2020.11.02.01.47.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2020 01:47:56 -0800 (PST)
-Subject: Re: [PATCH v2 1/2] console: Remove dummy con_font_op() callback
- implementations
-To:     Peilin Ye <yepeilin.cs@gmail.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Winischhofer <thomas@winischhofer.net>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        George Kennedy <george.kennedy@oracle.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org
-References: <c5563eeea36aae7bd72ea2e985bc610d585ece40.1604128639.git.yepeilin.cs@gmail.com>
- <c5563eeea36aae7bd72ea2e985bc610d585ece40.1604306433.git.yepeilin.cs@gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Message-ID: <a8157089-bc72-c409-c7cc-2fd7eb087ebc@kernel.org>
-Date:   Mon, 2 Nov 2020 10:47:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.3
-MIME-Version: 1.0
-In-Reply-To: <c5563eeea36aae7bd72ea2e985bc610d585ece40.1604306433.git.yepeilin.cs@gmail.com>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
+        id S1728005AbgKBJuJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Nov 2020 04:50:09 -0500
+Received: from mail-eopbgr60052.outbound.protection.outlook.com ([40.107.6.52]:31150
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727992AbgKBJuJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Nov 2020 04:50:09 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aH7MDAADYNd5ddf91V8eCVivIfTPLCrXf5QxRsyiCvMY/0RSGvJVk/lIbb/FWJl1y48zDJ2hRfDMKNJglORwKa5RH8QmqHJgVlj6fPMkRcmsAxlj/N3gI8rFJ+wtfq0FDbDNpvT5WDNLWN6G3iYZlQCe2kPPrSpIrwYjbS71CE3c6ZXVpPFX+T6W78xyAiu9FFQk3tKB+KWzR9gw0ooqJ8WYVRVZ0h82kCM1+ir//rrcrvpge8+NSQrE7vAtWxhg9GpIXtr7b4yhkc5SZO/EwPXuO2VbGcMFfq4Ky3M7AdNdfVGmg7HcidshBHj3BKo7WCttWp/cgMWYAF5mf1IXrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IvAFuIFj4b1ln6qJT5CZjQVPY0F9P2ibE0j2Axb7vas=;
+ b=ZjxBLJq/3bd9FePOjlaNpvgZBU4YjqVp1rv+kKNbsW5HwIVMpE8P0zLTCeYNeXklB4enwmwGRXoclYZIy6762akvSphVnwCwld3tiHKC/GQa3YKoxiUVjcdBXTckhHlHpyXv8XyFBQQCBMutiENY+x4szvj9yebz8BOy52GVUkrO6/zWz98EQPcRlHBVh5AHW6dRVIxMbc3Kra7F+P4O74gCcAPhmlcEtaDa9dC6jJYW/Zer2gDnOJjsxB0DUswvyulNxFDZin78jmrdK5Om5GMIjRfxHDqBnyj9rbXgb096t95tEFQnV0rSvc2OeUl8WdN1mgV20mNCGF95MX4XvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IvAFuIFj4b1ln6qJT5CZjQVPY0F9P2ibE0j2Axb7vas=;
+ b=TmgXnzm0y6Rk/obWE71jBW59Xm3XqsjGO8YvmKofi5MXoi5M4ERp8m4EolsY666RkN5UjljBs3OTsmHZHZYSyL9Go+UXTnBIMCLuyh9EWARk0jvD5zwKIwcWGjGOy510YE065NgTx0v541uGLUJ63b9TdzHvgEbumTeKrnchvAg=
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::12)
+ by AM0PR04MB4004.eurprd04.prod.outlook.com (2603:10a6:208:57::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.27; Mon, 2 Nov
+ 2020 09:50:05 +0000
+Received: from AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2]) by AM8PR04MB7300.eurprd04.prod.outlook.com
+ ([fe80::b902:6be0:622b:26c2%4]) with mapi id 15.20.3499.030; Mon, 2 Nov 2020
+ 09:50:05 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>
+Subject: strange call stack when running uvc-gadget application
+Thread-Topic: strange call stack when running uvc-gadget application
+Thread-Index: AQHWsP2KqDDTmfpLkEq9OY9yxv5Few==
+Date:   Mon, 2 Nov 2020 09:50:05 +0000
+Message-ID: <20201102094936.GA29581@b29397-desktop>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 4c8ca668-75d2-42d8-5576-08d87f14ad2b
+x-ms-traffictypediagnostic: AM0PR04MB4004:
+x-microsoft-antispam-prvs: <AM0PR04MB40040CDFC0BE83D0BB4CD4668B100@AM0PR04MB4004.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: q1AFJBTqDT80hgYh/mahI9BBxCJEYZVYJ/+CXQSuhvW266NSjhKxT0lJ9jd2RcMw6qHfEvgU1loukv6pwopkJBYOTAAKESxU7hgWCB/5uz2FTOkwe6Vqp9C9pgf50nD+nzxHPjnq/Mh4umpiyxmU7GGwembseEryAFSsR1j3ISsX4TmD1oCEgQt0WIot3Y3jlao6z7lqKHp+N1jvBfbX1zUb48uCG7c/uB6UgtsV5VUOskDMaBtcRIHX6LC0WT7zwOAdAcXY2hvH1yb3it/AUaDVXx1pi+JpBkhCfaSzAHHhz5WPsLBXlZi5pnZjbWTf5X0P+4cxKU5MVNaKuFtiEQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7300.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(376002)(396003)(346002)(39860400002)(366004)(136003)(186003)(478600001)(6916009)(8676002)(5660300002)(1076003)(2906002)(33716001)(6506007)(316002)(86362001)(33656002)(8936002)(6512007)(9686003)(91956017)(6486002)(4326008)(66446008)(26005)(64756008)(66556008)(66476007)(44832011)(66946007)(76116006)(71200400001)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: eJjGg8XvbnmmjdYgYXc1+WKmVXSOKNvz1mfy9XNW1VVpef7wruDUlZ5dTehVH+7b4C8ETsjvUXyV93t4v5vof49Nz+AmMELy5n1NzQgy/5zd4o8yGl7Ot9eOxKB2FPaNd5qB4cuzyRqoHtUbswWGpgBFAhWNy5qnhYRj2PDcc/9Idu/1ko23NehF50zQ176Td/RriF3L4l709jmuuXD+zWHY/hebWNJK2W8l8vYvLxQJyivY1rCbtPm/1GhND0h7N3GaiieFOlfw23mfp0OtybsdzLf6VCYPTT+xGvtQK8nOY0wDEJWXycSA8bQqmiTjXZGwFyLAKyHk/nQbMkNP9XkWsEGU64aLYV7P2VrpqrBRck6A8e+z1xZ1t7buOzq24lqyzdA36MIhvWBJVRqDLkLwM1/aLw2Rnoqw/xoDa07JKpenutNOEB5G7DjEVj5I3Lii/vR1xIqakNscLIxNiu4EbYu0FpbNEsMVCDjEXekd9c68Mz0riAGKBP1P9co3+vF1NgdIepnOpfDndAh5atG0oalhlvEonxr7dIv1DkLJZbUy6mx5A5WK2tObdvhbl9EMCFFnVrgEDgwgUZFZ0fI+YmsTuOTe9qS4bmMX42S6067eGCOMSH5Oko5lyL8eHG4mxBuOMzKrCATbIWWyNA==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2BD0130E0ABA7742B0885F1C9B040A55@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7300.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c8ca668-75d2-42d8-5576-08d87f14ad2b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2020 09:50:05.2743
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: obPrUpjJQJ9LISMvj+4RGU7CkHyhyPP71ewlSes7Nc0R0biaYhXZ4fJo+ymi8ZPaKAkBtH2MRP9CDRAHdIAwBg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4004
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02. 11. 20, 10:36, Peilin Ye wrote:
-> `struct console_font` is a UAPI structure, thus ideally should not be
-> used for kernel internal abstraction. Remove some dummy .con_font_set,
-> .con_font_default and .con_font_copy `struct consw` callback
-> implementations, to make it cleaner.
+Hi all,
 
-ESEMANTIC_ERROR.
+When running run uvc-gadget application at HS using dwc3 gadget at Linux
+v5.10-rc1, the video stream will be stopped after 1-2 minutes running. The
+trace log like below, I wonder how _raw_spin_lock_irqsave calls __switch_to=
+?
+Any hints? Thanks.
 
-1) What do you refer to with the last "it"?
+usb_test# [ 4757.322728] configfs-gadget gadget: uvc: VS request completed =
+with status -18.
+[ 4757.329971] configfs-gadget gadget: uvc: VS request completed with statu=
+s -18.
+UVC: Possible USB shutdown requested from Host, seen during VIDIOC_DQBUF
 
-2) What's the purpose of mentioning struct console_font at all?
+usb_test# [ 4812.376465] check_interval: 37 callbacks suppressed
+[ 4825.307665] configfs-gadget gadget: uvc: VS request completed with statu=
+s -18.
+[ 4825.314912] configfs-gadget gadget: uvc: VS request completed with statu=
+s -18.
+UVC: Possible USB shutdown requested from Host, seen during VIDIOC_DQBUF
+[ 4826.231392] check_interval: 3 callbacks suppressed
+select timeout
+[ 4827.336088] dwc3 38100000.dwc3: request 0000000080ebefd3 was not queued =
+to ep2in
+[ 4827.343547] dwc3 38100000.dwc3: request 00000000b578605c was not queued =
+to ep2in
+[ 4827.350989] dwc3 38100000.dwc3: request 00000000c6d191cd was not queued =
+to ep2in
+[ 4827.358422] dwc3 38100000.dwc3: request 0000000085205409 was not queued =
+to ep2in
+UVC: Stopping video stream.
 
-3) Could you clarify whether you checked it is safe to remove the hooks?
+[ 4848.381718] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[ 4848.387824] rcu:     3-...0: (1 GPs behind) idle=3D162/1/0x4000000000000=
+000 softirq=3D10819/10819 fqs=3D2356
+[ 4848.396956]  (detected by 2, t=3D5252 jiffies, g=3D20129, q=3D3770)
+[ 4848.396959] Task dump for CPU 3:
+[ 4848.405925] task:uvc-gadget_wlhe state:R  running task     stack:    0 p=
+id:  674 ppid:   636 flags:0x00000202
+[ 4848.415842] Call trace:
+[ 4848.418294]  __switch_to+0xc0/0x170
+[ 4848.421785]  _raw_spin_lock_irqsave+0x84/0xb0
+[ 4848.426143]  composite_disconnect+0x28/0x78
+[ 4848.430327]  configfs_composite_disconnect+0x68/0x70
+[ 4848.435290]  usb_gadget_disconnect+0x10c/0x128
+[ 4848.439733]  usb_gadget_deactivate+0xd4/0x108
+[ 4848.444089]  usb_function_deactivate+0x6c/0x80
+[ 4848.448534]  uvc_function_disconnect+0x20/0x58
+[ 4848.452976]  uvc_v4l2_release+0x30/0x88
+[ 4848.456812]  v4l2_release+0xbc/0xf0
+[ 4848.460301]  __fput+0x7c/0x230
+[ 4848.463353]  ____fput+0x14/0x20
+[ 4848.466495]  task_work_run+0x88/0x140
+[ 4848.470157]  do_notify_resume+0x240/0x6f0
+[ 4848.474166]  work_pending+0x8/0x200
 
-4) All the hooks now return ENOSYS for both consoles (and not 0). Is 
-this intentional?
+--=20
 
-I know answers to the first 3 questions, but you need to elaborate a bit 
-in the commit log to connect those sentences. Esp. for people not 
-dealing with the code on a daily basis. Ad 4) I am not sure.
-
-> Suggested-by: Daniel Vetter <daniel@ffwll.ch>
-> Signed-off-by: Peilin Ye <yepeilin.cs@gmail.com>
-> ---
-> Change in v2:
->    - [v2 2/2] no longer Cc: stable, so do not Cc: stable
-> 
-> Context: https://lore.kernel.org/lkml/CAKMK7uFY2zv0adjKJ_ORVFT7Zzwn075MaU0rEU7_FuqENLR=UA@mail.gmail.com/
-> 
->   drivers/usb/misc/sisusbvga/sisusb_con.c | 21 ---------------------
->   drivers/video/console/dummycon.c        | 20 --------------------
->   2 files changed, 41 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/sisusbvga/sisusb_con.c b/drivers/usb/misc/sisusbvga/sisusb_con.c
-> index c63e545fb105..dfa0d5ce6012 100644
-> --- a/drivers/usb/misc/sisusbvga/sisusb_con.c
-> +++ b/drivers/usb/misc/sisusbvga/sisusb_con.c
-> @@ -1345,24 +1345,6 @@ static int sisusbdummycon_blank(struct vc_data *vc, int blank, int mode_switch)
->   	return 0;
->   }
->   
-> -static int sisusbdummycon_font_set(struct vc_data *vc,
-> -				   struct console_font *font,
-> -				   unsigned int flags)
-> -{
-> -	return 0;
-> -}
-> -
-> -static int sisusbdummycon_font_default(struct vc_data *vc,
-> -				       struct console_font *font, char *name)
-> -{
-> -	return 0;
-> -}
-> -
-> -static int sisusbdummycon_font_copy(struct vc_data *vc, int con)
-> -{
-> -	return 0;
-> -}
-> -
->   static const struct consw sisusb_dummy_con = {
->   	.owner =		THIS_MODULE,
->   	.con_startup =		sisusbdummycon_startup,
-> @@ -1375,9 +1357,6 @@ static const struct consw sisusb_dummy_con = {
->   	.con_scroll =		sisusbdummycon_scroll,
->   	.con_switch =		sisusbdummycon_switch,
->   	.con_blank =		sisusbdummycon_blank,
-> -	.con_font_set =		sisusbdummycon_font_set,
-> -	.con_font_default =	sisusbdummycon_font_default,
-> -	.con_font_copy =	sisusbdummycon_font_copy,
->   };
->   
->   int
-> diff --git a/drivers/video/console/dummycon.c b/drivers/video/console/dummycon.c
-> index 2a0d0bda7faa..f1711b2f9ff0 100644
-> --- a/drivers/video/console/dummycon.c
-> +++ b/drivers/video/console/dummycon.c
-> @@ -124,23 +124,6 @@ static int dummycon_switch(struct vc_data *vc)
->   	return 0;
->   }
->   
-> -static int dummycon_font_set(struct vc_data *vc, struct console_font *font,
-> -			     unsigned int flags)
-> -{
-> -	return 0;
-> -}
-> -
-> -static int dummycon_font_default(struct vc_data *vc,
-> -				 struct console_font *font, char *name)
-> -{
-> -	return 0;
-> -}
-> -
-> -static int dummycon_font_copy(struct vc_data *vc, int con)
-> -{
-> -	return 0;
-> -}
-> -
->   /*
->    *  The console `switch' structure for the dummy console
->    *
-> @@ -159,8 +142,5 @@ const struct consw dummy_con = {
->   	.con_scroll =	dummycon_scroll,
->   	.con_switch =	dummycon_switch,
->   	.con_blank =	dummycon_blank,
-> -	.con_font_set =	dummycon_font_set,
-> -	.con_font_default =	dummycon_font_default,
-> -	.con_font_copy =	dummycon_font_copy,
->   };
->   EXPORT_SYMBOL_GPL(dummy_con);
-> 
-
-
--- 
-js
-suse labs
+Thanks,
+Peter Chen=
