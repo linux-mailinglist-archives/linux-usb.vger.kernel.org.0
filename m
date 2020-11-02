@@ -2,81 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7588D2A2646
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Nov 2020 09:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B2A2A265A
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Nov 2020 09:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728302AbgKBIkD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Nov 2020 03:40:03 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:6728 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728284AbgKBIkB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Nov 2020 03:40:01 -0500
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CPmZ45LSBzkdcy;
-        Mon,  2 Nov 2020 16:39:56 +0800 (CST)
-Received: from [10.174.176.180] (10.174.176.180) by
- DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
- 14.3.487.0; Mon, 2 Nov 2020 16:39:56 +0800
-Subject: Re: [PATCH] usb: dwc2: Fix unused label warning
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-References: <20201031060342.43384-1-yuehaibing@huawei.com>
- <d3249c9c-e937-7ba1-e21b-3c89a79cb184@synopsys.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   Yuehaibing <yuehaibing@huawei.com>
-Message-ID: <2aa957ab-d31d-f22f-e470-19169220e6a9@huawei.com>
-Date:   Mon, 2 Nov 2020 16:39:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.8.0
+        id S1728191AbgKBIqV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Nov 2020 03:46:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60080 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727902AbgKBIqV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Nov 2020 03:46:21 -0500
+Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C08D3223BD;
+        Mon,  2 Nov 2020 08:46:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604306780;
+        bh=qx2T/W6tTjtmyp/rc1odgKmmTz4uBhsMMOSMRZ+z98U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=xDL01MlHmfS/Q+uKzysq6nkI64FCY9t9L7L5lt4CtrhkSIPYDyka7TIvrgWptCct7
+         0JBGPts4IspNCHY9iaFHhDM5wpflRQv+2NACz1hgBC2j6gqxLyNCeF5puqoJauFXCG
+         6JYaE1Y6m/E+wFA0JjCNpeut2rTduXa+1dWvQpg0=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB: fixes for v5.10-rc2
+Date:   Mon, 02 Nov 2020 10:46:13 +0200
+Message-ID: <87r1pcqh7u.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <d3249c9c-e937-7ba1-e21b-3c89a79cb184@synopsys.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.180]
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/11/2 15:04, Minas Harutyunyan wrote:
-> On 10/31/2020 10:03 AM, YueHaibing wrote:
->> drivers/usb/dwc2/platform.c: In function ‘dwc2_driver_probe’:
->> drivers/usb/dwc2/platform.c:611:1: warning: label ‘error_debugfs’ defined but not used [-Wunused-label]
->>   error_debugfs:
->>   ^~~~~~~~~~~~~
->>
->> Move label 'error_debugfs' to ifdef block.
->>
->> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
->> ---
->>   drivers/usb/dwc2/platform.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
->> index e2820676beb1..5f18acac7406 100644
->> --- a/drivers/usb/dwc2/platform.c
->> +++ b/drivers/usb/dwc2/platform.c
->> @@ -608,10 +608,13 @@ static int dwc2_driver_probe(struct platform_device *dev)
->>   #endif /* CONFIG_USB_DWC2_PERIPHERAL || CONFIG_USB_DWC2_DUAL_ROLE */
->>   	return 0;
->>   
->> +#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
->> +	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
->>   error_debugfs:
->>   	dwc2_debugfs_exit(hsotg);
->>   	if (hsotg->hcd_enabled)
->>   		dwc2_hcd_remove(hsotg);
->> +#endif
->>   error_drd:
->>   	dwc2_drd_exit(hsotg);
->>   
->>
-> Thank you for patch. Identical patch submitted by on 10/17/2020 by 
-> Martin Blumenstingl: [PATCH] usb: dwc2: Avoid leaving the error_debugfs 
-> label unused. I'm already ACKed it.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for this info.
-> Thanks,
-> Minas
-> 
+
+Hi Greg,
+
+here's my first pull request for the current -rc. Not much here this
+time around, hopefully this comment didn't jinx it ;-)
+
+Let me know if you want anything to be changed.
+
+cheers
+
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tags/fixes-fo=
+r-v5.10-rc2
+
+for you to fetch changes up to 129aa9734559a17990ee933351c7b6956f1dba62:
+
+  usb: raw-gadget: fix memory leak in gadget_setup (2020-10-27 11:34:09 +02=
+00)
+
+=2D---------------------------------------------------------------
+USB: fixes for v5.10-rc2
+
+Nothing major as of yet, we're adding support for Intel Alder Lake-S
+in dwc3, together with a few fixes that are quite important (memory
+leak in raw-gadget, probe crashes in goku_udc, and so on).
+
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
+
+=2D---------------------------------------------------------------
+Evgeny Novikov (1):
+      usb: gadget: goku_udc: fix potential crashes in probe
+
+Heikki Krogerus (1):
+      usb: dwc3: pci: add support for the Intel Alder Lake-S
+
+Martin Blumenstingl (1):
+      usb: dwc2: Avoid leaving the error_debugfs label unused
+
+Ran Wang (1):
+      usb: gadget: fsl: fix null pointer checking
+
+Thinh Nguyen (1):
+      usb: dwc3: ep0: Fix delay status handling
+
+Zqiang (1):
+      usb: raw-gadget: fix memory leak in gadget_setup
+
+ drivers/usb/dwc2/platform.c            | 3 +++
+ drivers/usb/dwc3/dwc3-pci.c            | 4 ++++
+ drivers/usb/dwc3/ep0.c                 | 3 ++-
+ drivers/usb/gadget/legacy/raw_gadget.c | 5 ++++-
+ drivers/usb/gadget/udc/fsl_udc_core.c  | 2 +-
+ drivers/usb/gadget/udc/goku_udc.c      | 2 +-
+ 6 files changed, 15 insertions(+), 4 deletions(-)
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+fx1URHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZ6GA//WYTvaA2PxnErWpOMah9CLY1uZLmMH2UX
+6Xa79Ih23stsOSqxVXY0xENPrxw+5wBuW4txr24kMpET3j9W/O3g4qsF7ZZm7C1M
+W5nmSRy0ZNRFmoYu1EtX/R8fu8mWoSBVm8O09LsbMtesAygOEEMQn3EYgPCwqozt
+qAMNnS8XlEjjCLjexnQI3nAgqowEdaxlfScNff2yZtEN3W7lKWPoQkaaoBNo8BNl
+Bbdh1wrwHuQF3RID7xc25Bf2BaJtQdqNWI5qk2DG7RQxYICCtoy8ODrJFz6yAR4X
+hyGxvE5MLdySJErJ2K/035QGT/z3c4JArLHFCnOtnl8HUbj5DIzdTUo4/sBip/0W
+3Hvn4TSRENH+m7kFPx/Tzdk8bkaw8n13Kph4d/DXZonSSxIN486x6ldUg6WsZ7fL
+1916KnqmteeW52WfjNjMFCnQ6q5F69YZjtbuRz7GhpBl7KwGsb9jElRP4653pyTK
+aB0PM4BI4FkbefT20qAUNxR8wVYSrMHWxNWceIE6xl/Bbub3zN5ar/3jHT9cE/yc
+tEVkOkTPckPMXx1bKxUnYGuqiKHDnM1yC2ZjHumW7lWr5gZ/J6BF9r/rsd3JqkSh
+IcTSVZSgj9gfObk0e+965KUqIfVWNwSoM4yZdpqgtCtOKa43aoCVe1/HlUGw/yB3
+p3tVvPmLm5M=
+=pbdQ
+-----END PGP SIGNATURE-----
+--=-=-=--
