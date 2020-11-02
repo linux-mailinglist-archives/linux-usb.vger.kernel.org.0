@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D91E02A28D1
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Nov 2020 12:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 648732A2991
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Nov 2020 12:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728555AbgKBLM7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Nov 2020 06:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S1728714AbgKBLbH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Nov 2020 06:31:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728545AbgKBLM6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Nov 2020 06:12:58 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC88DC061A04;
-        Mon,  2 Nov 2020 03:12:57 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id o129so10826729pfb.1;
-        Mon, 02 Nov 2020 03:12:57 -0800 (PST)
+        with ESMTP id S1728542AbgKBLbG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Nov 2020 06:31:06 -0500
+Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AECC061A47
+        for <linux-usb@vger.kernel.org>; Mon,  2 Nov 2020 03:31:05 -0800 (PST)
+Received: by mail-oo1-xc44.google.com with SMTP id v123so3277781ooa.5
+        for <linux-usb@vger.kernel.org>; Mon, 02 Nov 2020 03:31:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qCgiqZXGNwvNh2nZMtUDnqrlrZqGGd0+W48CRCFS5Bo=;
-        b=g3oyj/8BectFHMWdpOJLUmTdLl6ao46UPyBqt4FGqyBVKmWGt5uTsIVrZlIeUg1kKp
-         BBgtWX3kj4FS86SKaIeAwtMdHwt92nFpIAVanSryUOtS79J+OMzAjXRuwKG7yRz4Q2Jd
-         2YqA+/Rr5omjYftodpgfkeo2fVcimWdr9Jty4R5BaiXWsIpYYbdvxyxNOt83QtgY1Em8
-         nkFfjzgRFv1w4XLjnRsfzoTnaxg0gl6R+7Kt4wD0XKpn9prfm6SeaZyIjvU+i9TjGvvR
-         mKotJYuoYwAmT7GuZn9jTBKaZtrrWzYZMqWdL9nsHHVapaaDei+Htw61qhtLV7EF9d8E
-         5+QQ==
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zAOiszuYUyIyWLQKIJG6bc55M3RXwlsKsxrmhc4uVW8=;
+        b=RHq+P4QISBX4bWERbI32Xd6fFCiT1evuu26nesDDnjre/0R7UEXgt1be1gQR9BjPkh
+         idJSK5mAMe+xk6rG5/lB1KsEHZ0Oe0XaC7T8lQCBUNGKH1gJL9gAmFOAY93Xa7n2fkfb
+         JRWdzEF70nhdCmjgOrlXQYuI7njHj/tX/iWss=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qCgiqZXGNwvNh2nZMtUDnqrlrZqGGd0+W48CRCFS5Bo=;
-        b=QILySlQ2EtXNFxv2wIK7vP4O4AEI6ADBOP808x72I96t2ulO7WuKEAI8j+3c84TH2Z
-         Us/x7lnlbqTXmTix3ycDJ510v01jS1Am5kFTB5+YspHXQrdw1HqoNHdeetjVmR8JS2aU
-         RySwNyWtB9GWFVuTy1Y8PKHR8ZRqF0MfPftTTOr4vqyGCk4p1rKSjokXWXCL0MAaeKii
-         vp3FLh7tp4KTtjUGQXComEZp5ujwWQU1MXccrvHtL06dot+cWoXyhwqg0cl/Cl+t+7LP
-         ZIt2G6e+4XwcKV/Y04BZXNHBsT32b0pA45t+kHKFFaT6yHnAfulOi6tm3kpQZFfh0dHD
-         ux+w==
-X-Gm-Message-State: AOAM533cIvaa4ujxrssK7LTXkUfar6WigrI0YY8D+EuHZNLAg+jFWO9y
-        fj8S4JUqXuPx0shahXCqyg==
-X-Google-Smtp-Source: ABdhPJyKj6yz7vBgyoh7xhGNMnD24Vj1loJ7dkpZAbbMnfJNoJPPQas76a/fl61lg2hFJOnMRs6fDg==
-X-Received: by 2002:a62:64d1:0:b029:161:ffdb:e07d with SMTP id y200-20020a6264d10000b0290161ffdbe07dmr20737550pfb.71.1604315577377;
-        Mon, 02 Nov 2020 03:12:57 -0800 (PST)
-Received: from PWN (59-125-13-244.HINET-IP.hinet.net. [59.125.13.244])
-        by smtp.gmail.com with ESMTPSA id m2sm13516592pfh.44.2020.11.02.03.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 03:12:56 -0800 (PST)
-Date:   Mon, 2 Nov 2020 06:12:48 -0500
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Daniel Vetter <daniel@ffwll.ch>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zAOiszuYUyIyWLQKIJG6bc55M3RXwlsKsxrmhc4uVW8=;
+        b=DlJ6FuNQoJ3hiThYilksUdKybyTuQXycGOBSoJL7sO/4tqe8R4tTaBQGQXFOo3SIHH
+         UoT+gSyMRAzw7SPRmK4GmSPZpyDWQkzS+mzyEL88QzuGVfDQabryqWDTfcUeNHpw91Sc
+         skw/zpkHt2EF9HclTpPqJg5to1zrCip9tLg8w/dkuDg988JsYy69osdWjZkhNvf8Xq7T
+         lmX79/jI+NVnd8IXglDSbJkvwF03oWa3CMiKtaXJMmlZYKcwS0+jGJzlUgR6NLH4sUTJ
+         le1rbuL4iNZE6Fr4y3me0FdmdadSvsezL/+sV7L8KLyuclK9KJ4J7DaRqGHuOVawzHNU
+         XR5Q==
+X-Gm-Message-State: AOAM5314+NZh36MFUM2cC7g/ze8UjMu6QfnBx8u1vcSQXH1lBmcYnOEK
+        NV6FTwhgNgdN/Nop0bHqK4riUc+cc1rKEGC+2rbW+A==
+X-Google-Smtp-Source: ABdhPJymTv/GY1o66DtI8nUb04RogVy4P/jau3IpWYQX9hL2oM8RWoh0Dt8euA0YAJD1frHT9NECvc2I9O/h/4i+Pzk=
+X-Received: by 2002:a4a:b503:: with SMTP id r3mr11571270ooo.28.1604316665320;
+ Mon, 02 Nov 2020 03:31:05 -0800 (PST)
+MIME-Version: 1.0
+References: <c5563eeea36aae7bd72ea2e985bc610d585ece40.1604306433.git.yepeilin.cs@gmail.com>
+ <72c954371ed9b1d050901b2d498a979017de8a3c.1604306433.git.yepeilin.cs@gmail.com>
+ <20201102101044.GM401619@phenom.ffwll.local> <20201102111248.GA1558630@PWN>
+In-Reply-To: <20201102111248.GA1558630@PWN>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Mon, 2 Nov 2020 12:30:54 +0100
+Message-ID: <CAKMK7uGPnNM_96DgtJx0qqocNcro2y_skT21J-CqF9oX8651fA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] tty/vt: Avoid passing struct console_font_op to con_font_copy()
+To:     Peilin Ye <yepeilin.cs@gmail.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         Thomas Winischhofer <thomas@winischhofer.net>,
@@ -59,38 +59,39 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         George Kennedy <george.kennedy@oracle.com>,
         Nathan Chancellor <natechancellor@gmail.com>,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] tty/vt: Avoid passing struct console_font_op to
- con_font_copy()
-Message-ID: <20201102111248.GA1558630@PWN>
-References: <c5563eeea36aae7bd72ea2e985bc610d585ece40.1604306433.git.yepeilin.cs@gmail.com>
- <72c954371ed9b1d050901b2d498a979017de8a3c.1604306433.git.yepeilin.cs@gmail.com>
- <20201102101044.GM401619@phenom.ffwll.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201102101044.GM401619@phenom.ffwll.local>
+        Peter Rosin <peda@axentia.se>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 02, 2020 at 11:10:44AM +0100, Daniel Vetter wrote:
-> I'm not sure switching from int to unsigned just here makes much sense.
-> All the console code is still using int con to index all the various
-> arrays (I just checked fbcon.c code), and using int to index arrays is
-> pretty standard. As long as we have the con < 0 check to catch evil
-> userspace.
-> 
-> There's still the switch from op to int for con_font_copy, but I think
-> that's better done as part of the larger cleanup we already discussed. And
-> then maybe also include patch 1 from this series in that rework.
+On Mon, Nov 2, 2020 at 12:12 PM Peilin Ye <yepeilin.cs@gmail.com> wrote:
+>
+> On Mon, Nov 02, 2020 at 11:10:44AM +0100, Daniel Vetter wrote:
+> > I'm not sure switching from int to unsigned just here makes much sense.
+> > All the console code is still using int con to index all the various
+> > arrays (I just checked fbcon.c code), and using int to index arrays is
+> > pretty standard. As long as we have the con < 0 check to catch evil
+> > userspace.
+> >
+> > There's still the switch from op to int for con_font_copy, but I think
+> > that's better done as part of the larger cleanup we already discussed. And
+> > then maybe also include patch 1 from this series in that rework.
+>
+> I see. I think at the moment there's not much we can do for
+> con_font_get/set/default(). _get() and _default() use *op, and _set()
+> uses all except one field of *op. Maybe we can change the type of *op
+> from console_font_op to font_desc, after cleaning up everything else?
 
-I see. I think at the moment there's not much we can do for
-con_font_get/set/default(). _get() and _default() use *op, and _set()
-uses all except one field of *op. Maybe we can change the type of *op
-from console_font_op to font_desc, after cleaning up everything else?
-
-Peilin
-
+Yeah, for these one of the arguments should be the new font_desc, so
+that we can remove the op stuff properly. Opening up all the arguments
+without the font_desc doesn't make sense imo.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
