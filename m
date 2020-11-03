@@ -2,86 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6052A3ED9
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 09:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273802A3F14
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 09:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727109AbgKCI03 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 03:26:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39380 "EHLO mail.kernel.org"
+        id S1725997AbgKCIj4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 3 Nov 2020 03:39:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45080 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725968AbgKCI02 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Nov 2020 03:26:28 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 36959206E3;
-        Tue,  3 Nov 2020 08:26:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604391988;
-        bh=H2o46wRPnMfCNsMFuys7neQERbJwFfzabczNDkta3pM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dwdrDX82oG6KNy4uGMP56MKtqOyfCaei7QuxmihCi5nuY2BfUG3V3B/U+peBiTH0x
-         3Xh5Ma0p/h+2O2fY8hFCxA8TmkFFZx04w4SbovqnHgOzqKc4E3JP8WKr0vc9X0o3Mf
-         /1170kWuMXZW/zTII1J62AQ1umkoyP9q8v6fwJcY=
-Date:   Tue, 3 Nov 2020 09:27:21 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     luojiaxing <luojiaxing@huawei.com>
-Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        andriy.shevchenko@linux.intel.com, linux-kernel@vger.kernel.org,
-        martin.petersen@oracle.com, john.garry@huawei.com,
-        himanshu.madhani@cavium.com, felipe.balbi@linux.intel.com,
-        uma.shankar@intel.com, anshuman.gupta@intel.com,
-        animesh.manna@intel.com, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linuxarm@huawei.com
-Subject: Re: [PATCH v2 0/5] Introduce a new helper marco
- DEFINE_SHOW_STORE_ATTRIBUTE at seq_file.c
-Message-ID: <20201103082721.GA2510248@kroah.com>
-References: <1604046722-15531-1-git-send-email-luojiaxing@huawei.com>
- <20201030084448.GA1625087@kroah.com>
- <d4852df0-d7e0-ee7e-352c-58eaf47c2c72@huawei.com>
+        id S1725982AbgKCIjz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Nov 2020 03:39:55 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210015] New: page allocation failure in usb_hub_wq hub_event
+ when adding HID device
+Date:   Tue, 03 Nov 2020 08:39:54 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jadahl@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-210015-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d4852df0-d7e0-ee7e-352c-58eaf47c2c72@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 04:19:09PM +0800, luojiaxing wrote:
-> Hi
-> 
-> On 2020/10/30 16:44, Greg KH wrote:
-> > On Fri, Oct 30, 2020 at 04:31:57PM +0800, Luo Jiaxing wrote:
-> > > We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
-> > > for read-only file, but we found many of drivers also want a helper marco for
-> > > read-write file too.
-> > > 
-> > > So we try to add this macro to help decrease code duplication.
-> > > 
-> > > Luo Jiaxing (5):
-> > >    seq_file: Introduce DEFINE_SHOW_STORE_ATTRIBUTE() helper macro
-> > >    scsi: hisi_sas: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
-> > >    scsi: qla2xxx: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
-> > >    usb: dwc3: debugfs: Introduce DEFINE_SHOW_STORE_ATTRIBUTE
-> > >    drm/i915/display: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
-> > What changed from v1?
-> 
-> 
-> Sorry, I should add a commit for the change.
-> 
-> 
-> In v1, Andy pointed out that the old name of DEFINE_STORE_ATTRIBUTE was
-> easily misunderstood as a write-only file rather than a read-write file.
-> 
-> Therefore, it is changed to DEFINE_SHOW_STORE_ATTRIBUTE according to his
-> suggestion.
+https://bugzilla.kernel.org/show_bug.cgi?id=210015
 
-All of that needs to go in the patch, below the --- line, or in the
-00/XX email here, like is documented.
+            Bug ID: 210015
+           Summary: page allocation failure in usb_hub_wq hub_event when
+                    adding HID device
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.8.16-300.fc33.x86_64
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: jadahl@gmail.com
+        Regression: No
 
-Please fix that up and resend a v3 if you wish for people to look at
-this series and know what is going on.
+Created attachment 293411
+  --> https://bugzilla.kernel.org/attachment.cgi?id=293411&action=edit
+journal -k during the error
 
-thanks,
+When docking my laptop (Lenovo T470s, to a traditional docking station),
+running 5.8.16-300.fc33.x86_64, sometimes (every other time or so), the kernel
+runs into a page allocation failure when adding one of the HID device
+associated with the USB keyboard attached to the docking station.
 
-greg k-h
+When this does *not* happen, three evdev devices appear for the keyboard:
+
+/dev/input/event11:     TypeMatrix.com USB Keyboard
+/dev/input/event12:     TypeMatrix.com USB Keyboard System Control
+/dev/input/event13:     TypeMatrix.com USB Keyboard Consumer Control
+
+The third device emits events such as Volume Up, Volume Down etc. The first
+emits events such as regular A-Z keys.
+
+Available HID devices are 
+
+/dev/hidraw3:   TypeMatrix.com USB Keyboard
+/dev/hidraw4:   TypeMatrix.com USB Keyboard
+
+The first emits A-Z keys etc, while the second emits Volume up/down etc.
+
+When the page allocation failure happens, the raw HID devices remain the same
+and functioning, but the only evdev devices that appear are event11 and
+event12, missing event13, thus missing Volume up/down events.
+
+Replugging the keyboard enough times will make it work correctly again, most of
+the times.
+
+I'm attaching a journal -k for when it happens, containing the backtrace to the
+page allocation failure.
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
