@@ -2,77 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CA12A5804
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 22:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35CD2A589F
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 22:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733019AbgKCVrQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 16:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733017AbgKCVrP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Nov 2020 16:47:15 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFEEC0613D1;
-        Tue,  3 Nov 2020 13:47:15 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id s25so12653704ejy.6;
-        Tue, 03 Nov 2020 13:47:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=S6CL+T+HBwhBTGbdv3kXuibM6BJcgdU3GPg2IxIyF9A=;
-        b=SE/7zKsogU9eUwTHHOTXOItfRy3ydUqieWdmJtv13Z3o0Ko630AoISOOth71UzsKc2
-         VO7Fj3ywRPXAOL3LB/5d4gELKwdMmPCa17f2x3nQ1hLhTszl5+UeA/c7Mo04hOv1vJQo
-         CW7rnC6GLhZtQ8Ai6TUngQSwkDdbaFZNPaghGYzLbalp4R8NmhvY32lVnoZJaSAiKIk4
-         W5/t4A7eGTDsV6nmQrq/JNthLQ6V0DfxpfYWhpjMMOtgxdsMmySfJt+JVAGikDJVyUmW
-         qOe8HtVFw53Vs4QKjAUavGKvlP+EJ346UqpfsuPJ3McFYv9+5D98ova9Bu4tcXXZtVun
-         7HuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=S6CL+T+HBwhBTGbdv3kXuibM6BJcgdU3GPg2IxIyF9A=;
-        b=XqMBwwra87fHFG6xWJ0x6Oue29Q5N5lqNxgGBiPJSdtpUeIt8TionhOkk2fR/yr2Zx
-         S1rk1HbcV4baXHe8ImaWxAVgq+EAnkeZ6Fk/o2WM+2JIa0XGH72N45NEaDFHBWvjevGR
-         Eb3vzn5HaQt1Nz7FZtZ2+hTLW1BB0L8XQG94Dx7olF7k/XGENVRfrM5AcY+KBv9nlJ3q
-         qZDzCd0AOwpS0BvTkubGd7Rp2kQZoaBtbuUFzL+FhYE6RQIKhCDyWlfWxrpxzjoZ/73C
-         DFKLQptgDuucRP5nZnY4z3IwOxU2c9oOZXI45kvFKpLCdQusfuYRZUXaHFrXCjNwst16
-         Nsdw==
-X-Gm-Message-State: AOAM530TdoLEfbOUETH/cPw3OcCkGh//y9vfYpWZ5uVW6Kro6tDiP27c
-        7Kdmwsz9+lek+cVIXi24OKM=
-X-Google-Smtp-Source: ABdhPJzzwOjgj/TiQSgcFWwTsQO/P/KSxtrNK/9PSW0pP8YoD45n8lorOx44A+WeOK769s2XLUAXmQ==
-X-Received: by 2002:a17:906:7e43:: with SMTP id z3mr23057767ejr.143.1604440033905;
-        Tue, 03 Nov 2020 13:47:13 -0800 (PST)
-Received: from skbuf ([188.25.2.177])
-        by smtp.gmail.com with ESMTPSA id rl1sm11619ejb.36.2020.11.03.13.47.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2020 13:47:13 -0800 (PST)
-Date:   Tue, 3 Nov 2020 23:47:12 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: Re: [PATCH net-next 3/5] r8152: add MCU typed read/write functions
-Message-ID: <20201103214712.dzwpkj6d5val6536@skbuf>
-References: <20201103192226.2455-1-kabel@kernel.org>
- <20201103192226.2455-4-kabel@kernel.org>
+        id S1731716AbgKCVxP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 16:53:15 -0500
+Received: from m42-4.mailgun.net ([69.72.42.4]:19461 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732597AbgKCVxO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Nov 2020 16:53:14 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1604440393; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=RAH6NHCZ23WV/V4EE9neHeIyRy1eixbFuGon9dmhq0M=; b=Jud4a17a812QMZXF+wJ3TR+xvgqxSm7tB8MJ7WujYfvs2ChX4ixMSbuYNd7JmX5j+4tp6KUF
+ 2cAmCPe1rHFbmjlytAoWqtx4iTc4sQoQNjA5rJHwtn6QM0xSeQVjx95EP0jEa5fcg+fPcZ3k
+ O6VDZRQxz4+KZWzgrFLvsczhZJA=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 5fa1d141ca0638c0dcfebe5f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 03 Nov 2020 21:53:05
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E9B36C433C8; Tue,  3 Nov 2020 21:53:04 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [10.110.114.182] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1C8B3C433C8;
+        Tue,  3 Nov 2020 21:53:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1C8B3C433C8
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH 1/2] usb: dwc3: gadget: Allow runtime suspend if UDC
+ unbinded
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, jackp@codeaurora.org
+References: <20201028234311.6464-1-wcheng@codeaurora.org>
+ <20201028234311.6464-2-wcheng@codeaurora.org>
+ <20201029010748.GA1303156@rowland.harvard.edu>
+ <a47d78f3-0a11-9de8-dbea-ad745d496845@codeaurora.org>
+ <20201103200716.GA1538425@rowland.harvard.edu>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <57d56507-e2f7-bce8-2445-95820db25fc8@codeaurora.org>
+Date:   Tue, 3 Nov 2020 13:53:01 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201103192226.2455-4-kabel@kernel.org>
+In-Reply-To: <20201103200716.GA1538425@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 08:22:24PM +0100, Marek Behún wrote:
-> Add pla_ and usb_ prefixed versions of ocp_read_* and ocp_write_*
-> functions. This saves us from always writing MCU_TYPE_PLA/MCU_TYPE_USB
-> as parameter.
-> 
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-> ---
 
-You just made it harder for everyone to follow the code through pattern
-matching. Token concatenation should be banned from the C preprocessor.
+
+On 11/3/2020 12:07 PM, Alan Stern wrote:
+> On Tue, Nov 03, 2020 at 11:02:25AM -0800, Wesley Cheng wrote:
+>>
+>>
+>> On 10/28/2020 6:07 PM, Alan Stern wrote:
+>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>> @@ -1995,6 +1995,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>>>  	unsigned long		flags;
+>>>>  	int			ret;
+>>>>  
+>>>> +	if (pm_runtime_suspended(dwc->dev)) {
+>>>> +		pm_request_resume(dwc->dev);
+>>>> +		return 0;
+>>>> +	}
+>>>
+>>> Isn't this racy?  What happens if the controller was active but a 
+>>> runtime suspend occurs right here?
+>>>
+>>> Alan Stern
+>>>
+>>
+>> Hi Alan,
+>>
+>> Ah, yes you're right.  I was hoping that the PM runtime layer would be
+>> utilizing the spinlock when reading out the runtime status, but even
+>> then, we wouldn't be able to catch intermediate states with this API
+>> (i.e. RPM_RESUMING or RPM_SUSPENDING)
+>>
+>> Tried a few different approaches, and came up with something like the
+>> following:
+>>
+>> static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>> {
+>> ...
+>> 	ret = pm_runtime_get_sync(dwc->dev);
+>> 	if (!ret) {
+>> 		pm_runtime_put(dwc->dev);
+>> 		return 0;
+>> 	}
+>> 	...
+>> 	pm_runtime_put(dwc->dev);
+>>
+>> 	return 0;
+>> }
+>>
+>> I think this should be good to address your concern.  The only way we
+>> would be able to ensure that the runtime PM state doesn't enter
+>> idle/suspend is if we increment the usage count for the duration we're
+>> accessing the DWC3 registers.  With the synchronous PM runtime resume
+>> call, we can also ensure that no pending runtime suspends are executing
+>> in parallel while running this code.
+> 
+> That's correct.
+> 
+>> The check for the zero return value would be for avoiding running the
+>> DWC3 run stop sequence for the case where we executed the runtime PM
+>> resume, as the DWC3 runtime PM resume routine will set the run stop bit
+>> in there.
+> 
+> If you need to add an explanation of this subtle point in your email 
+> message, then you should add a similar explanation as a comment in the 
+> code.  And don't forget to check for ret < 0 (i.e., a resume error).
+> 
+
+Hi Alan,
+
+Got it, will do.  Yes, I'll include the error conditions as well in the
+actual change.  Thanks again!
+
+Thanks
+
+Regards,
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
