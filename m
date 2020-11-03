@@ -2,125 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C919E2A441F
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 12:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13502A4479
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 12:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728397AbgKCLX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 06:23:29 -0500
-Received: from mail-vi1eur05on2088.outbound.protection.outlook.com ([40.107.21.88]:21729
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        id S1728072AbgKCLq3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 06:46:29 -0500
+Received: from mail-eopbgr40066.outbound.protection.outlook.com ([40.107.4.66]:28642
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728092AbgKCLX2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Nov 2020 06:23:28 -0500
+        id S1727109AbgKCLq1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Nov 2020 06:46:27 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hto3k/y7vFeNuh5Jt/nucf0P8Ig3xYLjuY1Hp+iJeE8k+Q9rLEkznir9LEOSHyIgOgaujFZlACOzAS3/clUgQBWmLtutuDcjwBNp9tUlgqHsuDRvtrqMHL1GW+/RuhvDyV0jcl5QViHAr5/6QkPl8mRKxPUXr++YaNH8kHtYJctAsYj1C8WaudsZRSNfDE+O6UnZr53FJ8yvZ9O0mFCCTQzGISY+zKm+mqXITKTzO2y6wA796CnUyllDEoDQsS2ki8IYv5uUfe5vTX2WI+RL8CB9M0X6IT5+4jKigLBm34hidZm8yu0Xcb/yQ/n6U738fDMF5/Ra0LjVp+q2FSOXag==
+ b=aqaJJy3njJXAEB7/CsWRVAhEJpGsGBvocQEvXob4eZeZS0CcW6+s8BhjwYvlkXSuNFdnaJun2GgfhqWlHKL3B8wR/jeMIxfXY/cFHpEH4Eb9MGwOG+orpExMOLeC+PTxd4kQZTYdUleY2iaoxk3Rm9te3ttdSATHjv50YDekICR6lUZnHxuOdPlztMVNfeyD8IWbjwPtzOqWwgokD9OALqxD9TGX1xgxiD7pDfFIGrl7RxVcIIJ7ylFNfgmaZu2j3cFKJpDhUHvSSXn205QScer/sP93aQY+zECdYjBHN/SyN4EZUD9UIQQiHQcjZg6v7ZBW7qCCZPQNIQAcLY6sIQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zu5OyylSN127hG6rzB+NTi/+6clv255dmTTcZSPfFVE=;
- b=iCeAhAxN76QqGJOGYeOxZeOKay3Iid25y/HMtS6ooZXpTkWJD/F8n+8zK4Pyt0XyYs1qe2MhUoYaGHjPkozUoR9CicHvuLMwL9CdHxpTgbBcKs6YFItElqH2/qaOfchK+GQpMvrUP6sioDOwAdlDQmLLJowRZfiMsBmqzrTXv8uG9UBk9D0YlxQUD9AOVOq91RGWjVFeFi2oM1nF5Wo8tcXkweGSJEEaVnobdOIAXtkn8Hf21VSWCdXvudsoYPQZUpKUxjuTAI19HisTYtY1pZ86jU6+otoYvZoa+HDZGQaWYxTd6P4X35O67GQ1B3U7GQgkX1hPMeo7Oe0/MMPmGw==
+ bh=5w5WD8gBwMCmRzhXi8+9zceJ3wKIZEIC8qZhHX4kPC4=;
+ b=lW+1/aWLc6/n+hIR5wReWsnL38RStEOfFjuJVBprY2b2/mya1Q2qfSgt+++G1OOjY62XDjCPJezFhuQj2xmoIO5SAMUoNFFroUEs6NPeNDVGhWoT/S/MBoBJnoUQoGZjO/eYWSqYKjdFvPoZBE1xGaQdJ8ZQoRj6gS8opMYw/iYdFagQvS6CqFDAvzQfCVBZgDUNQA1StSAgYLw9OSTn0Vi4Tt7PJmsm/MyKVC7Lo90bSsKJspCfS6Y5siTbNN/7I8539Phlprkw2RQV5JGjaewKJ9FjkMB5nZcHqxn4sQpZ4GEG2hW23gWKGE7D3DaO85HC2nLVJyE73Q0F1QRaTg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zu5OyylSN127hG6rzB+NTi/+6clv255dmTTcZSPfFVE=;
- b=p/IMqZtVulgAYDQIAT/bB7LHPMSNs0Qlk6+fJGv8MUGjICb31RScFb/F/E3Ke1CefuxTML2ZmsgluIiC4qVB/71lZjkTZ1nrOHPD3znx6hHgHFu7IgJqG5mr71MIvepx7aKtrDVWKeIhH+ah9bqeHGlT+b+DPcsqgsXt8q2lAwg=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=nxp.com;
+ bh=5w5WD8gBwMCmRzhXi8+9zceJ3wKIZEIC8qZhHX4kPC4=;
+ b=NXk7Gs3iNmNKzoC6dZYJqcaLBhqvujpMrx6o5K+xxouO3VXsCFeuaWqc5qH5X/mLkCaw3W43XvoJrGr1Vz0i6kQdeVe3bPNUxX4Mc0Vkg06Zml9q50gm22nD3O5ZzKAzC9jXP9ofnTtDvjCiBLtZqHR+2X1bgYVDKrbyZlkd6W4=
+Authentication-Results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none header.from=nxp.com;
 Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
- by VI1PR0402MB3758.eurprd04.prod.outlook.com (2603:10a6:803:1d::27) with
+ by VE1PR04MB7278.eurprd04.prod.outlook.com (2603:10a6:800:1b1::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.29; Tue, 3 Nov
- 2020 11:23:25 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Tue, 3 Nov
+ 2020 11:46:22 +0000
 Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
  ([fe80::852e:24d5:4c9f:5bdf]) by VE1PR04MB6528.eurprd04.prod.outlook.com
  ([fe80::852e:24d5:4c9f:5bdf%6]) with mapi id 15.20.3499.032; Tue, 3 Nov 2020
- 11:23:25 +0000
+ 11:46:22 +0000
 From:   Li Jun <jun.li@nxp.com>
-To:     mathias.nyman@intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        peter.chen@nxp.com
-Subject: [PATCH] usb: host: xhci: wait USB2 port enter suspend for bus suspend
-Date:   Tue,  3 Nov 2020 19:17:30 +0800
-Message-Id: <1604402250-16434-1-git-send-email-jun.li@nxp.com>
+To:     heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
+        rafael@kernel.org
+Cc:     gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        hdegoede@redhat.com, lee.jones@linaro.org,
+        mika.westerberg@linux.intel.com, dmitry.torokhov@gmail.com,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-imx@nxp.com, peter.chen@nxp.com
+Subject: [PATCH v5 1/4] dt-bindings: usb: add documentation for typec switch simple driver
+Date:   Tue,  3 Nov 2020 19:40:07 +0800
+Message-Id: <1604403610-16577-1-git-send-email-jun.li@nxp.com>
 X-Mailer: git-send-email 2.7.4
 Content-Type: text/plain
 X-Originating-IP: [119.31.174.66]
-X-ClientProxiedBy: SG2PR02CA0078.apcprd02.prod.outlook.com
- (2603:1096:4:90::18) To VE1PR04MB6528.eurprd04.prod.outlook.com
+X-ClientProxiedBy: SG2PR01CA0131.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:40::35) To VE1PR04MB6528.eurprd04.prod.outlook.com
  (2603:10a6:803:127::18)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR02CA0078.apcprd02.prod.outlook.com (2603:1096:4:90::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3499.18 via Frontend Transport; Tue, 3 Nov 2020 11:23:23 +0000
+Received: from localhost.localdomain (119.31.174.66) by SG2PR01CA0131.apcprd01.prod.exchangelabs.com (2603:1096:4:40::35) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3499.19 via Frontend Transport; Tue, 3 Nov 2020 11:46:18 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 463d7039-054f-4b68-65ee-08d87feae153
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB3758:
+X-MS-Office365-Filtering-Correlation-Id: 0a7bf8fe-9195-4e49-9d80-08d87fee15f4
+X-MS-TrafficTypeDiagnostic: VE1PR04MB7278:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VI1PR0402MB3758277752F09D15B83845D389110@VI1PR0402MB3758.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-Microsoft-Antispam-PRVS: <VE1PR04MB72782CE02F8554981A2CE1B789110@VE1PR04MB7278.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: woxM8O+oG5nl2FBJ9O8VYEVlHJjLdE3F912y1sbY+mOkLlYBLO2LtZuK3CbNCXNqThfIkbh/4SSMZbpsTTEVv1db46L8A25tOzgoRA5MVhWGRzRq62YhrPBlKV5zxesC4lrmseaozfYuJyEIP86BJXtsP98TCpGmtkcWL+wh1khSNE2Gg28IBSH1e+28nb+kqfxoKrouLp0zfONvz72zv6cR5QfoWV24AOEcbh28yEmxeLd+g9kiPV9MiTMiLrsB0QOs2/BldKsYC1TATKUk/yTTysuRzgOQVXG6yUyMXG7iYLXd6/zektwkc8Pj+LCcDT1EvGoNWYC82I28Uz5jZOajzETj5KtNVJZjyvwsZGq78vfoERFzkQEBV+3VyZc+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(136003)(39860400002)(366004)(376002)(6666004)(86362001)(2616005)(69590400008)(26005)(6916009)(956004)(2906002)(6506007)(6486002)(4326008)(16526019)(8936002)(186003)(6512007)(36756003)(52116002)(66946007)(316002)(83380400001)(478600001)(5660300002)(15650500001)(66476007)(8676002)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: eHDxnwtAfgNtW61k7/BGWFQMWOuvkxxtMXiWJpMKPyTzcOc3NhV2j8n5eo4PPwOS0QR1dIxsBz6CjKdBrP8BEgGEV+nGO5//ZCf6T23xoZwS9ICx5xoNIax0qG+9XYvo9IP86QxuWv62Iu+TN8atO70n31wZoGCCf2ugYS8jQF42RVE/ADZ6FWozv3CoTNuu/tqHxc6UMCGt2kKdZps+3JkAATTi4+nfoTIhPUyzATWWuFFlRi91yTkZHeom/2hr+xb4qk/RZR7a6Ti0Env7/hjKlS+fncwcG0jyLw8zOTbqSd6v28eSlfeBvkuELkO4Vg0VljPoNdwgUAqpeEtIuXkv7gV3L1Mo2iJTrNG1drzH54ENtTQWzKqJSWc60QXxAQMwQpvDYj1dgicp+cz4uhPPi0/iPBWdQGL41sk4uVG8i+3jJ3WBSztJWpeIUhB848sAM4+F4ZGaNfCC+hU9j+ZFTi5eb+QgAtAOORcL1DLjCV3ezYyA12Ozigi8UPDhAdRYqwu3lncybFummxCRuC9g3beWmBo5tSR5EEfAwWMyc6pbzy8fVo6x3MMVfo5MPgZDxaQCIH2nToSQklRo76Qgi6rh8fERWpAFr/ev0OuUgkc7iWEYUqHV1iit+JSGpHqhlauqfAV5QKhJrFePmg==
+X-Microsoft-Antispam-Message-Info: awh9QUksJCvyPhyWGO+mHOhwAzOi6RHn03KSdewpUO5UPmgBzP58RxEMK1BSzlIrLy9cpmeYmYLtN6smah5N/oE1/Hj4fJ+MeaCYfJNQC64eXOP/9nu8KPEZMK6hn70ny06jTi4wLy/nfuU5L3tews1tv3sWZVY+Tm1EQjiZywDtqgS6ryJYpwq2e6nuOnBow366E3JykKxiifSMdUyQSrx5cShMFZO0BZbnDLbcyZYXIVSqAZ2+9H+OK5aLTMVNPW+CBCL/JmRmrCcWBbqA1QGoqk20pYGNsBFiii0A0vT/h6EGQWR5TVVspMiLdZtMrm++uNRSY2oPEfiHH7iQEIT5s3QxJqSVIC7A0wbkpD/oa48+2PJt9nqQF2fXjJczbk8ZgjtpnAl0655qzW28KZlzgL5QDb5B2eUc+XSem3X5B0W1l1lRGdyomkGLPOFLr9RQyYAXf08ofieLSBttaA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(136003)(346002)(376002)(39860400002)(69590400008)(26005)(316002)(16526019)(186003)(8936002)(6486002)(6506007)(7416002)(4326008)(6666004)(478600001)(966005)(36756003)(956004)(5660300002)(2906002)(66476007)(2616005)(86362001)(66556008)(52116002)(66946007)(6512007)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: yfKLULPVn3Rhq2LxA4rT7FGtSeZZ2U7H1Ih4B33GNLP3RKIPW1YjRPDsAYmUrejYCeL0D+WaP+qW8eRzmGYZH7Klq5pJXTw9EBE5c+g0p2SYKmRw7ONfCi0C0Mo+A5BoGF7irI+TIGnrv1fba4xnyXLBhNUMH9ZG+93TZ/W4J9npDH9AcQHpqazNRuJvHeQ9AOGi6BBq5HtmWAMrLrL4F5jpF6fp0HiDdfo33VjDQb7RyZ57kHodFH4vouwfID5iOcOyxgYXiKm/1JaoQC1HVQwc6ukgojdmpSV0+f+lVC4Elc86yK299QlnTsg8ON00RvtaasGD7zHkOVFCGE+THQUmGJj5Wf66m9uftwfJJPOf2JqqY27Qsup04WX60qwTmJJj2DLwIQqPhz62T+CwFY+1wkZrWGWFL7L00fHMh0+r5yKSHHIdHxceVt10d5rZEoH2LRNtYvfYb+mCdKi5uUGmLjz7/v0ubHeNb7JGGausqHGnUywLcDWtJMg4pDAuQ3oiqkBnT4xPMkS80wPh0mTZrgfOT7313Fliva2nm4JyVFDGPE5vxtV8l7TSMrEoK4K+QV8ZF1Oc4m9spn/tvXcdHmp4enIaZtWEgY6l159Iz9JEQcWiAs6se9LuiCAk4557Y09R8vhQuhX3QWpKiQ==
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 463d7039-054f-4b68-65ee-08d87feae153
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a7bf8fe-9195-4e49-9d80-08d87fee15f4
 X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2020 11:23:25.7396
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2020 11:46:22.3769
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f6j1JCnbby0njAX6togptUtE1EJnwE/Jb0gGhD7LDgoYaRwDyITWowkyyu0I7nPC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3758
+X-MS-Exchange-CrossTenant-UserPrincipalName: jY7iqcYTD+qL4yOrHU83tm4Ch+qk9L2QCyMpG8z2Go+ckbe89VeBUYoKEpsuZ4bc
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7278
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the connected USB2 device wakeup is not enabled/supported, the link
-state may still be U0 when do xhci bus suspend, after we suspend ports
-in U0, we need give time to device to enter suspend before do further
-suspend operations (e.g. system suspend), otherwise we may enter system
-suspend with link state at U0.
+Some platforms need a simple driver to do some controls according to
+typec orientation, this can be extended to be a generic driver with
+compatible with "typec-orientation-switch".
 
 Signed-off-by: Li Jun <jun.li@nxp.com>
 ---
- drivers/usb/host/xhci-hub.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+No changes for v5.
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index c799ca5..1e054d0 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1598,6 +1598,7 @@ int xhci_bus_suspend(struct usb_hcd *hcd)
- 	struct xhci_hub *rhub;
- 	struct xhci_port **ports;
- 	u32 portsc_buf[USB_MAXCHILDREN];
-+	bool wait_port_enter_u3 = false;
- 	bool wake_enabled;
- 
- 	rhub = xhci_get_rhub(hcd);
-@@ -1706,12 +1707,17 @@ int xhci_bus_suspend(struct usb_hcd *hcd)
- 				xhci_stop_device(xhci, slot_id, 1);
- 				spin_lock_irqsave(&xhci->lock, flags);
- 			}
-+			wait_port_enter_u3 = true;
- 		}
- 		writel(portsc_buf[port_index], ports[port_index]->addr);
- 	}
- 	hcd->state = HC_STATE_SUSPENDED;
- 	bus_state->next_statechange = jiffies + msecs_to_jiffies(10);
- 	spin_unlock_irqrestore(&xhci->lock, flags);
+changes on v4:
+- Use compatible instead of bool property for switch matching.
+- Change switch GPIO to be switch simple.
+- Change the active channel selection GPIO to be optional.
+
+previous discussion:
+http://patchwork.ozlabs.org/patch/1054342/
+
+ .../bindings/usb/typec-switch-simple.yaml          | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+new file mode 100644
+index 0000000..244162d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/typec-switch-simple.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	if (wait_port_enter_u3)
-+		usleep_range(5000, 10000);
++title: Typec Orientation Switch Simple Solution Bindings
 +
- 	return 0;
- }
- 
++maintainers:
++  - Li Jun <jun.li@nxp.com>
++
++description: |-
++  USB SuperSpeed (SS) lanes routing to which side of typec connector is
++  decided by orientation, this maybe achieved by some simple control like
++  GPIO toggle.
++
++properties:
++  compatible:
++    const: typec-orientation-switch
++
++  switch-gpios:
++    description: |
++      gpio specifier to switch the super speed active channel,
++      GPIO_ACTIVE_HIGH: GPIO state high for cc1;
++      GPIO_ACTIVE_LOW:  GPIO state low for cc1.
++    maxItems: 1
++
++  port:
++    type: object
++    additionalProperties: false
++    description: -|
++      Connection to the remote endpoint using OF graph bindings that model SS
++      data bus to typec connector.
++
++    properties:
++      endpoint:
++        type: object
++        additionalProperties: false
++
++        properties:
++          remote-endpoint: true
++
++        required:
++          - remote-endpoint
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    ptn36043 {
++        compatible = "typec-orientation-switch";
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_ss_sel>;
++        switch-gpios = <&gpio3 15 GPIO_ACTIVE_HIGH>;
++
++        port {
++                usb3_data_ss: endpoint {
++                        remote-endpoint = <&typec_con_ss>;
++                };
++        };
++    };
 -- 
 2.7.4
 
