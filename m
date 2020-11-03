@@ -2,99 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41592A50B9
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 21:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505EE2A5630
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 22:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729242AbgKCUHX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 15:07:23 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:47615 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729217AbgKCUHW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Nov 2020 15:07:22 -0500
-Received: (qmail 1538831 invoked by uid 1000); 3 Nov 2020 15:07:16 -0500
-Date:   Tue, 3 Nov 2020 15:07:16 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, jackp@codeaurora.org
-Subject: Re: [PATCH 1/2] usb: dwc3: gadget: Allow runtime suspend if UDC
- unbinded
-Message-ID: <20201103200716.GA1538425@rowland.harvard.edu>
-References: <20201028234311.6464-1-wcheng@codeaurora.org>
- <20201028234311.6464-2-wcheng@codeaurora.org>
- <20201029010748.GA1303156@rowland.harvard.edu>
- <a47d78f3-0a11-9de8-dbea-ad745d496845@codeaurora.org>
+        id S2387573AbgKCVCH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 16:02:07 -0500
+Received: from mx2.suse.de ([195.135.220.15]:35726 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387562AbgKCVCG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Nov 2020 16:02:06 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 6B2C8ACD9;
+        Tue,  3 Nov 2020 21:02:05 +0000 (UTC)
+Date:   Tue, 3 Nov 2020 12:40:14 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     johan@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [PATCH] usb/mos7720: process deferred urbs in a workqueue
+Message-ID: <20201103204014.3ue37owcras6cx7p@linux-p48b.lan>
+References: <20201102211450.5722-1-dave@stgolabs.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <a47d78f3-0a11-9de8-dbea-ad745d496845@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201102211450.5722-1-dave@stgolabs.net>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 11:02:25AM -0800, Wesley Cheng wrote:
-> 
-> 
-> On 10/28/2020 6:07 PM, Alan Stern wrote:
-> >> --- a/drivers/usb/dwc3/gadget.c
-> >> +++ b/drivers/usb/dwc3/gadget.c
-> >> @@ -1995,6 +1995,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
-> >>  	unsigned long		flags;
-> >>  	int			ret;
-> >>  
-> >> +	if (pm_runtime_suspended(dwc->dev)) {
-> >> +		pm_request_resume(dwc->dev);
-> >> +		return 0;
-> >> +	}
-> > 
-> > Isn't this racy?  What happens if the controller was active but a 
-> > runtime suspend occurs right here?
-> > 
-> > Alan Stern
-> > 
-> 
-> Hi Alan,
-> 
-> Ah, yes you're right.  I was hoping that the PM runtime layer would be
-> utilizing the spinlock when reading out the runtime status, but even
-> then, we wouldn't be able to catch intermediate states with this API
-> (i.e. RPM_RESUMING or RPM_SUSPENDING)
-> 
-> Tried a few different approaches, and came up with something like the
-> following:
-> 
-> static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
-> {
-> ...
-> 	ret = pm_runtime_get_sync(dwc->dev);
-> 	if (!ret) {
-> 		pm_runtime_put(dwc->dev);
-> 		return 0;
-> 	}
-> 	...
-> 	pm_runtime_put(dwc->dev);
-> 
-> 	return 0;
-> }
-> 
-> I think this should be good to address your concern.  The only way we
-> would be able to ensure that the runtime PM state doesn't enter
-> idle/suspend is if we increment the usage count for the duration we're
-> accessing the DWC3 registers.  With the synchronous PM runtime resume
-> call, we can also ensure that no pending runtime suspends are executing
-> in parallel while running this code.
+On Mon, 02 Nov 2020, Bueso wrote:
 
-That's correct.
+>There is
+>also no need anymore for atomic allocations.
 
-> The check for the zero return value would be for avoiding running the
-> DWC3 run stop sequence for the case where we executed the runtime PM
-> resume, as the DWC3 runtime PM resume routine will set the run stop bit
-> in there.
+Bleh this is a brain fart - obviously not true as usb_submit_urb() is
+called under mos_parport->listlock. I'll send a v2 unless you have
+any objections.
 
-If you need to add an explanation of this subtle point in your email 
-message, then you should add a similar explanation as a comment in the 
-code.  And don't forget to check for ret < 0 (i.e., a resume error).
-
-Alan Stern
+Thanks,
+Davidlohr
