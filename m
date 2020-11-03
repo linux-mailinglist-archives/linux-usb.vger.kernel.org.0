@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 956BD2A39A4
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 02:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BD32A395F
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 02:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728025AbgKCB0m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Nov 2020 20:26:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33150 "EHLO mail.kernel.org"
+        id S1728003AbgKCBZC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Nov 2020 20:25:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34456 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727667AbgKCBTY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 2 Nov 2020 20:19:24 -0500
+        id S1727981AbgKCBUD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Nov 2020 20:20:03 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 94FBF22404;
-        Tue,  3 Nov 2020 01:19:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0A7252242F;
+        Tue,  3 Nov 2020 01:20:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604366363;
+        s=default; t=1604366402;
         bh=86wGNSI8JmYe8ggY2XcpLkC6ohVEoexUDpj4tCkLil0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=npx+dYgz2rvVnJbBw93neVx0ewJo03OnboZ4EoUxf+4adSg6ClX09xycLMrnD1N29
-         XXtHaudNdOA5c9PxK4Ox5WdGb2YQ7cINcokFQ0e8j4UtDwTCTrqeo/9AIjryMnt15+
-         kT0dt3idjbzbA80wejNttdPP2uCkf2oH58AZfOCo=
+        b=BSMbjTfGZjOS72STf9BwP8H1/XEpdrK5EovH5gr2i2PkP7Zu4N24lM0cABp7KvN4F
+         OlkDAyPNPeX6tGE2pcIOpWoAjLYAOQ8FdMqtBGFMuqrHZy8Yb1rRJHOpCLFkMVnPUE
+         DyMjsSwzIu2dJzI/+moAJmap1aWn6r4g0LQiWTvE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 32/35] usb: cdns3: gadget: suspicious implicit sign extension
-Date:   Mon,  2 Nov 2020 20:18:37 -0500
-Message-Id: <20201103011840.182814-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 26/29] usb: cdns3: gadget: suspicious implicit sign extension
+Date:   Mon,  2 Nov 2020 20:19:25 -0500
+Message-Id: <20201103011928.183145-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201103011840.182814-1-sashal@kernel.org>
-References: <20201103011840.182814-1-sashal@kernel.org>
+In-Reply-To: <20201103011928.183145-1-sashal@kernel.org>
+References: <20201103011928.183145-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
