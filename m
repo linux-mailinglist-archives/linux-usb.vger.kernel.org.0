@@ -2,148 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F35CD2A589F
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 22:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 818F22A5A1E
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 23:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731716AbgKCVxP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 16:53:15 -0500
-Received: from m42-4.mailgun.net ([69.72.42.4]:19461 "EHLO m42-4.mailgun.net"
+        id S1730183AbgKCWcT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 17:32:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59404 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732597AbgKCVxO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Nov 2020 16:53:14 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1604440393; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=RAH6NHCZ23WV/V4EE9neHeIyRy1eixbFuGon9dmhq0M=; b=Jud4a17a812QMZXF+wJ3TR+xvgqxSm7tB8MJ7WujYfvs2ChX4ixMSbuYNd7JmX5j+4tp6KUF
- 2cAmCPe1rHFbmjlytAoWqtx4iTc4sQoQNjA5rJHwtn6QM0xSeQVjx95EP0jEa5fcg+fPcZ3k
- O6VDZRQxz4+KZWzgrFLvsczhZJA=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 5fa1d141ca0638c0dcfebe5f (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 03 Nov 2020 21:53:05
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E9B36C433C8; Tue,  3 Nov 2020 21:53:04 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.114.182] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1729342AbgKCWcT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Nov 2020 17:32:19 -0500
+Received: from localhost (230.sub-72-107-127.myvzw.com [72.107.127.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1C8B3C433C8;
-        Tue,  3 Nov 2020 21:53:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1C8B3C433C8
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH 1/2] usb: dwc3: gadget: Allow runtime suspend if UDC
- unbinded
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, jackp@codeaurora.org
-References: <20201028234311.6464-1-wcheng@codeaurora.org>
- <20201028234311.6464-2-wcheng@codeaurora.org>
- <20201029010748.GA1303156@rowland.harvard.edu>
- <a47d78f3-0a11-9de8-dbea-ad745d496845@codeaurora.org>
- <20201103200716.GA1538425@rowland.harvard.edu>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <57d56507-e2f7-bce8-2445-95820db25fc8@codeaurora.org>
-Date:   Tue, 3 Nov 2020 13:53:01 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        by mail.kernel.org (Postfix) with ESMTPSA id 66B68223C6;
+        Tue,  3 Nov 2020 22:32:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604442738;
+        bh=LVFmfl7SFRM115YRpJ+p2JJKc/6zzZ3EFVZTVi2Yqiw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sptZfr8rJcsKmBnkii0A6TKNyefSYP2WXK4SaT01qTobFRe8FM34wyknauXgwNOZD
+         xrAGhSZ0Dx0zmzbv+syOwDsRhxZhKz/HRbICaztCIz0gXIJHj42UtJZg1P8wG+m5rT
+         c3/Y636UnmcPM2nt+zGltkOBYZ6vrR3XPY1sYsb8=
+Date:   Tue, 3 Nov 2020 16:32:16 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [RFC PATCH 1/3] PCI: Add the IDs for Etron EJ168 and EJ188
+Message-ID: <20201103223216.GA270921@bjorn-Precision-5520>
 MIME-Version: 1.0
-In-Reply-To: <20201103200716.GA1538425@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFBinCCNHXfit5FkkvgHSh4NdbunKBp3kw3okqTY6ohsK7zNzw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 11/3/2020 12:07 PM, Alan Stern wrote:
-> On Tue, Nov 03, 2020 at 11:02:25AM -0800, Wesley Cheng wrote:
->>
->>
->> On 10/28/2020 6:07 PM, Alan Stern wrote:
->>>> --- a/drivers/usb/dwc3/gadget.c
->>>> +++ b/drivers/usb/dwc3/gadget.c
->>>> @@ -1995,6 +1995,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>>>  	unsigned long		flags;
->>>>  	int			ret;
->>>>  
->>>> +	if (pm_runtime_suspended(dwc->dev)) {
->>>> +		pm_request_resume(dwc->dev);
->>>> +		return 0;
->>>> +	}
->>>
->>> Isn't this racy?  What happens if the controller was active but a 
->>> runtime suspend occurs right here?
->>>
->>> Alan Stern
->>>
->>
->> Hi Alan,
->>
->> Ah, yes you're right.  I was hoping that the PM runtime layer would be
->> utilizing the spinlock when reading out the runtime status, but even
->> then, we wouldn't be able to catch intermediate states with this API
->> (i.e. RPM_RESUMING or RPM_SUSPENDING)
->>
->> Tried a few different approaches, and came up with something like the
->> following:
->>
->> static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->> {
->> ...
->> 	ret = pm_runtime_get_sync(dwc->dev);
->> 	if (!ret) {
->> 		pm_runtime_put(dwc->dev);
->> 		return 0;
->> 	}
->> 	...
->> 	pm_runtime_put(dwc->dev);
->>
->> 	return 0;
->> }
->>
->> I think this should be good to address your concern.  The only way we
->> would be able to ensure that the runtime PM state doesn't enter
->> idle/suspend is if we increment the usage count for the duration we're
->> accessing the DWC3 registers.  With the synchronous PM runtime resume
->> call, we can also ensure that no pending runtime suspends are executing
->> in parallel while running this code.
+On Wed, Oct 07, 2020 at 09:45:23PM +0200, Martin Blumenstingl wrote:
+> Hi Linus,
 > 
-> That's correct.
-> 
->> The check for the zero return value would be for avoiding running the
->> DWC3 run stop sequence for the case where we executed the runtime PM
->> resume, as the DWC3 runtime PM resume routine will set the run stop bit
->> in there.
-> 
-> If you need to add an explanation of this subtle point in your email 
-> message, then you should add a similar explanation as a comment in the 
-> code.  And don't forget to check for ret < 0 (i.e., a resume error).
-> 
+> On Wed, Oct 7, 2020 at 11:14 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> >
+> > On Sun, Oct 4, 2020 at 8:00 PM Martin Blumenstingl
+> > <martin.blumenstingl@googlemail.com> wrote:
+> >
+> > > Add the vendor ID for Etron Technology, Inc. as well as the device IDs
+> > > for the two USB xHCI controllers EJ168 and EJ188.
+> > >
+> > > Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> >
+> > (...)
+> >
+> > >  #define PCI_VENDOR_ID_REDHAT           0x1b36
+> > >
+> > > +#define PCI_VENDOR_ID_ETRON            0x1b6f
+> > > +#define PCI_DEVICE_ID_ETRON_EJ168      0x7023
+> > > +#define PCI_DEVICE_ID_ETRON_EJ188      0x7052
+> >
+> > If you're defining that here, I think it should also be
+> > removed in
+> > drivers/usb/host/xhci-pci.c
+> > by including this file instead?
+> you are absolutely right - I missed that part
+> I will change this in v2 - thanks for pointing it out!
 
-Hi Alan,
-
-Got it, will do.  Yes, I'll include the error conditions as well in the
-actual change.  Thanks again!
-
-Thanks
-
-Regards,
-Wesley Cheng
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+And please mention the 2+ places these are used in the commit log (see
+the comment at the top of include/linux/pci_ids.h).
