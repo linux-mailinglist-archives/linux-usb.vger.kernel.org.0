@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CAB2A54CA
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 22:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0022A5597
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 22:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388581AbgKCVOa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 16:14:30 -0500
-Received: from mga17.intel.com ([192.55.52.151]:8609 "EHLO mga17.intel.com"
+        id S2388248AbgKCVU0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 16:20:26 -0500
+Received: from mga03.intel.com ([134.134.136.65]:5628 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388856AbgKCVOX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Nov 2020 16:14:23 -0500
-IronPort-SDR: ZrHNVdR8l7pEH4v90PFAlNJ5ScxhL2WCshcsNBRwKwChSuJ5Ljgw4x0f7tDy8FFtpIHQ/by/Lt
- g8DBvBLN9VAA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9794"; a="148979243"
+        id S2388106AbgKCVUW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Nov 2020 16:20:22 -0500
+IronPort-SDR: ni8nxc9cJFVcpfR19iu+BAEn4MOKFtzoouNpuGd60+vkyLXJTB3K4MYHvYmdxanRx6f7h6XMYw
+ ew1RtKScdlMA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9794"; a="169235576"
 X-IronPort-AV: E=Sophos;i="5.77,448,1596524400"; 
-   d="scan'208";a="148979243"
+   d="scan'208";a="169235576"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2020 13:14:22 -0800
-IronPort-SDR: 1lJnmcTvUoJayQptWLxIAWkOLQFWgbfuxh6DVkF3o3vvL9EtibOJGlsEH2akICay+5Mgzdoyc8
- ilgiTXoqVtbw==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2020 13:20:21 -0800
+IronPort-SDR: Emz9HfODnhoSrMc6HSstqVfrfJb+s5menHDex+fSaVJSOjXlJD6/sDlIpNGTs463lOiWg0jeJK
+ e9UrVO9lxhQw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,448,1596524400"; 
-   d="scan'208";a="363753825"
+   d="scan'208";a="305937555"
 Received: from lkp-server02.sh.intel.com (HELO e61783667810) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 03 Nov 2020 13:14:19 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 03 Nov 2020 13:20:19 -0800
 Received: from kbuild by e61783667810 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1ka3dC-0000Vt-Ir; Tue, 03 Nov 2020 21:14:18 +0000
-Date:   Wed, 04 Nov 2020 05:13:51 +0800
+        id 1ka3j0-0000WH-WC; Tue, 03 Nov 2020 21:20:18 +0000
+Date:   Wed, 04 Nov 2020 05:19:47 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 35ad0d901eac56ac6af2e4d726f255486c1ee36c
-Message-ID: <5fa1c80f.l69HfciiY85x2PDF%lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ afaa2e745a246c5ab95103a65b1ed00101e1bc63
+Message-ID: <5fa1c973.l2J0VEEgzpxsGKio%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -45,12 +45,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 35ad0d901eac56ac6af2e4d726f255486c1ee36c  usb: misc: brcmstb-usb-pinmap: Fix an IS_ERR() vs NULL check
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: afaa2e745a246c5ab95103a65b1ed00101e1bc63  USB: Add NO_LPM quirk for Kingston flash drive
 
-elapsed time: 723m
+elapsed time: 720m
 
-configs tested: 195
+configs tested: 199
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -89,13 +89,10 @@ sh                          rsk7269_defconfig
 powerpc                      obs600_defconfig
 powerpc                mpc7448_hpc2_defconfig
 ia64                             alldefconfig
-arm                            zeus_defconfig
-powerpc                     tqm5200_defconfig
-ia64                          tiger_defconfig
-sh                         ecovec24_defconfig
 powerpc                   bluestone_defconfig
 arc                        vdk_hs38_defconfig
 arm                            qcom_defconfig
+ia64                          tiger_defconfig
 m68k                          atari_defconfig
 powerpc                     taishan_defconfig
 arm                         palmz72_defconfig
@@ -114,6 +111,11 @@ arm                        shmobile_defconfig
 arm                         lubbock_defconfig
 arm                        vexpress_defconfig
 powerpc                     mpc512x_defconfig
+mips                          rm200_defconfig
+powerpc                    mvme5100_defconfig
+mips                             allmodconfig
+powerpc                        cell_defconfig
+arc                          axs103_defconfig
 powerpc                    ge_imp3a_defconfig
 sh                          rsk7264_defconfig
 powerpc                     asp8347_defconfig
@@ -144,8 +146,8 @@ parisc                generic-64bit_defconfig
 sh                   secureedge5410_defconfig
 arm                          simpad_defconfig
 powerpc                      ppc44x_defconfig
+arm                            zeus_defconfig
 mips                      malta_kvm_defconfig
-sh                         apsh4a3a_defconfig
 powerpc                     ep8248e_defconfig
 arm                          pcm027_defconfig
 powerpc                     stx_gp3_defconfig
@@ -165,6 +167,9 @@ powerpc                      tqm8xx_defconfig
 powerpc                      ep88xc_defconfig
 mips                     cu1000-neo_defconfig
 sh                               allmodconfig
+sh                         apsh4a3a_defconfig
+powerpc                      acadia_defconfig
+powerpc                     ppa8548_defconfig
 powerpc                         ps3_defconfig
 powerpc                     rainier_defconfig
 mips                       bmips_be_defconfig
@@ -180,7 +185,6 @@ h8300                     edosk2674_defconfig
 arm                       mainstone_defconfig
 xtensa                  audio_kc705_defconfig
 arm                         lpc18xx_defconfig
-nds32                             allnoconfig
 ia64                                defconfig
 xtensa                           allyesconfig
 nios2                         3c120_defconfig
@@ -194,6 +198,7 @@ m68k                                defconfig
 m68k                             allyesconfig
 nios2                               defconfig
 arc                              allyesconfig
+nds32                             allnoconfig
 c6x                              allyesconfig
 nds32                               defconfig
 nios2                            allyesconfig
@@ -211,7 +216,6 @@ sparc                            allyesconfig
 sparc                               defconfig
 i386                                defconfig
 mips                             allyesconfig
-mips                             allmodconfig
 powerpc                          allyesconfig
 powerpc                          allmodconfig
 powerpc                           allnoconfig
