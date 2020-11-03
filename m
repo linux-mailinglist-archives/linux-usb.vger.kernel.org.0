@@ -2,57 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 736242A4DD4
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 19:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77A92A4F9D
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 20:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729107AbgKCSHc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 3 Nov 2020 13:07:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35386 "EHLO mail.kernel.org"
+        id S1729429AbgKCTD0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 14:03:26 -0500
+Received: from m42-4.mailgun.net ([69.72.42.4]:39281 "EHLO m42-4.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729160AbgKCSHa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Nov 2020 13:07:30 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210015] page allocation failure in usb_hub_wq hub_event when
- adding HID device
-Date:   Tue, 03 Nov 2020 18:07:30 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michel@daenzer.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210015-208809-Ob4FWYeyVZ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210015-208809@https.bugzilla.kernel.org/>
-References: <bug-210015-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1727901AbgKCTD0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Nov 2020 14:03:26 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1604430205; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To:
+ Subject: From: Sender; bh=gqNDghGDvxSexT3SrYY4Gu3eJ57pZ0a9nYp09EEOIdA=;
+ b=PIeh1AMzQnXR5shy3QbfykxsfiqCr419j6ZZjv9twix71GY4tFvLxSApXrPPeMCBpcUUDh/3
+ d6fkMwMQ8odhefZTmzz3mxuGRAsnN5YAlHfy6/uYkTpe5yGoOvW2nw15iMZnJOMZ5AUuuDvN
+ 4drX/SK8xv/0jXpwrHy/SxL1Hx0=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 5fa1a944b64b1c5b781a7e0b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 03 Nov 2020 19:02:28
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 98648C433C9; Tue,  3 Nov 2020 19:02:27 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.114.182] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 10EA4C433C8;
+        Tue,  3 Nov 2020 19:02:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 10EA4C433C8
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Subject: Re: [PATCH 1/2] usb: dwc3: gadget: Allow runtime suspend if UDC
+ unbinded
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, jackp@codeaurora.org
+References: <20201028234311.6464-1-wcheng@codeaurora.org>
+ <20201028234311.6464-2-wcheng@codeaurora.org>
+ <20201029010748.GA1303156@rowland.harvard.edu>
+Message-ID: <a47d78f3-0a11-9de8-dbea-ad745d496845@codeaurora.org>
+Date:   Tue, 3 Nov 2020 11:02:25 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
+In-Reply-To: <20201029010748.GA1303156@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=210015
 
---- Comment #3 from Michel Dänzer (michel@daenzer.net) ---
-(In reply to Benjamin Tissoires from comment #2)
-> I'll have to double check but I don't think the allocated memory should be
-> that big.
 
-order:5 means 32 physically contiguous pages.
+On 10/28/2020 6:07 PM, Alan Stern wrote:
+> On Wed, Oct 28, 2020 at 04:43:10PM -0700, Wesley Cheng wrote:
+>> The DWC3 runtime suspend routine checks for the USB connected parameter to
+>> determine if the controller can enter into a low power state.  The
+>> connected state is only set to false after receiving a disconnect event.
+>> However, in the case of a device initiated disconnect (i.e. UDC unbind),
+>> the controller is halted and a disconnect event is never generated.  Set
+>> the connected flag to false if issuing a device initiated disconnect to
+>> allow the controller to be suspended.
+>>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> ---
+>>  drivers/usb/dwc3/gadget.c | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 5d879b7606d5..6364429b2122 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -1995,6 +1995,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>  	unsigned long		flags;
+>>  	int			ret;
+>>  
+>> +	if (pm_runtime_suspended(dwc->dev)) {
+>> +		pm_request_resume(dwc->dev);
+>> +		return 0;
+>> +	}
+> 
+> Isn't this racy?  What happens if the controller was active but a 
+> runtime suspend occurs right here?
+> 
+> Alan Stern
+> 
+
+Hi Alan,
+
+Ah, yes you're right.  I was hoping that the PM runtime layer would be
+utilizing the spinlock when reading out the runtime status, but even
+then, we wouldn't be able to catch intermediate states with this API
+(i.e. RPM_RESUMING or RPM_SUSPENDING)
+
+Tried a few different approaches, and came up with something like the
+following:
+
+static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+{
+...
+	ret = pm_runtime_get_sync(dwc->dev);
+	if (!ret) {
+		pm_runtime_put(dwc->dev);
+		return 0;
+	}
+	...
+	pm_runtime_put(dwc->dev);
+
+	return 0;
+}
+
+I think this should be good to address your concern.  The only way we
+would be able to ensure that the runtime PM state doesn't enter
+idle/suspend is if we increment the usage count for the duration we're
+accessing the DWC3 registers.  With the synchronous PM runtime resume
+call, we can also ensure that no pending runtime suspends are executing
+in parallel while running this code.
+
+The check for the zero return value would be for avoiding running the
+DWC3 run stop sequence for the case where we executed the runtime PM
+resume, as the DWC3 runtime PM resume routine will set the run stop bit
+in there.
+
+Thanks
+
+Regards,
+Wesley Cheng
+>> +
+>>  	is_on = !!is_on;
+>>  
+>>  	/*
+>> @@ -2050,6 +2055,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>  			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
+>>  						dwc->ev_buf->length;
+>>  		}
+>> +		dwc->connected = false;
+>>  	}
+>>  
+>>  	ret = dwc3_gadget_run_stop(dwc, is_on, false);
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
 
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
