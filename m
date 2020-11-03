@@ -2,54 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 155E32A55FB
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 22:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CA12A5804
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 22:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388175AbgKCVYS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 16:24:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42156 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732214AbgKCVYR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Nov 2020 16:24:17 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A5A5520757;
-        Tue,  3 Nov 2020 21:24:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604438656;
-        bh=HALgchb57rAXLtSMIP3lmNo87q6ksmJHJO3V6ecsLCQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=x61avsHdUHN3cJKBc+6xm+qujO63vwwbv23LPrMIP4GqRzUbrAoZqxd2GDOHXMGGv
-         Oh0lx7GZPV8VxKGnELUsouzcPv9P+hCCqRPWHt5IdKCTebsSmO7v9rRanbckqGv8q6
-         ZblhmXrTFXlmnj97PCBUG6xCC84AFaFpA4cE4PQo=
-Date:   Tue, 3 Nov 2020 13:24:12 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
-Cc:     Daniele Palmas <dnlplm@gmail.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: usb: qmi_wwan: add Telit LE910Cx 0x1230
- composition
-Message-ID: <20201103132412.103c6c91@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <87blgf5x14.fsf@miraculix.mork.no>
-References: <20201102110108.17244-1-dnlplm@gmail.com>
-        <87blgf5x14.fsf@miraculix.mork.no>
+        id S1733019AbgKCVrQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 16:47:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733017AbgKCVrP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Nov 2020 16:47:15 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFEEC0613D1;
+        Tue,  3 Nov 2020 13:47:15 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id s25so12653704ejy.6;
+        Tue, 03 Nov 2020 13:47:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=S6CL+T+HBwhBTGbdv3kXuibM6BJcgdU3GPg2IxIyF9A=;
+        b=SE/7zKsogU9eUwTHHOTXOItfRy3ydUqieWdmJtv13Z3o0Ko630AoISOOth71UzsKc2
+         VO7Fj3ywRPXAOL3LB/5d4gELKwdMmPCa17f2x3nQ1hLhTszl5+UeA/c7Mo04hOv1vJQo
+         CW7rnC6GLhZtQ8Ai6TUngQSwkDdbaFZNPaghGYzLbalp4R8NmhvY32lVnoZJaSAiKIk4
+         W5/t4A7eGTDsV6nmQrq/JNthLQ6V0DfxpfYWhpjMMOtgxdsMmySfJt+JVAGikDJVyUmW
+         qOe8HtVFw53Vs4QKjAUavGKvlP+EJ346UqpfsuPJ3McFYv9+5D98ova9Bu4tcXXZtVun
+         7HuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=S6CL+T+HBwhBTGbdv3kXuibM6BJcgdU3GPg2IxIyF9A=;
+        b=XqMBwwra87fHFG6xWJ0x6Oue29Q5N5lqNxgGBiPJSdtpUeIt8TionhOkk2fR/yr2Zx
+         S1rk1HbcV4baXHe8ImaWxAVgq+EAnkeZ6Fk/o2WM+2JIa0XGH72N45NEaDFHBWvjevGR
+         Eb3vzn5HaQt1Nz7FZtZ2+hTLW1BB0L8XQG94Dx7olF7k/XGENVRfrM5AcY+KBv9nlJ3q
+         qZDzCd0AOwpS0BvTkubGd7Rp2kQZoaBtbuUFzL+FhYE6RQIKhCDyWlfWxrpxzjoZ/73C
+         DFKLQptgDuucRP5nZnY4z3IwOxU2c9oOZXI45kvFKpLCdQusfuYRZUXaHFrXCjNwst16
+         Nsdw==
+X-Gm-Message-State: AOAM530TdoLEfbOUETH/cPw3OcCkGh//y9vfYpWZ5uVW6Kro6tDiP27c
+        7Kdmwsz9+lek+cVIXi24OKM=
+X-Google-Smtp-Source: ABdhPJzzwOjgj/TiQSgcFWwTsQO/P/KSxtrNK/9PSW0pP8YoD45n8lorOx44A+WeOK769s2XLUAXmQ==
+X-Received: by 2002:a17:906:7e43:: with SMTP id z3mr23057767ejr.143.1604440033905;
+        Tue, 03 Nov 2020 13:47:13 -0800 (PST)
+Received: from skbuf ([188.25.2.177])
+        by smtp.gmail.com with ESMTPSA id rl1sm11619ejb.36.2020.11.03.13.47.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2020 13:47:13 -0800 (PST)
+Date:   Tue, 3 Nov 2020 23:47:12 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: Re: [PATCH net-next 3/5] r8152: add MCU typed read/write functions
+Message-ID: <20201103214712.dzwpkj6d5val6536@skbuf>
+References: <20201103192226.2455-1-kabel@kernel.org>
+ <20201103192226.2455-4-kabel@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201103192226.2455-4-kabel@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 02 Nov 2020 21:22:31 +0100 Bj=C3=B8rn Mork wrote:
-> Daniele Palmas <dnlplm@gmail.com> writes:
->=20
-> > dd support for Telit LE910Cx 0x1230 composition:
-> >
-> > 0x1230: tty, adb, rmnet, audio, tty, tty, tty, tty
-> >
-> > Signed-off-by: Daniele Palmas <dnlplm@gmail.com> =20
->=20
-> Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+On Tue, Nov 03, 2020 at 08:22:24PM +0100, Marek Behún wrote:
+> Add pla_ and usb_ prefixed versions of ocp_read_* and ocp_write_*
+> functions. This saves us from always writing MCU_TYPE_PLA/MCU_TYPE_USB
+> as parameter.
+> 
+> Signed-off-by: Marek Behún <kabel@kernel.org>
+> ---
 
-Applied, thanks!
+You just made it harder for everyone to follow the code through pattern
+matching. Token concatenation should be banned from the C preprocessor.
