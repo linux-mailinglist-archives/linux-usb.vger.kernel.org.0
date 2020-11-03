@@ -2,82 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5EB2A3B3F
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 04:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F29012A3EC6
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 09:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbgKCD6E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Nov 2020 22:58:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725952AbgKCD6E (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Nov 2020 22:58:04 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BE3C0617A6;
-        Mon,  2 Nov 2020 19:58:03 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id i26so12625160pgl.5;
-        Mon, 02 Nov 2020 19:58:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=/I1Zw4H3dYx4LoYnfze2QMgf89zOWPqxz/+LXrdwq+s=;
-        b=o3vVIH8+fjHyHItJzmdHX9QlszM4LCZfgD2qJ5mjg7UL8q3GcFkJ3wLroRDerD4mSE
-         uouS05UfQsx6Ga+VN3KZM//ldxuVcSzqb34BFsd2dLdWwEj/LnWbwmFBbEXKjTowApHK
-         zwmePBGUsKHfko0upsABba/hozkkCy497gpTXpGIGpOwqh2ZMpZHPXQLfozxLA7LoUnK
-         CGiUjRyCBXlwkKC22wzF7PEKJHHe/BybkaH46NockOdV372Ls0RGFL/Csf5V19BJ6/x+
-         eeb8+kCXS5OfbvA/SymxjWjxt2cMqWo1J0z2RSXpBjLtSwBB2nUCa/878zn1ROQ5x6Hq
-         cfDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=/I1Zw4H3dYx4LoYnfze2QMgf89zOWPqxz/+LXrdwq+s=;
-        b=DzFhHAb7T0Q1vUGduGUFia+npzxNWQ3Ofb6QBSUihSi61yuOow6RpbgoGoXIkw4RH6
-         X1eVUbiNTQ/5NBjR7AaTgdRFhDmM0RD4uaxrhM4TZFO5m8QCf7QSaU0a79s8FwJG7xo6
-         k/qAb4vhvUp2I0xFaLs1uCvdW/++8/uxmL0kBmAMiheUbess33tGJ65GeON7i7PiPGL2
-         nzAj5/RNgaUhLJQl91ZOruN7Zpx8rSuNOTE2CEn9efXWQ/AOx+CjD9N3AV8tB7OLYuQP
-         p8wXnvyVJTKNV3FWIVx7Gsydsygk8AkAj9p0e5CmVo3H+8riSqyjZPH3VGJKw6vlb2sN
-         U1TQ==
-X-Gm-Message-State: AOAM531A3FtAC3VnwwR5qgYhO/dXP65+i/eO0kvzJRuSk+2Ezw7q2K7U
-        4t9BELCqSDbBf3kLKeb/Fg0=
-X-Google-Smtp-Source: ABdhPJxHwRHCzCNEc0EpldiedT5K4k9Gg1EVAQvLVO5uUCuN6/rZwBjgA+fiElUSdwEmkWPoeWcZ7w==
-X-Received: by 2002:a17:90a:2e11:: with SMTP id q17mr1622412pjd.5.1604375882635;
-        Mon, 02 Nov 2020 19:58:02 -0800 (PST)
-Received: from localhost.localdomain ([8.210.202.142])
-        by smtp.gmail.com with ESMTPSA id jy19sm1098303pjb.9.2020.11.02.19.58.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 02 Nov 2020 19:58:02 -0800 (PST)
-From:   Yejune Deng <yejune.deng@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        p.zabel@pengutronix.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yejune.deng@gmail.com
-Subject: [PATCH] usb: dwc3: core: Replace devm_reset_control_array_get()
-Date:   Tue,  3 Nov 2020 11:57:43 +0800
-Message-Id: <1604375863-6649-1-git-send-email-yejune.deng@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        id S1727236AbgKCITV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 03:19:21 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7040 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725878AbgKCITV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Nov 2020 03:19:21 -0500
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CQN3n58KnzhXhX;
+        Tue,  3 Nov 2020 16:19:17 +0800 (CST)
+Received: from [127.0.0.1] (10.57.22.126) by DGGEMS408-HUB.china.huawei.com
+ (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Tue, 3 Nov 2020
+ 16:19:09 +0800
+Subject: Re: [PATCH v2 0/5] Introduce a new helper marco
+ DEFINE_SHOW_STORE_ATTRIBUTE at seq_file.c
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>,
+        <andriy.shevchenko@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <john.garry@huawei.com>, <himanshu.madhani@cavium.com>,
+        <felipe.balbi@linux.intel.com>, <uma.shankar@intel.com>,
+        <anshuman.gupta@intel.com>, <animesh.manna@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linuxarm@huawei.com>
+References: <1604046722-15531-1-git-send-email-luojiaxing@huawei.com>
+ <20201030084448.GA1625087@kroah.com>
+From:   luojiaxing <luojiaxing@huawei.com>
+Message-ID: <d4852df0-d7e0-ee7e-352c-58eaf47c2c72@huawei.com>
+Date:   Tue, 3 Nov 2020 16:19:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
+MIME-Version: 1.0
+In-Reply-To: <20201030084448.GA1625087@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.57.22.126]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-devm_reset_control_array_get_optional_shared() looks more readable
+Hi
 
-Signed-off-by: Yejune Deng <yejune.deng@gmail.com>
----
- drivers/usb/dwc3/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2020/10/30 16:44, Greg KH wrote:
+> On Fri, Oct 30, 2020 at 04:31:57PM +0800, Luo Jiaxing wrote:
+>> We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
+>> for read-only file, but we found many of drivers also want a helper marco for
+>> read-write file too.
+>>
+>> So we try to add this macro to help decrease code duplication.
+>>
+>> Luo Jiaxing (5):
+>>    seq_file: Introduce DEFINE_SHOW_STORE_ATTRIBUTE() helper macro
+>>    scsi: hisi_sas: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
+>>    scsi: qla2xxx: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
+>>    usb: dwc3: debugfs: Introduce DEFINE_SHOW_STORE_ATTRIBUTE
+>>    drm/i915/display: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
+> What changed from v1?
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 841daec..b87acf0 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1490,7 +1490,7 @@ static int dwc3_probe(struct platform_device *pdev)
- 
- 	dwc3_get_properties(dwc);
- 
--	dwc->reset = devm_reset_control_array_get(dev, true, true);
-+	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
- 	if (IS_ERR(dwc->reset))
- 		return PTR_ERR(dwc->reset);
- 
--- 
-1.9.1
+
+Sorry, I should add a commit for the change.
+
+
+In v1, Andy pointed out that the old name of DEFINE_STORE_ATTRIBUTE was 
+easily misunderstood as a write-only file rather than a read-write file.
+
+Therefore, it is changed to DEFINE_SHOW_STORE_ATTRIBUTE according to his 
+suggestion.
+
+
+Thanks
+
+Jiaxing
+
+
+>
+> thanks,
+>
+> greg k-h
+>
+> .
+>
 
