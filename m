@@ -2,83 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0DC42A3FF1
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 10:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A482A404E
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 10:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726212AbgKCJZP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 04:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgKCJZO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Nov 2020 04:25:14 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC787C0613D1;
-        Tue,  3 Nov 2020 01:25:14 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id r186so13239127pgr.0;
-        Tue, 03 Nov 2020 01:25:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=d4/h03zDOqgw/qAdyGs1ZWYJc/s8UVCZlQD6aAR3ofs=;
-        b=CFHG3pIrXH/BjoBalfhiCV8O5Ha/FfKxT1XF4T5PtPV8QH+tVrqYCyt3e9tnz58lPo
-         kF025AXuyvxpElsbaAID6c074+MCB8Se7Ogms+g3EamLMfJGkdQlm8IZwr/yqUQOZ6JM
-         AssRqicOLhbDyMmpQJksIa79rN7PWXokyihhi8g4VtN7IqKDRfsAx2vT7Db30thiGsXK
-         DjEjqg/1LW7I+m4b2EnKN6SYMB2LsaUneNlguP/qWoJ3cODk1r/5Pf8wyzQGQMYktCNa
-         QT/RhG6Xa1gbIisTkeh2fSR+IgqjknsX/BoBmxAqTh3+ZGQ2OehDAC4ZL/GD3K3o2v4S
-         dFfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=d4/h03zDOqgw/qAdyGs1ZWYJc/s8UVCZlQD6aAR3ofs=;
-        b=pizIrDir6o6wJ6xFYoXitLVeCwdSgCzZj/D894+hp0mdUZyyVEQ99BmGScCMOOWu1B
-         B4rfCmoFPdMRSP2Vihl22m9N9DmJBGWBNX1UdaPcgJc9ioiXvRjYtDn/60rYTlXWLUym
-         YDv+Mexu8bz1p1yCeWrS5UCl7z0pxw6HcAzJr2N0NJZeNxdp+wANMzgmvt0BQOJ8dTPH
-         XEoqJMDZ94lqugi51WMNaZRtQ5RmstIuevaXiMp/MyYjlEDku5knejtNwFG8F6WlF8Uq
-         R++rwK5biByMEIVESi6EvKKYWXcGorqCZDX9f55Om8W6UNT2+ss4cCvtF3N1GNL9bxSV
-         E2Mw==
-X-Gm-Message-State: AOAM533cFeV3B8y064moK0BJroMc6spkeYcc2rov2K65PiS9VdKiELpS
-        /gkrh1EpeCiNnYWOBqLNARNqN3/ur2k=
-X-Google-Smtp-Source: ABdhPJzzSXkmwpVed/iaZEeYmHrj3yrsBkXxQTnEj1IHfu/kslP0zHmNkNF9kljvj+cMOG01pc9dDA==
-X-Received: by 2002:a05:6a00:850:b029:18a:a8ce:d346 with SMTP id q16-20020a056a000850b029018aa8ced346mr15585894pfk.73.1604395514273;
-        Tue, 03 Nov 2020 01:25:14 -0800 (PST)
-Received: from localhost.localdomain ([8.210.202.142])
-        by smtp.gmail.com with ESMTPSA id b3sm16045356pfd.66.2020.11.03.01.25.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Nov 2020 01:25:13 -0800 (PST)
-From:   Yejune Deng <yejune.deng@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        p.zabel@pengutronix.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yejune.deng@gmail.com
-Subject: [PATCH] usb: dwc3: Replace of_reset_control_array_get()
-Date:   Tue,  3 Nov 2020 17:25:00 +0800
-Message-Id: <1604395500-8086-1-git-send-email-yejune.deng@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        id S1726212AbgKCJcq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 04:32:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40408 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725993AbgKCJcq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Nov 2020 04:32:46 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 69A10223BD;
+        Tue,  3 Nov 2020 09:32:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604395965;
+        bh=IrV4h0rvAGQFEgmyY4cuxqFV+gpefvvnyQJqDUsME3A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1FEPBqXYPwCDlxZrsBNgbv2PQxi4axoAfn6avNNmtBODJlGOZb/OcadPpYwk2CR6o
+         cyuOSWUNaT+gmCmN/IsYKxix5LyehVhBY3imN8/P5g4eWmlAW48qcsczhDHgT1OC8/
+         MIRWMEVLNZ7OL+tWm3mo9pUHqIyF7JjP0DpMhzro=
+Date:   Tue, 3 Nov 2020 10:32:41 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Hayes Wang <hayeswang@realtek.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Oliver Neukum <oliver@neukum.org>
+Subject: Re: [PATCH net-next v2] net/usb/r8153_ecm: support ECM mode for
+ RTL8153
+Message-ID: <20201103093241.GA79239@kroah.com>
+References: <1394712342-15778-387-Taiwan-albertk@realtek.com>
+ <1394712342-15778-388-Taiwan-albertk@realtek.com>
+ <20201031160838.39586608@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <dc7fd1d4d1c544e8898224c7d9b54bda@realtek.com>
+ <20201102114718.0118cc12@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201102114718.0118cc12@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-of_reset_control_array_get_optional_exclusive() looks more readable
+On Mon, Nov 02, 2020 at 11:47:18AM -0800, Jakub Kicinski wrote:
+> On Mon, 2 Nov 2020 07:20:15 +0000 Hayes Wang wrote:
+> > Jakub Kicinski <kuba@kernel.org>
+> > > Can you describe the use case in more detail?
+> > > 
+> > > AFAICT r8152 defines a match for the exact same device.
+> > > Does it not mean that which driver is used will be somewhat random
+> > > if both are built?  
+> > 
+> > I export rtl_get_version() from r8152. It would return none zero
+> > value if r8152 could support this device. Both r8152 and r8153_ecm
+> > would check the return value of rtl_get_version() in porbe().
+> > Therefore, if rtl_get_version() return none zero value, the r8152
+> > is used for the device with vendor mode. Otherwise, the r8153_ecm
+> > is used for the device with ECM mode.
+> 
+> Oh, I see, I missed that the rtl_get_version() checking is the inverse
+> of r8152.
+> 
+> > > > +/* Define these values to match your device */
+> > > > +#define VENDOR_ID_REALTEK		0x0bda
+> > > > +#define VENDOR_ID_MICROSOFT		0x045e
+> > > > +#define VENDOR_ID_SAMSUNG		0x04e8
+> > > > +#define VENDOR_ID_LENOVO		0x17ef
+> > > > +#define VENDOR_ID_LINKSYS		0x13b1
+> > > > +#define VENDOR_ID_NVIDIA		0x0955
+> > > > +#define VENDOR_ID_TPLINK		0x2357  
+> > > 
+> > > $ git grep 0x2357 | grep -i tplink
+> > > drivers/net/usb/cdc_ether.c:#define TPLINK_VENDOR_ID	0x2357
+> > > drivers/net/usb/r8152.c:#define VENDOR_ID_TPLINK		0x2357
+> > > drivers/usb/serial/option.c:#define TPLINK_VENDOR_ID			0x2357
+> > > 
+> > > $ git grep 0x17ef | grep -i lenovo
+> > > drivers/hid/hid-ids.h:#define USB_VENDOR_ID_LENOVO		0x17ef
+> > > drivers/hid/wacom.h:#define USB_VENDOR_ID_LENOVO	0x17ef
+> > > drivers/net/usb/cdc_ether.c:#define LENOVO_VENDOR_ID	0x17ef
+> > > drivers/net/usb/r8152.c:#define VENDOR_ID_LENOVO		0x17ef
+> > > 
+> > > Time to consolidate those vendor id defines perhaps?  
+> > 
+> > It seems that there is no such header file which I could include
+> > or add the new vendor IDs.
+> 
+> Please create one. (Adding Greg KH to the recipients, in case there is
+> a reason that USB subsystem doesn't have a common vendor id header.)
 
-Signed-off-by: Yejune Deng <yejune.deng@gmail.com>
----
- drivers/usb/dwc3/dwc3-of-simple.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+There is a reason, it's a nightmare to maintain and handle merges for,
+just don't do it.
 
-diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-index e62ecd2..e358ff0 100644
---- a/drivers/usb/dwc3/dwc3-of-simple.c
-+++ b/drivers/usb/dwc3/dwc3-of-simple.c
-@@ -52,8 +52,7 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
- 	if (of_device_is_compatible(np, "rockchip,rk3399-dwc3"))
- 		simple->need_reset = true;
- 
--	simple->resets = of_reset_control_array_get(np, false, true,
--						    true);
-+	simple->resets = of_reset_control_array_get_optional_exclusive(np);
- 	if (IS_ERR(simple->resets)) {
- 		ret = PTR_ERR(simple->resets);
- 		dev_err(dev, "failed to get device resets, err=%d\n", ret);
--- 
-1.9.1
+Read the comments at the top of the pci_ids.h file if you are curious
+why we don't even do this for PCI device ids anymore for the past 10+
+years.
 
+So no, please do not create such a common file, it is not needed or a
+good idea.
+
+thanks,
+
+greg k-h
