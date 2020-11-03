@@ -2,157 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF2F2A464F
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 14:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC532A466D
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 14:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729146AbgKCN2V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 08:28:21 -0500
-Received: from m42-4.mailgun.net ([69.72.42.4]:62865 "EHLO m42-4.mailgun.net"
+        id S1729320AbgKCN3a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 08:29:30 -0500
+Received: from z5.mailgun.us ([104.130.96.5]:62151 "EHLO z5.mailgun.us"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728918AbgKCN2V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Nov 2020 08:28:21 -0500
+        id S1729213AbgKCN30 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Nov 2020 08:29:26 -0500
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1604410100; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=flbiR8XyLk0hf9YV9E+TVqEEEBTBOVgjHvs5rzx79CE=; b=Sv0R0W+9LaJvDutnsgvten8Vtpg6ovDqmLeI/G3RwjWH+5JxNsVvVXZCm+vwX8613wrMiwtk
- tm688OJdaQnY8L12HDnynkOJtB1pFkkO741QCA9wQF92VO2qWNl0KRaBoSzBKwopS9QUzmmW
- /QgVvoeiILMtiYYi3RVar1ps6cg=
-X-Mailgun-Sending-Ip: 69.72.42.4
+ s=smtp; t=1604410166; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=X2YErXafDdkcu6A7UUnXanHOuRGPvsDZ6TouPm+F+5Q=; b=gIZ8JM5Htb+pyUdz08FEG63WOMlPmQnyD/173/ybEh8hCrNr4UiQQ/qEsa2aq0k1otoUUmmn
+ YW3RsVyKzwkGHpKpGvUyL09ceaoSeyTbBAEw907fHo0DJgriobo/B5IJgRUOIHpZ2lNYMrQd
+ bLaCnJGw9T1lN4ZkK6fDhMSr38k=
+X-Mailgun-Sending-Ip: 104.130.96.5
 X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5fa15af3ca0638c0dcc79f40 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 03 Nov 2020 13:28:19
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 5fa15af7d8a9d167f3dc4c08 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 03 Nov 2020 13:28:23
  GMT
-Sender: sallenki=codeaurora.org@mg.codeaurora.org
+Sender: jackp=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 86E42C384E2; Tue,  3 Nov 2020 06:20:22 +0000 (UTC)
+        id 1ECAEC384FB; Tue,  3 Nov 2020 08:55:10 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [192.168.0.107] (unknown [103.110.145.214])
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: sallenki)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 74013C433B1;
-        Tue,  3 Nov 2020 06:20:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 74013C433B1
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id D2F5DC384FB;
+        Tue,  3 Nov 2020 08:55:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D2F5DC384FB
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sallenki@codeaurora.org
-Subject: Re: strange call stack when running uvc-gadget application
-To:     Peter Chen <peter.chen@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>
-References: <20201102094936.GA29581@b29397-desktop>
-From:   Sriharsha Allenki <sallenki@codeaurora.org>
-Message-ID: <af78c723-0836-95aa-80fe-a914d708eeb6@codeaurora.org>
-Date:   Tue, 3 Nov 2020 11:50:17 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
+        Jack Pham <jackp@codeaurora.org>
+Subject: [PATCH] usb: gadget: configfs: Preserve function ordering after bind failure
+Date:   Tue,  3 Nov 2020 00:54:56 -0800
+Message-Id: <20201103085456.15591-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <20201102094936.GA29581@b29397-desktop>
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
+From: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
 
-On 11/2/2020 3:20 PM, Peter Chen wrote:
-> Hi all,
->
-> When running run uvc-gadget application at HS using dwc3 gadget at Linux
-> v5.10-rc1, the video stream will be stopped after 1-2 minutes running. The
-> trace log like below, I wonder how _raw_spin_lock_irqsave calls __switch_to?
-> Any hints? Thanks.
->
-> usb_test# [ 4757.322728] configfs-gadget gadget: uvc: VS request completed with status -18.
-> [ 4757.329971] configfs-gadget gadget: uvc: VS request completed with status -18.
-> UVC: Possible USB shutdown requested from Host, seen during VIDIOC_DQBUF
->
-> usb_test# [ 4812.376465] check_interval: 37 callbacks suppressed
-> [ 4825.307665] configfs-gadget gadget: uvc: VS request completed with status -18.
-> [ 4825.314912] configfs-gadget gadget: uvc: VS request completed with status -18.
-> UVC: Possible USB shutdown requested from Host, seen during VIDIOC_DQBUF
-> [ 4826.231392] check_interval: 3 callbacks suppressed
-> select timeout
-> [ 4827.336088] dwc3 38100000.dwc3: request 0000000080ebefd3 was not queued to ep2in
-> [ 4827.343547] dwc3 38100000.dwc3: request 00000000b578605c was not queued to ep2in
-> [ 4827.350989] dwc3 38100000.dwc3: request 00000000c6d191cd was not queued to ep2in
-> [ 4827.358422] dwc3 38100000.dwc3: request 0000000085205409 was not queued to ep2in
-> UVC: Stopping video stream.
->
-> [ 4848.381718] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> [ 4848.387824] rcu:     3-...0: (1 GPs behind) idle=162/1/0x4000000000000000 softirq=10819/10819 fqs=2356
-> [ 4848.396956]  (detected by 2, t=5252 jiffies, g=20129, q=3770)
-> [ 4848.396959] Task dump for CPU 3:
-> [ 4848.405925] task:uvc-gadget_wlhe state:R  running task     stack:    0 pid:  674 ppid:   636 flags:0x00000202
-> [ 4848.415842] Call trace:
-> [ 4848.418294]  __switch_to+0xc0/0x170
-> [ 4848.421785]  _raw_spin_lock_irqsave+0x84/0xb0
-> [ 4848.426143]  composite_disconnect+0x28/0x78
-> [ 4848.430327]  configfs_composite_disconnect+0x68/0x70
-> [ 4848.435290]  usb_gadget_disconnect+0x10c/0x128
-> [ 4848.439733]  usb_gadget_deactivate+0xd4/0x108
-> [ 4848.444089]  usb_function_deactivate+0x6c/0x80
-> [ 4848.448534]  uvc_function_disconnect+0x20/0x58
-> [ 4848.452976]  uvc_v4l2_release+0x30/0x88
-> [ 4848.456812]  v4l2_release+0xbc/0xf0
-> [ 4848.460301]  __fput+0x7c/0x230
-> [ 4848.463353]  ____fput+0x14/0x20
-> [ 4848.466495]  task_work_run+0x88/0x140
-> [ 4848.470157]  do_notify_resume+0x240/0x6f0
-> [ 4848.474166]  work_pending+0x8/0x200
-The reason for this seems to be that the usb_gadget_deactivate is being called with
-spinlock held from the usb_function_deactivate and the same lock is being used
-in the composite_disconnect (&cdev->lock).
+When binding the ConfigFS gadget to a UDC, the functions in each
+configuration are added in list order. However, if usb_add_function()
+fails, the failed function is put back on its configuration's
+func_list and purge_configs_funcs() is called to further clean up.
 
-This should be able to resolve it.
+purge_configs_funcs() iterates over the configurations and functions
+in forward order, calling unbind() on each of the previously added
+functions. But after doing so, each function gets moved to the
+tail of the configuration's func_list. This results in reshuffling
+the original order of the functions within a configuration such
+that the failed function now appears first even though it may have
+originally appeared in the middle or even end of the list. At this
+point if the ConfigFS gadget is attempted to re-bind to the UDC,
+the functions will be added in a different order than intended,
+with the only recourse being to remove and relink the functions all
+over again.
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 05b176c82cc5..5fced737e4ef 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -392,8 +392,11 @@ int usb_function_deactivate(struct usb_function *function)
+An example of this as follows:
 
-        spin_lock_irqsave(&cdev->lock, flags);
+ln -s functions/mass_storage.0 configs/c.1
+ln -s functions/ncm.0 configs/c.1
+ln -s functions/ffs.adb configs/c.1	# oops, forgot to start adbd
+echo "<udc device>" > UDC		# fails
+start adbd
+echo "<udc device>" > UDC		# now succeeds, but...
+					# bind order is
+					# "ADB", mass_storage, ncm
 
--       if (cdev->deactivations == 0)
-+       if (cdev->deactivations == 0) {
-+               spin_unlock_irqrestore(&cdev->lock, flags);
-                status = usb_gadget_deactivate(cdev->gadget);
-+               spin_lock_irqsave(&cdev->lock, flags);
-+       }
-        if (status == 0)
-                cdev->deactivations++;
+[30133.118289] configfs-gadget gadget: adding 'Mass Storage Function'/ffffff810af87200 to config 'c'/ffffff817d6a2520
+[30133.119875] configfs-gadget gadget: adding 'cdc_network'/ffffff80f48d1a00 to config 'c'/ffffff817d6a2520
+[30133.119974] using random self ethernet address
+[30133.120002] using random host ethernet address
+[30133.139604] usb0: HOST MAC 3e:27:46:ba:3e:26
+[30133.140015] usb0: MAC 6e:28:7e:42:66:6a
+[30133.140062] configfs-gadget gadget: adding 'Function FS Gadget'/ffffff80f3868438 to config 'c'/ffffff817d6a2520
+[30133.140081] configfs-gadget gadget: adding 'Function FS Gadget'/ffffff80f3868438 --> -19
+[30133.140098] configfs-gadget gadget: unbind function 'Mass Storage Function'/ffffff810af87200
+[30133.140119] configfs-gadget gadget: unbind function 'cdc_network'/ffffff80f48d1a00
+[30133.173201] configfs-gadget a600000.dwc3: failed to start g1: -19
+[30136.661933] init: starting service 'adbd'...
+[30136.700126] read descriptors
+[30136.700413] read strings
+[30138.574484] configfs-gadget gadget: adding 'Function FS Gadget'/ffffff80f3868438 to config 'c'/ffffff817d6a2520
+[30138.575497] configfs-gadget gadget: adding 'Mass Storage Function'/ffffff810af87200 to config 'c'/ffffff817d6a2520
+[30138.575554] configfs-gadget gadget: adding 'cdc_network'/ffffff80f48d1a00 to config 'c'/ffffff817d6a2520
+[30138.575631] using random self ethernet address
+[30138.575660] using random host ethernet address
+[30138.595338] usb0: HOST MAC 2e:cf:43:cd:ca:c8
+[30138.597160] usb0: MAC 6a:f0:9f:ee:82:a0
+[30138.791490] configfs-gadget gadget: super-speed config #1: c
 
-@@ -424,8 +427,11 @@ int usb_function_activate(struct usb_function *function)
-                status = -EINVAL;
-        else {
-                cdev->deactivations--;
--               if (cdev->deactivations == 0)
-+               if (cdev->deactivations == 0) {
-+                       spin_unlock_irqrestore(&cdev->lock, flags);
-                        status = usb_gadget_activate(cdev->gadget);
-+                       spin_lock_irqsave(&cdev->lock, flags);
-+               }
-        }
+Fix this by reversing the iteration order of the functions in
+purge_config_funcs() when unbinding them, and adding them back to
+the config's func_list at the head instead of the tail. This
+ensures that we unbind and unwind back to the original list order.
 
-        spin_unlock_irqrestore(&cdev->lock, flags);
+Fixes: 88af8bbe4ef7 ("usb: gadget: the start of the configfs interface")
+Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
+---
+ drivers/usb/gadget/configfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-This should also protect the cdev->deactivations as well which was the
-primary reason for the spinlock here. Hope this helps.
-
-Regards,
-Sriharsha
->
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 56051bb97349..3dda1d63f231 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -1248,9 +1248,9 @@ static void purge_configs_funcs(struct gadget_info *gi)
+ 
+ 		cfg = container_of(c, struct config_usb_cfg, c);
+ 
+-		list_for_each_entry_safe(f, tmp, &c->functions, list) {
++		list_for_each_entry_safe_reverse(f, tmp, &c->functions, list) {
+ 
+-			list_move_tail(&f->list, &cfg->func_list);
++			list_move(&f->list, &cfg->func_list);
+ 			if (f->unbind) {
+ 				dev_dbg(&gi->cdev.gadget->dev,
+ 					"unbind function '%s'/%p\n",
 -- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.24.0
 
