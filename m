@@ -2,117 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A354B2A4AF5
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 17:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 579802A4D8D
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Nov 2020 18:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728029AbgKCQPi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 11:15:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48686 "EHLO mail.kernel.org"
+        id S1728963AbgKCRxu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 3 Nov 2020 12:53:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59018 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727385AbgKCQPi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Nov 2020 11:15:38 -0500
-Received: from kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EDFB8206CB;
-        Tue,  3 Nov 2020 16:15:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604420137;
-        bh=dDSnEZsWeRQuzp5A2JaHrJaoDH+U2yZat/4bMvsaZj4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gAG/XNiVvMMkHRgOWWHXMdJ1xNP4/zBqNHCedZoWa9/vTnORRwvFKm8UCbdYynj5G
-         01ECL3TJKshN2Zo7tr/7XBkkRdAC8J1SCHgg96ob22wgN0BgT1KILPet1GRAWt8xV9
-         3YVC0k6df05/yCHKanHyCtKWM4nMIWL1RyrcpLV0=
-Date:   Tue, 3 Nov 2020 08:15:35 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Hayes Wang <hayeswang@realtek.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oliver@neukum.org>
-Subject: Re: [PATCH net-next v2] net/usb/r8153_ecm: support ECM mode for
- RTL8153
-Message-ID: <20201103081535.7e92a495@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20201103093241.GA79239@kroah.com>
-References: <1394712342-15778-387-Taiwan-albertk@realtek.com>
-        <1394712342-15778-388-Taiwan-albertk@realtek.com>
-        <20201031160838.39586608@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <dc7fd1d4d1c544e8898224c7d9b54bda@realtek.com>
-        <20201102114718.0118cc12@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <20201103093241.GA79239@kroah.com>
+        id S1727706AbgKCRxu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Nov 2020 12:53:50 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210015] page allocation failure in usb_hub_wq hub_event when
+ adding HID device
+Date:   Tue, 03 Nov 2020 17:53:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: benjamin.tissoires@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-210015-208809-ROwGFcv0Yp@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210015-208809@https.bugzilla.kernel.org/>
+References: <bug-210015-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 3 Nov 2020 10:32:41 +0100 Greg Kroah-Hartman wrote:
-> On Mon, Nov 02, 2020 at 11:47:18AM -0800, Jakub Kicinski wrote:
-> > On Mon, 2 Nov 2020 07:20:15 +0000 Hayes Wang wrote:  
-> > > Jakub Kicinski <kuba@kernel.org>  
-> > > > Can you describe the use case in more detail?
-> > > > 
-> > > > AFAICT r8152 defines a match for the exact same device.
-> > > > Does it not mean that which driver is used will be somewhat random
-> > > > if both are built?    
-> > > 
-> > > I export rtl_get_version() from r8152. It would return none zero
-> > > value if r8152 could support this device. Both r8152 and r8153_ecm
-> > > would check the return value of rtl_get_version() in porbe().
-> > > Therefore, if rtl_get_version() return none zero value, the r8152
-> > > is used for the device with vendor mode. Otherwise, the r8153_ecm
-> > > is used for the device with ECM mode.  
-> > 
-> > Oh, I see, I missed that the rtl_get_version() checking is the inverse
-> > of r8152.
-> >   
-> > > > > +/* Define these values to match your device */
-> > > > > +#define VENDOR_ID_REALTEK		0x0bda
-> > > > > +#define VENDOR_ID_MICROSOFT		0x045e
-> > > > > +#define VENDOR_ID_SAMSUNG		0x04e8
-> > > > > +#define VENDOR_ID_LENOVO		0x17ef
-> > > > > +#define VENDOR_ID_LINKSYS		0x13b1
-> > > > > +#define VENDOR_ID_NVIDIA		0x0955
-> > > > > +#define VENDOR_ID_TPLINK		0x2357    
-> > > > 
-> > > > $ git grep 0x2357 | grep -i tplink
-> > > > drivers/net/usb/cdc_ether.c:#define TPLINK_VENDOR_ID	0x2357
-> > > > drivers/net/usb/r8152.c:#define VENDOR_ID_TPLINK		0x2357
-> > > > drivers/usb/serial/option.c:#define TPLINK_VENDOR_ID			0x2357
-> > > > 
-> > > > $ git grep 0x17ef | grep -i lenovo
-> > > > drivers/hid/hid-ids.h:#define USB_VENDOR_ID_LENOVO		0x17ef
-> > > > drivers/hid/wacom.h:#define USB_VENDOR_ID_LENOVO	0x17ef
-> > > > drivers/net/usb/cdc_ether.c:#define LENOVO_VENDOR_ID	0x17ef
-> > > > drivers/net/usb/r8152.c:#define VENDOR_ID_LENOVO		0x17ef
-> > > > 
-> > > > Time to consolidate those vendor id defines perhaps?    
-> > > 
-> > > It seems that there is no such header file which I could include
-> > > or add the new vendor IDs.  
-> > 
-> > Please create one. (Adding Greg KH to the recipients, in case there is
-> > a reason that USB subsystem doesn't have a common vendor id header.)  
-> 
-> There is a reason, it's a nightmare to maintain and handle merges for,
-> just don't do it.
+https://bugzilla.kernel.org/show_bug.cgi?id=210015
 
-Ah! Good that we asked :)
+Benjamin Tissoires (benjamin.tissoires@gmail.com) changed:
 
-> Read the comments at the top of the pci_ids.h file if you are curious
-> why we don't even do this for PCI device ids anymore for the past 10+
-> years.
-> 
-> So no, please do not create such a common file, it is not needed or a
-> good idea.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |benjamin.tissoires@gmail.co
+                   |                            |m
 
-I wouldn't go that far, PCI subsystem just doesn't want everyone to add
-IDs to the shared file unless there is a reason.
+--- Comment #2 from Benjamin Tissoires (benjamin.tissoires@gmail.com) ---
+> Unless the memory allocated by the hid driver needs to be physically
+> contiguous, it should use kvmalloc(_array) instead of kmalloc(_array) (and
+> kvfree instead of kfree) where it can be larger than a single page.
 
- *	Do not add new entries to this file unless the definitions
- *	are shared between multiple drivers.
+hmm, that is a good lead. I'll have to double check but I don't think the
+allocated memory should be that big. I am worried that using kvmalloc would
+paper over an other problem and we'll eat up all the memory by just plugging a
+keyboard...
 
-Which seems quite reasonable. But it is most certainly your call :)
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
