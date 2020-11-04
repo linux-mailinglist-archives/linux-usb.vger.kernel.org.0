@@ -2,118 +2,205 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7650D2A5FE7
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 09:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE0A2A6048
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 10:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728623AbgKDIwT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Nov 2020 03:52:19 -0500
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:51275 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728523AbgKDIwS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 03:52:18 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7A5E55C00A6;
-        Wed,  4 Nov 2020 03:52:16 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 04 Nov 2020 03:52:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:content-transfer-encoding:in-reply-to; s=fm2; bh=Y
-        8LJ5umULDHAIpEYaXzyYeM+GS4L5A6niQs7elTurAE=; b=X8geIWFVc1/enc9Ho
-        +ZdZEKemTJP7yP1wY2nb/FikyTeMZPJRwLwSaZhDG9cqaNAJNvgKDTzjPft68vT8
-        bNtjgz1wrfAMFC2YqAqROld+++9CoJfsEvRfvj+BBtEcCzRlH/qJ3ZhW9hoqnM08
-        Z150cRbqaPvNHVYYP4vlPE3Srl2o3ynA65QwUspHAoQY9N2a7p+FnImScpVt3VZp
-        G+eCBOayLrRmrK5M4lRnB3/rPP38a8nvPpQnnfWSkIcIgLVltm+Hk8Fm7TSYMCPO
-        Nu5R2icMqZgB8xAL7jJsIJu51jwzeCoulTEpax80Uami6DxoQhOCDPxLvts9Pbi8
-        lYypg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=Y8LJ5umULDHAIpEYaXzyYeM+GS4L5A6niQs7elTur
-        AE=; b=mhd6PTlXl4YyghcUHJUAyONiaEd8vzgAPv7k5CXFKUdG8o6VQYI3QLlAg
-        Tw5rBZjrCIs3j0gxuKMNjfenfe5E8Kr0vQ5Uz5A+NX5pwfhxOiA94vbw82X9b0XB
-        gUQv6MdXHPIDB48ysJZmqXczv5mODXTu2hSKq3MdJX+E5On3nurRFUFb76cfzs22
-        RbdlvWqRKXUC0cC96ZNqiXu4cLYyZbZURxV7lQhtuGaqvZgd1e5dW6PBnbEDi4gW
-        4dcEHtk1FbYhBlvOpKRWsht8pyTRTax+9eD41anoSiWJVSNysBosZJuQEDkP4QxO
-        knT8o2E9KZjvwxxY7/khaMjm4nuAQ==
-X-ME-Sender: <xms:v2uiX5kPXNZ3ByUyuDm86hQrAySCUVL6MrivtPnOxNLAPH2w5mUCfg>
-    <xme:v2uiX002OFLdYNTo4PLqoL_BSZRfFQOmwWzJwvt8xT2KWsPr8eILLYc8GlH1j8-Rq
-    H2cHTvJKMp54A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtgedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevtd
-    eileeuteeggefgueefhfevgfdttefgtefgtddvgeejheeiuddvtdekffehffenucfkphep
-    keefrdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:wGuiX_qkFE9SeF7B7FSMnGNhL8rGmEKX84uFMw73lT-l-TxyeHLylw>
-    <xmx:wGuiX5lGXl95kBoR72KA4TWzuZTwtamdComPjp1xpTEzZGs5AjMHeA>
-    <xmx:wGuiX31J4U0ebWtnqF88HYFfew8-cVqqo8RNbYLDAKyqGmyEjB1pMQ>
-    <xmx:wGuiXw8sdC_NncpKb0admznhj5DR5FFiYzAzwINoMQvPMc8Sxece-g>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6FD943064680;
-        Wed,  4 Nov 2020 03:52:15 -0500 (EST)
-Date:   Wed, 4 Nov 2020 09:53:07 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH net-next 1/5] r8152: use generic USB macros to define
- product table
-Message-ID: <20201104085307.GA1028805@kroah.com>
-References: <20201103192226.2455-1-kabel@kernel.org>
- <20201103192226.2455-2-kabel@kernel.org>
- <b83ddcca96cb40cf8785e6b44f9838e0@realtek.com>
+        id S1728644AbgKDJG1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Nov 2020 04:06:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbgKDJGY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 04:06:24 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6D8C061A4A
+        for <linux-usb@vger.kernel.org>; Wed,  4 Nov 2020 01:06:24 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id c17so1814563wrc.11
+        for <linux-usb@vger.kernel.org>; Wed, 04 Nov 2020 01:06:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZVySsFYAxVyvKjZwFTKaFMnVATseHBsi4tJ0dIp9TLE=;
+        b=K1+Rdz5ogf/5T2jMdF3v9m88jLY/gNqsMKJm061QdgaEQGjK4st39GT4kTZK6c7eAv
+         3cJicgPoZBh9YEvxLFGZcZyHE0XnNqBy1XOiWQuoMPDL9faO4RhxQ9VP++HCtvthQR9S
+         799P3oQD3ZEWTAn8Z+1PDWW2WOSIRjZ/YNizWauRHAov45YgSsQGFvDCGkpGdXI1KiOg
+         QyMiZ+qAf84rNKlDHGrCMb3Z298LfBhK4STT2/MKrClXtDUj1+DxmNn50j9f2xT6h0lS
+         2FLRla4Vx5B06Pb85+k62n0XQr8agXXsfRziu37OjAXEKgzSYzjV1kzmZ4S3HLfgeg3X
+         jRpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZVySsFYAxVyvKjZwFTKaFMnVATseHBsi4tJ0dIp9TLE=;
+        b=nAhtfBj3Gb0EF3+ZmpgN59YtB56Le1/QNAwyxry2KquDtp0Rxhbe/HxQWU1LT5wjj9
+         h1MohlTCTHl/zS6OqJW8K+ThgAz9SDN9ibUgPljxNgyxg5Hl0O5EeMnQCyzMM4hMpSe/
+         jPHB86dF/4zLncW8lrnWZD1kM7D/IJuYN0BPy3sYTGYCesm+GzgP8+ySYGbZ/GqPAIbp
+         Aa0X/pqvyBmhHmWq7J+3pVPKNbfEGJ5IJYDqvsAKQRsQHQ60ZHb6xSAiF+dSidO2OM22
+         YFlYNWRroj0v9dgz582of4kI3IBLAycnln2b15+TGVm2SAMU2hvWAjfEV+3I8FaPYW/j
+         mdYA==
+X-Gm-Message-State: AOAM531V1xsb8zXmgj/qWJWKY4zBKvO5iMxr7CkAciwKHq9ne8gJs6zj
+        PP9I3FnDjNtURZqvTZ4nUtFzhQ==
+X-Google-Smtp-Source: ABdhPJzn8d8Abh2QVS+FdXToKUqdpB6TwiMSAYlD5+ls0hMcq+h/pWmcBsJhdaEKInesWzdpNiQxsw==
+X-Received: by 2002:adf:e384:: with SMTP id e4mr31089426wrm.227.1604480782887;
+        Wed, 04 Nov 2020 01:06:22 -0800 (PST)
+Received: from dell.default ([91.110.221.242])
+        by smtp.gmail.com with ESMTPSA id e25sm1607823wrc.76.2020.11.04.01.06.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2020 01:06:22 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        Dany Madden <drt@linux.ibm.com>,
+        Daris A Nevil <dnevil@snmc.com>,
+        Dustin McIntire <dustin@sensoria.com>,
+        Erik Stahlman <erik@vt.edu>,
+        Geoff Levand <geoff@infradead.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Ishizaki Kou <kou.ishizaki@toshiba.co.jp>,
+        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
+        Jens Osterkamp <Jens.Osterkamp@de.ibm.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Allen <jallen@linux.vnet.ibm.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        John Williams <john.williams@xilinx.com>,
+        Juergen Gross <jgross@suse.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Lijun Pan <ljp@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-usb@vger.kernel.org, Martin Habets <mhabets@solarflare.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        netdev@vger.kernel.org, Nicolas Pitre <nico@fluxnic.net>,
+        Paul Durrant <paul@xen.org>, Paul Mackerras <paulus@samba.org>,
+        Peter Cammaert <pc@denkart.be>,
+        Russell King <rmk@arm.linux.org.uk>,
+        Rusty Russell <rusty@rustcorp.com.au>,
+        Santiago Leon <santi_leon@yahoo.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        Song Liu <songliubraving@fb.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
+        Thomas Falcon <tlfalcon@linux.vnet.ibm.com>,
+        Utz Bacher <utz.bacher@de.ibm.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        xen-devel@lists.xenproject.org, Yonghong Song <yhs@fb.com>
+Subject: [PATCH 00/12] [Set 2] Rid W=1 warnings in Net
+Date:   Wed,  4 Nov 2020 09:05:58 +0000
+Message-Id: <20201104090610.1446616-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b83ddcca96cb40cf8785e6b44f9838e0@realtek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 04, 2020 at 01:57:10AM +0000, Hayes Wang wrote:
-> Marek Behún <kabel@kernel.org>
-> > Sent: Wednesday, November 4, 2020 3:22 AM
-> > diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> > index b1770489aca5..85dda591c838 100644
-> > --- a/drivers/net/usb/r8152.c
-> > +++ b/drivers/net/usb/r8152.c
-> > @@ -6862,20 +6862,12 @@ static void rtl8152_disconnect(struct
-> > usb_interface *intf)
-> >  }
-> > 
-> >  #define REALTEK_USB_DEVICE(vend, prod)	\
-> > -	.match_flags = USB_DEVICE_ID_MATCH_DEVICE | \
-> > -		       USB_DEVICE_ID_MATCH_INT_CLASS, \
-> > -	.idVendor = (vend), \
-> > -	.idProduct = (prod), \
-> > -	.bInterfaceClass = USB_CLASS_VENDOR_SPEC \
-> > +	USB_DEVICE_INTERFACE_CLASS(vend, prod, USB_CLASS_VENDOR_SPEC)
-> > \
-> >  }, \
-> >  { \
-> > -	.match_flags = USB_DEVICE_ID_MATCH_INT_INFO | \
-> > -		       USB_DEVICE_ID_MATCH_DEVICE, \
-> > -	.idVendor = (vend), \
-> > -	.idProduct = (prod), \
-> > -	.bInterfaceClass = USB_CLASS_COMM, \
-> > -	.bInterfaceSubClass = USB_CDC_SUBCLASS_ETHERNET, \
-> > -	.bInterfaceProtocol = USB_CDC_PROTO_NONE
-> > +	USB_DEVICE_AND_INTERFACE_INFO(vend, prod, USB_CLASS_COMM, \
-> > +				      USB_CDC_SUBCLASS_ETHERNET, \
-> > +				      USB_CDC_PROTO_NONE)
-> > 
-> >  /* table of devices that work with this driver */
-> >  static const struct usb_device_id rtl8152_table[] = {
-> 
-> I don't use these, because checkpatch.pl would show error.
-> 
-> 	$ scripts/checkpatch.pl --file --terse drivers/net/usb/r8152.c
-> 	ERROR: Macros with complex values should be enclosed in parentheses
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-checkpatch is wrong.
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
+
+This is the last set.
+
+Lee Jones (12):
+  net: usb: lan78xx: Remove lots of set but unused 'ret' variables
+  net: ethernet: smsc: smc911x: Mark 'status' as __maybe_unused
+  net: ethernet: xilinx: xilinx_emaclite: Document 'txqueue' even if it
+    is unused
+  net: ethernet: smsc: smc91x: Demote non-conformant kernel function
+    header
+  net: xen-netback: xenbus: Demote nonconformant kernel-doc headers
+  net: ethernet: ti: am65-cpsw-qos: Demote non-conformant function
+    header
+  net: ethernet: ti: am65-cpts: Document am65_cpts_rx_enable()'s 'en'
+    parameter
+  net: xen-netfront: Demote non-kernel-doc headers to standard comment
+    blocks
+  net: ethernet: ibm: ibmvnic: Fix some kernel-doc misdemeanours
+  net: ethernet: toshiba: ps3_gelic_net: Fix some kernel-doc
+    misdemeanours
+  net: ethernet: toshiba: spider_net: Document a whole bunch of function
+    parameters
+  net: ethernet: ibm: ibmvnic: Fix some kernel-doc issues
+
+ drivers/net/ethernet/ibm/ibmvnic.c            |  27 ++-
+ drivers/net/ethernet/smsc/smc911x.c           |   6 +-
+ drivers/net/ethernet/smsc/smc91x.c            |   2 +-
+ drivers/net/ethernet/ti/am65-cpsw-qos.c       |   2 +-
+ drivers/net/ethernet/ti/am65-cpts.c           |   2 +-
+ drivers/net/ethernet/toshiba/ps3_gelic_net.c  |   9 +-
+ drivers/net/ethernet/toshiba/spider_net.c     |  18 +-
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c |   1 +
+ drivers/net/usb/lan78xx.c                     | 212 +++++++++---------
+ drivers/net/xen-netback/xenbus.c              |   4 +-
+ drivers/net/xen-netfront.c                    |   6 +-
+ 11 files changed, 141 insertions(+), 148 deletions(-)
+
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: bpf@vger.kernel.org
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Dany Madden <drt@linux.ibm.com>
+Cc: Daris A Nevil <dnevil@snmc.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Dustin McIntire <dustin@sensoria.com>
+Cc: Erik Stahlman <erik@vt.edu>
+Cc: Geoff Levand <geoff@infradead.org>
+Cc: Grygorii Strashko <grygorii.strashko@ti.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Ishizaki Kou <kou.ishizaki@toshiba.co.jp>
+Cc: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Jens Osterkamp <Jens.Osterkamp@de.ibm.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: John Allen <jallen@linux.vnet.ibm.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: John Williams <john.williams@xilinx.com>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: KP Singh <kpsingh@chromium.org>
+Cc: Kurt Kanzenbach <kurt@linutronix.de>
+Cc: Lijun Pan <ljp@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-usb@vger.kernel.org
+Cc: Martin Habets <mhabets@solarflare.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Michal Simek <michal.simek@xilinx.com>
+Cc: Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
+Cc: netdev@vger.kernel.org
+Cc: Nicolas Pitre <nico@fluxnic.net>
+Cc: Paul Durrant <paul@xen.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Peter Cammaert <pc@denkart.be>
+Cc: Russell King <rmk@arm.linux.org.uk>
+Cc: Rusty Russell <rusty@rustcorp.com.au>
+Cc: Santiago Leon <santi_leon@yahoo.com>
+Cc: Shannon Nelson <snelson@pensando.io>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stefano Stabellini <sstabellini@kernel.org>
+Cc: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+Cc: Thomas Falcon <tlfalcon@linux.vnet.ibm.com>
+Cc: Utz Bacher <utz.bacher@de.ibm.com>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Woojung Huh <woojung.huh@microchip.com>
+Cc: xen-devel@lists.xenproject.org
+Cc: Yonghong Song <yhs@fb.com>
+-- 
+2.25.1
+
