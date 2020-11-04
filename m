@@ -2,79 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3DE2A6643
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 15:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAF02A66FA
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 16:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726956AbgKDOVl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Nov 2020 09:21:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726746AbgKDOVk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 09:21:40 -0500
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94207C061A4C
-        for <linux-usb@vger.kernel.org>; Wed,  4 Nov 2020 06:21:40 -0800 (PST)
-Received: by mail-yb1-xb44.google.com with SMTP id i186so18142260ybc.11
-        for <linux-usb@vger.kernel.org>; Wed, 04 Nov 2020 06:21:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=gZNQx1uqmcU7QdFoormB4JV3Z5vFGL+mFso4K56neqk=;
-        b=n+MgxAcqIJ3et1aSC5MvhIBv50bvzwjplj+wpod64xlf0i20dm7LpLMC3Y8fikci4u
-         KEz7JgzZP/Ts6p7FmjQ4zazOnXGBZuwFW4x+QMTKUKKXrw0XNLAMgWtkRV6bcj/Htglp
-         AOGJgqbKY8Oyh3IKovSezpmLx0RSnN4hi7G6ncLxHa9WfFPzZLgryrhIn+ui4+NPES3v
-         kxk2yZcTBDUl7NCEWEErnnvVzWRPV00VhShHPcbq1VYktuKJtvDgHc+oJ7baDr0t3w2B
-         4fcs3HdZxOqMBRzjgAfwP7zuaztHLpwvpmXGhOjy0lMyDG1O57DEU0VrQSAC8dxUJRF6
-         V/2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=gZNQx1uqmcU7QdFoormB4JV3Z5vFGL+mFso4K56neqk=;
-        b=dOhlJ0qI17qgclmTpfFXtLABXar2o3NohNGOq4WrNPgvXO1DLuBJaDLm0WOjZhKNOO
-         6mup9z573pQ2ZmX9BWFSHY3xhPyxWyaS4IX3Lee+aNs1mgMfFiS0sz6zqakImUwZS8v8
-         vOGRFOMzPkWfvoNa5doF4KKLjN8Niazc9ZTO++V4ITLULZoVtbubt0eEdBNLYdfz3M5B
-         cWjjTH3/zPljj+mFXrbMF3GczWpTaoG4Vf1S8YDubwJImEOLdQ3GcWM/4X2f4eekaEPZ
-         fmM6wtkiE2HEkx5UMpFW4GE9zBs2DW1syT52XfzsWowQOcIt8z/V75rLQtTmrfYMO8W/
-         Ql+g==
-X-Gm-Message-State: AOAM532Ekw1TbTFt8uMfEyaoOW3p2Tpu66GVsOiO1KJXFBKetnGMj5Ri
-        RNJtLG1Cpn6HFBUj1vhu0Z3PhCxlS+PcvpEGkcc=
-X-Google-Smtp-Source: ABdhPJywL/o1bbg6cVXKkk2r3T96Rl0GwweDIj9FidJmJXnhg1wbbzvq9y+N+S955MiQQBJkGMG/7yLTU6X+40Lyq94=
-X-Received: by 2002:a25:d2c5:: with SMTP id j188mr34615740ybg.32.1604499699579;
- Wed, 04 Nov 2020 06:21:39 -0800 (PST)
+        id S1730505AbgKDPAo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Nov 2020 10:00:44 -0500
+Received: from mga18.intel.com ([134.134.136.126]:53568 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727003AbgKDPAn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Nov 2020 10:00:43 -0500
+IronPort-SDR: 1LZgxxVIFn7y86NTfOnmfAXzi4emzNJwc5Esyubs098QdNOcpBy34eLYjAFUKGXHR4erSvh/Nx
+ BQ6Rzj+/rQYg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9794"; a="157001165"
+X-IronPort-AV: E=Sophos;i="5.77,451,1596524400"; 
+   d="scan'208";a="157001165"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2020 07:00:22 -0800
+IronPort-SDR: bFDFZC4z0VPm9yhcNjj/tvhdZwZeSRDAi0X6ghMbKaO1q7SFNKqhaYMcwGPhrejDVtU1LaBdyg
+ aBBoOP0v/VoA==
+X-IronPort-AV: E=Sophos;i="5.77,451,1596524400"; 
+   d="scan'208";a="353854707"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2020 07:00:19 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 04 Nov 2020 16:58:07 +0200
+Date:   Wed, 4 Nov 2020 16:58:07 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Isaac Hazan <isaac.hazan@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org
+Subject: Re: [PATCH 06/10] thunderbolt: Create debugfs directory
+ automatically for services
+Message-ID: <20201104145807.GP2495@lahna.fi.intel.com>
+References: <20201104140030.6853-1-mika.westerberg@linux.intel.com>
+ <20201104140030.6853-7-mika.westerberg@linux.intel.com>
+ <20201104142038.GA2201525@kroah.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7110:a044:b029:2b:64da:a21f with HTTP; Wed, 4 Nov 2020
- 06:21:39 -0800 (PST)
-Reply-To: aadt19@o2.pl
-From:   Mrs Evelyn Thompson <mrs.nefisetu@gmail.com>
-Date:   Wed, 4 Nov 2020 06:21:39 -0800
-Message-ID: <CANyAxob4QdF8H2ihOJJqV=MO-PyEzgeEYw5++jbvS-xhyHOd1A@mail.gmail.com>
-Subject: Good Morning,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201104142038.GA2201525@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-I am Mrs Evelyn Thompson, from the United States. I am the managing
-director of The Thomson Corporation - Company. my husband was a
-formerly co-head of JP Morgan Chase's investment and also
-Member-Market Monitoring Group at The Institute of International
-Finance, Inc. and the board of 5 other companies.
+On Wed, Nov 04, 2020 at 03:20:38PM +0100, Greg KH wrote:
+> > +/**
+> > + * tb_service_debugfs_remove() - Remove service debugfs directory
+> > + * @svc: Thunderbolt service pointer
+> > + *
+> > + * Removes the previously created debugfs directory for @svc.
+> > + */
+> > +void tb_service_debugfs_remove(struct tb_service *svc)
+> > +{
+> > +	debugfs_remove(svc->debugfs_dir);
+> 
+> debugfs_remove_recursive() just to be safe that you really did clean
+> everything up?  As you aren't "owning" this directory here, you don't
+> know what will get added by some other patch :)
 
-I want to hand over this project to you. I am sending this message to
-your notice with trust and honesty. I want to make a transfer into
-your account. please I want you to assure me before I proceed with the
-transfer. I'm written you this message herein the Hospital bed. I lost
-my Dear Beloved husband with our only Child for Deadly Coronavirus. I
-want to make a transfer to the less privileged through your receiving
-nominated bank account. I need your help with genuine trust please. do
-not hesitate to get back to me immediately you receive this email.
-failure for me to reply back your message please contact the Doctor
-with this WhatsApp Number: +13019692737 ask after Mrs Evelyn Thompson.
-I need to know what you do for a living: and your State Country:
-please awaiting your Reply now.
+Good point. I'll change it to debugfs_remove_recursive().
 
-Thanks
-Mrs Evelyn Thompson
+> Other than that tiny nit, this series looks good to me, nice work.
+
+Thanks!
