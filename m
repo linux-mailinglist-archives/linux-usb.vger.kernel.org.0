@@ -2,72 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F852A62E0
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 12:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 032462A62F6
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 12:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729362AbgKDLG6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Nov 2020 06:06:58 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:35996 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726344AbgKDLG5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 06:06:57 -0500
-Received: by mail-lj1-f193.google.com with SMTP id x6so22527870ljd.3;
-        Wed, 04 Nov 2020 03:06:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=46qic9gxmBR5O+V3e6aJntEIOnte/ybgRqaCaVRJqdk=;
-        b=tFdpq0GSAUMh7bU1k0J5DWLEMxDpj7c/2QHTN00sU+jGQR9o7bpJcQ0CtpzLkTYSpU
-         v4LiA/q9f7FGNTwbhKDe8VSL+PzVRDGRxnj9RGg9xMSFofdM3LbNyjlpLnrddbx8Mgwk
-         V4YdMnyB78TB0fbX20Npgq9F86IhzWGNPgv8frlvs/vzwYjiHltdEAU0Vbm0BksgSi35
-         nq6S6UDQYiqxrn3IDqtdIwj7BQAzmdxvK8yZx74g2rqxnz61QAZAWw6JeX1yUjVG/91q
-         bmFlJiK+5eRaS6mnvlGVciJ/0bWEkZV25TtmEUZ6PpGeMzCmyAJyccxptBQwwz2Udd9I
-         Cygw==
-X-Gm-Message-State: AOAM533cMtUJGh92txymtBtYoNsA1gIabIG1AXU9KXXRnOR0XaMkVVP2
-        1sa0aspf2v2L3dL0lYa6XgjbbIvDBTryiw==
-X-Google-Smtp-Source: ABdhPJx2PCrcXL2ZH4ykq1nhmTJIYe+5zflLA7oGv3ob0MF6bLpyOKdJy5voeutp8h+85+VtUhGoaQ==
-X-Received: by 2002:a2e:5016:: with SMTP id e22mr11245541ljb.301.1604488015291;
-        Wed, 04 Nov 2020 03:06:55 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id x20sm480216ljj.139.2020.11.04.03.06.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 03:06:54 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kaGcz-0003o5-Hz; Wed, 04 Nov 2020 12:06:58 +0100
-Date:   Wed, 4 Nov 2020 12:06:57 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Davidlohr Bueso <dbueso@suse.de>
-Subject: Re: [PATCH] usb/mos7720: process deferred urbs in a workqueue
-Message-ID: <20201104110657.GW4085@localhost>
-References: <20201102211450.5722-1-dave@stgolabs.net>
- <20201103204014.3ue37owcras6cx7p@linux-p48b.lan>
+        id S1729430AbgKDLLI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Nov 2020 06:11:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53632 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728066AbgKDLLI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Nov 2020 06:11:08 -0500
+Received: from localhost (otava-0257.koleje.cuni.cz [78.128.181.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 974F321556;
+        Wed,  4 Nov 2020 11:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604488267;
+        bh=nXUVAtygmawESmSumrMZwvlAPKxOTm6KcoJ271qgeno=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OiHaZda5laecmxqHg9f/Ocpu4QDX5BN8FbjJUF/0iJWrb+8lJGE9hdHl79sZNKyiH
+         FTFqf4LuL1HdmKLLL3v38Lb8Ljx2qt2OI4x+6g6Jql43bJkaAYMxZxdVmjkPrSw5UD
+         TfLTaJsPBRvLw3JUjdsj5CS6G71CSMf2FMJH0iJE=
+Date:   Wed, 4 Nov 2020 12:10:53 +0100
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: Re: [PATCH net-next 3/5] r8152: add MCU typed read/write functions
+Message-ID: <20201104121053.44fae8c7@kernel.org>
+In-Reply-To: <20201104110059.whkku3zlck6spnzj@skbuf>
+References: <20201103192226.2455-1-kabel@kernel.org>
+        <20201103192226.2455-4-kabel@kernel.org>
+        <20201103214712.dzwpkj6d5val6536@skbuf>
+        <20201104065524.36a85743@kernel.org>
+        <20201104084710.wr3eq4orjspwqvss@skbuf>
+        <20201104112511.78643f6e@kernel.org>
+        <20201104113545.0428f3fe@kernel.org>
+        <20201104110059.whkku3zlck6spnzj@skbuf>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201103204014.3ue37owcras6cx7p@linux-p48b.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 12:40:14PM -0800, Davidlohr Bueso wrote:
-> On Mon, 02 Nov 2020, Bueso wrote:
-> 
-> >There is
-> >also no need anymore for atomic allocations.
-> 
-> Bleh this is a brain fart - obviously not true as usb_submit_urb() is
-> called under mos_parport->listlock. I'll send a v2 unless you have
-> any objections.
+On Wed, 4 Nov 2020 13:00:59 +0200
+Vladimir Oltean <olteanv@gmail.com> wrote:
 
-The conversion looks good to me otherwise; it's not making this parport
-mess any worse than it already is...
+> On Wed, Nov 04, 2020 at 11:35:45AM +0100, Marek Beh=C3=BAn wrote:
+> > Or something like this?
+> >=20
+> > #define DEF_R_FUNC(_t, _r, _r_i, _mcu)				\
+> > static inline _t _r(struct r8152 *tp, u16 index)		\
+> > {								\
+> > 	return _r_i(tp, _mcu, index);				\
+> > }
+> >=20
+> > #define DEF_W_FUNC(_t, _w, _w_i, _mcu)				\
+> > static inline void _w(struct r8152 *tp, u16 index, _t data)	\
+> > {								\
+> > 	_w_i(tp, _mcu, index, data);				\
+> > }
+> >=20
+> > DEF_R_FUNC(u8, pla_ocp_read_byte, ocp_read_byte, MCU_TYPE_PLA)
+> > DEF_W_FUNC(u8, pla_ocp_write_byte, ocp_write_byte, MCU_TYPE_PLA)
+> > DEF_R_FUNC(u16, pla_ocp_read_word, ocp_read_word, MCU_TYPE_PLA)
+> > DEF_W_FUNC(u16, pla_ocp_write_word, ocp_write_word, MCU_TYPE_PLA)
+> > DEF_R_FUNC(u32, pla_ocp_read_dword, ocp_read_dword, MCU_TYPE_PLA)
+> > DEF_W_FUNC(u32, pla_ocp_write_dword, ocp_write_dword, MCU_TYPE_PLA)
+> >=20
+> > DEF_R_FUNC(u8, usb_ocp_read_byte, ocp_read_byte, MCU_TYPE_USB)
+> > DEF_W_FUNC(u8, usb_ocp_write_byte, ocp_write_byte, MCU_TYPE_USB)
+> > DEF_R_FUNC(u16, usb_ocp_read_word, ocp_read_word, MCU_TYPE_USB)
+> > DEF_W_FUNC(u16, usb_ocp_write_word, ocp_write_word, MCU_TYPE_USB)
+> > DEF_R_FUNC(u32, usb_ocp_read_dword, ocp_read_dword, MCU_TYPE_USB)
+> > DEF_W_FUNC(u32, usb_ocp_write_dword, ocp_write_dword, MCU_TYPE_USB) =20
+>=20
+> I'm not sure it's worth the change :(
+> Let's put it another way, your diffstat has 338 insertions and 335
+> deletions. Aka you're saving 3 lines overall.
+> With this new approach that doesn't use token concatenation at all,
+> you're probably not saving anything at all.
+> Also, I'm not sure that you need to make the functions inline. The
+> compiler should be smart enough to not generate functions for
+> usb_ocp_read_byte etc. You can check with
+> "make drivers/net/usb/r8152.lst".
 
-But please try to be a bit more stringent when updating the comments and
-printk messages, for example, "runs *from* a workqueue", "schedule a
-*worker*" or "queue a work item", etc.
+Vladimir, the purpose of this patch isn't to save lines, but to save us
+from always writing MCU_TYPE_USB / MCU_TYPE_PLA.
+It just transforms forms of
+  ocp_read_word(tp, MCU_TYPE_USB, idx);
+  ocp_write_dword(tp, MCU_TYPE_PLA, idx, val);
+into
+  usb_ocp_read_word(tp, idx);
+  pla_ocp_write_dword(tp, idx, val);
 
-Johan
+The fifth patch of this series saves lines by adding _modify functions,
+to transform
+  val =3D *_read(idx);
+  val &=3D ~clr;
+  val |=3D set;
+  *_write(idx, val);
+into
+  *_modify(idx, clr, set);
+
