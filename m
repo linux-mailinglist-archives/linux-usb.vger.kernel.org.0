@@ -2,224 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C02A2A5E5A
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 07:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCF62A5E9B
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 08:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729370AbgKDGs2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Nov 2020 01:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
+        id S1728319AbgKDHNA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Nov 2020 02:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729172AbgKDGs1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 01:48:27 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDA3C061A4D;
-        Tue,  3 Nov 2020 22:48:27 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id x13so15731241pgp.7;
-        Tue, 03 Nov 2020 22:48:27 -0800 (PST)
+        with ESMTP id S1726434AbgKDHNA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 02:13:00 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD33DC040203
+        for <linux-usb@vger.kernel.org>; Tue,  3 Nov 2020 23:12:59 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id o9so26197761ejg.1
+        for <linux-usb@vger.kernel.org>; Tue, 03 Nov 2020 23:12:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ysHUcVNbp38AUgn7NKxkH5Q5DIwpvOeEqm2kZUXUKmU=;
-        b=YzNxGd//p6RpHxyQKY/zhdc1gm8gz0LIfXvR7h5InWiRax8cOhO7XTjfgvIru0w46l
-         X4w55YlLlkCPHdQ7hCo/wgNXiRwUQwoMCmLOrB7YdM0Y48n/40OymgK1fgJjk6oKvAfv
-         7uVVyrGgzpO3DjwzTf0pMKZR7HXCHLU9ELAqbDeQjWMGAk/QECCKqV4RXooBd9RDzTz6
-         rt2B2eYb6efu4pg9hoDN0oc5SJwuch2gDNxkXMhM7SuNI9JPZJKNLZ6YnkBP4dLq7yky
-         lgLbjZy9wNJl65sC7/5OOztv1vKFyROkxORu4j8Oz0KhdlhkPT1JUIlf8ZkgP5xaQWoD
-         8v0Q==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Wg60tjtctfZ7oqTIPXWuKb6lWF4Baeks51n8od47Pnw=;
+        b=pRCeEDGnR7R7WoV3ZYdcEYzFRLXNolNjWW/Uz+57n2xAdCvARc+lrTI2SpZ4Q8wXVd
+         L9vwfTUnuqLYkrubxpbwtlsMms6ZM0Q0q/d0sG+UcR3gu39wdh/yAv53ljBV+BWuYxCx
+         BxoaQ75I9qtR103fcBjnbfm/Vwx0dI8JqvHnBLkK2jl262ocOagZ+177ntG2s7ZKZa7K
+         BAcCb2wampldFclG++67O8LQ7LZChO0jZTkLR4QOax/idOg+FhIeoShmUTV+lxNTycVj
+         Ad0fZQ4sveTpYYp0o8eMtEr9b0iEW6iws7FikWThOO/NsyBXmsZDQ1hifEB1CgfAu98c
+         rMhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ysHUcVNbp38AUgn7NKxkH5Q5DIwpvOeEqm2kZUXUKmU=;
-        b=DU06/bxEHeOGD9o+Aj8KbJ68ECb0CsBJQDuZZ56V8DdtOoncVK93pqiKgO7rqiVGXY
-         vnii9PYYQ495N8/xEwJfJRWouIl63Jv6DzwhIt41PV86NPunXKdmuG6+ehepBEO83hgG
-         5QxAXrXmEhTjhWV2E4DCmts28Cec6TOJhtpcLZENUy1Hh7PemAVJcjBaZYaahY08h+tn
-         /hTFpApHgV5aHzgQ/6dw5Zguv8eudqbbKqwKjzmoLaFDYCIuz8LLnBJIlK5//mFSz474
-         rRbxsv+w150Y3Eg04nv1hl3avNoGGzpK2qoAWze446UCaAsrOmeBl1Gbt2zY6Syrzqer
-         1PSw==
-X-Gm-Message-State: AOAM532GfLQyPtjYnv5lgC3f+RcMQGUQEhpPdTeqISoS6TBQGyeZbd7c
-        sC0L8zpVA3pJIJ3COuog2a4=
-X-Google-Smtp-Source: ABdhPJzuiIEqTk+1+1eFZRvLotka0QLSy6Ky8iB1wyY+65k+2+Lj+I04P2RisE3gcfbxPM73VqZifA==
-X-Received: by 2002:a17:90b:34f:: with SMTP id fh15mr3075738pjb.66.1604472507072;
-        Tue, 03 Nov 2020 22:48:27 -0800 (PST)
-Received: from localhost.localdomain ([2402:3a80:16e6:8166:e462:9fba:da9c:beed])
-        by smtp.gmail.com with ESMTPSA id s18sm1036873pgh.60.2020.11.03.22.48.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2020 22:48:26 -0800 (PST)
-From:   Himadri Pandya <himadrispandya@gmail.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        Himadri Pandya <himadrispandya@gmail.com>
-Subject: [PATCH 15/15] usb: serial: kl5kusb105: use usb_control_msg_recv() and usb_control_msg_send()
-Date:   Wed,  4 Nov 2020 12:17:03 +0530
-Message-Id: <20201104064703.15123-16-himadrispandya@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201104064703.15123-1-himadrispandya@gmail.com>
-References: <20201104064703.15123-1-himadrispandya@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Wg60tjtctfZ7oqTIPXWuKb6lWF4Baeks51n8od47Pnw=;
+        b=fxKh/x6u6v2pPFkx+RhsI/NkssQhPIAG2sXBIDOawGpfFlIcH6ZcmoEr9MMo7Tl8PS
+         M9ZaYew7sGJajn/Ym66/ZB+UFV5Qicia/RaSjg27O1BbxFo9u2rc0ng0tc9ac9PXdHIZ
+         6dWM9T+le/0uYkI0IVUI7TaHMkwIpxNBuJQiH/hztSGF6qKZeXNdDJwSLxgZKFYXd1dG
+         Z/M8W+DvYM2pUeJ9XUyrv8pwhlg+I28h+HFPmkWw9JIuZp9hQEqiiijT0vCgS7Twp3vr
+         4QdFjo+SpvIo3JLQY6YDwjHO0uUnAux1N4sIG+kjLtVmzPTDMFCzuGqlJRD4enGXeBua
+         /jfg==
+X-Gm-Message-State: AOAM530S5v0pmTOhqp243tvWZZCGVpOzc8XQr3R7BqLuxEmZYVWZfaLw
+        zX5YbRmEFdn2Qw5wnWCgYraGMJPtcbxJdrkYuLUi2w==
+X-Google-Smtp-Source: ABdhPJw6RY7vKNkQZdXTzjZ53SbW21NoUI5ZzfB0PL8rVbdo6HSI+V7sGQfAGhKgfMuj7WsTMoLKb6qfbQTtxvSHRO0=
+X-Received: by 2002:a17:906:39ce:: with SMTP id i14mr24553978eje.170.1604473978081;
+ Tue, 03 Nov 2020 23:12:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20201103203348.153465465@linuxfoundation.org>
+In-Reply-To: <20201103203348.153465465@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 4 Nov 2020 12:42:46 +0530
+Message-ID: <CA+G9fYsrppNwC0S4vkrS8jGW4k2fgmbAzy=oMLV6X9=DHkznpw@mail.gmail.com>
+Subject: Re: [PATCH 5.9 000/391] 5.9.4-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de,
+        linux- stable <stable@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The new usb_control_msg_recv() and usb_control_msg_send() nicely wraps
-usb_control_msg() with proper error check. Hence use the wrappers
-instead of calling usb_control_msg() directly
+On Wed, 4 Nov 2020 at 02:07, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.9.4 release.
+> There are 391 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 05 Nov 2020 20:29:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.9.4-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
----
- drivers/usb/serial/kl5kusb105.c | 94 +++++++++++++++------------------
- 1 file changed, 44 insertions(+), 50 deletions(-)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/drivers/usb/serial/kl5kusb105.c b/drivers/usb/serial/kl5kusb105.c
-index 5ee48b0650c4..75cfd1c907f3 100644
---- a/drivers/usb/serial/kl5kusb105.c
-+++ b/drivers/usb/serial/kl5kusb105.c
-@@ -124,16 +124,17 @@ static int klsi_105_chg_port_settings(struct usb_serial_port *port,
- {
- 	int rc;
- 
--	rc = usb_control_msg(port->serial->dev,
--			usb_sndctrlpipe(port->serial->dev, 0),
--			KL5KUSB105A_SIO_SET_DATA,
--			USB_TYPE_VENDOR | USB_DIR_OUT | USB_RECIP_INTERFACE,
--			0, /* value */
--			0, /* index */
--			settings,
--			sizeof(struct klsi_105_port_settings),
--			KLSI_TIMEOUT);
--	if (rc < 0)
-+	rc = usb_control_msg_send(port->serial->dev, 0,
-+				  KL5KUSB105A_SIO_SET_DATA,
-+				  USB_TYPE_VENDOR | USB_DIR_OUT |
-+				  USB_RECIP_INTERFACE,
-+				  0, /* value */
-+				  0, /* index */
-+				  settings,
-+				  sizeof(struct klsi_105_port_settings),
-+				  KLSI_TIMEOUT,
-+				  GFP_KERNEL);
-+	if (rc)
- 		dev_err(&port->dev,
- 			"Change port settings failed (error = %d)\n", rc);
- 
-@@ -167,28 +168,21 @@ static int klsi_105_get_line_state(struct usb_serial_port *port,
- 				   unsigned long *line_state_p)
- {
- 	int rc;
--	u8 *status_buf;
-+	u8 status_buf[2];
- 	__u16 status;
- 
--	status_buf = kmalloc(KLSI_STATUSBUF_LEN, GFP_KERNEL);
--	if (!status_buf)
--		return -ENOMEM;
--
- 	status_buf[0] = 0xff;
- 	status_buf[1] = 0xff;
--	rc = usb_control_msg(port->serial->dev,
--			     usb_rcvctrlpipe(port->serial->dev, 0),
--			     KL5KUSB105A_SIO_POLL,
--			     USB_TYPE_VENDOR | USB_DIR_IN,
--			     0, /* value */
--			     0, /* index */
--			     status_buf, KLSI_STATUSBUF_LEN,
--			     10000
--			     );
--	if (rc != KLSI_STATUSBUF_LEN) {
-+	rc = usb_control_msg_recv(port->serial->dev, 0,
-+				  KL5KUSB105A_SIO_POLL,
-+				  USB_TYPE_VENDOR | USB_DIR_IN,
-+				  0, /* value */
-+				  0, /* index */
-+				  &status_buf, KLSI_STATUSBUF_LEN,
-+				  10000,
-+				  GFP_KERNEL);
-+	if (rc) {
- 		dev_err(&port->dev, "reading line status failed: %d\n", rc);
--		if (rc >= 0)
--			rc = -EIO;
- 	} else {
- 		status = get_unaligned_le16(status_buf);
- 
-@@ -198,7 +192,6 @@ static int klsi_105_get_line_state(struct usb_serial_port *port,
- 		*line_state_p = klsi_105_status2linestate(status);
- 	}
- 
--	kfree(status_buf);
- 	return rc;
- }
- 
-@@ -283,16 +276,17 @@ static int  klsi_105_open(struct tty_struct *tty, struct usb_serial_port *port)
- 		goto err_free_cfg;
- 	}
- 
--	rc = usb_control_msg(port->serial->dev,
--			     usb_sndctrlpipe(port->serial->dev, 0),
--			     KL5KUSB105A_SIO_CONFIGURE,
--			     USB_TYPE_VENDOR|USB_DIR_OUT|USB_RECIP_INTERFACE,
--			     KL5KUSB105A_SIO_CONFIGURE_READ_ON,
--			     0, /* index */
--			     NULL,
--			     0,
--			     KLSI_TIMEOUT);
--	if (rc < 0) {
-+	rc  = usb_control_msg_send(port->serial->dev, 0,
-+				   KL5KUSB105A_SIO_CONFIGURE,
-+				   USB_TYPE_VENDOR | USB_DIR_OUT |
-+				   USB_RECIP_INTERFACE,
-+				   KL5KUSB105A_SIO_CONFIGURE_READ_ON,
-+				   0, /* index */
-+				   NULL,
-+				   0,
-+				   KLSI_TIMEOUT,
-+				   GFP_KERNEL);
-+	if (rc) {
- 		dev_err(&port->dev, "Enabling read failed (error = %d)\n", rc);
- 		retval = rc;
- 		goto err_generic_close;
-@@ -314,14 +308,14 @@ static int  klsi_105_open(struct tty_struct *tty, struct usb_serial_port *port)
- 	return 0;
- 
- err_disable_read:
--	usb_control_msg(port->serial->dev,
--			     usb_sndctrlpipe(port->serial->dev, 0),
-+	usb_control_msg_send(port->serial->dev, 0,
- 			     KL5KUSB105A_SIO_CONFIGURE,
- 			     USB_TYPE_VENDOR | USB_DIR_OUT,
- 			     KL5KUSB105A_SIO_CONFIGURE_READ_OFF,
- 			     0, /* index */
- 			     NULL, 0,
--			     KLSI_TIMEOUT);
-+			     KLSI_TIMEOUT,
-+			     GFP_KERNEL);
- err_generic_close:
- 	usb_serial_generic_close(port);
- err_free_cfg:
-@@ -335,15 +329,15 @@ static void klsi_105_close(struct usb_serial_port *port)
- 	int rc;
- 
- 	/* send READ_OFF */
--	rc = usb_control_msg(port->serial->dev,
--			     usb_sndctrlpipe(port->serial->dev, 0),
--			     KL5KUSB105A_SIO_CONFIGURE,
--			     USB_TYPE_VENDOR | USB_DIR_OUT,
--			     KL5KUSB105A_SIO_CONFIGURE_READ_OFF,
--			     0, /* index */
--			     NULL, 0,
--			     KLSI_TIMEOUT);
--	if (rc < 0)
-+	rc = usb_control_msg_send(port->serial->dev, 0,
-+				  KL5KUSB105A_SIO_CONFIGURE,
-+				  USB_TYPE_VENDOR | USB_DIR_OUT,
-+				  KL5KUSB105A_SIO_CONFIGURE_READ_OFF,
-+				  0, /* index */
-+				  NULL, 0,
-+				  KLSI_TIMEOUT,
-+				  GFP_KERNEL);
-+	if (rc)
- 		dev_err(&port->dev, "failed to disable read: %d\n", rc);
- 
- 	/* shutdown our bulk reads and writes */
--- 
-2.17.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+NOTE:
+The kernel warning noticed on arm64 nxp ls2088 device with KASAN config
+enabled while booting the device. We are not considering this as regression
+because this is the first arm64 KASAN config enabled on nxp ls2088 device.
+
+[    3.301882] dwc3 3100000.usb3: Failed to get clk 'ref': -2
+[    3.307433] ------------[ cut here ]------------
+[    3.312048] dwc3 3100000.usb3: request value same as default, ignoring
+[    3.318596] WARNING: CPU: 3 PID: 1 at
+/home/jenkins/ci/lsdk/master/all/packages/linux/linux/drivers/usb/dwc3/core=
+.c:347
+dwc3_core_init+0xd14/0xd70
+[    3.331716] Modules linked in:
+[    3.334766] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 4.19.46 #1
+[    3.340765] Hardware name: Freescale Layerscape 2088A RDB Board (DT)
+[    3.347111] pstate: 40000005 (nZcv daif -PAN -UAO)
+[    3.351895] pc : dwc3_core_init+0xd14/0xd70
+[    3.356070] lr : dwc3_core_init+0xd14/0xd70
+[    3.360243] sp : ffff000008063b00
+[    3.363550] x29: ffff000008063b00 x28: 0000000000000007
+[    3.368855] x27: ffff000009624068 x26: ffff000009532768
+[    3.374160] x25: ffff8082cd5ea1a0 x24: ffff000008f27000
+[    3.379465] x23: ffff8082ef45a410 x22: ffff0000096ca000
+[    3.384770] x21: 0000000000000041 x20: 0000000030c11004
+[    3.390075] x19: ffff8082ef6f9080 x18: ffffffffffffffff
+[    3.395380] x17: 0000000000000000 x16: 0000000000000000
+[    3.400685] x15: ffff0000096ca708 x14: ffff0000898776ff
+[    3.405991] x13: ffff00000987770d x12: ffff0000096ca980
+[    3.411297] x11: ffff000008707260 x10: ffff0000080637d0
+[    3.416603] x9 : 0000000000000016 x8 : 6769202c746c7561
+[    3.421908] x7 : 6665642073612065 x6 : 0000000000000163
+[    3.427213] x5 : 0000000000000000 x4 : 0000000000000000
+[    3.432517] x3 : ffffffffffffffff x2 : ffff0000096e3cf8
+[    3.437823] x1 : 4d579be806451100 x0 : 0000000000000000
+[    3.443129] Call trace:
+[    3.445568]  dwc3_core_init+0xd14/0xd70
+[    3.449395]  dwc3_probe+0x8b0/0xd30
+[    3.452877]  platform_drv_probe+0x50/0xa0
+[    3.456878]  really_probe+0x1b8/0x288
+[    3.460531]  driver_probe_device+0x58/0x100
+[    3.464705]  __driver_attach+0xd4/0xd8
+[    3.468446]  bus_for_each_dev+0x74/0xc8
+[    3.472273]  driver_attach+0x20/0x28
+[    3.475840]  bus_add_driver+0x1ac/0x218
+[    3.479667]  driver_register+0x60/0x110
+[    3.483494]  __platform_driver_register+0x40/0x48
+[    3.488192]  dwc3_driver_init+0x18/0x20
+[    3.492020]  do_one_initcall+0x5c/0x178
+[    3.495848]  kernel_init_freeable+0x198/0x244
+[    3.500197]  kernel_init+0x10/0x108
+[    3.503677]  ret_from_fork+0x10/0x18
+[    3.507245] ---[ end trace 13f260065c84085c ]---
+[    3.512196] dwc3 3110000.usb3: Failed to get clk 'ref': -2
+
+full boot log:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.9.y/build/v5.9.3=
+-392-g53574a4c558e/testrun/3391440/suite/linux-log-parser/test/check-kernel=
+-warning-121687/log
+
+Summary
+------------------------------------------------------------------------
+
+kernel: 5.9.4-rc1
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
+le-rc.git
+git branch: linux-5.9.y
+git commit: 53574a4c558e8da7cfde86a77fe760ba375394b8
+git describe: v5.9.3-392-g53574a4c558e
+Test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.9.=
+y/build/v5.9.3-392-g53574a4c558e
+
+No regressions (compared to build v5.9.3)
+
+No fixes (compared to build v5.9.3)
+
+Ran 38015 total tests in the following environments and test suites.
+
+Environments
+--------------
+- dragonboard-410c
+- hi6220-hikey
+- i386
+- juno-r2
+- juno-r2-compat
+- nxp-ls2088
+- nxp-ls2088-kasan
+- qemu-arm64-kasan
+- qemu-x86_64-kasan
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15
+- x86
+- x86-kasan
+
+Test Suites
+-----------
+* build
+* install-android-platform-tools-r2600
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-containers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-ipc-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-tracing-tests
+* perf
+* ltp-commands-tests
+* ltp-controllers-tests
+* ltp-dio-tests
+* ltp-io-tests
+* ltp-math-tests
+* ltp-syscalls-tests
+* network-basic-tests
+* v4l2-compliance
+* kselftest
+* ltp-cve-tests
+* ltp-open-posix-tests
+* kvm-unit-tests
+* kunit
+* kselftest-vsyscall-mode-none
+* kselftest-vsyscall-mode-native
+
+--=20
+Linaro LKFT
+https://lkft.linaro.org
