@@ -2,71 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB3C2A5C1D
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 02:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248382A5C71
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 02:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729908AbgKDBoH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Nov 2020 20:44:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34874 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725769AbgKDBoH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Nov 2020 20:44:07 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5CCFC20870;
-        Wed,  4 Nov 2020 01:44:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604454246;
-        bh=KI9LQShmDq+BbAxyoPo9nBH0BUcZngj2x4XBVSVL14w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0ua95QE7dN8/a8uyJ6TB/dmYe2R82r63Nk28Q2eoBMlXBkxvMNijRhLFW0h0ekJ16
-         9oxv+lGEGP/qRi7wM4bmDYwfpCfivLfGA3FcvoreQenaOmt4+HgwUv8Cz9izYqA6s/
-         KOighz9KFjh5dBklzmZ5BZ4t/Mp7yycD6ivhLHmc=
-Date:   Tue, 3 Nov 2020 17:44:05 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oliver@neukum.org>
-Subject: Re: [PATCH net-next v2] net/usb/r8153_ecm: support ECM mode for
- RTL8153
-Message-ID: <20201103174405.43a4a3ab@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <db4c6b3b30284206a6f131e922760e1e@realtek.com>
-References: <1394712342-15778-387-Taiwan-albertk@realtek.com>
-        <1394712342-15778-388-Taiwan-albertk@realtek.com>
-        <20201031160838.39586608@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <dc7fd1d4d1c544e8898224c7d9b54bda@realtek.com>
-        <20201102114718.0118cc12@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <20201103093241.GA79239@kroah.com>
-        <20201103081535.7e92a495@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <db4c6b3b30284206a6f131e922760e1e@realtek.com>
+        id S1730125AbgKDB5R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Nov 2020 20:57:17 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:58271 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730116AbgKDB5R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Nov 2020 20:57:17 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 0A41vBY51031929, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexmb06.realtek.com.tw[172.21.6.99])
+        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 0A41vBY51031929
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 4 Nov 2020 09:57:11 +0800
+Received: from RTEXMB04.realtek.com.tw (172.21.6.97) by
+ RTEXMB06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2044.4; Wed, 4 Nov 2020 09:57:10 +0800
+Received: from RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa]) by
+ RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa%3]) with mapi id
+ 15.01.2044.006; Wed, 4 Nov 2020 09:57:10 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     =?utf-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH net-next 1/5] r8152: use generic USB macros to define product table
+Thread-Topic: [PATCH net-next 1/5] r8152: use generic USB macros to define
+ product table
+Thread-Index: AQHWshavui7U4I+gmkudpd9bR0wfLqm3NRPA
+Date:   Wed, 4 Nov 2020 01:57:10 +0000
+Message-ID: <b83ddcca96cb40cf8785e6b44f9838e0@realtek.com>
+References: <20201103192226.2455-1-kabel@kernel.org>
+ <20201103192226.2455-2-kabel@kernel.org>
+In-Reply-To: <20201103192226.2455-2-kabel@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.146]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 4 Nov 2020 01:39:52 +0000 Hayes Wang wrote:
-> Jakub Kicinski <kuba@kernel.org>
-> > Sent: Wednesday, November 4, 2020 12:16 AM  
-> [...]
-> > > So no, please do not create such a common file, it is not needed or a
-> > > good idea.  
-> > 
-> > I wouldn't go that far, PCI subsystem just doesn't want everyone to add
-> > IDs to the shared file unless there is a reason.
-> > 
-> >  *	Do not add new entries to this file unless the definitions
-> >  *	are shared between multiple drivers.
-> > 
-> > Which seems quite reasonable. But it is most certainly your call :)  
-> 
-> Do I have to resend this patch?
-
-Yes please, that'd be easiest for me. Also Oliver wasn't CCed on this
-posting.
+TWFyZWsgQmVow7puIDxrYWJlbEBrZXJuZWwub3JnPg0KPiBTZW50OiBXZWRuZXNkYXksIE5vdmVt
+YmVyIDQsIDIwMjAgMzoyMiBBTQ0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvdXNiL3I4MTUy
+LmMgYi9kcml2ZXJzL25ldC91c2IvcjgxNTIuYw0KPiBpbmRleCBiMTc3MDQ4OWFjYTUuLjg1ZGRh
+NTkxYzgzOCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQvdXNiL3I4MTUyLmMNCj4gKysrIGIv
+ZHJpdmVycy9uZXQvdXNiL3I4MTUyLmMNCj4gQEAgLTY4NjIsMjAgKzY4NjIsMTIgQEAgc3RhdGlj
+IHZvaWQgcnRsODE1Ml9kaXNjb25uZWN0KHN0cnVjdA0KPiB1c2JfaW50ZXJmYWNlICppbnRmKQ0K
+PiAgfQ0KPiANCj4gICNkZWZpbmUgUkVBTFRFS19VU0JfREVWSUNFKHZlbmQsIHByb2QpCVwNCj4g
+LQkubWF0Y2hfZmxhZ3MgPSBVU0JfREVWSUNFX0lEX01BVENIX0RFVklDRSB8IFwNCj4gLQkJICAg
+ICAgIFVTQl9ERVZJQ0VfSURfTUFUQ0hfSU5UX0NMQVNTLCBcDQo+IC0JLmlkVmVuZG9yID0gKHZl
+bmQpLCBcDQo+IC0JLmlkUHJvZHVjdCA9IChwcm9kKSwgXA0KPiAtCS5iSW50ZXJmYWNlQ2xhc3Mg
+PSBVU0JfQ0xBU1NfVkVORE9SX1NQRUMgXA0KPiArCVVTQl9ERVZJQ0VfSU5URVJGQUNFX0NMQVNT
+KHZlbmQsIHByb2QsIFVTQl9DTEFTU19WRU5ET1JfU1BFQykNCj4gXA0KPiAgfSwgXA0KPiAgeyBc
+DQo+IC0JLm1hdGNoX2ZsYWdzID0gVVNCX0RFVklDRV9JRF9NQVRDSF9JTlRfSU5GTyB8IFwNCj4g
+LQkJICAgICAgIFVTQl9ERVZJQ0VfSURfTUFUQ0hfREVWSUNFLCBcDQo+IC0JLmlkVmVuZG9yID0g
+KHZlbmQpLCBcDQo+IC0JLmlkUHJvZHVjdCA9IChwcm9kKSwgXA0KPiAtCS5iSW50ZXJmYWNlQ2xh
+c3MgPSBVU0JfQ0xBU1NfQ09NTSwgXA0KPiAtCS5iSW50ZXJmYWNlU3ViQ2xhc3MgPSBVU0JfQ0RD
+X1NVQkNMQVNTX0VUSEVSTkVULCBcDQo+IC0JLmJJbnRlcmZhY2VQcm90b2NvbCA9IFVTQl9DRENf
+UFJPVE9fTk9ORQ0KPiArCVVTQl9ERVZJQ0VfQU5EX0lOVEVSRkFDRV9JTkZPKHZlbmQsIHByb2Qs
+IFVTQl9DTEFTU19DT01NLCBcDQo+ICsJCQkJICAgICAgVVNCX0NEQ19TVUJDTEFTU19FVEhFUk5F
+VCwgXA0KPiArCQkJCSAgICAgIFVTQl9DRENfUFJPVE9fTk9ORSkNCj4gDQo+ICAvKiB0YWJsZSBv
+ZiBkZXZpY2VzIHRoYXQgd29yayB3aXRoIHRoaXMgZHJpdmVyICovDQo+ICBzdGF0aWMgY29uc3Qg
+c3RydWN0IHVzYl9kZXZpY2VfaWQgcnRsODE1Ml90YWJsZVtdID0gew0KDQpJIGRvbid0IHVzZSB0
+aGVzZSwgYmVjYXVzZSBjaGVja3BhdGNoLnBsIHdvdWxkIHNob3cgZXJyb3IuDQoNCgkkIHNjcmlw
+dHMvY2hlY2twYXRjaC5wbCAtLWZpbGUgLS10ZXJzZSBkcml2ZXJzL25ldC91c2IvcjgxNTIuYw0K
+CUVSUk9SOiBNYWNyb3Mgd2l0aCBjb21wbGV4IHZhbHVlcyBzaG91bGQgYmUgZW5jbG9zZWQgaW4g
+cGFyZW50aGVzZXMNCg0KQmVzdCBSZWdhcmRzLA0KSGF5ZXMNCg0K
