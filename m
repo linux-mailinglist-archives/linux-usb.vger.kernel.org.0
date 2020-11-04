@@ -2,127 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 588C42A6B4A
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 18:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FBC2A6C2B
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 18:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731597AbgKDRBq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Nov 2020 12:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S1729996AbgKDRtW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Nov 2020 12:49:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731553AbgKDRBp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 12:01:45 -0500
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43BEC0613D3;
-        Wed,  4 Nov 2020 09:01:45 -0800 (PST)
-Received: by mail-oi1-x241.google.com with SMTP id w145so17201605oie.9;
-        Wed, 04 Nov 2020 09:01:45 -0800 (PST)
+        with ESMTP id S1726152AbgKDRtU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 12:49:20 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DA0C0613D3
+        for <linux-usb@vger.kernel.org>; Wed,  4 Nov 2020 09:49:19 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id u4so5388206pgr.9
+        for <linux-usb@vger.kernel.org>; Wed, 04 Nov 2020 09:49:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uknDCoKDga/da3SSTNKpZLFOARnk/1czGWKL3e4opsA=;
-        b=Nj78/yMtn9Bz24YK5JLcHx1MsO1C5RbFb3bcNQfDKNgDb8qTrEZV/wNN0dPZUetf88
-         vFGXw69ykOJAhxTTnqCmuYZ25FpK99TUJx6+Jd+NUYonNuNCWpF94lqhi8wdNZd90KsC
-         GdI/L5jLYfWnZT1mkCht67LGLy9EgipQNdHtGGotelR4l46xeAYIVSTfxm2DDGJUR4kE
-         h7IPifIgaEjd9XpJZydqcQqK1Jdfg6bOs9hLmq/sZ4qv6QzB4s6IROtc4SxZnpuXod5Y
-         qYXsWmPEgl1f8XUszV6V2CagdkeeWuF398+stdQYrzwHBLsbwi68b6rA7uS7nazKpMC0
-         FQAg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6DcXk+MfzqX1VYgKu6yCxw6DUdWo+h55xJMrIphl6v0=;
+        b=l8mgNMwn/m61nxiUfrS08uJ9lmAaaEF3bw3gbxTR+yd8gLCfNo8VkjWEUWal57/oav
+         DU4e7/UZbPxEOpG0LmHYKfym9jzUPRQ3J4YUdcvMQ7GyLNn1NyHZAbmqMgTJHHvUBhwN
+         DMp7Uzpho85QpnoNaJntK9tg17yEwmbDtyWeg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uknDCoKDga/da3SSTNKpZLFOARnk/1czGWKL3e4opsA=;
-        b=piARaNgVzAiYqmT97CEAh8veiorBP+m//KWNhXLpAk7Ew2qPIv6Kyz9Uscma4PkcQt
-         cfdJD8kbvOzL+Cif7dE66dj957v3bRrU4QzkUIWx7CkjkOJbQWHeA5i1TGR2My4+VO0j
-         lGw9t55ahs4OiMMXsv408+RKSiW6qxyJQ7dKkfRWtAYJX7U6uI7WV2ZcMOf78eycOVze
-         43BlDCC3sHWY/AqrrzzRtMPFKS+4HdOXOh3rgUGphPaYMpWau7hi6TBURdqtS/ToQdFY
-         x3Sv/lQ//X8Zm1RRlEuA6Og1I30hzgWNC4DjwlTO2cINFd3eE2qiMpVJqIgtxxUwyKCX
-         Vpfg==
-X-Gm-Message-State: AOAM532KcbByfuOA9qc3gHkmm+xzmTgGdMaMM9as7w00KCCV4UCtM5Q5
-        tLoGm0PPWegiAHeYNrvg5ui5p8xUs35AifTFFFE=
-X-Google-Smtp-Source: ABdhPJwLrc04OOOAuViqEFuEwlu6OC0l+UZ/XYET1RwC/wCciqygskfFNRfSoMC6pbWqBK7T5crCnYzRaLiHE/q/i6s=
-X-Received: by 2002:aca:bbc2:: with SMTP id l185mr1416712oif.172.1604509305040;
- Wed, 04 Nov 2020 09:01:45 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6DcXk+MfzqX1VYgKu6yCxw6DUdWo+h55xJMrIphl6v0=;
+        b=B5+g9ipeTZAz2eBQGVe135A3MKiiIlY3YBVenJnBDX6toHcWs9IYXVNZZL9v8bf4Jp
+         phkIP/FeVOFjmqYa2NF1g6awea8Jk/0Xc3j3CQNyCG+bDaFA3Dn5t7FfQQ9TX8RKuhk9
+         fuZUGmkkGRN2/WTJ3PGcrjmo1Ua7s1E9VaIbXRkglYn1TEr8W/U6zcgFgy5az+fN0rLx
+         goxbJgdunGddtCfX/Y/zW67wZabKoWNVp5r6rdKf77XBhcWjHQ7/zH8OdK8bVGKyQ/5T
+         4BGC85B+KKOxnClLAptdw4mcEp7CrL3vFWJm1k/rRQtZM4sFUeJA2xzeDY62zygdDbCJ
+         d+xA==
+X-Gm-Message-State: AOAM532vw11Wi3jp/dQLtrXSBlLln2qoxAJpiA/k1LL4Li2hCsPF2IiO
+        b+s47PXK83Th3cRIbSkHD1J9nQ==
+X-Google-Smtp-Source: ABdhPJx0dx/aveFsSHxCgcTEcAQc9HAgWMP5UBSvfwmC5gtlK5I5oG/MTu9LaA6X+XTTLVQGaUeetg==
+X-Received: by 2002:a17:90b:3902:: with SMTP id ob2mr5437810pjb.109.1604512159187;
+        Wed, 04 Nov 2020 09:49:19 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id d4sm2967693pjj.45.2020.11.04.09.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2020 09:49:18 -0800 (PST)
+Date:   Wed, 4 Nov 2020 09:49:17 -0800
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     Benson Leung <bleung@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v3 2/2] usb: typec: Expose Product Type VDOs via sysfs
+Message-ID: <20201104174917.GC3913249@google.com>
+References: <20201023214328.1262883-1-pmalani@chromium.org>
+ <20201023214328.1262883-2-pmalani@chromium.org>
 MIME-Version: 1.0
-References: <20200909091302.20992-1-dnlplm@gmail.com>
-In-Reply-To: <20200909091302.20992-1-dnlplm@gmail.com>
-From:   Kristian Evensen <kristian.evensen@gmail.com>
-Date:   Wed, 4 Nov 2020 18:01:34 +0100
-Message-ID: <CAKfDRXhDFk7x7b35G5w4XytcL29cw=U8tVpvFJmbsWezVUsTtQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/1] net: usb: qmi_wwan: add default rx_urb_size
-To:     Daniele Palmas <dnlplm@gmail.com>
-Cc:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        Paul Gildea <paul.gildea@gmail.com>,
-        Carl Yin <carl.yin@quectel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201023214328.1262883-2-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi All,
 
-On Wed, Sep 9, 2020 at 11:14 AM Daniele Palmas <dnlplm@gmail.com> wrote:
->
-> Add default rx_urb_size to support QMAP download data aggregation
-> without needing additional setup steps in userspace.
->
-> The value chosen is the current highest one seen in available modems.
->
-> The patch has the side-effect of fixing a babble issue in raw-ip mode
-> reported by multiple users.
->
-> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Was wondering if there were any comments on v3 of this series?
+
+Best regards,
+
+-Prashant
+On Fri, Oct 23, 2020 at 02:43:28PM -0700, Prashant Malani wrote:
+> A PD-capable device can return up to 3 Product Type VDOs as part of its
+> DiscoverIdentity Response (USB PD Spec, Rev 3.0, Version 2.0, Section
+> 6.4.4.3.1). Add sysfs attributes to expose these to userspace.
+> 
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 > ---
-> Resending with mailing lists added: sorry for the noise.
->
-> Hi Bj=C3=B8rn and all,
->
-> this patch tries to address the issue reported in the following threads
->
-> https://www.spinics.net/lists/netdev/msg635944.html
-> https://www.spinics.net/lists/linux-usb/msg198846.html
-> https://www.spinics.net/lists/linux-usb/msg198025.html
->
-> so I'm adding the people involved, maybe you can give it a try to
-> double check if this is good for you.
->
-> On my side, I performed tests with different QC chipsets without
-> experiencing problems.
->
-> Thanks,
-> Daniele
-
-First of all, I am very sorry for not providing any feedback earlier.
-I applied your patch and have been running it on my devices more or
-less since it was submitted. My devices are equipped with different
-generations of modems (cat. 4, cat. 6, cat. 12, 5G NSA), and I haven't
-noticed any problems and the babble-issue is gone. Over the last
-couple of days I also finally had a chance to experiment with QMAP,
-using an SDX55-based modem (i..e,32KB datagram support). Increasing
-the datagram size to 32KB gives a nice performance boost over for
-example 16KB. When measuring using iperf3 (on the same device), the
-throughput goes from around 210 Mbit/s and to 230 Mbit/s. The CPU was
-more or less saturated during all of my experiments, so the main
-performance gain was from the increased aggregated datagram size.
-
-As a side question, and perhaps this should be a separate thread, does
-anyone have any suggestion on how to improve QMI performance further?
-The device that I used for my iperf3-tests is mt7621-based, and using
-for example an Ethernet dongle I am able to reach somere between 400
-and 500 Mbit/s over USB. The Ethernet dongle is able to make use of
-for example scatter-gather, but I would still expect at least a bit
-more using QMI. I tried to replace the alloc()/put() in the
-qmimux_rx_fixup() function with clone() and then doing push()/pull(),
-but this resulted in a decrease in performance. I have probably
-overlooked something, but I think at least my use of the functions was
-correct. The packets looked correct when adding some debug output,
-error counters did not increase, etc., etc. The mobile network is not
-the bottleneck, on my phone I reliably get around 400 Mbit/s.
-
-BR,
-Kristian
