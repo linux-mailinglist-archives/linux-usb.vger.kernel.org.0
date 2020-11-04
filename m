@@ -2,236 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCF62A5E9B
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 08:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B3E2A5EA1
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 08:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728319AbgKDHNA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Nov 2020 02:13:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbgKDHNA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 02:13:00 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD33DC040203
-        for <linux-usb@vger.kernel.org>; Tue,  3 Nov 2020 23:12:59 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id o9so26197761ejg.1
-        for <linux-usb@vger.kernel.org>; Tue, 03 Nov 2020 23:12:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Wg60tjtctfZ7oqTIPXWuKb6lWF4Baeks51n8od47Pnw=;
-        b=pRCeEDGnR7R7WoV3ZYdcEYzFRLXNolNjWW/Uz+57n2xAdCvARc+lrTI2SpZ4Q8wXVd
-         L9vwfTUnuqLYkrubxpbwtlsMms6ZM0Q0q/d0sG+UcR3gu39wdh/yAv53ljBV+BWuYxCx
-         BxoaQ75I9qtR103fcBjnbfm/Vwx0dI8JqvHnBLkK2jl262ocOagZ+177ntG2s7ZKZa7K
-         BAcCb2wampldFclG++67O8LQ7LZChO0jZTkLR4QOax/idOg+FhIeoShmUTV+lxNTycVj
-         Ad0fZQ4sveTpYYp0o8eMtEr9b0iEW6iws7FikWThOO/NsyBXmsZDQ1hifEB1CgfAu98c
-         rMhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Wg60tjtctfZ7oqTIPXWuKb6lWF4Baeks51n8od47Pnw=;
-        b=fxKh/x6u6v2pPFkx+RhsI/NkssQhPIAG2sXBIDOawGpfFlIcH6ZcmoEr9MMo7Tl8PS
-         M9ZaYew7sGJajn/Ym66/ZB+UFV5Qicia/RaSjg27O1BbxFo9u2rc0ng0tc9ac9PXdHIZ
-         6dWM9T+le/0uYkI0IVUI7TaHMkwIpxNBuJQiH/hztSGF6qKZeXNdDJwSLxgZKFYXd1dG
-         Z/M8W+DvYM2pUeJ9XUyrv8pwhlg+I28h+HFPmkWw9JIuZp9hQEqiiijT0vCgS7Twp3vr
-         4QdFjo+SpvIo3JLQY6YDwjHO0uUnAux1N4sIG+kjLtVmzPTDMFCzuGqlJRD4enGXeBua
-         /jfg==
-X-Gm-Message-State: AOAM530S5v0pmTOhqp243tvWZZCGVpOzc8XQr3R7BqLuxEmZYVWZfaLw
-        zX5YbRmEFdn2Qw5wnWCgYraGMJPtcbxJdrkYuLUi2w==
-X-Google-Smtp-Source: ABdhPJw6RY7vKNkQZdXTzjZ53SbW21NoUI5ZzfB0PL8rVbdo6HSI+V7sGQfAGhKgfMuj7WsTMoLKb6qfbQTtxvSHRO0=
-X-Received: by 2002:a17:906:39ce:: with SMTP id i14mr24553978eje.170.1604473978081;
- Tue, 03 Nov 2020 23:12:58 -0800 (PST)
+        id S1728858AbgKDHPD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Nov 2020 02:15:03 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:38512 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727851AbgKDHPC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 02:15:02 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 0A47EubY6006108, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexmb01.realtek.com.tw[172.21.6.94])
+        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 0A47EubY6006108
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 4 Nov 2020 15:14:56 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.36) by
+ RTEXMB01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2044.4; Wed, 4 Nov 2020 15:14:56 +0800
+Received: from RTEXMB04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.36) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Wed, 4 Nov 2020 15:14:55 +0800
+Received: from RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa]) by
+ RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa%3]) with mapi id
+ 15.01.2044.006; Wed, 4 Nov 2020 15:14:55 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     =?utf-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>
+Subject: RE: [PATCH net-next 1/5] r8152: use generic USB macros to define product table
+Thread-Topic: [PATCH net-next 1/5] r8152: use generic USB macros to define
+ product table
+Thread-Index: AQHWshavui7U4I+gmkudpd9bR0wfLqm3NRPA///A5ICAAJWLQA==
+Date:   Wed, 4 Nov 2020 07:14:55 +0000
+Message-ID: <2c5c23b4cbae499e82a307b95685fed1@realtek.com>
+References: <20201103192226.2455-1-kabel@kernel.org>
+        <20201103192226.2455-2-kabel@kernel.org>
+        <b83ddcca96cb40cf8785e6b44f9838e0@realtek.com>
+ <20201104070251.52fe638e@kernel.org>
+In-Reply-To: <20201104070251.52fe638e@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.146]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20201103203348.153465465@linuxfoundation.org>
-In-Reply-To: <20201103203348.153465465@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 4 Nov 2020 12:42:46 +0530
-Message-ID: <CA+G9fYsrppNwC0S4vkrS8jGW4k2fgmbAzy=oMLV6X9=DHkznpw@mail.gmail.com>
-Subject: Re: [PATCH 5.9 000/391] 5.9.4-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de,
-        linux- stable <stable@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 4 Nov 2020 at 02:07, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.9.4 release.
-> There are 391 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 05 Nov 2020 20:29:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.9.4-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-NOTE:
-The kernel warning noticed on arm64 nxp ls2088 device with KASAN config
-enabled while booting the device. We are not considering this as regression
-because this is the first arm64 KASAN config enabled on nxp ls2088 device.
-
-[    3.301882] dwc3 3100000.usb3: Failed to get clk 'ref': -2
-[    3.307433] ------------[ cut here ]------------
-[    3.312048] dwc3 3100000.usb3: request value same as default, ignoring
-[    3.318596] WARNING: CPU: 3 PID: 1 at
-/home/jenkins/ci/lsdk/master/all/packages/linux/linux/drivers/usb/dwc3/core=
-.c:347
-dwc3_core_init+0xd14/0xd70
-[    3.331716] Modules linked in:
-[    3.334766] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 4.19.46 #1
-[    3.340765] Hardware name: Freescale Layerscape 2088A RDB Board (DT)
-[    3.347111] pstate: 40000005 (nZcv daif -PAN -UAO)
-[    3.351895] pc : dwc3_core_init+0xd14/0xd70
-[    3.356070] lr : dwc3_core_init+0xd14/0xd70
-[    3.360243] sp : ffff000008063b00
-[    3.363550] x29: ffff000008063b00 x28: 0000000000000007
-[    3.368855] x27: ffff000009624068 x26: ffff000009532768
-[    3.374160] x25: ffff8082cd5ea1a0 x24: ffff000008f27000
-[    3.379465] x23: ffff8082ef45a410 x22: ffff0000096ca000
-[    3.384770] x21: 0000000000000041 x20: 0000000030c11004
-[    3.390075] x19: ffff8082ef6f9080 x18: ffffffffffffffff
-[    3.395380] x17: 0000000000000000 x16: 0000000000000000
-[    3.400685] x15: ffff0000096ca708 x14: ffff0000898776ff
-[    3.405991] x13: ffff00000987770d x12: ffff0000096ca980
-[    3.411297] x11: ffff000008707260 x10: ffff0000080637d0
-[    3.416603] x9 : 0000000000000016 x8 : 6769202c746c7561
-[    3.421908] x7 : 6665642073612065 x6 : 0000000000000163
-[    3.427213] x5 : 0000000000000000 x4 : 0000000000000000
-[    3.432517] x3 : ffffffffffffffff x2 : ffff0000096e3cf8
-[    3.437823] x1 : 4d579be806451100 x0 : 0000000000000000
-[    3.443129] Call trace:
-[    3.445568]  dwc3_core_init+0xd14/0xd70
-[    3.449395]  dwc3_probe+0x8b0/0xd30
-[    3.452877]  platform_drv_probe+0x50/0xa0
-[    3.456878]  really_probe+0x1b8/0x288
-[    3.460531]  driver_probe_device+0x58/0x100
-[    3.464705]  __driver_attach+0xd4/0xd8
-[    3.468446]  bus_for_each_dev+0x74/0xc8
-[    3.472273]  driver_attach+0x20/0x28
-[    3.475840]  bus_add_driver+0x1ac/0x218
-[    3.479667]  driver_register+0x60/0x110
-[    3.483494]  __platform_driver_register+0x40/0x48
-[    3.488192]  dwc3_driver_init+0x18/0x20
-[    3.492020]  do_one_initcall+0x5c/0x178
-[    3.495848]  kernel_init_freeable+0x198/0x244
-[    3.500197]  kernel_init+0x10/0x108
-[    3.503677]  ret_from_fork+0x10/0x18
-[    3.507245] ---[ end trace 13f260065c84085c ]---
-[    3.512196] dwc3 3110000.usb3: Failed to get clk 'ref': -2
-
-full boot log:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.9.y/build/v5.9.3=
--392-g53574a4c558e/testrun/3391440/suite/linux-log-parser/test/check-kernel=
--warning-121687/log
-
-Summary
-------------------------------------------------------------------------
-
-kernel: 5.9.4-rc1
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
-le-rc.git
-git branch: linux-5.9.y
-git commit: 53574a4c558e8da7cfde86a77fe760ba375394b8
-git describe: v5.9.3-392-g53574a4c558e
-Test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.9.=
-y/build/v5.9.3-392-g53574a4c558e
-
-No regressions (compared to build v5.9.3)
-
-No fixes (compared to build v5.9.3)
-
-Ran 38015 total tests in the following environments and test suites.
-
-Environments
---------------
-- dragonboard-410c
-- hi6220-hikey
-- i386
-- juno-r2
-- juno-r2-compat
-- nxp-ls2088
-- nxp-ls2088-kasan
-- qemu-arm64-kasan
-- qemu-x86_64-kasan
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15
-- x86
-- x86-kasan
-
-Test Suites
------------
-* build
-* install-android-platform-tools-r2600
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-containers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-ipc-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-tracing-tests
-* perf
-* ltp-commands-tests
-* ltp-controllers-tests
-* ltp-dio-tests
-* ltp-io-tests
-* ltp-math-tests
-* ltp-syscalls-tests
-* network-basic-tests
-* v4l2-compliance
-* kselftest
-* ltp-cve-tests
-* ltp-open-posix-tests
-* kvm-unit-tests
-* kunit
-* kselftest-vsyscall-mode-none
-* kselftest-vsyscall-mode-native
-
---=20
-Linaro LKFT
-https://lkft.linaro.org
+TWFyZWsgQmVow7puIDxrYWJlbEBrZXJuZWwub3JnPg0KPiBTZW50OiBXZWRuZXNkYXksIE5vdmVt
+YmVyIDQsIDIwMjAgMjowMyBQTQ0KWy4uLl0gDQo+IEJUVyBIYXllcywgaXMgaXQgcG9zc2libGUg
+Zm9yIG1lIGdhaW5pbmcgYWNjZXNzIHRvIFJlYWx0ZWsNCj4gZG9jdW1lbnRhdGlvbiBmb3IgdGhl
+c2UgY2hpcHMgdW5kZXIgTkRBPyBGb3IgZXhhbXBsZSB2aWEgbXkgZW1wbG95ZXIsDQo+IENaLk5J
+Qz8gSSBjYW4ndCBmaW5kIGFueSBzdWNoIGluZm9ybWF0aW9uIG9uIFJlYWx0ZWsgd2Vic2l0ZS4N
+Cg0KSSBoYXZlIHRvIGFzayBteSBib3NzLg0KTWF5YmUgSSByZXBseSB5b3UgaW4gcHJpdmF0ZSB3
+aGVuIEkgZ2V0IHRoZSBhbnN3ZXIuDQoNCj4gQWxzbyBJIGNvdWxkIG5vdCBkb3dubG9hZCB0aGUg
+ZHJpdmVyIGZyb20gUmVhbHRlaydzIHdlYnNpdGUsIEkgaGFkIHRvDQo+IGZpbmQgaXQgb24gZ2l0
+aHViLiBXaGVuIGNsaWNraW5nIHRoZSBkb3dubG9hZCBidXR0b24gb24gWzFdLCBpdCBzYXlzOg0K
+PiAgIFdhcm5pbmcNCj4gICBUaGUgZm9ybSAjMTAgZG9lcyBub3QgZXhpc3Qgb3IgaXQgaXMgbm90
+IHB1Ymxpc2hlZC4NCg0KSSB0cnkgdG8gZG93bmxvYWQgdGhlIGRyaXZlciBmcm9tIG91ciB3ZWJz
+aXRlLg0KQW5kIGl0IHNlZW0gdG8gd29yayBmaW5lLg0KSSB3aWxsIHNlbmQgaXQgdG8geW91IGxh
+dGVyLg0KDQo+IEJUVzIgSSBhbSBpbnRlcmVzdGVkIHdoZXRoZXIgd2UgY2FuIG1ha2UgdGhlIGlu
+dGVybmFsIFBIWSB2aXNpYmxlIHRvDQo+IHRoZSBMaW51eCBQSFkgc3Vic3lzdGVtLg0KDQpJIHRo
+aW5rIGl0IGlzIHBvc3NpYmxlLg0KSSBhbSBub3QgZmFtaWxpYXIgd2l0aCB0aGUgTGludXggUEhZ
+IHN1YnN5c3RlbSwgc28gSSBoYXZlIG5vIGlkZWEgYWJvdXQNCmhvdyB0byBzdGFydC4NCg0KQmVz
+dCBSZWdhcmRzLA0KSGF5ZXMNCg0KDQoNCg==
