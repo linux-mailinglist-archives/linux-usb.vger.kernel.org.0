@@ -2,73 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AEB2A61B8
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 11:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671CE2A625F
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Nov 2020 11:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729254AbgKDKgA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Nov 2020 05:36:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33012 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728687AbgKDKf7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Nov 2020 05:35:59 -0500
-Received: from localhost (otava-0257.koleje.cuni.cz [78.128.181.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 152E82072C;
-        Wed,  4 Nov 2020 10:35:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604486159;
-        bh=lMavT5+TN1mkhDAI95Bsjm5w5SanrwH1BvQflKDiYjs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=wMIJltXfi18cWfPrnsJWYySAwXdAOMgHeB5c5sCjga8rmaW8mf0pP0GJ2FTQgCnR8
-         xyt6JKN5V9XL7dR0Oa1ZMRu9nzCPQYcM/MSQM1mp+4heT8Fm7wpqmyDZEJYl4S5Ke6
-         EYAD6HRrKz4VpzNyI7UrhTshh78Pim9EY5lN71Ew=
-Date:   Wed, 4 Nov 2020 11:35:45 +0100
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: Re: [PATCH net-next 3/5] r8152: add MCU typed read/write functions
-Message-ID: <20201104113545.0428f3fe@kernel.org>
-In-Reply-To: <20201104112511.78643f6e@kernel.org>
-References: <20201103192226.2455-1-kabel@kernel.org>
-        <20201103192226.2455-4-kabel@kernel.org>
-        <20201103214712.dzwpkj6d5val6536@skbuf>
-        <20201104065524.36a85743@kernel.org>
-        <20201104084710.wr3eq4orjspwqvss@skbuf>
-        <20201104112511.78643f6e@kernel.org>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1729631AbgKDKk5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Nov 2020 05:40:57 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:41697 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729548AbgKDKkz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 05:40:55 -0500
+Received: by mail-lj1-f195.google.com with SMTP id p15so22472204ljj.8
+        for <linux-usb@vger.kernel.org>; Wed, 04 Nov 2020 02:40:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a5lFtAHp3P0yH87RVgYEFAQoEcz/a9/NK/fmMRnbelI=;
+        b=LUFPH1yOawN+p4h2AmMpQ8XfCAZOeV5zVSpO4cpyZMXAJdo0YeFhAya8v6821k5kiq
+         cRfnb3KZUxuCLSwNh5bpnSKAd35ZY7AdbyBlR6YNh9UYwPsVEOcaQ5uEwZBMUkLDeNaB
+         pcl02mcAIIQbAUL3NvC7d4Z0PfLSeAJMomcmvZ4Xv3B+v867Wf6YyRdYQ6YBQlOm4lJT
+         VxcvUrwmBe1GEQDgpouV89dQjZRsp6G7Nt5bmGbeid0h6fs1/WfJOX+48VZpn7Bo695S
+         ifdgqije+V8ZdBkZeKiPbflliOUggFAX/Fh9J8M0pBtTWm2kHi1ZxU8XVW5esVar497a
+         q0Ug==
+X-Gm-Message-State: AOAM531r/Q2xWHzbTbLs6aF2N5ZZbqYGVTdjStllkYk2rNg+cLQQ6bOY
+        giXuY7fdFo27tF7LK3ZxlYI=
+X-Google-Smtp-Source: ABdhPJx3Uk5CkLebNWC7nFQWRpCYG36ISM0mFUXGU7Vms0Z08K9TnvvUxY+aRJpmEZNxh2KLU7juQg==
+X-Received: by 2002:a2e:879a:: with SMTP id n26mr10781528lji.347.1604486453704;
+        Wed, 04 Nov 2020 02:40:53 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id g20sm474777ljn.134.2020.11.04.02.40.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2020 02:40:52 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kaGDo-0003gd-8d; Wed, 04 Nov 2020 11:40:57 +0100
+Date:   Wed, 4 Nov 2020 11:40:56 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Yann Garras <yann.garras@y3s.fr>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: creating of the missings constants
+ for Telit products
+Message-ID: <20201104104056.GV4085@localhost>
+References: <20201030153927.20795-1-yann.garras@y3s.fr>
+ <20201030154431.GM4085@localhost>
+ <CACosQq_fHtfdp9sevpVz4jn0uao1m2S5Lmd_27p3LGbFRwScLw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACosQq_fHtfdp9sevpVz4jn0uao1m2S5Lmd_27p3LGbFRwScLw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Or something like this?
+On Fri, Oct 30, 2020 at 06:22:20PM +0100, Yann Garras wrote:
+> Hi,
+> Thank you for your response.
+> 
+> Personally, I find more valuable to read :
+> { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_LE910C1_EUX,
+> 0xff),
+>          .driver_info = NCTRL(0) | RSVD(3) },
+> 
+> Rather than
+> { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1031, 0xff),
+>          .driver_info = NCTRL(0) | RSVD(3) },
 
-#define DEF_R_FUNC(_t, _r, _r_i, _mcu)				\
-static inline _t _r(struct r8152 *tp, u16 index)		\
-{								\
-	return _r_i(tp, _mcu, index);				\
-}
+Sure, but we try to keep the model name in a comment after the entry.
+That way you get a more compact notation (one line less) and you can
+still find the model name easily.
 
-#define DEF_W_FUNC(_t, _w, _w_i, _mcu)				\
-static inline void _w(struct r8152 *tp, u16 index, _t data)	\
-{								\
-	_w_i(tp, _mcu, index, data);				\
-}
+> But where I agree with you, is to make a choice and apply it.
 
-DEF_R_FUNC(u8, pla_ocp_read_byte, ocp_read_byte, MCU_TYPE_PLA)
-DEF_W_FUNC(u8, pla_ocp_write_byte, ocp_write_byte, MCU_TYPE_PLA)
-DEF_R_FUNC(u16, pla_ocp_read_word, ocp_read_word, MCU_TYPE_PLA)
-DEF_W_FUNC(u16, pla_ocp_write_word, ocp_write_word, MCU_TYPE_PLA)
-DEF_R_FUNC(u32, pla_ocp_read_dword, ocp_read_dword, MCU_TYPE_PLA)
-DEF_W_FUNC(u32, pla_ocp_write_dword, ocp_write_dword, MCU_TYPE_PLA)
+Yeah, the current half-measure isn't optimal.
 
-DEF_R_FUNC(u8, usb_ocp_read_byte, ocp_read_byte, MCU_TYPE_USB)
-DEF_W_FUNC(u8, usb_ocp_write_byte, ocp_write_byte, MCU_TYPE_USB)
-DEF_R_FUNC(u16, usb_ocp_read_word, ocp_read_word, MCU_TYPE_USB)
-DEF_W_FUNC(u16, usb_ocp_write_word, ocp_write_word, MCU_TYPE_USB)
-DEF_R_FUNC(u32, usb_ocp_read_dword, ocp_read_dword, MCU_TYPE_USB)
-DEF_W_FUNC(u32, usb_ocp_write_dword, ocp_write_dword, MCU_TYPE_USB)
+Johan
