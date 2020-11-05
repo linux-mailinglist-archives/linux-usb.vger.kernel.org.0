@@ -2,151 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8A92A7CAC
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 12:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E832A7D19
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 12:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730126AbgKELNG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 06:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729016AbgKELNF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 06:13:05 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5951C0613D2
-        for <linux-usb@vger.kernel.org>; Thu,  5 Nov 2020 03:13:04 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id x13so1226291pfa.9
-        for <linux-usb@vger.kernel.org>; Thu, 05 Nov 2020 03:13:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=BcYYFtNRltYDE4hy/KAkGjdjtprJ1Trm7OKV+MnN8cU=;
-        b=u8YwcS6hVr8BwxXTTAlNESEmEgsS3lF6OTr1XaUbam4I/edC3qndBdjg6Uy8iz2Q4Q
-         hYlNAs1/XTw3soHv/si3tXmCczuo3mNDte6nlbwM878k4WF91kDK1iYVRDtibkoROSKj
-         yjfCZIqB3MO3ncbEJATqL58LXrnls4IqwABwbbGOdNIV9RGTDrMZptXqbnjj+V1N6WqI
-         HBRHng10F8RPuKJ6CJ1uCINPNb6xUgsC8CsubJFIRFcKAf9XUt6Zu0y7tcW3MCJO9JyS
-         huRJpus5BnMDQprBpyeMBR2Zh8O7Sqy9/tsu93YAUw3ok0YtILTEkI4ZmB3ZgeuvMkLC
-         Ze4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BcYYFtNRltYDE4hy/KAkGjdjtprJ1Trm7OKV+MnN8cU=;
-        b=NM9frQgiPd7RIqMm0cMEjXGRcNhqb3g9uYgDY13qd+dR55uPDeQTs25ehqRO3Vy1CI
-         hx+p9QZd4fN0EtBPMACbPoePi0wguZZ/Q33xPZ27fEPLCcjkUlNuPfMfe22Ntpsq9hjS
-         K+3LlvO/xE8//v2zvQIHlaYZ0jtvsqCb+fidLqGLxNoHxpf1A6Y8XuGq4owZ5cAmGh+x
-         BEU8QM1Md3TOBNy9xADHKxoT5yMKCOGqgw/UJKyQJ8YsH51dhJoUWFM8XEgJbgf9Upqh
-         nGXGQ6yOEOCQh8FJtJanV0Lw9TgWdefu0mIq+JhbKma6SjmTu9FzCc4ULhQkkGSd5Ye2
-         jfeA==
-X-Gm-Message-State: AOAM5336o6ZSC5W+3x7P+TN307nii+7NSxZUPAWUpUuKe8BR/+YrpFiY
-        c5UUPNRjx1qZ7hMxhENamjrTGg==
-X-Google-Smtp-Source: ABdhPJwnuuk4daHbZCdYn/aCWQKiS7cX8bO0eWv5v6ODss+cRR8E8lvUDPwS9VwogQBWTDgNXP1wow==
-X-Received: by 2002:a17:90a:e391:: with SMTP id b17mr1925329pjz.209.1604574784247;
-        Thu, 05 Nov 2020 03:13:04 -0800 (PST)
-Received: from localhost ([122.172.12.172])
-        by smtp.gmail.com with ESMTPSA id f204sm2296698pfa.189.2020.11.05.03.13.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Nov 2020 03:13:03 -0800 (PST)
-Date:   Thu, 5 Nov 2020 16:43:01 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        driverdevel <devel@driverdev.osuosl.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-pwm@vger.kernel.org,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
- Tegra20/30 SoCs
-Message-ID: <20201105111301.2hxfx2tnmf2saakp@vireshk-i7>
-References: <20201104234427.26477-1-digetx@gmail.com>
- <CAPDyKFr7qTU2RPhA_ZrbCayoTTNUEno1zdmvmv+8HBe-Owrfeg@mail.gmail.com>
- <20201105100603.skrirm7uke4s2xyl@vireshk-i7>
- <CAPDyKFoCJt5MBSKBJ8n1OAMdVsWHdwXTx0zFEcZw_F_gQ6Ug0w@mail.gmail.com>
- <20201105104009.oo4dc6a2gdcwduhk@vireshk-i7>
- <CAPDyKFpQG98d6foc1U6fp3YEBdZ1vLqY9cmWxpUwXoKgDn+ojQ@mail.gmail.com>
+        id S1730044AbgKELcE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 06:32:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53490 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729898AbgKELa6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Nov 2020 06:30:58 -0500
+Received: from localhost (otava-0257.koleje.cuni.cz [78.128.181.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6C0B32078E;
+        Thu,  5 Nov 2020 11:30:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604575857;
+        bh=Dxd/asuG1ffxD38m+faQ2D4wqGfZEZQQ/iK88SC6Vgw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RuUqKC6ALvHpg5g/xQ+Ff2j1vo5BlQDeHcKnmMHuDGGZXP76xIeJ9k6cXVTXNLYLD
+         9QX0GPbw2eYrNmMAm2KlDegUoCrLdR13v+rmerXMdwylI3ENeYH1OvU3JhHjjq4lGe
+         hkt2hXzrZ8O8onQz8m7gIiJqOilzosJd95iPf+gw=
+Date:   Thu, 5 Nov 2020 12:30:43 +0100
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: Re: [PATCH net-next 3/5] r8152: add MCU typed read/write functions
+Message-ID: <20201105123043.3b114bec@kernel.org>
+In-Reply-To: <20201105105642.pgdxxlytpindj5fq@skbuf>
+References: <20201103192226.2455-4-kabel@kernel.org>
+        <20201103214712.dzwpkj6d5val6536@skbuf>
+        <20201104065524.36a85743@kernel.org>
+        <20201104084710.wr3eq4orjspwqvss@skbuf>
+        <20201104112511.78643f6e@kernel.org>
+        <20201104113545.0428f3fe@kernel.org>
+        <20201104110059.whkku3zlck6spnzj@skbuf>
+        <20201104121053.44fae8c7@kernel.org>
+        <20201104121424.th4v6b3ucjhro5d3@skbuf>
+        <20201105105418.555d6e54@kernel.org>
+        <20201105105642.pgdxxlytpindj5fq@skbuf>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFpQG98d6foc1U6fp3YEBdZ1vLqY9cmWxpUwXoKgDn+ojQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 05-11-20, 11:56, Ulf Hansson wrote:
-> On Thu, 5 Nov 2020 at 11:40, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > Btw, how do we identify if it is a power domain or a regulator ?
+On Thu, 5 Nov 2020 12:56:42 +0200
+Vladimir Oltean <olteanv@gmail.com> wrote:
 
-To be honest, I was a bit afraid and embarrassed to ask this question,
-and was hoping people to make fun of me in return :)
+> On Thu, Nov 05, 2020 at 10:54:18AM +0100, Marek Beh=C3=BAn wrote:
+> > I thought that static inline functions are preferred to macros, since
+> > compiler warns better if they are used incorrectly... =20
+>=20
+> Citation needed.
 
-> Good question. It's not a crystal clear line in between them, I think.
+Just search for substring "instead of macro" in git log, there are
+multiple such changes that were accepted since it provides better
+typechecking. I am not saying it is documented anywhere, just that I
+thought it was preffered.
 
-And I was relieved after reading this :)
+> Also, how do static inline functions wrapped in macros
+> (i.e. your patch) stack up against your claim about better warnings?
 
-> A power domain to me, means that some part of a silicon (a group of
-> controllers or just a single piece, for example) needs some kind of
-> resource (typically a power rail) to be enabled to be functional, to
-> start with.
+If they are defined as functions (they don't have to be inline,
+of course) instead of macros and they are used incorrectly, the compiler
+provides more readable warnings. (Yes, in current versions of gcc it is
+much better than in the past, but still there are more lines of
+warnings printed: "in expansion of macro"...).
 
-Isn't this what a part of regulator does as well ? i.e.
-enabling/disabling of the regulator or power to a group of
-controllers.
 
-Over that the regulator does voltage/current scaling as well, which
-normally the power domains don't do (though we did that in
-performance-state case).
+> I guess ease of maintainership should prevail here, and Hayes should
+> have the final word. I don't really have any stake here.
 
-> If there are operating points involved, that's also a
-> clear indication to me, that it's not a regular regulator.
+Vladimir, your arguments are valid and I accept the reasoning.
+I too can see that the resulting code is a little awkward.
 
-Is there any example of that? I hope by OPP you meant both freq and
-voltage here. I am not sure if I know of a case where a power domain
-handles both of them.
+Marek
 
-> Maybe we should try to specify this more exactly in some
-> documentation, somewhere.
 
-I think yes, it is very much required. And in absence of that I think,
-many (or most) of the platforms that also need to scale the voltage
-would have modeled their hardware as a regulator and not a PM domain.
-
-What I always thought was:
-
-- Module that can just enable/disable power to a block of SoC is a
-  power domain.
-
-- Module that can enable/disable as well as scale voltage is a
-  regulator.
-
-And so I thought that this patchset has done the right thing. This
-changed a bit with the qcom stuff where the IP to be configured was in
-control of RPM and not Linux and so we couldn't add it as a regulator.
-If it was controlled by Linux, it would have been a regulator in
-kernel for sure :)
-
--- 
-viresh
