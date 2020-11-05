@@ -2,200 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2109E2A7D36
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 12:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309CE2A7D33
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 12:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730564AbgKELhV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 06:37:21 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:36356 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729113AbgKELhS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 06:37:18 -0500
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A5BS4XO013965;
-        Thu, 5 Nov 2020 12:36:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=GD9jEceIxlMsIrgJmQF6VGJY1YfRz3aoD8368VuZnoM=;
- b=aEHtkTEVxB9ySM+wZiu9wxj8eiN+VELZNqQ7EXfUyJnIY5RLvWXsO5Z3PZRf//3squ5n
- 5oB8oxkAAIyjcECxQRaJbfSjUZEhq7Vyp3OfYJeWH70npb2tUsO8qBxkK4ng6wDsbZL2
- U6gvLDFleoNUQGEOoLk3XTzIo3j3Kcm+F0EeHKDHDerk6N2kopB1E5kdKVoO91FoKJSD
- Q5I9spqpggH0GmFKE//xyx/2Z0ApUeD1CbUsU7dYfFZLJw7F88bRixIuDrDoEn397IFw
- WkEQruy7/DBPaXpf03zn4sN+060M7XlVqM2loEtoIj3luiXn7noA4QMtOJibNLFgWLiV 6w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34h00enp2j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Nov 2020 12:36:49 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A48E910002A;
-        Thu,  5 Nov 2020 12:36:48 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 88BA5244C1C;
-        Thu,  5 Nov 2020 12:36:48 +0100 (CET)
-Received: from lmecxl0995.lme.st.com (10.75.127.46) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 5 Nov
- 2020 12:36:47 +0100
-Subject: Re: [RESEND PATCH v3 1/4] dt-bindings: connector: add power-opmode
- optional property to usb-connector
-To:     Rob Herring <robh@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Jun Li <lijun.kernel@gmail.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-References: <20201029095806.10648-1-amelie.delaunay@st.com>
- <20201029095806.10648-2-amelie.delaunay@st.com>
- <20201029154016.GA1917373@bogus>
- <860d5620-4fdf-6e01-9a04-3967d6fcfd6b@st.com>
- <CAL_JsqKs-Po8BdShjQNDNPjNWBCD3FSPdq4KbQGx3=VnV+3nPw@mail.gmail.com>
- <ebccf61a-c88f-c7f4-9f06-01d2bd1f43de@st.com>
- <20201104210803.GA4115079@bogus>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <2da804ff-3b3c-0ea9-14d5-a163b28ccc33@st.com>
-Date:   Thu, 5 Nov 2020 12:36:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1730525AbgKELhS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 06:37:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55408 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726996AbgKELhR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Nov 2020 06:37:17 -0500
+Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4E8B220A8B;
+        Thu,  5 Nov 2020 11:37:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604576235;
+        bh=pBp+PSOlqYChMbjW9M+N2OTIL46RqNqDn9FBuRaY9bU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Y+576v7iNcj4kMvB35eysruJOQdkR348xg5HcGVS+tQDPuC9XKkqsXpLQUoSBhsun
+         PdAvNWVMFWx4IIPB7wYaRk99EriNFgiEuUwNa8mObtwaUATKqOvyTaoveviaTkGLLa
+         IatMWOcPLeZ+E44kK/jPZYO+06UVwDVNk7wBFM2A=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] xhci-pci: Allow host runtime PM as default for Intel
+ Maple Ridge xHCI
+In-Reply-To: <20201105110031.8691-1-mika.westerberg@linux.intel.com>
+References: <20201105110031.8691-1-mika.westerberg@linux.intel.com>
+Date:   Thu, 05 Nov 2020 13:37:10 +0200
+Message-ID: <87imakqbkp.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20201104210803.GA4115079@bogus>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG3NODE3.st.com (10.75.127.9) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-05_07:2020-11-05,2020-11-05 signatures=0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/4/20 10:08 PM, Rob Herring wrote:
-> On Fri, Oct 30, 2020 at 04:27:14PM +0100, Amelie DELAUNAY wrote:
->>
->>
->> On 10/30/20 3:29 PM, Rob Herring wrote:
->>> On Thu, Oct 29, 2020 at 11:49 AM Amelie DELAUNAY <amelie.delaunay@st.com> wrote:
->>>>
->>>>
->>>>
->>>> On 10/29/20 4:40 PM, Rob Herring wrote:
->>>>> On Thu, Oct 29, 2020 at 10:58:03AM +0100, Amelie Delaunay wrote:
->>>>>> Power operation mode may depends on hardware design, so, add the optional
->>>>>> property power-opmode for usb-c connector to select the power operation
->>>>>> mode capability.
->>>>>>
->>>>>> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
->>>>>> ---
->>>>>>     .../bindings/connector/usb-connector.yaml      | 18 ++++++++++++++++++
->>>>>>     1 file changed, 18 insertions(+)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>>>>> index 728f82db073d..200d19c60fd5 100644
->>>>>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->>>>>> @@ -93,6 +93,24 @@ properties:
->>>>>>           - device
->>>>>>           - dual
->>>>>>
->>>>>> +  power-opmode:
->>>>>
->>>>> I've acked this version:
->>>>>
->>>>> https://lore.kernel.org/r/20201020093627.256885-2-badhri@google.com
->>>>>
->>>>
->>>> frs is used for Fast Role Swap defined in USB PD spec.
->>>> I understand it allows to get the same information but I'm wondering why
->>>> the property name is limited to -frs- in this case. What about a
->>>> non-power delivery USB-C connector ?
->>>
->>> I've got no idea. The folks that know USB-C and PD details need to get
->>> together and work all this out. To me, it looks like the same thing...
->>>
->>
->> It looks but...
->>
->> The purpose of power-opmode property is to configure the USB-C controllers,
->> especially the non-PD USB-C controllers to determine the power operation
->> mode that the Type C connector will support and will advertise through CC
->> pins when it has no power delivery support, whatever the power role: Sink,
->> Source or Dual
->> The management of the property is the same that data-role and power-role
->> properties, and done by USB Type-C Connector Class.
->>
->> new-source-frs-typec-current specifies initial current capability of the new
->> source when vSafe5V is applied during PD3.0 Fast Role Swap. So here, this
->> property is not applied at usb-c controller configuration level, but during
->> PD Fast Role Swap, so when the Sink become the Source.
->> Moreover, the related driver code says FRS can only be supported by DRP
->> ports. So new-source-frs-typec-current property, in addition to being
->> specific to PD, is also dedicated to DRP usb-c controller.
->> The property is managed by Type-C Port Controller Manager for PD.
-> 
-> But it's the same set of possible values, right? So we can align the
-> values at least.
-> 
 
-USB Power Delivery FRS values are defined in 
-include/dt-bindings/usb/pd.h to fit with drivers/usb/typec/tcpm/tcpm.c 
-frs_typec_current enum.
+Hi,
 
-USB-C power operation mode values are defined in 
-include/linux/usb/typec.h with typec_pwr_opmode enum and matching with 
-string values of typec_pwr_opmodes tab.
+Mika Westerberg <mika.westerberg@linux.intel.com> writes:
+> Intel Maple Ridge is successor of Titan Ridge Thunderbolt controller. As
+> Titan Ridge this one also includes xHCI host controller. In order to
+> safe energy we should put it to low power state by default when idle.
+  ^^^^
+  save
 
-USB PD requires USB-C.
-USB-C doesn't requires USB PD.
+> For this reason allow host runtime PM for Maple Ridge.
+>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+>  drivers/usb/host/xhci-pci.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index bf89172c43ca..d17e463087df 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -55,6 +55,7 @@
+>  #define PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI		0x8a13
+>  #define PCI_DEVICE_ID_INTEL_CML_XHCI			0xa3af
+>  #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
+> +#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
+>  
+>  #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+>  #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
+> @@ -238,7 +239,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>  	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI ||
+>  	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
+>  	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
+> -	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI))
+> +	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
+> +	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI))
+>  		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
 
-drivers/usb/typec/tcpm/tcpm.c already used typec_pwr_opmode values.
+the ever growing list of quirks to *allow* PM :-) Perhaps the logic
+should be inverted here and call a quirk to something that *can't*
+handle PM?
 
-USB PD specification Table 6-14 Fixed Supply PDO says:
-Fast Role Swap required USB Type-C Current (see also [USB Type-C 2.0]):
-Value | Description
-  00b  | Fast Swap not supported (default)
-  01b  | Default USB Power
-  10b  | 1.5A @ 5V
-  11b  | 3.0A @ 5V
-
-Note the *see also USB Type-C 2.0*.
-
-USB Type-C specification 4.6.2.1 USB Type-C Current says:
-The USB Type-C connector uses CC pins for configuration including an 
-ability for a Source to advertise to its port partner (Sink) the amount 
-of current it shall supply:
-• Default is the as-configured for high-power operation current value as 
-defined by the USB Specification (500 mA for USB 2.0 ports; 900 mA or 
-1,500 mA for USB 3.2 ports in single-lane or dual-lane operation, 
-respectively)
-• 1.5 A
-• 3.0 A
-
-> Can we align the names in some way? power-opmode and frs-source-opmode
-> or ??
-> 
-
-I let USB PD specialists answer.
-
-*frs* property fits with USB PD specification, so with USB PD protocol.
-*power-opmode fits with USB Type-C specification, so with USB-C hardware 
-support.
-
-> Are these 2 properties mutually exclusive? If so, that should be
-> captured.
-
-FRS is specific to products with Power Delivery Support.
-
-power-opmode is dedicated to products with USB-C connector support.
-
-Regards,
-Amelie
+-- 
+balbi
