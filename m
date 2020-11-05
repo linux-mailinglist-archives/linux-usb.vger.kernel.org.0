@@ -2,69 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840532A75FE
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 04:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDB92A7710
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 06:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388554AbgKEDNr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Nov 2020 22:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730888AbgKEDNr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Nov 2020 22:13:47 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A07C0613CF;
-        Wed,  4 Nov 2020 19:13:46 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id z24so284318pgk.3;
-        Wed, 04 Nov 2020 19:13:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=7ZW/P8m/wP7Uq6FxGtIgAnrwS9HoTp1U2UA8xNrpeMU=;
-        b=qSCIofcCq5WwkXfT/ybpYb8vJOnPqU8q1XIe2O5ujGVskta3/MYQVo8M77n4MNGe27
-         uK6XeyQYaGOg1BMZJ2Fk1/XpfsFJMJ02mI9Vq1LkPYbLJDs0BhEcM/lB54+xR8+SOhJS
-         BcgFHLU8fzExvfks6LJGwJt86nn/SxEsg1WswqkNnSXVyOM9rznppYMNw0f1W3W+lsem
-         nPc+nwgO36MRwroD7aPQ74qqP8KqkleaPvgFlUji/yd0CTL1TrtCyTuQulIfCXawguKF
-         MqqF9T/VhbcqwWAc+1aMvYAtQRMwkBL9MtXdXlf3YwHjcTWscxXS2eNnpQ+1uHUc6ffX
-         UyXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=7ZW/P8m/wP7Uq6FxGtIgAnrwS9HoTp1U2UA8xNrpeMU=;
-        b=pMDDd6eqvy5h7DSEkQUgv3ZQtI7NQ1pWFUArbLngigEXkykhAumPyW4e9AnC9vCUZc
-         e4K7CYpq3nHKJFFbVBgppQ5OaJmYQowia5inb1x2NzDVLAY7viXPTx5zbbzb11d6PTel
-         A+mH9uUYTUXG1N5f51ML2XwClnRS1zeM3Nm+kfCiO9mE32F9ItdOIpD8X8zGXMWQKz4H
-         l4Vhr4XQXU0eXr5fNW71RTVWZ6xHiXgpWAO4yFtoBuvOwIbcFh+56N0q4ea1DWRcnlxb
-         FMjNzfPtvpdwq3fjXQqj5zIGPz+ibHS6NdvvkzBqjlLRh7RFNZlTpFeF2ryN/s+rDm6L
-         /4fA==
-X-Gm-Message-State: AOAM530SkiA8Kus53wqV5wWZ/5oNY1CaB347mVt2jFR9lMlyfpJwFMc7
-        WvARlKG31of+gkmBBsuGrDr6YRjQZkNn3tbPrJk=
-X-Google-Smtp-Source: ABdhPJyazpFcx7YIHd6w7bQyqP4NCdpcBn45WCXeadNspdIsXCewqr56fOv4ynTvXTuCdJIVo4n5Xg==
-X-Received: by 2002:a17:90b:ec9:: with SMTP id gz9mr284993pjb.105.1604546025413;
-        Wed, 04 Nov 2020 19:13:45 -0800 (PST)
-Received: from [192.168.0.104] ([49.207.201.182])
-        by smtp.gmail.com with ESMTPSA id s6sm315164pfh.9.2020.11.04.19.13.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Nov 2020 19:13:44 -0800 (PST)
-Subject: Re: [PATCH v3 net-next 07/21] net: usb: aqc111: Add support for
- getting and setting of MAC address
-To:     Igor Russkikh <Igor.Russkikh@aquantia.com>
+        id S1726996AbgKEF3s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 00:29:48 -0500
+Received: from z5.mailgun.us ([104.130.96.5]:59425 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726307AbgKEF3s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Nov 2020 00:29:48 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1604554186; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=7Fgplp/vGedVzY7LkgXnQph8/xJaGqTQde+yVz6mUJc=; b=fTWthj3La94fL2zB2/z5ZZUd2f4TsuwmsovoQuxu4B5fvQ19MYI4TbLDnkoTM+mX6mZDF4U7
+ NGEP/s98IlR/nKHzMtjFkPwVAAsZiu95WKEnB7OhtQ0EcrEyV6d0IZmbKimG04/4Wsj7wtSq
+ 5Z8z27lG8grhq9k3U25iSfNmhO0=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 5fa38dc846e8885ab887edaa (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 05 Nov 2020 05:29:44
+ GMT
+Sender: sallenki=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 1392AC433CB; Thu,  5 Nov 2020 05:29:44 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [192.168.0.105] (unknown [103.110.145.22])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sallenki)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 564BCC433C6;
+        Thu,  5 Nov 2020 05:29:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 564BCC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sallenki@codeaurora.org
+Subject: Re: strange call stack when running uvc-gadget application
+To:     Peter Chen <peter.chen@nxp.com>
 Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        Dmitry Bezrukov <Dmitry.Bezrukov@aquantia.com>
-References: <cover.1542794577.git.igor.russkikh@aquantia.com>
- <8f92711d8479a3df65849e60fd92c727e1e1f78a.1542794577.git.igor.russkikh@aquantia.com>
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Message-ID: <7a866553-1333-4952-5fe6-45336235ebb2@gmail.com>
-Date:   Thu, 5 Nov 2020 08:43:40 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>
+References: <20201102094936.GA29581@b29397-desktop>
+ <af78c723-0836-95aa-80fe-a914d708eeb6@codeaurora.org>
+ <20201104100511.GA16946@b29397-desktop>
+From:   Sriharsha Allenki <sallenki@codeaurora.org>
+Message-ID: <51accf3a-6fe8-4d3d-2773-7d0756dab806@codeaurora.org>
+Date:   Thu, 5 Nov 2020 10:59:39 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <8f92711d8479a3df65849e60fd92c727e1e1f78a.1542794577.git.igor.russkikh@aquantia.com>
+In-Reply-To: <20201104100511.GA16946@b29397-desktop>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -72,144 +64,107 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Peter,
 
-I only recently browsed through the code, and had some queries regarding
-the changes introduced by this commit.
-
-On 21/11/18 3:43 pm, Igor Russkikh wrote:
-> From: Dmitry Bezrukov <dmitry.bezrukov@aquantia.com>
+On 11/4/2020 3:35 PM, Peter Chen wrote:
+> On 20-11-03 11:50:17, Sriharsha Allenki wrote:
+>> Hi Peter,
+>>
+>> On 11/2/2020 3:20 PM, Peter Chen wrote:
+>>> Hi all,
+>>>
+>>> When running run uvc-gadget application at HS using dwc3 gadget at Linux
+>>> v5.10-rc1, the video stream will be stopped after 1-2 minutes running. The
+>>> trace log like below, I wonder how _raw_spin_lock_irqsave calls __switch_to?
+>>> Any hints? Thanks.
+>>>
+>>> usb_test# [ 4757.322728] configfs-gadget gadget: uvc: VS request completed with status -18.
+>>> [ 4757.329971] configfs-gadget gadget: uvc: VS request completed with status -18.
+>>> UVC: Possible USB shutdown requested from Host, seen during VIDIOC_DQBUF
+>>>
+>>> usb_test# [ 4812.376465] check_interval: 37 callbacks suppressed
+>>> [ 4825.307665] configfs-gadget gadget: uvc: VS request completed with status -18.
+>>> [ 4825.314912] configfs-gadget gadget: uvc: VS request completed with status -18.
+>>> UVC: Possible USB shutdown requested from Host, seen during VIDIOC_DQBUF
+>>> [ 4826.231392] check_interval: 3 callbacks suppressed
+>>> select timeout
+>>> [ 4827.336088] dwc3 38100000.dwc3: request 0000000080ebefd3 was not queued to ep2in
+>>> [ 4827.343547] dwc3 38100000.dwc3: request 00000000b578605c was not queued to ep2in
+>>> [ 4827.350989] dwc3 38100000.dwc3: request 00000000c6d191cd was not queued to ep2in
+>>> [ 4827.358422] dwc3 38100000.dwc3: request 0000000085205409 was not queued to ep2in
+>>> UVC: Stopping video stream.
+>>>
+>>> [ 4848.381718] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+>>> [ 4848.387824] rcu:     3-...0: (1 GPs behind) idle=162/1/0x4000000000000000 softirq=10819/10819 fqs=2356
+>>> [ 4848.396956]  (detected by 2, t=5252 jiffies, g=20129, q=3770)
+>>> [ 4848.396959] Task dump for CPU 3:
+>>> [ 4848.405925] task:uvc-gadget_wlhe state:R  running task     stack:    0 pid:  674 ppid:   636 flags:0x00000202
+>>> [ 4848.415842] Call trace:
+>>> [ 4848.418294]  __switch_to+0xc0/0x170
+>>> [ 4848.421785]  _raw_spin_lock_irqsave+0x84/0xb0
+>>> [ 4848.426143]  composite_disconnect+0x28/0x78
+>>> [ 4848.430327]  configfs_composite_disconnect+0x68/0x70
+>>> [ 4848.435290]  usb_gadget_disconnect+0x10c/0x128
+>>> [ 4848.439733]  usb_gadget_deactivate+0xd4/0x108
+>>> [ 4848.444089]  usb_function_deactivate+0x6c/0x80
+>>> [ 4848.448534]  uvc_function_disconnect+0x20/0x58
+>>> [ 4848.452976]  uvc_v4l2_release+0x30/0x88
+>>> [ 4848.456812]  v4l2_release+0xbc/0xf0
+>>> [ 4848.460301]  __fput+0x7c/0x230
+>>> [ 4848.463353]  ____fput+0x14/0x20
+>>> [ 4848.466495]  task_work_run+0x88/0x140
+>>> [ 4848.470157]  do_notify_resume+0x240/0x6f0
+>>> [ 4848.474166]  work_pending+0x8/0x200
+>> The reason for this seems to be that the usb_gadget_deactivate is being called with
+>> spinlock held from the usb_function_deactivate and the same lock is being used
+>> in the composite_disconnect (&cdev->lock).
+>>
+>> This should be able to resolve it.
+>>
+>> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+>> index 05b176c82cc5..5fced737e4ef 100644
+>> --- a/drivers/usb/gadget/composite.c
+>> +++ b/drivers/usb/gadget/composite.c
+>> @@ -392,8 +392,11 @@ int usb_function_deactivate(struct usb_function *function)
+>>
+>>         spin_lock_irqsave(&cdev->lock, flags);
+>>
+>> -       if (cdev->deactivations == 0)
+>> +       if (cdev->deactivations == 0) {
+>> +               spin_unlock_irqrestore(&cdev->lock, flags);
+>>                 status = usb_gadget_deactivate(cdev->gadget);
+>> +               spin_lock_irqsave(&cdev->lock, flags);
+>> +       }
+>>         if (status == 0)
+>>                 cdev->deactivations++;
+>>
+>> @@ -424,8 +427,11 @@ int usb_function_activate(struct usb_function *function)
+>>                 status = -EINVAL;
+>>         else {
+>>                 cdev->deactivations--;
+>> -               if (cdev->deactivations == 0)
+>> +               if (cdev->deactivations == 0) {
+>> +                       spin_unlock_irqrestore(&cdev->lock, flags);
+>>                         status = usb_gadget_activate(cdev->gadget);
+>> +                       spin_lock_irqsave(&cdev->lock, flags);
+>> +               }
+>>         }
+>>
+>>         spin_unlock_irqrestore(&cdev->lock, flags);
+>>
+> Thanks, Sriharsha. It fixed the kernel dump after video stream has
+> stopped, I did not check the whole trace carefully, and not found this
+> spin recursion issue. You could add my Tested-by for it. Meanwhile,
+> this issue was reported before, and unlock at usb_function_activate
+> could also fix the possible sleep at atomic context issue for dwc3.
 >
-> Signed-off-by: Dmitry Bezrukov <dmitry.bezrukov@aquantia.com>
-> Signed-off-by: Igor Russkikh <igor.russkikh@aquantia.com>
-> ---
->  drivers/net/usb/aqc111.c | 47 ++++++++++++++++++++++++++++++++++++++++
->  drivers/net/usb/aqc111.h |  1 +
->  2 files changed, 48 insertions(+)
+> https://lore.kernel.org/linux-usb/20191115070122.GF30608@b29397-desktop/T/
+Thanks for the testing and confirmation, will raise the patch soon.
+
+Regards,
+Sriharsha
 >
-> diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
-> index e33be16b506c..390ed6cbc3fd 100644
-> --- a/drivers/net/usb/aqc111.c
-> +++ b/drivers/net/usb/aqc111.c
-> @@ -11,6 +11,7 @@
->  #include <linux/netdevice.h>
->  #include <linux/mii.h>
->  #include <linux/usb.h>
-> +#include <linux/if_vlan.h>
->  #include <linux/usb/cdc.h>
->  #include <linux/usb/usbnet.h>
->  
-> @@ -204,11 +205,43 @@ static void aqc111_set_phy_speed(struct usbnet *dev, u8 autoneg, u16 speed)
->  	aqc111_write32_cmd(dev, AQ_PHY_OPS, 0, 0, &aqc111_data->phy_cfg);
->  }
->  
-> +static int aqc111_set_mac_addr(struct net_device *net, void *p)
-> +{
-> +	struct usbnet *dev = netdev_priv(net);
-> +	int ret = 0;
-> +
-> +	ret = eth_mac_addr(net, p);
-> +	if (ret < 0)
-> +		return ret;
-> +
-
-When eth_mac_addr() fails, from what I can see, it returns either -EBUSY, or
--EADDRNOTAVAIL.
-Wouldn't it be a better idea to set a random MAC address instead, when
--EADDRNOTAVAIL is returned, so that the interface still comes up and is
-usable?
-
-I'm only asking because this feels similar to the discussion that can be found here.
-    https://lkml.org/lkml/2020/10/2/305
-
-> +	/* Set the MAC address */
-> +	return aqc111_write_cmd(dev, AQ_ACCESS_MAC, SFR_NODE_ID, ETH_ALEN,
-> +				ETH_ALEN, net->dev_addr);
-> +}
-> +
->  static const struct net_device_ops aqc111_netdev_ops = {
->  	.ndo_open		= usbnet_open,
->  	.ndo_stop		= usbnet_stop,
-> +	.ndo_set_mac_address	= aqc111_set_mac_addr,
-> +	.ndo_validate_addr	= eth_validate_addr,
->  };
->  
-> +static int aqc111_read_perm_mac(struct usbnet *dev)
-> +{
-> +	u8 buf[ETH_ALEN];
-> +	int ret;
-> +
-> +	ret = aqc111_read_cmd(dev, AQ_FLASH_PARAMETERS, 0, 0, ETH_ALEN, buf);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	ether_addr_copy(dev->net->perm_addr, buf);
-> +
-> +	return 0;
-> +out:
-> +	return ret;
-> +}
-> +
->  static void aqc111_read_fw_version(struct usbnet *dev,
->  				   struct aqc111_data *aqc111_data)
->  {
-> @@ -251,6 +284,12 @@ static int aqc111_bind(struct usbnet *dev, struct usb_interface *intf)
->  	/* store aqc111_data pointer in device data field */
->  	dev->driver_priv = aqc111_data;
->  
-> +	/* Init the MAC address */
-> +	ret = aqc111_read_perm_mac(dev);
-> +	if (ret)
-> +		goto out;
-> +
-> +	ether_addr_copy(dev->net->dev_addr, dev->net->perm_addr);
->  	dev->net->netdev_ops = &aqc111_netdev_ops;
->  
->  	aqc111_read_fw_version(dev, aqc111_data);
-> @@ -259,6 +298,10 @@ static int aqc111_bind(struct usbnet *dev, struct usb_interface *intf)
->  					 SPEED_5000 : SPEED_1000;
->  
->  	return 0;
-> +
-> +out:
-> +	kfree(aqc111_data);
-> +	return ret;
->  }
->  
->  static void aqc111_unbind(struct usbnet *dev, struct usb_interface *intf)
-> @@ -467,6 +510,10 @@ static int aqc111_reset(struct usbnet *dev)
->  	aqc111_write32_cmd(dev, AQ_PHY_OPS, 0, 0,
->  			   &aqc111_data->phy_cfg);
->  
-> +	/* Set the MAC address */
-> +	aqc111_write_cmd(dev, AQ_ACCESS_MAC, SFR_NODE_ID, ETH_ALEN,
-> +			 ETH_ALEN, dev->net->dev_addr);
-> +
-
-There's a chance that aqc111_write_cmd() can end up writing only a
-part of the required amount of data too.
-Wouldn't it be a better idea to enforce a sanity check here, and set a
-random mac address instead if this write fails?
-
->  	reg8 = 0xFF;
->  	aqc111_write_cmd(dev, AQ_ACCESS_MAC, SFR_BM_INT_MASK, 1, 1, &reg8);
->  
-> diff --git a/drivers/net/usb/aqc111.h b/drivers/net/usb/aqc111.h
-> index f3b45d8ca4e3..0c8e1ee29893 100644
-> --- a/drivers/net/usb/aqc111.h
-> +++ b/drivers/net/usb/aqc111.h
-> @@ -11,6 +11,7 @@
->  #define __LINUX_USBNET_AQC111_H
->  
->  #define AQ_ACCESS_MAC			0x01
-> +#define AQ_FLASH_PARAMETERS		0x20
->  #define AQ_PHY_POWER			0x31
->  #define AQ_PHY_OPS			0x61
->
-
-If any of these changes sound like a good idea, I'd be happy to write a
-patch implementing them. :)
-
-Thanks,
-Anant
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
