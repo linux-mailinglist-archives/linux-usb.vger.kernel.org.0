@@ -2,101 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 120762A792B
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 09:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E0D2A7AEB
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 10:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726371AbgKEIZj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 03:25:39 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:41060 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725287AbgKEIZi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 03:25:38 -0500
-Received: by mail-lj1-f194.google.com with SMTP id p15so636520ljj.8;
-        Thu, 05 Nov 2020 00:25:37 -0800 (PST)
+        id S1726844AbgKEJqB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 04:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726067AbgKEJqB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 04:46:01 -0500
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DB0C061A4A
+        for <linux-usb@vger.kernel.org>; Thu,  5 Nov 2020 01:46:00 -0800 (PST)
+Received: by mail-ua1-x941.google.com with SMTP id y1so326984uac.13
+        for <linux-usb@vger.kernel.org>; Thu, 05 Nov 2020 01:46:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BPeVC0/yyKKsuDCRa2ABd9prVUPUc34ioExCTRmKEHc=;
+        b=uufJzy4G7ts1PiE/L3wJVNCw2wP3NSOmawqIi/e2dVMD4Xd21IBA/Vm2yEuo3NRkIO
+         5RTFPkxoUZgZvRGL3uCJhgSw/HE6fmf+IDx190dCfUqR+JPH8zXGsd6gelceLKdsJg6T
+         W9tmGvZtl0GRilR/Tesuwpo7+anWJCeo6NBiNViKTK2V8/GqdsDZTq11ps7gJlbfeY+i
+         pSoDKrE7a3V1srakOPqPG22Jy7SHWsEgoGIWEGTN0Htlxp1Nhn/YPfKpypwxo8uOWeve
+         gx03c3qbD5se6hfduEKaO+xHmrhlxJQp6xOVJi1NkwG4/qLyzw5ZIE/FCeeFdhAUNOiH
+         Ddqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ain3gng+tyhVNHLNuknbnfu4ui30IIf5sYIECi8yy8k=;
-        b=l+iag1Dn6afPJEZP0foFnX4mR45OhmUmETKb7gRPtw2r32GoBO4+vm522UIVjZHuVo
-         e44s8yEWQY4m/Wb9qxj10XBH8kJAQoxjILmnGJtIe9S3oT3qco4P8s/Z/Qk4P8EbFE79
-         hI/EAn9ICLBzhvCaGq9XZkLCPGEKw9WFTMhWLOj76KBON4tkqTqZQfmBz5eE+/bqWZoB
-         grscl+1HTGEM1fYgyWk0nQXmCrGejkE2TPeCdAwSoEclvptg6PT7vMfUib9I7uidKumN
-         GU/p9/aei8Ycq0sEqAgJ5f7kIz8mWf4kvjafkdSUL18ncByLoCtDuVsAF6pKju6c0AFB
-         dOGw==
-X-Gm-Message-State: AOAM5336nDUvFgULRx/orXSyAmFsa082bHDvqj9WXuaYwrPQsfYJGget
-        4Qg6uHCLJEdnsuuRfMu3uNQ=
-X-Google-Smtp-Source: ABdhPJwWQ+e6VFM217MSlVWkWBDWax6l3MPGXynbC0p4Iv0KA9VQCiTnv9HtDKAeK9MQy/vBFLe2gw==
-X-Received: by 2002:a2e:b532:: with SMTP id z18mr477696ljm.449.1604564736916;
-        Thu, 05 Nov 2020 00:25:36 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id g20sm83194ljn.134.2020.11.05.00.25.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2020 00:25:36 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kaaaS-0001pB-BO; Thu, 05 Nov 2020 09:25:41 +0100
-Date:   Thu, 5 Nov 2020 09:25:40 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Davidlohr Bueso <dbueso@suse.de>
-Subject: Re: [PATCH] usb/mos7720: process deferred urbs in a workqueue
-Message-ID: <20201105082540.GA4085@localhost>
-References: <20201102211450.5722-1-dave@stgolabs.net>
- <20201103204014.3ue37owcras6cx7p@linux-p48b.lan>
- <20201104110657.GW4085@localhost>
- <20201104162534.GY4085@localhost>
- <20201105001307.lelve65nif344cfs@linux-p48b.lan>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BPeVC0/yyKKsuDCRa2ABd9prVUPUc34ioExCTRmKEHc=;
+        b=lKSL4fyVSyChmIa5wutERe/zjwCn86D665eVkQZbhdz+s6RLO9pARRZIoVdi6CRnWE
+         yUTMofkha060k9ivJDLOQ4EzqRmbnJYE1C6o4CM0aj8CBUOhhv/nWK7H6jTPNwzkDG9h
+         4Da5JgHwezd1A6oxart5DnQnHZnughz0PGnbd4c8kYAHl8IpW2Z7LdBz3yIfZyvipBQP
+         prEQk+2wYlNnR25uTVgebnMX2OOJv1mJkhiuobk/etwKK+CkAZ7eDNw+A91GPS3Y15VX
+         2ie7bONNYrCGikWmklQUXplniHtIqU4wBWpN8oB4s+51Ct6Ojm9ZYB5u+ciTAVWx8+st
+         MeAw==
+X-Gm-Message-State: AOAM5309ZSbxXgTzeqPpr51/dRPb5bI09D01SlAJsMT61tPAUlu0l81C
+        OpvRknp9ac7a9eJoly2BaFmmBQGykeLOgyDT7B+gKg==
+X-Google-Smtp-Source: ABdhPJyQXmDq3VGXwDr0haDHSXpl4JtWo+uo7sQGY6XWLUZgE6Tj9Jyk5i5lU0labVUxd8mL5Fh6Hi6T+EuKK3uFWNY=
+X-Received: by 2002:ab0:23d5:: with SMTP id c21mr548021uan.129.1604569559528;
+ Thu, 05 Nov 2020 01:45:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201105001307.lelve65nif344cfs@linux-p48b.lan>
+References: <20201104234427.26477-1-digetx@gmail.com>
+In-Reply-To: <20201104234427.26477-1-digetx@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 5 Nov 2020 10:45:23 +0100
+Message-ID: <CAPDyKFr7qTU2RPhA_ZrbCayoTTNUEno1zdmvmv+8HBe-Owrfeg@mail.gmail.com>
+Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
+ Tegra20/30 SoCs
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        driverdevel <devel@driverdev.osuosl.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-pwm@vger.kernel.org,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 04, 2020 at 04:13:07PM -0800, Davidlohr Bueso wrote:
-> On Wed, 04 Nov 2020, Johan Hovold wrote:
-> 
-> >Hmm. I took at closer look at the parport code and it seems the current
-> >implementation is already racy but that removing the tasklet is going to
-> >widen that that window.
-> >
-> >Those register writes in restore() should be submitted before any
-> >later requests. Perhaps setting a flag and flushing the work in
-> >parport_prologue() could work?
-> 
-> Ah, I see and agree. Considering work is only deferred from restore_state()
-> I don't even think we need a flag, no? We can let parport_prologue()
-> just flush_work() unconditionally (right before taking the disc_mutex)
-> which for the most part will be idle anyway. The flush_work() also becomes
-> saner now that we'll stop rescheduling work in send_deferred_urbs().
++ Viresh
 
-A flag isn't strictly needed, no, but it could be used to avoid some of
-the flush_work() overhead for every parport callback. The restore-state
-work will typically only be queued once.
- 
-> Also, but not strictly related to this. What do you think of deferring all
-> work in write_parport_reg_nonblock() unconditionally? I'd like to avoid
-> that mutex_trylock() because eventually I'll be re-adding a warn in the
-> locking code, but that would also simplify the code done here in the
-> nonblocking irq write. I'm not at all familiar with parport, but I would
-> think that restore_state context would not care.
+On Thu, 5 Nov 2020 at 00:44, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> Introduce core voltage scaling for NVIDIA Tegra20/30 SoCs, which reduces
+> power consumption and heating of the Tegra chips. Tegra SoC has multiple
+> hardware units which belong to a core power domain of the SoC and share
+> the core voltage. The voltage must be selected in accordance to a minimum
+> requirement of every core hardware unit.
+>
+> The minimum core voltage requirement depends on:
+>
+>   1. Clock enable state of a hardware unit.
+>   2. Clock frequency.
+>   3. Unit's internal idling/active state.
+>
+> This series is tested on Acer A500 (T20), AC100 (T20), Nexus 7 (T30) and
+> Ouya (T30) devices. I also added voltage scaling to the Ventana (T20) and
+> Cardhu (T30) boards which are tested by NVIDIA's CI farm. Tegra30 is now up
+> to 5C cooler on Nexus 7 and stays cool on Ouya (instead of becoming burning
+> hot) while system is idling. It should be possible to improve this further
+> by implementing a more advanced power management features for the kernel
+> drivers.
+>
+> The DVFS support is opt-in for all boards, meaning that older DTBs will
+> continue to work like they did it before this series. It should be possible
+> to easily add the core voltage scaling support for Tegra114+ SoCs based on
+> this grounding work later on, if anyone will want to implement it.
+>
+> WARNING(!) This series is made on top of the memory interconnect patches
+>            which are currently under review [1]. The Tegra EMC driver
+>            and devicetree-related patches need to be applied on top of
+>            the ICC series.
+>
+> [1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=212196
+>
+> Dmitry Osipenko (30):
+>   dt-bindings: host1x: Document OPP and voltage regulator properties
+>   dt-bindings: mmc: tegra: Document OPP and voltage regulator properties
+>   dt-bindings: pwm: tegra: Document OPP and voltage regulator properties
+>   media: dt: bindings: tegra-vde: Document OPP and voltage regulator
+>     properties
+>   dt-binding: usb: ci-hdrc-usb2:  Document OPP and voltage regulator
+>     properties
+>   dt-bindings: usb: tegra-ehci: Document OPP and voltage regulator
+>     properties
+>   soc/tegra: Add sync state API
+>   soc/tegra: regulators: Support Tegra SoC device sync state API
+>   soc/tegra: regulators: Fix lockup when voltage-spread is out of range
+>   regulator: Allow skipping disabled regulators in
+>     regulator_check_consumers()
+>   drm/tegra: dc: Support OPP and SoC core voltage scaling
+>   drm/tegra: gr2d: Correct swapped device-tree compatibles
+>   drm/tegra: gr2d: Support OPP and SoC core voltage scaling
+>   drm/tegra: gr3d: Support OPP and SoC core voltage scaling
+>   drm/tegra: hdmi: Support OPP and SoC core voltage scaling
+>   gpu: host1x: Support OPP and SoC core voltage scaling
+>   mmc: sdhci-tegra: Support OPP and core voltage scaling
+>   pwm: tegra: Support OPP and core voltage scaling
+>   media: staging: tegra-vde: Support OPP and SoC core voltage scaling
+>   usb: chipidea: tegra: Support OPP and SoC core voltage scaling
+>   usb: host: ehci-tegra: Support OPP and SoC core voltage scaling
+>   memory: tegra20-emc: Support Tegra SoC device state syncing
+>   memory: tegra30-emc: Support Tegra SoC device state syncing
+>   ARM: tegra: Add OPP tables for Tegra20 peripheral devices
+>   ARM: tegra: Add OPP tables for Tegra30 peripheral devices
+>   ARM: tegra: ventana: Add voltage supplies to DVFS-capable devices
+>   ARM: tegra: paz00: Add voltage supplies to DVFS-capable devices
+>   ARM: tegra: acer-a500: Add voltage supplies to DVFS-capable devices
+>   ARM: tegra: cardhu-a04: Add voltage supplies to DVFS-capable devices
+>   ARM: tegra: nexus7: Add voltage supplies to DVFS-capable devices
+>
+>  .../display/tegra/nvidia,tegra20-host1x.txt   |  56 +++
+>  .../bindings/media/nvidia,tegra-vde.txt       |  12 +
+>  .../bindings/mmc/nvidia,tegra20-sdhci.txt     |  12 +
+>  .../bindings/pwm/nvidia,tegra20-pwm.txt       |  13 +
+>  .../devicetree/bindings/usb/ci-hdrc-usb2.txt  |   4 +
+>  .../bindings/usb/nvidia,tegra20-ehci.txt      |   2 +
+>  .../boot/dts/tegra20-acer-a500-picasso.dts    |  30 +-
+>  arch/arm/boot/dts/tegra20-paz00.dts           |  40 +-
+>  .../arm/boot/dts/tegra20-peripherals-opp.dtsi | 386 ++++++++++++++++
+>  arch/arm/boot/dts/tegra20-ventana.dts         |  65 ++-
+>  arch/arm/boot/dts/tegra20.dtsi                |  14 +
+>  .../tegra30-asus-nexus7-grouper-common.dtsi   |  23 +
+>  arch/arm/boot/dts/tegra30-cardhu-a04.dts      |  44 ++
+>  .../arm/boot/dts/tegra30-peripherals-opp.dtsi | 415 ++++++++++++++++++
+>  arch/arm/boot/dts/tegra30.dtsi                |  13 +
+>  drivers/gpu/drm/tegra/Kconfig                 |   1 +
+>  drivers/gpu/drm/tegra/dc.c                    | 138 +++++-
+>  drivers/gpu/drm/tegra/dc.h                    |   5 +
+>  drivers/gpu/drm/tegra/gr2d.c                  | 140 +++++-
+>  drivers/gpu/drm/tegra/gr3d.c                  | 136 ++++++
+>  drivers/gpu/drm/tegra/hdmi.c                  |  63 ++-
+>  drivers/gpu/host1x/Kconfig                    |   1 +
+>  drivers/gpu/host1x/dev.c                      |  87 ++++
+>  drivers/memory/tegra/tegra20-emc.c            |   8 +-
+>  drivers/memory/tegra/tegra30-emc.c            |   8 +-
+>  drivers/mmc/host/Kconfig                      |   1 +
+>  drivers/mmc/host/sdhci-tegra.c                |  70 ++-
+>  drivers/pwm/Kconfig                           |   1 +
+>  drivers/pwm/pwm-tegra.c                       |  84 +++-
+>  drivers/regulator/core.c                      |  12 +-
+>  .../soc/samsung/exynos-regulator-coupler.c    |   2 +-
+>  drivers/soc/tegra/common.c                    | 152 ++++++-
+>  drivers/soc/tegra/regulators-tegra20.c        |  25 +-
+>  drivers/soc/tegra/regulators-tegra30.c        |  30 +-
+>  drivers/staging/media/tegra-vde/Kconfig       |   1 +
+>  drivers/staging/media/tegra-vde/vde.c         | 127 ++++++
+>  drivers/staging/media/tegra-vde/vde.h         |   1 +
+>  drivers/usb/chipidea/Kconfig                  |   1 +
+>  drivers/usb/chipidea/ci_hdrc_tegra.c          |  79 ++++
+>  drivers/usb/host/Kconfig                      |   1 +
+>  drivers/usb/host/ehci-tegra.c                 |  79 ++++
+>  include/linux/regulator/coupler.h             |   6 +-
+>  include/soc/tegra/common.h                    |  22 +
+>  43 files changed, 2360 insertions(+), 50 deletions(-)
+>
+> --
+> 2.27.0
+>
 
-Sounds good to me. As long as the state is restored before submitting
-further requests we should be fine. That would even allow getting rid of
-write_parport_reg_nonblock() as you can restore the state using
-synchronous calls from the worker thread. Should simplify things quite a
-bit.
+I need some more time to review this, but just a quick check found a
+few potential issues...
 
-> >On the other hand, the restore() implementation looks broken in that it
-> >doesn't actually restore the provided state. I'll go fix that up.
-> 
-> How did this thing ever work?
+The "core-supply", that you specify as a regulator for each
+controller's device node, is not the way we describe power domains.
+Instead, it seems like you should register a power-domain provider
+(with the help of genpd) and implement the ->set_performance_state()
+callback for it. Each device node should then be hooked up to this
+power-domain, rather than to a "core-supply". For DT bindings, please
+have a look at Documentation/devicetree/bindings/power/power-domain.yaml
+and Documentation/devicetree/bindings/power/power_domain.txt.
 
-The shadow registers are initialised at probe so as long as you don't
-switch to a different parallel-port driver without disconnecting the
-mos7715 in between it works.
+In regards to the "sync state" problem (preventing to change
+performance states until all consumers have been attached), this can
+then be managed by the genpd provider driver instead.
 
-Johan
+Kind regards
+Uffe
