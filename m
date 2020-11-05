@@ -2,174 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 771472A8312
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 17:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 698FF2A833D
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 17:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730871AbgKEQHq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 11:07:46 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:42725 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726729AbgKEQHo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 11:07:44 -0500
-Received: (qmail 1615519 invoked by uid 1000); 5 Nov 2020 11:07:43 -0500
-Date:   Thu, 5 Nov 2020 11:07:43 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-usb@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v1 21/30] usb: host: ehci-tegra: Support OPP and SoC core
- voltage scaling
-Message-ID: <20201105160743.GA1613614@rowland.harvard.edu>
-References: <20201104234427.26477-1-digetx@gmail.com>
- <20201104234427.26477-22-digetx@gmail.com>
+        id S1731013AbgKEQOx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 11:14:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43278 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725862AbgKEQOw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Nov 2020 11:14:52 -0500
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B5BC6206B7;
+        Thu,  5 Nov 2020 16:14:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604592892;
+        bh=urp1TUB7bsad4HXf4hTdc4VKnO9NVgIYTeMT68wlEuU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Wyyh+fFSHvTV97GVS2CF90aZljGaeaSSnfDyRwT27cf0apqDyUvPvgsYhSabjNLnu
+         V/O9zFoAn/44po0ODzNjRbGzQ9TtdXv78slJTXnQg+uqBy1gUr+dLXtWxzC0oBGgBT
+         +Mzx+2glIkLOXh4dAoKT8iYYEnAsFanUh8tUi890=
+Date:   Thu, 5 Nov 2020 08:14:50 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [RESEND PATCH v3] net: usb: usbnet: update
+ __usbnet_{read|write}_cmd() to use new API
+Message-ID: <20201105081450.4a257e7f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <dc3a4901-9aad-3064-4131-bc3fc82f965f@gmail.com>
+References: <20201102173946.13800-1-anant.thazhemadam@gmail.com>
+        <20201104162444.66b5cc56@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <dc3a4901-9aad-3064-4131-bc3fc82f965f@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201104234427.26477-22-digetx@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 02:44:18AM +0300, Dmitry Osipenko wrote:
-> Add initial OPP and SoC core voltage scaling support to the Tegra EHCI
-> driver. This is required for enabling system-wide DVFS on older Tegra
-> SoCs.
+On Thu, 5 Nov 2020 07:56:08 +0530 Anant Thazhemadam wrote:
+> On 05/11/20 5:54 am, Jakub Kicinski wrote:
+> > On Mon,  2 Nov 2020 23:09:46 +0530 Anant Thazhemadam wrote:  
+> >> Currently, __usbnet_{read|write}_cmd() use usb_control_msg().
+> >> However, this could lead to potential partial reads/writes being
+> >> considered valid, and since most of the callers of
+> >> usbnet_{read|write}_cmd() don't take partial reads/writes into account
+> >> (only checking for negative error number is done), and this can lead to
+> >> issues.
+> >>
+> >> However, the new usb_control_msg_{send|recv}() APIs don't allow partial
+> >> reads and writes.
+> >> Using the new APIs also relaxes the return value checking that must
+> >> be done after usbnet_{read|write}_cmd() is called.
+> >>
+> >> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>  
+> > So you're changing the semantics without updating the callers?
+> >
+> > I'm confused. 
+> >
+> > Is this supposed to be applied to some tree which already has the
+> > callers fixed?
+> >
+> > At a quick scan at least drivers/net/usb/plusb.c* would get confused 
+> > as it compares the return value to zero and 0 used to mean "nothing
+> > transferred", now it means "all good", no? 
+> >
+> > * I haven't looked at all the other callers  
 > 
-> Tested-by: Peter Geis <pgwipeout@gmail.com>
-> Tested-by: Nicolas Chauvet <kwizart@gmail.com>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
+> I see. I checked most of the callers that directly called the functions,
+> but it seems to have slipped my mind that these callers were also
+> wrappers, and to check the callers for these wrapper.
+> I apologize for the oversight.
+> I'll perform a more in-depth analysis of all the callers, fix this mistake,
+> and send in a patch series instead, that update all the callers too.
+> Would that be alright?
 
-I'm no expert on OPP stuff, but some of what you have done here looks 
-peculiar.
-
-> diff --git a/drivers/usb/host/ehci-tegra.c b/drivers/usb/host/ehci-tegra.c
-> index 869d9c4de5fc..0976577f54b4 100644
-> --- a/drivers/usb/host/ehci-tegra.c
-> +++ b/drivers/usb/host/ehci-tegra.c
-> @@ -17,6 +17,7 @@
->  #include <linux/of_device.h>
->  #include <linux/of_gpio.h>
->  #include <linux/platform_device.h>
-> +#include <linux/pm_opp.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/reset.h>
->  #include <linux/slab.h>
-> @@ -364,6 +365,79 @@ static void tegra_ehci_unmap_urb_for_dma(struct usb_hcd *hcd, struct urb *urb)
->  	free_dma_aligned_buffer(urb);
->  }
->  
-> +static void tegra_ehci_deinit_opp_table(void *data)
-> +{
-> +	struct device *dev = data;
-> +	struct opp_table *opp_table;
-> +
-> +	opp_table = dev_pm_opp_get_opp_table(dev);
-> +	dev_pm_opp_of_remove_table(dev);
-> +	dev_pm_opp_put_regulators(opp_table);
-> +	dev_pm_opp_put_opp_table(opp_table);
-> +}
-> +
-> +static int devm_tegra_ehci_init_opp_table(struct device *dev)
-> +{
-> +	unsigned long rate = ULONG_MAX;
-> +	struct opp_table *opp_table;
-> +	const char *rname = "core";
-> +	struct dev_pm_opp *opp;
-> +	int err;
-> +
-> +	/* legacy device-trees don't have OPP table */
-> +	if (!device_property_present(dev, "operating-points-v2"))
-> +		return 0;
-> +
-> +	/* voltage scaling is optional */
-> +	if (device_property_present(dev, "core-supply"))
-> +		opp_table = dev_pm_opp_set_regulators(dev, &rname, 1);
-> +	else
-> +		opp_table = dev_pm_opp_get_opp_table(dev);
-> +
-> +	if (IS_ERR(opp_table))
-> +		return dev_err_probe(dev, PTR_ERR(opp_table),
-> +				     "failed to prepare OPP table\n");
-> +
-> +	err = dev_pm_opp_of_add_table(dev);
-> +	if (err) {
-> +		dev_err(dev, "failed to add OPP table: %d\n", err);
-> +		goto put_table;
-> +	}
-> +
-> +	/* find suitable OPP for the maximum clock rate */
-> +	opp = dev_pm_opp_find_freq_floor(dev, &rate);
-> +	err = PTR_ERR_OR_ZERO(opp);
-> +	if (err) {
-> +		dev_err(dev, "failed to get OPP: %d\n", err);
-> +		goto remove_table;
-> +	}
-> +
-> +	dev_pm_opp_put(opp);
-> +
-> +	/*
-> +	 * First dummy rate-set initializes voltage vote by setting voltage
-> +	 * in accordance to the clock rate.
-> +	 */
-> +	err = dev_pm_opp_set_rate(dev, rate);
-> +	if (err) {
-> +		dev_err(dev, "failed to initialize OPP clock: %d\n", err);
-> +		goto remove_table;
-> +	}
-> +
-> +	err = devm_add_action(dev, tegra_ehci_deinit_opp_table, dev);
-> +	if (err)
-> +		goto remove_table;
-> +
-> +	return 0;
-> +
-> +remove_table:
-> +	dev_pm_opp_of_remove_table(dev);
-> +put_table:
-> +	dev_pm_opp_put_regulators(opp_table);
-
-Do you really want to use the same error unwinding for opp_table values 
-obtained from dev_pm_opp_set_regulators() as from 
-dev_pm_opp_get_opp_table()?
-
-> +
-> +	return err;
-> +}
-> +
->  static const struct tegra_ehci_soc_config tegra30_soc_config = {
->  	.has_hostpc = true,
->  };
-> @@ -431,6 +505,11 @@ static int tegra_ehci_probe(struct platform_device *pdev)
->  		goto cleanup_hcd_create;
->  	}
->  
-> +	err = devm_tegra_ehci_init_opp_table(&pdev->dev);
-> +	if (err)
-> +		return dev_err_probe(&pdev->dev, err,
-> +				     "Failed to initialize OPP\n");
-
-Why log a second error message?  Just return err.
-
-Alan Stern
+Yes. Probably best if you rename the existing function as first patch,
+then add a new one with the old name using usb_control_msg_{send|recv}()
+then switch the callers one by one, and finally remove the old renamed
+function.
