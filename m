@@ -2,80 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 053862A7C82
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 12:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BB52A7C92
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 12:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727836AbgKELAe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 06:00:34 -0500
-Received: from mga12.intel.com ([192.55.52.136]:14533 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725827AbgKELAe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Nov 2020 06:00:34 -0500
-IronPort-SDR: Z8PQfEDWqwIfmu+mBPh+jUI7d+MzS2bZvur1nMo4sdlliz2UoDX9qeDKmSPq9JNotWPdwYvGB4
- Pnh1sw2ovRnA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="148642538"
-X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
-   d="scan'208";a="148642538"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 03:00:33 -0800
-IronPort-SDR: QGvzJNYN6F85Y52CIaYREDGsw01nqY+MkNTpxfTYecvOUG3446zFvZoHQGfVf+CVSH32ZuTjQi
- ohh4e2nNwaFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
-   d="scan'208";a="358387080"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Nov 2020 03:00:32 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id D30DD252; Thu,  5 Nov 2020 13:00:31 +0200 (EET)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] xhci-pci: Allow host runtime PM as default for Intel Maple Ridge xHCI
-Date:   Thu,  5 Nov 2020 14:00:31 +0300
-Message-Id: <20201105110031.8691-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.28.0
+        id S1730057AbgKELFX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 06:05:23 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7146 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729263AbgKELFX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 06:05:23 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CRgfP2bwhz15RqR;
+        Thu,  5 Nov 2020 19:05:17 +0800 (CST)
+Received: from [127.0.0.1] (10.57.22.126) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Thu, 5 Nov 2020
+ 19:05:11 +0800
+Subject: Re: [PATCH v3 0/5] Introduce a new helper marco
+ DEFINE_SHOW_STORE_ATTRIBUTE at seq_file.c
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>,
+        <andriy.shevchenko@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <john.garry@huawei.com>, <himanshu.madhani@cavium.com>,
+        <felipe.balbi@linux.intel.com>, <uma.shankar@intel.com>,
+        <anshuman.gupta@intel.com>, <animesh.manna@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linuxarm@huawei.com>
+References: <1604406584-53926-1-git-send-email-luojiaxing@huawei.com>
+ <20201103133644.GA2067567@kroah.com>
+From:   luojiaxing <luojiaxing@huawei.com>
+Message-ID: <69d4de3f-cf1f-3530-fc53-5cf30d11010d@huawei.com>
+Date:   Thu, 5 Nov 2020 19:05:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201103133644.GA2067567@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.57.22.126]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Intel Maple Ridge is successor of Titan Ridge Thunderbolt controller. As
-Titan Ridge this one also includes xHCI host controller. In order to
-safe energy we should put it to low power state by default when idle.
-For this reason allow host runtime PM for Maple Ridge.
+Hi, Greg
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/usb/host/xhci-pci.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On 2020/11/3 21:36, Greg KH wrote:
+> On Tue, Nov 03, 2020 at 08:29:39PM +0800, Luo Jiaxing wrote:
+>> We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
+>> for read-only file, but we found many of drivers also want a helper macro
+>> for read-write file too.
+>>
+>> So we add this macro to help decrease code duplication.
+>>
+>> ---
+>>   v1->v2:
+>>          1.Rename DEFINE_STORE_ATTRIBUTE() to DEFINE_SHOW_STORE_ATTRIBUTE().
+>>   v2->v3:
+>>          1.Fixed some spelling mistakes in commit.
+>>          2.Revised resumes are added for easy tracing.
+> You forgot to address Al Viro's review comments :(
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index bf89172c43ca..d17e463087df 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -55,6 +55,7 @@
- #define PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI		0x8a13
- #define PCI_DEVICE_ID_INTEL_CML_XHCI			0xa3af
- #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
-+#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
- 
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
-@@ -238,7 +239,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI))
-+	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI))
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
--- 
-2.28.0
+
+Yes, I remember that AI Viro point out that he don't want this, but Andy 
+reply later and suggest me to modify the naming,
+
+So I send a v2 for review.
+
+
+Actually I am not sure about what you mean by " forgot to address Al 
+Viro's review comments ". Should I add AI Viro's review comments at my 
+changes description?
+
+
+Thanks
+
+Jiaxing
+
+
+>
+>
+> .
+>
 
