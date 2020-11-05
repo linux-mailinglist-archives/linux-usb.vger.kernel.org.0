@@ -2,248 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D173D2A7E82
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 13:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963F82A7F08
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 13:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730044AbgKEMYI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 07:24:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S1730552AbgKEMxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 07:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbgKEMYH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 07:24:07 -0500
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC8EC0613CF;
-        Thu,  5 Nov 2020 04:24:07 -0800 (PST)
-Received: by mail-vs1-xe42.google.com with SMTP id l22so648907vsa.4;
-        Thu, 05 Nov 2020 04:24:07 -0800 (PST)
+        with ESMTP id S1726777AbgKEMxQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 07:53:16 -0500
+Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B47EC0613CF
+        for <linux-usb@vger.kernel.org>; Thu,  5 Nov 2020 04:53:16 -0800 (PST)
+Received: by mail-ua1-x943.google.com with SMTP id k12so469047uad.11
+        for <linux-usb@vger.kernel.org>; Thu, 05 Nov 2020 04:53:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kL2m+ZFgq1/K+CQrrDxi61N8IEUFK1H2EexBFfPVxDg=;
-        b=Ygz0p7/1IFsL6fMq4vGN0ed+2c39VHo8k8ld81EIwj/BVvsosT+em3sXxoP9ZlmKPs
-         oPYvKNB1RFt5nvFV2G1USKal7xWAt3G2Qc3H8KIP6IlSCsz1ozp2jwOuFjJGxYv5bRgV
-         ULHs3CHnSVk7FXyjP0bnsm8mrVH19eoX4YGbYnRTp70hL1X7sIGzsi+74HsmdwK0a2En
-         HMNWnEN8EzxNtQPCYAJn2rqB2qiXTMltpDOeQoM5NymQhG06QKzMMBziHR1YlyTa+kKW
-         cRpwcWzTR3H/P/EBNtKFPSLt2zV0uuUo9hsW8agIOvsFsTbBviXTS8jPt6HeW0cVpuMA
-         bPwg==
+         :cc;
+        bh=L6TCLuc1aSDhvBsEh/oyOKoJFVXSTFCOXAYW2AUTtHo=;
+        b=y6DX4cMUVCgpxUKuGqoEligLjI7mP0FgyJ97c7sIUUHZxJlTwtRRakXekgH7YsuigB
+         Na2QU2xZN4x2PfpN6omerSdhzPwwGn9bDYKeR2k6MuBaUl4m5dH4WWWTdnhpeJeXb0wO
+         XSZFej4dNy5nb1iC9xr8tfwJeCBjFjlTzg4qI2DAs6FEDqJOv7dGIgx54zxdVZ6kpJNY
+         qEEM8136+KYXcHo4ba8akOcRfEEQa2WPh8DybrHFK+sabZgBhMR36tCVRG83K7vH1cW2
+         +tAvD7+11Tiw9WmdBdchM838Ksuv8W7UHq8LoeYHHVZz9EZWz0CY4hFIKH9bgfZDnoHM
+         MkFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kL2m+ZFgq1/K+CQrrDxi61N8IEUFK1H2EexBFfPVxDg=;
-        b=Cj0IkL/gWOYSiQyVWptQCaA29VNp7rLd+9yCQtFmXRiFoVcUjk2rn3S9pEXzWutVUz
-         lcw0pAsheyPrxoLjuStMuxMvkeoY20Zv/uPI9ZrJKPFARwnsn9W4tKXAuTcblXhpCMrl
-         zMK4clfyhWwaUGAnxu50MLkVdj209OpxW7H/BvBj3yKmeMp4PlVC5U5xnwbHJIml4xRe
-         oRDYCJTnZnbWF4Phte/U4BY0OaIILmvjT+HqHDmz0Rd9xirW+jijICCWRzmTpIOUFdxN
-         HmI9krU0Mzm6ym08CkC90LJdU1wbIVXCtrS1uoEOoSSa4FWzQblnDOUR8EpcpldcxUON
-         kLvQ==
-X-Gm-Message-State: AOAM530zA+991ejRPRHuOBjuvN4vTD+6TqRLzXO83AixcSJsIxY4C8r/
-        8AOKiR0MA2rWiIot9gAKq1zmUDqf+rZXXVx6JBU=
-X-Google-Smtp-Source: ABdhPJwrw+XyaIXuE6kgWuVslPDF/evht/Qk0FVkDZi9BYHfsLnPP4rZ+nmFWRlo79G76RQdvVb6D0/EONFB1ohCn84=
-X-Received: by 2002:a05:6102:a1a:: with SMTP id t26mr814216vsa.37.1604579046470;
- Thu, 05 Nov 2020 04:24:06 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=L6TCLuc1aSDhvBsEh/oyOKoJFVXSTFCOXAYW2AUTtHo=;
+        b=ZWYLLVkTgPQFb9gA1PSMiAXedg+rIhkipP1kBmy72kfRAMZ6dwjhQ0cYWj4SLhEkru
+         eGpFWYb+aRTsu1PM48OHw0cSdSFF209+X1ZTrWJbBnBUIqfm0TO8XFKV2kJaRcZmPSD1
+         t164AYiV7d6Z5lXsjEf0zK0jkw5gpjtArV+D6y2hgO/+g/P5aUbmr053kjVTp9VU6187
+         TJl+zIvMSoiMPpeZ8EmK//l6qfDgV0d/faE9H6pvJUwYvnIs7R9Jr5I1Fp4H1YyJnj3V
+         KSCzNA5IeTDW6CISr8kks1lYAhPqasU+n9/DU5JA59BSOTUME2loCqAiYBDIQchahQ0m
+         eUtQ==
+X-Gm-Message-State: AOAM531U1RIvbRonuobxX1Acyj2HzOQqGwQFJ+6KkXpECkMXt6kc7f8A
+        kNuc7Dc34JGXirjgvwHlN64XoKdrXQevmIdR4shEaQ==
+X-Google-Smtp-Source: ABdhPJycxdGkrda5dU9htxc/OSwm7s+GQAoBTPW1YXOO/bE03Yfcq+QBohkR+LMOwjYHynIUz7nEwPk/k/ZMFVtVBnc=
+X-Received: by 2002:a9f:2f15:: with SMTP id x21mr833961uaj.104.1604580795669;
+ Thu, 05 Nov 2020 04:53:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20201029095806.10648-1-amelie.delaunay@st.com>
- <20201029095806.10648-2-amelie.delaunay@st.com> <20201029154016.GA1917373@bogus>
- <860d5620-4fdf-6e01-9a04-3967d6fcfd6b@st.com> <CAL_JsqKs-Po8BdShjQNDNPjNWBCD3FSPdq4KbQGx3=VnV+3nPw@mail.gmail.com>
- <ebccf61a-c88f-c7f4-9f06-01d2bd1f43de@st.com> <20201104210803.GA4115079@bogus>
- <2da804ff-3b3c-0ea9-14d5-a163b28ccc33@st.com>
-In-Reply-To: <2da804ff-3b3c-0ea9-14d5-a163b28ccc33@st.com>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Thu, 5 Nov 2020 20:23:55 +0800
-Message-ID: <CAKgpwJU_yTTYabeMYFBqNs_6=N7gaTAc1v-+fU-dshFUrL1qVA@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3 1/4] dt-bindings: connector: add power-opmode
- optional property to usb-connector
-To:     Amelie DELAUNAY <amelie.delaunay@st.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
+References: <20201104234427.26477-1-digetx@gmail.com> <CAPDyKFr7qTU2RPhA_ZrbCayoTTNUEno1zdmvmv+8HBe-Owrfeg@mail.gmail.com>
+ <20201105100603.skrirm7uke4s2xyl@vireshk-i7> <CAPDyKFoCJt5MBSKBJ8n1OAMdVsWHdwXTx0zFEcZw_F_gQ6Ug0w@mail.gmail.com>
+ <20201105104009.oo4dc6a2gdcwduhk@vireshk-i7> <CAPDyKFpQG98d6foc1U6fp3YEBdZ1vLqY9cmWxpUwXoKgDn+ojQ@mail.gmail.com>
+ <20201105111301.2hxfx2tnmf2saakp@vireshk-i7>
+In-Reply-To: <20201105111301.2hxfx2tnmf2saakp@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 5 Nov 2020 13:52:39 +0100
+Message-ID: <CAPDyKFr3LhrnK9mm=RzhZvcnfeAKez3Yzm6HU_oP1bnPokh9vg@mail.gmail.com>
+Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
+ Tegra20/30 SoCs
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        driverdevel <devel@driverdev.osuosl.org>,
         Linux USB List <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
+        linux-pwm@vger.kernel.org,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Amelie DELAUNAY <amelie.delaunay@st.com> =E4=BA=8E2020=E5=B9=B411=E6=9C=885=
-=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8B=E5=8D=887:36=E5=86=99=E9=81=93=EF=BC=
-=9A
+On Thu, 5 Nov 2020 at 12:13, Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On 11/4/20 10:08 PM, Rob Herring wrote:
-> > On Fri, Oct 30, 2020 at 04:27:14PM +0100, Amelie DELAUNAY wrote:
-> >>
-> >>
-> >> On 10/30/20 3:29 PM, Rob Herring wrote:
-> >>> On Thu, Oct 29, 2020 at 11:49 AM Amelie DELAUNAY <amelie.delaunay@st.=
-com> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>> On 10/29/20 4:40 PM, Rob Herring wrote:
-> >>>>> On Thu, Oct 29, 2020 at 10:58:03AM +0100, Amelie Delaunay wrote:
-> >>>>>> Power operation mode may depends on hardware design, so, add the o=
-ptional
-> >>>>>> property power-opmode for usb-c connector to select the power oper=
-ation
-> >>>>>> mode capability.
-> >>>>>>
-> >>>>>> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
-> >>>>>> ---
-> >>>>>>     .../bindings/connector/usb-connector.yaml      | 18 ++++++++++=
-++++++++
-> >>>>>>     1 file changed, 18 insertions(+)
-> >>>>>>
-> >>>>>> diff --git a/Documentation/devicetree/bindings/connector/usb-conne=
-ctor.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> >>>>>> index 728f82db073d..200d19c60fd5 100644
-> >>>>>> --- a/Documentation/devicetree/bindings/connector/usb-connector.ya=
-ml
-> >>>>>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.ya=
-ml
-> >>>>>> @@ -93,6 +93,24 @@ properties:
-> >>>>>>           - device
-> >>>>>>           - dual
-> >>>>>>
-> >>>>>> +  power-opmode:
-> >>>>>
-> >>>>> I've acked this version:
-> >>>>>
-> >>>>> https://lore.kernel.org/r/20201020093627.256885-2-badhri@google.com
-> >>>>>
-> >>>>
-> >>>> frs is used for Fast Role Swap defined in USB PD spec.
-> >>>> I understand it allows to get the same information but I'm wondering=
- why
-> >>>> the property name is limited to -frs- in this case. What about a
-> >>>> non-power delivery USB-C connector ?
-> >>>
-> >>> I've got no idea. The folks that know USB-C and PD details need to ge=
-t
-> >>> together and work all this out. To me, it looks like the same thing..=
-.
-> >>>
-> >>
-> >> It looks but...
-> >>
-> >> The purpose of power-opmode property is to configure the USB-C control=
-lers,
-> >> especially the non-PD USB-C controllers to determine the power operati=
-on
-> >> mode that the Type C connector will support and will advertise through=
- CC
-> >> pins when it has no power delivery support, whatever the power role: S=
-ink,
-> >> Source or Dual
-> >> The management of the property is the same that data-role and power-ro=
-le
-> >> properties, and done by USB Type-C Connector Class.
-> >>
-> >> new-source-frs-typec-current specifies initial current capability of t=
-he new
-> >> source when vSafe5V is applied during PD3.0 Fast Role Swap. So here, t=
-his
-> >> property is not applied at usb-c controller configuration level, but d=
-uring
-> >> PD Fast Role Swap, so when the Sink become the Source.
-> >> Moreover, the related driver code says FRS can only be supported by DR=
-P
-> >> ports. So new-source-frs-typec-current property, in addition to being
-> >> specific to PD, is also dedicated to DRP usb-c controller.
-> >> The property is managed by Type-C Port Controller Manager for PD.
-> >
-> > But it's the same set of possible values, right? So we can align the
-> > values at least.
-> >
+> On 05-11-20, 11:56, Ulf Hansson wrote:
+> > On Thu, 5 Nov 2020 at 11:40, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > Btw, how do we identify if it is a power domain or a regulator ?
 >
-> USB Power Delivery FRS values are defined in
-> include/dt-bindings/usb/pd.h
+> To be honest, I was a bit afraid and embarrassed to ask this question,
+> and was hoping people to make fun of me in return :)
+>
+> > Good question. It's not a crystal clear line in between them, I think.
+>
+> And I was relieved after reading this :)
+>
+> > A power domain to me, means that some part of a silicon (a group of
+> > controllers or just a single piece, for example) needs some kind of
+> > resource (typically a power rail) to be enabled to be functional, to
+> > start with.
+>
+> Isn't this what a part of regulator does as well ? i.e.
+> enabling/disabling of the regulator or power to a group of
+> controllers.
 
-I think this can be changed if both can be aligned.
-
->to fit with drivers/usb/typec/tcpm/tcpm.c
-> frs_typec_current enum.
->
-> USB-C power operation mode values are defined in
-> include/linux/usb/typec.h with typec_pwr_opmode enum and matching with
-> string values of typec_pwr_opmodes tab.
->
-> USB PD requires USB-C.
-> USB-C doesn't requires USB PD.
->
-> drivers/usb/typec/tcpm/tcpm.c already used typec_pwr_opmode values.
->
-> USB PD specification Table 6-14 Fixed Supply PDO says:
-> Fast Role Swap required USB Type-C Current (see also [USB Type-C 2.0]):
-> Value | Description
->   00b  | Fast Swap not supported (default)
->   01b  | Default USB Power
->   10b  | 1.5A @ 5V
->   11b  | 3.0A @ 5V
-
-This is the value in PDO of sink, the FRS property value(or after translate=
-d)
-actually is used to compare with above value.
-
-So I think both properties can share the same "value", maybe string
-like below
-
-  10 static const char * const typec_pwr_opmodes[] =3D {
-  11         [TYPEC_PWR_MODE_USB]    =3D "default",
-  12         [TYPEC_PWR_MODE_1_5A]   =3D "1.5A",
-  13         [TYPEC_PWR_MODE_3_0A]   =3D "3.0A",
+It could, but it shouldn't.
 
 >
-> Note the *see also USB Type-C 2.0*.
+> Over that the regulator does voltage/current scaling as well, which
+> normally the power domains don't do (though we did that in
+> performance-state case).
 >
-> USB Type-C specification 4.6.2.1 USB Type-C Current says:
-> The USB Type-C connector uses CC pins for configuration including an
-> ability for a Source to advertise to its port partner (Sink) the amount
-> of current it shall supply:
-> =E2=80=A2 Default is the as-configured for high-power operation current v=
-alue as
-> defined by the USB Specification (500 mA for USB 2.0 ports; 900 mA or
-> 1,500 mA for USB 3.2 ports in single-lane or dual-lane operation,
-> respectively)
-> =E2=80=A2 1.5 A
-> =E2=80=A2 3.0 A
+> > If there are operating points involved, that's also a
+> > clear indication to me, that it's not a regular regulator.
 >
-> > Can we align the names in some way? power-opmode and frs-source-opmode
-> > or ??
+> Is there any example of that? I hope by OPP you meant both freq and
+> voltage here. I am not sure if I know of a case where a power domain
+> handles both of them.
 
-how about typec-power-opmode and frs-new-source-opmode
+It may be both voltage and frequency - but in some cases only voltage.
+From HW point of view, many ARM legacy platforms have power domains
+that work like this.
 
-> >
->
-> I let USB PD specialists answer.
->
-> *frs* property fits with USB PD specification, so with USB PD protocol.
-> *power-opmode fits with USB Type-C specification, so with USB-C hardware
-> support.
->
-> > Are these 2 properties mutually exclusive?
+As you know, the DVFS case has in many years not been solved in a
+generic way, but mostly via platform specific hacks.
 
-I think yes.
+The worst ones are probably those hacking clock drivers (which myself
+also have contributed to). Have a look at clk_prcmu_opp_prepare(), for
+example, which is used by the UX500 platform. Another option has been
+to use the devfreq framework, but it has limitations in regards to
+this too.
 
-thanks
-Li Jun
->> If so, that should be
-> > captured.
+That said, I am hoping that people start moving towards the
+deploying/implementing DVFS through the power-domain approach,
+together with the OPPs. Maybe there are still some pieces missing from
+an infrastructure point of view, but that should become more evident
+as more starts using it.
+
 >
-> FRS is specific to products with Power Delivery Support.
+> > Maybe we should try to specify this more exactly in some
+> > documentation, somewhere.
 >
-> power-opmode is dedicated to products with USB-C connector support.
+> I think yes, it is very much required. And in absence of that I think,
+> many (or most) of the platforms that also need to scale the voltage
+> would have modeled their hardware as a regulator and not a PM domain.
 >
-> Regards,
-> Amelie
+> What I always thought was:
+>
+> - Module that can just enable/disable power to a block of SoC is a
+>   power domain.
+>
+> - Module that can enable/disable as well as scale voltage is a
+>   regulator.
+>
+> And so I thought that this patchset has done the right thing. This
+> changed a bit with the qcom stuff where the IP to be configured was in
+> control of RPM and not Linux and so we couldn't add it as a regulator.
+> If it was controlled by Linux, it would have been a regulator in
+> kernel for sure :)
+
+In my view, DT bindings have consistently been pushed back during the
+year, if they have tried to model power domains as regulator supplies
+from consumer device nodes. Hence, people have tried other things, as
+I mentioned above.
+
+I definitely agree that we need to update some documentations,
+explaining things more exactly. Additionally, it seems like a talk at
+some conferences should make sense, as a way to spread the word.
+
+Kind regards
+Uffe
