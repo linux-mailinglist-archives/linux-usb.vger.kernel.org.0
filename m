@@ -2,83 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2602A7C6F
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 11:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053862A7C82
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 12:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730152AbgKEK4p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 05:56:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730069AbgKEK4p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 05:56:45 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11400C0613CF;
-        Thu,  5 Nov 2020 02:56:45 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id oq3so1952915ejb.7;
-        Thu, 05 Nov 2020 02:56:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=AtroSstUCyILeySaqdfODVVqHZHsfk6Z9ZPz46kg3Uk=;
-        b=uJPNm/9fX3Jf24EnO4xc7KbgtzTtSXE6BXX3IWTEed2qtNk5ipkQ8Z1P4a18M0vaBB
-         PyPSp9f5xIKMG4K02fxqMVRu2zqMNp5qbhUfs/28Tc7aFjxvSTYichUvs6rv+QMNLQvs
-         qit6fCGQagC0F0r6CWh3Z2MSoR1R01+beNFFYeTCZu5L0DamVlns97F8BtnfmJKURrgK
-         InncOII52BV2qICMswBBCDj4lsvtQDa7ARU8kCWybA3RDTUEzah4vqpXXHODsUUD4iYF
-         rxyeHksLagvVpemCUD5lI1xrMJDeh9vKmatgb/eBfhiBfr/wOjwahXKSe+mWoH/EAxx8
-         8Hzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=AtroSstUCyILeySaqdfODVVqHZHsfk6Z9ZPz46kg3Uk=;
-        b=M/utkE/CR4zCfdCTFzarRf3/D0JNRAIgtLiDXv74ch7NHelaAIE53HMhTIJ0JvBhK2
-         yKA+0WN+ifbW4Yb5N2SbC78a3saEJ3lmn6bg+GgqHEBfqxs/8qF31egaupgyed7LN1W1
-         u3PvkaffGkJF9qLnNXEOA3Vh1X/QzTNIKWxXYWN8edCTnHeXjMUJP2F9XGyUS7MomKUH
-         6RFdSPv0s4VsL4mDHnLiuIW63yBHxj91k5OTuRkaqb+U9/Y+A6Q33ekwe8Uyp93wMP82
-         2GMAmLDO9NUcCnxMqFYz6zs5pTLy4z/j3qtO4yr0dGbnliHdLKvrmnagdHB6I9wcIna8
-         oSyw==
-X-Gm-Message-State: AOAM533PlAtUK/BTlN7S3A19bnmwDJJlXWqasNwS4Xvop40T51mqFb9s
-        v2nQh2vp9kkLMh9NW4QD6Ck=
-X-Google-Smtp-Source: ABdhPJwImWuTsjbha72MzYhweiG73gxU/PCNOwPm29v3UZUaq05ZSrQ8wDTOcFlhqh+3kxKUrdtKJA==
-X-Received: by 2002:a17:906:a14c:: with SMTP id bu12mr1732678ejb.444.1604573803817;
-        Thu, 05 Nov 2020 02:56:43 -0800 (PST)
-Received: from skbuf ([188.25.2.177])
-        by smtp.gmail.com with ESMTPSA id o31sm656257edd.94.2020.11.05.02.56.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2020 02:56:43 -0800 (PST)
-Date:   Thu, 5 Nov 2020 12:56:42 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: Re: [PATCH net-next 3/5] r8152: add MCU typed read/write functions
-Message-ID: <20201105105642.pgdxxlytpindj5fq@skbuf>
-References: <20201103192226.2455-4-kabel@kernel.org>
- <20201103214712.dzwpkj6d5val6536@skbuf>
- <20201104065524.36a85743@kernel.org>
- <20201104084710.wr3eq4orjspwqvss@skbuf>
- <20201104112511.78643f6e@kernel.org>
- <20201104113545.0428f3fe@kernel.org>
- <20201104110059.whkku3zlck6spnzj@skbuf>
- <20201104121053.44fae8c7@kernel.org>
- <20201104121424.th4v6b3ucjhro5d3@skbuf>
- <20201105105418.555d6e54@kernel.org>
+        id S1727836AbgKELAe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 06:00:34 -0500
+Received: from mga12.intel.com ([192.55.52.136]:14533 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725827AbgKELAe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Nov 2020 06:00:34 -0500
+IronPort-SDR: Z8PQfEDWqwIfmu+mBPh+jUI7d+MzS2bZvur1nMo4sdlliz2UoDX9qeDKmSPq9JNotWPdwYvGB4
+ Pnh1sw2ovRnA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="148642538"
+X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
+   d="scan'208";a="148642538"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 03:00:33 -0800
+IronPort-SDR: QGvzJNYN6F85Y52CIaYREDGsw01nqY+MkNTpxfTYecvOUG3446zFvZoHQGfVf+CVSH32ZuTjQi
+ ohh4e2nNwaFA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
+   d="scan'208";a="358387080"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 05 Nov 2020 03:00:32 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id D30DD252; Thu,  5 Nov 2020 13:00:31 +0200 (EET)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] xhci-pci: Allow host runtime PM as default for Intel Maple Ridge xHCI
+Date:   Thu,  5 Nov 2020 14:00:31 +0300
+Message-Id: <20201105110031.8691-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201105105418.555d6e54@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 10:54:18AM +0100, Marek Behún wrote:
-> I thought that static inline functions are preferred to macros, since
-> compiler warns better if they are used incorrectly...
+Intel Maple Ridge is successor of Titan Ridge Thunderbolt controller. As
+Titan Ridge this one also includes xHCI host controller. In order to
+safe energy we should put it to low power state by default when idle.
+For this reason allow host runtime PM for Maple Ridge.
 
-Citation needed. Also, how do static inline functions wrapped in macros
-(i.e. your patch) stack up against your claim about better warnings?
-I guess ease of maintainership should prevail here, and Hayes should
-have the final word. I don't really have any stake here.
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/usb/host/xhci-pci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index bf89172c43ca..d17e463087df 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -55,6 +55,7 @@
+ #define PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI		0x8a13
+ #define PCI_DEVICE_ID_INTEL_CML_XHCI			0xa3af
+ #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
++#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
+ 
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
+@@ -238,7 +239,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
+-	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI))
++	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI))
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
+-- 
+2.28.0
+
