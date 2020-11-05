@@ -2,71 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2FB2A89FA
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 23:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7832A8AC4
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 00:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732046AbgKEWhC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 17:37:02 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:33041 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726729AbgKEWhC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 17:37:02 -0500
-Received: by mail-oi1-f195.google.com with SMTP id k26so3420105oiw.0;
-        Thu, 05 Nov 2020 14:37:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c3C5XgJRHAT7v5YhunvUxIvvrDo4P+JprtJHnujvPNA=;
-        b=KDy2QR+bHpviKioVB8JNVtUXsNJ8zcZ+KmvYrJ8PS/TClBRiR5g0LKEeihWten0lw5
-         xjVDEha6EA0DZp8GPnSmNfPCAuYuqMylH1YjkvrR51y1d6gJN7wnnba+6kLAUNQo0pYZ
-         gM7BuRI4N8Ohchn00m1wksyJCq/ItHazjV2eCgCnXSlKoW9zT211ERrcYDXTPZuRon/1
-         mT2dKHSEdTcQJSlOB/UU5ZNvw7AE12BvXhUgf+yGA7sjns7GKWMGxDMLh98ncKXe5a1A
-         xBcaYz63Sg/2BjPicpoIAJEKkrXvVrImURkpc/pMOZBHNL7AIbgdl13OQuOMyejDd/Qa
-         tS8Q==
-X-Gm-Message-State: AOAM532epUO9sd6590UCWMjkRm778ISUcZxE4iwPsVuX099jD05ZcMQc
-        knwbH5SwMviOaVSN2UpGQFhbGgldGgv1
-X-Google-Smtp-Source: ABdhPJwxq4RjY+Ng5QZd+7R7yaDhg1MuA9bc2erBAB7yVXrBvjdv24Bh3IG4EiVZF35X69h680KpaA==
-X-Received: by 2002:aca:abc1:: with SMTP id u184mr980023oie.122.1604615821597;
-        Thu, 05 Nov 2020 14:37:01 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id f34sm644286otb.34.2020.11.05.14.37.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2020 14:37:01 -0800 (PST)
-Received: (nullmailer pid 1927393 invoked by uid 1000);
-        Thu, 05 Nov 2020 22:37:00 -0000
-Date:   Thu, 5 Nov 2020 16:37:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     devicetree@vger.kernel.org, pawell@cadence.com,
-        linux-usb@vger.kernel.org, rogerq@ti.com, jun.li@nxp.com,
-        linux-imx@nxp.com, robh+dt@kernel.org
-Subject: Re: [PATCH v3 1/1] doc: dt-binding: cdns,usb3: add wakeup-irq
-Message-ID: <20201105223700.GA1927324@bogus>
-References: <20201104080524.1821-1-peter.chen@nxp.com>
+        id S1732675AbgKEX2s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 18:28:48 -0500
+Received: from m42-4.mailgun.net ([69.72.42.4]:31374 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732409AbgKEX2r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Nov 2020 18:28:47 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1604618927; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=1KAhvuLf/yvnWPBQm8h6VYbwH4+MlaWZaU2ApTgCAck=; b=noTKCf3WzS3sDPq+0Zug/XYZGh/IdA+DQ8SaKvSq/KIw29eggr4DuNsboBCGpQV1kM8mf6ps
+ talAV/XOsVa9kypgmz76Sy4hRSsqS6xKEN3c+Ma3vICE2xXL2vy4FfUHhO2sUh3Nnh6720i8
+ Yl7b/czyqtahiuKJvA4h5/GBTps=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 5fa48aad903b44cb0e659c77 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 05 Nov 2020 23:28:45
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 0CDC5C433FF; Thu,  5 Nov 2020 23:28:45 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id D922EC433C9;
+        Thu,  5 Nov 2020 23:28:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D922EC433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu, Thinh.Nguyen@synopsys.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH v2 0/2] Allow DWC3 runtime suspend if UDC is unbinded
+Date:   Thu,  5 Nov 2020 15:28:23 -0800
+Message-Id: <20201105232825.5233-1-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201104080524.1821-1-peter.chen@nxp.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 04 Nov 2020 16:05:24 +0800, Peter Chen wrote:
-> To support low power mode for controller, the driver needs wakeup-irq
-> to reflect the signal changing after controller is stopped, and waking
-> the controller up accordingly.
-> 
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
-> Changes for v3:
-> - Fix the dt_binding_check error
-> 
-> Changes for v2:
-> - Add "minItems: 3" to make wakeup irq optional
-> 
->  Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+Changes in v2:
+ - Modified logic for executing the runtime PM resume.  Using a sychronous get
+   call to avoid race conditions.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+During the following scenario, the DWC3 runtime suspend routine is blocked as
+the connected flag is still true:
+
+1.  Enumerate device w/ host.
+2.  Gadget is unbinded
+	- echo "" > /sys/kernel/config/usb_gadget/g1/UDC
+3.  Disconnect the USB cable (VBUS low)
+4.  No dwc3_gadget_disconnect_interrupt() seen (since controller is
+   halted from step#1)
+5.  Runtime PM autosuspend fails due to "dwc->connected" being true
+(cleared in dwc3_gadget_disconnect_interrupt())
+6.  Gadget binded
+	- echo udc_name > /sys/kernel/config/usb_gadget/g1/UDC
+7.  No runtime suspend until cable is plugged in and out
+
+Technically, for device initiated disconnects, there is no active session/link
+with the host, so the DWC3 controller should be allowed to go into a low power
+state.  Also, we need to now consider when re-binding the UDC,
+dwc3_gadget_set_speed() is executed before dwc3_gadget_pullup(), so if the DWC3
+controller is suspended/disabled, while accessing the DCFG, that could result in
+bus timeouts, etc...  Change the dwc3_gadget_set_speed() to save the speed
+being requested, and program it during dwc3_gadget_run_stop(), which is executed
+during PM runtime resume.  If not, previous setting will be overridden as we
+execute a DWC3 controller reset during PM runtime resume. 
+
+Wesley Cheng (2):
+  usb: dwc3: gadget: Allow runtime suspend if UDC unbinded
+  usb: dwc3: gadget: Preserve UDC max speed setting
+
+ drivers/usb/dwc3/core.h   |   1 +
+ drivers/usb/dwc3/gadget.c | 121 ++++++++++++++++++++++----------------
+ 2 files changed, 71 insertions(+), 51 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
