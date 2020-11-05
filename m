@@ -2,86 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 698FF2A833D
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 17:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D16E12A8560
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 18:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731013AbgKEQOx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 11:14:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43278 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725862AbgKEQOw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Nov 2020 11:14:52 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5BC6206B7;
-        Thu,  5 Nov 2020 16:14:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604592892;
-        bh=urp1TUB7bsad4HXf4hTdc4VKnO9NVgIYTeMT68wlEuU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Wyyh+fFSHvTV97GVS2CF90aZljGaeaSSnfDyRwT27cf0apqDyUvPvgsYhSabjNLnu
-         V/O9zFoAn/44po0ODzNjRbGzQ9TtdXv78slJTXnQg+uqBy1gUr+dLXtWxzC0oBGgBT
-         +Mzx+2glIkLOXh4dAoKT8iYYEnAsFanUh8tUi890=
-Date:   Thu, 5 Nov 2020 08:14:50 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [RESEND PATCH v3] net: usb: usbnet: update
- __usbnet_{read|write}_cmd() to use new API
-Message-ID: <20201105081450.4a257e7f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <dc3a4901-9aad-3064-4131-bc3fc82f965f@gmail.com>
-References: <20201102173946.13800-1-anant.thazhemadam@gmail.com>
-        <20201104162444.66b5cc56@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <dc3a4901-9aad-3064-4131-bc3fc82f965f@gmail.com>
+        id S1731558AbgKERyz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 12:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726214AbgKERyx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 12:54:53 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD3EC0613CF;
+        Thu,  5 Nov 2020 09:54:53 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id u18so3540928lfd.9;
+        Thu, 05 Nov 2020 09:54:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=gA6OLdD6ilrl1MlK7OiJsrdds83PpowmxPmjVFzKPLU=;
+        b=XXHF9HTK2ugJChM+FIFMCW2E53QGEH1yguNWVVsZT4/1tb/wA72NsMDzQdgSY44iRC
+         mV3oLf1MLXH5haz2YuP1CDRT8aUuzPTl7F2/RMHftpwIeYEBCAs3NG+BR4dNeGs187mI
+         XbuGXQroBJTTOWAvgupbT5YRyuuxAIsIhg4fLFlZAAdVH++d1JBlqRiVgDhJ8kvrw9/J
+         CoeoXoFGkh8y4iwGjCRTehbz/gI/F1PorRz0eVlctXoG9S08Uk7T6RBaUSdPCHSWuFmU
+         /CTWZV/yrLcMfC8ZqzKcUNZKBSSDhWAWRgAsWN1XiInqnWC0QIShxySn34YF6hnFOplx
+         3LEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gA6OLdD6ilrl1MlK7OiJsrdds83PpowmxPmjVFzKPLU=;
+        b=LpDc8mD5HHiK/05L6j9SILjUW7kl9ImPU9DSX3knUp05nIak7YsZwvidw7C966nsEK
+         cF4Qy+7FdJIxKoTJhgwJ9D+6TQFmgJYlS3xa3+yA+4JL0hy2i34V4iXKj94W2oUt8mbj
+         rh+l4iY3ZEhvKP5hwzfenDxIRuc5CFcnstLIFAjv+mJmC8P+hLON9jIOPng+KzO32LtB
+         3CbRN2FONZ+luJ42achnO+4YMRTY1dsl0CZIuZpvdYmbAN4pk6D7G+qGzdNMO7cAVzMO
+         mBYSC/TfUrsELzEauD2eB5bcbs0DHu7GLSQhxv6El7ep4Rpy3fE4Py5x1CprltFrmSEC
+         Xqdg==
+X-Gm-Message-State: AOAM531ZyCewGlIdzS6sTCisd6Xp2UHLMSR55AKBKnHEG9tPyrKYdonF
+        gGAwbsai3pqckEqlLshyKCvBnFQ7tEs=
+X-Google-Smtp-Source: ABdhPJyehz6KeITPmKFKw6lYd3zXe4BcIJiDjnQqHKJZPRp9Z41GNG8/Y3X7JzcgSQn251Z5j8SlyQ==
+X-Received: by 2002:a19:4206:: with SMTP id p6mr1372241lfa.151.1604598890223;
+        Thu, 05 Nov 2020 09:54:50 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-83.dynamic.spd-mgts.ru. [109.252.192.83])
+        by smtp.googlemail.com with ESMTPSA id v20sm248899lfd.178.2020.11.05.09.54.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Nov 2020 09:54:49 -0800 (PST)
+Subject: Re: [PATCH v1 21/30] usb: host: ehci-tegra: Support OPP and SoC core
+ voltage scaling
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-usb@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <20201104234427.26477-22-digetx@gmail.com>
+ <20201105160743.GA1613614@rowland.harvard.edu>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <cbc6bf1f-eccb-dee5-d2aa-2c60f1d365e2@gmail.com>
+Date:   Thu, 5 Nov 2020 20:54:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20201105160743.GA1613614@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 5 Nov 2020 07:56:08 +0530 Anant Thazhemadam wrote:
-> On 05/11/20 5:54 am, Jakub Kicinski wrote:
-> > On Mon,  2 Nov 2020 23:09:46 +0530 Anant Thazhemadam wrote:  
-> >> Currently, __usbnet_{read|write}_cmd() use usb_control_msg().
-> >> However, this could lead to potential partial reads/writes being
-> >> considered valid, and since most of the callers of
-> >> usbnet_{read|write}_cmd() don't take partial reads/writes into account
-> >> (only checking for negative error number is done), and this can lead to
-> >> issues.
-> >>
-> >> However, the new usb_control_msg_{send|recv}() APIs don't allow partial
-> >> reads and writes.
-> >> Using the new APIs also relaxes the return value checking that must
-> >> be done after usbnet_{read|write}_cmd() is called.
-> >>
-> >> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>  
-> > So you're changing the semantics without updating the callers?
-> >
-> > I'm confused. 
-> >
-> > Is this supposed to be applied to some tree which already has the
-> > callers fixed?
-> >
-> > At a quick scan at least drivers/net/usb/plusb.c* would get confused 
-> > as it compares the return value to zero and 0 used to mean "nothing
-> > transferred", now it means "all good", no? 
-> >
-> > * I haven't looked at all the other callers  
-> 
-> I see. I checked most of the callers that directly called the functions,
-> but it seems to have slipped my mind that these callers were also
-> wrappers, and to check the callers for these wrapper.
-> I apologize for the oversight.
-> I'll perform a more in-depth analysis of all the callers, fix this mistake,
-> and send in a patch series instead, that update all the callers too.
-> Would that be alright?
+05.11.2020 19:07, Alan Stern пишет:
+> Do you really want to use the same error unwinding for opp_table values 
+> obtained from dev_pm_opp_set_regulators() as from 
+> dev_pm_opp_get_opp_table()?
 
-Yes. Probably best if you rename the existing function as first patch,
-then add a new one with the old name using usb_control_msg_{send|recv}()
-then switch the callers one by one, and finally remove the old renamed
-function.
+They both are pointing at the same opp_table, which is refcounted.
+
+The dev_pm_opp_set_regulators() is dev_pm_opp_get_opp_table() + it sets
+regulator for the table.
+
+https://elixir.bootlin.com/linux/v5.10-rc2/source/drivers/opp/core.c#L1756
