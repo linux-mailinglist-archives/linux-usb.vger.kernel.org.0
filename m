@@ -2,149 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1A02A7D9C
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 12:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F6B2A7E48
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 13:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729916AbgKEL4Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 06:56:25 -0500
-Received: from mga06.intel.com ([134.134.136.31]:28858 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726067AbgKEL4X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Nov 2020 06:56:23 -0500
-IronPort-SDR: 990pnNWtUKl5Ce3mbT7Hh7E7rO1aJE8xB58h1/CpysVXdGc+eAK/dUGZNSXnpYkozwVqCQVJqt
- zEjcoc/hHQkQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="230995570"
-X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
-   d="scan'208";a="230995570"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 03:56:23 -0800
-IronPort-SDR: PrSahF/skdxo4vcRpEnt6mrtoYPpUss50AvAuePljTy2ALLkNFwmJPknTAZR6xdDNZIKZQaihy
- UV0wEAD1eYDg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
-   d="scan'208";a="354253896"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Nov 2020 03:56:21 -0800
-Subject: Re: [PATCH] xhci-pci: Allow host runtime PM as default for Intel
- Maple Ridge xHCI
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-References: <20201105110031.8691-1-mika.westerberg@linux.intel.com>
- <87imakqbkp.fsf@kernel.org> <20201105115006.GH2495@lahna.fi.intel.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <01786d10-f7e8-f863-8621-f33e3268dab2@linux.intel.com>
-Date:   Thu, 5 Nov 2020 13:57:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1730681AbgKEMGo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 07:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730270AbgKEMGn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 07:06:43 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AE8C0613CF;
+        Thu,  5 Nov 2020 04:06:43 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id oq3so2242729ejb.7;
+        Thu, 05 Nov 2020 04:06:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Sn/aYlWmXDGmFRHLTMaa0NIVzI9EMOinFodzXgmolWU=;
+        b=cjOoTOcu0q40i5XFzBJ2xVgbzc0Ozs9Xuw+h0FTIDtR5bgwzTs1wreNPSu2ad/5k4h
+         bZ7AVHEGvNPBmloFk2ysqfv2CvCrEpGe7nbkjva17Ineg5aCK8XxJ2E3NfcnDfsBxnp+
+         T0gw8zfTGjG75OYzU9A6BT+EzPYkGi1hiwbG/qqUlHLS0G3eywGBed7xj0fLuSgFVhG2
+         vGiiDeKyfVuxS9UVHzUw5FKus1qlPXQnfCHANxcLei1D1/BPIrrJv6da9BMVvZhJPlqS
+         RFg8mud35v+uNbJh8jtBdns0thiZPhdI274P6/tpPEJlv+1dfGSlpvoU3i8HrKcrqxAF
+         uJLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Sn/aYlWmXDGmFRHLTMaa0NIVzI9EMOinFodzXgmolWU=;
+        b=AUenuMR9YtiZcst7+L4V///z6qLdsjYznm3BAFBrIrzrfBszmTP16YVqmzo6HZ0GCi
+         u7USdsEfgAtj1MOF9Qq+lnHsHtjm2P6lBSD00jglJm+4FQUzW/9J1JGfqzNSUbloLLPK
+         HXC8kQew2hzxqVJhBkkk7oZx2bMgJhEHNW0Iar8+ZCg+FOpvpNaGNhibYV/xDKuxtMyZ
+         0GSXiRS3errRgHifnc5ygrVdu5UqGpiK8yGwLwMBP39aJWHu3ml1wyYFBZvN+CSVyVrE
+         eZ1TS2HS87XPf1WgYMpgaIGKOS+KWiNnzv6+xUHgCntuM3Y0STz2Y/lxNVXqWkisd6wV
+         otEQ==
+X-Gm-Message-State: AOAM533BOJQEZIGiNCHaL7VdzlfGp/tTze2/z920rcUrZBIUq7JxUGPz
+        7d8hKgBtoQYgauA33dCoWTA=
+X-Google-Smtp-Source: ABdhPJx0wNJO5bkkdrneALqSB25f5n8OAdtgSA1Ypo3ILc6984/3saechrsqKJqyNd1FNz2dTuN79w==
+X-Received: by 2002:a17:906:17d1:: with SMTP id u17mr1825341eje.229.1604578002245;
+        Thu, 05 Nov 2020 04:06:42 -0800 (PST)
+Received: from skbuf ([188.25.2.177])
+        by smtp.gmail.com with ESMTPSA id p20sm816136ejd.78.2020.11.05.04.06.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2020 04:06:41 -0800 (PST)
+Date:   Thu, 5 Nov 2020 14:06:40 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: Re: [PATCH net-next 3/5] r8152: add MCU typed read/write functions
+Message-ID: <20201105120640.5ltlf4vu5vmkf3xl@skbuf>
+References: <20201104065524.36a85743@kernel.org>
+ <20201104084710.wr3eq4orjspwqvss@skbuf>
+ <20201104112511.78643f6e@kernel.org>
+ <20201104113545.0428f3fe@kernel.org>
+ <20201104110059.whkku3zlck6spnzj@skbuf>
+ <20201104121053.44fae8c7@kernel.org>
+ <20201104121424.th4v6b3ucjhro5d3@skbuf>
+ <20201105105418.555d6e54@kernel.org>
+ <20201105105642.pgdxxlytpindj5fq@skbuf>
+ <20201105123043.3b114bec@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20201105115006.GH2495@lahna.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201105123043.3b114bec@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5.11.2020 13.50, Mika Westerberg wrote:
-> On Thu, Nov 05, 2020 at 01:37:10PM +0200, Felipe Balbi wrote:
->>
->> Hi,
->>
->> Mika Westerberg <mika.westerberg@linux.intel.com> writes:
->>> Intel Maple Ridge is successor of Titan Ridge Thunderbolt controller. As
->>> Titan Ridge this one also includes xHCI host controller. In order to
->>> safe energy we should put it to low power state by default when idle.
->>   ^^^^
->>   save
+On Thu, Nov 05, 2020 at 12:30:43PM +0100, Marek Behún wrote:
+> On Thu, 5 Nov 2020 12:56:42 +0200
+> Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> > On Thu, Nov 05, 2020 at 10:54:18AM +0100, Marek Behún wrote:
+> > > I thought that static inline functions are preferred to macros, since
+> > > compiler warns better if they are used incorrectly...
+> >
+> > Citation needed.
+>
+> Just search for substring "instead of macro" in git log, there are
+> multiple such changes that were accepted since it provides better
+> typechecking. I am not saying it is documented anywhere, just that I
+> thought it was preffered.
+>
+> > Also, how do static inline functions wrapped in macros
+> > (i.e. your patch) stack up against your claim about better warnings?
+>
+> If they are defined as functions (they don't have to be inline,
+> of course) instead of macros and they are used incorrectly, the compiler
+> provides more readable warnings. (Yes, in current versions of gcc it is
+> much better than in the past, but still there are more lines of
+> warnings printed: "in expansion of macro"...).
 
-I'll fix that while applying
-
-> 
-> Indeed, thanks.
-> 
->>> For this reason allow host runtime PM for Maple Ridge.
->>>
->>> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
->>> ---
->>>  drivers/usb/host/xhci-pci.c | 4 +++-
->>>  1 file changed, 3 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->>> index bf89172c43ca..d17e463087df 100644
->>> --- a/drivers/usb/host/xhci-pci.c
->>> +++ b/drivers/usb/host/xhci-pci.c
->>> @@ -55,6 +55,7 @@
->>>  #define PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI		0x8a13
->>>  #define PCI_DEVICE_ID_INTEL_CML_XHCI			0xa3af
->>>  #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
->>> +#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
->>>  
->>>  #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
->>>  #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
->>> @@ -238,7 +239,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->>>  	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI ||
->>>  	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
->>>  	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
->>> -	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI))
->>> +	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
->>> +	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI))
->>>  		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
->>
->> the ever growing list of quirks to *allow* PM :-) Perhaps the logic
->> should be inverted here and call a quirk to something that *can't*
->> handle PM?
-> 
-> I'm not a xHCI expert but I would expect that list to be even longer ;-)
-> 
-
-Yes, in the long run either way isn't really an optimal solution, but for now, until we
-figure out a better way this will have to do.
-
--Mathias
+Ok, but I mean, we're not even in contradiction at this point? I only
+provided you macro definitions of pla_ocp_* and usb_ocp_* to prove that
+they can be defined in a cleaner way than your attempt. If you still
+think it's worth having the pla_ocp_* and usb_ocp_* helpers defined as
+separate functions just to avoid passing the extra MCU_TYPE_* argument,
+then go ahead.
