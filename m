@@ -2,70 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B28442A73B4
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 01:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 739472A73DD
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 01:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732874AbgKEAYq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Nov 2020 19:24:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46204 "EHLO mail.kernel.org"
+        id S1733181AbgKEAfB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Nov 2020 19:35:01 -0500
+Received: from mx2.suse.de ([195.135.220.15]:45328 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728212AbgKEAYp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Nov 2020 19:24:45 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EBC602080D;
-        Thu,  5 Nov 2020 00:24:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604535885;
-        bh=uYtt1Nd+0axqH7yuxo8Tc4Yl1kGBqXxqhhp8NdbBKbw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ExvxMxxJ+ZxeVDpHX1VNEHHr8mx4wPekye0QK5AmFgc+8JfUXPnXN8E5CSRa/Bs2+
-         TFOeeF5Ie5/WISQ7G0HdKNXvkGpLS4hH8f8BLNpsRv03sP+smtq3d/vG0nGHLguH3s
-         b1fgHmXEybTKMnNwIx7CfTHyKSrTIY/6K8jnORIw=
-Date:   Wed, 4 Nov 2020 16:24:44 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [RESEND PATCH v3] net: usb: usbnet: update
- __usbnet_{read|write}_cmd() to use new API
-Message-ID: <20201104162444.66b5cc56@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201102173946.13800-1-anant.thazhemadam@gmail.com>
-References: <20201102173946.13800-1-anant.thazhemadam@gmail.com>
+        id S1726608AbgKEAfB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Nov 2020 19:35:01 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 6AC2DAC3F;
+        Thu,  5 Nov 2020 00:34:59 +0000 (UTC)
+Date:   Wed, 4 Nov 2020 16:13:07 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [PATCH] usb/mos7720: process deferred urbs in a workqueue
+Message-ID: <20201105001307.lelve65nif344cfs@linux-p48b.lan>
+References: <20201102211450.5722-1-dave@stgolabs.net>
+ <20201103204014.3ue37owcras6cx7p@linux-p48b.lan>
+ <20201104110657.GW4085@localhost>
+ <20201104162534.GY4085@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20201104162534.GY4085@localhost>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon,  2 Nov 2020 23:09:46 +0530 Anant Thazhemadam wrote:
-> Currently, __usbnet_{read|write}_cmd() use usb_control_msg().
-> However, this could lead to potential partial reads/writes being
-> considered valid, and since most of the callers of
-> usbnet_{read|write}_cmd() don't take partial reads/writes into account
-> (only checking for negative error number is done), and this can lead to
-> issues.
-> 
-> However, the new usb_control_msg_{send|recv}() APIs don't allow partial
-> reads and writes.
-> Using the new APIs also relaxes the return value checking that must
-> be done after usbnet_{read|write}_cmd() is called.
-> 
-> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+On Wed, 04 Nov 2020, Johan Hovold wrote:
 
-So you're changing the semantics without updating the callers?
+>Hmm. I took at closer look at the parport code and it seems the current
+>implementation is already racy but that removing the tasklet is going to
+>widen that that window.
+>
+>Those register writes in restore() should be submitted before any
+>later requests. Perhaps setting a flag and flushing the work in
+>parport_prologue() could work?
 
-I'm confused. 
+Ah, I see and agree. Considering work is only deferred from restore_state()
+I don't even think we need a flag, no? We can let parport_prologue()
+just flush_work() unconditionally (right before taking the disc_mutex)
+which for the most part will be idle anyway. The flush_work() also becomes
+saner now that we'll stop rescheduling work in send_deferred_urbs().
 
-Is this supposed to be applied to some tree which already has the
-callers fixed?
+Also, but not strictly related to this. What do you think of deferring all
+work in write_parport_reg_nonblock() unconditionally? I'd like to avoid
+that mutex_trylock() because eventually I'll be re-adding a warn in the
+locking code, but that would also simplify the code done here in the
+nonblocking irq write. I'm not at all familiar with parport, but I would
+think that restore_state context would not care.
 
-At a quick scan at least drivers/net/usb/plusb.c* would get confused 
-as it compares the return value to zero and 0 used to mean "nothing
-transferred", now it means "all good", no? 
+>On the other hand, the restore() implementation looks broken in that it
+>doesn't actually restore the provided state. I'll go fix that up.
 
-* I haven't looked at all the other callers
+How did this thing ever work?
+
+Thanks,
+Davidlohr
