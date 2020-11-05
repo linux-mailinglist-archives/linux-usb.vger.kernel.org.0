@@ -2,189 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F5C2A7BF6
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 11:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C616F2A7C0B
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 11:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728371AbgKEKhN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 05:37:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44076 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726152AbgKEKhN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Nov 2020 05:37:13 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2AB13206E3;
-        Thu,  5 Nov 2020 10:37:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604572630;
-        bh=ObOQtJ5/x0uOtTDXpdRr8XT0Mw7WNwsh4CnjbzNvdMM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S6MAOM/FDZaEpRc64GCe+kdLbIqw7UT/Ms5jexGoRmGhticUegG9iU4I0xOL3UjOh
-         ilsQg3humpWb3Ne3JiEaS+ICPTb0Me04YudpeaedPZKLZ0munStjX0xkJHeT/ugXW/
-         7PtzPZclXPgzfu3axlVdyC4dkJ4ooqyhIB/YNkHY=
-Date:   Thu, 5 Nov 2020 11:37:58 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     thomas.haemmerle@wolfvision.net
-Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
-        linux-usb@vger.kernel.org, m.tretter@pengutronix.de
-Subject: Re: [PATCH] usb: gadget: uvc: fix multiple opens
-Message-ID: <20201105103758.GA4033354@kroah.com>
-References: <20201105103119.11419-1-thomas.haemmerle@wolfvision.net>
+        id S1729016AbgKEKkQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 05:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728371AbgKEKkP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 05:40:15 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA96C061A4A
+        for <linux-usb@vger.kernel.org>; Thu,  5 Nov 2020 02:40:13 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id t22so583702plr.9
+        for <linux-usb@vger.kernel.org>; Thu, 05 Nov 2020 02:40:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=WCCTQKcgxT5BgoXvd55cVkeUPDruRceTke7HPT3Hkyo=;
+        b=uI5sjdIZnJfMXmb2BmcneLzfiFbBlet9wY7JQZtjHR0GF8UkHMmcqlXwBrkvsqK1WI
+         SeinhDQqNDH8/hEaMPpSpgwvj0qAA2DAOlij96dLz+WulydyVF4o3fYzumZUYFXFoH1h
+         ZgXb17DvmcshHNZxztv5zRi/aeOa+ymd+joJrRroDAhLo0nx97avxNo1KBPgxXcO+5qD
+         SXvk12UVzaw2/5tEF2FemBinKY4gdRZP1KDwgT69Jbp7nnNi1tx0Yci0mKB/TEHxbTdH
+         hUsmGHEaNuInutK+0y4SPLiOBIQ+CzV6c4LqpUQ2rUe9GYtY4Vnxx2LLLnO7akoNoqHJ
+         X5Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=WCCTQKcgxT5BgoXvd55cVkeUPDruRceTke7HPT3Hkyo=;
+        b=C0UggUvPJ0MKTlnBU6lu/PT5Xt2rdKrU8uEh2GfRxtFY/L7ijVgFW//bwN5b8jkjPb
+         /eViSS/qtwvKsHZQonJCWZM22RHYO2yfJnaQmy5Z2rzn9CVSnTLoliGhD4lOqnaukRyo
+         9Fkg7NpT2hIvDldfcQlxcfvyY8bwvi6G301fWjCVS3TdRUGsoxrDwxONMVn7FIFgZpZV
+         wc8w+AcGLfm6OJ5tiqllldG0iYMgW7LPgIv70wjUdfNCh9hQ51sxxY3UsTRjrzElp9Xr
+         QvhcreBV3YVZgH7aPCJmmQW8ki428iIsntUvMe6DgIBKD9WY27Rkxt/vxc6bqbKUnuMQ
+         Eeaw==
+X-Gm-Message-State: AOAM531Ooj9USUkKe03l2oBixPZM8KiwbmlOsYOgOj4YFHDlO+S397Eq
+        wpFAS5XwlglAblbyuT8n9MmgKQ==
+X-Google-Smtp-Source: ABdhPJxaeig/5BttxMih2SwDkKcSP7+kCvVk+Bpsa5+VJfx+t48gt5Hq0JWRUoD/r4V+wRad0uK0Vw==
+X-Received: by 2002:a17:902:b601:b029:d3:e6c5:5112 with SMTP id b1-20020a170902b601b02900d3e6c55112mr1328833pls.65.1604572812590;
+        Thu, 05 Nov 2020 02:40:12 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id q11sm1908845pgm.79.2020.11.05.02.40.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 05 Nov 2020 02:40:11 -0800 (PST)
+Date:   Thu, 5 Nov 2020 16:10:09 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        driverdevel <devel@driverdev.osuosl.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-pwm@vger.kernel.org,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
+ Tegra20/30 SoCs
+Message-ID: <20201105104009.oo4dc6a2gdcwduhk@vireshk-i7>
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <CAPDyKFr7qTU2RPhA_ZrbCayoTTNUEno1zdmvmv+8HBe-Owrfeg@mail.gmail.com>
+ <20201105100603.skrirm7uke4s2xyl@vireshk-i7>
+ <CAPDyKFoCJt5MBSKBJ8n1OAMdVsWHdwXTx0zFEcZw_F_gQ6Ug0w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201105103119.11419-1-thomas.haemmerle@wolfvision.net>
+In-Reply-To: <CAPDyKFoCJt5MBSKBJ8n1OAMdVsWHdwXTx0zFEcZw_F_gQ6Ug0w@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 11:31:19AM +0100, thomas.haemmerle@wolfvision.net wrote:
-> From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-> 
-> Currently, the UVC function is activated when open on the corresponding
-> v4l2 device is called.
-> On another open the activation of the function fails since the
-> deactivation counter in `usb_function_activate` equals 0. However the
-> error is not returned to userspace since the open of the v4l2 device is
-> successful.
-> 
-> On a close the function is deactivated (since deactivation counter still
-> equals 0) and the video is disabled in `uvc_v4l2_release`, although
-> another process potentially is streaming.
-> 
-> Move activation of UVC function to subscription on UVC_EVENT_SETUP and
-> keep track of the number of subscribers (limited to 1) because there we
-> can guarantee for a userspace program utilizing UVC.
-> Extend the `struct uvc_file_handle` with member `bool setup_subscriber`
-> to tag it for a deactivation of the function.
-> 
-> With this a process is able to check capabilities of the v4l2 device
-> without deactivating the function for another process actually using the
-> device for UVC streaming.
-> 
-> Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-> ---
->  drivers/usb/gadget/function/uvc.h      |  2 +
->  drivers/usb/gadget/function/uvc_v4l2.c | 57 +++++++++++++++++++++-----
->  2 files changed, 49 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-> index 23ee25383c1f..deeec2b80786 100644
-> --- a/drivers/usb/gadget/function/uvc.h
-> +++ b/drivers/usb/gadget/function/uvc.h
-> @@ -117,6 +117,7 @@ struct uvc_device {
->  	enum uvc_state state;
->  	struct usb_function func;
->  	struct uvc_video video;
-> +	unsigned int connections;
->  
->  	/* Descriptors */
->  	struct {
-> @@ -147,6 +148,7 @@ static inline struct uvc_device *to_uvc(struct usb_function *f)
->  struct uvc_file_handle {
->  	struct v4l2_fh vfh;
->  	struct uvc_video *device;
-> +	bool connected;
->  };
->  
->  #define to_uvc_file_handle(handle) \
-> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> index 4ca89eab6159..c0c2588b0efb 100644
-> --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> @@ -227,17 +227,60 @@ static int
->  uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
->  			 const struct v4l2_event_subscription *sub)
->  {
-> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
-> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
-> +	int ret;
-> +
->  	if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
->  		return -EINVAL;
->  
-> -	return v4l2_event_subscribe(fh, sub, 2, NULL);
-> +	if ((sub->type == UVC_EVENT_SETUP) && (uvc->connections >= 1))
-> +		return -EBUSY;
-> +
-> +	ret = v4l2_event_subscribe(fh, sub, 2, NULL);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (sub->type == UVC_EVENT_SETUP) {
-> +		uvc->connections++;
-> +		handle->connected = true;
-> +		uvc_function_connect(uvc);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void uvc_v4l2_disable(struct uvc_device *uvc)
-> +{
-> +	if (--uvc->connections)
-> +		return;
-> +
-> +	uvc_function_disconnect(uvc);
-> +
-> +	mutex_lock(&uvc->video.mutex);
-> +	uvcg_video_enable(&uvc->video, 0);
-> +	uvcg_free_buffers(&uvc->video.queue);
-> +	mutex_unlock(&uvc->video.mutex);
->  }
->  
->  static int
->  uvc_v4l2_unsubscribe_event(struct v4l2_fh *fh,
->  			   const struct v4l2_event_subscription *sub)
->  {
-> -	return v4l2_event_unsubscribe(fh, sub);
-> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
-> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
-> +	int ret;
-> +
-> +	ret = v4l2_event_unsubscribe(fh, sub);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if ((sub->type == UVC_EVENT_SETUP) && handle->connected) {
-> +		uvc_v4l2_disable(uvc);
-> +		handle->connected = false;
-> +	}
-> +
-> +	return 0;
->  }
->  
->  static long
-> @@ -292,7 +335,6 @@ uvc_v4l2_open(struct file *file)
->  	handle->device = &uvc->video;
->  	file->private_data = &handle->vfh;
->  
-> -	uvc_function_connect(uvc);
->  	return 0;
->  }
->  
-> @@ -302,14 +344,9 @@ uvc_v4l2_release(struct file *file)
->  	struct video_device *vdev = video_devdata(file);
->  	struct uvc_device *uvc = video_get_drvdata(vdev);
->  	struct uvc_file_handle *handle = to_uvc_file_handle(file->private_data);
-> -	struct uvc_video *video = handle->device;
-> -
-> -	uvc_function_disconnect(uvc);
->  
-> -	mutex_lock(&video->mutex);
-> -	uvcg_video_enable(video, 0);
-> -	uvcg_free_buffers(&video->queue);
-> -	mutex_unlock(&video->mutex);
-> +	if (handle->connected)
-> +		uvc_v4l2_disable(uvc);
+On 05-11-20, 11:34, Ulf Hansson wrote:
+> I am not objecting about scaling the voltage through a regulator,
+> that's fine to me. However, encoding a power domain as a regulator
+> (even if it may seem like a regulator) isn't. Well, unless Mark Brown
+> has changed his mind about this.
+>
+> In this case, it seems like the regulator supply belongs in the
+> description of the power domain provider.
 
-What prevents connected from changing between the test and the next
-call?
+Okay, I wasn't sure if it is a power domain or a regulator here. Btw,
+how do we identify if it is a power domain or a regulator ?
 
-I think you need a lock somewhere, a simple integer isn't going to
-protect you from anything (hint, and neither will an atomic variable...)
+> > In case of Qcom earlier (when we added the performance-state stuff),
+> > the eventual hardware was out of kernel's control and we didn't wanted
+> > (allowed) to model it as a virtual regulator just to pass the votes to
+> > the RPM. And so we did what we did.
+> >
+> > But if the hardware (where the voltage is required to be changed) is
+> > indeed a regulator and is modeled as one, then what Dmitry has done
+> > looks okay. i.e. add a supply in the device's node and microvolt
+> > property in the DT entries.
+> 
+> I guess I haven't paid enough attention how power domain regulators
+> are being described then. I was under the impression that the CPUfreq
+> case was a bit specific - and we had legacy bindings to stick with.
+> 
+> Can you point me to some other existing examples of where power domain
+> regulators are specified as a regulator in each device's node?
 
-thanks,
+No, I thought it is a regulator here and not a power domain.
 
-greg k-h
+-- 
+viresh
