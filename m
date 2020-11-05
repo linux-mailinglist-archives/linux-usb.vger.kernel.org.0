@@ -2,137 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 303122A7C72
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 11:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2602A7C6F
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 11:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730073AbgKEK5Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 05:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
+        id S1730152AbgKEK4p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 05:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726688AbgKEK5P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 05:57:15 -0500
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF183C0613D2
-        for <linux-usb@vger.kernel.org>; Thu,  5 Nov 2020 02:57:14 -0800 (PST)
-Received: by mail-vs1-xe41.google.com with SMTP id h5so520545vsp.3
-        for <linux-usb@vger.kernel.org>; Thu, 05 Nov 2020 02:57:14 -0800 (PST)
+        with ESMTP id S1730069AbgKEK4p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 05:56:45 -0500
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11400C0613CF;
+        Thu,  5 Nov 2020 02:56:45 -0800 (PST)
+Received: by mail-ej1-x643.google.com with SMTP id oq3so1952915ejb.7;
+        Thu, 05 Nov 2020 02:56:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NZmePoLLIiaP7pYwZl5Ym7F23h4GkDT/CkXYHiP4lxo=;
-        b=sMrO9GRUiQTa3qJHIC5F27I3pHGV5/pX9nBuQ9TmRTxE01Ehxii8CB9TiezKwc2tYJ
-         3SHV/Rhxs7BmoKB4aJ9W24W7rjat8dvXU+F20+lfe5dyWM1qwmiRT2/Hz4E+yVMLYnPt
-         b7MnO/qq1/9P+on1rkNYRYvwC+wu1WaH12rx3rIlc9KubXnGg8K8RqrwvSVobVT1eBhL
-         S5jUjJHcPKtkeDXyshEdMUlmsFSrn0JHuPLo57AVegznV5Ma/kMzEcO9yRsB/eDD9c8G
-         VI/lxjTY1cQzy9HDsuMni9iMjRs1YrWj3PYOnqX2Fk0T+EROO60K2racmtEoxOny53Bc
-         Vckg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=AtroSstUCyILeySaqdfODVVqHZHsfk6Z9ZPz46kg3Uk=;
+        b=uJPNm/9fX3Jf24EnO4xc7KbgtzTtSXE6BXX3IWTEed2qtNk5ipkQ8Z1P4a18M0vaBB
+         PyPSp9f5xIKMG4K02fxqMVRu2zqMNp5qbhUfs/28Tc7aFjxvSTYichUvs6rv+QMNLQvs
+         qit6fCGQagC0F0r6CWh3Z2MSoR1R01+beNFFYeTCZu5L0DamVlns97F8BtnfmJKURrgK
+         InncOII52BV2qICMswBBCDj4lsvtQDa7ARU8kCWybA3RDTUEzah4vqpXXHODsUUD4iYF
+         rxyeHksLagvVpemCUD5lI1xrMJDeh9vKmatgb/eBfhiBfr/wOjwahXKSe+mWoH/EAxx8
+         8Hzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NZmePoLLIiaP7pYwZl5Ym7F23h4GkDT/CkXYHiP4lxo=;
-        b=ILU2zu53h/0D18f+HmZ0/JVicGtGSZ/Fc3Iysre22urEM6IfpbQlfcL2b+LwfBc16p
-         K336N/7o0WzD2tnwdP2LZrHGsX35vNt9SjNgvIVVdy6ONcBr4U5Sp8CKa/Kua+QYWjlT
-         1sWZyJPGRfT4el5MYK14aB+aHegr8g7pmftgV9ehC8jMEaE5CiFAyYrb7TJoFV7mkjns
-         G8bLNKuYjlXlpm3iBMJEzNqS+iDj+dcIknd2jMAa1kv5uGwo8ghQwKLLyt3ohFQWTx+s
-         WGxeeOBPIvy3IYIQRayVedicdhsWc8M9JcA61zQOLiBuamXf+Aa7n3ltBfbX9PwSVQa2
-         9C2A==
-X-Gm-Message-State: AOAM530Fx4bvcH1d3sYrf9nTbaFk057NWTcOd1UQ8SDtw9vWlZki0y8M
-        UovNKM6qjXKjEAt+j0VaOjHA/trPo4Pv5KHjcS0wgQ==
-X-Google-Smtp-Source: ABdhPJxaRHBJV2RUrIs2kqpAdWFFr8Yx3RVQqbiDwrHCSiI8zLcVccVJz2D9BrdKdQ25WwGzjdkbJ1OYioX7LFmCPEw=
-X-Received: by 2002:a67:310d:: with SMTP id x13mr785780vsx.19.1604573833960;
- Thu, 05 Nov 2020 02:57:13 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=AtroSstUCyILeySaqdfODVVqHZHsfk6Z9ZPz46kg3Uk=;
+        b=M/utkE/CR4zCfdCTFzarRf3/D0JNRAIgtLiDXv74ch7NHelaAIE53HMhTIJ0JvBhK2
+         yKA+0WN+ifbW4Yb5N2SbC78a3saEJ3lmn6bg+GgqHEBfqxs/8qF31egaupgyed7LN1W1
+         u3PvkaffGkJF9qLnNXEOA3Vh1X/QzTNIKWxXYWN8edCTnHeXjMUJP2F9XGyUS7MomKUH
+         6RFdSPv0s4VsL4mDHnLiuIW63yBHxj91k5OTuRkaqb+U9/Y+A6Q33ekwe8Uyp93wMP82
+         2GMAmLDO9NUcCnxMqFYz6zs5pTLy4z/j3qtO4yr0dGbnliHdLKvrmnagdHB6I9wcIna8
+         oSyw==
+X-Gm-Message-State: AOAM533PlAtUK/BTlN7S3A19bnmwDJJlXWqasNwS4Xvop40T51mqFb9s
+        v2nQh2vp9kkLMh9NW4QD6Ck=
+X-Google-Smtp-Source: ABdhPJwImWuTsjbha72MzYhweiG73gxU/PCNOwPm29v3UZUaq05ZSrQ8wDTOcFlhqh+3kxKUrdtKJA==
+X-Received: by 2002:a17:906:a14c:: with SMTP id bu12mr1732678ejb.444.1604573803817;
+        Thu, 05 Nov 2020 02:56:43 -0800 (PST)
+Received: from skbuf ([188.25.2.177])
+        by smtp.gmail.com with ESMTPSA id o31sm656257edd.94.2020.11.05.02.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2020 02:56:43 -0800 (PST)
+Date:   Thu, 5 Nov 2020 12:56:42 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: Re: [PATCH net-next 3/5] r8152: add MCU typed read/write functions
+Message-ID: <20201105105642.pgdxxlytpindj5fq@skbuf>
+References: <20201103192226.2455-4-kabel@kernel.org>
+ <20201103214712.dzwpkj6d5val6536@skbuf>
+ <20201104065524.36a85743@kernel.org>
+ <20201104084710.wr3eq4orjspwqvss@skbuf>
+ <20201104112511.78643f6e@kernel.org>
+ <20201104113545.0428f3fe@kernel.org>
+ <20201104110059.whkku3zlck6spnzj@skbuf>
+ <20201104121053.44fae8c7@kernel.org>
+ <20201104121424.th4v6b3ucjhro5d3@skbuf>
+ <20201105105418.555d6e54@kernel.org>
 MIME-Version: 1.0
-References: <20201104234427.26477-1-digetx@gmail.com> <CAPDyKFr7qTU2RPhA_ZrbCayoTTNUEno1zdmvmv+8HBe-Owrfeg@mail.gmail.com>
- <20201105100603.skrirm7uke4s2xyl@vireshk-i7> <CAPDyKFoCJt5MBSKBJ8n1OAMdVsWHdwXTx0zFEcZw_F_gQ6Ug0w@mail.gmail.com>
- <20201105104009.oo4dc6a2gdcwduhk@vireshk-i7>
-In-Reply-To: <20201105104009.oo4dc6a2gdcwduhk@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 5 Nov 2020 11:56:37 +0100
-Message-ID: <CAPDyKFpQG98d6foc1U6fp3YEBdZ1vLqY9cmWxpUwXoKgDn+ojQ@mail.gmail.com>
-Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
- Tegra20/30 SoCs
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        driverdevel <devel@driverdev.osuosl.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-pwm@vger.kernel.org,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201105105418.555d6e54@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 5 Nov 2020 at 11:40, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 05-11-20, 11:34, Ulf Hansson wrote:
-> > I am not objecting about scaling the voltage through a regulator,
-> > that's fine to me. However, encoding a power domain as a regulator
-> > (even if it may seem like a regulator) isn't. Well, unless Mark Brown
-> > has changed his mind about this.
-> >
-> > In this case, it seems like the regulator supply belongs in the
-> > description of the power domain provider.
->
-> Okay, I wasn't sure if it is a power domain or a regulator here. Btw,
-> how do we identify if it is a power domain or a regulator ?
+On Thu, Nov 05, 2020 at 10:54:18AM +0100, Marek Behún wrote:
+> I thought that static inline functions are preferred to macros, since
+> compiler warns better if they are used incorrectly...
 
-Good question. It's not a crystal clear line in between them, I think.
-
-A power domain to me, means that some part of a silicon (a group of
-controllers or just a single piece, for example) needs some kind of
-resource (typically a power rail) to be enabled to be functional, to
-start with. If there are operating points involved, that's also a
-clear indication to me, that it's not a regular regulator.
-
-Maybe we should try to specify this more exactly in some
-documentation, somewhere.
-
->
-> > > In case of Qcom earlier (when we added the performance-state stuff),
-> > > the eventual hardware was out of kernel's control and we didn't wanted
-> > > (allowed) to model it as a virtual regulator just to pass the votes to
-> > > the RPM. And so we did what we did.
-> > >
-> > > But if the hardware (where the voltage is required to be changed) is
-> > > indeed a regulator and is modeled as one, then what Dmitry has done
-> > > looks okay. i.e. add a supply in the device's node and microvolt
-> > > property in the DT entries.
-> >
-> > I guess I haven't paid enough attention how power domain regulators
-> > are being described then. I was under the impression that the CPUfreq
-> > case was a bit specific - and we had legacy bindings to stick with.
-> >
-> > Can you point me to some other existing examples of where power domain
-> > regulators are specified as a regulator in each device's node?
->
-> No, I thought it is a regulator here and not a power domain.
-
-Okay, thanks!
-
-Kind regards
-Uffe
+Citation needed. Also, how do static inline functions wrapped in macros
+(i.e. your patch) stack up against your claim about better warnings?
+I guess ease of maintainership should prevail here, and Hayes should
+have the final word. I don't really have any stake here.
