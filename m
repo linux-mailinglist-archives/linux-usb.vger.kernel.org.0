@@ -2,74 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCB62A77E2
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 08:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497CE2A7889
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 09:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728272AbgKEHTq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 02:19:46 -0500
-Received: from mga02.intel.com ([134.134.136.20]:38421 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726626AbgKEHTq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Nov 2020 02:19:46 -0500
-IronPort-SDR: iP6Y7n+73uIUOBuuhQQf3KG/y5on6sH495iMuHXH5h9rdv0CJLqtILJu8JAhylxfoEvkY6SlRh
- v3fAWM2b6ELg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="156331240"
-X-IronPort-AV: E=Sophos;i="5.77,452,1596524400"; 
-   d="scan'208";a="156331240"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2020 23:19:44 -0800
-IronPort-SDR: hPFez/pYy589J5b3IG8IIFg1tpC6oHEmU+EYBsxtzjjkUCodYZ9mP0wei+SUxMzrCtgH/eTuEm
- QLe/66+37T2g==
-X-IronPort-AV: E=Sophos;i="5.77,452,1596524400"; 
-   d="scan'208";a="354177010"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2020 23:19:41 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 05 Nov 2020 09:17:26 +0200
-Date:   Thu, 5 Nov 2020 09:17:26 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Yehezkel Bernat <yehezkelshb@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Isaac Hazan <isaac.hazan@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org
-Subject: Re: [PATCH 00/10] thunderbolt: Add DMA traffic test driver
-Message-ID: <20201105071726.GX2495@lahna.fi.intel.com>
-References: <20201104140030.6853-1-mika.westerberg@linux.intel.com>
- <CA+CmpXtqdfJ_gWCUG6DABFabSzWv7m3cex3Aja9Nddp5u_tyNg@mail.gmail.com>
+        id S1729275AbgKEIF4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 03:05:56 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:36153 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725827AbgKEIF4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Nov 2020 03:05:56 -0500
+Received: by mail-lf1-f68.google.com with SMTP id h6so990457lfj.3;
+        Thu, 05 Nov 2020 00:05:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jcbSFuZNjbwwPpmdXXuMLatE+ma/MkyayRwCMh0xeEw=;
+        b=IY8TTTT/TCb1AnXBp6d4v1bQzZdEXp1SAmpAyAEBxdC1FOFpM44VUu8GQDT47gW1UF
+         NTvwbU31OSEew7Yw70XGfM3uXK1EXn7BBqscXXjSeNejlQcxJhvykg8TggqifpTlRg6u
+         FWLs88lCd+JcWhr9vG0mF+qBBXd6r5NLAvb/MBm7tw7DRfKEugTTYJ/YquzXHgTnKtDH
+         j34SL7xegiF2OF2UYPjQLu99IDlbeK6lakp09e3bS12RuhWRxROlGUZlNZVsOw4pnOQA
+         3QOczezbbcUvVn5tQnhYRZdr1pY1Ri68efFDDMYNAftpAqLtsp5ahVr44hdByZjeAZIL
+         yhmg==
+X-Gm-Message-State: AOAM530+OoYYDrSd/tW0erPGoKQDLkCrmFimyXLPef8VqYiDfcAkYB9W
+        fZTAXHVXXb74HzsG67NNUVgi8dZxqW1zAg==
+X-Google-Smtp-Source: ABdhPJxO6iT4ufyTU4k10t0H9GULmCKc8Mk9EcLRvKpR1sNEwto031olXZ7Kd6J9qcksigpxE1jkag==
+X-Received: by 2002:a19:458:: with SMTP id 85mr458868lfe.249.1604563553248;
+        Thu, 05 Nov 2020 00:05:53 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id d26sm79031ljj.102.2020.11.05.00.05.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2020 00:05:52 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kaaHN-0000UQ-4T; Thu, 05 Nov 2020 09:05:57 +0100
+Date:   Thu, 5 Nov 2020 09:05:57 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>
+Subject: Re: [PATCH] USB: serial: mos7720: fix parallel-port state restore
+Message-ID: <20201105080557.GZ4085@localhost>
+References: <20201104164727.26351-1-johan@kernel.org>
+ <20201104165910.GA2342981@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+CmpXtqdfJ_gWCUG6DABFabSzWv7m3cex3Aja9Nddp5u_tyNg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20201104165910.GA2342981@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 04, 2020 at 08:39:01PM +0200, Yehezkel Bernat wrote:
-> On Wed, Nov 4, 2020 at 4:00 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > Hi all,
-> >
-> > This series adds a new Thunderbolt service driver that can be used on
-> > manufacturing floor to test that each Thunderbolt/USB4 port is functional.
-> > It can be done either using a special loopback dongle that has RX and TX
-> > lanes crossed, or by connecting a cable back to the host (for those who
-> > don't have these dongles).
-> >
-> > This takes advantage of the existing XDomain protocol and creates XDomain
-> > devices for the loops back to the host where the DMA traffic test driver
-> > can bind to.
-> >
-> > The DMA traffic test driver creates a tunnel through the fabric and then
-> > sends and receives data frames over the tunnel checking for different
-> > errors.
+On Wed, Nov 04, 2020 at 05:59:10PM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Nov 04, 2020 at 05:47:27PM +0100, Johan Hovold wrote:
+> > The parallel-port restore operations is called when a driver claims the
+> > port and is supposed to restore the provided state (e.g. saved when
+> > releasing the port).
+> > 
+> > Fixes: b69578df7e98 ("USB: usbserial: mos7720: add support for parallel port on moschip 7715")
+> > Cc: stable <stable@vger.kernel.org>     # 2.6.35
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> >  drivers/usb/serial/mos7720.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
+> > index 5eed1078fac8..5a5d2a95070e 100644
+> > --- a/drivers/usb/serial/mos7720.c
+> > +++ b/drivers/usb/serial/mos7720.c
+> > @@ -639,6 +639,8 @@ static void parport_mos7715_restore_state(struct parport *pp,
+> >  		spin_unlock(&release_lock);
+> >  		return;
+> >  	}
+> > +	mos_parport->shadowDCR = s->u.pc.ctr;
+> > +	mos_parport->shadowECR = s->u.pc.ecr;
 > 
-> For the whole series,
-> 
-> Acked-by: Yehezkel Bernat <YehezkelShB@gmail.com>
+> Wow that's old code.  I'm guessing no one uses these devices really :(
 
-Thanks!
+Possibly, but this would still work as long as you don't switch parallel
+port driver without disconnecting the mos7715 device in between.
+
+> Anyway, nice work:
+> 
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Thanks, now applied for -next.
+
+Johan
