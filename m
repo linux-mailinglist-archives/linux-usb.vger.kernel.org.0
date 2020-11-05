@@ -2,58 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0532A7BFD
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 11:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F5C2A7BF6
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Nov 2020 11:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728371AbgKEKh5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 05:37:57 -0500
-Received: from mga18.intel.com ([134.134.136.126]:23555 "EHLO mga18.intel.com"
+        id S1728371AbgKEKhN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 05:37:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44076 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726400AbgKEKh5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Nov 2020 05:37:57 -0500
-IronPort-SDR: skZUtvB36k+c1u43cOxnNKcj5nP8HlTHhJnOYY037Dju3G7VWp7yKr4UvHaCtJ/Cn7HmtjFjsA
- sv1tw0eyUC6A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="157140088"
-X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
-   d="scan'208";a="157140088"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 02:37:56 -0800
-IronPort-SDR: vtd5uq0/lEpH9P8JwAmODQZGcOgbXfw/lP24YiuRNegConPqJ6ia2xjhSandx1c+/1DDTy3zbU
- N796WQG6oEeg==
-X-IronPort-AV: E=Sophos;i="5.77,453,1596524400"; 
-   d="scan'208";a="354231632"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2020 02:37:53 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 05 Nov 2020 12:37:51 +0200
-Date:   Thu, 5 Nov 2020 12:37:51 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Casey Bowman <casey.g.bowman@intel.com>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH 1/3] thunderbolt: Fix memory leak if ida_simple_get()
- fails in enumerate_services()
-Message-ID: <20201105103751.GF2495@lahna.fi.intel.com>
-References: <20201029094636.51818-1-mika.westerberg@linux.intel.com>
+        id S1726152AbgKEKhN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Nov 2020 05:37:13 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2AB13206E3;
+        Thu,  5 Nov 2020 10:37:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604572630;
+        bh=ObOQtJ5/x0uOtTDXpdRr8XT0Mw7WNwsh4CnjbzNvdMM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S6MAOM/FDZaEpRc64GCe+kdLbIqw7UT/Ms5jexGoRmGhticUegG9iU4I0xOL3UjOh
+         ilsQg3humpWb3Ne3JiEaS+ICPTb0Me04YudpeaedPZKLZ0munStjX0xkJHeT/ugXW/
+         7PtzPZclXPgzfu3axlVdyC4dkJ4ooqyhIB/YNkHY=
+Date:   Thu, 5 Nov 2020 11:37:58 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     thomas.haemmerle@wolfvision.net
+Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
+        linux-usb@vger.kernel.org, m.tretter@pengutronix.de
+Subject: Re: [PATCH] usb: gadget: uvc: fix multiple opens
+Message-ID: <20201105103758.GA4033354@kroah.com>
+References: <20201105103119.11419-1-thomas.haemmerle@wolfvision.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201029094636.51818-1-mika.westerberg@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20201105103119.11419-1-thomas.haemmerle@wolfvision.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 12:46:34PM +0300, Mika Westerberg wrote:
-> The svc->key field is not released as it should be if ida_simple_get()
-> fails so fix that.
+On Thu, Nov 05, 2020 at 11:31:19AM +0100, thomas.haemmerle@wolfvision.net wrote:
+> From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
 > 
-> Fixes: 9aabb68568b4 ("thunderbolt: Fix to check return value of ida_simple_get")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Currently, the UVC function is activated when open on the corresponding
+> v4l2 device is called.
+> On another open the activation of the function fails since the
+> deactivation counter in `usb_function_activate` equals 0. However the
+> error is not returned to userspace since the open of the v4l2 device is
+> successful.
+> 
+> On a close the function is deactivated (since deactivation counter still
+> equals 0) and the video is disabled in `uvc_v4l2_release`, although
+> another process potentially is streaming.
+> 
+> Move activation of UVC function to subscription on UVC_EVENT_SETUP and
+> keep track of the number of subscribers (limited to 1) because there we
+> can guarantee for a userspace program utilizing UVC.
+> Extend the `struct uvc_file_handle` with member `bool setup_subscriber`
+> to tag it for a deactivation of the function.
+> 
+> With this a process is able to check capabilities of the v4l2 device
+> without deactivating the function for another process actually using the
+> device for UVC streaming.
+> 
+> Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+> ---
+>  drivers/usb/gadget/function/uvc.h      |  2 +
+>  drivers/usb/gadget/function/uvc_v4l2.c | 57 +++++++++++++++++++++-----
+>  2 files changed, 49 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+> index 23ee25383c1f..deeec2b80786 100644
+> --- a/drivers/usb/gadget/function/uvc.h
+> +++ b/drivers/usb/gadget/function/uvc.h
+> @@ -117,6 +117,7 @@ struct uvc_device {
+>  	enum uvc_state state;
+>  	struct usb_function func;
+>  	struct uvc_video video;
+> +	unsigned int connections;
+>  
+>  	/* Descriptors */
+>  	struct {
+> @@ -147,6 +148,7 @@ static inline struct uvc_device *to_uvc(struct usb_function *f)
+>  struct uvc_file_handle {
+>  	struct v4l2_fh vfh;
+>  	struct uvc_video *device;
+> +	bool connected;
+>  };
+>  
+>  #define to_uvc_file_handle(handle) \
+> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+> index 4ca89eab6159..c0c2588b0efb 100644
+> --- a/drivers/usb/gadget/function/uvc_v4l2.c
+> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+> @@ -227,17 +227,60 @@ static int
+>  uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
+>  			 const struct v4l2_event_subscription *sub)
+>  {
+> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
+> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
+> +	int ret;
+> +
+>  	if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
+>  		return -EINVAL;
+>  
+> -	return v4l2_event_subscribe(fh, sub, 2, NULL);
+> +	if ((sub->type == UVC_EVENT_SETUP) && (uvc->connections >= 1))
+> +		return -EBUSY;
+> +
+> +	ret = v4l2_event_subscribe(fh, sub, 2, NULL);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (sub->type == UVC_EVENT_SETUP) {
+> +		uvc->connections++;
+> +		handle->connected = true;
+> +		uvc_function_connect(uvc);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void uvc_v4l2_disable(struct uvc_device *uvc)
+> +{
+> +	if (--uvc->connections)
+> +		return;
+> +
+> +	uvc_function_disconnect(uvc);
+> +
+> +	mutex_lock(&uvc->video.mutex);
+> +	uvcg_video_enable(&uvc->video, 0);
+> +	uvcg_free_buffers(&uvc->video.queue);
+> +	mutex_unlock(&uvc->video.mutex);
+>  }
+>  
+>  static int
+>  uvc_v4l2_unsubscribe_event(struct v4l2_fh *fh,
+>  			   const struct v4l2_event_subscription *sub)
+>  {
+> -	return v4l2_event_unsubscribe(fh, sub);
+> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
+> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
+> +	int ret;
+> +
+> +	ret = v4l2_event_unsubscribe(fh, sub);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if ((sub->type == UVC_EVENT_SETUP) && handle->connected) {
+> +		uvc_v4l2_disable(uvc);
+> +		handle->connected = false;
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static long
+> @@ -292,7 +335,6 @@ uvc_v4l2_open(struct file *file)
+>  	handle->device = &uvc->video;
+>  	file->private_data = &handle->vfh;
+>  
+> -	uvc_function_connect(uvc);
+>  	return 0;
+>  }
+>  
+> @@ -302,14 +344,9 @@ uvc_v4l2_release(struct file *file)
+>  	struct video_device *vdev = video_devdata(file);
+>  	struct uvc_device *uvc = video_get_drvdata(vdev);
+>  	struct uvc_file_handle *handle = to_uvc_file_handle(file->private_data);
+> -	struct uvc_video *video = handle->device;
+> -
+> -	uvc_function_disconnect(uvc);
+>  
+> -	mutex_lock(&video->mutex);
+> -	uvcg_video_enable(video, 0);
+> -	uvcg_free_buffers(&video->queue);
+> -	mutex_unlock(&video->mutex);
+> +	if (handle->connected)
+> +		uvc_v4l2_disable(uvc);
 
-This and the other 2 patches applied to thunderbolt.git/fixes.
+What prevents connected from changing between the test and the next
+call?
+
+I think you need a lock somewhere, a simple integer isn't going to
+protect you from anything (hint, and neither will an atomic variable...)
+
+thanks,
+
+greg k-h
