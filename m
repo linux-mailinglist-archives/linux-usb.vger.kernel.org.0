@@ -2,221 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EB02A8AC2
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 00:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97DEC2A8BBF
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 02:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732736AbgKEX2x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Nov 2020 18:28:53 -0500
-Received: from z5.mailgun.us ([104.130.96.5]:35482 "EHLO z5.mailgun.us"
+        id S1732603AbgKFBA1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Nov 2020 20:00:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38090 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732721AbgKEX2v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Nov 2020 18:28:51 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1604618931; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=qPSGGbSQ/whpFm0CGfEW2fSmc4Ym/F/rF5YoPwodicU=; b=i311LNF9SVrbzyThb315iEE+pyufeDk3puryB4QniGcB5turZhYo8mdtuHtEe4oaS3W2LKtD
- Bgw7ZSUiL+f2WbY3mfG+fWMtF00IjmtiLlTrl0CLBO76g5/aTKU3djVudRqTcDOWU2EN9V7d
- ngnlgd58st6WDMerrsHVeN37Li0=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 5fa48aafe58103ecbcb74a37 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 05 Nov 2020 23:28:47
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6DA03C433FE; Thu,  5 Nov 2020 23:28:46 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1729162AbgKFBA1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Nov 2020 20:00:27 -0500
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3E67CC433FE;
-        Thu,  5 Nov 2020 23:28:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3E67CC433FE
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, Thinh.Nguyen@synopsys.com
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH v2 2/2] usb: dwc3: gadget: Preserve UDC max speed setting
-Date:   Thu,  5 Nov 2020 15:28:25 -0800
-Message-Id: <20201105232825.5233-3-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201105232825.5233-1-wcheng@codeaurora.org>
-References: <20201105232825.5233-1-wcheng@codeaurora.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id 86FEA20782;
+        Fri,  6 Nov 2020 01:00:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604624426;
+        bh=Qh4FnoRV8X4BbV/hbtbCWzunfO90hTzfmBC2bEirE98=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Qkcsy+0xEeI6F3HLonUPz2IEYnsH4fRrzUAxzw275JmjKrotiJ6SPEg2AhTBv2Sav
+         +WxPIObH7JafBnFDoYZX2Xvs89OOLeRS9tdFFWT/ZNVD6HlpqqSyZX9wniJK5C2e1M
+         56c6hcuirFMf1LkA6InWXSo9s4G1w72oHWsE0DNU=
+Date:   Thu, 5 Nov 2020 17:00:25 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <oliver@neukum.org>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 RESEND] net/usb/r8153_ecm: support ECM mode
+ for RTL8153
+Message-ID: <20201105170025.5dc759bf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <1394712342-15778-392-Taiwan-albertk@realtek.com>
+References: <1394712342-15778-387-Taiwan-albertk@realtek.com>
+        <1394712342-15778-392-Taiwan-albertk@realtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB gadget/UDC driver can restrict the DWC3 controller speed using
-dwc3_gadget_set_speed().  Store this setting into a variable, in order for
-this setting to persist across controller resets due to runtime PM.
+On Wed, 4 Nov 2020 10:19:22 +0800 Hayes Wang wrote:
+> Support ECM mode based on cdc_ether with relative mii functions,
+> when CONFIG_USB_RTL8152 is not set, or the device is not supported
+> by r8152 driver.
+> 
+> Both r8152 and r8153_ecm would check the return value of
+> rtl8152_get_version() in porbe(). If rtl8152_get_version()
+> return none zero value, the r8152 is used for the device
+> with vendor mode. Otherwise, the r8153_ecm is used for the
+> device with ECM mode.
+> 
+> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- drivers/usb/dwc3/core.h   |   1 +
- drivers/usb/dwc3/gadget.c | 108 ++++++++++++++++++++------------------
- 2 files changed, 58 insertions(+), 51 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 2f04b3e42bf1..390d3deef0ba 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1119,6 +1119,7 @@ struct dwc3 {
- 	u32			nr_scratch;
- 	u32			u1u2;
- 	u32			maximum_speed;
-+	u32			gadget_max_speed;
- 
- 	u32			ip;
- 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index babf977cadc0..c145da1d8ba5 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1941,6 +1941,61 @@ static void dwc3_stop_active_transfers(struct dwc3 *dwc)
- 	}
- }
- 
-+static void __dwc3_gadget_set_speed(struct dwc3 *dwc)
-+{
-+	u32			reg;
-+
-+	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
-+	reg &= ~(DWC3_DCFG_SPEED_MASK);
-+
-+	/*
-+	 * WORKAROUND: DWC3 revision < 2.20a have an issue
-+	 * which would cause metastability state on Run/Stop
-+	 * bit if we try to force the IP to USB2-only mode.
-+	 *
-+	 * Because of that, we cannot configure the IP to any
-+	 * speed other than the SuperSpeed
-+	 *
-+	 * Refers to:
-+	 *
-+	 * STAR#9000525659: Clock Domain Crossing on DCTL in
-+	 * USB 2.0 Mode
-+	 */
-+	if (DWC3_VER_IS_PRIOR(DWC3, 220A) &&
-+	    !dwc->dis_metastability_quirk) {
-+		reg |= DWC3_DCFG_SUPERSPEED;
-+	} else {
-+		switch (dwc->gadget_max_speed) {
-+		case USB_SPEED_LOW:
-+			reg |= DWC3_DCFG_LOWSPEED;
-+			break;
-+		case USB_SPEED_FULL:
-+			reg |= DWC3_DCFG_FULLSPEED;
-+			break;
-+		case USB_SPEED_HIGH:
-+			reg |= DWC3_DCFG_HIGHSPEED;
-+			break;
-+		case USB_SPEED_SUPER:
-+			reg |= DWC3_DCFG_SUPERSPEED;
-+			break;
-+		case USB_SPEED_SUPER_PLUS:
-+			if (DWC3_IP_IS(DWC3))
-+				reg |= DWC3_DCFG_SUPERSPEED;
-+			else
-+				reg |= DWC3_DCFG_SUPERSPEED_PLUS;
-+			break;
-+		default:
-+			dev_err(dwc->dev, "invalid speed (%d)\n", dwc->gadget_max_speed);
-+
-+			if (DWC3_IP_IS(DWC3))
-+				reg |= DWC3_DCFG_SUPERSPEED;
-+			else
-+				reg |= DWC3_DCFG_SUPERSPEED_PLUS;
-+		}
-+	}
-+	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
-+}
-+
- static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
- {
- 	u32			reg;
-@@ -1963,6 +2018,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
- 		if (dwc->has_hibernation)
- 			reg |= DWC3_DCTL_KEEP_CONNECT;
- 
-+		__dwc3_gadget_set_speed(dwc);
- 		dwc->pullups_connected = true;
- 	} else {
- 		reg &= ~DWC3_DCTL_RUN_STOP;
-@@ -2325,59 +2381,9 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
- 	unsigned long		flags;
--	u32			reg;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
--	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
--	reg &= ~(DWC3_DCFG_SPEED_MASK);
--
--	/*
--	 * WORKAROUND: DWC3 revision < 2.20a have an issue
--	 * which would cause metastability state on Run/Stop
--	 * bit if we try to force the IP to USB2-only mode.
--	 *
--	 * Because of that, we cannot configure the IP to any
--	 * speed other than the SuperSpeed
--	 *
--	 * Refers to:
--	 *
--	 * STAR#9000525659: Clock Domain Crossing on DCTL in
--	 * USB 2.0 Mode
--	 */
--	if (DWC3_VER_IS_PRIOR(DWC3, 220A) &&
--	    !dwc->dis_metastability_quirk) {
--		reg |= DWC3_DCFG_SUPERSPEED;
--	} else {
--		switch (speed) {
--		case USB_SPEED_LOW:
--			reg |= DWC3_DCFG_LOWSPEED;
--			break;
--		case USB_SPEED_FULL:
--			reg |= DWC3_DCFG_FULLSPEED;
--			break;
--		case USB_SPEED_HIGH:
--			reg |= DWC3_DCFG_HIGHSPEED;
--			break;
--		case USB_SPEED_SUPER:
--			reg |= DWC3_DCFG_SUPERSPEED;
--			break;
--		case USB_SPEED_SUPER_PLUS:
--			if (DWC3_IP_IS(DWC3))
--				reg |= DWC3_DCFG_SUPERSPEED;
--			else
--				reg |= DWC3_DCFG_SUPERSPEED_PLUS;
--			break;
--		default:
--			dev_err(dwc->dev, "invalid speed (%d)\n", speed);
--
--			if (DWC3_IP_IS(DWC3))
--				reg |= DWC3_DCFG_SUPERSPEED;
--			else
--				reg |= DWC3_DCFG_SUPERSPEED_PLUS;
--		}
--	}
--	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
--
-+	dwc->gadget_max_speed = speed;
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- }
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Applied, thanks!
