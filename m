@@ -2,68 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 476832A93C4
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 11:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 892822A940F
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 11:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726770AbgKFKKA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Nov 2020 05:10:00 -0500
-Received: from mga04.intel.com ([192.55.52.120]:37750 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726713AbgKFKKA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Nov 2020 05:10:00 -0500
-IronPort-SDR: Zlb18iSgnGmDW/5+nkZ/fSPhCk/GmnwVe+qPXHXvkqIgdeYDbqnnN4Tsms6VimWh8pEYivQOOb
- k2HSRuVae+LQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9796"; a="166936364"
-X-IronPort-AV: E=Sophos;i="5.77,456,1596524400"; 
-   d="scan'208";a="166936364"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 02:10:00 -0800
-IronPort-SDR: Q//tRwzL5PbJ56tvHBk+eIOG2oOLYTfiPohZcrdpUm4iNA71gUrSQQBu//U/iY1Qk5yQSPPHZ1
- q+Siyn848LJQ==
-X-IronPort-AV: E=Sophos;i="5.77,456,1596524400"; 
-   d="scan'208";a="529759467"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 02:09:58 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kayhw-004J3z-LC; Fri, 06 Nov 2020 12:11:00 +0200
-Date:   Fri, 6 Nov 2020 12:11:00 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        johan@kernel.org, linux-usb@vger.kernel.org
-Cc:     alberto.vignani@fastwebnet.it,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        David Woodhouse <dwmw2@infradead.org>
-Subject: Re: [PATCH v1 1/2] PCI: Disable MSI for Pericom PCIe-USB adapter
-Message-ID: <20201106101100.GG4077@smile.fi.intel.com>
-References: <20201105180644.42862-1-andriy.shevchenko@linux.intel.com>
+        id S1727014AbgKFKWD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Nov 2020 05:22:03 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:53325 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726865AbgKFKWB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 05:22:01 -0500
+X-UUID: 9b89258081404873932c7c17e901f2c8-20201106
+X-UUID: 9b89258081404873932c7c17e901f2c8-20201106
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 837883830; Fri, 06 Nov 2020 18:21:51 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 6 Nov 2020 18:21:48 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 6 Nov 2020 18:21:48 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Chunfeng Yun <Chunfeng.Yun@mediatek.com>
+CC:     Ainge Hsu <ainge.hsu@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Macpaul Lin <macpaul@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v3 1/2] dt-bindings: usb: mediatek,mtk-xhci: add str-clock-on
+Date:   Fri, 6 Nov 2020 18:21:36 +0800
+Message-ID: <1604658097-5127-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <1604301530-31546-1-git-send-email-macpaul.lin@mediatek.com>
+References: <1604301530-31546-1-git-send-email-macpaul.lin@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201105180644.42862-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 08:06:43PM +0200, Andy Shevchenko wrote:
-> Pericom PCIe-USB adapter ambiguously advertises MSI, but documentation says
-> "The MSI Function is not implemented on this device." in the chapters 7.3.27,
-> 7.3.29-7.3.31.
+Option "mediatek,str-clock-on" means to keep clock on during system
+suspend and resume. Some platform will flush register settings if clock has
+been disabled when system is suspended. Set this option to avoid clock off.
 
-I have sent v2 [1].
+Fixes: 0cbd4b34cda9 ("xhci: mediatek: support MTK xHCI host controller")
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Cc: stable@vger.kernel.org
+---
+Changes for v3:
+  - Remove unnecessary Change-Id in commit message.
+  - Add "Fixes" tag as a bug fix on phone system.
+Changes for v2:
+  - Rename "mediatek,keep-clock-on" to "mediatek,str-clock-on" which implies
+    this option related to STR functions.
+  - After discussion with Chunfeng, resend dt-bindings descritption based on
+    mediatek,mtk-xhci.txt instead of yaml format.
 
-[1]: https://lore.kernel.org/linux-usb/20201106100526.17726-1-andriy.shevchenko@linux.intel.com/
+ .../devicetree/bindings/usb/mediatek,mtk-xhci.txt  |    3 +++
+ 1 file changed, 3 insertions(+)
 
-> Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
-> Datasheet: https://www.diodes.com/assets/Datasheets/PI7C9X440SL.pdf
-> Reported-by: alberto.vignani@fastwebnet.it
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
+index 42d8814..fc93bcf 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
+@@ -37,6 +37,9 @@ Required properties:
+ 
+ Optional properties:
+  - wakeup-source : enable USB remote wakeup;
++ - mediatek,str-clock-on: Keep clock on during system suspend and resume.
++	Some platform will flush register settings if clock has been disabled
++	when system is suspended.
+  - mediatek,syscon-wakeup : phandle to syscon used to access the register
+ 	of the USB wakeup glue layer between xHCI and SPM; it depends on
+ 	"wakeup-source", and has two arguments:
 -- 
-With Best Regards,
-Andy Shevchenko
-
+1.7.9.5
 
