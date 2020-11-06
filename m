@@ -2,94 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 424922A9255
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 10:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7AC2A92F5
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 10:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726659AbgKFJTp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Nov 2020 04:19:45 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:44598 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726028AbgKFJTb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 04:19:31 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A698CXu027453;
-        Fri, 6 Nov 2020 10:19:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=5CCBWSPpY2LWeU+v1BMKbE0dfzDcb6O0clQonhwRrS0=;
- b=nIA9apAJqAaWS3AH+IvbdzJ3ibhGlkUPdH58kTwQxdny2h3CXXF/hulK+r2i7cv5hrzZ
- Z/vZ5p1Rp3S1qmvHJ1JvfmUvKT3Og/NueTJKdNbpm6a1jPPeYVpgRCoCrhMLJN5msUMb
- 2noefRx7X4HYZgvOpW7sq3lFNAP8Z+BdJCyDPkVZoriwJj3ylNuFaKqYUYKZvlrS4w1M
- ZvzXADgkke3ziLfB9A7pEpXsQbcE2gCBPJt3cj1JXnEYjaey26sIDajZHIoNu3+ZOmnL
- 2IIEc/P+QkHMPGv1JoZlVP3oRIJDzd43SqP1jGtHiQuAi5gsRkR7vX2ednR5w5x/ZlLG 0Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34gywrd890-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Nov 2020 10:19:13 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6358D100034;
-        Fri,  6 Nov 2020 10:19:13 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 541EF233E9E;
-        Fri,  6 Nov 2020 10:19:13 +0100 (CET)
-Received: from localhost (10.75.127.47) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Nov 2020 10:19:12
- +0100
-From:   Amelie Delaunay <amelie.delaunay@st.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Jun Li <lijun.kernel@gmail.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
+        id S1726754AbgKFJkN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Nov 2020 04:40:13 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:60725 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726139AbgKFJkN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 04:40:13 -0500
+X-UUID: 98e6f12c83284343b59c84fff5705688-20201106
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=hwcTnf+x5JkMX4z/81xeJjmzHGsQ5Nx2TTLtSPHzhSo=;
+        b=QExinJOCt6PZPLpMdjxVoWAuhBkFexuBf6vhcx7bHETl+mSd4p0SGaXvWMOYGNN6sVbHhhVMUl5DWj/K7ldSMS/PVCxWfKFI2h9h1zYOnfNmOhdoJ7Xld3FdCl+EQo/XB9jclgpUie7EQhytzm7ShD/AG3E2q28kHQfF8/bqpJ0=;
+X-UUID: 98e6f12c83284343b59c84fff5705688-20201106
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 817783204; Fri, 06 Nov 2020 17:29:48 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 6 Nov 2020 17:29:46 +0800
+Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 6 Nov 2020 17:29:46 +0800
+Message-ID: <1604654987.24301.23.camel@mtkswgap22>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: mediatek,mtk-xhci: add
+ keep-clock-on
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "Chunfeng Yun" <chunfeng.yun@mediatek.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-Subject: [PATCH v4 5/5] ARM: multi_v7_defconfig: enable STUSB160X Type-C port controller support
-Date:   Fri, 6 Nov 2020 10:18:54 +0100
-Message-ID: <20201106091854.14958-6-amelie.delaunay@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201106091854.14958-1-amelie.delaunay@st.com>
-References: <20201106091854.14958-1-amelie.delaunay@st.com>
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Ainge Hsu <ainge.hsu@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        "Mediatek WSD Upstream" <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul@gmail.com>
+Date:   Fri, 6 Nov 2020 17:29:47 +0800
+In-Reply-To: <20201104223926.GA54259@bogus>
+References: <1604301530-31546-1-git-send-email-macpaul.lin@mediatek.com>
+         <20201104223926.GA54259@bogus>
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-06_03:2020-11-05,2020-11-06 signatures=0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable support for the STMicroelectronics STUSB160X USB Type-C port
-controller driver by turning on CONFIG_TYPEC and CONFIG_TYPEC_STUSB160X as
-modules.
-
-Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
----
- arch/arm/configs/multi_v7_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index a611b0c1e540..47eed80268e2 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -829,6 +829,8 @@ CONFIG_USB_CONFIGFS_F_HID=y
- CONFIG_USB_CONFIGFS_F_UVC=y
- CONFIG_USB_CONFIGFS_F_PRINTER=y
- CONFIG_USB_ETH=m
-+CONFIG_TYPEC=m
-+CONFIG_TYPEC_STUSB160X=m
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=16
- CONFIG_MMC_ARMMMCI=y
--- 
-2.17.1
+T24gV2VkLCAyMDIwLTExLTA0IGF0IDE2OjM5IC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
+T24gTW9uLCBOb3YgMDIsIDIwMjAgYXQgMDM6MTg6NDhQTSArMDgwMCwgTWFjcGF1bCBMaW4gd3Jv
+dGU6DQo+ID4gT3B0aW9uICJtZWRpYXRlayxrZWVwLWNsb2NrLW9uIiBtZWFucyB0byBrZWVwIGNs
+b2NrIG9uIGR1cmluZyBzeXN0ZW0NCj4gPiBzdXNwZW5kIGFuZCByZXN1bWUuIFNvbWUgcGxhdGZv
+cm0gd2lsbCBmbHVzaCByZWdpc3RlciBzZXR0aW5ncyBpZiBjbG9jayBoYXMNCj4gPiBiZWVuIGRp
+c2FibGVkIHdoZW4gc3lzdGVtIGlzIHN1c3BlbmRlZC4gU2V0IHRoaXMgb3B0aW9uIHRvIGF2b2lk
+IGNsb2NrIG9mZi4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1
+bC5saW5AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICAuLi4vZGV2aWNldHJlZS9iaW5kaW5n
+cy91c2IvbWVkaWF0ZWssbXRrLXhoY2kueWFtbCB8ICAgIDcgKysrKysrKw0KPiA+ICAxIGZpbGUg
+Y2hhbmdlZCwgNyBpbnNlcnRpb25zKCspDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50
+YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWssbXRrLXhoY2kueWFtbCBiL0Rv
+Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWssbXRrLXhoY2kueWFt
+bA0KPiA+IGluZGV4IGVhNjk2YzguLmE5NTZkZGUgMTAwNjQ0DQo+ID4gLS0tIGEvRG9jdW1lbnRh
+dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9tZWRpYXRlayxtdGsteGhjaS55YW1sDQo+ID4g
+KysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9tZWRpYXRlayxtdGst
+eGhjaS55YW1sDQo+ID4gQEAgLTEwNCw2ICsxMDQsMTIgQEAgcHJvcGVydGllczoNCj4gPiAgICAg
+IGRlc2NyaXB0aW9uOiBlbmFibGUgVVNCIHJlbW90ZSB3YWtldXAsIHNlZSBwb3dlci93YWtldXAt
+c291cmNlLnR4dA0KPiA+ICAgICAgdHlwZTogYm9vbGVhbg0KPiA+ICANCj4gPiArICBtZWRpYXRl
+ayxrZWVwLWNsb2NrLW9uOg0KPiA+ICsgICAgZGVzY3JpcHRpb246IHwNCj4gPiArICAgICAgS2Vl
+cCBjbG9jayBvbiBkdXJpbmcgc3lzdGVtIHN1c3BlbmQgYW5kIHJlc3VtZS4gU29tZSBwbGF0Zm9y
+bSB3aWxsIGZsdXNoDQo+ID4gKyAgICAgIHJlZ2lzdGVyIHNldHRpbmdzIGlmIGNsb2NrIGhhcyBi
+ZWVuIGRpc2FibGVkIHdoZW4gc3lzdGVtIGlzIHN1c3BlbmRlZC4NCj4gPiArICAgIHR5cGU6IGJv
+b2xlYW4NCj4gPiArDQo+IA0KPiBUaGlzIHNob3VsZCBiZSBpbXBsaWVkIGJ5IHRoZSBjb21wYXRp
+YmxlIHN0cmluZy4NCg0KVGhpcyBzaG91bGQgYmUgYW4gcHJvcGVydHkgYWNjb3JkaW5nIHRvIHN5
+c3RlbS13aWRlIGRlc2lnbi4NCg0KTXRrLXhoY2kgbWF5IGJlIGFwcGxpZWQgdG8gZGlmZmVyZW50
+IHByb2R1Y3QgbGluZXMgZm9yIHRoZSBzYW1lIHBsYXRmb3JtDQooSUMpLiBTdXNwZW5kIG9uIHBo
+b25lIHN5c3RlbSBpcyBkaWZmZXJlbnQgdG8gdGFibGV0IG9yIGxhcHRvcC4gUGhvbmUncw0KcG93
+ZXIgbWFuYWdlbWVudCBtb2R1bGUgd2lsbCB0dXJuIG9mZiBYSENJJ3MgcG93ZXIgb25jZSB0aGUg
+Y2xvY2sgaGFzDQpiZWVuIHR1cm5lZCBvZmYuIEZvciBleGFtcGxlLCB0aGUgaGVhZHNldCBwbHVn
+Z2VkIGludG8gcGhvbmUgd29uJ3QgZG8NCmRpc2Nvbm5lY3QgYW5kIHJlLWVudW1lcmF0aW9uIGR1
+cmluZyBzeXN0ZW0gc3VzcGVuZC4gQ2xpY2sgYSBidXR0b24gb24NCnRoZSBoZWFkc2V0IHRvIHdh
+a2UtdXAgcGhvbmUgaXMgbmVjZXNzYXJ5LCBhbmQgdGhlbiwgWEhDSSBuZWVkcyByZWFkeSB0bw0K
+d29yayBpbW1lZGlhdGVseS4NCg0KSWYgdGhlIElDIGhhcyBiZWVuIGFwcGxpZWQgdG8gYSB0YWJs
+ZXQgb3IgbGFwdG9wIHByb2R1Y3QuIFdoZW4gc3lzdGVtIGlzDQpzdXNwZW5kaW5nLCB0aGUgaGVh
+ZHNldCB3aWxsIGJlIGRpc2Nvbm5lY3RlZC4gVGhlIGhlYWRzZXQgd2lsbCBkbw0KcmUtZW51bWVy
+YXRlIHdoZW4gc3lzdGVtIGlzIHdha2luZyB1cC4gSW4gdGhpcyBraW5kIG9mIGFwcGxpY2F0aW9u
+cywgdGhlDQpwb3dlciBvZiBYSENJIGNhbiBiZSB0dXJuZWQgb2ZmIHdpdGggY2xvY2suDQoNCj4g
+PiAgICBtZWRpYXRlayxzeXNjb24td2FrZXVwOg0KPiA+ICAgICAgJHJlZjogL3NjaGVtYXMvdHlw
+ZXMueWFtbCMvZGVmaW5pdGlvbnMvcGhhbmRsZS1hcnJheQ0KPiA+ICAgICAgbWF4SXRlbXM6IDEN
+Cj4gPiBAQCAtMTc1LDYgKzE4MSw3IEBAIGV4YW1wbGVzOg0KPiA+ICAgICAgICAgIGltb2QtaW50
+ZXJ2YWwtbnMgPSA8MTAwMDA+Ow0KPiA+ICAgICAgICAgIG1lZGlhdGVrLHN5c2Nvbi13YWtldXAg
+PSA8JnBlcmljZmcgMHg0MDAgMT47DQo+ID4gICAgICAgICAgd2FrZXVwLXNvdXJjZTsNCj4gPiAr
+ICAgICAgICBtZWRpYXRlayxrZWVwLWNsb2NrLW9uOw0KPiA+ICAgICAgICAgIHVzYjMtbHBtLWNh
+cGFibGU7DQo+ID4gICAgICB9Ow0KPiA+ICAuLi4NCj4gPiAtLSANCj4gPiAxLjcuOS41DQoNCkFm
+dGVyIGEgZGlzY3Vzc2lvbiB3aXRoIENodW5mZW5nLCBJJ2xsIHNlbmQgYSBuZXcgdmVyc2lvbiBm
+b3IgDQpEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL21lZGlhdGVrLG10ay14
+aGNpLnR4dCBiZWNhdXNlIHRoZQ0KWUFNTCBmaWxlIHN0aWxsIG5lZWQgdG8gYmUgcmV2aXNlZC4g
+VGhlIHByb3BlcnR5DQoibWVkaWF0ZWssa2VlcC1jbG9jay1vbiIgd2lsbCBiZSByZW5hbWVkIHRv
+ICJtZWRpYXRlayxzdHItY2xvY2stb24iIGZvcg0KaW1wbHlpbmcgaXQgcmVsYXRlcyB0byBzdXNw
+ZW5kL3Jlc3VtZSBjYXBhYmlsaXR5Lg0KDQpUaGFua3MuDQpNYWNwYXVsIExpbg0K
 
