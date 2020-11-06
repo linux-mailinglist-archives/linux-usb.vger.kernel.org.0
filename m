@@ -2,107 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E782A9719
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 14:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E09AD2A973D
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 14:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727449AbgKFNk4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Nov 2020 08:40:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47454 "EHLO mail.kernel.org"
+        id S1727352AbgKFNsn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Nov 2020 08:48:43 -0500
+Received: from mga17.intel.com ([192.55.52.151]:1080 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727438AbgKFNkz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Nov 2020 08:40:55 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 036B620735;
-        Fri,  6 Nov 2020 13:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604670054;
-        bh=YwRjRr5lQ3DrZpfxUlBZhH48YgZI3xA4YO4Sg1E415c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X4qmm7sLeUGaNiAgiy4WPChA/ZU3+M1x3a9Wu04rQnc0fOQy+x24c4KFbTl5jQjZH
-         jLDCXPJRBCUS3kcG6Xv4dp7+ED8YWGb1Crx6Px1WDHHk0INGxdE4xfTy6VJfm3BQmi
-         nnkpgO+znrw8YXgpe+OO//E9kgNlyWPAlQAUNgVI=
-Date:   Fri, 6 Nov 2020 14:41:36 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     peter.chen@nxp.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, balbi@kernel.org,
-        colin.king@canonical.com, rogerq@ti.com, kurahul@cadence.com,
-        nsekhar@ti.com
-Subject: Re: [PATCH v2 00/10] Introduced new Cadence USBSSP DRD Driver.
-Message-ID: <20201106134136.GA3316286@kroah.com>
-References: <20201106114300.1245-1-pawell@cadence.com>
+        id S1727093AbgKFNsn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 6 Nov 2020 08:48:43 -0500
+IronPort-SDR: hUQaQuixFtmG3nTQt8G2RljiOsrWAngoApzbnStr+hWT0P7VmQ4rrJklkOo44JEWbpTo+FvkhG
+ 5lUQs+3m9djw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9796"; a="149396969"
+X-IronPort-AV: E=Sophos;i="5.77,456,1596524400"; 
+   d="scan'208";a="149396969"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 05:48:42 -0800
+IronPort-SDR: cXYbMuDD4o/hXl/ZVFy6z2HEiPU7bYdI075STXFZOZxy77sMiOCZDa54kLInF28eVOs4lEbJcs
+ HTcJwAzEij8g==
+X-IronPort-AV: E=Sophos;i="5.77,456,1596524400"; 
+   d="scan'208";a="354738341"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 05:48:40 -0800
+Received: by lahna (sSMTP sendmail emulation); Fri, 06 Nov 2020 15:46:26 +0200
+Date:   Fri, 6 Nov 2020 15:46:26 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH] thunderbolt: Add support for Intel Tiger Lake-H
+Message-ID: <20201106134626.GS2495@lahna.fi.intel.com>
+References: <20201102160617.40101-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201106114300.1245-1-pawell@cadence.com>
+In-Reply-To: <20201102160617.40101-1-mika.westerberg@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 06, 2020 at 12:42:50PM +0100, Pawel Laszczak wrote:
-> This patch introduce new Cadence USBSS DRD driver to linux kernel.
+On Mon, Nov 02, 2020 at 07:06:17PM +0300, Mika Westerberg wrote:
+> Intel Tiger Lake-H has the same Thunderbolt/USB4 controller as Tiger
+> Lake-LP. Add the Tiger Lake-H PCI IDs to the driver list of supported
+> devices.
 > 
-> The Cadence USBSS DRD Controller is a highly configurable IP Core which
-> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
-> Host Only (XHCI)configurations.
-> 
-> The current driver has been validated with FPGA burned. We have support
-> for PCIe bus, which is used on FPGA prototyping.
-> 
-> The host side of USBSS-DRD controller is compliance with XHCI
-> specification, so it works with standard XHCI Linux driver.
-> 
-> The device side of USBSS DRD controller is compliant with XHCI.
-> The architecture for device side is almost the same as for host side,
-> and most of the XHCI specification can be used to understand how
-> this controller operates.
-> 
-> This controller and driver support Full Speed, Hight Speed, Supper Speed
-> and Supper Speed Plus USB protocol.
-> 
-> The prefix cdnsp used in driver has chosen by analogy to cdn3 driver.
-> The last letter of this acronym means PLUS. The formal name of controller
-> is USBSSP but it's to generic so I've decided to use CDNSP.
-> 
-> The patch 1: adds support for DRD CDNSP.
-> The patch 2: separates common code that can be reusable by cdnsp driver.
-> The patch 3: moves reusable code to separate module.
-> The patch 4: changes prefixes in reusable code from cdns3 to common cdns.
-> The patch 5: adopts gadget_dev pointer in cdns structure to make possible 
->              use it in both drivers.
-> The patches 6-8: add the main part of driver and has been intentionally
->              split into 3 part. In my opinion such division should not
->              affect understanding and reviewing the driver, and cause that
->              main patch (7/8) is little smaller. Patch 6 introduces main
->              header file for driver, 7 is the main part that implements all
->              functionality of driver and 8 introduces tracepoints.
-> The patch 9: Adds cdns3 prefixes to files related with USBSS driver.
-> the patch 10: Adds USBSSP DRD IP driver entry to MAINTAINERS file.
-> 
-> Changlog from v1:
-> - updated common code to latest cdns3 driver
-> - moved cdnsp driver files to cdns3 as sugested by Peter Chan
-> - removed duplicate code from cdnsp_ep0_set_config function
-> - added cdns3 prefixes to file related with USBSS driver
-> - updated MAINTAINERS file
-> - fixed issue with U1
-> - fixed issue with L1
-> - some less improtant changes sugested by Chunfeng Yun
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-After a quick review, I don't see anything wrong with this series, nice
-work.
-
-It does feel odd you need to split things into a "common" and then 2
-other modules, but I guess it makes sense.  Worst case, over time, you
-merge them back together after everyone just ends up enabling both of
-them :)
-
-Felipe, want me to take these directly, or should they go through your
-tree after you review them?  I never remember with this driver whose it
-goes through.
-
-thanks,
-
-greg k-h
+Applied to thunderbolt.git/fixes.
