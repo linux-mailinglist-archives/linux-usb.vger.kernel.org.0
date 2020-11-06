@@ -2,122 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C6D2A9C9A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 19:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F9D2A9CBC
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 19:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbgKFSme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Nov 2020 13:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S1728029AbgKFSw7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Nov 2020 13:52:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727944AbgKFSmd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 13:42:33 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F33FC0613CF
-        for <linux-usb@vger.kernel.org>; Fri,  6 Nov 2020 10:42:32 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id 62so1586992pgg.12
-        for <linux-usb@vger.kernel.org>; Fri, 06 Nov 2020 10:42:32 -0800 (PST)
+        with ESMTP id S1728021AbgKFSw5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 13:52:57 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9B8C0613D2
+        for <linux-usb@vger.kernel.org>; Fri,  6 Nov 2020 10:52:57 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id u4so1622089pgr.9
+        for <linux-usb@vger.kernel.org>; Fri, 06 Nov 2020 10:52:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZIbxuFcWEsm1IZwnLCYdZyYRjU3KKvSYVK6rSgB6bkQ=;
-        b=fPU257iApiVM5ZmKvNaVne8y3hNHUFNH1RDNQnXpKJ2MqUGURLqgAl4hIQl3NYfojQ
-         rwhz+zEByqiwYfV++HLmDLP5DqcIWPhnx+TL5RKRnYaby3uNqhe1OYW0vPCn5EIm1zNc
-         18jcCOC3Fx1mwy84rHdkrp6MMc6jPxy7UGXPc=
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GK9vvnW6ctWymDB59jo0SDWre4XXCtpqcBQ/nZPVTOA=;
+        b=LxvYFg1u31Vpjj4/md21kaLYCS8Ph/9tI5k76rK+eC6s9CK9D5MIw6Ol316LNm4uCm
+         XlgPn2z/VaTyoUrY1FSp15mSk42OQzI9dDIabEoNHdsgmqIFB5L5ANKRF+qFw2cvveb4
+         OKlxw97GiVEvqWzpqFMkkYuxsaCjD+i2GomJqP8IkdAGmtBCXKrvNfzKrrY44ruBtnV1
+         15KKiYqYo8FlMP5Rz0550zUesAElvk2Xrk/1WWEDN+SVO2JpzYnOg7hwkRlEWr/1mJMk
+         uKXhEBR+8F1k8peFnZoRL7LlrZLqstWEJOcPcb5ywR1ezzODM4IMIc/iRWYrq5JRKPIq
+         AOCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZIbxuFcWEsm1IZwnLCYdZyYRjU3KKvSYVK6rSgB6bkQ=;
-        b=pMiXUp2qBVmrs1hT+YrfmSGtwdtjXnFGfsGYSDWC4oCl8OFQHuulGiEDIiqLhLTfH3
-         Vj3kpcdxZdDF+X7Pplxhn4Dgj/DF9By0MTCiYvCcjZIHH1WlfDISYyZXop2Te+J5FYVa
-         i2eNjcS0cyH5NHEpGlXs9a4QHWR8AGGYtVoUstAx//hp3icqq6nDlVhHqmI79xYbo92F
-         DfXA3vfO2IQ9b9JO/PgPANKEYCOvZSXuMVWmkm20WcC611bvGEvwZ5EnBUYn61CljTVo
-         xO5xlvVVd368RFOdIyldgdyxSz6/pyqHRUUpAxTNhbOxOmayJVkgBnurMKGbbAW6F7GW
-         fAaA==
-X-Gm-Message-State: AOAM5317TgpLB4Q0+jA3xuTHjHbfkkiyzZHZiRvj8MpyFEI5f5Kl+Wdh
-        sj4xedeTtMUreGnbhD2Ys629nA==
-X-Google-Smtp-Source: ABdhPJzevWVC1by/7jK4Y0IL195o8gPGu04HuvVtT+MV9LoFz3MHh1HFuSl7U3CpItiCa+7GU5pQDA==
-X-Received: by 2002:a65:679a:: with SMTP id e26mr2914937pgr.374.1604688151778;
-        Fri, 06 Nov 2020 10:42:31 -0800 (PST)
-Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
-        by smtp.gmail.com with ESMTPSA id b6sm3246143pjq.42.2020.11.06.10.42.30
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GK9vvnW6ctWymDB59jo0SDWre4XXCtpqcBQ/nZPVTOA=;
+        b=cEdORYlJHxeLkzwsGrbHXY+1Q1r9alpNUPiT+If3n35PHae0OOQxjAZDwNvPAfvuIG
+         JqE0QWwXvRLRCfUnli/sWiHNWppZUqEPxmuWOZk/oL2h0/Kl6Ml6tsv40l06bhhwdDhY
+         6BZeMN/YgODNX8RNo6/6EXWRImfA+VgTegV22XJHrHYKBDkX1qZPvE8iuNFTwGZ8DeO9
+         l2cBLs+iTiWCx9FQdKNFbI22Cw1nKmPR5z0eYrT/xuzVlavLT6tU79kgKrztMfcOsdYE
+         PKlfhpf1iJ1zFwoB9tkP10rXFbm1Hnls4c2qeg9uuaAtXODSt2QQkkfW9ou7gB5KFiZv
+         kT8w==
+X-Gm-Message-State: AOAM532gnXcp/RcciPOqwxb85EPiJbP8x1UGPI1RB0XKv02hLuTMDW0B
+        oubGcQ/aw0yl6M5IAQ/99N6+nA==
+X-Google-Smtp-Source: ABdhPJzqijE9T9MXSXdPB4kmRbd7XOjJpFEhyA53mMYC8jWzlPd/gYuGuENillbwWW9PmWWz2izebQ==
+X-Received: by 2002:a17:90a:5204:: with SMTP id v4mr927972pjh.188.1604688776289;
+        Fri, 06 Nov 2020 10:52:56 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:4a0f:cfff:fe66:e92e])
+        by smtp.gmail.com with ESMTPSA id k12sm3457989pjf.22.2020.11.06.10.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2020 10:42:31 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: [PATCH v2 6/6] platform/chrome: cros_ec_typec: Store cable plug type
-Date:   Fri,  6 Nov 2020 10:41:10 -0800
-Message-Id: <20201106184104.939284-7-pmalani@chromium.org>
-X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
-In-Reply-To: <20201106184104.939284-1-pmalani@chromium.org>
+        Fri, 06 Nov 2020 10:52:54 -0800 (PST)
+Date:   Fri, 6 Nov 2020 10:52:49 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v2 5/6] usb: pd: Add captive Type C cable type
+Message-ID: <20201106185249.GA2874493@google.com>
 References: <20201106184104.939284-1-pmalani@chromium.org>
+ <20201106184104.939284-6-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="J2SCkAp4GZ/dPZZf"
+Content-Disposition: inline
+In-Reply-To: <20201106184104.939284-6-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use the PD VDO Type C cable plug type macro to retrieve and store the
-cable plug type in the cable descriptor.
 
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
+--J2SCkAp4GZ/dPZZf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Changes in v2:
-- Changed local variable from uint32_to u32.
+Hi Prashant,
 
- drivers/platform/chrome/cros_ec_typec.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 5e7f0b4ebbec..cf609aa10567 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -709,6 +709,7 @@ static int cros_typec_handle_sop_prime_disc(struct cros_typec_data *typec, int p
- 		.port = port_num,
- 		.partner_type = TYPEC_PARTNER_SOP_PRIME,
- 	};
-+	u32 cable_plug_type;
- 	int ret = 0;
- 
- 	memset(disc, 0, EC_PROTO2_MAX_RESPONSE_SIZE);
-@@ -722,8 +723,26 @@ static int cros_typec_handle_sop_prime_disc(struct cros_typec_data *typec, int p
- 	/* Parse the PD identity data, even if only 0s were returned. */
- 	cros_typec_parse_pd_identity(&port->c_identity, disc);
- 
--	if (disc->identity_count != 0)
-+	if (disc->identity_count != 0) {
-+		cable_plug_type = VDO_TYPEC_CABLE_TYPE(port->c_identity.vdo[0]);
-+		switch (cable_plug_type) {
-+		case CABLE_ATYPE:
-+			desc.type = USB_PLUG_TYPE_A;
-+			break;
-+		case CABLE_BTYPE:
-+			desc.type = USB_PLUG_TYPE_B;
-+			break;
-+		case CABLE_CTYPE:
-+			desc.type = USB_PLUG_TYPE_C;
-+			break;
-+		case CABLE_CAPTIVE:
-+			desc.type = USB_PLUG_CAPTIVE;
-+			break;
-+		default:
-+			desc.type = USB_PLUG_NONE;
-+		}
- 		desc.active = PD_IDH_PTYPE(port->c_identity.id_header) == IDH_PTYPE_ACABLE;
-+	}
- 
- 	desc.identity = &port->c_identity;
- 
--- 
-2.29.1.341.ge80a0c044ae-goog
+On Fri, Nov 06, 2020 at 10:41:08AM -0800, Prashant Malani wrote:
+> The USB Power Delivery Specification R3.0 adds a captive cable type
+> to the "USB Type-C plug to USB Type-C/Captive" field (Bits 19-18,
+> Passive/Active Cable VDO, Table 6-38 & 6-39).
+>=20
+> Add the corresponding definition to the Cable VDO header. Also add a
+> helper macro to get the Type C cable connector type, when provided
+> the cable VDO.
+>=20
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
+Reviewed-by: Benson Leung <bleung@chromium.org>
+
+Looks good, to modify the Cable VDO decoding to bring it up to date to PD 3=
+=2E0.
+
+I should also note that the ID Header VDO also has a new field (that I adde=
+d to
+the PD spec) that marks whether or not SOP/SOP' is a captive plug versus a
+receptacle as well. Nothing depends on it yet, but we should keep this in
+mind for future changes to the connector class.
+
+Thanks,
+Benson
+
+> ---
+>=20
+> Changes in v2:
+> - No changes.
+>=20
+>  include/linux/usb/pd_vdo.h | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/include/linux/usb/pd_vdo.h b/include/linux/usb/pd_vdo.h
+> index 68bdc4e2f5a9..8c5cb5830754 100644
+> --- a/include/linux/usb/pd_vdo.h
+> +++ b/include/linux/usb/pd_vdo.h
+> @@ -177,7 +177,7 @@
+>   * <31:28> :: Cable HW version
+>   * <27:24> :: Cable FW version
+>   * <23:20> :: Reserved, Shall be set to zero
+> - * <19:18> :: type-C to Type-A/B/C (00b =3D=3D A, 01 =3D=3D B, 10 =3D=3D=
+ C)
+> + * <19:18> :: type-C to Type-A/B/C/Captive (00b =3D=3D A, 01 =3D=3D B, 1=
+0 =3D=3D C, 11 =3D=3D Captive)
+>   * <17>    :: Type-C to Plug/Receptacle (0b =3D=3D plug, 1b =3D=3D recep=
+tacle)
+>   * <16:13> :: cable latency (0001 =3D=3D <10ns(~1m length))
+>   * <12:11> :: cable termination type (11b =3D=3D both ends active VCONN =
+req)
+> @@ -193,6 +193,7 @@
+>  #define CABLE_ATYPE		0
+>  #define CABLE_BTYPE		1
+>  #define CABLE_CTYPE		2
+> +#define CABLE_CAPTIVE		3
+>  #define CABLE_PLUG		0
+>  #define CABLE_RECEPTACLE	1
+>  #define CABLE_CURR_1A5		0
+> @@ -208,6 +209,7 @@
+>  	 | (tx1d) << 10 | (tx2d) << 9 | (rx1d) << 8 | (rx2d) << 7	\
+>  	 | ((cur) & 0x3) << 5 | (vps) << 4 | (sopp) << 3		\
+>  	 | ((usbss) & 0x7))
+> +#define VDO_TYPEC_CABLE_TYPE(vdo)	(((vdo) >> 18) & 0x3)
+> =20
+>  /*
+>   * AMA VDO
+> --=20
+> 2.29.1.341.ge80a0c044ae-goog
+>=20
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--J2SCkAp4GZ/dPZZf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCX6WbgQAKCRBzbaomhzOw
+wgdNAP4jo7I9B+HMxTp+v/kdlGdx9a7piPiHEAvxKAB1LbNDiwD/e7ht6IzRwNGn
+7VBEc/u1jWd14MUBfJ+louWVjyFUFgc=
+=SsxY
+-----END PGP SIGNATURE-----
+
+--J2SCkAp4GZ/dPZZf--
