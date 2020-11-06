@@ -2,131 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B660C2A8F1A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 06:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F82B2A8F59
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 07:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726338AbgKFFyx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Nov 2020 00:54:53 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:40074 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726260AbgKFFyx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 00:54:53 -0500
-X-UUID: 50d5a11850aa4c6fb9ed9d3c0ef08991-20201106
-X-UUID: 50d5a11850aa4c6fb9ed9d3c0ef08991-20201106
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 742032322; Fri, 06 Nov 2020 13:54:46 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 6 Nov 2020 13:54:43 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 6 Nov 2020 13:54:41 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
+        id S1726302AbgKFGPc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Nov 2020 01:15:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726290AbgKFGPR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 01:15:17 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3850C0613CF
+        for <linux-usb@vger.kernel.org>; Thu,  5 Nov 2020 22:15:17 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id 1so194855ple.2
+        for <linux-usb@vger.kernel.org>; Thu, 05 Nov 2020 22:15:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=F6tmY/1EFEb7yGiRngVYTKYYAOLMtuHBKlHb/X3FBro=;
+        b=HzLmr6JaFIcMravMY3wIPry/F1073BkN3VM3cd8Gi2O7jw7et61EBNfNlEzqqyIEDr
+         O9QiSB84NaObwQzvoVVuxKeOGt8VndPGxRzphlfH+7cLMvRgCXLb/PtEMTpcP1H83oxY
+         b+191SXYF8ylE2gKUBgugVqSge7yMZjugqqrlBWgxtA673su21UfCt+IML3oDpN4vxti
+         8gs+7/IuMoCGcBYg+3V7fWv1iCZUsugnMa0A4fQsRR3hvDwRfUGjQ+Urs3m1MNcObuQw
+         SCG2Y8JOLZc95bYGIDT0kkK9vrovP4jkrz7oM7qStmXfzFjQgjgOi7MZJht8PgCtGzrM
+         RfPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=F6tmY/1EFEb7yGiRngVYTKYYAOLMtuHBKlHb/X3FBro=;
+        b=oCXvaPcT5zMp/3OioH9CO8K6OnXYpcN1FuD2vCWSYRrkkjwWdrScoj/pNq8hX3KVzR
+         shvyVuwOXBVSqwycqiZkXiF2GqYWPWP1VohGRO0IdH3j8ObJf/DbHMS3Z/YbbJatbM0T
+         PfshXI0IA4vaVJDz0krV9gBsR65/AzSJ33SxVDwSYREsD6dHHjiwl0B2Vjx7GCtPKV1s
+         VAStIGdVcF3NZgvG9btspFMGSgFmU2de+tKe6pZ6Z8RrJHWXb31+y9A2uDMYOfGxuMoU
+         ULN8pL2KZ3Ii3MPjL34MXaIw82Y/W12R0XX+gpchDeheC1w2x73/0cINXkw683YfPVPF
+         Xg+Q==
+X-Gm-Message-State: AOAM531nYRHS7MckzRTOVzKNwl5vAMDl0QvECjzLeQnwJscrPTDv93R6
+        +FbLb3/bxof0Mfoo4KkJpKSyLg==
+X-Google-Smtp-Source: ABdhPJxg63tT7kf2/vWsP55uyoDC2lQuTRCTVcejh0K/L0eGZvU7H1zdtru1IjirtMh06PtAF/i6Ug==
+X-Received: by 2002:a17:902:9a83:b029:d6:e05e:c7e9 with SMTP id w3-20020a1709029a83b02900d6e05ec7e9mr430546plp.49.1604643317224;
+        Thu, 05 Nov 2020 22:15:17 -0800 (PST)
+Received: from localhost ([122.172.12.172])
+        by smtp.gmail.com with ESMTPSA id h16sm703800pjz.10.2020.11.05.22.15.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 05 Nov 2020 22:15:15 -0800 (PST)
+Date:   Fri, 6 Nov 2020 11:45:13 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-CC:     Ainge Hsu <ainge.hsu@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <stable@vger.kernel.org>
-Subject: [RESEND PATCH v4] usb: mtu3: fix panic in mtu3_gadget_stop()
-Date:   Fri, 6 Nov 2020 13:54:29 +0800
-Message-ID: <1604642069-20961-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1598539328-1976-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1598539328-1976-1-git-send-email-macpaul.lin@mediatek.com>
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        driver-dev <devel@driverdev.osuosl.org>,
+        linux-pwm@vger.kernel.org,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>, linux-usb@vger.kernel.org,
+        "open list:SECURE DIGITAL HO..." <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-tegra@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v1 17/30] mmc: sdhci-tegra: Support OPP and core voltage
+ scaling
+Message-ID: <20201106061513.uyys7njcqcdlah67@vireshk-i7>
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <20201104234427.26477-18-digetx@gmail.com>
+ <CAOh2x==sy1w7_oEV8=toC6uQnSN44wyOixbP_X0BrMsnm1AUFg@mail.gmail.com>
+ <6fa54ce6-d5ae-d04f-7c77-b62c148d92b7@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 39034FCC61EDF9B6A654BEEF06F6764DB605319D12BBEBE5EA98C7A01A428BEF2000:8
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6fa54ce6-d5ae-d04f-7c77-b62c148d92b7@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch fixes a possible issue when mtu3_gadget_stop()
-already assigned NULL to mtu->gadget_driver during mtu_gadget_disconnect().
+On 05-11-20, 17:18, Dmitry Osipenko wrote:
+> 05.11.2020 12:58, Viresh Kumar пишет:
+> >> +static void sdhci_tegra_deinit_opp_table(void *data)
+> >> +{
+> >> +       struct device *dev = data;
+> >> +       struct opp_table *opp_table;
+> >> +
+> >> +       opp_table = dev_pm_opp_get_opp_table(dev);
+> > So you need to get an OPP table to put one :)
+> > You need to save the pointer returned by dev_pm_opp_set_regulators() instead.
+> 
+> This is intentional because why do we need to save the pointer if we're
+> not using it and we know that we could get this pointer using OPP API?
 
-[<ffffff9008161974>] notifier_call_chain+0xa4/0x128
-[<ffffff9008161fd4>] __atomic_notifier_call_chain+0x84/0x138
-[<ffffff9008162ec0>] notify_die+0xb0/0x120
-[<ffffff900809e340>] die+0x1f8/0x5d0
-[<ffffff90080d03b4>] __do_kernel_fault+0x19c/0x280
-[<ffffff90080d04dc>] do_bad_area+0x44/0x140
-[<ffffff90080d0f9c>] do_translation_fault+0x4c/0x90
-[<ffffff9008080a78>] do_mem_abort+0xb8/0x258
-[<ffffff90080849d0>] el1_da+0x24/0x3c
-[<ffffff9009bde01c>] mtu3_gadget_disconnect+0xac/0x128
-[<ffffff9009bd576c>] mtu3_irq+0x34c/0xc18
-[<ffffff90082ac03c>] __handle_irq_event_percpu+0x2ac/0xcd0
-[<ffffff90082acae0>] handle_irq_event_percpu+0x80/0x138
-[<ffffff90082acc44>] handle_irq_event+0xac/0x148
-[<ffffff90082b71cc>] handle_fasteoi_irq+0x234/0x568
-[<ffffff90082a8708>] generic_handle_irq+0x48/0x68
-[<ffffff90082a96ac>] __handle_domain_irq+0x264/0x1740
-[<ffffff90080819f4>] gic_handle_irq+0x14c/0x250
-[<ffffff9008084cec>] el1_irq+0xec/0x194
-[<ffffff90085b985c>] dma_pool_alloc+0x6e4/0xae0
-[<ffffff9008d7f890>] cmdq_mbox_pool_alloc_impl+0xb0/0x238
-[<ffffff9008d80904>] cmdq_pkt_alloc_buf+0x2dc/0x7c0
-[<ffffff9008d80f60>] cmdq_pkt_add_cmd_buffer+0x178/0x270
-[<ffffff9008d82320>] cmdq_pkt_perf_begin+0x108/0x148
-[<ffffff9008d824d8>] cmdq_pkt_create+0x178/0x1f0
-[<ffffff9008f96230>] mtk_crtc_config_default_path+0x328/0x7a0
-[<ffffff90090246cc>] mtk_drm_idlemgr_kick+0xa6c/0x1460
-[<ffffff9008f9bbb4>] mtk_drm_crtc_atomic_begin+0x1a4/0x1a68
-[<ffffff9008e8df9c>] drm_atomic_helper_commit_planes+0x154/0x878
-[<ffffff9008f2fb70>] mtk_atomic_complete.isra.16+0xe80/0x19c8
-[<ffffff9008f30910>] mtk_atomic_commit+0x258/0x898
-[<ffffff9008ef142c>] drm_atomic_commit+0xcc/0x108
-[<ffffff9008ef7cf0>] drm_mode_atomic_ioctl+0x1c20/0x2580
-[<ffffff9008ebc768>] drm_ioctl_kernel+0x118/0x1b0
-[<ffffff9008ebcde8>] drm_ioctl+0x5c0/0x920
-[<ffffff900863b030>] do_vfs_ioctl+0x188/0x1820
-[<ffffff900863c754>] SyS_ioctl+0x8c/0xa0
+Because it is highly inefficient and it doesn't follow the rules set
+by the OPP core. Hypothetically speaking, the OPP core is free to
+allocate the OPP table structure as much as it wants, and if you don't
+use the value returned back to you earlier (think of it as a cookie
+assigned to your driver), then it will eventually lead to memory leak.
 
-Fixes: df2069acb005 ("usb: Add MediaTek USB3 DRD driver")
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Acked-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc: stable@vger.kernel.org
----
-RESEND for v4:
-  - Resend this patch by plain-text instead of MTK IT's default (base64)
-    outgoing SMTP settings.
-  - Add Acked-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Changes for v4:
-  - Add a "Fixes:" line.  Thanks Felipe.
-Changes for v3:
-  - Call synchronize_irq() in mtu3_gadget_stop() instead of remembering
-    callback function in mtu3_gadget_disconnect().
-    Thanks for Alan's suggestion.
-Changes for v2:
-  - Check mtu_gadget_driver out of spin_lock might still not work.
-    We use a temporary pointer to remember the callback function.
+> This is exactly the same what I did for the CPUFreq driver [1] :)
 
- drivers/usb/mtu3/mtu3_gadget.c |    1 +
- 1 file changed, 1 insertions(+)
+I will strongly suggest you to save the pointer here and do the same
+in the cpufreq driver as well.
 
-diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
-index 1de5c9a..1ab3d3a 100644
---- a/drivers/usb/mtu3/mtu3_gadget.c
-+++ b/drivers/usb/mtu3/mtu3_gadget.c
-@@ -564,6 +564,7 @@ static int mtu3_gadget_stop(struct usb_gadget *g)
- 
- 	spin_unlock_irqrestore(&mtu->lock, flags);
- 
-+	synchronize_irq(mtu->irq);
- 	return 0;
- }
- 
+> >> +static int devm_sdhci_tegra_init_opp_table(struct device *dev)
+> >> +{
+> >> +       struct opp_table *opp_table;
+> >> +       const char *rname = "core";
+> >> +       int err;
+> >> +
+> >> +       /* voltage scaling is optional */
+> >> +       if (device_property_present(dev, "core-supply"))
+> >> +               opp_table = dev_pm_opp_set_regulators(dev, &rname, 1);
+> >> +       else
+> > 
+> >> +               opp_table = dev_pm_opp_get_opp_table(dev);
+
+To make it further clear, this will end up allocating an OPP table for
+you, which it shouldn't have.
+
+> > Nice. I didn't think that someone will end up abusing this API and so made it
+> > available for all, but someone just did that. I will fix that in the OPP core.
+
+To be fair, I allowed the cpufreq-dt driver to abuse it too, which I
+am going to fix shortly.
+
+> The dev_pm_opp_put_regulators() handles the case where regulator is
+> missing by acting as dev_pm_opp_get_opp_table(), but the
+> dev_pm_opp_set_regulators() doesn't do it. Hence I don't think this is
+> an abuse, but the OPP API drawback.
+
+I am not sure what you meant here. Normally you are required to call
+dev_pm_opp_put_regulators() only if you have called
+dev_pm_opp_set_regulators() earlier. And the refcount stays in
+balance.
+
+> > Any idea why you are doing what you are doing here ?
+> 
+> Two reasons:
+> 
+> 1. Voltage regulator is optional, but dev_pm_opp_set_regulators()
+> doesn't support optional regulators.
+> 
+> 2. We need to balance the opp_table refcount in order to use OPP API
+> without polluting code with if(have_regulator), hence the
+> dev_pm_opp_get_opp_table() is needed for taking the opp_table reference
+> to have the same refcount as in the case of the dev_pm_opp_set_regulators().
+
+I am going to send a patchset shortly after which this call to
+dev_pm_opp_get_opp_table() will fail, if it is called before adding
+the OPP table.
+
+> I guess we could make dev_pm_opp_set_regulators(dev, count) to accept
+> regulators count=0 and then act as dev_pm_opp_get_opp_table(dev), will
+> it be acceptable?
+
+Setting regulators for count as 0 doesn't sound good to me.
+
+But, I understand that you don't want to have that if (have_regulator)
+check, and it is a fair request. What I will instead do is, allow all
+dev_pm_opp_put*() API to start accepting a NULL pointer for the OPP
+table and fail silently. And so you won't be required to have this
+unwanted check. But you will be required to save the pointer returned
+back by dev_pm_opp_set_regulators(), which is the right thing to do
+anyways.
+
 -- 
-1.7.9.5
-
+viresh
