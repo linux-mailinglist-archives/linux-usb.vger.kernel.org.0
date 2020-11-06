@@ -2,93 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AFA2A9385
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 10:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 277F72A93A2
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 11:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726242AbgKFJ6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Nov 2020 04:58:46 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:48779 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726075AbgKFJ6q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 04:58:46 -0500
-X-UUID: 8529835258ca4689bd97b26971337d07-20201106
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=4s+L7wob1CsZbTthU7rAq7FTbLUsWXrb2OgOu2nJ7fo=;
-        b=d7kmhsuQvTimtfvpgc0k+T1KEaoBxx9Dm/kyM7x2X3xbfIiFb5SmDUmi5UKfI0q7GNIiZW7dBGJCYQxvLWSIjrNzCVYYVniVY8/omtlGctyMIUqBT+njrGedsYvPAGxej1gsutGGi2iSsLT8VVJ6dymWfV1t2+c0CmqZ/CM9mkg=;
-X-UUID: 8529835258ca4689bd97b26971337d07-20201106
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1293617369; Fri, 06 Nov 2020 17:58:42 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 6 Nov 2020 17:58:39 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 6 Nov 2020 17:58:39 +0800
-Message-ID: <1604656720.24301.24.camel@mtkswgap22>
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: mediatek,mtk-xhci: add
- str-clock-on
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "Chunfeng Yun =?UTF-8?Q?=28=E4=BA=91=E6=98=A5=E5=B3=B0=29?=" 
-        <Chunfeng.Yun@mediatek.com>,
-        Ainge Hsu =?UTF-8?Q?=28=E5=BE=90=E5=B7=A7=E5=AE=9C=29?= 
-        <ainge.hsu@mediatek.com>,
-        Eddie Hung =?UTF-8?Q?=28=E6=B4=AA=E6=AD=A3=E9=91=AB=29?= 
-        <Eddie.Hung@mediatek.com>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>
-Date:   Fri, 6 Nov 2020 17:58:40 +0800
-In-Reply-To: <1604655965-22418-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1604301530-31546-1-git-send-email-macpaul.lin@mediatek.com>
-         <1604655965-22418-1-git-send-email-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726734AbgKFKFc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Nov 2020 05:05:32 -0500
+Received: from mga06.intel.com ([134.134.136.31]:9736 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725868AbgKFKFc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 6 Nov 2020 05:05:32 -0500
+IronPort-SDR: fJdjecHC8ANb13nG5ofLgXK+Dxvk+gXWQQMPk+fJFbTNKwcTFatuOXZFSWZr4O8nBhMN8bdHUf
+ Ff7sVi/CXQOg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9796"; a="231155217"
+X-IronPort-AV: E=Sophos;i="5.77,456,1596524400"; 
+   d="scan'208";a="231155217"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 02:05:30 -0800
+IronPort-SDR: HFA0Cx8Es6DEHA30ai0ln6LSYSTD4rx3dg9selNMwmVYVbfQBBwa2bi1F6ti1rEQhPoXisN+W9
+ yWdZH5oFOQwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,456,1596524400"; 
+   d="scan'208";a="306816676"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Nov 2020 02:05:28 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A7C9E252; Fri,  6 Nov 2020 12:05:26 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        johan@kernel.org, linux-usb@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        alberto.vignani@fastwebnet.it
+Subject: [PATCH v2 1/2] PCI: Disable MSI for Pericom PCIe-USB adapter
+Date:   Fri,  6 Nov 2020 12:05:25 +0200
+Message-Id: <20201106100526.17726-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTExLTA2IGF0IDE3OjQ2ICswODAwLCBNYWNwYXVsIExpbiB3cm90ZToNCj4g
-T3B0aW9uICJtZWRpYXRlayxzdHItY2xvY2stb24iIG1lYW5zIHRvIGtlZXAgY2xvY2sgb24gZHVy
-aW5nIHN5c3RlbQ0KPiBzdXNwZW5kIGFuZCByZXN1bWUuIFNvbWUgcGxhdGZvcm0gd2lsbCBmbHVz
-aCByZWdpc3RlciBzZXR0aW5ncyBpZiBjbG9jayBoYXMNCj4gYmVlbiBkaXNhYmxlZCB3aGVuIHN5
-c3RlbSBpcyBzdXNwZW5kZWQuIFNldCB0aGlzIG9wdGlvbiB0byBhdm9pZCBjbG9jayBvZmYuDQo+
-IA0KPiBDaGFuZ2UtSWQ6IElkODQxZjU4ZTlkN2ZiMzY1NjUxMTA3MmIzZWIxNGQwZDM1NWUyZGQ1
-DQoNClNvcnJ5IEkndmUgZm91bmQgYSBDaGFuZ2UtSUQgdGFnIGhlcmUsDQpJJ2xsIHNlbmQgcGF0
-Y2ggdjMuDQoNCj4gU2lnbmVkLW9mZi1ieTogTWFjcGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlh
-dGVrLmNvbT4NCj4gLS0tDQo+IENoYW5nZXMgZm9yIHYyOg0KPiAgIC0gUmVuYW1lICJtZWRpYXRl
-ayxrZWVwLWNsb2NrLW9uIiB0byAibWVkaWF0ZWssc3RyLWNsb2NrLW9uIiB3aGljaCBpbXBsaWVz
-DQo+ICAgICB0aGlzIG9wdGlvbiByZWxhdGVkIHRvIFNUUiBmdW5jdGlvbnMuDQo+ICAgLSBBZnRl
-ciBkaXNjdXNzaW9uIHdpdGggQ2h1bmZlbmcsIHJlc2VuZCBkdC1iaW5kaW5ncyBkZXNjcml0cHRp
-b24gYmFzZWQgb24NCj4gICAgIG1lZGlhdGVrLG10ay14aGNpLnR4dCBpbnN0ZWFkIG9mIHlhbWwg
-Zm9ybWF0Lg0KPiANCj4gIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9tZWRpYXRlayxtdGst
-eGhjaS50eHQgIHwgICAgMyArKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKykN
-Cj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNi
-L21lZGlhdGVrLG10ay14aGNpLnR4dCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
-cy91c2IvbWVkaWF0ZWssbXRrLXhoY2kudHh0DQo+IGluZGV4IDQyZDg4MTQuLmZjOTNiY2YgMTAw
-NjQ0DQo+IC0tLSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0
-ZWssbXRrLXhoY2kudHh0DQo+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
-cy91c2IvbWVkaWF0ZWssbXRrLXhoY2kudHh0DQo+IEBAIC0zNyw2ICszNyw5IEBAIFJlcXVpcmVk
-IHByb3BlcnRpZXM6DQo+ICANCj4gIE9wdGlvbmFsIHByb3BlcnRpZXM6DQo+ICAgLSB3YWtldXAt
-c291cmNlIDogZW5hYmxlIFVTQiByZW1vdGUgd2FrZXVwOw0KPiArIC0gbWVkaWF0ZWssc3RyLWNs
-b2NrLW9uOiBLZWVwIGNsb2NrIG9uIGR1cmluZyBzeXN0ZW0gc3VzcGVuZCBhbmQgcmVzdW1lLg0K
-PiArCVNvbWUgcGxhdGZvcm0gd2lsbCBmbHVzaCByZWdpc3RlciBzZXR0aW5ncyBpZiBjbG9jayBo
-YXMgYmVlbiBkaXNhYmxlZA0KPiArCXdoZW4gc3lzdGVtIGlzIHN1c3BlbmRlZC4NCj4gICAtIG1l
-ZGlhdGVrLHN5c2Nvbi13YWtldXAgOiBwaGFuZGxlIHRvIHN5c2NvbiB1c2VkIHRvIGFjY2VzcyB0
-aGUgcmVnaXN0ZXINCj4gIAlvZiB0aGUgVVNCIHdha2V1cCBnbHVlIGxheWVyIGJldHdlZW4geEhD
-SSBhbmQgU1BNOyBpdCBkZXBlbmRzIG9uDQo+ICAJIndha2V1cC1zb3VyY2UiLCBhbmQgaGFzIHR3
-byBhcmd1bWVudHM6DQoNClRoYW5rcw0KTWFjcGF1bCBMaW4NCg==
+Pericom PCIe-USB adapter advertises MSI, but documentation says
+"The MSI Function is not implemented on this device." in the chapters
+7.3.27, 7.3.29-7.3.31.
+
+Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
+Datasheet: https://www.diodes.com/assets/Datasheets/PI7C9X440SL.pdf
+Reported-by: alberto.vignani@fastwebnet.it
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: dropped confusing word (David), added ifdeffery (Ben)
+ drivers/pci/quirks.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index f70692ac79c5..e66e0cc8f99b 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5567,17 +5567,26 @@ static void pci_fixup_no_d0_pme(struct pci_dev *dev)
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ASMEDIA, 0x2142, pci_fixup_no_d0_pme);
+ 
+ /*
+- * Device [12d8:0x400e] and [12d8:0x400f]
++ * Device 12d8:0x400e [OHCI] and 12d8:0x400f [EHCI]
++ *
+  * These devices advertise PME# support in all power states but don't
+  * reliably assert it.
++ *
++ * These devices advertise MSI, but documentation (PI7C9X440SL.pdf) says
++ * "The MSI Function is not implemented on this device." in the chapters
++ * 7.3.27, 7.3.29-7.3.31.
+  */
+-static void pci_fixup_no_pme(struct pci_dev *dev)
++static void pci_fixup_no_msi_no_pme(struct pci_dev *dev)
+ {
++#ifdef CONFIG_PCI_MSI
++	pci_info(dev, "The MSI is not implemented on this device, disabling it\n");
++	dev->no_msi = 1;
++#endif
+ 	pci_info(dev, "PME# is unreliable, disabling it\n");
+ 	dev->pme_support = 0;
+ }
+-DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400e, pci_fixup_no_pme);
+-DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400f, pci_fixup_no_pme);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400e, pci_fixup_no_msi_no_pme);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400f, pci_fixup_no_msi_no_pme);
+ 
+ static void apex_pci_fixup_class(struct pci_dev *pdev)
+ {
+-- 
+2.28.0
 
