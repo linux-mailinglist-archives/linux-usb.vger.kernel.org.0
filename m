@@ -2,172 +2,268 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 779B32A977A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 15:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 227CE2A9790
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 15:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727251AbgKFOQJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Nov 2020 09:16:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58190 "EHLO mail.kernel.org"
+        id S1727251AbgKFOYi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Nov 2020 09:24:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59812 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726812AbgKFOQI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Nov 2020 09:16:08 -0500
-Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727166AbgKFOYh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 6 Nov 2020 09:24:37 -0500
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 66C962071A;
-        Fri,  6 Nov 2020 14:16:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 55C0F2151B;
+        Fri,  6 Nov 2020 14:24:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604672167;
-        bh=dwqIrjREMpE3aCs5UsswQD8Vff2Vo/148pWll4qzmk4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=pu+SiWaWYPwZLdf0gMuJ01ldNUL251wz6jEsxwpUcjpvVEzaRDx63q251MynjjSDZ
-         gEvaPNDq0I1NenqpZSr29kZk8xrwTf7qu9bsMFLBvz8vDhga0vYtKxZJVeENve7p84
-         xmwUsAv/tZaAAfK+O7PVjuOfanCidrxHW8VWiM/U=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Ferry Toth <fntoth@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
-In-Reply-To: <326aa23e-fabd-f3d6-4778-d036858413a2@gmail.com>
-References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
- <87a6wig461.fsf@kernel.org>
- <a565dc52-27ab-f5be-4fee-5a8f96d66456@gmail.com>
- <874kmpf583.fsf@kernel.org>
- <d0aca346-353c-d74e-6f00-ccd2a4ed26ef@gmail.com>
- <976cea12-e54e-fbca-6c53-e6ef5c554094@synopsys.com>
- <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
- <2b6586e6-528c-86e8-9d92-0061bc44866d@gmail.com>
- <aad327a8-95bc-40ec-abf7-ad216a02fad0@synopsys.com>
- <2cc783ac-6b71-190b-49fc-9e2bceeacd4b@gmail.com>
- <920590dc-5430-7f8b-b2e1-1a4c37f4dfbe@synopsys.com>
- <CAHp75Vfs9AoOYSVGTpw30h11ptPOSPNf1AsWBKdiVrDL=9X3PQ@mail.gmail.com>
- <0089306e-e2ca-9a53-6ffb-202d028050ce@gmail.com>
- <CAHp75Vc0P746FhhohJ=wRccsQL4ewn+AECMw3yTD6cuGxHCG9Q@mail.gmail.com>
- <30ab00e4-53ae-fd9e-1689-c94078a31625@gmail.com>
- <871rhin1yt.fsf@kernel.org>
- <ec15a515-6dbc-1224-a457-d5ac4a4db280@gmail.com>
- <87eel7q9bk.fsf@kernel.org>
- <326aa23e-fabd-f3d6-4778-d036858413a2@gmail.com>
-Date:   Fri, 06 Nov 2020 16:15:59 +0200
-Message-ID: <87blgar2ow.fsf@kernel.org>
+        s=default; t=1604672676;
+        bh=8R/HkQhxiIJtH+pu6bTEhw47dgED0NJDh0oJeQr18Nk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BgazNXKjLS8bFbjvTK1EL5rNDNhSaCTiVw6n+p2pcw/zKzNtM8qHAkw1Dz+Eh8GJ5
+         tP42vEfgMnb4GpweRcdG1mVPgrjrJotDRSSDMhp0lXrVFxMpS8F033xhI7DEkBQMPk
+         5R7P2CkT6HIN5iSi/WtQdO+pYom534RqIojwcATU=
+Received: by mail-ot1-f51.google.com with SMTP id y22so1356938oti.10;
+        Fri, 06 Nov 2020 06:24:36 -0800 (PST)
+X-Gm-Message-State: AOAM533xjNcPMAiqnbVW/XA+aQXS2Y3AoD1FHOo6ZxhbAZIwZEVZ4fRK
+        +pgs9CrUqIVSpUm3SV8Is659KaH23wA7sN7VpQ==
+X-Google-Smtp-Source: ABdhPJz2lZyE8yejc5mq35b+Eqmy+/owOscHu1zVRHO7y1Dz83CYFrC4m0AbhGpdw/6gbzSieZ5FVR3NO0kbPXPXrl4=
+X-Received: by 2002:a05:6830:2259:: with SMTP id t25mr1324932otd.192.1604672673035;
+ Fri, 06 Nov 2020 06:24:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+References: <1604403610-16577-1-git-send-email-jun.li@nxp.com>
+ <20201105222559.GA1701705@bogus> <VE1PR04MB6528DB5965EFE139C7E0FAFA89ED0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+In-Reply-To: <VE1PR04MB6528DB5965EFE139C7E0FAFA89ED0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 6 Nov 2020 08:24:21 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJxvkG05Ds7Wa4RBU8eDqr4O=OcmgyogAYQjVwhcs02aA@mail.gmail.com>
+Message-ID: <CAL_JsqJxvkG05Ds7Wa4RBU8eDqr4O=OcmgyogAYQjVwhcs02aA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: usb: add documentation for typec
+ switch simple driver
+To:     Jun Li <jun.li@nxp.com>
+Cc:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "prabhakar.mahadev-lad.rj@bp.renesas.com" 
+        <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "laurent.pinchart+renesas@ideasonboard.com" 
+        <laurent.pinchart+renesas@ideasonboard.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Peter Chen <peter.chen@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+On Fri, Nov 6, 2020 at 5:07 AM Jun Li <jun.li@nxp.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: Friday, November 6, 2020 6:26 AM
+> > To: Jun Li <jun.li@nxp.com>
+> > Cc: heikki.krogerus@linux.intel.com; rafael@kernel.org;
+> > gregkh@linuxfoundation.org; andriy.shevchenko@linux.intel.com;
+> > hdegoede@redhat.com; lee.jones@linaro.org;
+> > mika.westerberg@linux.intel.com; dmitry.torokhov@gmail.com;
+> > prabhakar.mahadev-lad.rj@bp.renesas.com;
+> > laurent.pinchart+renesas@ideasonboard.com; linux-usb@vger.kernel.org;
+> > devicetree@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>; Peter Chen
+> > <peter.chen@nxp.com>
+> > Subject: Re: [PATCH v5 1/4] dt-bindings: usb: add documentation for typec
+> > switch simple driver
+> >
+> > On Tue, Nov 03, 2020 at 07:40:07PM +0800, Li Jun wrote:
+> > > Some platforms need a simple driver to do some controls according to
+> > > typec orientation, this can be extended to be a generic driver with
+> > > compatible with "typec-orientation-switch".
+> > >
+> > > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > > ---
+> > > No changes for v5.
+> > >
+> > > changes on v4:
+> > > - Use compatible instead of bool property for switch matching.
+> > > - Change switch GPIO to be switch simple.
+> > > - Change the active channel selection GPIO to be optional.
+> > >
+> > > previous discussion:
+> > >
+> > https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fpatch
+> > >
+> > work.ozlabs.org%2Fpatch%2F1054342%2F&amp;data=04%7C01%7Cjun.li%40nxp.c
+> > >
+> > om%7C78ca5205695149e2743208d881d9c753%7C686ea1d3bc2b4c6fa92cd99c5c3016
+> > >
+> > 35%7C0%7C0%7C637402119664101856%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLj
+> > >
+> > AwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=
+> > > 8TY%2BPRIui6HhxhYE1%2BLmwWL38Vp7SY1Ceb5rGG%2B4DUo%3D&amp;reserved=0
+> > >
+> > >  .../bindings/usb/typec-switch-simple.yaml          | 69
+> > ++++++++++++++++++++++
+> > >  1 file changed, 69 insertions(+)
+> > >
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+> > > b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+> > > new file mode 100644
+> > > index 0000000..244162d
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+> > > @@ -0,0 +1,69 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
+> > > +---
+> > > +$id:
+> > >
+> > +https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevi
+> > >
+> > +cetree.org%2Fschemas%2Fusb%2Ftypec-switch-simple.yaml%23&amp;data=04%
+> > >
+> > +7C01%7Cjun.li%40nxp.com%7C78ca5205695149e2743208d881d9c753%7C686ea1d3
+> > >
+> > +bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637402119664111854%7CUnknown%7CTWF
+> > >
+> > +pbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6
+> > >
+> > +Mn0%3D%7C1000&amp;sdata=HjWfKlDLyqb%2FKLlL6vdnyPe%2BnB8pSllhokIXQ%2Bw
+> > > +yyw8%3D&amp;reserved=0
+> > > +$schema:
+> > >
+> > +https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevi
+> > >
+> > +cetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=04%7C01%7Cjun.li%40
+> > >
+> > +nxp.com%7C78ca5205695149e2743208d881d9c753%7C686ea1d3bc2b4c6fa92cd99c
+> > >
+> > +5c301635%7C0%7C0%7C637402119664111854%7CUnknown%7CTWFpbGZsb3d8eyJWIjo
+> > >
+> > +iMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&am
+> > >
+> > +p;sdata=z0bO47QVl5gw0UE%2Bx3a5E27ALgz568zp%2Bf4suGlch%2Fo%3D&amp;rese
+> > > +rved=0
+> > > +
+> > > +title: Typec Orientation Switch Simple Solution Bindings
+> > > +
+> > > +maintainers:
+> > > +  - Li Jun <jun.li@nxp.com>
+> > > +
+> > > +description: |-
+> > > +  USB SuperSpeed (SS) lanes routing to which side of typec connector
+> > > +is
+> > > +  decided by orientation, this maybe achieved by some simple control
+> > > +like
+> > > +  GPIO toggle.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: typec-orientation-switch
+> > > +
+> > > +  switch-gpios:
+> > > +    description: |
+> > > +      gpio specifier to switch the super speed active channel,
+> > > +      GPIO_ACTIVE_HIGH: GPIO state high for cc1;
+> > > +      GPIO_ACTIVE_LOW:  GPIO state low for cc1.
+> >
+> > What does active mean? There isn't really an active and inactive state, right?
+> > It's more a mux selecting 0 or 1 input?
+>
+> Yes, I will change the description:
+> gpio specifier to select the target channel of mux.
 
+I wonder if the existing mux bindings should be used here.
 
-Hi,
+> > I think you want flags 0 (aka GPIO_ACTIVE_HIGH) unless there's an inverter
+> > in the middle.
+>
+> This depends on the switch IC design and board design, leave 2 flags
+> (GPIO_ACTIVE_HIGH and GPIO_ACTIVE_LOW) can cover all possible cases.
+>
+> NXP has 2 diff IC parts for this:
+> 1. PTN36043(used on iMX8MQ)
+> Output selection control
+> When SEL=0, RX_AP_*/TX_AP_* are connected to RX_CON_2*/TX_CON_2*, and
+> RX_CON_1*/TX_CON_1* are connected to VDD thru low ohmic resistor.
+> When SEL=1, RX_AP_*/TX_AP_* are connected to RX_CON_1*/TX_CON_1*, and
+> RX_CON_2*/TX_CON_2* are connected to VDD thru low ohmic resistor.
+>
+> Board design connects RX_CON_1*/TX_CON_1* to typec connector CC1,
+> so GPIO_ACTIVE_HIGH
+>
+> 2. CBTU02043(used on iMX8MP)
+> SEL        Function
+> --------------------------------------
+> Low        A to B ports and vice versa
+> High       A to C ports and vice versa
+>
+> Board design connects B to typec connector CC1, so GPIO_ACTIVE_LOW
+>
+> Therefore, we need 2 flags.
 
-Ferry Toth <fntoth@gmail.com> writes:
->>>> Ferry Toth <fntoth@gmail.com> writes:
->>>>> Op 27-10-2020 om 22:16 schreef Andy Shevchenko:
->>>>>> On Tue, Oct 27, 2020 at 10:13 PM Ferry Toth <fntoth@gmail.com> wrote:
->>>>>>> Op 22-10-2020 om 15:43 schreef Andy Shevchenko:
->>>>>>>> On Thu, Oct 22, 2020 at 4:21 PM Thinh Nguyen <Thinh.Nguyen@synopsy=
-s.com> wrote:
->>>>>>>>> Ferry Toth wrote:
->>>>>> ...
->>>>>>
->>>>>>>>> There are some fixes to dwc3 in kernel mainline. Is it possible t=
-o test
->>>>>>>>> this against linux-next?
->>>>>>>> I think the best is to wait for v5.10-rc1 and retest.
->>>>>> Can you give a try of v5.10-rc1?
->>>>> Yes, I just tried:
->>>>>
->>>>> I booted in host mode, then flip the switch. Gadget come up, go down
->>>>> once, then come up again and stay up.
->>>> please collect trace events. It's important to figure out why it's goi=
-ng
->>>> down, even if only once. Make sure to collect trace *and* dmesg so we
->>>> can correlate trace with the reenumeration that should show up in dmes=
-g.
->>>>
->>>> thanks
->>> Sorry, I had to replace mobo. Now back on this.
->>>
->>> As is, on Edison I can record with something like "perf record -e
->>> 'dwc3:dwc3_gadget*' -e 'gadget:*' -g -a".
->>> Then get the trace buffer with "perf script > gadget.txt". Then at each
->>> trace point we get a stack trace like:
->>>
->>> file-storage=C2=A0=C2=A0 831 [001]=C2=A0 4445.240038: dwc3:dwc3_gadget_=
-ep_cmd: [FAILED
->>> TO PARSE] name=3Dep4in cmd=3D524295 param0=3D0 param1=3D0 param2=3D0 cm=
-d_status=3D0
->>>   =C2=A0=C2=A0 =C2=A0ffffffff9a35b7e7 __traceiter_dwc3_gadget_ep_cmd+0x=
-37
->>> ([kernel.kallsyms])
->>>   =C2=A0=C2=A0 =C2=A0ffffffff9a35b7e7 __traceiter_dwc3_gadget_ep_cmd+0x=
-37
->>> ([kernel.kallsyms])
->>>   =C2=A0=C2=A0 =C2=A0ffffffff9a35fa40 dwc3_send_gadget_ep_cmd+0x320 ([k=
-ernel.kallsyms])
->>>   =C2=A0=C2=A0 =C2=A0ffffffff9a3606d0 __dwc3_gadget_kick_transfer+0x200=
- ([kernel.kallsyms])
->>>   =C2=A0=C2=A0 =C2=A0ffffffff9a361114 dwc3_gadget_ep_queue+0xe4 ([kerne=
-l.kallsyms])
->>>   =C2=A0=C2=A0 =C2=A0ffffffff9a3afc3a usb_ep_queue+0x2a ([kernel.kallsy=
-ms])
->>>   =C2=A0=C2=A0 =C2=A0ffffffffc047c301 start_transfer.isra.0+0x21 ([kern=
-el.kallsyms])
->>>   =C2=A0=C2=A0 =C2=A0ffffffffc047c88a start_in_transfer.isra.0+0x3a ([k=
-ernel.kallsyms])
->>>   =C2=A0=C2=A0 =C2=A0ffffffffc047c93d send_status+0x8d ([kernel.kallsym=
-s])
->>>   =C2=A0=C2=A0 =C2=A0ffffffffc047dd05 fsg_main_thread+0x3c5 ([kernel.ka=
-llsyms])
->>>   =C2=A0=C2=A0 =C2=A0ffffffff99c853b9 kthread+0xf9 ([kernel.kallsyms])
->>>   =C2=A0=C2=A0 =C2=A0ffffffff99c01a32 ret_from_fork+0x22 ([kernel.kalls=
-yms])
->>>
->>> "perf list" shows the tracepoint events, the same as under
->>> /sys/kernel/debug/tracing/events/
->>>
->>> Question is which points to trace (above command fills buffer to 35MB in
->>> 10sec). Do you have suggestions?
->> don't enable any gadget event. Only dwc3 events. Also, enable *all* dwc3
->> events. Usually, I avoid perf when doing this and just go straight to
->> /sys/kernel/trace/.
-> Ok, I can do that. But I'm not sure how I turn on tracing and capture=20
-> the results.
+I'm not saying you don't. Just that the description is a bit odd.
+Please expand the description for how one decides how to set the
+flags.
 
-Got you covered ;-)
+>
+> >
+> > > +    maxItems: 1
+> > > +
+> > > +  port:
+> > > +    type: object
+> > > +    additionalProperties: false
+> > > +    description: -|
+> > > +      Connection to the remote endpoint using OF graph bindings that model
+> > SS
+> > > +      data bus to typec connector.
+> > > +
+> > > +    properties:
+> > > +      endpoint:
+> > > +        type: object
+> > > +        additionalProperties: false
+> > > +
+> > > +        properties:
+> > > +          remote-endpoint: true
+> > > +
+> > > +        required:
+> > > +          - remote-endpoint
+> > > +
+> > > +    required:
+> > > +      - endpoint
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - port
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/gpio/gpio.h>
+> > > +    ptn36043 {
+> > > +        compatible = "typec-orientation-switch";
+> > > +        pinctrl-names = "default";
+> > > +        pinctrl-0 = <&pinctrl_ss_sel>;
+> > > +        switch-gpios = <&gpio3 15 GPIO_ACTIVE_HIGH>;
+> > > +
+> > > +        port {
+> > > +                usb3_data_ss: endpoint {
+> > > +                        remote-endpoint = <&typec_con_ss>;
+> >
+> > The data goes from the connector to here and then where? You need a connection
+> > to the USB host controller.
+>
+> The orientation switch only need interact with type-c, no any interaction
+> with USB controller, do we still need a connection to it?
 
-https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-b=
-ugs
+If you have 2 USB hosts and 2 connectors (and 2 muxes), how would you
+describe which connector goes with which host?
 
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+lWp8RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQaJ5hAA34PjQLp1Lw4DSqmuxLqrrULVbqwEEamu
-5lCmOQcIr41wWeLu0XGiQhEZoTVK0euMgg6NP6Di1oyoz2NXtBUxeebQEhJ6XKm9
-hpdyC8lMp3xrxYxyagcvNpoZgbyu2GwP3ZEOfA43L3UsscAPyESFQc4gzw6yayyE
-uar19WeN80Tiqk2msIskssT3hxv71M28+KlB3RDIDOV1308dJrhIdW3lt084NPjB
-n8MhBoSHrPrf75sehdag2e5O5qnDWvzrwioJ0C3Z1iXOTYRgZMb5rQ4duH5dzcg2
-F+II/9Mi0xsjtqIAfMS9x6R4ZswS46mX0WPMJ3X/AytCyFQ9+6AWpNKPlEfpwHTt
-Q3jigS8RBRwQQkJcjKKtGhaq2n8ES7LuFXCZU5FKFS2GAr8XErdFBa2QljnZQ9sr
-HQeKwaaVrPjp/NbBd/5eUluKDWPCSaFSgXcFsUwdeniVGQkfQ3ff5wWRtdF/L1hn
-XIOtOMV63q1T1KcPQMI0aLBl1gMZVlGflVU1Xx7AK5XdxvVhWOpe3cT6L9XV1Zlk
-mYqaHgVjvsoLwhls5/iMk/Qs0qukt0gTnsW6BPFwECCFPkZDZbwa11yZSyI+YOb/
-GqJpXNG7schQOalTPKSkQsEZMcX9r5v+kKWS+XtxDt28GLo0Bkmf5glCIcHDPupu
-Eo5x2Mhl+L4=
-=JixR
------END PGP SIGNATURE-----
---=-=-=--
+Rob
