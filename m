@@ -2,80 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE572A9A5D
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 18:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E872A9C8B
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 19:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727629AbgKFRDR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Nov 2020 12:03:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60326 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726880AbgKFRDR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Nov 2020 12:03:17 -0500
-Received: from sol.localdomain (172-10-235-113.lightspeed.sntcca.sbcglobal.net [172.10.235.113])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 144F1217A0;
-        Fri,  6 Nov 2020 17:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604682196;
-        bh=8qTMHsqw2tR8BoQH69u5hejd4jKL4a4QMXrqYRaNg2Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b3BaJyxzuCBZbIOZIZY7xuDiyfkm8O9vsQYyOHW4HoTKjkHlisX4Oc7uhcEX+WL6P
-         JITz0WXmSDjg4a7xRaVxCgTCiorGnORl9TVpCL8OaHSt2c1JP+UEhj+4WcquA7pAVs
-         kNEEkSv25vkK5tvP+O2XqTk/qa/XqfyZ2zMg1oX8=
-Date:   Fri, 6 Nov 2020 09:03:14 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     syzbot <syzbot+92340f7b2b4789907fdb@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: WARNING in input_register_device
-Message-ID: <20201106170314.GA845@sol.localdomain>
-References: <000000000000872b5405b36f8e31@google.com>
- <20201106140336.GA3319902@kroah.com>
+        id S1727998AbgKFSlR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Nov 2020 13:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727605AbgKFSlQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 13:41:16 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04CDC0613CF
+        for <linux-usb@vger.kernel.org>; Fri,  6 Nov 2020 10:41:14 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id z24so1619427pgk.3
+        for <linux-usb@vger.kernel.org>; Fri, 06 Nov 2020 10:41:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jDCAM3XXJ/HqS+XVohaVZpsIAUFDZRh6b3WrbFuDG9U=;
+        b=fFFla20VJR/kGP9WOCjXrl2YTtaAKL0pypx0TCbvLLuwisjKD7azcqfEP6esytHrPT
+         ZhIi+A/5Tl+B755MlTRP9B6xUmAaybjazvH20Eaib1iOIGiRAJUh8LNjd7wWsXT8R1SG
+         somhWUx6M/pq/EbjlMdx3JUkCk3neMgJDotC4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jDCAM3XXJ/HqS+XVohaVZpsIAUFDZRh6b3WrbFuDG9U=;
+        b=V8g7jaBus/4UkAYjNceyvKDDKPc74xBlXnr5LuGr3wfwHQD8QfBDZcuRUL0Sj7l/BR
+         8M1WfqvdVeDnsbo/wbmb7leRefCrwwGJSdXGdfb/ij8mWK96Lc9MCeoULQfapJgBzsEB
+         cQNqtW0y/fWVW8+IWEi4DR9hmj4bY27JwkJBrIhSheI/mL+i/7tnvo8nrgXKi+HVlqXa
+         4XHT0vkhAJ9OfYEcRl67ujgx/NXwbKefeiH0VoyQvwGK3B1ioGVzTcggOwhVYMSktW6J
+         /eCLt0HSRj7KM/vcxYV0xbZDtqPywDFIktos2BvrHdbGc5OrUmgXmuyfuN3UOJSps61W
+         Pcig==
+X-Gm-Message-State: AOAM532lUclxFhXty4RCr6seO43WAQ0x+QOfRVVR8eHBo3rIsZajPMOU
+        KPW0Bmz208HHpDGGE6stLphvTQ==
+X-Google-Smtp-Source: ABdhPJy4TU6PlLg261yhikfs03Bl03a33QLqBDzlxcnuY3UDTN4lEkK0ah72fLRDjXly1XBAW49Dvw==
+X-Received: by 2002:a17:90b:316:: with SMTP id ay22mr1001591pjb.8.1604688074447;
+        Fri, 06 Nov 2020 10:41:14 -0800 (PST)
+Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id b6sm3246143pjq.42.2020.11.06.10.41.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Nov 2020 10:41:13 -0800 (PST)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: [PATCH v2 0/6] platform/chrome: cros_ec_typec: Add cable
+Date:   Fri,  6 Nov 2020 10:40:57 -0800
+Message-Id: <20201106184104.939284-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201106140336.GA3319902@kroah.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 06, 2020 at 03:03:36PM +0100, Greg KH wrote:
-> On Fri, Nov 06, 2020 at 04:43:17AM -0800, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    9e39aef3 usb: misc: brcmstb-usb-pinmap: Make sync_all_pins..
-> > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=145ffa8a500000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=a05f5efbb00b1465
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=92340f7b2b4789907fdb
-> > compiler:       gcc (GCC) 10.1.0-syz 20200507
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172ae7a8500000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13b24746500000
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+92340f7b2b4789907fdb@syzkaller.appspotmail.com
-> > 
-> > microsoft 0003:045E:07DA.0001: unknown main item tag 0x0
-> > HID 045e:07da: Invalid code 65791 type 1
-> > ------------[ cut here ]------------
-> > init_uevent_argv: buffer size too small
-> > WARNING: CPU: 0 PID: 5 at lib/kobject_uevent.c:259 init_uevent_argv lib/kobject_uevent.c:259 [inline]
-> > WARNING: CPU: 0 PID: 5 at lib/kobject_uevent.c:259 kobject_uevent_env+0x1640/0x1680 lib/kobject_uevent.c:608
-> 
-> You gave it a device with a buffer that was "too small", and it rejected
-> it.
-> 
-> Which, aside from the huge warning message, is to be expected, so I
-> don't think this is really a bug here.
-> 
+The following series adds Type C cable registration to the cros-ec-typec
+port driver using the Type C connector class framework. The first few
+patches perform a few minor re-organizations to prepare for the cable
+registration patch.
 
-The purpose of WARN is for reporting recoverable kernel bugs.  So a reachable
-WARN is a bug.  Either it is reporting one, or the bug is that the use of WARN
-is wrong.
+The last couple of CLs update the USB PD VDO header file to add a
+captive cable connector for the Type C cable plug field, and then use
+the added macro to add the corresponding field of the Type C cable
+descriptor in the cros-ec-typec driver.
 
-- Eric
+v1:
+https://lore.kernel.org/lkml/20201106012758.525472-1-pmalani@chromium.org/
+
+Changes since v2:
+- Changed local variable uint32_t to u32 in patch 6/6.
+
+Prashant Malani (6):
+  platform/chrome: cros_ec_typec: Make disc_done flag partner-only
+  platform/chrome: cros_ec_typec: Factor out PD identity parsing
+  platform/chrome: cros_ec_typec: Rename discovery struct
+  platform/chrome: cros_ec_typec: Register cable
+  usb: pd: Add captive Type C cable type
+  platform/chrome: cros_ec_typec: Store cable plug type
+
+ drivers/platform/chrome/cros_ec_typec.c | 148 +++++++++++++++++++-----
+ include/linux/usb/pd_vdo.h              |   4 +-
+ 2 files changed, 123 insertions(+), 29 deletions(-)
+
+-- 
+2.29.1.341.ge80a0c044ae-goog
+
