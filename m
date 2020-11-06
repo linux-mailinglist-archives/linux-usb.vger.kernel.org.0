@@ -2,65 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 633BA2A90B3
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 08:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26AE32A9086
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Nov 2020 08:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgKFHtU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Nov 2020 02:49:20 -0500
-Received: from m176149.mail.qiye.163.com ([59.111.176.149]:58485 "EHLO
-        m176149.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbgKFHtU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 02:49:20 -0500
-X-Greylist: delayed 576 seconds by postgrey-1.27 at vger.kernel.org; Fri, 06 Nov 2020 02:49:19 EST
-Received: from vivo.com (wm-9.qy.internal [127.0.0.1])
-        by m176149.mail.qiye.163.com (Hmail) with ESMTP id 4C9A62832DD;
-        Fri,  6 Nov 2020 15:39:41 +0800 (CST)
-Content-Type: text/plain; charset="UTF-8"
+        id S1726050AbgKFHkH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Nov 2020 02:40:07 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:33275 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbgKFHkG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Nov 2020 02:40:06 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 0A67dxXoB015419, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexmb03.realtek.com.tw[172.21.6.96])
+        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 0A67dxXoB015419
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 6 Nov 2020 15:39:59 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXMB03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2044.4; Fri, 6 Nov 2020 15:39:59 +0800
+Received: from RTEXMB04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2044.4; Fri, 6 Nov 2020 15:39:59 +0800
+Received: from RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa]) by
+ RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa%3]) with mapi id
+ 15.01.2044.006; Fri, 6 Nov 2020 15:39:59 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     =?utf-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+CC:     Vladimir Oltean <olteanv@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH net-next 3/5] r8152: add MCU typed read/write functions
+Thread-Topic: [PATCH net-next 3/5] r8152: add MCU typed read/write functions
+Thread-Index: AQHWshawQtN/T3fh9kiJgjvtG4xSCKm2a3wAgACIZwCAAC/9AIAAG2OAgAAC9ICAAAcNgIAAAsSAgAARvwCAAWswAIAAEW8AgAGRtDD//7jZgIAAkFAA
+Date:   Fri, 6 Nov 2020 07:39:59 +0000
+Message-ID: <96fee294b4ec41e6a389836cff3513fc@realtek.com>
+References: <20201103192226.2455-4-kabel@kernel.org>
+        <20201103214712.dzwpkj6d5val6536@skbuf> <20201104065524.36a85743@kernel.org>
+        <20201104084710.wr3eq4orjspwqvss@skbuf> <20201104112511.78643f6e@kernel.org>
+        <20201104113545.0428f3fe@kernel.org>    <20201104110059.whkku3zlck6spnzj@skbuf>
+        <20201104121053.44fae8c7@kernel.org>    <20201104121424.th4v6b3ucjhro5d3@skbuf>
+        <20201105105418.555d6e54@kernel.org>    <20201105105642.pgdxxlytpindj5fq@skbuf>
+        <21f6ca0a96d640558633d6296b81271a@realtek.com>
+ <20201106073947.6328280d@kernel.org>
+In-Reply-To: <20201106073947.6328280d@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.146]
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
-Message-ID: <ACIArQBlDXHfZNI0kyjfGqo0.3.1604648380903.Hmail.wangqing@vivo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: =?UTF-8?B?UmU6UmU6IFtQQVRDSF0gdXNiOiBBc3NpZ24gTlVMTCDigIvigIt0byBwaHkgdGhhdCBtYXkgYmUgcmV0dXJuZWQ=?=
-X-Priority: 3
-X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com
-X-Originating-IP: 58.213.83.156
-In-Reply-To: <20201106065131.GD697514@kroah.com>
 MIME-Version: 1.0
-Received: from wangqing@vivo.com( [58.213.83.156) ] by ajax-webmail ( [127.0.0.1] ) ; Fri, 6 Nov 2020 15:39:40 +0800 (GMT+08:00)
-From:   =?UTF-8?B?546L5pOO?= <wangqing@vivo.com>
-Date:   Fri, 6 Nov 2020 15:39:40 +0800 (GMT+08:00)
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZTEsYTUhOHU4eGhgaVkpNS09NT0NIQ0pISEJVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
-        FZT0tIVUpKS09ISFVLWQY+
-X-HM-Sender-Digest: e1kJHlYWEh9ZQU5CTkNDQ0NIQ0tCN1dZDB4ZWUEPCQ4eV1kSHx4VD1lB
-        WUc6ODI6CSo5Fz8jMx0hNTJLEAIRHTwKFEtVSFVKTUtPTU9DSENKTExCVTMWGhIXVQwaFRwKEhUc
-        Ow0SDRRVGBQWRVlXWRILWUFZTkNVSUpIVUNIVUpOTVlXWQgBWUFIT0xINwY+
-X-HM-Tid: 0a759c7f2b849395kuws4c9a62832dd
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Pj4gQXNzaWduIGluaXRpYWwgdmFsdWVzIHRvIGxvY2FsIHZhcmlhYmxlcyB0aGF0IG1heSBiZSBy
-ZXR1cm5lZAo+PiAKPj4gU2lnbmVkLW9mZi1ieTogV2FuZyBRaW5nIDx3YW5ncWluZ0B2aXZvLmNv
-bT4KPgo+WW91ciBzdWJqZWN0LCBhbmQgYm9keSBvZiB0ZXh0LCBzZWVtIHRvIGhhdmUgMiAib2Rk
-IiBjaGFyYWN0ZXJzIGluIGl0LAo+cGxlYXNlIGZpeCB1cC4KPgo+QWxzbywgeW91ciBzdWJqZWN0
-IGFuZCBjaGFuZ2Vsb2cgYm9keSBoZXJlIGFyZSBpZGVudGljYWwsIHBsZWFzZSBiZSBtdWNoCj5t
-b3JlIHZlcmJvc2UgaW4gdGhlIGJvZHkgZXhwbGFpbmluZyB3aHkgeW91IGFyZSBkb2luZyBzb21l
-dGhpbmcsIG5vdAo+anVzdCB3aGF0IHlvdSBhcmUgZG9pbmcuCj4KPkFuZCB5b3VyIHN1YmplY3Qg
-bGluZSBzaG91bGQgYWxzbyBtYXRjaCBvdGhlciBwYXRjaGVzIGZvciB0aGlzIGZpbGUsIGFuZAo+
-aGF2ZSAidXNiOiBwaHk6IC4uLiIgaW4gdGhlIGJlZ2lubmluZy4KWWVhaCwgSSBnb3QgaXQuCj4K
-Pj4gLS0tCj4+ICBkcml2ZXJzL3VzYi9waHkvcGh5LmMgfCAyICstCj4+ICAxIGZpbGUgY2hhbmdl
-ZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPj4gCj4+IGRpZmYgLS1naXQgYS9kcml2
-ZXJzL3VzYi9waHkvcGh5LmMgYi9kcml2ZXJzL3VzYi9waHkvcGh5LmMKPj4gaW5kZXggYjQ3Mjg1
-Zi4uZGUyMTk2Nwo+PiAtLS0gYS9kcml2ZXJzL3VzYi9waHkvcGh5LmMKPj4gKysrIGIvZHJpdmVy
-cy91c2IvcGh5L3BoeS5jCj4+IEBAIC01OSw3ICs1OSw3IEBAIHN0YXRpYyBzdHJ1Y3QgdXNiX3Bo
-eSAqX191c2JfZmluZF9waHkoc3RydWN0IGxpc3RfaGVhZCAqbGlzdCwKPj4gIAo+PiAgc3RhdGlj
-IHN0cnVjdCB1c2JfcGh5ICpfX29mX3VzYl9maW5kX3BoeShzdHJ1Y3QgZGV2aWNlX25vZGUgKm5v
-ZGUpCj4+ICB7Cj4+IC0Jc3RydWN0IHVzYl9waHkgICpwaHk7Cj4+ICsJc3RydWN0IHVzYl9waHkg
-ICpwaHkgPSBOVUxMOwo+Cj5XaHkgaXNuJ3QgdGhlIGNvbXBpbGVyIGNvbXBsYWluaW5nIGFib3V0
-IHRoaXMgdG9kYXk/ICBBcmUgeW91IHN1cmUgdGhpcwo+aXMgbmVlZGVkPwpTb3JyeSwgSSBkaWRu
-J3QgbG9vayBhdCBpdCBjYXJlZnVsbHksIGJlY2F1c2UgX191c2JfZmluZF9waHkgaGFzIGFuIGlu
-aXRpYWwgdmFsdWUsIAphbmQgSSB3YXMgYWZmZWN0ZWQuLiBZb3UgZG9uJ3QgbmVlZCB0byBtb2Rp
-ZnkgaXQsIEluIGZhY3QuCgp0aGFua3MsCgpXYW5nIFFpbmcKPgo+dGhhbmtzLAo+Cj5ncmVnIGst
-aAoNCg0K
+TWFyZWsgQmVow7puIDxrYWJlbEBrZXJuZWwub3JnPg0KPiBTZW50OiBGcmlkYXksIE5vdmVtYmVy
+IDYsIDIwMjAgMjo0MCBQTQ0KWy4uLl0NCj4gSGkgSGF5ZXMsDQo+IA0KPiBqdXN0IHRvIGJlIGNs
+ZWFyOg0KPiBBcmUgeW91IGFnYWluc3QgZGVmaW5pbmcgdGhlc2UgZnVuY3Rpb25zIHZpYSBtYWNy
+b3M/DQo+IElmIHNvLCBJIGNhbiBzaW1wbHkgcmV3cml0ZSB0aGlzIHNvIHRoYXQgaXQgZG9lcyBu
+b3QgdXNlIG1hY3Jvcy4uLg0KDQpJIHdvdWxkIGxpa2UgdGhlIHdheSB3aGljaCBsZXQgbWUgZmlu
+ZCB0aGUgc291cmNlIG9mIHRoZQ0KZnVuY3Rpb24gZWFzaWx5LiBJIGRvbid0IGxpa2UgdGhhdCBJ
+IGNvdWxkbid0IGZpbmQgd2hlcmUgdGhlc2UNCmZ1bmN0aW9ucyBhcmUgZGVmaW5lZCwgd2hlbiBJ
+IHNlYXJjaCB3aG9sZSB0aGUgc291cmNlIGNvZGUuDQoNCkZvciBleGFtcGxlLCBmb3IgdGhlIG1l
+dGhvZCB3aGljaCBWbGFkaW1pciBPbHRlYW4gcHJvdmlkZXMsDQp3aGVuIEkgc2VhcmNoIHRoZSBr
+ZXl3b3JkICJwbGFfb2NwX3JlYWRfYnl0ZSIsIEkgY291bGQgZWFzaWx5DQpmaW5kIG91dCB0aGF0
+IHRoZSBzb3VyY2UgZnVuY3Rpb24gaXMgIm9jcF9yZWFkX2J5dGUiLg0KSG93ZXZlciwgZm9yIHlv
+dXIgcGF0Y2gsIEkgY291bGQgb25seSBmaW5kIHdoZXJlIHRoZSBmdW5jdGlvbg0KaXMgdXNlZC4g
+SSB0aGluayBpdCBpcyBub3QgZnJpZW5kbHkgZm9yIHRoZSBuZXdiaWUgd2hvIGlzIG5vdA0KZmFt
+aWxpYXIgd2l0aCB0aGlzIGRyaXZlci4NCg0KSG93ZXZlciwgSSBkb24ndCB0aGluayBJIGFtIHRo
+ZSBkZWNpc2lvbiBtYWtlci4gVGhpcyBpcw0KanVzdCBteSB2aWV3Lg0KDQo+IE9yIGFyZSB5b3Ug
+YWdhaW5zdCBpbXBsZW1lbnRpbmcgdGhlc2UgZnVuY3Rpb25zIHRoZW1zZWx2ZXM/DQoNCk5vLg0K
+DQo+IA0KPiBCVFcsIHdoYXQgYWJvdXQgcGF0Y2ggNS81IHdoaWNoIGludHJvZHVjZXMgKl9tb2Rp
+ZnkgaGVscGVycz8NCg0KSXQgaXMgZmluZS4NCg0KQmVzdCBSZWdhcmRzLA0KSGF5ZXMNCg0KDQo=
