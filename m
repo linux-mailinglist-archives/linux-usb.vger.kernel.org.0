@@ -2,92 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C58A2AA3D1
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Nov 2020 09:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53AD2AA3E4
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Nov 2020 09:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728034AbgKGIWL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 7 Nov 2020 03:22:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46732 "EHLO mail.kernel.org"
+        id S1728007AbgKGIem (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 7 Nov 2020 03:34:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727833AbgKGIWK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 7 Nov 2020 03:22:10 -0500
+        id S1727901AbgKGIel (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 7 Nov 2020 03:34:41 -0500
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9DC50208E4;
-        Sat,  7 Nov 2020 08:22:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3F9C820704;
+        Sat,  7 Nov 2020 08:34:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604737330;
-        bh=CkbprsLnaQeBBm6DUnL6INt3t6GokDjSX4nOC4dcFLA=;
+        s=default; t=1604738079;
+        bh=VQEIbjgIJN/CnKwg2D7bKy1wLmUA3zkwBcSJPJaFNtw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WNID+V9NRHfr44zwSVrr+mO/v5e+giuAfKqMgQ/LtJSX3R/HDPlgV6lqW8xG5Hbe2
-         28fVsWz4pfUvCdHpSVFM7cbEzEkPFOnjwsv/biK2xEIzpdK4mpMrmOyYoPc1yUmi2v
-         3hq9EAcqvxDhv2Pw+IcNpc5iR2589AlzUhvL6gl8=
-Date:   Sat, 7 Nov 2020 09:22:06 +0100
+        b=jS3v4nPDiyzQ+usZu5wTHDpE3l2O+nUeSEOT4McUCzkS+y30py91an90kdpCevIJA
+         QFdjmZYa6EqjZkmQXt1IU8Yo71v0nwTRurU4ER1FtRjAjOBbFJDEXciNOpLuGmXveh
+         cq6jVyTdnVBngN4n4wtwF/XnUt3EsG85XHB42nbQ=
+Date:   Sat, 7 Nov 2020 09:34:36 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     syzbot <syzbot+92340f7b2b4789907fdb@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: WARNING in input_register_device
-Message-ID: <20201107082206.GA19079@kroah.com>
-References: <000000000000872b5405b36f8e31@google.com>
- <20201106140336.GA3319902@kroah.com>
- <20201106170314.GA845@sol.localdomain>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH v2 0/6] platform/chrome: cros_ec_typec: Add cable
+Message-ID: <20201107083436.GB19079@kroah.com>
+References: <20201106184104.939284-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201106170314.GA845@sol.localdomain>
+In-Reply-To: <20201106184104.939284-1-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 06, 2020 at 09:03:14AM -0800, Eric Biggers wrote:
-> On Fri, Nov 06, 2020 at 03:03:36PM +0100, Greg KH wrote:
-> > On Fri, Nov 06, 2020 at 04:43:17AM -0800, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot found the following issue on:
-> > > 
-> > > HEAD commit:    9e39aef3 usb: misc: brcmstb-usb-pinmap: Make sync_all_pins..
-> > > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=145ffa8a500000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a05f5efbb00b1465
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=92340f7b2b4789907fdb
-> > > compiler:       gcc (GCC) 10.1.0-syz 20200507
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172ae7a8500000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13b24746500000
-> > > 
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+92340f7b2b4789907fdb@syzkaller.appspotmail.com
-> > > 
-> > > microsoft 0003:045E:07DA.0001: unknown main item tag 0x0
-> > > HID 045e:07da: Invalid code 65791 type 1
-> > > ------------[ cut here ]------------
-> > > init_uevent_argv: buffer size too small
-> > > WARNING: CPU: 0 PID: 5 at lib/kobject_uevent.c:259 init_uevent_argv lib/kobject_uevent.c:259 [inline]
-> > > WARNING: CPU: 0 PID: 5 at lib/kobject_uevent.c:259 kobject_uevent_env+0x1640/0x1680 lib/kobject_uevent.c:608
-> > 
-> > You gave it a device with a buffer that was "too small", and it rejected
-> > it.
-> > 
-> > Which, aside from the huge warning message, is to be expected, so I
-> > don't think this is really a bug here.
-> > 
+On Fri, Nov 06, 2020 at 10:40:57AM -0800, Prashant Malani wrote:
+> The following series adds Type C cable registration to the cros-ec-typec
+> port driver using the Type C connector class framework. The first few
+> patches perform a few minor re-organizations to prepare for the cable
+> registration patch.
 > 
-> The purpose of WARN is for reporting recoverable kernel bugs.  So a reachable
-> WARN is a bug.  Either it is reporting one, or the bug is that the use of WARN
-> is wrong.
+> The last couple of CLs update the USB PD VDO header file to add a
+> captive cable connector for the Type C cable plug field, and then use
+> the added macro to add the corresponding field of the Type C cable
+> descriptor in the cros-ec-typec driver.
+> 
+> v1:
+> https://lore.kernel.org/lkml/20201106012758.525472-1-pmalani@chromium.org/
+> 
+> Changes since v2:
+> - Changed local variable uint32_t to u32 in patch 6/6.
 
-In the past, as you know, we have thought that hardware issues like this
-are a "recoverable bug but someone better do something about it".  Now
-that we can fake hardware devices so easily, it's probably better to
-just knock this down to a dev_warn() and keep on moving.
+Looks good to me, for all of these:
 
-If I get a chance, I'll write up a patch today, but anyone else should
-feel free to also do it.
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-thanks,
-
-greg k-h
