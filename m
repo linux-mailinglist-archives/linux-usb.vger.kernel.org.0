@@ -2,284 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C292AAAA2
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Nov 2020 12:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9B02AAAF5
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Nov 2020 13:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727958AbgKHLEM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Nov 2020 06:04:12 -0500
-Received: from avasout06.plus.net ([212.159.14.18]:42636 "EHLO
-        avasout06.plus.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727348AbgKHLEK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Nov 2020 06:04:10 -0500
-X-Greylist: delayed 451 seconds by postgrey-1.27 at vger.kernel.org; Sun, 08 Nov 2020 06:04:10 EST
-Received: from APOLLO ([212.159.61.44])
-        by smtp with ESMTPA
-        id biNAk5opOhO4HbiNBkjhQ2; Sun, 08 Nov 2020 10:56:38 +0000
-X-Clacks-Overhead: "GNU Terry Pratchett"
-X-CM-Score: 0.00
-X-CNFS-Analysis: v=2.3 cv=SPPZqNnH c=1 sm=1 tr=0
- a=AGp1duJPimIJhwGXxSk9fg==:117 a=AGp1duJPimIJhwGXxSk9fg==:17
- a=kj9zAlcOel0A:10 a=SbXeIS652ipZBpwof8QA:9 a=CjuIK1q_8ugA:10
-X-AUTH: perdrix52@:2500
-From:   "David C. Partridge" <david.partridge@perdrix.co.uk>
-To:     <linux-usb@vger.kernel.org>
-Subject: Issues with LaCie USB3 drive and UAS
-Date:   Sun, 8 Nov 2020 10:56:36 -0000
-Message-ID: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>
+        id S1728482AbgKHMTW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Nov 2020 07:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728197AbgKHMTV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Nov 2020 07:19:21 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0198C0613CF;
+        Sun,  8 Nov 2020 04:19:20 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id l2so8264578lfk.0;
+        Sun, 08 Nov 2020 04:19:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2sZ4icayrxxDWpa2xJypEQHGIoro/hg/XjsXfIMVIO0=;
+        b=rFpONZz/Kl33uh/dizvuNJQR2av8Rv5uFlJ5DePIU/DxOtnlMkNpGoI3JXUj2MWsEF
+         ir6IGHMPuOz5Ha0JkEbKS4xflgVuaxejRvr3J7nUUQOCUdjtzTtB+/2LCSIwZ1YYD/TJ
+         lKE8uooAVEPA5V7sGNiXi7IF5izcclg1E7XOW+XQRLEz/SOzhIs5xZCH9hY7R371YhQJ
+         LdeTxesJm0/t9nWD/LlBWtdARIzCuiHjTsZN8sOpocViLXo7UpaGVp/CBzAK20Ddkauz
+         tbH9apGbBjlfs/0xTDfRayemP603Ij5uZuDJzOs53HjDllldmig65ToOUo4o93xa8AYC
+         tAvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2sZ4icayrxxDWpa2xJypEQHGIoro/hg/XjsXfIMVIO0=;
+        b=a0VrwSjIo7DPx418VgQPnP7O7neTTCqu0icPt2WzwWobZaZX1emMwqLA2mUVDMX658
+         52FSjkV2QnBRR4J78NbYum7oKX0gTvu2Dw9twhUdkxnlfVUTX1rGhgpUELBgHg3qIL61
+         scNfR/wW9t5p1secyzgnGI8+dgkBPJNAdTJf+qVWH4ejy5/GudXp2ObX6C3QgYvdOrkU
+         PwIbCk/kDjaTc09rRblXGAqkasN4vEsF58vS5kOtsrc/wuiu8TCvVOMqcd/nBIefEvi0
+         7+d70o5zJ6ENSEwPttjK9P08P15Ds7UStyF7yq5yWzRZHYY8VnLsh+qMqDFtTtx86CBF
+         1JXg==
+X-Gm-Message-State: AOAM532WNQm7NkHr9PMosQY1fp/5mdNCTavtHa/F9S0seojw693xnAA6
+        eQg4GAvPsnQi0Y+/Emf2qficb/gmkfA=
+X-Google-Smtp-Source: ABdhPJx2JpfTMAfVNhGgqvUuTHG0na3AuqFBXgT3nmIXEBqvHyuzg1Il4cTfxq8l0jMElMVqEADDJg==
+X-Received: by 2002:a05:6512:3250:: with SMTP id c16mr469413lfr.404.1604837959047;
+        Sun, 08 Nov 2020 04:19:19 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id d26sm1479402ljj.102.2020.11.08.04.19.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 Nov 2020 04:19:18 -0800 (PST)
+Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
+ Tegra20/30 SoCs
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        driverdevel <devel@driverdev.osuosl.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-pwm@vger.kernel.org,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <CAPDyKFr7qTU2RPhA_ZrbCayoTTNUEno1zdmvmv+8HBe-Owrfeg@mail.gmail.com>
+ <cd147ab0-1304-a491-7a56-ee6199c02d32@gmail.com>
+Message-ID: <2716c195-083a-112f-f1e5-2f6b7152a4b5@gmail.com>
+Date:   Sun, 8 Nov 2020 15:19:16 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 14.0
-Thread-Index: Ada1vb+VkVz6p9XNThaW1KK4PG7Pqw==
-Content-Language: en-gb
-X-CMAE-Envelope: MS4wfJzeUkCiksrmOHArl4/vqJ+jH7bhJ2xr+I5kKgzBLJ18kPb38CplwFKw7RmwZwcLgDZDWx1bgkj53RTAkUUm5LzFZOEAEATkRWzZVaLQ0qpJifVfg0vs
- evpy7voetEUkqrRgh1aZgZtQwIvYWSpRWr44sBUii05Kw42cMlbFpSM4vLE1Vogby44XdWlY0ahbqQ==
+In-Reply-To: <cd147ab0-1304-a491-7a56-ee6199c02d32@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-LUbuntu 20.04.1
+05.11.2020 18:22, Dmitry Osipenko пишет:
+> 05.11.2020 12:45, Ulf Hansson пишет:
+> ...
+>> I need some more time to review this, but just a quick check found a
+>> few potential issues...
+> 
+> Thank you for starting the review! I'm pretty sure it will take a couple
+> revisions until all the questions will be resolved :)
+> 
+>> The "core-supply", that you specify as a regulator for each
+>> controller's device node, is not the way we describe power domains.
+>> Instead, it seems like you should register a power-domain provider
+>> (with the help of genpd) and implement the ->set_performance_state()
+>> callback for it. Each device node should then be hooked up to this
+>> power-domain, rather than to a "core-supply". For DT bindings, please
+>> have a look at Documentation/devicetree/bindings/power/power-domain.yaml
+>> and Documentation/devicetree/bindings/power/power_domain.txt.
+>>
+>> In regards to the "sync state" problem (preventing to change
+>> performance states until all consumers have been attached), this can
+>> then be managed by the genpd provider driver instead.
+> 
+> I'll need to take a closer look at GENPD, thank you for the suggestion.
+> 
+> Sounds like a software GENPD driver which manages clocks and voltages
+> could be a good idea, but it also could be an unnecessary
+> over-engineering. Let's see..
+> 
 
-root@charon:/home/amonra# lsusb
-Bus 002 Device 006: ID 059f:105f LaCie, Ltd 2Big Quadra USB3
+Hello Ulf and all,
 
-Trying to format the above drive using mkfs.ext4 /dev/sdc2
+I took a detailed look at the GENPD and tried to implement it. Here is
+what was found:
 
-Initially got a 120s Kernel timeout which I resolved by setting the timeout
-to 0
+1. GENPD framework doesn't aggregate performance requests from the
+attached devices. This means that if deviceA requests performance state
+10 and then deviceB requests state 3, then framework will set domain's
+state to 3 instead of 10.
 
-However I got LOTS of message groups in the system log looking like this:
+https://elixir.bootlin.com/linux/v5.10-rc2/source/drivers/base/power/domain.c#L376
 
-Nov 04 06:18:51 charon kernel: scsi host5: uas_eh_device_reset_handler start
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#0 uas_zap_pending 0
-uas-tag 1 inflight: 
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#0 CDB: Write Same(10)
-41 00 e8 ea 47 fc 00 00 04 00
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#1 uas_zap_pending 0
-uas-tag 2 inflight: 
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#1 CDB: Write Same(10)
-41 00 e8 e6 48 00 00 ff ff 00
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#2 uas_zap_pending 0
-uas-tag 3 inflight: 
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#2 CDB: Write Same(10)
-41 00 e8 e9 47 fd 00 ff ff 00
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#3 uas_zap_pending 0
-uas-tag 4 inflight: 
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#3 CDB: Write Same(10)
-41 00 e8 e8 47 fe 00 ff ff 00
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#4 uas_zap_pending 0
-uas-tag 5 inflight: 
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#4 CDB: Write Same(10)
-41 00 e8 e7 47 ff 00 ff ff 00
-Nov 04 06:18:51 charon kernel: usb 2-1: reset SuperSpeed Gen 1 USB device
-number 6 using xhci_hcd
-Nov 04 06:18:51 charon kernel: scsi host5: uas_eh_device_reset_handler
-success
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#0 FAILED Result:
-hostbyte=DID_RESET driverbyte=DRIVER_OK
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#0 CDB: Write Same(10)
-41 00 e8 ea 47 fc 00 00 04 00
-Nov 04 06:18:51 charon kernel: blk_update_request: I/O error, dev sdc,
-sector 3907667964 op 0x9:(WRITE_ZEROES) flags 0x1000800 phys_seg 0 prio
-class 0
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#1 FAILED Result:
-hostbyte=DID_RESET driverbyte=DRIVER_OK
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#1 CDB: Write Same(10)
-41 00 e8 e6 48 00 00 ff ff 00
-Nov 04 06:18:51 charon kernel: blk_update_request: I/O error, dev sdc,
-sector 3907405824 op 0x9:(WRITE_ZEROES) flags 0x1000000 phys_seg 0 prio
-class 0
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#2 FAILED Result:
-hostbyte=DID_RESET driverbyte=DRIVER_OK
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#2 CDB: Write Same(10)
-41 00 e8 e9 47 fd 00 ff ff 00
-Nov 04 06:18:51 charon kernel: blk_update_request: I/O error, dev sdc,
-sector 3907602429 op 0x9:(WRITE_ZEROES) flags 0x1000000 phys_seg 0 prio
-class 0
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#3 FAILED Result:
-hostbyte=DID_RESET driverbyte=DRIVER_OK
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#3 CDB: Write Same(10)
-41 00 e8 e8 47 fe 00 ff ff 00
-Nov 04 06:18:51 charon kernel: blk_update_request: I/O error, dev sdc,
-sector 3907536894 op 0x9:(WRITE_ZEROES) flags 0x1000000 phys_seg 0 prio
-class 0
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#4 FAILED Result:
-hostbyte=DID_RESET driverbyte=DRIVER_OK
-Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#4 CDB: Write Same(10)
-41 00 e8 e7 47 ff 00 ff ff 00
-Nov 04 06:18:51 charon kernel: blk_update_request: I/O error, dev sdc,
-sector 3907471359 op 0x9:(WRITE_ZEROES) flags 0x1000000 phys_seg 0 prio
-class 0
+2. GENPD framework has a sync() callback in the genpd.domain structure,
+but this callback isn't allowed to be used by the GENPD implementation.
+The GENPD framework always overrides that callback for its own needs.
+Hence GENPD doesn't allow to solve the bootstrapping
+state-synchronization problem in a nice way.
 
-and while the command apparently ended cleanly it took a *very long* time
-(hours)
+https://elixir.bootlin.com/linux/v5.10-rc2/source/drivers/base/power/domain.c#L2606
 
-root@charon:/home/amonra# mkfs.ext4 /dev/sdc2
-mke2fs 1.45.5 (07-Jan-2020)
-Creating filesystem with 976701696 4k blocks and 244178944 inodes
-Filesystem UUID: f45b0cd6-131a-4a3a-988f-c5a848611445
-Superblock backups stored on blocks: 
-    32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, 
-    4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968, 
-    102400000, 214990848, 512000000, 550731776, 644972544
+3. Tegra doesn't have a dedicated hardware power-controller for the core
+domain, instead there is only an external voltage regulator. Hence we
+will need to create a phony device-tree node for the virtual power
+domain, which is probably a wrong thing to do.
 
-Allocating group tables: done                            
-Writing inode tables: done                            
-Creating journal (262144 blocks): done
-Writing superblocks and filesystem accounting information: done       
+===
 
-root@charon:/home/amonra# fsck /dev/sdc2
-fsck from util-linux 2.34
-e2fsck 1.45.5 (07-Jan-2020)
-/dev/sdc2: clean, 11/244178944 files, 15615751/976701696 blocks
-root@charon:/home/amonra#
+Perhaps it should be possible to create some hacks to work around
+bullets 2 and 3 in order to achieve what we need for DVFS on Tegra, but
+bullet 1 isn't solvable without changing how the GENPD core works.
 
-I'm not 100% convinced it did ...
-
-If I just attach and mount the drive I get:
-
-Nov 08 10:25:40 charon kernel: EXT4-fs (sdc2): recovery complete
-Nov 08 10:25:40 charon kernel: EXT4-fs (sdc2): mounted filesystem with
-ordered data mode. Opts: (null)
-Nov 08 10:26:12 charon kernel: sd 5:0:0:0: [sdc] tag#17 uas_eh_abort_handler
-0 uas-tag 1 inflight: OUT 
-Nov 08 10:26:12 charon kernel: sd 5:0:0:0: [sdc] tag#17 CDB: Write Same(10)
-41 00 00 06 b7 98 00 10 00 00
-Nov 08 10:26:12 charon kernel: scsi host5: uas_eh_device_reset_handler start
-Nov 08 10:26:12 charon kernel: usb 2-1: reset SuperSpeed Gen 1 USB device
-number 2 using xhci_hcd
-Nov 08 10:26:12 charon kernel: scsi host5: uas_eh_device_reset_handler
-success
-
-I then see a lot of message groups like this in the log:
-
-Nov 08 10:31:21 charon kernel: INFO: task jbd2/sdc2-8:104742 blocked for
-more than 241 seconds.
-Nov 08 10:31:21 charon kernel:       Not tainted 5.4.0-52-generic #57-Ubuntu
-Nov 08 10:31:21 charon kernel: "echo 0 >
-/proc/sys/kernel/hung_task_timeout_secs" disables this message.
-Nov 08 10:31:21 charon kernel: jbd2/sdc2-8     D    0 104742      2
-0x80004000
-Nov 08 10:31:21 charon kernel: Call Trace:
-Nov 08 10:31:21 charon kernel:  __schedule+0x2e3/0x740
-Nov 08 10:31:21 charon kernel:  schedule+0x42/0xb0
-Nov 08 10:31:21 charon kernel:  jbd2_journal_commit_transaction+0x258/0x17e8
-Nov 08 10:31:21 charon kernel:  ? __switch_to_asm+0x40/0x70
-Nov 08 10:31:21 charon kernel:  ? __switch_to_asm+0x34/0x70
-Nov 08 10:31:21 charon kernel:  ? __switch_to_asm+0x40/0x70
-Nov 08 10:31:21 charon kernel:  ? __switch_to_asm+0x34/0x70
-Nov 08 10:31:21 charon kernel:  ? __switch_to_asm+0x40/0x70
-Nov 08 10:31:21 charon kernel:  ? __switch_to_asm+0x34/0x70
-Nov 08 10:31:21 charon kernel:  ? __switch_to_asm+0x40/0x70
-Nov 08 10:31:21 charon kernel:  ? __switch_to_asm+0x40/0x70
-Nov 08 10:31:21 charon kernel:  ? __switch_to_asm+0x34/0x70
-Nov 08 10:31:21 charon kernel:  ? __switch_to_asm+0x34/0x70
-Nov 08 10:31:21 charon kernel:  ? wait_woken+0x80/0x80
-Nov 08 10:31:21 charon kernel:  ? try_to_del_timer_sync+0x54/0x80
-Nov 08 10:31:21 charon kernel:  kjournald2+0xb6/0x280
-Nov 08 10:31:21 charon kernel:  ? wait_woken+0x80/0x80
-Nov 08 10:31:21 charon kernel:  kthread+0x104/0x140
-Nov 08 10:31:21 charon kernel:  ? commit_timeout+0x20/0x20
-Nov 08 10:31:21 charon kernel:  ? kthread_park+0x90/0x90
-Nov 08 10:31:21 charon kernel:  ret_from_fork+0x35/0x40
-Nov 08 10:31:21 charon kernel: INFO: task ext4lazyinit:104744 blocked for
-more than 241 seconds.
-Nov 08 10:31:21 charon kernel:       Not tainted 5.4.0-52-generic #57-Ubuntu
-Nov 08 10:31:21 charon kernel: "echo 0 >
-/proc/sys/kernel/hung_task_timeout_secs" disables this message.
-Nov 08 10:31:21 charon kernel: ext4lazyinit    D    0 104744      2
-0x80004000
-Nov 08 10:31:21 charon kernel: Call Trace:
-Nov 08 10:31:21 charon kernel:  __schedule+0x2e3/0x740
-Nov 08 10:31:21 charon kernel:  schedule+0x42/0xb0
-Nov 08 10:31:21 charon kernel:  schedule_timeout+0x10e/0x160
-Nov 08 10:31:21 charon kernel:  io_schedule_timeout+0x1e/0x50
-Nov 08 10:31:21 charon kernel:  wait_for_completion_io+0xb1/0x120
-Nov 08 10:31:21 charon kernel:  ? wake_up_q+0x70/0x70
-Nov 08 10:31:21 charon kernel:  submit_bio_wait+0x60/0x90
-Nov 08 10:31:21 charon kernel:  blkdev_issue_zeroout+0x13f/0x220
-Nov 08 10:31:21 charon kernel:  ext4_init_inode_table+0x195/0x386
-Nov 08 10:31:21 charon kernel:  ext4_lazyinit_thread+0x2c7/0x3b0
-Nov 08 10:31:21 charon kernel:  kthread+0x104/0x140
-Nov 08 10:31:21 charon kernel:  ? ext4_unregister_li_request+0x70/0x70
-Nov 08 10:31:21 charon kernel:  ? kthread_park+0x90/0x90
-Nov 08 10:31:21 charon kernel:  ret_from_fork+0x35/0x40
-Nov 08 10:32:14 charon kernel: scsi host5: uas_eh_device_reset_handler start
-Nov 08 10:32:14 charon kernel: sd 5:0:0:0: [sdc] tag#9 uas_zap_pending 0
-uas-tag 1 inflight: 
-Nov 08 10:32:14 charon kernel: sd 5:0:0:0: [sdc] tag#9 CDB: Write Same(10)
-41 00 00 06 b7 98 00 10 00 00
-Nov 08 10:32:14 charon kernel: usb 2-1: reset SuperSpeed Gen 1 USB device
-number 2 using xhci_hcd
-Nov 08 10:32:14 charon kernel: scsi host5: uas_eh_device_reset_handler
-success
-Nov 08 10:32:28 charon systemd[1]: Started Run anacron jobs.
-Nov 08 10:32:28 charon anacron[107039]: Anacron 2.3 started on 2020-11-08
-Nov 08 10:32:28 charon anacron[107039]: Normal exit (0 jobs run)
-Nov 08 10:32:28 charon systemd[1]: anacron.service: Succeeded.
-Nov 08 10:33:22 charon kernel: INFO: task jbd2/sdc2-8:104742 blocked for
-more than 362 seconds.
-Nov 08 10:33:22 charon kernel:       Not tainted 5.4.0-52-generic #57-Ubuntu
-Nov 08 10:33:22 charon kernel: "echo 0 >
-/proc/sys/kernel/hung_task_timeout_secs" disables this message.
-Nov 08 10:33:22 charon kernel: jbd2/sdc2-8     D    0 104742      2
-0x80004000
-Nov 08 10:33:22 charon kernel: Call Trace:
-Nov 08 10:33:22 charon kernel:  __schedule+0x2e3/0x740
-Nov 08 10:33:22 charon kernel:  schedule+0x42/0xb0
-Nov 08 10:33:22 charon kernel:  jbd2_journal_commit_transaction+0x258/0x17e8
-Nov 08 10:33:22 charon kernel:  ? __switch_to_asm+0x40/0x70
-Nov 08 10:33:22 charon kernel:  ? __switch_to_asm+0x34/0x70
-Nov 08 10:33:22 charon kernel:  ? __switch_to_asm+0x40/0x70
-Nov 08 10:33:22 charon kernel:  ? __switch_to_asm+0x34/0x70
-Nov 08 10:33:22 charon kernel:  ? __switch_to_asm+0x40/0x70
-Nov 08 10:33:22 charon kernel:  ? __switch_to_asm+0x34/0x70
-Nov 08 10:33:22 charon kernel:  ? __switch_to_asm+0x40/0x70
-Nov 08 10:33:22 charon kernel:  ? __switch_to_asm+0x40/0x70
-Nov 08 10:33:22 charon kernel:  ? __switch_to_asm+0x34/0x70
-Nov 08 10:33:22 charon kernel:  ? __switch_to_asm+0x34/0x70
-Nov 08 10:33:22 charon kernel:  ? wait_woken+0x80/0x80
-Nov 08 10:33:22 charon kernel:  ? try_to_del_timer_sync+0x54/0x80
-Nov 08 10:33:22 charon kernel:  kjournald2+0xb6/0x280
-Nov 08 10:33:22 charon kernel:  ? wait_woken+0x80/0x80
-Nov 08 10:33:22 charon kernel:  kthread+0x104/0x140
-Nov 08 10:33:22 charon kernel:  ? commit_timeout+0x20/0x20
-Nov 08 10:33:22 charon kernel:  ? kthread_park+0x90/0x90
-Nov 08 10:33:22 charon kernel:  ret_from_fork+0x35/0x40
-Nov 08 10:33:22 charon kernel: INFO: task ext4lazyinit:104744 blocked for
-more than 362 seconds.
-Nov 08 10:33:22 charon kernel:       Not tainted 5.4.0-52-generic #57-Ubuntu
-Nov 08 10:33:22 charon kernel: "echo 0 >
-/proc/sys/kernel/hung_task_timeout_secs" disables this message.
-Nov 08 10:33:22 charon kernel: ext4lazyinit    D    0 104744      2
-0x80004000
-Nov 08 10:33:22 charon kernel: Call Trace:
-Nov 08 10:33:22 charon kernel:  __schedule+0x2e3/0x740
-Nov 08 10:33:22 charon kernel:  schedule+0x42/0xb0
-Nov 08 10:33:22 charon kernel:  schedule_timeout+0x10e/0x160
-Nov 08 10:33:22 charon kernel:  io_schedule_timeout+0x1e/0x50
-Nov 08 10:33:22 charon kernel:  wait_for_completion_io+0xb1/0x120
-Nov 08 10:33:22 charon kernel:  ? wake_up_q+0x70/0x70
-Nov 08 10:33:22 charon kernel:  submit_bio_wait+0x60/0x90
-Nov 08 10:33:22 charon kernel:  blkdev_issue_zeroout+0x13f/0x220
-Nov 08 10:33:22 charon kernel:  ext4_init_inode_table+0x195/0x386
-Nov 08 10:33:22 charon kernel:  ext4_lazyinit_thread+0x2c7/0x3b0
-Nov 08 10:33:22 charon kernel:  kthread+0x104/0x140
-Nov 08 10:33:22 charon kernel:  ? ext4_unregister_li_request+0x70/0x70
-Nov 08 10:33:22 charon kernel:  ? kthread_park+0x90/0x90
-Nov 08 10:33:22 charon kernel:  ret_from_fork+0x35/0x40
-Nov 08 10:34:15 charon kernel: scsi host5: uas_eh_device_reset_handler start
-Nov 08 10:34:15 charon kernel: sd 5:0:0:0: [sdc] tag#1 uas_zap_pending 0
-uas-tag 1 inflight: 
-Nov 08 10:34:15 charon kernel: sd 5:0:0:0: [sdc] tag#1 CDB: Write Same(10)
-41 00 00 06 b7 98 00 10 00 00
-Nov 08 10:34:15 charon kernel: usb 2-1: reset SuperSpeed Gen 1 USB device
-number 2 using xhci_hcd
-Nov 08 10:34:15 charon kernel: scsi host5: uas_eh_device_reset_handler
-success
-
-Any guidance and help much appreciated.
-
-David
-
+Altogether, the GENPD in its current form is a wrong abstraction for a
+system-wide DVFS in a case where multiple devices share power domain and
+this domain is a voltage regulator. The regulator framework is the
+correct abstraction in this case for today.
