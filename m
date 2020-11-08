@@ -2,160 +2,258 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9B02AAAF5
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Nov 2020 13:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCBC2AAC58
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Nov 2020 17:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728482AbgKHMTW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Nov 2020 07:19:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728197AbgKHMTV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Nov 2020 07:19:21 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0198C0613CF;
-        Sun,  8 Nov 2020 04:19:20 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id l2so8264578lfk.0;
-        Sun, 08 Nov 2020 04:19:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2sZ4icayrxxDWpa2xJypEQHGIoro/hg/XjsXfIMVIO0=;
-        b=rFpONZz/Kl33uh/dizvuNJQR2av8Rv5uFlJ5DePIU/DxOtnlMkNpGoI3JXUj2MWsEF
-         ir6IGHMPuOz5Ha0JkEbKS4xflgVuaxejRvr3J7nUUQOCUdjtzTtB+/2LCSIwZ1YYD/TJ
-         lKE8uooAVEPA5V7sGNiXi7IF5izcclg1E7XOW+XQRLEz/SOzhIs5xZCH9hY7R371YhQJ
-         LdeTxesJm0/t9nWD/LlBWtdARIzCuiHjTsZN8sOpocViLXo7UpaGVp/CBzAK20Ddkauz
-         tbH9apGbBjlfs/0xTDfRayemP603Ij5uZuDJzOs53HjDllldmig65ToOUo4o93xa8AYC
-         tAvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2sZ4icayrxxDWpa2xJypEQHGIoro/hg/XjsXfIMVIO0=;
-        b=a0VrwSjIo7DPx418VgQPnP7O7neTTCqu0icPt2WzwWobZaZX1emMwqLA2mUVDMX658
-         52FSjkV2QnBRR4J78NbYum7oKX0gTvu2Dw9twhUdkxnlfVUTX1rGhgpUELBgHg3qIL61
-         scNfR/wW9t5p1secyzgnGI8+dgkBPJNAdTJf+qVWH4ejy5/GudXp2ObX6C3QgYvdOrkU
-         PwIbCk/kDjaTc09rRblXGAqkasN4vEsF58vS5kOtsrc/wuiu8TCvVOMqcd/nBIefEvi0
-         7+d70o5zJ6ENSEwPttjK9P08P15Ds7UStyF7yq5yWzRZHYY8VnLsh+qMqDFtTtx86CBF
-         1JXg==
-X-Gm-Message-State: AOAM532WNQm7NkHr9PMosQY1fp/5mdNCTavtHa/F9S0seojw693xnAA6
-        eQg4GAvPsnQi0Y+/Emf2qficb/gmkfA=
-X-Google-Smtp-Source: ABdhPJx2JpfTMAfVNhGgqvUuTHG0na3AuqFBXgT3nmIXEBqvHyuzg1Il4cTfxq8l0jMElMVqEADDJg==
-X-Received: by 2002:a05:6512:3250:: with SMTP id c16mr469413lfr.404.1604837959047;
-        Sun, 08 Nov 2020 04:19:19 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.googlemail.com with ESMTPSA id d26sm1479402ljj.102.2020.11.08.04.19.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Nov 2020 04:19:18 -0800 (PST)
-Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
- Tegra20/30 SoCs
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        driverdevel <devel@driverdev.osuosl.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-pwm@vger.kernel.org,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20201104234427.26477-1-digetx@gmail.com>
- <CAPDyKFr7qTU2RPhA_ZrbCayoTTNUEno1zdmvmv+8HBe-Owrfeg@mail.gmail.com>
- <cd147ab0-1304-a491-7a56-ee6199c02d32@gmail.com>
-Message-ID: <2716c195-083a-112f-f1e5-2f6b7152a4b5@gmail.com>
-Date:   Sun, 8 Nov 2020 15:19:16 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728599AbgKHQ4k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Nov 2020 11:56:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35208 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727570AbgKHQ4j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 8 Nov 2020 11:56:39 -0500
+Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 289C720678;
+        Sun,  8 Nov 2020 16:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604854597;
+        bh=HmpnTGD+sCqkzYKB+VNNoQPDyYLZ8DVZYqWfmSgpAfA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jTr8zTsz0WaJ6nnvT5Eg1Ll2ihGmqcyn+2SF+Wf/mrD2qllK/kFqFW/v7wcgZNefk
+         zS7dIr/q6PaG6DfI7dBacAjjo5nnHikNbE1GU0b2Tz2VVRAwvJAMwi+yrMpSam0vAS
+         yISkL1OxDj/prQqrSSSyaYuB90OjYqoYVe7sJd6Y=
+Date:   Sun, 8 Nov 2020 16:56:21 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Javier =?UTF-8?B?R29uesOhbGV6?= <javier@javigon.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Benson Leung <bleung@chromium.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bruno Meneguele <bmeneg@redhat.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Dan Murphy <dmurphy@ti.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Juergen Gross <jgross@suse.com>,
+        Konstantin Khlebnikov <koct9i@gmail.com>,
+        Kranthi Kuntala <kranthi.kuntala@intel.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Len Brown <lenb@kernel.org>,
+        Leonid Maksymchuk <leonmaxx@gmail.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Oleh Kravchenko <oleg@kaa.org.ua>,
+        Orson Zhai <orsonzhai@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Peter Rosin <peda@axentia.se>, Petr Mladek <pmladek@suse.com>,
+        Philippe Bergheaud <felix@linux.ibm.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        netdev@vger.kernel.org, xen-devel@lists.xenproject.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2 20/39] docs: ABI: testing: make the files compatible
+ with ReST output
+Message-ID: <20201108165621.4d0da3f4@archlinux>
+In-Reply-To: <20201102154250.45bee17f@coco.lan>
+References: <cover.1604042072.git.mchehab+huawei@kernel.org>
+        <58cf3c2d611e0197fb215652719ebd82ca2658db.1604042072.git.mchehab+huawei@kernel.org>
+        <5326488b-4185-9d67-fc09-79b911fbb3b8@st.com>
+        <20201030110925.3e09d59e@coco.lan>
+        <cb586ea3-b6e6-4e48-2344-2bd641e5323f@st.com>
+        <20201102124641.GA881895@kroah.com>
+        <20201102154250.45bee17f@coco.lan>
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <cd147ab0-1304-a491-7a56-ee6199c02d32@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-05.11.2020 18:22, Dmitry Osipenko пишет:
-> 05.11.2020 12:45, Ulf Hansson пишет:
-> ...
->> I need some more time to review this, but just a quick check found a
->> few potential issues...
+On Mon, 2 Nov 2020 15:42:50 +0100
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+
+> Em Mon, 2 Nov 2020 13:46:41 +0100
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> escreveu:
 > 
-> Thank you for starting the review! I'm pretty sure it will take a couple
-> revisions until all the questions will be resolved :)
+> > On Mon, Nov 02, 2020 at 12:04:36PM +0100, Fabrice Gasnier wrote:  
+> > > On 10/30/20 11:09 AM, Mauro Carvalho Chehab wrote:    
+> > > > Em Fri, 30 Oct 2020 10:19:12 +0100
+> > > > Fabrice Gasnier <fabrice.gasnier@st.com> escreveu:
+> > > >     
+> > > >> Hi Mauro,
+> > > >>
+> > > >> [...]
+> > > >>    
+> > > >>>  
+> > > >>> +What:		/sys/bus/iio/devices/iio:deviceX/in_count_quadrature_mode_available
+> > > >>> +KernelVersion:	4.12
+> > > >>> +Contact:	benjamin.gaignard@st.com
+> > > >>> +Description:
+> > > >>> +		Reading returns the list possible quadrature modes.
+> > > >>> +
+> > > >>> +What:		/sys/bus/iio/devices/iio:deviceX/in_count0_quadrature_mode
+> > > >>> +KernelVersion:	4.12
+> > > >>> +Contact:	benjamin.gaignard@st.com
+> > > >>> +Description:
+> > > >>> +		Configure the device counter quadrature modes:
+> > > >>> +
+> > > >>> +		channel_A:
+> > > >>> +			Encoder A input servers as the count input and B as
+> > > >>> +			the UP/DOWN direction control input.
+> > > >>> +
+> > > >>> +		channel_B:
+> > > >>> +			Encoder B input serves as the count input and A as
+> > > >>> +			the UP/DOWN direction control input.
+> > > >>> +
+> > > >>> +		quadrature:
+> > > >>> +			Encoder A and B inputs are mixed to get direction
+> > > >>> +			and count with a scale of 0.25.
+> > > >>> +      
+> > > >>    
+> > > > 
+> > > > Hi Fabrice,
+> > > >     
+> > > >> I just noticed that since Jonathan question in v1.
+> > > >>
+> > > >> Above ABI has been moved in the past as discussed in [1]. You can take a
+> > > >> look at:
+> > > >> b299d00 IIO: stm32: Remove quadrature related functions from trigger driver
+> > > >>
+> > > >> Could you please remove the above chunk ?
+> > > >>
+> > > >> With that, for the stm32 part:
+> > > >> Acked-by: Fabrice Gasnier <fabrice.gasnier@st.com>    
+> > > > 
+> > > > 
+> > > > Hmm... probably those were re-introduced due to a rebase. This
+> > > > series were originally written about 1,5 years ago.
+> > > > 
+> > > > I'll drop those hunks.    
+> > > 
+> > > Hi Mauro, Greg,
+> > > 
+> > > I just figured out this patch has been applied with above hunk.
+> > > 
+> > > This should be dropped: is there a fix on its way already ?
+> > > (I may have missed it)    
+> > 
+> > Can you send a fix for just this hunk?  
 > 
->> The "core-supply", that you specify as a regulator for each
->> controller's device node, is not the way we describe power domains.
->> Instead, it seems like you should register a power-domain provider
->> (with the help of genpd) and implement the ->set_performance_state()
->> callback for it. Each device node should then be hooked up to this
->> power-domain, rather than to a "core-supply". For DT bindings, please
->> have a look at Documentation/devicetree/bindings/power/power-domain.yaml
->> and Documentation/devicetree/bindings/power/power_domain.txt.
->>
->> In regards to the "sync state" problem (preventing to change
->> performance states until all consumers have been attached), this can
->> then be managed by the genpd provider driver instead.
+> Hmm...
 > 
-> I'll need to take a closer look at GENPD, thank you for the suggestion.
+> 	$ git grep /sys/bus/iio/devices/iio:deviceX/in_count_quadrature_mode_available
+> 	Documentation/ABI/testing/sysfs-bus-iio-counter-104-quad-8:What:                /sys/bus/iio/devices/iio:deviceX/in_count_quadrature_mode_available
+> 	Documentation/ABI/testing/sysfs-bus-iio-lptimer-stm32:What:             /sys/bus/iio/devices/iio:deviceX/in_count_quadrature_mode_available
+> 	Documentation/ABI/testing/sysfs-bus-iio-timer-stm32:What:               /sys/bus/iio/devices/iio:deviceX/in_count_quadrature_mode_available
 > 
-> Sounds like a software GENPD driver which manages clocks and voltages
-> could be a good idea, but it also could be an unnecessary
-> over-engineering. Let's see..
+> Even re-doing the changes from 
+> changeset b299d00420e2 ("IIO: stm32: Remove quadrature related functions from trigger driver")
+> at Documentation/ABI/testing/sysfs-bus-iio-timer-stm32, there's still
+> a third duplicate of some of those, as reported by the script:
 > 
+> 	$ ./scripts/get_abi.pl validate 2>&1|grep quadra
+> 	Warning: /sys/bus/iio/devices/iio:deviceX/in_count0_quadrature_mode is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-timer-stm32:117  Documentation/ABI/testing/sysfs-bus-iio-lptimer-stm32:14
+> 	Warning: /sys/bus/iio/devices/iio:deviceX/in_count_quadrature_mode_available is defined 3 times:  Documentation/ABI/testing/sysfs-bus-iio-counter-104-quad-8:2  Documentation/ABI/testing/sysfs-bus-iio-timer-stm32:111  Documentation/ABI/testing/sysfs-bus-iio-lptimer-stm32:8
+> 
+> As in_count_quadrature_mode_available is also defined at:
+> 	Documentation/ABI/testing/sysfs-bus-iio-counter-104-quad-8:2
+> 
+> The best here seems to have a patch that will also drop the other
+> duplication of this, probably moving in_count_quadrature_mode_available
+> to a generic node probably placing it inside 
+> Documentation/ABI/testing/sysfs-bus-iio.
 
-Hello Ulf and all,
+In this particular case it may be valid to do that, but it's not in
+general without loosing information - see below.
 
-I took a detailed look at the GENPD and tried to implement it. Here is
-what was found:
+> 
+> Comments?
+> 
+> Thanks,
+> Mauro
+> 
+> PS.: the IIO subsystem is the one that currently has more duplicated
+> ABI entries:
 
-1. GENPD framework doesn't aggregate performance requests from the
-attached devices. This means that if deviceA requests performance state
-10 and then deviceB requests state 3, then framework will set domain's
-state to 3 instead of 10.
+That was intentional.  Often these provide more information on the
+ABI for a particular device than is present in the base ABI doc.
 
-https://elixir.bootlin.com/linux/v5.10-rc2/source/drivers/base/power/domain.c#L376
+A bit like when we have additional description for dt binding properties
+for a particular device, even though they are standard properties.
 
-2. GENPD framework has a sync() callback in the genpd.domain structure,
-but this callback isn't allowed to be used by the GENPD implementation.
-The GENPD framework always overrides that callback for its own needs.
-Hence GENPD doesn't allow to solve the bootstrapping
-state-synchronization problem in a nice way.
+Often a standard property allows for more values than the specific
+one for a particular device.  There can also be obscuring coupling
+between sysfs attributes due to hardware restrictions that we would
+like to provide some explanatory info on.
 
-https://elixir.bootlin.com/linux/v5.10-rc2/source/drivers/base/power/domain.c#L2606
+I suppose we could add all this information to the parent doc but
+that is pretty ugly and will make that doc very nasty to read.
 
-3. Tegra doesn't have a dedicated hardware power-controller for the core
-domain, instead there is only an external voltage regulator. Hence we
-will need to create a phony device-tree node for the virtual power
-domain, which is probably a wrong thing to do.
+Jonathan
 
-===
+> 
+> $ ./scripts/get_abi.pl validate 2>&1|grep iio
+> Warning: /sys/bus/iio/devices/iio:deviceX/in_accel_x_calibbias is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-icm42600:0  Documentation/ABI/testing/sysfs-bus-iio:394
+> Warning: /sys/bus/iio/devices/iio:deviceX/in_accel_y_calibbias is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-icm42600:1  Documentation/ABI/testing/sysfs-bus-iio:395
+> Warning: /sys/bus/iio/devices/iio:deviceX/in_accel_z_calibbias is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-icm42600:2  Documentation/ABI/testing/sysfs-bus-iio:396
+> Warning: /sys/bus/iio/devices/iio:deviceX/in_anglvel_x_calibbias is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-icm42600:3  Documentation/ABI/testing/sysfs-bus-iio:397
+> Warning: /sys/bus/iio/devices/iio:deviceX/in_anglvel_y_calibbias is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-icm42600:4  Documentation/ABI/testing/sysfs-bus-iio:398
+> Warning: /sys/bus/iio/devices/iio:deviceX/in_anglvel_z_calibbias is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-icm42600:5  Documentation/ABI/testing/sysfs-bus-iio:399
+> Warning: /sys/bus/iio/devices/iio:deviceX/in_count0_preset is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-timer-stm32:100  Documentation/ABI/testing/sysfs-bus-iio-lptimer-stm32:0
+> Warning: /sys/bus/iio/devices/iio:deviceX/in_count0_quadrature_mode is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-timer-stm32:117  Documentation/ABI/testing/sysfs-bus-iio-lptimer-stm32:14
+> Warning: /sys/bus/iio/devices/iio:deviceX/in_count_quadrature_mode_available is defined 3 times:  Documentation/ABI/testing/sysfs-bus-iio-counter-104-quad-8:2  Documentation/ABI/testing/sysfs-bus-iio-timer-stm32:111  Documentation/ABI/testing/sysfs-bus-iio-lptimer-stm32:8
+> Warning: /sys/bus/iio/devices/iio:deviceX/out_altvoltageY_frequency is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4371:0  Documentation/ABI/testing/sysfs-bus-iio:599
+> Warning: /sys/bus/iio/devices/iio:deviceX/out_altvoltageY_powerdown is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4371:36  Documentation/ABI/testing/sysfs-bus-iio:588
+> Warning: /sys/bus/iio/devices/iio:deviceX/out_currentY_raw is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-light-lm3533-als:43  Documentation/ABI/testing/sysfs-bus-iio-health-afe440x:38
+> Warning: /sys/bus/iio/devices/iio:deviceX/out_current_heater_raw is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-humidity-hdc2010:0  Documentation/ABI/testing/sysfs-bus-iio-humidity-hdc100x:0
+> Warning: /sys/bus/iio/devices/iio:deviceX/out_current_heater_raw_available is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-humidity-hdc2010:1  Documentation/ABI/testing/sysfs-bus-iio-humidity-hdc100x:1
+> Warning: /sys/bus/iio/devices/iio:deviceX/sensor_sensitivity is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-distance-srf08:0  Documentation/ABI/testing/sysfs-bus-iio-proximity-as3935:8
+> Warning: /sys/bus/iio/devices/triggerX/sampling_frequency is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-timer-stm32:92  Documentation/ABI/testing/sysfs-bus-iio:45
 
-Perhaps it should be possible to create some hacks to work around
-bullets 2 and 3 in order to achieve what we need for DVFS on Tegra, but
-bullet 1 isn't solvable without changing how the GENPD core works.
-
-Altogether, the GENPD in its current form is a wrong abstraction for a
-system-wide DVFS in a case where multiple devices share power domain and
-this domain is a voltage regulator. The regulator framework is the
-correct abstraction in this case for today.
