@@ -2,68 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7132AB394
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 10:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 898FC2AB3AD
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 10:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727774AbgKIJ3n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 04:29:43 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50252 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726176AbgKIJ3n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 04:29:43 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1604914181;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZdOafiiVKnML6zSVIQ0iINXPVsTF7V7FpeoE+SDYXSI=;
-        b=Jq+gSU9w+Q52RbNQbUb6d1TGphuXAJHVDmE6VrZsALT7TGMUjoTQ+dIRJqAVTh9FyeNIC8
-        LubQ7YkfSPU8zLtgvQg0f40+98t/Dm3o0imawe6Z1dLtGyL8uozJ2GN8FxinPdn7CWxh7F
-        9H479N6iMS/HT3T1dKZ00/UjSDPbINo=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7AEA5ABCC;
-        Mon,  9 Nov 2020 09:29:41 +0000 (UTC)
-Message-ID: <eceedea7ca5d950eb8ea4d186a6b01a04d0a804f.camel@suse.com>
-Subject: Re: Issues with LaCie USB3 drive and UAS
-From:   Oliver Neukum <oneukum@suse.com>
-To:     "David C. Partridge" <david.partridge@perdrix.co.uk>,
-        linux-usb@vger.kernel.org
-Date:   Mon, 09 Nov 2020 10:29:34 +0100
-In-Reply-To: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>
-References: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1726482AbgKIJgK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 04:36:10 -0500
+Received: from smtp1.math.uni-bielefeld.de ([129.70.45.10]:57480 "EHLO
+        smtp1.math.uni-bielefeld.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725854AbgKIJgK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 04:36:10 -0500
+X-Greylist: delayed 436 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Nov 2020 04:36:09 EST
+Received: from [192.168.0.100] (pc19f5ca4.dip0.t-ipconnect.de [193.159.92.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (3072 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by smtp1.math.uni-bielefeld.de (Postfix) with ESMTPSA id 601C66055B
+        for <linux-usb@vger.kernel.org>; Mon,  9 Nov 2020 10:28:52 +0100 (CET)
+To:     linux-usb@vger.kernel.org
+From:   Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+Subject: [bugreport] JMicron JMS567 kills AMD Renoir xHCI
+Message-ID: <5e1cc031-3615-75ae-8acc-1b63d8c7cfc6@math.uni-bielefeld.de>
+Date:   Mon, 9 Nov 2020 10:28:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Sonntag, den 08.11.2020, 10:56 +0000 schrieb David C. Partridge:
-> LUbuntu 20.04.1
-> 
-> root@charon:/home/amonra# lsusb
-> Bus 002 Device 006: ID 059f:105f LaCie, Ltd 2Big Quadra USB3
-> 
-> Trying to format the above drive using mkfs.ext4 /dev/sdc2
-> 
-> Initially got a 120s Kernel timeout which I resolved by setting the timeout
-> to 0
-> 
-> However I got LOTS of message groups in the system log looking like this:
-> 
-> Nov 04 06:18:51 charon kernel: scsi host5: uas_eh_device_reset_handler start
-> Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#0 uas_zap_pending 0
-> uas-tag 1 inflight: 
-> Nov 04 06:18:51 charon kernel: sd 5:0:0:0: [sdc] tag#0 CDB: Write Same(10)
-> 41 00 e8 ea 47 fc 00 00 04 00
+Greetings,
 
-Write Same? What you are seeing is that the error handling is running
-non-stop. I suspect that the device does not understand WRITE SAME.
+I recently got a new notebook, a Dell G5 5505, mostly composed of AMD 
+hardware. After the initial hiccups most things work smoothly now, until 
+I tried to connect my backup drive (2TB HDD in a USB3 enclosure with 
+JMicron bridge):
+Nov  8 23:39:09 leena kernel: usb 1-2: new low-speed USB device number 2 
+using xhci_hcd
+Nov  8 23:39:19 leena kernel: xhci_hcd 0000:08:00.3: xHCI host not 
+responding to stop endpoint command.
+Nov  8 23:39:19 leena kernel: xhci_hcd 0000:08:00.3: USBSTS:
+Nov  8 23:39:19 leena kernel: xhci_hcd 0000:08:00.3: xHCI host 
+controller not responding, assume dead
+Nov  8 23:39:19 leena kernel: xhci_hcd 0000:08:00.3: HC died; cleaning up
+Nov  8 23:39:19 leena kernel: usb usb1-port2: couldn't allocate usb_device
+Nov  8 23:39:19 leena kernel: usb usb2-port2: couldn't allocate usb_device
 
-	Regards
-		Oliver
+Sadly that's not a random hiccup, but reproducable. I did some research 
+and some sources recommended to add iommu=pt, but not changes here. The 
+BIOS of the G5 is kinda sparse, the only option looking relevant was 
+"USB emulation", but toggling it also did not change anything.
 
+I uploaded several logs:
+kernel_g5.log (full kernel log from the G5)
+lsusb_g5. log (lsusb log, JMicron not plugged in)
+lspci_g5.log (lspci log)
+lsusb_enclosure (lsusb excerpt for the JMicron, taken via a different 
+system)
+
+You can find the files here: 
+https://gist.github.com/tobiasjakobi/84b6d58d5c387cfb4bbba87e7a589ca8
+
+The "different system" is another AMD based one (desktop, AMD Athlon 
+3000G, ASRock B450M-HDV R4.0). lspci says the following about the USB hw:
+01:00.0 USB controller: Advanced Micro Devices, Inc. [AMD] 400 Series 
+Chipset USB 3.1 XHCI Controller (rev 01)
+09:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Raven2 USB 3.1
+
+Anything I can do to help triage this problem?
+
+With best wishes,
+Tobias
 
