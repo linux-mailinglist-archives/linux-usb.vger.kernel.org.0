@@ -2,232 +2,234 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8892AB285
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 09:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3ED2AB2FC
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 10:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728134AbgKIIg2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 03:36:28 -0500
-Received: from mga09.intel.com ([134.134.136.24]:62281 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727077AbgKIIg1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 03:36:27 -0500
-IronPort-SDR: QCg9wn3MORsCwnsiivEwqPE+ZE2d2RivkJ1P9Ao6zixGMaV5ylsf0lFLk6yPpPf0l+oOhsdO8m
- mUKy6qOkiIpQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9799"; a="169921211"
-X-IronPort-AV: E=Sophos;i="5.77,463,1596524400"; 
-   d="scan'208";a="169921211"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2020 00:36:27 -0800
-IronPort-SDR: zx4YSIYa8thRb83kzAa13sKwRcdsFQjANxj3PF8wk2W0iRn/8v9eq41tTfmyDKcnKliDb1LMhW
- n5Fh/7qXGwuA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,463,1596524400"; 
-   d="scan'208";a="427921962"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 09 Nov 2020 00:36:22 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 09 Nov 2020 10:36:22 +0200
-Date:   Mon, 9 Nov 2020 10:36:21 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     robh+dt@kernel.org, rafael@kernel.org, gregkh@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, hdegoede@redhat.com,
-        lee.jones@linaro.org, mika.westerberg@linux.intel.com,
-        dmitry.torokhov@gmail.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-imx@nxp.com, peter.chen@nxp.com
-Subject: Re: [PATCH v5 4/4] usb: typec: mux: add typec switch simple driver
-Message-ID: <20201109083621.GJ4062920@kuha.fi.intel.com>
-References: <1604403610-16577-1-git-send-email-jun.li@nxp.com>
- <1604403610-16577-4-git-send-email-jun.li@nxp.com>
+        id S1727922AbgKIJAB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 04:00:01 -0500
+Received: from mail-eopbgr60083.outbound.protection.outlook.com ([40.107.6.83]:56129
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726482AbgKIJAA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Nov 2020 04:00:00 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JrP3F3iJogMiiAOv18vdZ1CATglh6iRXWq3KRGTSwzcmQ/l9eItFZPvrTBV+h0OwYGcoDB9s11zcmTaQP9J6jNajxBm8UKS3QbPYDSi5UUp6/0orZXho7M5fvs8V737iEriYHW9dBHTTabNi/JGv7y9aqhkrfG45YhsnHl9ASZ+dP9A5eapIY9Q0iHOziCsM/0GeWSY6ZvW/kGyOmd5aq4C6rr4SDq9+cEe8qYBgoymzjb6iiBtCbdmJUIUDaRkx+E/mTVJ+U+A1BE5OCOx0BmsxF5o4ASIoqS7dOMhM7NGUuUoOsxD1sQ6/g+ZuE4jwHzoM0lHdfYi2y1JzgPUMRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MAaRGyaFvUdcJKPlwWqr1+g4a2JlcA9m+B7TC3vgtMM=;
+ b=DXwWH3dAFOHSKupbLItBQL+PaP3CVJ381ms0YP27nJMMuFnWBf96Q2gM6M8rbbywn2pZ63m9Bqc+OgW1TF7sGSPkNx3OOcAqVFG0oHCTjiLCwCR4lH/A9LU4LopKwzhuxFI01ZYsMr/56iwdQcgEQQl2Ia51YB3aovWovBDjCt85oPIFk7GWBLzyqnP9dZkjaZU5ty8GtK7lmGOliFxFO6ubTYSjGv5+Zx5EUFmLpHGt8e/TENXoLKwzlNbxAxmds5Pw5L9XLGsyyYyF/DwR7+C2MRTP8Wh0IMuHWC79CO8/agdtP+11/abnjsgkfGLCbHcbMJDui/86lhq1hZs9nQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MAaRGyaFvUdcJKPlwWqr1+g4a2JlcA9m+B7TC3vgtMM=;
+ b=Mpv8NP0uZaPDlXEDn4Chl6m8Lx847wagegYD9SM0UE7CHwJy5t9xD4MAtQ582GPYyLwQL0yluZBPo40NP3Rw13YseFxQXPemQUqJOVoLGBnfid1wmoWivXpafkohk/JbIpY7fYsRCkLKNF2/LDOtlqbvqBd4Sr/Cwj7j+y4npzI=
+Authentication-Results: ideasonboard.com; dkim=none (message not signed)
+ header.d=none;ideasonboard.com; dmarc=none action=none
+ header.from=wolfvision.net;
+Received: from AM0PR08MB4049.eurprd08.prod.outlook.com (2603:10a6:208:12c::33)
+ by AM4PR0802MB2130.eurprd08.prod.outlook.com (2603:10a6:200:61::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Mon, 9 Nov
+ 2020 08:59:56 +0000
+Received: from AM0PR08MB4049.eurprd08.prod.outlook.com
+ ([fe80::ddaa:c243:6820:818a]) by AM0PR08MB4049.eurprd08.prod.outlook.com
+ ([fe80::ddaa:c243:6820:818a%7]) with mapi id 15.20.3499.032; Mon, 9 Nov 2020
+ 08:59:56 +0000
+From:   thomas.haemmerle@wolfvision.net
+To:     laurent.pinchart@ideasonboard.com
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        m.tretter@pengutronix.de,
+        Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+Subject: [PATCH v2] usb: gadget: uvc: fix multiple opens
+Date:   Mon,  9 Nov 2020 09:59:41 +0100
+Message-Id: <20201109085941.26194-1-thomas.haemmerle@wolfvision.net>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201105103758.GA4033354@kroah.com>
+References: <20201105103758.GA4033354@kroah.com>
+Content-Type: text/plain
+X-Originating-IP: [91.118.163.37]
+X-ClientProxiedBy: VI1PR10CA0101.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:803:28::30) To AM0PR08MB4049.eurprd08.prod.outlook.com
+ (2603:10a6:208:12c::33)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1604403610-16577-4-git-send-email-jun.li@nxp.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from wvls01.wolfvision-at.intra (91.118.163.37) by VI1PR10CA0101.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:28::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Mon, 9 Nov 2020 08:59:55 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 112d8264-0120-4a2a-7db6-08d8848dd462
+X-MS-TrafficTypeDiagnostic: AM4PR0802MB2130:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM4PR0802MB21304B9E266607DFEB800899EDEA0@AM4PR0802MB2130.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QuW0/IcFOFHY/UvqCHMWaSQc5HnmdBOSqJggVh1Nnn5v2sIiBg8DXitfUHr8+VmX2i/zvqXZbnAOkWbIXZqN/ouJQ7Ns7YqXDOXmNaVrjsj853hMCvUogWiQBEjzOh3PC2IVo4Q/vmpyBfTqHw0zC/KyAydAvMjxBpd6nQ6BlTIUvNJghjBb9+sBHlxWswjQhQynDHqoX7nAott6sMTTjPtKhqGQDxzTLOD9RcQhrXKmzXnjMgsmb3Jp+UeHcxUlZOmhjxea6MQXf/nDsvv4hc2dMIouxNnTooGf7W0QKsi0nrMnkkFabEDDUSlHCqekzOWDuL3YM3lFvKMjyf3bNw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR08MB4049.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(39840400004)(376002)(136003)(346002)(186003)(16526019)(26005)(6506007)(4326008)(6666004)(478600001)(2616005)(956004)(9686003)(6512007)(83380400001)(2906002)(36756003)(107886003)(52116002)(6916009)(66556008)(66476007)(66946007)(6486002)(1076003)(8676002)(5660300002)(8936002)(86362001)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: e5J3gHHdE5TWaVU+OKEsIOMAJO0U1BVdraIGKNQ3faYI56FKItLMMGmMMihkgLUZS/u5vZfA4+KJVCuQag6lyZWeYtOfnD9Rs791uYxCllzRU5XyMERFz5TuJBIws6FCTq761tMExZPgoJe5V/XbgZ+ya6w+E/E08GJWlf0b7kLIpQWyWqxFoH+mPy4aMovEFHQ+oNOTAypFsIXcs3/ZYXneMkZoI17q4EGyxnJRG44Zu+9dZ9kRDfumlFM/pICmDONtiTMiYJFlQhk4Io907hCKPQjhPtlRSWt0LBz5VgHhlR82wqD6tKDo13WCOBmmw3HoSK30VM3kva0zEdJBjwZC3w6uSR5CshS6+KXO2hyVCraav2B4b+K20tRTPrFyqhbpSdXE+dKcHggOLbCe8HnRJj2HIV1ZR2aUfLv+zuNRKVyIEZ+nxAvrG3H+iDGjH6VOH5H1m9J1f44UWhwwzS+wvUUz5isKb5dopTzFZDSUU5kqMsiKy9KcHLmHkTJ36cBppKHKXY5C1f/YLYoW0jTCJEwZIPTVdIo5etfun8wQ3THmrcmPHkGbf2rxb26cmaBrshtdh0rDT3TRcfnuzIbUwxsQppOECEaqz3x+K2Icu73UczsTN4uFleZ6Zn+CCoDkgqerv7EfqVxce1w1VQ==
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 112d8264-0120-4a2a-7db6-08d8848dd462
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR08MB4049.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2020 08:59:56.3933
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CvTsoqCwZ2GAOy9i72Im9rcOFt+ssjZ1DFg7SXE11Sg3qjcQMuxcWe5iJ5x3s8+TZdrjpT/IZn7/ZaWPdBnYm5ZhXBEd+W6vP2T/tmGhMN0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR0802MB2130
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 07:40:10PM +0800, Li Jun wrote:
-> This patch adds a simple typec switch driver for cases which only
-> needs some simple operations but a dedicated driver is required,
-> current driver only supports GPIO toggle to switch the super speed
-> active channel according to typec orientation.
-> 
-> Signed-off-by: Li Jun <jun.li@nxp.com>
+From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Currently, the UVC function is activated when open on the corresponding
+v4l2 device is called.
+On another open the activation of the function fails since the
+deactivation counter in `usb_function_activate` equals 0. However the
+error is not returned to userspace since the open of the v4l2 device is
+successful.
 
-> ---
-> Changes for v5:
-> - A few changes address Andy's comment, remove gpio check as it's
->   optional, add module name for Kconfig, use correct header files,
->   and other minor changes.
-> - Remove the mutex lock as it's not required currently.
-> 
-> Changes for v4:
-> - Change driver name to be switch simple from switch GPIO, to make it
->   generic for possible extention.
-> - Use compatiable "typec-orientation-switch" instead of bool property
->   for switch matching.
-> - Make acitve channel selection GPIO to be optional.
-> - Remove Andy's R-b tag since the driver changes a lot.
-> 
-> Change for v3:
-> - Remove file name in driver description.
-> - Add Andy Shevchenko's Reviewed-by tag.
-> 
-> Changes for v2:
-> - Use the correct head files for gpio api and of_device_id:
->   #include <linux/gpio/consumer.h>
->   #include <linux/mod_devicetable.h>
-> - Add driver dependency on GPIOLIB
-> 
->  drivers/usb/typec/mux/Kconfig         |  10 ++++
->  drivers/usb/typec/mux/Makefile        |   1 +
->  drivers/usb/typec/mux/switch-simple.c | 100 ++++++++++++++++++++++++++++++++++
->  3 files changed, 111 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-> index a4dbd11..11320d7 100644
-> --- a/drivers/usb/typec/mux/Kconfig
-> +++ b/drivers/usb/typec/mux/Kconfig
-> @@ -18,4 +18,14 @@ config TYPEC_MUX_INTEL_PMC
->  	  control the USB role switch and also the multiplexer/demultiplexer
->  	  switches used with USB Type-C Alternate Modes.
->  
-> +config TYPEC_SWITCH_SIMPLE
-> +	tristate "Type-C orientation switch simple driver"
-> +	depends on GPIOLIB
-> +	help
-> +	  Say Y or M if your system need a simple driver for typec switch
-> +	  control, like use GPIO to select active channel.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called switch-simple.
-> +
->  endmenu
-> diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
-> index 280a6f5..712d0ad 100644
-> --- a/drivers/usb/typec/mux/Makefile
-> +++ b/drivers/usb/typec/mux/Makefile
-> @@ -2,3 +2,4 @@
->  
->  obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
->  obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
-> +obj-$(CONFIG_TYPEC_SWITCH_SIMPLE)	+= switch-simple.o
-> diff --git a/drivers/usb/typec/mux/switch-simple.c b/drivers/usb/typec/mux/switch-simple.c
-> new file mode 100644
-> index 0000000..8707703
-> --- /dev/null
-> +++ b/drivers/usb/typec/mux/switch-simple.c
-> @@ -0,0 +1,100 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Type-C switch simple control driver
-> + *
-> + * Copyright 2020 NXP
-> + * Author: Jun Li <jun.li@nxp.com>
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/usb/typec_mux.h>
-> +
-> +struct typec_switch_simple {
-> +	struct typec_switch *sw;
-> +	struct gpio_desc *sel_gpio;
-> +};
-> +
-> +static int typec_switch_simple_set(struct typec_switch *sw,
-> +				   enum typec_orientation orientation)
-> +{
-> +	struct typec_switch_simple *typec_sw = typec_switch_get_drvdata(sw);
-> +
-> +	switch (orientation) {
-> +	case TYPEC_ORIENTATION_NORMAL:
-> +		gpiod_set_value_cansleep(typec_sw->sel_gpio, 1);
-> +		break;
-> +	case TYPEC_ORIENTATION_REVERSE:
-> +		gpiod_set_value_cansleep(typec_sw->sel_gpio, 0);
-> +		break;
-> +	case TYPEC_ORIENTATION_NONE:
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int typec_switch_simple_probe(struct platform_device *pdev)
-> +{
-> +	struct device			*dev = &pdev->dev;
-> +	struct typec_switch_desc	sw_desc;
-> +	struct typec_switch_simple	*typec_sw;
-> +
-> +	typec_sw = devm_kzalloc(dev, sizeof(*typec_sw), GFP_KERNEL);
-> +	if (!typec_sw)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, typec_sw);
-> +
-> +	sw_desc.drvdata = typec_sw;
-> +	sw_desc.fwnode = dev->fwnode;
-> +	sw_desc.set = typec_switch_simple_set;
-> +
-> +	/* Get the super speed active channel selection GPIO */
-> +	typec_sw->sel_gpio = devm_gpiod_get_optional(dev, "switch", GPIOD_OUT_LOW);
-> +	if (IS_ERR(typec_sw->sel_gpio))
-> +		return PTR_ERR(typec_sw->sel_gpio);
-> +
-> +	typec_sw->sw = typec_switch_register(dev, &sw_desc);
-> +	if (IS_ERR(typec_sw->sw)) {
-> +		dev_err(dev, "Error registering typec switch: %ld\n",
-> +			PTR_ERR(typec_sw->sw));
-> +		return PTR_ERR(typec_sw->sw);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int typec_switch_simple_remove(struct platform_device *pdev)
-> +{
-> +	struct typec_switch_simple *typec_sw = platform_get_drvdata(pdev);
-> +
-> +	typec_switch_unregister(typec_sw->sw);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id of_typec_switch_simple_match[] = {
-> +	{ .compatible = "typec-orientation-switch" },
-> +	{ /* Sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, of_typec_switch_simple_match);
-> +
-> +static struct platform_driver typec_switch_simple_driver = {
-> +	.probe		= typec_switch_simple_probe,
-> +	.remove		= typec_switch_simple_remove,
-> +	.driver		= {
-> +		.name	= "typec-switch-simple",
-> +		.of_match_table = of_typec_switch_simple_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(typec_switch_simple_driver);
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_DESCRIPTION("TypeC Orientation Switch Simple driver");
-> +MODULE_AUTHOR("Jun Li <jun.li@nxp.com>");
-> -- 
-> 2.7.4
+On a close the function is deactivated (since deactivation counter still
+equals 0) and the video is disabled in `uvc_v4l2_release`, although
+another process potentially is streaming.
 
-thanks,
+Move activation of UVC function to subscription on UVC_EVENT_SETUP and
+keep track of the number of subscribers (limited to 1) because there we
+can guarantee for a userspace program utilizing UVC.
+Extend the `struct uvc_file_handle` with member `bool connected` to tag 
+it for a deactivation of the function.
 
+With this a process is able to check capabilities of the v4l2 device
+without deactivating the function for another process actually using the
+device for UVC streaming.
+
+Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+---
+v2:
+ - fix deadlock in `uvc_v4l2_unsubscribe_event()` (mutex is already
+   locked in v4l2-core) introduced in v1
+ - lock mutex in `uvc_v4l2_release()` to suppress ioctls and protect
+   connected
+
+ drivers/usb/gadget/function/uvc.h      |  2 +
+ drivers/usb/gadget/function/uvc_v4l2.c | 56 +++++++++++++++++++++-----
+ 2 files changed, 48 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 73da4f9a8d4c..0d0bcbffc8fd 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -117,6 +117,7 @@ struct uvc_device {
+ 	enum uvc_state state;
+ 	struct usb_function func;
+ 	struct uvc_video video;
++	unsigned int connections;
+ 
+ 	/* Descriptors */
+ 	struct {
+@@ -147,6 +148,7 @@ static inline struct uvc_device *to_uvc(struct usb_function *f)
+ struct uvc_file_handle {
+ 	struct v4l2_fh vfh;
+ 	struct uvc_video *device;
++	bool connected;
+ };
+ 
+ #define to_uvc_file_handle(handle) \
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index 67922b1355e6..aee4888e17b1 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -228,17 +228,57 @@ static int
+ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
+ 			 const struct v4l2_event_subscription *sub)
+ {
++	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
++	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
++	int ret;
++
+ 	if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
+ 		return -EINVAL;
+ 
+-	return v4l2_event_subscribe(fh, sub, 2, NULL);
++	if ((sub->type == UVC_EVENT_SETUP) && (uvc->connections >= 1))
++		return -EBUSY;
++
++	ret = v4l2_event_subscribe(fh, sub, 2, NULL);
++	if (ret < 0)
++		return ret;
++
++	if (sub->type == UVC_EVENT_SETUP) {
++		uvc->connections++;
++		handle->connected = true;
++		uvc_function_connect(uvc);
++	}
++
++	return 0;
++}
++
++static void uvc_v4l2_disable(struct uvc_device *uvc)
++{
++	if (--uvc->connections)
++		return;
++
++	uvc_function_disconnect(uvc);
++	uvcg_video_enable(&uvc->video, 0);
++	uvcg_free_buffers(&uvc->video.queue);
+ }
+ 
+ static int
+ uvc_v4l2_unsubscribe_event(struct v4l2_fh *fh,
+ 			   const struct v4l2_event_subscription *sub)
+ {
+-	return v4l2_event_unsubscribe(fh, sub);
++	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
++	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
++	int ret;
++
++	ret = v4l2_event_unsubscribe(fh, sub);
++	if (ret < 0)
++		return ret;
++
++	if ((sub->type == UVC_EVENT_SETUP) && handle->connected) {
++		uvc_v4l2_disable(uvc);
++		handle->connected = false;
++	}
++
++	return 0;
+ }
+ 
+ static long
+@@ -293,7 +333,6 @@ uvc_v4l2_open(struct file *file)
+ 	handle->device = &uvc->video;
+ 	file->private_data = &handle->vfh;
+ 
+-	uvc_function_connect(uvc);
+ 	return 0;
+ }
+ 
+@@ -303,14 +342,11 @@ uvc_v4l2_release(struct file *file)
+ 	struct video_device *vdev = video_devdata(file);
+ 	struct uvc_device *uvc = video_get_drvdata(vdev);
+ 	struct uvc_file_handle *handle = to_uvc_file_handle(file->private_data);
+-	struct uvc_video *video = handle->device;
+-
+-	uvc_function_disconnect(uvc);
+ 
+-	mutex_lock(&video->mutex);
+-	uvcg_video_enable(video, 0);
+-	uvcg_free_buffers(&video->queue);
+-	mutex_unlock(&video->mutex);
++	mutex_lock(&uvc->video.mutex);
++	if (handle->connected)
++		uvc_v4l2_disable(uvc);
++	mutex_unlock(&uvc->video.mutex);
+ 
+ 	file->private_data = NULL;
+ 	v4l2_fh_del(&handle->vfh);
 -- 
-heikki
+2.17.1
+
