@@ -2,106 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C64282AC01D
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 16:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D882AC04E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 16:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729445AbgKIPmR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 10:42:17 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:35770 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727303AbgKIPmQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 10:42:16 -0500
-Received: by mail-oi1-f195.google.com with SMTP id c80so10649164oib.2;
-        Mon, 09 Nov 2020 07:42:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=qDCEpBkFLulC00NVUrlJOaEfoieaKfsOXl1ZnSUUlrc=;
-        b=q2i18BmuH62GxVDtK/57VEvvhuqyhJCkBbqldpRkBdigBkgPkZ46quiLPmTIB1sAE5
-         P6U+nd8DYx6T5DzygUpr3fioDkj8c0yTkGJSeUWackc53uU+qmVgmkUy6/YhAW0hYojy
-         A5OY2vNreNZIbEj1VzE51/hEXUjPp8/Q/YJ8lVaCcRfm6Puj6E8jwEoxngMi4qknQ+HR
-         W9yCjAlwM+c6V4lyB5v+Hp+nwtvQSG80beEZSCHezI2s3q0sF/giB86qRnVZc1vGLjH3
-         0MDd1NjS8VwHmoSkemRLa3Ww6FdyY0WE844s1/d2DYZykC+bZGuWeA2t6uKuek/qj18a
-         Kt3g==
-X-Gm-Message-State: AOAM5302J+FPWQroTPmlebiH5WDP7vbIp4wJgMeIofZb0VNyyuSZl684
-        MUF7rXzy1F2+ByL2bUnEcA==
-X-Google-Smtp-Source: ABdhPJwljMkcqsk2ICLQs/kbA6TgKKVTl0MP55hDMb1X5tEip+2F+I7aH4IkZraz/rREs1cBsMTFaw==
-X-Received: by 2002:a54:4614:: with SMTP id p20mr8997965oip.131.1604936535633;
-        Mon, 09 Nov 2020 07:42:15 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v5sm2581843otb.44.2020.11.09.07.42.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 07:42:14 -0800 (PST)
-Received: (nullmailer pid 1341840 invoked by uid 1000);
-        Mon, 09 Nov 2020 15:42:13 -0000
-Date:   Mon, 9 Nov 2020 09:42:13 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     kishon@ti.com, vkoul@kernel.org, dongsheng.qiu@ingenic.com,
-        linux-usb@vger.kernel.org, paul@crapouillou.net,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, rick.tyliu@ingenic.com, balbi@kernel.org,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com,
-        devicetree@vger.kernel.org, aric.pzqi@ingenic.com,
-        yanfei.li@ingenic.com
-Subject: Re: [PATCH v8 2/3] dt-bindings: USB: Add bindings for Ingenic JZ4775
- and X2000.
-Message-ID: <20201109154213.GA1341312@bogus>
-References: <20201107094758.83291-1-zhouyanjie@wanyeetech.com>
- <20201107094758.83291-3-zhouyanjie@wanyeetech.com>
+        id S1729951AbgKIPzL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 10:55:11 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:64288 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729445AbgKIPzL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 10:55:11 -0500
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A9Fkdt6032585;
+        Mon, 9 Nov 2020 16:54:45 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=UBGo5D2wKRwZPFXsITIZTn6DFn/APPci5EP/rirzjqc=;
+ b=J9K8BqLjt5FzSEbfXkVSs+P046W5I2QQZI+Utl1BTaCkgsaGBrV4VkyjNnNHyrCadrWp
+ hKYCPrca47AIE4qRAHuPg/aFg+ve/12zC+zGaSW4m5zky3sHzV0TorCtxdLFjBVNBzNP
+ Xfu4JDrxLsSM9F2t3oyXbuQUUG0Dim+ApvP/k9PjGxmYKkXGJNSg7KUaapwnOAlY+TCv
+ iz9DBemlzLrai6E7KDPTfJCfPLmlWs6F8XhF73Nq/xdqtABINi9kidS6S8cMdTnjoLFe
+ FkHaZbxnJraXF0QQT3VDiMqoHe1GOJI0cUS6ddS4NLFsRKAXhiDJ+BgpMFAHfiFnZ2RW HQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 34nj80jvyv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Nov 2020 16:54:45 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D4C4E10002A;
+        Mon,  9 Nov 2020 16:54:44 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BBD1322D74A;
+        Mon,  9 Nov 2020 16:54:44 +0100 (CET)
+Received: from lmecxl0995.lme.st.com (10.75.127.47) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 9 Nov
+ 2020 16:54:43 +0100
+Subject: Re: [PATCH v5 1/5] dt-bindings: connector: add typec-power-opmode
+ property to usb-connector
+To:     Rob Herring <robh+dt@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Jun Li <lijun.kernel@gmail.com>, <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>
+References: <20201106165805.31534-1-amelie.delaunay@st.com>
+ <20201106165805.31534-2-amelie.delaunay@st.com>
+ <CAL_Jsq+A=nixpdrT3Omq7Osat=_Egb5g6VGao=gY4CEssOe+xQ@mail.gmail.com>
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+Message-ID: <a0e0bde1-5657-c0f9-9123-6b1dd5a1bd73@st.com>
+Date:   Mon, 9 Nov 2020 16:54:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201107094758.83291-3-zhouyanjie@wanyeetech.com>
+In-Reply-To: <CAL_Jsq+A=nixpdrT3Omq7Osat=_Egb5g6VGao=gY4CEssOe+xQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-09_08:2020-11-05,2020-11-09 signatures=0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 07 Nov 2020 17:47:57 +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Move Ingenic USB PHY bindings from Documentation/devicetree/bindings/usb
-> to Documentation/devicetree/bindings/phy, and add bindings for JZ4775 SoC
-> and X2000 SoC.
+On 11/9/20 4:03 PM, Rob Herring wrote:
+> On Fri, Nov 6, 2020 at 10:58 AM Amelie Delaunay <amelie.delaunay@st.com> wrote:
+>>
+>> Power operation mode may depends on hardware design, so, add the optional
+>> property typec-power-opmode for usb-c connector to select the power
+>> operation mode capability.
+>>
+>> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+>> ---
+>> Hi Bahdri, Rob,
+>>
+>> I've added the exlusion with FRS property, but new FRS property name
+>> should be use here so, be careful.
+>>
+>> ---
+>>   .../bindings/connector/usb-connector.yaml     | 24 +++++++++++++++++++
+>>   1 file changed, 24 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> index 62781518aefc..a84464b3e1f2 100644
+>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> @@ -93,6 +93,24 @@ properties:
+>>         - device
+>>         - dual
+>>
+>> +  typec-power-opmode:
+>> +    description: Determines the power operation mode that the Type C connector
+>> +      will support and will advertise through CC pins when it has no power
+>> +      delivery support.
+>> +      - "default" corresponds to default USB voltage and current defined by the
+>> +        USB 2.0 and USB 3.2 specifications, 5V 500mA for USB 2.0 ports and
+>> +        5V 900mA or 1500mA for USB 3.2 ports in single-lane or dual-lane
+>> +        operation respectively.
+>> +      - "1.5A" and "3.0A", 5V 1.5A and 5V 3.0A respectively, as defined in USB
+>> +        Type-C Cable and Connector specification, when Power Delivery is not
+>> +        supported.
+>> +    allOf:
+>> +      - $ref: /schemas/types.yaml#definitions/string
+>> +    enum:
+>> +      - default
+>> +      - 1.5A
+>> +      - 3.0A
 > 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
+> Use the enums here. Unless you want to define it as actual current as
+> a numerical value.
+
+If I understand your point correctly, I think I should remove allOf here 
+and stick with what is done to describe power-role and data-role 
+property. Right ?
+
+Regards,
+Amelie
 > 
-> Notes:
->     v8:
->     New patch.
+> Rob
 > 
->  .../{usb/ingenic,jz4770-phy.yaml => phy/ingenic,phy-usb.yaml}         | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->  rename Documentation/devicetree/bindings/{usb/ingenic,jz4770-phy.yaml => phy/ingenic,phy-usb.yaml} (89%)
-> 
-
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/usb/ingenic,jz4770-phy.yaml'
-xargs: dt-doc-validate: exited with status 255; aborting
-make[1]: *** [Documentation/devicetree/bindings/Makefile:59: Documentation/devicetree/bindings/processed-schema-examples.json] Error 124
-make: *** [Makefile:1364: dt_binding_check] Error 2
-./Documentation/devicetree/bindings/phy/ingenic,phy-usb.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/phy/ingenic,phy-usb.yaml#
-
-
-See https://patchwork.ozlabs.org/patch/1396098
-
-The base for the patch is generally the last rc1. Any dependencies
-should be noted.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
