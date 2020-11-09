@@ -2,68 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48ACF2AB48C
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 11:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79AA82AB50D
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 11:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726646AbgKIKNn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 05:13:43 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45740 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726176AbgKIKNm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 05:13:42 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1604916822;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8e3bxkXwQ0VIQETueqJwv7iFSBsZBn43KllGQCC1g7M=;
-        b=rKb3G1pKBFeqIZBsbhpsI+0zsEXGR08tZFXkFuc5Oq80+uDQ5S/mbcSakmRCg7DCQLNCCc
-        4mF3rvgg6qVE9NP2UaasVR3VDxb8IPnc/I6SI263h/lB6KEcxjwu7IT4rIivMC7FQRi9vS
-        HsARqdI36Mvz/QQv57BQFxE1dqzXSIo=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E33B5ABCC;
-        Mon,  9 Nov 2020 10:13:41 +0000 (UTC)
-Message-ID: <aebf92944c1ecb256d21108ce092165a0fd904db.camel@suse.com>
-Subject: Re: Issues with LaCie USB3 drive and UAS
-From:   Oliver Neukum <oneukum@suse.com>
-To:     "David C. Partridge" <david.partridge@perdrix.co.uk>,
-        linux-usb@vger.kernel.org
-Date:   Mon, 09 Nov 2020 11:13:34 +0100
-In-Reply-To: <001601d6b67d$e97a1e30$bc6e5a90$@perdrix.co.uk>
-References: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>
-         <eceedea7ca5d950eb8ea4d186a6b01a04d0a804f.camel@suse.com>
-         <001601d6b67d$e97a1e30$bc6e5a90$@perdrix.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1729302AbgKIKej (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 05:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726176AbgKIKej (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 05:34:39 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B724C0613CF;
+        Mon,  9 Nov 2020 02:34:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=qH9b1O1m9yVoEB6n8QkB/6TaJXHCxIPP32Fq1mFfWKE=; b=gGrvZ5xBLQtSpNi2uSB0ANIyt
+        afY6SWLthCnmt6Eeq9iZZax1/dyotilgV7RwYmDtVPVh7RwXnEAYDGAtLsa727gWFqK5CzSIwzblw
+        DaYTkWl5eVU2agK0Wy6hnKjxer6VycAEWpMtm1NwlVYP8n9kJucFn6RRJt2oQiqC+/YAOq4k6TXTo
+        dYesdPUt9+kdk2famskEu8KnvAp6sqlxtQTkKiPG+IohXg8HNv0sKPXA55oJI+hF72r+UriKjmSUr
+        sydSD86p/UZ7m2nM8/IM9hJ+KGVUGO+/ml+2PkrHYDWyWW/YYlOyIF6iLw25zd+4lV3cvHJvnHiJX
+        ZcxHuRLig==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56980)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1kc4V7-000858-1A; Mon, 09 Nov 2020 10:34:17 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1kc4V4-0000KD-S1; Mon, 09 Nov 2020 10:34:14 +0000
+Date:   Mon, 9 Nov 2020 10:34:14 +0000
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH usb-next] usb: dwc3: Use devm_of_platform_populate
+Message-ID: <20201109103414.GF1559@shell.armlinux.org.uk>
+References: <20201109095953.7f810239@xhacker.debian>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201109095953.7f810239@xhacker.debian>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 09.11.2020, 09:51 +0000 schrieb David C. Partridge:
-> I'm sure you are right in your diagnosis (absent any knowledge to the contrary).
+On Mon, Nov 09, 2020 at 09:59:53AM +0800, Jisheng Zhang wrote:
+> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> index 417e05381b5d..83015bb7b926 100644
+> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
+> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> @@ -702,7 +702,6 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  {
+>  	struct dwc3_meson_g12a	*priv;
+>  	struct device		*dev = &pdev->dev;
+> -	struct device_node	*np = dev->of_node;
+>  	void __iomem *base;
+>  	int ret, i;
+>  
+> @@ -794,7 +793,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  			goto err_phys_power;
+>  	}
+>  
+> -	ret = of_platform_populate(np, NULL, NULL, dev);
+> +	ret = devm_of_platform_populate(dev);
+>  	if (ret)
+>  		goto err_phys_power;
+>  
+> @@ -832,8 +831,6 @@ static int dwc3_meson_g12a_remove(struct platform_device *pdev)
+>  	if (priv->drvdata->otg_switch_supported)
+>  		usb_role_switch_unregister(priv->role_switch);
+>  
+> -	of_platform_depopulate(dev);
+> -
+>  	for (i = 0 ; i < PHY_COUNT ; ++i) {
+>  		phy_power_off(priv->phys[i]);
+>  		phy_exit(priv->phys[i]);
 
-It is a guess, merely. Based on long woefull experience with the
-quality of some hardware.
+Does it matter that the order that things happen in
+dwc3_meson_g12a_remove() is changed as a result of your patch? Was
+the code relying on the platform devices being depopulated before
+powering off the PHYs?
 
-> Now what's the treatment?
+> diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
+> index e62ecd22b3ed..f1c267e39d62 100644
+> --- a/drivers/usb/dwc3/dwc3-of-simple.c
+> +++ b/drivers/usb/dwc3/dwc3-of-simple.c
+> @@ -73,7 +73,7 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto err_resetc_assert;
+>  
+> -	ret = of_platform_populate(np, NULL, NULL, dev);
+> +	ret = devm_of_platform_populate(dev);
+>  	if (ret)
+>  		goto err_clk_put;
+>  
+> @@ -97,8 +97,6 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+>  
+>  static void __dwc3_of_simple_teardown(struct dwc3_of_simple *simple)
+>  {
+> -	of_platform_depopulate(simple->dev);
+> -
+>  	clk_bulk_disable_unprepare(simple->num_clocks, simple->clks);
+>  	clk_bulk_put_all(simple->num_clocks, simple->clks);
+>  	simple->num_clocks = 0;
 
-Use WRITE, not WRITE SAME. That is a task of the SCSI layer, not UAS.
+Same here... and for anywhere else in this patch that you're deleting
+a of_platform_depopulate().
 
-> Would uas black-list provide a work-araound? If so a detailed recipe will be needed by me ...
+You effectively are moving the call to of_platform_depopulate() *after*
+the driver's .remove function has been called.
 
-Indirectly. The storage driver sets no_write_same. UAS does not. It
-looks like UAS will need a kernel patch for that.
-
-> Fix to the code? Ideal, but takes lots longer, so a work-around may be needed for a while
-
-Very well. For experimentation, please try blacklisting UAS. If that
-fails I have guessed wrong. If it works, I will make a test patch.
-
-	Regards
-		Oliver
-
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
