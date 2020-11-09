@@ -2,311 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CE42AB73C
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 12:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B542AB7B8
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 13:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729724AbgKILgv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 06:36:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:46971 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729956AbgKILgu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 06:36:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604921808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AG/JjvSWgiu1h7jtGSppsn7bH14OQ5r5mGepNHuPYlM=;
-        b=a9lYtaz/qeQj4wa1yWUqIoXzD4QB4GP+wQ4W+HB2xp32CcLyZNW2JGgh17fQmFJ6czIfIQ
-        l7CMxb0nbLiemJW1tykDvLmx9gq7KB3/toDAdQv6yoGftScvrbxlladEnoR6srMhh3AblQ
-        5sOUU7nOBa4djigZJdYAn2rXMw/iYEA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-326-k_j2T0mnMeuesdEtzjerlg-1; Mon, 09 Nov 2020 06:36:46 -0500
-X-MC-Unique: k_j2T0mnMeuesdEtzjerlg-1
-Received: by mail-wm1-f72.google.com with SMTP id 3so1860332wms.9
-        for <linux-usb@vger.kernel.org>; Mon, 09 Nov 2020 03:36:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=AG/JjvSWgiu1h7jtGSppsn7bH14OQ5r5mGepNHuPYlM=;
-        b=JtJOJSvbatcD09MQjJ1zDCF3ce1dTf5XqOZP+IyiohD0ssSBWkKwHiu2o35dgYsk3X
-         EZtEd/X0QqS1ojfrBBFmM8GxPfscnlYCnB9rfIiMHnQggg+xKpTPwwris79gHkt6RfnA
-         S6qUUrs4DHHmbzE0rPfFkUJduzyAE/LI0z0AegNWsd43+FPBUVOriMVLPtcG132vwOuZ
-         tlssojqJx9DSANgE9YuumWdQlrvxdBroZEadPJXsby8GlsCSqpgWbcuxkTof1LyxfTR5
-         WPTOMGjXG+jFnhcaMWSf/eQ5bY5QbDRVRE8CARKGUkPsQQLbYRVnjSJrnAoVYXSsYng8
-         Q7Nw==
-X-Gm-Message-State: AOAM533pHlsnRIfrt8OarreYnw1MBWNU+78uQUChQNl/ncHDQ0Qkxm1w
-        KQj70Yp5bubrvVfMu9FHMZ0YAYfHC/vNLMR93qCc/UWJlQV+k/tdVP5R/82Q1jVGmXGDg77w8Tw
-        zfjxGj0eSmhawHqDNd4Nm
-X-Received: by 2002:a7b:c5c6:: with SMTP id n6mr14605037wmk.131.1604921804311;
-        Mon, 09 Nov 2020 03:36:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxuHkN9Mews4C//dvt0qEqmwvO0MbyvgtCZR8bErvr9AmidoANtwldJXyOv5SFWrge6eGxNwA==
-X-Received: by 2002:a7b:c5c6:: with SMTP id n6mr14605016wmk.131.1604921804111;
-        Mon, 09 Nov 2020 03:36:44 -0800 (PST)
-Received: from ben-x1c7.lan (200116b826c04af00000000000000185.dip.versatel-1u1.de. [2001:16b8:26c0:4af0::185])
-        by smtp.gmail.com with ESMTPSA id w21sm11681830wmi.29.2020.11.09.03.36.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 03:36:43 -0800 (PST)
-Message-ID: <dab0302c9156a845923ee7fbefad7dd4305eedb3.camel@redhat.com>
-Subject: Re: Power supply detection issue caused by ucsi_psy?
-From:   Benjamin Berg <bberg@redhat.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Vladimir Yerilov <openmindead@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Date:   Mon, 09 Nov 2020 12:36:37 +0100
-In-Reply-To: <20201109112051.GL4062920@kuha.fi.intel.com>
-References: <CAB31r6UbF_Q-APvfmxanvMZOYJZwr0eEPwMQ8EGWw3-VkJtHhQ@mail.gmail.com>
-         <20201109112051.GL4062920@kuha.fi.intel.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-gTP5k6aZYaMsYU89R2j8"
-User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+        id S1729303AbgKIMF2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 07:05:28 -0500
+Received: from mga03.intel.com ([134.134.136.65]:60335 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726956AbgKIMF2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Nov 2020 07:05:28 -0500
+IronPort-SDR: sXDwvxZvqExsDXpM1ne7s+yXy9Z9wLcd6Qj3NZh8OQJ7A3E2N8a5nHlHfYEaSEQxKR/QFkIOEL
+ OC0neCGtlISg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9799"; a="169901040"
+X-IronPort-AV: E=Sophos;i="5.77,463,1596524400"; 
+   d="scan'208";a="169901040"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2020 04:05:26 -0800
+IronPort-SDR: 1kDXhZs0u7OIwVKtsy6RjqE4ZwYsXFC60ItyfqEgZVvM5JW6sKkrFkz+cSZMO11h2bPBruPkQO
+ rI/AACVByrEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,463,1596524400"; 
+   d="scan'208";a="427969644"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Nov 2020 04:05:25 -0800
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: Add typec_enter_usb() helper function
+Date:   Mon,  9 Nov 2020 15:05:24 +0300
+Message-Id: <20201109120524.50255-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This function configures the muxes according to the
+requested USB mode in the Enter_USB Message that was
+communicated with the partner.
 
---=-gTP5k6aZYaMsYU89R2j8
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In practice the function just fills struct typec_mux_state
+for the caller by extracting the connector mode (so USB
+mode) from the EUDO (Enter_USB Data Object), and then passes
+that structure to typec_mux_set().
 
-Hi,
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/class.c | 32 ++++++++++++++++++++++++++++++++
+ include/linux/usb/typec.h |  1 +
+ 2 files changed, 33 insertions(+)
 
-On Mon, 2020-11-09 at 13:20 +0200, Heikki Krogerus wrote:
-> On Mon, Nov 09, 2020 at 08:48:06PM +1000, Vladimir Yerilov wrote:
-> > Since linux 5.8 I'm experiencing a problem related to power source
-> > detection on my laptop. My machine is equipped with 2 typec ports, one
-> > of them has power delivery and is used for charging, another one has
-> > only data transfer capability. The issue is, when I unplug the power
-> > cable, the OS is reporting something like "Battery at 100%, plugged in
-> > but still discharging" (KDE Plasma notification) - whether another
-> > port is used or not. I checked with upower, you can see the output for
-> > kernel 5.4 and 5.10 attached. In brief, on 5.8 onwards I have some
-> > "line_power_ucsi_source_psy_USBC000o001" device which is considered a
-> > power supply and that prevents OS to switch to "battery mode" when
-> > unplugging the cable, instead it thinks there's a power source but not
-> > powerful enough to charge the battery, upower says this: "on-battery:
-> >     no", but actually no ac power source is connected.
-> > I did some research with git bisect up to the merge commit
-> > `e611c0fe318c6d6827ee2bba660fbc23cf73f7dc` ("Merge tag 'usb-5.8-rc1'
-> > of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb"), and
-> > looked through its content. My wild guess based on upower output is
-> > that a new driver introduced there, /drivers/usb/typec/ucsi/psy.c, is
-> > responsible for this wrong behavior.
-> >=20
-> > Could you please look into that based on info I'm providing?
-> > Thank you!
->=20
-> This sounds a bit like the issue that was reported and fixed here:
-> https://lore.kernel.org/lkml/20201009144047.505957-1-benjamin@sipsolution=
-s.net/
-
-I agree, sounds very much like the issue I was seeing.
-
-What machine/model are you seeing this on? The PPM is implemented in
-Firmware, so the behaviour will depend on the Vendor or even model. I
-observed it on a Lenovo laptop, but would be curious to know if similar
-issues happen elsewhere.
-
-I only observed an issue when using a thunderbolt dock and not with a
-plain USB-C charger.
-
-> Can you try the two patches from that series?
-
-Yeah, that would be a good data point.
-
-Benjamin
-
-> +Bejamin, who prepared those patches.
->=20
-> > Device: /org/freedesktop/UPower/devices/line_power_ADP0
-> >   native-path:          ADP0
-> >   power supply:         yes
-> >   updated:              Sun 08 Nov 2020 15:27:39 +10 (97 seconds
-> > ago)
-> >   has history:          no
-> >   has statistics:       no
-> >   line-power
-> >     warning-level:       none
-> >     online:              yes
-> >     icon-name:          'ac-adapter-symbolic'
-> >=20
-> > Device: /org/freedesktop/UPower/devices/battery_BAT0
-> >   native-path:          BAT0
-> >   vendor:               SUNWODA
-> >   model:                R15B01W
-> >   serial:               ACFA
-> >   power supply:         yes
-> >   updated:              Sun 08 Nov 2020 15:27:39 +10 (97 seconds
-> > ago)
-> >   has history:          yes
-> >   has statistics:       yes
-> >   battery
-> >     present:             yes
-> >     rechargeable:        yes
-> >     state:               charging
-> >     warning-level:       none
-> >     energy:              46.198 Wh
-> >     energy-empty:        0 Wh
-> >     energy-full:         46.664 Wh
-> >     energy-full-design:  60.04 Wh
-> >     energy-rate:         2.059 W
-> >     voltage:             8.672 V
-> >     time to full:        13.6 minutes
-> >     percentage:          99%
-> >     capacity:            77.7215%
-> >     technology:          lithium-ion
-> >     icon-name:          'battery-full-charging-symbolic'
-> >   History (charge):
-> >     1604813259	0.000	unknown
-> >   History (rate):
-> >     1604813259	0.000	unknown
-> >=20
-> > Device:
-> > /org/freedesktop/UPower/devices/line_power_ucsi_source_psy_USBC000o
-> > 001
-> >   native-path:          ucsi-source-psy-USBC000:001
-> >   power supply:         yes
-> >   updated:              Sun 08 Nov 2020 15:27:39 +10 (97 seconds
-> > ago)
-> >   has history:          no
-> >   has statistics:       no
-> >   line-power
-> >     warning-level:       none
-> >     online:              yes
-> >     icon-name:          'ac-adapter-symbolic'
-> >=20
-> > Device: /org/freedesktop/UPower/devices/DisplayDevice
-> >   power supply:         yes
-> >   updated:              Sun 08 Nov 2020 15:27:39 +10 (97 seconds
-> > ago)
-> >   has history:          no
-> >   has statistics:       no
-> >   battery
-> >     present:             yes
-> >     state:               charging
-> >     warning-level:       none
-> >     energy:              46.198 Wh
-> >     energy-full:         46.664 Wh
-> >     energy-rate:         2.059 W
-> >     time to full:        13.6 minutes
-> >     percentage:          99%
-> >     icon-name:          'battery-full-charging-symbolic'
-> >=20
-> > Daemon:
-> >   daemon-version:  0.99.11
-> >   on-battery:      no
-> >   lid-is-closed:   no
-> >   lid-is-present:  yes
-> >   critical-action: HybridSleep
-> > Device: /org/freedesktop/UPower/devices/line_power_ADP0
-> >   native-path:          ADP0
-> >   power supply:         yes
-> >   updated:              Sun 08 Nov 2020 15:29:25 +10 (18 seconds
-> > ago)
-> >   has history:          no
-> >   has statistics:       no
-> >   line-power
-> >     warning-level:       none
-> >     online:              no
-> >     icon-name:          'ac-adapter-symbolic'
-> >=20
-> > Device: /org/freedesktop/UPower/devices/battery_BAT0
-> >   native-path:          BAT0
-> >   vendor:               SUNWODA
-> >   model:                R15B01W
-> >   serial:               ACFA
-> >   power supply:         yes
-> >   updated:              Sun 08 Nov 2020 15:29:25 +10 (18 seconds
-> > ago)
-> >   has history:          yes
-> >   has statistics:       yes
-> >   battery
-> >     present:             yes
-> >     rechargeable:        yes
-> >     state:               discharging
-> >     warning-level:       none
-> >     energy:              46.198 Wh
-> >     energy-empty:        0 Wh
-> >     energy-full:         46.664 Wh
-> >     energy-full-design:  60.04 Wh
-> >     energy-rate:         1.998 W
-> >     voltage:             8.44 V
-> >     time to empty:       23.1 hours
-> >     percentage:          99%
-> >     capacity:            77.7215%
-> >     technology:          lithium-ion
-> >     icon-name:          'battery-full-symbolic'
-> >   History (charge):
-> >     1604813365	99.000	charging
-> >   History (rate):
-> >     1604813365	1.998	charging
-> >=20
-> > Device:
-> > /org/freedesktop/UPower/devices/line_power_ucsi_source_psy_USBC000o
-> > 001
-> >   native-path:          ucsi-source-psy-USBC000:001
-> >   power supply:         yes
-> >   updated:              Sun 08 Nov 2020 15:27:39 +10 (124 seconds
-> > ago)
-> >   has history:          no
-> >   has statistics:       no
-> >   line-power
-> >     warning-level:       none
-> >     online:              yes
-> >     icon-name:          'ac-adapter-symbolic'
-> >=20
-> > Device: /org/freedesktop/UPower/devices/DisplayDevice
-> >   power supply:         yes
-> >   updated:              Sun 08 Nov 2020 15:29:25 +10 (18 seconds
-> > ago)
-> >   has history:          no
-> >   has statistics:       no
-> >   battery
-> >     present:             yes
-> >     state:               discharging
-> >     warning-level:       none
-> >     energy:              46.198 Wh
-> >     energy-full:         46.664 Wh
-> >     energy-rate:         1.998 W
-> >     time to empty:       23.1 hours
-> >     percentage:          99%
-> >     icon-name:          'battery-full-symbolic'
-> >=20
-> > Daemon:
-> >   daemon-version:  0.99.11
-> >   on-battery:      no
-> >   lid-is-closed:   no
-> >   lid-is-present:  yes
-> >   critical-action: HybridSleep
-> >=20
->=20
-> thanks,
->=20
-
---=-gTP5k6aZYaMsYU89R2j8
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAl+pKcYACgkQq6ZWhpmF
-Y3BuKA//SlzFa17C0tRLUkq6ZzEdkxGeovyasUowHJtCwQvVg6fJAJERfusnHVz+
-qBjaTY1fZ6Nsue9OghK1rBqJGOLqz02RLQ7BffhzkMfkKYql11Z1E0cz9ZAoaQBN
-SVOA4IM7BH+wX5+w4JJq7fh+aOtirpBSIO8myB25WqrBtZ9KByPP1/bDB6s9tYZg
-+0D2pTyRfXNI/71GKGC3YsL6YeoNxJNQ2Ok+rkShAD+zg/8o215FXCCnMQj7t7s4
-4d2VnMd0g867YuM5B6s6CMVcPmADTzqs2lsgRVXHaZpneoztOiTKt9IRIyOWznct
-DeLiAxwQsGu2D89Ms0kx4GVRztrU8wXglHjJFoI+z7Zd1aYKZmfKTqTy6w1bbOn2
-/dYurmdLACsAd0ThJVOMp4ou07xGWm5cwNPXw6A4k1Tp7XpG6XR3wwnCKdqiEHi1
-RSQZ2wT5/73cCy+PU/f/aegjhESfMPrwu6l3WD8mFALCMNAGs8k+OeTZpz4qgpaw
-LtrJoTL/OJqOhP+EonGWZr7FV4vrsSRGTUg+RODH8GTJLWWsmwOi4faxGyDiImjC
-C/zAJyOKEpjM83+L/TtP20pTPjX9+N4sUuSI0/NXTRnS/u67d+aC6fRad7Y2s82F
-Bpg+oWa+jnIZslXnQLiYUSypoPIW9x7EN8wnUuGDDyPGAtXVvHo=
-=6TyA
------END PGP SIGNATURE-----
-
---=-gTP5k6aZYaMsYU89R2j8--
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 35eec707cb512..22f82e924d585 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -11,6 +11,7 @@
+ #include <linux/mutex.h>
+ #include <linux/property.h>
+ #include <linux/slab.h>
++#include <linux/usb/pd.h>
+ 
+ #include "bus.h"
+ 
+@@ -1579,6 +1580,37 @@ int typec_set_mode(struct typec_port *port, int mode)
+ }
+ EXPORT_SYMBOL_GPL(typec_set_mode);
+ 
++/**
++ * typec_enter_usb - Set USB Mode for USB Type-C connector
++ * @port: USB Type-C connector
++ * @data: Enter_USB Message details.
++ *
++ * This function is called when Enter_USB Message is used. It configures @port
++ * muxes for the USB mode (USB 2.0, USB 3.2 or USB4).
++ */
++int typec_enter_usb(struct typec_port *port, struct enter_usb_data *data)
++{
++	struct typec_mux_state mux_state;
++
++	switch ((data->eudo & EUDO_USB_MODE_MASK) >> EUDO_USB_MODE_SHIFT) {
++	case EUDO_USB_MODE_USB4:
++		mux_state.mode = TYPEC_MODE_USB4;
++		break;
++	case EUDO_USB_MODE_USB3:
++		mux_state.mode = TYPEC_MODE_USB3;
++		break;
++	default:
++		mux_state.mode = TYPEC_MODE_USB2;
++		break;
++	}
++
++	mux_state.alt = NULL; /* Not an alt mode */
++	mux_state.data = data;
++
++	return typec_mux_set(port->mux, &mux_state);
++}
++EXPORT_SYMBOL_GPL(typec_enter_usb);
++
+ /* --------------------------------------- */
+ 
+ /**
+diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+index 6be5580459428..ee8db91737330 100644
+--- a/include/linux/usb/typec.h
++++ b/include/linux/usb/typec.h
+@@ -265,6 +265,7 @@ int typec_set_orientation(struct typec_port *port,
+ 			  enum typec_orientation orientation);
+ enum typec_orientation typec_get_orientation(struct typec_port *port);
+ int typec_set_mode(struct typec_port *port, int mode);
++int typec_enter_usb(struct typec_port *port, struct enter_usb_data *data);
+ 
+ void *typec_get_drvdata(struct typec_port *port);
+ 
+-- 
+2.28.0
 
