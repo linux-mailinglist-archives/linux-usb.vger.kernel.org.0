@@ -2,96 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA292AB182
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 08:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D362AB251
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 09:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729615AbgKIHAx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 02:00:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37092 "EHLO mail.kernel.org"
+        id S1727774AbgKIIVl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 03:21:41 -0500
+Received: from mga04.intel.com ([192.55.52.120]:10121 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728873AbgKIHAx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 02:00:53 -0500
-Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 772C620665;
-        Mon,  9 Nov 2020 07:00:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604905252;
-        bh=FisUgV7uscqua/AneDb62Q2lcmZKFJRrYhSkiLnuRrI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=NOcf1lTWXRbb5fiUkYnOeAi6+47AtPpiqxDDSDG5cguHL8LGTTgLQNzo8CXyZJFso
-         u2nyOkIbAtpMzMRlkUH/rQVmkx2UiqrD1P32QKR7fbyRHr4JmfkOAr/ml2OLCBeQjH
-         6Mkf8ktzW0O9XUvLkU81JxNEDt4k+hPcX/IW2X0Q=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Ferry Toth <fntoth@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: BUG with linux 5.9.0 with dwc3 in gadget mode
-In-Reply-To: <cdb37a4c-2815-0068-1707-2e9163d1a93c@gmail.com>
-References: <913dccca-500d-1938-b199-6eb67cfb60cc@gmail.com>
- <874kmpf583.fsf@kernel.org>
- <d0aca346-353c-d74e-6f00-ccd2a4ed26ef@gmail.com>
- <976cea12-e54e-fbca-6c53-e6ef5c554094@synopsys.com>
- <645b6ddc-d4f5-3f5b-b85f-b3d27fc365f5@synopsys.com>
- <2b6586e6-528c-86e8-9d92-0061bc44866d@gmail.com>
- <aad327a8-95bc-40ec-abf7-ad216a02fad0@synopsys.com>
- <2cc783ac-6b71-190b-49fc-9e2bceeacd4b@gmail.com>
- <920590dc-5430-7f8b-b2e1-1a4c37f4dfbe@synopsys.com>
- <CAHp75Vfs9AoOYSVGTpw30h11ptPOSPNf1AsWBKdiVrDL=9X3PQ@mail.gmail.com>
- <0089306e-e2ca-9a53-6ffb-202d028050ce@gmail.com>
- <CAHp75Vc0P746FhhohJ=wRccsQL4ewn+AECMw3yTD6cuGxHCG9Q@mail.gmail.com>
- <30ab00e4-53ae-fd9e-1689-c94078a31625@gmail.com>
- <871rhin1yt.fsf@kernel.org>
- <ec15a515-6dbc-1224-a457-d5ac4a4db280@gmail.com>
- <87eel7q9bk.fsf@kernel.org>
- <326aa23e-fabd-f3d6-4778-d036858413a2@gmail.com>
- <87blgar2ow.fsf@kernel.org>
- <e21a5a77-9017-4cbe-a228-85357d660da5@gmail.com>
- <87d00py4sj.fsf@kernel.org>
- <cdb37a4c-2815-0068-1707-2e9163d1a93c@gmail.com>
-Date:   Mon, 09 Nov 2020 09:00:47 +0200
-Message-ID: <87wnyv2ew0.fsf@kernel.org>
+        id S1726127AbgKIIVl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Nov 2020 03:21:41 -0500
+IronPort-SDR: SQK8nSCUtXhY69jb39xP1V0HRN07K0I3wZl0rkSB7QwkDBXu/Psnhz5d0nVgMDpAn7kbD7HmDW
+ 3pxeWm6thlNQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9799"; a="167180726"
+X-IronPort-AV: E=Sophos;i="5.77,463,1596524400"; 
+   d="scan'208";a="167180726"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2020 00:21:41 -0800
+IronPort-SDR: 1QHL9hl5i/AFL5m9rnjISD4M/EbsLnbNoQDPRvHfBv8CUSjc5dWVtuJuHlqqEj2tpfDamD6X4d
+ Rz/t/yBYhx6A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,463,1596524400"; 
+   d="scan'208";a="427917472"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 09 Nov 2020 00:21:38 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 09 Nov 2020 10:21:38 +0200
+Date:   Mon, 9 Nov 2020 10:21:38 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH v2 1/6] platform/chrome: cros_ec_typec: Make disc_done
+ flag partner-only
+Message-ID: <20201109082138.GC4062920@kuha.fi.intel.com>
+References: <20201106184104.939284-1-pmalani@chromium.org>
+ <20201106184104.939284-2-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201106184104.939284-2-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Nov 06, 2020 at 10:40:59AM -0800, Prashant Malani wrote:
+> Change the disc_done flag, which indicates whether PD discovery is
+> complete, to sop_disc_done instead, since we will process SOP and SOP'
+> discovery data separately.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Hi,
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Ferry Toth <fntoth@gmail.com> writes:
->> I don't suppose you have a USB sniffer, do you?
-> No, I don't have one of those.
->> Andy, could you see if you can reproduce the same behavior with a
->> sniffer? It really seems like this either caused by the host side or
->> something outside dwc3. Perhaps the PHY is going bonkers?
->>
->> cheers
->
-> But got other inspiration: like you say dwc3 is behaving normally, so 
-> problem might be elsewhere right?
->
-> Now, to make gadget working I needed to apply the experiment from Jack Pham:
->
-> https://github.com/edison-fw/linux/commit/da90cb63fc8f0ce18805f262d4d6b5b4d8c11d5c
->
-> But now Jack has already sent in "[PATCH v3] usb: gadget: audio: Free 
-> requests only after callback"
->
-> So, removing the experiment and adding PATCH 3, this issue appears to go 
-> away.
->
-> And indeed this fixes a problem in u_audio.c, not in dwc3.
->
-> Thanks all, I'm looking forward to the patch to land in 5.10-rc3/4.
+> ---
+> 
+> Changes in v2:
+> - No changes.
+> 
+>  drivers/platform/chrome/cros_ec_typec.c | 19 +++++++------------
+>  1 file changed, 7 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> index ce031a10eb1b..801c3d2c1fbd 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -57,8 +57,8 @@ struct cros_typec_port {
+>  	/* Port alt modes. */
+>  	struct typec_altmode p_altmode[CROS_EC_ALTMODE_MAX];
+>  
+> -	/* Flag indicating that PD discovery data parsing is completed. */
+> -	bool disc_done;
+> +	/* Flag indicating that PD partner discovery data parsing is completed. */
+> +	bool sop_disc_done;
+>  	struct ec_response_typec_discovery *sop_disc;
+>  	struct list_head partner_mode_list;
+>  };
+> @@ -210,7 +210,7 @@ static void cros_typec_remove_partner(struct cros_typec_data *typec,
+>  	typec_unregister_partner(port->partner);
+>  	port->partner = NULL;
+>  	memset(&port->p_identity, 0, sizeof(port->p_identity));
+> -	port->disc_done = false;
+> +	port->sop_disc_done = false;
+>  }
+>  
+>  static void cros_unregister_ports(struct cros_typec_data *typec)
+> @@ -727,18 +727,13 @@ static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num
+>  		return;
+>  	}
+>  
+> -	if (typec->ports[port_num]->disc_done)
+> -		return;
+> -
+>  	/* Handle any events appropriately. */
+> -	if (resp.events & PD_STATUS_EVENT_SOP_DISC_DONE) {
+> +	if (resp.events & PD_STATUS_EVENT_SOP_DISC_DONE && !typec->ports[port_num]->sop_disc_done) {
+>  		ret = cros_typec_handle_sop_disc(typec, port_num);
+> -		if (ret < 0) {
+> +		if (ret < 0)
+>  			dev_err(typec->dev, "Couldn't parse SOP Disc data, port: %d\n", port_num);
+> -			return;
+> -		}
+> -
+> -		typec->ports[port_num]->disc_done = true;
+> +		else
+> +			typec->ports[port_num]->sop_disc_done = true;
+>  	}
+>  }
+>  
 
-Awesome!!! Do you want to reply to Jack's patch with a Tested-by?
+thanks,
 
 -- 
-balbi
+heikki
