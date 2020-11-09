@@ -2,89 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 406B22AB262
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 09:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E292AB25C
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 09:27:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729236AbgKII3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 03:29:33 -0500
-Received: from cable.insite.cz ([84.242.75.189]:53648 "EHLO cable.insite.cz"
+        id S1727311AbgKII1n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 03:27:43 -0500
+Received: from mga05.intel.com ([192.55.52.43]:2548 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726127AbgKII3d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 03:29:33 -0500
-X-Greylist: delayed 312 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Nov 2020 03:29:32 EST
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 0A5BCA93253BA;
-        Mon,  9 Nov 2020 09:24:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1604910257; bh=GFxrZmOjHf1coQIZ1tOskOK/f3baZkB6oWTLPzXpIoY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=QK965PRVN184B0sSUibHV8LDjeZP1b6YeVUWkE+vPMzR6Nw1ea0+BvqoUbM1dVlvk
-         TZxi5t/UoTE/pPAemRcRmufhbOkkfWyQEX2NEvPzvqGAsM7JKCjlfBlxzqL7+7E4/x
-         c0luAoi5TDzVdhxG/SPV9PJnIBwm1Y9LHsxHm9PA=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bDuFcrYv9yJ3; Mon,  9 Nov 2020 09:24:11 +0100 (CET)
-Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 7790AA93158DC;
-        Mon,  9 Nov 2020 09:24:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1604910251; bh=GFxrZmOjHf1coQIZ1tOskOK/f3baZkB6oWTLPzXpIoY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=l6P/zTnZu7xLX3vRtuzZnvQis65mA+6RXJsccfWKwyZODGmO+BR9yhV1e1iZdSaxb
-         ckaUe8KOZR0DFu+mlnPuX5sAPdZrXoasZ4WhZtOQKKREa6th2adeOUzAOcSpRkOoIJ
-         2TCCWt6bX3z80NoZ6U1y4tKl5Fi0DQvePR4mvyvw=
-Subject: Re: [PATCH 3/3] usb: gadget: u_audio: add real feedback
- implementation
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>, balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, gschmottlach@gmail.com
-References: <1604794711-8661-1-git-send-email-ruslan.bilovol@gmail.com>
- <1604794711-8661-4-git-send-email-ruslan.bilovol@gmail.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <cbdd5e54-87e8-98f2-becb-692c125ae456@ivitera.com>
-Date:   Mon, 9 Nov 2020 09:24:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1725854AbgKII1n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Nov 2020 03:27:43 -0500
+IronPort-SDR: fSkMqY3SJCvmwxqcxpxhU89KCvJGkc/lz3P+2IQlckHKjmIzQf0ZVpmf8DAwJMiex9IxfFZHtE
+ FZa98j4ua2WA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9799"; a="254474375"
+X-IronPort-AV: E=Sophos;i="5.77,463,1596524400"; 
+   d="scan'208";a="254474375"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2020 00:27:42 -0800
+IronPort-SDR: Lj6pTrFm4NEjQGjSR9ul59SY//xesgg3qG0lyvUg/KmMKSN3GnTOorKx2hDTShHj8M0lWYnIzz
+ g05b0aB7MWcg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,463,1596524400"; 
+   d="scan'208";a="427919571"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 09 Nov 2020 00:27:38 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 09 Nov 2020 10:27:38 +0200
+Date:   Mon, 9 Nov 2020 10:27:38 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH v2 4/6] platform/chrome: cros_ec_typec: Register cable
+Message-ID: <20201109082738.GF4062920@kuha.fi.intel.com>
+References: <20201106184104.939284-1-pmalani@chromium.org>
+ <20201106184104.939284-5-pmalani@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <1604794711-8661-4-git-send-email-ruslan.bilovol@gmail.com>
-Content-Type: text/plain; charset=iso-8859-2
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201106184104.939284-5-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bilovol,
+On Fri, Nov 06, 2020 at 10:41:06AM -0800, Prashant Malani wrote:
+> When the Chrome Embedded Controller notifies the driver that SOP'
+> discovery is complete, retrieve the PD discovery data and register a
+> cable object with the Type C connector class framework.
+> 
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Dne 08. 11. 20 v 1:18 Ruslan Bilovol napsal(a):
-> This adds interface between userspace and feedback
-> endpoint to report real feedback frequency to the Host.
-> 
-> Current implementation adds new userspace interface
-> ALSA mixer control "PCM Feedback Frequency Hz" (similar
-> to aloop driver's "PCM Rate Shift 100000" mixer control)
-> 
-> We allow +/-20% deviation of nominal sampling frequency,
-> that usually is more than enough in real-world usecases
-> 
-> Usage of this new control is easy to implement in
-> existing userspace tools like alsaloop from alsa-utils.
-> 
-> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  drivers/usb/gadget/function/f_uac2.c  |  4 ++
->  drivers/usb/gadget/function/u_audio.c | 93 +++++++++++++++++++++++++++++++++++
->  drivers/usb/gadget/function/u_audio.h |  7 +++
->  3 files changed, 104 insertions(+)
+> 
+> Changes in v2:
+> - No changes.
+> 
+>  drivers/platform/chrome/cros_ec_typec.c | 67 +++++++++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+> 
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> index 3c8ff07c8803..5e7f0b4ebbec 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -44,8 +44,11 @@ struct cros_typec_port {
+>  	/* Initial capabilities for the port. */
+>  	struct typec_capability caps;
+>  	struct typec_partner *partner;
+> +	struct typec_cable *cable;
+>  	/* Port partner PD identity info. */
+>  	struct usb_pd_identity p_identity;
+> +	/* Port cable PD identity info. */
+> +	struct usb_pd_identity c_identity;
+>  	struct typec_switch *ori_sw;
+>  	struct typec_mux *mux;
+>  	struct usb_role_switch *role_sw;
+> @@ -59,6 +62,7 @@ struct cros_typec_port {
+>  
+>  	/* Flag indicating that PD partner discovery data parsing is completed. */
+>  	bool sop_disc_done;
+> +	bool sop_prime_disc_done;
+>  	struct ec_response_typec_discovery *disc_data;
+>  	struct list_head partner_mode_list;
+>  };
+> @@ -213,6 +217,17 @@ static void cros_typec_remove_partner(struct cros_typec_data *typec,
+>  	port->sop_disc_done = false;
+>  }
+>  
+> +static void cros_typec_remove_cable(struct cros_typec_data *typec,
+> +				    int port_num)
+> +{
+> +	struct cros_typec_port *port = typec->ports[port_num];
+> +
+> +	typec_unregister_cable(port->cable);
+> +	port->cable = NULL;
+> +	memset(&port->c_identity, 0, sizeof(port->c_identity));
+> +	port->sop_prime_disc_done = false;
+> +}
+> +
+>  static void cros_unregister_ports(struct cros_typec_data *typec)
+>  {
+>  	int i;
+> @@ -224,6 +239,9 @@ static void cros_unregister_ports(struct cros_typec_data *typec)
+>  		if (typec->ports[i]->partner)
+>  			cros_typec_remove_partner(typec, i);
+>  
+> +		if (typec->ports[i]->cable)
+> +			cros_typec_remove_cable(typec, i);
+> +
+>  		usb_role_switch_put(typec->ports[i]->role_sw);
+>  		typec_switch_put(typec->ports[i]->ori_sw);
+>  		typec_mux_put(typec->ports[i]->mux);
+> @@ -600,6 +618,9 @@ static void cros_typec_set_port_params_v1(struct cros_typec_data *typec,
+>  		if (!typec->ports[port_num]->partner)
+>  			return;
+>  		cros_typec_remove_partner(typec, port_num);
+> +
+> +		if (typec->ports[port_num]->cable)
+> +			cros_typec_remove_cable(typec, port_num);
+>  	}
+>  }
+>  
+> @@ -679,6 +700,43 @@ static void cros_typec_parse_pd_identity(struct usb_pd_identity *id,
+>  		id->vdo[i - 3] = disc->discovery_vdo[i];
+>  }
+>  
+> +static int cros_typec_handle_sop_prime_disc(struct cros_typec_data *typec, int port_num)
+> +{
+> +	struct cros_typec_port *port = typec->ports[port_num];
+> +	struct ec_response_typec_discovery *disc = port->disc_data;
+> +	struct typec_cable_desc desc = {};
+> +	struct ec_params_typec_discovery req = {
+> +		.port = port_num,
+> +		.partner_type = TYPEC_PARTNER_SOP_PRIME,
+> +	};
+> +	int ret = 0;
+> +
+> +	memset(disc, 0, EC_PROTO2_MAX_RESPONSE_SIZE);
+> +	ret = cros_typec_ec_command(typec, 0, EC_CMD_TYPEC_DISCOVERY, &req, sizeof(req),
+> +				    disc, EC_PROTO2_MAX_RESPONSE_SIZE);
+> +	if (ret < 0) {
+> +		dev_err(typec->dev, "Failed to get SOP' discovery data for port: %d\n", port_num);
+> +		goto sop_prime_disc_exit;
+> +	}
+> +
+> +	/* Parse the PD identity data, even if only 0s were returned. */
+> +	cros_typec_parse_pd_identity(&port->c_identity, disc);
+> +
+> +	if (disc->identity_count != 0)
+> +		desc.active = PD_IDH_PTYPE(port->c_identity.id_header) == IDH_PTYPE_ACABLE;
+> +
+> +	desc.identity = &port->c_identity;
+> +
+> +	port->cable = typec_register_cable(port->port, &desc);
+> +	if (IS_ERR(port->cable)) {
+> +		ret = PTR_ERR(port->cable);
+> +		port->cable = NULL;
+> +	}
+> +
+> +sop_prime_disc_exit:
+> +	return ret;
+> +}
+> +
+>  static int cros_typec_handle_sop_disc(struct cros_typec_data *typec, int port_num)
+>  {
+>  	struct cros_typec_port *port = typec->ports[port_num];
+> @@ -746,6 +804,15 @@ static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num
+>  		else
+>  			typec->ports[port_num]->sop_disc_done = true;
+>  	}
+> +
+> +	if (resp.events & PD_STATUS_EVENT_SOP_PRIME_DISC_DONE &&
+> +	    !typec->ports[port_num]->sop_prime_disc_done) {
+> +		ret = cros_typec_handle_sop_prime_disc(typec, port_num);
+> +		if (ret < 0)
+> +			dev_err(typec->dev, "Couldn't parse SOP' Disc data, port: %d\n", port_num);
+> +		else
+> +			typec->ports[port_num]->sop_prime_disc_done = true;
+> +	}
+>  }
+>  
+>  static int cros_typec_port_update(struct cros_typec_data *typec, int port_num)
+> -- 
+> 2.29.1.341.ge80a0c044ae-goog
 
-Thanks a lot for the great implementation. IIUC the control element sets
-integer frequency in Hz. Often the clocks deviate by small fractions of
-Hz. Please have you considered the value to be e.g. in 100th of Hz for
-finer control of the samplerate? Similar to the PCM Rate Shift which has
-a step 100000th of the samplerate.
+thanks,
 
-Thanks a lot.
-
-Best regards,
-
-Pavel.
+-- 
+heikki
