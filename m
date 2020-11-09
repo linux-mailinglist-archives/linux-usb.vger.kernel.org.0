@@ -2,190 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AA62AC2B9
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 18:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 444BB2AC43E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 19:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731801AbgKIRns (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 12:43:48 -0500
-Received: from mga12.intel.com ([192.55.52.136]:17898 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730115AbgKIRns (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 12:43:48 -0500
-IronPort-SDR: lJW53+Xu+twISsMs2YCEn++IFXFE3i4PCem8p8umKARrSklzJTlI6J0MDNCA4T4/Ui9+M/zkNq
- jTFa01VlDz+A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9800"; a="149122478"
-X-IronPort-AV: E=Sophos;i="5.77,463,1596524400"; 
-   d="scan'208";a="149122478"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2020 09:43:47 -0800
-IronPort-SDR: 9wKt7CZZSj9gX03zQZ6B8RtbPf7hnUs7N8ahExnRCbL6fk1G02yQiIna1np7evYvsDhPzWJnMx
- hHfXAgYGKrig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,463,1596524400"; 
-   d="scan'208";a="529433843"
-Received: from lkp-server01.sh.intel.com (HELO d0be80f1a028) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Nov 2020 09:43:45 -0800
-Received: from kbuild by d0be80f1a028 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kcBCj-0000KO-7g; Mon, 09 Nov 2020 17:43:45 +0000
-Date:   Tue, 10 Nov 2020 01:43:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [balbi-usb:testing/next] BUILD SUCCESS
- e5bf91cd194629853ac2aaab3dd2ebac41d6a899
-Message-ID: <5fa97fa6.hIfRycjJk1ES/kW/%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1730130AbgKIS5a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 13:57:30 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35826 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729451AbgKIS53 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 13:57:29 -0500
+Received: by mail-ot1-f67.google.com with SMTP id n11so10000353ota.2;
+        Mon, 09 Nov 2020 10:57:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Yp+Myu+RbCp/hhggXGpFgymnJTdUJhcL8XQ+E+Agqsg=;
+        b=uF4ICZHwbNkw+7QU963JESi95i2PMWWRg5B3jNapcoVYnUNZhyHvFCP507UwGqtAUV
+         ZN8PnOGC8FMktOUxkw9j04RYTcPKKTdHS6XQcox8mN+/o8BfxvWPjLQVBVUWTicQKMd5
+         NxVuK/dPL1ETwELkKsyQ20kand+UKcOGVVwY3znsfjO7AAku4U2CE11AiYRlEbcoZqUh
+         ROFm+nulGhwqRdzNwg5xqngAqeek5zhUqVW2A66dh7lzgV3Te6kEJ5qNkJ/0nNkxDHFl
+         3tIXRDYzK+W4cwK8/m/nvbNU9ZlvEhelrA7v8JHyqhzK+m2xTWVFrdnflT7MOT9benoz
+         SXww==
+X-Gm-Message-State: AOAM5339xECIA6+Y8hThpXO0StsvzSD3qk/Rw95Ptp3u5NHP4qSZoaVx
+        2wxQ0Z+Gjq8B7ACJZkpsgg==
+X-Google-Smtp-Source: ABdhPJwTrJM8+DV6yoj0yZkvksdAC3aJsLLLrx1WHxgB39fkbPYVnHOpW6Iq5AkW4A4fHBNfxiLHQg==
+X-Received: by 2002:a05:6830:2093:: with SMTP id y19mr10923388otq.219.1604948248350;
+        Mon, 09 Nov 2020 10:57:28 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id o29sm2726530ote.7.2020.11.09.10.57.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2020 10:57:27 -0800 (PST)
+Received: (nullmailer pid 1586563 invoked by uid 1000);
+        Mon, 09 Nov 2020 18:57:25 -0000
+Date:   Mon, 9 Nov 2020 12:57:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     devel@driverdev.osuosl.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        linux-pwm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Peter Geis <pgwipeout@gmail.com>, linux-mmc@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-media@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v1 01/30] dt-bindings: host1x: Document OPP and voltage
+ regulator properties
+Message-ID: <20201109185725.GA1586511@bogus>
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <20201104234427.26477-2-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20201104234427.26477-2-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
-branch HEAD: e5bf91cd194629853ac2aaab3dd2ebac41d6a899  arm64: dts: rockchip: enable rk3328-rock64 usb3 nodes
+On Thu, 05 Nov 2020 02:43:58 +0300, Dmitry Osipenko wrote:
+> Document new DVFS OPP table and voltage regulator properties of the
+> Host1x bus and devices sitting on the bus.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../display/tegra/nvidia,tegra20-host1x.txt   | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+> 
 
-elapsed time: 720m
-
-configs tested: 126
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arc                        nsim_700_defconfig
-powerpc                       holly_defconfig
-xtensa                  audio_kc705_defconfig
-sh                           se7343_defconfig
-arm                  colibri_pxa270_defconfig
-x86_64                           allyesconfig
-openrisc                 simple_smp_defconfig
-xtensa                  cadence_csp_defconfig
-mips                      maltaaprp_defconfig
-powerpc                    sam440ep_defconfig
-powerpc                     pseries_defconfig
-m68k                         amcore_defconfig
-arm                         s5pv210_defconfig
-mips                  cavium_octeon_defconfig
-m68k                             alldefconfig
-nios2                         10m50_defconfig
-powerpc                     tqm8548_defconfig
-c6x                        evmc6474_defconfig
-sh                          rsk7201_defconfig
-nios2                         3c120_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                          badge4_defconfig
-arm                       multi_v4t_defconfig
-h8300                               defconfig
-arm                          collie_defconfig
-arc                                 defconfig
-mips                      fuloong2e_defconfig
-sh                         microdev_defconfig
-arm                            mmp2_defconfig
-sh                        sh7757lcr_defconfig
-um                           x86_64_defconfig
-mips                          rm200_defconfig
-powerpc                      bamboo_defconfig
-arm                            u300_defconfig
-arm                       versatile_defconfig
-arc                              alldefconfig
-arm                        multi_v5_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                 mpc836x_mds_defconfig
-arm                       omap2plus_defconfig
-mips                           ip27_defconfig
-powerpc                 mpc8560_ads_defconfig
-mips                        qi_lb60_defconfig
-m68k                        m5307c3_defconfig
-arm                             rpc_defconfig
-m68k                        m5272c3_defconfig
-c6x                              alldefconfig
-powerpc                      pmac32_defconfig
-arm                          imote2_defconfig
-arc                        vdk_hs38_defconfig
-arm                          pcm027_defconfig
-arm                        realview_defconfig
-mips                          rb532_defconfig
-mips                        nlm_xlr_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20201109
-x86_64               randconfig-a002-20201109
-x86_64               randconfig-a003-20201109
-x86_64               randconfig-a005-20201109
-x86_64               randconfig-a006-20201109
-x86_64               randconfig-a001-20201109
-i386                 randconfig-a004-20201109
-i386                 randconfig-a006-20201109
-i386                 randconfig-a005-20201109
-i386                 randconfig-a001-20201109
-i386                 randconfig-a003-20201109
-i386                 randconfig-a002-20201109
-i386                 randconfig-a014-20201109
-i386                 randconfig-a015-20201109
-i386                 randconfig-a013-20201109
-i386                 randconfig-a016-20201109
-i386                 randconfig-a011-20201109
-i386                 randconfig-a012-20201109
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a012-20201109
-x86_64               randconfig-a015-20201109
-x86_64               randconfig-a013-20201109
-x86_64               randconfig-a011-20201109
-x86_64               randconfig-a014-20201109
-x86_64               randconfig-a016-20201109
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Rob Herring <robh@kernel.org>
