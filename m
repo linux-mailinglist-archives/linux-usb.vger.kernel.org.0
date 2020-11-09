@@ -2,187 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A91C2AB553
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 11:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34872AB647
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 12:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729197AbgKIKsV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 05:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728865AbgKIKsU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 05:48:20 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD549C0613CF
-        for <linux-usb@vger.kernel.org>; Mon,  9 Nov 2020 02:48:18 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id e7so7740581pfn.12
-        for <linux-usb@vger.kernel.org>; Mon, 09 Nov 2020 02:48:18 -0800 (PST)
+        id S1729478AbgKILNN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 06:13:13 -0500
+Received: from mail-co1nam11on2071.outbound.protection.outlook.com ([40.107.220.71]:65025
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729119AbgKILNM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Nov 2020 06:13:12 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fItWsM+L6dWA8L1+1s3kljsXTk/f8kJySeePwlMVaCeeB/7b7nC3L0UNBFkWeWHzjfzn0fzs37RF7OmA+Oem6WWDx506HFZkzfcBl2wQ/qTO3HBenAfIYCdH6GtCz4qVIdGQ3taKeWyOjnIEH19I0/674QYph7aZmTINW/Jabco09NaBERmdw3hZInOYQNLgOrzIoLYgUr6P5U6dwwiNDN+AGyG5+v9nd5Y+rjjwTldl/9itvX0yfWv6M4wvvgVaCZOcEhTKSZW2tFjDKTR0Qfb5OdmjhupwnWj5WP6cTme3CyBFYDpOTCbj3bE8U5b8dLYkvhlaknSy2YsrtIe6bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y14Fnt2E3Gf1b3vRjYy6Z1Iss4h4LbRzLwwNACLnkv4=;
+ b=kJ/5F+wUR/rAxQEHFykmSolIWA/Mr24edTR/ITlnAOCZNPq5kNHdlH6zJoTEnPuy0m0vcSd4I/xxzoW3DqSPYjg0CIFTZadwO0i9h15DVlSNbFk0UslBL4mrolkq0Ati9sSBSRXHK04IqWWlVLyDa2XOb6rWRVG5cVDHBJqgdK/Y3+fmwxpvyyN3zKuHerudCGO19W+uIH8FodNHiTIRcgQIVMLuzorCBbI2h714gLGNqjCJnYlrgkzSbNP30rIzM9CaNEF94FpHbiVn6c8KztmS9WkML+jju8hScZYJ4aJs9vOMYZv+U7swWy2yFnm224bJ8qQXpFS/UP+2yG+K5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=CnzmfXvdlYjB/xGhMH1s5X9mVREZjlgk00e3TCstA/c=;
-        b=N7p1NWKdINfWv0+ikoXwYBA1+6Dl0H3Ul8D8ZRpULpKzClkUNIhhultYtn26GSebSa
-         EzOw/zPRQh+x0rOuRGvYMbxGo8V33lrIHeoyJXqMXdA2d4t10Relai4vSyOLVr7WEjUr
-         ysIoNjOGFhgNoRDR8slmiDsV0OY3kwTkcKbKwZm56isS6U6Hr49FTIbyFFXe7waOfeHe
-         Q2dMz1y0S9ctQJ8Qcy8NnpqCUlC08GnwIM6Ymp+J/jTj1902Id+8JWsQLkl12F/wPzMK
-         8K0qlaHm4jvdJo8mB/RQXNXc1b20mpmiuMSJ8DmQuJDcHGk+Am4GH+VRgcU61Zt93KeT
-         5waQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=CnzmfXvdlYjB/xGhMH1s5X9mVREZjlgk00e3TCstA/c=;
-        b=bTM+ku4K7S7tbdzNO44DpkhFLqw2wOJGT6Ax2tILumQcleS4/KpPZnQ/Aqlmz1VW8q
-         +hbxt2nA/mL41NMXYs71toTTMc4RSkPKW2j2JljKGttkem9/6vB28Rqib4KgD7L9+Ni5
-         Q1geHweIlp8+rxZ6/GAR+rbIdxqpXScrbTjoACt8t3IE5fa6GALWA0bAxKIFjjrNQq+3
-         FFN9m9J+vJYuZeq8Kyy7JN34Il02O6hm5yOpHEZZJ9j42b/HAZFaB6B4AL+4KkKQBrHW
-         0JmCENePkzOPfAM8G4k4kq6C/PPNAJ26kCAu4MTAqtHbSGG1MVpIpioY2NfwCvvlDfzt
-         FJpQ==
-X-Gm-Message-State: AOAM532Bb7M67hsXQtEZlUpbNFMSmOH+/bw7DaQihLfebdvKwnztOqJk
-        WrO2jCRhcFd5+tixZQ9418kW9V1c6bNwSym4VxwjBgMT4PJVCw==
-X-Google-Smtp-Source: ABdhPJxp8d2q0JLdOHqNRCVNO5df/bOkXaVRHfKkOJW0kVe5D9wL9q08aWQ2lnDyd07IvV1geawdriQjDL7+/VsIhV4=
-X-Received: by 2002:a65:5c4c:: with SMTP id v12mr12568427pgr.119.1604918898093;
- Mon, 09 Nov 2020 02:48:18 -0800 (PST)
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y14Fnt2E3Gf1b3vRjYy6Z1Iss4h4LbRzLwwNACLnkv4=;
+ b=Jv+sh3cjljrFPllsHnlGQmi2bk1qO1JnKEBB0zElay/TeloJ/NxqbH9JN9w/O7Ao7Cx4PKyeqDuGAy3sRgZ/ibQHjSo7TZ7MzZjMoihe1xoOkyn4JyWRhvQ5/oyuKuG0uTkvtPcB9uql4QqjrbyNK3+ORfoBj6xpmOMljZKf2ow=
+Authentication-Results: armlinux.org.uk; dkim=none (message not signed)
+ header.d=none;armlinux.org.uk; dmarc=none action=none
+ header.from=synaptics.com;
+Received: from SN2PR03MB2383.namprd03.prod.outlook.com (2603:10b6:804:d::23)
+ by SA0PR03MB5497.namprd03.prod.outlook.com (2603:10b6:806:b5::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Mon, 9 Nov
+ 2020 11:13:09 +0000
+Received: from SN2PR03MB2383.namprd03.prod.outlook.com
+ ([fe80::49be:5ea3:8961:a22]) by SN2PR03MB2383.namprd03.prod.outlook.com
+ ([fe80::49be:5ea3:8961:a22%6]) with mapi id 15.20.3541.024; Mon, 9 Nov 2020
+ 11:13:09 +0000
+Date:   Mon, 9 Nov 2020 19:12:57 +0800
+From:   Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH usb-next] usb: dwc3: Use devm_of_platform_populate
+Message-ID: <20201109191257.1074ad74@xhacker.debian>
+In-Reply-To: <20201109103414.GF1559@shell.armlinux.org.uk>
+References: <20201109095953.7f810239@xhacker.debian>
+        <20201109103414.GF1559@shell.armlinux.org.uk>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.147.44.204]
+X-ClientProxiedBy: BYAPR01CA0002.prod.exchangelabs.com (2603:10b6:a02:80::15)
+ To SN2PR03MB2383.namprd03.prod.outlook.com (2603:10b6:804:d::23)
 MIME-Version: 1.0
-From:   Vladimir Yerilov <openmindead@gmail.com>
-Date:   Mon, 9 Nov 2020 20:48:06 +1000
-Message-ID: <CAB31r6UbF_Q-APvfmxanvMZOYJZwr0eEPwMQ8EGWw3-VkJtHhQ@mail.gmail.com>
-Subject: Power supply detection issue caused by ucsi_psy?
-To:     linux-usb@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: multipart/mixed; boundary="000000000000d0cf5d05b3aa4ce0"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from xhacker.debian (192.147.44.204) by BYAPR01CA0002.prod.exchangelabs.com (2603:10b6:a02:80::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.25 via Frontend Transport; Mon, 9 Nov 2020 11:13:03 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2f915fa2-8619-4547-d3b0-08d884a07072
+X-MS-TrafficTypeDiagnostic: SA0PR03MB5497:
+X-Microsoft-Antispam-PRVS: <SA0PR03MB54975E43FBDCF26F691D613EEDEA0@SA0PR03MB5497.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: A70KJyDQs0iMkggiauyxvRSv0FWlMeEw6NN3Nt+aUDKB5DXvU+18MQZ9elhPI80VsZdboalPWakIimGkGzWRFwpAYq6hQbMz5FsLil2On1YyGd71Npc0fdSEjD/w+ObNh6tfCFWCm9PcjMgIBjdncX2SII3258ImirdjLU7gwXprIupbBuowxuH6TX6Hlxyon9khakN7bzZnWKL5bCVar61mrbWd99AqjN+QMPF76WA1u8Is/dLpTrERa3loGKvFAE+RyhJEKhfDKWwW9vLLc2a/jzTSCwlB+c7x88JADhfcoG+6l3V7j2glFOkHNPW9IIzm+UM4EZgMzEVWBX+TFQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN2PR03MB2383.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(346002)(39860400002)(376002)(396003)(86362001)(186003)(478600001)(1076003)(316002)(956004)(16526019)(6666004)(6506007)(83380400001)(5660300002)(7696005)(8936002)(66556008)(55016002)(9686003)(66946007)(54906003)(6916009)(8676002)(52116002)(7416002)(26005)(2906002)(4326008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: iHurbci9xh/1uLgRVhmw2kzWXjWAqVXozSsC2Il5C0pj0+9tIsxW+3Ray01GCIT/Ox0hAMsl/gxxoBVXW3oYA6gbCO19LLcquvB+KhqZo9seflM2/B61w+0KNlB8bMIGebdavIxqN09GdmPHreh9j/i31i2WD/NF1gJVcGu4k6ywFtjTwmMDZvkz355Us8ToEwNdrGUG0cYeoQMclseG9M9W6awbEEN3CL+lVI1PC6l+ygH/fSjS82FkyB22iSI6cZSv9Io3IQTk2q5yfJEJQdnPxi509pazdlWj/kj/f81eNLupitTW9PRQWCxiNLpqEAORwtVb/TNCBGMllHd+HuN39i74WwQLZteIy45DRnUyfPE6xjEiJS7frFLNUorETb7+CpwxLSruU/JvwU/63eYKd4dSOPhtA06FzjRddlKku13ww8KNnsqAZLKIjUW6r99Le94IQbfEJweslWHOyH67cI8BIoRkscjSYLWwLLTkr9v2YpwD5igykkx3+p9OnxEUBIiw7RgMzd4HvMBnHfBz9Eh8GjztF2go/RcwefiiWKFIq3XaXZ8CV8V9U1xi4Aho1k2zAjAvutfSaZmESy9k8lkVciBr+7hQsr4zNMcumX/SEoBqdA0MZCogcNbeUEm5xfczYmT2o64X0vlqkA==
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f915fa2-8619-4547-d3b0-08d884a07072
+X-MS-Exchange-CrossTenant-AuthSource: SN2PR03MB2383.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2020 11:13:09.1231
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qOGMTeoOtl0ctDI3KiZWfizJjt9UvhZaBanUy228uPqPz18cw3SuOe4zHP+0dKIolmS8qMivC/jpV5qbRi2EWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR03MB5497
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000d0cf5d05b3aa4ce0
-Content-Type: text/plain; charset="UTF-8"
+On Mon, 9 Nov 2020 10:34:14 +0000 Russell King - ARM Linux admin  wrote:
 
-Good day everyone,
+> 
+> 
+> On Mon, Nov 09, 2020 at 09:59:53AM +0800, Jisheng Zhang wrote:
+> > diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> > index 417e05381b5d..83015bb7b926 100644
+> > --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
+> > +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> > @@ -702,7 +702,6 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+> >  {
+> >       struct dwc3_meson_g12a  *priv;
+> >       struct device           *dev = &pdev->dev;
+> > -     struct device_node      *np = dev->of_node;
+> >       void __iomem *base;
+> >       int ret, i;
+> >
+> > @@ -794,7 +793,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+> >                       goto err_phys_power;
+> >       }
+> >
+> > -     ret = of_platform_populate(np, NULL, NULL, dev);
+> > +     ret = devm_of_platform_populate(dev);
+> >       if (ret)
+> >               goto err_phys_power;
+> >
+> > @@ -832,8 +831,6 @@ static int dwc3_meson_g12a_remove(struct platform_device *pdev)
+> >       if (priv->drvdata->otg_switch_supported)
+> >               usb_role_switch_unregister(priv->role_switch);
+> >
+> > -     of_platform_depopulate(dev);
+> > -
+> >       for (i = 0 ; i < PHY_COUNT ; ++i) {
+> >               phy_power_off(priv->phys[i]);
+> >               phy_exit(priv->phys[i]);  
+> 
+> Does it matter that the order that things happen in
+> dwc3_meson_g12a_remove() is changed as a result of your patch? Was
+> the code relying on the platform devices being depopulated before
+> powering off the PHYs?
 
-Since linux 5.8 I'm experiencing a problem related to power source
-detection on my laptop. My machine is equipped with 2 typec ports, one
-of them has power delivery and is used for charging, another one has
-only data transfer capability. The issue is, when I unplug the power
-cable, the OS is reporting something like "Battery at 100%, plugged in
-but still discharging" (KDE Plasma notification) - whether another
-port is used or not. I checked with upower, you can see the output for
-kernel 5.4 and 5.10 attached. In brief, on 5.8 onwards I have some
-"line_power_ucsi_source_psy_USBC000o001" device which is considered a
-power supply and that prevents OS to switch to "battery mode" when
-unplugging the cable, instead it thinks there's a power source but not
-powerful enough to charge the battery, upower says this: "on-battery:
-    no", but actually no ac power source is connected.
-I did some research with git bisect up to the merge commit
-`e611c0fe318c6d6827ee2bba660fbc23cf73f7dc` ("Merge tag 'usb-5.8-rc1'
-of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb"), and
-looked through its content. My wild guess based on upower output is
-that a new driver introduced there, /drivers/usb/typec/ucsi/psy.c, is
-responsible for this wrong behavior.
+...
 
-Could you please look into that based on info I'm providing?
-Thank you!
+> 
+> Same here... and for anywhere else in this patch that you're deleting
+> a of_platform_depopulate().
 
--- 
-----
-Best regards,
-Vladimir Yerilov
+oops, good question! I believe it's not safe to move the depopulate after
+the phy_* APIs.
 
---000000000000d0cf5d05b3aa4ce0
-Content-Type: text/plain; charset="US-ASCII"; name="upower_5.10.txt"
-Content-Disposition: attachment; filename="upower_5.10.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_khaf56xu1>
-X-Attachment-Id: f_khaf56xu1
+So please ignore this patch.
 
-RGV2aWNlOiAvb3JnL2ZyZWVkZXNrdG9wL1VQb3dlci9kZXZpY2VzL2xpbmVfcG93ZXJfQURQMAog
-IG5hdGl2ZS1wYXRoOiAgICAgICAgICBBRFAwCiAgcG93ZXIgc3VwcGx5OiAgICAgICAgIHllcwog
-IHVwZGF0ZWQ6ICAgICAgICAgICAgICBTdW4gMDggTm92IDIwMjAgMTU6Mjc6MzkgKzEwICg5NyBz
-ZWNvbmRzIGFnbykKICBoYXMgaGlzdG9yeTogICAgICAgICAgbm8KICBoYXMgc3RhdGlzdGljczog
-ICAgICAgbm8KICBsaW5lLXBvd2VyCiAgICB3YXJuaW5nLWxldmVsOiAgICAgICBub25lCiAgICBv
-bmxpbmU6ICAgICAgICAgICAgICB5ZXMKICAgIGljb24tbmFtZTogICAgICAgICAgJ2FjLWFkYXB0
-ZXItc3ltYm9saWMnCgpEZXZpY2U6IC9vcmcvZnJlZWRlc2t0b3AvVVBvd2VyL2RldmljZXMvYmF0
-dGVyeV9CQVQwCiAgbmF0aXZlLXBhdGg6ICAgICAgICAgIEJBVDAKICB2ZW5kb3I6ICAgICAgICAg
-ICAgICAgU1VOV09EQQogIG1vZGVsOiAgICAgICAgICAgICAgICBSMTVCMDFXCiAgc2VyaWFsOiAg
-ICAgICAgICAgICAgIEFDRkEKICBwb3dlciBzdXBwbHk6ICAgICAgICAgeWVzCiAgdXBkYXRlZDog
-ICAgICAgICAgICAgIFN1biAwOCBOb3YgMjAyMCAxNToyNzozOSArMTAgKDk3IHNlY29uZHMgYWdv
-KQogIGhhcyBoaXN0b3J5OiAgICAgICAgICB5ZXMKICBoYXMgc3RhdGlzdGljczogICAgICAgeWVz
-CiAgYmF0dGVyeQogICAgcHJlc2VudDogICAgICAgICAgICAgeWVzCiAgICByZWNoYXJnZWFibGU6
-ICAgICAgICB5ZXMKICAgIHN0YXRlOiAgICAgICAgICAgICAgIGNoYXJnaW5nCiAgICB3YXJuaW5n
-LWxldmVsOiAgICAgICBub25lCiAgICBlbmVyZ3k6ICAgICAgICAgICAgICA0Ni4xOTggV2gKICAg
-IGVuZXJneS1lbXB0eTogICAgICAgIDAgV2gKICAgIGVuZXJneS1mdWxsOiAgICAgICAgIDQ2LjY2
-NCBXaAogICAgZW5lcmd5LWZ1bGwtZGVzaWduOiAgNjAuMDQgV2gKICAgIGVuZXJneS1yYXRlOiAg
-ICAgICAgIDIuMDU5IFcKICAgIHZvbHRhZ2U6ICAgICAgICAgICAgIDguNjcyIFYKICAgIHRpbWUg
-dG8gZnVsbDogICAgICAgIDEzLjYgbWludXRlcwogICAgcGVyY2VudGFnZTogICAgICAgICAgOTkl
-CiAgICBjYXBhY2l0eTogICAgICAgICAgICA3Ny43MjE1JQogICAgdGVjaG5vbG9neTogICAgICAg
-ICAgbGl0aGl1bS1pb24KICAgIGljb24tbmFtZTogICAgICAgICAgJ2JhdHRlcnktZnVsbC1jaGFy
-Z2luZy1zeW1ib2xpYycKICBIaXN0b3J5IChjaGFyZ2UpOgogICAgMTYwNDgxMzI1OQkwLjAwMAl1
-bmtub3duCiAgSGlzdG9yeSAocmF0ZSk6CiAgICAxNjA0ODEzMjU5CTAuMDAwCXVua25vd24KCkRl
-dmljZTogL29yZy9mcmVlZGVza3RvcC9VUG93ZXIvZGV2aWNlcy9saW5lX3Bvd2VyX3Vjc2lfc291
-cmNlX3BzeV9VU0JDMDAwbzAwMQogIG5hdGl2ZS1wYXRoOiAgICAgICAgICB1Y3NpLXNvdXJjZS1w
-c3ktVVNCQzAwMDowMDEKICBwb3dlciBzdXBwbHk6ICAgICAgICAgeWVzCiAgdXBkYXRlZDogICAg
-ICAgICAgICAgIFN1biAwOCBOb3YgMjAyMCAxNToyNzozOSArMTAgKDk3IHNlY29uZHMgYWdvKQog
-IGhhcyBoaXN0b3J5OiAgICAgICAgICBubwogIGhhcyBzdGF0aXN0aWNzOiAgICAgICBubwogIGxp
-bmUtcG93ZXIKICAgIHdhcm5pbmctbGV2ZWw6ICAgICAgIG5vbmUKICAgIG9ubGluZTogICAgICAg
-ICAgICAgIHllcwogICAgaWNvbi1uYW1lOiAgICAgICAgICAnYWMtYWRhcHRlci1zeW1ib2xpYycK
-CkRldmljZTogL29yZy9mcmVlZGVza3RvcC9VUG93ZXIvZGV2aWNlcy9EaXNwbGF5RGV2aWNlCiAg
-cG93ZXIgc3VwcGx5OiAgICAgICAgIHllcwogIHVwZGF0ZWQ6ICAgICAgICAgICAgICBTdW4gMDgg
-Tm92IDIwMjAgMTU6Mjc6MzkgKzEwICg5NyBzZWNvbmRzIGFnbykKICBoYXMgaGlzdG9yeTogICAg
-ICAgICAgbm8KICBoYXMgc3RhdGlzdGljczogICAgICAgbm8KICBiYXR0ZXJ5CiAgICBwcmVzZW50
-OiAgICAgICAgICAgICB5ZXMKICAgIHN0YXRlOiAgICAgICAgICAgICAgIGNoYXJnaW5nCiAgICB3
-YXJuaW5nLWxldmVsOiAgICAgICBub25lCiAgICBlbmVyZ3k6ICAgICAgICAgICAgICA0Ni4xOTgg
-V2gKICAgIGVuZXJneS1mdWxsOiAgICAgICAgIDQ2LjY2NCBXaAogICAgZW5lcmd5LXJhdGU6ICAg
-ICAgICAgMi4wNTkgVwogICAgdGltZSB0byBmdWxsOiAgICAgICAgMTMuNiBtaW51dGVzCiAgICBw
-ZXJjZW50YWdlOiAgICAgICAgICA5OSUKICAgIGljb24tbmFtZTogICAgICAgICAgJ2JhdHRlcnkt
-ZnVsbC1jaGFyZ2luZy1zeW1ib2xpYycKCkRhZW1vbjoKICBkYWVtb24tdmVyc2lvbjogIDAuOTku
-MTEKICBvbi1iYXR0ZXJ5OiAgICAgIG5vCiAgbGlkLWlzLWNsb3NlZDogICBubwogIGxpZC1pcy1w
-cmVzZW50OiAgeWVzCiAgY3JpdGljYWwtYWN0aW9uOiBIeWJyaWRTbGVlcAo=
---000000000000d0cf5d05b3aa4ce0
-Content-Type: text/plain; charset="US-ASCII"; name="upower_5.10_bat.txt"
-Content-Disposition: attachment; filename="upower_5.10_bat.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_khaf56wh0>
-X-Attachment-Id: f_khaf56wh0
-
-RGV2aWNlOiAvb3JnL2ZyZWVkZXNrdG9wL1VQb3dlci9kZXZpY2VzL2xpbmVfcG93ZXJfQURQMAog
-IG5hdGl2ZS1wYXRoOiAgICAgICAgICBBRFAwCiAgcG93ZXIgc3VwcGx5OiAgICAgICAgIHllcwog
-IHVwZGF0ZWQ6ICAgICAgICAgICAgICBTdW4gMDggTm92IDIwMjAgMTU6Mjk6MjUgKzEwICgxOCBz
-ZWNvbmRzIGFnbykKICBoYXMgaGlzdG9yeTogICAgICAgICAgbm8KICBoYXMgc3RhdGlzdGljczog
-ICAgICAgbm8KICBsaW5lLXBvd2VyCiAgICB3YXJuaW5nLWxldmVsOiAgICAgICBub25lCiAgICBv
-bmxpbmU6ICAgICAgICAgICAgICBubwogICAgaWNvbi1uYW1lOiAgICAgICAgICAnYWMtYWRhcHRl
-ci1zeW1ib2xpYycKCkRldmljZTogL29yZy9mcmVlZGVza3RvcC9VUG93ZXIvZGV2aWNlcy9iYXR0
-ZXJ5X0JBVDAKICBuYXRpdmUtcGF0aDogICAgICAgICAgQkFUMAogIHZlbmRvcjogICAgICAgICAg
-ICAgICBTVU5XT0RBCiAgbW9kZWw6ICAgICAgICAgICAgICAgIFIxNUIwMVcKICBzZXJpYWw6ICAg
-ICAgICAgICAgICAgQUNGQQogIHBvd2VyIHN1cHBseTogICAgICAgICB5ZXMKICB1cGRhdGVkOiAg
-ICAgICAgICAgICAgU3VuIDA4IE5vdiAyMDIwIDE1OjI5OjI1ICsxMCAoMTggc2Vjb25kcyBhZ28p
-CiAgaGFzIGhpc3Rvcnk6ICAgICAgICAgIHllcwogIGhhcyBzdGF0aXN0aWNzOiAgICAgICB5ZXMK
-ICBiYXR0ZXJ5CiAgICBwcmVzZW50OiAgICAgICAgICAgICB5ZXMKICAgIHJlY2hhcmdlYWJsZTog
-ICAgICAgIHllcwogICAgc3RhdGU6ICAgICAgICAgICAgICAgZGlzY2hhcmdpbmcKICAgIHdhcm5p
-bmctbGV2ZWw6ICAgICAgIG5vbmUKICAgIGVuZXJneTogICAgICAgICAgICAgIDQ2LjE5OCBXaAog
-ICAgZW5lcmd5LWVtcHR5OiAgICAgICAgMCBXaAogICAgZW5lcmd5LWZ1bGw6ICAgICAgICAgNDYu
-NjY0IFdoCiAgICBlbmVyZ3ktZnVsbC1kZXNpZ246ICA2MC4wNCBXaAogICAgZW5lcmd5LXJhdGU6
-ICAgICAgICAgMS45OTggVwogICAgdm9sdGFnZTogICAgICAgICAgICAgOC40NCBWCiAgICB0aW1l
-IHRvIGVtcHR5OiAgICAgICAyMy4xIGhvdXJzCiAgICBwZXJjZW50YWdlOiAgICAgICAgICA5OSUK
-ICAgIGNhcGFjaXR5OiAgICAgICAgICAgIDc3LjcyMTUlCiAgICB0ZWNobm9sb2d5OiAgICAgICAg
-ICBsaXRoaXVtLWlvbgogICAgaWNvbi1uYW1lOiAgICAgICAgICAnYmF0dGVyeS1mdWxsLXN5bWJv
-bGljJwogIEhpc3RvcnkgKGNoYXJnZSk6CiAgICAxNjA0ODEzMzY1CTk5LjAwMAljaGFyZ2luZwog
-IEhpc3RvcnkgKHJhdGUpOgogICAgMTYwNDgxMzM2NQkxLjk5OAljaGFyZ2luZwoKRGV2aWNlOiAv
-b3JnL2ZyZWVkZXNrdG9wL1VQb3dlci9kZXZpY2VzL2xpbmVfcG93ZXJfdWNzaV9zb3VyY2VfcHN5
-X1VTQkMwMDBvMDAxCiAgbmF0aXZlLXBhdGg6ICAgICAgICAgIHVjc2ktc291cmNlLXBzeS1VU0JD
-MDAwOjAwMQogIHBvd2VyIHN1cHBseTogICAgICAgICB5ZXMKICB1cGRhdGVkOiAgICAgICAgICAg
-ICAgU3VuIDA4IE5vdiAyMDIwIDE1OjI3OjM5ICsxMCAoMTI0IHNlY29uZHMgYWdvKQogIGhhcyBo
-aXN0b3J5OiAgICAgICAgICBubwogIGhhcyBzdGF0aXN0aWNzOiAgICAgICBubwogIGxpbmUtcG93
-ZXIKICAgIHdhcm5pbmctbGV2ZWw6ICAgICAgIG5vbmUKICAgIG9ubGluZTogICAgICAgICAgICAg
-IHllcwogICAgaWNvbi1uYW1lOiAgICAgICAgICAnYWMtYWRhcHRlci1zeW1ib2xpYycKCkRldmlj
-ZTogL29yZy9mcmVlZGVza3RvcC9VUG93ZXIvZGV2aWNlcy9EaXNwbGF5RGV2aWNlCiAgcG93ZXIg
-c3VwcGx5OiAgICAgICAgIHllcwogIHVwZGF0ZWQ6ICAgICAgICAgICAgICBTdW4gMDggTm92IDIw
-MjAgMTU6Mjk6MjUgKzEwICgxOCBzZWNvbmRzIGFnbykKICBoYXMgaGlzdG9yeTogICAgICAgICAg
-bm8KICBoYXMgc3RhdGlzdGljczogICAgICAgbm8KICBiYXR0ZXJ5CiAgICBwcmVzZW50OiAgICAg
-ICAgICAgICB5ZXMKICAgIHN0YXRlOiAgICAgICAgICAgICAgIGRpc2NoYXJnaW5nCiAgICB3YXJu
-aW5nLWxldmVsOiAgICAgICBub25lCiAgICBlbmVyZ3k6ICAgICAgICAgICAgICA0Ni4xOTggV2gK
-ICAgIGVuZXJneS1mdWxsOiAgICAgICAgIDQ2LjY2NCBXaAogICAgZW5lcmd5LXJhdGU6ICAgICAg
-ICAgMS45OTggVwogICAgdGltZSB0byBlbXB0eTogICAgICAgMjMuMSBob3VycwogICAgcGVyY2Vu
-dGFnZTogICAgICAgICAgOTklCiAgICBpY29uLW5hbWU6ICAgICAgICAgICdiYXR0ZXJ5LWZ1bGwt
-c3ltYm9saWMnCgpEYWVtb246CiAgZGFlbW9uLXZlcnNpb246ICAwLjk5LjExCiAgb24tYmF0dGVy
-eTogICAgICBubwogIGxpZC1pcy1jbG9zZWQ6ICAgbm8KICBsaWQtaXMtcHJlc2VudDogIHllcwog
-IGNyaXRpY2FsLWFjdGlvbjogSHlicmlkU2xlZXAKCg==
---000000000000d0cf5d05b3aa4ce0--
+> 
+> You effectively are moving the call to of_platform_depopulate() *after*
+> the driver's .remove function has been called.
+> 
+> --
+>
