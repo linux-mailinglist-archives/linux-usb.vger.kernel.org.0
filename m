@@ -2,183 +2,286 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A95F22ABED6
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 15:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 480A32ABF46
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 15:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731070AbgKIOiH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 09:38:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52714 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729976AbgKIOiH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 09:38:07 -0500
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5C73B21D46;
-        Mon,  9 Nov 2020 14:38:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604932686;
-        bh=1EhLTYBAx6izuftlV7HeZNLE3o3knmEM9oG0vm1AZ9w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CTsM6gyzxanTlfPdsXpiDoL5m9MFqh7QirAz2FPLhKk/o38NfXZQVeUvhkJnUvQJR
-         xh1J8KZbOI8rpSgKDLtlB2NMljLr9owbmsVAYpIn5Ps9UDG8W9uHqj2Xfj3d5B/7ZZ
-         p4Anqj89D84g31G3SIUCBHMLRZHyBtPfGMevJwRU=
-Received: by mail-oo1-f46.google.com with SMTP id l20so2242568oot.3;
-        Mon, 09 Nov 2020 06:38:06 -0800 (PST)
-X-Gm-Message-State: AOAM533U6cqyO/4K8N+jNCpiTYzKL/8caefOq1TvsXXdLRjU9ZPoQOjF
-        pQfuzJFTpx14+1cNj3wZaN6iRLVK2/T+dAUWQg==
-X-Google-Smtp-Source: ABdhPJzsywgteDGfcmRGeodpD5h/7LtCCLWwr6TGwQJKLa8WhoWvqJtUY2d1KEdEJc1AuoBHcgBcLu2uKlwEGBlZInw=
-X-Received: by 2002:a4a:6f4d:: with SMTP id i13mr10267741oof.25.1604932685560;
- Mon, 09 Nov 2020 06:38:05 -0800 (PST)
+        id S1730318AbgKIO6B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 09:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730206AbgKIO6A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 09:58:00 -0500
+X-Greylist: delayed 308 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 Nov 2020 06:58:00 PST
+Received: from mout0.freenet.de (mout0.freenet.de [IPv6:2001:748:100:40::2:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1549C0613CF
+        for <linux-usb@vger.kernel.org>; Mon,  9 Nov 2020 06:58:00 -0800 (PST)
+Received: from [195.4.92.121] (helo=sub2.freenet.de)
+        by mout0.freenet.de with esmtpa (ID matthias.luebberstedt@01019freenet.de) (port 25) (Exim 4.92 #3)
+        id 1kc8XJ-00027s-3u
+        for linux-usb@vger.kernel.org; Mon, 09 Nov 2020 15:52:49 +0100
+Received: from p200300e3e70506adc295920fa5e21e6f.dip0.t-ipconnect.de ([2003:e3:e705:6ad:c295:920f:a5e2:1e6f]:49768 helo=ludlum.speedport.ip)
+        by sub2.freenet.de with esmtpsa (ID matthias.luebberstedt@01019freenet.de) (TLSv1.2:ECDHE-RSA-CHACHA20-POLY1305:256) (port 587) (Exim 4.92 #3)
+        id 1kc8XI-0001sk-VZ
+        for linux-usb@vger.kernel.org; Mon, 09 Nov 2020 15:52:49 +0100
+To:     linux-usb@vger.kernel.org
+From:   =?UTF-8?Q?Matthias_L=c3=bcbberstedt_=28freenet=2ede=29?= 
+        <matthias.luebberstedt@freenet.de>
+Subject: xHCI controller dies when mounting Toshiba Canvio Basics external
+ hard disk
+Message-ID: <d7dc2455-7a05-db54-9138-935455a22287@freenet.de>
+Date:   Mon, 9 Nov 2020 15:52:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.1
 MIME-Version: 1.0
-References: <1604403610-16577-1-git-send-email-jun.li@nxp.com>
- <20201105222559.GA1701705@bogus> <VE1PR04MB6528DB5965EFE139C7E0FAFA89ED0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <CAL_JsqJxvkG05Ds7Wa4RBU8eDqr4O=OcmgyogAYQjVwhcs02aA@mail.gmail.com> <VE1PR04MB6528D5291F820CDDA8EBE65A89EA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-In-Reply-To: <VE1PR04MB6528D5291F820CDDA8EBE65A89EA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 9 Nov 2020 08:37:53 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+OB=aGN+sVAtN89x3LjaRXi_BCy94uceDKmvD+7MnV0g@mail.gmail.com>
-Message-ID: <CAL_Jsq+OB=aGN+sVAtN89x3LjaRXi_BCy94uceDKmvD+7MnV0g@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] dt-bindings: usb: add documentation for typec
- switch simple driver
-To:     Jun Li <jun.li@nxp.com>
-Cc:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "prabhakar.mahadev-lad.rj@bp.renesas.com" 
-        <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "laurent.pinchart+renesas@ideasonboard.com" 
-        <laurent.pinchart+renesas@ideasonboard.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>, Peter Chen <peter.chen@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: de-DE
+X-Originated-At: 2003:e3:e705:6ad:c295:920f:a5e2:1e6f!49768
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 9, 2020 at 6:24 AM Jun Li <jun.li@nxp.com> wrote:
-> > From: Rob Herring <robh@kernel.org>
-> > On Fri, Nov 6, 2020 at 5:07 AM Jun Li <jun.li@nxp.com> wrote:
-> > > > From: Rob Herring <robh@kernel.org>
+Hi,
 
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    const: typec-orientation-switch
-> > > > > +
-> > > > > +  switch-gpios:
-> > > > > +    description: |
-> > > > > +      gpio specifier to switch the super speed active channel,
-> > > > > +      GPIO_ACTIVE_HIGH: GPIO state high for cc1;
-> > > > > +      GPIO_ACTIVE_LOW:  GPIO state low for cc1.
-> > > >
-> > > > What does active mean? There isn't really an active and inactive state,
-> > right?
-> > > > It's more a mux selecting 0 or 1 input?
-> > >
-> > > Yes, I will change the description:
-> > > gpio specifier to select the target channel of mux.
-> >
-> > I wonder if the existing mux bindings should be used here.
->
-> If only consider typec switch via "gpio", existing "mux-gpio"
-> binding may be used with property "mux-control-names" to be
-> "typec-xxx" for match, but we still need create typec stuff at
-> mux driver to hook to typec system, so little benefit, considering
-> this binding is going to be for a generic typec orientation switch
-> simple driver, I think a new typec binding make sense.
+I recently added a PCIe USB3 Controller Card (StarTech PEXUSB3S2EI, 2 
+ext./2 int. Ports) to my (old, USB 2-only up to this point) Linux PC 
+running openSUSE Leap 15.2.
+The controller card uses the NEC/Renesas uPD720201 chip.
 
-You can instantiate drivers without a compatible. That's just the easy
-way. However, using the mux binding doesn't necessarily mean you have
-to use 'mux-gpio'. Consider if you need to do more control than just
-the GPIO line. For example, the chips you mentioned may have a s/w
-controlled power supply or reset.
+It works well with all of my USB 2 external storage devices (hard disks, 
+flash sticks) but not with all of my USB 3 peripherals.
+USB 3 flash sticks and a Seagate Expansion 3TB 3,5" external hard disk 
+work properly.
 
-Also, consider what the mux would look like with different control
-interfaces. That could be I2C or some sub-block in a PMIC or ??? I'm
-sure we already have some examples. I'm not happy with these piecemeal
-additions to TypeC related bindings that don't consider more than 1
-h/w possibility.
+However, when I connect my Toshiba Canvio Basics 1TB 2.5" external USB 3 
+hard drive to any of the Ports that the controller card provides (the 
+internal 19 pin connector is connected to a 2-port front panel), the 
+device is detected and identified as super speed device, but the disk is 
+not mounted and the controller dies.
 
-> > > > I think you want flags 0 (aka GPIO_ACTIVE_HIGH) unless there's an
-> > > > inverter in the middle.
-> > >
-> > > This depends on the switch IC design and board design, leave 2 flags
-> > > (GPIO_ACTIVE_HIGH and GPIO_ACTIVE_LOW) can cover all possible cases.
-> > >
-> > > NXP has 2 diff IC parts for this:
-> > > 1. PTN36043(used on iMX8MQ)
-> > > Output selection control
-> > > When SEL=0, RX_AP_*/TX_AP_* are connected to RX_CON_2*/TX_CON_2*, and
-> > > RX_CON_1*/TX_CON_1* are connected to VDD thru low ohmic resistor.
-> > > When SEL=1, RX_AP_*/TX_AP_* are connected to RX_CON_1*/TX_CON_1*, and
-> > > RX_CON_2*/TX_CON_2* are connected to VDD thru low ohmic resistor.
-> > >
-> > > Board design connects RX_CON_1*/TX_CON_1* to typec connector CC1, so
-> > > GPIO_ACTIVE_HIGH
-> > >
-> > > 2. CBTU02043(used on iMX8MP)
-> > > SEL        Function
-> > > --------------------------------------
-> > > Low        A to B ports and vice versa
-> > > High       A to C ports and vice versa
-> > >
-> > > Board design connects B to typec connector CC1, so GPIO_ACTIVE_LOW
-> > >
-> > > Therefore, we need 2 flags.
-> >
-> > I'm not saying you don't. Just that the description is a bit odd.
-> > Please expand the description for how one decides how to set the flags.
->
-> Misunderstood your point, OK, I thought the "how to set the flags" was
-> simple and clear enough:
-> Use GPIO_ACTIVE_HIGH if GPIO physical state high is for cc1; or
-> Use GPIO_ACTIVE_LOW if GPIO physical state low is for cc1.
+This is what the system log (journalctl -f) says:
+   Nov 09 15:29:37 ludlum.speedport.ip kernel: usb 2-1: new SuperSpeed 
+Gen 1 USB device number 2 using xhci_hcd
+   Nov 09 15:29:37 ludlum.speedport.ip kernel: usb 2-1: New USB device 
+found, idVendor=0480, idProduct=a20c, bcdDevice=83.01
+   Nov 09 15:29:37 ludlum.speedport.ip kernel: usb 2-1: New USB device 
+strings: Mfr=1, Product=2, SerialNumber=3
+   Nov 09 15:29:37 ludlum.speedport.ip kernel: usb 2-1: Product: 
+External USB 3.0
+   Nov 09 15:29:37 ludlum.speedport.ip kernel: usb 2-1: Manufacturer: 
+TOSHIBA
+   Nov 09 15:29:37 ludlum.speedport.ip kernel: usb 2-1: SerialNumber: 
+23944815082C
+   Nov 09 15:29:37 ludlum.speedport.ip kernel: usb-storage 2-1:1.0: USB 
+Mass Storage device detected
+   Nov 09 15:29:37 ludlum.speedport.ip kernel: scsi host7: usb-storage 
+2-1:1.0
+   Nov 09 15:29:37 ludlum.speedport.ip mtp-probe[31733]: checking bus 2, 
+device 2: "/sys/devices/pci0000:00/0000:00:03.0/0000:01:00.0/usb2/2-1"
+   Nov 09 15:29:37 ludlum.speedport.ip mtp-probe[31733]: bus: 2, device: 
+2 was not an MTP device
+   Nov 09 15:29:49 ludlum.speedport.ip kernel: xhci_hcd 0000:01:00.0: 
+xHCI host controller not responding, assume dead
+   Nov 09 15:29:49 ludlum.speedport.ip kernel: xhci_hcd 0000:01:00.0: HC 
+died; cleaning up
+   Nov 09 15:29:49 ludlum.speedport.ip kernel: usb 2-1: USB disconnect, 
+device number 2
 
-Okay.
+After that, no device connected to any of the USB ports provided by the 
+new controller is detected, not even one that normally works flawlessly.
+Reloading the kernel modules (xhci_pci, xhci_hcd, usb_storage, uas) is 
+no cure.
+Only after forcing a rescan of the PCI bus device with
+     # echo "1" > /sys/bus/pci/devices/0000:01:00.0/remove
+     # echo 1 >/sys/bus/pci/rescan
+the USB ports are usable again. Or after a reboot, of course.
 
-> > > > > +examples:
-> > > > > +  - |
-> > > > > +    #include <dt-bindings/gpio/gpio.h>
-> > > > > +    ptn36043 {
-> > > > > +        compatible = "typec-orientation-switch";
-> > > > > +        pinctrl-names = "default";
-> > > > > +        pinctrl-0 = <&pinctrl_ss_sel>;
-> > > > > +        switch-gpios = <&gpio3 15 GPIO_ACTIVE_HIGH>;
-> > > > > +
-> > > > > +        port {
-> > > > > +                usb3_data_ss: endpoint {
-> > > > > +                        remote-endpoint = <&typec_con_ss>;
-> > > >
-> > > > The data goes from the connector to here and then where? You need a
-> > > > connection to the USB host controller.
-> > >
-> > > The orientation switch only need interact with type-c, no any
-> > > interaction with USB controller, do we still need a connection to it?
-> >
-> > If you have 2 USB hosts and 2 connectors (and 2 muxes), how would you describe
-> > which connector goes with which host?
->
-> One instance of typec orientation switch defined by this binding only for
-> One typec connector. With that, my understanding is
-> Whether a connection need be described depends on if the connector
-> (typec driver) need notify the host controller driver to do something
-> (e.g. role switch need a connection between controller node and connector
-> node for controller driver to swap usb role). If the mux/switch control is
-> transparent to usb host controller (e.g. my case, usb controller drivers
-> normally don't need do anything for orientation change), there is no need
-> to describe connection between orientation switch node and host controller
-> node.
+This is what lspci -vv says about the controller card:
 
-There can be several reasons you need to know the association. When
-writing the DT you can't assume what information is or isn't needed.
-That may vary by h/w or can evolve in an OS and the DT shouldn't
-change.
+01:00.0 USB controller: Renesas Technology Corp. uPD720201 USB 3.0 Host 
+Controller (rev 03) (prog-if 30 [XHCI])
+         Subsystem: Renesas Technology Corp. uPD720201 USB 3.0 Host 
+Controller
+         Control: I/O- Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- 
+ParErr- Stepping- SERR- FastB2B- DisINTx-
+         Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- 
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+         Interrupt: pin A routed to IRQ 16
+         NUMA node: 0
+         Region 0: Memory at fdbfe000 (64-bit, non-prefetchable) [size=8K]
+         Capabilities: [50] Power Management version 3
+                 Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA 
+PME(D0+,D1-,D2-,D3hot+,D3cold+)
+                 Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+         Capabilities: [70] MSI: Enable- Count=1/8 Maskable- 64bit+
+                 Address: 0000000000000000  Data: 0000
+         Capabilities: [90] MSI-X: Enable- Count=8 Masked-
+                 Vector table: BAR=0 offset=00001000
+                 PBA: BAR=0 offset=00001080
+         Capabilities: [a0] Express (v2) Endpoint, MSI 00
+                 DevCap: MaxPayload 128 bytes, PhantFunc 0, Latency L0s 
+unlimited, L1 unlimited
+                         ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset- 
+SlotPowerLimit 0.000W
+                 DevCtl: Report errors: Correctable- Non-Fatal- Fatal- 
+Unsupported-
+                         RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+
+                         MaxPayload 128 bytes, MaxReadReq 512 bytes
+                 DevSta: CorrErr+ UncorrErr+ FatalErr- UnsuppReq+ 
+AuxPwr+ TransPend-
+                 LnkCap: Port #0, Speed 5GT/s, Width x1, ASPM L0s L1, 
+Exit Latency L0s <4us, L1 unlimited
+                         ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp-
+                 LnkCtl: ASPM Disabled; RCB 64 bytes Disabled- CommClk-
+                         ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+                 LnkSta: Speed 2.5GT/s, Width x1, TrErr- Train- SlotClk+ 
+DLActive- BWMgmt- ABWMgmt-
+                 DevCap2: Completion Timeout: Not Supported, 
+TimeoutDis+, LTR+, OBFF Not Supported
+                          AtomicOpsCap: 32bit- 64bit- 128bitCAS-
+                 DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-, 
+LTR-, OBFF Disabled
+                          AtomicOpsCtl: ReqEn-
+                 LnkCtl2: Target Link Speed: 5GT/s, EnterCompliance- 
+SpeedDis-
+                          Transmit Margin: Normal Operating Range, 
+EnterModifiedCompliance- ComplianceSOS-
+                          Compliance De-emphasis: -6dB
+                 LnkSta2: Current De-emphasis Level: -3.5dB, 
+EqualizationComplete-, EqualizationPhase1-
+                          EqualizationPhase2-, EqualizationPhase3-, 
+LinkEqualizationRequest-
+         Capabilities: [100 v1] Advanced Error Reporting
+                 UESta:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- 
+UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq+ ACSViol-
+                 UEMsk:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- 
+UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+                 UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- 
+UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
+                 CESta:  RxErr- BadTLP+ BadDLLP+ Rollover+ Timeout+ 
+NonFatalErr+
+                 CEMsk:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- 
+NonFatalErr+
+                 AERCap: First Error Pointer: 14, ECRCGenCap- ECRCGenEn- 
+ECRCChkCap- ECRCChkEn-
+                         MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
+                 HeaderLog: 40000001 0018000f fdbfe020 f3fbffff
+         Capabilities: [150 v1] Latency Tolerance Reporting
+                 Max snoop latency: 0ns
+                 Max no snoop latency: 0ns
+         Kernel modules: xhci_pci
 
-Rob
+This is what "lsusb -vv" says about the Toshiba drive (when attached to 
+a USB 2 port):
+
+Bus 003 Device 008: ID 0480:a20c Toshiba America Inc
+Device Descriptor:
+   bLength                18
+   bDescriptorType         1
+   bcdUSB               2.10
+   bDeviceClass            0
+   bDeviceSubClass         0
+   bDeviceProtocol         0
+   bMaxPacketSize0        64
+   idVendor           0x0480 Toshiba America Inc
+   idProduct          0xa20c
+   bcdDevice           83.01
+   iManufacturer           1 TOSHIBA
+   iProduct                2 External USB 3.0
+   iSerial                 3 23944815082C
+   bNumConfigurations      1
+   Configuration Descriptor:
+     bLength                 9
+     bDescriptorType         2
+     wTotalLength           32
+     bNumInterfaces          1
+     bConfigurationValue     1
+     iConfiguration          0
+     bmAttributes         0x80
+       (Bus Powered)
+     MaxPower              500mA
+     Interface Descriptor:
+       bLength                 9
+       bDescriptorType         4
+       bInterfaceNumber        0
+       bAlternateSetting       0
+       bNumEndpoints           2
+       bInterfaceClass         8 Mass Storage
+       bInterfaceSubClass      6 SCSI
+       bInterfaceProtocol     80 Bulk-Only
+       iInterface              0
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x81  EP 1 IN
+         bmAttributes            2
+           Transfer Type            Bulk
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0200  1x 512 bytes
+         bInterval               0
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x02  EP 2 OUT
+         bmAttributes            2
+           Transfer Type            Bulk
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0200  1x 512 bytes
+         bInterval               0
+Binary Object Store Descriptor:
+   bLength                 5
+   bDescriptorType        15
+   wTotalLength           42
+   bNumDeviceCaps          3
+   USB 2.0 Extension Device Capability:
+     bLength                 7
+     bDescriptorType        16
+     bDevCapabilityType      2
+     bmAttributes   0x00000002
+       HIRD Link Power Management (LPM) Supported
+   SuperSpeed USB Device Capability:
+     bLength                10
+     bDescriptorType        16
+     bDevCapabilityType      3
+     bmAttributes         0x00
+     wSpeedsSupported   0x000e
+       Device can operate at Full Speed (12Mbps)
+       Device can operate at High Speed (480Mbps)
+       Device can operate at SuperSpeed (5Gbps)
+     bFunctionalitySupport   1
+       Lowest fully-functional device speed is Full Speed (12Mbps)
+     bU1DevExitLat          10 micro seconds
+     bU2DevExitLat        2047 micro seconds
+   Container ID Device Capability:
+     bLength                20
+     bDescriptorType        16
+     bDevCapabilityType      4
+     bReserved               0
+     ContainerID             {a4935419-91be-4e3a-b8c5-55c6374ff575}
+can't get debug descriptor: Resource temporarily unavailable
+Device Status:     0x0000
+   (Bus Powered)
+
+
+I tried some USB quirks, namely 't' (NO_ATA_1X) and 'u' (IGNORE_UAS), by
+     # rmmod uas usb-storage
+     # modprobe usb-storage quirks=0480:a20c:tu
+According to the system log, the quirks are detected/applied when the 
+drive is connected, but to no avail.
+I'm hesitating to apply other quirks, because i'm not an expert at this 
+and don't actually know what they do.
+So I'm afraid they might harm the data on the hard disk.
+
+I use openSUSE Leap 15.2 with the current kernel update version (Linux 
+5.3.18-lp152.47-default x86_64) but also tried a more recent kernel 
+version 5.7.0 - same results.
+
+Is there a way to make this Toshiba external hard drive work when 
+attached to a USB 3 port provided by my STarTech controller card?
+
+Cheers
+Matthias
+
+
