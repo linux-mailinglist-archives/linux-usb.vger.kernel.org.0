@@ -2,96 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 297AF2ABFBA
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 16:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C64282AC01D
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 16:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730637AbgKIPVH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 9 Nov 2020 10:21:07 -0500
-Received: from avasout04.plus.net ([212.159.14.19]:37535 "EHLO
-        avasout04.plus.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727077AbgKIPVG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 10:21:06 -0500
-Received: from APOLLO ([212.159.61.44])
-        by smtp with ESMTPA
-        id c8ydkR92zrXCcc8yekQeH3; Mon, 09 Nov 2020 15:21:05 +0000
-X-Clacks-Overhead: "GNU Terry Pratchett"
-X-CM-Score: 0.00
-X-CNFS-Analysis: v=2.3 cv=Q+xJH7+a c=1 sm=1 tr=0
- a=AGp1duJPimIJhwGXxSk9fg==:117 a=AGp1duJPimIJhwGXxSk9fg==:17
- a=IkcTkHD0fZMA:10 a=P1kZ4gAsAAAA:8 a=VwQbUJbxAAAA:8 a=iox4zFpeAAAA:8
- a=Lkthg0g8UsnYpIhIs2EA:9 a=QEXdDO2ut3YA:10 a=fn9vMg-Z9CMH7MoVPInU:22
- a=AjGcO6oz07-iQ99wixmX:22 a=WzC6qhA0u3u7Ye7llzcV:22
-X-AUTH: perdrix52@:2500
-From:   "David C. Partridge" <david.partridge@perdrix.co.uk>
-To:     "'Oliver Neukum'" <oneukum@suse.com>, <linux-usb@vger.kernel.org>
-References: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>         <eceedea7ca5d950eb8ea4d186a6b01a04d0a804f.camel@suse.com>         <001601d6b67d$e97a1e30$bc6e5a90$@perdrix.co.uk> <aebf92944c1ecb256d21108ce092165a0fd904db.camel@suse.com> <001b01d6b68a$79937fa0$6cba7ee0$@perdrix.co.uk>
-In-Reply-To: <001b01d6b68a$79937fa0$6cba7ee0$@perdrix.co.uk>
-Subject: RE: Issues with LaCie USB3 drive and UAS
-Date:   Mon, 9 Nov 2020 15:21:03 -0000
-Message-ID: <007901d6b6ab$f0f66230$d2e32690$@perdrix.co.uk>
+        id S1729445AbgKIPmR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 10:42:17 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:35770 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727303AbgKIPmQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 10:42:16 -0500
+Received: by mail-oi1-f195.google.com with SMTP id c80so10649164oib.2;
+        Mon, 09 Nov 2020 07:42:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qDCEpBkFLulC00NVUrlJOaEfoieaKfsOXl1ZnSUUlrc=;
+        b=q2i18BmuH62GxVDtK/57VEvvhuqyhJCkBbqldpRkBdigBkgPkZ46quiLPmTIB1sAE5
+         P6U+nd8DYx6T5DzygUpr3fioDkj8c0yTkGJSeUWackc53uU+qmVgmkUy6/YhAW0hYojy
+         A5OY2vNreNZIbEj1VzE51/hEXUjPp8/Q/YJ8lVaCcRfm6Puj6E8jwEoxngMi4qknQ+HR
+         W9yCjAlwM+c6V4lyB5v+Hp+nwtvQSG80beEZSCHezI2s3q0sF/giB86qRnVZc1vGLjH3
+         0MDd1NjS8VwHmoSkemRLa3Ww6FdyY0WE844s1/d2DYZykC+bZGuWeA2t6uKuek/qj18a
+         Kt3g==
+X-Gm-Message-State: AOAM5302J+FPWQroTPmlebiH5WDP7vbIp4wJgMeIofZb0VNyyuSZl684
+        MUF7rXzy1F2+ByL2bUnEcA==
+X-Google-Smtp-Source: ABdhPJwljMkcqsk2ICLQs/kbA6TgKKVTl0MP55hDMb1X5tEip+2F+I7aH4IkZraz/rREs1cBsMTFaw==
+X-Received: by 2002:a54:4614:: with SMTP id p20mr8997965oip.131.1604936535633;
+        Mon, 09 Nov 2020 07:42:15 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v5sm2581843otb.44.2020.11.09.07.42.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2020 07:42:14 -0800 (PST)
+Received: (nullmailer pid 1341840 invoked by uid 1000);
+        Mon, 09 Nov 2020 15:42:13 -0000
+Date:   Mon, 9 Nov 2020 09:42:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     kishon@ti.com, vkoul@kernel.org, dongsheng.qiu@ingenic.com,
+        linux-usb@vger.kernel.org, paul@crapouillou.net,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, rick.tyliu@ingenic.com, balbi@kernel.org,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com,
+        devicetree@vger.kernel.org, aric.pzqi@ingenic.com,
+        yanfei.li@ingenic.com
+Subject: Re: [PATCH v8 2/3] dt-bindings: USB: Add bindings for Ingenic JZ4775
+ and X2000.
+Message-ID: <20201109154213.GA1341312@bogus>
+References: <20201107094758.83291-1-zhouyanjie@wanyeetech.com>
+ <20201107094758.83291-3-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Microsoft Outlook 14.0
-Thread-Index: AQEj7PcoQVookx4f1d3/LPoLd4O7AAH2dKS3AXO3T8ACPDV8AQK5Jqf9quJ3XdA=
-Content-Language: en-gb
-X-CMAE-Envelope: MS4wfAsyNjhQ3UYRGmriDaX5fDovlTY+ziC2OR26pa9ludB/MS4+Y8lQE/cQPl6ozLM8gz6hCI4c5u1FmCMuKNZd9rL5lJUmS1wnLFm/geQDDSsgZAV5L0yi
- OZmsR4JsPQIK5LQVGDHb6i49fwJmYHKtV380q1KKhFskFu+U6JZMTMWZWeMuvxo969YVzuMBJwkSEw==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201107094758.83291-3-zhouyanjie@wanyeetech.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Update: I found out how to do it! 
+On Sat, 07 Nov 2020 17:47:57 +0800, 周琰杰 (Zhou Yanjie) wrote:
+> Move Ingenic USB PHY bindings from Documentation/devicetree/bindings/usb
+> to Documentation/devicetree/bindings/phy, and add bindings for JZ4775 SoC
+> and X2000 SoC.
+> 
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> ---
+> 
+> Notes:
+>     v8:
+>     New patch.
+> 
+>  .../{usb/ingenic,jz4770-phy.yaml => phy/ingenic,phy-usb.yaml}         | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>  rename Documentation/devicetree/bindings/{usb/ingenic,jz4770-phy.yaml => phy/ingenic,phy-usb.yaml} (89%)
+> 
 
-Created /etc/modprobe.d/blacklist_uas.conf containing text:
 
-options usb-storage quirks=059f:105f:u
+My bot found errors running 'make dt_binding_check' on your patch:
 
-followed by: update-initramfs -u
-and rebooted.
+yamllint warnings/errors:
 
-Now the device works fine and mkfs.ext4 finishes in seconds rather than hours.
+dtschema/dtc warnings/errors:
+Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/usb/ingenic,jz4770-phy.yaml'
+xargs: dt-doc-validate: exited with status 255; aborting
+make[1]: *** [Documentation/devicetree/bindings/Makefile:59: Documentation/devicetree/bindings/processed-schema-examples.json] Error 124
+make: *** [Makefile:1364: dt_binding_check] Error 2
+./Documentation/devicetree/bindings/phy/ingenic,phy-usb.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/phy/ingenic,phy-usb.yaml#
 
-David
------Original Message-----
-From: David C. Partridge [mailto:david.partridge@perdrix.co.uk] 
-Sent: 09 November 2020 11:21
-To: 'Oliver Neukum'; linux-usb@vger.kernel.org
-Subject: RE: Issues with LaCie USB3 drive and UAS
 
-Please could I ask you to provide detailed instructions on how to blacklist UAS for just this device?
+See https://patchwork.ozlabs.org/patch/1396098
 
-Thanks
-Daivd
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
 
------Original Message-----
-From: Oliver Neukum [mailto:oneukum@suse.com] 
-Sent: 09 November 2020 10:14
-To: David C. Partridge; linux-usb@vger.kernel.org
-Subject: Re: Issues with LaCie USB3 drive and UAS
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Am Montag, den 09.11.2020, 09:51 +0000 schrieb David C. Partridge:
-> I'm sure you are right in your diagnosis (absent any knowledge to the contrary).
+pip3 install dtschema --upgrade
 
-It is a guess, merely. Based on long woefull experience with the
-quality of some hardware.
-
-> Now what's the treatment?
-
-Use WRITE, not WRITE SAME. That is a task of the SCSI layer, not UAS.
-
-> Would uas black-list provide a work-araound? If so a detailed recipe will be needed by me ...
-
-Indirectly. The storage driver sets no_write_same. UAS does not. It
-looks like UAS will need a kernel patch for that.
-
-> Fix to the code? Ideal, but takes lots longer, so a work-around may be needed for a while
-
-Very well. For experimentation, please try blacklisting UAS. If that
-fails I have guessed wrong. If it works, I will make a test patch.
-
-	Regards
-		Oliver
-
+Please check and re-submit.
 
