@@ -2,106 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE012ABF56
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 16:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297AF2ABFBA
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Nov 2020 16:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730892AbgKIPEF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 10:04:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34814 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730294AbgKIPEF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 10:04:05 -0500
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9AA6F21D7F;
-        Mon,  9 Nov 2020 15:04:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604934244;
-        bh=klOzq0fwls70xqZlUdJhI8p1HAh7xB/+hUm3hhvBTbc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=zRkjX1fywCRc3cml6SgOLCjAP2nOhigBWN5i0+nDFKxkORwia7b0HsX9kYPgUg7jT
-         rR/ga4f3KxVT4cND616QWDq5eHk5H3ps34SnJNgFSi/PN6cxg8R/FKQAn0OWaXk6sz
-         7+l/AC0itXBgeHXQyXwhTYa7EbU//qSkwiYccBWw=
-Received: by mail-ot1-f47.google.com with SMTP id n15so9184875otl.8;
-        Mon, 09 Nov 2020 07:04:04 -0800 (PST)
-X-Gm-Message-State: AOAM5332G4Iqsu2tMlzS0JxSvs3MHAd/ixVUk7vNkmQDbkCKS/D2rMCq
-        FgUfgE+T/BsaAGW1tSv/CppgT3nYJ7jpKYCnmw==
-X-Google-Smtp-Source: ABdhPJwVIajxUZd8pHgC4uOmEOHHpIlfzHZZGsTgFYCu33zI8wFT1W6B6OuaQFPH0g3XDgCIJq3bs4vnyzZR5TPU8Uo=
-X-Received: by 2002:a05:6830:2259:: with SMTP id t25mr10977628otd.192.1604934243782;
- Mon, 09 Nov 2020 07:04:03 -0800 (PST)
+        id S1730637AbgKIPVH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 9 Nov 2020 10:21:07 -0500
+Received: from avasout04.plus.net ([212.159.14.19]:37535 "EHLO
+        avasout04.plus.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727077AbgKIPVG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 10:21:06 -0500
+Received: from APOLLO ([212.159.61.44])
+        by smtp with ESMTPA
+        id c8ydkR92zrXCcc8yekQeH3; Mon, 09 Nov 2020 15:21:05 +0000
+X-Clacks-Overhead: "GNU Terry Pratchett"
+X-CM-Score: 0.00
+X-CNFS-Analysis: v=2.3 cv=Q+xJH7+a c=1 sm=1 tr=0
+ a=AGp1duJPimIJhwGXxSk9fg==:117 a=AGp1duJPimIJhwGXxSk9fg==:17
+ a=IkcTkHD0fZMA:10 a=P1kZ4gAsAAAA:8 a=VwQbUJbxAAAA:8 a=iox4zFpeAAAA:8
+ a=Lkthg0g8UsnYpIhIs2EA:9 a=QEXdDO2ut3YA:10 a=fn9vMg-Z9CMH7MoVPInU:22
+ a=AjGcO6oz07-iQ99wixmX:22 a=WzC6qhA0u3u7Ye7llzcV:22
+X-AUTH: perdrix52@:2500
+From:   "David C. Partridge" <david.partridge@perdrix.co.uk>
+To:     "'Oliver Neukum'" <oneukum@suse.com>, <linux-usb@vger.kernel.org>
+References: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>         <eceedea7ca5d950eb8ea4d186a6b01a04d0a804f.camel@suse.com>         <001601d6b67d$e97a1e30$bc6e5a90$@perdrix.co.uk> <aebf92944c1ecb256d21108ce092165a0fd904db.camel@suse.com> <001b01d6b68a$79937fa0$6cba7ee0$@perdrix.co.uk>
+In-Reply-To: <001b01d6b68a$79937fa0$6cba7ee0$@perdrix.co.uk>
+Subject: RE: Issues with LaCie USB3 drive and UAS
+Date:   Mon, 9 Nov 2020 15:21:03 -0000
+Message-ID: <007901d6b6ab$f0f66230$d2e32690$@perdrix.co.uk>
 MIME-Version: 1.0
-References: <20201106165805.31534-1-amelie.delaunay@st.com> <20201106165805.31534-2-amelie.delaunay@st.com>
-In-Reply-To: <20201106165805.31534-2-amelie.delaunay@st.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 9 Nov 2020 09:03:52 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+A=nixpdrT3Omq7Osat=_Egb5g6VGao=gY4CEssOe+xQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+A=nixpdrT3Omq7Osat=_Egb5g6VGao=gY4CEssOe+xQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/5] dt-bindings: connector: add typec-power-opmode
- property to usb-connector
-To:     Amelie Delaunay <amelie.delaunay@st.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Jun Li <lijun.kernel@gmail.com>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 14.0
+Thread-Index: AQEj7PcoQVookx4f1d3/LPoLd4O7AAH2dKS3AXO3T8ACPDV8AQK5Jqf9quJ3XdA=
+Content-Language: en-gb
+X-CMAE-Envelope: MS4wfAsyNjhQ3UYRGmriDaX5fDovlTY+ziC2OR26pa9ludB/MS4+Y8lQE/cQPl6ozLM8gz6hCI4c5u1FmCMuKNZd9rL5lJUmS1wnLFm/geQDDSsgZAV5L0yi
+ OZmsR4JsPQIK5LQVGDHb6i49fwJmYHKtV380q1KKhFskFu+U6JZMTMWZWeMuvxo969YVzuMBJwkSEw==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 6, 2020 at 10:58 AM Amelie Delaunay <amelie.delaunay@st.com> wrote:
->
-> Power operation mode may depends on hardware design, so, add the optional
-> property typec-power-opmode for usb-c connector to select the power
-> operation mode capability.
->
-> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
-> ---
-> Hi Bahdri, Rob,
->
-> I've added the exlusion with FRS property, but new FRS property name
-> should be use here so, be careful.
->
-> ---
->  .../bindings/connector/usb-connector.yaml     | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> index 62781518aefc..a84464b3e1f2 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> @@ -93,6 +93,24 @@ properties:
->        - device
->        - dual
->
-> +  typec-power-opmode:
-> +    description: Determines the power operation mode that the Type C connector
-> +      will support and will advertise through CC pins when it has no power
-> +      delivery support.
-> +      - "default" corresponds to default USB voltage and current defined by the
-> +        USB 2.0 and USB 3.2 specifications, 5V 500mA for USB 2.0 ports and
-> +        5V 900mA or 1500mA for USB 3.2 ports in single-lane or dual-lane
-> +        operation respectively.
-> +      - "1.5A" and "3.0A", 5V 1.5A and 5V 3.0A respectively, as defined in USB
-> +        Type-C Cable and Connector specification, when Power Delivery is not
-> +        supported.
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#definitions/string
-> +    enum:
-> +      - default
-> +      - 1.5A
-> +      - 3.0A
+Update: I found out how to do it! 
 
-Use the enums here. Unless you want to define it as actual current as
-a numerical value.
+Created /etc/modprobe.d/blacklist_uas.conf containing text:
 
-Rob
+options usb-storage quirks=059f:105f:u
+
+followed by: update-initramfs -u
+and rebooted.
+
+Now the device works fine and mkfs.ext4 finishes in seconds rather than hours.
+
+David
+-----Original Message-----
+From: David C. Partridge [mailto:david.partridge@perdrix.co.uk] 
+Sent: 09 November 2020 11:21
+To: 'Oliver Neukum'; linux-usb@vger.kernel.org
+Subject: RE: Issues with LaCie USB3 drive and UAS
+
+Please could I ask you to provide detailed instructions on how to blacklist UAS for just this device?
+
+Thanks
+Daivd
+
+-----Original Message-----
+From: Oliver Neukum [mailto:oneukum@suse.com] 
+Sent: 09 November 2020 10:14
+To: David C. Partridge; linux-usb@vger.kernel.org
+Subject: Re: Issues with LaCie USB3 drive and UAS
+
+Am Montag, den 09.11.2020, 09:51 +0000 schrieb David C. Partridge:
+> I'm sure you are right in your diagnosis (absent any knowledge to the contrary).
+
+It is a guess, merely. Based on long woefull experience with the
+quality of some hardware.
+
+> Now what's the treatment?
+
+Use WRITE, not WRITE SAME. That is a task of the SCSI layer, not UAS.
+
+> Would uas black-list provide a work-araound? If so a detailed recipe will be needed by me ...
+
+Indirectly. The storage driver sets no_write_same. UAS does not. It
+looks like UAS will need a kernel patch for that.
+
+> Fix to the code? Ideal, but takes lots longer, so a work-around may be needed for a while
+
+Very well. For experimentation, please try blacklisting UAS. If that
+fails I have guessed wrong. If it works, I will make a test patch.
+
+	Regards
+		Oliver
+
+
