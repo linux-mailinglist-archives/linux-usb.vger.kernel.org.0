@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52C92ACC26
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 04:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FA82ACC5A
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 04:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731589AbgKJDx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 22:53:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53862 "EHLO mail.kernel.org"
+        id S1732871AbgKJDyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 22:54:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731487AbgKJDx1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 22:53:27 -0500
+        id S1732834AbgKJDyq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Nov 2020 22:54:46 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AFC6520781;
-        Tue, 10 Nov 2020 03:53:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B4D83216C4;
+        Tue, 10 Nov 2020 03:54:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604980406;
-        bh=tdRDeBb688Tbj/zy/2sTeleiGzaqdpmOChiOlz+fbb4=;
+        s=default; t=1604980485;
+        bh=fZXpqzRVhUKq/GPnlC0UTgWYvCzqvthyjK3Oz86uZ6M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tafsHTthqGIpMRlxFPrK4CtwsaKQalUqFNOYvUmxzOinjqFgskn8DXDOgod4pz3G9
-         30zF34U+5GDO2uru7m1FEilYQdehAWB0P1OT5oAZpgaGzLbK/kLY5DGnW48gBvfXQG
-         3MgWe+8+WeBS+4gltI2OSL7QZ9xRUcnTIxD9I/mk=
+        b=c4JaA65IdwVdm2RTRtLyZ5zYEWGctBHYREEH1FRls4bJwl6cdw1HTl49Iy0+qy/fd
+         aK5/+hDhofZ/qzK3g1Bm+VhEOT6ZjkBACKcfSUqTMrbBiDaWgCRfTo61Ms0Ynyukw0
+         rKIvDAWfjwsTWKPNhNP/WOY6+mjlF2lKOykROTGE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Felipe Balbi <balbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 05/55] usb: dwc3: pci: add support for the Intel Alder Lake-S
-Date:   Mon,  9 Nov 2020 22:52:28 -0500
-Message-Id: <20201110035318.423757-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 03/42] usb: dwc3: pci: add support for the Intel Alder Lake-S
+Date:   Mon,  9 Nov 2020 22:54:01 -0500
+Message-Id: <20201110035440.424258-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201110035318.423757-1-sashal@kernel.org>
-References: <20201110035318.423757-1-sashal@kernel.org>
+In-Reply-To: <20201110035440.424258-1-sashal@kernel.org>
+References: <20201110035440.424258-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,7 +57,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+)
 
 diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 242b6210380a4..bae6a70664c80 100644
+index ba88039449e03..58b8801ce8816 100644
 --- a/drivers/usb/dwc3/dwc3-pci.c
 +++ b/drivers/usb/dwc3/dwc3-pci.c
 @@ -40,6 +40,7 @@
