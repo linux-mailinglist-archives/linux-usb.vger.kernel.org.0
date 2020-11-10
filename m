@@ -2,115 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 629E52AE111
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 21:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B512AE177
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 22:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731788AbgKJUvR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 15:51:17 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:40601 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730618AbgKJUvP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 15:51:15 -0500
-Received: (qmail 206073 invoked by uid 1000); 10 Nov 2020 15:51:14 -0500
-Date:   Tue, 10 Nov 2020 15:51:14 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Alberto Sentieri <22t@tripolho.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: kernel locks due to USB I/O
-Message-ID: <20201110205114.GB204624@rowland.harvard.edu>
-References: <9428ae70-887e-b48b-f31c-f95d58f67c61@tripolho.com>
+        id S1731772AbgKJVRP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 16:17:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725862AbgKJVRM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 16:17:12 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8960C0613D1;
+        Tue, 10 Nov 2020 13:17:10 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id v144so88828lfa.13;
+        Tue, 10 Nov 2020 13:17:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EGw/lJ2fFtGQXxuehfGhLjJtLJBME8AehCZBZ0GpWKM=;
+        b=NAjhIP+3pP7247wVyMNIoqS0eBQ6Ub6VXzYDVkDW5hh7OeVhZnrCfqxE2LxWyJsKMV
+         90KLTj2Sz4TgROVkbS2FdYgKiKElggblFjPltnMdRMP+LsofRfySn0ZAVRiZ/rJhCxi6
+         Ihb4k6looEtRmT1ELEZ0lM7wPWjSKyFQbZqNuGGZWJnLFo6POVOBCZ35lDBdx6WUlyZo
+         hFkkJUxBTXfhYM1L6nmK/Cdx6WzQfwcvnzNWLiRd/LuWn+G/zTP5qT4snC3j+huX+nYr
+         tA9dCLNuMRHfewvKYy4Ua/ksZbn9fdwQO2uPYg+XI2muKxWHeQxfYp9b34Tx6cpXjg8z
+         oyIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EGw/lJ2fFtGQXxuehfGhLjJtLJBME8AehCZBZ0GpWKM=;
+        b=YZRECcJ7PAUTjtP9s4dxXu0vwXJ/TdAvaawxP8WYuIH35iAxGEkfgMhKtPeollmBlq
+         D0Qaih+nf+WySiB7fzwV4vbdpVo7CgtuMXDuqD5CaOA9pKgiBMnw434KzQ5ohbAzJzJW
+         7xgONDva+SlzjQcT/NZPUlnhzdC1Y2iIVtGTBNAohYMX4G4AoX0BTHUd7CWQ8LZAnt1m
+         gPiv9H8Kt9OKrJ46bW6paHblxjXWSurUJXrDTe7nIlvGp3o8QcHAp2Sj8FWlGpMtJEmb
+         QEUoyraWHs9KfeB8iZkiiHusWiIsraLDqtiyixaMkfmwcXuGJtwTGSS3fN+NNqxlFcM8
+         6SzQ==
+X-Gm-Message-State: AOAM531Ih9D4P6xzza1CqNOLFm42BFxdGp2niDJ2OPFi26saNnNkZaka
+        L6NBIndpt1aCVG3h4aOr84fWlsM3ldE=
+X-Google-Smtp-Source: ABdhPJy9MxQ9JDqgbUxs5iJjOZhvvAhbIb4SB90wBtvxj6i+Z1NqL4Sgmd5xFUlSjTl9BiZi3p2X+g==
+X-Received: by 2002:a19:6a07:: with SMTP id u7mr4706867lfu.252.1605043028710;
+        Tue, 10 Nov 2020 13:17:08 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id m7sm1658405ljb.37.2020.11.10.13.17.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Nov 2020 13:17:07 -0800 (PST)
+Subject: Re: [PATCH v1 18/30] pwm: tegra: Support OPP and core voltage scaling
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-usb@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <20201104234427.26477-19-digetx@gmail.com> <20201110205057.GH2375022@ulmo>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <a3bf156d-17b8-0edd-9981-a17991266e1d@gmail.com>
+Date:   Wed, 11 Nov 2020 00:17:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20201110205057.GH2375022@ulmo>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9428ae70-887e-b48b-f31c-f95d58f67c61@tripolho.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 10, 2020 at 02:20:50PM -0500, Alberto Sentieri wrote:
-> I’ve seen many kernel locks caused by a particular user-level application.
-> After the kernel locks, there is no report left in the machine, neither in
-> the logs. These locks have to do with USB input and output.
+10.11.2020 23:50, Thierry Reding пишет:
+> On Thu, Nov 05, 2020 at 02:44:15AM +0300, Dmitry Osipenko wrote:
+> [...]
+>> +static void tegra_pwm_deinit_opp_table(void *data)
+>> +{
+>> +	struct device *dev = data;
+>> +	struct opp_table *opp_table;
+>> +
+>> +	opp_table = dev_pm_opp_get_opp_table(dev);
+>> +	dev_pm_opp_of_remove_table(dev);
+>> +	dev_pm_opp_put_regulators(opp_table);
+>> +	dev_pm_opp_put_opp_table(opp_table);
+>> +}
+>> +
+>> +static int devm_tegra_pwm_init_opp_table(struct device *dev)
+>> +{
+>> +	struct opp_table *opp_table;
+>> +	const char *rname = "core";
+>> +	int err;
+>> +
+>> +	/* voltage scaling is optional */
+>> +	if (device_property_present(dev, "core-supply"))
+>> +		opp_table = dev_pm_opp_set_regulators(dev, &rname, 1);
+>> +	else
+>> +		opp_table = dev_pm_opp_get_opp_table(dev);
+>> +
+>> +	if (IS_ERR(opp_table))
+>> +		return dev_err_probe(dev, PTR_ERR(opp_table),
+>> +				     "failed to prepare OPP table\n");
+>> +
+>> +	/*
+>> +	 * OPP table presence is optional and we want the set_rate() of OPP
+>> +	 * API to work similarly to clk_set_rate() if table is missing in a
+>> +	 * device-tree.  The add_table() errors out if OPP is missing in DT.
+>> +	 */
+>> +	if (device_property_present(dev, "operating-points-v2")) {
+>> +		err = dev_pm_opp_of_add_table(dev);
+>> +		if (err) {
+>> +			dev_err(dev, "failed to add OPP table: %d\n", err);
+>> +			goto put_table;
+>> +		}
+>> +	}
+>> +
+>> +	err = devm_add_action(dev, tegra_pwm_deinit_opp_table, dev);
+>> +	if (err)
+>> +		goto remove_table;
+>> +
+>> +	return 0;
+>> +
+>> +remove_table:
+>> +	dev_pm_opp_of_remove_table(dev);
+>> +put_table:
+>> +	dev_pm_opp_put_regulators(opp_table);
+>> +
+>> +	return err;
+>> +}
 > 
-> The objective of this email is to get guidance about how to collect more
-> data related to the locks.
-> 
-> Follows a description of the problem.
-> 
-> I manage a few remote machines installed at a manufacturing facility, which
-> run Ubuntu 18.04. For months I had seen unexpected kernel locks, which I
-> could not explain. By locks I mean that the machine completely dies. The
-> graphical screen and keyboard freezes. I cannot ping or connect through ssh
-> during the locks. The only way of making the machine come back is through a
-> “pull the plug”. After rebooting I cannot find anything meaningful about the
-> lock in the logs. The machine is a good quality one with a 6-core Xeon, 32
-> GB ECC memory (and the application is using about 1GB). Exact the same
-> problem happens in two identical machines, one running kernel 5.0.0-37
-> generic and the other running kernel 5.3.0-62-generic.
+> These two functions seem to be heavily boilerplate across all these
+> drivers. Have you considered splitting these out into separate helpers?
 
-Can you update either machine to a 5.9 kernel?
-
-> A few days ago I was able to create a sequence of events that produce the
-> locks in a couple of minutes. These events have to do with USB 2.0 interrupt
-> I/O on USB devices connected at 12 Mbits/s and the frequency URBs are
-> submitted and reaped . It is necessary to have at least 36 devices connected
-> to reproduce the problem easily, which I cannot do from where I am. The
-> machines are in a country other than the one I live, and my physical access
-> to them is not possible due to COVID-19 restrictions.
-> 
-> There is no special USB drivers installed. However, there is a NVIDIA
-> manufacturer driver installed, which I installed using the Ubuntu regular
-> tools for non-free software. All USB I/O is done by a regular user opening
-> /dev/bus/usb/xxx/xxx (the device group is set to the user group by udev).
-> 
-> Each set of 18 USB devices is connected to a 10-Amp.-power-supply powered
-> HUB. Each hub has its own USB 2.0 root, I mean, I installed multiple USB 2.0
-> PCI express expansion cards, and only one port of each expansion card is
-> used for each HUB.
-> 
-> The protocol to talk to any of the 36 devices is pretty simple. It uses USB
-> interrupt frames. A 64-byte frame is sent to the device (request packet). I
-> use ioctl (USBDEVFS_SUBMITURB). The file descriptor is monitored by epoll
-> and when an answer comes back, the response packet (another 64-byte
-> interrupt packet) is recovered by ioctl (USBDEVFS_REAPURBNDELAY). Then a
-> 64-byte packet (confirmation packet) is sent through USBDEVFS_SUBMITURB.
-> This sequence happens once every few seconds and the delay between the three
-> packets is just a couple of milliseconds. All process of dealing with the 36
-> devices is in a unique thread, under the same epoll loop.
-
-This sentence is ambiguous.  Do you mean there is a single unique thread 
-which talks to all 36 devices?  Or do you mean there is a separate 
-unique thread for each device (so 36 threads)?
-
-> So if I synchronize all 36 devices, I mean, I try to talk to all them
-> basically at the same time, the kernel will lock in about 2 minutes or less.
-> By “at the same time” I mean to submit the URBs for the request packet
-> around the same time for all of them, and then sit there, waiting for the
-> proper epoll wake-up to deal with the state machine (response and
-> confirmation packets).
-> 
-> However, if I lock a semaphore before sending the request packet for one
-> device, and only unlock after reaping the URB I used to send the
-> confirmation packet, it ran for ate least 72 hours without problems. So, one
-> device at a time (using basically the same software plus the semaphore) does
-> not cause the kernel lock.
-> 
-> My point is that simple ioctl calls to USB devices should not break the
-> kernel. I need help to address the kernel issue. The problem is difficult to
-> reproduce at my office because it needs many devices connected to it, which
-> are available only in a place I do not have physical access to, due to
-> COVID-19 travel restrictions.
-> 
-> My guess is that, for a regular user, this bug rarely manifests itself and
-> it may be there for a long time.
-> 
-> I would like to figure out exactly where the problem is and I am looking for
-> your guidance to get more information about it.
-
-You could try using a network console.  Or have someone who is on-site 
-take a picture of the computer screen when a crash occurs.
-
-Alan Stern
+The helper is already prepared for v2.
