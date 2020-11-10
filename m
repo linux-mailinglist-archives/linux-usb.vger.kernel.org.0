@@ -2,154 +2,284 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DE62AD582
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 12:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E978A2AD5A5
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 12:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730152AbgKJLny (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 06:43:54 -0500
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:40778 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730108AbgKJLnr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 06:43:47 -0500
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AABbiYe007038;
-        Tue, 10 Nov 2020 03:43:02 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=TtXGHhACjfz8Ps0N21N52xQy9kXRKdO13Q8xFxpEivA=;
- b=NKsYUEbWYEgl5qu83Fm68La6O0RGlfNbioKMqm4X59pjYZ2zk7+56HN9bCGTY1i7qo6V
- 1jd2TjwyVbPALREPV/J5j+KaBsQ4Sg5vXPGr/SjqEUJ2BketiREmjjBNoBtfRWAYbQM6
- H96v1raXQUVrsO6mQasnoDOd5D9OS/m9O3QfXfKzcNTh5+k40++C0lVveYbs63CDJUJQ
- TNPDVNaMkBnA/P+yfJ0tSpB4ycWqpB47OvXqUm4wISUfN4wrDTRwDjvU5UVLR2T/eLc1
- SBczz68aR8iSskcGDpjj3o3eGo/bjgTV5VRA+rqP1U6L0AxEf/thFjsmYPSAVd9NYSRK TA== 
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2106.outbound.protection.outlook.com [104.47.58.106])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 34ns14aft2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Nov 2020 03:43:02 -0800
+        id S1726861AbgKJLx4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 06:53:56 -0500
+Received: from mail-eopbgr00054.outbound.protection.outlook.com ([40.107.0.54]:57091
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726428AbgKJLxz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Nov 2020 06:53:55 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aC3MdFdpnGgkB1NXmkz0Q16vSd5aoZea85a86SXVRfTbP1u8L2I2YkipDWlZRTgPrvmhfL1RR9wiz/DQIwrjYRGQv34WgS8U81zYKzl8ajeA6WEpTRJ3OPVHGgm8INz8a2SuLSAv+k4uxI5K/7akatbkZDJqONsIKi0llSnMt5f8N5b9UdXWLNl8MV5BzfEvs/uxWudh3jOjSxEFmfGHzjNv3w6MJy/sMclI5hcMCu2t9ieBzKPE8BaLJgRa12BIQ558nuluV1Misc6/KlCzpKrH2APBQNAUcrQPZ9U0KzOGKFxE3p95EfIvtZdZOh5jTMyFnINuIL3rqVzJOZKX8w==
+ b=lDLxegdQkyq3zbGkpLtyJdp0WAOGGpVpDNJPnpfNTm6H3VWvtVC+69lHy6bVuBaaHCCsTDBYJcU1uKJbfwydixsLv7t2yR4/bGaSVgUCQT5qMCQ/5XT8WF/LojpySR6YnuprFvFPCyXFHR30HvUv9dOTHspusNzNWhgEIllqPp2HDguzqDbuPsi1AN2Rzm65im04kDaCqloVx5CI4yz82ygjOq/HxPT2TcF4/fiRnFjWiieZfstERuc3tEs0xiWJsYim+qNaMMuecTzx38tutbMgbIlPLPXsBjSCKtIHB0BsfYxYOIyMtI2T+9FQAr7IB3XxRoTIujRVFPfKp5o+3w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TtXGHhACjfz8Ps0N21N52xQy9kXRKdO13Q8xFxpEivA=;
- b=BJ2way55f3EkKBztiPAp0hdNFVxkIxTprSPIz7uuBRpWb2D1/b4YrnM4RqkeFVm88MPxRb4b9nnGDMXcbzeC7M0MqjrG3Cd/LvMUn4q+zKJPXVxKjbvdKHT7YcZAkinjrAKkIgeuWGGOj4pbVHIcsaH8d/9fugJFv2mdhVkpZBxtZ+yApiadsNZ+9peQqYNUi1A08cx2ynIEapsxghGLsAoi8HiOfdfV9yJGqcGpWWDdCMVPyDO4qacS+comqrCnvuJ2Zfskep16q3ugr7cSGlQdzfScVVVwX92N+eT+IQDZMT5tIVxQWdbV4AqJm6PdppxTrhIlVqFPy3PcMtP5Jw==
+ bh=ntHfeVRRfuJdivyYbV05cZl2IdPLKqIoxYU4jkfve10=;
+ b=DLG9cSPZxdY4BcDEPfPjSQc2OwsXKo0tAbFTETuGSVOIrz4j5nkyOqZfGhTfEl5LmSBBO5ZEO72CUkU3Vro4Iq/09K5udEdYkDDRI0/zB61NNKvJgu1CH5NCRDZcks5qkGhVhcZ66fVVAROd8OpB+0JjZbaI0gIt78VrNuOSAuJtfHxs7CNkhWFv1mDRoKsgWzwFiBsVn88AaQvtCowaVzRTcOXC9xmaZB/diepYcqp5x8SBi7RR0Iaq80K8kmb5U8+aZ4NdhVM680JbC/B75irHefunzsgvpsCXDllzmwHfzNP6tRFwSJQtbU5itN2pqyDkIs8HoTlJbcHjGEeXUQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TtXGHhACjfz8Ps0N21N52xQy9kXRKdO13Q8xFxpEivA=;
- b=DJhLKTgvZB4h0PtPCoLFMsaH8pExsx764C4IcuzhyWNv88pV+BR8QUv+vElYKvSKKODbokYdi5we/ytAQj/bnOhbXMwLJDry4gBB7aqzCBRNVRYM4u2idIvk8XaUDtHFp+iFnyUIwyDKY0FIvo6CjsKmSBSo9eCeKdjbE4/Wd84=
-Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
- DM6PR07MB6362.namprd07.prod.outlook.com (2603:10b6:5:179::27) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3541.21; Tue, 10 Nov 2020 11:43:00 +0000
-Received: from DM6PR07MB5529.namprd07.prod.outlook.com
- ([fe80::f977:ce71:755d:bed6]) by DM6PR07MB5529.namprd07.prod.outlook.com
- ([fe80::f977:ce71:755d:bed6%6]) with mapi id 15.20.3541.025; Tue, 10 Nov 2020
- 11:43:00 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@nxp.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "colin.king@canonical.com" <colin.king@canonical.com>,
-        "rogerq@ti.com" <rogerq@ti.com>, Rahul Kumar <kurahul@cadence.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>
-Subject: RE: [PATCH v2 03/10] usb: cdns3: Moves reusable code to separate
- module
-Thread-Topic: [PATCH v2 03/10] usb: cdns3: Moves reusable code to separate
- module
-Thread-Index: AQHWtDIwjXrTHzGzLka9II0WlmWMgKnBGfiAgAAAUrCAACSOAIAABRoAgAAABOA=
-Date:   Tue, 10 Nov 2020 11:42:59 +0000
-Message-ID: <DM6PR07MB552957F3C0D3E321C527578BDDE90@DM6PR07MB5529.namprd07.prod.outlook.com>
-References: <20201106114300.1245-1-pawell@cadence.com>
- <20201106114300.1245-4-pawell@cadence.com>
- <20201110090854.GB22481@b29397-desktop>
- <DM6PR07MB55294E87F6D76BA3C04E510ADDE90@DM6PR07MB5529.namprd07.prod.outlook.com>
- <20201110112054.GC22481@b29397-desktop> <X6p7+nXa/H4uqj0+@kroah.com>
-In-Reply-To: <X6p7+nXa/H4uqj0+@kroah.com>
-Accept-Language: en-US
+ bh=ntHfeVRRfuJdivyYbV05cZl2IdPLKqIoxYU4jkfve10=;
+ b=p2fH90z+ikTwpKiBZnnssfps5n7MHDJ7jgengzaxsVZXOp5nQhBcxB7vKLG6R0yaQwdF7Zw+DCy2gQ64mqpauT65CQhQrSTBp3Jymg8vMjNxyNLuwkdRFRfh5qs74YR+DmDWueZnj6KzWM2z92HHirR54eFOwJxhXJnXYHXLsFo=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=wolfvision.net;
+Received: from VI1PR08MB4064.eurprd08.prod.outlook.com (2603:10a6:803:e5::10)
+ by VI1PR0802MB2414.eurprd08.prod.outlook.com (2603:10a6:800:b2::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.24; Tue, 10 Nov
+ 2020 11:53:47 +0000
+Received: from VI1PR08MB4064.eurprd08.prod.outlook.com
+ ([fe80::3cab:8098:fc6c:df30]) by VI1PR08MB4064.eurprd08.prod.outlook.com
+ ([fe80::3cab:8098:fc6c:df30%4]) with mapi id 15.20.3541.025; Tue, 10 Nov 2020
+ 11:53:47 +0000
+Subject: Re: [PATCH v2] usb: gadget: uvc: fix multiple opens
+To:     Hans Verkuil <hverkuil@xs4all.nl>, gregkh@linuxfoundation.org
+Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
+        linux-usb@vger.kernel.org, m.tretter@pengutronix.de,
+        linux-media@vger.kernel.org
+References: <20201105103758.GA4033354@kroah.com>
+ <20201110082504.26134-1-thomas.haemmerle@wolfvision.net>
+ <2bf6f3b3-6475-9cd9-b6f9-dfc4b444c955@xs4all.nl>
+From:   =?UTF-8?Q?Thomas_H=c3=a4mmerle?= <thomas.haemmerle@wolfvision.net>
+Message-ID: <03c81d2f-24c3-0c15-3a8a-506ea955bf67@wolfvision.net>
+Date:   Tue, 10 Nov 2020 12:53:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <2bf6f3b3-6475-9cd9-b6f9-dfc4b444c955@xs4all.nl>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctZGY2OWI2NjctMjM0OS0xMWViLTg3NmItMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XGRmNjliNjY5LTIzNDktMTFlYi04NzZiLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMTI5NyIgdD0iMTMyNDk0ODIxNzYyOTA2NzUwIiBoPSJpUTJpTVdRMjZXSVFXVlFuWndHUDd6dmR3MWs9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: true
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=cadence.com;
-x-originating-ip: [185.217.253.59]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ae54f9c6-c8f3-4261-7c00-08d8856dc674
-x-ms-traffictypediagnostic: DM6PR07MB6362:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR07MB6362A324B10AD66F58364B8BDDE90@DM6PR07MB6362.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TO/dBZAgsF0gxq/rhedtRyPB4Q5MDjFSOuuxEopobcAWhMEwHNxWPThZlj0FdGIzIE9IAZFsT+Nf4CrLykCnV6JHMvpb6c3iTxGe37jcT2o6tm9m88QfinXfOOIqoVoKsbT9TRJ/lG7rLTfbDmUqin+Vktz591UcKHgGTpd8LghuGiIGnzIGjJLVcUSqpcZdRb/hL/ex+EseaulUeHR2Y3e14h25GLk7O0GTi/42JdDBQkc8NbGHQPW+BR3w7djGvjpZWSvCEx1RZiawtwx38Y+M6z4QN9bAT+y6CyHB7rA/bIPAlrv7RRG/4ZgrWQYKJ/WZedpjx5OZL9bfdDnR4SbRng8nzl/xNboNBNUqA02LXpR9JfJQD/JAc8rFgO1+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(346002)(376002)(396003)(136003)(366004)(36092001)(8936002)(83380400001)(110136005)(55016002)(2906002)(26005)(8676002)(316002)(186003)(7696005)(33656002)(478600001)(6506007)(53546011)(76116006)(66556008)(66946007)(66476007)(66446008)(54906003)(5660300002)(71200400001)(9686003)(52536014)(64756008)(4326008)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: VCmxw9ArVdaw+Hzs9P3lLCJ98w5trmdJDRQ9Fl1xyLK/r28pSQpoQI/Jl6yfszvZS9htjRNK0esd8MwWHpvidzE9cHirvAsp/+7vZhd96jluinE1HqLBqzWx7Be0IhEgDgUmeBvKxkl68f8jZm9G5snGp8d6ZIwkpku7Bi8ZXOj0lwjy14dO78WCFRCAHlJf/n4E64fF8gWXV55MdBdrXY10MAPCUxOcqU1RXWXSfkCwbRfUs5v8LaPv7t6JxSlDD1wFB1qh+mDXoUUbsSGvhd4mc+kOixV+tsV8Xm5ZgC55H9lFURNqA9ZQ/UQWwzCFuBNUd4qYZss1oXVPBs/YqOsLiLJTgQvlHU3zsdY6++yr0sEeap6QWcFe8sEZpnKqSXE2V/DhoxqjbF8rpNv2TSY/ROgXMD5pDlpcHuPLAwVoA23wrwndgOAmv6uyg6YePSUXQm5cNjX8EntmSj69yGt2YpaNhSj+sHh3CrZPKvt5ZkXbNa7Kf9SLBE74v/cSHoQOqHQ+oeGfWrQziVC6lzfZiUkB8fD7Yt3FFHlFPfAgStSgldu/6kJ5+MrNLDv93fgClecgHdC1itsohE0ZK6666WWiWQhkn326tfIsdkqyLMdZV4eUn1nA6GpVI/iZLz7W+5yT+sxDufFhqWMvQGDYxAPKlxy6TUetXqnsvpj8D1470LmuUgr9bO/NvI9A+f216uO7Al0c3gfYO0z++pAF3bqB9FT14jz3MyNNvpZh0S5c5XpbcyTytduZf+u6zUJW4gIUNPnO7Ay3RO99L1SR+rD97XdhbNBuDQawZOKgAC67CUu2IYu+FydFiYx658qorTwMvylA4UcchPuHB0n2YaXrVu8yq/G7HzuLnY2BdIGeaAwNkWDPS1mCfeAo2KoUXEe7xvCkoiVQfZR0oA==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [91.118.163.37]
+X-ClientProxiedBy: VE1PR03CA0015.eurprd03.prod.outlook.com
+ (2603:10a6:802:a0::27) To VI1PR08MB4064.eurprd08.prod.outlook.com
+ (2603:10a6:803:e5::10)
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.10.12.11] (91.118.163.37) by VE1PR03CA0015.eurprd03.prod.outlook.com (2603:10a6:802:a0::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Tue, 10 Nov 2020 11:53:47 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c4d37acb-555d-4d6a-e896-08d8856f4829
+X-MS-TrafficTypeDiagnostic: VI1PR0802MB2414:
+X-Microsoft-Antispam-PRVS: <VI1PR0802MB2414333E0DC66B1B1704DC54EDE90@VI1PR0802MB2414.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X0+z3BXd8M36RnIFBBfpW3hlZzSsFpHR3/Vjf1Yoh2q260/7es+fOpwU9tDyjVs1jffLGjx+bnSiwRqcFgJmS+0fLlidCFF1DhdYJ31czlM7QYpTgtDBRpPHmzPMqOSeZI42WBOT5XPQWXlzWW2VZpy2HC7f8F//FZJ9zYLcqqnh0MYBVN8+RIyMS3xva9rZ7jnKS9LHMgAYYM+6/4NbzWvLS3U9GhSqqYUqJXUNCEqvokMYWbJ/pxKwsWVZCZJO3a7aAkj8q6r75jsT8mKMHK5l+IkBUo2uUFbx/sEqN+TtH8v/Clukf/Rj7JlCHI4lM7tjugXvIJ2elgX4xiwfzEJqG3z2aTSRyZkzAsJnYdtZsDzvgVrEJJQ2jHHK6F7R
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB4064.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(366004)(346002)(39840400004)(136003)(396003)(26005)(478600001)(186003)(31686004)(16526019)(52116002)(956004)(6486002)(2616005)(16576012)(2906002)(53546011)(4326008)(316002)(31696002)(8676002)(83380400001)(66946007)(8936002)(66556008)(36756003)(66476007)(86362001)(5660300002)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: yP5xY6ykypNhJdZh+iXCygnRH8jEJUldid1OU6PTgtrTXyQkdUEkcrbk5JOfw8U3gVft5I5geIaHeGCdQlEf5g0BbZd69R/+6UvJOb7SZtwPWgNFd71AbzpYJZqaWcAEKEvGgM8yTIUXjXFAm5/lbWFnmMpN1fB7ZBCxCbllLDgVEUYC1vtQ4zARbv2GD3ERClFWx6ra+d2Dvfff2XqzG5oUsk0dBYKhNfcQQb11BIOQvYFP5znPiw0eFMpZEMJkRJ0pOr2A1OvoPmLG5xY59XaIHm3bbdls44TYlq7JZ4HymKiIAlYl8BcMb28nmRGn3At1zsp+7jVXdbcTTNMGar+Ma0FjqXLdjrN5SyFlpAgHOVyMg+YPDKIelwSrJxGzQ5nyXYZBW904uvbQVbrICCpGe0AkLp88SL2k13tS3i8NFe2PE4rLQjvPS62p79FKGUQkIqvFR75+z9KamonPnSPGy3O6ijzfKfiDVoJzCTNSG7STtVEm6ANEG3qoR0LfkC9RPT0sXJBRE4tYB7OC9FFA6feWD7uN6WE4VXgZn22CA9N/f/hCGnmnnhgO//O2T6bQskVmoX9hIyXJDtbdt4HxWXBYVkg3E9HW3Bu/8Sgg1cnZ4Ys+2/fU+n80l1vMFwBxwUuQA1TZ2w5nUeetYrFHcQMv4Ix0pzU+6PRngLTijs1X1ETK1hzfh0uKfmp7Kh2ERpqcO1Qg5f1PFxXWWixCqrdlY/bUlgujwjmA+3fOJD7CqAE6yBodb1IepoedaJDWdD3p4AgYBjihnol6DDFQl+LFVVtWUVCh9OFigRtXhTZblKndRfjwI5CUmQRhlQ/ccy+BjFJOWc2SS2faK3Qnpn2fjZEiluK+O/AihzsAVHCRs2elieF0DHcIwfvseNwCE+YppoAkYPiaB59+gA==
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4d37acb-555d-4d6a-e896-08d8856f4829
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR08MB4064.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae54f9c6-c8f3-4261-7c00-08d8856dc674
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2020 11:42:59.8808
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2020 11:53:47.3334
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: q8hptiEjbgS472NbmjbFW1WYP2Z18VnCCyBIKSzh22tK9dudMxOmzdqf3jsxgSctfGgkmyHUZqw/5RwySVILL8OtQhwKAWb7WJtwhv41EsI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB6362
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-10_04:2020-11-10,2020-11-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 phishscore=0
- adultscore=0 mlxlogscore=549 spamscore=0 impostorscore=0 suspectscore=0
- clxscore=1015 mlxscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011100084
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WeJaqupF1RSo5ouB6k2T9eBhxdxvQ/a3dJVaRHzLWb0Q9xeYBsb4J8dKIoq/V57u3b1zbg34ce9gigGmQWyevcIjzuWUql5sGIfCuvqFOIo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0802MB2414
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
->On Tue, Nov 10, 2020 at 11:21:22AM +0000, Peter Chen wrote:
->> On 20-11-10 09:20:54, Pawel Laszczak wrote:
->> > Hi,
->> >
->> > >>
->> > >>  int cdns3_hw_role_switch(struct cdns3 *cdns);
->> > >> -int cdns3_init(struct cdns3 *cdns);
->> > >> -int cdns3_remove(struct cdns3 *cdns);
->> > >> +extern int cdns3_init(struct cdns3 *cdns);
->> > >> +extern int cdns3_remove(struct cdns3 *cdns);
->> > >
->> > >Why add "extern" here and below?
->> > >
->> >
->> > These functions are the API between cdnsp and cdns3 modules.
->> > It's looks like a common approach in kernel.
->> > Many or even most of API function in kernel has "extern".
->> >
+On 10.11.20 11:31, Hans Verkuil wrote:
+> On 10/11/2020 09:25, thomas.haemmerle@wolfvision.net wrote:
+>> From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
 >>
->> Even you have not written "extern" keyword, the "extern" is
->> added implicitly by compiler. Usually, we use "extern" for variable
->> or the function is defined at assembly. You could see some
->> "extern" keyword use cases at include/linux/device.h.
->
->We are moving away from using this keyword for functions now, if at all
->possible please.  Only use it for variables, I think checkpatch now
->catches it as well.
->
+>> Currently, the UVC function is activated when open on the corresponding
+>> v4l2 device is called.
+>> On another open the activation of the function fails since the
+>> deactivation counter in `usb_function_activate` equals 0. However the
+>> error is not returned to userspace since the open of the v4l2 device is
+>> successful.
+>>
+>> On a close the function is deactivated (since deactivation counter still
+>> equals 0) and the video is disabled in `uvc_v4l2_release`, although
+>> another process potentially is streaming.
+>>
+>> Move activation of UVC function to subscription on UVC_EVENT_SETUP and
+>> keep track of the number of subscribers (limited to 1) because there we
+>> can guarantee for a userspace program utilizing UVC.
+>> Extend the `struct uvc_file_handle` with member `bool connected` to tag
+>> it for a deactivation of the function.
+>>
+>> With this a process is able to check capabilities of the v4l2 device
+>> without deactivating the function for another process actually using the
+>> device for UVC streaming.
+>>
+>> Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+>> ---
+>> v2:
+>>   - fix deadlock in `uvc_v4l2_unsubscribe_event()` (mutex is already
+>>     locked in v4l2-core) introduced in v1
+>>   - lock mutex in `uvc_v4l2_release()` to suppress ioctls and protect
+>>     connected
+>>
+>>   drivers/usb/gadget/function/uvc.h      |  2 +
+>>   drivers/usb/gadget/function/uvc_v4l2.c | 56 +++++++++++++++++++++-----
+>>   2 files changed, 48 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+>> index 73da4f9a8d4c..0d0bcbffc8fd 100644
+>> --- a/drivers/usb/gadget/function/uvc.h
+>> +++ b/drivers/usb/gadget/function/uvc.h
+>> @@ -117,6 +117,7 @@ struct uvc_device {
+>>   	enum uvc_state state;
+>>   	struct usb_function func;
+>>   	struct uvc_video video;
+>> +	unsigned int connections;
+>>   
+>>   	/* Descriptors */
+>>   	struct {
+>> @@ -147,6 +148,7 @@ static inline struct uvc_device *to_uvc(struct usb_function *f)
+>>   struct uvc_file_handle {
+>>   	struct v4l2_fh vfh;
+>>   	struct uvc_video *device;
+>> +	bool connected;
+>>   };
+>>   
+>>   #define to_uvc_file_handle(handle) \
+>> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+>> index 67922b1355e6..aee4888e17b1 100644
+>> --- a/drivers/usb/gadget/function/uvc_v4l2.c
+>> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+>> @@ -228,17 +228,57 @@ static int
+>>   uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
+>>   			 const struct v4l2_event_subscription *sub)
+>>   {
+>> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
+>> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
+>> +	int ret;
+>> +
+>>   	if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
+>>   		return -EINVAL;
+>>   
+>> -	return v4l2_event_subscribe(fh, sub, 2, NULL);
+>> +	if ((sub->type == UVC_EVENT_SETUP) && (uvc->connections >= 1))
+>> +		return -EBUSY;
+>> +
+>> +	ret = v4l2_event_subscribe(fh, sub, 2, NULL);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	if (sub->type == UVC_EVENT_SETUP) {
+>> +		uvc->connections++;
+>> +		handle->connected = true;
+>> +		uvc_function_connect(uvc);
+>> +	}
+> 
+> This makes no sense. Why would subscribing to a SETUP event
+> mean that you are 'connected'?
 
-Ok, I will remove all extern from driver.=20
-Removing it also will remove checkpatch.pl warmings.
+Subscribing to a SETUP does not mean that you are connected - on a 
+subscription to SETUP we can expect that there is a userspace process, 
+utilizing UVC -- which is required for the UVC gadget function -- and 
+everything is ready to enable the function by calling uvc_function_connect.
+How about calling it `function_connected`?
 
-Thanks
-Pawel
+> 
+> It should be possible to open a V4L2 device node any number of times,
+> and any filehandle can subscribe to any event, but typically once
+> userspace allocates buffers (VIDIOC_REQBUFS or VIDIOC_CREATE_BUFS)
+> then that filehandle is marked as the owner of the device and other
+> open filehandles are no longer allowed to allocate buffers or stream video.
+
+Sure - this can be also done if userspace allocates buffers.
+But why does it make more sense to call uvc_function_connect on 
+VIDIOC_REQBUFS or VIDIOC_CREATE_BUFS instead of subscribtion to a UVC event?
+
+> 
+> See e.g. drivers/media/common/videobuf2/videobuf2-v4l2.c
+> and vb2_ioctl_reqbufs and other vb2_ioctl_* functions.
+> 
+> Unfortunately this UVC gadget driver is rather old and is not using
+> these helper functions.
+> 
+> Running 'v4l2-compliance' will likely fail on a lot of tests for this
+> driver.
+> 
+> This driver probably could use some TLC.
+
+I totally agree with that, however this change fixes at least one test 
+of 'v4l2-compliance'.
+Currently a running UVC connection can be corrupted by another process 
+which just opens and closes the device.
+
+Thomas
+
+> 
+> Regards,
+> 
+> 	Hans
+> 
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void uvc_v4l2_disable(struct uvc_device *uvc)
+>> +{
+>> +	if (--uvc->connections)
+>> +		return;
+>> +
+>> +	uvc_function_disconnect(uvc);
+>> +	uvcg_video_enable(&uvc->video, 0);
+>> +	uvcg_free_buffers(&uvc->video.queue);
+>>   }
+>>   
+>>   static int
+>>   uvc_v4l2_unsubscribe_event(struct v4l2_fh *fh,
+>>   			   const struct v4l2_event_subscription *sub)
+>>   {
+>> -	return v4l2_event_unsubscribe(fh, sub);
+>> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
+>> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
+>> +	int ret;
+>> +
+>> +	ret = v4l2_event_unsubscribe(fh, sub);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	if ((sub->type == UVC_EVENT_SETUP) && handle->connected) {
+>> +		uvc_v4l2_disable(uvc);
+>> +		handle->connected = false;
+>> +	}
+>> +
+>> +	return 0;
+>>   }
+>>   
+>>   static long
+>> @@ -293,7 +333,6 @@ uvc_v4l2_open(struct file *file)
+>>   	handle->device = &uvc->video;
+>>   	file->private_data = &handle->vfh;
+>>   
+>> -	uvc_function_connect(uvc);
+>>   	return 0;
+>>   }
+>>   
+>> @@ -303,14 +342,11 @@ uvc_v4l2_release(struct file *file)
+>>   	struct video_device *vdev = video_devdata(file);
+>>   	struct uvc_device *uvc = video_get_drvdata(vdev);
+>>   	struct uvc_file_handle *handle = to_uvc_file_handle(file->private_data);
+>> -	struct uvc_video *video = handle->device;
+>> -
+>> -	uvc_function_disconnect(uvc);
+>>   
+>> -	mutex_lock(&video->mutex);
+>> -	uvcg_video_enable(video, 0);
+>> -	uvcg_free_buffers(&video->queue);
+>> -	mutex_unlock(&video->mutex);
+>> +	mutex_lock(&uvc->video.mutex);
+>> +	if (handle->connected)
+>> +		uvc_v4l2_disable(uvc);
+>> +	mutex_unlock(&uvc->video.mutex);
+>>   
+>>   	file->private_data = NULL;
+>>   	v4l2_fh_del(&handle->vfh);
+>>
+> 
