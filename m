@@ -2,39 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FA82ACC5A
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 04:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8148E2ACD22
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 05:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732871AbgKJDyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 22:54:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55754 "EHLO mail.kernel.org"
+        id S1733278AbgKJD74 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 22:59:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57862 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732834AbgKJDyq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 22:54:46 -0500
+        id S2387479AbgKJD4E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Nov 2020 22:56:04 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B4D83216C4;
-        Tue, 10 Nov 2020 03:54:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B992221E9;
+        Tue, 10 Nov 2020 03:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604980485;
-        bh=fZXpqzRVhUKq/GPnlC0UTgWYvCzqvthyjK3Oz86uZ6M=;
+        s=default; t=1604980564;
+        bh=UaJXI7CmmFagNQ+Bm1MDXc1Hz7G6tZ1vvQPuioPW6tM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c4JaA65IdwVdm2RTRtLyZ5zYEWGctBHYREEH1FRls4bJwl6cdw1HTl49Iy0+qy/fd
-         aK5/+hDhofZ/qzK3g1Bm+VhEOT6ZjkBACKcfSUqTMrbBiDaWgCRfTo61Ms0Ynyukw0
-         rKIvDAWfjwsTWKPNhNP/WOY6+mjlF2lKOykROTGE=
+        b=t0AwF+dQMMFoMuvl7kr9ypX+JlrfIMo3hXsHNERtw15OQYX0zchWwitQJfd4RAH14
+         eEpqdm8SYQrY/TfrJ8dovIsdSd6XVVW9be+wxYCAScsmo/G4088ZEY8U9elVdmSlB+
+         u5oCBudJwMgdFQAa8JiyqwdPajqc+tP0nVB8eU68=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 03/42] usb: dwc3: pci: add support for the Intel Alder Lake-S
-Date:   Mon,  9 Nov 2020 22:54:01 -0500
-Message-Id: <20201110035440.424258-3-sashal@kernel.org>
+Cc:     Daniele Palmas <dnlplm@gmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 17/21] net: usb: qmi_wwan: add Telit LE910Cx 0x1230 composition
+Date:   Mon,  9 Nov 2020 22:55:37 -0500
+Message-Id: <20201110035541.424648-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201110035440.424258-1-sashal@kernel.org>
-References: <20201110035440.424258-1-sashal@kernel.org>
+In-Reply-To: <20201110035541.424648-1-sashal@kernel.org>
+References: <20201110035541.424648-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -42,42 +45,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+From: Daniele Palmas <dnlplm@gmail.com>
 
-[ Upstream commit 1384ab4fee12c4c4f8bd37bc9f8686881587b286 ]
+[ Upstream commit 5fd8477ed8ca77e64b93d44a6dae4aa70c191396 ]
 
-This patch adds the necessary PCI ID for Intel Alder Lake-S
-devices.
+Add support for Telit LE910Cx 0x1230 composition:
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
+0x1230: tty, adb, rmnet, audio, tty, tty, tty, tty
+
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Link: https://lore.kernel.org/r/20201102110108.17244-1-dnlplm@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index ba88039449e03..58b8801ce8816 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -40,6 +40,7 @@
- #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
- #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
- #define PCI_DEVICE_ID_INTEL_JSP			0x4dee
-+#define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
- 
- #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
- #define PCI_INTEL_BXT_FUNC_PMU_PWR	4
-@@ -367,6 +368,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_JSP),
- 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
- 
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLS),
-+	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
- 	  (kernel_ulong_t) &dwc3_pci_amd_properties, },
- 	{  }	/* Terminating Entry */
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index d2612b69257ea..6e0b3dc14aa47 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1268,6 +1268,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1201, 2)},	/* Telit LE920, LE920A4 */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1230, 2)},	/* Telit LE910Cx */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1260, 2)},	/* Telit LE910Cx */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1261, 2)},	/* Telit LE910Cx */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1900, 1)},	/* Telit LN940 series */
 -- 
 2.27.0
 
