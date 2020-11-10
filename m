@@ -2,81 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 997482AE238
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 22:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C532AE37C
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 23:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729862AbgKJVzN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 16:55:13 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:37323 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726467AbgKJVzN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 16:55:13 -0500
-Received: (qmail 209049 invoked by uid 1000); 10 Nov 2020 16:55:11 -0500
-Date:   Tue, 10 Nov 2020 16:55:11 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     David Niklas <Hgntkwis@vfemail.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: I need advice with UPS connection.
-Message-ID: <20201110215511.GA208895@rowland.harvard.edu>
-References: <20201109220000.2ae98fa5@Phenom-II-x6.niklas.com>
+        id S1732349AbgKJWmQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 17:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732373AbgKJWmQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 17:42:16 -0500
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A912FC0613D4
+        for <linux-usb@vger.kernel.org>; Tue, 10 Nov 2020 14:42:14 -0800 (PST)
+Received: by mail-il1-x143.google.com with SMTP id n5so127450ile.7
+        for <linux-usb@vger.kernel.org>; Tue, 10 Nov 2020 14:42:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7jSf/XzZ4jyQ+1vMaLtMgIwZ1Hd3aE57H+YNIg7Vd6s=;
+        b=HmAOZ27e8pHLOZtNt33kCndwJB139JyHCZFOiD/C94/+pWb2KGdTlQCvLFR1HyR9mk
+         lFx1ytT/rJSJ7/tpMYshlVQIWUN/TZct4TCzlg9wYsDyPKswhZWrEi9oFiHeYSi0CMuE
+         tmbYZnr4Jy0AgOqG0pqnPBmt6xrLd9kKaYRBo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7jSf/XzZ4jyQ+1vMaLtMgIwZ1Hd3aE57H+YNIg7Vd6s=;
+        b=mPniOLc1RCfzu1w83+fpgsBqv8S5qUWf3j3qjpPzk2ukI+Hc143ABvFymW4Vvn0bk/
+         I5a8CAIWCbw4KxzWnOpTCUcjN2bWaJgGZDDBZJnJQq6cLL5gYvjAK8NBgryvlrNWpEU7
+         VQZw5O9WLmyPfnL8Qtgs1XRefw+xf0iFfAw6crnKz6yLXR+t3kJCo6w3P68mxkvbCr16
+         FEwNz0Dwb7V+gzsBn+o565iCHo/dydgTg4ihwJpgn68uZlzfEh+QFC+YSNxvFrWvHYqS
+         m4jqYjHCoDhYG/afXFWOrALOcCoNz+4B4G1KWC1k+vu4GR0LLPdmDULw6J6cd1gqhIX4
+         9Pbw==
+X-Gm-Message-State: AOAM533MiYVUFKjD3DojcLXzsnkUomaVe4DOoISR/sZY0tqzk3TVAZ1/
+        rS6MktXo7IkeW+8ukUTViStwZQ==
+X-Google-Smtp-Source: ABdhPJy+/m7HgoPinpwrhFYoHGR3jeRThmYkrgj1Js7jS1hKjj3aF+EFXbp2kYFpSB7gnDlz1TZdJg==
+X-Received: by 2002:a92:99ce:: with SMTP id t75mr16441201ilk.257.1605048133972;
+        Tue, 10 Nov 2020 14:42:13 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id e12sm38652ilq.65.2020.11.10.14.42.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Nov 2020 14:42:13 -0800 (PST)
+Subject: Re: [PATCH 00/13] Introduce seqnum_ops
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
+        peterz@infradead.org, rafael@kernel.org, lenb@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
+        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
+        rric@kernel.org, valentina.manea.m@gmail.com, shuah@kernel.org,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <cover.1605027593.git.skhan@linuxfoundation.org>
+ <20201110204414.GA204624@rowland.harvard.edu>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <c58fde16-4bd1-0e1e-94ce-a15c359f9f91@linuxfoundation.org>
+Date:   Tue, 10 Nov 2020 15:42:11 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201109220000.2ae98fa5@Phenom-II-x6.niklas.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201110204414.GA204624@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+Jiri, Ben, and linux-input
+On 11/10/20 1:44 PM, Alan Stern wrote:
+> On Tue, Nov 10, 2020 at 12:53:26PM -0700, Shuah Khan wrote:
+>> There are a number of atomic_t usages in the kernel where atomic_t api
+>> is used strictly for counting sequence numbers and other statistical
+>> counters and not for managing object lifetime.
+>>
+>> The purpose of these Sequence Number Ops is to clearly differentiate
+>> atomic_t counter usages from atomic_t usages that guard object lifetimes,
+>> hence prone to overflow and underflow errors.
+>>
+>> The atomic_t api provides a wide range of atomic operations as a base
+>> api to implement atomic counters, bitops, spinlock interfaces. The usages
+>> also evolved into being used for resource lifetimes and state management.
+>> The refcount_t api was introduced to address resource lifetime problems
+>> related to atomic_t wrapping. There is a large overlap between the
+>> atomic_t api used for resource lifetimes and just counters, stats, and
+>> sequence numbers. It has become difficult to differentiate between the
+>> atomic_t usages that should be converted to refcount_t and the ones that
+>> can be left alone. Introducing seqnum_ops to wrap the usages that are
+>> stats, counters, sequence numbers makes it easier for tools that scan
+>> for underflow and overflow on atomic_t usages to detect overflow and
+>> underflows to scan just the cases that are prone to errors.
+>>
+>> Sequence Number api provides interfaces for simple atomic_t counter usages
+>> that just count, and don't guard resource lifetimes. The seqnum_ops are
+>> built on top of atomic_t api, providing a smaller subset of atomic_t
+>> interfaces necessary to support atomic_t usages as simple counters.
+>> This api has init/set/inc/dec/read and doesn't support any other atomic_t
+>> ops with the intent to restrict the use of these interfaces as simple
+>> counting usages.
+>>
+>> Sequence Numbers wrap around to INT_MIN when it overflows and should not
+>> be used to guard resource lifetimes, device usage and open counts that
+>> control state changes, and pm states. Overflowing to INT_MIN is consistent
+>> with the atomic_t api, which it is built on top of.
+> 
+> If Sequence Numbers are subject to wraparound then they aren't reliable.
+> Given that they aren't reliable, why use atomic instructions at all?
+> Why not just use plain regular integers with READ_ONCE and WRITE_ONCE?
+> 
 
-On Mon, Nov 09, 2020 at 10:00:00PM -0500, David Niklas wrote:
-> Hello,
-> I'm running Linux Kernel 5.8.X on a Devuan (Debian) system. I connected
-> my UPS (OPTI-UPS Thunder Shield TS2250B) via USB cable and got:
-> 
-> [739229.454592][T25544] usb 9-4: new low-speed USB device number 2 using ohci-pci
-> [739229.635343][T25544] usb 9-4: config index 0 descriptor too short (expected 9, got 0)
-> [739229.635348][T25544] usb 9-4: can't read configurations, error -22
-> [739229.791290][T25544] usb 9-4: new low-speed USB device number 3 using ohci-pci
-> [739229.982414][T25544] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
-> [739229.982421][T25544] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
-> [739229.982426][T25544] usb 9-4: Product: HID UPS Battery
-> [739229.982430][T25544] usb 9-4: Manufacturer: POWERCOM Co.,LTD
-> [739229.982433][T25544] usb 9-4: SerialNumber: 004-0D9F-000
-> [739230.027616][T25544] hid-generic 0003:0D9F:0004.0004: hiddev1,hidraw2: USB HID v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on usb-0000:00:16.0-4/input0
-> [739233.484723][T25544] usb 9-4: USB disconnect, device number 3
-> [739236.257951][T25544] usb 9-4: new low-speed USB device number 4 using ohci-pci
-> [739236.475434][T25544] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
-> [739236.475442][T25544] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
-> [739236.520783][T25544] hid-generic 0003:0D9F:0004.0005: hiddev1,hidraw2: USB HID v1.00 Device [HID 0d9f:0004] on usb-0000:00:16.0-4/input0
-> [739239.933809][T25544] usb 9-4: USB disconnect, device number 4
-> [739242.701322][T25544] usb 9-4: new low-speed USB device number 5 using ohci-pci
-> [739242.880035][T25544] usb 9-4: device descriptor read/all, error -62
-> [739243.034561][T25544] usb 9-4: new low-speed USB device number 6 using ohci-pci
-> [739243.252040][T25544] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
-> [739243.252042][T25544] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
-> [739243.296444][T25544] hid-generic 0003:0D9F:0004.0006: hiddev1,hidraw2: USB HID v1.00 Device [HID 0d9f:0004] on usb-0000:00:16.0-4/input0
-> [739246.720152][T25544] usb 9-4: USB disconnect, device number 6
-> [739249.491330][T13473] usb 9-4: new low-speed USB device number 7 using ohci-pci
-> [739249.718707][T13473] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
-> [739249.718709][T13473] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
-> [739249.718710][T13473] usb 9-4: Product: HID UPS Battery
-> [739249.718711][T13473] usb 9-4: Manufacturer: POWERCOM Co.,LTD
-> [739249.718712][T13473] usb 9-4: SerialNumber: 004-0D9F-000
-> [739249.751173][T13473] hid-generic 0003:0D9F:0004.0007: unknown main item tag 0x0
-> <snip class="spam-repeated-previous-message">
-> [739250.162392][T13473] hid-generic 0003:0D9F:0004.0007: unknown main item tag 0x0
-> [739250.162813][T13473] hid-generic 0003:0D9F:0004.0007: hidraw2: USB HID v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on usb-0000:00:16.0-4/input0
-> [739253.165518][T13473] usb 9-4: USB disconnect, device number 7
-> ...
-> 
-> 
-> I'd appreciate any advice trying to get my UPS to stay connected and not
-> spam the kernel log. The UPS is about 1 year old. It's working fine. I
-> just want to use nut or apcupsd with it.
-> 
-> Thanks,
-> David
+You still need atomic update for these numbers. The intent is to provide
+atomic api for cases where the variable doesn't guard lifetimes and yet
+needs atomic instructions.
+
+Several such usages where atomic_t is used for up counting, also use
+upper bounds. It is also an option to switch to seqnum64 to avoid
+wrap around in case there is a concern.
+
+thanks,
+-- Shuah
+
+
