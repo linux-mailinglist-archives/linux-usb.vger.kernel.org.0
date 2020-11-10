@@ -2,142 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 506BE2ADE15
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 19:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF9A2ADE37
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 19:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729630AbgKJST1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 13:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbgKJSTZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 13:19:25 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D6EC0613CF;
-        Tue, 10 Nov 2020 10:19:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=Ct6aE0Bm8FKKbzyR0cHse7bKKnoXTwBFYl7S9+AHa7M=; b=RFBBplucvygNQ6kLC7amRs2zQ2
-        jtuZiTjE7qGN10yc9ZPOrch35q8ioF7bOSvZrVS3CaHAbmRER2RiMQ05VaJEbNKHvh/5BR0O541V2
-        Gca/C1mlMqiRD0ABv+Mep2UJ4C1tdOAmjsGmAFXtgHMbf/ZnmKYTa/b/tE++H7sZr3i6NPxdJiFLc
-        zZXogcHmMGNFpI3oq7mSneRkgpFUNihyVjwMuW9UXJ6iN7LW82vA/iOo7qS8rBiRYbxtO9DblFakc
-        GUdAR8qdE3T1a6EbsoAshklApxvl/ps5eNoUhe4tNlZDdG1fN96lpd4jIJXkVB/fkaHCdXIfsK4xm
-        +2iXQ7/A==;
-Received: from [2601:1c0:6280:3f0::662d]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kcYES-0001S3-4s; Tue, 10 Nov 2020 18:19:04 +0000
-Subject: Re: Duplicated ABI entries - Was: Re: [PATCH v2 20/39] docs: ABI:
- testing: make the files compatible with ReST output
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        =?UTF-8?Q?Javier_Gonz=c3=a1lez?= <javier@javigon.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Benson Leung <bleung@chromium.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Bruno Meneguele <bmeneg@redhat.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Dan Murphy <dmurphy@ti.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Juergen Gross <jgross@suse.com>,
-        Konstantin Khlebnikov <koct9i@gmail.com>,
-        Kranthi Kuntala <kranthi.kuntala@intel.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Len Brown <lenb@kernel.org>,
-        Leonid Maksymchuk <leonmaxx@gmail.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Oleh Kravchenko <oleg@kaa.org.ua>,
-        Orson Zhai <orsonzhai@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Peter Rosin <peda@axentia.se>, Petr Mladek <pmladek@suse.com>,
-        Philippe Bergheaud <felix@linux.ibm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        netdev@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <cover.1604042072.git.mchehab+huawei@kernel.org>
- <58cf3c2d611e0197fb215652719ebd82ca2658db.1604042072.git.mchehab+huawei@kernel.org>
- <5326488b-4185-9d67-fc09-79b911fbb3b8@st.com>
- <20201030110925.3e09d59e@coco.lan>
- <cb586ea3-b6e6-4e48-2344-2bd641e5323f@st.com>
- <20201102124641.GA881895@kroah.com> <20201102154250.45bee17f@coco.lan>
- <20201108165621.4d0da3f4@archlinux> <20201110082658.2edc1ab5@coco.lan>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <aa855d9a-4fc6-2b64-b6b7-69409af3f9d0@infradead.org>
-Date:   Tue, 10 Nov 2020 10:18:48 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1731260AbgKJSZT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 13:25:19 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:44771 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726557AbgKJSZT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 13:25:19 -0500
+Received: by mail-io1-f72.google.com with SMTP id f2so6653544ion.11
+        for <linux-usb@vger.kernel.org>; Tue, 10 Nov 2020 10:25:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=TXO+2A0GRnZizAfhKjCrCYfOZAWglOyhJBANsYg+Qvc=;
+        b=bI+W+wxWEnnczyFkGy85G5VCGBAqm/+UDxZt0hy7lhY7HUG+dfOtM+KLJPTVxaSuxG
+         XjdQjycddiRrX4+GFS7jIrNwdBBY714yR2vEQVVIEdqOdLQNk8soFg/gvhjD7xQkm5PG
+         NCe/XTKnhDi5+AWmh7cswxd8ZMehDZByZxux7zlAekoehpvxBhccecfkIeYE7yoPGKar
+         ZPMoNiipeVRKGICrLAo9zIcplfNEGtdRsXBvXwW3DcUTfLMK35vK/EHO6pRUwFuqlbNt
+         vRlvkCvtpWGNmr59EphoxaCyJ8JYW9yg/8fFybPuWrX484KqbPOAPi8hJD6JxB5wYUm0
+         hR0A==
+X-Gm-Message-State: AOAM532kfT0lzczJLqzCyifYkvhYolAnmaRUf3h/41HBaHzZjBgYj/aA
+        SvGJi0ZtCmmHkBtfmNjFb0euOObOwcNDCia7q15UrF9oZFgy
+X-Google-Smtp-Source: ABdhPJwOHCB5GIUsMAjuGWZhIROaeRgS5LavfkwflgWhakL1m4qFtjBI3qpAhgnHK0rtN3vyMX/l36L3iy0g6HpmuV4fwW9qY9W5
 MIME-Version: 1.0
-In-Reply-To: <20201110082658.2edc1ab5@coco.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a6b:e911:: with SMTP id u17mr15144787iof.200.1605032718053;
+ Tue, 10 Nov 2020 10:25:18 -0800 (PST)
+Date:   Tue, 10 Nov 2020 10:25:18 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000335e105b3c4cd69@google.com>
+Subject: memory leak in ath9k_hif_usb_firmware_cb
+From:   syzbot <syzbot+6692c72009680f7c4eb2@syzkaller.appspotmail.com>
+To:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
+        gustavoars@kernel.org, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        tiwai@suse.de
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/9/20 11:26 PM, Mauro Carvalho Chehab wrote:
-> Hi Jonathan,
-> 
-> Let's view ABI from the PoV of a system admin that doesn't know
-> yet about a certain ABI symbol.
-> 
-> He'll try to seek for the symbol, more likely using the HTML 
-> documentation. Only very senior system admins might try to take
-> a look at the Kernel.
+Hello,
 
-FWIW, I think that the likely search methods are $search_engine
-and 'grep'.
+syzbot found the following issue on:
 
-Have a good few days off.
+HEAD commit:    407ab579 Merge tag 'for-linus' of git://git.kernel.org/pub..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=134dd026500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f13716fa0212fd
+dashboard link: https://syzkaller.appspot.com/bug?extid=6692c72009680f7c4eb2
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=163be156500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1775d04e500000
 
--- 
-~Randy
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6692c72009680f7c4eb2@syzkaller.appspotmail.com
 
+BUG: memory leak
+unreferenced object 0xffff888109b4dc00 (size 192):
+  comm "kworker/1:2", pid 3705, jiffies 4294941906 (age 14.110s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 18 dc b4 09 81 88 ff ff  ................
+  backtrace:
+    [<000000006422299c>] kmalloc include/linux/slab.h:557 [inline]
+    [<000000006422299c>] usb_alloc_urb+0x66/0xe0 drivers/usb/core/urb.c:74
+    [<000000007744b258>] ath9k_hif_usb_alloc_tx_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:829 [inline]
+    [<000000007744b258>] ath9k_hif_usb_alloc_urbs+0x148/0x640 drivers/net/wireless/ath/ath9k/hif_usb.c:1008
+    [<000000006c8e4116>] ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1102 [inline]
+    [<000000006c8e4116>] ath9k_hif_usb_firmware_cb+0x88/0x1f0 drivers/net/wireless/ath/ath9k/hif_usb.c:1235
+    [<00000000e5c70763>] request_firmware_work_func+0x47/0x90 drivers/base/firmware_loader/main.c:1079
+    [<0000000089bbfbae>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<00000000d58def96>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<000000001b9033f3>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<000000001b3150ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+BUG: memory leak
+unreferenced object 0xffff88810efed240 (size 192):
+  comm "kworker/1:2", pid 3705, jiffies 4294941906 (age 14.110s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 58 d2 fe 0e 81 88 ff ff  ........X.......
+  backtrace:
+    [<000000006422299c>] kmalloc include/linux/slab.h:557 [inline]
+    [<000000006422299c>] usb_alloc_urb+0x66/0xe0 drivers/usb/core/urb.c:74
+    [<000000007744b258>] ath9k_hif_usb_alloc_tx_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:829 [inline]
+    [<000000007744b258>] ath9k_hif_usb_alloc_urbs+0x148/0x640 drivers/net/wireless/ath/ath9k/hif_usb.c:1008
+    [<000000006c8e4116>] ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1102 [inline]
+    [<000000006c8e4116>] ath9k_hif_usb_firmware_cb+0x88/0x1f0 drivers/net/wireless/ath/ath9k/hif_usb.c:1235
+    [<00000000e5c70763>] request_firmware_work_func+0x47/0x90 drivers/base/firmware_loader/main.c:1079
+    [<0000000089bbfbae>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<00000000d58def96>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<000000001b9033f3>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<000000001b3150ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+BUG: memory leak
+unreferenced object 0xffff88810efedb40 (size 192):
+  comm "kworker/1:2", pid 3705, jiffies 4294941906 (age 14.110s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 58 db fe 0e 81 88 ff ff  ........X.......
+  backtrace:
+    [<000000006422299c>] kmalloc include/linux/slab.h:557 [inline]
+    [<000000006422299c>] usb_alloc_urb+0x66/0xe0 drivers/usb/core/urb.c:74
+    [<000000007744b258>] ath9k_hif_usb_alloc_tx_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:829 [inline]
+    [<000000007744b258>] ath9k_hif_usb_alloc_urbs+0x148/0x640 drivers/net/wireless/ath/ath9k/hif_usb.c:1008
+    [<000000006c8e4116>] ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1102 [inline]
+    [<000000006c8e4116>] ath9k_hif_usb_firmware_cb+0x88/0x1f0 drivers/net/wireless/ath/ath9k/hif_usb.c:1235
+    [<00000000e5c70763>] request_firmware_work_func+0x47/0x90 drivers/base/firmware_loader/main.c:1079
+    [<0000000089bbfbae>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<00000000d58def96>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<000000001b9033f3>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<000000001b3150ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+BUG: memory leak
+unreferenced object 0xffff88810efedf00 (size 192):
+  comm "kworker/1:2", pid 3705, jiffies 4294941906 (age 14.110s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 18 df fe 0e 81 88 ff ff  ................
+  backtrace:
+    [<000000006422299c>] kmalloc include/linux/slab.h:557 [inline]
+    [<000000006422299c>] usb_alloc_urb+0x66/0xe0 drivers/usb/core/urb.c:74
+    [<000000007744b258>] ath9k_hif_usb_alloc_tx_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:829 [inline]
+    [<000000007744b258>] ath9k_hif_usb_alloc_urbs+0x148/0x640 drivers/net/wireless/ath/ath9k/hif_usb.c:1008
+    [<000000006c8e4116>] ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1102 [inline]
+    [<000000006c8e4116>] ath9k_hif_usb_firmware_cb+0x88/0x1f0 drivers/net/wireless/ath/ath9k/hif_usb.c:1235
+    [<00000000e5c70763>] request_firmware_work_func+0x47/0x90 drivers/base/firmware_loader/main.c:1079
+    [<0000000089bbfbae>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<00000000d58def96>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<000000001b9033f3>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<000000001b3150ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+BUG: memory leak
+unreferenced object 0xffff88810efedc00 (size 192):
+  comm "kworker/1:2", pid 3705, jiffies 4294941906 (age 14.110s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 18 dc fe 0e 81 88 ff ff  ................
+  backtrace:
+    [<000000006422299c>] kmalloc include/linux/slab.h:557 [inline]
+    [<000000006422299c>] usb_alloc_urb+0x66/0xe0 drivers/usb/core/urb.c:74
+    [<000000007744b258>] ath9k_hif_usb_alloc_tx_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:829 [inline]
+    [<000000007744b258>] ath9k_hif_usb_alloc_urbs+0x148/0x640 drivers/net/wireless/ath/ath9k/hif_usb.c:1008
+    [<000000006c8e4116>] ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1102 [inline]
+    [<000000006c8e4116>] ath9k_hif_usb_firmware_cb+0x88/0x1f0 drivers/net/wireless/ath/ath9k/hif_usb.c:1235
+    [<00000000e5c70763>] request_firmware_work_func+0x47/0x90 drivers/base/firmware_loader/main.c:1079
+    [<0000000089bbfbae>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<00000000d58def96>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<000000001b9033f3>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<000000001b3150ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
