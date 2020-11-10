@@ -2,76 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 542D82ADAFD
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 16:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CF42ADB10
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 17:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730819AbgKJP4w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 10:56:52 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:48703 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730299AbgKJP4w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 10:56:52 -0500
-Received: (qmail 193217 invoked by uid 1000); 10 Nov 2020 10:56:50 -0500
-Date:   Tue, 10 Nov 2020 10:56:50 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kyungtae Kim <kt0755@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>
-Subject: Re: WARNING in usb_composite_setup_continue
-Message-ID: <20201110155650.GC190146@rowland.harvard.edu>
-References: <CAEAjamsxe9OuMVpHfox3w57HtGsE3mPXOty9bdXW-iPdx=TXMA@mail.gmail.com>
- <CAEAjamsjFXWGSwUcCuUOeJ8s9EWGQP-Jvt40bG0Otav=xFb+5A@mail.gmail.com>
+        id S1731068AbgKJQBJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 11:01:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729909AbgKJQBJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 11:01:09 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06153C0613CF;
+        Tue, 10 Nov 2020 08:01:09 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id DADA91F44B95
+Subject: Re: [PATCH v2 2/2] platform/chrome: cros_ec_typec: Set partner
+ num_altmodes
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+References: <20201110061535.2163599-1-pmalani@chromium.org>
+ <20201110061535.2163599-2-pmalani@chromium.org>
+ <20201110105015.GF1224435@kuha.fi.intel.com>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <ba6c1415-457b-1e8d-b604-fad603fe9be6@collabora.com>
+Date:   Tue, 10 Nov 2020 17:01:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEAjamsjFXWGSwUcCuUOeJ8s9EWGQP-Jvt40bG0Otav=xFb+5A@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201110105015.GF1224435@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Felipe:
+Hi,
 
-On Mon, Nov 09, 2020 at 02:29:42PM -0500, Kyungtae Kim wrote:
-> We report a bug (in linux-5.8.13) found by FuzzUSB (a modified version
-> of syzkaller).
+On 10/11/20 11:50, Heikki Krogerus wrote:
+> On Mon, Nov 09, 2020 at 10:15:36PM -0800, Prashant Malani wrote:
+>> Set the number of altmodes available for a registered partner using the
+>> Type C connector class framework routine.
+>>
+>> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 > 
-> (corrected analysis)
-> This bug happens while continuing a delayed setup message in mass
-> storage gadget.
-> To be specific, composite_setup() sets FSG_STATE_CONFIG_CHANGE via
-> fsg_set_alt() (line 1793),
-> and followed by cdev->delayed_status++ (line 1798).
-> Meanwile, the mass gadget tries  check cdev->delayed_status == 0
-> through handle_exception() (line 2428),
-> which occurs in between the two operations above.
-> Such a race causes invalid operations eventually.
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> 
 
-Do you know who maintains composite.c (or the composite framework) these 
-days?  This is a real race, and it needs to be fixed.
+Acked-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
-Part of the problem seems to be that cdev->delayed_status is sometimes 
-accessed without the protection of cdev->lock.  But I don't know when it 
-is safe to take that lock, so I can't tell what changes to make.
+Heikki, would you like to take these two through your tree? It'd help if you can
+create an inmutable branch so I can pick other cros_ec_typec patches on top of it.
 
-Another part of the problem is that cdev->delayed_status doesn't count 
-things properly.  That is, its value is incremented each time a function 
-driver asks for a delayed status and decremented each time a function 
-driver calls usb_composite_setup_continue(), and the delayed status 
-response is sent when the value reaches 0.  But there's nothing to stop 
-this from happening (imagine a gadget with two functions A and B):
+Thanks,
+ Enric
 
-	Function driver A asks for delayed status;
-	Function driver A calls setup_continue(): Now the value
-		of the counter is 0 so a status message is queued
-		too early;
-	Function driver B asks for delayed status;
-	Function driver B calls setup_continue(): Now a second
-		status message is queued.
-
-I'm willing to help fix these issues, but I need assistance from someone 
-who fully understands the composite framework.
-
-Alan Stern
+>> ---
+>>
+>> Changes in v2:
+>> - Patch introduced for the first time in v2.
+>>
+>>  drivers/platform/chrome/cros_ec_typec.c | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+>> index ce031a10eb1b..743a28426f98 100644
+>> --- a/drivers/platform/chrome/cros_ec_typec.c
+>> +++ b/drivers/platform/chrome/cros_ec_typec.c
+>> @@ -621,6 +621,7 @@ static int cros_typec_register_altmodes(struct cros_typec_data *typec, int port_
+>>  	struct cros_typec_altmode_node *node;
+>>  	struct typec_altmode_desc desc;
+>>  	struct typec_altmode *amode;
+>> +	int num_altmodes = 0;
+>>  	int ret = 0;
+>>  	int i, j;
+>>  
+>> @@ -647,9 +648,16 @@ static int cros_typec_register_altmodes(struct cros_typec_data *typec, int port_
+>>  
+>>  			node->amode = amode;
+>>  			list_add_tail(&node->list, &port->partner_mode_list);
+>> +			num_altmodes++;
+>>  		}
+>>  	}
+>>  
+>> +	ret = typec_partner_set_num_altmodes(port->partner, num_altmodes);
+>> +	if (ret < 0) {
+>> +		dev_err(typec->dev, "Unable to set partner num_altmodes for port: %d\n", port_num);
+>> +		goto err_cleanup;
+>> +	}
+>> +
+>>  	return 0;
+>>  
+>>  err_cleanup:
+>> -- 
+>> 2.29.2.222.g5d2a92d10f8-goog
+> 
+> thanks,
+> 
