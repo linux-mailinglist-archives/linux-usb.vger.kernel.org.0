@@ -2,235 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29ACA2AD13A
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 09:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB852AD150
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 09:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727658AbgKJIZ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 03:25:26 -0500
-Received: from mail-eopbgr60084.outbound.protection.outlook.com ([40.107.6.84]:41414
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726213AbgKJIZZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Nov 2020 03:25:25 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WRiwTzBFeBZVMJTvqvEJEVMCHSRXVVMlzTf9X9RS9gOpl0e81R2axGOx7adFTv+W1fHPGae4iUH9pzyUj1nrgvfB9qLeyIw99IaS+hvYeJ/KZvOVXeZFtU9okrW908sDMepqOM06rNiNjTR6nvfUAd5pJ2OJH/KnjL14gU+bn3Ty64g3mZQmgUXS59H/Dfdmi03V508ajTH22WvzOq+PfeChHh6h+K5KmE/JNj/coCe6NfVeVEtEaNFVlFJ72YW4GK2m7c8xiEQ+39k76V9nYE8JDSXLcYgr81RymgSlDVKcuaG8Gdb4Yi+YoOAWTX5PCDGyYqW9tAsWz3taDyqDXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MAaRGyaFvUdcJKPlwWqr1+g4a2JlcA9m+B7TC3vgtMM=;
- b=TpFo/Y7abgtH97elrIUeV+F3Gz9VxCbPRBLvwr9WJ9Jy/ANnPo+Im53ErvcGdHMXjCQUWeNXKetASq1w1hnxrewjrOev2t5il9d6qCQ8rmqBjOTZR23WvjX5YLwRZcucOzUjxY73AvSyKEjTplnZHZQB4REO6OYEqlzv2iLv0p2TlwlKnqaV7yy1n6waQjDbIZxEHD5WuATmdwFcJ2EGQnEU1M2WO6mDGD5VyNu5CFXj0sWozLMy2DRdXcq1iK+1c1UkomQxwvd7PGeqLeNANgRYD83pezOlbyTvGBtqApYfoLlvNq3DJP+3XLYPqD65breWlFXfFYxsUansNFuLEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MAaRGyaFvUdcJKPlwWqr1+g4a2JlcA9m+B7TC3vgtMM=;
- b=zVUMGSH6IsSfy/oaXdR5ZGPmn+lDXN5Q/6OL4EBJYY5FZhquzc4mPVDHoSzxO6qd5q9bawNeIler4bpaHi/ViNIuZ4iyC5lYyDZ1ztRAfo/GR+5601DxfPRg3XUd6rxnDEDAU3Akxjbhn91WWB0W+ZtrA0z/JXH1VyGX0z4SGQs=
-Authentication-Results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=wolfvision.net;
-Received: from VI1PR08MB4064.eurprd08.prod.outlook.com (2603:10a6:803:e5::10)
- by VI1PR0802MB2175.eurprd08.prod.outlook.com (2603:10a6:800:9b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.24; Tue, 10 Nov
- 2020 08:25:19 +0000
-Received: from VI1PR08MB4064.eurprd08.prod.outlook.com
- ([fe80::3cab:8098:fc6c:df30]) by VI1PR08MB4064.eurprd08.prod.outlook.com
- ([fe80::3cab:8098:fc6c:df30%4]) with mapi id 15.20.3541.025; Tue, 10 Nov 2020
- 08:25:19 +0000
-From:   thomas.haemmerle@wolfvision.net
-To:     gregkh@linuxfoundation.org
-Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
-        linux-usb@vger.kernel.org, m.tretter@pengutronix.de,
-        linux-media@vger.kernel.org,
-        Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-Subject: [PATCH v2] usb: gadget: uvc: fix multiple opens
-Date:   Tue, 10 Nov 2020 09:25:04 +0100
-Message-Id: <20201110082504.26134-1-thomas.haemmerle@wolfvision.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201105103758.GA4033354@kroah.com>
-References: <20201105103758.GA4033354@kroah.com>
-Content-Type: text/plain
-X-Originating-IP: [91.118.163.37]
-X-ClientProxiedBy: VI1PR09CA0094.eurprd09.prod.outlook.com
- (2603:10a6:803:78::17) To VI1PR08MB4064.eurprd08.prod.outlook.com
- (2603:10a6:803:e5::10)
+        id S1726721AbgKJIbm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 03:31:42 -0500
+Received: from mga18.intel.com ([134.134.136.126]:36258 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726462AbgKJIbl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Nov 2020 03:31:41 -0500
+IronPort-SDR: aftMu93wod27CL7ertC/ezgFBdTs/eFOOIPCEw1bEyNSLMCPBcdAb07Gu+9eS3p1hv7GNm91Ij
+ DwXL5MY6uqpw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9800"; a="157718933"
+X-IronPort-AV: E=Sophos;i="5.77,465,1596524400"; 
+   d="scan'208,223";a="157718933"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 00:31:37 -0800
+IronPort-SDR: btUBPra0wyqCcUep1No2VG5CDm2xRnRu5jNWPWtixy+Jf3iwwarhyEJ0HrPuMOmnAvn9vrg+u8
+ uXrxHDJ08Yeg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,465,1596524400"; 
+   d="scan'208,223";a="428287672"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 10 Nov 2020 00:31:33 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 10 Nov 2020 10:31:32 +0200
+Date:   Tue, 10 Nov 2020 10:31:32 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Vladimir Yerilov <openmindead@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Subject: Re: Fwd: Power supply detection issue caused by ucsi_psy?
+Message-ID: <20201110083132.GB1224435@kuha.fi.intel.com>
+References: <CAB31r6UbF_Q-APvfmxanvMZOYJZwr0eEPwMQ8EGWw3-VkJtHhQ@mail.gmail.com>
+ <20201109112051.GL4062920@kuha.fi.intel.com>
+ <dab0302c9156a845923ee7fbefad7dd4305eedb3.camel@redhat.com>
+ <CAB31r6XWQqM-kLYm4vb8H=45grhuwsHDYT94y5QJZVtP8w_sXg@mail.gmail.com>
+ <CAB31r6XpFRPkMcrU+os6VbkdNiQty+s8a_MWhZXY=cjK3yXvmw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from wvls01.wolfvision-at.intra (91.118.163.37) by VI1PR09CA0094.eurprd09.prod.outlook.com (2603:10a6:803:78::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Tue, 10 Nov 2020 08:25:19 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0b59f61e-dc51-44da-0732-08d8855228fe
-X-MS-TrafficTypeDiagnostic: VI1PR0802MB2175:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VI1PR0802MB21751F9539CC5AA3DC32E022EDE90@VI1PR0802MB2175.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nTu+lSsbi/EMhJjssdwTtxEdBtuvBR4EiVOsNhjRRgrfEVRcpOdLnzmXaWii4380idDugBfMC+C2vfXQvLVYogVvPHghL21zFlQOn7pVP0tXgM19wJPHYQ+ciS8eI9bOWHNgxQYkb5m5W0R62vWeuRgDKyDv2umwIpp9qvyLPhcYhq1UonyC5WpwDLhTVUVfMraRMWZr6y4Pgcyl98DuI7VDfCU/0QKkOGA/kvWaj/2Y4ViAnZ12o+M0SvDg0SsRfYXL+7xpGHXDlLOCIzj/pMFeQHYJfWPDL8MOuQbSnRAl7xl7e7iVrN96iloz93e5RHpf3rADWm2Tw5XGJVkgaQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB4064.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(136003)(376002)(39840400004)(366004)(6916009)(86362001)(83380400001)(5660300002)(26005)(186003)(6666004)(4326008)(316002)(66946007)(478600001)(2906002)(1076003)(8936002)(8676002)(107886003)(2616005)(16526019)(956004)(52116002)(6506007)(6486002)(6512007)(9686003)(36756003)(66556008)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: OtxaToyGbTPgB5VoATBxG18jsDBCX828Rl6ttzZd2PmbuoRDlWHvB5KLNfQuz1M3PoTXA8ZbW+s/6ntPa3SPME6uDz0f3j8wMlt/t42xHea0yEf/hxp6PSQM2aw0iQoGb+derSZJaR1zr39Bvt23uKA8BRyApC3zYTRgmld3thDNXdm+EJAGZYfOakT6l+s7vxvPh+gRjQ4O+645/UHX9MngV2U5ScPD9za3FacpVfJoVNfffMzvT71BS1jE9jUCpyqc0fi+UWEE8vwOOVb8MUyKoL1B2dqESkZQGRpr1iWc6Ebt7Nyov7nOpst21AiUMQYUoNfzAlGDU0v7ivuo44rH5bDa0EB9d76HUOojOBUnfryIkR0MOv+WNcQtieHusH1cLA7efYbl+Zlpyg2HuTbbLd7w1+itjL/ZFm9NQz151W5NdxQH3EWhxXvmku3PTdVm7/Q1lIwC0Eb4W1o5BuGyS1BWaZY673Vr0+Td+wzrujHFONLutUJrVsx0ddHUZhCqhG7081IdQi0nSLReWSg6P1lNeWBGIUvfanN2ljTvm/LBZ8IuxiK0exmdUmEbMZvLKINDew1Jjw3ydnPEVSGSJZ/xc2inTvjxcbZth8kRtmfTdrDbZ0UwN4KoO/Ipphwk9QJ3yz5nN33VZV3k+/BXjycnHuCki5uZHgpQgGDYm0kHnbM97rk4UOtmORgKGg8B0oa7jcDr3h83hkrmcoIkIw2z4umGU9KcreS2N0ZHI2XX83NibqIIMErq0Vh86d8tCpi9JD7zptH1uNZi4Yu0aI7Ph2lct1zt4cg0Q33L9kYu49elOODYO2voJfijwyJ9/BntH2pzKXn6xbmnsY87zKZJ//exIAhn6byStXE2OCo24nsXpREb5RDwbqBaDuuJOoQ12KGZ0t31DwU2qA==
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b59f61e-dc51-44da-0732-08d8855228fe
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR08MB4064.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2020 08:25:19.6233
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U9tHr7/Ew90SRn400jFBuRpikNjPQV7ZmCGSOgz8YWUJvsOpxtAkXOziSN1YuFSp5ap639Rt92Irn8Q8HpXK3usSXtZqaCEEyPODxZy5HAo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0802MB2175
+Content-Type: multipart/mixed; boundary="J/dobhs11T7y2rNN"
+Content-Disposition: inline
+In-Reply-To: <CAB31r6XpFRPkMcrU+os6VbkdNiQty+s8a_MWhZXY=cjK3yXvmw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
 
-Currently, the UVC function is activated when open on the corresponding
-v4l2 device is called.
-On another open the activation of the function fails since the
-deactivation counter in `usb_function_activate` equals 0. However the
-error is not returned to userspace since the open of the v4l2 device is
-successful.
+--J/dobhs11T7y2rNN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On a close the function is deactivated (since deactivation counter still
-equals 0) and the video is disabled in `uvc_v4l2_release`, although
-another process potentially is streaming.
+Hi Vladimir,
 
-Move activation of UVC function to subscription on UVC_EVENT_SETUP and
-keep track of the number of subscribers (limited to 1) because there we
-can guarantee for a userspace program utilizing UVC.
-Extend the `struct uvc_file_handle` with member `bool connected` to tag 
-it for a deactivation of the function.
+On Tue, Nov 10, 2020 at 03:02:40AM +1000, Vladimir Yerilov wrote:
+> Forwarding to y'all.
+> 
+> Just some extra info:
+> `cat /sys/class/power_supply/ucsi-source-psy-USBC000:001/online` shows
+> zero when the cable is unplugged, same for
+> `/sys/class/power_supply/ADP0/online` status, but that means nothing
+> for upower and all system services considering that there a power
+> source available and not setting display brightness and other
+> parameters due to that.
+> Checked in Ubuntu as well, same situation with their kernel 5.8.
 
-With this a process is able to check capabilities of the v4l2 device
-without deactivating the function for another process actually using the
-device for UVC streaming.
+Please try to avoid top-posting.
 
-Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+It seems that the ucsi psy does not report any changes. That is one
+obvious bug that I can see.
+
+I'm attaching a patch to fix that. Can you give it a try?
+
+thanks,
+
+-- 
+heikki
+
+--J/dobhs11T7y2rNN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-usb-typec-ucsi-Send-power-supply-change-notification.patch"
+
+From 3017dd8d8f9b8bca58d5ac80fff00d7af80e87bd Mon Sep 17 00:00:00 2001
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Date: Tue, 10 Nov 2020 11:25:42 +0300
+Subject: [PATCH] usb: typec: ucsi: Send power supply change notifications
+
+When the ucsi power supply goes online/offline, and when the
+power levels change, the power supply class needs to be
+notified so it can inform the user space.
+
+Fixes: 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
-v2:
- - fix deadlock in `uvc_v4l2_unsubscribe_event()` (mutex is already
-   locked in v4l2-core) introduced in v1
- - lock mutex in `uvc_v4l2_release()` to suppress ioctls and protect
-   connected
+ drivers/usb/typec/ucsi/psy.c  | 9 +++++++++
+ drivers/usb/typec/ucsi/ucsi.c | 7 ++++++-
+ drivers/usb/typec/ucsi/ucsi.h | 2 ++
+ 3 files changed, 17 insertions(+), 1 deletion(-)
 
- drivers/usb/gadget/function/uvc.h      |  2 +
- drivers/usb/gadget/function/uvc_v4l2.c | 56 +++++++++++++++++++++-----
- 2 files changed, 48 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 73da4f9a8d4c..0d0bcbffc8fd 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -117,6 +117,7 @@ struct uvc_device {
- 	enum uvc_state state;
- 	struct usb_function func;
- 	struct uvc_video video;
-+	unsigned int connections;
+diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+index 26ed0b520749a..571a51e162346 100644
+--- a/drivers/usb/typec/ucsi/psy.c
++++ b/drivers/usb/typec/ucsi/psy.c
+@@ -238,4 +238,13 @@ void ucsi_unregister_port_psy(struct ucsi_connector *con)
+ 		return;
  
- 	/* Descriptors */
- 	struct {
-@@ -147,6 +148,7 @@ static inline struct uvc_device *to_uvc(struct usb_function *f)
- struct uvc_file_handle {
- 	struct v4l2_fh vfh;
- 	struct uvc_video *device;
-+	bool connected;
- };
- 
- #define to_uvc_file_handle(handle) \
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index 67922b1355e6..aee4888e17b1 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -228,17 +228,57 @@ static int
- uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
- 			 const struct v4l2_event_subscription *sub)
- {
-+	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
-+	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
-+	int ret;
-+
- 	if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
- 		return -EINVAL;
- 
--	return v4l2_event_subscribe(fh, sub, 2, NULL);
-+	if ((sub->type == UVC_EVENT_SETUP) && (uvc->connections >= 1))
-+		return -EBUSY;
-+
-+	ret = v4l2_event_subscribe(fh, sub, 2, NULL);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (sub->type == UVC_EVENT_SETUP) {
-+		uvc->connections++;
-+		handle->connected = true;
-+		uvc_function_connect(uvc);
-+	}
-+
-+	return 0;
+ 	power_supply_unregister(con->psy);
++	con->psy = NULL;
 +}
 +
-+static void uvc_v4l2_disable(struct uvc_device *uvc)
++void ucsi_port_psy_changed(struct ucsi_connector *con)
 +{
-+	if (--uvc->connections)
++	if (IS_ERR_OR_NULL(con->psy))
 +		return;
 +
-+	uvc_function_disconnect(uvc);
-+	uvcg_video_enable(&uvc->video, 0);
-+	uvcg_free_buffers(&uvc->video.queue);
++	power_supply_changed(con->psy);
  }
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 758b988ac518a..51a570d40a42e 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -643,8 +643,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 	role = !!(con->status.flags & UCSI_CONSTAT_PWR_DIR);
  
- static int
- uvc_v4l2_unsubscribe_event(struct v4l2_fh *fh,
- 			   const struct v4l2_event_subscription *sub)
- {
--	return v4l2_event_unsubscribe(fh, sub);
-+	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
-+	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
-+	int ret;
-+
-+	ret = v4l2_event_unsubscribe(fh, sub);
-+	if (ret < 0)
-+		return ret;
-+
-+	if ((sub->type == UVC_EVENT_SETUP) && handle->connected) {
-+		uvc_v4l2_disable(uvc);
-+		handle->connected = false;
+ 	if (con->status.change & UCSI_CONSTAT_POWER_OPMODE_CHANGE ||
+-	    con->status.change & UCSI_CONSTAT_POWER_LEVEL_CHANGE)
++	    con->status.change & UCSI_CONSTAT_POWER_LEVEL_CHANGE) {
+ 		ucsi_pwr_opmode_change(con);
++		ucsi_port_psy_changed(con);
 +	}
+ 
+ 	if (con->status.change & UCSI_CONSTAT_POWER_DIR_CHANGE) {
+ 		typec_set_pwr_role(con->port, role);
+@@ -674,6 +676,8 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 			ucsi_register_partner(con);
+ 		else
+ 			ucsi_unregister_partner(con);
 +
-+	return 0;
- }
++		ucsi_port_psy_changed(con);
+ 	}
  
- static long
-@@ -293,7 +333,6 @@ uvc_v4l2_open(struct file *file)
- 	handle->device = &uvc->video;
- 	file->private_data = &handle->vfh;
+ 	if (con->status.change & UCSI_CONSTAT_CAM_CHANGE) {
+@@ -994,6 +998,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 				  !!(con->status.flags & UCSI_CONSTAT_PWR_DIR));
+ 		ucsi_pwr_opmode_change(con);
+ 		ucsi_register_partner(con);
++		ucsi_port_psy_changed(con);
+ 	}
  
--	uvc_function_connect(uvc);
- 	return 0;
- }
+ 	if (con->partner) {
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index cba6f77bea61b..b7a92f2460507 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -340,9 +340,11 @@ int ucsi_resume(struct ucsi *ucsi);
+ #if IS_ENABLED(CONFIG_POWER_SUPPLY)
+ int ucsi_register_port_psy(struct ucsi_connector *con);
+ void ucsi_unregister_port_psy(struct ucsi_connector *con);
++void ucsi_port_psy_changed(struct ucsi_connector *con);
+ #else
+ static inline int ucsi_register_port_psy(struct ucsi_connector *con) { return 0; }
+ static inline void ucsi_unregister_port_psy(struct ucsi_connector *con) { }
++static inline void ucsi_port_psy_changed(struct ucsi_connector *con) { }
+ #endif /* CONFIG_POWER_SUPPLY */
  
-@@ -303,14 +342,11 @@ uvc_v4l2_release(struct file *file)
- 	struct video_device *vdev = video_devdata(file);
- 	struct uvc_device *uvc = video_get_drvdata(vdev);
- 	struct uvc_file_handle *handle = to_uvc_file_handle(file->private_data);
--	struct uvc_video *video = handle->device;
--
--	uvc_function_disconnect(uvc);
- 
--	mutex_lock(&video->mutex);
--	uvcg_video_enable(video, 0);
--	uvcg_free_buffers(&video->queue);
--	mutex_unlock(&video->mutex);
-+	mutex_lock(&uvc->video.mutex);
-+	if (handle->connected)
-+		uvc_v4l2_disable(uvc);
-+	mutex_unlock(&uvc->video.mutex);
- 
- 	file->private_data = NULL;
- 	v4l2_fh_del(&handle->vfh);
+ #if IS_ENABLED(CONFIG_TYPEC_DP_ALTMODE)
 -- 
-2.17.1
+2.28.0
 
+
+--J/dobhs11T7y2rNN--
