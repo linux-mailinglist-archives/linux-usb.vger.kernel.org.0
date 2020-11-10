@@ -2,362 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C15382AE023
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 20:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B61C2AE035
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 20:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731770AbgKJTvc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 14:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
+        id S1731584AbgKJTyb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 14:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731613AbgKJTv3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 14:51:29 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D79DC0613D1;
-        Tue, 10 Nov 2020 11:51:29 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id o23so19373999ejn.11;
-        Tue, 10 Nov 2020 11:51:29 -0800 (PST)
+        with ESMTP id S1731373AbgKJTya (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 14:54:30 -0500
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC28C0613D6
+        for <linux-usb@vger.kernel.org>; Tue, 10 Nov 2020 11:54:30 -0800 (PST)
+Received: by mail-io1-xd44.google.com with SMTP id s24so15513577ioj.13
+        for <linux-usb@vger.kernel.org>; Tue, 10 Nov 2020 11:54:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=HH3eQpgACFc0U7/w0sEUlYSVeHEP4oODaS+YLEBlqzk=;
-        b=K7WBROx+NQYbR4nWTmYwYSoLBjquYRRNJUYANnNuVwBOfSGxffrEZsbRmOK4pFg+hV
-         h+2ALZaHn/SjgGHYjul25syEsCXxShqAk/Hza3VuOs8lPmK25OPtx6XH/CyV/z8aIyZU
-         sfc3yG2EQ9YjYcGvgsnP+LmEvtdlROiNwZ5Mck3wo+jHCeUnsKCK8e8jhnXfz6HywR9w
-         CTNZ3x43OsxB7vmXt/o+1y53Ponh0LRShKzgVKb2DTdZ0+axHWLaq5pJFWktcpT6dLb6
-         nOam/wXBAremig+CLzi/qYnWpbWOSz86uvvzNdjJpEnmkGtP1mATiiEbf0BQ7ZahoTHh
-         e+QQ==
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vdba1It8LuruBRXATlGs5ogDOu37tb0jUQlcsfQ+i94=;
+        b=erhpGeuR4YZoPxfbaOj6VRTo5qEDTaMnmy8kz3XZUQlHcvUC5PAMnd4vRUgcWhnCY4
+         HmjHbSPgIj5umTnUKC8XvX1IvbsCFZxMBGUdUE7TrHhyO2iCd6OhgwKqfD97WQg1umxw
+         JFTX/vqjOOD2aZVjcPXZOK3wm7m2rMYTBiYoY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=HH3eQpgACFc0U7/w0sEUlYSVeHEP4oODaS+YLEBlqzk=;
-        b=h8De7nWNofLLkkpbYZSDAuhj98RCtgYGHAqEZYSNQau499UprdwXdGA6/cIGrQQNZZ
-         qWiLCCH32kszOjjIH8j8Dt8i8JGJJSDEFr0uUlt03eWJ9IsjyIeiHARTgBdc/InCO0Pm
-         wK3APlcxcDXTQkzJRCcRi4HX5BM53HpkbU2GGnAIa+o09RSIwuEgftvDsFaSkroC+xOF
-         hllm3mkZtGQV8l20iWeHP0jowrPr7ZkRc1/CwwmF+DlQXwLo4IVpkUF8/80C/PaFCBft
-         wzEQ1gk+aNqSjt+EjTbn0cW2kQIU10jd6EGf+wbtAZs51CbUFXbIQ6ZN94CGT4/ImP2p
-         CL7w==
-X-Gm-Message-State: AOAM533hnIra35zlN5xfW8SDS3WCQwfzim7x/a0P1MloopldhTXPcOF4
-        AEXFRy6GVnlun4NsEKbO0ws3TjbRXiotbA==
-X-Google-Smtp-Source: ABdhPJzOpD+iG/6Kqb/nWpvnuEymcgQb7LmaE3K2QMu6lKg5LMdkfUVDy7WhCeJrttpFy6FWM4Y/Ow==
-X-Received: by 2002:a17:906:f84f:: with SMTP id ks15mr20944652ejb.337.1605037887372;
-        Tue, 10 Nov 2020 11:51:27 -0800 (PST)
-Received: from ?IPv6:2003:ea:8f23:2800:895e:e59d:3602:de4b? (p200300ea8f232800895ee59d3602de4b.dip0.t-ipconnect.de. [2003:ea:8f23:2800:895e:e59d:3602:de4b])
-        by smtp.googlemail.com with ESMTPSA id d23sm8595042edy.57.2020.11.10.11.51.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2020 11:51:26 -0800 (PST)
-Subject: [PATCH net-next 5/5] net: usb: switch to dev_get_tstats64 and remove
- usbnet_get_stats64 alias
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>,
-        Igor Mitsyanko <imitsyanko@quantenna.com>,
-        Sergey Matyukevich <geomatsi@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        linux-rdma@vger.kernel.org,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>
-References: <5fbe3a1f-6625-eadc-b1c9-f76f78debb94@gmail.com>
-Message-ID: <35569407-d028-ed00-bf2a-2fc572a938e9@gmail.com>
-Date:   Tue, 10 Nov 2020 20:51:03 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vdba1It8LuruBRXATlGs5ogDOu37tb0jUQlcsfQ+i94=;
+        b=bECyjpzubuzRwMFLLirp6xUPN4+T4vN7hzvYMsTRWrMRrA/f3gk5nGwETcUwAFMjzc
+         GSLEM2+TVgkVAetsBDaq/oy59zv8JkUGnTrDItmie8tspncyy1D7uh/HQaSYjPdx6o1J
+         nCbl1v0IPV+PLtq3epFDSlutTrh/7iasw2zb4VX/HJ1nu+VgmDwZe4gutGMZIx84erGe
+         R+7X9EiW14xz8iMmmDyDjgu6sW9nWJbahl1GGolDIuqVoYk/XqVG2RwafOOX+M2IwSg/
+         LGnVrMDiR5/ICkADc1AotxQwX7gwqR1qvDuuFEUTD72Ov1qdul8avmtyA5z/H00Rl0Jh
+         1wZA==
+X-Gm-Message-State: AOAM533+5o6umaqOc0Rc+A1SmAyHi+rxCpJmbr4GAhQcuPl2hIWpGgHh
+        uYhn7E9jREsG0v0QqV4sfhzsWg==
+X-Google-Smtp-Source: ABdhPJzSoGm8gSgvRaSBerc+sxmFJLhfNH27ldXelE/5n3b7bzL48Ie7m56QLtjKLU/yXqTHWYQj8w==
+X-Received: by 2002:a6b:b30b:: with SMTP id c11mr15269551iof.175.1605038069386;
+        Tue, 10 Nov 2020 11:54:29 -0800 (PST)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id o14sm123971ilg.71.2020.11.10.11.54.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2020 11:54:28 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
+        peterz@infradead.org, rafael@kernel.org, lenb@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
+        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
+        rric@kernel.org, valentina.manea.m@gmail.com, shuah@kernel.org,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 00/13] Introduce seqnum_ops 
+Date:   Tue, 10 Nov 2020 12:53:26 -0700
+Message-Id: <cover.1605027593.git.skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <5fbe3a1f-6625-eadc-b1c9-f76f78debb94@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Replace usbnet_get_stats64() with new identical core function
-dev_get_tstats64() in all users and remove usbnet_get_stats64().
+There are a number of atomic_t usages in the kernel where atomic_t api
+is used strictly for counting sequence numbers and other statistical
+counters and not for managing object lifetime.
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/net/usb/aqc111.c          | 2 +-
- drivers/net/usb/asix_devices.c    | 6 +++---
- drivers/net/usb/ax88172a.c        | 2 +-
- drivers/net/usb/ax88179_178a.c    | 2 +-
- drivers/net/usb/cdc_mbim.c        | 2 +-
- drivers/net/usb/cdc_ncm.c         | 2 +-
- drivers/net/usb/dm9601.c          | 2 +-
- drivers/net/usb/int51x1.c         | 2 +-
- drivers/net/usb/mcs7830.c         | 2 +-
- drivers/net/usb/qmi_wwan.c        | 2 +-
- drivers/net/usb/rndis_host.c      | 2 +-
- drivers/net/usb/sierra_net.c      | 2 +-
- drivers/net/usb/smsc75xx.c        | 2 +-
- drivers/net/usb/smsc95xx.c        | 2 +-
- drivers/net/usb/sr9700.c          | 2 +-
- drivers/net/usb/sr9800.c          | 2 +-
- drivers/net/wireless/rndis_wlan.c | 2 +-
- include/linux/usb/usbnet.h        | 2 --
- 18 files changed, 19 insertions(+), 21 deletions(-)
+The purpose of these Sequence Number Ops is to clearly differentiate
+atomic_t counter usages from atomic_t usages that guard object lifetimes,
+hence prone to overflow and underflow errors.
 
-diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
-index 0717c1801..73b97f4cc 100644
---- a/drivers/net/usb/aqc111.c
-+++ b/drivers/net/usb/aqc111.c
-@@ -641,7 +641,7 @@ static const struct net_device_ops aqc111_netdev_ops = {
- 	.ndo_stop		= usbnet_stop,
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_change_mtu		= aqc111_change_mtu,
- 	.ndo_set_mac_address	= aqc111_set_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index ef548beba..6e13d8165 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -194,7 +194,7 @@ static const struct net_device_ops ax88172_netdev_ops = {
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
- 	.ndo_change_mtu		= usbnet_change_mtu,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address 	= eth_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_do_ioctl		= asix_ioctl,
-@@ -580,7 +580,7 @@ static const struct net_device_ops ax88772_netdev_ops = {
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
- 	.ndo_change_mtu		= usbnet_change_mtu,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address 	= asix_set_mac_address,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_do_ioctl		= asix_ioctl,
-@@ -1050,7 +1050,7 @@ static const struct net_device_ops ax88178_netdev_ops = {
- 	.ndo_stop		= usbnet_stop,
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address 	= asix_set_mac_address,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_set_rx_mode	= asix_set_multicast,
-diff --git a/drivers/net/usb/ax88172a.c b/drivers/net/usb/ax88172a.c
-index fd3a04d98..b404c9462 100644
---- a/drivers/net/usb/ax88172a.c
-+++ b/drivers/net/usb/ax88172a.c
-@@ -120,7 +120,7 @@ static const struct net_device_ops ax88172a_netdev_ops = {
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
- 	.ndo_change_mtu		= usbnet_change_mtu,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address	= asix_set_mac_address,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_do_ioctl		= phy_do_ioctl_running,
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 5541f3fae..d650b39b6 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1031,7 +1031,7 @@ static const struct net_device_ops ax88179_netdev_ops = {
- 	.ndo_stop		= usbnet_stop,
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_change_mtu		= ax88179_change_mtu,
- 	.ndo_set_mac_address	= ax88179_set_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
-diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
-index eb100eb33..5db66272f 100644
---- a/drivers/net/usb/cdc_mbim.c
-+++ b/drivers/net/usb/cdc_mbim.c
-@@ -98,7 +98,7 @@ static const struct net_device_ops cdc_mbim_netdev_ops = {
- 	.ndo_stop             = usbnet_stop,
- 	.ndo_start_xmit       = usbnet_start_xmit,
- 	.ndo_tx_timeout       = usbnet_tx_timeout,
--	.ndo_get_stats64      = usbnet_get_stats64,
-+	.ndo_get_stats64      = dev_get_tstats64,
- 	.ndo_change_mtu       = cdc_ncm_change_mtu,
- 	.ndo_set_mac_address  = eth_mac_addr,
- 	.ndo_validate_addr    = eth_validate_addr,
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index e04f58853..abe1162dc 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -793,7 +793,7 @@ static const struct net_device_ops cdc_ncm_netdev_ops = {
- 	.ndo_start_xmit	     = usbnet_start_xmit,
- 	.ndo_tx_timeout	     = usbnet_tx_timeout,
- 	.ndo_set_rx_mode     = usbnet_set_rx_mode,
--	.ndo_get_stats64     = usbnet_get_stats64,
-+	.ndo_get_stats64     = dev_get_tstats64,
- 	.ndo_change_mtu	     = cdc_ncm_change_mtu,
- 	.ndo_set_mac_address = eth_mac_addr,
- 	.ndo_validate_addr   = eth_validate_addr,
-diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
-index 915ac75b5..b5d2ac55a 100644
---- a/drivers/net/usb/dm9601.c
-+++ b/drivers/net/usb/dm9601.c
-@@ -343,7 +343,7 @@ static const struct net_device_ops dm9601_netdev_ops = {
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
- 	.ndo_change_mtu		= usbnet_change_mtu,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_do_ioctl 		= dm9601_ioctl,
- 	.ndo_set_rx_mode	= dm9601_set_multicast,
-diff --git a/drivers/net/usb/int51x1.c b/drivers/net/usb/int51x1.c
-index cb5bc1a7f..ed05f992c 100644
---- a/drivers/net/usb/int51x1.c
-+++ b/drivers/net/usb/int51x1.c
-@@ -133,7 +133,7 @@ static const struct net_device_ops int51x1_netdev_ops = {
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
- 	.ndo_change_mtu		= usbnet_change_mtu,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address	= eth_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_set_rx_mode	= int51x1_set_multicast,
-diff --git a/drivers/net/usb/mcs7830.c b/drivers/net/usb/mcs7830.c
-index 09bfa6a4d..fc512b780 100644
---- a/drivers/net/usb/mcs7830.c
-+++ b/drivers/net/usb/mcs7830.c
-@@ -462,7 +462,7 @@ static const struct net_device_ops mcs7830_netdev_ops = {
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
- 	.ndo_change_mtu		= usbnet_change_mtu,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_do_ioctl 		= mcs7830_ioctl,
- 	.ndo_set_rx_mode	= mcs7830_set_multicast,
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index b9d74d9a7..afeb09b96 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -575,7 +575,7 @@ static const struct net_device_ops qmi_wwan_netdev_ops = {
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
- 	.ndo_change_mtu		= usbnet_change_mtu,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address	= qmi_wwan_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
- };
-diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
-index 6fa7a009a..6609d21ef 100644
---- a/drivers/net/usb/rndis_host.c
-+++ b/drivers/net/usb/rndis_host.c
-@@ -279,7 +279,7 @@ static const struct net_device_ops rndis_netdev_ops = {
- 	.ndo_stop		= usbnet_stop,
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address 	= eth_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
- };
-diff --git a/drivers/net/usb/sierra_net.c b/drivers/net/usb/sierra_net.c
-index 0abd257b6..55a244eca 100644
---- a/drivers/net/usb/sierra_net.c
-+++ b/drivers/net/usb/sierra_net.c
-@@ -184,7 +184,7 @@ static const struct net_device_ops sierra_net_device_ops = {
- 	.ndo_start_xmit         = usbnet_start_xmit,
- 	.ndo_tx_timeout         = usbnet_tx_timeout,
- 	.ndo_change_mtu         = usbnet_change_mtu,
--	.ndo_get_stats64        = usbnet_get_stats64,
-+	.ndo_get_stats64        = dev_get_tstats64,
- 	.ndo_set_mac_address    = eth_mac_addr,
- 	.ndo_validate_addr      = eth_validate_addr,
- };
-diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
-index 8689835a5..4353b3702 100644
---- a/drivers/net/usb/smsc75xx.c
-+++ b/drivers/net/usb/smsc75xx.c
-@@ -1435,7 +1435,7 @@ static const struct net_device_ops smsc75xx_netdev_ops = {
- 	.ndo_stop		= usbnet_stop,
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_change_mtu		= smsc75xx_change_mtu,
- 	.ndo_set_mac_address 	= eth_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index ea0d5f04d..4c8ee1cff 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1041,7 +1041,7 @@ static const struct net_device_ops smsc95xx_netdev_ops = {
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
- 	.ndo_change_mtu		= usbnet_change_mtu,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address 	= eth_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_do_ioctl 		= smsc95xx_ioctl,
-diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
-index e04c8054c..878557ad0 100644
---- a/drivers/net/usb/sr9700.c
-+++ b/drivers/net/usb/sr9700.c
-@@ -308,7 +308,7 @@ static const struct net_device_ops sr9700_netdev_ops = {
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
- 	.ndo_change_mtu		= usbnet_change_mtu,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_do_ioctl		= sr9700_ioctl,
- 	.ndo_set_rx_mode	= sr9700_set_multicast,
-diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
-index 681e0def6..da56735d7 100644
---- a/drivers/net/usb/sr9800.c
-+++ b/drivers/net/usb/sr9800.c
-@@ -681,7 +681,7 @@ static const struct net_device_ops sr9800_netdev_ops = {
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
- 	.ndo_change_mtu		= usbnet_change_mtu,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address	= sr_set_mac_address,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_do_ioctl		= sr_ioctl,
-diff --git a/drivers/net/wireless/rndis_wlan.c b/drivers/net/wireless/rndis_wlan.c
-index 75b5d545b..9fe775568 100644
---- a/drivers/net/wireless/rndis_wlan.c
-+++ b/drivers/net/wireless/rndis_wlan.c
-@@ -3379,7 +3379,7 @@ static const struct net_device_ops rndis_wlan_netdev_ops = {
- 	.ndo_stop		= usbnet_stop,
- 	.ndo_start_xmit		= usbnet_start_xmit,
- 	.ndo_tx_timeout		= usbnet_tx_timeout,
--	.ndo_get_stats64	= usbnet_get_stats64,
-+	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address 	= eth_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_set_rx_mode	= rndis_wlan_set_multicast_list,
-diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
-index 1f6dfa977..88a767389 100644
---- a/include/linux/usb/usbnet.h
-+++ b/include/linux/usb/usbnet.h
-@@ -284,6 +284,4 @@ extern void usbnet_status_stop(struct usbnet *dev);
- 
- extern void usbnet_update_max_qlen(struct usbnet *dev);
- 
--#define usbnet_get_stats64 dev_get_tstats64
--
- #endif /* __LINUX_USB_USBNET_H */
+The atomic_t api provides a wide range of atomic operations as a base
+api to implement atomic counters, bitops, spinlock interfaces. The usages
+also evolved into being used for resource lifetimes and state management.
+The refcount_t api was introduced to address resource lifetime problems
+related to atomic_t wrapping. There is a large overlap between the
+atomic_t api used for resource lifetimes and just counters, stats, and
+sequence numbers. It has become difficult to differentiate between the
+atomic_t usages that should be converted to refcount_t and the ones that
+can be left alone. Introducing seqnum_ops to wrap the usages that are
+stats, counters, sequence numbers makes it easier for tools that scan
+for underflow and overflow on atomic_t usages to detect overflow and
+underflows to scan just the cases that are prone to errors.
+
+Sequence Number api provides interfaces for simple atomic_t counter usages
+that just count, and don't guard resource lifetimes. The seqnum_ops are
+built on top of atomic_t api, providing a smaller subset of atomic_t
+interfaces necessary to support atomic_t usages as simple counters.
+This api has init/set/inc/dec/read and doesn't support any other atomic_t
+ops with the intent to restrict the use of these interfaces as simple
+counting usages.
+
+Sequence Numbers wrap around to INT_MIN when it overflows and should not
+be used to guard resource lifetimes, device usage and open counts that
+control state changes, and pm states. Overflowing to INT_MIN is consistent
+with the atomic_t api, which it is built on top of.
+
+Using seqnum to guard lifetimes could lead to use-after free when it
+overflows and undefined behavior when used to manage state changes and
+device usage/open states.
+
+In addition this patch series converts a few drivers to use the new api.
+The following criteria is used for select variables for conversion:
+
+1. Variable doesn't guard object lifetimes, manage state changes e.g:
+   device usage counts, device open counts, and pm states.
+2. Variable is used for stats and counters.
+3. The conversion doesn't change the overflow behavior.
+4. Note: inc_return() usages are changed to _inc() followed by _read()
+   Patches: 03/13, 04/13, 09/13, 10/13, 11/13
+5. drivers/acpi and drivers/acpi/apei patches have been reviewed
+   before the rename, however in addition to rename, inc_return()
+   usages are changed to _inc() followed by _read()
+6. test_async_driver_probe, char/ipmi, and edac patches have been
+   reviewed and no changes other than the rename to seqnum_ops.
+7. security/integrity/ima: Okay to depend on CONFIG_64BIT? 
+
+The work for this is a follow-on to the discussion and review of
+Introduce Simple atomic counters patch series:
+
+//lore.kernel.org/lkml/cover.1602209970.git.skhan@linuxfoundation.org/
+
+Based on the feedback to restrict and limit the scope:
+- dropped inc_return()
+- renamed interfaces to match the intent and also shorten the
+  interface names.
+
+Shuah Khan (13):
+  seqnum_ops: Introduce Sequence Number Ops
+  selftests: lib:test_seqnum_ops: add new test for seqnum_ops
+  drivers/acpi: convert seqno seqnum_ops
+  drivers/acpi/apei: convert seqno to seqnum_ops
+  drivers/base/test/test_async_driver_probe: convert to use seqnum_ops
+  drivers/char/ipmi: convert stats to use seqnum_ops
+  drivers/edac: convert pci counters to seqnum_ops
+  drivers/oprofile: convert stats to use seqnum_ops
+  drivers/staging/rtl8723bs: convert stats to use seqnum_ops
+  usb: usbip/vhci: convert seqno to seqnum_ops
+  drivers/staging/rtl8188eu: convert stats to use seqnum_ops
+  drivers/staging/unisys/visorhba: convert stats to use seqnum_ops
+  security/integrity/ima: converts stats to seqnum_ops
+
+ Documentation/core-api/atomic_ops.rst         |   4 +
+ Documentation/core-api/index.rst              |   1 +
+ Documentation/core-api/seqnum_ops.rst         | 126 ++++++++++++++
+ MAINTAINERS                                   |   8 +
+ drivers/acpi/acpi_extlog.c                    |   6 +-
+ drivers/acpi/apei/ghes.c                      |   6 +-
+ drivers/base/test/test_async_driver_probe.c   |  26 +--
+ drivers/char/ipmi/ipmi_msghandler.c           |   9 +-
+ drivers/char/ipmi/ipmi_si_intf.c              |   9 +-
+ drivers/char/ipmi/ipmi_ssif.c                 |   9 +-
+ drivers/edac/edac_pci.h                       |   5 +-
+ drivers/edac/edac_pci_sysfs.c                 |  28 ++--
+ drivers/oprofile/buffer_sync.c                |   9 +-
+ drivers/oprofile/event_buffer.c               |   3 +-
+ drivers/oprofile/oprof.c                      |   3 +-
+ drivers/oprofile/oprofile_stats.c             |  11 +-
+ drivers/oprofile/oprofile_stats.h             |  11 +-
+ drivers/oprofile/oprofilefs.c                 |   3 +-
+ drivers/staging/rtl8188eu/core/rtw_mlme_ext.c |  23 ++-
+ .../staging/rtl8188eu/include/rtw_mlme_ext.h  |   3 +-
+ drivers/staging/rtl8723bs/core/rtw_cmd.c      |   3 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c |  33 ++--
+ drivers/staging/rtl8723bs/include/rtw_cmd.h   |   3 +-
+ .../staging/rtl8723bs/include/rtw_mlme_ext.h  |   3 +-
+ .../staging/unisys/visorhba/visorhba_main.c   |  37 +++--
+ drivers/usb/usbip/vhci.h                      |   3 +-
+ drivers/usb/usbip/vhci_hcd.c                  |   9 +-
+ drivers/usb/usbip/vhci_rx.c                   |   3 +-
+ include/linux/oprofile.h                      |   3 +-
+ include/linux/seqnum_ops.h                    | 154 ++++++++++++++++++
+ lib/Kconfig                                   |   9 +
+ lib/Makefile                                  |   1 +
+ lib/test_seqnum_ops.c                         | 154 ++++++++++++++++++
+ security/integrity/ima/ima.h                  |   5 +-
+ security/integrity/ima/ima_api.c              |   2 +-
+ security/integrity/ima/ima_fs.c               |   4 +-
+ security/integrity/ima/ima_queue.c            |   7 +-
+ tools/testing/selftests/lib/Makefile          |   1 +
+ tools/testing/selftests/lib/config            |   1 +
+ .../testing/selftests/lib/test_seqnum_ops.sh  |  10 ++
+ 40 files changed, 637 insertions(+), 111 deletions(-)
+ create mode 100644 Documentation/core-api/seqnum_ops.rst
+ create mode 100644 include/linux/seqnum_ops.h
+ create mode 100644 lib/test_seqnum_ops.c
+ create mode 100755 tools/testing/selftests/lib/test_seqnum_ops.sh
+
 -- 
-2.29.2
-
+2.27.0
 
