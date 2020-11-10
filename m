@@ -2,232 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CB72ACF7F
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 07:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F242ACF82
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 07:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728045AbgKJGPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 01:15:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
+        id S1730198AbgKJGP7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 01:15:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727089AbgKJGPr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 01:15:47 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9FFC0613CF
-        for <linux-usb@vger.kernel.org>; Mon,  9 Nov 2020 22:15:47 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id i13so4480494pgm.9
-        for <linux-usb@vger.kernel.org>; Mon, 09 Nov 2020 22:15:47 -0800 (PST)
+        with ESMTP id S1727127AbgKJGP7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 01:15:59 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD63AC0613CF
+        for <linux-usb@vger.kernel.org>; Mon,  9 Nov 2020 22:15:58 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id c66so4729875pfa.4
+        for <linux-usb@vger.kernel.org>; Mon, 09 Nov 2020 22:15:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LCjaa2+ZDzyMpp6rXWIBgooM2TUDsF7cGfUV06VXLIQ=;
-        b=Q//nWbDM7rB33p5BDxBDwYhPt+E2lvFctSHuFsv4XgW5esX7EwMB2z3enN3ARlkvA/
-         h0RWtNah+ZfkNQv68Zhl9X/zvx4vM8HIAO1WaK+BRCtURckCOA1aH0J7emwHeScNzjMB
-         TO+1Y4bgPoL7qx42nXJQxkRcv2jCBgqMXt/wY=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ishEzNNk71XyJfj/YS8Ah7LiakzS8LRvxFS16PhxjMY=;
+        b=X6pktCSUMDWxfDkhCFCTXugNsW6qfeqofV7+vvb+fvWaMp4XCRc/aOpVtsB8AWTcst
+         4NO5zKNASuIyCzCcqBZCse3wrwSmEcJY6SiZ3LKfHW3OlS/hui4yq/Lx1fXbj5D3n6bO
+         Bkbpn0YBUU+EaJEdqToxbV/+iG1FL/nI3M0/E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LCjaa2+ZDzyMpp6rXWIBgooM2TUDsF7cGfUV06VXLIQ=;
-        b=gY/o4xufjBqAuka/15/bIZCZ0VJbJKxSnI6r281iE0uoYqKbNJeaNXjxDl+GRZ799j
-         wDtvKyn+KP6PFmuUseh//KrOGyAXXKP7jSOJamhuO8geN3XaT/vvrCReFUPfM1A/RP/P
-         4FgSFx8snFTLLhDltyiUNpO5diCING48+1E/XTkUxTPy0g1PIjtP/q6rz8CBvKMpUc4F
-         KbIlm3EUtz68jy24d1lyaxY5Ktt+CaQhjfWWeAz7aL4SJFX+s2WJT+WaU+Rmem9Ssa7P
-         piW8ND6HSZ4CqFdOZKh3l8H1tvvELJyaf31WR6K0GEXF/9e3lCSnHd+f/7KT4FEdhCwN
-         cbaQ==
-X-Gm-Message-State: AOAM530ZuZ8gLjPfEjpIsQHUCJQVaapApjB3bTDDv1jFoaxMMcOuh0Hc
-        wii+KHR4Jx1yZ2dXctmgDnO9ww==
-X-Google-Smtp-Source: ABdhPJxBLQdt29k4/3op2GxtMZs7G0IH6QrJy72JpIt3FwQNDvQJ0isZGLLaR0RU2nSUU4qAmPZECQ==
-X-Received: by 2002:a17:90a:bb8b:: with SMTP id v11mr3346952pjr.57.1604988946611;
-        Mon, 09 Nov 2020 22:15:46 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ishEzNNk71XyJfj/YS8Ah7LiakzS8LRvxFS16PhxjMY=;
+        b=ohwKdSjV0VerNLFP79ui+bWuFVlr6tqpr4w5siwLe14eXw14Q3x/IAPro/cpun/Gmk
+         AekRQ1mhG2yWR3VL07xxdGcWO3Vm30U7OYEMIKFWrRawmPR2djM4tY3BpA8pDtKjwySc
+         3MXN4oSzcHserlDQZf7wiHcEA52WhACU2kHIjhxSYlJ2lu4sai0GlMKmjud7GPt0Etu+
+         s3tnfrcIB4k4OgtfYGypa4w1HuT2AQpWVnRgzNFRmF7ltg+ZNGJ0/9ZrEOUAaYCYmJEF
+         PAT+U6x1M6PbE0dEjdZFplu+GyhjPlt+gjl9CoJr1zBk4Rs1yNdbtpmCEZSx6dbKVWMd
+         5+mg==
+X-Gm-Message-State: AOAM533jTUxqemNBO6TpE3riPc5JtTntuQJmUU6ZbAT9efHbLMZjud5l
+        l0xgVwxiFU2pCy7dtcdcgkPx4HbkXvVmWQ==
+X-Google-Smtp-Source: ABdhPJytDIP/l8mvqGh+OKLWODfRdY34xLMN1KtDbXdXLEhLnVxMIyFY+c5F3ny9df8uxNtqxWA3Rg==
+X-Received: by 2002:a17:90b:395:: with SMTP id ga21mr3254794pjb.219.1604988958540;
+        Mon, 09 Nov 2020 22:15:58 -0800 (PST)
 Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
-        by smtp.gmail.com with ESMTPSA id gw10sm1499932pjb.24.2020.11.09.22.15.45
+        by smtp.gmail.com with ESMTPSA id gw10sm1499932pjb.24.2020.11.09.22.15.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 22:15:45 -0800 (PST)
+        Mon, 09 Nov 2020 22:15:57 -0800 (PST)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         gregkh@linuxfoundation.org
 Cc:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Guenter Roeck <groeck@chromium.org>
-Subject: [PATCH v2 1/2] usb: typec: Add number of altmodes partner attr
-Date:   Mon,  9 Nov 2020 22:15:34 -0800
-Message-Id: <20201110061535.2163599-1-pmalani@chromium.org>
+Subject: [PATCH v2 2/2] platform/chrome: cros_ec_typec: Set partner num_altmodes
+Date:   Mon,  9 Nov 2020 22:15:36 -0800
+Message-Id: <20201110061535.2163599-2-pmalani@chromium.org>
 X-Mailer: git-send-email 2.29.2.222.g5d2a92d10f8-goog
+In-Reply-To: <20201110061535.2163599-1-pmalani@chromium.org>
+References: <20201110061535.2163599-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a user-visible attribute for the number of alternate modes available
-in a partner. This allows userspace to determine whether there are any
-remaining alternate modes left to be registered by the kernel driver. It
-can begin executing any policy state machine after all available
-alternate modes have been registered with the connector class framework.
+Set the number of altmodes available for a registered partner using the
+Type C connector class framework routine.
 
-This value is set to "-1" initially, signifying that a valid number of
-alternate modes haven't been set for the partner.
-
-Also add a sysfs file which exposes this attribute. The file remains
-hidden as long as the attribute value is -1.
-
-Cc: Benson Leung <bleung@chromium.org>
 Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Signed-off-by: Prashant Malani <pmalani@chromium.org>
 ---
 
 Changes in v2:
-- Added ABI/testing documentation entry for added sysfs file.
-- Changed name of the sysfs file to "number_of_alternate_modes" based on
-  review comments.
-- Added is_visible() logic suggested by Heikki in the comments of v1.
-- Updated commit message.
+- Patch introduced for the first time in v2.
 
-v1:
-https://lore.kernel.org/lkml/20200701003149.3101219-1-pmalani@chromium.org/
+ drivers/platform/chrome/cros_ec_typec.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- Documentation/ABI/testing/sysfs-class-typec |  8 +++
- drivers/usb/typec/class.c                   | 66 ++++++++++++++++++++-
- include/linux/usb/typec.h                   |  1 +
- 3 files changed, 74 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-index b834671522d6..73ac7b461ae5 100644
---- a/Documentation/ABI/testing/sysfs-class-typec
-+++ b/Documentation/ABI/testing/sysfs-class-typec
-@@ -134,6 +134,14 @@ Description:
- 		Shows if the partner supports USB Power Delivery communication:
- 		Valid values: yes, no
+diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+index ce031a10eb1b..743a28426f98 100644
+--- a/drivers/platform/chrome/cros_ec_typec.c
++++ b/drivers/platform/chrome/cros_ec_typec.c
+@@ -621,6 +621,7 @@ static int cros_typec_register_altmodes(struct cros_typec_data *typec, int port_
+ 	struct cros_typec_altmode_node *node;
+ 	struct typec_altmode_desc desc;
+ 	struct typec_altmode *amode;
++	int num_altmodes = 0;
+ 	int ret = 0;
+ 	int i, j;
  
-+What:		/sys/class/typec/<port>-partner/number_of_alternate_modes
-+Date:		November 2020
-+Contact:	Prashant Malani <pmalani@chromium.org>
-+Description:
-+		Shows the number of alternate modes which are advertised by the partner
-+		during Power Delivery discovery. This file remains hidden until a value
-+		greater than or equal to 0 is set by Type C port driver.
-+
- What:		/sys/class/typec/<port>-partner>/identity/
- Date:		April 2017
- Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 35eec707cb51..c7412ddbd311 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -33,6 +33,7 @@ struct typec_partner {
- 	struct usb_pd_identity		*identity;
- 	enum typec_accessory		accessory;
- 	struct ida			mode_ids;
-+	int				num_altmodes;
- };
+@@ -647,9 +648,16 @@ static int cros_typec_register_altmodes(struct cros_typec_data *typec, int port_
  
- struct typec_port {
-@@ -532,12 +533,43 @@ static ssize_t supports_usb_power_delivery_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(supports_usb_power_delivery);
+ 			node->amode = amode;
+ 			list_add_tail(&node->list, &port->partner_mode_list);
++			num_altmodes++;
+ 		}
+ 	}
  
-+static ssize_t number_of_alternate_modes_show(struct device *dev, struct device_attribute *attr,
-+					      char *buf)
-+{
-+	struct typec_partner *p = to_typec_partner(dev);
-+
-+	return sysfs_emit(buf, "%d\n", p->num_altmodes);
-+}
-+static DEVICE_ATTR_RO(number_of_alternate_modes);
-+
- static struct attribute *typec_partner_attrs[] = {
- 	&dev_attr_accessory_mode.attr,
- 	&dev_attr_supports_usb_power_delivery.attr,
-+	&dev_attr_number_of_alternate_modes.attr,
-+	NULL
-+};
-+
-+static umode_t typec_partner_attr_is_visible(struct kobject *kobj, struct attribute *attr, int n)
-+{
-+	struct typec_partner *partner = to_typec_partner(kobj_to_dev(kobj));
-+
-+	if (attr == &dev_attr_number_of_alternate_modes.attr) {
-+		if (partner->num_altmodes < 0)
-+			return 0;
++	ret = typec_partner_set_num_altmodes(port->partner, num_altmodes);
++	if (ret < 0) {
++		dev_err(typec->dev, "Unable to set partner num_altmodes for port: %d\n", port_num);
++		goto err_cleanup;
 +	}
 +
-+	return attr->mode;
-+}
-+
-+static struct attribute_group typec_partner_group = {
-+	.is_visible = typec_partner_attr_is_visible,
-+	.attrs = typec_partner_attrs
-+};
-+
-+static const struct attribute_group *typec_partner_groups[] = {
-+	&typec_partner_group,
- 	NULL
- };
--ATTRIBUTE_GROUPS(typec_partner);
+ 	return 0;
  
- static void typec_partner_release(struct device *dev)
- {
-@@ -570,6 +602,37 @@ int typec_partner_set_identity(struct typec_partner *partner)
- }
- EXPORT_SYMBOL_GPL(typec_partner_set_identity);
- 
-+/**
-+ * typec_partner_set_num_altmodes - Set the number of available partner altmodes
-+ * @partner: The partner to be updated.
-+ * @num_alt_modes: The number of altmodes we want to specify as available.
-+ *
-+ * This routine is used to report the number of alternate modes supported by the
-+ * partner. This value is *not* enforced in alternate mode registration routines.
-+ *
-+ * @partner.num_altmodes is set to -1 on partner registration, denoting that
-+ * a valid value has not been set for it yet.
-+ *
-+ * Returns 0 on success or negative error number on failure.
-+ */
-+int typec_partner_set_num_altmodes(struct typec_partner *partner, int num_altmodes)
-+{
-+	int ret;
-+
-+	if (num_altmodes < 0)
-+		return -EINVAL;
-+
-+	partner->num_altmodes = num_altmodes;
-+	ret = sysfs_update_group(&partner->dev.kobj, &typec_partner_group);
-+	if (ret < 0)
-+		return ret;
-+
-+	sysfs_notify(&partner->dev.kobj, NULL, "number_of_alternate_modes");
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(typec_partner_set_num_altmodes);
-+
- /**
-  * typec_partner_register_altmode - Register USB Type-C Partner Alternate Mode
-  * @partner: USB Type-C Partner that supports the alternate mode
-@@ -612,6 +675,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
- 	ida_init(&partner->mode_ids);
- 	partner->usb_pd = desc->usb_pd;
- 	partner->accessory = desc->accessory;
-+	partner->num_altmodes = -1;
- 
- 	if (desc->identity) {
- 		/*
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index 6be558045942..bc6b1a71cb8a 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -126,6 +126,7 @@ struct typec_altmode_desc {
- 	enum typec_port_data	roles;
- };
- 
-+int typec_partner_set_num_altmodes(struct typec_partner *partner, int num_altmodes);
- struct typec_altmode
- *typec_partner_register_altmode(struct typec_partner *partner,
- 				const struct typec_altmode_desc *desc);
+ err_cleanup:
 -- 
 2.29.2.222.g5d2a92d10f8-goog
 
