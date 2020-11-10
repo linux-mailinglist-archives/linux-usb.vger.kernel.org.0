@@ -2,87 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 306692AD3CD
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 11:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1802E2AD3E5
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 11:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbgKJKan (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 05:30:43 -0500
-Received: from mga05.intel.com ([192.55.52.43]:60177 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726690AbgKJKan (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Nov 2020 05:30:43 -0500
-IronPort-SDR: MtspCfiAGLdZRAnvwUCnYmx0XxlQMcqhw/BvgALJQyPNiyxviQ/+N+YVyqpyucV3rFJH2NgrfW
- gs3QsM8Laa7A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9800"; a="254659149"
-X-IronPort-AV: E=Sophos;i="5.77,466,1596524400"; 
-   d="scan'208";a="254659149"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 02:30:43 -0800
-IronPort-SDR: SwaWE1hcQhX7tQsTU0naZqvcWnLrIHhRMH5pdZsCnW7O9LCx3RMPEs6XXIcJx2HVfqn2Apqx1E
- UNiD35paRjzg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,466,1596524400"; 
-   d="scan'208";a="428322863"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 10 Nov 2020 02:30:41 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 10 Nov 2020 12:30:40 +0200
-Date:   Tue, 10 Nov 2020 12:30:40 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Vladimir Yerilov <openmindead@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Benjamin Berg <bberg@redhat.com>, linux-usb@vger.kernel.org
-Subject: Re: Fwd: Power supply detection issue caused by ucsi_psy?
-Message-ID: <20201110103040.GD1224435@kuha.fi.intel.com>
-References: <CAB31r6UbF_Q-APvfmxanvMZOYJZwr0eEPwMQ8EGWw3-VkJtHhQ@mail.gmail.com>
- <20201109112051.GL4062920@kuha.fi.intel.com>
- <dab0302c9156a845923ee7fbefad7dd4305eedb3.camel@redhat.com>
- <CAB31r6XWQqM-kLYm4vb8H=45grhuwsHDYT94y5QJZVtP8w_sXg@mail.gmail.com>
- <CAB31r6XpFRPkMcrU+os6VbkdNiQty+s8a_MWhZXY=cjK3yXvmw@mail.gmail.com>
- <20201110083132.GB1224435@kuha.fi.intel.com>
- <CAB31r6Wq5c7n=Ywdq1KAgRZFemH6Wx2b-9tq46k=ipZrqarmdA@mail.gmail.com>
+        id S1726690AbgKJKi6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 05:38:58 -0500
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:45283 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726219AbgKJKi5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 05:38:57 -0500
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Tue, 10 Nov 2020 05:38:56 EST
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id cQwCkl89cNanzcQwFk5Qw2; Tue, 10 Nov 2020 11:31:48 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1605004308; bh=sSUZeBbALipBVaAcCxxvxF92gzHg1s0qI8782LffVyw=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=r5dPlNsY6mZo891vK/ccSQsEJK/hyKbIH9c8V+0MAAJmXvuCuJcBuJrvFw7nJ4nM/
+         xT7BlXeu2gpLnnlbhheZLhB/+B2Ae5XtJVpQ9OrhJVNOdZjZNW/Z5FUbf/UcBFGR+d
+         dO4F0qlSdJEFQxsmsDUa5L+Y+AEUIZe6n/7U07LiTkiSvjkA/QKsN129ryfRRkkHCe
+         muGrXMdpuJznHNQXW8zr7vpedfO4Z0iljm4ouATil+lvqMg7knpf+ShuMTeVPEl9U+
+         lSu04F5kHwAPf3EdciZA3MzS8jg3pYPBC6+9JSwgP45NO4BKSE+sVlIfi/Xqv+5kZV
+         6jW80gMLNU1FQ==
+Subject: Re: [PATCH v2] usb: gadget: uvc: fix multiple opens
+To:     thomas.haemmerle@wolfvision.net, gregkh@linuxfoundation.org
+Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
+        linux-usb@vger.kernel.org, m.tretter@pengutronix.de,
+        linux-media@vger.kernel.org
+References: <20201105103758.GA4033354@kroah.com>
+ <20201110082504.26134-1-thomas.haemmerle@wolfvision.net>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <2bf6f3b3-6475-9cd9-b6f9-dfc4b444c955@xs4all.nl>
+Date:   Tue, 10 Nov 2020 11:31:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <20201110082504.26134-1-thomas.haemmerle@wolfvision.net>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAB31r6Wq5c7n=Ywdq1KAgRZFemH6Wx2b-9tq46k=ipZrqarmdA@mail.gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfAWwltG6ZRf8zb9NVmxM+GJc07KHQ0legS+bi2bENofERX9Ov++J4NgpnTW4kTWoq2PVSMqvkjvqR8LFb5woK3qSDRlhh2qO+zdhcIZKfzrh4yGT/Y/P
+ FR9tmNzMa/vnUnzoKVqZGtsqwqyIhm4+0fopz8/JLiM3coXofsooegHBwOfZXHov4cDTFAFwZ/XTQBNF3G/J6i31/WksFu86aGm8jFGOLnU6V40jS30jQde3
+ j4v+vrPu5Ivu8yKG7I5HrwMYOo3+BB3P/XT3DywAm156Vna6/D3fp74ISrmdD0xDZf4OmQNIpaoxLFKQdvJ4OFMZdZ+xaUuE2IEBS4z5VbTnJmclORtdPWN1
+ olfhpIuELTEw286DPWj5AWj5mX2qFU5/pzpuK6tVp6YOhS0A6IG8nSVfZ24eMLzVoFst8hmD+Otk3nChVGxdhVHJT4P6vw==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 10, 2020 at 08:22:31PM +1000, Vladimir Yerilov wrote:
-> It worked! You're a wizard sir, thank you!
-> :D
+On 10/11/2020 09:25, thomas.haemmerle@wolfvision.net wrote:
+> From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+> 
+> Currently, the UVC function is activated when open on the corresponding
+> v4l2 device is called.
+> On another open the activation of the function fails since the
+> deactivation counter in `usb_function_activate` equals 0. However the
+> error is not returned to userspace since the open of the v4l2 device is
+> successful.
+> 
+> On a close the function is deactivated (since deactivation counter still
+> equals 0) and the video is disabled in `uvc_v4l2_release`, although
+> another process potentially is streaming.
+> 
+> Move activation of UVC function to subscription on UVC_EVENT_SETUP and
+> keep track of the number of subscribers (limited to 1) because there we
+> can guarantee for a userspace program utilizing UVC.
+> Extend the `struct uvc_file_handle` with member `bool connected` to tag 
+> it for a deactivation of the function.
+> 
+> With this a process is able to check capabilities of the v4l2 device
+> without deactivating the function for another process actually using the
+> device for UVC streaming.
+> 
+> Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+> ---
+> v2:
+>  - fix deadlock in `uvc_v4l2_unsubscribe_event()` (mutex is already
+>    locked in v4l2-core) introduced in v1
+>  - lock mutex in `uvc_v4l2_release()` to suppress ioctls and protect
+>    connected
+> 
+>  drivers/usb/gadget/function/uvc.h      |  2 +
+>  drivers/usb/gadget/function/uvc_v4l2.c | 56 +++++++++++++++++++++-----
+>  2 files changed, 48 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+> index 73da4f9a8d4c..0d0bcbffc8fd 100644
+> --- a/drivers/usb/gadget/function/uvc.h
+> +++ b/drivers/usb/gadget/function/uvc.h
+> @@ -117,6 +117,7 @@ struct uvc_device {
+>  	enum uvc_state state;
+>  	struct usb_function func;
+>  	struct uvc_video video;
+> +	unsigned int connections;
+>  
+>  	/* Descriptors */
+>  	struct {
+> @@ -147,6 +148,7 @@ static inline struct uvc_device *to_uvc(struct usb_function *f)
+>  struct uvc_file_handle {
+>  	struct v4l2_fh vfh;
+>  	struct uvc_video *device;
+> +	bool connected;
+>  };
+>  
+>  #define to_uvc_file_handle(handle) \
+> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+> index 67922b1355e6..aee4888e17b1 100644
+> --- a/drivers/usb/gadget/function/uvc_v4l2.c
+> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+> @@ -228,17 +228,57 @@ static int
+>  uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
+>  			 const struct v4l2_event_subscription *sub)
+>  {
+> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
+> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
+> +	int ret;
+> +
+>  	if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
+>  		return -EINVAL;
+>  
+> -	return v4l2_event_subscribe(fh, sub, 2, NULL);
+> +	if ((sub->type == UVC_EVENT_SETUP) && (uvc->connections >= 1))
+> +		return -EBUSY;
+> +
+> +	ret = v4l2_event_subscribe(fh, sub, 2, NULL);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (sub->type == UVC_EVENT_SETUP) {
+> +		uvc->connections++;
+> +		handle->connected = true;
+> +		uvc_function_connect(uvc);
+> +	}
 
-Excellent!
+This makes no sense. Why would subscribing to a SETUP event
+mean that you are 'connected'?
 
-+Greg, Benjamin and the list.
+It should be possible to open a V4L2 device node any number of times,
+and any filehandle can subscribe to any event, but typically once
+userspace allocates buffers (VIDIOC_REQBUFS or VIDIOC_CREATE_BUFS)
+then that filehandle is marked as the owner of the device and other
+open filehandles are no longer allowed to allocate buffers or stream video.
 
-> вт, 10 нояб. 2020 г. в 18:31, Heikki Krogerus <heikki.krogerus@linux.intel.com>:
-> >
-> > Hi Vladimir,
-> >
-> > On Tue, Nov 10, 2020 at 03:02:40AM +1000, Vladimir Yerilov wrote:
-> > > Forwarding to y'all.
-> > >
-> > > Just some extra info:
-> > > `cat /sys/class/power_supply/ucsi-source-psy-USBC000:001/online` shows
-> > > zero when the cable is unplugged, same for
-> > > `/sys/class/power_supply/ADP0/online` status, but that means nothing
-> > > for upower and all system services considering that there a power
-> > > source available and not setting display brightness and other
-> > > parameters due to that.
-> > > Checked in Ubuntu as well, same situation with their kernel 5.8.
-> >
-> > Please try to avoid top-posting.
-> >
-> > It seems that the ucsi psy does not report any changes. That is one
-> > obvious bug that I can see.
-> >
-> > I'm attaching a patch to fix that. Can you give it a try?
+See e.g. drivers/media/common/videobuf2/videobuf2-v4l2.c
+and vb2_ioctl_reqbufs and other vb2_ioctl_* functions.
 
-thanks,
+Unfortunately this UVC gadget driver is rather old and is not using
+these helper functions.
 
--- 
-heikki
+Running 'v4l2-compliance' will likely fail on a lot of tests for this
+driver.
+
+This driver probably could use some TLC.
+
+Regards,
+
+	Hans
+
+> +
+> +	return 0;
+> +}
+> +
+> +static void uvc_v4l2_disable(struct uvc_device *uvc)
+> +{
+> +	if (--uvc->connections)
+> +		return;
+> +
+> +	uvc_function_disconnect(uvc);
+> +	uvcg_video_enable(&uvc->video, 0);
+> +	uvcg_free_buffers(&uvc->video.queue);
+>  }
+>  
+>  static int
+>  uvc_v4l2_unsubscribe_event(struct v4l2_fh *fh,
+>  			   const struct v4l2_event_subscription *sub)
+>  {
+> -	return v4l2_event_unsubscribe(fh, sub);
+> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
+> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
+> +	int ret;
+> +
+> +	ret = v4l2_event_unsubscribe(fh, sub);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if ((sub->type == UVC_EVENT_SETUP) && handle->connected) {
+> +		uvc_v4l2_disable(uvc);
+> +		handle->connected = false;
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static long
+> @@ -293,7 +333,6 @@ uvc_v4l2_open(struct file *file)
+>  	handle->device = &uvc->video;
+>  	file->private_data = &handle->vfh;
+>  
+> -	uvc_function_connect(uvc);
+>  	return 0;
+>  }
+>  
+> @@ -303,14 +342,11 @@ uvc_v4l2_release(struct file *file)
+>  	struct video_device *vdev = video_devdata(file);
+>  	struct uvc_device *uvc = video_get_drvdata(vdev);
+>  	struct uvc_file_handle *handle = to_uvc_file_handle(file->private_data);
+> -	struct uvc_video *video = handle->device;
+> -
+> -	uvc_function_disconnect(uvc);
+>  
+> -	mutex_lock(&video->mutex);
+> -	uvcg_video_enable(video, 0);
+> -	uvcg_free_buffers(&video->queue);
+> -	mutex_unlock(&video->mutex);
+> +	mutex_lock(&uvc->video.mutex);
+> +	if (handle->connected)
+> +		uvc_v4l2_disable(uvc);
+> +	mutex_unlock(&uvc->video.mutex);
+>  
+>  	file->private_data = NULL;
+>  	v4l2_fh_del(&handle->vfh);
+> 
+
