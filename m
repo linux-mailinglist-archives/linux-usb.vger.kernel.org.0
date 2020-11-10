@@ -2,151 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E73582AD170
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 09:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DC52AD183
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 09:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730735AbgKJIj6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 03:39:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33978 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730116AbgKJIj4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Nov 2020 03:39:56 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DD8E020731;
-        Tue, 10 Nov 2020 08:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604997595;
-        bh=PXiAAftzN6GduD3leXdMMam7ZG0s3JyEEMG4p6SdMvc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G9nkPdrWtPrJduPcSdxHmqQpUnc0aHS598O0eKE8RN4F3wOqBYdHhwl40XikGeC6u
-         d2KyuQ1Zz6/EZ+07G7F9QskpEHC3YJ6CDjP97u8EJxstu+OmWTlwd4APq0fdlhSX1d
-         zgFGvmXo6zRmpFOjP9gbPmwF6STfNC3h6RcPUu4g=
-Date:   Tue, 10 Nov 2020 09:40:51 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     thomas.haemmerle@wolfvision.net
-Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
-        linux-usb@vger.kernel.org, m.tretter@pengutronix.de,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: uvc: fix multiple opens
-Message-ID: <X6pSExWwSoHeSldW@kroah.com>
-References: <20201105103758.GA4033354@kroah.com>
- <20201110082504.26134-1-thomas.haemmerle@wolfvision.net>
+        id S1728905AbgKJInS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 03:43:18 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:51798 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726462AbgKJInP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 03:43:15 -0500
+X-UUID: 9a49a4eb747a4336a1463e66c6adc991-20201110
+X-UUID: 9a49a4eb747a4336a1463e66c6adc991-20201110
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 750161777; Tue, 10 Nov 2020 16:43:11 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 10 Nov 2020 16:43:08 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 10 Nov 2020 16:43:09 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexander Tsoy <alexander@tsoy.me>,
+        Nicola Lunghi <nick83ola@gmail.com>,
+        Christopher Swenson <swenson@swenson.io>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        <alsa-devel@alsa-project.org>
+CC:     Ainge Hsu <ainge.hsu@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Macpaul Lin <macpaul@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v2] ALSA: usb-audio: disable 96khz support for HUAWEI USB-C HEADSET
+Date:   Tue, 10 Nov 2020 16:42:54 +0800
+Message-ID: <1604997774-13593-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <1604995443-30453-1-git-send-email-macpaul.lin@mediatek.com>
+References: <1604995443-30453-1-git-send-email-macpaul.lin@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201110082504.26134-1-thomas.haemmerle@wolfvision.net>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 10, 2020 at 09:25:04AM +0100, thomas.haemmerle@wolfvision.net wrote:
-> From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-> 
-> Currently, the UVC function is activated when open on the corresponding
-> v4l2 device is called.
-> On another open the activation of the function fails since the
-> deactivation counter in `usb_function_activate` equals 0. However the
-> error is not returned to userspace since the open of the v4l2 device is
-> successful.
-> 
-> On a close the function is deactivated (since deactivation counter still
-> equals 0) and the video is disabled in `uvc_v4l2_release`, although
-> another process potentially is streaming.
-> 
-> Move activation of UVC function to subscription on UVC_EVENT_SETUP and
-> keep track of the number of subscribers (limited to 1) because there we
-> can guarantee for a userspace program utilizing UVC.
-> Extend the `struct uvc_file_handle` with member `bool connected` to tag 
-> it for a deactivation of the function.
-> 
-> With this a process is able to check capabilities of the v4l2 device
-> without deactivating the function for another process actually using the
-> device for UVC streaming.
-> 
-> Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-> ---
-> v2:
->  - fix deadlock in `uvc_v4l2_unsubscribe_event()` (mutex is already
->    locked in v4l2-core) introduced in v1
->  - lock mutex in `uvc_v4l2_release()` to suppress ioctls and protect
->    connected
-> 
->  drivers/usb/gadget/function/uvc.h      |  2 +
->  drivers/usb/gadget/function/uvc_v4l2.c | 56 +++++++++++++++++++++-----
->  2 files changed, 48 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-> index 73da4f9a8d4c..0d0bcbffc8fd 100644
-> --- a/drivers/usb/gadget/function/uvc.h
-> +++ b/drivers/usb/gadget/function/uvc.h
-> @@ -117,6 +117,7 @@ struct uvc_device {
->  	enum uvc_state state;
->  	struct usb_function func;
->  	struct uvc_video video;
-> +	unsigned int connections;
->  
->  	/* Descriptors */
->  	struct {
-> @@ -147,6 +148,7 @@ static inline struct uvc_device *to_uvc(struct usb_function *f)
->  struct uvc_file_handle {
->  	struct v4l2_fh vfh;
->  	struct uvc_video *device;
-> +	bool connected;
+The HUAWEI USB-C headset (VID:0x12d1, PID:0x3a07) reported it supports
+96khz. However there will be some random issue under 96khz.
+Not sure if there is any alternate setting could be applied.
+Hence 48khz is suggested to be applied at this moment.
 
-What protects these two fields you are adding?
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Signed-off-by: Eddie Hung <eddie.hung@mediatek.com>
+Cc: stable@vger.kernel.org
+---
+Changes for v2:
+  - Fix build error.
+  - Add Cc: stable@vger.kernel.org
 
->  };
->  
->  #define to_uvc_file_handle(handle) \
-> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> index 67922b1355e6..aee4888e17b1 100644
-> --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> @@ -228,17 +228,57 @@ static int
->  uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
->  			 const struct v4l2_event_subscription *sub)
->  {
-> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
-> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
-> +	int ret;
-> +
->  	if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
->  		return -EINVAL;
->  
-> -	return v4l2_event_subscribe(fh, sub, 2, NULL);
-> +	if ((sub->type == UVC_EVENT_SETUP) && (uvc->connections >= 1))
-> +		return -EBUSY;
+ sound/usb/format.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Are you sure you can't handle more than one connection?
+diff --git a/sound/usb/format.c b/sound/usb/format.c
+index 1b28d01..7a4837b 100644
+--- a/sound/usb/format.c
++++ b/sound/usb/format.c
+@@ -202,6 +202,7 @@ static int parse_audio_format_rates_v1(struct snd_usb_audio *chip, struct audiof
+ 		fp->rate_min = fp->rate_max = 0;
+ 		for (r = 0, idx = offset + 1; r < nr_rates; r++, idx += 3) {
+ 			unsigned int rate = combine_triple(&fmt[idx]);
++			struct usb_device *udev = chip->dev;
+ 			if (!rate)
+ 				continue;
+ 			/* C-Media CM6501 mislabels its 96 kHz altsetting */
+@@ -217,6 +218,11 @@ static int parse_audio_format_rates_v1(struct snd_usb_audio *chip, struct audiof
+ 			    (chip->usb_id == USB_ID(0x041e, 0x4064) ||
+ 			     chip->usb_id == USB_ID(0x041e, 0x4068)))
+ 				rate = 8000;
++			/* Huawei headset can't support 96kHz fully */
++			if (rate == 96000 &&
++			    chip->usb_id == USB_ID(0x12d1, 0x3a07) &&
++			    le16_to_cpu(udev->descriptor.bcdDevice) == 0x49)
++				continue;
+ 
+ 			fp->rate_table[fp->nr_rates] = rate;
+ 			if (!fp->rate_min || rate < fp->rate_min)
+-- 
+1.7.9.5
 
-If so, why is it an integer and not just a boolean?
-
-And what prevents the value from changing right after you test it here?
-
-> +
-> +	ret = v4l2_event_subscribe(fh, sub, 2, NULL);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (sub->type == UVC_EVENT_SETUP) {
-> +		uvc->connections++;
-> +		handle->connected = true;
-> +		uvc_function_connect(uvc);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void uvc_v4l2_disable(struct uvc_device *uvc)
-> +{
-> +	if (--uvc->connections)
-> +		return;
-> +
-
-What prevents "connections" from changing right after testing it here?
-
-thanks,
-
-greg k-h
