@@ -2,98 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 237532AE221
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 22:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997482AE238
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 22:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731744AbgKJVun (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 16:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726688AbgKJVum (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 16:50:42 -0500
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56985C0613D1;
-        Tue, 10 Nov 2020 13:50:42 -0800 (PST)
-Received: by mail-lj1-x243.google.com with SMTP id v18so16546150ljc.3;
-        Tue, 10 Nov 2020 13:50:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QumWPjldyhkIYYrKZybLDjf0NEcp9tE/cFj+ALYFR9A=;
-        b=JajzXzj+taW37LHKKk1rBUu2Z4ElUMNSSHS0K95OnI5UImwAIF74Qu+QTmiVzypvAS
-         gAQiDrdU4a2B6Z9A/XX/OOpJu3zamPLYGVpiOdVUDJw7ZsRpBauLkm/3QQp5PvJ2UM4A
-         LlfneuREhApeooZpB9lnnAX6U7j1XdRX88sCUzdxugTvIG1jP5PTHJPC3/8IUgW/bc/i
-         LWgLoXa7caMAbqITehUnmz/UH2tBulw/gQUU8Cd3shJtQ+zvYfoUG1N8jDZq2ZIllOe/
-         aCD81lT6Dj2NRU8sGRrZHHc26lsCxBQnWNgpAjWLB1z+6WE0AmdSq+A5dXHYbs0KDWUd
-         P/Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QumWPjldyhkIYYrKZybLDjf0NEcp9tE/cFj+ALYFR9A=;
-        b=KtRbblHfKi1Ay5PEaAn1KZJFAZ3msWs02D6BzwC7cpXqRlnOnvOsDkoWebzQgSmqRn
-         D0/46SSJdZtmRc8TYtLDSTqBcdmtD/q0X84oyL6u/lKoxtv+nppRHfvWEano4m6qmEmi
-         rXQQvksoL6RzOfdbBrJHfSycz4On2/LJmHdR2XfZTqHuG++IzKFo82z+nNIQWQIJJ+gC
-         z54/p8NqoA0PQEl1qM9KDrr6k3p55B55fy5vJteEuIRfeWw9c+VaI4mYgd82bPDT/auF
-         QrpRkldWJXDRAM45Qad3pyoo7E/xRG8TWtB25rXPHZpkOFrL4IPkA2bBj06S5X6rNR1s
-         bjyg==
-X-Gm-Message-State: AOAM532fAQDNrGzkhk75e2G6DC7w9w8rVE8dImJHRYvrpFlR5L1Yu6V0
-        q6s7cZc8D4FtniHhyZAm0VzFtSlyNKo=
-X-Google-Smtp-Source: ABdhPJxca3fiSpZnzLwSSmf1STAmFU4WFUoLoBVs2ZCeEEkdDu9neVJtNB2ucZnGCMuP/Af+mNHRXw==
-X-Received: by 2002:a2e:9583:: with SMTP id w3mr9542353ljh.25.1605045040627;
-        Tue, 10 Nov 2020 13:50:40 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.googlemail.com with ESMTPSA id x9sm12074lfg.93.2020.11.10.13.50.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2020 13:50:39 -0800 (PST)
-Subject: Re: [PATCH v1 11/30] drm/tegra: dc: Support OPP and SoC core voltage
- scaling
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-usb@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20201104234427.26477-1-digetx@gmail.com>
- <20201104234427.26477-12-digetx@gmail.com> <20201110202945.GF2375022@ulmo>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <7b0052e1-0ea7-b28f-ae46-52e669a980ac@gmail.com>
-Date:   Wed, 11 Nov 2020 00:50:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729862AbgKJVzN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 16:55:13 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:37323 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726467AbgKJVzN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 16:55:13 -0500
+Received: (qmail 209049 invoked by uid 1000); 10 Nov 2020 16:55:11 -0500
+Date:   Tue, 10 Nov 2020 16:55:11 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     David Niklas <Hgntkwis@vfemail.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: I need advice with UPS connection.
+Message-ID: <20201110215511.GA208895@rowland.harvard.edu>
+References: <20201109220000.2ae98fa5@Phenom-II-x6.niklas.com>
 MIME-Version: 1.0
-In-Reply-To: <20201110202945.GF2375022@ulmo>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201109220000.2ae98fa5@Phenom-II-x6.niklas.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-10.11.2020 23:29, Thierry Reding пишет:
->> +	/* legacy device-trees don't have OPP table */
->> +	if (!device_property_present(dc->dev, "operating-points-v2"))
->> +		return 0;
-> "Legacy" is a bit confusing here. For one, no device trees currently
-> have these tables and secondly, for newer SoCs we may never need them.
-> 
++Jiri, Ben, and linux-input
 
-I had the same thought and already improved such comments a day ago.
+On Mon, Nov 09, 2020 at 10:00:00PM -0500, David Niklas wrote:
+> Hello,
+> I'm running Linux Kernel 5.8.X on a Devuan (Debian) system. I connected
+> my UPS (OPTI-UPS Thunder Shield TS2250B) via USB cable and got:
+> 
+> [739229.454592][T25544] usb 9-4: new low-speed USB device number 2 using ohci-pci
+> [739229.635343][T25544] usb 9-4: config index 0 descriptor too short (expected 9, got 0)
+> [739229.635348][T25544] usb 9-4: can't read configurations, error -22
+> [739229.791290][T25544] usb 9-4: new low-speed USB device number 3 using ohci-pci
+> [739229.982414][T25544] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
+> [739229.982421][T25544] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
+> [739229.982426][T25544] usb 9-4: Product: HID UPS Battery
+> [739229.982430][T25544] usb 9-4: Manufacturer: POWERCOM Co.,LTD
+> [739229.982433][T25544] usb 9-4: SerialNumber: 004-0D9F-000
+> [739230.027616][T25544] hid-generic 0003:0D9F:0004.0004: hiddev1,hidraw2: USB HID v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on usb-0000:00:16.0-4/input0
+> [739233.484723][T25544] usb 9-4: USB disconnect, device number 3
+> [739236.257951][T25544] usb 9-4: new low-speed USB device number 4 using ohci-pci
+> [739236.475434][T25544] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
+> [739236.475442][T25544] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
+> [739236.520783][T25544] hid-generic 0003:0D9F:0004.0005: hiddev1,hidraw2: USB HID v1.00 Device [HID 0d9f:0004] on usb-0000:00:16.0-4/input0
+> [739239.933809][T25544] usb 9-4: USB disconnect, device number 4
+> [739242.701322][T25544] usb 9-4: new low-speed USB device number 5 using ohci-pci
+> [739242.880035][T25544] usb 9-4: device descriptor read/all, error -62
+> [739243.034561][T25544] usb 9-4: new low-speed USB device number 6 using ohci-pci
+> [739243.252040][T25544] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
+> [739243.252042][T25544] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
+> [739243.296444][T25544] hid-generic 0003:0D9F:0004.0006: hiddev1,hidraw2: USB HID v1.00 Device [HID 0d9f:0004] on usb-0000:00:16.0-4/input0
+> [739246.720152][T25544] usb 9-4: USB disconnect, device number 6
+> [739249.491330][T13473] usb 9-4: new low-speed USB device number 7 using ohci-pci
+> [739249.718707][T13473] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
+> [739249.718709][T13473] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
+> [739249.718710][T13473] usb 9-4: Product: HID UPS Battery
+> [739249.718711][T13473] usb 9-4: Manufacturer: POWERCOM Co.,LTD
+> [739249.718712][T13473] usb 9-4: SerialNumber: 004-0D9F-000
+> [739249.751173][T13473] hid-generic 0003:0D9F:0004.0007: unknown main item tag 0x0
+> <snip class="spam-repeated-previous-message">
+> [739250.162392][T13473] hid-generic 0003:0D9F:0004.0007: unknown main item tag 0x0
+> [739250.162813][T13473] hid-generic 0003:0D9F:0004.0007: hidraw2: USB HID v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on usb-0000:00:16.0-4/input0
+> [739253.165518][T13473] usb 9-4: USB disconnect, device number 7
+> ...
+> 
+> 
+> I'd appreciate any advice trying to get my UPS to stay connected and not
+> spam the kernel log. The UPS is about 1 year old. It's working fine. I
+> just want to use nut or apcupsd with it.
+> 
+> Thanks,
+> David
