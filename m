@@ -2,164 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 636452AE447
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 00:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 204C72AE489
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 00:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731746AbgKJXn0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 18:43:26 -0500
-Received: from p3nlsmtpcp01-02.prod.phx3.secureserver.net ([184.168.200.140]:36740
-        "EHLO p3nlsmtpcp01-02.prod.phx3.secureserver.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731558AbgKJXn0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Nov 2020 18:43:26 -0500
-Received: from p3plcpnl0564.prod.phx3.secureserver.net ([50.62.176.91])
-        by : HOSTING RELAY : with ESMTP
-        id cdHLkJvvqsFA9cdHLkD5gn; Tue, 10 Nov 2020 16:42:23 -0700
-X-CMAE-Analysis: v=2.4 cv=Xu4/hXJ9 c=1 sm=1 tr=0 ts=5fab255f
- a=enoWsqFKhXaBs5BDtsbzsA==:117 a=dhrM4QDckVN49Kxx3K61fg==:17
- a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=IkcTkHD0fZMA:10 a=nNwsprhYR40A:10
- a=VwQbUJbxAAAA:8 a=_mUPLmyXwGQoOHowg7QA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22
-X-SECURESERVER-ACCT: a1@tripolho.com
-Received: from pool-96-242-17-244.nwrknj.fios.verizon.net ([96.242.17.244]:40926 helo=[192.168.62.65])
-        by p3plcpnl0564.prod.phx3.secureserver.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <22t@tripolho.com>)
-        id 1kcdHL-004XCT-8M; Tue, 10 Nov 2020 16:42:23 -0700
-Subject: Re: kernel locks due to USB I/O
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-References: <9428ae70-887e-b48b-f31c-f95d58f67c61@tripolho.com>
- <20201110205114.GB204624@rowland.harvard.edu>
-From:   Alberto Sentieri <22t@tripolho.com>
-Message-ID: <8152190e-c962-e376-64fd-cc2ebf3e6104@tripolho.com>
-Date:   Tue, 10 Nov 2020 18:42:17 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
-MIME-Version: 1.0
-In-Reply-To: <20201110205114.GB204624@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1732023AbgKJX73 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 18:59:29 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:51366 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727275AbgKJX73 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 18:59:29 -0500
+Received: from mailhost.synopsys.com (us03-mailhost2.synopsys.com [10.4.17.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id C995D400D5;
+        Tue, 10 Nov 2020 23:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1605052768; bh=LSwcfk+BMOaGz2P1w7NsHNOOOD1t+HTNND8plASdb2Y=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=NxH38x5nbQGMUQnpEY5PfrOaYA8bJrigKGVRL4NbW4Gn6QJeWwvSrmX9qEcXE21+F
+         vI3XupiyCwIbKqtuzJOJFSrd+XxmH9gRS1vIEv6z23yvYsq/fGC/FP72p0gsorQpNi
+         kvRiL6OO+jrcdxdmmr/5kQ0keI1EFqP740P3xyYEkBvnDNngS6dsWH+FK141GzqM4K
+         glHCQU703WWMe8NDBtl55eS1NbXzBbFola8GeQ83aEJC/AQaTeaOvr2i7BguSY9dBF
+         WwaO1HBoLmrKjItGooH7q29IXMS+J9TaPp3mHJDEddmTeDo/4B61iBby6ZPIn2jbP2
+         5n0hvoO9V1jCg==
+Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 9EF3FA0084;
+        Tue, 10 Nov 2020 23:59:26 +0000 (UTC)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11lp2173.outbound.protection.outlook.com [104.47.56.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id A7DAA80256;
+        Tue, 10 Nov 2020 23:59:25 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="HoYAtdr7";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jtJvkCjDAhI/QLgVHKq0ra2EIhLdJP5Y0jE0lHgq7cJ8kYMFp3AVrRR6F6IrxIlCWvw/BskMAcwU1bFFt9QOVWJMPCdd3pLsesBGqouvHvtcFPzJ/0x/OkehvIlghCQzm/5zNnvnCrzjeFpGFaGjmwRGeiwdUc32gSPSxCGJ+dN4B3qVNyaNHlpmUVM/2xsH3YOkznEYdxka0rU22eNXS7ZXaCym40GGTQ7oiULaxItKkrPGFjITBVOYk52o/1niWGFAFhFJIEHj+TlkrCDC8IDiliX+ts8t417NLi2nHdx3DEnnOy+fhyvNb7UzNX+v+blrQTd4adHQaMPpAPtvcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LSwcfk+BMOaGz2P1w7NsHNOOOD1t+HTNND8plASdb2Y=;
+ b=bA/H3hNRZ2vFTKcqXbuUGgHC9A0nLDmrd4gH/xC7CGYsxmhKbhFOjOuTQ4c2rMz1NkL0gXqzKgWvpMjIp4LeKGsB3EJtzkAz4WhJtCdQ1Zr9nPrf91alysWKyx8Be5ehTGxzQqgHW9QtmHEa9gY0lVtAFIzTvCkhVNBGR1lhmKMcFzoHuOflI6VMVnqNxgN7ElSPBxVwmNUKvCCWsLsovVRbSu+rWJ2dU1BAF9/2ytVwfSJdE/n436IuXw+12sCPQhPFL93SvH24M0vuUo4d7gT+taoMptMcz3XuHh6qgaO4w4dDnOeZ5uo6e1xauddBS1Q2rJbec9umK+/quVBN1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LSwcfk+BMOaGz2P1w7NsHNOOOD1t+HTNND8plASdb2Y=;
+ b=HoYAtdr76t5rck9UdbORxv2SqJeAGt+AUqBDVZI4n++z/pYQDMCTt7HTQLh9ZKP6v3iOMXlnfFL1PX+AUZin1gZARYgMN5UZmJNwvieTkAuKkc72h1nrZ2GO8tktpPpegeMWptMZk9G9uEAOGC6i+U073xiSWtY2D3v6rAu+yH8=
+Received: from BYAPR12MB3303.namprd12.prod.outlook.com (2603:10b6:a03:131::28)
+ by BYAPR12MB2952.namprd12.prod.outlook.com (2603:10b6:a03:13b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.23; Tue, 10 Nov
+ 2020 23:59:24 +0000
+Received: from BYAPR12MB3303.namprd12.prod.outlook.com
+ ([fe80::f1dc:e903:bcfb:d79b]) by BYAPR12MB3303.namprd12.prod.outlook.com
+ ([fe80::f1dc:e903:bcfb:d79b%5]) with mapi id 15.20.3541.025; Tue, 10 Nov 2020
+ 23:59:24 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>
+CC:     Yu Chen <chenyu56@huawei.com>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: dwc3: Trigger a GCTL soft reset when switching
+ modes in DRD
+Thread-Topic: [PATCH v2] usb: dwc3: Trigger a GCTL soft reset when switching
+ modes in DRD
+Thread-Index: AQHWp/wCBx/WzG0lD0G/6zZaqZHYK6mi0lqAgABv5ACAHujRAA==
+Date:   Tue, 10 Nov 2020 23:59:24 +0000
+Message-ID: <8a5dde42-df12-535a-07a0-7e7b18b816f7@synopsys.com>
+References: <20201021224619.20796-1-john.stultz@linaro.org>
+ <d9c241a5-f31b-b044-bc15-1c5e4d445a69@synopsys.com>
+ <87tuumelpf.fsf@kernel.org>
+In-Reply-To: <87tuumelpf.fsf@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - p3plcpnl0564.prod.phx3.secureserver.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - tripolho.com
-X-Get-Message-Sender-Via: p3plcpnl0564.prod.phx3.secureserver.net: authenticated_id: a1@tripolho.com
-X-Authenticated-Sender: p3plcpnl0564.prod.phx3.secureserver.net: a1@tripolho.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-CMAE-Envelope: MS4xfI8Fl918J6UWusk35n+qaMc4qEgJLjUHITLNX/Tfv+L5ZSRC9hakzRLJuE8/y5BkN6c9FljCzbhFpqFjrBTGeaUbg6LeOuFFM9ZGcRDBmlGO0yZMe7w+
- pviiFFGn9JaVPZ9HCYUB1QiDNt5puiBhuFWNbqYPaKUuklh+F5qZrXzPPJOyB1C5fItGA00kfMdo26FyaRIn4hpVslepY8iZ4xCR/8hcnpZPGlvtkMkSYk4x
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=synopsys.com;
+x-originating-ip: [98.248.94.126]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d646110d-e33f-487c-7ddb-08d885d4a69b
+x-ms-traffictypediagnostic: BYAPR12MB2952:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR12MB29527E32808C3B4D1B7E724DAAE90@BYAPR12MB2952.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tsamlIi1io7/veTmIFLPYUi/vrvu5/P8VQHvxitEkFK+jNfx12Get+BCTEjZIm7PhRu2zYBq/ytNR6dkAA5QzAumcMdXEab6jKlhfG0o/IQgW9VeqKN7CL/vE2ziFd2JCXyEg4CgjxqVgz01ih+il73zhByh9xc8hxAuQCxQxWaa2T4yejQGW6aXrrnDA1mU6VKNxCz75AZVlxVZuOq/CZQeo5OHG8tQ1AyD6dJYRekPInc1FQqkC5Lv5uC6AcYP+tD4Bvk4wgSkAFrggf2ytMdTtG8j3zWMPIl9mMQzzi1BYuxwSlKz79TJsrUGO7+yJ5Sl2BGvXguV+GNI8lcEgf8QoTQVVQVWsaqG3laa/r3NrAqYjH7GcKs5gglsoFpd
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3303.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(39850400004)(376002)(346002)(136003)(4326008)(316002)(31686004)(66946007)(31696002)(66556008)(76116006)(66476007)(8676002)(64756008)(26005)(86362001)(5660300002)(54906003)(8936002)(2616005)(110136005)(2906002)(66446008)(6486002)(6506007)(36756003)(71200400001)(83380400001)(6512007)(7416002)(478600001)(186003)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: sFkNV0yR77q++Og60jAhi0Knr2ejmjcpIi44qL9cRm5FUWijy1iqGxa/QZhxNVqXApvSQTkLLZJ6VAgby5lRXimg7aRttEw5/aVcLNoa4uUToNm1wkNpK3syOj169b7rcC2nVoMko+zRTYVBA2lgiRYwzUDiAfTAwSA+pDVG5HGaQNQEOWy46EwJKV37KlWtXBGUOkzloSf4CSYpMefnvwY8ZMf4HmXO2l1Rk4G4rvbSl6bv2BdkoLpetzc9Dbyr6Mt5nZkewtORHjwFKxlt2ti4E60sd2pdcMw5aAPmbi8LdgrzxZQ3rHrp9Ze5/nsczLgtgKrZDYVB/yZMCWXBCSOsBe/jmSrkvzPfMPwtGvUxNPdmpSAbRmmC2s0eNcxh3I+ioRptj1vRakpJe84L5c+loBEbxXNK/949perTkLRdBzy+nkKEqlT91L9T0lwChuvPdvFMcZu/aLt03wO48oAnGS60VQQKyXCv6gPIsiC6Rr2ojLNlnAOU5oGBRGcuDgAHkEIdJjGo7APIfmKYlSrT660/OUZ8NAMeQheaqfQxgP7z3xMuMHkfGWRsKNVzhg8bq1F4u1BFH8VrLNToHg/GcFoBN0vpyuGx3kC7pBoAcHViUeaKPqH68MP1DVb+kkvbcRT2a24u/jiCN5JzqA==
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DB2EAB10C79558439DC98204ACD71A84@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3303.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d646110d-e33f-487c-7ddb-08d885d4a69b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2020 23:59:24.6784
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9lsykgaVuX4NbNMGMwuFqR3BLZQqkbq34/BGBChZgMNCr6zXlBwzuZC4EKBw/QpgD3rkxuloaJrJSBXfNemzRw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2952
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-1) The current Ubuntu Kernel is 5.4.0-53. Do you want me to upgrade it 
-to 5.9, from kernel.org? Or is there a Ubuntu 5.9 package that I can 
-use? It would be easy to do it If there is a Ubuntu package with 5.9, 
-which I would install and, after the tests, uninstall.
-
-2) Why do you believe that 5.9 would solve the problem? I am asking that 
-because I cannot change the production machine for a test if I cannot go 
-back to the original state. There is always a risk involved.
-
-3) It is one single thread dealing with all 36 devices. Each device has 
-its own co-routine (not preemptive), but all co-routines are executed by 
-a unique thread.
-
-4) By network console, do you mean ssh? It dies as well when it locks. 
-The screen is the regular GNOME3 screen and nothing can be seen there. 
-Every time it locks they send a picture, and I cannot see anything 
-meaningful there. I am thinking about disabling GNOME3, but I need their 
-blessing for that.
-
-Thanks,
-
-Alberto
-
-On 11/10/20 3:51 PM, Alan Stern wrote:
-> On Tue, Nov 10, 2020 at 02:20:50PM -0500, Alberto Sentieri wrote:
->> I’ve seen many kernel locks caused by a particular user-level application.
->> After the kernel locks, there is no report left in the machine, neither in
->> the logs. These locks have to do with USB input and output.
->>
->> The objective of this email is to get guidance about how to collect more
->> data related to the locks.
->>
->> Follows a description of the problem.
->>
->> I manage a few remote machines installed at a manufacturing facility, which
->> run Ubuntu 18.04. For months I had seen unexpected kernel locks, which I
->> could not explain. By locks I mean that the machine completely dies. The
->> graphical screen and keyboard freezes. I cannot ping or connect through ssh
->> during the locks. The only way of making the machine come back is through a
->> “pull the plug”. After rebooting I cannot find anything meaningful about the
->> lock in the logs. The machine is a good quality one with a 6-core Xeon, 32
->> GB ECC memory (and the application is using about 1GB). Exact the same
->> problem happens in two identical machines, one running kernel 5.0.0-37
->> generic and the other running kernel 5.3.0-62-generic.
-> Can you update either machine to a 5.9 kernel?
->
->> A few days ago I was able to create a sequence of events that produce the
->> locks in a couple of minutes. These events have to do with USB 2.0 interrupt
->> I/O on USB devices connected at 12 Mbits/s and the frequency URBs are
->> submitted and reaped . It is necessary to have at least 36 devices connected
->> to reproduce the problem easily, which I cannot do from where I am. The
->> machines are in a country other than the one I live, and my physical access
->> to them is not possible due to COVID-19 restrictions.
->>
->> There is no special USB drivers installed. However, there is a NVIDIA
->> manufacturer driver installed, which I installed using the Ubuntu regular
->> tools for non-free software. All USB I/O is done by a regular user opening
->> /dev/bus/usb/xxx/xxx (the device group is set to the user group by udev).
->>
->> Each set of 18 USB devices is connected to a 10-Amp.-power-supply powered
->> HUB. Each hub has its own USB 2.0 root, I mean, I installed multiple USB 2.0
->> PCI express expansion cards, and only one port of each expansion card is
->> used for each HUB.
->>
->> The protocol to talk to any of the 36 devices is pretty simple. It uses USB
->> interrupt frames. A 64-byte frame is sent to the device (request packet). I
->> use ioctl (USBDEVFS_SUBMITURB). The file descriptor is monitored by epoll
->> and when an answer comes back, the response packet (another 64-byte
->> interrupt packet) is recovered by ioctl (USBDEVFS_REAPURBNDELAY). Then a
->> 64-byte packet (confirmation packet) is sent through USBDEVFS_SUBMITURB.
->> This sequence happens once every few seconds and the delay between the three
->> packets is just a couple of milliseconds. All process of dealing with the 36
->> devices is in a unique thread, under the same epoll loop.
-> This sentence is ambiguous.  Do you mean there is a single unique thread
-> which talks to all 36 devices?  Or do you mean there is a separate
-> unique thread for each device (so 36 threads)?
->
->> So if I synchronize all 36 devices, I mean, I try to talk to all them
->> basically at the same time, the kernel will lock in about 2 minutes or less.
->> By “at the same time” I mean to submit the URBs for the request packet
->> around the same time for all of them, and then sit there, waiting for the
->> proper epoll wake-up to deal with the state machine (response and
->> confirmation packets).
->>
->> However, if I lock a semaphore before sending the request packet for one
->> device, and only unlock after reaping the URB I used to send the
->> confirmation packet, it ran for ate least 72 hours without problems. So, one
->> device at a time (using basically the same software plus the semaphore) does
->> not cause the kernel lock.
->>
->> My point is that simple ioctl calls to USB devices should not break the
->> kernel. I need help to address the kernel issue. The problem is difficult to
->> reproduce at my office because it needs many devices connected to it, which
->> are available only in a place I do not have physical access to, due to
->> COVID-19 travel restrictions.
->>
->> My guess is that, for a regular user, this bug rarely manifests itself and
->> it may be there for a long time.
->>
->> I would like to figure out exactly where the problem is and I am looking for
->> your guidance to get more information about it.
-> You could try using a network console.  Or have someone who is on-site
-> take a picture of the computer screen when a crash occurs.
->
-> Alan Stern
+SGksDQoNCkZlbGlwZSBCYWxiaSB3cm90ZToNCj4gSGksDQo+DQo+IFRoaW5oIE5ndXllbiA8VGhp
+bmguTmd1eWVuQHN5bm9wc3lzLmNvbT4gd3JpdGVzOg0KPj4gSm9obiBTdHVsdHogd3JvdGU6DQo+
+Pj4gIHN0YXRpYyB2b2lkIF9fZHdjM19zZXRfbW9kZShzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmsp
+DQo+Pj4gIHsNCj4+PiAgCXN0cnVjdCBkd2MzICpkd2MgPSB3b3JrX3RvX2R3Yyh3b3JrKTsNCj4+
+PiAgCXVuc2lnbmVkIGxvbmcgZmxhZ3M7DQo+Pj4gKwlpbnQgaHdfbW9kZTsNCj4+PiAgCWludCBy
+ZXQ7DQo+Pj4gIAl1MzIgcmVnOw0KPj4+ICANCj4+PiBAQCAtMTU0LDYgKzE2OCwxMSBAQCBzdGF0
+aWMgdm9pZCBfX2R3YzNfc2V0X21vZGUoc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQ0KPj4+ICAJ
+CWJyZWFrOw0KPj4+ICAJfQ0KPj4+ICANCj4+PiArCS8qIEV4ZWN1dGUgYSBHQ1RMIENvcmUgU29m
+dCBSZXNldCB3aGVuIHN3aXRjaCBtb2RlIGluIERSRCovDQo+Pj4gKwlod19tb2RlID0gRFdDM19H
+SFdQQVJBTVMwX01PREUoZHdjLT5od3BhcmFtcy5od3BhcmFtczApOw0KPj4+ICsJaWYgKGh3X21v
+ZGUgPT0gRFdDM19HSFdQQVJBTVMwX01PREVfRFJEKQ0KPj4+ICsJCWR3YzNfZ2N0bF9jb3JlX3Nv
+ZnRfcmVzZXQoZHdjKTsNCj4+PiArDQo+PiBJIHRoaW5rIHRoaXMgc2hvdWxkIGJlIGRvbmUgaW5z
+aWRlIHRoZSBzcGluX2xvY2suDQo+Pg0KPj4+ICAJc3Bpbl9sb2NrX2lycXNhdmUoJmR3Yy0+bG9j
+aywgZmxhZ3MpOw0KPj4+ICANCj4+PiAgCWR3YzNfc2V0X3BydGNhcChkd2MsIGR3Yy0+ZGVzaXJl
+ZF9kcl9yb2xlKTsNCj4+IFRoZSBEUkQgbW9kZSBjaGFuZ2Ugc2VxdWVuY2Ugc2hvdWxkIGJlIGxp
+a2UgdGhpcyBpZiB3ZSB3YW50IHRvIHN3aXRjaA0KPj4gZnJvbSBob3N0IC0+IGRldmljZSBhY2Nv
+cmRpbmcgdG8gdGhlIHByb2dyYW1taW5nIGd1aWRlIChmb3IgYWxsIERSRCBJUHMpOg0KPj4gMS4g
+UmVzZXQgY29udHJvbGxlciB3aXRoIEdDVEwuQ29yZVNvZnRSZXNldA0KPj4gMi4gU2V0IEdDVEwu
+UHJ0Q2FwRGlyKGRldmljZSkNCj4+IDMuIFNvZnQgcmVzZXQgd2l0aCBEQ1RMLkNTZnRSc3QNCj4+
+IDQuIFRoZW4gZm9sbG93IHVwIHdpdGggdGhlIGluaXRpYWxpemluZyByZWdpc3RlcnMgc2VxdWVu
+Y2UNCj4+DQo+PiBIb3dldmVyLCBmcm9tIGNvZGUgcmV2aWV3LCB3aXRoIHRoaXMgcGF0Y2gsIGl0
+IGZvbGxvd3MgdGhpcyBzZXF1ZW5jZToNCj4+IGEuIFNvZnQgcmVzZXQgd2l0aCBEQ1RMLkNTZnRS
+c3Qgb24gZHJpdmVyIHByb2JlDQo+PiBiLiBSZXNldCBjb250cm9sbGVyIHdpdGggR0NUTC5Db3Jl
+U29mdFJlc2V0DQo+PiBjLiBTZXQgR0NUTC5QcnRDYXBEaXIoZGV2aWNlKQ0KPj4gZC4gPCBtaXNz
+aW5nIERDVEwuQ1NmdFJzdCA+DQo+PiBlLiBUaGVuIGZvbGxvdyB1cCB3aXRoIGluaXRpYWxpemlu
+ZyByZWdpc3RlcnMgc2VxdWVuY2UNCj4+DQo+PiBJdCBtYXkgd29yaywgYnV0IGl0IGRvZXNuJ3Qg
+Zm9sbG93IHRoZSBwcm9ncmFtbWluZyBndWlkZS4NCj4+DQo+PiBGb3IgZGV2aWNlIC0+IGhvc3Qs
+IGl0IHNob3VsZCBiZSBmaW5lIGJlY2F1c2UgdGhlIHhIQ0kgZHJpdmVyIHdpbGwgZG8NCj4+IFVT
+QkNNRC5IQ1JTVCBkdXJpbmcgaW5pdGlhbGl6YXRpb24uDQo+IFRoZSBvbmx5IHJlYXNvbiB3aHkg
+dGhpcyBpcyBuZWVkZWQgaXMgYmVjYXVzZSBTTlBTIHNhdmVzIHNvbWUgZGllIGFyZWENCj4gYnkg
+bWFwcGluZyBzb21lIGhvc3QgYW5kIHBlcmlwaGVyYWwgcmVnaXN0ZXIgdG8gdGhlIHNhbWUgcGh5
+c2ljYWwgYXJlYQ0KPiBpbiB0aGUgZGllLiBJIHN0aWxsIHRoaW5rIGEgZnVsbCBzb2Z0IHJlc2V0
+IGlzIHVubmVjZXNzYXJ5IGFzIHdlIGhhdmUNCj4gYmVlbiBydW5uaW5nIHRoaXMgZHJpdmVyIHdp
+dGhvdXQgdGhhdCBzb2Z0IHJlc2V0IGZvciBzZXZlcmFsIHllYXJzIG5vdy4NCj4NCg0KVGhpcyBp
+c24ndCBhYm91dCB3aGV0aGVyIHRvIHVzZSBHQ1RMIG9yIERDVEwgZm9yIENvcmUgU29mdCBSZXNl
+dCAoUGxlYXNlDQpjb3JyZWN0IG1lIGlmIEknbSB3cm9uZyBiZWNhdXNlIEkgdGhpbmsgdGhpcyBp
+cyB3aGF0IHlvdSdyZSByZWZlcnJpbmcNCnRvKS4gSXQncyBhYm91dCB0aGUgcHJvZ3JhbW1pbmcg
+ZmxvdyB3aGVuIHN3aXRjaGluZyBtb2Rlcy4NCg0KQm90aCBzdGVwIDEgYW5kIDMgYXJlIHJlcXVp
+cmVkLiBCZWNhdXNlIGJlZm9yZSBzdGVwIDEsIGlmIHRoZSBob3N0IHdhcw0KaW4gbm9ybWFsIHdv
+cmtpbmcgbW9kZSAoZS5nLiBhdHRhY2hlZCB0byBhIGRldmljZSksIHRoZW4gY2hhbmdpbmcgdGhl
+DQpQcnRDYXBEaXIgZGlyZWN0bHkgdG8gZGV2aWNlIG1vZGUgaXMgbm90IGFkdmlzYWJsZSBhbmQg
+SFcgbWF5IGV4aGliaXQNCnVua25vd24gYmVoYXZpb3IuIFRoZSBwcm9wZXIgd2F5IGlzIHRvIGhh
+dmUgc3RlcCAxIHRocm91Z2ggNCBpbg0Kc2VxdWVuY2UuIFN0ZXAgMyBpcyByZXF1aXJlZCBiZWNh
+dXNlIHNvbWUgb2YgdGhlIEhXIGZ1bmN0aW9uYWxpdHkgaXMNCmRlcGVuZGVudCBvbiB0aGUgUHJ0
+Q2FwRGlyIHNldHRpbmcgYmVmb3JlIHRoZSBkcml2ZXIgaW50ZXJ2ZW50aW9uIGlzDQpyZXF1aXJl
+ZCBmb3IgcHJvcGVyIGNvbW11bmljYXRpb24gd2l0aCB0aGUgZGV2aWNlLiBUaGUgSFcgbWF5IGJl
+IGluIHNvbWUNCmludGVybWVkaWF0ZSBzdGF0ZSB3aGlsZSBjaGFuZ2luZyB0aGUgUHJ0Q2FwRGly
+LiBTbywgaXQgaXMgcmVxdWlyZWQgdG8NCnJlc2V0IGl0IHRvIGhhdmUgYSBmcmVzaCBzdGFydCBp
+biBkZXZpY2UgbW9kZS4NCg0KVGhvdWdoIHdlIG1heSBub3Qgc2VlIGlzc3VlcyBldmVuIGlmIHdl
+IGVsaW1pbmF0ZSB0aGUgc3RlcHMgMSBhbmQgMywgaXQNCmlzIG5vdCBhZHZpc2FibGUgYW5kIHdl
+IG1heSBoYXZlIHNvbWUgaW1wYWN0IHVuZGVyIGNlcnRhaW4gY29uZGl0aW9ucy4NCg0KT25lIGNo
+YW5nZSBuZWVkcyB0byBtYWRlIGZvciB0aGlzIHBhdGNoIGlzIHRoZSBkcml2ZXIgbmVlZHMgdG8g
+d2FpdCBhDQpjZXJ0YWluIGFtb3VudCBvZiB0aW1lIGJlZm9yZSBjbGVhcmluZyB0aGUgR0NUTC5D
+b3JlU29mdFJlc2V0IGZvciB0aGUNClBIWSBjbG9jayB0byBzdGFydCBhbmQgc3RhYmlsaXplLg0K
+DQpCUiwNClRoaW5oDQoNCg==
