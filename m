@@ -2,77 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B062AC9CC
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 01:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFF82ACB0E
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 03:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731253AbgKJAjN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 19:39:13 -0500
-Received: from mga04.intel.com ([192.55.52.120]:25974 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731130AbgKJAjL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 19:39:11 -0500
-IronPort-SDR: T2HXha+OnmeyGqV0UsAyU5NBsNogDJB7yIjYUBWSwMgellrWVKvmHewCPhzCqZyg0hl8uD4Fm1
- Z7pVObWGgX1A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9800"; a="167308689"
-X-IronPort-AV: E=Sophos;i="5.77,464,1596524400"; 
-   d="scan'208";a="167308689"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2020 16:38:58 -0800
-IronPort-SDR: I8VpbswOaV7EmvvtK8g+7qrYToR7tuShwspPwrXpQWuCI2QE1D/JwSOM9n1je1OqVVHYWzAvBH
- KkbDoJ9atiVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,464,1596524400"; 
-   d="scan'208";a="354312394"
-Received: from uhpatel-desk4.jf.intel.com (HELO uhpatel-desk4.intel.com) ([10.23.15.15])
-  by orsmga008.jf.intel.com with ESMTP; 09 Nov 2020 16:38:58 -0800
-From:   Utkarsh Patel <utkarsh.h.patel@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     heikki.krogerus@linux.intel.com, pmalani@chromium.org,
-        enric.balletbo@collabora.com, rajmohan.mani@intel.com,
-        azhar.shaikh@intel.com, Utkarsh Patel <utkarsh.h.patel@intel.com>
-Subject: [PATCH 8/8] usb: typec: Remove active_link_training variable from Enter_USB message
-Date:   Mon,  9 Nov 2020 16:37:16 -0800
-Message-Id: <20201110003716.5164-9-utkarsh.h.patel@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201110003716.5164-1-utkarsh.h.patel@intel.com>
-References: <20201110003716.5164-1-utkarsh.h.patel@intel.com>
+        id S1729336AbgKJC2P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 21:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727311AbgKJC2P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 21:28:15 -0500
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841F5C0613CF;
+        Mon,  9 Nov 2020 18:28:15 -0800 (PST)
+Received: by mail-io1-xd44.google.com with SMTP id n129so12074659iod.5;
+        Mon, 09 Nov 2020 18:28:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=keYF4CkgxzM1pesky08YWn1U5fRMi55bwI9myTqfa/U=;
+        b=A1HUlEtAojTRba+JWBSh6M5Xdhez3Q1OvSMAOSpYW3rjeKA70euFOGo/ncD2l69gPJ
+         a5nHSD3s9GgjnXKmijeWT1YdOh2NiDod7oBqRiSPb+ykJM7RNK1EAxc2tzRfzC8R2SFA
+         /L4YlOoE3zb9lBTg/hYUY3xCCIw4iQ7S2VvDY0nQLaHiR5eGqyYQ1NbgeDJRpigpLVXz
+         Ux2FWSv8yYa+KVwKmaVxf4je9mDJyBCnDY8F2qIxDkqnMQ+5dObw7TXqhBIDqGH2PcB9
+         /DKOTj6vasZ5f1D5mkqCduukNOfo4zSFwIPcb4NYM3n8GGUyeMkzWjc9+ML8aMTiewhz
+         ojGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=keYF4CkgxzM1pesky08YWn1U5fRMi55bwI9myTqfa/U=;
+        b=LR1wpUVzNPxEDuOR0/+XLD4hrY9oR84SRZmjEcShdfUicDUW/yCClST+d63n9Cm/i8
+         qNNE5oNocnlJGrjVMUcdm8823tg//Tk+oVp2JCxF2OWbpToZsYZTriMsRojx2QDgW1zw
+         6PH+lmTp4rBX7pOfZJ5nMxQF4iRRh0LhpjTFKh+38EhURcYS8J6g1Frx12IPE5zI8Eg0
+         +9VJ6PHe+G8WEizOQHwPSaHc0dkq8su+Q5yr5/4cG+JJ61ec0WR9N/eEfycIE/h1djUG
+         LfFItXxCflNxxrVCv5qZb8ll2/u8Am0ZG8j637R0OtUsjA3xs7ruvjvi2XsJBAUcwJ/8
+         b7Mg==
+X-Gm-Message-State: AOAM530OcbmLLGr/Zo0Cua8HujJPkLHoLWYwlKenqzJCL+4VuZfrQh1j
+        gzMAVb5fUSpSBj7k6QD2RNjiJ9dTC2+inB/1q6liRrhDrdFN+Y/K
+X-Google-Smtp-Source: ABdhPJxDwrptMszZuKk2HnOQoODlBjgh6e630cLHfANreTNmB2DtR2JbwwGbwINv7gukrkuDGa/4uKyWHpXngx6bsiY=
+X-Received: by 2002:a5d:9842:: with SMTP id p2mr12619519ios.113.1604975295009;
+ Mon, 09 Nov 2020 18:28:15 -0800 (PST)
+MIME-Version: 1.0
+From:   app l <lipc198702@gmail.com>
+Date:   Tue, 10 Nov 2020 10:28:04 +0800
+Message-ID: <CAGaOi3Z5ezAiBB4-YxUa+so1s=PnVzVsfw9rAs3CGKExJHD-ow@mail.gmail.com>
+Subject: Question: gadget: How to realize uvc and uac composite function?
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thunderbolt 3 cable discover mode VDO support has been added as part of
-Enter_USB message to fill details of active cable plug link training.
-Hence, removing unused variable active_link_training from Enter_USB
-message data structure.
+Hi,
+Version: 4.9 and uac1 driver is V5.9. I tested it based on 4.9 with
+backported dwc3 driver frome v5.9.
+1. According to configfs-usb-gadget-uvc, PC(Windows 10) can get ISO
+data normally;
+2. According to configfs-usb-gadget-uac1, PC(Windows 10) can  install
+audio driver normally(AC Interface,/Captue Input terminal/Speaker);
+3=E3=80=81uvc+uac1 composite device, PC(Windows 10) can get ISO data normal=
+ly,
+but PC shows that the uac1 driver installation failed(AC
+Interface/Capture Inactive/Playback Inactive). AC Interface/Capture
+Inactive/Playback Inactive all show the device cannot start code 10,
+The settings of the I/O device are incorrect or the configuration
+parameters of the driver are incorrect. Through the USB analyzer to
+capture the packet, I found that the Index value seems to be wrong
+when PC host to get the descriptor. The acquisition is Playback
+Inactive and Capture Inactive, and the PC did not send the command
+packet about uac1. It is difficult to debug it.
+I suspect that some parts of the uac1 descriptor need to be modified,
+but I don=E2=80=99t know which one to modify.
+I sincerely hope that everyone can give some suggestions or related
+patches to help me. Thanks very much!
 
-Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
----
- include/linux/usb/typec.h | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index d91e09d9d91c..4a9608a15ac1 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -76,16 +76,10 @@ enum typec_orientation {
-  * struct enter_usb_data - Enter_USB Message details
-  * @eudo: Enter_USB Data Object
-  * @tbt_cable_vdo: TBT3 Cable Discover Mode Response
-- * @active_link_training: Active Cable Plug Link Training
-- *
-- * @active_link_training is a flag that should be set with uni-directional SBRX
-- * communication, and left 0 with passive cables and with bi-directional SBRX
-- * communication.
-  */
- struct enter_usb_data {
- 	u32			eudo;
- 	u32			tbt_cable_vdo;
--	unsigned char		active_link_training:1;
- };
- 
- /*
--- 
-2.17.1
-
+Regards,
+pengcheng
