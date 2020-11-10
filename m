@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CB92ACCF4
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 04:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D1D2ACCDD
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 04:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387614AbgKJD4h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 22:56:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58660 "EHLO mail.kernel.org"
+        id S2387764AbgKJD4y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 22:56:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59064 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387673AbgKJD4g (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Nov 2020 22:56:36 -0500
+        id S1732036AbgKJD4y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Nov 2020 22:56:54 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A589820870;
-        Tue, 10 Nov 2020 03:56:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE6BC2054F;
+        Tue, 10 Nov 2020 03:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604980595;
-        bh=cG3vbnM8bx1OdB0QcQcJ72+101WCvZN42O7uuetWIYY=;
+        s=default; t=1604980613;
+        bh=A37OiWbnTjlyCr+Wpq+gqaATOUcIelbqofq8d0wJNqc=;
         h=From:To:Cc:Subject:Date:From;
-        b=K6gImZZ3Gmh7LTvIe79Sh8z1sWFgbA8J09Qfr4qQvldWy3tss2YdjbiIxwKKHpoSN
-         SXSgZwXgJolx/sLaITp8TjczOkASWazs9Wv5tchwTmkxJmsDn8Mr5LuIhdiSflCXBN
-         n2D+Zz8ed0YpvazHMAoLOotx9tdP6tS20lGjNUXE=
+        b=CrEaoYWyeBReMOcXkJ+I1bQ3FdMsLJWQSmZyC8vMHDgQaqhtc4UxJ1yzL4FhQ+0p3
+         WiTgrj7UEbEMJ3FHKB+15M8COSfw+1FNkZRyJvK/wk9kwJW+QP+Hmr6I01vzu2HIcK
+         mZZQ08BcRArpt4Ei9YOTMdVUJ7m2+NW4QldkfSuI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Evgeny Novikov <novikov@ispras.ru>,
         Pavel Andrianov <andrianov@ispras.ru>,
         Felipe Balbi <balbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 01/12] usb: gadget: goku_udc: fix potential crashes in probe
-Date:   Mon,  9 Nov 2020 22:56:22 -0500
-Message-Id: <20201110035633.425030-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 01/10] usb: gadget: goku_udc: fix potential crashes in probe
+Date:   Mon,  9 Nov 2020 22:56:42 -0500
+Message-Id: <20201110035651.425177-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 X-stable: review
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
-index 5107987bd3538..d363224dce6f5 100644
+index 1fdfec14a3ba1..5d4616061309e 100644
 --- a/drivers/usb/gadget/udc/goku_udc.c
 +++ b/drivers/usb/gadget/udc/goku_udc.c
-@@ -1772,6 +1772,7 @@ static int goku_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+@@ -1773,6 +1773,7 @@ static int goku_probe(struct pci_dev *pdev, const struct pci_device_id *id)
  		goto err;
  	}
  
@@ -76,7 +76,7 @@ index 5107987bd3538..d363224dce6f5 100644
  	spin_lock_init(&dev->lock);
  	dev->pdev = pdev;
  	dev->gadget.ops = &goku_ops;
-@@ -1805,7 +1806,6 @@ static int goku_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+@@ -1806,7 +1807,6 @@ static int goku_probe(struct pci_dev *pdev, const struct pci_device_id *id)
  	}
  	dev->regs = (struct goku_udc_regs __iomem *) base;
  
