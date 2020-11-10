@@ -2,168 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A9E2AD426
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 11:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4BF2AD42D
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 11:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729359AbgKJKwb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 05:52:31 -0500
-Received: from mga09.intel.com ([134.134.136.24]:58841 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726219AbgKJKwb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Nov 2020 05:52:31 -0500
-IronPort-SDR: VXza8AhYx6a0yW0Z27G1psAAYCH2yl/8cbZc0qFe1A876ldryxMryfYuyAGN99T3nakQRy/88L
- uqWgKxOpzgPA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9800"; a="170106594"
-X-IronPort-AV: E=Sophos;i="5.77,466,1596524400"; 
-   d="scan'208";a="170106594"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 02:52:30 -0800
-IronPort-SDR: qhGvdzwyj36pXd7OS41zJ5CU9vhv55PM3S53ZpIcWYG7eyDm13UFaCKqFLEiPhkJCxSrmOTRBu
- ke4qMD3u4uqQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,466,1596524400"; 
-   d="scan'208";a="428326157"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 10 Nov 2020 02:52:25 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 10 Nov 2020 12:52:25 +0200
-Date:   Tue, 10 Nov 2020 12:52:25 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v3 1/2] usb: typec: Consolidate syfs ABI documentation
-Message-ID: <20201110105225.GH1224435@kuha.fi.intel.com>
-References: <20201023214328.1262883-1-pmalani@chromium.org>
+        id S1726690AbgKJK5M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 05:57:12 -0500
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:53203 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726280AbgKJK5L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 05:57:11 -0500
+X-Originating-IP: 82.255.60.242
+Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
+        (Authenticated sender: hadess@hadess.net)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 6DCC2C0004;
+        Tue, 10 Nov 2020 10:57:08 +0000 (UTC)
+Message-ID: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
+Subject: How to enable auto-suspend by default
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Linux PM <linux-pm@vger.kernel.org>, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@dell.com>
+Date:   Tue, 10 Nov 2020 11:57:07 +0100
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.1 (3.38.1-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201023214328.1262883-1-pmalani@chromium.org>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 23, 2020 at 02:43:26PM -0700, Prashant Malani wrote:
-> Both partner and cable have identity VDOs. These are listed separately
-> in the Documentation/ABI/testing/sysfs-class-typec. Factor these out
-> into a common location to avoid the duplication.
-> 
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+Hey,
 
-I don't have a problem with this change. FWIW:
+systemd has been shipping this script to enable auto-suspend on a
+number of USB and PCI devices:
+https://github.com/systemd/systemd/blob/master/tools/chromiumos/gen_autosuspend_rules.py
 
-Acked-by: Heikki Krogerus <heikki.krogeurus@linux.intel.com>
+The problem here is twofold. First, the list of devices is updated from
+ChromeOS, and the original list obviously won't be updated by ChromeOS
+developers unless a device listed exists in a ChromeBook computer,
+which means a number of devices that do support autosuspend aren't
+listed.
 
-> ---
-> 
-> Patch first introduced in v3.
-> 
->  Documentation/ABI/testing/sysfs-class-typec | 59 ++++++---------------
->  1 file changed, 17 insertions(+), 42 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> index b834671522d6..0f839fd022f1 100644
-> --- a/Documentation/ABI/testing/sysfs-class-typec
-> +++ b/Documentation/ABI/testing/sysfs-class-typec
-> @@ -134,42 +134,6 @@ Description:
->  		Shows if the partner supports USB Power Delivery communication:
->  		Valid values: yes, no
->  
-> -What:		/sys/class/typec/<port>-partner>/identity/
-> -Date:		April 2017
-> -Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> -Description:
-> -		This directory appears only if the port device driver is capable
-> -		of showing the result of Discover Identity USB power delivery
-> -		command. That will not always be possible even when USB power
-> -		delivery is supported, for example when USB power delivery
-> -		communication for the port is mostly handled in firmware. If the
-> -		directory exists, it will have an attribute file for every VDO
-> -		in Discover Identity command result.
-> -
-> -What:		/sys/class/typec/<port>-partner/identity/id_header
-> -Date:		April 2017
-> -Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> -Description:
-> -		ID Header VDO part of Discover Identity command result. The
-> -		value will show 0 until Discover Identity command result becomes
-> -		available. The value can be polled.
-> -
-> -What:		/sys/class/typec/<port>-partner/identity/cert_stat
-> -Date:		April 2017
-> -Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> -Description:
-> -		Cert Stat VDO part of Discover Identity command result. The
-> -		value will show 0 until Discover Identity command result becomes
-> -		available. The value can be polled.
-> -
-> -What:		/sys/class/typec/<port>-partner/identity/product
-> -Date:		April 2017
-> -Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> -Description:
-> -		Product VDO part of Discover Identity command result. The value
-> -		will show 0 until Discover Identity command result becomes
-> -		available. The value can be polled.
-> -
->  
->  USB Type-C cable devices (eg. /sys/class/typec/port0-cable/)
->  
-> @@ -196,17 +160,28 @@ Description:
->  		- type-c
->  		- captive
->  
-> -What:		/sys/class/typec/<port>-cable/identity/
-> +
-> +USB Type-C partner/cable Power Delivery Identity objects
-> +
-> +NOTE: The following attributes will be applicable to both
-> +partner (e.g /sys/class/typec/port0-partner/) and
-> +cable (e.g /sys/class/typec/port0-cable/) devices. Consequently, the example file
-> +paths below are prefixed with "/sys/class/typec/<port>-{partner|cable}/" to
-> +reflect this.
-> +
-> +What:		/sys/class/typec/<port>-{partner|cable}/identity/
->  Date:		April 2017
->  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
->  Description:
->  		This directory appears only if the port device driver is capable
->  		of showing the result of Discover Identity USB power delivery
->  		command. That will not always be possible even when USB power
-> -		delivery is supported. If the directory exists, it will have an
-> -		attribute for every VDO returned by Discover Identity command.
-> +		delivery is supported, for example when USB power delivery
-> +		communication for the port is mostly handled in firmware. If the
-> +		directory exists, it will have an attribute file for every VDO
-> +		in Discover Identity command result.
->  
-> -What:		/sys/class/typec/<port>-cable/identity/id_header
-> +What:		/sys/class/typec/<port>-{partner|cable}/identity/id_header
->  Date:		April 2017
->  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
->  Description:
-> @@ -214,7 +189,7 @@ Description:
->  		value will show 0 until Discover Identity command result becomes
->  		available. The value can be polled.
->  
-> -What:		/sys/class/typec/<port>-cable/identity/cert_stat
-> +What:		/sys/class/typec/<port>-{partner|cable}/identity/cert_stat
->  Date:		April 2017
->  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
->  Description:
-> @@ -222,7 +197,7 @@ Description:
->  		value will show 0 until Discover Identity command result becomes
->  		available. The value can be polled.
->  
-> -What:		/sys/class/typec/<port>-cable/identity/product
-> +What:		/sys/class/typec/<port>-{partner|cable}/identity/product
->  Date:		April 2017
->  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
->  Description:
-> -- 
-> 2.29.0.rc1.297.gfa9743e501-goog
+The other problem is that this list needs to exist at all, and that it
+doesn't seem possible for device driver developers (at various levels
+of the stack) to opt-in to auto-suspend when all the variants of the
+device (or at least detectable ones) support auto-suspend.
 
-thanks,
+So the question is: how can we make it easier for device drivers to
+implicitly allow autosuspend *unless they opt-out*, especially for
+frameworks where the device's transport layer isn't directly available
+(eg. HID devices)?
 
--- 
-heikki
+If that can't be done in the kernel drivers directly, would it be
+possible for the kernel to ship with a somewhat canonical list that
+systemd (or its replacement on other "Linuxes") could use to generate
+those user-space quirks?
+
+Ideally, for example, all new "iwlwifi" or all tested "iwlwifi" devices
+should have autosuspend enabled by the developers adding support for
+them, as in the script above, rather than downstreams (systemd upstream
+included) having to chase new PCI IDs.
+
+Cheers
+
