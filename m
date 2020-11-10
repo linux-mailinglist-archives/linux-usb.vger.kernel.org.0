@@ -2,126 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6202AD5DC
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 13:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553EF2AD5EB
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 13:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728478AbgKJMFv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 07:05:51 -0500
-Received: from mga14.intel.com ([192.55.52.115]:37203 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726462AbgKJMFu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Nov 2020 07:05:50 -0500
-IronPort-SDR: DKS17judCf10Hi4G4sigfY8HfaTNKPfHHPFLteZ/XsxIf+emCkQRo79PTK90ve1wmuvq1oTWgE
- 4k+iIMfGxTFA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9800"; a="169176995"
-X-IronPort-AV: E=Sophos;i="5.77,466,1596524400"; 
-   d="scan'208";a="169176995"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 04:05:49 -0800
-IronPort-SDR: YGuZpH5a4CUexDzc4ZC55F7nJ+HoQAQJUlNJGnZvb6p2c8I64zWZv70j8CoElO3T6tf6vCdsvi
- T29NqmwBsbpQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,466,1596524400"; 
-   d="scan'208";a="428346197"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Nov 2020 04:05:47 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Benjamin Berg <bberg@redhat.com>, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org, Vladimir Yerilov <openmindead@gmail.com>
-Subject: [PATCH] usb: typec: ucsi: Report power supply changes
-Date:   Tue, 10 Nov 2020 15:05:47 +0300
-Message-Id: <20201110120547.67922-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.28.0
+        id S1730070AbgKJMMe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 07:12:34 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:34074 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730021AbgKJMMe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 07:12:34 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 25063803086A;
+        Tue, 10 Nov 2020 12:12:32 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7_7GLs-UjHzI; Tue, 10 Nov 2020 15:12:31 +0300 (MSK)
+Date:   Tue, 10 Nov 2020 15:12:30 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
+Message-ID: <20201110121230.vnyg33dbfggkonmm@mobilestation>
+References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
+ <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
+ <CAKgpwJWWg+fimuQOCcw=L0HZSwLYXNNCAV4ifzzG-HXfkFmazw@mail.gmail.com>
+ <20201103232347.GD65067@builder.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20201103232347.GD65067@builder.lan>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the ucsi power supply goes online/offline, and when the
-power levels change, the power supply class needs to be
-notified so it can inform the user space.
+Hello Jun and Bjorn.
 
-Fixes: 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
-Cc: stable@vger.kernel.org
-Reported-and-tested-by: Vladimir Yerilov <openmindead@gmail.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/psy.c  | 9 +++++++++
- drivers/usb/typec/ucsi/ucsi.c | 7 ++++++-
- drivers/usb/typec/ucsi/ucsi.h | 2 ++
- 3 files changed, 17 insertions(+), 1 deletion(-)
+On Tue, Nov 03, 2020 at 05:23:47PM -0600, Bjorn Andersson wrote:
+> On Mon 02 Nov 01:34 CST 2020, Jun Li wrote:
+> 
+> > Serge Semin <Sergey.Semin@baikalelectronics.ru> ???2020???10???20????????? ??????8:04?????????
+> > >
+> > > In accordance with the DWC USB3 bindings the corresponding node
+> > > name is suppose to comply with the Generic USB HCD DT schema, which
+> > > requires the USB nodes to have the name acceptable by the regexp:
+> > > "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
+> > > named.
+> > 
 
-diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-index 26ed0b520749a..571a51e162346 100644
---- a/drivers/usb/typec/ucsi/psy.c
-+++ b/drivers/usb/typec/ucsi/psy.c
-@@ -238,4 +238,13 @@ void ucsi_unregister_port_psy(struct ucsi_connector *con)
- 		return;
- 
- 	power_supply_unregister(con->psy);
-+	con->psy = NULL;
-+}
-+
-+void ucsi_port_psy_changed(struct ucsi_connector *con)
-+{
-+	if (IS_ERR_OR_NULL(con->psy))
-+		return;
-+
-+	power_supply_changed(con->psy);
- }
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 758b988ac518a..51a570d40a42e 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -643,8 +643,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 	role = !!(con->status.flags & UCSI_CONSTAT_PWR_DIR);
- 
- 	if (con->status.change & UCSI_CONSTAT_POWER_OPMODE_CHANGE ||
--	    con->status.change & UCSI_CONSTAT_POWER_LEVEL_CHANGE)
-+	    con->status.change & UCSI_CONSTAT_POWER_LEVEL_CHANGE) {
- 		ucsi_pwr_opmode_change(con);
-+		ucsi_port_psy_changed(con);
-+	}
- 
- 	if (con->status.change & UCSI_CONSTAT_POWER_DIR_CHANGE) {
- 		typec_set_pwr_role(con->port, role);
-@@ -674,6 +676,8 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 			ucsi_register_partner(con);
- 		else
- 			ucsi_unregister_partner(con);
-+
-+		ucsi_port_psy_changed(con);
- 	}
- 
- 	if (con->status.change & UCSI_CONSTAT_CAM_CHANGE) {
-@@ -994,6 +998,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 				  !!(con->status.flags & UCSI_CONSTAT_PWR_DIR));
- 		ucsi_pwr_opmode_change(con);
- 		ucsi_register_partner(con);
-+		ucsi_port_psy_changed(con);
- 	}
- 
- 	if (con->partner) {
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index cba6f77bea61b..b7a92f2460507 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -340,9 +340,11 @@ int ucsi_resume(struct ucsi *ucsi);
- #if IS_ENABLED(CONFIG_POWER_SUPPLY)
- int ucsi_register_port_psy(struct ucsi_connector *con);
- void ucsi_unregister_port_psy(struct ucsi_connector *con);
-+void ucsi_port_psy_changed(struct ucsi_connector *con);
- #else
- static inline int ucsi_register_port_psy(struct ucsi_connector *con) { return 0; }
- static inline void ucsi_unregister_port_psy(struct ucsi_connector *con) { }
-+static inline void ucsi_port_psy_changed(struct ucsi_connector *con) { }
- #endif /* CONFIG_POWER_SUPPLY */
- 
- #if IS_ENABLED(CONFIG_TYPEC_DP_ALTMODE)
--- 
-2.28.0
+> > This need a counterpart driver change:
+> > drivers/usb/dwc3/dwc3-qcom.c
+> > dwc3_np = of_get_child_by_name(np, "dwc3");
+> > 
+> 
+> Thanks for catching this Jun. The code certainly needs to be updated to
+> look for the new child node, while falling back to the old name, before
+> I can merge this change.
 
+Thanks for looking into this. I'll add a patch, which fixes that into
+the next series, but with no tested status guarantee, since I haven't
+got a corresponding hardware.
+
+-Sergey
+
+> 
+> Regards,
+> Bjorn
