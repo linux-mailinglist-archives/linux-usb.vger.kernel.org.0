@@ -2,90 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2F82AD0BC
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 08:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0FC2AD0CD
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 09:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728403AbgKJH6a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 02:58:30 -0500
-Received: from mga03.intel.com ([134.134.136.65]:24983 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726825AbgKJH6a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Nov 2020 02:58:30 -0500
-IronPort-SDR: vryIweX4lrCuguktv74Fkpbw8LYqhwgkLLKbUpPdxO+fXhAGyqPczcRFOoc3nB9smM7uPPkFZ8
- p4qrDpZx11sA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9800"; a="170044628"
-X-IronPort-AV: E=Sophos;i="5.77,465,1596524400"; 
-   d="scan'208";a="170044628"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2020 23:58:28 -0800
-IronPort-SDR: +W2pAKk4dh4YUlHAcnDzbOtQzTkuZcCOcRAwfQl9IwsRnk9VaKIeq8moknSaD8ikJEeFHnAgSY
- O01L5enN4CPg==
-X-IronPort-AV: E=Sophos;i="5.77,465,1596524400"; 
-   d="scan'208";a="541231177"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2020 23:58:24 -0800
-Received: by lahna (sSMTP sendmail emulation); Tue, 10 Nov 2020 09:58:21 +0200
-Date:   Tue, 10 Nov 2020 09:58:21 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [GIT PULL] Thunderbolt/USB4 fixes for v5.10-rc4
-Message-ID: <20201110075821.GP2495@lahna.fi.intel.com>
+        id S1729610AbgKJIE0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 03:04:26 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41637 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727019AbgKJIEZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 03:04:25 -0500
+X-UUID: 11ecea745cf34cf1b480769982905ca6-20201110
+X-UUID: 11ecea745cf34cf1b480769982905ca6-20201110
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 708621736; Tue, 10 Nov 2020 16:04:19 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 10 Nov 2020 16:04:18 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 10 Nov 2020 16:04:18 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexander Tsoy <alexander@tsoy.me>,
+        Nicola Lunghi <nick83ola@gmail.com>,
+        Christopher Swenson <swenson@swenson.io>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        <alsa-devel@alsa-project.org>
+CC:     Ainge Hsu <ainge.hsu@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Macpaul Lin <macpaul@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] ALSA: usb-audio: disable 96khz support for HUAWEI USB-C HEADSET
+Date:   Tue, 10 Nov 2020 16:04:03 +0800
+Message-ID: <1604995443-30453-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+The HUAWEI USB-C headset (VID:0x12d1, PID:0x3a07) reported it supports
+96khz. However there will be some random issue under 96khz.
+Not sure if there is any alternate setting could be applied.
+Hence 48khz is suggested to be applied at this moment.
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Signed-off-by: Eddie Hung <eddie.hung@mediatek.com>
+---
+ sound/usb/format.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+diff --git a/sound/usb/format.c b/sound/usb/format.c
+index 1b28d01..6f6e79b 100644
+--- a/sound/usb/format.c
++++ b/sound/usb/format.c
+@@ -217,6 +217,11 @@ static int parse_audio_format_rates_v1(struct snd_usb_audio *chip, struct audiof
+ 			    (chip->usb_id == USB_ID(0x041e, 0x4064) ||
+ 			     chip->usb_id == USB_ID(0x041e, 0x4068)))
+ 				rate = 8000;
++			/* Huawei headset can't support 96kHz fully */
++			if (rate == 96000 &&
++			    chip->usb_id == USB_ID(0x12d1, 0x3a07) &&
++			    le16_to_cpu(udev->descriptor.bcdDevice) == 0x49)
++				continue;
+ 
+ 			fp->rate_table[fp->nr_rates] = rate;
+ 			if (!fp->rate_min || rate < fp->rate_min)
+-- 
+1.7.9.5
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.10-rc4
-
-for you to fetch changes up to f6439c531d52193f890807958aaec52905bc0f2e:
-
-  thunderbolt: Add support for Intel Tiger Lake-H (2020-11-06 16:39:11 +0300)
-
-----------------------------------------------------------------
-thunderbolt: Fixes for v5.10-rc4
-
-This includes two fixes for resource leaks that have been around for a
-while. Then two fixes for code that was added during v5.10 merge window
-and PCI IDs for Intel Tiger Lake-H.
-
-All these have been in linux-next without reported issues.
-
-----------------------------------------------------------------
-Casey Bowman (1):
-      thunderbolt: Add uaccess dependency to debugfs interface
-
-Jing Xiangfeng (1):
-      thunderbolt: Add the missed ida_simple_remove() in ring_request_msix()
-
-Mika Westerberg (3):
-      thunderbolt: Fix memory leak if ida_simple_get() fails in enumerate_services()
-      thunderbolt: Only configure USB4 wake for lane 0 adapters
-      thunderbolt: Add support for Intel Tiger Lake-H
-
- drivers/thunderbolt/debugfs.c |  1 +
- drivers/thunderbolt/icm.c     |  2 ++
- drivers/thunderbolt/nhi.c     | 23 +++++++++++++++++++----
- drivers/thunderbolt/nhi.h     |  2 ++
- drivers/thunderbolt/tb.h      |  2 ++
- drivers/thunderbolt/usb4.c    |  4 ++++
- drivers/thunderbolt/xdomain.c |  1 +
- 7 files changed, 31 insertions(+), 4 deletions(-)
