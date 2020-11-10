@@ -2,86 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 670BF2ACB84
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 04:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52C92ACC26
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Nov 2020 04:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729336AbgKJDLt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Nov 2020 22:11:49 -0500
-Received: from nl101-3.vfemail.net ([149.210.219.33]:36325 "EHLO
-        nl101-3.vfemail.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728607AbgKJDLs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Nov 2020 22:11:48 -0500
-X-Greylist: delayed 400 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Nov 2020 22:11:48 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=vfemail.net; h=date:from
-        :to:cc:subject:message-id:mime-version:content-type
-        :content-transfer-encoding; s=2018; bh=iaqyz8WDU2SGr8rxdy5LcZHKE
-        7YhvzKuXoTGn8TTe3M=; b=Hwy18rQ7lfvBTJ/fwmvkkldoxxPcVq1ZxEkIsN0qL
-        +XZ4KO/jMghUZGe1O/dGvcpUYFrR66EYqQXMi967sPQNSGLh6aELqSDy/VnwLisP
-        OuTImfYfeO1Yf7L7t4J55px/2KUWDdyr+oRpM3ngA9EGJCLrQV/YPr4IjHVEWb6o
-        J8=
-Received: (qmail 68737 invoked from network); 10 Nov 2020 03:05:06 -0000
-Received: by simscan 1.4.0 ppid: 68677, pid: 68730, t: 0.2183s
-         scanners:none
-Received: from unknown (HELO d3d3MTkyLnZmZW1haWwubmV0) (aGdudGt3aXNAdmZlbWFpbC5uZXQ=@MTkyLjE2OC4xLjE5Mg==)
-  by nl101.vfemail.net with ESMTPA; 10 Nov 2020 03:05:06 -0000
-Date:   Mon, 9 Nov 2020 22:00:00 -0500
-From:   David Niklas <Hgntkwis@vfemail.net>
-To:     <linux-usb@vger.kernel.org>
-Cc:     <linux-kernel-owner@vger.kernel.org>
-Subject: I need advice with UPS connection.
-Message-ID: <20201109220000.2ae98fa5@Phenom-II-x6.niklas.com>
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+        id S1731589AbgKJDx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Nov 2020 22:53:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53862 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731487AbgKJDx1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Nov 2020 22:53:27 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AFC6520781;
+        Tue, 10 Nov 2020 03:53:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604980406;
+        bh=tdRDeBb688Tbj/zy/2sTeleiGzaqdpmOChiOlz+fbb4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tafsHTthqGIpMRlxFPrK4CtwsaKQalUqFNOYvUmxzOinjqFgskn8DXDOgod4pz3G9
+         30zF34U+5GDO2uru7m1FEilYQdehAWB0P1OT5oAZpgaGzLbK/kLY5DGnW48gBvfXQG
+         3MgWe+8+WeBS+4gltI2OSL7QZ9xRUcnTIxD9I/mk=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.9 05/55] usb: dwc3: pci: add support for the Intel Alder Lake-S
+Date:   Mon,  9 Nov 2020 22:52:28 -0500
+Message-Id: <20201110035318.423757-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201110035318.423757-1-sashal@kernel.org>
+References: <20201110035318.423757-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-I'm running Linux Kernel 5.8.X on a Devuan (Debian) system. I connected
-my UPS (OPTI-UPS Thunder Shield TS2250B) via USB cable and got:
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-[739229.454592][T25544] usb 9-4: new low-speed USB device number 2 using ohci-pci
-[739229.635343][T25544] usb 9-4: config index 0 descriptor too short (expected 9, got 0)
-[739229.635348][T25544] usb 9-4: can't read configurations, error -22
-[739229.791290][T25544] usb 9-4: new low-speed USB device number 3 using ohci-pci
-[739229.982414][T25544] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
-[739229.982421][T25544] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
-[739229.982426][T25544] usb 9-4: Product: HID UPS Battery
-[739229.982430][T25544] usb 9-4: Manufacturer: POWERCOM Co.,LTD
-[739229.982433][T25544] usb 9-4: SerialNumber: 004-0D9F-000
-[739230.027616][T25544] hid-generic 0003:0D9F:0004.0004: hiddev1,hidraw2: USB HID v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on usb-0000:00:16.0-4/input0
-[739233.484723][T25544] usb 9-4: USB disconnect, device number 3
-[739236.257951][T25544] usb 9-4: new low-speed USB device number 4 using ohci-pci
-[739236.475434][T25544] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
-[739236.475442][T25544] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
-[739236.520783][T25544] hid-generic 0003:0D9F:0004.0005: hiddev1,hidraw2: USB HID v1.00 Device [HID 0d9f:0004] on usb-0000:00:16.0-4/input0
-[739239.933809][T25544] usb 9-4: USB disconnect, device number 4
-[739242.701322][T25544] usb 9-4: new low-speed USB device number 5 using ohci-pci
-[739242.880035][T25544] usb 9-4: device descriptor read/all, error -62
-[739243.034561][T25544] usb 9-4: new low-speed USB device number 6 using ohci-pci
-[739243.252040][T25544] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
-[739243.252042][T25544] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
-[739243.296444][T25544] hid-generic 0003:0D9F:0004.0006: hiddev1,hidraw2: USB HID v1.00 Device [HID 0d9f:0004] on usb-0000:00:16.0-4/input0
-[739246.720152][T25544] usb 9-4: USB disconnect, device number 6
-[739249.491330][T13473] usb 9-4: new low-speed USB device number 7 using ohci-pci
-[739249.718707][T13473] usb 9-4: New USB device found, idVendor=0d9f, idProduct=0004, bcdDevice= 0.02
-[739249.718709][T13473] usb 9-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
-[739249.718710][T13473] usb 9-4: Product: HID UPS Battery
-[739249.718711][T13473] usb 9-4: Manufacturer: POWERCOM Co.,LTD
-[739249.718712][T13473] usb 9-4: SerialNumber: 004-0D9F-000
-[739249.751173][T13473] hid-generic 0003:0D9F:0004.0007: unknown main item tag 0x0
-<snip class="spam-repeated-previous-message">
-[739250.162392][T13473] hid-generic 0003:0D9F:0004.0007: unknown main item tag 0x0
-[739250.162813][T13473] hid-generic 0003:0D9F:0004.0007: hidraw2: USB HID v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on usb-0000:00:16.0-4/input0
-[739253.165518][T13473] usb 9-4: USB disconnect, device number 7
-...
+[ Upstream commit 1384ab4fee12c4c4f8bd37bc9f8686881587b286 ]
 
+This patch adds the necessary PCI ID for Intel Alder Lake-S
+devices.
 
-I'd appreciate any advice trying to get my UPS to stay connected and not
-spam the kernel log. The UPS is about 1 year old. It's working fine. I
-just want to use nut or apcupsd with it.
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/dwc3/dwc3-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks,
-David
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 242b6210380a4..bae6a70664c80 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -40,6 +40,7 @@
+ #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
+ #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
+ #define PCI_DEVICE_ID_INTEL_JSP			0x4dee
++#define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
+ 
+ #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
+ #define PCI_INTEL_BXT_FUNC_PMU_PWR	4
+@@ -367,6 +368,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_JSP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
+ 
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLS),
++	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
++
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
+ 	  (kernel_ulong_t) &dwc3_pci_amd_properties, },
+ 	{  }	/* Terminating Entry */
+-- 
+2.27.0
+
