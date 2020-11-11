@@ -2,77 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DE22AF939
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 20:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10052AF949
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 20:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727682AbgKKTmW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Nov 2020 14:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727629AbgKKTmP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 14:42:15 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124CBC0613D4;
-        Wed, 11 Nov 2020 11:42:15 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id ay21so3591415edb.2;
-        Wed, 11 Nov 2020 11:42:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kcqgsA1C03N+sBAIpewIwQ5iiWf5Tl1aifp7Xa5kwsU=;
-        b=hxxN1bsVIxKHJ2u+OGXh4vbrnNxJtt03MwyFm3BYAAY+F8QzijYemQF0oYHQjHHp57
-         l7OyLE/flv2yXl8Q+5Nxs63NVYrl+pfl/o/J7qP8/ChFENuCl79FnQe6EL8rBb7TgAvC
-         YhYGzxeZsqT4vTASOaiX7Jk+C6jKE0rs731aj41UbiXSUYsitZiPWR3V79ddeMlupYVD
-         C+jONWN/Y+OLtKwwKUq9bwhLr4oqQducG6fdodCglTQAEW8rEhwDgnzxP+nIGVRER5dE
-         c87D1e3UbG/7ZwVeH0irqZvbi8i5Ug1enHf6zE1J05nvfuFzgXVp/Q1vYPPqBrf9HKKy
-         AF/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kcqgsA1C03N+sBAIpewIwQ5iiWf5Tl1aifp7Xa5kwsU=;
-        b=hwXlNbhrvn3NE164Pqx2eaMhYDPCCMent7qEqutP94yP/tR6hQoTu8PhqVAyogz4tf
-         13Qyhp0BPmP2k/quYKJvR5EV9N0btDFBsDCIg0JG809LtRhbB8FdJOnauSoRQdfPoblH
-         Qz5C0soT4L/8EuDccnOSAT+1Z1HPkW3LdeLz+U/fWBCYzWav/iDkvP5lq5novVzv3HEA
-         /CNpDVgtbhkmKOwX9L7EyCur4lK/bMkyHeRJagGm9g+/OWt/kNaY3mAZZwYQAWhgrnTV
-         OSGd34+0zHDwVHEPhujhKH94PYZJ3Vpn457nziyItCOTHzEWwWGxabDZ3Cm8qyNzPZR2
-         2URA==
-X-Gm-Message-State: AOAM533YGg5zPf+WROgR/IkXcAtzcZYnXeaO3Gy445o5TC03qRuEzSK/
-        3p5EaS6yKBZHDNWwVPmc4Pw+QawPGR3YrTwHUQQ=
-X-Google-Smtp-Source: ABdhPJwGxN7mIplXBb44OlVVKoTUN4OC9QCZpvNJmOTEXLHPRh4R7PNPAI5YZU21uteEXmjaSHXn4o2dFfeqxiEvHt0=
-X-Received: by 2002:a05:6402:2059:: with SMTP id bc25mr1241699edb.13.1605123733810;
- Wed, 11 Nov 2020 11:42:13 -0800 (PST)
+        id S1725984AbgKKTrL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Nov 2020 14:47:11 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:46973 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726039AbgKKTrL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 14:47:11 -0500
+Received: (qmail 246899 invoked by uid 1000); 11 Nov 2020 14:47:10 -0500
+Date:   Wed, 11 Nov 2020 14:47:10 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Peter Chen <peter.chen@nxp.com>, Kyungtae Kim <kt0755@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>
+Subject: Re: WARNING in usb_composite_setup_continue
+Message-ID: <20201111194710.GA245264@rowland.harvard.edu>
+References: <CAEAjamsxe9OuMVpHfox3w57HtGsE3mPXOty9bdXW-iPdx=TXMA@mail.gmail.com>
+ <CAEAjamsjFXWGSwUcCuUOeJ8s9EWGQP-Jvt40bG0Otav=xFb+5A@mail.gmail.com>
+ <20201110155650.GC190146@rowland.harvard.edu>
 MIME-Version: 1.0
-References: <20201111095256.10477-1-zhengzengkai@huawei.com>
-In-Reply-To: <20201111095256.10477-1-zhengzengkai@huawei.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 11 Nov 2020 20:42:02 +0100
-Message-ID: <CAFBinCANr3zC4VxeGFTXhz1ZmTiOJ44r7DX8EmPwOjezyFAmhQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: meson-g12a: disable clk on error handling path
- in probe
-To:     Zheng Zengkai <zhengzengkai@huawei.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, khilman@baylibre.com,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201110155650.GC190146@rowland.harvard.edu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 10:48 AM Zheng Zengkai <zhengzengkai@huawei.com> wrote:
->
-> dwc3_meson_g12a_probe() does not invoke clk_bulk_disable_unprepare()
-> on one error handling path. This patch fixes that.
->
-> Fixes: 347052e3bf1b ("usb: dwc3: meson-g12a: fix USB2 PHY initialization on G12A and A1 SoCs")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zheng Zengkai <zhengzengkai@huawei.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On Tue, Nov 10, 2020 at 10:56:50AM -0500, Alan Stern wrote:
+> Felipe:
+> 
+> On Mon, Nov 09, 2020 at 02:29:42PM -0500, Kyungtae Kim wrote:
+> > We report a bug (in linux-5.8.13) found by FuzzUSB (a modified version
+> > of syzkaller).
+> > 
+> > (corrected analysis)
+> > This bug happens while continuing a delayed setup message in mass
+> > storage gadget.
+> > To be specific, composite_setup() sets FSG_STATE_CONFIG_CHANGE via
+> > fsg_set_alt() (line 1793),
+> > and followed by cdev->delayed_status++ (line 1798).
+> > Meanwile, the mass gadget tries  check cdev->delayed_status == 0
+> > through handle_exception() (line 2428),
+> > which occurs in between the two operations above.
+> > Such a race causes invalid operations eventually.
+> 
+> Do you know who maintains composite.c (or the composite framework) these 
+> days?  This is a real race, and it needs to be fixed.
+> 
+> Part of the problem seems to be that cdev->delayed_status is sometimes 
+> accessed without the protection of cdev->lock.  But I don't know when it 
+> is safe to take that lock, so I can't tell what changes to make.
+> 
+> Another part of the problem is that cdev->delayed_status doesn't count 
+> things properly.  That is, its value is incremented each time a function 
+> driver asks for a delayed status and decremented each time a function 
+> driver calls usb_composite_setup_continue(), and the delayed status 
+> response is sent when the value reaches 0.  But there's nothing to stop 
+> this from happening (imagine a gadget with two functions A and B):
+> 
+> 	Function driver A asks for delayed status;
+> 	Function driver A calls setup_continue(): Now the value
+> 		of the counter is 0 so a status message is queued
+> 		too early;
+> 	Function driver B asks for delayed status;
+> 	Function driver B calls setup_continue(): Now a second
+> 		status message is queued.
+> 
+> I'm willing to help fix these issues, but I need assistance from someone 
+> who fully understands the composite framework.
 
-many thanks for this fix!
+Okay, so as Peter pointed out, these comments were wrong.  The cdev lock 
+is held and the scenario described above can't occur, because the lock 
+isn't released until after both functions have asked for delayed status.
 
+This means that Kyungtae's analysis of the FuzzUSB report is wrong, and 
+we still don't know what really happened.  Here's my guess...
 
-Best regards
-Martin
+There's still a possible race, although it's a different one: The 
+gadget's delayed status reply can race with the host timing out and 
+sending a new SETUP packet:
+
+	Host sends SETUP packet A
+
+	Function receives A and decides
+	to send a delayed status reply
+
+					Function thread starts to
+					process packet A
+
+	Host times out waiting for A status
+
+	Host sends new SETUP packet B
+
+	Composite core receives packet B
+	and resets cdev->delayed_status
+
+					Function thread finishes and calls
+					usb_composite_setup_continue()
+
+					The composite core sends a status
+					reply for packet A, not packet B
+
+	Host receives status for A but thinks
+	it is the status for B!
+
+					Function thread processes packet B
+
+					Function thread finishes and calls
+					usb_composite_setup_continue()
+
+					The composite core sees
+					cdev->delayed_status == 0 and WARNs.
+
+At the moment I don't see how to prevent this sort of race from 
+happening.  We may need to change the API, giving the composite core a 
+way to match up calls to usb_composite_setup_continue() with the 
+corresponding call to composite_setup().  But even that wouldn't fix 
+the entire problem.
+
+Suggestions?
+
+Alan Stern
