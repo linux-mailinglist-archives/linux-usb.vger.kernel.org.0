@@ -2,110 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 585592AF5C1
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 17:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABCE2AF68C
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 17:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbgKKQFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Nov 2020 11:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726125AbgKKQFb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 11:05:31 -0500
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9644BC0613D6
-        for <linux-usb@vger.kernel.org>; Wed, 11 Nov 2020 08:05:30 -0800 (PST)
-Received: by mail-ot1-x341.google.com with SMTP id n89so2610237otn.3
-        for <linux-usb@vger.kernel.org>; Wed, 11 Nov 2020 08:05:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tIdCI4JuUH0To3ThBGDMIM0wMwtQ0E2bZknwfovjkQY=;
-        b=zGscNFqsQR0Cqr0sc4HVKjDAPMoT8IwDDlxPlPSolaPqFNhAbAJ9f7tes13lzFkbgm
-         9h7vI6sscfhxeZJOzylBHp5/W241jIYXiw168JkCpHKIyDQk4foO3ExYk434Q1wcPnoT
-         QD9ARnkTKJQGTR10rU5GHqsXrSsOHcn9LuhMF5xSP6QNFeCGw6ZqHAWdAE5lXAGeDbqa
-         wFh6a/R89DRy5h/2SDFKXzKaGfCycyUyuHVtPlgTV8L3KseWKVhhp7hbV5hMk0Teh8t7
-         bkohFpLiyaz9MQoD1pg7zLxPFrGEyPn+1RcSwuORj+1O8LR3KeB+1Mhv8/AUdDaN2xtu
-         XPJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tIdCI4JuUH0To3ThBGDMIM0wMwtQ0E2bZknwfovjkQY=;
-        b=FPwKBN4NU3gmZCe3GAJR2gmdNDgozr9x2HPthUrA6GmMQ8UH0aoy0EgHcfQT9yR/2d
-         Rof/Iqwl3UxCL1PDYWpTnmqr2v4nrTYeWGTf83FJAZ88k4/5Qr/qUXnrusA9/WhzKV3i
-         kiiJ6uroVAVZTvMPqlFydJLqpJC0wq+OaT4mbRCemqjj1I9aoNVfVzYX1tXdfavX0FGk
-         vVBY0QcmcA+VoguViRm+GH5duCDhni6gNVY5Yx2kc8eWgDoLE+bXLv5uH/X1jB+JhX5K
-         IpoQghtIDgfGa69ky8rh+3qQgGZRKQO9ZRDnHxIs4mzCKJMP6dsq8GieMpju5r+QHpvF
-         HpfA==
-X-Gm-Message-State: AOAM531z6NiL9LvH4OXv2RRIIC38TUgxHOJuuOnGd5DEF2IGBx2+lQ5L
-        Y/MlgsPIIVUfOecD8i2IkOKrcg==
-X-Google-Smtp-Source: ABdhPJybLnLecwIG5z15kW8hap8FZxxo60aelsmKCuw5oQaDVQ8crNKy+LE3iNrxCD3SW+U6jrgyiA==
-X-Received: by 2002:a9d:590e:: with SMTP id t14mr19057125oth.230.1605110729909;
-        Wed, 11 Nov 2020 08:05:29 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id c64sm479042oia.49.2020.11.11.08.05.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2020 08:05:29 -0800 (PST)
-Date:   Wed, 11 Nov 2020 10:05:27 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 17/18] usb: dwc3: qcom: Detect DWC3 DT-nodes with
- "usb"-prefixed names
-Message-ID: <20201111160527.GI173948@builder.lan>
-References: <20201111091552.15593-1-Sergey.Semin@baikalelectronics.ru>
- <20201111091552.15593-18-Sergey.Semin@baikalelectronics.ru>
+        id S1727266AbgKKQbX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Nov 2020 11:31:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53796 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726208AbgKKQbX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Nov 2020 11:31:23 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 06267206B5;
+        Wed, 11 Nov 2020 16:31:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605112282;
+        bh=u1W79eBhFJDijrV1bXsrDHc02dojBuPzlmTjNRwzECM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pTJO7zCDEAIc4ENcSgzN9lsMdGt7wXtmAxlhGhYh9RxxpVjT7DGXoeXUS10GeaFoJ
+         TqdEeulUJiiE6h4kRf+qbVUdou0DBrWTQpZdIfznMNMFg0Uy+wXHd5P9E0SvPkdoXw
+         eDeNfg3jKEyZgGrNPO6pRBc2UXlWpwDPeeHKE9T4=
+Date:   Wed, 11 Nov 2020 17:32:22 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Limonciello, Mario" <Mario.Limonciello@dell.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bastien Nocera <hadess@hadess.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: How to enable auto-suspend by default
+Message-ID: <X6wSFojYLvwGhY/g@kroah.com>
+References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
+ <X6p6ubTOoMPUPPXi@kroah.com>
+ <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
+ <20201110172517.GC2495@lahna.fi.intel.com>
+ <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
+ <DM6PR19MB26366008D59FC94D384A1E3BFAE80@DM6PR19MB2636.namprd19.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201111091552.15593-18-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <DM6PR19MB26366008D59FC94D384A1E3BFAE80@DM6PR19MB2636.namprd19.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed 11 Nov 03:15 CST 2020, Serge Semin wrote:
-
-> In accordance with the USB HCD/DRD schema all the USB controllers are
-> supposed to have DT-nodes named with prefix "^usb(@.*)?".  Since the
-> existing DT-nodes will be renamed in a subsequent patch let's first make
-> sure the DWC3 Qualcomm driver supports them and second falls back to the
-> deprecated naming so not to fail on the legacy DTS-files passed to the
-> newer kernels.
+On Wed, Nov 11, 2020 at 04:03:30PM +0000, Limonciello, Mario wrote:
+> > >> Given we're effectively ending up with the combination of runtime PM turned
+> > >> on by udev rules, do we need something like this for that ID:
+> > >>
+> > >>
+> > https://github.com/torvalds/linux/commit/6a7c533d4a1854f54901a065d8c672e890400
+> > d8a
+> > >>
+> > >> @Mika Westerberg should 8086:a0ed be quirked like the TCSS xHCI too?
+> > >
+> > > I think this one is the TGL PCH xHCI. The quirk currently for xHCI
+> > > controllers that are part of the TCSS (Type-C SubSystem) where it is
+> > > important to put all devices into low power mode whenever possible,
+> > > otherwise it keeps the whole block on.
+> > 
+> > Note that there are currently some IDs missing from the xHCIs which
+> > are part of the TCSS too. At least the id for the xHCI in the thunderbolt
+> > controller on the Lenovo T14 gen 1 is missing. I started a discussion
+> > about extending the kernel quirk list for this vs switching to hwdb
+> > a while a go:
+> > 
+> > https://lore.kernel.org/linux-usb/b8b21ba3-0a8a-ff54-5e12-
+> > cf8960651086@redhat.com/
+> > 
+> > The conclusion back then was to switch to hwdb, but I never got around to
+> > this.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> I guess the problem I see with switching to a hwdb for this type of thing is
+> that if there is a "bug" in your kernel driver around autosuspend you will
+> then be potentially causing it to occur more regularly on a kernel that didn't
+> necessarily pick up the fix but does have the newer hwdb.
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index e1e78e9824b1..661263e62f21 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -519,7 +519,8 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->  	struct device		*dev = &pdev->dev;
->  	int			ret;
->  
-> -	dwc3_np = of_get_child_by_name(np, "dwc3");
-> +	dwc3_np = of_get_child_by_name(np, "usb") ?:
-> +		  of_get_child_by_name(np, "dwc3");
->  	if (!dwc3_np) {
->  		dev_err(dev, "failed to find dwc3 core child\n");
->  		return -ENODEV;
-> -- 
-> 2.28.0
+> I don't know how common that will really be though.
 > 
+> Since Mika mentioned the really light userspace scenario, what about shipping
+> the hwdb "with" the kernel in tree?  This could allow evicting all these quirk
+> scenarios from the kernel at the same time as switching to a hwdb and also cover
+> the problem I suggested might happen with a bug in older kernel and newer userspace.
+
+We took things out of the kernel to put it in hwdb years ago as it was
+easier for people to update a "text file" than it was their kernel
+image.  I don't think you want to go backwards here :)
+
+thanks,
+
+greg k-h
