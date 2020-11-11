@@ -2,104 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE8F2AF78D
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 18:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFF42AF84E
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 19:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726973AbgKKRsF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Nov 2020 12:48:05 -0500
-Received: from m42-4.mailgun.net ([69.72.42.4]:51342 "EHLO m42-4.mailgun.net"
+        id S1726595AbgKKSjz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Nov 2020 13:39:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58830 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726074AbgKKRsF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Nov 2020 12:48:05 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1605116884; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=7g87NZ0M/XFTxCuaZCnkFZZOqSYBdmIg4bjJcPXl19M=; b=DQNFGQ2uYMU5hUw5eGuIwlMcCHismO4v8zDB8xGrymaS0sKBxT6VIRQDu0mTBzJOakI7wxeb
- RNKAlbvzP7cKqdO5RPdTqGtI9Kquz56tcoawQaqNUotmGgmRZy7I1o3CsBHmWqDkefaXhqa0
- InC0Z6UVhS8Mx4sP5zyP0E+vm5A=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 5fac1b7f34c4908d19e68649 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 11 Nov 2020 17:12:31
- GMT
-Sender: kvalo=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 12E90C433A1; Wed, 11 Nov 2020 17:12:30 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726460AbgKKSjz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Nov 2020 13:39:55 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C6DEEC433C6;
-        Wed, 11 Nov 2020 17:12:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C6DEEC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?utf-8?Q?Bj?= =?utf-8?Q?=C3=B8rn?= Mork <bjorn@mork.no>,
-        Igor Mitsyanko <imitsyanko@quantenna.com>,
-        Sergey Matyukevich <geomatsi@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        linux-rdma@vger.kernel.org,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>
-Subject: Re: [PATCH net-next 3/5] qtnfmac: switch to core handling of rx/tx byte/packet counters
-References: <5fbe3a1f-6625-eadc-b1c9-f76f78debb94@gmail.com>
-        <4b22c155-6868-793f-ebfe-f797e16b9c40@gmail.com>
-Date:   Wed, 11 Nov 2020 19:12:22 +0200
-In-Reply-To: <4b22c155-6868-793f-ebfe-f797e16b9c40@gmail.com> (Heiner
-        Kallweit's message of "Tue, 10 Nov 2020 20:48:54 +0100")
-Message-ID: <87o8k34y2x.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6AA53205CB;
+        Wed, 11 Nov 2020 18:39:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605119994;
+        bh=mg4cq31o364PM/T1bGsNiqiKct0gxyb09dZfWAc1ugs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ANE84NR5QxXniFgpTUCLO7LzZtSzrUWjSJt0nRyNrmFx3ovA7qo2/X41acx4ErBkN
+         pxNLy+O7B01h4oeJzQFjhtxAxGhK1EYOcBoV9k4N/LxslRada+zHL8qiiq7lWXU0ye
+         e1/waJlnczzTVZd3xFgfBCBHP58jMgJuQefLXVOc=
+Date:   Wed, 11 Nov 2020 19:40:54 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ingo Rohloff <ingo.rohloff@lauterbach.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/2] usb: gadget: User space URBs for FunctionFS
+Message-ID: <X6wwNo5ZYYugyHu7@kroah.com>
+References: <20201111170718.3381-1-ingo.rohloff@lauterbach.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201111170718.3381-1-ingo.rohloff@lauterbach.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Heiner Kallweit <hkallweit1@gmail.com> writes:
+On Wed, Nov 11, 2020 at 06:07:16PM +0100, Ingo Rohloff wrote:
+> I am working on a platform (Xilinx Zynq Ultrascale+), which
+> is supposed to work as a pure USB Device (not dual-role).
+> 
+> To get fast USB bulk transfers I wanted to have something similar
+> like USBDEVFS_SUBMITURB/USBDEVFS_REAPURB, but for an USB Device.
+> 
+> I now implement two new ioctls for FunctionFS:
+>   FUNCTIONFS_SUBMITBULKURB
+>   FUNCTIONFS_REAPBULKURB
+> which provide simliar functionality.
+> 
+> A similar functionality is already implemented via AIO. But: To use this
+> API, your user space environment needs to know how to use these system
+> calls.
 
-> Use netdev->tstats instead of a member of qtnf_vif for storing a pointer
-> to the per-cpu counters. This allows us to use core functionality for
-> statistics handling.
-> The driver sets netdev->needs_free_netdev, therefore freeing the per-cpu
-> counters at the right point in time is a little bit tricky. Best option
-> seems to be to use the ndo_init/ndo_uninit callbacks.
->
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  drivers/net/wireless/quantenna/qtnfmac/core.c | 78 ++++---------------
->  drivers/net/wireless/quantenna/qtnfmac/core.h |  4 -
->  .../quantenna/qtnfmac/pcie/pearl_pcie.c       |  4 +-
->  .../quantenna/qtnfmac/pcie/topaz_pcie.c       |  4 +-
->  4 files changed, 20 insertions(+), 70 deletions(-)
+So instead you created a new interface which requires different system
+calls?
 
-Jakub, feel free to take this to net-next:
+Doing it in a different way is "interesting", but you are duplicating
+existing functionality here.  What is wrong with the AIO interface that
+we currently have that keeps you from using it, other than it being
+"different" than some other user/kernel interfaces that people are
+familiar with?
 
-Acked-by: Kalle Valo <kvalo@codeaurora.org>
+> Additionally the semantics of the ioctls is slightly different:
+> Usually you can only access a FunctionFS file if the FunctionFS is
+> already bound to an UDC (USB Device Controller) and the USB Device is
+> connected to a USB Host (which then enables the appropriate configuration
+> and USB endpoints).
+> These new ioctls behave different: You already can submit URBs before the
+> Function is bound to an UDC and before the USB Device is connected.
+> These "pending" URBs will be activated once the endpoints become active.
+> 
+> When the endpoints become deactivated (either by a disconnect from the
+> USB Host or by unbinding the UDC), active URBs are cancelled.
+> 
+> A user space program will then get a notification, that the URBs have
+> been cancelled and the status will indicate to the user space program,
+> that the connection was lost.
+> Via this mechanism a user space program can keep precise track, which
+> URBs succeeded and which URBs failed.
 
-But I can also take this to wireless-drivers-next, whichever you prefer.
+So, it implements AIO in a different way?
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+> The final goal here is to be able to directly let user space provide data
+> buffers (via mmap I guess), which are then transferred via USB; but this
+> is the next step.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Isn't that kind of what the AIO inteface provides today?  :)
+
+thanks,
+
+greg k-h
