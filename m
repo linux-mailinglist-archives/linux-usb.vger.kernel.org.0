@@ -2,154 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8CE2AF915
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 20:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BDC2AF91B
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 20:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727439AbgKKTaj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Nov 2020 14:30:39 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:43366 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725955AbgKKTai (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 14:30:38 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id C53D3803071C;
-        Wed, 11 Nov 2020 19:30:34 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id JBorFac4oRnu; Wed, 11 Nov 2020 22:30:32 +0300 (MSK)
-Date:   Wed, 11 Nov 2020 22:30:29 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <devicetree@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        <linux-snps-arc@lists.infradead.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        <linux-kernel@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        <linux-usb@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v4 01/18] dt-bindings: usb: usb-hcd: Detach generic USB
- controller properties
-Message-ID: <20201111193029.ao6kdwrhpsdxb7il@mobilestation>
-References: <20201111090853.14112-1-Sergey.Semin@baikalelectronics.ru>
- <20201111090853.14112-2-Sergey.Semin@baikalelectronics.ru>
- <20201111191640.GA1857205@bogus>
+        id S1727132AbgKKTc0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Nov 2020 14:32:26 -0500
+Received: from p3nlsmtpcp01-02.prod.phx3.secureserver.net ([184.168.200.140]:59082
+        "EHLO p3nlsmtpcp01-02.prod.phx3.secureserver.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726513AbgKKTcZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Nov 2020 14:32:25 -0500
+Received: from p3plcpnl0564.prod.phx3.secureserver.net ([50.62.176.91])
+        by : HOSTING RELAY : with ESMTP
+        id cvq0kRNbjsFA9cvq0kJ4al; Wed, 11 Nov 2020 12:31:24 -0700
+X-CMAE-Analysis: v=2.4 cv=Xu4/hXJ9 c=1 sm=1 tr=0 ts=5fac3c0c
+ a=enoWsqFKhXaBs5BDtsbzsA==:117 a=dhrM4QDckVN49Kxx3K61fg==:17
+ a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=IkcTkHD0fZMA:10 a=nNwsprhYR40A:10
+ a=VwQbUJbxAAAA:8 a=XRmz5qeXFlNOdd5SrRAA:9 a=QEXdDO2ut3YA:10
+ a=AjGcO6oz07-iQ99wixmX:22
+X-SECURESERVER-ACCT: a1@tripolho.com
+Received: from pool-96-242-17-244.nwrknj.fios.verizon.net ([96.242.17.244]:46736 helo=[192.168.62.65])
+        by p3plcpnl0564.prod.phx3.secureserver.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <22t@tripolho.com>)
+        id 1kcvq0-00AFFh-DH; Wed, 11 Nov 2020 12:31:24 -0700
+Subject: Re: kernel locks due to USB I/O
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+References: <9428ae70-887e-b48b-f31c-f95d58f67c61@tripolho.com>
+ <20201110205114.GB204624@rowland.harvard.edu>
+ <8152190e-c962-e376-64fd-cc2ebf3e6104@tripolho.com>
+ <20201111155130.GB237113@rowland.harvard.edu>
+From:   Alberto Sentieri <22t@tripolho.com>
+Message-ID: <e505f7eb-1841-4c10-03af-6d7975bcd2dd@tripolho.com>
+Date:   Wed, 11 Nov 2020 14:31:18 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20201111191640.GA1857205@bogus>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20201111155130.GB237113@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - p3plcpnl0564.prod.phx3.secureserver.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - tripolho.com
+X-Get-Message-Sender-Via: p3plcpnl0564.prod.phx3.secureserver.net: authenticated_id: a1@tripolho.com
+X-Authenticated-Sender: p3plcpnl0564.prod.phx3.secureserver.net: a1@tripolho.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-CMAE-Envelope: MS4xfBVjhXJFWsf3RKEFYmrFDgGPiQ5qBgyFuenlgxNmPlm/fHLNell9oAF7cDsYlAMSovK+q9T8IUY+aQF576iN9JBh1GQ/mtxVMcSlrDCGEhpOxUtCqTXs
+ WW1DbF0FIJQXbuCTl9RCDAjsz7QsTO/Uuz1bCJG0nOCoXStmM7WleAH40u37U1PHQ3FTy8Ohgo4HrVKf/u5mDCgX5QHUZHSg5i6809bR0iFTv9RKWxUUmRMw
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 01:16:40PM -0600, Rob Herring wrote:
-> On Wed, 11 Nov 2020 12:08:36 +0300, Serge Semin wrote:
-> > There can be three distinctive types of the USB controllers: USB hosts,
-> > USB peripherals/gadgets and USB OTG, which can switch from one role to
-> > another. In order to have that hierarchy handled in the DT binding files,
-> > we need to collect common properties in a common DT schema and specific
-> > properties in dedicated schemas. Seeing the usb-hcd.yaml DT schema is
-> > dedicated for the USB host controllers only, let's move some common
-> > properties from there into the usb.yaml schema. So the later would be
-> > available to evaluate all currently supported types of the USB
-> > controllers.
-> > 
-> > While at it add an explicit "additionalProperties: true" into the
-> > usb-hcd.yaml as setting the additionalProperties/unevaluateProperties
-> > properties is going to be get mandatory soon.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Changelog v4:
-> > - This is a new patch created as a result of the comment left
-> >   by Chunfeng Yun in v3
-> > ---
-> >  .../devicetree/bindings/usb/usb-hcd.yaml      | 14 ++-------
-> >  .../devicetree/bindings/usb/usb.yaml          | 29 +++++++++++++++++++
-> >  2 files changed, 32 insertions(+), 11 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/usb.yaml
-> > 
-> 
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
+On 11/11/20 10:51 AM, Alan Stern wrote:
+> On Tue, Nov 10, 2020 at 06:42:17PM -0500, Alberto Sentieri wrote:
+>> 1) The current Ubuntu Kernel is 5.4.0-53. Do you want me to upgrade it to
+>> 5.9, from kernel.org? Or is there a Ubuntu 5.9 package that I can use? It
+>> would be easy to do it If there is a Ubuntu package with 5.9, which I would
+>> install and, after the tests, uninstall.
+> If you want to know what Ubuntu packages are available, you should ask
+> on an Ubuntu mailing list instead of the linux-usb mailing list.
+I am sorry to be asking about Ubuntu. For some reason I imagined I was 
+exchanging emails with Ubuntu guys, but now I understand that you are 
+from the kernel.org.
+>
+>> 2) Why do you believe that 5.9 would solve the problem? I am asking that
+>> because I cannot change the production machine for a test if I cannot go
+>> back to the original state. There is always a risk involved.
+> We do not believe that 5.9 will solve the problem -- we have no reason
+> to believe this -- but we could be wrong.  In any case it is always
+> best to test with the most up-to-date software available, and 5.9 is the
+> version closest to what we are working on now.
+I will try kernel 5.9 soon...
+>
+>> 3) It is one single thread dealing with all 36 devices. Each device has its
+>> own co-routine (not preemptive), but all co-routines are executed by a
+>> unique thread.
+> If everything runs within a single thread, how can adding a semaphore
+> or mutex make any difference?
+The semaphore will block a co-routine, not a thread. It is not the type 
+of semaphore C programmers are used to. So, before the introduction of 
+the semaphore, a sequence like that would happen:
 
-> yamllint warnings/errors:
-> ./Documentation/devicetree/bindings/usb/usb-hcd.yaml:17:1: [error] duplication of key "additionalProperties" in mapping (key-duplicates)
+request packet device 1 URB submit
+request packet device 2 URB submit
+...
+request packet device 36 URB submit
+wait on epoll after submitting 36 URBs, one for each device.
+reap URBs, receive response packets, send confirmation packets 
+(basically run the state machine, each device has its own state)
 
-Oh my. Don't know how this has slipped in. It's even more weird given
-that I've performed dt_binding_check before sending the patches out.
-Anyway I'll fix the duplication in v5. Please proceed with the series
-review.
+After the semaphore, a sequence like that would happen:
 
--Sergey
+lock the semaphore
+send request packet device 1 (URB submit)
+wait on epoll
+reap URB with device 1 response packet
+submit URB with device 1 confirmation
+wait on epoll
+reap URB submitted on last step
+unlock the semaphore
+Now go to the next device, which was waiting on the co-routine semaphore.
 
-> 
-> dtschema/dtc warnings/errors:
-> Traceback (most recent call last):
->   File "/usr/local/bin/dt-extract-example", line 45, in <module>
->     binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
->   File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 343, in load
->     return constructor.get_single_data()
->   File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 113, in get_single_data
->     return self.construct_document(node)
->   File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 123, in construct_document
->     for _dummy in generator:
->   File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 723, in construct_yaml_map
->     value = self.construct_mapping(node)
->   File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 440, in construct_mapping
->     return BaseConstructor.construct_mapping(self, node, deep=deep)
->   File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 257, in construct_mapping
->     if self.check_mapping_key(node, key_node, mapping, key, value):
->   File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 295, in check_mapping_key
->     raise DuplicateKeyError(*args)
-> ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
->   in "<unicode string>", line 4, column 1
-> found duplicate key "additionalProperties" with value "True" (original value: "True")
->   in "<unicode string>", line 17, column 1
-> 
-> To suppress this check see:
->     http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
-> 
-> Duplicate keys will become an error in future releases, and are errors
-> by default when using the new API.
-> 
-> make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/usb/usb-hcd.example.dts] Error 1
-> make[1]: *** Deleting file 'Documentation/devicetree/bindings/usb/usb-hcd.example.dts'
-> make[1]: *** Waiting for unfinished jobs....
-> make[1]: *** [Documentation/devicetree/bindings/Makefile:59: Documentation/devicetree/bindings/processed-schema-examples.json] Error 123
-> make: *** [Makefile:1364: dt_binding_check] Error 2
-> 
-> 
-> See https://patchwork.ozlabs.org/patch/1398034
-> 
-> The base for the patch is generally the last rc1. Any dependencies
-> should be noted.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
+The main difference is that I would not submit 36 URBs to 36 different 
+devices at the same time. The submission of 36 URBs would make the 
+devices start responding as soon as they get ready and receive a pool.
+
+
+>
+>> 4) By network console, do you mean ssh? It dies as well when it locks. The
+>> screen is the regular GNOME3 screen and nothing can be seen there. Every
+>> time it locks they send a picture, and I cannot see anything meaningful
+>> there. I am thinking about disabling GNOME3, but I need their blessing for
+>> that.
+> See https://www.kernel.org/doc/Documentation/networking/netconsole.txt
+> for instructions on netconsole.  And when you use it for testing, be
+> sure to set the console log level to a high value.
+>
+> Alan Stern
+
+
+I will try kernel 5.9. However, it seems that the 5.3 kernel gets lost 
+when too many submits / reaps start happening very close to each other.
+
+Thanks,
+
+Alberto Sentieri
+
