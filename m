@@ -2,93 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A272AEF7E
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 12:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7F72AEF9A
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 12:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbgKKLVw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Nov 2020 06:21:52 -0500
-Received: from mga14.intel.com ([192.55.52.115]:46369 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726081AbgKKLVv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Nov 2020 06:21:51 -0500
-IronPort-SDR: 3J+Qv1zQonDbYq5TavfPPlsXHjNQIS4iJLpGNEcZuyLZl1bCWuQi4oVbFD1NUYce8gA8F1VVT7
- H/mwasmGtb2w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9801"; a="169348094"
-X-IronPort-AV: E=Sophos;i="5.77,469,1596524400"; 
-   d="scan'208";a="169348094"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2020 03:21:46 -0800
-IronPort-SDR: i9GSmkJyDyBIgNUenUzEob8HffyiVM1iloRBkNIR5RKr3OWvt8faVtA8lgixlCVI87wZvLwsLv
- +uMbvOCW4lJg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,469,1596524400"; 
-   d="scan'208";a="428716333"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 11 Nov 2020 03:21:43 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 11 Nov 2020 13:21:42 +0200
-Date:   Wed, 11 Nov 2020 13:21:42 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH v2 2/2] platform/chrome: cros_ec_typec: Set partner
- num_altmodes
-Message-ID: <20201111112142.GQ1224435@kuha.fi.intel.com>
-References: <20201110061535.2163599-1-pmalani@chromium.org>
- <20201110061535.2163599-2-pmalani@chromium.org>
- <20201110105015.GF1224435@kuha.fi.intel.com>
- <ba6c1415-457b-1e8d-b604-fad603fe9be6@collabora.com>
- <20201111102846.GP1224435@kuha.fi.intel.com>
- <X6vDZXI3Cp1pqRUr@kroah.com>
+        id S1726387AbgKKL1s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Nov 2020 06:27:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54832 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725949AbgKKL1m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 06:27:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605094060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7mmS90S83tFEhf0c8FgtqNUv8njBrefiR0OxTEZyr2M=;
+        b=L0mAhd79wIZuKzmF6LGq/NibA0+4XYSRFS8xMeHsmo3TTq2CQNK9H4hbyVUCIfHZZF2XZY
+        k7Lto0tZNLv1DqRXWiXES5yqACdKQqZgsXvpk2cvdabzPJ+NH/81qvq1XdKBpigeiq7ZQV
+        2hDDs80GwWKjNokBWPpRJS0EwaoNuVg=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-541-Ydu3QW92Mja2QbTASK2TEQ-1; Wed, 11 Nov 2020 06:27:36 -0500
+X-MC-Unique: Ydu3QW92Mja2QbTASK2TEQ-1
+Received: by mail-ed1-f69.google.com with SMTP id y99so738858ede.3
+        for <linux-usb@vger.kernel.org>; Wed, 11 Nov 2020 03:27:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7mmS90S83tFEhf0c8FgtqNUv8njBrefiR0OxTEZyr2M=;
+        b=fSoGrKNgg66jqcBc2rOyWXGrYxMYLF6QQe0FkgrUMZ5AvlzcHpuVGaPs2a0zRV1dlb
+         axyT+u6X2y2n23xKnsYQbFmeOo+dQ0Hsz9QR74BHM30SyoaH8LgihbhqjUhhd4C5ImDD
+         ifSDQ4qcN1RD5ub9dYSX05fZWBJfIpRu7VWzBOrS7hBmAvhFjv5XDFWsMCka+7ksGYTz
+         gITFiL2BaL6evETLmfOAD5oLjU//nZYJe+FJQFZqFmLbjbxvnr0vpwAMktWWTY7GNZwM
+         XkRxTeZUOYnD2PWssoMQYY0a4y3i0jtZPGLD1XiPkmxazseT9ErGd8ddVCnWMueIlmhN
+         CvmA==
+X-Gm-Message-State: AOAM5303CZWpwtJujE8tKtdiTFE2Pln/+73vPc7KFtcVE1hIQ2tHRF8V
+        /oYpAotMSHk8HzfCpnQB0PquHUaTWjtIQpHKHV79QwTozPqmEYhZ0zWSCTXHeiRyyL7Mucp4Quf
+        M1dxJjLBi+P8ayUKlfqBa
+X-Received: by 2002:a17:906:ccd3:: with SMTP id ot19mr25670728ejb.44.1605094054110;
+        Wed, 11 Nov 2020 03:27:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxUqyaU0omIOv5C+Qp9U4J8pr/SqkfPBudloMrG7hTbiFv2Lv6TAsDLoqT2VrHnNCMl5TA0mQ==
+X-Received: by 2002:a17:906:ccd3:: with SMTP id ot19mr25670705ejb.44.1605094053841;
+        Wed, 11 Nov 2020 03:27:33 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
+        by smtp.gmail.com with ESMTPSA id h7sm779566edt.24.2020.11.11.03.27.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2020 03:27:33 -0800 (PST)
+Subject: Re: How to enable auto-suspend by default
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Limonciello, Mario" <Mario.Limonciello@dell.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
+ <X6p6ubTOoMPUPPXi@kroah.com>
+ <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
+ <20201110172517.GC2495@lahna.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
+Date:   Wed, 11 Nov 2020 12:27:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <X6vDZXI3Cp1pqRUr@kroah.com>
+In-Reply-To: <20201110172517.GC2495@lahna.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 11:56:37AM +0100, Greg KH wrote:
-> On Wed, Nov 11, 2020 at 12:28:46PM +0200, Heikki Krogerus wrote:
-> > On Tue, Nov 10, 2020 at 05:01:04PM +0100, Enric Balletbo i Serra wrote:
-> > > Hi,
-> > > 
-> > > On 10/11/20 11:50, Heikki Krogerus wrote:
-> > > > On Mon, Nov 09, 2020 at 10:15:36PM -0800, Prashant Malani wrote:
-> > > >> Set the number of altmodes available for a registered partner using the
-> > > >> Type C connector class framework routine.
-> > > >>
-> > > >> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > > > 
-> > > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > 
-> > > 
-> > > Acked-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-> > > 
-> > > Heikki, would you like to take these two through your tree? It'd help if you can
-> > > create an inmutable branch so I can pick other cros_ec_typec patches on top of it.
-> > 
-> > I'm sorry, but I don't actually maintain a tree for the USB Type-C
-> > stuff.
-> > 
-> > Greg, I'm sorry to bother you with this, but can you provide the
-> > immutable branch for Enric?
-> 
-> My usb tree branches are always immutable :)
-> 
-> > Maybe I should set up a tree for the USB Type-C stuff?
-> 
-> Or I can just take all of these patches as they depend on USB stuff more
-> than any other specific platform driver changes, right?
+Hi,
 
-Works for me.
+On 11/10/20 6:25 PM, Mika Westerberg wrote:
+> On Tue, Nov 10, 2020 at 04:02:33PM +0000, Limonciello, Mario wrote:
+>>>
+>>> On Tue, Nov 10, 2020 at 11:57:07AM +0100, Bastien Nocera wrote:
+>>>> Hey,
+>>>>
+>>>> systemd has been shipping this script to enable auto-suspend on a
+>>>> number of USB and PCI devices:
+>>>>
+>>> https://github.com/systemd/systemd/blob/master/tools/chromiumos/gen_autosuspen
+>>> d_rules.py
+>>>>
+>>>> The problem here is twofold. First, the list of devices is updated from
+>>>> ChromeOS, and the original list obviously won't be updated by ChromeOS
+>>>> developers unless a device listed exists in a ChromeBook computer,
+>>>> which means a number of devices that do support autosuspend aren't
+>>>> listed.
+>>>>
+>>>> The other problem is that this list needs to exist at all, and that it
+>>>> doesn't seem possible for device driver developers (at various levels
+>>>> of the stack) to opt-in to auto-suspend when all the variants of the
+>>>> device (or at least detectable ones) support auto-suspend.
+>>>
+>>> A driver can say they support autosuspend today, but I think you are
+>>> concerned about the devices that are controlled by class-compliant
+>>> drivers, right?  And for those, no, we can't do this in the kernel as
+>>> there are just too many broken devices out there.
+>>>
+>>
+>> I guess what Bastien is getting at is for newer devices supported by class
+>> drivers rather than having to store an allowlist in udev rules, can we set
+>> the allowlist in the kernel instead.  Then distributions that either don't
+>> use systemd or don't regularly update udev rules from systemd can take
+>> advantage of better defaults on modern hardware.
+>>
+>> The one item that stood out to me in that rules file was 8086:a0ed.
+>> It's listed as "Volteer XHCI", but that same device ID is actually present
+>> in an XPS 9310 in front of me as well and used by the xhci-pci kernel module.
+>>
+>> Given we're effectively ending up with the combination of runtime PM turned
+>> on by udev rules, do we need something like this for that ID:
+>>
+>> https://github.com/torvalds/linux/commit/6a7c533d4a1854f54901a065d8c672e890400d8a
+>>
+>> @Mika Westerberg should 8086:a0ed be quirked like the TCSS xHCI too?
+> 
+> I think this one is the TGL PCH xHCI. The quirk currently for xHCI
+> controllers that are part of the TCSS (Type-C SubSystem) where it is
+> important to put all devices into low power mode whenever possible,
+> otherwise it keeps the whole block on.
 
-Br,
+Note that there are currently some IDs missing from the xHCIs which
+are part of the TCSS too. At least the id for the xHCI in the thunderbolt
+controller on the Lenovo T14 gen 1 is missing. I started a discussion
+about extending the kernel quirk list for this vs switching to hwdb
+a while a go:
 
--- 
-heikki
+https://lore.kernel.org/linux-usb/b8b21ba3-0a8a-ff54-5e12-cf8960651086@redhat.com/
+
+The conclusion back then was to switch to hwdb, but I never got around to this.
+
+> Typically we haven't done that for PCH side xHCI controllers though, but
+> I don't see why not if it works that is. Adding Mathias to comment more
+> on that since he is the xHCI maintainer.
+
+If we are also going to enable this for the non TCSS Intel XHCI controllers,
+maybe just uncondtionally enable it for all Intel XHCI controllers, or
+if necessary do a deny-list for some older models and enable it for anything
+not on the deny-list (so all newer models). That should avoid the game of
+whack-a-mole which we will have with this otherwise.
+
+Note the deny-list + enable anything not on it approach could be done
+either in the kernel or in a udev-rule + hwdb combo.
+
+Regards,
+
+Hans
+
