@@ -2,84 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4B12AF1C6
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 14:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA24E2AF29D
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 14:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726692AbgKKNNC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Nov 2020 08:13:02 -0500
-Received: from pbmsgap02.intersil.com ([192.157.179.202]:39352 "EHLO
-        pbmsgap02.intersil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726039AbgKKNNB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 08:13:01 -0500
-Received: from pps.filterd (pbmsgap02.intersil.com [127.0.0.1])
-        by pbmsgap02.intersil.com (8.16.0.42/8.16.0.42) with SMTP id 0ABDCs5q026026;
-        Wed, 11 Nov 2020 08:12:54 -0500
-Received: from pbmxdp01.intersil.corp (pbmxdp01.pb.intersil.com [132.158.200.222])
-        by pbmsgap02.intersil.com with ESMTP id 34npmk9w5p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 11 Nov 2020 08:12:54 -0500
-Received: from pbmxdp02.intersil.corp (132.158.200.223) by
- pbmxdp01.intersil.corp (132.158.200.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.1979.3; Wed, 11 Nov 2020 08:12:52 -0500
-Received: from localhost.localdomain (132.158.202.109) by
- pbmxdp02.intersil.corp (132.158.200.223) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Wed, 11 Nov 2020 08:12:52 -0500
-From:   Chris Brandt <chris.brandt@renesas.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        "Jesse Pfeister" <jpfeister@fender.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH] usb: cdc-acm: Add DISABLE_ECHO for Renesas USB Download mode
-Date:   Wed, 11 Nov 2020 08:12:09 -0500
-Message-ID: <20201111131209.3977903-1-chris.brandt@renesas.com>
-X-Mailer: git-send-email 2.28.0
+        id S1727216AbgKKNzc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Nov 2020 08:55:32 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:38725 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727196AbgKKNz3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 08:55:29 -0500
+Received: by mail-il1-f197.google.com with SMTP id p17so1382017ilb.5
+        for <linux-usb@vger.kernel.org>; Wed, 11 Nov 2020 05:55:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=eBJECi1MCWmcND7XU6JD96ghwkq64uxBYy2L3wSV0kY=;
+        b=MLAyVgUy9V1bvuD4EYo6PkVCwR98SQVaruNMrnvsa6je10U9ovybR6SBfsY8YjAVM5
+         E4J4tMOtYPuZxBaljs9RdLjFkQfrhrzfmrvnlVYwRaE9s9gHSL+zSBm0RldTdS3ZPzMt
+         6K5xGO5DeqtWbYgdaQH5fz2Ya1ab/HBYviCBOOGAQzHDNdmpIZ5qoMYPs8mN/cnpGtVd
+         qNqZir4grXaI+Vc9QVWOPQsBwBRRvQ6tzGclhoHSy13lCCzy9acQemv5/ceZZzZj2lEP
+         thFIgvnswk4cHebYM2KNf9Y5zif5Wfj9BuETyRk433neq2/JIMF0Mwvw4bJwYb3rs5xQ
+         OGVA==
+X-Gm-Message-State: AOAM530Xvti5b/FpBiyOU+3CG3jg/8SZPQP1rSkrxIKHXP3LdEGElG7Q
+        QNmz7Ygy1MdRY+WmmRSJNFx6UiReO7sa+XUA2RM7LR4cPh9P
+X-Google-Smtp-Source: ABdhPJyqsVD/08P7KbjopKFgcEXU3rJ49JEnT/YpZLyQBbsuoA9cpDRkJxew2c6gp9ZEl+04aZ2IP0wHC6Pa5XJA9g5YPzelGxcR
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-11_06:2020-11-10,2020-11-11 signatures=0
-X-Proofpoint-Spam-Details: rule=junk_notspam policy=junk score=0 spamscore=0 mlxlogscore=983
- malwarescore=0 phishscore=0 adultscore=0 suspectscore=2 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011110075
-X-Proofpoint-Spam-Reason: mlx
+X-Received: by 2002:a92:4442:: with SMTP id a2mr18160839ilm.220.1605102926926;
+ Wed, 11 Nov 2020 05:55:26 -0800 (PST)
+Date:   Wed, 11 Nov 2020 05:55:26 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c99ca505b3d525fb@google.com>
+Subject: memory leak in __usbhid_submit_report
+From:   syzbot <syzbot+47b26cd837ececfc666d@syzkaller.appspotmail.com>
+To:     benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Renesas R-Car and RZ/G SoCs have a firmware download mode over USB.
-However, on reset a banner string is transmitted out which is not expected
-to be echoed back and will corrupt the protocol.
+Hello,
 
-Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
-Cc: stable <stable@vger.kernel.org>
+syzbot found the following issue on:
+
+HEAD commit:    f8394f23 Linux 5.10-rc3
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12ebbdc6500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f13716fa0212fd
+dashboard link: https://syzkaller.appspot.com/bug?extid=47b26cd837ececfc666d
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14497b82500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1586ff14500000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+47b26cd837ececfc666d@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff8881097e5ec0 (size 32):
+  comm "kworker/0:1", pid 7, jiffies 4294949214 (age 33.520s)
+  hex dump (first 32 bytes):
+    04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000008296eaa1>] __usbhid_submit_report+0x116/0x490 drivers/hid/usbhid/hid-core.c:588
+    [<00000000fe39f007>] usbhid_submit_report drivers/hid/usbhid/hid-core.c:638 [inline]
+    [<00000000fe39f007>] usbhid_request+0x59/0xa0 drivers/hid/usbhid/hid-core.c:1272
+    [<00000000428a854b>] hidinput_led_worker+0x59/0x160 drivers/hid/hid-input.c:1507
+    [<000000001bb8d86d>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<000000005d9a2f9c>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<00000000dc999b29>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<0000000099d5a9ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+BUG: memory leak
+unreferenced object 0xffff8881120200c0 (size 32):
+  comm "kworker/0:1", pid 7, jiffies 4294949214 (age 33.520s)
+  hex dump (first 32 bytes):
+    04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000008296eaa1>] __usbhid_submit_report+0x116/0x490 drivers/hid/usbhid/hid-core.c:588
+    [<00000000fe39f007>] usbhid_submit_report drivers/hid/usbhid/hid-core.c:638 [inline]
+    [<00000000fe39f007>] usbhid_request+0x59/0xa0 drivers/hid/usbhid/hid-core.c:1272
+    [<00000000428a854b>] hidinput_led_worker+0x59/0x160 drivers/hid/hid-input.c:1507
+    [<000000001bb8d86d>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<000000005d9a2f9c>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<00000000dc999b29>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<0000000099d5a9ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+BUG: memory leak
+unreferenced object 0xffff888107fa9420 (size 32):
+  comm "kworker/0:1", pid 7, jiffies 4294949214 (age 33.520s)
+  hex dump (first 32 bytes):
+    04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000008296eaa1>] __usbhid_submit_report+0x116/0x490 drivers/hid/usbhid/hid-core.c:588
+    [<00000000fe39f007>] usbhid_submit_report drivers/hid/usbhid/hid-core.c:638 [inline]
+    [<00000000fe39f007>] usbhid_request+0x59/0xa0 drivers/hid/usbhid/hid-core.c:1272
+    [<00000000428a854b>] hidinput_led_worker+0x59/0x160 drivers/hid/hid-input.c:1507
+    [<000000001bb8d86d>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<000000005d9a2f9c>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<00000000dc999b29>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<0000000099d5a9ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+BUG: memory leak
+unreferenced object 0xffff888112020b60 (size 32):
+  comm "kworker/1:4", pid 8569, jiffies 4294949237 (age 33.290s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000008296eaa1>] __usbhid_submit_report+0x116/0x490 drivers/hid/usbhid/hid-core.c:588
+    [<00000000fe39f007>] usbhid_submit_report drivers/hid/usbhid/hid-core.c:638 [inline]
+    [<00000000fe39f007>] usbhid_request+0x59/0xa0 drivers/hid/usbhid/hid-core.c:1272
+    [<00000000428a854b>] hidinput_led_worker+0x59/0x160 drivers/hid/hid-input.c:1507
+    [<000000001bb8d86d>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<000000005d9a2f9c>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<00000000dc999b29>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<0000000099d5a9ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+BUG: memory leak
+unreferenced object 0xffff888107fa9a20 (size 32):
+  comm "kworker/1:3", pid 8559, jiffies 4294949241 (age 33.250s)
+  hex dump (first 32 bytes):
+    04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000008296eaa1>] __usbhid_submit_report+0x116/0x490 drivers/hid/usbhid/hid-core.c:588
+    [<00000000fe39f007>] usbhid_submit_report drivers/hid/usbhid/hid-core.c:638 [inline]
+    [<00000000fe39f007>] usbhid_request+0x59/0xa0 drivers/hid/usbhid/hid-core.c:1272
+    [<00000000428a854b>] hidinput_led_worker+0x59/0x160 drivers/hid/hid-input.c:1507
+    [<000000001bb8d86d>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<000000005d9a2f9c>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<00000000dc999b29>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<0000000099d5a9ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+BUG: memory leak
+unreferenced object 0xffff888112020940 (size 32):
+  comm "kworker/1:3", pid 8559, jiffies 4294949241 (age 33.250s)
+  hex dump (first 32 bytes):
+    04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000008296eaa1>] __usbhid_submit_report+0x116/0x490 drivers/hid/usbhid/hid-core.c:588
+    [<00000000fe39f007>] usbhid_submit_report drivers/hid/usbhid/hid-core.c:638 [inline]
+    [<00000000fe39f007>] usbhid_request+0x59/0xa0 drivers/hid/usbhid/hid-core.c:1272
+    [<00000000428a854b>] hidinput_led_worker+0x59/0x160 drivers/hid/hid-input.c:1507
+    [<000000001bb8d86d>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+    [<000000005d9a2f9c>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+    [<00000000dc999b29>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<0000000099d5a9ee>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+executing program
+executing program
+executing program
+executing program
+executing program
+executing program
+executing program
+
+
 ---
- drivers/usb/class/cdc-acm.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 1e7568867910..f52f1bc0559f 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1693,6 +1693,15 @@ static const struct usb_device_id acm_ids[] = {
- 	{ USB_DEVICE(0x0870, 0x0001), /* Metricom GS Modem */
- 	.driver_info = NO_UNION_NORMAL, /* has no union descriptor */
- 	},
-+	{ USB_DEVICE(0x045b, 0x023c),	/* Renesas USB Download mode */
-+	.driver_info = DISABLE_ECHO,	/* Don't echo banner */
-+	},
-+	{ USB_DEVICE(0x045b, 0x0248),	/* Renesas USB Download mode */
-+	.driver_info = DISABLE_ECHO,	/* Don't echo banner */
-+	},
-+	{ USB_DEVICE(0x045b, 0x024D),	/* Renesas USB Download mode */
-+	.driver_info = DISABLE_ECHO,	/* Don't echo banner */
-+	},
- 	{ USB_DEVICE(0x0e8d, 0x0003), /* FIREFLY, MediaTek Inc; andrey.arapov@gmail.com */
- 	.driver_info = NO_UNION_NORMAL, /* has no union descriptor */
- 	},
--- 
-2.28.0
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
