@@ -2,97 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C732AF15C
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 13:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4B12AF1C6
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 14:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725979AbgKKM7b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Nov 2020 07:59:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725933AbgKKM7a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 07:59:30 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB8AC0613D1;
-        Wed, 11 Nov 2020 04:59:30 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id b9so2172076edu.10;
-        Wed, 11 Nov 2020 04:59:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=naiXUCmSl6hLpXohb70ro0STbH/AhhPgkWlcemJAgl0=;
-        b=FUUrPeEy5bYDcr8CDP/fPnFMQq2vMEsrT7Tc71Y9DHf06H3lEB8lMmCWqa97EBcq2Z
-         AFIMOQR0QuxcL6ng0nyNrP+bvcWB0JqKXqyRkS+Zqc3POZY/U39mFwZStz6MSdcOn5DB
-         RPTwNu8kRaCjS/Eh88jAHdYdn4OdN/XkUjgOC4D7vtkjdHLvUQD2iHVvzvqOvOFsefaz
-         maSEmb5soISdd3Rp7y1ZI6XLcIdIDa4glQcMPBZjJN2I4s+SyQ9kyHXLqgovJO1QmjXa
-         fuwinjJiGhTSQAq+9mUWfLzNMgXYKRoOH/v/8ufjKcFee+i5hK1FGGHU3a79mHmfAV9V
-         lHlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=naiXUCmSl6hLpXohb70ro0STbH/AhhPgkWlcemJAgl0=;
-        b=I2kBfY9MRPcFVIjqr8AplAIDI5o1edv0u6LmY2XdxcHb6Y8z6b7k8/Rkjap0jotY/p
-         uPIQWgU877I8hib/+vFljpHsBBC3tVHL0QN+SJkiCG49cqNhurdaMVu9U1XI5A1s0NRz
-         +1pIP7ZyHaUb48Y5efewVVcpctZ1nimclT+f1vO1Qwe7PktNUXSps8nEiQXgPJvWvK7j
-         V8pqplu+usG69MuEji84PCz7wFURcopLl4dX0KBHjdSNlNZMkLumCAKlEpIhMd0z2qSB
-         TdK7/wthRP7wphLBaGfhvzfV1hy8eTk85M2+fXDB64afU0rMvig/cOIbJwoz6uEIJ99M
-         /oQQ==
-X-Gm-Message-State: AOAM5338MF9yYu7hDoreW+TOv4z+3CrfINQcbV/z5ONPHeOZAuGR0iGm
-        B+EcbkpCXdAfKLsNu4UUF8gllzx2DqLIFbe6cro=
-X-Google-Smtp-Source: ABdhPJy5ik3AI9eZMElnUe65jPrr5qriWyQJfoRxHx62qn0ZVQUCNLn1w3vL0RmB/q7qGPyvfTU+rQmbZTVIjJqGR/U=
-X-Received: by 2002:a50:ab5e:: with SMTP id t30mr26750399edc.314.1605099569249;
- Wed, 11 Nov 2020 04:59:29 -0800 (PST)
+        id S1726692AbgKKNNC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Nov 2020 08:13:02 -0500
+Received: from pbmsgap02.intersil.com ([192.157.179.202]:39352 "EHLO
+        pbmsgap02.intersil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726039AbgKKNNB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 08:13:01 -0500
+Received: from pps.filterd (pbmsgap02.intersil.com [127.0.0.1])
+        by pbmsgap02.intersil.com (8.16.0.42/8.16.0.42) with SMTP id 0ABDCs5q026026;
+        Wed, 11 Nov 2020 08:12:54 -0500
+Received: from pbmxdp01.intersil.corp (pbmxdp01.pb.intersil.com [132.158.200.222])
+        by pbmsgap02.intersil.com with ESMTP id 34npmk9w5p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 11 Nov 2020 08:12:54 -0500
+Received: from pbmxdp02.intersil.corp (132.158.200.223) by
+ pbmxdp01.intersil.corp (132.158.200.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.1979.3; Wed, 11 Nov 2020 08:12:52 -0500
+Received: from localhost.localdomain (132.158.202.109) by
+ pbmxdp02.intersil.corp (132.158.200.223) with Microsoft SMTP Server id
+ 15.1.1979.3 via Frontend Transport; Wed, 11 Nov 2020 08:12:52 -0500
+From:   Chris Brandt <chris.brandt@renesas.com>
+To:     Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        "Jesse Pfeister" <jpfeister@fender.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH] usb: cdc-acm: Add DISABLE_ECHO for Renesas USB Download mode
+Date:   Wed, 11 Nov 2020 08:12:09 -0500
+Message-ID: <20201111131209.3977903-1-chris.brandt@renesas.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <245047b3fffaf5c0b791ed226d1ea272b2aef031.1605060950.git.andreyknvl@google.com>
-In-Reply-To: <245047b3fffaf5c0b791ed226d1ea272b2aef031.1605060950.git.andreyknvl@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 11 Nov 2020 13:59:18 +0100
-Message-ID: <CA+fCnZeKepFMskWh3ep841AS47hhy9mXAHZSziT6KqvO75=DWQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: add usb raw gadget entry
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-11_06:2020-11-10,2020-11-11 signatures=0
+X-Proofpoint-Spam-Details: rule=junk_notspam policy=junk score=0 spamscore=0 mlxlogscore=983
+ malwarescore=0 phishscore=0 adultscore=0 suspectscore=2 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011110075
+X-Proofpoint-Spam-Reason: mlx
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 3:18 AM Andrey Konovalov <andreyknvl@google.com> wr=
-ote:
->
-> Add myself (using the personal email address) as a reviewer for the
-> USB Raw Gadget driver.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 94ac10a153c7..f68835aaaddc 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18176,6 +18176,14 @@ L:     linux-usb@vger.kernel.org
->  S:     Supported
->  F:     drivers/usb/class/usblp.c
->
-> +USB RAW GADGET DRIVER
-> +R:     Andrey Konovalov <andreyknvl@gmail.com>
-> +L:     linux-usb@vger.kernel.org
-> +S:     Maintained
-> +F:     Documentation/usb/raw-gadget.rst
-> +F:     drivers/usb/gadget/legacy/raw_gadget.c
-> +F:     include/uapi/linux/usb/raw_gadget.h
-> +
->  USB QMI WWAN NETWORK DRIVER
->  M:     Bj=C3=B8rn Mork <bjorn@mork.no>
->  L:     netdev@vger.kernel.org
-> --
-> 2.29.2.222.g5d2a92d10f8-goog
->
+Renesas R-Car and RZ/G SoCs have a firmware download mode over USB.
+However, on reset a banner string is transmitted out which is not expected
+to be echoed back and will corrupt the protocol.
 
-Acked-by: Andrey Konovalov <andreyknvl@gmail.com>
+Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
+Cc: stable <stable@vger.kernel.org>
+---
+ drivers/usb/class/cdc-acm.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 1e7568867910..f52f1bc0559f 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1693,6 +1693,15 @@ static const struct usb_device_id acm_ids[] = {
+ 	{ USB_DEVICE(0x0870, 0x0001), /* Metricom GS Modem */
+ 	.driver_info = NO_UNION_NORMAL, /* has no union descriptor */
+ 	},
++	{ USB_DEVICE(0x045b, 0x023c),	/* Renesas USB Download mode */
++	.driver_info = DISABLE_ECHO,	/* Don't echo banner */
++	},
++	{ USB_DEVICE(0x045b, 0x0248),	/* Renesas USB Download mode */
++	.driver_info = DISABLE_ECHO,	/* Don't echo banner */
++	},
++	{ USB_DEVICE(0x045b, 0x024D),	/* Renesas USB Download mode */
++	.driver_info = DISABLE_ECHO,	/* Don't echo banner */
++	},
+ 	{ USB_DEVICE(0x0e8d, 0x0003), /* FIREFLY, MediaTek Inc; andrey.arapov@gmail.com */
+ 	.driver_info = NO_UNION_NORMAL, /* has no union descriptor */
+ 	},
+-- 
+2.28.0
+
