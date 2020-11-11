@@ -2,97 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABCE2AF68C
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 17:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B852AF6C1
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 17:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727266AbgKKQbX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Nov 2020 11:31:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53796 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726208AbgKKQbX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Nov 2020 11:31:23 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 06267206B5;
-        Wed, 11 Nov 2020 16:31:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605112282;
-        bh=u1W79eBhFJDijrV1bXsrDHc02dojBuPzlmTjNRwzECM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pTJO7zCDEAIc4ENcSgzN9lsMdGt7wXtmAxlhGhYh9RxxpVjT7DGXoeXUS10GeaFoJ
-         TqdEeulUJiiE6h4kRf+qbVUdou0DBrWTQpZdIfznMNMFg0Uy+wXHd5P9E0SvPkdoXw
-         eDeNfg3jKEyZgGrNPO6pRBc2UXlWpwDPeeHKE9T4=
-Date:   Wed, 11 Nov 2020 17:32:22 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Limonciello, Mario" <Mario.Limonciello@dell.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bastien Nocera <hadess@hadess.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: How to enable auto-suspend by default
-Message-ID: <X6wSFojYLvwGhY/g@kroah.com>
-References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
- <X6p6ubTOoMPUPPXi@kroah.com>
- <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
- <20201110172517.GC2495@lahna.fi.intel.com>
- <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
- <DM6PR19MB26366008D59FC94D384A1E3BFAE80@DM6PR19MB2636.namprd19.prod.outlook.com>
+        id S1727518AbgKKQmT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Nov 2020 11:42:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727132AbgKKQmP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 11:42:15 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91FBC0613D1;
+        Wed, 11 Nov 2020 08:42:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CdmQLCwtYnJ5737miMX6EDzo04FbVACXjJLBV8q9mKA=; b=Km1fuPPHydJXaMwRTIxnTPT7pO
+        pBU+59/VZfX5+xusAShQ4joPY0E+weOOpsFrbpcjoBXqybcfQCo20iR0qOx84e37PHNvivcx13mhg
+        kZLfAEDCCsFHPMVKhaaLWI3JbuPdA79ERGR5z5Y2JKW84K+BdzUVao/f5nFSFvG/8T23p26PAd1+8
+        Sc9oTLXb56vCknvvtNf6xsfcfjwrBZOhFIaVp7SSel7dlQDtw+Cb8e9qg4OKMbVxzPdyfuHM3Ab+B
+        FZSEmkPx0JPBQacjL5Z+Y4ZGf8Wkmwuio1lE5oZpUmXji4lB70vEynRHF5/EMdIwopzpaxPOx93A9
+        r93p8KYg==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kctBx-00026P-W3; Wed, 11 Nov 2020 16:41:54 +0000
+Date:   Wed, 11 Nov 2020 16:41:53 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
+        peterz@infradead.org, rafael@kernel.org, lenb@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
+        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
+        rric@kernel.org, valentina.manea.m@gmail.com, shuah@kernel.org,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 00/13] Introduce seqnum_ops
+Message-ID: <20201111164153.GV17076@casper.infradead.org>
+References: <cover.1605027593.git.skhan@linuxfoundation.org>
+ <20201111043304.GS17076@casper.infradead.org>
+ <e84de5d0-f2b2-5481-eb8e-47370d632c4d@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM6PR19MB26366008D59FC94D384A1E3BFAE80@DM6PR19MB2636.namprd19.prod.outlook.com>
+In-Reply-To: <e84de5d0-f2b2-5481-eb8e-47370d632c4d@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 04:03:30PM +0000, Limonciello, Mario wrote:
-> > >> Given we're effectively ending up with the combination of runtime PM turned
-> > >> on by udev rules, do we need something like this for that ID:
-> > >>
-> > >>
-> > https://github.com/torvalds/linux/commit/6a7c533d4a1854f54901a065d8c672e890400
-> > d8a
-> > >>
-> > >> @Mika Westerberg should 8086:a0ed be quirked like the TCSS xHCI too?
-> > >
-> > > I think this one is the TGL PCH xHCI. The quirk currently for xHCI
-> > > controllers that are part of the TCSS (Type-C SubSystem) where it is
-> > > important to put all devices into low power mode whenever possible,
-> > > otherwise it keeps the whole block on.
+On Wed, Nov 11, 2020 at 09:03:20AM -0700, Shuah Khan wrote:
+> On 11/10/20 9:33 PM, Matthew Wilcox wrote:
+> > On Tue, Nov 10, 2020 at 12:53:26PM -0700, Shuah Khan wrote:
+> > > There are a number of atomic_t usages in the kernel where atomic_t api
+> > > is used strictly for counting sequence numbers and other statistical
+> > > counters and not for managing object lifetime.
 > > 
-> > Note that there are currently some IDs missing from the xHCIs which
-> > are part of the TCSS too. At least the id for the xHCI in the thunderbolt
-> > controller on the Lenovo T14 gen 1 is missing. I started a discussion
-> > about extending the kernel quirk list for this vs switching to hwdb
-> > a while a go:
+> > We already have something in Linux called a sequence counter, and it's
+> > different from this.  ID counter?  instance number?  monotonic_t?  stat_t?
 > > 
-> > https://lore.kernel.org/linux-usb/b8b21ba3-0a8a-ff54-5e12-
-> > cf8960651086@redhat.com/
-> > 
-> > The conclusion back then was to switch to hwdb, but I never got around to
-> > this.
 > 
-> I guess the problem I see with switching to a hwdb for this type of thing is
-> that if there is a "bug" in your kernel driver around autosuspend you will
-> then be potentially causing it to occur more regularly on a kernel that didn't
-> necessarily pick up the fix but does have the newer hwdb.
-> 
-> I don't know how common that will really be though.
-> 
-> Since Mika mentioned the really light userspace scenario, what about shipping
-> the hwdb "with" the kernel in tree?  This could allow evicting all these quirk
-> scenarios from the kernel at the same time as switching to a hwdb and also cover
-> the problem I suggested might happen with a bug in older kernel and newer userspace.
+> No results for monotonic_t or stat_t. Can you give me a pointer to what
+> your referring to.
 
-We took things out of the kernel to put it in hwdb years ago as it was
-easier for people to update a "text file" than it was their kernel
-image.  I don't think you want to go backwards here :)
-
-thanks,
-
-greg k-h
+We have a seqcount_t.  We need to call this something different.
+maybe we should call it stat_t (and for that usage, stat_add() as well
+as stat_inc() is a legitimate API to have).
