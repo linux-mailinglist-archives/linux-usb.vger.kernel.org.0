@@ -2,93 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 267052AE647
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 03:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4D52AE662
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 03:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732248AbgKKCSD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Nov 2020 21:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
+        id S1725882AbgKKC1G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Nov 2020 21:27:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732090AbgKKCSC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 21:18:02 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B964C0613D3
-        for <linux-usb@vger.kernel.org>; Tue, 10 Nov 2020 18:18:01 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id z7so226293wme.8
-        for <linux-usb@vger.kernel.org>; Tue, 10 Nov 2020 18:18:01 -0800 (PST)
+        with ESMTP id S1725844AbgKKC1G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Nov 2020 21:27:06 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F807C0613D1
+        for <linux-usb@vger.kernel.org>; Tue, 10 Nov 2020 18:27:04 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id f11so1097332lfs.3
+        for <linux-usb@vger.kernel.org>; Tue, 10 Nov 2020 18:27:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=ytnceseKstAkbTY6hqRw1K2IUsH5s6eyRpuBlxMNr7E=;
-        b=bIHeqXCjBg9KBCdMR1zWDl6CFWFcA1jwTMpdjeCeLoPP88uZXsSSFPrxQH2gU7/nl6
-         pW5Pef923VxB62smWyXe//me2yzR9bkW8ZVlcVY0OVvm2+itLvtNwi4nAi7T5VT2TSxf
-         KT2ovmvtuWkhXWtgpNr3FizmQXg5H0L6KDvI7pJsJv0Z9JVQKq2NRm6z/cd8dE+1LRqc
-         heS6HxxyVtwVQJxk5xkpOZAoDFg+K0h/JRuXfmy2iI2moLAhDubhCQCgySiJH+37fOZR
-         bvRKIRYJzPWgC3WiCjlIjW5t3fjeEuSMExu8mB14w6Igz3xnJGHcTdK0GbRg7Z9+ykhe
-         UgxA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qmn6G7kQ/KxG60kLYsaMIjbgg5mvOLdx4epTPmjZMjI=;
+        b=l5k9Dx9ofMM+ACVyF/EqSZEzdqM2vWbL5eAAf8ORuOi6JYcI2IHiNklEjwGzdmqKdE
+         yIZhGKKtLj7ZVyEL5yEInfvcI8I46keOZhq8eoh4e4n9liMAgwT3R1T/Q2JaX8qdo7+V
+         jFGGeGK2Zgxoz14SOhddzEFXafxSJ6/NGuxyfZm26AA2W6QQEceUEPYJaV9BoU/9uIqQ
+         FyWPctO213Ng5fx8MzMTopbwHseKaaMKz/YgF0bFXf0isBwj5dSlAxMg5BbGSm1lpcx+
+         bKmnReNUfLa8arMtv2uDH+HwZRiQa3AS+khls6z7eBmDmJT0XZXjweI4ro22eSZMZVkN
+         1ByQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc:content-transfer-encoding;
-        bh=ytnceseKstAkbTY6hqRw1K2IUsH5s6eyRpuBlxMNr7E=;
-        b=k8Yy12Tv5dl2eI2AO+Kzh83P1XMMnAK0fPiCPqZY3EvO+jCcP3ME3U3wFCWFRGBo/h
-         i30PjSALeah2X9jsyklVP9Ufr7JQqD2W3I+z2+WSTtEVHAtjU0Qmx2JlTbasuk8qvZWn
-         wo7al5O8RzIlGQ51eyBw9cm6pVQJe43dmY2DSFtRSthDZMN7sznQZacblJ4gyqJR8Ju+
-         DP0dIWI5MhtrRNX5FIlz020cJ5UERLy53P2/IltWOMuwqqI3lgfzV7osfajFY5gCfZ4Z
-         Bi3/o7jftys2+Ox7Mnmb7yr+216n+n5dHoVzqfqK1mhoL72QQe95qsFQXRCV7e9EzunV
-         ct3Q==
-X-Gm-Message-State: AOAM533EOrxiUNbaedK9DEMp2ZJnT5RD1vWazAczcVkJ/TMtr1dkrsuT
-        KE0ty2X2z7AMsH+ooNv2kOmQkXUErEQoLEi8
-X-Google-Smtp-Source: ABdhPJzuuDXDSY0PgO7PMSKSHaXAnCza28TgavAUOfVt3lTBjteVZ5QDJPOeCX6Ohk6PzjQ0RxW5pzGi92qT8zkQ
-Sender: "andreyknvl via sendgmr" <andreyknvl@andreyknvl3.muc.corp.google.com>
-X-Received: from andreyknvl3.muc.corp.google.com ([2a00:79e0:15:13:7220:84ff:fe09:7e9d])
- (user=andreyknvl job=sendgmr) by 2002:a1c:e4d4:: with SMTP id
- b203mr91996wmh.141.1605061080014; Tue, 10 Nov 2020 18:18:00 -0800 (PST)
-Date:   Wed, 11 Nov 2020 03:17:55 +0100
-Message-Id: <245047b3fffaf5c0b791ed226d1ea272b2aef031.1605060950.git.andreyknvl@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.2.222.g5d2a92d10f8-goog
-Subject: [PATCH] MAINTAINERS: add usb raw gadget entry
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qmn6G7kQ/KxG60kLYsaMIjbgg5mvOLdx4epTPmjZMjI=;
+        b=H1sPdfbJUfEHN18HlBqN1K1ZdhQZXopsc49Kzy/epupjwsPCz/e1htCKXcjdIy9vWw
+         Dnvfk30FecmAh6gQPg+Hv+b1x9Ef7uWS2jq8R38Gkd10oAX7zmKQptg7lq3UH5PgD+8m
+         2ocNJkV0s0nH2tFXRTcFFdJkROpBqPGx853GXmu+xnwyjVD6eftpWFEhRCRtfnPxCbcH
+         OQT+mSUURFziUesD+e+KoMZMFZ4f2lX6e1kSysZ9vJj6uUucKp1o9UgkAgT6BG3zVPbm
+         uGRmE+v63tDfw5pWgoSxeyzz5A4qsgTdONYNGIggts6JJVJdhgna7QSucPLWp2JZkmGJ
+         3H8Q==
+X-Gm-Message-State: AOAM5324c7g2T8Aqr0g2xLM2lw3dh/dwaAEHoKMLSJ9hcIisNHuAV0d3
+        R0PzmXub1+CI+5gsKl6temDfwQxp4U2w/C62VKA=
+X-Google-Smtp-Source: ABdhPJy2XBLvFsJmmfsT9G6m6jCJKEPO5Ud5/gRJHOh0uQonZ+zjQ/ZDXVaLBcTARcGC+kEFCBW+4rHAQiC5ZLR2xY4=
+X-Received: by 2002:a05:6512:1109:: with SMTP id l9mr9321744lfg.251.1605061620152;
+ Tue, 10 Nov 2020 18:27:00 -0800 (PST)
+MIME-Version: 1.0
+References: <CAOMZO5AMuRv5AZ2HOEgqzaPcbLeNXWajpTB40Dejs7gcsL=BhQ@mail.gmail.com>
+ <20201111013711.GA14896@b29397-desktop>
+In-Reply-To: <20201111013711.GA14896@b29397-desktop>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 10 Nov 2020 23:26:48 -0300
+Message-ID: <CAOMZO5Aik9vSdQCMea5B7CAOs0UBzUgdDBiW9S9-o+_-isWKJQ@mail.gmail.com>
+Subject: Re: chip idea: Crash on i.MX27
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>, Jun Li <jun.li@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add myself (using the personal email address) as a reviewer for the
-USB Raw Gadget driver.
+Hi Peter,
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On Tue, Nov 10, 2020 at 10:37 PM Peter Chen <peter.chen@nxp.com> wrote:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 94ac10a153c7..f68835aaaddc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18176,6 +18176,14 @@ L:	linux-usb@vger.kernel.org
- S:	Supported
- F:	drivers/usb/class/usblp.c
-=20
-+USB RAW GADGET DRIVER
-+R:	Andrey Konovalov <andreyknvl@gmail.com>
-+L:	linux-usb@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/usb/raw-gadget.rst
-+F:	drivers/usb/gadget/legacy/raw_gadget.c
-+F:	include/uapi/linux/usb/raw_gadget.h
-+
- USB QMI WWAN NETWORK DRIVER
- M:	Bj=C3=B8rn Mork <bjorn@mork.no>
- L:	netdev@vger.kernel.org
---=20
-2.29.2.222.g5d2a92d10f8-goog
+> 0xf4424184 should be the virtual address for the register PORTSC. There are
+> two possible reasons for this issue:
+> - The PHY is not initialized correctly
+> - The related clock has not opened correctly.
 
+If you have a suggestion for a debug patch, I can give it a try.
+
+Thanks
