@@ -2,131 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBFA2AF592
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 16:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2EE2AF5B0
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 17:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727494AbgKKP5U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Nov 2020 10:57:20 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:59993 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727497AbgKKP5S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 10:57:18 -0500
-Received: (qmail 238536 invoked by uid 1000); 11 Nov 2020 10:57:17 -0500
-Date:   Wed, 11 Nov 2020 10:57:17 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Kyungtae Kim <kt0755@gmail.com>, Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>
-Subject: Re: WARNING in usb_composite_setup_continue
-Message-ID: <20201111155717.GC237113@rowland.harvard.edu>
-References: <CAEAjamsxe9OuMVpHfox3w57HtGsE3mPXOty9bdXW-iPdx=TXMA@mail.gmail.com>
- <CAEAjamsjFXWGSwUcCuUOeJ8s9EWGQP-Jvt40bG0Otav=xFb+5A@mail.gmail.com>
- <20201110155650.GC190146@rowland.harvard.edu>
- <20201111075905.GF14896@b29397-desktop>
+        id S1727279AbgKKQDc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Nov 2020 11:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727132AbgKKQDb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 11:03:31 -0500
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BCBC061A48
+        for <linux-usb@vger.kernel.org>; Wed, 11 Nov 2020 08:03:24 -0800 (PST)
+Received: by mail-il1-x144.google.com with SMTP id g15so2415513ilc.9
+        for <linux-usb@vger.kernel.org>; Wed, 11 Nov 2020 08:03:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=t1jRZwSuuEQg/bscnGGcsBqPGqmw90tTjNeAiADGZWQ=;
+        b=J0hJSJOtZ8cKp8g+AeRYn4zxI0z474RogLJ5yTPblSThyhiNsosQswbzULN0LbKveR
+         X0HAP1BB/hEjAalzEOtQYXHKBPj76Ny52sSHtoN3iZ+Hs8inttTe9EdPQNaO01FSCro6
+         PYFW08h9SJjByeNV57EQfbTW7Znk7xIl6IRI0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=t1jRZwSuuEQg/bscnGGcsBqPGqmw90tTjNeAiADGZWQ=;
+        b=fINtT8653KXZ8squtCuEjXeBkTKIc6FvvsFAP8c2PWOOHJQPw5HZT4q9axomTEsJ2d
+         mZqeK0hwr5SkyTqLzWGKs6UbrUF9wvZPGorUTrpXW/BCUJBwZep+JT8EbEkDrvaDljSy
+         w1hcrvLP9rx+XQYHkAqkEgYr8Kd3s8TaxUDTfFZdQ5sBpqymN4c+W4bV2u5EubSvxc20
+         6tFebITIH4LzjRVk8RkeEGyj55tW5QZeXWfSuqWyv7aR+4pdWAYWSWyyBhpiFCB3pftP
+         bFfzykjAGeG+ceq51+OkJfRz2gnV8eEdIeCUBgXcmb6Y/cHXz6R4GqTxtB0pmvDOsWGw
+         OxIA==
+X-Gm-Message-State: AOAM530njxL0uLubJrM+ecba+NcHgBWvQ+ItthbR7TfdsAv+01KdRvYd
+        FYKDgJ5BVQzNHGKCfKg3CMODeg==
+X-Google-Smtp-Source: ABdhPJzfuPKbLPy0S959f+cmN74uBmhaZrB/aTXCrRPM53UdGcZ4oGHwyut2AWmWt1ZgJZjUJccyXg==
+X-Received: by 2002:a92:6c11:: with SMTP id h17mr12292757ilc.270.1605110603170;
+        Wed, 11 Nov 2020 08:03:23 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id x14sm1533054ior.7.2020.11.11.08.03.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2020 08:03:22 -0800 (PST)
+Subject: Re: [PATCH 00/13] Introduce seqnum_ops
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
+        peterz@infradead.org, rafael@kernel.org, lenb@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
+        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
+        rric@kernel.org, valentina.manea.m@gmail.com, shuah@kernel.org,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, skhan@linuxfoundation.org
+References: <cover.1605027593.git.skhan@linuxfoundation.org>
+ <20201111043304.GS17076@casper.infradead.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e84de5d0-f2b2-5481-eb8e-47370d632c4d@linuxfoundation.org>
+Date:   Wed, 11 Nov 2020 09:03:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201111075905.GF14896@b29397-desktop>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201111043304.GS17076@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 07:59:34AM +0000, Peter Chen wrote:
-> On 20-11-10 10:56:50, Alan Stern wrote:
-> > Felipe:
-> > 
-> > On Mon, Nov 09, 2020 at 02:29:42PM -0500, Kyungtae Kim wrote:
-> > > We report a bug (in linux-5.8.13) found by FuzzUSB (a modified version
-> > > of syzkaller).
-> > > 
-> > > (corrected analysis)
-> > > This bug happens while continuing a delayed setup message in mass
-> > > storage gadget.
-> > > To be specific, composite_setup() sets FSG_STATE_CONFIG_CHANGE via
-> > > fsg_set_alt() (line 1793),
-> > > and followed by cdev->delayed_status++ (line 1798).
-> > > Meanwile, the mass gadget tries  check cdev->delayed_status == 0
-> > > through handle_exception() (line 2428),
-> > > which occurs in between the two operations above.
-> > > Such a race causes invalid operations eventually.
-> > 
-> > Do you know who maintains composite.c (or the composite framework) these 
-> > days?  This is a real race, and it needs to be fixed.
-> > 
-> > Part of the problem seems to be that cdev->delayed_status is sometimes 
-> > accessed without the protection of cdev->lock.  But I don't know when it 
-> > is safe to take that lock, so I can't tell what changes to make.
-> > 
-> > Another part of the problem is that cdev->delayed_status doesn't count 
-> > things properly.  That is, its value is incremented each time a function 
-> > driver asks for a delayed status and decremented each time a function 
-> > driver calls usb_composite_setup_continue(), and the delayed status 
-> > response is sent when the value reaches 0.  But there's nothing to stop 
-> > this from happening (imagine a gadget with two functions A and B):
-> > 
-> > 	Function driver A asks for delayed status;
-> > 	Function driver A calls setup_continue(): Now the value
-> > 		of the counter is 0 so a status message is queued
-> > 		too early;
-> > 	Function driver B asks for delayed status;
-> > 	Function driver B calls setup_continue(): Now a second
-> > 		status message is queued.
-> > 
-> > I'm willing to help fix these issues, but I need assistance from someone 
-> > who fully understands the composite framework.
-> > 
+On 11/10/20 9:33 PM, Matthew Wilcox wrote:
+> On Tue, Nov 10, 2020 at 12:53:26PM -0700, Shuah Khan wrote:
+>> There are a number of atomic_t usages in the kernel where atomic_t api
+>> is used strictly for counting sequence numbers and other statistical
+>> counters and not for managing object lifetime.
 > 
-> Hi Alan & Kyungtae,
+> We already have something in Linux called a sequence counter, and it's
+> different from this.  ID counter?  instance number?  monotonic_t?  stat_t?
 > 
-> I quite not understand why this occurs, since cdev->delayed_status's
-> increment and decrement are both protected by cdev->lock.
-> 
-> cdev->delayed_status's increment:
-> 
-> Place 1:
-> case USB_REQ_GET_CONFIGURATION:
-> spin_lock(&cdev->lock);
-> set_config(cdev, ctrl, w_value);
-> 	f->set_alt;
-> 	cdev->delayed_status++;
-> 
-> spin_unlock(&cdev->lock);
-> 
-> Place 2:
-> case USB_REQ_SET_INTERFACE:
-> spin_lock(&cdev->lock);
-> value = f->set_alt(f, w_index, w_value);
-> if (value == USB_GADGET_DELAYED_STATUS) {
-> 	DBG(cdev,
-> 	 "%s: interface %d (%s) requested delayed status\n",
-> 			__func__, intf, f->name);
-> 	cdev->delayed_status++;
-> 	DBG(cdev, "delayed_status count %d\n",
-> 			cdev->delayed_status);
-> }
-> spin_unlock(&cdev->lock);
-> 
-> cdev->delayed_status's decrement:
-> function: usb_composite_setup_continue which called by fsg_main_thread
-> due to FSG_STATE_CONFIG_CHANGE.
-> 
-> spin_lock_irqsave(&cdev->lock, flags);
-> 
-> 	if (cdev->delayed_status == 0) {
-> 		WARN(cdev, "%s: Unexpected call\n", __func__);
-> 
-> 	} else if (--cdev->delayed_status == 0) {
-> 		...
-> 
-> spin_unlock_irqrestore(&cdev->lock, flags);
 
-You are right.  I didn't follow the call changes enough to see that 
-set_config and reset_config are always called with cdev->lock held.
+No results for monotonic_t or stat_t. Can you give me a pointer to what
+your referring to.
 
-However, the other problem outlined in my earlier email still remains.  
-But now I understand what's happening well enough to write a patch.
-
-Alan Stern
+thanks,
+-- Shuah
