@@ -2,150 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4CA2B0D93
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 20:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBAD2B0DA2
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 20:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgKLTNH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 14:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S1726727AbgKLTQT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 14:16:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726295AbgKLTNG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 14:13:06 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B431DC0613D1;
-        Thu, 12 Nov 2020 11:13:06 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id h62so6467294wme.3;
-        Thu, 12 Nov 2020 11:13:06 -0800 (PST)
+        with ESMTP id S1726295AbgKLTQS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 14:16:18 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AE6C0613D1;
+        Thu, 12 Nov 2020 11:16:18 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id p12so7512741ljc.9;
+        Thu, 12 Nov 2020 11:16:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=pdSRw9mlDHitGPfQBRUv6P8lG2F84sSOXhcflYqXKJo=;
-        b=jVBu+ceL7qUj6u8/X7xubAJKNSY5DbZ2HfkQRBgCL4jTPNrpsiFEiEAvT0tRY7qeK6
-         mf6yNfh9nlT1CFl//UHXh1KCkjpuZfzIyaglUJ9+4xO22Wkk/myB5Fta9JH6OzvGHbOU
-         eWWQ25wqiwH/kYN8X1sbRbZsGS5qAfha++XnYzyED9rqyYe0pTS55PPnZEgUTR05kmXz
-         L2hCpOfrBaMw6Rg/zwikeUz1DrrAWGy7SHVFxf2V2SraMjdWu1C+Cmm/+MzzgvD7tQqP
-         k9OtkUTWl+VM+G0bsyKUvh4KiqY14AuDPrQm3HtYkYBPTd7uFj8RXe++f7/H70PArCCv
-         tCgw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jhfgYY14US6m4wxn2OreBeb6CQeVO8DRDGhHQIgAX+o=;
+        b=JFNyFw3LyyoB90fZPGzibsAizgKSOjs+HqVe40YhbRGey2zTAPm90qOBN8X1CJVzoO
+         M3SYYsbwVohly2d/++o0SchoujkkkZR3dQt9ALW0Nr5as8bdsOwP9tSGe6IWLUkjDbLQ
+         195IBsC4Go1c1FjWE4ifCXQMePRx9EASGLxk3zkSi25VwJ40hSyML0Ad1Owq7P06AL8m
+         dFmcJl1TYbfZeVB79l6ZTjRGThpjEH8gcPMSD2d7MgbQCdIrxVuQr31nNcK/3J9UPz8n
+         C+0AtkGaTIthUSxYky3m4HNI/HHnDyM1MWHC5gE8hZrjpfxfX3nJfxmyVs2Ix2MChWKO
+         Ve6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=pdSRw9mlDHitGPfQBRUv6P8lG2F84sSOXhcflYqXKJo=;
-        b=HzpGRz4o0tDcnzlSeifbF3c83TBZB711Y3QdAfclzKJ51NolozCkV/KmHbLlesTNlQ
-         UX7Y3jDOCp6N8VdLPuGC05FBVpFHMJFT4Ylk68gvbRh81dQWttxt5xMgfna2kX1/j8ld
-         0rWagv8kyiEXgceuu8xaYvGCvNtMcoolotduPpD6zkg1loLXNjrdWXzTo0tXQWk5SCQ3
-         XHsIamzf1dNVhWMl/fTChlhv3jVCAL1SCLm0Vhf4qKtOohxNf1DDeuvUS49Ikt6EaQZm
-         yCfPePt92aS52zedNjFUNcqb8uoI1tD8MVgZ5gH77i16b+RRjVFyvgYtYo2MIC74x6DW
-         vG3w==
-X-Gm-Message-State: AOAM532PESp6ueFohq/MfuWO8b2J01IqbwRkmVvsGy4MjkPnWsMgf7Pf
-        V7bMiwLDwjUADVI+5ljuD+o=
-X-Google-Smtp-Source: ABdhPJzUNjkj5hW3jOV8Ulc6jJZ63ghMB8cNmQwlAyaNV3fB041ODIEjkkL9OKhKE9y1nzvTWuwP2g==
-X-Received: by 2002:a1c:b0c4:: with SMTP id z187mr1066051wme.113.1605208385297;
-        Thu, 12 Nov 2020 11:13:05 -0800 (PST)
-Received: from felia.fritz.box ([2001:16b8:2d19:d300:649c:b988:4446:6d44])
-        by smtp.gmail.com with ESMTPSA id 30sm427118wrd.88.2020.11.12.11.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 11:13:04 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jhfgYY14US6m4wxn2OreBeb6CQeVO8DRDGhHQIgAX+o=;
+        b=Che0jVDu7B8pE34x8sdEtldRwr4yRFc9htl3oWuEdv5HFYW07SyEBbaUappE26lyq1
+         +KKTYbSqQT5UWBEyYgw+xV3etiqb8a9RTqbgNHnngJZz7wLvg+UXu4iRgP8Vv71EuYeP
+         DeKQk2cwl2TGcYpdtA5zzwIgYq6hhWk77uWf5lO54sJ5OB1PZhPoj0IohATBBJId8t0J
+         tYHKyB6OofjpvmopZE6RyLVL2YtxCIIQLyCwxRxxCwK67AEd/Lq15OWtt4vy2VV/eKMl
+         vzCMYfU0bAqAxu7m3qO7fxlqxkr8+IDNJQ4uH/v1tzUkGG+HQdT99NJxHx7yUgba4pEZ
+         pHHg==
+X-Gm-Message-State: AOAM532IXPzQwSn9E/XMsdGNfvsio7CJk8PepONetZi+QtmbgLx/uvx5
+        DbVq2lY3ms0UnvEvcxYM9U9c9RipKLk=
+X-Google-Smtp-Source: ABdhPJzE5qPV9KbGM96b/lBJNsGC5IOm8d97RUP9808EMVCjf5Dc6sywu66SXsgtyXC8GPiqUvektg==
+X-Received: by 2002:a05:651c:95:: with SMTP id 21mr428933ljq.307.1605208576330;
+        Thu, 12 Nov 2020 11:16:16 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id z19sm721401lfd.128.2020.11.12.11.16.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Nov 2020 11:16:15 -0800 (PST)
+Subject: Re: [PATCH v1 11/30] drm/tegra: dc: Support OPP and SoC core voltage
+ scaling
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Cc:     Tom Rix <trix@redhat.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-janitors@vger.kernel.org, linux-safety@lists.elisa.tech,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] USB: storage: avoid use of uninitialized values in error path
-Date:   Thu, 12 Nov 2020 20:12:55 +0100
-Message-Id: <20201112191255.13372-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-usb@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <20201104234427.26477-12-digetx@gmail.com> <20201110202945.GF2375022@ulmo>
+ <20201110203257.GC5957@sirena.org.uk>
+ <72ae6462-13df-9fcb-510e-8e57eee0f035@gmail.com>
+ <20201111115534.GA4847@sirena.org.uk>
+ <dd26eb18-8ac4-22a6-29b0-dbbe5fa6075b@gmail.com>
+ <20201112171600.GD4742@sirena.org.uk>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <b4b06c1d-c9d4-43b2-c6eb-93f8cb6c677d@gmail.com>
+Date:   Thu, 12 Nov 2020 22:16:14 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
+MIME-Version: 1.0
+In-Reply-To: <20201112171600.GD4742@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When usb_stor_bulk_transfer_sglist() returns with USB_STOR_XFER_ERROR, it
-returns without writing to its parameter *act_len.
+12.11.2020 20:16, Mark Brown пишет:
+> On Thu, Nov 12, 2020 at 07:59:36PM +0300, Dmitry Osipenko wrote:
+>> 11.11.2020 14:55, Mark Brown пишет:
+>>> On Wed, Nov 11, 2020 at 12:23:41AM +0300, Dmitry Osipenko wrote:
+> 
+>>>> I already changed that code to use regulator_get_optional() for v2.
+> 
+>>> That doesn't look entirely appropriate given that the core does most
+>>> likely require some kind of power to operate.
+> 
+>> We will need to do this because older DTBs won't have that regulator and
+>> we want to keep them working.
+> 
+>> Also, some device-trees won't have that regulator anyways because board
+>> schematics isn't available, and thus, we can't fix them.
+> 
+> This is what dummy supplies are for?
 
-Further, the two callers of usb_stor_bulk_transfer_sglist():
+But it's not allowed to change voltage of a dummy regulator, is it
+intentional?
 
-    usb_stor_bulk_srb() and
-    usb_stor_bulk_transfer_sg(),
+>>>> Regarding the enumerating supported voltage.. I think this should be
+>>>> done by the OPP core, but regulator core doesn't work well if
+>>>> regulator_get() is invoked more than one time for the same device, at
+>>>> least there is a loud debugfs warning about an already existing
+> 
+>>> I don't understand why this would be an issue - if nothing else the core
+>>> could just offer an interface to trigger the check.
+> 
+>> It's not an issue, I just described what happens when device driver
+>> tries to get a regulator twice.
+> 
+>> There was an issue once that check is added to the regulator core code.
+>> But perhaps not worth to discuss it for now because I don't remember
+>> details.
+> 
+> So there's no known obstacle to putting enumeration of supported
+> voltages into the OPP core then?  I'm a bit confused here.
 
-use the passed variable partial without checking the return value. Hence,
-the uninitialized value of partial is then used in the further execution
-of those two functions.
+It's an obstacle if both OPP and device driver need to get the same
+regulator. Like in the case of this DRM driver, which need to control
+the voltage instead of allowing OPP core to do it.
 
-Clang-analyzer detects this potential control and data flow and warns:
+Please notice that devm_tegra_dc_opp_table_init() of this patch doesn't
+use dev_pm_opp_set_regulators(), which would allow OPP core to filter
+out unsupported OPPs. But then OPP core will need need to get an already
+requested regulator and this doesn't work well.
 
-  drivers/usb/storage/transport.c:469:40:
-    warning: The right operand of '-' is a garbage value
-    [clang-analyzer-core.UndefinedBinaryOperatorResult]
-          scsi_set_resid(srb, scsi_bufflen(srb) - partial);
-                                                ^
+>>>> directory for a regulator. It's easy to check whether the debug
+>>>> directory exists before creating it, like thermal framework does it for
+>>>> example, but then there were some other more difficult issues.. I don't
+>>>> recall what they were right now. Perhaps will be easier to simply get a
+>>>> error from regulator_set_voltage() for now because it shouldn't ever
+>>>> happen in practice, unless device-tree has wrong constraints.
+> 
+>>> The constraints might not be wrong, there might be some board which has
+>>> a constraint somewhere for 
+> 
+>> In this case board's DT shouldn't specify unsupportable OPPs.
+> 
+> Ah, so each board duplicates the OPP tables then, or there's an
+> expectation that if there's some limit then they'll copy and modify the
+> table?  If that's the case then it's a bit redundant to do filtering
+> indeed.
 
-  drivers/usb/storage/transport.c:495:15:
-    warning: Assigned value is garbage or undefined
-    [clang-analyzer-core.uninitialized.Assign]
-                  length_left -= partial;
-                              ^
-
-When a transfer error occurs, the *act_len value is probably ignored by the
-higher layers. But it won't hurt to set it to a valid number, just in case.
-
-For the two early-return paths in usb_stor_bulk_transfer_sglist(), the
-amount of data transferred is 0.  So if act_len is not NULL, set *act_len
-to 0 in those paths. That makes clang-analyzer happy.
-
-Proposal was discussed in this mail thread:
-
-Link: https://lore.kernel.org/linux-usb/alpine.DEB.2.21.2011112146110.13119@felia/
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-applies cleanly on current master and next-20201112
-
-I did some basic compile testing...
-
-Alan, Greg, please pick this minor non-urgent clean-up patch.
-
- drivers/usb/storage/transport.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-index 238a8088e17f..5eb895b19c55 100644
---- a/drivers/usb/storage/transport.c
-+++ b/drivers/usb/storage/transport.c
-@@ -416,7 +416,7 @@ static int usb_stor_bulk_transfer_sglist(struct us_data *us, unsigned int pipe,
- 
- 	/* don't submit s-g requests during abort processing */
- 	if (test_bit(US_FLIDX_ABORTING, &us->dflags))
--		return USB_STOR_XFER_ERROR;
-+		goto usb_stor_xfer_error;
- 
- 	/* initialize the scatter-gather request block */
- 	usb_stor_dbg(us, "xfer %u bytes, %d entries\n", length, num_sg);
-@@ -424,7 +424,7 @@ static int usb_stor_bulk_transfer_sglist(struct us_data *us, unsigned int pipe,
- 			sg, num_sg, length, GFP_NOIO);
- 	if (result) {
- 		usb_stor_dbg(us, "usb_sg_init returned %d\n", result);
--		return USB_STOR_XFER_ERROR;
-+		goto usb_stor_xfer_error;
- 	}
- 
- 	/*
-@@ -452,6 +452,11 @@ static int usb_stor_bulk_transfer_sglist(struct us_data *us, unsigned int pipe,
- 		*act_len = us->current_sg.bytes;
- 	return interpret_urb_result(us, pipe, length, result,
- 			us->current_sg.bytes);
-+
-+usb_stor_xfer_error:
-+	if (act_len)
-+		*act_len = 0;
-+	return USB_STOR_XFER_ERROR;
- }
- 
- /*
--- 
-2.17.1
-
+I think this is not strictly defined. Either way will work, although
+perhaps it should be more preferred that unsupported OPPs aren't present
+in a device-tree.
