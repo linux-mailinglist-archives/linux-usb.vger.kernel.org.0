@@ -2,114 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AFE2AFA2F
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Nov 2020 22:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E332AFCD3
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 02:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726108AbgKKVIi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Nov 2020 16:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S1728752AbgKLBef (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Nov 2020 20:34:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725949AbgKKVIi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 16:08:38 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD53FC0613D1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Nov 2020 13:08:37 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id e18so3813992edy.6
-        for <linux-usb@vger.kernel.org>; Wed, 11 Nov 2020 13:08:37 -0800 (PST)
+        with ESMTP id S1728234AbgKLBXy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 20:23:54 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0462C0613D1
+        for <linux-usb@vger.kernel.org>; Wed, 11 Nov 2020 17:23:53 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id z3so2951819pfb.10
+        for <linux-usb@vger.kernel.org>; Wed, 11 Nov 2020 17:23:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:subject:message-id:user-agent:mime-version;
-        bh=lDAKmgu5vfJgWqcyddHDPqIFtgiSrjvsXTxdwMbEk6U=;
-        b=V4UbwjwvqS/sr9TjbqbdJSQLX5joany7fdcuurxJICBVsH7Molzu2y0cxHA6huaRon
-         l+XOwbRxtxaH6uzdYOyL9rKj8JtRfzgzYmypN/rfulnTesFroBqYvuLU9NjxCZdG7LcS
-         BwcOmSqguYQlt/5dOSh5UCS1sgIN1sAtNY6XCaFpQXqRBgIT4+HNiqnqP7Nm8maNeqw7
-         zUbS2zNBeHDEESrulHlj9otFuhypXni0VaPx3k0WZ7gLeF0bvFTuobKv0J0DwlSyxVlj
-         GN1SBpFWHu9321eT1z5W72V6mQANH3+cY578zNVeegUVJboKuIjFxqNAl/G8rSmu4fSJ
-         RrTQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N7Lf2zyWERPVdu1htC4rXtjvkvXPb9GfV1THCOYFuzQ=;
+        b=XH00HgnQSvMCsYKU8m1dMFSTUu9rPajGK59TSV5XwegjFuF/OFM80jpJKt9b4w8HtO
+         DAEoq/eI0pSDbHL5YiiGx87azE4m2Kcm+iXSVBeegTQIX3hxH1OdMUpggeVIy1J4BuoC
+         Gns43J9xqLOkFd9XvKJIUMopKQO+xfIkJwLns=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:subject:message-id:user-agent
-         :mime-version;
-        bh=lDAKmgu5vfJgWqcyddHDPqIFtgiSrjvsXTxdwMbEk6U=;
-        b=pdvkNPQnXZomKgx7fO7O+x5Nj1/nYkXErolhcVOLbpm6FYs/7w+3OqwbtQqZO0PLxp
-         r+uuw5TuTrH64hRqwzQrycChZmouMAAzhDygJfn+3Mls2LRZeHugE9KLFW5Rn9nZ4x8g
-         3xf1zr9E2eC96fMTTS6IzV9ZBToedYXOUB+JHxngzo0xk3XmLAhduKz4/0IVM+Hd7r6E
-         cj70CwkIW15DNuYUMUJN9Cx9qk7qD0N6IlQFXktR07SOgogaKmzzz16WsPjLvZd3oKZM
-         Sgg5Q0XHJ48bjOyWepvnFhH9/QhwRJ2TMwiw/t6zn/0rdMMEWqgAQMZUNEatGE3V/dXo
-         rsfg==
-X-Gm-Message-State: AOAM532dYA0M5zd5AIzStwVHXNJUidVxk5LcOi2gWYwAsdeiLW3hE+DL
-        +6S6SjCmB5tG+f/zf0ow0MQ=
-X-Google-Smtp-Source: ABdhPJxvxbDerqXKIBwhbVFKx5gwSeeQMJR+gZo2uycpRouFYOfeFL1dTgLmYv33XY6wzyyGrAsEhQ==
-X-Received: by 2002:a05:6402:16d5:: with SMTP id r21mr1560702edx.149.1605128916550;
-        Wed, 11 Nov 2020 13:08:36 -0800 (PST)
-Received: from felia ([2001:16b8:2d8b:d300:a90c:1cb5:6919:1ee2])
-        by smtp.gmail.com with ESMTPSA id f25sm1398888edr.53.2020.11.11.13.08.35
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N7Lf2zyWERPVdu1htC4rXtjvkvXPb9GfV1THCOYFuzQ=;
+        b=QdIXGJLM0lHXX0+m1l6hNI9SanCxv0sKmu0m1/s9ZVgoMarg2C48E0LQVO+mlzwxbr
+         fkdN39XwYgzQUseJBEs1QKgW+9XLrsuwSWCzrz5GAKDo6SOfKT+aU/A6fqSz7WCnnqiZ
+         sM0a7/MPWsfDQxJcjhMcoChnBdOa+GO8e6T93JXbAJTqSuDABXnbUK0wGfOpmvkGO9xB
+         2Ati2oFIs58oEOVf8tCcOPFKilgmOuHjvtLCXIhUAg8cPwv+w8tgYHKawd7D1mnChFEg
+         87QYvXBkMfvSF5s19fooMZkyJ0cz/l1IZ/S5nJqoLMMSwOv9JAnO0f0cfTZhM12x+WMP
+         SX2A==
+X-Gm-Message-State: AOAM5311xL/bMwznsoFeimGsg6OKtW+t0YDSVuuOgomA5p8xBji9WJgK
+        hIs77Vhkf++JknnYZOhFEcKC7w==
+X-Google-Smtp-Source: ABdhPJyUs9WS/doQQJOar3CjKqcIF17wYM/oOgMOnZUo3GYSHnoTc1p0MtsJCj1qhMZAS7qduYBywg==
+X-Received: by 2002:a65:508a:: with SMTP id r10mr24784979pgp.307.1605144233091;
+        Wed, 11 Nov 2020 17:23:53 -0800 (PST)
+Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id k25sm4057227pfi.42.2020.11.11.17.23.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2020 13:08:35 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-X-Google-Original-From: Lukas Bulwahn <lukas@gmail.com>
-Date:   Wed, 11 Nov 2020 22:08:26 +0100 (CET)
-X-X-Sender: lukas@felia
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        clang-built-linux@googlegroups.com, Tom Rix <trix@redhat.com>,
-        Nathan Chancellor <natechancellor@gmail.com>
-Subject: Use of uninitialized data in special error case of usb storage
- transport
-Message-ID: <alpine.DEB.2.21.2011112146110.13119@felia>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 11 Nov 2020 17:23:52 -0800 (PST)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        enric.balletbo@collabora.com
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: [PATCH 0/3] platform/chrome: cros_ec_typec: Add plug and plug altmodes
+Date:   Wed, 11 Nov 2020 17:23:25 -0800
+Message-Id: <20201112012329.1364975-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.29.2.222.g5d2a92d10f8-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Alan, dear Greg,
+This patch series add plug registration support to the cros-ec-typec
+driver. It also adds support for registering alternate modes for the
+registered plug. These features utilize the API provided by the Type C
+connector class framework.
 
+The first patch adds support to the connector class framework for the
+number_of_alternate_modes attribute (along with the relevant ABI
+documentation).
 
-here is a quick report from the static analysis tool clang-analyzer on 
-./drivers/usb/storage/transport.c:
+The next two patches add plug registration, and then altmode
+registration for the plugs. The latter of these two patches utilizes the
+new function for plug number_of_alternate_modes introduced in the first patch.
 
-When usb_stor_bulk_transfer_sglist() returns with USB_STOR_XFER_ERROR, it 
-returns without writing to its parameter *act_len.
+This series is based on top of the following branch and other patch
+series (applied in the order specified):
+- Branch: chrome-platform for-next [1], which is currently set to the
+  "Linux 5.10-rc1" tag.
+- cros-ec-typec: Patch series to register PD identity information + partner altmodes[2]
+- cros-ec-typec: Patch series to register cable[3]
+- cros-ec-typec: Patch series to add partner number_of_altmodes[4]
 
-Further, the two callers of usb_stor_bulk_transfer_sglist():
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/log/?h=for-next
+[2]: https://lore.kernel.org/lkml/20201029222738.482366-1-pmalani@chromium.org/
+[3]: https://lore.kernel.org/lkml/20201106184104.939284-1-pmalani@chromium.org/
+[4]: https://lore.kernel.org/lkml/20201110061535.2163599-1-pmalani@chromium.org/
 
-    usb_stor_bulk_srb() and
-    usb_stor_bulk_transfer_sg(),
+Prashant Malani (3):
+  usb: typec: Add plug num_altmodes sysfs attr
+  platform/chrome: cros_ec_typec: Register SOP' cable plug
+  platform/chrome: cros_ec_typec: Register plug altmodes
 
-use the passed variable partial without checking the return value. Hence, 
-the uninitialized value of partial is then used in the further execution 
-of those two functions.
+ Documentation/ABI/testing/sysfs-class-typec |  9 +++
+ drivers/platform/chrome/cros_ec_typec.c     | 85 ++++++++++++++++-----
+ drivers/usb/typec/class.c                   | 77 ++++++++++++++++++-
+ include/linux/usb/typec.h                   |  1 +
+ 4 files changed, 151 insertions(+), 21 deletions(-)
 
-Clang-analyzer detects this potential control and data flow and warns:
+-- 
+2.29.2.222.g5d2a92d10f8-goog
 
-drivers/usb/storage/transport.c:469:40: warning: The right operand of '-' 
-is a garbage value [clang-analyzer-core.UndefinedBinaryOperatorResult]
-        scsi_set_resid(srb, scsi_bufflen(srb) - partial);
-                                              ^
-
-drivers/usb/storage/transport.c:495:15: warning: Assigned value is garbage 
-or undefined [clang-analyzer-core.uninitialized.Assign]
-                length_left -= partial;
-                            ^
-
-The tool is right; unfortunately, I do not know anything about the   
-intended function here. What is the further operation of those two  
-functions supposed to be when USB_STOR_XFER_ERROR is returned from 
-usb_stor_bulk_transfer_sglist()? Should the passed arguments remain 
-untouched, so setting *act_len to zero for the error paths would be
-a suitable fix to achieve that.
-
-A quick hint on that point and I can prepare a patch for you to pick up...
-
-Given that this code is pretty stable for years and probably in wider  
-use, the overall functionality is probably resilient to having this local 
-data being filled with arbitrary undefined data in the error case... but 
-who knows...
-
-
-Thanks and best regards,
-
-Lukas
