@@ -2,90 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90ED62AFE82
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 06:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087C82AFFAC
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 07:30:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729482AbgKLFil (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 00:38:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728482AbgKLECN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Nov 2020 23:02:13 -0500
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DDDC0613D1;
-        Wed, 11 Nov 2020 20:02:12 -0800 (PST)
-Received: by mail-il1-x141.google.com with SMTP id q1so4024831ilt.6;
-        Wed, 11 Nov 2020 20:02:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=U+8jpjvx6PAYwsv1dXTnTLiw8GFCxCK+HvTqDAev6w4=;
-        b=a8wC6MGMvbtOwRwEqZ+bZ1sl1CkbTUaiQmrEtWsxDvDAjzqe3VbbnpcJaJrcKecJuK
-         Fk6cFG58xCPrj6NE8tF0zuGDWOowgbXLNeiA77pz6trKRETvUEGhVWaDWKPhFvkqe078
-         RxxIgCtxs29YzaoW2sRkK5+4Rc7HnYX29VZVLRmiOHYg7yTPjc/Dm+LssRvplsVmw4mP
-         7njwoiEeY1K84OppoLt280JYE3KL7SCjHX2xAgfgvGk3z9XmDsKTLUSSgjmS8eFWfuJy
-         azUziBo46TD/0pVBn0hDSE6NLNQsR4nBg6NYKQCJ2joWKigsgOjGpkZ4/q3+HEtX9Kb3
-         ikiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=U+8jpjvx6PAYwsv1dXTnTLiw8GFCxCK+HvTqDAev6w4=;
-        b=APDuR8icKO1agoIdFU9qlJyDiQjCKk6YDEtBMP5qHkoVo1Vupjt3/8N08QprQDQIUW
-         TdM/8OhXCzujlE9GKdr7SAlS444JyaRvYW5txDIXX1ifScnuhlfkpOC+cb7oX9cFKwj3
-         XJotbs8Ugqgwe7m9hu04tdiTEjXmk0NktqMQfaWIe45fQVIq0M8Ueea/W6TZ6uZ8LmI1
-         ZblT3emXjBeVY7r9bl0UkId9eW2AuEp/Bare8OkhY7eZ7hHFVAdihMH55QPV5bXeYxU+
-         rC49RyYeXOJcAMwgMWrZbR0QASOBgn+eLSOOu7FvPHJEooiiUcMKwuxScxBi4gOZGfit
-         pgVw==
-X-Gm-Message-State: AOAM5330r8iA6H9zLdylO6CRjNTsubLt6q9+3P/2UWo0KcwTdPCWizxn
-        M+/x0pbQL0/i6mD7FiBYUirBMhfABRCtbAif6gQ=
-X-Google-Smtp-Source: ABdhPJyHAbpI5VZ+WCYeQcIuPdX64cIeiZk0VZEGRdy1BKycJnmkGyJorCWba2P10ce/IdBwEtYcTz6BoKlhp+e0524=
-X-Received: by 2002:a92:5eda:: with SMTP id f87mr23102667ilg.131.1605153731335;
- Wed, 11 Nov 2020 20:02:11 -0800 (PST)
-MIME-Version: 1.0
-References: <CAGaOi3Z5ezAiBB4-YxUa+so1s=PnVzVsfw9rAs3CGKExJHD-ow@mail.gmail.com>
-In-Reply-To: <CAGaOi3Z5ezAiBB4-YxUa+so1s=PnVzVsfw9rAs3CGKExJHD-ow@mail.gmail.com>
-From:   app l <lipc198702@gmail.com>
-Date:   Thu, 12 Nov 2020 12:02:00 +0800
-Message-ID: <CAGaOi3ZLiVUBaTX=humCVYp-tU1L61iY64HUCShfSeY38SZZsA@mail.gmail.com>
-Subject: Re: Question: gadget: How to realize uvc and uac composite function?
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1726112AbgKLGat (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 01:30:49 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:22483 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725966AbgKLGat (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 01:30:49 -0500
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 11 Nov 2020 22:30:49 -0800
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Nov 2020 22:30:46 -0800
+X-QCInternal: smtphost
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 12 Nov 2020 12:00:22 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id 050622F87; Thu, 12 Nov 2020 12:00:21 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH] usb: dwc3: qcom: Add shutdown callback for dwc3
+Date:   Thu, 12 Nov 2020 12:00:18 +0530
+Message-Id: <1605162619-10064-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Through the debug, the problem has been resolved, it can be recognized
-normally, and the windows driver can be loaded normally, thank you
+This patch adds a shutdown callback to USB DWC QCOM driver to ensure that
+it is properly shutdown in reboot/shutdown path. This is required
+where SMMU address translation is enabled like on SC7180
+SoC and few others. If the hardware is still accessing memory after
+SMMU translation is disabled as part of SMMU shutdown callback in
+system reboot or shutdown path, then IOVAs(I/O virtual address)
+which it was using will go on the bus as the physical addresses which
+might result in unknown crashes (NoC/interconnect errors).
 
-On Tue, Nov 10, 2020 at 10:28 AM app l <lipc198702@gmail.com> wrote:
->
-> Hi,
-> Version: 4.9 and uac1 driver is V5.9. I tested it based on 4.9 with
-> backported dwc3 driver frome v5.9.
-> 1. According to configfs-usb-gadget-uvc, PC(Windows 10) can get ISO
-> data normally;
-> 2. According to configfs-usb-gadget-uac1, PC(Windows 10) can  install
-> audio driver normally(AC Interface,/Captue Input terminal/Speaker);
-> 3=E3=80=81uvc+uac1 composite device, PC(Windows 10) can get ISO data norm=
-ally,
-> but PC shows that the uac1 driver installation failed(AC
-> Interface/Capture Inactive/Playback Inactive). AC Interface/Capture
-> Inactive/Playback Inactive all show the device cannot start code 10,
-> The settings of the I/O device are incorrect or the configuration
-> parameters of the driver are incorrect. Through the USB analyzer to
-> capture the packet, I found that the Index value seems to be wrong
-> when PC host to get the descriptor. The acquisition is Playback
-> Inactive and Capture Inactive, and the PC did not send the command
-> packet about uac1. It is difficult to debug it.
-> I suspect that some parts of the uac1 descriptor need to be modified,
-> but I don=E2=80=99t know which one to modify.
-> I sincerely hope that everyone can give some suggestions or related
-> patches to help me. Thanks very much!
->
-> Regards,
-> pengcheng
+Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index c703d55..a930e06 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -790,13 +790,11 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static int dwc3_qcom_remove(struct platform_device *pdev)
++static void __dwc3_qcom_teardown(struct dwc3_qcom *qcom)
+ {
+-	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
+-	struct device *dev = &pdev->dev;
+ 	int i;
+ 
+-	of_platform_depopulate(dev);
++	of_platform_depopulate(qcom->dev);
+ 
+ 	for (i = qcom->num_clocks - 1; i >= 0; i--) {
+ 		clk_disable_unprepare(qcom->clks[i]);
+@@ -807,12 +805,27 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+ 	dwc3_qcom_interconnect_exit(qcom);
+ 	reset_control_assert(qcom->resets);
+ 
+-	pm_runtime_allow(dev);
+-	pm_runtime_disable(dev);
++	pm_runtime_allow(qcom->dev);
++	pm_runtime_disable(qcom->dev);
++}
++
++static int dwc3_qcom_remove(struct platform_device *pdev)
++{
++	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
++
++	__dwc3_qcom_teardown(qcom);
+ 
+ 	return 0;
+ }
+ 
++static void dwc3_qcom_shutdown(struct platform_device *pdev)
++{
++	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
++
++	__dwc3_qcom_teardown(qcom);
++
++}
++
+ static int __maybe_unused dwc3_qcom_pm_suspend(struct device *dev)
+ {
+ 	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
+@@ -887,6 +900,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
+ static struct platform_driver dwc3_qcom_driver = {
+ 	.probe		= dwc3_qcom_probe,
+ 	.remove		= dwc3_qcom_remove,
++	.shutdown	= dwc3_qcom_shutdown,
+ 	.driver		= {
+ 		.name	= "dwc3-qcom",
+ 		.pm	= &dwc3_qcom_dev_pm_ops,
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
+
