@@ -2,67 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF1E2B06F5
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 14:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6782B0725
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 14:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728400AbgKLNth (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 08:49:37 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7220 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727790AbgKLNtg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 08:49:36 -0500
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CX2yQ5rqHzkhhY;
-        Thu, 12 Nov 2020 21:49:18 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 12 Nov 2020 21:49:23 +0800
-From:   Chen Zhou <chenzhou10@huawei.com>
-To:     <balbi@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <weiyongjun1@huawei.com>,
-        <jun.li@freescale.com>, <rogerq@ti.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chenzhou10@huawei.com>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH v2] usb: gadget: mass_storage: fix error return code in msg_bind()
-Date:   Thu, 12 Nov 2020 21:54:23 +0800
-Message-ID: <20201112135423.89536-1-chenzhou10@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1728231AbgKLN7O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 08:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728134AbgKLN7O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 08:59:14 -0500
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE71C0613D4
+        for <linux-usb@vger.kernel.org>; Thu, 12 Nov 2020 05:59:13 -0800 (PST)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by andre.telenet-ops.be with bizsmtp
+        id rRz9230044C55Sk01Rz9M2; Thu, 12 Nov 2020 14:59:09 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kdD80-001rT1-LT; Thu, 12 Nov 2020 14:59:08 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kdD80-00G2Ra-4E; Thu, 12 Nov 2020 14:59:08 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Drew Fustini <drew@pdp7.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] Revert "usb: musb: convert to devm_platform_ioremap_resource_byname"
+Date:   Thu, 12 Nov 2020 14:59:00 +0100
+Message-Id: <20201112135900.3822599-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix to return a negative error code from the error handling case
-instead of 0 in function msg_bind(), as done elsewhere in this
-function.
+This reverts commit 2d30e408a2a6b3443d3232593e3d472584a3e9f8.
 
-Fixes: d86788979761 ("usb: gadget: mass_storage: allocate and init otg descriptor by otg capabilities")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
+On Beaglebone Black, where each interface has 2 children:
+
+    musb-dsps 47401c00.usb: can't request region for resource [mem 0x47401800-0x474019ff]
+    musb-hdrc musb-hdrc.1: musb_init_controller failed with status -16
+    musb-hdrc: probe of musb-hdrc.1 failed with error -16
+    musb-dsps 47401400.usb: can't request region for resource [mem 0x47401000-0x474011ff]
+    musb-hdrc musb-hdrc.0: musb_init_controller failed with status -16
+    musb-hdrc: probe of musb-hdrc.0 failed with error -16
+
+Before, devm_ioremap_resource() was called on "dev" ("musb-hdrc.0" or
+"musb-hdrc.1"), after it is called on "&pdev->dev" ("47401400.usb" or
+"47401c00.usb"), leading to a duplicate region request, which fails.
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/usb/gadget/legacy/mass_storage.c | 4 +++-
+ drivers/usb/musb/musb_dsps.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/legacy/mass_storage.c b/drivers/usb/gadget/legacy/mass_storage.c
-index 9ed22c5fb7fe..ac1741126619 100644
---- a/drivers/usb/gadget/legacy/mass_storage.c
-+++ b/drivers/usb/gadget/legacy/mass_storage.c
-@@ -175,8 +175,10 @@ static int msg_bind(struct usb_composite_dev *cdev)
- 		struct usb_descriptor_header *usb_desc;
+diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
+index 30085b2be7b90bf1..5892f3ce0cdc824d 100644
+--- a/drivers/usb/musb/musb_dsps.c
++++ b/drivers/usb/musb/musb_dsps.c
+@@ -429,10 +429,12 @@ static int dsps_musb_init(struct musb *musb)
+ 	struct platform_device *parent = to_platform_device(dev->parent);
+ 	const struct dsps_musb_wrapper *wrp = glue->wrp;
+ 	void __iomem *reg_base;
++	struct resource *r;
+ 	u32 rev, val;
+ 	int ret;
  
- 		usb_desc = usb_otg_descriptor_alloc(cdev->gadget);
--		if (!usb_desc)
-+		if (!usb_desc) {
-+			status = -ENOMEM;
- 			goto fail_string_ids;
-+		}
- 		usb_otg_descriptor_init(cdev->gadget, usb_desc);
- 		otg_desc[0] = usb_desc;
- 		otg_desc[1] = NULL;
+-	reg_base = devm_platform_ioremap_resource_byname(parent, "control");
++	r = platform_get_resource_byname(parent, IORESOURCE_MEM, "control");
++	reg_base = devm_ioremap_resource(dev, r);
+ 	if (IS_ERR(reg_base))
+ 		return PTR_ERR(reg_base);
+ 	musb->ctrl_base = reg_base;
 -- 
-2.20.1
+2.25.1
 
