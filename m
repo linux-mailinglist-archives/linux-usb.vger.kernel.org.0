@@ -2,72 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFA92B0659
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 14:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960F82B067B
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 14:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728270AbgKLNXT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 08:23:19 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7523 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728266AbgKLNXS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 08:23:18 -0500
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CX2N91FKvzhk1l;
-        Thu, 12 Nov 2020 21:23:05 +0800 (CST)
-Received: from [10.174.176.61] (10.174.176.61) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 12 Nov 2020 21:23:05 +0800
-Subject: Re: [PATCH] usb: gadget: mass_storage: fix error return code in
- msg_bind()
-To:     <balbi@kernel.org>
-References: <20201112085324.181903-1-chenzhou10@huawei.com>
-CC:     <gregkh@linuxfoundation.org>, <weiyongjun1@huawei.com>,
-        <jun.li@freescale.com>, <rogerq@ti.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
-From:   chenzhou <chenzhou10@huawei.com>
-Message-ID: <53ee397a-ef2e-4248-8d32-52c8d1e138e9@huawei.com>
-Date:   Thu, 12 Nov 2020 21:23:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        id S1728142AbgKLNb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 08:31:57 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7219 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727646AbgKLNb4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 08:31:56 -0500
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CX2Z501t4zkjk8;
+        Thu, 12 Nov 2020 21:31:41 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Thu, 12 Nov 2020
+ 21:31:48 +0800
+From:   Zhang Qilong <zhangqilong3@huawei.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>
+Subject: [PATCH] usb: gadget: tegra-xudc: Fix PM disable depth imbalance on error path
+Date:   Thu, 12 Nov 2020 21:35:33 +0800
+Message-ID: <20201112133533.1793971-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-In-Reply-To: <20201112085324.181903-1-chenzhou10@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.176.61]
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The pm_runtime_enable will increase power disable depth. Imbalance
+depth will resulted in enabling runtime PM of device fails later.
+Thus a pairing decrement must be needed on the error handling path
+to keep it balanced.
 
+Fixes: 49db427232fe2 ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+---
+ drivers/usb/gadget/udc/tegra-xudc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 2020/11/12 16:53, Chen Zhou wrote:
-> Fix to return a negative error code from the error handling case
-> instead of 0 in function msg_bind(), as done elsewhere in this
-> function.
->
-> Fixes: d86788979761 ("usb: gadget: mass_storage: allocate and init otg descriptor by otg capabilities")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
-> ---
->  drivers/usb/gadget/legacy/mass_storage.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/gadget/legacy/mass_storage.c b/drivers/usb/gadget/legacy/mass_storage.c
-> index 9ed22c5fb7fe..7a88c5282d61 100644
-> --- a/drivers/usb/gadget/legacy/mass_storage.c
-> +++ b/drivers/usb/gadget/legacy/mass_storage.c
-> @@ -175,8 +175,10 @@ static int msg_bind(struct usb_composite_dev *cdev)
->  		struct usb_descriptor_header *usb_desc;
->  
->  		usb_desc = usb_otg_descriptor_alloc(cdev->gadget);
-> -		if (!usb_desc)
-> +		if (IS_ERR(usb_desc)) {
-> +			status = PTR_ERR(usb_desc);
->  			goto fail_string_ids;
-> +		}
->  		usb_otg_descriptor_init(cdev->gadget, usb_desc);
->  		otg_desc[0] = usb_desc;
->  		otg_desc[1] = NULL;
-Ignore this.
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index 580bef8eb4cb..ad205e178033 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -3861,6 +3861,7 @@ static int tegra_xudc_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ free_eps:
++	pm_runtime_disable(&pdev->dev);
+ 	tegra_xudc_free_eps(xudc);
+ free_event_ring:
+ 	tegra_xudc_free_event_ring(xudc);
+-- 
+2.25.4
+
