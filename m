@@ -2,120 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 087C82AFFAC
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 07:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E992AFFD4
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 07:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbgKLGat (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 01:30:49 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:22483 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbgKLGat (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 01:30:49 -0500
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 11 Nov 2020 22:30:49 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Nov 2020 22:30:46 -0800
-X-QCInternal: smtphost
-Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 12 Nov 2020 12:00:22 +0530
-Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
-        id 050622F87; Thu, 12 Nov 2020 12:00:21 +0530 (IST)
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: [PATCH] usb: dwc3: qcom: Add shutdown callback for dwc3
-Date:   Thu, 12 Nov 2020 12:00:18 +0530
-Message-Id: <1605162619-10064-1-git-send-email-sanm@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S1726287AbgKLGo4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 01:44:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53484 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725959AbgKLGov (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Nov 2020 01:44:51 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C78C8208FE;
+        Thu, 12 Nov 2020 06:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605163491;
+        bh=ms84zS6nvXOPPy9ZCb5VdcXF53wCiDUhfQzWcrbNnOM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PII7FtK7S28rWp8JCWJYiQOERkNbXdK44WUuirJft0/BeTWwzmqWLBq1soiPRFxKl
+         Z5qq1p2WoBNvlCEXnEZModj1CUMVzsirCURsXlipW8DkPxTURgSGBaiVpyN7I5DMl1
+         nS4kwbSJn8zo5JLraO7q9LcvqXSacIvqg4B0QbWs=
+Date:   Thu, 12 Nov 2020 07:45:50 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        clang-built-linux@googlegroups.com, Tom Rix <trix@redhat.com>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: Re: Use of uninitialized data in special error case of usb storage
+ transport
+Message-ID: <X6zaHl/RhW5xu89K@kroah.com>
+References: <alpine.DEB.2.21.2011112146110.13119@felia>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2011112146110.13119@felia>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds a shutdown callback to USB DWC QCOM driver to ensure that
-it is properly shutdown in reboot/shutdown path. This is required
-where SMMU address translation is enabled like on SC7180
-SoC and few others. If the hardware is still accessing memory after
-SMMU translation is disabled as part of SMMU shutdown callback in
-system reboot or shutdown path, then IOVAs(I/O virtual address)
-which it was using will go on the bus as the physical addresses which
-might result in unknown crashes (NoC/interconnect errors).
+On Wed, Nov 11, 2020 at 10:08:26PM +0100, Lukas Bulwahn wrote:
+> Dear Alan, dear Greg,
+> 
+> 
+> here is a quick report from the static analysis tool clang-analyzer on 
+> ./drivers/usb/storage/transport.c:
+> 
+> When usb_stor_bulk_transfer_sglist() returns with USB_STOR_XFER_ERROR, it 
+> returns without writing to its parameter *act_len.
+> 
+> Further, the two callers of usb_stor_bulk_transfer_sglist():
+> 
+>     usb_stor_bulk_srb() and
+>     usb_stor_bulk_transfer_sg(),
+> 
+> use the passed variable partial without checking the return value. Hence, 
+> the uninitialized value of partial is then used in the further execution 
+> of those two functions.
+> 
+> Clang-analyzer detects this potential control and data flow and warns:
+> 
+> drivers/usb/storage/transport.c:469:40: warning: The right operand of '-' 
+> is a garbage value [clang-analyzer-core.UndefinedBinaryOperatorResult]
+>         scsi_set_resid(srb, scsi_bufflen(srb) - partial);
+>                                               ^
+> 
+> drivers/usb/storage/transport.c:495:15: warning: Assigned value is garbage 
+> or undefined [clang-analyzer-core.uninitialized.Assign]
+>                 length_left -= partial;
+>                             ^
+> 
+> The tool is right; unfortunately, I do not know anything about the   
+> intended function here. What is the further operation of those two  
+> functions supposed to be when USB_STOR_XFER_ERROR is returned from 
+> usb_stor_bulk_transfer_sglist()? Should the passed arguments remain 
+> untouched, so setting *act_len to zero for the error paths would be
+> a suitable fix to achieve that.
+> 
+> A quick hint on that point and I can prepare a patch for you to pick up...
+> 
+> Given that this code is pretty stable for years and probably in wider  
+> use, the overall functionality is probably resilient to having this local 
+> data being filled with arbitrary undefined data in the error case... but 
+> who knows...
 
-Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
+Sounds reasonable, testing error paths of "short reads" is something
+that people are now only starting to notice and work to resolve.
+Patches to resolve this are always gladly appreciated!
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index c703d55..a930e06 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -790,13 +790,11 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int dwc3_qcom_remove(struct platform_device *pdev)
-+static void __dwc3_qcom_teardown(struct dwc3_qcom *qcom)
- {
--	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
--	struct device *dev = &pdev->dev;
- 	int i;
- 
--	of_platform_depopulate(dev);
-+	of_platform_depopulate(qcom->dev);
- 
- 	for (i = qcom->num_clocks - 1; i >= 0; i--) {
- 		clk_disable_unprepare(qcom->clks[i]);
-@@ -807,12 +805,27 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
- 	dwc3_qcom_interconnect_exit(qcom);
- 	reset_control_assert(qcom->resets);
- 
--	pm_runtime_allow(dev);
--	pm_runtime_disable(dev);
-+	pm_runtime_allow(qcom->dev);
-+	pm_runtime_disable(qcom->dev);
-+}
-+
-+static int dwc3_qcom_remove(struct platform_device *pdev)
-+{
-+	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
-+
-+	__dwc3_qcom_teardown(qcom);
- 
- 	return 0;
- }
- 
-+static void dwc3_qcom_shutdown(struct platform_device *pdev)
-+{
-+	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
-+
-+	__dwc3_qcom_teardown(qcom);
-+
-+}
-+
- static int __maybe_unused dwc3_qcom_pm_suspend(struct device *dev)
- {
- 	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
-@@ -887,6 +900,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
- static struct platform_driver dwc3_qcom_driver = {
- 	.probe		= dwc3_qcom_probe,
- 	.remove		= dwc3_qcom_remove,
-+	.shutdown	= dwc3_qcom_shutdown,
- 	.driver		= {
- 		.name	= "dwc3-qcom",
- 		.pm	= &dwc3_qcom_dev_pm_ops,
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+thanks,
 
+greg k-h
