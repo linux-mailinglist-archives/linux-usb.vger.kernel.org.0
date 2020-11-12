@@ -2,148 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 384E02B0ABD
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 17:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC70D2B0AD4
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 17:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728987AbgKLQvJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 11:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
+        id S1726130AbgKLQ7m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 11:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728870AbgKLQvI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 11:51:08 -0500
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCE9C0613D4
-        for <linux-usb@vger.kernel.org>; Thu, 12 Nov 2020 08:51:07 -0800 (PST)
-Received: by mail-qk1-x744.google.com with SMTP id d9so5867647qke.8
-        for <linux-usb@vger.kernel.org>; Thu, 12 Nov 2020 08:51:07 -0800 (PST)
+        with ESMTP id S1725965AbgKLQ7l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 11:59:41 -0500
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C78C0613D1;
+        Thu, 12 Nov 2020 08:59:40 -0800 (PST)
+Received: by mail-lj1-x244.google.com with SMTP id y16so7019915ljk.1;
+        Thu, 12 Nov 2020 08:59:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/UULMa69Cha07mkg9eirozXg6Mg78pzprVXlk+8aQkM=;
-        b=dvsccChuE3wiK+OshV+vABrj1Afl8QjdNGNFHbbhR0lhgYGNWoyn+TWB7YZk8uz7FU
-         O73DLJ8W3AxrdrwcsDP7Dm6FqAFVf8866PbeLRGKHJWH4qz89ARYKYycgixmy470el8S
-         Do2zFVA8D6pYCRjGmI5KaihgM07SQvPBq8JCk=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Xt95colZf33mgot8tELeNlRansGBvck/Mt4yELIIDqY=;
+        b=fHDLJ02XfofqPoW/m/ty+7VMDDU5x/EGpHV/+Yy5G1qvgpLWH4Bj6qirnIfR2GOFHY
+         H2rsWty5fFNMq6aCx6XdDWhpV6BR3+tvp61A5zWYd6mxO3JGE39IAl69QXwXp/OPSLOc
+         dbjrfCbzaQBa8KcMu6SiyVtP5+MIJvDirOdjY9sY049RqEx6eY2eqm19yoWcz95sPsLg
+         NScSb7Br1t6cH2J6CRqeJIQlDccMferVM5GcIzWR9yGjzpka13Dd7CaUaJF4CwdiAUzW
+         byu4iX3gr3BVLIGe/LU4yPecdAgxDUtNUIthKeuggKFO5txc0jODLiR2lG9aCqUdXeXb
+         ScEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/UULMa69Cha07mkg9eirozXg6Mg78pzprVXlk+8aQkM=;
-        b=r6IExNNLtTQkuAZ0kw4/1Ee/iwUHdUZcgNAxsS5VEiGoQ4/FJ1y1iuYSdYjeXbFMi5
-         rSeHBHPPqMsY0rOVdcKMhnnzjefcj17ChZSVfRjxDJzv0SSkOZbtcfUlQXVQbr8GtWtL
-         8dF93su1mWH8hVpCZPibJEAPLgqUDzgnYDNysATUwu8W+Da3euA+92h/EALYBPkz5TrS
-         a2ngLhimeMBCBTdlPnuktHYkR6tp6oQyhJ79YVoznsoBa6Ogfi1Y9CNs2ohM81o+6Zvl
-         oMVATmgjQCvCH5YBI80Rn7TH/e3cYmPtMVz6BtTZBSfG3YdxsIj8bcWxUOi2JRLEkJXg
-         sKew==
-X-Gm-Message-State: AOAM532kRNxASzCdwWgIlgACO4ASeSi1+XmFFHkn3nGigEOALdJOKHEG
-        R+qNa1BJzqLBdW6O/w2k5IpP/R968fOhyVi9klTF6Q==
-X-Google-Smtp-Source: ABdhPJyvp5RU9RgCm4JgruJfjcPXdy15Gz74XVwau7R0EMqFVublUMeQ1Bk/QxIwCTcx579bQL4sxseB/LKFp6qKZ8M=
-X-Received: by 2002:a05:620a:248c:: with SMTP id i12mr621929qkn.179.1605199866960;
- Thu, 12 Nov 2020 08:51:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20201023214328.1262883-1-pmalani@chromium.org>
- <20201023214328.1262883-2-pmalani@chromium.org> <20201110115453.GI1224435@kuha.fi.intel.com>
- <20201112024055.GA1367855@google.com> <20201112124345.GS1224435@kuha.fi.intel.com>
-In-Reply-To: <20201112124345.GS1224435@kuha.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 12 Nov 2020 08:50:55 -0800
-Message-ID: <CACeCKafKODtbhCinwD=uwDa==atQoJFyXGwMhJEczh2NWq4NMQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] usb: typec: Expose Product Type VDOs via sysfs
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Xt95colZf33mgot8tELeNlRansGBvck/Mt4yELIIDqY=;
+        b=Quc5cZb8N4+lSjAXByxBevRjhOn/VQ2Thrux0j8xs6bVFAUTeqtv9SgrxK5/4P/ZQm
+         BM0ABVbCKLlQDSG2C3qu62ywTK8eWCuERI9B84iBATWsv8ujKu5EMW8HFnd4I3vvxnSf
+         Bszh8r3WtDjMFk1JZfaKCI3DWQuSalenbqtbgdcbM95CNeS1kTehqRXC9zQcvdtbgwAC
+         cYh4RaeIuuCJQtjuOvErAXiH0gcfZhrMniJIu//GRgzwDjWF1lVwEnlpGDm7V4u5bwWy
+         RkTNUnYqRT6cpl4BdnatDzQkwe0raEEu0zaPEf4ryEXsHq0QH5V750YBoBctnljBU3W9
+         5viA==
+X-Gm-Message-State: AOAM532B78c8CxzTjvVOmWdO915+aRw58/d2m59OVUEwXXbc7SvDqQ63
+        jbYG3IstePgOaAwD/vqnB4B0dvICp2E=
+X-Google-Smtp-Source: ABdhPJyl96aYzliFwkLljLShw56ErRaoK0Xab1vQjJi14A44PY75rTZLE8QOeBZnDRsExRlkCgmYqg==
+X-Received: by 2002:a2e:8315:: with SMTP id a21mr166883ljh.29.1605200379012;
+        Thu, 12 Nov 2020 08:59:39 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id t5sm691068lfc.75.2020.11.12.08.59.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Nov 2020 08:59:38 -0800 (PST)
+Subject: Re: [PATCH v1 11/30] drm/tegra: dc: Support OPP and SoC core voltage
+ scaling
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benson Leung <bleung@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-usb@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <20201104234427.26477-12-digetx@gmail.com> <20201110202945.GF2375022@ulmo>
+ <20201110203257.GC5957@sirena.org.uk>
+ <72ae6462-13df-9fcb-510e-8e57eee0f035@gmail.com>
+ <20201111115534.GA4847@sirena.org.uk>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <dd26eb18-8ac4-22a6-29b0-dbbe5fa6075b@gmail.com>
+Date:   Thu, 12 Nov 2020 19:59:36 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
+MIME-Version: 1.0
+In-Reply-To: <20201111115534.GA4847@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+11.11.2020 14:55, Mark Brown пишет:
+> On Wed, Nov 11, 2020 at 12:23:41AM +0300, Dmitry Osipenko wrote:
+>> 10.11.2020 23:32, Mark Brown пишет:
+> 
+>>>>> +	if (!device_property_present(dc->dev, "core-supply"))
+>>>>> +		return;
+> 
+>>>> This is a potentially heavy operation, so I think we should avoid that
+>>>> here. How about you use devm_regulator_get_optional() in ->probe()? That
+>>>> returns -ENODEV if no regulator was specified, in which case you can set
+>>>> dc->core_reg = NULL and use that as the condition here.
+> 
+>>> Or enumerate the configurable voltages after getting the regulator and
+>>> handle that appropriately which would be more robust in case there's
+>>> missing or unusual constraints.
+> 
+>> I already changed that code to use regulator_get_optional() for v2.
+> 
+> That doesn't look entirely appropriate given that the core does most
+> likely require some kind of power to operate.
 
-On Thu, Nov 12, 2020 at 4:43 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Wed, Nov 11, 2020 at 06:40:55PM -0800, Prashant Malani wrote:
-> > Hi Heikki,
-> >
-> > On Tue, Nov 10, 2020 at 01:54:53PM +0200, Heikki Krogerus wrote:
-> > > On Fri, Oct 23, 2020 at 02:43:28PM -0700, Prashant Malani wrote:
-> > >
-> > > I've now come to the conclusion that this is not the correct approach.
-> > > Instead, the whole identity, all six VDOs, should be supplied
-> > > separately with a "raw" sysfs attribute file after all.
-> > >
-> > > The three attribute files that we already have - so id_header,
-> > > cert_stat and product - can always supply the actual VDO as is,
-> > > regardless of the product type, so they are fine. But these new
-> > > attribute files, product_type_vdoX, would behave differently as they
-> > > supply different information depending on the product type. That just
-> > > does not feel right to me.
-> >
-> > OOI: I'd like to understand the reservations around this approach. Can't
-> > userspace just read these and then interpret them appropriately according
-> > to the id_header as well as PD revision (and version number) if that's exposed?
-> > The only thing I see changing is how we name those product_type_vdoX
-> > sysfs files, i.e product_type_vdo0 == passive_cable_vdo OR active_cable_vdo1
-> > depending on the product type.
-> >
-> > That said, perhaps I'm missing some aspect of this.
->
-> I don't think the userspace should have to interpret any of these
-> VDOs. If the userspace has to interpret the information, then the
-> userspace should interpret everything for the sake of consistency (so
-> the "raw" attribute file).
->
-> But I still think that defining separate device types for every
-> product type would be the best way to handle the identity. We could
-> then have sysfs attribute files that are specific for each product
-> type. It does not even matter that some of the product types are going
-> to be removed. We will have to handle all of them in any case,
-> including the ones that were removed. This way things would be much
-> more clear for the userspace.
->
-> The only problem IMO with the separate device types for each product
-> type is that we don't always have access to the Discover Identity
-> result. It means depending on your system we will claim the
-> partner device type is "default" (no identity information) or the
-> actual product type. That is also a bit inconsistent, but is is
-> acceptable? I would really like to here what Greg thinks about all
-> this.
+We will need to do this because older DTBs won't have that regulator and
+we want to keep them working.
 
-Thanks for explaining the rationale.
-Of course, I defer to Greg & your decision on this :)
+Also, some device-trees won't have that regulator anyways because board
+schematics isn't available, and thus, we can't fix them.
 
-I'm yet unable to grasp what benefit userspace gets from having the kernel parse
-and present this data in appropriately named sysfs files when the userspace has
-enough info to do so itself.
+>> Regarding the enumerating supported voltage.. I think this should be
+>> done by the OPP core, but regulator core doesn't work well if
+>> regulator_get() is invoked more than one time for the same device, at
+>> least there is a loud debugfs warning about an already existing
+> 
+> I don't understand why this would be an issue - if nothing else the core
+> could just offer an interface to trigger the check.
 
-For that reason and also because the "raw" approach is IMO a bit more
-resilient to the changes
-we talk about (some product type VDOs being dropped off across PD spec
-uprevs [1] etc)
-the "raw" proposal sounded appealing to me.
+It's not an issue, I just described what happens when device driver
+tries to get a regulator twice.
 
->
-> > > So lets just add the "raw" sysfs attribute file. We can think about
-> > > extracting some other details from the product type VDOs once the
-> > > specification has settled down a bit and we can be quite certain that
-> > > those details will always be available.
-> > >
-> > > Would this be OK to you? I think we should be able to dump the data to
-> > > the "raw" sysfs attribute file with something like hex_dump_to_buffer().
-> >
-> > FWIW, "raw" option SGTM (the product type VDOs can be parsed from the
-> > buffer since the format is fixed).
->
-> Well, I'm starting to think that what if we just prepare patches where
-> we propose separate device type for every product type? Of course, if
-> they are OK to you?
->
-SG. To clarify, will you prepare these patches?
+There was an issue once that check is added to the regulator core code.
+But perhaps not worth to discuss it for now because I don't remember
+details.
 
-Thanks & best regards,
+>> directory for a regulator. It's easy to check whether the debug
+>> directory exists before creating it, like thermal framework does it for
+>> example, but then there were some other more difficult issues.. I don't
+>> recall what they were right now. Perhaps will be easier to simply get a
+>> error from regulator_set_voltage() for now because it shouldn't ever
+>> happen in practice, unless device-tree has wrong constraints.
+> 
+> The constraints might not be wrong, there might be some board which has
+> a constraint somewhere for 
+> 
 
--Prashant
-
-[1]: https://lore.kernel.org/linux-usb/CANLzEkskrWXWLC+csObYwB+JUFdH+p6V6giMHtsKY-L61cTG9g@mail.gmail.com/
+In this case board's DT shouldn't specify unsupportable OPPs.
