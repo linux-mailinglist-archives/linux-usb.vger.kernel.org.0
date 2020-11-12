@@ -2,101 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE8E2B0AEB
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 18:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A44EE2B0B10
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 18:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726081AbgKLRE5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 12:04:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44456 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725903AbgKLRE4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Nov 2020 12:04:56 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7C58621D7F;
-        Thu, 12 Nov 2020 17:04:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605200696;
-        bh=qEGu5uST4byz8XuJRMjnqZZkRabdlL6gGWmFkpschCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BHYu2GVHYY7GTOmz8a4uXpdurzwymiO5oR5TaJepK0yXP8/vAgy/bZnVJSJMKOndk
-         rjlSioJxLgU6QdTh9CkDQqtecBYOJRLhVdj2NXpDoA33ovt17OdZeF9+SJXWOj7mX9
-         07jQPCTDECz06JDYesZpuDDdi/vLAakx5/Mbbpxo=
-Date:   Thu, 12 Nov 2020 18:05:53 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     John Boero <boeroboy@gmail.com>
+        id S1726267AbgKLRNo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 12:13:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726037AbgKLRNn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 12:13:43 -0500
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC811C0613D1;
+        Thu, 12 Nov 2020 09:13:43 -0800 (PST)
+Received: by mail-oi1-x242.google.com with SMTP id o25so7198663oie.5;
+        Thu, 12 Nov 2020 09:13:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nceTjB9+ZybzYeoCmmubZXLqq+8RSUIB59xSAFOqQqU=;
+        b=V4gj33hg83VX0YYEMazVv7L1RojdjsIDX2AQTSe1t4xhYtYWOJw6k4KFmxN2PdwN8g
+         jZd45ZqOJDP3pyrsxe2KPsp1+vPLsolSo/C20ews5rTwjknmxnufBVLU+AVZEPDqvPKU
+         6DFdOTD3PUcioxDZ1gD0bb6uUAvihIViDrBtEREeQjZxmKJiKAy7r3VLUX1XJJwdorFa
+         8Hlxoii7FQTkvGiY36GYEfDRK6xoqvzNTQ/r3YpaSYJyvws3p/BZM/7Ufb64+IVv4T+r
+         ac99QBpdHRMjqYz9lKjLUZYkwZEHmsx/bpkbiCCXimdugNwU7e3yHUmFf8I/sdUSkuR2
+         WieQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nceTjB9+ZybzYeoCmmubZXLqq+8RSUIB59xSAFOqQqU=;
+        b=qvpw67i4lnS3TP2fKTFPRejqSdvdN1udwnANnnV4zLQGciBFlqnAnfkK3sWi1VHWQU
+         BF0BSRrG3Pgxjl9AyTPnT/gS6GUKE+3+B6ALqbudxwo0c0kcDlOEn+tPxKXTLbpPNPrA
+         AIcKAnsc3vbS2klIXXIO93SpbrPv8kZR/kqsHUS3cnKquykdLamDp1P0+MJC+Xj0SDD7
+         D0yK0msIfQhfK1hs1HScr23Z+DdhXBpKNirzP7FhF0ZEoRJ2jIPwowSTxwi3t6y9IavB
+         Z5ksRL+9nZWSPASGMTcGr3o6k0GtVrGSECrIugcTJpX4K0CVuW/U/DdB9QXVBqAs95KA
+         q8qw==
+X-Gm-Message-State: AOAM530THrpQ1+spQpigVUVZ7srz4qaEG67cGcD5sXL5ioPF76wC4Pem
+        SEHWgbsETliPRyKp6/BGGSMs9gZHx5BzmnZ54+M=
+X-Google-Smtp-Source: ABdhPJxDxxXRui8G7xubM8M/dmUDtzgR/mWVwj6eJV++7pQ40+wdUhrtAxh9KQG8iGvgvddsf2lywflIeDcWSOZ+6rU=
+X-Received: by 2002:aca:ad07:: with SMTP id w7mr444554oie.122.1605201222906;
+ Thu, 12 Nov 2020 09:13:42 -0800 (PST)
+MIME-Version: 1.0
+References: <CAO5W59jOWuRKizngF8vv9jb-zr_HnLC2eNxKqi3AYwg8KLwKoA@mail.gmail.com>
+ <X61rce8GANHW1ysh@kroah.com>
+In-Reply-To: <X61rce8GANHW1ysh@kroah.com>
+From:   John Boero <boeroboy@gmail.com>
+Date:   Thu, 12 Nov 2020 17:13:30 +0000
+Message-ID: <CAO5W59iGm3kN-HhA_g78iJH9cV3fHzjQORM_b3xqo1Mg+XEi2g@mail.gmail.com>
+Subject: Re: [PATCH] usb: core: Null deref in kernel with USB webcams.
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: core: Null deref in kernel with USB webcams.
-Message-ID: <X61rce8GANHW1ysh@kroah.com>
-References: <CAO5W59jOWuRKizngF8vv9jb-zr_HnLC2eNxKqi3AYwg8KLwKoA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO5W59jOWuRKizngF8vv9jb-zr_HnLC2eNxKqi3AYwg8KLwKoA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 03:52:02PM +0000, John Boero wrote:
-> >From 54f9886454e9a28e8d943c1cef15df9c11555df7 Mon Sep 17 00:00:00 2001
-> From: JohnnyB <jboero@users.noreply.github.com>
+Sorry header was generated by git email and I should have
+paid closer attention to it before sending.
+Long time listener, first time caller.
 
-Why all this header here?
+Yes the patch is backwards sorry.  Testing alt proposal from
+stern@rowland.harvard.edu.  It may be a buggy driver
+but it would be nice if a buggy driver couldn't bring down
+the entire usb core. lsusb hangs until reboot or reset of usb.
 
-And the from: line doesn't match your Signed-off-by: line :(
+It seems to behave fine on first use.  Run Zoom or cheese
+works fine first time.  Subsequent runs, no device found
+and usb is crashed with trace in dmesg.
 
-> Date: Thu, 12 Nov 2020 15:28:29 +0000
-> Subject: [PATCH] usb: core: Null deref in kernel with USB webcams.
-> 
-> Fixes: Ubuntu Launchpad bug 1827452
-> 
-> This is my first attempt at a kernel contribution so sorry if sloppy.
+Thanks
+John
 
-No need to put this in the changelog text and have it be in the kernel
-for foever :)
 
-> 
-> There is some kind of race condition affecting Logitech
-> webcams that crash USB with a null dereference.
-> Affects raspberry pi devices as well as x86.
-> No check on dev before dereference.
-> Simple fix for issue experienced for months in
-> both x86 and arm/rpi environments.
-> 
-> Signed-off-by: John Boero <boeroboy@gmail.com>
-> 
-> ---
-> drivers/usb/core/usb.c | 6 +-----
-> 1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> index d8756ffe513a..9b4ac4415f1a 100644
-> --- a/drivers/usb/core/usb.c
-> +++ b/drivers/usb/core/usb.c
-> @@ -272,13 +272,9 @@ EXPORT_SYMBOL_GPL(usb_find_alt_setting);
-> struct usb_interface *usb_ifnum_to_if(const struct usb_device *dev,
->                                      unsigned ifnum)
-> {
-> -       struct usb_host_config *config = NULL;
-> +       struct usb_host_config *config = dev->actconfig;
->        int i;
-> 
-> -       if (!dev)
-> -               return NULL;
-> -
-> -       config = dev->actconfig;
->        if (!config)
->                return NULL;
->        for (i = 0; i < config->desc.bNumInterfaces; i++)
-
-This patch is corrupted and can not be applied, but also, it looks
-backwards, right?
-
-And how about we find the race condition and fix that instead of trying
-to paper over it here?
-
-thanks,
-
-greg k-h
+On Thu, Nov 12, 2020 at 5:04 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Nov 12, 2020 at 03:52:02PM +0000, John Boero wrote:
+> > >From 54f9886454e9a28e8d943c1cef15df9c11555df7 Mon Sep 17 00:00:00 2001
+> > From: JohnnyB <jboero@users.noreply.github.com>
+>
+> Why all this header here?
+>
+> And the from: line doesn't match your Signed-off-by: line :(
+>
+> > Date: Thu, 12 Nov 2020 15:28:29 +0000
+> > Subject: [PATCH] usb: core: Null deref in kernel with USB webcams.
+> >
+> > Fixes: Ubuntu Launchpad bug 1827452
+> >
+> > This is my first attempt at a kernel contribution so sorry if sloppy.
+>
+> No need to put this in the changelog text and have it be in the kernel
+> for foever :)
+>
+> >
+> > There is some kind of race condition affecting Logitech
+> > webcams that crash USB with a null dereference.
+> > Affects raspberry pi devices as well as x86.
+> > No check on dev before dereference.
+> > Simple fix for issue experienced for months in
+> > both x86 and arm/rpi environments.
+> >
+> > Signed-off-by: John Boero <boeroboy@gmail.com>
+> >
+> > ---
+> > drivers/usb/core/usb.c | 6 +-----
+> > 1 file changed, 1 insertion(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> > index d8756ffe513a..9b4ac4415f1a 100644
+> > --- a/drivers/usb/core/usb.c
+> > +++ b/drivers/usb/core/usb.c
+> > @@ -272,13 +272,9 @@ EXPORT_SYMBOL_GPL(usb_find_alt_setting);
+> > struct usb_interface *usb_ifnum_to_if(const struct usb_device *dev,
+> >                                      unsigned ifnum)
+> > {
+> > -       struct usb_host_config *config = NULL;
+> > +       struct usb_host_config *config = dev->actconfig;
+> >        int i;
+> >
+> > -       if (!dev)
+> > -               return NULL;
+> > -
+> > -       config = dev->actconfig;
+> >        if (!config)
+> >                return NULL;
+> >        for (i = 0; i < config->desc.bNumInterfaces; i++)
+>
+> This patch is corrupted and can not be applied, but also, it looks
+> backwards, right?
+>
+> And how about we find the race condition and fix that instead of trying
+> to paper over it here?
+>
+> thanks,
+>
+> greg k-h
