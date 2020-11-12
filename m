@@ -2,170 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C10672B04BC
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 13:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA062B051D
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 13:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727942AbgKLMLx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 07:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727035AbgKLMLw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 07:11:52 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEC8C0613D1;
-        Thu, 12 Nov 2020 04:11:52 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id c66so4364961pfa.4;
-        Thu, 12 Nov 2020 04:11:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=t1DdLgTC9wfaj9IQp94XVXE/ol9y5Kusx3kBt32JG7w=;
-        b=nfGWH+sC/kJrBlznTemQAIuBYZQD2xNWxlJEtlggRHen6AMLz+O/MUAXtwEGzKvuZ/
-         bsS3SrCgqY+YgV9+IQFoE66cWTsqf59EVv7MAXIMcyCZLQBi3ZYrdH0UBRMuLlUf2yj9
-         b3zk/VlfZuKV5h+JRk2sbI5YCSK/eXZQe9SLBqml5q6VbrP+Hu37EXSklURgk0RJXkCL
-         zaFuF/yPmrcY4R9Nl3tfQb6E0kpPJsUC1scb2nkDY4XAILjjEVTQ+IskKOpGAVM/tKzP
-         a9OclLMKkoky6+eolkG9m1qHdhsY+dM5SBB4tu2ODyD6qKMArQFDJ5Rlnvj+QOkG6IN7
-         pMog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=t1DdLgTC9wfaj9IQp94XVXE/ol9y5Kusx3kBt32JG7w=;
-        b=OU69d8bAqyK+I/4tEJJRNMxpny5ha5Mp92v90p4TA1RjIjEfRUh2WUD2T/EEmKLxr+
-         51qdN6OVJmdxvlvJvaz+CUCHeOgrPKsrYDqBSejaMfoTMfp3ZAwQZqL7DkJaECc5hI2R
-         eDxhwwpva/noLLFIz7kM1y+2jYusdYyx/2w33qgi7fZJRnYqjd7W+eLNzYuYDsZivdDI
-         t+EiQ8pyTj+OEpmnIAs4i+oQMNC7kvikDuKw5nyiXI9THQASysmq2laryLGQj58j2K98
-         rsVgD60/dWFXuWZOXHnOenXIJSB/320N2tJTUJf3HulvcmHc+KoebLHf8V8/ayXIHlKc
-         m7uA==
-X-Gm-Message-State: AOAM533Hd0AzWh4oGcKayoPs7LEI1JvkkVpQHZ5gZsOE4Jdk4HM7jwBd
-        4Q8gGOl8Hf3TxG348n6LxVmouXuF+u8Dteo=
-X-Google-Smtp-Source: ABdhPJzoAKiGQyUiVJYAYxSHzoiJpwlzyy5z+eeSeCMFXBPBeQw15GAuIH4UK25wWxOwLWRnusSo1g==
-X-Received: by 2002:a17:90a:4295:: with SMTP id p21mr9377058pjg.217.1605183112075;
-        Thu, 12 Nov 2020 04:11:52 -0800 (PST)
-Received: from localhost.localdomain ([221.124.243.27])
-        by smtp.gmail.com with ESMTPSA id v23sm6150243pfn.141.2020.11.12.04.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 04:11:51 -0800 (PST)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Thomas Winischhofer <thomas@winischhofer.net>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH v3 2/5] console: Delete dummy con_font_set() and con_font_default() callback implementations
-Date:   Thu, 12 Nov 2020 07:11:20 -0500
-Message-Id: <9952c7538d2a32bb1a82af323be482e7afb3dedf.1605169912.git.yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1605169912.git.yepeilin.cs@gmail.com>
-References: <cover.1605169912.git.yepeilin.cs@gmail.com>
+        id S1728042AbgKLMnu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 07:43:50 -0500
+Received: from mga04.intel.com ([192.55.52.120]:60504 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727646AbgKLMnu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Nov 2020 07:43:50 -0500
+IronPort-SDR: otbR1JLwLu1RBxt6bzxquAa1N3WDBUkrkQLoC7YsQkjB5q1cpoqinH1jMkBAwv857eZKizHW2j
+ 2geA9X9OjzVw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9802"; a="167717469"
+X-IronPort-AV: E=Sophos;i="5.77,472,1596524400"; 
+   d="scan'208";a="167717469"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2020 04:43:48 -0800
+IronPort-SDR: fsFIy+cgjj5mCIALl4pFdwQtH9jpbeYRKJ+LkG20X3MmxlB61B5wkqSOhDDYdp7CfF7ZMlVneK
+ 4/3UU/iW/AwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,472,1596524400"; 
+   d="scan'208";a="429188768"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 12 Nov 2020 04:43:46 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Nov 2020 14:43:45 +0200
+Date:   Thu, 12 Nov 2020 14:43:45 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, Benson Leung <bleung@chromium.org>
+Subject: Re: [PATCH v3 2/2] usb: typec: Expose Product Type VDOs via sysfs
+Message-ID: <20201112124345.GS1224435@kuha.fi.intel.com>
+References: <20201023214328.1262883-1-pmalani@chromium.org>
+ <20201023214328.1262883-2-pmalani@chromium.org>
+ <20201110115453.GI1224435@kuha.fi.intel.com>
+ <20201112024055.GA1367855@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201112024055.GA1367855@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-.con_font_set and .con_font_default callbacks should not pass `struct
-console_font *` as a parameter, since `struct console_font` is a UAPI
-structure.
+On Wed, Nov 11, 2020 at 06:40:55PM -0800, Prashant Malani wrote:
+> Hi Heikki,
+> 
+> On Tue, Nov 10, 2020 at 01:54:53PM +0200, Heikki Krogerus wrote:
+> > On Fri, Oct 23, 2020 at 02:43:28PM -0700, Prashant Malani wrote:
+> > 
+> > I've now come to the conclusion that this is not the correct approach.
+> > Instead, the whole identity, all six VDOs, should be supplied
+> > separately with a "raw" sysfs attribute file after all.
+> > 
+> > The three attribute files that we already have - so id_header,
+> > cert_stat and product - can always supply the actual VDO as is,
+> > regardless of the product type, so they are fine. But these new
+> > attribute files, product_type_vdoX, would behave differently as they
+> > supply different information depending on the product type. That just
+> > does not feel right to me.
+> 
+> OOI: I'd like to understand the reservations around this approach. Can't
+> userspace just read these and then interpret them appropriately according
+> to the id_header as well as PD revision (and version number) if that's exposed?
+> The only thing I see changing is how we name those product_type_vdoX
+> sysfs files, i.e product_type_vdo0 == passive_cable_vdo OR active_cable_vdo1
+> depending on the product type.
+> 
+> That said, perhaps I'm missing some aspect of this.
 
-We are trying to let them use our new kernel font descriptor, `struct
-font_desc` instead. To make that work slightly easier, first delete all of
-their no-op implementations used by dummy consoles.
+I don't think the userspace should have to interpret any of these
+VDOs. If the userspace has to interpret the information, then the
+userspace should interpret everything for the sake of consistency (so
+the "raw" attribute file).
 
-This will make KD_FONT_OP_SET and KD_FONT_OP_SET_DEFAULT ioctl() requests
-on dummy consoles start to fail and return `-ENOSYS`, which is intended,
-since no user should ever expect such operations to succeed on dummy
-consoles.
+But I still think that defining separate device types for every
+product type would be the best way to handle the identity. We could
+then have sysfs attribute files that are specific for each product
+type. It does not even matter that some of the product types are going
+to be removed. We will have to handle all of them in any case,
+including the ones that were removed. This way things would be much
+more clear for the userspace.
 
-Suggested-by: Daniel Vetter <daniel@ffwll.ch>
-Signed-off-by: Peilin Ye <yepeilin.cs@gmail.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-v2: https://lore.kernel.org/lkml/c5563eeea36aae7bd72ea2e985bc610d585ece40.1604306433.git.yepeilin.cs@gmail.com/
+The only problem IMO with the separate device types for each product
+type is that we don't always have access to the Discover Identity
+result. It means depending on your system we will claim the
+partner device type is "default" (no identity information) or the
+actual product type. That is also a bit inconsistent, but is is
+acceptable? I would really like to here what Greg thinks about all
+this.
 
-Strictly speaking this is different from v2 (see changelog), but it really
-shouldn't matter, so I'm keeping Greg's "Reviewed-by:".
+> > So lets just add the "raw" sysfs attribute file. We can think about
+> > extracting some other details from the product type VDOs once the
+> > specification has settled down a bit and we can be quite certain that
+> > those details will always be available.
+> > 
+> > Would this be OK to you? I think we should be able to dump the data to
+> > the "raw" sysfs attribute file with something like hex_dump_to_buffer().
+> 
+> FWIW, "raw" option SGTM (the product type VDOs can be parsed from the
+> buffer since the format is fixed).
 
-Changes in v3:
-  - Improve commit message. (Jiri)
-  - Do not delete con_font_copy() callbacks, since they have been deleted
-    in patch "console: Delete unused con_font_copy() callback
-    implementations".
+Well, I'm starting to think that what if we just prepare patches where
+we propose separate device type for every product type? Of course, if
+they are OK to you?
 
-Change in v2:
-  - Do not Cc: stable.
 
- drivers/usb/misc/sisusbvga/sisusb_con.c | 15 ---------------
- drivers/video/console/dummycon.c        | 14 --------------
- 2 files changed, 29 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/misc/sisusbvga/sisusb_con.c b/drivers/usb/misc/sisusbvga/sisusb_con.c
-index fd9954381fbf..dfa0d5ce6012 100644
---- a/drivers/usb/misc/sisusbvga/sisusb_con.c
-+++ b/drivers/usb/misc/sisusbvga/sisusb_con.c
-@@ -1345,19 +1345,6 @@ static int sisusbdummycon_blank(struct vc_data *vc, int blank, int mode_switch)
- 	return 0;
- }
- 
--static int sisusbdummycon_font_set(struct vc_data *vc,
--				   struct console_font *font,
--				   unsigned int flags)
--{
--	return 0;
--}
--
--static int sisusbdummycon_font_default(struct vc_data *vc,
--				       struct console_font *font, char *name)
--{
--	return 0;
--}
--
- static const struct consw sisusb_dummy_con = {
- 	.owner =		THIS_MODULE,
- 	.con_startup =		sisusbdummycon_startup,
-@@ -1370,8 +1357,6 @@ static const struct consw sisusb_dummy_con = {
- 	.con_scroll =		sisusbdummycon_scroll,
- 	.con_switch =		sisusbdummycon_switch,
- 	.con_blank =		sisusbdummycon_blank,
--	.con_font_set =		sisusbdummycon_font_set,
--	.con_font_default =	sisusbdummycon_font_default,
- };
- 
- int
-diff --git a/drivers/video/console/dummycon.c b/drivers/video/console/dummycon.c
-index ab3df752fb57..f1711b2f9ff0 100644
---- a/drivers/video/console/dummycon.c
-+++ b/drivers/video/console/dummycon.c
-@@ -124,18 +124,6 @@ static int dummycon_switch(struct vc_data *vc)
- 	return 0;
- }
- 
--static int dummycon_font_set(struct vc_data *vc, struct console_font *font,
--			     unsigned int flags)
--{
--	return 0;
--}
--
--static int dummycon_font_default(struct vc_data *vc,
--				 struct console_font *font, char *name)
--{
--	return 0;
--}
--
- /*
-  *  The console `switch' structure for the dummy console
-  *
-@@ -154,7 +142,5 @@ const struct consw dummy_con = {
- 	.con_scroll =	dummycon_scroll,
- 	.con_switch =	dummycon_switch,
- 	.con_blank =	dummycon_blank,
--	.con_font_set =	dummycon_font_set,
--	.con_font_default =	dummycon_font_default,
- };
- EXPORT_SYMBOL_GPL(dummy_con);
 -- 
-2.25.1
-
+heikki
