@@ -2,140 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4534A2B001D
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 08:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3CE2B005C
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 08:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726108AbgKLHHw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 02:07:52 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7518 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725902AbgKLHH0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 02:07:26 -0500
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CWt2V1WpVzhkl7;
-        Thu, 12 Nov 2020 15:07:14 +0800 (CST)
-Received: from huawei.com (10.69.192.56) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Thu, 12 Nov 2020
- 15:07:15 +0800
-From:   Luo Jiaxing <luojiaxing@huawei.com>
-To:     <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>,
-        <andriy.shevchenko@linux.intel.com>
-CC:     <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <john.garry@huawei.com>, <himanshu.madhani@cavium.com>,
-        <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <uma.shankar@intel.com>, <anshuman.gupta@intel.com>,
-        <animesh.manna@intel.com>, <linux-usb@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>
-Subject: [PATCH v4 5/5] drm/i915/display: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
-Date:   Thu, 12 Nov 2020 15:07:43 +0800
-Message-ID: <1605164864-58944-6-git-send-email-luojiaxing@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
-References: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
+        id S1725966AbgKLHbY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 02:31:24 -0500
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:48350 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725884AbgKLHbY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 02:31:24 -0500
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AC7QKw2026884;
+        Wed, 11 Nov 2020 23:31:18 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pfpt0220;
+ bh=Q5CSx4nNQG/6lho+5mk7KxoCzmyopquKcR2OAYFD2B8=;
+ b=SLY8p2Or9tDCBzhq1OTVhaZVk1d7aqbZkg/18J4c2PaK6ZSkcNylN3n7HsqG6T2foHjV
+ +ni8vKUtzUaqo+N7m37GAlbwAZB//wszyjTE6oFZ1PLamglWlacI0PeVqkxDjYa0ha/n
+ AYS9KyAh/imiTQZxZqLjw34w3irOrhIAJoovBZoTNUNGUqaBCeBzg0MUWxYgSv1K4qxd
+ Rko6YtLf52B052L+vfzugvCzc3KLHtEPxhUtLCVm9jLVHgDL9eVakkrlF1TjsZLd/Mrp
+ pO1bXTJWZXIcj4FpDoAotr6UewjiVJUaurrX8seOy+jQo0YFiSC97dzYyk8z/lfna1/d Mw== 
+Received: from sc-exch01.marvell.com ([199.233.58.181])
+        by mx0a-0016f401.pphosted.com with ESMTP id 34nstuayc5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 11 Nov 2020 23:31:18 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 11 Nov
+ 2020 23:31:16 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 11 Nov
+ 2020 23:31:15 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 11 Nov 2020 23:31:15 -0800
+Received: from [10.193.39.169] (NN-LT0019.marvell.com [10.193.39.169])
+        by maili.marvell.com (Postfix) with ESMTP id E68873F7040;
+        Wed, 11 Nov 2020 23:31:12 -0800 (PST)
+Subject: Re: [EXT] Re: [PATCH v3 net-next 07/21] net: usb: aqc111: Add support
+ for getting and setting of MAC address
+To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        Igor Russkikh <Igor.Russkikh@aquantia.com>
+CC:     <linux-usb@vger.kernel.org>, <davem@davemloft.net>,
+        <netdev@vger.kernel.org>, <andrew@lunn.ch>,
+        Dmitry Bezrukov <Dmitry.Bezrukov@aquantia.com>
+References: <cover.1542794577.git.igor.russkikh@aquantia.com>
+ <8f92711d8479a3df65849e60fd92c727e1e1f78a.1542794577.git.igor.russkikh@aquantia.com>
+ <7a866553-1333-4952-5fe6-45336235ebb2@gmail.com>
+From:   Igor Russkikh <irusskikh@marvell.com>
+Message-ID: <9ad88163-ba9a-f49d-4327-d25ad97a8041@marvell.com>
+Date:   Thu, 12 Nov 2020 10:31:11 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101
+ Thunderbird/83.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+In-Reply-To: <7a866553-1333-4952-5fe6-45336235ebb2@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-12_02:2020-11-10,2020-11-12 signatures=0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Seq introduce a new helper macro DEFINE_SHOW_STORE_ATTRIBUTE for
-Read-Write file, so we apply it at drm/i915/display to reduce some
-duplicated code.
+Hi Anant,
 
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
----
- .../gpu/drm/i915/display/intel_display_debugfs.c   | 55 ++--------------------
- 1 file changed, 4 insertions(+), 51 deletions(-)
+>>
+>> +static int aqc111_set_mac_addr(struct net_device *net, void *p)
+>> +{
+>> +	struct usbnet *dev = netdev_priv(net);
+>> +	int ret = 0;
+>> +
+>> +	ret = eth_mac_addr(net, p);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+> 
+> When eth_mac_addr() fails, from what I can see, it returns either -EBUSY, or
+> -EADDRNOTAVAIL.
+> Wouldn't it be a better idea to set a random MAC address instead, when
+> -EADDRNOTAVAIL is returned, so that the interface still comes up and is
+> usable?
+> 
+> I'm only asking because this feels similar to the discussion that can be 
+> found here.
+>     https://urldefense.proofpoint.com/v2/url?u=https-3A__lkml.org_lkml_2020_10_2_305&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=3kUjVPjrPMvlbd3rzgP63W0eewvCq4D-kzQRqaXHOqU&m=aJdSTt0SmQpKGqrsMm9TQ2mCWDH1Vc7arUp0xq-v6Ac&s=n-tXDyWIR5tPvrQ4DUasDgrocxKU3e_A-mh3Nv5JC5A&e=
 
-diff --git a/drivers/gpu/drm/i915/display/intel_display_debugfs.c b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-index 0bf31f9..8bf839f 100644
---- a/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-+++ b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-@@ -1329,21 +1329,7 @@ static int i915_displayport_test_active_show(struct seq_file *m, void *data)
- 	return 0;
- }
- 
--static int i915_displayport_test_active_open(struct inode *inode,
--					     struct file *file)
--{
--	return single_open(file, i915_displayport_test_active_show,
--			   inode->i_private);
--}
--
--static const struct file_operations i915_displayport_test_active_fops = {
--	.owner = THIS_MODULE,
--	.open = i915_displayport_test_active_open,
--	.read = seq_read,
--	.llseek = seq_lseek,
--	.release = single_release,
--	.write = i915_displayport_test_active_write
--};
-+DEFINE_SHOW_STORE_ATTRIBUTE(i915_displayport_test_active);
- 
- static int i915_displayport_test_data_show(struct seq_file *m, void *data)
- {
-@@ -1733,19 +1719,7 @@ static ssize_t i915_hpd_storm_ctl_write(struct file *file,
- 	return len;
- }
- 
--static int i915_hpd_storm_ctl_open(struct inode *inode, struct file *file)
--{
--	return single_open(file, i915_hpd_storm_ctl_show, inode->i_private);
--}
--
--static const struct file_operations i915_hpd_storm_ctl_fops = {
--	.owner = THIS_MODULE,
--	.open = i915_hpd_storm_ctl_open,
--	.read = seq_read,
--	.llseek = seq_lseek,
--	.release = single_release,
--	.write = i915_hpd_storm_ctl_write
--};
-+DEFINE_SHOW_STORE_ATTRIBUTE(i915_hpd_storm_ctl);
- 
- static int i915_hpd_short_storm_ctl_show(struct seq_file *m, void *data)
- {
-@@ -1811,14 +1785,7 @@ static ssize_t i915_hpd_short_storm_ctl_write(struct file *file,
- 	return len;
- }
- 
--static const struct file_operations i915_hpd_short_storm_ctl_fops = {
--	.owner = THIS_MODULE,
--	.open = i915_hpd_short_storm_ctl_open,
--	.read = seq_read,
--	.llseek = seq_lseek,
--	.release = single_release,
--	.write = i915_hpd_short_storm_ctl_write,
--};
-+DEFINE_SHOW_STORE_ATTRIBUTE(i915_hpd_short_storm_ctl);
- 
- static int i915_drrs_ctl_set(void *data, u64 val)
- {
-@@ -2181,21 +2148,7 @@ static ssize_t i915_dsc_fec_support_write(struct file *file,
- 	return len;
- }
- 
--static int i915_dsc_fec_support_open(struct inode *inode,
--				     struct file *file)
--{
--	return single_open(file, i915_dsc_fec_support_show,
--			   inode->i_private);
--}
--
--static const struct file_operations i915_dsc_fec_support_fops = {
--	.owner = THIS_MODULE,
--	.open = i915_dsc_fec_support_open,
--	.read = seq_read,
--	.llseek = seq_lseek,
--	.release = single_release,
--	.write = i915_dsc_fec_support_write
--};
-+DEFINE_SHOW_STORE_ATTRIBUTE(i915_dsc_fec_support);
- 
- /**
-  * intel_connector_debugfs_add - add i915 specific connector debugfs files
--- 
-2.7.4
+Here in set_mac_addr driver is being asked to SET the specified mac.
+If it fails - device will most probably drop the packets designated for it.
 
+So I think no, you can't put here some random MAC.
+
+Regards,
+  Igor
