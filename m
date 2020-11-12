@@ -2,50 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6532B08F2
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 16:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D302B0902
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 16:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728327AbgKLPwP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 10:52:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
+        id S1728414AbgKLPya (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 10:54:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728274AbgKLPwP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 10:52:15 -0500
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E986EC0613D1;
-        Thu, 12 Nov 2020 07:52:14 -0800 (PST)
-Received: by mail-oi1-x243.google.com with SMTP id m17so6882950oie.4;
-        Thu, 12 Nov 2020 07:52:14 -0800 (PST)
+        with ESMTP id S1728263AbgKLPya (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 10:54:30 -0500
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86ABC0613D1;
+        Thu, 12 Nov 2020 07:54:29 -0800 (PST)
+Received: by mail-ot1-x341.google.com with SMTP id i18so6041921ots.0;
+        Thu, 12 Nov 2020 07:54:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=MIVD3ec0pMDUnB/9PHlMhpg4aZF0Cw3HdcfpgHfnm9o=;
-        b=e3rEPnCUToZm5Auuc2kEjfMVYhGgtYli/SBoiMGAGsCoAroVu4wW5EZ3o+iG2by1nF
-         qr2/wTqIj+Ic/t5+zK2A2LDV/wRKNy+zC0N7zszbmxcrC6R5Dh+nuG0xmfCjU71WIZtg
-         AJ0Tanvonq6536yxNEOjKE97UKhAEAE5JsvH8zEo1hbBt9m7PhqQBQcPZZ7VMhPziw9g
-         e/GEPChTM9lFlegJVyZpgSTdajf/pwItZeZeqcxD/eZgsIV34g4Wuv9VMK9Dk5EvVeg2
-         3rBqSjEq8+uGG3jLyO5MXCUAk8HPhfUJTVQMbRt9aglzZnS97pdkUs2m8OzRWr5ID+nC
-         Uqfg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=MMQtN7Nbr6zgWARwui70WbLbCVVKRL1DcrlPGnl/Ue4=;
+        b=EE7ELnPSH9qljHjoTnHA2ZP4SzySQWAi75w+rvGCgr6OpYHl/nUWBPMWiD7P1ZN+LW
+         foQPoHUFiGKFRsvShNJfBayHKA6FAv05zLK5HJqc9vU83+hdJz778R8zVap4/EVFtpGY
+         5+C3wVoWEWy/x9wkY4Rzrq1Qt2KRn6liZzLSsUaBc4Yml29fgGC8eIgEWHvBlF81F46F
+         /zBW4B4V9gdc+8syWGvtNWV/ovHq5kO8i0MJNeZZzJsFPct5dN0PtVEFeIXirHYgSP7o
+         f1kj4KsfwKXYwDjJcgW1xNMJRE2ScECjRWtiNRbIibIgsO5vJsNMHnzyjOcoJWYzssxo
+         Do2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=MIVD3ec0pMDUnB/9PHlMhpg4aZF0Cw3HdcfpgHfnm9o=;
-        b=hdPAd7jQBrZOjHvx9sJLV+lGN8b+v4rqJSRpVyWNy3gj5ru5JOcfMKkUoDH8KElGtr
-         BLnfKWDnF2itZ9JaFWC6rG245QIs9acprdc1ZNEg82oDGcfbY9otVfn2HnLlDK9lN7ag
-         i7v3kq+cxOqZalqfXY3uDpozfgz90mZKWNtHLPFCQsiLf97XPdAbybvo9ZplE15pOmYz
-         lva9NZ0GBGdncMGGIyNsGphgjwzhCDxkvo8LmHAFvPJcrCxzwvA6FFOOrbUCfFmbgYQd
-         WxEcry2A9CIkL9ab6L6jr8e31KWfS1PEhO1nRNl2V93qRwDiTGJ3JYL4mSYz8H54IAtc
-         yxBg==
-X-Gm-Message-State: AOAM533eqo10FuksqbqHmmy7bxp7Yf0xvNrWSPLZ11iZ8Hy+Ehme+Rds
-        ybMP5DYXDIjU0uwSpwmB43TV6qrJ6xWeZuQrZbf23mR0X8Wyng==
-X-Google-Smtp-Source: ABdhPJwaGZvLg3cxotGZ2nYmKL0QSsibauQxy6Q/maqt4lPWs92SRosc9XQushbmxSDrR3grHmDG+8RMVAhIgW2b6rM=
-X-Received: by 2002:aca:ad07:: with SMTP id w7mr182696oie.122.1605196334088;
- Thu, 12 Nov 2020 07:52:14 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=MMQtN7Nbr6zgWARwui70WbLbCVVKRL1DcrlPGnl/Ue4=;
+        b=p1AMtXXS7Lc/AVqITGdHaMSbgDBzSjG4bYxqcjgt2kLAcDDi1HkNzDzgrXWfY9aOpz
+         ACk7rixLanX+HrEZkkekqBzcMak6Qf8LTnC2XtpoBuNkeRr3fzX/QWj5BQGpmgtgPRAd
+         93NDuH4EaDyBt3y4RpevH3eUs7yXEvOKuE078ZuhS6fl8A8JaNKvPO9t2coVdlqrfVYQ
+         lX4gSYICJdVrF2n0fHhIeUYJrV9CPHJRcEX7UOhaad1HZLVvqo9HYa1xS8Fui/hCdwDh
+         B5YSW3XlagtOj0S/QUftf1VH5ToH5vd+eIHsu7AbJYeQl6EsJpmh4NAfP7IZ9hiVuB4H
+         JFmw==
+X-Gm-Message-State: AOAM530DwzbwKa9Z+p4fwAVLUq6SYUstAX6SLngIvTJCLQoCRo2yhXpO
+        gAHmEgP71gNmAeiCdoRYuutcK+qske/N3kve2KVwh1rh8wQ=
+X-Google-Smtp-Source: ABdhPJwdGiaFxFk9fnJXsrIziAr7OViLgeoGxQozhv0pFjjs1JcwMznl5dpBiMeK/OBliZLiWSoJnsvSRuo7WlO5cUs=
+X-Received: by 2002:a9d:3ef7:: with SMTP id b110mr21167453otc.333.1605196469227;
+ Thu, 12 Nov 2020 07:54:29 -0800 (PST)
 MIME-Version: 1.0
+References: <CAO5W59jOWuRKizngF8vv9jb-zr_HnLC2eNxKqi3AYwg8KLwKoA@mail.gmail.com>
+In-Reply-To: <CAO5W59jOWuRKizngF8vv9jb-zr_HnLC2eNxKqi3AYwg8KLwKoA@mail.gmail.com>
 From:   John Boero <boeroboy@gmail.com>
-Date:   Thu, 12 Nov 2020 15:52:02 +0000
-Message-ID: <CAO5W59jOWuRKizngF8vv9jb-zr_HnLC2eNxKqi3AYwg8KLwKoA@mail.gmail.com>
-Subject: [PATCH] usb: core: Null deref in kernel with USB webcams.
+Date:   Thu, 12 Nov 2020 15:54:17 +0000
+Message-ID: <CAO5W59iCaHOZkjPvQ2zeSt6+T1pvhrDrKYfMqOkfCx7eQBVcsQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: core: Null deref in kernel with USB webcams.
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -54,46 +57,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From 54f9886454e9a28e8d943c1cef15df9c11555df7 Mon Sep 17 00:00:00 2001
-From: JohnnyB <jboero@users.noreply.github.com>
-Date: Thu, 12 Nov 2020 15:28:29 +0000
-Subject: [PATCH] usb: core: Null deref in kernel with USB webcams.
+Oh for pete's sake.  That patch is backwards.  Sorry.
+John
 
-Fixes: Ubuntu Launchpad bug 1827452
-
-This is my first attempt at a kernel contribution so sorry if sloppy.
-
-There is some kind of race condition affecting Logitech
-webcams that crash USB with a null dereference.
-Affects raspberry pi devices as well as x86.
-No check on dev before dereference.
-Simple fix for issue experienced for months in
-both x86 and arm/rpi environments.
-
-Signed-off-by: John Boero <boeroboy@gmail.com>
-
----
-drivers/usb/core/usb.c | 6 +-----
-1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index d8756ffe513a..9b4ac4415f1a 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -272,13 +272,9 @@ EXPORT_SYMBOL_GPL(usb_find_alt_setting);
-struct usb_interface *usb_ifnum_to_if(const struct usb_device *dev,
-                                     unsigned ifnum)
-{
--       struct usb_host_config *config = NULL;
-+       struct usb_host_config *config = dev->actconfig;
-       int i;
-
--       if (!dev)
--               return NULL;
--
--       config = dev->actconfig;
-       if (!config)
-               return NULL;
-       for (i = 0; i < config->desc.bNumInterfaces; i++)
---
-2.26.2
+On Thu, Nov 12, 2020 at 3:52 PM John Boero <boeroboy@gmail.com> wrote:
+>
+> From 54f9886454e9a28e8d943c1cef15df9c11555df7 Mon Sep 17 00:00:00 2001
+> From: JohnnyB <jboero@users.noreply.github.com>
+> Date: Thu, 12 Nov 2020 15:28:29 +0000
+> Subject: [PATCH] usb: core: Null deref in kernel with USB webcams.
+>
+> Fixes: Ubuntu Launchpad bug 1827452
+>
+> This is my first attempt at a kernel contribution so sorry if sloppy.
+>
+> There is some kind of race condition affecting Logitech
+> webcams that crash USB with a null dereference.
+> Affects raspberry pi devices as well as x86.
+> No check on dev before dereference.
+> Simple fix for issue experienced for months in
+> both x86 and arm/rpi environments.
+>
+> Signed-off-by: John Boero <boeroboy@gmail.com>
+>
+> ---
+> drivers/usb/core/usb.c | 6 +-----
+> 1 file changed, 1 insertion(+), 5 deletions(-)
+>
+> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> index d8756ffe513a..9b4ac4415f1a 100644
+> --- a/drivers/usb/core/usb.c
+> +++ b/drivers/usb/core/usb.c
+> @@ -272,13 +272,9 @@ EXPORT_SYMBOL_GPL(usb_find_alt_setting);
+> struct usb_interface *usb_ifnum_to_if(const struct usb_device *dev,
+>                                      unsigned ifnum)
+> {
+> -       struct usb_host_config *config = NULL;
+> +       struct usb_host_config *config = dev->actconfig;
+>        int i;
+>
+> -       if (!dev)
+> -               return NULL;
+> -
+> -       config = dev->actconfig;
+>        if (!config)
+>                return NULL;
+>        for (i = 0; i < config->desc.bNumInterfaces; i++)
+> --
+> 2.26.2
