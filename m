@@ -2,163 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B065C2B0EDF
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 21:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65D92B0F20
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 21:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbgKLUNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 15:13:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
+        id S1727155AbgKLUnB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 15:43:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726876AbgKLUNB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 15:13:01 -0500
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78A2C0613D1;
-        Thu, 12 Nov 2020 12:13:00 -0800 (PST)
-Received: by mail-qt1-x844.google.com with SMTP id p12so5031945qtp.7;
-        Thu, 12 Nov 2020 12:13:00 -0800 (PST)
+        with ESMTP id S1727025AbgKLUnB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 15:43:01 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB50C0613D1
+        for <linux-usb@vger.kernel.org>; Thu, 12 Nov 2020 12:43:01 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id 74so10480781lfo.5
+        for <linux-usb@vger.kernel.org>; Thu, 12 Nov 2020 12:43:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jSLiwf45DctnZlDAuzdiBpZq++0HKZoLZ6SkMPPn0Lc=;
-        b=T0m21NbnuzVFIlMwyubECMfP9v2p6loVrpJFqHZnT9DLrqu99Qddv9vw4pgOyrXD5x
-         2P8Kgh6qTZ4akl7IKVAXVTVnZtNpjD8v8eSapzD+wwXWhX+bF4bKPu86XOYM1HeyoS3I
-         ABG39Klv2C3qmEG6YMQYcIJcODxqT7+eZvGXRMFQQS94e94HuRoaEwC+9wgygVhO93OW
-         NGiOjtdJ1Tb1ID9UK1NsjXyGzibOVvqbhI4mu0q+k7/w/8iFi+ioW3Nxht1kw7ZbuBqH
-         loKv5LTYSJlTxwWEVYpibJO0LbJYLF1yjOdGokCcRpKihGlUYFvnABQdjd4Nyi11djmQ
-         WWFg==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=wxwl1Ls/3gFJRcyba11bJr9CwJo7zW4muQyQiz0ZX6k=;
+        b=uoM7D2CNwr2jhLTptMv6q/uHCUjnBKMtzeEmjDB6rXyTUcF7iJRwz9GopeMlEAkzyn
+         1l282KciEaC8YLclGqV83qAQb5aJmEnZH60AbnyGmHfAe+EPmWrIRLxJki9PHYW5/7G9
+         4KsFaoJLde3u5++IEG1B7KNjeJJiqeaWzKrtUcaZOh0yknd0r9Heub5+xTuoCwbwoIGr
+         jbaTqW4A2b41+wCNKj1gHbHZAQCULyCL8JDcr2bt/WW0CJ6ri1DXe05Na2yFx8hL7DeN
+         Dq6Pn/EuuOZ5uRjCcgTqiypfBHFwJ38kjDkcN3h8R2D0dWPM6A0SKx4jWFnjfxAFu26Y
+         GCNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jSLiwf45DctnZlDAuzdiBpZq++0HKZoLZ6SkMPPn0Lc=;
-        b=Q9FNrNd+f9zuU2yI8Xc2jL+I/m1/zJe3DXYRElGQvm1HAMCo8rE6e3bsJVmRADlEJQ
-         Kk54nsglo/xif6by/evw3oQpKSyUtF74oRfwTzK4ovLXbx258TreWQS8WE72ris0T4tv
-         6Gwz/yXxSWLOTsywz+ysQKQtvrNdY4o5T/1HxYVMb/Y35xpdRNX1FBfWmBzfJxr8sgY4
-         ZqZrg+/thDVeAyk0vcGIGxGW+6C7MGNtc/sneNWnYh1quVFerYPAlLNvRkoxJX0DaFLC
-         WniNlkLnpWbfwAjeYuqRJV5sNOg+VyndlL7YbmA3laKyjHSAIDEZ0T1GPYXF56yD0q+0
-         bUMQ==
-X-Gm-Message-State: AOAM532mGOxRiy3xBugjt6dmqzBgxhvVyeknyikWBPSJsNS+4I/je510
-        HuPR8NF2OdFynaaVg/XGOgk=
-X-Google-Smtp-Source: ABdhPJyww+5zAVmXn72kJFjtR3QIx2kTV6PHDyJEmNwoMrp7p2o5iZ4kKYJgx3pPMDma1yO7B7hWEA==
-X-Received: by 2002:ac8:6898:: with SMTP id m24mr901388qtq.157.1605211980076;
-        Thu, 12 Nov 2020 12:13:00 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id z26sm5147041qki.40.2020.11.12.12.12.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 12:12:58 -0800 (PST)
-Date:   Thu, 12 Nov 2020 13:12:57 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        Tom Rix <trix@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-janitors@vger.kernel.org, linux-safety@lists.elisa.tech,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: storage: avoid use of uninitialized values in error
- path
-Message-ID: <20201112201257.GA1665022@ubuntu-m3-large-x86>
-References: <20201112191255.13372-1-lukas.bulwahn@gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=wxwl1Ls/3gFJRcyba11bJr9CwJo7zW4muQyQiz0ZX6k=;
+        b=dgafKULCHXmpBtIDgPLni3m7g8qn7O7FB6uar3aMPariM0teIlGjtOscCk4dF3tXXC
+         nIL1HNugcI8gMIlLSzZBa5s4AoGmNe9M3Xpk83EEup2jzpVQGn1dPP0emGyQheXtjSQ1
+         3pY4ETaZbow+NuWrQcS8Kld9LRgTDTClxKsghty3AM+lG9zOBn/tKK6PPDm2LPDDcwbP
+         pNfkeR5J5YUj6lFq+XLd1qkfUZWKNEDBZ1vwX+b7YlI9UsItVj8C+d9s2mvT2bcod/IV
+         p/JoywVt0ZnlH6xc6fzzzGTwyBjQtl2ftALqGxO2/Kp3AxkTIWP/yZ/VR/JiCxM6J/C5
+         a7aA==
+X-Gm-Message-State: AOAM533V6fcZOwWEpYHcdLwCqqUWOjClwh8PSXRdS3BWdHtAWXa/3Ep6
+        dMttOKDMeE5nX3nrO2O5qI2+YwOGj9vCgiUtRdx6/CoSIKpbXLAj
+X-Google-Smtp-Source: ABdhPJxdcJZdniK+SHl/wdeEpFqIXgKG0+lJdAfgAfBaGz3M8vgyN4uewQRveh6BYRoV1DMC5lqVuqIuiS1yuJawKqY=
+X-Received: by 2002:a05:6512:1050:: with SMTP id c16mr431613lfb.597.1605213778940;
+ Thu, 12 Nov 2020 12:42:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201112191255.13372-1-lukas.bulwahn@gmail.com>
+From:   Glenn Schmottlach <gschmottlach@gmail.com>
+Date:   Thu, 12 Nov 2020 15:42:47 -0500
+Message-ID: <CAMS2kBGqFx_8ErjXr4F8r=f2y6VEjFAVq2qoVf0DZA5ryqBB6g@mail.gmail.com>
+Subject: Re: [PATCH 0/3] UAC2 Gadget: feedback endpoint support
+To:     linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>, peter.chen@nxp.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 08:12:55PM +0100, Lukas Bulwahn wrote:
-> When usb_stor_bulk_transfer_sglist() returns with USB_STOR_XFER_ERROR, it
-> returns without writing to its parameter *act_len.
-> 
-> Further, the two callers of usb_stor_bulk_transfer_sglist():
-> 
->     usb_stor_bulk_srb() and
->     usb_stor_bulk_transfer_sg(),
-> 
-> use the passed variable partial without checking the return value. Hence,
-> the uninitialized value of partial is then used in the further execution
-> of those two functions.
-> 
-> Clang-analyzer detects this potential control and data flow and warns:
-> 
->   drivers/usb/storage/transport.c:469:40:
->     warning: The right operand of '-' is a garbage value
->     [clang-analyzer-core.UndefinedBinaryOperatorResult]
->           scsi_set_resid(srb, scsi_bufflen(srb) - partial);
->                                                 ^
-> 
->   drivers/usb/storage/transport.c:495:15:
->     warning: Assigned value is garbage or undefined
->     [clang-analyzer-core.uninitialized.Assign]
->                   length_left -= partial;
->                               ^
-> 
-> When a transfer error occurs, the *act_len value is probably ignored by the
-> higher layers. But it won't hurt to set it to a valid number, just in case.
-> 
-> For the two early-return paths in usb_stor_bulk_transfer_sglist(), the
-> amount of data transferred is 0.  So if act_len is not NULL, set *act_len
-> to 0 in those paths. That makes clang-analyzer happy.
-> 
-> Proposal was discussed in this mail thread:
-> 
-> Link: https://lore.kernel.org/linux-usb/alpine.DEB.2.21.2011112146110.13119@felia/
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Hi Ruslan -
 
-Assuming that setting it to zero is okay (sounds like it is based on the
-other thread), this is a reasonable fix.
+> I applied your patches, but WIN10 still can't recognize it well.
+> The UAC1 is OK for WIN10 with the below same configuration.
+> Any debug information you would like to know to check it?
 
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+> if [ "$FUNC" =3D=3D "uac2" ]; then
+> mkdir functions/$FUNC".0"
+> echo 2 > functions/$FUNC".0"/p_ssize
+> echo 48000 > functions/$FUNC".0"/p_srate
+> echo 3 > functions/$FUNC".0"/p_chmask
+>
+> echo 2 > functions/$FUNC".0"/c_ssize
+> echo 48000 > functions/$FUNC".0"/c_srate
+> echo 3 > functions/$FUNC".0"/c_chmask
+> #echo 4 > functions/$FUNC".0"/req_number
+> ln -s functions/$FUNC".0" configs/c.1
+> echo high-speed > /sys/kernel/config/usb_gadget/g1/max_speed
 
-> ---
-> applies cleanly on current master and next-20201112
-> 
-> I did some basic compile testing...
-> 
-> Alan, Greg, please pick this minor non-urgent clean-up patch.
-> 
->  drivers/usb/storage/transport.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-> index 238a8088e17f..5eb895b19c55 100644
-> --- a/drivers/usb/storage/transport.c
-> +++ b/drivers/usb/storage/transport.c
-> @@ -416,7 +416,7 @@ static int usb_stor_bulk_transfer_sglist(struct us_data *us, unsigned int pipe,
->  
->  	/* don't submit s-g requests during abort processing */
->  	if (test_bit(US_FLIDX_ABORTING, &us->dflags))
-> -		return USB_STOR_XFER_ERROR;
-> +		goto usb_stor_xfer_error;
->  
->  	/* initialize the scatter-gather request block */
->  	usb_stor_dbg(us, "xfer %u bytes, %d entries\n", length, num_sg);
-> @@ -424,7 +424,7 @@ static int usb_stor_bulk_transfer_sglist(struct us_data *us, unsigned int pipe,
->  			sg, num_sg, length, GFP_NOIO);
->  	if (result) {
->  		usb_stor_dbg(us, "usb_sg_init returned %d\n", result);
-> -		return USB_STOR_XFER_ERROR;
-> +		goto usb_stor_xfer_error;
->  	}
->  
->  	/*
-> @@ -452,6 +452,11 @@ static int usb_stor_bulk_transfer_sglist(struct us_data *us, unsigned int pipe,
->  		*act_len = us->current_sg.bytes;
->  	return interpret_urb_result(us, pipe, length, result,
->  			us->current_sg.bytes);
-> +
-> +usb_stor_xfer_error:
-> +	if (act_len)
-> +		*act_len = 0;
-> +	return USB_STOR_XFER_ERROR;
->  }
->  
->  /*
-> -- 
-> 2.17.1
-> 
+I too applied your patch and configured my UAC2 gadget with the
+following pertinent parameters:
+
+mkdir -p "/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0"
+echo "${req_number:-4}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/req_number"
+echo "${c_ssize:-4}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/c_ssize"
+echo "${c_srate:-48000}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/c_srate"
+echo "${c_chmask:-0xFFFFFFFF}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/c_chmask"
+echo "${c_sync:-adaptive}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/c_sync"
+echo "${p_ssize:-4}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/p_ssize"
+echo "${p_srate:-48000}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/p_srate"
+echo "${p_chmask:-0xFFFFFFFF}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/p_chmask"
+
+Unfortunately, under Windows 10 I get the following error loading the driver:
+
+This device cannot start. ( Problem Code 10)
+Problem Status: C0440022
+
+So the generic Windows (Thesycon) UAC2 driver appears to fail loading
+the Linux UAC2 gadget device. Can you share with us your configuration
+or how you tested this with Windows 10? I tested audio capture with
+another Linux PC running Audacity and it was correctly detected and
+seemed to work. I'm hoping it's a simple misconfiguration issue. Can
+you offer suggestions?
+
+Thanks,
+
+Glenn
