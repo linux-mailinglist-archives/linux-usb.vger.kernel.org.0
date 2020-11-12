@@ -2,65 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 864322B0347
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 12:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A3C2B03D1
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Nov 2020 12:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727819AbgKLLCC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Nov 2020 06:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727611AbgKLLAe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Nov 2020 06:00:34 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E150EC0617A6
-        for <linux-usb@vger.kernel.org>; Thu, 12 Nov 2020 03:00:28 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id o25so5917266oie.5
-        for <linux-usb@vger.kernel.org>; Thu, 12 Nov 2020 03:00:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=h4onEJdwh0UB0UIoQ3aO6sC3hYYulCy9/DmepheK50Q=;
-        b=Vg0+EQX1DV4yvZ5XnrlO5tg33koDysnOjLtTz0JKZxi9oyQmFoULGyUdMg67lJCZw5
-         simEiamh/EgvURX9QfhYsCQn7z4gWLbLX9PqrkinVHV3Z1QI10K2yzQ/8SKQDt7b6giW
-         hRgcqnK2KP8txrxGT8Di9xdRydSGnnWkhdkPPCvxZ2TrpeiiTkMXLM0XQjm46C3DbmNb
-         qjUArppIbx2Ku53t/CefaioMqfGIYmgz6Z3qpI+RPGpcoboeM/JwMXxLqzZJHdfDJR4Y
-         wo7vuDza9Na/TB8TF8f30WN/5Oromhqnq00qlZqCADBRUYkrYFw6Co/vo3KEZXaJ1KTT
-         qjcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=h4onEJdwh0UB0UIoQ3aO6sC3hYYulCy9/DmepheK50Q=;
-        b=bjo+2OlnnZ5dll2H5UltIz+DtvJmelzvDdxbKGlb+QMqYlYkJC9NyZ7eYOMWmTql5C
-         9EYusJp4lNBezRPQ77aQOlYVneWvsBnzid9LI3nbXGSKqpJCy44D1gJx7LrehF+7X5gM
-         MOmMrxSsaT9r4StnPg8KtIgJIx7LCX87YzYWNFmNJrJeo3MejmvC3w2toVzmv/JieAez
-         ymRAVgu3MilO0RI3MRsX608LxgN5lSQsuJ0lH1eigrQsRzuIgsA/lsMjFNR85MEF2OmG
-         WnzQahbLnbj6coH/CVkQO8C6bGIXlNReehA5AuOCgRTXU7LFfP/KJrAhz8sxeOe/P9Dx
-         1QFQ==
-X-Gm-Message-State: AOAM532maTmas8aRme3kbHjbxQxJvumEPPhH7QGNTL6Xq1/vpF7yzE4h
-        MmjL6HiNX6J87ARrBrDTN1Z0sV3oQaMvZiEca8uEYoouHwpm0Q==
-X-Google-Smtp-Source: ABdhPJwT03uXfc/KcV6gWH5LBv0FQVMmAPor5TEMRo6tl5mbpCglaqi/zYY1nkyXwasxj8xdwuv4AMscF7aMNTl82fA=
-X-Received: by 2002:aca:59c3:: with SMTP id n186mr4902442oib.149.1605178828138;
- Thu, 12 Nov 2020 03:00:28 -0800 (PST)
+        id S1727489AbgKLL06 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Nov 2020 06:26:58 -0500
+Received: from cable.insite.cz ([84.242.75.189]:35088 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727234AbgKLL05 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Nov 2020 06:26:57 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 20C82A956C327;
+        Thu, 12 Nov 2020 12:26:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1605180412; bh=4Qv3VfHguyWB8Fa58L7q9KCQVBYAF3dJToEaqoupNAY=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=JbAZzMkPPlupGsgQPt8d6zvkOdFcOr+U/AccmRFz60oWODWvFiyiRpgQFBq7WB519
+         rmH1f1ndyicEnTKLoPFI5yAAyeTYqS4jN57F5wcTGzaX1c1bEGz0vLG51oDagGk65W
+         qujp/Q1TOIE8q7RztEe+T8RTjFwH4CDLMbg4t2+M=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id A4uUwZrHTuAN; Thu, 12 Nov 2020 12:26:52 +0100 (CET)
+Received: from [192.168.100.21] (unknown [192.168.100.21])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id ECD81A956C323;
+        Thu, 12 Nov 2020 12:26:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1605180411; bh=4Qv3VfHguyWB8Fa58L7q9KCQVBYAF3dJToEaqoupNAY=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=EOvFxWw0yNjgvef8ohABAyc3Xt3u6W/tdmMCvPGzvkUi88LiS+2MfoMe9/98bS8U4
+         w3HPwl0ZKowkOzM9ksypT1hVKdE/FDWfqxU/Ra7zH4LQz+KTJF+0hytAxIszjix66z
+         B5GFGX/pOBil4i3iekI4lVt9MrptfZpQqvbU2iBI=
+Subject: Re: [PATCH 3/3] usb: gadget: u_audio: add real feedback
+ implementation
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, gschmottlach@gmail.com
+References: <1604794711-8661-1-git-send-email-ruslan.bilovol@gmail.com>
+ <1604794711-8661-4-git-send-email-ruslan.bilovol@gmail.com>
+ <cbdd5e54-87e8-98f2-becb-692c125ae456@ivitera.com>
+Message-ID: <6e11c4cb-e622-7e86-51ea-72280ff0218c@ivitera.com>
+Date:   Thu, 12 Nov 2020 12:26:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-From:   John Boero <boeroboy@gmail.com>
-Date:   Thu, 12 Nov 2020 11:00:16 +0000
-Message-ID: <CAO5W59jPcJej6srJiQ4yzwtNbvdK9RGJ=_KK5KeckkYeThrX6A@mail.gmail.com>
-Subject: Kernel null dereference race condition fix.
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <cbdd5e54-87e8-98f2-becb-692c125ae456@ivitera.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: cs-CZ
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi for months Linux users have been reporting random USB crashes with
-certain webcams.  It happens randomly and mostly with Logitech webcams
-(which claim no Linux support).  I'm pretty sure I've tracked it down
-to a simple pointer check before dereference but it completely crashes
-USB subsystems until reboot and is really frustrating.
+Dne 09. 11. 20 v 9:24 Pavel Hofman napsal(a):
+> Hi Ruslan,
+> 
+> Dne 08. 11. 20 v 1:18 Ruslan Bilovol napsal(a):
+>> This adds interface between userspace and feedback
+>> endpoint to report real feedback frequency to the Host.
+>>
+>> Current implementation adds new userspace interface
+>> ALSA mixer control "PCM Feedback Frequency Hz" (similar
+>> to aloop driver's "PCM Rate Shift 100000" mixer control)
+>>
+>> We allow +/-20% deviation of nominal sampling frequency,
+>> that usually is more than enough in real-world usecases
+>>
+>> Usage of this new control is easy to implement in
+>> existing userspace tools like alsaloop from alsa-utils.
+>>
+>> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>> ---
+>>   drivers/usb/gadget/function/f_uac2.c  |  4 ++
+>>   drivers/usb/gadget/function/u_audio.c | 93 +++++++++++++++++++++++++++++++++++
+>>   drivers/usb/gadget/function/u_audio.h |  7 +++
+>>   3 files changed, 104 insertions(+)
+> 
+> Thanks a lot for the great implementation. IIUC the control element sets
+> integer frequency in Hz. Often the clocks deviate by small fractions of
+> Hz. Please have you considered the value to be e.g. in 100th of Hz for
+> finer control of the samplerate? Similar to the PCM Rate Shift which has
+> a step 100000th of the samplerate.
+> 
 
-PR and explanation can be found here.  Please have a look.  It won't
-fix any race condition but at least it won't Oops the kernel.
-https://github.com/torvalds/linux/commit/a40519014549f60969c8e67a2fd91426db05fe04
+My stupid, I did not realize that one Hz in the samplerate value is 
+basically the same order of magnitude as the 100,000ths in the "PCM Rate 
+Shift 100000" mixer control. Sorry for disturbing.
 
-Thank you!
-John Boero
+Thanks,
+
+Pavel.
