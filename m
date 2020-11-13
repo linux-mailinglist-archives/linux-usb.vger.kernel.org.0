@@ -2,86 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCA02B1BDF
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 14:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F26D2B1BE5
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 14:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbgKMN2W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 08:28:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726278AbgKMN2W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 08:28:22 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AD2C0613D1;
-        Fri, 13 Nov 2020 05:28:21 -0800 (PST)
-Date:   Fri, 13 Nov 2020 14:28:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1605274099;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LXWiWkQSkMaH2+lNu6mt3jtJ0LZIwn7gxSqUVpMIUGM=;
-        b=xFPZJeUg90c7ostUkheKJZF3LSpoO2jEGJuWPacDvgsketVmXMRcSQgV16LufDzB2SnfYO
-        b8ghlObBsj8P1us+WiVhtRHr8feOcbV28k4bNdB96f3OuyO5+mUDMLLRD6fNrE1+sUISWV
-        JnttxgB/bwxjLo/gNhcRghb2/lIEu+JRgl/AfkYk1G2EhWyVphsfwDVvlnuyswc8XSmbQm
-        +x5zfh+E2UE9uD/FDQrG+tB82KHvl9wzU4zAVnJZKI+TmgtmvXHP8nmlH++83JuasWo6Gj
-        hD8Lp+8hI3UH6t9M1KswXDb3k6QNw+aumDJJMlloVMOBJZEKIdO/cVRBELu0KQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1605274099;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LXWiWkQSkMaH2+lNu6mt3jtJ0LZIwn7gxSqUVpMIUGM=;
-        b=0ADZiL2vlR5OZhWpc+E9jIBZv7ajQ/BWfNJWXBis872jhqDm1int5/I6FviQ1gEqOeU4f0
-        g3Rump6jCpWoyaBA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Nazime Hande Harputluoglu <handeharput@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v4] kcov, usb: only collect coverage from
- __usb_hcd_giveback_urb in softirq
-Message-ID: <20201113132818.zhtdhzg6ukv4wgxl@linutronix.de>
-References: <f3a7a153f0719cb53ec385b16e912798bd3e4cf9.1602856358.git.andreyknvl@google.com>
- <20201113123035.tjllvijjzd54npsf@linutronix.de>
- <CAAeHK+zd0ucaj8EJ8ro+0ekubrxp5GiBMaBULHJB05dDrzpQGw@mail.gmail.com>
+        id S1726493AbgKMNaf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 08:30:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38876 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726278AbgKMNaf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Nov 2020 08:30:35 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 651C82085B;
+        Fri, 13 Nov 2020 13:30:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605274235;
+        bh=TfJkZ2oHXjGcRW1STcAE522a0gfrypGFHLoxwZUnAT0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y2uJSDY/BM7HwdgOS/+gIHZSxAOdaxdhN0ZO4jkxD8hfbpk/7RtQMhIka6xqdA0J8
+         EiYx/IiEyoCUeIsS0L0eYFR8leprVXwuDrdmlfnHVQwpTxQ5rMseSD/pGJzZ5KIbCq
+         z7WPR8g3uwIYWooxdDe+frEwQrT3NZmZdVm4UPKw=
+Date:   Fri, 13 Nov 2020 14:31:31 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>,
+        Drew Fustini <drew@pdp7.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "usb: musb: convert to
+ devm_platform_ioremap_resource_byname"
+Message-ID: <X66Ks5ER2RRfUGB2@kroah.com>
+References: <20201112135900.3822599-1-geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAeHK+zd0ucaj8EJ8ro+0ekubrxp5GiBMaBULHJB05dDrzpQGw@mail.gmail.com>
+In-Reply-To: <20201112135900.3822599-1-geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020-11-13 13:51:19 [+0100], Andrey Konovalov wrote:
-> Hi Sebastian,
+On Thu, Nov 12, 2020 at 02:59:00PM +0100, Geert Uytterhoeven wrote:
+> This reverts commit 2d30e408a2a6b3443d3232593e3d472584a3e9f8.
+> 
+> On Beaglebone Black, where each interface has 2 children:
+> 
+>     musb-dsps 47401c00.usb: can't request region for resource [mem 0x47401800-0x474019ff]
+>     musb-hdrc musb-hdrc.1: musb_init_controller failed with status -16
+>     musb-hdrc: probe of musb-hdrc.1 failed with error -16
+>     musb-dsps 47401400.usb: can't request region for resource [mem 0x47401000-0x474011ff]
+>     musb-hdrc musb-hdrc.0: musb_init_controller failed with status -16
+>     musb-hdrc: probe of musb-hdrc.0 failed with error -16
+> 
+> Before, devm_ioremap_resource() was called on "dev" ("musb-hdrc.0" or
+> "musb-hdrc.1"), after it is called on "&pdev->dev" ("47401400.usb" or
+> "47401c00.usb"), leading to a duplicate region request, which fails.
+> 
 
-Hi Andrey,
+Thanks for this, I'll go queue it up now.
 
-> Replaced with what and why?
-
-Linus requested in
-	https://lkml.kernel.org/r/CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com/
-
-that drivers should not change their behaviour on context magic like
-in_atomic(), in_interrupt() and so on.
-The USB bits were posted in
-	https://lkml.kernel.org/r/20201019100629.419020859@linutronix.de
-
-and merged (which is probably the same time as this patch).
-
-I haven't look what this code should do or does but there are HCDs for
-which this is never true like the UHCI/OHCI controller for instance.
-
-> Thanks!
-
-Sebastian
+greg k-h
