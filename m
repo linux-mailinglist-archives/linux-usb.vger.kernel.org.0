@@ -2,49 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6562B28BC
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 23:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263382B291E
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Nov 2020 00:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbgKMWqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 17:46:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38342 "EHLO mail.kernel.org"
+        id S1726150AbgKMXVl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 18:21:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45478 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726278AbgKMWqi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Nov 2020 17:46:38 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        id S1725885AbgKMXVk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Nov 2020 18:21:40 -0500
+Received: from localhost (230.sub-72-107-127.myvzw.com [72.107.127.230])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4A1DE20825;
-        Fri, 13 Nov 2020 22:46:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D80E620759;
+        Fri, 13 Nov 2020 23:21:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605307597;
-        bh=sAHfBWYsmVHR+SfGB/ln/MCDla0n1I2DT5/kzKpNhe8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B2fCmjrrbXF0xrN0qS6XMm+4Hj//UETsVgUZyFZTHWUXr6eObcHsNgZXagEUMZF7i
-         IRUV63HwnNuNPj+ZJ1PYunJ33/u3KdlNuS1lbSCJriIWj8T4D8gBCvcAYtK1cGOMpH
-         FyR7ThmY7SEatk9nsGoRPs5W95RcFOAcr/RImVY0=
-Date:   Fri, 13 Nov 2020 23:47:33 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-usb@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] usb: Remove RUN_CONTEXT
-Message-ID: <X68NBdTy2F/IeZ2Y@kroah.com>
-References: <20201113212704.2243807-1-bigeasy@linutronix.de>
+        s=default; t=1605309700;
+        bh=MeuF6lURc8/pMzHwJ17dUsjKSA4WKxPWAWawNSgAn2o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=cmn1KPusFXT2IzXJCjbcpRzJlJN64rFvgmFhk5IpRMWguCE5iXcrbWRrzQIm1PXSd
+         ZNGItDZhEsL3+nIM22H4xKAcQoo+ccQ5xDroN+kTXzKseE3CuDpOD1nHLSWLgEzGTd
+         oVyApHmbApkRuX490+A2S9oW0Ifx1n7DxG/81Hok=
+Date:   Fri, 13 Nov 2020 17:21:38 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        johan@kernel.org, linux-usb@vger.kernel.org,
+        alberto.vignani@fastwebnet.it
+Subject: Re: [PATCH v2 1/2] PCI: Disable MSI for Pericom PCIe-USB adapter
+Message-ID: <20201113232138.GA1141907@bjorn-Precision-5520>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201113212704.2243807-1-bigeasy@linutronix.de>
+In-Reply-To: <20201106100526.17726-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 10:27:04PM +0100, Sebastian Andrzej Siewior wrote:
-> The last user of RUN_CONTEXT was removed in commit
->    97c17beb3b668 ("[PATCH] ehci-hcd (1/2):  portability (2.4), tasklet,")
+On Fri, Nov 06, 2020 at 12:05:25PM +0200, Andy Shevchenko wrote:
+> Pericom PCIe-USB adapter advertises MSI, but documentation says
+> "The MSI Function is not implemented on this device." in the chapters
+> 7.3.27, 7.3.29-7.3.31.
+> 
+> Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
+> Datasheet: https://www.diodes.com/assets/Datasheets/PI7C9X440SL.pdf
+> Reported-by: alberto.vignani@fastwebnet.it
 
-I don't see that git commit id in Linus's tree, nor in my usb.git tree.
-Where does it live?
+Is there a URL to a problem report we can include here?
 
-thanks,
-
-greg k-h
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: dropped confusing word (David), added ifdeffery (Ben)
+>  drivers/pci/quirks.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index f70692ac79c5..e66e0cc8f99b 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -5567,17 +5567,26 @@ static void pci_fixup_no_d0_pme(struct pci_dev *dev)
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ASMEDIA, 0x2142, pci_fixup_no_d0_pme);
+>  
+>  /*
+> - * Device [12d8:0x400e] and [12d8:0x400f]
+> + * Device 12d8:0x400e [OHCI] and 12d8:0x400f [EHCI]
+> + *
+>   * These devices advertise PME# support in all power states but don't
+>   * reliably assert it.
+> + *
+> + * These devices advertise MSI, but documentation (PI7C9X440SL.pdf) says
+> + * "The MSI Function is not implemented on this device." in the chapters
+> + * 7.3.27, 7.3.29-7.3.31.
+>   */
+> -static void pci_fixup_no_pme(struct pci_dev *dev)
+> +static void pci_fixup_no_msi_no_pme(struct pci_dev *dev)
+>  {
+> +#ifdef CONFIG_PCI_MSI
+> +	pci_info(dev, "The MSI is not implemented on this device, disabling it\n");
+> +	dev->no_msi = 1;
+> +#endif
+>  	pci_info(dev, "PME# is unreliable, disabling it\n");
+>  	dev->pme_support = 0;
+>  }
+> -DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400e, pci_fixup_no_pme);
+> -DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400f, pci_fixup_no_pme);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400e, pci_fixup_no_msi_no_pme);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400f, pci_fixup_no_msi_no_pme);
+>  
+>  static void apex_pci_fixup_class(struct pci_dev *pdev)
+>  {
+> -- 
+> 2.28.0
+> 
