@@ -2,191 +2,222 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C64D2B208B
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 17:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3582B20B8
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 17:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgKMQgF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 11:36:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
+        id S1726457AbgKMQpG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 11:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726157AbgKMQgD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 11:36:03 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724D1C0613D1;
-        Fri, 13 Nov 2020 08:36:01 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id o15so10575893wru.6;
-        Fri, 13 Nov 2020 08:36:01 -0800 (PST)
+        with ESMTP id S1726353AbgKMQpG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 11:45:06 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741FBC0613D1;
+        Fri, 13 Nov 2020 08:45:04 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id s13so9038339wmh.4;
+        Fri, 13 Nov 2020 08:45:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=dQRQDur4C385F9uHjVsTWYFjOPOTyFC/a81xU2Lamvk=;
-        b=hYjtCO8hZTyLH2Kyoh58AH0k4dJctPDDMUFST3ORvzuMx/d+q622LhLzVrAUwruqpj
-         vatSp2tdsnyRwv0asO3bbpGDvd0vEZjDV3IaINbpZsJmI5S0GwzO7kZs5w4Lyo2VH/4c
-         Y1Xhiw7uCTIk5kY2QZeUv7U1NQWSzu5o9XoRi5yn+8NlZq7l2qlfEeSbzOt2RJpv5OYy
-         1x6+4v3ShQP7Hi7WCV6M1Cx8cu9XeKLqQAKEmagxoqkiRNn8VSJv/QtGIVgzQBRaUZ+M
-         mco4TyKjxVpCzCsxEz/w5kDm69UIKoK6OgA032HEi8rB4Km/3qZsxJLI5l6qtY4Bhnoc
-         fs2w==
+        bh=w3tTeimsV7KGyYQSPfv9SeS1lBQXGPjuqYfC+5XH5KI=;
+        b=iyeS1LLDqzvM9Nzps8PD90IxAbzzRzoR5CT+0pS0zuFTgHzaUu+KZrjWfP8nf4S2Bi
+         l9/eAFV507IbALmpVOnFWchGR8VYr/wLxxj2BHQ1b1ZBrPfLIkMobEJUvpsR6S2ejCRq
+         yAaxzYIJSZ5PxuqY/fBLLVkNyre0ALqD6d14ykDgOQXV7Tn6f242FYVjMkDsnHhJHQaJ
+         VifX4MHW3wVNXpVCbcOv6qHz1SSxO1rlZhV/golqJO3ifOOxrnnMBrBK1s94P1SnxHVt
+         lDL5LgyNH3nP7YuwfJDBN1cYQ4PQ80pKsX8y+uZq0kFS2YLEhPUM5fQ59/n4gxa9CLmP
+         oC+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dQRQDur4C385F9uHjVsTWYFjOPOTyFC/a81xU2Lamvk=;
-        b=rD/bCBXNWkpvdjvfUv6BFFy8VlXp2KjMGabFmI3TzfOO3LWol6VUkbCkkxhQSFuvDQ
-         zzlV4UqIIO53MjZ+ZqnAJ4kk1RWZgKr0SN7Q6QRLfFbUSi1D3496YTJ0NjnZuj9doJn1
-         xp+NjjMfdIH/rXXagAk8NyaTm3vcK7+bqzRucrpoIiqSbbflWvRaGyaBi1+YI8lImJHc
-         WccbtXLz2baWRRqVcYhA18waEo9R5UHGUn3ueyehMDoODPcfxchtsopU5VwNsR8C2k9s
-         vaPfqZO4cRy5ZHGFZGI/f9mc6ENdg6uOnf03jOcm//O705xHDT8SxjrOwWDbgK3QxR5u
-         +mgQ==
-X-Gm-Message-State: AOAM530rdnu0JeM4msWRvjr8ukU0CuG6RaezGylQ4UuKCfm3wcRG0ahv
-        o0LLt+51LDZJLcvN0shq1g4=
-X-Google-Smtp-Source: ABdhPJyLdoQr70KNk4+Fb/DdcC/nPPnONUO+wvv6EXYBj9QK5AbdJZn9lq3s3z7ryBX+7Ul7LRtFKg==
-X-Received: by 2002:adf:906b:: with SMTP id h98mr4463717wrh.310.1605285355248;
-        Fri, 13 Nov 2020 08:35:55 -0800 (PST)
+        bh=w3tTeimsV7KGyYQSPfv9SeS1lBQXGPjuqYfC+5XH5KI=;
+        b=VL7qENfLSQVRgMABPl1GQNZwHgN9Tpk58iSBzcVz0ljiQnnjukTgoP9SdKSHt4Lq3h
+         2eD+4Zrzwqg0XI2JGM7Ch3AEjeo1RaV5E/CDsgCVJyZG5xs+Gry7wnOuJY9mH/7lLIez
+         zBq49yNuJteSL6jhruMnufzNNVpBXHhNXn8hizHv0Q7JWySn4eyEGO40Dn9MVeiQOUJ+
+         CjCUdoUpk0l2q3EGz3uwkd6I3vrQMxYbhypfuJot6Yt1I3DzS++3oqazlnjyPTOpkpv2
+         HfCe7S84CYBGuzOOnmwV6ib0BOI8LmpmS9fjbhJcuKED0qGUW1A351fWETz6jaKZt0ZN
+         UlQw==
+X-Gm-Message-State: AOAM531g0uCkHnU3X+PFTl78nV6ZedfQeZ5QTINA8j46nBYjeRpc0tH9
+        AD90mI/V/LP+FsbXShVVPlY=
+X-Google-Smtp-Source: ABdhPJz5G5ud1mfgz5CSN1RmYNnQ+Xy235w4dA9chcJ0UI8urW/wzporWQvrWq5O71L2s5nPFnI6JQ==
+X-Received: by 2002:a05:600c:218a:: with SMTP id e10mr419285wme.73.1605285898183;
+        Fri, 13 Nov 2020 08:44:58 -0800 (PST)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id t7sm11384960wrx.42.2020.11.13.08.35.53
+        by smtp.gmail.com with ESMTPSA id c6sm12442041wrh.74.2020.11.13.08.44.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2020 08:35:53 -0800 (PST)
-Date:   Fri, 13 Nov 2020 17:35:52 +0100
+        Fri, 13 Nov 2020 08:44:56 -0800 (PST)
+Date:   Fri, 13 Nov 2020 17:44:55 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        driverdevel <devel@driverdev.osuosl.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-pwm@vger.kernel.org,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
- Tegra20/30 SoCs
-Message-ID: <20201113163552.GE1408970@ulmo>
-References: <20201104234427.26477-1-digetx@gmail.com>
- <CAPDyKFr7qTU2RPhA_ZrbCayoTTNUEno1zdmvmv+8HBe-Owrfeg@mail.gmail.com>
- <cd147ab0-1304-a491-7a56-ee6199c02d32@gmail.com>
- <2716c195-083a-112f-f1e5-2f6b7152a4b5@gmail.com>
- <CAPDyKFqUMsH9dCZ=OYqfdLt==+-8NjK9n=S5jGGNXZu6Y9q=2w@mail.gmail.com>
- <1f7e90c4-6134-2e2b-4869-5afbda18ead3@gmail.com>
- <20201112204358.GA1027187@ulmo>
- <25942da9-b527-c0aa-5403-53c9cc34ad93@gmail.com>
+To:     JC Kuo <jckuo@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, robh@kernel.org, jonathanh@nvidia.com,
+        kishon@ti.com, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, nkristam@nvidia.com
+Subject: Re: [PATCH v4 00/16] Tegra XHCI controller ELPG support
+Message-ID: <20201113164455.GG1408970@ulmo>
+References: <20201016130726.1378666-1-jckuo@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="KuLpqunXa7jZSBt+"
+        protocol="application/pgp-signature"; boundary="NPukt5Otb9an/u20"
 Content-Disposition: inline
-In-Reply-To: <25942da9-b527-c0aa-5403-53c9cc34ad93@gmail.com>
+In-Reply-To: <20201016130726.1378666-1-jckuo@nvidia.com>
 User-Agent: Mutt/1.14.7 (2020-08-29)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---KuLpqunXa7jZSBt+
-Content-Type: text/plain; charset=utf-8
+--NPukt5Otb9an/u20
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 13, 2020 at 01:14:45AM +0300, Dmitry Osipenko wrote:
-> 12.11.2020 23:43, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >> The difference in comparison to using voltage regulator directly is
-> >> minimal, basically the core-supply phandle is replaced is replaced with
-> >> a power-domain phandle in a device tree.
-> > These new power-domain handles would have to be added to devices that
-> > potentially already have a power-domain handle, right? Isn't that going
-> > to cause issues? I vaguely recall that we already have multiple power
-> > domains for the XUSB controller and we have to jump through extra hoops
-> > to make that work.
+On Fri, Oct 16, 2020 at 09:07:10PM +0800, JC Kuo wrote:
+> Tegra XHCI controler can be placed in ELPG (Engine Level PowerGated)
+> state for power saving when all of the connected USB devices are in
+> suspended state. This patch series includes clk, phy and pmc changes
+> that are required for properly place controller in ELPG and bring
+> controller out of ELPG.
 >=20
-> I modeled the core PD as a parent of the PMC sub-domains, which
-> presumably is a correct way to represent the domains topology.
+> JC Kuo (16):
+>   clk: tegra: Add PLLE HW power sequencer control
+>   clk: tegra: Don't enable PLLE HW sequencer at init
+>   phy: tegra: xusb: Move usb3 port init for Tegra210
+>   phy: tegra: xusb: tegra210: Do not reset UPHY PLL
+>   phy: tegra: xusb: Rearrange UPHY init on Tegra210
+>   phy: tegra: xusb: Add Tegra210 lane_iddq operation
+>   phy: tegra: xusb: Add sleepwalk and suspend/resume
+>   soc/tegra: pmc: Provide USB sleepwalk register map
+>   arm64: tegra210: XUSB PADCTL add "nvidia,pmc" prop
+>   dt-bindings: phy: tegra-xusb: Add nvidia,pmc prop
+>   phy: tegra: xusb: Add wake/sleepwalk for Tegra210
+>   phy: tegra: xusb: Tegra210 host mode VBUS control
+>   phy: tegra: xusb: Add wake/sleepwalk for Tegra186
+>   arm64: tegra210/tegra186/tegra194: XUSB PADCTL irq
+>   usb: host: xhci-tegra: Unlink power domain devices
+>   xhci: tegra: Enable ELPG for runtime/system PM
 >=20
-> https://gist.github.com/digetx/dfd92c7f7e0aa6cef20403c4298088d7
->=20
-> >> The only thing which makes me feel a bit uncomfortable is that there is
-> >> no real hardware node for the power domain node in a device-tree.
-> > Could we anchor the new power domain at the PMC for example? That would
-> > allow us to avoid the "virtual" node.
->=20
-> I had a thought about using PMC for the core domain, but not sure
-> whether it will be an entirely correct hardware description. Although,
-> it will be nice to have it this way.
->=20
-> This is what Tegra TRM says about PMC:
->=20
-> "The Power Management Controller (PMC) block interacts with an external
-> or Power Manager Unit (PMU). The PMC mostly controls the entry and exit
-> of the system from different sleep modes. It provides power-gating
-> controllers for SOC and CPU power-islands and also provides scratch
-> storage to save some of the context during sleep modes (when CPU and/or
-> SOC power rails are off). Additionally, PMC interacts with the external
-> Power Manager Unit (PMU)."
->=20
-> The core voltage regulator is a part of the PMU.
->=20
-> Not all core SoC devices are behind PMC, IIUC.
+>  .../phy/nvidia,tegra124-xusb-padctl.txt       |    1 +
+>  arch/arm64/boot/dts/nvidia/tegra186.dtsi      |    1 +
+>  arch/arm64/boot/dts/nvidia/tegra194.dtsi      |    1 +
+>  arch/arm64/boot/dts/nvidia/tegra210.dtsi      |    2 +
+>  drivers/clk/tegra/clk-pll.c                   |   12 -
+>  drivers/clk/tegra/clk-tegra210.c              |   53 +-
+>  drivers/phy/tegra/xusb-tegra186.c             |  558 ++++-
+>  drivers/phy/tegra/xusb-tegra210.c             | 1889 +++++++++++++----
+>  drivers/phy/tegra/xusb.c                      |   92 +-
+>  drivers/phy/tegra/xusb.h                      |   22 +-
+>  drivers/soc/tegra/pmc.c                       |   94 +
+>  drivers/usb/host/xhci-tegra.c                 |  610 ++++--
+>  include/linux/clk/tegra.h                     |    4 +-
+>  include/linux/phy/tegra/xusb.h                |   10 +-
+>  14 files changed, 2785 insertions(+), 564 deletions(-)
 
-There are usually some SoC devices that are always-on. Things like the
-RTC for example, can never be power-gated, as far as I recall. On newer
-chips there are usually many more blocks that can't be powergated at
-all.
+I've been testing this, but I keep seeing the following oops on suspend
+on a Jetson TX1:
 
-> > On the other hand, if we were to
-> > use a regulator, we'd be adding a node for that, right? So isn't this
-> > effectively going to be the same node if we use a power domain? Both
-> > software constructs are using the same voltage regulator, so they should
-> > be able to be described by the same device tree node, shouldn't they?
->=20
-> I'm not exactly sure what you're meaning by "use a regulator" and "we'd
-> be adding a node for that", could you please clarify? This v1 approach
-> uses a core-supply phandle (i.e. regulator is used), it doesn't require
-> extra nodes.
+[  153.451108] tegra-xusb-padctl phy-usb2.0: > tegra_xusb_padctl_suspend_no=
+irq(dev=3Dffff000080917000)
+[  153.460353] tegra-xusb-padctl phy-usb2.0:   driver: ffff8000114453e0 (te=
+gra_xusb_padctl_driver)
+[  153.469245] tegra-xusb-padctl phy-usb2.0:   padctl: ffff0000829f6480
+[  153.475772] tegra-xusb-padctl phy-usb2.0:     soc: ef7bdd7fffffffff (0xe=
+f7bdd7fffffffff)
+[  153.484061] Unable to handle kernel paging request at virtual address 00=
+7bdd800000004f
+[  153.492132] Mem abort info:
+[  153.495083]   ESR =3D 0x96000004
+[  153.498308]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+[  153.503771]   SET =3D 0, FnV =3D 0
+[  153.506979]   EA =3D 0, S1PTW =3D 0
+[  153.510260] Data abort info:
+[  153.513200]   ISV =3D 0, ISS =3D 0x00000004
+[  153.517181]   CM =3D 0, WnR =3D 0
+[  153.520302] [007bdd800000004f] address between user and kernel address r=
+anges
+[  153.527600] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[  153.533231] Modules linked in: nouveau panel_simple tegra_video(C) tegra=
+_drm drm_ttm_helper videobuf2_dma_contig ttm videobuf2_memops cec videobuf2=
+_v4l2 videobuf2_common drm_kms_helper v4l2_fwnode videodev drm mc snd_hda_c=
+odec_hdmi cdc_ether usbnet snd_hda_tegra r8152 crct10dif_ce snd_hda_codec s=
+nd_hda_core tegra_xudc host1x lp855x_bl at24 ip_tables x_tables ipv6
+[  153.566417] CPU: 0 PID: 300 Comm: systemd-sleep Tainted: G         C    =
+    5.10.0-rc3-next-20201113-00019-g5c064d5372b0-dirty #624
+[  153.578283] Hardware name: NVIDIA Jetson TX1 Developer Kit (DT)
+[  153.584281] pstate: 40000005 (nZcv daif -PAN -UAO -TCO BTYPE=3D--)
+[  153.590381] pc : tegra_xusb_padctl_suspend_noirq+0x88/0x100
+[  153.596016] lr : tegra_xusb_padctl_suspend_noirq+0x80/0x100
+[  153.601632] sp : ffff8000120dbb60
+[  153.604999] x29: ffff8000120dbb60 x28: ffff000080a1df00
+[  153.610430] x27: 0000000000000002 x26: ffff8000106f8540
+[  153.615858] x25: ffff8000113ac4a4 x24: ffff80001148c198
+[  153.621277] x23: ffff800010c4538c x22: 0000000000000002
+[  153.626692] x21: ffff800010ccde80 x20: ffff0000829f6480
+[  153.632107] x19: ffff000080917000 x18: 0000000000000030
+[  153.637521] x17: 0000000000000000 x16: 0000000000000000
+[  153.642933] x15: ffff000080a1e380 x14: 74636461702d6273
+[  153.648346] x13: ffff8000113ad058 x12: 0000000000000f39
+[  153.653759] x11: 0000000000000513 x10: ffff800011405058
+[  153.659176] x9 : 00000000fffff000 x8 : ffff8000113ad058
+[  153.664590] x7 : ffff800011405058 x6 : 0000000000000000
+[  153.670002] x5 : 0000000000000000 x4 : ffff0000fe908bc0
+[  153.675414] x3 : ffff0000fe910228 x2 : 162ef67e0581e700
+[  153.680826] x1 : 162ef67e0581e700 x0 : ef7bdd7fffffffff
+[  153.686241] Call trace:
+[  153.688769]  tegra_xusb_padctl_suspend_noirq+0x88/0x100
+[  153.694077]  __device_suspend_noirq+0x68/0x1cc
+[  153.698594]  dpm_noirq_suspend_devices+0x10c/0x1d0
+[  153.703456]  dpm_suspend_noirq+0x28/0xa0
+[  153.707461]  suspend_devices_and_enter+0x234/0x4bc
+[  153.712314]  pm_suspend+0x1e4/0x270
+[  153.715868]  state_store+0x8c/0x110
+[  153.719440]  kobj_attr_store+0x1c/0x30
+[  153.723259]  sysfs_kf_write+0x4c/0x7c
+[  153.726981]  kernfs_fop_write+0x124/0x240
+[  153.731065]  vfs_write+0xe4/0x204
+[  153.734449]  ksys_write+0x6c/0x100
+[  153.737925]  __arm64_sys_write+0x20/0x30
+[  153.741931]  el0_svc_common.constprop.0+0x78/0x1a0
+[  153.746789]  do_el0_svc+0x24/0x90
+[  153.750181]  el0_sync_handler+0x254/0x260
+[  153.754251]  el0_sync+0x174/0x180
+[  153.757663] Code: aa0303e2 94000f64 f9405680 b40000e0 (f9402803)
+[  153.763826] ---[ end trace 81543a3394cb409d ]---
 
-What I meant to say was that the actual supply voltage is generated by
-some device (typically one of the SD outputs of the PMIC). Whether we
-model this as a power domain or a regulator doesn't really matter,
-right? So I'm wondering if the device that generates the voltage should
-be the power domain provider, just like it is the provider of the
-regulator if this was modelled as a regulator.
+Note that I've added a bit of debug information there to show what's
+going on. See how tegra_xusb_padctl_suspend_noirq() is being called for
+the phy-usb2.0 device? That's one of the PHYs that's being created for
+the USB2 lanes. Sometimes I do see that padctl->soc ends up being NULL
+for that device and in that case the function just aborts early and then
+tegra_xusb_padctl_suspend_noirq() will get called again for the padctl
+device and succeed.
+
+I can't explain what's happening here. tegra_xusb_padctl_driver never
+binds to the phy-usb2.0 device, so I don't understand how it could end
+up suspending the device with that set of dev_pm_ops. Perhaps this is
+some weird type of corruption somewhere?
 
 Thierry
 
---KuLpqunXa7jZSBt+
+--NPukt5Otb9an/u20
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl+uteUACgkQ3SOs138+
-s6HFrg//XUCBi+MoTYKA9Q0nyyDEbz8pB7xsPWf9AWJHRToygKc0DTU1ZaPQLNp+
-zx+Yg2HSEBBzzv1c5cABiz0dUaE+gkzTfY74+wByGBumAiPaFCOmamm3fwgTlzsM
-ZzTrLxJShO6bIo12gq98qI68RxlwptdQcGagjc4QLcaL1xxhdyYiEFtQj8X3rwfp
-r2ELceMzT3klMTV34ghkgQKBRkgxm3thCmk+O/+scUwM9ju23OeClHBPsq+YwWz/
-ItCwLTUXyfPTSzIqXbjPEGXPbNGS2aUdYo0YsY42Q5XswBGPGXV+VgCPd153Vyek
-x+tAG0YSkV3NWFIQKBR5iwvguqZbVYgBR8tonT+LH9qyx6wADX2bp1VtEssD3Dsq
-qWc7y+PnmrUkx895JcxYLzhGoN5Hr3xwKeTLSRxGCQQvh1fqJJO4Ja4QnBdxK1lm
-FLLCPrq0/yK+o6DKJnAWjBcVyWfY4z2MPej6lao9ZlR4nC0qaY9URhD//kujuB7R
-dsRKyAwamYzw0b1doZWjffloEhog7WbjMw8UsbF+E8K7kSNePUqgaWWMsZDwh6yI
-VrszC62dJzCUMweS9s2mSjQ08xGrcITA8i2qxMKpRQA6VoZzMAdP6WjxseQoDa4g
-6Rsyr9Mt8Ed+Gs4vssp8C6jeFDQEGXM+37kYIC8LrNM21HZoq74=
-=p82m
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl+uuAcACgkQ3SOs138+
+s6HhJRAAhIzGiht64leNoRXPprKnW6lHKN1r2ajglsfVhD33Vz6ZN7y7Lj4o0vBo
+5KzmMKHASLMs6sCtpCH/8lIsvyh2r78gUg7wAam2XxkEOFbcMJHGXQAwXcwwPZCc
+BjqOULXVOSS4aXpuZN/0KeMmZE3DJ4k7WJ6VuNzfs9zVK9Hain7JKmIILZFQN/V+
++cUThQtOt11R8f/Bc2Z99sunlJhaH7SXt4mU8jZVTACOh9Z47bQYqAa79VpoFzoC
+PAT1fLqNTDUez30psdqQT/vbbx85OP7dZNJroFhU4m9b/rWXO3dnnTEZ8+Sjq9gk
+KGd1OtJoE4bvhsC0nepyQkOoISP8qZQlqeteDXWSjAEgKskfbz+c1B0DdXHpyXUb
+6kKl3NR5FTWX4P4dF5VNwZlnDfc7rqtKdzSbPRMUQCGo9PvHht9pjriu+Cv8Rc6+
+7+1IqMH2SA2ylFZ0I8/BI5qwrayEKJH9fOEZ9GXCeaTqN96gBnlJMhUZsTdFMUjy
+3uquBOOVOkhUMw1tkdyOYdJ6g9kFZgcZvNSQdoUgBNxf5FxGOcMZWGPq+jtLWtLB
+HG8/w3xMqVqQbNskrdCTpkQJyoej7IvI/rSOtxEmYX8FsEkUwLZENS5NOfnQ8lWL
+4+s3PoH2Buu3Q+W7iojUkHVO+k7sjpjhNBtJvIIuJfPJz7lqKSg=
+=OrSO
 -----END PGP SIGNATURE-----
 
---KuLpqunXa7jZSBt+--
+--NPukt5Otb9an/u20--
