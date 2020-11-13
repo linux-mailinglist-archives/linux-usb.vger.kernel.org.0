@@ -2,119 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E10242B1F25
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDB02B1F4B
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726606AbgKMPtC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 10:49:02 -0500
-Received: from mail-mw2nam12on2065.outbound.protection.outlook.com ([40.107.244.65]:64210
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726437AbgKMPtB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Nov 2020 10:49:01 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TIg7bFFDcVKSvDQSA5IcaI7YIajOvo4m+2LI/hn5OhdjY6nZHvIyMEIEpgToTlWEjsLhJ3VzgpftAMAwP0CcQiSA/y+3AUH4vml/BrA34iCHIiCSvCZtRvRdnxd9e2iVtyXz5iw2rqGS2z8uWJdj7ueHB8IXzqrwdhKX73IgjAXAt/R1/Vpz+3GpaCiAISCXYOBe6FllokUL5HVxbuz+fjUNo41tMR+sEVEaSkB6kp6XxXDf/jkVJUkod9CPDczVIezh3h8w5mHr/Krh5hlfEUZIG7bLhhQEMmDtE1YWD73HxKFl62m6FrMjEPLRLQLIdxVP9qpOFWsWqzqpTvSSVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cOPIzImRDYgEMrzBBDMWCshgZWp/gLYwBH7milchkZU=;
- b=h+d3daqNvSs8m40XKGFnIFwvf3izGlHOC+n261NrRtVvlZdi/ONW0W3IZX0+xjJ4LTqBju2+D4zXUez4YoC5vuUiMTy61wG8BkZV123EMEbC+BCjLKJhkwiBASodWelppfm7/hotkHDHuUZ+y1GDOFtwNWB5d+R7Bf1lGTlHGswfrt4RDVWWNWWXLgxl5ZMyOdHx5l0q4jVTVgOirV0kQdBTmleVl/PJenLGWaw7mJA/0wJJ6WVM0VBms9vXqixRUVCic+CSsDdXyIrfdabkzUbwVJBRZQJn4HvWpG9pkB26u5/cKVvc6drjcFAghYDsLShKiF2BKKdwtUfW1ROqYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
- dkim=pass header.d=infinera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cOPIzImRDYgEMrzBBDMWCshgZWp/gLYwBH7milchkZU=;
- b=D8QneKFHSNnyVQzv7GG5nclTFTSvKRAUkmXB0Us24W+vzIY4TD8ER3U0wk/09NY/0wygnWbgVXPklL1kDO0P5DVEYrVuVu0j4QpasThOl9koUMMvsd6Uco9jc6yCc9egQKpTGniQ9xaIP6fz7iyUvfJvOrNjYauWSm/of6EU7rA=
-Received: from CY4PR1001MB2389.namprd10.prod.outlook.com
- (2603:10b6:910:45::21) by CY4PR10MB1943.namprd10.prod.outlook.com
- (2603:10b6:903:11a::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Fri, 13 Nov
- 2020 15:48:59 +0000
-Received: from CY4PR1001MB2389.namprd10.prod.outlook.com
- ([fe80::6d08:ba9e:476a:8523]) by CY4PR1001MB2389.namprd10.prod.outlook.com
- ([fe80::6d08:ba9e:476a:8523%6]) with mapi id 15.20.3541.025; Fri, 13 Nov 2020
- 15:48:59 +0000
-From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] ALSA: usb-audio: Add delay quirk for all Logitech USB
- devices
-Thread-Topic: [PATCH] ALSA: usb-audio: Add delay quirk for all Logitech USB
- devices
-Thread-Index: AQHWudMglpstayskekOO5Bc0b19TYanGNVkA
-Date:   Fri, 13 Nov 2020 15:48:59 +0000
-Message-ID: <51f0d803f7f48c5f1e5068e12f1f186a169b4fbd.camel@infinera.com>
-References: <20201113153720.5158-1-joakim.tjernlund@infinera.com>
-In-Reply-To: <20201113153720.5158-1-joakim.tjernlund@infinera.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.38.1 
-authentication-results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=infinera.com;
-x-originating-ip: [88.131.87.201]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9a8a89b1-84f5-443c-2833-08d887eba31c
-x-ms-traffictypediagnostic: CY4PR10MB1943:
-x-microsoft-antispam-prvs: <CY4PR10MB1943F6188AD9AD6894FCCC57F4E60@CY4PR10MB1943.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9Sz/OQpMHE8VynXoamQR7o6/jcObSvikllBtdBuS9hp96xAD8jh1wt8Zcf7uBHZZCpskqwOggPmUz1R0AXwdDDVNC9X40dmzUMpUcH2S6e5kT1YFkB/RPYSCiIlqTNXyomnrg0syI3Vj4gsldCVNImVhoQMnlnxt+GRfQhKljt1GFfb51/g8NzECtCwBONHU7bTuzr7219eGixVhmo2/LkYCxgmh8yjZU2Sf99qNQ3526xDfig+rj6CrHGcmHn+kezr5FGnFEAqKnbNT7hWMDIyh32b4yIPgSUEKz8CnlQou9LQbpZSz6sp0OtcsVXX6l4EQj3aV/8y8Rd2VVIknMQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1001MB2389.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(366004)(136003)(376002)(346002)(66946007)(64756008)(91956017)(26005)(6916009)(5660300002)(4326008)(71200400001)(8936002)(450100002)(76116006)(66556008)(83380400001)(186003)(2616005)(66476007)(8676002)(66446008)(316002)(2906002)(4001150100001)(86362001)(36756003)(6512007)(6486002)(6506007)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: DMH9N+X8CYqFpI57fTTS+lsWYXvicVwj5+y5Fx/2JDcwpFg6LZ44WXfe8JnLIMDYxLN8jBlLDLTVM/1kmVanP3C/13g/rdBcDc+SPXgmNNoOYlL1Rx/mm8ecRqeBoxntvwr9hUarKqtUTGifay0cm2JYG55YxvdEaTPly3lYXa7wu9Z/BBrCyQubNWG1AZSnQo/TVvjDCdkQkXdGXSvgqj5VsoI6YwhTuuOPR0ixMOGn1hl3DDep+NPJlMVDBZ1T1qVq+1/4R8h1T+3TzDweHDLCVTNQM+tAe/w92cUkrlEUM28QWUaiOq/cuL4wS9DSgfZ0YmC1UNXWZ7WtKvx1809gATeX4YO2IQM8m+zSaPup+KZx9biQ6UJpuLU03RvdTTfFuzIimI3LQzPDZ65SM2gSEAW/CQrTjTCBKk87S0GqQ155hTrotdH5atrPp8/bWSqYxjHxxoZzWBK7udc5mWcWXKvVQ9AdBcNR9EORbsj2ex8yW6zk56EUPKYdJ6q8SCpujusVDOvHMVAkzRd1x/DBVCXXEsxeQgvMfvDiAYH0Rw2AcffnAhf+hF/qV5WavSaNIh0P/MJew1jsD0SypYbydP3do4rx2Yi3ivktXSkTCv89d06wZJSqDMWUX9wD3h8/Z7V5fz48vGJfzlRQmg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <271A9E38262D0845943A7BC8FFE7650D@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726840AbgKMPzi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 10:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726336AbgKMPzh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 10:55:37 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D450BC0613D1;
+        Fri, 13 Nov 2020 07:55:36 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id z21so14481633lfe.12;
+        Fri, 13 Nov 2020 07:55:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4/bF4c42U9QIMTb1QGxEpNjGgqxOXHed/9Sju++TrnQ=;
+        b=EmXWyr9gx7KS0zwcEBEAYUaxurDUV3ESqpMaCg9JaE9hKPHdsMyptRiU0PhucAJg57
+         sWNit+5QfNq8tNVIqx46BqCocNtjeJXbt4jKtikifYsjkdUQbLjXrnxr9qkxjgZRyZHq
+         TXlCW0/ciAaZVvMnyVhuZxC2ijNcNkBjiAcv9bDzbBMXnusu37wDsDL7NY0jYqQtA3vp
+         PIgR17yr3IOJzvWiye1+iRzAfcIGWQeDEi+egnXgCSnrSt/IzJcPeOgFOq4e5cJTdOLu
+         hhiAHxxwDWXN0pyDhoMxZJHVC4zrdnmiTI5ssYzWwy6ojWuvzKDNpVu8jf2LV7apAlp+
+         bE+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4/bF4c42U9QIMTb1QGxEpNjGgqxOXHed/9Sju++TrnQ=;
+        b=jLRCFJSC4LVQ9WUs0yyiPmszK0QoY8YTndx9qxhP7JieDaEOoVb7/5Q4bm9Ixtw234
+         Dmv8ZtdjxT/weu7ooPJ5y3z4mQZ+snejT4TCqfrUaLr/rOpV1ToXrKAMZNByJtBrfCtl
+         rXNIS995/TntlTPElbGrtLPiqud00YolaGtAG36hdxiKfVHdX6C2m5kulga60M/ENZht
+         ghOP4O+oZSkGg6i3KhvqLQSgtTWG4SlWr4c3xbFIE7+AV3VcZjY3J2pcF624IsSnvgjF
+         1tDyhJhlUb4Rl6bZad2Bg7MQCorE1nw5/sY7C8eIymiAqu1GQAFUfzXyuGL7jSFGL61u
+         pYHg==
+X-Gm-Message-State: AOAM533NWPiXoKqarqfKC62EiffB3h7RIxxrSOL1pfzP4Ku0h7RXCAfl
+        X+vxbkC0cs0b8oKwmuOwzJOzBxp0/FE=
+X-Google-Smtp-Source: ABdhPJw1/12loswbdkPkD8Zhl2Yvb+Tjd/1tqW0mRR71ohF0rznxZ7TNEV0H6NcysfGbIqHPuGQf6Q==
+X-Received: by 2002:ac2:5503:: with SMTP id j3mr1281724lfk.94.1605282930190;
+        Fri, 13 Nov 2020 07:55:30 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
+        by smtp.googlemail.com with ESMTPSA id v12sm1474128lji.3.2020.11.13.07.55.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Nov 2020 07:55:29 -0800 (PST)
+Subject: Re: [PATCH v1 11/30] drm/tegra: dc: Support OPP and SoC core voltage
+ scaling
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-usb@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20201104234427.26477-12-digetx@gmail.com>
+ <20201110202945.GF2375022@ulmo> <20201110203257.GC5957@sirena.org.uk>
+ <72ae6462-13df-9fcb-510e-8e57eee0f035@gmail.com>
+ <20201111115534.GA4847@sirena.org.uk>
+ <dd26eb18-8ac4-22a6-29b0-dbbe5fa6075b@gmail.com>
+ <20201112171600.GD4742@sirena.org.uk>
+ <b4b06c1d-c9d4-43b2-c6eb-93f8cb6c677d@gmail.com>
+ <20201112200123.GF4742@sirena.org.uk>
+ <ce9e2d9f-917e-fb8a-7323-f3bf1a367e9d@gmail.com>
+ <20201113142937.GB4828@sirena.org.uk>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <7f066805-97d9-088f-e89d-a554fe478574@gmail.com>
+Date:   Fri, 13 Nov 2020 18:55:27 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-X-OriginatorOrg: infinera.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR1001MB2389.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a8a89b1-84f5-443c-2833-08d887eba31c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2020 15:48:59.5601
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1Ve4MN6o5ZXT89IGvZJmF+YsdbFcclwdcYjx9TcSlOJw7maxeqZyesypRgbs2jcgb59/1aV3ADpzM0oXemdcYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1943
+In-Reply-To: <20201113142937.GB4828@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTExLTEzIGF0IDE2OjM3ICswMTAwLCBKb2FraW0gVGplcm5sdW5kIHdyb3Rl
-Og0KPiBGb3VuZCBvbmUgbW9yZSBMb2dpdGVjaCBkZXZpY2UsIEJDQzk1MCBDb25mZXJlbmNlQ2Ft
-LCB3aGljaCBuZWVkcw0KPiB0aGUgc2FtZSBkZWxheSBoZXJlLiBUaGlzIG1ha2VzIDMgb3V0IG9m
-IDMgZGV2aWNlcyBJIGhhdmUgdHJpZWQuDQo+IA0KPiBUaGVyZWZvcmUsIGFkZCBhIGRlbGF5IGZv
-ciBhbGwgTG9naXRlY2ggZGV2aWNlcyBhcyBpdCBkb2VzIG5vdCBodXJ0Lg0KDQpNYXliZSB0aGlz
-IGRlbGF5IHNob3VsZCBqdXN0IGJlIGRlZmF1bHQgZm9yIGFsbCBVU0IgYXVkaW8gZGV2aWNlcz8N
-Cg0KIEpvY2tlDQoNCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEpvYWtpbSBUamVybmx1bmQgPGpvYWtp
-bS50amVybmx1bmRAaW5maW5lcmEuY29tPg0KPiBDQzogc3RhYmxlQHZnZXIua2VybmVsLm9yZyAo
-NC4xOSwgNS40KQ0KPiANCj4gLS0tDQo+IMKgc291bmQvdXNiL3F1aXJrcy5jIHwgMTAgKysrKyst
-LS0tLQ0KPiDCoDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0p
-DQo+IA0KPiBkaWZmIC0tZ2l0IGEvc291bmQvdXNiL3F1aXJrcy5jIGIvc291bmQvdXNiL3F1aXJr
-cy5jDQo+IGluZGV4IGM5ODlhZDgwNTJhZS4uYzUwYmUyZjc1ZjcwIDEwMDY0NA0KPiAtLS0gYS9z
-b3VuZC91c2IvcXVpcmtzLmMNCj4gKysrIGIvc291bmQvdXNiL3F1aXJrcy5jDQo+IEBAIC0xNjcy
-LDEzICsxNjcyLDEzIEBAIHZvaWQgc25kX3VzYl9jdGxfbXNnX3F1aXJrKHN0cnVjdCB1c2JfZGV2
-aWNlICpkZXYsIHVuc2lnbmVkIGludCBwaXBlLA0KPiDCoAkgICAgJiYgKHJlcXVlc3R0eXBlICYg
-VVNCX1RZUEVfTUFTSykgPT0gVVNCX1RZUEVfQ0xBU1MpDQo+IMKgCQltc2xlZXAoMjApOw0KPiDC
-oA0KPiANCj4gDQo+IA0KPiAtCS8qIFpvb20gUjE2LzI0LCBMb2dpdGVjaCBINjUwZS9INTcwZSwg
-SmFicmEgNTUwYSwgS2luZ3N0b24gSHlwZXJYDQo+IC0JICogIG5lZWRzIGEgdGlueSBkZWxheSBo
-ZXJlLCBvdGhlcndpc2UgcmVxdWVzdHMgbGlrZSBnZXQvc2V0DQo+IC0JICogIGZyZXF1ZW5jeSBy
-ZXR1cm4gYXMgZmFpbGVkIGRlc3BpdGUgYWN0dWFsbHkgc3VjY2VlZGluZy4NCj4gKwkvKiBab29t
-IFIxNi8yNCwgbWFueSBMb2dpdGVjaChhdCBsZWFzdCBINjUwZS9INTcwZS9CQ0M5NTApLA0KPiAr
-CSAqIEphYnJhIDU1MGEsIEtpbmdzdG9uIEh5cGVyWCBuZWVkcyBhIHRpbnkgZGVsYXkgaGVyZSwN
-Cj4gKwkgKiBvdGhlcndpc2UgcmVxdWVzdHMgbGlrZSBnZXQvc2V0IGZyZXF1ZW5jeSByZXR1cm4N
-Cj4gKwkgKiBhcyBmYWlsZWQgZGVzcGl0ZSBhY3R1YWxseSBzdWNjZWVkaW5nLg0KPiDCoAkgKi8N
-Cj4gwqAJaWYgKChjaGlwLT51c2JfaWQgPT0gVVNCX0lEKDB4MTY4NiwgMHgwMGRkKSB8fA0KPiAt
-CSAgICAgY2hpcC0+dXNiX2lkID09IFVTQl9JRCgweDA0NmQsIDB4MGE0NikgfHwNCj4gLQkgICAg
-IGNoaXAtPnVzYl9pZCA9PSBVU0JfSUQoMHgwNDZkLCAweDBhNTYpIHx8DQo+ICsJICAgICBVU0Jf
-SURfVkVORE9SKGNoaXAtPnVzYl9pZCkgPT0gMHgwNDZkICB8fCAvKiBMb2dpdGVjaCAqLw0KPiDC
-oAkgICAgIGNoaXAtPnVzYl9pZCA9PSBVU0JfSUQoMHgwYjBlLCAweDAzNDkpIHx8DQo+IMKgCSAg
-ICAgY2hpcC0+dXNiX2lkID09IFVTQl9JRCgweDA5NTEsIDB4MTZhZCkpICYmDQo+IMKgCSAgICAo
-cmVxdWVzdHR5cGUgJiBVU0JfVFlQRV9NQVNLKSA9PSBVU0JfVFlQRV9DTEFTUykNCg0K
+13.11.2020 17:29, Mark Brown пишет:
+> On Fri, Nov 13, 2020 at 01:37:01AM +0300, Dmitry Osipenko wrote:
+>> 12.11.2020 23:01, Mark Brown пишет:
+>>>> But it's not allowed to change voltage of a dummy regulator, is it
+>>>> intentional?
+> 
+>>> Of course not, we can't know if the requested new voltage is valid - the
+>>> driver would have to have explict support for handling situations where
+>>> it's not possible to change the voltage (which it can detect through
+>>> enumerating the values it wants to set at startup).
+> 
+>>> [Requesting the same supply multiple times]
+> 
+>> But how driver is supposed to recognize that it's a dummy or buggy
+>> regulator if it rejects all voltages?
+> 
+> It's not clear if it matters - it's more a policy decision on the part
+> of the driver about what it thinks safe error handling is.  If it's not
+> possible to read voltages from the regulator the consumer driver has to
+> decide what it thinks it's safe for it to do, either way it has no idea
+> what the actual current voltage is.  It could assume that it's something
+> that supports all the use cases it wants to use and just carry on with
+> no configuration of voltages, it could decide that it might not support
+> everything and not make any changes to be safe, or do something like
+> try to figure out that if we're currently at a given OPP that's the top
+> OPP possible.  Historically when we've not had regulator control in
+> these drivers so they have effectively gone with the first option of
+> just assuming it's a generally safe value, this often aligns with what
+> the power on requirements for SoCs are so it's not unreasonable.
+
+I don't think that in a case of this particular driver there is a way to
+make any decisions other than to assume that all changes are safe to be
+done if regulator isn't specified in a device-tree.
+
+If regulator_get() returns a dummy regulator, then this means that
+regulator isn't specified in a device-tree. But then the only way for a
+consumer driver to check whether regulator is dummy, is to check
+presence of the supply property in a device-tree.
+
+We want to emit error messages when something goes wrong, for example
+when regulator voltage fails to change. It's fine that voltage changes
+are failing for a dummy regulator, but then consumer driver shouldn't
+recognize it as a error condition.
+
+The regulator_get_optional() provides a more consistent and
+straightforward way for consumer drivers to check presence of a physical
+voltage regulator in comparison to dealing with a regulator_get(). The
+dummy regulator is nice to use when there is no need to change
+regulator's voltage, which doesn't work for a dummy regulator.
