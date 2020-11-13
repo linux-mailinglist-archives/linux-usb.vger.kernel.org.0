@@ -2,107 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 931212B1E5E
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2F42B1E74
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726569AbgKMPNe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 10:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726160AbgKMPNe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 10:13:34 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B51C0613D1
-        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 07:13:33 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id k2so10319280wrx.2
-        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 07:13:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:message-id
-         :date:mime-version;
-        bh=g2eWYS/TuIBg2trIPFi3kCqzhwEAZYnEwoucxK7S/uM=;
-        b=FBvYqur0Qp9aKH4Savqs1DxgrKDoYMnR8YWxDPAVxtuXYCqgWdpzIWhWu/JwsCt0EE
-         beqnmgnC2p8nLAoRTgy3jaFQ7Ffu9zPIx+qyJTmgHy/TbMRRunssqjjYWp1L+hF1GbBP
-         smn55I2OgBZ8S6VUw6LunUkpQ40IXDnz4dNz5QYSR64PN/OwxCXh3A0ArU1KN8yoU5gM
-         ffxa5co8uGs3dcOR0LmIr0syzogK4JhoGAqiPwGO7IZPzVnKg7jYnk2wr3U4aA+W8rbC
-         7wBCheQRpyaL7YYAxgsVz9kDS5oTndz9WoEXfW64zphyNmpiUhCw6UEnyKT0LkuWYs5l
-         VipA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:message-id:date:mime-version;
-        bh=g2eWYS/TuIBg2trIPFi3kCqzhwEAZYnEwoucxK7S/uM=;
-        b=egHQjabIn304lvwk798Z7buKPkqDTjlFTpFrUnnkgKxh9UlZ8XzoYNO18Gfqrgounj
-         YV1b0Bum7oSP1+0WQAaC1/3YwrImj/ZBp9itGlUCZeVK2R1j6bpUcmn9Ij8lpr071n6w
-         FookEAhh3WJ21mmDGGrdw+EgkhJjGmRXG4PkCScBzA3EWlQdzBVQOB9BzriPbe78Y2uL
-         06t+pbM5sOwhZQLijA24PM5BgWJvhTPe44hMAx3jG8g9A3gzywxIJ03lHQ+LK9AT0kEG
-         fBlxaV8HJ5fkqrTaCjcIEC6HTG8wSnRqWUPZGF9yE/2Kg26deMEgWciT5AL5uXcViDsp
-         FwdA==
-X-Gm-Message-State: AOAM531sU7KNszhPavWVS3/n5/W/1/x8wmMazLfQMBT2Hi3F/oX/vJWY
-        +yr9KZLPF3f3Py30p2uRpxGGlA==
-X-Google-Smtp-Source: ABdhPJwd+fiAbK8NZOBUneQcMTjdFObaHBrUXLOnyyZOiG6lbkh9XW68EclIsNXhMD8e3AYxJpBepw==
-X-Received: by 2002:a5d:5048:: with SMTP id h8mr4074266wrt.135.1605280411764;
-        Fri, 13 Nov 2020 07:13:31 -0800 (PST)
-Received: from localhost (253.35.17.109.rev.sfr.net. [109.17.35.253])
-        by smtp.gmail.com with ESMTPSA id i6sm10790839wma.42.2020.11.13.07.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2020 07:13:31 -0800 (PST)
-References: <20201112230043.28987-1-aouledameur@baylibre.com>
- <0f679c62aa48603ea43a8fa4819d688baa802d73.camel@pengutronix.de>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-usb@vger.kernel.org, "Kevin Hilman" <khilman@baylibre.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>
-Subject: Re: [PATCH v2] reset: make shared pulsed reset controls re-triggerable
-In-reply-to: <0f679c62aa48603ea43a8fa4819d688baa802d73.camel@pengutronix.de>
-Message-ID: <1jima91e92.fsf@starbuckisacylon.baylibre.com>
-Date:   Fri, 13 Nov 2020 16:13:29 +0100
+        id S1726507AbgKMPUt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 10:20:49 -0500
+Received: from smtp1.lauterbach.com ([62.154.241.196]:42527 "EHLO
+        smtp1.lauterbach.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726336AbgKMPUt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 10:20:49 -0500
+Received: (qmail 18103 invoked by uid 484); 13 Nov 2020 15:20:47 -0000
+X-Qmail-Scanner-Diagnostics: from ppp-82-135-76-196.dynamic.mnet-online.de by smtp1.lauterbach.com (envelope-from <ingo.rohloff@lauterbach.com>, uid 484) with qmail-scanner-2.11 
+ (mhr: 1.0. clamdscan: 0.99/21437. spamassassin: 3.4.0.  
+ Clear:RC:1(82.135.76.196):. 
+ Processed in 0.401076 secs); 13 Nov 2020 15:20:47 -0000
+Received: from ppp-82-135-76-196.dynamic.mnet-online.de (HELO ingxiaomi.fritz.box) (Authenticated_SSL:irohloff@[82.135.76.196])
+          (envelope-sender <ingo.rohloff@lauterbach.com>)
+          by smtp1.lauterbach.com (qmail-ldap-1.03) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <gregkh@linuxfoundation.org>; 13 Nov 2020 15:20:46 -0000
+Date:   Fri, 13 Nov 2020 16:20:45 +0100
+From:   Ingo Rohloff <ingo.rohloff@lauterbach.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/2] usb: gadget: User space URBs for FunctionFS
+Message-ID: <20201113161753.55588bcf@ingxiaomi.fritz.box>
+In-Reply-To: <X66WIqMoGWLUyraz@kroah.com>
+References: <20201111170718.3381-1-ingo.rohloff@lauterbach.com>
+        <X6wwNo5ZYYugyHu7@kroah.com>
+        <20201112180528.33bbe44c@ingxiaomi.fritz.box>
+        <X66WIqMoGWLUyraz@kroah.com>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Greg,
 
-On Fri 13 Nov 2020 at 16:04, Philipp Zabel <p.zabel@pengutronix.de> wrote:
+> The gadget code has always used AIO since the very beginning, this is
+> nothing new (decades old).  While it might feel "odd", I recommend
+> working with it first before trying to create new kernel apis that
+> duplicate existing functionality for the only reason being that AIO is
+> "different".
 
-> On Fri, 2020-11-13 at 00:00 +0100, Amjad Ouled-Ameur wrote:
->> The current reset framework API does not allow to release what is done by
->> reset_control_reset(), IOW decrement triggered_count. Add the new
->> reset_control_rearm() call to do so.
->> 
->> When reset_control_reset() has been called once, the counter
->> triggered_count, in the reset framework, is incremented i.e the resource
->> under the reset is in-use and the reset should not be done again.
->> reset_control_rearm() would be the way to state that the resource is
->> no longer used and, that from the caller's perspective, the reset can be
->> fired again if necessary.
->> 
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> Reported-by: Jerome Brunet <jbrunet@baylibre.com>
->> ---
->> Change since v1: [0]
->> * Renamed the new call from reset_control_(array_)resettable to 
->> reset_control_(array_)rearm
->> * Open-coded reset_control_array_rearm to check for errors before
->> decrementing triggered_count because we cannot roll back in case an
->> error occurs while decrementing one of the rstc.
->> * Reworded the new call's description.
+Forget my patch: You are right: I am now convinced, that using the AIO
+of the kernel should really provide the same.
+
+For me it was the other way round: I wrote code talking to "devio.c" on
+the USB Host and using "ioctl"; so that sounded natural to me.
+I think "devio.c" does not support async I/O ?
+So when starting, I was not aware at all that the gadget side supports
+AIO; and then I got misled by the POSIX aio interface (which did hide
+the native Linux aio system calls from me.)
+
+The "bug" I found is a bug in the example code (not in the kernel)
+as far as I can tell.
+
+The other thing I want in the future:
+> > > The final goal here is to be able to directly let user space
+> > > provide data buffers (via mmap I guess), which are then
+> > > transferred via USB; but this is the next step.    
+> 
+> > Isn't that kind of what the AIO inteface provides today?  :)  
 >
-> Thank you, applied to reset/next.
+> I think my explanation was not clear at all:
+> What I want to have is a "zero copy" transfer.
 
-Hi Philipp,
+I now think this can be implemented within the already existing
+AIO framework in f_fs.c by implementing a suitable mmap call.
 
-Would it be possible to get an immutable branch/tag with this ?
-It would allow to move forward on the USB side, without waiting for the
-next rc1.
+But before doing any of that I need test code.
 
-Thx
-Jerome
+So my plan right now:
+- Write a working (fast) echo example using libaio
 
+- Write a working (fast) echo example using liburing
+  (https://github.com/axboe/liburing)
+  because this should result in even faster AIO.
+  Another big reason for not doing extra ioctls;
+  using the existing AIO framework in the kernel
+  should allow to use liburing :)
+
+- Once I have done that I will look into extending
+  f_fs.c with a mmap call so that complete zero copy
+  transfers to/from USB bulk endpoints should become possible.
+
+Then I should be able to do some performance tests via USB 3.0
+to see how much this helps.
+
+I will post again once I have some working code.
+
+Thank you for your time and comments; 
+that really helps me to find a better solution :-)
+
+so long
+  Ingo
+
+
+PS: Not important:
+> >   https://pagure.io/libaio 
+> >   version 0.3.111
 >
-> regards
-> Philipp
+> I do not know if this is the latest one or not, sorry.  Ask your Linux
+> distro about this, or use the "raw" kernel aio syscalls.
+
+Thanks to gentoo, I found out there is 
+  https://releases.pagure.org/libaio/
+and this one has the 0.3.112 release; and of course there is always the
+git repository (which unfortunately does not include tags for anything
+more recent than 0.3.110).
