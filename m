@@ -2,85 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6291D2B1CF2
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 15:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DBD2B1D08
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 15:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726376AbgKMONA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 09:13:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51442 "EHLO mail.kernel.org"
+        id S1726560AbgKMOT0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 09:19:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55664 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726278AbgKMONA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Nov 2020 09:13:00 -0500
+        id S1726503AbgKMOT0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Nov 2020 09:19:26 -0500
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DD10F22226;
-        Fri, 13 Nov 2020 14:12:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7031722240;
+        Fri, 13 Nov 2020 14:19:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605276779;
-        bh=g3VM31K0NG7LqAnSgaUP3p+CmZcx4hSzlN+h8qaOZiY=;
+        s=default; t=1605277161;
+        bh=hIH22I2UqQ15Y9iIOIcq0UO8w4CmXoXJajaZ0Vq25+4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YN+ptGH7IxVgi1456cLOmm3Cig2q7+yNMAp2Ak5zw9ELgFooqFbJBP3hCmV4+eO8i
-         kICE6+iu4iK6Ksl7SRJfjbmOgm73B5MOGqRsIN27mye7qevW1KstHT4wjbkqsm0Wb0
-         dNxTH44ZUnhHMAlni7w+Hen1nPOmcL1MljNIQen4=
-Date:   Fri, 13 Nov 2020 15:13:55 +0100
+        b=171i4JeYVRjw3hoyK2hi40/qag8TGRV+PK8sZfDbg6oBFjI79u4VrkrnFGT5iGMh3
+         16ef+9TdM90OdcjM4W7trrAGk6TkHuagZxPjvwKTma6svbfW7qoBgFrRla3GLaqjo0
+         q2R1tCjTU8T8uwqp3f8Yi0Qj00vlBxxdG+bH2GpY=
+Date:   Fri, 13 Nov 2020 15:20:18 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        heikki.krogerus@linux.intel.com, enric.balletbo@collabora.com,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH 0/3] platform/chrome: cros_ec_typec: Add plug and plug
- altmodes
-Message-ID: <X66Uo83dTGS2dMcx@kroah.com>
-References: <20201112012329.1364975-1-pmalani@chromium.org>
+To:     Ingo Rohloff <ingo.rohloff@lauterbach.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/2] usb: gadget: User space URBs for FunctionFS
+Message-ID: <X66WIqMoGWLUyraz@kroah.com>
+References: <20201111170718.3381-1-ingo.rohloff@lauterbach.com>
+ <X6wwNo5ZYYugyHu7@kroah.com>
+ <20201112180528.33bbe44c@ingxiaomi.fritz.box>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201112012329.1364975-1-pmalani@chromium.org>
+In-Reply-To: <20201112180528.33bbe44c@ingxiaomi.fritz.box>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 05:23:25PM -0800, Prashant Malani wrote:
-> This patch series add plug registration support to the cros-ec-typec
-> driver. It also adds support for registering alternate modes for the
-> registered plug. These features utilize the API provided by the Type C
-> connector class framework.
+On Thu, Nov 12, 2020 at 06:05:35PM +0100, Ingo Rohloff wrote:
+> On Wed, 11 Nov 2020 19:40:54 +0100
+> Greg KH <gregkh@linuxfoundation.org> wrote:
 > 
-> The first patch adds support to the connector class framework for the
-> number_of_alternate_modes attribute (along with the relevant ABI
-> documentation).
+> > On Wed, Nov 11, 2020 at 06:07:16PM +0100, Ingo Rohloff wrote:
+> > ...
+> > > I now implement two new ioctls for FunctionFS:
+> > >   FUNCTIONFS_SUBMITBULKURB
+> > >   FUNCTIONFS_REAPBULKURB
+> > > which provide simliar functionality.
+> > > 
+> > > A similar functionality is already implemented via AIO. But: To use
+> > > this API, your user space environment needs to know how to use
+> > > these system calls.  
 > 
-> The next two patches add plug registration, and then altmode
-> registration for the plugs. The latter of these two patches utilizes the
-> new function for plug number_of_alternate_modes introduced in the first patch.
-> 
-> This series is based on top of the following branch and other patch
-> series (applied in the order specified):
-> - Branch: chrome-platform for-next [1], which is currently set to the
->   "Linux 5.10-rc1" tag.
-> - cros-ec-typec: Patch series to register PD identity information + partner altmodes[2]
-> - cros-ec-typec: Patch series to register cable[3]
-> - cros-ec-typec: Patch series to add partner number_of_altmodes[4]
-> 
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/log/?h=for-next
-> [2]: https://lore.kernel.org/lkml/20201029222738.482366-1-pmalani@chromium.org/
-> [3]: https://lore.kernel.org/lkml/20201106184104.939284-1-pmalani@chromium.org/
-> [4]: https://lore.kernel.org/lkml/20201110061535.2163599-1-pmalani@chromium.org/
+> OK I now understand why I was confused myself:
+> I was looking into the POSIX AIO functions ("man 7 aio").
+> At least in the C library which I use, the implementation of
+> POSIX AIO does not use the native Linux system calls.
+> What I meant above was: This C library does not know about the native
+> Linux system calls.
 
-Ok, I'm confused.  This is not the first submission of this series, as
-you sent out a v2 a few days before this one.
+Then use a new library :)
 
-And am I supposed to suck in the chrome-platform branch into the
-usb-next tree?
+> Now because of your comment I learned about "libaio", which uses the
+> Linux native system calls.
 
-What should I do here, ignore these?  Merge them?
+Great!
 
-I see the USB change lost the reviewer's ack as well, why?
+> The first problem here: Where do you get this library from ?
+> At the end I got it from here:
+>   https://pagure.io/libaio 
+>   version 0.3.111
+> I am still not sure if this is the right place, because at least
+> Debian provides a 0.3.112 version, which seems to use an extra
+> system call (io_pgetevents); no clue if I should use the Debian
+> version or not.
 
-I'm going to delete all of these patches from my review queue now and
-wait for a resend with some clarity as to what I should do with it :)
+I do not know if this is the latest one or not, sorry.  Ask your Linux
+distro about this, or use the "raw" kernel aio syscalls.
+
+The gadget code has always used AIO since the very beginning, this is
+nothing new (decades old).  While it might feel "odd", I recommend
+working with it first before trying to create new kernel apis that
+duplicate existing functionality for the only reason being that AIO is
+"different".
+
+But if you find bugs in the current implementation, we will gladly
+accept patches.
 
 thanks,
 
