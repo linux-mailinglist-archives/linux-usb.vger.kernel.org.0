@@ -2,138 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A42012B1EEA
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB82B2B1F1E
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726614AbgKMPhi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 10:37:38 -0500
-Received: from mail-bn8nam11on2053.outbound.protection.outlook.com ([40.107.236.53]:33633
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726603AbgKMPhh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Nov 2020 10:37:37 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Svnwv7ebJ2UuBMg3+wwnCarRlMaZ/eOEy2gVkN4A7HoaC+mMibz1HhoW2oPE3WauzA+fd7MyseA6JEWtfsnYyVufaWjHLO4gkT4uBpypmnVEQRQLZkpJaKE21W5wyRbNWIjT7UnNmTrX4LYq+lOz3Wzn2Uv49N8yn1vcAUBcK/9t3STf8kOxrVJxq8w+FNvOivFsG9vCZUmg6DLDrWLjYQUB8hCQ9oL5iyL7U4gjvJFQkTnOJF2OEsVyJ218LGairqKyha80VoVn+dwnJQXsO4FM29quTeCkXj4eFyT4mQBmj41Xhllo+jVSB0Dp8dDdF0p1fXsA0jkk9+GwntrPSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DS1Hpqdt/AZ/tDODWOjpu8hfGMwmTShq5Kb6i5jz5+0=;
- b=HlwkShfGjpdLCYB65QiagQMHSzUf3oxK+GVxQNlapxU++FHYPQ5ak0YPSdhEGqzzVMDEjgGRWUX1Aqf0Jd2a8Dafs/qO4mt7cAIFwUHztnoeKgPxnVp+yLB9qtXc3QmoR7SkLwGrlBt/+H1Wp+a/c9j9CVburLfjqyxsaH85+ugOGWON5RQ3dvxu8Ki3QraRQZsTSdPxkfWH9nMeqZaxDfLo7JorwdpNB2vNzMl4RoQUcAdTgPh9ICOen36ysxVd8f8NJk8T/Z9nJi9OyuL419a6xJftPH6O8BjMGB4ohRmjv+kQmTysAY9Zbmb2S3EWtgm9BdVWkHLgzR9DNK8Y0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 8.4.225.191) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=infinera.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=infinera.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DS1Hpqdt/AZ/tDODWOjpu8hfGMwmTShq5Kb6i5jz5+0=;
- b=dIbaAHomto0astBTc5E2iBoPrQxQEy4WhO8jyXZicvyaPtGkBrpFaWopfweKJXe7XxjG1XeJIaRdJFYyJaFGDKn+xToBrqZ2Uoxfu961qjEfa04bsJIpgpMw5nTJo/mVSKtg/rAA+RfZWPUJg9RZB8DE+/NI2yekyKocL+zFE5M=
-Received: from MWHPR07CA0023.namprd07.prod.outlook.com (2603:10b6:300:116::33)
- by MWHPR10MB1981.namprd10.prod.outlook.com (2603:10b6:300:10c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.23; Fri, 13 Nov
- 2020 15:37:33 +0000
-Received: from CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:116:cafe::8e) by MWHPR07CA0023.outlook.office365.com
- (2603:10b6:300:116::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.25 via Frontend
- Transport; Fri, 13 Nov 2020 15:37:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 8.4.225.191)
- smtp.mailfrom=infinera.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=pass action=none
- header.from=infinera.com;
-Received-SPF: Pass (protection.outlook.com: domain of infinera.com designates
- 8.4.225.191 as permitted sender) receiver=protection.outlook.com;
- client-ip=8.4.225.191; helo=owa.infinera.com;
-Received: from owa.infinera.com (8.4.225.191) by
- CO1NAM11FT003.mail.protection.outlook.com (10.13.175.93) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3541.22 via Frontend Transport; Fri, 13 Nov 2020 15:37:32 +0000
-Received: from sv-ex16-prd.infinera.com (10.100.96.229) by
- sv-ex16-prd.infinera.com (10.100.96.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Fri, 13 Nov 2020 07:37:32 -0800
-Received: from sv-smtp-prod2.infinera.com (10.100.98.82) by
- sv-ex16-prd.infinera.com (10.100.96.229) with Microsoft SMTP Server id
- 15.1.1847.3 via Frontend Transport; Fri, 13 Nov 2020 07:37:32 -0800
-Received: from se-metroit-prd1.infinera.com ([10.210.32.58]) by sv-smtp-prod2.infinera.com with Microsoft SMTPSVC(7.5.7601.17514);
-         Fri, 13 Nov 2020 07:37:31 -0800
-Received: from gentoo-jocke.infinera.com (gentoo-jocke.infinera.com [10.210.71.2])
-        by se-metroit-prd1.infinera.com (Postfix) with ESMTP id 75E9D2C03201;
-        Fri, 13 Nov 2020 16:37:31 +0100 (CET)
-Received: by gentoo-jocke.infinera.com (Postfix, from userid 1001)
-        id 6D4F0E0A9; Fri, 13 Nov 2020 16:37:31 +0100 (CET)
-From:   Joakim Tjernlund <joakim.tjernlund@infinera.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     Joakim Tjernlund <joakim.tjernlund@infinera.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH] ALSA: usb-audio: Add delay quirk for all Logitech USB devices
-Date:   Fri, 13 Nov 2020 16:37:20 +0100
-Message-ID: <20201113153720.5158-1-joakim.tjernlund@infinera.com>
-X-Mailer: git-send-email 2.26.2
+        id S1726746AbgKMPrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 10:47:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726633AbgKMPrR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 10:47:17 -0500
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2782C0617A6
+        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 07:47:17 -0800 (PST)
+Received: by mail-ot1-x344.google.com with SMTP id k3so9266051otp.12
+        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 07:47:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ITN/VwmToF8JO+5dUf151w/YV2UUx/XnMJGOWKQ4yB0=;
+        b=e3B8zi+09jNaeLEgxxw8TGHRusy89tboB52gu4WqUpg07/U1n/7Pnq001IusQnQbGm
+         KgI7YjFCmV9THbu0RmYqbfIChtHkHnjBHtfIefezbKoYD5PijIkwWFps4fY2O7eSz0Ob
+         dBOnCoBpAF6Li+NdlgJwX85OIN28aAv3IfHcjKp8zBMiSTDx1JlJQB9YlfGM36uhbZTU
+         bHScsXijCTtKxfg5KLOdIsZA/xuALvcXzRJcNlpOgYCV/1Db4VGDPK9VKShDwKoT9HZ+
+         NJNsNWRQvQiB4XwxwINWlHEDai31yCUxTnsI09SDH5J/iMrf3v53zSMNv1BtXP1KiuEO
+         x1QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ITN/VwmToF8JO+5dUf151w/YV2UUx/XnMJGOWKQ4yB0=;
+        b=Q3hbhRs9eGXGqNsNfYDd0PQt9oWt3J/cC4DnUj9YrVDm+R5ANHFN1uKRUHEdEzDuha
+         HG9BLXQXdb4Tdv99OjuUk1ulpCP/to0g4Em+aERvyK4MouqX9oONHG6ngvvJ+yYuwO5Z
+         FeaBhlWH1od6vBeTPEmla+1ISxz3wZmRmOGM1gqDdV9xxY/NU4/0CUhTjlkmaKwrr9Ho
+         cg67BSL6LtbO0YBL4oGJAzhR48Kf2fNeYJrXKPPzchO8IAJiATY/OoRgodvk3TorXqz3
+         gumHvdfDhrjur0V+IJ6dPF8uzkXnEe/tblg2p2cmqnP7EwE0vfBKPvVptl+xLT0/aM+h
+         PRMQ==
+X-Gm-Message-State: AOAM53013DpjRXh0DF3FBhbFvCXIP4bkq+apBBWoNnVeXupD8foiqmXO
+        ehKqahlSjH7CdwV+eMSabv+zM2z/2GhY2wWQih0Zlw==
+X-Google-Smtp-Source: ABdhPJw4Fyli3vIWE2XQlPNOh8R9pZQFlkyPbhp1mahj4h/JWo0EdgjcEGKfBqlE3Ycn835yt0E9GRBzfsgpJ43ojGI=
+X-Received: by 2002:a9d:649:: with SMTP id 67mr2020465otn.233.1605282432199;
+ Fri, 13 Nov 2020 07:47:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-OriginalArrivalTime: 13 Nov 2020 15:37:32.0294 (UTC) FILETIME=[E6F2A260:01D6B9D2]
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ee69584d-999f-4e82-56fc-08d887ea09dc
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1981:
-X-Microsoft-Antispam-PRVS: <MWHPR10MB1981E5FBE294B87A92F87136F4E60@MWHPR10MB1981.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: goJMnjAJa9IGVrT0QTC2zfQP1StjhtGuCm2DlrvwQaqLn9ztco5kEvPyr3c0pfawkxgtYgSQyhXD29RjlUTSTxlOZMPl3eZM/SWce2h+Xsy+omD3syvO9ZiOIpAA7naApImflKlBjcyVuRMKF9inDh3s/HPs5QSbpIg5ycsG1/S2ZlMXY1s0L6EvX7TmgShAnQGRQ5sbTFwoyn/FRDX3SnrLg52k+CZ2RlSrIogqv5V7aQlpO1Hi0w8vQIjp6IbYsECHbyGm4u/h8Xnc8032XMY+uINFfZTjo0O2o/JceT7QQ7jvG6XhrTjoiBKIlz988rby4uzEUrDndFaXomfDG7ndAK758b2iCt+2WW1K1QmqSSQ0lKTPmG6Oh/US+vFtm9euWmQiqyXG98Sc+dApMg==
-X-Forefront-Antispam-Report: CIP:8.4.225.191;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:owa.infinera.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(376002)(346002)(396003)(39860400002)(136003)(46966005)(70206006)(36756003)(6266002)(82310400003)(450100002)(82740400003)(54906003)(8676002)(5660300002)(70586007)(426003)(44832011)(47076004)(42186006)(356005)(36906005)(336012)(6916009)(81166007)(186003)(478600001)(316002)(26005)(83380400001)(2906002)(2616005)(6666004)(86362001)(4326008)(1076003)(8936002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: infinera.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2020 15:37:32.9857
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee69584d-999f-4e82-56fc-08d887ea09dc
-X-MS-Exchange-CrossTenant-Id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=285643de-5f5b-4b03-a153-0ae2dc8aaf77;Ip=[8.4.225.191];Helo=[owa.infinera.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1981
+References: <f3a7a153f0719cb53ec385b16e912798bd3e4cf9.1602856358.git.andreyknvl@google.com>
+ <20201113123035.tjllvijjzd54npsf@linutronix.de> <CAAeHK+zd0ucaj8EJ8ro+0ekubrxp5GiBMaBULHJB05dDrzpQGw@mail.gmail.com>
+ <20201113132818.zhtdhzg6ukv4wgxl@linutronix.de> <CAAeHK+yZEQ7r1bBWbUhdys8s1CntwpOyF+Fm+H=NiuK0g3KwYg@mail.gmail.com>
+In-Reply-To: <CAAeHK+yZEQ7r1bBWbUhdys8s1CntwpOyF+Fm+H=NiuK0g3KwYg@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 13 Nov 2020 16:47:00 +0100
+Message-ID: <CANpmjNNd1-0+UX8Pkjov7Roq-c2RHcHed2znqvMVMxmoX-3LXg@mail.gmail.com>
+Subject: Re: [PATCH v4] kcov, usb: only collect coverage from
+ __usb_hcd_giveback_urb in softirq
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Nazime Hande Harputluoglu <handeharput@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Found one more Logitech device, BCC950 ConferenceCam, which needs
-the same delay here. This makes 3 out of 3 devices I have tried.
+On Fri, 13 Nov 2020 at 14:42, Andrey Konovalov <andreyknvl@google.com> wrote:
+> On Fri, Nov 13, 2020 at 2:28 PM Sebastian Andrzej Siewior
+> <bigeasy@linutronix.de> wrote:
+> >
+> > On 2020-11-13 13:51:19 [+0100], Andrey Konovalov wrote:
+> > > Hi Sebastian,
+> >
+> > Hi Andrey,
+> >
+> > > Replaced with what and why?
+> >
+> > Linus requested in
+> >         https://lkml.kernel.org/r/CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com/
+> >
+> > that drivers should not change their behaviour on context magic like
+> > in_atomic(), in_interrupt() and so on.
+> > The USB bits were posted in
+> >         https://lkml.kernel.org/r/20201019100629.419020859@linutronix.de
 
-Therefore, add a delay for all Logitech devices as it does not hurt.
+Arguably this patch is *not* changing "driver behaviour", it's only
+changing how and when KCOV collects coverage, which is not related to
+how the driver behaves.
 
-Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
-CC: stable@vger.kernel.org (4.19, 5.4)
+> > and merged (which is probably the same time as this patch).
+> >
+> > I haven't look what this code should do or does but there are HCDs for
+> > which this is never true like the UHCI/OHCI controller for instance.
+>
+> We could go back to adding softirq-specific kcov callbacks. Perhaps
+> with a simpler implementation than what we had before to only cover
+> this case. Something like kcov_remote_start_usb_softirq() and
+> kcov_remote_stop_softirq() that do the softirq check internally.
 
----
- sound/usb/quirks.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Is this a matter of simply banning such functions entirely without
+understanding their use? Because that sounds wrong. But if it is, we
+probably have to just add some static inline functions in
+include/linux/kcov.h that simply does the check.
 
-diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-index c989ad8052ae..c50be2f75f70 100644
---- a/sound/usb/quirks.c
-+++ b/sound/usb/quirks.c
-@@ -1672,13 +1672,13 @@ void snd_usb_ctl_msg_quirk(struct usb_device *dev, unsigned int pipe,
- 	    && (requesttype & USB_TYPE_MASK) == USB_TYPE_CLASS)
- 		msleep(20);
- 
--	/* Zoom R16/24, Logitech H650e/H570e, Jabra 550a, Kingston HyperX
--	 *  needs a tiny delay here, otherwise requests like get/set
--	 *  frequency return as failed despite actually succeeding.
-+	/* Zoom R16/24, many Logitech(at least H650e/H570e/BCC950),
-+	 * Jabra 550a, Kingston HyperX needs a tiny delay here,
-+	 * otherwise requests like get/set frequency return
-+	 * as failed despite actually succeeding.
- 	 */
- 	if ((chip->usb_id == USB_ID(0x1686, 0x00dd) ||
--	     chip->usb_id == USB_ID(0x046d, 0x0a46) ||
--	     chip->usb_id == USB_ID(0x046d, 0x0a56) ||
-+	     USB_ID_VENDOR(chip->usb_id) == 0x046d  || /* Logitech */
- 	     chip->usb_id == USB_ID(0x0b0e, 0x0349) ||
- 	     chip->usb_id == USB_ID(0x0951, 0x16ad)) &&
- 	    (requesttype & USB_TYPE_MASK) == USB_TYPE_CLASS)
--- 
-2.26.2
-
+Thanks,
+-- Marco
