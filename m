@@ -2,62 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F26D2B1BE5
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 14:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2BA2B1BEF
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 14:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726493AbgKMNaf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 08:30:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38876 "EHLO mail.kernel.org"
+        id S1726437AbgKMNff (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 08:35:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41526 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726278AbgKMNaf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Nov 2020 08:30:35 -0500
+        id S1726160AbgKMNfe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Nov 2020 08:35:34 -0500
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 651C82085B;
-        Fri, 13 Nov 2020 13:30:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 58DD722201;
+        Fri, 13 Nov 2020 13:35:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605274235;
-        bh=TfJkZ2oHXjGcRW1STcAE522a0gfrypGFHLoxwZUnAT0=;
+        s=default; t=1605274526;
+        bh=4LrSB+L6f6m3Hv04Ngx55q6oO+x0uJsQ+LVSLRd8aeY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y2uJSDY/BM7HwdgOS/+gIHZSxAOdaxdhN0ZO4jkxD8hfbpk/7RtQMhIka6xqdA0J8
-         EiYx/IiEyoCUeIsS0L0eYFR8leprVXwuDrdmlfnHVQwpTxQ5rMseSD/pGJzZ5KIbCq
-         z7WPR8g3uwIYWooxdDe+frEwQrT3NZmZdVm4UPKw=
-Date:   Fri, 13 Nov 2020 14:31:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>,
-        Drew Fustini <drew@pdp7.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "usb: musb: convert to
- devm_platform_ioremap_resource_byname"
-Message-ID: <X66Ks5ER2RRfUGB2@kroah.com>
-References: <20201112135900.3822599-1-geert+renesas@glider.be>
+        b=oB6Nqu07LPWM/yPVqcjSoxdeChM/3+UZpoP0QY3TavErbjzReKlVsatUNJLu+cZqe
+         rYh1uuhB7y8SFqunxtFjZ12yvPx2rGzG6a+PcDiqTRaAVVEF0bzNKAtsXJ3ZY0IoK+
+         ZlHcGi8Hky/88cnajPcI2iMRefrO4f1MbU7aECjk=
+Date:   Fri, 13 Nov 2020 14:36:23 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     thomas.haemmerle@wolfvision.net
+Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
+        hverkuil@xs4all.nl, linux-usb@vger.kernel.org,
+        m.tretter@pengutronix.de, linux-media@vger.kernel.org
+Subject: Re: [PATCH v3] usb: gadget: uvc: fix multiple opens
+Message-ID: <X66L17t41LkoIOm1@kroah.com>
+References: <X6pmMFYmzO088p4g@kroah.com>
+ <20201110143015.15134-1-thomas.haemmerle@wolfvision.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201112135900.3822599-1-geert+renesas@glider.be>
+In-Reply-To: <20201110143015.15134-1-thomas.haemmerle@wolfvision.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 02:59:00PM +0100, Geert Uytterhoeven wrote:
-> This reverts commit 2d30e408a2a6b3443d3232593e3d472584a3e9f8.
+On Tue, Nov 10, 2020 at 03:30:15PM +0100, thomas.haemmerle@wolfvision.net wrote:
+> From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
 > 
-> On Beaglebone Black, where each interface has 2 children:
+> Currently, the UVC function is activated when open on the corresponding
+> v4l2 device is called.
+> On another open the activation of the function fails since the
+> deactivation counter in `usb_function_activate` equals 0. However the
+> error is not returned to userspace since the open of the v4l2 device is
+> successful.
 > 
->     musb-dsps 47401c00.usb: can't request region for resource [mem 0x47401800-0x474019ff]
->     musb-hdrc musb-hdrc.1: musb_init_controller failed with status -16
->     musb-hdrc: probe of musb-hdrc.1 failed with error -16
->     musb-dsps 47401400.usb: can't request region for resource [mem 0x47401000-0x474011ff]
->     musb-hdrc musb-hdrc.0: musb_init_controller failed with status -16
->     musb-hdrc: probe of musb-hdrc.0 failed with error -16
+> On a close the function is deactivated (since deactivation counter still
+> equals 0) and the video is disabled in `uvc_v4l2_release`, although the
+> UVC application potentially is streaming.
 > 
-> Before, devm_ioremap_resource() was called on "dev" ("musb-hdrc.0" or
-> "musb-hdrc.1"), after it is called on "&pdev->dev" ("47401400.usb" or
-> "47401c00.usb"), leading to a duplicate region request, which fails.
+> Move activation of UVC function to subscription on UVC_EVENT_SETUP
+> because there we can guarantee for a userspace application utilizing UVC.
+> Block subscription on UVC_EVENT_SETUP while another application already
+> is subscribed to it, indicated by `bool func_connected` in
+> `struct uvc_device`.
+> Extend the `struct uvc_file_handle` with member `bool is_uvc_app_handle`
+> to tag it as the handle used by the userspace UVC application.
 > 
+> With this a process is able to check capabilities of the v4l2 device
+> without deactivating the function for the actual UVC application.
+> 
+> Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+> ---
+> v3:
+>  - replace `unsigned int connections` with `bool func_connected`
+>  - rename `bool connected` to `bool is_uvc_app_handle`
 
-Thanks for this, I'll go queue it up now.
+Can you fix this up based on Hans's review?
+
+thanks,
 
 greg k-h
