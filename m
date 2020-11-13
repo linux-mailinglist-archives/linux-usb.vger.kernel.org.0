@@ -2,102 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ED82B1C03
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 14:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6291D2B1CF2
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 15:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbgKMNm4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 08:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726376AbgKMNm4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 08:42:56 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5850C0613D1
-        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 05:42:55 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id h6so7115286pgk.4
-        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 05:42:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xeRteUYbLutGkQrrpi7H2enRNwMxf8nMPaFExxLpUmk=;
-        b=A25bqIPX9jFZk1iMzFP0ddtBNLjKWWaHxxVsq74rjDyWqE139lDfn6UGug1+K9zZvR
-         qLJrsCrI97d2UAIVKhY9MrsolfuQ2m1H5N9iZiplPvxKW+BCJWH+Kp8CB58Pye/CtRoa
-         zKo1LI4D3ubRc4fYv8vYyyyh+xB0yMf04A3i00l+CRVkfF7l0EyzdQme6XLH2LaPzUsX
-         C7rJoyE6fAhm5vYrT66fX6AM3QegDp1vgYyLkOuqNBS7iBYh3L2aiNN83Qliz5HI4wUb
-         wM1VQycQi/hqZlLg5hZQ422NV7xJX7lt8amslmYYMY1pUzf0/OphNiKkV2i1N9R4l8eE
-         o9sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xeRteUYbLutGkQrrpi7H2enRNwMxf8nMPaFExxLpUmk=;
-        b=Mo4ibT2a7sHsnurCTwgPXXG7NngsyqkadncUpDqIefbPT8KCtTbGZUTzSPVCVwsY6B
-         uulfcrQncoayhSBH7rhkiOqWAlO34qG3r4vJQNn4ij2Iag64LRtYojh7hyUanAVuZPFt
-         /6W1ZsAXQbYUQt9vuejYm+0GK20HTzWqEYMwoa+q3amxq54OMOLg/U1ugxlFz1cF88yi
-         A8NUhABXWCZkc/Dtl2AvBvgO4tgHSWu8hafD4xfMWrqYWlKAacPhKejPFEvM3AKxUJj0
-         XOVu9B1VvHAmtKYewxDx9sAHhvbRZMsjTq+dUvwxetCk+IulLhVZmCKD19ED/+KiWYSt
-         oV9A==
-X-Gm-Message-State: AOAM530AxyMnkLyJkN8CZbGNnPtMhZJgImLiYp3FHxJ8ZSsgWg6cYL8b
-        YWlLua4+MHLzUrkxroQVqyM/g5uHukQEnlElVu8iCuOYj/8GDg==
-X-Google-Smtp-Source: ABdhPJxEEff5q7MFEuv9XJLX+NqYpChvyXOK9HnYhOTDuUpjWQxD+GDapX1xLjPDWz6r9vbmj1gmK9DryNPwU9h0ij0=
-X-Received: by 2002:a05:6a00:16c4:b029:162:bf9f:6458 with SMTP id
- l4-20020a056a0016c4b0290162bf9f6458mr2014799pfc.55.1605274975132; Fri, 13 Nov
- 2020 05:42:55 -0800 (PST)
+        id S1726376AbgKMONA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 09:13:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51442 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726278AbgKMONA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Nov 2020 09:13:00 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DD10F22226;
+        Fri, 13 Nov 2020 14:12:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605276779;
+        bh=g3VM31K0NG7LqAnSgaUP3p+CmZcx4hSzlN+h8qaOZiY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YN+ptGH7IxVgi1456cLOmm3Cig2q7+yNMAp2Ak5zw9ELgFooqFbJBP3hCmV4+eO8i
+         kICE6+iu4iK6Ksl7SRJfjbmOgm73B5MOGqRsIN27mye7qevW1KstHT4wjbkqsm0Wb0
+         dNxTH44ZUnhHMAlni7w+Hen1nPOmcL1MljNIQen4=
+Date:   Fri, 13 Nov 2020 15:13:55 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com, enric.balletbo@collabora.com,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH 0/3] platform/chrome: cros_ec_typec: Add plug and plug
+ altmodes
+Message-ID: <X66Uo83dTGS2dMcx@kroah.com>
+References: <20201112012329.1364975-1-pmalani@chromium.org>
 MIME-Version: 1.0
-References: <f3a7a153f0719cb53ec385b16e912798bd3e4cf9.1602856358.git.andreyknvl@google.com>
- <20201113123035.tjllvijjzd54npsf@linutronix.de> <CAAeHK+zd0ucaj8EJ8ro+0ekubrxp5GiBMaBULHJB05dDrzpQGw@mail.gmail.com>
- <20201113132818.zhtdhzg6ukv4wgxl@linutronix.de>
-In-Reply-To: <20201113132818.zhtdhzg6ukv4wgxl@linutronix.de>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 13 Nov 2020 14:42:44 +0100
-Message-ID: <CAAeHK+yZEQ7r1bBWbUhdys8s1CntwpOyF+Fm+H=NiuK0g3KwYg@mail.gmail.com>
-Subject: Re: [PATCH v4] kcov, usb: only collect coverage from
- __usb_hcd_giveback_urb in softirq
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Nazime Hande Harputluoglu <handeharput@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201112012329.1364975-1-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 2:28 PM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
->
-> On 2020-11-13 13:51:19 [+0100], Andrey Konovalov wrote:
-> > Hi Sebastian,
->
-> Hi Andrey,
->
-> > Replaced with what and why?
->
-> Linus requested in
->         https://lkml.kernel.org/r/CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com/
->
-> that drivers should not change their behaviour on context magic like
-> in_atomic(), in_interrupt() and so on.
-> The USB bits were posted in
->         https://lkml.kernel.org/r/20201019100629.419020859@linutronix.de
->
-> and merged (which is probably the same time as this patch).
->
-> I haven't look what this code should do or does but there are HCDs for
-> which this is never true like the UHCI/OHCI controller for instance.
+On Wed, Nov 11, 2020 at 05:23:25PM -0800, Prashant Malani wrote:
+> This patch series add plug registration support to the cros-ec-typec
+> driver. It also adds support for registering alternate modes for the
+> registered plug. These features utilize the API provided by the Type C
+> connector class framework.
+> 
+> The first patch adds support to the connector class framework for the
+> number_of_alternate_modes attribute (along with the relevant ABI
+> documentation).
+> 
+> The next two patches add plug registration, and then altmode
+> registration for the plugs. The latter of these two patches utilizes the
+> new function for plug number_of_alternate_modes introduced in the first patch.
+> 
+> This series is based on top of the following branch and other patch
+> series (applied in the order specified):
+> - Branch: chrome-platform for-next [1], which is currently set to the
+>   "Linux 5.10-rc1" tag.
+> - cros-ec-typec: Patch series to register PD identity information + partner altmodes[2]
+> - cros-ec-typec: Patch series to register cable[3]
+> - cros-ec-typec: Patch series to add partner number_of_altmodes[4]
+> 
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/log/?h=for-next
+> [2]: https://lore.kernel.org/lkml/20201029222738.482366-1-pmalani@chromium.org/
+> [3]: https://lore.kernel.org/lkml/20201106184104.939284-1-pmalani@chromium.org/
+> [4]: https://lore.kernel.org/lkml/20201110061535.2163599-1-pmalani@chromium.org/
 
-We could go back to adding softirq-specific kcov callbacks. Perhaps
-with a simpler implementation than what we had before to only cover
-this case. Something like kcov_remote_start_usb_softirq() and
-kcov_remote_stop_softirq() that do the softirq check internally.
+Ok, I'm confused.  This is not the first submission of this series, as
+you sent out a v2 a few days before this one.
 
-Greg, what would you prefer?
+And am I supposed to suck in the chrome-platform branch into the
+usb-next tree?
+
+What should I do here, ignore these?  Merge them?
+
+I see the USB change lost the reviewer's ack as well, why?
+
+I'm going to delete all of these patches from my review queue now and
+wait for a resend with some clarity as to what I should do with it :)
+
+thanks,
+
+greg k-h
