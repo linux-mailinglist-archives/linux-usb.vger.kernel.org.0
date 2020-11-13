@@ -2,88 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0AF2B1D93
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 15:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 118802B1DAA
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 15:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726569AbgKMOhc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 09:37:32 -0500
-Received: from mail-lf1-f47.google.com ([209.85.167.47]:43806 "EHLO
-        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726443AbgKMOhc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 09:37:32 -0500
-Received: by mail-lf1-f47.google.com with SMTP id d17so14099880lfq.10
-        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 06:37:30 -0800 (PST)
+        id S1726707AbgKMOqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 09:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726488AbgKMOqh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 09:46:37 -0500
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD37C061A47
+        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 06:46:21 -0800 (PST)
+Received: by mail-vs1-xe41.google.com with SMTP id b129so5329236vsb.1
+        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 06:46:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Aa2pPBMOldZH+yQGH0UrveON65rZ08/cb06MQFHGa0E=;
+        b=oI7Irk60nS8p8IJ9aebTfBT8tKh0VFGTFn4N+jHvPSrvutUGz4HDN9F2eXGWUFLUJO
+         pztkL1zvJJMqmmqAU4axiDuUUDb7ZZEfZv/0TZRBLjwcw3/kbFA/Hx96JgrITvvr02pZ
+         P9ohzUknb4wDMFPoki9mO18MI2KcxcBOr1dFLBdisyT0QQlXZ092Oz52zVXzS4AIl6nm
+         U8S/pCXL5v33Tp7vs3/soInXrThDoA5cbxXaCLXchnNuLPv28h5iBteaaK6ficGI1j82
+         XTk7m3rfU//IdaFvmbs97w3+GVYDzQv+iWKbaHXieTVM3M0QznSjPWGv6+xYuZCuLvZr
+         7YfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZHY872/0WcYO4ydQa857YZgLKhKQ8e4tP7SuYJav/XA=;
-        b=jAaTd0CDUcK1AnX6DJCwdUfFBJ/QqEf7OKSde+rNoiIMpX/e7B8e7hKBKg7lYdSS9f
-         JOn/jkoNHyDVCvNLmwB30E82DgbTA6PGrX7fHX98u2d8AiD1PjKdurEpbjJPXn42k3JQ
-         wc/hHfS5TfotsJfHMJZ2a2xbRnia7OZrsoUSFunBqRlexX7b/M0gHibt94ighYXNoLYQ
-         WlbmXhh5wLXqMk6xWJsh580ekd64i2gOe0xmHAU9njf7ehPhj37P9Y94ylppmikYgUpv
-         yby2pszO3cp3QGOLTThhz6UQm50G5HFRTM0SIeTqJlEcXJsHQPYTzXAVYb6Uf9R90Lu7
-         1VmA==
-X-Gm-Message-State: AOAM5322PKVyoo6q3gHk3a7MKVPjLtJJ3jFndsdHUNTyx2aabbNqWMOz
-        nUhVmbj4CDeCxXO0o5jD9wg=
-X-Google-Smtp-Source: ABdhPJwMTx53x43eDWtDGOtIeFH15aS39G/WnhzyoOKEgOnUi0Xjr8ict3x/c4srL8G7J/RdKc4OIg==
-X-Received: by 2002:a19:7f55:: with SMTP id a82mr1159315lfd.603.1605278250178;
-        Fri, 13 Nov 2020 06:37:30 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id f62sm1583800lfd.144.2020.11.13.06.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2020 06:37:29 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kdaCo-00024Q-9n; Fri, 13 Nov 2020 15:37:38 +0100
-Date:   Fri, 13 Nov 2020 15:37:38 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Johan Hovold <johan@kernel.org>, Bin Liu <b-liu@ti.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: USB multi-serial using few endpoints?
-Message-ID: <X66aMn2K4Kla/s5T@localhost>
-References: <CAMuHMdU4VQ8kvM=1bXpDmVGicU7-T78f0uZw8G2wZWctnwsJog@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Aa2pPBMOldZH+yQGH0UrveON65rZ08/cb06MQFHGa0E=;
+        b=GE37mBvW9Fn3gGqqar4kWxbczbvJr12Cp8qIAnNxFbtV46Rtyd8tv0a1O2N2g/S4BJ
+         yUizQxixwSTMfG9YxI15OlNTfqPt8uWQ9IuVpjpbu/xhVDzbWqz5lYXRYlBq07Fe2WLC
+         5orO/pPdiYRNW7ev763vzGg3jE3b31om9ugByNYisbRgo4zZkE7Kzn4mHiedA4c2t7pR
+         2ZLswFRjlpohln5DM5LdgsRda65cH4+FMNIqITXRjbulTDrQJvmqkoYj+GcoFWTYj948
+         0Rqx7Zw8bGVT41dt3TiXFQxOE/YsC0bofmHPS3X6TOvXW16h599CyRclj6G+mm+1M97e
+         N4NQ==
+X-Gm-Message-State: AOAM531ovxUy0VFS+i5qc4sElyJOnTOJvQ5CDRzdtkqYN6xI0gGpCV5S
+        F+1Qh5PV5CES1ghPEhTVyOwwyZKy1RHOKTxTqgocmg==
+X-Google-Smtp-Source: ABdhPJwkbgKSdaTWhgIsxWjShz+Kw+ub2606C3A/AwjkR07HCOjuCnqip2AUmLV/UBcfKhNInvgSpQVBCTAIPmGnX5w=
+X-Received: by 2002:a67:3256:: with SMTP id y83mr1567875vsy.48.1605278780301;
+ Fri, 13 Nov 2020 06:46:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdU4VQ8kvM=1bXpDmVGicU7-T78f0uZw8G2wZWctnwsJog@mail.gmail.com>
+References: <20201104234427.26477-1-digetx@gmail.com> <CAPDyKFr7qTU2RPhA_ZrbCayoTTNUEno1zdmvmv+8HBe-Owrfeg@mail.gmail.com>
+ <cd147ab0-1304-a491-7a56-ee6199c02d32@gmail.com> <2716c195-083a-112f-f1e5-2f6b7152a4b5@gmail.com>
+ <CAPDyKFqUMsH9dCZ=OYqfdLt==+-8NjK9n=S5jGGNXZu6Y9q=2w@mail.gmail.com>
+ <1f7e90c4-6134-2e2b-4869-5afbda18ead3@gmail.com> <20201112204358.GA1027187@ulmo>
+ <25942da9-b527-c0aa-5403-53c9cc34ad93@gmail.com>
+In-Reply-To: <25942da9-b527-c0aa-5403-53c9cc34ad93@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 13 Nov 2020 15:45:43 +0100
+Message-ID: <CAPDyKFomk7mw7-wpZFPOfT27CEXuCbzRiBoicH5-k7QF_pphVw@mail.gmail.com>
+Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
+ Tegra20/30 SoCs
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        driverdevel <devel@driverdev.osuosl.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-pwm@vger.kernel.org,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 02:07:41PM +0100, Geert Uytterhoeven wrote:
-> Hi all,
-> 
-> TL;DR: I'm looking for a USB-to-multi-serial solution that uses as few
-> USB endpoints as possible.  Anyone with a good suggestion?
+On Thu, 12 Nov 2020 at 23:14, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 12.11.2020 23:43, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >> The difference in comparison to using voltage regulator directly is
+> >> minimal, basically the core-supply phandle is replaced is replaced wit=
+h
+> >> a power-domain phandle in a device tree.
+> > These new power-domain handles would have to be added to devices that
+> > potentially already have a power-domain handle, right? Isn't that going
+> > to cause issues? I vaguely recall that we already have multiple power
+> > domains for the XUSB controller and we have to jump through extra hoops
+> > to make that work.
+>
+> I modeled the core PD as a parent of the PMC sub-domains, which
+> presumably is a correct way to represent the domains topology.
+>
+> https://gist.github.com/digetx/dfd92c7f7e0aa6cef20403c4298088d7
 
-Moxa has a device with 16 ports that only use three endpoints; see the
-mxuport driver.
+That could make sense, it seems.
 
-> While I cannot replace USB-serial convertors on development boards, I
-> can replace the USB serial implementation on the Teensy.  Hence I'm
-> looking for a more efficient USB-multi-serial protocol (preferably one
-> that has a Linux driver), using as few endpoints as possible.
-> I'm not a USB expert, but If I'm not mistaken, an N-port
-> USB-multi-serial adapter could be implemented using only 2 or 3
-> endpoints (one "locked" input endpoint for signalling, and one (TX/RX
-> combined) or two (TX and RX separated) multiplexed endpoints for data)?
+Anyway, this made me realize that
+dev_pm_genpd_set_performance_state(dev) returns -EINVAL, in case the
+device's genpd doesn't have the ->set_performance_state() assigned.
+This may not be correct. Instead we should likely consider an empty
+callback as okay and continue to walk the topology upwards to the
+parent domain, etc.
 
-Right, you'd (typically) need two bulk endpoints for tx and rx. The Moxa
-protocol use a third for signalling events. (And USB devices always have
-a control endpoint, which I don't count here).
+Just wanted to point this out. I intend to post a patch as soon as I
+can for this.
 
-> If no such thing exists, I guess I can use the mos7840 protocol instead?
-> Or is there a better solution?
+[...]
 
-You can always roll your own minimal mux protocol in case the moxa one
-is too complex (and we may want to keep an alternative implementation
-separate for other reasons).
-
-And then there's the n_gsm line discipline...
-
-Johan
+Kind regards
+Uffe
