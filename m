@@ -2,125 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0D92B21D7
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 18:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 064E62B21F3
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 18:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726219AbgKMRRT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 12:17:19 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:42771 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725977AbgKMRRT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 12:17:19 -0500
-Received: by mail-io1-f71.google.com with SMTP id p67so6882388iod.9
-        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 09:17:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Agi4vIfpYIxnSc7sohSHL9s1YwIYP2n4KLNjGhcfDCM=;
-        b=KoycqQ/uVghVGieuj0ct0bLcbgNxJKdxKhGir0alKl9TbC5gR8jS4twXbbFqqRBAGx
-         tzSfMe6iwW7S91/T/JxQIAs1EGUm1QXMFEsQAKESO5a+0kJIG7G9xEX1sY9ZfLBYY0yA
-         PGRULGiArKTfBUgjNU8adR52LYFihYSZ3JaGlCFjfhbnHmeMYu8GaqteaC06lhphsSdT
-         m8v/Gevi835nLUdHe1YpAWjBXj7xYNpobciq533e5usLskAPNZxc3tjOVfB6SMXIPvyn
-         qZ5tP+bYfrb7KOT6SCeMtBierWXW+JhsHMdW4MRBqFgK5npzB5C9Bz1TFSTYQEfMklI0
-         4uGw==
-X-Gm-Message-State: AOAM531CupFo6TjJvMNxeSIu9Ef2BqPKOCYchgInmzxinSNDCHK5GVal
-        FELS/LMmzrnamXLWULu0G5oLtrFDxycrppPQvAMidpSMW40L
-X-Google-Smtp-Source: ABdhPJwI9+L9+ot7vk2bnhKDzXurwWlV5KlrNJKrob8iF9WD+egoT9JMaIH9aJUvR1UIiWh6g+/XC2sdEeDFY0hPf6XlrZxwpUSS
+        id S1726612AbgKMRTg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 12:19:36 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:52969 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726603AbgKMRTf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 12:19:35 -0500
+Received: (qmail 327245 invoked by uid 1000); 13 Nov 2020 12:19:48 -0500
+Date:   Fri, 13 Nov 2020 12:19:48 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     gregkh@linuxfoundation.org, peter.chen@nxp.com,
+        s.hauer@pengutronix.de, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ehci-mxc: Remove the driver
+Message-ID: <20201113171948.GG322940@rowland.harvard.edu>
+References: <20201113171231.2205-1-festevam@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:bf3:: with SMTP id d19mr618076ilu.184.1605287852034;
- Fri, 13 Nov 2020 09:17:32 -0800 (PST)
-Date:   Fri, 13 Nov 2020 09:17:32 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002ed0ef05b4003400@google.com>
-Subject: memory leak in atusb_probe
-From:   syzbot <syzbot+28a246747e0a465127f3@syzkaller.appspotmail.com>
-To:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
-        gustavoars@kernel.org, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        oneukum@suse.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com, tiwai@suse.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201113171231.2205-1-festevam@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, Nov 13, 2020 at 02:12:31PM -0300, Fabio Estevam wrote:
+> The ehci-mxc driver was only used by i.MX non-DT platforms.
+> 
+> Since 5.10-rc1, i.MX has been converted to a DT-only platform and all
+> board files are gone.
+> 
+> Remove the ehci-mxc driver as there are no more users at all.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
 
-syzbot found the following issue on:
-
-HEAD commit:    af5043c8 Merge tag 'acpi-5.10-rc4' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10f165e6500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f13716fa0212fd
-dashboard link: https://syzkaller.appspot.com/bug?extid=28a246747e0a465127f3
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=155d8dba500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=153b46a1500000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+28a246747e0a465127f3@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff888109e0af00 (size 192):
-  comm "kworker/1:2", pid 3205, jiffies 4294942324 (age 8.180s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 18 af e0 09 81 88 ff ff  ................
-  backtrace:
-    [<0000000070ad19b0>] kmalloc include/linux/slab.h:557 [inline]
-    [<0000000070ad19b0>] usb_alloc_urb+0x66/0xe0 drivers/usb/core/urb.c:74
-    [<000000008781be0e>] atusb_alloc_urbs drivers/net/ieee802154/atusb.c:362 [inline]
-    [<000000008781be0e>] atusb_probe+0x158/0x820 drivers/net/ieee802154/atusb.c:1038
-    [<00000000cce0cf01>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
-    [<0000000020e0d57d>] really_probe+0x159/0x480 drivers/base/dd.c:554
-    [<00000000e105c1d7>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
-    [<0000000027607927>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
-    [<000000003813d62a>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
-    [<00000000e9e76ec4>] __device_attach+0x122/0x250 drivers/base/dd.c:912
-    [<00000000db4b9c2e>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
-    [<0000000004dae719>] device_add+0x5ac/0xc30 drivers/base/core.c:2936
-    [<000000002e126243>] usb_set_configuration+0x9de/0xb90 drivers/usb/core/message.c:2159
-    [<0000000076889926>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<000000004ff8d735>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<0000000020e0d57d>] really_probe+0x159/0x480 drivers/base/dd.c:554
-    [<00000000e105c1d7>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
-    [<0000000027607927>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
-
-BUG: memory leak
-unreferenced object 0xffff888109e0a300 (size 192):
-  comm "kworker/1:2", pid 3205, jiffies 4294942324 (age 8.180s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 18 a3 e0 09 81 88 ff ff  ................
-  backtrace:
-    [<0000000070ad19b0>] kmalloc include/linux/slab.h:557 [inline]
-    [<0000000070ad19b0>] usb_alloc_urb+0x66/0xe0 drivers/usb/core/urb.c:74
-    [<000000008781be0e>] atusb_alloc_urbs drivers/net/ieee802154/atusb.c:362 [inline]
-    [<000000008781be0e>] atusb_probe+0x158/0x820 drivers/net/ieee802154/atusb.c:1038
-    [<00000000cce0cf01>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
-    [<0000000020e0d57d>] really_probe+0x159/0x480 drivers/base/dd.c:554
-    [<00000000e105c1d7>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
-    [<0000000027607927>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
-    [<000000003813d62a>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
-    [<00000000e9e76ec4>] __device_attach+0x122/0x250 drivers/base/dd.c:912
-    [<00000000db4b9c2e>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
-    [<0000000004dae719>] device_add+0x5ac/0xc30 drivers/base/core.c:2936
-    [<000000002e126243>] usb_set_configuration+0x9de/0xb90 drivers/usb/core/message.c:2159
-    [<0000000076889926>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<000000004ff8d735>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<0000000020e0d57d>] really_probe+0x159/0x480 drivers/base/dd.c:554
-    [<00000000e105c1d7>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
-    [<0000000027607927>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
