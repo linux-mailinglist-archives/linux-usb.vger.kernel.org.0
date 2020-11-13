@@ -2,87 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C79A2B1EBE
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02722B1EE3
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726662AbgKMPb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 10:31:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726324AbgKMPb5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Nov 2020 10:31:57 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE112208D5;
-        Fri, 13 Nov 2020 15:31:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605281516;
-        bh=D+K4eSnXMa89LSYZ7jMaE8u+DXUbJR1/k9ED80rrD7w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tIa+n2qHt2lDhuEwBt0MljRqQxaq0sqOY4cMgfJ3+csbJx9x2mLT7Sc38QXTYVCl3
-         WDlCXMAFV6wi6QOHdHqb9JDAMmnPQ3igo8lcfJA3OaspPbUkgu+qp3VRkw8kpWX7Sb
-         +hHPtYlmIWiY7lHRbInh4m/G1boQ2bwcxWSYpj2I=
-Date:   Fri, 13 Nov 2020 16:32:53 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Nazime Hande Harputluoglu <handeharput@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v4] kcov, usb: only collect coverage from
- __usb_hcd_giveback_urb in softirq
-Message-ID: <X66nJSTbppPoFneS@kroah.com>
-References: <f3a7a153f0719cb53ec385b16e912798bd3e4cf9.1602856358.git.andreyknvl@google.com>
- <20201113123035.tjllvijjzd54npsf@linutronix.de>
- <CAAeHK+zd0ucaj8EJ8ro+0ekubrxp5GiBMaBULHJB05dDrzpQGw@mail.gmail.com>
- <20201113132818.zhtdhzg6ukv4wgxl@linutronix.de>
- <CAAeHK+yZEQ7r1bBWbUhdys8s1CntwpOyF+Fm+H=NiuK0g3KwYg@mail.gmail.com>
+        id S1726603AbgKMPf3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 10:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726278AbgKMPf3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 10:35:29 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECE4C0613D1
+        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 07:35:28 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id j205so14420704lfj.6
+        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 07:35:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QgEelvqepj7dJn97Ypu8skbF6Wbs3DPU03jJjGKjLQI=;
+        b=rxNxNaDG/DslSA8vY9XQLwfQpU1ESdQ9TYvLmPoOuB85iYA+TLppaXmRbcd8x5TDq0
+         ttz8Ao8REPHeUxfUvP6quKzeH01LbUwcCFOM1r/UmQzuqdfy+0BoMJk6NmobVRSREfo3
+         LB8mLcuJBHPJpyODkIZ8vk+k7xFvmz8kRqXFC18AwV4fs9QEqoXV3f/V8ntVJNcwVA2u
+         d4/hwL2HxdxIqVVhMT1BpiwgMSR5CWAbbekVlunZC2BGHaGNdMSmJqao0I4ZgJXVqTwX
+         yWHiCVoDRoRufaO59gIydrrR/fwAdL4WbAMr0VxpRtjA9J1laDG921ta4K6uqT2Bej/c
+         h3vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QgEelvqepj7dJn97Ypu8skbF6Wbs3DPU03jJjGKjLQI=;
+        b=Ar5lu7/T2TFrpV84CO2mfLX/9kGw5cOh9oZ6e8Q10TbIlfoh4Q4FsEn+4wA1WhBigZ
+         fZoclA4QiRuqNkQTMXoduMCDUi/Ulq1jXcmwc9Rf6G/C39AAegg7Iy4RbPZA56UOsDlV
+         6iGS/FBqI6MLDtMfrrwwDgyxQnZ8blDKyOAJUi7MlVnI+6WTFbjfUgQmzGdJRFTBU/Gm
+         yTVH4RdFtlrDVMtQ1NklhmiA8IurE0LoHqpo6H7BGfGjaVcY9nFbglAr34/MlmaKUXFS
+         7cxh1lVC6k4GNjkmpwZgYEDC9J+W8ymdwh3h6avoAS16YvlTnsMDUm0Yf9UDbfvkFSWd
+         w/0A==
+X-Gm-Message-State: AOAM533Zj1ZvycPySQMPwCo/xhD4YFuUBlq6TVJJs2bUHn1R6cWDvAoi
+        urRGJ/ZNI9KDt+Ssn5Ro5LxY7HAQSZjFB6ovZSA=
+X-Google-Smtp-Source: ABdhPJxOhiaZYJgzuTGkDNub+4N+P1YDG9ZuxquZEOVoREQEM1Db7i4hzb7Ig/8qb7eT7QOZCLzHK3gk7w13vVzX34c=
+X-Received: by 2002:a19:418d:: with SMTP id o135mr1172622lfa.329.1605281722300;
+ Fri, 13 Nov 2020 07:35:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAeHK+yZEQ7r1bBWbUhdys8s1CntwpOyF+Fm+H=NiuK0g3KwYg@mail.gmail.com>
+References: <1604794711-8661-1-git-send-email-ruslan.bilovol@gmail.com>
+ <20201111092941.GJ14896@b29397-desktop> <CAB=otbSAGhDYxim9_fsyH4pZCLqgq+bxNJfv5hXqgQRVngVaig@mail.gmail.com>
+In-Reply-To: <CAB=otbSAGhDYxim9_fsyH4pZCLqgq+bxNJfv5hXqgQRVngVaig@mail.gmail.com>
+From:   Glenn Schmottlach <gschmottlach@gmail.com>
+Date:   Fri, 13 Nov 2020 10:35:10 -0500
+Message-ID: <CAMS2kBF5Gvhnf7AzdeSFeVeWBLhtHM_hHfTvMLTN-3Jkh=BwHw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] UAC2 Gadget: feedback endpoint support
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 02:42:44PM +0100, Andrey Konovalov wrote:
-> On Fri, Nov 13, 2020 at 2:28 PM Sebastian Andrzej Siewior
-> <bigeasy@linutronix.de> wrote:
+On Thu, Nov 12, 2020 at 6:20 PM Ruslan Bilovol <ruslan.bilovol@gmail.com> wrote:
+>
+> On Wed, Nov 11, 2020 at 11:30 AM Peter Chen <peter.chen@nxp.com> wrote:
 > >
-> > On 2020-11-13 13:51:19 [+0100], Andrey Konovalov wrote:
-> > > Hi Sebastian,
+> > On 20-11-08 02:18:28, Ruslan Bilovol wrote:
+> > > Current UAC2 gadget implements capture/sync paths
+> > > as two USB ISO ASYNC endpoints (IN and OUT).
+> > >
+> > > This violates USB spec which says that ISO ASYNC OUT endpoint
+> > > should have feedback companion endpoint.
+> > > See USB2.0 spec  "5.12.4.1 Synchronization Type": asynchronous
+> > > sink provides explicit feedback (isochronous pipe).
+> > > Interesting that for ISO ASYNC *IN* endpoint respective
+> > > feedback isn't required since source provides implicit
+> > > feedforward (data stream).
+> > >
+> > > While it's not an issue if UAC2 Gadget is connected to
+> > > Linux host (Linux ignores missing feedback endpoint),
+> > > with other hosts like Windows or MacOS the UAC2 Gadget
+> > > isn't enumerated due to missing feedback endpoint.
+> > >
+> > > This patch series adds feedback endpoint support to
+> > > UAC2 function, new control to UAC2 mixer which can
+> > > be used by userspace tools (like alsaloop from alsa-utils)
+> > > for updating feedback frequency reported to the host.
+> > > This is useful for usecases when UAC2 Gadget's audio
+> > > samples are played to another codec or audio card
+> > > with its own internal freerunning clock so host can
+> > > be notified that more/less samples are required.
+> > >
+> > > The alsaloop tool requires some (relatively small)
+> > > modifications in order to start support driving
+> > > feedback frequency through UAC2 mixer control.
+> > > That change will be sent as a separate patch
+> > > to ALSA community.
+> > >
+> > > Also added ability to switch ISO ASYNC OUT endpoint into
+> > > adaptive endpoint which doesn't require feedback endpoint
+> > > (as per USB spec).
+> > >
+> > > Ruslan Bilovol (3):
+> > >   usb: gadget: f_uac2/u_audio: add feedback endpoint support
+> > >   usb: gadget: f_uac2: add adaptive sync support for capture
+> > >   usb: gadget: u_audio: add real feedback implementation
 > >
-> > Hi Andrey,
+> > Hi Ruslan,
 > >
-> > > Replaced with what and why?
+> > I applied your patches, but WIN10 still can't recognize it well.
+> > The UAC1 is OK for WIN10 with the below same configuration.
+> > Any debug information you would like to know to check it?
 > >
-> > Linus requested in
-> >         https://lkml.kernel.org/r/CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com/
 > >
-> > that drivers should not change their behaviour on context magic like
-> > in_atomic(), in_interrupt() and so on.
-> > The USB bits were posted in
-> >         https://lkml.kernel.org/r/20201019100629.419020859@linutronix.de
+> > if [ "$FUNC" == "uac2" ]; then
+> > mkdir functions/$FUNC".0"
+> > echo 2 > functions/$FUNC".0"/p_ssize
+> > echo 48000 > functions/$FUNC".0"/p_srate
+> > echo 3 > functions/$FUNC".0"/p_chmask
 > >
-> > and merged (which is probably the same time as this patch).
+> > echo 2 > functions/$FUNC".0"/c_ssize
+> > echo 48000 > functions/$FUNC".0"/c_srate
+> > echo 3 > functions/$FUNC".0"/c_chmask
+> > #echo 4 > functions/$FUNC".0"/req_number
+> > ln -s functions/$FUNC".0" configs/c.1
+> > echo high-speed > /sys/kernel/config/usb_gadget/g1/max_speed
+> > fi
 > >
-> > I haven't look what this code should do or does but there are HCDs for
-> > which this is never true like the UHCI/OHCI controller for instance.
-> 
-> We could go back to adding softirq-specific kcov callbacks. Perhaps
-> with a simpler implementation than what we had before to only cover
-> this case. Something like kcov_remote_start_usb_softirq() and
-> kcov_remote_stop_softirq() that do the softirq check internally.
-> 
-> Greg, what would you prefer?
+>
+> Hmm... I just tested below config and it works fine with my Win10.
+> The only thing I noticed is Windows doesn't enable UAC2 gadget
+> by default, but this can be done from Win10 sound settings
+>
+> --------------------------------->8--------------------------------------
+> mkdir cfg
+> mount none cfg -t configfs
+> mkdir cfg/usb_gadget/g1
+> cd cfg/usb_gadget/g1
+> mkdir configs/c.1
+> mkdir functions/uac2.0
+>
+> # 44.1 kHz sample rate
+> echo 44100 > functions/uac2.0/c_srate
+> echo 44100 > functions/uac2.0/p_srate
+>
+> mkdir strings/0x409
+> mkdir configs/c.1/strings/0x409
+> echo 0x0101 > idProduct
+> echo 0x1d6b > idVendor
+> echo my-serial-num > strings/0x409/serialnumber
+> echo my-manufacturer > strings/0x409/manufacturer
+> echo "Test gadget" > strings/0x409/product
+> echo "Conf 1" > configs/c.1/strings/0x409/configuration
+> echo 120 > configs/c.1/MaxPower
+> ln -s functions/uac2.0 configs/c.1
+> echo musb-hdrc.0 > UDC
+> --------------------------------->8--------------------------------------
+>
+> Thanks,
+> Ruslan
 
-I really have no idea, sorry.
+Hi Ruslan -
+
+With your configuration (above) Win10 was able to recognize and load
+the driver. What appears to prevent my configuration from loading is
+the fact that I selected 48K as my sample rate and my capture/playback
+channel mask includes more than two (2) channels. If I take your
+configuration and change the sample rate (c_srate/p_srate) to 48000
+Windows will fail to load the driver. Likewise, setting the
+c_chmask/p_chmask to 7 (three channels) will also cause the driver to
+fail to load.
+
+You mentioned there is an option in Win10 Sound Settings to "enable"
+UAC2 by default. I cannot find that option and I wonder if this is
+what is preventing me from changing the sample rate or channel mask?
+Could Windows be treating my audio gadget as a UAC1 device rather than
+a fully multi-channel audio device (even though the usbaudio2.sys
+driver is loaded)? Have you tried other configurations to verify your
+Win10 box supports more than two channels and a 44.1K sample rate? I
+look forward to your feedback and any suggestions you might offer.
+
+Thanks,
+
+Glenn
