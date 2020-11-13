@@ -2,118 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 614132B1643
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 08:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31922B1691
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 08:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726279AbgKMHTH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 02:19:07 -0500
-Received: from cable.insite.cz ([84.242.75.189]:38678 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726133AbgKMHTH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Nov 2020 02:19:07 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id D722EA95CEB3B;
-        Fri, 13 Nov 2020 08:18:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1605251933; bh=jqHIgBW38VyYlMJdSn0D9x9hP7tKzWCGLqTKs+HZ+mU=;
-        h=From:Subject:To:Date:From;
-        b=cxVLoX1XvbtjJBvdsoySsp1lH2rKtEmEJgF6zl36prE8zu78ZKhawvmQ7msKIcXag
-         cwgNcLDL6DM5lq2gVnD/SVnB70Z/tZOxp1jfpC8+WiQ1M2gTStgnaSVNIWvPelfYf5
-         tMtPIbXt4xRGdG40OfacO6ueVZAF89dqxHGPrOdA=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2I7Atbo5DQLv; Fri, 13 Nov 2020 08:18:48 +0100 (CET)
-Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 41C55A95CEB37;
-        Fri, 13 Nov 2020 08:18:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1605251928; bh=jqHIgBW38VyYlMJdSn0D9x9hP7tKzWCGLqTKs+HZ+mU=;
-        h=From:Subject:To:Date:From;
-        b=dIJxEwMI5JyTYt6O5LHsglRyRXoJnhLL1ZLO2FaYbLty5r1AbXxW5zLVjveuhis6y
-         4++1il8ilYSQ9tV23uNmApuIOZ0LyqmXt70SZgMN9CSZ5tdJUdMjw0rygj34MTpZxh
-         VVlK1cBD/Cw4d23Ium2bzATa+HVmxu6AwfnhGWvo=
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Subject: [PATCH] ARM: dts: bcm283x: increase dwc2's RX FIFO size
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org
-Message-ID: <e9e7d070-593c-122f-3a5c-2435bb147ab2@ivitera.com>
-Date:   Fri, 13 Nov 2020 08:18:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726488AbgKMHhi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 02:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726279AbgKMHhi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 02:37:38 -0500
+Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5013CC0613D1;
+        Thu, 12 Nov 2020 23:37:38 -0800 (PST)
+Received: by mail-oo1-xc42.google.com with SMTP id t142so1952113oot.7;
+        Thu, 12 Nov 2020 23:37:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vFMFLWWTfi10fKhsaLXn7qpaj9MnwqgtX3A+mFzhD+w=;
+        b=RSZRcxyj+KaNfwxfyWiVkX19UNGatET0KYdhzOXKMfIRQs28ngk7GFYNnOhGr3vTtR
+         rwy8zQrozIA7K+QhV1ovR1QVnxa5Ej337gBDREjqGYa9HazZmXH+C7X5p0oegoQCBYC1
+         pkAMMjdpGsQKpLPWzNngZ9I8HvIxQ6wcq1fN7jr9U4OkRWUYGdgCbQ8Phr4RP9Bp6JSC
+         KdNoLKBF4P2BrKdDDAsySoneOiYV0bvCNU67FCEHf12yXW77IiRAvoqgEgM8l7ZtT5Wb
+         NP8xbkzVh9nzE4Ud8X+Jo/B82S9XB4K4X4qs5rEDvL3IPodHuPWB8l+X8De6RdD/1w6b
+         2QCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vFMFLWWTfi10fKhsaLXn7qpaj9MnwqgtX3A+mFzhD+w=;
+        b=g1zmfnUoAJMQXw7oA2vi1WOnrH9nL9oC2I7gT3WYHCKz+mOxXtJG2/JiIHvXEtrPZx
+         X/ZtqX0JAvwtrEwPW5hWfPP8G7MJwYGmcvs+k6YnwEsiWDt+Jse1kfp37Z4CsltRml34
+         5wjANy6/HoqfrAR+QiBOXVL2BlpVLnQOM5yA1w8kRxAOcuDCSMGePO87/yL+MK8EF632
+         Jb2h1ZflVk+CdhMboH4lmSIYFieEyT/UErBehqa34QJ/W71B+WKkYT4mC4RLl/Yu7BtU
+         FFkaSx+cMZ/nlWG1jcf2tWOaxqJ11szHXxkoVGl3PURKOMWvepYVJJNQJKKdd9vFvSKq
+         gULA==
+X-Gm-Message-State: AOAM5318w4et94UaK1wGU2paZ3egMrujUH3JvmZV8S2twq0Cuft5rW8J
+        DR5QyTMddLcvFlI0wfybztgW1UVGYpRzbAGfMZM=
+X-Google-Smtp-Source: ABdhPJwQRgYLydClI0XmvjyFKGtZWXxm7pmgEvDFYgA8KLN+9joGOM5GL+pl5oO78IptiFsJX4TYa2wFpUd+P3Ts0XY=
+X-Received: by 2002:a4a:dcd6:: with SMTP id h22mr608646oou.6.1605253057666;
+ Thu, 12 Nov 2020 23:37:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200909091302.20992-1-dnlplm@gmail.com> <CAKfDRXhDFk7x7b35G5w4XytcL29cw=U8tVpvFJmbsWezVUsTtQ@mail.gmail.com>
+ <CAGRyCJHqQpOgkbh=DvEL=7LJr0z65L6Oq9-sK7DJBtxu0_=_Ww@mail.gmail.com>
+In-Reply-To: <CAGRyCJHqQpOgkbh=DvEL=7LJr0z65L6Oq9-sK7DJBtxu0_=_Ww@mail.gmail.com>
+From:   Kristian Evensen <kristian.evensen@gmail.com>
+Date:   Fri, 13 Nov 2020 08:37:26 +0100
+Message-ID: <CAKfDRXjcOCvfTx0o6Hxdd4ytkNfJuxY97Wk2QnYvUCY8nzT7Sg@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/1] net: usb: qmi_wwan: add default rx_urb_size
+To:     Daniele Palmas <dnlplm@gmail.com>
+Cc:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        Paul Gildea <paul.gildea@gmail.com>,
+        Carl Yin <carl.yin@quectel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The previous version of the dwc2 overlay set the RX FIFO size to
-256 4-byte words. This is not enough for 1024 bytes of the largest
-isochronous high speed packet allowed, because it doesn't take into
-account extra space needed by dwc2.
+Hi Daniele,
 
-RX FIFO's size is calculated based on the following (in 4byte words):
-- 13 locations for SETUP packets
-  5*n + 8 for Slave and Buffer DMA mode where n is number of control
-  endpoints which is 1 on the bcm283x core
+On Thu, Nov 12, 2020 at 7:29 PM Daniele Palmas <dnlplm@gmail.com> wrote:
+> thanks for testing. Still thinking it could be better to differentiate
+> between raw-ip and qmap, but not yet able to find the time to perform
+> some tests on my own.
 
-- 1 location for Global OUT NAK
+I agree that separating between qmap and non-qmap would be nice.
+However, with my modules I have not noticed any issues when using 32KB
+as the URB size. Still, the results show that there is no gain in
+increasing the aggregation size from 16 to 32KB. Capturing traffic
+from the modem reveals that the hardware still only generates 16KB
+URBs (even in high-speed networks). I also see that for example the
+r8152 driver uses a static URB size of 16384.
 
-- 2 * 257 locations for status information and the received packet.
-  Typically two spaces are recommended so that when the previous packet
-  is being transferred to AHB, the USB can receive the subsequent
-  packet.
+> Is the dongle driver based on usbnet? Besides the aggregated datagram
+> size, did you also try different datagram max numbers?
 
-- 10 * 1 location for transfer complete status for last packet of each
-  endpoint. The bcm283x core has 5 IN and 5 OUT EPs
+The dongle driver is not based on usbnet, it is r8152. I tried to
+increase the maximum datagrams from 32 to 64 (as well as some other
+values), but it had no effect on the perfrormance.
 
-- 10 * 1 additional location for EPDisable status for each endpoint
+> The only advice I can give you is to check if other drivers are
+> performing better, e.g. did you try the MBIM composition? not sure it
+> will make much difference, since it's based on usbnet, but could be
+> worth trying.
 
-- 5 * 2 additional locations are recommended for each OUT endpoint
+I tried to use MBIM, but the performance was the same as with QMI. I
+will take a look at r8152 and experiment with implementing some of the
+differences in usbnet/qmi_wwan. I see for example that r8152 uses
+NAPI, which while not a perfect fit for USB could be worth a try.
+Based on some discussions I found on the mailing list from 2011,
+implementing NAPI in usbnet could be worthwhile.
 
-Total is 558 locations.
+Thanks for the reply!
 
-Signed-off-by: Phil Elwell <phil@raspberrypi.com>
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
----
- arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi        | 2 +-
- arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
-b/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
-index e2fd961..20322de 100644
---- a/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
-+++ b/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- &usb {
- 	dr_mode = "otg";
--	g-rx-fifo-size = <256>;
-+	g-rx-fifo-size = <558>;
- 	g-np-tx-fifo-size = <32>;
- 	/*
- 	 * According to dwc2 the sum of all device EP
-diff --git a/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
-b/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
-index 0ff0e9e..1409d1b 100644
---- a/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
-+++ b/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- &usb {
- 	dr_mode = "peripheral";
--	g-rx-fifo-size = <256>;
-+	g-rx-fifo-size = <558>;
- 	g-np-tx-fifo-size = <32>;
- 	g-tx-fifo-size = <256 256 512 512 512 768 768>;
- };
--- 
-1.9.1
-
-
+BR,
+Kristian
