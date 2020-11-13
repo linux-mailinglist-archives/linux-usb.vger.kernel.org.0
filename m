@@ -2,154 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2FF2B1EAD
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C79A2B1EBE
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgKMP36 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 10:29:58 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:37019 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726457AbgKMP34 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 10:29:56 -0500
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20201113152943euoutp0157a2fb55ffd51c0ff766b5e2dd71687f~HGuncxH4n1536315363euoutp01I
-        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 15:29:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20201113152943euoutp0157a2fb55ffd51c0ff766b5e2dd71687f~HGuncxH4n1536315363euoutp01I
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1605281383;
-        bh=eXpFxQiDPbPJzGcl99AjzmWcz7lTSBvAvdVyGn0Rj1U=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=SqBWjl+yPbBWSUqdc3OAm9XTsQQaibjG6cbIAla9bwx2zV4iMg1KSnCNjoT3uG3xd
-         TSywEtDAxxZDfF0QeZYsjSrhKCdp5z/yw8ZSHhwRjdBBraLrNpmeGn9MysFZgW7wS1
-         Z4f2DMRz4lL1XaYuMRU6U/gLFhFoXFTtpp63t1Uw=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20201113152938eucas1p1b570c141f19acdecb63bfe129c6adb63~HGuin2vpJ2614326143eucas1p1_;
-        Fri, 13 Nov 2020 15:29:38 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id A3.F5.44805.266AEAF5; Fri, 13
-        Nov 2020 15:29:38 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20201113152938eucas1p2c8500d9d3d0c892c7c2a2d56b32fedc0~HGuiIvQBl1201512015eucas1p2c;
-        Fri, 13 Nov 2020 15:29:38 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201113152938eusmtrp1fa3d047e86f51e4669042f00c951ff79~HGuiCRAn41760917609eusmtrp1E;
-        Fri, 13 Nov 2020 15:29:38 +0000 (GMT)
-X-AuditID: cbfec7f4-b37ff7000000af05-8c-5faea662d954
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 59.46.16282.166AEAF5; Fri, 13
-        Nov 2020 15:29:38 +0000 (GMT)
-Received: from [106.210.88.143] (unknown [106.210.88.143]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20201113152937eusmtip2cf56823ab93846d53b49d0f325c5b72d~HGuhhrN3C2784427844eusmtip2D;
-        Fri, 13 Nov 2020 15:29:37 +0000 (GMT)
-Subject: Re: [PATCH net-next v2 RESEND] net/usb/r8153_ecm: support ECM mode
- for RTL8153
-To:     Hayes Wang <hayeswang@realtek.com>, netdev@vger.kernel.org
-Cc:     nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
-        oliver@neukum.org, linux-usb@vger.kernel.org,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <7fd014f2-c9a5-e7ec-f1c6-b3e4bb0f6eb6@samsung.com>
-Date:   Fri, 13 Nov 2020 16:29:37 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0)
-        Gecko/20100101 Thunderbird/78.4.3
+        id S1726662AbgKMPb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 10:31:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726324AbgKMPb5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Nov 2020 10:31:57 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DE112208D5;
+        Fri, 13 Nov 2020 15:31:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605281516;
+        bh=D+K4eSnXMa89LSYZ7jMaE8u+DXUbJR1/k9ED80rrD7w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tIa+n2qHt2lDhuEwBt0MljRqQxaq0sqOY4cMgfJ3+csbJx9x2mLT7Sc38QXTYVCl3
+         WDlCXMAFV6wi6QOHdHqb9JDAMmnPQ3igo8lcfJA3OaspPbUkgu+qp3VRkw8kpWX7Sb
+         +hHPtYlmIWiY7lHRbInh4m/G1boQ2bwcxWSYpj2I=
+Date:   Fri, 13 Nov 2020 16:32:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Nazime Hande Harputluoglu <handeharput@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v4] kcov, usb: only collect coverage from
+ __usb_hcd_giveback_urb in softirq
+Message-ID: <X66nJSTbppPoFneS@kroah.com>
+References: <f3a7a153f0719cb53ec385b16e912798bd3e4cf9.1602856358.git.andreyknvl@google.com>
+ <20201113123035.tjllvijjzd54npsf@linutronix.de>
+ <CAAeHK+zd0ucaj8EJ8ro+0ekubrxp5GiBMaBULHJB05dDrzpQGw@mail.gmail.com>
+ <20201113132818.zhtdhzg6ukv4wgxl@linutronix.de>
+ <CAAeHK+yZEQ7r1bBWbUhdys8s1CntwpOyF+Fm+H=NiuK0g3KwYg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1394712342-15778-392-Taiwan-albertk@realtek.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBKsWRmVeSWpSXmKPExsWy7djPc7pJy9bFG/zvVrfYOGM9q8W0gz2M
-        FufPb2C3uLxrDpvFjPP7mCwWLWtltji2QMziS+8sVovvlz8xOXB6bFrVyebx+ssDJo/Hbzez
-        e/RtWcXo8XmTXABrFJdNSmpOZllqkb5dAlfG4a5e9oJzfBW3dj9gamD8zN3FyMkhIWAisa3h
-        FmMXIxeHkMAKRombVxZAOV8YJQ4tu8gE4XxmlOie/p8VpmVO82yoxHJGiRPTZ7BAOO8ZJWbf
-        WcAEUiUsECkx81EPI4gtImAnMf3lBbC5zAINTBLTZ7xkAUmwCRhKdL3tYgOxeYGKTvz9BtbM
-        IqAq8aVxHVhcVCBJYvuW7awQNYISJ2c+Aerl4OAEqj9+rg4kzCwgL7H97RxmCFtc4taT+WDX
-        SQi84ZA4uGoBO8TZLhKN+5+yQdjCEq+Ob4GKy0icntzDAtHQzCjx8Nxadginh1HictMMRogq
-        a4k7536xgWxmFtCUWL9LHyLsKPH4zwRGkLCEAJ/EjbeCEEfwSUzaNp0ZIswr0dEmBFGtJjHr
-        +Dq4tQcvXGKewKg0C8lns5C8MwvJO7MQ9i5gZFnFKJ5aWpybnlpslJdarlecmFtcmpeul5yf
-        u4kRmJhO/zv+ZQfj8lcf9Q4xMnEwHmKU4GBWEuFVdlgTL8SbklhZlVqUH19UmpNafIhRmoNF
-        SZw3aQtQSiA9sSQ1OzW1ILUIJsvEwSnVwCRvLLREeH9N+duF2pfXLVqooR3abxhxrnT30WyF
-        E51vefXffbW+pcmZ8k922YOWye7hRllB3vHNayyeVycvMYgrkRe295WacjpjW7Tdomju5Uae
-        GXmfbB+qHFvfc/9pfPCj5JW86rcEP6lJy15qX7lte0yRu9a7OolkmVexOtm8mzTS5kwxTF5p
-        +W71er8Sng83Ohb3REaE/7zgoJ34Lif175aeQyFcoY9lpnwO67WIOvlx6taEz7Ht2X0hpzVs
-        rN6odJfpXHt5i/V0xZVPz5tbvdumTXKa+zvEs+RY7SVDxeBtWgvdv0gYXJ+jWmuw8N7ftt4C
-        tg874v2bbwhVPKuT/L3m/YE756btSvlxVomlOCPRUIu5qDgRAAAzPem7AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJIsWRmVeSWpSXmKPExsVy+t/xe7pJy9bFG1zbwmixccZ6VotpB3sY
-        Lc6f38BucXnXHDaLGef3MVksWtbKbHFsgZjFl95ZrBbfL39icuD02LSqk83j9ZcHTB6P325m
-        9+jbsorR4/MmuQDWKD2bovzSklSFjPziElulaEMLIz1DSws9IxNLPUNj81grI1MlfTublNSc
-        zLLUIn27BL2Mw1297AXn+Cpu7X7A1MD4mbuLkZNDQsBEYk7zbKYuRi4OIYGljBLrrj9mh0jI
-        SJyc1sAKYQtL/LnWxQZR9JZR4lzLVLAiYYFIiZmPehhBbBEBO4npLy8wghQxCzQxSXzve8UC
-        khASKJQ49GU+M4jNJmAo0fUWZBInBy9Qw4m/35hAbBYBVYkvjevA4qICSRIzj59lh6gRlDg5
-        8wnQHA4OTqD64+fqQMLMAmYS8zY/ZIaw5SW2v50DZYtL3Hoyn2kCo9AsJN2zkLTMQtIyC0nL
-        AkaWVYwiqaXFuem5xUZ6xYm5xaV56XrJ+bmbGIFxuO3Yzy07GFe++qh3iJGJg/EQowQHs5II
-        r7LDmngh3pTEyqrUovz4otKc1OJDjKZA70xklhJNzgcmgrySeEMzA1NDEzNLA1NLM2MlcV6T
-        I0BNAumJJanZqakFqUUwfUwcnFINTBsu6hYI3Fyzd6nXsWn+Dwvqd4q+E1iu+C+pfItg3o1P
-        +07vZYsVKbxtqjpv08yCRqUPps3euauluN07b3Vc5U+YmRWfrN0s97jB0v2X4bYHV+/6pbXP
-        Pab8aVvqVv7IcGfmN/J7ji92EdOWWfR/2fXYRql73m43DaMfTGWV1fIwFF6+YTp7eYyId1f7
-        iWt7nl8RPRW815VFZ9Ox+IeParK2uT3ojjuwZmdMbvP8Yxs7uC2z0++vTa+MvMuqejbP7/DW
-        NU9V3KxM+Cpt/78pWiq398jFgsZdzIYLub2qvE8+EG7ZrSFxjTX2qrDk3zesUw8+7pjzq6n5
-        XtK+9N0Hv2+4wnF6xQax6DM2dp9O1yixFGckGmoxFxUnAgBm23OcTAMAAA==
-X-CMS-MailID: 20201113152938eucas1p2c8500d9d3d0c892c7c2a2d56b32fedc0
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20201113152938eucas1p2c8500d9d3d0c892c7c2a2d56b32fedc0
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20201113152938eucas1p2c8500d9d3d0c892c7c2a2d56b32fedc0
-References: <1394712342-15778-387-Taiwan-albertk@realtek.com>
-        <1394712342-15778-392-Taiwan-albertk@realtek.com>
-        <CGME20201113152938eucas1p2c8500d9d3d0c892c7c2a2d56b32fedc0@eucas1p2.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAeHK+yZEQ7r1bBWbUhdys8s1CntwpOyF+Fm+H=NiuK0g3KwYg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hayes,
+On Fri, Nov 13, 2020 at 02:42:44PM +0100, Andrey Konovalov wrote:
+> On Fri, Nov 13, 2020 at 2:28 PM Sebastian Andrzej Siewior
+> <bigeasy@linutronix.de> wrote:
+> >
+> > On 2020-11-13 13:51:19 [+0100], Andrey Konovalov wrote:
+> > > Hi Sebastian,
+> >
+> > Hi Andrey,
+> >
+> > > Replaced with what and why?
+> >
+> > Linus requested in
+> >         https://lkml.kernel.org/r/CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com/
+> >
+> > that drivers should not change their behaviour on context magic like
+> > in_atomic(), in_interrupt() and so on.
+> > The USB bits were posted in
+> >         https://lkml.kernel.org/r/20201019100629.419020859@linutronix.de
+> >
+> > and merged (which is probably the same time as this patch).
+> >
+> > I haven't look what this code should do or does but there are HCDs for
+> > which this is never true like the UHCI/OHCI controller for instance.
+> 
+> We could go back to adding softirq-specific kcov callbacks. Perhaps
+> with a simpler implementation than what we had before to only cover
+> this case. Something like kcov_remote_start_usb_softirq() and
+> kcov_remote_stop_softirq() that do the softirq check internally.
+> 
+> Greg, what would you prefer?
 
-On 04.11.2020 03:19, Hayes Wang wrote:
-> Support ECM mode based on cdc_ether with relative mii functions,
-> when CONFIG_USB_RTL8152 is not set, or the device is not supported
-> by r8152 driver.
->
-> Both r8152 and r8153_ecm would check the return value of
-> rtl8152_get_version() in porbe(). If rtl8152_get_version()
-> return none zero value, the r8152 is used for the device
-> with vendor mode. Otherwise, the r8153_ecm is used for the
-> device with ECM mode.
->
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
-
-This patch landed recently in linux-next and breaks ethernet operation 
-on Samsung Exynos5422 Odroid XU4/HC1 boards when kernel is compiled from 
-arm/configs/multi_v7_defconfig. The main problem is that the hardware is 
-bound to r8153_ecm driver, not to the r8152. Manually switching the 
-drivers by "echo 4-1:2.0 >/sys/bus/usb/drivers/r8153_ecm/unbind && echo 
-4-1:2.0 >/sys/bus/usb/drivers/r8152/bind" fixes ethernet operation.
-
-This is because in multi_v7_defconfig r8153_ecm driver is built-in (as 
-it is tied to CONFIG_USB_NET_CDCETHER), while the r8152 driver is 
-compiled as module and loaded when r8153_ecm has already bound.
-
-I think that r8153_ecm driver should have a separate Kconfig symbol, 
-which matches the r8152 driver (either both are built-in or both as 
-modules), otherwise those 2 drivers cannot properly detect their cases.
-
-> ---
->   drivers/net/usb/Makefile    |   2 +-
->   drivers/net/usb/r8152.c     |  30 +------
->   drivers/net/usb/r8153_ecm.c | 162 ++++++++++++++++++++++++++++++++++++
->   include/linux/usb/r8152.h   |  37 ++++++++
->   4 files changed, 204 insertions(+), 27 deletions(-)
->   create mode 100644 drivers/net/usb/r8153_ecm.c
->   create mode 100644 include/linux/usb/r8152.h
->
-> > ...
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+I really have no idea, sorry.
