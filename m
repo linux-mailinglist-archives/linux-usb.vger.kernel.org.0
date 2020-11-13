@@ -2,103 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CEC2B1E1B
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 931212B1E5E
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbgKMPFY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 10:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S1726569AbgKMPNe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 10:13:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbgKMPFY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 10:05:24 -0500
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE96C0613D1;
-        Fri, 13 Nov 2020 07:05:11 -0800 (PST)
-Received: by mail-ot1-x343.google.com with SMTP id n11so9191288ota.2;
-        Fri, 13 Nov 2020 07:05:11 -0800 (PST)
+        with ESMTP id S1726160AbgKMPNe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 10:13:34 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B51C0613D1
+        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 07:13:33 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id k2so10319280wrx.2
+        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 07:13:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1C47CTLZAr89HP4Ij49KChin9n/8obEs9p/icBbyAZE=;
-        b=KG5S5U2kccbW0H4DF1sSGnVRAZL776fQmrZHApKZVnVh1XXn2LG9mG2p0h0FblW+MV
-         FGjd9VHdExpUitvFcz507nNywfL7q6Lv+7rgMoyk8d4IIFQDYX5otPdN/JWBqvUX5k8q
-         VlO4WAgw2g7ujeNNzP0bZzwuVqS1Lc6EK/yLdMsvGKUfvZndEIgkXKSrAaxBiPKSGyeJ
-         l+PKE+3+XTI4sdq/wQYGMNSu1MUGsndWg1BvHzx/MgnshB57zv+nsV/RAfVq4xC+2+F5
-         q6z36ZJeN8MaKaUEefiJwy2ceZtz1wtyOh0T1K0cvYC+jkWtEj3jtUaOPn3vBNceNB9f
-         CwBg==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:message-id
+         :date:mime-version;
+        bh=g2eWYS/TuIBg2trIPFi3kCqzhwEAZYnEwoucxK7S/uM=;
+        b=FBvYqur0Qp9aKH4Savqs1DxgrKDoYMnR8YWxDPAVxtuXYCqgWdpzIWhWu/JwsCt0EE
+         beqnmgnC2p8nLAoRTgy3jaFQ7Ffu9zPIx+qyJTmgHy/TbMRRunssqjjYWp1L+hF1GbBP
+         smn55I2OgBZ8S6VUw6LunUkpQ40IXDnz4dNz5QYSR64PN/OwxCXh3A0ArU1KN8yoU5gM
+         ffxa5co8uGs3dcOR0LmIr0syzogK4JhoGAqiPwGO7IZPzVnKg7jYnk2wr3U4aA+W8rbC
+         7wBCheQRpyaL7YYAxgsVz9kDS5oTndz9WoEXfW64zphyNmpiUhCw6UEnyKT0LkuWYs5l
+         VipA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1C47CTLZAr89HP4Ij49KChin9n/8obEs9p/icBbyAZE=;
-        b=NEFiC5fVwQlvLdnGj+DdAmHoZXaYPnMSEBKHCbEliDBp91VBn7HavYYgYFsvvd4ch4
-         UQvgTX2LIo8gXQ5xOWXoUhKom5DbOXjWdHvW+Xwj24It4Kxf59VB1Kt0rWygx4IUqxsZ
-         F53elt/JSrCS0YwzHRsRKepui/bsiy0QUrpIrUQZxRviY4vymZIskU2EoFQa0yScuggZ
-         vkX497UXCANVv6i8TSiRMAOS1ctZWSperCo8385MNdnVGWG+Xb6Pk36FC6mQcYU2hfcT
-         ASj/zkcj+BxxarE10+PbmTqPG84Mt9eeJDTDzh+6u8AJt15st/gqjspnHGpzVKrd+klL
-         hiVQ==
-X-Gm-Message-State: AOAM533VxUd22bnrxGaEzBH7l3fvivtQkdlja9qDRSuFRPmLUOidmIL/
-        +TwJ/0O8SrEH5VzyZ8pfngHae36y3r2DThs8xoI=
-X-Google-Smtp-Source: ABdhPJyl4bssDWV93YJHQrFi28t8HVpRM6w/THK3WbZjakE5i/96GEDqtjQK4TPjzsd2aNY0iD1d0w0YwdtlFmt/dMg=
-X-Received: by 2002:a9d:6f8f:: with SMTP id h15mr1828218otq.166.1605279910676;
- Fri, 13 Nov 2020 07:05:10 -0800 (PST)
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:message-id:date:mime-version;
+        bh=g2eWYS/TuIBg2trIPFi3kCqzhwEAZYnEwoucxK7S/uM=;
+        b=egHQjabIn304lvwk798Z7buKPkqDTjlFTpFrUnnkgKxh9UlZ8XzoYNO18Gfqrgounj
+         YV1b0Bum7oSP1+0WQAaC1/3YwrImj/ZBp9itGlUCZeVK2R1j6bpUcmn9Ij8lpr071n6w
+         FookEAhh3WJ21mmDGGrdw+EgkhJjGmRXG4PkCScBzA3EWlQdzBVQOB9BzriPbe78Y2uL
+         06t+pbM5sOwhZQLijA24PM5BgWJvhTPe44hMAx3jG8g9A3gzywxIJ03lHQ+LK9AT0kEG
+         fBlxaV8HJ5fkqrTaCjcIEC6HTG8wSnRqWUPZGF9yE/2Kg26deMEgWciT5AL5uXcViDsp
+         FwdA==
+X-Gm-Message-State: AOAM531sU7KNszhPavWVS3/n5/W/1/x8wmMazLfQMBT2Hi3F/oX/vJWY
+        +yr9KZLPF3f3Py30p2uRpxGGlA==
+X-Google-Smtp-Source: ABdhPJwd+fiAbK8NZOBUneQcMTjdFObaHBrUXLOnyyZOiG6lbkh9XW68EclIsNXhMD8e3AYxJpBepw==
+X-Received: by 2002:a5d:5048:: with SMTP id h8mr4074266wrt.135.1605280411764;
+        Fri, 13 Nov 2020 07:13:31 -0800 (PST)
+Received: from localhost (253.35.17.109.rev.sfr.net. [109.17.35.253])
+        by smtp.gmail.com with ESMTPSA id i6sm10790839wma.42.2020.11.13.07.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2020 07:13:31 -0800 (PST)
+References: <20201112230043.28987-1-aouledameur@baylibre.com>
+ <0f679c62aa48603ea43a8fa4819d688baa802d73.camel@pengutronix.de>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-usb@vger.kernel.org, "Kevin Hilman" <khilman@baylibre.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>
+Subject: Re: [PATCH v2] reset: make shared pulsed reset controls re-triggerable
+In-reply-to: <0f679c62aa48603ea43a8fa4819d688baa802d73.camel@pengutronix.de>
+Message-ID: <1jima91e92.fsf@starbuckisacylon.baylibre.com>
+Date:   Fri, 13 Nov 2020 16:13:29 +0100
 MIME-Version: 1.0
-References: <e724ce7621dcb8bd412edb5d30bfb1e8@sslemail.net>
- <CAKfDRXjcOCvfTx0o6Hxdd4ytkNfJuxY97Wk2QnYvUCY8nzT7Sg@mail.gmail.com>
- <HK2PR06MB35071489A05CEBF9C5FADD1C86E60@HK2PR06MB3507.apcprd06.prod.outlook.com>
- <CAKfDRXgGw0s=DAOsR5x7SXtr6twda5U_uOEb_VNZ-0hVEEvuYg@mail.gmail.com>
-In-Reply-To: <CAKfDRXgGw0s=DAOsR5x7SXtr6twda5U_uOEb_VNZ-0hVEEvuYg@mail.gmail.com>
-From:   Kristian Evensen <kristian.evensen@gmail.com>
-Date:   Fri, 13 Nov 2020 16:04:59 +0100
-Message-ID: <CAKfDRXg+ViFVdN=op1s-xuaEQ3aWqtdh6-kdvcuMnx2zdd0QOw@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/1] net: usb: qmi_wwan: add default rx_urb_size
-To:     =?UTF-8?B?Q2FybCBZaW4o5q635byg5oiQKQ==?= <carl.yin@quectel.com>
-Cc:     Daniele Palmas <dnlplm@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        Paul Gildea <paul.gildea@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
 
-On Fri, Nov 13, 2020 at 9:50 AM Kristian Evensen
-<kristian.evensen@gmail.com> wrote:
-> Yes, you are right in that NAT can have a large effect on performance,
-> especially when you start being CPU-limited. However,when using perf
-> to profile the kernel during my tests, no function related to
-> netfilter/conntrack appeared very high on the list. I would also
-> expect the modem to at least reach the performance of the dongle, with
-> offloading being switched off. However, there could be some detail I
-> missed.
+On Fri 13 Nov 2020 at 16:04, Philipp Zabel <p.zabel@pengutronix.de> wrote:
 
-I continued working on this issue today and I believe I have found at
-least one reason for my performance problems. My initial attempts at
-profiling resulted in quite noisy perf files and this caused me to
-look in the wrong places. Today I figured out how to get a cleaner
-file, and I noticed that a lot of resources were spent on
-pskb_expand_head() + support functions.
+> On Fri, 2020-11-13 at 00:00 +0100, Amjad Ouled-Ameur wrote:
+>> The current reset framework API does not allow to release what is done by
+>> reset_control_reset(), IOW decrement triggered_count. Add the new
+>> reset_control_rearm() call to do so.
+>> 
+>> When reset_control_reset() has been called once, the counter
+>> triggered_count, in the reset framework, is incremented i.e the resource
+>> under the reset is in-use and the reset should not be done again.
+>> reset_control_rearm() would be the way to state that the resource is
+>> no longer used and, that from the caller's perspective, the reset can be
+>> fired again if necessary.
+>> 
+>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+>> Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+>> ---
+>> Change since v1: [0]
+>> * Renamed the new call from reset_control_(array_)resettable to 
+>> reset_control_(array_)rearm
+>> * Open-coded reset_control_array_rearm to check for errors before
+>> decrementing triggered_count because we cannot roll back in case an
+>> error occurs while decrementing one of the rstc.
+>> * Reworded the new call's description.
+>
+> Thank you, applied to reset/next.
 
-My MT7621 devices are used as routers, so before the packets are sent
-out on the LAN additional headers have to be added. The current code
-in qmimux_rx_fixup() allocates an SKB for each aggregated packet and
-copies the data from the URB. The newly allocated SKB has too little
-headroom, so when we get to ip_forward() then the check in skb_cow()
-fails and the SKB is reallocated. After increasing the amount of data
-allocated to also include the required headroom + reserving headroom
-amount of bytes, I see a huge performance increase. I go from around
-230 Mbit/s and to 280Mbit/s, with significantly less CPU usage. 280
-Mbit/s is the same speed as I get from my phone connected to the same
-network, so it seems to be the max of the network right now.
+Hi Philipp,
 
-I do not know what would be an acceptable way (if any) to get this fix
-upstreamed. I currently add an additional "safe" amount of data, but I
-am pretty sure ETH_HLEN + 2 is not an acceptable solution :)
+Would it be possible to get an immutable branch/tag with this ?
+It would allow to move forward on the USB side, without waiting for the
+next rc1.
 
-Kristian
+Thx
+Jerome
+
+>
+> regards
+> Philipp
