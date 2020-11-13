@@ -2,82 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3645F2B2571
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 21:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D182B26B2
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 22:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbgKMU1B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 15:27:01 -0500
-Received: from mga06.intel.com ([134.134.136.31]:13739 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725959AbgKMU07 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Nov 2020 15:26:59 -0500
-IronPort-SDR: Gs8YenaL4IKKmvCjSXMnumMKYmAGxXvwM6GpYcktb3LLhfWzAAlGCm4UCqHzq/nOkMntYBEc/8
- /nKnzzhP0WDw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9804"; a="232145829"
-X-IronPort-AV: E=Sophos;i="5.77,476,1596524400"; 
-   d="scan'208";a="232145829"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2020 12:26:55 -0800
-IronPort-SDR: Fe1lLJqLe3XwSO91v4PXXtxMEhKUXUAzdCfmW98bnXl89UQp9KrpbyeJx6Z8HYq8Ro5o0VBQNa
- K+ZsuutbVR0A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,476,1596524400"; 
-   d="scan'208";a="367050293"
-Received: from uhpatel-desk4.jf.intel.com (HELO uhpatel-desk4.intel.com) ([10.23.15.15])
-  by orsmga007.jf.intel.com with ESMTP; 13 Nov 2020 12:26:55 -0800
-From:   Utkarsh Patel <utkarsh.h.patel@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     heikki.krogerus@linux.intel.com, pmalani@chromium.org,
-        enric.balletbo@collabora.com, rajmohan.mani@intel.com,
-        azhar.shaikh@intel.com, Utkarsh Patel <utkarsh.h.patel@intel.com>
-Subject: [PATCH v2 8/8] usb: typec: Remove active_link_training variable from Enter_USB message
-Date:   Fri, 13 Nov 2020 12:25:03 -0800
-Message-Id: <20201113202503.6559-9-utkarsh.h.patel@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201113202503.6559-1-utkarsh.h.patel@intel.com>
-References: <20201113202503.6559-1-utkarsh.h.patel@intel.com>
+        id S1726455AbgKMV2F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 16:28:05 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:55278 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726583AbgKMV2D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 16:28:03 -0500
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1605302878;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=P4RP441BOauOir2Oa3cFxCUL2HeYPqIvw79teAEl2IE=;
+        b=RLTez745BUb554hoMEOpms0BwRb5TUG79OAOKkkHkIfpU4h1CeEm0vRxsJM6frqAfIckFz
+        xnYxoWLjxls2z3H86g4p85tS5wxwCmWXKpxsiIVlBR/Hc80zXkzj8spCBwHrL4ozcrxlxS
+        TkHjcUReWYN8LJyOTm1KsFyoQz+PMiYQ8KbdrAJZuPNjO05bu7HeeIR+bz1sF7ncRmgfLN
+        EWlHw8YkfkVN6/DRbDmRJYD4QIUg6RENF+iyxQfABDyUDYdM9zDoU0circFQe+R33B2/fB
+        qeIveBlFj+X7Xp2EW6eVcC7fkjAzAm9OM4EmR+bHcJi5Y49bQnNLVkh0SV5vBw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1605302878;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=P4RP441BOauOir2Oa3cFxCUL2HeYPqIvw79teAEl2IE=;
+        b=2U6qppHWrxw/IGFK2bbnL4ZBhTyFfsTtigoKs0FMOLSzrBGWiJ/Am6bBradTbTJ6SDo67v
+        wX94LOgDmYJ4DPCw==
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH] usb: Remove RUN_CONTEXT
+Date:   Fri, 13 Nov 2020 22:27:04 +0100
+Message-Id: <20201113212704.2243807-1-bigeasy@linutronix.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thunderbolt 3 cable discover mode VDO support has been added as part of
-Enter_USB message to fill details of active cable plug link training.
-Hence, removing unused variable active_link_training from Enter_USB
-message data structure.
+The last user of RUN_CONTEXT was removed in commit
+   97c17beb3b668 ("[PATCH] ehci-hcd (1/2):  portability (2.4), tasklet,")
 
-Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
+There are no users of RUN_CONTEXT, remove it.
 
---
-Changes in v2:
-- No change.
---
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- include/linux/usb/typec.h | 6 ------
- 1 file changed, 6 deletions(-)
+ include/linux/usb/hcd.h | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index d91e09d9d91c..4a9608a15ac1 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -76,16 +76,10 @@ enum typec_orientation {
-  * struct enter_usb_data - Enter_USB Message details
-  * @eudo: Enter_USB Data Object
-  * @tbt_cable_vdo: TBT3 Cable Discover Mode Response
-- * @active_link_training: Active Cable Plug Link Training
-- *
-- * @active_link_training is a flag that should be set with uni-directional SBRX
-- * communication, and left 0 with passive cables and with bi-directional SBRX
-- * communication.
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 3dbb42c637c14..96281cd50ff66 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -734,10 +734,6 @@ static inline void usbmon_urb_complete(struct usb_bus =
+*bus, struct urb *urb,
+=20
+ /* random stuff */
+=20
+-#define	RUN_CONTEXT (in_irq() ? "in_irq" \
+-		: (in_interrupt() ? "in_interrupt" : "can sleep"))
+-
+-
+ /* This rwsem is for use only by the hub driver and ehci-hcd.
+  * Nobody else should touch it.
   */
- struct enter_usb_data {
- 	u32			eudo;
- 	u32			tbt_cable_vdo;
--	unsigned char		active_link_training:1;
- };
- 
- /*
--- 
-2.17.1
+--=20
+2.29.2
 
