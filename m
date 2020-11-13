@@ -2,183 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A02722B1EE3
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A42012B1EEA
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Nov 2020 16:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbgKMPf3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 10:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726278AbgKMPf3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Nov 2020 10:35:29 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECE4C0613D1
-        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 07:35:28 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id j205so14420704lfj.6
-        for <linux-usb@vger.kernel.org>; Fri, 13 Nov 2020 07:35:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QgEelvqepj7dJn97Ypu8skbF6Wbs3DPU03jJjGKjLQI=;
-        b=rxNxNaDG/DslSA8vY9XQLwfQpU1ESdQ9TYvLmPoOuB85iYA+TLppaXmRbcd8x5TDq0
-         ttz8Ao8REPHeUxfUvP6quKzeH01LbUwcCFOM1r/UmQzuqdfy+0BoMJk6NmobVRSREfo3
-         LB8mLcuJBHPJpyODkIZ8vk+k7xFvmz8kRqXFC18AwV4fs9QEqoXV3f/V8ntVJNcwVA2u
-         d4/hwL2HxdxIqVVhMT1BpiwgMSR5CWAbbekVlunZC2BGHaGNdMSmJqao0I4ZgJXVqTwX
-         yWHiCVoDRoRufaO59gIydrrR/fwAdL4WbAMr0VxpRtjA9J1laDG921ta4K6uqT2Bej/c
-         h3vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QgEelvqepj7dJn97Ypu8skbF6Wbs3DPU03jJjGKjLQI=;
-        b=Ar5lu7/T2TFrpV84CO2mfLX/9kGw5cOh9oZ6e8Q10TbIlfoh4Q4FsEn+4wA1WhBigZ
-         fZoclA4QiRuqNkQTMXoduMCDUi/Ulq1jXcmwc9Rf6G/C39AAegg7Iy4RbPZA56UOsDlV
-         6iGS/FBqI6MLDtMfrrwwDgyxQnZ8blDKyOAJUi7MlVnI+6WTFbjfUgQmzGdJRFTBU/Gm
-         yTVH4RdFtlrDVMtQ1NklhmiA8IurE0LoHqpo6H7BGfGjaVcY9nFbglAr34/MlmaKUXFS
-         7cxh1lVC6k4GNjkmpwZgYEDC9J+W8ymdwh3h6avoAS16YvlTnsMDUm0Yf9UDbfvkFSWd
-         w/0A==
-X-Gm-Message-State: AOAM533Zj1ZvycPySQMPwCo/xhD4YFuUBlq6TVJJs2bUHn1R6cWDvAoi
-        urRGJ/ZNI9KDt+Ssn5Ro5LxY7HAQSZjFB6ovZSA=
-X-Google-Smtp-Source: ABdhPJxOhiaZYJgzuTGkDNub+4N+P1YDG9ZuxquZEOVoREQEM1Db7i4hzb7Ig/8qb7eT7QOZCLzHK3gk7w13vVzX34c=
-X-Received: by 2002:a19:418d:: with SMTP id o135mr1172622lfa.329.1605281722300;
- Fri, 13 Nov 2020 07:35:22 -0800 (PST)
+        id S1726614AbgKMPhi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 10:37:38 -0500
+Received: from mail-bn8nam11on2053.outbound.protection.outlook.com ([40.107.236.53]:33633
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726603AbgKMPhh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Nov 2020 10:37:37 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Svnwv7ebJ2UuBMg3+wwnCarRlMaZ/eOEy2gVkN4A7HoaC+mMibz1HhoW2oPE3WauzA+fd7MyseA6JEWtfsnYyVufaWjHLO4gkT4uBpypmnVEQRQLZkpJaKE21W5wyRbNWIjT7UnNmTrX4LYq+lOz3Wzn2Uv49N8yn1vcAUBcK/9t3STf8kOxrVJxq8w+FNvOivFsG9vCZUmg6DLDrWLjYQUB8hCQ9oL5iyL7U4gjvJFQkTnOJF2OEsVyJ218LGairqKyha80VoVn+dwnJQXsO4FM29quTeCkXj4eFyT4mQBmj41Xhllo+jVSB0Dp8dDdF0p1fXsA0jkk9+GwntrPSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DS1Hpqdt/AZ/tDODWOjpu8hfGMwmTShq5Kb6i5jz5+0=;
+ b=HlwkShfGjpdLCYB65QiagQMHSzUf3oxK+GVxQNlapxU++FHYPQ5ak0YPSdhEGqzzVMDEjgGRWUX1Aqf0Jd2a8Dafs/qO4mt7cAIFwUHztnoeKgPxnVp+yLB9qtXc3QmoR7SkLwGrlBt/+H1Wp+a/c9j9CVburLfjqyxsaH85+ugOGWON5RQ3dvxu8Ki3QraRQZsTSdPxkfWH9nMeqZaxDfLo7JorwdpNB2vNzMl4RoQUcAdTgPh9ICOen36ysxVd8f8NJk8T/Z9nJi9OyuL419a6xJftPH6O8BjMGB4ohRmjv+kQmTysAY9Zbmb2S3EWtgm9BdVWkHLgzR9DNK8Y0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 8.4.225.191) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=infinera.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=infinera.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DS1Hpqdt/AZ/tDODWOjpu8hfGMwmTShq5Kb6i5jz5+0=;
+ b=dIbaAHomto0astBTc5E2iBoPrQxQEy4WhO8jyXZicvyaPtGkBrpFaWopfweKJXe7XxjG1XeJIaRdJFYyJaFGDKn+xToBrqZ2Uoxfu961qjEfa04bsJIpgpMw5nTJo/mVSKtg/rAA+RfZWPUJg9RZB8DE+/NI2yekyKocL+zFE5M=
+Received: from MWHPR07CA0023.namprd07.prod.outlook.com (2603:10b6:300:116::33)
+ by MWHPR10MB1981.namprd10.prod.outlook.com (2603:10b6:300:10c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.23; Fri, 13 Nov
+ 2020 15:37:33 +0000
+Received: from CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:116:cafe::8e) by MWHPR07CA0023.outlook.office365.com
+ (2603:10b6:300:116::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.25 via Frontend
+ Transport; Fri, 13 Nov 2020 15:37:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 8.4.225.191)
+ smtp.mailfrom=infinera.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none
+ header.from=infinera.com;
+Received-SPF: Pass (protection.outlook.com: domain of infinera.com designates
+ 8.4.225.191 as permitted sender) receiver=protection.outlook.com;
+ client-ip=8.4.225.191; helo=owa.infinera.com;
+Received: from owa.infinera.com (8.4.225.191) by
+ CO1NAM11FT003.mail.protection.outlook.com (10.13.175.93) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3541.22 via Frontend Transport; Fri, 13 Nov 2020 15:37:32 +0000
+Received: from sv-ex16-prd.infinera.com (10.100.96.229) by
+ sv-ex16-prd.infinera.com (10.100.96.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Fri, 13 Nov 2020 07:37:32 -0800
+Received: from sv-smtp-prod2.infinera.com (10.100.98.82) by
+ sv-ex16-prd.infinera.com (10.100.96.229) with Microsoft SMTP Server id
+ 15.1.1847.3 via Frontend Transport; Fri, 13 Nov 2020 07:37:32 -0800
+Received: from se-metroit-prd1.infinera.com ([10.210.32.58]) by sv-smtp-prod2.infinera.com with Microsoft SMTPSVC(7.5.7601.17514);
+         Fri, 13 Nov 2020 07:37:31 -0800
+Received: from gentoo-jocke.infinera.com (gentoo-jocke.infinera.com [10.210.71.2])
+        by se-metroit-prd1.infinera.com (Postfix) with ESMTP id 75E9D2C03201;
+        Fri, 13 Nov 2020 16:37:31 +0100 (CET)
+Received: by gentoo-jocke.infinera.com (Postfix, from userid 1001)
+        id 6D4F0E0A9; Fri, 13 Nov 2020 16:37:31 +0100 (CET)
+From:   Joakim Tjernlund <joakim.tjernlund@infinera.com>
+To:     <linux-usb@vger.kernel.org>
+CC:     Joakim Tjernlund <joakim.tjernlund@infinera.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] ALSA: usb-audio: Add delay quirk for all Logitech USB devices
+Date:   Fri, 13 Nov 2020 16:37:20 +0100
+Message-ID: <20201113153720.5158-1-joakim.tjernlund@infinera.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <1604794711-8661-1-git-send-email-ruslan.bilovol@gmail.com>
- <20201111092941.GJ14896@b29397-desktop> <CAB=otbSAGhDYxim9_fsyH4pZCLqgq+bxNJfv5hXqgQRVngVaig@mail.gmail.com>
-In-Reply-To: <CAB=otbSAGhDYxim9_fsyH4pZCLqgq+bxNJfv5hXqgQRVngVaig@mail.gmail.com>
-From:   Glenn Schmottlach <gschmottlach@gmail.com>
-Date:   Fri, 13 Nov 2020 10:35:10 -0500
-Message-ID: <CAMS2kBF5Gvhnf7AzdeSFeVeWBLhtHM_hHfTvMLTN-3Jkh=BwHw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] UAC2 Gadget: feedback endpoint support
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 13 Nov 2020 15:37:32.0294 (UTC) FILETIME=[E6F2A260:01D6B9D2]
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ee69584d-999f-4e82-56fc-08d887ea09dc
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1981:
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1981E5FBE294B87A92F87136F4E60@MWHPR10MB1981.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: goJMnjAJa9IGVrT0QTC2zfQP1StjhtGuCm2DlrvwQaqLn9ztco5kEvPyr3c0pfawkxgtYgSQyhXD29RjlUTSTxlOZMPl3eZM/SWce2h+Xsy+omD3syvO9ZiOIpAA7naApImflKlBjcyVuRMKF9inDh3s/HPs5QSbpIg5ycsG1/S2ZlMXY1s0L6EvX7TmgShAnQGRQ5sbTFwoyn/FRDX3SnrLg52k+CZ2RlSrIogqv5V7aQlpO1Hi0w8vQIjp6IbYsECHbyGm4u/h8Xnc8032XMY+uINFfZTjo0O2o/JceT7QQ7jvG6XhrTjoiBKIlz988rby4uzEUrDndFaXomfDG7ndAK758b2iCt+2WW1K1QmqSSQ0lKTPmG6Oh/US+vFtm9euWmQiqyXG98Sc+dApMg==
+X-Forefront-Antispam-Report: CIP:8.4.225.191;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:owa.infinera.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(376002)(346002)(396003)(39860400002)(136003)(46966005)(70206006)(36756003)(6266002)(82310400003)(450100002)(82740400003)(54906003)(8676002)(5660300002)(70586007)(426003)(44832011)(47076004)(42186006)(356005)(36906005)(336012)(6916009)(81166007)(186003)(478600001)(316002)(26005)(83380400001)(2906002)(2616005)(6666004)(86362001)(4326008)(1076003)(8936002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: infinera.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2020 15:37:32.9857
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee69584d-999f-4e82-56fc-08d887ea09dc
+X-MS-Exchange-CrossTenant-Id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=285643de-5f5b-4b03-a153-0ae2dc8aaf77;Ip=[8.4.225.191];Helo=[owa.infinera.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1981
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 6:20 PM Ruslan Bilovol <ruslan.bilovol@gmail.com> wrote:
->
-> On Wed, Nov 11, 2020 at 11:30 AM Peter Chen <peter.chen@nxp.com> wrote:
-> >
-> > On 20-11-08 02:18:28, Ruslan Bilovol wrote:
-> > > Current UAC2 gadget implements capture/sync paths
-> > > as two USB ISO ASYNC endpoints (IN and OUT).
-> > >
-> > > This violates USB spec which says that ISO ASYNC OUT endpoint
-> > > should have feedback companion endpoint.
-> > > See USB2.0 spec  "5.12.4.1 Synchronization Type": asynchronous
-> > > sink provides explicit feedback (isochronous pipe).
-> > > Interesting that for ISO ASYNC *IN* endpoint respective
-> > > feedback isn't required since source provides implicit
-> > > feedforward (data stream).
-> > >
-> > > While it's not an issue if UAC2 Gadget is connected to
-> > > Linux host (Linux ignores missing feedback endpoint),
-> > > with other hosts like Windows or MacOS the UAC2 Gadget
-> > > isn't enumerated due to missing feedback endpoint.
-> > >
-> > > This patch series adds feedback endpoint support to
-> > > UAC2 function, new control to UAC2 mixer which can
-> > > be used by userspace tools (like alsaloop from alsa-utils)
-> > > for updating feedback frequency reported to the host.
-> > > This is useful for usecases when UAC2 Gadget's audio
-> > > samples are played to another codec or audio card
-> > > with its own internal freerunning clock so host can
-> > > be notified that more/less samples are required.
-> > >
-> > > The alsaloop tool requires some (relatively small)
-> > > modifications in order to start support driving
-> > > feedback frequency through UAC2 mixer control.
-> > > That change will be sent as a separate patch
-> > > to ALSA community.
-> > >
-> > > Also added ability to switch ISO ASYNC OUT endpoint into
-> > > adaptive endpoint which doesn't require feedback endpoint
-> > > (as per USB spec).
-> > >
-> > > Ruslan Bilovol (3):
-> > >   usb: gadget: f_uac2/u_audio: add feedback endpoint support
-> > >   usb: gadget: f_uac2: add adaptive sync support for capture
-> > >   usb: gadget: u_audio: add real feedback implementation
-> >
-> > Hi Ruslan,
-> >
-> > I applied your patches, but WIN10 still can't recognize it well.
-> > The UAC1 is OK for WIN10 with the below same configuration.
-> > Any debug information you would like to know to check it?
-> >
-> >
-> > if [ "$FUNC" == "uac2" ]; then
-> > mkdir functions/$FUNC".0"
-> > echo 2 > functions/$FUNC".0"/p_ssize
-> > echo 48000 > functions/$FUNC".0"/p_srate
-> > echo 3 > functions/$FUNC".0"/p_chmask
-> >
-> > echo 2 > functions/$FUNC".0"/c_ssize
-> > echo 48000 > functions/$FUNC".0"/c_srate
-> > echo 3 > functions/$FUNC".0"/c_chmask
-> > #echo 4 > functions/$FUNC".0"/req_number
-> > ln -s functions/$FUNC".0" configs/c.1
-> > echo high-speed > /sys/kernel/config/usb_gadget/g1/max_speed
-> > fi
-> >
->
-> Hmm... I just tested below config and it works fine with my Win10.
-> The only thing I noticed is Windows doesn't enable UAC2 gadget
-> by default, but this can be done from Win10 sound settings
->
-> --------------------------------->8--------------------------------------
-> mkdir cfg
-> mount none cfg -t configfs
-> mkdir cfg/usb_gadget/g1
-> cd cfg/usb_gadget/g1
-> mkdir configs/c.1
-> mkdir functions/uac2.0
->
-> # 44.1 kHz sample rate
-> echo 44100 > functions/uac2.0/c_srate
-> echo 44100 > functions/uac2.0/p_srate
->
-> mkdir strings/0x409
-> mkdir configs/c.1/strings/0x409
-> echo 0x0101 > idProduct
-> echo 0x1d6b > idVendor
-> echo my-serial-num > strings/0x409/serialnumber
-> echo my-manufacturer > strings/0x409/manufacturer
-> echo "Test gadget" > strings/0x409/product
-> echo "Conf 1" > configs/c.1/strings/0x409/configuration
-> echo 120 > configs/c.1/MaxPower
-> ln -s functions/uac2.0 configs/c.1
-> echo musb-hdrc.0 > UDC
-> --------------------------------->8--------------------------------------
->
-> Thanks,
-> Ruslan
+Found one more Logitech device, BCC950 ConferenceCam, which needs
+the same delay here. This makes 3 out of 3 devices I have tried.
 
-Hi Ruslan -
+Therefore, add a delay for all Logitech devices as it does not hurt.
 
-With your configuration (above) Win10 was able to recognize and load
-the driver. What appears to prevent my configuration from loading is
-the fact that I selected 48K as my sample rate and my capture/playback
-channel mask includes more than two (2) channels. If I take your
-configuration and change the sample rate (c_srate/p_srate) to 48000
-Windows will fail to load the driver. Likewise, setting the
-c_chmask/p_chmask to 7 (three channels) will also cause the driver to
-fail to load.
+Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+CC: stable@vger.kernel.org (4.19, 5.4)
 
-You mentioned there is an option in Win10 Sound Settings to "enable"
-UAC2 by default. I cannot find that option and I wonder if this is
-what is preventing me from changing the sample rate or channel mask?
-Could Windows be treating my audio gadget as a UAC1 device rather than
-a fully multi-channel audio device (even though the usbaudio2.sys
-driver is loaded)? Have you tried other configurations to verify your
-Win10 box supports more than two channels and a 44.1K sample rate? I
-look forward to your feedback and any suggestions you might offer.
+---
+ sound/usb/quirks.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Thanks,
+diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+index c989ad8052ae..c50be2f75f70 100644
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -1672,13 +1672,13 @@ void snd_usb_ctl_msg_quirk(struct usb_device *dev, unsigned int pipe,
+ 	    && (requesttype & USB_TYPE_MASK) == USB_TYPE_CLASS)
+ 		msleep(20);
+ 
+-	/* Zoom R16/24, Logitech H650e/H570e, Jabra 550a, Kingston HyperX
+-	 *  needs a tiny delay here, otherwise requests like get/set
+-	 *  frequency return as failed despite actually succeeding.
++	/* Zoom R16/24, many Logitech(at least H650e/H570e/BCC950),
++	 * Jabra 550a, Kingston HyperX needs a tiny delay here,
++	 * otherwise requests like get/set frequency return
++	 * as failed despite actually succeeding.
+ 	 */
+ 	if ((chip->usb_id == USB_ID(0x1686, 0x00dd) ||
+-	     chip->usb_id == USB_ID(0x046d, 0x0a46) ||
+-	     chip->usb_id == USB_ID(0x046d, 0x0a56) ||
++	     USB_ID_VENDOR(chip->usb_id) == 0x046d  || /* Logitech */
+ 	     chip->usb_id == USB_ID(0x0b0e, 0x0349) ||
+ 	     chip->usb_id == USB_ID(0x0951, 0x16ad)) &&
+ 	    (requesttype & USB_TYPE_MASK) == USB_TYPE_CLASS)
+-- 
+2.26.2
 
-Glenn
