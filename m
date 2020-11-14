@@ -2,134 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FCA2B2DA3
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Nov 2020 15:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D832B2DB5
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Nov 2020 15:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726591AbgKNOSC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 Nov 2020 09:18:02 -0500
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:43255 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726307AbgKNOSB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Nov 2020 09:18:01 -0500
-Received: by mail-vs1-f65.google.com with SMTP id f7so6726486vsh.10;
-        Sat, 14 Nov 2020 06:18:00 -0800 (PST)
+        id S1726802AbgKNOsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Nov 2020 09:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726112AbgKNOsC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Nov 2020 09:48:02 -0500
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE63C0613D2
+        for <linux-usb@vger.kernel.org>; Sat, 14 Nov 2020 06:48:01 -0800 (PST)
+Received: by mail-qk1-x741.google.com with SMTP id 199so12391877qkg.9
+        for <linux-usb@vger.kernel.org>; Sat, 14 Nov 2020 06:48:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MpB5UkK56ULUM/SwJXVraZSg8z1gOcmwFB3VTdcmzJo=;
+        b=QNRM/oPGZSiJ5Ihc+dQq07AAlcXhfoXogpgu1O+Vw+FE1cUGucylF1m9NB4mVfrwil
+         gHYbCmW2Pw2viqaEi7SEzZTn2v6wHiEUJXID9wVcIIUSMr5aqGUKgo8mjd/NuiVupidG
+         v4nvNFP+PgT1a67Q72FUZCEtADW3xN5myRnK+TEQW7M/rN54dtvvs0HfgyTRGgWNV+dq
+         uMZ7/L7HBrir0e29FqxxcN8/scJviyy6ZPtThkgs7+XclcFtYnTeJisDb/iSKDvxvBlC
+         v4Ai4dhrArjmRn0ZPCFzca6E8Z3pKzXyaImOwq7pFKKNh/ZuLWr9pVe6iowlpblCz8wb
+         YWFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=2nyHy33MI2x03SLbTYwXPNRWCCKocisnvXz3U5fHmgg=;
-        b=R6kvCY9oi1e2FkCNAtfw3ThCWuI0USI2QMbsgUG9Wo/Mt6lQyekrJOLp7RtXN7yAlB
-         MUsKoW5KFL06XtkAJp6fCo/f/5UVDCPCGxGURKWVFrpYfv0QiztpiT3Y4Vn0X1HByEkI
-         1eukcUuY+XHA6PdAsnb8YjvWS48CiBW+q7QYibQgi9Bqy8J1J0pZHAokpaUItEhPlEYI
-         glXbvEUvT+EmdhgPIzZ8/DUaIlQ17yV1fwPVwG+VxjxTo1466yQXAHsvOmlDCKJ5hG5P
-         xh3eM8xkCs5sdgFC/R+Io3QPhRcol7ODW8ToA5EFaTrJAGYUuxayuJY2oSrPDn4AW33e
-         mhgw==
-X-Gm-Message-State: AOAM532eePrdIjARz1WjRUXbdKyE+bGraEd1Yj0LATBo1Qos0DITxG7S
-        xJSWcLM3RwC/U/UXPOWzN+irvgJaVTEUGQ==
-X-Google-Smtp-Source: ABdhPJxpdBgZHUqD4BJITp8tmhGVt2p4KUfpz2Tjg+rqoLibpduSWzaoDsJKOP05cOk+c4nOwCdSEw==
-X-Received: by 2002:a67:6ac6:: with SMTP id f189mr4431356vsc.4.1605363480359;
-        Sat, 14 Nov 2020 06:18:00 -0800 (PST)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id w1sm1207109vsk.34.2020.11.14.06.17.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Nov 2020 06:18:00 -0800 (PST)
-Received: by mail-ua1-f45.google.com with SMTP id t15so3925918ual.6;
-        Sat, 14 Nov 2020 06:17:59 -0800 (PST)
-X-Received: by 2002:ab0:6d91:: with SMTP id m17mr3490956uah.97.1605363479780;
- Sat, 14 Nov 2020 06:17:59 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MpB5UkK56ULUM/SwJXVraZSg8z1gOcmwFB3VTdcmzJo=;
+        b=mTltYbh40TUqXFJn4+KIaskhjD5bUqA9PFwOCXHN1TNovOMHMviq5DrUeCGSyU7blT
+         majzfW8qneSoD9mjWA8MJRHgucuXEawZMqZx/yBU5xvOddT3s3nPDnLYd9OK7/GTv+pC
+         th1xx+Hz4WK65QRtaHBRCmwfE9QcB07DUEbaV6kv+PE76q71cwmsyli2CNc7v/YSDnng
+         CGvFuQipI3Ta5s4ZCKdx9RKEuoT9JITSeH4kCn5qOND9mzwMIWdzkQ8rz1oPKYkFZkTt
+         ugzmszUR3Lz22ws5qr9oj8+mGWRkSuewrMlFhB/HcOCPQYHZY8tHhFK9SaOKO3W7pSGy
+         3H3A==
+X-Gm-Message-State: AOAM5306vRYZFx76E6NXaSCnmwMr/Oz5qkYvfeduOgyrKoXw0OSruG7r
+        1+iQzCnxW1ExC3OqRCHLj2Mn5YpLxkT0kHFKk+TFOg==
+X-Google-Smtp-Source: ABdhPJzuWjAkMT2fMiblRtI+NGA2TeGiI3YRlWPhDhVvtz73GYSTdIR7z+1XOaHF7I6z6iRkYmCpKWUSt0KbS8331ZE=
+X-Received: by 2002:a37:6b07:: with SMTP id g7mr7030919qkc.265.1605365279254;
+ Sat, 14 Nov 2020 06:47:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20201114124249.634234-1-tanure@linux.com> <X6/UDpZRDAGDZydT@kroah.com>
-In-Reply-To: <X6/UDpZRDAGDZydT@kroah.com>
-Reply-To: tanure@linux.com
-From:   Lucas Tanure <tanure@linux.com>
-Date:   Sat, 14 Nov 2020 14:17:48 +0000
-X-Gmail-Original-Message-ID: <CAJX_Q+2iLzf8M-vzvrEh6TEhn2bDyg-P5CiHiSOwcmoYxzQgdQ@mail.gmail.com>
-Message-ID: <CAJX_Q+2iLzf8M-vzvrEh6TEhn2bDyg-P5CiHiSOwcmoYxzQgdQ@mail.gmail.com>
-Subject: Re: [PATCH] USB: apple-mfi-fastcharge: Use devm_kzalloc and simplify
- the code
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <000000000000a923c105b411505f@google.com>
+In-Reply-To: <000000000000a923c105b411505f@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Sat, 14 Nov 2020 15:47:48 +0100
+Message-ID: <CACT4Y+ab10d-3powP6kHV0ixFooQRJVDajAxGaKtA+aYmn7+Mw@mail.gmail.com>
+Subject: Re: INFO: task hung in reboot
+To:     syzbot <syzbot+9dec836197fea6892a28@syzkaller.appspotmail.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Nov 14, 2020 at 12:56 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Sat, Nov 14, 2020 at 2:42 PM syzbot
+<syzbot+9dec836197fea6892a28@syzkaller.appspotmail.com> wrote:
 >
-> On Sat, Nov 14, 2020 at 12:42:49PM +0000, Lucas Tanure wrote:
-> > Signed-off-by: Lucas Tanure <tanure@linux.com>
+> Hello,
 >
-> I can't take patches without any changelog text, sorry.
+> syzbot found the following issue on:
 >
-> > ---
-> >  drivers/usb/misc/apple-mfi-fastcharge.c | 17 +++++------------
-> >  1 file changed, 5 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c b/drivers/usb/misc/apple-mfi-fastcharge.c
-> > index 9de0171b5177..de86e389a008 100644
-> > --- a/drivers/usb/misc/apple-mfi-fastcharge.c
-> > +++ b/drivers/usb/misc/apple-mfi-fastcharge.c
-> > @@ -178,16 +178,13 @@ static int mfi_fc_probe(struct usb_device *udev)
-> >  {
-> >       struct power_supply_config battery_cfg = {};
-> >       struct mfi_device *mfi = NULL;
-> > -     int err;
-> >
-> >       if (!mfi_fc_match(udev))
-> >               return -ENODEV;
-> >
-> > -     mfi = kzalloc(sizeof(struct mfi_device), GFP_KERNEL);
-> > -     if (!mfi) {
-> > -             err = -ENOMEM;
-> > -             goto error;
-> > -     }
-> > +     mfi = devm_kzalloc(&udev->dev, sizeof(*mfi), GFP_KERNEL);
-> > +     if (!mfi)
-> > +             return -ENOMEM;
-> >
-> >       battery_cfg.drv_data = mfi;
-> >
-> > @@ -197,8 +194,7 @@ static int mfi_fc_probe(struct usb_device *udev)
-> >                                               &battery_cfg);
-> >       if (IS_ERR(mfi->battery)) {
-> >               dev_err(&udev->dev, "Can't register battery\n");
-> > -             err = PTR_ERR(mfi->battery);
-> > -             goto error;
-> > +             return PTR_ERR(mfi->battery);
-> >       }
-> >
-> >       mfi->udev = usb_get_dev(udev);
-> > @@ -206,9 +202,6 @@ static int mfi_fc_probe(struct usb_device *udev)
-> >
-> >       return 0;
-> >
-> > -error:
-> > -     kfree(mfi);
-> > -     return err;
-> >  }
-> >
-> >  static void mfi_fc_disconnect(struct usb_device *udev)
-> > @@ -220,7 +213,7 @@ static void mfi_fc_disconnect(struct usb_device *udev)
-> >               power_supply_unregister(mfi->battery);
-> >       dev_set_drvdata(&udev->dev, NULL);
-> >       usb_put_dev(mfi->udev);
-> > -     kfree(mfi);
-> > +     devm_kfree(&udev->dev, mfi);
+> HEAD commit:    e7018751 usb: host: ehci-mxc: Remove the driver
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15d0c6a1500000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a84e3059298aeb27
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9dec836197fea6892a28
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
 >
-> Are you sure about this?
-I think so, as the probe will allocate again that struct, the
-disconnect should free the previous one.
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9dec836197fea6892a28@syzkaller.appspotmail.com
 
->
-> And what's wrong with the existing code?  Using the devm_*() variants
-> seems like a "cleanup", but it's not always the case.
-I don't know what's wrong, but I will figure out.
->
-> thanks,
->
-> greg k-h
+It seems syzkaller has found another way to reboot the machine.
+systemd initialiated shutdown:
+[ [0;32m  OK   [0m] Stopped Raise network interfaces.
 
-Thanks
-Lucas
+but it's unclear why.
+
+Kernel also hanged:
+
+[ 2599.057387][    T1] systemd-shutdown[1]: Sending SIGTERM to
+remaining processes...
+[ 2599.704086][    T1] systemd-shutdown[1]: Sending SIGKILL to
+remaining processes...
+[ 2600.107613][    T1] systemd-shutdown[1]: All loop devices detached.
+[ 2746.006716][ T1253] INFO: task systemd-shutdow:1 blocked for more
+than 143 seconds.
+[ 2746.014884][ T1253]       Not tainted 5.10.0-rc3-syzkaller #0
+
+It seems due to some misbehaving device:
+
+[ 2746.057796][ T1253]  schedule+0xcb/0x270
+[ 2746.061900][ T1253]  wait_for_device_probe+0x1be/0x220
+[ 2746.089974][ T1253]  device_shutdown+0x18/0x5c0
+[ 2746.094669][ T1253]  __do_sys_reboot.cold+0x5d/0x97
+
+Most likely some USB device because there is lots of USB-related
+output before that.
+
+
+
+> INFO: task systemd-shutdow:1 blocked for more than 143 seconds.
+>       Not tainted 5.10.0-rc3-syzkaller #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:systemd-shutdow state:D stack:23432 pid:    1 ppid:     0 flags:0x00000000
+> Call Trace:
+>  context_switch kernel/sched/core.c:3774 [inline]
+>  __schedule+0x8a2/0x1f30 kernel/sched/core.c:4523
+>  schedule+0xcb/0x270 kernel/sched/core.c:4601
+>  wait_for_device_probe+0x1be/0x220 drivers/base/dd.c:702
+>  device_shutdown+0x18/0x5c0 drivers/base/core.c:4007
+>  kernel_restart_prepare kernel/reboot.c:76 [inline]
+>  kernel_restart kernel/reboot.c:246 [inline]
+>  __do_sys_reboot.cold+0x5d/0x97 kernel/reboot.c:347
+>  do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x7fa389e6c8c6
+> Code: Unable to access opcode bytes at RIP 0x7fa389e6c89c.
+> RSP: 002b:00007ffe1fb46e18 EFLAGS: 00000206 ORIG_RAX: 00000000000000a9
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fa389e6c8c6
+> RDX: 0000000001234567 RSI: 0000000028121969 RDI: fffffffffee1dead
+> RBP: 00007ffe1fb46ea8 R08: 0000000000002800 R09: 0000000000000005
+> R10: 0000000000000002 R11: 0000000000000206 R12: 0000000000000000
+> R13: 0000000000000000 R14: 000055c2d05dc150 R15: 00007ffe1fb47198
+>
+> Showing all locks held in the system:
+> 1 lock held by systemd-shutdow/1:
+>  #0: ffffffff871288a8 (system_transition_mutex){+.+.}-{3:3}, at: __do_sys_reboot+0x1a4/0x3e0 kernel/reboot.c:344
+> 5 locks held by kworker/1:0/17:
+> 1 lock held by khungtaskd/1253:
+>  #0: ffffffff872492e0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x269 kernel/locking/lockdep.c:6253
+>
+> =============================================
+>
+> NMI backtrace for cpu 1
+> CPU: 1 PID: 1253 Comm: khungtaskd Not tainted 5.10.0-rc3-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0x107/0x163 lib/dump_stack.c:118
+>  nmi_cpu_backtrace.cold+0x46/0xe0 lib/nmi_backtrace.c:105
+>  nmi_trigger_cpumask_backtrace+0x1da/0x200 lib/nmi_backtrace.c:62
+>  trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+>  check_hung_uninterruptible_tasks kernel/hung_task.c:209 [inline]
+>  watchdog+0xd32/0xf70 kernel/hung_task.c:294
+>  kthread+0x38c/0x460 kernel/kthread.c:292
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+> Sending NMI from CPU 1 to CPUs 0:
+> NMI backtrace for cpu 0 skipped: idling at native_safe_halt arch/x86/include/asm/irqflags.h:60 [inline]
+> NMI backtrace for cpu 0 skipped: idling at arch_safe_halt arch/x86/include/asm/irqflags.h:103 [inline]
+> NMI backtrace for cpu 0 skipped: idling at acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
+> NMI backtrace for cpu 0 skipped: idling at acpi_idle_do_entry+0x1c9/0x250 drivers/acpi/processor_idle.c:517
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000a923c105b411505f%40google.com.
