@@ -2,207 +2,376 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5592B2B10
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Nov 2020 04:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C812B2B5A
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Nov 2020 05:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726348AbgKND37 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Nov 2020 22:29:59 -0500
-Received: from mga12.intel.com ([192.55.52.136]:7808 "EHLO mga12.intel.com"
+        id S1726440AbgKNEuG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Nov 2020 23:50:06 -0500
+Received: from mx2.suse.de ([195.135.220.15]:48512 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726495AbgKND36 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Nov 2020 22:29:58 -0500
-IronPort-SDR: SfBvmawSck6T9JK+9EXLMWMXTbGPWbrN4urvqinIWb5A2AXSYGdOYtX7Txy630ZrsaNcXxi5bq
- cBxTKe5nc4/Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9804"; a="149828670"
-X-IronPort-AV: E=Sophos;i="5.77,477,1596524400"; 
-   d="scan'208";a="149828670"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2020 19:29:58 -0800
-IronPort-SDR: cUl0CCwzZ/fkQVPncr1yD4TVuPqU++V3r9KTo7NdeqKm36qSIvKexFcb0DOacwUpmQE9huz4BT
- fg/Gf//D3ZzA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,477,1596524400"; 
-   d="scan'208";a="542900882"
-Received: from lkp-server02.sh.intel.com (HELO 697932c29306) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 13 Nov 2020 19:29:56 -0800
-Received: from kbuild by 697932c29306 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kdmGC-0000eE-2h; Sat, 14 Nov 2020 03:29:56 +0000
-Date:   Sat, 14 Nov 2020 11:28:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 6d853c9e4104b4fc8d55dc9cd3b99712aa347174
-Message-ID: <5faf4ef9.PG71B2lWi6/j88SZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726414AbgKNEuF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Nov 2020 23:50:05 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id ACB79ABDE;
+        Sat, 14 Nov 2020 04:50:02 +0000 (UTC)
+Date:   Fri, 13 Nov 2020 20:27:25 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Davidlohr Bueso <dbueso@suse.de>, dave@stgolabs.net
+Subject: [PATCH] USB: serial: mos7720: defer state restore to a workqueue
+Message-ID: <20201114042725.ofs7zbzmxg32tbbi@linux-p48b.lan>
+References: <20201102211450.5722-1-dave@stgolabs.net>
+ <20201103204014.3ue37owcras6cx7p@linux-p48b.lan>
+ <20201104110657.GW4085@localhost>
+ <20201104162534.GY4085@localhost>
+ <20201105001307.lelve65nif344cfs@linux-p48b.lan>
+ <20201105082540.GA4085@localhost>
+ <20201106061713.lgghl4xnvdmkvges@linux-p48b.lan>
+ <20201113091443.GI4085@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20201113091443.GI4085@localhost>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: 6d853c9e4104b4fc8d55dc9cd3b99712aa347174  usb: cdc-acm: Add DISABLE_ECHO for Renesas USB Download mode
+The parallel port restore operation currently defers writes
+to a tasklet, if it sees a locked disconnect mutex. The
+driver goes to a lot of trouble to ensure writes happen
+in a non-blocking context, but things can be greatly
+simplified if it's done in regular process context and
+this is not a system performance critical path. As such,
+instead of doing the async state restore writes in irq
+context, use a workqueue and just do regular synchronous
+writes.
 
-elapsed time: 723m
+In addition to the cleanup, this also imposes less on the
+overall system as tasklets have been deprecated because
+of it's BH implications, potentially blocking a higher
+priority task from running. We also get rid of hacks
+such as trylocking a mutex in irq, something which does
+not play nice with priority boosting in PREEMPT_RT.
 
-configs tested: 143
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                     sequoia_defconfig
-powerpc                       eiger_defconfig
-arm                        neponset_defconfig
-powerpc                     kmeter1_defconfig
-m68k                                defconfig
-m68k                        m5307c3_defconfig
-powerpc                      mgcoge_defconfig
-sh                          sdk7780_defconfig
-arm                         lubbock_defconfig
-mips                            e55_defconfig
-xtensa                  cadence_csp_defconfig
-nios2                            alldefconfig
-sh                          rsk7203_defconfig
-m68k                            q40_defconfig
-sh                             shx3_defconfig
-openrisc                    or1ksim_defconfig
-arm                         hackkit_defconfig
-powerpc                  storcenter_defconfig
-sparc                       sparc32_defconfig
-powerpc                     ppa8548_defconfig
-arm                          gemini_defconfig
-m68k                       m5249evb_defconfig
-arm                          iop32x_defconfig
-arm                          simpad_defconfig
-arm                           sunxi_defconfig
-powerpc                  mpc866_ads_defconfig
-sh                ecovec24-romimage_defconfig
-arm64                            alldefconfig
-arm                           h5000_defconfig
-powerpc                      pmac32_defconfig
-mips                   sb1250_swarm_defconfig
-sh                   sh7724_generic_defconfig
-alpha                            alldefconfig
-arm                         s3c6400_defconfig
-arm                         vf610m4_defconfig
-arm                      integrator_defconfig
-sh                         ecovec24_defconfig
-sh                           se7750_defconfig
-mips                           jazz_defconfig
-powerpc                      acadia_defconfig
-xtensa                          iss_defconfig
-nds32                            alldefconfig
-arm                       aspeed_g4_defconfig
-arm                         assabet_defconfig
-um                            kunit_defconfig
-xtensa                         virt_defconfig
-arm                        shmobile_defconfig
-powerpc64                           defconfig
-arm                           sama5_defconfig
-mips                           ip32_defconfig
-riscv                               defconfig
-sh                          kfr2r09_defconfig
-mips                     loongson1c_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                           spitz_defconfig
-mips                         tb0226_defconfig
-m68k                        m5272c3_defconfig
-ia64                          tiger_defconfig
-arm                            xcep_defconfig
-mips                 decstation_r4k_defconfig
-arm                       imx_v4_v5_defconfig
-powerpc                     pq2fads_defconfig
-powerpc                    mvme5100_defconfig
-ia64                        generic_defconfig
-arm                           stm32_defconfig
-mips                        bcm63xx_defconfig
-arc                     haps_hs_smp_defconfig
-powerpc                 mpc8540_ads_defconfig
-powerpc                          g5_defconfig
-sparc                       sparc64_defconfig
-mips                      pistachio_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a006-20201113
-i386                 randconfig-a005-20201113
-i386                 randconfig-a002-20201113
-i386                 randconfig-a001-20201113
-i386                 randconfig-a003-20201113
-i386                 randconfig-a004-20201113
-x86_64               randconfig-a015-20201113
-x86_64               randconfig-a011-20201113
-x86_64               randconfig-a014-20201113
-x86_64               randconfig-a013-20201113
-x86_64               randconfig-a016-20201113
-x86_64               randconfig-a012-20201113
-i386                 randconfig-a012-20201113
-i386                 randconfig-a014-20201113
-i386                 randconfig-a016-20201113
-i386                 randconfig-a011-20201113
-i386                 randconfig-a015-20201113
-i386                 randconfig-a013-20201113
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a003-20201113
-x86_64               randconfig-a005-20201113
-x86_64               randconfig-a004-20201113
-x86_64               randconfig-a002-20201113
-x86_64               randconfig-a006-20201113
-x86_64               randconfig-a001-20201113
-
+Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/serial/mos7720.c | 235 ++++++-----------------------------
+ 1 file changed, 36 insertions(+), 199 deletions(-)
+
+diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
+index 5a5d2a95070e..d36aaa4a13de 100644
+--- a/drivers/usb/serial/mos7720.c
++++ b/drivers/usb/serial/mos7720.c
+@@ -79,14 +79,6 @@ MODULE_DEVICE_TABLE(usb, id_table);
+ #define DCR_INIT_VAL       0x0c	/* SLCTIN, nINIT */
+ #define ECR_INIT_VAL       0x00	/* SPP mode */
+
+-struct urbtracker {
+-	struct mos7715_parport  *mos_parport;
+-	struct list_head        urblist_entry;
+-	struct kref             ref_count;
+-	struct urb              *urb;
+-	struct usb_ctrlrequest	*setup;
+-};
+-
+ enum mos7715_pp_modes {
+	SPP = 0<<5,
+	PS2 = 1<<5,      /* moschip calls this 'NIBBLE' mode */
+@@ -96,12 +88,9 @@ enum mos7715_pp_modes {
+ struct mos7715_parport {
+	struct parport          *pp;	       /* back to containing struct */
+	struct kref             ref_count;     /* to instance of this struct */
+-	struct list_head        deferred_urbs; /* list deferred async urbs */
+-	struct list_head        active_urbs;   /* list async urbs in flight */
+-	spinlock_t              listlock;      /* protects list access */
+	bool                    msg_pending;   /* usb sync call pending */
+	struct completion       syncmsg_compl; /* usb sync call completed */
+-	struct tasklet_struct   urb_tasklet;   /* for sending deferred urbs */
++	struct work_struct      work;          /* restore deferred writes */
+	struct usb_serial       *serial;       /* back to containing struct */
+	__u8			shadowECR;     /* parallel port regs... */
+	__u8			shadowDCR;
+@@ -265,174 +254,8 @@ static void destroy_mos_parport(struct kref *kref)
+	kfree(mos_parport);
+ }
+
+-static void destroy_urbtracker(struct kref *kref)
+-{
+-	struct urbtracker *urbtrack =
+-		container_of(kref, struct urbtracker, ref_count);
+-	struct mos7715_parport *mos_parport = urbtrack->mos_parport;
+-
+-	usb_free_urb(urbtrack->urb);
+-	kfree(urbtrack->setup);
+-	kfree(urbtrack);
+-	kref_put(&mos_parport->ref_count, destroy_mos_parport);
+-}
+-
+ /*
+- * This runs as a tasklet when sending an urb in a non-blocking parallel
+- * port callback had to be deferred because the disconnect mutex could not be
+- * obtained at the time.
+- */
+-static void send_deferred_urbs(struct tasklet_struct *t)
+-{
+-	int ret_val;
+-	unsigned long flags;
+-	struct mos7715_parport *mos_parport = from_tasklet(mos_parport, t,
+-							   urb_tasklet);
+-	struct urbtracker *urbtrack, *tmp;
+-	struct list_head *cursor, *next;
+-	struct device *dev;
+-
+-	/* if release function ran, game over */
+-	if (unlikely(mos_parport->serial == NULL))
+-		return;
+-
+-	dev = &mos_parport->serial->dev->dev;
+-
+-	/* try again to get the mutex */
+-	if (!mutex_trylock(&mos_parport->serial->disc_mutex)) {
+-		dev_dbg(dev, "%s: rescheduling tasklet\n", __func__);
+-		tasklet_schedule(&mos_parport->urb_tasklet);
+-		return;
+-	}
+-
+-	/* if device disconnected, game over */
+-	if (unlikely(mos_parport->serial->disconnected)) {
+-		mutex_unlock(&mos_parport->serial->disc_mutex);
+-		return;
+-	}
+-
+-	spin_lock_irqsave(&mos_parport->listlock, flags);
+-	if (list_empty(&mos_parport->deferred_urbs)) {
+-		spin_unlock_irqrestore(&mos_parport->listlock, flags);
+-		mutex_unlock(&mos_parport->serial->disc_mutex);
+-		dev_dbg(dev, "%s: deferred_urbs list empty\n", __func__);
+-		return;
+-	}
+-
+-	/* move contents of deferred_urbs list to active_urbs list and submit */
+-	list_for_each_safe(cursor, next, &mos_parport->deferred_urbs)
+-		list_move_tail(cursor, &mos_parport->active_urbs);
+-	list_for_each_entry_safe(urbtrack, tmp, &mos_parport->active_urbs,
+-			    urblist_entry) {
+-		ret_val = usb_submit_urb(urbtrack->urb, GFP_ATOMIC);
+-		dev_dbg(dev, "%s: urb submitted\n", __func__);
+-		if (ret_val) {
+-			dev_err(dev, "usb_submit_urb() failed: %d\n", ret_val);
+-			list_del(&urbtrack->urblist_entry);
+-			kref_put(&urbtrack->ref_count, destroy_urbtracker);
+-		}
+-	}
+-	spin_unlock_irqrestore(&mos_parport->listlock, flags);
+-	mutex_unlock(&mos_parport->serial->disc_mutex);
+-}
+-
+-/* callback for parallel port control urbs submitted asynchronously */
+-static void async_complete(struct urb *urb)
+-{
+-	struct urbtracker *urbtrack = urb->context;
+-	int status = urb->status;
+-	unsigned long flags;
+-
+-	if (unlikely(status))
+-		dev_dbg(&urb->dev->dev, "%s - nonzero urb status received: %d\n", __func__, status);
+-
+-	/* remove the urbtracker from the active_urbs list */
+-	spin_lock_irqsave(&urbtrack->mos_parport->listlock, flags);
+-	list_del(&urbtrack->urblist_entry);
+-	spin_unlock_irqrestore(&urbtrack->mos_parport->listlock, flags);
+-	kref_put(&urbtrack->ref_count, destroy_urbtracker);
+-}
+-
+-static int write_parport_reg_nonblock(struct mos7715_parport *mos_parport,
+-				      enum mos_regs reg, __u8 data)
+-{
+-	struct urbtracker *urbtrack;
+-	int ret_val;
+-	unsigned long flags;
+-	struct usb_serial *serial = mos_parport->serial;
+-	struct usb_device *usbdev = serial->dev;
+-
+-	/* create and initialize the control urb and containing urbtracker */
+-	urbtrack = kmalloc(sizeof(struct urbtracker), GFP_ATOMIC);
+-	if (!urbtrack)
+-		return -ENOMEM;
+-
+-	urbtrack->urb = usb_alloc_urb(0, GFP_ATOMIC);
+-	if (!urbtrack->urb) {
+-		kfree(urbtrack);
+-		return -ENOMEM;
+-	}
+-	urbtrack->setup = kmalloc(sizeof(*urbtrack->setup), GFP_ATOMIC);
+-	if (!urbtrack->setup) {
+-		usb_free_urb(urbtrack->urb);
+-		kfree(urbtrack);
+-		return -ENOMEM;
+-	}
+-	urbtrack->setup->bRequestType = (__u8)0x40;
+-	urbtrack->setup->bRequest = (__u8)0x0e;
+-	urbtrack->setup->wValue = cpu_to_le16(get_reg_value(reg, dummy));
+-	urbtrack->setup->wIndex = cpu_to_le16(get_reg_index(reg));
+-	urbtrack->setup->wLength = 0;
+-	usb_fill_control_urb(urbtrack->urb, usbdev,
+-			     usb_sndctrlpipe(usbdev, 0),
+-			     (unsigned char *)urbtrack->setup,
+-			     NULL, 0, async_complete, urbtrack);
+-	kref_get(&mos_parport->ref_count);
+-	urbtrack->mos_parport = mos_parport;
+-	kref_init(&urbtrack->ref_count);
+-	INIT_LIST_HEAD(&urbtrack->urblist_entry);
+-
+-	/*
+-	 * get the disconnect mutex, or add tracker to the deferred_urbs list
+-	 * and schedule a tasklet to try again later
+-	 */
+-	if (!mutex_trylock(&serial->disc_mutex)) {
+-		spin_lock_irqsave(&mos_parport->listlock, flags);
+-		list_add_tail(&urbtrack->urblist_entry,
+-			      &mos_parport->deferred_urbs);
+-		spin_unlock_irqrestore(&mos_parport->listlock, flags);
+-		tasklet_schedule(&mos_parport->urb_tasklet);
+-		dev_dbg(&usbdev->dev, "tasklet scheduled\n");
+-		return 0;
+-	}
+-
+-	/* bail if device disconnected */
+-	if (serial->disconnected) {
+-		kref_put(&urbtrack->ref_count, destroy_urbtracker);
+-		mutex_unlock(&serial->disc_mutex);
+-		return -ENODEV;
+-	}
+-
+-	/* add the tracker to the active_urbs list and submit */
+-	spin_lock_irqsave(&mos_parport->listlock, flags);
+-	list_add_tail(&urbtrack->urblist_entry, &mos_parport->active_urbs);
+-	spin_unlock_irqrestore(&mos_parport->listlock, flags);
+-	ret_val = usb_submit_urb(urbtrack->urb, GFP_ATOMIC);
+-	mutex_unlock(&serial->disc_mutex);
+-	if (ret_val) {
+-		dev_err(&usbdev->dev,
+-			"%s: submit_urb() failed: %d\n", __func__, ret_val);
+-		spin_lock_irqsave(&mos_parport->listlock, flags);
+-		list_del(&urbtrack->urblist_entry);
+-		spin_unlock_irqrestore(&mos_parport->listlock, flags);
+-		kref_put(&urbtrack->ref_count, destroy_urbtracker);
+-		return ret_val;
+-	}
+-	return 0;
+-}
+-
+-/*
+- * This is the the common top part of all parallel port callback operations that
++ * This is the common top part of all parallel port callback operations that
+  * send synchronous messages to the device.  This implements convoluted locking
+  * that avoids two scenarios: (1) a port operation is called after usbserial
+  * has called our release function, at which point struct mos7715_parport has
+@@ -458,6 +281,10 @@ static int parport_prologue(struct parport *pp)
+	reinit_completion(&mos_parport->syncmsg_compl);
+	spin_unlock(&release_lock);
+
++	/* ensure writes from restore are submitted before new requests */
++	if (work_pending(&mos_parport->work))
++		flush_work(&mos_parport->work);
++
+	mutex_lock(&mos_parport->serial->disc_mutex);
+	if (mos_parport->serial->disconnected) {
+		/* device disconnected */
+@@ -482,6 +309,26 @@ static inline void parport_epilogue(struct parport *pp)
+	complete(&mos_parport->syncmsg_compl);
+ }
+
++static void deferred_restore_writes(struct work_struct *work)
++{
++	struct mos7715_parport *mos_parport;
++
++	mos_parport = container_of(work, struct mos7715_parport, work);
++
++	mutex_lock(&mos_parport->serial->disc_mutex);
++
++	/* if device disconnected, game over */
++	if (mos_parport->serial->disconnected)
++		goto done;
++
++	write_mos_reg(mos_parport->serial, dummy, MOS7720_DCR,
++		      mos_parport->shadowDCR);
++	write_mos_reg(mos_parport->serial, dummy, MOS7720_ECR,
++		      mos_parport->shadowECR);
++done:
++	mutex_unlock(&mos_parport->serial->disc_mutex);
++}
++
+ static void parport_mos7715_write_data(struct parport *pp, unsigned char d)
+ {
+	struct mos7715_parport *mos_parport = pp->private_data;
+@@ -641,10 +488,9 @@ static void parport_mos7715_restore_state(struct parport *pp,
+	}
+	mos_parport->shadowDCR = s->u.pc.ctr;
+	mos_parport->shadowECR = s->u.pc.ecr;
+-	write_parport_reg_nonblock(mos_parport, MOS7720_DCR,
+-				   mos_parport->shadowDCR);
+-	write_parport_reg_nonblock(mos_parport, MOS7720_ECR,
+-				   mos_parport->shadowECR);
++
++	/* defer synchronous writes outside of irq */
++	schedule_work(&mos_parport->work);
+	spin_unlock(&release_lock);
+ }
+
+@@ -714,12 +560,9 @@ static int mos7715_parport_init(struct usb_serial *serial)
+
+	mos_parport->msg_pending = false;
+	kref_init(&mos_parport->ref_count);
+-	spin_lock_init(&mos_parport->listlock);
+-	INIT_LIST_HEAD(&mos_parport->active_urbs);
+-	INIT_LIST_HEAD(&mos_parport->deferred_urbs);
+	usb_set_serial_data(serial, mos_parport); /* hijack private pointer */
+	mos_parport->serial = serial;
+-	tasklet_setup(&mos_parport->urb_tasklet, send_deferred_urbs);
++	INIT_WORK(&mos_parport->work, deferred_restore_writes);
+	init_completion(&mos_parport->syncmsg_compl);
+
+	/* cycle parallel port reset bit */
+@@ -1869,8 +1712,6 @@ static void mos7720_release(struct usb_serial *serial)
+
+	if (le16_to_cpu(serial->dev->descriptor.idProduct)
+	    == MOSCHIP_DEVICE_ID_7715) {
+-		struct urbtracker *urbtrack;
+-		unsigned long flags;
+		struct mos7715_parport *mos_parport =
+			usb_get_serial_data(serial);
+
+@@ -1883,21 +1724,17 @@ static void mos7720_release(struct usb_serial *serial)
+		if (mos_parport->msg_pending)
+			wait_for_completion_timeout(&mos_parport->syncmsg_compl,
+					    msecs_to_jiffies(MOS_WDR_TIMEOUT));
++		/*
++		 * If delayed work is currently scheduled, wait for it to
++		 * complete. This also implies barriers that ensure the
++		 * below serial clearing is not hoisted above the ->work.
++		 */
++		cancel_work_sync(&mos_parport->work);
+
+		parport_remove_port(mos_parport->pp);
+		usb_set_serial_data(serial, NULL);
+		mos_parport->serial = NULL;
+
+-		/* if tasklet currently scheduled, wait for it to complete */
+-		tasklet_kill(&mos_parport->urb_tasklet);
+-
+-		/* unlink any urbs sent by the tasklet  */
+-		spin_lock_irqsave(&mos_parport->listlock, flags);
+-		list_for_each_entry(urbtrack,
+-				    &mos_parport->active_urbs,
+-				    urblist_entry)
+-			usb_unlink_urb(urbtrack->urb);
+-		spin_unlock_irqrestore(&mos_parport->listlock, flags);
+		parport_del_port(mos_parport->pp);
+
+		kref_put(&mos_parport->ref_count, destroy_mos_parport);
+--
+2.26.2
