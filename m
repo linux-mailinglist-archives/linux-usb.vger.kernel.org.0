@@ -2,59 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E42F62B2CA7
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Nov 2020 11:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A733B2B2D2C
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Nov 2020 13:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbgKNKUU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 Nov 2020 05:20:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39370 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726513AbgKNKUU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 14 Nov 2020 05:20:20 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B6B9A22252;
-        Sat, 14 Nov 2020 10:20:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605349219;
-        bh=r/on8D/3kby+cVwMFfYApSg52129KT3+E809/9HlpNk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZCmC4U94EyC9rtYAaOE281MwQxxTMelkL8TrYoltm3nJ6XT2vPx9q5kDr9DXynE9A
-         9ZAiM+s/AcOAJpUVePo/DLg44eFCLDpLzZAnbD6gR3xElQG6TY2B4q+WZa4gpq7JS4
-         N1n8BTl6P87si/knp3Kaiu2I1cIfPO/5Ctpb5fNA=
-Date:   Sat, 14 Nov 2020 11:21:13 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-usb@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] usb: Remove RUN_CONTEXT
-Message-ID: <X6+vme6z6dpV8r2V@kroah.com>
-References: <20201113212704.2243807-1-bigeasy@linutronix.de>
- <X68NBdTy2F/IeZ2Y@kroah.com>
- <20201114100856.ncwcel2zd76n7ocv@linutronix.de>
+        id S1726756AbgKNMnB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Nov 2020 07:43:01 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:51275 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726307AbgKNMnA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Nov 2020 07:43:00 -0500
+Received: by mail-wm1-f67.google.com with SMTP id 19so18318321wmf.1;
+        Sat, 14 Nov 2020 04:42:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cdrvsLUz/w0ysSu+S5S32Vims6n1V9dJUKCYLfM1QfE=;
+        b=S+BcjaG1/CmWL6pdVR5Zou7CaX2Nf8SvtxebIqeV+Z30vn8TcFn5rWG811OiIxVere
+         7mS9d/ZJr3qkBjNrVMaXoW4ShN12b8HIQ8de36wA11wIltO9CL1lh2QrS08XIqAFLu6i
+         97pJptnymudvXdRpZypAu7OZRspBCZ6HWndCxrvludYALiruZeMMXGTuEwiNvrJ8cuiT
+         UPQjkPqkeitsmMb0jz7BZsiAIlJ2E2yLx6+KGrPQISE7fzSMAqNpnw1/uuFz4yZZW7iz
+         ZyrQa7IxqGhJnVnEovRAwkhuHxuJH4ZUvjCWAhhiCxRp+IQi/l1NIt9EZBwvCd8g8FsK
+         9iRw==
+X-Gm-Message-State: AOAM533BySLYxEed4WVVAM9BJyp7ogGHtz1BizsFo/RtiqAAjfUBERPy
+        GW+uPaeTptHMIdUV3ylZ4r0=
+X-Google-Smtp-Source: ABdhPJzVcELzWKFmlso1HdyGZEs/y8xKYIFVGOXgqzfDXLGr8nQHKXf/i6LWAcSHaFA8EcYhX/wzLA==
+X-Received: by 2002:a1c:2041:: with SMTP id g62mr7003249wmg.118.1605357778758;
+        Sat, 14 Nov 2020 04:42:58 -0800 (PST)
+Received: from archtower.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
+        by smtp.gmail.com with ESMTPSA id o197sm12964945wme.17.2020.11.14.04.42.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Nov 2020 04:42:58 -0800 (PST)
+From:   Lucas Tanure <tanure@linux.com>
+To:     Bastien Nocera <hadess@hadess.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lucas Tanure <tanure@linux.com>
+Subject: [PATCH] USB: apple-mfi-fastcharge: Use devm_kzalloc and simplify the code
+Date:   Sat, 14 Nov 2020 12:42:49 +0000
+Message-Id: <20201114124249.634234-1-tanure@linux.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201114100856.ncwcel2zd76n7ocv@linutronix.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Nov 14, 2020 at 11:08:56AM +0100, Sebastian Andrzej Siewior wrote:
-> On 2020-11-13 23:47:33 [+0100], Greg Kroah-Hartman wrote:
-> > On Fri, Nov 13, 2020 at 10:27:04PM +0100, Sebastian Andrzej Siewior wrote:
-> > > The last user of RUN_CONTEXT was removed in commit
-> > >    97c17beb3b668 ("[PATCH] ehci-hcd (1/2):  portability (2.4), tasklet,")
-> > 
-> > I don't see that git commit id in Linus's tree, nor in my usb.git tree.
-> > Where does it live?
-> 
-> As a archaeologist I have the history trees linked in my tree. This is
-> from:
->    https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=97c17beb3b668c79ef5d056b3f687aa0be2d672f
+Signed-off-by: Lucas Tanure <tanure@linux.com>
+---
+ drivers/usb/misc/apple-mfi-fastcharge.c | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
 
-Oh wow, didn't think to look back past 15 years :)
+diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c b/drivers/usb/misc/apple-mfi-fastcharge.c
+index 9de0171b5177..de86e389a008 100644
+--- a/drivers/usb/misc/apple-mfi-fastcharge.c
++++ b/drivers/usb/misc/apple-mfi-fastcharge.c
+@@ -178,16 +178,13 @@ static int mfi_fc_probe(struct usb_device *udev)
+ {
+ 	struct power_supply_config battery_cfg = {};
+ 	struct mfi_device *mfi = NULL;
+-	int err;
+ 
+ 	if (!mfi_fc_match(udev))
+ 		return -ENODEV;
+ 
+-	mfi = kzalloc(sizeof(struct mfi_device), GFP_KERNEL);
+-	if (!mfi) {
+-		err = -ENOMEM;
+-		goto error;
+-	}
++	mfi = devm_kzalloc(&udev->dev, sizeof(*mfi), GFP_KERNEL);
++	if (!mfi)
++		return -ENOMEM;
+ 
+ 	battery_cfg.drv_data = mfi;
+ 
+@@ -197,8 +194,7 @@ static int mfi_fc_probe(struct usb_device *udev)
+ 						&battery_cfg);
+ 	if (IS_ERR(mfi->battery)) {
+ 		dev_err(&udev->dev, "Can't register battery\n");
+-		err = PTR_ERR(mfi->battery);
+-		goto error;
++		return PTR_ERR(mfi->battery);
+ 	}
+ 
+ 	mfi->udev = usb_get_dev(udev);
+@@ -206,9 +202,6 @@ static int mfi_fc_probe(struct usb_device *udev)
+ 
+ 	return 0;
+ 
+-error:
+-	kfree(mfi);
+-	return err;
+ }
+ 
+ static void mfi_fc_disconnect(struct usb_device *udev)
+@@ -220,7 +213,7 @@ static void mfi_fc_disconnect(struct usb_device *udev)
+ 		power_supply_unregister(mfi->battery);
+ 	dev_set_drvdata(&udev->dev, NULL);
+ 	usb_put_dev(mfi->udev);
+-	kfree(mfi);
++	devm_kfree(&udev->dev, mfi);
+ }
+ 
+ static struct usb_device_driver mfi_fc_driver = {
+-- 
+2.29.2
 
-I'll go queue this up, thanks.
-
-greg k-h
