@@ -2,252 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 684252B5015
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 19:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7A12B5214
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 21:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728052AbgKPSnz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 13:43:55 -0500
-Received: from p3nlsmtpcp01-04.prod.phx3.secureserver.net ([184.168.200.145]:34424
-        "EHLO p3nlsmtpcp01-04.prod.phx3.secureserver.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727391AbgKPSnz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Nov 2020 13:43:55 -0500
-Received: from p3plcpnl0564.prod.phx3.secureserver.net ([50.62.176.91])
-        by : HOSTING RELAY : with ESMTP
-        id ejSnktadQt9bCejSnkHSSV; Mon, 16 Nov 2020 11:42:53 -0700
-X-CMAE-Analysis: v=2.4 cv=RJ12o6u+ c=1 sm=1 tr=0 ts=5fb2c82d
- a=enoWsqFKhXaBs5BDtsbzsA==:117 a=dhrM4QDckVN49Kxx3K61fg==:17
- a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=IkcTkHD0fZMA:10 a=nNwsprhYR40A:10
- a=3vGk7YgEQgiX6p95JxQA:9 a=OtOXIhoYnLR8EhRJ:21 a=Nz1XyxlhXoG7-vUs:21
- a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: a1@tripolho.com
-Received: from pool-96-242-17-244.nwrknj.fios.verizon.net ([96.242.17.244]:41874 helo=[192.168.62.65])
-        by p3plcpnl0564.prod.phx3.secureserver.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <22t@tripolho.com>)
-        id 1kejSm-0036IO-TQ; Mon, 16 Nov 2020 11:42:53 -0700
-Subject: Re: kernel locks due to USB I/O
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-References: <9428ae70-887e-b48b-f31c-f95d58f67c61@tripolho.com>
- <20201110205114.GB204624@rowland.harvard.edu>
- <8152190e-c962-e376-64fd-cc2ebf3e6104@tripolho.com>
- <20201111155130.GB237113@rowland.harvard.edu>
- <9687fac9-94de-50a3-f88e-b7e05d660aba@tripolho.com>
- <20201116170625.GC436089@rowland.harvard.edu>
-From:   Alberto Sentieri <22t@tripolho.com>
-Message-ID: <1e58c6f4-c651-b45a-b0fc-7bee40fe61cb@tripolho.com>
-Date:   Mon, 16 Nov 2020 13:42:46 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        id S1732038AbgKPUMC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 15:12:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728438AbgKPUMB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 15:12:01 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68C2C0613CF
+        for <linux-usb@vger.kernel.org>; Mon, 16 Nov 2020 12:12:01 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id i8so1488616pfk.10
+        for <linux-usb@vger.kernel.org>; Mon, 16 Nov 2020 12:12:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HITzTjgTL+ns/6ovuW41Vsq2GdzLFmOErnmQRXkbgUg=;
+        b=n7jAlUVsg4U4IvNEQPQKvDPUVSbq0c/UWeoKLRYp06Pt8qYTyGwCR1ETEUy8IuCqJO
+         3SEZ37HJ8d5zbaf3SnReG9dFgFsoH+ywbtARtGRYKId+Qrn9VZ/rLeHV3iXxDYAn2cfv
+         qAgYGsidd0NGvSruikCq2UMsnp+NPoWxyi41I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HITzTjgTL+ns/6ovuW41Vsq2GdzLFmOErnmQRXkbgUg=;
+        b=E53y/y6qTwxuzTx6Qh6a0y0ScS8rQBteuX7hapXsk0vNYtk1JKwzgH/bAuSBdA1qIe
+         g8F9PzoCbUWWLXM7oTK5en/zcEVq/pU9Fczq4n4TgXZeD8xBwn7eOhmW1uBJOBvWHmog
+         GwJu8OTK7wyZgzFVhBPZ7VCBHlEjDz/nIucv/2eluoCtE8XLi2l/3hPQ0CygIiKRiW+n
+         VpW8OEwnOwWN+eevHikouHPFapRrWQfQc7nQuow/ElUKHk0P6v9NxSvGaRobbOajxUrO
+         XvLva5qrsiPH8/nYCG2zuRXd1dcikLIuwN5l/zEWQas9muc2+6nbJLI2q5mc9HXBuFfx
+         BVJw==
+X-Gm-Message-State: AOAM530socsJTEo1If/6McLNhq3AXS15t5z1VVGYw/lBaSySPJdeD8kh
+        iGXP+yg8EpOLunOjWSzE31GoI/QR+V8I4g==
+X-Google-Smtp-Source: ABdhPJwL5MhwEOkkQqa/mJGhE/geuKqPyxMIqajClVinDTtN5wZYnM+ZTfW60Q+YOFFkAZwPs5W3TA==
+X-Received: by 2002:a17:90a:fed:: with SMTP id 100mr638868pjz.65.1605557521165;
+        Mon, 16 Nov 2020 12:12:01 -0800 (PST)
+Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id a12sm234577pjh.48.2020.11.16.12.12.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2020 12:12:00 -0800 (PST)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        enric.balletbo@collabora.com
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: [PATCH v3 00/11] chrome/platform: cros_ec_typec: Register cables, partner altmodes and plug altmodes
+Date:   Mon, 16 Nov 2020 12:11:36 -0800
+Message-Id: <20201116201150.2919178-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.29.2.299.gdc1121823c-goog
 MIME-Version: 1.0
-In-Reply-To: <20201116170625.GC436089@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - p3plcpnl0564.prod.phx3.secureserver.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - tripolho.com
-X-Get-Message-Sender-Via: p3plcpnl0564.prod.phx3.secureserver.net: authenticated_id: a1@tripolho.com
-X-Authenticated-Sender: p3plcpnl0564.prod.phx3.secureserver.net: a1@tripolho.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-CMAE-Envelope: MS4xfGJ+WJIzGnZIi14HmAN3t/LzrpYBoztOd7wcut+Zfug87PvN7ubUfPbjWTEu3yzmzTGSCYW1NBN3SMpkfQyy390msHGK5gfoGWXGwScFvK90tCVCfqe7
- giyBXA+aTCmkM+ECaybA3JV2VCwN3TqAdM8/9kPh5ePG2KhpFM3VXKnhU3Yc6I8C4n8W4Q8oEts9fhH3vR5i5O8G7ENz1hExWdZeI5TS17GWXsSBwzo7rOry
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Alan,
+This patch series adds support for the following bits of functionality,
+parsing USB Type C Power Delivery information from the Chrome Embedded Controller
+and using the Type C connector class:
+- Register cable objects (including plug type).
+- Register "number of altmodes" attribute for partners.
+- Register altmodes and "number of altmodes" attribute for cable plugs.
 
-I am not sure if that would give you any clue, but I enabled usbfs_snoop 
-in the kernel and I got URB error -108 (endpoint shutdown) just before 
-the kernel lock.
+The functionality was earlier part of multiple series ([1], [2], [3]), but
+I've combined it into 1 series and re-ordered the patches to hopefully make
+it easier to peruse. I've maintained the patch Acked-by/Reviewed-by tags where
+they were received.
 
-Just after starting the program, I got something like that:
+Patches 1/11, 2/11, 3/11 introduce the changes needed in the USB subsystem (PD VDO
+header update, sysfs attribute additions) and hence the first three patches
+can go through Greg's tree.
+The others are users of the newly introduced USB changes and can go through
+the chrome-platform tree.
 
-[  174.325977] usb 1-1.1.1: opened by process 2961: ate
-[  174.326006] usb 1-1.1.1: usbdev_do_ioctl: GETDRIVER
-[  174.326015] usb 1-1.1.1: usbdev_do_ioctl: IOCTL
-[  174.326334] usb 1-1.1.1: usbdev_do_ioctl: CLAIMINTERFACE
-[  174.326371] usb 1-1.1.1: usbdev_do_ioctl: SETINTERFACE
-[  174.326582] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326592] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326617] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326623] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326629] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326635] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326640] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326645] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326652] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326657] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326663] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326668] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326674] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326679] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326685] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326691] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326696] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326702] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326708] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326713] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326718] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326723] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326729] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326734] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326740] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326745] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326751] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326756] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326762] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326767] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.326773] usb 1-1.1.1: usbdev_do_ioctl: SUBMITURB
-[  174.326783] usb 1-1.1.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.327565] usb 1-1.3.1: opened by process 2961: ate
-[  174.327584] usb 1-1.3.1: usbdev_do_ioctl: GETDRIVER
-[  174.327593] usb 1-1.3.1: usbdev_do_ioctl: IOCTL
-[  174.327855] usb 1-1.3.1: usbdev_do_ioctl: CLAIMINTERFACE
-[  174.327881] usb 1-1.3.1: usbdev_do_ioctl: SETINTERFACE
-[  174.328180] usb 1-1.3.1: usbdev_do_ioctl: SUBMITURB
-[  174.328188] usb 1-1.3.1: userurb 0000000000000000, ep1 int-in, length 64
-[  174.328205] usb 1-1.3.1: usbdev_do_ioctl: SUBMITURB
+Of course, the above is only a suggestion, so I'd be happy to follow
+another means of integrating the patches if available.
 
+The series is based on the following git branch and commit
+Branch: chrome-platform for-next [4]
+Commit: de0f49487db3 ("platform/chrome: cros_ec_typec: Register partner altmodes")
 
-During the program execution, I got many lines like that:
+For reference, the patches in this series which are yet to be reviewed are
+Patch 3/11, Patch 10/11 and Patch 11/11.
 
-[  178.537958] usb 1-1.4.1: urb complete
-[  178.537975] usb 1-1.4.1: userurb         pK-error, ep1 int-out, 
-actual_length 64 status 0
-[  178.538000] usb 1-1.2.1: urb complete
-[  178.538006] usb 1-1.2.1: userurb         pK-error, ep1 int-out, 
-actual_length 64 status 0
+Version history:
+- No v2 or v1, as mentioned earlier these patches were uploaded as separate
+  series [1], [2] and [3] but have now been coalesced.
 
-I am not sure if pK-error has a special meaning there.
+[1]:
+https://lore.kernel.org/lkml/20201106184104.939284-1-pmalani@chromium.org/
+[2]:
+https://lore.kernel.org/lkml/20201110061535.2163599-1-pmalani@chromium.org/
+[3]:
+https://lore.kernel.org/linux-usb/20201112012329.1364975-1-pmalani@chromium.org/
+[4]:
+https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/log/?h=for-next
 
-However, just before the lock, I got this sequence:
+Prashant Malani (11):
+  usb: pd: Add captive Type C cable type
+  usb: typec: Add number of altmodes partner attr
+  usb: typec: Add plug num_altmodes sysfs attr
+  platform/chrome: cros_ec_typec: Make disc_done flag partner-only
+  platform/chrome: cros_ec_typec: Factor out PD identity parsing
+  platform/chrome: cros_ec_typec: Rename discovery struct
+  platform/chrome: cros_ec_typec: Register cable
+  platform/chrome: cros_ec_typec: Store cable plug type
+  platform/chrome: cros_ec_typec: Set partner num_altmodes
+  platform/chrome: cros_ec_typec: Register SOP' cable plug
+  platform/chrome: cros_ec_typec: Register plug altmodes
 
-[  387.326795] usb 1-1.5.3.1: usbdev_do_ioctl: SUBMITURB
-[  387.326801] usb 1-1.5.3.1: userurb 0000000000000000, ep1 int-in, 
-length 64
-[  387.327531] usb 1-1.5.3.1: urb complete
-[  387.327539] usb 1-1.5.3.1: userurb         pK-error, ep1 int-out, 
-actual_length 64 status 0
-[  387.327582] usb 1-1.5.3.1: usbdev_do_ioctl: REAPURBNDELAY
-[  387.327590] usb 1-1.5.3.1: reap 0000000000000000
-[  387.327598] usb 1-1.5.3.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.109400] usb 3-1.5.7.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.110032] usb 3-1.6.7.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.110169] usb 3-1.5.5.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.110605] usb 3-1.6.5.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.111394] usb 3-1.1.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.403278] usb 3-1.6.4.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.404011] usb 3-1.5.1.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.404344] usb 3-1.6.3.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.404649] usb 3-1.4.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.404790] usb 3-1.3.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.405283] usb 3-1.5.3.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.407828] usb 3-1.6.1.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.408771] usb 3-1.5.4.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.409155] usb 3-1.5.2.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.409452] usb 3-1.5.6.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.409743] usb 3-1.6.6.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.409848] usb 3-1.2.1: usbdev_do_ioctl: REAPURBNDELAY
-[  388.410840] usb 3-1.6.2.1: usbdev_do_ioctl: REAPURBNDELAY
-[  389.612597] usb 3-1.5.7.1: opened by process 2961: ate
-[  389.612622] usb 3-1.5.7.1: usbdev_do_ioctl: GETDRIVER
-[  389.612631] usb 3-1.5.7.1: usbdev_do_ioctl: IOCTL
-[  389.614965] usb 3-1.5.7.1: urb complete
-[  389.614981] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.614989] usb 3-1.5.7.1: urb complete
-[  389.614994] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.614999] usb 3-1.5.7.1: urb complete
-[  389.615003] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615008] usb 3-1.5.7.1: urb complete
-[  389.615013] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615018] usb 3-1.5.7.1: urb complete
-[  389.615022] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615027] usb 3-1.5.7.1: urb complete
-[  389.615032] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615037] usb 3-1.5.7.1: urb complete
-[  389.615042] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615047] usb 3-1.5.7.1: urb complete
-[  389.615051] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615056] usb 3-1.5.7.1: urb complete
-[  389.615060] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615065] usb 3-1.5.7.1: urb complete
-[  389.615070] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615074] usb 3-1.5.7.1: urb complete
-[  389.615079] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615084] usb 3-1.5.7.1: urb complete
-[  389.615089] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615094] usb 3-1.5.7.1: urb complete
-[  389.615098] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615103] usb 3-1.5.7.1: urb complete
-[  389.615108] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615112] usb 3-1.5.7.1: urb complete
-[  389.615117] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.615121] usb 3-1.5.7.1: urb complete
-[  389.615126] usb 3-1.5.7.1: userurb         pK-error, ep1 int-in, 
-actual_length 0 status -108
-[  389.616823] usb 3-1.5.7.1: urb complete
-[  389.616839] usb 3-1.5.7.1: userurb         pK-error, ep1 int-out, 
-actual_length 0 status -108
-[  389.616926] usb 3-1.5.7.1: usbdev_do_ioctl: CLAIMINTERFACE
-[  389.616964] usb 3-1.5.7.1: usbdev_do_ioctl: SETINTERFACE
+ Documentation/ABI/testing/sysfs-class-typec |  17 ++
+ drivers/platform/chrome/cros_ec_typec.c     | 219 ++++++++++++++++----
+ drivers/usb/typec/class.c                   | 139 ++++++++++++-
+ include/linux/usb/pd_vdo.h                  |   4 +-
+ include/linux/usb/typec.h                   |   2 +
+ 5 files changed, 343 insertions(+), 38 deletions(-)
 
-As you can see, it locked in 215 seconds, in this test. Do you see 
-anything special in this sequence?
+-- 
+2.29.2.299.gdc1121823c-goog
 
-
-Thanks,
-
-
-Alberto Sentieri
-
-
-On 11/16/20 12:06 PM, Alan Stern wrote:
-> On Mon, Nov 16, 2020 at 11:53:38AM -0500, Alberto Sentieri wrote:
->> The objective of this email is to report the current status of my findings.
->>
->> I loaded netconsole on both machines I was having problems with. I tried 3
->> times on the machine with kernel 5.0.0-37 and twice with on the machine with
->> kernel 5.3.0-62. Each attempt consisted of running the program which lock
->> the kernel until it locked (about 3 minutes after stating the program). The
->> referred program had the "semphore code" commented out. Nothing was sent to
->> netconsole on all the 5 attempts I made when the kernel locked.
->>
->> Just to be clear about my use of netconsole, before loading the netconsole
->> kernel module, I ran "dmesg -n 8". When netconsole module was loaded I could
->> clearly see about 9 message lines on the computer receiving the netconsole
->> messages telling me that netconsole was loaded (and how it was configured),
->> so no doubts about the correct netconsole setup. The "netconsole server" was
->> a machine on the same local network.
->>
->> My next attempt will be to compile kernel 5.9, as you suggest, and try it.
-> While this may not generate any useful information, one way to create a
-> bunch of log output while running your test is to set the usbfs_snoop
-> module parameter for usbcore to true.
->
-> You can also enable dynamic debugging for usbcore, although in a stable
-> environment like yours it probably won't produce much output.
->
-> Alan Stern
