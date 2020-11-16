@@ -2,252 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DB52B5373
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 22:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E27CF2B54A6
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 23:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731003AbgKPVKP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 16:10:15 -0500
-Received: from mga09.intel.com ([134.134.136.24]:20947 "EHLO mga09.intel.com"
+        id S1728269AbgKPWyJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 17:54:09 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36744 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727861AbgKPVKP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Nov 2020 16:10:15 -0500
-IronPort-SDR: N+maxO3qzZLw5DXddH5FbyQPnspmhiQb1Kdr99SxBd77xw21MOquJaoOhg+hLHTc4GT7+PQUxg
- JehwgJIXq1mw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="170987036"
-X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
-   d="scan'208";a="170987036"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 13:10:08 -0800
-IronPort-SDR: +7JSnBtEKIw+8b0ym5hMcOQ4bvWlkgNcvnP9drczAjO8tudZ1c89x1uzHaAxc2atzsjkcNYgt9
- EgLOjuMRls+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
-   d="scan'208";a="358611616"
-Received: from lkp-server01.sh.intel.com (HELO fb398427a497) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Nov 2020 13:10:05 -0800
-Received: from kbuild by fb398427a497 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kellE-0000DB-Uh; Mon, 16 Nov 2020 21:10:04 +0000
-Date:   Tue, 17 Nov 2020 05:09:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 24880a87042b3032a6ac04d79cb51892c5a7901d
-Message-ID: <5fb2ea91.pn1cHR3IfssyQrWx%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725379AbgKPWyJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Nov 2020 17:54:09 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 61900ACC5;
+        Mon, 16 Nov 2020 22:54:07 +0000 (UTC)
+Date:   Mon, 16 Nov 2020 14:31:02 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [PATCH] USB: serial: mos7720: defer state restore to a workqueue
+Message-ID: <20201116223102.eliwt7uh5rkiiq5h@linux-p48b.lan>
+References: <20201102211450.5722-1-dave@stgolabs.net>
+ <20201103204014.3ue37owcras6cx7p@linux-p48b.lan>
+ <20201104110657.GW4085@localhost>
+ <20201104162534.GY4085@localhost>
+ <20201105001307.lelve65nif344cfs@linux-p48b.lan>
+ <20201105082540.GA4085@localhost>
+ <20201106061713.lgghl4xnvdmkvges@linux-p48b.lan>
+ <20201113091443.GI4085@localhost>
+ <20201114042725.ofs7zbzmxg32tbbi@linux-p48b.lan>
+ <X7KyPrY8FDH4C/gm@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <X7KyPrY8FDH4C/gm@localhost>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: 24880a87042b3032a6ac04d79cb51892c5a7901d  usb: typec: qcom-pmic-typec: fix builtin build errors
+On Mon, 16 Nov 2020, Johan Hovold wrote:
 
-elapsed time: 725m
+>On Fri, Nov 13, 2020 at 08:27:25PM -0800, Davidlohr Bueso wrote:
+>> @@ -1883,21 +1724,17 @@ static void mos7720_release(struct usb_serial *serial)
+>>		if (mos_parport->msg_pending)
+>>			wait_for_completion_timeout(&mos_parport->syncmsg_compl,
+>>					    msecs_to_jiffies(MOS_WDR_TIMEOUT));
+>> +		/*
+>> +		 * If delayed work is currently scheduled, wait for it to
+>> +		 * complete. This also implies barriers that ensure the
+>> +		 * below serial clearing is not hoisted above the ->work.
+>> +		 */
+>> +		cancel_work_sync(&mos_parport->work);
+>
+>As I mentioned, this needs to be done *after* deregistering the port or
+>you could theoretically end up with the work item being requeued.
 
-configs tested: 188
-configs skipped: 2
+Hmm sorry yes I forgot to mention this. I was counting on the private_data
+already being null to prevent any new work being actually scheduled, so an
+incoming restore state, for example, would be a nop.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>
+>Yes, the same applies for the "synchronous" requests, but that's a
+>preexisting issue.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                   sh7770_generic_defconfig
-powerpc                       eiger_defconfig
-powerpc                     tqm8548_defconfig
-sh                        sh7757lcr_defconfig
-s390                                defconfig
-arm                         lpc32xx_defconfig
-mips                            e55_defconfig
-openrisc                 simple_smp_defconfig
-sh                          rsk7203_defconfig
-arm                       netwinder_defconfig
-arm                     am200epdkit_defconfig
-mips                           gcw0_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                     mpc512x_defconfig
-sh                        sh7785lcr_defconfig
-arm                        oxnas_v6_defconfig
-mips                           ip27_defconfig
-sh                          r7780mp_defconfig
-s390                             alldefconfig
-powerpc                      pmac32_defconfig
-arc                        nsimosci_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                       mainstone_defconfig
-um                           x86_64_defconfig
-arm                        magician_defconfig
-m68k                        m5272c3_defconfig
-arm                        spear3xx_defconfig
-arm                         shannon_defconfig
-sh                 kfr2r09-romimage_defconfig
-arm                          iop32x_defconfig
-sh                           sh2007_defconfig
-sh                      rts7751r2d1_defconfig
-riscv                    nommu_k210_defconfig
-arm                     eseries_pxa_defconfig
-mips                      malta_kvm_defconfig
-m68k                         amcore_defconfig
-arm                           viper_defconfig
-ia64                          tiger_defconfig
-mips                       capcella_defconfig
-mips                        nlm_xlr_defconfig
-sh                        dreamcast_defconfig
-arm                        shmobile_defconfig
-openrisc                            defconfig
-sh                         microdev_defconfig
-sh                             espt_defconfig
-powerpc                     tqm8555_defconfig
-arc                          axs101_defconfig
-powerpc                     ep8248e_defconfig
-m68k                             allmodconfig
-powerpc                     sbc8548_defconfig
-openrisc                         alldefconfig
-powerpc                      cm5200_defconfig
-mips                          malta_defconfig
-microblaze                          defconfig
-nds32                            alldefconfig
-powerpc                      ppc40x_defconfig
-arm                          badge4_defconfig
-um                            kunit_defconfig
-powerpc               mpc834x_itxgp_defconfig
-mips                           xway_defconfig
-riscv                             allnoconfig
-alpha                               defconfig
-m68k                          hp300_defconfig
-arm                          gemini_defconfig
-arm                      tct_hammer_defconfig
-mips                        bcm47xx_defconfig
-powerpc                      walnut_defconfig
-alpha                            allyesconfig
-h8300                               defconfig
-mips                     cu1830-neo_defconfig
-mips                            gpr_defconfig
-powerpc                        icon_defconfig
-sh                           se7721_defconfig
-arm                            zeus_defconfig
-sh                               alldefconfig
-arm                           h3600_defconfig
-arm                        neponset_defconfig
-xtensa                  nommu_kc705_defconfig
-sh                         ap325rxa_defconfig
-arm                        mvebu_v7_defconfig
-ia64                            zx1_defconfig
-i386                             allyesconfig
-powerpc                     pq2fads_defconfig
-mips                        jmr3927_defconfig
-xtensa                  audio_kc705_defconfig
-arm                        vexpress_defconfig
-sh                          kfr2r09_defconfig
-arm                       multi_v4t_defconfig
-arm                          ixp4xx_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                     powernv_defconfig
-arm                            mmp2_defconfig
-arm                       cns3420vb_defconfig
-ia64                      gensparse_defconfig
-powerpc                      chrp32_defconfig
-arm                          moxart_defconfig
-powerpc                      arches_defconfig
-sh                          lboxre2_defconfig
-powerpc                    amigaone_defconfig
-sh                           se7724_defconfig
-arc                    vdk_hs38_smp_defconfig
-mips                        bcm63xx_defconfig
-powerpc                 mpc8272_ads_defconfig
-m68k                       m5249evb_defconfig
-m68k                          sun3x_defconfig
-arm                          collie_defconfig
-s390                          debug_defconfig
-powerpc                 xes_mpc85xx_defconfig
-ia64                         bigsur_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20201116
-x86_64               randconfig-a005-20201116
-x86_64               randconfig-a004-20201116
-x86_64               randconfig-a002-20201116
-x86_64               randconfig-a001-20201116
-x86_64               randconfig-a006-20201116
-i386                 randconfig-a006-20201116
-i386                 randconfig-a005-20201116
-i386                 randconfig-a001-20201116
-i386                 randconfig-a002-20201116
-i386                 randconfig-a004-20201116
-i386                 randconfig-a003-20201116
-i386                 randconfig-a012-20201116
-i386                 randconfig-a014-20201116
-i386                 randconfig-a016-20201116
-i386                 randconfig-a011-20201116
-i386                 randconfig-a015-20201116
-i386                 randconfig-a013-20201116
-i386                 randconfig-a012-20201115
-i386                 randconfig-a014-20201115
-i386                 randconfig-a016-20201115
-i386                 randconfig-a011-20201115
-i386                 randconfig-a015-20201115
-i386                 randconfig-a013-20201115
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Per the above I also assumed sync requests were also safe as is.
 
-clang tested configs:
-x86_64               randconfig-a003-20201115
-x86_64               randconfig-a005-20201115
-x86_64               randconfig-a004-20201115
-x86_64               randconfig-a002-20201115
-x86_64               randconfig-a001-20201115
-x86_64               randconfig-a006-20201115
-x86_64               randconfig-a015-20201116
-x86_64               randconfig-a011-20201116
-x86_64               randconfig-a014-20201116
-x86_64               randconfig-a013-20201116
-x86_64               randconfig-a016-20201116
-x86_64               randconfig-a012-20201116
+But I can certainly re-order things, how about:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+mos7720_release():
+    mos_parport->pp->private_data = NULL;
+    parport_remove_port(mos_parport->pp);
+
+    wait_for_completion_timeout();
+    cancel_work_sync();
+
+    usb_set_serial_data(serial, NULL);
+    mos_parport->serial = NULL;
+
+    parport_del_port(mos_parport->pp);
+    kref_put();
+
+Thanks,
+Davidlohr
