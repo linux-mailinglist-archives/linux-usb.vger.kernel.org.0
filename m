@@ -2,87 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C232B3EA6
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 09:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3D42B3EC2
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 09:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726487AbgKPI33 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 03:29:29 -0500
-Received: from mga07.intel.com ([134.134.136.100]:43396 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726172AbgKPI33 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Nov 2020 03:29:29 -0500
-IronPort-SDR: 2YHY0o7ecBVHR6ooseAXfg7aQpoyN8r0o5hwdCmOk1EEKanSVdy0a9vNqJf+UiZZaQYMUcKs9C
- CZU6eESZYXFQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9806"; a="234870221"
-X-IronPort-AV: E=Sophos;i="5.77,482,1596524400"; 
-   d="scan'208";a="234870221"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 00:29:27 -0800
-IronPort-SDR: ODRF0kv+gdWqUeDMdgSOymqjdHmPsEyLkhukYWmwpZWu0iqWTKoJFfyI7TMIT6QRdnYQLlL5tk
- it/yg7m0HYRw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,482,1596524400"; 
-   d="scan'208";a="430101055"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 16 Nov 2020 00:29:25 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 16 Nov 2020 10:29:24 +0200
-Date:   Mon, 16 Nov 2020 10:29:24 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-usb@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] usb: typec: qcom-pmic-typec: fix builtin build errors
-Message-ID: <20201116082924.GA3124021@kuha.fi.intel.com>
-References: <20201116040653.7943-1-rdunlap@infradead.org>
+        id S1727463AbgKPIeY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 03:34:24 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7246 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727384AbgKPIeY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 03:34:24 -0500
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CZMmq2rB3zkY8s;
+        Mon, 16 Nov 2020 16:34:03 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 16 Nov 2020 16:34:15 +0800
+From:   Tian Tao <tiantao6@hisilicon.com>
+To:     <chunfeng.yun@mediatek.com>, <gregkh@linuxfoundation.org>,
+        <matthias.bgg@gmail.com>
+CC:     <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] usb: mtu3: replace spin_lock_irqsave by spin_lock in hard IRQ
+Date:   Mon, 16 Nov 2020 16:34:42 +0800
+Message-ID: <1605515682-23771-1-git-send-email-tiantao6@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201116040653.7943-1-rdunlap@infradead.org>
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Nov 15, 2020 at 08:06:53PM -0800, Randy Dunlap wrote:
-> Fix build errors when CONFIG_TYPEC_QCOM_PMIC=y and
-> CONFIG_USB_ROLE_SWITCH=m by limiting the former to =m when
-> USB_ROLE_SWITCH also =m.
-> 
-> powerpc64-linux-ld: drivers/usb/typec/qcom-pmic-typec.o: in function `.qcom_pmic_typec_remove':
-> qcom-pmic-typec.c:(.text+0x28): undefined reference to `.usb_role_switch_set_role'
-> powerpc64-linux-ld: qcom-pmic-typec.c:(.text+0x64): undefined reference to `.usb_role_switch_put'
-> powerpc64-linux-ld: drivers/usb/typec/qcom-pmic-typec.o: in function `.qcom_pmic_typec_check_connection':
-> qcom-pmic-typec.c:(.text+0x120): undefined reference to `.usb_role_switch_set_role'
-> powerpc64-linux-ld: drivers/usb/typec/qcom-pmic-typec.o: in function `.qcom_pmic_typec_probe':
-> qcom-pmic-typec.c:(.text+0x360): undefined reference to `.fwnode_usb_role_switch_get'
-> powerpc64-linux-ld: qcom-pmic-typec.c:(.text+0x4e4): undefined reference to `.usb_role_switch_put'
-> 
-> Fixes: 6c8cf3695176 ("usb: typec: Add QCOM PMIC typec detection driver")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: Wesley Cheng <wcheng@codeaurora.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The code has been in a irq-disabled context since it is hard IRQ. There
+is no necessity to do it again.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+---
+ drivers/usb/mtu3/mtu3_core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> ---
->  drivers/usb/typec/Kconfig |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> --- linux-next-20201113.orig/drivers/usb/typec/Kconfig
-> +++ linux-next-20201113/drivers/usb/typec/Kconfig
-> @@ -88,6 +88,7 @@ config TYPEC_STUSB160X
->  config TYPEC_QCOM_PMIC
->  	tristate "Qualcomm PMIC USB Type-C driver"
->  	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
->  	help
->  	  Driver for supporting role switch over the Qualcomm PMIC.  This will
->  	  handle the USB Type-C role and orientation detection reported by the
-
+diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
+index b3b4599..a6d7684 100644
+--- a/drivers/usb/mtu3/mtu3_core.c
++++ b/drivers/usb/mtu3/mtu3_core.c
+@@ -745,10 +745,9 @@ static irqreturn_t mtu3_u2_common_isr(struct mtu3 *mtu)
+ static irqreturn_t mtu3_irq(int irq, void *data)
+ {
+ 	struct mtu3 *mtu = (struct mtu3 *)data;
+-	unsigned long flags;
+ 	u32 level1;
+ 
+-	spin_lock_irqsave(&mtu->lock, flags);
++	spin_lock(&mtu->lock);
+ 
+ 	/* U3D_LV1ISR is RU */
+ 	level1 = mtu3_readl(mtu->mac_base, U3D_LV1ISR);
+@@ -769,7 +768,7 @@ static irqreturn_t mtu3_irq(int irq, void *data)
+ 	if (level1 & QMU_INTR)
+ 		mtu3_qmu_isr(mtu);
+ 
+-	spin_unlock_irqrestore(&mtu->lock, flags);
++	spin_unlock(&mtu->lock);
+ 
+ 	return IRQ_HANDLED;
+ }
 -- 
-heikki
+2.7.4
+
