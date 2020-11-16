@@ -2,79 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0782C2B3BFC
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 05:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF77E2B3D56
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 07:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726963AbgKPEHE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Nov 2020 23:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726723AbgKPEHE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Nov 2020 23:07:04 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192C8C0613CF;
-        Sun, 15 Nov 2020 20:07:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=G0dfAfznZJzv/nBcCwxeSpzHAALeDcd4KyZc28j1+1U=; b=SjhlmeeCa3/0T1Ta5vBzs0wEEP
-        EsNwXGl5nEA3fXU8O5O07bHdEfyKtOI/S1bTsjMFyeYTzY6qLTUbuOjyvQl9vj7lizWjfq8Fgpli5
-        4LTqhh3zx97PQHXkNwQFKxj0kIxLgHynLQFHqwUAYMQX4RBc4659/d9RgGq30clg2lAXNVu3nsR6H
-        m2rSGFL3MSz2I/7cAp2nP+qhFPSPRkQ8Q7vKjLGnpItYujXaPvgmAWNgx6AZp6kZfC5A17kNp1/Yf
-        M5r3dClbDvvNCQrlGXzo3Xmax3I7FrSttvqKuLewHZBIf+zO/OMZy9jtTdPeKAx/8EbrQmw8e/7hU
-        xDCC7UXA==;
-Received: from [2601:1c0:6280:3f0::f32] (helo=smtpauth.infradead.org)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1keVn8-0003ZY-W0; Mon, 16 Nov 2020 04:06:59 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] usb: typec: qcom-pmic-typec: fix builtin build errors
-Date:   Sun, 15 Nov 2020 20:06:53 -0800
-Message-Id: <20201116040653.7943-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+        id S1726925AbgKPGxN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 01:53:13 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:52815 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725819AbgKPGxN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 01:53:13 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 0AG6r9DM1027092, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexmb04.realtek.com.tw[172.21.6.97])
+        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 0AG6r9DM1027092
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 16 Nov 2020 14:53:09 +0800
+Received: from fc32.localdomain (172.21.177.102) by RTEXMB04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2044.4; Mon, 16 Nov
+ 2020 14:53:09 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <netdev@vger.kernel.org>, <m.szyprowski@samsung.com>
+CC:     <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net-next] r8153_ecm: avoid to be prior to r8152 driver
+Date:   Mon, 16 Nov 2020 14:52:39 +0800
+Message-ID: <1394712342-15778-393-Taiwan-albertk@realtek.com>
+X-Mailer: Microsoft Office Outlook 11
+In-Reply-To: <7fd014f2-c9a5-e7ec-f1c6-b3e4bb0f6eb6@samsung.com>
+References: <7fd014f2-c9a5-e7ec-f1c6-b3e4bb0f6eb6@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.21.177.102]
+X-ClientProxiedBy: RTEXMB01.realtek.com.tw (172.21.6.94) To
+ RTEXMB04.realtek.com.tw (172.21.6.97)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix build errors when CONFIG_TYPEC_QCOM_PMIC=y and
-CONFIG_USB_ROLE_SWITCH=m by limiting the former to =m when
-USB_ROLE_SWITCH also =m.
+Avoid r8153_ecm is compiled as built-in, if r8152 driver is compiled
+as modules. Otherwise, the r8153_ecm would be used, even though the
+device is supported by r8152 driver.
 
-powerpc64-linux-ld: drivers/usb/typec/qcom-pmic-typec.o: in function `.qcom_pmic_typec_remove':
-qcom-pmic-typec.c:(.text+0x28): undefined reference to `.usb_role_switch_set_role'
-powerpc64-linux-ld: qcom-pmic-typec.c:(.text+0x64): undefined reference to `.usb_role_switch_put'
-powerpc64-linux-ld: drivers/usb/typec/qcom-pmic-typec.o: in function `.qcom_pmic_typec_check_connection':
-qcom-pmic-typec.c:(.text+0x120): undefined reference to `.usb_role_switch_set_role'
-powerpc64-linux-ld: drivers/usb/typec/qcom-pmic-typec.o: in function `.qcom_pmic_typec_probe':
-qcom-pmic-typec.c:(.text+0x360): undefined reference to `.fwnode_usb_role_switch_get'
-powerpc64-linux-ld: qcom-pmic-typec.c:(.text+0x4e4): undefined reference to `.usb_role_switch_put'
-
-Fixes: 6c8cf3695176 ("usb: typec: Add QCOM PMIC typec detection driver")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Cc: Wesley Cheng <wcheng@codeaurora.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: c1aedf015ebd ("net/usb/r8153_ecm: support ECM mode for RTL8153")
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
 ---
- drivers/usb/typec/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/usb/Makefile | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- linux-next-20201113.orig/drivers/usb/typec/Kconfig
-+++ linux-next-20201113/drivers/usb/typec/Kconfig
-@@ -88,6 +88,7 @@ config TYPEC_STUSB160X
- config TYPEC_QCOM_PMIC
- 	tristate "Qualcomm PMIC USB Type-C driver"
- 	depends on ARCH_QCOM || COMPILE_TEST
-+	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
- 	help
- 	  Driver for supporting role switch over the Qualcomm PMIC.  This will
- 	  handle the USB Type-C role and orientation detection reported by the
+diff --git a/drivers/net/usb/Makefile b/drivers/net/usb/Makefile
+index 99381e6bea78..98f4c100955e 100644
+--- a/drivers/net/usb/Makefile
++++ b/drivers/net/usb/Makefile
+@@ -13,7 +13,7 @@ obj-$(CONFIG_USB_LAN78XX)	+= lan78xx.o
+ obj-$(CONFIG_USB_NET_AX8817X)	+= asix.o
+ asix-y := asix_devices.o asix_common.o ax88172a.o
+ obj-$(CONFIG_USB_NET_AX88179_178A)      += ax88179_178a.o
+-obj-$(CONFIG_USB_NET_CDCETHER)	+= cdc_ether.o r8153_ecm.o
++obj-$(CONFIG_USB_NET_CDCETHER)	+= cdc_ether.o
+ obj-$(CONFIG_USB_NET_CDC_EEM)	+= cdc_eem.o
+ obj-$(CONFIG_USB_NET_DM9601)	+= dm9601.o
+ obj-$(CONFIG_USB_NET_SR9700)	+= sr9700.o
+@@ -41,3 +41,11 @@ obj-$(CONFIG_USB_NET_QMI_WWAN)	+= qmi_wwan.o
+ obj-$(CONFIG_USB_NET_CDC_MBIM)	+= cdc_mbim.o
+ obj-$(CONFIG_USB_NET_CH9200)	+= ch9200.o
+ obj-$(CONFIG_USB_NET_AQC111)	+= aqc111.o
++
++ifdef CONFIG_USB_NET_CDCETHER
++ifeq ($(CONFIG_USB_RTL8152), m)
++obj-$(CONFIG_USB_RTL8152)	+= r8153_ecm.o
++else
++obj-$(CONFIG_USB_NET_CDCETHER)	+= r8153_ecm.o
++endif
++endif
+-- 
+2.26.2
+
