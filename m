@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDD42B4C0B
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 18:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D015B2B4C22
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 18:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732504AbgKPRCd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 12:02:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38586 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731681AbgKPRCc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Nov 2020 12:02:32 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DBE0220789;
-        Mon, 16 Nov 2020 17:02:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605546152;
-        bh=ykvawW0olLJgE6wckd62t+BySXzfbRrSNq5I3/RVv9k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sspM8WWp+4qLobSpyveJ7LHhlImy86icjXndo3etDQoOE3tYh9ETP1+XwJBLZO76k
-         2q5s2ixmsdYktLYyWoInr0wVeU4pPA4iyHnGfWlUaFkJXgsjuInCGcirvMQ8Fhxhnz
-         uCmMKV7HoCxy52liCzJBB/YSnE2r7uYNpf1lpnPI=
-Date:   Mon, 16 Nov 2020 09:02:31 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Hayes Wang <hayeswang@realtek.com>, netdev@vger.kernel.org,
-        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+        id S1732487AbgKPRG1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 12:06:27 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:44461 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1732195AbgKPRG0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 12:06:26 -0500
+Received: (qmail 442206 invoked by uid 1000); 16 Nov 2020 12:06:25 -0500
+Date:   Mon, 16 Nov 2020 12:06:25 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Alberto Sentieri <22t@tripolho.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH net-next] r8153_ecm: avoid to be prior to r8152 driver
-Message-ID: <20201116090231.423afc8f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <5f3db229-940c-c8ed-257b-0b4b3dd2afbb@samsung.com>
-References: <7fd014f2-c9a5-e7ec-f1c6-b3e4bb0f6eb6@samsung.com>
-        <CGME20201116065317eucas1p2a2d141857bbdd6b4998dd11937d52f56@eucas1p2.samsung.com>
-        <1394712342-15778-393-Taiwan-albertk@realtek.com>
-        <5f3db229-940c-c8ed-257b-0b4b3dd2afbb@samsung.com>
+Subject: Re: kernel locks due to USB I/O
+Message-ID: <20201116170625.GC436089@rowland.harvard.edu>
+References: <9428ae70-887e-b48b-f31c-f95d58f67c61@tripolho.com>
+ <20201110205114.GB204624@rowland.harvard.edu>
+ <8152190e-c962-e376-64fd-cc2ebf3e6104@tripolho.com>
+ <20201111155130.GB237113@rowland.harvard.edu>
+ <9687fac9-94de-50a3-f88e-b7e05d660aba@tripolho.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9687fac9-94de-50a3-f88e-b7e05d660aba@tripolho.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 16 Nov 2020 10:18:13 +0100 Marek Szyprowski wrote:
-> On 16.11.2020 07:52, Hayes Wang wrote:
-> > Avoid r8153_ecm is compiled as built-in, if r8152 driver is compiled
-> > as modules. Otherwise, the r8153_ecm would be used, even though the
-> > device is supported by r8152 driver.
-> >
-> > Fixes: c1aedf015ebd ("net/usb/r8153_ecm: support ECM mode for RTL8153")
-> > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > Signed-off-by: Hayes Wang <hayeswang@realtek.com>  
+On Mon, Nov 16, 2020 at 11:53:38AM -0500, Alberto Sentieri wrote:
+> The objective of this email is to report the current status of my findings.
 > 
-> Yes, this fixes this issue, although I would prefer a separate Kconfig 
-> entry for r8153_ecm with proper dependencies instead of this ifdefs in 
-> Makefile.
+> I loaded netconsole on both machines I was having problems with. I tried 3
+> times on the machine with kernel 5.0.0-37 and twice with on the machine with
+> kernel 5.3.0-62. Each attempt consisted of running the program which lock
+> the kernel until it locked (about 3 minutes after stating the program). The
+> referred program had the "semphore code" commented out. Nothing was sent to
+> netconsole on all the 5 attempts I made when the kernel locked.
+> 
+> Just to be clear about my use of netconsole, before loading the netconsole
+> kernel module, I ran "dmesg -n 8". When netconsole module was loaded I could
+> clearly see about 9 message lines on the computer receiving the netconsole
+> messages telling me that netconsole was loaded (and how it was configured),
+> so no doubts about the correct netconsole setup. The "netconsole server" was
+> a machine on the same local network.
+> 
+> My next attempt will be to compile kernel 5.9, as you suggest, and try it.
 
-Agreed, this is what dependency resolution is for.
+While this may not generate any useful information, one way to create a 
+bunch of log output while running your test is to set the usbfs_snoop 
+module parameter for usbcore to true.
 
-Let's just make this a separate Kconfig entry.
+You can also enable dynamic debugging for usbcore, although in a stable 
+environment like yours it probably won't produce much output.
+
+Alan Stern
