@@ -2,65 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FBA2B4582
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 15:06:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF3B2B45B3
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 15:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729415AbgKPOGS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 09:06:18 -0500
-Received: from mx2.suse.de ([195.135.220.15]:48846 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727416AbgKPOGS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Nov 2020 09:06:18 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1605535576; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rM6crSg2IayHa5VaDbYzpC4aq3vLWemfT1wPY2mIF9o=;
-        b=T9zHgMuxw/effvxlvlTzK3xC6wxzdk3Kcl3q+YufRIjIPefGPFAm4YQne4WLvM+E40AdHC
-        vhtmconab+mUF0j8kSnwszruO8TivHJV2HAbfibU6vUVwz92tNiegYOANdOEkrfg83xK41
-        d7NkbrfCTG/zEejOiYPRcuAcC97IJGk=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 2FC25AC23;
-        Mon, 16 Nov 2020 14:06:16 +0000 (UTC)
-Message-ID: <da3dac18a3c17750ef12b06b09cdac92e3c79f25.camel@suse.com>
-Subject: Re: driver/net/usb/r8152 stop working after some time with kernel
- 5.10-rc series
-From:   Oliver Neukum <oneukum@suse.com>
-To:     "Milan P." =?UTF-8?Q?Stani=C4=87?= <mps@arvanta.net>,
-        linux-usb@vger.kernel.org
-Cc:     Hayes Wang <hayeswang@realtek.com>
-Date:   Mon, 16 Nov 2020 15:06:02 +0100
-In-Reply-To: <X6/TsY8hd+Z3ITtL@arya.arvanta.net>
-References: <X6/TsY8hd+Z3ITtL@arya.arvanta.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1729976AbgKPOT5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 09:19:57 -0500
+Received: from out28-170.mail.aliyun.com ([115.124.28.170]:59150 "EHLO
+        out28-170.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726321AbgKPOTv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 09:19:51 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08245762|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.22616-0.0193576-0.754482;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.IxS0Otf_1605536372;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.IxS0Otf_1605536372)
+          by smtp.aliyun-inc.com(10.147.40.7);
+          Mon, 16 Nov 2020 22:19:44 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        kishon@ti.com, vkoul@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, paul@crapouillou.net
+Subject: [PATCH v9 0/3] Use the generic PHY framework for Ingenic USB PHY.
+Date:   Mon, 16 Nov 2020 22:19:03 +0800
+Message-Id: <20201116141906.11758-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Samstag, den 14.11.2020, 13:55 +0100 schrieb Milan P. Stanić:
-> 
+v3->v4:
+Only add new generic-PHY driver, without removing the old one. Because the
+jz4740-musb driver is not ready to use the generic PHY framework. When the
+jz4740-musb driver is modified to use the generic PHY framework, the old
+jz4770-phy driver can be "retired".
 
-Hi,
+v4->v5:
+1.Add an extra blank line between "devm_of_phy_provider_register" and "return".
+2.Remove unnecessary "phy_set_drvdata".
+3.Add Paul Cercueil's Reviewed-by.
 
-> Driver loads and work some time but at unpredictable time it stops and
-> starts to flood 'dmesg' output until shutdown (eth) interface.
-> 
-> Machine where I test this is arm64 ACER R13 chromebook.
+v5->v6:
+1.Revert the removal of "phy_set_drvdata" in v5, removing "phy_set_drvdata" will
+  cause a kernel panic on CI20.
+  Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
+2.Rewrite the macro definitions, replace the original code with "FIELD_PREP()"
+  and "u32p_replace_bits()" according to Vinod Koul's suggestion.
 
-Are you sure this started in v5.10 or did you not try earlier kernels?
+v6->v7:
+1.Remove the stray tab character.
+2.Remove unnecessary "platform_set_drvdata".
+3.Remove the "dev" field in priv structure, and use &phy->dev instead.
 
-> 'dmesg' shows a lot of such messages:
-> 
-> [305186.211284] r8152 2-1.2.4:1.0 eth0: Couldn't submit rx[000000005d575699], ret = -11
+v7->v8:
+Add support for Ingenic JZ4775 SoC and X2000 SoC.
 
-EAGAIN is an unusual error return.
+v8->v9:
+Correct the path errors in "ingenic,phy-usb.yaml" and "ingenic,cgu.yaml".
 
-	Regards
-		Oliver
+周琰杰 (Zhou Yanjie) (3):
+  USB: PHY: JZ4770: Remove unnecessary function calls.
+  dt-bindings: USB: Add bindings for Ingenic JZ4775 and X2000.
+  PHY: Ingenic: Add USB PHY driver using generic PHY framework.
 
+ .../devicetree/bindings/clock/ingenic,cgu.yaml     |   2 +-
+ .../ingenic,phy-usb.yaml}                          |   4 +-
+ drivers/phy/Kconfig                                |   1 +
+ drivers/phy/Makefile                               |   1 +
+ drivers/phy/ingenic/Kconfig                        |  12 +
+ drivers/phy/ingenic/Makefile                       |   2 +
+ drivers/phy/ingenic/phy-ingenic-usb.c              | 412 +++++++++++++++++++++
+ drivers/usb/phy/phy-jz4770.c                       |   2 +-
+ 8 files changed, 433 insertions(+), 3 deletions(-)
+ rename Documentation/devicetree/bindings/{usb/ingenic,jz4770-phy.yaml => phy/ingenic,phy-usb.yaml} (89%)
+ create mode 100644 drivers/phy/ingenic/Kconfig
+ create mode 100644 drivers/phy/ingenic/Makefile
+ create mode 100644 drivers/phy/ingenic/phy-ingenic-usb.c
+
+-- 
+2.11.0
 
