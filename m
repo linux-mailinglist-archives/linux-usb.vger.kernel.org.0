@@ -2,226 +2,246 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AC62B5233
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 21:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F04A72B5374
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 22:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732088AbgKPUOr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 15:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729225AbgKPUOr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 15:14:47 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79505C0613CF
-        for <linux-usb@vger.kernel.org>; Mon, 16 Nov 2020 12:14:47 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id v21so1476957pgi.2
-        for <linux-usb@vger.kernel.org>; Mon, 16 Nov 2020 12:14:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hsW48GZXWWHJHv9tGptpE4PtcEa1mg4qhIRMZyTuOLo=;
-        b=cQYjoqQxQQLR5+pU3IDgXaENnQbouI7k9Vr1T9Snn6OobiwxSkkpNJQx72sHwhOnQ7
-         joUjDPG5FerMCcf0nscd3kYc8PqxYouvi84JmLgQ8lRLPMmwqJ0UMy2cAgqqb9/mNdhW
-         JlEjyKBp8zk6xQ5zewHO7lIiUGvjraRaLxtJw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hsW48GZXWWHJHv9tGptpE4PtcEa1mg4qhIRMZyTuOLo=;
-        b=IVBR2JsApuerxwR9RkN8cwCbitbdfx9En6D/JOmvQCCceBLNHrvTFuIamL/pR9NB5Q
-         pK8rvRArnf3SxNe2FN/5IH2vNRZklgAEeknuOeByXba5Q3eGyTZ4qDZM0t5oex3IgM31
-         WKVdAy/M9u5IzHCqOHwwJv0yFg6NGm2afvFx8TzIbSGXa4pstKgFUGloiIP2YhvM5Wfd
-         g32pPPsigptX422+s+/NaQL63DdLSwaonJXjB00NVKAvdqTT497aOuDUmFAzuZIkP8OI
-         hfkWG79mthXp262f4SWL+FnM4TuzUHeUvBYcUwuEor+DwrynWcPFwgw4uF3rnThb5nrA
-         Tb2A==
-X-Gm-Message-State: AOAM5330bQ8DCyAzzfTa7KL3cHnDVge9G8SSiKXT74+ioj0FPVfOxfep
-        SGFzV4XAoK2y6kX+20Akd0/OYA==
-X-Google-Smtp-Source: ABdhPJxKErvKZ+SwEAZlFuX0HP+OIap0RxuHTj3C37PMdqqnuKQopNWYSlAHDUI2lZDQahDFV2aC6Q==
-X-Received: by 2002:a62:f94d:0:b029:15c:f1a3:cd47 with SMTP id g13-20020a62f94d0000b029015cf1a3cd47mr15230109pfm.81.1605557687061;
-        Mon, 16 Nov 2020 12:14:47 -0800 (PST)
-Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
-        by smtp.gmail.com with ESMTPSA id a12sm234577pjh.48.2020.11.16.12.14.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 12:14:46 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
-        enric.balletbo@collabora.com
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: [PATCH v3 11/11] platform/chrome: cros_ec_typec: Register plug altmodes
-Date:   Mon, 16 Nov 2020 12:11:58 -0800
-Message-Id: <20201116201150.2919178-12-pmalani@chromium.org>
-X-Mailer: git-send-email 2.29.2.299.gdc1121823c-goog
-In-Reply-To: <20201116201150.2919178-1-pmalani@chromium.org>
-References: <20201116201150.2919178-1-pmalani@chromium.org>
+        id S1731338AbgKPVKQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 16:10:16 -0500
+Received: from mga09.intel.com ([134.134.136.24]:20948 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728877AbgKPVKQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Nov 2020 16:10:16 -0500
+IronPort-SDR: WvtuEkOk8yKzQ4WNWee4M38+d4lLIwS5/lnDc8OwmySh3eJ9RTXrLU55OOhsoGVaQL9xgnMGAv
+ 5+mdffhRpz5Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="170987034"
+X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
+   d="scan'208";a="170987034"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 13:10:08 -0800
+IronPort-SDR: 6YW/5alM66zDFAEjCB6i0tciYnSuJEeJljR2Tru+wKRZr3vpyrhsIvNQ7fEPMN6rY0EV0CRoPO
+ iiU4axQIpO7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
+   d="scan'208";a="329833102"
+Received: from lkp-server01.sh.intel.com (HELO fb398427a497) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 16 Nov 2020 13:10:06 -0800
+Received: from kbuild by fb398427a497 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kellG-0000DE-7j; Mon, 16 Nov 2020 21:10:06 +0000
+Date:   Tue, 17 Nov 2020 05:09:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 0fb2c41f992cc58aa87fe42b6ee9c6048359670f
+Message-ID: <5fb2ea8e.VWgGJqb3Ad3EPpje%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Modify the altmode registration (and unregistration) code so that it
-can be used by both partners and plugs.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 0fb2c41f992cc58aa87fe42b6ee9c6048359670f  Merge 5.10-rc4 into here.
 
-Then, add code to register plug altmodes using the newly parameterized
-function. Also set the number of alternate modes for the plug using the
-associated Type C connector class function
-typec_plug_set_num_altmodes().
+elapsed time: 725m
 
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
+configs tested: 182
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                   sh7770_generic_defconfig
+powerpc                       eiger_defconfig
+powerpc                     tqm8548_defconfig
+sh                        sh7757lcr_defconfig
+s390                                defconfig
+arm                         lpc32xx_defconfig
+mips                            e55_defconfig
+openrisc                 simple_smp_defconfig
+sh                          rsk7203_defconfig
+arm                       netwinder_defconfig
+arm                     am200epdkit_defconfig
+mips                           gcw0_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                     mpc512x_defconfig
+sh                        sh7785lcr_defconfig
+arm                        oxnas_v6_defconfig
+mips                           ip27_defconfig
+sh                          r7780mp_defconfig
+s390                             alldefconfig
+powerpc                      pmac32_defconfig
+arc                        nsimosci_defconfig
+powerpc                  mpc866_ads_defconfig
+arm                       mainstone_defconfig
+um                           x86_64_defconfig
+arm                        magician_defconfig
+m68k                        m5272c3_defconfig
+arm                        spear3xx_defconfig
+arm                         shannon_defconfig
+sh                 kfr2r09-romimage_defconfig
+arm                          iop32x_defconfig
+sh                           sh2007_defconfig
+sh                      rts7751r2d1_defconfig
+riscv                    nommu_k210_defconfig
+arm                     eseries_pxa_defconfig
+mips                      malta_kvm_defconfig
+m68k                         amcore_defconfig
+arm                           viper_defconfig
+ia64                          tiger_defconfig
+mips                       capcella_defconfig
+mips                        nlm_xlr_defconfig
+sh                        dreamcast_defconfig
+arm                        shmobile_defconfig
+openrisc                            defconfig
+sh                         microdev_defconfig
+sh                             espt_defconfig
+powerpc                     tqm8555_defconfig
+arc                          axs101_defconfig
+powerpc                     ep8248e_defconfig
+m68k                             allmodconfig
+powerpc                     sbc8548_defconfig
+openrisc                         alldefconfig
+powerpc                      cm5200_defconfig
+mips                          malta_defconfig
+microblaze                          defconfig
+nds32                            alldefconfig
+powerpc                      ppc40x_defconfig
+arm                          badge4_defconfig
+um                            kunit_defconfig
+powerpc               mpc834x_itxgp_defconfig
+mips                           xway_defconfig
+riscv                             allnoconfig
+alpha                               defconfig
+powerpc                      walnut_defconfig
+alpha                            allyesconfig
+h8300                               defconfig
+mips                     cu1830-neo_defconfig
+mips                            gpr_defconfig
+powerpc                        icon_defconfig
+sh                           se7721_defconfig
+arm                            zeus_defconfig
+sh                               alldefconfig
+arm                           h3600_defconfig
+arm                        neponset_defconfig
+xtensa                  nommu_kc705_defconfig
+sh                         ap325rxa_defconfig
+arm                        mvebu_v7_defconfig
+ia64                            zx1_defconfig
+i386                             allyesconfig
+powerpc                     pq2fads_defconfig
+mips                        jmr3927_defconfig
+xtensa                  audio_kc705_defconfig
+arm                        vexpress_defconfig
+m68k                          hp300_defconfig
+sh                          kfr2r09_defconfig
+arm                       multi_v4t_defconfig
+arm                          ixp4xx_defconfig
+powerpc                      chrp32_defconfig
+arm                          moxart_defconfig
+powerpc                      arches_defconfig
+sh                          lboxre2_defconfig
+powerpc                    amigaone_defconfig
+sh                           se7724_defconfig
+arc                    vdk_hs38_smp_defconfig
+mips                        bcm47xx_defconfig
+mips                        bcm63xx_defconfig
+powerpc                 mpc8272_ads_defconfig
+m68k                       m5249evb_defconfig
+m68k                          sun3x_defconfig
+arm                          collie_defconfig
+s390                          debug_defconfig
+arm                          gemini_defconfig
+powerpc                 xes_mpc85xx_defconfig
+ia64                         bigsur_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20201116
+x86_64               randconfig-a005-20201116
+x86_64               randconfig-a004-20201116
+x86_64               randconfig-a002-20201116
+x86_64               randconfig-a001-20201116
+x86_64               randconfig-a006-20201116
+i386                 randconfig-a006-20201116
+i386                 randconfig-a005-20201116
+i386                 randconfig-a001-20201116
+i386                 randconfig-a002-20201116
+i386                 randconfig-a004-20201116
+i386                 randconfig-a003-20201116
+i386                 randconfig-a012-20201116
+i386                 randconfig-a014-20201116
+i386                 randconfig-a016-20201116
+i386                 randconfig-a011-20201116
+i386                 randconfig-a015-20201116
+i386                 randconfig-a013-20201116
+i386                 randconfig-a012-20201115
+i386                 randconfig-a014-20201115
+i386                 randconfig-a016-20201115
+i386                 randconfig-a011-20201115
+i386                 randconfig-a015-20201115
+i386                 randconfig-a013-20201115
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a003-20201115
+x86_64               randconfig-a005-20201115
+x86_64               randconfig-a004-20201115
+x86_64               randconfig-a002-20201115
+x86_64               randconfig-a001-20201115
+x86_64               randconfig-a006-20201115
+x86_64               randconfig-a015-20201116
+x86_64               randconfig-a011-20201116
+x86_64               randconfig-a014-20201116
+x86_64               randconfig-a013-20201116
+x86_64               randconfig-a016-20201116
+x86_64               randconfig-a012-20201116
+
 ---
-
-Changes in v3:
-- Re-arranged patch order and combined it with related series of
-  patches.
-
-No version v2.
-
- drivers/platform/chrome/cros_ec_typec.c | 50 ++++++++++++++++++++-----
- 1 file changed, 40 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index d2e154ae2362..65c5d0090ccd 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -67,6 +67,7 @@ struct cros_typec_port {
- 	bool sop_prime_disc_done;
- 	struct ec_response_typec_discovery *disc_data;
- 	struct list_head partner_mode_list;
-+	struct list_head plug_mode_list;
- };
- 
- /* Platform-specific data for the Chrome OS EC Type C controller. */
-@@ -186,12 +187,15 @@ static int cros_typec_add_partner(struct cros_typec_data *typec, int port_num,
- 	return ret;
- }
- 
--static void cros_typec_unregister_altmodes(struct cros_typec_data *typec, int port_num)
-+static void cros_typec_unregister_altmodes(struct cros_typec_data *typec, int port_num,
-+					   bool is_partner)
- {
- 	struct cros_typec_port *port = typec->ports[port_num];
- 	struct cros_typec_altmode_node *node, *tmp;
-+	struct list_head *head;
- 
--	list_for_each_entry_safe(node, tmp, &port->partner_mode_list, list) {
-+	head = is_partner ? &port->partner_mode_list : &port->plug_mode_list;
-+	list_for_each_entry_safe(node, tmp, head, list) {
- 		list_del(&node->list);
- 		typec_unregister_altmode(node->amode);
- 		devm_kfree(typec->dev, node);
-@@ -203,7 +207,7 @@ static void cros_typec_remove_partner(struct cros_typec_data *typec,
- {
- 	struct cros_typec_port *port = typec->ports[port_num];
- 
--	cros_typec_unregister_altmodes(typec, port_num);
-+	cros_typec_unregister_altmodes(typec, port_num, true);
- 
- 	port->state.alt = NULL;
- 	port->state.mode = TYPEC_STATE_USB;
-@@ -224,6 +228,8 @@ static void cros_typec_remove_cable(struct cros_typec_data *typec,
- {
- 	struct cros_typec_port *port = typec->ports[port_num];
- 
-+	cros_typec_unregister_altmodes(typec, port_num, false);
-+
- 	typec_unregister_plug(port->plug);
- 	port->plug = NULL;
- 	typec_unregister_cable(port->cable);
-@@ -352,6 +358,7 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
- 		}
- 
- 		INIT_LIST_HEAD(&cros_port->partner_mode_list);
-+		INIT_LIST_HEAD(&cros_port->plug_mode_list);
- 	}
- 
- 	return 0;
-@@ -639,7 +646,11 @@ static int cros_typec_get_mux_info(struct cros_typec_data *typec, int port_num,
- 				     sizeof(req), resp, sizeof(*resp));
- }
- 
--static int cros_typec_register_altmodes(struct cros_typec_data *typec, int port_num)
-+/*
-+ * Helper function to register partner/plug altmodes.
-+ */
-+static int cros_typec_register_altmodes(struct cros_typec_data *typec, int port_num,
-+					bool is_partner)
- {
- 	struct cros_typec_port *port = typec->ports[port_num];
- 	struct ec_response_typec_discovery *sop_disc = port->disc_data;
-@@ -657,7 +668,11 @@ static int cros_typec_register_altmodes(struct cros_typec_data *typec, int port_
- 			desc.mode = j;
- 			desc.vdo = sop_disc->svids[i].mode_vdo[j];
- 
--			amode = typec_partner_register_altmode(port->partner, &desc);
-+			if (is_partner)
-+				amode = typec_partner_register_altmode(port->partner, &desc);
-+			else
-+				amode = typec_plug_register_altmode(port->plug, &desc);
-+
- 			if (IS_ERR(amode)) {
- 				ret = PTR_ERR(amode);
- 				goto err_cleanup;
-@@ -672,21 +687,30 @@ static int cros_typec_register_altmodes(struct cros_typec_data *typec, int port_
- 			}
- 
- 			node->amode = amode;
--			list_add_tail(&node->list, &port->partner_mode_list);
-+
-+			if (is_partner)
-+				list_add_tail(&node->list, &port->partner_mode_list);
-+			else
-+				list_add_tail(&node->list, &port->plug_mode_list);
- 			num_altmodes++;
- 		}
- 	}
- 
--	ret = typec_partner_set_num_altmodes(port->partner, num_altmodes);
-+	if (is_partner)
-+		ret = typec_partner_set_num_altmodes(port->partner, num_altmodes);
-+	else
-+		ret = typec_plug_set_num_altmodes(port->plug, num_altmodes);
-+
- 	if (ret < 0) {
--		dev_err(typec->dev, "Unable to set partner num_altmodes for port: %d\n", port_num);
-+		dev_err(typec->dev, "Unable to set %s num_altmodes for port: %d\n",
-+			is_partner ? "partner" : "plug", port_num);
- 		goto err_cleanup;
- 	}
- 
- 	return 0;
- 
- err_cleanup:
--	cros_typec_unregister_altmodes(typec, port_num);
-+	cros_typec_unregister_altmodes(typec, port_num, is_partner);
- 	return ret;
- }
- 
-@@ -774,6 +798,12 @@ static int cros_typec_handle_sop_prime_disc(struct cros_typec_data *typec, int p
- 		goto sop_prime_disc_exit;
- 	}
- 
-+	ret = cros_typec_register_altmodes(typec, port_num, false);
-+	if (ret < 0) {
-+		dev_err(typec->dev, "Failed to register plug altmodes, port: %d\n", port_num);
-+		goto sop_prime_disc_exit;
-+	}
-+
- 	return 0;
- 
- sop_prime_disc_exit:
-@@ -815,7 +845,7 @@ static int cros_typec_handle_sop_disc(struct cros_typec_data *typec, int port_nu
- 		goto disc_exit;
- 	}
- 
--	ret = cros_typec_register_altmodes(typec, port_num);
-+	ret = cros_typec_register_altmodes(typec, port_num, true);
- 	if (ret < 0) {
- 		dev_err(typec->dev, "Failed to register partner altmodes, port: %d\n", port_num);
- 		goto disc_exit;
--- 
-2.29.2.299.gdc1121823c-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
