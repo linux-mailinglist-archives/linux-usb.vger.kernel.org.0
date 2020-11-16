@@ -2,107 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD9B2B4B58
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 17:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A52832B4B67
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 17:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732176AbgKPQgU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 16 Nov 2020 11:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730661AbgKPQgU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 11:36:20 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D763C0613CF
-        for <linux-usb@vger.kernel.org>; Mon, 16 Nov 2020 08:36:19 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kehUG-0005k5-BS; Mon, 16 Nov 2020 17:36:16 +0100
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kehUF-00028h-EU; Mon, 16 Nov 2020 17:36:15 +0100
-Message-ID: <48332a44241f3c06966420277060b6048c1f77d0.camel@pengutronix.de>
-Subject: Re: [PATCH v2] reset: make shared pulsed reset controls
- re-triggerable
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-usb@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>
-Date:   Mon, 16 Nov 2020 17:36:15 +0100
-In-Reply-To: <1jima91e92.fsf@starbuckisacylon.baylibre.com>
-References: <20201112230043.28987-1-aouledameur@baylibre.com>
-         <0f679c62aa48603ea43a8fa4819d688baa802d73.camel@pengutronix.de>
-         <1jima91e92.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        id S1731281AbgKPQiB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 11:38:01 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:35978 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730587AbgKPQiB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 11:38:01 -0500
+Received: by mail-lj1-f193.google.com with SMTP id i17so19762658ljd.3;
+        Mon, 16 Nov 2020 08:37:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=h2Bfj7+xj4igoEgjq6r/E0rjrswFf3bHb9as6/4tQAk=;
+        b=c6mMpguqQQxo7Jh2Uju5rgqTjHan/vF/S1FcMhX5IpiakrvD2fYnc9bPB4ayCNlCsd
+         j5GFoMg6Wn0d2JY422hinFUZN7lWELPVKt1g9yKEdjrg/j4Zik76oalNJufbQ7gvsKDF
+         JLsQ2DryGWGTHdRXbkTcZ/iE9kDGucYuP3kIg988sBycSKbwe4Tc8Zpnpfnap2+LJaYM
+         8QRMVOtytIKhE2YIbq+ZUvPiQaZsH7MVygeNJGrPrTNKSs9wZzUlu7RBf6tvhJvpK0wL
+         OftmnbQZWT96G2+dM7cMcA9RZ0AcEuVYizGOtW1DvY6euzIOY64Typ/rMM2sGjsnEpdW
+         Lv6A==
+X-Gm-Message-State: AOAM530fKO4VLE8pPi+Er6FnuJYCqfDDCcbHpEQA2gCPZzq7c3F2S8NX
+        NVEUUuOqDuGpucisksDdtCU=
+X-Google-Smtp-Source: ABdhPJx0pbM6pYVy1fS4wwWK5NpjMG9W8q6n0ygGYsXLASkRwW86DG04y7wHPxHEgvrpTN8xH8bB3w==
+X-Received: by 2002:a05:651c:1b6:: with SMTP id c22mr71982ljn.365.1605544679073;
+        Mon, 16 Nov 2020 08:37:59 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id f7sm2774395lja.87.2020.11.16.08.37.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2020 08:37:58 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kehVx-0007vT-Dw; Mon, 16 Nov 2020 17:38:01 +0100
+Date:   Mon, 16 Nov 2020 17:38:01 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     "Wang, Sheng Long" <shenglong.wang.ext@siemens.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Sheng Long Wang <china_shenglong@163.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lkp@intel.com" <lkp@intel.com>
+Subject: Re: [PATCH v6] usb-serial:cp210x: add support to software flow
+ control
+Message-ID: <X7Kq6fJ/VMnB3Nt0@localhost>
+References: <20201016022428.9671-1-china_shenglong@163.com>
+ <X66l44MqSlj774DL@localhost>
+ <520e730958174cb39561a94d03e4727e@siemens.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <520e730958174cb39561a94d03e4727e@siemens.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2020-11-13 at 16:13 +0100, Jerome Brunet wrote:
-> On Fri 13 Nov 2020 at 16:04, Philipp Zabel <p.zabel@pengutronix.de> wrote:
+[ Please avoid top posting. ]
+
+On Mon, Nov 16, 2020 at 07:56:10AM +0000, Wang, Sheng Long wrote:
+> Hi, Johan
 > 
-> > On Fri, 2020-11-13 at 00:00 +0100, Amjad Ouled-Ameur wrote:
-> > > The current reset framework API does not allow to release what is done by
-> > > reset_control_reset(), IOW decrement triggered_count. Add the new
-> > > reset_control_rearm() call to do so.
-> > > 
-> > > When reset_control_reset() has been called once, the counter
-> > > triggered_count, in the reset framework, is incremented i.e the resource
-> > > under the reset is in-use and the reset should not be done again.
-> > > reset_control_rearm() would be the way to state that the resource is
-> > > no longer used and, that from the caller's perspective, the reset can be
-> > > fired again if necessary.
-> > > 
-> > > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> > > Reported-by: Jerome Brunet <jbrunet@baylibre.com>
-> > > ---
-> > > Change since v1: [0]
-> > > * Renamed the new call from reset_control_(array_)resettable to 
-> > > reset_control_(array_)rearm
-> > > * Open-coded reset_control_array_rearm to check for errors before
-> > > decrementing triggered_count because we cannot roll back in case an
-> > > error occurs while decrementing one of the rstc.
-> > > * Reworded the new call's description.
-> > 
-> > Thank you, applied to reset/next.
+> Thank you very much for your reply!
 > 
-> Hi Philipp,
-> 
-> Would it be possible to get an immutable branch/tag with this ?
-> It would allow to move forward on the USB side, without waiting for the
-> next rc1.
+> You mean if we call cp210x_open()  When opening the device, because
+> IXON  is set by default, the cp210x_get_termios() does not process
+> IXON, So it is invalid IXON at this time.
 
-Here you go,
+Right, with the current implementation you need to make sure that
+termios reflects the device state on open or your changes will never
+actually enable software flow control in the device.
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+> As you said, It is very strange in cp210x_get_termios()  In the "get"
+> function to "set"  IXON.  In addition, the best way is to disable the
+> IXON bit as you said.  If the user needs IXON, call set_ termios
+> function, So I'm now in cp210x_get_termios()  Is it a temporary
+> solution for terminos to handle IXON ?  I'm afraid it will need to be
+> adjusted.
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+No, I didn't mean that IXON should be disabled by default. I meant that
+the driver should make sure that the device settings matches termios on
+open, not the other way round.
 
-are available in the Git repository at:
+This unusual implementation has caused a number of issues in the past
+and it's been on my list fix up for some time. I finally got around to
+that today and I just CCed you on the result. That should simplify
+adding software flow control and allow more code to be shared with the
+hardware flow-control handling.
 
-  git://git.pengutronix.de/git/pza/linux.git reset/shared-retrigger
+I've pushed a branch for you here:
 
-for you to fetch changes up to 557acb3d2cd9c82de19f944f6cc967a347735385:
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/log/?h=cp210x-termios
 
-  reset: make shared pulsed reset controls re-triggerable (2020-11-16 17:05:28 +0100)
-
-----------------------------------------------------------------
-Amjad Ouled-Ameur (1):
-      reset: make shared pulsed reset controls re-triggerable
-
- drivers/reset/core.c  | 73 +++++++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/reset.h |  1 +
- 2 files changed, 74 insertions(+)
-
-regards
-Philipp
+Johan
