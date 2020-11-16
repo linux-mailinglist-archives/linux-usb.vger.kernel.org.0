@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F04A72B5374
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 22:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DB52B5373
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 22:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731338AbgKPVKQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 16:10:16 -0500
-Received: from mga09.intel.com ([134.134.136.24]:20948 "EHLO mga09.intel.com"
+        id S1731003AbgKPVKP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 16:10:15 -0500
+Received: from mga09.intel.com ([134.134.136.24]:20947 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728877AbgKPVKQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Nov 2020 16:10:16 -0500
-IronPort-SDR: WvtuEkOk8yKzQ4WNWee4M38+d4lLIwS5/lnDc8OwmySh3eJ9RTXrLU55OOhsoGVaQL9xgnMGAv
- 5+mdffhRpz5Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="170987034"
+        id S1727861AbgKPVKP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Nov 2020 16:10:15 -0500
+IronPort-SDR: N+maxO3qzZLw5DXddH5FbyQPnspmhiQb1Kdr99SxBd77xw21MOquJaoOhg+hLHTc4GT7+PQUxg
+ JehwgJIXq1mw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="170987036"
 X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
-   d="scan'208";a="170987034"
+   d="scan'208";a="170987036"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 13:10:08 -0800
-IronPort-SDR: 6YW/5alM66zDFAEjCB6i0tciYnSuJEeJljR2Tru+wKRZr3vpyrhsIvNQ7fEPMN6rY0EV0CRoPO
- iiU4axQIpO7g==
+IronPort-SDR: +7JSnBtEKIw+8b0ym5hMcOQ4bvWlkgNcvnP9drczAjO8tudZ1c89x1uzHaAxc2atzsjkcNYgt9
+ EgLOjuMRls+A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
-   d="scan'208";a="329833102"
+   d="scan'208";a="358611616"
 Received: from lkp-server01.sh.intel.com (HELO fb398427a497) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 16 Nov 2020 13:10:06 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 16 Nov 2020 13:10:05 -0800
 Received: from kbuild by fb398427a497 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kellG-0000DE-7j; Mon, 16 Nov 2020 21:10:06 +0000
-Date:   Tue, 17 Nov 2020 05:09:34 +0800
+        id 1kellE-0000DB-Uh; Mon, 16 Nov 2020 21:10:04 +0000
+Date:   Tue, 17 Nov 2020 05:09:37 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 0fb2c41f992cc58aa87fe42b6ee9c6048359670f
-Message-ID: <5fb2ea8e.VWgGJqb3Ad3EPpje%lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 24880a87042b3032a6ac04d79cb51892c5a7901d
+Message-ID: <5fb2ea91.pn1cHR3IfssyQrWx%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -45,12 +45,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 0fb2c41f992cc58aa87fe42b6ee9c6048359670f  Merge 5.10-rc4 into here.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: 24880a87042b3032a6ac04d79cb51892c5a7901d  usb: typec: qcom-pmic-typec: fix builtin build errors
 
 elapsed time: 725m
 
-configs tested: 182
+configs tested: 188
 configs skipped: 2
 
 The following configs have been built successfully.
@@ -124,6 +124,10 @@ powerpc               mpc834x_itxgp_defconfig
 mips                           xway_defconfig
 riscv                             allnoconfig
 alpha                               defconfig
+m68k                          hp300_defconfig
+arm                          gemini_defconfig
+arm                      tct_hammer_defconfig
+mips                        bcm47xx_defconfig
 powerpc                      walnut_defconfig
 alpha                            allyesconfig
 h8300                               defconfig
@@ -144,10 +148,14 @@ powerpc                     pq2fads_defconfig
 mips                        jmr3927_defconfig
 xtensa                  audio_kc705_defconfig
 arm                        vexpress_defconfig
-m68k                          hp300_defconfig
 sh                          kfr2r09_defconfig
 arm                       multi_v4t_defconfig
 arm                          ixp4xx_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                     powernv_defconfig
+arm                            mmp2_defconfig
+arm                       cns3420vb_defconfig
+ia64                      gensparse_defconfig
 powerpc                      chrp32_defconfig
 arm                          moxart_defconfig
 powerpc                      arches_defconfig
@@ -155,14 +163,12 @@ sh                          lboxre2_defconfig
 powerpc                    amigaone_defconfig
 sh                           se7724_defconfig
 arc                    vdk_hs38_smp_defconfig
-mips                        bcm47xx_defconfig
 mips                        bcm63xx_defconfig
 powerpc                 mpc8272_ads_defconfig
 m68k                       m5249evb_defconfig
 m68k                          sun3x_defconfig
 arm                          collie_defconfig
 s390                          debug_defconfig
-arm                          gemini_defconfig
 powerpc                 xes_mpc85xx_defconfig
 ia64                         bigsur_defconfig
 ia64                             allmodconfig
