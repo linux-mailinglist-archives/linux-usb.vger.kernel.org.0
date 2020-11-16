@@ -2,134 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B872B4B76
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 17:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BDF2B4BC4
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 17:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731502AbgKPQlS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 11:41:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728433AbgKPQlS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 11:41:18 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98701C0613CF
-        for <linux-usb@vger.kernel.org>; Mon, 16 Nov 2020 08:41:16 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id b6so19394847wrt.4
-        for <linux-usb@vger.kernel.org>; Mon, 16 Nov 2020 08:41:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:message-id
-         :date:mime-version;
-        bh=Rtf3WPy2v5/PbwArc8zsVNsYHP4yZqiUV6FRg+0fDSA=;
-        b=teNJyuybcUBRu8Y/N3gpPv/LkkNYwAueeD6QaOUW4C0LP+SGZAkWUTyyfuxdp71ABj
-         mwJazhnQ3ObYIxtFblXSVQyRtxkhhCkWVEsdYJHKkEa45fxyFsy8NkGaxQ264EhAFrah
-         KE68YvuSveMPDdbqLjECCajE7wFZNJI3NnPI2Du5TADkSQfiSL5QcijOsW4jjUZbdASw
-         9aoSkR+JnlXDaGMV6tl8WBux4Bod70pl/GYVIAYgmoWVXGpsa2puo9GSkE631MpSr0ri
-         gY3AByZqA8TLYUJhmV6X3+QWnhG25t2sgOaTkjhlEVkjS/BKkzt5W2+NTVUWZqofvv2U
-         vSYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:message-id:date:mime-version;
-        bh=Rtf3WPy2v5/PbwArc8zsVNsYHP4yZqiUV6FRg+0fDSA=;
-        b=g5LI7Z8UO7ql0VSNaQd0O58by1CCSTRLQJ0AE0mmQpJ4U71DANN5vfzpfLQ8y+3Lfb
-         xSZsaBbmbz2kORwb7KBVZY/ahNG0VaMFf5tNCtCKw30GuafMv1EeBtY4TW+8322YwAhK
-         nLChTubcPlnCPQi2Ymhkel/s5WbsZi0hx7lk64gzvZFdQ0RzoPFGyLxdF6LpwiJL3e9y
-         Ys3Bwsv8mCKzWWZEc74aXUu5JSXtIdF/DUQ81YkygO6AnlpfZavliRDpJg70CYqzcMVm
-         Izu8XAkHuFL3t7PGrY31V7z9x8RMFggAs7YRTZ6df4RrLq2gkPIAyAYjFi383LBB1dMU
-         EQZw==
-X-Gm-Message-State: AOAM5300QR2+Pjq0TSemmKgQDYSIl+CHNQqJhUubxcROSf6fgh2UZBdC
-        ZSdCIuh5YjrR4aSMh+wm7fnnXw==
-X-Google-Smtp-Source: ABdhPJzvBUGf8eI0OYt/qmbfQt+9LTf5uEZcDSPO6S6VGAe1+j7kmLoBgoNQyoNJtK+MHMe/ypdKGw==
-X-Received: by 2002:adf:f4c7:: with SMTP id h7mr19643713wrp.234.1605544875289;
-        Mon, 16 Nov 2020 08:41:15 -0800 (PST)
-Received: from localhost (253.35.17.109.rev.sfr.net. [109.17.35.253])
-        by smtp.gmail.com with ESMTPSA id k1sm20071604wrp.23.2020.11.16.08.41.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 08:41:14 -0800 (PST)
-References: <20201112230043.28987-1-aouledameur@baylibre.com>
- <0f679c62aa48603ea43a8fa4819d688baa802d73.camel@pengutronix.de>
- <1jima91e92.fsf@starbuckisacylon.baylibre.com>
- <48332a44241f3c06966420277060b6048c1f77d0.camel@pengutronix.de>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-usb@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH v2] reset: make shared pulsed reset controls re-triggerable
-In-reply-to: <48332a44241f3c06966420277060b6048c1f77d0.camel@pengutronix.de>
-Message-ID: <1j4klp1cgm.fsf@starbuckisacylon.baylibre.com>
-Date:   Mon, 16 Nov 2020 17:41:13 +0100
+        id S1732191AbgKPQyq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 11:54:46 -0500
+Received: from p3nlsmtpcp01-04.prod.phx3.secureserver.net ([184.168.200.145]:33534
+        "EHLO p3nlsmtpcp01-04.prod.phx3.secureserver.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731271AbgKPQyq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Nov 2020 11:54:46 -0500
+Received: from p3plcpnl0564.prod.phx3.secureserver.net ([50.62.176.91])
+        by : HOSTING RELAY : with ESMTP
+        id ehlAkstXGt9bCehlAkGu0x; Mon, 16 Nov 2020 09:53:44 -0700
+X-CMAE-Analysis: v=2.4 cv=RJ12o6u+ c=1 sm=1 tr=0 ts=5fb2ae98
+ a=enoWsqFKhXaBs5BDtsbzsA==:117 a=dhrM4QDckVN49Kxx3K61fg==:17
+ a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=IkcTkHD0fZMA:10 a=nNwsprhYR40A:10
+ a=VwQbUJbxAAAA:8 a=5isuLWmZutClaEJmLAcA:9 a=QEXdDO2ut3YA:10
+ a=AjGcO6oz07-iQ99wixmX:22
+X-SECURESERVER-ACCT: a1@tripolho.com
+Received: from pool-96-242-17-244.nwrknj.fios.verizon.net ([96.242.17.244]:41130 helo=[192.168.62.65])
+        by p3plcpnl0564.prod.phx3.secureserver.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <22t@tripolho.com>)
+        id 1kehlA-001MKZ-4a; Mon, 16 Nov 2020 09:53:44 -0700
+Subject: Re: kernel locks due to USB I/O
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+References: <9428ae70-887e-b48b-f31c-f95d58f67c61@tripolho.com>
+ <20201110205114.GB204624@rowland.harvard.edu>
+ <8152190e-c962-e376-64fd-cc2ebf3e6104@tripolho.com>
+ <20201111155130.GB237113@rowland.harvard.edu>
+From:   Alberto Sentieri <22t@tripolho.com>
+Message-ID: <9687fac9-94de-50a3-f88e-b7e05d660aba@tripolho.com>
+Date:   Mon, 16 Nov 2020 11:53:38 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20201111155130.GB237113@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - p3plcpnl0564.prod.phx3.secureserver.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - tripolho.com
+X-Get-Message-Sender-Via: p3plcpnl0564.prod.phx3.secureserver.net: authenticated_id: a1@tripolho.com
+X-Authenticated-Sender: p3plcpnl0564.prod.phx3.secureserver.net: a1@tripolho.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-CMAE-Envelope: MS4xfC9zXGncmi6XIaZXZZtnmbvUdL14bijhv8TkeWk4NUd/eSFzHyz+uX46yanpfdnBlN0eksPKX/Hg+sW1ViQ6hXNItx7WMT8dU5X8Ru+oYYC/nWotnlsx
+ XaHNoFWAT695yV0kyZBOMtKBFdGV3no8IvZ7ICpLggcQXaVdWx3lVPu9WRT2kKuvTnte3H7pjDpX7uBQh49cLpvn9ibpXOfe6z8TiFzeEB8GL1Rg+r/VoFJ1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The objective of this email is to report the current status of my findings.
 
-On Mon 16 Nov 2020 at 17:36, Philipp Zabel <p.zabel@pengutronix.de> wrote:
+I loaded netconsole on both machines I was having problems with. I tried 
+3 times on the machine with kernel 5.0.0-37 and twice with on the 
+machine with kernel 5.3.0-62. Each attempt consisted of running the 
+program which lock the kernel until it locked (about 3 minutes after 
+stating the program). The referred program had the "semphore code" 
+commented out. Nothing was sent to netconsole on all the 5 attempts I 
+made when the kernel locked.
 
-> On Fri, 2020-11-13 at 16:13 +0100, Jerome Brunet wrote:
->> On Fri 13 Nov 2020 at 16:04, Philipp Zabel <p.zabel@pengutronix.de> wrote:
->> 
->> > On Fri, 2020-11-13 at 00:00 +0100, Amjad Ouled-Ameur wrote:
->> > > The current reset framework API does not allow to release what is done by
->> > > reset_control_reset(), IOW decrement triggered_count. Add the new
->> > > reset_control_rearm() call to do so.
->> > > 
->> > > When reset_control_reset() has been called once, the counter
->> > > triggered_count, in the reset framework, is incremented i.e the resource
->> > > under the reset is in-use and the reset should not be done again.
->> > > reset_control_rearm() would be the way to state that the resource is
->> > > no longer used and, that from the caller's perspective, the reset can be
->> > > fired again if necessary.
->> > > 
->> > > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> > > Reported-by: Jerome Brunet <jbrunet@baylibre.com>
->> > > ---
->> > > Change since v1: [0]
->> > > * Renamed the new call from reset_control_(array_)resettable to 
->> > > reset_control_(array_)rearm
->> > > * Open-coded reset_control_array_rearm to check for errors before
->> > > decrementing triggered_count because we cannot roll back in case an
->> > > error occurs while decrementing one of the rstc.
->> > > * Reworded the new call's description.
->> > 
->> > Thank you, applied to reset/next.
->> 
->> Hi Philipp,
->> 
->> Would it be possible to get an immutable branch/tag with this ?
->> It would allow to move forward on the USB side, without waiting for the
->> next rc1.
->
-> Here you go,
->
-> The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
->
->   Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
->
-> are available in the Git repository at:
->
->   git://git.pengutronix.de/git/pza/linux.git reset/shared-retrigger
->
-> for you to fetch changes up to 557acb3d2cd9c82de19f944f6cc967a347735385:
->
->   reset: make shared pulsed reset controls re-triggerable (2020-11-16 17:05:28 +0100)
->
-> ----------------------------------------------------------------
-> Amjad Ouled-Ameur (1):
->       reset: make shared pulsed reset controls re-triggerable
->
->  drivers/reset/core.c  | 73 +++++++++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/reset.h |  1 +
->  2 files changed, 74 insertions(+)
->
+Just to be clear about my use of netconsole, before loading the 
+netconsole kernel module, I ran "dmesg -n 8". When netconsole module was 
+loaded I could clearly see about 9 message lines on the computer 
+receiving the netconsole messages telling me that netconsole was loaded 
+(and how it was configured), so no doubts about the correct netconsole 
+setup. The "netconsole server" was a machine on the same local network.
 
-Thx Philipp !
+My next attempt will be to compile kernel 5.9, as you suggest, and try it.
 
-> regards
-> Philipp
+Thanks,
 
+Alberto Sentieri
+
+On 11/11/20 10:51 AM, Alan Stern wrote:
+> On Tue, Nov 10, 2020 at 06:42:17PM -0500, Alberto Sentieri wrote:
+>> 1) The current Ubuntu Kernel is 5.4.0-53. Do you want me to upgrade it to
+>> 5.9, from kernel.org? Or is there a Ubuntu 5.9 package that I can use? It
+>> would be easy to do it If there is a Ubuntu package with 5.9, which I would
+>> install and, after the tests, uninstall.
+> If you want to know what Ubuntu packages are available, you should ask
+> on an Ubuntu mailing list instead of the linux-usb mailing list.
+>
+>> 2) Why do you believe that 5.9 would solve the problem? I am asking that
+>> because I cannot change the production machine for a test if I cannot go
+>> back to the original state. There is always a risk involved.
+> We do not believe that 5.9 will solve the problem -- we have no reason
+> to believe this -- but we could be wrong.  In any case it is always
+> best to test with the most up-to-date software available, and 5.9 is the
+> version closest to what we are working on now.
+>
+>> 3) It is one single thread dealing with all 36 devices. Each device has its
+>> own co-routine (not preemptive), but all co-routines are executed by a
+>> unique thread.
+> If everything runs within a single thread, how can adding a semaphore
+> or mutex make any difference?
+>
+>> 4) By network console, do you mean ssh? It dies as well when it locks. The
+>> screen is the regular GNOME3 screen and nothing can be seen there. Every
+>> time it locks they send a picture, and I cannot see anything meaningful
+>> there. I am thinking about disabling GNOME3, but I need their blessing for
+>> that.
+> See https://www.kernel.org/doc/Documentation/networking/netconsole.txt
+> for instructions on netconsole.  And when you use it for testing, be
+> sure to set the console log level to a high value.
+>
+> Alan Stern
