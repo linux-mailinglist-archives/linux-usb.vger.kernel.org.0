@@ -2,86 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A74E72B44EB
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 14:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE472B4548
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 14:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728759AbgKPNp5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 08:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726308AbgKPNp4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 08:45:56 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D55CC0613CF;
-        Mon, 16 Nov 2020 05:45:56 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id 62so13255187pgg.12;
-        Mon, 16 Nov 2020 05:45:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2xltnhArQ46zPt1AhUH7/HjKCFSGIMeJZ2ZE626Cb4k=;
-        b=JrVsFEPbaP7qtjZTl0SaHhYi0aQajdxebrHZeCx+I/FBKSSY2cdWFUT3tAvbUPaLao
-         AizGgOZ7y2IBjwQynHChCnwHKMe17K9/TnKK6KTiWEbfHb9U4pw+jdhJySRwEY3mtyqm
-         PSIzz17l2ctPjTw1XlIAxyLMesds8eDW+VqUUaVAG0lZX/aIuhPa7lSz4UTzg79Wj5at
-         24KWPPJM94hrIp5t2/NrviPa263GJyvvNf0qF9M4mYdn/nJSLhnb9MxGufkYNJMu9qeR
-         tja+74BNb4s1G0ofn83Yb+6tw+SGm+OJqodGqo+C3Zm5FqBj0BMeCqba4wqqdHqcOEXj
-         Ip8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2xltnhArQ46zPt1AhUH7/HjKCFSGIMeJZ2ZE626Cb4k=;
-        b=mMFGwQRCOvoGe9mx1reyxo9/CAxOoF4cBLFmSnsSQtWtyMDR69qwwydJFEUb8HIoSD
-         4AbObRgNzGN4aeR/bwiiGmxkuG9rPWkb0VF8I9JEaFu0OKPt3uhmyU8pZ8m9XV8tSMlw
-         w5Hx/8/4gadIimhaBemipZTFTj59AFwA8OiIJdzjlFVO00CFaqqYyyewlWl3rSb9X4wN
-         P64RpZD7s0iMP0LHoC6SCaTIco8Ls/r5cGNeWh2mA5/7Nq5CMCTXO32F0ItczKV20gkp
-         ijKqUwh/6+0JRDKrciVS0ufXREjA3fHhm95Zojjdrb1ydUE09MdAWPtQl/BbDsexlUPj
-         S8Xw==
-X-Gm-Message-State: AOAM5326C9GDhjVM+RcUAMA10pC+o/JbxNusX2roGYf0H6PFUGBpKvs8
-        +PO/kx+HWvVQ0VjMfufpwc7dcA8ciR/Yc2nqtwo=
-X-Google-Smtp-Source: ABdhPJytXcRS+PUZHr+vY/FY2mP+eW3iwttP1o2/6RewHYJEWGUN2isHUzPIgRAsot9cE92t7RGb0n50eC0wENn9ag8=
-X-Received: by 2002:a63:3e05:: with SMTP id l5mr12624254pga.74.1605534356088;
- Mon, 16 Nov 2020 05:45:56 -0800 (PST)
+        id S1729904AbgKPNzK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 08:55:10 -0500
+Received: from mail-vi1eur05on2068.outbound.protection.outlook.com ([40.107.21.68]:61984
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729893AbgKPNzJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Nov 2020 08:55:09 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DC5jlxCbgvo6FNj0J+LlV/N7C0Vf/fiIf793DoFWuJNjLZyjmlHHNU11d9LtNM0JTnsq7h+t8CfkrUNUlr1Y3P3KfC3GxG1+jsl3e4fpDjRpD/LL/zY0rPVhFF+6/ny470VHfGhfRkBEyhcmUk8r+1bGaJzP6Nwdkzro3Vmi+uLzdPIkN4c8zvuK0fhrTmrxbapPMvwfoHdVQjdKhgCkEjAnOBlaqNbNl3uV0n/Fs+zSnd7QPWMWBN+I76ONrqvS6tNZRPG36EESLauC75wqDr6UHrTJal++YR7kP24ROiMVHH2YlxOoQiVFiMCOMIe1Xepwznlc6scciiyud9U3Cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BTCGtJZU6Cc8Dt0PL/q6A7yV90Wxo5YLV/kTh+e7CD0=;
+ b=M8GyR4BdN7HWF5SW8pO0XzhUTGX9hzqJ8hB48ENaBLxzLlOg50asEQ4xagDdRVzj9NFtBNFCca2gxdYqTjQ13Ds3y4s5LZJTUZmQdwOGEaAiiRlPMy/Gt+TEbDGvE3l63w16hLSdU6sgOAxJhVm8aINYUWcwOk8GlhJExNWkyKWTN0cNhqfCE7Qgpe1lHih+BoZk7f6vI2V7nIRzng/3kYQGI/YejY9toxOdznJBcu3wVovZUaFtkMsDxk+hxB+Aj1ek+dY9XwqfI58QD6D9m5RwHlshybRBflFrYjyk7OQu4Uc0Fa1DKA9PtV2jhq/JBLbuOeBUgGWN/yjxRe4l3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BTCGtJZU6Cc8Dt0PL/q6A7yV90Wxo5YLV/kTh+e7CD0=;
+ b=ARC9jqjg8nn8TstHXKn6fG4YIk1JmxbY/KnoQu205EhIAvPadoExhYUS3iGaMV4kAsIft3J9k/KUBWA64xYSsgnjVXcuLzl3hBKKMl+8qjdbaXfipd9y7gVuI7QOjBWWZfh1VqELHgyEEXSYAxHOw9DeRfAQknQsEhN+jJNwofc=
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
+ by DBBPR04MB6027.eurprd04.prod.outlook.com (2603:10a6:10:c7::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.28; Mon, 16 Nov
+ 2020 13:55:04 +0000
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3564.028; Mon, 16 Nov 2020
+ 13:55:04 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "jackp@codeaurora.org" <jackp@codeaurora.org>
+Subject: Re: [PATCH 3/3] usb: gadget: configfs: Add a specific configFS reset
+ callback
+Thread-Topic: [PATCH 3/3] usb: gadget: configfs: Add a specific configFS reset
+ callback
+Thread-Index: AQHWul43O0hfmlT/D0uhAjVYLr2LN6nKy00A
+Date:   Mon, 16 Nov 2020 13:55:04 +0000
+Message-ID: <20201116135435.GF28313@b29397-desktop>
+References: <20201114081247.25063-1-wcheng@codeaurora.org>
+ <20201114081247.25063-4-wcheng@codeaurora.org>
+In-Reply-To: <20201114081247.25063-4-wcheng@codeaurora.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: codeaurora.org; dkim=none (message not signed)
+ header.d=none;codeaurora.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: fa396b52-0fa0-429e-9ca1-08d88a37388d
+x-ms-traffictypediagnostic: DBBPR04MB6027:
+x-microsoft-antispam-prvs: <DBBPR04MB6027E21073943770E726B7DB8BE30@DBBPR04MB6027.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VTb9b8mt/J0lGdQ+AuChrfucj1KZEg+IHqm1T/Jwfd1jqUjI80uN2Npz0g5pDftTYJ6XkvQEuFvA0aLtI+Ppp20nK4w0JTMv0S7Z3Gq+I0I5DqmMzRk6vKhjQbS9KuD024DUqy2c8i8wyfHuasdG4w6Pmmj+SQvPvNUmiG3TIy5B0UAWbf2TU/NcSPT31jnSCBH4V3XPogKZ9Ch7H9KvzkntwQb+VMUkrAY5tkYVvsS1v5Z5e1x1GBDVXap1TeCE6CSLTz+9twr+Y+LhLoZfU+R5Oco1hNUrC7DDwcRzzOZItiihKrI8AgjdM2/iVUKaGMgj/yJjoq8hL4btjGyqjw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(376002)(346002)(39860400002)(366004)(396003)(136003)(478600001)(6512007)(2906002)(83380400001)(6916009)(6486002)(9686003)(186003)(76116006)(91956017)(44832011)(5660300002)(26005)(6506007)(316002)(54906003)(53546011)(71200400001)(33656002)(8676002)(4326008)(66946007)(33716001)(66476007)(86362001)(66556008)(66446008)(64756008)(8936002)(1076003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: rQsIPLJBoJPgTnVujPYw7vT05xQNbLk9jg/l2j7gmO4b5pUny9He2d/drWK7oFQROWfD/JY57jEFGYbPSUGraWoxdpNa3t+UWFahx/dlGZKTEijQFIHlkmAoNtKO0Co66X7IW8DEjHPxZ67VJ04AxP9CsGmWEERUjmquv8tDb4tt0KY9XeOP6WCUYxREPq+y20F7gZTjwpZBbuyGWkiUIFnMFqArJATS2WKA5MXIxd9TalDGz0CLN9r44PJCE2xvp0ZbfaGz9ehGGv6lr4I455qkTOy0hkANxk9++oGN4R2BDA2rqqijo9vuHmdMUoHW053y9bXlx7ZXYWxpOhQmbYRT4CL6xeSqu049oxUWr28YbszW05+NG8pT4KMbL8lvnEb8uSfVaEVQAus1pakEfPZI6tvm+WeywS9R255z49RKStnqwHBACvyu0HDWV3AOmj0G5Oi1kHalU8zBebVCt78Slwhjos7xJ9GrJezvXZGgkxnmvItTQfpukkES5k4J0tFRGBXRuRrNZVgdi2trdsVmGzG9ILsqGjpqAgOC/XJFgVkW0B8ropf3BSTBnoewJ3zxgEU+/Ii0wUr6t3KGz73dH+1VyIMATviPs8eS3Izuqv5wGKz54p6fXme+6vkFAfpqbToW7o8XO/8DhlP9BQ==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <122BCDA57440CF41B1520864519A7F39@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20201116094644.GP4077@smile.fi.intel.com> <20201116123735.GA1273179@bjorn-Precision-5520>
-In-Reply-To: <20201116123735.GA1273179@bjorn-Precision-5520>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 16 Nov 2020 15:46:44 +0200
-Message-ID: <CAHp75VdYg+u5jhb9aA4w=f4WbqQLD8aUaf1MRCWp2c+CHOr67A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] PCI: Disable MSI for Pericom PCIe-USB adapter
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        USB <linux-usb@vger.kernel.org>, alberto.vignani@fastwebnet.it
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa396b52-0fa0-429e-9ca1-08d88a37388d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2020 13:55:04.8588
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zb9zSlvkzZ4y9zb+mJKg9q+ubdzpAM5jqdgEfUicx9ug1c3ZiQ+DwfljD7HDj5JEw0fLmlwf5R5GESlgNT0fsQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6027
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 2:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> On Mon, Nov 16, 2020 at 11:46:44AM +0200, Andy Shevchenko wrote:
-> > On Fri, Nov 13, 2020 at 05:21:38PM -0600, Bjorn Helgaas wrote:
-> > > On Fri, Nov 06, 2020 at 12:05:25PM +0200, Andy Shevchenko wrote:
-> > > > Pericom PCIe-USB adapter advertises MSI, but documentation says
-> > > > "The MSI Function is not implemented on this device." in the chapters
-> > > > 7.3.27, 7.3.29-7.3.31.
-> > > >
-> > > > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
-> > > > Datasheet: https://www.diodes.com/assets/Datasheets/PI7C9X440SL.pdf
-> > > > Reported-by: alberto.vignani@fastwebnet.it
-> > >
-> > > Is there a URL to a problem report we can include here?
-> >
-> > You mean URL to email archives or something else?
->
-> Yes.  URL to lore email archive, bugzilla, or any other report of the
-> problem this caused, i.e., how Alberto noticed something wrong.
+On 20-11-14 00:12:47, Wesley Cheng wrote:
+> In order for configFS based USB gadgets to set the proper charge current
+> for bus reset scenarios, expose a separate reset callback to set the
+> current to 100mA based on the USB battery charging specification.
+>=20
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 
-Okay, I'll include in v3.
+Reviewed-by: Peter Chen <peter.chen@nxp.com>
 
--- 
-With Best Regards,
-Andy Shevchenko
+> ---
+>  drivers/usb/gadget/configfs.c | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.=
+c
+> index 56051bb97349..80ca7ff2fb97 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -1481,6 +1481,28 @@ static void configfs_composite_disconnect(struct u=
+sb_gadget *gadget)
+>  	spin_unlock_irqrestore(&gi->spinlock, flags);
+>  }
+> =20
+> +static void configfs_composite_reset(struct usb_gadget *gadget)
+> +{
+> +	struct usb_composite_dev *cdev;
+> +	struct gadget_info *gi;
+> +	unsigned long flags;
+> +
+> +	cdev =3D get_gadget_data(gadget);
+> +	if (!cdev)
+> +		return;
+> +
+> +	gi =3D container_of(cdev, struct gadget_info, cdev);
+> +	spin_lock_irqsave(&gi->spinlock, flags);
+> +	cdev =3D get_gadget_data(gadget);
+> +	if (!cdev || gi->unbind) {
+> +		spin_unlock_irqrestore(&gi->spinlock, flags);
+> +		return;
+> +	}
+> +
+> +	composite_reset(gadget);
+> +	spin_unlock_irqrestore(&gi->spinlock, flags);
+> +}
+> +
+>  static void configfs_composite_suspend(struct usb_gadget *gadget)
+>  {
+>  	struct usb_composite_dev *cdev;
+> @@ -1530,7 +1552,7 @@ static const struct usb_gadget_driver configfs_driv=
+er_template =3D {
+>  	.unbind         =3D configfs_composite_unbind,
+> =20
+>  	.setup          =3D configfs_composite_setup,
+> -	.reset          =3D configfs_composite_disconnect,
+> +	.reset          =3D configfs_composite_reset,
+>  	.disconnect     =3D configfs_composite_disconnect,
+> =20
+>  	.suspend	=3D configfs_composite_suspend,
+> --=20
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum=
+,
+> a Linux Foundation Collaborative Project
+>=20
+
+--=20
+
+Thanks,
+Peter Chen=
