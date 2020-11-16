@@ -2,128 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3F42B44CA
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 14:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E76EC2B44E5
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 14:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729310AbgKPNdc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 08:33:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43800 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726944AbgKPNdb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Nov 2020 08:33:31 -0500
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8C9B522240;
-        Mon, 16 Nov 2020 13:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605533610;
-        bh=AfprN1MLPuZxPJwWwhQ10Y05soQ+6PcoI/dzBev3uK4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TvMUPFfEnYP+7X+I3jS+BXXvuFdvsu7NObQM9gv3lyhncPwBvdgPZlymPe5fe5a3m
-         2KnG9/v/PHJePREmnrtVnbtuyG+VQu8l3LuvhED4Ys4T/ruz+EAGsYatEYG75BgSL0
-         lfVz49hRDbF2lTeo3XY3s53AU53yvuriDvJOgIOY=
-Date:   Mon, 16 Nov 2020 13:33:11 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-usb@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v1 11/30] drm/tegra: dc: Support OPP and SoC core voltage
- scaling
-Message-ID: <20201116133311.GB4739@sirena.org.uk>
-References: <20201112171600.GD4742@sirena.org.uk>
- <b4b06c1d-c9d4-43b2-c6eb-93f8cb6c677d@gmail.com>
- <20201112200123.GF4742@sirena.org.uk>
- <ce9e2d9f-917e-fb8a-7323-f3bf1a367e9d@gmail.com>
- <20201113142937.GB4828@sirena.org.uk>
- <7f066805-97d9-088f-e89d-a554fe478574@gmail.com>
- <20201113161550.GC4828@sirena.org.uk>
- <3beaa12b-4a50-a3b6-fc43-ebb5ce7a8db7@gmail.com>
- <20201113172859.GF4828@sirena.org.uk>
- <74cfc6a9-3f59-d679-14b7-51102a6f11b3@gmail.com>
+        id S1727849AbgKPNn3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 08:43:29 -0500
+Received: from mail-vi1eur05on2070.outbound.protection.outlook.com ([40.107.21.70]:29377
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726615AbgKPNn3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Nov 2020 08:43:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dw6z/KdxKRkH6qqiRxqd7g8kSZsZZZouz5c0/FYW9XqzBmOjJtVfTDA3XmGATNPO9zBCE0XZy20FaxpR5YwTQxHCPbdUsR+CgZrq0jqzzc8b4mQe5FL8gV7nJGEE8snltJ290NEp5t/XVyOz52qtVyEE+74MWOtO/m48oZV+xLboFC6thFpS70PZCZKqajUrRo7Zdo2KPuFKu9LxohxCy12lCfDCnyyG6r/5ka4X10ul3OqUCMBiepVsAQDw1+9uzFHXsdqtMsCzO+vCwz1bdqAvNftTArihLPSUVL3VZSpmDvvkaA6iE/88YcGncKxdBWywa0ftwOZAOTBcGMsvPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8b6vmCpdGesgD9VsLkDt6+Dq9OBsewhJ+5h556xZImg=;
+ b=MIHu1kwqbK/vCPqDcIv+Gm25BYDgGEwUIUrsumIGa4lP0NAuv0gLMJAPtuBlukBwugiBGHfbVLzxYBqy/MFxQGCdClOPk8MJLhN9JO9uE/QfEEick0C8i4jqUb3NouQu0NwSKD5aF38ICOOwbEMdCEyAh/Pz7hbJlIpCrAfyumaNtmMWbTiqTHACjDu8Gb8boFk716+M7yCOINC8aqMI9HGCiU2aIyQyAuu3iGU39rVmx8SqLEQFPnZgMJZ3iyjqL9IsMaIORaeYDNhTGRp3IF2FmmrKPC7MhEwbqfkpa1ntSTWvvUhHJIK19BllkvTXaaEZJTdNKTkUAQmfo5YbLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8b6vmCpdGesgD9VsLkDt6+Dq9OBsewhJ+5h556xZImg=;
+ b=kokYgRcbAlBl22nOXC9cG4/0A0PWcOwPuQuIIl6XR4MtVZ0ba2YmJ+4U8GI6KO4z/Y+gqlbFiRkH0+DLPefDJzniq4PnUwsxRkAOXV0JWSK0eGC27wnQ1cW1DTLgN3+C0M+0LTV//t9WWgXIDcKjuO8aj1znh3N6ks5wbrcX0BM=
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
+ by DB8PR04MB6715.eurprd04.prod.outlook.com (2603:10a6:10:10d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.25; Mon, 16 Nov
+ 2020 13:43:25 +0000
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3564.028; Mon, 16 Nov 2020
+ 13:43:25 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "jackp@codeaurora.org" <jackp@codeaurora.org>
+Subject: Re: [PATCH 1/3] usb: dwc3: gadget: Introduce a DWC3 VBUS draw
+ callback
+Thread-Topic: [PATCH 1/3] usb: dwc3: gadget: Introduce a DWC3 VBUS draw
+ callback
+Thread-Index: AQHWul428/SymkiG90aqrLQfwE9+U6nKyAoA
+Date:   Mon, 16 Nov 2020 13:43:25 +0000
+Message-ID: <20201116134255.GD28313@b29397-desktop>
+References: <20201114081247.25063-1-wcheng@codeaurora.org>
+ <20201114081247.25063-2-wcheng@codeaurora.org>
+In-Reply-To: <20201114081247.25063-2-wcheng@codeaurora.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: codeaurora.org; dkim=none (message not signed)
+ header.d=none;codeaurora.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 61bc9d57-c9c2-47c3-21e8-08d88a359790
+x-ms-traffictypediagnostic: DB8PR04MB6715:
+x-microsoft-antispam-prvs: <DB8PR04MB67158CBDFB6EF0ED3CC699538BE30@DB8PR04MB6715.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qyHgjgGi+Z+k1n7TlaUyy15nuTY05U1InLfhEt146ojlEbax70zxS+TgP+ODMES9D3wBMJMFhi5T10ofisLINr5XsXu+lNYifj2ijftiJ5nltlusH8Hspw0VEqOWg2Dn+TQDJd3C2GZCWiZUKRRIzB3w0iXMPUutUH917XtzTQ5R82gE239fQ1z7fX8//oV4xX26Vvrr9mr8VqIGTv8ZHeGg96p6ewzOTsqzybmKEK32D1hNGkheUyskaRDthog9HIfsAi5NH8qoF4QrSJfMy2B0GKlmjqXX5bXVur7juw23NKtsyHNhY34NDPAwzJCNyPgrZ91cbOM4YKMl1iWddA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(376002)(39860400002)(396003)(366004)(136003)(346002)(71200400001)(6506007)(6512007)(44832011)(86362001)(54906003)(26005)(8936002)(8676002)(91956017)(316002)(6486002)(53546011)(1076003)(9686003)(66446008)(186003)(2906002)(478600001)(33656002)(64756008)(83380400001)(66556008)(33716001)(76116006)(4326008)(66946007)(6916009)(5660300002)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 6tdOlqJ30xhNwJfhrmK5srWaStUpbF9I91jIkOFrpLbVikmRkDoruXRmCgSqhnAvuNRoBsnLXNeW46yPS6q6/UWUqOI+5sXB9RfzeTxvyge1FBfrUj7lCSl7Gj03s+Orn7InZRp4SGPT/uUt3BWg+xQenWp2ST0RERCpWQBT5cG7l4NQGLV5Njk1gNsuEKHXc+wZZPN/t+116I0eCH7AXsJdm7HxXo6f1Kz3lELA2KCoLD3WwNu7GGNMSriDtpip0qstb3sBKcixI3USynNvYkN85rXJGeCWfsbHHPKQN8jWZqEWBA0elsKn57rYD3DiUlJsmlZ/8COhKbcWFuUK8M9WZrzKQIMb6rRmfgENJmfQfOdezTWCBvaUzGjiA/TVBT784O3BUVHVOQxqrHzWcvY17AoJKc8tZ5NEHt2zVkFWqPs6KHKghjvlAoomXcsfwmjbYPK2wZiekmmDdv4QXPHAYiat2Gw2XR+yetuoylQKHlRrdm814tjqN1ZmavDK01z1MYP8HTMlY/wMFIXxDzYLwiDPxS7KtF9dscefzuPUzBwO8gPA5e5WQNvUhB3nbEWRrofXfFJC/VPk4sUbb6Ph/TnQwa2/nD20N2lPQPi0YqO9EQXUTwCC3a/ySLNBemEbpHhORUnAmA04cHNzCw==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C7154BF661943241BCD2F83977331297@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="U+BazGySraz5kW0T"
-Content-Disposition: inline
-In-Reply-To: <74cfc6a9-3f59-d679-14b7-51102a6f11b3@gmail.com>
-X-Cookie: Immanuel doesn't pun, he Kant.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61bc9d57-c9c2-47c3-21e8-08d88a359790
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2020 13:43:25.1270
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ONqsbbIO9MjStpOf14CIDJP3+A7RzvLbjsMRUoaMobHN/zTgumtVhVDCL1ZK+I1cGEam8r6O7Ri2Uwj35igsXg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6715
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 20-11-14 00:12:45, Wesley Cheng wrote:
+> Some devices support charging while in device mode.  In these situations,
+> the USB gadget will notify the DWC3 gadget driver to modify the current
+> based on the enumeration and device state.  The usb_phy_set_power() API
+> will allow external charger entities to adjust the charge current through
+> the notifier block.
+>=20
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/gadget.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>=20
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index c145da1d8ba5..69122f66978e 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -2387,6 +2387,16 @@ static void dwc3_gadget_set_speed(struct usb_gadge=
+t *g,
+>  	spin_unlock_irqrestore(&dwc->lock, flags);
+>  }
+> =20
+> +static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+> +{
+> +	struct dwc3		*dwc =3D gadget_to_dwc(g);
+> +
+> +	if (dwc->usb2_phy)
+> +		return usb_phy_set_power(dwc->usb2_phy, mA);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct usb_gadget_ops dwc3_gadget_ops =3D {
+>  	.get_frame		=3D dwc3_gadget_get_frame,
+>  	.wakeup			=3D dwc3_gadget_wakeup,
+> @@ -2396,6 +2406,7 @@ static const struct usb_gadget_ops dwc3_gadget_ops =
+=3D {
+>  	.udc_stop		=3D dwc3_gadget_stop,
+>  	.udc_set_speed		=3D dwc3_gadget_set_speed,
+>  	.get_config_params	=3D dwc3_gadget_config_params,
+> +	.vbus_draw		=3D dwc3_gadget_vbus_draw,
+>  };
+> =20
 
---U+BazGySraz5kW0T
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Peter Chen <peter.chen@nxp.com>
 
-On Sun, Nov 15, 2020 at 08:42:10PM +0300, Dmitry Osipenko wrote:
-> 13.11.2020 20:28, Mark Brown =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+--=20
 
-> >> What should we do?
-
-> > As I keep saying the consumer driver should be enumerating the voltages
-> > it can set, if it can't find any and wants to continue then it can just
-> > skip setting voltages later on.  If only some are unavailable then it
-> > probably wants to eliminate those specific OPPs instead.
-
-> I'm seeing a dummy regulator as a helper for consumer drivers which
-> removes burden of handling an absent (optional) regulator. Is this a
-> correct understanding of a dummy regulator?
-
-> Older DTBs don't have a regulator and we want to keep them working. This
-> is equal to a physically absent regulator and in this case it's an
-> optional regulator, IMO.
-
-No, you are failing to understand the purpose of this code.  To
-reiterate unless the device supports operating with the supply
-physically absent then the driver should not be attempting to use
-regulator_get_optional().  That exists specifically for the case where
-the supply may be absent, nothing else.  The dummy regulator is there
-precisely for the case where the system does not describe supplies that
-we know are required for the device to function, it fixes up that
-omission so we don't need to open code handling of this in every single
-consumer driver.
-
-Regulators that are present but not described by the firmware are a
-clearly different case to regulators that are not physically there,
-hardware with actually optional regulators will generally require some
-configuration for this case.
-
---U+BazGySraz5kW0T
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+yf5YACgkQJNaLcl1U
-h9AVMQf+IoDe7CVrA+pGhJ28AkcYg8sn+fM3Rc1IOht/iu21+rnclIoozR+TXdQS
-Jm4mLzjjC4nogj7AsCKZhCKkWguwmpqIJMNSgmWoVJ74EOVlelev8tfIq9Ih2wNS
-OfwLqZWOpetdcf2LYiCCMhJtAsfS0c8vaqXWKQyTFc1I12BSuWZD+CPPtw8c3h97
-grOgbw1i3OIO5veJ0o6Ia96tJGNokju2054eJsAP0I+H5KXg4emm7um4AzSDmNh+
-ewuLlkg4vtgEtT07Vf59X4CD3TEiHzZJpg6ADEaZmbDRYkPeogIw1W7R1lPJ/ahg
-9kpqISDUQWH2TtJJXqZWteiMDzVYsQ==
-=DOOy
------END PGP SIGNATURE-----
-
---U+BazGySraz5kW0T--
+Thanks,
+Peter Chen=
