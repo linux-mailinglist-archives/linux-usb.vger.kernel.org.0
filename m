@@ -2,156 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE472B4548
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 14:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 191282B456D
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Nov 2020 15:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729904AbgKPNzK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 08:55:10 -0500
-Received: from mail-vi1eur05on2068.outbound.protection.outlook.com ([40.107.21.68]:61984
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        id S1730213AbgKPOBg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 09:01:36 -0500
+Received: from mail-eopbgr60055.outbound.protection.outlook.com ([40.107.6.55]:34693
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729893AbgKPNzJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Nov 2020 08:55:09 -0500
+        id S1730211AbgKPOBf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Nov 2020 09:01:35 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DC5jlxCbgvo6FNj0J+LlV/N7C0Vf/fiIf793DoFWuJNjLZyjmlHHNU11d9LtNM0JTnsq7h+t8CfkrUNUlr1Y3P3KfC3GxG1+jsl3e4fpDjRpD/LL/zY0rPVhFF+6/ny470VHfGhfRkBEyhcmUk8r+1bGaJzP6Nwdkzro3Vmi+uLzdPIkN4c8zvuK0fhrTmrxbapPMvwfoHdVQjdKhgCkEjAnOBlaqNbNl3uV0n/Fs+zSnd7QPWMWBN+I76ONrqvS6tNZRPG36EESLauC75wqDr6UHrTJal++YR7kP24ROiMVHH2YlxOoQiVFiMCOMIe1Xepwznlc6scciiyud9U3Cw==
+ b=idndw+9bjNvng9YfM5RKu2LBj/mIU2aJ8n4DKg3uQl4OGZeo8Nxriu+LuuZC15UsWjiykCNgBFFfHYijONBBfDHYO5hkBNg5DnepLFML1kVH1nFPRIZdb5QB0PlL1EgJMsau/7MOI3jmGavcgZAXIMy4dqRmHYX/ESB++IDboZEcyjDUBDyGco6DswQYYYBWa5vJoyon67FH0uhQodIydTUM2aKPj2JWH0LF3KNCRqZtt3xygO8redpLaVTHlqdZJT8lewXaeEMYfbd/cedkHkE4bnkggHm5eg0+NuRRc1kpanmu+8veyDqv0q/4NPd3T0oE9KpvjxFmucs7qAZK9g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BTCGtJZU6Cc8Dt0PL/q6A7yV90Wxo5YLV/kTh+e7CD0=;
- b=M8GyR4BdN7HWF5SW8pO0XzhUTGX9hzqJ8hB48ENaBLxzLlOg50asEQ4xagDdRVzj9NFtBNFCca2gxdYqTjQ13Ds3y4s5LZJTUZmQdwOGEaAiiRlPMy/Gt+TEbDGvE3l63w16hLSdU6sgOAxJhVm8aINYUWcwOk8GlhJExNWkyKWTN0cNhqfCE7Qgpe1lHih+BoZk7f6vI2V7nIRzng/3kYQGI/YejY9toxOdznJBcu3wVovZUaFtkMsDxk+hxB+Aj1ek+dY9XwqfI58QD6D9m5RwHlshybRBflFrYjyk7OQu4Uc0Fa1DKA9PtV2jhq/JBLbuOeBUgGWN/yjxRe4l3w==
+ bh=zwuI+rn5HNfIbC6upNB+7LKwEGjcclUS5DLsoDgOSw0=;
+ b=ivSHafjy/0eG+s85LaJPcen9DnAJuQO5SmvjunB1AW2sKeDVaw8ktFYP11c83vPyev7jlT9nJ/nNpNf+dASIX0HPhCdqsskqCsByF0D6lSabNeFeZOlY2m24sczy/Yq1Jl9QYkJrIAOq9po52n0KLUAm6oBF9RJ4jA2e0tavkPmMNRXTNw8fkFBKp5PU75vwXvCT/5PFNIUPoUHPcGa4Zsg+ci//6nKHyyiZc1WREt4aZkbwkil2WAOxVwbepAjpoda1jvUy/HdsWZwOqeSu24otWevWxPl0Y/3CxUJxmSmeDi7UtVnVGzehISZ1qrpBWq2xMNqRbYS9E/1Wo7E6gA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BTCGtJZU6Cc8Dt0PL/q6A7yV90Wxo5YLV/kTh+e7CD0=;
- b=ARC9jqjg8nn8TstHXKn6fG4YIk1JmxbY/KnoQu205EhIAvPadoExhYUS3iGaMV4kAsIft3J9k/KUBWA64xYSsgnjVXcuLzl3hBKKMl+8qjdbaXfipd9y7gVuI7QOjBWWZfh1VqELHgyEEXSYAxHOw9DeRfAQknQsEhN+jJNwofc=
+ bh=zwuI+rn5HNfIbC6upNB+7LKwEGjcclUS5DLsoDgOSw0=;
+ b=HTxgnnUp9w+puKT7jiYZCIsBkTDZ0B04Zsn3u4OnJVVvua4/M+sYQi/qMHV5rnPzhLBzSa75kyEWrmkYNyr8wGxJefKUo16E+RNFMi01H8AN7mk1jQ1dw0Qg6Ph6QHSIljOKF9NyYaEdxbE+pOpyu4w5GqWiL54ePDxEOw4EoME=
 Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
  by DBBPR04MB6027.eurprd04.prod.outlook.com (2603:10a6:10:c7::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.28; Mon, 16 Nov
- 2020 13:55:04 +0000
+ 2020 14:01:33 +0000
 Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
  ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
  ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3564.028; Mon, 16 Nov 2020
- 13:55:04 +0000
+ 14:01:33 +0000
 From:   Peter Chen <peter.chen@nxp.com>
-To:     Wesley Cheng <wcheng@codeaurora.org>
+To:     Chen Zhou <chenzhou10@huawei.com>
 CC:     "balbi@kernel.org" <balbi@kernel.org>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
+        "jun.li@freescale.com" <jun.li@freescale.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "jackp@codeaurora.org" <jackp@codeaurora.org>
-Subject: Re: [PATCH 3/3] usb: gadget: configfs: Add a specific configFS reset
- callback
-Thread-Topic: [PATCH 3/3] usb: gadget: configfs: Add a specific configFS reset
- callback
-Thread-Index: AQHWul43O0hfmlT/D0uhAjVYLr2LN6nKy00A
-Date:   Mon, 16 Nov 2020 13:55:04 +0000
-Message-ID: <20201116135435.GF28313@b29397-desktop>
-References: <20201114081247.25063-1-wcheng@codeaurora.org>
- <20201114081247.25063-4-wcheng@codeaurora.org>
-In-Reply-To: <20201114081247.25063-4-wcheng@codeaurora.org>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH v2] usb: gadget: mass_storage: fix error return code in
+ msg_bind()
+Thread-Topic: [PATCH v2] usb: gadget: mass_storage: fix error return code in
+ msg_bind()
+Thread-Index: AQHWuPqsLIOnAtmxwUipVxtESKIpeqnKz+IA
+Date:   Mon, 16 Nov 2020 14:01:33 +0000
+Message-ID: <20201116140104.GG28313@b29397-desktop>
+References: <20201112135423.89536-1-chenzhou10@huawei.com>
+In-Reply-To: <20201112135423.89536-1-chenzhou10@huawei.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: codeaurora.org; dkim=none (message not signed)
- header.d=none;codeaurora.org; dmarc=none action=none header.from=nxp.com;
+authentication-results: huawei.com; dkim=none (message not signed)
+ header.d=none;huawei.com; dmarc=none action=none header.from=nxp.com;
 x-originating-ip: [119.31.174.67]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: fa396b52-0fa0-429e-9ca1-08d88a37388d
+x-ms-office365-filtering-correlation-id: 59ca0937-133b-455b-35e9-08d88a381fef
 x-ms-traffictypediagnostic: DBBPR04MB6027:
-x-microsoft-antispam-prvs: <DBBPR04MB6027E21073943770E726B7DB8BE30@DBBPR04MB6027.eurprd04.prod.outlook.com>
+x-microsoft-antispam-prvs: <DBBPR04MB6027F6233ABC3C02F01B4C378BE30@DBBPR04MB6027.eurprd04.prod.outlook.com>
+x-ms-exchange-transport-forked: True
 x-ms-oob-tlc-oobclassifiers: OLM:7219;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VTb9b8mt/J0lGdQ+AuChrfucj1KZEg+IHqm1T/Jwfd1jqUjI80uN2Npz0g5pDftTYJ6XkvQEuFvA0aLtI+Ppp20nK4w0JTMv0S7Z3Gq+I0I5DqmMzRk6vKhjQbS9KuD024DUqy2c8i8wyfHuasdG4w6Pmmj+SQvPvNUmiG3TIy5B0UAWbf2TU/NcSPT31jnSCBH4V3XPogKZ9Ch7H9KvzkntwQb+VMUkrAY5tkYVvsS1v5Z5e1x1GBDVXap1TeCE6CSLTz+9twr+Y+LhLoZfU+R5Oco1hNUrC7DDwcRzzOZItiihKrI8AgjdM2/iVUKaGMgj/yJjoq8hL4btjGyqjw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(376002)(346002)(39860400002)(366004)(396003)(136003)(478600001)(6512007)(2906002)(83380400001)(6916009)(6486002)(9686003)(186003)(76116006)(91956017)(44832011)(5660300002)(26005)(6506007)(316002)(54906003)(53546011)(71200400001)(33656002)(8676002)(4326008)(66946007)(33716001)(66476007)(86362001)(66556008)(66446008)(64756008)(8936002)(1076003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: rQsIPLJBoJPgTnVujPYw7vT05xQNbLk9jg/l2j7gmO4b5pUny9He2d/drWK7oFQROWfD/JY57jEFGYbPSUGraWoxdpNa3t+UWFahx/dlGZKTEijQFIHlkmAoNtKO0Co66X7IW8DEjHPxZ67VJ04AxP9CsGmWEERUjmquv8tDb4tt0KY9XeOP6WCUYxREPq+y20F7gZTjwpZBbuyGWkiUIFnMFqArJATS2WKA5MXIxd9TalDGz0CLN9r44PJCE2xvp0ZbfaGz9ehGGv6lr4I455qkTOy0hkANxk9++oGN4R2BDA2rqqijo9vuHmdMUoHW053y9bXlx7ZXYWxpOhQmbYRT4CL6xeSqu049oxUWr28YbszW05+NG8pT4KMbL8lvnEb8uSfVaEVQAus1pakEfPZI6tvm+WeywS9R255z49RKStnqwHBACvyu0HDWV3AOmj0G5Oi1kHalU8zBebVCt78Slwhjos7xJ9GrJezvXZGgkxnmvItTQfpukkES5k4J0tFRGBXRuRrNZVgdi2trdsVmGzG9ILsqGjpqAgOC/XJFgVkW0B8ropf3BSTBnoewJ3zxgEU+/Ii0wUr6t3KGz73dH+1VyIMATviPs8eS3Izuqv5wGKz54p6fXme+6vkFAfpqbToW7o8XO/8DhlP9BQ==
-x-ms-exchange-transport-forked: True
+x-microsoft-antispam-message-info: eP0FywL9RcClidAcFY8KlsUcw9IMMGTenwuYdVglSmKXr16Q3jFv3D9oyvo4bTFRdCOh3Og47e+a8I3N4ldtqiXT/6KviLDbW1gI4PMEtNa4Xk64TMNZkd2RL5YYdzxsUt6c1jnPt2Hzw5w7CWuNSPN3xgAmddl1F+mU8+y+ZPPuCZeZ3jG0taVtz2/ymfsTBg7j/N/cMNfLs17roS/ycpgYiKPS2e5og3pJ6y167Tj81c5rkVgm2kzvZi/TLweGE/qOaYLGCgKdauCsN1yy0CnISC/M6U1jcm5s5b2DJLJd9yVhI7yIZGzzlQUPE5VyXS/gV89gjQcxi2j5IqQy1Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(396003)(136003)(39860400002)(346002)(376002)(26005)(53546011)(71200400001)(54906003)(6506007)(316002)(186003)(44832011)(5660300002)(76116006)(91956017)(66446008)(64756008)(1076003)(8936002)(66556008)(66476007)(86362001)(33716001)(33656002)(8676002)(4326008)(66946007)(83380400001)(6916009)(478600001)(2906002)(6512007)(9686003)(6486002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: xfSPciGe4yiheKmL/nzAUW1C3a4vzdCyDgVjxFZXAH84Sp0oeTEG4dSpFIDpNI6s1pTMEIcdm5tQQx7K953K1pre1cnX0vxcBx6FznC4SFN6Obkoo68hXzJerRPZkb+kKxUdGJrvvse7qTYhHZSG4jrmqKj0kMeQV/Y/ev2OPCw51PLnpAbF494Z3VnAkVckX921u+ctVC3v/ll20z7EbXoxNGMLUzrToBVl86390nRcI+0u6VBosmjb8UITyzjhvL+sOzfDF2FeTHFvF6IKYkCU8ivYdE40lKZ4N/VDz+wyubc55qwiN7vSDrbtj7uoPMXbw+VBrwE3YSdsH/ewlLJKTy29dR8jpEI/tfhI7p2LTFRVlHCwzL7HNNz4XegdgW/YHQlaQJ0LceEVGtJMLKlZMBdLPuXg1kUnVHTZoqPrz8XrZpMi6Sj0+JsM1gnNBE4DicnkOHc/nWO7oe+b9gks2P2cd3vS09wuKx966fHrRG0uoO9voXx+3twQOg3PiPj9Hfo3rYnj2F7F8AWEs8JLtXsDR0Jhi0p5BoNg7RwWIuP8jWmpnkQ0s3BuMmGCF+83NOWWXyzK7y4qI/MidsBRzXcNd0ndjlg5WnzAqp1TnPLRNyD20Y9RLEacQn690APwomOPIlBoFkCQPd33gQ==
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <122BCDA57440CF41B1520864519A7F39@eurprd04.prod.outlook.com>
+Content-ID: <93BBCD88BDED4349B2F61D504CDF2BEC@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa396b52-0fa0-429e-9ca1-08d88a37388d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2020 13:55:04.8588
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59ca0937-133b-455b-35e9-08d88a381fef
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2020 14:01:33.0591
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zb9zSlvkzZ4y9zb+mJKg9q+ubdzpAM5jqdgEfUicx9ug1c3ZiQ+DwfljD7HDj5JEw0fLmlwf5R5GESlgNT0fsQ==
+X-MS-Exchange-CrossTenant-userprincipalname: lAFXCUpN3WnPZQeOiL78TjfcvU5DKjz+sX2JBJtOY6lFl5ecDq6O5C7M42ZKTgrrYsf0tGzQ+Em5TR1H+sAB8w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6027
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-11-14 00:12:47, Wesley Cheng wrote:
-> In order for configFS based USB gadgets to set the proper charge current
-> for bus reset scenarios, expose a separate reset callback to set the
-> current to 100mA based on the USB battery charging specification.
+On 20-11-12 21:54:23, Chen Zhou wrote:
+> Fix to return a negative error code from the error handling case
+> instead of 0 in function msg_bind(), as done elsewhere in this
+> function.
 >=20
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> Fixes: d86788979761 ("usb: gadget: mass_storage: allocate and init otg de=
+scriptor by otg capabilities")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
 
 Reviewed-by: Peter Chen <peter.chen@nxp.com>
 
+Peter
 > ---
->  drivers/usb/gadget/configfs.c | 24 +++++++++++++++++++++++-
->  1 file changed, 23 insertions(+), 1 deletion(-)
+>  drivers/usb/gadget/legacy/mass_storage.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.=
-c
-> index 56051bb97349..80ca7ff2fb97 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -1481,6 +1481,28 @@ static void configfs_composite_disconnect(struct u=
-sb_gadget *gadget)
->  	spin_unlock_irqrestore(&gi->spinlock, flags);
->  }
+> diff --git a/drivers/usb/gadget/legacy/mass_storage.c b/drivers/usb/gadge=
+t/legacy/mass_storage.c
+> index 9ed22c5fb7fe..ac1741126619 100644
+> --- a/drivers/usb/gadget/legacy/mass_storage.c
+> +++ b/drivers/usb/gadget/legacy/mass_storage.c
+> @@ -175,8 +175,10 @@ static int msg_bind(struct usb_composite_dev *cdev)
+>  		struct usb_descriptor_header *usb_desc;
 > =20
-> +static void configfs_composite_reset(struct usb_gadget *gadget)
-> +{
-> +	struct usb_composite_dev *cdev;
-> +	struct gadget_info *gi;
-> +	unsigned long flags;
-> +
-> +	cdev =3D get_gadget_data(gadget);
-> +	if (!cdev)
-> +		return;
-> +
-> +	gi =3D container_of(cdev, struct gadget_info, cdev);
-> +	spin_lock_irqsave(&gi->spinlock, flags);
-> +	cdev =3D get_gadget_data(gadget);
-> +	if (!cdev || gi->unbind) {
-> +		spin_unlock_irqrestore(&gi->spinlock, flags);
-> +		return;
-> +	}
-> +
-> +	composite_reset(gadget);
-> +	spin_unlock_irqrestore(&gi->spinlock, flags);
-> +}
-> +
->  static void configfs_composite_suspend(struct usb_gadget *gadget)
->  {
->  	struct usb_composite_dev *cdev;
-> @@ -1530,7 +1552,7 @@ static const struct usb_gadget_driver configfs_driv=
-er_template =3D {
->  	.unbind         =3D configfs_composite_unbind,
-> =20
->  	.setup          =3D configfs_composite_setup,
-> -	.reset          =3D configfs_composite_disconnect,
-> +	.reset          =3D configfs_composite_reset,
->  	.disconnect     =3D configfs_composite_disconnect,
-> =20
->  	.suspend	=3D configfs_composite_suspend,
+>  		usb_desc =3D usb_otg_descriptor_alloc(cdev->gadget);
+> -		if (!usb_desc)
+> +		if (!usb_desc) {
+> +			status =3D -ENOMEM;
+>  			goto fail_string_ids;
+> +		}
+>  		usb_otg_descriptor_init(cdev->gadget, usb_desc);
+>  		otg_desc[0] =3D usb_desc;
+>  		otg_desc[1] =3D NULL;
 > --=20
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum=
-,
-> a Linux Foundation Collaborative Project
+> 2.20.1
 >=20
 
 --=20
