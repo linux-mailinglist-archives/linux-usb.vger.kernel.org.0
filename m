@@ -2,83 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E383D2B5AE5
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 09:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0559C2B5B91
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 10:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbgKQIVe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Nov 2020 03:21:34 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:12601 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727044AbgKQIVd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Nov 2020 03:21:33 -0500
-X-UUID: 0705bf3d096d4f659d5a58afd1564ded-20201117
-X-UUID: 0705bf3d096d4f659d5a58afd1564ded-20201117
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <min.guo@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 225383250; Tue, 17 Nov 2020 16:21:28 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 17 Nov 2020 16:21:26 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 17 Nov 2020 16:21:26 +0800
-From:   <min.guo@mediatek.com>
-To:     Bin Liu <b-liu@ti.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Min Guo <min.guo@mediatek.com>
-Subject: [PATCH] usb: musb: remove unused variable 'devctl'
-Date:   Tue, 17 Nov 2020 16:21:25 +0800
-Message-ID: <20201117082125.7619-1-min.guo@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S1726954AbgKQJOD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Nov 2020 04:14:03 -0500
+Received: from pao.o2scoral.fr ([109.234.167.119]:44072 "EHLO pao.o2scoral.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725730AbgKQJOD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Nov 2020 04:14:03 -0500
+X-Greylist: delayed 312 seconds by postgrey-1.27 at vger.kernel.org; Tue, 17 Nov 2020 04:14:02 EST
+X-Spam-Status: No
+X-MailPropre-MailScanner-From: ddhx@madh.eu
+X-MailPropre-MailScanner-SpamScore: s
+X-MailPropre-MailScanner-SpamCheck: not spam, SpamAssassin (not cached,
+        score=1.658, required 5, autolearn=disabled, BAYES_05 1.50,
+        HELO_MISC_IP 0.17, RDNS_DYNAMIC 0.98, SPF_HELO_NONE 0.00,
+        SPF_PASS -1.00, TVD_RCVD_IP 0.00)
+X-MailPropre-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+X-MailPropre-MailScanner-ID: 499631005B9.A6A15
+X-MailPropre-MailScanner-Information: Please contact the ISP for more information
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=madh.eu;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=RTu6lxPlmRl+CD+vg0S2622UgRMHHI/fKl01GZ9NPDc=; b=BQOVK4vZKF8Xh7lWpEKb5e7aRs
+        No68FjINjNVVjSeJ2vLFTOuNU4EQiK0O0/jVE++dVxcKmNXm+5c780bLYPb15JZiqOI0DJFi//x+6
+        cVGX7p7C/vbc4S6hU8gQsDd5sjpAE7uWfoDMykKij1WOD4TRy6RuOA9bvmPCUU+hASGBJMETSbDyQ
+        OgnlBFNdpYfVlc4imrl+KMsea1K7xMr68PG4g5sG6ikKB4FWo6pjlMI1lTjZ91PDSx6vY9dtNzOeu
+        on9RlV+blY4Y1eYYjIC92USbYL6Gyc3qwLz9dFYfl9O1VGBpBYe8LkBUvdpD1ZRpylRbg14Jn7uUQ
+        oWygNp6Q==;
+To:     linux-usb@vger.kernel.org
+From:   ddhx <ddhx@madh.eu>
+Subject: Garmin 72h
+Message-ID: <dba77dcc-5ff2-912f-2398-04f46be2966f@madh.eu>
+Date:   Tue, 17 Nov 2020 10:08:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 4A52950D1BF0114C89270D23257F406A875C20222DDA92BD96092F5C4159C3FA2000:8
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: fr
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - parmesan.o2switch.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - madh.eu
+X-Get-Message-Sender-Via: parmesan.o2switch.net: authenticated_id: ddhx@madh.eu
+X-Authenticated-Sender: parmesan.o2switch.net: ddhx@madh.eu
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Min Guo <min.guo@mediatek.com>
+Hi,
 
-Remove unused 'devctl' variable to fix compile warnings:
+Is it possible to add the Garmin 72h GPS?
 
-    drivers/usb/musb/musbhsdma.c: In function 'dma_controller_irq':
-    drivers/usb/musb/musbhsdma.c:324:8: warning: variable 'devctl' set
-    but not used [-Wunused-but-set-variable]
+Thanks,
 
-Signed-off-by: Min Guo <min.guo@mediatek.com>
----
- drivers/usb/musb/musbhsdma.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/usb/musb/musbhsdma.c b/drivers/usb/musb/musbhsdma.c
-index 0aacfc8be5a1..7acd1635850d 100644
---- a/drivers/usb/musb/musbhsdma.c
-+++ b/drivers/usb/musb/musbhsdma.c
-@@ -321,8 +321,6 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
- 				musb_channel->channel.status =
- 					MUSB_DMA_STATUS_BUS_ABORT;
- 			} else {
--				u8 devctl;
--
- 				addr = musb_read_hsdma_addr(mbase,
- 						bchannel);
- 				channel->actual_len = addr
-@@ -336,8 +334,6 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
- 						< musb_channel->len) ?
- 					"=> reconfig 0" : "=> complete");
- 
--				devctl = musb_readb(mbase, MUSB_DEVCTL);
--
- 				channel->status = MUSB_DMA_STATUS_FREE;
- 
- 				/* completed */
--- 
-2.18.0
+Donald Hervieux
 
