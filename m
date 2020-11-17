@@ -2,71 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D472B71AA
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 23:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A9B2B7267
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 00:30:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729193AbgKQWh2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Nov 2020 17:37:28 -0500
-Received: from mga17.intel.com ([192.55.52.151]:12860 "EHLO mga17.intel.com"
+        id S1725823AbgKQX2p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Nov 2020 18:28:45 -0500
+Received: from mga18.intel.com ([134.134.136.126]:61718 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728044AbgKQWh2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Nov 2020 17:37:28 -0500
-IronPort-SDR: wbyc1icAw/y192UhnbxVpYH1CtUyYEhm7NL89erFjlR4opMbSzoy4pe8t+z0IQRNY1lUWIO8QU
- Th6aB5+JamBQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="150873266"
+        id S1725747AbgKQX2p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Nov 2020 18:28:45 -0500
+IronPort-SDR: Zd/f6cFb+G/sFkmgxdMTerv3RWCiB7/ptBcnZQkDB5tBum2ph4B9Cfn3QgL6OO868JxqqLUAef
+ ijIXeud6EKyA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="158806428"
 X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
-   d="scan'208";a="150873266"
+   d="scan'208";a="158806428"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 14:37:27 -0800
-IronPort-SDR: HIlCh1KOX1pPhZ9KS7XK8yqJ6mEdM7DMX9cQRE6pLy1UkkDUkZ+n+Ec+S+SwcNKlw1PYX65PV5
- LN62wwn7ATwQ==
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 15:28:44 -0800
+IronPort-SDR: Kwh6AC+TGcyeXWTb8OByHlCE8Hk+LhNjJyFl6uMAD2cClhFuigkliaLlDTXQIv+3BWNShjfwBk
+ 8tBw4ofwVF6Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
-   d="scan'208";a="325335070"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by orsmga003.jf.intel.com with ESMTP; 17 Nov 2020 14:37:27 -0800
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+   d="scan'208";a="476100590"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga004.jf.intel.com with ESMTP; 17 Nov 2020 15:28:44 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 17 Nov 2020 14:37:27 -0800
-Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 17 Nov 2020 14:37:27 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ 15.1.1713.5; Tue, 17 Nov 2020 15:28:44 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Tue, 17 Nov 2020 14:37:27 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.174)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ via Frontend Transport; Tue, 17 Nov 2020 15:28:44 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.1713.5; Tue, 17 Nov 2020 14:37:26 -0800
+ 15.1.1713.5; Tue, 17 Nov 2020 15:28:44 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WEf1P54Wlt0frGLhsC9MbpkmlqbO6OXUDi69fDrwLXDEsAtwu7nxgSWLyxaWu8urho5UcBUrR58H8m9JkUbbwrLkzgtWqX8KYXoiP0IRmBpVRv7jxm56mdmh3WPpAdPsAEtcBIePpy3j40oB9OrUWAiOruHkw19FPHlnrqwf8c7CnGp+UMP+1VxYdw1QjeHb0nSjIUeRreX4NN35ejXKe0z+wyNsB5COZDzyt5US57Rfu9Qxd+k6fslL6bIDFq47yr7WT5iaslgFLR+QZi1iafM/Cs1mKa3abdG3VsJJ3aKA+dLaRL/j9nFHPPT+Nx0zsdTr+ykeTvVI9BJyMBhuMw==
+ b=f2ixfsl3Lv4l94ZJHUdKH/V6ftwBksu+rZyeLjky7NqLi54eITTY7aLJoL19wk3lzwjHR7d86o/c5Bhj/N+yeKtJLyNp4d5Zk0P1C8GrCj8J1YLNxIH0gWCHioGtlNvDh4DIVHFrtaAOyRvoQ5fijlztknMe+O3/0c87lj0W1Jaqfa+QT4uYn65EcruLLps4j2h6sntnIRPlC3SGIdqmnYabDkheMMsyP5fXtxU/Hg3/889Ywm+ij4cKy8xD9uQIt+5MmipwtXFjrrAgK3qiqJHXfCg7lf8U2YOD+C9Ck9vvthhTjxD8OXlmG1LjAn0i+PexaqbkvpmjF+IZ2AoUcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RRMgesPTdkZ9Pj8JdlJNGruyf/IHbu8ESkqCnn2VCkI=;
- b=GGwsS9EEGy2j7N1+benuPBtGEBjWT1yIgnyj/AKGMWoSAHwnBkVGnp3X+nHcjgyDG2k4VXZuGMsarV1gA0/PGcsIoMaQq9VpWFlv1sZyuPKSU8SGv9jyqpn3HL3KHcYShgnaL7qnrfJxlM6KplWZxZCNLBydeTnGe9IhVXGaE2fWSsmIkuposazM1baRnaDfCmhDB19g3g68/w2ZnVqjYFq+A6ZgqNhc10N5NEUgKhbFYpRpazdPTTuX79IjdLa0ADRtJi/tZmNzq69HhowXPWI5d8fIHpJQ4HeXQJ6BROIDWne0Nanufasjd4Ta3RZKl1obwQlwsS62zOw9XO9g2w==
+ bh=wrANTlxTyPKMahYwyBB8Fetu8ghDqCO+Urjz4zw1GPo=;
+ b=MVnDurOZxIHkiEbsziQP31sDNdc4gnyzRMV5vwiipJe6xMerOuXiYEnBUQEqJV2KKznMz2rWkBkTe9VBB+psy/9mf0n8hRhVBgE6kAevk2IaM3XyY1708w+LdruCmqC5JEcKldqC52c60xmGufkt/cGje/uYjjcOhoM+ItgIKufvqrTZJJxaDAtPOwNqfwj6jCLAhV5YPA8p9epnmOlailFu5Kl4nC0FrOK03pE7BYUgdMCfGo45s+MDKZrjHEvP2eHCxXXSkfQDnb6R7wlc0qFVOPHrLe7POwkHatHjqGDxlvOSuiOku+NlslHNNnAZ9fWsO6I/9upAr8BI78zLNA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
  s=selector2-intel-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RRMgesPTdkZ9Pj8JdlJNGruyf/IHbu8ESkqCnn2VCkI=;
- b=dw4Qx3ECBk+CTVemKHWbEqd/U/i/peMKADWy60PKCrrV8XvdYdqaIZNVz7Wfj/WbvLitYjSYl+yQwcjZddI3Y4e7FKzK9pJHP9I0JtcP1M43eZIKdyDv/s/4H8ti9CWpGpGYYCinGgR2Je1shnK8nHg4zQz1wdrjS8Ksa/876/0=
+ bh=wrANTlxTyPKMahYwyBB8Fetu8ghDqCO+Urjz4zw1GPo=;
+ b=cZ8Iv+TZ6G1NY7hgEUY18KKUVbM+nWt0kZIfUjMG3uLqoUGoDaFhP/S6RmPsUDLnRN8hy2PAv7ULfYLcZrkbQmFUpg0aGZQ3ZqXcHJjmGP2A4qC+ljCBX99AjEblmTFogmtEDoV5agAnvdFSuSblije+SJjgwur/8UydClmfYJU=
 Received: from MWHPR11MB0048.namprd11.prod.outlook.com (2603:10b6:301:6a::31)
- by MWHPR11MB1439.namprd11.prod.outlook.com (2603:10b6:301:9::20) with
+ by MWHPR11MB1984.namprd11.prod.outlook.com (2603:10b6:300:110::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.25; Tue, 17 Nov
- 2020 22:37:25 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.28; Tue, 17 Nov
+ 2020 23:28:43 +0000
 Received: from MWHPR11MB0048.namprd11.prod.outlook.com
  ([fe80::ed62:6d3c:c9aa:4c4d]) by MWHPR11MB0048.namprd11.prod.outlook.com
  ([fe80::ed62:6d3c:c9aa:4c4d%5]) with mapi id 15.20.3541.028; Tue, 17 Nov 2020
- 22:37:25 +0000
+ 23:28:43 +0000
 From:   "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
 CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -75,17 +71,17 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "enric.balletbo@collabora.com" <enric.balletbo@collabora.com>,
         "Mani, Rajmohan" <rajmohan.mani@intel.com>,
         "Shaikh, Azhar" <azhar.shaikh@intel.com>
-Subject: RE: [PATCH v2 7/8] usb: typec: intel_pmc_mux: Configure active cable
- properties for USB4
-Thread-Topic: [PATCH v2 7/8] usb: typec: intel_pmc_mux: Configure active cable
- properties for USB4
-Thread-Index: AQHWuftcvRTGQa9W7k+FodjnNhK3kanMRG2AgACrpwA=
-Date:   Tue, 17 Nov 2020 22:37:25 +0000
-Message-ID: <MWHPR11MB004881BD25EDEA77F68931C1A9E20@MWHPR11MB0048.namprd11.prod.outlook.com>
+Subject: RE: [PATCH v2 5/8] usb: typec: Use Thunderbolt 3 cable discover mode
+ VDO in Enter_USB message
+Thread-Topic: [PATCH v2 5/8] usb: typec: Use Thunderbolt 3 cable discover mode
+ VDO in Enter_USB message
+Thread-Index: AQHWuftciqlUTahejUqMxUOZ9NQlpKnMQSQAgAC9BJA=
+Date:   Tue, 17 Nov 2020 23:28:43 +0000
+Message-ID: <MWHPR11MB00482D9AA8FF011EA8A859AAA9E20@MWHPR11MB0048.namprd11.prod.outlook.com>
 References: <20201113202503.6559-1-utkarsh.h.patel@intel.com>
- <20201113202503.6559-8-utkarsh.h.patel@intel.com>
- <20201117122137.GG3437448@kuha.fi.intel.com>
-In-Reply-To: <20201117122137.GG3437448@kuha.fi.intel.com>
+ <20201113202503.6559-6-utkarsh.h.patel@intel.com>
+ <20201117120952.GE3437448@kuha.fi.intel.com>
+In-Reply-To: <20201117120952.GE3437448@kuha.fi.intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -97,29 +93,29 @@ authentication-results: linux.intel.com; dkim=none (message not signed)
  header.d=none;linux.intel.com; dmarc=none action=none header.from=intel.com;
 x-originating-ip: [50.39.100.134]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6900c43e-9b38-4011-35bd-08d88b495b84
-x-ms-traffictypediagnostic: MWHPR11MB1439:
+x-ms-office365-filtering-correlation-id: e842c5c8-dfae-414f-6ec7-08d88b5085f9
+x-ms-traffictypediagnostic: MWHPR11MB1984:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR11MB14395A40060E15A316E76070A9E20@MWHPR11MB1439.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-microsoft-antispam-prvs: <MWHPR11MB198485F436ED43FF57B2F487A9E20@MWHPR11MB1984.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1284;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jgVbWRYpIEQHqsv9PR6dFAm7oA/EBYHsANnqHNJDmSWSCt9D4xlZKnpFUGatdWjya5SmTe5MCk41jXVnNgyl9ITINHsJtziV0kX/xpKylTK6NG+CGKOxVk2PNwtnqAYQJLISdfRsO2nqam1Gxxkt7UywyaDY90rgVAhQpmRR/qbqzQtzZMWrzcx0ScK+ibS0DGtovG69c+1z6VK1MTWcjzdSJ87ymdOe2dWF8197B6Cyyq3S3UdmUp56owgr8p3I4BpOv+ALXWo/z8qagGW5pr5stVTwYzvpk/mJ6hMgftDcSSO7uCVoYglejp92Wm7oRW9+SS8fgCUgT7RSox4IrQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0048.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(53546011)(76116006)(2906002)(5660300002)(8936002)(86362001)(186003)(478600001)(33656002)(52536014)(55016002)(9686003)(8676002)(66946007)(83380400001)(26005)(54906003)(4326008)(66556008)(66476007)(66446008)(6916009)(316002)(6506007)(71200400001)(64756008)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: kprsJWxVU8xvAtbL+NzZtOLXre83W8kbfeBXuy+tniPvbWzqiwGjvpHhQ6yB3EKuVPx/tn0xtWChyHwVYwVN1CX0ZBHE9N6JQkDagXcpWRA7R8Fn7hkn//cVmIZgKWzgMsjZUNbtU8Cd/Umf7s7QYF3z3wzQpLzucOGQz/Bm6ItTQRgIkci1rgO5MMOjpfpvASeAgTucDqrXlJ+jSt9yAmTw01teidM5dyekCgt4+DuiOFMw5LfprKyMYkHWi7zqhSELb4h681kK4azG7bQ01k4kZZdn++IdPPWSd5Btrp0ZACNYJEwazLRB+2NYmCdoTJF7HaM7+XhKUaSX7k7q3Alo/T08fEK0Mu+DGVD8pP3jXwPQH2Ad9SS8xfsDuZYqbhuDNi7QazKO+HUvU2dPf+DF9OBuGWYhovABPXvgAwZY/4oxC5vzW6/dve9b1/2Ex8vIvzStT71/lO27FxfH4aNnsESdhp5z1hn71IqgJoLR4G0O5TCu13A+KbJgp4vY5sq0IEhPPRZiUzARRiMioVlhePXfomS/Vwr0kjoznZDqXgWIY8aXf8LW+NsvbyS6Bs8yIKV3g9C80j+0mxiTkMaH1IrfEY531PYd1bK2l1VdkO35peTzEQnHaOEajekZ/M/h2zn1rkCprpK/onJ84hkW/cDZGdHcXtblCJplyMiziPrgpJt4nCUBRBPANZOqp3fcZ1bb3s3McZmdc1jGlQd2au3kXP5Vfg6eWDfm6a1JIFbYNu9PKfZKFYZmx8X0DcSg7QsaTPGrqFA/5b+lYniFVShLsB6WQue+3wsLDD708xDs/EGQI8DiOBSC3yxrxTKm6Ch4JG7wqjH/7KvCFS0WVRyCTukU3kA3r9bHKNZeeiTP7FElx7pTTBoUZ2H5o5Y8w5eBNO0FBqYX5ooXVw==
+x-microsoft-antispam-message-info: 2uRk62yS/lc78WRC8WeaDbOmPLdX1ZTbBFcZoop8ChwLHiV7JzxMkXLtanU9+EwmIgnfCUvAFTSFREAsZIsLUkdNUCytrF6Oh1jzQJH3GBRtt2eXAE3UJ3F1zcJtoqy4xBWvQZWi+N5B0/4r7zT1phFzDUy0YJA6yZFPbowg+qFzX9TeLsh6GFCWU1H0YPoF/y/iC8kd1INmgAZ3JidyoKl58Zi6r32YVOHResCneE4dJJAIZZNeQuVL7SdsV8ib42JxfIrFV5hiGFwBaNalv0lB3rL1U7S0NDL9WxqbXOvp/ksas4Uw2vXuQpxtL6Vk
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0048.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(15650500001)(2906002)(55016002)(86362001)(64756008)(76116006)(6916009)(498600001)(4326008)(54906003)(71200400001)(186003)(6506007)(33656002)(9686003)(53546011)(8936002)(5660300002)(66556008)(52536014)(8676002)(7696005)(66446008)(66476007)(83380400001)(26005)(66946007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: StIDjUCI/yh45LkDKJ4+Lah5DQilX1TL/imMccPeDGURNWjtwFD6xbMbtK2r/1NDsYHkF2hgZJZiEDJNECfi9KKyPwOFZkuSfM2L7Ai1YjLrXoQWmfw/ItEjoOeDrkLlUnZrqt0fzfpw+PpmWsJcGEq/b/OhNtoHFC3KUhuWqYt6dNSAljNsGTmjovL8iURTmxTSt2t+ATii9SuuIH0i06CSOP9MhY6xKaY+d5fMLC8CPozG/eLoDsyQP9/CEqx0dkCp6Ye2QJnY3xr4YtC0t8CMJlSHQF7vMzOcdZIhuw8AQUQW0MPJHsJdJsYszMpjXVTC16B59DDqisU/DIP5/5mSvaUIY0w2HXPSTL2ZscYy3DmOjR6kbAfKC5ZsPcg0jkC4gAtWwWgvgVo/MU0GglUA0JIq6QTrIgdYx8WuLyF1MkWUkcYALD2AhvhiCks4oR6XxVqqh7SY4r2/HswF03lqLrUJIU40Ni922E9H75G/daGcV6ZkKLuwPwWvUxDy+UJYyYZcrWsFFhEAvb2Wkh0H5fQHZEu9YXCRvXfOMlkz7NbmhtdLS836HSBFhPvJ2YP7oG+LqdznP6RDgF4MsGSPvHK6eBfJUhNcuts8CfQr5MhtdU83YqlZgkgwc3q1HhtOoVowqKS6/s8z+qfi9WY15CySnfLmhzLdhJ8qgT4Gtayt0A4vmLNq5PKK+YUqSdEKskVmG6U6Jzk0CmwNUV2Jx1D/c2BqksXScJKG8m9OGXQXRc64EeQI0pDNcXU6iXjrs7CFZQGqW4+y9CaA9Yxr4fEw7czfNv62ms2YBjasecO7iA598nzq5JwUqHk4q0/Pff8oDzIuy6W7vWyYqexQRnqIXAcl9Zwm/cKp6WJl+Yf5GYxdgnNo71iEnnY4arEUBR7cYKQpqQu+WZ+ZeQ==
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB0048.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6900c43e-9b38-4011-35bd-08d88b495b84
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2020 22:37:25.5980
+X-MS-Exchange-CrossTenant-Network-Message-Id: e842c5c8-dfae-414f-6ec7-08d88b5085f9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2020 23:28:43.2797
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LKrZLVdR6v2j46xpxfI2kXxY8T/WMyvqrGKoCdXbBYAXa6L6UdCRpepxW+YQjcLDnG5P4KFxHTqwW1Vlj2tf/Koobbbby3DRGHQwQ5nEQXw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1439
+X-MS-Exchange-CrossTenant-userprincipalname: hiPPxBLX91Bbpov4FZ3lFqiHfrlr5Y4Y6mwzBLRGBw4RhjvFOXxet5FY9VVPj+c786U2QByDSyf8WEt0/Esqs+Z/wFzYcHmdsEWwiMDb6pU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1984
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -129,93 +125,69 @@ Hi Heikki,
 
 > -----Original Message-----
 > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Sent: Tuesday, November 17, 2020 4:22 AM
+> Sent: Tuesday, November 17, 2020 4:10 AM
 > To: Patel, Utkarsh H <utkarsh.h.patel@intel.com>
 > Cc: linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
 > pmalani@chromium.org; enric.balletbo@collabora.com; Mani, Rajmohan
 > <rajmohan.mani@intel.com>; Shaikh, Azhar <azhar.shaikh@intel.com>
-> Subject: Re: [PATCH v2 7/8] usb: typec: intel_pmc_mux: Configure active c=
-able
-> properties for USB4
+> Subject: Re: [PATCH v2 5/8] usb: typec: Use Thunderbolt 3 cable discover
+> mode VDO in Enter_USB message
 >=20
-> On Fri, Nov 13, 2020 at 12:25:02PM -0800, Utkarsh Patel wrote:
-> > Value received as a part of Thunderbolt 3 cable discover mode VDO
-> > needs to be configured in the USB4 mode for the Thunderbolt rounded
-> > support and active cable plug link training.
-> >
+> On Fri, Nov 13, 2020 at 12:25:00PM -0800, Utkarsh Patel wrote:
+> > USB4 also uses same cable properties as Thunderbolt 3 so use
+> > Thunderbolt 3 cable discover mode VDO to fill details such as active
+> > cable plug link training and cable rounded support.
+>=20
+> I'm sorry, but I think that has to be explained better. We only need the
+> Thunderbolt 3 properties when we create the USB4 connection with
+> Thunderbolt 3 cables. With USB4 cables that information is simply not
+> available. Claiming that USB4 uses the same properties in general is not =
+true.
+
+Ack. I will change the commit message. =20
+
+>=20
 > > Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > > Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
-> >
 > > --
 > > Changes in v2:
 > > - No change.
 > > --
 > > ---
-> >  drivers/usb/typec/mux/intel_pmc_mux.c | 18 +++++++++++++++---
-> >  1 file changed, 15 insertions(+), 3 deletions(-)
+> >  include/linux/usb/typec.h | 2 ++
+> >  1 file changed, 2 insertions(+)
 > >
-> > diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c
-> > b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > index aa3211f1c4c3..61feb358aad3 100644
-> > --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> > +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> > @@ -295,6 +295,7 @@ pmc_usb_mux_usb4(struct pmc_usb_port *port,
-> struct
-> > typec_mux_state *state)  {
-> >  	struct enter_usb_data *data =3D state->data;
-> >  	struct altmode_req req =3D { };
-> > +	u8 cable_rounded;
-> >  	u8 cable_speed;
-> >
-> >  	if (IOM_PORT_ACTIVITY_IS(port->iom_status, TBT) || @@ -308,9
-> +309,6
-> > @@ pmc_usb_mux_usb4(struct pmc_usb_port *port, struct
-> typec_mux_state *state)
-> >  	/* USB4 Mode */
-> >  	req.mode_data =3D PMC_USB_ALTMODE_FORCE_LSR;
-> >
-> > -	if (data->active_link_training)
-> > -		req.mode_data |=3D PMC_USB_ALTMODE_ACTIVE_LINK;
-> > -
-> >  	req.mode_data |=3D (port->orientation - 1) <<
-> PMC_USB_ALTMODE_ORI_SHIFT;
-> >  	req.mode_data |=3D (port->role - 1) << PMC_USB_ALTMODE_UFP_SHIFT;
-> >
-> > @@ -322,6 +320,20 @@ pmc_usb_mux_usb4(struct pmc_usb_port *port,
-> struct typec_mux_state *state)
-> >  		fallthrough;
-> >  	default:
-> >  		req.mode_data |=3D PMC_USB_ALTMODE_ACTIVE_CABLE;
-> > +
-> > +		if (data->tbt_cable_vdo) {
-> > +			/* Active Thunderbolt 3 cable */
-> > +			if (data->tbt_cable_vdo &
-> TBT_CABLE_LINK_TRAINING)
-> > +				req.mode_data |=3D
-> PMC_USB_ALTMODE_ACTIVE_LINK;
-> > +
-> > +			cable_rounded =3D
-> > +				TBT_CABLE_ROUNDED_SUPPORT(data-
-> >tbt_cable_vdo);
+> > diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> > index 6be558045942..d91e09d9d91c 100644
+> > --- a/include/linux/usb/typec.h
+> > +++ b/include/linux/usb/typec.h
+> > @@ -75,6 +75,7 @@ enum typec_orientation {
+> >  /*
+> >   * struct enter_usb_data - Enter_USB Message details
+> >   * @eudo: Enter_USB Data Object
+> > + * @tbt_cable_vdo: TBT3 Cable Discover Mode Response
+> >   * @active_link_training: Active Cable Plug Link Training
+> >   *
+> >   * @active_link_training is a flag that should be set with
+> > uni-directional SBRX
 >=20
-> No need for the newline:
+> Please also explain the same here with a short comment. So basically, if =
+the
+> USB4 connection is created using TBT3 cable, then we need to supply also =
+the
+> TBT3 Cable VDO as part of this data. But if USB4 cable is used, then that
+> member should not be filled at all.
 
-Ack
+Ack.=20
 
 >=20
-> 			cable_rounded =3D
-> TBT_CABLE_ROUNDED_SUPPORT(data->tbt_cable_vdo);
->=20
-> > +			req.mode_data |=3D
-> PMC_USB_ALTMODE_TBT_GEN(cable_rounded);
-> > +		} else {
-> > +			/* Active USB4 cable */
-> > +			req.mode_data |=3D PMC_USB_ALTMODE_ACTIVE_LINK
-> |
-> > +				PMC_USB_ALTMODE_TBT_GEN(1);
-> > +		}
-> >  		break;
-> >  	}
+> > @@ -83,6 +84,7 @@ enum typec_orientation {
+> >   */
+> >  struct enter_usb_data {
+> >  	u32			eudo;
+> > +	u32			tbt_cable_vdo;
+> >  	unsigned char		active_link_training:1;
+> >  };
 >=20
 > thanks,
 >=20
@@ -223,4 +195,4 @@ Ack
 > Heikki
 
 Sincerely,
-Utkarsh Patel.
+Utkarsh Patel.=20
