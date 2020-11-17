@@ -2,119 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9A12B5979
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 06:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821A82B5997
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 07:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgKQFtJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Nov 2020 00:49:09 -0500
-Received: from mail-eopbgr700059.outbound.protection.outlook.com ([40.107.70.59]:51425
-        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725355AbgKQFtJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Nov 2020 00:49:09 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=az0j9kmBQrz/MujXg3SQIE9fDWpSUNQGRXdGOu/2lBq6+1n5XPN/yDmh+dC63OFmDe8Nl+Ww076m+CIfduOVw34yJrUSlU6Wh96LuWLUNGm0NRfn5WY5v7fvlgSL0VjBDmR5XyN1KS1ZmgUrwi/AmcDEvKz0AT834P3HFt5QPpN4eOWRUpoUWHLTwpv84t3P6T4MaoBfDy4Vo9cByaB4pS0u5N0A6j5mb/dioL7d/Wgb6rpX3hOHOVsA6FCv6Q9bV9wvMWtgb1f8arqwmB9qeXkpNRUC2OusEW2U8CMQADTiD5lhF01ySumjs1AEE7UI17rGlSulpxqnQaAuQXEH3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ft9mEukCyPMZ6G0cdeHkh//pBIMKWBVee3hNhUgHQo8=;
- b=gyXg/KyWN8O31xopapPnaQ2k5PML0yqQUQV0eH6N1lQNb5sGG6U+0bAUvIvHaOlQf+WE8JypjtTqKIdaZ+QEKsNETmGzNImCTOhFh2APChjY/9WWxtdvVyvK0MwO8qGkowDAPpy0w7tlGalEYrD9d15FJVTOJx4TvGA9/XBS0hWIANkMDkJ80NRZ8fbXiL+s4h5zDMIegZBNzJ/CqGzp5A2X+/X+8gYtEHXJmFFxAFvCNwqHtJnaEmUH+unzTK3wVZLoBoXwFnVmSjora8F3lJRU4POnlTn1XxeqrU7ItlxxDoiCW7DeJE1yqmWwHyMdECchcCdo4ZcoidpGz8Np7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=windriversystems.onmicrosoft.com;
- s=selector2-windriversystems-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ft9mEukCyPMZ6G0cdeHkh//pBIMKWBVee3hNhUgHQo8=;
- b=dcRJv6urNx/ffHamryA72O8JfEIihTM5b+cDymmUUBu1FN/lLjplBjECNbQbXqSB0RV4Ycgjswzn25TmtslvUdYGLC7MwHpT9+D1RB+hbOXK8Wi4QpdeTbuLR6RIX1kr66tQzodH8OOxW6eupxqiXsIJIcfHBKNcEl4HqjB6onw=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=windriver.com;
-Received: from BYAPR11MB2632.namprd11.prod.outlook.com (2603:10b6:a02:c4::17)
- by BYAPR11MB2632.namprd11.prod.outlook.com (2603:10b6:a02:c4::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.28; Tue, 17 Nov
- 2020 05:49:05 +0000
-Received: from BYAPR11MB2632.namprd11.prod.outlook.com
- ([fe80::dc7e:c582:20a1:5bc7]) by BYAPR11MB2632.namprd11.prod.outlook.com
- ([fe80::dc7e:c582:20a1:5bc7%6]) with mapi id 15.20.3564.028; Tue, 17 Nov 2020
- 05:49:05 +0000
-From:   qiang.zhang@windriver.com
-To:     jikos@kernel.org, benjamin.tissoires@redhat.com
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org
-Subject: [PATCH] HID: usbhid: fix memleak for ctrl or out raw_report
-Date:   Tue, 17 Nov 2020 13:48:51 +0800
-Message-Id: <20201117054851.557-1-qiang.zhang@windriver.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-Originating-IP: [60.247.85.82]
-X-ClientProxiedBy: HKAPR03CA0013.apcprd03.prod.outlook.com
- (2603:1096:203:c8::18) To BYAPR11MB2632.namprd11.prod.outlook.com
- (2603:10b6:a02:c4::17)
+        id S1726716AbgKQGOi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Nov 2020 01:14:38 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:16269 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgKQGOi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Nov 2020 01:14:38 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fb36a570000>; Mon, 16 Nov 2020 22:14:47 -0800
+Received: from [10.19.109.31] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 17 Nov
+ 2020 06:14:34 +0000
+Subject: Re: [PATCH v4 00/16] Tegra XHCI controller ELPG support
+To:     Thierry Reding <thierry.reding@gmail.com>
+CC:     <gregkh@linuxfoundation.org>, <robh@kernel.org>,
+        <jonathanh@nvidia.com>, <kishon@ti.com>,
+        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nkristam@nvidia.com>
+References: <20201016130726.1378666-1-jckuo@nvidia.com>
+ <20201113164455.GG1408970@ulmo>
+X-Nvconfidentiality: public
+From:   JC Kuo <jckuo@nvidia.com>
+Message-ID: <9b64c181-1c5b-f6bd-d9db-03e30b4479a5@nvidia.com>
+Date:   Tue, 17 Nov 2020 14:14:33 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from pek-qzhang2-d1.wrs.com (60.247.85.82) by HKAPR03CA0013.apcprd03.prod.outlook.com (2603:1096:203:c8::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.15 via Frontend Transport; Tue, 17 Nov 2020 05:49:03 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c69ff58b-de2f-4890-fb6c-08d88abc7e04
-X-MS-TrafficTypeDiagnostic: BYAPR11MB2632:
-X-Microsoft-Antispam-PRVS: <BYAPR11MB2632473BFE850207C2CE9C4BFFE20@BYAPR11MB2632.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TSuqJ1EqKIiHyrQ8DWxTfnEiQGzhbvHti++ymjNlXXjnMdevB819jV/XmtiiJbl+8vaXZkVWGjarBI7oJjEYJh+HVIp1B+uVOCNPp9luSme+qW0Jz5AB713mfa9ThNLFLWjXOoPRZHVJ2SC20yAtn4iqkh8RCMmbIatJep3Z6Lfgd06oD0BCci1TpUtld5PJWNvV165B5FiD+g2CHSRTR8Z0Sb4y1ydrgRmxn009EyWsFYBW9XKlOnaTdGkcQ/8RvsqmhyCwJIyPUHWBN2fWym4tRdeojPMFn32n3zt88BGa1sEU8i5GE8mgJwNVED9FNLlPJQYBBpUIOf6DY1aF6g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2632.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(136003)(366004)(396003)(346002)(376002)(186003)(66946007)(66476007)(66556008)(6512007)(8936002)(2906002)(6666004)(5660300002)(8676002)(9686003)(26005)(52116002)(86362001)(478600001)(6486002)(16526019)(316002)(4326008)(36756003)(2616005)(1076003)(956004)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: ecbTclNcddqFu3BF4t6sQn0K2rV++sz6wMIL76kf6uxfL0VGZmUaT+8fTf1C2F9PayyXKdgy//fOIm0ZKXLaz7ezvp9E6FenQ10H32rt3wgE0jFhDjXjNdlcXqstC1ur5WElkuGQOSUtWqkewggz1/ek2GXrQ2yoNm/iZrOei14JIhslEnbgPXnEO72dd6c64o46XDZL0mkYQQ59LFE1sB9yRE9w1nJ6FC4FtEUYPEpIF+O2MoNZ9BXn/SVnQ+glX1r6aUS57+ODLYJTgcfAVYVWpW53BLz9g/fgYVIL5RXkT+xZ8QsnBdoX/826wDM0bc/AJpiWnTuvLVWIZW3ymORRMWbXgUUmO972CUWkznYdOxky4okvZu2J6WdtIryfhezgfMtqrA7S7zajbrUVrs0SdadObXjUiHMzTjtZF+jxcuLlMmHduHlveTNaYJnIP0JxM2gW0HXD92ZI6aN8KCkSY2HYNH4mikLOOzwVbM4eXOfpcKCtB96IVu1SxzeMpBWe5pK7T6fGw1odI6oPsxrVI9rgantlpnq/p8Kfzb9aNu5b9gtJ5x69X7PH+0JEnx67CLUfGzun45A/SEH4gw4W/6IJCkqv506JbOo6dzX5vt8Maq5CHAJQ4YsED0jpwZFa1V0SDLAv2rEqRAyFrQ==
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c69ff58b-de2f-4890-fb6c-08d88abc7e04
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2632.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2020 05:49:05.1642
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GHMo4s5QfRYPQfRS4MPZuE4MoVnBOhWqwb53TV/Qkdq4vcZ4CbIWqjpXUaUBjLN/kYX1a1Ua+gFM6jn5kkhhh56fvNqqGgVSPu30+bHRPcY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2632
+In-Reply-To: <20201113164455.GG1408970@ulmo>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1605593687; bh=QZtXCGM+q2rMWr9GD4knohnZaY8gE+YhOGU4SliD8f8=;
+        h=Subject:To:CC:References:X-Nvconfidentiality:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=dtSwXK3cExvCd5/vTA9KS9ceZHJWqbCCJa4ZWUTa4B2WYCKvBD0pGUhZh+XOpkEbw
+         XKsJ53r5QU1m9ySB+upTh02wQdd/2JgtB73483lcdBDjcfLPWLQA+iBZL8idK7zl/g
+         NqULrQGmwqok51Ojg7ggUzHnig3pMVECDQGtZhWmnuM/z3QGOLWWk3E0eAyRfid3DP
+         m0621WgNKcA72Ip8dpyq+eyWzutgpO7Ks7ALYf8/K/06CFYV2gYsOkLL8L1WTm/84B
+         iPHlBIfBsvgIBGtO0Mq1VaGNSaNTnDxWWhp+1INzj4aH4K6fAgYlxbRQU3Zv9151Pi
+         /9+IOMtJO5qvQ==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Zqiang <qiang.zhang@windriver.com>
 
-When the usb device disconnect, usbhid_stop function be called,
-if ctrl or out's raw_report exists, need to be free.
+On 11/14/20 12:44 AM, Thierry Reding wrote:
+> On Fri, Oct 16, 2020 at 09:07:10PM +0800, JC Kuo wrote:
+>> Tegra XHCI controler can be placed in ELPG (Engine Level PowerGated)
+>> state for power saving when all of the connected USB devices are in
+>> suspended state. This patch series includes clk, phy and pmc changes
+>> that are required for properly place controller in ELPG and bring
+>> controller out of ELPG.
+>>
+>> JC Kuo (16):
+>>   clk: tegra: Add PLLE HW power sequencer control
+>>   clk: tegra: Don't enable PLLE HW sequencer at init
+>>   phy: tegra: xusb: Move usb3 port init for Tegra210
+>>   phy: tegra: xusb: tegra210: Do not reset UPHY PLL
+>>   phy: tegra: xusb: Rearrange UPHY init on Tegra210
+>>   phy: tegra: xusb: Add Tegra210 lane_iddq operation
+>>   phy: tegra: xusb: Add sleepwalk and suspend/resume
+>>   soc/tegra: pmc: Provide USB sleepwalk register map
+>>   arm64: tegra210: XUSB PADCTL add "nvidia,pmc" prop
+>>   dt-bindings: phy: tegra-xusb: Add nvidia,pmc prop
+>>   phy: tegra: xusb: Add wake/sleepwalk for Tegra210
+>>   phy: tegra: xusb: Tegra210 host mode VBUS control
+>>   phy: tegra: xusb: Add wake/sleepwalk for Tegra186
+>>   arm64: tegra210/tegra186/tegra194: XUSB PADCTL irq
+>>   usb: host: xhci-tegra: Unlink power domain devices
+>>   xhci: tegra: Enable ELPG for runtime/system PM
+>>
+>>  .../phy/nvidia,tegra124-xusb-padctl.txt       |    1 +
+>>  arch/arm64/boot/dts/nvidia/tegra186.dtsi      |    1 +
+>>  arch/arm64/boot/dts/nvidia/tegra194.dtsi      |    1 +
+>>  arch/arm64/boot/dts/nvidia/tegra210.dtsi      |    2 +
+>>  drivers/clk/tegra/clk-pll.c                   |   12 -
+>>  drivers/clk/tegra/clk-tegra210.c              |   53 +-
+>>  drivers/phy/tegra/xusb-tegra186.c             |  558 ++++-
+>>  drivers/phy/tegra/xusb-tegra210.c             | 1889 +++++++++++++----
+>>  drivers/phy/tegra/xusb.c                      |   92 +-
+>>  drivers/phy/tegra/xusb.h                      |   22 +-
+>>  drivers/soc/tegra/pmc.c                       |   94 +
+>>  drivers/usb/host/xhci-tegra.c                 |  610 ++++--
+>>  include/linux/clk/tegra.h                     |    4 +-
+>>  include/linux/phy/tegra/xusb.h                |   10 +-
+>>  14 files changed, 2785 insertions(+), 564 deletions(-)
+> 
+> I've been testing this, but I keep seeing the following oops on suspend
+> on a Jetson TX1:
+> 
+> [  153.451108] tegra-xusb-padctl phy-usb2.0: > tegra_xusb_padctl_suspend_noirq(dev=ffff000080917000)
+> [  153.460353] tegra-xusb-padctl phy-usb2.0:   driver: ffff8000114453e0 (tegra_xusb_padctl_driver)
+> [  153.469245] tegra-xusb-padctl phy-usb2.0:   padctl: ffff0000829f6480
+> [  153.475772] tegra-xusb-padctl phy-usb2.0:     soc: ef7bdd7fffffffff (0xef7bdd7fffffffff)
+> [  153.484061] Unable to handle kernel paging request at virtual address 007bdd800000004f
+> [  153.492132] Mem abort info:
+> [  153.495083]   ESR = 0x96000004
+> [  153.498308]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [  153.503771]   SET = 0, FnV = 0
+> [  153.506979]   EA = 0, S1PTW = 0
+> [  153.510260] Data abort info:
+> [  153.513200]   ISV = 0, ISS = 0x00000004
+> [  153.517181]   CM = 0, WnR = 0
+> [  153.520302] [007bdd800000004f] address between user and kernel address ranges
+> [  153.527600] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> [  153.533231] Modules linked in: nouveau panel_simple tegra_video(C) tegra_drm drm_ttm_helper videobuf2_dma_contig ttm videobuf2_memops cec videobuf2_v4l2 videobuf2_common drm_kms_helper v4l2_fwnode videodev drm mc snd_hda_codec_hdmi cdc_ether usbnet snd_hda_tegra r8152 crct10dif_ce snd_hda_codec snd_hda_core tegra_xudc host1x lp855x_bl at24 ip_tables x_tables ipv6
+> [  153.566417] CPU: 0 PID: 300 Comm: systemd-sleep Tainted: G         C        5.10.0-rc3-next-20201113-00019-g5c064d5372b0-dirty #624
+> [  153.578283] Hardware name: NVIDIA Jetson TX1 Developer Kit (DT)
+> [  153.584281] pstate: 40000005 (nZcv daif -PAN -UAO -TCO BTYPE=--)
+> [  153.590381] pc : tegra_xusb_padctl_suspend_noirq+0x88/0x100
+> [  153.596016] lr : tegra_xusb_padctl_suspend_noirq+0x80/0x100
+> [  153.601632] sp : ffff8000120dbb60
+> [  153.604999] x29: ffff8000120dbb60 x28: ffff000080a1df00
+> [  153.610430] x27: 0000000000000002 x26: ffff8000106f8540
+> [  153.615858] x25: ffff8000113ac4a4 x24: ffff80001148c198
+> [  153.621277] x23: ffff800010c4538c x22: 0000000000000002
+> [  153.626692] x21: ffff800010ccde80 x20: ffff0000829f6480
+> [  153.632107] x19: ffff000080917000 x18: 0000000000000030
+> [  153.637521] x17: 0000000000000000 x16: 0000000000000000
+> [  153.642933] x15: ffff000080a1e380 x14: 74636461702d6273
+> [  153.648346] x13: ffff8000113ad058 x12: 0000000000000f39
+> [  153.653759] x11: 0000000000000513 x10: ffff800011405058
+> [  153.659176] x9 : 00000000fffff000 x8 : ffff8000113ad058
+> [  153.664590] x7 : ffff800011405058 x6 : 0000000000000000
+> [  153.670002] x5 : 0000000000000000 x4 : ffff0000fe908bc0
+> [  153.675414] x3 : ffff0000fe910228 x2 : 162ef67e0581e700
+> [  153.680826] x1 : 162ef67e0581e700 x0 : ef7bdd7fffffffff
+> [  153.686241] Call trace:
+> [  153.688769]  tegra_xusb_padctl_suspend_noirq+0x88/0x100
+> [  153.694077]  __device_suspend_noirq+0x68/0x1cc
+> [  153.698594]  dpm_noirq_suspend_devices+0x10c/0x1d0
+> [  153.703456]  dpm_suspend_noirq+0x28/0xa0
+> [  153.707461]  suspend_devices_and_enter+0x234/0x4bc
+> [  153.712314]  pm_suspend+0x1e4/0x270
+> [  153.715868]  state_store+0x8c/0x110
+> [  153.719440]  kobj_attr_store+0x1c/0x30
+> [  153.723259]  sysfs_kf_write+0x4c/0x7c
+> [  153.726981]  kernfs_fop_write+0x124/0x240
+> [  153.731065]  vfs_write+0xe4/0x204
+> [  153.734449]  ksys_write+0x6c/0x100
+> [  153.737925]  __arm64_sys_write+0x20/0x30
+> [  153.741931]  el0_svc_common.constprop.0+0x78/0x1a0
+> [  153.746789]  do_el0_svc+0x24/0x90
+> [  153.750181]  el0_sync_handler+0x254/0x260
+> [  153.754251]  el0_sync+0x174/0x180
+> [  153.757663] Code: aa0303e2 94000f64 f9405680 b40000e0 (f9402803)
+> [  153.763826] ---[ end trace 81543a3394cb409d ]---
+> 
+> Note that I've added a bit of debug information there to show what's
+> going on. See how tegra_xusb_padctl_suspend_noirq() is being called for
+> the phy-usb2.0 device? That's one of the PHYs that's being created for
+> the USB2 lanes. Sometimes I do see that padctl->soc ends up being NULL
+> for that device and in that case the function just aborts early and then
+> tegra_xusb_padctl_suspend_noirq() will get called again for the padctl
+> device and succeed.
+> 
+> I can't explain what's happening here. tegra_xusb_padctl_driver never
+> binds to the phy-usb2.0 device, so I don't understand how it could end
+> up suspending the device with that set of dev_pm_ops. Perhaps this is
+> some weird type of corruption somewhere?
+> 
+> Thierry
+> 
 
-Signed-off-by: Zqiang <qiang.zhang@windriver.com>
----
- drivers/hid/usbhid/hid-core.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Hi Thierry,
+I figured out that phy-usb2.0 device is bound to tegra-xusb-padctl driver by
+those two lines in tegra_xusb_setup_usb_role_switch()
 
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index 17a29ee0ac6c..f8a49f8d4015 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -1209,6 +1209,7 @@ static int usbhid_start(struct hid_device *hid)
- static void usbhid_stop(struct hid_device *hid)
- {
- 	struct usbhid_device *usbhid = hid->driver_data;
-+	int index;
- 
- 	if (WARN_ON(!usbhid))
- 		return;
-@@ -1232,6 +1233,13 @@ static void usbhid_stop(struct hid_device *hid)
- 
- 	hid->claimed = 0;
- 
-+	for (index = 0; index < HID_CONTROL_FIFO_SIZE; index++) {
-+		if (usbhid->ctrl[index].raw_report)
-+			kfree(usbhid->ctrl[index].raw_report);
-+		if (usbhid->out[index].raw_report)
-+			kfree(usbhid->out[index].raw_report);
-+	}
-+
- 	usb_free_urb(usbhid->urbin);
- 	usb_free_urb(usbhid->urbctrl);
- 	usb_free_urb(usbhid->urbout);
--- 
-2.17.1
+	port->usb_phy.dev = &lane->pad->lanes[port->index]->dev;
+	port->usb_phy.dev->driver = port->padctl->dev->driver;
 
+Instead of assigning lane (phy) device to 'struct usb_phy', I think it should be
+the port device (port->dev) since the 'usb-role-switch' capability belongs to
+port device.
+
+	port->usb_phy.dev = &port->dev;
+
+I will submit a patch and ask for your review.
+
+Thanks,
+JC
