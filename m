@@ -2,89 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8812B5D3A
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 11:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDE62B5EC9
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 13:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727646AbgKQKtn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Nov 2020 05:49:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbgKQKtm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Nov 2020 05:49:42 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE13C0613CF;
-        Tue, 17 Nov 2020 02:49:42 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 25D9D1F44341
-Subject: Re: [PATCH v2 6/8] platform/chrome: cros_ec_typec: Use Thunderbolt 3
- cable discover mode VDO in USB4 mode
-To:     Utkarsh Patel <utkarsh.h.patel@intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     heikki.krogerus@linux.intel.com, pmalani@chromium.org,
-        rajmohan.mani@intel.com, azhar.shaikh@intel.com
-References: <20201113202503.6559-1-utkarsh.h.patel@intel.com>
- <20201113202503.6559-7-utkarsh.h.patel@intel.com>
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Message-ID: <8654d16e-7f9e-7dda-41b7-bf2996f82136@collabora.com>
-Date:   Tue, 17 Nov 2020 11:49:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1728169AbgKQL77 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Nov 2020 06:59:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35822 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727919AbgKQL77 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Nov 2020 06:59:59 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 55F772462E;
+        Tue, 17 Nov 2020 11:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605614398;
+        bh=tsxmx1vtF1zeLKOw6pUV17oomzFwH/UYB3NCEt26dDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LfFCaZW0CTBEs3lhxyh7GtpDDzTeRXW6VDRMHpAMVF+pDSBapXrTBzoo2jMQ1XuZU
+         Faga+K06vCxfwpgIarSKl2oswbEujdk5uf+MePv9cprKwnlvIdt3iAF4sGlx+/lAoz
+         p2QSAh60qGIDdqUXAmGmTyi2fMUhRZ4unelM41NU=
+Date:   Tue, 17 Nov 2020 13:00:46 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: usb-audio: Add delay quirk for all Logitech USB
+ devices
+Message-ID: <X7O7bkHYJrN3wa7A@kroah.com>
+References: <20201113153720.5158-1-joakim.tjernlund@infinera.com>
+ <07339bc75af562945e431b9bba23b0fa0ac303e5.camel@infinera.com>
 MIME-Version: 1.0
-In-Reply-To: <20201113202503.6559-7-utkarsh.h.patel@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <07339bc75af562945e431b9bba23b0fa0ac303e5.camel@infinera.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Nov 17, 2020 at 10:40:43AM +0000, Joakim Tjernlund wrote:
+> 
+> Ping ?
+> 
+> On Fri, 2020-11-13 at 16:37 +0100, Joakim Tjernlund wrote:
+> > Found one more Logitech device, BCC950 ConferenceCam, which needs
+> > the same delay here. This makes 3 out of 3 devices I have tried.
+> > 
+> > Therefore, add a delay for all Logitech devices as it does not hurt.
+> > 
+> > Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+> > CC: stable@vger.kernel.org (4.19, 5.4)
+> > 
+> > ---
+> >  sound/usb/quirks.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+
+$ ./scripts/get_maintainer.pl --file sound/usb/quirks.c
+Jaroslav Kysela <perex@perex.cz> (maintainer:SOUND)
+Takashi Iwai <tiwai@suse.com> (maintainer:SOUND,commit_signer:26/27=96%,authored:4/27=15%,added_lines:39/245=16%,removed_lines:18/59=31%)
+Alexander Tsoy <alexander@tsoy.me> (commit_signer:6/27=22%,authored:5/27=19%,added_lines:63/245=26%,removed_lines:22/59=37%)
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> (commit_signer:2/27=7%,authored:2/27=7%,removed_lines:12/59=20%)
+Nick Kossifidis <mickflemm@gmail.com> (added_lines:36/245=15%)
+Dmitry Panchenko <dmitry@d-systems.ee> (added_lines:27/245=11%)
+Chris Wulff <crwulff@gmail.com> (added_lines:14/245=6%)
+Jesus Ramos <jesus-ramos@live.com> (removed_lines:4/59=7%)
+Joakim Tjernlund <joakim.tjernlund@infinera.com> (removed_lines:3/59=5%)
+alsa-devel@alsa-project.org (moderated list:SOUND)
+linux-kernel@vger.kernel.org (open list)
 
 
-On 13/11/20 21:25, Utkarsh Patel wrote:
-> Configure Thunderbolt3/USB4 cable generation value by filing Thunderbolt 3
-> cable discover mode VDO to support rounded and non-rounded Thunderbolt3/
-> USB4 cables.
-> While we are here use Thunderbolt 3 cable discover mode VDO to fill active
-> cable plug link training value.
-> 
-> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
-
-Acked-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-
-> 
-> --
-> Changes in v2:
-> - No change.
-> --
-> ---
->  drivers/platform/chrome/cros_ec_typec.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> index 8111ed1fc574..b7416e82c3b3 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -514,8 +514,18 @@ static int cros_typec_enable_usb4(struct cros_typec_data *typec,
->  	else if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE)
->  		data.eudo |= EUDO_CABLE_TYPE_RE_TIMER << EUDO_CABLE_TYPE_SHIFT;
->  
-> -	data.active_link_training = !!(pd_ctrl->control_flags &
-> -				       USB_PD_CTRL_ACTIVE_LINK_UNIDIR);
-> +	/*
-> +	 * This driver does not have access to the identity information or
-> +	 * capabilities of the cable, so we don't know is it a real USB4 or
-> +	 * TBT3 cable. Therefore pretending that it's always TBT3 cable by
-> +	 * filling the TBT3 Cable VDO.
-> +	 */
-> +	data.tbt_cable_vdo = TBT_MODE;
-> +
-> +	if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_LINK_UNIDIR)
-> +		data.tbt_cable_vdo |= TBT_CABLE_LINK_TRAINING;
-> +
-> +	data.tbt_cable_vdo |= TBT_SET_CABLE_ROUNDED(pd_ctrl->cable_gen);
->  
->  	port->state.alt = NULL;
->  	port->state.data = &data;
-> 
+Try sending it to the people who can actually apply the thing...
