@@ -2,84 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2B42B5D2F
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 11:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2632B5D39
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 11:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727885AbgKQKq3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Nov 2020 05:46:29 -0500
-Received: from mga09.intel.com ([134.134.136.24]:17496 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727783AbgKQKq2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Nov 2020 05:46:28 -0500
-IronPort-SDR: ghOcfc5U7fBJyukk0Kpib9ubC/5WysrVAAIEb5WZbjPtXPcUwojCAr8fJyJQ+5pgILmJqvMBTa
- RLzax1JLzj1w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="171071425"
-X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
-   d="scan'208";a="171071425"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 02:46:28 -0800
-IronPort-SDR: vg1S/+UpEUuY29x434YdrxTuq09PU96DCAJLLwq2K/+OHgzegTDSyf9PK+mBS+brPgkmNN5/H7
- iGq4TFNPufJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
-   d="scan'208";a="430442715"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 17 Nov 2020 02:46:25 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Nov 2020 12:46:24 +0200
-Date:   Tue, 17 Nov 2020 12:46:24 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        pmalani@chromium.org, enric.balletbo@collabora.com,
+        id S1727683AbgKQKtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Nov 2020 05:49:17 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44686 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726265AbgKQKtR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Nov 2020 05:49:17 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id 1F4621F44341
+Subject: Re: [PATCH v2 2/8] platform/chrome: cros_ec_typec: Correct the
+ Thunderbolt rounded/non-rounded cable support
+To:     Utkarsh Patel <utkarsh.h.patel@intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     heikki.krogerus@linux.intel.com, pmalani@chromium.org,
         rajmohan.mani@intel.com, azhar.shaikh@intel.com
-Subject: Re: [PATCH v2 4/8] usb: typec: Remove one bit support for the
- Thunderbolt rounded/non-rounded cable
-Message-ID: <20201117104624.GD3437448@kuha.fi.intel.com>
 References: <20201113202503.6559-1-utkarsh.h.patel@intel.com>
- <20201113202503.6559-5-utkarsh.h.patel@intel.com>
+ <20201113202503.6559-3-utkarsh.h.patel@intel.com>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <5c919cea-3773-2782-2855-904e131fe057@collabora.com>
+Date:   Tue, 17 Nov 2020 11:49:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201113202503.6559-5-utkarsh.h.patel@intel.com>
+In-Reply-To: <20201113202503.6559-3-utkarsh.h.patel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 12:24:59PM -0800, Utkarsh Patel wrote:
-> Two bits support for the Thunderbolt rounded/non-rounded cable has been
-> added to the header file.
-> Hence, removing unused TBT_CABLE_ROUNDED definition from the header file.
+
+
+On 13/11/20 21:24, Utkarsh Patel wrote:
+> Thunderbolt rounded/non-rounded cable support is two bits value. Correcting
+> it as per the Thunderbolt 3 cable discover mode VDO changes done in the
+> Thunderbolt 3 alternate mode header.
 > 
 > Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Acked-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
 > --
-> changes in v2:
+> Changes in v2:
 > - Removed the fixes tag as there is no functional implication.
 > --
 > ---
->  include/linux/usb/typec_tbt.h | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/platform/chrome/cros_ec_typec.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/include/linux/usb/typec_tbt.h b/include/linux/usb/typec_tbt.h
-> index aad648d14bb3..63dd44b72e0c 100644
-> --- a/include/linux/usb/typec_tbt.h
-> +++ b/include/linux/usb/typec_tbt.h
-> @@ -39,7 +39,6 @@ struct typec_thunderbolt_data {
->  #define   TBT_CABLE_USB3_GEN1		1
->  #define   TBT_CABLE_USB3_PASSIVE	2
->  #define   TBT_CABLE_10_AND_20GBPS	3
-> -#define TBT_CABLE_ROUNDED		BIT(19)
->  #define TBT_CABLE_ROUNDED_SUPPORT(_vdo_) \
->  					(((_vdo_) & GENMASK(20, 19)) >> 19)
->  #define   TBT_GEN3_NON_ROUNDED                 0
-> -- 
-> 2.17.1
-
-thanks,
-
--- 
-heikki
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> index 31be31161350..8111ed1fc574 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -438,8 +438,7 @@ static int cros_typec_enable_tbt(struct cros_typec_data *typec,
+>  	if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_LINK_UNIDIR)
+>  		data.cable_mode |= TBT_CABLE_LINK_TRAINING;
+>  
+> -	if (pd_ctrl->cable_gen)
+> -		data.cable_mode |= TBT_CABLE_ROUNDED;
+> +	data.cable_mode |= TBT_SET_CABLE_ROUNDED(pd_ctrl->cable_gen);
+>  
+>  	/* Enter Mode VDO */
+>  	data.enter_vdo = TBT_SET_CABLE_SPEED(pd_ctrl->cable_speed);
+> 
