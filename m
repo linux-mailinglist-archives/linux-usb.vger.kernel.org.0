@@ -2,139 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8049B2B5F17
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 13:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D29D2B5F45
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 13:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728200AbgKQM2Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Nov 2020 07:28:16 -0500
-Received: from mail-bn7nam10on2085.outbound.protection.outlook.com ([40.107.92.85]:9568
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728085AbgKQM2P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Nov 2020 07:28:15 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VjHGJFTUyI+uR5lU4mCPaLxTYbSRxmURFQHVTJ94Ss18jZZGbnAaDpO6wMa4nqlSllEkJzcXdxTiL0nbf+uX9b3LP6M9TknnAU18g1xMYhuLLDW2JWmcntFfpA4pIAxTC8o1B2UbEkMu7YDSAYGDMJc1WY/WlAoRl5NErLDO1Ce0BsyfOnB0mX5agtQ6HpFrH/R+3sbkzYG4sYi4TjnolosqE8v9t2iXxT3tANr86Gmk+O9BpBf5WE0spsvQ9ymWmicKYlpVEvkWfHVX5U/NJFcIzbFlyFZBMxDnAnWiDCbEI/Zfy7Gx+SkcHw1mHrubYZRhPu9sYMYCHzHzENhMAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DS1Hpqdt/AZ/tDODWOjpu8hfGMwmTShq5Kb6i5jz5+0=;
- b=furu3LrSNR/lbsrmE7TJNnh7nC69xo13d1Q7zHpUXkMyE/Sr7oxWkSDkTQclXcSCT1pfx0WH1zmNTeevWeRMP8yR2bmPLmgvlGC9fil0RXlQGMO8hfP84BnUl1oCGVzJ2FJ1ba4VwYqtDC9YaAS0ONQ+rfQQgMCnpDJp4ozGnHnHZ71hPJBxHBRdVBgvRRe5/YwWSv5sDE+Yb40SdsyIABqGcY9sNqzcCo2jC4UjUOp4Lw53EZ+Jt8BoWqh/kiuhQDOjWjk65+wB65ufCljwTqn8yJLi9J9MVXk5Q9mB9K4ipxZ62Up8+MC9OgzKifnAQvfNP80zA6IUUj13r7yA6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 8.4.225.191) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=infinera.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=infinera.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DS1Hpqdt/AZ/tDODWOjpu8hfGMwmTShq5Kb6i5jz5+0=;
- b=QDxbZb88a/bZHzRK7FpHxb5npl2bycHfuDPSLSVN4OvLtKadkPec73nhW2IqK9dv87tDneR6/I6BsMDTdMJibra5JlAEr1QYFnjhuzqD53QAUGZorUwCt5+VEQUE7qRV66isqV39dPiSqBikdrlwiGzktcc2NlLCbkrOAEEO+Zo=
-Received: from DM5PR04CA0067.namprd04.prod.outlook.com (2603:10b6:3:ef::29) by
- BY5PR10MB4226.namprd10.prod.outlook.com (2603:10b6:a03:210::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.25; Tue, 17 Nov
- 2020 12:28:11 +0000
-Received: from DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:ef:cafe::cb) by DM5PR04CA0067.outlook.office365.com
- (2603:10b6:3:ef::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.25 via Frontend
- Transport; Tue, 17 Nov 2020 12:28:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 8.4.225.191)
- smtp.mailfrom=infinera.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=pass action=none
- header.from=infinera.com;
-Received-SPF: Pass (protection.outlook.com: domain of infinera.com designates
- 8.4.225.191 as permitted sender) receiver=protection.outlook.com;
- client-ip=8.4.225.191; helo=owa.infinera.com;
-Received: from owa.infinera.com (8.4.225.191) by
- DM6NAM11FT019.mail.protection.outlook.com (10.13.172.172) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3564.28 via Frontend Transport; Tue, 17 Nov 2020 12:28:10 +0000
-Received: from sv-ex16-prd.infinera.com (10.100.96.229) by
- sv-ex16-prd.infinera.com (10.100.96.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Tue, 17 Nov 2020 04:28:07 -0800
-Received: from sv-smtp-prod2.infinera.com (10.100.98.82) by
- sv-ex16-prd.infinera.com (10.100.96.229) with Microsoft SMTP Server id
- 15.1.1847.3 via Frontend Transport; Tue, 17 Nov 2020 04:28:07 -0800
-Received: from se-metroit-prd1.infinera.com ([10.210.32.58]) by sv-smtp-prod2.infinera.com with Microsoft SMTPSVC(7.5.7601.17514);
-         Tue, 17 Nov 2020 04:28:07 -0800
-Received: from gentoo-jocke.infinera.com (gentoo-jocke.infinera.com [10.210.71.2])
-        by se-metroit-prd1.infinera.com (Postfix) with ESMTP id 8B1392C03201;
-        Tue, 17 Nov 2020 13:28:06 +0100 (CET)
-Received: by gentoo-jocke.infinera.com (Postfix, from userid 1001)
-        id 7C17CC538; Tue, 17 Nov 2020 13:28:06 +0100 (CET)
-From:   Joakim Tjernlund <joakim.tjernlund@infinera.com>
-To:     Jaroslav Kysela <perex@perex.cz>, <linux-usb@vger.kernel.org>,
-        Takashi Iwai <tiwai@suse.com>
-CC:     Joakim Tjernlund <joakim.tjernlund@infinera.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH] ALSA: usb-audio: Add delay quirk for all Logitech USB devices
-Date:   Tue, 17 Nov 2020 13:28:03 +0100
-Message-ID: <20201117122803.24310-1-joakim.tjernlund@infinera.com>
-X-Mailer: git-send-email 2.26.2
+        id S1727350AbgKQMlr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Nov 2020 07:41:47 -0500
+Received: from mga14.intel.com ([192.55.52.115]:8373 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725355AbgKQMlr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Nov 2020 07:41:47 -0500
+IronPort-SDR: Bd2/gJtsSLIoapTNURkklzfBM+7/X51L0ZUVoJ8XE9VeX2y+QbOQh/npt/k789kYCUnuxG49Ms
+ WamXKMc6OObA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="170131740"
+X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
+   d="scan'208";a="170131740"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 04:41:46 -0800
+IronPort-SDR: /s1sCQ6RJLyT75isHNx8xUVNWaGwTDwdmX556y9yU/erI5XdHTLtJ4Chbq4JZnLQuVSXmB4G9S
+ 3VOodp9O4STw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
+   d="scan'208";a="430466891"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 17 Nov 2020 04:41:44 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Nov 2020 14:41:43 +0200
+Date:   Tue, 17 Nov 2020 14:41:43 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, enric.balletbo@collabora.com
+Subject: Re: [PATCH v3 03/11] usb: typec: Add plug num_altmodes sysfs attr
+Message-ID: <20201117124143.GI3437448@kuha.fi.intel.com>
+References: <20201116201150.2919178-1-pmalani@chromium.org>
+ <20201116201150.2919178-4-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-OriginalArrivalTime: 17 Nov 2020 12:28:07.0507 (UTC) FILETIME=[1AA8C230:01D6BCDD]
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5291f1c9-5d4d-4f20-f5f6-08d88af43f48
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4226:
-X-Microsoft-Antispam-PRVS: <BY5PR10MB42262A60D1901CE53E897758F4E20@BY5PR10MB4226.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iPTAsFU7tX5tHKC0XlsJYtdkRSpuzHLB+irPQkC1cq3CXApIgZ+9gOVXj1eGgUY7xMYTafshrh/2oWnIujYhjKdRFrkqFDdxrTcHKS6KVo1/jVmZHUpbZx4DpfaArQ7A4QvDOCyzfphGc172ZnduBUK5uE1xTwWOHpRE0vX85nnMgng5o2LlUqG/ElIUhWuFx+i+slYDDhymHx3FZsCTSyN7MEEO1K3OdKQZDx22iVjXkFn/WQYa9wMja8m4n+sqk3MN6ekHkjoOesCJJ2axD1LQb9/VjHYWVlxDyOZ4Z0net6rG2LrT194KzOet2IhQGVdiV8xYnoylWBPDreLT1lxyGopevpY3UbL2u/CegrTzcU5dzsNbowGVR3h0YLa/y8Vp+Z9pFUYe/siL2I9dCQ==
-X-Forefront-Antispam-Report: CIP:8.4.225.191;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:owa.infinera.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(396003)(39860400002)(376002)(136003)(346002)(46966005)(26005)(36756003)(4326008)(82740400003)(110136005)(54906003)(478600001)(83380400001)(47076004)(316002)(8936002)(42186006)(356005)(450100002)(5660300002)(426003)(44832011)(36906005)(2616005)(6266002)(336012)(81166007)(86362001)(70206006)(70586007)(8676002)(82310400003)(1076003)(6666004)(186003)(2906002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: infinera.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2020 12:28:10.9465
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5291f1c9-5d4d-4f20-f5f6-08d88af43f48
-X-MS-Exchange-CrossTenant-Id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=285643de-5f5b-4b03-a153-0ae2dc8aaf77;Ip=[8.4.225.191];Helo=[owa.infinera.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4226
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201116201150.2919178-4-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Found one more Logitech device, BCC950 ConferenceCam, which needs
-the same delay here. This makes 3 out of 3 devices I have tried.
+On Mon, Nov 16, 2020 at 12:11:42PM -0800, Prashant Malani wrote:
+> Add a field to the typec_plug struct to record the number of available
+> altmodes as well as the corresponding sysfs attribute to expose this to
+> userspace.
+> 
+> This allows userspace to determine whether there are any
+> remaining alternate modes left to be registered by the kernel driver. It
+> can begin executing any policy state machine after all available
+> alternate modes have been registered with the connector class framework.
+> 
+> This value is set to "-1" initially, signifying that a valid number of
+> alternate modes haven't been set for the plug. The sysfs file remains
+> hidden as long as the attribute value is -1.
 
-Therefore, add a delay for all Logitech devices as it does not hurt.
+Why couldn't we just keep it hidden for as long as the number of
+alt modes is 0? If you already explained that, then I apologise, I've
+forgotten.
 
-Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
-CC: stable@vger.kernel.org (4.19, 5.4)
+> We re-use the partner attribute for number_of_alternate_modes since the
+> usage and name is similar, and update the corresponding *_show() command
+> to support both partner and plugs.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+> 
+> Changes in v3:
+> - Re-arranged patch order and combined it with related series of
+>   patches.
+> 
+> No version v2.
+> 
+>  Documentation/ABI/testing/sysfs-class-typec |  9 +++
+>  drivers/usb/typec/class.c                   | 77 ++++++++++++++++++++-
+>  include/linux/usb/typec.h                   |  1 +
+>  3 files changed, 85 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> index 73ac7b461ae5..29eccf5fb8ed 100644
+> --- a/Documentation/ABI/testing/sysfs-class-typec
+> +++ b/Documentation/ABI/testing/sysfs-class-typec
+> @@ -204,6 +204,15 @@ Description:
+>  		- type-c
+>  		- captive
+>  
+> +What:		/sys/class/typec/<port>-<plug>/number_of_alternate_modes
+> +Date:		November 2020
+> +Contact:	Prashant Malani <pmalani@chromium.org>
+> +Description:
+> +		Shows the number of alternate modes which are advertised by the plug
+> +		associated with a particular cable during Power Delivery discovery.
+> +		This file remains hidden until a value greater than or equal to 0
+> +		is set by Type C port driver.
+> +
+>  What:		/sys/class/typec/<port>-cable/identity/
+>  Date:		April 2017
+>  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index c7412ddbd311..e68798599ca8 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -18,6 +18,7 @@ struct typec_plug {
+>  	struct device			dev;
+>  	enum typec_plug_index		index;
+>  	struct ida			mode_ids;
+> +	int				num_altmodes;
+>  };
+>  
+>  struct typec_cable {
+> @@ -536,9 +537,21 @@ static DEVICE_ATTR_RO(supports_usb_power_delivery);
+>  static ssize_t number_of_alternate_modes_show(struct device *dev, struct device_attribute *attr,
+>  					      char *buf)
+>  {
+> -	struct typec_partner *p = to_typec_partner(dev);
+> +	struct typec_partner *partner;
+> +	struct typec_plug *plug;
+> +	int num_altmodes;
+> +
+> +	if (is_typec_partner(dev)) {
+> +		partner = to_typec_partner(dev);
+> +		num_altmodes = partner->num_altmodes;
+> +	} else if (is_typec_plug(dev)) {
+> +		plug = to_typec_plug(dev);
+> +		num_altmodes = plug->num_altmodes;
+> +	} else {
+> +		return 0;
+> +	}
+>  
+> -	return sysfs_emit(buf, "%d\n", p->num_altmodes);
+> +	return sysfs_emit(buf, "%d\n", num_altmodes);
+>  }
+>  static DEVICE_ATTR_RO(number_of_alternate_modes);
+>  
+> @@ -726,11 +739,70 @@ static void typec_plug_release(struct device *dev)
+>  	kfree(plug);
+>  }
+>  
+> +static struct attribute *typec_plug_attrs[] = {
+> +	&dev_attr_number_of_alternate_modes.attr,
+> +	NULL
+> +};
+> +
+> +static umode_t typec_plug_attr_is_visible(struct kobject *kobj, struct attribute *attr, int n)
+> +{
+> +	struct typec_plug *plug = to_typec_plug(kobj_to_dev(kobj));
+> +
+> +	if (attr == &dev_attr_number_of_alternate_modes.attr) {
+> +		if (plug->num_altmodes < 0)
+> +			return 0;
+> +	}
+> +
+> +	return attr->mode;
+> +}
+> +
+> +static struct attribute_group typec_plug_group = {
+> +	.is_visible = typec_plug_attr_is_visible,
+> +	.attrs = typec_plug_attrs
+> +};
+> +
+> +static const struct attribute_group *typec_plug_groups[] = {
+> +	&typec_plug_group,
+> +	NULL
+> +};
+> +
+>  static const struct device_type typec_plug_dev_type = {
+>  	.name = "typec_plug",
+> +	.groups = typec_plug_groups,
+>  	.release = typec_plug_release,
+>  };
+>  
+> +/**
+> + * typec_plug_set_num_altmodes - Set the number of available plug altmodes
+> + * @plug: The plug to be updated.
+> + * @num_altmodes: The number of altmodes we want to specify as available.
+> + *
+> + * This routine is used to report the number of alternate modes supported by the
+> + * plug. This value is *not* enforced in alternate mode registration routines.
+> + *
+> + * @plug.num_altmodes is set to -1 on plug registration, denoting that
+> + * a valid value has not been set for it yet.
+> + *
+> + * Returns 0 on success or negative error number on failure.
+> + */
+> +int typec_plug_set_num_altmodes(struct typec_plug *plug, int num_altmodes)
+> +{
+> +	int ret;
+> +
+> +	if (num_altmodes < 0)
+> +		return -EINVAL;
+> +
+> +	plug->num_altmodes = num_altmodes;
+> +	ret = sysfs_update_group(&plug->dev.kobj, &typec_plug_group);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	sysfs_notify(&plug->dev.kobj, NULL, "number_of_alternate_modes");
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_plug_set_num_altmodes);
+> +
+>  /**
+>   * typec_plug_register_altmode - Register USB Type-C Cable Plug Alternate Mode
+>   * @plug: USB Type-C Cable Plug that supports the alternate mode
+> @@ -776,6 +848,7 @@ struct typec_plug *typec_register_plug(struct typec_cable *cable,
+>  	sprintf(name, "plug%d", desc->index);
+>  
+>  	ida_init(&plug->mode_ids);
+> +	plug->num_altmodes = -1;
+>  	plug->index = desc->index;
+>  	plug->dev.class = typec_class;
+>  	plug->dev.parent = &cable->dev;
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index bc6b1a71cb8a..54475323f83b 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -130,6 +130,7 @@ int typec_partner_set_num_altmodes(struct typec_partner *partner, int num_altmod
+>  struct typec_altmode
+>  *typec_partner_register_altmode(struct typec_partner *partner,
+>  				const struct typec_altmode_desc *desc);
+> +int typec_plug_set_num_altmodes(struct typec_plug *plug, int num_altmodes);
+>  struct typec_altmode
+>  *typec_plug_register_altmode(struct typec_plug *plug,
+>  			     const struct typec_altmode_desc *desc);
+> -- 
+> 2.29.2.299.gdc1121823c-goog
 
----
- sound/usb/quirks.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+thanks,
 
-diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-index c989ad8052ae..c50be2f75f70 100644
---- a/sound/usb/quirks.c
-+++ b/sound/usb/quirks.c
-@@ -1672,13 +1672,13 @@ void snd_usb_ctl_msg_quirk(struct usb_device *dev, unsigned int pipe,
- 	    && (requesttype & USB_TYPE_MASK) == USB_TYPE_CLASS)
- 		msleep(20);
- 
--	/* Zoom R16/24, Logitech H650e/H570e, Jabra 550a, Kingston HyperX
--	 *  needs a tiny delay here, otherwise requests like get/set
--	 *  frequency return as failed despite actually succeeding.
-+	/* Zoom R16/24, many Logitech(at least H650e/H570e/BCC950),
-+	 * Jabra 550a, Kingston HyperX needs a tiny delay here,
-+	 * otherwise requests like get/set frequency return
-+	 * as failed despite actually succeeding.
- 	 */
- 	if ((chip->usb_id == USB_ID(0x1686, 0x00dd) ||
--	     chip->usb_id == USB_ID(0x046d, 0x0a46) ||
--	     chip->usb_id == USB_ID(0x046d, 0x0a56) ||
-+	     USB_ID_VENDOR(chip->usb_id) == 0x046d  || /* Logitech */
- 	     chip->usb_id == USB_ID(0x0b0e, 0x0349) ||
- 	     chip->usb_id == USB_ID(0x0951, 0x16ad)) &&
- 	    (requesttype & USB_TYPE_MASK) == USB_TYPE_CLASS)
 -- 
-2.26.2
-
+heikki
