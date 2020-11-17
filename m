@@ -2,75 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDE62B5EC9
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 13:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AD12B5EE3
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 13:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728169AbgKQL77 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Nov 2020 06:59:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35822 "EHLO mail.kernel.org"
+        id S1728206AbgKQMJ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Nov 2020 07:09:57 -0500
+Received: from mga03.intel.com ([134.134.136.65]:35508 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727919AbgKQL77 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Nov 2020 06:59:59 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 55F772462E;
-        Tue, 17 Nov 2020 11:59:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605614398;
-        bh=tsxmx1vtF1zeLKOw6pUV17oomzFwH/UYB3NCEt26dDM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LfFCaZW0CTBEs3lhxyh7GtpDDzTeRXW6VDRMHpAMVF+pDSBapXrTBzoo2jMQ1XuZU
-         Faga+K06vCxfwpgIarSKl2oswbEujdk5uf+MePv9cprKwnlvIdt3iAF4sGlx+/lAoz
-         p2QSAh60qGIDdqUXAmGmTyi2fMUhRZ4unelM41NU=
-Date:   Tue, 17 Nov 2020 13:00:46 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] ALSA: usb-audio: Add delay quirk for all Logitech USB
- devices
-Message-ID: <X7O7bkHYJrN3wa7A@kroah.com>
-References: <20201113153720.5158-1-joakim.tjernlund@infinera.com>
- <07339bc75af562945e431b9bba23b0fa0ac303e5.camel@infinera.com>
+        id S1725446AbgKQMJ5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Nov 2020 07:09:57 -0500
+IronPort-SDR: xtxZrDzIH4pKUnRVWUDQIYNOEpgNjBXO6+tsX1PtNqC29fTfXkLYpBQfffqgRw+Q8zGtiEUEqB
+ PxItTiW1LrVA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="171011629"
+X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
+   d="scan'208";a="171011629"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 04:09:56 -0800
+IronPort-SDR: 6zU5qG2I4Kp6HIQDmtkOp7foVGq8DLZXaUq3cKtauuAubFVlTfh/9o07sAPidfHaUaD5vnudEf
+ bDmB7a0iYDGg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
+   d="scan'208";a="430458516"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 17 Nov 2020 04:09:53 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Nov 2020 14:09:52 +0200
+Date:   Tue, 17 Nov 2020 14:09:52 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        pmalani@chromium.org, enric.balletbo@collabora.com,
+        rajmohan.mani@intel.com, azhar.shaikh@intel.com
+Subject: Re: [PATCH v2 5/8] usb: typec: Use Thunderbolt 3 cable discover mode
+ VDO in Enter_USB message
+Message-ID: <20201117120952.GE3437448@kuha.fi.intel.com>
+References: <20201113202503.6559-1-utkarsh.h.patel@intel.com>
+ <20201113202503.6559-6-utkarsh.h.patel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <07339bc75af562945e431b9bba23b0fa0ac303e5.camel@infinera.com>
+In-Reply-To: <20201113202503.6559-6-utkarsh.h.patel@intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 10:40:43AM +0000, Joakim Tjernlund wrote:
+On Fri, Nov 13, 2020 at 12:25:00PM -0800, Utkarsh Patel wrote:
+> USB4 also uses same cable properties as Thunderbolt 3 so use Thunderbolt 3
+> cable discover mode VDO to fill details such as active cable plug link
+> training and cable rounded support.
+
+I'm sorry, but I think that has to be explained better. We only need
+the Thunderbolt 3 properties when we create the USB4 connection with
+Thunderbolt 3 cables. With USB4 cables that information is simply not
+available. Claiming that USB4 uses the same properties in general is
+not true.
+
+> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
+> --
+> Changes in v2:
+> - No change.
+> --
+> ---
+>  include/linux/usb/typec.h | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Ping ?
-> 
-> On Fri, 2020-11-13 at 16:37 +0100, Joakim Tjernlund wrote:
-> > Found one more Logitech device, BCC950 ConferenceCam, which needs
-> > the same delay here. This makes 3 out of 3 devices I have tried.
-> > 
-> > Therefore, add a delay for all Logitech devices as it does not hurt.
-> > 
-> > Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
-> > CC: stable@vger.kernel.org (4.19, 5.4)
-> > 
-> > ---
-> >  sound/usb/quirks.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 6be558045942..d91e09d9d91c 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -75,6 +75,7 @@ enum typec_orientation {
+>  /*
+>   * struct enter_usb_data - Enter_USB Message details
+>   * @eudo: Enter_USB Data Object
+> + * @tbt_cable_vdo: TBT3 Cable Discover Mode Response
+>   * @active_link_training: Active Cable Plug Link Training
+>   *
+>   * @active_link_training is a flag that should be set with uni-directional SBRX
 
-$ ./scripts/get_maintainer.pl --file sound/usb/quirks.c
-Jaroslav Kysela <perex@perex.cz> (maintainer:SOUND)
-Takashi Iwai <tiwai@suse.com> (maintainer:SOUND,commit_signer:26/27=96%,authored:4/27=15%,added_lines:39/245=16%,removed_lines:18/59=31%)
-Alexander Tsoy <alexander@tsoy.me> (commit_signer:6/27=22%,authored:5/27=19%,added_lines:63/245=26%,removed_lines:22/59=37%)
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> (commit_signer:2/27=7%,authored:2/27=7%,removed_lines:12/59=20%)
-Nick Kossifidis <mickflemm@gmail.com> (added_lines:36/245=15%)
-Dmitry Panchenko <dmitry@d-systems.ee> (added_lines:27/245=11%)
-Chris Wulff <crwulff@gmail.com> (added_lines:14/245=6%)
-Jesus Ramos <jesus-ramos@live.com> (removed_lines:4/59=7%)
-Joakim Tjernlund <joakim.tjernlund@infinera.com> (removed_lines:3/59=5%)
-alsa-devel@alsa-project.org (moderated list:SOUND)
-linux-kernel@vger.kernel.org (open list)
+Please also explain the same here with a short comment. So basically,
+if the USB4 connection is created using TBT3 cable, then we need to
+supply also the TBT3 Cable VDO as part of this data. But if USB4
+cable is used, then that member should not be filled at all.
 
+> @@ -83,6 +84,7 @@ enum typec_orientation {
+>   */
+>  struct enter_usb_data {
+>  	u32			eudo;
+> +	u32			tbt_cable_vdo;
+>  	unsigned char		active_link_training:1;
+>  };
 
-Try sending it to the people who can actually apply the thing...
+thanks,
+
+-- 
+heikki
