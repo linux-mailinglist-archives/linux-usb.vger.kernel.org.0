@@ -2,84 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DAF2B6995
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 17:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284B52B69FA
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 17:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727314AbgKQQLw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Nov 2020 11:11:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43164 "EHLO mail.kernel.org"
+        id S1727454AbgKQQZT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Nov 2020 11:25:19 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37192 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727298AbgKQQLv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Nov 2020 11:11:51 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A7F6C2463D;
-        Tue, 17 Nov 2020 16:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605629511;
-        bh=L63llMV2FMC+E9qdiSTIJ//xn/d4NWH+qdGamgCxkJQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=v2sl2oz12YbryGBOd2sByIEKQ/YCxX0nfN+kIW8Wu3YibAXAlOAdNW6HF8O71BKUF
-         dF98dpigKw9Y5U2RsH8jurGARVEclLn8CPo/fkvFxpTLrqdAlrbrBvesD82a3idu5+
-         61ziDNM45vw/dZwtX6vF14fOreWkUj85A2B/OkL0=
-Date:   Tue, 17 Nov 2020 08:11:49 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH net-next] r8153_ecm: avoid to be prior to r8152 driver
-Message-ID: <20201117081149.20723b4a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <02f38e505a3a45389e2f3c06b2f6c850@realtek.com>
-References: <7fd014f2-c9a5-e7ec-f1c6-b3e4bb0f6eb6@samsung.com>
-        <CGME20201116065317eucas1p2a2d141857bbdd6b4998dd11937d52f56@eucas1p2.samsung.com>
-        <1394712342-15778-393-Taiwan-albertk@realtek.com>
-        <5f3db229-940c-c8ed-257b-0b4b3dd2afbb@samsung.com>
-        <20201116090231.423afc8f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <02f38e505a3a45389e2f3c06b2f6c850@realtek.com>
+        id S1727443AbgKQQZS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Nov 2020 11:25:18 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1605630316; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hd3g7fl2JCMUdoujM7aj21LdB0w+wh2IKhgX8tcLU8M=;
+        b=hEzxGUCGVoEqPttXJGRDF4mXii1BRxvckAXGMJ6Yd+mAioc0C38QNjqBc59raHEKWlue9O
+        dF0rCQS93o8gzesvil+hFmxYDFjZtcp8m+iWIzB1mGj1tSn6tnJjogNci6Tendhjmo2iV8
+        JpvrXrCZzQ/H3f2lEF9CsNI8yjlp7lQ=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id A8970AC1F;
+        Tue, 17 Nov 2020 16:25:16 +0000 (UTC)
+Message-ID: <4a3b2f07f854f6b90bc4772dfa2731388116cda1.camel@suse.com>
+Subject: Re: Garmin 72h
+From:   Oliver Neukum <oneukum@suse.com>
+To:     ddhx <ddhx@madh.eu>, linux-usb@vger.kernel.org
+Date:   Tue, 17 Nov 2020 17:25:14 +0100
+In-Reply-To: <dba77dcc-5ff2-912f-2398-04f46be2966f@madh.eu>
+References: <dba77dcc-5ff2-912f-2398-04f46be2966f@madh.eu>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 17 Nov 2020 01:50:03 +0000 Hayes Wang wrote:
-> Jakub Kicinski <kuba@kernel.org>
-> > Sent: Tuesday, November 17, 2020 1:03 AM  
-> [...]
-> > > Yes, this fixes this issue, although I would prefer a separate Kconfig
-> > > entry for r8153_ecm with proper dependencies instead of this ifdefs in
-> > > Makefile.  
-> > 
-> > Agreed, this is what dependency resolution is for.
-> > 
-> > Let's just make this a separate Kconfig entry.  
+Am Dienstag, den 17.11.2020, 10:08 +0100 schrieb ddhx:
+> Hi,
 > 
-> Excuse me. I am not familiar with Kconfig.
+> Is it possible to add the Garmin 72h GPS?
 > 
-> I wish r8153_ecm could be used, even
-> CONFIG_USB_RTL8152 is not defined.
-> 
-> How should set it in Kconfig? 
 
-Something like this?
+Hi,
 
-config USB_RTL8153_ECM
-	tristate <headline text>
-	select MII
-	select USB_NET_CDCETHER
-	depends on USB_RTL8152 || USB_RTL8152=n
-	help
-		<you help text>
+to try we would at least need a device ID and a suggestion to which
+driver it ought to be added to.
+
+	Regards
+		Oliver
 
 
-select clauses will pull in the dependencies you need, and the
-dependency on RTL8152 will be satisfied either when RTL8152's code 
-is reachable (both are modules or RTL8152 is built in) or when RTL8152
-is not built at all.
-
-Does that help?
