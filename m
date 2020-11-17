@@ -2,60 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 629962B54FC
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 00:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D53772B5612
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 02:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729352AbgKPXaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 18:30:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38940 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726227AbgKPXaF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Nov 2020 18:30:05 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605569405;
-        bh=hrhGHOd+8vWh9fJJG1fhWn7TWoyVgpcJuUX0QOFG7M8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=1v4iiRPFG3bNWKFEzdHmow4mnXxlbHCkdxVuyhGvSlSGrsf02LOYZ1QG0PMsM9pZW
-         VgHLRivO+7jWO5PaD2tNZ9yd4j9ebAqjdd/oyk/+omv3pz1bq4Z+X2jQ97NAeDRDie
-         45tl5k8u1JkB3NttBYHIeNoyO3Oz9oirFicDpHGY=
+        id S1731775AbgKQBLI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 20:11:08 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7253 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731757AbgKQBLI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 20:11:08 -0500
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CZntq75HQzkYWc;
+        Tue, 17 Nov 2020 09:10:43 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Tue, 17 Nov 2020
+ 09:10:54 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <Peter.Chen@nxp.com>, <gregkh@linuxfoundation.org>,
+        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>
+CC:     <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>
+Subject: [PATCH] usb: chipidea: ci_hdrc_imx: add missing put_device() call in usbmisc_get_init_data()
+Date:   Tue, 17 Nov 2020 09:14:30 +0800
+Message-ID: <20201117011430.642589-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] cx82310_eth: fix error return code in cx82310_bind()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160556940487.9105.61677391575473381.git-patchwork-notify@kernel.org>
-Date:   Mon, 16 Nov 2020 23:30:04 +0000
-References: <1605247627-15385-1-git-send-email-zhangchangzhong@huawei.com>
-In-Reply-To: <1605247627-15385-1-git-send-email-zhangchangzhong@huawei.com>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux@zary.sk,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+if of_find_device_by_node() succeed, usbmisc_get_init_data() doesn't have
+a corresponding put_device(). Thus add put_device() to fix the exception
+handling for this function implementation.
 
-This patch was applied to netdev/net.git (refs/heads/master):
+Fixes: commit ef12da914ed6 ("usb: chipidea: imx: properly check for usbmisc")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ drivers/usb/chipidea/ci_hdrc_imx.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-On Fri, 13 Nov 2020 14:07:07 +0800 you wrote:
-> Fix to return a negative error code from the error handling
-> case instead of 0, as done elsewhere in this function.
-> 
-> Fixes: ca139d76b0d9 ("cx82310_eth: re-enable ethernet mode after router reboot")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [net] cx82310_eth: fix error return code in cx82310_bind()
-    https://git.kernel.org/netdev/net/c/cfbaa8b33e02
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index 25c65accf089..d4b1069b86ec 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -138,9 +138,13 @@ static struct imx_usbmisc_data *usbmisc_get_init_data(struct device *dev)
+ 	misc_pdev = of_find_device_by_node(args.np);
+ 	of_node_put(args.np);
+ 
+-	if (!misc_pdev || !platform_get_drvdata(misc_pdev))
++	if (!misc_pdev)
+ 		return ERR_PTR(-EPROBE_DEFER);
+ 
++	if (!platform_get_drvdata(misc_pdev)) {
++		put_device(&misc_pdev->dev);
++		return ERR_PTR(-EPROBE_DEFER);
++	}
+ 	data->dev = &misc_pdev->dev;
+ 
+ 	/*
+-- 
+2.25.4
 
