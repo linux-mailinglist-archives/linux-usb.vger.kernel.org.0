@@ -2,80 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC682B566C
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 02:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7981B2B569F
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 03:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgKQBuL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 16 Nov 2020 20:50:11 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:55329 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgKQBuL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 20:50:11 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 0AH1o4WJ1014800, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexmb03.realtek.com.tw[172.21.6.96])
-        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 0AH1o4WJ1014800
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 17 Nov 2020 09:50:04 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.33) by
- RTEXMB03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2044.4; Tue, 17 Nov 2020 09:50:03 +0800
-Received: from RTEXMB04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 17 Nov 2020 09:50:03 +0800
-Received: from RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa]) by
- RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa%3]) with mapi id
- 15.01.2044.006; Tue, 17 Nov 2020 09:50:03 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH net-next] r8153_ecm: avoid to be prior to r8152 driver
-Thread-Topic: [PATCH net-next] r8153_ecm: avoid to be prior to r8152 driver
-Thread-Index: AQHWu+Uk6MVFESXbN0aOZKSDeZR30KnJ9OqAgACBuYCAARgAcA==
-Date:   Tue, 17 Nov 2020 01:50:03 +0000
-Message-ID: <02f38e505a3a45389e2f3c06b2f6c850@realtek.com>
-References: <7fd014f2-c9a5-e7ec-f1c6-b3e4bb0f6eb6@samsung.com>
-        <CGME20201116065317eucas1p2a2d141857bbdd6b4998dd11937d52f56@eucas1p2.samsung.com>
-        <1394712342-15778-393-Taiwan-albertk@realtek.com>
-        <5f3db229-940c-c8ed-257b-0b4b3dd2afbb@samsung.com>
- <20201116090231.423afc8f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201116090231.423afc8f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.146]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1726554AbgKQCMy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Nov 2020 21:12:54 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:7940 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726471AbgKQCMx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 21:12:53 -0500
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CZqGK6x1NzhZxY;
+        Tue, 17 Nov 2020 10:12:41 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Tue, 17 Nov 2020
+ 10:12:50 +0800
+From:   Zhang Qilong <zhangqilong3@huawei.com>
+To:     <peter.chen@nxp.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>, <sergei.shtylyov@gmail.com>
+CC:     <linux-usb@vger.kernel.org>
+Subject: [PATCH v2 0/2] usb: gadget: Fix two memleaks in error handling
+Date:   Tue, 17 Nov 2020 10:16:27 +0800
+Message-ID: <20201117021629.1470544-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org>
-> Sent: Tuesday, November 17, 2020 1:03 AM
-[...]
-> > Yes, this fixes this issue, although I would prefer a separate Kconfig
-> > entry for r8153_ecm with proper dependencies instead of this ifdefs in
-> > Makefile.
-> 
-> Agreed, this is what dependency resolution is for.
-> 
-> Let's just make this a separate Kconfig entry.
+This patch sets fix two memleaks before error returns.
+---
+Changelog:
+v2
+- add midi_free label in f_midi_alloc and use kfree in
+  gadgetfs_fill_super.
 
-Excuse me. I am not familiar with Kconfig.
+Zhang Qilong (2):
+  usb: gadget: f_midi: Fix memleak in f_midi_alloc
+  usb: gadget: Fix memleak in gadgetfs_fill_super
 
-I wish r8153_ecm could be used, even
-CONFIG_USB_RTL8152 is not defined.
+ drivers/usb/gadget/function/f_midi.c | 10 +++++++---
+ drivers/usb/gadget/legacy/inode.c    |  3 +++
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-How should set it in Kconfig? 
-
-Best Regards,
-Hayes
+-- 
+2.25.4
 
