@@ -2,114 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A01D2B6C0A
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 18:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D185D2B6D13
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 19:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729906AbgKQRkT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Nov 2020 12:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S1730156AbgKQSTV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Nov 2020 13:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729905AbgKQRkS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Nov 2020 12:40:18 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E646C0613CF
-        for <linux-usb@vger.kernel.org>; Tue, 17 Nov 2020 09:40:18 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id oc3so896906pjb.4
-        for <linux-usb@vger.kernel.org>; Tue, 17 Nov 2020 09:40:18 -0800 (PST)
+        with ESMTP id S1729115AbgKQSTU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Nov 2020 13:19:20 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A74C0613CF
+        for <linux-usb@vger.kernel.org>; Tue, 17 Nov 2020 10:19:20 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id m9so6974674pgb.4
+        for <linux-usb@vger.kernel.org>; Tue, 17 Nov 2020 10:19:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=iiwx67hxxgxtCCuEa1EzwHVFpWqU1uzHgGryNJZoJco=;
-        b=EnjD+jW+kv1TUdbA9VVE/MUiB+sfoy5HxSR3PKjA9z7czDazKAjIws4AWaTwW9VXbr
-         zFuZHDEPph3laugWXQylEgfV9XDIX/FK0pvdvakNrEwEmjzpl0TCiy+ZQUGwYTVygMcN
-         rsn38lspn4WRnop3BmNqaJyhXubSOI94Ra+hk=
+        bh=PCgrY2aBpRPAX/roDvuGOrFaxtGkBJ2lTrHl8BUGv4A=;
+        b=GAneKGoG2Io10/3LWlTWJUCwy28HHQcLayHqSU9hLDc4DmunSEd5mdQZMrKPmkQ9K3
+         VQsDq1foqZki5dv3xhpVdzzZEAZ+hPj4RYmNZ6zQ8bzjpp7X1LE+wzEe2kFcpktoCsQI
+         53QgOCJl6z5jYVsbLhNgHSsp0X1hj/8D2RGQw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=iiwx67hxxgxtCCuEa1EzwHVFpWqU1uzHgGryNJZoJco=;
-        b=tqMUwfnJS7d7Iw16nQA+ecEQZBe/imMWV5dl6ijGD7zc4kdKRvNLpLCA+CA2QfkmVG
-         GxP48R8hlM++Lod6O0dpTnvB+CYyZtBp5sNQlhXMHlV0x3494dw1OYANsvJTB79Y3aCP
-         FD2MvGjjOIg4V5lbjPy0U+HFkjaQcIWcmeNcc1Fs2KaDhFT5XB0f9CoeiF9bEppVWJHf
-         gLhEiJYSevQ9loPoqO91kvUadlUvWxdMs6tbFBvQrApHqmyt59LzfCQkC/ONR1A+vyjk
-         Bbdkwus2f1lpRclOYwp9vOC+6IP2jTOeUWe0Ppyv8nuzTfYcBYDd7ak2NHbKlbSrpcSa
-         BPWQ==
-X-Gm-Message-State: AOAM5312aQtE2oRhD/WqnLO86icmgtelk6OiD9bPCaRqp+GAQ7ienncL
-        clowObfR2Zl7yTXusFdISy9bOQ==
-X-Google-Smtp-Source: ABdhPJxc0ydiXe3VInfI6J2+5e2WI/955LuSZkxewaWME+8Y6ifHxlwySoocMBHrEYfV5wN7XBv9WQ==
-X-Received: by 2002:a17:90a:d252:: with SMTP id o18mr199429pjw.108.1605634817792;
-        Tue, 17 Nov 2020 09:40:17 -0800 (PST)
+        bh=PCgrY2aBpRPAX/roDvuGOrFaxtGkBJ2lTrHl8BUGv4A=;
+        b=qcBMzLX9cppvtd8nXkLzq8bfDRUuMSmKKrJ8PMBKxXacxdwZtqdaMyqmAeJkp3bxdp
+         +KhcUMyy1Cu/mk72FUaA7iA8+SbfGAb5cNhzHmtXTirPQAsQmU6H9HHVO9pGWFPTNL+3
+         DXe9yUhz5eSb9YY6RcYOduf3L3OvLqFmKgUL/uzIxBm7b64U5yZuQw9SXxmlfMTaClBL
+         cMBi0k/L00wpPNMkLKPbGfRALjCMKERdY+rZxUzeoLdXqV0O9HUmhxdW8Pjcf8/I73II
+         X2CKCuPJYfIbB5tgtUWL8Rv8/5QlQJImNXg0uDEZlTRc90MRj+Ap+DjOCMHhTmXPSnbo
+         vM9A==
+X-Gm-Message-State: AOAM532kj/VoGdS6lE4HMDcBkJMlrye9W819BYzj1UeHjgLOw0ALJxGm
+        KEqkzppdqtyCvsWgtZSYim5XuA==
+X-Google-Smtp-Source: ABdhPJwlUD+zvvpBBQFbbbouktVbBndX2gMv7jTi96odnE9w+zMsgJQ5w5FlffK5mrpjCmRFe8rYQg==
+X-Received: by 2002:a63:7b55:: with SMTP id k21mr4516899pgn.256.1605637160286;
+        Tue, 17 Nov 2020 10:19:20 -0800 (PST)
 Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
-        by smtp.gmail.com with ESMTPSA id q16sm21771433pff.114.2020.11.17.09.40.16
+        by smtp.gmail.com with ESMTPSA id l133sm22320736pfd.112.2020.11.17.10.19.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2020 09:40:17 -0800 (PST)
-Date:   Tue, 17 Nov 2020 09:40:16 -0800
+        Tue, 17 Nov 2020 10:19:19 -0800 (PST)
+Date:   Tue, 17 Nov 2020 10:19:18 -0800
 From:   Prashant Malani <pmalani@chromium.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
 Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, enric.balletbo@collabora.com
-Subject: Re: [PATCH v3 03/11] usb: typec: Add plug num_altmodes sysfs attr
-Message-ID: <20201117174016.GA1819103@google.com>
-References: <20201116201150.2919178-1-pmalani@chromium.org>
- <20201116201150.2919178-4-pmalani@chromium.org>
- <20201117124143.GI3437448@kuha.fi.intel.com>
+        heikki.krogerus@linux.intel.com, enric.balletbo@collabora.com,
+        rajmohan.mani@intel.com, azhar.shaikh@intel.com
+Subject: Re: [PATCH v2 6/8] platform/chrome: cros_ec_typec: Use Thunderbolt 3
+ cable discover mode VDO in USB4 mode
+Message-ID: <20201117181918.GB1819103@google.com>
+References: <20201113202503.6559-1-utkarsh.h.patel@intel.com>
+ <20201113202503.6559-7-utkarsh.h.patel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201117124143.GI3437448@kuha.fi.intel.com>
+In-Reply-To: <20201113202503.6559-7-utkarsh.h.patel@intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+Hi Utkarsh,
 
-On Tue, Nov 17, 2020 at 02:41:43PM +0200, Heikki Krogerus wrote:
-> On Mon, Nov 16, 2020 at 12:11:42PM -0800, Prashant Malani wrote:
-> > Add a field to the typec_plug struct to record the number of available
-> > altmodes as well as the corresponding sysfs attribute to expose this to
-> > userspace.
-> > 
-> > This allows userspace to determine whether there are any
-> > remaining alternate modes left to be registered by the kernel driver. It
-> > can begin executing any policy state machine after all available
-> > alternate modes have been registered with the connector class framework.
-> > 
-> > This value is set to "-1" initially, signifying that a valid number of
-> > alternate modes haven't been set for the plug. The sysfs file remains
-> > hidden as long as the attribute value is -1.
+On Fri, Nov 13, 2020 at 12:25:01PM -0800, Utkarsh Patel wrote:
+> Configure Thunderbolt3/USB4 cable generation value by filing Thunderbolt 3
+> cable discover mode VDO to support rounded and non-rounded Thunderbolt3/
+> USB4 cables.
+> While we are here use Thunderbolt 3 cable discover mode VDO to fill active
+> cable plug link training value.
 > 
-> Why couldn't we just keep it hidden for as long as the number of
-> alt modes is 0? If you already explained that, then I apologise, I've
-> forgotten.
+> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
 > 
+> --
+> Changes in v2:
+> - No change.
+> --
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> index 8111ed1fc574..b7416e82c3b3 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -514,8 +514,18 @@ static int cros_typec_enable_usb4(struct cros_typec_data *typec,
+>  	else if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE)
+>  		data.eudo |= EUDO_CABLE_TYPE_RE_TIMER << EUDO_CABLE_TYPE_SHIFT;
+>  
+> -	data.active_link_training = !!(pd_ctrl->control_flags &
+> -				       USB_PD_CTRL_ACTIVE_LINK_UNIDIR);
+> +	/*
+> +	 * This driver does not have access to the identity information or
+> +	 * capabilities of the cable, so we don't know is it a real USB4 or
+> +	 * TBT3 cable. Therefore pretending that it's always TBT3 cable by
+> +	 * filling the TBT3 Cable VDO.
+> +	 */
+> +	data.tbt_cable_vdo = TBT_MODE;
 
-No worries :)
+Is it safe to be making this assumption unconditionally? It might work for
+Intel Mux agent but is it guaranteed to be safe for any other future
+mux implementation? In other words, what if a "true" USB4 cable is
+connected which doesn't have the Thunderbolt SVID alt mode?
 
-Succinctly, because 0 is a valid value for "number of altmodes
-supported".
+(Pre-fetching some alternatives in case the answer is no)
 
-If we keep the attribute hidden for 0, then there won't
-be a way for userspace to determine that PD discovery is done and we
-don't expect any more cable plug altmodes to be registered by the kernel
-Type C port driver (it can determine this by comparing
-"number_of_altmodes" against the actual number of alt modes registered
-by the Type C port driver).
+You might want to check with the Cros EC team if you can repurpose a bit of
+the "reserved" field for specifying whether the cable is TBT or not.
 
-If we keep "number_of_altmodes" hidden even for 0, the userspace cannot
-differentiate between "this cable doesn't support any altmodes" and
-"it does altmodes, but the PD stack hasn't completed PD Discovery
-including DiscoverIdentity yet".
+Either that or see if there is a way to determine from the pd_ctrl->cable_speed
+whether the cable is actually TBT or not.
 
-For reference, here is the initial patch and mini-discussion around it
-back in July for port-partner altmodes [1] (I've followed a similar
-logic here).
-
-Hope this helps the rationale a bit more.
+Failing all the above, perhaps you'll have to wait for the PD discovery stuff
+to make it's way through review and use that (note that there may be
+timing issues between the Mux update event and PD discovery complete
+event reaching the port driver).
 
 Best regards,
 
 -Prashant
-
-[1]:
-https://lore.kernel.org/linux-usb/20200701082230.GF856968@kuha.fi.intel.com/
