@@ -2,74 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 315822B5661
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 02:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC682B566C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Nov 2020 02:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgKQBo7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Nov 2020 20:44:59 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:4096 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgKQBo6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 20:44:58 -0500
-Received: from DGGEMM404-HUB.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4CZpf360gGzXmbF;
-        Tue, 17 Nov 2020 09:44:43 +0800 (CST)
-Received: from dggema707-chm.china.huawei.com (10.3.20.71) by
- DGGEMM404-HUB.china.huawei.com (10.3.20.212) with Microsoft SMTP Server (TLS)
- id 14.3.487.0; Tue, 17 Nov 2020 09:44:54 +0800
-Received: from dggema755-chm.china.huawei.com (10.1.198.197) by
- dggema707-chm.china.huawei.com (10.3.20.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Tue, 17 Nov 2020 09:44:54 +0800
-Received: from dggema755-chm.china.huawei.com ([10.1.198.197]) by
- dggema755-chm.china.huawei.com ([10.1.198.197]) with mapi id 15.01.1913.007;
- Tue, 17 Nov 2020 09:44:54 +0800
-From:   zhangqilong <zhangqilong3@huawei.com>
-To:     Peter Chen <peter.chen@nxp.com>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        id S1726948AbgKQBuL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 16 Nov 2020 20:50:11 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:55329 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgKQBuL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Nov 2020 20:50:11 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 0AH1o4WJ1014800, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexmb03.realtek.com.tw[172.21.6.96])
+        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 0AH1o4WJ1014800
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 17 Nov 2020 09:50:04 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.33) by
+ RTEXMB03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2044.4; Tue, 17 Nov 2020 09:50:03 +0800
+Received: from RTEXMB04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Tue, 17 Nov 2020 09:50:03 +0800
+Received: from RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa]) by
+ RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa%3]) with mapi id
+ 15.01.2044.006; Tue, 17 Nov 2020 09:50:03 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIIDIvMl0gdXNiOiBnYWRnZXQ6IEZpeCBtZW1sZWFrIGlu?=
- =?gb2312?B?IGdhZGdldGZzX2ZpbGxfc3VwZXI=?=
-Thread-Topic: [PATCH 2/2] usb: gadget: Fix memleak in gadgetfs_fill_super
-Thread-Index: AQHWvBIW5cJpZ52Yvkeg48eIFj8y3anKubWAgADTwEA=
-Date:   Tue, 17 Nov 2020 01:44:54 +0000
-Message-ID: <21e2ad201ff54e7798c443fa66a5f39c@huawei.com>
-References: <20201116121710.1546690-1-zhangqilong3@huawei.com>
- <20201116121710.1546690-3-zhangqilong3@huawei.com>
- <20201116130349.GC28313@b29397-desktop>
-In-Reply-To: <20201116130349.GC28313@b29397-desktop>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
+Subject: RE: [PATCH net-next] r8153_ecm: avoid to be prior to r8152 driver
+Thread-Topic: [PATCH net-next] r8153_ecm: avoid to be prior to r8152 driver
+Thread-Index: AQHWu+Uk6MVFESXbN0aOZKSDeZR30KnJ9OqAgACBuYCAARgAcA==
+Date:   Tue, 17 Nov 2020 01:50:03 +0000
+Message-ID: <02f38e505a3a45389e2f3c06b2f6c850@realtek.com>
+References: <7fd014f2-c9a5-e7ec-f1c6-b3e4bb0f6eb6@samsung.com>
+        <CGME20201116065317eucas1p2a2d141857bbdd6b4998dd11937d52f56@eucas1p2.samsung.com>
+        <1394712342-15778-393-Taiwan-albertk@realtek.com>
+        <5f3db229-940c-c8ed-257b-0b4b3dd2afbb@samsung.com>
+ <20201116090231.423afc8f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201116090231.423afc8f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.179.28]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+x-originating-ip: [172.21.177.146]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiANCj4gT24gMjAtMTEtMTYgMjA6MTc6MTAsIFpoYW5nIFFpbG9uZyB3cm90ZToNCj4gPiB1c2Jf
-Z2V0X2dhZGdldF91ZGNfbmFtZSB3aWxsIGFsbG9jIG1lbW9yeSBmb3IgQ0hJUCBpbiAiRW5vbWVt
-IiBicmFuY2guDQo+ID4gd2Ugc2hvdWxkIGZyZWUgaXQgYmVmb3JlIGVycm9yIHJldHVybnMgdG8g
-cHJldmVudCBtZW1sZWFrLg0KPiA+DQo+ID4gRml4ZXM6IDE3NWY3MTIxMTljNTcgKCJ1c2I6IGdh
-ZGdldDogcHJvdmlkZSBpbnRlcmZhY2UgZm9yIGxlZ2FjeQ0KPiA+IGdhZGdldHMgdG8gZ2V0IFVE
-QyBuYW1lIikNCj4gPiBSZXBvcnRlZC1ieTogSHVsayBSb2JvdCA8aHVsa2NpQGh1YXdlaS5jb20+
-DQo+ID4gU2lnbmVkLW9mZi1ieTogWmhhbmcgUWlsb25nIDx6aGFuZ3FpbG9uZzNAaHVhd2VpLmNv
-bT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy91c2IvZ2FkZ2V0L2xlZ2FjeS9pbm9kZS5jIHwgMyAr
-KysNCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9sZWdhY3kvaW5vZGUuYw0KPiA+IGIvZHJpdmVycy91
-c2IvZ2FkZ2V0L2xlZ2FjeS9pbm9kZS5jDQo+ID4gaW5kZXggMWI0MzBiMzZkMGE2Li4zY2VmYzI3
-YmUwOTggMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvZ2FkZ2V0L2xlZ2FjeS9pbm9kZS5j
-DQo+ID4gKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2xlZ2FjeS9pbm9kZS5jDQo+ID4gQEAgLTIw
-MzksNiArMjAzOSw5IEBAIGdhZGdldGZzX2ZpbGxfc3VwZXIgKHN0cnVjdCBzdXBlcl9ibG9jayAq
-c2IsIHN0cnVjdA0KPiBmc19jb250ZXh0ICpmYykNCj4gPiAgCXJldHVybiAwOw0KPiA+DQo+ID4g
-IEVub21lbToNCj4gPiArCWZyZWUoQ0hJUCk7DQo+ID4gKwlDSElQID0gTlVMTDsNCj4gPiArDQo+
-ID4gIAlyZXR1cm4gLUVOT01FTTsNCj4gPiAgfQ0KPiANCj4gSXQgc2VlbXMgdGhlIGRldl9uZXcg
-YWxzbyBhbGxvY2F0ZSB0aGUgbWVtb3J5LCB3b3VsZCB5b3UgcGxlYXNlIGNoYW5nZSBpdA0KPiB0
-b28sIGFsc28sIGNyZWF0ZSBhIG5ldyBnb3RvIGVudHJ5IGZvciBpdC4NCg0KSWYgZ2FkZ2V0ZnNf
-Y3JlYXRlX2ZpbGUgZmFpbHMsIHRoZSBkZXZfbmV3IHdpbGwgYmUgZnJlZWQgaW4gcHV0X2Rldi4N
-Cg0KVGhhbmtzLA0KWmhhbmcNCg0KPiAtLQ0KPiANCj4gVGhhbmtzLA0KPiBQZXRlciBDaGVuDQo=
+Jakub Kicinski <kuba@kernel.org>
+> Sent: Tuesday, November 17, 2020 1:03 AM
+[...]
+> > Yes, this fixes this issue, although I would prefer a separate Kconfig
+> > entry for r8153_ecm with proper dependencies instead of this ifdefs in
+> > Makefile.
+> 
+> Agreed, this is what dependency resolution is for.
+> 
+> Let's just make this a separate Kconfig entry.
+
+Excuse me. I am not familiar with Kconfig.
+
+I wish r8153_ecm could be used, even
+CONFIG_USB_RTL8152 is not defined.
+
+How should set it in Kconfig? 
+
+Best Regards,
+Hayes
+
