@@ -2,57 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A14842B7D11
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 12:56:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5902B7D24
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 12:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbgKRLxu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Nov 2020 06:53:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38750 "EHLO mail.kernel.org"
+        id S1726677AbgKRL7P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Nov 2020 06:59:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40130 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbgKRLxu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Nov 2020 06:53:50 -0500
+        id S1726044AbgKRL7P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Nov 2020 06:59:15 -0500
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4B38B207D3;
-        Wed, 18 Nov 2020 11:53:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A81582225B;
+        Wed, 18 Nov 2020 11:59:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1605700430;
-        bh=OvcOpWYH/daMpxGjh0Ud84d8UhmjV3x6Q1H1hRHM0uE=;
+        s=korg; t=1605700753;
+        bh=bpIaJCuL97BrXNCVsIpB3z8ri1lvvqCDzS5qRClP03I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DFB5hQLT2jGphVhPHsQO8w9pVhZolvHVXItR5ggY3CIe7Z472PBhl8s+QqMnMYeSX
-         oLMKUpOwNZf+ZJD4P+Ws/kYPLrZbzVazwxV7Wu6M8FREA7kcPZ9qUPqxB3nFBu+Gyz
-         8njUB74Qgfi5PchIdGY+fB1Sc8MDCIjU3/igjSB4=
-Date:   Wed, 18 Nov 2020 12:54:36 +0100
+        b=qrCzw2jfI/0p2MfdH8tnjlUIIxeNljgifiqyPVSPFRlivzdvssgQHJoDMwp5sm18A
+         R42lLl1L6XSBw3/gGCA/Fl9EyPPHtG7r58+PVn9u/X7GoEMj+eInDS+ym3TXj2w/hi
+         Faf5ygibf63uxxmvt2fGMCOZh39UWQfhkAu0ySLQ=
+Date:   Wed, 18 Nov 2020 12:59:59 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        heikki.krogerus@linux.intel.com, pmalani@chromium.org,
-        enric.balletbo@collabora.com, rajmohan.mani@intel.com,
-        azhar.shaikh@intel.com
-Subject: Re: [PATCH v2 0/8] Thunderbolt3/USB4 cable rounded and active cable
- plug link training support
-Message-ID: <X7ULfA//gU3vsIqd@kroah.com>
-References: <20201113202503.6559-1-utkarsh.h.patel@intel.com>
+        heikki.krogerus@linux.intel.com, enric.balletbo@collabora.com,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH v3 00/11] chrome/platform: cros_ec_typec: Register
+ cables, partner altmodes and plug altmodes
+Message-ID: <X7UMvw7wnMapkAk8@kroah.com>
+References: <20201116201150.2919178-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201113202503.6559-1-utkarsh.h.patel@intel.com>
+In-Reply-To: <20201116201150.2919178-1-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 12:24:55PM -0800, Utkarsh Patel wrote:
-> This patch series adds the support for Thunderbolt3/USB4 rounded and
-> non-rounded frequencies cables and fixes the active cable plug link
-> training support.
+On Mon, Nov 16, 2020 at 12:11:36PM -0800, Prashant Malani wrote:
+> This patch series adds support for the following bits of functionality,
+> parsing USB Type C Power Delivery information from the Chrome Embedded Controller
+> and using the Type C connector class:
+> - Register cable objects (including plug type).
+> - Register "number of altmodes" attribute for partners.
+> - Register altmodes and "number of altmodes" attribute for cable plugs.
 > 
-> Changes in v2:
-> - Removed the fixes tag as there is no functional implication from patches
->   1/8, 2/8 and 4/8.
+> The functionality was earlier part of multiple series ([1], [2], [3]), but
+> I've combined it into 1 series and re-ordered the patches to hopefully make
+> it easier to peruse. I've maintained the patch Acked-by/Reviewed-by tags where
+> they were received.
+> 
+> Patches 1/11, 2/11, 3/11 introduce the changes needed in the USB subsystem (PD VDO
+> header update, sysfs attribute additions) and hence the first three patches
+> can go through Greg's tree.
 
-I've queued up the first 4 patches of this series.  Feel free to redo
-the rest and resend.
+I've taken the first 2 patches in my usb tree now, waiting for Heikki's
+response on patch 3 before I touch that.
 
 thanks,
 
