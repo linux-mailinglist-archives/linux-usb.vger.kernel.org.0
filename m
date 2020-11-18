@@ -2,145 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 659812B7377
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 02:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 877402B73BB
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 02:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbgKRBGY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Nov 2020 20:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725767AbgKRBGW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Nov 2020 20:06:22 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386AFC061A4D
-        for <linux-usb@vger.kernel.org>; Tue, 17 Nov 2020 17:06:21 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id i13so24755pgm.9
-        for <linux-usb@vger.kernel.org>; Tue, 17 Nov 2020 17:06:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lCC2MNDhMsDM9oonU7PaUg8pw4Z2GypPso1Qfr4fex8=;
-        b=oHN6oQnER2pBv76SZtXrUEs4eP8xPoJnAlvAAgTvts8qEq8H+3nNicbPa+u2SBfbGi
-         lUCGl7+I3JSrd8DREpkTH10dQTukIS0NPpN4/uovmOmdGB6dEkdrUuugYuWwnLytTdeM
-         bagFCyS0ygVaCrdwra7nFUmMToFWyDOAaWwIc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lCC2MNDhMsDM9oonU7PaUg8pw4Z2GypPso1Qfr4fex8=;
-        b=FYbKglQpPKgk15HhQnlQTVyEnzJtP4Pf7NDk4YWmX2cZbaHuIkHPlgVBqg0B9Nhsvi
-         Oamg6aARnwUMbvN9q/9KhoGEf+vMjlSFTRsrCoXDvWnguOQ1o0ShpNGG6OW0QQsXTDiK
-         HRLPJ/v1+kkLqYrQKMELjl2eq9QQqAC2/lW7TGqKjJ2JA42DZfNrNLgwA9eoF+ZSA3Fy
-         RfyAzVUB2+jGalCAHSBL18TcoS70MnW1Dsi3bBkUPizRL0iSWdX6FI0s+aUCttWlysgX
-         MbcXdEPvXUA/0dlpBH3iR5SaZb8xE8hhqlcFanPSJUKmP8ZGO/ZmG5414vXdGAJOB1lL
-         Dx2g==
-X-Gm-Message-State: AOAM533zRcxlBOqsH2icyLdLk6Oox5I1d/vtmYfEUK09bhOnRo5kCn9r
-        N6VAHUofOUcpiU87OPevhBauAg==
-X-Google-Smtp-Source: ABdhPJxQCqu3SJgkg3RsGjXhJL4MZcligzJGgmmZeNs6GebOhd10ARAkEvWMMRYi+JTHmYEzsnsAdg==
-X-Received: by 2002:a62:3047:0:b029:197:6ca1:24de with SMTP id w68-20020a6230470000b02901976ca124demr1934147pfw.8.1605661580565;
-        Tue, 17 Nov 2020 17:06:20 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
-        by smtp.gmail.com with ESMTPSA id mv5sm313200pjb.42.2020.11.17.17.06.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2020 17:06:20 -0800 (PST)
-Date:   Tue, 17 Nov 2020 17:06:18 -0800
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Azhar Shaikh <azhar.shaikh@intel.com>
-Subject: Re: [PATCH v2 6/8] platform/chrome: cros_ec_typec: Use Thunderbolt 3
- cable discover mode VDO in USB4 mode
-Message-ID: <CACeCKacedkvQDq7pJm7G5qbu__5PerUkTK5DjtWy5StMShSB3w@mail.gmail.com>
-References: <20201113202503.6559-1-utkarsh.h.patel@intel.com>
- <20201113202503.6559-7-utkarsh.h.patel@intel.com>
- <20201117181918.GB1819103@google.com>
+        id S1728237AbgKRBWD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 17 Nov 2020 20:22:03 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:36454 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727174AbgKRBWC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Nov 2020 20:22:02 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 0AI1LuIU2004179, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexmb03.realtek.com.tw[172.21.6.96])
+        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 0AI1LuIU2004179
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 18 Nov 2020 09:21:56 +0800
+Received: from RTEXMB04.realtek.com.tw (172.21.6.97) by
+ RTEXMB03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2044.4; Wed, 18 Nov 2020 09:21:55 +0800
+Received: from RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa]) by
+ RTEXMB04.realtek.com.tw ([fe80::89f7:e6c3:b043:15fa%3]) with mapi id
+ 15.01.2044.006; Wed, 18 Nov 2020 09:21:55 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH net-next] r8153_ecm: avoid to be prior to r8152 driver
+Thread-Topic: [PATCH net-next] r8153_ecm: avoid to be prior to r8152 driver
+Thread-Index: AQHWu+Uk6MVFESXbN0aOZKSDeZR30KnJ9OqAgACBuYCAARgAcIAAbCuAgAEfDcA=
+Date:   Wed, 18 Nov 2020 01:21:55 +0000
+Message-ID: <8249fd02c3484d6484c6e278478561a6@realtek.com>
+References: <7fd014f2-c9a5-e7ec-f1c6-b3e4bb0f6eb6@samsung.com>
+        <CGME20201116065317eucas1p2a2d141857bbdd6b4998dd11937d52f56@eucas1p2.samsung.com>
+        <1394712342-15778-393-Taiwan-albertk@realtek.com>
+        <5f3db229-940c-c8ed-257b-0b4b3dd2afbb@samsung.com>
+        <20201116090231.423afc8f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <02f38e505a3a45389e2f3c06b2f6c850@realtek.com>
+ <20201117081149.20723b4a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201117081149.20723b4a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.146]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201117181918.GB1819103@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Jakub Kicinski <kuba@kernel.org>
+> Sent: Wednesday, November 18, 2020 12:12 AM
+[...]
+> Something like this?
+> 
+> config USB_RTL8153_ECM
+> 	tristate <headline text>
+> 	select MII
+> 	select USB_NET_CDCETHER
+> 	depends on USB_RTL8152 || USB_RTL8152=n
+> 	help
+> 		<you help text>
+> 
+> 
+> select clauses will pull in the dependencies you need, and the
+> dependency on RTL8152 will be satisfied either when RTL8152's code
+> is reachable (both are modules or RTL8152 is built in) or when RTL8152
+> is not built at all.
+> 
+> Does that help?
 
+Thanks a lot.
+I would test it.
 
-On Tue, Nov 17, 2020 at 10:19 AM Prashant Malani <pmalani@chromium.org> wrote:
->
-> Hi Utkarsh,
->
-> On Fri, Nov 13, 2020 at 12:25:01PM -0800, Utkarsh Patel wrote:
-> > Configure Thunderbolt3/USB4 cable generation value by filing Thunderbolt 3
-> > cable discover mode VDO to support rounded and non-rounded Thunderbolt3/
-> > USB4 cables.
-> > While we are here use Thunderbolt 3 cable discover mode VDO to fill active
-> > cable plug link training value.
-> >
-> > Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
-> >
-> > --
-> > Changes in v2:
-> > - No change.
-> > --
-> > ---
-> >  drivers/platform/chrome/cros_ec_typec.c | 14 ++++++++++++--
-> >  1 file changed, 12 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> > index 8111ed1fc574..b7416e82c3b3 100644
-> > --- a/drivers/platform/chrome/cros_ec_typec.c
-> > +++ b/drivers/platform/chrome/cros_ec_typec.c
-> > @@ -514,8 +514,18 @@ static int cros_typec_enable_usb4(struct cros_typec_data *typec,
-> >       else if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE)
-> >               data.eudo |= EUDO_CABLE_TYPE_RE_TIMER << EUDO_CABLE_TYPE_SHIFT;
-> >
-> > -     data.active_link_training = !!(pd_ctrl->control_flags &
-> > -                                    USB_PD_CTRL_ACTIVE_LINK_UNIDIR);
-> > +     /*
-> > +      * This driver does not have access to the identity information or
-> > +      * capabilities of the cable, so we don't know is it a real USB4 or
-> > +      * TBT3 cable. Therefore pretending that it's always TBT3 cable by
-> > +      * filling the TBT3 Cable VDO.
-> > +      */
-> > +     data.tbt_cable_vdo = TBT_MODE;
->
-> Is it safe to be making this assumption unconditionally? It might work for
-> Intel Mux agent but is it guaranteed to be safe for any other future
-> mux implementation? In other words, what if a "true" USB4 cable is
-> connected which doesn't have the Thunderbolt SVID alt mode?
+Best Regards,
+Hayes
 
-I dug into this a bit more and can maybe articulate my concern better:
-
-Is there a situation where both of the following are true ? :
-- Cable type = EUDO_CABLE_TYPE_OPTICAL or EUDO_CABLE_TYPE_RE_TIMER
-- No TBT_CABLE_LINK_TRAINING or TBT_CABLE_ROUNDED_SUPPORT defined (both
-  these are 0).
-
-If both the above are true, then in Patch 7/8, wouldn't we never hit the
-else condition (labeled "Active USB cable") and therefore not set the
-mode_data correctly?
-
->
-> (Pre-fetching some alternatives in case the answer is no)
->
-> You might want to check with the Cros EC team if you can repurpose a bit of
-> the "reserved" field for specifying whether the cable is TBT or not.
->
-> Either that or see if there is a way to determine from the pd_ctrl->cable_speed
-> whether the cable is actually TBT or not.
-
-It seems link cable_gen and USB_PD_CTRL_ACTIVE_LINK_UNIDIR are
-reasonable proxies for whether the cable has TBT support, so perhaps
-we should only set tbt_cable_vdo = TBT_MODE if either of those are
-non-zero?
-
-WDYT?
-
-Best regards,
-
--Prashant
