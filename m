@@ -2,199 +2,456 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D7D2B81A2
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 17:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7046E2B8358
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 18:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbgKRQUB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Nov 2020 11:20:01 -0500
-Received: from mga09.intel.com ([134.134.136.24]:35420 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726094AbgKRQUB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Nov 2020 11:20:01 -0500
-IronPort-SDR: pD/GdBmAcKmm1YfQr3K1r2772rXSe48TKw8W57TQlJHljgBmA4xVp+9uaFfJ1OoWog3MH/eiU7
- 9M/p0eU4ktiw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="171309905"
-X-IronPort-AV: E=Sophos;i="5.77,488,1596524400"; 
-   d="scan'208";a="171309905"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 08:20:00 -0800
-IronPort-SDR: IwO7ay7d/r4Z3MXUQBffgeLJywTHhgF60dsip14DJwf19iBrSLIdnIMlXMuAACAoLMnr7+aU2t
- WXEewkD7FHgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,488,1596524400"; 
-   d="scan'208";a="310706419"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Nov 2020 08:19:58 -0800
-Subject: Re: [RFC PATCH] USB: xhci: Enable HCE event reset function
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        liulongfang <liulongfang@huawei.com>
-Cc:     linux-usb@vger.kernel.org, yisen.zhuang@huawei.com,
-        tanxiaofei@huawei.com, mathias.nyman@intel.com
-References: <1605670573-949-1-git-send-email-liulongfang@huawei.com>
- <X7TG+UWWtgbX6EnU@kroah.com>
- <0877eba8-dcce-0c5e-98b4-64dd0fc06e4f@huawei.com>
- <X7TmBT2LbdJbDypG@kroah.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <aa5b4ef3-444a-176e-495e-4109720de4ff@linux.intel.com>
-Date:   Wed, 18 Nov 2020 18:21:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726530AbgKRRs3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Nov 2020 12:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726360AbgKRRs2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Nov 2020 12:48:28 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48E3C0613D4
+        for <linux-usb@vger.kernel.org>; Wed, 18 Nov 2020 09:48:28 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id a18so1888070pfl.3
+        for <linux-usb@vger.kernel.org>; Wed, 18 Nov 2020 09:48:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HgAK5y0ic7imcSnfA2IT+7MZ20IGw6NqpjJTqo3NP7k=;
+        b=muykQAmy0v84kFbjkDhGLQt375vOlyjnsV/PlTypndUs34ZtSEw07FG+AiIwAx6Gm5
+         6MgD13+wYBWxITQpAF0hxyPgdFGpORt6iE/iw0PrYOrAS6lPF1zINU563LsVQaa9vDgF
+         P0CAOL8XM3RxcXHC7EwMk9cXcHoK7bxvkB6vAVWN+upDfqUD4nKP6gExT8FrGHdNv6yV
+         zabcaaYNo/1behO98GYjfgZeYUahBjuqaXyln9MHtoZEWFN62BSQk44FutwPVLMPYZiC
+         83m6zlg/Xa0E30mG6H2zcDA4AKqu1BAF1KrNcUBZChKVyJmOG4Lk2epL8vz2PQFWl/xw
+         B4Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HgAK5y0ic7imcSnfA2IT+7MZ20IGw6NqpjJTqo3NP7k=;
+        b=QWf6oljo6Ob9bT0UgXoLwAAIwiZGpt44XI4azsSj8/bwXu9nM7vg4K+B/6Ba+cpgOi
+         jEHH0pkXIzLRccTWyvxhRx+ecWGWfGwbdQSAcGsIUKuhBi12ow9T/9buxYQK2yyBKQVp
+         LlpOiZV/B4qkS+ht1IpYYcMC/9FtLuZGjM8WT2WFMY/hu6UmRy68qLkonsgX9SfIsbpG
+         J8MzUyNLNHbck4JkBiOTTmGUmWOiXlJFWy+DkGfn9zwYYavmQ11qM0yZGBAVsONqICWu
+         fCFo8IppsTwG2L4Y9ScOur089XxtxNzs2QmbAN8ru1jZhhvYJPWPi8lHoZAI20HnTtTt
+         9eCg==
+X-Gm-Message-State: AOAM532yIWJ0zF8StPzALw+e54PYiTjbFfFLQp8KZAJwRXbCflgNyxCe
+        4SHUb4P3wDsF6a3rVmPH4x/y3Q==
+X-Google-Smtp-Source: ABdhPJxGxLl0XurCZ6h62K/qk1EwmdcjvC5EyUVR8hZfCFwx/Tz8cDuqunHWiIGpNEqdfkKA5VoLSw==
+X-Received: by 2002:a63:c745:: with SMTP id v5mr8945627pgg.389.1605721707815;
+        Wed, 18 Nov 2020 09:48:27 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:4a0f:cfff:fe66:e92e])
+        by smtp.gmail.com with ESMTPSA id n72sm26739670pfd.202.2020.11.18.09.48.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2020 09:48:26 -0800 (PST)
+Date:   Wed, 18 Nov 2020 09:48:21 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] usb: typec: Add product_type sysfs attribute
+ file for partners and cables
+Message-ID: <20201118174821.GA1966168@google.com>
+References: <20201118150059.3419-1-heikki.krogerus@linux.intel.com>
+ <20201118150059.3419-3-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <X7TmBT2LbdJbDypG@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
+Content-Disposition: inline
+In-Reply-To: <20201118150059.3419-3-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18.11.2020 11.14, Greg KH wrote:
-> On Wed, Nov 18, 2020 at 05:04:36PM +0800, liulongfang wrote:
->> On 2020/11/18 15:02, Greg KH Wrote:
->>> On Wed, Nov 18, 2020 at 11:36:13AM +0800, Longfang Liu wrote:
->>>> The HCE(Host Controller Error) event has been defined in
->>>> the XHCI driver but has not been used. If we want to use
->>>> the HCE event to reset the controller, can we implement
->>>> it in the interrupt function as follows:
->>>>
->>>> xhci_irq()
->>>>     |----xhci_halt()
->>>>     |----xhci_shutdown()
->>>>     |----xhci_start()
->>>>     |----xhci_run()
->>>>
->>>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->>>> ---
->>>>  drivers/usb/host/xhci-ring.c | 10 ++++++++++
->>>>  1 file changed, 10 insertions(+)
->>>
->>> $ ./scripts/get_maintainer.pl --file drivers/usb/host/xhci-ring.c
->>> Mathias Nyman <mathias.nyman@intel.com> (supporter:USB XHCI DRIVER)
->>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
->>> linux-usb@vger.kernel.org (open list:USB XHCI DRIVER)
->>> linux-kernel@vger.kernel.org (open list)
->>>
->>> Any reason to not include the maintainer of the xhci driver here?
->> OK, I will include the maintainer in the next patch.
->>>
->>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->>>> index 2c255d0..87b3a40 100644
->>>> --- a/drivers/usb/host/xhci-ring.c
->>>> +++ b/drivers/usb/host/xhci-ring.c
->>>> @@ -2857,6 +2857,16 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
->>>>  		goto out;
->>>>  	}
->>>>  
->>>> +	if (status & STS_HCE) {
->>>> +		xhci_warn(xhci, "WARNING: Host Controller Error\n");
->>>> +		xhci_halt(xhci);
->>>> +		xhci_shutdown(hcd);
->>>> +		xhci_start(xhci);
->>>> +		xhci_run(hcd);
->>>> +		ret = IRQ_HANDLED;
->>>> +		goto out;
->>>> +	}
-This won't work at all.  It doesn't reset the xHC which is the one thing needed to
-recover from a HCE. This would deadlock immediately.
-Many of the above functions shouldn't be called from interrupt context, and if
-HCE is set we probably even won't get any interrupts.
 
-A reset will set all registers to their initial values, and need to be
-re-initialized. Nothing is freed or re-allocated, registrs are not re-initialized
-here.  
+--liOOAslEiF7prFVr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please revisit the xhci spec about HCE, and HCRST, and a more detail look
-at the xhci driver, and test the code before submitting. 
+Hi Heikki,
 
->>>> +
->>>
->>> Does this fix a real problem for you?  Are you sure we will not suddenly
->>> start resetting devices that were working properly and sending this
->>> error incorrectly?  How did you test this?
->>>
->>> thanks,
->>>
->>> greg k-h
->>> .
->>>
->> Yes, we want to add a RAS feature to the USB,
-> 
-> What is "RAS"?
-> 
->> Use the HCE event to trigger the reset operation of the USB controller.
-> 
-> Is that allowed by the XHCI specification?
-> 
->> By searching for the current xhci driver, the driver did not handle HCE event.
->> In fact, I am not sure if other operations will cause HCE, The HCE event is
->> used to reset the USB controller according to the definition of the event.
-> 
-> What generates that event?  Do existing controllers do that today?  What
-> causes it?
-> 
+On Wed, Nov 18, 2020 at 06:00:58PM +0300, Heikki Krogerus wrote:
+> USB Power Delivery Specification defines a set of product
+> types for partners and cables. The product type is defined
+> in the ID Header VDO, which is the first object in the
+> response to the Discover Identity command.
+>=20
+> This sysfs attribute file is only created for the partners
+> and cables if the product type is really known in the
+> driver. Some interfaces do not give access to the Discover
+> Identity response from the partner or cable, but they may
+> still supply the product type separately in some cases.
+>=20
+> When the product type of the partner or cable is detected,
+> uevent is also raised with PRODUCT_TYPE set to show the
+> actual product type (for example PRODUCT_TYPE=3Dhost).
+>=20
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  Documentation/ABI/testing/sysfs-class-typec |  55 ++++++++
+>  drivers/usb/typec/class.c                   | 132 ++++++++++++++++++--
+>  2 files changed, 180 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/=
+ABI/testing/sysfs-class-typec
+> index b7794e02ad205..4c09e327c62be 100644
+> --- a/Documentation/ABI/testing/sysfs-class-typec
+> +++ b/Documentation/ABI/testing/sysfs-class-typec
+> @@ -139,6 +139,42 @@ Description:
+>  		Shows if the partner supports USB Power Delivery communication:
+>  		Valid values: yes, no
+> =20
+> +What:		/sys/class/typec/<port>-partner/product_type
+> +Date:		December 2020
+> +Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> +Description:	USB Power Delivery Specification defines a set of product t=
+ypes
+> +		for the partner devices. This file will show the product type of
+> +		the partner if it is known. Dual-role capable partners will have
+> +		both UFP and DFP product types defined, but only one that
+> +		matches the current role will be active at the time. If the
+> +		product type of the partner is not visible to the device driver,
+> +		this file will not exist.
+> +
+> +		When the partner product type is detected, or changed with role
+> +		swap, uvevent is also raised that contains PRODUCT_TYPE=3D<product
+> +		type> (for example PRODUCT_TYPE=3Dhub).
+> +
+> +		Valid values:
+> +
+> +		UFP / device role
+> +		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +		undefined		  -
+> +		hub			  PDUSB Hub
+> +		peripheral		  PDUSB Peripheral
+> +		psd			  Power Bank
+> +		ama			  Alternate Mode Adapter
+> +		vpd			  VCONN Powered USB Device
 
-It's not an event, it's a controller internal error state.
-It's probably not very useful to check for it in the interrupt handler as
-the xHC hw ceases all activity when it sets the HCE bit, including sending
-interrupts.
- 
-From the spec:
+I have it on good authority that "vpd" is incorrectly categorized here,
+and for future proofing, we'd better not introduce vpd as a product
+type for UFP...
 
-4.24.1 Internal Errors
-The Host Controller Error (HCE) flag is asserted when an internal xHC error is
-detected that exclusively affects the xHC. When the HCE flag is set to ‘1’ the xHC
-shall cease all activity. Software response to the assertion of HCE is to reset the
-xHC (HCRST = ‘1’) and reinitialize it
+A vpd is actually more closely related to a "cable" than it is a "UFP."
+A closer reading of the USB Type-C and USB PD specs will reveal that
+VPDs can only ever appear as SOP' and not as SOP, so having its type
+appear under UFP is a mistake.
 
->> I test this reset operation through the Sysfs file, but have not tested all usage scenarios.
-> 
-> What sysfs file?
+In other words, the USB PD V3.0 R2.0 spec is wrong. A change has been
+working its way through the spec committee to fix this, but it is not yet
+published.
 
-I'm also interested in this, and to know more about RAS?
+In order to reduce the amount of churn, I would recommend not
+including vpd as a possible type until a new version of the spec (or the EC=
+N)
+is published.
 
-Thanks
--Mathias
+Thanks,
+Benson
+
+> +		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +
+> +		DFP / host role
+> +		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +		undefined		  -
+> +		hub			  PDUSB Hub
+> +		host			  PDUSB Host
+> +		power_brick		  Power Brick
+> +		amc			  Alternate Mode Controller
+> +		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +
+>  What:		/sys/class/typec/<port>-partner>/identity/
+>  Date:		April 2017
+>  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> @@ -202,6 +238,25 @@ Description:
+>  		- type-c
+>  		- captive
+> =20
+> +What:		/sys/class/typec/<port>-cable/product_type
+> +Date:		December 2020
+> +Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> +Description:	USB Power Delivery Specification defines a set of product t=
+ypes
+> +		for the cables. This file will show the product type of the
+> +		cable if it is known. If the product type of the cable is not
+> +		visible to the device driver, this file will not exist.
+> +
+> +		When the cable product type is detected, uvevent is also raised
+> +		with PRODUCT_TYPE showing the product type of the cable.
+> +
+> +		Valid values:
+> +
+> +		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +		undefined		  -
+> +		active			  Active Cable
+> +		passive			  Passive Cable
+> +		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +
+>  What:		/sys/class/typec/<port>-cable/identity/
+>  Date:		April 2017
+>  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 35eec707cb512..303f054181ff7 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/mutex.h>
+>  #include <linux/property.h>
+>  #include <linux/slab.h>
+> +#include <linux/usb/pd_vdo.h>
+> =20
+>  #include "bus.h"
+> =20
+> @@ -81,6 +82,30 @@ static const char * const typec_accessory_modes[] =3D {
+>  	[TYPEC_ACCESSORY_DEBUG]		=3D "debug",
+>  };
+> =20
+> +/* Product types defined in USB PD Specification R3.0 V2.0 */
+> +static const char * const product_type_ufp[8] =3D {
+> +	[IDH_PTYPE_UNDEF]		=3D "undefined",
+> +	[IDH_PTYPE_HUB]			=3D "hub",
+> +	[IDH_PTYPE_PERIPH]		=3D "peripheral",
+> +	[IDH_PTYPE_PSD]			=3D "psd",
+> +	[IDH_PTYPE_AMA]			=3D "ama",
+> +	[IDH_PTYPE_VPD]			=3D "vpd",
+> +};
+> +
+> +static const char * const product_type_dfp[8] =3D {
+> +	[IDH_PTYPE_DFP_UNDEF]		=3D "undefined",
+> +	[IDH_PTYPE_DFP_HUB]		=3D "hub",
+> +	[IDH_PTYPE_DFP_HOST]		=3D "host",
+> +	[IDH_PTYPE_DFP_PB]		=3D "power_brick",
+> +	[IDH_PTYPE_DFP_AMC]		=3D "amc",
+> +};
+> +
+> +static const char * const product_type_cable[8] =3D {
+> +	[IDH_PTYPE_UNDEF]		=3D "undefined",
+> +	[IDH_PTYPE_PCABLE]		=3D "passive",
+> +	[IDH_PTYPE_ACABLE]		=3D "active",
+> +};
+> +
+>  static struct usb_pd_identity *get_pd_identity(struct device *dev)
+>  {
+>  	if (is_typec_partner(dev)) {
+> @@ -95,6 +120,24 @@ static struct usb_pd_identity *get_pd_identity(struct=
+ device *dev)
+>  	return NULL;
+>  }
+> =20
+> +static const char *get_pd_product_type(struct device *dev)
+> +{
+> +	struct typec_port *port =3D to_typec_port(dev->parent);
+> +	struct usb_pd_identity *id =3D get_pd_identity(dev);
+> +	const char *ptype =3D NULL;
+> +
+> +	if (is_typec_partner(dev)) {
+> +		if (port->data_role =3D=3D TYPEC_HOST)
+> +			ptype =3D product_type_ufp[PD_IDH_PTYPE(id->id_header)];
+> +		else
+> +			ptype =3D product_type_dfp[PD_IDH_DFP_PTYPE(id->id_header)];
+> +	} else if (is_typec_cable(dev)) {
+> +		ptype =3D product_type_cable[PD_IDH_PTYPE(id->id_header)];
+> +	}
+> +
+> +	return ptype;
+> +}
+> +
+>  static ssize_t id_header_show(struct device *dev, struct device_attribut=
+e *attr,
+>  			      char *buf)
+>  {
+> @@ -139,11 +182,55 @@ static const struct attribute_group *usb_pd_id_grou=
+ps[] =3D {
+>  	NULL,
+>  };
+> =20
+> +static void typec_product_type_notify(struct device *dev)
+> +{
+> +	const char *ptype;
+> +	char *envp[2];
+> +
+> +	ptype =3D get_pd_product_type(dev);
+> +	if (!ptype)
+> +		return;
+> +
+> +	sysfs_notify(&dev->kobj, NULL, "product_type");
+> +
+> +	envp[0] =3D kasprintf(GFP_KERNEL, "PRODUCT_TYPE=3D%s", ptype);
+> +	if (!envp[0])
+> +		return;
+> +
+> +	envp[1] =3D NULL;
+> +	kobject_uevent_env(&dev->kobj, KOBJ_CHANGE, envp);
+> +	kfree(envp[0]);
+> +}
+> +
+>  static void typec_report_identity(struct device *dev)
+>  {
+>  	sysfs_notify(&dev->kobj, "identity", "id_header");
+>  	sysfs_notify(&dev->kobj, "identity", "cert_stat");
+>  	sysfs_notify(&dev->kobj, "identity", "product");
+> +	typec_product_type_notify(dev);
+> +}
+> +
+> +static ssize_t
+> +product_type_show(struct device *dev, struct device_attribute *attr, cha=
+r *buf)
+> +{
+> +	const char *ptype;
+> +
+> +	ptype =3D get_pd_product_type(dev);
+> +	if (!ptype)
+> +		return 0;
+> +
+> +	return sysfs_emit(buf, "%s\n", ptype);
+> +}
+> +static DEVICE_ATTR_RO(product_type);
+> +
+> +static umode_t typec_product_type_attr_is_visible(struct kobject *kobj,
+> +						  struct attribute *attr, int n)
+> +{
+> +	if (attr =3D=3D &dev_attr_product_type.attr)
+> +		if (!get_pd_identity(kobj_to_dev(kobj)))
+> +			return 0;
+> +
+> +	return attr->mode;
+>  }
+> =20
+>  /* ---------------------------------------------------------------------=
+---- */
+> @@ -534,10 +621,20 @@ static DEVICE_ATTR_RO(supports_usb_power_delivery);
+> =20
+>  static struct attribute *typec_partner_attrs[] =3D {
+>  	&dev_attr_accessory_mode.attr,
+> +	&dev_attr_product_type.attr,
+>  	&dev_attr_supports_usb_power_delivery.attr,
+>  	NULL
+>  };
+> -ATTRIBUTE_GROUPS(typec_partner);
+> +
+> +static struct attribute_group typec_partner_group =3D {
+> +	.is_visible =3D typec_product_type_attr_is_visible,
+> +	.attrs =3D typec_partner_attrs,
+> +};
+> +
+> +static const struct attribute_group *typec_partner_groups[] =3D {
+> +	&typec_partner_group,
+> +	NULL
+> +};
+> =20
+>  static void typec_partner_release(struct device *dev)
+>  {
+> @@ -773,9 +870,19 @@ static DEVICE_ATTR_RO(plug_type);
+>  static struct attribute *typec_cable_attrs[] =3D {
+>  	&dev_attr_type.attr,
+>  	&dev_attr_plug_type.attr,
+> +	&dev_attr_product_type.attr,
+> +	NULL
+> +};
+> +
+> +static struct attribute_group typec_cable_group =3D {
+> +	.is_visible =3D typec_product_type_attr_is_visible,
+> +	.attrs =3D typec_cable_attrs,
+> +};
+> +
+> +static const struct attribute_group *typec_cable_groups[] =3D {
+> +	&typec_cable_group,
+>  	NULL
+>  };
+> -ATTRIBUTE_GROUPS(typec_cable);
+> =20
+>  static void typec_cable_release(struct device *dev)
+>  {
+> @@ -1352,6 +1459,11 @@ const struct device_type typec_port_dev_type =3D {
+>  /* --------------------------------------- */
+>  /* Driver callbacks to report role updates */
+> =20
+> +static int partner_match(struct device *dev, void *data)
+> +{
+> +	return is_typec_partner(dev);
+> +}
+> +
+>  /**
+>   * typec_set_data_role - Report data role change
+>   * @port: The USB Type-C Port where the role was changed
+> @@ -1361,12 +1473,23 @@ const struct device_type typec_port_dev_type =3D {
+>   */
+>  void typec_set_data_role(struct typec_port *port, enum typec_data_role r=
+ole)
+>  {
+> +	struct device *partner_dev;
+> +
+>  	if (port->data_role =3D=3D role)
+>  		return;
+> =20
+>  	port->data_role =3D role;
+>  	sysfs_notify(&port->dev.kobj, NULL, "data_role");
+>  	kobject_uevent(&port->dev.kobj, KOBJ_CHANGE);
+> +
+> +	partner_dev =3D device_find_child(&port->dev, NULL, partner_match);
+> +	if (!partner_dev)
+> +		return;
+> +
+> +	if (to_typec_partner(partner_dev)->identity)
+> +		typec_product_type_notify(partner_dev);
+> +
+> +	put_device(partner_dev);
+>  }
+>  EXPORT_SYMBOL_GPL(typec_set_data_role);
+> =20
+> @@ -1407,11 +1530,6 @@ void typec_set_vconn_role(struct typec_port *port,=
+ enum typec_role role)
+>  }
+>  EXPORT_SYMBOL_GPL(typec_set_vconn_role);
+> =20
+> -static int partner_match(struct device *dev, void *data)
+> -{
+> -	return is_typec_partner(dev);
+> -}
+> -
+>  /**
+>   * typec_set_pwr_opmode - Report changed power operation mode
+>   * @port: The USB Type-C Port where the mode was changed
+> --=20
+> 2.29.2
+>=20
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--liOOAslEiF7prFVr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCX7VeZQAKCRBzbaomhzOw
+wo0iAP9EGBs3R438FkkgSOeUx3Elr6+n6K0WYsAHvEsyCZDgtQEA8N27j2fJ+l6U
+JDjjWudtZiDPgLTfzbkx1S8Ny0yO8QM=
+=OExU
+-----END PGP SIGNATURE-----
+
+--liOOAslEiF7prFVr--
