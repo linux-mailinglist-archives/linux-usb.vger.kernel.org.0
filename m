@@ -2,152 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4EB2B7E13
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 14:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFED2B7E6B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 14:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbgKRNIv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 18 Nov 2020 08:08:51 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:57531 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726158AbgKRNIu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Nov 2020 08:08:50 -0500
-Received: from mail-pl1-f200.google.com ([209.85.214.200])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1kfNCZ-0000aI-W5
-        for linux-usb@vger.kernel.org; Wed, 18 Nov 2020 13:08:48 +0000
-Received: by mail-pl1-f200.google.com with SMTP id bf9so1144557plb.18
-        for <linux-usb@vger.kernel.org>; Wed, 18 Nov 2020 05:08:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=21ZU1BIRNMQ3+uPHUldMQmJXyQgMOx75iKFMw5odfJA=;
-        b=n6bITJJSug8fuk5iV+IXhyAOdCVFs4WG/21euRPCjrid0tgnQQe27J3msDXpjNWNls
-         pNr3XB2d8pBTP4rU9Ns5Pl6rfzAvUTQ/LA0JRyww7OIExoROL2gwg8vgXwB0HI/LtTRV
-         ggRXg4kF9arhVmh+ox23H4WuszXX/6DGcwBHjBwzttLpaCINa9Jtg5NuJbhlWFZe1cz0
-         oQuH6xeDSeq6jxH72lxx56QBhlqEEQy4Zushu3NnhjotPhk18/GRREUpt97LeSDiqpn+
-         JTh23uxboWoL4lNakCqVY7kY6tIE6uumx84ZjsADfpeI88Cx2pJfBVmvdHvk7I22eHM3
-         D+sw==
-X-Gm-Message-State: AOAM5315d8rKPEbZYL5NU0QeC35f1NtYXfbKNNX9/U2Pq3fOksvzRD8p
-        nPZGXY3UXhj/KwVcNOLJDN3weme846gkU3jOdXf7jxMrj8fLYWy+I6c3Mxw1DbUpTRbE0peuGsf
-        c7zJYqJWLHXmKpkkA6IR54nCt9JtrK6Pz2eDE4g==
-X-Received: by 2002:a17:90a:ee82:: with SMTP id i2mr3966970pjz.158.1605704926571;
-        Wed, 18 Nov 2020 05:08:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz2qEeW96egxD1oQg6RcIwS4sTi9RYIzJYDeuD50SjWQBN/StPaHqbRf98w76gcOcUXjhdqgg==
-X-Received: by 2002:a17:90a:ee82:: with SMTP id i2mr3966947pjz.158.1605704926236;
-        Wed, 18 Nov 2020 05:08:46 -0800 (PST)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id z22sm2428925pje.16.2020.11.18.05.08.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Nov 2020 05:08:45 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.20.0.2.21\))
-Subject: Re: [PATCH] USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND quirk for
- Lenovo A630Z TIO built-in usb-audio card
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <20201118123039.11696-1-penghao@uniontech.com>
-Date:   Wed, 18 Nov 2020 21:08:41 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, johan@kernel.org,
-        jonathan@jdcox.net, tomasz@meresinski.eu,
-        Hans de Goede <hdegoede@redhat.com>, dlaz@chromium.org,
-        richard.o.dodd@gmail.com, kerneldev@karsmulder.nl,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <49219711-84BE-44FC-BBFE-DD8D609CA26D@canonical.com>
-References: <20201118123039.11696-1-penghao@uniontech.com>
-To:     penghao <penghao@uniontech.com>
-X-Mailer: Apple Mail (2.3654.20.0.2.21)
+        id S1726503AbgKRNiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Nov 2020 08:38:06 -0500
+Received: from mga18.intel.com ([134.134.136.126]:41354 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726216AbgKRNiG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Nov 2020 08:38:06 -0500
+IronPort-SDR: j0bSVpWCzEPYzoMwzM4u5ofuGndkx7mMiBgkrw0/otJkg+e1RziXxHNoodNq1o9SWR2dOSi2kk
+ krf5ykSAomrg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="158888395"
+X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
+   d="scan'208";a="158888395"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 05:37:50 -0800
+IronPort-SDR: v7cTrv/KjhrAmyqlfQpl7rik/QWaJy2ivBss1qvxOAI2EnZK1fS5dnXRoamcDgq7RQsfka7XuC
+ dYhsd0MsGxTw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
+   d="scan'208";a="341285756"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 18 Nov 2020 05:37:46 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id F3CB911E; Wed, 18 Nov 2020 15:37:45 +0200 (EET)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Paulian Bogdan Marinca <paulian@marinca.net>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH] thunderbolt: Fix use-after-free in remove_unplugged_switch()
+Date:   Wed, 18 Nov 2020 16:37:45 +0300
+Message-Id: <20201118133745.65628-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi penghao,
+Paulian reported a crash that happens when a dock is unplugged during
+hibernation:
 
-> On Nov 18, 2020, at 20:30, penghao <penghao@uniontech.com> wrote:
-> 
-> Add a USB_QUIRK_DISCONNECT_SUSPEND quirk for the Lenovo TIO built-in
-> usb-audio. when A630Z going into S3,the system immediately wakeup 7-8
-> seconds later by usb-audio disconnect interrupt to avoids the issue.
-> eg dmesg:
-> ....
-> [  626.974091 ] usb 7-1.1: USB disconnect, device number 3
-> ....
-> ....
-> [ 1774.486691] usb 7-1.1: new full-speed USB device number 5 using xhci_hcd
-> [ 1774.947742] usb 7-1.1: New USB device found, idVendor=17ef, idProduct=a012, bcdDevice= 0.55
-> [ 1774.956588] usb 7-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> [ 1774.964339] usb 7-1.1: Product: Thinkcentre TIO24Gen3 for USB-audio
-> [ 1774.970999] usb 7-1.1: Manufacturer: Lenovo
-> [ 1774.975447] usb 7-1.1: SerialNumber: 000000000000
-> [ 1775.048590] usb 7-1.1: 2:1: cannot get freq at ep 0x1
+[78436.228217] thunderbolt 0-1: device disconnected
+[78436.228365] BUG: kernel NULL pointer dereference, address: 00000000000001e0
+...
+[78436.228397] RIP: 0010:icm_free_unplugged_children+0x109/0x1a0
+...
+[78436.228432] Call Trace:
+[78436.228439]  icm_rescan_work+0x24/0x30
+[78436.228444]  process_one_work+0x1a3/0x3a0
+[78436.228449]  worker_thread+0x30/0x370
+[78436.228454]  ? process_one_work+0x3a0/0x3a0
+[78436.228457]  kthread+0x13d/0x160
+[78436.228461]  ? kthread_park+0x90/0x90
+[78436.228465]  ret_from_fork+0x1f/0x30
 
-Can you please attach full dmesg with dynamic debug enabled when the issue happens?
+This happens because remove_unplugged_switch() calls tb_switch_remove()
+that releases the memory pointed by sw so the following lines reference
+to a memory that might be released already.
 
-We may need to poll for U3 in xhci_bus_suspend().
+Fix this by saving pointer to the parent device before calling
+tb_switch_remove().
 
-Kai-Heng
+Reported-by: Paulian Bogdan Marinca <paulian@marinca.net>
+Fixes: 4f7c2e0d8765 ("thunderbolt: Make sure device runtime resume completes before taking domain lock")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/thunderbolt/icm.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-> .......
-> Seeking a better fix, we've tried a lot of things, including:
-> - Check that the device's power/wakeup is disabled
-> - Check that remote wakeup is off at the USB level
-> - All the quirks in drivers/usb/core/quirks.c
->   e.g. USB_QUIRK_RESET_RESUME,
->        USB_QUIRK_RESET,
->        USB_QUIRK_IGNORE_REMOTE_WAKEUP,
->        USB_QUIRK_NO_LPM.
-> 
-> but none of that makes any difference.
-> 
-> There are no errors in the logs showing any suspend/resume-related issues.
-> When the system wakes up due to the modem, log-wise it appears to be a
-> normal resume.
-> 
-> Introduce a quirk to disable the port during suspend when the modem is
-> detected.
-> 
-> Changes since v5
-> - Add dmesg for this issue
-> 
-> Changes since v4
-> - Fixed add a blank line
-> 
-> Changes since v3
-> - Fixed spelling error on appropriate
-> 
-> Changes since v2
-> - Add Changes commit format
-> 
-> Changes since v1
-> - Change subject form "ALSA" to "USB:"
-> - Adjust to appropriate line
-> 
-> Signed-off-by: penghao <penghao@uniontech.com>
-> ---
-> drivers/usb/core/quirks.c | 4 ++++
-> 1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index 7c1198f80c23..26b852ae0d85 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -410,6 +410,10 @@ static const struct usb_device_id usb_quirk_list[] = {
-> 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
-> 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
-> 
-> +	/* Lenovo ThinkCenter A630Z TI024Gen3 usb-audio */
-> +	{ USB_DEVICE(0x17ef, 0xa012), .driver_info =
-> +			USB_QUIRK_DISCONNECT_SUSPEND },
-> +
-> 	/* BUILDWIN Photo Frame */
-> 	{ USB_DEVICE(0x1908, 0x1315), .driver_info =
-> 			USB_QUIRK_HONOR_BNUMINTERFACES },
-> -- 
-> 2.11.0
-> 
-> 
-> 
+diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+index b51fc3f62b1f..05323c442b56 100644
+--- a/drivers/thunderbolt/icm.c
++++ b/drivers/thunderbolt/icm.c
+@@ -1976,7 +1976,9 @@ static int complete_rpm(struct device *dev, void *data)
+ 
+ static void remove_unplugged_switch(struct tb_switch *sw)
+ {
+-	pm_runtime_get_sync(sw->dev.parent);
++	struct device *parent = sw->dev.parent;
++
++	pm_runtime_get_sync(parent);
+ 
+ 	/*
+ 	 * Signal this and switches below for rpm_complete because
+@@ -1987,8 +1989,8 @@ static void remove_unplugged_switch(struct tb_switch *sw)
+ 	bus_for_each_dev(&tb_bus_type, &sw->dev, NULL, complete_rpm);
+ 	tb_switch_remove(sw);
+ 
+-	pm_runtime_mark_last_busy(sw->dev.parent);
+-	pm_runtime_put_autosuspend(sw->dev.parent);
++	pm_runtime_mark_last_busy(parent);
++	pm_runtime_put_autosuspend(parent);
+ }
+ 
+ static void icm_free_unplugged_children(struct tb_switch *sw)
+-- 
+2.29.2
 
