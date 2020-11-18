@@ -2,97 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 605C12B7678
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 07:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C27F02B76A2
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 07:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726647AbgKRGok (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Nov 2020 01:44:40 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:45799 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726089AbgKRGoj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Nov 2020 01:44:39 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 0AI6iQQD1015853, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexmb04.realtek.com.tw[172.21.6.97])
-        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 0AI6iQQD1015853
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 18 Nov 2020 14:44:26 +0800
-Received: from fc32.localdomain (172.21.177.102) by RTEXMB04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2044.4; Wed, 18 Nov
- 2020 14:44:26 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <netdev@vger.kernel.org>
-CC:     <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <m.szyprowski@samsung.com>,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net-next v2] r8153_ecm: avoid to be prior to r8152 driver
-Date:   Wed, 18 Nov 2020 14:43:58 +0800
-Message-ID: <1394712342-15778-394-Taiwan-albertk@realtek.com>
-X-Mailer: Microsoft Office Outlook 11
-In-Reply-To: <1394712342-15778-393-Taiwan-albertk@realtek.com>
-References: <1394712342-15778-393-Taiwan-albertk@realtek.com>
+        id S1726536AbgKRG6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Nov 2020 01:58:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50822 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725800AbgKRG6p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Nov 2020 01:58:45 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8A24424654;
+        Wed, 18 Nov 2020 06:58:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1605682725;
+        bh=JEXidrPb3WDPpJaEzmw1ttSq10d4MBZ43iMbE5Qt4MI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M7rfoP64Hh8gVgpqqh2RU601bedtyMQFnJMEpJXzhq83bFzsQjypaXQVerCJlGRGH
+         iDLjXiNaPoY+SjgKYNOwPx8Nnf41vV1e7JihUD2YrzSN2O2Or5r2ZOxJYZ1QuSUQ5X
+         YIzByOKV7Cj2ySDFJrx7w6bfiwjJ/x+YSx7e1NHA=
+Date:   Wed, 18 Nov 2020 07:59:31 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     penghao <penghao@uniontech.com>
+Cc:     johan@kernel.org, jonathan@jdcox.net, tomasz@meresinski.eu,
+        hdegoede@redhat.com, dlaz@chromium.org,
+        kai.heng.feng@canonical.com, richard.o.dodd@gmail.com,
+        kerneldev@karsmulder.nl, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Changes since v1  - Change subject form "ALSA" to "USB:"
+ - Adjust to approoriate line
+Message-ID: <X7TGU+JHUL4eTbG6@kroah.com>
+References: <20201118065132.24772-1-penghao@uniontech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.102]
-X-ClientProxiedBy: RTEXMB01.realtek.com.tw (172.21.6.94) To
- RTEXMB04.realtek.com.tw (172.21.6.97)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201118065132.24772-1-penghao@uniontech.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Avoid r8153_ecm is compiled as built-in, if r8152 driver is compiled
-as modules. Otherwise, the r8153_ecm would be used, even though the
-device is supported by r8152 driver.
+On Wed, Nov 18, 2020 at 02:51:32PM +0800, penghao wrote:
+> USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND quirk for
+> Lenovo A630Z TIO built-in usb-audio card
 
-Fixes: c1aedf015ebd ("net/usb/r8153_ecm: support ECM mode for RTL8153")
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
-v2:
-Use a separate Kconfig entry for r8153_ecm with proper dependencies.
+Your subject line does not work, please put that information below the
+--- line.
 
- drivers/net/usb/Kconfig  | 9 +++++++++
- drivers/net/usb/Makefile | 3 ++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+Also, we need a "real" name for the From: and signed-off-by line please.
 
-diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
-index b46993d5f997..1e3719028780 100644
---- a/drivers/net/usb/Kconfig
-+++ b/drivers/net/usb/Kconfig
-@@ -628,4 +628,13 @@ config USB_NET_AQC111
- 	  This driver should work with at least the following devices:
- 	  * Aquantia AQtion USB to 5GbE
- 
-+config USB_RTL8153_ECM
-+	tristate "RTL8153 ECM support"
-+	depends on USB_NET_CDCETHER && (USB_RTL8152 || USB_RTL8152=n)
-+	default y
-+	help
-+	  This option supports ECM mode for RTL8153 ethernet adapter, when
-+	  CONFIG_USB_RTL8152 is not set, or the RTL8153 device is not
-+	  supported by r8152 driver.
-+
- endif # USB_NET_DRIVERS
-diff --git a/drivers/net/usb/Makefile b/drivers/net/usb/Makefile
-index 99381e6bea78..4964f7b326fb 100644
---- a/drivers/net/usb/Makefile
-+++ b/drivers/net/usb/Makefile
-@@ -13,7 +13,7 @@ obj-$(CONFIG_USB_LAN78XX)	+= lan78xx.o
- obj-$(CONFIG_USB_NET_AX8817X)	+= asix.o
- asix-y := asix_devices.o asix_common.o ax88172a.o
- obj-$(CONFIG_USB_NET_AX88179_178A)      += ax88179_178a.o
--obj-$(CONFIG_USB_NET_CDCETHER)	+= cdc_ether.o r8153_ecm.o
-+obj-$(CONFIG_USB_NET_CDCETHER)	+= cdc_ether.o
- obj-$(CONFIG_USB_NET_CDC_EEM)	+= cdc_eem.o
- obj-$(CONFIG_USB_NET_DM9601)	+= dm9601.o
- obj-$(CONFIG_USB_NET_SR9700)	+= sr9700.o
-@@ -41,3 +41,4 @@ obj-$(CONFIG_USB_NET_QMI_WWAN)	+= qmi_wwan.o
- obj-$(CONFIG_USB_NET_CDC_MBIM)	+= cdc_mbim.o
- obj-$(CONFIG_USB_NET_CH9200)	+= ch9200.o
- obj-$(CONFIG_USB_NET_AQC111)	+= aqc111.o
-+obj-$(CONFIG_USB_RTL8153_ECM)	+= r8153_ecm.o
--- 
-2.26.2
+> Add a USB_QUIRK_DISCONNECT_SUSPEND quirk for the Lenovo TIO built-in
+> usb-audio. when A630Z going into S3,the system immediately wakeup 7-8
+> seconds later by usb-audio disconnect interrupt to avoids the issue.
+> 
+> Seeking a better fix, we've tried a lot of things, including:
+>  - Check that the device's power/wakeup is disabled
+>  - Check that remote wakeup is off at the USB level
+>  - All the quirks in drivers/usb/core/quirks.c
+>    e.g. USB_QUIRK_RESET_RESUME,
+>         USB_QUIRK_RESET,
+>         USB_QUIRK_IGNORE_REMOTE_WAKEUP,
+>         USB_QUIRK_NO_LPM.
+> 
+> but none of that makes any difference.
+> 
+> There are no errors in the logs showing any suspend/resume-related issues.
+> When the system wakes up due to the modem, log-wise it appears to be a
+> normal resume.
+> 
+> Introduce a quirk to disable the port during suspend when the modem is
+> detected.
+> 
+> Signed-off-by: penghao <penghao@uniontech.com>
+> ---
+>  drivers/usb/core/quirks.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+> index 7c1198f80c23..8d18e89f9eb0 100644
+> --- a/drivers/usb/core/quirks.c
+> +++ b/drivers/usb/core/quirks.c
+> @@ -410,7 +410,11 @@ static const struct usb_device_id usb_quirk_list[] = {
+>  	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+>  			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+>  
+> -	/* BUILDWIN Photo Frame */
+> +/* Lenovo - ThinkCenter A630Z TI024Gen3 usb-audio card */
+> +{ USB_DEVICE(0x17ef, 0x0xa012), .driver_info =
+> +USB_QUIRK_DISCONNECT_SUSPEND },
+> +
+> +    /* BUILDWIN Photo Frame */
 
+Your patch seems to have messed up spaces and tabs here, please fix that
+up in your editor and always run scripts/checkpatch.pl on your patch
+before resending it.
+
+thanks,
+
+greg k-h
