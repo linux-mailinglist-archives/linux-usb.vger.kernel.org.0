@@ -2,259 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C82F42B7B02
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 11:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C53BC2B7B11
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 11:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726883AbgKRKOh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Nov 2020 05:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726802AbgKRKOh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Nov 2020 05:14:37 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650E8C061A4D
-        for <linux-usb@vger.kernel.org>; Wed, 18 Nov 2020 02:14:37 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1kfKTv-0005p9-TW; Wed, 18 Nov 2020 11:14:31 +0100
-Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1kfKTu-0000tZ-S4; Wed, 18 Nov 2020 11:14:30 +0100
-Date:   Wed, 18 Nov 2020 11:14:30 +0100
-From:   Michael Tretter <m.tretter@pengutronix.de>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, thinhn@synopsys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        jackp@codeaurora.org
-Subject: Re: [PATCH v4] usb: dwc3: Stop active transfers before halting the
- controller
-Message-ID: <20201118101430.GC23024@pengutronix.de>
-References: <20200929002059.26714-1-wcheng@codeaurora.org>
+        id S1726195AbgKRKTW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Nov 2020 05:19:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41638 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726156AbgKRKTW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Nov 2020 05:19:22 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E2C7022210;
+        Wed, 18 Nov 2020 10:19:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1605694761;
+        bh=x4wkNRe9jFo0ZxW1Vm46053m/YQ6R5tZA6HofhoEH3Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2oI8NKP1oMB2PUbxVUQofBmZ4cGXj6Fpfvq/DlN6jtCS/d7UaOGsx2Nmrn/xcS0i9
+         lW/DDqLpy+P/wisQMW3BXDNs1woYqsnLi418xZjbp7kkgBDB51tGrxfgPA5ukIoHJG
+         AAaHAUStLsWocHg8c53tgVXXPEhlj4tgJ1jFUdvw=
+Date:   Wed, 18 Nov 2020 11:20:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     penghao <penghao@uniontech.com>
+Cc:     johan@kernel.org, jonathan@jdcox.net, tomasz@meresinski.eu,
+        hdegoede@redhat.com, dlaz@chromium.org,
+        kai.heng.feng@canonical.com, richard.o.dodd@gmail.com,
+        kerneldev@karsmulder.nl, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND quirk for
+ Lenovo A630Z TIO built-in usb-audio card
+Message-ID: <X7T1V7deGBLk49Ul@kroah.com>
+References: <20201118095343.3401-1-penghao@uniontech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200929002059.26714-1-wcheng@codeaurora.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:54:55 up 272 days, 17:25, 90 users,  load average: 0.21, 0.20,
- 0.17
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mtr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20201118095343.3401-1-penghao@uniontech.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-On Mon, 28 Sep 2020 17:20:59 -0700, Wesley Cheng wrote:
-> In the DWC3 databook, for a device initiated disconnect or bus reset, the
-> driver is required to send dependxfer commands for any pending transfers.
-> In addition, before the controller can move to the halted state, the SW
-> needs to acknowledge any pending events.  If the controller is not halted
-> properly, there is a chance the controller will continue accessing stale or
-> freed TRBs and buffers.
-
-This patch causes a regression when using the uvc gadget with the dwc3 gadget
-driver, which causes host to not be able to enumerate the USB device.
-
-The regression can be reproduced as follows:
-
-Configure the uvc gadget via configfs, which in the end binds to the driver
-and calls dwc3_gadget_start. Start the uvc-gadget user space application,
-which activates the function and the gadget and calls pullup enable. The UVC
-Device is now detected by a USB host.
-
-Stop the uvc gadget application, which deactivates the gadget, calls pullup
-disable and, thus, stops the dwc3 gadget.
-
-Restart the uvc gadget application; the gadget is activated and pullup enable
-is called, but the dwc3 gadget is not started.
-
-The USB Host shows the following error messages and the USB device cannot be
-enumerated.
-
-	usb 3-1.1: Device not responding to setup address.
-	usb 3-1.1: Device not responding to setup address.
-	usb 3-1.1: device not accepting address 10, error -71
-	usb 3-1.1: Device not responding to setup address.
-	usb 3-1.1: Device not responding to setup address.
-	usb 3-1.1: device not accepting address 11, error -71
-	usb 3-1-port1: unable to enumerate USB device
-
+On Wed, Nov 18, 2020 at 05:53:43PM +0800, penghao wrote:
+> Add a USB_QUIRK_DISCONNECT_SUSPEND quirk for the Lenovo TIO built-in
+> usb-audio. when A630Z going into S3,the system immediately wakeup 7-8
+> seconds later by usb-audio disconnect interrupt to avoids the issue.
 > 
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> Reviewed-by: Thinh Nguyen <thinhn@synopsys.com>
+> Seeking a better fix, we've tried a lot of things, including:
+>  - Check that the device's power/wakeup is disabled
+>  - Check that remote wakeup is off at the USB level
+>  - All the quirks in drivers/usb/core/quirks.c
+>    e.g. USB_QUIRK_RESET_RESUME,
+>         USB_QUIRK_RESET,
+>         USB_QUIRK_IGNORE_REMOTE_WAKEUP,
+>         USB_QUIRK_NO_LPM.
 > 
+> but none of that makes any difference.
+> 
+> There are no errors in the logs showing any suspend/resume-related issues.
+> When the system wakes up due to the modem, log-wise it appears to be a
+> normal resume.
+> 
+> Introduce a quirk to disable the port during suspend when the modem is
+> detected.
+> 
+> Changes since v3
+>  - Fixed spelling error on appropriate
+> 
+> Changes since v2
+>  - Add Changes commit format
+> 
+> Changes since v1
+>  - Change subject form "ALSA" to "USB:"
+>  - Adjust to appropriate line
+> 
+> Signed-off-by: penghao <penghao@uniontech.com>
 > ---
-> Changes in v4:
->  - Updated comments to reference DWC3 databook sections and added direct
->    quotes.
->  - Changed the stop active transfer EP loop to use dwc->num_eps.
->  - Moved to using dwc3_gadget_disable_irq/synchronize_irq instead of
->    enable_irq/disable_irq for ensuring the interrupt handler is not pending.
+>  drivers/usb/core/quirks.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> Changes in v3:
->  - Removed DWC3_EP_ENABLED check from dwc3_gadget_stop_active_transfers()
->    as dwc3_stop_active_transfer() has a check already in place.
->  - Calling __dwc3_gadget_stop() which ensures that DWC3 interrupt events
->    are cleared, and ep0 eps are cleared for the pullup disabled case.  Not
->    required to call __dwc3_gadget_start() on pullup enable, as the
->    composite driver will execute udc_start() before calling pullup().
+> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+> index 7c1198f80c23..25f655c2cd28 100644
+> --- a/drivers/usb/core/quirks.c
+> +++ b/drivers/usb/core/quirks.c
+> @@ -410,6 +410,10 @@ static const struct usb_device_id usb_quirk_list[] = {
+>  	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+>  			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+>  
+> +	/* Lenovo ThinkCenter A630Z TI024Gen3 usb-audio */
+> +	{ USB_DEVICE(0x17ef, 0xa012), .driver_info =
+> +			USB_QUIRK_DISCONNECT_SUSPEND },
+> +
+>  	/* BUILDWIN Photo Frame */
+>  	{ USB_DEVICE(0x1908, 0x1315), .driver_info =
+>  			USB_QUIRK_HONOR_BNUMINTERFACES },
+> @@ -430,6 +434,7 @@ static const struct usb_device_id usb_quirk_list[] = {
+>  	  USB_QUIRK_DELAY_CTRL_MSG },
+>  
+>  	/* Corsair Strafe RGB */
+> +
 
-This change seems to be related to the regression. Maybe it is required to
-call __dwc3_gadget_start() on pullup enable, but I am not sure, how this
-should be handled.
-
-Michael
-
-> 
-> Changes in v2:
->  - Moved cleanup code to the pullup() API to differentiate between device
->    disconnect and hibernation.
->  - Added cleanup code to the bus reset case as well.
->  - Verified the move to pullup() did not reproduce the problen using the
->    same test sequence.
-> 
-> Verified fix by adding a check for ETIMEDOUT during the run stop call.
-> Shell script writing to the configfs UDC file to trigger disconnect and
-> connect.  Batch script to have PC execute data transfers over adb (ie adb
-> push)  After a few iterations, we'd run into a scenario where the
-> controller wasn't halted.  With the following change, no failed halts after
-> many iterations.
-> ---
->  drivers/usb/dwc3/ep0.c    |  2 +-
->  drivers/usb/dwc3/gadget.c | 66 ++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 66 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-> index 59f2e8c31bd1..456aa87e8778 100644
-> --- a/drivers/usb/dwc3/ep0.c
-> +++ b/drivers/usb/dwc3/ep0.c
-> @@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
->  	int				ret;
->  
->  	spin_lock_irqsave(&dwc->lock, flags);
-> -	if (!dep->endpoint.desc) {
-> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
->  		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
->  				dep->name);
->  		ret = -ESHUTDOWN;
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 3ab6f118c508..5d879b7606d5 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -1516,7 +1516,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
->  {
->  	struct dwc3		*dwc = dep->dwc;
->  
-> -	if (!dep->endpoint.desc) {
-> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
->  		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
->  				dep->name);
->  		return -ESHUTDOWN;
-> @@ -1926,6 +1926,21 @@ static int dwc3_gadget_set_selfpowered(struct usb_gadget *g,
->  	return 0;
->  }
->  
-> +static void dwc3_stop_active_transfers(struct dwc3 *dwc)
-> +{
-> +	u32 epnum;
-> +
-> +	for (epnum = 2; epnum < dwc->num_eps; epnum++) {
-> +		struct dwc3_ep *dep;
-> +
-> +		dep = dwc->eps[epnum];
-> +		if (!dep)
-> +			continue;
-> +
-> +		dwc3_remove_requests(dwc, dep);
-> +	}
-> +}
-> +
->  static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
->  {
->  	u32			reg;
-> @@ -1971,6 +1986,9 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
->  	return 0;
->  }
->  
-> +static void dwc3_gadget_disable_irq(struct dwc3 *dwc);
-> +static void __dwc3_gadget_stop(struct dwc3 *dwc);
-> +
->  static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->  {
->  	struct dwc3		*dwc = gadget_to_dwc(g);
-> @@ -1994,7 +2012,46 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->  		}
->  	}
->  
-> +	/*
-> +	 * Synchronize any pending event handling before executing the controller
-> +	 * halt routine.
-> +	 */
-> +	if (!is_on) {
-> +		dwc3_gadget_disable_irq(dwc);
-> +		synchronize_irq(dwc->irq_gadget);
-> +	}
-> +
->  	spin_lock_irqsave(&dwc->lock, flags);
-> +
-> +	if (!is_on) {
-> +		u32 count;
-> +
-> +		/*
-> +		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
-> +		 * Section 4.1.8 Table 4-7, it states that for a device-initiated
-> +		 * disconnect, the SW needs to ensure that it sends "a DEPENDXFER
-> +		 * command for any active transfers" before clearing the RunStop
-> +		 * bit.
-> +		 */
-> +		dwc3_stop_active_transfers(dwc);
-> +		__dwc3_gadget_stop(dwc);
-> +
-> +		/*
-> +		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
-> +		 * Section 1.3.4, it mentions that for the DEVCTRLHLT bit, the
-> +		 * "software needs to acknowledge the events that are generated
-> +		 * (by writing to GEVNTCOUNTn) while it is waiting for this bit
-> +		 * to be set to '1'."
-> +		 */
-> +		count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
-> +		count &= DWC3_GEVNTCOUNT_MASK;
-> +		if (count > 0) {
-> +			dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
-> +			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
-> +						dwc->ev_buf->length;
-> +		}
-> +	}
-> +
->  	ret = dwc3_gadget_run_stop(dwc, is_on, false);
->  	spin_unlock_irqrestore(&dwc->lock, flags);
->  
-> @@ -3100,6 +3157,13 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
->  	}
->  
->  	dwc3_reset_gadget(dwc);
-> +	/*
-> +	 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
-> +	 * Section 4.1.2 Table 4-2, it states that during a USB reset, the SW
-> +	 * needs to ensure that it sends "a DEPENDXFER command for any active
-> +	 * transfers."
-> +	 */
-> +	dwc3_stop_active_transfers(dwc);
->  
->  	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
->  	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
-> 
+You are still leaving this blank line being added to the file, please do
+not do that.
