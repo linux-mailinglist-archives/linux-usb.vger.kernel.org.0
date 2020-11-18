@@ -2,69 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 039E82B7A37
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 10:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7584F2B7A58
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 10:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbgKRJSd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Nov 2020 04:18:33 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:11152 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726837AbgKRJSc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Nov 2020 04:18:32 -0500
-X-UUID: e40d2a85f990416ea17f906529bcf277-20201118
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=qfpE3TD0SXn2IdwIG4zbudRW/4wZoYJlExaUY6FckbM=;
-        b=jGaw3LpG+D2ZJSq0ti/x1pZ2cREV4x5dTfwNc14vDBS3Nhkpzwf3BEqV2E8Oir6FmH79EoovD+NgdDIhs52XCnjxlE4jDmYhp1RsVITJjuTG1M8aOgP0QwjZssHw8dRuWwozmn0X+zk1gJcgprqenaskRAssgFfCN4lMyVKdts0=;
-X-UUID: e40d2a85f990416ea17f906529bcf277-20201118
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 813261830; Wed, 18 Nov 2020 17:18:27 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- MTKMBS31DR.mediatek.inc (172.27.6.102) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 18 Nov 2020 17:18:24 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 18 Nov 2020 17:18:24 +0800
-Message-ID: <1605691104.18082.3.camel@mtkswgap22>
-Subject: Re: [PATCH v3 05/11] dt-bindings: phy: convert phy-mtk-ufs.txt to
- YAML schema
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Min Guo <min.guo@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
-Date:   Wed, 18 Nov 2020 17:18:24 +0800
-In-Reply-To: <20201118082126.42701-5-chunfeng.yun@mediatek.com>
-References: <20201118082126.42701-1-chunfeng.yun@mediatek.com>
-         <20201118082126.42701-5-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-MIME-Version: 1.0
-X-TM-SNTS-SMTP: 3661B6D048093FC12761A842A0EF53BC43F4169167C5DF3D9BA71DE7D2A9FEBD2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1726894AbgKRJ1F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Nov 2020 04:27:05 -0500
+Received: from lucky1.263xmail.com ([211.157.147.134]:57448 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726251AbgKRJ1F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Nov 2020 04:27:05 -0500
+Received: from localhost (unknown [192.168.167.13])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 5DABAC5583;
+        Wed, 18 Nov 2020 17:26:57 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (250.19.126.124.broad.bjtelecom.net [124.126.19.250])
+        by smtp.263.net (postfix) whith ESMTP id P9245T140658469750528S1605691618403318_;
+        Wed, 18 Nov 2020 17:26:58 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <05e9ad3925ebc6bbc78433db74d89000>
+X-RL-SENDER: penghao@uniontech.com
+X-SENDER: penghao@uniontech.com
+X-LOGIN-NAME: penghao@uniontech.com
+X-FST-TO: gregkh@linuxfoundation.org
+X-SENDER-IP: 124.126.19.250
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 5
+X-System-Flag: 0
+From:   penghao <penghao@uniontech.com>
+To:     gregkh@linuxfoundation.org
+Cc:     johan@kernel.org, jonathan@jdcox.net, tomasz@meresinski.eu,
+        penghao@uniontech.com, hdegoede@redhat.com, dlaz@chromium.org,
+        kai.heng.feng@canonical.com, richard.o.dodd@gmail.com,
+        kerneldev@karsmulder.nl, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND quirk for Lenovo A630Z TIO built-in usb-audio card
+Date:   Wed, 18 Nov 2020 17:26:56 +0800
+Message-Id: <20201118092656.944-1-penghao@uniontech.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gV2VkLCAyMDIwLTExLTE4IGF0IDE2OjIxICswODAwLCBDaHVuZmVuZyBZdW4gd3JvdGU6DQo+
-IENvbnZlcnQgcGh5LW10ay11ZnMudHh0IHRvIFlBTUwgc2NoZW1hIG1lZGlhdGVrLHVmcy1waHku
-eWFtbA0KPiANCj4gQ2M6IFN0YW5sZXkgQ2h1IDxzdGFubGV5LmNodUBtZWRpYXRlay5jb20+DQo+
-IFNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4N
-Cj4gUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+DQoNClJldmlld2Vk
-LWJ5OiBTdGFubGV5IENodSA8c3RhbmxleS5jaHVAbWVkaWF0ZWsuY29tPg0KDQo=
+Add a USB_QUIRK_DISCONNECT_SUSPEND quirk for the Lenovo TIO built-in
+usb-audio. when A630Z going into S3,the system immediately wakeup 7-8
+seconds later by usb-audio disconnect interrupt to avoids the issue.
+
+Seeking a better fix, we've tried a lot of things, including:
+ - Check that the device's power/wakeup is disabled
+ - Check that remote wakeup is off at the USB level
+ - All the quirks in drivers/usb/core/quirks.c
+   e.g. USB_QUIRK_RESET_RESUME,
+        USB_QUIRK_RESET,
+        USB_QUIRK_IGNORE_REMOTE_WAKEUP,
+        USB_QUIRK_NO_LPM.
+
+but none of that makes any difference.
+
+There are no errors in the logs showing any suspend/resume-related issues.
+When the system wakes up due to the modem, log-wise it appears to be a
+normal resume.
+
+Introduce a quirk to disable the port during suspend when the modem is
+detected.
+
+Changes approoriate to appropriate
+
+Changes since v2
+ - Add Changes commit format
+
+Changes since v1
+ - Change subject form "ALSA" to "USB:"
+ - Adjust to appropriate line
+
+Signed-off-by: penghao <penghao@uniontech.com>
+---
+ drivers/usb/core/quirks.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 7c1198f80c23..25f655c2cd28 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -410,6 +410,10 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+ 
++	/* Lenovo ThinkCenter A630Z TI024Gen3 usb-audio */
++	{ USB_DEVICE(0x17ef, 0xa012), .driver_info =
++			USB_QUIRK_DISCONNECT_SUSPEND },
++
+ 	/* BUILDWIN Photo Frame */
+ 	{ USB_DEVICE(0x1908, 0x1315), .driver_info =
+ 			USB_QUIRK_HONOR_BNUMINTERFACES },
+@@ -430,6 +434,7 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	  USB_QUIRK_DELAY_CTRL_MSG },
+ 
+ 	/* Corsair Strafe RGB */
++
+ 	{ USB_DEVICE(0x1b1c, 0x1b20), .driver_info = USB_QUIRK_DELAY_INIT |
+ 	  USB_QUIRK_DELAY_CTRL_MSG },
+ 
+-- 
+2.11.0
+
+
 
