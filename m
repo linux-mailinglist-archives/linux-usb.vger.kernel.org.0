@@ -2,300 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3C82B8452
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 20:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB562B868B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Nov 2020 22:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727167AbgKRTBy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Nov 2020 14:01:54 -0500
-Received: from m42-4.mailgun.net ([69.72.42.4]:51367 "EHLO m42-4.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727012AbgKRTBx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Nov 2020 14:01:53 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1605726111; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=dp59ll0cwi4fKbOjXmQC9h9P16VEfYIK+g8aTYDxuP0=; b=BEwVNmiv3j+s3qw1IrUbbKDppIIPyMqwaNMGXR2aCz74uOJnAR847EoVF8JyWII9bjqiSYg0
- ff0s40DJV5CW0ZqvKbRuW9WbmqqqP1fpR1EWQrcsp8wk6ic15MoIdf0QYy7jFsPKWrbKOnb/
- zU4ktJKjXfDDggM0qBSPWSGNAVg=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 5fb56f78a5c560669c81d8ec (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 18 Nov 2020 19:01:12
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D959BC43460; Wed, 18 Nov 2020 19:01:11 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.117.159] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6E1B7C43463;
-        Wed, 18 Nov 2020 19:01:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6E1B7C43463
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v4] usb: dwc3: Stop active transfers before halting the
- controller
-To:     Michael Tretter <m.tretter@pengutronix.de>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, thinhn@synopsys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        jackp@codeaurora.org
-References: <20200929002059.26714-1-wcheng@codeaurora.org>
- <20201118101430.GC23024@pengutronix.de>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <db9df635-ac72-c5f1-387e-694fcad77385@codeaurora.org>
-Date:   Wed, 18 Nov 2020 11:01:08 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.3
+        id S1726530AbgKRVXz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Nov 2020 16:23:55 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43342 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726136AbgKRVXm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Nov 2020 16:23:42 -0500
+Received: by mail-oi1-f195.google.com with SMTP id t143so3849951oif.10;
+        Wed, 18 Nov 2020 13:23:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VwNLniwC05uRP38qLvBvwBl3DAlw0ptrgVFyzGmX8aE=;
+        b=o3/ODECGpdNQm1NvbKcapOEhvd1PWULzQ5TLEXIapIlnJlG06Gha2BVughpHGqu2qo
+         urx2sBEulBLHEnt5FhliZBDByz7K6KusYTcsy2gg6hNh+1WP7xae9IJq3JCnmTtmh/J7
+         6bpfrcZIpxcu3+JnA05sBSiNgex9Ogp06gUkBhjZD723lfRX9uO+28CiARAflbDNIT8w
+         CgHKyHas1UQM1iyUcgqUFFlSnBtqhlsIMb1jfixv2Z/5LLE4I5ile6s0h1g0OTdFqNWJ
+         7UrzMRopY1F0H5RDyOjsdBtAjvmxMX/w2XyCCIJJnCbXW+lzkSKdWw8+P3oUu487rwol
+         C8rw==
+X-Gm-Message-State: AOAM5332Qu+j6ynBGvfp6PiHmkj9m0yb1Pl6ahIlC1ihZCIhFtYg94ro
+        hrfFqBtw6iPQdJIcenMfJg==
+X-Google-Smtp-Source: ABdhPJxGFTjxG7CJuPxoqdLsQg9S19jIx83S+QcoWMEsUa1EVmhqHhY1J3hxYWHsPEsETeEM72gnGg==
+X-Received: by 2002:aca:c502:: with SMTP id v2mr728700oif.93.1605734619925;
+        Wed, 18 Nov 2020 13:23:39 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id u138sm8120293oie.33.2020.11.18.13.23.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2020 13:23:39 -0800 (PST)
+Received: (nullmailer pid 1839273 invoked by uid 1000);
+        Wed, 18 Nov 2020 21:23:37 -0000
+Date:   Wed, 18 Nov 2020 15:23:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-usb@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        David Airlie <airlied@linux.ie>, Vinod Koul <vkoul@kernel.org>,
+        Min Guo <min.guo@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 01/11] dt-bindings: usb: convert usb-device.txt to
+ YAML schema
+Message-ID: <20201118212337.GA1838662@bogus>
+References: <20201118082126.42701-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <20201118101430.GC23024@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201118082126.42701-1-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 11/18/2020 2:14 AM, Michael Tretter wrote:
-> Hello,
+On Wed, 18 Nov 2020 16:21:16 +0800, Chunfeng Yun wrote:
+> Convert usb-device.txt to YAML schema usb-device.yaml
 > 
-> On Mon, 28 Sep 2020 17:20:59 -0700, Wesley Cheng wrote:
->> In the DWC3 databook, for a device initiated disconnect or bus reset, the
->> driver is required to send dependxfer commands for any pending transfers.
->> In addition, before the controller can move to the halted state, the SW
->> needs to acknowledge any pending events.  If the controller is not halted
->> properly, there is a chance the controller will continue accessing stale or
->> freed TRBs and buffers.
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v3:
+>   1. remove $nodenmae and items key word for compatilbe;
+>   2. add additionalProperties;
 > 
-> This patch causes a regression when using the uvc gadget with the dwc3 gadget
-> driver, which causes host to not be able to enumerate the USB device.
+>   The followings are suggested by Rob:
+>   3. merge the following patch
+>     [v2,1/4] dt-bindings: usb: convert usb-device.txt to YAML schema
+>     [v2,2/4] dt-bindings: usb: add properties for hard wired devices
+>   4. define the unit-address for hard-wired device in usb-hcd.yaml,
+>      also define its 'reg' and 'compatible';
+>   5. This series is base on Serge's series:
+>     https://patchwork.kernel.org/project/linux-usb/cover/20201111090853.14112-1-Sergey.Semin@baikalelectronics.ru/
+>     [v4,00/18] dt-bindings: usb: Add generic USB HCD, xHCI, DWC USB3 DT schema
 > 
-> The regression can be reproduced as follows:
-> 
-> Configure the uvc gadget via configfs, which in the end binds to the driver
-> and calls dwc3_gadget_start. Start the uvc-gadget user space application,
-> which activates the function and the gadget and calls pullup enable. The UVC
-> Device is now detected by a USB host.
-> 
-> Stop the uvc gadget application, which deactivates the gadget, calls pullup
-> disable and, thus, stops the dwc3 gadget.
-> 
-Hi Michael,
-
-Thanks for the analysis.  I think specifically, the f_uvc will use the
-usb_function_deactivate() API to disable the pullup (w/o calling
-udc_stop()) and using usb_function_activate() to do the opposite.  These
-are triggered when an application opens/closes the V4L2 device. (your
-application)
-
-> Restart the uvc gadget application; the gadget is activated and pullup enable
-> is called, but the dwc3 gadget is not started.
+> v2 changes suggested by Rob:
+>   1. modify pattern to support any USB class
+>   2. convert usb-device.txt into usb-device.yaml
+> ---
+>  .../devicetree/bindings/usb/usb-device.txt    | 102 --------------
+>  .../devicetree/bindings/usb/usb-device.yaml   | 125 ++++++++++++++++++
+>  .../devicetree/bindings/usb/usb-hcd.yaml      |  33 +++++
+>  3 files changed, 158 insertions(+), 102 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/usb-device.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/usb-device.yaml
 > 
 
-Seems like the deactivate/activate calls avoid any UDC start stop
-operations, and only use the pullup executions to issue a soft disconnect.
 
-> The USB Host shows the following error messages and the USB device cannot be
-> enumerated.
-> 
-> 	usb 3-1.1: Device not responding to setup address.
-> 	usb 3-1.1: Device not responding to setup address.
-> 	usb 3-1.1: device not accepting address 10, error -71
-> 	usb 3-1.1: Device not responding to setup address.
-> 	usb 3-1.1: Device not responding to setup address.
-> 	usb 3-1.1: device not accepting address 11, error -71
-> 	usb 3-1-port1: unable to enumerate USB device
-> 
->>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> Reviewed-by: Thinh Nguyen <thinhn@synopsys.com>
->>
->> ---
->> Changes in v4:
->>  - Updated comments to reference DWC3 databook sections and added direct
->>    quotes.
->>  - Changed the stop active transfer EP loop to use dwc->num_eps.
->>  - Moved to using dwc3_gadget_disable_irq/synchronize_irq instead of
->>    enable_irq/disable_irq for ensuring the interrupt handler is not pending.
->>
->> Changes in v3:
->>  - Removed DWC3_EP_ENABLED check from dwc3_gadget_stop_active_transfers()
->>    as dwc3_stop_active_transfer() has a check already in place.
->>  - Calling __dwc3_gadget_stop() which ensures that DWC3 interrupt events
->>    are cleared, and ep0 eps are cleared for the pullup disabled case.  Not
->>    required to call __dwc3_gadget_start() on pullup enable, as the
->>    composite driver will execute udc_start() before calling pullup().
-> 
-> This change seems to be related to the regression. Maybe it is required to
-> call __dwc3_gadget_start() on pullup enable, but I am not sure, how this
-> should be handled.
-> 
-> Michael
-> 
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Definitely, in this situation, we would not call the udc_start()
-callback, which will affect the functionality after re-enabling the
-device.  I wonder why the deactivate/activate routines don't explicitly
-need to start/stop the UDC?
+yamllint warnings/errors:
 
-Thanks
-Wesley Cheng
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.example.dt.yaml: usb: #size-cells:0:0: 0 was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.example.dt.yaml: usb: dwc3@34000000:compatible:0: 'snps,dwc3' does not match '^usb[0-9a-f]+,[0-9a-f]+$'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: usb@a6f8800: #address-cells:0:0: 1 was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: usb@a6f8800: #size-cells:0:0: 0 was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: usb@a6f8800: dwc3@a600000:compatible:0: 'snps,dwc3' does not match '^usb[0-9a-f]+,[0-9a-f]+$'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dt.yaml: usb@ffe09000: #size-cells:0:0: 0 was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dt.yaml: usb@ffe09000: usb@ff400000:compatible:0: 'amlogic,meson-g12a-usb' does not match '^usb[0-9a-f]+,[0-9a-f]+$'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dt.yaml: usb@ffe09000: usb@ff400000:compatible: ['amlogic,meson-g12a-usb', 'snps,dwc2'] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dt.yaml: usb@ffe09000: usb@ff400000:compatible: Additional items are not allowed ('snps,dwc2' was unexpected)
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dt.yaml: usb@ffe09000: usb@ff500000:compatible:0: 'snps,dwc3' does not match '^usb[0-9a-f]+,[0-9a-f]+$'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/socionext,uniphier-usb2-phy.example.dt.yaml: usb-controller: phy@0: 'compatible' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/socionext,uniphier-usb2-phy.example.dt.yaml: usb-controller: phy@1: 'compatible' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/socionext,uniphier-usb2-phy.example.dt.yaml: usb-controller: phy@2: 'compatible' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.example.dt.yaml: usb-glue@65b00000: #size-cells:0:0: 0 was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.example.dt.yaml: usb-glue@65b00000: ss-phy@300:compatible:0: 'socionext,uniphier-ld20-usb3-ssphy' does not match '^usb[0-9a-f]+,[0-9a-f]+$'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.example.dt.yaml: usb-glue@65b00000: #size-cells:0:0: 0 was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.example.dt.yaml: usb-glue@65b00000: hs-phy@200:compatible:0: 'socionext,uniphier-ld20-usb3-hsphy' does not match '^usb[0-9a-f]+,[0-9a-f]+$'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/usb-hcd.yaml
 
->>
->> Changes in v2:
->>  - Moved cleanup code to the pullup() API to differentiate between device
->>    disconnect and hibernation.
->>  - Added cleanup code to the bus reset case as well.
->>  - Verified the move to pullup() did not reproduce the problen using the
->>    same test sequence.
->>
->> Verified fix by adding a check for ETIMEDOUT during the run stop call.
->> Shell script writing to the configfs UDC file to trigger disconnect and
->> connect.  Batch script to have PC execute data transfers over adb (ie adb
->> push)  After a few iterations, we'd run into a scenario where the
->> controller wasn't halted.  With the following change, no failed halts after
->> many iterations.
->> ---
->>  drivers/usb/dwc3/ep0.c    |  2 +-
->>  drivers/usb/dwc3/gadget.c | 66 ++++++++++++++++++++++++++++++++++++++-
->>  2 files changed, 66 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->> index 59f2e8c31bd1..456aa87e8778 100644
->> --- a/drivers/usb/dwc3/ep0.c
->> +++ b/drivers/usb/dwc3/ep0.c
->> @@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
->>  	int				ret;
->>  
->>  	spin_lock_irqsave(&dwc->lock, flags);
->> -	if (!dep->endpoint.desc) {
->> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
->>  		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
->>  				dep->name);
->>  		ret = -ESHUTDOWN;
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 3ab6f118c508..5d879b7606d5 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -1516,7 +1516,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
->>  {
->>  	struct dwc3		*dwc = dep->dwc;
->>  
->> -	if (!dep->endpoint.desc) {
->> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
->>  		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
->>  				dep->name);
->>  		return -ESHUTDOWN;
->> @@ -1926,6 +1926,21 @@ static int dwc3_gadget_set_selfpowered(struct usb_gadget *g,
->>  	return 0;
->>  }
->>  
->> +static void dwc3_stop_active_transfers(struct dwc3 *dwc)
->> +{
->> +	u32 epnum;
->> +
->> +	for (epnum = 2; epnum < dwc->num_eps; epnum++) {
->> +		struct dwc3_ep *dep;
->> +
->> +		dep = dwc->eps[epnum];
->> +		if (!dep)
->> +			continue;
->> +
->> +		dwc3_remove_requests(dwc, dep);
->> +	}
->> +}
->> +
->>  static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
->>  {
->>  	u32			reg;
->> @@ -1971,6 +1986,9 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
->>  	return 0;
->>  }
->>  
->> +static void dwc3_gadget_disable_irq(struct dwc3 *dwc);
->> +static void __dwc3_gadget_stop(struct dwc3 *dwc);
->> +
->>  static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>  {
->>  	struct dwc3		*dwc = gadget_to_dwc(g);
->> @@ -1994,7 +2012,46 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>  		}
->>  	}
->>  
->> +	/*
->> +	 * Synchronize any pending event handling before executing the controller
->> +	 * halt routine.
->> +	 */
->> +	if (!is_on) {
->> +		dwc3_gadget_disable_irq(dwc);
->> +		synchronize_irq(dwc->irq_gadget);
->> +	}
->> +
->>  	spin_lock_irqsave(&dwc->lock, flags);
->> +
->> +	if (!is_on) {
->> +		u32 count;
->> +
->> +		/*
->> +		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
->> +		 * Section 4.1.8 Table 4-7, it states that for a device-initiated
->> +		 * disconnect, the SW needs to ensure that it sends "a DEPENDXFER
->> +		 * command for any active transfers" before clearing the RunStop
->> +		 * bit.
->> +		 */
->> +		dwc3_stop_active_transfers(dwc);
->> +		__dwc3_gadget_stop(dwc);
->> +
->> +		/*
->> +		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
->> +		 * Section 1.3.4, it mentions that for the DEVCTRLHLT bit, the
->> +		 * "software needs to acknowledge the events that are generated
->> +		 * (by writing to GEVNTCOUNTn) while it is waiting for this bit
->> +		 * to be set to '1'."
->> +		 */
->> +		count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
->> +		count &= DWC3_GEVNTCOUNT_MASK;
->> +		if (count > 0) {
->> +			dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
->> +			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
->> +						dwc->ev_buf->length;
->> +		}
->> +	}
->> +
->>  	ret = dwc3_gadget_run_stop(dwc, is_on, false);
->>  	spin_unlock_irqrestore(&dwc->lock, flags);
->>  
->> @@ -3100,6 +3157,13 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
->>  	}
->>  
->>  	dwc3_reset_gadget(dwc);
->> +	/*
->> +	 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
->> +	 * Section 4.1.2 Table 4-2, it states that during a USB reset, the SW
->> +	 * needs to ensure that it sends "a DEPENDXFER command for any active
->> +	 * transfers."
->> +	 */
->> +	dwc3_stop_active_transfers(dwc);
->>  
->>  	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
->>  	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
->>
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+See https://patchwork.ozlabs.org/patch/1402017
+
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
