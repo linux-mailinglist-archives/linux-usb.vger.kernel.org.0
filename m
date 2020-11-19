@@ -2,87 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E97F2B957A
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 15:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F262B95F6
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 16:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728202AbgKSOsU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Nov 2020 09:48:20 -0500
-Received: from mga02.intel.com ([134.134.136.20]:58845 "EHLO mga02.intel.com"
+        id S1728470AbgKSPTk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Nov 2020 10:19:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34222 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727773AbgKSOsT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Nov 2020 09:48:19 -0500
-IronPort-SDR: 9GYD2W97+7sbzeLFlsZSPDsLNphA/nsnusw+ynz7AOj7k7jr6p1xyaS0xG79Xl8f/nN4yHKzqp
- X9b797x8eggw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9809"; a="158331457"
-X-IronPort-AV: E=Sophos;i="5.77,490,1596524400"; 
-   d="scan'208";a="158331457"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2020 06:48:18 -0800
-IronPort-SDR: UllQAD24P5nqQjTMGw3A+hxVHk0+wimBeiQXI6bT+70MoDy/qf3gd8jN3Y58eR3VvzMXudqdPh
- l4HMVeSi8h8Q==
-X-IronPort-AV: E=Sophos;i="5.77,490,1596524400"; 
-   d="scan'208";a="545033050"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2020 06:48:15 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 19 Nov 2020 16:48:12 +0200
-Date:   Thu, 19 Nov 2020 16:48:12 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Paulian Bogdan Marinca <paulian@marinca.net>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v2] thunderbolt: Fix use-after-free in
- remove_unplugged_switch()
-Message-ID: <20201119144812.GL2495@lahna.fi.intel.com>
-References: <20201119083429.71784-1-mika.westerberg@linux.intel.com>
- <X7YvrflfJf+I/5BX@kroah.com>
+        id S1728062AbgKSPTk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Nov 2020 10:19:40 -0500
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E6E4F24654;
+        Thu, 19 Nov 2020 15:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605799178;
+        bh=0W6X+yvUpSkdAAGKagVENpsqMNRqNF4X/9HGlBkWMgk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MJc09AJAL2xk01qiS05ieRaCGIlLeUWY/cvod14/kBGzC1gFcG/mDtMvf8iSA9QUD
+         jSD4dFUuEnrjJi4GroCmvV7jayJepAbLbLZeNgzQ9BKU3QE60JUhIRrlYDwHw/JhIU
+         B+8st17jTJ6Z1DYEmUVIDvIfP/2L0eFW2zmF94NU=
+Date:   Thu, 19 Nov 2020 15:19:18 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        linux-samsung-soc@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-usb@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v1 11/30] drm/tegra: dc: Support OPP and SoC core voltage
+ scaling
+Message-ID: <20201119151918.GA5554@sirena.org.uk>
+References: <20201112200123.GF4742@sirena.org.uk>
+ <ce9e2d9f-917e-fb8a-7323-f3bf1a367e9d@gmail.com>
+ <20201113142937.GB4828@sirena.org.uk>
+ <7f066805-97d9-088f-e89d-a554fe478574@gmail.com>
+ <20201113161550.GC4828@sirena.org.uk>
+ <3beaa12b-4a50-a3b6-fc43-ebb5ce7a8db7@gmail.com>
+ <20201113172859.GF4828@sirena.org.uk>
+ <74cfc6a9-3f59-d679-14b7-51102a6f11b3@gmail.com>
+ <20201116133311.GB4739@sirena.org.uk>
+ <332ab946-daee-bb83-24ab-0bda4fd8e1ef@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="G4iJoqBmSsgzjUCe"
 Content-Disposition: inline
-In-Reply-To: <X7YvrflfJf+I/5BX@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <332ab946-daee-bb83-24ab-0bda4fd8e1ef@gmail.com>
+X-Cookie: Chocolate chip.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 09:41:17AM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Nov 19, 2020 at 11:34:29AM +0300, Mika Westerberg wrote:
-> > Paulian reported a crash that happens when a dock is unplugged during
-> > hibernation:
-> > 
-> > [78436.228217] thunderbolt 0-1: device disconnected
-> > [78436.228365] BUG: kernel NULL pointer dereference, address: 00000000000001e0
-> > ...
-> > [78436.228397] RIP: 0010:icm_free_unplugged_children+0x109/0x1a0
-> > ...
-> > [78436.228432] Call Trace:
-> > [78436.228439]  icm_rescan_work+0x24/0x30
-> > [78436.228444]  process_one_work+0x1a3/0x3a0
-> > [78436.228449]  worker_thread+0x30/0x370
-> > [78436.228454]  ? process_one_work+0x3a0/0x3a0
-> > [78436.228457]  kthread+0x13d/0x160
-> > [78436.228461]  ? kthread_park+0x90/0x90
-> > [78436.228465]  ret_from_fork+0x1f/0x30
-> > 
-> > This happens because remove_unplugged_switch() calls tb_switch_remove()
-> > that releases the memory pointed by sw so the following lines reference
-> > to a memory that might be released already.
-> > 
-> > Fix this by saving pointer to the parent device before calling
-> > tb_switch_remove().
-> > 
-> > Reported-by: Paulian Bogdan Marinca <paulian@marinca.net>
-> > Fixes: 4f7c2e0d8765 ("thunderbolt: Make sure device runtime resume completes before taking domain lock")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > ---
-> 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Thanks!
+--G4iJoqBmSsgzjUCe
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Applied to thunderbolt.git/fixes.
+On Thu, Nov 19, 2020 at 05:22:43PM +0300, Dmitry Osipenko wrote:
+> 16.11.2020 16:33, Mark Brown =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+
+> > No, you are failing to understand the purpose of this code.  To
+> > reiterate unless the device supports operating with the supply
+> > physically absent then the driver should not be attempting to use
+> > regulator_get_optional().  That exists specifically for the case where
+
+> The original intention of regulator_get_optional() is clear to me, but
+> nothing really stops drivers from slightly re-purposing this API, IMO.
+
+> Drivers should be free to assume that if regulator isn't defined by
+> firmware, then it's physically absent if this doesn't break anything. Of
+> course in some cases it's unsafe to make such assumptions. I think it's
+> a bit unpractical to artificially limit API usage without a good reason,
+> i.e. if nothing breaks underneath of a driver.
+
+If the supply can be physically absent without breaking anything then
+this is the intended use case for optional regulators.  This is a *very*
+uncommon.
+
+> > Regulators that are present but not described by the firmware are a
+> > clearly different case to regulators that are not physically there,
+> > hardware with actually optional regulators will generally require some
+> > configuration for this case.
+
+> I have good news. After spending some more time on trying out different
+> things, I found that my previous assumption about the fixed-regulator
+> was wrong, it actually accepts voltage changes, i.e. regulator consumer
+> doesn't get a error on a voltage-change. This is exactly what is needed
+> for the OPP core to work properly.
+
+To be clear when you set a voltage range you will get the minimum
+voltage that can be supported within that range on the system given all
+the other constraints the system has.  For fixed voltage regulators or
+regulators constraints to not change voltage this means that if whatever
+voltage they are fixed at is in the range requested then the API will
+report success.
+
+--G4iJoqBmSsgzjUCe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+2jPUACgkQJNaLcl1U
+h9Cg3Qf/ScTE8SCsHJLjKatjArehtbhKoUyG6aFABrEI/v3bjsqKt/Sq0WjEm255
+nKAu6jVgldwyJP7JR+NQvS2KTy6/Ai/3r+U/lyG8X0xthT14nzXhC6QSAIfukqgq
+JHderVdLXa+mc9bZ4vJ8AzG88ImFulrVA84t2cIuHOU27i4wVx5oQJZoRquB5JdJ
+jAPleN81AYXwTdcJkckY0QoHEFVz55g/4xI2cuh9onlNHbt8eVr7FGsswsNnATrv
+DlAATwOrW84BJnGHjaB0vfWLRx75q3bJ1z62kbdf0VqU5rYaVUppa5a+8eHY6i4V
+A1ZTgD1YjmUvJjo2cbBpm7mJsYOinA==
+=tj+B
+-----END PGP SIGNATURE-----
+
+--G4iJoqBmSsgzjUCe--
