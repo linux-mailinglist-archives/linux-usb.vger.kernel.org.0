@@ -2,76 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F299D2B8DC3
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 09:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E992B8E00
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 09:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726315AbgKSIkf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Nov 2020 03:40:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52336 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726297AbgKSIkf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Nov 2020 03:40:35 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 27F7D246DC;
-        Thu, 19 Nov 2020 08:40:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1605775233;
-        bh=5sGdS93+NBVLFLQMTqvWfCrihjQcACl78AOSIX98xsI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N/TzQ+b8oM73e5kxbtdfcQspSEh7F2zQCHfTNUSZgL/If6zPPKkHT8NkJhZDjmZ0e
-         uNviTBQQWFEFPks4uFhxAUl94QwljrVhYFQTuKhC+UzNJKTSxG653KKqTwmMyhXILe
-         qMWPE9H0i1uLAsxQouZXUlf+klbd77Y57EdZRGlk=
-Date:   Thu, 19 Nov 2020 09:41:17 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Paulian Bogdan Marinca <paulian@marinca.net>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v2] thunderbolt: Fix use-after-free in
- remove_unplugged_switch()
-Message-ID: <X7YvrflfJf+I/5BX@kroah.com>
-References: <20201119083429.71784-1-mika.westerberg@linux.intel.com>
+        id S1726095AbgKSIyM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Nov 2020 03:54:12 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:12983 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725648AbgKSIyM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Nov 2020 03:54:12 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fb632bf0000>; Thu, 19 Nov 2020 00:54:23 -0800
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 19 Nov
+ 2020 08:54:09 +0000
+Received: from jckuo-lt.nvidia.com (10.124.1.5) by mail.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Thu, 19 Nov 2020 08:54:07 +0000
+From:   JC Kuo <jckuo@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
+        <robh@kernel.org>, <jonathanh@nvidia.com>, <kishon@ti.com>
+CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>
+Subject: [PATCH v5 00/16] Tegra XHCI controller ELPG support
+Date:   Thu, 19 Nov 2020 16:53:49 +0800
+Message-ID: <20201119085405.556138-1-jckuo@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201119083429.71784-1-mika.westerberg@linux.intel.com>
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1605776063; bh=CmXb3eYWUiDlzWr3hDdd1ob3Q9NsgunCKgz7xTZ9kKs=;
+        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+         X-NVConfidentiality:Content-Transfer-Encoding:Content-Type;
+        b=Qx81zObipdI2BpYvHgXz+7B/Rw3N/Sjmaklbh3SDUb4xXUCGOsCBZN0Wvnf1BZl3c
+         RmTVf70lAMhhLQSicMVpGH4hwXuLf+fTPLS6mDUSAcr7AOwVpNNyXYaYBQUZTcTQVR
+         g/SpLf5JM3rNwTK5UqRKKXDBU+t6fER8owdlPX4BPTuoi8dA5O6qgdvlAlhBC8AQ4t
+         uNlmEZbrH5tG4WzSShy17Rc0Yi/XmoDuVxFSJPFLndT8AZ+3LfwfgKA+XJ+7BhrRsS
+         7Iqy/mg46FxM4N4wt+HWmMoAqQemhwE1K5r52prBSgmKCMrJk+SrMa/a9NqF4IoHS+
+         5kuYtpXj6Xl+A==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 11:34:29AM +0300, Mika Westerberg wrote:
-> Paulian reported a crash that happens when a dock is unplugged during
-> hibernation:
-> 
-> [78436.228217] thunderbolt 0-1: device disconnected
-> [78436.228365] BUG: kernel NULL pointer dereference, address: 00000000000001e0
-> ...
-> [78436.228397] RIP: 0010:icm_free_unplugged_children+0x109/0x1a0
-> ...
-> [78436.228432] Call Trace:
-> [78436.228439]  icm_rescan_work+0x24/0x30
-> [78436.228444]  process_one_work+0x1a3/0x3a0
-> [78436.228449]  worker_thread+0x30/0x370
-> [78436.228454]  ? process_one_work+0x3a0/0x3a0
-> [78436.228457]  kthread+0x13d/0x160
-> [78436.228461]  ? kthread_park+0x90/0x90
-> [78436.228465]  ret_from_fork+0x1f/0x30
-> 
-> This happens because remove_unplugged_switch() calls tb_switch_remove()
-> that releases the memory pointed by sw so the following lines reference
-> to a memory that might be released already.
-> 
-> Fix this by saving pointer to the parent device before calling
-> tb_switch_remove().
-> 
-> Reported-by: Paulian Bogdan Marinca <paulian@marinca.net>
-> Fixes: 4f7c2e0d8765 ("thunderbolt: Make sure device runtime resume completes before taking domain lock")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> ---
+Tegra XHCI controler can be placed in ELPG (Engine Level PowerGated)
+state for power saving when all of the connected USB devices are in
+suspended state. This patch series includes clk, phy and pmc changes
+that are required for properly place controller in ELPG and bring
+controller out of ELPG.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+JC Kuo (16):
+  clk: tegra: Add PLLE HW power sequencer control
+  clk: tegra: Don't enable PLLE HW sequencer at init
+  phy: tegra: xusb: Move usb3 port init for Tegra210
+  phy: tegra: xusb: tegra210: Do not reset UPHY PLL
+  phy: tegra: xusb: Rearrange UPHY init on Tegra210
+  phy: tegra: xusb: Add Tegra210 lane_iddq operation
+  phy: tegra: xusb: Add sleepwalk and suspend/resume
+  soc/tegra: pmc: Provide USB sleepwalk register map
+  arm64: tegra210: XUSB PADCTL add "nvidia,pmc" prop
+  dt-bindings: phy: tegra-xusb: Add nvidia,pmc prop
+  phy: tegra: xusb: Add wake/sleepwalk for Tegra210
+  phy: tegra: xusb: Tegra210 host mode VBUS control
+  phy: tegra: xusb: Add wake/sleepwalk for Tegra186
+  arm64: tegra210/tegra186/tegra194: XUSB PADCTL irq
+  usb: host: xhci-tegra: Unlink power domain devices
+  xhci: tegra: Enable ELPG for runtime/system PM
+
+ .../phy/nvidia,tegra124-xusb-padctl.txt       |    1 +
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi      |    1 +
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi      |    1 +
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi      |    2 +
+ drivers/clk/tegra/clk-pll.c                   |   12 -
+ drivers/clk/tegra/clk-tegra210.c              |   53 +-
+ drivers/phy/tegra/xusb-tegra186.c             |  558 ++++-
+ drivers/phy/tegra/xusb-tegra210.c             | 1889 +++++++++++++----
+ drivers/phy/tegra/xusb.c                      |   92 +-
+ drivers/phy/tegra/xusb.h                      |   22 +-
+ drivers/soc/tegra/pmc.c                       |   94 +
+ drivers/usb/host/xhci-tegra.c                 |  613 ++++--
+ include/linux/clk/tegra.h                     |    4 +-
+ include/linux/phy/tegra/xusb.h                |   10 +-
+ 14 files changed, 2787 insertions(+), 565 deletions(-)
+
+--=20
+2.25.1
+
