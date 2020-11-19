@@ -2,86 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BE52B8BB8
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 07:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BB42B8CD1
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 09:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726360AbgKSGeF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Nov 2020 01:34:05 -0500
-Received: from mga18.intel.com ([134.134.136.126]:60908 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725802AbgKSGeF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Nov 2020 01:34:05 -0500
-IronPort-SDR: dFSqme/PRaTOgSoiDV0NghUlgCZ6ipwW/Jj6kUftPGK2iRljIIODSaF/TjYVzXamArSvI3wjXR
- bEnYPMNSL4Uw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9809"; a="159012441"
-X-IronPort-AV: E=Sophos;i="5.77,489,1596524400"; 
-   d="scan'208";a="159012441"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 22:34:04 -0800
-IronPort-SDR: 3UYDVX0MCer5gpeuzPlBIvQHTQlSAR4iYLrubaQxKGYYwV00I5UAPMYjyGJtq5vfn8V3ZQAAVq
- 3yyfMOXUohqQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,489,1596524400"; 
-   d="scan'208";a="544877929"
-Received: from uhpatel-desk4.jf.intel.com (HELO uhpatel-desk4.intel.com) ([10.23.15.15])
-  by orsmga005.jf.intel.com with ESMTP; 18 Nov 2020 22:34:04 -0800
-From:   Utkarsh Patel <utkarsh.h.patel@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     heikki.krogerus@linux.intel.com, pmalani@chromium.org,
-        enric.balletbo@collabora.com, rajmohan.mani@intel.com,
-        azhar.shaikh@intel.com, Utkarsh Patel <utkarsh.h.patel@intel.com>
-Subject: [PATCH v3 4/4] usb: typec: Remove active_link_training variable from Enter_USB message
-Date:   Wed, 18 Nov 2020 22:32:11 -0800
-Message-Id: <20201119063211.2264-5-utkarsh.h.patel@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201119063211.2264-1-utkarsh.h.patel@intel.com>
-References: <20201119063211.2264-1-utkarsh.h.patel@intel.com>
+        id S1726272AbgKSIF1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Nov 2020 03:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbgKSIF1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Nov 2020 03:05:27 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D97C0613CF
+        for <linux-usb@vger.kernel.org>; Thu, 19 Nov 2020 00:05:27 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id l22so2562551vsa.4
+        for <linux-usb@vger.kernel.org>; Thu, 19 Nov 2020 00:05:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=cy4emllfc+J5YrBKtpxSmH7isRrDnwx875lpX6aEmSA=;
+        b=XnlmHqwllAtlzF3r5S6oxntPtC2vyEAJ6Vke69qcAwy0hYJ9C3+6ejyP6mWpwY767w
+         gHc3dM9vL1AG/UH9Es3Dqq3I23u4WeFp5F1+9szzM34/DQvQduUi5dMuGh4Wn7u6vQc2
+         1XzwdL+QTso2Z1cHOxA5RMlVXH+2e3p5GmtHGqJhCV6iBkHvKd8yfVRV9VnNHuHtEftA
+         noUlN2tb0rXdRJ6tUk8UkzGbxwqBywbHbVc++HRJ3552M/iCtNRRW4FOjeffpkZoht/D
+         a5jW/XkEQ7bzBEjKxBTXqGc0fy0ZrTVW5e/MC54szWbcd9Z08PyiYf1GxKvBbUB/ObUi
+         e7rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=cy4emllfc+J5YrBKtpxSmH7isRrDnwx875lpX6aEmSA=;
+        b=Hchu2Wf5Xw4YElG14mOqpmCnr8Mr5fxh/hO31I3JmiAYAwZnc35amjqBG8J/lXod/4
+         hO83LQ/xvdsVCg9Sa7r78X9V6FPIOvo58SMmiFUfUU1Mng8sZQIEAcs0FmzUc+9zP97k
+         IIIP7rXSrWdatGSGKH2uhAHWrelVsNGrr8MSoBv0mU1LaNqWN5Mm2Ewmp4n/KC0ImQxd
+         awy42xEbdypJfdUIDXCnbqzf/qpQYbSZ6T3KuMG+giI4DnqiduoSrAeHJOH/JzyLluG5
+         62+MR1gQR6LlUpwWF7hHJ4vd7MJ/KC2Uth2VONgkXB21rq1Fkw2EBw0oLGJdD9WZ8Unv
+         U+AA==
+X-Gm-Message-State: AOAM532/DWkapdANjY8FxLmC7R7X9G6VeEUUaW+k+4Qcg7ELLQeEshEi
+        zTqACS1RC8h0ftsIOoEXyRJKP5rcZg2/0RBHH7xsYm4xJ9s=
+X-Google-Smtp-Source: ABdhPJxi5Xpoa+pomCCtG7sgBeAafdIIY+lzNAr8+Pro84ox6vB4zFg+4alGJXVh65KAT1t5DEXlPbUvsJdcW9Gj50A=
+X-Received: by 2002:a67:774c:: with SMTP id s73mr7945163vsc.1.1605773125749;
+ Thu, 19 Nov 2020 00:05:25 -0800 (PST)
+MIME-Version: 1.0
+From:   Kevin Liu <kliutw1947@gmail.com>
+Date:   Thu, 19 Nov 2020 16:05:14 +0800
+Message-ID: <CAMLv=Q9DVb+t63eK9fyDsdUWTF7d7jHQy5QXik=-nyV0rVE-3Q@mail.gmail.com>
+Subject: add product ID 1b93 under Supermicro 2c23
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thunderbolt 3 cable discover mode VDO support has been added as part of
-Enter_USB message to fill details of active cable plug link training.
-Hence, removing unused variable active_link_training from Enter_USB
-message data structure.
+Hi,
 
-Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I tried to add product ID 1b93 under Supermicro 2c23 on USB ID
+Repository last week, could you please help to check the request and
+let me know if any additional action I shall take? Thank you very
+much.
 
---
-Changes in v3:
-- Rebased and Added Reviewed-by tag.
+Information captured from USB ID Repository:
+Main -> USB Devices -> Device UD:2c23 -> Subsystem UD:2c23:1b93
+Name: USB Ethernet/RNDIS
+Add PID for lan-over-usb host interface device that will be applied on
+Supermicro motherboard from late 2020.
+kliutw1947
+2020-11-13 09:20:12
 
-Changes in v2:
-- No change.
---
----
- include/linux/usb/typec.h | 6 ------
- 1 file changed, 6 deletions(-)
 
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index 25731ed863fa..d26824a30ff9 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -79,16 +79,10 @@ enum typec_orientation {
-  * @tbt_cable_vdo needs to be filled with details of active cable plug link
-  * training and cable rounded support when thunderbolt 3 cable is being used to
-  * create USB4 connection. Do not fill this in case of USB4 cable.
-- * @active_link_training: Active Cable Plug Link Training
-- *
-- * @active_link_training is a flag that should be set with uni-directional SBRX
-- * communication, and left 0 with passive cables and with bi-directional SBRX
-- * communication.
-  */
- struct enter_usb_data {
- 	u32			eudo;
- 	u32			tbt_cable_vdo;
--	unsigned char		active_link_training:1;
- };
- 
- /*
--- 
-2.17.1
-
+Regards,
+Kevin Liu
+Sr. Product Manager, SW
+Super Micro Computer, Inc. TAIWAN
+23511=E6=96=B0=E5=8C=97=E5=B8=82=E4=B8=AD=E5=92=8C=E5=8D=80=E5=BB=BA=E4=B8=
+=80=E8=B7=AF150=E8=99=9F6=E6=A8=93
+6F., No.150, Jian 1st Rd., Zhonghe Dist., New Taipei City 23511, Taiwan, R.=
+O.C.
+TEL: +886 2 82263990 #3436
+Mobile: +886 937 170436
