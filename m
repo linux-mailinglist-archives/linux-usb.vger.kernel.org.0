@@ -2,92 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3672B948D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 15:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E97F2B957A
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 15:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727769AbgKSOXK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Nov 2020 09:23:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48612 "EHLO mail.kernel.org"
+        id S1728202AbgKSOsU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Nov 2020 09:48:20 -0500
+Received: from mga02.intel.com ([134.134.136.20]:58845 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727512AbgKSOXK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Nov 2020 09:23:10 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 21BDE2222A;
-        Thu, 19 Nov 2020 14:23:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1605795789;
-        bh=P9U0+AiYZ1j6MYp8T9AkJ7YQKwTSGN1e2U2URWeskQI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=znA916Tob8+E0QcTLDETsD0WDyq7TW+FM+luH1LnQnhLtBeuO1chHkew8SpT7RFVp
-         HTm+j223Pelx78jUU5eubmfVjnDdOeL8UdLptQP52PQPedww5zncSQ+ocQGdC8WLJf
-         0dTmeN1IW2XLrmV+aS/DRHX7pzCnFIWNBlTm44e0=
-Date:   Thu, 19 Nov 2020 15:23:53 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     =?utf-8?B?5b2t5rWp?= <penghao@uniontech.com>,
-        johan <johan@kernel.org>, jonathan <jonathan@jdcox.net>,
-        tomasz <tomasz@meresinski.eu>,
-        Hans de Goede <hdegoede@redhat.com>,
-        dlaz <dlaz@chromium.org>,
-        "richard.o.dodd" <richard.o.dodd@gmail.com>,
-        kerneldev <kerneldev@karsmulder.nl>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND quirk
- forLenovo A630Z TIO built-in usb-audio card
-Message-ID: <X7Z/+Tehbmx54Fzb@kroah.com>
-References: <20201118123039.11696-1-penghao@uniontech.com>
- <49219711-84BE-44FC-BBFE-DD8D609CA26D@canonical.com>
- <1892790617.185900.1605788248261.JavaMail.xmail@bj-wm-cp-6>
- <7D73C39C-C3E2-4C08-A773-3D7582A6AA7D@canonical.com>
- <X7Z6RKu4T5IrhUFB@kroah.com>
- <FB40A0E5-5E3C-4FC6-B690-02F9785EC7D5@canonical.com>
+        id S1727773AbgKSOsT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Nov 2020 09:48:19 -0500
+IronPort-SDR: 9GYD2W97+7sbzeLFlsZSPDsLNphA/nsnusw+ynz7AOj7k7jr6p1xyaS0xG79Xl8f/nN4yHKzqp
+ X9b797x8eggw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9809"; a="158331457"
+X-IronPort-AV: E=Sophos;i="5.77,490,1596524400"; 
+   d="scan'208";a="158331457"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2020 06:48:18 -0800
+IronPort-SDR: UllQAD24P5nqQjTMGw3A+hxVHk0+wimBeiQXI6bT+70MoDy/qf3gd8jN3Y58eR3VvzMXudqdPh
+ l4HMVeSi8h8Q==
+X-IronPort-AV: E=Sophos;i="5.77,490,1596524400"; 
+   d="scan'208";a="545033050"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2020 06:48:15 -0800
+Received: by lahna (sSMTP sendmail emulation); Thu, 19 Nov 2020 16:48:12 +0200
+Date:   Thu, 19 Nov 2020 16:48:12 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Paulian Bogdan Marinca <paulian@marinca.net>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v2] thunderbolt: Fix use-after-free in
+ remove_unplugged_switch()
+Message-ID: <20201119144812.GL2495@lahna.fi.intel.com>
+References: <20201119083429.71784-1-mika.westerberg@linux.intel.com>
+ <X7YvrflfJf+I/5BX@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <FB40A0E5-5E3C-4FC6-B690-02F9785EC7D5@canonical.com>
+In-Reply-To: <X7YvrflfJf+I/5BX@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 10:12:02PM +0800, Kai-Heng Feng wrote:
-> 
-> 
-> > On Nov 19, 2020, at 21:59, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+On Thu, Nov 19, 2020 at 09:41:17AM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Nov 19, 2020 at 11:34:29AM +0300, Mika Westerberg wrote:
+> > Paulian reported a crash that happens when a dock is unplugged during
+> > hibernation:
 > > 
-> > On Thu, Nov 19, 2020 at 09:41:32PM +0800, Kai-Heng Feng wrote:
-> >> Hi penghao,
-> >> 
-> >>> On Nov 19, 2020, at 20:17, 彭浩 <penghao@uniontech.com> wrote:
-> >>> 
-> >>> root@uos-PC:/sys/bus/usb/devices/usb7# dmesg
-> >>> [ 0.000000] Linux version 4.19.0-6-amd64 (debian-kernel@lists.debian.org) (gcc version 8.3.0 (Debian 8.3.0-6)) #1 SMP Uos 4.19.67-11eagle (2020-03-21)
-> >> 
-> >> Thanks for the dmesg. But would it be possible to use mainline kernel enable dynamic debug?
-> >> 
-> >> But anyway, this is not a regular AMD or Intel platform, so I guess we can merge the quirk as is...
-> >> 
-> >> Kai-Heng
-> >> 
-> >>> [ 0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-4.19.0-6-amd64 root=UUID=e5a40c4f-d88e-4a4d-9414-a27892a31be7 ro splash console=ttyS0,115200n8 loglevel=7 DEEPIN_GFXMODE=0,1920x1080,1600x1200,1280x1024,1024x768
-> >>> [ 0.000000] Zhaoxin Linux Patch Version is V3.0.2 
-> >>> [ 0.000000] With Zhaoxin Shanghai CPU patch V2.0.0
+> > [78436.228217] thunderbolt 0-1: device disconnected
+> > [78436.228365] BUG: kernel NULL pointer dereference, address: 00000000000001e0
+> > ...
+> > [78436.228397] RIP: 0010:icm_free_unplugged_children+0x109/0x1a0
+> > ...
+> > [78436.228432] Call Trace:
+> > [78436.228439]  icm_rescan_work+0x24/0x30
+> > [78436.228444]  process_one_work+0x1a3/0x3a0
+> > [78436.228449]  worker_thread+0x30/0x370
+> > [78436.228454]  ? process_one_work+0x3a0/0x3a0
+> > [78436.228457]  kthread+0x13d/0x160
+> > [78436.228461]  ? kthread_park+0x90/0x90
+> > [78436.228465]  ret_from_fork+0x1f/0x30
 > > 
-> > What do you mean "not a regular"?  This is an x86-variant chip platform,
-> > but what does that have to do with the USB quirk detection?
+> > This happens because remove_unplugged_switch() calls tb_switch_remove()
+> > that releases the memory pointed by sw so the following lines reference
+> > to a memory that might be released already.
+> > 
+> > Fix this by saving pointer to the parent device before calling
+> > tb_switch_remove().
+> > 
+> > Reported-by: Paulian Bogdan Marinca <paulian@marinca.net>
+> > Fixes: 4f7c2e0d8765 ("thunderbolt: Make sure device runtime resume completes before taking domain lock")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > ---
 > 
-> USB quirk detection should work fine. I was trying to find the root cause, but seeing it's a Zhaoxin CPU, that could be the reason why mainline kernel, which has many USB power management fixes, wasn't used.
-> 
-> penghao, is it possible to boot mainline kernel on Zhaoxin CPU?
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-There have been a number of small patches for this type of CPU merged
-over the past months, so I hope a mainline kernel works here :)
+Thanks!
 
-That being said, why would the platform matter for a USB device quirk?
-
-thanks,
-
-greg k-h
+Applied to thunderbolt.git/fixes.
