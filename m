@@ -2,157 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B308F2B89C0
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 02:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9610E2B89FE
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 03:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727156AbgKSBud (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Nov 2020 20:50:33 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7556 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725947AbgKSBud (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Nov 2020 20:50:33 -0500
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Cc2gQ6zq0zhcck;
-        Thu, 19 Nov 2020 09:50:10 +0800 (CST)
-Received: from [10.67.102.118] (10.67.102.118) by
- DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 19 Nov 2020 09:50:20 +0800
-Subject: Re: [RFC PATCH] USB: xhci: Enable HCE event reset function
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <yisen.zhuang@huawei.com>,
-        <tanxiaofei@huawei.com>, <mathias.nyman@intel.com>
-References: <1605670573-949-1-git-send-email-liulongfang@huawei.com>
- <X7TG+UWWtgbX6EnU@kroah.com>
- <0877eba8-dcce-0c5e-98b4-64dd0fc06e4f@huawei.com>
- <X7TmBT2LbdJbDypG@kroah.com>
- <aa5b4ef3-444a-176e-495e-4109720de4ff@linux.intel.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <3422ed2b-81e2-6927-fb9a-1ff5151945a5@huawei.com>
-Date:   Thu, 19 Nov 2020 09:50:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727360AbgKSCHJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Nov 2020 21:07:09 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:51748 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727356AbgKSCHI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Nov 2020 21:07:08 -0500
+Received: by mail-io1-f71.google.com with SMTP id l15so3140706ioh.18
+        for <linux-usb@vger.kernel.org>; Wed, 18 Nov 2020 18:07:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=C3VJue3RGqKKiz/dey+cwbB/cJZLcFnQvx6oQYKE/kA=;
+        b=b4Lo5pGCeIPyYClySH1lu+FVDVozTrAtv5Pj+H3zAsw9fsoCQM8i5jSNdfE7S+a8F1
+         iy+ooc8seOJXgiK2NUM3pHVhpGmsQweikWvy6693E4/LxPwr1p9P+BGuEkyehSH566ZZ
+         hmkPQoho/mUcfn+TUCa+ZxNNHqFV5gC0DkktBLOKsPEzEAhmtpR2lxnQQuRiMcmHxA2o
+         RFqP+mKA/yWJyOltgDIp0VmTqw9l2re/H6Tv5lQhytV/HluMvFfYqm3oK/HYYLiVMXNV
+         c/UDlVIEpdR2SElOAT9K7HiIcIswLT/Cyqrw5z5S2Ji/B0D3M8TT0sK/GD2eIPwnFAL2
+         vYew==
+X-Gm-Message-State: AOAM530JoLgRNYpCCLcLibhq4dBkPOL1Uj0sZfg5JpLSKxPpn+nDPuAt
+        uSypMf3dFSWucuPUS82r5eTR9QT6V6YIGCqJQowhUGP5aCIk
+X-Google-Smtp-Source: ABdhPJwGnfqYhdSrWrWlFmOilVg/nbpNsCCtVfqEKKfBbwvtt+AtVgNH1kqI3lh4iC2puEfZ8izsr5iBAXYRKFBDRtB9wzApLcos
 MIME-Version: 1.0
-In-Reply-To: <aa5b4ef3-444a-176e-495e-4109720de4ff@linux.intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.118]
-X-CFilter-Loop: Reflected
+X-Received: by 2002:a92:6e0a:: with SMTP id j10mr3269284ilc.272.1605751627741;
+ Wed, 18 Nov 2020 18:07:07 -0800 (PST)
+Date:   Wed, 18 Nov 2020 18:07:07 -0800
+In-Reply-To: <00000000000055348705b43c701d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005e834e05b46c2f37@google.com>
+Subject: Re: KASAN: use-after-free Read in ath9k_hif_usb_rx_cb (2)
+From:   syzbot <syzbot+03110230a11411024147@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        davem@davemloft.net, johannes.berg@intel.com,
+        johannes@sipsolutions.net, kuba@kernel.org, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/11/19 0:21, Mathias Nyman Wrote:
-> On 18.11.2020 11.14, Greg KH wrote:
->> On Wed, Nov 18, 2020 at 05:04:36PM +0800, liulongfang wrote:
->>> On 2020/11/18 15:02, Greg KH Wrote:
->>>> On Wed, Nov 18, 2020 at 11:36:13AM +0800, Longfang Liu wrote:
->>>>> The HCE(Host Controller Error) event has been defined in
->>>>> the XHCI driver but has not been used. If we want to use
->>>>> the HCE event to reset the controller, can we implement
->>>>> it in the interrupt function as follows:
->>>>>
->>>>> xhci_irq()
->>>>>     |----xhci_halt()
->>>>>     |----xhci_shutdown()
->>>>>     |----xhci_start()
->>>>>     |----xhci_run()
->>>>>
->>>>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->>>>> ---
->>>>>  drivers/usb/host/xhci-ring.c | 10 ++++++++++
->>>>>  1 file changed, 10 insertions(+)
->>>>
->>>> $ ./scripts/get_maintainer.pl --file drivers/usb/host/xhci-ring.c
->>>> Mathias Nyman <mathias.nyman@intel.com> (supporter:USB XHCI DRIVER)
->>>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
->>>> linux-usb@vger.kernel.org (open list:USB XHCI DRIVER)
->>>> linux-kernel@vger.kernel.org (open list)
->>>>
->>>> Any reason to not include the maintainer of the xhci driver here?
->>> OK, I will include the maintainer in the next patch.
->>>>
->>>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->>>>> index 2c255d0..87b3a40 100644
->>>>> --- a/drivers/usb/host/xhci-ring.c
->>>>> +++ b/drivers/usb/host/xhci-ring.c
->>>>> @@ -2857,6 +2857,16 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
->>>>>  		goto out;
->>>>>  	}
->>>>>  
->>>>> +	if (status & STS_HCE) {
->>>>> +		xhci_warn(xhci, "WARNING: Host Controller Error\n");
->>>>> +		xhci_halt(xhci);
->>>>> +		xhci_shutdown(hcd);
->>>>> +		xhci_start(xhci);
->>>>> +		xhci_run(hcd);
->>>>> +		ret = IRQ_HANDLED;
->>>>> +		goto out;
->>>>> +	}
-> This won't work at all.  It doesn't reset the xHC which is the one thing needed to
-> recover from a HCE. This would deadlock immediately.
-> Many of the above functions shouldn't be called from interrupt context, and if
-> HCE is set we probably even won't get any interrupts.
-> 
-> A reset will set all registers to their initial values, and need to be
-> re-initialized. Nothing is freed or re-allocated, registrs are not re-initialized
-> here.  
-> 
-> Please revisit the xhci spec about HCE, and HCRST, and a more detail look
-> at the xhci driver, and test the code before submitting. 
-> 
->>>>> +
->>>>
->>>> Does this fix a real problem for you?  Are you sure we will not suddenly
->>>> start resetting devices that were working properly and sending this
->>>> error incorrectly?  How did you test this?
->>>>
->>>> thanks,
->>>>
->>>> greg k-h
->>>> .
->>>>
->>> Yes, we want to add a RAS feature to the USB,
->>
->> What is "RAS"?
->>
->>> Use the HCE event to trigger the reset operation of the USB controller.
->>
->> Is that allowed by the XHCI specification?
->>
->>> By searching for the current xhci driver, the driver did not handle HCE event.
->>> In fact, I am not sure if other operations will cause HCE, The HCE event is
->>> used to reset the USB controller according to the definition of the event.
->>
->> What generates that event?  Do existing controllers do that today?  What
->> causes it?
->>
-> 
-> It's not an event, it's a controller internal error state.
-> It's probably not very useful to check for it in the interrupt handler as
-> the xHC hw ceases all activity when it sets the HCE bit, including sending
-> interrupts.
->  
->>From the spec:
-> 
-> 4.24.1 Internal Errors
-> The Host Controller Error (HCE) flag is asserted when an internal xHC error is
-> detected that exclusively affects the xHC. When the HCE flag is set to ‘1’ the xHC
-> shall cease all activity. Software response to the assertion of HCE is to reset the
-> xHC (HCRST = ‘1’) and reinitialize it
-> 
->>> I test this reset operation through the Sysfs file, but have not tested all usage scenarios.
->>
->> What sysfs file?
-> 
-> I'm also interested in this, and to know more about RAS?
-> 
-> Thanks
-> -Mathias
-> .
-> 
-RAS: Reliablity, Availability and Serviceability.
-sysfs: a virtual file system based on memory, it's similar as proc.
-Use DEVICE_ATTR or DRIVER_ATTR to create files to the /sys directory
-Thanks
-Longfang.
+syzbot has bisected this issue to:
+
+commit dcd479e10a0510522a5d88b29b8f79ea3467d501
+Author: Johannes Berg <johannes.berg@intel.com>
+Date:   Fri Oct 9 12:17:11 2020 +0000
+
+    mac80211: always wind down STA state
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=100c9c16500000
+start commit:   0fa8ee0d Merge branch 'for-linus' of git://git.kernel.org/..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=120c9c16500000
+console output: https://syzkaller.appspot.com/x/log.txt?x=140c9c16500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=75292221eb79ace2
+dashboard link: https://syzkaller.appspot.com/bug?extid=03110230a11411024147
+userspace arch: i386
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1587f841500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ec0fe6500000
+
+Reported-by: syzbot+03110230a11411024147@syzkaller.appspotmail.com
+Fixes: dcd479e10a05 ("mac80211: always wind down STA state")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
