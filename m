@@ -2,80 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 814CC2B98A4
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 17:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952F72B98D0
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 18:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729213AbgKSQw0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Nov 2020 11:52:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728256AbgKSQw0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Nov 2020 11:52:26 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0567C0613CF
-        for <linux-usb@vger.kernel.org>; Thu, 19 Nov 2020 08:52:25 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id a16so8899012ejj.5
-        for <linux-usb@vger.kernel.org>; Thu, 19 Nov 2020 08:52:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jhdam4JJsmZDRNdv/8ctzT1YWmG7aOPkP3XgPug6Xf8=;
-        b=g1eVIvfGEb3iPccEpV/gEtqgoX9z56/YQWY5DkTddu5H18sMnJVmpfnuaPHPsMARVd
-         zfSlStfKjpgngh7BSGzTYr5J2leRBggAntmn0zIteyw6smApBre6vG/Cxu+AG3kcmOOK
-         X73rr3GW6l1oFviHnX9Zrk7j3d3o9l0bwff2J4z5qW2c1xVqIlpTU4Y26YsMZzsxQaqM
-         1E5wD6qeDuWJrZyqve4tDFVfIPVU4vdCv2CDujlWntZcrSZbF9P5MIbP7BEmUSkVO6YA
-         GaaMTzpSCL4wZvzA9C0k1B9dXHdHSGkak4SMLwFZ9kR/8uu4xrg4XpsrR9PZ9ncsR7C4
-         JbXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jhdam4JJsmZDRNdv/8ctzT1YWmG7aOPkP3XgPug6Xf8=;
-        b=dgthaoHDAHU6AjNv41swsApwottChTxy1YeeH1mmAHCSu+tCLAI9j/kCMjr9iLbYmV
-         F3ctQEwNTGwmaq+lGBg8NJX9MsX8hK46WDSlQrPW6S5EvQM5R1jAs7CEO3vEGPeOz0Ly
-         Hj20iqXXyLu90RZW+z1/nJZ5UbbFCuW0X8t5N2Nfls/U/OelQ/3VxdaIZ+OqBn94cm/T
-         Db/jeinIO1B92QJuz0QzAKKbX0YjoGakdIMeLsvzuk/gGmPcXBPXBDTUWL+hLSnJ+eny
-         BRQ1XPsdiY0A2n8j5KbG3bwCjqhNfWCPAltVKyyg9XcToyoOdU1uLMm2dH8fiyZowD/W
-         +7Uw==
-X-Gm-Message-State: AOAM531BDKFuz1wEs7RXyAWxysJlNuS7LOtjx9nfG+6rlXmV0A0Bz52v
-        s0nk9WHKe76bFCi82yMuVQJC/FSMs4iEAsyV568nzw==
-X-Google-Smtp-Source: ABdhPJxhwBAUBSg9gYreNM8WYQ88mROFKajVFdUyPF+aKgNI2kMM3Lg3IC1yuEg7tvhDt6NscpdVa2543+oRaYITtrQ=
-X-Received: by 2002:a17:906:11d0:: with SMTP id o16mr4712406eja.25.1605804744033;
- Thu, 19 Nov 2020 08:52:24 -0800 (PST)
+        id S1728357AbgKSRAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Nov 2020 12:00:41 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:53041 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728327AbgKSRAl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Nov 2020 12:00:41 -0500
+Received: (qmail 577008 invoked by uid 1000); 19 Nov 2020 12:00:40 -0500
+Date:   Thu, 19 Nov 2020 12:00:40 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <greg@kroah.com>
+Cc:     Alexander Chalikiopoulos <bugzilla.kernel.org@mrtoasted.com>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH] USB: core: Fix regression in Hercules audio card
+Message-ID: <20201119170040.GA576844@rowland.harvard.edu>
 MIME-Version: 1.0
-References: <65ac3a73-ca57-c3e8-561b-9ba5c15b3c65@collabora.com>
- <a6364bd9-58d9-e66e-5595-7d887a8f3fc9@linux.intel.com> <8230c2a2-719c-ef81-e85d-5921bf8e98e6@collabora.com>
- <133c123e-e857-7f83-d146-f39c00afe39f@linux.intel.com> <20200925210517.GA4487@google.com>
- <7e38c533-6ea1-63a6-fc92-2ecef7ee1f84@linux.intel.com> <20201001164352.GA13249@google.com>
- <69f8cbc3-0ae7-cfb2-2fdd-556ada77381f@linux.intel.com> <20201012215348.GA3324220@google.com>
- <ad976018-31ec-3b1e-464c-363a08538ef5@linux.intel.com>
-In-Reply-To: <ad976018-31ec-3b1e-464c-363a08538ef5@linux.intel.com>
-From:   Ross Zwisler <zwisler@google.com>
-Date:   Thu, 19 Nov 2020 09:52:12 -0700
-Message-ID: <CAGRrVHwC=3qs00CTzPkrVPzXBnpcxfjRCKjgaYK9Hjt0GRfObg@mail.gmail.com>
-Subject: Re: xhci problem -> general protection fault
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 1:45 AM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
+Commit ecaaef6b50a7 ("USB: core: fix check for duplicate endpoints")
+aimed to make the USB stack more reliable by detecting and skipping
+over endpoints that are duplicated between interfaces.  This caused a
+regression for a Hercules audio card (reported as Bugzilla #208357),
+which contains such non-compliant duplications.  Although the
+duplications are harmless, skipping the valid endpoints prevented the
+device from working.
 
-> I've been focusing on this part so rewrite shouldn't take long.
-> If hardware is still giving incorrect values after this we might
-> also need a quirk on top of it.
+This patch fixes the regression by adding ENDPOINT_IGNORE quirks for
+the Hercules card, telling the kernel to ignore the invalid duplicate
+endpoints and thereby allowing the valid endpoints to be used as
+intended.
 
-Hi Mathias,
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Reported-by: Alexander Chalikiopoulos <bugzilla.kernel.org@mrtoasted.com>
+Fixes: ecaaef6b50a7 ("USB: core: fix check for duplicate endpoints")
+CC: <stable@vger.kernel.org>
 
-I just wanted to check back in on this and see how things were going.
-Can Andrzej and I help test anything for you?  Have you been able to
-reproduce this issue locally?  Anything else we can do to help?
+---
 
-Thanks,
-- Ross
+Note: Back-porting this patch to kernels before 91c7eaa686c3 ("USB:
+rename USB quirk to USB_QUIRK_ENDPOINT_IGNORE") will require changing
+a few occurrences of "ignore" or "IGNORE" to "blacklist" or
+"BLACKLIST".
+
+
+[as1947]
+
+
+ drivers/usb/core/quirks.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
+
+Index: usb-devel/drivers/usb/core/quirks.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/quirks.c
++++ usb-devel/drivers/usb/core/quirks.c
+@@ -348,6 +348,10 @@ static const struct usb_device_id usb_qu
+ 	/* Guillemot Webcam Hercules Dualpix Exchange*/
+ 	{ USB_DEVICE(0x06f8, 0x3005), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
++	/* Guillemot Hercules DJ Console audio card (BZ 208357) */
++	{ USB_DEVICE(0x06f8, 0xb000), .driver_info =
++			USB_QUIRK_ENDPOINT_IGNORE },
++
+ 	/* Midiman M-Audio Keystation 88es */
+ 	{ USB_DEVICE(0x0763, 0x0192), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
+@@ -521,6 +525,8 @@ static const struct usb_device_id usb_am
+  * Matched for devices with USB_QUIRK_ENDPOINT_IGNORE.
+  */
+ static const struct usb_device_id usb_endpoint_ignore[] = {
++	{ USB_DEVICE_INTERFACE_NUMBER(0x06f8, 0xb000, 5), .driver_info = 0x01 },
++	{ USB_DEVICE_INTERFACE_NUMBER(0x06f8, 0xb000, 5), .driver_info = 0x81 },
+ 	{ USB_DEVICE_INTERFACE_NUMBER(0x0926, 0x0202, 1), .driver_info = 0x85 },
+ 	{ USB_DEVICE_INTERFACE_NUMBER(0x0926, 0x0208, 1), .driver_info = 0x85 },
+ 	{ }
