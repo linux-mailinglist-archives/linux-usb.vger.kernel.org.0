@@ -2,141 +2,231 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E05572B9D7B
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 23:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014E02B9E93
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 00:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgKSWPm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Nov 2020 17:15:42 -0500
-Received: from p3nlsmtpcp01-04.prod.phx3.secureserver.net ([184.168.200.145]:36422
-        "EHLO p3nlsmtpcp01-04.prod.phx3.secureserver.net"
+        id S1727382AbgKSXiy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Nov 2020 18:38:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44292 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726474AbgKSWPm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Nov 2020 17:15:42 -0500
-Received: from p3plcpnl0564.prod.phx3.secureserver.net ([50.62.176.91])
-        by : HOSTING RELAY : with ESMTP
-        id fsCPkDfeWFpAefsCPkHvuK; Thu, 19 Nov 2020 15:14:41 -0700
-X-CMAE-Analysis: v=2.4 cv=aJs1FZxm c=1 sm=1 tr=0 ts=5fb6ee51
- a=enoWsqFKhXaBs5BDtsbzsA==:117 a=dhrM4QDckVN49Kxx3K61fg==:17
- a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=IkcTkHD0fZMA:10 a=nNwsprhYR40A:10
- a=_NlQC1uBnsVzd435jXIA:9 a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: a1@tripolho.com
-Received: from pool-96-242-17-244.nwrknj.fios.verizon.net ([96.242.17.244]:46516 helo=[192.168.62.65])
-        by p3plcpnl0564.prod.phx3.secureserver.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <22t@tripolho.com>)
-        id 1kfsCP-0018jm-LE; Thu, 19 Nov 2020 15:14:41 -0700
-Subject: Re: kernel locks due to USB I/O
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-References: <9428ae70-887e-b48b-f31c-f95d58f67c61@tripolho.com>
- <20201110205114.GB204624@rowland.harvard.edu>
- <8152190e-c962-e376-64fd-cc2ebf3e6104@tripolho.com>
- <20201111155130.GB237113@rowland.harvard.edu>
- <9687fac9-94de-50a3-f88e-b7e05d660aba@tripolho.com>
- <20201116170625.GC436089@rowland.harvard.edu>
- <1e58c6f4-c651-b45a-b0fc-7bee40fe61cb@tripolho.com>
- <20201119172250.GC576844@rowland.harvard.edu>
- <427818cf-aa35-54d3-83cf-02529a0ab5aa@tripolho.com>
- <20201119194300.GA582614@rowland.harvard.edu>
-From:   Alberto Sentieri <22t@tripolho.com>
-Message-ID: <3c7ee33a-643b-0264-6317-d6c4fa70e9f6@tripolho.com>
-Date:   Thu, 19 Nov 2020 17:14:35 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        id S1727028AbgKSXix (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Nov 2020 18:38:53 -0500
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B29C022248;
+        Thu, 19 Nov 2020 23:38:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605829133;
+        bh=XJSKtvpgEybgfJcO0SJsTybzoZJuV4CZibv1f3Vm9Q4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=1w6tnffGLWdZheAqgLLRjoFP66HuyXPIcYm238SHq4vJaaDHD5I/G2qoN9AynmR/r
+         Zfb0giKkohOvZdwTIHwba6fSf5YO0MvGzc1EQg2mdbXbtn35bBh1NIBbwZLTpYF30i
+         dWzoExbrSn5VYaFfD9LEkGHVXdH8mjuOVKAiD6EI=
+Received: by mail-ej1-f47.google.com with SMTP id lv15so4510548ejb.12;
+        Thu, 19 Nov 2020 15:38:52 -0800 (PST)
+X-Gm-Message-State: AOAM531I2WqeosR08ojhNM75lCRmCKRP1ruoJexoJBLCNf4h6zUD1wBO
+        buYQ5el9o2bZ7x64krLpVQglleWZgaYacwM1hA==
+X-Google-Smtp-Source: ABdhPJyCTosQ1GLHfnPlHYYUBtA/b5PCwSHB1U+bWLkPDbn0q/TbtAXAoCGE19frEgpV/RtrhRZkovX5D61bPOn2L44=
+X-Received: by 2002:a17:906:6a4e:: with SMTP id n14mr13380254ejs.194.1605829131052;
+ Thu, 19 Nov 2020 15:38:51 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201119194300.GA582614@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - p3plcpnl0564.prod.phx3.secureserver.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - tripolho.com
-X-Get-Message-Sender-Via: p3plcpnl0564.prod.phx3.secureserver.net: authenticated_id: a1@tripolho.com
-X-Authenticated-Sender: p3plcpnl0564.prod.phx3.secureserver.net: a1@tripolho.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-CMAE-Envelope: MS4xfLjjRSG1j7eZ1HBx142l/sXGrBulSW+SleIkq01z3KnC9B1GfN/8UuHX88JuDeGYS7ZIXLkz2+o05s3K2POHpllp5wR8fDUynTuro7ImOJ25GYys0uIc
- spKGAhFf3hKqI2vTy6Tmu+YvSAn1y8Kz+qG+aTfYTq3/t79FUf17xpayj19vr3fElO0QefX1u7NqTfp+03AcV0hGNyXAn0cRhlj80U+KKCZelGRJugWpGGq7
+References: <20201118082126.42701-1-chunfeng.yun@mediatek.com> <20201118082126.42701-7-chunfeng.yun@mediatek.com>
+In-Reply-To: <20201118082126.42701-7-chunfeng.yun@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Fri, 20 Nov 2020 07:38:41 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_81uZ7MY1ZyfsyYL_62wkNvG2VCT3+G4Zr1bZBG9_Yg1w@mail.gmail.com>
+Message-ID: <CAAOTY_81uZ7MY1ZyfsyYL_62wkNvG2VCT3+G4Zr1bZBG9_Yg1w@mail.gmail.com>
+Subject: Re: [PATCH v3 07/11] dt-bindings: phy: convert MIP DSI PHY binding to
+ YAML schema
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Min Guo <min.guo@mediatek.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/19/20 2:43 PM, Alan Stern wrote:
-> On Thu, Nov 19, 2020 at 02:21:47PM -0500, Alberto Sentieri wrote:
->> lsusb -t in a similar configuration I use for development (it has just 6
->> device, and not 36):
->>
->> $ lsusb -t
->> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/4p, 480M
->>      |__ Port 3: Dev 5, If 0, Class=Hub, Driver=hub/7p, 480M
->>          |__ Port 1: Dev 6, If 0, Class=Hub, Driver=hub/2p, 480M
->>              |__ Port 1: Dev 8, If 0, Class=Human Interface Device,
->> Driver=usbhid, 12M
->>          |__ Port 2: Dev 7, If 0, Class=Hub, Driver=hub/2p, 480M
->>              |__ Port 1: Dev 10, If 0, Class=Human Interface Device,
->> Driver=usbhid, 12M
->>          |__ Port 4: Dev 9, If 0, Class=Hub, Driver=hub/2p, 480M
->>              |__ Port 1: Dev 12, If 0, Class=Human Interface Device,
->> Driver=usbhid, 12M
->>          |__ Port 5: Dev 11, If 0, Class=Hub, Driver=hub/7p, 480M
->>          |__ Port 6: Dev 13, If 0, Class=Hub, Driver=hub/7p, 480M
->>              |__ Port 6: Dev 15, If 0, Class=Hub, Driver=hub/2p, 480M
->>                  |__ Port 1: Dev 17, If 0, Class=Human Interface Device,
->> Driver=usbhid, 12M
->>              |__ Port 7: Dev 16, If 0, Class=Hub, Driver=hub/2p, 480M
->>                  |__ Port 1: Dev 18, If 0, Class=Human Interface Device,
->> Driver=usbhid, 12M
->>          |__ Port 7: Dev 14, If 0, Class=Human Interface Device,
->> Driver=usbhid, 12M
-> Previously you said that each HID microcontroller is connected to port 1
-> of a two-port hub.  But that clearly isn't true for device 14 in the
-> listing above.  What happened there?
-The program never talks to that device. It does not try to open it. The 
-program has a list of valid interfaces, and if one is not in the list it 
-will not be part of the game. Really I sent you a list of 5 devices, 
-because one was disconnect when I ran lsusb.
+Hi, Chunfeng:
 
-This would be the list with the 6 devices:
+Chunfeng Yun <chunfeng.yun@mediatek.com> =E6=96=BC 2020=E5=B9=B411=E6=9C=88=
+18=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=884:21=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> Convert MIPI DSI PHY binding to YAML schema mediatek,dsi-phy.yaml
+>
+> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v3: new patch
+> ---
+>  .../display/mediatek/mediatek,dsi.txt         | 18 +---
+>  .../bindings/phy/mediatek,dsi-phy.yaml        | 83 +++++++++++++++++++
+>  2 files changed, 84 insertions(+), 17 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/phy/mediatek,dsi-ph=
+y.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
+dsi.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.t=
+xt
+> index f06f24d405a5..8238a86686be 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
+> @@ -22,23 +22,7 @@ Required properties:
+>  MIPI TX Configuration Module
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+>
+> -The MIPI TX configuration module controls the MIPI D-PHY.
+> -
+> -Required properties:
+> -- compatible: "mediatek,<chip>-mipi-tx"
+> -- the supported chips are mt2701, 7623, mt8173 and mt8183.
+> -- reg: Physical base address and length of the controller's registers
+> -- clocks: PLL reference clock
+> -- clock-output-names: name of the output clock line to the DSI encoder
+> -- #clock-cells: must be <0>;
+> -- #phy-cells: must be <0>.
+> -
+> -Optional properties:
+> -- drive-strength-microamp: adjust driving current, should be 3000 ~ 6000=
+. And
+> -                                                  the step is 200.
+> -- nvmem-cells: A phandle to the calibration data provided by a nvmem dev=
+ice. If
+> -               unspecified default values shall be used.
+> -- nvmem-cell-names: Should be "calibration-data"
+> +See phy/mediatek,dsi-phy.yaml
+>
+>  Example:
+>
+> diff --git a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml =
+b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+> new file mode 100644
+> index 000000000000..87f8df251ab0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+> @@ -0,0 +1,83 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (c) 2020 MediaTek
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/mediatek,dsi-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MIPI Display Serial Interface (DSI) PHY binding
+> +
+> +maintainers:
+> +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> +  - Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/4p, 480M
-     |__ Port 3: Dev 53, If 0, Class=Hub, Driver=hub/7p, 480M
-         |__ Port 1: Dev 54, If 0, Class=Hub, Driver=hub/2p, 480M
-             |__ Port 1: Dev 56, If 0, Class=Human Interface Device, 
-Driver=, 12M
-         |__ Port 2: Dev 55, If 0, Class=Hub, Driver=hub/2p, 480M
-             |__ Port 1: Dev 58, If 0, Class=Human Interface Device, 
-Driver=, 12M
-         |__ Port 3: Dev 57, If 0, Class=Hub, Driver=hub/2p, 480M
-             |__ Port 1: Dev 60, If 0, Class=Human Interface Device, 
-Driver=, 12M
-         |__ Port 4: Dev 59, If 0, Class=Hub, Driver=hub/2p, 480M
-             |__ Port 1: Dev 62, If 0, Class=Human Interface Device, 
-Driver=, 12M
-         |__ Port 5: Dev 61, If 0, Class=Hub, Driver=hub/7p, 480M
-         |__ Port 6: Dev 63, If 0, Class=Hub, Driver=hub/7p, 480M
-             |__ Port 6: Dev 69, If 0, Class=Hub, Driver=hub/2p, 480M
-                 |__ Port 1: Dev 70, If 0, Class=Human Interface Device, 
-Driver=, 12M
-             |__ Port 7: Dev 66, If 0, Class=Hub, Driver=hub/2p, 480M
-                 |__ Port 1: Dev 68, If 0, Class=Human Interface Device, 
-Driver=, 12M
-         |__ Port 7: Dev 64, If 0, Class=Human Interface Device, 
-Driver=usbhid, 12M
+Please add Philipp Zabel because he is Mediatek DRM driver maintainer.
 
-Again, device 64 (previous device 14) is not part of the game.
+DRM DRIVERS FOR MEDIATEK
+M: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+M: Philipp Zabel <p.zabel@pengutronix.de>
+L: dri-devel@lists.freedesktop.org
+S: Supported
+F: Documentation/devicetree/bindings/display/mediatek/
 
-I compiled kernel 5.9.8, which is running, and have other kernels as 
-well. I will try to reproduce the problem in my lab. I will let you know 
-as soon as I have more information. If I were able to reproduce the 
-problem, I will try to use a Beagle USB analyzer at the same time the 
-problem occurs.
+> +
+> +description: The MIPI DSI PHY supports up to 4-lane output.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^dsi-phy@[0-9a-f]+$"
+> +
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt2701-mipi-tx
+> +      - mediatek,mt7623-mipi-tx
+> +      - mediatek,mt8173-mipi-tx
 
-Thanks,
+Add mediatek,mt8183-mipi-tx
 
-Alberto
-> Alan Stern
+Regards,
+Chun-Kuang.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: PLL reference clock
+> +
+> +  clock-output-names:
+> +    maxItems: 1
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +  "#clock-cells":
+> +    const: 0
+> +
+> +  nvmem-cells:
+> +    maxItems: 1
+> +    description: A phandle to the calibration data provided by a nvmem d=
+evice,
+> +      if unspecified, default values shall be used.
+> +
+> +  nvmem-cell-names:
+> +    items:
+> +      - const: calibration-data
+> +
+> +  drive-strength-microamp:
+> +    description: adjust driving current, the step is 200.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 2000
+> +    maximum: 6000
+> +    default: 4600
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-output-names
+> +  - "#phy-cells"
+> +  - "#clock-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt8173-clk.h>
+> +    dsi-phy@10215000 {
+> +        compatible =3D "mediatek,mt8173-mipi-tx";
+> +        reg =3D <0x10215000 0x1000>;
+> +        clocks =3D <&clk26m>;
+> +        clock-output-names =3D "mipi_tx0_pll";
+> +        drive-strength-microamp =3D <4000>;
+> +        nvmem-cells=3D <&mipi_tx_calibration>;
+> +        nvmem-cell-names =3D "calibration-data";
+> +        #clock-cells =3D <0>;
+> +        #phy-cells =3D <0>;
+> +    };
+> +
+> +...
+> --
+> 2.18.0
 >
