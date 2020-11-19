@@ -2,221 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D91D2B8970
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 02:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B308F2B89C0
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 02:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727011AbgKSBUx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Nov 2020 20:20:53 -0500
-Received: from mga01.intel.com ([192.55.52.88]:5376 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726890AbgKSBUx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Nov 2020 20:20:53 -0500
-IronPort-SDR: VjxCErRVsWWLuDCN1AYAW38b15SrsSULkE6zhkPYU+a5touTzqkCpRK/q5+p0AbH4qE2yPDw/l
- OmJAL9Ko47DQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9809"; a="189297110"
-X-IronPort-AV: E=Sophos;i="5.77,488,1596524400"; 
-   d="scan'208";a="189297110"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 17:20:52 -0800
-IronPort-SDR: 5Uk9OzoVPpa/hkdrH98whPoizll9M8raGCYLS6RPwYT1UvSpCidQ29+zOYR9lP83cBqCk7+i7W
- MvLwdyGxLAMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,489,1596524400"; 
-   d="scan'208";a="544789823"
-Received: from lkp-server01.sh.intel.com (HELO cf7a658f8e69) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 18 Nov 2020 17:20:50 -0800
-Received: from kbuild by cf7a658f8e69 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kfYd0-000026-8g; Thu, 19 Nov 2020 01:20:50 +0000
-Date:   Thu, 19 Nov 2020 09:20:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- e1e52361c61afdf81d81cfbbfa3ce08971e60f50
-Message-ID: <5fb5c841.YLOSq+JYI4e9uoxC%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727156AbgKSBud (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Nov 2020 20:50:33 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7556 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725947AbgKSBud (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Nov 2020 20:50:33 -0500
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Cc2gQ6zq0zhcck;
+        Thu, 19 Nov 2020 09:50:10 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 19 Nov 2020 09:50:20 +0800
+Subject: Re: [RFC PATCH] USB: xhci: Enable HCE event reset function
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <yisen.zhuang@huawei.com>,
+        <tanxiaofei@huawei.com>, <mathias.nyman@intel.com>
+References: <1605670573-949-1-git-send-email-liulongfang@huawei.com>
+ <X7TG+UWWtgbX6EnU@kroah.com>
+ <0877eba8-dcce-0c5e-98b4-64dd0fc06e4f@huawei.com>
+ <X7TmBT2LbdJbDypG@kroah.com>
+ <aa5b4ef3-444a-176e-495e-4109720de4ff@linux.intel.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <3422ed2b-81e2-6927-fb9a-1ff5151945a5@huawei.com>
+Date:   Thu, 19 Nov 2020 09:50:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <aa5b4ef3-444a-176e-495e-4109720de4ff@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: e1e52361c61afdf81d81cfbbfa3ce08971e60f50  usb: typec: Add plug num_altmodes sysfs attr
-
-elapsed time: 722m
-
-configs tested: 157
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-sh                          rsk7269_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                        edosk7760_defconfig
-sh                         microdev_defconfig
-sh                            shmin_defconfig
-sh                            migor_defconfig
-sh                         ap325rxa_defconfig
-mips                  maltasmvp_eva_defconfig
-mips                      pic32mzda_defconfig
-powerpc                      bamboo_defconfig
-powerpc                     tqm8560_defconfig
-m68k                          sun3x_defconfig
-arc                        nsim_700_defconfig
-mips                      loongson3_defconfig
-arm                           sunxi_defconfig
-nios2                            alldefconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                      ppc6xx_defconfig
-powerpc                     taishan_defconfig
-powerpc                     skiroot_defconfig
-sh                   sh7724_generic_defconfig
-arm                         s3c6400_defconfig
-m68k                        mvme16x_defconfig
-mips                        omega2p_defconfig
-mips                    maltaup_xpa_defconfig
-mips                       bmips_be_defconfig
-mips                  cavium_octeon_defconfig
-ia64                        generic_defconfig
-mips                        nlm_xlr_defconfig
-powerpc                     tqm8540_defconfig
-mips                        bcm63xx_defconfig
-powerpc                  mpc885_ads_defconfig
-sh                           se7722_defconfig
-powerpc                     stx_gp3_defconfig
-powerpc                 mpc85xx_cds_defconfig
-powerpc                      pcm030_defconfig
-powerpc                      ppc64e_defconfig
-sh                         ecovec24_defconfig
-arm                         socfpga_defconfig
-powerpc                 mpc8313_rdb_defconfig
-sh                               j2_defconfig
-arm                          exynos_defconfig
-xtensa                  cadence_csp_defconfig
-mips                         rt305x_defconfig
-sh                               alldefconfig
-arm                      tct_hammer_defconfig
-sh                             sh03_defconfig
-arm                         shannon_defconfig
-arm                         axm55xx_defconfig
-powerpc                       ebony_defconfig
-arm                           sama5_defconfig
-sparc                       sparc32_defconfig
-sh                            hp6xx_defconfig
-nios2                         10m50_defconfig
-um                           x86_64_defconfig
-arm                       netwinder_defconfig
-arm                         s3c2410_defconfig
-arc                                 defconfig
-riscv                    nommu_virt_defconfig
-powerpc                mpc7448_hpc2_defconfig
-mips                           ip32_defconfig
-arm                       spear13xx_defconfig
-sh                           se7705_defconfig
-arm                         cm_x300_defconfig
-sh                          r7780mp_defconfig
-arc                              alldefconfig
-powerpc                     mpc83xx_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a005-20201118
-x86_64               randconfig-a003-20201118
-x86_64               randconfig-a004-20201118
-x86_64               randconfig-a002-20201118
-x86_64               randconfig-a006-20201118
-x86_64               randconfig-a001-20201118
-i386                 randconfig-a006-20201118
-i386                 randconfig-a005-20201118
-i386                 randconfig-a002-20201118
-i386                 randconfig-a001-20201118
-i386                 randconfig-a003-20201118
-i386                 randconfig-a004-20201118
-i386                 randconfig-a006-20201119
-i386                 randconfig-a005-20201119
-i386                 randconfig-a002-20201119
-i386                 randconfig-a001-20201119
-i386                 randconfig-a003-20201119
-i386                 randconfig-a004-20201119
-i386                 randconfig-a012-20201118
-i386                 randconfig-a014-20201118
-i386                 randconfig-a016-20201118
-i386                 randconfig-a011-20201118
-i386                 randconfig-a013-20201118
-i386                 randconfig-a015-20201118
-i386                 randconfig-a012-20201119
-i386                 randconfig-a014-20201119
-i386                 randconfig-a016-20201119
-i386                 randconfig-a011-20201119
-i386                 randconfig-a013-20201119
-i386                 randconfig-a015-20201119
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a015-20201118
-x86_64               randconfig-a014-20201118
-x86_64               randconfig-a011-20201118
-x86_64               randconfig-a013-20201118
-x86_64               randconfig-a016-20201118
-x86_64               randconfig-a012-20201118
-x86_64               randconfig-a005-20201119
-x86_64               randconfig-a003-20201119
-x86_64               randconfig-a004-20201119
-x86_64               randconfig-a002-20201119
-x86_64               randconfig-a006-20201119
-x86_64               randconfig-a001-20201119
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On 2020/11/19 0:21, Mathias Nyman Wrote:
+> On 18.11.2020 11.14, Greg KH wrote:
+>> On Wed, Nov 18, 2020 at 05:04:36PM +0800, liulongfang wrote:
+>>> On 2020/11/18 15:02, Greg KH Wrote:
+>>>> On Wed, Nov 18, 2020 at 11:36:13AM +0800, Longfang Liu wrote:
+>>>>> The HCE(Host Controller Error) event has been defined in
+>>>>> the XHCI driver but has not been used. If we want to use
+>>>>> the HCE event to reset the controller, can we implement
+>>>>> it in the interrupt function as follows:
+>>>>>
+>>>>> xhci_irq()
+>>>>>     |----xhci_halt()
+>>>>>     |----xhci_shutdown()
+>>>>>     |----xhci_start()
+>>>>>     |----xhci_run()
+>>>>>
+>>>>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+>>>>> ---
+>>>>>  drivers/usb/host/xhci-ring.c | 10 ++++++++++
+>>>>>  1 file changed, 10 insertions(+)
+>>>>
+>>>> $ ./scripts/get_maintainer.pl --file drivers/usb/host/xhci-ring.c
+>>>> Mathias Nyman <mathias.nyman@intel.com> (supporter:USB XHCI DRIVER)
+>>>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
+>>>> linux-usb@vger.kernel.org (open list:USB XHCI DRIVER)
+>>>> linux-kernel@vger.kernel.org (open list)
+>>>>
+>>>> Any reason to not include the maintainer of the xhci driver here?
+>>> OK, I will include the maintainer in the next patch.
+>>>>
+>>>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>>>>> index 2c255d0..87b3a40 100644
+>>>>> --- a/drivers/usb/host/xhci-ring.c
+>>>>> +++ b/drivers/usb/host/xhci-ring.c
+>>>>> @@ -2857,6 +2857,16 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+>>>>>  		goto out;
+>>>>>  	}
+>>>>>  
+>>>>> +	if (status & STS_HCE) {
+>>>>> +		xhci_warn(xhci, "WARNING: Host Controller Error\n");
+>>>>> +		xhci_halt(xhci);
+>>>>> +		xhci_shutdown(hcd);
+>>>>> +		xhci_start(xhci);
+>>>>> +		xhci_run(hcd);
+>>>>> +		ret = IRQ_HANDLED;
+>>>>> +		goto out;
+>>>>> +	}
+> This won't work at all.  It doesn't reset the xHC which is the one thing needed to
+> recover from a HCE. This would deadlock immediately.
+> Many of the above functions shouldn't be called from interrupt context, and if
+> HCE is set we probably even won't get any interrupts.
+> 
+> A reset will set all registers to their initial values, and need to be
+> re-initialized. Nothing is freed or re-allocated, registrs are not re-initialized
+> here.  
+> 
+> Please revisit the xhci spec about HCE, and HCRST, and a more detail look
+> at the xhci driver, and test the code before submitting. 
+> 
+>>>>> +
+>>>>
+>>>> Does this fix a real problem for you?  Are you sure we will not suddenly
+>>>> start resetting devices that were working properly and sending this
+>>>> error incorrectly?  How did you test this?
+>>>>
+>>>> thanks,
+>>>>
+>>>> greg k-h
+>>>> .
+>>>>
+>>> Yes, we want to add a RAS feature to the USB,
+>>
+>> What is "RAS"?
+>>
+>>> Use the HCE event to trigger the reset operation of the USB controller.
+>>
+>> Is that allowed by the XHCI specification?
+>>
+>>> By searching for the current xhci driver, the driver did not handle HCE event.
+>>> In fact, I am not sure if other operations will cause HCE, The HCE event is
+>>> used to reset the USB controller according to the definition of the event.
+>>
+>> What generates that event?  Do existing controllers do that today?  What
+>> causes it?
+>>
+> 
+> It's not an event, it's a controller internal error state.
+> It's probably not very useful to check for it in the interrupt handler as
+> the xHC hw ceases all activity when it sets the HCE bit, including sending
+> interrupts.
+>  
+>>From the spec:
+> 
+> 4.24.1 Internal Errors
+> The Host Controller Error (HCE) flag is asserted when an internal xHC error is
+> detected that exclusively affects the xHC. When the HCE flag is set to ‘1’ the xHC
+> shall cease all activity. Software response to the assertion of HCE is to reset the
+> xHC (HCRST = ‘1’) and reinitialize it
+> 
+>>> I test this reset operation through the Sysfs file, but have not tested all usage scenarios.
+>>
+>> What sysfs file?
+> 
+> I'm also interested in this, and to know more about RAS?
+> 
+> Thanks
+> -Mathias
+> .
+> 
+RAS: Reliablity, Availability and Serviceability.
+sysfs: a virtual file system based on memory, it's similar as proc.
+Use DEVICE_ATTR or DRIVER_ATTR to create files to the /sys directory
+Thanks
+Longfang.
