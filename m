@@ -2,174 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A08A2B8B62
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 07:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F652B8BB0
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 07:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726292AbgKSGJd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Nov 2020 01:09:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50298 "EHLO mail.kernel.org"
+        id S1725915AbgKSGd5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Nov 2020 01:33:57 -0500
+Received: from mga18.intel.com ([134.134.136.126]:60908 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726163AbgKSGJc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Nov 2020 01:09:32 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E16A1246A5;
-        Thu, 19 Nov 2020 06:09:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1605766171;
-        bh=9anztMio/QO+JLZRWyXjYGREMn/lDzzN/hx2DgqZMp8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sZrGTOnWrrEuIQ7nFtzSlsotccEM2J52Cxi4okbvwboT1jqcGUJBNZsa9o8Xv77Ae
-         cJJp7EH15m1TgenQHlmiI84Dx21Fbfxx5Ctv9UKPJ26s4ZoaMXuKwlHOHcAnVacQVe
-         3rCuFQnsWse2B38nXpYkCF29r1tYNSBjlDkTHBa0=
-Date:   Thu, 19 Nov 2020 07:09:26 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     liulongfang <liulongfang@huawei.com>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org, yisen.zhuang@huawei.com,
-        tanxiaofei@huawei.com, mathias.nyman@intel.com
-Subject: Re: [RFC PATCH] USB: xhci: Enable HCE event reset function
-Message-ID: <X7YMFq/ji/x1B7ww@kroah.com>
-References: <1605670573-949-1-git-send-email-liulongfang@huawei.com>
- <X7TG+UWWtgbX6EnU@kroah.com>
- <0877eba8-dcce-0c5e-98b4-64dd0fc06e4f@huawei.com>
- <X7TmBT2LbdJbDypG@kroah.com>
- <aa5b4ef3-444a-176e-495e-4109720de4ff@linux.intel.com>
- <3422ed2b-81e2-6927-fb9a-1ff5151945a5@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3422ed2b-81e2-6927-fb9a-1ff5151945a5@huawei.com>
+        id S1725802AbgKSGd5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Nov 2020 01:33:57 -0500
+IronPort-SDR: DrZzt4gosLdmdren37IkzcUsMkiKlWL3WWyjcjmPRrKqSJWNjID39/fa8VBbEIiIpox6sUnYzA
+ OK9mJnxLaO+A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9809"; a="159012423"
+X-IronPort-AV: E=Sophos;i="5.77,489,1596524400"; 
+   d="scan'208";a="159012423"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 22:33:56 -0800
+IronPort-SDR: wbDiW33NWiofA9oWiYwfz//xWCHSPo1NwOsIHCn68QA2oiaP6xlrFu1rqcwCFyY4N+LqxJ5t6+
+ 9kBzxJjMZRLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,489,1596524400"; 
+   d="scan'208";a="544877871"
+Received: from uhpatel-desk4.jf.intel.com (HELO uhpatel-desk4.intel.com) ([10.23.15.15])
+  by orsmga005.jf.intel.com with ESMTP; 18 Nov 2020 22:33:56 -0800
+From:   Utkarsh Patel <utkarsh.h.patel@intel.com>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     heikki.krogerus@linux.intel.com, pmalani@chromium.org,
+        enric.balletbo@collabora.com, rajmohan.mani@intel.com,
+        azhar.shaikh@intel.com, Utkarsh Patel <utkarsh.h.patel@intel.com>
+Subject: [PATCH v3 0/4] Thunderbolt3/USB4 cable rounded and active cable plug link training support
+Date:   Wed, 18 Nov 2020 22:32:07 -0800
+Message-Id: <20201119063211.2264-1-utkarsh.h.patel@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 09:50:20AM +0800, liulongfang wrote:
-> On 2020/11/19 0:21, Mathias Nyman Wrote:
-> > On 18.11.2020 11.14, Greg KH wrote:
-> >> On Wed, Nov 18, 2020 at 05:04:36PM +0800, liulongfang wrote:
-> >>> On 2020/11/18 15:02, Greg KH Wrote:
-> >>>> On Wed, Nov 18, 2020 at 11:36:13AM +0800, Longfang Liu wrote:
-> >>>>> The HCE(Host Controller Error) event has been defined in
-> >>>>> the XHCI driver but has not been used. If we want to use
-> >>>>> the HCE event to reset the controller, can we implement
-> >>>>> it in the interrupt function as follows:
-> >>>>>
-> >>>>> xhci_irq()
-> >>>>>     |----xhci_halt()
-> >>>>>     |----xhci_shutdown()
-> >>>>>     |----xhci_start()
-> >>>>>     |----xhci_run()
-> >>>>>
-> >>>>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> >>>>> ---
-> >>>>>  drivers/usb/host/xhci-ring.c | 10 ++++++++++
-> >>>>>  1 file changed, 10 insertions(+)
-> >>>>
-> >>>> $ ./scripts/get_maintainer.pl --file drivers/usb/host/xhci-ring.c
-> >>>> Mathias Nyman <mathias.nyman@intel.com> (supporter:USB XHCI DRIVER)
-> >>>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
-> >>>> linux-usb@vger.kernel.org (open list:USB XHCI DRIVER)
-> >>>> linux-kernel@vger.kernel.org (open list)
-> >>>>
-> >>>> Any reason to not include the maintainer of the xhci driver here?
-> >>> OK, I will include the maintainer in the next patch.
-> >>>>
-> >>>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> >>>>> index 2c255d0..87b3a40 100644
-> >>>>> --- a/drivers/usb/host/xhci-ring.c
-> >>>>> +++ b/drivers/usb/host/xhci-ring.c
-> >>>>> @@ -2857,6 +2857,16 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
-> >>>>>  		goto out;
-> >>>>>  	}
-> >>>>>  
-> >>>>> +	if (status & STS_HCE) {
-> >>>>> +		xhci_warn(xhci, "WARNING: Host Controller Error\n");
-> >>>>> +		xhci_halt(xhci);
-> >>>>> +		xhci_shutdown(hcd);
-> >>>>> +		xhci_start(xhci);
-> >>>>> +		xhci_run(hcd);
-> >>>>> +		ret = IRQ_HANDLED;
-> >>>>> +		goto out;
-> >>>>> +	}
-> > This won't work at all.  It doesn't reset the xHC which is the one thing needed to
-> > recover from a HCE. This would deadlock immediately.
-> > Many of the above functions shouldn't be called from interrupt context, and if
-> > HCE is set we probably even won't get any interrupts.
-> > 
-> > A reset will set all registers to their initial values, and need to be
-> > re-initialized. Nothing is freed or re-allocated, registrs are not re-initialized
-> > here.  
-> > 
-> > Please revisit the xhci spec about HCE, and HCRST, and a more detail look
-> > at the xhci driver, and test the code before submitting. 
-> > 
-> >>>>> +
-> >>>>
-> >>>> Does this fix a real problem for you?  Are you sure we will not suddenly
-> >>>> start resetting devices that were working properly and sending this
-> >>>> error incorrectly?  How did you test this?
-> >>>>
-> >>>> thanks,
-> >>>>
-> >>>> greg k-h
-> >>>> .
-> >>>>
-> >>> Yes, we want to add a RAS feature to the USB,
-> >>
-> >> What is "RAS"?
-> >>
-> >>> Use the HCE event to trigger the reset operation of the USB controller.
-> >>
-> >> Is that allowed by the XHCI specification?
-> >>
-> >>> By searching for the current xhci driver, the driver did not handle HCE event.
-> >>> In fact, I am not sure if other operations will cause HCE, The HCE event is
-> >>> used to reset the USB controller according to the definition of the event.
-> >>
-> >> What generates that event?  Do existing controllers do that today?  What
-> >> causes it?
-> >>
-> > 
-> > It's not an event, it's a controller internal error state.
-> > It's probably not very useful to check for it in the interrupt handler as
-> > the xHC hw ceases all activity when it sets the HCE bit, including sending
-> > interrupts.
-> >  
-> >>>From the spec:
-> > 
-> > 4.24.1 Internal Errors
-> > The Host Controller Error (HCE) flag is asserted when an internal xHC error is
-> > detected that exclusively affects the xHC. When the HCE flag is set to ‘1’ the xHC
-> > shall cease all activity. Software response to the assertion of HCE is to reset the
-> > xHC (HCRST = ‘1’) and reinitialize it
-> > 
-> >>> I test this reset operation through the Sysfs file, but have not tested all usage scenarios.
-> >>
-> >> What sysfs file?
-> > 
-> > I'm also interested in this, and to know more about RAS?
-> > 
-> > Thanks
-> > -Mathias
-> > .
-> > 
-> RAS: Reliablity, Availability and Serviceability.
+This patch series adds the support for Thunderbolt3/USB4 rounded and
+non-rounded frequencies cables and fixes the active cable plug link
+training support.
 
-That's a marketing phrase, what specifically are you talking about when
-it comes to the xhci driver?
+Changes in v3:
+- First four patches of this series have been queued by Greg to usb-testing
+  branch. https://www.spinics.net/lists/linux-usb/msg204880.html
+- Changed commit message and description in header file in patch 1/4.
+- Added a check for Cable's TBT support in patch 2/4
+- Moved TBT_CABLE_ROUNDED_SUPPORT assignment to same line in patch 3/4.
+- Rebased and added Reviewed-by tag in patch 4/4.
 
-> sysfs: a virtual file system based on memory, it's similar as proc.
+Changes in v2:
+- Removed the fixes tag as there is no functional implication from patches
+  1/8, 2/8 and 4/8.
 
-I am very aware of what sysfs is, look at the MAINTAINERS entry for it :)
+Utkarsh Patel (4):
+  usb: typec: Use Thunderbolt 3 cable discover mode VDO in Enter_USB
+    message
+  platform/chrome: cros_ec_typec: Use Thunderbolt 3 cable discover mode
+    VDO in USB4 mode
+  usb: typec: intel_pmc_mux: Configure active cable properties for USB4
+  usb: typec: Remove active_link_training variable from Enter_USB
+    message
 
-> Use DEVICE_ATTR or DRIVER_ATTR to create files to the /sys directory
+ drivers/platform/chrome/cros_ec_typec.c | 14 ++++++++++++--
+ drivers/usb/typec/mux/intel_pmc_mux.c   | 17 ++++++++++++++---
+ include/linux/usb/typec.h               | 11 +++++------
+ 3 files changed, 31 insertions(+), 11 deletions(-)
 
-Yes, but what file did you use for this?  I don't see one in the kernel
-that can cause this, do you?
+-- 
+2.17.1
 
-thanks,
-
-greg k-h
