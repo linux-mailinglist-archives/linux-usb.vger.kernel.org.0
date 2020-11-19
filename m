@@ -2,82 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BB42B8CD1
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 09:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 829682B8CDB
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Nov 2020 09:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726272AbgKSIF1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Nov 2020 03:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S1726384AbgKSIJJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Nov 2020 03:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbgKSIF1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Nov 2020 03:05:27 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D97C0613CF
-        for <linux-usb@vger.kernel.org>; Thu, 19 Nov 2020 00:05:27 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id l22so2562551vsa.4
-        for <linux-usb@vger.kernel.org>; Thu, 19 Nov 2020 00:05:27 -0800 (PST)
+        with ESMTP id S1726300AbgKSIJJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Nov 2020 03:09:09 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E87C0613CF
+        for <linux-usb@vger.kernel.org>; Thu, 19 Nov 2020 00:09:08 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id p6so142129plr.7
+        for <linux-usb@vger.kernel.org>; Thu, 19 Nov 2020 00:09:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=cy4emllfc+J5YrBKtpxSmH7isRrDnwx875lpX6aEmSA=;
-        b=XnlmHqwllAtlzF3r5S6oxntPtC2vyEAJ6Vke69qcAwy0hYJ9C3+6ejyP6mWpwY767w
-         gHc3dM9vL1AG/UH9Es3Dqq3I23u4WeFp5F1+9szzM34/DQvQduUi5dMuGh4Wn7u6vQc2
-         1XzwdL+QTso2Z1cHOxA5RMlVXH+2e3p5GmtHGqJhCV6iBkHvKd8yfVRV9VnNHuHtEftA
-         noUlN2tb0rXdRJ6tUk8UkzGbxwqBywbHbVc++HRJ3552M/iCtNRRW4FOjeffpkZoht/D
-         a5jW/XkEQ7bzBEjKxBTXqGc0fy0ZrTVW5e/MC54szWbcd9Z08PyiYf1GxKvBbUB/ObUi
-         e7rQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9YeX71DgvayKaBn55/9EguYcKXPkstIm7k9o5hsUwd4=;
+        b=g+ix/XqX7fwT7g0wx9jHzdNVXBba7Yu/WJLfwnSiMAdEPtKmmo/hM2oxQqWdpVCuJc
+         1KKLUOoRuaP/w+gSYU2/zRs79JTHFJoYO8dp/VJf++5VYfEWVv0zVrHk9Hwy/4KMy6Pt
+         MWnZi7QlYNMj2wK1pSc9AhtHWr8D+xWicSX8E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=cy4emllfc+J5YrBKtpxSmH7isRrDnwx875lpX6aEmSA=;
-        b=Hchu2Wf5Xw4YElG14mOqpmCnr8Mr5fxh/hO31I3JmiAYAwZnc35amjqBG8J/lXod/4
-         hO83LQ/xvdsVCg9Sa7r78X9V6FPIOvo58SMmiFUfUU1Mng8sZQIEAcs0FmzUc+9zP97k
-         IIIP7rXSrWdatGSGKH2uhAHWrelVsNGrr8MSoBv0mU1LaNqWN5Mm2Ewmp4n/KC0ImQxd
-         awy42xEbdypJfdUIDXCnbqzf/qpQYbSZ6T3KuMG+giI4DnqiduoSrAeHJOH/JzyLluG5
-         62+MR1gQR6LlUpwWF7hHJ4vd7MJ/KC2Uth2VONgkXB21rq1Fkw2EBw0oLGJdD9WZ8Unv
-         U+AA==
-X-Gm-Message-State: AOAM532/DWkapdANjY8FxLmC7R7X9G6VeEUUaW+k+4Qcg7ELLQeEshEi
-        zTqACS1RC8h0ftsIOoEXyRJKP5rcZg2/0RBHH7xsYm4xJ9s=
-X-Google-Smtp-Source: ABdhPJxi5Xpoa+pomCCtG7sgBeAafdIIY+lzNAr8+Pro84ox6vB4zFg+4alGJXVh65KAT1t5DEXlPbUvsJdcW9Gj50A=
-X-Received: by 2002:a67:774c:: with SMTP id s73mr7945163vsc.1.1605773125749;
- Thu, 19 Nov 2020 00:05:25 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9YeX71DgvayKaBn55/9EguYcKXPkstIm7k9o5hsUwd4=;
+        b=kjTFEgej1F42fogGV/OKwHL23i++qwdIyl3unln+QckKY+fAyPhb8PP62c12S+mT1j
+         L4J14glhLD/nyXFLjUOll1M8hPax+McWc1dlTkbPXHKhQh163p2EDHknAc/bsCqXhHdO
+         4Bp17jQ5R01sV+wHt5a0QplbLhTgJ/5Lbhkho9Jdco5NgMZWaPQKAjrW4zhpwhwx/3wv
+         yTFCBJ9UY7WeurM8eUnnQ0ftpr7CiZsOBgFmtQflPD6mNN3Qan7aWF9K4e+EOxwFiwJb
+         JY41M+YroLIoqL61YdXUC6AQ+dEjPopTZtuEnjVauzzPaPejSP7uh0ziAP8kAlKln7Dr
+         XZ3Q==
+X-Gm-Message-State: AOAM531SD7i1LL7Pyn63TprYJsXPiP+WRbkwpf1eJq/ixwaA3USK3ecm
+        wpTlpCZRljPJbLT2QRblj11o8JBkkdPpoQ==
+X-Google-Smtp-Source: ABdhPJyjgjvgkqU/XXSkUf6OeAkjb64BJmpaJrHCk6LYUKDVS3qmAt7paEzL1YBGyoPtbY4Zb+syyw==
+X-Received: by 2002:a17:902:a415:b029:d8:f55b:5e9b with SMTP id p21-20020a170902a415b02900d8f55b5e9bmr7492889plq.6.1605773348474;
+        Thu, 19 Nov 2020 00:09:08 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id a123sm29092392pfd.218.2020.11.19.00.09.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2020 00:09:08 -0800 (PST)
+Date:   Thu, 19 Nov 2020 00:09:06 -0800
+From:   Prashant Malani <pmalani@chromium.org>
+To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com, enric.balletbo@collabora.com,
+        rajmohan.mani@intel.com, azhar.shaikh@intel.com
+Subject: Re: [PATCH v3 2/4] platform/chrome: cros_ec_typec: Use Thunderbolt 3
+ cable discover mode VDO in USB4 mode
+Message-ID: <20201119080906.GE3652649@google.com>
+References: <20201119063211.2264-1-utkarsh.h.patel@intel.com>
+ <20201119063211.2264-3-utkarsh.h.patel@intel.com>
 MIME-Version: 1.0
-From:   Kevin Liu <kliutw1947@gmail.com>
-Date:   Thu, 19 Nov 2020 16:05:14 +0800
-Message-ID: <CAMLv=Q9DVb+t63eK9fyDsdUWTF7d7jHQy5QXik=-nyV0rVE-3Q@mail.gmail.com>
-Subject: add product ID 1b93 under Supermicro 2c23
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201119063211.2264-3-utkarsh.h.patel@intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Utkarsh,
 
-I tried to add product ID 1b93 under Supermicro 2c23 on USB ID
-Repository last week, could you please help to check the request and
-let me know if any additional action I shall take? Thank you very
-much.
+On Wed, Nov 18, 2020 at 10:32:09PM -0800, Utkarsh Patel wrote:
+> Configure Thunderbolt 3 cable generation value by filling Thunderbolt 3
+> cable discover mode VDO to support rounded Thunderbolt 3 cables.
+> While we are here use Thunderbolt 3 cable discover mode VDO to fill active
+> cable plug link training value.
+> 
+> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
+> 
+> --
+> Changes in v3:
+> - Added a check for cable's TBT support before filling TBT3 discover mode
+>   VDO.
+> 
+> Changes in v2:
+> - No change.
+> --
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> index 8111ed1fc574..68b17ee1d1ae 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -514,8 +514,18 @@ static int cros_typec_enable_usb4(struct cros_typec_data *typec,
+>  	else if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE)
+>  		data.eudo |= EUDO_CABLE_TYPE_RE_TIMER << EUDO_CABLE_TYPE_SHIFT;
+>  
+> -	data.active_link_training = !!(pd_ctrl->control_flags &
+> -				       USB_PD_CTRL_ACTIVE_LINK_UNIDIR);
+> +	/*
+> +	 * Filling TBT3 Cable VDO when TBT3 cable is being used to establish
+> +	 * USB4 connection.
+> +	 */
+> +	if (pd_ctrl->cable_gen) {
+> +		data.tbt_cable_vdo = TBT_MODE;
+> +
+> +		if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_LINK_UNIDIR)
+> +			data.tbt_cable_vdo |= TBT_CABLE_LINK_TRAINING;
+> +
+> +		data.tbt_cable_vdo |= TBT_SET_CABLE_ROUNDED(pd_ctrl->cable_gen);
+> +	}
 
-Information captured from USB ID Repository:
-Main -> USB Devices -> Device UD:2c23 -> Subsystem UD:2c23:1b93
-Name: USB Ethernet/RNDIS
-Add PID for lan-over-usb host interface device that will be applied on
-Supermicro motherboard from late 2020.
-kliutw1947
-2020-11-13 09:20:12
+I think the following would decouple Rounded Support and Active Cable Link
+Training?:
+
+	struct typec_thunderbolt_data data = {};
+...
+	if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_LINK_UNIDIR)
+		data.tbt_cable_vdo |= TBT_CABLE_LINK_TRAINING;
+
+	data.tbt_cable_vdo |= TBT_SET_CABLE_ROUNDED(pd_ctrl->cable_gen);
+
+	if (data.tbt_cable_vdo)
+		data.tbt_cable_vdo |= TBT_MODE;
 
 
-Regards,
-Kevin Liu
-Sr. Product Manager, SW
-Super Micro Computer, Inc. TAIWAN
-23511=E6=96=B0=E5=8C=97=E5=B8=82=E4=B8=AD=E5=92=8C=E5=8D=80=E5=BB=BA=E4=B8=
-=80=E8=B7=AF150=E8=99=9F6=E6=A8=93
-6F., No.150, Jian 1st Rd., Zhonghe Dist., New Taipei City 23511, Taiwan, R.=
-O.C.
-TEL: +886 2 82263990 #3436
-Mobile: +886 937 170436
+Best regards,
+
+-Prashant
