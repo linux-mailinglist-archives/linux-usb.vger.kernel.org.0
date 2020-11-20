@@ -2,85 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 218E82BA69E
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 10:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA8A2BA78F
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 11:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgKTJyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 04:54:49 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:44986 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbgKTJyt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 04:54:49 -0500
-Received: by mail-lj1-f193.google.com with SMTP id s9so9380337ljo.11;
-        Fri, 20 Nov 2020 01:54:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=C59c0mgsV+SRL0gTcx0qWRGq+USR/SFMGynSGvNxYmA=;
-        b=BWu/vPP+q4YBjSK/Hf7r/Tf3VHnDLnzcIOm+FNe5SLZk/CajbFADRMob7zOILJK0xH
-         3lNdcujBT0D+lHCPrbrLp0aWkYyhso8iYNDOoo4WaTX+Rcsg/3fSR+0huAiJ8PgUpB4I
-         hHT+ugouVSea+mqDJk4u0l35Vekl901a40Cfx9plJ+2zCaf2c1l8A2/AeeYHIjZERtju
-         IIQJvBCSdirpNBnEgNJveoosDj2MLr7LmBZNzByBzEoKjmpCx7QfQvrFrhLN8xIZG9RR
-         K8/2Kh+A9Ow5/YnUkNbVgQH8dlRFoLe4uOPQC67AIPUw0k6ViXMc1rL+43ykRba+613t
-         6tQg==
-X-Gm-Message-State: AOAM531J7NsaRTaWZVWcE9SpQDskqGAwJbgl24gHwHLM0mu7KURNocrM
-        /a/jhAJz2irBNv0YNUYRtW6EFeZObOyDrA==
-X-Google-Smtp-Source: ABdhPJxSgBzw5ROqXBewpxM2xbqBDivuTciM6YpFoI3bCUF3jvXcsfIxRNmiWpBeKrc/sbdnmZmM2g==
-X-Received: by 2002:a2e:93cf:: with SMTP id p15mr8423247ljh.141.1605866085852;
-        Fri, 20 Nov 2020 01:54:45 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id x8sm285070lff.196.2020.11.20.01.54.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 01:54:45 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kg37w-0007Qy-JW; Fri, 20 Nov 2020 10:54:49 +0100
-Date:   Fri, 20 Nov 2020 10:54:48 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     vpalatin@chromium.org
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: serial: option: add Fibocom NL668 variants
-Message-ID: <X7eSaCD3pqvdD4jj@localhost>
-References: <20201120090107.502832-1-vpalatin@chromium.org>
- <20201120092828.665931-1-vpalatin@chromium.org>
+        id S1726765AbgKTKiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 05:38:06 -0500
+Received: from mail-dm6nam10on2065.outbound.protection.outlook.com ([40.107.93.65]:12129
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725824AbgKTKiF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Nov 2020 05:38:05 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iLvfQGHAF0jn0Ur2oafNckmT6H3ilfbv0Eg1Roudj2FQMR5ct+aOi0nSYxSMS00Ol5ZxWpfp0hSN4P2aNdFuNMqmArh/oSr+VM5vzmGQZOW1S5e+ybKIeiEeKx20xyE5HIv+7kdtw/rRPWZkXhLrAqsVrxkbtM3MG2UbleBK4YOirmK2nYxniwNwGFfY/qH2MDgdJFIxn3FzBDhVcK/mwuceJz23Cdhsu1dVZompSA0mtjiaccBshy6DK0TiFPa/6pUTYWwZGbT47fh4P3vOkwKZqQBtn+hVahhESU34lYQBUcSfLGwDVp1Wb+UNnUk/XvuQV2vMo+/jROYV1bKLFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7HZ+Xmy0aG64QNyaQwc2lH520uMthFUQLvSfTL9KPdM=;
+ b=PGBh45CsKNcx9fJ3agB8fyXQIPlZSz7jpiv3cNZQYI1sswkZhZWeVO5eB/zVFUOfyf3pXOCHxGwwOOXeszduop9E0mLwaFBC1lBlHoI92sSGEdCYfFLWGtZyzPyWoQjjD2i2WL+sbyHjhQAXAn/A0ikmDRjNS28Z/wf907SZ5mkWUSuOi0DaWIx7tUvXWn0r/ePbokAtdxPFdCq1LBn1wVd7u7NwehIzxtrCUXLpJ5yFj+ZHf2foky6n3pwGwe7zJ1b/zKN16KGpJA+eVF/rDwQBHYkMk0myY8VFZyLZderPs3gW+2bU7yoyrl6Q11WPwxk5+I50XA+/GSQMyUsXzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7HZ+Xmy0aG64QNyaQwc2lH520uMthFUQLvSfTL9KPdM=;
+ b=L67Ev+/KlZfW0M/31CZOR26emC9owWErvBF/rHPYo45WTuJFoS1xqIItdYtkcaQn+z1cmBYUyI2e36zjY7ZgCRiO5Glw7diHoVQEhOvFksNzQyo7ihWsWZUXGKV0mNfeNuVAOs+Ovx078lBlufV9J/CafpxbyIuR3NrzAML8cUY=
+Received: from SA9PR13CA0150.namprd13.prod.outlook.com (2603:10b6:806:27::35)
+ by BYAPR02MB5365.namprd02.prod.outlook.com (2603:10b6:a03:66::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.25; Fri, 20 Nov
+ 2020 10:38:01 +0000
+Received: from SN1NAM02FT019.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:27:cafe::80) by SA9PR13CA0150.outlook.office365.com
+ (2603:10b6:806:27::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.13 via Frontend
+ Transport; Fri, 20 Nov 2020 10:38:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT019.mail.protection.outlook.com (10.152.72.130) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3589.20 via Frontend Transport; Fri, 20 Nov 2020 10:38:01 +0000
+Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Fri, 20 Nov 2020 02:37:47 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Fri, 20 Nov 2020 02:37:47 -0800
+Envelope-to: git@xilinx.com,
+ michal.simek@xilinx.com,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org,
+ p.zabel@pengutronix.de,
+ balbi@kernel.org,
+ robh+dt@kernel.org,
+ gregkh@linuxfoundation.org
+Received: from [172.30.17.109] (port=43496)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1kg3nW-0001A8-AV; Fri, 20 Nov 2020 02:37:46 -0800
+Subject: Re: [PATCH v3 0/2] Add a separate DWC3 OF driver for Xilinx platforms
+To:     Manish Narani <manish.narani@xilinx.com>,
+        <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <michal.simek@xilinx.com>, <balbi@kernel.org>,
+        <p.zabel@pengutronix.de>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>
+References: <1602162416-28058-1-git-send-email-manish.narani@xilinx.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+Message-ID: <e491bc10-96ca-34a9-4e96-ff5701763584@xilinx.com>
+Date:   Fri, 20 Nov 2020 11:37:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201120092828.665931-1-vpalatin@chromium.org>
+In-Reply-To: <1602162416-28058-1-git-send-email-manish.narani@xilinx.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 44ed3098-b629-4714-8b50-08d88d405acd
+X-MS-TrafficTypeDiagnostic: BYAPR02MB5365:
+X-Microsoft-Antispam-PRVS: <BYAPR02MB53650645F64D2CD30EF4086AC6FF0@BYAPR02MB5365.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G2CcN+JPRI7Fv/3ptSV81djWpduz/iwEFjioVLGHb3wugRmDgPpToqfU88Uj7JNOqs8ssKaoacLWzdBaTHzw2l1lIiJTCjGz+58C/vu4JMEQzH65cIA2ee3AND7JkRUpxCFJpZs/Tvul+AdCAthk8QNpwhnVrfsbm6W+kqBkomOK8yiCYQg8MUoB0/j+M85DTCZUeLjd+QqjUiqRmfyhCqw95WmlwMeA3BsWX5YM9UhB15qLvS1hzog0YqNsalSfZiRdzPyHWpXA/QwGigImL1J0ht8wdNkOO9gSFVldGOWLc2I4PLj06qwvU7RXkZzlaVg1SiengU/LJ/AbwKV3a8GFrN91xIxeoFfhgAshtsfwp2UjrSfsiWgPx0VeL3ZfAdHwEnBtxhClNImQsuYdfv80aCPAKSXsXsqbjGZstTQaIHA8IM2b5TYwD+MMYEq6NR/fnxxzhJg7cvDGfBsb7g==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(376002)(346002)(396003)(39860400002)(46966005)(2616005)(26005)(186003)(54906003)(47076004)(356005)(44832011)(316002)(336012)(426003)(83380400001)(2906002)(82740400003)(36906005)(8936002)(7636003)(110136005)(9786002)(31686004)(4326008)(478600001)(107886003)(5660300002)(36756003)(8676002)(82310400003)(70206006)(70586007)(31696002)(6666004)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2020 10:38:01.2958
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44ed3098-b629-4714-8b50-08d88d405acd
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT019.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5365
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 10:28:28AM +0100, vpalatin@chromium.org wrote:
-> From: Vincent Palatin <vpalatin@chromium.org>
-> 
-> Update the USB serial option driver support for the Fibocom NL668 Cat.4
-> LTE modules as there are actually several different variants.
-> Got clarifications from Fibocom, there are distinct products:
-> - VID:PID 1508:1001, NL668 for IOT (no MBIM interface)
-> - VID:PID 2cb7:01a0, NL668-AM and NL652-EU are laptop M.2 cards (with
->   MBIM interfaces for Windows/Linux/Chrome OS), respectively for Americas
->   and Europe.
-> 
-> usb-devices output for the laptop M.2 cards:
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  4 Spd=480 MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=2cb7 ProdID=01a0 Rev=03.18
-> S:  Manufacturer=Fibocom Wireless Inc.
-> S:  Product=Fibocom NL652-EU Modem
-> S:  SerialNumber=0123456789ABCDEF
-> C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-> I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-> I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-> 
-> Signed-off-by: Vincent Palatin <vpalatin@chromium.org>
+Hi Felipe,
 
-Applied, thanks!
+On 08. 10. 20 15:06, Manish Narani wrote:
+> This patch series documents the Xilinx Versal DWC3 controller. This also
+> adds a new Xilinx specific driver for adding new features in the future.
+> 
+> Changes in v2:
+> 	- Addressed review comments from v1
+> 	- merged normal and runtime suspend resume functions as they are
+> 	  same
+> 	- Improved description of some register operations to avoid
+> 	  confusion
+> 	- Updated commit log for patch 2/2 for better clarity.
+> 
+> Changes in v3:
+> 	- Removed snps,enable-hibernation property from the devicetree
+> 	  binding.
+> 
+> Manish Narani (2):
+>   dt-bindings: usb: dwc3-xilinx: Add documentation for Versal DWC3
+>     Controller
+>   usb: dwc3: Add driver for Xilinx platforms
+> 
+>  .../devicetree/bindings/usb/dwc3-xilinx.txt   |  17 +-
+>  drivers/usb/dwc3/Kconfig                      |   9 +
+>  drivers/usb/dwc3/Makefile                     |   1 +
+>  drivers/usb/dwc3/dwc3-of-simple.c             |   1 -
+>  drivers/usb/dwc3/dwc3-xilinx.c                | 334 ++++++++++++++++++
+>  5 files changed, 359 insertions(+), 3 deletions(-)
+>  create mode 100644 drivers/usb/dwc3/dwc3-xilinx.c
+> 
 
-Johan
+Can you please take a look at these patches?
+I see that the first one has been reviewed by Rob already.
+
+Thanks,
+Michal
