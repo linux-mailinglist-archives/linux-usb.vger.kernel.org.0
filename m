@@ -2,105 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 418292BA568
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 10:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BCA2BA5AA
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 10:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727327AbgKTJC1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 04:02:27 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:11990 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726335AbgKTJC0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 04:02:26 -0500
-X-UUID: a13e9e7876b24e11b8b92e7003cf77cd-20201120
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=NOnBEeD5QcqRy5ACxANNtYY5eIEEbKNWhHFCVwRq7Bk=;
-        b=DwfGG6wPx8bwL1YuhPBQqay0GjEFZHN+7ZklUtK4gmQpzaPr/NDBddmO2BU28NP5qJQfzbDbLIVuq5U1cuKBqwtmkVYH+wPJCNIGgrOa7qBQ1ACmWXmMOP6J+eSscooV+ERUSIlPtefL/KwuPyOL7CLQnClG9kSBbCNW7sh9+Yk=;
-X-UUID: a13e9e7876b24e11b8b92e7003cf77cd-20201120
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <min.guo@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1925620927; Fri, 20 Nov 2020 17:02:17 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 20 Nov
- 2020 17:02:16 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 20 Nov 2020 17:02:15 +0800
-Message-ID: <1605862935.3995.20.camel@mhfsdcap03>
-Subject: Re: [PATCH] usb: musb: remove unused variable 'devctl'
-From:   Min Guo <min.guo@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Bin Liu <b-liu@ti.com>, Matthias Brugger <matthias.bgg@gmail.com>,
-        <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Fri, 20 Nov 2020 17:02:15 +0800
-In-Reply-To: <X7eAEaTN/fM3fkkp@kroah.com>
-References: <20201117082125.7619-1-min.guo@mediatek.com>
-         <X7UKJtWtE0UZgqAQ@kroah.com> <1605854930.3995.8.camel@mhfsdcap03>
-         <X7doKlP1k824LGGN@kroah.com> <1605858126.3995.14.camel@mhfsdcap03>
-         <X7eAEaTN/fM3fkkp@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726420AbgKTJOr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 04:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726321AbgKTJOq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 04:14:46 -0500
+Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DECC0613CF
+        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 01:14:45 -0800 (PST)
+Received: by mail-ua1-x944.google.com with SMTP id t15so2903993ual.6
+        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 01:14:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fcNvMotCM1exp3r5B/p5/L6Jzulju5L2C7j0PonYvws=;
+        b=Bt0OxNh7ImKNFNyLTLlhXgiQtJjb1avpqJVw/sQfCWf13hC9zEnABwcA3bIXNBuP6e
+         99mr1qOMejQQMLuHkm1ITiiv/1cM3vHwapHH3srjgmsRaIjOjXA1mAXAkuCDilBgoAmU
+         1PTZzr7+dv1mE/gAmQo5FidVG81H2idoks9fQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fcNvMotCM1exp3r5B/p5/L6Jzulju5L2C7j0PonYvws=;
+        b=hEBYuQm23gKL3nARi+bjM/1X+ysWB6T5ApeKT93qUL560QxO2ThzCvwyBMBdxmOMs2
+         kO3Euj5/nP2rwevVUK4NkfTaNTg++Z7Pgn/4o0GnUJQscl+x5o8updxLKQ72nYQ6MvJ3
+         un/WdtLn31zXcmn1MnVQ4uWu30J97U1iu62YsduAQbgUmyYhXM7Biim6N5Z9zpcJtzXq
+         6eJr8fXGbs/B337by4jHiH+Y+EGIgA9Q7H5/HI2iEzmmDbwCqVixNr1j7yolSHOuCX4X
+         AedJ89FG8EPWzjGM0wUp2937UcdjIWQxs7273z44uA96s4Qrd6MfkEnoSz42xLt77Lgd
+         RkkA==
+X-Gm-Message-State: AOAM530IfAsKsXl3c+uj5PgpVDES+Lh17AFcf904vY9Napt90L3nWN59
+        oMxJDBtMtb9kSe9uK1fhQ37yTetRQOvkiDs1nCM0+A==
+X-Google-Smtp-Source: ABdhPJx6aF6fhonX7ytEsmCkuM7JrqflkdBOn4vGz/9I7tzyAtIeeoB3i0Eyu8RjphrivZcjizZxXtJ8E24yOx8Ptjo=
+X-Received: by 2002:ab0:2091:: with SMTP id r17mr1087575uak.102.1605863684678;
+ Fri, 20 Nov 2020 01:14:44 -0800 (PST)
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: F523D46BD23D8F2D4C4167306D0A9C11AFC2932A6549B7623E792AD4C4C739792000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <20201120090107.502832-1-vpalatin@chromium.org>
+In-Reply-To: <20201120090107.502832-1-vpalatin@chromium.org>
+From:   Vincent Palatin <vpalatin@chromium.org>
+Date:   Fri, 20 Nov 2020 10:14:33 +0100
+Message-ID: <CAP_ceTxrp6cKrh0p02Y49owc9+xe-o2Wt03923=tbdE9E24khw@mail.gmail.com>
+Subject: Re: [PATCH] usb: serial: option: add Fibocom NL668 variants
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTExLTIwIGF0IDA5OjM2ICswMTAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
-dGU6DQo+IE9uIEZyaSwgTm92IDIwLCAyMDIwIGF0IDAzOjQyOjA2UE0gKzA4MDAsIE1pbiBHdW8g
-d3JvdGU6DQo+ID4gT24gRnJpLCAyMDIwLTExLTIwIGF0IDA3OjU0ICswMTAwLCBHcmVnIEtyb2Fo
-LUhhcnRtYW4gd3JvdGU6DQo+ID4gPiBPbiBGcmksIE5vdiAyMCwgMjAyMCBhdCAwMjo0ODo1MFBN
-ICswODAwLCBNaW4gR3VvIHdyb3RlOg0KPiA+ID4gPiBIaSBncmVnIGstaDoNCj4gPiA+ID4gT24g
-V2VkLCAyMDIwLTExLTE4IGF0IDEyOjQ4ICswMTAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3JvdGU6
-DQo+ID4gPiA+ID4gT24gVHVlLCBOb3YgMTcsIDIwMjAgYXQgMDQ6MjE6MjVQTSArMDgwMCwgbWlu
-Lmd1b0BtZWRpYXRlay5jb20gd3JvdGU6DQo+ID4gPiA+ID4gPiBGcm9tOiBNaW4gR3VvIDxtaW4u
-Z3VvQG1lZGlhdGVrLmNvbT4NCj4gPiA+ID4gPiA+IA0KPiA+ID4gPiA+ID4gUmVtb3ZlIHVudXNl
-ZCAnZGV2Y3RsJyB2YXJpYWJsZSB0byBmaXggY29tcGlsZSB3YXJuaW5nczoNCj4gPiA+ID4gPiA+
-IA0KPiA+ID4gPiA+ID4gICAgIGRyaXZlcnMvdXNiL211c2IvbXVzYmhzZG1hLmM6IEluIGZ1bmN0
-aW9uICdkbWFfY29udHJvbGxlcl9pcnEnOg0KPiA+ID4gPiA+ID4gICAgIGRyaXZlcnMvdXNiL211
-c2IvbXVzYmhzZG1hLmM6MzI0Ojg6IHdhcm5pbmc6IHZhcmlhYmxlICdkZXZjdGwnIHNldA0KPiA+
-ID4gPiA+ID4gICAgIGJ1dCBub3QgdXNlZCBbLVd1bnVzZWQtYnV0LXNldC12YXJpYWJsZV0NCj4g
-PiA+ID4gPiA+IA0KPiA+ID4gPiA+ID4gU2lnbmVkLW9mZi1ieTogTWluIEd1byA8bWluLmd1b0Bt
-ZWRpYXRlay5jb20+DQo+ID4gPiA+ID4gPiAtLS0NCj4gPiA+ID4gPiA+ICBkcml2ZXJzL3VzYi9t
-dXNiL211c2Joc2RtYS5jIHwgNCAtLS0tDQo+ID4gPiA+ID4gPiAgMSBmaWxlIGNoYW5nZWQsIDQg
-ZGVsZXRpb25zKC0pDQo+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+IGRpZmYgLS1naXQgYS9kcml2
-ZXJzL3VzYi9tdXNiL211c2Joc2RtYS5jIGIvZHJpdmVycy91c2IvbXVzYi9tdXNiaHNkbWEuYw0K
-PiA+ID4gPiA+ID4gaW5kZXggMGFhY2ZjOGJlNWExLi43YWNkMTYzNTg1MGQgMTAwNjQ0DQo+ID4g
-PiA+ID4gPiAtLS0gYS9kcml2ZXJzL3VzYi9tdXNiL211c2Joc2RtYS5jDQo+ID4gPiA+ID4gPiAr
-KysgYi9kcml2ZXJzL3VzYi9tdXNiL211c2Joc2RtYS5jDQo+ID4gPiA+ID4gPiBAQCAtMzIxLDgg
-KzMyMSw2IEBAIGlycXJldHVybl90IGRtYV9jb250cm9sbGVyX2lycShpbnQgaXJxLCB2b2lkICpw
-cml2YXRlX2RhdGEpDQo+ID4gPiA+ID4gPiAgCQkJCW11c2JfY2hhbm5lbC0+Y2hhbm5lbC5zdGF0
-dXMgPQ0KPiA+ID4gPiA+ID4gIAkJCQkJTVVTQl9ETUFfU1RBVFVTX0JVU19BQk9SVDsNCj4gPiA+
-ID4gPiA+ICAJCQl9IGVsc2Ugew0KPiA+ID4gPiA+ID4gLQkJCQl1OCBkZXZjdGw7DQo+ID4gPiA+
-ID4gPiAtDQo+ID4gPiA+ID4gPiAgCQkJCWFkZHIgPSBtdXNiX3JlYWRfaHNkbWFfYWRkcihtYmFz
-ZSwNCj4gPiA+ID4gPiA+ICAJCQkJCQliY2hhbm5lbCk7DQo+ID4gPiA+ID4gPiAgCQkJCWNoYW5u
-ZWwtPmFjdHVhbF9sZW4gPSBhZGRyDQo+ID4gPiA+ID4gPiBAQCAtMzM2LDggKzMzNCw2IEBAIGly
-cXJldHVybl90IGRtYV9jb250cm9sbGVyX2lycShpbnQgaXJxLCB2b2lkICpwcml2YXRlX2RhdGEp
-DQo+ID4gPiA+ID4gPiAgCQkJCQkJPCBtdXNiX2NoYW5uZWwtPmxlbikgPw0KPiA+ID4gPiA+ID4g
-IAkJCQkJIj0+IHJlY29uZmlnIDAiIDogIj0+IGNvbXBsZXRlIik7DQo+ID4gPiA+ID4gPiAgDQo+
-ID4gPiA+ID4gPiAtCQkJCWRldmN0bCA9IG11c2JfcmVhZGIobWJhc2UsIE1VU0JfREVWQ1RMKTsN
-Cj4gPiA+ID4gPiANCj4gPiA+ID4gPiBBcmUgeW91IHN1cmUgdGhhdCB0aGUgaGFyZHdhcmUgZG9l
-cyBub3QgcmVxdWlyZSB0aGlzIHJlYWQgdG8gY29tcGxldGUNCj4gPiA+ID4gPiB0aGUgY29tbWFu
-ZD8gIExvdHMgb2YgaGFyZHdhcmUgaXMgdGhhdCB3YXksIHNvIGJlIHZlcnkgY2FyZWZ1bCBhYm91
-dA0KPiA+ID4gPiA+IHRoaXMuICBEaWQgeW91IHRlc3QgaXQ/DQo+ID4gPiA+IA0KPiA+ID4gPiBJ
-IGhhdmUgdGVzdGVkIHRoaXMgcGF0Y2ggb24gTWVkaWF0ZWsncyBwbGF0Zm9ybSwgYW5kIG5vdCBz
-dXJlIGlmIGl0DQo+ID4gPiA+IHdpbGwgYWZmZWN0IG90aGVyIHZlbmRvcnMnIHBsYXRmb3Jtcy4N
-Cj4gPiA+ID4gDQo+ID4gPiA+IERlYXIgQmluOg0KPiA+ID4gPiANCj4gPiA+ID4gRG9lcyB0aGlz
-IHBhdGNoIHdpbGwgYWZmZWN0IG90aGVyIHZlbmRvcnMnIHBsYXRmb3Jtcz8NCj4gPiA+IA0KPiA+
-ID4gVGhlIGhhcmR3YXJlIHNwZWNzIHdpbGwgYW5zd2VyIHRoaXMgcXVlc3Rpb24sIHdoYXQgZG8g
-dGhleSBzYXkgYWJvdXQNCj4gPiA+IHRoaXMgcmVhZD8NCj4gPiANCj4gPiBTb3JyeSwgSSBkaWRu
-J3Qgc2VlbiB0aGUgY29tbWVudCBvbiB0aGUgaGFyZHdhcmUgc3BlY3MgaW5kaWNhdGUgdGhhdA0K
-PiA+IGRldmN0bCByZWdpc3RlciBuZWVkcyB0byByZWFkIG9uY2UgdG8gdGFrZSBlZmZlY3QuDQo+
-IA0KPiBQZXJoYXBzIHlvdSBtaWdodCB3YW50IHRvIGFkZCBhIGNvbW1lbnQgaGVyZSBzbyB0aGF0
-IHBlb3BsZSB3aWxsIG5vdA0KPiBrZWVwIG1ha2luZyB0aGlzIHNhbWUgbWlzdGFrZSB3aGVuIHRo
-ZXkgcnVuIGF1dG8tY2hlY2tlcnMgb24gdGhlDQo+IGNvZGViYXNlPw0KDQpTb3JyeSBmb3IgY29u
-ZnVzZWQgeW91LCBJIHNlYXJjaGVkIHRoZSBoYXJkd2FyZSBzcGVjcywgYnV0IGRpZCBub3QgZmlu
-ZA0KdGhlIHNwZWNpYWwgZGVzY3JpcHRpb24gb2YgdGhlIHJlZ2lzdGVyIGRldmN0bCBpbmRpY2F0
-aW5nIHRoYXQgaXQgbmVlZHMNCnRvIGJlIHJlYWQgb3V0IGJlZm9yZSB0aGUgaGFyZHdhcmUgY2Fu
-IHdvcmsuDQoNCj4gdGhhbmtzLA0KPiANCj4gZ3JlZyBrLWgNCg0K
+On Fri, Nov 20, 2020 at 10:01 AM <vpalatin@chromium.org> wrote:
+>
+> From: Vincent Palatin <vpalatin@chromium.org>
+>
+> Update the USB serial option driver support for the Fibocom NL668 Cat.4
+> LTE modules as there are actually several different variants.
+> Got clarifications from Fibocom, there are distinct products:
+> - VID:PID 1508:1001, NL668 for IOT (no MBIM interface)
+> - VID:PID 2cb7:01a0, NL668-AM and NL652-EU are laptop M.2 cards (with
+>   MBIM interfaces for Windows/Linux/Chrome OS), respectively for Americas
+>   and Europe.
+>
+> usb-devices output for the laptop M.2 cards:
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  4 Spd=480 MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=2cb7 ProdID=01a0 Rev=03.18
+> S:  Manufacturer=Fibocom Wireless Inc.
+> S:  Product=Fibocom NL652-EU Modem
+> S:  SerialNumber=0123456789ABCDEF
+> C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+>
+> Signed-off-by: Vincent Palatin <vpalatin@chromium.org>
+> ---
+>  drivers/usb/serial/option.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 54ca85cc920d..2a6d59bc0201 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -2046,12 +2046,13 @@ static const struct usb_device_id option_ids[] = {
+>           .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+>         { USB_DEVICE(0x0489, 0xe0b5),                                           /* Foxconn T77W968 ESIM */
+>           .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+> -       { USB_DEVICE(0x1508, 0x1001),                                           /* Fibocom NL668 */
+> +       { USB_DEVICE(0x1508, 0x1001),                                           /* Fibocom NL668 (IOT version) */
+>           .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
+>         { USB_DEVICE(0x2cb7, 0x0104),                                           /* Fibocom NL678 series */
+>           .driver_info = RSVD(4) | RSVD(5) },
+>         { USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),                     /* Fibocom NL678 series */
+>           .driver_info = RSVD(6) },
+> +       { USB_DEVICE(0x2cb7, 0x01a0, 0xff) },                                   /* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
 
+
+I obviously screw up here. Wrong version of the patch with the wrong macro name
+I will send the updated one.
+
+>
+>         { USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },                   /* GosunCn GM500 RNDIS */
+>         { USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },                   /* GosunCn GM500 MBIM */
+>         { USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },                   /* GosunCn GM500 ECM/NCM */
+> --
+> 2.26.2
+>
