@@ -2,139 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 545AF2BB592
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 20:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7C02BB5BF
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 20:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732359AbgKTTay (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 14:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50750 "EHLO
+        id S1729173AbgKTTpr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 14:45:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732422AbgKTTap (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 14:30:45 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B05C061A4E
-        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 11:30:43 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id t21so8155906pgl.3
-        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 11:30:43 -0800 (PST)
+        with ESMTP id S1728590AbgKTTpq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 14:45:46 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457FEC0613CF;
+        Fri, 20 Nov 2020 11:45:46 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id g7so8875976pfc.2;
+        Fri, 20 Nov 2020 11:45:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3bv50j9tOMZCSWAChUvUk5K6TgooTRt3SRcQZBJ9fcA=;
-        b=GgFl3K9IS/lWsdMjkEVVAtTSDzsQ0sxEOabPKwuHzNJyTA7s1nVN/P5Py+wtAIOvbE
-         i43RryzoLL4QMDFVI6bDxTe0ngekUN0rycJ/u5dixn0o4ZWxiMdHtnF6M1zgV7bxdmjG
-         OxnZTS8PQwcd6ZCwnahaxVB8GYQEw6f4nxFx4=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=ZVzA6BcrTZh0tSWw4NpPHXuO0gXGORPvDJECx8JucK8=;
+        b=FgLWOaHjZ0f+Ob1LQWqJroVeWbvc+ZBQztZWdvWC6x4t/WBpFRk09IcVpP4QRpthDn
+         oPeVexHzxtZdgbrPhoGqHyRPEYKEbbqEOOUeC5WEBQlhNdrtJMGxy5mv3fwr2Hl8hRMu
+         t7LVKxvUZ/G7DrJwgvt8tqFkcgdOJR2baAkH+2zQYsKf2pUGLRQgrnDY2gXp+MHBiBzV
+         +jinJhhWEFgOOg1cht7FQLBhbJoCkRey96s8mFFvJjlDuAUODFepKa7qwSYUbdgIUevb
+         cngtkLq/9NET42s07yDzUpaaTnjv5m1UAModYjAExVtwIyaiO/jD7SX2YVBXYrKRENRZ
+         SPQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3bv50j9tOMZCSWAChUvUk5K6TgooTRt3SRcQZBJ9fcA=;
-        b=GUiNDF/zECnGDFia7rAb67BrVemfvmMgQP5rR+x5EjkMQX0ZL8pf61hySM2DHNyXSp
-         49Pk9/Qwxfz0E+idk+UqFgnXhMLnq0vQgUAxJgaocyEHjeZnQYdirYAdPEOGfyBxgnvX
-         QSO2bSW+gep9dBQ4ldjoeV2N69nNfjGKZxCysgYcZ6fFeIHOh/leqZeeCjLT6A4hm9Ux
-         JKSypBiUAlMClN0yNeh5tBnkZYqF/bTF2S5Q3AGVC5cdADqUUydhSeJ0lZ5VRJ3QE7bd
-         yJrn8uZzKohQUUHAXHXnA73x7/ObiYzkIs6d5Iz8LqdB5/fgnzaCmDQJMktXIGjxMsWh
-         4DlA==
-X-Gm-Message-State: AOAM532SNkg3RVbwfBA2Nz5r0+WL2oPfKmbWpTMEr9pC7yySdi67hgYc
-        mxaaS0e1GRf6G25ZeQxjlVoBGg==
-X-Google-Smtp-Source: ABdhPJwFn7oz/bfAp6J8E6Vk82WR2gtV/ls3AEWmwH/TblnvnVOa/FKFQXEYpz+4sj3KQLcuYCiPkA==
-X-Received: by 2002:a63:a84f:: with SMTP id i15mr19199286pgp.120.1605900643186;
-        Fri, 20 Nov 2020 11:30:43 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s5sm4261271pfh.164.2020.11.20.11.30.41
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ZVzA6BcrTZh0tSWw4NpPHXuO0gXGORPvDJECx8JucK8=;
+        b=LcxYp/qKqIR6fc5Vbdm6ZRJluWtMSDwmSt7VIWlHLvtiYyXvTuEEPcfgeyyBIoUyec
+         h30Ye/ArwhztlbC1fTLoD1Kxuv5z003XNpi+I9OHlIF1zF42+hdZOvqJef4nZ8O30/PH
+         Oz6ti/qc032gVnK6RT1BhJGezAYmaNnYhBIx0/DiLHrXI927ooJR/3q7joNpd1Gq8ETf
+         ac6px8gGIuYWWQf/DxyYyNII0TDbqsEgRi4NilcEhIWTpcT1n/E+Fdp6NnvwSyZXbPNp
+         bOVWyaQlzAkxi2ivE6+Noq+rzYh8G9IpLPV73ENVItJOX7zdmSoAbWxw2fnj2YGYetZn
+         pWQA==
+X-Gm-Message-State: AOAM531oKdEFJRL743eX4boJVdwQTQ0kL3o3pwsCtsD41sgS/ldzliJk
+        FWB7uI6fFMT2RxDpcwX8sZMkGI9iyf0=
+X-Google-Smtp-Source: ABdhPJzQf/Rj1Vsba1yzL0jn1ipKLmVplUbWUrOf/qQASTlqZCh+KP4IKf9FenQVkaFIwoXym73Jcg==
+X-Received: by 2002:a17:90a:f318:: with SMTP id ca24mr12180801pjb.100.1605901545652;
+        Fri, 20 Nov 2020 11:45:45 -0800 (PST)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id b1sm3755884pgg.74.2020.11.20.11.45.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 11:30:41 -0800 (PST)
-Date:   Fri, 20 Nov 2020 11:30:40 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        amd-gfx@lists.freedesktop.org, bridge@lists.linux-foundation.org,
-        ceph-devel@vger.kernel.org, cluster-devel@redhat.com,
-        coreteam@netfilter.org, devel@driverdev.osuosl.org,
-        dm-devel@redhat.com, drbd-dev@lists.linbit.com,
-        dri-devel@lists.freedesktop.org, GR-everest-linux-l2@marvell.com,
-        GR-Linux-NIC-Dev@marvell.com, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux-acpi@vger.kernel.org,
-        linux-afs@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        linux-ext4@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-Message-ID: <202011201129.B13FDB3C@keescook>
-References: <cover.1605896059.git.gustavoars@kernel.org>
- <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Fri, 20 Nov 2020 11:45:45 -0800 (PST)
+From:   Al Cooper <alcooperx@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH 0/3] serial: 8250: Add driver for Broadcom UART
+Date:   Fri, 20 Nov 2020 14:43:02 -0500
+Message-Id: <20201120194305.8847-1-alcooperx@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 10:53:44AM -0800, Jakub Kicinski wrote:
-> On Fri, 20 Nov 2020 12:21:39 -0600 Gustavo A. R. Silva wrote:
-> > This series aims to fix almost all remaining fall-through warnings in
-> > order to enable -Wimplicit-fallthrough for Clang.
-> > 
-> > In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
-> > add multiple break/goto/return/fallthrough statements instead of just
-> > letting the code fall through to the next case.
-> > 
-> > Notice that in order to enable -Wimplicit-fallthrough for Clang, this
-> > change[1] is meant to be reverted at some point. So, this patch helps
-> > to move in that direction.
-> > 
-> > Something important to mention is that there is currently a discrepancy
-> > between GCC and Clang when dealing with switch fall-through to empty case
-> > statements or to cases that only contain a break/continue/return
-> > statement[2][3][4].
-> 
-> Are we sure we want to make this change? Was it discussed before?
-> 
-> Are there any bugs Clangs puritanical definition of fallthrough helped
-> find?
-> 
-> IMVHO compiler warnings are supposed to warn about issues that could
-> be bugs. Falling through to default: break; can hardly be a bug?!
+Add UART driver for the new Broadcom 8250 based STB UART. The new
+UART is backward compatible with the standard 8250, but has some
+additional features. The new features include a high accuracy baud
+rate clock system and DMA support.
 
-It's certainly a place where the intent is not always clear. I think
-this makes all the cases unambiguous, and doesn't impact the machine
-code, since the compiler will happily optimize away any behavioral
-redundancy.
+Al Cooper (2):
+  dt-bindings: Add support for the Broadcom UART driver
+  serial: 8250: Add new 8250-core based Broadcom STB driver
 
+Jim Quinlan (1):
+  serial: 8250: of: Check for CONFIG_SERIAL_8250_BCM7271
+
+ .../bindings/serial/brcm,bcm7271-uart.yaml    |   94 ++
+ MAINTAINERS                                   |    8 +
+ drivers/tty/serial/8250/8250_bcm7271.c        | 1131 +++++++++++++++++
+ drivers/tty/serial/8250/8250_of.c             |    4 +
+ drivers/tty/serial/8250/Kconfig               |   11 +
+ drivers/tty/serial/8250/Makefile              |    1 +
+ drivers/tty/serial/8250/bcm7271_uart.h        |  158 +++
+ 7 files changed, 1407 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml
+ create mode 100644 drivers/tty/serial/8250/8250_bcm7271.c
+ create mode 100644 drivers/tty/serial/8250/bcm7271_uart.h
 
 -- 
-Kees Cook
+2.17.1
+
