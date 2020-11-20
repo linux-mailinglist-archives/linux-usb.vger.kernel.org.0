@@ -2,96 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2652BAF14
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 16:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE2E2BAFD0
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 17:19:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728791AbgKTPfa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 10:35:30 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:55141 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729562AbgKTPf3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 10:35:29 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5C7A55C00C6;
-        Fri, 20 Nov 2020 10:35:28 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 20 Nov 2020 10:35:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=fbu6GB2S5qczpw6HOQEMUIHe4iW
-        yMJQhl+jQGri3P30=; b=p2J5ntvPOaU3xPd7ldlQAwu2bI6WDTuGXSP3qfRTMfL
-        qqEu1+S194ZgRPXjS4/usnDfzYclpvvVUj9yKWf+AcF5x1z00w4hoDgjzRgyx94y
-        GkKkBoNbVRjLZt3uk7DIBg8Cv5LOJUIzZa9loLeTdFRWKZR3IVlN7i5NOieGrKCz
-        aP5cJP2K3plWnoEPZVjwQ+7tpvYa0qWDIK1r1u41aVzXDTRb8JzrI3spjVzuCmgB
-        KfyAR5ydyJBGgAJrp/uUUTUJlg9G3wsLoBJ52kuWK9yN89e3cy0jy5Sl5ZklXWh7
-        Oy9QWKQtgTJh93nxpUbmV6XUIwThmLqkJsDbMvFcRHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=fbu6GB
-        2S5qczpw6HOQEMUIHe4iWyMJQhl+jQGri3P30=; b=II4kfMwl6pyTWE8JhNrcc5
-        D+J+0ffCDFi1GVF+7D0poeBt1H/Ciz1kXofOKRqOe8PHruK/tY4ROBhpN1m9zKV6
-        zgBUMBZfqnd31MzMDgvNimghg5Vci7eG28j8VpWNYbbfTdCKyLSE3dHZCspPKUK2
-        8d5dgzFKED0M9k6h0vfSnxuPCiT9OsTKAXTVUOvoDL0mAOKaP/zm/H6AwpHC73m0
-        jWWOctJLZTzx3JZMWBr44yXdrJkkxSxf2pweBcD2tSRxJBXDeXPuJGfLTQuOFo4l
-        y9OQs2/KNZAr+pIBPNVDZtCEaXsV+KSwUI7fCHI3v1HnvB0o6oECmBXCMtn94Aog
-        ==
-X-ME-Sender: <xms:P-K3X3NBASbV0Pk4vfXsI-ZMzipTrIbYbmK2ZXBkZiDF9bdkq7eCkQ>
-    <xme:P-K3Xx9MUKd5xVSMSOa6RG626CYmhBzEnf8YxZSbXTnBOM5Turc5kucWBSh7XLcmM
-    s7Tt457PrnNUA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudegtddgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
-    rdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:P-K3X2SbiGeCUmaR4oGIZxR8pAadolzlhA-0dV2H7RGSQm8TMxqq6g>
-    <xmx:P-K3X7tt2Q2AfuyqhPp1JO_BPixXR5dGVhE-MFtfHZ_XQMALiC5dBQ>
-    <xmx:P-K3X_d-0cyfeEJDQ8xwvfqQlQZqPRATU1huqDJi1dgaT6omFSkN2A>
-    <xmx:QOK3X_lA4Or6mp53F8NtMbjd0erxHsLTJxYRGyM46tHKaNlsMMQ_gA>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 667823064AB5;
-        Fri, 20 Nov 2020 10:35:27 -0500 (EST)
-Date:   Fri, 20 Nov 2020 16:36:09 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Alexander Chalikiopoulos <bugzilla.kernel.org@mrtoasted.com>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: core: Fix regression in Hercules audio card
-Message-ID: <X7fiab4KwSE/0gq1@kroah.com>
-References: <20201119170040.GA576844@rowland.harvard.edu>
+        id S1728628AbgKTQPU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 11:15:20 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:44073 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728622AbgKTQPU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 11:15:20 -0500
+Received: (qmail 619842 invoked by uid 1000); 20 Nov 2020 11:15:19 -0500
+Date:   Fri, 20 Nov 2020 11:15:19 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Min Guo <min.guo@mediatek.com>, Bin Liu <b-liu@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] usb: musb: remove unused variable 'devctl'
+Message-ID: <20201120161519.GA619708@rowland.harvard.edu>
+References: <20201117082125.7619-1-min.guo@mediatek.com>
+ <X7UKJtWtE0UZgqAQ@kroah.com>
+ <1605854930.3995.8.camel@mhfsdcap03>
+ <X7doKlP1k824LGGN@kroah.com>
+ <1605858126.3995.14.camel@mhfsdcap03>
+ <X7eAEaTN/fM3fkkp@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201119170040.GA576844@rowland.harvard.edu>
+In-Reply-To: <X7eAEaTN/fM3fkkp@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 12:00:40PM -0500, Alan Stern wrote:
-> Commit ecaaef6b50a7 ("USB: core: fix check for duplicate endpoints")
-> aimed to make the USB stack more reliable by detecting and skipping
-> over endpoints that are duplicated between interfaces.  This caused a
-> regression for a Hercules audio card (reported as Bugzilla #208357),
-> which contains such non-compliant duplications.  Although the
-> duplications are harmless, skipping the valid endpoints prevented the
-> device from working.
+On Fri, Nov 20, 2020 at 09:36:33AM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Nov 20, 2020 at 03:42:06PM +0800, Min Guo wrote:
+> > On Fri, 2020-11-20 at 07:54 +0100, Greg Kroah-Hartman wrote:
+> > > On Fri, Nov 20, 2020 at 02:48:50PM +0800, Min Guo wrote:
+> > > > Hi greg k-h:
+> > > > On Wed, 2020-11-18 at 12:48 +0100, Greg Kroah-Hartman wrote:
+> > > > > On Tue, Nov 17, 2020 at 04:21:25PM +0800, min.guo@mediatek.com wrote:
+> > > > > > From: Min Guo <min.guo@mediatek.com>
+> > > > > > 
+> > > > > > Remove unused 'devctl' variable to fix compile warnings:
+> > > > > > 
+> > > > > >     drivers/usb/musb/musbhsdma.c: In function 'dma_controller_irq':
+> > > > > >     drivers/usb/musb/musbhsdma.c:324:8: warning: variable 'devctl' set
+> > > > > >     but not used [-Wunused-but-set-variable]
+> > > > > > 
+> > > > > > Signed-off-by: Min Guo <min.guo@mediatek.com>
+> > > > > > ---
+> > > > > >  drivers/usb/musb/musbhsdma.c | 4 ----
+> > > > > >  1 file changed, 4 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/usb/musb/musbhsdma.c b/drivers/usb/musb/musbhsdma.c
+> > > > > > index 0aacfc8be5a1..7acd1635850d 100644
+> > > > > > --- a/drivers/usb/musb/musbhsdma.c
+> > > > > > +++ b/drivers/usb/musb/musbhsdma.c
+> > > > > > @@ -321,8 +321,6 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
+> > > > > >  				musb_channel->channel.status =
+> > > > > >  					MUSB_DMA_STATUS_BUS_ABORT;
+> > > > > >  			} else {
+> > > > > > -				u8 devctl;
+> > > > > > -
+> > > > > >  				addr = musb_read_hsdma_addr(mbase,
+> > > > > >  						bchannel);
+> > > > > >  				channel->actual_len = addr
+> > > > > > @@ -336,8 +334,6 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
+> > > > > >  						< musb_channel->len) ?
+> > > > > >  					"=> reconfig 0" : "=> complete");
+> > > > > >  
+> > > > > > -				devctl = musb_readb(mbase, MUSB_DEVCTL);
+> > > > > 
+> > > > > Are you sure that the hardware does not require this read to complete
+> > > > > the command?  Lots of hardware is that way, so be very careful about
+> > > > > this.  Did you test it?
+> > > > 
+> > > > I have tested this patch on Mediatek's platform, and not sure if it
+> > > > will affect other vendors' platforms.
+> > > > 
+> > > > Dear Bin:
+> > > > 
+> > > > Does this patch will affect other vendors' platforms?
+> > > 
+> > > The hardware specs will answer this question, what do they say about
+> > > this read?
+> > 
+> > Sorry, I didn't seen the comment on the hardware specs indicate that
+> > devctl register needs to read once to take effect.
 > 
-> This patch fixes the regression by adding ENDPOINT_IGNORE quirks for
-> the Hercules card, telling the kernel to ignore the invalid duplicate
-> endpoints and thereby allowing the valid endpoints to be used as
-> intended.
-> 
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> Reported-by: Alexander Chalikiopoulos <bugzilla.kernel.org@mrtoasted.com>
-> Fixes: ecaaef6b50a7 ("USB: core: fix check for duplicate endpoints")
+> Perhaps you might want to add a comment here so that people will not
+> keep making this same mistake when they run auto-checkers on the
+> codebase?
 
-Nit, this is:
-	 3e4f8e21c4f2 ("USB: core: fix check for duplicate endpoints")
-The id you listed here is the 4.9.209 backport id.
+A better change would be
 
-thanks,
+-			devctl = musb_readb(mbase, MUSB_DEVCTL);
++			(void) musb_readb(mbase, MUSB_DEVCTL);
 
-greg k-h
+and eliminate the unused variable.  Then there wouldn't be any compiler 
+warning.
+
+Alan Stern
