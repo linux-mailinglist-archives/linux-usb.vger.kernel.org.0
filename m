@@ -2,121 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1922BA5E6
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 10:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E22E2BA626
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 10:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727761AbgKTJU3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 04:20:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40102 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727757AbgKTJU1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Nov 2020 04:20:27 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E803922264;
-        Fri, 20 Nov 2020 09:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1605864026;
-        bh=2u/5mhCZv1xdPFL6xL5rON8rEuNwDZ5NL6N7lPUewns=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XNqG64/n8KmjuhcLmgLYf48IecH4L16ozQdP/cgWyMIffoCtf5iL0LH+I73HgmXNg
-         AqlemRpN+JQttIotgWDRxHQTUti6HwOpzRC+nLmEOqs0zr05ylBp/WNzt+TmLSEls+
-         z1Ti3DfpbibbsXvK+UXsqXlDwyD6HKA58gHvntmM=
-Date:   Fri, 20 Nov 2020 10:20:58 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Min Guo <min.guo@mediatek.com>
-Cc:     Bin Liu <b-liu@ti.com>, Matthias Brugger <matthias.bgg@gmail.com>,
-        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] usb: musb: remove unused variable 'devctl'
-Message-ID: <X7eKetkCN+Z3meyB@kroah.com>
-References: <20201117082125.7619-1-min.guo@mediatek.com>
- <X7UKJtWtE0UZgqAQ@kroah.com>
- <1605854930.3995.8.camel@mhfsdcap03>
- <X7doKlP1k824LGGN@kroah.com>
- <1605858126.3995.14.camel@mhfsdcap03>
- <X7eAEaTN/fM3fkkp@kroah.com>
- <1605862935.3995.20.camel@mhfsdcap03>
+        id S1726335AbgKTJ3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 04:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbgKTJ3A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 04:29:00 -0500
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D8FC0613CF
+        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 01:28:59 -0800 (PST)
+Received: by mail-wm1-x342.google.com with SMTP id a65so9182100wme.1
+        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 01:28:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ne6U1iN+VmwNbZxwYjqa57664T2M7DV98pQLWi7ApwE=;
+        b=lOd51iA9903iOxBuLB5MlPVdJyCk1yBKnXKkVkGNiGsTQLu4RWpABG+7fL7mxTzlcO
+         9eFU/3TYNawPdtb5XQgudMLSgpfeIdTsUmha/xn81Ih97Po/3EhUGl/NEqpa0DiId5i8
+         4OSTNlQftw1x4dXJtDXJ41QwDUJDC2Ae4BkWw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ne6U1iN+VmwNbZxwYjqa57664T2M7DV98pQLWi7ApwE=;
+        b=bsA6PCKRhwPJbeoTqiRfSNr77n95arBS0PVvo8Lj2YpeQf+g4wKPwgJSzdDrUBzHmk
+         KRESQrN+fyv5WxYaIpcmUQaBgai4eVcDtZhbA8PO8tSKbwjleMj6yyQOjFceKxz9e9n3
+         t+nFbECyrmrWOzJ+ODO+sGVGiOZU7dM0EjH7JyleUGNFQXYRmYsxhQ1jCfCQeqlCMrhG
+         k3qqLmjJ0TjTkKKKpBqapozwDuJuGqtg+GkAx1JfeCnuh4NxMrNiC4pJrHV2S/WO1rbC
+         2t6a3Ktwe/FTNRl8iBY3qi0BJH+A47CwoqtYP2DZsRyLumMQ22fb4BJ2ZOQMYgRDouQI
+         ZTQw==
+X-Gm-Message-State: AOAM533mO+vaZNAZrj6zj+6vtV/IUSu2cbjeh9slpan6BM1hxBIEUlOG
+        3i8UW23RsfMTwhiU7esV56HrUw==
+X-Google-Smtp-Source: ABdhPJzDRfjOtVJeeZGHohEgz05mObGSGGcqjEHsfCvj55T8h5x2bLw4rOzlhprHhLNesGONKtsjFw==
+X-Received: by 2002:a1c:b487:: with SMTP id d129mr9180590wmf.38.1605864538603;
+        Fri, 20 Nov 2020 01:28:58 -0800 (PST)
+Received: from vpa2.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
+        by smtp.gmail.com with ESMTPSA id a14sm3561791wmj.40.2020.11.20.01.28.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Nov 2020 01:28:57 -0800 (PST)
+From:   vpalatin@chromium.org
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vincent Palatin <vpalatin@chromium.org>
+Subject: [PATCH v2] usb: serial: option: add Fibocom NL668 variants
+Date:   Fri, 20 Nov 2020 10:28:28 +0100
+Message-Id: <20201120092828.665931-1-vpalatin@chromium.org>
+X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
+In-Reply-To: <20201120090107.502832-1-vpalatin@chromium.org>
+References: <20201120090107.502832-1-vpalatin@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1605862935.3995.20.camel@mhfsdcap03>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 05:02:15PM +0800, Min Guo wrote:
-> On Fri, 2020-11-20 at 09:36 +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Nov 20, 2020 at 03:42:06PM +0800, Min Guo wrote:
-> > > On Fri, 2020-11-20 at 07:54 +0100, Greg Kroah-Hartman wrote:
-> > > > On Fri, Nov 20, 2020 at 02:48:50PM +0800, Min Guo wrote:
-> > > > > Hi greg k-h:
-> > > > > On Wed, 2020-11-18 at 12:48 +0100, Greg Kroah-Hartman wrote:
-> > > > > > On Tue, Nov 17, 2020 at 04:21:25PM +0800, min.guo@mediatek.com wrote:
-> > > > > > > From: Min Guo <min.guo@mediatek.com>
-> > > > > > > 
-> > > > > > > Remove unused 'devctl' variable to fix compile warnings:
-> > > > > > > 
-> > > > > > >     drivers/usb/musb/musbhsdma.c: In function 'dma_controller_irq':
-> > > > > > >     drivers/usb/musb/musbhsdma.c:324:8: warning: variable 'devctl' set
-> > > > > > >     but not used [-Wunused-but-set-variable]
-> > > > > > > 
-> > > > > > > Signed-off-by: Min Guo <min.guo@mediatek.com>
-> > > > > > > ---
-> > > > > > >  drivers/usb/musb/musbhsdma.c | 4 ----
-> > > > > > >  1 file changed, 4 deletions(-)
-> > > > > > > 
-> > > > > > > diff --git a/drivers/usb/musb/musbhsdma.c b/drivers/usb/musb/musbhsdma.c
-> > > > > > > index 0aacfc8be5a1..7acd1635850d 100644
-> > > > > > > --- a/drivers/usb/musb/musbhsdma.c
-> > > > > > > +++ b/drivers/usb/musb/musbhsdma.c
-> > > > > > > @@ -321,8 +321,6 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
-> > > > > > >  				musb_channel->channel.status =
-> > > > > > >  					MUSB_DMA_STATUS_BUS_ABORT;
-> > > > > > >  			} else {
-> > > > > > > -				u8 devctl;
-> > > > > > > -
-> > > > > > >  				addr = musb_read_hsdma_addr(mbase,
-> > > > > > >  						bchannel);
-> > > > > > >  				channel->actual_len = addr
-> > > > > > > @@ -336,8 +334,6 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
-> > > > > > >  						< musb_channel->len) ?
-> > > > > > >  					"=> reconfig 0" : "=> complete");
-> > > > > > >  
-> > > > > > > -				devctl = musb_readb(mbase, MUSB_DEVCTL);
-> > > > > > 
-> > > > > > Are you sure that the hardware does not require this read to complete
-> > > > > > the command?  Lots of hardware is that way, so be very careful about
-> > > > > > this.  Did you test it?
-> > > > > 
-> > > > > I have tested this patch on Mediatek's platform, and not sure if it
-> > > > > will affect other vendors' platforms.
-> > > > > 
-> > > > > Dear Bin:
-> > > > > 
-> > > > > Does this patch will affect other vendors' platforms?
-> > > > 
-> > > > The hardware specs will answer this question, what do they say about
-> > > > this read?
-> > > 
-> > > Sorry, I didn't seen the comment on the hardware specs indicate that
-> > > devctl register needs to read once to take effect.
-> > 
-> > Perhaps you might want to add a comment here so that people will not
-> > keep making this same mistake when they run auto-checkers on the
-> > codebase?
-> 
-> Sorry for confused you, I searched the hardware specs, but did not find
-> the special description of the register devctl indicating that it needs
-> to be read out before the hardware can work.
+From: Vincent Palatin <vpalatin@chromium.org>
 
-If this is a PCI device, that is implied as that is how all PCI devices
-work, right?
+Update the USB serial option driver support for the Fibocom NL668 Cat.4
+LTE modules as there are actually several different variants.
+Got clarifications from Fibocom, there are distinct products:
+- VID:PID 1508:1001, NL668 for IOT (no MBIM interface)
+- VID:PID 2cb7:01a0, NL668-AM and NL652-EU are laptop M.2 cards (with
+  MBIM interfaces for Windows/Linux/Chrome OS), respectively for Americas
+  and Europe.
 
-What is the problem that is fixed by removing this read?
+usb-devices output for the laptop M.2 cards:
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  4 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2cb7 ProdID=01a0 Rev=03.18
+S:  Manufacturer=Fibocom Wireless Inc.
+S:  Product=Fibocom NL652-EU Modem
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
 
-thanks,
+Signed-off-by: Vincent Palatin <vpalatin@chromium.org>
+---
+ drivers/usb/serial/option.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-greg k-h
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index c773db129bf9..1dfde90765fd 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2036,12 +2036,13 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+ 	{ USB_DEVICE(0x0489, 0xe0b5),						/* Foxconn T77W968 ESIM */
+ 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+-	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 */
++	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
+ 	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
+ 	{ USB_DEVICE(0x2cb7, 0x0104),						/* Fibocom NL678 series */
+ 	  .driver_info = RSVD(4) | RSVD(5) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
+ 	  .driver_info = RSVD(6) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a0, 0xff) },			/* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
+-- 
+2.29.2.454.gaff20da3a2-goog
+
