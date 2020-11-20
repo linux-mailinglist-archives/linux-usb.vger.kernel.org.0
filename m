@@ -2,237 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A09812B9EA3
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 00:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037AC2B9F25
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 01:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727107AbgKSXmt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Nov 2020 18:42:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45110 "EHLO mail.kernel.org"
+        id S1727181AbgKTAP3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Nov 2020 19:15:29 -0500
+Received: from z5.mailgun.us ([104.130.96.5]:16210 "EHLO z5.mailgun.us"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726680AbgKSXmt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Nov 2020 18:42:49 -0500
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1727111AbgKTAP3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Nov 2020 19:15:29 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1605831328; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=o9ZMTbrPjh2CQrVWamYZ1L7gO50n4I5H1yPQu3eeebc=; b=UAXZDCI7WLuvdK76zLd+vLd1gXDMM4JaeCvr5odYmuLJbZJIevmooSdBq5L9iCIvbhsay02R
+ UoCRfK8zRb564Fr8KBNm3a70iUyWLKsean9JW8+bsxI5XFFlYqD8tpy507DeVGVdVWDSBQTP
+ k05KBJyUmvJEezw+Mk8NIU3TAHQ=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
+ 5fb70a99d64ea0b7035d0de7 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 20 Nov 2020 00:15:21
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 14E73C43460; Fri, 20 Nov 2020 00:15:21 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 72CD422254;
-        Thu, 19 Nov 2020 23:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605829367;
-        bh=JW1A1AIJoN9PpzGhcADx31Z4mx3wWPs74PG/UyKWTyc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WSV37G/uB+kbkh5m4iyZCcetg/i8uGeEVSaynOqAPohVpnxqHuxKuvP/wBMZgh1ci
-         ouHmfOT/7dTeLdlrP5cP8tT6hlO22rtZ2FMNwDgTsS9F1z4rDnd6FVcUiLczcTscYf
-         iC32Vb8XZCiAl75Ou8QI/5k6bnh8vzIUicztAQVE=
-Received: by mail-ed1-f50.google.com with SMTP id e18so7686701edy.6;
-        Thu, 19 Nov 2020 15:42:47 -0800 (PST)
-X-Gm-Message-State: AOAM530HlfLDeSmhujVoj7LRh1DYMW7R+3XCtWyVmwC+pBOTLvUH/Mjo
-        ToyJWVJ+eM6f6T4PvyA10XZDRvBFUxKot82Brw==
-X-Google-Smtp-Source: ABdhPJzoOIkdvfjzQ6rnTB9cEDNydznFiETJ7HfdxkLrWoEHgiRI4U2yN3QuxRQN/WPS3HW2x5lbkSbMmlBW5Htu0YE=
-X-Received: by 2002:a50:8745:: with SMTP id 5mr32752275edv.49.1605829365718;
- Thu, 19 Nov 2020 15:42:45 -0800 (PST)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7CD7AC43460;
+        Fri, 20 Nov 2020 00:15:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7CD7AC43460
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Thinh.Nguyen@synopsys.com, m.tretter@pengutronix.de,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH] usb: dwc3: gadget: Restart DWC3 gadget when enabling pullup
+Date:   Thu, 19 Nov 2020 16:13:21 -0800
+Message-Id: <20201120001321.773-1-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20201118082126.42701-1-chunfeng.yun@mediatek.com> <20201118082126.42701-6-chunfeng.yun@mediatek.com>
-In-Reply-To: <20201118082126.42701-6-chunfeng.yun@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Fri, 20 Nov 2020 07:42:35 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_9dNyySJkyX78tHDQZPaqD+5Jqixbdbohp319FyXO1X5Q@mail.gmail.com>
-Message-ID: <CAAOTY_9dNyySJkyX78tHDQZPaqD+5Jqixbdbohp319FyXO1X5Q@mail.gmail.com>
-Subject: Re: [PATCH v3 06/11] dt-bindings: phy: convert HDMI PHY binding to
- YAML schema
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Min Guo <min.guo@mediatek.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, Chunfeng:
+usb_gadget_deactivate/usb_gadget_activate does not execute the UDC start
+operation, which may leave EP0 disabled and event IRQs disabled when
+re-activating the function. Move the enabling/disabling of USB EP0 and
+device event IRQs to be performed in the pullup routine.
 
-Chunfeng Yun <chunfeng.yun@mediatek.com> =E6=96=BC 2020=E5=B9=B411=E6=9C=88=
-18=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=884:21=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Convert HDMI PHY binding to YAML schema mediatek,hdmi-phy.yaml
->
-> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
-> v3: add Reviewed-by Rob
-> v2: fix binding check warning of reg in example
-> ---
->  .../display/mediatek/mediatek,hdmi.txt        | 18 +---
->  .../bindings/phy/mediatek,hdmi-phy.yaml       | 91 +++++++++++++++++++
->  2 files changed, 92 insertions(+), 17 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/phy/mediatek,hdmi-p=
-hy.yaml
->
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-hdmi.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi=
-.txt
-> index 6b1c586403e4..b284ca51b913 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.tx=
-t
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.tx=
-t
-> @@ -53,23 +53,7 @@ Required properties:
->
->  HDMI PHY
->  =3D=3D=3D=3D=3D=3D=3D=3D
-> -
-> -The HDMI PHY serializes the HDMI encoder's three channel 10-bit parallel
-> -output and drives the HDMI pads.
-> -
-> -Required properties:
-> -- compatible: "mediatek,<chip>-hdmi-phy"
-> -- the supported chips are mt2701, mt7623 and mt8173
-> -- reg: Physical base address and length of the module's registers
-> -- clocks: PLL reference clock
-> -- clock-names: must contain "pll_ref"
-> -- clock-output-names: must be "hdmitx_dig_cts" on mt8173
-> -- #phy-cells: must be <0>
-> -- #clock-cells: must be <0>
-> -
-> -Optional properties:
-> -- mediatek,ibias: TX DRV bias current for <1.65Gbps, defaults to 0xa
-> -- mediatek,ibias_up: TX DRV bias current for >1.65Gbps, defaults to 0x1c
-> +See phy/mediatek,hdmi-phy.yaml
->
->  Example:
->
-> diff --git a/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml=
- b/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
-> new file mode 100644
-> index 000000000000..96700bb8bc00
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
-> @@ -0,0 +1,91 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (c) 2020 MediaTek
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/mediatek,hdmi-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek High Definition Multimedia Interface (HDMI) PHY binding
-> +
-> +maintainers:
-> +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> +  - Chunfeng Yun <chunfeng.yun@mediatek.com>
+Fixes: ae7e86108b12 ("usb: dwc3: Stop active transfers before halting the
+controller")
 
-Please add Philipp Zabel because he is Mediatek DRM driver maintainer.
+Reported-by: Michael Tretter <m.tretter@pengutronix.de>
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+---
+ drivers/usb/dwc3/gadget.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-DRM DRIVERS FOR MEDIATEK
-M: Chun-Kuang Hu <chunkuang.hu at kernel.org>
-M: Philipp Zabel <p.zabel at pengutronix.de>
-L: dri-devel at lists.freedesktop.org
-S: Supported
-F: Documentation/devicetree/bindings/display/mediatek/
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 5d879b7606d5..922c8b76e534 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1988,6 +1988,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
+ 
+ static void dwc3_gadget_disable_irq(struct dwc3 *dwc);
+ static void __dwc3_gadget_stop(struct dwc3 *dwc);
++static int __dwc3_gadget_start(struct dwc3 *dwc);
+ 
+ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ {
+@@ -2050,6 +2051,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
+ 						dwc->ev_buf->length;
+ 		}
++	} else {
++		__dwc3_gadget_start(dwc);
+ 	}
+ 
+ 	ret = dwc3_gadget_run_stop(dwc, is_on, false);
+@@ -2224,10 +2227,6 @@ static int dwc3_gadget_start(struct usb_gadget *g,
+ 	}
+ 
+ 	dwc->gadget_driver	= driver;
+-
+-	if (pm_runtime_active(dwc->dev))
+-		__dwc3_gadget_start(dwc);
+-
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	return 0;
+@@ -2253,13 +2252,6 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
+ 	unsigned long		flags;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-
+-	if (pm_runtime_suspended(dwc->dev))
+-		goto out;
+-
+-	__dwc3_gadget_stop(dwc);
+-
+-out:
+ 	dwc->gadget_driver	= NULL;
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-Regards,
-Chun-Kuang.
-
-> +
-> +description: |
-> +  The HDMI PHY serializes the HDMI encoder's three channel 10-bit parall=
-el
-> +  output and drives the HDMI pads.
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^hdmi-phy@[0-9a-f]+$"
-> +
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt2701-hdmi-phy
-> +      - mediatek,mt7623-hdmi-phy
-> +      - mediatek,mt8173-hdmi-phy
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: PLL reference clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: pll_ref
-> +
-> +  clock-output-names:
-> +    items:
-> +      - const: hdmitx_dig_cts
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +  "#clock-cells":
-> +    const: 0
-> +
-> +  mediatek,ibias:
-> +    description:
-> +      TX DRV bias current for < 1.65Gbps
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 63
-> +    default: 0xa
-> +
-> +  mediatek,ibias_up:
-> +    description:
-> +      TX DRV bias current for >=3D 1.65Gbps
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 63
-> +    default: 0x1c
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - clock-output-names
-> +  - "#phy-cells"
-> +  - "#clock-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    hdmi_phy: hdmi-phy@10209100 {
-> +        compatible =3D "mediatek,mt8173-hdmi-phy";
-> +        reg =3D <0x10209100 0x24>;
-> +        clocks =3D <&apmixedsys CLK_APMIXED_HDMI_REF>;
-> +        clock-names =3D "pll_ref";
-> +        clock-output-names =3D "hdmitx_dig_cts";
-> +        mediatek,ibias =3D <0xa>;
-> +        mediatek,ibias_up =3D <0x1c>;
-> +        #clock-cells =3D <0>;
-> +        #phy-cells =3D <0>;
-> +    };
-> +
-> +...
-> --
-> 2.18.0
->
