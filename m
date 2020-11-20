@@ -2,184 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE312BB7E6
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 21:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EE12BB814
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 22:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730139AbgKTUtH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 15:49:07 -0500
-Received: from mga07.intel.com ([134.134.136.100]:11834 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729912AbgKTUtH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Nov 2020 15:49:07 -0500
-IronPort-SDR: 1IS3uQ2d8wThG1Y+jzYj84YNxPEis9DogwmhD8LOffrKMw+DHPu36ZfRhjpCAfSOd/x+oQRY5S
- rHH86k4+Yn0A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9811"; a="235685423"
-X-IronPort-AV: E=Sophos;i="5.78,357,1599548400"; 
-   d="scan'208";a="235685423"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2020 12:49:06 -0800
-IronPort-SDR: lwAFtr6tEoaNwVzC6RdUYfppvJdGnP53epBELtQyUt8SjLkmnGxEObt8wl9D02hJIN6ymC1p5v
- /CAuraEEBvjQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,357,1599548400"; 
-   d="scan'208";a="326480082"
-Received: from lkp-server01.sh.intel.com (HELO 00bc34107a07) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 20 Nov 2020 12:49:05 -0800
-Received: from kbuild by 00bc34107a07 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kgDL6-00005U-8t; Fri, 20 Nov 2020 20:49:04 +0000
-Date:   Sat, 21 Nov 2020 04:48:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD REGRESSION
- 52a0372a38b45899368b44147db52f7360aaea31
-Message-ID: <5fb82ba2.YWk1i1vZTKw/8mrV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1730664AbgKTVEb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 16:04:31 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:38959 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730524AbgKTVEb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 16:04:31 -0500
+Received: by mail-ot1-f68.google.com with SMTP id z16so10024557otq.6;
+        Fri, 20 Nov 2020 13:04:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hG0Yjdk9OimqrWpKYF/IkVWg6nsHdnZMFyZuaLz0d1k=;
+        b=M/WmwzU09ZqN89i/h+j5sU3eJv5VcQgJrLEAI0sWgrAVuyB9szLyD7n9K9eBv/wNTr
+         8ReidoP+Ph3/e1KDo8KYXu+m/kWBJoIhqEKdd6UcLUX/NLCzMV9v0UgD2apx8R7w5vd2
+         z8SPGfV6ree2X1bcy7rNBVM12hK9AHh+If9MHAdSIowld9cgW0XyVSfpvzIRyyXU9e+y
+         id9ENlpC+ZVj+lsa8g36ZfUSa2cpHOpw83QD/9NnB1n1/fw7mhgSKV6jCtbXb2V057fH
+         2Rlz7RlO1BM+zufq7xlxKxMWsIEGRxHJxk0sET5iAuvF1YVnWKOAxXoGK6OHRcmb9dJC
+         wb0g==
+X-Gm-Message-State: AOAM531Djiy7wQNDeFdOsrUs6A0S1oQdiO0NSsVFK4HY/OxH4osCrRLR
+        RVJ9uOqKYRiQ4F1YMOEwE6V5KagdFw==
+X-Google-Smtp-Source: ABdhPJwLeMlOc9JnvLCoMo/5Ni0hEffgWksdYu0UKsb07/EKXhO37Q+3KKYnD25MH0HsDzi9KghYyg==
+X-Received: by 2002:a05:6830:22c9:: with SMTP id q9mr16142414otc.48.1605906270299;
+        Fri, 20 Nov 2020 13:04:30 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id n3sm2254605oif.42.2020.11.20.13.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Nov 2020 13:04:29 -0800 (PST)
+Received: (nullmailer pid 1736597 invoked by uid 1000);
+        Fri, 20 Nov 2020 21:04:28 -0000
+Date:   Fri, 20 Nov 2020 15:04:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: Add support for the Broadcom UART driver
+Message-ID: <20201120210428.GA1736336@robh.at.kernel.org>
+References: <20201120194305.8847-1-alcooperx@gmail.com>
+ <20201120194305.8847-3-alcooperx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20201120194305.8847-3-alcooperx@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 52a0372a38b45899368b44147db52f7360aaea31  usb: typec: Fix num_altmodes kernel-doc error
+On Fri, 20 Nov 2020 14:43:04 -0500, Al Cooper wrote:
+> Add DT bindings for the Broadcom 8250 based UART driver. This
+> UART is based on an 8250 but adds additional functionality. The
+> additional features include the ability to use DMA for transfers and
+> a baud rate clock system that is more accurate at high baud rates.
+> This UART is backward compatible with the standard 8250 UART.
+> 
+> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> ---
+>  .../bindings/serial/brcm,bcm7271-uart.yaml    | 94 +++++++++++++++++++
+>  1 file changed, 94 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml
+> 
 
-Error/Warning ids grouped by kconfigs:
 
-gcc_recent_errors
-`-- sh-randconfig-c004-20201120
-    `-- drivers-usb-misc-apple-mfi-fastcharge.c:ERROR:reference-preceded-by-free-on-line
+My bot found errors running 'make dt_binding_check' on your patch:
 
-elapsed time: 724m
+yamllint warnings/errors:
 
-configs tested: 117
-configs skipped: 2
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml: 'additionalProperties' is a required property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml: ignoring, error in schema: 
+warning: no schema found in file: ./Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                         hackkit_defconfig
-sh                   sh7724_generic_defconfig
-powerpc                      obs600_defconfig
-powerpc                     mpc512x_defconfig
-mips                      malta_kvm_defconfig
-powerpc                        cell_defconfig
-powerpc                     tqm8560_defconfig
-arm                          pxa168_defconfig
-sh                        sh7785lcr_defconfig
-nds32                             allnoconfig
-mips                        jmr3927_defconfig
-xtensa                          iss_defconfig
-arm                              alldefconfig
-sh                          rsk7203_defconfig
-powerpc                      mgcoge_defconfig
-mips                     decstation_defconfig
-arm                          imote2_defconfig
-h8300                     edosk2674_defconfig
-sh                         ap325rxa_defconfig
-m68k                           sun3_defconfig
-mips                      maltasmvp_defconfig
-powerpc                     kilauea_defconfig
-mips                         cobalt_defconfig
-powerpc                    ge_imp3a_defconfig
-powerpc                      pcm030_defconfig
-arm                        magician_defconfig
-um                            kunit_defconfig
-powerpc                     ppa8548_defconfig
-sh                      rts7751r2d1_defconfig
-arm                             pxa_defconfig
-arm                      pxa255-idp_defconfig
-mips                            ar7_defconfig
-arm                        mvebu_v5_defconfig
-sparc                       sparc64_defconfig
-mips                         tb0219_defconfig
-mips                          malta_defconfig
-arm                            hisi_defconfig
-mips                        nlm_xlr_defconfig
-arm                           viper_defconfig
-m68k                        m5307c3_defconfig
-arm                       aspeed_g5_defconfig
-sh                             espt_defconfig
-arm                         lubbock_defconfig
-xtensa                       common_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20201120
-x86_64               randconfig-a003-20201120
-x86_64               randconfig-a004-20201120
-x86_64               randconfig-a005-20201120
-x86_64               randconfig-a001-20201120
-x86_64               randconfig-a002-20201120
-i386                 randconfig-a004-20201120
-i386                 randconfig-a003-20201120
-i386                 randconfig-a002-20201120
-i386                 randconfig-a005-20201120
-i386                 randconfig-a001-20201120
-i386                 randconfig-a006-20201120
-i386                 randconfig-a012-20201120
-i386                 randconfig-a013-20201120
-i386                 randconfig-a011-20201120
-i386                 randconfig-a016-20201120
-i386                 randconfig-a014-20201120
-i386                 randconfig-a015-20201120
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
 
-clang tested configs:
-x86_64               randconfig-a015-20201120
-x86_64               randconfig-a011-20201120
-x86_64               randconfig-a014-20201120
-x86_64               randconfig-a016-20201120
-x86_64               randconfig-a012-20201120
-x86_64               randconfig-a013-20201120
+See https://patchwork.ozlabs.org/patch/1404090
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+The base for the patch is generally the last rc1. Any dependencies
+should be noted.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
