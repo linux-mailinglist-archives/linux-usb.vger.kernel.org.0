@@ -2,61 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B009D2BA665
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 10:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218E82BA69E
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 10:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727222AbgKTJll (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 04:41:41 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:41643 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727133AbgKTJll (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 04:41:41 -0500
-Received: by mail-lf1-f65.google.com with SMTP id w142so12534457lff.8
-        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 01:41:40 -0800 (PST)
+        id S1726882AbgKTJyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 04:54:49 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:44986 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726460AbgKTJyt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 04:54:49 -0500
+Received: by mail-lj1-f193.google.com with SMTP id s9so9380337ljo.11;
+        Fri, 20 Nov 2020 01:54:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Zbkkgyc0qIFpwelhg/lviXiCJzFmERI5eN6eyBAkzkw=;
-        b=NWI1xUcxNo0LBQAKtmgcDskIaNfS3QDzjtBzgieyj9XHmTngYUpIgAwKYbw0IN4/Nu
-         cqgInMAIo2H0EJVBH18JpmXcu0f41D+NINxV1fDSjtk4EMl13Hb8+zub2ECPQgswhzKe
-         8Tx8M89JC6nFqufgwVMQrZWDUsYHwXWausXI9yTQOTZZ+xACXLLJ/oK9Y9W+uREdIfQq
-         flbr6cLq1hN1tQ6Zv5dWAq2mj+oPackq5tggB4Q0q32EkHez/iGVjLtclGPSuM+6rSd/
-         Am/qB+NkFwSzj5UV2krBetAHNIp1uio6yK21bdiNTqnM49fHNStJmvl1Z0ETaAqE5uWe
-         6Fdw==
-X-Gm-Message-State: AOAM532D4GpLVO+VEDCysNEiNX7m+2cvMIp6qyU5RDULLG14ti7eme36
-        EcgUhE3f+nk9Vj6IhRsN9+s=
-X-Google-Smtp-Source: ABdhPJyC4ZnuNpAy0el8cfjQXhVINsHTc5Bh/062Owr9+OgtlkcTemQ74ZZUYWEF7lShHVpG0/p5iA==
-X-Received: by 2002:a19:4050:: with SMTP id n77mr7608759lfa.460.1605865299349;
-        Fri, 20 Nov 2020 01:41:39 -0800 (PST)
+        bh=C59c0mgsV+SRL0gTcx0qWRGq+USR/SFMGynSGvNxYmA=;
+        b=BWu/vPP+q4YBjSK/Hf7r/Tf3VHnDLnzcIOm+FNe5SLZk/CajbFADRMob7zOILJK0xH
+         3lNdcujBT0D+lHCPrbrLp0aWkYyhso8iYNDOoo4WaTX+Rcsg/3fSR+0huAiJ8PgUpB4I
+         hHT+ugouVSea+mqDJk4u0l35Vekl901a40Cfx9plJ+2zCaf2c1l8A2/AeeYHIjZERtju
+         IIQJvBCSdirpNBnEgNJveoosDj2MLr7LmBZNzByBzEoKjmpCx7QfQvrFrhLN8xIZG9RR
+         K8/2Kh+A9Ow5/YnUkNbVgQH8dlRFoLe4uOPQC67AIPUw0k6ViXMc1rL+43ykRba+613t
+         6tQg==
+X-Gm-Message-State: AOAM531J7NsaRTaWZVWcE9SpQDskqGAwJbgl24gHwHLM0mu7KURNocrM
+        /a/jhAJz2irBNv0YNUYRtW6EFeZObOyDrA==
+X-Google-Smtp-Source: ABdhPJxSgBzw5ROqXBewpxM2xbqBDivuTciM6YpFoI3bCUF3jvXcsfIxRNmiWpBeKrc/sbdnmZmM2g==
+X-Received: by 2002:a2e:93cf:: with SMTP id p15mr8423247ljh.141.1605866085852;
+        Fri, 20 Nov 2020 01:54:45 -0800 (PST)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id j27sm285791lfm.33.2020.11.20.01.41.38
+        by smtp.gmail.com with ESMTPSA id x8sm285070lff.196.2020.11.20.01.54.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 01:41:38 -0800 (PST)
+        Fri, 20 Nov 2020 01:54:45 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1kg2vG-00059F-RV; Fri, 20 Nov 2020 10:41:42 +0100
-Date:   Fri, 20 Nov 2020 10:41:42 +0100
+        id 1kg37w-0007Qy-JW; Fri, 20 Nov 2020 10:54:49 +0100
+Date:   Fri, 20 Nov 2020 10:54:48 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Giacinto Cifelli <gciofono@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] option: added support for Thales Cinterion MV31 option
- port.
-Message-ID: <X7ePVj4C/wVWb5GL@localhost>
-References: <20201119115931.19050-1-gciofono@gmail.com>
+To:     vpalatin@chromium.org
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: serial: option: add Fibocom NL668 variants
+Message-ID: <X7eSaCD3pqvdD4jj@localhost>
+References: <20201120090107.502832-1-vpalatin@chromium.org>
+ <20201120092828.665931-1-vpalatin@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201119115931.19050-1-gciofono@gmail.com>
+In-Reply-To: <20201120092828.665931-1-vpalatin@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 12:59:31PM +0100, Giacinto Cifelli wrote:
-> There is a single option port in this modem, and it is used as debug port
+On Fri, Nov 20, 2020 at 10:28:28AM +0100, vpalatin@chromium.org wrote:
+> From: Vincent Palatin <vpalatin@chromium.org>
 > 
-> Signed-off-by: Giacinto Cifelli <gciofono@gmail.com>
+> Update the USB serial option driver support for the Fibocom NL668 Cat.4
+> LTE modules as there are actually several different variants.
+> Got clarifications from Fibocom, there are distinct products:
+> - VID:PID 1508:1001, NL668 for IOT (no MBIM interface)
+> - VID:PID 2cb7:01a0, NL668-AM and NL652-EU are laptop M.2 cards (with
+>   MBIM interfaces for Windows/Linux/Chrome OS), respectively for Americas
+>   and Europe.
+> 
+> usb-devices output for the laptop M.2 cards:
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  4 Spd=480 MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=2cb7 ProdID=01a0 Rev=03.18
+> S:  Manufacturer=Fibocom Wireless Inc.
+> S:  Product=Fibocom NL652-EU Modem
+> S:  SerialNumber=0123456789ABCDEF
+> C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+> 
+> Signed-off-by: Vincent Palatin <vpalatin@chromium.org>
 
-Can you post the output of "lsusb -v" for this device?
+Applied, thanks!
 
 Johan
