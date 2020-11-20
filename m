@@ -2,53 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2C72BB111
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 17:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DA02BB121
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 18:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730161AbgKTQ5B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 11:57:01 -0500
-Received: from pic75-3-78-194-244-226.fbxo.proxad.net ([78.194.244.226]:44784
-        "EHLO mail.corsac.net" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1730236AbgKTQ4z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 11:56:55 -0500
-X-Greylist: delayed 84688 seconds by postgrey-1.27 at vger.kernel.org; Fri, 20 Nov 2020 11:56:54 EST
-Received: from scapa.corsac.net (unknown [IPv6:2a01:e34:ec2f:4e20:6af7:28ff:fe8d:2119])
-        by mail.corsac.net (Postfix) with ESMTPS id 7FA389E
-        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 17:56:48 +0100 (CET)
-Received: from corsac (uid 1000)
-        (envelope-from corsac@corsac.net)
-        id a0181
-        by scapa.corsac.net (DragonFly Mail Agent v0.12);
-        Fri, 20 Nov 2020 17:56:47 +0100
-Message-ID: <6266fe045aa8a1a0fc927c6e731a10dc64b41628.camel@corsac.net>
-Subject: Re: [PATCH] usbnet: ipheth: fix connectivity with iOS 14
-From:   Yves-Alexis Perez <corsac@corsac.net>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Martin Habets <mhabets@solarflare.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Shannon Nelson <snelson@pensando.io>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Matti Vuorela <matti.vuorela@bitfactor.fi>, stable@vger.kernel.org
-Date:   Fri, 20 Nov 2020 17:56:47 +0100
-In-Reply-To: <22d938ab-babc-815a-f635-5025e871cf62@gmail.com>
-References: <CAAn0qaXmysJ9vx3ZEMkViv_B19ju-_ExN8Yn_uSefxpjS6g4Lw@mail.gmail.com>
-         <20201119172439.94988-1-corsac@corsac.net>
-         <22d938ab-babc-815a-f635-5025e871cf62@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.38.1-2 
+        id S1730197AbgKTRA5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 12:00:57 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:36847 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729985AbgKTRA4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 12:00:56 -0500
+Received: (qmail 622202 invoked by uid 1000); 20 Nov 2020 12:00:55 -0500
+Date:   Fri, 20 Nov 2020 12:00:55 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: Re: memory leak in hub_event
+Message-ID: <20201120170055.GF619708@rowland.harvard.edu>
+References: <20201120165609.GE619708@rowland.harvard.edu>
+ <000000000000c49c8b05b48cb833@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000c49c8b05b48cb833@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTExLTIwIGF0IDEyOjE1ICswMzAwLCBTZXJnZWkgU2h0eWx5b3Ygd3JvdGU6
-Cj4gPiBJbnZlc3RpZ2F0aW9uIG9uIHRoZSBtYXR0ZXIgc2hvd3MgdGhhdCBVRFAgYW5kIElDTVAg
-dHJhZmZpYyBmcm9tIHRoZQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIF4gIm5vIiBtaXNzaW5n
-PwpZZXMgaW5kZWVkLiBUaGFua3MgYW5kIHNvcnJ5IGZvciB0aGUgdHlwby4KClJlZ2FyZHMsCi0t
-IApZdmVzLUFsZXhpcwo=
+On Fri, Nov 20, 2020 at 08:56:11AM -0800, syzbot wrote:
+> > On Fri, Nov 20, 2020 at 07:15:20AM -0800, syzbot wrote:
+> >> Hello,
+> >> 
+> >> syzbot found the following issue on:
+> >> 
+> >> HEAD commit:    4d02da97 Merge tag 'net-5.10-rc5' of git://git.kernel.org/..
+> >> git tree:       upstream
+> >> console output: https://syzkaller.appspot.com/x/log.txt?x=13a7d2b6500000
+> >> kernel config:  https://syzkaller.appspot.com/x/.config?x=c5353ac514ca5a43
+> >> dashboard link: https://syzkaller.appspot.com/bug?extid=44e64397bd81d5e84cba
+> >> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> >> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14925089500000
+> >> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16810051500000
 
+> > #syz test: upstream 4d02da97
+> 
+> "upstream" does not look like a valid git repo address.
+
+Okay, Andrey.  If "upstream" is not accepted as a valid git repo 
+address, why does syzkaller list it on the "git tree:" line?  It seems 
+to me that syzkaller should be willing to accept as input anything it 
+produces as output.
+
+And what repo should I put here?
+
+Alan Stern
