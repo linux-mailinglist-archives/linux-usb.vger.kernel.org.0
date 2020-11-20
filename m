@@ -2,108 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D05922BA4BC
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 09:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD67E2BA4E0
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 09:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbgKTIfw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 03:35:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56970 "EHLO mail.kernel.org"
+        id S1727091AbgKTIkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 03:40:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58110 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725824AbgKTIfw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Nov 2020 03:35:52 -0500
+        id S1726558AbgKTIkj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Nov 2020 03:40:39 -0500
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 89CE422249;
-        Fri, 20 Nov 2020 08:35:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0002722244;
+        Fri, 20 Nov 2020 08:40:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1605861351;
-        bh=tIxJKxqoDLTXmbqUoDmW42v8F6sWdb/G/JzerkWeM58=;
+        s=korg; t=1605861638;
+        bh=dMzZlCs5sLmUYyTkOdmbEULzF7orbNVTDESsGpFByl8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QQI+s1yU0No8f3DanI86ICz7XccjfboP1FJlveIti0enUDRR5ozLmsF1POiozmV4y
-         yFpmK16JZl6/fv5rJ9R9qQDzCflZIFYreqVYvGpZsygZQI5KMsvsWgmbvYCYaFVzDv
-         1EBPQponTVekf79w4/BC7M74MSRQh0w73kSUFH4I=
-Date:   Fri, 20 Nov 2020 09:36:33 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Min Guo <min.guo@mediatek.com>
-Cc:     Bin Liu <b-liu@ti.com>, Matthias Brugger <matthias.bgg@gmail.com>,
-        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] usb: musb: remove unused variable 'devctl'
-Message-ID: <X7eAEaTN/fM3fkkp@kroah.com>
-References: <20201117082125.7619-1-min.guo@mediatek.com>
- <X7UKJtWtE0UZgqAQ@kroah.com>
- <1605854930.3995.8.camel@mhfsdcap03>
- <X7doKlP1k824LGGN@kroah.com>
- <1605858126.3995.14.camel@mhfsdcap03>
+        b=1oBieG22nyex1qdaCb4oeucEUir+1Bd12wZTeO9GLvXYsw+4eNO8YkgMk41OMMfls
+         gf40PB99fzXut/MsHbtH6TE2kwMPyfMx0lZV13QhhfBr0k67ZtiUvhwog08NpMh8vQ
+         Q/Wp4vLizAJaKYf0SC6ku6/TdFz+qpbbNLyzjr4Q=
+Date:   Fri, 20 Nov 2020 09:41:21 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com,
+        linux-kernel@vger.kernel.org, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: Fix num_altmodes kernel-doc error
+Message-ID: <X7eBMRWAopEYu78r@kroah.com>
+References: <20201120063523.4159877-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1605858126.3995.14.camel@mhfsdcap03>
+In-Reply-To: <20201120063523.4159877-1-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 03:42:06PM +0800, Min Guo wrote:
-> On Fri, 2020-11-20 at 07:54 +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Nov 20, 2020 at 02:48:50PM +0800, Min Guo wrote:
-> > > Hi greg k-h:
-> > > On Wed, 2020-11-18 at 12:48 +0100, Greg Kroah-Hartman wrote:
-> > > > On Tue, Nov 17, 2020 at 04:21:25PM +0800, min.guo@mediatek.com wrote:
-> > > > > From: Min Guo <min.guo@mediatek.com>
-> > > > > 
-> > > > > Remove unused 'devctl' variable to fix compile warnings:
-> > > > > 
-> > > > >     drivers/usb/musb/musbhsdma.c: In function 'dma_controller_irq':
-> > > > >     drivers/usb/musb/musbhsdma.c:324:8: warning: variable 'devctl' set
-> > > > >     but not used [-Wunused-but-set-variable]
-> > > > > 
-> > > > > Signed-off-by: Min Guo <min.guo@mediatek.com>
-> > > > > ---
-> > > > >  drivers/usb/musb/musbhsdma.c | 4 ----
-> > > > >  1 file changed, 4 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/usb/musb/musbhsdma.c b/drivers/usb/musb/musbhsdma.c
-> > > > > index 0aacfc8be5a1..7acd1635850d 100644
-> > > > > --- a/drivers/usb/musb/musbhsdma.c
-> > > > > +++ b/drivers/usb/musb/musbhsdma.c
-> > > > > @@ -321,8 +321,6 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
-> > > > >  				musb_channel->channel.status =
-> > > > >  					MUSB_DMA_STATUS_BUS_ABORT;
-> > > > >  			} else {
-> > > > > -				u8 devctl;
-> > > > > -
-> > > > >  				addr = musb_read_hsdma_addr(mbase,
-> > > > >  						bchannel);
-> > > > >  				channel->actual_len = addr
-> > > > > @@ -336,8 +334,6 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
-> > > > >  						< musb_channel->len) ?
-> > > > >  					"=> reconfig 0" : "=> complete");
-> > > > >  
-> > > > > -				devctl = musb_readb(mbase, MUSB_DEVCTL);
-> > > > 
-> > > > Are you sure that the hardware does not require this read to complete
-> > > > the command?  Lots of hardware is that way, so be very careful about
-> > > > this.  Did you test it?
-> > > 
-> > > I have tested this patch on Mediatek's platform, and not sure if it
-> > > will affect other vendors' platforms.
-> > > 
-> > > Dear Bin:
-> > > 
-> > > Does this patch will affect other vendors' platforms?
-> > 
-> > The hardware specs will answer this question, what do they say about
-> > this read?
+On Thu, Nov 19, 2020 at 10:35:22PM -0800, Prashant Malani wrote:
+> The commit to introduce the num_altmodes attribute for partner had an
+> error where one of the parameters was named differently in the comment
+> and the function signature. Fix the version in the comment to align with
+> what is in the function signature.
 > 
-> Sorry, I didn't seen the comment on the hardware specs indicate that
-> devctl register needs to read once to take effect.
+> This fixes the following htmldocs warning:
+> 
+> drivers/usb/typec/class.c:632: warning: Excess function parameter
+> 'num_alt_modes' description in 'typec_partner_set_num_altmodes'
+> 
+> Fixes: a0ccdc4a77a1 ("usb: typec: Add number of altmodes partner attr")
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Perhaps you might want to add a comment here so that people will not
-keep making this same mistake when they run auto-checkers on the
-codebase?
+You forgot a "Reported-by:" tag here :(
 
-thanks,
+I'll go add it by hand...
 
 greg k-h
