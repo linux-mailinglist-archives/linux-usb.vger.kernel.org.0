@@ -2,95 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 669D22BAE54
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 16:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC842BAEED
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 16:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729318AbgKTPPX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 10:15:23 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:52048 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729305AbgKTPPV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 10:15:21 -0500
-Received: by mail-io1-f69.google.com with SMTP id l15so7605718ioh.18
-        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 07:15:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=u+dd7zmsQHvaKxf7u/6X30MzZ3ooS0NO8ZrIH9E/AgE=;
-        b=PA99oHNKuF7yzWv7dn20IK/GYUlmB36xm3BC3XLdZpdcbsoi9NxD3LS9XvF9PkMhI6
-         Rkd3aAgePy2il2wRDqlSuB+7TDdrEY/4E6AX//CuHCjrOivpCjB3TUdgIKOX3H0seKgZ
-         v6aaJgxj3cDpRIPh9TBdshxUJIvriy+LTCSxm76cEGHzHJxbKaDPBaWDVw63MntXosQ6
-         XLPw8yFG7R1czCogdYgckDhnESrsbW0h4sUyQ8ofCPOS+vz3Iph+q3yqwTagXcJO+IFu
-         wlW5zuxA5kWsJnLITD9+/pEsFmCgZ6zNGnTXY3wbjo1RybP0MhCLWw+GEz4iUlGhNUbJ
-         lF9A==
-X-Gm-Message-State: AOAM531SdbvsTawaSvs7tvEJkXfv0CL1kmDmYEJ/DF4iRa9yHlS7y+Yp
-        UhY04VNaFsDnmdfkXAo+sDicAuCo0mFQAsFlXi2zGAqZnM3z
-X-Google-Smtp-Source: ABdhPJzKyWbuIDCMhXDpinb+OjANzYYzjCAZYgJnCtSCCPWKAwxcQBeHEip5wCO/YTm2h1YHqRdbQ/hGEupGR8vanb/En7NP5D+s
+        id S1728739AbgKTP03 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 10:26:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33358 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728628AbgKTP03 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Nov 2020 10:26:29 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E4D4122252;
+        Fri, 20 Nov 2020 15:26:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1605885989;
+        bh=P0HBOCBl1RMU/HixCoEPMKQrzhCV59wwxizWcfylWLI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YjkzJDiU9qPIa+ZlXYviHuFH55jhHzssMDi2sQiyrSGdd7yRj1eL6rrJ57lA4PJ4f
+         mnVQwNNIwtiJ8+4HqiZbZcxmcNSk7Seo8Ai+2SZFu8/Ow79q/hf7N5ZKonAGLVwBKj
+         8/UNs1FsZvfYusp6HegC6xR9HpZQzYZWCduQQtSY=
+Date:   Fri, 20 Nov 2020 16:27:11 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     manchette <manchette@free.fr>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Webcam not working , HD Web Camera (18d1:0002)
+Message-ID: <X7fgT2+hqdCj7dyY@kroah.com>
+References: <6affe2b1-1f99-14c6-7cde-f73ca18576b0@free.fr>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:d80c:: with SMTP id y12mr25234768iob.183.1605885321069;
- Fri, 20 Nov 2020 07:15:21 -0800 (PST)
-Date:   Fri, 20 Nov 2020 07:15:21 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001cc99505b48b5094@google.com>
-Subject: WARNING in corrupted/usb_submit_urb (2)
-From:   syzbot <syzbot+4feb9bb7280fb554f021@syzkaller.appspotmail.com>
-To:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
-        gustavoars@kernel.org, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tiwai@suse.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6affe2b1-1f99-14c6-7cde-f73ca18576b0@free.fr>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, Nov 20, 2020 at 02:43:41PM +0100, manchette wrote:
+> Hello,
+> 
+> A webcam is not working here :
+> here is what i know of it :
+> 
+> System:    Host: linux-815u Kernel: 5.3.18-lp152.47-default x86_64 bits: 64
+> Desktop: KDE Plasma 5.18.5
+>            Distro: openSUSE Leap 15.2
 
-syzbot found the following issue on:
+That is a very old kernel version, you should at least upgrade to a
+modern one.
 
-HEAD commit:    3494d588 Merge tag 'xtensa-20201119' of git://github.com/j..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10a028c1500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=75292221eb79ace2
-dashboard link: https://syzkaller.appspot.com/bug?extid=4feb9bb7280fb554f021
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11c94f86500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178f05ce500000
+> [19563.481204] usb 1-7: Product: HD Web Camera
+> [19563.481207] usb 1-7: Manufacturer: Ingenic Semiconductor CO., LTD.
+> [19563.481210] usb 1-7: SerialNumber: Ucamera001
+> [19563.488049] uvcvideo: Found UVC 1.00 device HD Web Camera (18d1:0002)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4feb9bb7280fb554f021@syzkaller.appspotmail.com
+Looks like the driver is bound properly to the device, are you sure this
+device follows the correct UVC specification?
 
-usb 1-1: Manufacturer: syz
-usb 1-1: SerialNumber: syz
-usb 1-1: ath9k_htc: Firmware ath9k_htc/htc_9271-1.4.0.fw requested
-usb 1-1: ath9k_htc: Transferred FW: ath9k_htc/htc_9271-1.4.0.fw, size: 51008
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 1 PID: 3077 at drivers/usb/core/urb.c:493 usb_submit_urb+0xcde/0x14e0 drivers/usb/core/urb.c:493
-Modules linked in:
-CPU: 1 PID: 3077 Comm: kworker/1:2 Not tainted 5.10.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events request_firmware_work_func
-RIP: 0010:usb_submit_urb+0xcde/0x14e0 drivers/usb/core/urb.c:493
-Code: 84 d4 02 00 00 e8 02 b4 3b fc 4c 89 ef e8 8a 37 0d ff 41 89 d8 44 89 e1 4c 89 f2 48 89 c6 48 c7 c7 80 6b e1 89 e8 5c f7 77 03 <0f> 0b e9 ca f8 ff ff e8 d6 b3 3b fc 48 81 c5 48 06 00 00 e9 f6 f7
-RSP: 0018:ffffc90001a67820 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: ffff88801a498000 RSI: ffffffff8158f3c5 RDI: fffff5200034cef6
-RBP: ffff88801dcf8000 R08: 0000000000000001 R09: ffff8880b9f30627
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff88814757f0a0 R14: ffff88801beffa78 R15: ffff888014092c00
-FS:  0000000000000000(0000) GS:ffff8880b9f00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055fe72d35188 CR3: 0000000013cf7000 CR4: 00000000001506e0
-DR0: 0000000000000000 
+Try updating to a 5.9 kernel version, and if that doesn't work, send
+your log message to the linux-media developers, they can help you out
+better than we can.
 
+good luck!
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+greg k-h
