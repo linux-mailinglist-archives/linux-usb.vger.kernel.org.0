@@ -2,113 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E22E2BA626
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 10:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592172BA651
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 10:38:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbgKTJ3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 04:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725789AbgKTJ3A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 04:29:00 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D8FC0613CF
-        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 01:28:59 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id a65so9182100wme.1
-        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 01:28:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ne6U1iN+VmwNbZxwYjqa57664T2M7DV98pQLWi7ApwE=;
-        b=lOd51iA9903iOxBuLB5MlPVdJyCk1yBKnXKkVkGNiGsTQLu4RWpABG+7fL7mxTzlcO
-         9eFU/3TYNawPdtb5XQgudMLSgpfeIdTsUmha/xn81Ih97Po/3EhUGl/NEqpa0DiId5i8
-         4OSTNlQftw1x4dXJtDXJ41QwDUJDC2Ae4BkWw=
+        id S1726765AbgKTJhr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 04:37:47 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:45768 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726321AbgKTJhr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 04:37:47 -0500
+Received: by mail-lf1-f65.google.com with SMTP id z21so12485270lfe.12;
+        Fri, 20 Nov 2020 01:37:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ne6U1iN+VmwNbZxwYjqa57664T2M7DV98pQLWi7ApwE=;
-        b=bsA6PCKRhwPJbeoTqiRfSNr77n95arBS0PVvo8Lj2YpeQf+g4wKPwgJSzdDrUBzHmk
-         KRESQrN+fyv5WxYaIpcmUQaBgai4eVcDtZhbA8PO8tSKbwjleMj6yyQOjFceKxz9e9n3
-         t+nFbECyrmrWOzJ+ODO+sGVGiOZU7dM0EjH7JyleUGNFQXYRmYsxhQ1jCfCQeqlCMrhG
-         k3qqLmjJ0TjTkKKKpBqapozwDuJuGqtg+GkAx1JfeCnuh4NxMrNiC4pJrHV2S/WO1rbC
-         2t6a3Ktwe/FTNRl8iBY3qi0BJH+A47CwoqtYP2DZsRyLumMQ22fb4BJ2ZOQMYgRDouQI
-         ZTQw==
-X-Gm-Message-State: AOAM533mO+vaZNAZrj6zj+6vtV/IUSu2cbjeh9slpan6BM1hxBIEUlOG
-        3i8UW23RsfMTwhiU7esV56HrUw==
-X-Google-Smtp-Source: ABdhPJzDRfjOtVJeeZGHohEgz05mObGSGGcqjEHsfCvj55T8h5x2bLw4rOzlhprHhLNesGONKtsjFw==
-X-Received: by 2002:a1c:b487:: with SMTP id d129mr9180590wmf.38.1605864538603;
-        Fri, 20 Nov 2020 01:28:58 -0800 (PST)
-Received: from vpa2.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id a14sm3561791wmj.40.2020.11.20.01.28.57
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nJSicL6e7BRcv6Ha4mdE6qST64QMHD5+uyjuop7yg9E=;
+        b=D8AKTSJIF4Hp6Te1yQxa7bMDsmNhLWTZF2Zs0Ddwc1QNZEvoSRG3eC3pRM3Pn+Ukkc
+         OJ1mAg5rwTce3giYTdM5KSyiheJsU9yHhsqdhkK0qbnXk39KTFwLYo6YPakSbHWAXwQN
+         NR8zviOLgPHcP1vd0aVrCYKMacEKjK3b57ZLWs7uEsjqdVubRoxLS1VUR7FFplOTUpeB
+         VndG0ooMIcTnUYShH9AQnDZyUwYPT0s57nb5Tdc5zQ+LcPENR+w4AKzXmesLebUPvQ4Y
+         2VKDuPVArizIQVGQS47+iz/GcaoKjaVWA33Uhn0KKNdW5KKYOdXWJTbmP3QtLWLY3vXR
+         fibw==
+X-Gm-Message-State: AOAM533N9AJLWVoL+5SlrpekjEVvStsTXzOIyaaZjYkTMI1b7C5V7lt2
+        lBd20X1QqrsZz7KI320XLcUVDJoDZV3rvg==
+X-Google-Smtp-Source: ABdhPJyk7efy95w7iVpRaJ9O+XxOirZvxBgAaRljC77i4lpba5BSvyYPD1XN3ha0qFaMo7FOc9RXag==
+X-Received: by 2002:a19:7e94:: with SMTP id z142mr7083911lfc.268.1605865064798;
+        Fri, 20 Nov 2020 01:37:44 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id c17sm281450lfr.135.2020.11.20.01.37.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 01:28:57 -0800 (PST)
-From:   vpalatin@chromium.org
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vincent Palatin <vpalatin@chromium.org>
-Subject: [PATCH v2] usb: serial: option: add Fibocom NL668 variants
-Date:   Fri, 20 Nov 2020 10:28:28 +0100
-Message-Id: <20201120092828.665931-1-vpalatin@chromium.org>
-X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-In-Reply-To: <20201120090107.502832-1-vpalatin@chromium.org>
-References: <20201120090107.502832-1-vpalatin@chromium.org>
+        Fri, 20 Nov 2020 01:37:44 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kg2rT-00053N-HR; Fri, 20 Nov 2020 10:37:48 +0100
+Date:   Fri, 20 Nov 2020 10:37:47 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     johan@kernel.org, dbueso@suse.de, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3] USB: serial: mos7720: defer state restore to a
+ workqueue
+Message-ID: <X7eOax2XYDMbySAa@localhost>
+References: <X7TzUr+nl+P4SL6c@localhost>
+ <20201120045300.28804-1-dave@stgolabs.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201120045300.28804-1-dave@stgolabs.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Vincent Palatin <vpalatin@chromium.org>
+On Thu, Nov 19, 2020 at 08:53:00PM -0800, Davidlohr Bueso wrote:
+> The parallel port restore operation currently defers writes
+> to a tasklet, if it sees a locked disconnect mutex. The
+> driver goes to a lot of trouble to ensure writes happen
+> in a non-blocking context, but things can be greatly
+> simplified if it's done in regular process context and
+> this is not a system performance critical path. As such,
+> instead of doing the state restore writes in irq context,
+> use a workqueue and just do regular synchronous writes.
+> 
+> In addition to the cleanup, this also imposes less on the
+> overall system as tasklets have been deprecated because
+> of it's softirq implications, potentially blocking a higher
+> priority task from running.
+> 
+> Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
 
-Update the USB serial option driver support for the Fibocom NL668 Cat.4
-LTE modules as there are actually several different variants.
-Got clarifications from Fibocom, there are distinct products:
-- VID:PID 1508:1001, NL668 for IOT (no MBIM interface)
-- VID:PID 2cb7:01a0, NL668-AM and NL652-EU are laptop M.2 cards (with
-  MBIM interfaces for Windows/Linux/Chrome OS), respectively for Americas
-  and Europe.
+Now applied, thanks!
 
-usb-devices output for the laptop M.2 cards:
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  4 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2cb7 ProdID=01a0 Rev=03.18
-S:  Manufacturer=Fibocom Wireless Inc.
-S:  Product=Fibocom NL652-EU Modem
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-
-Signed-off-by: Vincent Palatin <vpalatin@chromium.org>
----
- drivers/usb/serial/option.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index c773db129bf9..1dfde90765fd 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2036,12 +2036,13 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
- 	{ USB_DEVICE(0x0489, 0xe0b5),						/* Foxconn T77W968 ESIM */
- 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
--	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 */
-+	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
- 	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
- 	{ USB_DEVICE(0x2cb7, 0x0104),						/* Fibocom NL678 series */
- 	  .driver_info = RSVD(4) | RSVD(5) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
- 	  .driver_info = RSVD(6) },
-+	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a0, 0xff) },			/* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
--- 
-2.29.2.454.gaff20da3a2-goog
-
+Johan
