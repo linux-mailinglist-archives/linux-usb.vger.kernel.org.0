@@ -2,181 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEE82BAB64
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 14:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A50B62BAB75
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 14:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728443AbgKTNgr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Nov 2020 08:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728316AbgKTNgq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Nov 2020 08:36:46 -0500
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488C8C0613CF
-        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 05:36:45 -0800 (PST)
-Received: by mail-qt1-x844.google.com with SMTP id i12so7064601qtj.0
-        for <linux-usb@vger.kernel.org>; Fri, 20 Nov 2020 05:36:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V9sozv2P/WIWdmbfvHUStARw9ssObqq8u6/YeFBz3gI=;
-        b=mOTU/VbLQABaaNZOWZAKWAXfDPSoJej7gIX8tfeQQlL3db/NfEnZI7ACQFzNSFStoJ
-         +D0O602dD2itIyTnalHNQLBmxUqBUS8RCCkwGadL7Mz9p6osbdxh+fx8xYsWp7Tv5o69
-         4Zh8X2DO3CWPpOnlMRxtP3Y3L62WPlEXZYojs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V9sozv2P/WIWdmbfvHUStARw9ssObqq8u6/YeFBz3gI=;
-        b=Q7YF/f6flbCqpJSCBp9/lK5hn8ggJc12mZDM3V3xtysy6H46STSRh5Hc/vLJHwqhVq
-         yrdVYnFJzfLZ0rvAZs24sY2Bzx9rgO0lvaGr2woSM8wY1XU6FPlKsJdx+dz2qoS4LMJx
-         M0HhjLo0DNFViG8GIK//UY9wQlZSY+2C3TlLTc3wa/oZmhKz7trvpJV5Z3thRbjDn5P0
-         Zao7Otc7GB9QJ3rgRCHFBy6kuC1gufkFEDo4kD+cRGKgFhcu9sameEb483ksbMKz3bTj
-         ulvk0MU15yA0ZJTDFIgW2lxIHnnK6ukkclLu8OHS6AeHT+FfpaDEETp86Z9iNxzDDhML
-         RfqQ==
-X-Gm-Message-State: AOAM530bA7Omxjycvh2eW+TSc7zNB5ng9sYpFvcqdY++HWtHpFy/qajQ
-        IcBseB9lK0IKTOq9/88geP2bZYvmhy3e1sIS7sHI4A==
-X-Google-Smtp-Source: ABdhPJxb4AOlT65o4qBViIMDg4U7OmsRwkSVqxW/PttdM/ZwWdo86yFz0EwuvVizapZAIgeKpPuQYfOcw17H8TZzgJg=
-X-Received: by 2002:aed:2e23:: with SMTP id j32mr16530554qtd.132.1605879404460;
- Fri, 20 Nov 2020 05:36:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20201119063211.2264-1-utkarsh.h.patel@intel.com>
- <20201119063211.2264-3-utkarsh.h.patel@intel.com> <20201119080906.GE3652649@google.com>
- <20201120112218.GE4120550@kuha.fi.intel.com> <20201120120700.GD4160865@google.com>
-In-Reply-To: <20201120120700.GD4160865@google.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Fri, 20 Nov 2020 05:36:33 -0800
-Message-ID: <CACeCKadoxnWdCh4sMB8b5Ppb-1gBogoAst1Rz=yBSqEL3fuppw@mail.gmail.com>
+        id S1728174AbgKTNmG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Nov 2020 08:42:06 -0500
+Received: from mga09.intel.com ([134.134.136.24]:55569 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727043AbgKTNmG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Nov 2020 08:42:06 -0500
+IronPort-SDR: MVuHTBlluN1E4/K8/genGK9vS3tP+eZJNXFC+PJfiu944e5Xz+MWz2uC/WbLzmf8M/KqrolLCg
+ bQ0D89BgMQ/A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9810"; a="171639683"
+X-IronPort-AV: E=Sophos;i="5.78,356,1599548400"; 
+   d="scan'208";a="171639683"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2020 05:42:05 -0800
+IronPort-SDR: BWt1lre77QLy4QmAVtAza0La1Ggg+04hXV7L4akabWHbbdWFDTAQwOt+QQcnL7vwC/D9+ZSK+Z
+ V3QSjiEPQrGQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,356,1599548400"; 
+   d="scan'208";a="431569463"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 20 Nov 2020 05:41:59 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 20 Nov 2020 15:41:58 +0200
+Date:   Fri, 20 Nov 2020 15:41:58 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Utkarsh Patel <utkarsh.h.patel@intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        enric.balletbo@collabora.com, rajmohan.mani@intel.com,
+        azhar.shaikh@intel.com
 Subject: Re: [PATCH v3 2/4] platform/chrome: cros_ec_typec: Use Thunderbolt 3
  cable discover mode VDO in USB4 mode
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Utkarsh Patel <utkarsh.h.patel@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Azhar Shaikh <azhar.shaikh@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <20201120134158.GF4120550@kuha.fi.intel.com>
+References: <20201119063211.2264-1-utkarsh.h.patel@intel.com>
+ <20201119063211.2264-3-utkarsh.h.patel@intel.com>
+ <20201119080906.GE3652649@google.com>
+ <20201120112218.GE4120550@kuha.fi.intel.com>
+ <20201120120700.GD4160865@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201120120700.GD4160865@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 4:07 AM Prashant Malani <pmalani@chromium.org> wrote:
->
+Hi Prashant,
+
+On Fri, Nov 20, 2020 at 04:07:00AM -0800, Prashant Malani wrote:
 > On Fri, Nov 20, 2020 at 01:22:18PM +0200, Heikki Krogerus wrote:
-> > On Thu, Nov 19, 2020 at 12:09:06AM -0800, Prashant Malani wrote:
-> > > Hi Utkarsh,
-> > >
-> > > On Wed, Nov 18, 2020 at 10:32:09PM -0800, Utkarsh Patel wrote:
-> > > > Configure Thunderbolt 3 cable generation value by filling Thunderbolt 3
-> > > > cable discover mode VDO to support rounded Thunderbolt 3 cables.
-> > > > While we are here use Thunderbolt 3 cable discover mode VDO to fill active
-> > > > cable plug link training value.
-> > > >
-> > > > Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
-> > > >
-> > > > --
-> > > > Changes in v3:
-> > > > - Added a check for cable's TBT support before filling TBT3 discover mode
-> > > >   VDO.
-> > > >
-> > > > Changes in v2:
-> > > > - No change.
-> > > > --
-> > > > ---
-> > > >  drivers/platform/chrome/cros_ec_typec.c | 14 ++++++++++++--
-> > > >  1 file changed, 12 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> > > > index 8111ed1fc574..68b17ee1d1ae 100644
-> > > > --- a/drivers/platform/chrome/cros_ec_typec.c
-> > > > +++ b/drivers/platform/chrome/cros_ec_typec.c
-> > > > @@ -514,8 +514,18 @@ static int cros_typec_enable_usb4(struct cros_typec_data *typec,
-> > > >   else if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE)
-> > > >           data.eudo |= EUDO_CABLE_TYPE_RE_TIMER << EUDO_CABLE_TYPE_SHIFT;
-> > > >
-> > > > - data.active_link_training = !!(pd_ctrl->control_flags &
-> > > > -                                USB_PD_CTRL_ACTIVE_LINK_UNIDIR);
-> > > > + /*
-> > > > +  * Filling TBT3 Cable VDO when TBT3 cable is being used to establish
-> > > > +  * USB4 connection.
-> > > > +  */
-> > > > + if (pd_ctrl->cable_gen) {
-> > > > +         data.tbt_cable_vdo = TBT_MODE;
-> > > > +
-> > > > +         if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_LINK_UNIDIR)
-> > > > +                 data.tbt_cable_vdo |= TBT_CABLE_LINK_TRAINING;
-> > > > +
-> > > > +         data.tbt_cable_vdo |= TBT_SET_CABLE_ROUNDED(pd_ctrl->cable_gen);
-> > > > + }
-> > >
-> > > I think the following would decouple Rounded Support and Active Cable Link
-> > > Training?:
-> > >
-> > >     struct typec_thunderbolt_data data = {};
-> > > ...
-> > >     if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_LINK_UNIDIR)
-> > >             data.tbt_cable_vdo |= TBT_CABLE_LINK_TRAINING;
-> > >
-> > >     data.tbt_cable_vdo |= TBT_SET_CABLE_ROUNDED(pd_ctrl->cable_gen);
-> >
-> > I agree with this. We should not modify the data that we actually
-> > have access to.
-> >
-> > >     if (data.tbt_cable_vdo)
-> > >             data.tbt_cable_vdo |= TBT_MODE;
-> >
-> > That is wrong. If the LSRX communication is bi-directional, and/or the
-> > data rates are non-rounded, the cable has to be TBT3 cable. So I think
-> > what you would want is:
->
-> Thanks for pointing this out, I didn't consider this case.
->
-> >
-> >       if (!data.tbt_cable_vdo)
-> >               data.tbt_cable_vdo = TBT_MODE;
-> >
-> > But of course we can not do that either, because we have to set the
-> > TBT_MODE bit if there is any other data in tbt_cable_vdo (USB Type-C
-> > spec does not define any other valid values except 0x0001 = TBT_MODE
-> > for that field). Otherwise the mux driver should consider the data
-> > corrupted. So we would have to do this:
-> >
-> >         if (pd_ctrl->cable_gen &&
-> >             pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_LINK_UNIDIR)
-> >                 data.tbt_cable_vdo = 0; /* We assume USB4 cable */
-> >         else
-> >               data.tbt_cable_vdo |= TBT_MODE; /* It is for sure TBT3 cable */
-> >
-> > But I would not do that. TBT3 cable can also support unidirectional
-> > SBU communication and rounded data rates.
-> >
 > > IMO safer bet for now would be to just claim that the cable is always
 > > TBT3 cable until we have access to information that can really tell us
 > > is the cable USB4 or TBT3.
->
+> 
 > Which brings us back to v1 of the patch :S
->
+> 
 > That still leaves my underlying concern that we'll be telling the Mux
 > implementation that a TBT3 cable is connected when in fact it's a USB4
 > active cable.
->
-> How about we don't set the TBT_MODE bit at all ? IMO it's equally bad as setting it
-> always, but with the additional advantage:
->
+
+No matter what we do with these values, it does not change the fact
+that we do not know is the cable USB4 or TBT3 at the moment. What ever
+we do, we are guessing things.
+
+Can you please explain your concern again? What can happen if we use
+USB4 cable but claim that it is TBT3 to the mux?
+
+> How about we don't set the TBT_MODE bit at all ?
+
+Let's not come up with values that are not defined in the spec for
+this field (or any other). Even though it is unlikely, we can not rule
+out the possibility that one day value of 0x0000 is defined for that
+field.
+
+I'm strongly against this kind of "modifications". It would mean that
+the member tbt_cable_vdo does not actually contain TBT3 Cable VDO, but
+instead it has to be considered as driver or subsystem specific data.
+
+> IMO it's equally bad as setting it always, but with the additional
+> advantage:
+> 
 > - USB4 active cable case : you are covered (since if we unilaterally set
 > TBT_MODE then the Active USB4 cable case never gets executed in
 > pmc_usb_mux_usb4() in drivers/usb/typec/mux/intel_pmc_mux.c Patch 3/4)
->
+> 
 > - Bidirectional LSRX non-rounded TBT: Still supported since
 >   the code path in the Intel Mux agent is the same.
 
-Thinking about this a bit more, never setting TBT_MODE would mean that
-bidrectional LSRX non-rounded TBT would be treated the same as USB4
-active cable in the mux agent
-code, which is also incorrect (I think)
+This case will not work. The tbt_cable_vdo member is now 0, which to
+the mux driver means that the cable is USB4 cable (and that is what it
+really must mean to the mux driver - any mux driver). The mux driver
+will therefore enable unidirectional SBU communication even though it
+is actually bidirectional, and also rounded data rates even though the
+cable supports only non-rounded data rates.
 
-I need to think about this a bit more, but currently I don't have any
-solutions to offer.
+> I understand neither of the options are ideal, but WDYT?
+
+I may be missing something, but I'm still going to say that let's just
+claim that the cable is always TBT3 for now in this driver. That is
+the only safe bet that we have.
+
+
+thanks,
+
+-- 
+heikki
