@@ -2,160 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAE52BA055
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 03:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A50C2BA076
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Nov 2020 03:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbgKTCZL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Nov 2020 21:25:11 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:18855 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726549AbgKTCZK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Nov 2020 21:25:10 -0500
-X-UUID: 114c18dc7e44412bad972cfabfcc6587-20201120
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=tK3LSMVAjG6d7GMpXdDRnIvlzSI8hJUSp1hQeVKgOdA=;
-        b=huamlgbA5F8dI9GYIzEy3ZIKHD2zs3Xnip6PQAwElMwHJZomIbqYxKxf/hsjVHn3S3QkO8KJQloSkdOe6edeHyJl650FfBcROfHB70ER0/SXfet2IWSg9WKypv71SnmujlLhjApctMUcaw8STiE0TfTlyKZPygh1ZF+08ZO7/Z8=;
-X-UUID: 114c18dc7e44412bad972cfabfcc6587-20201120
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1560120825; Fri, 20 Nov 2020 10:25:04 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 20 Nov
- 2020 10:25:00 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 20 Nov 2020 10:25:00 +0800
-Message-ID: <1605839100.32484.0.camel@mhfsdcap03>
-Subject: Re: [PATCH v3 06/11] dt-bindings: phy: convert HDMI PHY binding to
- YAML schema
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Min Guo <min.guo@mediatek.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
-Date:   Fri, 20 Nov 2020 10:25:00 +0800
-In-Reply-To: <CAAOTY_9dNyySJkyX78tHDQZPaqD+5Jqixbdbohp319FyXO1X5Q@mail.gmail.com>
-References: <20201118082126.42701-1-chunfeng.yun@mediatek.com>
-         <20201118082126.42701-6-chunfeng.yun@mediatek.com>
-         <CAAOTY_9dNyySJkyX78tHDQZPaqD+5Jqixbdbohp319FyXO1X5Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726806AbgKTCc2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Nov 2020 21:32:28 -0500
+Received: from mga03.intel.com ([134.134.136.65]:24853 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726654AbgKTCc2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Nov 2020 21:32:28 -0500
+IronPort-SDR: wtBvjoRb7IDzUBPZ1ChmQGNGL/YuroMhwLBj4LV8SAVCZlmrEkZ/Ygz/yguG2k/O+wP7jsCPGu
+ dQpwHyj1Enzg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9810"; a="171500017"
+X-IronPort-AV: E=Sophos;i="5.78,354,1599548400"; 
+   d="scan'208";a="171500017"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2020 18:32:26 -0800
+IronPort-SDR: NAuq667yFYMEkEwZNtP5rvIie1z4KB/ESFq08FwHV6AqvBE0Eo6IzOd8P86yBmBhTKI72mg9X5
+ 5z4cjh3MS7KQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,354,1599548400"; 
+   d="scan'208";a="545269166"
+Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
+  by orsmga005.jf.intel.com with ESMTP; 19 Nov 2020 18:32:26 -0800
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 19 Nov 2020 18:32:26 -0800
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 19 Nov 2020 18:32:26 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Thu, 19 Nov 2020 18:32:26 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.103)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.1713.5; Thu, 19 Nov 2020 18:32:24 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SECr0N9ZRoxuF59Mp0caN9hmrhXGiBOS0IGV4tC4ATnv5rNESsmOV2kJsHbWbun+i7NiOhYoo4pzVrjtsB40cVs77G/POA3WqvlIWhMFTqYocfIzYntLWy6Mgq7g6x4vGb4APuWyeasMtdEpdhYuNnqG18Ck/IrsupZGGNThGPkGI7T4KbTwrfiqo0E8TH6m/zWBCl1cYWR3NYzCzt1ppPLMrBfWq4Y0YrpE6r/eNFGjPqRozawjcsvfaX3yuIGvwrZGZP6BpdWfBGUgnl3dUSl0tl5B4fNlfBN7YBEITYjrE9+JDOvNiWiwWaOtedEFmunBRYUtsoHxhkzkoXC2Sg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QjLhoMLn8YcALFzGshlGtuHI8jxisSJQ9THUby6/SOU=;
+ b=IgfFt4/VUOqvU177O3ndexOGmlqyD+1HNHhqzX6orPhVRP2H1E8ZKISOQcG9RXgYJBxocMgxKyqmsxoXk7Hrus0rpKOIc2b33kxzpL73BRXLkJNRtxXw6tEioLchr2Q8+dsSymBnGJHL56c1KDOYUd8Qu4OFyM6Y3ooriu+1aNBF6bwLcuPgzACZ4mD5TK+uuwpHwiGekZmBc7Nsog0l5I/NHS9ycSJTPJnRoEntefJbZ6fAkcjQeZ3BjZRF58OJSFh/HquJhulvX0BtEIUqeMNz1rPeZWOczbC6ms+QbsmAK6D0F9ICC5StFp2Y65M3MSnRKAcH9qYXXsVfcObGjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QjLhoMLn8YcALFzGshlGtuHI8jxisSJQ9THUby6/SOU=;
+ b=YV3Bl8fWBdLxWrkalGYqwHuEOpaFi/YAQl56yorkA9i/tldrIw8jfYx0LeRXds/q9ndSAlBPoQvF5D9j+OZk+v8d6V7+6YwMYujjW4H0RcNv3QhM5X0MWT90WdeDkf04GHjrFd2Ls21+fNP1b7rL9brPpk00DZ8H3WDoj3TD2Kw=
+Received: from MWHPR11MB0048.namprd11.prod.outlook.com (2603:10b6:301:6a::31)
+ by MWHPR11MB1437.namprd11.prod.outlook.com (2603:10b6:301:a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.22; Fri, 20 Nov
+ 2020 02:32:24 +0000
+Received: from MWHPR11MB0048.namprd11.prod.outlook.com
+ ([fe80::ed62:6d3c:c9aa:4c4d]) by MWHPR11MB0048.namprd11.prod.outlook.com
+ ([fe80::ed62:6d3c:c9aa:4c4d%5]) with mapi id 15.20.3541.028; Fri, 20 Nov 2020
+ 02:32:24 +0000
+From:   "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "enric.balletbo@collabora.com" <enric.balletbo@collabora.com>,
+        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
+        "Shaikh, Azhar" <azhar.shaikh@intel.com>
+Subject: RE: [PATCH v3 2/4] platform/chrome: cros_ec_typec: Use Thunderbolt 3
+ cable discover mode VDO in USB4 mode
+Thread-Topic: [PATCH v3 2/4] platform/chrome: cros_ec_typec: Use Thunderbolt 3
+ cable discover mode VDO in USB4 mode
+Thread-Index: AQHWvj38P4aA1Z7OikiHPeCCNaPmQ6nPGgQAgAEtF2A=
+Date:   Fri, 20 Nov 2020 02:32:24 +0000
+Message-ID: <MWHPR11MB004898556A4CF622742D3EAAA9FF0@MWHPR11MB0048.namprd11.prod.outlook.com>
+References: <20201119063211.2264-1-utkarsh.h.patel@intel.com>
+ <20201119063211.2264-3-utkarsh.h.patel@intel.com>
+ <20201119080906.GE3652649@google.com>
+In-Reply-To: <20201119080906.GE3652649@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+dlp-product: dlpe-windows
+authentication-results: chromium.org; dkim=none (message not signed)
+ header.d=none;chromium.org; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [134.134.136.193]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 51c1ba90-e87e-41e0-607f-08d88cfc83a3
+x-ms-traffictypediagnostic: MWHPR11MB1437:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR11MB143711521A95F802ADAFAA35A9FF0@MWHPR11MB1437.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: lNoBz7JWeSXWjIg1ufS7zSmew6d83wVgepSkZ+TqG9hcSE7NzTD/0deki/ayv3re8Iax0XCTFIXFScgH1u7DPu1ohGzM1xJl4SI1AGpmFMEvI216jlIjr7eqtHi1wkdTzNcJIkJnrjj2koqgaQlkc+FP0tp8dDIz3DRY81coGDlZk3xFScaPDppUzyXozP8d2pZfxVObLFAPg3TyXHC7HbUaEJ8eUc5+1B4Bzu6iVs8eUX7ZrHk8IcyqOV0JMioFIGA1rauUSMUgjb6VbBYRDXvGPyUO4tBWQESuJkYqVri0C/+eXKqPTm/SA372TkbB
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0048.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39860400002)(376002)(366004)(136003)(396003)(9686003)(6916009)(83380400001)(8936002)(7696005)(86362001)(2906002)(33656002)(6506007)(26005)(8676002)(316002)(186003)(53546011)(54906003)(55016002)(478600001)(66946007)(5660300002)(52536014)(4326008)(66556008)(66476007)(66446008)(71200400001)(64756008)(76116006);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: Gylz4/RlwZ5wJxfkHyUJupBgf7u0m27+6HInPbu2Ydol523OMKcotULfZPH790DaQHtECdK8kKuz1p/5xBNkGOaKrG2COw2YsiskV8iYoRvmZPwBGSMhCUX/hukcKSY0/RaQQV/BiCr5qgYbteZ6P4AKLxlPfUlX9SFnetUSmdQDsP2dYvQufyPdayWDH1h2ywqnPJ1W4gfT6jXWozKxciLiqq5zatzUFE0arMvf80LPEeBKVPwBc27eMFkgXHIH5hdMK2TezW/+LU9UyvL7XscT4s+mTA+6Ef0S1G6/0PXWwtD9tjCFYzVNVDsI/uTF7rWBETKQvIhbtceJiBAbAWncg/R0O1bewlwAoYUFiLl4EfsMtjkbYw62ZWSaB34WRd4RKSfEhrxjljICbYdFjTHSbqjmGfb6B5jP4c3uSWPzXxeTU1yRBK723qKON02jWwukONARdE0/elI0Oc+1mD9w1wm+sIbAzDeLZekU/N7b3CXoaMjDWd4aSwAF+m0KAiBp+N5Oyk3e8uZU56vmqjMB80Xvun5c2bG8PaDw22tU42zwQPRRjsvaIt7ZtejW9NarZh8BUQerhnjuVRD8nRN5VS2QDB57Wi8TBpPUhwSsbEp+Qc3wjjfFYu8E3igLZLFY6fxpsWgRyiEcM4Dwz3+Nu6gfld6Hm+dg0zrhHaKTsdMDoluhwGduzfRph2lTdHCVB9YvmnT2w2GBxnLewhLNTHJGnML+0ps/PWPSAiZqkVX821y6wOqX4OvkiYmhaK0o1iUo4fO0xr5nlYUAxsHyORICUmJlz0pcCOKSGjBei3npuaKUTBMt9bBAULUjbKcmDSEB1isCwQlVEKCxZG5aSTVfiwsuri6jwLKm5/YgrTgJduJzHLi1Vs1u92HRok32g5lEs8RkENewzK3tHQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: EEFA5D895C9CCDBC05A08A02EA921E7502A2D2C166CFEA2145249A566CC53CBB2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB0048.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51c1ba90-e87e-41e0-607f-08d88cfc83a3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Nov 2020 02:32:24.0325
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iltgLUZs7Yvz48RHeQkOmlBh41GVvLwMVScnuV0LD7zofjZBH9UH68NmF7EDoJfPVSA7ukgP3DPPCQNPig5TFB688+7TFmvFqyHXFAEaBlE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1437
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTExLTIwIGF0IDA3OjQyICswODAwLCBDaHVuLUt1YW5nIEh1IHdyb3RlOg0K
-PiBIaSwgQ2h1bmZlbmc6DQo+IA0KPiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRl
-ay5jb20+IOaWvCAyMDIw5bm0MTHmnIgxOOaXpSDpgLHkuIkg5LiL5Y2INDoyMeWvq+mBk++8mg0K
-PiA+DQo+ID4gQ29udmVydCBIRE1JIFBIWSBiaW5kaW5nIHRvIFlBTUwgc2NoZW1hIG1lZGlhdGVr
-LGhkbWktcGh5LnlhbWwNCj4gPg0KPiA+IENjOiBDaHVuLUt1YW5nIEh1IDxjaHVua3VhbmcuaHVA
-a2VybmVsLm9yZz4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1
-bkBtZWRpYXRlay5jb20+DQo+ID4gUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5l
-bC5vcmc+DQo+ID4gLS0tDQo+ID4gdjM6IGFkZCBSZXZpZXdlZC1ieSBSb2INCj4gPiB2MjogZml4
-IGJpbmRpbmcgY2hlY2sgd2FybmluZyBvZiByZWcgaW4gZXhhbXBsZQ0KPiA+IC0tLQ0KPiA+ICAu
-Li4vZGlzcGxheS9tZWRpYXRlay9tZWRpYXRlayxoZG1pLnR4dCAgICAgICAgfCAxOCArLS0tDQo+
-ID4gIC4uLi9iaW5kaW5ncy9waHkvbWVkaWF0ZWssaGRtaS1waHkueWFtbCAgICAgICB8IDkxICsr
-KysrKysrKysrKysrKysrKysNCj4gPiAgMiBmaWxlcyBjaGFuZ2VkLCA5MiBpbnNlcnRpb25zKCsp
-LCAxNyBkZWxldGlvbnMoLSkNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy9waHkvbWVkaWF0ZWssaGRtaS1waHkueWFtbA0KPiA+DQo+ID4g
-ZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9kaXNwbGF5L21l
-ZGlhdGVrL21lZGlhdGVrLGhkbWkudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
-bmdzL2Rpc3BsYXkvbWVkaWF0ZWsvbWVkaWF0ZWssaGRtaS50eHQNCj4gPiBpbmRleCA2YjFjNTg2
-NDAzZTQuLmIyODRjYTUxYjkxMyAxMDA2NDQNCj4gPiAtLS0gYS9Eb2N1bWVudGF0aW9uL2Rldmlj
-ZXRyZWUvYmluZGluZ3MvZGlzcGxheS9tZWRpYXRlay9tZWRpYXRlayxoZG1pLnR4dA0KPiA+ICsr
-KyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9kaXNwbGF5L21lZGlhdGVrL21l
-ZGlhdGVrLGhkbWkudHh0DQo+ID4gQEAgLTUzLDIzICs1Myw3IEBAIFJlcXVpcmVkIHByb3BlcnRp
-ZXM6DQo+ID4NCj4gPiAgSERNSSBQSFkNCj4gPiAgPT09PT09PT0NCj4gPiAtDQo+ID4gLVRoZSBI
-RE1JIFBIWSBzZXJpYWxpemVzIHRoZSBIRE1JIGVuY29kZXIncyB0aHJlZSBjaGFubmVsIDEwLWJp
-dCBwYXJhbGxlbA0KPiA+IC1vdXRwdXQgYW5kIGRyaXZlcyB0aGUgSERNSSBwYWRzLg0KPiA+IC0N
-Cj4gPiAtUmVxdWlyZWQgcHJvcGVydGllczoNCj4gPiAtLSBjb21wYXRpYmxlOiAibWVkaWF0ZWss
-PGNoaXA+LWhkbWktcGh5Ig0KPiA+IC0tIHRoZSBzdXBwb3J0ZWQgY2hpcHMgYXJlIG10MjcwMSwg
-bXQ3NjIzIGFuZCBtdDgxNzMNCj4gPiAtLSByZWc6IFBoeXNpY2FsIGJhc2UgYWRkcmVzcyBhbmQg
-bGVuZ3RoIG9mIHRoZSBtb2R1bGUncyByZWdpc3RlcnMNCj4gPiAtLSBjbG9ja3M6IFBMTCByZWZl
-cmVuY2UgY2xvY2sNCj4gPiAtLSBjbG9jay1uYW1lczogbXVzdCBjb250YWluICJwbGxfcmVmIg0K
-PiA+IC0tIGNsb2NrLW91dHB1dC1uYW1lczogbXVzdCBiZSAiaGRtaXR4X2RpZ19jdHMiIG9uIG10
-ODE3Mw0KPiA+IC0tICNwaHktY2VsbHM6IG11c3QgYmUgPDA+DQo+ID4gLS0gI2Nsb2NrLWNlbGxz
-OiBtdXN0IGJlIDwwPg0KPiA+IC0NCj4gPiAtT3B0aW9uYWwgcHJvcGVydGllczoNCj4gPiAtLSBt
-ZWRpYXRlayxpYmlhczogVFggRFJWIGJpYXMgY3VycmVudCBmb3IgPDEuNjVHYnBzLCBkZWZhdWx0
-cyB0byAweGENCj4gPiAtLSBtZWRpYXRlayxpYmlhc191cDogVFggRFJWIGJpYXMgY3VycmVudCBm
-b3IgPjEuNjVHYnBzLCBkZWZhdWx0cyB0byAweDFjDQo+ID4gK1NlZSBwaHkvbWVkaWF0ZWssaGRt
-aS1waHkueWFtbA0KPiA+DQo+ID4gIEV4YW1wbGU6DQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvRG9j
-dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BoeS9tZWRpYXRlayxoZG1pLXBoeS55YW1s
-IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BoeS9tZWRpYXRlayxoZG1pLXBo
-eS55YW1sDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAwMDAu
-Ljk2NzAwYmI4YmMwMA0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9u
-L2RldmljZXRyZWUvYmluZGluZ3MvcGh5L21lZGlhdGVrLGhkbWktcGh5LnlhbWwNCj4gPiBAQCAt
-MCwwICsxLDkxIEBADQo+ID4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9u
-bHkgT1IgQlNELTItQ2xhdXNlKQ0KPiA+ICsjIENvcHlyaWdodCAoYykgMjAyMCBNZWRpYVRlaw0K
-PiA+ICslWUFNTCAxLjINCj4gPiArLS0tDQo+ID4gKyRpZDogaHR0cDovL2RldmljZXRyZWUub3Jn
-L3NjaGVtYXMvcGh5L21lZGlhdGVrLGhkbWktcGh5LnlhbWwjDQo+ID4gKyRzY2hlbWE6IGh0dHA6
-Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiA+ICsNCj4gPiArdGl0
-bGU6IE1lZGlhVGVrIEhpZ2ggRGVmaW5pdGlvbiBNdWx0aW1lZGlhIEludGVyZmFjZSAoSERNSSkg
-UEhZIGJpbmRpbmcNCj4gPiArDQo+ID4gK21haW50YWluZXJzOg0KPiA+ICsgIC0gQ2h1bi1LdWFu
-ZyBIdSA8Y2h1bmt1YW5nLmh1QGtlcm5lbC5vcmc+DQo+ID4gKyAgLSBDaHVuZmVuZyBZdW4gPGNo
-dW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+IA0KPiBQbGVhc2UgYWRkIFBoaWxpcHAgWmFiZWwg
-YmVjYXVzZSBoZSBpcyBNZWRpYXRlayBEUk0gZHJpdmVyIG1haW50YWluZXIuDQpPaywgd2lsbCBk
-byBpdA0KDQpUaGFua3MgYSBsb3QNCg0KPiANCj4gRFJNIERSSVZFUlMgRk9SIE1FRElBVEVLDQo+
-IE06IENodW4tS3VhbmcgSHUgPGNodW5rdWFuZy5odSBhdCBrZXJuZWwub3JnPg0KPiBNOiBQaGls
-aXBwIFphYmVsIDxwLnphYmVsIGF0IHBlbmd1dHJvbml4LmRlPg0KPiBMOiBkcmktZGV2ZWwgYXQg
-bGlzdHMuZnJlZWRlc2t0b3Aub3JnDQo+IFM6IFN1cHBvcnRlZA0KPiBGOiBEb2N1bWVudGF0aW9u
-L2RldmljZXRyZWUvYmluZGluZ3MvZGlzcGxheS9tZWRpYXRlay8NCj4gDQo+IFJlZ2FyZHMsDQo+
-IENodW4tS3VhbmcuDQo+IA0KPiA+ICsNCj4gPiArZGVzY3JpcHRpb246IHwNCj4gPiArICBUaGUg
-SERNSSBQSFkgc2VyaWFsaXplcyB0aGUgSERNSSBlbmNvZGVyJ3MgdGhyZWUgY2hhbm5lbCAxMC1i
-aXQgcGFyYWxsZWwNCj4gPiArICBvdXRwdXQgYW5kIGRyaXZlcyB0aGUgSERNSSBwYWRzLg0KPiA+
-ICsNCj4gPiArcHJvcGVydGllczoNCj4gPiArICAkbm9kZW5hbWU6DQo+ID4gKyAgICBwYXR0ZXJu
-OiAiXmhkbWktcGh5QFswLTlhLWZdKyQiDQo+ID4gKw0KPiA+ICsgIGNvbXBhdGlibGU6DQo+ID4g
-KyAgICBlbnVtOg0KPiA+ICsgICAgICAtIG1lZGlhdGVrLG10MjcwMS1oZG1pLXBoeQ0KPiA+ICsg
-ICAgICAtIG1lZGlhdGVrLG10NzYyMy1oZG1pLXBoeQ0KPiA+ICsgICAgICAtIG1lZGlhdGVrLG10
-ODE3My1oZG1pLXBoeQ0KPiA+ICsNCj4gPiArICByZWc6DQo+ID4gKyAgICBtYXhJdGVtczogMQ0K
-PiA+ICsNCj4gPiArICBjbG9ja3M6DQo+ID4gKyAgICBpdGVtczoNCj4gPiArICAgICAgLSBkZXNj
-cmlwdGlvbjogUExMIHJlZmVyZW5jZSBjbG9jaw0KPiA+ICsNCj4gPiArICBjbG9jay1uYW1lczoN
-Cj4gPiArICAgIGl0ZW1zOg0KPiA+ICsgICAgICAtIGNvbnN0OiBwbGxfcmVmDQo+ID4gKw0KPiA+
-ICsgIGNsb2NrLW91dHB1dC1uYW1lczoNCj4gPiArICAgIGl0ZW1zOg0KPiA+ICsgICAgICAtIGNv
-bnN0OiBoZG1pdHhfZGlnX2N0cw0KPiA+ICsNCj4gPiArICAiI3BoeS1jZWxscyI6DQo+ID4gKyAg
-ICBjb25zdDogMA0KPiA+ICsNCj4gPiArICAiI2Nsb2NrLWNlbGxzIjoNCj4gPiArICAgIGNvbnN0
-OiAwDQo+ID4gKw0KPiA+ICsgIG1lZGlhdGVrLGliaWFzOg0KPiA+ICsgICAgZGVzY3JpcHRpb246
-DQo+ID4gKyAgICAgIFRYIERSViBiaWFzIGN1cnJlbnQgZm9yIDwgMS42NUdicHMNCj4gPiArICAg
-ICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMg0KPiA+ICsgICAg
-bWluaW11bTogMA0KPiA+ICsgICAgbWF4aW11bTogNjMNCj4gPiArICAgIGRlZmF1bHQ6IDB4YQ0K
-PiA+ICsNCj4gPiArICBtZWRpYXRlayxpYmlhc191cDoNCj4gPiArICAgIGRlc2NyaXB0aW9uOg0K
-PiA+ICsgICAgICBUWCBEUlYgYmlhcyBjdXJyZW50IGZvciA+PSAxLjY1R2Jwcw0KPiA+ICsgICAg
-JHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyDQo+ID4gKyAgICBt
-aW5pbXVtOiAwDQo+ID4gKyAgICBtYXhpbXVtOiA2Mw0KPiA+ICsgICAgZGVmYXVsdDogMHgxYw0K
-PiA+ICsNCj4gPiArcmVxdWlyZWQ6DQo+ID4gKyAgLSBjb21wYXRpYmxlDQo+ID4gKyAgLSByZWcN
-Cj4gPiArICAtIGNsb2Nrcw0KPiA+ICsgIC0gY2xvY2stbmFtZXMNCj4gPiArICAtIGNsb2NrLW91
-dHB1dC1uYW1lcw0KPiA+ICsgIC0gIiNwaHktY2VsbHMiDQo+ID4gKyAgLSAiI2Nsb2NrLWNlbGxz
-Ig0KPiA+ICsNCj4gPiArYWRkaXRpb25hbFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+ICtl
-eGFtcGxlczoNCj4gPiArICAtIHwNCj4gPiArICAgICNpbmNsdWRlIDxkdC1iaW5kaW5ncy9jbG9j
-ay9tdDgxNzMtY2xrLmg+DQo+ID4gKyAgICBoZG1pX3BoeTogaGRtaS1waHlAMTAyMDkxMDAgew0K
-PiA+ICsgICAgICAgIGNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4MTczLWhkbWktcGh5IjsNCj4g
-PiArICAgICAgICByZWcgPSA8MHgxMDIwOTEwMCAweDI0PjsNCj4gPiArICAgICAgICBjbG9ja3Mg
-PSA8JmFwbWl4ZWRzeXMgQ0xLX0FQTUlYRURfSERNSV9SRUY+Ow0KPiA+ICsgICAgICAgIGNsb2Nr
-LW5hbWVzID0gInBsbF9yZWYiOw0KPiA+ICsgICAgICAgIGNsb2NrLW91dHB1dC1uYW1lcyA9ICJo
-ZG1pdHhfZGlnX2N0cyI7DQo+ID4gKyAgICAgICAgbWVkaWF0ZWssaWJpYXMgPSA8MHhhPjsNCj4g
-PiArICAgICAgICBtZWRpYXRlayxpYmlhc191cCA9IDwweDFjPjsNCj4gPiArICAgICAgICAjY2xv
-Y2stY2VsbHMgPSA8MD47DQo+ID4gKyAgICAgICAgI3BoeS1jZWxscyA9IDwwPjsNCj4gPiArICAg
-IH07DQo+ID4gKw0KPiA+ICsuLi4NCj4gPiAtLQ0KPiA+IDIuMTguMA0KPiA+DQoNCg==
+Hi Prashant,
 
+> -----Original Message-----
+> From: Prashant Malani <pmalani@chromium.org>
+> Sent: Thursday, November 19, 2020 12:09 AM
+> To: Patel, Utkarsh H <utkarsh.h.patel@intel.com>
+> Cc: linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
+> heikki.krogerus@linux.intel.com; enric.balletbo@collabora.com; Mani,
+> Rajmohan <rajmohan.mani@intel.com>; Shaikh, Azhar
+> <azhar.shaikh@intel.com>
+> Subject: Re: [PATCH v3 2/4] platform/chrome: cros_ec_typec: Use Thunderbo=
+lt
+> 3 cable discover mode VDO in USB4 mode
+>=20
+> Hi Utkarsh,
+>=20
+> On Wed, Nov 18, 2020 at 10:32:09PM -0800, Utkarsh Patel wrote:
+> > Configure Thunderbolt 3 cable generation value by filling Thunderbolt
+> > 3 cable discover mode VDO to support rounded Thunderbolt 3 cables.
+> > While we are here use Thunderbolt 3 cable discover mode VDO to fill
+> > active cable plug link training value.
+> >
+> > Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
+> >
+> > --
+> > Changes in v3:
+> > - Added a check for cable's TBT support before filling TBT3 discover mo=
+de
+> >   VDO.
+> >
+> > Changes in v2:
+> > - No change.
+> > --
+> > ---
+> >  drivers/platform/chrome/cros_ec_typec.c | 14 ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/platform/chrome/cros_ec_typec.c
+> > b/drivers/platform/chrome/cros_ec_typec.c
+> > index 8111ed1fc574..68b17ee1d1ae 100644
+> > --- a/drivers/platform/chrome/cros_ec_typec.c
+> > +++ b/drivers/platform/chrome/cros_ec_typec.c
+> > @@ -514,8 +514,18 @@ static int cros_typec_enable_usb4(struct
+> cros_typec_data *typec,
+> >  	else if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE)
+> >  		data.eudo |=3D EUDO_CABLE_TYPE_RE_TIMER <<
+> EUDO_CABLE_TYPE_SHIFT;
+> >
+> > -	data.active_link_training =3D !!(pd_ctrl->control_flags &
+> > -				       USB_PD_CTRL_ACTIVE_LINK_UNIDIR);
+> > +	/*
+> > +	 * Filling TBT3 Cable VDO when TBT3 cable is being used to establish
+> > +	 * USB4 connection.
+> > +	 */
+> > +	if (pd_ctrl->cable_gen) {
+> > +		data.tbt_cable_vdo =3D TBT_MODE;
+> > +
+> > +		if (pd_ctrl->control_flags &
+> USB_PD_CTRL_ACTIVE_LINK_UNIDIR)
+> > +			data.tbt_cable_vdo |=3D TBT_CABLE_LINK_TRAINING;
+> > +
+> > +		data.tbt_cable_vdo |=3D TBT_SET_CABLE_ROUNDED(pd_ctrl-
+> >cable_gen);
+> > +	}
+>=20
+> I think the following would decouple Rounded Support and Active Cable Lin=
+k
+> Training?:
+
+Any reason you would want to decouple them?
+As for the TBT3 active cable to create USB4 connection, it needs have round=
+ed data rates.=20
+
+>=20
+> 	struct typec_thunderbolt_data data =3D {}; ...
+> 	if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_LINK_UNIDIR)
+> 		data.tbt_cable_vdo |=3D TBT_CABLE_LINK_TRAINING;
+>=20
+> 	data.tbt_cable_vdo |=3D TBT_SET_CABLE_ROUNDED(pd_ctrl-
+> >cable_gen);
+>=20
+> 	if (data.tbt_cable_vdo)
+> 		data.tbt_cable_vdo |=3D TBT_MODE;
+>=20
+>=20
+> Best regards,
+>=20
+> -Prashant
+
+Sincerely,
+Utkarsh Patel.
