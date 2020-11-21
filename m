@@ -2,317 +2,266 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DAE2BBF12
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Nov 2020 13:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6642BC0AF
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Nov 2020 17:52:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727815AbgKUMvE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Nov 2020 07:51:04 -0500
-Received: from mail-am6eur05on2051.outbound.protection.outlook.com ([40.107.22.51]:35809
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727698AbgKUMvD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 21 Nov 2020 07:51:03 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cec0qZKBxEF4HMpmT4BJ8xt31ge4SPlNVb1wbRufX997CzIHiYdnNZoUqvU4KMrJaljGcAHgQahYo44Wb4QtAGeL4+5WzrBZ+LRLBPG6IL39TwhyMfUK/gHtb3b2P4ox7k8mKiVPz2TgH5A9vnylg9LxLDSldPOEuSjo2rLrXK0vtWFveL+ac20/mglzes7+WFpKIz9j40yUD/rzgY00PQbrMlDbDziLu1ohPAXtdoz25KzzDiUaL3vByPdolv6j2mvB9L53Qzb7NiH3W9/x1tHPktfH7MdasqAPgerpTnH8OP8N1o8mm76adH/+Kul2e5Q2XnU7Iah+ffiWfmoiDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qdsuKC2eNTT1i89orLafBQKCUjZIFC8I5pZxMCCMUqQ=;
- b=GN5/uhYHQ8zgm1DwEfIOIkXXZDkHmt8EP2XImTyPRRVss9SJvx04ibCayQMMbIxT1QFmJNkOuciKcDNluh7uTCUH6lDlx67m9YbU7hhfACdeelLxGX3Z342MSAByGVkCGGWTG52+1ccZQHsOmf6++bsWYiZTJqLxsiOPnwju0lVLedgFqaUKAjgW5XeD5yGQsDTLBiWN5d//ujG8KqE2R2XlxbMafcLYSqL46ld+Glh8xTd9aJ+nl2UbFu46RWmyokAddJB2dZ8N1l2P9ZzNzMONCMZZW+RCe/0ZIn0FOHUGw9e8SQEcXWbrEx/2jNlsMzLtcSnqYxylMg5CsAuq7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qdsuKC2eNTT1i89orLafBQKCUjZIFC8I5pZxMCCMUqQ=;
- b=vqFovvFxQqG9idGRTqL3D6sPmfe2ztKAcge1JQwplW8tinnT1pYqV1T2/uEoqF2G8AITk4G879Ej5uhKqBt7Jwb+YnQ5GqEy8581MpseHTU9S8dViWkuyAlBSicNxfHKxgAxnwlhLiSj9M4JUIKAz8QyhiXhlTiLSwtyGzXVTRE=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=wolfvision.net;
-Received: from VI1PR08MB4064.eurprd08.prod.outlook.com (2603:10a6:803:e5::10)
- by VI1PR08MB3951.eurprd08.prod.outlook.com (2603:10a6:803:e3::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.22; Sat, 21 Nov
- 2020 12:50:56 +0000
-Received: from VI1PR08MB4064.eurprd08.prod.outlook.com
- ([fe80::3cab:8098:fc6c:df30]) by VI1PR08MB4064.eurprd08.prod.outlook.com
- ([fe80::3cab:8098:fc6c:df30%4]) with mapi id 15.20.3589.020; Sat, 21 Nov 2020
- 12:50:56 +0000
-Subject: Re: [PATCH v3] usb: gadget: uvc: fix multiple opens
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     gregkh@linuxfoundation.org, balbi@kernel.org, hverkuil@xs4all.nl,
-        linux-usb@vger.kernel.org, m.tretter@pengutronix.de,
-        linux-media@vger.kernel.org
-References: <X6pmMFYmzO088p4g@kroah.com>
- <20201110143015.15134-1-thomas.haemmerle@wolfvision.net>
- <20201116154858.GP6540@pendragon.ideasonboard.com>
-From:   =?UTF-8?Q?Thomas_H=c3=a4mmerle?= <thomas.haemmerle@wolfvision.net>
-Message-ID: <2920c6ea-d191-a6cb-ec90-dda22bb9df55@wolfvision.net>
-Date:   Sat, 21 Nov 2020 13:50:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <20201116154858.GP6540@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [2a02:8389:41c3:3c80:cc5:bc4:a811:aeed]
-X-ClientProxiedBy: VI1P18901CA0020.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:801::30) To VI1PR08MB4064.eurprd08.prod.outlook.com
- (2603:10a6:803:e5::10)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2a02:8389:41c3:3c80:cc5:bc4:a811:aeed] (2a02:8389:41c3:3c80:cc5:bc4:a811:aeed) by VI1P18901CA0020.EURP189.PROD.OUTLOOK.COM (2603:10a6:801::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20 via Frontend Transport; Sat, 21 Nov 2020 12:50:56 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fc529d37-f318-4b3e-27c1-08d88e1c16c6
-X-MS-TrafficTypeDiagnostic: VI1PR08MB3951:
-X-Microsoft-Antispam-PRVS: <VI1PR08MB395159E4C070AC649F7CB27AEDFE0@VI1PR08MB3951.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4H/i6Unz92e5gkOnUF13YegTr3D7tPg9+eT3VShN85tO5CSgd9yu+bfE42ztJByDwDsSrcoO+9NCibEvBtlAVzvOiaoFBpR/kMQCag8wIUHk28lQrQ3e7wvnLcyFrVL4k2dEf4G6PV28bEeuSrJSYgi63H2zfahEs1vsfJFJKSs/wuAKvunHpLVP63YDDE9wBkv5vXgmvGwjlViM4ee2uRd/GZjDcDDB6E3cTgcPsAZfxk3XDKX+dvY4iRvuR3yQ7WRd3STw4/Q8EuQVEjVUvvncI4TxZd2/bArypW1Iab556wnQDm9XRCZoNNgeedrvfUskyw5VAKRCrF8Mr3sMiR4M4nPARySg1SzW0zvem0o3S8871HOHn8MMUOewLvRh
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB4064.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(366004)(396003)(39830400003)(136003)(86362001)(5660300002)(8676002)(4326008)(6916009)(6486002)(66556008)(478600001)(66946007)(8936002)(66476007)(316002)(2616005)(2906002)(52116002)(36756003)(31686004)(16526019)(83380400001)(31696002)(53546011)(186003)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?N2FIVWcrRDZTVVdaUlIxQ0pJU2lPNTZSVlVnVG1kblYybXNmMnNDK0FPeTQ2?=
- =?utf-8?B?OUMxQ21KNEQ0ZzRlUlJYTTJIN2dHZ3QvVmRhUEx3MlpzUXlWYmxuZDFoS1N4?=
- =?utf-8?B?OWNQWW5VdVF1QmRlY2hNaGVtYTNaY1ZtaElocWlTanp0U1lpNW90ODRJZTdp?=
- =?utf-8?B?TU84UWVWQmx1a3haaVdCUmlNSjVueTQ2enpFYTY4a1IvV241SEFyMTc5b1Zz?=
- =?utf-8?B?cWhPWDRKWS9GZ21DeEc4UFNWQVZnNXpJbGZ6QjN3Q1VZaCtFbStPaGxBK3BR?=
- =?utf-8?B?cllOeklrTHJmeXowWFpwU3F4M1VCNTVGcktxVnN6Tnpja1RIdmM0b1NiODZD?=
- =?utf-8?B?OFFCK0YyWHQxdWtFYmtnOEpVVlEvWkVscENlN1pVSHhQc21vUmhhdmh3Q3NV?=
- =?utf-8?B?QkxlSnVUMW1wWGV0c3RKQUliU1VqMUxvZHNJTHc0QkhEMHIzL3lDbkNuRU5U?=
- =?utf-8?B?bWNLMGxaWm1HTUFuK3E0MTVUSnZIdmNxRTdObHNXaWFSalAzcWhLZzU1TVNp?=
- =?utf-8?B?WDRCVElvMUR2UjY5U2VxSFVHNnpzS09odGRsazdRbFZkcW1zbkM4eW4zQUZw?=
- =?utf-8?B?ZU9jUjRRWE1pSzVCcmtxZWI0TFlFeUtxdXJ1K1FWbmIxQWdYeG5uUCs0ZHZp?=
- =?utf-8?B?dFRwYXhLTTJNU1BiWmpGejA5OEF5bnJ6MTRlUXM1VExCZnNqbWViTnpYS1FI?=
- =?utf-8?B?VktjVUlUdFozbXMzSXlyOWRwTUtHMWl2RkpidlhmbzlEZGludEQrZVpBR0pm?=
- =?utf-8?B?VFVnY25FQ0JZQVRmdUxwS1Z4SWdzSGV4ME95RUdYWlkxMXNvYklwd3AxSklO?=
- =?utf-8?B?aHJPSEdVZmZpZjU3bXZpdktUa1FlVjFwWWZ3RWZlQjl6QVo4dUpxVktpRU9X?=
- =?utf-8?B?eEd0RU1tK1A1bVFQMk5rTmxsRldlYWluS0IraDlKd3NUQVJlRWEySmFWSjBM?=
- =?utf-8?B?bmsraUJSUXVSVHNqS09rM2dzay9lV1VJVmVvbkZJRXJrR0RHdnRqQnVjbFpP?=
- =?utf-8?B?WmIvZVZ5djNuYXlRclFIN3FJR1hlWExLU2o3Rit2TG1haDlVQjkxZHhzSVJN?=
- =?utf-8?B?MWdOOTlLckNFY2picmNxK0RuMFN6eTU2dTJWUXFURzZaTDM3d3I3RFRZcnpq?=
- =?utf-8?B?cFZCUEUrcEw0dFQvNXNlU29oU1NYVjZwY01Fd3lCWVlZNENkQk52eUhucStQ?=
- =?utf-8?B?REdtTkNnYlJkd0JJNExib29uWVBSdFJWaE01YnlQWjd6RlBITTB2ZndDdUYx?=
- =?utf-8?B?aHRSMGhMRkFjTGZDQ0xhbFh4TzA0cUgrOTc2RDZJV25nWkJZZz09?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc529d37-f318-4b3e-27c1-08d88e1c16c6
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR08MB4064.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2020 12:50:56.6707
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OjKJ3Hg4S62qf7qVxLgl8WWgX1z6umjdn1svKt7bv66Lfe15zvXX+hxHoKfVKUJRzrhipuQJg6BvlAH05lc8m+6Hjl+zb0nFdxD4qixeoIA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB3951
+        id S1727180AbgKUQvT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Nov 2020 11:51:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31754 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727150AbgKUQvR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Nov 2020 11:51:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605977475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=zLH0U0S3qPuM/4/c12zDySDpu72UCHtVP0nLwv0orcI=;
+        b=gFXVWcSrAhgyMeqQ73pID6Yth2SfkIhwHJFgmQXwSVrs3UYMsnJbrNNzTqFB+7oZK7dfEq
+        CjHMPw8Erwfv9TIrmhBo/lHAAcVejP6N1pMWLUDSp37qjAWZOSOh+dzc6CTaS42axK/M8M
+        HBv48wqHjk5hGOXX5iO8hcxZ75PG+Ng=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-533-w11xOQIsMxCkX0Pgcv_oAg-1; Sat, 21 Nov 2020 11:51:08 -0500
+X-MC-Unique: w11xOQIsMxCkX0Pgcv_oAg-1
+Received: by mail-qk1-f198.google.com with SMTP id d206so10849743qkc.23
+        for <linux-usb@vger.kernel.org>; Sat, 21 Nov 2020 08:51:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=zLH0U0S3qPuM/4/c12zDySDpu72UCHtVP0nLwv0orcI=;
+        b=NMlQnQBv1ZIVDtcWOqVsZLX/cHbpI8a3+5ctiOBPs+8pbqpHAg4ZIfP/xZZDeWD8zV
+         YwSnYFKNwNqtUkEhupjiltP2kwMB+qSE+ZRIqY01SHUkNbnmCrZJtt1Jjn4fSd0Q74AW
+         K0FgRHZwdcEqmnpW9tdkyCNS/g/e0CjW8pRslyq/HPxwSAj8igYmmqOJm5dzdZz4dbgT
+         A2d/g0/AjLQCUy8zXGC4O7hLJruaSdtATqnn0lPAPKb3tc/1LwnQrNpgtNIDzmU0tFgY
+         VE/jJfqb+M/GqScFjn34mfUGP4VCJ6EdveIidi4OxRSN4iEcqN9uQnomrdJ6Hyspaey+
+         w1cQ==
+X-Gm-Message-State: AOAM532lXgcOPLsdlnr/GpAtDHS2MtM0gaFlCOi9qsWFdt1AQNGHAWos
+        AlyOyssb80dv3S2jwJFJ1M3tO3GRQyGVx1YzQrvLizf8306vSOg/feRQbZXJAQYREb76I3pqlZi
+        U9GPCXGJIVo1h2sDlLTDj
+X-Received: by 2002:a05:620a:15ce:: with SMTP id o14mr22885278qkm.231.1605977467695;
+        Sat, 21 Nov 2020 08:51:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwJMB7Phx6GdQ/NzrSSCIOwTBjDbbn+gugDtHjIEeXte769cdu0l51J2LUn/+h4QxN+fnLujw==
+X-Received: by 2002:a05:620a:15ce:: with SMTP id o14mr22885248qkm.231.1605977467468;
+        Sat, 21 Nov 2020 08:51:07 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id j202sm4129196qke.108.2020.11.21.08.51.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Nov 2020 08:51:06 -0800 (PST)
+From:   trix@redhat.com
+To:     trix@redhat.com, joe@perches.com,
+        clang-built-linux@googlegroups.com
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, tboot-devel@lists.sourceforge.net,
+        kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-wireless@vger.kernel.org,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        ecryptfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        cluster-devel@redhat.com, linux-mtd@lists.infradead.org,
+        keyrings@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, alsa-devel@alsa-project.org,
+        bpf@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-nfs@vger.kernel.org, patches@opensource.cirrus.com
+Subject: [RFC] MAINTAINERS tag for cleanup robot
+Date:   Sat, 21 Nov 2020 08:50:58 -0800
+Message-Id: <20201121165058.1644182-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Laurent,
+A difficult part of automating commits is composing the subsystem
+preamble in the commit log.  For the ongoing effort of a fixer producing
+one or two fixes a release the use of 'treewide:' does not seem appropriate.
 
-sorry for my late response!
+It would be better if the normal prefix was used.  Unfortunately normal is
+not consistent across the tree.
 
-On 16.11.20 16:48, Laurent Pinchart wrote:
-> Hi Thomas,
-> 
-> Thank you for the patch, and sorry for the late review. I was mostly
-> absent last week.
-> 
-> On Tue, Nov 10, 2020 at 03:30:15PM +0100, thomas.haemmerle@wolfvision.net wrote:
->> From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
->>
->> Currently, the UVC function is activated when open on the corresponding
->> v4l2 device is called.
->> On another open the activation of the function fails since the
->> deactivation counter in `usb_function_activate` equals 0. However the
->> error is not returned to userspace since the open of the v4l2 device is
->> successful.
->>
->> On a close the function is deactivated (since deactivation counter still
->> equals 0) and the video is disabled in `uvc_v4l2_release`, although the
->> UVC application potentially is streaming.
->>
->> Move activation of UVC function to subscription on UVC_EVENT_SETUP
->> because there we can guarantee for a userspace application utilizing UVC.
->> Block subscription on UVC_EVENT_SETUP while another application already
->> is subscribed to it, indicated by `bool func_connected` in
->> `struct uvc_device`.
->> Extend the `struct uvc_file_handle` with member `bool is_uvc_app_handle`
->> to tag it as the handle used by the userspace UVC application.
->>
->> With this a process is able to check capabilities of the v4l2 device
->> without deactivating the function for the actual UVC application.
->>
->> Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
->> ---
->> v3:
->>   - replace `unsigned int connections` with `bool func_connected`
->>   - rename `bool connected` to `bool is_uvc_app_handle`
->>
->> v2:
->>   - fix deadlock in `uvc_v4l2_unsubscribe_event()` (mutex is already
->>     locked in v4l2-core) introduced in v1
->>   - lock mutex in `uvc_v4l2_release()` to suppress ioctls and protect
->>     connected
->>
->>   drivers/usb/gadget/function/uvc.h      |  2 +
->>   drivers/usb/gadget/function/uvc_v4l2.c | 54 +++++++++++++++++++++-----
->>   2 files changed, 46 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
->> index 73da4f9a8d4c..d6d0fd2dffa0 100644
->> --- a/drivers/usb/gadget/function/uvc.h
->> +++ b/drivers/usb/gadget/function/uvc.h
->> @@ -117,6 +117,7 @@ struct uvc_device {
->>   	enum uvc_state state;
->>   	struct usb_function func;
->>   	struct uvc_video video;
->> +	bool func_connected;
->>   
->>   	/* Descriptors */
->>   	struct {
->> @@ -147,6 +148,7 @@ static inline struct uvc_device *to_uvc(struct usb_function *f)
->>   struct uvc_file_handle {
->>   	struct v4l2_fh vfh;
->>   	struct uvc_video *device;
->> +	bool is_uvc_app_handle;
->>   };
->>   
->>   #define to_uvc_file_handle(handle) \
->> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
->> index 67922b1355e6..3c0b7a969107 100644
->> --- a/drivers/usb/gadget/function/uvc_v4l2.c
->> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
->> @@ -228,17 +228,55 @@ static int
->>   uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
->>   			 const struct v4l2_event_subscription *sub)
->>   {
->> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
->> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
->> +	int ret;
->> +
->>   	if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
->>   		return -EINVAL;
->>   
->> -	return v4l2_event_subscribe(fh, sub, 2, NULL);
->> +	if ((sub->type == UVC_EVENT_SETUP) && uvc->func_connected)
-> 
-> No need for the inner parentheses.
+So I am looking for comments for adding a new tag to the MAINTAINERS file
 
-I will change this.
+	D: Commit subsystem prefix
 
-> 
->> +		return -EBUSY;
->> +
->> +	ret = v4l2_event_subscribe(fh, sub, 2, NULL);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	if (sub->type == UVC_EVENT_SETUP) {
->> +		uvc->func_connected = true;
->> +		handle->is_uvc_app_handle = true;
->> +		uvc_function_connect(uvc);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static void uvc_v4l2_disable(struct uvc_device *uvc)
->> +{
->> +	uvc->func_connected = false;
->> +	uvc_function_disconnect(uvc);
->> +	uvcg_video_enable(&uvc->video, 0);
->> +	uvcg_free_buffers(&uvc->video.queue);
->>   }
->>   
->>   static int
->>   uvc_v4l2_unsubscribe_event(struct v4l2_fh *fh,
->>   			   const struct v4l2_event_subscription *sub)
->>   {
->> -	return v4l2_event_unsubscribe(fh, sub);
->> +	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
->> +	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
->> +	int ret;
->> +
->> +	ret = v4l2_event_unsubscribe(fh, sub);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	if ((sub->type == UVC_EVENT_SETUP) && handle->is_uvc_app_handle) {
-> 
-> No need for the inner parentheses.
+ex/ for FPGA DFL DRIVERS
 
-I will change this.
+	D: fpga: dfl:
 
-> 
->> +		uvc_v4l2_disable(uvc);
->> +		handle->is_uvc_app_handle = false;
-> 
-> Calling uvc_v4l2_disable() here means that we'll stop everything when
-> unsubscribing from the event, which sounds like it could cause issues as
-> that behaviour is not expected. Wouldn't it be enough to only handle
-> this in uvc_v4l2_release() ?
-> 
+Continuing with cleaning up clang's -Wextra-semi-stmt
 
-Of course it would be enough. But maybe a UVC gadget application wants 
-to release the device for another application without closing it and 
-since the function is activated on subscription the logical consequence 
-is to deactivate it on unsubscription.
+A significant number of warnings are caused by function like macros with
+a trailing semicolon.  For example.
 
->> +	}
->> +
->> +	return 0;
->>   }
->>   
->>   static long
->> @@ -293,7 +331,6 @@ uvc_v4l2_open(struct file *file)
->>   	handle->device = &uvc->video;
->>   	file->private_data = &handle->vfh;
->>   
->> -	uvc_function_connect(uvc);
->>   	return 0;
->>   }
->>   
->> @@ -303,14 +340,11 @@ uvc_v4l2_release(struct file *file)
->>   	struct video_device *vdev = video_devdata(file);
->>   	struct uvc_device *uvc = video_get_drvdata(vdev);
->>   	struct uvc_file_handle *handle = to_uvc_file_handle(file->private_data);
->> -	struct uvc_video *video = handle->device;
->> -
->> -	uvc_function_disconnect(uvc);
->>   
->> -	mutex_lock(&video->mutex);
->> -	uvcg_video_enable(video, 0);
->> -	uvcg_free_buffers(&video->queue);
->> -	mutex_unlock(&video->mutex);
->> +	mutex_lock(&uvc->video.mutex);
-> 
-> Could you please keep keep the local video variable, and use
-> &video->mutex here ? The driver has a single video device at the moment,
-> but could be extended in the future with support for multiple video
-> devices in a single UVC device (lots of changes would be needed though).
+#define FOO(a) a++; <-- extra, unneeded semicolon
+void bar() {
+	int v = 0;
+	FOO(a);
+} 
 
-Yes.
+Clang will warn at the FOO(a); expansion location. Instead of removing
+the semicolon there,  the fixer removes semicolon from the macro
+definition.  After the fixer, the code will be:
 
-> 
->> +	if (handle->is_uvc_app_handle)
->> +		uvc_v4l2_disable(uvc);
->> +	mutex_unlock(&uvc->video.mutex);
-> 
-> Note that this lock isn't the same as the lock taken by
-> __video_do_ioctl(), which alls uvc_v4l2_subscribe_event() and
-> uvc_v4l2_unsubscribe_event(). I think Hans got confused in his review,
-> it appears that there's nothing protecting concurrent access to
-> is_uvc_app_handle and func_connected in v3. I think you need to take the
-> driver-specific lock in uvc_v4l2_subscribe_event() and
-> uvc_v4l2_unsubscribe_event().
+#define FOO(a) a++
+void bar() {
+	int v = 0;
+	FOO(a);
+} 
 
-Why isn't this the same lock taken by __video_do_ioctl()?
-The lock in video_device is set to it in `uvc_register_video()` in f_uvc.c:
-uvc->vdev.lock = &uvc->video.mutex;
+The fixer review is
+https://reviews.llvm.org/D91789
 
-So this should be the same, right?
+A run over allyesconfig for x86_64 finds 62 issues, 5 are false positives.
+The false positives are caused by macros passed to other macros and by
+some macro expansions that did not have an extra semicolon.
 
-Regards
-Thomas
+This cleans up about 1,000 of the current 10,000 -Wextra-semi-stmt
+warnings in linux-next.
+
+An update to [RFC] clang tooling cleanup
+This change adds the clang-tidy-fix as a top level target and
+uses it to do the cleaning.  The next iteration will do a loop of
+cleaners.  This will mean breaking clang-tidy-fix out into its own
+processing function 'run_fixers'.
+
+Makefile: Add toplevel target clang-tidy-fix to makefile
+
+Calls clang-tidy with -fix option for a set of checkers that
+programatically fixes the kernel source in place, treewide.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ Makefile                               |  7 ++++---
+ scripts/clang-tools/run-clang-tools.py | 20 +++++++++++++++++---
+ 2 files changed, 21 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 47a8add4dd28..57756dbb767b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1567,20 +1567,21 @@ help:
+ 	 echo  ''
+ 	@echo  'Static analysers:'
+ 	@echo  '  checkstack      - Generate a list of stack hogs'
+ 	@echo  '  versioncheck    - Sanity check on version.h usage'
+ 	@echo  '  includecheck    - Check for duplicate included header files'
+ 	@echo  '  export_report   - List the usages of all exported symbols'
+ 	@echo  '  headerdep       - Detect inclusion cycles in headers'
+ 	@echo  '  coccicheck      - Check with Coccinelle'
+ 	@echo  '  clang-analyzer  - Check with clang static analyzer'
+ 	@echo  '  clang-tidy      - Check with clang-tidy'
++	@echo  '  clang-tidy-fix  - Check and fix with clang-tidy'
+ 	@echo  ''
+ 	@echo  'Tools:'
+ 	@echo  '  nsdeps          - Generate missing symbol namespace dependencies'
+ 	@echo  ''
+ 	@echo  'Kernel selftest:'
+ 	@echo  '  kselftest         - Build and run kernel selftest'
+ 	@echo  '                      Build, install, and boot kernel before'
+ 	@echo  '                      running kselftest on it'
+ 	@echo  '                      Run as root for full coverage'
+ 	@echo  '  kselftest-all     - Build kernel selftest'
+@@ -1842,30 +1843,30 @@ nsdeps: modules
+ quiet_cmd_gen_compile_commands = GEN     $@
+       cmd_gen_compile_commands = $(PYTHON3) $< -a $(AR) -o $@ $(filter-out $<, $(real-prereqs))
+ 
+ $(extmod-prefix)compile_commands.json: scripts/clang-tools/gen_compile_commands.py \
+ 	$(if $(KBUILD_EXTMOD),,$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)) \
+ 	$(if $(CONFIG_MODULES), $(MODORDER)) FORCE
+ 	$(call if_changed,gen_compile_commands)
+ 
+ targets += $(extmod-prefix)compile_commands.json
+ 
+-PHONY += clang-tidy clang-analyzer
++PHONY += clang-tidy-fix clang-tidy clang-analyzer
+ 
+ ifdef CONFIG_CC_IS_CLANG
+ quiet_cmd_clang_tools = CHECK   $<
+       cmd_clang_tools = $(PYTHON3) $(srctree)/scripts/clang-tools/run-clang-tools.py $@ $<
+ 
+-clang-tidy clang-analyzer: $(extmod-prefix)compile_commands.json
++clang-tidy-fix clang-tidy clang-analyzer: $(extmod-prefix)compile_commands.json
+ 	$(call cmd,clang_tools)
+ else
+-clang-tidy clang-analyzer:
++clang-tidy-fix clang-tidy clang-analyzer:
+ 	@echo "$@ requires CC=clang" >&2
+ 	@false
+ endif
+ 
+ # Scripts to check various things for consistency
+ # ---------------------------------------------------------------------------
+ 
+ PHONY += includecheck versioncheck coccicheck export_report
+ 
+ includecheck:
+diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+index fa7655c7cec0..c177ca822c56 100755
+--- a/scripts/clang-tools/run-clang-tools.py
++++ b/scripts/clang-tools/run-clang-tools.py
+@@ -22,43 +22,57 @@ def parse_arguments():
+     Returns:
+         args: Dict of parsed args
+         Has keys: [path, type]
+     """
+     usage = """Run clang-tidy or the clang static-analyzer on a
+         compilation database."""
+     parser = argparse.ArgumentParser(description=usage)
+ 
+     type_help = "Type of analysis to be performed"
+     parser.add_argument("type",
+-                        choices=["clang-tidy", "clang-analyzer"],
++                        choices=["clang-tidy-fix", "clang-tidy", "clang-analyzer"],
+                         help=type_help)
+     path_help = "Path to the compilation database to parse"
+     parser.add_argument("path", type=str, help=path_help)
+ 
+     return parser.parse_args()
+ 
+ 
+ def init(l, a):
+     global lock
+     global args
+     lock = l
+     args = a
+ 
+ 
+ def run_analysis(entry):
+     # Disable all checks, then re-enable the ones we want
+     checks = "-checks=-*,"
+-    if args.type == "clang-tidy":
++    fix = ""
++    header_filter = ""
++    if args.type == "clang-tidy-fix":
++        checks += "linuxkernel-macro-trailing-semi"
++        #
++        # Fix this
++        # #define M(a) a++; <-- clang-tidy fixes the problem here
++        # int f() {
++        #   int v = 0;
++        #   M(v);  <-- clang reports problem here
++        #   return v;
++        # }
++        fix += "-fix"
++        header_filter += "-header-filter=.*"
++    elif args.type == "clang-tidy":
+         checks += "linuxkernel-*"
+     else:
+         checks += "clang-analyzer-*"
+-    p = subprocess.run(["clang-tidy", "-p", args.path, checks, entry["file"]],
++    p = subprocess.run(["clang-tidy", "-p", args.path, checks, header_filter, fix, entry["file"]],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        cwd=entry["directory"])
+     with lock:
+         sys.stderr.buffer.write(p.stdout)
+ 
+ 
+ def main():
+     args = parse_arguments()
+ 
+-- 
+2.18.4
+
