@@ -2,72 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8E72BC25D
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Nov 2020 23:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB922BC355
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Nov 2020 04:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728599AbgKUWDN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Nov 2020 17:03:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52806 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728554AbgKUWDN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 21 Nov 2020 17:03:13 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 00D2F221EB;
-        Sat, 21 Nov 2020 22:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605996192;
-        bh=R6LqJxezNsIXeikq7/GWHBaCNJJhNQqtYGcbp68R/3M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DHo8lItmfyDlGx9rDMqCPK3RRroyKQ1eP/qG2LLbTrbP86PRDurhtMGIjcPjaPGFF
-         GbWL1gsbT9DO9XYEjhQ+Sk+nVuGrCVmCwPe2UfADDYAcqNrmN43VavyrrCmsRg0gM5
-         I3lzR5ifW8oYRN04boVkjovzzP11R6f7R6sNQpZo=
-Date:   Sat, 21 Nov 2020 14:03:11 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yves-Alexis Perez <corsac@corsac.net>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Martin Habets <mhabets@solarflare.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Shannon Nelson <snelson@pensando.io>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matti Vuorela <matti.vuorela@bitfactor.fi>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usbnet: ipheth: fix connectivity with iOS 14
-Message-ID: <20201121140311.42585c68@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201119172439.94988-1-corsac@corsac.net>
-References: <CAAn0qaXmysJ9vx3ZEMkViv_B19ju-_ExN8Yn_uSefxpjS6g4Lw@mail.gmail.com>
-        <20201119172439.94988-1-corsac@corsac.net>
+        id S1727134AbgKVDXg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Nov 2020 22:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726544AbgKVDXe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Nov 2020 22:23:34 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E05C0613CF;
+        Sat, 21 Nov 2020 19:23:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t7P1qjxLtvKyLv5lupmc5Zc5j0L3lqaoBXMlGIL9vWk=; b=BCb+FFzpwYCsAL5/GuZs0qQqU7
+        2wigu715rAloO1MXfHFDjsI/DCCkjrJ0RLz4Myz+wD98+zNWw6243kPWNzvqzMn6Tn8JVpmOuQv+x
+        7EKe3xartwVOhq4ran1ZhW92oaIukRN20h1OI3pPMusUrtae1AY4TqDUCPUPtiDgxz6eQOoVcrvcz
+        Ara6lCihfF7KrYMxKPcv522GOw1XE7kmR9pLBWd69WCJIf1380JdPIessAMMrwuE8sqCmQUL7YEHL
+        BXN0W+EBw/mKx6JrVL7roopk6K2PnHDj+T1EiV35semdke1klNMJQXZf1Gvzraa/TLsC310jvDxAq
+        zJ5cWKdw==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kgfxw-0001fc-2G; Sun, 22 Nov 2020 03:23:04 +0000
+Date:   Sun, 22 Nov 2020 03:23:04 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     trix@redhat.com
+Cc:     joe@perches.com, clang-built-linux@googlegroups.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, tboot-devel@lists.sourceforge.net,
+        kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-wireless@vger.kernel.org,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        ecryptfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        cluster-devel@redhat.com, linux-mtd@lists.infradead.org,
+        keyrings@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, alsa-devel@alsa-project.org,
+        bpf@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-nfs@vger.kernel.org, patches@opensource.cirrus.com
+Subject: Re: [RFC] MAINTAINERS tag for cleanup robot
+Message-ID: <20201122032304.GE4327@casper.infradead.org>
+References: <20201121165058.1644182-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201121165058.1644182-1-trix@redhat.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 19 Nov 2020 18:24:39 +0100 Yves-Alexis Perez wrote:
-> Starting with iOS 14 released in September 2020, connectivity using the
-> personal hotspot USB tethering function of iOS devices is broken.
+On Sat, Nov 21, 2020 at 08:50:58AM -0800, trix@redhat.com wrote:
+> The fixer review is
+> https://reviews.llvm.org/D91789
 > 
-> Communication between the host and the device (for example ICMP traffic
-> or DNS resolution using the DNS service running in the device itself)
-> works fine, but communication to endpoints further away doesn't work.
+> A run over allyesconfig for x86_64 finds 62 issues, 5 are false positives.
+> The false positives are caused by macros passed to other macros and by
+> some macro expansions that did not have an extra semicolon.
 > 
-> Investigation on the matter shows that UDP and ICMP traffic from the
-> tethered host is reaching the Internet at all. For TCP traffic there are
-> exchanges between tethered host and server but packets are modified in
-> transit leading to impossible communication.
-> 
-> After some trials Matti Vuorela discovered that reducing the URB buffer
-> size by two bytes restored the previous behavior. While a better
-> solution might exist to fix the issue, since the protocol is not
-> publicly documented and considering the small size of the fix, let's do
-> that.
-> 
-> Tested-by: Matti Vuorela <matti.vuorela@bitfactor.fi>
-> Signed-off-by: Yves-Alexis Perez <corsac@corsac.net>
-> Link: https://lore.kernel.org/linux-usb/CAAn0qaXmysJ9vx3ZEMkViv_B19ju-_ExN8Yn_uSefxpjS6g4Lw@mail.gmail.com/
-> Link: https://github.com/libimobiledevice/libimobiledevice/issues/1038
+> This cleans up about 1,000 of the current 10,000 -Wextra-semi-stmt
+> warnings in linux-next.
 
-Applied to net with the typo fixed, thanks!
+Are any of them not false-positives?  It's all very well to enable
+stricter warnings, but if they don't fix any bugs, they're just churn.
