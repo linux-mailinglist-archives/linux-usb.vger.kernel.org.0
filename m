@@ -2,85 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EE42C0E82
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 16:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B46B82C0E93
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 16:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389413AbgKWPLu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 10:11:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55748 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389411AbgKWPLu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 10:11:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606144309;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=LsqWP7umdoS2DWw9OeK8zXj+a59306lgFa5WjpWOyqc=;
-        b=DVIuPzOSSTfmRDTSNWFjZgz2N0BhVwDd8jZBSC80BCUUkVMYursUQ83Ad//6YKy++POPts
-        VDiB56ojIYss5u1MuIvTpigEpVpx3cSoN/A2NzZbaaX2zqD4Qh5Ow7j9Myx/K0uCIxSJIL
-        jnZJBvXmo+KSAqXRAJGal57dhs/MUcw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-315-M2RMHG8QMlywA9ka4yTbIQ-1; Mon, 23 Nov 2020 10:11:45 -0500
-X-MC-Unique: M2RMHG8QMlywA9ka4yTbIQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 931511076023;
-        Mon, 23 Nov 2020 15:11:42 +0000 (UTC)
-Received: from x1.localdomain (ovpn-112-208.ams2.redhat.com [10.36.112.208])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 75BD060864;
-        Mon, 23 Nov 2020 15:11:41 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] xhci-pci: Allow host runtime PM as default for Intel Alpine LP
-Date:   Mon, 23 Nov 2020 16:11:40 +0100
-Message-Id: <20201123151140.5324-1-hdegoede@redhat.com>
+        id S1731949AbgKWPPS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 10:15:18 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:59287 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729718AbgKWPPR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 10:15:17 -0500
+Received: (qmail 709648 invoked by uid 1000); 23 Nov 2020 10:15:15 -0500
+Date:   Mon, 23 Nov 2020 10:15:15 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Zhang Qilong <zhangqilong3@huawei.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: ehci-omap: Fix PM disable depth umbalance in
+ ehci_hcd_omap_probe
+Message-ID: <20201123151515.GA708586@rowland.harvard.edu>
+References: <20201123145719.1455849-1-zhangqilong3@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201123145719.1455849-1-zhangqilong3@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The xhci controller on Alpine Ridge LP keeps the whole thunderbolt
-controller awake if the host controller is not allowed to sleep.
-This is the case even if no USB devices are connected to the host.
+On Mon, Nov 23, 2020 at 10:57:19PM +0800, Zhang Qilong wrote:
+> The pm_runtime_enable will increase power disable depth. Imbalance
 
-Add the Intel Alpine LP product-id to the list of product-ids
-for which we allow runtime PM by default.
+That's backward.  pm_runtime_enable _decrements_ the power-disable 
+depth.
 
-Fixes: 2815ef7fe4d4 ("xhci-pci: allow host runtime PM as default for Intel Alpine and Titan Ridge")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/usb/host/xhci-pci.c | 2 ++
- 1 file changed, 2 insertions(+)
+> depth will resulted in enabling runtime PM of device fails later.
+> Thus a pairing decrement must be needed on the error handling path
+> to keep it balanced.
+> 
+> Fixes: 6c984b066d84b ("ARM: OMAP: USBHOST: Replace usbhs core driver APIs by Runtime pm APIs")
+> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+> ---
+>  drivers/usb/host/ehci-omap.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/host/ehci-omap.c b/drivers/usb/host/ehci-omap.c
+> index 8771a2ed6926..7f4a03e8647a 100644
+> --- a/drivers/usb/host/ehci-omap.c
+> +++ b/drivers/usb/host/ehci-omap.c
+> @@ -220,6 +220,7 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
+>  
+>  err_pm_runtime:
+>  	pm_runtime_put_sync(dev);
+> +	pm_runtime_disable(dev);
+>  
+>  err_phy:
+>  	for (i = 0; i < omap->nports; i++) {
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index bf89172c43ca..5f94d7edeb37 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -47,6 +47,7 @@
- #define PCI_DEVICE_ID_INTEL_DNV_XHCI			0x19d0
- #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_XHCI	0x15b5
- #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_4C_XHCI	0x15b6
-+#define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_LP_XHCI	0x15c1
- #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_2C_XHCI	0x15db
- #define PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_4C_XHCI	0x15d4
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_2C_XHCI		0x15e9
-@@ -232,6 +233,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
- 	    (pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_4C_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_LP_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_2C_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_4C_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_2C_XHCI ||
--- 
-2.28.0
+Apart from that one typo,
 
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
