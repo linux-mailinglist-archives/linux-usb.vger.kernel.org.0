@@ -2,147 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 271752C0D58
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 15:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C413B2C0E1C
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 15:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389025AbgKWOUK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 09:20:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388810AbgKWOUI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 09:20:08 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCBAC0613CF;
-        Mon, 23 Nov 2020 06:20:06 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id t33so16099316ybd.0;
-        Mon, 23 Nov 2020 06:20:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WUYMqcUnfpAQa1YuH9tQ3ze5bp2bxaoGLXc9Sg/470Y=;
-        b=b0LkeT2q71Z3peIccxL7MkU5QadaCN3igdEC89IE4ykmdOxIlhuoo/0+H7pQCoNmlh
-         0UX19Z7soasUpz2fDZHX56luUWrH4GLKAJ9K28HwPu9km7qlcvasqfBffaQW+LtXvh6a
-         fVP4J8wQFxbi1QWFB10Wsq9dLONxRShLcqQtcaktrZCy3tSRV5R4FOw2MSdgwNuCxNwd
-         cKQMyE/jYgmlc9Qm972BZKz9xJaasT5iW6gpZgai8YpCh1sxJNgZFzlfCpv21Fvd7rwb
-         akOsznbnFT4mJT95mXFDUPnplTdAJirWAcm8YfzHFRAfOGn9Vk91PuRcq7JipLelDPMB
-         VWgQ==
+        id S1730142AbgKWOtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 09:49:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:34907 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728649AbgKWOtQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 09:49:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606142954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jx0e387EU8Y8QGi626Zz2QkBXc0rICaXyds9sJ3z3xc=;
+        b=iUx6CnHwKEHjgKXOgGgF3CSepsWWVCdCaFDvvWHXy8kcCXc0sRx+1yTcN8NexhEl1wxSLP
+        r6OkVb2tfR6CGsoujjRj4grvSVOdFbO7v8wUvnnY5Guhc5Vm9nlU7CT2HhnztncwWcDYz6
+        f94OFGwDc3ZxrH/cU61FJdFuIG7IIsY=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-380-Ggg6HhOXMsaVKeHMw6dX1A-1; Mon, 23 Nov 2020 09:49:12 -0500
+X-MC-Unique: Ggg6HhOXMsaVKeHMw6dX1A-1
+Received: by mail-ej1-f69.google.com with SMTP id k2so3906907eji.21
+        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 06:49:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WUYMqcUnfpAQa1YuH9tQ3ze5bp2bxaoGLXc9Sg/470Y=;
-        b=k/qgZ8Z9bBqeNograULAsVmY6QgH/o27YDc4TQqwadJEFPSHfj8njq8ybzc5p5uAqz
-         G2SF1GHjXgxVX+FODMOQfjlRZXXNW8F8Ux14RKIUmWQY2couN16YR3yqVIzbwT4iX+yY
-         VYevTNouvCvLvx1xngkvK6RPKneGbHmGKG5FWBekf4NZ/3kPDSYqCl0zGT3EJ0yk0X4t
-         kU+csohpniyEyWF3yBeZ4aH/Tq8NjSKFDNPVh4gegMfVdeoJsrqFPE3o5GJQHSG5qjFd
-         /s6X6u/SLjhTMvHx9dFj3eBhExXvELYjltJz7wnCgTa8WRq49qIZaylj2t5HkrN/zQMT
-         LOBg==
-X-Gm-Message-State: AOAM533+WIFD/5i1qM3ecRgslbKC6w7KewwGOZRW9A2m2jL8dzVHgZRd
-        FqTd3sI8v3im//r2zntxY7nbBjfQQlZgP2y43RA=
-X-Google-Smtp-Source: ABdhPJyiJqjBIpEzWlk5pyqpoGG3+KpoWdKnlyza2YA6ODhXnRhATytwh5Bq+iGOzNqc5gs+zuqHC8iB1cjfDTXU/ik=
-X-Received: by 2002:a25:bcc7:: with SMTP id l7mr32380985ybm.115.1606141205830;
- Mon, 23 Nov 2020 06:20:05 -0800 (PST)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Jx0e387EU8Y8QGi626Zz2QkBXc0rICaXyds9sJ3z3xc=;
+        b=SUe1YAKTtGjlBlPxknjmHfvpfcXAn+9Kmgx2TzUshLTOsQ0jF+TwBUqQsQT2f6ZANT
+         1hO0MT5dGm1mB6uAzSopbYzo/anmqew6TzdypYglUkk/Pdrk+GHaCiiIz7pFWVPB2DIT
+         ll4AbVZKkMZf9QHreKp0ak0Bs0QQBiBEGUFC1/W/8U1UtQfz7d0pDh9Au1ZI1o3whZSG
+         IaaZw7VUVI19ewXwI5ZC0dq9VlCTFTFRuEp+LQr+2mR7Pulw8ltudHUypToegcKQa5kg
+         qqxfQaI8EMtsIu8Tk8yom+u8XacSrEo3EfFVbg3ulGRGIzfH/FahHHG//KCBCagE7QrX
+         VXrw==
+X-Gm-Message-State: AOAM5324RYTnInKBDPZUPxDc2vD78u9hVHOHbpSx5c6q57Tcnro8p68Z
+        ibTRkFZJoHJw+zoNcjac9ga9W+vK2OQKvIQLuYiKudZRLPcOdwA5gdAWCpMh1TyJ8Zl3RMyCoJ+
+        1uvH63gAcfCdPCtQxwoIt
+X-Received: by 2002:a17:906:34c3:: with SMTP id h3mr44342898ejb.132.1606142951014;
+        Mon, 23 Nov 2020 06:49:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxxZbyXGfQnU6e1Iz1byKZPi+kKZ/Xi1qd7ffpRUxuGiEndpGF59D1Wg50E4fd2o/f5XNyoWw==
+X-Received: by 2002:a17:906:34c3:: with SMTP id h3mr44342885ejb.132.1606142950839;
+        Mon, 23 Nov 2020 06:49:10 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
+        by smtp.gmail.com with ESMTPSA id u13sm5094947ejz.74.2020.11.23.06.49.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Nov 2020 06:49:09 -0800 (PST)
+Subject: Re: 5.10 regression, many XHCI swiotlb buffer is full / DMAR: Device
+ bounce map failed errors on thunderbolt connected XHCI controller
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org
+References: <b046dd04-ac4f-3c69-0602-af810fb1b365@redhat.com>
+Message-ID: <be031d15-201f-0e5c-8b0f-be030077141f@redhat.com>
+Date:   Mon, 23 Nov 2020 15:49:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
- <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com> <1c7d7fde126bc0acf825766de64bf2f9b888f216.camel@HansenPartnership.com>
-In-Reply-To: <1c7d7fde126bc0acf825766de64bf2f9b888f216.camel@HansenPartnership.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 23 Nov 2020 15:19:55 +0100
-Message-ID: <CANiq72m22Jb5_+62NnwX8xds2iUdWDMAqD8PZw9cuxdHd95W0A@mail.gmail.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <b046dd04-ac4f-3c69-0602-af810fb1b365@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Nov 22, 2020 at 11:36 PM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> Well, it seems to be three years of someone's time plus the maintainer
-> review time and series disruption of nearly a thousand patches.  Let's
-> be conservative and assume the producer worked about 30% on the series
-> and it takes about 5-10 minutes per patch to review, merge and for
-> others to rework existing series.  So let's say it's cost a person year
-> of a relatively junior engineer producing the patches and say 100h of
-> review and application time.  The latter is likely the big ticket item
-> because it's what we have in least supply in the kernel (even though
-> it's 20x vs the producer time).
+Hi,
 
-How are you arriving at such numbers? It is a total of ~200 trivial lines.
++Cc Christoph Hellwig <hch@lst.de>
 
-> It's not about the risk of the changes it's about the cost of
-> implementing them.  Even if you discount the producer time (which
-> someone gets to pay for, and if I were the engineering manager, I'd be
-> unhappy about), the review/merge/rework time is pretty significant in
-> exchange for six minor bug fixes.  Fine, when a new compiler warning
-> comes along it's certainly reasonable to see if we can benefit from it
-> and the fact that the compiler people think it's worthwhile is enough
-> evidence to assume this initially.  But at some point you have to ask
-> whether that assumption is supported by the evidence we've accumulated
-> over the time we've been using it.  And if the evidence doesn't support
-> it perhaps it is time to stop the experiment.
+Christoph, this is still an issue, so I've been looking around a bit and think this
+might have something to do with the dma-mapping-5.10 changes.
 
-Maintainers routinely review 1-line trivial patches, not to mention
-internal API changes, etc.
+Do you have any suggestions to debug this, or is it time to do a git bisect
+on this before 5.10 ships with regression?
 
-If some company does not want to pay for that, that's fine, but they
-don't get to be maintainers and claim `Supported`.
+Regards,
 
-Cheers,
-Miguel
+Hans
+
+
+
+
+On 11/10/20 12:36 PM, Hans de Goede wrote:
+> Hi All,
+> 
+> Not sure if this is a XHCI driver problem at all, but I needed to start
+> somewhere with reporting this so I went with:
+> 
+> scripts/get_maintainer.pl -f drivers/usb/host/xhci-pci.c
+> 
+> And added a Cc: linux-pci@vger.kernel.org as bonus.
+> 
+> I'm seeing the following errors and very slow network performance with
+> the USB NIC in a Lenovo Thunderbolt gen 2 dock.
+> 
+> Note that the USB NIC is connected to the XHCI controller which is
+> embedded inside the dock and is connected over thunderbolt!
+> 
+> So the errors are:
+> 
+> [ 1148.744205] swiotlb_tbl_map_single: 6 callbacks suppressed
+> [ 1148.744210] xhci_hcd 0000:0a:00.0: swiotlb buffer is full (sz: 8192 bytes), total 32768 (slots), used 16 (slots)
+> [ 1148.744218] xhci_hcd 0000:0a:00.0: DMAR: Device bounce map: 16ea@1411c0000 dir 1 --- failed
+> [ 1148.744226] r8152 4-2.1.2:1.0 ens1u2u1u2: failed tx_urb -11
+> [ 1148.744368] xhci_hcd 0000:0a:00.0: swiotlb buffer is full (sz: 8192 bytes), total 32768 (slots), used 16 (slots)
+> [ 1148.744375] xhci_hcd 0000:0a:00.0: DMAR: Device bounce map: 16ea@10aabc000 dir 1 --- failed
+> [ 1148.744381] r8152 4-2.1.2:1.0 ens1u2u1u2: failed tx_urb -11
+> [ 1148.745141] xhci_hcd 0000:0a:00.0: swiotlb buffer is full (sz: 8192 bytes), total 32768 (slots), used 16 (slots)
+> [ 1148.745148] xhci_hcd 0000:0a:00.0: DMAR: Device bounce map: 118e@1411c0000 dir 1 --- failed
+> [ 1148.745155] r8152 4-2.1.2:1.0 ens1u2u1u2: failed tx_urb -11
+> [ 1148.951282] xhci_hcd 0000:0a:00.0: swiotlb buffer is full (sz: 8192 bytes), total 32768 (slots), used 16 (slots)
+> [ 1148.951388] xhci_hcd 0000:0a:00.0: DMAR: Device bounce map: 118e@140988000 dir 1 --- failed
+> [ 1148.951420] r8152 4-2.1.2:1.0 ens1u2u1u2: failed tx_urb -11
+> [ 1151.013342] xhci_hcd 0000:0a:00.0: swiotlb buffer is full (sz: 8192 bytes), total 32768 (slots), used 16 (slots)
+> [ 1151.013357] xhci_hcd 0000:0a:00.0: DMAR: Device bounce map: 1d2a@1411c0000 dir 1 --- failed
+> [ 1151.013373] r8152 4-2.1.2:1.0 ens1u2u1u2: failed tx_urb -11
+> [ 1151.018660] xhci_hcd 0000:0a:00.0: swiotlb buffer is full (sz: 8192 bytes), total 32768 (slots), used 18 (slots)
+> [ 1151.018696] xhci_hcd 0000:0a:00.0: DMAR: Device bounce map: 11da@1411c0000 dir 1 --- failed
+> [ 1151.018711] r8152 4-2.1.2:1.0 ens1u2u1u2: failed tx_urb -11
+> [ 1151.223022] xhci_hcd 0000:0a:00.0: swiotlb buffer is full (sz: 8192 bytes), total 32768 (slots), used 16 (slots)
+> [ 1151.223102] xhci_hcd 0000:0a:00.0: DMAR: Device bounce map: 11da@10aabc000 dir 1 --- failed
+> [ 1151.223133] r8152 4-2.1.2:1.0 ens1u2u1u2: failed tx_urb -11
+> [ 1151.228810] xhci_hcd 0000:0a:00.0: swiotlb buffer is full (sz: 8192 bytes), total 32768 (slots), used 16 (slots)
+> [ 1151.228870] xhci_hcd 0000:0a:00.0: DMAR: Device bounce map: 11da@10aabc000 dir 1 --- failed
+> [ 1151.228898] r8152 4-2.1.2:1.0 ens1u2u1u2: failed tx_urb -11
+> [ 1151.234792] xhci_hcd 0000:0a:00.0: swiotlb buffer is full (sz: 8192 bytes), total 32768 (slots), used 16 (slots)
+> [ 1151.234852] xhci_hcd 0000:0a:00.0: DMAR: Device bounce map: 11da@10aabc000 dir 1 --- failed
+> [ 1151.234882] r8152 4-2.1.2:1.0 ens1u2u1u2: failed tx_urb -11
+> 
+> etc.
+> 
+> This happens as soon as I generate any serious amount of outgoing network traffic. E.g. rsyncing files
+> to another machine.
+> 
+> Regards,
+> 
+> Hans
+> 
+
