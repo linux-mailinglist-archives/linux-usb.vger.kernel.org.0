@@ -2,105 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAC72C0EC7
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 16:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EDF2C0EDB
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 16:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389504AbgKWP0z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 10:26:55 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:48947 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2389489AbgKWP0z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 10:26:55 -0500
-Received: (qmail 710166 invoked by uid 1000); 23 Nov 2020 10:26:54 -0500
-Date:   Mon, 23 Nov 2020 10:26:54 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     John Boero <boeroboy@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: core: Null deref in kernel with USB webcams.
-Message-ID: <20201123152654.GB708586@rowland.harvard.edu>
-References: <X61rce8GANHW1ysh@kroah.com>
- <CAO5W59iGm3kN-HhA_g78iJH9cV3fHzjQORM_b3xqo1Mg+XEi2g@mail.gmail.com>
- <X613chtPVIg8kquH@kroah.com>
- <CAO5W59jZdDgSBE3Tr79u7TuCrdsirhisFxKH6aCH5oE4soOz1g@mail.gmail.com>
- <20201112192524.GB287229@rowland.harvard.edu>
- <CAO5W59hXOHAd_D0K3HnvJmf883e_u+s6oM+DGJMqpr392N5Gww@mail.gmail.com>
- <20201113163449.GB322940@rowland.harvard.edu>
- <CAO5W59iqXGeAQTP7hzzRmbqwZUcK=vwuJ7pFzzNzZ9o11_k2tw@mail.gmail.com>
- <20201113171658.GF322940@rowland.harvard.edu>
- <CAO5W59hRNB0xH1Z2cd17ckYuHp38zL366K_3AuMoH8WTZYatow@mail.gmail.com>
+        id S2388129AbgKWPaJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 10:30:09 -0500
+Received: from mga14.intel.com ([192.55.52.115]:10654 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729244AbgKWPaJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Nov 2020 10:30:09 -0500
+IronPort-SDR: zXH04rPhVdBgnVOHmj25Cjfkjd3+izJVESYLjv93j51t9w9IbB4m1e3/2XTxuU62k9bDEgR8mF
+ GKT5bJir0sLw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9813"; a="171001013"
+X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
+   d="scan'208";a="171001013"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 07:30:08 -0800
+IronPort-SDR: HEmb1RIW2Z8vt2oQqZYuHlTAGvDorddLeYbZCovRtqA6Z2EFCjNdPtXnL+6ESNeWKSKa9rHV/2
+ pjYFOwY3aIcQ==
+X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
+   d="scan'208";a="327230618"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 07:30:04 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1khDo0-009CDf-9Z; Mon, 23 Nov 2020 17:31:04 +0200
+Date:   Mon, 23 Nov 2020 17:31:04 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Li Jun <jun.li@nxp.com>
+Cc:     heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
+        rafael@kernel.org, gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        lee.jones@linaro.org, mika.westerberg@linux.intel.com,
+        dmitry.torokhov@gmail.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-imx@nxp.com, peter.chen@nxp.com
+Subject: Re: [PATCH v6 5/6] usb: typec: mux: add typec switch via general mux
+ control
+Message-ID: <20201123153104.GI4077@smile.fi.intel.com>
+References: <1606140096-1382-1-git-send-email-jun.li@nxp.com>
+ <1606140096-1382-5-git-send-email-jun.li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAO5W59hRNB0xH1Z2cd17ckYuHp38zL366K_3AuMoH8WTZYatow@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1606140096-1382-5-git-send-email-jun.li@nxp.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To recap: The problem is that uvcvideo tries to change an interface 
-altsetting (from within uvc_video_start_streaming -> 
-uvc_video_start_transfer) after the driver has been unbound from the 
-device.  This triggers an invalid memory reference.
+On Mon, Nov 23, 2020 at 10:01:35PM +0800, Li Jun wrote:
+> The general mux controller can be easily extended to support
+> various mux selection, this especially fits typec orientation
+> switch block with a dedicated driver.
 
-On Sun, Nov 22, 2020 at 08:03:43PM +0000, John Boero wrote:
-> Thanks Alan
-> I just spent some more time investigating and playing with different patches,
-> locks, mutexes, and sleeps, and I think I see exactly what's happening now.
-> I now understand why it:
-> A) seems to happen randomly during uvc start_stream
-> B) affects multiple device vendors
-> C) has been reported in RaspberryPi and IoT threads
-> 
-> I put a trace on usb/core/hub.c:usb_disconnect to identify why the device was
-> disconnecting and it seems this is a low power issue.  An idle webcam appears
-> fine to usbcore but as soon as you initialize it or uvc starts a stream, it
-> consumes more power, might find the cable can't supply it, and then disconnects
-> via interrupt. In my case I can reproduce this consistently with a cheap USB
-> extension cable, but this issue appears common to passive hubs, and IoT or SBCs
-> that don't always supply clean power over USB.  My simplified patch can at least
-> protect usbcore from crashing on a bad device:
-> 
-> From 73019d79fe4fd8b2c945005f8a067f528d8056fd Mon Sep 17 00:00:00 2001
-> From: jboero <boeroboy@gmail.com>
-> Date: Sun, 22 Nov 2020 19:30:41 +0000
-> Subject: [PATCH] USBCore NULL interface deref fix
-> 
-> ---
-> drivers/usb/core/usb.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> index bafc113f2b3e..da46c84c87ce 100644
-> --- a/drivers/usb/core/usb.c
-> +++ b/drivers/usb/core/usb.c
-> @@ -278,7 +278,7 @@ struct usb_interface *usb_ifnum_to_if(const struct
-> usb_device *dev,
->        if (!config)
->                return NULL;
->        for (i = 0; i < config->desc.bNumInterfaces; i++)
-> -               if (config->interface[i]->altsetting[0]
-> +               if (config->interface[i] && config->interface[i]->altsetting[0]
->                                .desc.bInterfaceNumber == ifnum)
->                        return config->interface[i];
+...
 
-I really dislike the idea of papering over a problem instead of fixing 
-it properly.
+> @@ -42,10 +43,8 @@ static void *typec_switch_match(struct device_connection *con, int ep,
+>  	if (con->id && !fwnode_is_compatible(con->fwnode, con->id) &&
+>  		       !fwnode_property_present(con->fwnode, con->id))
+>  		return NULL;
+> -
+>  	dev = class_find_device(&typec_mux_class, NULL, con->fwnode,
+>  				switch_fwnode_match);
+> -
+>  	return dev ? to_typec_switch(dev) : ERR_PTR(-EPROBE_DEFER);
+>  }
+>  
 
-> This protects ongoing USB functionality including lsusb, and prevents a hang on
-> reboot after error.  It doesn't help a user diagnose the error on the UVC side.
-> A fix from the uvc side is a little trickier and I'd like an opinion on how
-> best to handle locks in uvc_video_start_transfer. I've tried a few options
-> around uvcvideo.c:1874
-> 
-> ret = usb_set_interface(stream->dev->udev, intfnum, altsetting);
-> 
-> I've even used multiple msleeps and checked for NULL interfaces but that feels
-> like a cheap trick and I was wondering what lock solution might help best here?
+Not related change.
 
-Laurent Pinchart is the person to ask.  He is the maintainer of the 
-uvcvideo driver.  I know very little about it.
+...
 
-Alan Stern
+> +	if (sw->mux_ctrl)
+> +		return typec_switch_mux_ctrl(sw->mux_ctrl, orientation);
+
+> +	else
+
+Redundant.
+
+> +		return sw->set(sw, orientation);
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
