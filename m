@@ -2,125 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9A62C1311
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 19:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C22152C13D2
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 20:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729612AbgKWS3X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 13:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728809AbgKWS3X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 13:29:23 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0012C061A4D
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 10:29:21 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id y7so15681993pfq.11
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 10:29:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LLL5VK65mropUj8eVChZS1FbZOADJKAQxn0fusexOMQ=;
-        b=E8EPKJbkoUBbzxmoxgjFiQDVuHPS66jo9mhAmbeF+pFORPGIjOhZhSTc47rfpx0BOb
-         lFz5rG5hVDN/0HlSEYnEwl0E8my4zcJNGdnReE02YgE7F44rSSK1IA8TnVbwioo4jhpR
-         /gwz4/9uQmYPEU1bYf3lUQ9myfmne+0c3HhsySPc1EQTdtxeFIW37MaXWfBm2MX6xmCR
-         rPqDrazVGn7dfJ/i1MU1LHesntCd5ldm9jGNQAbiPAFUdndrB0v8sxPlSA+9K9j56fy5
-         Nuhm6YBhVFtOyjj9xtuba7WgDOJjaSdW/+C20+47qQ8vEXov5GtQ5lnqzuJo0lSIZiIm
-         o3Mg==
+        id S2389168AbgKWSoI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 13:44:08 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:42804 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729528AbgKWSoH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 13:44:07 -0500
+Received: by mail-il1-f198.google.com with SMTP id t14so14778006ilg.9
+        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 10:44:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LLL5VK65mropUj8eVChZS1FbZOADJKAQxn0fusexOMQ=;
-        b=VAo9fHZJ6rzVi1XHBHgaRFqZUqcA6XpQIFsxCDyaOAaySA4MdVgH78f48kyHVCvUWK
-         Mo+mMQ1TVGwPR5a22FFxK8QiJ58DHqKFPg5EEJ6dioRxomtMUsMk5ufAyQlvi9IZu+xJ
-         2vk0lefxQrNKT+DMzVIMb51UE9LSZP4OBY7EOqppZB+Gf8v8GeKu+geejoHftonwRbmC
-         qiebpdIocoKlHkXOApIJvV7gjkWegPjFDkwYvnTWdmDiHXN84yntT/Gs2S8DPJ7OTLRS
-         ny1hravaPZLSxZv2MzNcyCQYEYC3oR5kuO+RHtXuJtWB2d/ZP7fLNewMMvTphOx5pCVE
-         /7Jg==
-X-Gm-Message-State: AOAM530Xje5CiWlixgf2avkX48+H02duHFVZqrAX91UkHmFwX4CQL7Gs
-        RwIwjkygw5k4fJ0wTko7Ak7cbdhVL9Sr+VBPPLgFBA==
-X-Google-Smtp-Source: ABdhPJy6gYzD7W2pmsK/fMkiWlS3Yn8XMBEuepH9rHqFD2NmMngxbrkwdDFj//KzCjmXr3fUAFfoPZbyWFaJ8QWOT5U=
-X-Received: by 2002:a62:864a:0:b029:197:ad58:4184 with SMTP id
- x71-20020a62864a0000b0290197ad584184mr565914pfd.55.1606156161130; Mon, 23 Nov
- 2020 10:29:21 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Y7OXxGuhTNSLjHgBwnMPkQNQXPV8jo1HjwxEZT4e6RI=;
+        b=iPKF8c99IEnE/fIWAF1bsfv8uPR6svCeI2HZGGAoPhRIIriC5CBEYLlE7ba+ZfIhQK
+         /XqCsqY/2UW4fNg2+y36enj4DL1O7UcA9u6m3ddxRT4yyLLQq7ZG6zX328oN1BzH+Wj1
+         E8gAiaQvFowwxPCyyC+h+kOYmI+pdgNNFiRBy5YkIC3EDMYtvlM68iEvu63zpmEKT6G3
+         T6iNlicbVgrYcx8XqCkrKgc/xM4U4O034sd2vKB/39OwCRZbWnmv7CCOG3ZWcn4l4e9t
+         2fKjE/QAy69FmfpUIE35v3bCsof02iAkFuE0zSUnLNZFU4AvfFcuSP7V1I6W9+P+sNWU
+         F84A==
+X-Gm-Message-State: AOAM531i2kDtNTq1lZjGQ54TPE09fBjTv+MY4ml5mUbdNTA0PsDbGW5B
+        QR7R58KKEFaGZXC6JzzH7bunSDe1PH1IclLfGzdQftzD8m7h
+X-Google-Smtp-Source: ABdhPJzUPe49Pf5zqftMbICWiMg5hxz1uvONaaf2UKjilTNrUpSZLE2ariCLahkjtorhEnG6zXhsQKf4JOT6B800SIy1I/+95n3A
 MIME-Version: 1.0
-References: <20201120165609.GE619708@rowland.harvard.edu> <000000000000c49c8b05b48cb833@google.com>
- <20201120170055.GF619708@rowland.harvard.edu>
-In-Reply-To: <20201120170055.GF619708@rowland.harvard.edu>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 23 Nov 2020 19:29:10 +0100
-Message-ID: <CAAeHK+z0Lb_5zw-fQF6AXLzL=+P6kizOJ7yu=t4SP_5UPK66kg@mail.gmail.com>
-Subject: Re: Re: memory leak in hub_event
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: multipart/mixed; boundary="00000000000071161905b4ca5f5a"
+X-Received: by 2002:a02:c881:: with SMTP id m1mr888289jao.86.1606157046221;
+ Mon, 23 Nov 2020 10:44:06 -0800 (PST)
+Date:   Mon, 23 Nov 2020 10:44:06 -0800
+In-Reply-To: <CAAeHK+z0Lb_5zw-fQF6AXLzL=+P6kizOJ7yu=t4SP_5UPK66kg@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000031907005b4ca944b@google.com>
+Subject: Re: memory leak in hub_event
+From:   syzbot <syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---00000000000071161905b4ca5f5a
-Content-Type: text/plain; charset="UTF-8"
+Hello,
 
-On Fri, Nov 20, 2020 at 6:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, Nov 20, 2020 at 08:56:11AM -0800, syzbot wrote:
-> > > On Fri, Nov 20, 2020 at 07:15:20AM -0800, syzbot wrote:
-> > >> Hello,
-> > >>
-> > >> syzbot found the following issue on:
-> > >>
-> > >> HEAD commit:    4d02da97 Merge tag 'net-5.10-rc5' of git://git.kernel.org/..
-> > >> git tree:       upstream
-> > >> console output: https://syzkaller.appspot.com/x/log.txt?x=13a7d2b6500000
-> > >> kernel config:  https://syzkaller.appspot.com/x/.config?x=c5353ac514ca5a43
-> > >> dashboard link: https://syzkaller.appspot.com/bug?extid=44e64397bd81d5e84cba
-> > >> compiler:       gcc (GCC) 10.1.0-syz 20200507
-> > >> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14925089500000
-> > >> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16810051500000
->
-> > > #syz test: upstream 4d02da97
-> >
-> > "upstream" does not look like a valid git repo address.
->
-> Okay, Andrey.  If "upstream" is not accepted as a valid git repo
-> address, why does syzkaller list it on the "git tree:" line?  It seems
-> to me that syzkaller should be willing to accept as input anything it
-> produces as output.
->
-> And what repo should I put here?
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+memory leak in rxrpc_lookup_local
 
-Hi Alan,
+write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
+write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
+BUG: memory leak
+unreferenced object 0xffff888117824d00 (size 256):
+  comm "syz-executor.6", pid 8896, jiffies 4294943994 (age 432.900s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 0a 00 00 00 00 00 ad 17 81 88 ff ff  ................
+  backtrace:
+    [<0000000069b066ee>] kmalloc include/linux/slab.h:552 [inline]
+    [<0000000069b066ee>] kzalloc include/linux/slab.h:664 [inline]
+    [<0000000069b066ee>] rxrpc_alloc_local net/rxrpc/local_object.c:79 [inline]
+    [<0000000069b066ee>] rxrpc_lookup_local+0x1c1/0x760 net/rxrpc/local_object.c:244
+    [<0000000085db7132>] rxrpc_bind+0x174/0x240 net/rxrpc/af_rxrpc.c:149
+    [<00000000a2a77c59>] afs_open_socket+0xdb/0x200 fs/afs/rxrpc.c:64
+    [<0000000086f4a248>] afs_net_init+0x2b4/0x340 fs/afs/main.c:126
+    [<00000000fafe7caa>] ops_init+0x4e/0x190 net/core/net_namespace.c:152
+    [<00000000c3d26710>] setup_net+0xdb/0x2d0 net/core/net_namespace.c:342
+    [<000000001d81d993>] copy_net_ns+0x14b/0x320 net/core/net_namespace.c:483
+    [<0000000058b54b80>] create_new_namespaces+0x199/0x4e0 kernel/nsproxy.c:110
+    [<00000000cd2a2042>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:231
+    [<00000000f7907f96>] ksys_unshare+0x2fe/0x5c0 kernel/fork.c:2949
+    [<0000000050cbc28c>] __do_sys_unshare kernel/fork.c:3017 [inline]
+    [<0000000050cbc28c>] __se_sys_unshare kernel/fork.c:3015 [inline]
+    [<0000000050cbc28c>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3015
+    [<00000000ade5a609>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+    [<000000003424d3b0>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-Yeah, this is confusing, sorry. I've filed
-https://github.com/google/syzkaller/issues/2265 for this.
+BUG: memory leak
+unreferenced object 0xffff8881182a6700 (size 256):
+  comm "syz-executor.2", pid 8885, jiffies 4294943999 (age 432.850s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 0a 00 00 00 00 c0 b7 16 81 88 ff ff  ................
+  backtrace:
+    [<0000000069b066ee>] kmalloc include/linux/slab.h:552 [inline]
+    [<0000000069b066ee>] kzalloc include/linux/slab.h:664 [inline]
+    [<0000000069b066ee>] rxrpc_alloc_local net/rxrpc/local_object.c:79 [inline]
+    [<0000000069b066ee>] rxrpc_lookup_local+0x1c1/0x760 net/rxrpc/local_object.c:244
+    [<0000000085db7132>] rxrpc_bind+0x174/0x240 net/rxrpc/af_rxrpc.c:149
+    [<00000000a2a77c59>] afs_open_socket+0xdb/0x200 fs/afs/rxrpc.c:64
+    [<0000000086f4a248>] afs_net_init+0x2b4/0x340 fs/afs/main.c:126
+    [<00000000fafe7caa>] ops_init+0x4e/0x190 net/core/net_namespace.c:152
+    [<00000000c3d26710>] setup_net+0xdb/0x2d0 net/core/net_namespace.c:342
+    [<000000001d81d993>] copy_net_ns+0x14b/0x320 net/core/net_namespace.c:483
+    [<0000000058b54b80>] create_new_namespaces+0x199/0x4e0 kernel/nsproxy.c:110
+    [<00000000cd2a2042>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:231
+    [<00000000f7907f96>] ksys_unshare+0x2fe/0x5c0 kernel/fork.c:2949
+    [<0000000050cbc28c>] __do_sys_unshare kernel/fork.c:3017 [inline]
+    [<0000000050cbc28c>] __se_sys_unshare kernel/fork.c:3015 [inline]
+    [<0000000050cbc28c>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3015
+    [<00000000ade5a609>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+    [<000000003424d3b0>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-Here "upstream" stands for the mainline tree, so something like this
-should work:
+BUG: memory leak
+unreferenced object 0xffff888118395100 (size 256):
+  comm "syz-executor.4", pid 8892, jiffies 4294944000 (age 432.840s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 0a 00 00 00 00 00 8b 17 81 88 ff ff  ................
+  backtrace:
+    [<0000000069b066ee>] kmalloc include/linux/slab.h:552 [inline]
+    [<0000000069b066ee>] kzalloc include/linux/slab.h:664 [inline]
+    [<0000000069b066ee>] rxrpc_alloc_local net/rxrpc/local_object.c:79 [inline]
+    [<0000000069b066ee>] rxrpc_lookup_local+0x1c1/0x760 net/rxrpc/local_object.c:244
+    [<0000000085db7132>] rxrpc_bind+0x174/0x240 net/rxrpc/af_rxrpc.c:149
+    [<00000000a2a77c59>] afs_open_socket+0xdb/0x200 fs/afs/rxrpc.c:64
+    [<0000000086f4a248>] afs_net_init+0x2b4/0x340 fs/afs/main.c:126
+    [<00000000fafe7caa>] ops_init+0x4e/0x190 net/core/net_namespace.c:152
+    [<00000000c3d26710>] setup_net+0xdb/0x2d0 net/core/net_namespace.c:342
+    [<000000001d81d993>] copy_net_ns+0x14b/0x320 net/core/net_namespace.c:483
+    [<0000000058b54b80>] create_new_namespaces+0x199/0x4e0 kernel/nsproxy.c:110
+    [<00000000cd2a2042>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:231
+    [<00000000f7907f96>] ksys_unshare+0x2fe/0x5c0 kernel/fork.c:2949
+    [<0000000050cbc28c>] __do_sys_unshare kernel/fork.c:3017 [inline]
+    [<0000000050cbc28c>] __se_sys_unshare kernel/fork.c:3015 [inline]
+    [<0000000050cbc28c>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3015
+    [<00000000ade5a609>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+    [<000000003424d3b0>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-4d02da97
+BUG: memory leak
+unreferenced object 0xffff8881116e0f00 (size 256):
+  comm "syz-executor.7", pid 8894, jiffies 4294944002 (age 432.820s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 0a 00 00 00 00 00 b9 17 81 88 ff ff  ................
+  backtrace:
+    [<0000000069b066ee>] kmalloc include/linux/slab.h:552 [inline]
+    [<0000000069b066ee>] kzalloc include/linux/slab.h:664 [inline]
+    [<0000000069b066ee>] rxrpc_alloc_local net/rxrpc/local_object.c:79 [inline]
+    [<0000000069b066ee>] rxrpc_lookup_local+0x1c1/0x760 net/rxrpc/local_object.c:244
+    [<0000000085db7132>] rxrpc_bind+0x174/0x240 net/rxrpc/af_rxrpc.c:149
+    [<00000000a2a77c59>] afs_open_socket+0xdb/0x200 fs/afs/rxrpc.c:64
+    [<0000000086f4a248>] afs_net_init+0x2b4/0x340 fs/afs/main.c:126
+    [<00000000fafe7caa>] ops_init+0x4e/0x190 net/core/net_namespace.c:152
+    [<00000000c3d26710>] setup_net+0xdb/0x2d0 net/core/net_namespace.c:342
+    [<000000001d81d993>] copy_net_ns+0x14b/0x320 net/core/net_namespace.c:483
+    [<0000000058b54b80>] create_new_namespaces+0x199/0x4e0 kernel/nsproxy.c:110
+    [<00000000cd2a2042>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:231
+    [<00000000f7907f96>] ksys_unshare+0x2fe/0x5c0 kernel/fork.c:2949
+    [<0000000050cbc28c>] __do_sys_unshare kernel/fork.c:3017 [inline]
+    [<0000000050cbc28c>] __se_sys_unshare kernel/fork.c:3015 [inline]
+    [<0000000050cbc28c>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3015
+    [<00000000ade5a609>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+    [<000000003424d3b0>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-Thanks!
+write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
+write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
 
---00000000000071161905b4ca5f5a
-Content-Type: application/octet-stream; name="gspca.patch"
-Content-Disposition: attachment; filename="gspca.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_khuvvg0l0>
-X-Attachment-Id: f_khuvvg0l0
 
-SW5kZXg6IHVzYi1kZXZlbC9kcml2ZXJzL21lZGlhL3VzYi9nc3BjYS9nc3BjYS5jCj09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT0KLS0tIHVzYi1kZXZlbC5vcmlnL2RyaXZlcnMvbWVkaWEvdXNiL2dzcGNhL2dzcGNhLmMKKysr
-IHVzYi1kZXZlbC9kcml2ZXJzL21lZGlhL3VzYi9nc3BjYS9nc3BjYS5jCkBAIC0xNDg5LDYgKzE0
-ODksOCBAQCBpbnQgZ3NwY2FfZGV2X3Byb2JlMihzdHJ1Y3QgdXNiX2ludGVyZmFjCiAJfQogCiAJ
-Z3NwY2FfZGV2LT52NGwyX2Rldi5yZWxlYXNlID0gZ3NwY2FfcmVsZWFzZTsKKwlyZXQgPSAtRUlP
-OworCWdvdG8gb3V0OwogCXJldCA9IHY0bDJfZGV2aWNlX3JlZ2lzdGVyKCZpbnRmLT5kZXYsICZn
-c3BjYV9kZXYtPnY0bDJfZGV2KTsKIAlpZiAocmV0KQogCQlnb3RvIG91dDsKCg==
---00000000000071161905b4ca5f5a--
+Tested on:
+
+commit:         4d02da97 Merge tag 'net-5.10-rc5' of git://git.kernel.org/..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=134bda0d500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b29e92cdfa2687df
+dashboard link: https://syzkaller.appspot.com/bug?extid=44e64397bd81d5e84cba
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=10d4463e500000
+
