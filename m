@@ -2,179 +2,244 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2200C2C0C76
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 14:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3658F2C0CF0
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 15:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730017AbgKWNyc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 08:54:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:58357 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729724AbgKWNy1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 08:54:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606139665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=APKvgfycvs+93El5UNmcWIiLLYfXiD5273Nut/H1q08=;
-        b=A+Ppj1aZMX+ycE8SFHu+tJdroqVsklKzeWVALuGpliL6/Z22vMpBemJCRZ3NINMclw8nKO
-        TXaws8lvkerjkydInr/prrYPacOqhqbGfU14xIm2OviDgeH0+FAa6WF5vZVsj/bYiYerO1
-        CSJtuz6a8AGGXDRkfaqqfzU1eVnFL1Q=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-399-h5tKACcuNDG35LLPerAgNg-1; Mon, 23 Nov 2020 08:54:22 -0500
-X-MC-Unique: h5tKACcuNDG35LLPerAgNg-1
-Received: by mail-ej1-f72.google.com with SMTP id g18so1043591eje.1
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 05:54:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=APKvgfycvs+93El5UNmcWIiLLYfXiD5273Nut/H1q08=;
-        b=ZZvGTBCaEui8FdWCa3GItMePRc930xPLIAn8k0KCi44VdxhT0iXrSYgu/Kj5SIvFN7
-         D4INZW5qvn8t+Na/EuL1xtHKK7Pc9wSislLSsFDdy18AE13rQM4wSX8mL4lJLuPwDX8C
-         3WuLBkV+lKobcCBPhoxFqMHNA5RlCGg2PL8Duz7pT+iHrj6Tgb3JUEEkMNutKEzLuhJM
-         7dKT2Kj2rnnZAUKV5UtGb4G0AjnlaB/38pKEXPAFoL4QmTQL4UmIeDvmekVFp7hsyAr/
-         Pz+sypKfcUHYQAHu19zsP6I6KA+5o4cdyBlb73fYVJ2xk13mLIHOjZVan7rQcEXX/eG+
-         CwIA==
-X-Gm-Message-State: AOAM532dJ07Wm59wFRqEX6KWi7Q+Tj+fNHpjagNprFuf5Q+tWkmgOt4V
-        NWkwRDZjrc541xCFW+uwOfX5c1e9e/dNxrhfvs8SFeLVy+HKjEcEZqguv1tKFztK+I0atzZQtgS
-        bS5EMEmTD7H1ZKorXxgV4
-X-Received: by 2002:a17:906:3687:: with SMTP id a7mr2403363ejc.210.1606139661080;
-        Mon, 23 Nov 2020 05:54:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx5Q16PYHJb0dDrEqMadufavGZDzIfMt3t0VpfOII4wGDMTlNBqDsFlxsVrbId5W75XAR2Kkg==
-X-Received: by 2002:a17:906:3687:: with SMTP id a7mr2403342ejc.210.1606139660824;
-        Mon, 23 Nov 2020 05:54:20 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
-        by smtp.gmail.com with ESMTPSA id u15sm5264621edt.24.2020.11.23.05.54.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2020 05:54:20 -0800 (PST)
-Subject: Re: How to enable auto-suspend by default
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@dell.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
- <X6p6ubTOoMPUPPXi@kroah.com>
- <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
- <20201110172517.GC2495@lahna.fi.intel.com>
- <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
- <20201111143143.GV2495@lahna.fi.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <30aa8c96-1809-8c5f-2305-5e39fbeba434@redhat.com>
-Date:   Mon, 23 Nov 2020 14:54:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1729867AbgKWOIy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 09:08:54 -0500
+Received: from mail-vi1eur05on2073.outbound.protection.outlook.com ([40.107.21.73]:8513
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729111AbgKWOIx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Nov 2020 09:08:53 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NhWFtNa+hmOZLtnZ1G+rb/A0g6D5L6YDw8VvNWojJ2InjfQQiX7xTK0Q/EQIeLp5Y0BNMEfL2EoGvZ5vWywnHCQbknC2Bc72XjF7u3K/P+Ro7ZCynAP5zxeAPDfEKjD+NIdVm6MOmR0BCSD1CsuB97mNNOunDSxBds+10F6LRAn8uh/eM88PoGeF/4KGcmpK1G/f3xruWPh40mI6KSk8DkyLu6EiB6Rx1w8hrjnfpHe4rDdCS9TgMKnuE4XPrBRAtbj+zPNEl+P1MAJuR+zz0zMrHgM6FMlxNjLzZzbzenG6ssrpc6BP5cTdpscWyn5XDOwvHj+bo7gtGJv12TVRtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tvjPCHPIKqLJYXalimTUpBZ/ZbP6H6NE4aqt3/1bTRM=;
+ b=U+I6CzYXU7l+UoAXiEnuXx3aanOhmtoWsjvKSAYAxLOeR6TkPaMgmelcWKAH8h8RQdjjcJlS4HHD0VD6Vhyzcb4X7iJGRPVaRJt2m28RCyj3939+CExTwYPpVj1AUJQLbi7H3Tgzeb4gEpVsRz1cTj928TpyiBm3iqtIwL/b0oLz1AUJRNdOmvho2+NmYDU5Bf4gzc0wtfm29Smkqd7Hbx0k8w8mrcQY/SsTwfTPkxXxk+23t2L7bqp04bOs3fov0+06EiuGWJCMVl9mPf91g2164td79cCcBfpAy+Ys/pbhP9ByF4BErVsO1jt3kuyn1AzMh+NC4mwJBf9fQJP5nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tvjPCHPIKqLJYXalimTUpBZ/ZbP6H6NE4aqt3/1bTRM=;
+ b=YurncW6P6GpySbwLSSStCWS7b0eEA+gqZZmF+CAPvRFdkFTD3EBwWG8gVVZtO9AaD7FLxXiQgiOxg5UHI3MHsxt4srn7plVT5LgJKISHg5PyIllm3o/EpQC5yVbezN0iREJXaE0WzCGjG2iSN/OU5AKqSurwr18DJBfMelqdKbU=
+Authentication-Results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none header.from=nxp.com;
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
+ by VI1PR0402MB3760.eurprd04.prod.outlook.com (2603:10a6:803:23::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.22; Mon, 23 Nov
+ 2020 14:08:49 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::b035:d158:c99c:57c6]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::b035:d158:c99c:57c6%7]) with mapi id 15.20.3589.028; Mon, 23 Nov 2020
+ 14:08:49 +0000
+From:   Li Jun <jun.li@nxp.com>
+To:     heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
+        rafael@kernel.org
+Cc:     gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        hdegoede@redhat.com, lee.jones@linaro.org,
+        mika.westerberg@linux.intel.com, dmitry.torokhov@gmail.com,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-imx@nxp.com, peter.chen@nxp.com
+Subject: [PATCH v6 1/6] dt-bindings: usb: add documentation for typec switch simple driver
+Date:   Mon, 23 Nov 2020 22:01:31 +0800
+Message-Id: <1606140096-1382-1-git-send-email-jun.li@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-Originating-IP: [119.31.174.66]
+X-ClientProxiedBy: SG2PR06CA0164.apcprd06.prod.outlook.com
+ (2603:1096:1:1e::18) To VE1PR04MB6528.eurprd04.prod.outlook.com
+ (2603:10a6:803:127::18)
 MIME-Version: 1.0
-In-Reply-To: <20201111143143.GV2495@lahna.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.66) by SG2PR06CA0164.apcprd06.prod.outlook.com (2603:1096:1:1e::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3589.20 via Frontend Transport; Mon, 23 Nov 2020 14:08:45 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: f70fbdc3-2b91-4866-f5c4-08d88fb94c95
+X-MS-TrafficTypeDiagnostic: VI1PR0402MB3760:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <VI1PR0402MB3760C9701D5B54D983E8434E89FC0@VI1PR0402MB3760.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SlyBArFZGi3e1P2Z/JIlFvuJ+jMGSWTIn84GdbeWVWsdnp+hoEhHrWI6ei0V3RzHn0/boOkW+MCwBpu1hR8Od4tfUEuW0J/syEVWJCP2TfQouH0jE9I/6Wh/gNBOx9kDTCzYCh/PoCJs6OWIQE/NYioLIzIu0bNqrl07hiu/r3QWcwnrSHZIjz0Ep6IZhfX0AyXAsZupruMzxC06n/1HXKIYITSkE62lxXhWP7U+LFsmpWRprk79/SSfAT3DjKBj3gJcyuL8pghsS6QblQU3RR9AF9f6K/XAWYHJvGWfFxN132WA+lYV58ximiwFwDnz4Wln7G57hh5+NV2hUsKxrUaGhpWhm925wFuYAx7Dob468d1SsXdWRvPrQJxssllW5MeU4arXmb2hKNfka16BIhIOqaLXSgvejoRVNq3gbkRyJ/OiGB+Be/iHbv8G41rysi0elSiniMQ3C1Q5OWm64Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(346002)(396003)(136003)(376002)(366004)(4326008)(186003)(16526019)(26005)(36756003)(86362001)(69590400008)(6666004)(2906002)(66556008)(6512007)(66946007)(478600001)(7416002)(2616005)(8936002)(956004)(966005)(316002)(52116002)(66476007)(6486002)(8676002)(6506007)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: CQpUQycvXexQwG1CvA/sLgWLoQ1008IQr1koKI1vPVV7J7fV2h6v+N3IM48tzWXBqUKVOI/QmBrI5qigBLVAusbkv49M+SF+lf0vO9i9xr93MP0Wz8QM7yXF4Qz85+wSJeMchrnnfUizHugMpYatuDA0GMglqCwvVuRZ//s0C24lpynwDd3gIArvbu+SopLBD0qJsGFrkAPPK/7C3gp+KLhJElQSLM5eRlVbsDzX3+IOJiJwP3vJUQS7rBzPt0ENROT/TF9418D5Chp9pa4pRJY46wDXjasasrp76brsSFRYKtDE4C13SRCjOmT1Cn18lD+q9AKwqVlLxPr5fjFwL6AHEHMZdkUO9v/vpTFOXLuwel6bx8JyyMT4PdJHebJurYb4kbTI6OZsTkJ4X89qf45+sHvQVGb9ARnNUDQaGcltK52cHYPUNanEs5ZJPioK2lIXYoKBI0wrVNpDqpZR9ZYYr/QqgI0HUBYWNM/+LS3ppagLIwLJBFNpAApH8oAkVxQLYjzbSG8kKbY+UzXqVVo4YAApmahLLKFKvu+o6bnnoJXYqYmBF9dv8wBLp4h6RGoTtEmRn9Ric2zDzrXS4+KYYMYUZuyRgtd0mtY4mnhUUfqJ6rWFGlAUq0fszjUwwmxBgo5kANGhlqMFvZdXs/7+zJvMIuo1Bx+NCLQFDySStF6hQCc3QJAnTwmE38m0CAU4E/GTqS6Yq4jZ/38bclqCtGWCp6d+DCvCCdaylvxYuBb9B8XYJGI5vvNujWmszToTqX7wa4CiUKIwnE3lcoWX08bw1xuJ7e4OEOK1VM4FAwYQkPmv3f0Vzyi60OfWjdTs4BVoMb97BZo2X0PSmtUzCcpW7tFrmPuCRDrKyJT80sypJN0psNEz71Ty4LBMFWUenYYTuZrnGmKeboHCKA==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f70fbdc3-2b91-4866-f5c4-08d88fb94c95
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2020 14:08:49.2561
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: T9lhvYYumLyEmwV/rWF78SN45LjODU3XnU4ZmgmYl1iMvwCoXVycflZTwFlpDuxQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3760
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Some platforms need a simple driver to do some controls according to
+typec orientation, this can be extended to be a generic driver with
+compatible with "typec-orientation-switch".
 
-On 11/11/20 3:31 PM, Mika Westerberg wrote:
-> On Wed, Nov 11, 2020 at 12:27:32PM +0100, Hans de Goede wrote:
->> Hi,
->>
->> On 11/10/20 6:25 PM, Mika Westerberg wrote:
->>> On Tue, Nov 10, 2020 at 04:02:33PM +0000, Limonciello, Mario wrote:
->>>>>
->>>>> On Tue, Nov 10, 2020 at 11:57:07AM +0100, Bastien Nocera wrote:
->>>>>> Hey,
->>>>>>
->>>>>> systemd has been shipping this script to enable auto-suspend on a
->>>>>> number of USB and PCI devices:
->>>>>>
->>>>> https://github.com/systemd/systemd/blob/master/tools/chromiumos/gen_autosuspen
->>>>> d_rules.py
->>>>>>
->>>>>> The problem here is twofold. First, the list of devices is updated from
->>>>>> ChromeOS, and the original list obviously won't be updated by ChromeOS
->>>>>> developers unless a device listed exists in a ChromeBook computer,
->>>>>> which means a number of devices that do support autosuspend aren't
->>>>>> listed.
->>>>>>
->>>>>> The other problem is that this list needs to exist at all, and that it
->>>>>> doesn't seem possible for device driver developers (at various levels
->>>>>> of the stack) to opt-in to auto-suspend when all the variants of the
->>>>>> device (or at least detectable ones) support auto-suspend.
->>>>>
->>>>> A driver can say they support autosuspend today, but I think you are
->>>>> concerned about the devices that are controlled by class-compliant
->>>>> drivers, right?  And for those, no, we can't do this in the kernel as
->>>>> there are just too many broken devices out there.
->>>>>
->>>>
->>>> I guess what Bastien is getting at is for newer devices supported by class
->>>> drivers rather than having to store an allowlist in udev rules, can we set
->>>> the allowlist in the kernel instead.  Then distributions that either don't
->>>> use systemd or don't regularly update udev rules from systemd can take
->>>> advantage of better defaults on modern hardware.
->>>>
->>>> The one item that stood out to me in that rules file was 8086:a0ed.
->>>> It's listed as "Volteer XHCI", but that same device ID is actually present
->>>> in an XPS 9310 in front of me as well and used by the xhci-pci kernel module.
->>>>
->>>> Given we're effectively ending up with the combination of runtime PM turned
->>>> on by udev rules, do we need something like this for that ID:
->>>>
->>>> https://github.com/torvalds/linux/commit/6a7c533d4a1854f54901a065d8c672e890400d8a
->>>>
->>>> @Mika Westerberg should 8086:a0ed be quirked like the TCSS xHCI too?
->>>
->>> I think this one is the TGL PCH xHCI. The quirk currently for xHCI
->>> controllers that are part of the TCSS (Type-C SubSystem) where it is
->>> important to put all devices into low power mode whenever possible,
->>> otherwise it keeps the whole block on.
->>
->> Note that there are currently some IDs missing from the xHCIs which
->> are part of the TCSS too. At least the id for the xHCI in the thunderbolt
->> controller on the Lenovo T14 gen 1 is missing. I started a discussion
->> about extending the kernel quirk list for this vs switching to hwdb
->> a while a go:
->>
->> https://lore.kernel.org/linux-usb/b8b21ba3-0a8a-ff54-5e12-cf8960651086@redhat.com/
->>
->> The conclusion back then was to switch to hwdb, but I never got around to this.
-> 
-> The reason I've added these to the xHCI driver is that it works even if
-> you are running some really small userspace (like busybox). Also for the
-> xHCI in TCSS we know for sure that it fully supports D3cold.
-> 
-> (The one you refer above is actually mistake from my side as I never
->  tested Alpine Ridge LP controller which I think this is).
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+changes for v6:
+- Use general mux bindings for typec switch, one typec switch
+  may have 1 or 2 GPIOs for channel selection, if 1 GPIO, only
+  can be used to select cc1 or cc2; if 2 GPIOs, the second GPIO
+  can be used to deselect both channels or keep normal operations.
+- Add one more connection to usb controller.
+ 
+No changes for v5.
 
-Ok, so I'll submit a patch adding the 15c1 product-id for the
-INTEL_ALPINE_RIDGE_LP_2C_XHCI controller to the list of ids for which we
-set the XHCI_DEFAULT_PM_RUNTIME_ALLOW quirk. To fix the much too high
-idle-power consumption problem on devices with this Alpine Ridge variant.
+changes on v4:
+- Use compatible instead of bool property for switch matching.
+- Change switch GPIO to be switch simple.
+- Change the active channel selection GPIO to be optional.
 
->>> Typically we haven't done that for PCH side xHCI controllers though, but
->>> I don't see why not if it works that is. Adding Mathias to comment more
->>> on that since he is the xHCI maintainer.
->>
->> If we are also going to enable this for the non TCSS Intel XHCI controllers,
->> maybe just uncondtionally enable it for all Intel XHCI controllers, or
->> if necessary do a deny-list for some older models and enable it for anything
->> not on the deny-list (so all newer models). That should avoid the game of
->> whack-a-mole which we will have with this otherwise.
-> 
-> This is really up to Mathias to decide. I'm fine either way :)
+previous discussion:
+http://patchwork.ozlabs.org/patch/1054342/
 
-Ok, Matthias what do you think about this?
+ .../bindings/usb/typec-switch-simple.yaml          | 122 +++++++++++++++++++++
+ 1 file changed, 122 insertions(+)
 
-Regards,
-
-Hans
+diff --git a/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+new file mode 100644
+index 0000000..030ade5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+@@ -0,0 +1,122 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/typec-switch-simple.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Typec Orientation Switch Simple Solution Bindings
++
++maintainers:
++  - Li Jun <jun.li@nxp.com>
++
++description: |-
++  USB SuperSpeed (SS) lanes routing to which side of typec connector is
++  decided by orientation, this maybe achieved by some simple control like
++  GPIO toggle.
++
++properties:
++  compatible:
++    const: typec-orientation-switch
++
++  '#mux-control-cells':
++    const: 0
++
++  switch-gpios:
++    description: |
++      GPIO specifiers to select the target channel of mux.
++      The first GPIO is for cc1 and cc2 selection, the GPIO flag use
++      GPIO_ACTIVE_HIGH if GPIO physical state high is for cc1; or use
++      GPIO_ACTIVE_LOW if GPIO physical state low is for cc1.
++      The second gpio is to deselect any channles by places all channels
++      in high-impedance state to reduce current consumption, the gpio flag
++      use GPIO_ACTIVE_HIGH if GPIO physical state high is for
++      high-impedance state (so low for normal operations); or Use
++      GPIO_ACTIVE_LOW if GPIO physical state low is for high-impedance
++      state(so high for normal operations).
++    minItems: 1
++    maxItems: 2
++
++  idle-state:
++    description: -|
++      For TYPEC_ORIENTATION_NONE by deselect both channels if supported.
++    const: 2
++
++  # Standard properties described in
++  # Documentation/devicetree/bindings/mux/mux-controller.txt
++
++  port:
++    type: object
++    additionalProperties: false
++    description: -|
++      Connection to the remote endpoint using OF graph bindings that model
++      SS data bus to typec connector.
++
++    properties:
++      '#address-cells':
++        const: 1
++
++      '#size-cells':
++        const: 0
++
++      endpoint@0:
++        type: object
++        description: Endpoint connected to typec connector.
++        additionalProperties: false
++
++        properties:
++          reg:
++            const: 0
++          remote-endpoint: true
++
++        required:
++          - remote-endpoint
++
++      endpoint@1:
++        type: object
++        description: Endpoint connected to usb controller.
++        additionalProperties: false
++
++        properties:
++          reg:
++            const: 1
++          remote-endpoint: true
++
++        required:
++          - remote-endpoint
++
++    required:
++      - endpoint@0
++
++required:
++  - compatible
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    typec_switch: mux-controller {
++        compatible = "typec-orientation-switch";
++        #mux-control-cells = <0>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_ss_sel>;
++        switch-gpios = <&gpio3 15 GPIO_ACTIVE_HIGH>,
++                       <&gpio2 20 GPIO_ACTIVE_HIGH>;
++        idle-state = <2>;
++
++        port {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                usb3_orien_sel: endpoint@0 {
++                        reg = <0>;
++                        remote-endpoint = <&typec_con_ss>;
++                };
++
++                usb3_con_data: endpoint@1 {
++                        reg = <1>;
++                        remote-endpoint = <&dwc3_0>;
++                };
++        };
++    };
+-- 
+2.7.4
 
