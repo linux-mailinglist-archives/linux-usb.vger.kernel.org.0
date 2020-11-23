@@ -2,117 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 261A72C02F1
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 11:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01B62C032E
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 11:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728438AbgKWKFU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 05:05:20 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:37349 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728348AbgKWKFT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 05:05:19 -0500
-Received: by mail-il1-f197.google.com with SMTP id u17so13307053ilb.4
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 02:05:17 -0800 (PST)
+        id S1726306AbgKWKXz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 05:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725275AbgKWKXy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 05:23:54 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11524C0613CF
+        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 02:23:53 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id v14so825809lfo.3
+        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 02:23:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s0MEgY28uT7zUD4FBkpaIkXeQ71utsAniKwN5z6xBsw=;
+        b=Z+UkOHryKIpfWD36tt2Z8LrJlvKHmFZegqNGEYSvAp2iSa7MdEJq7GWx1l/Gr7LmF3
+         d7q5A/vJJGuiNO2uGclfyJDKLWRv0NcGTkJ9nXX9OJGzCpYurpyPFlZP9ORM2uf8Mr3C
+         JBvhz9Q+/3kGbWu2ocxn3G5DIwPQvH6M6uVeGW2371M9balqmJB4t59B8XiZW8PFnvRz
+         2Fd1i0mvOO+X/ThhtYKAQH8vXIxKG0C12TzicupDNqRSMZouJNfsPMsjpIJiYfKmddBg
+         1ltFRq6H1i6x7qIe9GzaLI+kUjD1gyM520l1CI3JOk8u3WeRHcRzcS057lPiGIF62tb7
+         EsCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=BES57B4JG1nbaujnQb/iDqduyXORqzEHVZ+fboilFls=;
-        b=IvlMoMmjdh2yWx63wXZvRDoCLUCQuclxJm+6EpG6uKpFwWAAT0P4MiQ9GSge2Umodx
-         lCfBMusXByjjHs9yKSPK1ev8SY6T9/jd2SEJBcv6F0wxrL7vNDx78nRl0Pz4aCj/tTt6
-         eaqWbxCNYQaz6ZCGSw6eCtAcSzhVJ2u8mIJceQrkgqZNKRmt94IKumQ5uuQzdKYKspdD
-         cNWJEESaEmx3WmVOHJyNUA8nsZVBw0rcqxi3UO54EYm18wN3X7WuPGE2+4OoydXxjHOI
-         5xgUtD4AocJL1J9sXxq83pJsgKP74ucEtUaqZr9WzCV8AysRkXl03uiT9CuevI7MiRzG
-         UtGw==
-X-Gm-Message-State: AOAM531TGhA0ePiW7jZaY7nQxvvZxUfwsXvoJWltzlMcp7N0ngLhc5Mk
-        5iybhKUhC4HizBMYYTUufTy1d90IbTCnuS1iFuqLxB+ljKTG
-X-Google-Smtp-Source: ABdhPJwSorRGNEeSeAvS4oNVeulu7Uyu4xvkgFiQJ23LNQl2fqWExUhKkJqJ5wENYjRWC5b5TZXrYArHcxfMM2QLeo1mp5xf7/tb
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s0MEgY28uT7zUD4FBkpaIkXeQ71utsAniKwN5z6xBsw=;
+        b=HtaAA9B9+kF7BVL2QaAfz+cSmgZDvfemgaOaD6NLQKm0gOBFjz8GwkgHWppfIdmU/d
+         iGIdJNA5RFOxdS8yGTv6skepHOwF6J6FcbxEmbxZZGqStXq1bAmyVf/A6kwar2mg5p/5
+         oZ9MqwbPXlBb+QOH5Bo85iHrKv9eeRgYp3dL6n8s/wEJTzadmJEYACHUgE9RfZiiWDGP
+         Wnc/2fNDrwAhk/HA59jztOCbQ5ToEql8uh/hrCVGpVriaIe8y/ml/keZx3DAChAcfnUk
+         bk8TnKaTRVGbQKGUsWpPme8/I15D3aTelOiQKtbfXFKWuPGlKHTRRGNLPghMJ79VX+Nu
+         0sOg==
+X-Gm-Message-State: AOAM530bRVKDXhqADz5pGiIkQl+bKNiEIiNnTAQTdadvFcFF5/0RNUnS
+        4emE8AEs/sfm/DpPFBPYy1Y9RQ==
+X-Google-Smtp-Source: ABdhPJyT3HwOnQanvFqrmShOJmP0YlPfRx15PjGh5Y5ucx7A9CSNL08+LVMM68QvCkWtNioXbleUGQ==
+X-Received: by 2002:a19:952:: with SMTP id 79mr15067359lfj.559.1606127031438;
+        Mon, 23 Nov 2020 02:23:51 -0800 (PST)
+Received: from genomnajs.ideon.se ([85.235.10.227])
+        by smtp.gmail.com with ESMTPSA id n8sm1341173lfq.2.2020.11.23.02.23.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2020 02:23:50 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>
+Subject: [PATCH] usb: isp1301-omap: Convert to use GPIO descriptors
+Date:   Mon, 23 Nov 2020 11:23:46 +0100
+Message-Id: <20201123102346.48284-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-X-Received: by 2002:a92:c88c:: with SMTP id w12mr36901962ilo.204.1606125917149;
- Mon, 23 Nov 2020 02:05:17 -0800 (PST)
-Date:   Mon, 23 Nov 2020 02:05:17 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c19e7b05b4c35440@google.com>
-Subject: WARNING in cm109_submit_buzz_toggle/usb_submit_urb
-From:   syzbot <syzbot+c7e665956b189738fe5e@syzkaller.appspotmail.com>
-To:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
-        gustavoars@kernel.org, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tiwai@suse.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+This modernized the ISP1301 a bit by switching it to provide
+a GPIO descriptor from the H2 board if used.
 
-syzbot found the following issue on:
-
-HEAD commit:    a349e4c6 Merge tag 'xfs-5.10-fixes-7' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1756e035500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=330f3436df12fd44
-dashboard link: https://syzkaller.appspot.com/bug?extid=c7e665956b189738fe5e
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c7e665956b189738fe5e@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-URB 000000001a5f6e54 submitted while active
-WARNING: CPU: 0 PID: 15525 at drivers/usb/core/urb.c:378 usb_submit_urb+0x1228/0x14e0 drivers/usb/core/urb.c:378
-Modules linked in:
-CPU: 0 PID: 15525 Comm: syz-executor.5 Not tainted 5.10.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:usb_submit_urb+0x1228/0x14e0 drivers/usb/core/urb.c:378
-Code: 89 de e8 2b 93 3b fc 84 db 0f 85 da f4 ff ff e8 0e 9b 3b fc 4c 89 fe 48 c7 c7 e0 6a e1 89 c6 05 03 18 a4 07 01 e8 82 fe 77 03 <0f> 0b e9 b8 f4 ff ff c7 44 24 14 01 00 00 00 e9 6f f5 ff ff 41 bd
-RSP: 0018:ffffc9000395f710 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000040000 RSI: ffffffff8158f3b5 RDI: fffff5200072bed4
-RBP: 0000000000000020 R08: 0000000000000001 R09: ffff8880b9e2011b
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801ef80488
-R13: 00000000fffffff0 R14: ffffffff85a1ef60 R15: ffff88801297a600
-FS:  00007f8480e75700(0000) GS:ffff8880b9e00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f56ba3fdc10 CR3: 0000000018999000 CR4: 00000000001526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- cm109_submit_buzz_toggle+0xd0/0x130 drivers/input/misc/cm109.c:351
- cm109_toggle_buzzer_async drivers/input/misc/cm109.c:487 [inline]
- cm109_input_ev+0x1ea/0x230 drivers/input/misc/cm109.c:621
- input_handle_event+0x66e/0x1400 drivers/input/input.c:376
- input_inject_event+0x2f5/0x310 drivers/input/input.c:471
- kd_sound_helper+0x122/0x260 drivers/tty/vt/keyboard.c:242
- input_handler_for_each_handle+0xf4/0x210 drivers/input/input.c:2356
- kd_mksound+0x85/0x120 drivers/tty/vt/keyboard.c:266
- do_con_trol+0x813/0x54c0 drivers/tty/vt/vt.c:2152
- do_con_write+0xb89/0x1dd0 drivers/tty/vt/vt.c:2911
- con_write+0x22/0xb0 drivers/tty/vt/vt.c:3255
- process_output_block drivers/tty/n_tty.c:595 [inline]
- n_tty_write+0x3ce/0xf80 drivers/tty/n_tty.c:2333
- do_tty_write drivers/tty/tty_io.c:962 [inline]
- tty_write+0x4d9/0x870 drivers/tty/tty_io.c:1046
- vfs_write+0x28e/0xa30 fs/read_write.c:603
- ksys_write+0x12d/0x250 fs/read_write.c:658
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x45deb9
-Code: 0d b4 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 db b3 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007f8480e74c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 000000000003a6c0 RCX: 000000000045deb9
-RDX: 0000000000001006 RSI: 0000000020001440 RDI: 0000000000000006
-RBP: 000000000118bf60 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000118bf2c
-R13: 000000000169fb7f R14: 00007f8480e759c0 R15: 000000000118bf2c
-
-
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ arch/arm/mach-omap1/board-h2.c     | 22 ++++++++++++++++++++--
+ drivers/usb/phy/phy-isp1301-omap.c | 21 +++++++++++++--------
+ 2 files changed, 33 insertions(+), 10 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/arch/arm/mach-omap1/board-h2.c b/arch/arm/mach-omap1/board-h2.c
+index cb7ce627ffe8..c40cf5ef8607 100644
+--- a/arch/arm/mach-omap1/board-h2.c
++++ b/arch/arm/mach-omap1/board-h2.c
+@@ -16,6 +16,7 @@
+  * Copyright (C) 2004 Nokia Corporation by Imre Deak <imre.deak@nokia.com>
+  */
+ #include <linux/gpio.h>
++#include <linux/gpio/machine.h>
+ #include <linux/kernel.h>
+ #include <linux/platform_device.h>
+ #include <linux/delay.h>
+@@ -46,6 +47,9 @@
+ #include "common.h"
+ #include "board-h2.h"
+ 
++/* The first 16 SoC GPIO lines are on this GPIO chip */
++#define OMAP_GPIO_LABEL			"gpio-0-15"
++
+ /* At OMAP1610 Innovator the Ethernet is directly connected to CS1 */
+ #define OMAP1610_ETHR_START		0x04000300
+ 
+@@ -334,7 +338,19 @@ static struct i2c_board_info __initdata h2_i2c_board_info[] = {
+ 		I2C_BOARD_INFO("tps65010", 0x48),
+ 		.platform_data	= &tps_board,
+ 	}, {
+-		I2C_BOARD_INFO("isp1301_omap", 0x2d),
++		.type = "isp1301_omap",
++		.addr = 0x2d,
++		.dev_name = "isp1301",
++	},
++};
++
++static struct gpiod_lookup_table isp1301_gpiod_table = {
++	.dev_id = "isp1301",
++	.table = {
++		/* Active low since the irq triggers on falling edge */
++		GPIO_LOOKUP(OMAP_GPIO_LABEL, 2,
++			    NULL, GPIO_ACTIVE_LOW),
++		{ },
+ 	},
+ };
+ 
+@@ -406,8 +422,10 @@ static void __init h2_init(void)
+ 	h2_smc91x_resources[1].end = gpio_to_irq(0);
+ 	platform_add_devices(h2_devices, ARRAY_SIZE(h2_devices));
+ 	omap_serial_init();
++
++	/* ISP1301 IRQ wired at M14 */
++	omap_cfg_reg(M14_1510_GPIO2);
+ 	h2_i2c_board_info[0].irq = gpio_to_irq(58);
+-	h2_i2c_board_info[1].irq = gpio_to_irq(2);
+ 	omap_register_i2c_bus(1, 100, h2_i2c_board_info,
+ 			      ARRAY_SIZE(h2_i2c_board_info));
+ 	omap1_usb_init(&h2_usb_config);
+diff --git a/drivers/usb/phy/phy-isp1301-omap.c b/drivers/usb/phy/phy-isp1301-omap.c
+index d50bf4f6a660..e3497bc3cb75 100644
+--- a/drivers/usb/phy/phy-isp1301-omap.c
++++ b/drivers/usb/phy/phy-isp1301-omap.c
+@@ -1208,9 +1208,6 @@ static int isp1301_remove(struct i2c_client *i2c)
+ #ifdef	CONFIG_USB_OTG
+ 	otg_unbind(isp);
+ #endif
+-	if (machine_is_omap_h2())
+-		gpio_free(2);
+-
+ 	set_bit(WORK_STOP, &isp->todo);
+ 	del_timer_sync(&isp->timer);
+ 	flush_work(&isp->work);
+@@ -1480,6 +1477,7 @@ isp1301_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
+ {
+ 	int			status;
+ 	struct isp1301		*isp;
++	int irq;
+ 
+ 	if (the_transceiver)
+ 		return 0;
+@@ -1543,20 +1541,27 @@ isp1301_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
+ #endif
+ 
+ 	if (machine_is_omap_h2()) {
++		struct gpio_desc *gpiod;
++
+ 		/* full speed signaling by default */
+ 		isp1301_set_bits(isp, ISP1301_MODE_CONTROL_1,
+ 			MC1_SPEED);
+ 		isp1301_set_bits(isp, ISP1301_MODE_CONTROL_2,
+ 			MC2_SPD_SUSP_CTRL);
+ 
+-		/* IRQ wired at M14 */
+-		omap_cfg_reg(M14_1510_GPIO2);
+-		if (gpio_request(2, "isp1301") == 0)
+-			gpio_direction_input(2);
++		gpiod = devm_gpiod_get(&i2c->dev, NULL, GPIOD_IN);
++		if (IS_ERR(gpiod)) {
++			dev_err(&i2c->dev, "cannot obtain H2 GPIO\n");
++			goto fail;
++		}
++		gpiod_set_consumer_name(gpiod, "isp1301");
++		irq = gpiod_to_irq(gpiod);
+ 		isp->irq_type = IRQF_TRIGGER_FALLING;
++	} else {
++		irq = i2c->irq;
+ 	}
+ 
+-	status = request_irq(i2c->irq, isp1301_irq,
++	status = request_irq(irq, isp1301_irq,
+ 			isp->irq_type, DRIVER_NAME, isp);
+ 	if (status < 0) {
+ 		dev_dbg(&i2c->dev, "can't get IRQ %d, err %d\n",
+-- 
+2.26.2
+
