@@ -2,140 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 017252C0911
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 14:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2200C2C0C76
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 14:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388394AbgKWNDu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 08:03:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40738 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388335AbgKWNDp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Nov 2020 08:03:45 -0500
-Received: from embeddedor (187-162-31-110.static.axtel.net [187.162.31.110])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 191D120758;
-        Mon, 23 Nov 2020 13:03:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606136621;
-        bh=J/TET3MqSRKQBkZDLmw3offBuTNq8xblR6VPj5c7KTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=huMDpxd34lY8zl81VJt6WrkzA8VbZ3WZKfCc+01YUsnQkEm+dvBfrNL343ZTscxgS
-         4cn7RRAIuR/6lyK6TO0qxACy3TNrSBuTodAx+s4Q2YpvApK9inZpqsbsSdtJmbV9Zx
-         YwwBYqtSxUH9kHvWkiEz2t98c4vnYVnAJ6qqQTEg=
-Date:   Mon, 23 Nov 2020 07:03:48 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Joe Perches <joe@perches.com>, Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
-        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        selinux@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        x86@kernel.org, linux-nfs@vger.kernel.org,
-        GR-Linux-NIC-Dev@marvell.com, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linux-decnet-user@lists.sourceforge.net,
-        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-integrity@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for
- Clang
-Message-ID: <20201123130348.GA3119@embeddedor>
-References: <cover.1605896059.git.gustavoars@kernel.org>
- <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011201129.B13FDB3C@keescook>
- <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook>
- <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
- <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
- <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
- <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
- <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
+        id S1730017AbgKWNyc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 08:54:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:58357 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729724AbgKWNy1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 08:54:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606139665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=APKvgfycvs+93El5UNmcWIiLLYfXiD5273Nut/H1q08=;
+        b=A+Ppj1aZMX+ycE8SFHu+tJdroqVsklKzeWVALuGpliL6/Z22vMpBemJCRZ3NINMclw8nKO
+        TXaws8lvkerjkydInr/prrYPacOqhqbGfU14xIm2OviDgeH0+FAa6WF5vZVsj/bYiYerO1
+        CSJtuz6a8AGGXDRkfaqqfzU1eVnFL1Q=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-399-h5tKACcuNDG35LLPerAgNg-1; Mon, 23 Nov 2020 08:54:22 -0500
+X-MC-Unique: h5tKACcuNDG35LLPerAgNg-1
+Received: by mail-ej1-f72.google.com with SMTP id g18so1043591eje.1
+        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 05:54:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=APKvgfycvs+93El5UNmcWIiLLYfXiD5273Nut/H1q08=;
+        b=ZZvGTBCaEui8FdWCa3GItMePRc930xPLIAn8k0KCi44VdxhT0iXrSYgu/Kj5SIvFN7
+         D4INZW5qvn8t+Na/EuL1xtHKK7Pc9wSislLSsFDdy18AE13rQM4wSX8mL4lJLuPwDX8C
+         3WuLBkV+lKobcCBPhoxFqMHNA5RlCGg2PL8Duz7pT+iHrj6Tgb3JUEEkMNutKEzLuhJM
+         7dKT2Kj2rnnZAUKV5UtGb4G0AjnlaB/38pKEXPAFoL4QmTQL4UmIeDvmekVFp7hsyAr/
+         Pz+sypKfcUHYQAHu19zsP6I6KA+5o4cdyBlb73fYVJ2xk13mLIHOjZVan7rQcEXX/eG+
+         CwIA==
+X-Gm-Message-State: AOAM532dJ07Wm59wFRqEX6KWi7Q+Tj+fNHpjagNprFuf5Q+tWkmgOt4V
+        NWkwRDZjrc541xCFW+uwOfX5c1e9e/dNxrhfvs8SFeLVy+HKjEcEZqguv1tKFztK+I0atzZQtgS
+        bS5EMEmTD7H1ZKorXxgV4
+X-Received: by 2002:a17:906:3687:: with SMTP id a7mr2403363ejc.210.1606139661080;
+        Mon, 23 Nov 2020 05:54:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx5Q16PYHJb0dDrEqMadufavGZDzIfMt3t0VpfOII4wGDMTlNBqDsFlxsVrbId5W75XAR2Kkg==
+X-Received: by 2002:a17:906:3687:: with SMTP id a7mr2403342ejc.210.1606139660824;
+        Mon, 23 Nov 2020 05:54:20 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
+        by smtp.gmail.com with ESMTPSA id u15sm5264621edt.24.2020.11.23.05.54.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Nov 2020 05:54:20 -0800 (PST)
+Subject: Re: How to enable auto-suspend by default
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
+ <X6p6ubTOoMPUPPXi@kroah.com>
+ <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
+ <20201110172517.GC2495@lahna.fi.intel.com>
+ <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
+ <20201111143143.GV2495@lahna.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <30aa8c96-1809-8c5f-2305-5e39fbeba434@redhat.com>
+Date:   Mon, 23 Nov 2020 14:54:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20201111143143.GV2495@lahna.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Nov 22, 2020 at 11:53:55AM -0800, James Bottomley wrote:
-> On Sun, 2020-11-22 at 11:22 -0800, Joe Perches wrote:
-> > On Sun, 2020-11-22 at 11:12 -0800, James Bottomley wrote:
-> > > On Sun, 2020-11-22 at 10:25 -0800, Joe Perches wrote:
-> > > > On Sun, 2020-11-22 at 10:21 -0800, James Bottomley wrote:
-> > > > > Please tell me our reward for all this effort isn't a single
-> > > > > missing error print.
-> > > > 
-> > > > There were quite literally dozens of logical defects found
-> > > > by the fallthrough additions.  Very few were logging only.
-> > > 
-> > > So can you give us the best examples (or indeed all of them if
-> > > someone is keeping score)?  hopefully this isn't a US election
-> > > situation ...
-> > 
-> > Gustavo?  Are you running for congress now?
-> > 
-> > https://lwn.net/Articles/794944/
+Hi,
+
+On 11/11/20 3:31 PM, Mika Westerberg wrote:
+> On Wed, Nov 11, 2020 at 12:27:32PM +0100, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 11/10/20 6:25 PM, Mika Westerberg wrote:
+>>> On Tue, Nov 10, 2020 at 04:02:33PM +0000, Limonciello, Mario wrote:
+>>>>>
+>>>>> On Tue, Nov 10, 2020 at 11:57:07AM +0100, Bastien Nocera wrote:
+>>>>>> Hey,
+>>>>>>
+>>>>>> systemd has been shipping this script to enable auto-suspend on a
+>>>>>> number of USB and PCI devices:
+>>>>>>
+>>>>> https://github.com/systemd/systemd/blob/master/tools/chromiumos/gen_autosuspen
+>>>>> d_rules.py
+>>>>>>
+>>>>>> The problem here is twofold. First, the list of devices is updated from
+>>>>>> ChromeOS, and the original list obviously won't be updated by ChromeOS
+>>>>>> developers unless a device listed exists in a ChromeBook computer,
+>>>>>> which means a number of devices that do support autosuspend aren't
+>>>>>> listed.
+>>>>>>
+>>>>>> The other problem is that this list needs to exist at all, and that it
+>>>>>> doesn't seem possible for device driver developers (at various levels
+>>>>>> of the stack) to opt-in to auto-suspend when all the variants of the
+>>>>>> device (or at least detectable ones) support auto-suspend.
+>>>>>
+>>>>> A driver can say they support autosuspend today, but I think you are
+>>>>> concerned about the devices that are controlled by class-compliant
+>>>>> drivers, right?  And for those, no, we can't do this in the kernel as
+>>>>> there are just too many broken devices out there.
+>>>>>
+>>>>
+>>>> I guess what Bastien is getting at is for newer devices supported by class
+>>>> drivers rather than having to store an allowlist in udev rules, can we set
+>>>> the allowlist in the kernel instead.  Then distributions that either don't
+>>>> use systemd or don't regularly update udev rules from systemd can take
+>>>> advantage of better defaults on modern hardware.
+>>>>
+>>>> The one item that stood out to me in that rules file was 8086:a0ed.
+>>>> It's listed as "Volteer XHCI", but that same device ID is actually present
+>>>> in an XPS 9310 in front of me as well and used by the xhci-pci kernel module.
+>>>>
+>>>> Given we're effectively ending up with the combination of runtime PM turned
+>>>> on by udev rules, do we need something like this for that ID:
+>>>>
+>>>> https://github.com/torvalds/linux/commit/6a7c533d4a1854f54901a065d8c672e890400d8a
+>>>>
+>>>> @Mika Westerberg should 8086:a0ed be quirked like the TCSS xHCI too?
+>>>
+>>> I think this one is the TGL PCH xHCI. The quirk currently for xHCI
+>>> controllers that are part of the TCSS (Type-C SubSystem) where it is
+>>> important to put all devices into low power mode whenever possible,
+>>> otherwise it keeps the whole block on.
+>>
+>> Note that there are currently some IDs missing from the xHCIs which
+>> are part of the TCSS too. At least the id for the xHCI in the thunderbolt
+>> controller on the Lenovo T14 gen 1 is missing. I started a discussion
+>> about extending the kernel quirk list for this vs switching to hwdb
+>> a while a go:
+>>
+>> https://lore.kernel.org/linux-usb/b8b21ba3-0a8a-ff54-5e12-cf8960651086@redhat.com/
+>>
+>> The conclusion back then was to switch to hwdb, but I never got around to this.
 > 
-> That's 21 reported fixes of which about 50% seem to produce no change
-> in code behaviour at all, a quarter seem to have no user visible effect
-> with the remaining quarter producing unexpected errors on obscure
-> configuration parameters, which is why no-one really noticed them
-> before.
+> The reason I've added these to the xHCI driver is that it works even if
+> you are running some really small userspace (like busybox). Also for the
+> xHCI in TCSS we know for sure that it fully supports D3cold.
+> 
+> (The one you refer above is actually mistake from my side as I never
+>  tested Alpine Ridge LP controller which I think this is).
 
-The really important point here is the number of bugs this has prevented
-and will prevent in the future. See an example of this, below:
+Ok, so I'll submit a patch adding the 15c1 product-id for the
+INTEL_ALPINE_RIDGE_LP_2C_XHCI controller to the list of ids for which we
+set the XHCI_DEFAULT_PM_RUNTIME_ALLOW quirk. To fix the much too high
+idle-power consumption problem on devices with this Alpine Ridge variant.
 
-https://lore.kernel.org/linux-iio/20190813135802.GB27392@kroah.com/
+>>> Typically we haven't done that for PCH side xHCI controllers though, but
+>>> I don't see why not if it works that is. Adding Mathias to comment more
+>>> on that since he is the xHCI maintainer.
+>>
+>> If we are also going to enable this for the non TCSS Intel XHCI controllers,
+>> maybe just uncondtionally enable it for all Intel XHCI controllers, or
+>> if necessary do a deny-list for some older models and enable it for anything
+>> not on the deny-list (so all newer models). That should avoid the game of
+>> whack-a-mole which we will have with this otherwise.
+> 
+> This is really up to Mathias to decide. I'm fine either way :)
 
-This work is still relevant, even if the total number of issues/bugs
-we find in the process is zero (which is not the case).
+Ok, Matthias what do you think about this?
 
-"The sucky thing about doing hard work to deploy hardening is that the
-result is totally invisible by definition (things not happening) [..]"
-- Dmitry Vyukov
+Regards,
 
-Thanks
---
-Gustavo
-
-
-
-
+Hans
 
