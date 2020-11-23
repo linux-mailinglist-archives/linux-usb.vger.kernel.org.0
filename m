@@ -2,196 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 942A52C0FAA
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 17:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0676D2C1001
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 17:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389704AbgKWP6f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 10:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59924 "EHLO
+        id S2389837AbgKWQRP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 11:17:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730956AbgKWP6e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 10:58:34 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93282C061A4D
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 07:58:34 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id p8so19105182wrx.5
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 07:58:34 -0800 (PST)
+        with ESMTP id S1730953AbgKWQRN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 11:17:13 -0500
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58B8C0613CF;
+        Mon, 23 Nov 2020 08:17:12 -0800 (PST)
+Received: by mail-io1-xd41.google.com with SMTP id r1so18631487iob.13;
+        Mon, 23 Nov 2020 08:17:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=sluFcbZWXqMSO6icpf7e3JQsvKmo+q0w6hhq4DfZul0=;
-        b=BMEg1QZywxHj+q1jUs+SecMomO+1sOviGoySBGtDzS8pfBL2o6AU9M0NorS53WptwP
-         v3+vT8h153hrARegtuVcLhUvCBIr+i4PaAct6zlA5wRstmcBbllm35QUTIOPhdrAOxJ+
-         DUrGpi1MUH4m8clMLsM6TWat5oClGOV4qgLr8=
+        bh=9G9wehhbpTZzWWOvGr3rWAgWQ0geLC9Yp77M/YC6Idw=;
+        b=jzsPhOCPkH8JcubkL+ilpCqrpmJxzR/ZZhmza1K1c0eddk7+QY69lMXZ1zjj7yUobv
+         UPOat94Oznz5N+aYQtyK2tx44PHGHvaT6c5ydFaOoT5387NjxS4giDE0liSNJKSpvdGp
+         HKiV67o8ZfM+QomP6uHJNCHgME5k654Lm9OlI5uZEZV/BZyGXhrMcp4osA9RqzKjR7Ze
+         0dIcMPHMz9M6e1KbFfvtyGGjldyt3D137VsBHg9GBRp12UjhpWPsI6mtFPtV54IoaC+K
+         mSdXyd8g5UOodS4awURhueIsrAq2XHUWM9vJndBZGt3fLtR88qq6iY1NEsTPrUzb2MVL
+         n+0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sluFcbZWXqMSO6icpf7e3JQsvKmo+q0w6hhq4DfZul0=;
-        b=P9r/5dPd6VOpB3KCcckRRvwwBqOcepB5Ehot63K5qNDyMC1B/bQqYVJMDm9QShqtpa
-         rJdJI0+QE5/+6eP/RE+ql3x+C36Y99BqaTROtC5xmty/5LZGiBlnczyJ+x1tS829Ac9b
-         uirqTfPZrvFdr2dNdb0GcX67Jllxy6Tho2ETrJhbT7fbulcFuh8bxM8mPHhsum2ZI3GN
-         6Eyze+knHqKU1ov6koYBxVqRN6exsrF51o2HvTbhBOrYdbDLcQmUV0OJVAeD7dMpkaat
-         jzeEq0tD7JJDLI4TH0hyAN6kzllk1x7OEC8FcFla4IU5NH4TTrc0wVrG6gufNy4Q2pd9
-         ezqw==
-X-Gm-Message-State: AOAM531hUgrAkleXni+CtPLnIQZIH6fU4P1UN3Px5Lho7nyZtDH8lPV1
-        QFP2aktmy4lsskEXZk3/o45PhnqibHnHxJRfE89NwA==
-X-Google-Smtp-Source: ABdhPJzfc79PY6eNDEoomp3X5q17gbDMu1sWXoPIcGzs9UP1Co36EJV/IBjDbltXME/e2GC4Owz4wvebX8Cr1Fqq1as=
-X-Received: by 2002:a5d:5552:: with SMTP id g18mr296545wrw.145.1606147113083;
- Mon, 23 Nov 2020 07:58:33 -0800 (PST)
+        bh=9G9wehhbpTZzWWOvGr3rWAgWQ0geLC9Yp77M/YC6Idw=;
+        b=hVitWrlh2sxeAFONKORzLus4JyvFA3rcn8QIGBQq2k3uJuVq9YUNy4fCzc2x69GM/K
+         x6rfL2APtZvmrb1QXu5TXk9V3l0N6frUY3Frbobn0kfBusqszKZr4uiJWNdpaCdv56Z/
+         wgziWxLdZgSOzR4FRX9JXiW5o4UOPn1jq8hzDGybC0oJkLOCyFUgLiLrhTnpbS+MLyEH
+         lmEqyVjNf6BTXWC7Ghnn6V46zxeDQZ7iP2c4fd9pUb+1oMUgwzcz3TL4RFIJocGkSwXl
+         TPsa+LquElSljh07DGHwR4mXXm/pXrcSuqcFIzp5JCtS1lDBTj67LON7U4ug71f5MvLC
+         sQWQ==
+X-Gm-Message-State: AOAM530K9rFD6JQ02rXi1spGVMPYez+BJ8N9wPtE6BGR/WFNVYGQ52rc
+        gi/eUmgbUZdvHll24yu2X3FTOrjU/s2OU5ec+po=
+X-Google-Smtp-Source: ABdhPJw5wxDBX8QpwE2CghMfFtPIAtnmG9XIUqmbpxXD9wxvuYGnavpxLlav0NBfuecvTCMrGKLgN0Lee5ktV7i8vQ8=
+X-Received: by 2002:a05:6602:22c7:: with SMTP id e7mr415585ioe.114.1606148231969;
+ Mon, 23 Nov 2020 08:17:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20201120194305.8847-1-alcooperx@gmail.com> <20201120194305.8847-2-alcooperx@gmail.com>
-In-Reply-To: <20201120194305.8847-2-alcooperx@gmail.com>
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-Date:   Mon, 23 Nov 2020 10:58:20 -0500
-Message-ID: <CA+-6iNxteaMui4XdC-eMctguuZs3T-G85UMuwa7fNUCkJqE1Cw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] serial: 8250: of: Check for CONFIG_SERIAL_8250_BCM7271
-To:     Al Cooper <alcooperx@gmail.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Jim Quinlan <jquinlan@broadcom.com>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000270bbc05b4c84491"
+References: <20201121165058.1644182-1-trix@redhat.com> <5843ef910b0e86c00d9c0143dec20f93823b016b.camel@HansenPartnership.com>
+ <87y2ism5or.fsf@intel.com>
+In-Reply-To: <87y2ism5or.fsf@intel.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Mon, 23 Nov 2020 17:17:00 +0100
+Message-ID: <CAKXUXMydH+VtMeuftPRgCg_PYm2iChOMkUYjO=QTG=NRM3QFiw@mail.gmail.com>
+Subject: Re: [RFC] MAINTAINERS tag for cleanup robot
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Tom Rix <trix@redhat.com>, Joe Perches <joe@perches.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org,
+        ibm-acpi-devel@lists.sourceforge.net,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-mtd@lists.infradead.org, linux-scsi@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, cluster-devel@redhat.com,
+        linux-acpi@vger.kernel.org, tboot-devel@lists.sourceforge.net,
+        coreteam@netfilter.org, xen-devel@lists.xenproject.org,
+        MPT-FusionLinux.pdl@broadcom.com,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        alsa-devel@alsa-project.org, intel-gfx@lists.freedesktop.org,
+        ecryptfs@vger.kernel.org, linux-omap@vger.kernel.org,
+        devel@acpica.org, linux-nfs@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-bluetooth@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000270bbc05b4c84491
-Content-Type: text/plain; charset="UTF-8"
-
-On Fri, Nov 20, 2020 at 2:45 PM Al Cooper <alcooperx@gmail.com> wrote:
+On Mon, Nov 23, 2020 at 4:52 PM Jani Nikula <jani.nikula@linux.intel.com> wrote:
 >
-> From: Jim Quinlan <jquinlan@broadcom.com>
+> On Sat, 21 Nov 2020, James Bottomley <James.Bottomley@HansenPartnership.com> wrote:
+> > On Sat, 2020-11-21 at 08:50 -0800, trix@redhat.com wrote:
+> >> A difficult part of automating commits is composing the subsystem
+> >> preamble in the commit log.  For the ongoing effort of a fixer
+> >> producing
+> >> one or two fixes a release the use of 'treewide:' does not seem
+> >> appropriate.
+> >>
+> >> It would be better if the normal prefix was used.  Unfortunately
+> >> normal is
+> >> not consistent across the tree.
+> >>
+> >>
+> >>      D: Commit subsystem prefix
+> >>
+> >> ex/ for FPGA DFL DRIVERS
+> >>
+> >>      D: fpga: dfl:
+> >>
+> >
+> > I've got to bet this is going to cause more issues than it solves.
 >
-> This commit has of_platform_serial_probe() check specifically for the
-> "brcm,bcm7271-uart" and whether its companion driver is enabled. If it
-> is the case, and the clock provider is not ready, we want to make sure
-> that when the 8250_bcm7271.c driver returns EPROBE_DEFER, we are not
-> getting the UART registered via 8250_of.c.
->
-> Signed-off-by: Jim Quinlan <jquinlan@broadcom.com>
-> ---
->  drivers/tty/serial/8250/8250_of.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/tty/serial/8250/8250_of.c b/drivers/tty/serial/8250/8250_of.c
-> index 65e9045dafe6..aa458f3c6644 100644
-> --- a/drivers/tty/serial/8250/8250_of.c
-> +++ b/drivers/tty/serial/8250/8250_of.c
-> @@ -192,6 +192,10 @@ static int of_platform_serial_probe(struct platform_device *ofdev)
->         u32 tx_threshold;
->         int ret;
->
-> +       if (IS_ENABLED(CONFIG_SERIAL_8250_BCM7271) &&
-> +           of_device_is_compatible(ofdev->dev.of_node, "brcm,bcm7271-uart"))
-> +               return -ENODEV;
-> +
-NOTE: this commit is a "strawman" commit, and I will not be surprised
-if it gets quickly NAKed. We have a new idea on how to solve this
-issue, and if that not is not viable, will ask for a dialog on this
-problem either in this thread or through a separate RFC.
-
-Regards,
-Jim Quinlan
-Broadcom STB
-
-
-
->         port_type = (unsigned long)of_device_get_match_data(&ofdev->dev);
->         if (port_type == PORT_UNKNOWN)
->                 return -EINVAL;
-> --
-> 2.17.1
+> Agreed.
 >
 
---000000000000270bbc05b4c84491
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Tom, this a problem only kernel janitors encounter; all other
+developers really do not have that issue. The time spent on creating
+the patch is much larger than the amount saved if the commit log
+header line prefix would be derived automatically. I believe Julia
+Lawall, Arnd Bergmann and Nathan Chancellor as long-term
+high-frequency janitors do have already scripted approaches to that
+issue. Maybe they simply need to share these scripts with you and you
+consolidate them and share with everyone?
 
-MIIQQwYJKoZIhvcNAQcCoIIQNDCCEDACAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg2YMIIE6DCCA9CgAwIBAgIOSBtqCRO9gCTKXSLwFPMwDQYJKoZIhvcNAQELBQAwTDEgMB4GA1UE
-CxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMT
-Ckdsb2JhbFNpZ24wHhcNMTYwNjE1MDAwMDAwWhcNMjQwNjE1MDAwMDAwWjBdMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTEzMDEGA1UEAxMqR2xvYmFsU2lnbiBQZXJzb25h
-bFNpZ24gMiBDQSAtIFNIQTI1NiAtIEczMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-tpZok2X9LAHsYqMNVL+Ly6RDkaKar7GD8rVtb9nw6tzPFnvXGeOEA4X5xh9wjx9sScVpGR5wkTg1
-fgJIXTlrGESmaqXIdPRd9YQ+Yx9xRIIIPu3Jp/bpbiZBKYDJSbr/2Xago7sb9nnfSyjTSnucUcIP
-ZVChn6hKneVGBI2DT9yyyD3PmCEJmEzA8Y96qT83JmVH2GaPSSbCw0C+Zj1s/zqtKUbwE5zh8uuZ
-p4vC019QbaIOb8cGlzgvTqGORwK0gwDYpOO6QQdg5d03WvIHwTunnJdoLrfvqUg2vOlpqJmqR+nH
-9lHS+bEstsVJtZieU1Pa+3LzfA/4cT7XA/pnwwIDAQABo4IBtTCCAbEwDgYDVR0PAQH/BAQDAgEG
-MGoGA1UdJQRjMGEGCCsGAQUFBwMCBggrBgEFBQcDBAYIKwYBBQUHAwkGCisGAQQBgjcUAgIGCisG
-AQQBgjcKAwQGCSsGAQQBgjcVBgYKKwYBBAGCNwoDDAYIKwYBBQUHAwcGCCsGAQUFBwMRMBIGA1Ud
-EwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFGlygmIxZ5VEhXeRgMQENkmdewthMB8GA1UdIwQYMBaA
-FI/wS3+oLkUkrk1Q+mOai97i3Ru8MD4GCCsGAQUFBwEBBDIwMDAuBggrBgEFBQcwAYYiaHR0cDov
-L29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3RyMzA2BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3Js
-Lmdsb2JhbHNpZ24uY29tL3Jvb3QtcjMuY3JsMGcGA1UdIARgMF4wCwYJKwYBBAGgMgEoMAwGCisG
-AQQBoDIBKAowQQYJKwYBBAGgMgFfMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNp
-Z24uY29tL3JlcG9zaXRvcnkvMA0GCSqGSIb3DQEBCwUAA4IBAQConc0yzHxn4gtQ16VccKNm4iXv
-6rS2UzBuhxI3XDPiwihW45O9RZXzWNgVcUzz5IKJFL7+pcxHvesGVII+5r++9eqI9XnEKCILjHr2
-DgvjKq5Jmg6bwifybLYbVUoBthnhaFB0WLwSRRhPrt5eGxMw51UmNICi/hSKBKsHhGFSEaJQALZy
-4HL0EWduE6ILYAjX6BSXRDtHFeUPddb46f5Hf5rzITGLsn9BIpoOVrgS878O4JnfUWQi29yBfn75
-HajifFvPC+uqn+rcVnvrpLgsLOYG/64kWX/FRH8+mhVe+mcSX3xsUpcxK9q9vLTVtroU/yJUmEC4
-OcH5dQsbHBqjMIIDXzCCAkegAwIBAgILBAAAAAABIVhTCKIwDQYJKoZIhvcNAQELBQAwTDEgMB4G
-A1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNV
-BAMTCkdsb2JhbFNpZ24wHhcNMDkwMzE4MTAwMDAwWhcNMjkwMzE4MTAwMDAwWjBMMSAwHgYDVQQL
-ExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UEAxMK
-R2xvYmFsU2lnbjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMwldpB5BngiFvXAg7aE
-yiie/QV2EcWtiHL8RgJDx7KKnQRfJMsuS+FggkbhUqsMgUdwbN1k0ev1LKMPgj0MK66X17YUhhB5
-uzsTgHeMCOFJ0mpiLx9e+pZo34knlTifBtc+ycsmWQ1z3rDI6SYOgxXG71uL0gRgykmmKPZpO/bL
-yCiR5Z2KYVc3rHQU3HTgOu5yLy6c+9C7v/U9AOEGM+iCK65TpjoWc4zdQQ4gOsC0p6Hpsk+QLjJg
-6VfLuQSSaGjlOCZgdbKfd/+RFO+uIEn8rUAVSNECMWEZXriX7613t2Saer9fwRPvm2L7DWzgVGkW
-qQPabumDk3F2xmmFghcCAwEAAaNCMEAwDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8w
-HQYDVR0OBBYEFI/wS3+oLkUkrk1Q+mOai97i3Ru8MA0GCSqGSIb3DQEBCwUAA4IBAQBLQNvAUKr+
-yAzv95ZURUm7lgAJQayzE4aGKAczymvmdLm6AC2upArT9fHxD4q/c2dKg8dEe3jgr25sbwMpjjM5
-RcOO5LlXbKr8EpbsU8Yt5CRsuZRj+9xTaGdWPoO4zzUhw8lo/s7awlOqzJCK6fBdRoyV3XpYKBov
-Hd7NADdBj+1EbddTKJd+82cEHhXXipa0095MJ6RMG3NzdvQXmcIfeg7jLQitChws/zyrVQ4PkX42
-68NXSb7hLi18YIvDQVETI53O9zJrlAGomecsMx86OyXShkDOOyyGeMlhLxS67ttVb9+E7gUJTb0o
-2HLO02JQZR7rkpeDMdmztcpHWD9fMIIFRTCCBC2gAwIBAgIME79sZrUeCjpiuELzMA0GCSqGSIb3
-DQEBCwUAMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYDVQQD
-EypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0gRzMwHhcNMjAwOTA0MDcw
-ODQ0WhcNMjIwOTA1MDcwODQ0WjCBjjELMAkGA1UEBhMCSU4xEjAQBgNVBAgTCUthcm5hdGFrYTES
-MBAGA1UEBxMJQmFuZ2Fsb3JlMRYwFAYDVQQKEw1Ccm9hZGNvbSBJbmMuMRQwEgYDVQQDEwtKaW0g
-UXVpbmxhbjEpMCcGCSqGSIb3DQEJARYaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wggEiMA0G
-CSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDqsBkKCQn3+AT8d+247+l35R4b3HcQmAIBLNwR78Pv
-pMo/m+/bgJGpfN9+2p6a/M0l8nzvM+kaKcDdXKfYrnSGE5t+AFFb6dQD1UbJAX1IpZLyjTC215h2
-49CKrg1K58cBpU95z5THwRvY/lDS1AyNJ8LkrKF20wMGQzam3LVfmrYHEUPSsMOVw7rRMSbVSGO9
-+I2BkxB5dBmbnwpUPXY5+Mx6BEac1mEWA5+7anZeAAxsyvrER6cbU8MwwlrORp5lkeqDQKW3FIZB
-mOxPm7sNHsn0TVdPryi9+T2d8fVC/kUmuEdTYP/Hdu4W4b4T9BcW57fInYrmaJ+uotS6X59rAgMB
-AAGjggHRMIIBzTAOBgNVHQ8BAf8EBAMCBaAwgZ4GCCsGAQUFBwEBBIGRMIGOME0GCCsGAQUFBzAC
-hkFodHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc3BlcnNvbmFsc2lnbjJzaGEy
-ZzNvY3NwLmNydDA9BggrBgEFBQcwAYYxaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL2dzcGVy
-c29uYWxzaWduMnNoYTJnMzBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYm
-aHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBEBgNVHR8E
-PTA7MDmgN6A1hjNodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzcGVyc29uYWxzaWduMnNoYTJn
-My5jcmwwJQYDVR0RBB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYI
-KwYBBQUHAwQwHwYDVR0jBBgwFoAUaXKCYjFnlUSFd5GAxAQ2SZ17C2EwHQYDVR0OBBYEFNYm4GDl
-4WOt3laB3gNKFfYyaM8bMA0GCSqGSIb3DQEBCwUAA4IBAQBD+XYEgpG/OqeRgXAgDF8sa+lQ/00T
-wCP/3nBzwZPblTyThtDE/iaL/YZ5rdwqXwdCnSFh9cMhd/bnA+Eqw89clgTixvz9MdL9Vuo8LACI
-VpHO+sxZ2Cu3bO5lpK+UVCyr21y1zumOICsOuu4MJA5mtkpzBXQiA7b/ogjGxG+5iNjt9FAMX4JP
-V6GuAMmRknrzeTlxPy40UhUcRKk6Nm8mxl3Jh4KB68z7NFVpIx8G5w5I7S5ar1mLGNRjtFZ0RE4O
-lcCwKVGUXRaZMgQGrIhxGVelVgrcBh2vjpndlv733VI2VKE/TvV5MxMGU18RnogYSm66AEFA/Zb+
-5ztz1AtIMYICbzCCAmsCAQEwbTBdMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBu
-di1zYTEzMDEGA1UEAxMqR2xvYmFsU2lnbiBQZXJzb25hbFNpZ24gMiBDQSAtIFNIQTI1NiAtIEcz
-AgwTv2xmtR4KOmK4QvMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKk4bcwhZay0
-QtQwptb+OXJGvqHBdi28o6aGQub5gT9hMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
-hvcNAQkFMQ8XDTIwMTEyMzE1NTgzM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJ
-YIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcN
-AQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCTkYAzlI6mnMf3cUR34Xqc1UrPbGP1
-ov1xAXpsloy3OnQUf+HK6zOFtn7mff8pk+QpOUb/ixx3srrUNmMhorbu4qEj2/6V+ojkpmxtZ23M
-vuKx8pfiyVCI4VvBSK3xw8u9NKml2xaTJ+wocHK2y5ap6i6fCNY1+3iJyEc4xpGu757ACOqBqM1L
-u4XrWpeQz22ZhdsRIYYnwbb6ZJ/DfoNOhp0XJS+1uyAG8rLmT7cr808/zBsc2Dswd4C7huDJFphX
-A8ReWwEya4Z8gMeIGjNcRX4us1rCiJYexoQmV29yca/nCP52f08eBk/m7mJIVSYdwfOanDwoOOYS
-DjfCumUf
---000000000000270bbc05b4c84491--
+Also, making clean-up patches cumbersome has a positive side as well;
+maintainers are not swamped with fully automated patch submissions.
+There have been some bad experiences with some submitters on that in
+the past...
+
+> > SCSI uses scsi: <driver>: for drivers but not every driver has a
+> > MAINTAINERS entry.  We use either scsi: or scsi: core: for mid layer
+> > things, but we're not consistent.  Block uses blk-<something>: for all
+> > of it's stuff but almost no <somtehing>s have a MAINTAINERS entry.  So
+> > the next thing you're going to cause is an explosion of suggested
+> > MAINTAINERs entries.
+>
+> On the one hand, adoption of new MAINTAINERS entries has been really
+> slow. Look at B, C, or P, for instance. On the other hand, if this were
+> to get adopted, you'll potentially get conflicting prefixes for patches
+> touching multiple files. Then what?
+>
+> I'm guessing a script looking at git log could come up with better
+> suggestions for prefixes via popularity contest than manually maintained
+> MAINTAINERS entries. It might not always get it right, but then human
+> outsiders aren't going to always get it right either.
+>
+> Now you'll only need Someone(tm) to write the script. ;)
+>
+> Something quick like this:
+>
+> git log --since={1year} --pretty=format:%s -- <FILES> |\
+>         grep -v "^\(Merge\|Revert\)" |\
+>         sed 's/:[^:]*$//' |\
+>         sort | uniq -c | sort -rn | head -5
+>
+> already gives me results that really aren't worse than some of the
+> prefixes invented by drive-by contributors.
+>
+
+I agree I do not see the need to introduce something in MAINTAINERS;
+from my observations maintaining MAINTAINERS, there is sufficient work
+on adoption and maintenance of the existing entries already without
+such an yet another additional entry. Some entries are outdated or
+wrong and the janitor task of cleaning those up is already enough work
+for involved janitors and enough churn for involved maintainers. So a
+machine-learned approach as above is probably good enough, but if you
+think you need more complex rules try to learn them from the data at
+hand... certainly a nice task to do with machine learning on commit
+message prefixes.
+
+Lukas
