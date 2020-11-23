@@ -2,167 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E91D12C14F3
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 21:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997202C150A
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 21:04:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbgKWUBK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 15:01:10 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:44583 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726921AbgKWUBJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 15:01:09 -0500
-Received: by mail-io1-f69.google.com with SMTP id p12so13833748ioj.11
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 12:01:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Ko7nwhTGGiKHd70/ZGthku4qrchayecD8A3kHnKGqF0=;
-        b=DoAubEE3AgL1SNB+tK7+aDY8KRbdPkJm4Jv1EQH/+akzYaZwVKf9weM6Jo+IEsx/Ly
-         6kdxYXjqlU5p40JryAhcFnACh6B0Y8EmT8teCrKnWw3I0eso7L+fpJO4EEzbY7HeWicK
-         2WSEjXD57dTruf32AO23/DLhFvtalTvFdGvy9eU9ROElSmH39xyAilkTCALy9DfpSOO/
-         PNPQDrvtegHINOXmZhGy524wwSCVnB3Y0nqBqbI7fBZCCCYEMvFaaw3tlpZL/8S089H6
-         yRPCltdAA6iw/bXYiqBozfSOUy7C19fOUvLcO0NKC5BxIv8lsKKrX0FCS+pY2Qk7BNKc
-         72BQ==
-X-Gm-Message-State: AOAM532A8geGbVrioBnqRCs4+CwrfvzHV52tzs6gKk8P/5Qn6R3v57BH
-        DvXtOZsisLeH/H4ruQwdd3QfsAhmvUCkk82sY4O+NhjXC8v8
-X-Google-Smtp-Source: ABdhPJy13D4YEMhGTuyDGSuORHv/JF5zjJjzpqNatAuZ4G9xxhdtYq6lLpKSqWfGTN6NIvbVMFECC5CXvEIzTHREEG7iZjcYJ0MJ
+        id S1729070AbgKWUD6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 15:03:58 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17000 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726770AbgKWUDy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 15:03:54 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fbc15a70004>; Mon, 23 Nov 2020 12:03:51 -0800
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 23 Nov
+ 2020 20:03:49 +0000
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.103)
+ by HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Mon, 23 Nov 2020 20:03:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gITd84wMHHzcOptjQRg1Bi4wKYLoloErjGXTzbxbsYYxXpRm6DfDjP1G8JsqPPruG8n8djHpWT3ChykgCoTQdTlPHkj05TPw7WZ4Y46HlI8bprZC3XuF3n009Te/qaTwPxc9ef3s3wxgnUStlvtZrJvP5WQhh3MIKLFTGEWjhLXWcgs1VmoV9q6ndrBwWgPhsRBIC9rKh9qqm9cf9Ujr9sks/ml2cZ4bW16uPSJVifE1ke5RuUikXPZ60YcpNVw15sbmeBPfJ8v059YAkVfr8AOpsBgi+OymMySTg/JYVNFtVJ2pGo3M9pC5txLp474ztgTCR2D9RfvqUQOXT+42RA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QophqWBVIGhmInjMMmoN1JCz5yEuED07MVw87J8AVUY=;
+ b=dpOj+p56VpZQgFejSTc+TjZx9PpIbmIlWcJPfXyA8QiV6hyerQ1PNIg37pZm/OoPMM7dRNU+MPO2Sxmva5Z6iKtLQpQNkcM79tS52of8WjxHEmReB+Qc/VB0gzy26dU2FtXMoEzn5Rx6YHRp97uhlWeSk7Nsi1BUrieORD+G9yqkgKBmwQvC726s6EkJ0s32uNc7iMGffyCjKbyBtSLggJX9G9WEJ0m0GYQlYWRE7aVXL+Iy16bXoksvn7nW7YXP74v45GAqxPt7EElquzCZ4kXurFfWXXWM9ThsUobGLm/yb7wWVAmTEM+ttWZwc1mR7P3I+RsId2H9o2Xiqq+zAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com (2603:10b6:5:14a::12)
+ by DM6PR12MB4338.namprd12.prod.outlook.com (2603:10b6:5:2a2::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.21; Mon, 23 Nov
+ 2020 20:03:48 +0000
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::e40c:730c:156c:2ef9]) by DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::e40c:730c:156c:2ef9%7]) with mapi id 15.20.3589.022; Mon, 23 Nov 2020
+ 20:03:48 +0000
+Date:   Mon, 23 Nov 2020 16:03:45 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <amd-gfx@lists.freedesktop.org>,
+        <bridge@lists.linux-foundation.org>, <ceph-devel@vger.kernel.org>,
+        <cluster-devel@redhat.com>, <coreteam@netfilter.org>,
+        <devel@driverdev.osuosl.org>, <dm-devel@redhat.com>,
+        <drbd-dev@lists.linbit.com>, <dri-devel@lists.freedesktop.org>,
+        <GR-everest-linux-l2@marvell.com>, <GR-Linux-NIC-Dev@marvell.com>,
+        <intel-gfx@lists.freedesktop.org>,
+        <intel-wired-lan@lists.osuosl.org>, <keyrings@vger.kernel.org>,
+        <linux1394-devel@lists.sourceforge.net>,
+        <linux-acpi@vger.kernel.org>, <linux-afs@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-atm-general@lists.sourceforge.net>,
+        <linux-block@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-cifs@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-decnet-user@lists.sourceforge.net>,
+        <linux-ext4@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <linux-geode@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
+        <linux-hams@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-i3c@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-mtd@lists.infradead.org>,
+        <linux-nfs@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-sctp@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-usb@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <netfilter-devel@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
+        <op-tee@lists.trustedfirmware.org>, <oss-drivers@netronome.com>,
+        <patches@opensource.cirrus.com>, <rds-devel@oss.oracle.com>,
+        <reiserfs-devel@vger.kernel.org>,
+        <samba-technical@lists.samba.org>, <selinux@vger.kernel.org>,
+        <target-devel@vger.kernel.org>,
+        <tipc-discussion@lists.sourceforge.net>,
+        <usb-storage@lists.one-eyed-alien.net>,
+        <virtualization@lists.linux-foundation.org>,
+        <wcn36xx@lists.infradead.org>, <x86@kernel.org>,
+        <xen-devel@lists.xenproject.org>,
+        <linux-hardening@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+Message-ID: <20201123200345.GA38546@nvidia.com>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cover.1605896059.git.gustavoars@kernel.org>
+X-ClientProxiedBy: MN2PR03CA0013.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::18) To DM6PR12MB3834.namprd12.prod.outlook.com
+ (2603:10b6:5:14a::12)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:5de:: with SMTP id w30mr1204481iox.64.1606161668349;
- Mon, 23 Nov 2020 12:01:08 -0800 (PST)
-Date:   Mon, 23 Nov 2020 12:01:08 -0800
-In-Reply-To: <20201123195307.GA720000@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b1a48005b4cba75e@google.com>
-Subject: Re: memory leak in hub_event
-From:   syzbot <syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com>
-To:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from mlx.ziepe.ca (156.34.48.30) by MN2PR03CA0013.namprd03.prod.outlook.com (2603:10b6:208:23a::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20 via Frontend Transport; Mon, 23 Nov 2020 20:03:47 +0000
+Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1khI3t-000A35-Tb; Mon, 23 Nov 2020 16:03:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1606161831; bh=QophqWBVIGhmInjMMmoN1JCz5yEuED07MVw87J8AVUY=;
+        h=ARC-Seal:ARC-Message-Signature:ARC-Authentication-Results:Date:
+         From:To:CC:Subject:Message-ID:References:Content-Type:
+         Content-Disposition:In-Reply-To:X-ClientProxiedBy:MIME-Version:
+         X-MS-Exchange-MessageSentRepresentingType;
+        b=Zr1EZlr7FGouweCXJ2A3YJZ8lxsTazMwmiIDkNNgeYuPc4M3hA0h9guNHLXrnnLeX
+         Dp0jtpGLpYuZZsYit0m8+Y/3Pgk+U78P2KDuhjfei0oh+kHbQnRfzB2jD1Wu7rVyZ8
+         A2iuCgvA8hhwNVx8Bo/l4LfRAECKvf8eJj6um7c8+wyJ6oFgyijvPixB8Xcq6YNTLj
+         o7o09Zdo2SkPJV9Ld82VvGAW1KENwGx8qxL8L4kHw5xGizl/kk/4FLfOCs8mx17bXD
+         N2PIS7AsaPoH2bHogxWrZ7vcH6YOCMGYKk/oZQ1BhSoaDoH96AMZAs9BCirfcyYEMq
+         3EMRDyReptNPA==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, Nov 20, 2020 at 12:21:39PM -0600, Gustavo A. R. Silva wrote:
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-memory leak in usb_set_configuration
+>   IB/hfi1: Fix fall-through warnings for Clang
+>   IB/mlx4: Fix fall-through warnings for Clang
+>   IB/qedr: Fix fall-through warnings for Clang
+>   RDMA/mlx5: Fix fall-through warnings for Clang
 
-BUG: memory leak
-unreferenced object 0xffff88812695d400 (size 1024):
-  comm "kworker/1:2", pid 3876, jiffies 4294944657 (age 14.950s)
-  hex dump (first 32 bytes):
-    c8 ee 8d 26 81 88 ff ff c8 ee 8d 26 81 88 ff ff  ...&.......&....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000e23bdd53>] kmalloc include/linux/slab.h:552 [inline]
-    [<00000000e23bdd53>] kzalloc include/linux/slab.h:664 [inline]
-    [<00000000e23bdd53>] usb_set_configuration+0x18c/0xb90 drivers/usb/core/message.c:1987
-    [<0000000075483a2c>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<00000000e7052b0c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<0000000084544ac0>] really_probe+0x159/0x480 drivers/base/dd.c:554
-    [<00000000b1ca23bf>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
-    [<0000000071b8d8fa>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
-    [<00000000b1c25910>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
-    [<00000000104c17ae>] __device_attach+0x122/0x250 drivers/base/dd.c:912
-    [<00000000b93cff33>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
-    [<0000000098ed347d>] device_add+0x5ac/0xc30 drivers/base/core.c:2936
-    [<000000008afe4d3b>] usb_new_device.cold+0x166/0x578 drivers/usb/core/hub.c:2554
-    [<000000000db8d2bb>] hub_port_connect drivers/usb/core/hub.c:5222 [inline]
-    [<000000000db8d2bb>] hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
-    [<000000000db8d2bb>] port_event drivers/usb/core/hub.c:5508 [inline]
-    [<000000000db8d2bb>] hub_event+0x144a/0x20d0 drivers/usb/core/hub.c:5590
-    [<00000000d321de91>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
-    [<0000000038230b58>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
-    [<00000000a1e60acf>] kthread+0x178/0x1b0 kernel/kthread.c:292
-    [<00000000d5e1cdc3>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+I picked these four to the rdma tree, thanks
 
-BUG: memory leak
-unreferenced object 0xffff8881269b6560 (size 32):
-  comm "kworker/1:2", pid 3876, jiffies 4294944657 (age 14.950s)
-  hex dump (first 32 bytes):
-    36 2d 31 3a 30 2e 30 00 00 00 00 00 00 00 00 00  6-1:0.0.........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000e5418e58>] kvasprintf+0x6c/0xf0 lib/kasprintf.c:25
-    [<00000000a3c51b27>] kvasprintf_const+0x58/0x110 lib/kasprintf.c:49
-    [<000000002234e01b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:289
-    [<00000000f280c658>] dev_set_name+0x63/0x90 drivers/base/core.c:2722
-    [<000000008b5b3978>] usb_set_configuration+0x6be/0xb90 drivers/usb/core/message.c:2094
-    [<0000000075483a2c>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<00000000e7052b0c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<0000000084544ac0>] really_probe+0x159/0x480 drivers/base/dd.c:554
-    [<00000000b1ca23bf>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
-    [<0000000071b8d8fa>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
-    [<00000000b1c25910>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
-    [<00000000104c17ae>] __device_attach+0x122/0x250 drivers/base/dd.c:912
-    [<00000000b93cff33>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
-    [<0000000098ed347d>] device_add+0x5ac/0xc30 drivers/base/core.c:2936
-    [<000000008afe4d3b>] usb_new_device.cold+0x166/0x578 drivers/usb/core/hub.c:2554
-    [<000000000db8d2bb>] hub_port_connect drivers/usb/core/hub.c:5222 [inline]
-    [<000000000db8d2bb>] hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
-    [<000000000db8d2bb>] port_event drivers/usb/core/hub.c:5508 [inline]
-    [<000000000db8d2bb>] hub_event+0x144a/0x20d0 drivers/usb/core/hub.c:5590
-
-BUG: memory leak
-unreferenced object 0xffff8881263eff00 (size 256):
-  comm "kworker/1:2", pid 3876, jiffies 4294944661 (age 14.910s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 08 ff 3e 26 81 88 ff ff  ..........>&....
-    08 ff 3e 26 81 88 ff ff f0 8b 58 82 ff ff ff ff  ..>&......X.....
-  backtrace:
-    [<000000001dc8ab7b>] kmalloc include/linux/slab.h:552 [inline]
-    [<000000001dc8ab7b>] kzalloc include/linux/slab.h:664 [inline]
-    [<000000001dc8ab7b>] device_private_init drivers/base/core.c:2778 [inline]
-    [<000000001dc8ab7b>] device_add+0x7e8/0xc30 drivers/base/core.c:2828
-    [<00000000268b1f35>] usb_set_configuration+0x9de/0xb90 drivers/usb/core/message.c:2159
-    [<0000000075483a2c>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<00000000e7052b0c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<0000000084544ac0>] really_probe+0x159/0x480 drivers/base/dd.c:554
-    [<00000000b1ca23bf>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
-    [<0000000071b8d8fa>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
-    [<00000000b1c25910>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
-    [<00000000104c17ae>] __device_attach+0x122/0x250 drivers/base/dd.c:912
-    [<00000000b93cff33>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
-    [<0000000098ed347d>] device_add+0x5ac/0xc30 drivers/base/core.c:2936
-    [<000000008afe4d3b>] usb_new_device.cold+0x166/0x578 drivers/usb/core/hub.c:2554
-    [<000000000db8d2bb>] hub_port_connect drivers/usb/core/hub.c:5222 [inline]
-    [<000000000db8d2bb>] hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
-    [<000000000db8d2bb>] port_event drivers/usb/core/hub.c:5508 [inline]
-    [<000000000db8d2bb>] hub_event+0x144a/0x20d0 drivers/usb/core/hub.c:5590
-    [<00000000d321de91>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
-    [<0000000038230b58>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
-    [<00000000a1e60acf>] kthread+0x178/0x1b0 kernel/kthread.c:292
-
-BUG: memory leak
-unreferenced object 0xffff888126ad1800 (size 2048):
-  comm "kworker/0:3", pid 4909, jiffies 4294944664 (age 14.880s)
-  hex dump (first 32 bytes):
-    ff ff ff ff 31 00 00 00 00 00 00 00 00 00 00 00  ....1...........
-    00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00  ................
-  backtrace:
-    [<0000000083df40a5>] kmalloc include/linux/slab.h:552 [inline]
-    [<0000000083df40a5>] kzalloc include/linux/slab.h:664 [inline]
-    [<0000000083df40a5>] usb_alloc_dev+0x32/0x450 drivers/usb/core/usb.c:582
-    [<000000006a2b040a>] hub_port_connect drivers/usb/core/hub.c:5128 [inline]
-    [<000000006a2b040a>] hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
-    [<000000006a2b040a>] port_event drivers/usb/core/hub.c:5508 [inline]
-    [<000000006a2b040a>] hub_event+0x118d/0x20d0 drivers/usb/core/hub.c:5590
-    [<00000000d321de91>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
-    [<0000000038230b58>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
-    [<00000000a1e60acf>] kthread+0x178/0x1b0 kernel/kthread.c:292
-    [<00000000d5e1cdc3>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-
-
-
-Tested on:
-
-commit:         4d02da97 Merge tag 'net-5.10-rc5' of git://git.kernel.org/..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=110c7521500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b29e92cdfa2687df
-dashboard link: https://syzkaller.appspot.com/bug?extid=44e64397bd81d5e84cba
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10a8b8f1500000
-
+Jason
