@@ -2,116 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 601902C0246
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 10:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 261A72C02F1
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 11:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727352AbgKWJ3J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 04:29:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726979AbgKWJ3J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 04:29:09 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74F2C061A4D
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 01:29:08 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id u12so17924139wrt.0
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 01:29:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=oP064/YoSybWWI1ICcTHgnGH1OvAg15H5I+x0Ai9JRM=;
-        b=tc2FSCMksV59M4EtjiNWL8jYvxSmVR5HwDIE2Tr71m7qnAClPF0WfZkK6l1j/v1pgg
-         x3DTXnv21DuT7mxGXmNG95HWVVpIqYllKM/ceX8Fk8RbADMKqK3EGw2NAn20RT50uLx9
-         vzqySDtlWJF3MoZCG8RGUDaaMsLff8t+PiO1O6H5/57hg3Vi6lG8UYMjV9YhVpj6JKhA
-         Xue3Hp163rBm56BqB6SfMRrGA/D/n14zLO0EG3XGCEnzGT3vvfVEHtAYk+vH8n8i6VFR
-         Zj6MDGOiEXGasq1wZNU2vR5zQxf9gHNLRMH3CaCTrxQ8shv8EmDqwRwN7OUX8Jc+XDCG
-         2/cQ==
+        id S1728438AbgKWKFU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 05:05:20 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:37349 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728348AbgKWKFT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 05:05:19 -0500
+Received: by mail-il1-f197.google.com with SMTP id u17so13307053ilb.4
+        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 02:05:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=oP064/YoSybWWI1ICcTHgnGH1OvAg15H5I+x0Ai9JRM=;
-        b=R3UmyoBnUkQgxYVHJZe8fvpyS/IcZrLACrCwF4Iha/UzFvhMXdN3ojD+adDkTxLrEp
-         YFKSRNWW9KiVlJTU7yW/SSTqfb5GgwXsPYQ8G/spNMkj1SKoSdHxDeZg55SEzKrdNSTq
-         mZg87llY6smksXWIHfzlHnFaK12eJPXYYij2inI+Y4XG8toc3g0FkICHuqs99KzTmvEi
-         cCJnOzG9jj7GWgImMKRF+klyv4TZnpFu22gwzzvl50Ypu2oZVilSssl+/eauOI9FxCnO
-         Qjx+oJB4VpICW9dQ8rqlffIcVIIW4mximZiXnNEzF+uWy5QrcHUorltvzV66WQT8gTxz
-         Jgtg==
-X-Gm-Message-State: AOAM531S4Ewo/9p1FXRvpKjCZocDhHh1cgjCzQZzTURATADrtIZIUB6j
-        IgBcYsjQns3Lga11s7xsABHOGKP9zci62Bk8
-X-Google-Smtp-Source: ABdhPJze2Z5hY7lJwWf2ixUnWns3PM39g8MYfbp1DWWbev6ip3HKIrUgxapU+GPCk1Cbcjffb3NKdA==
-X-Received: by 2002:a5d:6743:: with SMTP id l3mr29498818wrw.82.1606123747181;
-        Mon, 23 Nov 2020 01:29:07 -0800 (PST)
-Received: from ?IPv6:2001:861:3a84:7260:8466:ae5d:28e6:8c59? ([2001:861:3a84:7260:8466:ae5d:28e6:8c59])
-        by smtp.gmail.com with ESMTPSA id a15sm18441848wrn.75.2020.11.23.01.29.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2020 01:29:06 -0800 (PST)
-Subject: Re: [PATCH 0/3] usb: meson: fix shared reset control use
-To:     Kevin Hilman <khilman@baylibre.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20201113000508.14702-1-aouledameur@baylibre.com>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Message-ID: <093933fc-eac5-de56-d314-a1348de348af@baylibre.com>
-Date:   Mon, 23 Nov 2020 10:29:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=BES57B4JG1nbaujnQb/iDqduyXORqzEHVZ+fboilFls=;
+        b=IvlMoMmjdh2yWx63wXZvRDoCLUCQuclxJm+6EpG6uKpFwWAAT0P4MiQ9GSge2Umodx
+         lCfBMusXByjjHs9yKSPK1ev8SY6T9/jd2SEJBcv6F0wxrL7vNDx78nRl0Pz4aCj/tTt6
+         eaqWbxCNYQaz6ZCGSw6eCtAcSzhVJ2u8mIJceQrkgqZNKRmt94IKumQ5uuQzdKYKspdD
+         cNWJEESaEmx3WmVOHJyNUA8nsZVBw0rcqxi3UO54EYm18wN3X7WuPGE2+4OoydXxjHOI
+         5xgUtD4AocJL1J9sXxq83pJsgKP74ucEtUaqZr9WzCV8AysRkXl03uiT9CuevI7MiRzG
+         UtGw==
+X-Gm-Message-State: AOAM531TGhA0ePiW7jZaY7nQxvvZxUfwsXvoJWltzlMcp7N0ngLhc5Mk
+        5iybhKUhC4HizBMYYTUufTy1d90IbTCnuS1iFuqLxB+ljKTG
+X-Google-Smtp-Source: ABdhPJwSorRGNEeSeAvS4oNVeulu7Uyu4xvkgFiQJ23LNQl2fqWExUhKkJqJ5wENYjRWC5b5TZXrYArHcxfMM2QLeo1mp5xf7/tb
 MIME-Version: 1.0
-In-Reply-To: <20201113000508.14702-1-aouledameur@baylibre.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: fr
+X-Received: by 2002:a92:c88c:: with SMTP id w12mr36901962ilo.204.1606125917149;
+ Mon, 23 Nov 2020 02:05:17 -0800 (PST)
+Date:   Mon, 23 Nov 2020 02:05:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c19e7b05b4c35440@google.com>
+Subject: WARNING in cm109_submit_buzz_toggle/usb_submit_urb
+From:   syzbot <syzbot+c7e665956b189738fe5e@syzkaller.appspotmail.com>
+To:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
+        gustavoars@kernel.org, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tiwai@suse.de
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Felipe and Kevin,
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    a349e4c6 Merge tag 'xfs-5.10-fixes-7' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1756e035500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=330f3436df12fd44
+dashboard link: https://syzkaller.appspot.com/bug?extid=c7e665956b189738fe5e
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c7e665956b189738fe5e@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+URB 000000001a5f6e54 submitted while active
+WARNING: CPU: 0 PID: 15525 at drivers/usb/core/urb.c:378 usb_submit_urb+0x1228/0x14e0 drivers/usb/core/urb.c:378
+Modules linked in:
+CPU: 0 PID: 15525 Comm: syz-executor.5 Not tainted 5.10.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:usb_submit_urb+0x1228/0x14e0 drivers/usb/core/urb.c:378
+Code: 89 de e8 2b 93 3b fc 84 db 0f 85 da f4 ff ff e8 0e 9b 3b fc 4c 89 fe 48 c7 c7 e0 6a e1 89 c6 05 03 18 a4 07 01 e8 82 fe 77 03 <0f> 0b e9 b8 f4 ff ff c7 44 24 14 01 00 00 00 e9 6f f5 ff ff 41 bd
+RSP: 0018:ffffc9000395f710 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff8158f3b5 RDI: fffff5200072bed4
+RBP: 0000000000000020 R08: 0000000000000001 R09: ffff8880b9e2011b
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801ef80488
+R13: 00000000fffffff0 R14: ffffffff85a1ef60 R15: ffff88801297a600
+FS:  00007f8480e75700(0000) GS:ffff8880b9e00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f56ba3fdc10 CR3: 0000000018999000 CR4: 00000000001526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ cm109_submit_buzz_toggle+0xd0/0x130 drivers/input/misc/cm109.c:351
+ cm109_toggle_buzzer_async drivers/input/misc/cm109.c:487 [inline]
+ cm109_input_ev+0x1ea/0x230 drivers/input/misc/cm109.c:621
+ input_handle_event+0x66e/0x1400 drivers/input/input.c:376
+ input_inject_event+0x2f5/0x310 drivers/input/input.c:471
+ kd_sound_helper+0x122/0x260 drivers/tty/vt/keyboard.c:242
+ input_handler_for_each_handle+0xf4/0x210 drivers/input/input.c:2356
+ kd_mksound+0x85/0x120 drivers/tty/vt/keyboard.c:266
+ do_con_trol+0x813/0x54c0 drivers/tty/vt/vt.c:2152
+ do_con_write+0xb89/0x1dd0 drivers/tty/vt/vt.c:2911
+ con_write+0x22/0xb0 drivers/tty/vt/vt.c:3255
+ process_output_block drivers/tty/n_tty.c:595 [inline]
+ n_tty_write+0x3ce/0xf80 drivers/tty/n_tty.c:2333
+ do_tty_write drivers/tty/tty_io.c:962 [inline]
+ tty_write+0x4d9/0x870 drivers/tty/tty_io.c:1046
+ vfs_write+0x28e/0xa30 fs/read_write.c:603
+ ksys_write+0x12d/0x250 fs/read_write.c:658
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x45deb9
+Code: 0d b4 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 db b3 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f8480e74c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 000000000003a6c0 RCX: 000000000045deb9
+RDX: 0000000000001006 RSI: 0000000020001440 RDI: 0000000000000006
+RBP: 000000000118bf60 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000118bf2c
+R13: 000000000169fb7f R14: 00007f8480e759c0 R15: 000000000118bf2c
 
 
-Could you please review this patchset ?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Thank you in advance.
-
-On 13/11/2020 01:05, Amjad Ouled-Ameur wrote:
-
-> This patchset fixes a usb suspend warning seen on the libretech-cc by
-> using reset_control_rearm() call of the reset framework API.
-> This call allows a reset consummer to release the reset line even when
-> just triggered so that it may be triggered again by other reset
-> consummers.
->
-> reset_control_(de)assert() calls are called, in some meson usb drivers,
-> on a shared reset line when reset_control_reset has been used. This is not
-> allowed by the reset framework.
->
-> Finally the meson usb drivers are updated to use this new call, which
-> solves the suspend issue addressed by the previous reverted
-> commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared reset control
-> use").
->
-> Important:
-> Please DO NOT merge before this patch [0] is merged, it adds
-> reset_control_rearm() call to the reset framework API.
->
-> [0] https://lore.kernel.org/lkml/20201112230043.28987-1-aouledameur@baylib
-> re.com/
->
-> Amjad Ouled-Ameur (3):
->    phy: amlogic: phy-meson-gxl-usb2: fix shared reset controller use
->    usb: dwc3: meson-g12a: fix shared reset control use
->    phy: amlogic: meson8b-usb2: fix shared reset control use
->
->   drivers/phy/amlogic/phy-meson-gxl-usb2.c |  5 ++++-
->   drivers/phy/amlogic/phy-meson8b-usb2.c   |  4 ++++
->   drivers/usb/dwc3/dwc3-meson-g12a.c       | 19 +++++++++++++------
->   3 files changed, 21 insertions(+), 7 deletions(-)
->
->
-Sincerely,
-Amjad
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
