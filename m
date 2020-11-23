@@ -2,380 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 919A52C00D1
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 08:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0485D2C0165
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Nov 2020 09:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727057AbgKWHpV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 02:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        id S1728006AbgKWIUY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 03:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725320AbgKWHpV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 02:45:21 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03247C0613CF
-        for <linux-usb@vger.kernel.org>; Sun, 22 Nov 2020 23:45:21 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id y73so8624738vsc.5
-        for <linux-usb@vger.kernel.org>; Sun, 22 Nov 2020 23:45:20 -0800 (PST)
+        with ESMTP id S1725320AbgKWIUX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 03:20:23 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1F8C0613CF
+        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 00:20:22 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id q10so14229148pfn.0
+        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 00:20:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mly8w2bQw7hI7nAsWqMWyGpJd8PDkyFM0D9DrCDINE0=;
-        b=mFTEetiIxZa4VJtDN9jeDK2IX1C5edYAozp9D2muCh9rFQNz/5zGuT3Fdhnvf0sQK2
-         GClDD0/PwUoXgyO8/o8oZNSJdeSNA0/dejEGsOhtUhyhyuLdDRQ6YE+jtd8VM+bN2sHc
-         uDSxcd5gpFzyRET1nsEcIfyLmpD3He1OzrCggqZTGJBqqFSVnOTFDZJkjnNEBODXufhh
-         +xDdd6gCgIu62qGJNWvoQSSaOzWxteS39P009Q3p2t3ST+luZp9o1QjooFGEUTyXlbED
-         ZqTgYw0/wxbmnvmunLPW0l3S4P46QqEsSva2PLzpCiqPFpVQy7YurY6gfJv3B0HlxIiM
-         l5hA==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=Mo0Sq/OzugcX97oreNJE3KHVwzOxGHyEtciIJ5e7V8I=;
+        b=RxRK+i+jCTbdPUrYg5fWbnGDtz33PWkkWl0zBjBchH2KFQetHERottW91emNnI+6xE
+         gyHJeTwLGe+joGdr1XMd/kNVSY2yMmRbcOGLj2PByvvWPDuX/OokrDnZE7J/d6bA7J1R
+         y9Q/mYCQl/FnO3lyTwG/4kLvT7LJfDm0/0xGvpI4ABqW01dApl0MkFlLiHkfKz1fCtE6
+         nFhYPL8sK2dJ4ov/TDneQHbzGxvTLFEykNRcbqEw0je8NAZbD5c0dGWZZ8G5gOkFFgz0
+         8SXRXiOZgIUSxm7jVkbxSPlhHgkCgbrt2c0gKoVkFxdzlY1DFwZ9uW50iQkdIAQLUiXH
+         L+qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mly8w2bQw7hI7nAsWqMWyGpJd8PDkyFM0D9DrCDINE0=;
-        b=H2DangNMCO5Dpq3z7qETRmKXKw9+1MT6OSeBzjv1gHU7Pe6G1eWthTJUPlFi8JMMk3
-         9vlJpUKfbMvejIZEDCBeG5Z41QNaUi/RhwF/mMNZXM4HbrjST5f3TLRRJmpYH39L3EMN
-         IIyYGKy0sc2ZWXwmz+Zx5Bj2kPPV9WKf6ErurCDjU1xJXljusFZb9/zp6ohZb/0AKaH4
-         rX9qEFFu5yZFWlOr0TVUbC5CgkqrkMo8apVFtRfkuzBIgIhfDtS3udabU8/HH5OfdJxH
-         scMQJnl1t4idI/tqIspgdyuHt+SFVNYFTWDEhYbGulAZzc+qFoLc2uE3LHd+SyXcHEG5
-         sQZw==
-X-Gm-Message-State: AOAM530qm41LxJMZ0TAX/wgKtFPShx4k9khX1z9tRMwX9LSOq7y8dgcs
-        7HfSnSh6tOD/UOnH4iFCObp5GSao2WkO2FeQOfI=
-X-Google-Smtp-Source: ABdhPJwIrJ/Kfegw4AIl0E86SMSs2BV0Edrimwpkn3rvOSJ4Wcca0e+I8WtdUkjVL59b/R6Dk9eRhaNHvZPyV5JXO4g=
-X-Received: by 2002:a67:df8b:: with SMTP id x11mr17490712vsk.37.1606117520188;
- Sun, 22 Nov 2020 23:45:20 -0800 (PST)
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Mo0Sq/OzugcX97oreNJE3KHVwzOxGHyEtciIJ5e7V8I=;
+        b=PiyWBib3xbxFIVCOhbpbdwnpmRSQrNNCP/gCqI8wx2rq/5r6780JDDAEUvSpksMNe/
+         OZjvrUbdDJ8xYLipX7nZ2Lzq+LNp/W/fiEmPDD+LG0a679SDGul3iiup9mhUjcalMyKn
+         avRlqW8d8yD9YKTuU1exyZIoOZ2en59Dy2oyc6XVonIgIu9XBLmN3r9CnBHPQTI57u3n
+         3paEcE4v85nfl9BAWbLtRqOkjCiNVANlVAOmD233mg6yHWiwtrly41cFKncpZzglpozV
+         8cwj/1NWQS0n0Mv14kjzP9w5vjDt2Ij0RL0OqMGteXyeo5kD+J4/Hv8ofuT++9GsUiDe
+         Nq4A==
+X-Gm-Message-State: AOAM531crSRTbI7Ccq5IIVng5/+DjTWNl6ePLa7JrHmIvn1Iim7sr/ic
+        Rpbx+3Yoh7MtrbV0WheHVQ0OuxktNJ0=
+X-Google-Smtp-Source: ABdhPJzBdGy004AdS2W/VowWcFa6K509Ep15vcw7pKLvk5l9a1rOWtj9N0p+L5Yc+aAPr3ERcRsH+A==
+X-Received: by 2002:a63:d547:: with SMTP id v7mr26050989pgi.375.1606119622120;
+        Mon, 23 Nov 2020 00:20:22 -0800 (PST)
+Received: from [192.168.1.5] ([159.192.85.80])
+        by smtp.googlemail.com with ESMTPSA id x8sm11105173pfi.24.2020.11.23.00.20.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Nov 2020 00:20:21 -0800 (PST)
+Subject: Re: [PATCH] option: added support for Thales Cinterion MV31 option
+ port.
+To:     Giacinto Cifelli <gciofono@gmail.com>, linux-usb@vger.kernel.org
+References: <20201119115931.19050-1-gciofono@gmail.com>
+From:   Lars Melin <larsm17@gmail.com>
+Message-ID: <981fe0c1-58be-21b8-0e6b-bd19d0b26ce5@gmail.com>
+Date:   Mon, 23 Nov 2020 15:20:19 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-References: <20201119115931.19050-1-gciofono@gmail.com> <X7ePVj4C/wVWb5GL@localhost>
-In-Reply-To: <X7ePVj4C/wVWb5GL@localhost>
-From:   Giacinto Cifelli <gciofono@gmail.com>
-Date:   Mon, 23 Nov 2020 08:45:09 +0100
-Message-ID: <CAKSBH7E_nRw-B7LAb-jj78OW7YPjBu-iKwJA4keZzd-WiBDQEA@mail.gmail.com>
-Subject: Re: [PATCH] option: added support for Thales Cinterion MV31 option port.
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201119115931.19050-1-gciofono@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
+On 11/19/2020 18:59, Giacinto Cifelli wrote:
+> There is a single option port in this modem, and it is used as debug port
+> 
+> Signed-off-by: Giacinto Cifelli <gciofono@gmail.com>
+> ---
+>   drivers/usb/serial/option.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 54ca85cc920d..3ad86a6e8487 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -424,6 +424,7 @@ static void option_instat_callback(struct urb *urb);
+>   #define CINTERION_PRODUCT_AHXX_2RMNET		0x0084
+>   #define CINTERION_PRODUCT_AHXX_AUDIO		0x0085
+>   #define CINTERION_PRODUCT_CLS8			0x00b0
+> +#define CINTERION_PRODUCT_EXS82			0x006c
+>   
+>   /* Olivetti products */
+>   #define OLIVETTI_VENDOR_ID			0x0b3c
+> @@ -1908,6 +1909,8 @@ static const struct usb_device_id option_ids[] = {
+>   	{ USB_DEVICE(SIEMENS_VENDOR_ID, CINTERION_PRODUCT_HC25_MDMNET) },
+>   	{ USB_DEVICE(SIEMENS_VENDOR_ID, CINTERION_PRODUCT_HC28_MDM) }, /* HC28 enumerates with Siemens or Cinterion VID depending on FW revision */
+>   	{ USB_DEVICE(SIEMENS_VENDOR_ID, CINTERION_PRODUCT_HC28_MDMNET) },
+> +	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_EXS82, 0xff),
+> +	  .driver_info = RSVD(1) | RSVD(2) | RSVD(3) },
+>   	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
+>   	  .driver_info = RSVD(4) },
+>   	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
+> 
 
-here is the short version: bus 1, dev 2 is the EXS82:
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
-    |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 12M
-    |__ Port 2: Dev 3, If 0, Class=Hub, Driver=hub/7p, 12M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/6p, 480M
-    |__ Port 1: Dev 2, If 0, Class=Vendor Specific Class, Driver=option, 480M
-    |__ Port 1: Dev 2, If 1, Class=Communications, Driver=cdc_acm, 480M
-    |__ Port 1: Dev 2, If 2, Class=CDC Data, Driver=cdc_acm, 480M
-    |__ Port 1: Dev 2, If 3, Class=Communications, Driver=cdc_acm, 480M
-    |__ Port 1: Dev 2, If 4, Class=CDC Data, Driver=cdc_acm, 480M
-    |__ Port 1: Dev 2, If 5, Class=Communications, Driver=cdc_ether, 480M
-    |__ Port 1: Dev 2, If 6, Class=CDC Data, Driver=cdc_ether, 480M
+There is only one interface in this device that should be driven by 
+optiom, the first interface which likely is a diag interface.
+All other interfaces are driven by CDC drivers and they will not be 
+taken by option so no need for the blacklisting of them.
+Remove the .driver_info line from the patch.
 
-and here the long version (only the part concerning the device):
-
-Bus 001 Device 002: ID 1e2d:006c
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2 ?
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x1e2d
-  idProduct          0x006c
-  bcdDevice            0.00
-  iManufacturer           4
-  iProduct                3
-  iSerial                 5
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength          243
-    bNumInterfaces          7
-    bConfigurationValue     1
-    iConfiguration          2
-    bmAttributes         0xe0
-      Self Powered
-      Remote Wakeup
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol    255 Vendor Specific Protocol
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         1
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       2 Abstract (modem)
-      bFunctionProtocol       1 AT-commands (v.25ter)
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Call Management:
-        bmCapabilities       0x03
-          call management
-          use DataInterface
-        bDataInterface          2
-      CDC Union:
-        bMasterInterface        1
-        bSlaveInterface         2
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         3
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       2 Abstract (modem)
-      bFunctionProtocol       1 AT-commands (v.25ter)
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Call Management:
-        bmCapabilities       0x03
-          call management
-          use DataInterface
-        bDataInterface          4
-      CDC Union:
-        bMasterInterface        3
-        bSlaveInterface         4
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x84  EP 4 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        4
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x85  EP 5 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         5
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       2 Abstract (modem)
-      bFunctionProtocol       1 AT-commands (v.25ter)
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        5
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      6 Ethernet Networking
-      bInterfaceProtocol      0
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC Ethernet:
-        iMacAddress                      1 (??)
-        bmEthernetStatistics    0x00000000
-        wMaxSegmentSize              16384
-        wNumberMCFilters            0x0001
-        bNumberPowerFilters              0
-      CDC Union:
-        bMasterInterface        5
-        bSlaveInterface         6
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x86  EP 6 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        6
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        6
-      bAlternateSetting       1
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x87  EP 7 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x04  EP 4 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-
-
-I did make a mistake on the name of the patch.  It should read EXS82
-and not MV31 (which will come a bit later, as soon as they make their
-mind for the final enumeration).
-Please let me know of any further comments, and I will re-submit with
-the right subject.
-Shall I add the lsusb output above in the patch comment?
-
-Thank you,
-Giacinto
-
-
-
-On Fri, Nov 20, 2020 at 10:41 AM Johan Hovold <johan@kernel.org> wrote:
->
-> On Thu, Nov 19, 2020 at 12:59:31PM +0100, Giacinto Cifelli wrote:
-> > There is a single option port in this modem, and it is used as debug port
-> >
-> > Signed-off-by: Giacinto Cifelli <gciofono@gmail.com>
->
-> Can you post the output of "lsusb -v" for this device?
->
-> Johan
+thanks
+Lars
