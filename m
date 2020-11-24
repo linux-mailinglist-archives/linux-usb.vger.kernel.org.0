@@ -2,74 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE7F2C2C04
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 16:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8D92C2C26
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 17:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390089AbgKXPxH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Nov 2020 10:53:07 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:38315 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389842AbgKXPxE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 10:53:04 -0500
-X-Originating-IP: 82.255.60.242
-Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
-        (Authenticated sender: hadess@hadess.net)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id E0D1760003;
-        Tue, 24 Nov 2020 15:53:00 +0000 (UTC)
-Message-ID: <56726c3591feb0a61dd2bf8ffa5dc218af46cbab.camel@hadess.net>
-Subject: Re: How to enable auto-suspend by default
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@dell.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
-Date:   Tue, 24 Nov 2020 16:53:00 +0100
-In-Reply-To: <ecd964af-efdb-99c6-45cb-4979397fb324@linux.intel.com>
-References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
-         <X6p6ubTOoMPUPPXi@kroah.com>
-         <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
-         <20201110172517.GC2495@lahna.fi.intel.com>
-         <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
-         <20201111143143.GV2495@lahna.fi.intel.com>
-         <30aa8c96-1809-8c5f-2305-5e39fbeba434@redhat.com>
-         <ecd964af-efdb-99c6-45cb-4979397fb324@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.1 (3.38.1-1.fc33) 
+        id S2389956AbgKXQA2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Nov 2020 11:00:28 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:58785 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2389900AbgKXQA2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 11:00:28 -0500
+Received: (qmail 750208 invoked by uid 1000); 24 Nov 2020 11:00:26 -0500
+Date:   Tue, 24 Nov 2020 11:00:26 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     syzbot <syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com>,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Subject: [PATCH] media: gspca: Fix memory leak in probe
+Message-ID: <20201124160026.GA749809@rowland.harvard.edu>
+References: <20201123215345.GA721643@rowland.harvard.edu>
+ <0000000000004b629f05b4cd7124@google.com>
+ <20201123222428.GB721643@rowland.harvard.edu>
+ <c2cf1a80-ec47-69ac-c3e2-1b0e32447ef2@xs4all.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c2cf1a80-ec47-69ac-c3e2-1b0e32447ef2@xs4all.nl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2020-11-24 at 14:37 +0200, Mathias Nyman wrote:
-> <snip>
-> I don't think we are ready to enable runtime pm as default for all
-> Intel xHCI controllers.
-> The risk of xHCI not waking up when user plugs a mouse/keyboard,
-> making the system unusable
-> just seems too high compared to the powersaving benefit.
-> 
-> The powersaving benefit from autosuspending the TCSS xHCI is a lot
-> better, and we, (Mika mostly)
-> has been able to verify they work.
-> 
-> So I propose we for now continue adding TCSS xHCI controllers to the
-> allowlist in kernel.
-> For others I think a userspace allow/denylist makes sense.
-> 
-> Long term goal would be default allow for all, with short denylist in
-> kernel.
+The gspca driver leaks memory when a probe fails.  gspca_dev_probe2()
+calls v4l2_device_register(), which takes a reference to the
+underlying device node (in this case, a USB interface).  But the
+failure pathway neglects to call v4l2_device_disconnect(), the routine
+responsible for dropping this reference.  Consequently the memory for
+the USB interface and its device never gets released.
 
-Is there any way to preemptively enable autosuspend for all the _TCSS_
-xHCI controllers?
+This patch adds the missing function call.
 
-This was the problem the original post tried to tease out, whether it
-would be easier/better to enable autosuspend by default, and not enable
-it on systems where it breaks something, rather than default to sucking
-battery until somebody notices that a device ID got missed.
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Reported-and-tested-by: syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com
+CC: <stable@vger.kernel.org>
+
+---
+
+This doesn't fully fix syzbot's test case, because the test goes on and 
+encounters another memory leak in a different driver.
+
+
+[as1949]
+
+
+ drivers/media/usb/gspca/gspca.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+Index: usb-devel/drivers/media/usb/gspca/gspca.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/gspca/gspca.c
++++ usb-devel/drivers/media/usb/gspca/gspca.c
+@@ -1575,6 +1575,7 @@ out:
+ 		input_unregister_device(gspca_dev->input_dev);
+ #endif
+ 	v4l2_ctrl_handler_free(gspca_dev->vdev.ctrl_handler);
++	v4l2_device_disconnect(&gspca_dev->v4l2_dev);
+ 	kfree(gspca_dev->usb_buf);
+ 	kfree(gspca_dev);
+ 	return ret;
 
