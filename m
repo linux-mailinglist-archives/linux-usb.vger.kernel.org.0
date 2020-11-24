@@ -2,68 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 059412C231B
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 11:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B9C2C2326
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 11:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732021AbgKXKkY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 24 Nov 2020 05:40:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55150 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726744AbgKXKkY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Nov 2020 05:40:24 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210345] xhci init fail
-Date:   Tue, 24 Nov 2020 10:40:23 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gregkh@linuxfoundation.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210345-208809-YbUgzXyqPW@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210345-208809@https.bugzilla.kernel.org/>
-References: <bug-210345-208809@https.bugzilla.kernel.org/>
+        id S1732173AbgKXKmM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 24 Nov 2020 05:42:12 -0500
+Received: from pic75-3-78-194-244-226.fbxo.proxad.net ([78.194.244.226]:40990
+        "EHLO mail.corsac.net" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1732088AbgKXKmM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 05:42:12 -0500
+Received: from scapa.corsac.net (unknown [IPv6:2a01:e34:ec2f:4e20:6af7:28ff:fe8d:2119])
+        by mail.corsac.net (Postfix) with ESMTPS id E04989E
+        for <linux-usb@vger.kernel.org>; Tue, 24 Nov 2020 11:41:40 +0100 (CET)
+Received: from corsac (uid 1000)
+        (envelope-from corsac@corsac.net)
+        id a00a5
+        by scapa.corsac.net (DragonFly Mail Agent v0.12);
+        Tue, 24 Nov 2020 11:41:40 +0100
+Message-ID: <02c032512dab22c1ab758d953affd94a4064fdbd.camel@corsac.net>
+Subject: Re: [PATCH] usbnet: ipheth: fix connectivity with iOS 14
+From:   Yves-Alexis Perez <corsac@corsac.net>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Martin Habets <mhabets@solarflare.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matti Vuorela <matti.vuorela@bitfactor.fi>,
+        stable@vger.kernel.org
+Date:   Tue, 24 Nov 2020 11:41:40 +0100
+In-Reply-To: <20201121140311.42585c68@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <CAAn0qaXmysJ9vx3ZEMkViv_B19ju-_ExN8Yn_uSefxpjS6g4Lw@mail.gmail.com>
+         <20201119172439.94988-1-corsac@corsac.net>
+         <20201121140311.42585c68@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+User-Agent: Evolution 3.38.1-2 
 MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=210345
+On Sat, 2020-11-21 at 14:03 -0800, Jakub Kicinski wrote:
+> Applied to net with the typo fixed, thanks!
 
---- Comment #1 from gregkh@linuxfoundation.org ---
-On Tue, Nov 24, 2020 at 09:58:51AM +0000, bugzilla-daemon@bugzilla.kernel.org
-wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=210345
-> 
->             Bug ID: 210345
->            Summary: xhci init fail
->            Product: Drivers
->            Version: 2.5
->     Kernel Version: 5.4.0-53-generic #59-Ubuntu SMP
+Thanks!
 
-Please file this with Ubuntu as this is a very old kernel release and we
-at kernel.org have no idea what is actually included in this kernel
-release.
+Is there any chance it'll be in 5.10 or will it have to wait for the 5.11
+merge window?
 
-thanks,
+Also it should be applied to all supported/stable kernels. I guess that'll
+have to wait until it's in Linus tree according [1] to but I'm unsure if I
+need to trigger the action myself or if Greg (or Dave, according to [2]) will
+do it.
 
-greg k-h
+I looked at [3] and it seems that adding the CC: stable in my commit message
+maybe was an error because it's marked as a Failure, so if there's anything
+needed from me here, don't hesitate to ask.
 
+[1] https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+[2]
+https://www.kernel.org/doc/html/latest/networking/netdev-FAQ.html#q-how-can-i-tell-what-patches-are-queued-up-for-backporting-to-the-various-stable-releases
+[3] https://patchwork.kernel.org/bundle/netdev/stable/?state=*
+
+Regards,
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Yves-Alexis
