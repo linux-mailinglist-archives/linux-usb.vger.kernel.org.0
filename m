@@ -2,173 +2,277 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A26C2C26A0
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 13:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C314A2C26AC
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 14:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387757AbgKXM5R convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 24 Nov 2020 07:57:17 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:52841 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387436AbgKXM5Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 07:57:16 -0500
-Received: from mail-pg1-f200.google.com ([209.85.215.200])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1khXsf-0006Ot-Tx
-        for linux-usb@vger.kernel.org; Tue, 24 Nov 2020 12:57:14 +0000
-Received: by mail-pg1-f200.google.com with SMTP id b35so14954080pgl.8
-        for <linux-usb@vger.kernel.org>; Tue, 24 Nov 2020 04:57:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=X8iDYlGf8nwy/cRec/5+aTzq8vO1DEtqnmOZbXaUW3s=;
-        b=dpDE0BQzAqLfRAXD7QG95miFJa5zleewBGUcASalbTKM+09ejNSCn5A5Gvy37yLtUd
-         KH4puHI+mw9AWQma8OjFS9hMRmAMeLPzhFbIiaN68avDbZSvLVouoRxt9ANPgTBjEJon
-         B2KNrVH2RzA36Li63hXBYUj9tk/zTEvbwF4xvuP2Bzxy0UfutRa08Cw/PGkMGrb+vkDs
-         mUiyUe+os+pgnXV8GP8Y8tYFLiLXgspyQVI92rwVg1Kbe7wv7CHrASAzno+tllG+5VIq
-         2YsFi0BwMyWExs28pO+PeM5iZwj3kg9ma7fVUSaao8Ohn5W2se3k6UU8LENfFEadv2sr
-         Qr/A==
-X-Gm-Message-State: AOAM531X905wKQSs9IpjE5DJZcuLKFkQWjJKtg7bbZ689w3LUEMHGZ4k
-        BMFhY/mucquDsMR2ePuGls8yhEykbVPzDshBWUoJv/XKuS5xCFm/XL5arZhfIs0fiL5SVagvgeF
-        g+OYBIPF+WswcSDzScj3JBIW6r+DpxL2YKnyxnQ==
-X-Received: by 2002:a17:902:70cc:b029:d7:e8ad:26d4 with SMTP id l12-20020a17090270ccb02900d7e8ad26d4mr3807234plt.33.1606222632572;
-        Tue, 24 Nov 2020 04:57:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwozB2pCgo1Ni9DdJRatk31M0oTPqAtTl0z7nrnx3WvUiICbsTns3if3MiDh+TKIGCtfwofHg==
-X-Received: by 2002:a17:902:70cc:b029:d7:e8ad:26d4 with SMTP id l12-20020a17090270ccb02900d7e8ad26d4mr3807205plt.33.1606222632167;
-        Tue, 24 Nov 2020 04:57:12 -0800 (PST)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id i19sm13444182pgk.44.2020.11.24.04.57.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 24 Nov 2020 04:57:11 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.20.0.2.21\))
-Subject: Re: [PATCH] USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND
- quirkforLenovo A630Z TIO built-in usb-audio card
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <1503654237.281102.1605875117132.JavaMail.xmail@bj-wm-cp-6>
-Date:   Tue, 24 Nov 2020 20:57:07 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        johan <johan@kernel.org>, jonathan <jonathan@jdcox.net>,
-        tomasz <tomasz@meresinski.eu>,
-        Hans de Goede <hdegoede@redhat.com>,
-        dlaz <dlaz@chromium.org>,
-        "richard.o.dodd" <richard.o.dodd@gmail.com>,
-        kerneldev <kerneldev@karsmulder.nl>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <484458B3-EADF-48AC-94E0-13C3247783DA@canonical.com>
-References: <20201118123039.11696-1-penghao@uniontech.com>
- <49219711-84BE-44FC-BBFE-DD8D609CA26D@canonical.com>
- <1892790617.185900.1605788248261.JavaMail.xmail@bj-wm-cp-6>
- <7D73C39C-C3E2-4C08-A773-3D7582A6AA7D@canonical.com>
- <X7Z6RKu4T5IrhUFB@kroah.com>
- <FB40A0E5-5E3C-4FC6-B690-02F9785EC7D5@canonical.com>
- <X7Z/+Tehbmx54Fzb@kroah.com>
- <2FEF0396-33A8-4164-AB79-E5B8F87F6ABF@canonical.com>
- <1503654237.281102.1605875117132.JavaMail.xmail@bj-wm-cp-6>
-To:     =?utf-8?B?5b2t5rWp?= <penghao@uniontech.com>
-X-Mailer: Apple Mail (2.3654.20.0.2.21)
+        id S2387599AbgKXNAe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Nov 2020 08:00:34 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:7978 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732763AbgKXNAe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 08:00:34 -0500
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CgPJF5RJjzhcdg;
+        Tue, 24 Nov 2020 21:00:13 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 24 Nov 2020 21:00:25 +0800
+Subject: Re: [PATCH v6 2/3] usb: xhci: Use temporary buffer to consolidate SG
+To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+CC:     John Youn <John.Youn@synopsys.com>
+References: <cover.1606149078.git.joglekar@synopsys.com>
+ <29b919fe9c3780d2cdcae59f7230786e4bbe1d0c.1606149078.git.joglekar@synopsys.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <b757bf1c-a9ca-160f-d530-3bf4866d0063@huawei.com>
+Date:   Tue, 24 Nov 2020 21:00:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <29b919fe9c3780d2cdcae59f7230786e4bbe1d0c.1606149078.git.joglekar@synopsys.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi penghao,
+On 2020/11/24 0:38, Tejas Joglekar Wrote:
+> The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
+> each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
+> for HS. The controller loads and updates the TRB cache from the transfer
+> ring in system memory whenever the driver issues a start transfer or
+> update transfer command.
+> 
+> For chained TRBs, the Synopsys xHC requires that the total amount of
+> bytes for all TRBs loaded in the TRB cache be greater than or equal to 1
+> MPS. Or the chain ends within the TRB cache (with a last TRB).
+> 
+Is there a similar problem on Synopsys ehci controller?
+Because of the TRB cache��the EHCI controller's Next Link queue head is NULL.
 
-> On Nov 20, 2020, at 20:25, 彭浩 <penghao@uniontech.com> wrote:
+> If this requirement is not met, the controller will not be able to send
+> or receive a packet and it will hang causing a driver timeout and error.
 > 
+> This can be a problem if a class driver queues SG requests with many
+> small-buffer entries. The XHCI driver will create a chained TRB for each
+> entry which may trigger this issue.
 > 
-> > Seeking a better fix, we've tried a lot of things, including:
-> > - Check that the device's power/wakeup is disabled
-> > - Check that remote wakeup is off at the USB level
-> > - All the quirks in drivers/usb/core/quirks.c
-> Since the machine has been returned to the manufacturer, i can not provide dynamic debugging information.
-> Is there any other way to solve your doubts？
-
-Basically, no.
-
-It would be great if we can know whether the device is quiesced in U3 before suspend.
-Currently xHCI doesn't poll for U3 for global suspend.
-
-Kai-Heng
-
+> This patch adds logic to the XHCI driver to detect and prevent this from
+> happening.
 > 
-> peng hao 
+> For every (TRB_CACHE_SIZE - 2), we check the total buffer size of
+> the SG list and if the last window of (TRB_CACHE_SIZE - 2) SG list length
+> and we don't make up at least 1 MPS, we create a temporary buffer to
+> consolidate full SG list into the buffer.
 > 
-> 统信软件技术有限公司
+> We check at (TRB_CACHE_SIZE - 2) window because it is possible that there
+> would be a link and/or event data TRB that take up to 2 of the cache
+> entries.
 > 
-> UnionTech Software Technology Co., Ltd. 　
+> We discovered this issue with devices on other platforms but have not
+> yet come across any device that triggers this on Linux. But it could be
+> a real problem now or in the future. All it takes is N number of small
+> chained TRBs. And other instances of the Synopsys IP may have smaller
+> values for the TRB_CACHE_SIZE which would exacerbate the problem.
 > 
-> 官网：www.uniontech.com　　
+> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
+> ---
+>  drivers/usb/host/xhci-ring.c |   2 +-
+>  drivers/usb/host/xhci.c      | 129 ++++++++++++++++++++++++++++++++++-
+>  drivers/usb/host/xhci.h      |   4 ++
+>  3 files changed, 133 insertions(+), 2 deletions(-)
 > 
-> 
-> 
-> 此电子邮件消息仅供预期收件人使用，其中可能包含保密或特权使用信息。如果您不是预期收件人，请勿使用、传播、分发或复制此电子邮件或信赖此邮件采取任何行动。如果您误收了此邮件，请立即回复邮件通知统信软件技术有限公司发件人，并删除误收电子邮件及其相关附件。感谢配合！
-> 
-> This email message is intended only for the use of the individual or entity who/which is the intended recipient and may contain information that is privileged or confidential. If you are not the intended recipient, you are hereby notified that any use, dissemination, distribution or copying of, or taking any action in reliance on, this e-mail is strictly prohibited. If you have received this email in error, please notify UnionTech Software Technology  immediately by replying to this e-mail and immediately delete and discard all copies of the e-mail and the attachment thereto (if any). Thank you.
-> 
-> 
-> 
-> 
-> ----- Original Message -----
-> From:Kai-Heng Feng <kai.heng.feng@canonical.com> 
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>  
-> CC: 彭浩 <penghao@uniontech.com> johan <johan@kernel.org> jonathan <jonathan@jdcox.net> tomasz <tomasz@meresinski.eu> Hans de Goede <hdegoede@redhat.com> dlaz <dlaz@chromium.org> richard.o.dodd <richard.o.dodd@gmail.com> kerneldev <kerneldev@karsmulder.nl> linux-usb <linux-usb@vger.kernel.org> linux-kernel <linux-kernel@vger.kernel.org>  
-> Sent: 2020-11-20 02:27
-> Subject: Re:Re: [PATCH] USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND quirkforLenovo A630Z TIO built-in usb-audio card
-> 
-> 
-> 
-> > On Nov 19, 2020, at 22:23, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > 
-> > On Thu, Nov 19, 2020 at 10:12:02PM +0800, Kai-Heng Feng wrote:
-> >> 
-> >> 
-> >>> On Nov 19, 2020, at 21:59, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> >>> 
-> >>> On Thu, Nov 19, 2020 at 09:41:32PM +0800, Kai-Heng Feng wrote:
-> >>>> Hi penghao,
-> >>>> 
-> >>>>> On Nov 19, 2020, at 20:17, 彭浩 <penghao@uniontech.com> wrote:
-> >>>>> 
-> >>>>> root@uos-PC:/sys/bus/usb/devices/usb7# dmesg
-> >>>>> [ 0.000000] Linux version 4.19.0-6-amd64 (debian-kernel@lists.debian.org) (gcc version 8.3.0 (Debian 8.3.0-6)) #1 SMP Uos 4.19.67-11eagle (2020-03-21)
-> >>>> 
-> >>>> Thanks for the dmesg. But would it be possible to use mainline kernel enable dynamic debug?
-> >>>> 
-> >>>> But anyway, this is not a regular AMD or Intel platform, so I guess we can merge the quirk as is...
-> >>>> 
-> >>>> Kai-Heng
-> >>>> 
-> >>>>> [ 0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-4.19.0-6-amd64 root=UUID=e5a40c4f-d88e-4a4d-9414-a27892a31be7 ro splash console=ttyS0,115200n8 loglevel=7 DEEPIN_GFXMODE=0,1920x1080,1600x1200,1280x1024,1024x768
-> >>>>> [ 0.000000] Zhaoxin Linux Patch Version is V3.0.2 
-> >>>>> [ 0.000000] With Zhaoxin Shanghai CPU patch V2.0.0
-> >>> 
-> >>> What do you mean "not a regular"? This is an x86-variant chip platform,
-> >>> but what does that have to do with the USB quirk detection?
-> >> 
-> >> USB quirk detection should work fine. I was trying to find the root cause, but seeing it's a Zhaoxin CPU, that could be the reason why mainline kernel, which has many USB power management fixes, wasn't used.
-> >> 
-> >> penghao, is it possible to boot mainline kernel on Zhaoxin CPU?
-> > 
-> > There have been a number of small patches for this type of CPU merged
-> > over the past months, so I hope a mainline kernel works here :)
-> > 
-> > That being said, why would the platform matter for a USB device quirk?
-> 
-> No, it doesn't matter at all. 
-> Because I am not sure if it can boot a mainline kernel, and the author doesn't know how to enable dynamic debug to let us understand what really happens here.
-> 
-> Kai-Hen
-> 
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> 
-> 
-
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 167dae117f73..6d4dae5e5f21 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -3325,7 +3325,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+>  
+>  	full_len = urb->transfer_buffer_length;
+>  	/* If we have scatter/gather list, we use it. */
+> -	if (urb->num_sgs) {
+> +	if (urb->num_sgs && !(urb->transfer_flags & URB_DMA_MAP_SINGLE)) {
+>  		num_sgs = urb->num_mapped_sgs;
+>  		sg = urb->sg;
+>  		addr = (u64) sg_dma_address(sg);
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index d4a8d0efbbc4..5b0b5f1bb40d 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1259,6 +1259,108 @@ EXPORT_SYMBOL_GPL(xhci_resume);
+>  
+>  /*-------------------------------------------------------------------------*/
+>  
+> +static int xhci_map_temp_buffer(struct usb_hcd *hcd, struct urb *urb)
+> +{
+> +	void *temp;
+> +	int ret = 0;
+> +	unsigned int buf_len;
+> +	enum dma_data_direction dir;
+> +
+> +	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> +	buf_len = urb->transfer_buffer_length;
+> +
+> +	temp = kzalloc_node(buf_len, GFP_ATOMIC,
+> +			    dev_to_node(hcd->self.sysdev));
+> +
+> +	if (usb_urb_dir_out(urb))
+> +		sg_pcopy_to_buffer(urb->sg, urb->num_sgs,
+> +				   temp, buf_len, 0);
+> +
+> +	urb->transfer_buffer = temp;
+> +	urb->transfer_dma = dma_map_single(hcd->self.sysdev,
+> +					   urb->transfer_buffer,
+> +					   urb->transfer_buffer_length,
+> +					   dir);
+> +
+> +	if (dma_mapping_error(hcd->self.sysdev,
+> +			      urb->transfer_dma)) {
+> +		ret = -EAGAIN;
+> +		kfree(temp);
+> +	} else {
+> +		urb->transfer_flags |= URB_DMA_MAP_SINGLE;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
+> +					  struct urb *urb)
+> +{
+> +	bool ret = false;
+> +	unsigned int i;
+> +	unsigned int len = 0;
+> +	unsigned int trb_size;
+> +	unsigned int max_pkt;
+> +	struct scatterlist *sg;
+> +	struct scatterlist *tail_sg;
+> +
+> +	tail_sg = urb->sg;
+> +	max_pkt = usb_endpoint_maxp(&urb->ep->desc);
+> +
+> +	if (!urb->num_sgs)
+> +		return ret;
+> +
+> +	if (urb->dev->speed >= USB_SPEED_SUPER)
+> +		trb_size = TRB_CACHE_SIZE_SS;
+> +	else
+> +		trb_size = TRB_CACHE_SIZE_HS;
+> +
+> +	if (urb->transfer_buffer_length != 0 &&
+> +	    !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP)) {
+> +		for_each_sg(urb->sg, sg, urb->num_sgs, i) {
+> +			len = len + sg->length;
+> +			if (i > trb_size - 2) {
+> +				len = len - tail_sg->length;
+> +				if (len < max_pkt) {
+> +					ret = true;
+> +					break;
+> +				}
+> +
+> +				tail_sg = sg_next(tail_sg);
+> +			}
+> +		}
+> +	}
+> +	return ret;
+> +}
+> +
+> +static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+> +{
+> +	unsigned int len;
+> +	unsigned int buf_len;
+> +	enum dma_data_direction dir;
+> +
+> +	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> +
+> +	buf_len = urb->transfer_buffer_length;
+> +
+> +	if (IS_ENABLED(CONFIG_HAS_DMA) &&
+> +	    (urb->transfer_flags & URB_DMA_MAP_SINGLE))
+> +		dma_unmap_single(hcd->self.sysdev,
+> +				 urb->transfer_dma,
+> +				 urb->transfer_buffer_length,
+> +				 dir);
+> +
+> +	if (usb_urb_dir_in(urb))
+> +		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+> +					   urb->transfer_buffer,
+> +					   buf_len,
+> +					   0);
+> +
+> +	urb->transfer_flags &= ~URB_DMA_MAP_SINGLE;
+> +	kfree(urb->transfer_buffer);
+> +	urb->transfer_buffer = NULL;
+> +}
+> +
+>  /*
+>   * Bypass the DMA mapping if URB is suitable for Immediate Transfer (IDT),
+>   * we'll copy the actual data into the TRB address register. This is limited to
+> @@ -1268,13 +1370,37 @@ EXPORT_SYMBOL_GPL(xhci_resume);
+>  static int xhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+>  				gfp_t mem_flags)
+>  {
+> +	struct xhci_hcd *xhci;
+> +
+> +	xhci = hcd_to_xhci(hcd);
+> +
+>  	if (xhci_urb_suitable_for_idt(urb))
+>  		return 0;
+>  
+> +	if (xhci->quirks & XHCI_SG_TRB_CACHE_SIZE_QUIRK) {
+> +		if (xhci_urb_temp_buffer_required(hcd, urb))
+> +			return xhci_map_temp_buffer(hcd, urb);
+> +	}
+>  	return usb_hcd_map_urb_for_dma(hcd, urb, mem_flags);
+>  }
+>  
+> -/*
+> +static void xhci_unmap_urb_for_dma(struct usb_hcd *hcd, struct urb *urb)
+> +{
+> +	struct xhci_hcd *xhci;
+> +	bool unmap_temp_buf = false;
+> +
+> +	xhci = hcd_to_xhci(hcd);
+> +
+> +	if (urb->num_sgs && (urb->transfer_flags & URB_DMA_MAP_SINGLE))
+> +		unmap_temp_buf = true;
+> +
+> +	if ((xhci->quirks & XHCI_SG_TRB_CACHE_SIZE_QUIRK) && unmap_temp_buf)
+> +		xhci_unmap_temp_buf(hcd, urb);
+> +	else
+> +		usb_hcd_unmap_urb_for_dma(hcd, urb);
+> +}
+> +
+> +/**
+>   * xhci_get_endpoint_index - Used for passing endpoint bitmasks between the core and
+>   * HCDs.  Find the index for an endpoint given its descriptor.  Use the return
+>   * value to right shift 1 for the bitmask.
+> @@ -5329,6 +5455,7 @@ static const struct hc_driver xhci_hc_driver = {
+>  	 * managing i/o requests and associated device resources
+>  	 */
+>  	.map_urb_for_dma =      xhci_map_urb_for_dma,
+> +	.unmap_urb_for_dma =    xhci_unmap_urb_for_dma,
+>  	.urb_enqueue =		xhci_urb_enqueue,
+>  	.urb_dequeue =		xhci_urb_dequeue,
+>  	.alloc_dev =		xhci_alloc_dev,
+> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> index d90c0d5df3b3..25e57bc9c3cc 100644
+> --- a/drivers/usb/host/xhci.h
+> +++ b/drivers/usb/host/xhci.h
+> @@ -1330,6 +1330,10 @@ enum xhci_setup_dev {
+>  #define TRB_SIA			(1<<31)
+>  #define TRB_FRAME_ID(p)		(((p) & 0x7ff) << 20)
+>  
+> +/* TRB cache size for xHC with TRB cache */
+> +#define TRB_CACHE_SIZE_HS	8
+> +#define TRB_CACHE_SIZE_SS	16
+> +
+>  struct xhci_generic_trb {
+>  	__le32 field[4];
+>  };
+>Thanks,
+Liu Longfang
