@@ -2,172 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EC32C2593
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 13:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E642C25CD
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 13:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733257AbgKXMWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Nov 2020 07:22:39 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:50310 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732603AbgKXMWi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 07:22:38 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0AOCMTx4115256;
-        Tue, 24 Nov 2020 06:22:29 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1606220549;
-        bh=x24vlfzLyE77QIt6cp3BSR5WjGdYPmRgvAFaen/KIJc=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=QIkKAb25Vuey29w6HX8Ow0PzHRBn2OctfRqZsdPNPgBa3ChpUQdeFiMlQ18c4X/RT
-         j20EGTEkcBJl1jFhb84N7R73d47IwcBVSlRXUNmHGlZMrie19Xx+s14DwOfwexOtHG
-         3726w3BfWGVNO2H22LWn8XTMaZdipy7a/p4/RfC8=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0AOCMTqw008568
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Nov 2020 06:22:29 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 24
- Nov 2020 06:22:28 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 24 Nov 2020 06:22:28 -0600
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0AOCMQNf099790;
-        Tue, 24 Nov 2020 06:22:26 -0600
-Subject: Re: [PATCH] Revert "usb: cdns3: core: quit if it uses role switch
- class"
-To:     Peter Chen <peter.chen@nxp.com>
-CC:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
+        id S2387590AbgKXMfg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Nov 2020 07:35:36 -0500
+Received: from mga01.intel.com ([192.55.52.88]:52789 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387530AbgKXMfg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Nov 2020 07:35:36 -0500
+IronPort-SDR: H53SCl4JPQVVhId37oOeFXqR274E6UhpIl8vzNkvDO4jj/chI7U1HIY4v6FGFTpZ8T9HMrhUDZ
+ 6gIDZOz5zx2Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9814"; a="190060628"
+X-IronPort-AV: E=Sophos;i="5.78,366,1599548400"; 
+   d="scan'208";a="190060628"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 04:35:35 -0800
+IronPort-SDR: /VW7t1HEueGL6TMTcOaGlcfZ3+047NqtbZMYZsQlPCcv+yS3N8ky8H8smVbj4nMeafmgnj0745
+ GeBP4bshzFLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,366,1599548400"; 
+   d="scan'208";a="478483431"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga004.jf.intel.com with ESMTP; 24 Nov 2020 04:35:32 -0800
+Subject: Re: How to enable auto-suspend by default
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20201123115051.30047-1-rogerq@ti.com>
- <20201124064242.GA32310@b29397-desktop>
- <89067b6a-5b94-d7d2-b07a-f434c9e5e2bd@ti.com>
- <DBBPR04MB797982E6E190F0C0E0980F258BFB0@DBBPR04MB7979.eurprd04.prod.outlook.com>
- <bdb2b4cb-686e-9283-bc66-78808b92c349@ti.com>
- <20201124114641.GA9929@b29397-desktop>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <1c4fb95a-97b7-9022-7062-8fafcfe42c3d@ti.com>
-Date:   Tue, 24 Nov 2020 14:22:25 +0200
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
+References: <fe8ab4cab3740afd261fa902f14ecae002a1122d.camel@hadess.net>
+ <X6p6ubTOoMPUPPXi@kroah.com>
+ <DM6PR19MB2636C94B56D5FBC0BD98A1B0FAE90@DM6PR19MB2636.namprd19.prod.outlook.com>
+ <20201110172517.GC2495@lahna.fi.intel.com>
+ <30957f1a-1fe5-5d9a-101b-25f12fb93907@redhat.com>
+ <20201111143143.GV2495@lahna.fi.intel.com>
+ <30aa8c96-1809-8c5f-2305-5e39fbeba434@redhat.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <ecd964af-efdb-99c6-45cb-4979397fb324@linux.intel.com>
+Date:   Tue, 24 Nov 2020 14:37:11 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201124114641.GA9929@b29397-desktop>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <30aa8c96-1809-8c5f-2305-5e39fbeba434@redhat.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Peter,
-
-On 24/11/2020 13:47, Peter Chen wrote:
-> On 20-11-24 12:33:34, Roger Quadros wrote:
+On 23.11.2020 15.54, Hans de Goede wrote:
+> Hi,
+> 
+> On 11/11/20 3:31 PM, Mika Westerberg wrote:
+>> On Wed, Nov 11, 2020 at 12:27:32PM +0100, Hans de Goede wrote:
+>>> Hi,
+>>>
+>>> On 11/10/20 6:25 PM, Mika Westerberg wrote:
+>>>> On Tue, Nov 10, 2020 at 04:02:33PM +0000, Limonciello, Mario wrote:
+>>>>>>
+>>>>>> On Tue, Nov 10, 2020 at 11:57:07AM +0100, Bastien Nocera wrote:
+>>>>>>> Hey,
+>>>>>>>
+>>>>>>> systemd has been shipping this script to enable auto-suspend on a
+>>>>>>> number of USB and PCI devices:
+>>>>>>>
+>>>>>> https://github.com/systemd/systemd/blob/master/tools/chromiumos/gen_autosuspen
+>>>>>> d_rules.py
+>>>>>>>
+>>>>>>> The problem here is twofold. First, the list of devices is updated from
+>>>>>>> ChromeOS, and the original list obviously won't be updated by ChromeOS
+>>>>>>> developers unless a device listed exists in a ChromeBook computer,
+>>>>>>> which means a number of devices that do support autosuspend aren't
+>>>>>>> listed.
+>>>>>>>
+>>>>>>> The other problem is that this list needs to exist at all, and that it
+>>>>>>> doesn't seem possible for device driver developers (at various levels
+>>>>>>> of the stack) to opt-in to auto-suspend when all the variants of the
+>>>>>>> device (or at least detectable ones) support auto-suspend.
+>>>>>>
+>>>>>> A driver can say they support autosuspend today, but I think you are
+>>>>>> concerned about the devices that are controlled by class-compliant
+>>>>>> drivers, right?  And for those, no, we can't do this in the kernel as
+>>>>>> there are just too many broken devices out there.
+>>>>>>
 >>>>>
->>>>> I am sorry about that. Do you use role switch /sys entry, if you have
->>>>> used, I prefer using "usb-role-switch" property at dts to judge if SoC
->>>>> OTG signals or external signals for role switch. If you have not used
->>>>> it, I prefer only setting cdns->role_sw for role switch use cases.
+>>>>> I guess what Bastien is getting at is for newer devices supported by class
+>>>>> drivers rather than having to store an allowlist in udev rules, can we set
+>>>>> the allowlist in the kernel instead.  Then distributions that either don't
+>>>>> use systemd or don't regularly update udev rules from systemd can take
+>>>>> advantage of better defaults on modern hardware.
 >>>>>
+>>>>> The one item that stood out to me in that rules file was 8086:a0ed.
+>>>>> It's listed as "Volteer XHCI", but that same device ID is actually present
+>>>>> in an XPS 9310 in front of me as well and used by the xhci-pci kernel module.
+>>>>>
+>>>>> Given we're effectively ending up with the combination of runtime PM turned
+>>>>> on by udev rules, do we need something like this for that ID:
+>>>>>
+>>>>> https://github.com/torvalds/linux/commit/6a7c533d4a1854f54901a065d8c672e890400d8a
+>>>>>
+>>>>> @Mika Westerberg should 8086:a0ed be quirked like the TCSS xHCI too?
 >>>>
->>>> We use both hardware role switch and /sys entries for manually forcing a
->>>> certain role.
->>>>
->>>> We do not set any "usb-role-switch" property at DTS.
->>>>
->>>> Currently cdns->role_sw is being always set by driver irrespective of any DT
->>>> property, so this patch is clearly wrong and needs to be reverted.
->>>>
->>>> What do you think?
->>>>
+>>>> I think this one is the TGL PCH xHCI. The quirk currently for xHCI
+>>>> controllers that are part of the TCSS (Type-C SubSystem) where it is
+>>>> important to put all devices into low power mode whenever possible,
+>>>> otherwise it keeps the whole block on.
 >>>
->>> Could you accept below fix?
+>>> Note that there are currently some IDs missing from the xHCIs which
+>>> are part of the TCSS too. At least the id for the xHCI in the thunderbolt
+>>> controller on the Lenovo T14 gen 1 is missing. I started a discussion
+>>> about extending the kernel quirk list for this vs switching to hwdb
+>>> a while a go:
 >>>
->>> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
->>> index 2e469139769f..fdd52e87a7b2 100644
->>> --- a/drivers/usb/cdns3/core.c
->>> +++ b/drivers/usb/cdns3/core.c
->>> @@ -280,8 +280,8 @@ int cdns3_hw_role_switch(struct cdns3 *cdns)
->>>           enum usb_role real_role, current_role;
->>>           int ret = 0;
+>>> https://lore.kernel.org/linux-usb/b8b21ba3-0a8a-ff54-5e12-cf8960651086@redhat.com/
 >>>
->>> -       /* Depends on role switch class */
->>> -       if (cdns->role_sw)
->>> +       /* quit if switch role through external signals */
->>> +       if (device_property_read_bool(cdns->dev, "usb-role-switch"))
->>>                   return 0;
->>>
->>>           pm_runtime_get_sync(cdns->dev);
+>>> The conclusion back then was to switch to hwdb, but I never got around to this.
 >>
->> Although this will fix the issue I don't think this is making the driver to behave
->> as expected with usb-role-switch property.
+>> The reason I've added these to the xHCI driver is that it works even if
+>> you are running some really small userspace (like busybox). Also for the
+>> xHCI in TCSS we know for sure that it fully supports D3cold.
 >>
->> Now, even if usb-role-switch property is not present the driver will still register
->> the role switch driver.
->>
->> I think we need to register the role switch driver only if usb-role-switch property
->> is present. We would also need to set the default role if role-switch-default-mode is present.
->>
->> How about the following? It still doesn't handle role-switch-default-mode property though.
->>
+>> (The one you refer above is actually mistake from my side as I never
+>>  tested Alpine Ridge LP controller which I think this is).
 > 
-> Roger, you said you also use /sys entries (I suppose it means through role
-> switch class) to do role switch, with your change, there will be no /sys
-> entry for role switch.
+> Ok, so I'll submit a patch adding the 15c1 product-id for the
+> INTEL_ALPINE_RIDGE_LP_2C_XHCI controller to the list of ids for which we
+> set the XHCI_DEFAULT_PM_RUNTIME_ALLOW quirk. To fix the much too high
+> idle-power consumption problem on devices with this Alpine Ridge variant.
 
-Sorry for the confusion. Although we do need both features (SW role switch + HW role switch)
-I don't think it is required to operate simultaneously. If users need SW control they can set the DT flag.
-
-cheers,
--roger
+Thanks
 
 > 
-> Peter
-> 
->>>> We use both hardware role switch and /sys entries for manually forcing a
->>>> certain role.
-> 
-> 
-> 
-> 
->> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
->> index 4c1445cf2ad0..986b56a9940c 100644
->> --- a/drivers/usb/cdns3/core.c
->> +++ b/drivers/usb/cdns3/core.c
->> @@ -532,11 +532,13 @@ static int cdns3_probe(struct platform_device *pdev)
->>   	if (device_property_read_bool(dev, "usb-role-switch"))
->>   		sw_desc.fwnode = dev->fwnode;
->> -	cdns->role_sw = usb_role_switch_register(dev, &sw_desc);
->> -	if (IS_ERR(cdns->role_sw)) {
->> -		ret = PTR_ERR(cdns->role_sw);
->> -		dev_warn(dev, "Unable to register Role Switch\n");
->> -		goto err3;
->> +	if (device_property_read_bool(cdns->dev, "usb-role-switch")) {
->> +		cdns->role_sw = usb_role_switch_register(dev, &sw_desc);
->> +		if (IS_ERR(cdns->role_sw)) {
->> +			ret = PTR_ERR(cdns->role_sw);
->> +			dev_warn(dev, "Unable to register Role Switch\n");
->> +			goto err3;
->> +		}
->>   	}
->>   	if (cdns->wakeup_irq) {
+>>>> Typically we haven't done that for PCH side xHCI controllers though, but
+>>>> I don't see why not if it works that is. Adding Mathias to comment more
+>>>> on that since he is the xHCI maintainer.
+>>>
+>>> If we are also going to enable this for the non TCSS Intel XHCI controllers,
+>>> maybe just uncondtionally enable it for all Intel XHCI controllers, or
+>>> if necessary do a deny-list for some older models and enable it for anything
+>>> not on the deny-list (so all newer models). That should avoid the game of
+>>> whack-a-mole which we will have with this otherwise.
 >>
->>
->>
->> cheers,
->> -roger
->> -- 
->> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
->> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+>> This is really up to Mathias to decide. I'm fine either way :)
 > 
+> Ok, Matthias what do you think about this?
 
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+I don't think we are ready to enable runtime pm as default for all Intel xHCI controllers.
+The risk of xHCI not waking up when user plugs a mouse/keyboard, making the system unusable
+just seems too high compared to the powersaving benefit.
+
+The powersaving benefit from autosuspending the TCSS xHCI is a lot better, and we, (Mika mostly)
+has been able to verify they work.
+
+So I propose we for now continue adding TCSS xHCI controllers to the allowlist in kernel.
+For others I think a userspace allow/denylist makes sense.
+
+Long term goal would be default allow for all, with short denylist in kernel.
+
+Thanks
+Mathias 
