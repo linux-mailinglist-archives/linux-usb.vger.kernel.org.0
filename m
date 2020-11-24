@@ -2,112 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D952C25D9
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 13:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A26C2C26A0
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 13:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387598AbgKXMlA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Nov 2020 07:41:00 -0500
-Received: from mga06.intel.com ([134.134.136.31]:15149 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732586AbgKXMk6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Nov 2020 07:40:58 -0500
-IronPort-SDR: qrPUpnlB+/EflIDXZbsGDb3ZgjfV4nXlnqdxZ4fR/f1RmRb74Lq30rVUFYqPytGc+feTAs3CkZ
- VYueaf/mmLHQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9814"; a="233544099"
-X-IronPort-AV: E=Sophos;i="5.78,366,1599548400"; 
-   d="scan'208";a="233544099"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 04:40:58 -0800
-IronPort-SDR: wVxk2Tr3ujM05md0BjZmfmYXwSoHVDyajheQttyZ9yKYDeJevkYSHuNoY9u2TIb62wccvlWFaz
- cr+oa73BcYBg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,366,1599548400"; 
-   d="scan'208";a="478484393"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga004.jf.intel.com with ESMTP; 24 Nov 2020 04:40:56 -0800
-Subject: Re: [PATCH v2] xhci-pci: Allow host runtime PM as default for Intel
- Alpine Ridge LP
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20201124102039.11267-1-hdegoede@redhat.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <473730f3-4422-a20f-babc-c1ebd3c4ecff@linux.intel.com>
-Date:   Tue, 24 Nov 2020 14:42:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201124102039.11267-1-hdegoede@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S2387757AbgKXM5R convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 24 Nov 2020 07:57:17 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:52841 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387436AbgKXM5Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 07:57:16 -0500
+Received: from mail-pg1-f200.google.com ([209.85.215.200])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1khXsf-0006Ot-Tx
+        for linux-usb@vger.kernel.org; Tue, 24 Nov 2020 12:57:14 +0000
+Received: by mail-pg1-f200.google.com with SMTP id b35so14954080pgl.8
+        for <linux-usb@vger.kernel.org>; Tue, 24 Nov 2020 04:57:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=X8iDYlGf8nwy/cRec/5+aTzq8vO1DEtqnmOZbXaUW3s=;
+        b=dpDE0BQzAqLfRAXD7QG95miFJa5zleewBGUcASalbTKM+09ejNSCn5A5Gvy37yLtUd
+         KH4puHI+mw9AWQma8OjFS9hMRmAMeLPzhFbIiaN68avDbZSvLVouoRxt9ANPgTBjEJon
+         B2KNrVH2RzA36Li63hXBYUj9tk/zTEvbwF4xvuP2Bzxy0UfutRa08Cw/PGkMGrb+vkDs
+         mUiyUe+os+pgnXV8GP8Y8tYFLiLXgspyQVI92rwVg1Kbe7wv7CHrASAzno+tllG+5VIq
+         2YsFi0BwMyWExs28pO+PeM5iZwj3kg9ma7fVUSaao8Ohn5W2se3k6UU8LENfFEadv2sr
+         Qr/A==
+X-Gm-Message-State: AOAM531X905wKQSs9IpjE5DJZcuLKFkQWjJKtg7bbZ689w3LUEMHGZ4k
+        BMFhY/mucquDsMR2ePuGls8yhEykbVPzDshBWUoJv/XKuS5xCFm/XL5arZhfIs0fiL5SVagvgeF
+        g+OYBIPF+WswcSDzScj3JBIW6r+DpxL2YKnyxnQ==
+X-Received: by 2002:a17:902:70cc:b029:d7:e8ad:26d4 with SMTP id l12-20020a17090270ccb02900d7e8ad26d4mr3807234plt.33.1606222632572;
+        Tue, 24 Nov 2020 04:57:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwozB2pCgo1Ni9DdJRatk31M0oTPqAtTl0z7nrnx3WvUiICbsTns3if3MiDh+TKIGCtfwofHg==
+X-Received: by 2002:a17:902:70cc:b029:d7:e8ad:26d4 with SMTP id l12-20020a17090270ccb02900d7e8ad26d4mr3807205plt.33.1606222632167;
+        Tue, 24 Nov 2020 04:57:12 -0800 (PST)
+Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
+        by smtp.gmail.com with ESMTPSA id i19sm13444182pgk.44.2020.11.24.04.57.09
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 24 Nov 2020 04:57:11 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.20.0.2.21\))
+Subject: Re: [PATCH] USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND
+ quirkforLenovo A630Z TIO built-in usb-audio card
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <1503654237.281102.1605875117132.JavaMail.xmail@bj-wm-cp-6>
+Date:   Tue, 24 Nov 2020 20:57:07 +0800
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        johan <johan@kernel.org>, jonathan <jonathan@jdcox.net>,
+        tomasz <tomasz@meresinski.eu>,
+        Hans de Goede <hdegoede@redhat.com>,
+        dlaz <dlaz@chromium.org>,
+        "richard.o.dodd" <richard.o.dodd@gmail.com>,
+        kerneldev <kerneldev@karsmulder.nl>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <484458B3-EADF-48AC-94E0-13C3247783DA@canonical.com>
+References: <20201118123039.11696-1-penghao@uniontech.com>
+ <49219711-84BE-44FC-BBFE-DD8D609CA26D@canonical.com>
+ <1892790617.185900.1605788248261.JavaMail.xmail@bj-wm-cp-6>
+ <7D73C39C-C3E2-4C08-A773-3D7582A6AA7D@canonical.com>
+ <X7Z6RKu4T5IrhUFB@kroah.com>
+ <FB40A0E5-5E3C-4FC6-B690-02F9785EC7D5@canonical.com>
+ <X7Z/+Tehbmx54Fzb@kroah.com>
+ <2FEF0396-33A8-4164-AB79-E5B8F87F6ABF@canonical.com>
+ <1503654237.281102.1605875117132.JavaMail.xmail@bj-wm-cp-6>
+To:     =?utf-8?B?5b2t5rWp?= <penghao@uniontech.com>
+X-Mailer: Apple Mail (2.3654.20.0.2.21)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24.11.2020 12.20, Hans de Goede wrote:
-> The xHCI controller on Alpine Ridge LP keeps the whole Thunderbolt
-> controller awake if the host controller is not allowed to sleep.
-> This is the case even if no USB devices are connected to the host.
-> 
-> Add the Intel Alpine Ridge LP product-id to the list of product-ids
-> for which we allow runtime PM by default.
-> 
-> Fixes: 2815ef7fe4d4 ("xhci-pci: allow host runtime PM as default for Intel Alpine and Titan Ridge")
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-> Changes in v2:
-> -Fixup commit msg (add missing Ridge in a few places, caps)
-> -Add Mika's Reviewed-by
-> ---
+Hi penghao,
 
-Thanks, adding
+> On Nov 20, 2020, at 20:25, 彭浩 <penghao@uniontech.com> wrote:
+> 
+> 
+> > Seeking a better fix, we've tried a lot of things, including:
+> > - Check that the device's power/wakeup is disabled
+> > - Check that remote wakeup is off at the USB level
+> > - All the quirks in drivers/usb/core/quirks.c
+> Since the machine has been returned to the manufacturer, i can not provide dynamic debugging information.
+> Is there any other way to solve your doubts？
 
--Mathias
+Basically, no.
+
+It would be great if we can know whether the device is quiesced in U3 before suspend.
+Currently xHCI doesn't poll for U3 for global suspend.
+
+Kai-Heng
+
+> 
+> peng hao 
+> 
+> 统信软件技术有限公司
+> 
+> UnionTech Software Technology Co., Ltd. 　
+> 
+> 官网：www.uniontech.com　　
+> 
+> 
+> 
+> 此电子邮件消息仅供预期收件人使用，其中可能包含保密或特权使用信息。如果您不是预期收件人，请勿使用、传播、分发或复制此电子邮件或信赖此邮件采取任何行动。如果您误收了此邮件，请立即回复邮件通知统信软件技术有限公司发件人，并删除误收电子邮件及其相关附件。感谢配合！
+> 
+> This email message is intended only for the use of the individual or entity who/which is the intended recipient and may contain information that is privileged or confidential. If you are not the intended recipient, you are hereby notified that any use, dissemination, distribution or copying of, or taking any action in reliance on, this e-mail is strictly prohibited. If you have received this email in error, please notify UnionTech Software Technology  immediately by replying to this e-mail and immediately delete and discard all copies of the e-mail and the attachment thereto (if any). Thank you.
+> 
+> 
+> 
+> 
+> ----- Original Message -----
+> From:Kai-Heng Feng <kai.heng.feng@canonical.com> 
+> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>  
+> CC: 彭浩 <penghao@uniontech.com> johan <johan@kernel.org> jonathan <jonathan@jdcox.net> tomasz <tomasz@meresinski.eu> Hans de Goede <hdegoede@redhat.com> dlaz <dlaz@chromium.org> richard.o.dodd <richard.o.dodd@gmail.com> kerneldev <kerneldev@karsmulder.nl> linux-usb <linux-usb@vger.kernel.org> linux-kernel <linux-kernel@vger.kernel.org>  
+> Sent: 2020-11-20 02:27
+> Subject: Re:Re: [PATCH] USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND quirkforLenovo A630Z TIO built-in usb-audio card
+> 
+> 
+> 
+> > On Nov 19, 2020, at 22:23, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > 
+> > On Thu, Nov 19, 2020 at 10:12:02PM +0800, Kai-Heng Feng wrote:
+> >> 
+> >> 
+> >>> On Nov 19, 2020, at 21:59, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> >>> 
+> >>> On Thu, Nov 19, 2020 at 09:41:32PM +0800, Kai-Heng Feng wrote:
+> >>>> Hi penghao,
+> >>>> 
+> >>>>> On Nov 19, 2020, at 20:17, 彭浩 <penghao@uniontech.com> wrote:
+> >>>>> 
+> >>>>> root@uos-PC:/sys/bus/usb/devices/usb7# dmesg
+> >>>>> [ 0.000000] Linux version 4.19.0-6-amd64 (debian-kernel@lists.debian.org) (gcc version 8.3.0 (Debian 8.3.0-6)) #1 SMP Uos 4.19.67-11eagle (2020-03-21)
+> >>>> 
+> >>>> Thanks for the dmesg. But would it be possible to use mainline kernel enable dynamic debug?
+> >>>> 
+> >>>> But anyway, this is not a regular AMD or Intel platform, so I guess we can merge the quirk as is...
+> >>>> 
+> >>>> Kai-Heng
+> >>>> 
+> >>>>> [ 0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-4.19.0-6-amd64 root=UUID=e5a40c4f-d88e-4a4d-9414-a27892a31be7 ro splash console=ttyS0,115200n8 loglevel=7 DEEPIN_GFXMODE=0,1920x1080,1600x1200,1280x1024,1024x768
+> >>>>> [ 0.000000] Zhaoxin Linux Patch Version is V3.0.2 
+> >>>>> [ 0.000000] With Zhaoxin Shanghai CPU patch V2.0.0
+> >>> 
+> >>> What do you mean "not a regular"? This is an x86-variant chip platform,
+> >>> but what does that have to do with the USB quirk detection?
+> >> 
+> >> USB quirk detection should work fine. I was trying to find the root cause, but seeing it's a Zhaoxin CPU, that could be the reason why mainline kernel, which has many USB power management fixes, wasn't used.
+> >> 
+> >> penghao, is it possible to boot mainline kernel on Zhaoxin CPU?
+> > 
+> > There have been a number of small patches for this type of CPU merged
+> > over the past months, so I hope a mainline kernel works here :)
+> > 
+> > That being said, why would the platform matter for a USB device quirk?
+> 
+> No, it doesn't matter at all. 
+> Because I am not sure if it can boot a mainline kernel, and the author doesn't know how to enable dynamic debug to let us understand what really happens here.
+> 
+> Kai-Hen
+> 
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> 
+> 
+
