@@ -2,97 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7FB2C205E
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 09:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C66F2C20F3
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 10:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730808AbgKXIuI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Nov 2020 03:50:08 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:65510 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730519AbgKXIuI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 03:50:08 -0500
-X-UUID: 9befa535e3a34f3e90b751a6e93804cb-20201124
-X-UUID: 9befa535e3a34f3e90b751a6e93804cb-20201124
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <min.guo@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 493252092; Tue, 24 Nov 2020 16:50:01 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 24 Nov 2020 16:49:58 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 24 Nov 2020 16:49:59 +0800
-From:   <min.guo@mediatek.com>
-To:     Bin Liu <b-liu@ti.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1730840AbgKXJNw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Nov 2020 04:13:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727477AbgKXJNw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 04:13:52 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDA4C0613D6;
+        Tue, 24 Nov 2020 01:13:51 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id s30so27866481lfc.4;
+        Tue, 24 Nov 2020 01:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fIukb1V/mzn93MU1dQnXMsPLeNbtxaANkhBLdUp3br0=;
+        b=Cs3k1SZ7ifHsNVz0CZW36NkPQFd0rGwgER9f8cZGQQko1ikOKhr4QWnWr7eWc7Yzfc
+         MDtohI4WKe5AtxCJOwRVbfnbEqWzt6iwZKRcsWl6Zntdve4L6np4Ltdc8UA1Ybq4Vx+f
+         jkTbfww4FtxD1tOa71zcmihcXFm1DoAyCkty0gzyYBGMpTbPJHxtlmGYgnyZCvOg7WwG
+         /OEiGh7E4T52ddQQ33opkEjHCbtbasseciyiYlm9rrkUzHsQog+59kJpgL/e/JVl9bZ2
+         Q9bgzkKdhB0y23+hR20ySeSipeqIN5ffi6/V9lvozoC6G/epREtERZS8gD3NrAhsfq5E
+         gy1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=fIukb1V/mzn93MU1dQnXMsPLeNbtxaANkhBLdUp3br0=;
+        b=A5/2/CYeKhVCmukyL2KJH50MYdLk5UbvMDpN2DmjzCk5PLTJyn62IsgKEZJUo3lKI6
+         ISvRvUu3c/Gpdbl8rq1eS61nhVRZO3H5xkSzlMS/WSY3KTz1K/sPSH5M9CkTmYKxT08v
+         mcsaKHsFqk/0kgnJa7VnjcuriYyw44apCBFza+2Hes4QUC/Q6SJ3J5gXmYmvIIaA+C3z
+         08IA9giUMgGwD4R7Rj1mNdApyEO0FltV/T+kQfXBSVjRrCCOifbBf4VVHsjcnFjDk02y
+         O7OTdXQTpwo05rfT7Fw8i9GvF7ga3y309dSNChVpcwIMoES1v2E6bY4SZ5lvMHAmDPmX
+         rbtQ==
+X-Gm-Message-State: AOAM533gNbsz9I4NHmbIdHlaTF2pf7OtSxUAe8Dj5/81JozTgv/x5lPt
+        zyIovb/uWYQvBQDlqqEpWTs=
+X-Google-Smtp-Source: ABdhPJxbyG0352c86lWvNDZnJDqhA2YOWXcRsyfKquJjBhPyD4Ni9BJBwtvNNPtm+8dxHSAwjj+CPw==
+X-Received: by 2002:a19:7b06:: with SMTP id w6mr1484289lfc.260.1606209230293;
+        Tue, 24 Nov 2020 01:13:50 -0800 (PST)
+Received: from ?IPv6:2a00:1fa0:42b3:ccad:a982:d97f:90ed:ada1? ([2a00:1fa0:42b3:ccad:a982:d97f:90ed:ada1])
+        by smtp.gmail.com with ESMTPSA id 6sm253081ljr.127.2020.11.24.01.13.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2020 01:13:49 -0800 (PST)
+Subject: Re: [PATCH v3] usb: musb: remove unused variable 'devctl'
+To:     min.guo@mediatek.com, Bin Liu <b-liu@ti.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Min Guo <min.guo@mediatek.com>
-Subject: [PATCH v3] usb: musb: remove unused variable 'devctl'
-Date:   Tue, 24 Nov 2020 16:49:55 +0800
-Message-ID: <20201124084955.30270-1-min.guo@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20201124084955.30270-1-min.guo@mediatek.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <c2f3f643-8514-5c4a-dd52-7abc8a6dc501@gmail.com>
+Date:   Tue, 24 Nov 2020 12:13:42 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 1E15F157744AEC9989CA4857FFB6D99450DE2308CA458A37E137A2127E0005752000:8
-X-MTK:  N
+In-Reply-To: <20201124084955.30270-1-min.guo@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Min Guo <min.guo@mediatek.com>
+Hello!
 
-Remove unused 'devctl' variable to fix compile warnings:
+On 24.11.2020 11:49, min.guo@mediatek.com wrote:
 
-    drivers/usb/musb/musbhsdma.c: In function 'dma_controller_irq':
-    drivers/usb/musb/musbhsdma.c:324:8: warning: variable 'devctl' set
-    but not used [-Wunused-but-set-variable]
+> From: Min Guo <min.guo@mediatek.com>
+> 
+> Remove unused 'devctl' variable to fix compile warnings:
+> 
+>      drivers/usb/musb/musbhsdma.c: In function 'dma_controller_irq':
+>      drivers/usb/musb/musbhsdma.c:324:8: warning: variable 'devctl' set
+>      but not used [-Wunused-but-set-variable]
+> 
+> Signed-off-by: Min Guo <min.guo@mediatek.com>
+> ---
+> changes in v3
+> suggested by Greg Kroah-Hartman:
+> Add a comment.
+> 
+> changes in v2
+> suggested by Alan Stern:
+> Add void before musb_read to indicate that the register MUSB_DEVCTL
+> was intended to be read and discarded.
+> ---
+>   drivers/usb/musb/musbhsdma.c | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/musb/musbhsdma.c b/drivers/usb/musb/musbhsdma.c
+> index 0aacfc8be5a1..2a345b4ad015 100644
+> --- a/drivers/usb/musb/musbhsdma.c
+> +++ b/drivers/usb/musb/musbhsdma.c
+[...]
+> @@ -336,7 +334,11 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
+>   						< musb_channel->len) ?
+>   					"=> reconfig 0" : "=> complete");
+>   
+> -				devctl = musb_readb(mbase, MUSB_DEVCTL);
+> +				/*
+> +				 * Some hardware may need to read the
+> +				 * MUSB_DEVCTL register once to take effect.
+> +				 */
+> +				(void)musb_readb(mbase, MUSB_DEVCTL);
 
-Signed-off-by: Min Guo <min.guo@mediatek.com>
----
-changes in v3
-suggested by Greg Kroah-Hartman:
-Add a comment.
+    Hm, forcibly reading DevCtl in the DMA driver... sounds quite 
+nonsensically. Lemme take a look...
 
-changes in v2
-suggested by Alan Stern:
-Add void before musb_read to indicate that the register MUSB_DEVCTL
-was intended to be read and discarded.
----
- drivers/usb/musb/musbhsdma.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+[...]
 
-diff --git a/drivers/usb/musb/musbhsdma.c b/drivers/usb/musb/musbhsdma.c
-index 0aacfc8be5a1..2a345b4ad015 100644
---- a/drivers/usb/musb/musbhsdma.c
-+++ b/drivers/usb/musb/musbhsdma.c
-@@ -321,8 +321,6 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
- 				musb_channel->channel.status =
- 					MUSB_DMA_STATUS_BUS_ABORT;
- 			} else {
--				u8 devctl;
--
- 				addr = musb_read_hsdma_addr(mbase,
- 						bchannel);
- 				channel->actual_len = addr
-@@ -336,7 +334,11 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
- 						< musb_channel->len) ?
- 					"=> reconfig 0" : "=> complete");
- 
--				devctl = musb_readb(mbase, MUSB_DEVCTL);
-+				/*
-+				 * Some hardware may need to read the
-+				 * MUSB_DEVCTL register once to take effect.
-+				 */
-+				(void)musb_readb(mbase, MUSB_DEVCTL);
- 
- 				channel->status = MUSB_DMA_STATUS_FREE;
- 
--- 
-2.18.0
-
+MBR, Sergei
