@@ -2,187 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9802C2372
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 12:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8E02C24B3
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 12:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732253AbgKXLAZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Nov 2020 06:00:25 -0500
-Received: from mga02.intel.com ([134.134.136.20]:17580 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726628AbgKXLAY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Nov 2020 06:00:24 -0500
-IronPort-SDR: 4fuxdfLH0cANVwLD8F0+W8vnP4OZL0xNUORJ5CuQfPSTNiwoSMUM1zfE5OOJvFoTLLfYerib5h
- AjdMLwDKlzbg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9814"; a="158968018"
-X-IronPort-AV: E=Sophos;i="5.78,366,1599548400"; 
-   d="scan'208";a="158968018"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 03:00:24 -0800
-IronPort-SDR: 7Srde/6ru/0gKKhg+a+Vrj08hTovIQC5xtCaacSiSQcJ8H2T99Wr45V/NZ3sm1b9cR3ZOb3aLW
- JxOhQOHourbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,366,1599548400"; 
-   d="scan'208";a="432568841"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 24 Nov 2020 03:00:21 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 24 Nov 2020 13:00:20 +0200
-Date:   Tue, 24 Nov 2020 13:00:20 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Roger Quadros <rogerq@ti.com>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Revert "usb: cdns3: core: quit if it uses role switch
- class"
-Message-ID: <20201124110020.GA1008337@kuha.fi.intel.com>
-References: <20201123115051.30047-1-rogerq@ti.com>
- <20201124064242.GA32310@b29397-desktop>
- <89067b6a-5b94-d7d2-b07a-f434c9e5e2bd@ti.com>
- <DBBPR04MB797982E6E190F0C0E0980F258BFB0@DBBPR04MB7979.eurprd04.prod.outlook.com>
- <bdb2b4cb-686e-9283-bc66-78808b92c349@ti.com>
+        id S1732856AbgKXLiv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Nov 2020 06:38:51 -0500
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:47347 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731539AbgKXLiv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 06:38:51 -0500
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id hWeik0w9LDuFjhWelkd1F1; Tue, 24 Nov 2020 12:38:48 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1606217928; bh=sHbi/2KeT1EFxvwIn3BrHx507chG0pyiJyL2Q2MPja0=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=NCTsrmXFmTOrI+x0ciNj/VvfhemYW7gEnFu7ubjWkvLLzGIg4oRUbIEEeEU07Zunl
+         lnq8V0p2E2X+tENle9rNqVP/lkG3cL/hmZfz07cP7QniSi6HTPQwWKX7oEu4CwyuQP
+         Qfu7NnwvWkJOedsGYK/z3sf56u8/GCGLjnCEgD5R0786xcGCEWYN9Mk9ClipA0QXtv
+         Re0EhBNwaYG8Ftr0jXmBlyq4ZQBM2+toCfnBctTyMCneH8B3meZn6E/fejoFf2Wcd2
+         6LgICMKQZ4sFMJ/A1gB6k7ETD712secUQ2wadp40Q5QjfssDiBb13bWGzzkhAjcZCJ
+         AokrjtOEOyFWA==
+Subject: Re: memory leak in hub_event
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        syzbot <syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com>
+Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+References: <20201123215345.GA721643@rowland.harvard.edu>
+ <0000000000004b629f05b4cd7124@google.com>
+ <20201123222428.GB721643@rowland.harvard.edu>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <c2cf1a80-ec47-69ac-c3e2-1b0e32447ef2@xs4all.nl>
+Date:   Tue, 24 Nov 2020 12:38:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <20201123222428.GB721643@rowland.harvard.edu>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bdb2b4cb-686e-9283-bc66-78808b92c349@ti.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfOjyUnVEHvIHT2WcPlFP8kwIIjD1z5FINgl61SGmpqcuTCMHXKdEwCw2eRyZZU4adkiQVm6X4PpL1wZV3A/K3vaPSGKjlb90lBqjCgF/kmlsSFqcxtXj
+ U2J51dMTl1RJL7jCiE/VTYxe4yvDgCZxKNJQ19QifpwDs1MCXaBlZG3dAKjOeizLgYsfpznYLEv2dVWZTSaWYH5wwQxYkJzPPg92MzyVZVxrKRzEFlVR+jPz
+ 0FVVD8aQIx7NqKTrBb2f2OQGqOK7Tw5ge6XBOjL+y1r9WwvMnbURdOa1bQ19b4awH0E4RTSNN8nv3cO41IWH+zLJHXhtEXIoMHKxfQ5ALw0xxNust+6SQUXP
+ 2YhdrS57limYwvQwK8aeqtMP8WTbS0D2dMWCICmHpkV+Sj0uffz6j+PJFRt4Q3vsRQx4r7ph
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 12:33:34PM +0200, Roger Quadros wrote:
-> +Heikki
+On 23/11/2020 23:24, Alan Stern wrote:
+> On Mon, Nov 23, 2020 at 02:09:05PM -0800, syzbot wrote:
+>> Hello,
+>>
+>> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+>> memory leak in rxrpc_lookup_local
+>>
+>> BUG: memory leak
+>> unreferenced object 0xffff888117ab9900 (size 256):
+>>   comm "syz-executor.0", pid 8883, jiffies 4294943811 (age 433.620s)
+>>   hex dump (first 32 bytes):
+>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>>     00 00 00 00 0a 00 00 00 00 80 cb 17 81 88 ff ff  ................
+>>   backtrace:
+>>     [<000000009003383a>] kmalloc include/linux/slab.h:552 [inline]
+>>     [<000000009003383a>] kzalloc include/linux/slab.h:664 [inline]
+>>     [<000000009003383a>] rxrpc_alloc_local net/rxrpc/local_object.c:79 [inline]
+>>     [<000000009003383a>] rxrpc_lookup_local+0x1c1/0x760 net/rxrpc/local_object.c:244
+>>     [<00000000609410d3>] rxrpc_bind+0x174/0x240 net/rxrpc/af_rxrpc.c:149
+>>     [<00000000661f73ad>] afs_open_socket+0xdb/0x200 fs/afs/rxrpc.c:64
+>>     [<00000000e3eb5768>] afs_net_init+0x2b4/0x340 fs/afs/main.c:126
+>>     [<000000002c6bf109>] ops_init+0x4e/0x190 net/core/net_namespace.c:152
+>>     [<000000009ce0aa62>] setup_net+0xdb/0x2d0 net/core/net_namespace.c:342
+>>     [<00000000db8c8dc2>] copy_net_ns+0x14b/0x320 net/core/net_namespace.c:483
+>>     [<00000000b04b70a8>] create_new_namespaces+0x199/0x4e0 kernel/nsproxy.c:110
+>>     [<000000005dc01eb8>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:231
+>>     [<00000000422ec6bd>] ksys_unshare+0x2fe/0x5c0 kernel/fork.c:2949
+>>     [<0000000042f77bee>] __do_sys_unshare kernel/fork.c:3017 [inline]
+>>     [<0000000042f77bee>] __se_sys_unshare kernel/fork.c:3015 [inline]
+>>     [<0000000042f77bee>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3015
+>>     [<00000000e58e69f9>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+>>     [<000000000a67195e>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 > 
-> Peter,
+> Okay, that confirms it.  This is a completely different memory leak, as 
+> can be seen by comparing the stack trace with the previous one.  The 
+> problem with the gspca driver is gone.
 > 
-> On 24/11/2020 11:57, Peter Chen wrote:
-> > 
-> > 
-> > 
-> > Best regards,
-> > Peter Chen
-> > 
-> > > -----Original Message-----
-> > > From: Roger Quadros <rogerq@ti.com>
-> > > Sent: 2020年11月24日 17:39
-> > > To: Peter Chen <peter.chen@nxp.com>
-> > > Cc: pawell@cadence.com; gregkh@linuxfoundation.org; balbi@kernel.org;
-> > > linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org
-> > > Subject: Re: [PATCH] Revert "usb: cdns3: core: quit if it uses role switch class"
-> > > 
-> > > Peter,
-> > > 
-> > > On 24/11/2020 08:43, Peter Chen wrote:
-> > > > On 20-11-23 13:50:51, Roger Quadros wrote:
-> > > > > This reverts commit 50642709f6590fe40afa6d22c32f23f5b842aed5.
-> > > > > 
-> > > > > This commit breaks hardware based role switching on TI platforms.
-> > > > > cdns->role_sw is always going to be non-zero as it is a pointer
-> > > > > to the usb_role_switch instance. Some other means needs to be used if
-> > > > > hardware based role switching is not required by the platform.
-> > > > > 
-> > > > > Signed-off-by: Roger Quadros <rogerq@ti.com>
-> > > > > ---
-> > > > >    drivers/usb/cdns3/core.c | 4 ----
-> > > > >    1 file changed, 4 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> > > > > index a0f73d4711ae..4c1445cf2ad0 100644
-> > > > > --- a/drivers/usb/cdns3/core.c
-> > > > > +++ b/drivers/usb/cdns3/core.c
-> > > > > @@ -280,10 +280,6 @@ int cdns3_hw_role_switch(struct cdns3 *cdns)
-> > > > >    	enum usb_role real_role, current_role;
-> > > > >    	int ret = 0;
-> > > > > 
-> > > > > -	/* Depends on role switch class */
-> > > > > -	if (cdns->role_sw)
-> > > > > -		return 0;
-> > > > > -
-> > > > >    	pm_runtime_get_sync(cdns->dev);
-> > > > > 
-> > > > >    	current_role = cdns->role;
-> > > > > --
-> > > > 
-> > > > Hi Roger,
-> > > > 
-> > > > I am sorry about that. Do you use role switch /sys entry, if you have
-> > > > used, I prefer using "usb-role-switch" property at dts to judge if SoC
-> > > > OTG signals or external signals for role switch. If you have not used
-> > > > it, I prefer only setting cdns->role_sw for role switch use cases.
-> > > > 
-> > > 
-> > > We use both hardware role switch and /sys entries for manually forcing a
-> > > certain role.
-> > > 
-> > > We do not set any "usb-role-switch" property at DTS.
-> > > 
-> > > Currently cdns->role_sw is being always set by driver irrespective of any DT
-> > > property, so this patch is clearly wrong and needs to be reverted.
-> > > 
-> > > What do you think?
-> > > 
-> > 
-> > Could you accept below fix?
-> > 
-> > diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> > index 2e469139769f..fdd52e87a7b2 100644
-> > --- a/drivers/usb/cdns3/core.c
-> > +++ b/drivers/usb/cdns3/core.c
-> > @@ -280,8 +280,8 @@ int cdns3_hw_role_switch(struct cdns3 *cdns)
-> >          enum usb_role real_role, current_role;
-> >          int ret = 0;
-> > 
-> > -       /* Depends on role switch class */
-> > -       if (cdns->role_sw)
-> > +       /* quit if switch role through external signals */
-> > +       if (device_property_read_bool(cdns->dev, "usb-role-switch"))
-> >                  return 0;
-> > 
-> >          pm_runtime_get_sync(cdns->dev);
-> 
-> Although this will fix the issue I don't think this is making the driver to behave
-> as expected with usb-role-switch property.
-> 
-> Now, even if usb-role-switch property is not present the driver will still register
-> the role switch driver.
-> 
-> I think we need to register the role switch driver only if usb-role-switch property
-> is present. We would also need to set the default role if role-switch-default-mode is present.
-> 
-> How about the following? It still doesn't handle role-switch-default-mode property though.
-> 
-> 
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index 4c1445cf2ad0..986b56a9940c 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -532,11 +532,13 @@ static int cdns3_probe(struct platform_device *pdev)
->  	if (device_property_read_bool(dev, "usb-role-switch"))
->  		sw_desc.fwnode = dev->fwnode;
-> -	cdns->role_sw = usb_role_switch_register(dev, &sw_desc);
-> -	if (IS_ERR(cdns->role_sw)) {
-> -		ret = PTR_ERR(cdns->role_sw);
-> -		dev_warn(dev, "Unable to register Role Switch\n");
-> -		goto err3;
-> +	if (device_property_read_bool(cdns->dev, "usb-role-switch")) {
-> +		cdns->role_sw = usb_role_switch_register(dev, &sw_desc);
-> +		if (IS_ERR(cdns->role_sw)) {
-> +			ret = PTR_ERR(cdns->role_sw);
-> +			dev_warn(dev, "Unable to register Role Switch\n");
-> +			goto err3;
-> +		}
->  	}
->  	if (cdns->wakeup_irq) {
+> Mauro/Hans, what should I do with the patch?
 
-Makes sense to me. FWIW:
+Just post it to linux-media and I'll pick it up as gspca maintainer.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Regards,
 
-thanks,
-
--- 
-heikki
+	Hans
