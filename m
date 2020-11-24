@@ -2,57 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D2C2C2D1D
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 17:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5832C2D1E
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 17:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390424AbgKXQje (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Nov 2020 11:39:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
+        id S2390425AbgKXQjg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Nov 2020 11:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726105AbgKXQjd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 11:39:33 -0500
-Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4385C0613D6
-        for <linux-usb@vger.kernel.org>; Tue, 24 Nov 2020 08:39:33 -0800 (PST)
-Received: by mail-qv1-xf44.google.com with SMTP id 9so6697488qvk.9
-        for <linux-usb@vger.kernel.org>; Tue, 24 Nov 2020 08:39:33 -0800 (PST)
+        with ESMTP id S1726105AbgKXQjg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 11:39:36 -0500
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D43C0613D6
+        for <linux-usb@vger.kernel.org>; Tue, 24 Nov 2020 08:39:36 -0800 (PST)
+Received: by mail-qt1-x844.google.com with SMTP id f93so16479101qtb.10
+        for <linux-usb@vger.kernel.org>; Tue, 24 Nov 2020 08:39:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=s6LR8uRjQdRvLEv8j5xeCwm4vaQ8Erfd1B4yEz6MGs4=;
-        b=czCZnm3HH2iQG5a5Rf0S6naa+gqkFPxBlWlSu3FXaGV2C7blqdrAClkOqrA3C2olEq
-         XSWk5fBtD8Fayv6ra333tyqmn9abcCMMjgCtZhQueRAFHa0CG0tafIPKjPLZZxi4ySsw
-         GKNbZzZA0M7Yl/0xXLqw4VU2lrk9FuEPoC5HrAYRwHtn+2Ueu2AS2J+8KiZ4YcBtwLiR
-         4YhG+Qq9nJLctao9xcI19LdpgEPEANO+cYK/lgm80SO7tI8sBcJ4EZYE5kMt87ny0gS0
-         vTQ924VrZPzGSpXASTOVjS92fSm3JUWXmH+/OBY/G3le77Pq5Q8Y7bK6hz9N+UVrWIqL
-         nCkg==
+        bh=SmqjczyD2I19WAjXr+LpFshrpxp5FLfEcvD4fdSdczE=;
+        b=NOMh465BxFkdUqOb96e4LoiBxdbjFl/kzN/qOGn+nsPPpX3q01zjGK3vBG18PI/edX
+         ajLiQLToA9QXE/b2OISstB9egh0KL7K6TlWWm25AcE2dgZLcWoM9gdHAWmMcQtYbmnA5
+         b6Q99y5GI24Dal00HVHVNrro58bB9Hl6HXEd2d93klS9AiIWNpyx0vRWIIICBgq35Ok2
+         ebbjpj8IL+EzEpoW1I207lSlhmg9dmFZ573GIC4Yt187sf+wGNdyhMwJSQbO/h3iy1wg
+         lBLDlhDN0GJdAe8yX/FXN2iUMK8onJdJH3FsiAwdrn1ILKZ5jaFTxqSBvvBQRA3BqNIv
+         LlLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=s6LR8uRjQdRvLEv8j5xeCwm4vaQ8Erfd1B4yEz6MGs4=;
-        b=JDeU7ghkZEdUtGZJcqDWTezTUmg0PqFP04BpxJ8gjvp2lFjYhNRGt6ok2rOI2UULLz
-         7hGI95Ff/JbgszXioUCvVCPcZ7q6eKFnGd5/3sfP3h9itJa49eSRqHN5fXEX+6Z9KzB9
-         OiXjLJGfE1/6uy5gF+hRWhUfYGvlkwT0GFMMXf9YapAJAFhmjwG49sYOfQwC+3lpQyl+
-         YRounTgxCr0fUICFzAcnDt5Te7otu7H6faujveNYXhZFK70o6lR9Tu6WxE944u8cu4Mc
-         xrKx9y1zWtk7yf5WrtopA3GLLWK8FEYS6YtqxmGEWcQ8yJGkWv5fprTdQin/uy2ODNPt
-         OdmA==
-X-Gm-Message-State: AOAM531TrcS86GQ6wMG/SI5MuVqvrdiq9TbTEAiUvDAEMEnnV7jTybVd
-        hzw1tDA7Jjo9ZlZAGOIZohpnhfR6mDBfUw==
-X-Google-Smtp-Source: ABdhPJyn2N1Dxqruz58Rqn3T3jZCnbPZSNJi1Rdb8pBUh5JUZmjC9Ld8kU9lTX/jrVKJ12Vjse7Rgg==
-X-Received: by 2002:a05:6214:c2d:: with SMTP id a13mr5471158qvd.23.1606235972904;
-        Tue, 24 Nov 2020 08:39:32 -0800 (PST)
+        bh=SmqjczyD2I19WAjXr+LpFshrpxp5FLfEcvD4fdSdczE=;
+        b=KsxSWOlYOuYUHM7geD6nK6ABoZ6luz7Yibpz6wLNSQ+yGBzoGf/JRMasORb05MIsYz
+         G/UHuX3Lp3lgoO8PPiaAVMLndU+e8Zu13EXufRwgThX1rC2pNnPCIt+odT5Vg9W1+Nky
+         Ax7xLxZx7nNMtwdzlxRzigbJaM0uaEo5gwQcpxer1qftA1Kb0qChpS8JdIh2pXQ+JSzx
+         n1HhzWyeq940h5YUN3JZV7YYmRg7qgqlHYKn11SRfWkmLupD+bwKcGb+0XNoVlaDv7GI
+         95+Zgs0HMFnOuX9OWn6e9Hq7C03YChnY5VJomArlrqIyhaLLdxllfc8odm6QL5UEwUpV
+         HF6A==
+X-Gm-Message-State: AOAM532FoLXI8Xu2pR6e/iXMNla4BoLzNTTyqIOy2NptnwpAC11oiNKV
+        1jrL4yGeuJXeoxmkBK001mg=
+X-Google-Smtp-Source: ABdhPJxX8yxx9JlpWLBlkQz7yxoWUiOUNO3G2pTDK3NHRsGen54HnSMgTH0N5q2+NZDEFm9CCKC3pQ==
+X-Received: by 2002:ac8:3890:: with SMTP id f16mr5156988qtc.372.1606235975298;
+        Tue, 24 Nov 2020 08:39:35 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:482:c91:9ce8:56e7:5368:ece8])
-        by smtp.gmail.com with ESMTPSA id o21sm14060909qko.9.2020.11.24.08.39.30
+        by smtp.gmail.com with ESMTPSA id o21sm14060909qko.9.2020.11.24.08.39.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2020 08:39:32 -0800 (PST)
+        Tue, 24 Nov 2020 08:39:34 -0800 (PST)
 From:   Fabio Estevam <festevam@gmail.com>
 To:     Peter.Chen@nxp.com
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH 2/3] usb: chipidea: usbmisc_imx: Use of_device_get_match_data()
-Date:   Tue, 24 Nov 2020 13:39:11 -0300
-Message-Id: <20201124163912.12074-2-festevam@gmail.com>
+Subject: [PATCH 3/3] usb: chipidea: ci_hdrc_imx: Use of_device_get_match_data()
+Date:   Tue, 24 Nov 2020 13:39:12 -0300
+Message-Id: <20201124163912.12074-3-festevam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201124163912.12074-1-festevam@gmail.com>
 References: <20201124163912.12074-1-festevam@gmail.com>
@@ -67,34 +67,31 @@ Use of_device_get_match_data() to simplify the code.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- drivers/usb/chipidea/usbmisc_imx.c | 7 +------
+ drivers/usb/chipidea/ci_hdrc_imx.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
-index 6d8331e7da99..4545b23bda3f 100644
---- a/drivers/usb/chipidea/usbmisc_imx.c
-+++ b/drivers/usb/chipidea/usbmisc_imx.c
-@@ -1134,11 +1134,6 @@ MODULE_DEVICE_TABLE(of, usbmisc_imx_dt_ids);
- static int usbmisc_imx_probe(struct platform_device *pdev)
- {
- 	struct imx_usbmisc *data;
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index 25c65accf089..8fa712148e5d 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -319,16 +319,11 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+ 		.notify_event	= ci_hdrc_imx_notify_event,
+ 	};
+ 	int ret;
 -	const struct of_device_id *of_id;
--
--	of_id = of_match_device(usbmisc_imx_dt_ids, &pdev->dev);
+ 	const struct ci_hdrc_imx_platform_flag *imx_platform_flag;
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct device *dev = &pdev->dev;
+ 
+-	of_id = of_match_device(ci_hdrc_imx_dt_ids, dev);
 -	if (!of_id)
 -		return -ENODEV;
+-
+-	imx_platform_flag = of_id->data;
++	imx_platform_flag = of_device_get_match_data(&pdev->dev);
  
  	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
  	if (!data)
-@@ -1150,7 +1145,7 @@ static int usbmisc_imx_probe(struct platform_device *pdev)
- 	if (IS_ERR(data->base))
- 		return PTR_ERR(data->base);
- 
--	data->ops = (const struct usbmisc_ops *)of_id->data;
-+	data->ops = of_device_get_match_data(&pdev->dev);
- 	platform_set_drvdata(pdev, data);
- 
- 	return 0;
 -- 
 2.17.1
 
