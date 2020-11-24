@@ -2,165 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B43E2C1999
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 00:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E881A2C1A65
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 02:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727804AbgKWXvG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 18:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727522AbgKWXvG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 18:51:06 -0500
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEA5C0613CF
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 15:51:04 -0800 (PST)
-Received: by mail-qv1-xf4a.google.com with SMTP id dp12so14128801qvb.2
-        for <linux-usb@vger.kernel.org>; Mon, 23 Nov 2020 15:51:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=53LKNClv9WjrnexN7IY+lrSioJLLdaMg3EsJwltsJf8=;
-        b=hy5xhvJu5L5VyPRBqml9A5kdcttMKgO7iuIOoRVScRVfZmPyHgoAqyMgHN/NUvsBzu
-         ZCYGkJzvgbDYyVfmzDPrv+D+P+YcqzvrmRRaVHs8lbGmP2Z7CRvG/eMLP+09kQuCCKG7
-         0EjhnQnPbm6UW/04mLvLMVmUsChAgZVcoRR0mSoUCI8/JXVFDhDWDZR0NnzzJE9MESoz
-         J/TwrFSNBgpVgLjdktEUpq6ROQhjyX8IBKNCGYxBrtmAFROfVMdSnbpEHz1XHnwCWUg5
-         YA8+CZEB+FrgNVOQQuEPjMV0rP3SosIKsJDGRJfvgRmHodTNd5uht+joL34xulomXDzY
-         9vfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=53LKNClv9WjrnexN7IY+lrSioJLLdaMg3EsJwltsJf8=;
-        b=ky633fuFrJmJWtsR0EVDYfOm8easwGNBIcIPZ5c9BaneugQZvqHqXYGFN4oaWlQXEs
-         UhS4ZH7xbWYJtAbDEzIgDMh1qvjEvd7z8jIKeN0z4lTyS35EdVq61ndKKXF1nGLJROIt
-         CM6cRy5cd3XsiT73hFFQI5xrF8Qb767LcUSbp2+Zhg5Ghvgzr8JPILYbxBGiulK9ypCf
-         TyQE2draZr802H3UgMcUu8QJ3WmqGP+dgL4UD1QL9BzIvwTaCwB0g0LYShG6MzhSwxsQ
-         aq3dC9dEAUtRetNyIu6IfRaWRRAJ2CnxEwrUU2Fz2yPku8Df29jtJRAtj325jU+7haVF
-         RBPA==
-X-Gm-Message-State: AOAM532zt97+PAttNHjvhXkZq9JFtczcgsz3RYNlmBHLAz1HHLKPEOPd
-        N2XcFa7UsYO6qeDUnwbZHF7oRdF6IuTc6ZWP
-X-Google-Smtp-Source: ABdhPJwAzb5p6/dyrldQv2YE5KAOiyY3OZm0ny4lqJSKRMz0MO2v8vqB79+o3WSlE6TXrIjJC4qLiDkVZJhCW3dL
-Sender: "andreyknvl via sendgmr" <andreyknvl@andreyknvl3.muc.corp.google.com>
-X-Received: from andreyknvl3.muc.corp.google.com ([2a00:79e0:15:13:7220:84ff:fe09:7e9d])
- (user=andreyknvl job=sendgmr) by 2002:a05:6214:924:: with SMTP id
- dk4mr2031501qvb.19.1606175463697; Mon, 23 Nov 2020 15:51:03 -0800 (PST)
-Date:   Tue, 24 Nov 2020 00:50:52 +0100
-Message-Id: <f8114050f8d65aa0bc801318b1db532d9f432447.1606175386.git.andreyknvl@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-Subject: [PATCH v4] kcov, usbip: collect coverage from vhci_rx_loop
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Nazime Hande Harputluoglu <handeharput@gmail.com>,
-        Nazime Hande Harputluoglu <handeharputlu@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729321AbgKXA6t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 19:58:49 -0500
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:51159 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726803AbgKXA6q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 19:58:46 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 0EF842A8E0;
+        Mon, 23 Nov 2020 19:58:39 -0500 (EST)
+Date:   Tue, 24 Nov 2020 11:58:37 +1100 (AEDT)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
+        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
+        cluster-devel@redhat.com, coreteam@netfilter.org,
+        devel@driverdev.osuosl.org, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
+        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-decnet-user@lists.sourceforge.net,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input <linux-input@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+In-Reply-To: <CANiq72=z+tmuey9wj3Kk7wX5s0hTHpsQdLhAqcOVNrHon6xn5Q@mail.gmail.com>
+Message-ID: <alpine.LNX.2.23.453.2011241036520.7@nippy.intranet>
+References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <202011220816.8B6591A@keescook>
+ <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com> <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com> <alpine.LNX.2.23.453.2011230938390.7@nippy.intranet>
+ <CANiq72=z+tmuey9wj3Kk7wX5s0hTHpsQdLhAqcOVNrHon6xn5Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Nazime Hande Harputluoglu <handeharputlu@google.com>
 
-Add kcov_remote_start()/kcov_remote_stop() annotations to the
-vhci_rx_loop() function, which is responsible for parsing USB/IP packets
-coming into USB/IP client.
+On Mon, 23 Nov 2020, Miguel Ojeda wrote:
 
-Since vhci_rx_loop() threads are spawned per vhci_hcd device instance, the
-common kcov handle is used for kcov_remote_start()/stop() annotations
-(see Documentation/dev-tools/kcov.rst for details). As the result kcov
-can now be used to collect coverage from vhci_rx_loop() threads.
+> On Mon, 23 Nov 2020, Finn Thain wrote:
+> 
+> > On Sun, 22 Nov 2020, Miguel Ojeda wrote:
+> > 
+> > > 
+> > > It isn't that much effort, isn't it? Plus we need to take into 
+> > > account the future mistakes that it might prevent, too.
+> > 
+> > We should also take into account optimisim about future improvements 
+> > in tooling.
+> > 
+> Not sure what you mean here. There is no reliable way to guess what the 
+> intention was with a missing fallthrough, even if you parsed whitespace 
+> and indentation.
+> 
 
-Signed-off-by: Nazime Hande Harputluoglu <handeharputlu@google.com>
-Co-developed-by: Andrey Konovalov <andreyknvl@google.com>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
+What I meant was that you've used pessimism as if it was fact.
 
-Changes in v4:
-- Add USB/IP specific wrappers around kcov functions to avoid having a lot
-  of ifdef CONFIG_KCOV in the USB/IP code.
+For example, "There is no way to guess what the effect would be if the 
+compiler trained programmers to add a knee-jerk 'break' statement to avoid 
+a warning".
 
----
- drivers/usb/usbip/usbip_common.h | 29 +++++++++++++++++++++++++++++
- drivers/usb/usbip/vhci_rx.c      |  2 ++
- drivers/usb/usbip/vhci_sysfs.c   |  1 +
- 3 files changed, 32 insertions(+)
+Moreover, what I meant was that preventing programmer mistakes is a 
+problem to be solved by development tools. The idea that retro-fitting new 
+language constructs onto mature code is somehow necessary to "prevent 
+future mistakes" is entirely questionable.
 
-diff --git a/drivers/usb/usbip/usbip_common.h b/drivers/usb/usbip/usbip_common.h
-index 8be857a4fa13..d60ce17d3dd2 100644
---- a/drivers/usb/usbip/usbip_common.h
-+++ b/drivers/usb/usbip/usbip_common.h
-@@ -277,6 +277,10 @@ struct usbip_device {
- 		void (*reset)(struct usbip_device *);
- 		void (*unusable)(struct usbip_device *);
- 	} eh_ops;
-+
-+#ifdef CONFIG_KCOV
-+	u64 kcov_handle;
-+#endif
- };
- 
- #define kthread_get_run(threadfn, data, namefmt, ...)			   \
-@@ -337,4 +341,29 @@ static inline int interface_to_devnum(struct usb_interface *interface)
- 	return udev->devnum;
- }
- 
-+#ifdef CONFIG_KCOV
-+
-+static inline void usbip_kcov_handle_init(struct usbip_device *ud)
-+{
-+	ud->kcov_handle = kcov_common_handle();
-+}
-+
-+static inline void usbip_kcov_remote_start(struct usbip_device *ud)
-+{
-+	kcov_remote_start_common(ud->kcov_handle);
-+}
-+
-+static inline void usbip_kcov_remote_stop(void)
-+{
-+	kcov_remote_stop();
-+}
-+
-+#else /* CONFIG_KCOV */
-+
-+static inline void usbip_kcov_handle_init(struct usbip_device *ud) { }
-+static inline void usbip_kcov_remote_start(struct usbip_device *ud) { }
-+static inline void usbip_kcov_remote_stop(void) { }
-+
-+#endif /* CONFIG_KCOV */
-+
- #endif /* __USBIP_COMMON_H */
-diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
-index 266024cbb64f..7f2d1c241559 100644
---- a/drivers/usb/usbip/vhci_rx.c
-+++ b/drivers/usb/usbip/vhci_rx.c
-@@ -261,7 +261,9 @@ int vhci_rx_loop(void *data)
- 		if (usbip_event_happened(ud))
- 			break;
- 
-+		usbip_kcov_remote_start(ud);
- 		vhci_rx_pdu(ud);
-+		usbip_kcov_remote_stop();
- 	}
- 
- 	return 0;
-diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-index be37aec250c2..96e5371dc335 100644
---- a/drivers/usb/usbip/vhci_sysfs.c
-+++ b/drivers/usb/usbip/vhci_sysfs.c
-@@ -383,6 +383,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
- 	vdev->ud.sockfd     = sockfd;
- 	vdev->ud.tcp_socket = socket;
- 	vdev->ud.status     = VDEV_ST_NOTASSIGNED;
-+	usbip_kcov_handle_init(&vdev->ud);
- 
- 	spin_unlock(&vdev->ud.lock);
- 	spin_unlock_irqrestore(&vhci->lock, flags);
--- 
-2.29.2.454.gaff20da3a2-goog
+> > > So even if there were zero problems found so far, it is still a 
+> > > positive change.
+> > > 
+> > 
+> > It is if you want to spin it that way.
+> > 
+> How is that a "spin"? It is a fact that we won't get *implicit* 
+> fallthrough mistakes anymore (in particular if we make it a hard error).
+> 
 
+Perhaps "handwaving" is a better term?
+
+> > > I would agree if these changes were high risk, though; but they are 
+> > > almost trivial.
+> > > 
+> > 
+> > This is trivial:
+> > 
+> >  case 1:
+> >         this();
+> > +       fallthrough;
+> >  case 2:
+> >         that();
+> > 
+> > But what we inevitably get is changes like this:
+> > 
+> >  case 3:
+> >         this();
+> > +       break;
+> >  case 4:
+> >         hmmm();
+> > 
+> > Why? Mainly to silence the compiler. Also because the patch author 
+> > argued successfully that they had found a theoretical bug, often in 
+> > mature code.
+> > 
+> If someone changes control flow, that is on them. Every kernel developer 
+> knows what `break` does.
+> 
+
+Sure. And if you put -Wimplicit-fallthrough into the Makefile and if that 
+leads to well-intentioned patches that cause regressions, it is partly on 
+you.
+
+Have you ever considered the overall cost of the countless 
+-Wpresume-incompetence flags?
+
+Perhaps you pay the power bill for a build farm that produces logs that 
+no-one reads? Perhaps you've run git bisect, knowing that the compiler 
+messages are not interesting? Or compiled software in using a language 
+that generates impenetrable messages? If so, here's a tip:
+
+# grep CFLAGS /etc/portage/make.conf 
+CFLAGS="... -Wno-all -Wno-extra ..."
+CXXFLAGS="${CFLAGS}"
+
+Now allow me some pessimism: the hardware upgrades, gigawatt hours and 
+wait time attributable to obligatory static analyses are a net loss.
+
+> > But is anyone keeping score of the regressions? If unreported bugs 
+> > count, what about unreported regressions?
+> > 
+> Introducing `fallthrough` does not change semantics. If you are really 
+> keen, you can always compare the objects because the generated code 
+> shouldn't change.
+> 
+
+No, it's not for me to prove that such patches don't affect code 
+generation. That's for the patch author and (unfortunately) for reviewers.
+
+> Cheers,
+> Miguel
+> 
