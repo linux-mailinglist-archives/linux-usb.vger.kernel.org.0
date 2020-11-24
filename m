@@ -2,104 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 028C62C1BA9
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 03:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E61F72C1D1E
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Nov 2020 05:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728853AbgKXCsp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Nov 2020 21:48:45 -0500
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:53350 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725907AbgKXCsl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Nov 2020 21:48:41 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id EF15F2AA0D;
-        Mon, 23 Nov 2020 21:48:35 -0500 (EST)
-Date:   Tue, 24 Nov 2020 13:48:34 +1100 (AEDT)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Joe Perches <joe@perches.com>
-cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-In-Reply-To: <e72a1aaef8673553a3ee9dfa033d6e893e00abcd.camel@perches.com>
-Message-ID: <alpine.LNX.2.23.453.2011241210310.7@nippy.intranet>
-References: <cover.1605896059.git.gustavoars@kernel.org>  <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>  <202011201129.B13FDB3C@keescook>  <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>  <202011220816.8B6591A@keescook>
-  <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>  <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>  <alpine.LNX.2.23.453.2011230938390.7@nippy.intranet>  <CANiq72=z+tmuey9wj3Kk7wX5s0hTHpsQdLhAqcOVNrHon6xn5Q@mail.gmail.com>
-  <alpine.LNX.2.23.453.2011241036520.7@nippy.intranet> <e72a1aaef8673553a3ee9dfa033d6e893e00abcd.camel@perches.com>
+        id S1726260AbgKXEvB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Nov 2020 23:51:01 -0500
+Received: from mga06.intel.com ([134.134.136.31]:41409 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725797AbgKXEvA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Nov 2020 23:51:00 -0500
+IronPort-SDR: lZd2AAlWix0jIr5e7gT7sxEEuIP8ZEzYbsyPaeRFa3Fppz57t2BGqQ2tBBofzqU2i6jP5QwZb2
+ M/VFb+i/WLUA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9814"; a="233498577"
+X-IronPort-AV: E=Sophos;i="5.78,365,1599548400"; 
+   d="scan'208";a="233498577"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 20:50:56 -0800
+IronPort-SDR: yKp/WQMVjffklMk5JGjc3KxoGIS7+ZBYnknQ4ir6oWWQzYu+3ZJ+gfkAFYUUX86+J8ByUtjhWb
+ y/JbMC3yHgMA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,365,1599548400"; 
+   d="scan'208";a="364889797"
+Received: from lkp-server01.sh.intel.com (HELO d32bb8956768) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 23 Nov 2020 20:50:55 -0800
+Received: from kbuild by d32bb8956768 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1khQI2-00001E-Jr; Tue, 24 Nov 2020 04:50:54 +0000
+Date:   Tue, 24 Nov 2020 12:50:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 93c747ed00c1c74316645f7761f0cdb3f3d3952d
+Message-ID: <5fbc912b.CmxazWoSU9x6Q/+y%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 93c747ed00c1c74316645f7761f0cdb3f3d3952d  usb: Fix fall-through warnings for Clang
 
-On Mon, 23 Nov 2020, Joe Perches wrote:
+elapsed time: 722m
 
-> On Tue, 2020-11-24 at 11:58 +1100, Finn Thain wrote:
-> > it's not for me to prove that such patches don't affect code 
-> > generation. That's for the patch author and (unfortunately) for 
-> > reviewers.
-> 
-> Ideally, that proof would be provided by the compilation system itself 
-> and not patch authors nor reviewers nor maintainers.
-> 
-> Unfortunately gcc does not guarantee repeatability or deterministic 
-> output. To my knowledge, neither does clang.
-> 
+configs tested: 132
+configs skipped: 2
 
-Yes, I've said the same thing myself. But having attempted it, I now think 
-this is a hard problem. YMMV.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-https://lore.kernel.org/linux-scsi/alpine.LNX.2.22.394.2004281017310.12@nippy.intranet/
-https://lore.kernel.org/linux-scsi/alpine.LNX.2.22.394.2005211358460.8@nippy.intranet/
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                      pcm030_defconfig
+arm                         s3c6400_defconfig
+sh                        sh7763rdp_defconfig
+powerpc                        warp_defconfig
+arm                             ezx_defconfig
+mips                         bigsur_defconfig
+arm                        spear6xx_defconfig
+powerpc                 mpc8560_ads_defconfig
+alpha                               defconfig
+sh                           sh2007_defconfig
+riscv                          rv32_defconfig
+sh                                  defconfig
+arm                     eseries_pxa_defconfig
+arm                      tct_hammer_defconfig
+arm                         s5pv210_defconfig
+arm                       mainstone_defconfig
+arm                          moxart_defconfig
+openrisc                         alldefconfig
+ia64                                defconfig
+arm                        mvebu_v5_defconfig
+powerpc                      makalu_defconfig
+arm                        keystone_defconfig
+mips                           ip32_defconfig
+arm                            u300_defconfig
+powerpc                      tqm8xx_defconfig
+m68k                        mvme16x_defconfig
+powerpc                  storcenter_defconfig
+powerpc                      acadia_defconfig
+powerpc                     mpc512x_defconfig
+mips                        vocore2_defconfig
+powerpc                 mpc832x_mds_defconfig
+arm                          badge4_defconfig
+powerpc                     stx_gp3_defconfig
+arm                      integrator_defconfig
+sh                         ecovec24_defconfig
+arm                         hackkit_defconfig
+mips                         tb0219_defconfig
+arm                         lubbock_defconfig
+arm                        mini2440_defconfig
+arm                          iop32x_defconfig
+mips                           ip27_defconfig
+nds32                             allnoconfig
+powerpc                    mvme5100_defconfig
+arm                  colibri_pxa270_defconfig
+m68k                           sun3_defconfig
+powerpc                           allnoconfig
+powerpc                   bluestone_defconfig
+mips                            e55_defconfig
+powerpc                     powernv_defconfig
+sh                           se7751_defconfig
+mips                     loongson1b_defconfig
+arm                          tango4_defconfig
+xtensa                  nommu_kc705_defconfig
+mips                         rt305x_defconfig
+arc                      axs103_smp_defconfig
+powerpc                      arches_defconfig
+powerpc                      ppc64e_defconfig
+arm                          collie_defconfig
+arm                           corgi_defconfig
+powerpc                       ppc64_defconfig
+powerpc                     taishan_defconfig
+mips                           ci20_defconfig
+arc                     nsimosci_hs_defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+i386                 randconfig-a004-20201123
+i386                 randconfig-a003-20201123
+i386                 randconfig-a002-20201123
+i386                 randconfig-a005-20201123
+i386                 randconfig-a001-20201123
+i386                 randconfig-a006-20201123
+x86_64               randconfig-a015-20201123
+x86_64               randconfig-a011-20201123
+x86_64               randconfig-a014-20201123
+x86_64               randconfig-a016-20201123
+x86_64               randconfig-a012-20201123
+x86_64               randconfig-a013-20201123
+i386                 randconfig-a012-20201123
+i386                 randconfig-a013-20201123
+i386                 randconfig-a011-20201123
+i386                 randconfig-a016-20201123
+i386                 randconfig-a014-20201123
+i386                 randconfig-a015-20201123
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a006-20201123
+x86_64               randconfig-a003-20201123
+x86_64               randconfig-a004-20201123
+x86_64               randconfig-a005-20201123
+x86_64               randconfig-a002-20201123
+x86_64               randconfig-a001-20201123
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
