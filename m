@@ -2,226 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2457D2C3B35
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 09:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB582C3B57
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 09:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726361AbgKYIis (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Nov 2020 03:38:48 -0500
-Received: from mx.baikalchip.com ([94.125.187.42]:55358 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725287AbgKYIir (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Nov 2020 03:38:47 -0500
-X-Greylist: delayed 397 seconds by postgrey-1.27 at vger.kernel.org; Wed, 25 Nov 2020 03:38:46 EST
-Date:   Wed, 25 Nov 2020 11:32:02 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 10/18] dt-bindings: usb: Convert DWC USB3 bindings to
- DT schema
-Message-ID: <20201125083202.ytoyd62bg3s7kvvg@mobilestation>
-References: <20201111090853.14112-1-Sergey.Semin@baikalelectronics.ru>
- <20201111090853.14112-11-Sergey.Semin@baikalelectronics.ru>
- <20201111201423.GA1938179@bogus>
- <20201112102946.ipcsiidty4ut4kap@mobilestation>
- <20201121124228.GA2039998@robh.at.kernel.org>
+        id S1726788AbgKYItV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Nov 2020 03:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725921AbgKYItV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Nov 2020 03:49:21 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6719CC0613D4
+        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 00:49:19 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id q10so1695967pfn.0
+        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 00:49:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nFwhSlS+Pvo/ma1TQw3B7yiFr0R2qAwmXx/iKMM6vms=;
+        b=frWQrn9pB0jVThrEPqb3eSmYoAF/DmAkevYHE/b7Kb/MtEMwg1wEoyUVPvDzVdkC7S
+         awjLFmy08lOwdUKcSB+RSaSRR3V1etU592zZ2lQlCCMiwE8qRBnv8yXfdWi121+Dn8Uo
+         UK5w1RYog3/O+B/byNkYgyltobyOUOKSijY0o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nFwhSlS+Pvo/ma1TQw3B7yiFr0R2qAwmXx/iKMM6vms=;
+        b=AVYJB+nj8AD5/+oUCbYvUs3EEVOuPRbmE1uhNYWZF8pcGV6SEB2M5Ip0sF9RXOW35B
+         rTrFtUqmMVbKY46hiwFk/Jfp8BEhtvTaPYbKeAp7n2GfLpTiwti7r1JY8AM2kHoUiz4G
+         SlM2BShvX7A6mVoTPruPyLEOfb/ftNv6iONgpvbMXTyxCmxwXfzJIkZU7/fzxQBll+vE
+         vytrXu5lJZAATc6WwezT1Lab+wVUrcTcyoUSC8h0WB1O2rLq5m/j4luMQwNdI2wP1eAu
+         eOuziPCgrncxc1OjlW8ltEiLK2P7esxUsUyJ4TYUYARdtPe3lfStF+hfErqFlQgSsVXI
+         gSKQ==
+X-Gm-Message-State: AOAM533GVuhSyP2kO/QgVh9JFpfNSciwmKEo7lO5RwXSQKbpxeeF1bYq
+        myE5uSFqt0XRNII2qoq4hyReTg==
+X-Google-Smtp-Source: ABdhPJx+iqGZOhgaw4SyQsTcTvCYlAyqdoKyfeekSxIq7yqnD+XM7aGa51oCMv9CwhVXGSCgT3rE7A==
+X-Received: by 2002:a63:575a:: with SMTP id h26mr2270634pgm.228.1606294158950;
+        Wed, 25 Nov 2020 00:49:18 -0800 (PST)
+Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id x30sm1554565pgc.86.2020.11.25.00.49.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2020 00:49:18 -0800 (PST)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com
+Cc:     bleung@chromium.org, Prashant Malani <pmalani@chromium.org>
+Subject: [PATCH v5 1/2] usb: typec: Consolidate sysfs ABI documentation
+Date:   Wed, 25 Nov 2020 00:49:09 -0800
+Message-Id: <20201125084911.1077462-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20201121124228.GA2039998@robh.at.kernel.org>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Nov 21, 2020 at 06:42:28AM -0600, Rob Herring wrote:
-> On Thu, Nov 12, 2020 at 01:29:46PM +0300, Serge Semin wrote:
-> > On Wed, Nov 11, 2020 at 02:14:23PM -0600, Rob Herring wrote:
-> > > On Wed, Nov 11, 2020 at 12:08:45PM +0300, Serge Semin wrote:
-> > > > DWC USB3 DT node is supposed to be compliant with the Generic xHCI
-> > > > Controller schema, but with additional vendor-specific properties, the
-> > > > controller-specific reference clocks and PHYs. So let's convert the
-> > > > currently available legacy text-based DWC USB3 bindings to the DT schema
-> > > > and make sure the DWC USB3 nodes are also validated against the
-> > > > usb-xhci.yaml schema.
-> > > > 
-> > > > Note we have to discard the nodename restriction of being prefixed with
-> > > > "dwc3@" string, since in accordance with the usb-hcd.yaml schema USB nodes
-> > > > are supposed to be named as "^usb(@.*)".
-> > > > 
-> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > > 
-> > > > ---
-> > > > 
-> > > > Changelog v2:
-> > > > - Discard '|' from the descriptions, since we don't need to preserve
-> > > >   the text formatting in any of them.
-> > > > - Drop quotes from around the string constants.
-> > > > - Fix the "clock-names" prop description to be referring the enumerated
-> > > >   clock-names instead of the ones from the Databook.
-> > > > 
-> > > > Changelog v3:
-> > > > - Apply usb-xhci.yaml# schema only if the controller is supposed to work
-> > > >   as either host or otg.
-> > > > 
-> > > > Changelog v4:
-> > > > - Apply usb-drd.yaml schema first. If the controller is configured
-> > > >   to work in a gadget mode only, then apply the usb.yaml schema too,
-> > > >   otherwise apply the usb-xhci.yaml schema.
-> > > > - Discard the Rob'es Reviewed-by tag. Please review the patch one more
-> > > >   time.
-> > > > ---
-> > > >  .../devicetree/bindings/usb/dwc3.txt          | 125 --------
-> > > >  .../devicetree/bindings/usb/snps,dwc3.yaml    | 303 ++++++++++++++++++
-> > > >  2 files changed, 303 insertions(+), 125 deletions(-)
-> > > >  delete mode 100644 Documentation/devicetree/bindings/usb/dwc3.txt
-> > > >  create mode 100644 Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> 
-> 
-> > > > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..079617891da6
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > > @@ -0,0 +1,303 @@
-> > > > +# SPDX-License-Identifier: GPL-2.0
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Synopsys DesignWare USB3 Controller
-> > > > +
-> > > > +maintainers:
-> > > > +  - Felipe Balbi <balbi@kernel.org>
-> > > > +
-> > > > +description:
-> > > > +  This is usually a subnode to DWC3 glue to which it is connected, but can also
-> > > > +  be presented as a standalone DT node with an optional vendor-specific
-> > > > +  compatible string.
-> > > > +
-> > 
-> > > > +allOf:
-> > > > +  - $ref: usb-drd.yaml#
-> > > > +  - if:
-> > > > +      properties:
-> > > > +        dr_mode:
-> > > > +          const: peripheral
-> 
+Both partner and cable have identity VDOs. These are listed separately
+in the Documentation/ABI/testing/sysfs-class-typec. Factor these out
+into a common location to avoid the duplication.
 
-> Another thing, this evaluates to true if dr_mode is not present. You 
-> need to add 'required'?
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
 
-Right. Will something like this do that?
+Changes in v5:
+- Corrected the email address in the Acked-by tag.
 
-+ allOf:
-+  - $ref: usb-drd.yaml#
-+  - if:
-+      properties:
-+        dr_mode:
-+          const: peripheral
-+ 
-+      required:
-+        - dr_mode
-+    then:
-+      $ref: usb.yaml#
-+    else
-+      $ref: usb-xhci.yaml#
+Changes in v4:
+- Rebased on top of the usb-next tree.
+- Added Acked-by tag from pevious version's review.
+- Corrected a typo ('syfs' -> 'sysfs') in the subject line.
 
-> If dr_mode is otg, then don't you need to apply 
-> both usb.yaml and usb-xhci.yaml?
+Patch first introduced in v3.
 
-No I don't. Since there is no peripheral-specific DT schema, then the
-only schema any USB-gadget node needs to pass is usb.yaml, which
-is already included into the usb-xhci.yaml schema. So for pure OTG devices
-with xHCI host and gadget capabilities it's enough to evaluate: allOf:
-[$ref: usb-drd.yaml#, $ref: usb-xhci.yaml#].  Please see the
-sketch/ASCII-figure below and the following text for details.
+ Documentation/ABI/testing/sysfs-class-typec | 59 ++++++---------------
+ 1 file changed, 17 insertions(+), 42 deletions(-)
 
--Sergey
+diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+index 4eccb343fc7b..88ffc14d4cd2 100644
+--- a/Documentation/ABI/testing/sysfs-class-typec
++++ b/Documentation/ABI/testing/sysfs-class-typec
+@@ -147,42 +147,6 @@ Description:
+ 		during Power Delivery discovery. This file remains hidden until a value
+ 		greater than or equal to 0 is set by Type C port driver.
+ 
+-What:		/sys/class/typec/<port>-partner>/identity/
+-Date:		April 2017
+-Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+-Description:
+-		This directory appears only if the port device driver is capable
+-		of showing the result of Discover Identity USB power delivery
+-		command. That will not always be possible even when USB power
+-		delivery is supported, for example when USB power delivery
+-		communication for the port is mostly handled in firmware. If the
+-		directory exists, it will have an attribute file for every VDO
+-		in Discover Identity command result.
+-
+-What:		/sys/class/typec/<port>-partner/identity/id_header
+-Date:		April 2017
+-Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+-Description:
+-		ID Header VDO part of Discover Identity command result. The
+-		value will show 0 until Discover Identity command result becomes
+-		available. The value can be polled.
+-
+-What:		/sys/class/typec/<port>-partner/identity/cert_stat
+-Date:		April 2017
+-Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+-Description:
+-		Cert Stat VDO part of Discover Identity command result. The
+-		value will show 0 until Discover Identity command result becomes
+-		available. The value can be polled.
+-
+-What:		/sys/class/typec/<port>-partner/identity/product
+-Date:		April 2017
+-Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+-Description:
+-		Product VDO part of Discover Identity command result. The value
+-		will show 0 until Discover Identity command result becomes
+-		available. The value can be polled.
+-
+ 
+ USB Type-C cable devices (eg. /sys/class/typec/port0-cable/)
+ 
+@@ -219,17 +183,28 @@ Description:
+ 		This file remains hidden until a value greater than or equal to 0
+ 		is set by Type C port driver.
+ 
+-What:		/sys/class/typec/<port>-cable/identity/
++
++USB Type-C partner/cable Power Delivery Identity objects
++
++NOTE: The following attributes will be applicable to both
++partner (e.g /sys/class/typec/port0-partner/) and
++cable (e.g /sys/class/typec/port0-cable/) devices. Consequently, the example file
++paths below are prefixed with "/sys/class/typec/<port>-{partner|cable}/" to
++reflect this.
++
++What:		/sys/class/typec/<port>-{partner|cable}/identity/
+ Date:		April 2017
+ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ Description:
+ 		This directory appears only if the port device driver is capable
+ 		of showing the result of Discover Identity USB power delivery
+ 		command. That will not always be possible even when USB power
+-		delivery is supported. If the directory exists, it will have an
+-		attribute for every VDO returned by Discover Identity command.
++		delivery is supported, for example when USB power delivery
++		communication for the port is mostly handled in firmware. If the
++		directory exists, it will have an attribute file for every VDO
++		in Discover Identity command result.
+ 
+-What:		/sys/class/typec/<port>-cable/identity/id_header
++What:		/sys/class/typec/<port>-{partner|cable}/identity/id_header
+ Date:		April 2017
+ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ Description:
+@@ -237,7 +212,7 @@ Description:
+ 		value will show 0 until Discover Identity command result becomes
+ 		available. The value can be polled.
+ 
+-What:		/sys/class/typec/<port>-cable/identity/cert_stat
++What:		/sys/class/typec/<port>-{partner|cable}/identity/cert_stat
+ Date:		April 2017
+ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ Description:
+@@ -245,7 +220,7 @@ Description:
+ 		value will show 0 until Discover Identity command result becomes
+ 		available. The value can be polled.
+ 
+-What:		/sys/class/typec/<port>-cable/identity/product
++What:		/sys/class/typec/<port>-{partner|cable}/identity/product
+ Date:		April 2017
+ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ Description:
+-- 
+2.29.2.454.gaff20da3a2-goog
 
-> 
-> > > > +    then:
-> > > > +      $ref: usb.yaml#
-> > > 
-> > > This part could be done in usb-drd.yaml?
-> > 
-> > Originally I was thinking about that, but then in order to minimize
-> > the properties validation I've decided to split the properties in
-> > accordance with the USB controllers functionality:
-> > 
-> >             +----- USB Gadget/Peripheral Controller. There is no
-> >             |      specific schema for the gadgets since there is no
-> >             |      common gadget properties (at least I failed to find
-> >             |      ones). So the pure gadget controllers need to be
-> >             |      validated just against usb.yaml schema.
-> >             |
-> > usb.yaml <--+-- usb-hcd.yaml - Generic USB Host Controller. The schema
-> >                 ^              turns out to include the OHCI/UHCI/EHCI
-> >                 |              properties, which AFAICS are also
-> >                 |              applicable for the other host controllers.
-> >                 |              So any USB host controller node needs to
-> >                 |              be validated against this schema.
-> >                 |
-> >                 +- usb-xhci.yaml - Generic xHCI Host controller.
-> > 
-> > usb-drd.yaml -- USB Dual-Role/OTG Controllers. It describes the
-> >                 DRD/OTG-specific properties and nothing else. So normally
-> >                 it should be applied together with one of the
-> >                 schemas described above.
-> > 
-> > So the use-cases of the suggested schemas is following:
-> > 
-> > 1) USB Controller is pure gadget? Then:
-> >    + allOf:
-> >    +  - $ref: usb.yaml#
-> > 2) USB Controller is pure USB host (including OHCI/UHCI/EHCI)?
-> >    + allOf:
-> >    +   - $ref: usb-hcd.yaml#
-> >    Note this prevents us from fixing all the currently available USB DT
-> >    schemas, which already apply the usb-hcd.yaml schema.
-> > 3) USB Controller is pure xHCI host controller? Then:
-> >    + allOf:
-> >    +   - $ref: usb-xhci.yaml#
-> > 4) USB Controller is Dual-Role/OTG controller with USB 2.0 host? Then:
-> >    + allOf:
-> >    +   - $ref: usb-drd.yaml#
-> >    +   - $ref: usb-hcd.yaml#
-> > 5) USB Controller is Dual-Role/OTG controller with xHCI host? Then:
-> >    + allOf:
-> >    +   - $ref: usb-drd.yaml#
-> >    +   - $ref: usb-xhci.yaml#
-> > 6) USB Controller is Dual-Role/OTG controller which can only be a
-> >    gadget? Then:
-> >    + allOf:
-> >    +   - $ref: usb-drd.yaml#
-> >    +   - $ref: usb.yaml#
-> > 
-> > * Don't know really if controllers like in 6)-th really exist. Most
-> > * likely they are still internally capable of dual-roling, but due to
-> > * some conditions can be used as gadgets only.
-> > 
-> > It looks a bit complicated, but at least by having such design we'd minimize
-> > the number of properties validation.
-> > 
-
-[...]
