@@ -2,171 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF962C44E3
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 17:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B24A2C44FC
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 17:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730710AbgKYQXS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Nov 2020 11:23:18 -0500
-Received: from mga14.intel.com ([192.55.52.115]:40360 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730650AbgKYQXR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Nov 2020 11:23:17 -0500
-IronPort-SDR: Wr0iXfGMUTc7az2HgAOqSSeHHOljsZ9JjgzKKjQ+OHGhtCOKCgQ9wYGzaM24HfYvPlUtlZlfYY
- lETnevSd41Og==
-X-IronPort-AV: E=McAfee;i="6000,8403,9816"; a="171381879"
-X-IronPort-AV: E=Sophos;i="5.78,369,1599548400"; 
-   d="scan'208";a="171381879"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 08:23:17 -0800
-IronPort-SDR: 27H8LbJIL07Dr92oHYQqLTuPJ6CtGKlPGWb634biZSQQiGXkiFpoQeYJJW1Wyxj6j4iBG6AV3Z
- wzVmgSWjOyIg==
-X-IronPort-AV: E=Sophos;i="5.78,369,1599548400"; 
-   d="scan'208";a="362433326"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 08:23:00 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1khxaM-009fJM-FV; Wed, 25 Nov 2020 18:24:02 +0200
-Date:   Wed, 25 Nov 2020 18:24:02 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1] usb: dwc3: Simplify with dev_err_probe()
-Message-ID: <20201125162402.GA4077@smile.fi.intel.com>
-References: <20201020083815.89275-1-andriy.shevchenko@linux.intel.com>
+        id S1731016AbgKYQZ1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Nov 2020 11:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730835AbgKYQZ1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Nov 2020 11:25:27 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240F2C0613D4;
+        Wed, 25 Nov 2020 08:25:27 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id y10so2902288ljc.7;
+        Wed, 25 Nov 2020 08:25:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8tUmyfZuKCBKqXKF3o2cj2CwedLbltQ8tnlPWo78TEo=;
+        b=hLuxMUEdMa6FCqj2AEOmuZzSpDiZ6ore+amjYLc6vfzXoyPrRxGTNie0XjE+lxMWeW
+         b+ID1gmGZmDQHmZ8exvLvJgdtFN+zgicO6HVxSxZX0YsF1ptrAAOj06cPJi9vUiteuGL
+         R8Y/rLu29Ool8btnen0BXGN13Jxml6cYEK6DPXkv26M+6VZI6Ks9CE2fw926RfLZWMzr
+         yJPTLEI1jxl6TOi2M5HHlPDXIlPhrDUqN3SfMpXWI2E1FCEHVg68RhroLVX7EDZxg3m5
+         vw1TBe7K7IzUF599X2SB7Skmildj0o1alZ/qCz4w+mSijj2UviQ6DPxwwoJkYK+mU3Kn
+         Ay+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8tUmyfZuKCBKqXKF3o2cj2CwedLbltQ8tnlPWo78TEo=;
+        b=EUwDVHaxK7PHYk+mgu+YXcVHQFgZIAOQx+oADj1PpnReRjZh21+3fPrKnl2sngbNnp
+         dh3/MHIncV/21OsF8Y3bYGOfLFXc+MuE8etIaEYs9kaNNi7ILqWopv1eGNCZSjgUymwC
+         BGj1/b3vc6L77nfiyTdNorP8F+5vnatygv/l1CIuYYqWCtb6LIu4W/0kYfh0a5lm40wZ
+         MAuuEQAOIwqDFJJD3GbFTUFE3gV9v/bvQ7h4EmmhAYqWY+vhHc9p8CA4DhF/KJ3LKfC0
+         TDbJjCumnh66KDGeUPIoKzMT0LEuLrIY+5ZoMA5JQNvstMB/ZNT+LTFnlw0iSHyoOgzF
+         tXCA==
+X-Gm-Message-State: AOAM530Hk39oLSH5vU7D1fi6jXuyKBpWr4btJdrM1ZxEn9pv4FUrQI+d
+        dVYfakZghhDf0WfP08imMwt4aEwRSsxVCg==
+X-Google-Smtp-Source: ABdhPJxoMN5LMQpUlRO8iTthkd7NgjDkUfUnI6iASTOWLdX/HNgDl46Ud1msRfGHT8jWszNW+n0btQ==
+X-Received: by 2002:a2e:b0e6:: with SMTP id h6mr1650820ljl.196.1606321525650;
+        Wed, 25 Nov 2020 08:25:25 -0800 (PST)
+Received: from localhost.localdomain (h-158-174-22-6.NA.cust.bahnhof.se. [158.174.22.6])
+        by smtp.gmail.com with ESMTPSA id z131sm313881lfc.56.2020.11.25.08.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2020 08:25:24 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        chenqiwu <chenqiwu@xiaomi.com>,
+        Zeng Tao <prime.zeng@hisilicon.com>
+Subject: [PATCH 0/3] drivers/usb: Constify static attribute_group structs
+Date:   Wed, 25 Nov 2020 17:24:57 +0100
+Message-Id: <20201125162500.37228-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201020083815.89275-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 11:38:15AM +0300, Andy Shevchenko wrote:
-> Common pattern of handling deferred probe can be simplified with
-> dev_err_probe(). Less code and the error value gets printed.
+Constify a number of static attribute_group structs. Typically, the
+structs either have their address stored in an array of pointers to
+const attribute_group or have their address passed to functions that
+have pointers to const attribute_group structs as input arguments.
 
-Felipe, any comments?
+With these patches applied, all static struct attribute_group in
+drivers/usb are const.
 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/usb/dwc3/core.c | 44 +++++++++++------------------------------
->  1 file changed, 11 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index bdf0925da6b6..8787dff5342e 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1126,11 +1126,8 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
->  		ret = PTR_ERR(dwc->usb2_phy);
->  		if (ret == -ENXIO || ret == -ENODEV) {
->  			dwc->usb2_phy = NULL;
-> -		} else if (ret == -EPROBE_DEFER) {
-> -			return ret;
->  		} else {
-> -			dev_err(dev, "no usb2 phy configured\n");
-> -			return ret;
-> +			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
->  		}
->  	}
->  
-> @@ -1138,11 +1135,8 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
->  		ret = PTR_ERR(dwc->usb3_phy);
->  		if (ret == -ENXIO || ret == -ENODEV) {
->  			dwc->usb3_phy = NULL;
-> -		} else if (ret == -EPROBE_DEFER) {
-> -			return ret;
->  		} else {
-> -			dev_err(dev, "no usb3 phy configured\n");
-> -			return ret;
-> +			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
->  		}
->  	}
->  
-> @@ -1151,11 +1145,8 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
->  		ret = PTR_ERR(dwc->usb2_generic_phy);
->  		if (ret == -ENOSYS || ret == -ENODEV) {
->  			dwc->usb2_generic_phy = NULL;
-> -		} else if (ret == -EPROBE_DEFER) {
-> -			return ret;
->  		} else {
-> -			dev_err(dev, "no usb2 phy configured\n");
-> -			return ret;
-> +			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
->  		}
->  	}
->  
-> @@ -1164,11 +1155,8 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
->  		ret = PTR_ERR(dwc->usb3_generic_phy);
->  		if (ret == -ENOSYS || ret == -ENODEV) {
->  			dwc->usb3_generic_phy = NULL;
-> -		} else if (ret == -EPROBE_DEFER) {
-> -			return ret;
->  		} else {
-> -			dev_err(dev, "no usb3 phy configured\n");
-> -			return ret;
-> +			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
->  		}
->  	}
->  
-> @@ -1190,11 +1178,8 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
->  		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
->  
->  		ret = dwc3_gadget_init(dwc);
-> -		if (ret) {
-> -			if (ret != -EPROBE_DEFER)
-> -				dev_err(dev, "failed to initialize gadget\n");
-> -			return ret;
-> -		}
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "failed to initialize gadget\n");
->  		break;
->  	case USB_DR_MODE_HOST:
->  		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> @@ -1205,20 +1190,14 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
->  		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
->  
->  		ret = dwc3_host_init(dwc);
-> -		if (ret) {
-> -			if (ret != -EPROBE_DEFER)
-> -				dev_err(dev, "failed to initialize host\n");
-> -			return ret;
-> -		}
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "failed to initialize host\n");
->  		break;
->  	case USB_DR_MODE_OTG:
->  		INIT_WORK(&dwc->drd_work, __dwc3_set_mode);
->  		ret = dwc3_drd_init(dwc);
-> -		if (ret) {
-> -			if (ret != -EPROBE_DEFER)
-> -				dev_err(dev, "failed to initialize dual-role\n");
-> -			return ret;
-> -		}
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "failed to initialize dual-role\n");
->  		break;
->  	default:
->  		dev_err(dev, "Unsupported mode of operation %d\n", dwc->dr_mode);
-> @@ -1555,8 +1534,7 @@ static int dwc3_probe(struct platform_device *pdev)
->  
->  	ret = dwc3_core_init(dwc);
->  	if (ret) {
-> -		if (ret != -EPROBE_DEFER)
-> -			dev_err(dev, "failed to initialize core: %d\n", ret);
-> +		dev_err_probe(dev, ret, "failed to initialize core\n");
->  		goto err4;
->  	}
->  
-> -- 
-> 2.28.0
-> 
+Done with the help of coccinelle.
+
+Rikard Falkeborn (3):
+  USB: core: Constify static attribute_group structs
+  usb: typec: Constify static attribute_group structs
+  usb: common: ulpi: Constify static attribute_group struct
+
+ drivers/usb/common/ulpi.c   |  2 +-
+ drivers/usb/core/endpoint.c |  2 +-
+ drivers/usb/core/port.c     |  4 ++--
+ drivers/usb/core/sysfs.c    | 14 +++++++-------
+ drivers/usb/typec/class.c   |  8 ++++----
+ 5 files changed, 15 insertions(+), 15 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.29.2
 
