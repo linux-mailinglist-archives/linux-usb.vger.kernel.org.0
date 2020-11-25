@@ -2,164 +2,382 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F6D2C4201
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 15:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D128B2C4277
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 15:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729956AbgKYORe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Nov 2020 09:17:34 -0500
-Received: from gproxy6-pub.mail.unifiedlayer.com ([67.222.39.168]:46845 "EHLO
-        gproxy6-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729488AbgKYORe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Nov 2020 09:17:34 -0500
-Received: from cmgw12.unifiedlayer.com (unknown [10.9.0.12])
-        by gproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 647581E06E3
-        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 07:17:33 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id hvbwktUkIeMJHhvbxk178g; Wed, 25 Nov 2020 07:17:33 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=aouc9xRV c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
- a=nNwsprhYR40A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=1XWaLZrsAAAA:8
- a=_jlGtV7tAAAA:8 a=X1H8zownwjDEwyqyG0IA:9 a=CjuIK1q_8ugA:10:nop_charset_2
- a=nlm17XC03S6CtCLSeiRr:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6vf0Vvzddvqh1Lb7tQR89btyhOYvwBDVJ+GUnAHdB+A=; b=kn6j38yWamr+Dou88q5BMV/OR8
-        l1t/c9r1zH9EV9ukk8An/9/s3VYzyLbCynvJ+Bt/72lEKs/C5+3TG4/w6RWwyNQ7PwAZcJ3n1dM5c
-        J3ZwpgHWCJPR8gD4aqsx3E74+YQPjAf1IujUOU4+tlAcpGkVaFD6CYndlsxYGVUhnEibsAr2x2Zgb
-        UcVYhsL90I6UY25YOj13ZxsrQJ6YArNoeDACJXREuQvwW7zBc9gRZ8cAiyIXCFxOYu/XUV5CRrs/3
-        GjiFj7wBX3jfcFyaIeNYaouY7VTcbO5JCJWlCv+A/wzfanmHC84qItsjMDT282gosddOZUInGcpy9
-        h0w4ZvHw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:34424 helo=localhost)
-        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1khvbw-002JL1-Fg; Wed, 25 Nov 2020 14:17:32 +0000
-Date:   Wed, 25 Nov 2020 06:17:31 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: Stay in
- SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS till Rp is seen
-Message-ID: <20201125141731.GC97010@roeck-us.net>
-References: <20201125014804.1596719-1-badhri@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201125014804.1596719-1-badhri@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1khvbw-002JL1-Fg
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:34424
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 37
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+        id S1729839AbgKYOxJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Nov 2020 09:53:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725792AbgKYOxJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Nov 2020 09:53:09 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261EAC0613D4
+        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 06:53:09 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id k27so3366424ejs.10
+        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 06:53:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=v6sR76XC4PstPtqBTWfP/UdDRAaizrsoO4+ON74kRZ8=;
+        b=B38bLun1jYjyYeJK04p2VrFHKs2N7EDgBeL8XEsd1rnybgWWw0T00Ci6Wtb8Z+qVkP
+         3ly5fkShzrqDon3LCs+vK90sjSCpWjat+H5yHx2ZsG7UhPhCupQC5sse/3//IfsSYAzO
+         WV3/dbQe49UUj3FszAUD7odadESggP0t45n2BHz6pWhc45c6s/qtBgOmkFnfbUvNqNvm
+         lHnQkteNLOgww2vVQyUtsMMmK0xwjn0i1WqWvYG+0MQ2T55tyqcO8npN+XmVA59Oml06
+         ZKcaol0C1SV1OGX1ghm+BCCN71hLtcUo78qOtRJb0IOKiXNK+4/ze+SUw2ynzOv1Pg+y
+         pXYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=v6sR76XC4PstPtqBTWfP/UdDRAaizrsoO4+ON74kRZ8=;
+        b=PJn1dUBJP6YvckC9Dx9gfZc3+Y5chnUQ9Y9OkB/PPS2CnjIeKPI3r2I/62OF0k3EXM
+         YWwLSS/bU7MIboMCE9Mw7q0034h5Nl++MtWZfPupJbdZ74+BW89tl098JiwHsmx9tiGN
+         eoaCEJ+cdMhSqoyZkJtCRJ1ig4FUAQPLY1zXsu+VaWZtNTwdMyikon7amzUlfYXXQFZC
+         nZe/8Zxlda4jqZOQiqKAnJWo5UGGsOetGF186pE7DyPfr/oaWL3rbtqLIMUVcJh0ge2i
+         JRdz2sJgnDCY5KUhDaf0s3M5pmweHGfY/GsCOfW8pzQY5Tt1Ll8G2Z7+WV/FwuMpkC28
+         KKAg==
+X-Gm-Message-State: AOAM531FqumWl+oy7hZdknO5eQFSVQhlyuLJsYqCOqBPGGXUwpJTtCwF
+        mHP32qAzlFgIGQIUGUQKQ7lKFkEb5L4=
+X-Google-Smtp-Source: ABdhPJwnrjXiyZQq690QTQjK0zvV+ga/68ycVMGhzNkLEu5JOnL0Dckh3pOhjLuj4CcEGQ6CHsw22A==
+X-Received: by 2002:a17:906:eb49:: with SMTP id mc9mr1708524ejb.487.1606315987530;
+        Wed, 25 Nov 2020 06:53:07 -0800 (PST)
+Received: from gci-Precision-M2800.fritz.box ([2a02:8109:8b00:c24:cd23:4879:729c:73ed])
+        by smtp.googlemail.com with ESMTPSA id n3sm1386904ejs.110.2020.11.25.06.53.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2020 06:53:07 -0800 (PST)
+From:   Giacinto Cifelli <gciofono@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Giacinto Cifelli <gciofono@gmail.com>
+Subject: [PATCH v3] USB: serial: option: add support for Thales Cinterion EXS82 option port
+Date:   Wed, 25 Nov 2020 15:53:04 +0100
+Message-Id: <20201125145304.10385-1-gciofono@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 05:48:04PM -0800, Badhri Jagan Sridharan wrote:
-> TD.4.7.3. Try SNK DRP Connect Try.SRC DRP fails. The compliance
-> tester mimics being a Try.SRC USB-C port.
-> The failure is due to TCPM exiting SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS
-> when VBUS is not present eventhough when SNK.Rp is seen. Exit to
-> SRC_TRYWAIT from SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS only when SNK.Rp
-> is not seen for PD_T_TRY_CC_DEBOUNCE.
-> 
-> From the spec:
-> The port shall then transition to Attached.SNK when the SNK.Rp state
-> is detected on exactly one of the CC1 or CC2 pins for at least
-> tTryCCDebounce and VBUS is detected. Alternatively, the port shall
-> transition to TryWait.SRC if SNK.Rp state is not detected for
-> tTryCCDebounce.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+There is a single option port in this modem, and it is used as debug port
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+lsusb -v for this device:
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 18 +++++++++++++-----
->  include/linux/usb/pd.h        |  1 +
->  2 files changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 4aac0efdb720..b2cffa00d737 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -3124,15 +3124,13 @@ static void run_state_machine(struct tcpm_port *port)
->  		break;
->  	case SNK_TRY_WAIT_DEBOUNCE:
->  		tcpm_set_state(port, SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS,
-> -			       PD_T_PD_DEBOUNCE);
-> +			       PD_T_TRY_CC_DEBOUNCE);
->  		break;
->  	case SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS:
-> -		if (port->vbus_present && tcpm_port_is_sink(port)) {
-> +		if (port->vbus_present && tcpm_port_is_sink(port))
->  			tcpm_set_state(port, SNK_ATTACHED, 0);
-> -		} else {
-> -			tcpm_set_state(port, SRC_TRYWAIT, 0);
-> +		else
->  			port->max_wait = 0;
-> -		}
->  		break;
->  	case SRC_TRYWAIT:
->  		tcpm_set_cc(port, tcpm_rp_cc(port));
-> @@ -4053,6 +4051,12 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
->  		if (!tcpm_port_is_sink(port))
->  			tcpm_set_state(port, SNK_TRYWAIT_DEBOUNCE, 0);
->  		break;
-> +	case SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS:
-> +		if (!tcpm_port_is_sink(port))
-> +			tcpm_set_state(port, SRC_TRYWAIT, PD_T_TRY_CC_DEBOUNCE);
-> +		else
-> +			tcpm_set_state(port, SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS, 0);
-> +		break;
->  	case SNK_TRYWAIT:
->  		/* Do nothing, waiting for tCCDebounce */
->  		break;
-> @@ -4139,6 +4143,10 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
->  	case SNK_TRYWAIT_DEBOUNCE:
->  		/* Do nothing, waiting for Rp */
->  		break;
-> +	case SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS:
-> +		if (port->vbus_present && tcpm_port_is_sink(port))
-> +			tcpm_set_state(port, SNK_ATTACHED, 0);
-> +		break;
->  	case SRC_TRY_WAIT:
->  	case SRC_TRY_DEBOUNCE:
->  		/* Do nothing, waiting for sink detection */
-> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-> index 3a805e2ecbc9..63a66dd5d832 100644
-> --- a/include/linux/usb/pd.h
-> +++ b/include/linux/usb/pd.h
-> @@ -484,6 +484,7 @@ static inline unsigned int rdo_max_power(u32 rdo)
->  
->  #define PD_T_CC_DEBOUNCE	200	/* 100 - 200 ms */
->  #define PD_T_PD_DEBOUNCE	20	/* 10 - 20 ms */
-> +#define PD_T_TRY_CC_DEBOUNCE	15	/* 10 - 20 ms */
->  
->  #define PD_N_CAPS_COUNT		(PD_T_NO_RESPONSE / PD_T_SEND_SOURCE_CAP)
->  #define PD_N_HARD_RESET_COUNT	2
-> -- 
-> 2.29.2.454.gaff20da3a2-goog
-> 
+Bus 001 Device 002: ID 1e2d:006c
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2 ?
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x1e2d
+  idProduct          0x006c
+  bcdDevice            0.00
+  iManufacturer           4
+  iProduct                3
+  iSerial                 5
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength          243
+    bNumInterfaces          7
+    bConfigurationValue     1
+    iConfiguration          2
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol    255 Vendor Specific Protocol
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         1
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass       2 Abstract (modem)
+      bFunctionProtocol       1 AT-commands (v.25ter)
+      iFunction               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              0
+      CDC Header:
+        bcdCDC               1.10
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Call Management:
+        bmCapabilities       0x03
+          call management
+          use DataInterface
+        bDataInterface          2
+      CDC Union:
+        bMasterInterface        1
+        bSlaveInterface         2
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               5
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 Unused
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         3
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass       2 Abstract (modem)
+      bFunctionProtocol       1 AT-commands (v.25ter)
+      iFunction               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              0
+      CDC Header:
+        bcdCDC               1.10
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Call Management:
+        bmCapabilities       0x03
+          call management
+          use DataInterface
+        bDataInterface          4
+      CDC Union:
+        bMasterInterface        3
+        bSlaveInterface         4
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x84  EP 4 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               5
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        4
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 Unused
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x85  EP 5 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         5
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass       2 Abstract (modem)
+      bFunctionProtocol       1 AT-commands (v.25ter)
+      iFunction               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        5
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      6 Ethernet Networking
+      bInterfaceProtocol      0
+      iInterface              0
+      CDC Header:
+        bcdCDC               1.10
+      CDC Ethernet:
+        iMacAddress                      1 (??)
+        bmEthernetStatistics    0x00000000
+        wMaxSegmentSize              16384
+        wNumberMCFilters            0x0001
+        bNumberPowerFilters              0
+      CDC Union:
+        bMasterInterface        5
+        bSlaveInterface         6
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x86  EP 6 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               5
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        6
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 Unused
+      bInterfaceProtocol      0
+      iInterface              0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        6
+      bAlternateSetting       1
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 Unused
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+
+Signed-off-by: Giacinto Cifelli <gciofono@gmail.com>
+---
+
+Notes:
+    changelog:
+    v2: removed extra .driver_info, unneeded for this patch:
+            .driver_info = RSVD(1) | RSVD(2) | RSVD(3)
+        renamed the device in the commit name
+    v3: renamed the commit to follow current conventions
+        included a short changelog and patch versioning
+        new device define re-ordered by PID
+        new device entry re-ordered alphabetically
+
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 54ca85cc920d..ba035b2cdb92 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -419,6 +419,7 @@ static void option_instat_callback(struct urb *urb);
+ #define CINTERION_PRODUCT_PH8			0x0053
+ #define CINTERION_PRODUCT_AHXX			0x0055
+ #define CINTERION_PRODUCT_PLXX			0x0060
++#define CINTERION_PRODUCT_EXS82			0x006c
+ #define CINTERION_PRODUCT_PH8_2RMNET		0x0082
+ #define CINTERION_PRODUCT_PH8_AUDIO		0x0083
+ #define CINTERION_PRODUCT_AHXX_2RMNET		0x0084
+@@ -1902,6 +1903,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_AHXX_AUDIO, 0xff) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_CLS8, 0xff),
+ 	  .driver_info = RSVD(0) | RSVD(4) },
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_EXS82, 0xff) },
+ 	{ USB_DEVICE(CINTERION_VENDOR_ID, CINTERION_PRODUCT_HC28_MDM) },
+ 	{ USB_DEVICE(CINTERION_VENDOR_ID, CINTERION_PRODUCT_HC28_MDMNET) },
+ 	{ USB_DEVICE(SIEMENS_VENDOR_ID, CINTERION_PRODUCT_HC25_MDM) },
+-- 
+2.17.1
+
