@@ -2,202 +2,404 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8369E2C4735
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 19:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC20B2C4857
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 20:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732106AbgKYSEe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Nov 2020 13:04:34 -0500
-Received: from honk.sigxcpu.org ([24.134.29.49]:45160 "EHLO honk.sigxcpu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730735AbgKYSEe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Nov 2020 13:04:34 -0500
-X-Greylist: delayed 522 seconds by postgrey-1.27 at vger.kernel.org; Wed, 25 Nov 2020 13:04:34 EST
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id 0BEF7FB02;
-        Wed, 25 Nov 2020 18:55:51 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Zj3mMRwPQSRm; Wed, 25 Nov 2020 18:55:48 +0100 (CET)
-Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
-        id C83144026B; Wed, 25 Nov 2020 18:55:46 +0100 (CET)
-From:   =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/1] usb: typec: tps6598x: Export some power supply properties
-Date:   Wed, 25 Nov 2020 18:55:46 +0100
-Message-Id: <b28b09937f3ade9355fcbfa2833dd98fab8fe2bc.1606326871.git.agx@sigxcpu.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <cover.1606326871.git.agx@sigxcpu.org>
-References: <cover.1606326871.git.agx@sigxcpu.org>
+        id S1728535AbgKYT3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Nov 2020 14:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728524AbgKYT3F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Nov 2020 14:29:05 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0776C0613D4
+        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 11:29:04 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id l11so4757072lfg.0
+        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 11:29:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SSwxu+F81eJtg79qcmcy/Xc/znmBmPH7OrfZ9S8zxKQ=;
+        b=Sa5FMfH61npNduankmpR554wIUJ4/RZvfnik0usZw41zgtsVEiSRcvdzEXrCfWkPP8
+         3il34pIggsKHCBDOTr/XMLGle14yy3btPEivySRFj/n2oZNZt7+mEZBHDc/FabgRt0hR
+         U+SOH9u5KNTK64OXltcEeZTAKHJP5jxfENjNHJqDoFzYOJkgB6J8AplYMoSEsb83eBiv
+         aiO7K13KZzSFpxyhrGniZyt63d7EJgmiSGF3ws/ffGARTfIbZKSQ9lts4wtWCuXwni3/
+         ehCGSt2nS7mbWWyiowXegAe/OWegHWWqzYedW453OmJFb7f1AR2sOsKG/wFXU60DhELb
+         xO3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SSwxu+F81eJtg79qcmcy/Xc/znmBmPH7OrfZ9S8zxKQ=;
+        b=mw/XKZkUiyLfP5XGw/gbQhZNS64ZrfcTM4nS00/oa5wFY0zGgqz11ea04uuxV8itwN
+         2wtgwky/nxHJYdHlFOHb8grrQg6zm7MSULQ67C6JvkUiHBlqBkp1RCJSNy7jbSdDvx2o
+         j6fmrVAmm4kVjOlkDS7htCrNhcgJlHskVPMCX03JK9nq/Bhp1qtLaeVpBLSU2durKvJp
+         48kQJrMfekb64XrG27nNP34mqjFMQf5L1E4/3yiLdfamIGN8Tn25j3W1deFubO0uONAg
+         e/ApyxfxS3sYk28+0akob/18+C1aQPmH4gpKpT8z8nUm1yzhtBAibE6IoQ+NQxJJ9/SE
+         EJ3g==
+X-Gm-Message-State: AOAM5304/tshPEAF0uPh/Dz7tYTvWhEnQAVNVFYAijvf2sQp/iBCJGAH
+        zhB0CWMOqokkJw04YgqYU6/bJtnp0FnOyJGU0IU=
+X-Google-Smtp-Source: ABdhPJw0VDSOxl5SuCn+HDHe9+nVn73IPr/tMuiTvUtttOTV0pdgfea+YPn3vgjlD3631lWwHe7llYlky7UXg7j5GfA=
+X-Received: by 2002:ac2:4307:: with SMTP id l7mr158015lfh.304.1606332543137;
+ Wed, 25 Nov 2020 11:29:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <1604794711-8661-1-git-send-email-ruslan.bilovol@gmail.com>
+ <20201111092941.GJ14896@b29397-desktop> <CAB=otbSAGhDYxim9_fsyH4pZCLqgq+bxNJfv5hXqgQRVngVaig@mail.gmail.com>
+ <CAMS2kBF5Gvhnf7AzdeSFeVeWBLhtHM_hHfTvMLTN-3Jkh=BwHw@mail.gmail.com> <CAB=otbTK0j03HjiLS-tqqaBTuavaFEJs49hpKPj2Df8e1_WN+A@mail.gmail.com>
+In-Reply-To: <CAB=otbTK0j03HjiLS-tqqaBTuavaFEJs49hpKPj2Df8e1_WN+A@mail.gmail.com>
+From:   Glenn Schmottlach <gschmottlach@gmail.com>
+Date:   Wed, 25 Nov 2020 14:28:51 -0500
+Message-ID: <CAMS2kBEnUDi5jKiNu5ZKihyucCikfoGor4n7=e+xX=7WU_rrog@mail.gmail.com>
+Subject: Re: [PATCH 0/3] UAC2 Gadget: feedback endpoint support
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This allows downstream supplies and userspace to detect
-whether external power is supplied.
+On Sun, Nov 22, 2020 at 2:52 PM Ruslan Bilovol <ruslan.bilovol@gmail.com> wrote:
+>
+> On Fri, Nov 13, 2020 at 5:35 PM Glenn Schmottlach
+> <gschmottlach@gmail.com> wrote:
+> >
+> > On Thu, Nov 12, 2020 at 6:20 PM Ruslan Bilovol <ruslan.bilovol@gmail.com> wrote:
+> > >
+> > > On Wed, Nov 11, 2020 at 11:30 AM Peter Chen <peter.chen@nxp.com> wrote:
+> > > >
+> > > > On 20-11-08 02:18:28, Ruslan Bilovol wrote:
+> > > > > Current UAC2 gadget implements capture/sync paths
+> > > > > as two USB ISO ASYNC endpoints (IN and OUT).
+> > > > >
+> > > > > This violates USB spec which says that ISO ASYNC OUT endpoint
+> > > > > should have feedback companion endpoint.
+> > > > > See USB2.0 spec  "5.12.4.1 Synchronization Type": asynchronous
+> > > > > sink provides explicit feedback (isochronous pipe).
+> > > > > Interesting that for ISO ASYNC *IN* endpoint respective
+> > > > > feedback isn't required since source provides implicit
+> > > > > feedforward (data stream).
+> > > > >
+> > > > > While it's not an issue if UAC2 Gadget is connected to
+> > > > > Linux host (Linux ignores missing feedback endpoint),
+> > > > > with other hosts like Windows or MacOS the UAC2 Gadget
+> > > > > isn't enumerated due to missing feedback endpoint.
+> > > > >
+> > > > > This patch series adds feedback endpoint support to
+> > > > > UAC2 function, new control to UAC2 mixer which can
+> > > > > be used by userspace tools (like alsaloop from alsa-utils)
+> > > > > for updating feedback frequency reported to the host.
+> > > > > This is useful for usecases when UAC2 Gadget's audio
+> > > > > samples are played to another codec or audio card
+> > > > > with its own internal freerunning clock so host can
+> > > > > be notified that more/less samples are required.
+> > > > >
+> > > > > The alsaloop tool requires some (relatively small)
+> > > > > modifications in order to start support driving
+> > > > > feedback frequency through UAC2 mixer control.
+> > > > > That change will be sent as a separate patch
+> > > > > to ALSA community.
+> > > > >
+> > > > > Also added ability to switch ISO ASYNC OUT endpoint into
+> > > > > adaptive endpoint which doesn't require feedback endpoint
+> > > > > (as per USB spec).
+> > > > >
+> > > > > Ruslan Bilovol (3):
+> > > > >   usb: gadget: f_uac2/u_audio: add feedback endpoint support
+> > > > >   usb: gadget: f_uac2: add adaptive sync support for capture
+> > > > >   usb: gadget: u_audio: add real feedback implementation
+> > > >
+> > > > Hi Ruslan,
+> > > >
+> > > > I applied your patches, but WIN10 still can't recognize it well.
+> > > > The UAC1 is OK for WIN10 with the below same configuration.
+> > > > Any debug information you would like to know to check it?
+> > > >
+> > > >
+> > > > if [ "$FUNC" == "uac2" ]; then
+> > > > mkdir functions/$FUNC".0"
+> > > > echo 2 > functions/$FUNC".0"/p_ssize
+> > > > echo 48000 > functions/$FUNC".0"/p_srate
+> > > > echo 3 > functions/$FUNC".0"/p_chmask
+> > > >
+> > > > echo 2 > functions/$FUNC".0"/c_ssize
+> > > > echo 48000 > functions/$FUNC".0"/c_srate
+> > > > echo 3 > functions/$FUNC".0"/c_chmask
+> > > > #echo 4 > functions/$FUNC".0"/req_number
+> > > > ln -s functions/$FUNC".0" configs/c.1
+> > > > echo high-speed > /sys/kernel/config/usb_gadget/g1/max_speed
+> > > > fi
+> > > >
+> > >
+> > > Hmm... I just tested below config and it works fine with my Win10.
+> > > The only thing I noticed is Windows doesn't enable UAC2 gadget
+> > > by default, but this can be done from Win10 sound settings
+> > >
+> > > --------------------------------->8--------------------------------------
+> > > mkdir cfg
+> > > mount none cfg -t configfs
+> > > mkdir cfg/usb_gadget/g1
+> > > cd cfg/usb_gadget/g1
+> > > mkdir configs/c.1
+> > > mkdir functions/uac2.0
+> > >
+> > > # 44.1 kHz sample rate
+> > > echo 44100 > functions/uac2.0/c_srate
+> > > echo 44100 > functions/uac2.0/p_srate
+> > >
+> > > mkdir strings/0x409
+> > > mkdir configs/c.1/strings/0x409
+> > > echo 0x0101 > idProduct
+> > > echo 0x1d6b > idVendor
+> > > echo my-serial-num > strings/0x409/serialnumber
+> > > echo my-manufacturer > strings/0x409/manufacturer
+> > > echo "Test gadget" > strings/0x409/product
+> > > echo "Conf 1" > configs/c.1/strings/0x409/configuration
+> > > echo 120 > configs/c.1/MaxPower
+> > > ln -s functions/uac2.0 configs/c.1
+> > > echo musb-hdrc.0 > UDC
+> > > --------------------------------->8--------------------------------------
+> > >
+> > > Thanks,
+> > > Ruslan
+> >
+> > Hi Ruslan -
+> >
+> > With your configuration (above) Win10 was able to recognize and load
+> > the driver. What appears to prevent my configuration from loading is
+> > the fact that I selected 48K as my sample rate and my capture/playback
+> > channel mask includes more than two (2) channels. If I take your
+> > configuration and change the sample rate (c_srate/p_srate) to 48000
+> > Windows will fail to load the driver. Likewise, setting the
+> > c_chmask/p_chmask to 7 (three channels) will also cause the driver to
+> > fail to load.
+> >
+> > You mentioned there is an option in Win10 Sound Settings to "enable"
+> > UAC2 by default. I cannot find that option and I wonder if this is
+> > what is preventing me from changing the sample rate or channel mask?
+> > Could Windows be treating my audio gadget as a UAC1 device rather than
+> > a fully multi-channel audio device (even though the usbaudio2.sys
+> > driver is loaded)? Have you tried other configurations to verify your
+> > Win10 box supports more than two channels and a 44.1K sample rate? I
+> > look forward to your feedback and any suggestions you might offer.
+> >
+>
+> I was able to reproduce the issue and prepared a patch below, please
+> try it and see if it fixes the issue.
+>
+> Maximum data rates that I used were (AFAIR) 8 channel 192kHz/32bit,
+> but there is another issue with high data rate if someone uses so many
+> channels, very high sampling frequency or sample size that data can't
+> fit into allowed (by USB spec) max packet size of endpoint. In this case
+> need to decrease bInterval of endpoint.
+> I test it in a high-performance audio case so always use a minimal possible
+> bInterval (set to '1').
+> Of course in the future that need to be calculated dynamically depending on
+> the UAC2 settings
+>
+> Please test patches below and see it it helps
+>
+> ---------------------------------------------8<----------------------------------------
+> From 51516435bbf2486574ec7bc9fd4726677cd474a4 Mon Sep 17 00:00:00 2001
+> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> Date: Sun, 22 Nov 2020 21:05:38 +0200
+> Subject: [PATCH] usb: gadget: f_uac2: always increase endpoint max_packet_size
+>  by one audio slot
+>
+> As per UAC2 Audio Data Formats spec (2.3.1.1 USB Packets),
+> if the sampling rate is a constant, the allowable variation
+> of number of audio slots per virtual frame is +/- 1 audio slot.
+>
+> It means that endpoint should be able to accept/send +1 audio
+> slot.
+>
+> Previous endpoint max_packet_size calculation code
+> was adding sometimes +1 audio slot due to DIV_ROUND_UP
+> behaviour which was rounding up to closest integer.
+> However this doesn't work if the numbers are divisible.
+>
+> It had no any impact with Linux hosts which ignore
+> this issue, but in case of more strict Windows it
+> caused rejected enumeration
+>
+> Thus always add +1 audio slot to endpoint's max packet size
+>
+> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> ---
+>  drivers/usb/gadget/function/f_uac2.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_uac2.c
+> b/drivers/usb/gadget/function/f_uac2.c
+> index ebdb2a1..1698587 100644
+> --- a/drivers/usb/gadget/function/f_uac2.c
+> +++ b/drivers/usb/gadget/function/f_uac2.c
+> @@ -486,7 +486,7 @@ static void set_ep_max_packet_size(const struct
+> f_uac2_opts *uac2_opts,
+>   }
+>
+>   max_packet_size = num_channels(chmask) * ssize *
+> - DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1)));
+> + ((srate / (factor / (1 << (ep_desc->bInterval - 1)))) + 1);
+>
+>   if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC))
+>   max_packet_size = max_packet_size * FBACK_FREQ_MAX / 100;
+> --
+> 1.9.1
+>
+>
+> ---------------------------------------------8<----------------------------------------
+> From c8f2f2b414af672ec40841e75fb1ea761ae29122 Mon Sep 17 00:00:00 2001
+> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> Date: Sun, 16 Feb 2020 22:40:23 +0200
+> Subject: [PATCH] usb: gadget: f_uac2: change bInterval to 1 for
+>  8ch/24bit/44.1kHz
+>
+> With bInterval=4 one audio slot in case of 8ch/24bit/44.1kHz
+> exeeds MaxPacket size of ISO endpoint (>1024) and can't be
+> transferred in time.
+> USB spec ("5.6.3 Isochronous Transfer Packet Size Constraints")
+> says if we need to transfer more than 1024 it is a high speed, high
+> bandwidth endpoint and should have bInterval=1.
+>
+> In the future, bInterval should be dynamically calculated
+> depending on bandwith requirementes
+>
+> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> ---
+>  drivers/usb/gadget/function/f_uac2.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_uac2.c
+> b/drivers/usb/gadget/function/f_uac2.c
+> index 3633df6..fb9b875 100644
+> --- a/drivers/usb/gadget/function/f_uac2.c
+> +++ b/drivers/usb/gadget/function/f_uac2.c
+> @@ -281,7 +281,7 @@ enum {
+>
+>   .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
+>   .wMaxPacketSize = cpu_to_le16(1024),
+> - .bInterval = 4,
+> + .bInterval = 1,
+>  };
+>
+>  /* CS AS ISO OUT Endpoint */
+> @@ -358,7 +358,7 @@ enum {
+>
+>   .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
+>   .wMaxPacketSize = cpu_to_le16(1024),
+> - .bInterval = 4,
+> + .bInterval = 1,
+>  };
+>
+>  /* CS AS ISO IN Endpoint */
+> --
+> 1.9.1
+>
+>
+> ---------------------------------------------8<----------------------------------------
+>
+> Thanks,
+> Ruslan
 
-Signed-off-by: Guido Günther <agx@sigxcpu.org>
----
- drivers/usb/typec/tps6598x.c | 97 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
+Hi Ruslan -
 
-diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-index 3db33bb622c3..ea72957602d8 100644
---- a/drivers/usb/typec/tps6598x.c
-+++ b/drivers/usb/typec/tps6598x.c
-@@ -9,6 +9,7 @@
- #include <linux/i2c.h>
- #include <linux/acpi.h>
- #include <linux/module.h>
-+#include <linux/power_supply.h>
- #include <linux/regmap.h>
- #include <linux/interrupt.h>
- #include <linux/usb/typec.h>
-@@ -55,6 +56,7 @@ enum {
- };
- 
- /* TPS_REG_POWER_STATUS bits */
-+#define TPS_POWER_STATUS_CONNECTION	BIT(0)
- #define TPS_POWER_STATUS_SOURCESINK	BIT(1)
- #define TPS_POWER_STATUS_PWROPMODE(p)	(((p) & GENMASK(3, 2)) >> 2)
- 
-@@ -96,8 +98,24 @@ struct tps6598x {
- 	struct typec_partner *partner;
- 	struct usb_pd_identity partner_identity;
- 	struct usb_role_switch *role_sw;
-+	struct typec_capability typec_cap;
-+
-+	struct power_supply *psy;
-+	struct power_supply_desc psy_desc;
-+	enum power_supply_usb_type usb_type;
-+};
-+
-+static enum power_supply_property tps6598x_psy_props[] = {
-+	POWER_SUPPLY_PROP_USB_TYPE,
-+	POWER_SUPPLY_PROP_ONLINE,
-+};
-+
-+static enum power_supply_usb_type tps6598x_psy_usb_types[] = {
-+	POWER_SUPPLY_USB_TYPE_C,
- };
- 
-+static const char *tps6598x_psy_name_prefix = "tps6598x-source-psy-";
-+
- /*
-  * Max data bytes for Data1, Data2, and other registers. See ch 1.3.2:
-  * https://www.ti.com/lit/ug/slvuan1a/slvuan1a.pdf
-@@ -248,6 +266,8 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
- 	if (desc.identity)
- 		typec_partner_set_identity(tps->partner);
- 
-+	power_supply_changed(tps->psy);
-+
- 	return 0;
- }
- 
-@@ -260,6 +280,7 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
- 	typec_set_pwr_role(tps->port, TPS_STATUS_PORTROLE(status));
- 	typec_set_vconn_role(tps->port, TPS_STATUS_VCONN(status));
- 	tps6598x_set_data_role(tps, TPS_STATUS_DATAROLE(status), false);
-+	power_supply_changed(tps->psy);
- }
- 
- static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
-@@ -467,6 +488,78 @@ static const struct regmap_config tps6598x_regmap_config = {
- 	.max_register = 0x7F,
- };
- 
-+static int tps6598x_psy_get_online(struct tps6598x *tps,
-+				   union power_supply_propval *val)
-+{
-+	int ret;
-+	u16 pwr_status;
-+
-+	ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!(pwr_status & TPS_POWER_STATUS_CONNECTION) ||
-+	    !(pwr_status & TPS_POWER_STATUS_SOURCESINK)) {
-+		val->intval = 0;
-+	} else {
-+		val->intval = 1;
-+	}
-+	return 0;
-+}
-+
-+static int tps6598x_psy_get_prop(struct power_supply *psy,
-+				 enum power_supply_property psp,
-+				 union power_supply_propval *val)
-+{
-+	struct tps6598x *tps = power_supply_get_drvdata(psy);
-+	int ret = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_USB_TYPE:
-+		val->intval = POWER_SUPPLY_USB_TYPE_C;
-+		break;
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		ret = tps6598x_psy_get_online(tps, val);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int devm_tps6598_psy_register(struct tps6598x *tps)
-+{
-+	struct power_supply_config psy_cfg = {};
-+	const char *port_dev_name = dev_name(tps->dev);
-+	size_t psy_name_len = strlen(tps6598x_psy_name_prefix) +
-+				     strlen(port_dev_name) + 1;
-+	char *psy_name;
-+
-+	psy_cfg.drv_data = tps;
-+	psy_cfg.fwnode = dev_fwnode(tps->dev);
-+	psy_name = devm_kzalloc(tps->dev, psy_name_len, GFP_KERNEL);
-+	if (!psy_name)
-+		return -ENOMEM;
-+
-+	snprintf(psy_name, psy_name_len, "%s%s", tps6598x_psy_name_prefix,
-+		 port_dev_name);
-+	tps->psy_desc.name = psy_name;
-+	tps->psy_desc.type = POWER_SUPPLY_TYPE_USB;
-+	tps->psy_desc.usb_types = tps6598x_psy_usb_types;
-+	tps->psy_desc.num_usb_types = ARRAY_SIZE(tps6598x_psy_usb_types);
-+	tps->psy_desc.properties = tps6598x_psy_props;
-+	tps->psy_desc.num_properties = ARRAY_SIZE(tps6598x_psy_props);
-+	tps->psy_desc.get_property = tps6598x_psy_get_prop;
-+
-+	tps->usb_type = POWER_SUPPLY_USB_TYPE_C;
-+
-+	tps->psy = devm_power_supply_register(tps->dev, &tps->psy_desc,
-+					       &psy_cfg);
-+	return PTR_ERR_OR_ZERO(tps->psy);
-+}
-+
- static int tps6598x_probe(struct i2c_client *client)
- {
- 	struct typec_capability typec_cap = { };
-@@ -560,6 +653,10 @@ static int tps6598x_probe(struct i2c_client *client)
- 		goto err_role_put;
- 	}
- 
-+	ret = devm_tps6598_psy_register(tps);
-+	if (ret)
-+		return ret;
-+
- 	tps->port = typec_register_port(&client->dev, &typec_cap);
- 	if (IS_ERR(tps->port)) {
- 		ret = PTR_ERR(tps->port);
--- 
-2.29.2
+I have had some mixed success with your additional patches. First, the
+UAC2 gadget does correctly register with Windows 10 but only for 1-31
+channels. For a fully specified channel map (32 channels):
 
+c_chmask = 0xFFFFFFFF    ( Does not load)
+p_chmask = 0xFFFFFFFF   ( Does not load)
+
+the driver fails to load (code=10). This seems similar to the prior
+problem. Could there be another off-by-one problem here?
+
+With a 31 channel mask the Windows 10 usbaudio2.sys loads successfully, e.g.
+
+c_chmask = 0x7FFFFFFF (loads)
+p_chmask = 0x7FFFFFFF (loads)
+
+Once Windows 10 loads the driver successfully, however, I can't seem
+to select the device through Audacity on Windows. The device appears
+in the Windows "Device Manager" under "Sound, video and game
+controllers -> Source/Sink". How are you testing audio
+playback/capture under Windows? Perhaps my test approach is wrong?
+
+I used the same approach on my Linux host where the USB UAC2 device
+appears as an ALSA device and I use speaker-test on the target
+(BeagleBone Black) to play and then capture the audio using Audacity
+on the Linux host. I was hoping to do the same or something similar
+under Windows.
+
+Below is the script I've been using on the target to configure my UAC2 device:
+
+mkdir -p "/sys/kernel/config/usb_gadget/g_multi"
+echo "${idVendor:-0x11F5}" > "/sys/kernel/config/usb_gadget/g_multi/idVendor"
+echo "${idProduct:-0x0009}" > "/sys/kernel/config/usb_gadget/g_multi/idProduct"
+echo "${bcdDevice:-0x0001}" > "/sys/kernel/config/usb_gadget/g_multi/bcdDevice"
+echo "${bDeviceClass:-0x00}" >
+"/sys/kernel/config/usb_gadget/g_multi/bDeviceClass"
+echo "${bDeviceSubClass:-0x00}" >
+"/sys/kernel/config/usb_gadget/g_multi/bDeviceSubClass"
+echo "${bDeviceProtocol:-0x00}" >
+"/sys/kernel/config/usb_gadget/g_multi/bDeviceProtocol"
+echo "${bcdUSB:-0x0200}" > "/sys/kernel/config/usb_gadget/g_multi/bcdUSB"
+echo "${bMaxPacketSize0:-0x00}" >
+"/sys/kernel/config/usb_gadget/g_multi/bMaxPacketSize0"
+mkdir -p "/sys/kernel/config/usb_gadget/g_multi/strings/0x409"
+echo "${serialnumber:-000000000000}" >
+"/sys/kernel/config/usb_gadget/g_multi/strings/0x409/serialnumber"
+echo "${product:-UAC2}" >
+"/sys/kernel/config/usb_gadget/g_multi/strings/0x409/product"
+echo "${manufacturer:-www.acme.com}" >
+"/sys/kernel/config/usb_gadget/g_multi/strings/0x409/manufacturer"
+mkdir -p "/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0"
+echo "${req_number:-4}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/req_number"
+echo "${c_ssize:-4}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/c_ssize"
+echo "${c_srate:-48000}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/c_srate"
+echo "${c_chmask:-0x00000003}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/c_chmask"
+echo "${c_sync:-asynchronous}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/c_sync"
+echo "${p_ssize:-4}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/p_ssize"
+echo "${p_srate:-48000}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/p_srate"
+echo "${p_chmask:-0x00000003}" >
+"/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0/p_chmask"
+mkdir -p "/sys/kernel/config/usb_gadget/g_multi/configs/c.1"
+echo "${bmAttributes:-0x80}" >
+"/sys/kernel/config/usb_gadget/g_multi/configs/c.1/bmAttributes"
+echo "${MaxPower:-500}" >
+"/sys/kernel/config/usb_gadget/g_multi/configs/c.1/MaxPower"
+mkdir -p "/sys/kernel/config/usb_gadget/g_multi/configs/c.1/strings/0x409"
+echo "${configuration:-BeagleBone Composite}" >
+"/sys/kernel/config/usb_gadget/g_multi/configs/c.1/strings/0x409/configuration"
+ln -s "/sys/kernel/config/usb_gadget/g_multi/functions/uac2.usb0"
+"/sys/kernel/config/usb_gadget/g_multi/configs/c.1/uac2.usb0"
+mkdir -p "/sys/kernel/config/usb_gadget/g_multi/os_desc"
+ln -s "//sys/kernel/config/usb_gadget/g_multi/configs/c.1"
+"/sys/kernel/config/usb_gadget/g_multi/os_desc/c.1"
+echo "${qw_sign:-MSFT100}" >
+"/sys/kernel/config/usb_gadget/g_multi/os_desc/qw_sign"
+echo "${b_vendor_code:-0x00}" >
+"/sys/kernel/config/usb_gadget/g_multi/os_desc/b_vendor_code"
+echo "${use:-1}" > "/sys/kernel/config/usb_gadget/g_multi/os_desc/use"
+
+basename /sys/class/udc/* > /sys/kernel/config/usb_gadget/g_multi/UDC
+
+This is only a two channel playback/capture configuration. I hoped to
+get this working under Windows before increasing my channel count to a
+full 32 channel mask with a 48K sample rate.
+
+I look forward to hearing your suggestions and possibly pointing out
+where I've gone astray.
+
+Thanks,
+
+Glenn
