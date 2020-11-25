@@ -2,382 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D128B2C4277
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 15:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D53C32C4298
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 16:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729839AbgKYOxJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Nov 2020 09:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725792AbgKYOxJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Nov 2020 09:53:09 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261EAC0613D4
-        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 06:53:09 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id k27so3366424ejs.10
-        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 06:53:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=v6sR76XC4PstPtqBTWfP/UdDRAaizrsoO4+ON74kRZ8=;
-        b=B38bLun1jYjyYeJK04p2VrFHKs2N7EDgBeL8XEsd1rnybgWWw0T00Ci6Wtb8Z+qVkP
-         3ly5fkShzrqDon3LCs+vK90sjSCpWjat+H5yHx2ZsG7UhPhCupQC5sse/3//IfsSYAzO
-         WV3/dbQe49UUj3FszAUD7odadESggP0t45n2BHz6pWhc45c6s/qtBgOmkFnfbUvNqNvm
-         lHnQkteNLOgww2vVQyUtsMMmK0xwjn0i1WqWvYG+0MQ2T55tyqcO8npN+XmVA59Oml06
-         ZKcaol0C1SV1OGX1ghm+BCCN71hLtcUo78qOtRJb0IOKiXNK+4/ze+SUw2ynzOv1Pg+y
-         pXYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=v6sR76XC4PstPtqBTWfP/UdDRAaizrsoO4+ON74kRZ8=;
-        b=PJn1dUBJP6YvckC9Dx9gfZc3+Y5chnUQ9Y9OkB/PPS2CnjIeKPI3r2I/62OF0k3EXM
-         YWwLSS/bU7MIboMCE9Mw7q0034h5Nl++MtWZfPupJbdZ74+BW89tl098JiwHsmx9tiGN
-         eoaCEJ+cdMhSqoyZkJtCRJ1ig4FUAQPLY1zXsu+VaWZtNTwdMyikon7amzUlfYXXQFZC
-         nZe/8Zxlda4jqZOQiqKAnJWo5UGGsOetGF186pE7DyPfr/oaWL3rbtqLIMUVcJh0ge2i
-         JRdz2sJgnDCY5KUhDaf0s3M5pmweHGfY/GsCOfW8pzQY5Tt1Ll8G2Z7+WV/FwuMpkC28
-         KKAg==
-X-Gm-Message-State: AOAM531FqumWl+oy7hZdknO5eQFSVQhlyuLJsYqCOqBPGGXUwpJTtCwF
-        mHP32qAzlFgIGQIUGUQKQ7lKFkEb5L4=
-X-Google-Smtp-Source: ABdhPJwnrjXiyZQq690QTQjK0zvV+ga/68ycVMGhzNkLEu5JOnL0Dckh3pOhjLuj4CcEGQ6CHsw22A==
-X-Received: by 2002:a17:906:eb49:: with SMTP id mc9mr1708524ejb.487.1606315987530;
-        Wed, 25 Nov 2020 06:53:07 -0800 (PST)
-Received: from gci-Precision-M2800.fritz.box ([2a02:8109:8b00:c24:cd23:4879:729c:73ed])
-        by smtp.googlemail.com with ESMTPSA id n3sm1386904ejs.110.2020.11.25.06.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2020 06:53:07 -0800 (PST)
-From:   Giacinto Cifelli <gciofono@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Giacinto Cifelli <gciofono@gmail.com>
-Subject: [PATCH v3] USB: serial: option: add support for Thales Cinterion EXS82 option port
-Date:   Wed, 25 Nov 2020 15:53:04 +0100
-Message-Id: <20201125145304.10385-1-gciofono@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1729989AbgKYPEV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Nov 2020 10:04:21 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:40604 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727614AbgKYPEV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Nov 2020 10:04:21 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0APF45fd102151;
+        Wed, 25 Nov 2020 09:04:05 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1606316645;
+        bh=abbitnCOhB4/7GZNMu7oESPWpbhlDGq3AlXmkk73T8Q=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=OBCvNGYTxI/LJ0xY2UMJmIAqfBPQEUfZe2MPpgXUo9rTlNcqRQPnLnwogr5dcoj7C
+         HHQxu4p7DFTUYRMyhxJIROpCg9Rl64OntdIZz8lh724Y8phlPfFH5l5FDknT2j5mFG
+         3Lo+Gfg+ppUd/dHEYYHbVkilQbEHzkTkDORX0tEY=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0APF45X9031923
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 25 Nov 2020 09:04:05 -0600
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 25
+ Nov 2020 09:04:05 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 25 Nov 2020 09:04:05 -0600
+Received: from [10.24.69.198] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0APF3tXj058491;
+        Wed, 25 Nov 2020 09:03:58 -0600
+Subject: Re: [PATCH v3 00/10] Introduced new Cadence USBSSP DRD Driver.
+To:     Pawel Laszczak <pawell@cadence.com>,
+        Peter Chen <peter.chen@nxp.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        "rogerq@ti.com" <rogerq@ti.com>, Rahul Kumar <kurahul@cadence.com>,
+        "Govindraju, Aswath" <a-govindraju@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+References: <20201119141307.8342-1-pawell@cadence.com>
+ <20201124075023.GC32310@b29397-desktop>
+ <DM6PR07MB55299F262CEA81216999CB05DDFB0@DM6PR07MB5529.namprd07.prod.outlook.com>
+ <45ffc5f8-f9de-e14d-3d03-9ef1f1c848d9@ti.com>
+ <DM6PR07MB5529316FE42279C77BB43317DDFB0@DM6PR07MB5529.namprd07.prod.outlook.com>
+From:   Sekhar Nori <nsekhar@ti.com>
+Message-ID: <24639633-919c-7082-fbde-dc613a7a71d0@ti.com>
+Date:   Wed, 25 Nov 2020 20:33:54 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <DM6PR07MB5529316FE42279C77BB43317DDFB0@DM6PR07MB5529.namprd07.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is a single option port in this modem, and it is used as debug port
+On 24/11/20 3:22 PM, Pawel Laszczak wrote:
+> Sekhar,
+> 
+>>
+>>
+>> On 24/11/20 2:51 PM, Pawel Laszczak wrote:
+>>> Peter,
+>>>
+>>>> On 20-11-19 15:12:57, Pawel Laszczak wrote:
+>>>>> This patch introduce new Cadence USBSS DRD driver to linux kernel.
+>>>>>
+>>>>> The Cadence USBSS DRD Controller is a highly configurable IP Core which
+>>>>> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
+>>>>> Host Only (XHCI)configurations.
+>>>>>
+>>>>> The current driver has been validated with FPGA burned. We have support
+>>>>> for PCIe bus, which is used on FPGA prototyping.
+>>>>>
+>>>>> The host side of USBSS-DRD controller is compliance with XHCI
+>>>>> specification, so it works with standard XHCI Linux driver.
+>>>>>
+>>>>> The device side of USBSS DRD controller is compliant with XHCI.
+>>>>> The architecture for device side is almost the same as for host side,
+>>>>> and most of the XHCI specification can be used to understand how
+>>>>> this controller operates.
+>>>>>
+>>>>> This controller and driver support Full Speed, Hight Speed, Supper Speed
+>>>>> and Supper Speed Plus USB protocol.
+>>>>>
+>>>>> The prefix cdnsp used in driver has chosen by analogy to cdn3 driver.
+>>>>> The last letter of this acronym means PLUS. The formal name of controller
+>>>>> is USBSSP but it's to generic so I've decided to use CDNSP.
+>>>>>
+>>>>> The patch 1: adds support for DRD CDNSP.
+>>>>> The patch 2: separates common code that can be reusable by cdnsp driver.
+>>>>> The patch 3: moves reusable code to separate module.
+>>>>> The patch 4: changes prefixes in reusable code from cdns3 to common cdns.
+>>>>> The patch 5: adopts gadget_dev pointer in cdns structure to make possible
+>>>>>              use it in both drivers.
+>>>>> The patches 6-8: add the main part of driver and has been intentionally
+>>>>>              split into 3 part. In my opinion such division should not
+>>>>>              affect understanding and reviewing the driver, and cause that
+>>>>>              main patch (7/8) is little smaller. Patch 6 introduces main
+>>>>>              header file for driver, 7 is the main part that implements all
+>>>>>              functionality of driver and 8 introduces tracepoints.
+>>>>> The patch 9: Adds cdns3 prefixes to files related with USBSS driver.
+>>>>> the patch 10: Adds USBSSP DRD IP driver entry to MAINTAINERS file.
+>>>>>
+>>>>> Changlog from v2:
+>>>>> - removed not used pdev parameter from cdnsp_read/wite_64 functions
+>>>>> - fixed incorrect value assigned to CDNSP_ENDPOINTS_NUM (32 -> 31)
+>>>>> - replaced some constant value with CDNSP_ENDPOINTS_NUM macro
+>>>>> - replaced 'true' with '1' in bits description in cdnsp-gadget.h file
+>>>>> - fixed some typos
+>>>>> - some other less important changes suggested by Peter Chen
+>>>>
+>>>> Hi Pawel,
+>>>>
+>>>> I have updated my -next tree as the latest usb-next tree which v5.10-rc4
+>>>> is included, would you please rebase my tree and send again, I could apply your
+>>>> patches and test, if test could pass, I will apply it to my -next tree.
+>>>> You don't need to rebase again since it is a huge patch set, will take some
+>>>> efforts for rebase.
+>>>>
+>>>
+>>> I'll try to post it tomorrow.
+>>
+>> Pawel, have you tested TI J7 for regressions after this series? After
+>> your latest changes, can you post a tree which someone in TI can test?
+> 
+> No I haven't test it on J7.  For testing I'm using PCIe based platform for
+> both cnds3 and cdnsp driver. 
 
-lsusb -v for this device:
+Do you have access to J7 EVM? Are you willing to test it there to make
+sure nothing broke?
 
-Bus 001 Device 002: ID 1e2d:006c
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2 ?
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x1e2d
-  idProduct          0x006c
-  bcdDevice            0.00
-  iManufacturer           4
-  iProduct                3
-  iSerial                 5
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength          243
-    bNumInterfaces          7
-    bConfigurationValue     1
-    iConfiguration          2
-    bmAttributes         0xe0
-      Self Powered
-      Remote Wakeup
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol    255 Vendor Specific Protocol
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         1
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       2 Abstract (modem)
-      bFunctionProtocol       1 AT-commands (v.25ter)
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Call Management:
-        bmCapabilities       0x03
-          call management
-          use DataInterface
-        bDataInterface          2
-      CDC Union:
-        bMasterInterface        1
-        bSlaveInterface         2
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         3
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       2 Abstract (modem)
-      bFunctionProtocol       1 AT-commands (v.25ter)
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Call Management:
-        bmCapabilities       0x03
-          call management
-          use DataInterface
-        bDataInterface          4
-      CDC Union:
-        bMasterInterface        3
-        bSlaveInterface         4
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x84  EP 4 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        4
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x85  EP 5 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         5
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       2 Abstract (modem)
-      bFunctionProtocol       1 AT-commands (v.25ter)
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        5
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      6 Ethernet Networking
-      bInterfaceProtocol      0
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC Ethernet:
-        iMacAddress                      1 (??)
-        bmEthernetStatistics    0x00000000
-        wMaxSegmentSize              16384
-        wNumberMCFilters            0x0001
-        bNumberPowerFilters              0
-      CDC Union:
-        bMasterInterface        5
-        bSlaveInterface         6
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x86  EP 6 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        6
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        6
-      bAlternateSetting       1
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x87  EP 7 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x04  EP 4 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
+> 
+> Why you can't use the latest kernel version and current series ? 
 
-Signed-off-by: Giacinto Cifelli <gciofono@gmail.com>
----
+Sure. Let me try that. Looking at some other traffic on this thread, I
+was not sure where this applies. So, this applies to latest of Linus's
+tree? I re-read the cover letter but cannot find this information.
 
-Notes:
-    changelog:
-    v2: removed extra .driver_info, unneeded for this patch:
-            .driver_info = RSVD(1) | RSVD(2) | RSVD(3)
-        renamed the device in the commit name
-    v3: renamed the commit to follow current conventions
-        included a short changelog and patch versioning
-        new device define re-ordered by PID
-        new device entry re-ordered alphabetically
-
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 54ca85cc920d..ba035b2cdb92 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -419,6 +419,7 @@ static void option_instat_callback(struct urb *urb);
- #define CINTERION_PRODUCT_PH8			0x0053
- #define CINTERION_PRODUCT_AHXX			0x0055
- #define CINTERION_PRODUCT_PLXX			0x0060
-+#define CINTERION_PRODUCT_EXS82			0x006c
- #define CINTERION_PRODUCT_PH8_2RMNET		0x0082
- #define CINTERION_PRODUCT_PH8_AUDIO		0x0083
- #define CINTERION_PRODUCT_AHXX_2RMNET		0x0084
-@@ -1902,6 +1903,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_AHXX_AUDIO, 0xff) },
- 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_CLS8, 0xff),
- 	  .driver_info = RSVD(0) | RSVD(4) },
-+	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_EXS82, 0xff) },
- 	{ USB_DEVICE(CINTERION_VENDOR_ID, CINTERION_PRODUCT_HC28_MDM) },
- 	{ USB_DEVICE(CINTERION_VENDOR_ID, CINTERION_PRODUCT_HC28_MDMNET) },
- 	{ USB_DEVICE(SIEMENS_VENDOR_ID, CINTERION_PRODUCT_HC25_MDM) },
--- 
-2.17.1
-
+Thanks,
+Sekhar
