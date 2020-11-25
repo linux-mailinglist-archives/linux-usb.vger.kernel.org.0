@@ -2,375 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 617852C3F8F
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 13:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A3D2C4008
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 13:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728963AbgKYMGs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Nov 2020 07:06:48 -0500
-Received: from mga04.intel.com ([192.55.52.120]:40146 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727409AbgKYMGs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Nov 2020 07:06:48 -0500
-IronPort-SDR: Q6jSUV/l8JPHYit4BnjVe4NYNripDBt+IQIpzEQgBeezEZ3gB901Qt/abcgf3tfeDU7+yyMhM2
- 71CmdRKTBBxw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9815"; a="169559227"
-X-IronPort-AV: E=Sophos;i="5.78,368,1599548400"; 
-   d="scan'208";a="169559227"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 04:06:48 -0800
-IronPort-SDR: d1SKB5EHJrxVkJ9DIr+wTnTweHSFPqVYmj2RahrbyGj0JQ8XO1pLuTqdCWxecQc7jyWENR/3/B
- 6ucvABPsXR1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,368,1599548400"; 
-   d="scan'208";a="432936360"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Nov 2020 04:06:46 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>, linux-usb@vger.kernel.org
-Subject: [PATCH 2/2] usb: typec: Add type sysfs attribute file for partners
-Date:   Wed, 25 Nov 2020 15:06:42 +0300
-Message-Id: <20201125120642.37156-3-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201125120642.37156-1-heikki.krogerus@linux.intel.com>
-References: <20201125120642.37156-1-heikki.krogerus@linux.intel.com>
+        id S1729232AbgKYMYy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Nov 2020 07:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729221AbgKYMYk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Nov 2020 07:24:40 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED57C08ED7E
+        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 04:24:40 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id t8so2156846pfg.8
+        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 04:24:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9IH0l2L/ELs04A0W/6GC4nhC0e+RvRGWJ1bAzD1+dFc=;
+        b=GyrkIL7rJc/Wrkz9wtYqXZYvGBry6qXFkQono0nmrBFDlUCiGmbX9ByD1wUhih87ZW
+         XCd/8etF0h65aGuVNHVvGVnSoIRV2cIFxWeuMsMEKDZ+SIKsK6eM3KIHPaY2Au+pxfCB
+         jFmSmO0a8jtSnIjbAi/709gkMW9hnqxggrhUNIGI/2GrlejcLn7tyz9MFlSEpE31y19Z
+         9ARaZhNBbaKZzII6ioDoEFmbbi01XI+4/fF65wWR3SGfZuCMoV2cgGUJ8Osa8sFeqdbz
+         KLllcyBsC3gtRPDbq4Yc+z3inKaZT7D05cYTb7CBHNDdR/afLH0A7E5JHrBWilMAefn4
+         uS6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9IH0l2L/ELs04A0W/6GC4nhC0e+RvRGWJ1bAzD1+dFc=;
+        b=cyoQjtnEUsaQyM7pZvyDMSsg5dxrQ+H4moeAw94K2AJZIMYDXRl+sg1u8B6Ehu/2Yx
+         0gTo2sv1XbSi1OBbB74rc7kF2C3YjyIkmwzOc2SPqlnZ8d0jTaq4ik6Xr1ILQSQIXxxg
+         kyLmdhzc1zAxyXr4JMgjbC7ji6Xchi5AhFk9RVDe9Yhkbl6VExeMjXR5fMvvSTr6i4C3
+         xPrlg60uD/yMd4Mto8UMt296XoEVk54qM+ChOqInWpFBLyGB+/EX0Jp3+Csdraz+9tSX
+         UPvpwYuyVgbzhWD1AzbtYvBh0L65lYY5Y5spfDDL/6X05PS/uyixAeSDOVRBtr34dpmB
+         RS6A==
+X-Gm-Message-State: AOAM531SP7nM0iYqm1dmCh9zCrYiUK2zOkvihDB6b7h+olVHVF9COQBi
+        /C2gzfFCPCm+H8jAS9thQIOh++sNb8lbFiwmb2yAwg==
+X-Google-Smtp-Source: ABdhPJySo35UzNwHodlreVMfJuWPwHO1z+zkcbFfSYU3Avf+sN4n16LJPBb97SBockWyJEKx3Xs8q1wCvzejZmwrmAM=
+X-Received: by 2002:a62:7905:0:b029:197:f300:5a2a with SMTP id
+ u5-20020a6279050000b0290197f3005a2amr2898775pfc.30.1606307078380; Wed, 25 Nov
+ 2020 04:24:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+ <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
+ <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
+ <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
+ <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
+ <20201123130348.GA3119@embeddedor> <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com>
+ <202011241327.BB28F12F6@keescook> <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
+In-Reply-To: <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 25 Nov 2020 04:24:27 -0800
+Message-ID: <CAKwvOdkGBn7nuWTAqrORMeN1G+w3YwBfCqqaRD2nwvoAXKi=Aw@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for Clang
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Joe Perches <joe@perches.com>,
+        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
+        linux-atm-general@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-ide@vger.kernel.org, dm-devel@redhat.com,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
+        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-scsi@vger.kernel.org,
+        linux-rdma@vger.kernel.org, oss-drivers@netronome.com,
+        bridge@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
+        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        selinux@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
+        netfilter-devel@vger.kernel.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>, patches@opensource.cirrus.com,
+        linux-integrity@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB Power Delivery Specification defines a set of product
-types for partners and cables. The product type can be read
-from the ID Header VDO which is the first object in the
-response to the Discover Identity command. This attribute
-will display the product type of the partner. The cables
-already have the attribute.
+On Tue, Nov 24, 2020 at 11:05 PM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> On Tue, 2020-11-24 at 13:32 -0800, Kees Cook wrote:
+> > We already enable -Wimplicit-fallthrough globally, so that's not the
+> > discussion. The issue is that Clang is (correctly) even more strict
+> > than GCC for this, so these are the remaining ones to fix for full
+> > Clang coverage too.
+> >
+> > People have spent more time debating this already than it would have
+> > taken to apply the patches. :)
+>
+> You mean we've already spent 90% of the effort to come this far so we
+> might as well go the remaining 10% because then at least we get some
+> return? It's certainly a clinching argument in defence procurement ...
 
-This sysfs attribute file is only created for the partners
-and cables if the product type is really known in the
-driver. Some interfaces do not give access to the Discover
-Identity response from the partner or cable, but they may
-still supply the product type separately in some cases.
+So developers and distributions using Clang can't have
+-Wimplicit-fallthrough enabled because GCC is less strict (which has
+been shown in this thread to lead to bugs)?  We'd like to have nice
+things too, you know.
 
-When the product type of the partner or cable is detected,
-uevent is also raised with PRODUCT_TYPE set to show the
-actual product type (for example PRODUCT_TYPE=host).
+I even agree that most of the churn comes from
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- Documentation/ABI/testing/sysfs-class-typec |  53 ++++++-
- drivers/usb/typec/class.c                   | 147 +++++++++++++++++---
- 2 files changed, 181 insertions(+), 19 deletions(-)
+case 0:
+  ++x;
+default:
+  break;
 
-diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-index b7794e02ad205..64c4b6b32b8ee 100644
---- a/Documentation/ABI/testing/sysfs-class-typec
-+++ b/Documentation/ABI/testing/sysfs-class-typec
-@@ -139,6 +139,41 @@ Description:
- 		Shows if the partner supports USB Power Delivery communication:
- 		Valid values: yes, no
- 
-+What:		/sys/class/typec/<port>-partner/type
-+Date:		December 2020
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:	USB Power Delivery Specification defines a set of product types
-+		for the partner devices. This file will show the product type of
-+		the partner if it is known. Dual-role capable partners will have
-+		both UFP and DFP product types defined, but only one that
-+		matches the current role will be active at the time. If the
-+		product type of the partner is not visible to the device driver,
-+		this file will not exist.
-+
-+		When the partner product type is detected, or changed with role
-+		swap, uvevent is also raised that contains PRODUCT_TYPE=<product
-+		type> (for example PRODUCT_TYPE=hub).
-+
-+		Valid values:
-+
-+		UFP / device role
-+		======================  ==========================
-+		undefined		-
-+		hub			PDUSB Hub
-+		peripheral		PDUSB Peripheral
-+		psd			Power Bank
-+		ama			Alternate Mode Adapter
-+		======================  ==========================
-+
-+		DFP / host role
-+		======================  ==========================
-+		undefined		-
-+		hub			PDUSB Hub
-+		host			PDUSB Host
-+		power_brick		Power Brick
-+		amc			Alternate Mode Controller
-+		======================  ==========================
-+
- What:		/sys/class/typec/<port>-partner>/identity/
- Date:		April 2017
- Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-@@ -187,9 +222,21 @@ described in USB Type-C and USB Power Delivery specifications.
- What:		/sys/class/typec/<port>-cable/type
- Date:		April 2017
- Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
--Description:
--		Shows if the cable is active.
--		Valid values: active, passive
-+Description:	USB Power Delivery Specification defines a set of product types
-+		for the cables. This file will show the product type of the
-+		cable if it is known. If the product type of the cable is not
-+		visible to the device driver, this file will not exist.
-+
-+		When the cable product type is detected, uvevent is also raised
-+		with PRODUCT_TYPE showing the product type of the cable.
-+
-+		Valid values:
-+
-+		======================  ==========================
-+		undefined		-
-+		active			Active Cable
-+		passive			Passive Cable
-+		======================  ==========================
- 
- What:		/sys/class/typec/<port>-cable/plug_type
- Date:		April 2017
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 35eec707cb512..1190148ad3ed5 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -11,6 +11,7 @@
- #include <linux/mutex.h>
- #include <linux/property.h>
- #include <linux/slab.h>
-+#include <linux/usb/pd_vdo.h>
- 
- #include "bus.h"
- 
-@@ -81,6 +82,29 @@ static const char * const typec_accessory_modes[] = {
- 	[TYPEC_ACCESSORY_DEBUG]		= "debug",
- };
- 
-+/* Product types defined in USB PD Specification R3.0 V2.0 */
-+static const char * const product_type_ufp[8] = {
-+	[IDH_PTYPE_UNDEF]		= "undefined",
-+	[IDH_PTYPE_HUB]			= "hub",
-+	[IDH_PTYPE_PERIPH]		= "peripheral",
-+	[IDH_PTYPE_PSD]			= "psd",
-+	[IDH_PTYPE_AMA]			= "ama",
-+};
-+
-+static const char * const product_type_dfp[8] = {
-+	[IDH_PTYPE_DFP_UNDEF]		= "undefined",
-+	[IDH_PTYPE_DFP_HUB]		= "hub",
-+	[IDH_PTYPE_DFP_HOST]		= "host",
-+	[IDH_PTYPE_DFP_PB]		= "power_brick",
-+	[IDH_PTYPE_DFP_AMC]		= "amc",
-+};
-+
-+static const char * const product_type_cable[8] = {
-+	[IDH_PTYPE_UNDEF]		= "undefined",
-+	[IDH_PTYPE_PCABLE]		= "passive",
-+	[IDH_PTYPE_ACABLE]		= "active",
-+};
-+
- static struct usb_pd_identity *get_pd_identity(struct device *dev)
- {
- 	if (is_typec_partner(dev)) {
-@@ -95,6 +119,32 @@ static struct usb_pd_identity *get_pd_identity(struct device *dev)
- 	return NULL;
- }
- 
-+static const char *get_pd_product_type(struct device *dev)
-+{
-+	struct typec_port *port = to_typec_port(dev->parent);
-+	struct usb_pd_identity *id = get_pd_identity(dev);
-+	const char *ptype = NULL;
-+
-+	if (is_typec_partner(dev)) {
-+		if (!id)
-+			return NULL;
-+
-+		if (port->data_role == TYPEC_HOST)
-+			ptype = product_type_ufp[PD_IDH_PTYPE(id->id_header)];
-+		else
-+			ptype = product_type_dfp[PD_IDH_DFP_PTYPE(id->id_header)];
-+	} else if (is_typec_cable(dev)) {
-+		if (id)
-+			ptype = product_type_cable[PD_IDH_PTYPE(id->id_header)];
-+		else
-+			ptype = to_typec_cable(dev)->active ?
-+				product_type_cable[IDH_PTYPE_ACABLE] :
-+				product_type_cable[IDH_PTYPE_PCABLE];
-+	}
-+
-+	return ptype;
-+}
-+
- static ssize_t id_header_show(struct device *dev, struct device_attribute *attr,
- 			      char *buf)
- {
-@@ -139,11 +189,56 @@ static const struct attribute_group *usb_pd_id_groups[] = {
- 	NULL,
- };
- 
-+static void typec_product_type_notify(struct device *dev)
-+{
-+	char *envp[2] = { };
-+	const char *ptype;
-+
-+	ptype = get_pd_product_type(dev);
-+	if (!ptype)
-+		return;
-+
-+	sysfs_notify(&dev->kobj, NULL, "type");
-+
-+	envp[0] = kasprintf(GFP_KERNEL, "PRODUCT_TYPE=%s", ptype);
-+	if (!envp[0])
-+		return;
-+
-+	kobject_uevent_env(&dev->kobj, KOBJ_CHANGE, envp);
-+	kfree(envp[0]);
-+}
-+
- static void typec_report_identity(struct device *dev)
- {
- 	sysfs_notify(&dev->kobj, "identity", "id_header");
- 	sysfs_notify(&dev->kobj, "identity", "cert_stat");
- 	sysfs_notify(&dev->kobj, "identity", "product");
-+	typec_product_type_notify(dev);
-+}
-+
-+static ssize_t
-+type_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	const char *ptype;
-+
-+	ptype = get_pd_product_type(dev);
-+	if (!ptype)
-+		return 0;
-+
-+	return sysfs_emit(buf, "%s\n", ptype);
-+}
-+static DEVICE_ATTR_RO(type);
-+
-+static umode_t typec_product_type_attr_is_visible(struct kobject *kobj,
-+						  struct attribute *attr, int n)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+
-+	if (attr == &dev_attr_type.attr)
-+		if (!get_pd_product_type(dev))
-+			return 0;
-+
-+	return attr->mode;
- }
- 
- /* ------------------------------------------------------------------------- */
-@@ -535,9 +630,19 @@ static DEVICE_ATTR_RO(supports_usb_power_delivery);
- static struct attribute *typec_partner_attrs[] = {
- 	&dev_attr_accessory_mode.attr,
- 	&dev_attr_supports_usb_power_delivery.attr,
-+	&dev_attr_type.attr,
-+	NULL
-+};
-+
-+static struct attribute_group typec_partner_group = {
-+	.is_visible = typec_product_type_attr_is_visible,
-+	.attrs = typec_partner_attrs,
-+};
-+
-+static const struct attribute_group *typec_partner_groups[] = {
-+	&typec_partner_group,
- 	NULL
- };
--ATTRIBUTE_GROUPS(typec_partner);
- 
- static void typec_partner_release(struct device *dev)
- {
-@@ -744,15 +849,6 @@ EXPORT_SYMBOL_GPL(typec_unregister_plug);
- 
- /* Type-C Cables */
- 
--static ssize_t
--type_show(struct device *dev, struct device_attribute *attr, char *buf)
--{
--	struct typec_cable *cable = to_typec_cable(dev);
--
--	return sprintf(buf, "%s\n", cable->active ? "active" : "passive");
--}
--static DEVICE_ATTR_RO(type);
--
- static const char * const typec_plug_types[] = {
- 	[USB_PLUG_NONE]		= "unknown",
- 	[USB_PLUG_TYPE_A]	= "type-a",
-@@ -775,7 +871,15 @@ static struct attribute *typec_cable_attrs[] = {
- 	&dev_attr_plug_type.attr,
- 	NULL
- };
--ATTRIBUTE_GROUPS(typec_cable);
-+
-+static struct attribute_group typec_cable_group = {
-+	.attrs = typec_cable_attrs,
-+};
-+
-+static const struct attribute_group *typec_cable_groups[] = {
-+	&typec_cable_group,
-+	NULL
-+};
- 
- static void typec_cable_release(struct device *dev)
- {
-@@ -1352,6 +1456,11 @@ const struct device_type typec_port_dev_type = {
- /* --------------------------------------- */
- /* Driver callbacks to report role updates */
- 
-+static int partner_match(struct device *dev, void *data)
-+{
-+	return is_typec_partner(dev);
-+}
-+
- /**
-  * typec_set_data_role - Report data role change
-  * @port: The USB Type-C Port where the role was changed
-@@ -1361,12 +1470,23 @@ const struct device_type typec_port_dev_type = {
-  */
- void typec_set_data_role(struct typec_port *port, enum typec_data_role role)
- {
-+	struct device *partner_dev;
-+
- 	if (port->data_role == role)
- 		return;
- 
- 	port->data_role = role;
- 	sysfs_notify(&port->dev.kobj, NULL, "data_role");
- 	kobject_uevent(&port->dev.kobj, KOBJ_CHANGE);
-+
-+	partner_dev = device_find_child(&port->dev, NULL, partner_match);
-+	if (!partner_dev)
-+		return;
-+
-+	if (to_typec_partner(partner_dev)->identity)
-+		typec_product_type_notify(partner_dev);
-+
-+	put_device(partner_dev);
- }
- EXPORT_SYMBOL_GPL(typec_set_data_role);
- 
-@@ -1407,11 +1527,6 @@ void typec_set_vconn_role(struct typec_port *port, enum typec_role role)
- }
- EXPORT_SYMBOL_GPL(typec_set_vconn_role);
- 
--static int partner_match(struct device *dev, void *data)
--{
--	return is_typec_partner(dev);
--}
--
- /**
-  * typec_set_pwr_opmode - Report changed power operation mode
-  * @port: The USB Type-C Port where the mode was changed
+which I have a patch for: https://reviews.llvm.org/D91895.  I agree
+that can never lead to bugs.  But that's not the sole case of this
+series, just most of them.
+
+Though, note how the reviewer (C++ spec editor and clang front end
+owner) in https://reviews.llvm.org/D91895 even asks in that review how
+maybe a new flag would be more appropriate for a watered
+down/stylistic variant of the existing behavior.  And if the current
+wording of Documentation/process/deprecated.rst around "fallthrough"
+is a straightforward rule of thumb, I kind of agree with him.
+
+>
+> > This is about robustness and language wrangling. It's a big code-
+> > base, and this is the price of our managing technical debt for
+> > permanent robustness improvements. (The numbers I ran from Gustavo's
+> > earlier patches were that about 10% of the places adjusted were
+> > identified as legitimate bugs being fixed. This final series may be
+> > lower, but there are still bugs being found from it -- we need to
+> > finish this and shut the door on it for good.)
+>
+> I got my six patches by analyzing the lwn.net report of the fixes that
+> was cited which had 21 of which 50% didn't actually change the emitted
+> code, and 25% didn't have a user visible effect.
+>
+> But the broader point I'm making is just because the compiler people
+> come up with a shiny new warning doesn't necessarily mean the problem
+
+That's not what this is though; you're attacking a strawman.  I'd
+encourage you to bring that up when that actually occurs, unlike this
+case since it's actively hindering getting -Wimplicit-fallthrough
+enabled for Clang.  This is not a shiny new warning; it's already on
+for GCC and has existed in both compilers for multiple releases.
+
+And I'll also note that warnings are warnings and not errors because
+they cannot be proven to be bugs in 100% of cases, but they have led
+to bugs in the past.  They require a human to review their intent and
+remove ambiguities.  If 97% of cases would end in a break ("Expert C
+Programming: Deep C Secrets" - Peter van der Linden), then it starts
+to look to me like a language defect; certainly an incorrectly chosen
+default.  But the compiler can't know those 3% were intentional,
+unless you're explicit for those exceptional cases.
+
+> it's detecting is one that causes us actual problems in the code base.
+> I'd really be happier if we had a theory about what classes of CVE or
+> bug we could eliminate before we embrace the next new warning.
+
+We don't generally file CVEs and waiting for them to occur might be
+too reactive, but I agree that pointing to some additional
+documentation in commit messages about how a warning could lead to a
+bug would make it clearer to reviewers why being able to enable it
+treewide, even if there's no bug in their particular subsystem, is in
+the general interest of the commons.
+
+On Mon, Nov 23, 2020 at 7:58 AM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> We're also complaining about the inability to recruit maintainers:
+>
+> https://www.theregister.com/2020/06/30/hard_to_find_linux_maintainers_says_torvalds/
+>
+> And burn out:
+>
+> http://antirez.com/news/129
+>
+> The whole crux of your argument seems to be maintainers' time isn't
+> important so we should accept all trivial patches ... I'm pushing back
+> on that assumption in two places, firstly the valulessness of the time
+> and secondly that all trivial patches are valuable.
+
+It's critical to the longevity of any open source project that there
+are not single points of failure.  If someone is not expendable or
+replaceable (or claims to be) then that's a risk to the project and a
+bottleneck.  Not having a replacement in training or some form of
+redundancy is short sighted.
+
+If trivial patches are adding too much to your workload, consider
+training a co-maintainer or asking for help from one of your reviewers
+whom you trust.  I don't doubt it's hard to find maintainers, but
+existing maintainers should go out of their way to entrust
+co-maintainers especially when they find their workload becomes too
+high.  And reviewing/picking up trivial patches is probably a great
+way to get started.  If we allow too much knowledge of any one
+subsystem to collect with one maintainer, what happens when that
+maintainer leaves the community (which, given a finite lifespan, is an
+inevitability)?
 -- 
-2.29.2
-
+Thanks,
+~Nick Desaulniers
