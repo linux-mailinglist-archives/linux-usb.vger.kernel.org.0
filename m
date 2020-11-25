@@ -2,171 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 402F62C3832
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 05:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 112D02C3844
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 05:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726771AbgKYEmh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Nov 2020 23:42:37 -0500
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:21434 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725817AbgKYEmg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Nov 2020 23:42:36 -0500
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0AP4Tb8b013142;
-        Tue, 24 Nov 2020 20:42:02 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=GWpAz1pdsUfuFgTwCa3nOFr0xcn7x6mdK/cV7M61o8A=;
- b=Gu2CjMDoQgOpEvpNE4tl+aU4ghNIg5NODYNBHgM4CNuA3eItap3uECmHPy7oUtgHm6eD
- 8jxleIjr6sjC4zRWwhCXKqyvc9lNdxX+HFzGbDFPoaFx9fheYG9KVmtYNhjZ8qfZGqE6
- 02VhXd5xgmsANHwI8pf94+0rMJUyox8DJv2RvTYgpNa+rI/prLAYlroxxRgXHEgwbdl9
- 2HRlDozaWiOmVyJuRns1Hd0R3XYnWH8H6Q7qTi6mSAdi5NKpRyeJUUsJkSfEVS0le3Cj
- OoiHby004Ltsj9+jdUP0PpMVG8EgcQtqnkrYT36PX+LdBtedjwh3rpZI4VL7TsVJXG7l VA== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2048.outbound.protection.outlook.com [104.47.66.48])
-        by mx0b-0014ca01.pphosted.com with ESMTP id 34y0bvegqs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Nov 2020 20:42:02 -0800
+        id S1726640AbgKYEsj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Nov 2020 23:48:39 -0500
+Received: from mail-am6eur05on2056.outbound.protection.outlook.com ([40.107.22.56]:61344
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725817AbgKYEsj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Nov 2020 23:48:39 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HRJ2sQ8UOj24GfH1zA75CRZafafSlKo+k3L8fAQTCcXHCfuDhuvv2MDeMvUaVUhGYqq/K0XgQBZMFgN+zke28dmnGosBs+XX8Aj4lNGLIrR1Inw8RkpBtktlKYzsj/CWLHgd+0E00NjBZvEqk4Yl5CnqnWfXFaOPUmmgipBnHLR3lpK6UaB2C2TVJVnaSWz7naix37PbHpQVxtgpoF05Phu3uBSMHccRciAw2jGOEkqr7n1tGO1IZ22bNRjf19ioX580anWVxwzpFP0icGlyAA9qs8eqxPm6HmOIIMiY963x6W9JzuysgAZx6zgp7e7WQZHB7d73QKMwGcG2vAWKlQ==
+ b=K4aTxveFpW/ValFMhlaThQUBlQh6bE5jmsKYQdZorIChDnsmHqqx/LH5w3bsCOif2H3NhcwFwPjczKw5d+yjGPwrsLD/NzpQ7v5+gTZKSeeBxIiJIRnLDPcHnBDmo+QpVq+C4qI2iVd0URPr3ILZhpXruuuKS+xyNPyHTv+CzGONm0l7qo796WgG3jLStGdpcbUoK3GgeswlNpsANdpBFbNyGgkDvL1qLHfWDJV5NE1pa17hYiEOi53qu5yaXUtUttXYoZUK9jKSVINluAdBnyGLF+y90a5loz3mCldYb1cAa84PSdQ2s0YJrlG/+7ndfWW3Tlu39cZhUSwieW7CZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GWpAz1pdsUfuFgTwCa3nOFr0xcn7x6mdK/cV7M61o8A=;
- b=CwEpGGK8bIZdBrpcLq+SvO2Y5NKuejd2W9xyqy3w+upEl9+juAnoknqs8BjzcGPhya2v1fFNj5HGiStgYq1brASSZHD3sOxt3Tt0zEt3xzZrvBZGpfCD4Egdp5ZJoyr5bBwTtRhctFAH0d3Jz6PKkBySSg45Vobc0WBf2PqhXx1CDosHn9mtFHU0I6aNweo+DJjyc6P/w70cFCE+vTpreBL2mRZZmKYaEP2MtH6tsZcac9eKv0ycbNwZcda9bnHI+bNM+GOQVACBHEkg8Lcj2sq3C0d3f0OAWjbPOzknL3B8v2jvg/2t5vVdz8GuhnhsDf39UkMVBUuqNaH+f5AMKA==
+ bh=3vDKM0N9sqT18+F168w7uH5AZm2DfWZcSyhO4vBmeR4=;
+ b=XNdQ6yOeX+6TfOt1xcbi0ra3SMPaRqolO6zmUpmf5CI+CPQ+9oXXmvZKN878Ha02a/2xFD93tl75olMiCiDTOKwm+WVnW05G9OYuIy1m3f3MpRha1dLrSc5qad1l1BYLQ/gLpuKwDmYoxthyLKTeY4dxNxmLS8YC/hAIxDwyn7wXRYOJiDYJuhAYk/eR3hf4W7/3ruuqNI0Of4saOAjinxvZV8/qr6yUx6mVKgK+XUNQ5jQ4KzCMOVfz7qLB0WqCSkvfAXLmmdtCC5Sq+6LZjEhlYF9WZb6Sj0X307NjvRw1g5UBoyIz2GLnHSr2MU/6ZBZu4qfB7wAW9O6O0OnwPQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GWpAz1pdsUfuFgTwCa3nOFr0xcn7x6mdK/cV7M61o8A=;
- b=wu5GPWWx2eGpfPKaslZjGZT9zHRVbHltvTzlimX76i0zlOSAhrFtRkYIuD2RbBBym9oeBmAnOnqFukbPKBTU1Y3tWMv1POKHhtRI42BArjGycXCEvAYOoLxvXVIxPFVsHqgmgs4rOJglH9Z8Jsi8RgA4/C8Gy/1f+8tuJTkWmys=
-Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
- DM5PR07MB3017.namprd07.prod.outlook.com (2603:10b6:3:df::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3589.22; Wed, 25 Nov 2020 04:41:58 +0000
-Received: from DM6PR07MB5529.namprd07.prod.outlook.com
- ([fe80::5c52:d1b0:b595:cfc1]) by DM6PR07MB5529.namprd07.prod.outlook.com
- ([fe80::5c52:d1b0:b595:cfc1%3]) with mapi id 15.20.3589.022; Wed, 25 Nov 2020
- 04:41:58 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Peter Chen <peter.chen@nxp.com>
+ bh=3vDKM0N9sqT18+F168w7uH5AZm2DfWZcSyhO4vBmeR4=;
+ b=QCSetHl3jGUukKZ0ZqZgIcF40slGy9zwCavcAKTNAoVtGEtvPlFx0+K+Jjggc5JLec9K3Zl7H9YwsrYz11HE1z+9k4M5edmaIdWBErM8QdJWKrvXiF+JUPCB2Vzsf7sz0OjnLFkHo67yRpNAGVxD6JgOwfzlYXlyUMrB8MWRqIE=
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
+ by DB6PR0401MB2533.eurprd04.prod.outlook.com (2603:10a6:4:37::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20; Wed, 25 Nov
+ 2020 04:48:34 +0000
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3589.030; Wed, 25 Nov 2020
+ 04:48:34 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Fabio Estevam <festevam@gmail.com>
 CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "colin.king@canonical.com" <colin.king@canonical.com>,
-        "rogerq@ti.com" <rogerq@ti.com>, Rahul Kumar <kurahul@cadence.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>
-Subject: RE: [PATCH v3 10/10] MAINTAINERS: add Cadence USBSSP DRD IP driver
- entry
-Thread-Topic: [PATCH v3 10/10] MAINTAINERS: add Cadence USBSSP DRD IP driver
- entry
-Thread-Index: AQHWvn5VThDxVdNZYkqk3u4Wq9ZpyKnYEn8AgAA6gXA=
-Date:   Wed, 25 Nov 2020 04:41:58 +0000
-Message-ID: <DM6PR07MB55297B6A1A2DE7D29AE80A6DDDFA0@DM6PR07MB5529.namprd07.prod.outlook.com>
-References: <20201119141307.8342-1-pawell@cadence.com>
- <20201119141307.8342-11-pawell@cadence.com>
- <20201125010951.GC9929@b29397-desktop>
-In-Reply-To: <20201125010951.GC9929@b29397-desktop>
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH 1/3] usb: phy: phy-mxs-usb: Use of_device_get_match_data()
+Thread-Topic: [PATCH 1/3] usb: phy: phy-mxs-usb: Use
+ of_device_get_match_data()
+Thread-Index: AQHWwoBjdKkP4Uur+ECB1vaKYiRwUanYR1Cg
+Date:   Wed, 25 Nov 2020 04:48:34 +0000
+Message-ID: <DBBPR04MB79791491EB1F4EA6CB560BC48BFA0@DBBPR04MB7979.eurprd04.prod.outlook.com>
+References: <20201124163912.12074-1-festevam@gmail.com>
+In-Reply-To: <20201124163912.12074-1-festevam@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctOGFiMjJkODYtMmVkOC0xMWViLTg3NzUtYTQ0Y2M4MWIwYzU1XGFtZS10ZXN0XDhhYjIyZDg4LTJlZDgtMTFlYi04Nzc1LWE0NGNjODFiMGM1NWJvZHkudHh0IiBzej0iMTA2OSIgdD0iMTMyNTA3NTI5MTQ5ODI3ODgyIiBoPSJKRnNoRHoyQzlSSXBaK1VNVHRwZks4YkliMjg9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: true
-authentication-results: nxp.com; dkim=none (message not signed)
- header.d=none;nxp.com; dmarc=none action=none header.from=cadence.com;
-x-originating-ip: [185.217.253.59]
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [92.121.68.129]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5fdbf032-aa5c-45d5-d680-08d890fc7179
-x-ms-traffictypediagnostic: DM5PR07MB3017:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM5PR07MB3017FD4AC60F77EF1F736F63DDFA0@DM5PR07MB3017.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:883;
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 6ae43221-d028-4cb3-92e9-08d890fd5dae
+x-ms-traffictypediagnostic: DB6PR0401MB2533:
+x-microsoft-antispam-prvs: <DB6PR0401MB253354477D7900F38DCB9BF58BFA0@DB6PR0401MB2533.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:136;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OVCk7joCdzloh2f6C3ELkh25REOmvRfMWC7p15QWoWfMhRSOHm6BSFljo1lSIt1ecD6YQEFFabJGKEI6QIJsHbCRKFwXL9q7DosPK1ISvwx+gWcNzCMJv/SvJ6GWmxOLYzK9VakZfGBKHAXYKSf1NWYFzP9+p1RlOojnKvq1V+Bqwx0sLJ3qbCa0UNsLhgo0tZQDKVqKiLHU3l1GEqXo/tbAqVMSCUCHEobsh4hf7or4d/H50Yi//gme41yI4bZCWUBmZAApsmVK5dMlaw/l+DMVmrmaCVO94VpXrVT66OAWnJX2yNRqLXFGTOyJI/WKTDgRWuHKNV35/xegmR5C9+zN1z2DBYSR3xsFHn4/jtBmVaezdTtmgygY/0dzy4qo
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39860400002)(376002)(136003)(396003)(366004)(36092001)(186003)(66556008)(64756008)(66946007)(8676002)(71200400001)(54906003)(76116006)(9686003)(66476007)(26005)(66446008)(4744005)(55016002)(316002)(52536014)(6506007)(2906002)(7696005)(478600001)(5660300002)(8936002)(6916009)(86362001)(33656002)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?5Mm+nuuW/AJhtI8hIp8nfFI7C3GYI5PSttfQeieWQXHNHEyrYp4dxQhSTkUA?=
- =?us-ascii?Q?V1gVtwnzhaaAFncZsN+UomvHe/Ev6pmVso3EmsMZZju/VNq1hsU63G1pHIOQ?=
- =?us-ascii?Q?XcMHsu0hVHh3yZzJiD+VOiIWEeANLngZvjUkVXsHNHRNGwQ/HlUGhTDfVdow?=
- =?us-ascii?Q?rPHKJOMOrzLBmKMqS7AzI5L3V7fLVFXXsQdZPR8mEJIcwgA63AqNokhTEtoO?=
- =?us-ascii?Q?iMU7+0Imyr5jInSO350KED02tvQ61eGRvmF0tuvb3HR+h9IlVrDzRIejVUk9?=
- =?us-ascii?Q?TEqsZ9oP+5E4uekMmXV7+veRAAq6yV+XnFqxtjUDx6IGuBBjiJzFwHA2msvt?=
- =?us-ascii?Q?QsFZcX4kBAZEJb00HO1HPdzM4AOnVRbqyw9wRLTaGRszj2zm2JUJXwxSLypF?=
- =?us-ascii?Q?dNcE06BiSNFbS+BqXE/SDHDK/q0qMOcwerkaK3lgDwURZKdQlna07ncXtUX0?=
- =?us-ascii?Q?3hdstmEdZq4zVo2YnNgG6tD17Q3zX9rzkjhDgJX4QNde2H6/89Gnss3JjJD9?=
- =?us-ascii?Q?SFfBUjYucompwR2xIhXqeh9RQ4KfDQxyFKEGxkup31MlL8ZS2/O6h78fFtx6?=
- =?us-ascii?Q?PUXfQb8tht+zC3aB+/n4Yso8uP9hTIVjbtgTRAVTxFOiTxYA+F1guQDom4pJ?=
- =?us-ascii?Q?EUZuMwVTceuRMgS/JSWc2q+/J9+ph2Nrj6W68NRxPvXsaC2YNWJzCOuQi2s7?=
- =?us-ascii?Q?XgVbXcDFNtVGA6sYfSKeOi0nKhAuOhAuWuBrTHdkgylh2xPjapcjaI4myF5p?=
- =?us-ascii?Q?scxqRzAvnxtf2OnhISsAKtzZkGFgVeTMgLqW1xLgvQCHg9bISctVPoZoOjKB?=
- =?us-ascii?Q?/KILVPRELZy1L3oftbhwM/GgU+ZgWeT06MstncwBfHSSpCulLmA8u7ItyKgN?=
- =?us-ascii?Q?/bZJX8vtX1wH0sudD/pd7Kg6twk6PXW2oYGOiE3O6/cupCYyygKhO0efq1hq?=
- =?us-ascii?Q?50rOqEq9GrdEB/2PjkiTjqhVkiCPA1HpoULRbJHgWLE=3D?=
+x-microsoft-antispam-message-info: SPGaU1vjUrPg0TfeW+U5GKDHVJLB8hNpsRa+jL+3GJJENTmhO2SnfS+fRFBDKl7hvcCiXQcSP6FK6NLA5R3NYjEDIWQRgnkDpx2eSM5SBTcuosQwZjeXZZ6SCgvxjEblJ/m95WefmpLf2MfMqU62B8VDyjKzolyQqMig9jJ3e2cShd5HYaIAiytW1DdsvGvDoangG1KAIpK56z6No2vQ7dlvsrdGEVxJp+aQkeiMfpGj1PCuVQs0PyzvOnzKxlVeuvLHr3Qlh6B+JCqHz/t7oTb6f+FPY+CfiiEMhr39wq+5deJqaxD2Huu5Ya9H4+of8j45WdweiNZK/MGua9AOww==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(376002)(346002)(136003)(39860400002)(5660300002)(8676002)(26005)(33656002)(86362001)(66946007)(64756008)(6506007)(52536014)(76116006)(7696005)(66476007)(8936002)(9686003)(2906002)(44832011)(478600001)(186003)(66446008)(55016002)(83380400001)(66556008)(6916009)(316002)(4326008)(54906003)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: gk9qb3lv3q7lgp27kSSSwoVDtpuipLpS0HYU1dPxbjSukJiT7AmjeyPL3XQvYmhIdq9kF7bhjjqDyGFfJ+rcHQDlXgG79NXN4vofIVJTx4f0I92+IF+5PX8QXcoU9xoaBbCCKI9lzOPNdjykCX23rdbszJ/5DZgKc+83dRbOYSWP1L8mgrwncfFddxJr8f0+/XkDp2enaLQ5NTbOm/KQGT7Faphrxp9YBbZuGDy0KsffV4Vu522hdqDucF6KWVaQwuoD++BQJAqWnYZzm8E3kI34gIkgvVoeosmxDl+5yuzR847DXMcJpgxgotwh1quk+7J/Vl0IIJQa2cWH03IrGmowUXYSh9d99cBW3qDyGqtEmZ7775x7CKJfrRhS2MuBsSkdyII41aX8ah4I4C9hOE9Cno6ErvYrAz6Yt0thqCRMUPgK8cNquBnrVkBjskL5w9hzSVgmgLwQRLSvP9n6RruLWaNZzOwQ6RRs66PwqEzqUfX33fXFHgeTRJ4+2Lkxpe3KiC6T4oXekbfCtcIUct2+mV/t197NrFUnYQDxdq6DMdlBJRiB2zwUnudZcAzPEp+UCPz/h/tcPQVoLHSS6RlL+fjeJ9aVUu0ctr4ZpKvoJPE8o+Sbk24NVs/6H5tjIwySegKx2leJusOBMIrPqlbBGX5CxLbwUmc/8mRPJtFlqEIimccJmSBgixcOIuXHnAF0Yaqv2C+s9Y0nkQ3stu4rqfftTNHmL4ZNytUC4q8umlEIE/F5gKCGoAjVJGEBnLJ2NpwUvOvCgR8CWwhCw7heQytpzCdPuB4e7w4G2PCQCmWtafjGs5SzNJ1Kds9/JH+0gSg1cp08+VZWEo3ROMB05maxaYfpdAwkBlsGtd2S4E+pycT5J8kvB8+jCVIM46w2pek8+UBMoHIJvYWWrg==
+x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fdbf032-aa5c-45d5-d680-08d890fc7179
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2020 04:41:58.0984
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ae43221-d028-4cb3-92e9-08d890fd5dae
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2020 04:48:34.4697
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1SVODO88ssCfG1OuGawfSeJrFcjxypdAzuiLBZmbha9HK4nYfrVH5VHyq06pRrU17JSaxdzPi5y/sUQOC6ElIOnErlLSMU9gSKfrs+PfLb8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR07MB3017
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-25_02:2020-11-25,2020-11-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 phishscore=0
- adultscore=0 lowpriorityscore=0 mlxlogscore=730 suspectscore=0
- malwarescore=0 spamscore=0 bulkscore=0 impostorscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011250027
+X-MS-Exchange-CrossTenant-userprincipalname: TeMVHn/MkKBq1opiIUrXiUZ76z1H52Ts2RygqGfD30KSJgVJKjvx18MawVrviia9j9kE1sDWXNYMCHs5/eAypw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2533
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Peter,
+=20
+>=20
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
->
->On 20-11-19 15:13:07, Pawel Laszczak wrote:
->> Patch adds entry for USBSSP (CDNSP) driver into MAINTARNERS file.
->>
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> ---
->>  MAINTAINERS | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 842fef329119..70c31fd2cd61 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -3867,6 +3867,14 @@ S:	Maintained
->>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
->>  F:	Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->>  F:	drivers/usb/cdns3/
->> +X:	drivers/usb/cdns3/cdnsp*
->> +
->> +CADENCE USBSSP DRD IP DRIVER
->> +M:	Pawel Laszczak <pawell@cadence.com>
->> +L:	linux-usb@vger.kernel.org
->> +S:	Maintained
->> +F:	drivers/usb/cdns3/
->> +X:	drivers/usb/cdns3/cdns3*
->>
->
->Hi Pawel,
->
->You may add "T" for which tree for cdns3 ssp driver.
+Acked-by: Peter Chen <peter.chen@nxp.com>
 
-It make sense. I will do it.
+Peter
+> ---
+>  drivers/usb/phy/phy-mxs-usb.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.=
+c
+> index 67b39dc62b37..8a262c5a0408 100644
+> --- a/drivers/usb/phy/phy-mxs-usb.c
+> +++ b/drivers/usb/phy/phy-mxs-usb.c
+> @@ -714,14 +714,9 @@ static int mxs_phy_probe(struct platform_device
+> *pdev)
+>  	struct clk *clk;
+>  	struct mxs_phy *mxs_phy;
+>  	int ret;
+> -	const struct of_device_id *of_id;
+>  	struct device_node *np =3D pdev->dev.of_node;
+>  	u32 val;
+>=20
+> -	of_id =3D of_match_device(mxs_phy_dt_ids, &pdev->dev);
+> -	if (!of_id)
+> -		return -ENODEV;
+> -
+>  	base =3D devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(base))
+>  		return PTR_ERR(base);
+> @@ -797,7 +792,7 @@ static int mxs_phy_probe(struct platform_device
+> *pdev)
+>  	mxs_phy->phy.charger_detect	=3D mxs_phy_charger_detect;
+>=20
+>  	mxs_phy->clk =3D clk;
+> -	mxs_phy->data =3D of_id->data;
+> +	mxs_phy->data =3D of_device_get_match_data(&pdev->dev);
+>=20
+>  	platform_set_drvdata(pdev, mxs_phy);
+>=20
+> --
+> 2.17.1
 
---
-
-Thanks,
-Pawel
