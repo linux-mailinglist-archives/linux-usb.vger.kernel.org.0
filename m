@@ -2,145 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 907322C3BB4
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 10:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D242C3C70
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Nov 2020 10:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727639AbgKYJJz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Nov 2020 04:09:55 -0500
-Received: from gofer.mess.org ([88.97.38.141]:33717 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726284AbgKYJJw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Nov 2020 04:09:52 -0500
-X-Greylist: delayed 492 seconds by postgrey-1.27 at vger.kernel.org; Wed, 25 Nov 2020 04:09:46 EST
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id C2D44C63FB; Wed, 25 Nov 2020 09:01:14 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1606294874; bh=KH9dzgywMXfGPGDwmO8Qm6o//zr8KQDL4nO6EawRuDY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SJYLrwiKZrmMRjkeBYo7cqsbs6xljPuQypU3vE6W0mhxhiBNmXN2bqL5RV07d2awA
-         Wb5Oa7L0TiIxfU/vxoLt2vFycI3gN8Kh1qdOF59uK2dEnqITAnDV+wsiQw/exDF78D
-         hoTz22IC76edW7bl4Xm8hYrqoRAlLOCNTSbizDTKI7x8BBnutJW03OyPsTxurVqfdC
-         T9t8y4uSMzXA9L5TYoAbkkzEdR07qHfBTYdhaiYGGYuE1E1bdzLhtRTU2iYu251NBa
-         zqIr2827TZMk9I1fNh/951tgkmCQWewUCt5nrmXnkgqHhLp9nxDE6gWAGCUXG6XCXv
-         3mw8Hv064saVQ==
-Date:   Wed, 25 Nov 2020 09:01:14 +0000
-From:   Sean Young <sean@mess.org>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-Message-ID: <20201125090114.GA24274@gofer.mess.org>
-References: <cover.1605896059.git.gustavoars@kernel.org>
- <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011201129.B13FDB3C@keescook>
- <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook>
- <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
- <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
- <1c7d7fde126bc0acf825766de64bf2f9b888f216.camel@HansenPartnership.com>
- <CANiq72m22Jb5_+62NnwX8xds2iUdWDMAqD8PZw9cuxdHd95W0A@mail.gmail.com>
- <fc45750b6d0277c401015b7aa11e16cd15f32ab2.camel@HansenPartnership.com>
+        id S1726242AbgKYJkY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Nov 2020 04:40:24 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:42065 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726039AbgKYJkY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Nov 2020 04:40:24 -0500
+Received: by mail-lf1-f66.google.com with SMTP id u18so2191970lfd.9
+        for <linux-usb@vger.kernel.org>; Wed, 25 Nov 2020 01:40:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nCit6xd+O70kjek/u0RUbkcgjxkoOHaO4tjhquE+s7Y=;
+        b=Qsbp9a6B3Yt/NnuaAlmztA+uvtuvlrVBq3v6haM2wZ+mzYOaa3f01FAw35W7tQXtNU
+         usXmCllmtKLDfBKoX2T1bc7++O8+g+mZ8paj0RubhS61ryaWe5Rv5PZuZO4BHB7UBPH0
+         TutbeCMm9ATNEzltdFoQ4zY6+5LZDnljGFlPQL1JbacaG9pTfqlup+s0x9o/UxwHHLAT
+         MWvHZJfZ9jmeqvUuWUEyc3wZetTlvs+TEa4RzCMlfm2dBsjaWHXlwK3780CXCokN+Jr3
+         71/Rf2M2klgJvVPnVvtZJZRwpxd0UksYPB6zQJVOeZZSLqyB/OFiBUoKlLkk0cHLp0HP
+         dl6Q==
+X-Gm-Message-State: AOAM533CZ9Qzzid+Ezj2HXgPTy9cJelA/v4n1C8wmzW+2+QNhOXxMy18
+        s4EfZYWFX9h6BVTNSEKrmKM=
+X-Google-Smtp-Source: ABdhPJyVlal1LBu3aRZGckcBQTZVUrJtbAbnYnkmN6WSFFd3w08UFFjCSm8FAhZiKLomVNWPYEThCQ==
+X-Received: by 2002:a05:6512:3128:: with SMTP id p8mr947123lfd.13.1606297221720;
+        Wed, 25 Nov 2020 01:40:21 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id p16sm189700lfe.255.2020.11.25.01.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2020 01:40:20 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1khrHv-00035w-4w; Wed, 25 Nov 2020 10:40:35 +0100
+Date:   Wed, 25 Nov 2020 10:40:35 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Giacinto Cifelli <gciofono@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Lars Melin <larsm17@gmail.com>
+Subject: Re: [PATCH] option: added support for Thales Cinterion EXS82 option
+ port.
+Message-ID: <X74mk/lw2NYJ78jq@localhost>
+References: <20201124094155.10510-1-gciofono@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fc45750b6d0277c401015b7aa11e16cd15f32ab2.camel@HansenPartnership.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201124094155.10510-1-gciofono@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 07:58:06AM -0800, James Bottomley wrote:
-> On Mon, 2020-11-23 at 15:19 +0100, Miguel Ojeda wrote:
-> > On Sun, Nov 22, 2020 at 11:36 PM James Bottomley
-> > <James.Bottomley@hansenpartnership.com> wrote:
-> > > It's not about the risk of the changes it's about the cost of
-> > > implementing them.  Even if you discount the producer time (which
-> > > someone gets to pay for, and if I were the engineering manager, I'd
-> > > be unhappy about), the review/merge/rework time is pretty
-> > > significant in exchange for six minor bug fixes.  Fine, when a new
-> > > compiler warning comes along it's certainly reasonable to see if we
-> > > can benefit from it and the fact that the compiler people think
-> > > it's worthwhile is enough evidence to assume this initially.  But
-> > > at some point you have to ask whether that assumption is supported
-> > > by the evidence we've accumulated over the time we've been using
-> > > it.  And if the evidence doesn't support it perhaps it is time to
-> > > stop the experiment.
-> > 
-> > Maintainers routinely review 1-line trivial patches, not to mention
-> > internal API changes, etc.
+On Tue, Nov 24, 2020 at 10:41:55AM +0100, Giacinto Cifelli wrote:
+> There is a single option port in this modem, and it is used as debug port
 > 
-> We're also complaining about the inability to recruit maintainers:
+> Signed-off-by: Giacinto Cifelli <gciofono@gmail.com>
+
+Thanks for the update (and thanks for the review, Lars).
+
+Using the option driver for just a debug port seems like overkill, but
+ok.
+
+Some form issues:
+
+ - When updating a patch always include a patch revision number in the
+   Subject prefix (e.g. "[PATCH v2] USB: serial: option: add ...").
+
+ - Include a short changelog below the "---" line so we know what
+   changed since the previous version.
+
+ - Try to follow the convention used by the subsystem for the Subject
+   prefix (i.e. "USB: serial: option: add ...").
+
+> ---
+
+And please keep the lsusb -v info here below the cut-off line when
+resending.
+
+>  drivers/usb/serial/option.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> https://www.theregister.com/2020/06/30/hard_to_find_linux_maintainers_says_torvalds/
-> 
-> And burn out:
-> 
-> http://antirez.com/news/129
-> 
-> The whole crux of your argument seems to be maintainers' time isn't
-> important so we should accept all trivial patches ... I'm pushing back
-> on that assumption in two places, firstly the valulessness of the time
-> and secondly that all trivial patches are valuable.
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 54ca85cc920d..fda291e68e4b 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -424,6 +424,7 @@ static void option_instat_callback(struct urb *urb);
+>  #define CINTERION_PRODUCT_AHXX_2RMNET		0x0084
+>  #define CINTERION_PRODUCT_AHXX_AUDIO		0x0085
+>  #define CINTERION_PRODUCT_CLS8			0x00b0
+> +#define CINTERION_PRODUCT_EXS82			0x006c
 
-You're assuming burn out or recruitment problems is due to patch workload
-or too many "trivial" patches.
+Please keep the entries sorted by PID.
 
-In my experience, "other maintainers" is by far the biggest cause of
-burn out for my kernel maintenance work.
+>  
+>  /* Olivetti products */
+>  #define OLIVETTI_VENDOR_ID			0x0b3c
+> @@ -1908,6 +1909,7 @@ static const struct usb_device_id option_ids[] = {
+>  	{ USB_DEVICE(SIEMENS_VENDOR_ID, CINTERION_PRODUCT_HC25_MDMNET) },
+>  	{ USB_DEVICE(SIEMENS_VENDOR_ID, CINTERION_PRODUCT_HC28_MDM) }, /* HC28 enumerates with Siemens or Cinterion VID depending on FW revision */
+>  	{ USB_DEVICE(SIEMENS_VENDOR_ID, CINTERION_PRODUCT_HC28_MDMNET) },
+> +	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_EXS82, 0xff) },
 
-Certainly arguing with a maintainer about some obviously-correct patch
-series must be a good example of this.
+And keep these sorted alphabetically if possible (at least keep the
+CINTERION_VENDOR_ID entries together).
 
+>  	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
+>  	  .driver_info = RSVD(4) },
+>  	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
 
-Sean
+Care to fix that up in a v3?
+
+Johan
