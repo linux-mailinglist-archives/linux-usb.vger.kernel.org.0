@@ -2,217 +2,319 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 224E92C5468
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Nov 2020 14:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1188E2C551D
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Nov 2020 14:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389827AbgKZNCr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Nov 2020 08:02:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44962 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389603AbgKZNCq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Nov 2020 08:02:46 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9548921D46;
-        Thu, 26 Nov 2020 13:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1606395764;
-        bh=KVw3w1gmxgW5mUSSds+QDCZAu2G54OF9gmSZSyVWauw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=goTwucKPFTLSoQnhhoGSA9ZHfABjBrkS6olH1FTR02jePwXc/x4mYLiZmSbsbKwz8
-         bCKAa76eOqtfz24uim7xcrrKO7BDoVmc0dVTGVFpFkuwZ+EOWnvHMGSUqhgOVkyVjJ
-         5D3SMJPf1HnBv1GfQeT+mQ7WuKp97257LmqaYIiw=
-Date:   Thu, 26 Nov 2020 14:03:54 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     lijiazi <jqqlijiazi@gmail.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        lijiazi@xiaomi.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: add sanity check for opmode
-Message-ID: <X7+nukwBT94YovSy@kroah.com>
-References: <1795c4568c3d7cfdd6b89258473a5e10bfc821f6.1606357163.git.lijiazi@xiaomi.com>
- <X79mPTrr4rakUV8S@kroah.com>
- <5fbf7cc4.1c69fb81.1cad6.e568@mx.google.com>
- <X7+DaSHWYRA7iiID@kroah.com>
- <5fbfa382.1c69fb81.81118.c465@mx.google.com>
+        id S2389873AbgKZNQ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Nov 2020 08:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389784AbgKZNQ2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Nov 2020 08:16:28 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378D0C0613D4
+        for <linux-usb@vger.kernel.org>; Thu, 26 Nov 2020 05:16:26 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id i2so2107649wrs.4
+        for <linux-usb@vger.kernel.org>; Thu, 26 Nov 2020 05:16:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:message-id
+         :date:mime-version;
+        bh=fiaQhJbDNG4WO4ZaRM9Ux0ZN0/RlvVRiX7f0zpYUKT0=;
+        b=X6/hq8vpqttqYS9/flRQFkXq49MA7Zv2JkavrRsoIAluGlFMozVtEfR6ZDLxRaZIYE
+         Ayy5cspDCjEzOdSCU82JHnjSDew7ChNvZd6znXUcCsWg19xf4az+ZprxkB7xUO0WEXGJ
+         D9gVYlw/mJPGLFHjUatiHvOV3Kcv6cAqUCNsVWtvUcGXP0VkZpKrwTYaZWuv2srKfids
+         gGurqRdbDdYfoAZZJ944gyGk/YI4CV8gJJSc1oftfDXUeyp12HIuCXDB+GVsQc47P7Ws
+         5EA0onPehmSldkLoPvafg+YVDl16Smc8Vf9ni/z016gPjWtN2xmeoQbHtqbx3XlHIBhV
+         +BhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:message-id:date:mime-version;
+        bh=fiaQhJbDNG4WO4ZaRM9Ux0ZN0/RlvVRiX7f0zpYUKT0=;
+        b=bL7bQ7IXc5yVq678Y4m6X/8FCuNX3rWSUYEywZBJdcK6ebZUzDn5lG1hxv080i3/fg
+         kpAMjSnruqsBcSidSGLKzPouXwrpT6mzVOgWFBMZW7U5Py8rORQAl1/8CqLFEqFp8l5T
+         n/DFaDhfN9s2r62k8k3lImda2ZkupUOY8OtYa6sQZyqkbKvogELEw3SFyVXliKdE0gAO
+         KwNdFdkhrSge4jGsOs2/hfpGt5hRkGSYip1K9OcZ3ARw6Y8UoMhCHRvLnwPJ4qQer12R
+         VEvKyjurEzUiaI716YDb2Hlm5HoxkZV5/A7AjUNp2rC/D/0tWltolhfFr1taVI8FST0A
+         7XJw==
+X-Gm-Message-State: AOAM530tv/OsBn5XJD+Fgebft+sWsKuy1YeBfWi1OwscgJ/Y0d3kvh4m
+        iieLZBE4Smpdo0fi42UBBY47Qw==
+X-Google-Smtp-Source: ABdhPJwbCpBDLNUAkaf47M8e4Pgffh+Zwo+Mcu/hkblB7VX9pyLGmk+7WFJAufmPpKUL0zw299ZYzw==
+X-Received: by 2002:adf:ee12:: with SMTP id y18mr3760795wrn.231.1606396584806;
+        Thu, 26 Nov 2020 05:16:24 -0800 (PST)
+Received: from localhost (253.35.17.109.rev.sfr.net. [109.17.35.253])
+        by smtp.gmail.com with ESMTPSA id q12sm8417981wmc.45.2020.11.26.05.16.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Nov 2020 05:16:23 -0800 (PST)
+References: <1604794711-8661-1-git-send-email-ruslan.bilovol@gmail.com>
+ <20201111092941.GJ14896@b29397-desktop>
+ <CAB=otbSAGhDYxim9_fsyH4pZCLqgq+bxNJfv5hXqgQRVngVaig@mail.gmail.com>
+ <CAMS2kBF5Gvhnf7AzdeSFeVeWBLhtHM_hHfTvMLTN-3Jkh=BwHw@mail.gmail.com>
+ <CAB=otbTK0j03HjiLS-tqqaBTuavaFEJs49hpKPj2Df8e1_WN+A@mail.gmail.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Glenn Schmottlach <gschmottlach@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 0/3] UAC2 Gadget: feedback endpoint support
+In-reply-to: <CAB=otbTK0j03HjiLS-tqqaBTuavaFEJs49hpKPj2Df8e1_WN+A@mail.gmail.com>
+Message-ID: <1jblfk8di1.fsf@starbuckisacylon.baylibre.com>
+Date:   Thu, 26 Nov 2020 14:16:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5fbfa382.1c69fb81.81118.c465@mx.google.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 08:45:50PM +0800, lijiazi wrote:
-> On Thu, Nov 26, 2020 at 11:28:57AM +0100, Greg Kroah-Hartman wrote:
-> > On Thu, Nov 26, 2020 at 06:00:33PM +0800, lijiazi wrote:
-> > > On Thu, Nov 26, 2020 at 09:24:29AM +0100, Greg Kroah-Hartman wrote:
-> > > > On Thu, Nov 26, 2020 at 01:10:55PM +0800, lijiazi wrote:
-> > > > > If usb drivers set a invalid value, for example, a negative
-> > > > > value. then a userspace task
-> > > > > cat sys/class/typec/port0/power_operation_mode, will cause a
-> > > > > panic issue:
-> > > > > [154325.262827] Unable to handle kernel paging request at virtual
-> > > > > address ffffff980aad8b68
-> > > > > [154325.262838] Mem abort info:
-> > > > > [154325.262843]   ESR = 0x96000005
-> > > > > [154325.262849]   Exception class = DABT (current EL), IL = 32 bits
-> > > > > [154325.262855]   SET = 0, FnV = 0
-> > > > > [154325.262860]   EA = 0, S1PTW = 0
-> > > > > [154325.262865] Data abort info:
-> > > > > [154325.262870]   ISV = 0, ISS = 0x00000005
-> > > > > [154325.262875]   CM = 0, WnR = 0
-> > > > > [154325.262880] swapper pgtable: 4k pages, 39-bit VAs, pgdp =
-> > > > > 000000001cae9c14
-> > > > > [154325.262884] [ffffff980aad8b68] pgd=0000000000000000,
-> > > > > pud=0000000000000000
-> > > > > [154325.262891] Internal error: Oops: 96000005 [#1] PREEMPT SMP
-> > > > > [154325.262896] Modules linked in: rmnet_perf(O) rmnet_shs(O)
-> > > > > wlan(O) sla(O) exfat(O) machine_dlkm(O) tfa98xx_dlkm(O)
-> > > > > cs35l41_dlkm(O) wcd938x_slave_dlkm(O) wcd938x_dlkm(O)
-> > > > > wcd9xxx_dlkm(O) mbhc_dlkm(O) tx_macro_dlkm(O) rx_macro_dlkm(O)
-> > > > > va_macro_dlkm(O) wsa_macro_dlkm(O) swr_ctrl_dlkm(O)
-> > > > > bolero_cdc_dlkm(O) wsa881x_dlkm(O) wcd_core_dlkm(O) stub_dlkm(O)
-> > > > > hdmi_dlkm(O) swr_dlkm(O) pinctrl_lpi_dlkm(O) pinctrl_wcd_dlkm(O)
-> > > > > usf_dlkm(O) native_dlkm(O) platform_dlkm(O) q6_dlkm(O)
-> > > > > adsp_loader_dlkm(O) apr_dlkm(O) snd_event_dlkm(O)
-> > > > > q6_notifier_dlkm(O) q6_pdr_dlkm(O) [last unloaded: rmnet_perf]
-> > > > > [154325.262939] Process usb@1.2-service (pid: 2501, stack limit
-> > > > > 		= 0x00000000cb0343ac)
-> > > > > [154325.262946] CPU: 5 PID: 2501 Comm: usb@1.2-service Tainted:
-> > > > > G S      W  O      4.19.113-perf-g0307705d321bc #1
-> > > > > [154325.262950] Hardware name: Qualcomm Technologies, Inc.
-> > > > > xiaomi cas (DT)
-> > > > > [154325.262955] pstate: 80400005 (Nzcv daif +PAN -UAO)
-> > > > > [154325.262967] pc : power_operation_mode_show+0x34/0x58
-> > > > > [154325.262971] lr : power_operation_mode_show+0x34/0x58
-> > > > > [154325.262974] sp : ffffffc1376bf990
-> > > > > [154325.262977] x29: ffffffc1376bf990 x28: ffffffc195aede58
-> > > > > [154325.262981] x27: ffffffc195aede48 x26: ffffff9008c55638
-> > > > > [154325.262986] x25: ffffffc05a44b300 x24: 0000000000001000
-> > > > > [154325.262990] x23: ffffffc19a340018 x22: ffffffc19a340018
-> > > > > [154325.262994] x21: ffffff900bb10038 x20: ffffff980aad8b68
-> > > > > [154325.262998] x19: ffffffc05a44b300 x18: 0000000000000000
-> > > > > [154325.263002] x17: 0000000000000000 x16: 0000000000000000
-> > > > > [154325.263006] x15: 0000000000000000 x14: 00000000080a38f8
-> > > > > [154325.263010] x13: ffffff880b489860 x12: 0000000000000000
-> > > > > [154325.263014] x11: 0000000000000000 x10: 1ffffff30155b16d
-> > > > > [154325.263018] x9 : 0000000000000000 x8 : 0000000000000007
-> > > > > [154325.263022] x7 : 0000000000000000 x6 : 000000000000003f
-> > > > > [154325.263026] x5 : 0000000000000040 x4 : 0000000000000000
-> > > > > [154325.263030] x3 : 0000000000000004 x2 : ffffffc05a44b300
-> > > > > [154325.263034] x1 : ffffff900bb10038 x0 : ffffff980aad8b68
-> > > > > [154325.263039]
-> > > > > [154325.263039] SP: 0xffffffc1376bf910:
-> > > > > [154325.263043] f910  00001000 00000000 5a44b300 ffffffc0
-> > > > > 08c55638 ffffff90 95aede48 ffffffc1
-> > > > > [154325.263052] f930  95aede58 ffffffc1 376bf990 ffffffc1
-> > > > > 09024b5c ffffff90 376bf990 ffffffc1
-> > > > > [154325.263060] f950  09024b5c ffffff90 80400005 00000000
-> > > > > 376bf9c0 ffffffc1 083cdf64 ffffff90
-> > > > > [154325.263067] f970  ffffffff 0000007f 376bfd80 ffffffc1
-> > > > > 376bf990 ffffffc1 09024b5c ffffff90
-> > > > > [154325.263075] f990  376bf9b0 ffffffc1 08c55678 ffffff90
-> > > > > 0bb10048 ffffff90 5a44b300 ffffffc0
-> > > > > [154325.263082] f9b0  376bf9e0 ffffffc1 085075e0 ffffff90
-> > > > > 0a5d43f8 ffffff90 9a9d9f00 ffffffc1
-> > > > > [154325.263090] f9d0  95aede48 ffffffc1 95aede58 ffffffc1
-> > > > > 376bfa30 ffffffc1 08506248 ffffff90
-> > > > > [154325.263097] f9f0  95aede40 ffffffc1 00000000 00000000
-> > > > > 00000001 00000000 9a9d9f00 ffffffc1
-> > > > > [154325.263106] Call trace:
-> > > > > [154325.263111]  power_operation_mode_show+0x34/0x58
-> > > > > [154325.263116]  dev_attr_show+0x40/0x80
-> > > > > [154325.263123]  sysfs_kf_seq_show+0x110/0x1c0
-> > > > > [154325.263127]  kernfs_seq_show+0x80/0x98
-> > > > > [154325.263133]  seq_read+0x2d8/0x778
-> > > > > [154325.263136]  kernfs_fop_read+0xa4/0x2a8
-> > > > > [154325.263142]  __vfs_read+0xd4/0x2e8
-> > > > > [154325.263145]  vfs_read+0xe0/0x1b0
-> > > > > [154325.263149]  ksys_read+0xdc/0x170
-> > > > > [154325.263153]  __arm64_sys_read+0x44/0x58
-> > > > > [154325.263158]  el0_svc_common+0xd8/0x1d0
-> > > > > [154325.263162]  el0_svc_handler+0x90/0xb8
-> > > > > [154325.263166]  el0_svc+0x8/0xc
-> > > > > 
-> > > > > Signed-off-by: lijiazi <lijiazi@xiaomi.com>
-> > > > 
-> > > > I need a name here that you sign legal documents with.  If this is
-> > > > "ligiazi", that's fine, but at least capitalize it?
-> > > >
-> > > 
-> > > My Name is Jiazi Li.
-> > 
-> > Great, please fix up your "From:" line, and this signed-off-by line to
-> > have that name there, as is documented.
-> > 
-> OK, I will fix up "From:" and "Signed-off-by" line.
-> Thanks!
-> > > > > ---
-> > > > >  drivers/usb/typec/class.c | 2 ++
-> > > > >  include/linux/usb/typec.h | 1 +
-> > > > >  2 files changed, 3 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> > > > > index cb1362187..bcc8f79 100644
-> > > > > --- a/drivers/usb/typec/class.c
-> > > > > +++ b/drivers/usb/typec/class.c
-> > > > > @@ -1564,6 +1564,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
-> > > > >  {
-> > > > >  	struct device *partner_dev;
-> > > > >  
-> > > > > +	if (opmode >= TYPEC_PWR_MODE_MAX)
-> > > > > +		return;
-> > > > 
-> > > > Shouldn't we report the error somehow to userspace so they know they
-> > > > have a broken device that needs to be fixed?
-> > > >
-> > > 
-> > > This typec_set_pwr_opmode function has no return value, so just return.
-> > 
-> > But should that change?  Shouldn't the operation fail somehow?
-> > 
-> Yes, if opmode invalid returns -EINVAL, 0 is returned in other cases.
-> What do you think about it?
 
-If that works, sure.
+On Sun 22 Nov 2020 at 20:51, Ruslan Bilovol <ruslan.bilovol@gmail.com> wrote:
 
-> > > > >  	if (port->pwr_opmode == opmode)
-> > > > >  		return;
-> > > > >  
-> > > > > diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> > > > > index 5447532..e21c791 100644
-> > > > > --- a/include/linux/usb/typec.h
-> > > > > +++ b/include/linux/usb/typec.h
-> > > > > @@ -56,6 +56,7 @@ enum typec_pwr_opmode {
-> > > > >  	TYPEC_PWR_MODE_1_5A,
-> > > > >  	TYPEC_PWR_MODE_3_0A,
-> > > > >  	TYPEC_PWR_MODE_PD,
-> > > > > +	TYPEC_PWR_MODE_MAX,
-> > > > 
-> > > > If these are specific values that a device uses, then please set them to
-> > > > the specific values and don't just rely on the compiler to set the
-> > > > correctly.
-> > > >
-> > > 
-> > > This invalid value is generated by a faulty usb driver logic, so it
-> > > could be any vaule.  
-> > 
-> > Yes, but the valid values are specific numbers, those should be
-> > specified here.
-> > 
-> There is not new mode value, in my device just use these four modes.
-> If has new valid value, I will specified here.
+> On Fri, Nov 13, 2020 at 5:35 PM Glenn Schmottlach
+> <gschmottlach@gmail.com> wrote:
+>>
+>> On Thu, Nov 12, 2020 at 6:20 PM Ruslan Bilovol <ruslan.bilovol@gmail.com> wrote:
+>> >
+>> > On Wed, Nov 11, 2020 at 11:30 AM Peter Chen <peter.chen@nxp.com> wrote:
+>> > >
+>> > > On 20-11-08 02:18:28, Ruslan Bilovol wrote:
+>> > > > Current UAC2 gadget implements capture/sync paths
+>> > > > as two USB ISO ASYNC endpoints (IN and OUT).
+>> > > >
+>> > > > This violates USB spec which says that ISO ASYNC OUT endpoint
+>> > > > should have feedback companion endpoint.
+>> > > > See USB2.0 spec  "5.12.4.1 Synchronization Type": asynchronous
+>> > > > sink provides explicit feedback (isochronous pipe).
+>> > > > Interesting that for ISO ASYNC *IN* endpoint respective
+>> > > > feedback isn't required since source provides implicit
+>> > > > feedforward (data stream).
+>> > > >
+>> > > > While it's not an issue if UAC2 Gadget is connected to
+>> > > > Linux host (Linux ignores missing feedback endpoint),
+>> > > > with other hosts like Windows or MacOS the UAC2 Gadget
+>> > > > isn't enumerated due to missing feedback endpoint.
+>> > > >
+>> > > > This patch series adds feedback endpoint support to
+>> > > > UAC2 function, new control to UAC2 mixer which can
+>> > > > be used by userspace tools (like alsaloop from alsa-utils)
+>> > > > for updating feedback frequency reported to the host.
+>> > > > This is useful for usecases when UAC2 Gadget's audio
+>> > > > samples are played to another codec or audio card
+>> > > > with its own internal freerunning clock so host can
+>> > > > be notified that more/less samples are required.
+>> > > >
+>> > > > The alsaloop tool requires some (relatively small)
+>> > > > modifications in order to start support driving
+>> > > > feedback frequency through UAC2 mixer control.
+>> > > > That change will be sent as a separate patch
+>> > > > to ALSA community.
+>> > > >
+>> > > > Also added ability to switch ISO ASYNC OUT endpoint into
+>> > > > adaptive endpoint which doesn't require feedback endpoint
+>> > > > (as per USB spec).
+>> > > >
+>> > > > Ruslan Bilovol (3):
+>> > > >   usb: gadget: f_uac2/u_audio: add feedback endpoint support
+>> > > >   usb: gadget: f_uac2: add adaptive sync support for capture
+>> > > >   usb: gadget: u_audio: add real feedback implementation
+>> > >
+>> > > Hi Ruslan,
+>> > >
+>> > > I applied your patches, but WIN10 still can't recognize it well.
+>> > > The UAC1 is OK for WIN10 with the below same configuration.
+>> > > Any debug information you would like to know to check it?
+>> > >
+>> > >
+>> > > if [ "$FUNC" == "uac2" ]; then
+>> > > mkdir functions/$FUNC".0"
+>> > > echo 2 > functions/$FUNC".0"/p_ssize
+>> > > echo 48000 > functions/$FUNC".0"/p_srate
+>> > > echo 3 > functions/$FUNC".0"/p_chmask
+>> > >
+>> > > echo 2 > functions/$FUNC".0"/c_ssize
+>> > > echo 48000 > functions/$FUNC".0"/c_srate
+>> > > echo 3 > functions/$FUNC".0"/c_chmask
+>> > > #echo 4 > functions/$FUNC".0"/req_number
+>> > > ln -s functions/$FUNC".0" configs/c.1
+>> > > echo high-speed > /sys/kernel/config/usb_gadget/g1/max_speed
+>> > > fi
+>> > >
+>> >
+>> > Hmm... I just tested below config and it works fine with my Win10.
+>> > The only thing I noticed is Windows doesn't enable UAC2 gadget
+>> > by default, but this can be done from Win10 sound settings
+>> >
+>> > --------------------------------->8--------------------------------------
+>> > mkdir cfg
+>> > mount none cfg -t configfs
+>> > mkdir cfg/usb_gadget/g1
+>> > cd cfg/usb_gadget/g1
+>> > mkdir configs/c.1
+>> > mkdir functions/uac2.0
+>> >
+>> > # 44.1 kHz sample rate
+>> > echo 44100 > functions/uac2.0/c_srate
+>> > echo 44100 > functions/uac2.0/p_srate
+>> >
+>> > mkdir strings/0x409
+>> > mkdir configs/c.1/strings/0x409
+>> > echo 0x0101 > idProduct
+>> > echo 0x1d6b > idVendor
+>> > echo my-serial-num > strings/0x409/serialnumber
+>> > echo my-manufacturer > strings/0x409/manufacturer
+>> > echo "Test gadget" > strings/0x409/product
+>> > echo "Conf 1" > configs/c.1/strings/0x409/configuration
+>> > echo 120 > configs/c.1/MaxPower
+>> > ln -s functions/uac2.0 configs/c.1
+>> > echo musb-hdrc.0 > UDC
+>> > --------------------------------->8--------------------------------------
+>> >
+>> > Thanks,
+>> > Ruslan
+>>
+>> Hi Ruslan -
+>>
+>> With your configuration (above) Win10 was able to recognize and load
+>> the driver. What appears to prevent my configuration from loading is
+>> the fact that I selected 48K as my sample rate and my capture/playback
+>> channel mask includes more than two (2) channels. If I take your
+>> configuration and change the sample rate (c_srate/p_srate) to 48000
+>> Windows will fail to load the driver. Likewise, setting the
+>> c_chmask/p_chmask to 7 (three channels) will also cause the driver to
+>> fail to load.
+>>
+>> You mentioned there is an option in Win10 Sound Settings to "enable"
+>> UAC2 by default. I cannot find that option and I wonder if this is
+>> what is preventing me from changing the sample rate or channel mask?
+>> Could Windows be treating my audio gadget as a UAC1 device rather than
+>> a fully multi-channel audio device (even though the usbaudio2.sys
+>> driver is loaded)? Have you tried other configurations to verify your
+>> Win10 box supports more than two channels and a 44.1K sample rate? I
+>> look forward to your feedback and any suggestions you might offer.
+>>
+>
+> I was able to reproduce the issue and prepared a patch below, please
+> try it and see if it fixes the issue.
+>
+> Maximum data rates that I used were (AFAIR) 8 channel 192kHz/32bit,
+> but there is another issue with high data rate if someone uses so many
+> channels, very high sampling frequency or sample size that data can't
+> fit into allowed (by USB spec) max packet size of endpoint. In this case
+> need to decrease bInterval of endpoint.
+> I test it in a high-performance audio case so always use a minimal possible
+> bInterval (set to '1').
+> Of course in the future that need to be calculated dynamically depending on
+> the UAC2 settings
+>
+> Please test patches below and see it it helps
+>
+> ---------------------------------------------8<----------------------------------------
+> From 51516435bbf2486574ec7bc9fd4726677cd474a4 Mon Sep 17 00:00:00 2001
+> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> Date: Sun, 22 Nov 2020 21:05:38 +0200
+> Subject: [PATCH] usb: gadget: f_uac2: always increase endpoint max_packet_size
+>  by one audio slot
+>
+> As per UAC2 Audio Data Formats spec (2.3.1.1 USB Packets),
+> if the sampling rate is a constant, the allowable variation
+> of number of audio slots per virtual frame is +/- 1 audio slot.
+>
+> It means that endpoint should be able to accept/send +1 audio
+> slot.
+>
+> Previous endpoint max_packet_size calculation code
+> was adding sometimes +1 audio slot due to DIV_ROUND_UP
+> behaviour which was rounding up to closest integer.
+> However this doesn't work if the numbers are divisible.
+>
+> It had no any impact with Linux hosts which ignore
+> this issue, but in case of more strict Windows it
+> caused rejected enumeration
+>
+> Thus always add +1 audio slot to endpoint's max packet size
+>
+> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> ---
+>  drivers/usb/gadget/function/f_uac2.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_uac2.c
+> b/drivers/usb/gadget/function/f_uac2.c
+> index ebdb2a1..1698587 100644
+> --- a/drivers/usb/gadget/function/f_uac2.c
+> +++ b/drivers/usb/gadget/function/f_uac2.c
+> @@ -486,7 +486,7 @@ static void set_ep_max_packet_size(const struct
+> f_uac2_opts *uac2_opts,
+>   }
+>
+>   max_packet_size = num_channels(chmask) * ssize *
+> - DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1)));
+> + ((srate / (factor / (1 << (ep_desc->bInterval - 1)))) + 1);
+>
+>   if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC))
+>   max_packet_size = max_packet_size * FBACK_FREQ_MAX / 100;
 
-Yes, but again, if these are values that are used in devices or
-userspace, the enum must be specified here as an actual value like:
-	TYPEC_PWR_MODE_PD = 4,
+I think "reserving" 20% additional bandwidth is a bit extreme.
+In the end, the purpose is composate the drift which appears between
+different XTALs
 
-and the like.
+Allocating bandwidth for 1 more sample than the stream should require
+(49 instead of 48 for 48kHz with 4 bIntervals) should allow to
+compensate any realistic drift, don't you think ?
 
-This isn't a comment on your change, as your change is fine.  Just a
-comment that this needs to be done on top of your change.
+> -- 
+> 1.9.1
+>
+>
+> ---------------------------------------------8<----------------------------------------
+> From c8f2f2b414af672ec40841e75fb1ea761ae29122 Mon Sep 17 00:00:00 2001
+> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> Date: Sun, 16 Feb 2020 22:40:23 +0200
+> Subject: [PATCH] usb: gadget: f_uac2: change bInterval to 1 for
+>  8ch/24bit/44.1kHz
+>
+> With bInterval=4 one audio slot in case of 8ch/24bit/44.1kHz
+> exeeds MaxPacket size of ISO endpoint (>1024) and can't be
+> transferred in time.
+> USB spec ("5.6.3 Isochronous Transfer Packet Size Constraints")
+> says if we need to transfer more than 1024 it is a high speed, high
+> bandwidth endpoint and should have bInterval=1.
+>
+> In the future, bInterval should be dynamically calculated
+> depending on bandwith requirementes
 
-thanks,
+Probably better to do it from the start to avoid breaking stuff for
+people who have been using the gadget with the current badnwidth so far
 
-greg k-h
+>
+> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> ---
+>  drivers/usb/gadget/function/f_uac2.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_uac2.c
+> b/drivers/usb/gadget/function/f_uac2.c
+> index 3633df6..fb9b875 100644
+> --- a/drivers/usb/gadget/function/f_uac2.c
+> +++ b/drivers/usb/gadget/function/f_uac2.c
+> @@ -281,7 +281,7 @@ enum {
+>
+>   .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
+>   .wMaxPacketSize = cpu_to_le16(1024),
+> - .bInterval = 4,
+> + .bInterval = 1,
+>  };
+>
+>  /* CS AS ISO OUT Endpoint */
+> @@ -358,7 +358,7 @@ enum {
+>
+>   .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
+>   .wMaxPacketSize = cpu_to_le16(1024),
+> - .bInterval = 4,
+> + .bInterval = 1,
+>  };
+>
+>  /* CS AS ISO IN Endpoint */
+
