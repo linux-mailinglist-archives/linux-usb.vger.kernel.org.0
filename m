@@ -2,67 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6C32C5059
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Nov 2020 09:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580402C5069
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Nov 2020 09:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730372AbgKZIZG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Nov 2020 03:25:06 -0500
-Received: from mx2.suse.de ([195.135.220.15]:37456 "EHLO mx2.suse.de"
+        id S2388709AbgKZI24 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Nov 2020 03:28:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60364 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726392AbgKZIZF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Nov 2020 03:25:05 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1606379104; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ntrLnQjOVrYRti9MXLQM66valadiajQf7XhMT285Tbg=;
-        b=iJwbwg6NUfRCn1eoG5DF8wFxouy7jEfu3bf5+8K7eInPetoOBAtzISUSp9zf3UmGTal8kp
-        e6jaC0tiA+wne+URyZ8WvpvGsCnHpASKIQYLgi1Fp4Lx3q5zq3Gj3M7eEO93fdDMElQr7a
-        dCFNWhGcTnDSaxaD0r/gOPQxeaAJNDI=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id BD64CADD6;
-        Thu, 26 Nov 2020 08:25:04 +0000 (UTC)
-Message-ID: <d478123862a7e94898aaa771c21cc8cb0a3819fc.camel@suse.com>
-Subject: Re: Issues with LaCie USB3 drive and UAS
-From:   Oliver Neukum <oneukum@suse.com>
-To:     "David C. Partridge" <david.partridge@perdrix.co.uk>,
-        linux-usb@vger.kernel.org
-Date:   Thu, 26 Nov 2020 09:24:42 +0100
-In-Reply-To: <000f01d6c326$1eea3f50$5cbebdf0$@perdrix.co.uk>
-References: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>
-                         <eceedea7ca5d950eb8ea4d186a6b01a04d0a804f.camel@suse.com>
-                         <001601d6b67d$e97a1e30$bc6e5a90$@perdrix.co.uk>
-                 <aebf92944c1ecb256d21108ce092165a0fd904db.camel@suse.com>
-                 <001b01d6b68a$79937fa0$6cba7ee0$@perdrix.co.uk>
-                 <007901d6b6ab$f0f66230$d2e32690$@perdrix.co.uk>
-         <43abe2af0352f17f93e2453a86e2ed47b9913b6a.camel@suse.com>
-         <000f01d6c326$1eea3f50$5cbebdf0$@perdrix.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1726591AbgKZI24 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Nov 2020 03:28:56 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9C1D620872;
+        Thu, 26 Nov 2020 08:28:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1606379334;
+        bh=5KvXGI9RFJSJyRMweSifK1RqHqlX24baGxqNq/n4EiY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rz0R6dlG/wYGzKkon5TL5mSatmmC/5Ghn0hAQ1XO3Hi00GA+1BQxVBJi4pBN4hKV3
+         nVc/Cewdm3WOtJiBzpoWcz8VA9bvHV8GnwFG4mvEv8T/dNi5zipQ2bICpRSl/UBJoc
+         cJ/CCnAG7NR70B6xDqk0Bcad7FD3OdQMxJ7RMfkE=
+Date:   Thu, 26 Nov 2020 09:29:59 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Jim Quinlan <jquinlan@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/3] serial: 8250: of: Check for
+ CONFIG_SERIAL_8250_BCM7271
+Message-ID: <X79nh3UUzZfH17Qs@kroah.com>
+References: <20201120194305.8847-1-alcooperx@gmail.com>
+ <20201120194305.8847-2-alcooperx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201120194305.8847-2-alcooperx@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 25.11.2020, 12:25 +0000 schrieb David C. Partridge:
-> Hi Oliver
+On Fri, Nov 20, 2020 at 02:43:03PM -0500, Al Cooper wrote:
+> From: Jim Quinlan <jquinlan@broadcom.com>
 > 
-> I'm still trying to build a kernel with your patch applied but my Ubuntu system isn't cooperating :(
+> This commit has of_platform_serial_probe() check specifically for the
+> "brcm,bcm7271-uart" and whether its companion driver is enabled. If it
+> is the case, and the clock provider is not ready, we want to make sure
+> that when the 8250_bcm7271.c driver returns EPROBE_DEFER, we are not
+> getting the UART registered via 8250_of.c.
 > 
-> See the sorry story at 
-> https://ubuntuforums.org/showthread.php?t=2453530make ARCH=x86 mrproper
-Try using
+> Signed-off-by: Jim Quinlan <jquinlan@broadcom.com>
+> ---
 
-make ARCH=x86 mrproper
+When forwarding on patches from others, always include your
+signed-off-by: as well, to ensure that you have reviewed this and are ok
+with it.  I can't take this as-is, sorry.
 
-right before
+And why did you include linux-usb@vger for this patch series?
 
-LANG=C fakeroot debian/rules binary
+thanks,
 
-	HTH
-		Oliver
-
-
+greg k-h
