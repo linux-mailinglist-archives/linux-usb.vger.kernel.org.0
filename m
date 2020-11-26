@@ -2,163 +2,360 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D81192C533A
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Nov 2020 12:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D522C5371
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Nov 2020 13:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733184AbgKZLri (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Nov 2020 06:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732649AbgKZLrh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Nov 2020 06:47:37 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEAAC0613D4
-        for <linux-usb@vger.kernel.org>; Thu, 26 Nov 2020 03:47:37 -0800 (PST)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kiFkH-0006J0-W7; Thu, 26 Nov 2020 12:47:30 +0100
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kiFkG-0006wX-Pq; Thu, 26 Nov 2020 12:47:28 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Russell King <linux@armlinux.org.uk>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] ARM: sa11111: make sa1111 bus's remove callback return void
-Date:   Thu, 26 Nov 2020 12:47:24 +0100
-Message-Id: <20201126114724.2028511-1-u.kleine-koenig@pengutronix.de>
+        id S2387979AbgKZL5j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Nov 2020 06:57:39 -0500
+Received: from mga11.intel.com ([192.55.52.93]:3884 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726849AbgKZL5i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Nov 2020 06:57:38 -0500
+IronPort-SDR: IM528YlQ0YDangpKuPfhJy44Ws20vNWlPX1G9sPvi8MMD0TpN0cNbVm2ga/CMIkAau1EDUQnRr
+ FeZA/3k5ck3A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9816"; a="168772894"
+X-IronPort-AV: E=Sophos;i="5.78,372,1599548400"; 
+   d="scan'208";a="168772894"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2020 03:57:37 -0800
+IronPort-SDR: QL8ugdMB1oYrzeSJB+epnybm87/9FuVBOlMBGpQWlfzJT2K461VJItO/v6+uBwxuYq7Wb2/2tp
+ 1Fg4UZXHdA0A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,372,1599548400"; 
+   d="scan'208";a="433253540"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Nov 2020 03:57:36 -0800
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>, linux-usb@vger.kernel.org
+Subject: [PATCHv2] usb: typec: Add type sysfs attribute file for partners
+Date:   Thu, 26 Nov 2020 14:57:35 +0300
+Message-Id: <20201126115735.50529-1-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver core ignores the return value of struct device_driver::remove
-because there is only little that can be done. To simplify the quest to
-make this function return void, let struct sa1111_driver::remove return
-void, too. All users already unconditionally return 0, this commit makes
-it obvious that returning an error code is a bad idea and ensures future
-users behave accordingly.
+USB Power Delivery Specification defines a set of product
+types for partners and cables. The product type can be read
+from the ID Header VDO which is the first object in the
+response to the Discover Identity command. This attribute
+will display the product type of the partner. The cables
+already have the attribute.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+This sysfs attribute file is only created for the partners
+and cables if the product type is really known in the
+driver. Some interfaces do not give access to the Discover
+Identity response from the partner or cable, but they may
+still supply the product type separately in some cases.
+
+When the product type of the partner or cable is detected,
+uevent is also raised with PRODUCT_TYPE set to show the
+actual product type (for example PRODUCT_TYPE=host).
+
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- arch/arm/common/sa1111.c               | 6 +++---
- arch/arm/include/asm/hardware/sa1111.h | 2 +-
- drivers/input/serio/sa1111ps2.c        | 4 +---
- drivers/pcmcia/sa1111_generic.c        | 3 +--
- drivers/usb/host/ohci-sa1111.c         | 4 +---
- 5 files changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm/common/sa1111.c b/arch/arm/common/sa1111.c
-index f89c1ea327a2..ff5e0d04cb89 100644
---- a/arch/arm/common/sa1111.c
-+++ b/arch/arm/common/sa1111.c
-@@ -1368,11 +1368,11 @@ static int sa1111_bus_remove(struct device *dev)
- {
- 	struct sa1111_dev *sadev = to_sa1111_device(dev);
- 	struct sa1111_driver *drv = SA1111_DRV(dev->driver);
--	int ret = 0;
+That patch is now rebased on top of the latest usb-testing.
+
+---
+ Documentation/ABI/testing/sysfs-class-typec |  64 ++++++++++-
+ drivers/usb/typec/class.c                   | 118 +++++++++++++++++---
+ 2 files changed, 165 insertions(+), 17 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+index 619c4c67432b9..8eab41e79ce68 100644
+--- a/Documentation/ABI/testing/sysfs-class-typec
++++ b/Documentation/ABI/testing/sysfs-class-typec
+@@ -147,6 +147,52 @@ Description:
+ 		during Power Delivery discovery. This file remains hidden until a value
+ 		greater than or equal to 0 is set by Type C port driver.
  
- 	if (drv->remove)
--		ret = drv->remove(sadev);
--	return ret;
-+		drv->remove(sadev);
++What:		/sys/class/typec/<port>-partner/type
++Date:		December 2020
++Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
++Description:	USB Power Delivery Specification defines a set of product types
++		for the partner devices. This file will show the product type of
++		the partner if it is known. Dual-role capable partners will have
++		both UFP and DFP product types defined, but only one that
++		matches the current role will be active at the time. If the
++		product type of the partner is not visible to the device driver,
++		this file will not exist.
 +
-+	return 0;
- }
++		When the partner product type is detected, or changed with role
++		swap, uvevent is also raised that contains PRODUCT_TYPE=<product
++		type> (for example PRODUCT_TYPE=hub).
++
++		Valid values:
++
++		UFP / device role
++		======================  ==========================
++		undefined		-
++		hub			PDUSB Hub
++		peripheral		PDUSB Peripheral
++		psd			Power Bank
++		ama			Alternate Mode Adapter
++		======================  ==========================
++
++		DFP / host role
++		======================  ==========================
++		undefined		-
++		hub			PDUSB Hub
++		host			PDUSB Host
++		power_brick		Power Brick
++		amc			Alternate Mode Controller
++		======================  ==========================
++
++What:		/sys/class/typec/<port>-partner>/identity/
++Date:		April 2017
++Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
++Description:
++		This directory appears only if the port device driver is capable
++		of showing the result of Discover Identity USB power delivery
++		command. That will not always be possible even when USB power
++		delivery is supported, for example when USB power delivery
++		communication for the port is mostly handled in firmware. If the
++		directory exists, it will have an attribute file for every VDO
++		in Discover Identity command result.
  
- struct bus_type sa1111_bus_type = {
-diff --git a/arch/arm/include/asm/hardware/sa1111.h b/arch/arm/include/asm/hardware/sa1111.h
-index d134b9a5ff94..2e70db6f22ea 100644
---- a/arch/arm/include/asm/hardware/sa1111.h
-+++ b/arch/arm/include/asm/hardware/sa1111.h
-@@ -403,7 +403,7 @@ struct sa1111_driver {
- 	struct device_driver	drv;
- 	unsigned int		devid;
- 	int (*probe)(struct sa1111_dev *);
--	int (*remove)(struct sa1111_dev *);
-+	void (*remove)(struct sa1111_dev *);
+ USB Type-C cable devices (eg. /sys/class/typec/port0-cable/)
+ 
+@@ -159,9 +205,21 @@ described in USB Type-C and USB Power Delivery specifications.
+ What:		/sys/class/typec/<port>-cable/type
+ Date:		April 2017
+ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+-Description:
+-		Shows if the cable is active.
+-		Valid values: active, passive
++Description:	USB Power Delivery Specification defines a set of product types
++		for the cables. This file will show the product type of the
++		cable if it is known. If the product type of the cable is not
++		visible to the device driver, this file will not exist.
++
++		When the cable product type is detected, uvevent is also raised
++		with PRODUCT_TYPE showing the product type of the cable.
++
++		Valid values:
++
++		======================  ==========================
++		undefined		-
++		active			Active Cable
++		passive			Passive Cable
++		======================  ==========================
+ 
+ What:		/sys/class/typec/<port>-cable/plug_type
+ Date:		April 2017
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 8f40093c20449..4f6e58dfb81d5 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -11,6 +11,7 @@
+ #include <linux/mutex.h>
+ #include <linux/property.h>
+ #include <linux/slab.h>
++#include <linux/usb/pd_vdo.h>
+ 
+ #include "bus.h"
+ 
+@@ -83,6 +84,29 @@ static const char * const typec_accessory_modes[] = {
+ 	[TYPEC_ACCESSORY_DEBUG]		= "debug",
  };
  
- #define SA1111_DRV(_d)	container_of((_d), struct sa1111_driver, drv)
-diff --git a/drivers/input/serio/sa1111ps2.c b/drivers/input/serio/sa1111ps2.c
-index 7b8ceb702a74..68fac4801e2e 100644
---- a/drivers/input/serio/sa1111ps2.c
-+++ b/drivers/input/serio/sa1111ps2.c
-@@ -344,7 +344,7 @@ static int ps2_probe(struct sa1111_dev *dev)
- /*
-  * Remove one device from this driver.
-  */
--static int ps2_remove(struct sa1111_dev *dev)
-+static void ps2_remove(struct sa1111_dev *dev)
++/* Product types defined in USB PD Specification R3.0 V2.0 */
++static const char * const product_type_ufp[8] = {
++	[IDH_PTYPE_UNDEF]		= "undefined",
++	[IDH_PTYPE_HUB]			= "hub",
++	[IDH_PTYPE_PERIPH]		= "peripheral",
++	[IDH_PTYPE_PSD]			= "psd",
++	[IDH_PTYPE_AMA]			= "ama",
++};
++
++static const char * const product_type_dfp[8] = {
++	[IDH_PTYPE_DFP_UNDEF]		= "undefined",
++	[IDH_PTYPE_DFP_HUB]		= "hub",
++	[IDH_PTYPE_DFP_HOST]		= "host",
++	[IDH_PTYPE_DFP_PB]		= "power_brick",
++	[IDH_PTYPE_DFP_AMC]		= "amc",
++};
++
++static const char * const product_type_cable[8] = {
++	[IDH_PTYPE_UNDEF]		= "undefined",
++	[IDH_PTYPE_PCABLE]		= "passive",
++	[IDH_PTYPE_ACABLE]		= "active",
++};
++
+ static struct usb_pd_identity *get_pd_identity(struct device *dev)
  {
- 	struct ps2if *ps2if = sa1111_get_drvdata(dev);
+ 	if (is_typec_partner(dev)) {
+@@ -97,6 +121,32 @@ static struct usb_pd_identity *get_pd_identity(struct device *dev)
+ 	return NULL;
+ }
  
-@@ -353,8 +353,6 @@ static int ps2_remove(struct sa1111_dev *dev)
- 	sa1111_set_drvdata(dev, NULL);
++static const char *get_pd_product_type(struct device *dev)
++{
++	struct typec_port *port = to_typec_port(dev->parent);
++	struct usb_pd_identity *id = get_pd_identity(dev);
++	const char *ptype = NULL;
++
++	if (is_typec_partner(dev)) {
++		if (!id)
++			return NULL;
++
++		if (port->data_role == TYPEC_HOST)
++			ptype = product_type_ufp[PD_IDH_PTYPE(id->id_header)];
++		else
++			ptype = product_type_dfp[PD_IDH_DFP_PTYPE(id->id_header)];
++	} else if (is_typec_cable(dev)) {
++		if (id)
++			ptype = product_type_cable[PD_IDH_PTYPE(id->id_header)];
++		else
++			ptype = to_typec_cable(dev)->active ?
++				product_type_cable[IDH_PTYPE_ACABLE] :
++				product_type_cable[IDH_PTYPE_PCABLE];
++	}
++
++	return ptype;
++}
++
+ static ssize_t id_header_show(struct device *dev, struct device_attribute *attr,
+ 			      char *buf)
+ {
+@@ -171,6 +221,25 @@ static const struct attribute_group *usb_pd_id_groups[] = {
+ 	NULL,
+ };
  
- 	kfree(ps2if);
++static void typec_product_type_notify(struct device *dev)
++{
++	char *envp[2] = { };
++	const char *ptype;
++
++	ptype = get_pd_product_type(dev);
++	if (!ptype)
++		return;
++
++	sysfs_notify(&dev->kobj, NULL, "type");
++
++	envp[0] = kasprintf(GFP_KERNEL, "PRODUCT_TYPE=%s", ptype);
++	if (!envp[0])
++		return;
++
++	kobject_uevent_env(&dev->kobj, KOBJ_CHANGE, envp);
++	kfree(envp[0]);
++}
++
+ static void typec_report_identity(struct device *dev)
+ {
+ 	sysfs_notify(&dev->kobj, "identity", "id_header");
+@@ -179,7 +248,21 @@ static void typec_report_identity(struct device *dev)
+ 	sysfs_notify(&dev->kobj, "identity", "product_type_vdo1");
+ 	sysfs_notify(&dev->kobj, "identity", "product_type_vdo2");
+ 	sysfs_notify(&dev->kobj, "identity", "product_type_vdo3");
++	typec_product_type_notify(dev);
++}
++
++static ssize_t
++type_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	const char *ptype;
++
++	ptype = get_pd_product_type(dev);
++	if (!ptype)
++		return 0;
++
++	return sysfs_emit(buf, "%s\n", ptype);
+ }
++static DEVICE_ATTR_RO(type);
+ 
+ /* ------------------------------------------------------------------------- */
+ /* Alternate Modes */
+@@ -592,6 +675,7 @@ static struct attribute *typec_partner_attrs[] = {
+ 	&dev_attr_accessory_mode.attr,
+ 	&dev_attr_supports_usb_power_delivery.attr,
+ 	&dev_attr_number_of_alternate_modes.attr,
++	&dev_attr_type.attr,
+ 	NULL
+ };
+ 
+@@ -604,6 +688,10 @@ static umode_t typec_partner_attr_is_visible(struct kobject *kobj, struct attrib
+ 			return 0;
+ 	}
+ 
++	if (attr == &dev_attr_type.attr)
++		if (!get_pd_product_type(kobj_to_dev(kobj)))
++			return 0;
++
+ 	return attr->mode;
+ }
+ 
+@@ -914,15 +1002,6 @@ EXPORT_SYMBOL_GPL(typec_unregister_plug);
+ 
+ /* Type-C Cables */
+ 
+-static ssize_t
+-type_show(struct device *dev, struct device_attribute *attr, char *buf)
+-{
+-	struct typec_cable *cable = to_typec_cable(dev);
 -
--	return 0;
- }
- 
- /*
-diff --git a/drivers/pcmcia/sa1111_generic.c b/drivers/pcmcia/sa1111_generic.c
-index 11783410223b..29fdd174bc23 100644
---- a/drivers/pcmcia/sa1111_generic.c
-+++ b/drivers/pcmcia/sa1111_generic.c
-@@ -238,7 +238,7 @@ static int pcmcia_probe(struct sa1111_dev *dev)
- 	return ret;
- }
- 
--static int pcmcia_remove(struct sa1111_dev *dev)
-+static void pcmcia_remove(struct sa1111_dev *dev)
- {
- 	struct sa1111_pcmcia_socket *next, *s = dev_get_drvdata(&dev->dev);
- 
-@@ -252,7 +252,6 @@ static int pcmcia_remove(struct sa1111_dev *dev)
- 
- 	release_mem_region(dev->res.start, 512);
- 	sa1111_disable_device(dev);
--	return 0;
- }
- 
- static struct sa1111_driver pcmcia_driver = {
-diff --git a/drivers/usb/host/ohci-sa1111.c b/drivers/usb/host/ohci-sa1111.c
-index 8e19a5eb5b62..feca826d3f6a 100644
---- a/drivers/usb/host/ohci-sa1111.c
-+++ b/drivers/usb/host/ohci-sa1111.c
-@@ -236,7 +236,7 @@ static int ohci_hcd_sa1111_probe(struct sa1111_dev *dev)
-  * Reverses the effect of ohci_hcd_sa1111_probe(), first invoking
-  * the HCD's stop() method.
-  */
--static int ohci_hcd_sa1111_remove(struct sa1111_dev *dev)
-+static void ohci_hcd_sa1111_remove(struct sa1111_dev *dev)
- {
- 	struct usb_hcd *hcd = sa1111_get_drvdata(dev);
- 
-@@ -244,8 +244,6 @@ static int ohci_hcd_sa1111_remove(struct sa1111_dev *dev)
- 	sa1111_stop_hc(dev);
- 	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
- 	usb_put_hcd(hcd);
+-	return sprintf(buf, "%s\n", cable->active ? "active" : "passive");
+-}
+-static DEVICE_ATTR_RO(type);
 -
--	return 0;
- }
+ static const char * const typec_plug_types[] = {
+ 	[USB_PLUG_NONE]		= "unknown",
+ 	[USB_PLUG_TYPE_A]	= "type-a",
+@@ -1522,6 +1601,11 @@ const struct device_type typec_port_dev_type = {
+ /* --------------------------------------- */
+ /* Driver callbacks to report role updates */
  
- static void ohci_hcd_sa1111_shutdown(struct device *_dev)
++static int partner_match(struct device *dev, void *data)
++{
++	return is_typec_partner(dev);
++}
++
+ /**
+  * typec_set_data_role - Report data role change
+  * @port: The USB Type-C Port where the role was changed
+@@ -1531,12 +1615,23 @@ const struct device_type typec_port_dev_type = {
+  */
+ void typec_set_data_role(struct typec_port *port, enum typec_data_role role)
+ {
++	struct device *partner_dev;
++
+ 	if (port->data_role == role)
+ 		return;
+ 
+ 	port->data_role = role;
+ 	sysfs_notify(&port->dev.kobj, NULL, "data_role");
+ 	kobject_uevent(&port->dev.kobj, KOBJ_CHANGE);
++
++	partner_dev = device_find_child(&port->dev, NULL, partner_match);
++	if (!partner_dev)
++		return;
++
++	if (to_typec_partner(partner_dev)->identity)
++		typec_product_type_notify(partner_dev);
++
++	put_device(partner_dev);
+ }
+ EXPORT_SYMBOL_GPL(typec_set_data_role);
+ 
+@@ -1577,11 +1672,6 @@ void typec_set_vconn_role(struct typec_port *port, enum typec_role role)
+ }
+ EXPORT_SYMBOL_GPL(typec_set_vconn_role);
+ 
+-static int partner_match(struct device *dev, void *data)
+-{
+-	return is_typec_partner(dev);
+-}
+-
+ /**
+  * typec_set_pwr_opmode - Report changed power operation mode
+  * @port: The USB Type-C Port where the mode was changed
 -- 
 2.29.2
 
