@@ -2,61 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A59902C5BBC
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Nov 2020 19:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F002C5DE8
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Nov 2020 23:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404886AbgKZSKl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Nov 2020 13:10:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55126 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404406AbgKZSKj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Nov 2020 13:10:39 -0500
-Received: from localhost (82-217-20-185.cable.dynamic.v4.ziggo.nl [82.217.20.185])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6B1F320B80;
-        Thu, 26 Nov 2020 18:10:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1606414238;
-        bh=gYyFqYj7SYe38VKIBuS9np4f38ojFV2Q5kbW/65dZLc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U1MTExAaor2rufgcgwiG1HTsOQlFxZPYV/ULW8cELFK/K2gVoaOmefuRi4eooUyQy
-         fCYJ32UVdOJKLkAZcKh8tEf/i1mDgoBJlgxMpON51+slKFiAv/NvwE+IAShGIne6H5
-         ULVdLpQla9Z7oeMn6ttH//BAWjftUCNpZB8mZ1LY=
-Date:   Thu, 26 Nov 2020 19:10:36 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Greg Kroah-Hartman <gregkh@google.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Will McVicker <willmcvicker@google.com>,
-        EJ Hsu <ejh@nvidia.com>, Peter Chen <peter.chen@nxp.com>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 1/4] USB: gadget: f_rndis: fix bitrate for SuperSpeed and
- above
-Message-ID: <X7/vnKU+QlWdES50@kroah.com>
-References: <20201126180235.254523-1-gregkh@google.com>
+        id S2391880AbgKZWhH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Nov 2020 17:37:07 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:57384 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388212AbgKZWhH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Nov 2020 17:37:07 -0500
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1kiPsu-00068O-Ta; Thu, 26 Nov 2020 22:37:05 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: phy: Fix spelling mistake in Kconfig help text
+Date:   Thu, 26 Nov 2020 22:37:04 +0000
+Message-Id: <20201126223704.13273-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201126180235.254523-1-gregkh@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 07:02:32PM +0100, Greg Kroah-Hartman wrote:
-> From: Will McVicker <willmcvicker@google.com>
-> 
-> Align the SuperSpeed Plus bitrate for f_rndis to match f_ncm's ncm_bitrate
-> defined by commit 1650113888fe ("usb: gadget: f_ncm: add SuperSpeed descriptors
-> for CDC NCM").
-> 
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: EJ Hsu <ejh@nvidia.com>
-> Cc: Peter Chen <peter.chen@nxp.com>
-> Cc: stable <stable@vger.kernel.org>
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Colin Ian King <colin.king@canonical.com>
 
-Sent from wrong email address, will resend from proper one so they will
-go through the lists and validate the sender properly, sorry about
-that...
+There is a spelling mistake in the Kconfig help text. Fix it.
+
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/usb/phy/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/phy/Kconfig b/drivers/usb/phy/Kconfig
+index ef4787cd3d37..52eebcb88c1f 100644
+--- a/drivers/usb/phy/Kconfig
++++ b/drivers/usb/phy/Kconfig
+@@ -144,7 +144,7 @@ config USB_MV_OTG
+ 	depends on USB_GADGET || !USB_GADGET # if USB_GADGET=m, this can't be 'y'
+ 	select USB_PHY
+ 	help
+-	  Say Y here if you want to build Marvell USB OTG transciever
++	  Say Y here if you want to build Marvell USB OTG transceiver
+ 	  driver in kernel (including PXA and MMP series). This driver
+ 	  implements role switch between EHCI host driver and gadget driver.
+ 
+-- 
+2.29.2
+
