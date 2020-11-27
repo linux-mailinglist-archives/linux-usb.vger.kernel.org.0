@@ -2,168 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CED5D2C6028
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 07:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B45E2C6038
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 07:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392568AbgK0G2g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Nov 2020 01:28:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48146 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389589AbgK0G2g (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Nov 2020 01:28:36 -0500
-Received: from localhost.localdomain (unknown [180.164.155.184])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA76F221FD;
-        Fri, 27 Nov 2020 06:28:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606458515;
-        bh=xesqbq9mongWn1XNF3IbRBvUavaxfAhuBcfFCMugYr0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=1Yuu6WEGEuy7pW8R2+EDe+TF36ykPI7H/OhHq+VHtqCHNWVHkUfLPe3/olW6PQRu1
-         rAqqTcPxuVF4OwPYylGzzR81nICz4k7zFPvO+k4Iv9EPhA0+Lb9MuJnS055F9LmqUj
-         ntkXnDOuHpGcmDKQpgtagrS+smgqPaJKnHA/jtOw=
-From:   Peter Chen <peter.chen@kernel.org>
-To:     heikki.krogerus@linux.intel.com
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>
-Subject: [PATCH 1/1] usb: roles: reference controller's parent device if existed
-Date:   Fri, 27 Nov 2020 14:28:20 +0800
-Message-Id: <20201127062820.588-1-peter.chen@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S2387981AbgK0Gv0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Nov 2020 01:51:26 -0500
+Received: from mail-eopbgr20045.outbound.protection.outlook.com ([40.107.2.45]:41600
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387935AbgK0GvZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Nov 2020 01:51:25 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TkIj9lQRn0bgYuiXaAueY16NreLKIS2GTqzh3oUQD+iT3Qu+xC+bNF5NthdNUmKQgMPedctXmK6/JeqM/aiGg2SBxisjDh6jmbAt5f/zv6q9NPoC+7U1OqLTEDlkEhSgTKe2z5NEWIyC+lmXG9q9GQsKPps4k5856o3ewgS4eoyLFlo47jVQ90XRChYHuhXxwEeIwJMoiK9vKJMhfArtJT9ko+kGPYlPUZgFFmJWB1cYvCS91YavoxgpO9oANBeaQkD9XCwhmwYK1ezgLxW3BV0lY1mCT7qzduaauEanuUhYFZQLhrFFvgB1LYlzk7jz1HXqADXd2dXM2MLG+fJ2PQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pUx1FASUypQ+lqUp6IuEm2kCUy0rs0Z04LXDwr8nDxg=;
+ b=HrWzoPeFIWWSSpZ5N+XZ7IVFqnhqdyvjigERb05kxG1vPDbz9eE7eQmECYETa66DqKgvvlVzNQXxjRiRcgAyvmxWfEQp50yznasE+4GcDDiraTeaEm/+fudNYbAIZxXdMvTHcouNR4iAjiYdwXXdHIvfE+jAQgugNq3n+hE3EfzKKMDpgxNHOdaTFSHEwEk0/xrf0DORIi0jjl7ObiObZngoij1Qs+eZZwHTowD7o2AHuWrrqGZYwiY/Ps1EMQLoz4maqzdF0rtryt9KJfd8wwUgxnAGyfv0yhWNvhuKjMsxbL5JHD7w6j4c9Wm8Ru1Im1ECSn3qpMBMffkYX8OIZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pUx1FASUypQ+lqUp6IuEm2kCUy0rs0Z04LXDwr8nDxg=;
+ b=F14T3G/cGwsuqLAEn32nkvR087zFXKi4Ea+og3YpxHi6L3+CGcb+Aa8rN+TvQF0gZBC3eDU6tUTL/JtFhwyIl5jlit6Kal9H1WZ3CIclhHfYW5/Krn3G3nd68WZteI7mfa8/FtF3faMhjz6gcf6k0kk6gcQnnLDUk6uUSd3Y3Ww=
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
+ by DBBPR04MB6027.eurprd04.prod.outlook.com (2603:10a6:10:c7::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.23; Fri, 27 Nov
+ 2020 06:51:21 +0000
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3611.025; Fri, 27 Nov 2020
+ 06:51:18 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+CC:     Peter Chen <peter.chen@kernel.org>,
+        "pawell@cadence.com" <pawell@cadence.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Frank Li <frank.li@nxp.com>
+Subject: Re: [PATCH 2/2] usb: cdns3: core: fix goto label for error path
+Thread-Topic: [PATCH 2/2] usb: cdns3: core: fix goto label for error path
+Thread-Index: AQHWw8D+UOTz4LYHTEawhWrmYc0Hh6naMgAAgAFY+IA=
+Date:   Fri, 27 Nov 2020 06:48:26 +0000
+Message-ID: <20201127064757.GB22238@b29397-desktop>
+References: <20201126065409.7533-1-peter.chen@kernel.org>
+ <20201126065409.7533-2-peter.chen@kernel.org>
+ <007261b9-92ec-9ca6-e609-f5d3a337f322@gmail.com>
+In-Reply-To: <007261b9-92ec-9ca6-e609-f5d3a337f322@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mutt/1.9.4 (2018-02-28)
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: d65510fb-7039-4142-1bf3-08d892a0d7d0
+x-ms-traffictypediagnostic: DBBPR04MB6027:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DBBPR04MB602783794C2433F84287932C8BF80@DBBPR04MB6027.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1775;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LvtlRco3GODZC2EpJNpHtdopogvBccZwFim0y4zf2QtCrwWhwUJUpN7KGymzmsyGUBd5Ti27fIQxkqgA07iHmp8gdhRRZQKz6hQxotHr25UncmAxQzC1AKzu2MvXUs/PCFIkwHfEFoTknXCfcZ6qW+UrlFkcDMeQk6PDJvXXoJLkKdYm2JfIUQNYDSasgSVQDf41Dn8RW5FtA4rT4JDkdXX/cRj5gJnv6wsY8yrO951e7hbb6wZhMzMtBvkfthBiVZtCTrgyVuCSja+7arQAS8eCeKRc2p7FtzeUs6vakQBjOb7ZiKDRz3jb9lhtVsIT+0BxbJqkZpN+5cTTuMS4YQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(39860400002)(136003)(376002)(346002)(396003)(366004)(83380400001)(6916009)(8676002)(66446008)(4744005)(64756008)(6512007)(2906002)(26005)(9686003)(66556008)(66946007)(1076003)(91956017)(66476007)(76116006)(478600001)(33656002)(5660300002)(186003)(6666004)(8936002)(71200400001)(6486002)(6506007)(4326008)(53546011)(33716001)(54906003)(86362001)(316002)(44832011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?ULRQxYqk2L5T4QNbwItJTPoGe+WNDtXjURKsSq87WYr2sJCoTpRJ+98xbHzA?=
+ =?us-ascii?Q?cEL2DwcNAn0AHmxXtnf252J3J2UrL88c78ppPvr/Y7wCtuWs6AXLuq6NGPqT?=
+ =?us-ascii?Q?on/w/I+i7n60zHeOoNp4/eQomTQs09NZX4+wv7X/3LMGHlHvEVtJ5Xe5BBmj?=
+ =?us-ascii?Q?IGB//wr+nCUER4cdgqGMh5ZMzBM5s4FhQCMDebC2EZT53AXTXGKc0qx86/Ay?=
+ =?us-ascii?Q?VEv03087JAd8NLhJvf8owSjDV7jNrW019nmoHv4Rvm8Bji/u7uEgywSNZGPu?=
+ =?us-ascii?Q?7wNBUrwxAz60ABA2qgAn5YLfWXqMRItTd3E/5/BeCsJ89MOxoREvUc9EIBgA?=
+ =?us-ascii?Q?wndtWLIKCEqmyrEWO0FGIsiem7KDxcO/ysPwrpE7bVoyVev72s3YfW3/8hAb?=
+ =?us-ascii?Q?arOdTa61P1Wr07PF6rwW7EfMPq5bz3IPEMxaRF+bCO+tTBLMNW9rC8BWYOkU?=
+ =?us-ascii?Q?5GbNIisl3MHXC4+jnQcBs6feluL3zEVPnI6flHD5kRJIuVhVggMdco/6TjK1?=
+ =?us-ascii?Q?NyrsVi1kYtZr4lYbRARCx0naIDM/ZACijxUqyjAS1P6g5aIipPFfd11RQyxB?=
+ =?us-ascii?Q?5nqOtOuzt52A6LnRez29YXFg1y5ZLv9cDQvtMcSImiOTnt5/9FqwBcVOmNU1?=
+ =?us-ascii?Q?MeCBF+LBoVpQmYvlCxnFfi6Tk2na6ac6tIzd6Sv+2/v9+WDKZTjXHdG78viE?=
+ =?us-ascii?Q?hOnkiB4g/UjdWFH0iFBHpPpXVJefr2H2WgzAyP5TpnmGo5zwsFfRZXKSvIsd?=
+ =?us-ascii?Q?B5N5C25XKIExJ3R/gaduDN5oE6SZihvUoX4YNKPEcorrYfeejNLEsAq+Hjt8?=
+ =?us-ascii?Q?kvXG0v7lcaZ9OFlF/vJcSlwPyNwBMYIMnI1TZpM3qlk/Wuv+uRCug560nS3W?=
+ =?us-ascii?Q?YQKSq0JQAsXd39vXPPR6WzyciV4PXRpA4JOxsvQxZlA2lYe+sBU/HtVtoy5z?=
+ =?us-ascii?Q?Hu0gsEJwQObTdtXMIXfH8+OW2+xjmgubQ1Yhb73/xkqFF6umu5UZdMUv+QC7?=
+ =?us-ascii?Q?Oflo?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D3773895ED142042A485BB97C7C2504B@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d65510fb-7039-4142-1bf3-08d892a0d7d0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2020 06:48:26.5101
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jUhwBBWuJq7S07zReQSJOrxA0XdSRSZ3+k8MfiX400IjhT71UaIq97MnsSlhCGWqgvc8BIkAsHpekLoIo4bTKg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6027
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Peter Chen <peter.chen@nxp.com>
+On 20-11-26 13:13:16, Sergei Shtylyov wrote:
+> Hello!
+>=20
+> On 26.11.2020 9:54, Peter Chen wrote:
+>=20
+> > From: Peter Chen <peter.chen@nxp.com>
+> >=20
+> > The usb_role_switch_register has already called, so if the devm_request=
+_irq
+>                                   ^ been
+>=20
 
-For some DRD IP drivers (eg, dwc3/cdns3/chipidea), the core device is
-created and deleted by glue layer device. So, if role switch user
-(eg, tcpci), core device, and glue layer device are all built as module,
-and glue layer device is removed first, the core device's driver ->remove
-function will be called, and its device's driver pointer will be NULL,
-and cause below oops.
+Thanks, will fix it.
 
-To fix it, if there is a parent for controller device (role switch
-device's parent), it references to parent too.
+> > has failed, it needs to call usb_role_switch_unregister.
+> >=20
+> > Fixes: b1234e3b3b26 ("usb: cdns3: add runtime PM support")
+> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> [...]
+>=20
+> MBR, Sergei
 
-[ 1167.249191] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-[ 1167.258055] Mem abort info:
-[ 1167.260890]   ESR = 0x96000006
-[ 1167.263972]   EC = 0x25: DABT (current EL), IL = 32 bits
-[ 1167.269296]   SET = 0, FnV = 0
-[ 1167.272378]   EA = 0, S1PTW = 0
-[ 1167.275533] Data abort info:
-[ 1167.278446]   ISV = 0, ISS = 0x00000006
-[ 1167.282293]   CM = 0, WnR = 0
-[ 1167.285260] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000084811000
-[ 1167.291714] [0000000000000010] pgd=0000000080db2003, p4d=0000000080db2003, pud=0000000084d69003, pmd=0000000000000000
-[ 1167.302350] Internal error: Oops: 96000006 [#1] PREEMPT SMP
+--=20
 
-Message [f r1o1m6 7s.y3s0l7o25] Modules linked in: fsl_jr_uio caam_jr caamkeyblob_desc caamhash_desc caamalg_desc crypto_engine rng_core authenc
-libdes ci_hdrc ehci_hcd crct10dif_ce caam secvio tcpci(-) clk_bd718x7 error gpio_ir_recv rc_core [last unloaded: usbmisc_imx]
-[ 1167.331947] CPU: 2 PID: 567 Comm: modprobe Not tainted 5.10.0-rc4-04443-g8354b2be734-dirty #2
-gd@imx8qm[m e1k1 6a7t.3 4F0r4i6 9] Hardware name: FSL i.MX8MM DDR4 EVK with CYW43455 WIFI/BT board (DT)
-[ 1167.349598] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
-Jul 10 06:45:26 2020 ...
-imx8qm[ 1167.355611] pc : usb_role_switch_put+0x2c/0x50
-[ 1167.362905] lr : tcpm_unregister_port+0x48/0x68
-mek kern[e l1:1 6[7 .13166774.33] sp : ffff800012acbc60
-02350] Internal error: Oops[ :1 167.372390] x29: ffff800012acbc60 x28: ffff000040668e00
-[ 1167.380213] x27: 0000000000000000 x26: 0000000000000000
-85525] x25: 0000000000000000 x24: 0000000000000000
-[ 1167.393000] x23: 0000000080000000 x22: ffff000040584800
-
-[ 1167.398312] x21: ffff000044ab4080 x20: ffff000044ab4fd0
-[ 1167.403791] x19: ffff0000444f1400 x18: 0000000000000000
-[ 1167.409103] x17: 0000000000000000 x16: 0000000000000000
-[ 1167.414416] x15: 0000000000000040 x14: ffff8000122d8220
-[ 1167.419728] x13: 0000000000000228 x12: 0000000000000000
-[ 1167.425040] x11: ffff800012acbba8 x10: 0000000000000002
-[ 1167.430351] x9 : ffff800010c1c958 x8 : 3074726f703d5452
-[ 1167.435662] x7 : ffff000000000000 x6 : 0000000000000001
-[ 1167.440973] x5 : 0000000000000001 x4 : fffffe0000f298a0
-[ 1167.446286] x3 : 000000008020001c x2 : fffffe0000f298a0
-[ 1167.451598] x1 : 3ec74e543ca2de00 x0 : 0000000000000000
-[ 1167.456911] Call trace:
-[ 1167.459359]  usb_role_switch_put+0x2c/0x50
-[ 1167.463454]  tcpm_unregister_port+0x48/0x68
-[ 1167.467640]  tcpci_remove+0x5c/0x98 [tcpci]
-[ 1167.471823]  i2c_device_remove+0x5c/0x100
-[ 1167.475833]  device_release_driver_internal+0x114/0x1e8
-[ 1167.481056]  driver_detach+0x54/0xe0
-[ 1167.484631]  bus_remove_driver+0x60/0xd8
-[ 1167.488551]  driver_unregister+0x34/0x60
-[ 1167.492472]  i2c_del_driver+0x2c/0x68
-[ 1167.496134]  tcpci_i2c_driver_exit+0x14/0xf08 [tcpci]
-[ 1167.501186]  __arm64_sys_delete_module+0x180/0x258
-[ 1167.505977]  el0_svc_common.constprop.0+0x70/0x168
-[ 1167.510767]  do_el0_svc+0x28/0x88
-[ 1167.514081]  el0_sync_handler+0x158/0x160
-[ 1167.518088]  el0_sync+0x140/0x180
-[ 1167.521404] Code: aa0003f3 540000e8 f9402000 f9403400 (f9400800)
-[ 1167.527498] ---[ end trace f6a9099ec98b76de ]---
-Segmentation fault
-
-Cc: Jun Li <jun.li@nxp.com>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/roles/class.c | 28 +++++++++++++++++++++++-----
- 1 file changed, 23 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-index 97f37077b7f9..e8ff0f7ff4fd 100644
---- a/drivers/usb/roles/class.c
-+++ b/drivers/usb/roles/class.c
-@@ -129,8 +129,14 @@ struct usb_role_switch *usb_role_switch_get(struct device *dev)
- 		sw = device_connection_find_match(dev, "usb-role-switch", NULL,
- 						  usb_role_switch_match);
- 
--	if (!IS_ERR_OR_NULL(sw))
--		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
-+	if (!IS_ERR_OR_NULL(sw)) {
-+		struct device *dev;
-+
-+		dev = sw->dev.parent;
-+		WARN_ON(!try_module_get(dev->driver->owner));
-+		if (dev->parent)
-+			WARN_ON(!try_module_get(dev->parent->driver->owner));
-+	}
- 
- 	return sw;
- }
-@@ -151,8 +157,14 @@ struct usb_role_switch *fwnode_usb_role_switch_get(struct fwnode_handle *fwnode)
- 	if (!sw)
- 		sw = fwnode_connection_find_match(fwnode, "usb-role-switch",
- 						  NULL, usb_role_switch_match);
--	if (!IS_ERR_OR_NULL(sw))
--		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
-+	if (!IS_ERR_OR_NULL(sw)) {
-+		struct device *dev;
-+
-+		dev = sw->dev.parent;
-+		WARN_ON(!try_module_get(dev->driver->owner));
-+		if (dev->parent)
-+			WARN_ON(!try_module_get(dev->parent->driver->owner));
-+	}
- 
- 	return sw;
- }
-@@ -167,7 +179,13 @@ EXPORT_SYMBOL_GPL(fwnode_usb_role_switch_get);
- void usb_role_switch_put(struct usb_role_switch *sw)
- {
- 	if (!IS_ERR_OR_NULL(sw)) {
--		module_put(sw->dev.parent->driver->owner);
-+		struct device *dev;
-+
-+		dev = sw->dev.parent;
-+		module_put(dev->driver->owner);
-+		if (dev->parent)
-+			module_put(dev->parent->driver->owner);
-+
- 		put_device(&sw->dev);
- 	}
- }
--- 
-2.17.1
-
+Thanks,
+Peter Chen=
