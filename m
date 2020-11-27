@@ -2,114 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E172C5EBC
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 03:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E17F52C5ECA
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 03:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392226AbgK0C3L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Nov 2020 21:29:11 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:8043 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726862AbgK0C3L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Nov 2020 21:29:11 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Chz8G0fB9zhhvK;
-        Fri, 27 Nov 2020 10:28:46 +0800 (CST)
-Received: from [10.67.102.118] (10.67.102.118) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 27 Nov 2020 10:29:03 +0800
-Subject: Re: [PATCH] USB:ehci:fix an interrupt calltrace error
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1606361673-573-1-git-send-email-liulongfang@huawei.com>
- <20201126160830.GA827745@rowland.harvard.edu>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <96b4d366-c94c-9708-da12-5693bf16b716@huawei.com>
-Date:   Fri, 27 Nov 2020 10:29:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2392260AbgK0CqI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Nov 2020 21:46:08 -0500
+Received: from mga02.intel.com ([134.134.136.20]:1330 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728340AbgK0CqH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Nov 2020 21:46:07 -0500
+IronPort-SDR: sNkgTFkN2Gxkux9rHmd2Od79eJeXX8QuDBkVvhebKV4iUNLhQzdkumBvmH6sy3vwmM6aIUwzir
+ NSsWcwPA2jqw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9817"; a="159390653"
+X-IronPort-AV: E=Sophos;i="5.78,373,1599548400"; 
+   d="scan'208";a="159390653"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2020 18:46:06 -0800
+IronPort-SDR: iA6kORbtUJkScIIr2NpQtD3e2CzuS7Tupqp6R3y02zRVe6bg59NvKbYG0M1yTzaUeOJKa6TceX
+ 1MVyeiYOLaJQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,373,1599548400"; 
+   d="scan'208";a="433394877"
+Received: from lkp-server02.sh.intel.com (HELO e51121f5de4e) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Nov 2020 18:46:05 -0800
+Received: from kbuild by e51121f5de4e with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kiTlj-00005O-Hq; Fri, 27 Nov 2020 02:45:55 +0000
+Date:   Fri, 27 Nov 2020 10:45:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH v2 1/1] usb: typec: tps6598x: Export some power supply
+ properties
+Message-ID: <202011271005.zJVawX74-lkp@intel.com>
+References: <616993b62e4a8a39f2d8d874d95189b875dd05d8.1606410063.git.agx@sigxcpu.org>
 MIME-Version: 1.0
-In-Reply-To: <20201126160830.GA827745@rowland.harvard.edu>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.118]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <616993b62e4a8a39f2d8d874d95189b875dd05d8.1606410063.git.agx@sigxcpu.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/11/27 0:08, Alan Stern Wrote:
-> On Thu, Nov 26, 2020 at 11:34:33AM +0800, Longfang Liu wrote:
->> The system goes to suspend when using USB audio player. This causes
->> the USB device continuous send interrupt signal to system, When the
->> number of interrupts exceeds 100000, the system will forcibly close
->> the interrupts and output a calltrace error.
-> 
-> This description is very confusing.  USB devices do not send interrupt 
-> signals to the host.  Do you mean that the device sends a wakeup 
-> request?  Or do you mean something else?
-The irq type is IRQ_NONE£¬It's counted in the note_interrupt function.
-From the analysis of the driver code, that are indeed  interrupt signals.
-> 
->> When the system goes to suspend, the last interrupt is reported to
->> the driver. At this time, the system has set the state to suspend.
->> This causes the last interrupt to not be processed by the system and
->> not clear the interrupt state flag. This uncleared interrupt flag
->> constantly triggers new interrupt event. This causing the driver to
->> receive more than 100,000 interrupts, which causes the system to
->> forcibly close the interrupt report and report the calltrace error.
-> 
-> If the driver receives an interrupt, it is supposed to process the event 
-> even if the host controller is suspended.  And when ehci_irq() runs, it 
-> clears the bits that are set in the USBSYS register.
-When the host controller is suspended, the ehci_suspend() will clear
-the HCD_FLAG_HW_ACCESSIBLE, and then usb_hcd_irq() will return IRQ_NONE
-directly without calling ehci_irq().
-> 
-> Why is your system getting interrupts?  That is, which bits are set in 
-> the USBSTS register?
-BIT(5) and BIT(3) are setted, STS_IAA and STS_FLR.
-> 
->> so, when the driver goes to sleep and changes the system state to
->> suspend, the interrupt flag needs to be cleared.
->>
->> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->> ---
->>  drivers/usb/host/ehci-hub.c | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/usb/host/ehci-hub.c b/drivers/usb/host/ehci-hub.c
->> index ce0eaf7..5b13825 100644
->> --- a/drivers/usb/host/ehci-hub.c
->> +++ b/drivers/usb/host/ehci-hub.c
->> @@ -348,6 +348,11 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
->>  
->>  	/* Any IAA cycle that started before the suspend is now invalid */
->>  	end_iaa_cycle(ehci);
->> +
->> +	/* clear interrupt status */
->> +	if (ehci->has_synopsys_hc_bug)
->> +		ehci_writel(ehci, INTR_MASK | STS_FLR, &ehci->regs->status);
-> 
-> This is a very strange place to add your new code -- right in the middle 
-> of the IAA and unlink handling.  Why not put it in a more reasonable 
-> place?After the IAA is processed, clear the STS_IAA interrupt state flag.
-> 
-> Also, the patch description does not mention has_synopsys_hc_bug.  The 
-> meaning of this flag has no connection with the interrupt status 
-> register, so why do you use it here?
-Because of our USB IP comes from Synopsys, and the uncleared flage is also caused by
-special hardware design, in addition, we have not tested other manufacturers' USB
-controllers.We don¡¯t know if other manufacturers¡¯ designs have this problem,
-so this modification is only limited to this kind of design.
-> 
->> +
->>  	ehci_handle_start_intr_unlinks(ehci);
->>  	ehci_handle_intr_unlinks(ehci);
->>  	end_free_itds(ehci);
-> 
-> Alan Stern
-> .
-> 
-Thanks,
-Longfang Liu
+Hi "Guido,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on v5.10-rc5 next-20201126]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Guido-G-nther/usb-typec-tps6598x-Export-some-power-supply-properties/20201127-010748
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: x86_64-rhel
+compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/e2127770a7cde95b57cbdc55a68d783382282517
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Guido-G-nther/usb-typec-tps6598x-Export-some-power-supply-properties/20201127-010748
+        git checkout e2127770a7cde95b57cbdc55a68d783382282517
+        # save the attached .config to linux build tree
+        make W=1 ARCH=x86_64 
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/power/supply/Kconfig:2:error: recursive dependency detected!
+   drivers/power/supply/Kconfig:2: symbol POWER_SUPPLY is selected by TYPEC_TPS6598X
+   drivers/usb/typec/Kconfig:64: symbol TYPEC_TPS6598X depends on REGMAP_I2C
+   drivers/base/regmap/Kconfig:19: symbol REGMAP_I2C is selected by CHARGER_ADP5061
+   drivers/power/supply/Kconfig:93: symbol CHARGER_ADP5061 depends on POWER_SUPPLY
+   For a resolution refer to Documentation/kbuild/kconfig-language.rst
+   subsection "Kconfig recursive dependency limitations"
+
+vim +2 drivers/power/supply/Kconfig
+
+8c0984e5a75337d Sebastian Reichel 2016-06-17 @2  menuconfig POWER_SUPPLY
+8c0984e5a75337d Sebastian Reichel 2016-06-17  3  	bool "Power supply class support"
+8c0984e5a75337d Sebastian Reichel 2016-06-17  4  	help
+8c0984e5a75337d Sebastian Reichel 2016-06-17  5  	  Say Y here to enable power supply class support. This allows
+8c0984e5a75337d Sebastian Reichel 2016-06-17  6  	  power supply (batteries, AC, USB) monitoring by userspace
+8c0984e5a75337d Sebastian Reichel 2016-06-17  7  	  via sysfs and uevent (if available) and/or APM kernel interface
+8c0984e5a75337d Sebastian Reichel 2016-06-17  8  	  (if selected below).
+8c0984e5a75337d Sebastian Reichel 2016-06-17  9  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
