@@ -2,213 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E34C92C5FE9
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 06:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CED5D2C6028
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 07:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392516AbgK0F5a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Nov 2020 00:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392514AbgK0F5a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Nov 2020 00:57:30 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC30C0613D1
-        for <linux-usb@vger.kernel.org>; Thu, 26 Nov 2020 21:57:29 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id l11so2195730plt.1
-        for <linux-usb@vger.kernel.org>; Thu, 26 Nov 2020 21:57:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=UpBY/RpoPRSREMNWrrwjrNMJWPpxGLcb5KLNlWk5ERE=;
-        b=LO2CJ9mIt2VH3S6cMq+2UXPpTYbAoAg6KEO2YlLFrlm0YuVLhhQG6rP6fAeCKYB6DP
-         pS8shI36zYh7bqvUqgB+cfXnX6iRpWUcDclJj8615aexchdIIf3512qHEYfq0/PhRM4q
-         fs1LRgvhYmChNe3mUiKeVFt4JlNpeTxQm2Xs3G7fb3oZV+5WVTl2/QyZJfEYq0cKxxmr
-         YNQP9wDj7bsbXqIa0+ttoHK4jECCACegRu7GVWEZAMwzBzIQziS8yn+f9ceP6y1shan6
-         PlCj9IZ3s7WVH9l0Z22XLXNUkXkKzOk/qZlQYYigSdnNgMtSfBK6vbGZ7lxYVOKoZMge
-         trnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=UpBY/RpoPRSREMNWrrwjrNMJWPpxGLcb5KLNlWk5ERE=;
-        b=kuYXZZqVloGcbCMgJcYNW1nhuDyZq9TZAHK4M2gbBm1q+FcxO+wFAms8BFOUmmOamP
-         YFbbZ1v4GVVBYYJr92IKTQP0v+gcJZB+zOd1zR8VP7fsn7xue3xX66GQTR+JwwI64b33
-         fsZPFlwuBKT1WBPDQ0Gxk5tX7p+ZBra9oe8E5uUVI7ditiHax/XT62BVW0McowlZ+H7W
-         AX9OZcPzZfQvg6SQr26pM1uzzl2d2p9Wu+2Tqd95/5ECAqpyJGQvWb3M7dxCyjtD4rZA
-         eU8o2RIcy83BlA8lpssKe/OHchtZpPIQBebCDeoPwddoBHxUykczG4OC2DnXcAird/vD
-         1wng==
-X-Gm-Message-State: AOAM530g7XjpZ/4v8lSREK9zOnkkz/jBaNaWQMhp/kU7ByWyc4saS9rM
-        WRcvdmzxVTVuNMZPHD/N9Y0=
-X-Google-Smtp-Source: ABdhPJya9RBtn6ndgbjCAy5QUJyjjFLZcT4aKqmNtb+Einyxmg0TR8rJcT8Wz4BVAUbf+yOGtgmT7w==
-X-Received: by 2002:a17:902:860c:b029:da:1d7d:7320 with SMTP id f12-20020a170902860cb02900da1d7d7320mr5620573plo.56.1606456649528;
-        Thu, 26 Nov 2020 21:57:29 -0800 (PST)
-Received: from localhost ([209.9.72.214])
-        by smtp.gmail.com with ESMTPSA id h16sm6335617pfo.185.2020.11.26.21.57.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 26 Nov 2020 21:57:28 -0800 (PST)
-From:   lijiazi <jqqlijiazi@gmail.com>
-X-Google-Original-From: lijiazi <lijiazi@xiaomi.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiazi Li <lijiazi@xiaomi.com>, linux-usb@vger.kernel.org
-Subject: [PATCH v2] usb: typec: add sanity check for opmode
-Date:   Fri, 27 Nov 2020 13:57:23 +0800
-Message-Id: <1606456643-31913-1-git-send-email-lijiazi@xiaomi.com>
-X-Mailer: git-send-email 2.7.4
+        id S2392568AbgK0G2g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Nov 2020 01:28:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48146 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389589AbgK0G2g (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Nov 2020 01:28:36 -0500
+Received: from localhost.localdomain (unknown [180.164.155.184])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA76F221FD;
+        Fri, 27 Nov 2020 06:28:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606458515;
+        bh=xesqbq9mongWn1XNF3IbRBvUavaxfAhuBcfFCMugYr0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=1Yuu6WEGEuy7pW8R2+EDe+TF36ykPI7H/OhHq+VHtqCHNWVHkUfLPe3/olW6PQRu1
+         rAqqTcPxuVF4OwPYylGzzR81nICz4k7zFPvO+k4Iv9EPhA0+Lb9MuJnS055F9LmqUj
+         ntkXnDOuHpGcmDKQpgtagrS+smgqPaJKnHA/jtOw=
+From:   Peter Chen <peter.chen@kernel.org>
+To:     heikki.krogerus@linux.intel.com
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
+        Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>
+Subject: [PATCH 1/1] usb: roles: reference controller's parent device if existed
+Date:   Fri, 27 Nov 2020 14:28:20 +0800
+Message-Id: <20201127062820.588-1-peter.chen@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jiazi Li <lijiazi@xiaomi.com>
+From: Peter Chen <peter.chen@nxp.com>
 
-If usb drivers set a invalid value, for example, a negative
-value. then a userspace task
-cat sys/class/typec/port0/power_operation_mode, will cause a
-panic issue:
-[154325.262827] Unable to handle kernel paging request at virtual
-address ffffff980aad8b68
-[154325.262838] Mem abort info:
-[154325.262843]   ESR = 0x96000005
-[154325.262849]   Exception class = DABT (current EL), IL = 32 bits
-[154325.262855]   SET = 0, FnV = 0
-[154325.262860]   EA = 0, S1PTW = 0
-[154325.262865] Data abort info:
-[154325.262870]   ISV = 0, ISS = 0x00000005
-[154325.262875]   CM = 0, WnR = 0
-[154325.262880] swapper pgtable: 4k pages, 39-bit VAs, pgdp =
-000000001cae9c14
-[154325.262884] [ffffff980aad8b68] pgd=0000000000000000,
-pud=0000000000000000
-[154325.262891] Internal error: Oops: 96000005 [#1] PREEMPT SMP
-[154325.262896] Modules linked in: rmnet_perf(O) rmnet_shs(O)
-wlan(O) sla(O) exfat(O) machine_dlkm(O) tfa98xx_dlkm(O)
-cs35l41_dlkm(O) wcd938x_slave_dlkm(O) wcd938x_dlkm(O)
-wcd9xxx_dlkm(O) mbhc_dlkm(O) tx_macro_dlkm(O) rx_macro_dlkm(O)
-va_macro_dlkm(O) wsa_macro_dlkm(O) swr_ctrl_dlkm(O)
-bolero_cdc_dlkm(O) wsa881x_dlkm(O) wcd_core_dlkm(O) stub_dlkm(O)
-hdmi_dlkm(O) swr_dlkm(O) pinctrl_lpi_dlkm(O) pinctrl_wcd_dlkm(O)
-usf_dlkm(O) native_dlkm(O) platform_dlkm(O) q6_dlkm(O)
-adsp_loader_dlkm(O) apr_dlkm(O) snd_event_dlkm(O)
-q6_notifier_dlkm(O) q6_pdr_dlkm(O) [last unloaded: rmnet_perf]
-[154325.262939] Process usb@1.2-service (pid: 2501, stack limit
-		= 0x00000000cb0343ac)
-[154325.262946] CPU: 5 PID: 2501 Comm: usb@1.2-service Tainted:
-G S      W  O      4.19.113-perf-g0307705d321bc #1
-[154325.262950] Hardware name: Qualcomm Technologies, Inc.
-xiaomi cas (DT)
-[154325.262955] pstate: 80400005 (Nzcv daif +PAN -UAO)
-[154325.262967] pc : power_operation_mode_show+0x34/0x58
-[154325.262971] lr : power_operation_mode_show+0x34/0x58
-[154325.262974] sp : ffffffc1376bf990
-[154325.262977] x29: ffffffc1376bf990 x28: ffffffc195aede58
-[154325.262981] x27: ffffffc195aede48 x26: ffffff9008c55638
-[154325.262986] x25: ffffffc05a44b300 x24: 0000000000001000
-[154325.262990] x23: ffffffc19a340018 x22: ffffffc19a340018
-[154325.262994] x21: ffffff900bb10038 x20: ffffff980aad8b68
-[154325.262998] x19: ffffffc05a44b300 x18: 0000000000000000
-[154325.263002] x17: 0000000000000000 x16: 0000000000000000
-[154325.263006] x15: 0000000000000000 x14: 00000000080a38f8
-[154325.263010] x13: ffffff880b489860 x12: 0000000000000000
-[154325.263014] x11: 0000000000000000 x10: 1ffffff30155b16d
-[154325.263018] x9 : 0000000000000000 x8 : 0000000000000007
-[154325.263022] x7 : 0000000000000000 x6 : 000000000000003f
-[154325.263026] x5 : 0000000000000040 x4 : 0000000000000000
-[154325.263030] x3 : 0000000000000004 x2 : ffffffc05a44b300
-[154325.263034] x1 : ffffff900bb10038 x0 : ffffff980aad8b68
-[154325.263039]
-[154325.263039] SP: 0xffffffc1376bf910:
-[154325.263043] f910  00001000 00000000 5a44b300 ffffffc0
-08c55638 ffffff90 95aede48 ffffffc1
-[154325.263052] f930  95aede58 ffffffc1 376bf990 ffffffc1
-09024b5c ffffff90 376bf990 ffffffc1
-[154325.263060] f950  09024b5c ffffff90 80400005 00000000
-376bf9c0 ffffffc1 083cdf64 ffffff90
-[154325.263067] f970  ffffffff 0000007f 376bfd80 ffffffc1
-376bf990 ffffffc1 09024b5c ffffff90
-[154325.263075] f990  376bf9b0 ffffffc1 08c55678 ffffff90
-0bb10048 ffffff90 5a44b300 ffffffc0
-[154325.263082] f9b0  376bf9e0 ffffffc1 085075e0 ffffff90
-0a5d43f8 ffffff90 9a9d9f00 ffffffc1
-[154325.263090] f9d0  95aede48 ffffffc1 95aede58 ffffffc1
-376bfa30 ffffffc1 08506248 ffffff90
-[154325.263097] f9f0  95aede40 ffffffc1 00000000 00000000
-00000001 00000000 9a9d9f00 ffffffc1
-[154325.263106] Call trace:
-[154325.263111]  power_operation_mode_show+0x34/0x58
-[154325.263116]  dev_attr_show+0x40/0x80
-[154325.263123]  sysfs_kf_seq_show+0x110/0x1c0
-[154325.263127]  kernfs_seq_show+0x80/0x98
-[154325.263133]  seq_read+0x2d8/0x778
-[154325.263136]  kernfs_fop_read+0xa4/0x2a8
-[154325.263142]  __vfs_read+0xd4/0x2e8
-[154325.263145]  vfs_read+0xe0/0x1b0
-[154325.263149]  ksys_read+0xdc/0x170
-[154325.263153]  __arm64_sys_read+0x44/0x58
-[154325.263158]  el0_svc_common+0xd8/0x1d0
-[154325.263162]  el0_svc_handler+0x90/0xb8
-[154325.263166]  el0_svc+0x8/0xc
+For some DRD IP drivers (eg, dwc3/cdns3/chipidea), the core device is
+created and deleted by glue layer device. So, if role switch user
+(eg, tcpci), core device, and glue layer device are all built as module,
+and glue layer device is removed first, the core device's driver ->remove
+function will be called, and its device's driver pointer will be NULL,
+and cause below oops.
 
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Jiazi Li <lijiazi@xiaomi.com>
+To fix it, if there is a parent for controller device (role switch
+device's parent), it references to parent too.
+
+[ 1167.249191] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+[ 1167.258055] Mem abort info:
+[ 1167.260890]   ESR = 0x96000006
+[ 1167.263972]   EC = 0x25: DABT (current EL), IL = 32 bits
+[ 1167.269296]   SET = 0, FnV = 0
+[ 1167.272378]   EA = 0, S1PTW = 0
+[ 1167.275533] Data abort info:
+[ 1167.278446]   ISV = 0, ISS = 0x00000006
+[ 1167.282293]   CM = 0, WnR = 0
+[ 1167.285260] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000084811000
+[ 1167.291714] [0000000000000010] pgd=0000000080db2003, p4d=0000000080db2003, pud=0000000084d69003, pmd=0000000000000000
+[ 1167.302350] Internal error: Oops: 96000006 [#1] PREEMPT SMP
+
+Message [f r1o1m6 7s.y3s0l7o25] Modules linked in: fsl_jr_uio caam_jr caamkeyblob_desc caamhash_desc caamalg_desc crypto_engine rng_core authenc
+libdes ci_hdrc ehci_hcd crct10dif_ce caam secvio tcpci(-) clk_bd718x7 error gpio_ir_recv rc_core [last unloaded: usbmisc_imx]
+[ 1167.331947] CPU: 2 PID: 567 Comm: modprobe Not tainted 5.10.0-rc4-04443-g8354b2be734-dirty #2
+gd@imx8qm[m e1k1 6a7t.3 4F0r4i6 9] Hardware name: FSL i.MX8MM DDR4 EVK with CYW43455 WIFI/BT board (DT)
+[ 1167.349598] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
+Jul 10 06:45:26 2020 ...
+imx8qm[ 1167.355611] pc : usb_role_switch_put+0x2c/0x50
+[ 1167.362905] lr : tcpm_unregister_port+0x48/0x68
+mek kern[e l1:1 6[7 .13166774.33] sp : ffff800012acbc60
+02350] Internal error: Oops[ :1 167.372390] x29: ffff800012acbc60 x28: ffff000040668e00
+[ 1167.380213] x27: 0000000000000000 x26: 0000000000000000
+85525] x25: 0000000000000000 x24: 0000000000000000
+[ 1167.393000] x23: 0000000080000000 x22: ffff000040584800
+
+[ 1167.398312] x21: ffff000044ab4080 x20: ffff000044ab4fd0
+[ 1167.403791] x19: ffff0000444f1400 x18: 0000000000000000
+[ 1167.409103] x17: 0000000000000000 x16: 0000000000000000
+[ 1167.414416] x15: 0000000000000040 x14: ffff8000122d8220
+[ 1167.419728] x13: 0000000000000228 x12: 0000000000000000
+[ 1167.425040] x11: ffff800012acbba8 x10: 0000000000000002
+[ 1167.430351] x9 : ffff800010c1c958 x8 : 3074726f703d5452
+[ 1167.435662] x7 : ffff000000000000 x6 : 0000000000000001
+[ 1167.440973] x5 : 0000000000000001 x4 : fffffe0000f298a0
+[ 1167.446286] x3 : 000000008020001c x2 : fffffe0000f298a0
+[ 1167.451598] x1 : 3ec74e543ca2de00 x0 : 0000000000000000
+[ 1167.456911] Call trace:
+[ 1167.459359]  usb_role_switch_put+0x2c/0x50
+[ 1167.463454]  tcpm_unregister_port+0x48/0x68
+[ 1167.467640]  tcpci_remove+0x5c/0x98 [tcpci]
+[ 1167.471823]  i2c_device_remove+0x5c/0x100
+[ 1167.475833]  device_release_driver_internal+0x114/0x1e8
+[ 1167.481056]  driver_detach+0x54/0xe0
+[ 1167.484631]  bus_remove_driver+0x60/0xd8
+[ 1167.488551]  driver_unregister+0x34/0x60
+[ 1167.492472]  i2c_del_driver+0x2c/0x68
+[ 1167.496134]  tcpci_i2c_driver_exit+0x14/0xf08 [tcpci]
+[ 1167.501186]  __arm64_sys_delete_module+0x180/0x258
+[ 1167.505977]  el0_svc_common.constprop.0+0x70/0x168
+[ 1167.510767]  do_el0_svc+0x28/0x88
+[ 1167.514081]  el0_sync_handler+0x158/0x160
+[ 1167.518088]  el0_sync+0x140/0x180
+[ 1167.521404] Code: aa0003f3 540000e8 f9402000 f9403400 (f9400800)
+[ 1167.527498] ---[ end trace f6a9099ec98b76de ]---
+Segmentation fault
+
+Cc: Jun Li <jun.li@nxp.com>
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
-Changes in v2:
- - return -EINVAL when opmode invalid
----
- drivers/usb/typec/class.c | 8 ++++++--
- include/linux/usb/typec.h | 3 ++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ drivers/usb/roles/class.c | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index cb1362187..3f55182 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1559,13 +1559,15 @@ static int partner_match(struct device *dev, void *data)
-  * Type-C specification, and "USB Power Delivery" when the power levels are
-  * negotiated with methods defined in USB Power Delivery specification.
-  */
--void typec_set_pwr_opmode(struct typec_port *port,
-+int typec_set_pwr_opmode(struct typec_port *port,
- 			  enum typec_pwr_opmode opmode)
- {
- 	struct device *partner_dev;
+diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+index 97f37077b7f9..e8ff0f7ff4fd 100644
+--- a/drivers/usb/roles/class.c
++++ b/drivers/usb/roles/class.c
+@@ -129,8 +129,14 @@ struct usb_role_switch *usb_role_switch_get(struct device *dev)
+ 		sw = device_connection_find_match(dev, "usb-role-switch", NULL,
+ 						  usb_role_switch_match);
  
-+	if (opmode >= TYPEC_PWR_MODE_MAX)
-+		return -EINVAL;
- 	if (port->pwr_opmode == opmode)
--		return;
-+		return 0;
- 
- 	port->pwr_opmode = opmode;
- 	sysfs_notify(&port->dev.kobj, NULL, "power_operation_mode");
-@@ -1582,6 +1584,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
- 		}
- 		put_device(partner_dev);
- 	}
+-	if (!IS_ERR_OR_NULL(sw))
+-		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
++	if (!IS_ERR_OR_NULL(sw)) {
++		struct device *dev;
 +
-+	return 0;
++		dev = sw->dev.parent;
++		WARN_ON(!try_module_get(dev->driver->owner));
++		if (dev->parent)
++			WARN_ON(!try_module_get(dev->parent->driver->owner));
++	}
+ 
+ 	return sw;
  }
- EXPORT_SYMBOL_GPL(typec_set_pwr_opmode);
+@@ -151,8 +157,14 @@ struct usb_role_switch *fwnode_usb_role_switch_get(struct fwnode_handle *fwnode)
+ 	if (!sw)
+ 		sw = fwnode_connection_find_match(fwnode, "usb-role-switch",
+ 						  NULL, usb_role_switch_match);
+-	if (!IS_ERR_OR_NULL(sw))
+-		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
++	if (!IS_ERR_OR_NULL(sw)) {
++		struct device *dev;
++
++		dev = sw->dev.parent;
++		WARN_ON(!try_module_get(dev->driver->owner));
++		if (dev->parent)
++			WARN_ON(!try_module_get(dev->parent->driver->owner));
++	}
  
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index 5447532..84ed661 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -56,6 +56,7 @@ enum typec_pwr_opmode {
- 	TYPEC_PWR_MODE_1_5A,
- 	TYPEC_PWR_MODE_3_0A,
- 	TYPEC_PWR_MODE_PD,
-+	TYPEC_PWR_MODE_MAX,
- };
- 
- enum typec_accessory {
-@@ -261,7 +262,7 @@ void typec_unregister_plug(struct typec_plug *plug);
- void typec_set_data_role(struct typec_port *port, enum typec_data_role role);
- void typec_set_pwr_role(struct typec_port *port, enum typec_role role);
- void typec_set_vconn_role(struct typec_port *port, enum typec_role role);
--void typec_set_pwr_opmode(struct typec_port *port, enum typec_pwr_opmode mode);
-+int typec_set_pwr_opmode(struct typec_port *port, enum typec_pwr_opmode mode);
- 
- int typec_set_orientation(struct typec_port *port,
- 			  enum typec_orientation orientation);
+ 	return sw;
+ }
+@@ -167,7 +179,13 @@ EXPORT_SYMBOL_GPL(fwnode_usb_role_switch_get);
+ void usb_role_switch_put(struct usb_role_switch *sw)
+ {
+ 	if (!IS_ERR_OR_NULL(sw)) {
+-		module_put(sw->dev.parent->driver->owner);
++		struct device *dev;
++
++		dev = sw->dev.parent;
++		module_put(dev->driver->owner);
++		if (dev->parent)
++			module_put(dev->parent->driver->owner);
++
+ 		put_device(&sw->dev);
+ 	}
+ }
 -- 
-2.7.4
+2.17.1
 
