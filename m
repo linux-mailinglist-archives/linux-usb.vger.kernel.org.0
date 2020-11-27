@@ -2,65 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41C32C6657
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 14:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5982C667E
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 14:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730093AbgK0NIB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Nov 2020 08:08:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57138 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730069AbgK0NIA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Nov 2020 08:08:00 -0500
-Received: from localhost (82-217-20-185.cable.dynamic.v4.ziggo.nl [82.217.20.185])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E987B21D7A;
-        Fri, 27 Nov 2020 13:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1606482480;
-        bh=yEWT8yD9oRORktPdkDenJyadykuE0kyiolVtHRsxdHM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e/9RMs/Lk0qJsHgGqlYAZGfhW6KFi6eOV7v7iVF3ePVpFnnquSxjK1RhOq2MAuEkW
-         IV5t58M2RC/DOyoaFuh/4L3lhM80uteriqBgjg0CBsA3pMWxJiKB2/kqZallMfq4ty
-         KwAcpyjbizESECkuTvlATzYqGroK1lDPu9FldFKg=
-Date:   Fri, 27 Nov 2020 14:07:58 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Amelie DELAUNAY <amelie.delaunay@st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        id S1730213AbgK0NMy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Nov 2020 08:12:54 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:58706 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730098AbgK0NMy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Nov 2020 08:12:54 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0ARCR5IV006586;
+        Fri, 27 Nov 2020 14:12:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=GQp9+1KGBlt8NZocRR5PgA4+6R9ARvYpJUhtHSdjap4=;
+ b=Es7xEDIEJ0QUnArrxgnbGB9ZxyUqE2gRrKoKk1LMIIwkaPTvfMJlIjf4olaABz+Oj9gS
+ mOsI4nDjHhhh3Y2PfwK91qfIWAXBTUGNX/spvS96z3TGW6WQwD67OUhDPnDVQhp6nhyr
+ UpmqGS3GPa2MeTGceActUCeO8JWwmraJUymkGDYRAZ5wGrQ5msgBDtvh0T02wwIu+Rs0
+ TkcEysSPK7xn6x9YrnncOIuA20AA7RF5o5BtO/Ibgxc9N+73i6bUepBp8bSCfR8lfuRT
+ NyEgeT81XIN/RUT+TK5glb3v/0RpY+dV+ULl+PPMt668MwgPlINY8Tf17NyLr5qp6Ijj Aw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 34y0fhdnvn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Nov 2020 14:12:32 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5AC6510002A;
+        Fri, 27 Nov 2020 14:12:32 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4234A24A63B;
+        Fri, 27 Nov 2020 14:12:32 +0100 (CET)
+Received: from lmecxl0995.lme.st.com (10.75.127.48) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 27 Nov
+ 2020 14:12:30 +0100
+Subject: Re: [PATCH v5 3/5] usb: typec: stusb160x: fix power-opmode property
+ with typec-power-opmode
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Alexandre Torgue <alexandre.torgue@st.com>,
         Russell King <linux@armlinux.org.uk>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Badhri Jagan Sridharan <badhri@google.com>,
-        Jun Li <lijun.kernel@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
+        Jun Li <lijun.kernel@gmail.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
         Fabrice Gasnier <fabrice.gasnier@st.com>
-Subject: Re: [PATCH v5 3/5] usb: typec: stusb160x: fix power-opmode property
- with typec-power-opmode
-Message-ID: <X8D6LgTHMpk2gph9@kroah.com>
 References: <20201106165805.31534-1-amelie.delaunay@st.com>
  <20201106165805.31534-4-amelie.delaunay@st.com>
- <e97a537a-9c7e-cd98-8ffa-93abae087128@st.com>
+ <e97a537a-9c7e-cd98-8ffa-93abae087128@st.com> <X8D6LgTHMpk2gph9@kroah.com>
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+Message-ID: <b9bd4d0f-a6e4-29f4-77aa-9d144edff18c@st.com>
+Date:   Fri, 27 Nov 2020 14:12:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e97a537a-9c7e-cd98-8ffa-93abae087128@st.com>
+In-Reply-To: <X8D6LgTHMpk2gph9@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG4NODE1.st.com (10.75.127.10) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-27_06:2020-11-26,2020-11-27 signatures=0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 02:01:29PM +0100, Amelie DELAUNAY wrote:
-> Hi Greg,
+
+
+On 11/27/20 2:07 PM, Greg Kroah-Hartman wrote:
+> On Fri, Nov 27, 2020 at 02:01:29PM +0100, Amelie DELAUNAY wrote:
+>> Hi Greg,
+>>
+>> gentle reminder for this patch, lost in the middle of a DT series (DT part
+>> already in stm32-next).
 > 
-> gentle reminder for this patch, lost in the middle of a DT series (DT part
-> already in stm32-next).
+> Odd, I don't see this anymore, can you resend just this one so I can
+> apply it directly?
 
-Odd, I don't see this anymore, can you resend just this one so I can
-apply it directly?
+Sure :) I rebase it and send it right now.
 
-thanks,
-
-greg k-h
-
+Amelie
