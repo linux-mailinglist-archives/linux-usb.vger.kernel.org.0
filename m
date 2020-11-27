@@ -2,127 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B84462C6235
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 10:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F088F2C627F
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 11:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728174AbgK0JsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Nov 2020 04:48:02 -0500
-Received: from mail-eopbgr30040.outbound.protection.outlook.com ([40.107.3.40]:24197
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725854AbgK0JsB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Nov 2020 04:48:01 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZVoIdpoWeq2vXssiTMgVSxU5XLmWIgwwqPwtmxUmGB34zj977RipETQvgRuQ3uM2Qzo+xiUQVmxu8BiRTE8lCqFVOd2IHm9zLKiYIdQvD+fXzdes4sjyF7BAbw9w/E+L3e0QP5Ixw+g3dPoAt7y0h36xbSh568uwrs49513lRTaVhuCbyR0kgBqpD6EDDxdGa6VudbvrNA42X+o0mH0j3jW7GCVo2Vcnd58F4DmeucXO68t5PdbKbpnClbIrdOwD9ZugdJnUqumU1K7dIdG05U/fFfs9R1iD+Ry447gbUz64Hez4b7eMLP19a7/Aj5DwMKPtUgvsGFJLWaI0Fvk4WA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W/mLuYP1YqmsWk04rjye4K8z+ws4vKsWhAZky3zam/s=;
- b=Yf1mXcNhBOcUSdIzPXYYwfk944gK0EAAWQEDYq0pHROkfGKI8K6RitGbC1zJVaKzyx0Q5AGG6O7dqGoMTvUsW1vbuYLV3GZxi9ikHwuqJn8oA5EIVEHqU9q2UanOlVHO8AebPnyyt8usFelSTU+eyQqOTy+sIllRYk54NIKv5ImfePjL9ihkHFmqqzxMaNlVQPBz1UzU38YyPuJFF25n+fsEZkPX9Juo0wJerPYcelVOuRf4nWcmwcUB2Vzxl9iCbfBV6TlaFvmKvrlb98XXZ0DSFgbj81AqC4+fM6leKhzopwoaDbjQpfLpERqWZDdRGZcXpEWW41dF89Z5CMtZ4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W/mLuYP1YqmsWk04rjye4K8z+ws4vKsWhAZky3zam/s=;
- b=ZTz1wbWAyrvvEs7uAwHuo6L0QsWyFKmtW6z7lTWCQKRGJCp/7rBKKAbxmsqwUr37zepC7dbvwjEp6YVpNMcNWpJksRj97IlM21mcGSIJfUvibpj5rhigz7qULnipY0/nYugnLvTfRtLluRkBLbJ6cP/rc56L3Mxf+FCXjFJxLyg=
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
- by DB7PR04MB4235.eurprd04.prod.outlook.com (2603:10a6:5:22::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.22; Fri, 27 Nov
- 2020 09:47:53 +0000
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3611.025; Fri, 27 Nov 2020
- 09:47:53 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Roger Quadros <rogerq@ti.com>,
-        "pawell@cadence.com" <pawell@cadence.com>
-CC:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: cdns3: Fix hardware based role switch
-Thread-Topic: [PATCH] usb: cdns3: Fix hardware based role switch
-Thread-Index: AQHWwyl/2oNKkJaHaE64jPFyyE67kqnbuXiAgAAEW6A=
-Date:   Fri, 27 Nov 2020 09:47:53 +0000
-Message-ID: <DBBPR04MB7979103C23A8EE95187545608BF80@DBBPR04MB7979.eurprd04.prod.outlook.com>
-References: <20201125124936.5929-1-rogerq@ti.com>
- <520dd6e0-d3d4-b471-6c65-143e094a4f74@ti.com>
-In-Reply-To: <520dd6e0-d3d4-b471-6c65-143e094a4f74@ti.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: ti.com; dkim=none (message not signed)
- header.d=none;ti.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [92.121.68.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b888ab9a-ba91-43bd-a3ed-08d892b98305
-x-ms-traffictypediagnostic: DB7PR04MB4235:
-x-microsoft-antispam-prvs: <DB7PR04MB423590C063C5E817CCEA41078BF80@DB7PR04MB4235.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OM6yqiBgunIdCsdWdv2LKfo1oA8Pe/DAjui5kPqlADfBpSLw2ZiIy2Pds48xyw1bRD3mf8FynRN5xVHUKB6BWWzuMZSwa9yu338eGA2HOlXy4lYRkkTZkoNGXOpT+nsEQP6jMup0Cr5l/b7/tDiF2M3nd1bfbs7HC7G2m4KOzOE2Fc764HH/WxACo2jr53e1rs9ckXim5r7NM2ycK9f91uOeT6aVA/UB7uHfKrwm1GpVsUmFC2dDv5C82Cf3MNIpkD/ZYdfHXiamdnwEPMKszI394bwuYDGXDVFyImxICs2iUGLvbiQKHP9+gb7YOinOlv76mQD1gqjD9KN6XKzO5pOoYwlrbXeaX7oMKFvnHkvNBMotW8ZPIAu8sni4CdKW6RGNM4P3jUz4ZXzbw87BlA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(136003)(376002)(396003)(346002)(26005)(110136005)(52536014)(66946007)(5660300002)(86362001)(66476007)(76116006)(4326008)(9686003)(44832011)(316002)(55016002)(966005)(186003)(66446008)(53546011)(54906003)(7696005)(8936002)(478600001)(66556008)(33656002)(4744005)(71200400001)(6506007)(64756008)(8676002)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?dWtqbm05YVAxdlVpa0didjBVRm9sMm5KbnhaK1Z0ZnJLTU1lR0p3azVIdHNG?=
- =?utf-8?B?OGZ0Slkrd29GZmlia2d0ditoYVhXUVhzTGNySnFlY0VUVlV5WUpZQlRld2U2?=
- =?utf-8?B?QytGUkJMSGJOTFA5WVdaNEdSU0ZtKzJFN0NLQVJ1SGlZaGpHS1g4ZGRIVUdu?=
- =?utf-8?B?eSsvL21UZnRmQ0JjbHhqR2dWUFhEVlgyV2JSZk1ESHRwR1Y0V3lNeVhGaDBO?=
- =?utf-8?B?U1hXQWtsSEVVUjJTbThxZVdhK0VieDN3ZGh3K2h5T0VVRUIvemxrb2hidEJD?=
- =?utf-8?B?bThQYVVZWVNzbnQyTkhFc3E3MzM3UlR3Y3F5UEZrQVFBQ21tcVhmZFY5V3Zy?=
- =?utf-8?B?Qk9TS0lCa1ZPcTQvbk5CckVjZURlUm5MSy9MYXFLTWExTzlYWW5MZVQ0alUy?=
- =?utf-8?B?c0Z3N3J1UDNVWXV2REU5WFpGUXpxQm9zZCtCb01WWHYvaGF2UnJHWTRpOEFh?=
- =?utf-8?B?cXFYbW5vam5vKzh0V0FqR2krV3BmYTJkMW9mM0oyTnB2R1E5NUVHUWZMOFNh?=
- =?utf-8?B?anhiOGxSWEtEVnhhOEdZcjNUbCtCNEtsR21aRlJ0TEN0Q3BHaEpjTFc5UEJs?=
- =?utf-8?B?U0doMXV6WHUrMTYxaUtsME9KOU1PdDBNbDZlaTd2cEhSY21lNGxJdW9mWGlh?=
- =?utf-8?B?bGJ0S2V4cXJXalA0YjFiYjNSV2dxcEJqbm5XNm1ucW9ZM1J0ZHhQMFByb0Zm?=
- =?utf-8?B?TllZeDB0Y1dTd1FiUUkxU3BaaGFZNnZXN2pjOTdQK2FZZFJZY1BNVlpxRVU3?=
- =?utf-8?B?TjcyU0tIenVkUU5DTWtoa3ZNcUNBL0tRc05FWFFGcjE3SWJQYzNWOE92QjI5?=
- =?utf-8?B?RmpDVWdBYkxNVXFUa1VrM3JpZStqL0o2K3NQbjhyd1NLR3lSYUtLZURxZHZL?=
- =?utf-8?B?dEM5dkticDJhYjU1dEhRa3h2TWFPdjRnWFRjd2NnaWRjS3pxNC9td0w4UVdX?=
- =?utf-8?B?TXd4SDNxUGsrUHpkcW5rNFJrTTFkeHQ0VVlDUWd6cFRlQmx3NGRQKzV2Y3dS?=
- =?utf-8?B?K0M5Y2hHbUhVUUFER213anhHOWVLVXV3YlZ4NVhLa2d2VDdNZzRhTGpta1pz?=
- =?utf-8?B?UmtSY3UzSkd6VnVTbVNMNWx4MUl6cUZDNVlrbFUyRGZaZ25jREdlYXN6RllZ?=
- =?utf-8?B?L2VtcFMvamtnemxkYkcvYkw5a3U5T1VSWDZkTUxmWWlrWUthemVLZEd5Z295?=
- =?utf-8?B?ZFB4WUFWZEZZT0VGOTJqbisweVl6Ky9vNGxVdWIyWjNEZlFTZ0ZJWDI1VlJB?=
- =?utf-8?B?UTZwNlhwTGFmRmNHRnFRZElDUWkwTUZ3K3VWMXNlWmZWVVRLZ1dnZ2xOTWJx?=
- =?utf-8?Q?mboKyGH2TmTK4=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1728089AbgK0KFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Nov 2020 05:05:36 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:46674 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727281AbgK0KFf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Nov 2020 05:05:35 -0500
+Received: by mail-lj1-f193.google.com with SMTP id f24so5276802ljk.13
+        for <linux-usb@vger.kernel.org>; Fri, 27 Nov 2020 02:05:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OdwtOJRn2IUqyWPSW4vxCiuFOeYaizpMoO1kqgrIRqE=;
+        b=CSwBuE2BL2YKbG4IDmUftSgplziJQuKnr1a5Dwd/A0yuswfvqQDxg2gkwE/zOvRRdn
+         k8To2PYC3x208WeYqcvp05HNTMat91T1HoYuKo4qld8/Z48q1U4LElJSMXIJU9/XV+f7
+         Nb2mKOl+U5JLBKygKi88itAX8StG8NijoYG+2L47ddVS+oiOaWE6rsDUmWmwATSfNwVX
+         81UkXWvVa7Xy+GDV5lTqzZYZtRs9/xqsmSOqWsTkaiG+835tKo9RsL3QEIpFpXgPgARj
+         xEeioOfsjfvA1NxqFGBoL8gtokVLj89wmoC/t3zqc7iMh8xcnuIch0Lh4iJLn2+trShK
+         WnzQ==
+X-Gm-Message-State: AOAM530Q+U9hTHNfPAxoV/sKzXr4TZtgOz00oVzxCCeF2HbnzZ3ZPjuA
+        Hqc21PJw4uKOwrGLpEaIeW0=
+X-Google-Smtp-Source: ABdhPJxfoitGHr7LZC/qZf0rh6UiOubYMhgLyELAuanuSrWArE7q3lH2ZUqimX+OVvdk3PKWvmEpXA==
+X-Received: by 2002:a05:651c:1214:: with SMTP id i20mr2881016lja.324.1606471533601;
+        Fri, 27 Nov 2020 02:05:33 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id a11sm904357ljp.21.2020.11.27.02.05.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Nov 2020 02:05:32 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kiadV-0006KA-Hm; Fri, 27 Nov 2020 11:05:53 +0100
+Date:   Fri, 27 Nov 2020 11:05:53 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Giacinto Cifelli <gciofono@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3] USB: serial: option: add support for Thales Cinterion
+ EXS82 option port
+Message-ID: <X8DPgRn3wN+aRlED@localhost>
+References: <20201125145304.10385-1-gciofono@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b888ab9a-ba91-43bd-a3ed-08d892b98305
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2020 09:47:53.7117
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eVzI0FfpSNUO1lEXohRIHszeGoZL5qzcDpMAch8NOPYwCRju32+b99HQoCa77lfxlGYI+QqSyBjlwt1gPoMxTg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4235
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201125145304.10385-1-gciofono@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IA0KPiBIaSBQZXRlciwNCj4gDQo+IE9uIDI1LzExLzIwMjAgMTQ6NDksIFJvZ2VyIFF1YWRyb3Mg
-d3JvdGU6DQo+ID4gSGFyZHdhcmUgYmFzZWQgcm9sZSBzd2l0Y2ggaXMgYnJva2VuIGFzIHRoZSBk
-cml2ZXIgYWx3YXlzIHNraXBzIGl0Lg0KPiA+IEZpeCB0aGlzIGJ5IHJlZ2lzdGVyaW5nIGZvciAg
-U1cgcm9sZSBzd2l0Y2ggb25seSBpZiAndXNiLXJvbGUtc3dpdGNoJw0KPiA+IHByb3BlcnR5IGlz
-IHByZXNlbnQgaW4gdGhlIGRldmljZSB0cmVlLg0KPiA+DQo+ID4gRml4ZXM6IDUwNjQyNzA5ZjY1
-OSAoInVzYjogY2RuczM6IGNvcmU6IHF1aXQgaWYgaXQgdXNlcyByb2xlIHN3aXRjaA0KPiA+IGNs
-YXNzIikNCj4gPiBTaWduZWQtb2ZmLWJ5OiBSb2dlciBRdWFkcm9zIDxyb2dlcnFAdGkuY29tPg0K
-PiANCj4gQ2FuIHlvdSBwbGVhc2UgcGljayB0aGlzIHVwIGZvciAtcmMgY3ljbGUsIGVsc2Ugb3Rn
-IHdpbGwgYmUgYnJva2VuIGZvciB1cyBpbiB2NS4xMA0KPiByZWxlYXNlLg0KPiBUaGFua3MuDQo+
-IA0KDQpJdCBpcyBhdCBteSAtZml4ZXMgdHJlZSBhbG9uZyB3aXRoIG15IHR3byBmaXhlc1sxXVsy
-XS4gSWYgdGhlcmUgaXMgbm8gcmVwb3J0IGlzc3VlLA0KSSB3aWxsIHNlbmQgaXQgdG8gR3JlZyBu
-ZXh0IE1vbmRheS4NCg0KWzFdIGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcHJvamVjdC9s
-aW51eC11c2IvcGF0Y2gvMjAyMDExMjYwNjU0MDkuNzUzMy0xLXBldGVyLmNoZW5Aa2VybmVsLm9y
-Zy8NClsyXSBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3Byb2plY3QvbGludXgtdXNiL3Bh
-dGNoLzIwMjAxMTI2MDY1NDA5Ljc1MzMtMi1wZXRlci5jaGVuQGtlcm5lbC5vcmcvDQoNClBldGVy
-DQo=
+On Wed, Nov 25, 2020 at 03:53:04PM +0100, Giacinto Cifelli wrote:
+> There is a single option port in this modem, and it is used as debug port
+> 
+> lsusb -v for this device:
+
+> Signed-off-by: Giacinto Cifelli <gciofono@gmail.com>
+> ---
+> 
+> Notes:
+>     changelog:
+>     v2: removed extra .driver_info, unneeded for this patch:
+>             .driver_info = RSVD(1) | RSVD(2) | RSVD(3)
+>         renamed the device in the commit name
+>     v3: renamed the commit to follow current conventions
+>         included a short changelog and patch versioning
+>         new device define re-ordered by PID
+>         new device entry re-ordered alphabetically
+
+Thanks, now applied for 5.10 with a stable tag.
+
+Johan
