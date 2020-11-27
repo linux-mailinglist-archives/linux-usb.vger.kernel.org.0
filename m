@@ -2,135 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B45E2C6038
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 07:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 029742C6063
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 08:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387981AbgK0Gv0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Nov 2020 01:51:26 -0500
-Received: from mail-eopbgr20045.outbound.protection.outlook.com ([40.107.2.45]:41600
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387935AbgK0GvZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Nov 2020 01:51:25 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TkIj9lQRn0bgYuiXaAueY16NreLKIS2GTqzh3oUQD+iT3Qu+xC+bNF5NthdNUmKQgMPedctXmK6/JeqM/aiGg2SBxisjDh6jmbAt5f/zv6q9NPoC+7U1OqLTEDlkEhSgTKe2z5NEWIyC+lmXG9q9GQsKPps4k5856o3ewgS4eoyLFlo47jVQ90XRChYHuhXxwEeIwJMoiK9vKJMhfArtJT9ko+kGPYlPUZgFFmJWB1cYvCS91YavoxgpO9oANBeaQkD9XCwhmwYK1ezgLxW3BV0lY1mCT7qzduaauEanuUhYFZQLhrFFvgB1LYlzk7jz1HXqADXd2dXM2MLG+fJ2PQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pUx1FASUypQ+lqUp6IuEm2kCUy0rs0Z04LXDwr8nDxg=;
- b=HrWzoPeFIWWSSpZ5N+XZ7IVFqnhqdyvjigERb05kxG1vPDbz9eE7eQmECYETa66DqKgvvlVzNQXxjRiRcgAyvmxWfEQp50yznasE+4GcDDiraTeaEm/+fudNYbAIZxXdMvTHcouNR4iAjiYdwXXdHIvfE+jAQgugNq3n+hE3EfzKKMDpgxNHOdaTFSHEwEk0/xrf0DORIi0jjl7ObiObZngoij1Qs+eZZwHTowD7o2AHuWrrqGZYwiY/Ps1EMQLoz4maqzdF0rtryt9KJfd8wwUgxnAGyfv0yhWNvhuKjMsxbL5JHD7w6j4c9Wm8Ru1Im1ECSn3qpMBMffkYX8OIZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pUx1FASUypQ+lqUp6IuEm2kCUy0rs0Z04LXDwr8nDxg=;
- b=F14T3G/cGwsuqLAEn32nkvR087zFXKi4Ea+og3YpxHi6L3+CGcb+Aa8rN+TvQF0gZBC3eDU6tUTL/JtFhwyIl5jlit6Kal9H1WZ3CIclhHfYW5/Krn3G3nd68WZteI7mfa8/FtF3faMhjz6gcf6k0kk6gcQnnLDUk6uUSd3Y3Ww=
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
- by DBBPR04MB6027.eurprd04.prod.outlook.com (2603:10a6:10:c7::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.23; Fri, 27 Nov
- 2020 06:51:21 +0000
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3611.025; Fri, 27 Nov 2020
- 06:51:18 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-CC:     Peter Chen <peter.chen@kernel.org>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>, Frank Li <frank.li@nxp.com>
-Subject: Re: [PATCH 2/2] usb: cdns3: core: fix goto label for error path
-Thread-Topic: [PATCH 2/2] usb: cdns3: core: fix goto label for error path
-Thread-Index: AQHWw8D+UOTz4LYHTEawhWrmYc0Hh6naMgAAgAFY+IA=
-Date:   Fri, 27 Nov 2020 06:48:26 +0000
-Message-ID: <20201127064757.GB22238@b29397-desktop>
-References: <20201126065409.7533-1-peter.chen@kernel.org>
- <20201126065409.7533-2-peter.chen@kernel.org>
- <007261b9-92ec-9ca6-e609-f5d3a337f322@gmail.com>
-In-Reply-To: <007261b9-92ec-9ca6-e609-f5d3a337f322@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mutt/1.9.4 (2018-02-28)
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: d65510fb-7039-4142-1bf3-08d892a0d7d0
-x-ms-traffictypediagnostic: DBBPR04MB6027:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DBBPR04MB602783794C2433F84287932C8BF80@DBBPR04MB6027.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1775;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LvtlRco3GODZC2EpJNpHtdopogvBccZwFim0y4zf2QtCrwWhwUJUpN7KGymzmsyGUBd5Ti27fIQxkqgA07iHmp8gdhRRZQKz6hQxotHr25UncmAxQzC1AKzu2MvXUs/PCFIkwHfEFoTknXCfcZ6qW+UrlFkcDMeQk6PDJvXXoJLkKdYm2JfIUQNYDSasgSVQDf41Dn8RW5FtA4rT4JDkdXX/cRj5gJnv6wsY8yrO951e7hbb6wZhMzMtBvkfthBiVZtCTrgyVuCSja+7arQAS8eCeKRc2p7FtzeUs6vakQBjOb7ZiKDRz3jb9lhtVsIT+0BxbJqkZpN+5cTTuMS4YQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(39860400002)(136003)(376002)(346002)(396003)(366004)(83380400001)(6916009)(8676002)(66446008)(4744005)(64756008)(6512007)(2906002)(26005)(9686003)(66556008)(66946007)(1076003)(91956017)(66476007)(76116006)(478600001)(33656002)(5660300002)(186003)(6666004)(8936002)(71200400001)(6486002)(6506007)(4326008)(53546011)(33716001)(54906003)(86362001)(316002)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?ULRQxYqk2L5T4QNbwItJTPoGe+WNDtXjURKsSq87WYr2sJCoTpRJ+98xbHzA?=
- =?us-ascii?Q?cEL2DwcNAn0AHmxXtnf252J3J2UrL88c78ppPvr/Y7wCtuWs6AXLuq6NGPqT?=
- =?us-ascii?Q?on/w/I+i7n60zHeOoNp4/eQomTQs09NZX4+wv7X/3LMGHlHvEVtJ5Xe5BBmj?=
- =?us-ascii?Q?IGB//wr+nCUER4cdgqGMh5ZMzBM5s4FhQCMDebC2EZT53AXTXGKc0qx86/Ay?=
- =?us-ascii?Q?VEv03087JAd8NLhJvf8owSjDV7jNrW019nmoHv4Rvm8Bji/u7uEgywSNZGPu?=
- =?us-ascii?Q?7wNBUrwxAz60ABA2qgAn5YLfWXqMRItTd3E/5/BeCsJ89MOxoREvUc9EIBgA?=
- =?us-ascii?Q?wndtWLIKCEqmyrEWO0FGIsiem7KDxcO/ysPwrpE7bVoyVev72s3YfW3/8hAb?=
- =?us-ascii?Q?arOdTa61P1Wr07PF6rwW7EfMPq5bz3IPEMxaRF+bCO+tTBLMNW9rC8BWYOkU?=
- =?us-ascii?Q?5GbNIisl3MHXC4+jnQcBs6feluL3zEVPnI6flHD5kRJIuVhVggMdco/6TjK1?=
- =?us-ascii?Q?NyrsVi1kYtZr4lYbRARCx0naIDM/ZACijxUqyjAS1P6g5aIipPFfd11RQyxB?=
- =?us-ascii?Q?5nqOtOuzt52A6LnRez29YXFg1y5ZLv9cDQvtMcSImiOTnt5/9FqwBcVOmNU1?=
- =?us-ascii?Q?MeCBF+LBoVpQmYvlCxnFfi6Tk2na6ac6tIzd6Sv+2/v9+WDKZTjXHdG78viE?=
- =?us-ascii?Q?hOnkiB4g/UjdWFH0iFBHpPpXVJefr2H2WgzAyP5TpnmGo5zwsFfRZXKSvIsd?=
- =?us-ascii?Q?B5N5C25XKIExJ3R/gaduDN5oE6SZihvUoX4YNKPEcorrYfeejNLEsAq+Hjt8?=
- =?us-ascii?Q?kvXG0v7lcaZ9OFlF/vJcSlwPyNwBMYIMnI1TZpM3qlk/Wuv+uRCug560nS3W?=
- =?us-ascii?Q?YQKSq0JQAsXd39vXPPR6WzyciV4PXRpA4JOxsvQxZlA2lYe+sBU/HtVtoy5z?=
- =?us-ascii?Q?Hu0gsEJwQObTdtXMIXfH8+OW2+xjmgubQ1Yhb73/xkqFF6umu5UZdMUv+QC7?=
- =?us-ascii?Q?Oflo?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D3773895ED142042A485BB97C7C2504B@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S2392691AbgK0HPp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Nov 2020 02:15:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53412 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389420AbgK0HPo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Nov 2020 02:15:44 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5634E21D81;
+        Fri, 27 Nov 2020 07:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1606461343;
+        bh=lOqC+mdPesw2LThaxCyaW/UZEKX1KxHRlAUnQR0PIi0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=scL+IZ+0zwuISXGfOEW/zk6UC4nX1vQt0SaxrgB07yF8PW5YBXBDe5dNOi0DCJzlN
+         8auT2y1wNNYeWco2OBHbQsR/ad5nWFf27cS9PblBhexlE9g4zoR2SHBe7AuHdPBvi0
+         T56MxjSgjKXcnpE93uy8ota50E0Vjoweu25402z8=
+Date:   Fri, 27 Nov 2020 08:16:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     lijiazi <jqqlijiazi@gmail.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jiazi Li <lijiazi@xiaomi.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: add sanity check for opmode
+Message-ID: <X8Cn5dg5pnNFBHL0@kroah.com>
+References: <1606456643-31913-1-git-send-email-lijiazi@xiaomi.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d65510fb-7039-4142-1bf3-08d892a0d7d0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2020 06:48:26.5101
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jUhwBBWuJq7S07zReQSJOrxA0XdSRSZ3+k8MfiX400IjhT71UaIq97MnsSlhCGWqgvc8BIkAsHpekLoIo4bTKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6027
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1606456643-31913-1-git-send-email-lijiazi@xiaomi.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-11-26 13:13:16, Sergei Shtylyov wrote:
-> Hello!
->=20
-> On 26.11.2020 9:54, Peter Chen wrote:
->=20
-> > From: Peter Chen <peter.chen@nxp.com>
-> >=20
-> > The usb_role_switch_register has already called, so if the devm_request=
-_irq
->                                   ^ been
->=20
+On Fri, Nov 27, 2020 at 01:57:23PM +0800, lijiazi wrote:
+> From: Jiazi Li <lijiazi@xiaomi.com>
+> 
+> If usb drivers set a invalid value, for example, a negative
+> value. then a userspace task
+> cat sys/class/typec/port0/power_operation_mode, will cause a
+> panic issue:
+> [154325.262827] Unable to handle kernel paging request at virtual
+> address ffffff980aad8b68
+> [154325.262838] Mem abort info:
+> [154325.262843]   ESR = 0x96000005
+> [154325.262849]   Exception class = DABT (current EL), IL = 32 bits
+> [154325.262855]   SET = 0, FnV = 0
+> [154325.262860]   EA = 0, S1PTW = 0
+> [154325.262865] Data abort info:
+> [154325.262870]   ISV = 0, ISS = 0x00000005
+> [154325.262875]   CM = 0, WnR = 0
+> [154325.262880] swapper pgtable: 4k pages, 39-bit VAs, pgdp =
+> 000000001cae9c14
+> [154325.262884] [ffffff980aad8b68] pgd=0000000000000000,
+> pud=0000000000000000
+> [154325.262891] Internal error: Oops: 96000005 [#1] PREEMPT SMP
+> [154325.262896] Modules linked in: rmnet_perf(O) rmnet_shs(O)
+> wlan(O) sla(O) exfat(O) machine_dlkm(O) tfa98xx_dlkm(O)
+> cs35l41_dlkm(O) wcd938x_slave_dlkm(O) wcd938x_dlkm(O)
+> wcd9xxx_dlkm(O) mbhc_dlkm(O) tx_macro_dlkm(O) rx_macro_dlkm(O)
+> va_macro_dlkm(O) wsa_macro_dlkm(O) swr_ctrl_dlkm(O)
+> bolero_cdc_dlkm(O) wsa881x_dlkm(O) wcd_core_dlkm(O) stub_dlkm(O)
+> hdmi_dlkm(O) swr_dlkm(O) pinctrl_lpi_dlkm(O) pinctrl_wcd_dlkm(O)
+> usf_dlkm(O) native_dlkm(O) platform_dlkm(O) q6_dlkm(O)
+> adsp_loader_dlkm(O) apr_dlkm(O) snd_event_dlkm(O)
+> q6_notifier_dlkm(O) q6_pdr_dlkm(O) [last unloaded: rmnet_perf]
+> [154325.262939] Process usb@1.2-service (pid: 2501, stack limit
+> 		= 0x00000000cb0343ac)
+> [154325.262946] CPU: 5 PID: 2501 Comm: usb@1.2-service Tainted:
+> G S      W  O      4.19.113-perf-g0307705d321bc #1
+> [154325.262950] Hardware name: Qualcomm Technologies, Inc.
+> xiaomi cas (DT)
+> [154325.262955] pstate: 80400005 (Nzcv daif +PAN -UAO)
+> [154325.262967] pc : power_operation_mode_show+0x34/0x58
+> [154325.262971] lr : power_operation_mode_show+0x34/0x58
+> [154325.262974] sp : ffffffc1376bf990
+> [154325.262977] x29: ffffffc1376bf990 x28: ffffffc195aede58
+> [154325.262981] x27: ffffffc195aede48 x26: ffffff9008c55638
+> [154325.262986] x25: ffffffc05a44b300 x24: 0000000000001000
+> [154325.262990] x23: ffffffc19a340018 x22: ffffffc19a340018
+> [154325.262994] x21: ffffff900bb10038 x20: ffffff980aad8b68
+> [154325.262998] x19: ffffffc05a44b300 x18: 0000000000000000
+> [154325.263002] x17: 0000000000000000 x16: 0000000000000000
+> [154325.263006] x15: 0000000000000000 x14: 00000000080a38f8
+> [154325.263010] x13: ffffff880b489860 x12: 0000000000000000
+> [154325.263014] x11: 0000000000000000 x10: 1ffffff30155b16d
+> [154325.263018] x9 : 0000000000000000 x8 : 0000000000000007
+> [154325.263022] x7 : 0000000000000000 x6 : 000000000000003f
+> [154325.263026] x5 : 0000000000000040 x4 : 0000000000000000
+> [154325.263030] x3 : 0000000000000004 x2 : ffffffc05a44b300
+> [154325.263034] x1 : ffffff900bb10038 x0 : ffffff980aad8b68
+> [154325.263039]
+> [154325.263039] SP: 0xffffffc1376bf910:
+> [154325.263043] f910  00001000 00000000 5a44b300 ffffffc0
+> 08c55638 ffffff90 95aede48 ffffffc1
+> [154325.263052] f930  95aede58 ffffffc1 376bf990 ffffffc1
+> 09024b5c ffffff90 376bf990 ffffffc1
+> [154325.263060] f950  09024b5c ffffff90 80400005 00000000
+> 376bf9c0 ffffffc1 083cdf64 ffffff90
+> [154325.263067] f970  ffffffff 0000007f 376bfd80 ffffffc1
+> 376bf990 ffffffc1 09024b5c ffffff90
+> [154325.263075] f990  376bf9b0 ffffffc1 08c55678 ffffff90
+> 0bb10048 ffffff90 5a44b300 ffffffc0
+> [154325.263082] f9b0  376bf9e0 ffffffc1 085075e0 ffffff90
+> 0a5d43f8 ffffff90 9a9d9f00 ffffffc1
+> [154325.263090] f9d0  95aede48 ffffffc1 95aede58 ffffffc1
+> 376bfa30 ffffffc1 08506248 ffffff90
+> [154325.263097] f9f0  95aede40 ffffffc1 00000000 00000000
+> 00000001 00000000 9a9d9f00 ffffffc1
+> [154325.263106] Call trace:
+> [154325.263111]  power_operation_mode_show+0x34/0x58
+> [154325.263116]  dev_attr_show+0x40/0x80
+> [154325.263123]  sysfs_kf_seq_show+0x110/0x1c0
+> [154325.263127]  kernfs_seq_show+0x80/0x98
+> [154325.263133]  seq_read+0x2d8/0x778
+> [154325.263136]  kernfs_fop_read+0xa4/0x2a8
+> [154325.263142]  __vfs_read+0xd4/0x2e8
+> [154325.263145]  vfs_read+0xe0/0x1b0
+> [154325.263149]  ksys_read+0xdc/0x170
+> [154325.263153]  __arm64_sys_read+0x44/0x58
+> [154325.263158]  el0_svc_common+0xd8/0x1d0
+> [154325.263162]  el0_svc_handler+0x90/0xb8
+> [154325.263166]  el0_svc+0x8/0xc
+> 
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Jiazi Li <lijiazi@xiaomi.com>
+> ---
+> Changes in v2:
+>  - return -EINVAL when opmode invalid
+> ---
+>  drivers/usb/typec/class.c | 8 ++++++--
+>  include/linux/usb/typec.h | 3 ++-
+>  2 files changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index cb1362187..3f55182 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1559,13 +1559,15 @@ static int partner_match(struct device *dev, void *data)
+>   * Type-C specification, and "USB Power Delivery" when the power levels are
+>   * negotiated with methods defined in USB Power Delivery specification.
+>   */
+> -void typec_set_pwr_opmode(struct typec_port *port,
+> +int typec_set_pwr_opmode(struct typec_port *port,
+>  			  enum typec_pwr_opmode opmode)
 
-Thanks, will fix it.
+But now no one is checking this return value :(
 
-> > has failed, it needs to call usb_role_switch_unregister.
-> >=20
-> > Fixes: b1234e3b3b26 ("usb: cdns3: add runtime PM support")
-> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> [...]
->=20
-> MBR, Sergei
-
---=20
-
-Thanks,
-Peter Chen=
