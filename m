@@ -2,128 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 743732C68EF
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 16:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA3F2C694D
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 17:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731162AbgK0PrT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Nov 2020 10:47:19 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:57639 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1731154AbgK0PrT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Nov 2020 10:47:19 -0500
-Received: (qmail 862474 invoked by uid 1000); 27 Nov 2020 10:47:18 -0500
-Date:   Fri, 27 Nov 2020 10:47:18 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     liulongfang <liulongfang@huawei.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB:ehci:fix an interrupt calltrace error
-Message-ID: <20201127154718.GA861473@rowland.harvard.edu>
-References: <1606361673-573-1-git-send-email-liulongfang@huawei.com>
- <20201126160830.GA827745@rowland.harvard.edu>
- <96b4d366-c94c-9708-da12-5693bf16b716@huawei.com>
+        id S1731448AbgK0QTE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Nov 2020 11:19:04 -0500
+Received: from verein.lst.de ([213.95.11.211]:38050 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731437AbgK0QTE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Nov 2020 11:19:04 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 3D1E668B05; Fri, 27 Nov 2020 17:19:00 +0100 (CET)
+Date:   Fri, 27 Nov 2020 17:19:00 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Tom Yan <tom.ty89@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
+Subject: Re: 5.10 regression caused by: "uas: fix sdev->host->dma_dev":
+ many XHCI swiotlb buffer is full / DMAR: Device bounce map failed
+ errors on thunderbolt connected XHCI controller
+Message-ID: <20201127161900.GA10986@lst.de>
+References: <b046dd04-ac4f-3c69-0602-af810fb1b365@redhat.com> <be031d15-201f-0e5c-8b0f-be030077141f@redhat.com> <20201124102715.GA16983@lst.de> <fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com> <8a52e868-0ca1-55b7-5ad2-ddb0cbb5e45d@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <96b4d366-c94c-9708-da12-5693bf16b716@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <8a52e868-0ca1-55b7-5ad2-ddb0cbb5e45d@redhat.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 10:29:03AM +0800, liulongfang wrote:
-> On 2020/11/27 0:08, Alan Stern Wrote:
-> > On Thu, Nov 26, 2020 at 11:34:33AM +0800, Longfang Liu wrote:
-> >> The system goes to suspend when using USB audio player. This causes
-> >> the USB device continuous send interrupt signal to system, When the
-> >> number of interrupts exceeds 100000, the system will forcibly close
-> >> the interrupts and output a calltrace error.
-> > 
-> > This description is very confusing.  USB devices do not send interrupt 
-> > signals to the host.  Do you mean that the device sends a wakeup 
-> > request?  Or do you mean something else?
-> The irq type is IRQ_NONE，It's counted in the note_interrupt function.
-> From the analysis of the driver code, that are indeed  interrupt signals.
+On Fri, Nov 27, 2020 at 01:32:16PM +0100, Hans de Goede wrote:
+> I ran some more tests, I can confirm that reverting:
+> 
+> 5df7ef7d32fe "uas: bump hw_max_sectors to 2048 blocks for SS or faster drives"
+> 558033c2828f "uas: fix sdev->host->dma_dev"
+> 
+> Makes the problem go away while running a 5.10 kernel. I also tried doubling
+> the swiotlb size by adding: swiotlb=65536 to the kernel commandline but that
+> does not help.
+> 
+> Some more observations:
+> 
+> 1. The usb-storage driver does not cause this issue, even though it has a
+> very similar change.
+> 
+> 2. The problem does not happen until I plug an UAS decvice into the dock.
+> 
+> 3. The problem continues to happen even after I unplug the UAS device and
+> rmmod the uas module
+> 
+> 3. made me take a bit closer look to the troublesome commit, it passes:
+> udev->bus->sysdev, which I assume is the XHCI controller itself as device
+> to scsi_add_host_with_dma, which in turn seems to cause permanent changes
+> to the dma settings for the XHCI controller. I'm not all that familiar with
+> the DMA APIs but I'm getting the feeling that passing the actual XHCI-controller's
+> device as dma-device to scsi_add_host_with_dma is simply the wrong thing to
+> do; and that the intended effects (honor XHCI dma limits, but do not cause
+> any changes the XHCI dma settings) should be achieved differently.
+> 
+> Note that if this is indeed wrong, the matching usb-storage change should
+> likely also be dropped.
 
-Above you wrote: "the USB device continuous send interrupt signal to 
-system".  But that's not correct.  The interrupt signals are sent by the 
-USB host controller, not by the USB audio device.
-
-The patch description should mention that this happens only with some 
-Synopsys host controllers.
-
-> >> When the system goes to suspend, the last interrupt is reported to
-> >> the driver. At this time, the system has set the state to suspend.
-> >> This causes the last interrupt to not be processed by the system and
-> >> not clear the interrupt state flag. This uncleared interrupt flag
-> >> constantly triggers new interrupt event. This causing the driver to
-> >> receive more than 100,000 interrupts, which causes the system to
-> >> forcibly close the interrupt report and report the calltrace error.
-> > 
-> > If the driver receives an interrupt, it is supposed to process the event 
-> > even if the host controller is suspended.  And when ehci_irq() runs, it 
-> > clears the bits that are set in the USBSYS register.
-> When the host controller is suspended, the ehci_suspend() will clear
-> the HCD_FLAG_HW_ACCESSIBLE, and then usb_hcd_irq() will return IRQ_NONE
-> directly without calling ehci_irq().
-
-Yes.  But ehci_bus_suspend() runs _before_ the host controller is 
-suspended.  While ehci_bus_suspend() is running, usb_hcd_irq() _will_ 
-call ehci_irq(), and ehci_irq() _will_ clear the status bits.
-
-After the host controller is suspended it is not supposed to generate 
-any interrupt signals at all, because ehci_suspend() writes 0 to the 
-USBINTR register, and it does this _before_ clearing 
-HCD_FLAG_HW_ACCESSIBLE.
-
-> > Why is your system getting interrupts?  That is, which bits are set in 
-> > the USBSTS register?
-> BIT(5) and BIT(3) are setted, STS_IAA and STS_FLR.
-
-STS_FLR is not set in the USBINTR register, but STS_IAA is.  So that's 
-the one which matters.
-
-> >> so, when the driver goes to sleep and changes the system state to
-> >> suspend, the interrupt flag needs to be cleared.
-> >>
-> >> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> >> ---
-> >>  drivers/usb/host/ehci-hub.c | 5 +++++
-> >>  1 file changed, 5 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/host/ehci-hub.c b/drivers/usb/host/ehci-hub.c
-> >> index ce0eaf7..5b13825 100644
-> >> --- a/drivers/usb/host/ehci-hub.c
-> >> +++ b/drivers/usb/host/ehci-hub.c
-> >> @@ -348,6 +348,11 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
-> >>  
-> >>  	/* Any IAA cycle that started before the suspend is now invalid */
-> >>  	end_iaa_cycle(ehci);
-> >> +
-> >> +	/* clear interrupt status */
-> >> +	if (ehci->has_synopsys_hc_bug)
-> >> +		ehci_writel(ehci, INTR_MASK | STS_FLR, &ehci->regs->status);
-> > 
-> > This is a very strange place to add your new code -- right in the middle 
-> > of the IAA and unlink handling.  Why not put it in a more reasonable 
-> > place?After the IAA is processed, clear the STS_IAA interrupt state flag.
-> > 
-> > Also, the patch description does not mention has_synopsys_hc_bug.  The 
-> > meaning of this flag has no connection with the interrupt status 
-> > register, so why do you use it here?
-> Because of our USB IP comes from Synopsys, and the uncleared flage is also caused by
-> special hardware design, in addition, we have not tested other manufacturers' USB
-> controllers.We don’t know if other manufacturers’ designs have this problem,
-> so this modification is only limited to this kind of design.
-
-Clearing the STS_IAA flag won't hurt, no matter who manufactured the 
-controller.  So your patch should look more like this:
-
-+	/* Some Synopsys controllers mistakenly leave IAA turned on */
-+	ehci_writel(ehci, STS_IAA, &ehci->regs->status);
-
-And these lines should come before the "Any IAA cycle..." comment line.
-Does that fix the problem?
-
-Alan Stern
+One problem in this area is that the clamping of the DMA size through
+dma_max_mapping_size mentioned in the commit log doesn't work when
+swiotlb is called from intel-iommu. I think we need to wire up those
+calls there as well.
