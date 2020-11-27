@@ -2,214 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D8E2C5E7C
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 01:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E172C5EBC
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 03:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392084AbgK0An6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Nov 2020 19:43:58 -0500
-Received: from mga04.intel.com ([192.55.52.120]:17387 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392082AbgK0An6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Nov 2020 19:43:58 -0500
-IronPort-SDR: AEayIXwq7WaQ2nBoiqzX4dv3qQo7iG3VycgD7kavw5X/c7MQwZ5Jsvk191rAVIxOXdJgXNanlU
- PzyNKtzDiE2A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9817"; a="169776327"
-X-IronPort-AV: E=Sophos;i="5.78,373,1599548400"; 
-   d="scan'208";a="169776327"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2020 16:43:56 -0800
-IronPort-SDR: XvV3OqdYX0mLorzAh5LKpr4ddOd1VB67Nif+oqvluKo2ziK9xeA+um1oMr1hkK3Fc1PIiDGpCs
- Hs9aCafjZARg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,373,1599548400"; 
-   d="scan'208";a="535894086"
-Received: from lkp-server02.sh.intel.com (HELO e51121f5de4e) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Nov 2020 16:43:55 -0800
-Received: from kbuild by e51121f5de4e with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kiRre-000045-OJ; Fri, 27 Nov 2020 00:43:54 +0000
-Date:   Fri, 27 Nov 2020 08:43:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- ab37fa851c488be805f6568ecaabb67b13cd937c
-Message-ID: <5fc04bb2.RFc2YKjAi0KWkOHS%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S2392226AbgK0C3L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Nov 2020 21:29:11 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:8043 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726862AbgK0C3L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Nov 2020 21:29:11 -0500
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Chz8G0fB9zhhvK;
+        Fri, 27 Nov 2020 10:28:46 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
+ 14.3.487.0; Fri, 27 Nov 2020 10:29:03 +0800
+Subject: Re: [PATCH] USB:ehci:fix an interrupt calltrace error
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1606361673-573-1-git-send-email-liulongfang@huawei.com>
+ <20201126160830.GA827745@rowland.harvard.edu>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <96b4d366-c94c-9708-da12-5693bf16b716@huawei.com>
+Date:   Fri, 27 Nov 2020 10:29:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20201126160830.GA827745@rowland.harvard.edu>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: ab37fa851c488be805f6568ecaabb67b13cd937c  usb: typec: Add type sysfs attribute file for partners
-
-elapsed time: 722m
-
-configs tested: 150
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arc                          axs101_defconfig
-mips                      pic32mzda_defconfig
-arm                       imx_v6_v7_defconfig
-powerpc64                        alldefconfig
-mips                     loongson1c_defconfig
-arc                        nsim_700_defconfig
-parisc                generic-32bit_defconfig
-arm                           viper_defconfig
-s390                                defconfig
-sh                   sh7724_generic_defconfig
-m68k                        m5307c3_defconfig
-csky                             alldefconfig
-xtensa                          iss_defconfig
-sh                          urquell_defconfig
-sh                          sdk7786_defconfig
-arm                           stm32_defconfig
-arm                     am200epdkit_defconfig
-xtensa                  audio_kc705_defconfig
-arm                           efm32_defconfig
-xtensa                         virt_defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                      maltasmvp_defconfig
-m68k                          multi_defconfig
-arc                    vdk_hs38_smp_defconfig
-arc                           tb10x_defconfig
-mips                          rb532_defconfig
-powerpc                     kmeter1_defconfig
-mips                           ip22_defconfig
-powerpc                     mpc5200_defconfig
-powerpc                      chrp32_defconfig
-arm                      tct_hammer_defconfig
-powerpc                     rainier_defconfig
-m68k                        mvme147_defconfig
-c6x                                 defconfig
-powerpc                      katmai_defconfig
-arm                         assabet_defconfig
-c6x                        evmc6474_defconfig
-mips                        nlm_xlp_defconfig
-sh                           se7750_defconfig
-mips                        bcm47xx_defconfig
-h8300                       h8s-sim_defconfig
-arm                         hackkit_defconfig
-sh                          r7780mp_defconfig
-m68k                        m5407c3_defconfig
-arm                         lubbock_defconfig
-powerpc                      arches_defconfig
-x86_64                           alldefconfig
-sh                             shx3_defconfig
-powerpc                        cell_defconfig
-mips                 decstation_r4k_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arm                         ebsa110_defconfig
-powerpc                    amigaone_defconfig
-powerpc               mpc834x_itxgp_defconfig
-arc                     nsimosci_hs_defconfig
-powerpc                 mpc8272_ads_defconfig
-xtensa                              defconfig
-mips                       lemote2f_defconfig
-xtensa                  cadence_csp_defconfig
-mips                     decstation_defconfig
-arc                            hsdk_defconfig
-powerpc                      ppc40x_defconfig
-sh                        dreamcast_defconfig
-arm                       spear13xx_defconfig
-um                            kunit_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20201126
-x86_64               randconfig-a003-20201126
-x86_64               randconfig-a004-20201126
-x86_64               randconfig-a005-20201126
-x86_64               randconfig-a001-20201126
-x86_64               randconfig-a002-20201126
-i386                 randconfig-a004-20201127
-i386                 randconfig-a003-20201127
-i386                 randconfig-a002-20201127
-i386                 randconfig-a005-20201127
-i386                 randconfig-a001-20201127
-i386                 randconfig-a006-20201127
-i386                 randconfig-a004-20201126
-i386                 randconfig-a003-20201126
-i386                 randconfig-a002-20201126
-i386                 randconfig-a005-20201126
-i386                 randconfig-a001-20201126
-i386                 randconfig-a006-20201126
-i386                 randconfig-a012-20201126
-i386                 randconfig-a013-20201126
-i386                 randconfig-a011-20201126
-i386                 randconfig-a016-20201126
-i386                 randconfig-a014-20201126
-i386                 randconfig-a015-20201126
-i386                 randconfig-a012-20201127
-i386                 randconfig-a013-20201127
-i386                 randconfig-a011-20201127
-i386                 randconfig-a016-20201127
-i386                 randconfig-a014-20201127
-i386                 randconfig-a015-20201127
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a015-20201126
-x86_64               randconfig-a011-20201126
-x86_64               randconfig-a014-20201126
-x86_64               randconfig-a016-20201126
-x86_64               randconfig-a012-20201126
-x86_64               randconfig-a013-20201126
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On 2020/11/27 0:08, Alan Stern Wrote:
+> On Thu, Nov 26, 2020 at 11:34:33AM +0800, Longfang Liu wrote:
+>> The system goes to suspend when using USB audio player. This causes
+>> the USB device continuous send interrupt signal to system, When the
+>> number of interrupts exceeds 100000, the system will forcibly close
+>> the interrupts and output a calltrace error.
+> 
+> This description is very confusing.  USB devices do not send interrupt 
+> signals to the host.  Do you mean that the device sends a wakeup 
+> request?  Or do you mean something else?
+The irq type is IRQ_NONE£¬It's counted in the note_interrupt function.
+From the analysis of the driver code, that are indeed  interrupt signals.
+> 
+>> When the system goes to suspend, the last interrupt is reported to
+>> the driver. At this time, the system has set the state to suspend.
+>> This causes the last interrupt to not be processed by the system and
+>> not clear the interrupt state flag. This uncleared interrupt flag
+>> constantly triggers new interrupt event. This causing the driver to
+>> receive more than 100,000 interrupts, which causes the system to
+>> forcibly close the interrupt report and report the calltrace error.
+> 
+> If the driver receives an interrupt, it is supposed to process the event 
+> even if the host controller is suspended.  And when ehci_irq() runs, it 
+> clears the bits that are set in the USBSYS register.
+When the host controller is suspended, the ehci_suspend() will clear
+the HCD_FLAG_HW_ACCESSIBLE, and then usb_hcd_irq() will return IRQ_NONE
+directly without calling ehci_irq().
+> 
+> Why is your system getting interrupts?  That is, which bits are set in 
+> the USBSTS register?
+BIT(5) and BIT(3) are setted, STS_IAA and STS_FLR.
+> 
+>> so, when the driver goes to sleep and changes the system state to
+>> suspend, the interrupt flag needs to be cleared.
+>>
+>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+>> ---
+>>  drivers/usb/host/ehci-hub.c | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/ehci-hub.c b/drivers/usb/host/ehci-hub.c
+>> index ce0eaf7..5b13825 100644
+>> --- a/drivers/usb/host/ehci-hub.c
+>> +++ b/drivers/usb/host/ehci-hub.c
+>> @@ -348,6 +348,11 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
+>>  
+>>  	/* Any IAA cycle that started before the suspend is now invalid */
+>>  	end_iaa_cycle(ehci);
+>> +
+>> +	/* clear interrupt status */
+>> +	if (ehci->has_synopsys_hc_bug)
+>> +		ehci_writel(ehci, INTR_MASK | STS_FLR, &ehci->regs->status);
+> 
+> This is a very strange place to add your new code -- right in the middle 
+> of the IAA and unlink handling.  Why not put it in a more reasonable 
+> place?After the IAA is processed, clear the STS_IAA interrupt state flag.
+> 
+> Also, the patch description does not mention has_synopsys_hc_bug.  The 
+> meaning of this flag has no connection with the interrupt status 
+> register, so why do you use it here?
+Because of our USB IP comes from Synopsys, and the uncleared flage is also caused by
+special hardware design, in addition, we have not tested other manufacturers' USB
+controllers.We don¡¯t know if other manufacturers¡¯ designs have this problem,
+so this modification is only limited to this kind of design.
+> 
+>> +
+>>  	ehci_handle_start_intr_unlinks(ehci);
+>>  	ehci_handle_intr_unlinks(ehci);
+>>  	end_free_itds(ehci);
+> 
+> Alan Stern
+> .
+> 
+Thanks,
+Longfang Liu
