@@ -2,137 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F492C61B5
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 10:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617DA2C622E
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 10:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727952AbgK0JaU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Nov 2020 04:30:20 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:54552 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726736AbgK0JaU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Nov 2020 04:30:20 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0AR9UCLO048364;
-        Fri, 27 Nov 2020 03:30:12 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1606469412;
-        bh=lHEin1UNZLFaGOvIOKjpzGEcFVTMutU0s11Moh+HW4Q=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ZN+ueHWpTTVoglr2FEsw+N+LvpC3bk5ZD8I0W3P+OBkcFqyW4i3a0RtH2OG95CsGj
-         GuP8mjyhQqf+63yKKucGUf8wELnfy6+keY6DDbNaJYYMbHXjHuSTLvTQ9omfKj1aIZ
-         NmGqu+Mg2VuVxBK8E1j+LNRXk20hvWPvNO4U4mIY=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0AR9UCpb041067
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 27 Nov 2020 03:30:12 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 27
- Nov 2020 03:30:11 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 27 Nov 2020 03:30:11 -0600
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0AR9U9W6019490;
-        Fri, 27 Nov 2020 03:30:10 -0600
-Subject: Re: [PATCH] usb: cdns3: Fix hardware based role switch
-To:     <peter.chen@nxp.com>, <pawell@cadence.com>
-CC:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20201125124936.5929-1-rogerq@ti.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <520dd6e0-d3d4-b471-6c65-143e094a4f74@ti.com>
-Date:   Fri, 27 Nov 2020 11:30:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728153AbgK0JrO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Nov 2020 04:47:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726802AbgK0JrO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Nov 2020 04:47:14 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483CDC0613D1
+        for <linux-usb@vger.kernel.org>; Fri, 27 Nov 2020 01:47:14 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kiaKC-0005UC-C7; Fri, 27 Nov 2020 10:45:56 +0100
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kiaK4-0002Ad-OH; Fri, 27 Nov 2020 10:45:48 +0100
+Date:   Fri, 27 Nov 2020 10:45:47 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Geoff Levand <geoff@infradead.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jens Axboe <axboe@kernel.dk>, Jim Paris <jim@jtan.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        linux-block@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>
+Subject: Re: [PATCH 1/2] ALSA: ppc: drop if block with always false condition
+Message-ID: <20201127094547.4zcyeycfrriitkqx@pengutronix.de>
+References: <20201126165950.2554997-1-u.kleine-koenig@pengutronix.de>
+ <CAMuHMdUbfT7ax4BhjMT_DBweab8TDm5e=xMv5f61t9QpQJt1mw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201125124936.5929-1-rogerq@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="taccm5e5wyznne4d"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUbfT7ax4BhjMT_DBweab8TDm5e=xMv5f61t9QpQJt1mw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
 
-On 25/11/2020 14:49, Roger Quadros wrote:
-> Hardware based role switch is broken as the driver always skips it.
-> Fix this by registering for  SW role switch only if 'usb-role-switch'
-> property is present in the device tree.
-> 
-> Fixes: 50642709f659 ("usb: cdns3: core: quit if it uses role switch class")
-> Signed-off-by: Roger Quadros <rogerq@ti.com>
+--taccm5e5wyznne4d
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Can you please pick this up for -rc cycle, else otg will be broken for us in v5.10 release.
-Thanks.
+On Fri, Nov 27, 2020 at 09:35:39AM +0100, Geert Uytterhoeven wrote:
+> Hi Uwe,
+>=20
+> On Thu, Nov 26, 2020 at 6:03 PM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> > The remove callback is only called for devices that were probed
+> > successfully before. As the matching probe function cannot complete
+> > without error if dev->match_id !=3D PS3_MATCH_ID_SOUND, we don't have to
+> > check this here.
+> >
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> Thanks for your patch!
+>=20
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>=20
+> Note that there are similar checks in snd_ps3_driver_probe(), which
+> can be removed, too:
+>=20
+>         if (WARN_ON(!firmware_has_feature(FW_FEATURE_PS3_LV1)))
+>                 return -ENODEV;
+>         if (WARN_ON(dev->match_id !=3D PS3_MATCH_ID_SOUND))
+>                 return -ENODEV;
 
-cheers,
--roger
+I had to invest some brain cycles here. For the first:
 
-> ---
->   drivers/usb/cdns3/core.c | 27 +++++++++++++++------------
->   1 file changed, 15 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index a0f73d4711ae..170deb3eacf0 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -427,7 +427,6 @@ static irqreturn_t cdns3_wakeup_irq(int irq, void *data)
->    */
->   static int cdns3_probe(struct platform_device *pdev)
->   {
-> -	struct usb_role_switch_desc sw_desc = { };
->   	struct device *dev = &pdev->dev;
->   	struct resource	*res;
->   	struct cdns3 *cdns;
-> @@ -529,18 +528,21 @@ static int cdns3_probe(struct platform_device *pdev)
->   	if (ret)
->   		goto err2;
->   
-> -	sw_desc.set = cdns3_role_set;
-> -	sw_desc.get = cdns3_role_get;
-> -	sw_desc.allow_userspace_control = true;
-> -	sw_desc.driver_data = cdns;
-> -	if (device_property_read_bool(dev, "usb-role-switch"))
-> +	if (device_property_read_bool(dev, "usb-role-switch")) {
-> +		struct usb_role_switch_desc sw_desc = { };
-> +
-> +		sw_desc.set = cdns3_role_set;
-> +		sw_desc.get = cdns3_role_get;
-> +		sw_desc.allow_userspace_control = true;
-> +		sw_desc.driver_data = cdns;
->   		sw_desc.fwnode = dev->fwnode;
->   
-> -	cdns->role_sw = usb_role_switch_register(dev, &sw_desc);
-> -	if (IS_ERR(cdns->role_sw)) {
-> -		ret = PTR_ERR(cdns->role_sw);
-> -		dev_warn(dev, "Unable to register Role Switch\n");
-> -		goto err3;
-> +		cdns->role_sw = usb_role_switch_register(dev, &sw_desc);
-> +		if (IS_ERR(cdns->role_sw)) {
-> +			ret = PTR_ERR(cdns->role_sw);
-> +			dev_warn(dev, "Unable to register Role Switch\n");
-> +			goto err3;
-> +		}
->   	}
->   
->   	if (cdns->wakeup_irq) {
-> @@ -582,7 +584,8 @@ static int cdns3_probe(struct platform_device *pdev)
->   	return 0;
->   err4:
->   	cdns3_drd_exit(cdns);
-> -	usb_role_switch_unregister(cdns->role_sw);
-> +	if (cdns->role_sw)
-> +		usb_role_switch_unregister(cdns->role_sw);
->   err3:
->   	set_phy_power_off(cdns);
->   err2:
-> 
+Assuming firmware_has_feature(FW_FEATURE_PS3_LV1) always returns the
+same value, snd_ps3_driver_probe is only used after this check succeeds
+because the driver is registered only after this check in
+snd_ps3_init().
 
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+The second is superflous because ps3_system_bus_match() yields false if
+this doesn't match the driver's match_id.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--taccm5e5wyznne4d
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl/AyscACgkQwfwUeK3K
+7AmVbAf/fRHKZiIEMqPckqCjNor4UCILZvO1NJYHzctpPGBT8dETRjBW1ZmWu6MS
+qxv4y7aGSfc8pP5G0LU1rJJYOf7x8PpHEbm5uNM1UOIxzSIniALG7VIeoFIBrGoQ
+QuMcTv73n6ypzsNu87ynqrILEVYNrubD+Sb6B2xZEfPbIcvvwKfUvr8+lBEkabHX
+LbBbYbLL/ivRvUFm/YKvY3vcnTTAj88lURLp6V8EPT+8/TDr7Bfuy5LyjFsKAYsq
+QXNTBRLT8unlG99XvN4urWFVs9NMPKKWgV/e14LGumeL+mM8EQi+UPCnMTPOErWb
+F4a+SZgp6g00Syvd8mJVlWUKEkQUOg==
+=P7Le
+-----END PGP SIGNATURE-----
+
+--taccm5e5wyznne4d--
