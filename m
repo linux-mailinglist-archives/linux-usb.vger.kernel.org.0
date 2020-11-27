@@ -2,74 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F088F2C627F
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 11:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDCF2C62F5
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Nov 2020 11:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728089AbgK0KFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Nov 2020 05:05:36 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:46674 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727281AbgK0KFf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Nov 2020 05:05:35 -0500
-Received: by mail-lj1-f193.google.com with SMTP id f24so5276802ljk.13
-        for <linux-usb@vger.kernel.org>; Fri, 27 Nov 2020 02:05:34 -0800 (PST)
+        id S1726952AbgK0KXe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Nov 2020 05:23:34 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:39283 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725980AbgK0KXc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Nov 2020 05:23:32 -0500
+Received: by mail-lf1-f67.google.com with SMTP id j205so6325313lfj.6;
+        Fri, 27 Nov 2020 02:23:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=OdwtOJRn2IUqyWPSW4vxCiuFOeYaizpMoO1kqgrIRqE=;
-        b=CSwBuE2BL2YKbG4IDmUftSgplziJQuKnr1a5Dwd/A0yuswfvqQDxg2gkwE/zOvRRdn
-         k8To2PYC3x208WeYqcvp05HNTMat91T1HoYuKo4qld8/Z48q1U4LElJSMXIJU9/XV+f7
-         Nb2mKOl+U5JLBKygKi88itAX8StG8NijoYG+2L47ddVS+oiOaWE6rsDUmWmwATSfNwVX
-         81UkXWvVa7Xy+GDV5lTqzZYZtRs9/xqsmSOqWsTkaiG+835tKo9RsL3QEIpFpXgPgARj
-         xEeioOfsjfvA1NxqFGBoL8gtokVLj89wmoC/t3zqc7iMh8xcnuIch0Lh4iJLn2+trShK
-         WnzQ==
-X-Gm-Message-State: AOAM530Q+U9hTHNfPAxoV/sKzXr4TZtgOz00oVzxCCeF2HbnzZ3ZPjuA
-        Hqc21PJw4uKOwrGLpEaIeW0=
-X-Google-Smtp-Source: ABdhPJxfoitGHr7LZC/qZf0rh6UiOubYMhgLyELAuanuSrWArE7q3lH2ZUqimX+OVvdk3PKWvmEpXA==
-X-Received: by 2002:a05:651c:1214:: with SMTP id i20mr2881016lja.324.1606471533601;
-        Fri, 27 Nov 2020 02:05:33 -0800 (PST)
+        bh=mumQ7Odfbg86UBYuc0aTTU7S0G45wmDkPgeyYwAnXzg=;
+        b=ZzJFtFckVcSUYKQiNQ6AEhn5MDPS295SQOJuj8eVclgXjE9qS/+iFTovNKHDKe2iaC
+         /4pT6sLglFMcKWXJj0zyPmyTdHkBl7sZepHkPdx8rNULrZDg6p2XTLTSOJ1ccTdCCMVa
+         AzZnjWBM7GJpREZtcTDvhWSSTh3wW9XrEMu1/aVI5j+6oBSCvW319lXc6ZqmEzSlF5A9
+         5UFftJkup2PAuzNcbFli2ph2GsHg3YBZeeLXqKsnXnLA1qWJYto8ZBQ/cvYs0i925VjZ
+         gBi9I/10oyBA9YEp9KxMOuR8ByKH87KzJ0ydjZpWHsIG9tIyW7+Flw1YaHjsbyArq7au
+         ohNQ==
+X-Gm-Message-State: AOAM5304lzGVEMXemnhZ2cQ+R9ONgmifvD4K4NaPxPyrwauS7+4x0YAi
+        sSbJ5bRladqm5q0yDVpZuPs=
+X-Google-Smtp-Source: ABdhPJxtoKbHxaWqHwQ0DvBt5n8YhAsWq3nmxDqiUw9AfygpwmAHdA8nk2zr2jY/+kqjrPrcUkQAsQ==
+X-Received: by 2002:ac2:428d:: with SMTP id m13mr2850555lfh.137.1606472610279;
+        Fri, 27 Nov 2020 02:23:30 -0800 (PST)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id a11sm904357ljp.21.2020.11.27.02.05.32
+        by smtp.gmail.com with ESMTPSA id c6sm908462ljj.140.2020.11.27.02.23.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2020 02:05:32 -0800 (PST)
+        Fri, 27 Nov 2020 02:23:29 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1kiadV-0006KA-Hm; Fri, 27 Nov 2020 11:05:53 +0100
-Date:   Fri, 27 Nov 2020 11:05:53 +0100
+        id 1kiaur-0006Qe-HY; Fri, 27 Nov 2020 11:23:50 +0100
+Date:   Fri, 27 Nov 2020 11:23:49 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Giacinto Cifelli <gciofono@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3] USB: serial: option: add support for Thales Cinterion
- EXS82 option port
-Message-ID: <X8DPgRn3wN+aRlED@localhost>
-References: <20201125145304.10385-1-gciofono@gmail.com>
+To:     "Wang, Sheng Long" <shenglong.wang.ext@siemens.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Sheng Long Wang <china_shenglong@163.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lkp@intel.com" <lkp@intel.com>
+Subject: Re: [PATCH v6] usb-serial:cp210x: add support to software flow
+ control
+Message-ID: <X8DTtVEzL4X8UJCH@localhost>
+References: <20201016022428.9671-1-china_shenglong@163.com>
+ <X66l44MqSlj774DL@localhost>
+ <520e730958174cb39561a94d03e4727e@siemens.com>
+ <X7Kq6fJ/VMnB3Nt0@localhost>
+ <496f2cc77b4d4c3a9b49410ac318b927@siemens.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201125145304.10385-1-gciofono@gmail.com>
+In-Reply-To: <496f2cc77b4d4c3a9b49410ac318b927@siemens.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 25, 2020 at 03:53:04PM +0100, Giacinto Cifelli wrote:
-> There is a single option port in this modem, and it is used as debug port
-> 
-> lsusb -v for this device:
+[ Again, please do not top-post. Quoting Greg:
 
-> Signed-off-by: Giacinto Cifelli <gciofono@gmail.com>
-> ---
-> 
-> Notes:
->     changelog:
->     v2: removed extra .driver_info, unneeded for this patch:
->             .driver_info = RSVD(1) | RSVD(2) | RSVD(3)
->         renamed the device in the commit name
->     v3: renamed the commit to follow current conventions
->         included a short changelog and patch versioning
->         new device define re-ordered by PID
->         new device entry re-ordered alphabetically
+  A: http://en.wikipedia.org/wiki/Top_post
+  Q: Were do I find info about this thing called top-posting?
+  A: Because it messes up the order in which people normally read text.
+  Q: Why is top-posting such a bad thing?
+  A: Top-posting.
+  Q: What is the most annoying thing in e-mail?
 
-Thanks, now applied for 5.10 with a stable tag.
+  A: No.
+  Q: Should I include quotations after my reply?
+
+  http://daringfireball.net/2007/07/on_top
+]
+
+On Mon, Nov 23, 2020 at 01:11:24AM +0000, Wang, Sheng Long wrote:
+> Hi,  Johan
+> 
+> Do I add my  software flow control  patch directly to the branch you
+> gave me now ? 
+> https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/log/?h=cp210x-termios
+
+Yes, please rebase your work on top of that branch. I'll merge it to my
+usb-next branch before applying your patch.
+
+> Then, I also need the cp210x_ get_ terminus()  add ixoff / iXon handling?
+
+No, if you rebase your work on top of the above branch, you won't have
+to deal with cp210x_get_termios() which has now been removed.
+
+Just add support for software flow control to the new
+cp210x_set_flow_control() function (and cp210x_termios_change()).
+
+I think you can even drop get_special_chars() and just leave the rest
+set as NUL, which appears to be the default.
 
 Johan
