@@ -2,408 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7DB2C734D
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 23:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A228E2C7356
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 23:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389651AbgK1VuE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Nov 2020 16:50:04 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34416 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732855AbgK1SOR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 28 Nov 2020 13:14:17 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id D7E24AC2E;
-        Sat, 28 Nov 2020 08:48:30 +0000 (UTC)
-Date:   Sat, 28 Nov 2020 09:48:30 +0100
-Message-ID: <s5hv9dphnoh.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Geoff Levand <geoff@infradead.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Jens Axboe <axboe@kernel.dk>, Jim Paris <jim@jtan.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S2389722AbgK1VuF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:39406 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731020AbgK1Sqt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Nov 2020 13:46:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606589122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mOG1PEw7cXjSDVLm0frOBHIziQMwzgcOSI2ySbmS6LQ=;
+        b=anufJHNTFRlP6tnsjo6qdfxVwQeSx5NVabADL5SJHUZZ8t2jED1aE96dyjgGwsZF2bBWsk
+        yn2BndnSgKISwBTCyMvn8Gz8a676KL9D0+Zjxf87/O4qcSBoqA12OWrSdFr8+rDjZE0q5Y
+        Z/welwAMVxZebLMsfKTqp3fpd5g3MYM=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-115-W_YZQgQ7NnKZRLdhR6p62Q-1; Sat, 28 Nov 2020 05:43:24 -0500
+X-MC-Unique: W_YZQgQ7NnKZRLdhR6p62Q-1
+Received: by mail-ej1-f69.google.com with SMTP id yc22so3092374ejb.20
+        for <linux-usb@vger.kernel.org>; Sat, 28 Nov 2020 02:43:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mOG1PEw7cXjSDVLm0frOBHIziQMwzgcOSI2ySbmS6LQ=;
+        b=qf305dzTTP18A9kPU056APhD8Xi+ua5+fdfkUMpUWWAaD7JPSJZyOAEhnl1mhETGwT
+         fHiG4PBkQSJAGVyYreiSCN1elfv89eTLpyRImOSBvYyANVXSdQFQ/z0nKqbSZxrHHZhO
+         H8d1kxgb6jceQAO0UxSLBSi5YoeFt2Ay16ULrHN9JN6l4ii3XmwQlJx1lKfQEimwgKZL
+         Nx1wlks4rGGapyq/JWTdwCx/BcQsl5AVQhXVvyTI40H2hdiZYbtUo7zkHxy3kaaFJUHT
+         OofKLRtJ/AKvY33V8YUcpqIR3xIOjgpF+D2ZKmIu+PzbedCAusE2nPLwZBpyIHuomOsw
+         wUSA==
+X-Gm-Message-State: AOAM530ChXDB8tiDuRELRJiYI2Qs+I3jNV0Ej3lAtGjL7W63IkkVAzBT
+        SY0qzgkxwr5wX7De5eKjfgTSWX1JY1ZugaeeFc2Vx+W8+F71NTgcu7fS1YXXuD8aNzee6Scq0kK
+        0n6ecm4jvZZ+X9Icj9SkS
+X-Received: by 2002:a05:6402:1714:: with SMTP id y20mr12701514edu.306.1606560203154;
+        Sat, 28 Nov 2020 02:43:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz+U5XpbHLZUjMy5NtlxgvOGgJl2y1xXiCB0jHm13k7iQXRLvVbwaS3AVMB7MU3TDS324BvUQ==
+X-Received: by 2002:a05:6402:1714:: with SMTP id y20mr12701494edu.306.1606560202843;
+        Sat, 28 Nov 2020 02:43:22 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id t11sm5992608ejx.68.2020.11.28.02.43.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 Nov 2020 02:43:22 -0800 (PST)
+Subject: Re: 5.10 regression caused by: "uas: fix sdev->host->dma_dev": many
+ XHCI swiotlb buffer is full / DMAR: Device bounce map failed errors on
+ thunderbolt connected XHCI controller
+To:     Tom Yan <tom.ty89@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org, alsa-devel@alsa-project.org,
-        linux-block@vger.kernel.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH 2/2] powerpc/ps3: make system bus's remove and shutdown callbacks return void
-In-Reply-To: <20201126165950.2554997-2-u.kleine-koenig@pengutronix.de>
-References: <20201126165950.2554997-1-u.kleine-koenig@pengutronix.de>
-        <20201126165950.2554997-2-u.kleine-koenig@pengutronix.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
- FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
- (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
+References: <b046dd04-ac4f-3c69-0602-af810fb1b365@redhat.com>
+ <be031d15-201f-0e5c-8b0f-be030077141f@redhat.com>
+ <20201124102715.GA16983@lst.de>
+ <fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com>
+ <8a52e868-0ca1-55b7-5ad2-ddb0cbb5e45d@redhat.com>
+ <20201127161900.GA10986@lst.de>
+ <fded04e2-f2e9-de92-ab1f-5aa088904e90@redhat.com>
+ <CAGnHSEmyrw=r56ocLCkia+sYT0tmcCScZitBi=G+DY=gRBy+sg@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <09992cec-65e4-2757-aae6-8fb02a42f961@redhat.com>
+Date:   Sat, 28 Nov 2020 11:43:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
+MIME-Version: 1.0
+In-Reply-To: <CAGnHSEmyrw=r56ocLCkia+sYT0tmcCScZitBi=G+DY=gRBy+sg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 26 Nov 2020 17:59:50 +0100,
-Uwe Kleine-König wrote:
-> 
-> The driver core ignores the return value of struct device_driver::remove
-> because there is only little that can be done. For the shutdown callback
-> it's ps3_system_bus_shutdown() which ignores the return value.
-> 
-> To simplify the quest to make struct device_driver::remove return void,
-> let struct ps3_system_bus_driver::remove return void, too. All users
-> already unconditionally return 0, this commit makes it obvious that
-> returning an error code is a bad idea and ensures future users behave
-> accordingly.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Hi Tom,
 
-For the sound bit:
-Acked-by: Takashi Iwai <tiwai@suse.de>
+On 11/28/20 2:25 AM, Tom Yan wrote:
+> Should we still be clamping max_sectors to dma_max_mapping_size(dev)
+> (for now)? with dev being us->pusb_dev->bus->sysdev and
+> devinfo->udev->bus->sysdev respectively (i.e. revert only
+> scsi_add_host_with_dma() to scsi_add_host())?
+
+I would expect that to work / avoid the regression, so yes that is
+a good option.
+
+If you can provide me with a patch doing that, then I can test it to
+make sure it does indeed fix the regression.
+
+Regards,
+
+Hans
 
 
-thanks,
-
-Takashi
-
-> ---
->  arch/powerpc/include/asm/ps3.h               |  4 ++--
->  arch/powerpc/platforms/ps3/system-bus.c      |  5 ++---
->  drivers/block/ps3disk.c                      |  3 +--
->  drivers/block/ps3vram.c                      |  3 +--
->  drivers/char/ps3flash.c                      |  3 +--
->  drivers/net/ethernet/toshiba/ps3_gelic_net.c |  3 +--
->  drivers/ps3/ps3-lpm.c                        |  3 +--
->  drivers/ps3/ps3-vuart.c                      | 10 ++++------
->  drivers/scsi/ps3rom.c                        |  3 +--
->  drivers/usb/host/ehci-ps3.c                  |  4 +---
->  drivers/usb/host/ohci-ps3.c                  |  4 +---
->  drivers/video/fbdev/ps3fb.c                  |  4 +---
->  sound/ppc/snd_ps3.c                          |  3 +--
->  13 files changed, 18 insertions(+), 34 deletions(-)
 > 
-> diff --git a/arch/powerpc/include/asm/ps3.h b/arch/powerpc/include/asm/ps3.h
-> index cb89e4bf55ce..e646c7f218bc 100644
-> --- a/arch/powerpc/include/asm/ps3.h
-> +++ b/arch/powerpc/include/asm/ps3.h
-> @@ -378,8 +378,8 @@ struct ps3_system_bus_driver {
->  	enum ps3_match_sub_id match_sub_id;
->  	struct device_driver core;
->  	int (*probe)(struct ps3_system_bus_device *);
-> -	int (*remove)(struct ps3_system_bus_device *);
-> -	int (*shutdown)(struct ps3_system_bus_device *);
-> +	void (*remove)(struct ps3_system_bus_device *);
-> +	void (*shutdown)(struct ps3_system_bus_device *);
->  /*	int (*suspend)(struct ps3_system_bus_device *, pm_message_t); */
->  /*	int (*resume)(struct ps3_system_bus_device *); */
->  };
-> diff --git a/arch/powerpc/platforms/ps3/system-bus.c b/arch/powerpc/platforms/ps3/system-bus.c
-> index c62aaa29a9d5..b431f41c6cb5 100644
-> --- a/arch/powerpc/platforms/ps3/system-bus.c
-> +++ b/arch/powerpc/platforms/ps3/system-bus.c
-> @@ -382,7 +382,6 @@ static int ps3_system_bus_probe(struct device *_dev)
->  
->  static int ps3_system_bus_remove(struct device *_dev)
->  {
-> -	int result = 0;
->  	struct ps3_system_bus_device *dev = ps3_dev_to_system_bus_dev(_dev);
->  	struct ps3_system_bus_driver *drv;
->  
-> @@ -393,13 +392,13 @@ static int ps3_system_bus_remove(struct device *_dev)
->  	BUG_ON(!drv);
->  
->  	if (drv->remove)
-> -		result = drv->remove(dev);
-> +		drv->remove(dev);
->  	else
->  		dev_dbg(&dev->core, "%s:%d %s: no remove method\n",
->  			__func__, __LINE__, drv->core.name);
->  
->  	pr_debug(" <- %s:%d: %s\n", __func__, __LINE__, dev_name(&dev->core));
-> -	return result;
-> +	return 0;
->  }
->  
->  static void ps3_system_bus_shutdown(struct device *_dev)
-> diff --git a/drivers/block/ps3disk.c b/drivers/block/ps3disk.c
-> index 7b55811c2a81..ba3ece56cbb3 100644
-> --- a/drivers/block/ps3disk.c
-> +++ b/drivers/block/ps3disk.c
-> @@ -507,7 +507,7 @@ static int ps3disk_probe(struct ps3_system_bus_device *_dev)
->  	return error;
->  }
->  
-> -static int ps3disk_remove(struct ps3_system_bus_device *_dev)
-> +static void ps3disk_remove(struct ps3_system_bus_device *_dev)
->  {
->  	struct ps3_storage_device *dev = to_ps3_storage_device(&_dev->core);
->  	struct ps3disk_private *priv = ps3_system_bus_get_drvdata(&dev->sbd);
-> @@ -526,7 +526,6 @@ static int ps3disk_remove(struct ps3_system_bus_device *_dev)
->  	kfree(dev->bounce_buf);
->  	kfree(priv);
->  	ps3_system_bus_set_drvdata(_dev, NULL);
-> -	return 0;
->  }
->  
->  static struct ps3_system_bus_driver ps3disk = {
-> diff --git a/drivers/block/ps3vram.c b/drivers/block/ps3vram.c
-> index 1088798c8dd0..b71d28372ef3 100644
-> --- a/drivers/block/ps3vram.c
-> +++ b/drivers/block/ps3vram.c
-> @@ -797,7 +797,7 @@ static int ps3vram_probe(struct ps3_system_bus_device *dev)
->  	return error;
->  }
->  
-> -static int ps3vram_remove(struct ps3_system_bus_device *dev)
-> +static void ps3vram_remove(struct ps3_system_bus_device *dev)
->  {
->  	struct ps3vram_priv *priv = ps3_system_bus_get_drvdata(dev);
->  
-> @@ -817,7 +817,6 @@ static int ps3vram_remove(struct ps3_system_bus_device *dev)
->  	free_pages((unsigned long) priv->xdr_buf, get_order(XDR_BUF_SIZE));
->  	kfree(priv);
->  	ps3_system_bus_set_drvdata(dev, NULL);
-> -	return 0;
->  }
->  
->  static struct ps3_system_bus_driver ps3vram = {
-> diff --git a/drivers/char/ps3flash.c b/drivers/char/ps3flash.c
-> index 1a07fee33f66..23871cde41fb 100644
-> --- a/drivers/char/ps3flash.c
-> +++ b/drivers/char/ps3flash.c
-> @@ -403,7 +403,7 @@ static int ps3flash_probe(struct ps3_system_bus_device *_dev)
->  	return error;
->  }
->  
-> -static int ps3flash_remove(struct ps3_system_bus_device *_dev)
-> +static void ps3flash_remove(struct ps3_system_bus_device *_dev)
->  {
->  	struct ps3_storage_device *dev = to_ps3_storage_device(&_dev->core);
->  
-> @@ -413,7 +413,6 @@ static int ps3flash_remove(struct ps3_system_bus_device *_dev)
->  	kfree(ps3_system_bus_get_drvdata(&dev->sbd));
->  	ps3_system_bus_set_drvdata(&dev->sbd, NULL);
->  	ps3flash_dev = NULL;
-> -	return 0;
->  }
->  
->  
-> diff --git a/drivers/net/ethernet/toshiba/ps3_gelic_net.c b/drivers/net/ethernet/toshiba/ps3_gelic_net.c
-> index d9a5722f561b..3d1fc8d2ca66 100644
-> --- a/drivers/net/ethernet/toshiba/ps3_gelic_net.c
-> +++ b/drivers/net/ethernet/toshiba/ps3_gelic_net.c
-> @@ -1791,7 +1791,7 @@ static int ps3_gelic_driver_probe(struct ps3_system_bus_device *dev)
->   * ps3_gelic_driver_remove - remove a device from the control of this driver
->   */
->  
-> -static int ps3_gelic_driver_remove(struct ps3_system_bus_device *dev)
-> +static void ps3_gelic_driver_remove(struct ps3_system_bus_device *dev)
->  {
->  	struct gelic_card *card = ps3_system_bus_get_drvdata(dev);
->  	struct net_device *netdev0;
-> @@ -1840,7 +1840,6 @@ static int ps3_gelic_driver_remove(struct ps3_system_bus_device *dev)
->  	ps3_close_hv_device(dev);
->  
->  	pr_debug("%s: done\n", __func__);
-> -	return 0;
->  }
->  
->  static struct ps3_system_bus_driver ps3_gelic_driver = {
-> diff --git a/drivers/ps3/ps3-lpm.c b/drivers/ps3/ps3-lpm.c
-> index e54aa2d82f50..65512b6cc6fd 100644
-> --- a/drivers/ps3/ps3-lpm.c
-> +++ b/drivers/ps3/ps3-lpm.c
-> @@ -1196,7 +1196,7 @@ static int ps3_lpm_probe(struct ps3_system_bus_device *dev)
->  	return 0;
->  }
->  
-> -static int ps3_lpm_remove(struct ps3_system_bus_device *dev)
-> +static void ps3_lpm_remove(struct ps3_system_bus_device *dev)
->  {
->  	dev_dbg(&dev->core, " -> %s:%u:\n", __func__, __LINE__);
->  
-> @@ -1206,7 +1206,6 @@ static int ps3_lpm_remove(struct ps3_system_bus_device *dev)
->  	lpm_priv = NULL;
->  
->  	dev_info(&dev->core, " <- %s:%u:\n", __func__, __LINE__);
-> -	return 0;
->  }
->  
->  static struct ps3_system_bus_driver ps3_lpm_driver = {
-> diff --git a/drivers/ps3/ps3-vuart.c b/drivers/ps3/ps3-vuart.c
-> index 4ed131eaff51..e34ae6a442c7 100644
-> --- a/drivers/ps3/ps3-vuart.c
-> +++ b/drivers/ps3/ps3-vuart.c
-> @@ -1102,7 +1102,7 @@ static int ps3_vuart_cleanup(struct ps3_system_bus_device *dev)
->   * device can no longer be used.
->   */
->  
-> -static int ps3_vuart_remove(struct ps3_system_bus_device *dev)
-> +static void ps3_vuart_remove(struct ps3_system_bus_device *dev)
->  {
->  	struct ps3_vuart_port_priv *priv = to_port_priv(dev);
->  	struct ps3_vuart_port_driver *drv;
-> @@ -1118,7 +1118,7 @@ static int ps3_vuart_remove(struct ps3_system_bus_device *dev)
->  		dev_dbg(&dev->core, "%s:%d: no driver bound\n", __func__,
->  			__LINE__);
->  		mutex_unlock(&vuart_bus_priv.probe_mutex);
-> -		return 0;
-> +		return;
->  	}
->  
->  	drv = ps3_system_bus_dev_to_vuart_drv(dev);
-> @@ -1141,7 +1141,6 @@ static int ps3_vuart_remove(struct ps3_system_bus_device *dev)
->  
->  	dev_dbg(&dev->core, " <- %s:%d\n", __func__, __LINE__);
->  	mutex_unlock(&vuart_bus_priv.probe_mutex);
-> -	return 0;
->  }
->  
->  /**
-> @@ -1154,7 +1153,7 @@ static int ps3_vuart_remove(struct ps3_system_bus_device *dev)
->   * sequence.
->   */
->  
-> -static int ps3_vuart_shutdown(struct ps3_system_bus_device *dev)
-> +static void ps3_vuart_shutdown(struct ps3_system_bus_device *dev)
->  {
->  	struct ps3_vuart_port_driver *drv;
->  
-> @@ -1169,7 +1168,7 @@ static int ps3_vuart_shutdown(struct ps3_system_bus_device *dev)
->  		dev_dbg(&dev->core, "%s:%d: no driver bound\n", __func__,
->  			__LINE__);
->  		mutex_unlock(&vuart_bus_priv.probe_mutex);
-> -		return 0;
-> +		return;
->  	}
->  
->  	drv = ps3_system_bus_dev_to_vuart_drv(dev);
-> @@ -1193,7 +1192,6 @@ static int ps3_vuart_shutdown(struct ps3_system_bus_device *dev)
->  	dev_dbg(&dev->core, " <- %s:%d\n", __func__, __LINE__);
->  
->  	mutex_unlock(&vuart_bus_priv.probe_mutex);
-> -	return 0;
->  }
->  
->  static int __init ps3_vuart_bus_init(void)
-> diff --git a/drivers/scsi/ps3rom.c b/drivers/scsi/ps3rom.c
-> index f75c0b5cd587..ccb5771f1cb7 100644
-> --- a/drivers/scsi/ps3rom.c
-> +++ b/drivers/scsi/ps3rom.c
-> @@ -402,7 +402,7 @@ static int ps3rom_probe(struct ps3_system_bus_device *_dev)
->  	return error;
->  }
->  
-> -static int ps3rom_remove(struct ps3_system_bus_device *_dev)
-> +static void ps3rom_remove(struct ps3_system_bus_device *_dev)
->  {
->  	struct ps3_storage_device *dev = to_ps3_storage_device(&_dev->core);
->  	struct Scsi_Host *host = ps3_system_bus_get_drvdata(&dev->sbd);
-> @@ -412,7 +412,6 @@ static int ps3rom_remove(struct ps3_system_bus_device *_dev)
->  	scsi_host_put(host);
->  	ps3_system_bus_set_drvdata(&dev->sbd, NULL);
->  	kfree(dev->bounce_buf);
-> -	return 0;
->  }
->  
->  static struct ps3_system_bus_driver ps3rom = {
-> diff --git a/drivers/usb/host/ehci-ps3.c b/drivers/usb/host/ehci-ps3.c
-> index fb52133c3557..98568b046a1a 100644
-> --- a/drivers/usb/host/ehci-ps3.c
-> +++ b/drivers/usb/host/ehci-ps3.c
-> @@ -200,7 +200,7 @@ static int ps3_ehci_probe(struct ps3_system_bus_device *dev)
->  	return result;
->  }
->  
-> -static int ps3_ehci_remove(struct ps3_system_bus_device *dev)
-> +static void ps3_ehci_remove(struct ps3_system_bus_device *dev)
->  {
->  	unsigned int tmp;
->  	struct usb_hcd *hcd = ps3_system_bus_get_drvdata(dev);
-> @@ -227,8 +227,6 @@ static int ps3_ehci_remove(struct ps3_system_bus_device *dev)
->  
->  	ps3_dma_region_free(dev->d_region);
->  	ps3_close_hv_device(dev);
-> -
-> -	return 0;
->  }
->  
->  static int __init ps3_ehci_driver_register(struct ps3_system_bus_driver *drv)
-> diff --git a/drivers/usb/host/ohci-ps3.c b/drivers/usb/host/ohci-ps3.c
-> index f77cd6af0ccf..4f5af929c3e4 100644
-> --- a/drivers/usb/host/ohci-ps3.c
-> +++ b/drivers/usb/host/ohci-ps3.c
-> @@ -184,7 +184,7 @@ static int ps3_ohci_probe(struct ps3_system_bus_device *dev)
->  	return result;
->  }
->  
-> -static int ps3_ohci_remove(struct ps3_system_bus_device *dev)
-> +static void ps3_ohci_remove(struct ps3_system_bus_device *dev)
->  {
->  	unsigned int tmp;
->  	struct usb_hcd *hcd = ps3_system_bus_get_drvdata(dev);
-> @@ -212,8 +212,6 @@ static int ps3_ohci_remove(struct ps3_system_bus_device *dev)
->  
->  	ps3_dma_region_free(dev->d_region);
->  	ps3_close_hv_device(dev);
-> -
-> -	return 0;
->  }
->  
->  static int __init ps3_ohci_driver_register(struct ps3_system_bus_driver *drv)
-> diff --git a/drivers/video/fbdev/ps3fb.c b/drivers/video/fbdev/ps3fb.c
-> index 203c254f8f6c..2fe08b67eda7 100644
-> --- a/drivers/video/fbdev/ps3fb.c
-> +++ b/drivers/video/fbdev/ps3fb.c
-> @@ -1208,7 +1208,7 @@ static int ps3fb_probe(struct ps3_system_bus_device *dev)
->  	return retval;
->  }
->  
-> -static int ps3fb_shutdown(struct ps3_system_bus_device *dev)
-> +static void ps3fb_shutdown(struct ps3_system_bus_device *dev)
->  {
->  	struct fb_info *info = ps3_system_bus_get_drvdata(dev);
->  	u64 xdr_lpar = ps3_mm_phys_to_lpar(__pa(ps3fb_videomemory.address));
-> @@ -1241,8 +1241,6 @@ static int ps3fb_shutdown(struct ps3_system_bus_device *dev)
->  	lv1_gpu_memory_free(ps3fb.memory_handle);
->  	ps3_close_hv_device(dev);
->  	dev_dbg(&dev->core, " <- %s:%d\n", __func__, __LINE__);
-> -
-> -	return 0;
->  }
->  
->  static struct ps3_system_bus_driver ps3fb_driver = {
-> diff --git a/sound/ppc/snd_ps3.c b/sound/ppc/snd_ps3.c
-> index 6ab796a5d936..8e44fa5d4dc7 100644
-> --- a/sound/ppc/snd_ps3.c
-> +++ b/sound/ppc/snd_ps3.c
-> @@ -1049,7 +1049,7 @@ static int snd_ps3_driver_probe(struct ps3_system_bus_device *dev)
->  }; /* snd_ps3_probe */
->  
->  /* called when module removal */
-> -static int snd_ps3_driver_remove(struct ps3_system_bus_device *dev)
-> +static void snd_ps3_driver_remove(struct ps3_system_bus_device *dev)
->  {
->  	int ret;
->  	pr_info("%s:start id=%d\n", __func__,  dev->match_id);
-> @@ -1075,7 +1075,6 @@ static int snd_ps3_driver_remove(struct ps3_system_bus_device *dev)
->  	lv1_gpu_device_unmap(2);
->  	ps3_close_hv_device(dev);
->  	pr_info("%s:end id=%d\n", __func__, dev->match_id);
-> -	return 0;
->  } /* snd_ps3_remove */
->  
->  static struct ps3_system_bus_driver snd_ps3_bus_driver_info = {
-> -- 
-> 2.29.2
+> On Sat, 28 Nov 2020 at 02:12, Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> Hi,
+>>
+>> On 11/27/20 5:19 PM, Christoph Hellwig wrote:
+>>> On Fri, Nov 27, 2020 at 01:32:16PM +0100, Hans de Goede wrote:
+>>>> I ran some more tests, I can confirm that reverting:
+>>>>
+>>>> 5df7ef7d32fe "uas: bump hw_max_sectors to 2048 blocks for SS or faster drives"
+>>>> 558033c2828f "uas: fix sdev->host->dma_dev"
+>>>>
+>>>> Makes the problem go away while running a 5.10 kernel. I also tried doubling
+>>>> the swiotlb size by adding: swiotlb=65536 to the kernel commandline but that
+>>>> does not help.
+>>>>
+>>>> Some more observations:
+>>>>
+>>>> 1. The usb-storage driver does not cause this issue, even though it has a
+>>>> very similar change.
+>>>>
+>>>> 2. The problem does not happen until I plug an UAS decvice into the dock.
+>>>>
+>>>> 3. The problem continues to happen even after I unplug the UAS device and
+>>>> rmmod the uas module
+>>>>
+>>>> 3. made me take a bit closer look to the troublesome commit, it passes:
+>>>> udev->bus->sysdev, which I assume is the XHCI controller itself as device
+>>>> to scsi_add_host_with_dma, which in turn seems to cause permanent changes
+>>>> to the dma settings for the XHCI controller. I'm not all that familiar with
+>>>> the DMA APIs but I'm getting the feeling that passing the actual XHCI-controller's
+>>>> device as dma-device to scsi_add_host_with_dma is simply the wrong thing to
+>>>> do; and that the intended effects (honor XHCI dma limits, but do not cause
+>>>> any changes the XHCI dma settings) should be achieved differently.
+>>>>
+>>>> Note that if this is indeed wrong, the matching usb-storage change should
+>>>> likely also be dropped.
+>>>
+>>> One problem in this area is that the clamping of the DMA size through
+>>> dma_max_mapping_size mentioned in the commit log doesn't work when
+>>> swiotlb is called from intel-iommu. I think we need to wire up those
+>>> calls there as well.
+>>
+>> Ok, but that does not sound like a quick last minute fix for 5.10, so maybe
+>> for 5.10 we should just revert the uas and usb-storage changes which trigger
+>> this problem and then retry those for 5.11 ?
+>>
+>> Regards,
+>>
+>> Hans
+>>
 > 
+
