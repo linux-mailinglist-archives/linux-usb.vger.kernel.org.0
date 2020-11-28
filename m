@@ -2,204 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA1F2C6E48
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 02:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E74BA2C6E8B
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 03:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731202AbgK1BvS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Nov 2020 20:51:18 -0500
-Received: from mga01.intel.com ([192.55.52.88]:6896 "EHLO mga01.intel.com"
+        id S1731113AbgK1Cca (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Nov 2020 21:32:30 -0500
+Received: from z5.mailgun.us ([104.130.96.5]:62400 "EHLO z5.mailgun.us"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731347AbgK1BuY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Nov 2020 20:50:24 -0500
-IronPort-SDR: Olgh4FFqHFLmR5BTTimPzXA4ePRYC8UF8mOMOJw9GSJhR7YouE2k4atkUIaWE6/wErb0bkbjPN
- 6PpJG42u4Eog==
-X-IronPort-AV: E=McAfee;i="6000,8403,9818"; a="190612286"
-X-IronPort-AV: E=Sophos;i="5.78,376,1599548400"; 
-   d="scan'208";a="190612286"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2020 17:50:11 -0800
-IronPort-SDR: yik0CsWIq/LIQ7dw4O6Gtq++M9oHGB2CuWT0MtTikd2EOor2JePXa4Yk+m+/AUb2SZ3qU4Qgzw
- V8Mtyi/1kwnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,376,1599548400"; 
-   d="scan'208";a="548213202"
-Received: from lkp-server01.sh.intel.com (HELO b5888d13d5a5) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Nov 2020 17:50:10 -0800
-Received: from kbuild by b5888d13d5a5 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kipNJ-0000Eg-Km; Sat, 28 Nov 2020 01:50:09 +0000
-Date:   Sat, 28 Nov 2020 09:49:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 484cfbe5fb61469a5f5a276258a8b3973164b56f
-Message-ID: <5fc1acb2.I789ozGeSi6bvkDn%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1730990AbgK1Cbs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Nov 2020 21:31:48 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1606530701; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=DF8EgM8VlBkVaTO2iXksxvBj4FJ6qJwTrbBIDix1VFA=;
+ b=FNuIEohMqvMOI7PKxbPZMHtTw9zKRU94aLTwXC0oTSZaqD7RnHk6e/865+vdS4SxXejtCZ4s
+ HoFI2YIJwC/luUMQJN3oZ4XzSLJbokqEQOMIlsB/cFF2NkxU4jLRuegDDN88cHlBFHducvvZ
+ nhh07PPtC5YO75ulb+H732SfUYA=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 5fc1b685a5c560669c338b5c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 28 Nov 2020 02:31:33
+ GMT
+Sender: mgautam=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 66874C43460; Sat, 28 Nov 2020 02:31:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: mgautam)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9534BC433C6;
+        Sat, 28 Nov 2020 02:31:31 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date:   Sat, 28 Nov 2020 08:01:31 +0530
+From:   mgautam@codeaurora.org
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] usb: dwc3: core: Host wake up support from system
+ suspend
+In-Reply-To: <1603831083-2025-2-git-send-email-sanm@codeaurora.org>
+References: <1603831083-2025-1-git-send-email-sanm@codeaurora.org>
+ <1603831083-2025-2-git-send-email-sanm@codeaurora.org>
+Message-ID: <bca7bd32710a118d3583dd4e740ef3e0@codeaurora.org>
+X-Sender: mgautam@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: 484cfbe5fb61469a5f5a276258a8b3973164b56f  usb: typec: stusb160x: fix power-opmode property with typec-power-opmode
+Hi,
 
-elapsed time: 723m
 
-configs tested: 140
-configs skipped: 2
+On 2020-10-28 02:07, Sandeep Maheswaram wrote:
+> Avoiding phy powerdown in host mode so that it can be woken up by 
+> devices.
+> Added hs_phy_mode flag to check connection status and set phy mode
+> and configure interrupts.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/core.c | 14 +++-----------
+>  drivers/usb/dwc3/core.h |  2 ++
+>  2 files changed, 5 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index bdf0925..0e4bc1e 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1672,10 +1672,6 @@ static int dwc3_suspend_common(struct dwc3
+> *dwc, pm_message_t msg)
+>  		dwc3_core_exit(dwc);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> -			dwc3_core_exit(dwc);
+> -			break;
+> -		}
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                           ip28_defconfig
-m68k                         amcore_defconfig
-arm                          collie_defconfig
-arm                           efm32_defconfig
-powerpc                    sam440ep_defconfig
-m68k                       m5475evb_defconfig
-xtensa                    smp_lx200_defconfig
-arm                         mv78xx0_defconfig
-powerpc                 mpc836x_rdk_defconfig
-arm                         lpc18xx_defconfig
-mips                         db1xxx_defconfig
-arc                         haps_hs_defconfig
-mips                        workpad_defconfig
-nds32                             allnoconfig
-powerpc                      arches_defconfig
-mips                            gpr_defconfig
-m68k                           sun3_defconfig
-sh                         ap325rxa_defconfig
-powerpc                      pasemi_defconfig
-mips                         bigsur_defconfig
-mips                        omega2p_defconfig
-xtensa                       common_defconfig
-powerpc                     kilauea_defconfig
-sh                           se7206_defconfig
-arm                        keystone_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                          imote2_defconfig
-arm                            qcom_defconfig
-m68k                          atari_defconfig
-arm                           omap1_defconfig
-mips                      pistachio_defconfig
-powerpc                 mpc85xx_cds_defconfig
-mips                     loongson1c_defconfig
-alpha                               defconfig
-arm                         s3c2410_defconfig
-powerpc                        cell_defconfig
-sh                   rts7751r2dplus_defconfig
-xtensa                  cadence_csp_defconfig
-arm                       aspeed_g5_defconfig
-arc                        nsim_700_defconfig
-arm                            xcep_defconfig
-powerpc                     skiroot_defconfig
-nds32                               defconfig
-powerpc                      ppc40x_defconfig
-arm                            dove_defconfig
-arm                      jornada720_defconfig
-powerpc                 mpc837x_rdb_defconfig
-arm                         cm_x300_defconfig
-mips                          malta_defconfig
-arm                          pxa168_defconfig
-openrisc                 simple_smp_defconfig
-sh                                  defconfig
-ia64                      gensparse_defconfig
-mips                         rt305x_defconfig
-sh                             sh03_defconfig
-sparc64                             defconfig
-arm                  colibri_pxa300_defconfig
-arm                           corgi_defconfig
-sh                          kfr2r09_defconfig
-sh                          sdk7786_defconfig
-mips                           ip22_defconfig
-sh                           se7722_defconfig
-powerpc                 linkstation_defconfig
-arm                        oxnas_v6_defconfig
-riscv                          rv32_defconfig
-sh                          rsk7201_defconfig
-h8300                       h8s-sim_defconfig
-arm                          pxa3xx_defconfig
-ia64                             alldefconfig
-sh                           se7721_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-c6x                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20201127
-i386                 randconfig-a003-20201127
-i386                 randconfig-a002-20201127
-i386                 randconfig-a005-20201127
-i386                 randconfig-a001-20201127
-i386                 randconfig-a006-20201127
-x86_64               randconfig-a015-20201127
-x86_64               randconfig-a011-20201127
-x86_64               randconfig-a014-20201127
-x86_64               randconfig-a016-20201127
-x86_64               randconfig-a012-20201127
-x86_64               randconfig-a013-20201127
-i386                 randconfig-a012-20201127
-i386                 randconfig-a013-20201127
-i386                 randconfig-a011-20201127
-i386                 randconfig-a016-20201127
-i386                 randconfig-a014-20201127
-i386                 randconfig-a015-20201127
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+This could be a problem for platforms that don't support runtime_suspend
+and rely on dwc3_core_exit to power-down PHY.
+IMO you can continue to do dwc3_core_exit() if runtime_pm isn't enabled
+for the device.
 
-clang tested configs:
-x86_64               randconfig-a006-20201127
-x86_64               randconfig-a003-20201127
-x86_64               randconfig-a004-20201127
-x86_64               randconfig-a005-20201127
-x86_64               randconfig-a002-20201127
-x86_64               randconfig-a001-20201127
+> 
+>  		/* Let controller to suspend HSPHY before PHY driver suspends */
+>  		if (dwc->dis_u2_susphy_quirk ||
+> @@ -1733,13 +1729,9 @@ static int dwc3_resume_common(struct dwc3 *dwc,
+> pm_message_t msg)
+>  		spin_unlock_irqrestore(&dwc->lock, flags);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> -			ret = dwc3_core_init_for_resume(dwc);
+> -			if (ret)
+> -				return ret;
+> -			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> -			break;
+> -		}
+> +
+> +		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> +
+>  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
+>  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+>  		if (dwc->dis_u2_susphy_quirk)
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 74323b1..da63d4a3 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1101,6 +1101,8 @@ struct dwc3 {
+> 
+>  	bool			phys_ready;
+> 
+> +	unsigned int            hs_phy_mode;
+> +
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This change should instead be part of the other patch ?
+"usb: dwc3: host: Add suspend_quirk for dwc3 host"
+
+
+>  	struct ulpi		*ulpi;
+>  	bool			ulpi_ready;
