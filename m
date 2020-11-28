@@ -2,144 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E74BA2C6E8B
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 03:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 370B12C7048
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 19:18:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731113AbgK1Cca (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Nov 2020 21:32:30 -0500
-Received: from z5.mailgun.us ([104.130.96.5]:62400 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730990AbgK1Cbs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Nov 2020 21:31:48 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1606530701; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=DF8EgM8VlBkVaTO2iXksxvBj4FJ6qJwTrbBIDix1VFA=;
- b=FNuIEohMqvMOI7PKxbPZMHtTw9zKRU94aLTwXC0oTSZaqD7RnHk6e/865+vdS4SxXejtCZ4s
- HoFI2YIJwC/luUMQJN3oZ4XzSLJbokqEQOMIlsB/cFF2NkxU4jLRuegDDN88cHlBFHducvvZ
- nhh07PPtC5YO75ulb+H732SfUYA=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 5fc1b685a5c560669c338b5c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 28 Nov 2020 02:31:33
- GMT
-Sender: mgautam=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 66874C43460; Sat, 28 Nov 2020 02:31:32 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: mgautam)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9534BC433C6;
-        Sat, 28 Nov 2020 02:31:31 +0000 (UTC)
+        id S1730843AbgK1DXi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Nov 2020 22:23:38 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:8192 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726740AbgK1DWz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Nov 2020 22:22:55 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CjcHd27CLzkbkR;
+        Sat, 28 Nov 2020 11:22:21 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
+ 14.3.487.0; Sat, 28 Nov 2020 11:22:47 +0800
+Subject: Re: [PATCH] USB:ehci:fix an interrupt calltrace error
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1606361673-573-1-git-send-email-liulongfang@huawei.com>
+ <20201126160830.GA827745@rowland.harvard.edu>
+ <96b4d366-c94c-9708-da12-5693bf16b716@huawei.com>
+ <20201127154718.GA861473@rowland.harvard.edu>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <3c2366c8-4b3e-dac0-48ad-6b33b6eed10e@huawei.com>
+Date:   Sat, 28 Nov 2020 11:22:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Sat, 28 Nov 2020 08:01:31 +0530
-From:   mgautam@codeaurora.org
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] usb: dwc3: core: Host wake up support from system
- suspend
-In-Reply-To: <1603831083-2025-2-git-send-email-sanm@codeaurora.org>
-References: <1603831083-2025-1-git-send-email-sanm@codeaurora.org>
- <1603831083-2025-2-git-send-email-sanm@codeaurora.org>
-Message-ID: <bca7bd32710a118d3583dd4e740ef3e0@codeaurora.org>
-X-Sender: mgautam@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+In-Reply-To: <20201127154718.GA861473@rowland.harvard.edu>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-
-On 2020-10-28 02:07, Sandeep Maheswaram wrote:
-> Avoiding phy powerdown in host mode so that it can be woken up by 
-> devices.
-> Added hs_phy_mode flag to check connection status and set phy mode
-> and configure interrupts.
+On 2020/11/27 23:47, Alan Stern Wrote:
+> On Fri, Nov 27, 2020 at 10:29:03AM +0800, liulongfang wrote:
+>> On 2020/11/27 0:08, Alan Stern Wrote:
+>>> On Thu, Nov 26, 2020 at 11:34:33AM +0800, Longfang Liu wrote:
+>>>> The system goes to suspend when using USB audio player. This causes
+>>>> the USB device continuous send interrupt signal to system, When the
+>>>> number of interrupts exceeds 100000, the system will forcibly close
+>>>> the interrupts and output a calltrace error.
+>>>
+>>> This description is very confusing.  USB devices do not send interrupt 
+>>> signals to the host.  Do you mean that the device sends a wakeup 
+>>> request?  Or do you mean something else?
+>> The irq type is IRQ_NONE，It's counted in the note_interrupt function.
+>> From the analysis of the driver code, that are indeed  interrupt signals.
 > 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
->  drivers/usb/dwc3/core.c | 14 +++-----------
->  drivers/usb/dwc3/core.h |  2 ++
->  2 files changed, 5 insertions(+), 11 deletions(-)
+> Above you wrote: "the USB device continuous send interrupt signal to 
+> system".  But that's not correct.  The interrupt signals are sent by the 
+> USB host controller, not by the USB audio device.
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index bdf0925..0e4bc1e 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1672,10 +1672,6 @@ static int dwc3_suspend_common(struct dwc3
-> *dwc, pm_message_t msg)
->  		dwc3_core_exit(dwc);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> -			dwc3_core_exit(dwc);
-> -			break;
-> -		}
-
-
-This could be a problem for platforms that don't support runtime_suspend
-and rely on dwc3_core_exit to power-down PHY.
-IMO you can continue to do dwc3_core_exit() if runtime_pm isn't enabled
-for the device.
-
+OK, I will modify the description in the next patch.
+> The patch description should mention that this happens only with some 
+> Synopsys host controllers.
 > 
->  		/* Let controller to suspend HSPHY before PHY driver suspends */
->  		if (dwc->dis_u2_susphy_quirk ||
-> @@ -1733,13 +1729,9 @@ static int dwc3_resume_common(struct dwc3 *dwc,
-> pm_message_t msg)
->  		spin_unlock_irqrestore(&dwc->lock, flags);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> -			ret = dwc3_core_init_for_resume(dwc);
-> -			if (ret)
-> -				return ret;
-> -			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> -			break;
-> -		}
-> +
-> +		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> +
->  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
->  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
->  		if (dwc->dis_u2_susphy_quirk)
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 74323b1..da63d4a3 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -1101,6 +1101,8 @@ struct dwc3 {
+>>>> When the system goes to suspend, the last interrupt is reported to
+>>>> the driver. At this time, the system has set the state to suspend.
+>>>> This causes the last interrupt to not be processed by the system and
+>>>> not clear the interrupt state flag. This uncleared interrupt flag
+>>>> constantly triggers new interrupt event. This causing the driver to
+>>>> receive more than 100,000 interrupts, which causes the system to
+>>>> forcibly close the interrupt report and report the calltrace error.
+>>>
+>>> If the driver receives an interrupt, it is supposed to process the event 
+>>> even if the host controller is suspended.  And when ehci_irq() runs, it 
+>>> clears the bits that are set in the USBSYS register.
+>> When the host controller is suspended, the ehci_suspend() will clear
+>> the HCD_FLAG_HW_ACCESSIBLE, and then usb_hcd_irq() will return IRQ_NONE
+>> directly without calling ehci_irq().
 > 
->  	bool			phys_ready;
+> Yes.  But ehci_bus_suspend() runs _before_ the host controller is 
+> suspended.  While ehci_bus_suspend() is running, usb_hcd_irq() _will_ 
+> call ehci_irq(), and ehci_irq() _will_ clear the status bits.
 > 
-> +	unsigned int            hs_phy_mode;
-> +
+> After the host controller is suspended it is not supposed to generate 
+> any interrupt signals at all, because ehci_suspend() writes 0 to the 
+> USBINTR register, and it does this _before_ clearing 
+> HCD_FLAG_HW_ACCESSIBLE.
+> 
+According to this process, there should be no interruption storm problem,
+but the current fact is that the problem has occurred, so the actual
+execution process did not follow the correct process above.
 
-This change should instead be part of the other patch ?
-"usb: dwc3: host: Add suspend_quirk for dwc3 host"
-
-
->  	struct ulpi		*ulpi;
->  	bool			ulpi_ready;
+>>> Why is your system getting interrupts?  That is, which bits are set in 
+>>> the USBSTS register?
+>> BIT(5) and BIT(3) are setted, STS_IAA and STS_FLR.
+> 
+> STS_FLR is not set in the USBINTR register, but STS_IAA is.  So that's 
+> the one which matters.
+> 
+>>>> so, when the driver goes to sleep and changes the system state to
+>>>> suspend, the interrupt flag needs to be cleared.
+>>>>
+>>>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+>>>> ---
+>>>>  drivers/usb/host/ehci-hub.c | 5 +++++
+>>>>  1 file changed, 5 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/host/ehci-hub.c b/drivers/usb/host/ehci-hub.c
+>>>> index ce0eaf7..5b13825 100644
+>>>> --- a/drivers/usb/host/ehci-hub.c
+>>>> +++ b/drivers/usb/host/ehci-hub.c
+>>>> @@ -348,6 +348,11 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
+>>>>  
+>>>>  	/* Any IAA cycle that started before the suspend is now invalid */
+>>>>  	end_iaa_cycle(ehci);
+>>>> +
+>>>> +	/* clear interrupt status */
+>>>> +	if (ehci->has_synopsys_hc_bug)
+>>>> +		ehci_writel(ehci, INTR_MASK | STS_FLR, &ehci->regs->status);
+>>>
+>>> This is a very strange place to add your new code -- right in the middle 
+>>> of the IAA and unlink handling.  Why not put it in a more reasonable 
+>>> place?After the IAA is processed, clear the STS_IAA interrupt state flag.
+>>>
+>>> Also, the patch description does not mention has_synopsys_hc_bug.  The 
+>>> meaning of this flag has no connection with the interrupt status 
+>>> register, so why do you use it here?
+>> Because of our USB IP comes from Synopsys, and the uncleared flage is also caused by
+>> special hardware design, in addition, we have not tested other manufacturers' USB
+>> controllers.We don’t know if other manufacturers’ designs have this problem,
+>> so this modification is only limited to this kind of design.
+> 
+> Clearing the STS_IAA flag won't hurt, no matter who manufactured the 
+> controller.  So your patch should look more like this:
+> 
+> +	/* Some Synopsys controllers mistakenly leave IAA turned on */
+> +	ehci_writel(ehci, STS_IAA, &ehci->regs->status);
+> 
+> And these lines should come before the "Any IAA cycle..." comment line.
+> Does that fix the problem?
+I will conduct a round of testing based on this modification
+and provide the test results.
+> 
+> Alan Stern
+> .
+> 
+Thanks.
+Longfang Liu
