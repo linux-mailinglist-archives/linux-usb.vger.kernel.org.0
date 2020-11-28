@@ -2,128 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B94BE2C7354
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 23:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D69E2C7349
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 23:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389729AbgK1VuF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Nov 2020 16:50:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50312 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732557AbgK1TB7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 28 Nov 2020 14:01:59 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0A37921527;
-        Sat, 28 Nov 2020 12:21:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1606566108;
-        bh=Y0VLObZ7sDlZQU5Lu7IdF+WlaG5/Eqs/1V2TqTBE1rQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kyzT9BRp074TPB7Lg53SGB10AYY8MYgf1+NR647LFyvKAOycbRxMMdYd035YapKrz
-         /JN69x1tr0xqkntq/9qAgNvX7SjXIieWpJXgtr0v7kW+TneVJ/xFMMyhGhKqHIsrog
-         NPV0eBpsbR4BOsBJy5RiGnmOAaFPq/sTNR/zYiXw=
-Date:   Sat, 28 Nov 2020 13:22:56 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB/PHY driver fixes for 5.10-rc6
-Message-ID: <X8JBIBWUEgxr1lSY@kroah.com>
+        id S2389674AbgK1VuE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733296AbgK1SRx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Nov 2020 13:17:53 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFDCC0258DE;
+        Sat, 28 Nov 2020 07:49:04 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id s63so6698201pgc.8;
+        Sat, 28 Nov 2020 07:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dkZK75RDOqVvghIzMCSRWV8KKsXjayA5613tB1J4VCY=;
+        b=cecqxIdtNnXvYHZvKvSn+cJXABfzKkTd/GDrzvYRbiHDb1BP6cgaR7272scbX2PZDc
+         s66qMOjTi5VEweErH+bMB1Pj8cjOqt25SzDMIlrVeGTpanXxTB5mJgNvRvPP694wmVss
+         qg7iiVp+pUApFLXHQwv4ryBbj9qKQwxt/B8Z+e/KKQJxs3lXn3gQEn07+vDXsFiGTPRI
+         sRjHUmIRtEsC4mMUdZka+dgHGh7mVTPLsE/NLNEKybr2y6OnxMm7mTlJssmKQdqfRox5
+         oUdKAHsRIFzpD9vvII/060Sr2DeTQWOkGcNTyRCT8+AluWdxESQb3hETpkyh4XtkWtyE
+         HKrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dkZK75RDOqVvghIzMCSRWV8KKsXjayA5613tB1J4VCY=;
+        b=LixzY83ScElPUx+fjFaxjrup9IhUOmaxEe548wMseQA0+zhSbcsM0CzBBokWa2RsOR
+         F9JyflgUFAtIn8z3rjJwd0XQMOpGrxz25VSP+NBdvhp/9M5Iq9av8Y7uFTgK345i675B
+         /9mjqgK+K7tQ8kcA7aeWLhWvSSZtPplLF1AGKftRfCjJhX+YKPs+JsH4qZds+Lsh+5s5
+         X6uambP2skDksGmrQVveKhEGRexFRQ4DrGjkjcFFse7NR/zycdv1TJ4fgSYQKGZrSj19
+         EcWdaQ6zkO6RWhd8bHCwmTC796o5eFIexF2Y8yg95moyP4kgLHNg1ogEVrOpv3EDreIZ
+         VahQ==
+X-Gm-Message-State: AOAM531DlqC2hk5o+ZeY/C1sflW1kjmrVw3V9lSaTosqlC3Q2QSrD7WA
+        YOzBz1m/21SrLgxSH4XGvKQ=
+X-Google-Smtp-Source: ABdhPJxmSOateiAz2GwhjpxS1UWqa0G3kgwj0mii+pRLrVC3xY7iiTOsznBLTadT7na7xjXeVwo86w==
+X-Received: by 2002:a17:90b:19cf:: with SMTP id nm15mr15844023pjb.63.1606578543746;
+        Sat, 28 Nov 2020 07:49:03 -0800 (PST)
+Received: from localhost.localdomain ([161.81.68.216])
+        by smtp.gmail.com with ESMTPSA id r15sm15633028pjp.51.2020.11.28.07.49.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Nov 2020 07:49:03 -0800 (PST)
+From:   Tom Yan <tom.ty89@gmail.com>
+To:     hdegoede@redhat.com, hch@lst.de, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Cc:     mathias.nyman@intel.com, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, baolu.lu@linux.intel.com,
+        Tom Yan <tom.ty89@gmail.com>
+Subject: [PATCH 1/2] uas: revert from scsi_add_host_with_dma() to scsi_add_host()
+Date:   Sat, 28 Nov 2020 23:48:48 +0800
+Message-Id: <20201128154849.3193-1-tom.ty89@gmail.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <09992cec-65e4-2757-aae6-8fb02a42f961@redhat.com>
+References: <09992cec-65e4-2757-aae6-8fb02a42f961@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 09162bc32c880a791c6c0668ce0745cf7958f576:
+Apparently the former (with the chosen dma_dev) may cause problem in certain
+case (e.g. where thunderbolt dock and intel iommu are involved). The error
+observed was:
 
-  Linux 5.10-rc4 (2020-11-15 16:44:31 -0800)
+XHCI swiotlb buffer is full / DMAR: Device bounce map failed
 
-are available in the Git repository at:
+For now we retain the clamp for hw_max_sectors against the dma_max_mapping_size.
+Since the device/size for the clamp that is applied when the scsi request queue
+is initialized/allocated is different than the one used here, we invalidate the
+early clamping by making a fallback blk_queue_max_hw_sectors() call.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.10-rc6
+Signed-off-by: Tom Yan <tom.ty89@gmail.com>
+---
+ drivers/usb/storage/uas.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-for you to fetch changes up to 484cfbe5fb61469a5f5a276258a8b3973164b56f:
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index c8a577309e8f..5db1325cea20 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -843,18 +843,21 @@ static int uas_slave_alloc(struct scsi_device *sdev)
+ static int uas_slave_configure(struct scsi_device *sdev)
+ {
+ 	struct uas_dev_info *devinfo = sdev->hostdata;
+-	struct device *dev = sdev->host->dma_dev;
++	struct usb_device *udev = devinfo->udev;
+ 
+ 	if (devinfo->flags & US_FL_MAX_SECTORS_64)
+ 		blk_queue_max_hw_sectors(sdev->request_queue, 64);
+ 	else if (devinfo->flags & US_FL_MAX_SECTORS_240)
+ 		blk_queue_max_hw_sectors(sdev->request_queue, 240);
+-	else if (devinfo->udev->speed >= USB_SPEED_SUPER)
++	else if (udev->speed >= USB_SPEED_SUPER)
+ 		blk_queue_max_hw_sectors(sdev->request_queue, 2048);
++	else
++		blk_queue_max_hw_sectors(sdev->request_queue,
++					 SCSI_DEFAULT_MAX_SECTORS);
+ 
+ 	blk_queue_max_hw_sectors(sdev->request_queue,
+ 		min_t(size_t, queue_max_hw_sectors(sdev->request_queue),
+-		      dma_max_mapping_size(dev) >> SECTOR_SHIFT));
++		      dma_max_mapping_size(udev->bus->sysdev) >> SECTOR_SHIFT));
+ 
+ 	if (devinfo->flags & US_FL_NO_REPORT_OPCODES)
+ 		sdev->no_report_opcodes = 1;
+@@ -1040,7 +1043,7 @@ static int uas_probe(struct usb_interface *intf, const struct usb_device_id *id)
+ 	shost->can_queue = devinfo->qdepth - 2;
+ 
+ 	usb_set_intfdata(intf, shost);
+-	result = scsi_add_host_with_dma(shost, &intf->dev, udev->bus->sysdev);
++	result = scsi_add_host(shost, &intf->dev);
+ 	if (result)
+ 		goto free_streams;
+ 
+-- 
+2.29.2
 
-  usb: typec: stusb160x: fix power-opmode property with typec-power-opmode (2020-11-27 14:44:26 +0100)
-
-----------------------------------------------------------------
-USB / PHY driver fixes for 5.10-rc6
-
-Here are a few small USB and PHY driver fixes for 5.10-rc6.  They
-include:
-  - small PHY driver fixes to resolve reported issues
-  - USB quirks added for "broken" devices
-  - typec fixes for reported problems
-  - USB gadget fixes for small issues
-
-Full details are in the shortlog, nothing major in here and all have
-been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Al Cooper (1):
-      phy: usb: Fix incorrect clearing of tca_drv_sel bit in SETUP reg for 7211
-
-Alan Stern (2):
-      USB: core: Fix regression in Hercules audio card
-      USB: core: Change %pK for __user pointers to %px
-
-Amelie Delaunay (1):
-      usb: typec: stusb160x: fix power-opmode property with typec-power-opmode
-
-Bryan O'Donoghue (2):
-      phy: qualcomm: usb: Fix SuperSpeed PHY OF dependency
-      phy: qualcomm: Fix 28 nm Hi-Speed USB PHY OF dependency
-
-Colin Ian King (1):
-      phy: mediatek: fix spelling mistake in Kconfig "veriosn" -> "version"
-
-Geert Uytterhoeven (1):
-      phy: intel: PHY_INTEL_KEEMBAY_EMMC should depend on ARCH_KEEMBAY
-
-Greg Kroah-Hartman (2):
-      Merge tag 'usb-fixes-v5.10-rc5' of git://git.kernel.org/.../peter.chen/usb into usb-linus
-      Merge tag 'phy-fixes-5.10' of git://git.kernel.org/.../phy/linux-phy into usb-linus
-
-Marc Zyngier (1):
-      phy: tegra: xusb: Fix dangling pointer on probe failure
-
-Peter Chen (2):
-      usb: cdns3: gadget: initialize link_trb as NULL
-      usb: cdns3: gadget: calculate TD_SIZE based on TD
-
-Randy Dunlap (1):
-      usb: typec: qcom-pmic-typec: fix builtin build errors
-
-Stephen Boyd (1):
-      phy: qcom-qmp: Initialize another pointer to NULL
-
-Zhang Qilong (2):
-      usb: gadget: f_midi: Fix memleak in f_midi_alloc
-      usb: gadget: Fix memleak in gadgetfs_fill_super
-
-Zou Wei (1):
-      phy: cpcap-usb: Use IRQF_ONESHOT
-
-penghao (1):
-      USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND quirk for Lenovo A630Z TIO built-in usb-audio card
-
- drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c |  5 -----
- drivers/phy/intel/Kconfig                         |  2 +-
- drivers/phy/mediatek/Kconfig                      |  2 +-
- drivers/phy/motorola/phy-cpcap-usb.c              |  3 ++-
- drivers/phy/qualcomm/Kconfig                      |  4 ++--
- drivers/phy/qualcomm/phy-qcom-qmp.c               |  2 +-
- drivers/phy/tegra/xusb.c                          |  1 +
- drivers/usb/cdns3/gadget.c                        | 26 ++++++++++++-----------
- drivers/usb/core/devio.c                          | 14 ++++++------
- drivers/usb/core/quirks.c                         | 10 +++++++++
- drivers/usb/gadget/function/f_midi.c              | 10 ++++++---
- drivers/usb/gadget/legacy/inode.c                 |  3 +++
- drivers/usb/typec/Kconfig                         |  1 +
- drivers/usb/typec/stusb160x.c                     |  2 +-
- 14 files changed, 51 insertions(+), 34 deletions(-)
