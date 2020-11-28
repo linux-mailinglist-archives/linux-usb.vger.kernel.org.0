@@ -2,51 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE722C7344
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 23:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE212C71BE
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 23:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387555AbgK1VuE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Nov 2020 16:50:04 -0500
-Received: from verein.lst.de ([213.95.11.211]:40023 "EHLO verein.lst.de"
+        id S2391122AbgK1WAv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Nov 2020 17:00:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38368 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729983AbgK1Sdm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 28 Nov 2020 13:33:42 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 9163A68AFE; Sat, 28 Nov 2020 18:15:01 +0100 (CET)
-Date:   Sat, 28 Nov 2020 18:15:00 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Tom Yan <tom.ty89@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: 5.10 regression caused by: "uas: fix sdev->host->dma_dev":
- many XHCI swiotlb buffer is full / DMAR: Device bounce map failed
- errors on thunderbolt connected XHCI controller
-Message-ID: <20201128171500.GA3550@lst.de>
-References: <b046dd04-ac4f-3c69-0602-af810fb1b365@redhat.com> <be031d15-201f-0e5c-8b0f-be030077141f@redhat.com> <20201124102715.GA16983@lst.de> <fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com> <8a52e868-0ca1-55b7-5ad2-ddb0cbb5e45d@redhat.com> <20201127161900.GA10986@lst.de> <fded04e2-f2e9-de92-ab1f-5aa088904e90@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fded04e2-f2e9-de92-ab1f-5aa088904e90@redhat.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+        id S2390678AbgK1WAs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 28 Nov 2020 17:00:48 -0500
+Subject: Re: [GIT PULL] USB/PHY driver fixes for 5.10-rc6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606600808;
+        bh=4KSUhNjYMI1XH44Nc03wVJ8QmcR1pmMhqmSOesQ/xZU=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=hf5IehI/nfOGY3YC35VIi1Q1Crv8ss40XAWt0uwOXZgZDF3vt/GMKBou6JWSAzn4q
+         ab0ume6Eqj1EIWYhCOzAupNvdcbM7h0MN8R90c3rhR0U9I14hQnVrSu0jTYpWqyg4b
+         QMPvKssVWw5XjmnJsl+pjnJ1ODrUBloOnPkQtLSE=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <X8JBIBWUEgxr1lSY@kroah.com>
+References: <X8JBIBWUEgxr1lSY@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <X8JBIBWUEgxr1lSY@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.10-rc6
+X-PR-Tracked-Commit-Id: 484cfbe5fb61469a5f5a276258a8b3973164b56f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 67f34fa8893e6dfb0e8104c28ee6c5ce23a9e238
+Message-Id: <160660080815.28096.1107155279173363250.pr-tracker-bot@kernel.org>
+Date:   Sat, 28 Nov 2020 22:00:08 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Can you give this one-liner a spin?
+The pull request you sent on Sat, 28 Nov 2020 13:22:56 +0100:
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index c6622011d4938c..e889111b55c71d 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -4007,6 +4007,7 @@ static const struct dma_map_ops bounce_dma_ops = {
- 	.alloc_pages		= dma_common_alloc_pages,
- 	.free_pages		= dma_common_free_pages,
- 	.dma_supported		= dma_direct_supported,
-+	.max_mapping_size	= swiotlb_max_mapping_size,
- };
- 
- static inline int iommu_domain_cache_init(void)
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.10-rc6
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/67f34fa8893e6dfb0e8104c28ee6c5ce23a9e238
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
