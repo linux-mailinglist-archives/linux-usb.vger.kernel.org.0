@@ -2,156 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A228E2C7356
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 23:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B94BE2C7354
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Nov 2020 23:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389722AbgK1VuF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S2389729AbgK1VuF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Sat, 28 Nov 2020 16:50:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:39406 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731020AbgK1Sqt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Nov 2020 13:46:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606589122;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mOG1PEw7cXjSDVLm0frOBHIziQMwzgcOSI2ySbmS6LQ=;
-        b=anufJHNTFRlP6tnsjo6qdfxVwQeSx5NVabADL5SJHUZZ8t2jED1aE96dyjgGwsZF2bBWsk
-        yn2BndnSgKISwBTCyMvn8Gz8a676KL9D0+Zjxf87/O4qcSBoqA12OWrSdFr8+rDjZE0q5Y
-        Z/welwAMVxZebLMsfKTqp3fpd5g3MYM=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-115-W_YZQgQ7NnKZRLdhR6p62Q-1; Sat, 28 Nov 2020 05:43:24 -0500
-X-MC-Unique: W_YZQgQ7NnKZRLdhR6p62Q-1
-Received: by mail-ej1-f69.google.com with SMTP id yc22so3092374ejb.20
-        for <linux-usb@vger.kernel.org>; Sat, 28 Nov 2020 02:43:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mOG1PEw7cXjSDVLm0frOBHIziQMwzgcOSI2ySbmS6LQ=;
-        b=qf305dzTTP18A9kPU056APhD8Xi+ua5+fdfkUMpUWWAaD7JPSJZyOAEhnl1mhETGwT
-         fHiG4PBkQSJAGVyYreiSCN1elfv89eTLpyRImOSBvYyANVXSdQFQ/z0nKqbSZxrHHZhO
-         H8d1kxgb6jceQAO0UxSLBSi5YoeFt2Ay16ULrHN9JN6l4ii3XmwQlJx1lKfQEimwgKZL
-         Nx1wlks4rGGapyq/JWTdwCx/BcQsl5AVQhXVvyTI40H2hdiZYbtUo7zkHxy3kaaFJUHT
-         OofKLRtJ/AKvY33V8YUcpqIR3xIOjgpF+D2ZKmIu+PzbedCAusE2nPLwZBpyIHuomOsw
-         wUSA==
-X-Gm-Message-State: AOAM530ChXDB8tiDuRELRJiYI2Qs+I3jNV0Ej3lAtGjL7W63IkkVAzBT
-        SY0qzgkxwr5wX7De5eKjfgTSWX1JY1ZugaeeFc2Vx+W8+F71NTgcu7fS1YXXuD8aNzee6Scq0kK
-        0n6ecm4jvZZ+X9Icj9SkS
-X-Received: by 2002:a05:6402:1714:: with SMTP id y20mr12701514edu.306.1606560203154;
-        Sat, 28 Nov 2020 02:43:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz+U5XpbHLZUjMy5NtlxgvOGgJl2y1xXiCB0jHm13k7iQXRLvVbwaS3AVMB7MU3TDS324BvUQ==
-X-Received: by 2002:a05:6402:1714:: with SMTP id y20mr12701494edu.306.1606560202843;
-        Sat, 28 Nov 2020 02:43:22 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id t11sm5992608ejx.68.2020.11.28.02.43.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 Nov 2020 02:43:22 -0800 (PST)
-Subject: Re: 5.10 regression caused by: "uas: fix sdev->host->dma_dev": many
- XHCI swiotlb buffer is full / DMAR: Device bounce map failed errors on
- thunderbolt connected XHCI controller
-To:     Tom Yan <tom.ty89@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-References: <b046dd04-ac4f-3c69-0602-af810fb1b365@redhat.com>
- <be031d15-201f-0e5c-8b0f-be030077141f@redhat.com>
- <20201124102715.GA16983@lst.de>
- <fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com>
- <8a52e868-0ca1-55b7-5ad2-ddb0cbb5e45d@redhat.com>
- <20201127161900.GA10986@lst.de>
- <fded04e2-f2e9-de92-ab1f-5aa088904e90@redhat.com>
- <CAGnHSEmyrw=r56ocLCkia+sYT0tmcCScZitBi=G+DY=gRBy+sg@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <09992cec-65e4-2757-aae6-8fb02a42f961@redhat.com>
-Date:   Sat, 28 Nov 2020 11:43:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+Received: from mail.kernel.org ([198.145.29.99]:50312 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732557AbgK1TB7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 28 Nov 2020 14:01:59 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0A37921527;
+        Sat, 28 Nov 2020 12:21:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1606566108;
+        bh=Y0VLObZ7sDlZQU5Lu7IdF+WlaG5/Eqs/1V2TqTBE1rQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kyzT9BRp074TPB7Lg53SGB10AYY8MYgf1+NR647LFyvKAOycbRxMMdYd035YapKrz
+         /JN69x1tr0xqkntq/9qAgNvX7SjXIieWpJXgtr0v7kW+TneVJ/xFMMyhGhKqHIsrog
+         NPV0eBpsbR4BOsBJy5RiGnmOAaFPq/sTNR/zYiXw=
+Date:   Sat, 28 Nov 2020 13:22:56 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB/PHY driver fixes for 5.10-rc6
+Message-ID: <X8JBIBWUEgxr1lSY@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <CAGnHSEmyrw=r56ocLCkia+sYT0tmcCScZitBi=G+DY=gRBy+sg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Tom,
+The following changes since commit 09162bc32c880a791c6c0668ce0745cf7958f576:
 
-On 11/28/20 2:25 AM, Tom Yan wrote:
-> Should we still be clamping max_sectors to dma_max_mapping_size(dev)
-> (for now)? with dev being us->pusb_dev->bus->sysdev and
-> devinfo->udev->bus->sysdev respectively (i.e. revert only
-> scsi_add_host_with_dma() to scsi_add_host())?
+  Linux 5.10-rc4 (2020-11-15 16:44:31 -0800)
 
-I would expect that to work / avoid the regression, so yes that is
-a good option.
+are available in the Git repository at:
 
-If you can provide me with a patch doing that, then I can test it to
-make sure it does indeed fix the regression.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.10-rc6
 
-Regards,
+for you to fetch changes up to 484cfbe5fb61469a5f5a276258a8b3973164b56f:
 
-Hans
+  usb: typec: stusb160x: fix power-opmode property with typec-power-opmode (2020-11-27 14:44:26 +0100)
 
+----------------------------------------------------------------
+USB / PHY driver fixes for 5.10-rc6
 
-> 
-> On Sat, 28 Nov 2020 at 02:12, Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Hi,
->>
->> On 11/27/20 5:19 PM, Christoph Hellwig wrote:
->>> On Fri, Nov 27, 2020 at 01:32:16PM +0100, Hans de Goede wrote:
->>>> I ran some more tests, I can confirm that reverting:
->>>>
->>>> 5df7ef7d32fe "uas: bump hw_max_sectors to 2048 blocks for SS or faster drives"
->>>> 558033c2828f "uas: fix sdev->host->dma_dev"
->>>>
->>>> Makes the problem go away while running a 5.10 kernel. I also tried doubling
->>>> the swiotlb size by adding: swiotlb=65536 to the kernel commandline but that
->>>> does not help.
->>>>
->>>> Some more observations:
->>>>
->>>> 1. The usb-storage driver does not cause this issue, even though it has a
->>>> very similar change.
->>>>
->>>> 2. The problem does not happen until I plug an UAS decvice into the dock.
->>>>
->>>> 3. The problem continues to happen even after I unplug the UAS device and
->>>> rmmod the uas module
->>>>
->>>> 3. made me take a bit closer look to the troublesome commit, it passes:
->>>> udev->bus->sysdev, which I assume is the XHCI controller itself as device
->>>> to scsi_add_host_with_dma, which in turn seems to cause permanent changes
->>>> to the dma settings for the XHCI controller. I'm not all that familiar with
->>>> the DMA APIs but I'm getting the feeling that passing the actual XHCI-controller's
->>>> device as dma-device to scsi_add_host_with_dma is simply the wrong thing to
->>>> do; and that the intended effects (honor XHCI dma limits, but do not cause
->>>> any changes the XHCI dma settings) should be achieved differently.
->>>>
->>>> Note that if this is indeed wrong, the matching usb-storage change should
->>>> likely also be dropped.
->>>
->>> One problem in this area is that the clamping of the DMA size through
->>> dma_max_mapping_size mentioned in the commit log doesn't work when
->>> swiotlb is called from intel-iommu. I think we need to wire up those
->>> calls there as well.
->>
->> Ok, but that does not sound like a quick last minute fix for 5.10, so maybe
->> for 5.10 we should just revert the uas and usb-storage changes which trigger
->> this problem and then retry those for 5.11 ?
->>
->> Regards,
->>
->> Hans
->>
-> 
+Here are a few small USB and PHY driver fixes for 5.10-rc6.  They
+include:
+  - small PHY driver fixes to resolve reported issues
+  - USB quirks added for "broken" devices
+  - typec fixes for reported problems
+  - USB gadget fixes for small issues
 
+Full details are in the shortlog, nothing major in here and all have
+been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Al Cooper (1):
+      phy: usb: Fix incorrect clearing of tca_drv_sel bit in SETUP reg for 7211
+
+Alan Stern (2):
+      USB: core: Fix regression in Hercules audio card
+      USB: core: Change %pK for __user pointers to %px
+
+Amelie Delaunay (1):
+      usb: typec: stusb160x: fix power-opmode property with typec-power-opmode
+
+Bryan O'Donoghue (2):
+      phy: qualcomm: usb: Fix SuperSpeed PHY OF dependency
+      phy: qualcomm: Fix 28 nm Hi-Speed USB PHY OF dependency
+
+Colin Ian King (1):
+      phy: mediatek: fix spelling mistake in Kconfig "veriosn" -> "version"
+
+Geert Uytterhoeven (1):
+      phy: intel: PHY_INTEL_KEEMBAY_EMMC should depend on ARCH_KEEMBAY
+
+Greg Kroah-Hartman (2):
+      Merge tag 'usb-fixes-v5.10-rc5' of git://git.kernel.org/.../peter.chen/usb into usb-linus
+      Merge tag 'phy-fixes-5.10' of git://git.kernel.org/.../phy/linux-phy into usb-linus
+
+Marc Zyngier (1):
+      phy: tegra: xusb: Fix dangling pointer on probe failure
+
+Peter Chen (2):
+      usb: cdns3: gadget: initialize link_trb as NULL
+      usb: cdns3: gadget: calculate TD_SIZE based on TD
+
+Randy Dunlap (1):
+      usb: typec: qcom-pmic-typec: fix builtin build errors
+
+Stephen Boyd (1):
+      phy: qcom-qmp: Initialize another pointer to NULL
+
+Zhang Qilong (2):
+      usb: gadget: f_midi: Fix memleak in f_midi_alloc
+      usb: gadget: Fix memleak in gadgetfs_fill_super
+
+Zou Wei (1):
+      phy: cpcap-usb: Use IRQF_ONESHOT
+
+penghao (1):
+      USB: quirks: Add USB_QUIRK_DISCONNECT_SUSPEND quirk for Lenovo A630Z TIO built-in usb-audio card
+
+ drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c |  5 -----
+ drivers/phy/intel/Kconfig                         |  2 +-
+ drivers/phy/mediatek/Kconfig                      |  2 +-
+ drivers/phy/motorola/phy-cpcap-usb.c              |  3 ++-
+ drivers/phy/qualcomm/Kconfig                      |  4 ++--
+ drivers/phy/qualcomm/phy-qcom-qmp.c               |  2 +-
+ drivers/phy/tegra/xusb.c                          |  1 +
+ drivers/usb/cdns3/gadget.c                        | 26 ++++++++++++-----------
+ drivers/usb/core/devio.c                          | 14 ++++++------
+ drivers/usb/core/quirks.c                         | 10 +++++++++
+ drivers/usb/gadget/function/f_midi.c              | 10 ++++++---
+ drivers/usb/gadget/legacy/inode.c                 |  3 +++
+ drivers/usb/typec/Kconfig                         |  1 +
+ drivers/usb/typec/stusb160x.c                     |  2 +-
+ 14 files changed, 51 insertions(+), 34 deletions(-)
