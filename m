@@ -2,85 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C00D2C7A08
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Nov 2020 17:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB63B2C7A49
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Nov 2020 18:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727706AbgK2QjQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Nov 2020 11:39:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S1728106AbgK2ReL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Nov 2020 12:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbgK2QjO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Nov 2020 11:39:14 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28617C0613CF;
-        Sun, 29 Nov 2020 08:38:34 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id 131so8746558pfb.9;
-        Sun, 29 Nov 2020 08:38:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=zHdDK+dmWn8gCx5N2jMxoQKX0RRPwzh45mj3hu0wPTI=;
-        b=k8LJ3ofxbaEDXqtJqsn+MQmQ1WyUzQ8KBZqjnmOy4m8kugY0plvzl1PFPOHA8gtjdc
-         Mo4EscHW48LGZHZhZSkKo4w3A2rCL5lf7/ZJgGrr/WcenDfctf+sguY1z+Xa0AJAT/HD
-         CLtJfy8tG/b6sgbs3eYDxb/djbojTSoPG8gWGYYBcdfpSAsffG78LMIjKInE3lUtW1jJ
-         GyChVnDgh+Jwfc2KVa19u9spWVo9yldmaynpbcCXPSIP9OZTgpdFhqDBNYbDzGTydOEE
-         hlnxXhd4m38KFkClAgQMxIyf/ax52MZbIBkVTpXSF4GeRBB+EJZzuqTpFlraNaMpD/Q6
-         vGCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=zHdDK+dmWn8gCx5N2jMxoQKX0RRPwzh45mj3hu0wPTI=;
-        b=nUdrhAcxJXJxfMcoGwFvMEpbJu559rITKj+dXajjwveLCaysx7yNxUtnMrNuGxVPJY
-         hkjUw1leIfUjtPnAD4fj2FyFS+fOo9qV5PQ3jrpPtWpS74miKYGcimGoCLyC0f3PTRcc
-         Mi5n++uhzSYHnc1IRPQX5VxihK5A1fiyjYyDWJDc/ze9gq12XFY35eOzuxgNQkJIQ3nA
-         0LWJeO86UAo3fOBSlIhPV10OVbFkAK0E6ieILxjE5R4H4hUqFc6gin0vhidO+KPhCX8a
-         Tih45uWrhPjW/JxKCNyGP2IHRqONhaTg+ig9172rpAI3R7/pRbM3CraPVcYD0z9dRcFh
-         HyGA==
-X-Gm-Message-State: AOAM531zJW3KfEiBjnyt1VDw5WHKuR8/pUkbykBefAWBrmG0e3CCVgod
-        mm5UwC816TtQb1AzbACeKq8vGug922kF3fLuW5E=
-X-Google-Smtp-Source: ABdhPJyxIprkMw3TNMRFj6zBOvRavLjgksCcdNrTLnwuq9D3qq7Lzl6dAYIAxzhOt4a+LXZFJ3NMvg==
-X-Received: by 2002:a17:90a:f288:: with SMTP id fs8mr18371210pjb.184.1606667912972;
-        Sun, 29 Nov 2020 08:38:32 -0800 (PST)
-Received: from [192.168.0.104] ([49.207.196.188])
-        by smtp.gmail.com with ESMTPSA id e8sm13876144pfj.157.2020.11.29.08.38.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Nov 2020 08:38:32 -0800 (PST)
-Subject: Re: [PATCH 03/15] usb: misc: cytherm: update to use
- usb_control_msg_recv()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201129160612.1908074-1-anant.thazhemadam@gmail.com>
- <20201129160612.1908074-4-anant.thazhemadam@gmail.com>
- <X8PJQzUZymkClmbE@kroah.com>
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Message-ID: <eee3cc73-d346-8f04-b4ff-72561703bd05@gmail.com>
-Date:   Sun, 29 Nov 2020 22:08:29 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        with ESMTP id S1725830AbgK2ReK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Nov 2020 12:34:10 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A166BC0617A7
+        for <linux-usb@vger.kernel.org>; Sun, 29 Nov 2020 09:33:30 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kjQYS-0006zE-4U; Sun, 29 Nov 2020 18:32:08 +0100
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kjQYH-0003Mg-0E; Sun, 29 Nov 2020 18:31:57 +0100
+Date:   Sun, 29 Nov 2020 18:31:53 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Takashi Iwai <tiwai@suse.de>, Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Geoff Levand <geoff@infradead.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        Jim Paris <jim@jtan.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org, alsa-devel@alsa-project.org,
+        linux-block@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH 2/2] powerpc/ps3: make system bus's remove and shutdown
+ callbacks return void
+Message-ID: <20201129173153.jbt3epcxnasbemir@pengutronix.de>
+References: <20201126165950.2554997-1-u.kleine-koenig@pengutronix.de>
+ <20201126165950.2554997-2-u.kleine-koenig@pengutronix.de>
+ <s5hv9dphnoh.wl-tiwai@suse.de>
 MIME-Version: 1.0
-In-Reply-To: <X8PJQzUZymkClmbE@kroah.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="q5fwi2prasbljs5f"
+Content-Disposition: inline
+In-Reply-To: <s5hv9dphnoh.wl-tiwai@suse.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-On 29/11/20 9:46 pm, Greg Kroah-Hartman wrote:
-> There's no more need to dynamically allocate the buffer variable here
-> now, right?  It can be on the stack as the change you made above allows
-> that to work properly, no need to allocate the buffer twice in a row
-> (once here and once in the USB core).
->
-> That would make these functions less complex, always a good thing.
->
-> You should check this on the other patches in this series as well.
+--q5fwi2prasbljs5f
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Understood, I will do that. I apologize for the oversight.
+Hello Michael,
 
-Thanks,
-Anant
+On Sat, Nov 28, 2020 at 09:48:30AM +0100, Takashi Iwai wrote:
+> On Thu, 26 Nov 2020 17:59:50 +0100,
+> Uwe Kleine-K=F6nig wrote:
+> >=20
+> > The driver core ignores the return value of struct device_driver::remove
+> > because there is only little that can be done. For the shutdown callback
+> > it's ps3_system_bus_shutdown() which ignores the return value.
+> >=20
+> > To simplify the quest to make struct device_driver::remove return void,
+> > let struct ps3_system_bus_driver::remove return void, too. All users
+> > already unconditionally return 0, this commit makes it obvious that
+> > returning an error code is a bad idea and ensures future users behave
+> > accordingly.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> For the sound bit:
+> Acked-by: Takashi Iwai <tiwai@suse.de>
+
+assuming that you are the one who will apply this patch: Note that it
+depends on patch 1 that Takashi already applied to his tree. So you
+either have to wait untils patch 1 appears in some tree that you merge
+before applying, or you have to take patch 1, too. (With Takashi
+optinally dropping it then.)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--q5fwi2prasbljs5f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl/D2wYACgkQwfwUeK3K
+7AmmxQf+IiMtqhw/kONuYhwVAdprYhlgZyY9iZSe5xHA/6/1zNmBbfhPRm6PfStb
+RRMTewx97J4joVbCv7OhlZBsoA7lnpUKJD05Qt7eXIEMdnuscbTx8YZr/z94s9/Y
+/ElFT8e2Wx6crnEbjWeFcYVTLkGgf1pnUhpFmTq4LwQqqV5lQWUu6JMnS8THMhay
+RCwTJR+P84Nw4wv39uvWN4LFmuDeM5hjnPjoEFBbnAeUtQr62AAh7itX8pTNEyZp
+t6M09QdoxpJWDPe/vRxYZSZdsuE+vXsCuMWH5Kyo0hodOX9m6JpOhsPm/YiaCK5B
+IW1LSeEeHe9uPQSACw7mkNft9x6Zfg==
+=TO3P
+-----END PGP SIGNATURE-----
+
+--q5fwi2prasbljs5f--
