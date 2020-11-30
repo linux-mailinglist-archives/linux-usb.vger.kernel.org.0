@@ -2,119 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F2C2C7FFB
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 09:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0859E2C803C
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 09:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727359AbgK3IdX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 03:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727094AbgK3IdX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 03:33:23 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A191C0613CF
-        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 00:32:42 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id i17so16476148ljd.3
-        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 00:32:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yC6xJG3NVKTMtVPRPIG6905xDFoqZHa6VwMcDAxGvFM=;
-        b=kpTN4dWUDDMXO1PoFnvMZYwOImLNaFb+VXW1UanB/dVL4U3BxwU5HJfnLcOFy2MwTF
-         MhTGZQSKiBNwrfNzSaOO0oyciTkwHXjAeZhSUyv3OJd3HSnleUZYIH2NBEvRkH7QA0l3
-         wAh1vNP0pv7igWhFOXz6M3IcjItdPwBs5zvfxQE9HlX/vnWo6HknBxpbvfm6rsd4t5x+
-         60qP9BHucy7rmPkhII3esrCs2heaRnzyXgpC8phHKvmDpiqAXROevVMlr2CbkVkXUQ2X
-         NF0z902fCdyUotqZoNVUfLvmwUxErMB4GjFAV4u+807EXWyiIESDd1iIoPdruMRvycDw
-         NCVw==
+        id S1726746AbgK3Ipa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 03:45:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57531 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726137AbgK3Ipa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 03:45:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606725843;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ey1C0d9PZ+jC1SeRokoRwtQYfI7PDl+5m30mISh+nx8=;
+        b=N5ElSh6l3ue4g9AV/+pJ2f21bcxjeWXkMvMb7HleWN/CpBVHo+iO+LzcruagBRkIpQuMH/
+        aI3H4YwulFfYiNdCGcZ/f30lNfHyRQNm85SKWUh35z0UPXWplGWwwJVLQHsGR3n9BY9qKE
+        DAEBuuSF4QbOsuVb//CSfxtCGqZtBoY=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-279-gdcyDVUFOaqwf1cZ7Jnvpw-1; Mon, 30 Nov 2020 03:44:01 -0500
+X-MC-Unique: gdcyDVUFOaqwf1cZ7Jnvpw-1
+Received: by mail-ed1-f69.google.com with SMTP id s7so6394038eds.17
+        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 00:44:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=yC6xJG3NVKTMtVPRPIG6905xDFoqZHa6VwMcDAxGvFM=;
-        b=iMvrEjoTuVbp/LEeazCyESSBDROBsi5/64J7zQDAOt+2kKigkMVzuYfJ9f9a2gOv4p
-         7gOZXrFrrnNCNc1pBWgth+oT7nwhfcQ6aul9Z5uObTucb4ShwhVQJ+Hw2pKGhc63BcDw
-         wSVgr73MuGrOu82ZjlSMdzVZA3/LFSHk097cFTc6tfpmNFafDEU+9USst9ANI8bIr4al
-         Z38CcrVUm5NEQ7zhU9kLZqL/BKSQAL5yFR5Th5gHIiyjGq3K41PNA+z2I1FJe918NcPS
-         QiDCo+xCnueire4ZPowtIttoSGlzud4+n4BB2Y7CpyPsoxcy2COPE8AlkoauVSsyjXpZ
-         fJMA==
-X-Gm-Message-State: AOAM530zIDFkcw8uF6GO6V6loRACc167PDIxZslzDKomIwHvaCV/6o6b
-        RuTsDmWBWuk4LK5XJLDJGuEXtZerjaj2jolX
-X-Google-Smtp-Source: ABdhPJzNtKL1HcPJOrLH74epfJg89R/Ahcc3SQHgfaY44u+e9ku3/dHs9rS3gWRsrlaxW06PVEN+4Q==
-X-Received: by 2002:a05:651c:48f:: with SMTP id s15mr8942119ljc.412.1606725160816;
-        Mon, 30 Nov 2020 00:32:40 -0800 (PST)
-Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
-        by smtp.gmail.com with ESMTPSA id 7sm2742700ljq.34.2020.11.30.00.32.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 00:32:40 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>
-Subject: [PATCH] usb: ohci-omap: Fix descriptor conversion
-Date:   Mon, 30 Nov 2020 09:30:33 +0100
-Message-Id: <20201130083033.29435-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.26.2
+        bh=ey1C0d9PZ+jC1SeRokoRwtQYfI7PDl+5m30mISh+nx8=;
+        b=RJuKDT9zPcCLzLioTo+5omc1onN6AlGlF9rC8cQBASxHk83bEiLt1++fUXHZMpX+LS
+         MSh4fJabGuTwakqAr+b75YXSb5sdAgKKob67jpmS/VgyXSlnS2XBPFDxUEFuvkeIidWz
+         GwVIug5koBY+bqA1vUrBCTiTs1S5OVCCkxazdmt1wcGjJ14dLSuO9Cem4zS7AFa4t9Jo
+         8FQj4YWwg3nkSBr2cekmHxDUBjT+cBUEOGLIizKsYyfzKLoRoUH56KcpSmeGiL48BI+3
+         d2itx4x05TB8m9vhs1DfBFmAyw7LNYVxFiJG7yI6MR6f1zmSBZv6gTcxSAp+QKKxiR1R
+         JTzg==
+X-Gm-Message-State: AOAM530F0U5s/gJT5FiTcYwGLR5BPIHg+XJux8UPH90vvbvQLsRWO5Ra
+        YouRtBjVnFQDO+3COn/3sSEtWxZjwkQvGnEhDpdvRjHIrojNfggGuqIpLyGIuW61yF1unZtDa+u
+        7w3n7R0oj/jWn/Xz/ezi3
+X-Received: by 2002:a17:906:aac1:: with SMTP id kt1mr567771ejb.329.1606725840171;
+        Mon, 30 Nov 2020 00:44:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxs3ln5Efn41CjmIOtYUTR38V2LHcxx3XUgPY7qefkj2/Jh8zpB5MhDtTGr1Nse7RBqGNLFPA==
+X-Received: by 2002:a17:906:aac1:: with SMTP id kt1mr567760ejb.329.1606725840030;
+        Mon, 30 Nov 2020 00:44:00 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id d10sm7897462ejc.39.2020.11.30.00.43.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Nov 2020 00:43:59 -0800 (PST)
+Subject: Re: 5.10 regression caused by: "uas: fix sdev->host->dma_dev": many
+ XHCI swiotlb buffer is full / DMAR: Device bounce map failed errors on
+ thunderbolt connected XHCI controller
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Tom Yan <tom.ty89@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
+References: <b046dd04-ac4f-3c69-0602-af810fb1b365@redhat.com>
+ <be031d15-201f-0e5c-8b0f-be030077141f@redhat.com>
+ <20201124102715.GA16983@lst.de>
+ <fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com>
+ <8a52e868-0ca1-55b7-5ad2-ddb0cbb5e45d@redhat.com>
+ <20201127161900.GA10986@lst.de>
+ <fded04e2-f2e9-de92-ab1f-5aa088904e90@redhat.com>
+ <20201128171500.GA3550@lst.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <a84974a8-514b-690b-480b-c82c0617fec0@redhat.com>
+Date:   Mon, 30 Nov 2020 09:43:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201128171500.GA3550@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There were a bunch of issues with the patch converting the
-OMAP1 OSK board to use descriptors for controlling the USB
-host:
+Hi,
 
-- The chip label was incorrect
-- The GPIO offset was off-by-one
-- The code should use sleeping accessors
+On 11/28/20 6:15 PM, Christoph Hellwig wrote:
+> Can you give this one-liner a spin?
+> 
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index c6622011d4938c..e889111b55c71d 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4007,6 +4007,7 @@ static const struct dma_map_ops bounce_dma_ops = {
+>  	.alloc_pages		= dma_common_alloc_pages,
+>  	.free_pages		= dma_common_free_pages,
+>  	.dma_supported		= dma_direct_supported,
+> +	.max_mapping_size	= swiotlb_max_mapping_size,
+>  };
+>  
+>  static inline int iommu_domain_cache_init(void)
+> 
 
-This patch tries to fix all issues at the same time.
+I'm afraid that this does not help.
 
-Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
-Reported-by: Aaro Koskinen <aaro.koskinen@iki.fi>
-Fixes: 15d157e87443 ("usb: ohci-omap: Convert to use GPIO descriptors")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/arm/mach-omap1/board-osk.c | 2 +-
- drivers/usb/host/ohci-omap.c    | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Also I still find it somewhat wrong that the use of scsi_add_host_with_dma()
+in uas.c, which then passed the XHCI controller as dma-dev is causing changes
+to the DMA settings of the XHCI controller, impacting *other* USB devices
+and these changes also are permanent, they stay around even after unbinding
+the uas driver.
 
-diff --git a/arch/arm/mach-omap1/board-osk.c b/arch/arm/mach-omap1/board-osk.c
-index 144b9caa935c..a720259099ed 100644
---- a/arch/arm/mach-omap1/board-osk.c
-+++ b/arch/arm/mach-omap1/board-osk.c
-@@ -288,7 +288,7 @@ static struct gpiod_lookup_table osk_usb_gpio_table = {
- 	.dev_id = "ohci",
- 	.table = {
- 		/* Power GPIO on the I2C-attached TPS65010 */
--		GPIO_LOOKUP("i2c-tps65010", 1, "power", GPIO_ACTIVE_HIGH),
-+		GPIO_LOOKUP("tps65010", 0, "power", GPIO_ACTIVE_HIGH),
- 		GPIO_LOOKUP(OMAP_GPIO_LABEL, 9, "overcurrent",
- 			    GPIO_ACTIVE_HIGH),
- 	},
-diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
-index 9ccdf2c216b5..6374501ba139 100644
---- a/drivers/usb/host/ohci-omap.c
-+++ b/drivers/usb/host/ohci-omap.c
-@@ -91,14 +91,14 @@ static int omap_ohci_transceiver_power(struct ohci_omap_priv *priv, int on)
- 				| ((1 << 5/*usb1*/) | (1 << 3/*usb2*/)),
- 			       INNOVATOR_FPGA_CAM_USB_CONTROL);
- 		else if (priv->power)
--			gpiod_set_value(priv->power, 0);
-+			gpiod_set_value_cansleep(priv->power, 0);
- 	} else {
- 		if (machine_is_omap_innovator() && cpu_is_omap1510())
- 			__raw_writeb(__raw_readb(INNOVATOR_FPGA_CAM_USB_CONTROL)
- 				& ~((1 << 5/*usb1*/) | (1 << 3/*usb2*/)),
- 			       INNOVATOR_FPGA_CAM_USB_CONTROL);
- 		else if (priv->power)
--			gpiod_set_value(priv->power, 1);
-+			gpiod_set_value_cansleep(priv->power, 1);
- 	}
- 
- 	return 0;
--- 
-2.26.2
+This just feels wrong on many levels. If some changes to the XHCI controllers
+DMA settings are necessary for better uas performance then these changes
+really should be made inside the XHCI driver, so that they always apply and
+not have this weirdness going on where binding one USB driver permanently
+changes the behavior of the entire USB bus (until rebooted).
+
+Querying the DMA settings of the XHCI controller in the uas driver is fine,
+but changing them seems like a big nono to me.
+
+Regards,
+
+Hans
 
