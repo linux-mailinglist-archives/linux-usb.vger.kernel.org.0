@@ -2,86 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 894752C8CEA
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 19:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EEF2C8D84
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 19:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729741AbgK3SfZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 13:35:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
+        id S2387619AbgK3S6f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 13:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729735AbgK3SfY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 13:35:24 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7756BC0613D3;
-        Mon, 30 Nov 2020 10:34:38 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id l23so114745pjg.1;
-        Mon, 30 Nov 2020 10:34:38 -0800 (PST)
+        with ESMTP id S1725870AbgK3S6f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 13:58:35 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF174C0613CF;
+        Mon, 30 Nov 2020 10:57:54 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id a16so23851631ejj.5;
+        Mon, 30 Nov 2020 10:57:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=j2KSOF6GgSjfisRweLKXl6J6Qui7lp0yoyE8s99vP+4=;
-        b=QFyiYDuGLfs67t7fG78E+/0luvRO0T1XYzV/ZtG42Z5I01erPpF9V1rYbHtEC6RK/r
-         l4eH9DQzIQPGvymQC2v2+WQ3EnlvaL1Dow+5vW8ns2AOCX3QpNih19JsbxUCyStchlhl
-         7LsHjaFUd+e9XXh/9H8yIwqwcLrN0WAt1y6Qw2uSxi0Dp44oUrJml5HSuTvifIcAVdKd
-         +4azmGf5b4Hhd2ML0H/f8pyh5/pTBME7jjg/OIGwvTffc2eo13yXe5z/D/8rsAtjIeoW
-         5Hq9aOvXZT+3gotycaneY7FrX4itU3Drn1gbKlsb0cYm2erxZw0/gj7fqcV4Wxmezp+j
-         ve8g==
+         :cc;
+        bh=8n76AgB/s3s8UBJCFU8wC3PDZsO7yuSxlQ/9v49C7/w=;
+        b=NlsZlvDhvOGhSfcEJmF1RqoOqtL7bT3n8CwOdE339BhpWVOqEYkiFwVokoj7L85wfR
+         BG5ZjffMBvrRHe5Z78LfIQjqdYWRltLgRF05t8syrKIJ1aJD4dcejNKwcS52qePtzwqI
+         tpdkeGr+m8k8vbM+/DWlHZG32GP6mNRxaH99jLz0VbTzOdHgYJ4uALD7m4VBrLgUakqD
+         t71SL95G6rF1kKdJoRrPQ8R8SweEDC75iewUx/8tgGptlUr4KWQOtDpphN8vjpyUboIp
+         VENekoejpi9BFy+u7qhkY07afcancT3liymzg1ryqo293m/0a7J9Hhl0NwrakASIkVp3
+         9KhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=j2KSOF6GgSjfisRweLKXl6J6Qui7lp0yoyE8s99vP+4=;
-        b=jDANirQRMax5BTnNOCvKZ+8C7HVSvJhd34u4IzEfGO8XdC2T9N9/jm4byZdRESJz3a
-         qtdSxq6tZ+U1zYqYKSgrIwhCLUHfKgPMO4sEIj2pfHNZV0Kox1Lq+280kvIl7n6nqq5c
-         q1BkNoWcXXgvzCBZOg1f59QfF33JdUXab0z5lqM3plxSnlZS7BA0F1xFrR06XtVMANYY
-         ghWwTpdOJA9A0VX0y58aL8jTX0jofOyWZhphOSwjyJQCXB4OzDx9VxLv4QJw7rwoPLGc
-         KTnD0Hy76yVz3i37GsNMP2ve8y1/Mze0OSOlWgp3y3dX3bm5yjWB1p8G9JUZXb9e6Qq9
-         BRAA==
-X-Gm-Message-State: AOAM530sBMHVXBdaADGlaNbLQCDH1Ti5ns6KkyPl5Zbx0i21QZ9qVaQs
-        0hGKs9BzoOwYrOQR04tHSSAe1Z4MKBeQ65NXDGODfTKEQTbQ5w==
-X-Google-Smtp-Source: ABdhPJwJYfAZ0+IKqF2o1HM/74rPGcSVlPR1G9poAx/st3CMfEugZLT2JJJpWNc6/rWYtGDDsBFciTk4kL8rjeQ3mps=
-X-Received: by 2002:a17:90b:350:: with SMTP id fh16mr157207pjb.228.1606761278036;
- Mon, 30 Nov 2020 10:34:38 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=8n76AgB/s3s8UBJCFU8wC3PDZsO7yuSxlQ/9v49C7/w=;
+        b=jhQhFKShSgB8cVCzd+y58Np14/45HT1igBdSWG+ldFj9qIZHWlDbgTzHx4oXEB8JLP
+         jJ8ObzK3sbga5zqgQm47faLIOD3T9kJYfzUZdiEXfDtMB3jYj38zXG8syfHVfGhHkx6N
+         h5kJTXysO0GR4oObyrWo/YKARISELLNNHObzXDJWdlf7UvbbfvOxBs+ZlWzOCkNWZd51
+         +wXW6LxSMLwH+JNmWYTv9gdNbd0xKXPrdX+1yvzPWafGmPutAMpYTqafsNs839Kq0QtE
+         uUNGw3CK/XES7K5oTXqQrIpHLEajrd6GjshnbCtB9HVE0RYkpi0kBX+LnnLn+boZ+XE2
+         71vA==
+X-Gm-Message-State: AOAM531DQjQ/pnUKi8WiemvrSPH1gv3BdeKA3hfRUTbK4XJ/bGMlQUi7
+        9bqh+5z2gB91P1B0xzZzd4UKT8rSfZEw9edXlQY=
+X-Google-Smtp-Source: ABdhPJxzJSEtoaVbLjezZO5sixjTkeCh6wk1BuQlHJQsCpP13Gn1TeIWY/VZM/8ErlCV0FbNvZCSFXMKGVSXSb/KL8M=
+X-Received: by 2002:a17:906:e212:: with SMTP id gf18mr2744779ejb.551.1606762673708;
+ Mon, 30 Nov 2020 10:57:53 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1606481420.git.agx@sigxcpu.org> <91c27b323786445f6b33c6a7e89e93755d05e3a2.1606481420.git.agx@sigxcpu.org>
-In-Reply-To: <91c27b323786445f6b33c6a7e89e93755d05e3a2.1606481420.git.agx@sigxcpu.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 30 Nov 2020 20:35:26 +0200
-Message-ID: <CAHp75VeLZtm85Y=3QMkPGb332wn05-zr-_mrrwXvnqLhazR1Gg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] usb: typec: tps6598x: Export some power supply properties
-To:     =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <09992cec-65e4-2757-aae6-8fb02a42f961@redhat.com>
+ <20201128154849.3193-1-tom.ty89@gmail.com> <20201128154849.3193-2-tom.ty89@gmail.com>
+ <5e62c383-22ea-6df6-5acc-5e9f381d4632@redhat.com> <CAGnHSEnetAJNqUEW-iuq7eVyU6VnP84cv9+OVL4C5Z2ZK_eM0A@mail.gmail.com>
+ <186eb035-4bc4-ff72-ee41-aeb6d81888e3@redhat.com> <X8T0E2qvF2cgADl+@kroah.com>
+ <dd557c38-a919-5e5e-ab3b-17a235f17139@redhat.com> <20201130172004.GA966032@rowland.harvard.edu>
+ <abb0a79d-63a0-6f3d-4812-f828283cd47c@redhat.com>
+In-Reply-To: <abb0a79d-63a0-6f3d-4812-f828283cd47c@redhat.com>
+From:   Tom Yan <tom.ty89@gmail.com>
+Date:   Tue, 1 Dec 2020 02:57:41 +0800
+Message-ID: <CAGnHSEk1GixNK71CJMymwLE=MyedjCkiG5Ubq1=O_wFxBBM0GQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb-storage: revert from scsi_add_host_with_dma() to scsi_add_host()
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 2:57 PM Guido G=C3=BCnther <agx@sigxcpu.org> wrote:
+This maybe? https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/scsi_lib.c?h=v5.10-rc6#n1816
+
+UAS:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/storage/uas.c?h=v5.10-rc6#n918
+BOT (AFAICT):
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/hosts.c?h=v5.10-rc6#n466
+
+It would explain why the issue is only triggered with UAS drives.
+
+The questions (from me) are:
+1. From the scsi layer POV (as per what __scsi_init_queue() does),
+what/which should we use as dma_dev?
+2. Do we really need to set dma_boundary in the UAS host template (to
+PAGE_SIZE - 1)?
+3. Kind of the same question as #1: when we clamp hw_max_sectors to
+dma max mapping size, should the size actually be "the smaller one
+among dev and sysdev"? Or is one of the two sizes *always* the smaller
+one?
+
+
+On Tue, 1 Dec 2020 at 02:19, Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> This allows downstream supplies and userspace to detect
-> whether external power is supplied.
-
-> +       if (!(pwr_status & TPS_POWER_STATUS_CONNECTION) ||
-> +           !(pwr_status & TPS_POWER_STATUS_SOURCESINK)) {
-> +               val->intval =3D 0;
-> +       } else {
-> +               val->intval =3D 1;
-> +       }
-
-Can we please use positive conditionals (which usually are easier to read)?
-
-       if ((pwr_status & TPS_POWER_STATUS_CONNECTION) &&
-           (pwr_status & TPS_POWER_STATUS_SOURCESINK)) {
-               val->intval =3D 1;
-       } else {
-               val->intval =3D 0;
-       }
-
---=20
-With Best Regards,
-Andy Shevchenko
+> Hi,
+>
+> On 11/30/20 6:20 PM, Alan Stern wrote:
+> > On Mon, Nov 30, 2020 at 02:36:38PM +0100, Hans de Goede wrote:
+> >> Hi,
+> >>
+> >> On 11/30/20 2:30 PM, Greg KH wrote:
+> >>> On Mon, Nov 30, 2020 at 02:23:48PM +0100, Hans de Goede wrote:
+> >>>> Hi,
+> >>>>
+> >>>> On 11/30/20 1:58 PM, Tom Yan wrote:
+> >>>>> It's merely a moving of comment moving for/and a no-behavioral-change
+> >>>>> adaptation for the reversion.>
+> >>>>
+> >>>> IMHO the revert of the troublesome commit and the other/new changes really
+> >>>> should be 2 separate commits. But I will let Alan and Greg have the final
+> >>>> verdict on this.
+> >>>
+> >>> I would prefer to just revert the commits and not do anything
+> >>> different/special here so late in the release cycle.
+> >>>
+> >>> So, if Alan agrees, I'll be glad to do them on my end, I just need the
+> >>> commit ids for them.
+> >>
+> >> The troublesome commit are (in reverse, so revert, order):
+> >>
+> >> 5df7ef7d32fe ("uas: bump hw_max_sectors to 2048 blocks for SS or faster drives")
+> >> 558033c2828f ("uas: fix sdev->host->dma_dev")
+> >> 0154012f8018 ("usb-storage: fix sdev->host->dma_dev")
+> >>
+> >> Alan, the reason for reverting these is that using scsi_add_host_with_dma() as the
+> >> last 2 patches do, with the dmadev argument of that call pointing to the device
+> >> for the XHCI controller is causing changes to the DMA settings of the XHCI controller
+> >> itself which is causing regressions in 5.10, see this email thread:
+> >>
+> >> https://lore.kernel.org/linux-usb/fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com/T/#t
+> >
+> > It's hard to go wrong with reverting, so it's okay with me.
+> >
+> > Still, Hans, have you checked out the difference between the
+> > scsi_add_host() and scsi_add_host_with_dma() calls?  It's just a matter
+> > of using dev vs. sysdev.  In particular, have you checked to see what
+> > those two devices are on your system?
+>
+> Its not just dev vs sysdev, its iface->dev vs bus->sysdev, and I assume
+> that the latter is actually the XHCI controller.
+>
+> my vote goes to reverting to avoid the regression for 5.10, esp. since
+> this is a clean revert of 3 patches with nothing depending / building
+> on top of the reverted commits.
+>
+> Then for 5.11 we can retry to introduce similar changes. I would be happy
+> to try a new patch-set for 5.11.
+>
+> > It seems likely that if one of those calls messes up some DMA settings,
+> > the other one does too -- just maybe not settings that matter much.
+>
+> I'm not very familiar with all the DMA mapping / mask code, but AFAIK making
+> changes to the DMA settings of a child will not influence the parent.
+>
+> Where as when passing bus->sysdev, then changes are made to a device
+> which is shared with other devices on the bus, which is why we see
+> a regression in an USB NIC driver being triggered by the UAS driver
+> binding to a device (on the same bus).
+>
+> At least that is my interpretation of this. I bisected the regression
+> and that pointed at the UAS DMA change and reverting it fixes things,
+> confirming that I did not make any mistakes during the bisect.
+>
+> Regards,
+>
+> Hans
+>
