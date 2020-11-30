@@ -2,156 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA912C885D
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 16:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9332C8866
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 16:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728439AbgK3Piq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 10:38:46 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:40222 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728407AbgK3Pip (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 10:38:45 -0500
-Received: by mail-lf1-f68.google.com with SMTP id u19so22465389lfr.7;
-        Mon, 30 Nov 2020 07:38:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4xtaGbTTemD9c+E+gQC/qoKbsCwyc5X5pTFIoVTRIcY=;
-        b=XeGGeWo2IbayVLWJuk0LH9PvIkj4JGWuM01gBEL53/k5+vLiZn/gCm2XU/lPj1uORu
-         NrwtoaT+kwUs3N3IGOFePyh1GxVFTWrkR+0JQY1ud80deSm1mc4Lal/Q5M4iXgWy19hS
-         CpPrwGCSO+OCNr84kBAQhw8NHIXy/naU9z0nJaVNRkyEXsykCcTF6MmVrD16F1M9WNOk
-         O7m4VLelVPmX4jotxLeyO5oUBonsQTDo7Qe3bG6rc5xGd1bzJaNgJcOyS2NLXSAYOHW0
-         wiI0RhYpuSfXjo7MkRRi6yfOqxVv/ae8zROOK6vYVgs8EReQJIfC55WQj8oHZoBqVpT+
-         mYBw==
-X-Gm-Message-State: AOAM530d+ek4kvrQPxjdyLp55mV/kFDEczvMoWHRc0PzUFjabZVg4sKH
-        18RcygCRMBnwoqU1FC3gqiU=
-X-Google-Smtp-Source: ABdhPJyoAIGrX3t/GwCwwxX5FF3BTTdVclkBAmNcvhBtaeIKUyVCuYC3+kJHlq1YimU+WkvJIEYSxw==
-X-Received: by 2002:ac2:50c8:: with SMTP id h8mr9258203lfm.556.1606750676607;
-        Mon, 30 Nov 2020 07:37:56 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id v1sm2487959lfg.252.2020.11.30.07.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 07:37:55 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@xi.terra>)
-        id 1kjlFv-0002P1-1k; Mon, 30 Nov 2020 16:38:23 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5/5] USB: serial: ftdi_sio: add support for FreeCalypso DUART28C adapter
-Date:   Mon, 30 Nov 2020 16:37:42 +0100
-Message-Id: <20201130153742.9163-6-johan@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201130153742.9163-1-johan@kernel.org>
-References: <20201130153742.9163-1-johan@kernel.org>
+        id S1728462AbgK3PjL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 10:39:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44286 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727906AbgK3PjK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Nov 2020 10:39:10 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 932F62087C;
+        Mon, 30 Nov 2020 15:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606750708;
+        bh=/mwcAGKismYKxXjOUto0bcfFSTR7WENjNq8FNtV/FvQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=2aIc5WU4ggx2WEIptvhTRAMMko3vB/+/5Ij+oDy4TXGW9XlJkeGnBZmNnlCEoJrDh
+         K5BshOCX5QZ43DT/2PynSqPgRH2pZUtjaCn3Mj/WCcEDXnetQ6AYqf3rjna0rE4qyF
+         lOkF/qXz5oNnCQGi6hF7KALTiW7iVxvWrac+Yyls=
+Received: by mail-ej1-f48.google.com with SMTP id f23so22665853ejk.2;
+        Mon, 30 Nov 2020 07:38:28 -0800 (PST)
+X-Gm-Message-State: AOAM533BbnCLHzoP5UnPf6F2oQ6Z4ZjoTVYpvAf+j33w6E0pHV2ndLkK
+        zdAoFkBhDj7Hl4jAG2zmoI9oyAQqgity0H58Ow==
+X-Google-Smtp-Source: ABdhPJwfi/bEMZouaafRm5GbGn1YKFdYDmO1WDNjm1A+nVHVN3DMiM3lra3WgVaV1huC2tZ8DwNzz0146k2O8pmy8Hk=
+X-Received: by 2002:a17:907:2718:: with SMTP id w24mr15750107ejk.525.1606750707036;
+ Mon, 30 Nov 2020 07:38:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201111090853.14112-1-Sergey.Semin@baikalelectronics.ru>
+ <20201111090853.14112-11-Sergey.Semin@baikalelectronics.ru>
+ <20201111201423.GA1938179@bogus> <20201112102946.ipcsiidty4ut4kap@mobilestation>
+ <20201121124228.GA2039998@robh.at.kernel.org> <20201125083202.ytoyd62bg3s7kvvg@mobilestation>
+In-Reply-To: <20201125083202.ytoyd62bg3s7kvvg@mobilestation>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 30 Nov 2020 08:38:13 -0700
+X-Gmail-Original-Message-ID: <CAL_JsqKscjEgArQDbdEgbdNfC7PGVku7Wmk1myjADpsBWqJt+g@mail.gmail.com>
+Message-ID: <CAL_JsqKscjEgArQDbdEgbdNfC7PGVku7Wmk1myjADpsBWqJt+g@mail.gmail.com>
+Subject: Re: [PATCH v4 10/18] dt-bindings: usb: Convert DWC USB3 bindings to
+ DT schema
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Mychaela N. Falconia" <falcon@freecalypso.org>
+On Wed, Nov 25, 2020 at 1:32 AM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+>
+> On Sat, Nov 21, 2020 at 06:42:28AM -0600, Rob Herring wrote:
+> > On Thu, Nov 12, 2020 at 01:29:46PM +0300, Serge Semin wrote:
+> > > On Wed, Nov 11, 2020 at 02:14:23PM -0600, Rob Herring wrote:
+> > > > On Wed, Nov 11, 2020 at 12:08:45PM +0300, Serge Semin wrote:
+> > > > > DWC USB3 DT node is supposed to be compliant with the Generic xHCI
+> > > > > Controller schema, but with additional vendor-specific properties, the
+> > > > > controller-specific reference clocks and PHYs. So let's convert the
+> > > > > currently available legacy text-based DWC USB3 bindings to the DT schema
+> > > > > and make sure the DWC USB3 nodes are also validated against the
+> > > > > usb-xhci.yaml schema.
+> > > > >
+> > > > > Note we have to discard the nodename restriction of being prefixed with
+> > > > > "dwc3@" string, since in accordance with the usb-hcd.yaml schema USB nodes
+> > > > > are supposed to be named as "^usb(@.*)".
+> > > > >
+> > > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > > >
+> > > > > ---
+> > > > >
+> > > > > Changelog v2:
+> > > > > - Discard '|' from the descriptions, since we don't need to preserve
+> > > > >   the text formatting in any of them.
+> > > > > - Drop quotes from around the string constants.
+> > > > > - Fix the "clock-names" prop description to be referring the enumerated
+> > > > >   clock-names instead of the ones from the Databook.
+> > > > >
+> > > > > Changelog v3:
+> > > > > - Apply usb-xhci.yaml# schema only if the controller is supposed to work
+> > > > >   as either host or otg.
+> > > > >
+> > > > > Changelog v4:
+> > > > > - Apply usb-drd.yaml schema first. If the controller is configured
+> > > > >   to work in a gadget mode only, then apply the usb.yaml schema too,
+> > > > >   otherwise apply the usb-xhci.yaml schema.
+> > > > > - Discard the Rob'es Reviewed-by tag. Please review the patch one more
+> > > > >   time.
+> > > > > ---
+> > > > >  .../devicetree/bindings/usb/dwc3.txt          | 125 --------
+> > > > >  .../devicetree/bindings/usb/snps,dwc3.yaml    | 303 ++++++++++++++++++
+> > > > >  2 files changed, 303 insertions(+), 125 deletions(-)
+> > > > >  delete mode 100644 Documentation/devicetree/bindings/usb/dwc3.txt
+> > > > >  create mode 100644 Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> >
+> >
+> > > > > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > > > new file mode 100644
+> > > > > index 000000000000..079617891da6
+> > > > > --- /dev/null
+> > > > > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > > > @@ -0,0 +1,303 @@
+> > > > > +# SPDX-License-Identifier: GPL-2.0
+> > > > > +%YAML 1.2
+> > > > > +---
+> > > > > +$id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
+> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > +
+> > > > > +title: Synopsys DesignWare USB3 Controller
+> > > > > +
+> > > > > +maintainers:
+> > > > > +  - Felipe Balbi <balbi@kernel.org>
+> > > > > +
+> > > > > +description:
+> > > > > +  This is usually a subnode to DWC3 glue to which it is connected, but can also
+> > > > > +  be presented as a standalone DT node with an optional vendor-specific
+> > > > > +  compatible string.
+> > > > > +
+> > >
+> > > > > +allOf:
+> > > > > +  - $ref: usb-drd.yaml#
+> > > > > +  - if:
+> > > > > +      properties:
+> > > > > +        dr_mode:
+> > > > > +          const: peripheral
+> >
+>
+> > Another thing, this evaluates to true if dr_mode is not present. You
+> > need to add 'required'?
+>
+> Right. Will something like this do that?
 
-FreeCalypso DUART28C is an FT2232D-based USB to dual UART adapter
-with a special quirk: Channel B RTS and DTR outputs (BDBUS2 and BDBUS4
-on the chip) have been repurposed to drive PWON and RESET controls
-on Calypso targets.  The circuit is wired such that BDBUS[24] high
-(RTS/DTR inactive) is the normal state with Iota VRPC controls
-NOT activated, whereas BDBUS[24] low (RTS or DTR active) turn ON
-the corresponding open drain control signal drivers.
+Yes.
 
-A special ftdi_sio driver quirk is needed in order to suppress
-automatic assertion of DTR & RTS on device open: this device's
-special PWON and RESET control drivers MUST NOT be activated
-when the port is ordinarily opened for plain serial communication,
-instead they must only be activated when a special userspace
-application explicitly requests such activation with a TIOCMBIS ioctl.
-These special userspace applications are responsible for making the
-needed pulse with a TIOCMBIS, delay, TIOCMBIC sequence.
+>
+> + allOf:
+> +  - $ref: usb-drd.yaml#
+> +  - if:
+> +      properties:
+> +        dr_mode:
+> +          const: peripheral
+> +
+> +      required:
+> +        - dr_mode
+> +    then:
+> +      $ref: usb.yaml#
+> +    else
+> +      $ref: usb-xhci.yaml#
+>
+> > If dr_mode is otg, then don't you need to apply
+> > both usb.yaml and usb-xhci.yaml?
+>
+> No I don't. Since there is no peripheral-specific DT schema, then the
+> only schema any USB-gadget node needs to pass is usb.yaml, which
+> is already included into the usb-xhci.yaml schema. So for pure OTG devices
+> with xHCI host and gadget capabilities it's enough to evaluate: allOf:
+> [$ref: usb-drd.yaml#, $ref: usb-xhci.yaml#].  Please see the
+> sketch/ASCII-figure below and the following text for details.
 
-The special quirk is conditionalized on the DUART28C adapter's custom
-USB ID, and is further limited to FT2232D Channel B only: Channel A
-is wired normally, with the chip's ADBUS2 and ADBUS4 outputs
-actually being RTS and DTR rather than something else.
+Okay.
 
-Signed-off-by: Mychaela N. Falconia <falcon@freecalypso.org>
-[johan: reimplement using new NORDY flag, trim quirk comment]
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/ftdi_sio.c     | 22 ++++++++++++++++++++++
- drivers/usb/serial/ftdi_sio_ids.h |  1 +
- 2 files changed, 23 insertions(+)
-
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index b69032c9ec2b..b555bbc1b0a9 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -97,6 +97,7 @@ static int   ftdi_stmclite_probe(struct usb_serial *serial);
- static int   ftdi_8u2232c_probe(struct usb_serial *serial);
- static void  ftdi_USB_UIRT_setup(struct usb_serial_port *port);
- static void  ftdi_HE_TIRA1_setup(struct usb_serial_port *port);
-+static void  ftdi_duart28c_setup(struct usb_serial_port *port);
- 
- static const struct ftdi_sio_quirk ftdi_jtag_quirk = {
- 	.probe	= ftdi_jtag_probe,
-@@ -122,6 +123,10 @@ static const struct ftdi_sio_quirk ftdi_8u2232c_quirk = {
- 	.probe	= ftdi_8u2232c_probe,
- };
- 
-+static const struct ftdi_sio_quirk ftdi_duart28c_quirk = {
-+	.port_probe = ftdi_duart28c_setup,
-+};
-+
- /*
-  * The 8U232AM has the same API as the sio except for:
-  * - it can support MUCH higher baudrates; up to:
-@@ -1042,6 +1047,8 @@ static const struct usb_device_id id_table_combined[] = {
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
- 	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_JTAG_UNBUF_PID),
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-+	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_DUART28C_PID),
-+		.driver_info = (kernel_ulong_t)&ftdi_duart28c_quirk },
- 	{ }					/* Terminating entry */
- };
- 
-@@ -2386,6 +2393,21 @@ static int ftdi_stmclite_probe(struct usb_serial *serial)
- 	return 0;
- }
- 
-+/*
-+ * FreeCalypso DUART28C is an FT2232D-based USB to dual UART adapter
-+ * with a special quirk: Channel B RTS and DTR outputs (BDBUS2 and BDBUS4
-+ * on the chip) have been repurposed to drive PWON and RESET controls.
-+ */
-+static void ftdi_duart28c_setup(struct usb_serial_port *port)
-+{
-+	struct usb_serial *serial = port->serial;
-+	struct usb_interface *intf = serial->interface;
-+	int ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
-+
-+	if (ifnum == 1)
-+		tty_port_set_nordy(&port->port, 1);
-+}
-+
- static int ftdi_sio_port_remove(struct usb_serial_port *port)
- {
- 	struct ftdi_private *priv = usb_get_serial_port_data(port);
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 3d47c6d72256..3081b8916a0a 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -45,6 +45,7 @@
-  */
- #define FTDI_FALCONIA_JTAG_BUF_PID	0x7150
- #define FTDI_FALCONIA_JTAG_UNBUF_PID	0x7151
-+#define FTDI_FALCONIA_DUART28C_PID	0x7152
- 
- /* Sienna Serial Interface by Secyourit GmbH */
- #define FTDI_SIENNA_PID		0x8348
--- 
-2.26.2
-
+Rob
