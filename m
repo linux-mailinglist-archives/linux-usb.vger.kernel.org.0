@@ -2,124 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0859E2C803C
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 09:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3D52C80B6
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 10:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726746AbgK3Ipa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 03:45:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57531 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726137AbgK3Ipa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 03:45:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606725843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ey1C0d9PZ+jC1SeRokoRwtQYfI7PDl+5m30mISh+nx8=;
-        b=N5ElSh6l3ue4g9AV/+pJ2f21bcxjeWXkMvMb7HleWN/CpBVHo+iO+LzcruagBRkIpQuMH/
-        aI3H4YwulFfYiNdCGcZ/f30lNfHyRQNm85SKWUh35z0UPXWplGWwwJVLQHsGR3n9BY9qKE
-        DAEBuuSF4QbOsuVb//CSfxtCGqZtBoY=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-279-gdcyDVUFOaqwf1cZ7Jnvpw-1; Mon, 30 Nov 2020 03:44:01 -0500
-X-MC-Unique: gdcyDVUFOaqwf1cZ7Jnvpw-1
-Received: by mail-ed1-f69.google.com with SMTP id s7so6394038eds.17
-        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 00:44:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ey1C0d9PZ+jC1SeRokoRwtQYfI7PDl+5m30mISh+nx8=;
-        b=RJuKDT9zPcCLzLioTo+5omc1onN6AlGlF9rC8cQBASxHk83bEiLt1++fUXHZMpX+LS
-         MSh4fJabGuTwakqAr+b75YXSb5sdAgKKob67jpmS/VgyXSlnS2XBPFDxUEFuvkeIidWz
-         GwVIug5koBY+bqA1vUrBCTiTs1S5OVCCkxazdmt1wcGjJ14dLSuO9Cem4zS7AFa4t9Jo
-         8FQj4YWwg3nkSBr2cekmHxDUBjT+cBUEOGLIizKsYyfzKLoRoUH56KcpSmeGiL48BI+3
-         d2itx4x05TB8m9vhs1DfBFmAyw7LNYVxFiJG7yI6MR6f1zmSBZv6gTcxSAp+QKKxiR1R
-         JTzg==
-X-Gm-Message-State: AOAM530F0U5s/gJT5FiTcYwGLR5BPIHg+XJux8UPH90vvbvQLsRWO5Ra
-        YouRtBjVnFQDO+3COn/3sSEtWxZjwkQvGnEhDpdvRjHIrojNfggGuqIpLyGIuW61yF1unZtDa+u
-        7w3n7R0oj/jWn/Xz/ezi3
-X-Received: by 2002:a17:906:aac1:: with SMTP id kt1mr567771ejb.329.1606725840171;
-        Mon, 30 Nov 2020 00:44:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxs3ln5Efn41CjmIOtYUTR38V2LHcxx3XUgPY7qefkj2/Jh8zpB5MhDtTGr1Nse7RBqGNLFPA==
-X-Received: by 2002:a17:906:aac1:: with SMTP id kt1mr567760ejb.329.1606725840030;
-        Mon, 30 Nov 2020 00:44:00 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id d10sm7897462ejc.39.2020.11.30.00.43.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Nov 2020 00:43:59 -0800 (PST)
-Subject: Re: 5.10 regression caused by: "uas: fix sdev->host->dma_dev": many
- XHCI swiotlb buffer is full / DMAR: Device bounce map failed errors on
- thunderbolt connected XHCI controller
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Tom Yan <tom.ty89@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-References: <b046dd04-ac4f-3c69-0602-af810fb1b365@redhat.com>
- <be031d15-201f-0e5c-8b0f-be030077141f@redhat.com>
- <20201124102715.GA16983@lst.de>
- <fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com>
- <8a52e868-0ca1-55b7-5ad2-ddb0cbb5e45d@redhat.com>
- <20201127161900.GA10986@lst.de>
- <fded04e2-f2e9-de92-ab1f-5aa088904e90@redhat.com>
- <20201128171500.GA3550@lst.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <a84974a8-514b-690b-480b-c82c0617fec0@redhat.com>
-Date:   Mon, 30 Nov 2020 09:43:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1728001AbgK3JOC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 04:14:02 -0500
+Received: from z5.mailgun.us ([104.130.96.5]:63097 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727818AbgK3JOC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Nov 2020 04:14:02 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1606727624; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=SdkfUaGEnsQaKGcSRPesjSEXe34DQXrgiTsCu4nbNRc=; b=XB8X8wUruZQY51PHmK3gB9hZlwk2ReLZqviI9r3k0awjqXWogsAB7E8NUuurO4+ZC4E9d17J
+ a2Fj4RbzNzQ4Gktwe3XApeTmb7/lUCLZJYipacMEzX2j4RPYaDEqgiEojcv+I4hcv8ilcF2B
+ 8g3Nchlo46g3JPuIs7QQruAxmOo=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 5fc4b7a222377520ee49e427 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 30 Nov 2020 09:13:06
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 2ADE1C43462; Mon, 30 Nov 2020 09:13:06 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7C6D5C433ED;
+        Mon, 30 Nov 2020 09:13:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7C6D5C433ED
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+Date:   Mon, 30 Nov 2020 01:13:00 -0800
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, peter.chen@nxp.com, willmcvicker@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "taehyun.cho" <taehyun.cho@samsung.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 4/5] USB: gadget: f_fs: add SuperSpeed Plus support
+Message-ID: <20201130091259.GB31406@jackp-linux.qualcomm.com>
+References: <20201127140559.381351-1-gregkh@linuxfoundation.org>
+ <20201127140559.381351-5-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20201128171500.GA3550@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201127140559.381351-5-gregkh@linuxfoundation.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 11/28/20 6:15 PM, Christoph Hellwig wrote:
-> Can you give this one-liner a spin?
+On Fri, Nov 27, 2020 at 03:05:58PM +0100, Greg Kroah-Hartman wrote:
+> From: "taehyun.cho" <taehyun.cho@samsung.com>
 > 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index c6622011d4938c..e889111b55c71d 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -4007,6 +4007,7 @@ static const struct dma_map_ops bounce_dma_ops = {
->  	.alloc_pages		= dma_common_alloc_pages,
->  	.free_pages		= dma_common_free_pages,
->  	.dma_supported		= dma_direct_supported,
-> +	.max_mapping_size	= swiotlb_max_mapping_size,
->  };
+> Setup the descriptors for SuperSpeed Plus for f_fs. This allows the
+> gadget to work properly without crashing at SuperSpeed rates.
+> 
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: stable <stable@vger.kernel.org>
+> Signed-off-by: taehyun.cho <taehyun.cho@samsung.com>
+> Signed-off-by: Will McVicker <willmcvicker@google.com>
+> Reviewed-by: Peter Chen <peter.chen@nxp.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/usb/gadget/function/f_fs.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 046f770a76da..a34a7c96a1ab 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1327,6 +1327,7 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+>  		struct usb_endpoint_descriptor *desc;
 >  
->  static inline int iommu_domain_cache_init(void)
-> 
+>  		switch (epfile->ffs->gadget->speed) {
+> +		case USB_SPEED_SUPER_PLUS:
+>  		case USB_SPEED_SUPER:
+>  			desc_idx = 2;
+>  			break;
+> @@ -3222,6 +3223,10 @@ static int _ffs_func_bind(struct usb_configuration *c,
+>  	func->function.os_desc_n =
+>  		c->cdev->use_os_string ? ffs->interfaces_count : 0;
+>  
+> +	if (likely(super)) {
+> +		func->function.ssp_descriptors =
+> +			usb_copy_descriptors(func->function.ss_descriptors);
+> +	}
+>  	/* And we're done */
+>  	ffs_event_add(ffs, FUNCTIONFS_BIND);
+>  	return 0;
+> -- 
 
-I'm afraid that this does not help.
+Hi Greg,
 
-Also I still find it somewhat wrong that the use of scsi_add_host_with_dma()
-in uas.c, which then passed the XHCI controller as dma-dev is causing changes
-to the DMA settings of the XHCI controller, impacting *other* USB devices
-and these changes also are permanent, they stay around even after unbinding
-the uas driver.
+FWIW I had sent a very similar patch[1] a while back (twice in fact)
+but got no response about it. Looks like Taehyun's patch already went
+through Google for this, I assume it must be working on their Android
+kernels so I've no problem with you or Felipe taking this instead.
 
-This just feels wrong on many levels. If some changes to the XHCI controllers
-DMA settings are necessary for better uas performance then these changes
-really should be made inside the XHCI driver, so that they always apply and
-not have this weirdness going on where binding one USB driver permanently
-changes the behavior of the entire USB bus (until rebooted).
+Only one difference with my patch though is mine additionally clears the
+func->function.ssp_descriptors member to NULL upon ffs_func_unbind() as
+otherwise it could lead to a dangling reference in case the function is
+re-bound and userspace does not issue SS descriptors the next time.
+Realistically I don't think that's possible, except maybe when fuzzing?
 
-Querying the DMA settings of the XHCI controller in the uas driver is fine,
-but changing them seems like a big nono to me.
+[1] https://patchwork.kernel.org/project/linux-usb/patch/20201027230731.9073-1-jackp@codeaurora.org/
 
-Regards,
-
-Hans
-
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
