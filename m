@@ -2,189 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A882C8168
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 10:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104902C81EC
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 11:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727721AbgK3JwU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 04:52:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:58161 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726325AbgK3JwT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 04:52:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606729852;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hDeO7EwYb3PJHalWL3SGE459q+xe/amBDuL37VCHP+Q=;
-        b=IkLRxv9H7tJusv9Skh245XS2qqI+cRoLEbwfDVrDU1pdvRfvd8Ke3pzpBk9CPVq+7dTpjR
-        Hu+IqwS1x7kUcNFoUbTEQk4cLrooVKCuA+QU1FWHNKAyTHFnTIbdD2N28p1Qr08vQSEfSI
-        VULhOCAQcj4eMtimjUZUsqIzomMMOuM=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-276-E116KE4dNMOmW8h_668PpQ-1; Mon, 30 Nov 2020 04:50:51 -0500
-X-MC-Unique: E116KE4dNMOmW8h_668PpQ-1
-Received: by mail-ej1-f69.google.com with SMTP id y10so5524661ejg.3
-        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 01:50:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hDeO7EwYb3PJHalWL3SGE459q+xe/amBDuL37VCHP+Q=;
-        b=gPQqpqvn3YyGkXqZZ3//p/grQ/1oxjQ8m3oTFL1xWmJ2AZw8KkM6xEVwPB//6DJlpU
-         IJzDK4O+ODkGKqFewfvmhHLpzH9QSOA+Qb8/OmcBPZSIzgji0EBpx9H+bjSVdshBgEGH
-         LrgjKYkrYv4W1Ww/gFwb+MhKTnAfEEHTvrJqjDsm5iQu7qQ9os/uMzlgu7OItKqOhZ5d
-         c7xtiut7JBUTirTd9iCY1ZLik6SyIWUhFMQdzGtQh4mDOHem4/lkDpRkBBUoP/J83osD
-         Ixbc+abHuYjUUm41o8RCqIHLbG2oShUcpjQsNSw9/6gds9JPNxxvxA6TuisfHoCpCb5f
-         1Rog==
-X-Gm-Message-State: AOAM532rcH+EkpMWgBD6yryeHCFxIdyndKSKxRq+ZidZ3s3Xe/OQr6XV
-        IqVoVTLKRlg/YkPuSDauz2omI62FZ2LL80CmwnH6ocQKq6t7aV4cBlngmn6qY9snYFfcg2E8R7h
-        kFn1XJYduAnMrbnwN3bAm
-X-Received: by 2002:a17:906:7118:: with SMTP id x24mr9059515ejj.333.1606729849833;
-        Mon, 30 Nov 2020 01:50:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyU7f50bf7hh4kVqA+tq/hHC/I+4wSdL+dbmYg+8g9FdkE3mttqY43LKwJ8xA9bSgPjMoQPHA==
-X-Received: by 2002:a17:906:7118:: with SMTP id x24mr9059506ejj.333.1606729849647;
-        Mon, 30 Nov 2020 01:50:49 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id b15sm8816140edv.85.2020.11.30.01.50.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Nov 2020 01:50:48 -0800 (PST)
-Subject: Re: [PATCH 2/2] usb-storage: revert from scsi_add_host_with_dma() to
- scsi_add_host()
-To:     Tom Yan <tom.ty89@gmail.com>, hch@lst.de,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     mathias.nyman@intel.com, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, baolu.lu@linux.intel.com
-References: <09992cec-65e4-2757-aae6-8fb02a42f961@redhat.com>
- <20201128154849.3193-1-tom.ty89@gmail.com>
- <20201128154849.3193-2-tom.ty89@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <5e62c383-22ea-6df6-5acc-5e9f381d4632@redhat.com>
-Date:   Mon, 30 Nov 2020 10:50:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1728519AbgK3KOV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 05:14:21 -0500
+Received: from fgw20-4.mail.saunalahti.fi ([62.142.5.107]:46784 "EHLO
+        fgw20-4.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728461AbgK3KOV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 05:14:21 -0500
+X-Greylist: delayed 1042 seconds by postgrey-1.27 at vger.kernel.org; Mon, 30 Nov 2020 05:14:20 EST
+Received: from darkstar.musicnaut.iki.fi (85-76-71-224-nat.elisa-mobile.fi [85.76.71.224])
+        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
+        id 492b4562-32f2-11eb-ba24-005056bd6ce9;
+        Mon, 30 Nov 2020 11:56:16 +0200 (EET)
+Date:   Mon, 30 Nov 2020 11:56:15 +0200
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: ohci-omap: Fix descriptor conversion
+Message-ID: <20201130095615.GH551434@darkstar.musicnaut.iki.fi>
+References: <20201130083033.29435-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20201128154849.3193-2-tom.ty89@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201130083033.29435-1-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-On 11/28/20 4:48 PM, Tom Yan wrote:
-> While the change only seemed to have caused issue on uas drives, we
-> probably want to avoid it in the usb-storage driver as well, until
-> we are sure it is the right thing to do.
+On Mon, Nov 30, 2020 at 09:30:33AM +0100, Linus Walleij wrote:
+> There were a bunch of issues with the patch converting the
+> OMAP1 OSK board to use descriptors for controlling the USB
+> host:
 > 
-> Signed-off-by: Tom Yan <tom.ty89@gmail.com>
+> - The chip label was incorrect
+> - The GPIO offset was off-by-one
+> - The code should use sleeping accessors
+> 
+> This patch tries to fix all issues at the same time.
 
-This seems to do a whole lot more then just dropping back from
- scsi_add_host_with_dma() to scsi_add_host(). This has way more
-lines then the orginal commit.
+Unfortunately it still doesn't work:
 
-IMHO it would be best to just revert commit 0154012f8018bba4d9971d1007c12ffd48539ddb
-and then submit these changes as a separate patch (which would be
-5.11 material then).
+[    9.229949] ohci: probe of ohci failed with error -16
 
-That separate patch could then also have a proper commit message
-explaining the other changes you are making, which is also not
-unimportant.
+Looks like the GPIO was already reserved in early boot. The following
+is needed:
 
-Regards,
+diff --git a/arch/arm/mach-omap1/board-osk.c b/arch/arm/mach-omap1/board-osk.c
+index a720259099ed..7fe2e54e5e1a 100644
+--- a/arch/arm/mach-omap1/board-osk.c
++++ b/arch/arm/mach-omap1/board-osk.c
+@@ -203,6 +203,7 @@ static int osk_tps_setup(struct i2c_client *client, void *context)
+ 	 */
+ 	gpio_request(OSK_TPS_GPIO_USB_PWR_EN, "n_vbus_en");
+ 	gpio_direction_output(OSK_TPS_GPIO_USB_PWR_EN, 1);
++	gpio_free(OSK_TPS_GPIO_USB_PWR_EN);
+ 
+ 	/* Set GPIO 2 high so LED D3 is off by default */
+ 	tps65010_set_gpio_out_value(GPIO2, HIGH);
 
-Hans
-
-
-
-
+> Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
+> Reported-by: Aaro Koskinen <aaro.koskinen@iki.fi>
+> Fixes: 15d157e87443 ("usb: ohci-omap: Convert to use GPIO descriptors")
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
->  drivers/usb/storage/scsiglue.c | 40 +++++++++++++++++-----------------
->  drivers/usb/storage/usb.c      |  3 +--
->  2 files changed, 21 insertions(+), 22 deletions(-)
+>  arch/arm/mach-omap1/board-osk.c | 2 +-
+>  drivers/usb/host/ohci-omap.c    | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-> index 560efd1479ba..6539bae1c188 100644
-> --- a/drivers/usb/storage/scsiglue.c
-> +++ b/drivers/usb/storage/scsiglue.c
-> @@ -92,7 +92,7 @@ static int slave_alloc (struct scsi_device *sdev)
->  static int slave_configure(struct scsi_device *sdev)
->  {
->  	struct us_data *us = host_to_us(sdev->host);
-> -	struct device *dev = sdev->host->dma_dev;
-> +	struct device *dev = us->pusb_dev->bus->sysdev;
->  
->  	/*
->  	 * Many devices have trouble transferring more than 32KB at a time,
-> @@ -120,6 +120,25 @@ static int slave_configure(struct scsi_device *sdev)
->  		 * better throughput on most devices.
->  		 */
->  		blk_queue_max_hw_sectors(sdev->request_queue, 2048);
-> +	} else {
-> +		/*
-> +		 * Limit the total size of a transfer to 120 KB.
-> +		 *
-> +		 * Some devices are known to choke with anything larger. It seems like
-> +		 * the problem stems from the fact that original IDE controllers had
-> +		 * only an 8-bit register to hold the number of sectors in one transfer
-> +		 * and even those couldn't handle a full 256 sectors.
-> +		 *
-> +		 * Because we want to make sure we interoperate with as many devices as
-> +		 * possible, we will maintain a 240 sector transfer size limit for USB
-> +		 * Mass Storage devices.
-> +		 *
-> +		 * Tests show that other operating have similar limits with Microsoft
-> +		 * Windows 7 limiting transfers to 128 sectors for both USB2 and USB3
-> +		 * and Apple Mac OS X 10.11 limiting transfers to 256 sectors for USB2
-> +		 * and 2048 for USB3 devices.
-> +		 */
-> +		blk_queue_max_hw_sectors(sdev->request_queue, 240);
+> diff --git a/arch/arm/mach-omap1/board-osk.c b/arch/arm/mach-omap1/board-osk.c
+> index 144b9caa935c..a720259099ed 100644
+> --- a/arch/arm/mach-omap1/board-osk.c
+> +++ b/arch/arm/mach-omap1/board-osk.c
+> @@ -288,7 +288,7 @@ static struct gpiod_lookup_table osk_usb_gpio_table = {
+>  	.dev_id = "ohci",
+>  	.table = {
+>  		/* Power GPIO on the I2C-attached TPS65010 */
+> -		GPIO_LOOKUP("i2c-tps65010", 1, "power", GPIO_ACTIVE_HIGH),
+> +		GPIO_LOOKUP("tps65010", 0, "power", GPIO_ACTIVE_HIGH),
+>  		GPIO_LOOKUP(OMAP_GPIO_LABEL, 9, "overcurrent",
+>  			    GPIO_ACTIVE_HIGH),
+>  	},
+> diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
+> index 9ccdf2c216b5..6374501ba139 100644
+> --- a/drivers/usb/host/ohci-omap.c
+> +++ b/drivers/usb/host/ohci-omap.c
+> @@ -91,14 +91,14 @@ static int omap_ohci_transceiver_power(struct ohci_omap_priv *priv, int on)
+>  				| ((1 << 5/*usb1*/) | (1 << 3/*usb2*/)),
+>  			       INNOVATOR_FPGA_CAM_USB_CONTROL);
+>  		else if (priv->power)
+> -			gpiod_set_value(priv->power, 0);
+> +			gpiod_set_value_cansleep(priv->power, 0);
+>  	} else {
+>  		if (machine_is_omap_innovator() && cpu_is_omap1510())
+>  			__raw_writeb(__raw_readb(INNOVATOR_FPGA_CAM_USB_CONTROL)
+>  				& ~((1 << 5/*usb1*/) | (1 << 3/*usb2*/)),
+>  			       INNOVATOR_FPGA_CAM_USB_CONTROL);
+>  		else if (priv->power)
+> -			gpiod_set_value(priv->power, 1);
+> +			gpiod_set_value_cansleep(priv->power, 1);
 >  	}
 >  
->  	/*
-> @@ -627,25 +646,6 @@ static const struct scsi_host_template usb_stor_host_template = {
->  	.sg_tablesize =			SG_MAX_SEGMENTS,
->  
->  
-> -	/*
-> -	 * Limit the total size of a transfer to 120 KB.
-> -	 *
-> -	 * Some devices are known to choke with anything larger. It seems like
-> -	 * the problem stems from the fact that original IDE controllers had
-> -	 * only an 8-bit register to hold the number of sectors in one transfer
-> -	 * and even those couldn't handle a full 256 sectors.
-> -	 *
-> -	 * Because we want to make sure we interoperate with as many devices as
-> -	 * possible, we will maintain a 240 sector transfer size limit for USB
-> -	 * Mass Storage devices.
-> -	 *
-> -	 * Tests show that other operating have similar limits with Microsoft
-> -	 * Windows 7 limiting transfers to 128 sectors for both USB2 and USB3
-> -	 * and Apple Mac OS X 10.11 limiting transfers to 256 sectors for USB2
-> -	 * and 2048 for USB3 devices.
-> -	 */
-> -	.max_sectors =                  240,
-> -
->  	/* emulated HBA */
->  	.emulated =			1,
->  
-> diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-> index c2ef367cf257..f177da4ff1bc 100644
-> --- a/drivers/usb/storage/usb.c
-> +++ b/drivers/usb/storage/usb.c
-> @@ -1050,8 +1050,7 @@ int usb_stor_probe2(struct us_data *us)
->  	usb_autopm_get_interface_no_resume(us->pusb_intf);
->  	snprintf(us->scsi_name, sizeof(us->scsi_name), "usb-storage %s",
->  					dev_name(dev));
-> -	result = scsi_add_host_with_dma(us_to_host(us), dev,
-> -					us->pusb_dev->bus->sysdev);
-> +	result = scsi_add_host(us_to_host(us), dev);
->  	if (result) {
->  		dev_warn(dev,
->  				"Unable to add the scsi host\n");
+>  	return 0;
+> -- 
+> 2.26.2
 > 
-
