@@ -2,63 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5916D2C8DA5
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 20:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B382C8E16
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 20:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388038AbgK3TCv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 14:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
+        id S1729545AbgK3TbF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 14:31:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbgK3TCu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 14:02:50 -0500
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54642C0613D3;
-        Mon, 30 Nov 2020 11:02:10 -0800 (PST)
-Received: by mail-ej1-x644.google.com with SMTP id f23so23924171ejk.2;
-        Mon, 30 Nov 2020 11:02:10 -0800 (PST)
+        with ESMTP id S1728899AbgK3TbC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 14:31:02 -0500
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CE4C0613CF;
+        Mon, 30 Nov 2020 11:30:21 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id b2so5650893edy.13;
+        Mon, 30 Nov 2020 11:30:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=v4/QIctrXLZuVGTfw6POOs0tQ2zR3ltEGhnHc4d6oJE=;
-        b=O10VOEVXfmXkEILqKQALml9aAfJz6EnjEpbfKhPiRySHeclSkV/wGfC8b0e9oWzOYW
-         K4BDDsuc58bvppvDgT+GwJli0EWJNXWA0i+H6MTk9GQYZe1DmT4VzxzwPHjUvnXdFRcY
-         2doSVHtPDmNgpm2G7ZWDwpFN7ltKZkGcMe3ad9qZvrdpnyz4cLYusJSNuo/g/nVL6hbI
-         BkXCYF90PlrkVlXgTkcYzP6tXR1InkcCsTEQStaTJ4vNqniITulXww6ZGt8gR/RhCb4B
-         e2KCV0npfYcC2nRXMoWQNFEnP5x+cmK2P9JEbufxg41WnRhGu4g4OT55tF2qh7TXkquJ
-         hO8A==
+        bh=6xoXFQV4BbsJg4GJL1tP5zyqti0Izs4JfnX3eGx9ZII=;
+        b=Zq/11mTsid9DPdmqdQG1vEPB/JR5gwKhrJ7fFDHNFQwgBcFxbAW6WYdibvzYydHwO8
+         MfEUk11ihrmuCgdTH/dZC5mVM0ZsGyO+pzFT/b7NUvsDugim216B9tOs7QLuYswp5PL6
+         b9sLzcQhxgIffQf2RuqUeCvVaSOWPdvnSpNqnOgzj1zidcZ7ed7uAEJ+96TK1F6onaRF
+         yqgcKrKTgbsP1X0ZStUhe8jWdKAIbunVarBap9X3FlS1q7sGccn1JUGGUIcv4d4qTruK
+         vwO98mSkLeHHT076RRRRovst7MnzBkgSy8tpGt9SdHnp0pPLW6SEX2yx098Wlz5rPWVp
+         FqZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=v4/QIctrXLZuVGTfw6POOs0tQ2zR3ltEGhnHc4d6oJE=;
-        b=WvwfT2GWu1/U2AGqr0X5ZuueXuOeeEw8zuydTEfTTYUbxKlFMTkz4SxYZcIG2C0FK8
-         p+XBIDnW9zk5j9XcL8tbgrZzwPxlkT7QuoHkENMR60tu+PPYNguuMzmtNOfYK9AnfH3U
-         A4URs7E3mvZxUQQk74Tm7vihREjLWW/u3LZHhijvZUpHJXpwXGMf+30XArFEzkIpn/9Q
-         y7kEgna4+TK0GqNF6J1H4dtoOgFe2vsuur047yZXkF2VNx3gXZo+n8rjuilN5EJ9jpjn
-         Rj/0hUiV+U+352drvTUkctIC+oWfkbSQYVORCFurxob6/CveyLNXWMpSr3C+O80DHaQM
-         /UBw==
-X-Gm-Message-State: AOAM53271n3JR/4X8WmjaJZjIYjvzX1ntpKK4FqL43x29o9ajDDI4N28
-        uCYkFbt/3p7CcG1FMYMzBckuALvipvAAEIuBGvA=
-X-Google-Smtp-Source: ABdhPJz4KuzGJhb1+vLgjIvU2MC2gadiZChQVU7Nl0bodKE6nGqNgVjhjEHiK7FjlDLwqWlqRJV7zN82R2Yo0POBeZ8=
-X-Received: by 2002:a17:906:c046:: with SMTP id bm6mr3658460ejb.436.1606762928897;
- Mon, 30 Nov 2020 11:02:08 -0800 (PST)
+        bh=6xoXFQV4BbsJg4GJL1tP5zyqti0Izs4JfnX3eGx9ZII=;
+        b=QY8c97rHO/7sTpS2IuLBNM1Pd7xxZdXjz2vX8FSoNuVxA5ZFqCtGts4wiUCpcpZLcX
+         0hbl66JLlY4WZ4tDRsd/vNSftMsyXbuW3aUmNZgexUpMLa9P20jEYyBNVoC0TSqqFr3B
+         WZlhytX7CA7PB5PBRQ7uIlgOUl/l1oOaTfMthtyVef8ZczlxHLnNq6TZAHnYSegKaPkt
+         bvTybXCKbzLqDLh6jG09csSYcHZsKfDRxiu58pq0uGCea8Oo4Nh0PjDNwze4VXiVxIn+
+         gdWXCG7PmaRiivD2TWNK/s/+N/T3eOKUwQLaOTuknb1vt7pxl0P8i5pHfcKW9A/faW4u
+         DOXg==
+X-Gm-Message-State: AOAM532VswOklm5Oe1XvuzSwzpjX1i+WTfUYPBZWCmAG/e5CmHjkVs1h
+        QEdGPrwJIF8ZtwBTAnbbrfp7o5LE8Z4QVV7O09k=
+X-Google-Smtp-Source: ABdhPJzezmVM/nS96Muqp5B7lDWviRp/y1V8xtOI7nar908PFGFkWpkcuNGt9jlx4Ufw4MPV5xQZpSFfBP0jcrTEzi4=
+X-Received: by 2002:aa7:c713:: with SMTP id i19mr23481998edq.296.1606764619981;
+ Mon, 30 Nov 2020 11:30:19 -0800 (PST)
 MIME-Version: 1.0
 References: <09992cec-65e4-2757-aae6-8fb02a42f961@redhat.com>
- <20201128154849.3193-1-tom.ty89@gmail.com> <20201128154849.3193-2-tom.ty89@gmail.com>
- <5e62c383-22ea-6df6-5acc-5e9f381d4632@redhat.com> <CAGnHSEnetAJNqUEW-iuq7eVyU6VnP84cv9+OVL4C5Z2ZK_eM0A@mail.gmail.com>
- <186eb035-4bc4-ff72-ee41-aeb6d81888e3@redhat.com> <X8T0E2qvF2cgADl+@kroah.com>
- <dd557c38-a919-5e5e-ab3b-17a235f17139@redhat.com> <20201130172004.GA966032@rowland.harvard.edu>
- <abb0a79d-63a0-6f3d-4812-f828283cd47c@redhat.com> <CAGnHSEk1GixNK71CJMymwLE=MyedjCkiG5Ubq1=O_wFxBBM0GQ@mail.gmail.com>
-In-Reply-To: <CAGnHSEk1GixNK71CJMymwLE=MyedjCkiG5Ubq1=O_wFxBBM0GQ@mail.gmail.com>
+ <20201128154849.3193-1-tom.ty89@gmail.com> <62e0d5ea-e665-b913-5482-a75db0ac1368@redhat.com>
+In-Reply-To: <62e0d5ea-e665-b913-5482-a75db0ac1368@redhat.com>
 From:   Tom Yan <tom.ty89@gmail.com>
-Date:   Tue, 1 Dec 2020 03:01:56 +0800
-Message-ID: <CAGnHSEmPpbDokAfGkeCkvo3JuYfnosVt8H+TK7ZWFNsdyWAfYQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb-storage: revert from scsi_add_host_with_dma() to scsi_add_host()
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
+Date:   Tue, 1 Dec 2020 03:30:07 +0800
+Message-ID: <CAGnHSE=sS7tvttuTwE_s+QbCUVCfhmHnuXQp1g1AkZ=JEoxmQA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] uas: revert from scsi_add_host_with_dma() to scsi_add_host()
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Christoph Hellwig <hch@lst.de>,
         Greg KH <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>,
         linux-usb <linux-usb@vger.kernel.org>,
         Mathias Nyman <mathias.nyman@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -68,103 +64,87 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For the record,
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/scsi/scsi_host.h?h=v5.10-rc6#n753
+Hmm, I wonder if I/we wrongly assumed that the dma_dev used for the
+hw_max_sectors clamping in __scsi_init_queue() is wrong.
 
-On Tue, 1 Dec 2020 at 02:57, Tom Yan <tom.ty89@gmail.com> wrote:
+So instead of adding a fallback else-clause here or using "sysdev" as
+dma_dev like in the current upstream code, maybe we should actually do
+a three-way min: the "changed" hw_max_sectors, dma_max_mapping_size of
+dma_dev("dev") and dma_max_mapping_size of sysdev...?
+
+On Mon, 30 Nov 2020 at 17:48, Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> This maybe? https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/scsi_lib.c?h=v5.10-rc6#n1816
+> Hi,
 >
-> UAS:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/storage/uas.c?h=v5.10-rc6#n918
-> BOT (AFAICT):
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/hosts.c?h=v5.10-rc6#n466
+> On 11/28/20 4:48 PM, Tom Yan wrote:
+> > Apparently the former (with the chosen dma_dev) may cause problem in certain
+> > case (e.g. where thunderbolt dock and intel iommu are involved). The error
+> > observed was:
+> >
+> > XHCI swiotlb buffer is full / DMAR: Device bounce map failed
+> >
+> > For now we retain the clamp for hw_max_sectors against the dma_max_mapping_size.
+> > Since the device/size for the clamp that is applied when the scsi request queue
+> > is initialized/allocated is different than the one used here, we invalidate the
+> > early clamping by making a fallback blk_queue_max_hw_sectors() call.
+> >
+> > Signed-off-by: Tom Yan <tom.ty89@gmail.com>
 >
-> It would explain why the issue is only triggered with UAS drives.
+> I can confirm that this fixes the network performance on a Lenovo Thunderbolt
+> dock generation 2, which uses an USB attach NIC.
 >
-> The questions (from me) are:
-> 1. From the scsi layer POV (as per what __scsi_init_queue() does),
-> what/which should we use as dma_dev?
-> 2. Do we really need to set dma_boundary in the UAS host template (to
-> PAGE_SIZE - 1)?
-> 3. Kind of the same question as #1: when we clamp hw_max_sectors to
-> dma max mapping size, should the size actually be "the smaller one
-> among dev and sysdev"? Or is one of the two sizes *always* the smaller
-> one?
+> With this patch added on top of 5.10-rc5 scp performance to another machine
+> on the local gbit LAN goes back from the regressed 1 MB/s to its original 100MB/s
+> as it should be:
+>
+> Tested-by: Hans de Goede <hdegoede@redhat.com>
+>
+> Regards,
+>
+> Hans
 >
 >
-> On Tue, 1 Dec 2020 at 02:19, Hans de Goede <hdegoede@redhat.com> wrote:
+> > ---
+> >  drivers/usb/storage/uas.c | 11 +++++++----
+> >  1 file changed, 7 insertions(+), 4 deletions(-)
 > >
-> > Hi,
+> > diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+> > index c8a577309e8f..5db1325cea20 100644
+> > --- a/drivers/usb/storage/uas.c
+> > +++ b/drivers/usb/storage/uas.c
+> > @@ -843,18 +843,21 @@ static int uas_slave_alloc(struct scsi_device *sdev)
+> >  static int uas_slave_configure(struct scsi_device *sdev)
+> >  {
+> >       struct uas_dev_info *devinfo = sdev->hostdata;
+> > -     struct device *dev = sdev->host->dma_dev;
+> > +     struct usb_device *udev = devinfo->udev;
 > >
-> > On 11/30/20 6:20 PM, Alan Stern wrote:
-> > > On Mon, Nov 30, 2020 at 02:36:38PM +0100, Hans de Goede wrote:
-> > >> Hi,
-> > >>
-> > >> On 11/30/20 2:30 PM, Greg KH wrote:
-> > >>> On Mon, Nov 30, 2020 at 02:23:48PM +0100, Hans de Goede wrote:
-> > >>>> Hi,
-> > >>>>
-> > >>>> On 11/30/20 1:58 PM, Tom Yan wrote:
-> > >>>>> It's merely a moving of comment moving for/and a no-behavioral-change
-> > >>>>> adaptation for the reversion.>
-> > >>>>
-> > >>>> IMHO the revert of the troublesome commit and the other/new changes really
-> > >>>> should be 2 separate commits. But I will let Alan and Greg have the final
-> > >>>> verdict on this.
-> > >>>
-> > >>> I would prefer to just revert the commits and not do anything
-> > >>> different/special here so late in the release cycle.
-> > >>>
-> > >>> So, if Alan agrees, I'll be glad to do them on my end, I just need the
-> > >>> commit ids for them.
-> > >>
-> > >> The troublesome commit are (in reverse, so revert, order):
-> > >>
-> > >> 5df7ef7d32fe ("uas: bump hw_max_sectors to 2048 blocks for SS or faster drives")
-> > >> 558033c2828f ("uas: fix sdev->host->dma_dev")
-> > >> 0154012f8018 ("usb-storage: fix sdev->host->dma_dev")
-> > >>
-> > >> Alan, the reason for reverting these is that using scsi_add_host_with_dma() as the
-> > >> last 2 patches do, with the dmadev argument of that call pointing to the device
-> > >> for the XHCI controller is causing changes to the DMA settings of the XHCI controller
-> > >> itself which is causing regressions in 5.10, see this email thread:
-> > >>
-> > >> https://lore.kernel.org/linux-usb/fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com/T/#t
-> > >
-> > > It's hard to go wrong with reverting, so it's okay with me.
-> > >
-> > > Still, Hans, have you checked out the difference between the
-> > > scsi_add_host() and scsi_add_host_with_dma() calls?  It's just a matter
-> > > of using dev vs. sysdev.  In particular, have you checked to see what
-> > > those two devices are on your system?
+> >       if (devinfo->flags & US_FL_MAX_SECTORS_64)
+> >               blk_queue_max_hw_sectors(sdev->request_queue, 64);
+> >       else if (devinfo->flags & US_FL_MAX_SECTORS_240)
+> >               blk_queue_max_hw_sectors(sdev->request_queue, 240);
+> > -     else if (devinfo->udev->speed >= USB_SPEED_SUPER)
+> > +     else if (udev->speed >= USB_SPEED_SUPER)
+> >               blk_queue_max_hw_sectors(sdev->request_queue, 2048);
+> > +     else
+> > +             blk_queue_max_hw_sectors(sdev->request_queue,
+> > +                                      SCSI_DEFAULT_MAX_SECTORS);
 > >
-> > Its not just dev vs sysdev, its iface->dev vs bus->sysdev, and I assume
-> > that the latter is actually the XHCI controller.
+> >       blk_queue_max_hw_sectors(sdev->request_queue,
+> >               min_t(size_t, queue_max_hw_sectors(sdev->request_queue),
+> > -                   dma_max_mapping_size(dev) >> SECTOR_SHIFT));
+> > +                   dma_max_mapping_size(udev->bus->sysdev) >> SECTOR_SHIFT));
 > >
-> > my vote goes to reverting to avoid the regression for 5.10, esp. since
-> > this is a clean revert of 3 patches with nothing depending / building
-> > on top of the reverted commits.
+> >       if (devinfo->flags & US_FL_NO_REPORT_OPCODES)
+> >               sdev->no_report_opcodes = 1;
+> > @@ -1040,7 +1043,7 @@ static int uas_probe(struct usb_interface *intf, const struct usb_device_id *id)
+> >       shost->can_queue = devinfo->qdepth - 2;
 > >
-> > Then for 5.11 we can retry to introduce similar changes. I would be happy
-> > to try a new patch-set for 5.11.
+> >       usb_set_intfdata(intf, shost);
+> > -     result = scsi_add_host_with_dma(shost, &intf->dev, udev->bus->sysdev);
+> > +     result = scsi_add_host(shost, &intf->dev);
+> >       if (result)
+> >               goto free_streams;
 > >
-> > > It seems likely that if one of those calls messes up some DMA settings,
-> > > the other one does too -- just maybe not settings that matter much.
 > >
-> > I'm not very familiar with all the DMA mapping / mask code, but AFAIK making
-> > changes to the DMA settings of a child will not influence the parent.
-> >
-> > Where as when passing bus->sysdev, then changes are made to a device
-> > which is shared with other devices on the bus, which is why we see
-> > a regression in an USB NIC driver being triggered by the UAS driver
-> > binding to a device (on the same bus).
-> >
-> > At least that is my interpretation of this. I bisected the regression
-> > and that pointed at the UAS DMA change and reverting it fixes things,
-> > confirming that I did not make any mistakes during the bisect.
-> >
-> > Regards,
-> >
-> > Hans
-> >
+>
