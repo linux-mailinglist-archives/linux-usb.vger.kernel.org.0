@@ -2,136 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B5B2C867D
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 15:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704D32C8699
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 15:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727473AbgK3OR6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 09:17:58 -0500
-Received: from mail.msweet.org ([173.255.209.91]:56382 "EHLO mail.msweet.org"
+        id S1726482AbgK3OXr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 09:23:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39976 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726623AbgK3OR6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Nov 2020 09:17:58 -0500
-Received: from mbp16.lan (unknown [143.131.4.103])
-        by mail.msweet.org (Postfix) with ESMTPSA id 0392780691;
-        Mon, 30 Nov 2020 14:17:16 +0000 (UTC)
-Content-Type: multipart/signed;
-        boundary="Apple-Mail=_6107053A-E9BC-4591-A376-26450E530539";
-        protocol="application/pgp-signature";
-        micalg=pgp-sha512
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH] Fix default q_len for usb_f_printer gadget driver
-From:   Michael Sweet <msweet@msweet.org>
-In-Reply-To: <20201030223419.3780-1-msweet@msweet.org>
-Date:   Mon, 30 Nov 2020 09:17:15 -0500
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <C4FD0F03-E71F-4234-BF35-8BDFB7898900@msweet.org>
-References: <20201030223419.3780-1-msweet@msweet.org>
-To:     Felipe Balbi <balbi@kernel.org>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
+        id S1726410AbgK3OXr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Nov 2020 09:23:47 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5BA2720855;
+        Mon, 30 Nov 2020 14:23:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1606746181;
+        bh=D5YLA2umI5xTIpIU3B4wMUGQnZii2vBjolInixNmMu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j5SKazd1cvKNNnCeOH7JqRzgHU8HxogXSJhIyKx0caVlumceg40PfwHYT6FxLWl6y
+         eMN+YiGcBzjQDR0Z/R6QjdffJDE+VSA1Wn2Lr7g4IibKnSZWmJmkmHpGa67OxyAyd4
+         wBkDKfhAOosMnpvIbktmfdKaUg3zXnqvVea8bBlM=
+Date:   Mon, 30 Nov 2020 15:24:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] Thunderbolt/USB4 fix for v5.10-rc7
+Message-ID: <X8UAj0NE/vz7uNsn@kroah.com>
+References: <20201130113238.GT5246@lahna.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201130113238.GT5246@lahna.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Nov 30, 2020 at 01:32:38PM +0200, Mika Westerberg wrote:
+> Hi Greg,
+> 
+> The following changes since commit 09162bc32c880a791c6c0668ce0745cf7958f576:
+> 
+>   Linux 5.10-rc4 (2020-11-15 16:44:31 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.10-rc7
 
---Apple-Mail=_6107053A-E9BC-4591-A376-26450E530539
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=us-ascii
+Pulled and pushed out, thanks.
 
-Hi,
-
-I submitted this a month ago, and aside from Peter Chen's "reviewed by" =
-response I haven't heard anything nor seen it get merged.  I know you =
-are all really busy and I don't want to be a pest - is there something =
-else I need to do to advance this patch?
-
-Thanks!
-
-
-> On Oct 30, 2020, at 6:34 PM, Michael R Sweet <msweet@msweet.org> =
-wrote:
->=20
-> The usb_f_printer gadget driver uses a default q_len value of *0* =
-which prevents
-> any IO from occurring.  Moreover, once the driver is instantiated it =
-is
-> impossible to change the q_len value.
->=20
-> The following patch uses a default q_len value of 10 which matches the =
-legacy
-> g_printer gadget driver.  This minimizes the possibility that you end =
-up with a
-> non-working printer gadget.  It is still possible to set the q_len to =
-a
-> different value using the configfs path of the same name.
->=20
-> Signed-off-by: Michael R Sweet <msweet@msweet.org>
-> ---
-> drivers/usb/gadget/function/f_printer.c | 5 +++++
-> 1 file changed, 5 insertions(+)
->=20
-> diff --git a/drivers/usb/gadget/function/f_printer.c =
-b/drivers/usb/gadget/function/f_printer.c
-> index 9c7ed2539ff7..4f3161005e4f 100644
-> --- a/drivers/usb/gadget/function/f_printer.c
-> +++ b/drivers/usb/gadget/function/f_printer.c
-> @@ -50,6 +50,8 @@
-> #define GET_PORT_STATUS		1
-> #define SOFT_RESET		2
->=20
-> +#define DEFAULT_Q_LEN		10 /* same as legacy g_printer =
-gadget */
-> +
-> static int major, minors;
-> static struct class *usb_gadget_class;
-> static DEFINE_IDA(printer_ida);
-> @@ -1317,6 +1319,9 @@ static struct usb_function_instance =
-*gprinter_alloc_inst(void)
-> 	opts->func_inst.free_func_inst =3D gprinter_free_inst;
-> 	ret =3D &opts->func_inst;
->=20
-> +	/* Make sure q_len is initialized, otherwise the bound device =
-can't support read/write! */
-> +	opts->q_len =3D DEFAULT_Q_LEN;
-> +
-> 	mutex_lock(&printer_ida_lock);
->=20
-> 	if (ida_is_empty(&printer_ida)) {
-> --
-> 2.17.1
->=20
-
-________________________
-Michael Sweet
-
-
-
-
---Apple-Mail=_6107053A-E9BC-4591-A376-26450E530539
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename=signature.asc
-Content-Type: application/pgp-signature;
-	name=signature.asc
-Content-Description: Message signed with OpenPGP
-
------BEGIN PGP SIGNATURE-----
-Comment: GPGTools - https://gpgtools.org
-
-iQIzBAEBCgAdFiEEkIbDzcZsP1Y8+PQFvmfHXsgfMkQFAl/E/usACgkQvmfHXsgf
-MkQ+gBAAvktf6PWS+GR7rs/cKwwAi4kVZ5A3VeZdhgg5OOmc07p0QUz08zLl6iOq
-ejY1tcikCxaHnLyW20dDewWalIBiFkzY3NW+0AebASaj/awdDTec29TsctXss/yJ
-7NUoWwBR2QoHpjMT1FIkrrnxH4mb2QACq4FI3T5ReCsdVutq7ed6sDFs7nJ4/ki6
-0Q0QmNzET2ifwOXFdNhCJf1XrtOZdOo/fcViGr9j8eeNaPmxCLsm8CjzdGzBvtgw
-kYBu6RqbUINgfPhz2ZthXZrJMuS3gSRQ8L+YWB6hdvmqx3mQH3xXSgZAH9CpaBTy
-MvK3JM7Ip38bz8zvTLZEYGZMG7LLS56IpECNn0Ttf4f+uzIX001jWqaDHm4Ks/Lg
-LFC1kSygooa+Yd9Lb83fiBXsAUOwQtyicjeeQX+mEhUKfwIxo2tV7Gt9gmRD1GMJ
-iy10OqXqTJtOa/4DcaXCOka//oAQPZByCZ0no9EIeUkzXXj8r88s6rcDbjbpUBah
-pmhCwcNsEyGmj3Gdlu4CAP2duMuLWKZnMatAWToqPCRf3pPxDwBIFjaIGVv7XEbM
-iLFm6sOxCA9ksQbN0JCU2ub4Ux1ZSsigL/QdWyn7wglUUXdbGbUlKr9rS9Dkf3Ig
-ZphO/EeVM1TSCWcqQxXv1uWkNamM7DJbOJJ0ct9yEmZF119CF+A=
-=B/l8
------END PGP SIGNATURE-----
-
---Apple-Mail=_6107053A-E9BC-4591-A376-26450E530539--
+greg k-h
