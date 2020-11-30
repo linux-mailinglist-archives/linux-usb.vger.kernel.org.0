@@ -2,210 +2,244 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A99682C902A
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 22:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1DE2C903B
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 22:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729074AbgK3VnS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 16:43:18 -0500
-Received: from mga12.intel.com ([192.55.52.136]:29212 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725995AbgK3VnR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Nov 2020 16:43:17 -0500
-IronPort-SDR: EnyEhoGdGQPq51Kzf+Br4gdrntAzdUeWiO7DgLG2agxbKJRwgbW3qiSm9VYSRLXFbtPOufuDJD
- tvNfEy0xHmLA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="151970534"
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="151970534"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 13:42:37 -0800
-IronPort-SDR: wqRCLamIcZCs88BSWX4PDVDWMzJulVFNJAPNroaIGqJ/w/KpDcWWvTlwOEAm2nYQ8/WrRST+nn
- 9WVvZuidsnAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="372661467"
-Received: from lkp-server01.sh.intel.com (HELO 6b2307aab78b) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Nov 2020 13:42:36 -0800
-Received: from kbuild by 6b2307aab78b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kjqwN-00008l-Mk; Mon, 30 Nov 2020 21:42:35 +0000
-Date:   Tue, 01 Dec 2020 05:41:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- ebad43260d225bccd57c7144a6eecbef3cd88f7f
-Message-ID: <5fc56714.6QStqJRGmukCS8J7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1730086AbgK3VsG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 16:48:06 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:35341 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726734AbgK3VsG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 16:48:06 -0500
+Received: by mail-io1-f65.google.com with SMTP id i9so13460090ioo.2;
+        Mon, 30 Nov 2020 13:47:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GilpYripAt/bLXpE/jyghzfJ8zmApgVS3kBCnvZHAqI=;
+        b=dIRJUlVJpUha44NckFDeksTxNBZLSBcdeZKETqTtDPWJ2uapAqhX2tS3NOuLaMJ5p5
+         cwZLkCbfAqzUpUf+qY5WZboPELgKst3Z+drw0T25+TE6Bjf9eTlxmG6EGLFW5HPWFExt
+         msc5qfbVMGBL6YyIyfoc1KEl5EHOMPVbqBOD8ers8WimkNdsECyVbk3xZzo4ZjAK5YqY
+         69jOCAiQ5qj9qjrXHYSKf6zBrFWLghoQY/V/zdrWUFfcX51p1D8NWeZ2zMW9IlRQ506A
+         2e+Vb5M4ydOAipSVvgtEgho/FSuC/FX7mRvOwa6Bb37wpioDr8DrtTkLAZ0+aX3x+DbF
+         e6Ug==
+X-Gm-Message-State: AOAM530R8TDc9oEoS7qdNh0oEd6cjERd2GuF8klHlcFM/JFzMZv1JcD2
+        f3yLsae1btjX02OvvSpBxw==
+X-Google-Smtp-Source: ABdhPJyGtxemsjYUVFGU18tCnvYzgNkk60utnZFdMOpyjza0fMUIKtczYGaSgAFxkr28Kf5zyflnbA==
+X-Received: by 2002:a5e:9512:: with SMTP id r18mr2697964ioj.86.1606772839118;
+        Mon, 30 Nov 2020 13:47:19 -0800 (PST)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id e19sm3122300ioh.15.2020.11.30.13.47.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Nov 2020 13:47:18 -0800 (PST)
+Received: (nullmailer pid 3085495 invoked by uid 1000);
+        Mon, 30 Nov 2020 21:47:16 -0000
+Date:   Mon, 30 Nov 2020 14:47:16 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Li Jun <jun.li@nxp.com>
+Cc:     heikki.krogerus@linux.intel.com, rafael@kernel.org,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        hdegoede@redhat.com, lee.jones@linaro.org,
+        mika.westerberg@linux.intel.com, dmitry.torokhov@gmail.com,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-imx@nxp.com, peter.chen@nxp.com
+Subject: Re: [PATCH v6 1/6] dt-bindings: usb: add documentation for typec
+ switch simple driver
+Message-ID: <20201130214716.GA3040203@robh.at.kernel.org>
+References: <1606140096-1382-1-git-send-email-jun.li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <1606140096-1382-1-git-send-email-jun.li@nxp.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: ebad43260d225bccd57c7144a6eecbef3cd88f7f  Merge 5.10-rc6 into usb-next
+On Mon, Nov 23, 2020 at 10:01:31PM +0800, Li Jun wrote:
+> Some platforms need a simple driver to do some controls according to
+> typec orientation, this can be extended to be a generic driver with
+> compatible with "typec-orientation-switch".
+> 
+> Signed-off-by: Li Jun <jun.li@nxp.com>
+> ---
+> changes for v6:
+> - Use general mux bindings for typec switch, one typec switch
+>   may have 1 or 2 GPIOs for channel selection, if 1 GPIO, only
+>   can be used to select cc1 or cc2; if 2 GPIOs, the second GPIO
+>   can be used to deselect both channels or keep normal operations.
+> - Add one more connection to usb controller.
+>  
+> No changes for v5.
+> 
+> changes on v4:
+> - Use compatible instead of bool property for switch matching.
+> - Change switch GPIO to be switch simple.
+> - Change the active channel selection GPIO to be optional.
+> 
+> previous discussion:
+> http://patchwork.ozlabs.org/patch/1054342/
+> 
+>  .../bindings/usb/typec-switch-simple.yaml          | 122 +++++++++++++++++++++
+>  1 file changed, 122 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+> new file mode 100644
+> index 0000000..030ade5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+> @@ -0,0 +1,122 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/typec-switch-simple.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Typec Orientation Switch Simple Solution Bindings
+> +
+> +maintainers:
+> +  - Li Jun <jun.li@nxp.com>
+> +
+> +description: |-
+> +  USB SuperSpeed (SS) lanes routing to which side of typec connector is
+> +  decided by orientation, this maybe achieved by some simple control like
+> +  GPIO toggle.
+> +
+> +properties:
+> +  compatible:
+> +    const: typec-orientation-switch
+> +
+> +  '#mux-control-cells':
+> +    const: 0
 
-elapsed time: 727m
+Who is the mux-control consumer?
 
-configs tested: 146
-configs skipped: 2
+> +
+> +  switch-gpios:
+> +    description: |
+> +      GPIO specifiers to select the target channel of mux.
+> +      The first GPIO is for cc1 and cc2 selection, the GPIO flag use
+> +      GPIO_ACTIVE_HIGH if GPIO physical state high is for cc1; or use
+> +      GPIO_ACTIVE_LOW if GPIO physical state low is for cc1.
+> +      The second gpio is to deselect any channles by places all channels
+> +      in high-impedance state to reduce current consumption, the gpio flag
+> +      use GPIO_ACTIVE_HIGH if GPIO physical state high is for
+> +      high-impedance state (so low for normal operations); or Use
+> +      GPIO_ACTIVE_LOW if GPIO physical state low is for high-impedance
+> +      state(so high for normal operations).
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  idle-state:
+> +    description: -|
+> +      For TYPEC_ORIENTATION_NONE by deselect both channels if supported.
+> +    const: 2
+> +
+> +  # Standard properties described in
+> +  # Documentation/devicetree/bindings/mux/mux-controller.txt
+> +
+> +  port:
+> +    type: object
+> +    additionalProperties: false
+> +    description: -|
+> +      Connection to the remote endpoint using OF graph bindings that model
+> +      SS data bus to typec connector.
+> +
+> +    properties:
+> +      '#address-cells':
+> +        const: 1
+> +
+> +      '#size-cells':
+> +        const: 0
+> +
+> +      endpoint@0:
+> +        type: object
+> +        description: Endpoint connected to typec connector.
+> +        additionalProperties: false
+> +
+> +        properties:
+> +          reg:
+> +            const: 0
+> +          remote-endpoint: true
+> +
+> +        required:
+> +          - remote-endpoint
+> +
+> +      endpoint@1:
+> +        type: object
+> +        description: Endpoint connected to usb controller.
+> +        additionalProperties: false
+> +
+> +        properties:
+> +          reg:
+> +            const: 1
+> +          remote-endpoint: true
+> +
+> +        required:
+> +          - remote-endpoint
+> +
+> +    required:
+> +      - endpoint@0
+> +
+> +required:
+> +  - compatible
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    typec_switch: mux-controller {
+> +        compatible = "typec-orientation-switch";
+> +        #mux-control-cells = <0>;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&pinctrl_ss_sel>;
+> +        switch-gpios = <&gpio3 15 GPIO_ACTIVE_HIGH>,
+> +                       <&gpio2 20 GPIO_ACTIVE_HIGH>;
+> +        idle-state = <2>;
+> +
+> +        port {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                usb3_orien_sel: endpoint@0 {
+> +                        reg = <0>;
+> +                        remote-endpoint = <&typec_con_ss>;
+> +                };
+> +
+> +                usb3_con_data: endpoint@1 {
+> +                        reg = <1>;
+> +                        remote-endpoint = <&dwc3_0>;
+> +                };
+> +        };
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This still seems unnecessarily complicated. What I had in mind is just 
+something like this:
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                        sh7763rdp_defconfig
-sh                          sdk7786_defconfig
-mips                           xway_defconfig
-mips                        jmr3927_defconfig
-powerpc                     tqm8555_defconfig
-powerpc                     redwood_defconfig
-m68k                       m5208evb_defconfig
-m68k                        mvme16x_defconfig
-powerpc                        warp_defconfig
-x86_64                              defconfig
-h8300                               defconfig
-arc                          axs101_defconfig
-mips                           jazz_defconfig
-powerpc                     skiroot_defconfig
-riscv                            allmodconfig
-powerpc                    klondike_defconfig
-sh                          landisk_defconfig
-powerpc                      walnut_defconfig
-mips                      pic32mzda_defconfig
-um                             i386_defconfig
-arm                      pxa255-idp_defconfig
-arm                          ep93xx_defconfig
-arc                     haps_hs_smp_defconfig
-powerpc                      ppc64e_defconfig
-sparc                       sparc32_defconfig
-powerpc                           allnoconfig
-powerpc                      tqm8xx_defconfig
-sh                   sh7770_generic_defconfig
-ia64                            zx1_defconfig
-xtensa                           alldefconfig
-c6x                        evmc6474_defconfig
-powerpc                      obs600_defconfig
-arm                           efm32_defconfig
-mips                         tb0219_defconfig
-openrisc                         alldefconfig
-arm                         bcm2835_defconfig
-mips                           ip32_defconfig
-arm                         lpc18xx_defconfig
-arm                        shmobile_defconfig
-arm                          prima2_defconfig
-powerpc                     asp8347_defconfig
-c6x                         dsk6455_defconfig
-mips                         mpc30x_defconfig
-mips                          rm200_defconfig
-arc                         haps_hs_defconfig
-mips                        bcm47xx_defconfig
-openrisc                 simple_smp_defconfig
-nios2                            allyesconfig
-arm                            pleb_defconfig
-sh                        sh7757lcr_defconfig
-sh                           se7780_defconfig
-xtensa                generic_kc705_defconfig
-powerpc                 mpc832x_rdb_defconfig
-arm                            mmp2_defconfig
-arm                        neponset_defconfig
-powerpc                  iss476-smp_defconfig
-arm                            lart_defconfig
-mips                        qi_lb60_defconfig
-parisc                generic-32bit_defconfig
-powerpc                      ppc6xx_defconfig
-h8300                       h8s-sim_defconfig
-sh                           se7206_defconfig
-mips                           rs90_defconfig
-arm                         s5pv210_defconfig
-arm                          badge4_defconfig
-arc                              allyesconfig
-xtensa                    xip_kc705_defconfig
-arm                       imx_v6_v7_defconfig
-m68k                       bvme6000_defconfig
-arm64                            alldefconfig
-arm                        realview_defconfig
-arm                     am200epdkit_defconfig
-arm                        multi_v5_defconfig
-arm                      integrator_defconfig
-m68k                         amcore_defconfig
-arm                           spitz_defconfig
-sh                        edosk7705_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-i386                 randconfig-a004-20201130
-i386                 randconfig-a002-20201130
-i386                 randconfig-a003-20201130
-i386                 randconfig-a005-20201130
-i386                 randconfig-a006-20201130
-i386                 randconfig-a001-20201130
-x86_64               randconfig-a014-20201130
-x86_64               randconfig-a015-20201130
-x86_64               randconfig-a016-20201130
-x86_64               randconfig-a011-20201130
-x86_64               randconfig-a012-20201130
-x86_64               randconfig-a013-20201130
-i386                 randconfig-a013-20201130
-i386                 randconfig-a012-20201130
-i386                 randconfig-a011-20201130
-i386                 randconfig-a016-20201130
-i386                 randconfig-a015-20201130
-i386                 randconfig-a014-20201130
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
+mux: mux-controller {
+  compatible = "gpio-mux";
+  #mux-control-cells = <0>;
+  mux-gpios = <&gpio3 15 GPIO_ACTIVE_HIGH>,
+              <&gpio2 20 GPIO_ACTIVE_HIGH>;
+  idle-state = <2>;
+};
 
-clang tested configs:
-x86_64               randconfig-a002-20201130
-x86_64               randconfig-a006-20201130
-x86_64               randconfig-a005-20201130
-x86_64               randconfig-a004-20201130
-x86_64               randconfig-a001-20201130
-x86_64               randconfig-a003-20201130
+connector {
+  compatible = "usb-c-connector";
+  mux-controls = <&mux>;
+  ...
+};
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Then you aren't re-implementing the gpio-mux driver.
+
+This should work for *any* mux implementation as long as the mux states 
+always have the same meanings from the perspective of the connector.
+
+Of course, I have little visibility into the possible h/w 
+implementations for Type-C and maybe this isn't sufficient. So input 
+from Type-C experts would be helpful.
+
+Rob
