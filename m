@@ -2,73 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB312C8352
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 12:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A7F2C8374
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 12:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729168AbgK3LeY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 06:34:24 -0500
-Received: from mga02.intel.com ([134.134.136.20]:48127 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728345AbgK3LeY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Nov 2020 06:34:24 -0500
-IronPort-SDR: 6bwMl23HWPklERCjpNJhocn8nmlG5OW6DQH814+w5NGEBOUDinc3NRVRCP/DhMDIJ1fXOpD4NS
- HsrH3TNxoAFA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9820"; a="159671766"
-X-IronPort-AV: E=Sophos;i="5.78,381,1599548400"; 
-   d="scan'208";a="159671766"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 03:32:44 -0800
-IronPort-SDR: WDj5bXBzENd2PdlqqxP9H80inRwHBSG6pBwd3vyhf2qPim9xOt82IzkQuhjDOG1gyUbwiz3kA9
- jeJiHF8W3OSg==
-X-IronPort-AV: E=Sophos;i="5.78,381,1599548400"; 
-   d="scan'208";a="549061268"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 03:32:41 -0800
-Received: by lahna (sSMTP sendmail emulation); Mon, 30 Nov 2020 13:32:38 +0200
-Date:   Mon, 30 Nov 2020 13:32:38 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [GIT PULL] Thunderbolt/USB4 fix for v5.10-rc7
-Message-ID: <20201130113238.GT5246@lahna.fi.intel.com>
+        id S1729140AbgK3Lr2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 06:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727288AbgK3Lr2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 06:47:28 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F096BC0613D2
+        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 03:46:47 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1kjhdi-0004tk-W9; Mon, 30 Nov 2020 12:46:43 +0100
+Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1kjhdh-0000nU-FT; Mon, 30 Nov 2020 12:46:41 +0100
+Date:   Mon, 30 Nov 2020 12:46:41 +0100
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Thinh.Nguyen@synopsys.com, kernel@pengutronix.de
+Subject: Re: [PATCH] usb: dwc3: gadget: Restart DWC3 gadget when enabling
+ pullup
+Message-ID: <20201130114641.GD28656@pengutronix.de>
+References: <20201120001321.773-1-wcheng@codeaurora.org>
+ <20201120150804.GJ23024@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20201120150804.GJ23024@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:35:45 up 284 days, 19:06, 104 users,  load average: 0.39, 0.23,
+ 0.18
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On Fri, 20 Nov 2020 16:08:04 +0100, Michael Tretter wrote:
+> On Thu, 19 Nov 2020 16:13:21 -0800, Wesley Cheng wrote:
+> > usb_gadget_deactivate/usb_gadget_activate does not execute the UDC start
+> > operation, which may leave EP0 disabled and event IRQs disabled when
+> > re-activating the function. Move the enabling/disabling of USB EP0 and
+> > device event IRQs to be performed in the pullup routine.
+> > 
+> > Fixes: ae7e86108b12 ("usb: dwc3: Stop active transfers before halting the
+> > controller")
+> > 
+> > Reported-by: Michael Tretter <m.tretter@pengutronix.de>
+> > Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> 
+> Tested-by: Michael Tretter <m.tretter@pengutronix.de>
 
-The following changes since commit 09162bc32c880a791c6c0668ce0745cf7958f576:
+Gentle ping. I didn't see this fix being picked up into any of the usb trees.
 
-  Linux 5.10-rc4 (2020-11-15 16:44:31 -0800)
+Michael
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.10-rc7
-
-for you to fetch changes up to 600c0849cf86b75d86352f59745226273290986a:
-
-  thunderbolt: Fix use-after-free in remove_unplugged_switch() (2020-11-19 17:44:10 +0300)
-
-----------------------------------------------------------------
-thunderbolt: Fix for v5.10-rc7
-
-This includes a single fix for use-after-free bug after resume from
-hibernation.
-
-----------------------------------------------------------------
-Mika Westerberg (1):
-      thunderbolt: Fix use-after-free in remove_unplugged_switch()
-
- drivers/thunderbolt/icm.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> > ---
+> >  drivers/usb/dwc3/gadget.c | 14 +++-----------
+> >  1 file changed, 3 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 5d879b7606d5..922c8b76e534 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -1988,6 +1988,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
+> >  
+> >  static void dwc3_gadget_disable_irq(struct dwc3 *dwc);
+> >  static void __dwc3_gadget_stop(struct dwc3 *dwc);
+> > +static int __dwc3_gadget_start(struct dwc3 *dwc);
+> >  
+> >  static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+> >  {
+> > @@ -2050,6 +2051,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+> >  			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
+> >  						dwc->ev_buf->length;
+> >  		}
+> > +	} else {
+> > +		__dwc3_gadget_start(dwc);
+> >  	}
+> >  
+> >  	ret = dwc3_gadget_run_stop(dwc, is_on, false);
+> > @@ -2224,10 +2227,6 @@ static int dwc3_gadget_start(struct usb_gadget *g,
+> >  	}
+> >  
+> >  	dwc->gadget_driver	= driver;
+> > -
+> > -	if (pm_runtime_active(dwc->dev))
+> > -		__dwc3_gadget_start(dwc);
+> > -
+> >  	spin_unlock_irqrestore(&dwc->lock, flags);
+> >  
+> >  	return 0;
+> > @@ -2253,13 +2252,6 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
+> >  	unsigned long		flags;
+> >  
+> >  	spin_lock_irqsave(&dwc->lock, flags);
+> > -
+> > -	if (pm_runtime_suspended(dwc->dev))
+> > -		goto out;
+> > -
+> > -	__dwc3_gadget_stop(dwc);
+> > -
+> > -out:
+> >  	dwc->gadget_driver	= NULL;
+> >  	spin_unlock_irqrestore(&dwc->lock, flags);
+> >  
+> > -- 
+> > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> > a Linux Foundation Collaborative Project
+> > 
+> > 
+> 
