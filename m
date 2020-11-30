@@ -2,240 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B582C8235
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 11:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4FD2C8349
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 12:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728719AbgK3Kb0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 05:31:26 -0500
-Received: from mga11.intel.com ([192.55.52.93]:65474 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727288AbgK3Kb0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Nov 2020 05:31:26 -0500
-IronPort-SDR: BmijwczFEG6FHDCbzUyRMVm1xv7cYwqN489RMcfJREzMqqwSeY0DJNH89Qrk/fqMEMzSX9L24D
- BDAEBA3wZk0A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9820"; a="169115392"
-X-IronPort-AV: E=Sophos;i="5.78,381,1599548400"; 
-   d="scan'208";a="169115392"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 02:29:45 -0800
-IronPort-SDR: 37FsGUTQabxcZUL4YZTH2m4XDp0v0jJAcchF26J13qHZmx1wQfe8dUcWvMuivFgKgT9339Y2m4
- VATR/zyIs5rA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,381,1599548400"; 
-   d="scan'208";a="434266167"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 30 Nov 2020 02:29:43 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 30 Nov 2020 12:29:42 +0200
-Date:   Mon, 30 Nov 2020 12:29:42 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] usb: typec: tps6598x: Export some power supply
- properties
-Message-ID: <20201130102942.GB2911464@kuha.fi.intel.com>
-References: <cover.1606481420.git.agx@sigxcpu.org>
- <91c27b323786445f6b33c6a7e89e93755d05e3a2.1606481420.git.agx@sigxcpu.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <91c27b323786445f6b33c6a7e89e93755d05e3a2.1606481420.git.agx@sigxcpu.org>
+        id S1726949AbgK3Lbg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 06:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726345AbgK3Lbf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 06:31:35 -0500
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B272CC0613D2;
+        Mon, 30 Nov 2020 03:30:55 -0800 (PST)
+Received: by mail-qt1-x844.google.com with SMTP id u21so1992067qtw.11;
+        Mon, 30 Nov 2020 03:30:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=M+trhuPUBFP3JQwxSSGofs1PCXGPO8zUFhxjN+RxJTk=;
+        b=thJv2e9CevkDgp9T99+nyHwvCqRFoB33hNNgH+NJXQkDqjbFavjlPNE6x7H0gDP7sM
+         ePz0GCv8LCr5HtNk94F9riuL/c5Z6V/h3PJx9MmaJgeZSXww5AtnyMrFvWITWG68WWuY
+         WUetkGkcBn7COkmcOS5fikctSpkzDBgpYvFcv4EhchgWa3i73iUOZ84RZjnJAppCYa6K
+         7+QpGzZRgo87escIpsJDJu5VnyMs2gwcioyw+uNqr/5onw/m1Z1O9MsM4RklycW7KzSJ
+         gcxuiHIqAh/WY/a3RVf2l5klfpdOv9fQD42R7Xy6Cj+9KKLRWFsqvSpEdPsXlUYJMRFU
+         1s/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=M+trhuPUBFP3JQwxSSGofs1PCXGPO8zUFhxjN+RxJTk=;
+        b=aTbJWEgAzpXHPreQHc6XSCAwHvrBiZHmqMNvAVmDE9bbBWbeuEH5Vv9LdLhO0Uolmj
+         CJCxw8aIhVqbL/yMssFYHDJ7bZz1ZVNP4Q66ljVeqylHmmaXHeUVvJcKW/Ob16sJ0+Zu
+         FMozNr9Y5bZb+O8AF6Gs1XKa0NeSTvcZoE7tc98+7UPKBIoOxFnupTuKk4vYmMyqaLzU
+         //dLro0zaNWm05RaVaN4qZyGyLwr5yiUHPUe6Pouj9lgUm9jCR9LfGtQUKTGfYL5GUQR
+         fTgsFVy+go/hIPfFzaAjJhDFBYnPfVduQOEHgtcOlrQ2hWm8OgHHIfHbb3xDu62X7pN4
+         ym2Q==
+X-Gm-Message-State: AOAM533pgp09li2Cz4QewRzRmJtsB4tj/f+KohZEhaN5t9An5yfpk8Oi
+        N0SU/H5ukoR8J92BPI5z6uprzChGOP3Piw==
+X-Google-Smtp-Source: ABdhPJyJrp5D8aX96IDFdmbDR+W80+MzTyXPsDOGHMDq4gXqm3VOwlb1wJRj0FKh3/1sPxILvU/phw==
+X-Received: by 2002:ac8:4507:: with SMTP id q7mr21413019qtn.49.1606735854824;
+        Mon, 30 Nov 2020 03:30:54 -0800 (PST)
+Received: from localhost.localdomain ([177.194.72.74])
+        by smtp.gmail.com with ESMTPSA id o13sm14307852qkm.78.2020.11.30.03.30.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Nov 2020 03:30:54 -0800 (PST)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Peter.Chen@nxp.com, linux-usb@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH v2] usb: chipidea: ci_hdrc_imx: Pass DISABLE_DEVICE_STREAMING flag to imx6ul
+Date:   Mon, 30 Nov 2020 08:30:47 -0300
+Message-Id: <20201130113047.9659-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 01:53:29PM +0100, Guido Günther wrote:
-> This allows downstream supplies and userspace to detect
-> whether external power is supplied.
-> 
-> Signed-off-by: Guido Günther <agx@sigxcpu.org>
+According to the i.MX6UL Errata document:
+https://www.nxp.com/docs/en/errata/IMX6ULCE.pdf
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ERR007881 also affects i.MX6UL, so pass the
+CI_HDRC_DISABLE_DEVICE_STREAMING flag to workaround the issue.
 
-> ---
->  drivers/usb/typec/Kconfig    |   1 +
->  drivers/usb/typec/tps6598x.c | 105 +++++++++++++++++++++++++++++++++++
->  2 files changed, 106 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> index 772b07e9f188..365f905a8e49 100644
-> --- a/drivers/usb/typec/Kconfig
-> +++ b/drivers/usb/typec/Kconfig
-> @@ -64,6 +64,7 @@ config TYPEC_HD3SS3220
->  config TYPEC_TPS6598X
->  	tristate "TI TPS6598x USB Power Delivery controller driver"
->  	depends on I2C
-> +	select POWER_SUPPLY
->  	select REGMAP_I2C
->  	select USB_ROLE_SWITCH
->  	help
-> diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-> index 3db33bb622c3..8163306f849e 100644
-> --- a/drivers/usb/typec/tps6598x.c
-> +++ b/drivers/usb/typec/tps6598x.c
-> @@ -9,6 +9,7 @@
->  #include <linux/i2c.h>
->  #include <linux/acpi.h>
->  #include <linux/module.h>
-> +#include <linux/power_supply.h>
->  #include <linux/regmap.h>
->  #include <linux/interrupt.h>
->  #include <linux/usb/typec.h>
-> @@ -55,6 +56,7 @@ enum {
->  };
->  
->  /* TPS_REG_POWER_STATUS bits */
-> +#define TPS_POWER_STATUS_CONNECTION	BIT(0)
->  #define TPS_POWER_STATUS_SOURCESINK	BIT(1)
->  #define TPS_POWER_STATUS_PWROPMODE(p)	(((p) & GENMASK(3, 2)) >> 2)
->  
-> @@ -96,8 +98,25 @@ struct tps6598x {
->  	struct typec_partner *partner;
->  	struct usb_pd_identity partner_identity;
->  	struct usb_role_switch *role_sw;
-> +	struct typec_capability typec_cap;
-> +
-> +	struct power_supply *psy;
-> +	struct power_supply_desc psy_desc;
-> +	enum power_supply_usb_type usb_type;
-> +};
-> +
-> +static enum power_supply_property tps6598x_psy_props[] = {
-> +	POWER_SUPPLY_PROP_USB_TYPE,
-> +	POWER_SUPPLY_PROP_ONLINE,
->  };
->  
-> +static enum power_supply_usb_type tps6598x_psy_usb_types[] = {
-> +	POWER_SUPPLY_USB_TYPE_C,
-> +	POWER_SUPPLY_USB_TYPE_PD,
-> +};
-> +
-> +static const char *tps6598x_psy_name_prefix = "tps6598x-source-psy-";
-> +
->  /*
->   * Max data bytes for Data1, Data2, and other registers. See ch 1.3.2:
->   * https://www.ti.com/lit/ug/slvuan1a/slvuan1a.pdf
-> @@ -248,6 +267,8 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
->  	if (desc.identity)
->  		typec_partner_set_identity(tps->partner);
->  
-> +	power_supply_changed(tps->psy);
-> +
->  	return 0;
->  }
->  
-> @@ -260,6 +281,7 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
->  	typec_set_pwr_role(tps->port, TPS_STATUS_PORTROLE(status));
->  	typec_set_vconn_role(tps->port, TPS_STATUS_VCONN(status));
->  	tps6598x_set_data_role(tps, TPS_STATUS_DATAROLE(status), false);
-> +	power_supply_changed(tps->psy);
->  }
->  
->  static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
-> @@ -467,6 +489,85 @@ static const struct regmap_config tps6598x_regmap_config = {
->  	.max_register = 0x7F,
->  };
->  
-> +static int tps6598x_psy_get_online(struct tps6598x *tps,
-> +				   union power_supply_propval *val)
-> +{
-> +	int ret;
-> +	u16 pwr_status;
-> +
-> +	ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (!(pwr_status & TPS_POWER_STATUS_CONNECTION) ||
-> +	    !(pwr_status & TPS_POWER_STATUS_SOURCESINK)) {
-> +		val->intval = 0;
-> +	} else {
-> +		val->intval = 1;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int tps6598x_psy_get_prop(struct power_supply *psy,
-> +				 enum power_supply_property psp,
-> +				 union power_supply_propval *val)
-> +{
-> +	struct tps6598x *tps = power_supply_get_drvdata(psy);
-> +	u16 pwr_status;
-> +	int ret = 0;
-> +
-> +	switch (psp) {
-> +	case POWER_SUPPLY_PROP_USB_TYPE:
-> +		ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
-> +		if (ret < 0)
-> +			return ret;
-> +		if (TPS_POWER_STATUS_PWROPMODE(pwr_status) == TYPEC_PWR_MODE_PD)
-> +			val->intval = POWER_SUPPLY_USB_TYPE_PD;
-> +		else
-> +			val->intval = POWER_SUPPLY_USB_TYPE_C;
-> +		break;
-> +	case POWER_SUPPLY_PROP_ONLINE:
-> +		ret = tps6598x_psy_get_online(tps, val);
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int devm_tps6598_psy_register(struct tps6598x *tps)
-> +{
-> +	struct power_supply_config psy_cfg = {};
-> +	const char *port_dev_name = dev_name(tps->dev);
-> +	size_t psy_name_len = strlen(tps6598x_psy_name_prefix) +
-> +				     strlen(port_dev_name) + 1;
-> +	char *psy_name;
-> +
-> +	psy_cfg.drv_data = tps;
-> +	psy_cfg.fwnode = dev_fwnode(tps->dev);
-> +	psy_name = devm_kzalloc(tps->dev, psy_name_len, GFP_KERNEL);
-> +	if (!psy_name)
-> +		return -ENOMEM;
-> +
-> +	snprintf(psy_name, psy_name_len, "%s%s", tps6598x_psy_name_prefix,
-> +		 port_dev_name);
-> +	tps->psy_desc.name = psy_name;
-> +	tps->psy_desc.type = POWER_SUPPLY_TYPE_USB;
-> +	tps->psy_desc.usb_types = tps6598x_psy_usb_types;
-> +	tps->psy_desc.num_usb_types = ARRAY_SIZE(tps6598x_psy_usb_types);
-> +	tps->psy_desc.properties = tps6598x_psy_props;
-> +	tps->psy_desc.num_properties = ARRAY_SIZE(tps6598x_psy_props);
-> +	tps->psy_desc.get_property = tps6598x_psy_get_prop;
-> +
-> +	tps->usb_type = POWER_SUPPLY_USB_TYPE_C;
-> +
-> +	tps->psy = devm_power_supply_register(tps->dev, &tps->psy_desc,
-> +					       &psy_cfg);
-> +	return PTR_ERR_OR_ZERO(tps->psy);
-> +}
-> +
->  static int tps6598x_probe(struct i2c_client *client)
->  {
->  	struct typec_capability typec_cap = { };
-> @@ -560,6 +661,10 @@ static int tps6598x_probe(struct i2c_client *client)
->  		goto err_role_put;
->  	}
->  
-> +	ret = devm_tps6598_psy_register(tps);
-> +	if (ret)
-> +		return ret;
-> +
->  	tps->port = typec_register_port(&client->dev, &typec_cap);
->  	if (IS_ERR(tps->port)) {
->  		ret = PTR_ERR(tps->port);
-> -- 
-> 2.29.2
+Cc: <stable@vger.kernel.org>
+Fixes: 52fe568e5d71 ("usb: chipidea: imx: add imx6ul usb support")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+Changes since v1:
+- Use the CI_HDRC_DISABLE_DEVICE_STREAMING flag instead - Peter
 
-thanks,
+ drivers/usb/chipidea/ci_hdrc_imx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index 25c65accf089..5e07a0a86d11 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -57,7 +57,8 @@ static const struct ci_hdrc_imx_platform_flag imx6sx_usb_data = {
+ 
+ static const struct ci_hdrc_imx_platform_flag imx6ul_usb_data = {
+ 	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM |
+-		CI_HDRC_TURN_VBUS_EARLY_ON,
++		CI_HDRC_TURN_VBUS_EARLY_ON |
++		CI_HDRC_DISABLE_DEVICE_STREAMING,
+ };
+ 
+ static const struct ci_hdrc_imx_platform_flag imx7d_usb_data = {
 -- 
-heikki
+2.17.1
+
