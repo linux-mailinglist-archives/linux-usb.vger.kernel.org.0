@@ -2,157 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E64962C8C90
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 19:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EE32C8CC3
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 19:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729636AbgK3SUe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 13:20:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:21387 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729603AbgK3SUe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 13:20:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606760347;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vpk6I40VopO59OgCMYgesz1THx7bQXJvIwP+xEc7HEQ=;
-        b=h3k08JvwLZunGGFGNPjsnbRenBLbom/wjIZmjz8+DYFVrrNYB7b0vbvUiV4cBZAb+Uhz+C
-        AEUCviMWb7ofpU88fQFVw2KrphVXCrEoz+rbEBOeh98ffS/ZKS9F6odxjeUgnw6uLLNiaR
-        X7FdBea05PIQKTDE6nK2UepDxFhjyJ0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-383-I4Hohb0GOBKQnPKqYjBmiQ-1; Mon, 30 Nov 2020 13:19:02 -0500
-X-MC-Unique: I4Hohb0GOBKQnPKqYjBmiQ-1
-Received: by mail-ed1-f69.google.com with SMTP id s7so7198383eds.17
-        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 10:19:02 -0800 (PST)
+        id S1726860AbgK3S1q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 13:27:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725870AbgK3S1q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 13:27:46 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE78AC0613D6;
+        Mon, 30 Nov 2020 10:27:05 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id p6so6957669plr.7;
+        Mon, 30 Nov 2020 10:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kjq7AqurfeU73O1TvNnB5Y0LVcGlDBz5FkbYl20IufU=;
+        b=ImC2tXLjBq/6sX2N/46SyLLN8+pobdu3/UY54y5DuhKe6J39QsrDbaZU5si9EXoHNc
+         NhEdeNRNXAviG2HUrPIMO5G7uNSrBXakTKc51lSiLn86ioqSTxZg+MdlRJJwuqI3GAv6
+         y8Ll3j3fsWB1f7oSyJD/PBfMPLiEOP8Hdvj3sGpVhZ+uHy75cebuZS/q1h+23DMXby2K
+         G711GRW5TcmiPGCkkSr4pKJHOntAKwHzFE/s9kgu5y4Vuuki4+qHf6IKaGSAlUn+itdQ
+         qrNLr+fgU+dvn6ma14N/pxvmUZWGZQQxaT9r8VPvd5N5KdgF7w1irR/5VTPJV7JYf6in
+         qPLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vpk6I40VopO59OgCMYgesz1THx7bQXJvIwP+xEc7HEQ=;
-        b=CQWojsICEbfbOIV0axpk+GNiGcxq/XZrCrRN+5c7pqqEIss985zOdEVRdZASorFsqO
-         hUUUYXzWPSQc0tguIXuEZdKycXSUMF+QCXe7dzXO2v+v8EFq6afgtUOC2p8TlHpRz0K2
-         5+Ss67IX4+Pesa8ZX6lYN9bOoyvUsDRNdbcX9h5aqKnE3Xkij9IHzakVLMUsP1XWJuxx
-         eVSacPooMlpbdxmQYQeNNfdgecZknW9x1Vj5FRErDieSpcqCCVVsgxRxrcFYupYEGALU
-         G4sLJ71KqJPbLoEevlVa6v0OchzV8aWIUmGLNCD5EgGsvv0B6J4eIO7GEjtWanMFDS+3
-         dX8A==
-X-Gm-Message-State: AOAM531zddAd8D1dy7++VuG4qoa5t1YKjjdom2JRLnD1n62nW75HhQ3W
-        0xznyQL7N+ENsNZlrU5yYCfMkUrzv0au1c+6EupO1QzEdiaBsnn3npOqbp+ZzqsNazNf3PEAonU
-        NisLZJYmUBB/mldwwzqbP
-X-Received: by 2002:a50:da84:: with SMTP id q4mr22690812edj.377.1606760339860;
-        Mon, 30 Nov 2020 10:18:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz7e7Ny+dw3Vzt5jfmMjutla+i8r+BmbQoRbN9bFKPNsr2tG0kTRoVsYpfwnF7+UlTe+2pGXg==
-X-Received: by 2002:a50:da84:: with SMTP id q4mr22690625edj.377.1606760337762;
-        Mon, 30 Nov 2020 10:18:57 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id pj5sm6029636ejb.60.2020.11.30.10.18.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Nov 2020 10:18:56 -0800 (PST)
-Subject: Re: [PATCH 2/2] usb-storage: revert from scsi_add_host_with_dma() to
- scsi_add_host()
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, Tom Yan <tom.ty89@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-References: <09992cec-65e4-2757-aae6-8fb02a42f961@redhat.com>
- <20201128154849.3193-1-tom.ty89@gmail.com>
- <20201128154849.3193-2-tom.ty89@gmail.com>
- <5e62c383-22ea-6df6-5acc-5e9f381d4632@redhat.com>
- <CAGnHSEnetAJNqUEW-iuq7eVyU6VnP84cv9+OVL4C5Z2ZK_eM0A@mail.gmail.com>
- <186eb035-4bc4-ff72-ee41-aeb6d81888e3@redhat.com>
- <X8T0E2qvF2cgADl+@kroah.com>
- <dd557c38-a919-5e5e-ab3b-17a235f17139@redhat.com>
- <20201130172004.GA966032@rowland.harvard.edu>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <abb0a79d-63a0-6f3d-4812-f828283cd47c@redhat.com>
-Date:   Mon, 30 Nov 2020 19:18:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kjq7AqurfeU73O1TvNnB5Y0LVcGlDBz5FkbYl20IufU=;
+        b=n8/hC9c+NSiD9TC31kDHk3FxLxPmZQ8AtSGgDyYsoiQUxKLZf6Kwetue4S7z9Kb/LM
+         eeJH7pr3XUKj7pkjKWgtsQMuA9HGUHcQTFnpoh02DHLXRrfTr+AH4g29y6rZmWvdl7Bl
+         lIW3AmHDPPYMcdh7rVVIRWbnj/HjE2YGrwqueGRrWHMFcyj0eJ705OdR1GS/TnAJmYhv
+         322DtA36aWFlxh03q2UawxgGtaTRIkPd9i4MP5iVhJ62QFytzTORaPp4rI0G/s6d5aQI
+         bx6HR20SfIcIW9XMOxmB8EoTuIbTk9fMofh/W7bEEmNAh/Nj5zhB0vkgSP7ChVBOtnM+
+         h4mw==
+X-Gm-Message-State: AOAM530qjuiKIacJ7nHCiJV911G6kSwFHs+gqmya34Eg5Xilmi50hO2v
+        1E+N4QVZ27zFzYn+7fHWYSeYwMxs1mh0ihQzV2GDv8tpw9s=
+X-Google-Smtp-Source: ABdhPJzZT74pc8LY5TmeNr2gqUnmChzjOPkZ/CaNXyHbonCAXs4PDvd/WvcAYTa4q0cV+/kDpY0/7aJllNiQdZtUY3c=
+X-Received: by 2002:a17:90b:350:: with SMTP id fh16mr121104pjb.228.1606760825351;
+ Mon, 30 Nov 2020 10:27:05 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201130172004.GA966032@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201130153742.9163-1-johan@kernel.org> <20201130153742.9163-3-johan@kernel.org>
+In-Reply-To: <20201130153742.9163-3-johan@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 30 Nov 2020 20:27:54 +0200
+Message-ID: <CAHp75VdedN5iaGFpfiPFz6G=Ey3axgaZbKYtt95HEwwjWoWbmQ@mail.gmail.com>
+Subject: Re: [PATCH 2/5] serial: core: add sysfs attribute to suppress ready
+ signalling on open
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, Nov 30, 2020 at 5:42 PM Johan Hovold <johan@kernel.org> wrote:
+>
+> Add a nordy sysfs attribute to suppress raising the modem-control lines
+> on open to signal DTE readiness.
 
-On 11/30/20 6:20 PM, Alan Stern wrote:
-> On Mon, Nov 30, 2020 at 02:36:38PM +0100, Hans de Goede wrote:
->> Hi,
->>
->> On 11/30/20 2:30 PM, Greg KH wrote:
->>> On Mon, Nov 30, 2020 at 02:23:48PM +0100, Hans de Goede wrote:
->>>> Hi,
->>>>
->>>> On 11/30/20 1:58 PM, Tom Yan wrote:
->>>>> It's merely a moving of comment moving for/and a no-behavioral-change
->>>>> adaptation for the reversion.>
->>>>
->>>> IMHO the revert of the troublesome commit and the other/new changes really
->>>> should be 2 separate commits. But I will let Alan and Greg have the final
->>>> verdict on this.
->>>
->>> I would prefer to just revert the commits and not do anything
->>> different/special here so late in the release cycle.
->>>
->>> So, if Alan agrees, I'll be glad to do them on my end, I just need the
->>> commit ids for them.
->>
->> The troublesome commit are (in reverse, so revert, order):
->>
->> 5df7ef7d32fe ("uas: bump hw_max_sectors to 2048 blocks for SS or faster drives")
->> 558033c2828f ("uas: fix sdev->host->dma_dev")
->> 0154012f8018 ("usb-storage: fix sdev->host->dma_dev")
->>
->> Alan, the reason for reverting these is that using scsi_add_host_with_dma() as the
->> last 2 patches do, with the dmadev argument of that call pointing to the device
->> for the XHCI controller is causing changes to the DMA settings of the XHCI controller
->> itself which is causing regressions in 5.10, see this email thread:
->>
->> https://lore.kernel.org/linux-usb/fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com/T/#t
-> 
-> It's hard to go wrong with reverting, so it's okay with me.
-> 
-> Still, Hans, have you checked out the difference between the 
-> scsi_add_host() and scsi_add_host_with_dma() calls?  It's just a matter 
-> of using dev vs. sysdev.  In particular, have you checked to see what 
-> those two devices are on your system?
+Why not call it nomctrl ?
 
-Its not just dev vs sysdev, its iface->dev vs bus->sysdev, and I assume
-that the latter is actually the XHCI controller.
+> This can be use to prevent undesirable side-effects on open for
 
-my vote goes to reverting to avoid the regression for 5.10, esp. since
-this is a clean revert of 3 patches with nothing depending / building
-on top of the reverted commits.
+used
 
-Then for 5.11 we can retry to introduce similar changes. I would be happy
-to try a new patch-set for 5.11.
+> applications where the DTR and RTS lines are used for non-standard
+> purposes such as generating power-on and reset pulses.
 
-> It seems likely that if one of those calls messes up some DMA settings, 
-> the other one does too -- just maybe not settings that matter much.
+...
 
-I'm not very familiar with all the DMA mapping / mask code, but AFAIK making
-changes to the DMA settings of a child will not influence the parent.
+> +static ssize_t nordy_store(struct device *dev, struct device_attribute *attr,
+> +                               const char *buf, size_t count)
+> +{
+> +       struct tty_port *port = dev_get_drvdata(dev);
+> +       unsigned int val;
+> +       int ret;
+> +
+> +       ret = kstrtouint(buf, 0, &val);
+> +       if (ret)
+> +               return ret;
 
-Where as when passing bus->sysdev, then changes are made to a device
-which is shared with other devices on the bus, which is why we see
-a regression in an USB NIC driver being triggered by the UAS driver
-binding to a device (on the same bus).
+> +       if (val > 1)
+> +               return -EINVAL;
 
-At least that is my interpretation of this. I bisected the regression
-and that pointed at the UAS DMA change and reverting it fixes things,
-confirming that I did not make any mistakes during the bisect.
+Can't we utilise kstrtobool() instead?
 
-Regards,
+> +       tty_port_set_nordy(port, val);
+> +
+> +       return count;
+> +}
 
-Hans
-
+-- 
+With Best Regards,
+Andy Shevchenko
