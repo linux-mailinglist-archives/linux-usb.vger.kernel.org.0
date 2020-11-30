@@ -2,236 +2,250 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2745A2C86FA
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 15:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71BDE2C877A
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 16:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727156AbgK3Okx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 09:40:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726103AbgK3Okw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 09:40:52 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE35BC0613CF;
-        Mon, 30 Nov 2020 06:40:11 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id f9so20044593ejw.4;
-        Mon, 30 Nov 2020 06:40:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JM65qVWHe/D3jqo1oAErAS5mplJkY3vB0A9hWCwSLIE=;
-        b=ZDxilJ5H+NWCTSRBaHN4e2Xxpg2H1Esz2x/qwj0fYu5/+xeOCXtAA7h2mlHlsKRV7/
-         587biUBHiQgoefo71N0/WWnVTtLZ3fIQxrq1+00PyuLzP2rR74s++C0WOuhO+ydZ3yJM
-         3AvAo4GkTK+7x1c9rPE83XLItVjfpreX4i80ARRSb0bxqasHpnza5JwIYcTByzbGL3bO
-         7h8dbqXZe+vqE1QJyw6MovPcWwGTfe+BaksipSGERipBohK3Z1LduS3Jxkxx4IH+kPTN
-         HYAL/AoPd0eBzlJEd5UhfmgVIZu7VDAn3L8YhJWU3NwT0d8+AJQbM05c/CMpnLrHRcxY
-         pcHQ==
+        id S1727543AbgK3POB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 10:14:01 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40023 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725899AbgK3POA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 10:14:00 -0500
+Received: by mail-lj1-f196.google.com with SMTP id y10so18455036ljc.7
+        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 07:13:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JM65qVWHe/D3jqo1oAErAS5mplJkY3vB0A9hWCwSLIE=;
-        b=HN9m3nPZJoYZZFaUhZiScGXhZ5g77t+HIqIQAJadWVssbEg7FocZVHXcmhOhuHQZh6
-         OiHQrT4tiuoQVC3Vmlvmoapy268UH2VRM01OSMhiTAIbpVt28uwrxN44oe+i/plfcNdf
-         hh5JbS/uhQlCAmPXHkBjFFPRkA9L3ITyb8NCDeTnwfyuJfMF29AMj8zBVKLXNDridIsz
-         6VI5k/fnd+F3CyJ8Xlxp3gNxO0q27wuRD9eqtz34CB2uuehIQm9GoCGhsNwr1CLeSFDX
-         8ski0FM/rWdlVOnoZ2KwQOXJRbbVOS7O7+ejQz526BhX+Wc4NRof5RyRhb4KnfsdLew2
-         8vBw==
-X-Gm-Message-State: AOAM533952xm6sUtcPObG8XdVN053poTGaLT1UfqMzSnzOaDIEAnHrwf
-        Gtx15QG/D1bQgv55qCZk91XdE32nyxn4RA0/Rs4=
-X-Google-Smtp-Source: ABdhPJyIqGhQuQlbjzR2JMp0U09VtLQdJJJ4I6rmYABrKE6LgWcno98Gkte4VpRe3mOUxmmZrQnwFhGs41K62ga+yxI=
-X-Received: by 2002:a17:906:a195:: with SMTP id s21mr21312326ejy.146.1606747210492;
- Mon, 30 Nov 2020 06:40:10 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=V6uTNLxqpt7fAmAeM7/85Kr33LfMWRD1suuaBgrEuIQ=;
+        b=WbBgF4CKhx8eyGer3GiUVQsUCEwBIoVkdbVsds8FocZ+Rm7gS0s94+vF694s2xX7gS
+         qDjCfNBWJ8sIcx73ygGIP0YfIhy42AUr6gQJqduBpu+24dfhryi6K+I73U93njtmzbMk
+         pzteIKXWsPaLf0mBW/A7OrJOohO/BEDo8emsAwKP/9PDRowOMZ1HPx5/zjsxcJtXFx+U
+         2U37fJx6iWVt8DSApc7Q5ErH3EVJ8BQ+WpfXfcojssMZ0D/H9GvMLPaz51CiXn9pNA+x
+         0nIK6cc6xz4BO2V68rRC2LEZpSjvvEba16VFeGHg+0YMR+DwlnHdEY4mPj50/ro6XZmF
+         PC7A==
+X-Gm-Message-State: AOAM532zwK9EtdtWyLffROQVOx2vaPVSpY7j+L+fmuyBCgaPpmgioZ66
+        Ix7Aw1A/hkmIjcPQA7lVe4MJRLeLZ0jUjg==
+X-Google-Smtp-Source: ABdhPJw5ky9Rk+7aE6T3TSJjEgGHHVu3aLoKU6Esby1Y+l4BZF4NRES/HWGJIG0aC/qtMU4BSkNolA==
+X-Received: by 2002:a2e:6e14:: with SMTP id j20mr10088227ljc.372.1606749196233;
+        Mon, 30 Nov 2020 07:13:16 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id o15sm2953728ljh.57.2020.11.30.07.13.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Nov 2020 07:13:15 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kjks3-0000uI-VW; Mon, 30 Nov 2020 16:13:44 +0100
+Date:   Mon, 30 Nov 2020 16:13:43 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Mychaela Falconia <mychaela.falconia@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/3] a family of FTDI-based devices that need ftdi_sio
+ quirks
+Message-ID: <X8UMJ9a051tT1rbz@localhost>
+References: <20200916015621.EFCDA374023F@freecalypso.org>
+ <20200929101330.GQ24441@localhost>
+ <CA+uuBqY83q+UiRsYxBckXvbtYf4sRxqB_8eXXPgEKAOqTwD=vg@mail.gmail.com>
+ <20201005105722.GN5141@localhost>
+ <CA+uuBqZ6JhCq1ydU-9A+en3QO=9zX9LuEJ8+P0YvEzUE+9sYoA@mail.gmail.com>
 MIME-Version: 1.0
-References: <09992cec-65e4-2757-aae6-8fb02a42f961@redhat.com>
- <20201128154849.3193-1-tom.ty89@gmail.com> <20201128154849.3193-2-tom.ty89@gmail.com>
- <5e62c383-22ea-6df6-5acc-5e9f381d4632@redhat.com> <CAGnHSEnetAJNqUEW-iuq7eVyU6VnP84cv9+OVL4C5Z2ZK_eM0A@mail.gmail.com>
- <186eb035-4bc4-ff72-ee41-aeb6d81888e3@redhat.com>
-In-Reply-To: <186eb035-4bc4-ff72-ee41-aeb6d81888e3@redhat.com>
-From:   Tom Yan <tom.ty89@gmail.com>
-Date:   Mon, 30 Nov 2020 22:39:58 +0800
-Message-ID: <CAGnHSEnrmRUe9ESfRSRt6EoBYN+7pcM+71zsRF2cH+NJQWAQrg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb-storage: revert from scsi_add_host_with_dma() to scsi_add_host()
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Christoph Hellwig <hch@lst.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+uuBqZ6JhCq1ydU-9A+en3QO=9zX9LuEJ8+P0YvEzUE+9sYoA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 30 Nov 2020 at 21:23, Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 11/30/20 1:58 PM, Tom Yan wrote:
->
-> IMHO the revert of the troublesome commit and the other/new changes really
-> should be 2 separate commits. But I will let Alan and Greg have the final
-> verdict on this.
+Hi Mychaela, 
 
-They are not "other/new" changes. The same thing was done in the
-earlier version of the problematic commits, before I was given the
-idea that we can/should set dma_dev to the "chosen device". With the
-dma_dev setting approach the exact same clamping will be applied twice
-at different points so we don't have to invalidate the earlier one.
-But now since we no longer do so, the two clamping are / can be
-different, so we need to invalidate the earlier one when we are not
-overriding the default max_sectors in each case.
+and sorry about the late follow-up on this.
 
->
-> p.s. Why did you not send this patch-series to Alan Stern, the maintainer of
-> the usb-storage driver?
+I took a fresh look at this before going back and reading you last
+mails and found that I'd landed in more or less the same conclusions as
+you. Please see below.
 
-Either I accidentally missed him or the list I copied from did that
-already. Sorry.
-
->
-> > Similar has been done in the equivalent
-> > patch for the UAS driver (and the reason is stated there).
->
-> In the UAS driver the code setting max-hw-sectors was already moved to its
-> new place and another patch was added on top, so that is different.
-
-If you are referring to the alloc/configure move in the problematic
-commit, it was a trivial / code consistency change. It has nothing to
-do with what I'm talking about. What I'm talking about is the
-else-clause add in the first patch of the current series. I don't know
-if you simply missed it or it just seemed much trivial to you, either
-way it was "simple" there merely because the uas driver doesn't set
-its own "default" max_sectors (and hence has no comment for it) but
-use the one set in the SCSI layer. Most importantly, it's an
-*adapation* that makes these patches change *nothing* from the current
-behaviour but only switches back to scsi_add_host().
-
->
-> Regards,
->
-> Hans
->
->
+On Mon, Oct 05, 2020 at 12:02:55PM -0800, Mychaela Falconia wrote:
+> Hi Johan,
+> 
+> > Yeah, your application would then need to deassert after open.
 > >
-> > On Mon, 30 Nov 2020 at 17:50, Hans de Goede <hdegoede@redhat.com> wrote:
-> >>
-> >> Hi,
-> >>
-> >> On 11/28/20 4:48 PM, Tom Yan wrote:
-> >>> While the change only seemed to have caused issue on uas drives, we
-> >>> probably want to avoid it in the usb-storage driver as well, until
-> >>> we are sure it is the right thing to do.
-> >>>
-> >>> Signed-off-by: Tom Yan <tom.ty89@gmail.com>
-> >>
-> >> This seems to do a whole lot more then just dropping back from
-> >>  scsi_add_host_with_dma() to scsi_add_host(). This has way more
-> >> lines then the orginal commit.
-> >>
-> >> IMHO it would be best to just revert commit 0154012f8018bba4d9971d1007c12ffd48539ddb
-> >> and then submit these changes as a separate patch (which would be
-> >> 5.11 material then).
-> >>
-> >> That separate patch could then also have a proper commit message
-> >> explaining the other changes you are making, which is also not
-> >> unimportant.
-> >>
-> >> Regards,
-> >>
-> >> Hans
-> >>
-> >>
-> >>
-> >>
-> >>> ---
-> >>>  drivers/usb/storage/scsiglue.c | 40 +++++++++++++++++-----------------
-> >>>  drivers/usb/storage/usb.c      |  3 +--
-> >>>  2 files changed, 21 insertions(+), 22 deletions(-)
-> >>>
-> >>> diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-> >>> index 560efd1479ba..6539bae1c188 100644
-> >>> --- a/drivers/usb/storage/scsiglue.c
-> >>> +++ b/drivers/usb/storage/scsiglue.c
-> >>> @@ -92,7 +92,7 @@ static int slave_alloc (struct scsi_device *sdev)
-> >>>  static int slave_configure(struct scsi_device *sdev)
-> >>>  {
-> >>>       struct us_data *us = host_to_us(sdev->host);
-> >>> -     struct device *dev = sdev->host->dma_dev;
-> >>> +     struct device *dev = us->pusb_dev->bus->sysdev;
-> >>>
-> >>>       /*
-> >>>        * Many devices have trouble transferring more than 32KB at a time,
-> >>> @@ -120,6 +120,25 @@ static int slave_configure(struct scsi_device *sdev)
-> >>>                * better throughput on most devices.
-> >>>                */
-> >>>               blk_queue_max_hw_sectors(sdev->request_queue, 2048);
-> >>> +     } else {
-> >>> +             /*
-> >>> +              * Limit the total size of a transfer to 120 KB.
-> >>> +              *
-> >>> +              * Some devices are known to choke with anything larger. It seems like
-> >>> +              * the problem stems from the fact that original IDE controllers had
-> >>> +              * only an 8-bit register to hold the number of sectors in one transfer
-> >>> +              * and even those couldn't handle a full 256 sectors.
-> >>> +              *
-> >>> +              * Because we want to make sure we interoperate with as many devices as
-> >>> +              * possible, we will maintain a 240 sector transfer size limit for USB
-> >>> +              * Mass Storage devices.
-> >>> +              *
-> >>> +              * Tests show that other operating have similar limits with Microsoft
-> >>> +              * Windows 7 limiting transfers to 128 sectors for both USB2 and USB3
-> >>> +              * and Apple Mac OS X 10.11 limiting transfers to 256 sectors for USB2
-> >>> +              * and 2048 for USB3 devices.
-> >>> +              */
-> >>> +             blk_queue_max_hw_sectors(sdev->request_queue, 240);
-> >>>       }
-> >>>
-> >>>       /*
-> >>> @@ -627,25 +646,6 @@ static const struct scsi_host_template usb_stor_host_template = {
-> >>>       .sg_tablesize =                 SG_MAX_SEGMENTS,
-> >>>
-> >>>
-> >>> -     /*
-> >>> -      * Limit the total size of a transfer to 120 KB.
-> >>> -      *
-> >>> -      * Some devices are known to choke with anything larger. It seems like
-> >>> -      * the problem stems from the fact that original IDE controllers had
-> >>> -      * only an 8-bit register to hold the number of sectors in one transfer
-> >>> -      * and even those couldn't handle a full 256 sectors.
-> >>> -      *
-> >>> -      * Because we want to make sure we interoperate with as many devices as
-> >>> -      * possible, we will maintain a 240 sector transfer size limit for USB
-> >>> -      * Mass Storage devices.
-> >>> -      *
-> >>> -      * Tests show that other operating have similar limits with Microsoft
-> >>> -      * Windows 7 limiting transfers to 128 sectors for both USB2 and USB3
-> >>> -      * and Apple Mac OS X 10.11 limiting transfers to 256 sectors for USB2
-> >>> -      * and 2048 for USB3 devices.
-> >>> -      */
-> >>> -     .max_sectors =                  240,
-> >>> -
-> >>>       /* emulated HBA */
-> >>>       .emulated =                     1,
-> >>>
-> >>> diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-> >>> index c2ef367cf257..f177da4ff1bc 100644
-> >>> --- a/drivers/usb/storage/usb.c
-> >>> +++ b/drivers/usb/storage/usb.c
-> >>> @@ -1050,8 +1050,7 @@ int usb_stor_probe2(struct us_data *us)
-> >>>       usb_autopm_get_interface_no_resume(us->pusb_intf);
-> >>>       snprintf(us->scsi_name, sizeof(us->scsi_name), "usb-storage %s",
-> >>>                                       dev_name(dev));
-> >>> -     result = scsi_add_host_with_dma(us_to_host(us), dev,
-> >>> -                                     us->pusb_dev->bus->sysdev);
-> >>> +     result = scsi_add_host(us_to_host(us), dev);
-> >>>       if (result) {
-> >>>               dev_warn(dev,
-> >>>                               "Unable to add the scsi host\n");
-> >>>
-> >>
-> >
->
+> > I believe some arduino boards use a capacitor to trigger a reset pulse
+> > whenever DTR/RTS is asserted instead.
+> 
+> But you are still asking me to modify the hardware in ways that would
+> make the product worse for the end user.  Just consider the current
+> situation:
+
+> I don't see how any of your proposed alternative hardware designs
+> would ever accomplish the same objectives of having NO resets or PWON
+> actions glitch-triggered when the user merely plugs in or unplugs the
+> USB cable, or when the user desires to run an ordinary serial
+> communication program *without* triggering either RESET or PWON
+> controls.  Oh, and don't forget the ability to selectively trigger
+> either one of PWON and RESET as desired, without producing even a
+> slightest glitch on the other control line.
+
+Yeah, you're right.
+
+> > I wasn't expecting you to support "any serial port"; my point was that
+> > when possible it's better to accommodate the standard behaviour of these
+> > signals and have it work on any OS (version) rather than requiring
+> > patching drivers.
+> 
+> Please be more careful with phrases like "standard behaviour of these
+> signals" and "any OS": I argue that what Linux does with DTR & RTS is
+> NOT universally standard, and is in fact *defective* compared to what
+> Windows does.  Linux exhibits a fundamental philosophical design bug
+> in that whenever a serial port is opened, DTR and RTS are automatically
+> asserted without ever giving the userspace program a chance to say
+> "no, please don't do it" - that's a bug, not a feature.  I know that
+> Linux got this behaviour (which I hereby argue to be a philosophical
+> design bug) from POSIX, and that POSIX in turn got it from Original
+> UNIX - being a retrocomputing enthusiast, I happen to know that
+> Ancient UNIX exhibits the exact same misfeature of unconditional
+> DTR & RTS assertion on open - but just because it has been a very
+> long-standing tradition going all the way back to original 1970s UNIX
+> does not make it right.
+
+I'd still call it standard behaviour since Linux has always handled it
+this way (and so has earlier systems as you point out), but I see your
+point.
+
+> If you look at a real independent competitor to Linux, namely Windows,
+> a totally independent OS design not hindered by those particular
+> traditions, you will see that it does NOT exhibit the same philosophical
+> design bug: under Windows one can open a serial port with a
+> CreateFile("COM1", ...) API call, and this action in itself will NOT
+> cause any of the modem control signals to change state.  Instead the
+> userspace program gets the complete freedom to manipulate modem control
+> signals *as desired* with a SetCommState() API call, *without* the OS
+> and its drivers producing an unstoppable, unpreventable glitch on DTR
+> and RTS immediately on open.
+
+From the API docs I found, it seems the behaviour on open (CreateFile())
+is configurable after opening the port. Perhaps the default can be set
+through some other means too, unless it's driver dependent.
+
+> Of course the most proper fix would be to correct the Unix/POSIX/Linux
+> serial port handling philosophical design bug at its root, adding a
+> flag like O_NODTR to the open syscall that would prevent automatic
+> assertion of DTR & RTS on open, just like including O_NONBLOCK in the
+> open flags prevents a hang waiting for DCD to become asserted.  But
+> producing such a patch and getting it accepted would be far beyond my
+> capabilities, and even if such a change were to be made in current
+> mainline, it would not help practical end users: it would be too much
+> of a "new feature" change to get into stable kernels, end users of
+> older kernels would need to apply the patch locally, and making a
+> purely local application of a big change like adding a new open flag
+> (propagating it into /usr/include headers seen by userspace) is not
+> something I can reasonably ask my end users to do.
+
+Yeah, that may not be feasible.
+
+> Hence I am going for the minimally invasive surgical approach instead:
+> suppress the unwanted on-open assertion of DTR & RTS in the ftdi_sio
+> driver, conditionalized on my custom USB ID so no one else will be
+> affected except my custom hardware, and the patch is small and
+> surgical such that end users should be able to apply it locally with
+> minimal pain.
+
+Right, but I still think this should be generalised somewhat.
+
+> > But then the same should be done for B0 I think.
+> 
+> The whole concept of B0 meaning "hang up" is another bizarre legacy
+> from Ancient UNIX that crept its way into Linux through POSIX - before
+> TIOCMBIS and TIOCMBIC were invented, this B0 hack was provides as a
+> means for applications that needed to assert and negate DTR (RTS was
+> rarely used back then) without having to close and reopen the tty port.
+> 
+> When it comes to the no_auto_dtr_rts quirk, the important part is that
+> automatic assertion of DTR & RTS upon coming out of B0 state MUST be
+> suppressed - because having this suppression is the only way to prevent
+> unwanted automatic assertion of the signals if the previous state
+> (before userspace opening this serial port and operating on it) was B0.
+> 
+> What about going the other way: when userspace explicitly sets B0,
+> should the driver negate DTR & RTS?  I would be OK either way,
+> whichever way would allow my hardware support patch to be accepted,
+> but it seems more philosophically correct to me for the driver to
+> negate DTR & RTS upon userspace setting B0: it is an explicit request
+> from userspace, not an automatic unrequested action, and thus it
+> should honored.  This way userspace explicitly setting B0 is no
+> different from an explicit TIOCMBIC.
+
+I don't think we need to change the B0 handling. It will never be set
+unless explicitly requested by the user.
+
+> > Right. But we should still try to aim at general solution that can be
+> > reused by other devices if needed (cf. the jtag quirk).
+> 
+> It is indeed quite possible that other hardware engineers (or end
+> users of hardware that was designed for Windows) will run into the
+> same issue: someone has wired up DTR and/or RTS for a purpose that
+> does not tolerate glitches, everything works like a charm under
+> Windows, but Linux assininely insists on always asserting DTR & RTS on
+> device open whether the user wants it or not, and the hardware
+> glitches badly as a result.
+
+Right. This has come up the in past, and there are other more or less
+established applications such has HAM radio that use these lines for
+other purposes. So I agree, we should try to support it.
+
+> If you let my current patch into the kernel and then someone else runs
+> into a similar situation, they should be able to set the exact same
+> no_auto_dtr_rts flag in their ID-code-specific quirk as appropriate
+> for their hw (DUART28C quirk needs this flag set for Channel B but not
+> for Channel A; other people's hw has every right to be different), and
+> it should allow those people to exercise full arbitrary control over
+> both DTR and RTS from userspace as appropriate for their application,
+> even if their hw specifics are quite different from mine:
+> 
+> * Absolutely no signal state change will happen upon the mere act of
+> opening the ttyUSB device.
+> 
+> * If someone wants to have some signal state changes upon open, they
+> can trivially follow their open syscall with TIOCMBIS and/or TIOCMBIC
+> ioctls as appropriate for their hw.
+> 
+> * No signal state change will happen when going from B0 to Bxxx, and
+> this behaviour is required in order to avoid unstoppable control signal
+> glitches if the initial state prior to userspace open was B0.
+> 
+> * If userspace is explicitly setting B0, it is an explicit userspace
+> request to drop DTR & RTS just like TIOCMBIC, so it gets honored.
+> 
+> * Whether or not DTR & RTS will be dropped upon port close will depend
+> on whether HUPCL has been set or not.  Because HUPCL is a userspace-
+> controlled flag, someone could argue that if userspace set HUPCL, then
+> userspace wants DTR & RTS to be negated on port close, and that this
+> request should be honored - hence the current behaviour of my present
+> patch is defended for both drop-on-close and drop-on-B0 cases.
+> 
+> * CRTSCTS still works like it always did - thus if someone else's hw
+> is wired differently from mine in that they have an RTS signal that
+> works as flow control, but they still need to block automatic
+> assertion of RTS and/or DTR on device open, then they can open the
+> serial port, optionally manipulate DTR with TIOCMBIS or TIOCMBIC as
+> needed, and then set CRTSCTS if that is what their application calls
+> for.
+> 
+> > Let me give this some more thought.
+
+I've prepared a series adding generic support for use-cases such as
+yours and respun your last two patches on top so that they use the
+generic implementation instead.
+
+I'm adding a new tty port flag that can be used to suppress the
+assertion of DTR/RTS to signal DTE readiness on open named NORDY.
+Eventually we can expose it through termios to match HUPCL that controls
+the behaviour on final close. For now I'm only adding a sysfs interface
+but that also allows control over these signals on first open.
+
+Your FTDI quirk now only needs to set this flag on probe to override the
+default behaviour. The end result with respect to your device should be
+the same except for B0, which is still handled as before.
+
+I'll post the series shortly.
+
+Johan
