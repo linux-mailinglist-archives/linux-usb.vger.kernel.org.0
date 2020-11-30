@@ -2,85 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4119E2C8FC7
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 22:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0612C8FEC
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 22:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387393AbgK3VQA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 16:16:00 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:36000 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726265AbgK3VQA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 16:16:00 -0500
-Received: by mail-io1-f65.google.com with SMTP id z136so13364259iof.3;
-        Mon, 30 Nov 2020 13:15:44 -0800 (PST)
+        id S2388551AbgK3VWt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 16:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387531AbgK3VWt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 16:22:49 -0500
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9C8C0613D2;
+        Mon, 30 Nov 2020 13:22:09 -0800 (PST)
+Received: by mail-vs1-xe43.google.com with SMTP id k17so7120458vsp.13;
+        Mon, 30 Nov 2020 13:22:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=BA9WuBIxyQk+4n/puy9O59CDd70ZfBaz5viH95nnWs4=;
+        b=t6LKW3glQoMpja4iCdfaIijiPAdNwa0Ew+dwHC/qtp3GENalFciab3yQxZdXL/hMXz
+         VzYUMTzhYdIFFUygNk2tt6TNge/hwXCuD6CfokGXQajUiFlyiBxsleFXaJY6xxLb5Kgr
+         fK2CEl2kdb4hjX1iUjWsxFH7m5HxkSDLgqZtSUCq0LEbUou92kmNhlowY1gclfsrBh8m
+         1fZ+/jpYfXT6RbcfN7HTnKCyLDLiBqoSBCAlKGKLenPlZuqb/jkpR11IL2h2bvVx9qjO
+         e3lV1x5ZdREhS0AJo04YeGsM3lKfqmjicZIaioTExcf1UXN6mcT2ZlkMiUCuwUPVxVCU
+         mOug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Jwht71OxD5GRnfrTVHlZAHOwqpu6pUHtWSfdxPAhhe4=;
-        b=BNg4/OGGnTrwL1nW5Wtgce8tl4ZzC/gC3xbK2iJaM/lOGDOe+dFxPEr8lHXIZrLIQy
-         ULRl8bxMGxOXIjgtE8VTG5CCFaMjH0H4R8kukYI6RS8vyQE9mzlShJcOHtcQ6pxyykUv
-         oJvXdzYbKqCSxWWNqK12EpUI8L2SWKYxtTIz7gD2VJyGB0rE3VJUrmFl6VV9lG4Y7kM1
-         +oQmIePUScvudfqJniWnrHF5HUbU2qi6YaRLwuhWwODmg8Hc6wrM0Ru5RAv1IFvyr/WO
-         tfiV8tGFIWuemHoVEsVHZeIj4xTNZKs4oq4FzeyRIOSwrLedbWpxaMg2E1OSAQyKXr/i
-         c/qg==
-X-Gm-Message-State: AOAM533cmS8QUMUaDlZ/Qglx07BYxXNu2dCaEIUV6bllSfYxK8KLY2je
-        xbJVanSEG2ErgZiWNH//Rg==
-X-Google-Smtp-Source: ABdhPJxBxVUopJfyw4u+TG/AMxEzVixJJSObpTwD2wlDLL8a3YdNWFt17IuDYm5BToKWs/WtjrQ0/A==
-X-Received: by 2002:a5d:8042:: with SMTP id b2mr17558393ior.4.1606770919062;
-        Mon, 30 Nov 2020 13:15:19 -0800 (PST)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id v23sm2272237iol.21.2020.11.30.13.15.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 13:15:18 -0800 (PST)
-Received: (nullmailer pid 3035408 invoked by uid 1000);
-        Mon, 30 Nov 2020 21:15:16 -0000
-Date:   Mon, 30 Nov 2020 14:15:16 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     vkoul@kernel.org, kishon@ti.com, mturquette@baylibre.com,
-        robh+dt@kernel.org, rick.tyliu@ingenic.com, zhenwenjin@gmail.com,
-        paul@crapouillou.net, aric.pzqi@ingenic.com,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        dongsheng.qiu@ingenic.com, yanfei.li@ingenic.com,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        sboyd@kernel.org, linux-usb@vger.kernel.org,
-        sernia.zhou@foxmail.com, balbi@kernel.org
-Subject: Re: [PATCH v9 2/3] dt-bindings: USB: Add bindings for Ingenic JZ4775
- and X2000.
-Message-ID: <20201130211516.GA3035356@robh.at.kernel.org>
-References: <20201116141906.11758-1-zhouyanjie@wanyeetech.com>
- <20201116141906.11758-3-zhouyanjie@wanyeetech.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=BA9WuBIxyQk+4n/puy9O59CDd70ZfBaz5viH95nnWs4=;
+        b=JtPMZSn42qm0mtmshUL8vkpbofCvXjFVpifuD3D5ZGbF4XVwAvbSjvagas0WCR6jGO
+         Oo8xd4Sa0FDQdkywmHnfaSOwVEVIXlfk58JLYNjJCPDmgyqBirMRTfD4WbT4W8BqAHnK
+         4DcYUL84hKdfTBN3QrapbkRn2PvB2fcOmpTjvy0UFTfrhwB9XUk7S4XKLjN2MdTLJAzG
+         Q66UzcWYwB8wmNUweVaogDARSH5UgyxK+LxShMd6gcjXApWRmCRUNVuUPEHCTAef44BT
+         8yPdX5rePWn9lXmIgtQKWc/BtZUwO63PN0emill8F8LkUl7aW1Z6rJbiq08umhE+YtYW
+         HWRQ==
+X-Gm-Message-State: AOAM530cTphHmk+mUcqXnfVgwqo4ZGRcTjT0q7Ad+hUbZ99HpsD3+lHc
+        fdjLUUUIAeG9Rac/KBmN1KCa7fF1frRFEjSABIizgSM+qvo=
+X-Google-Smtp-Source: ABdhPJxUnwG28U4x2TJF1H+XUZg6igju8tZHdlidMvSYFb6mYkxwU91jI9HPvsWClBG0KG6pytABKZPVyHx1apFqRr0=
+X-Received: by 2002:a67:b347:: with SMTP id b7mr18370082vsm.15.1606771327575;
+ Mon, 30 Nov 2020 13:22:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201116141906.11758-3-zhouyanjie@wanyeetech.com>
+Received: by 2002:ab0:6ecb:0:0:0:0:0 with HTTP; Mon, 30 Nov 2020 13:22:07
+ -0800 (PST)
+In-Reply-To: <20201130153742.9163-1-johan@kernel.org>
+References: <20201130153742.9163-1-johan@kernel.org>
+From:   Mychaela Falconia <mychaela.falconia@gmail.com>
+Date:   Mon, 30 Nov 2020 13:22:07 -0800
+Message-ID: <CA+uuBqYmzJMiY75LrA_uKb_uL2=7oQTrzCFksb2ehT0XMXxrbw@mail.gmail.com>
+Subject: Re: [PATCH 0/5] tty: add flag to suppress ready signalling on open
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 16 Nov 2020 22:19:05 +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Move Ingenic USB PHY bindings from Documentation/devicetree/bindings/usb
-> to Documentation/devicetree/bindings/phy, and add bindings for JZ4775 SoC
-> and X2000 SoC.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
-> 
-> Notes:
->     v8:
->     New patch.
-> 
->     v8->v9:
->     Correct the path errors in "ingenic,phy-usb.yaml" and "ingenic,cgu.yaml".
-> 
->  Documentation/devicetree/bindings/clock/ingenic,cgu.yaml              | 2 +-
->  .../{usb/ingenic,jz4770-phy.yaml => phy/ingenic,phy-usb.yaml}         | 4 +++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
->  rename Documentation/devicetree/bindings/{usb/ingenic,jz4770-phy.yaml => phy/ingenic,phy-usb.yaml} (89%)
-> 
+A quick background for Greg and others who haven't seen the Sept-Oct
+discussion between me and Johan on the linux-usb ML: I am the hardware
+engineer who designed the FT2232D-based DUART28C adapter board, and it
+was my desire to have this custom FT2232D adapter supported in mainline
+Linux that triggered the chain of discussions and patch revisions that
+led to the present patch series by Johan.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+My FTDI-based USB to dual UART adapter is special in that the DTR &
+RTS signals on one of the two UART channels (FT2232D Channel B
+specifically) have been repurposed for a non-serial, non-modem-control
+use: they control open drain drivers (a Nexperia 74LVC2G07 buffer IC)
+which drive PWON & RESET control signals that would otherwise be
+driven by short-to-ground human-finger-operated pushbutton switches.
+The standard Unix/POSIX/Linux behaviour (going all the way back to
+1970s Original UNIX) of automatically asserting DTR & RTS on serial
+port open is a killer for custom hw in which these signals have been
+repurposed, thus I need some way to suppress this automatic DTR & RTS
+assertion on tty device open.  With automatic assertion on open
+suppressed, these two signals can then be freely manipulated by
+userspace via TIOCMBIS and TIOCMBIC.
+
+There have certainly been other serial devices in the past (whether
+true RS-232 or USB-serial) in which DTR and/or RTS has been repurposed
+for some non-standard use that does not tolerate unwanted auto-assert
+on every device open, and to the best of my knowledge this problem
+does not occur on Windows - thus it is quite possible that some other
+hw engineer somewhere out there could design and build a custom serial
+or USB-serial device with repurposed DTR/RTS that works fine under
+Windows, but the moment someone in Linux community tries to get it
+working under our free OS, they will run into the problem of unwanted
+DTR & RTS auto-assertion on device open.
+
+In our previous discussion Johan said "this has come up the in past",
+referring to repurposed DTR and/or RTS signals doing non-standard
+things, thus I find it a little surprising that this issue hasn't been
+solved long before my time - but I guess I must be the first to
+complain loudly enough to get something done about it, and someone
+always has to be the first...
+
+Johan's patch series provides two workable solutions to the problem of
+unwanted DTR & RTS auto-assertion:
+
+1) For hardware engineers like me who design and build their own
+boards with the USB-serial chip fully embedded and who have their own
+custom USB IDs, a driver quirk can be applied (as part of adding
+support for the new USB ID) that sets the new tty port flag upon
+detecting the USB ID of the custom hw device for which it is required
+- this approach provides the highest level of friendliness to the
+ultimate end user of the finished hardware product.
+
+2) For situations in which the luxury of a custom USB ID is not
+available, e.g., a situation where the device that does not tolerate
+automatic DTR/RTS assertion on open is a physical RS-232 device that
+can be connected to "any" serial port, the new sysfs attribute comes
+to the rescue.
+
+Johan's patch comments say that the new flag can also be brought out
+to termios in the future, similarly to HUPCL, but I question the
+usefulness of doing so, as it is a chicken and egg problem: one needs
+to open the tty device in order to do termios ioctls on it, and if
+that initial open triggers DTR/RTS hardware actions, then the end user
+is still screwed.  If Johan or someone else can see a potential use
+case for manipulating this new flag via termios (as opposed to sysfs
+or USB-ID-based driver quirks), perhaps you could elaborate on it?
+
+Andy Shevchenko wrote:
+
+> > Add a nordy sysfs attribute to suppress raising the modem-control lines
+> > on open to signal DTE readiness.
+>
+> Why not call it nomctrl ?
+
+I have no opinion one way or another as to what the new sysfs attribute
+should be called - my use case won't involve this sysfs mechanism at
+all, instead I care much more about the path where the tty port flag
+gets set via a driver quirk upon seeing my custom USB ID. :)
+
+The naming of the internal tty port flag is likewise a matter which I
+gladly leave to more qualified kernel developers like Johan and Greg.
+
+In any case, it would be really awesome if this patch series (with or
+without further modifications) can make it into 5.10 - any chance of
+such happening, or will it have to be pushed out to 5.11?
+
+Sincerely,
+Mychaela,
+freelance hardware and software engineer,
+she/her/hers
