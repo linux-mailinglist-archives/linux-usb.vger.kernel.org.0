@@ -2,194 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 301032C7C76
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 02:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 763AF2C7CCD
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 03:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728496AbgK3BfN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Nov 2020 20:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727028AbgK3BfM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Nov 2020 20:35:12 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9ABBC0613D2;
-        Sun, 29 Nov 2020 17:34:32 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id n137so9398883pfd.3;
-        Sun, 29 Nov 2020 17:34:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MRf4ZKc/l/eC7hFvdoC+Q4DO+7qNVyq14MdwpxFRyF4=;
-        b=G1ZxR9TkgoW8diPH06BgSmIXKYidGd9LgBebSIwX0TWLjOX0xJmKKv67iCR5getn7r
-         F7TKZVzfPzxw08bbKFbMm9Imcx1CvSk5EsFakblE6/MTcZBjM1tq0x3mImWeb5JhPsLr
-         ezr0XTJ7gKr5J/xbzjsNRDXFWKmYABaKmtJissHCKRnvydqPvDwTT5gDWkCuy7O6dkxx
-         1f1BM1i5tu3rK5UCdxKOQLaJg2rBSYRzs2Fr004b0BrABdWZVXSuVc6cAHJlqbMYdczv
-         g3xQwwvfROsl2MjrJZ7WoduuL0d0a/OswWVLv34SbCYzp5WQUk5AzznGv3cvz9AUoW1s
-         UXbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MRf4ZKc/l/eC7hFvdoC+Q4DO+7qNVyq14MdwpxFRyF4=;
-        b=CIe3ehLSetllqNOIznPj+d0+sDjMFNYM52by6Hp3WylMlmNj5w4it25oVBiNV0Sesu
-         TIA2KyYxMOF3nUtqbFZJLnfkuGq7jKYLOD3ypkfrNaecV6OaaMk0SwShAW0ekG5rny/6
-         E2my0K7JCu+OjGP9R8/BqhciihYR2CrqWPXo7swIYnuRvXNZzJdsYv8RfGcqxByfAqjA
-         4qvPzmxd3sCKdxycIavqWeECIIfcceSUXdafpzTdvegrhiR12yFhdtT1plllllJCcSJM
-         xw9Iy2n4THO3O2Fpnpac1XZqyT9s8q1VrCb6R2woQvlgKOAsoilt2JUSeYDeU7hnjyiG
-         Joww==
-X-Gm-Message-State: AOAM530240RVveszRGqExeOAKGJxvKlWyw9pgiGlmYlfRROpnQ7J4sE+
-        BW5bB242F+KFOOOFeZ1lnSs=
-X-Google-Smtp-Source: ABdhPJyHO7I4zPVmvwQF5AEJDODFMWaZarJmtHMBk2qu5luFRYuyFq+VBvj/Vf+wFjH0DgDAvSPmIw==
-X-Received: by 2002:a63:e54b:: with SMTP id z11mr3477173pgj.158.1606700072181;
-        Sun, 29 Nov 2020 17:34:32 -0800 (PST)
-Received: from localhost.localdomain ([49.207.197.72])
-        by smtp.gmail.com with ESMTPSA id k1sm13933508pgm.21.2020.11.29.17.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Nov 2020 17:34:31 -0800 (PST)
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        Zqiang <qiang.zhang@windriver.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 15/15] usb: misc: usbtest: update to use the usb_control_msg_{send|recv}() API
-Date:   Mon, 30 Nov 2020 07:04:23 +0530
-Message-Id: <20201130013423.2582099-1-anant.thazhemadam@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201130011819.2576481-1-anant.thazhemadam@gmail.com>
-References: <20201130011819.2576481-1-anant.thazhemadam@gmail.com>
+        id S1726299AbgK3Cip (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Nov 2020 21:38:45 -0500
+Received: from mail-eopbgr20069.outbound.protection.outlook.com ([40.107.2.69]:29003
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726000AbgK3Cio (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 29 Nov 2020 21:38:44 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C3ggQsr+2U9Vsdkfn2ipzN/djX8P4uVT1TMMnu8zT1Y4GA9COA095XF86XvEnkL8Gi69fjGV5H2hkAZJ6ZhAq6xrOGJCbFJQB0rUv92Fsz7hH2rcAKwVR9NeJgi0LE/4KlpyrOSd8xqD6xQTre52xHme+wCavosGQV3ROj69t0IeP1DFBrYKbUiauop45vDNrwvxBAQ/9YkZxujHu7d2C6TFm7tw2l/oN6enlG9e0h/CDzhP1oWJKer+nxaNQoAZSkEVyh+TdhIX+tCL5q67Q06L8ZCiMtrtqHhUxya+IFGVa+vwDMNPThE62VyBOIsPtbs4x9UkFzdaDv/ppUociw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jH/TKqPKMT9urK0ZRSKiO9d1cpIuxijeFzBdqTK6QNs=;
+ b=aB4r49mX4Rs1t9mG1ouXSsCu4J+GO0QvVmQW7tu4eigJ1pECuzenTz57A+NTMoU1PFOtyEnI2vXbIHvm4VItPDAwBL5dKC/H5ECrFQ7zl3ERWMZ+xuiePr9QZbg/N9s/e+rrOLh7L20i/Ug+Jw9zjuD1xClPH+/jtPPCGN4t0gscuXnkhdMAbjt8WfodG/1Pn6nO6xlHSY0mfMOqo2xtFVrxI/oIdud28/dPxW5lShz8XiDyfgg+GuX9aoiw140WWkvGQovB8hbLR4i4nwxrYmFVZRQ6S3JhtQ6ergux/9R7JAAKk8qNRxvDHhz8cigEHZ3hkvLIW4Wc9kngyo6iVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jH/TKqPKMT9urK0ZRSKiO9d1cpIuxijeFzBdqTK6QNs=;
+ b=oAj7yus+kDMYa9KyHo2I+3TsVwJgZ3Y4FMISmog3vM8kpNi+8/jUdAGJK8GrXvMde5Gpi6PD+5JanYC9N/JiYRLQMDrczKpSZsypIfPCBnL2IUKnnnoB/1kh9g6noPkQ18mFx6CTcOaqgWPT0GeUaYUfi1R/6xyWAQJIRtZTWy8=
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
+ by VI1PR04MB4590.eurprd04.prod.outlook.com (2603:10a6:803:6d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Mon, 30 Nov
+ 2020 02:37:55 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::b035:d158:c99c:57c6]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::b035:d158:c99c:57c6%7]) with mapi id 15.20.3611.031; Mon, 30 Nov 2020
+ 02:37:55 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Peter Chen <peter.chen@kernel.org>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Peter Chen <peter.chen@nxp.com>
+Subject: RE: [PATCH 1/1] usb: roles: reference controller's parent device if
+ existed
+Thread-Topic: [PATCH 1/1] usb: roles: reference controller's parent device if
+ existed
+Thread-Index: AQHWxIaMOP3mHXEjj06uWNIXxpVdA6nf9irg
+Date:   Mon, 30 Nov 2020 02:37:54 +0000
+Message-ID: <VE1PR04MB652872CBAAE71856BBF68FE489F50@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <20201127062820.588-1-peter.chen@kernel.org>
+In-Reply-To: <20201127062820.588-1-peter.chen@kernel.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 632c0cde-87b5-4389-2228-08d894d8f174
+x-ms-traffictypediagnostic: VI1PR04MB4590:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB4590061C690A6F63F05BA6D689F50@VI1PR04MB4590.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Sk6a+dvFaGC7+pIwRI5S8oBsZziAVG2XGcj5nH/msn7im3mdeKF8S5ERTq9YUdqXz4b0EX5eFIpCFJBVpv03ApeVlmN8eNmvuaM64Jl/eglUeUsmM4Ml09AFDGxivE+RS6FkLX9CH5vkR8gIatPRK7zQebygXpq+MQHrwdnTmy3LRt8WFFmM8x3zzXkHKW27W/Q9/My+sC+O7LTsSUUiIQ/A5+SxgUmAoPVFo1UpKU0RSOmufeqZEPMrsDNtYl8esmFUP9sL+FAOi7nV7MPdCgjdC74sFNXZAsAvH3Kb2LwvaGQA7yU2H+txo0VnFf9Fz98zA7PZCiz4maqtLd0mzA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(39860400002)(366004)(346002)(376002)(4326008)(71200400001)(478600001)(44832011)(86362001)(66556008)(33656002)(8676002)(64756008)(5660300002)(8936002)(76116006)(66446008)(52536014)(53546011)(2906002)(9686003)(6506007)(186003)(54906003)(83380400001)(316002)(7696005)(66476007)(26005)(55016002)(110136005)(66946007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?Sj4Zni4Z7sa2IHcQD+lSvEeefO7KMe4iw6ykFhxASVL8Y3ynqLZI/KMusdcl?=
+ =?us-ascii?Q?o3MxlqSsYDkVYpMeKjClg8oLQNpNQo8oaRqHzZUindZfzrnyJYO7fZ6cE25Q?=
+ =?us-ascii?Q?Xsty3o71l/iFw7v2Yfy2PhpRkr+vLR9un7akHQanSeuRmKXw2fWRKkzTLV3J?=
+ =?us-ascii?Q?S3+pB3vkw/0SZMldD+W9LfVU34n5+clKnUutdZZy6rO+QQYks2OoAooeZ3u/?=
+ =?us-ascii?Q?bS9CE29Gy2Z8VgSCnBArtgBIIMzfaNDqGzqQHaZgeBhUt1221y71bs2wmd02?=
+ =?us-ascii?Q?E7ccz5WmBTKGVhdm1ZQwrxLHURvebUeaBDT3pYCpRTwutJf9jaysTZuRqmnv?=
+ =?us-ascii?Q?lyJU3gKWPy+omq6LRZHVehp3mc9IWWo8TiPUPEHRqmC+MMN1J3Rzz9Ng0FpD?=
+ =?us-ascii?Q?0IbV6j/k5ELSfp2u6h7QTCZ720Or8ol+gqZNfMnI9Hhz7fqar8/b7p7vKwnk?=
+ =?us-ascii?Q?moU2F61rkt9QRnAAUL/MpnQonZ9OtI6T4Keb0Yw/UryNSV5CWAWvqsvyc8zb?=
+ =?us-ascii?Q?L5Y0m9WBMXhpmLyQSx4rAIzcMm9FUUcGRb657sIkuvnqRdbXZA9w/Wk129i1?=
+ =?us-ascii?Q?OWji7BySVenYp6S8SpmWqVUqXOtfg++MCKOPsmZ4lDy5Z4VsddIbNniXgWkj?=
+ =?us-ascii?Q?R3UU5DTxFP9OWGbITaB99aYYZ9RnDhYCwFa669xsmtgcCDXIWnTR4vUxTeNM?=
+ =?us-ascii?Q?Ni2bO9FGyTs7+K9LNaRgL6hzliG/vJHz0lnKRpPyLuqoKaJhTMkss1IhqJq9?=
+ =?us-ascii?Q?PWHRV85uCophs0NxtX8KhrwO96lu6c5WA+5VbUBe0AibNZViZ8GRXzJRBEEn?=
+ =?us-ascii?Q?kJrp4TAD/fkI8ksyV7N6oQ18GJ1l3qjzka+9p9Mjbth6HeXTVVPb6aQHWzSy?=
+ =?us-ascii?Q?J9wpvdyNIEDuEKYQ3nqz9KyOZ4t79faZ6BaOP2UDeEUdRlOj0b5NBQftHlnD?=
+ =?us-ascii?Q?uxISrJwgYpBEFBrQcKUZxxoPnxAs120C104mD5Se2yo=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 632c0cde-87b5-4389-2228-08d894d8f174
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2020 02:37:55.0446
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LKYfECvqJae85EYNK5BzHaFX6inpJDSwfIN0TaTNruNPMofFrnutIbZYczzK5qvM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4590
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The newer usb_control_msg_{send|recv}() API are an improvement on the
-existing usb_control_msg() as it ensures that a short read/write is treated
-as an error, data can be used off the stack, and raw usb pipes need not be
-created in the calling functions.
-For this reason, instances of usb_control_msg() have been replaced with
-usb_control_msg_{recv|send}() and the return value checking conditions have
-also been modified appropriately.
+Hi Peter,
+> -----Original Message-----
+> From: Peter Chen <peter.chen@kernel.org>
+> Sent: Friday, November 27, 2020 2:28 PM
+> To: heikki.krogerus@linux.intel.com
+> Cc: linux-usb@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>; Peter
+> Chen <peter.chen@nxp.com>; Jun Li <jun.li@nxp.com>
+> Subject: [PATCH 1/1] usb: roles: reference controller's parent device if
+> existed
+>=20
+> From: Peter Chen <peter.chen@nxp.com>
+>=20
+> For some DRD IP drivers (eg, dwc3/cdns3/chipidea), the core device is cre=
+ated
+> and deleted by glue layer device. So, if role switch user (eg, tcpci), co=
+re
+> device, and glue layer device are all built as module, and glue layer dev=
+ice
+> is removed first, the core device's driver ->remove function will be call=
+ed,
+> and its device's driver pointer will be NULL, and cause below oops.
+>=20
+> To fix it, if there is a parent for controller device (role switch device=
+'s
+> parent), it references to parent too.
 
-Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
----
- drivers/usb/misc/usbtest.c | 69 ++++++++++++++++----------------------
- 1 file changed, 29 insertions(+), 40 deletions(-)
+This may not enough, the trouble is role switch class isn't aware of
+the role switch is unregistered by its provider while typec class is
+using it, this can happen by different ways, if we do role switch provider
+driver unbind, we still suffer this problem:
 
-diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
-index 150090ee4ec1..4337eff2a749 100644
---- a/drivers/usb/misc/usbtest.c
-+++ b/drivers/usb/misc/usbtest.c
-@@ -672,19 +672,15 @@ static int get_altsetting(struct usbtest_dev *dev)
- 	struct usb_device	*udev = interface_to_usbdev(iface);
- 	int			retval;
- 
--	retval = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
--			USB_REQ_GET_INTERFACE, USB_DIR_IN|USB_RECIP_INTERFACE,
--			0, iface->altsetting[0].desc.bInterfaceNumber,
--			dev->buf, 1, USB_CTRL_GET_TIMEOUT);
--	switch (retval) {
--	case 1:
--		return dev->buf[0];
--	case 0:
--		retval = -ERANGE;
--		fallthrough;
--	default:
-+	retval = usb_control_msg_recv(udev, 0, USB_REQ_GET_INTERFACE,
-+				      USB_DIR_IN|USB_RECIP_INTERFACE,
-+				      0, iface->altsetting[0].desc.bInterfaceNumber,
-+				      dev->buf, 1, USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
-+
-+	if (retval < 0)
- 		return retval;
--	}
-+
-+	return dev->buf[0];
- }
- 
- static int set_altsetting(struct usbtest_dev *dev, int alternate)
-@@ -872,14 +868,15 @@ static int ch9_postconfig(struct usbtest_dev *dev)
- 		 * ... although some cheap devices (like one TI Hub I've got)
- 		 * won't return config descriptors except before set_config.
- 		 */
--		retval = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
--				USB_REQ_GET_CONFIGURATION,
--				USB_DIR_IN | USB_RECIP_DEVICE,
--				0, 0, dev->buf, 1, USB_CTRL_GET_TIMEOUT);
--		if (retval != 1 || dev->buf[0] != expected) {
-+		retval = usb_control_msg_recv(udev, 0, USB_REQ_GET_CONFIGURATION,
-+					      USB_DIR_IN | USB_RECIP_DEVICE,  0,
-+					      0, dev->buf, 1, USB_CTRL_GET_TIMEOUT,
-+					      GFP_KERNEL);
-+
-+		if (retval != 0 || dev->buf[0] != expected) {
- 			dev_err(&iface->dev, "get config --> %d %d (1 %d)\n",
- 				retval, dev->buf[0], expected);
--			return (retval < 0) ? retval : -EDOM;
-+			return retval;
- 		}
- 	}
- 
-@@ -1683,10 +1680,10 @@ static int test_halt(struct usbtest_dev *tdev, int ep, struct urb *urb)
- 		return retval;
- 
- 	/* set halt (protocol test only), verify it worked */
--	retval = usb_control_msg(urb->dev, usb_sndctrlpipe(urb->dev, 0),
--			USB_REQ_SET_FEATURE, USB_RECIP_ENDPOINT,
--			USB_ENDPOINT_HALT, ep,
--			NULL, 0, USB_CTRL_SET_TIMEOUT);
-+	retval = usb_control_msg_send(urb->dev, 0, USB_REQ_SET_FEATURE,
-+				      USB_RECIP_ENDPOINT, USB_ENDPOINT_HALT,
-+				      ep, NULL, 0, USB_CTRL_SET_TIMEOUT,
-+				      GFP_KERNEL);
- 	if (retval < 0) {
- 		ERROR(tdev, "ep %02x couldn't set halt, %d\n", ep, retval);
- 		return retval;
-@@ -1845,30 +1842,22 @@ static int ctrl_out(struct usbtest_dev *dev,
- 		/* write patterned data */
- 		for (j = 0; j < len; j++)
- 			buf[j] = (u8)(i + j);
--		retval = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
--				0x5b, USB_DIR_OUT|USB_TYPE_VENDOR,
--				0, 0, buf, len, USB_CTRL_SET_TIMEOUT);
--		if (retval != len) {
-+		retval = usb_control_msg_send(udev, 0, 0x5b,
-+					      USB_DIR_OUT | USB_TYPE_VENDOR, 0,
-+					      0, buf, len, USB_CTRL_SET_TIMEOUT,
-+					      GFP_KERNEL);
-+		if (retval < 0) {
- 			what = "write";
--			if (retval >= 0) {
--				ERROR(dev, "ctrl_out, wlen %d (expected %d)\n",
--						retval, len);
--				retval = -EBADMSG;
--			}
- 			break;
- 		}
- 
- 		/* read it back -- assuming nothing intervened!!  */
--		retval = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
--				0x5c, USB_DIR_IN|USB_TYPE_VENDOR,
--				0, 0, buf, len, USB_CTRL_GET_TIMEOUT);
--		if (retval != len) {
-+		retval = usb_control_msg_recv(udev, 0,
-+					      0x5c, USB_DIR_IN|USB_TYPE_VENDOR,
-+					      0, 0, buf, len, USB_CTRL_GET_TIMEOUT,
-+					      GFP_KERNEL);
-+		if (retval < 0) {
- 			what = "read";
--			if (retval >= 0) {
--				ERROR(dev, "ctrl_out, rlen %d (expected %d)\n",
--						retval, len);
--				retval = -EBADMSG;
--			}
- 			break;
- 		}
- 
--- 
-2.25.1
+echo usb_controller_dev > unbind
 
+I am not sure if we should prevent this happening at USB controller
+drivers(provider side), or this is allowed and we should enhance
+role switch class to be aware of this situation and properly handle it.
+
+Thanks
+Li Jun
