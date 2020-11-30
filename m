@@ -2,122 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A75D2C7ED4
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 08:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446EB2C7F50
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Nov 2020 08:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbgK3Hix (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 02:38:53 -0500
-Received: from mail-eopbgr140082.outbound.protection.outlook.com ([40.107.14.82]:45282
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        id S1727589AbgK3Hx2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 02:53:28 -0500
+Received: from mail-eopbgr70077.outbound.protection.outlook.com ([40.107.7.77]:38626
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726299AbgK3Hix (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Nov 2020 02:38:53 -0500
+        id S1726762AbgK3Hx2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Nov 2020 02:53:28 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JmOlMpEl2R/AI5+hnPNNZvE0J0Ae8mHqLCM76Uf8Q1PVx/wzjjJeuUTre8Oi7DGsSf+XSyXhnzr60EeXRB+5bncwvBfQYrV0H5p5OB1FiYEmJlTnDrcOxNvL/L0M+EFc3igYFgW4r8feRhIxY9SF+62n/YNETLOzmBsxCw7W9ueRCyMue5T+R2Po7MD1Ok0A2+DiD9C7TdnAg/BGHwOluuo2FrOQgib0k5OIvrXJODpnjKiY4YExuuDlyo4deU8Q1Ak7txibKNyCuwair7CG4fzDocklOf1nZrS6T76n0FWn6JwGbb8EYQOLl4rvyWAajK8mPRFMvqK7kZ1+v0+55g==
+ b=mDOtB3yE/23hWRaYZjE925bp2TNAgnImWbGwWiClcakWuYsJWQT3F39aSUFPvwbzIWT+uwt+ci5VgPmRMEBJMwkJyUV7eE/uLv/maW0PZsuVG4zwXus+r7rltb+v6uBtMM1sedSeayFd01ipbyODId1T/hIFRClODRngNM94lEotimu92bNmEQkDAXV5Kq8nrzlMmtJrn0dGKmX2QHtML+gJSNzVBoJUNdQonUjZWh4v2v/tMU+ixDGYB71gdL8NTt/ujeqkAuRK1h3qNV2FeRlCwQamFM6OMCFSP114lnMK59hiBW6ck/n/qVyLHks6Yzr42hcwNsWYHu2o4hAPvA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YJKEZbHZ2T2ROptGWki1eudq03lcm/Q1iCNSxfG0ylU=;
- b=lBri0dGV/8OlHInBwSku/dHSYf7TsBCIZCvpfXt7bbua6/eJXeVNxP7F2khQb9l0lyUoumhDaz2L9FNGEKRyNJyehQa9HPhv+pejHlp5137V8mOen3IxOZvNwvXFsgrs4frk3+OLiuT4gqqvkseVc6Ix+YfFwJR+RGEyjBi6fn94PXgSEtaK+tPqklPCROzLRhGTOJ/ufEw+QtY7L0oskYZM9qxtm8GW5tLdTmmXEPJFu9irTpUmqkb/WrgazedRNiErew0jmwkP/f8DfUwUbAX6EAOELi/VruffGHJ+q/3/kLf8LzbQRoDImSRB5IXw7YzLQqa28fFUi4AuxzH3vw==
+ bh=EkB0rB6zrKEeTXnSAw8Y3QbpQyOaVTAnvJYLbMET8fY=;
+ b=NrvsEKblHgHiSmewktzCmOpfo+pNoqEc+IAMjLBcG5MuQRDErvK9e+sjdJw+Y12voTmWSab8/9Bh8cm/FTBK0xpEKCwE/znfDltxAx5cSmtXts0y0To9D2YLCTz4Wo4HOdrupZKn960HQ2/XZNhA5xpvcIeNh7zYY/d7z36oSjmzMe169H9lZni14/YvLTwgqxXLzFryUmuf9qeaOdBNqg1DixEB5IJYwCP64JrDyHBJ/Y/0LJN0Aq/J9BLoIDAJ90LcO5Kczj+Qh16Dw7oo3S5y3reOCa2pA4+iabrmb9D7PYegyafarGPR4vWhGsuQF8mA6FVH6AXipTbOWjkXAQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YJKEZbHZ2T2ROptGWki1eudq03lcm/Q1iCNSxfG0ylU=;
- b=g6Dtwil0KZMJ/GnQ8ezzPrPZ8vyvkuomTB0RCRO9F0V8sHsKeg+xtWCG34Buj8W/SsjhoIACbUC0o8CK1lSQHYEAqh/iUycgSH5Nfgf0ixWJVxER3I8MRmm2z0N2JZIHMMk5WNqrq7VRtKoLAg2eO9KIaIW/g4YvoIZc2gnpDk8=
+ bh=EkB0rB6zrKEeTXnSAw8Y3QbpQyOaVTAnvJYLbMET8fY=;
+ b=IQH262mewWeSULFq0yUon7e//tfII8aZ9Bhuls7tL7nmOSWz1SvIpDSss3mozdXnj72pesOjm3cfM4TaUsxvnOfsJtgNf8hSz4Z0FZqjGHFtw41YpF9QQrIwAmHRKZSWlq/FrbpS02sSmG2vsZuc0dIEAyrLZvtFTjJimuZ1sMU=
 Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
- by DB8PR04MB7179.eurprd04.prod.outlook.com (2603:10a6:10:124::11) with
+ by DB6PR0402MB2759.eurprd04.prod.outlook.com (2603:10a6:4:a2::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.22; Mon, 30 Nov
- 2020 07:38:05 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Mon, 30 Nov
+ 2020 07:52:37 +0000
 Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
  ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
  ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3611.031; Mon, 30 Nov 2020
- 07:38:04 +0000
+ 07:52:37 +0000
 From:   Peter Chen <peter.chen@nxp.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [GIT PULL] usb: fixes for v5.10
-Thread-Topic: [GIT PULL] usb: fixes for v5.10
-Thread-Index: AdbG3+atLgWifxo9Q+6uGF8l0hWYEwACs1oAAAAs6IA=
-Date:   Mon, 30 Nov 2020 07:38:04 +0000
-Message-ID: <DBBPR04MB7979337BA0ED0C99CEF4D0738BF50@DBBPR04MB7979.eurprd04.prod.outlook.com>
-References: <DBBPR04MB7979962270A587129B3F7D268BF50@DBBPR04MB7979.eurprd04.prod.outlook.com>
- <X8SfoMVX0XOdLkMr@kroah.com>
-In-Reply-To: <X8SfoMVX0XOdLkMr@kroah.com>
+To:     Jun Li <jun.li@nxp.com>
+CC:     Peter Chen <peter.chen@kernel.org>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH 1/1] usb: roles: reference controller's parent device if
+ existed
+Thread-Topic: [PATCH 1/1] usb: roles: reference controller's parent device if
+ existed
+Thread-Index: AQHWxIaMEeZSYAPeE0ucJ+rFsWrPo6nf+o4AgABXzAA=
+Date:   Mon, 30 Nov 2020 07:52:37 +0000
+Message-ID: <20201130075208.GD32154@b29397-desktop>
+References: <20201127062820.588-1-peter.chen@kernel.org>
+ <VE1PR04MB652872CBAAE71856BBF68FE489F50@VE1PR04MB6528.eurprd04.prod.outlook.com>
+In-Reply-To: <VE1PR04MB652872CBAAE71856BBF68FE489F50@VE1PR04MB6528.eurprd04.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=nxp.com;
-x-originating-ip: [180.164.155.184]
+user-agent: Mutt/1.9.4 (2018-02-28)
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 6ac2458b-224e-4718-25f6-08d89502dfb8
-x-ms-traffictypediagnostic: DB8PR04MB7179:
-x-microsoft-antispam-prvs: <DB8PR04MB717932551E58BFABC92641728BF50@DB8PR04MB7179.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:341;
+x-ms-office365-filtering-correlation-id: ba436fd2-c74c-4dec-f8e6-08d89504e80e
+x-ms-traffictypediagnostic: DB6PR0402MB2759:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB6PR0402MB27592A57763E7CDC5B2B76438BF50@DB6PR0402MB2759.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: X1ZT5inLbF/McZ/y9Om3V7S2aI3KYhDHfp0XTxLau35Xux613HHPjQrZre8PIFOnnPG/2mh/kHNPEVHDWQo90v4vZgnmaJpxB01PwC+EjJDV7IvMu26UmUXSzhd79NtaifVetEHEIosnKAsMmdbpjXjr1malYBpZTyYMf6gOTpaWAEK+4Ks1V4OjiQeVYJKgaOu4g3NEc3r3s/RE8ijDVtgPpfUD3OFvrIeJHTp/Bj4rckvIwp/AcPIbSxXLfIkjPqamOx5BSL61wDfC7/0FtKYhlhEAfjjB080LF+Wb0mvsBO4p+n5/2b5t+IkWAx9Jv7T0rWe2l3Gxwtjg0tQivQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(136003)(346002)(376002)(39860400002)(86362001)(55016002)(7696005)(316002)(5660300002)(9686003)(4326008)(4744005)(8936002)(2906002)(26005)(8676002)(66476007)(186003)(52536014)(6506007)(71200400001)(76116006)(44832011)(66446008)(66946007)(4001150100001)(478600001)(33656002)(64756008)(66556008)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?nfsrXFUUyp2PceM38w4emOZBeBne0bFd+UVwWqnh+3wshcmG6Y6WX7CFMHU7?=
- =?us-ascii?Q?ky27nUgwgKgP2a0pMUej1hBDOeQ/uNLGa/q5wj/XwnZkK3aYX2WYrO4yqGxY?=
- =?us-ascii?Q?zfLjSTrGaJY5Oo2Bv5Opg7bNV0wEfV23fqAzfpKNqqSOIGcqRnTTToT3jFtN?=
- =?us-ascii?Q?zwov6AAQLRWWMJL4Yk8luNCz3nABUJ1KdEc5gCTn5js3Ra3eFG/UuDrV0aoP?=
- =?us-ascii?Q?CgvjmKeomivnH0fxo30CxUgoYZa++Z/Wk8Ux6EcI2ZHPEYY04dSbC6pSn83a?=
- =?us-ascii?Q?/jZpRANrHX5+X52kM6pcoJBh5rcYehZngqhCTBWWvjKyVScx/3Fo7vTKozL1?=
- =?us-ascii?Q?cJxXNs7CT2Q0Td+yBGgZ32CepySoxfvwub44+Ri9YzL/5lnd3DfgiQcHTxQ9?=
- =?us-ascii?Q?TNdYaApIMsI3ESXVkUj15OI3EKvBcnfQtIChjiLxUG+Gp7LlYXgK+hPnRR5n?=
- =?us-ascii?Q?/lF0uFsDZB8fTZq/PH+H5+SxJ2dRYOk9vY3fbIjI637bI/0OeJ6ibjZIjlC+?=
- =?us-ascii?Q?pdnCcewUaJdZDU2cG78cFQ4ZzGwIjrWcCwpy60k4WIm8OWZsIe5/kL6uqe18?=
- =?us-ascii?Q?GP+zM1g7UraPULJa4brqv89siwpE6/QFlbyF84MivF2EuRbEQL6FMLNOcrxe?=
- =?us-ascii?Q?Xw4zNXrzr95r+cgMuf/l2jjflFNLRvMjHnr0x/6DBKoqmKzpJfxj9MBYQjq8?=
- =?us-ascii?Q?GLOjr2qQPwfWsMwGXmnB8j15YA3zA6Hek68Ybi5NWPrSrbVWy98gqy5iYNQ/?=
- =?us-ascii?Q?lIpWPBaZ3YiImw7/XiHGQ9nsTtloC08qvtc5fxo6+A3HmPXC1BLj2u9w/xgC?=
- =?us-ascii?Q?xVW0VfGshahqShip2OThn1cxz6ixoaO6ui6QUgVma5QMjs6xhTH0rZKQU6Sl?=
- =?us-ascii?Q?JawHBAL6f6YsPoKIl4zQn0tTHGpFM90EmnC34+ndrBhuoepWcKl3ujKayaGb?=
- =?us-ascii?Q?yI9VP0+FzYHvlaDE82gcKBRp0Lk+U5VDg7Gqayr+bQY=3D?=
-x-ms-exchange-transport-forked: True
+x-microsoft-antispam-message-info: Z1gSM8WRBU8w8SMEUPGD74kzEP510lP2jdTcBAI3jUjGsdbYHKEV1P71xV/Ocf0pIw3eZyKYJCj1vsYmCZAysBtXZW/bLlbDPtqO2rSAZKsEzoszv0xKU/dhJXVtwHZerpGRY+0a+iOcya0SgDNM34c1is512TlaQsdnwaVTl08Ma1fNHo7tWUKLCcoI0I/lFqtxDtKOTC96VwncQnU+3kq/lbfdUk1JU+8nQRT2WrywsqLX2SX0BtblAGbijBe6twpZELSjKcXNhOk7400frEiWVPeLk2oLvu4363vGDUV0tDfadlUF9INlNbW7STrud/8pQTPQ+UBDPpTa2WfeSg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(6486002)(4326008)(64756008)(1076003)(6862004)(54906003)(9686003)(26005)(6512007)(44832011)(8676002)(8936002)(498600001)(2906002)(33716001)(186003)(6506007)(53546011)(86362001)(6636002)(5660300002)(33656002)(91956017)(66476007)(76116006)(66946007)(66446008)(83380400001)(66556008)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?cJ57H5k8jLD9EYLs/xzF41axjH8WVhHlIn9NXVoBwJo0zHtsVuzKoJc+nKBP?=
+ =?us-ascii?Q?7ulTdIEoCEw9Y/YRPSRYW0JhRDq0AbMsyMSecvg5V1dx3voNsm7pLZ2qAnOV?=
+ =?us-ascii?Q?XIcw/Nl2fyfCrmKvOHKNMXz4vxe1FouGuEIQh4QLDfkdv8Dr/v05JPDczhHq?=
+ =?us-ascii?Q?DSsWjX58miAOZnHJGNsuoW+sWVO2qc7qpf0/fpYmOW3VV4lT0cVKxuyzfY6V?=
+ =?us-ascii?Q?2LUwpoZvoOcfAWnAIccFDjPzC0sWqg9+payemB0JX9P2yI6F4RCq+eajZb5O?=
+ =?us-ascii?Q?MzumPhcUxcs40Qk1NQP6X0W/xvKQTVtvHiS/oMz8VjurPJ4SmXkmNsId6sC2?=
+ =?us-ascii?Q?T++VCGh8lKyBzWbcsfDxfXLZpPb6HjE+iybLjzhccBnH58bwfPZPaDo+z8Ib?=
+ =?us-ascii?Q?5LoxCd70aLVixHAdX+JvorptS4+YZRFLdz+RKx4ypy6u2m72SVgEoTlguyno?=
+ =?us-ascii?Q?rT9ZME1Q1ePGLQ9bavbeSLkGi5fvURkrqTKGkyXVKdeP058JMFL3Be8T+CaL?=
+ =?us-ascii?Q?7L6+eBj+ahWOfSpudn8KHN71D3M+DCubRr88aeBgnYfjwmGKa6Yx4VGbpf10?=
+ =?us-ascii?Q?XOdIN3VXvcx/UZIpJylb3JXr3zBknW27of+ymNoaFhb6QRfGIK9MZ5WNliiV?=
+ =?us-ascii?Q?Ce0euxGgIma6ZOIgKaXGpWcWugO2kyr71J92ecgKkNdpb0/aBUN+pP3mOJgJ?=
+ =?us-ascii?Q?0f0Yu7JP5SFUbMs3CttYOrIpZAcMw05xYnox2I+ILLhDuT/e/vgewqPdxMep?=
+ =?us-ascii?Q?np1HlTFpdn7aHKWYIusK8RwsQc7CW6HUKSgWgqHBZtmYhxz4gI1meW464fv9?=
+ =?us-ascii?Q?Wj/mmG+CYw1H+sdPh4dcVFfiBcHLcaF1sGNrYWeGzzyEy3/ChIy+Cxkri9/2?=
+ =?us-ascii?Q?iKRNm4X4wdBZef2i1VF/Hy7cZRsPu6SjFgVwleRXhJZ++5waR8c+I2DVuCUs?=
+ =?us-ascii?Q?9AlmT90k5M1qjHqItasQ5Ct5bMR8O3wpgQ4fGeMd97t6DjqO1VAUuPa+D8Jv?=
+ =?us-ascii?Q?OQSC?=
 Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7F2BD1C1C5CF5E4F8F84C0EDBC689319@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ac2458b-224e-4718-25f6-08d89502dfb8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2020 07:38:04.3857
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba436fd2-c74c-4dec-f8e6-08d89504e80e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2020 07:52:37.7184
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9C91FTZ7R7N55rZkwvuU9nK1GoJSYfZlwLGvG/D7907wGzEEg2jDbUSCyU3rWdHAMfXtuwqt3IYYUSw2HBIcWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7179
+X-MS-Exchange-CrossTenant-userprincipalname: R8pzgxVE55ej3/16sFaseQHqC1OOTb5Xqx1qXOYrEzwLwW9Pt8009LCNyn7sYrGBsrrNTnjKi9Whe7oBKil9xw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0402MB2759
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
+On 20-11-30 02:37:54, Jun Li wrote:
+> Hi Peter,
+> > -----Original Message-----
+> > From: Peter Chen <peter.chen@kernel.org>
+> > Sent: Friday, November 27, 2020 2:28 PM
+> > To: heikki.krogerus@linux.intel.com
+> > Cc: linux-usb@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>; Peter
+> > Chen <peter.chen@nxp.com>; Jun Li <jun.li@nxp.com>
+> > Subject: [PATCH 1/1] usb: roles: reference controller's parent device i=
+f
+> > existed
+> >=20
+> > From: Peter Chen <peter.chen@nxp.com>
+> >=20
+> > For some DRD IP drivers (eg, dwc3/cdns3/chipidea), the core device is c=
+reated
+> > and deleted by glue layer device. So, if role switch user (eg, tcpci), =
+core
+> > device, and glue layer device are all built as module, and glue layer d=
+evice
+> > is removed first, the core device's driver ->remove function will be ca=
+lled,
+> > and its device's driver pointer will be NULL, and cause below oops.
+> >=20
+> > To fix it, if there is a parent for controller device (role switch devi=
+ce's
+> > parent), it references to parent too.
 >=20
-> On Mon, Nov 30, 2020 at 06:13:22AM +0000, Peter Chen wrote:
-> > The following changes since commit
-> f3bc432aa8a7a2bfe9ebb432502be5c5d979d7fe:
-> >
-> >   USB: core: Change %pK for __user pointers to %px (2020-11-20 16:36:31
-> +0100)
-> >
-> > are available in the Git repository at:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/
-> tags/usb-fixes-v5.10-rc6
+> This may not enough, the trouble is role switch class isn't aware of
+> the role switch is unregistered by its provider while typec class is
+> using it, this can happen by different ways, if we do role switch provide=
+r
+> driver unbind, we still suffer this problem:
 >=20
-> You sent this twice, which one is correct?  Or are they both the same?
+> echo usb_controller_dev > unbind
 >=20
 
-Both are the same, the 1st one used wrong email format which is denied by
-linux-usb ML, so I sent again, sorry about it.
+Yes, to fix this issue totally, we need to change the way role switch class
+used by controller and type-c driver, until now, we still have not a good
+way.
 
-Peter=20
+We could fix module unload issue first, unbind two devices may not a common
+use case.
+
+> I am not sure if we should prevent this happening at USB controller
+> drivers(provider side), or this is allowed and we should enhance
+> role switch class to be aware of this situation and properly handle it.
+>=20
+
+
+--=20
+
+Thanks,
+Peter Chen=
