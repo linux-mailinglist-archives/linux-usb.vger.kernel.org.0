@@ -2,82 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1702C9DD5
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 10:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 230842C9D55
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 10:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387428AbgLAJ2J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 04:28:09 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:40173 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388486AbgLAJBK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 04:01:10 -0500
-Received: by mail-lj1-f196.google.com with SMTP id y10so1629009ljc.7
-        for <linux-usb@vger.kernel.org>; Tue, 01 Dec 2020 01:00:54 -0800 (PST)
+        id S2389229AbgLAJWJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 04:22:09 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:56041 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389237AbgLAJWH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 04:22:07 -0500
+Received: by mail-il1-f198.google.com with SMTP id w10so907097ila.22
+        for <linux-usb@vger.kernel.org>; Tue, 01 Dec 2020 01:21:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3FAzLAzbTqnDyPheEy8JH3X2tG5szlEVlz/oM+HlaVk=;
-        b=sIaC1ULscSRQmu3UlkJAG54DvD+7nf9FeIIKGx8GEa2Oq3JiN1QUk+CtlTapB4TVsv
-         Bq4y4FMXOY3yfy25yTtVt7YYxvzMtkw7AuY6WIYjnJ4cc3s81X32CnGp5SUEX6h2dLyu
-         iYwPpTX+pIpMK9V4AQQGBNTzCQc1bs3V43sQOD7DX1Hjr0WWPlZ8v/D0VzG1lDlApaCK
-         U7O84MyIOPVeJQz5sQObw+16+v1ijyv9RGERR4pxU7PMc+pl7a9DsG70mFzSMzn5gLf/
-         G6lWDXI7EDwj7VAOV3pn+M3mlQ6M8NLSKk+6TwJS9GowQaRKaC3o+04OP6ISiFiiTYWw
-         kljA==
-X-Gm-Message-State: AOAM5322TQeTGZApkzZh5a1au0FG/myKHbJ4qmtbd5mILyq+wCqF4EHu
-        G4ZX7WcaSzdlJPgAo6HfFP8=
-X-Google-Smtp-Source: ABdhPJzA31eo/gDXCV+MQixIrs2aGUatNx1gAw8nspCyE5ZQlSZTaJNaGuPaXR7ORt56OL/DBvH0ZA==
-X-Received: by 2002:a2e:9a98:: with SMTP id p24mr796270lji.418.1606813228669;
-        Tue, 01 Dec 2020 01:00:28 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id 14sm130683lfq.221.2020.12.01.01.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Dec 2020 01:00:27 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kk1Wq-0003LV-Sc; Tue, 01 Dec 2020 10:00:57 +0100
-Date:   Tue, 1 Dec 2020 10:00:56 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Mychaela Falconia <mychaela.falconia@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/3] a family of FTDI-based devices that need ftdi_sio
- quirks
-Message-ID: <X8YGSJWzOlIFfHjx@localhost>
-References: <20200916015621.EFCDA374023F@freecalypso.org>
- <20200929101330.GQ24441@localhost>
- <CA+uuBqY83q+UiRsYxBckXvbtYf4sRxqB_8eXXPgEKAOqTwD=vg@mail.gmail.com>
- <20201005105722.GN5141@localhost>
- <CA+uuBqZ6JhCq1ydU-9A+en3QO=9zX9LuEJ8+P0YvEzUE+9sYoA@mail.gmail.com>
- <X8UMJ9a051tT1rbz@localhost>
- <CA+uuBqaUqkVQ0JCS-_OMT3tApxswHDFCpXjrPFzftn2VEGAjVg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=IhVped9n3+W7lr2jNSHydqmrdoeSj1nEn4SFaAFBJxA=;
+        b=QwID1xTCj4znY06Epy2iTAQZeY5xMaeGqjnuB1GYytCX0RuIqo7lW4Wrc9jdownUeg
+         GpAaGFMXO5gc91stczEZ3u4Vb7A8fBAP5Z4qm62P1qQS0hLi4pT8xA0ZBGJGpd250Ufk
+         XdzhaUWIOl2pPUVfDYAOSVvDmxit3f7Plkp4wPX9qrwP5FFspEk5g35bRPyHgFs6XSAj
+         7YhUgsRhouUIJmL+gfKa8DYqc6Pn3pVwKxxLVXMDWZcsQWwHHdrMrHa/nWx83uBPlUmT
+         fxr6mTljBxoJgqYIHY9lQH5qAdiKYcxG2CrChQl1397KlipFG5FYJwZi4Fm1w9A7/WO5
+         jZUw==
+X-Gm-Message-State: AOAM5311WawfKCbOL9XbgeReRG/9wsuBPTtDLS3lTrLQ4kNrNQZEiUs7
+        0SLj3oyzZ4VX+4Pwt7G0LoWsTuwr9mlaP4mYalREYxw6ZKPr
+X-Google-Smtp-Source: ABdhPJxAjJJ8rInf9KkTfFQdR4DUChFH5bqqanNm46/Yg5PchxRZbZUxCqHRnRiDH6dodb8qOYSfOXaiYE+6IhKSOznG3puuvCEf
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+uuBqaUqkVQ0JCS-_OMT3tApxswHDFCpXjrPFzftn2VEGAjVg@mail.gmail.com>
+X-Received: by 2002:a05:6602:2dcf:: with SMTP id l15mr1625809iow.120.1606814487195;
+ Tue, 01 Dec 2020 01:21:27 -0800 (PST)
+Date:   Tue, 01 Dec 2020 01:21:27 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bab70f05b563a6cc@google.com>
+Subject: WARNING in port100_send_frame_async/usb_submit_urb
+From:   syzbot <syzbot+dbec6695a6565a9c6bc0@syzkaller.appspotmail.com>
+To:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
+        gustavoars@kernel.org, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        tiwai@suse.de
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 12:15:51PM -0800, Mychaela Falconia wrote:
+Hello,
 
-> > I'm adding a new tty port flag that can be used to suppress the
-> > assertion of DTR/RTS to signal DTE readiness on open named NORDY.
-> > Eventually we can expose it through termios to match HUPCL that controls
-> > the behaviour on final close. For now I'm only adding a sysfs interface
-> > but that also allows control over these signals on first open.
-> 
-> I don't see how exposing this new flag via termios would be of any use
-> (it's a chicken and egg problem: one needs to open the tty device in
-> order to do termios ioctls on it, and if that initial open triggers
-> DTR/RTS hardware actions, then the end user is still screwed), but
-> making this flag accessible for setting and clearing via sysfs is a
-> good idea.
+syzbot found the following issue on:
 
-Yeah, as I mentioned in the other thread a termios flag would not be
-sufficient for your use case, but there could be other applications that
-are more tolerant but still want control after first open.
+HEAD commit:    c84e1efa Merge tag 'asm-generic-fixes-5.10-2' of git://git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14a98565500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7be70951fca93701
+dashboard link: https://syzkaller.appspot.com/bug?extid=dbec6695a6565a9c6bc0
+compiler:       clang version 11.0.0 (https://github.com/llvm/llvm-project.git ca2dcbd030eadbf0aa9b660efe864ff08af6e18b)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17c607f1500000
 
-I believe this is also the way Win32, which you referred to earlier,
-works.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dbec6695a6565a9c6bc0@syzkaller.appspotmail.com
 
-Johan
+usb 1-1: string descriptor 0 read error: -32
+------------[ cut here ]------------
+URB 000000005c26bc1e submitted while active
+WARNING: CPU: 0 PID: 5 at drivers/usb/core/urb.c:378 usb_submit_urb+0xf57/0x1510 drivers/usb/core/urb.c:378
+Modules linked in:
+CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.10.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0xf57/0x1510 drivers/usb/core/urb.c:378
+Code: 5c 41 5d 41 5e 41 5f 5d e9 76 5b ff ff e8 f1 e8 04 fc c6 05 25 0e 8b 07 01 48 c7 c7 a0 b7 5b 8a 4c 89 e6 31 c0 e8 89 07 d5 fb <0f> 0b e9 20 f1 ff ff e8 cd e8 04 fc eb 05 e8 c6 e8 04 fc bb a6 ff
+RSP: 0018:ffffc90000ca6ec8 EFLAGS: 00010246
+RAX: cf72e284cb303700 RBX: ffff888021723708 RCX: ffff888011108000
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: 0000000000000cc0 R08: ffffffff815d29f2 R09: ffffed1017383ffc
+R10: ffffed1017383ffc R11: 0000000000000000 R12: ffff888021723700
+R13: dffffc0000000000 R14: ffff888012cfa458 R15: 1ffff1100259f489
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000056157313d160 CR3: 000000001e22c000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ port100_send_frame_async+0x1ea/0x390 drivers/nfc/port100.c:780
+ port100_send_cmd_async+0x6c7/0x950 drivers/nfc/port100.c:876
+ port100_send_cmd_sync drivers/nfc/port100.c:916 [inline]
+ port100_set_command_type drivers/nfc/port100.c:987 [inline]
+ port100_probe+0xd4f/0x1600 drivers/nfc/port100.c:1567
+ usb_probe_interface+0x662/0xb40 drivers/usb/core/driver.c:396
+ really_probe+0x4ab/0x1380 drivers/base/dd.c:558
+ driver_probe_device+0x15b/0x310 drivers/base/dd.c:738
+ bus_for_each_drv+0x108/0x170 drivers/base/bus.c:431
+ __device_attach+0x2c9/0x480 drivers/base/dd.c:912
+ bus_probe_device+0xb8/0x1f0 drivers/base/bus.c:491
+ device_add+0x1612/0x19e0 drivers/base/core.c:2936
+ usb_set_configuration+0x1c17/0x2100 drivers/usb/core/message.c:2159
+ usb_generic_driver_probe+0x82/0x140 drivers/usb/core/generic.c:238
+ usb_probe_device+0x13a/0x260 drivers/usb/core/driver.c:293
+ really_probe+0x4ab/0x1380 drivers/base/dd.c:558
+ driver_probe_device+0x15b/0x310 drivers/base/dd.c:738
+ bus_for_each_drv+0x108/0x170 drivers/base/bus.c:431
+ __device_attach+0x2c9/0x480 drivers/base/dd.c:912
+ bus_probe_device+0xb8/0x1f0 drivers/base/bus.c:491
+ device_add+0x1612/0x19e0 drivers/base/core.c:2936
+ usb_new_device+0xcc3/0x1700 drivers/usb/core/hub.c:2554
+ hub_port_connect+0xec7/0x2540 drivers/usb/core/hub.c:5222
+ hub_port_connect_change+0x600/0xb00 drivers/usb/core/hub.c:5362
+ port_event+0xae9/0x10a0 drivers/usb/core/hub.c:5508
+ hub_event+0x417/0xcb0 drivers/usb/core/hub.c:5590
+ process_one_work+0x789/0xfc0 kernel/workqueue.c:2272
+ worker_thread+0xaa4/0x1460 kernel/workqueue.c:2418
+ kthread+0x39a/0x3c0 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
