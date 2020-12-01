@@ -2,111 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F180C2CA544
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 15:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 801842CA56D
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 15:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728992AbgLAOLn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 09:11:43 -0500
-Received: from fgw20-4.mail.saunalahti.fi ([62.142.5.107]:10622 "EHLO
-        fgw20-4.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727132AbgLAOLn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 09:11:43 -0500
-Received: from darkstar.musicnaut.iki.fi (85-76-8-36-nat.elisa-mobile.fi [85.76.8.36])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 0a762813-33df-11eb-ba24-005056bd6ce9;
-        Tue, 01 Dec 2020 16:11:01 +0200 (EET)
-Date:   Tue, 1 Dec 2020 16:11:01 +0200
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: ohci-omap: Fix descriptor conversion
-Message-ID: <20201201141101.GI551434@darkstar.musicnaut.iki.fi>
-References: <20201201121606.235982-1-linus.walleij@linaro.org>
+        id S2388794AbgLAOSF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 09:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728702AbgLAOSE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 09:18:04 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6302C0613D4;
+        Tue,  1 Dec 2020 06:17:23 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id j205so4441170lfj.6;
+        Tue, 01 Dec 2020 06:17:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+/VDVLzOBDjqiEu/N1C0eMmuynbTWK2RMfkKzr3b440=;
+        b=NFS1gJ6qIMEM0tjrCNFlTLXIiKzLUz8Gnm9RoDkDgAGoOrAmFH665FazAn65xfep9j
+         q1MzYJOj3Zlv/6l+94KjbYlkwVpip2977xGSaKfNO/trDYc5k7c4/WcDtCzjHhJivaw4
+         R3wSqZQpSfK8urUC+KUWSI03zjKLD2qUjSA1Sh36Vv3gkEPtGffag2dP6CvSTvSq3UKY
+         YylNKX7Dx4eifs+51m341bLnClw1F91DSN9xMT666b1NKXE2m8BabsDyn4Az/aDh03d7
+         EAnoQKdNqE2iVos9mifhxROnB6lM4QDKR2vwmfs0SCZYZPWhyhwrUHdSXnF5Z6q3a5OU
+         KfeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+/VDVLzOBDjqiEu/N1C0eMmuynbTWK2RMfkKzr3b440=;
+        b=LdNCmRtHMzL2CqWs+Cppu8mR/wz1IRS+Q3HJ6rWJ4WI1lx9muj5HlNQJ974cTIIXgD
+         AFb/Rwop+vGgpCExbZLizRj4hdcjyLrPmrVptyWgLLd5FO472G4U4dmpg/bRIThDT/tz
+         lJCHymwruUxKSZD4uk7zIWt5Yb1GHUlGwcl5TgMn39C79RhCX0ori5L5je3JdROGWnzB
+         awLwEMYRElFPSpi+OeEjEPwmAYiP8aJRgzUNKOLnUH6AbqtkzzoPjSk3GoSclkIiof6P
+         81wBEar6Zb2y+leq85hAgHPfW1xQMUTi8+nfr/yqMni7mmp1vNj0lXm2tNqIIz5NXLDX
+         JL5g==
+X-Gm-Message-State: AOAM530E8mB5IY9b0+f5BrpGPt4Ed00Qk19r7ox/PNJzObu5RUHGXCiI
+        IKifSrFP1lWbaplpkpllVzWjOsdpv+M=
+X-Google-Smtp-Source: ABdhPJy45twU6WKpFARyvJXmOYuPohM+PTgEg36doZmYuxa+KLwfB3LOW5+S25YIdNCijAJHOc0fgg==
+X-Received: by 2002:ac2:5503:: with SMTP id j3mr1305836lfk.94.1606832242037;
+        Tue, 01 Dec 2020 06:17:22 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-53.dynamic.spd-mgts.ru. [109.252.192.53])
+        by smtp.googlemail.com with ESMTPSA id p16sm214803lfe.255.2020.12.01.06.17.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Dec 2020 06:17:21 -0800 (PST)
+Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
+ Tegra20/30 SoCs
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-mmc@vger.kernel.org, devel@driverdev.osuosl.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <160683107675.35139.13466076210885462180.b4-ty@kernel.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <858e4183-5064-084f-9b80-870e118c3edc@gmail.com>
+Date:   Tue, 1 Dec 2020 17:17:20 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201201121606.235982-1-linus.walleij@linaro.org>
+In-Reply-To: <160683107675.35139.13466076210885462180.b4-ty@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Tue, Dec 01, 2020 at 01:16:06PM +0100, Linus Walleij wrote:
-> There were a bunch of issues with the patch converting the
-> OMAP1 OSK board to use descriptors for controlling the USB
-> host:
+01.12.2020 16:57, Mark Brown пишет:
+> On Thu, 5 Nov 2020 02:43:57 +0300, Dmitry Osipenko wrote:
+>> Introduce core voltage scaling for NVIDIA Tegra20/30 SoCs, which reduces
+>> power consumption and heating of the Tegra chips. Tegra SoC has multiple
+>> hardware units which belong to a core power domain of the SoC and share
+>> the core voltage. The voltage must be selected in accordance to a minimum
+>> requirement of every core hardware unit.
+>>
+>> The minimum core voltage requirement depends on:
+>>
+>> [...]
 > 
-> - The chip label was incorrect
-> - The GPIO offset was off-by-one
-> - The code should use sleeping accessors
+> Applied to
 > 
-> This patch tries to fix all issues at the same time.
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 > 
-> Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
-> Reported-by: Aaro Koskinen <aaro.koskinen@iki.fi>
-> Fixes: 15d157e87443 ("usb: ohci-omap: Convert to use GPIO descriptors")
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-
-Tested-by: Aaro Koskinen <aaro.koskinen@iki.fi>
-
-Thanks,
-
-A.
-
-> ---
-> ChangeLog v1->v2:
-> - Also free the GPIO in the boardfile bootstrap code so that
->   the driver can later on properly grab it.
-> ---
->  arch/arm/mach-omap1/board-osk.c | 4 +++-
->  drivers/usb/host/ohci-omap.c    | 4 ++--
->  2 files changed, 5 insertions(+), 3 deletions(-)
+> Thanks!
 > 
-> diff --git a/arch/arm/mach-omap1/board-osk.c b/arch/arm/mach-omap1/board-osk.c
-> index 144b9caa935c..0a4c9b0b13b0 100644
-> --- a/arch/arm/mach-omap1/board-osk.c
-> +++ b/arch/arm/mach-omap1/board-osk.c
-> @@ -203,6 +203,8 @@ static int osk_tps_setup(struct i2c_client *client, void *context)
->  	 */
->  	gpio_request(OSK_TPS_GPIO_USB_PWR_EN, "n_vbus_en");
->  	gpio_direction_output(OSK_TPS_GPIO_USB_PWR_EN, 1);
-> +	/* Free the GPIO again as the driver will request it */
-> +	gpio_free(OSK_TPS_GPIO_USB_PWR_EN);
->  
->  	/* Set GPIO 2 high so LED D3 is off by default */
->  	tps65010_set_gpio_out_value(GPIO2, HIGH);
-> @@ -288,7 +290,7 @@ static struct gpiod_lookup_table osk_usb_gpio_table = {
->  	.dev_id = "ohci",
->  	.table = {
->  		/* Power GPIO on the I2C-attached TPS65010 */
-> -		GPIO_LOOKUP("i2c-tps65010", 1, "power", GPIO_ACTIVE_HIGH),
-> +		GPIO_LOOKUP("tps65010", 0, "power", GPIO_ACTIVE_HIGH),
->  		GPIO_LOOKUP(OMAP_GPIO_LABEL, 9, "overcurrent",
->  			    GPIO_ACTIVE_HIGH),
->  	},
-> diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
-> index 9ccdf2c216b5..6374501ba139 100644
-> --- a/drivers/usb/host/ohci-omap.c
-> +++ b/drivers/usb/host/ohci-omap.c
-> @@ -91,14 +91,14 @@ static int omap_ohci_transceiver_power(struct ohci_omap_priv *priv, int on)
->  				| ((1 << 5/*usb1*/) | (1 << 3/*usb2*/)),
->  			       INNOVATOR_FPGA_CAM_USB_CONTROL);
->  		else if (priv->power)
-> -			gpiod_set_value(priv->power, 0);
-> +			gpiod_set_value_cansleep(priv->power, 0);
->  	} else {
->  		if (machine_is_omap_innovator() && cpu_is_omap1510())
->  			__raw_writeb(__raw_readb(INNOVATOR_FPGA_CAM_USB_CONTROL)
->  				& ~((1 << 5/*usb1*/) | (1 << 3/*usb2*/)),
->  			       INNOVATOR_FPGA_CAM_USB_CONTROL);
->  		else if (priv->power)
-> -			gpiod_set_value(priv->power, 1);
-> +			gpiod_set_value_cansleep(priv->power, 1);
->  	}
->  
->  	return 0;
-> -- 
-> 2.26.2
+> [1/1] regulator: Allow skipping disabled regulators in regulator_check_consumers()
+>       (no commit info)
 > 
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+> 
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+
+Hello Mark,
+
+Could you please hold on this patch? It won't be needed in a v2, which
+will use power domains.
+
+Also, I'm not sure whether the "sound" tree is suitable for any of the
+patches in this series.
