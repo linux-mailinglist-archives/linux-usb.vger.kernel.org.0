@@ -2,119 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B62612CA678
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 16:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDE92CA779
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 16:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389849AbgLAPB6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 10:01:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33780 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389514AbgLAPB5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Dec 2020 10:01:57 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1706B20691;
-        Tue,  1 Dec 2020 15:01:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606834876;
-        bh=3peWW0gzDhg53QWR3p3MrFZHy1Ev+0muOybHCDu66+M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iDxgfnOHBZ8uTuNVOT9OzBbVIENBVQ7TsJSeopKt02no5szsFtc1cUGdMw7e1+vyu
-         iUqE9c9GwL+09dsmObIRlLlLh62maQ/9pGE9lTSLcbB3Q1eABzW2GzksR8XqTPMjG1
-         6VqlXY1DUFNEh5oNoGkWZ9J+HsT2KXH42fxylQnc=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94)
-        (envelope-from <maz@kernel.org>)
-        id 1kk79T-00F4zg-ID; Tue, 01 Dec 2020 15:01:14 +0000
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 01 Dec 2020 15:01:11 +0000
-From:   Marc Zyngier <maz@kernel.org>
+        id S2391920AbgLAPvj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 10:51:39 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:45773 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391886AbgLAPvi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 10:51:38 -0500
+Received: by mail-lj1-f195.google.com with SMTP id q8so3659941ljc.12;
+        Tue, 01 Dec 2020 07:51:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7pLlIXqniIb8lLwcUv8C5IJZPzU955Z7Fl+CrmV2OEM=;
+        b=uYvoluBnXyroJbptCW+Ar8hQraDaB7efOpodeAryrR+f0TFXYZQTI9Ob3eotE/344U
+         r+BNzSYfkpn3diiNfUSBk+iw7fnKXap9uKY2gN8QvsNF231+So1PLidDqHlqig8gOBsT
+         ulkD8sIQTMrqyrtULzhKzsnYWtklZh/qISO3CkkLXWfLSxJZx6IerVLLAjZ/Li4q31GQ
+         1nfZm8vYaTKeGZf7hUuvT0P6aqKeaDrMo2rapYaf+FcKXkwGv7n6X3vc8+qk0DCpfbMr
+         rDMQ1ZMVZJVRDgtDSS4ypQ2f4WHdG9xcGIRhuz+eQ9J4CR24j0al0kNoejyEedIEYMWM
+         Dw/w==
+X-Gm-Message-State: AOAM533jcit9LZUEqdQx+Y68W+XbndZG5Uc/Znw4W15GkCPIoFkm06+g
+        b4eXhcQ7TpHFq6GP23tJaYo=
+X-Google-Smtp-Source: ABdhPJyhTjIgdv44tVnheFanh1pnwuEnyZJ/oM1M51QMxVVcd7XlZQKoZ+kvHyYbdjILfHiOD6l3PA==
+X-Received: by 2002:a2e:81c7:: with SMTP id s7mr1685019ljg.60.1606837855694;
+        Tue, 01 Dec 2020 07:50:55 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id w3sm238215lfn.293.2020.12.01.07.50.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Dec 2020 07:50:54 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kk7w5-0001qm-32; Tue, 01 Dec 2020 16:51:25 +0100
+Date:   Tue, 1 Dec 2020 16:51:25 +0100
+From:   Johan Hovold <johan@kernel.org>
 To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ftdi_sio: Helpful error on GPIO attempt
-In-Reply-To: <20201201141048.1461042-1-linus.walleij@linaro.org>
-References: <20201201141048.1461042-1-linus.walleij@linaro.org>
-User-Agent: Roundcube Webmail/1.4.9
-Message-ID: <43d788c69a0f4fe3caf578b98ae72395@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, johan@kernel.org, linux-usb@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        patong.mxl@gmail.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        angelo.dureghello@timesys.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v5 2/3] usb: serial: xr_serial: Add gpiochip support
+Message-ID: <X8ZmfbQp7/BGgxec@localhost>
+References: <20201122170822.21715-1-mani@kernel.org>
+ <20201122170822.21715-3-mani@kernel.org>
+ <CACRpkdbY-aZB1BAD=JkZAHA+OQvpH12AD3tLAp6Nf1hwr74s9A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdbY-aZB1BAD=JkZAHA+OQvpH12AD3tLAp6Nf1hwr74s9A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Linus,
-
-On 2020-12-01 14:10, Linus Walleij wrote:
-> The FTDI adapters present all potentially available GPIO
-> lines to userspace, and they are often also visibly
-> available on things like breakout boards. These are
-> appetizing targets for random GPIO tinkering such as
-> bit-banging or other industrial control over USB.
+On Tue, Dec 01, 2020 at 03:37:38PM +0100, Linus Walleij wrote:
+> On Sun, Nov 22, 2020 at 6:08 PM Manivannan Sadhasivam <mani@kernel.org> wrote:
 > 
-> When a user attempts to use one of the GPIO lines, they
-> can get the opaque error -ENODEV, because the flashed
-> configuration says that the line is not in GPIO mode
-> but another alternative function.
+> > Add gpiochip support for Maxlinear/Exar USB to serial converter
+> > for controlling the available gpios.
+
+> One minor notice:
 > 
-> We had one user run into this, debug and finally fix the
-> problem using ftx-prog.
-
-Well, you gave me 2/3 of the solution ;-). How about adding
-a pointer to this tool? [1]
-
+> > +enum gpio_pins {
+> > +       GPIO_RI = 0,
+> > +       GPIO_CD,
+> > +       GPIO_DSR,
+> > +       GPIO_DTR,
+> > +       GPIO_CTS,
+> > +       GPIO_RTS,
+> > +       GPIO_MAX,
+> > +};
 > 
-> Give the user some more helpful dmesg text and a pointer
-> to ftx-prog when the error occurs.
+> You know the names of the pins...
 > 
-> Reported-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  drivers/usb/serial/ftdi_sio.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> > +       port_priv->gc.ngpio = 6;
+> > +       port_priv->gc.label = "xr_gpios";
+> > +       port_priv->gc.request = xr_gpio_request;
+> > +       port_priv->gc.free = xr_gpio_free;
+> > +       port_priv->gc.get_direction = xr_gpio_direction_get;
+> > +       port_priv->gc.direction_input = xr_gpio_direction_input;
+> > +       port_priv->gc.direction_output = xr_gpio_direction_output;
+> > +       port_priv->gc.get = xr_gpio_get;
+> > +       port_priv->gc.set = xr_gpio_set;
+> > +       port_priv->gc.owner = THIS_MODULE;
+> > +       port_priv->gc.parent = &port->dev;
+> > +       port_priv->gc.base = -1;
+> > +       port_priv->gc.can_sleep = true;
 > 
-> diff --git a/drivers/usb/serial/ftdi_sio.c 
-> b/drivers/usb/serial/ftdi_sio.c
-> index e0f4c3d9649c..405fec78f2fc 100644
-> --- a/drivers/usb/serial/ftdi_sio.c
-> +++ b/drivers/usb/serial/ftdi_sio.c
-> @@ -1841,8 +1841,11 @@ static int ftdi_gpio_request(struct gpio_chip
-> *gc, unsigned int offset)
->  	struct ftdi_private *priv = usb_get_serial_port_data(port);
->  	int result;
-> 
-> -	if (priv->gpio_altfunc & BIT(offset))
-> +	if (priv->gpio_altfunc & BIT(offset)) {
-> +		dev_err(&port->dev, "FTDI firmware says line is not in GPIO 
-> mode\n");
-> +		dev_err(&port->dev, "if you really know what you're doing the flash
-> can be reconfigured using ftx-prog\n");
->  		return -ENODEV;
-> +	}
-> 
->  	mutex_lock(&priv->gpio_lock);
->  	if (!priv->gpio_used) {
+> So assign port_priv->gc.names here as well with an array
+> of strings with the names ("RI", "CD", ... etc).
+> This makes it look really nice in userspace if you do
+> e.g. "lsgpio".
 
-It occurs to me that since the driver already knows which of the CBUS
-pins are unusable, we should maybe find a way to expose the line as
-"reserved", one way or another? Generic tools such as gpioinfo would
-(or should?) be able to display the status of the pin to the user.
+Last time we tried that gpiolib still used a flat namespace so that you
+can't have have more than one device using the same names. Unless that
+has changed this is a no-go. See
 
-enum gpio_v2_line_flag doesn't have a "reserved" flag, so maybe
-GPIO_V2_LINE_FLAG_USED is an adequate way to mark the line as
-being unavailable for userspace?
+	https://lore.kernel.org/r/20180930122703.7115-1-johan@kernel.org
 
-Thanks,
+for our previous discussion about this.
 
-         M.
-
-[1] https://github.com/richardeoin/ftx-prog
--- 
-Jazz is not dead. It just smells funny...
+Johan
