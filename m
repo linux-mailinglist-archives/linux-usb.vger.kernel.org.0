@@ -2,117 +2,270 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD462C93A8
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 01:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4ED2C94B4
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 02:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730915AbgLAAGM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 19:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S2387451AbgLABdj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Nov 2020 20:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbgLAAGM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 19:06:12 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CDEC0613D6
-        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 16:05:32 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id h21so633134wmb.2
-        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 16:05:31 -0800 (PST)
+        with ESMTP id S1731216AbgLABdj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 20:33:39 -0500
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02069C0613CF
+        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 17:32:52 -0800 (PST)
+Received: by mail-qt1-x84a.google.com with SMTP id f19so9797886qtx.6
+        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 17:32:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=PxcXUulEgKyT5OqGMviihTXF0lRaKbBQv3juecUtJO8=;
-        b=O7tahjFvfV270xsIxQrZzlM6k0pOwQyJC3RZ5+23q7vBo/Af+t8KarNIHs67XtYjR3
-         MG5fxSV+idLE+yD9ZEqVpNV4QqRuAIoJyiLNmF2q//gSDnIGLe1705lVNg646dyLIbOY
-         l3N7G+Q3Lagwg2lM66LXayYUUQaXmBKIHlxctdOjfTjLLr8tigAnTkRXXLMEoNG+Z02M
-         3e+6cb7+kFzE9fvDrgIskCefZrYNXco1DzWq4KNx9hRGsjlPhURp77jFj8P+evOOawzO
-         pizJJmd8NdBIIrUF0nptK18nImb9dM8agDGLY5ZiyVbyKqfsJOM4jQ/IyKp+Pk2N/aL6
-         r3MQ==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=EmxHim0aZSg8o5d0Bg0Km4CxFTJ/ntmkKCMnDqRTjRo=;
+        b=HgF5+bq0NT/hieJejh0bXxmyKV61G+IFYs14Kxo9bDSg6EBgXIcY7BoH41aGSjv0iR
+         9yJtsMJjt0S1biSIiSC/daR+6AmZIQyDPOYEEeliYEvGQOJXcI06P84LZ4q6VTNZ7dET
+         WzhZsADM1LOZpZfrkl4Ik+ouAT99VRKkk8No+DzXWpEXFeFjzG9FcefAr3R98R5nZvOG
+         sgP3AZ5xG3+XCIjb8Vay4OY2OkbYPjFFEfMMZD3N74h45PMjMe3fIOkVgvvvLfKM1UC2
+         SB+JPXZ9lIYsuBTpjIeSsFpXuircMcpBkDJdQmpu+kSv3vpuM8S8Tz7NRLvO+4JUT5bv
+         qf2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=PxcXUulEgKyT5OqGMviihTXF0lRaKbBQv3juecUtJO8=;
-        b=nV85YdauyeV7/elPAQ7URdEN0QYxWyM8R7I4bIQzwC3E0rGtTak7AX+ThWA104yxu7
-         u8kcZ3tLJmXJmYQPr2Th/eh6JSA6w87IYuKmFNsM1/OcDAsDMy56O520gy1oI0ep/oXR
-         gvFpkxmaBR3tx/z4PduiJ+vMqOv0BVLqKoi8fPCCgBsjPr7TxZtU2xDT/p+tX0mnxb3a
-         uzBEY1EKooh9Gx3DHBvPXxKGJNC7Cmm8Rn+3zlhp6LYLwpKSilUxpGD0pAmWJneaIQIT
-         1O3WLR8kTwbZh4frQtN2g8c9gmFRRFg8PtThwAj6Sb4mPj9UWbhXiSnthItgHumu7TU7
-         WF9A==
-X-Gm-Message-State: AOAM531Gi1N63VyOGdtV7LO1uegqPgLS/hJ8phee/VQFDIG8UlmICWEB
-        XiKmn5lPMUv12eq0B8iOUtN3ig==
-X-Google-Smtp-Source: ABdhPJxDo2whkAA2R00WX2/QVf+Qt3ioNPbxjqDxzSFpgUK0pyo10hiDr+JBjoGg0Wl+Gi6pgaZ9mw==
-X-Received: by 2002:a7b:cb09:: with SMTP id u9mr319472wmj.25.1606781130659;
-        Mon, 30 Nov 2020 16:05:30 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id t7sm27223749wrp.26.2020.11.30.16.05.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 16:05:29 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/3] usb: meson: fix shared reset control use
-In-Reply-To: <093933fc-eac5-de56-d314-a1348de348af@baylibre.com>
-References: <20201113000508.14702-1-aouledameur@baylibre.com> <093933fc-eac5-de56-d314-a1348de348af@baylibre.com>
-Date:   Mon, 30 Nov 2020 16:05:24 -0800
-Message-ID: <7hzh2ytmpn.fsf@baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc:content-transfer-encoding;
+        bh=EmxHim0aZSg8o5d0Bg0Km4CxFTJ/ntmkKCMnDqRTjRo=;
+        b=LrrSBsb6myjvBaQy0ibnBd5abRkGRorWvHNsdudMywy7UblOLA6ke+LYZ3dKa6hHL5
+         GTpsO0a3UO5ZmT1vr6eNyl1Fd5oFZUymSFqQ5XLPtMb7TTkTt/Oi019N8sxsdYejti6+
+         PgPT7O3bzkR0DplQcd3I7Gkwi3VDKa8jInGTy6t3tqHLu4LlAyRpwL6pHYKofxE+486+
+         6dcHwxzn1SgF3DDgeQj77pmlds0aA/LHQv2WoprqKu3OexoqQ66TqdLU+i6zdVtM/GI6
+         +Q223PzHdOmJwIzWI5o4F+7MreMF/qc/LlSjBm69BqKP4esnK7Yvsj/X0r146KGZ6oqs
+         qw+w==
+X-Gm-Message-State: AOAM531dEZYlIa0V+ivQjPfg3N6p0GzzgBE5yLvMRd4tBLzUB/jWuSaf
+        1j9TkRaGi2P7YVTQmQaUJfe+GWRqgkM=
+X-Google-Smtp-Source: ABdhPJzVb9f0QBwJ9ZC2i1H3K6BZZfhtDe3gWQl2DmFGhBreyas9kKIMmvA9Fr3Md83cW01IcrMry5BOyNU=
+Sender: "badhri via sendgmr" <badhri@badhri.mtv.corp.google.com>
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:f292:1cff:fee0:66cf])
+ (user=badhri job=sendgmr) by 2002:ad4:5bad:: with SMTP id 13mr707408qvq.23.1606786372038;
+ Mon, 30 Nov 2020 17:32:52 -0800 (PST)
+Date:   Mon, 30 Nov 2020 17:32:44 -0800
+Message-Id: <20201201013246.32034-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
+Subject: [PATCH v1 1/3] usb: typec: tcpm: Introduce vsafe0v for vbus
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Amjad Ouled-Ameur <aouledameur@baylibre.com> writes:
+TCPM at present lacks the notion of VSAFE0V. There
+are three vbus threshold levels that are critical to track:
+a. vSafe5V         - VBUS =E2=80=9C5 volts=E2=80=9D as defined by the USB
+                     PD specification.
+b. vSinkDisconnect - Threshold used for transition from
+                     Attached.SNK to Unattached.SNK.
+c. vSafe0V         - VBUS =E2=80=9C0 volts=E2=80=9D as defined by the USB
+                     PD specification.
 
-> Hello Felipe and Kevin,
->
->
-> Could you please review this patchset ?
+Tracking vSafe0V is crucial for entry into Try.SNK and
+Attached.SRC and turning vbus back on by the source in
+response to hard reset.
 
-The changes are OK with me.  Please update based on Martin's
-suggestions and this can be queued up by the USB maintainers.
+From "4.5.2.2.8.2 Exiting from AttachWait.SRC State" section
+in the Type-C spec:
 
-Kevin
+"The port shall transition to Attached.SRC when VBUS is at
+vSafe0V and the SRC.Rd state is detected on exactly one of
+the CC1 or CC2 pins for at least tCCDebounce."
 
-> Thank you in advance.
->
-> On 13/11/2020 01:05, Amjad Ouled-Ameur wrote:
->
->> This patchset fixes a usb suspend warning seen on the libretech-cc by
->> using reset_control_rearm() call of the reset framework API.
->> This call allows a reset consummer to release the reset line even when
->> just triggered so that it may be triggered again by other reset
->> consummers.
->>
->> reset_control_(de)assert() calls are called, in some meson usb drivers,
->> on a shared reset line when reset_control_reset has been used. This is not
->> allowed by the reset framework.
->>
->> Finally the meson usb drivers are updated to use this new call, which
->> solves the suspend issue addressed by the previous reverted
->> commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared reset control
->> use").
->>
->> Important:
->> Please DO NOT merge before this patch [0] is merged, it adds
->> reset_control_rearm() call to the reset framework API.
->>
->> [0] https://lore.kernel.org/lkml/20201112230043.28987-1-aouledameur@baylib
->> re.com/
->>
->> Amjad Ouled-Ameur (3):
->>    phy: amlogic: phy-meson-gxl-usb2: fix shared reset controller use
->>    usb: dwc3: meson-g12a: fix shared reset control use
->>    phy: amlogic: meson8b-usb2: fix shared reset control use
->>
->>   drivers/phy/amlogic/phy-meson-gxl-usb2.c |  5 ++++-
->>   drivers/phy/amlogic/phy-meson8b-usb2.c   |  4 ++++
->>   drivers/usb/dwc3/dwc3-meson-g12a.c       | 19 +++++++++++++------
->>   3 files changed, 21 insertions(+), 7 deletions(-)
->>
->>
-> Sincerely,
-> Amjad
+"A DRP that strongly prefers the Sink role may optionally
+transition to Try.SNK instead of Attached.SRC when VBUS
+is at vSafe0V and the SRC.Rd state is detected on exactly
+one of the CC1 or CC2 pins for at least tCCDebounce."
+
+From "7.1.5 Response to Hard Resets" section in the PD spec:
+
+"After establishing the vSafe0V voltage condition on VBUS,
+the Source Shall wait tSrcRecover before re-applying VCONN
+and restoring VBUS to vSafe5V."
+
+vbus_present in the TCPM code tracks vSafe5V(vbus_present is true)
+and vSinkDisconnect(vbus_present is false).
+
+This change adds is_vbus_vsafe0v callback which when set makes
+TCPM query for vSafe0V voltage level when needed.
+
+Since not all TCPC controllers might have the capability
+to report vSafe0V, TCPM assumes that vSafe0V is same as
+vSinkDisconnect when is_vbus_vsafe0v callback is not set.
+This allows TCPM to continue to support controllers which don't
+have the support for reporting vSafe0V.
+
+Introducing vSafe0V helps fix the failure reported at
+"Step 15. CVS verifies PUT remains in AttachWait.SRC for 500ms"
+of "TD 4.7.2 Try. SNK DRP Connect DRP Test" of
+"Universal Serial Bus Type-C (USB Type-C) Functional Test
+Specification Chapters 4 and 5". Here the compliance tester
+intentionally maintains vbus at greater than vSafe0V and expects
+the Product under test to stay in AttachWait.SRC till vbus drops
+to vSafe0V.
+
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 63 +++++++++++++++++++++++++++++------
+ include/linux/usb/tcpm.h      |  6 ++++
+ 2 files changed, 58 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 3bbc1f10af49..10a065eef73e 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -258,7 +258,19 @@ struct tcpm_port {
+ 	bool attached;
+ 	bool connected;
+ 	enum typec_port_type port_type;
++
++	/*
++	 * Set to true when vbus is greater than VSAFE5V min.
++	 * Set to false when vbus falls below vSinkDisconnect max threshold.
++	 */
+ 	bool vbus_present;
++
++	/*
++	 * Set to true when vbus is less than VSAFE0V max.
++	 * Set to false when vbus is greater than VSAFE0V max.
++	 */
++	bool vbus_vsafe0v;
++
+ 	bool vbus_never_low;
+ 	bool vbus_source;
+ 	bool vbus_charge;
+@@ -3094,7 +3106,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		else if (tcpm_port_is_audio(port))
+ 			tcpm_set_state(port, AUDIO_ACC_ATTACHED,
+ 				       PD_T_CC_DEBOUNCE);
+-		else if (tcpm_port_is_source(port))
++		else if (tcpm_port_is_source(port) && port->vbus_vsafe0v)
+ 			tcpm_set_state(port,
+ 				       tcpm_try_snk(port) ? SNK_TRY
+ 							  : SRC_ATTACHED,
+@@ -4097,6 +4109,12 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
+ {
+ 	tcpm_log_force(port, "VBUS on");
+ 	port->vbus_present =3D true;
++	/*
++	 * When vbus_present is true i.e. Voltage at VBUS is greater than VSAFE5V=
+ implicitly
++	 * states that vbus is not at VSAFE0V, hence clear the vbus_vsafe0v flag =
+here.
++	 */
++	port->vbus_vsafe0v =3D false;
++
+ 	switch (port->state) {
+ 	case SNK_TRANSITION_SINK_VBUS:
+ 		port->explicit_contract =3D true;
+@@ -4186,16 +4204,8 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port=
+)
+ 	case SNK_HARD_RESET_SINK_OFF:
+ 		tcpm_set_state(port, SNK_HARD_RESET_WAIT_VBUS, 0);
+ 		break;
+-	case SRC_HARD_RESET_VBUS_OFF:
+-		/*
+-		 * After establishing the vSafe0V voltage condition on VBUS, the Source =
+Shall wait
+-		 * tSrcRecover before re-applying VCONN and restoring VBUS to vSafe5V.
+-		 */
+-		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
+-		break;
+ 	case HARD_RESET_SEND:
+ 		break;
+-
+ 	case SNK_TRY:
+ 		/* Do nothing, waiting for timeout */
+ 		break;
+@@ -4266,6 +4276,28 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port=
+)
+ 	}
+ }
+=20
++static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
++{
++	tcpm_log_force(port, "VBUS VSAFE0V");
++	port->vbus_vsafe0v =3D true;
++	switch (port->state) {
++	case SRC_HARD_RESET_VBUS_OFF:
++		/*
++		 * After establishing the vSafe0V voltage condition on VBUS, the Source =
+Shall wait
++		 * tSrcRecover before re-applying VCONN and restoring VBUS to vSafe5V.
++		 */
++		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
++		break;
++	case SRC_ATTACH_WAIT:
++		if (tcpm_port_is_source(port))
++			tcpm_set_state(port, tcpm_try_snk(port) ? SNK_TRY : SRC_ATTACHED,
++				       PD_T_CC_DEBOUNCE);
++		break;
++	default:
++		break;
++	}
++}
++
+ static void _tcpm_pd_hard_reset(struct tcpm_port *port)
+ {
+ 	tcpm_log_force(port, "Received hard reset");
+@@ -4301,10 +4333,19 @@ static void tcpm_pd_event_handler(struct kthread_wo=
+rk *work)
+ 			bool vbus;
+=20
+ 			vbus =3D port->tcpc->get_vbus(port->tcpc);
+-			if (vbus)
++			if (vbus) {
+ 				_tcpm_pd_vbus_on(port);
+-			else
++			} else {
+ 				_tcpm_pd_vbus_off(port);
++				/*
++				 * When TCPC does not support detecting vsafe0v voltage level,
++				 * treat vbus absent as vsafe0v. Else invoke is_vbus_vsafe0v
++				 * to see if vbus has discharge to VSAFE0V.
++				 */
++				if (!port->tcpc->is_vbus_vsafe0v ||
++				    port->tcpc->is_vbus_vsafe0v(port->tcpc) > 0)
++					_tcpm_pd_vbus_vsafe0v(port);
++			}
+ 		}
+ 		if (events & TCPM_CC_EVENT) {
+ 			enum typec_cc_status cc1, cc2;
+diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+index e68aaa12886f..615d4532c028 100644
+--- a/include/linux/usb/tcpm.h
++++ b/include/linux/usb/tcpm.h
+@@ -98,6 +98,11 @@ enum tcpm_transmit_type {
+  *		will be turned on. requested_vbus_voltage is set to 0 when vbus
+  *		is going to disappear knowingly i.e. during PR_SWAP and
+  *		HARD_RESET etc.
++ * @is_vbus_vsafe0v:
++ *		Optional; TCPCI spec based TCPC implementations are expected to
++ *		detect VSAFE0V voltage level at vbus. When detection of VSAFE0V
++ *		is supported by TCPC, set this callback for TCPM to query
++ *		whether vbus is at VSAFE0V when needed.
+  */
+ struct tcpc_dev {
+ 	struct fwnode_handle *fwnode;
+@@ -128,6 +133,7 @@ struct tcpc_dev {
+ 	int (*enable_auto_vbus_discharge)(struct tcpc_dev *dev, bool enable);
+ 	int (*set_auto_vbus_discharge_threshold)(struct tcpc_dev *dev, enum typec=
+_pwr_opmode mode,
+ 						 bool pps_active, u32 requested_vbus_voltage);
++	int (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
+ };
+=20
+ struct tcpm_port;
+--=20
+2.29.2.454.gaff20da3a2-goog
+
