@@ -2,130 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BB82CA44A
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 14:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8847B2CA467
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 14:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391169AbgLANtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 08:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
+        id S2387938AbgLANwo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 08:52:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388093AbgLANtR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 08:49:17 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A2CC0613CF;
-        Tue,  1 Dec 2020 05:48:31 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id l11so1186787plt.1;
-        Tue, 01 Dec 2020 05:48:31 -0800 (PST)
+        with ESMTP id S2387833AbgLANwo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 08:52:44 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E0AC0613D6;
+        Tue,  1 Dec 2020 05:51:58 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id b6so1150231pfp.7;
+        Tue, 01 Dec 2020 05:51:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=plSlSB8BWAYE/ztLDhWMxwjFWQWCkUimRFhmgFEUAfQ=;
-        b=E3NyYGrdb0vHrL3gi/aN2z92fLeGyfn7i4T//KGcw+q76IES9ImWUlStjN4531WIqL
-         nk2e5Qr4i+8oxK9XkyrCmgZngdMglLw5IusO20TVFr3QtDEgKM0IjFBfCn1hPWt1SxiF
-         zlF2CtnlStwfHRKVjhmjT2Zo2F4Di2imgfApYSLPtpMb24nVjWv4mJ1rBORMFlqg0FrY
-         Y4ZMuOGWTbGBOFVJyuhgIJNNTRKnDzfzC2x1vLUx2e/vIopLaVasNqX/SXFPEuRghmjH
-         n3TBXbeQN7hBfDLXXTasaUvM731htT2YtWRIok/c6FPrYvYC0TDJkRAtdiH8PAUQvcda
-         YPkw==
+         :cc:content-transfer-encoding;
+        bh=U8eJNOHS+aUbBXn7pcWjETPrHmmQZ5+rMmh0rfza66c=;
+        b=Zs0zlqNz5yvaZTjtyetjqTA/N59AU/PLxzuAxbg7oluNJXAAosAncYfbQ4gqeWRl71
+         0sopphmkSvDUwdoxU3STU6Fj0zCQnup0aNfqEJHDniloim4EqK++ST62cD65exMtHGKG
+         n/rIQrfHyKYn6bxJ6ovXsnXp9iS/A/r93CPe39cL+1xC/5mK5g8eA6JazRuqdu4lT7ZG
+         yjc9sGLJzA82NrkPQasvDOEbbx6Hzbrxl95PTXTJL66BqGMLjKVzuXjENbYZELYFC0Cn
+         WVUjPV7nciq/zytcpXGMwpi50t/QJuxkOreYqpn1JWRMUwURwangM2vGkajqATeC9Q1c
+         LMRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=plSlSB8BWAYE/ztLDhWMxwjFWQWCkUimRFhmgFEUAfQ=;
-        b=m2UeyDZglD3fRjZGzdM2e3y6SDRxipRHJSwQAc7Xb3eR8oALETW8C1jMwHsip78gto
-         5NpBRtc/vA1ftZyl70URZf0WAsKjA6lp6jG7UxpUgZl2hu3+uQGPaAiXVBBBwGQj4Rfe
-         DcrJ+OLlrfjx9rxlYTfaSSTAwS2W+HvDIqYFlSOOiWDgTMjfGI7qbwbPXCMz4e/f9dPX
-         7NU10Krc3H0ccuHiQKdBQgYEx0L6NCnPqt0jjRabF5TQbp3P250dk+pLwmzI7nlZJrvx
-         xGUFqaFf5/4lOPhqj+myH9p+KntoHoATCj92Hsq9yr7LMUaqMpI1rFvlnTb2P3T0PRrA
-         ke+A==
-X-Gm-Message-State: AOAM530p2Qrgdi7MNYKwCcTfcbuLyR7Tczp+2QLOsWliqDTe+6H5VqCf
-        bEYJv1xhKPoQYC5FWiaIAd1ucjtaTRZ5mlBuPpI=
-X-Google-Smtp-Source: ABdhPJzkmW2Ov0TQgQn9vqGgt5zEseWGIXG1eQtc/CftuHj7IMouXix0R9fvXlc52UlTXSvDsI1NC0HJbKI8036ARAQ=
-X-Received: by 2002:a17:90a:34cb:: with SMTP id m11mr2729806pjf.181.1606830510564;
- Tue, 01 Dec 2020 05:48:30 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=U8eJNOHS+aUbBXn7pcWjETPrHmmQZ5+rMmh0rfza66c=;
+        b=ty2ayfYKtPEYlykA1sloUppvkmZDQo4QGLJ7jIIoMU0UE24rP/LdiJO2VJU9QDn4v4
+         jeb5W+wWHyHOMOMEblFiK67X0u9SEQ8zrFEMn5u4Lf/aKtuFZLHbnUFd0gw27iD73hpg
+         FoxcpSJMa+BfqOsLqx/BIf6jkeJDzjyFXSc6SLZaPPha09RYSZcG90pKm+rvcNF8gvXm
+         XlJO8Per/OTubzyVDJScKy9Sp7HWIbxS4aJ5XqDlQPeD0VybUVG4g0MCEIbFtg0I1u/g
+         MLYHGBH3toknrvwDPCIRiaXyUdrin3gtqKm8VkoivQPEk8yW0/BaFUnn9SylRuS6TdG/
+         rh6A==
+X-Gm-Message-State: AOAM531PdGM91/bmZmrWyBIxjZ2Y7PJXRTiiefpHat2O+kwhQMK8l6eO
+        P0WZQ1B2porQ+8sdiwjJ71P6e971PGr23Ojy5dHXfCDD6wY=
+X-Google-Smtp-Source: ABdhPJzkxeLTyDyGsVXpEwI/AlYj0VzxJq37602ZsfoiCdy29DoYIk86M0FBPsiMCf2cQij+pRUC8uY63L2zmwlZWRk=
+X-Received: by 2002:a63:1514:: with SMTP id v20mr2348579pgl.203.1606830717796;
+ Tue, 01 Dec 2020 05:51:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20201130153742.9163-1-johan@kernel.org> <20201130153742.9163-3-johan@kernel.org>
- <CAHp75VdedN5iaGFpfiPFz6G=Ey3axgaZbKYtt95HEwwjWoWbmQ@mail.gmail.com>
- <X8X9B1jYujUIWXaK@localhost> <CAHp75VfQud=QxwZyhYRU9mtNvrudj0tS6LOuutfJDVdv=-ptXw@mail.gmail.com>
- <X8Yjc0+Q7fM0nZP+@localhost> <CAHp75VdMcYj0H-HZcmyWFU5ROLwSy=8Pan7JABZxGimqXE35WQ@mail.gmail.com>
- <X8ZDfvuRbxqsKZMh@localhost>
-In-Reply-To: <X8ZDfvuRbxqsKZMh@localhost>
+References: <cover.1606827507.git.agx@sigxcpu.org> <ee2df27df04e6ff01d15255665458be1000dcfa8.1606827507.git.agx@sigxcpu.org>
+In-Reply-To: <ee2df27df04e6ff01d15255665458be1000dcfa8.1606827507.git.agx@sigxcpu.org>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 1 Dec 2020 15:49:19 +0200
-Message-ID: <CAHp75Vct+J7=BaUdzBktQvKvThCuC-HmyRP2s4LRJvgsE2A2UA@mail.gmail.com>
-Subject: Re: [PATCH 2/5] serial: core: add sysfs attribute to suppress ready
- signalling on open
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+Date:   Tue, 1 Dec 2020 15:52:40 +0200
+Message-ID: <CAHp75VdwnGD+39AHusGvSKcnOZs7q_AfXniTBaA+J=yMqL4_nw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] usb: typec: tps6598x: Export some power supply properties
+To:     =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         USB <linux-usb@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 1, 2020 at 3:21 PM Johan Hovold <johan@kernel.org> wrote:
-> On Tue, Dec 01, 2020 at 01:19:30PM +0200, Andy Shevchenko wrote:
-> > On Tue, Dec 1, 2020 at 1:04 PM Johan Hovold <johan@kernel.org> wrote:
+On Tue, Dec 1, 2020 at 2:59 PM Guido G=C3=BCnther <agx@sigxcpu.org> wrote:
+> This allows downstream supplies and userspace to detect
+> whether external power is supplied.
 
 ...
 
-> > > 0x01 is 1 and is generally treated as boolean true as you know.
-> >
-> > Depends how you interpret this. kstrtobool() uses one character (and
-> > in some cases two) of the input. Everything else is garbage.
-> > Should we interpret garbage?
->
-> No, ideally we should reject the input.
+> +static int devm_tps6598_psy_register(struct tps6598x *tps)
+> +{
+> +       struct power_supply_config psy_cfg =3D {};
+> +       const char *port_dev_name =3D dev_name(tps->dev);
 
-We can do it by the way in kstrtobool() and see if anybody complains
-(I believe the world is saner than relying on 0x01 for false and 123
-for true.
+> +       size_t psy_name_len =3D strlen(tps6598x_psy_name_prefix) +
+> +                                    strlen(port_dev_name) + 1;
 
-...
+I'm so sorry by not noticing this one...
 
-> > > So why should a sysfs-interface accept it as valid input and treat it as
-> > > false? That's just bad design.
-> >
-> > I can agree with this.
->
-> Looks like part of the problem are commits like 4cc7ecb7f2a6 ("param:
-> convert some "on"/"off" users to strtobool") which destroyed perfectly
-> well-defined interfaces.
+> +       char *psy_name;
+> +
+> +       psy_cfg.drv_data =3D tps;
+> +       psy_cfg.fwnode =3D dev_fwnode(tps->dev);
+> +       psy_name =3D devm_kzalloc(tps->dev, psy_name_len, GFP_KERNEL);
+> +       if (!psy_name)
+> +               return -ENOMEM;
+> +
+> +       snprintf(psy_name, psy_name_len, "%s%s", tps6598x_psy_name_prefix=
+,
+> +                port_dev_name);
 
-Oh, but the strtobool() in ABI was before that, for instance
- % git grep -n -p -w strtobool v3.14
-shows a few dozens of users and some of them looks like ABI.
+...followed by this.
 
-...
+Please, use devm_kasprintf() instead.
 
-> > Somehow cifs uses kstrtobool() in conjunction with the wider ranges. Nobody
-> > complained so far. But maybe they had it from day 1.
->
-> Wow, that's pretty nasty.
-
-I have checked, the wider range fits one character. So, basically they
-had this kind of interface from day 1.
-
-...
-
-> > So, we have two issues here: kstrtobool() doesn't report an error of
-> > input when it has garbage, the user may rely on garbage to be
-> > discarded.
->
-> Right, parsing is too allowing and there are too many ways to say
-> true/false.
->
-> The power-management attributes use 0 and 1 for boolean like I do here,
-> and I'd prefer to stick to that until we have deprecated the current
-> kstrtobool.
-
-Okay!
-
-
--- 
+--=20
 With Best Regards,
 Andy Shevchenko
