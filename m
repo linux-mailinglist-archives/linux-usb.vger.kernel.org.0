@@ -2,89 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3022C9680
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 05:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BFB2C9729
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 06:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728340AbgLAE2N convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 30 Nov 2020 23:28:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33912 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727897AbgLAE2N (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Nov 2020 23:28:13 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 203419] Logitech Group USB audio stopped working in 5.1-rc6
-Date:   Tue, 01 Dec 2020 04:27:31 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: petenewcomb@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-203419-208809-SoiZCmEcbI@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-203419-208809@https.bugzilla.kernel.org/>
-References: <bug-203419-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726294AbgLAFt6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 00:49:58 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:44376 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725979AbgLAFt5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 00:49:57 -0500
+Received: by mail-ed1-f67.google.com with SMTP id l5so1312693edq.11;
+        Mon, 30 Nov 2020 21:49:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=il4OrsFi/+ZmpHKzmwybykJE1rrEwD0WSXk3jzdi72I=;
+        b=fLn4lHcnXpH57H3ulw7kQpTsSQnQipnq35POuw4tZHmaTmEmXLB1XPakkRSRdPuWXM
+         qGTJwPE+ServoGSlJkVgT91O+yEnO0hrlhCVOrM6OMqH6fwmy6cE2LE0kKQjP324iyAc
+         H/f4+9TxriyY0H7dV9xnfBuXkd0VkOGJkSx3oPrBTvNHWR0fw6PeD/1bkVAvag0tQbqP
+         Hdu9F95IP7rdaTKSXGbaIao75SYcRYYaIHrsk8RO+LOiz1BYaWA0+hYyfdg/DAnvmS9o
+         Br3LZ5NyQNEWxct4yzoFKO88BHLJLJwfOanX4+ISYLn7T3mR5D0fegIAvOtF3PQbqn/n
+         5xEA==
+X-Gm-Message-State: AOAM530OLdicD/W3IPUZvAXQ9OpcQAEmBdEmdeEJbooVz8kvYCbgzkdP
+        X+XxDUm9aXJsvfK8qytNVIBg/1wB8+0=
+X-Google-Smtp-Source: ABdhPJwWPMSyk47AyVrRNMUatJNVHKwfArNXreja8lzZqzEHNBW6hFp0/8fHekt7sABXqBrcUmC7GQ==
+X-Received: by 2002:a50:fe14:: with SMTP id f20mr1343583edt.61.1606801749749;
+        Mon, 30 Nov 2020 21:49:09 -0800 (PST)
+Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id g15sm251467edj.49.2020.11.30.21.49.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Nov 2020 21:49:08 -0800 (PST)
+Subject: Re: [PATCH 1/5] tty: add port flag to suppress ready signalling on
+ open
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20201130153742.9163-1-johan@kernel.org>
+ <20201130153742.9163-2-johan@kernel.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Message-ID: <ffec9dbe-a238-4411-acdb-41bd33719288@kernel.org>
+Date:   Tue, 1 Dec 2020 06:49:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
+In-Reply-To: <20201130153742.9163-2-johan@kernel.org>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=203419
+On 30. 11. 20, 16:37, Johan Hovold wrote:
+> --- a/include/linux/tty.h
+> +++ b/include/linux/tty.h
+> @@ -683,6 +684,19 @@ static inline void tty_port_set_kopened(struct tty_port *port, bool val)
+>   		clear_bit(TTY_PORT_KOPENED, &port->iflags);
+>   }
+>   
+> +static inline bool tty_port_nordy(struct tty_port *port)
 
-Peter Newcomb (petenewcomb@gmail.com) changed:
+port can be const here.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |petenewcomb@gmail.com
+> +{
+> +	return test_bit(TTY_PORT_NORDY, &port->iflags);
+> +}
+> +
+> +static inline void tty_port_set_nordy(struct tty_port *port, bool val)
+> +{
+> +	if (val)
+> +		set_bit(TTY_PORT_NORDY, &port->iflags);
+> +	else
+> +		clear_bit(TTY_PORT_NORDY, &port->iflags);
 
---- Comment #50 from Peter Newcomb (petenewcomb@gmail.com) ---
-I ran into this issue and found that my Logitech Group audio device shows up
-with id 0x0857, not 0x0882.  I added the following patch and now it's working
-again:
+We have assign_bit() for these cases these days.
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index fbc93d8dda5e..0f3d74ec3860 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -775,6 +775,7 @@
- #define USB_DEVICE_ID_LOGITECH_WII_WHEEL       0xc29c
- #define USB_DEVICE_ID_LOGITECH_ELITE_KBD       0xc30a
- #define USB_DEVICE_ID_LOGITECH_GROUP_AUDIO     0x0882
-+#define USB_DEVICE_ID_LOGITECH_GROUP_AUDIO_2   0x0857
- #define USB_DEVICE_ID_S510_RECEIVER    0xc50c
- #define USB_DEVICE_ID_S510_RECEIVER_2  0xc517
- #define USB_DEVICE_ID_LOGITECH_CORDLESS_DESKTOP_LX500  0xc512
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 8a739ec50cc0..8a21a4e9db5a 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -183,6 +183,7 @@ static const struct hid_device_id hid_quirks[] = {
-        { HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP,
-USB_DEVICE_ID_QUAD_USB_JOYPAD), HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
-        { HID_USB_DEVICE(USB_VENDOR_ID_XIN_MO,
-USB_DEVICE_ID_XIN_MO_DUAL_ARCADE), HID_QUIRK_MULTI_INPUT },
-        { HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH,
-USB_DEVICE_ID_LOGITECH_GROUP_AUDIO), HID_QUIRK_NOGET },
-+       { HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH,
-USB_DEVICE_ID_LOGITECH_GROUP_AUDIO_2), HID_QUIRK_NOGET },
-
-        { 0 }
- };
-
+thanks,
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+js
